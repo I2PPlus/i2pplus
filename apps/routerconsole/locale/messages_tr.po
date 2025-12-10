@@ -143,7 +143,7 @@ msgid "Unreachable on any transport"
 msgstr "Hiçbir aktarım için erişilebilir değil"
 
 msgid "Cannot enumerate UPnP devices on Android."
-msgstr ""
+msgstr "Android'de UPnP cihazları listelenemiyor."
 
 msgid "UPnP is not enabled"
 msgstr "UPnP etkin değil"
@@ -683,7 +683,7 @@ msgid "After reporting, please restart your router"
 msgstr "Raporlamadan sonra lütfen yönlendiricinizi yeniden başlatın."
 
 msgid "Invalid form submission, requires POST"
-msgstr ""
+msgstr "Geçersiz form gönderimi, POST gerektiriyor"
 
 msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
 msgstr "Form gönderimi geçersiz. Tarayıcınızın \"geri\" ya da \"yenile\" düğmelerini kullandığınızdan olabilir. Lütfen formu yeniden gönderin."
@@ -817,13 +817,13 @@ msgid "To enable SSL access for the Router Console, see the commented <code>clie
 msgstr "Yönlendirici konsolu için SSL erişimini etkinleştirmek için, daha fazla bilgi için i2p uygulama dizininizde bulunan <code>clients.config</code> dosyasına bakın. Dizinde bulunan RouterConsolerunner Config dosyasını düzenlemeniz gerekir: "
 
 msgid "Save disabled, edit the router.config file to make changes"
-msgstr ""
+msgstr "Kaydetme devre dışı, değişiklik yapmak için router.config dosyasını düzenleyin"
 
 msgid "Error updating the configuration - please see the error logs"
 msgstr "Yapılandırma güncellenirken bir sorun çıktı - lütfen hata günlüğü kayıtlarına bakın"
 
 msgid "No changes made to the configuration"
-msgstr ""
+msgstr "Yapılandırmada değişiklik yapılmadı"
 
 msgid "Note"
 msgstr "NOT"
@@ -844,7 +844,7 @@ msgid "Save Plugin Configuration"
 msgstr "Uygulama Eki Yapılandırmasını Kaydet"
 
 msgid "Plugins disabled"
-msgstr ""
+msgstr "Eklentiler devre dışı"
 
 msgid "Install Plugin"
 msgstr "Uygulama Eki Kur"
@@ -856,7 +856,7 @@ msgid "Update All Installed Plugins"
 msgstr "Tüm Kurulu Uygulama Eklerini Güncelle"
 
 msgid "Delete client disabled"
-msgstr ""
+msgstr "İstemci silme devre dışı"
 
 #, java-format
 msgid "Error stopping plugin {0}"
@@ -940,17 +940,17 @@ msgid "Updating all plugins"
 msgstr "Tüm uygulama ekleri güncelleniyor"
 
 msgid "Update manager not registered, cannot install"
-msgstr ""
+msgstr "Güncelleme yöneticisi kayıtlı değil, yüklenemiyor"
 
 #, java-format
 msgid "Installing plugin from {0}"
 msgstr "Uygulama eki {0} üzerinden kuruluyor"
 
 msgid "Cannot install, check logs"
-msgstr ""
+msgstr "Yüklenemiyor, günlükleri kontrol edin"
 
 msgid "Update manager not registered, cannot check"
-msgstr ""
+msgstr "Güncelleme yöneticisi kayıtlı değil, kontrol edilemiyor"
 
 #, java-format
 msgid "Checking plugin {0} for updates"
@@ -1050,17 +1050,17 @@ msgid "Join Family"
 msgstr "Aileye Katıl"
 
 msgid "Bad certificate - No Subject CN"
-msgstr ""
+msgstr "Kötü sertifika - Konu CN yok"
 
 msgid "Bad characters in Family: "
-msgstr ""
+msgstr "Ailede kötü karakterler: "
 
 #, java-format
 msgid "Keystore {0} already exists for family {1}! Delete or rename it first."
-msgstr ""
+msgstr "Anahtar deposu {0} {1} ailesi için zaten mevcut! Önce silin veya yeniden adlandırın."
 
 msgid "Family key configured for router family: "
-msgstr ""
+msgstr "Yönlendirici ailesi için aile anahtarı yapılandırıldı: "
 
 msgid "Load from file failed"
 msgstr "Dosyadan yüklenemedi"
@@ -1078,7 +1078,7 @@ msgid "Restore defaults"
 msgstr "Varsayılanları geri yükle"
 
 msgid "Bad group detected, please retry"
-msgstr ""
+msgstr "Kötü grup tespit edildi, lütfen tekrar deneyin"
 
 msgid "Restored default settings"
 msgstr "Varsayılan ayarlar geri yüklendi"
@@ -1111,7 +1111,7 @@ msgid "Invalid destination"
 msgstr "Hedef geçersiz"
 
 msgid "Cannot add key for local destination. Enable encryption in the Tunnel Manager."
-msgstr ""
+msgstr "Yerel hedef için anahtar eklenemiyor. Tünel Yöneticisi'nde şifrelemeyi etkinleştirin."
 
 #, java-format
 msgid "Key for {0} added to keyring"
@@ -1124,7 +1124,7 @@ msgid "Requires hostname, destination, or blinded Base32"
 msgstr "Sunucu adı, hedef ya da körleştirilmiş Base32 gereklidir"
 
 msgid "Cannot add key for local destination. Enable encryption in the Hidden Services Manager."
-msgstr ""
+msgstr "Yerel hedef için anahtar eklenemiyor. Gizli Servisler Yöneticisi'nde şifrelemeyi etkinleştirin."
 
 msgid "Destination requires lookup password"
 msgstr "Hedef için tarama parolası gerekiyor"
@@ -1145,7 +1145,7 @@ msgid "Delete key"
 msgstr "Anahtarı sil"
 
 msgid "Cannot remove key for local destination. Disable encryption in the Tunnel Manager."
-msgstr ""
+msgstr "Yerel hedef için anahtar kaldırılamıyor. Tünel Yöneticisi'nde şifrelemeyi devre dışı bırakın."
 
 #, java-format
 msgid "Key for {0} removed from keyring"
@@ -1198,34 +1198,34 @@ msgid "Log overrides updated"
 msgstr "Günlük değişiklikleri güncellendi"
 
 msgid "Error updating the log limits - levels not valid"
-msgstr ""
+msgstr "Günlük limitleri güncellenirken hata - seviyeler geçersiz"
 
 msgid "Log limits cleared"
-msgstr ""
+msgstr "Günlük limitleri temizlendi"
 
 #, java-format
 msgid "Default log level updated from {0} to {1}"
-msgstr ""
+msgstr "Varsayılan günlük seviyesi {0} seviyesinden {1} seviyesine güncellendi"
 
 msgid "Date format updated"
-msgstr ""
+msgstr "Tarih formatı güncellendi"
 
 #, java-format
 msgid "Specified date format is not valid ({0}) - not updated"
-msgstr ""
+msgstr "Belirtilen tarih formatı geçersiz ({0}) - güncellenmedi"
 
 msgid "File size updated"
-msgstr ""
+msgstr "Dosya boyutu güncellendi"
 
 #, java-format
 msgid "Specified file size limit is not valid ({0}) - not updated"
-msgstr ""
+msgstr "Belirtilen dosya boyutu limiti geçersiz ({0}) - güncellenmedi"
 
 msgid "Compression setting updated"
-msgstr ""
+msgstr "Sıkıştırma ayarı güncellendi"
 
 msgid "Log record format updated"
-msgstr ""
+msgstr "Günlük kaydı formatı güncellendi"
 
 msgid "Log configuration saved"
 msgstr "Günlük yapılandırması kaydedildi"
@@ -1435,10 +1435,10 @@ msgid "Bad capacity value"
 msgstr "Kapasite değeri kötü"
 
 msgid "Bonuses adjusted for: "
-msgstr ""
+msgstr "Bonuslar ayarlandı: "
 
 msgid "No profile exists for: "
-msgstr ""
+msgstr "Profil yok: "
 
 msgid "Unsupported"
 msgstr "Desteklenmiyor"
@@ -1454,7 +1454,7 @@ msgstr "Kime"
 
 #, java-format
 msgid "First {0} displayed, see the {1} file for the full list"
-msgstr ""
+msgstr "İlk {0} gösterildi, tam liste için {1} dosyasına bakın"
 
 msgid "IPs Banned Until Restart"
 msgstr "Yeniden Başlatılana Kadar Yasaklanmış IP Adresleri"
@@ -1555,7 +1555,7 @@ msgid "Save order"
 msgstr "Sıralamayı kaydet"
 
 msgid "Sidebar preferences updated"
-msgstr ""
+msgstr "Kenar çubuğu tercihleri güncellendi"
 
 msgid "Refresh interval must be a number"
 msgstr "Yenileme sıklığı bir sayı olmalıdır"
@@ -1564,16 +1564,16 @@ msgid "Restore full default"
 msgstr "Tüm varsayılanları geri yükle"
 
 msgid "Full sidebar defaults restored."
-msgstr ""
+msgstr "Tam kenar çubuğu varsayılanları geri yüklendi."
 
 msgid "Sidebar will refresh shortly."
-msgstr ""
+msgstr "Kenar çubuğu kısa süre içinde yenilenecek."
 
 msgid "Restore minimal default"
 msgstr "En küçük varsayılanları geri yükle"
 
 msgid "Minimal sidebar defaults restored."
-msgstr ""
+msgstr "Minimal kenar çubuğu varsayılanları geri yüklendi."
 
 msgid "Order must be an integer"
 msgstr "Sıralama bir tamsayı olmalıdır"
@@ -1602,11 +1602,11 @@ msgstr "Çizelge listesi güncellendi. {0}Çizelge Sayfası{1} üzerinde görün
 
 #, java-format
 msgid "Internal error: could not resolve pool name {0}."
-msgstr ""
+msgstr "İç hata: havuz adı {0} çözümlenemedi."
 
 #, java-format
 msgid "Internal error: could not find pool settings for {0}."
-msgstr ""
+msgstr "İç hata: {0} için havuz ayarları bulunamadı."
 
 msgid "Updated settings for all pools."
 msgstr "Tüm havuzların ayarları güncellendi."
@@ -1681,7 +1681,7 @@ msgid "Add user"
 msgstr "Kullanıcı ekle"
 
 msgid "Cannot save theme choice, theme name has illegal characters"
-msgstr ""
+msgstr "Tema seçimi kaydedilemiyor, tema adında geçersiz karakterler var"
 
 msgid "Theme change saved."
 msgstr "Tema değişikliği kaydedildi."
@@ -1693,7 +1693,7 @@ msgid "No user name entered"
 msgstr "Bir kullanıcı adı yazmalısınız"
 
 msgid "User name may not contain '='"
-msgstr ""
+msgstr "Kullanıcı adı '=' içeremez"
 
 msgid "Warning: User names outside the ISO-8859-1 character set are not recommended. Support is not standardized and varies by browser."
 msgstr "Uyarı: Kullanıcı adında ISO-8859-1 karakter kümesi dışındaki karakterlerin kullanılması önerilmez. Destek standart değildir ve web tarayıcıya göre değişir."
@@ -2015,7 +2015,7 @@ msgid "Show list of all known I2P routers"
 msgstr "Tüm bilinen I2P yönelticilerinin listesini görüntüle"
 
 msgid "List of recently connected peers with profiling info"
-msgstr ""
+msgstr "Profil bilgileriyle son bağlanan eşlerin listesi"
 
 msgid "Peer Profiles"
 msgstr "Akran Profilleri"
@@ -2183,7 +2183,7 @@ msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Reddit için alternatif gizlilik odaklı ön uç"
 
 msgid "AI Image generation & Chat hub"
-msgstr ""
+msgstr "Yapay Zeka Görüntü üretimi ve Sohbet merkezi"
 
 msgid "IRC Logs for multiple networks"
 msgstr "Birden fazla ağ için IRC Günlükleri"
@@ -2324,10 +2324,10 @@ msgid "OpenDemocracy"
 msgstr "OpenDemocracy"
 
 msgid "Online privacy &amp; tech blog"
-msgstr ""
+msgstr "Çevrimiçi gizlilik ve teknoloji blogu"
 
 msgid "RightToPrivacy"
-msgstr ""
+msgstr "GizlilikHakkı"
 
 msgid "Lifestyle magazine"
 msgstr "Yaşam tarzı dergisi"
@@ -2348,7 +2348,7 @@ msgid "Community-driven tech news"
 msgstr "Topluluk odaklı teknoloji haberleri"
 
 msgid "Various services"
-msgstr ""
+msgstr "Çeşitli hizmetler"
 
 msgid "News for nerds"
 msgstr "İnekler için haberler"
@@ -2424,7 +2424,7 @@ msgid "Add"
 msgstr "Ekle"
 
 msgid "Error displaying the info page."
-msgstr ""
+msgstr "Bilgi sayfası görüntülenirken hata."
 
 msgid "Identity"
 msgstr "Kimlik"
@@ -2472,7 +2472,7 @@ msgid "Performance"
 msgstr "Performans"
 
 msgid "Maximum available RAM"
-msgstr ""
+msgstr "Maksimum mevcut RAM"
 
 msgid "Classified as slow"
 msgstr "Yavaş olarak sınıflandırıldı"
@@ -2484,7 +2484,7 @@ msgid "No"
 msgstr "Hayır"
 
 msgid "GeoIP Db"
-msgstr ""
+msgstr "GeoIP Veritabanı"
 
 msgid "Target"
 msgstr "Hedef"
@@ -2623,19 +2623,19 @@ msgid "Sybil Analysis"
 msgstr "Sybil Analizi"
 
 msgid "Bad value supplied, please check and try again."
-msgstr ""
+msgstr "Kötü değer sağlandı, lütfen kontrol edip tekrar deneyin."
 
 msgid "Router Map"
 msgstr "Router Haritası"
 
 msgid "Network Database Search"
-msgstr ""
+msgstr "Ağ Veritabanı Arama"
 
 msgid "Capabilities"
 msgstr "Yetenekler"
 
 msgid "e.g. f or XOfR"
-msgstr ""
+msgstr "örn. f veya XOfR"
 
 msgid "Cost"
 msgstr "Maliyet"
@@ -2644,49 +2644,49 @@ msgid "Country"
 msgstr "Ülke"
 
 msgid "Country Codes"
-msgstr ""
+msgstr "Ülke Kodları"
 
 msgid "Hash Prefix"
-msgstr ""
+msgstr "Hash Ön Eki"
 
 msgid "IPv4 or IPv6, /24,/16,/8 suffixes optional for IPv4, prefix ok for IPv6"
-msgstr ""
+msgstr "IPv4 veya IPv6, /24,/16,/8 sonekleri IPv4 için isteğe bağlı, ön ek IPv6 için uygun"
 
 msgid "Hostname or b32"
-msgstr ""
+msgstr "Ana bilgisayar adı veya b32"
 
 msgid "IPv6 Prefix"
-msgstr ""
+msgstr "IPv6 Ön Eki"
 
 msgid "Single port or range"
-msgstr ""
+msgstr "Tek port veya aralık"
 
 msgid "Signature Type"
-msgstr ""
+msgstr "İmza Türü"
 
 msgid "SSU Capabilities"
-msgstr ""
+msgstr "SSU Yetenekleri"
 
 msgid "Encryption Type"
-msgstr ""
+msgstr "Şifreleme Türü"
 
 msgid "Router Version"
-msgstr ""
+msgstr "Yönlendirici Sürümü"
 
 msgid "Transport"
 msgstr "Aktarım"
 
 msgid "Add Sybil analysis (must pick at least one above)"
-msgstr ""
+msgstr "Sybil analizi ekle (yukarıdan en az birini seçmelisiniz)"
 
 msgid "Sybil close to"
-msgstr ""
+msgstr "Sybil yakınında"
 
 msgid "Router hash, destination hash, b32, or from address book"
-msgstr ""
+msgstr "Yönlendirici hash'i, hedef hash'i, b32 veya adres defterinden"
 
 msgid "or Sybil close to this router"
-msgstr ""
+msgstr "veya bu yönlendiriciye yakın Sybil"
 
 msgid "Lookup"
 msgstr "Arama"
@@ -2701,13 +2701,13 @@ msgid "not found in network database"
 msgstr "ağ veritabanında bulunamadı"
 
 msgid "Bad Base64 Router hash"
-msgstr ""
+msgstr "Kötü Base64 Yönlendirici hash'i"
 
 msgid "No routers with"
-msgstr ""
+msgstr "Şu ile yönlendirici yok:"
 
 msgid "Hash prefix"
-msgstr ""
+msgstr "Hash ön eki"
 
 msgid "Port"
 msgstr "Kapı numarası"
@@ -2716,10 +2716,10 @@ msgid "MTU"
 msgstr "MTU"
 
 msgid "found in the network database"
-msgstr ""
+msgstr "ağ veritabanında bulundu"
 
 msgid "results"
-msgstr ""
+msgstr "sonuçlar"
 
 msgid "Previous Page"
 msgstr "Önceki Sayfa"
@@ -2728,43 +2728,43 @@ msgid "Next Page"
 msgstr "Sonraki Sayfa"
 
 msgid "Results per page"
-msgstr ""
+msgstr "Sayfa başına sonuç"
 
 msgid "Not initialized"
 msgstr "Başlatılmamış"
 
 msgid "Total Remote Leasesets"
-msgstr ""
+msgstr "Toplam Uzak Kiralama Kümeleri"
 
 msgid "Compact mode"
-msgstr ""
+msgstr "Sıkışık mod"
 
 msgid "Local Leasesets"
-msgstr ""
+msgstr "Yerel Kiralama Kümeleri"
 
 msgid "Debug Mode"
-msgstr ""
+msgstr "Hata Ayıklama Modu"
 
 msgid "Published (RAP) Leasesets"
-msgstr ""
+msgstr "Yayınlanmış (RAP) Kiralama Kümeleri"
 
 msgid "Sorted by hash distance, closest first."
-msgstr ""
+msgstr "Hash mesafesine göre sıralandı, en yakın ilk."
 
 msgid "Mod Data"
-msgstr ""
+msgstr "Mod Verisi"
 
 msgid "Last Changed"
-msgstr ""
+msgstr "Son Değiştirilme"
 
 msgid "Next Mod Data"
-msgstr ""
+msgstr "Sonraki Mod Verisi"
 
 msgid "Change in"
-msgstr ""
+msgstr "Değişim"
 
 msgid "Floodfill mode enabled"
-msgstr ""
+msgstr "Floodfill modu etkin"
 
 msgid "Routing Key"
 msgstr "Yönlendirme Anahtarı"
@@ -2779,21 +2779,21 @@ msgid "Estimated total leasesets"
 msgstr "Tahmini toplam kiralama setleri"
 
 msgid "Total Local Leasesets"
-msgstr ""
+msgstr "Toplam Yerel Kiralama Kümeleri"
 
 msgid "Remote Leasesets"
-msgstr ""
+msgstr "Uzak Kiralama Kümeleri"
 
 #, java-format
 msgid "Hostname {0} not found in network database"
-msgstr ""
+msgstr "Ana bilgisayar adı {0} ağ veritabanında bulunamadı"
 
 #, java-format
 msgid "LeaseSet for {0} not found in network database"
-msgstr ""
+msgstr "{0} için Kiralama Kümesi ağ veritabanında bulunamadı"
 
 msgid "Meta"
-msgstr ""
+msgstr "Meta"
 
 msgid "LeaseSet"
 msgstr "Kiralama Kümesi"
@@ -2825,7 +2825,7 @@ msgid "Signature type"
 msgstr "İmza türü"
 
 msgid "Public Key"
-msgstr ""
+msgstr "Genel Anahtar"
 
 msgid "Unsupported type"
 msgstr "Desteklenmeyen tip"
@@ -2842,10 +2842,10 @@ msgid "Unknown"
 msgstr "Bilinmiyor"
 
 msgid "Advanced mode - includes all statistics published by floodfills."
-msgstr ""
+msgstr "Gelişmiş mod - floodfill tarafından yayınlanan tüm istatistikleri içerir."
 
 msgid "Compact mode - does not include statistics published by floodfills."
-msgstr ""
+msgstr "Sıkışık mod - floodfill tarafından yayınlanan istatistikleri içermez."
 
 msgid "Network Database Router Statistics"
 msgstr "Ağ Veritabanı Yöneltici İstatistikleri"
@@ -2869,7 +2869,7 @@ msgid "Transports"
 msgstr "Aktarımlar"
 
 msgid "X Tier"
-msgstr ""
+msgstr "X Katmanı"
 
 msgid "Floodfills"
 msgstr "Taşkınlar"
@@ -2887,10 +2887,10 @@ msgid "Router is banlisted"
 msgstr "Yönlendirici yasaklandı"
 
 msgid "Java I2P variant"
-msgstr ""
+msgstr "Java I2P varyantı"
 
 msgid "I2Pd variant"
-msgstr ""
+msgstr "I2Pd varyantı"
 
 msgid "RouterInfo is compressible"
 msgstr "RouterInfo sıkıştırılabilir"
@@ -2924,7 +2924,7 @@ msgid "Hostname"
 msgstr "Ana bilgisayar adı"
 
 msgid "direct"
-msgstr ""
+msgstr "doğrudan"
 
 msgid "Verified family (signing certificate is installed and valid)"
 msgstr "Doğrulanmış aile (imza sertifikası yüklü ve geçerli)"
@@ -2963,10 +2963,10 @@ msgid "Last heard from"
 msgstr "Son haber"
 
 msgid "Network Id"
-msgstr ""
+msgstr "Ağ Kimliği"
 
 msgid "Count is always spoofed to avoid indicating router restarts"
-msgstr ""
+msgstr "Sayı, yönlendirici yeniden başlatmalarını belirtmekten kaçınmak için her zaman sahtelenir"
 
 msgid "Hidden or starting up"
 msgstr "Gizli ya da başlatılıyor"
@@ -3034,10 +3034,10 @@ msgid "IPv6"
 msgstr "IPv6"
 
 msgid "Active connections / Max permitted"
-msgstr ""
+msgstr "Aktif bağlantılar / Maksimum izin verilen"
 
 msgid "Connections / Limit"
-msgstr ""
+msgstr "Bağlantılar / Limit"
 
 msgid "Current / maximum permitted"
 msgstr "Akım / izin verilen maksimum"
@@ -3331,7 +3331,7 @@ msgid "Rejected"
 msgstr "Reddedildi"
 
 msgid "First Heard About"
-msgstr ""
+msgstr "İlk Duyma"
 
 msgid "Last Heard From"
 msgstr "Son Duyulan"
@@ -3444,7 +3444,7 @@ msgstr "{0} paylaşılmış bant genişliği"
 
 #, java-format
 msgid "Over {0} KB/s shared bandwidth"
-msgstr ""
+msgstr "{0} KB/s üzerinde paylaşılan bant genişliği"
 
 msgid "status"
 msgstr "durum"
@@ -3507,11 +3507,11 @@ msgid "Total number of banned peers"
 msgstr "Toplam yasaklanan akran sayısı"
 
 msgid "Note: 'LU' class routers have been excluded from the list."
-msgstr ""
+msgstr "Not: 'LU' sınıfı yönlendiriciler listeden dışlandı."
 
 #, java-format
 msgid "To view, see {0}Session Bans{1}."
-msgstr ""
+msgstr "Görüntülemek için {0}Oturum Yasakları{1}'na bakın."
 
 msgid "Select search engine"
 msgstr "Arama motorunu seçin"
@@ -3759,7 +3759,7 @@ msgid "An introduction to hosting websites on the I2P network"
 msgstr "I2P ağında web sitelerini barındırmaya giriş"
 
 msgid "New hosts in last 24 hours"
-msgstr ""
+msgstr "Son 24 saatteki yeni ana bilgisayarlar"
 
 msgid "I2PControl"
 msgstr "I2PControl"
@@ -3886,7 +3886,7 @@ msgid "Floodfill enabled"
 msgstr "Floodfill etkinleştirildi"
 
 msgid "Total number of remote LeaseSets stored in our NetDb"
-msgstr ""
+msgstr "NetDb'mizde depolanan uzak Kiralama Kümelerinin toplam sayısı"
 
 msgid "Warning: ECDSA is not available. Update your Java or OS"
 msgstr "Uyarı: ECDSA kullanılamıyor. Kullandığınız Java ya da İşletim Sistemi sürümünü yükseltin"
@@ -3901,7 +3901,7 @@ msgid "Peers we've been talking to in the last minute / last hour"
 msgstr "Son bir kaç dakika ya da son saat içinde iletişim kurulan eşler"
 
 msgid "Peers we've been talking to in the last minute"
-msgstr ""
+msgstr "Son dakikada konuştuğumuz eşler"
 
 msgid "The number of peers available for building client tunnels"
 msgstr "İstemci tünellerini oluşturmak için kullanılabilecek eş sayısı"
@@ -4410,7 +4410,7 @@ msgid "Data"
 msgstr "Veri"
 
 msgid "Limit"
-msgstr ""
+msgstr "Limit"
 
 msgid "Receive on"
 msgstr "Alınma zamanı"
@@ -4457,7 +4457,7 @@ msgid "No transit tunnels currently active."
 msgstr "Şu anda aktif transit tünel yok."
 
 msgid "Transit Tunnels by Peer (Top {0})"
-msgstr ""
+msgstr "Eşe Göre Geçiş Tünelleri (İlk {0})"
 
 msgid "Address"
 msgstr "Adres"
@@ -4536,7 +4536,7 @@ msgid "Bandwidth test did not complete"
 msgstr "Bant genişliği sınaması tamamlanamadı"
 
 msgid "Bad state for test"
-msgstr ""
+msgstr "Test için kötü durum"
 
 msgid "Bandwidth test started"
 msgstr "Bant genişliği sınaması başlatıldı"
@@ -4551,16 +4551,16 @@ msgid "Bandwidth test was not running"
 msgstr "Bant genişliği sınaması çalışmıyor"
 
 msgid "ready"
-msgstr ""
+msgstr "hazır"
 
 msgid "inbound test"
-msgstr ""
+msgstr "gelen test"
 
 msgid "outbound test"
-msgstr ""
+msgstr "giden test"
 
 msgid "done"
-msgstr ""
+msgstr "tamamlandı"
 
 msgid "bits per second"
 msgstr "saniyedeki bit sayısı"
@@ -4732,7 +4732,7 @@ msgid "Share"
 msgstr "Paylaşım"
 
 msgid "NOTE"
-msgstr ""
+msgstr "NOT"
 
 #, java-format
 msgid "You have configured I2P+ to share only {0} KBps."
@@ -4759,7 +4759,7 @@ msgstr "gelişmiş yapılandırma"
 
 #, java-format
 msgid "Key <b>{0}</b> selected for removal. To commit the change, save the configuration, or cancel to restore the key."
-msgstr ""
+msgstr "<b>{0}</b> anahtarı kaldırılmak üzere seçildi. Değişikliği onaylamak için yapılandırmayı kaydedin veya anahtarı geri yüklemek için iptal edin."
 
 msgid "Floodfill Configuration"
 msgstr "Otomatik Doldurma Yapılandırması"
@@ -4789,7 +4789,7 @@ msgid "Advanced I2P+ Configuration"
 msgstr "Gelişmiş I2P Yapılandırması"
 
 msgid "Help with additional configuration settings"
-msgstr ""
+msgstr "Ek yapılandırma ayarlarıyla ilgili yardım"
 
 #, java-format
 msgid "To make changes, edit the file: {0}"
@@ -5183,15 +5183,15 @@ msgid "Banning will prevent the participation of this peer in tunnels you create
 msgstr "Engellediğiniz eşler oluşturduğunuz tünellere katılamaz."
 
 msgid "A list of bans by IP address is presented below."
-msgstr ""
+msgstr "Aşağıda IP adresine göre yasakların bir listesi sunulmuştur."
 
 #, java-format
 msgid "To view all active bans by router hash, see {0}Banned Peers{1}."
-msgstr ""
+msgstr "Yönlendirici hash'ine göre tüm aktif yasakları görüntülemek için {0}Yasaklı Eşler{1}'e bakın."
 
 #, java-format
 msgid "A list of {0}session-only bans{1} by hash is also available."
-msgstr ""
+msgstr "Hash'e göre {0}sadece oturum yasakları{1} listesi de mevcuttur."
 
 msgid "Adjust Profile Bonuses"
 msgstr "Profil Puanı Ayarları"
@@ -5382,7 +5382,7 @@ msgid "config sidebar"
 msgstr "yan çubuk yapılandırması"
 
 msgid "Sidebar Options"
-msgstr ""
+msgstr "Kenar Çubuğu Seçenekleri"
 
 msgid "Refresh interval"
 msgstr "Yenileme Sıklığı"
@@ -5394,10 +5394,10 @@ msgid "0 to disable"
 msgstr "Devre dışı bırakmak için 0"
 
 msgid "Unified sidebar"
-msgstr ""
+msgstr "Birleşik kenar çubuğu"
 
 msgid "Use the same sidebar on all pages"
-msgstr ""
+msgstr "Tüm sayfalarda aynı kenar çubuğunu kullan"
 
 msgid "config stats"
 msgstr "istatistik yapılandırması"
@@ -5599,7 +5599,7 @@ msgid "Event Log"
 msgstr "Olay Günlüğü"
 
 msgid "Combined"
-msgstr ""
+msgstr "Birleşik"
 
 msgid "graph"
 msgstr "grafik"
@@ -5680,7 +5680,7 @@ msgid "This setting, when set to true, will display the <i>Sites of Interest</i>
 msgstr "Bu ayar, true olarak ayarlandığında, <a href=/sitemap>site haritasında</a> <i>İlgili Siteler</i> bağlantılarını gösterecektir. [Varsayılan değer false]"
 
 msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
-msgstr ""
+msgstr "Bu ayar true olarak ayarlandığında, ana sayfada standart kenar çubuğunu sunacak ve <a href=/configsidebar> üzerinden yapılandırmayı etkinleştirecektir. [Varsayılan false]"
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "Bu ayar, yönlendiricinin <i>blocklist.txt</i> dosyasını ve kullanıcı yapılandırmalı engelleme listelerini kullanarak yönlendiricilerin hash veya IP adresine göre yasaklanmasını etkinleştirip etkinleştirmeyeceğini belirler. IPv4 için aralıklar ve ağ maskeleri desteklenir, ancak IPv6 için desteklenmez. Daha fazla bilgi için I2P+ uygulama dizininizdeki <i>blocklist.txt</i>'yi görüntüleyin. [Varsayılan olarak etkin, yeniden başlatma gereklidir]"
@@ -5695,7 +5695,7 @@ msgid "This setting determines whether or not the router should use the provided
 msgstr "Bu ayar, yönlendiricinin Tor çıkış düğümü IP adreslerinden çalışan yönlendiricilerin yasaklanmasını etkinleştirmek için I2P+ uygulama dizininizdeki <i>blocklist_tor.txt</i> dosyasını kullanıp kullanmayacağını belirler. [Varsayılan olarak etkin, yeniden başlatma gereklidir]"
 
 msgid "This setting enables requests from routers in the specified countries to be blocked and banned as soon as a direct tunnel request is made. Countries must be specified as two letter country codes, separated with commas. e.g. router.blockCountries=cn,ru"
-msgstr ""
+msgstr "Bu ayar, belirtilen ülkelerdeki yönlendiricilerin doğrudan tünel isteği yapıldığı anda engellenmesini ve yasaklanmasını sağlar. Ülkeler virgülle ayrılmış iki harfli ülke kodları olarak belirtilmelidir. örn. router.blockCountries=cn,ru"
 
 msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
 msgstr "False olarak ayarlandığında, router daha yavaş veya erişilemez olan eski versiyonlu routrarın tünel oluşturma isteklerini engellemez. [Varsayılan değeri true, yeniden başlatma gereklidir]"
@@ -5833,7 +5833,7 @@ msgid "This setting determines whether routers classified as uninteresting (K or
 msgstr "Bu ayar, 1 saatlik çalışma süresinden sonra yenileme rotayolu işlemi sırasında ilgisiz olarak sınıflandırılan rotaların (K veya L katmanı, erişilemez veya 0.9.50'den daha eski) kontrol edilip edilmeyeceğini belirler. [Varsayılan değer yanlış]"
 
 msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
-msgstr ""
+msgstr "True olarak ayarlandığında, bu ayar, özellikle bant genişliği kullanımınızın yüksek olduğu belirlendiğinde, yönlendiricinizin tıkanıklık limitlerini yayınlaması için gereken koşulları gevşetir. Yüksek iş gecikmesi veya yavaş olarak sınıflandırılmış bir yönlendirici gibi diğer koşullar yine de limitlerin yayınlanmasına neden olacaktır. [Varsayılan false]"
 
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
 msgstr "Yapılandırıldığında, router'ın aynı anda inşa etmesine izin verilen tünel sayısı için sert bir sınırlama belirler. Varsayılan olarak, router, optimum inşa oranını belirlemek için ortalama inşa süresini ve mevcut çıkış bant genişliğini kullanır. [Yeniden başlatma gereklidir]"
@@ -5848,10 +5848,10 @@ msgid "This setting (in minutes) allows you to manually configure how long to wa
 msgstr "Bu ayar (dakika cinsinden) başlangıçtan sonra RouterInfos'nin geçerliliği için NetDb'deki rotaların ne kadar süre beklemesinin manuel olarak yapılandırmanıza olanak tanır, bu süreden sonra sadece geçerli rotalar dahil edilir. Doğrulama gerçekleştiğinde, geçerlilik süresi dolmuş RouterInfos'lar ve yalnızca SSU üzerinden erişilebilen yanıt vermeyen eşler, NetDb'den kaldırılır. [Varsayılan değer 60 dakika] Not: Bu ayar, NetDb depolaması denendiği anda NetDb'den ve yönlendirici oturumu için yasaklanan daha eski yönlendiricilere (varsayılan olarak 0.9.29'dan daha eski) etkisi yoktur."
 
 msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
-msgstr ""
+msgstr "Bu ayar true olarak ayarlandığında, kendi ülkenizdeki tüm yönlendiricilerle doğrudan iletişimi engelleyecek ve yönlendiriciniz yeniden başlayana kadar onları yasak listenize ekleyecektir. [Varsayılan false]"
 
 msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
-msgstr ""
+msgstr "Bu ayar true olarak ayarlandığında, G tıkanıklık limiti yayınlayan ve ne erişilebilir ne de erişilemez olan tüm X katmanı yönlendiricileriyle doğrudan iletişimi engelleyecek ve onları oturum yasak listesine ekleyecektir. Bu ayarın etkili olması için gelişmiş modun etkinleştirilmesi gerektiğini unutmayın. [Varsayılan false]"
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "Bu ayar, yönlendiricinizin güvenlik duvarı ile korunup korunmadığını belirlemek için SSU testlerinin devre dışı bırakılmasına izin verir ve kesinlikle güvenlik duvarı ile korunmayan ancak aralıklı güvenlik duvarı sorunları yaşayan yönlendiriciler için etkinleştirilebilir. Testin devre dışı bırakılması durumunda hem SSU hem de NTCP, mevcut genel IP adresinizi <a href=/info>yönlendirici bilgi sayfasında</a> bildirmelidir. [Yeniden başlatma gerekiyor]"
@@ -5860,7 +5860,7 @@ msgid "This setting determines which transport takes priority when communicating
 msgstr "Bu ayar, diğer öğelerle iletişim kurarken hangi iletimin önceliği olduğunu belirler. Varsayılan olarak, UDP (SSU)'dan daha tercih edilen NTCP'dir. Değerini true olarak ayarlarsanız, var olan bir NTCP bağlantısı olmadıkça UDP tercih edilecektir; her zaman olarak ayarlandığında, mevcut NTCP bağlantısına bakılmaksızın her zaman UDP kullanılacaktır. [Varsayılan değer false'dir]"
 
 msgid "miscellaneous"
-msgstr ""
+msgstr "çeşitli"
 
 msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
 msgstr "True olarak ayarlanırsa, bu seçenek temel hizmet kontrol seçenekleriyle birlikte sistem tepsisine / bildirim alanına bir simge yerleştirir. [Varsayılan olarak devre dışı]"
@@ -6100,16 +6100,16 @@ msgid "For SSL only"
 msgstr "Sadece SSL için"
 
 msgid "How can I configure the console and web services to be accessible on my local network?"
-msgstr ""
+msgstr "Konsolu ve web hizmetlerini yerel ağımda erişilebilir olacak şekilde nasıl yapılandırabilirim?"
 
 msgid "To make your console accessible on your local network, edit the configuration file 00-net.i2p.router.web.RouterConsoleRunner-clients.config in the clients.config.d folder of your I2P settings directory. Update or add the necessary IP addresses to the existing localhost (127.0.0.1) mapping. Use the -s switch for HTTPS access."
-msgstr ""
+msgstr "Konsolunuzu yerel ağınızda erişilebilir yapmak için, I2P ayarlar dizininizdeki clients.config.d klasöründeki 00-net.i2p.router.web.RouterConsoleRunner-clients.config yapılandırma dosyasını düzenleyin. Mevcut localhost (127.0.0.1) eşlemesine gerekli IP adreslerini güncelleyin veya ekleyin. HTTPS erişimi için -s anahtarını kullanın."
 
 msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
-msgstr ""
+msgstr "Örnek: Hem localhost hem de 192.168.1.10'dan HTTP ve HTTPS üzerinden erişime izin vermek için:"
 
 msgid "For most client services, change listening address for relevant service in Tunnel Manager's configuration section using <i>reachable by</i> dropdown."
-msgstr ""
+msgstr "Çoğu istemci hizmeti için, Tünel Yöneticisi'nin yapılandırma bölümünde ilgili hizmetin dinleme adresini <i>tarafından erişilebilir</i> açılır menüsünü kullanarak değiştirin."
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "I2P içinde IRC'ye nasıl bağlanırım?"
@@ -6496,7 +6496,7 @@ msgid "If you are in a hurry and can't wait a few hours, you can tell people to 
 msgstr "Eğer acele ediyorsanız ve birkaç saat bekleyemiyorsanız, insanlara \"jump\" adres yardımcı yönlendirme hizmetini kullanmalarını söyleyebilirsiniz. Bu, genellikle kendi alan adınızı aynı sitede kaydettikten birkaç dakika sonra çalışmaya başlayacaktır. Tarayıcınıza <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code> adresini girerek önce kendiniz test edebilirsiniz. Çalıştığında, diğer insanlara kullanmalarını söyleyebilirsiniz."
 
 msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skank.i2p</a>, and paste the link where it's required to share it with others."
-msgstr ""
+msgstr "Alternatif olarak, alan adınız için <i>adres yardımcı bağlantısını</i> kopyalayabilirsiniz, bu adres defteri listesi sayfasında veya alan adınızın detay sayfasında belirtilmiştir, örn. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>skank.i2p için detaylar</a>, ve bağlantıyı başkalarıyla paylaşmanız gereken yere yapıştırın."
 
 msgid "Backup your private key!"
 msgstr "Özel anahtarınızı yedekleyin!"
@@ -6733,7 +6733,7 @@ msgid "Getting Support Online"
 msgstr "Çevrimiçi Destek Almak"
 
 msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> on I2P's internal IRC network."
-msgstr ""
+msgstr "Ayrıca <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P web sitesindeki</a> bilgileri gözden geçirmek, <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P tartışma forumuna</a> mesaj göndermek veya I2P'nin iç IRC ağındaki <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> veya <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> kanallarına uğramak isteyebilirsiniz."
 
 msgid "Reporting Bugs"
 msgstr "Hataları Bildirme"
@@ -7273,7 +7273,7 @@ msgid "Configure display language, theme and optional console password"
 msgstr "Ekran dilini, temayı ve isteğe bağlı konsol şifresini yapılandırın"
 
 msgid "Language"
-msgstr ""
+msgstr "Dil"
 
 msgid "Configure router bandwidth"
 msgstr "Yönlendirici bant genişliğini yapılandırın"
@@ -7340,22 +7340,22 @@ msgid "network database"
 msgstr "ağ veritabanı"
 
 msgid "Encryption type"
-msgstr ""
+msgstr "Şifreleme türü"
 
 msgid "Encryption types"
-msgstr ""
+msgstr "Şifreleme türleri"
 
 msgid "Signature types"
-msgstr ""
+msgstr "İmza türleri"
 
 msgid "Locally hosted private service"
-msgstr ""
+msgstr "Yerel olarak barındırılan özel hizmet"
 
 msgid "Locally hosted public service"
-msgstr ""
+msgstr "Yerel olarak barındırılan genel hizmet"
 
 msgid "Requested client leaseset"
-msgstr ""
+msgstr "İstenen istemci kiralama kümesi"
 
 msgid "network database router map"
 msgstr "ağ veritabanı router haritası"
@@ -7401,10 +7401,10 @@ msgid "Fast / High Capacity"
 msgstr "Hızlı / Yüksek Kapasite"
 
 msgid "router logs"
-msgstr ""
+msgstr "yönlendirici günlükleri"
 
 msgid "service logs"
-msgstr ""
+msgstr "hizmet günlükleri"
 
 msgid "Manage I2P addresses"
 msgstr "I2P adreslerini yönet"
@@ -7611,13 +7611,13 @@ msgid "Toggle Tunnels"
 msgstr "Tünelleri Değiştir"
 
 msgid "Updating sidebar sections"
-msgstr ""
+msgstr "Kenar çubuğu bölümlerini güncelleme"
 
 msgid "Peer Profile"
 msgstr "Eş Profili"
 
 msgid "Profile View"
-msgstr ""
+msgstr "Profil Görünümü"
 
 msgid "Profile for peer"
 msgstr "Akran profili"

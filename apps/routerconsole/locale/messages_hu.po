@@ -143,7 +143,7 @@ msgid "Unreachable on any transport"
 msgstr "Egyik átvitelen sem érhető el"
 
 msgid "Cannot enumerate UPnP devices on Android."
-msgstr ""
+msgstr "Nem lehet felsorolni az UPnP eszközöket Androidon."
 
 msgid "UPnP is not enabled"
 msgstr "UPnP nincs engedélyezve"
@@ -683,7 +683,7 @@ msgid "After reporting, please restart your router"
 msgstr "A bejelentés után indítsa újra az útválasztót"
 
 msgid "Invalid form submission, requires POST"
-msgstr ""
+msgstr "Érvénytelen űrlap küldés, POST szükséges"
 
 msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
 msgstr "Úrlap küldése sikertelen, valószínűleg a \"vissza\" vagy az \"újratöltés\" gombokat használtad a böngészőben. Kérlek, hogy küldd újra."
@@ -817,13 +817,13 @@ msgid "To enable SSL access for the Router Console, see the commented <code>clie
 msgstr "További információkért lásd a kommentált <code>clients.config</code> fájl az SSL -hozzáférés engedélyezéséhez az I2P Alkalmazáskönyvtárban található megjegyzéseket. Szerkesztenie kell a RouterConsolerunner konfigurációs fájlt, amely a könyvtárban található: "
 
 msgid "Save disabled, edit the router.config file to make changes"
-msgstr ""
+msgstr "Mentés letiltva, szerkessze meg a router.config fájlt a változtásokhoz."
 
 msgid "Error updating the configuration - please see the error logs"
 msgstr "Hiba a beállítások frissítésekor - kérlek, nézd át a hibanaplót"
 
 msgid "No changes made to the configuration"
-msgstr ""
+msgstr "Nem történt változtatás a konfigurációban."
 
 msgid "Note"
 msgstr "MEGJEGYZÉS"
@@ -844,7 +844,7 @@ msgid "Save Plugin Configuration"
 msgstr "Kiegészítők Beállításainak Mentése"
 
 msgid "Plugins disabled"
-msgstr ""
+msgstr "Bővítményk letiltva"
 
 msgid "Install Plugin"
 msgstr "Kiegészítő Telepítése"
@@ -856,7 +856,7 @@ msgid "Update All Installed Plugins"
 msgstr "Összes Telepített Kiegészítő Frissítése"
 
 msgid "Delete client disabled"
-msgstr ""
+msgstr "Kliens törlése letiltva"
 
 #, java-format
 msgid "Error stopping plugin {0}"
@@ -940,17 +940,17 @@ msgid "Updating all plugins"
 msgstr "Az összes kiegészítő frissítése folyamatban"
 
 msgid "Update manager not registered, cannot install"
-msgstr ""
+msgstr "A frissítéskezelő nincs regisztrálva, nem telepíthető"
 
 #, java-format
 msgid "Installing plugin from {0}"
 msgstr "Beépülő telepítése innen: {0}"
 
 msgid "Cannot install, check logs"
-msgstr ""
+msgstr "Nem telepíthető, ellenőrizze a naplókat."
 
 msgid "Update manager not registered, cannot check"
-msgstr ""
+msgstr "A frissítéskezelő nincs regisztrálva, nem ellenőrizhető"
 
 #, java-format
 msgid "Checking plugin {0} for updates"
@@ -1050,17 +1050,17 @@ msgid "Join Family"
 msgstr "Csatlakozz a családhoz"
 
 msgid "Bad certificate - No Subject CN"
-msgstr ""
+msgstr "Rossz tanúsítvány - Nincs Tárgy CN"
 
 msgid "Bad characters in Family: "
-msgstr ""
+msgstr "Rossz karakterek a Családban: "
 
 #, java-format
 msgid "Keystore {0} already exists for family {1}! Delete or rename it first."
-msgstr ""
+msgstr "A kulcstár {0} már létezik a {1} családhoz! Először törölje vagy nevezd át."
 
 msgid "Family key configured for router family: "
-msgstr ""
+msgstr "Családkulcs beállítva a router családhoz: "
 
 msgid "Load from file failed"
 msgstr "A fájlból való betöltés nem sikerült"
@@ -1078,7 +1078,7 @@ msgid "Restore defaults"
 msgstr "Alapértelmezett Beállítások Visszaállítása"
 
 msgid "Bad group detected, please retry"
-msgstr ""
+msgstr "Rossz csoport észlelve, kérem próbálja újra."
 
 msgid "Restored default settings"
 msgstr "Alapértelmezett Beállítások Visszaállítva"
@@ -1111,7 +1111,7 @@ msgid "Invalid destination"
 msgstr "Érvénytelen célállomás"
 
 msgid "Cannot add key for local destination. Enable encryption in the Tunnel Manager."
-msgstr ""
+msgstr "Nem lehet hozzáadni kulcsot a helyi célhoz. Engedélyezze a titkosítást a Csatoragazdában."
 
 #, java-format
 msgid "Key for {0} added to keyring"
@@ -1124,7 +1124,7 @@ msgid "Requires hostname, destination, or blinded Base32"
 msgstr "Hosztnév, célhely vagy letiltott Base32 szükséges"
 
 msgid "Cannot add key for local destination. Enable encryption in the Hidden Services Manager."
-msgstr ""
+msgstr "Nem lehet hozzáadni kulcsot a helyi célhoz. Engedélyezze a titkosítást a Rejtett Szolgáltatások Kezelőben."
 
 msgid "Destination requires lookup password"
 msgstr "A cél keresési jelszót igényel"
@@ -1145,7 +1145,7 @@ msgid "Delete key"
 msgstr "Kulcs Törlése"
 
 msgid "Cannot remove key for local destination. Disable encryption in the Tunnel Manager."
-msgstr ""
+msgstr "Nem lehet eltávolítani a kulcsot a helyi célhoz. Tiltsa a titkosítást a Csatoragazdában."
 
 #, java-format
 msgid "Key for {0} removed from keyring"
@@ -1198,34 +1198,34 @@ msgid "Log overrides updated"
 msgstr "Napló felülbírálás frissítve"
 
 msgid "Error updating the log limits - levels not valid"
-msgstr ""
+msgstr "Hiba a naplókorlátok frissítésekor - a szintek nem érvényesek"
 
 msgid "Log limits cleared"
-msgstr ""
+msgstr "A naplókorlátok törölve"
 
 #, java-format
 msgid "Default log level updated from {0} to {1}"
-msgstr ""
+msgstr "Az alapértelmezű naplószint {0} szintről {1} szintre frissítve"
 
 msgid "Date format updated"
-msgstr ""
+msgstr "A dátumformátum frissítve"
 
 #, java-format
 msgid "Specified date format is not valid ({0}) - not updated"
-msgstr ""
+msgstr "A megadott dátumformátum nem érvényes ({0}) - nem frissítve"
 
 msgid "File size updated"
-msgstr ""
+msgstr "A fájlméret frissítve"
 
 #, java-format
 msgid "Specified file size limit is not valid ({0}) - not updated"
-msgstr ""
+msgstr "A megadott fájlméretkorlát nem érvényes ({0}) - nem frissítve"
 
 msgid "Compression setting updated"
-msgstr ""
+msgstr "A tömörítési beállítás frissítve"
 
 msgid "Log record format updated"
-msgstr ""
+msgstr "A naplórekord formátum frissítve"
 
 msgid "Log configuration saved"
 msgstr "Napló beállítások elmentve"
@@ -1435,10 +1435,10 @@ msgid "Bad capacity value"
 msgstr "Helytelen kapacitás érték"
 
 msgid "Bonuses adjusted for: "
-msgstr ""
+msgstr "Bónuszok beállítva: "
 
 msgid "No profile exists for: "
-msgstr ""
+msgstr "Nem létezik profil: "
 
 msgid "Unsupported"
 msgstr "Nem támogatott"
@@ -1454,7 +1454,7 @@ msgstr "Ide"
 
 #, java-format
 msgid "First {0} displayed, see the {1} file for the full list"
-msgstr ""
+msgstr "Első {0} megjelenítve, lásd a {1} fájlt a teljes listáért."
 
 msgid "IPs Banned Until Restart"
 msgstr "IP-k Kitiltva Újraindításig"
@@ -1555,7 +1555,7 @@ msgid "Save order"
 msgstr "Megrendelés mentése"
 
 msgid "Sidebar preferences updated"
-msgstr ""
+msgstr "Az oldalsáv beállítások frissítve"
 
 msgid "Refresh interval must be a number"
 msgstr "A frissítési időköz csak szám lehet"
@@ -1564,16 +1564,16 @@ msgid "Restore full default"
 msgstr "Alapértelmezett értékek visszaállítása"
 
 msgid "Full sidebar defaults restored."
-msgstr ""
+msgstr "A teljes oldalsáv alapértelmezett állapotok helyreállítva."
 
 msgid "Sidebar will refresh shortly."
-msgstr ""
+msgstr "Az oldalsáv hamarosan frissülni."
 
 msgid "Restore minimal default"
 msgstr "Minimális alapértelmezés visszaállítása"
 
 msgid "Minimal sidebar defaults restored."
-msgstr ""
+msgstr "A minimális oldalsáv alapértelmezett állapotok helyreállítva."
 
 msgid "Order must be an integer"
 msgstr "A sorrendnek egész számnak kell lennie"
@@ -1602,11 +1602,11 @@ msgstr "A grafikonok listája frissítve, akár 60 másodpercbe is telhet, mire 
 
 #, java-format
 msgid "Internal error: could not resolve pool name {0}."
-msgstr ""
+msgstr "Belső hiba: nem lehet feloldani a {0} medencenevet."
 
 #, java-format
 msgid "Internal error: could not find pool settings for {0}."
-msgstr ""
+msgstr "Belső hiba: nem lehet megtalálni a {0} medencebeállításokat."
 
 msgid "Updated settings for all pools."
 msgstr "Minden készlet beállításai frissítve."
@@ -1681,7 +1681,7 @@ msgid "Add user"
 msgstr "Felhasználó hozzáadása"
 
 msgid "Cannot save theme choice, theme name has illegal characters"
-msgstr ""
+msgstr "Nem lehet menteni a téma választást, a téma nevében illegális karaktereket tartalmaz."
 
 msgid "Theme change saved."
 msgstr "A témaváltoztatás mentve."
@@ -1693,7 +1693,7 @@ msgid "No user name entered"
 msgstr "Nincs megadva felhasználónév"
 
 msgid "User name may not contain '='"
-msgstr ""
+msgstr "A felhasználónév nem tartalmazhat '=' karaktert."
 
 msgid "Warning: User names outside the ISO-8859-1 character set are not recommended. Support is not standardized and varies by browser."
 msgstr "Figyelem: Az ISO-8859-1 karakterkészleten kívüli felhasználói nevek használata nem javasolt. "
@@ -2015,7 +2015,7 @@ msgid "Show list of all known I2P routers"
 msgstr "Minden ismert I2P router listájának megjelenítése"
 
 msgid "List of recently connected peers with profiling info"
-msgstr ""
+msgstr "Nemrég csatlakozott partnerek listája profilinformációkkal."
 
 msgid "Peer Profiles"
 msgstr "Peer Profilok"
@@ -2183,7 +2183,7 @@ msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Alternatív adatvédelemre összpontosító előtér a Reddithez"
 
 msgid "AI Image generation & Chat hub"
-msgstr ""
+msgstr "AI képgenerálás és csevegő központ"
 
 msgid "IRC Logs for multiple networks"
 msgstr "IRC naplók több hálózathoz"
@@ -2324,10 +2324,10 @@ msgid "OpenDemocracy"
 msgstr "Nyílt demokrácia"
 
 msgid "Online privacy &amp; tech blog"
-msgstr ""
+msgstr "Online adatvédelem és technológiai blog"
 
 msgid "RightToPrivacy"
-msgstr ""
+msgstr "JogAzAdatvédelemhez"
 
 msgid "Lifestyle magazine"
 msgstr "Életmód magazin"
@@ -2348,7 +2348,7 @@ msgid "Community-driven tech news"
 msgstr "Közösségvezérelt technológiai hírek"
 
 msgid "Various services"
-msgstr ""
+msgstr "Különböző szolgáltatások"
 
 msgid "News for nerds"
 msgstr "Hírek nebulóknak"
@@ -2424,7 +2424,7 @@ msgid "Add"
 msgstr "Hozzáadás"
 
 msgid "Error displaying the info page."
-msgstr ""
+msgstr "Hiba az információs oldal megjelenítésekor."
 
 msgid "Identity"
 msgstr "Identitás"
@@ -2472,7 +2472,7 @@ msgid "Performance"
 msgstr "Teljesítmény"
 
 msgid "Maximum available RAM"
-msgstr ""
+msgstr "Maximálisan elérhető RAM"
 
 msgid "Classified as slow"
 msgstr "Lassúnak minősítve"
@@ -2484,7 +2484,7 @@ msgid "No"
 msgstr "Nem"
 
 msgid "GeoIP Db"
-msgstr ""
+msgstr "GeoIP adatbázis"
 
 msgid "Target"
 msgstr "Cél"
@@ -2623,19 +2623,19 @@ msgid "Sybil Analysis"
 msgstr "Sybil Elemzés"
 
 msgid "Bad value supplied, please check and try again."
-msgstr ""
+msgstr "Rossz érték lett megadva, kérem ellenőrizze és próbálja újra."
 
 msgid "Router Map"
 msgstr "Router térkép"
 
 msgid "Network Database Search"
-msgstr ""
+msgstr "Hálózati adatbázis keresés"
 
 msgid "Capabilities"
 msgstr "Képességek"
 
 msgid "e.g. f or XOfR"
-msgstr ""
+msgstr "pl. f vagy XOfR"
 
 msgid "Cost"
 msgstr "Költség"
@@ -2644,49 +2644,49 @@ msgid "Country"
 msgstr "Ország"
 
 msgid "Country Codes"
-msgstr ""
+msgstr "Ország kódok"
 
 msgid "Hash Prefix"
-msgstr ""
+msgstr "Hash előtag"
 
 msgid "IPv4 or IPv6, /24,/16,/8 suffixes optional for IPv4, prefix ok for IPv6"
-msgstr ""
+msgstr "IPv4 vagy IPv6, /24,/16,/8 utótagok opcionálisak IPv4-hez, előtag ok IPv6-hez"
 
 msgid "Hostname or b32"
-msgstr ""
+msgstr "Gépnév vagy b32"
 
 msgid "IPv6 Prefix"
-msgstr ""
+msgstr "IPv6 előtag"
 
 msgid "Single port or range"
-msgstr ""
+msgstr "Egy port vagy tartomány"
 
 msgid "Signature Type"
-msgstr ""
+msgstr "Aláírás típus"
 
 msgid "SSU Capabilities"
-msgstr ""
+msgstr "SSU képességek"
 
 msgid "Encryption Type"
-msgstr ""
+msgstr "Titkosítás típus"
 
 msgid "Router Version"
-msgstr ""
+msgstr "Router verzió"
 
 msgid "Transport"
 msgstr "Szállítás"
 
 msgid "Add Sybil analysis (must pick at least one above)"
-msgstr ""
+msgstr "Sybil elemzés hozzáadása (legalább egyet kell választani fent)"
 
 msgid "Sybil close to"
-msgstr ""
+msgstr "Sybil közel"
 
 msgid "Router hash, destination hash, b32, or from address book"
-msgstr ""
+msgstr "Router hash, cél hash, b32 vagy címjegyzékből"
 
 msgid "or Sybil close to this router"
-msgstr ""
+msgstr "vagy Sybil közel ehhez a routerhez"
 
 msgid "Lookup"
 msgstr "Lookup"
@@ -2701,13 +2701,13 @@ msgid "not found in network database"
 msgstr "nem található a hálózati adatbázisban"
 
 msgid "Bad Base64 Router hash"
-msgstr ""
+msgstr "Rossz Base64 Router hash"
 
 msgid "No routers with"
-msgstr ""
+msgstr "Nincs router ezzel: "
 
 msgid "Hash prefix"
-msgstr ""
+msgstr "Hash előtag"
 
 msgid "Port"
 msgstr "Port"
@@ -2716,10 +2716,10 @@ msgid "MTU"
 msgstr "MTU"
 
 msgid "found in the network database"
-msgstr ""
+msgstr "megtalálva a hálózati adatbázisban"
 
 msgid "results"
-msgstr ""
+msgstr "eredmények"
 
 msgid "Previous Page"
 msgstr "Előző Oldal"
@@ -2728,43 +2728,43 @@ msgid "Next Page"
 msgstr "Következő Oldal"
 
 msgid "Results per page"
-msgstr ""
+msgstr "Eredmények oldalanként"
 
 msgid "Not initialized"
 msgstr "Nincs inicializálva"
 
 msgid "Total Remote Leasesets"
-msgstr ""
+msgstr "Összes távoli LeaseSet"
 
 msgid "Compact mode"
-msgstr ""
+msgstr "Kompakt mód"
 
 msgid "Local Leasesets"
-msgstr ""
+msgstr "Helyi LeaseSetek"
 
 msgid "Debug Mode"
-msgstr ""
+msgstr "Hibakeresési mód"
 
 msgid "Published (RAP) Leasesets"
-msgstr ""
+msgstr "Közzétett (RAP) LeaseSetek"
 
 msgid "Sorted by hash distance, closest first."
-msgstr ""
+msgstr "Hash távolság szerint rendezve, legközelebb elöl."
 
 msgid "Mod Data"
-msgstr ""
+msgstr "Módosítás adatok"
 
 msgid "Last Changed"
-msgstr ""
+msgstr "Utoljára módosítva"
 
 msgid "Next Mod Data"
-msgstr ""
+msgstr "Következő módosítás adatok"
 
 msgid "Change in"
-msgstr ""
+msgstr "Változás"
 
 msgid "Floodfill mode enabled"
-msgstr ""
+msgstr "Floodfill mód engedélyezve"
 
 msgid "Routing Key"
 msgstr "Útválasztó kulcs"
@@ -2779,10 +2779,10 @@ msgid "Estimated total leasesets"
 msgstr "Becsült összes bérleti szerződés"
 
 msgid "Total Local Leasesets"
-msgstr ""
+msgstr "Összes helyi LeaseSet"
 
 msgid "Remote Leasesets"
-msgstr ""
+msgstr "Távoli LeaseSetek"
 
 #, java-format
 msgid "Hostname {0} not found in network database"
@@ -2793,7 +2793,7 @@ msgid "LeaseSet for {0} not found in network database"
 msgstr ""
 
 msgid "Meta"
-msgstr ""
+msgstr "Meta"
 
 msgid "LeaseSet"
 msgstr "LeaseSet"
@@ -2825,7 +2825,7 @@ msgid "Signature type"
 msgstr "Aláírás típusa"
 
 msgid "Public Key"
-msgstr ""
+msgstr "Nyilvános kulcs"
 
 msgid "Unsupported type"
 msgstr "Nem támogatott típus"
@@ -2842,10 +2842,10 @@ msgid "Unknown"
 msgstr "Ismeretlen"
 
 msgid "Advanced mode - includes all statistics published by floodfills."
-msgstr ""
+msgstr "Haladó mód - tartalmazza az összes, floodfill által közzétett statisztikát."
 
 msgid "Compact mode - does not include statistics published by floodfills."
-msgstr ""
+msgstr "Kompakt mód - nem tartalmazza a floodfill által közzétett statisztikát."
 
 msgid "Network Database Router Statistics"
 msgstr "Hálózati Adatbázis Router Statisztika"
@@ -2869,7 +2869,7 @@ msgid "Transports"
 msgstr "Átvitel"
 
 msgid "X Tier"
-msgstr ""
+msgstr "X szint"
 
 msgid "Floodfills"
 msgstr "Árvizek"
@@ -2887,10 +2887,10 @@ msgid "Router is banlisted"
 msgstr "A router tiltva van"
 
 msgid "Java I2P variant"
-msgstr ""
+msgstr "Java I2P variáns"
 
 msgid "I2Pd variant"
-msgstr ""
+msgstr "I2Pd variáns"
 
 msgid "RouterInfo is compressible"
 msgstr "A RouterInfo tömöríthető"
@@ -2924,7 +2924,7 @@ msgid "Hostname"
 msgstr "Hostnév"
 
 msgid "direct"
-msgstr ""
+msgstr "közvetlen"
 
 msgid "Verified family (signing certificate is installed and valid)"
 msgstr "Ellenőrzött család (aláíró tanúsítvány telepítve és érvényes)"
@@ -2963,10 +2963,10 @@ msgid "Last heard from"
 msgstr "Utolsó hír"
 
 msgid "Network Id"
-msgstr ""
+msgstr "Hálózati azonosító"
 
 msgid "Count is always spoofed to avoid indicating router restarts"
-msgstr ""
+msgstr "A számlálás mindig hamisítva, hogy elkerülje a router újraindítások jelzését."
 
 msgid "Hidden or starting up"
 msgstr "Rejtett vagy indul"
@@ -3034,10 +3034,10 @@ msgid "IPv6"
 msgstr "IPv6"
 
 msgid "Active connections / Max permitted"
-msgstr ""
+msgstr "Aktív kapcsolatok / Max engedélyezett"
 
 msgid "Connections / Limit"
-msgstr ""
+msgstr "Kapcsolatok / Korlát"
 
 msgid "Current / maximum permitted"
 msgstr "Áram / maximálisan megengedett"
@@ -3331,7 +3331,7 @@ msgid "Rejected"
 msgstr "Elutasítva"
 
 msgid "First Heard About"
-msgstr ""
+msgstr "Először hallott róla"
 
 msgid "Last Heard From"
 msgstr "Legutoljára Hallott a Következőtől:"
@@ -3444,7 +3444,7 @@ msgstr "{0} megosztott sávszélesség"
 
 #, java-format
 msgid "Over {0} KB/s shared bandwidth"
-msgstr ""
+msgstr "Több mint {0} KB/s megosztott sávszélesség"
 
 msgid "status"
 msgstr "állapot"
@@ -3507,7 +3507,7 @@ msgid "Total number of banned peers"
 msgstr "A kitiltott társak száma összesen"
 
 msgid "Note: 'LU' class routers have been excluded from the list."
-msgstr ""
+msgstr "Megjegyzés: 'LU' osztályú routerek ki lettek a listából."
 
 #, java-format
 msgid "To view, see {0}Session Bans{1}."
@@ -3886,7 +3886,7 @@ msgid "Floodfill enabled"
 msgstr "Floodfill engedélyezve"
 
 msgid "Total number of remote LeaseSets stored in our NetDb"
-msgstr ""
+msgstr "A NetDb-ben tárolt távoli LeaseSetek teljes száma"
 
 msgid "Warning: ECDSA is not available. Update your Java or OS"
 msgstr "Figyelmeztetés: Az ECDSA nem elérhető. Frissítsd a Javádat vagy az operációs rendszeredet"
@@ -3901,7 +3901,7 @@ msgid "Peers we've been talking to in the last minute / last hour"
 msgstr "Utóbbi percek/óra kapcsolatai"
 
 msgid "Peers we've been talking to in the last minute"
-msgstr ""
+msgstr "Partnerek, akikkel az elmúlt percben beszéltünk"
 
 msgid "The number of peers available for building client tunnels"
 msgstr "A kliens csatornát létrehozó kapcsolatok száma"
@@ -4410,7 +4410,7 @@ msgid "Data"
 msgstr "Adatok"
 
 msgid "Limit"
-msgstr ""
+msgstr "Korlát"
 
 msgid "Receive on"
 msgstr "Fogadás a következőn"
@@ -4457,7 +4457,7 @@ msgid "No transit tunnels currently active."
 msgstr "Jelenleg nincsenek aktív tranzitalagutak."
 
 msgid "Transit Tunnels by Peer (Top {0})"
-msgstr ""
+msgstr "Tranzit alagutak partnerek szerint (Top {0})"
 
 msgid "Address"
 msgstr "Cím"
@@ -4536,7 +4536,7 @@ msgid "Bandwidth test did not complete"
 msgstr "A sávszélesség teszt nem fejeződött be"
 
 msgid "Bad state for test"
-msgstr ""
+msgstr "Rossz állapot a teszthez"
 
 msgid "Bandwidth test started"
 msgstr "Sávszélesség teszt elindítva"
@@ -4551,16 +4551,16 @@ msgid "Bandwidth test was not running"
 msgstr "A sávszélesség teszt nem futott"
 
 msgid "ready"
-msgstr ""
+msgstr "kész"
 
 msgid "inbound test"
-msgstr ""
+msgstr "bejövő teszt"
 
 msgid "outbound test"
-msgstr ""
+msgstr "kimenő teszt"
 
 msgid "done"
-msgstr ""
+msgstr "kész"
 
 msgid "bits per second"
 msgstr "bit másodpercenként"
@@ -4732,7 +4732,7 @@ msgid "Share"
 msgstr "Megoszt"
 
 msgid "NOTE"
-msgstr ""
+msgstr "MEGJEGYZÉS"
 
 #, java-format
 msgid "You have configured I2P+ to share only {0} KBps."
@@ -4759,7 +4759,7 @@ msgstr "haladó beállítások"
 
 #, java-format
 msgid "Key <b>{0}</b> selected for removal. To commit the change, save the configuration, or cancel to restore the key."
-msgstr ""
+msgstr "A <b>{0}</b> kulcs kiválasztva törlésre. A változtatás véglegesítéséhez mentse a konfigurációt, vagy a kulcs visszaállításához törlse."
 
 msgid "Floodfill Configuration"
 msgstr "Árvízi kitöltés konfiguráció"
@@ -4789,7 +4789,7 @@ msgid "Advanced I2P+ Configuration"
 msgstr "Haladó I2P Beállítások"
 
 msgid "Help with additional configuration settings"
-msgstr ""
+msgstr "Segítség a további konfigurációs beállításokkal"
 
 #, java-format
 msgid "To make changes, edit the file: {0}"
@@ -5183,7 +5183,7 @@ msgid "Banning will prevent the participation of this peer in tunnels you create
 msgstr "A kitiltás megakadályozza a társ részvételét az általad létrehozott alagutakban."
 
 msgid "A list of bans by IP address is presented below."
-msgstr ""
+msgstr "Alább látható a kitiltások listája IP-cím szerint."
 
 #, java-format
 msgid "To view all active bans by router hash, see {0}Banned Peers{1}."
@@ -5191,7 +5191,7 @@ msgstr ""
 
 #, java-format
 msgid "A list of {0}session-only bans{1} by hash is also available."
-msgstr ""
+msgstr "A {0}csak-munkamenetek{1} listája is elérhető hash szerint."
 
 msgid "Adjust Profile Bonuses"
 msgstr "Profil Bónusz Módosítása"
@@ -5382,7 +5382,7 @@ msgid "config sidebar"
 msgstr "Konfigurálja az oldalsávot"
 
 msgid "Sidebar Options"
-msgstr ""
+msgstr "Oldalsáv beállítások"
 
 msgid "Refresh interval"
 msgstr "Frissítési időköz"
@@ -5394,10 +5394,10 @@ msgid "0 to disable"
 msgstr "0 a letiltáshoz"
 
 msgid "Unified sidebar"
-msgstr ""
+msgstr "Egységesített oldalsáv"
 
 msgid "Use the same sidebar on all pages"
-msgstr ""
+msgstr "Ugyanazon oldalsáv használata az összes oldalon"
 
 msgid "config stats"
 msgstr "státusz beállításai"
@@ -5599,7 +5599,7 @@ msgid "Event Log"
 msgstr "Eseménynapló"
 
 msgid "Combined"
-msgstr ""
+msgstr "Kombinált"
 
 msgid "graph"
 msgstr "Grafikon"
@@ -5680,7 +5680,7 @@ msgid "This setting, when set to true, will display the <i>Sites of Interest</i>
 msgstr "Ez a beállítás, amikor igazra van állítva, megjeleníti az érdekes oldalak linkeit a <a href=/sitemap>webhelytérképen</a>. [Az alapértelmezett érték hamis]"
 
 msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
-msgstr ""
+msgstr "Ez a beállítás, ha igazra van állítva, a standard oldalsáv jelenik meg a főoldalon, lehetővé téve a konfigurációt a <a href=/configsidebar> linken keresztül. [Alapértelmezett false]"
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "Ezt a beállítástól függ, használja-e a router a rendelkezésre bocsátott <i>blocklist.txt</i> fájlt és a felhasználó által konfigurált tilalmi listákat a routerek tiltásához hash vagy IP cím alapján. Az IPv4 esetében tartományok és hálózati maszkok támogatottak, de az IPv6 esetében nem. További információkért tekintse meg az I2P+ alkalmazás könyvtárában található <i>blocklist.txt</i> fájlt. [Elsődlegesen engedélyezve, újraindítás szükséges]"
@@ -5695,7 +5695,7 @@ msgid "This setting determines whether or not the router should use the provided
 msgstr "Ezt a beállítástól függ, hogy a router használja-e a rendelkezésre bocsátott <i>blocklist_tor.txt</i> fájlt az I2P+ alkalmazás könyvtárában annak érdekében, hogy a Tor exit node IP címéről működő routereket tiltsa. [Elsődlegesen engedélyezve, újraindítás szükséges]"
 
 msgid "This setting enables requests from routers in the specified countries to be blocked and banned as soon as a direct tunnel request is made. Countries must be specified as two letter country codes, separated with commas. e.g. router.blockCountries=cn,ru"
-msgstr ""
+msgstr "Ez a beállítás lehetővé teszi, hogy a megadott országokból származó routerek kéréseit és kitiltása, amint egy közvetlen alagút kérés történik. Az országoknak kétbetű országkódként kell megadni, vesszővel elválasztva. Pl. router.blockCountries=cn,ru"
 
 msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
 msgstr "Amikor hamisra van állítva, a router nem blokkolja az alacsonyabb sebességű vagy elérhetetlen, régebbi verziójú routerektől érkező alagút létrehozási kérelmeket. [Alapértelmezés szerint igaz, újraindítás szükséges]"
@@ -5833,7 +5833,7 @@ msgid "This setting determines whether routers classified as uninteresting (K or
 msgstr "Ez a beállítás meghatározza, hogy az érdektelennek minősített routerek (K vagy L szint, elérhetetlen vagy 0.9.50-nél régebbiek) ellenőrizve lesznek-e a router frissítési folyamata után 1 óra üzemidő után. [Az alapértelmezés hamis]"
 
 msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
-msgstr ""
+msgstr "Ha igazra van állítva, ez a beállítás fellazgatja a router számára a torlódési sapkák közzétételéhez szükséges feltételeket, különösen akkor is, ha megállapítást, hogy a sávszélesség használata magas. Egyéb feltételek, mint például magas munka késés vagy a router lassúnak minősítése, továbbra is okozzák a sapkák közzétételét. [Alapértelmezett false]"
 
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
 msgstr "Amikor konfigurálva van, ez meghatározza a router által egyszerre felépíthető alagutak általános korlátát. Alapértelmezés szerint a router az átlagos felépítési időt és a jelenlegi kimenő sávszélességet használja az optimális felépítési sebesség meghatározásához. [Újraindítás szükséges]"
@@ -5848,10 +5848,10 @@ msgid "This setting (in minutes) allows you to manually configure how long to wa
 msgstr "Ez a beállítás (percben) lehetővé teszi, hogy kézzel állítsa be, mennyi ideig kell várni a rendszerindítás után, mielőtt a RouterInfo-kat a NetDb-ben ellenőriznék. Ezt követően csak érvényes routerek lesznek elfogadva a felvételre. Amikor a ellenőrzés megtörténik, a lejárt RouterInfo-k és az SSU-n keresztül elérhetetlen társak eltávolításra kerülnek a NetDb-ből. [Az alapértelmezés 60 perc] Megjegyzés: Ez a beállítás nem érinti a régebbi routereket (alapértelmezetten 0.9.29-nél régebbiek), amelyek eltávolításra kerülnek a NetDb-ből, és az útválasztói munkamenetet követően tiltásra kerülnek, amint egy NetDb tárolás megkísérelve lesz."
 
 msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
-msgstr ""
+msgstr "Ez a beállítás, ha igazra van állítva, blokkolja a saját ország összes routerével a közvetlen kommunikációt, és hozzáadja őket a kitiltási listájához, amíg a router újraindításig. [Alapértelmezett false]"
 
 msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
-msgstr ""
+msgstr "Ez a beállítás, ha igazra van állítva, blokkolja az összes X szintű routerrel a közvetlen kommunikációt, amelyek G torlódési sapkát tesznek, és sem elérhető sem elérhetetlen, hozzáadva őket a munkamenetek listájához. Figyelemmel, hogy ehhez a beállításnak hatályba kell lépnie a haladó módot. [Alapértelmezett false]"
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "Ez a beállítás lehetővé teszi az SSU tesztek letiltását a router tűzfalállapotának meghatározásához, és engedélyezhető azokon a routerekre, amelyek határozottan nincsenek tűzfalon kívül, de időszakos tűzfalozási problémákkal küzdenek. Abban az esetben, ha a tesztelés le van tiltva, mind az SSU, mind az NTCP jelentenie kell a jelenlegi nyilvános IP-címet a <a href=/info>tűzfal információ oldal</a>on. [Újraindítás szükséges]"
@@ -5860,7 +5860,7 @@ msgid "This setting determines which transport takes priority when communicating
 msgstr "Ez a beállítás meghatározza, hogy melyik átviteli mód kap előnyt a többi résztvevővel való kommunikáció során. Alapértelmezés szerint az NTCP kedvez a UDP (SSU) előtt. Az érték true-ra állításával az UDP lesz az elsődleges, hacsak nem létezik előre meghatározott NTCP kapcsolat; ha mindigre van állítva, mindig az UDP-t használja, függetlenül az előre meghatározott NTCP kapcsolattól. [Az alapérték false]"
 
 msgid "miscellaneous"
-msgstr ""
+msgstr "egyéb"
 
 msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
 msgstr "Ha igazra van állítva, ez az opció ikont helyez el a rendszer tálca / értesítési területén alapvető szolgáltatás-vezérlő lehetőségekkel. [Alapértelmezés szerint letiltva]"
@@ -6100,13 +6100,13 @@ msgid "For SSL only"
 msgstr "Csak SSL esetén"
 
 msgid "How can I configure the console and web services to be accessible on my local network?"
-msgstr ""
+msgstr "Hogyan tudom konfigurálni a konzolt és a webszolgáltatásokat, hogy elérhetők legyen a helyi hálózatomon?"
 
 msgid "To make your console accessible on your local network, edit the configuration file 00-net.i2p.router.web.RouterConsoleRunner-clients.config in the clients.config.d folder of your I2P settings directory. Update or add the necessary IP addresses to the existing localhost (127.0.0.1) mapping. Use the -s switch for HTTPS access."
-msgstr ""
+msgstr "Ahhoz, hogy a konzol elérhető legyen a helyi hálózaton, szerkessze meg a 00-net.i2p.router.web.RouterConsoleRunner-clients.config fájlt a clients.config.d mappában az I2P beállítások könyvtárában. Frissítse vagy adja hozzá a szükséges IP-címeket a meglévő localhost (127.0.0.1) leképezéshez. Használja a -s kapcsolót a HTTPS hozzáféréshez."
 
 msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
-msgstr ""
+msgstr "Példa: Hozzáférés engedélyezése localhost-ról és 192.168.1.10-ről HTTP-n és HTTPS-en keresztül:"
 
 msgid "For most client services, change listening address for relevant service in Tunnel Manager's configuration section using <i>reachable by</i> dropdown."
 msgstr ""
@@ -6496,7 +6496,7 @@ msgid "If you are in a hurry and can't wait a few hours, you can tell people to 
 msgstr "Ha siettetsz, és nem tudsz pár órát várni, akkor elmondhatod az embereknek, hogy használják az „ugrás” címsegítő átirányító szolgáltatást. Ez általában néhány percen belül működni fog miután regisztráltad a hosztnévét ugyanazon az oldalon. Előbb teszteld le magad a böngésződben ennek a beírásával: <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>a választott menedékod.i2p</i></code>. Ha működik, akkor másoknak is elmondhatod, hogy használják."
 
 msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skank.i2p</a>, and paste the link where it's required to share it with others."
-msgstr ""
+msgstr "Alternatívaként másolhatja a <i>cím segédlink</i> a domainjához, amelyet vagy a címjegyzékből vagy a domain részletező oldalon jelzik. Pl. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>skank.i2p részletei</a>. És beillesztheti a linket oda, ahol meg kell osztani másokkal."
 
 msgid "Backup your private key!"
 msgstr "Készíts biztonsági másolatot a privát kulcsodról!"
@@ -7273,7 +7273,7 @@ msgid "Configure display language, theme and optional console password"
 msgstr "A megjelenítési nyelv, a téma és az opcionális konzoljelszó konfigurálása"
 
 msgid "Language"
-msgstr ""
+msgstr "Nyelv"
 
 msgid "Configure router bandwidth"
 msgstr "Az útválasztó sávszélességének konfigurálása"
@@ -7340,22 +7340,22 @@ msgid "network database"
 msgstr "hálózati adatbázis"
 
 msgid "Encryption type"
-msgstr ""
+msgstr "Titkosítás típus"
 
 msgid "Encryption types"
-msgstr ""
+msgstr "Titkosítás típusok"
 
 msgid "Signature types"
-msgstr ""
+msgstr "Aláírás típusok"
 
 msgid "Locally hosted private service"
-msgstr ""
+msgstr "Helyile hosztolt privát szolgáltatás"
 
 msgid "Locally hosted public service"
-msgstr ""
+msgstr "Helyile hosztolt publikus szolgáltatás"
 
 msgid "Requested client leaseset"
-msgstr ""
+msgstr "Kért kliens LeaseSet"
 
 msgid "network database router map"
 msgstr "Hálózati adatbázis router térképe"
@@ -7401,10 +7401,10 @@ msgid "Fast / High Capacity"
 msgstr "Gyors / Nagy kapacitás"
 
 msgid "router logs"
-msgstr ""
+msgstr "Router naplók"
 
 msgid "service logs"
-msgstr ""
+msgstr "Szolgáltatás naplók"
 
 msgid "Manage I2P addresses"
 msgstr "I2P-címek kezelése"
@@ -7611,13 +7611,13 @@ msgid "Toggle Tunnels"
 msgstr "Alagutak váltása"
 
 msgid "Updating sidebar sections"
-msgstr ""
+msgstr "Oldalsáv szakaszok frissítése"
 
 msgid "Peer Profile"
 msgstr "Társ Profil"
 
 msgid "Profile View"
-msgstr ""
+msgstr "Profilnézet"
 
 msgid "Profile for peer"
 msgstr "Profil a társ számára"

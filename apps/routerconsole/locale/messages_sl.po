@@ -147,7 +147,7 @@ msgid "Unreachable on any transport"
 msgstr "Ne dosegljivo z nobenim prevoznikom"
 
 msgid "Cannot enumerate UPnP devices on Android."
-msgstr ""
+msgstr "Ni mogoče oštevilčiti UPnP naprave na Androidu."
 
 msgid "UPnP is not enabled"
 msgstr "UPnP ni omogočen"
@@ -687,7 +687,7 @@ msgid "After reporting, please restart your router"
 msgstr "Po poročanju, prosimo ponovno zagnite svoj usmerjevalnik"
 
 msgid "Invalid form submission, requires POST"
-msgstr ""
+msgstr "Neveljavna oddaja obrazca, zahteva POST"
 
 msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
 msgstr "Neveljavno oddajo obrazca, verjetno zaradi uporabe gumbev 'nazaj' ali 'osveži' v brskalniku. Prosimo, ponovno oddajte."

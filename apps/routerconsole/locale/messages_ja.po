@@ -141,7 +141,7 @@ msgid "Unreachable on any transport"
 msgstr "すべてのトランスポートに到達不可"
 
 msgid "Cannot enumerate UPnP devices on Android."
-msgstr ""
+msgstr "AndroidでUPnPデバイスを列挙できません。"
 
 msgid "UPnP is not enabled"
 msgstr "UPnP は有効ではありません"
@@ -681,7 +681,7 @@ msgid "After reporting, please restart your router"
 msgstr "報告後、ルーターを再起動してください"
 
 msgid "Invalid form submission, requires POST"
-msgstr ""
+msgstr "無効なフォーム送信、POSTが必要です"
 
 msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
 msgstr "無効なフォームからの送信、おそらくブラウザで「戻る」か「リロード」ボタンを使用したためです。再送信してください。"
@@ -814,13 +814,13 @@ msgid "To enable SSL access for the Router Console, see the commented <code>clie
 msgstr "RouterコンソールのSSLアクセスを有効にするには、詳細についてはi2pアプリケーションディレクトリにある<code>clients.config</code>ファイルを参照してください。 ディレクトリにあるRouterConsolerunner構成ファイルを編集する必要があります。"
 
 msgid "Save disabled, edit the router.config file to make changes"
-msgstr ""
+msgstr "保存が無効です。変更を加えるにはrouter.configファイルを編集してください。"
 
 msgid "Error updating the configuration - please see the error logs"
 msgstr "設定を更新する際にエラー - エラーログを確認してください"
 
 msgid "No changes made to the configuration"
-msgstr ""
+msgstr "設定に変更は加えられていません。"
 
 msgid "Note"
 msgstr "注意"
@@ -841,7 +841,7 @@ msgid "Save Plugin Configuration"
 msgstr "プラグイン設定を保存"
 
 msgid "Plugins disabled"
-msgstr ""
+msgstr "プラグインが無効です"
 
 msgid "Install Plugin"
 msgstr "プラグインをインストール"
@@ -853,7 +853,7 @@ msgid "Update All Installed Plugins"
 msgstr "全てのインストール済みプラグインをアップデート"
 
 msgid "Delete client disabled"
-msgstr ""
+msgstr "クライアントの削除が無効です"
 
 #, java-format
 msgid "Error stopping plugin {0}"
@@ -937,17 +937,17 @@ msgid "Updating all plugins"
 msgstr "全てのプラグインをアップデート中"
 
 msgid "Update manager not registered, cannot install"
-msgstr ""
+msgstr "アップデートマネージャーが登録されていません。インストールできません。"
 
 #, java-format
 msgid "Installing plugin from {0}"
 msgstr "{0} からプラグインをインストール中"
 
 msgid "Cannot install, check logs"
-msgstr ""
+msgstr "インストールできません。ログを確認してください。"
 
 msgid "Update manager not registered, cannot check"
-msgstr ""
+msgstr "アップデートマネージャーが登録されていません。確認できません。"
 
 #, java-format
 msgid "Checking plugin {0} for updates"
@@ -1047,17 +1047,17 @@ msgid "Join Family"
 msgstr "ファミリーに参加"
 
 msgid "Bad certificate - No Subject CN"
-msgstr ""
+msgstr "不正な証明書 - サブジェクトCNがありません"
 
 msgid "Bad characters in Family: "
-msgstr ""
+msgstr "ファミリーに不正な文字: "
 
 #, java-format
 msgid "Keystore {0} already exists for family {1}! Delete or rename it first."
-msgstr ""
+msgstr "キーストア{0}はファミリー{1}に既に存在します! 最初に削除または名前変更してください。"
 
 msgid "Family key configured for router family: "
-msgstr ""
+msgstr "ルーターファミリーのファミリーキーが設定されています: "
 
 msgid "Load from file failed"
 msgstr "ファイルからの読み込みに失敗"
@@ -1075,7 +1075,7 @@ msgid "Restore defaults"
 msgstr "デフォルトに戻す"
 
 msgid "Bad group detected, please retry"
-msgstr ""
+msgstr "不正なグループが検出されました。再試行してください。"
 
 msgid "Restored default settings"
 msgstr "デフォルトの設定に戻されました"
@@ -1108,7 +1108,7 @@ msgid "Invalid destination"
 msgstr "無効な宛先"
 
 msgid "Cannot add key for local destination. Enable encryption in the Tunnel Manager."
-msgstr ""
+msgstr "ローカル宛先にキーを追加できません。トンネルマネージャーで暗号化を有効にしてください。"
 
 #, java-format
 msgid "Key for {0} added to keyring"
@@ -1121,7 +1121,7 @@ msgid "Requires hostname, destination, or blinded Base32"
 msgstr "ホスト名、宛先、またはブラインドBase32が必要です"
 
 msgid "Cannot add key for local destination. Enable encryption in the Hidden Services Manager."
-msgstr ""
+msgstr "ローカル宛先にキーを追加できません。非表示サービスマネージャーで暗号化を有効にしてください。"
 
 msgid "Destination requires lookup password"
 msgstr "宛先には検索パスワードが必要です"
@@ -1142,7 +1142,7 @@ msgid "Delete key"
 msgstr "キーを削除"
 
 msgid "Cannot remove key for local destination. Disable encryption in the Tunnel Manager."
-msgstr ""
+msgstr "ローカル宛先のキーを削除できません。トンネルマネージャーで暗号化を無効にしてください。"
 
 #, java-format
 msgid "Key for {0} removed from keyring"
@@ -1195,34 +1195,34 @@ msgid "Log overrides updated"
 msgstr "ログオーバーライドが更新されました"
 
 msgid "Error updating the log limits - levels not valid"
-msgstr ""
+msgstr "ログ制限の更新エラー - レベルが無効です"
 
 msgid "Log limits cleared"
-msgstr ""
+msgstr "ログ制限がクリアされました"
 
 #, java-format
 msgid "Default log level updated from {0} to {1}"
-msgstr ""
+msgstr "デフォルトログレベルが{0}から{1}に更新されました"
 
 msgid "Date format updated"
-msgstr ""
+msgstr "日付形式が更新されました"
 
 #, java-format
 msgid "Specified date format is not valid ({0}) - not updated"
-msgstr ""
+msgstr "指定された日付形式が無効です({0}) - 更新されませんでした"
 
 msgid "File size updated"
-msgstr ""
+msgstr "ファイルサイズが更新されました"
 
 #, java-format
 msgid "Specified file size limit is not valid ({0}) - not updated"
-msgstr ""
+msgstr "指定されたファイルサイズ制限が無効です({0}) - 更新されませんでした"
 
 msgid "Compression setting updated"
-msgstr ""
+msgstr "圧縮設定が更新されました"
 
 msgid "Log record format updated"
-msgstr ""
+msgstr "ログ記録形式が更新されました"
 
 msgid "Log configuration saved"
 msgstr "ログ設定が保存されました"
@@ -1432,10 +1432,10 @@ msgid "Bad capacity value"
 msgstr "不良な許容値"
 
 msgid "Bonuses adjusted for: "
-msgstr ""
+msgstr "ボーナスが調整されました: "
 
 msgid "No profile exists for: "
-msgstr ""
+msgstr "プロファイルが存在しません: "
 
 msgid "Unsupported"
 msgstr "非サポート"
@@ -1451,7 +1451,7 @@ msgstr "送信先"
 
 #, java-format
 msgid "First {0} displayed, see the {1} file for the full list"
-msgstr ""
+msgstr "最初の{0}件が表示されました。完全なリストについては{1}ファイルを参照してください。"
 
 msgid "IPs Banned Until Restart"
 msgstr "再起動まで禁止された IP"
@@ -1549,7 +1549,7 @@ msgid "Save order"
 msgstr "順番を保存"
 
 msgid "Sidebar preferences updated"
-msgstr ""
+msgstr "サイドバーの設定が更新されました"
 
 msgid "Refresh interval must be a number"
 msgstr "更新間隔は数字でなければなりません"
@@ -1558,16 +1558,16 @@ msgid "Restore full default"
 msgstr "完全なデフォルトに戻す"
 
 msgid "Full sidebar defaults restored."
-msgstr ""
+msgstr "完全なサイドバーのデフォルトが復元されました。"
 
 msgid "Sidebar will refresh shortly."
-msgstr ""
+msgstr "サイドバーはまもなく更新されます。"
 
 msgid "Restore minimal default"
 msgstr "最小のデフォルトに戻す"
 
 msgid "Minimal sidebar defaults restored."
-msgstr ""
+msgstr "最小限のサイドバーのデフォルトが復元されました。"
 
 msgid "Order must be an integer"
 msgstr "順番は整数値でなければなりません"
@@ -1596,11 +1596,11 @@ msgstr "グラフリストが更新されましたが、 {0}グラフページ{1
 
 #, java-format
 msgid "Internal error: could not resolve pool name {0}."
-msgstr ""
+msgstr "内部エラー: プール名{0}を解決できませんでした。"
 
 #, java-format
 msgid "Internal error: could not find pool settings for {0}."
-msgstr ""
+msgstr "内部エラー: {0}のプール設定が見つかりませんでした。"
 
 msgid "Updated settings for all pools."
 msgstr "全プールで設定が更新されました。"
@@ -1673,7 +1673,7 @@ msgid "Add user"
 msgstr "ユーザーを追加"
 
 msgid "Cannot save theme choice, theme name has illegal characters"
-msgstr ""
+msgstr "テーマ選択を保存できません。テーマ名に不正な文字が含まれています。"
 
 msgid "Theme change saved."
 msgstr "テーマの変更が保存されました。"
@@ -1685,7 +1685,7 @@ msgid "No user name entered"
 msgstr "ユーザー名が入力されていません"
 
 msgid "User name may not contain '='"
-msgstr ""
+msgstr "ユーザー名に'='を含めることはできません。"
 
 msgid "Warning: User names outside the ISO-8859-1 character set are not recommended. Support is not standardized and varies by browser."
 msgstr "警告: ISO-8859-1 文字セットの範囲外のユーザ名は推奨されません。サポートは標準化されておらず、ブラウザに依存します。"
@@ -2007,7 +2007,7 @@ msgid "Show list of all known I2P routers"
 msgstr "既存の全 I2P ルーターの一覧を表示"
 
 msgid "List of recently connected peers with profiling info"
-msgstr ""
+msgstr "プロファイリング情報付きの最近接続されたピアのリスト"
 
 msgid "Peer Profiles"
 msgstr "ピアプロファイル"
@@ -2175,7 +2175,7 @@ msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Reddit向けのプライバシー重視の代替フロントエンド"
 
 msgid "AI Image generation & Chat hub"
-msgstr ""
+msgstr "AI画像生成とチャットハブ"
 
 msgid "IRC Logs for multiple networks"
 msgstr "複数のネットワークの IRC ログ"
@@ -2316,10 +2316,10 @@ msgid "OpenDemocracy"
 msgstr "オープンな民主主義"
 
 msgid "Online privacy &amp; tech blog"
-msgstr ""
+msgstr "オンラインプライバシーと技術ブログ"
 
 msgid "RightToPrivacy"
-msgstr ""
+msgstr "プライバシーの権利"
 
 msgid "Lifestyle magazine"
 msgstr "ライフスタイルマガジン"
@@ -2340,7 +2340,7 @@ msgid "Community-driven tech news"
 msgstr "コミュニティ主導のテクノロジーニュース"
 
 msgid "Various services"
-msgstr ""
+msgstr "各種サービス"
 
 msgid "News for nerds"
 msgstr "オタク向けニュース"
@@ -2416,7 +2416,7 @@ msgid "Add"
 msgstr "追加"
 
 msgid "Error displaying the info page."
-msgstr ""
+msgstr "情報ページの表示エラー。"
 
 msgid "Identity"
 msgstr "アイデンティティ"
@@ -2464,7 +2464,7 @@ msgid "Performance"
 msgstr "パフォーマンス"
 
 msgid "Maximum available RAM"
-msgstr ""
+msgstr "利用可能な最大RAM"
 
 msgid "Classified as slow"
 msgstr "低速として分類"
@@ -2476,7 +2476,7 @@ msgid "No"
 msgstr "いいえ"
 
 msgid "GeoIP Db"
-msgstr ""
+msgstr "GeoIPデータベース"
 
 msgid "Target"
 msgstr "ターゲット"
@@ -2615,19 +2615,19 @@ msgid "Sybil Analysis"
 msgstr "シビル分析"
 
 msgid "Bad value supplied, please check and try again."
-msgstr ""
+msgstr "不正な値が提供されました。確認して再試行してください。"
 
 msgid "Router Map"
 msgstr "ルーター地図"
 
 msgid "Network Database Search"
-msgstr ""
+msgstr "ネットワークデータベース検索"
 
 msgid "Capabilities"
 msgstr "能力"
 
 msgid "e.g. f or XOfR"
-msgstr ""
+msgstr "例: fまたはXOfR"
 
 msgid "Cost"
 msgstr "コスト"
@@ -2636,49 +2636,49 @@ msgid "Country"
 msgstr "国"
 
 msgid "Country Codes"
-msgstr ""
+msgstr "国コード"
 
 msgid "Hash Prefix"
-msgstr ""
+msgstr "ハッシュプレフィックス"
 
 msgid "IPv4 or IPv6, /24,/16,/8 suffixes optional for IPv4, prefix ok for IPv6"
-msgstr ""
+msgstr "IPv4またはIPv6、/24,/16,/8サフィックスはIPv4でオプション、IPv6でプレフィックスOK"
 
 msgid "Hostname or b32"
-msgstr ""
+msgstr "ホスト名またはb32"
 
 msgid "IPv6 Prefix"
-msgstr ""
+msgstr "IPv6プレフィックス"
 
 msgid "Single port or range"
-msgstr ""
+msgstr "単一ポートまたは範囲"
 
 msgid "Signature Type"
-msgstr ""
+msgstr "署名タイプ"
 
 msgid "SSU Capabilities"
-msgstr ""
+msgstr "SSU機能"
 
 msgid "Encryption Type"
-msgstr ""
+msgstr "暗号化タイプ"
 
 msgid "Router Version"
-msgstr ""
+msgstr "ルーターバージョン"
 
 msgid "Transport"
 msgstr "トランスポート"
 
 msgid "Add Sybil analysis (must pick at least one above)"
-msgstr ""
+msgstr "Sybil分析を追加（上記から少なくとも1つ選択する必要があります）"
 
 msgid "Sybil close to"
-msgstr ""
+msgstr "Sybilが近い"
 
 msgid "Router hash, destination hash, b32, or from address book"
-msgstr ""
+msgstr "ルーターハッシュ、宛先ハッシュ、b32、またはアドレス帳から"
 
 msgid "or Sybil close to this router"
-msgstr ""
+msgstr "またはSybilがこのルーターに近い"
 
 msgid "Lookup"
 msgstr "ルックアップ"
@@ -2693,13 +2693,13 @@ msgid "not found in network database"
 msgstr "ネットワークデータベース内に見つかりませんでした"
 
 msgid "Bad Base64 Router hash"
-msgstr ""
+msgstr "不正なBase64ルーターハッシュ"
 
 msgid "No routers with"
-msgstr ""
+msgstr "ルーターが存在しません: "
 
 msgid "Hash prefix"
-msgstr ""
+msgstr "ハッシュプレフィックス"
 
 msgid "Port"
 msgstr "ポート"
@@ -2708,10 +2708,10 @@ msgid "MTU"
 msgstr "男"
 
 msgid "found in the network database"
-msgstr ""
+msgstr "ネットワークデータベースで見つかりました"
 
 msgid "results"
-msgstr ""
+msgstr "結果"
 
 msgid "Previous Page"
 msgstr "前のページ"
@@ -2720,43 +2720,43 @@ msgid "Next Page"
 msgstr "次のページ"
 
 msgid "Results per page"
-msgstr ""
+msgstr "ページあたりの結果"
 
 msgid "Not initialized"
 msgstr "未初期化"
 
 msgid "Total Remote Leasesets"
-msgstr ""
+msgstr "リモートリースセット合計"
 
 msgid "Compact mode"
-msgstr ""
+msgstr "コンパクトモード"
 
 msgid "Local Leasesets"
-msgstr ""
+msgstr "ローカルリースセット"
 
 msgid "Debug Mode"
-msgstr ""
+msgstr "デバッグモード"
 
 msgid "Published (RAP) Leasesets"
-msgstr ""
+msgstr "公開済み(RAP)リースセット"
 
 msgid "Sorted by hash distance, closest first."
-msgstr ""
+msgstr "ハッシュ距離でソート、最も近いものが最初。"
 
 msgid "Mod Data"
-msgstr ""
+msgstr "Modデータ"
 
 msgid "Last Changed"
-msgstr ""
+msgstr "最終変更"
 
 msgid "Next Mod Data"
-msgstr ""
+msgstr "次のModデータ"
 
 msgid "Change in"
-msgstr ""
+msgstr "変更"
 
 msgid "Floodfill mode enabled"
-msgstr ""
+msgstr "フラッドフィルモードが有効です"
 
 msgid "Routing Key"
 msgstr "ルーティングキー"
@@ -2771,10 +2771,10 @@ msgid "Estimated total leasesets"
 msgstr "リースセットの推定合計数"
 
 msgid "Total Local Leasesets"
-msgstr ""
+msgstr "ローカルリースセット合計"
 
 msgid "Remote Leasesets"
-msgstr ""
+msgstr "リモートリースセット"
 
 #, java-format
 msgid "Hostname {0} not found in network database"
@@ -2785,7 +2785,7 @@ msgid "LeaseSet for {0} not found in network database"
 msgstr ""
 
 msgid "Meta"
-msgstr ""
+msgstr "メタ"
 
 msgid "LeaseSet"
 msgstr "リースセット"
@@ -2817,7 +2817,7 @@ msgid "Signature type"
 msgstr "署名の種類"
 
 msgid "Public Key"
-msgstr ""
+msgstr "公開鍵"
 
 msgid "Unsupported type"
 msgstr "サポートされていないタイプ"
@@ -2834,10 +2834,10 @@ msgid "Unknown"
 msgstr "不明"
 
 msgid "Advanced mode - includes all statistics published by floodfills."
-msgstr ""
+msgstr "高度モード - フラッドフィルによって公開されたすべての統計を含みます。"
 
 msgid "Compact mode - does not include statistics published by floodfills."
-msgstr ""
+msgstr "コンパクトモード - フラッドフィルによって公開された統計を含みません。"
 
 msgid "Network Database Router Statistics"
 msgstr "ネットワークデータベースルーター統計"
@@ -2861,7 +2861,7 @@ msgid "Transports"
 msgstr "トランスポート"
 
 msgid "X Tier"
-msgstr ""
+msgstr "Xティア"
 
 msgid "Floodfills"
 msgstr "埋め立て地"
@@ -2879,10 +2879,10 @@ msgid "Router is banlisted"
 msgstr "ルーターが禁止リストに登録されています"
 
 msgid "Java I2P variant"
-msgstr ""
+msgstr "Java I2Pバリアント"
 
 msgid "I2Pd variant"
-msgstr ""
+msgstr "I2Pdバリアント"
 
 msgid "RouterInfo is compressible"
 msgstr "RouterInfoは圧縮可能です"
@@ -2916,7 +2916,7 @@ msgid "Hostname"
 msgstr "ホスト名"
 
 msgid "direct"
-msgstr ""
+msgstr "直接"
 
 msgid "Verified family (signing certificate is installed and valid)"
 msgstr "検証済みファミリー (署名証明書がインストールされており、有効です)"
@@ -2955,10 +2955,10 @@ msgid "Last heard from"
 msgstr "最後に聞いたのは"
 
 msgid "Network Id"
-msgstr ""
+msgstr "ネットワークID"
 
 msgid "Count is always spoofed to avoid indicating router restarts"
-msgstr ""
+msgstr "カウントは常にルーターの再起動を示さないように偽装されています。"
 
 msgid "Hidden or starting up"
 msgstr "隠すか起動中"
@@ -3026,10 +3026,10 @@ msgid "IPv6"
 msgstr "IPv6"
 
 msgid "Active connections / Max permitted"
-msgstr ""
+msgstr "アクティブ接続 / 最大許可"
 
 msgid "Connections / Limit"
-msgstr ""
+msgstr "接続 / 制限"
 
 msgid "Current / maximum permitted"
 msgstr "現在 / 最大許可"
@@ -3318,7 +3318,7 @@ msgid "Rejected"
 msgstr "拒否されました"
 
 msgid "First Heard About"
-msgstr ""
+msgstr "最初に聞いた"
 
 msgid "Last Heard From"
 msgstr "次から最後に耳にした:"
@@ -3428,7 +3428,7 @@ msgstr "{0} 共有帯域幅"
 
 #, java-format
 msgid "Over {0} KB/s shared bandwidth"
-msgstr ""
+msgstr "{0} KB/sを超える共有帯域幅"
 
 msgid "status"
 msgstr "ステータス"
@@ -3491,7 +3491,7 @@ msgid "Total number of banned peers"
 msgstr "禁止されたピアの総数"
 
 msgid "Note: 'LU' class routers have been excluded from the list."
-msgstr ""
+msgstr "注意: 'LU'クラスのルーターはリストから除外されています。"
 
 #, java-format
 msgid "To view, see {0}Session Bans{1}."
@@ -3870,7 +3870,7 @@ msgid "Floodfill enabled"
 msgstr "Floodfill機能有効"
 
 msgid "Total number of remote LeaseSets stored in our NetDb"
-msgstr ""
+msgstr "私たちのNetDbに保存されているリモートリースセットの総数"
 
 msgid "Warning: ECDSA is not available. Update your Java or OS"
 msgstr "警告: ECDSA が利用できません。 Java または OS を更新してください"
@@ -3885,7 +3885,7 @@ msgid "Peers we've been talking to in the last minute / last hour"
 msgstr "過去数分/数時間内に通信したピア"
 
 msgid "Peers we've been talking to in the last minute"
-msgstr ""
+msgstr "最後の1分間に話していたピア"
 
 msgid "The number of peers available for building client tunnels"
 msgstr "クライアントトンネルのビルドに利用できるピアノ数"
@@ -4392,7 +4392,7 @@ msgid "Data"
 msgstr "データ"
 
 msgid "Limit"
-msgstr ""
+msgstr "制限"
 
 msgid "Receive on"
 msgstr "受信時間:"
@@ -4439,7 +4439,7 @@ msgid "No transit tunnels currently active."
 msgstr "現在アクティブなトランジット トンネルはありません。"
 
 msgid "Transit Tunnels by Peer (Top {0})"
-msgstr ""
+msgstr "ピア別のトランジットトンネル（上位{0}件）"
 
 msgid "Address"
 msgstr "住所"
@@ -4518,7 +4518,7 @@ msgid "Bandwidth test did not complete"
 msgstr "帯域幅テストが完了しませんでした"
 
 msgid "Bad state for test"
-msgstr ""
+msgstr "テストの状態が不良です"
 
 msgid "Bandwidth test started"
 msgstr "帯域幅テスト開始"
@@ -4533,16 +4533,16 @@ msgid "Bandwidth test was not running"
 msgstr "帯域幅テストが実行されていませんでした"
 
 msgid "ready"
-msgstr ""
+msgstr "準備完了"
 
 msgid "inbound test"
-msgstr ""
+msgstr "受信テスト"
 
 msgid "outbound test"
-msgstr ""
+msgstr "送信テスト"
 
 msgid "done"
-msgstr ""
+msgstr "完了"
 
 msgid "bits per second"
 msgstr "毎秒ビット"
@@ -4714,7 +4714,7 @@ msgid "Share"
 msgstr "共有"
 
 msgid "NOTE"
-msgstr ""
+msgstr "注記"
 
 #, java-format
 msgid "You have configured I2P+ to share only {0} KBps."
@@ -4741,7 +4741,7 @@ msgstr "詳細設定"
 
 #, java-format
 msgid "Key <b>{0}</b> selected for removal. To commit the change, save the configuration, or cancel to restore the key."
-msgstr ""
+msgstr "キー<b>{0}</b>が削除用に選択されました。変更を確定するには、設定を保存するか、キーを復元するためにキャンセルしてください。"
 
 msgid "Floodfill Configuration"
 msgstr "フラッドフィル構成"
@@ -4771,7 +4771,7 @@ msgid "Advanced I2P+ Configuration"
 msgstr "高度な I2P 構成"
 
 msgid "Help with additional configuration settings"
-msgstr ""
+msgstr "追加設定に関するヘルプ"
 
 #, java-format
 msgid "To make changes, edit the file: {0}"
@@ -5165,7 +5165,7 @@ msgid "Banning will prevent the participation of this peer in tunnels you create
 msgstr "禁止すると、作成したトンネルにこのピアが参加できなくなります。"
 
 msgid "A list of bans by IP address is presented below."
-msgstr ""
+msgstr "IPアドレス別の禁止リストが以下に表示されています。"
 
 #, java-format
 msgid "To view all active bans by router hash, see {0}Banned Peers{1}."
@@ -5173,7 +5173,7 @@ msgstr ""
 
 #, java-format
 msgid "A list of {0}session-only bans{1} by hash is also available."
-msgstr ""
+msgstr "ハッシュ別の{0}セッションのみ禁止{1}のリストも利用可能です。"
 
 msgid "Adjust Profile Bonuses"
 msgstr "プロフィールボーナスの調整"
@@ -5364,7 +5364,7 @@ msgid "config sidebar"
 msgstr "設定サイドバー"
 
 msgid "Sidebar Options"
-msgstr ""
+msgstr "サイドバーオプション"
 
 msgid "Refresh interval"
 msgstr "リフレッシュ間隔"
@@ -5376,10 +5376,10 @@ msgid "0 to disable"
 msgstr "0 無効にする"
 
 msgid "Unified sidebar"
-msgstr ""
+msgstr "統一サイドバー"
 
 msgid "Use the same sidebar on all pages"
-msgstr ""
+msgstr "すべてのページで同じサイドバーを使用する"
 
 msgid "config stats"
 msgstr "構成統計"
@@ -5581,7 +5581,7 @@ msgid "Event Log"
 msgstr "イベントログ"
 
 msgid "Combined"
-msgstr ""
+msgstr "結合"
 
 msgid "graph"
 msgstr "グラフ"
@@ -5662,7 +5662,7 @@ msgid "This setting, when set to true, will display the <i>Sites of Interest</i>
 msgstr "この設定をtrueにすると、<a href=/sitemap>サイトマップ</a>に<i>興味のあるサイト</i>のリンクが表示されます。[デフォルトはfalse]"
 
 msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
-msgstr ""
+msgstr "この設定をtrueに設定すると、ホームページに標準サイドバーを表示し、<a href=/configsidebar>経由で設定を有効にします。[デフォルトはfalse]"
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "この設定は、ルーターが提供された<i>blocklist.txt</i>ファイルとユーザーが設定したブロックリストを使用して、ハッシュまたはIPアドレスによるルーターの禁止を有効にするかどうかを決定します。IPv4では範囲やネットマスクがサポートされていますが、IPv6ではサポートされていません。詳細については、I2P+アプリケーションディレクトリの<i>blocklist.txt</i>を参照してください。[デフォルトで有効、再起動が必要]"
@@ -5677,7 +5677,7 @@ msgid "This setting determines whether or not the router should use the provided
 msgstr "この設定は、TorエグジットノードのIPアドレスから運営されているルーターを禁止するために、I2P+アプリケーションディレクトリ内の提供された<i>blocklist_tor.txt</i>ファイルを使用するかどうかを決定します。[デフォルトで有効になっていますが、再起動が必要です]"
 
 msgid "This setting enables requests from routers in the specified countries to be blocked and banned as soon as a direct tunnel request is made. Countries must be specified as two letter country codes, separated with commas. e.g. router.blockCountries=cn,ru"
-msgstr ""
+msgstr "この設定により、指定された国のルーターからの要求が直接トンネル要求が行われた直ちにブロックされ、禁止されます。国は2文字の国コードで指定し、カンマで区切る必要があります。例: router.blockCountries=cn,ru"
 
 msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
 msgstr "falseに設定すると、古いバージョンを実行している遅いまたは到達できないルーターからのトンネル構築リクエストはブロックされません。[デフォルトはtrue、再起動が必要]"
@@ -5815,7 +5815,7 @@ msgid "This setting determines whether routers classified as uninteresting (K or
 msgstr "この設定は、興味のない (K または L ティア、到達不能または0.9.50より古い) と分類されたルーターが、稼働時間1時間後にリフレッシュルータープロセス中にチェックされるかどうかを決定します。[デフォルトはfalse]"
 
 msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
-msgstr ""
+msgstr "trueに設定すると、この設定は帯域幅使用量が高いと判断された場合に、ルーターが輻輻キャップを公開するために必要な条件を緩和します。その他の条件、ジョブラグが高いまたはルーターが遅いと分類された場合でも、キャップの公開は引き続き発生します。[デフォルトはfalse]"
 
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
 msgstr "設定すると、これにより、ルータが同時に構築を許可されるトンネルの数に対する厳しい制限が設定されます。デフォルトでは、ルータは平均構築時間と現在の送信帯域幅を使用して最適な構築速度を決定します。[再起動が必要です]"
@@ -5830,10 +5830,10 @@ msgid "This setting (in minutes) allows you to manually configure how long to wa
 msgstr "この設定（分単位）は、起動後にNetDb内のRouterInfoの有効性を確認するまでの待機時間を手動で設定することを可能にします。その後、有効なルーターのみが組み込まれます。検証が行われると、期限切れのRouterInfoとSSUでのみアクセス可能な応答のないピアがNetDbから削除されます。[デフォルトは60分] 注：この設定は、古いルーター（デフォルトでは0.9.29より古い）には影響しません。古いルーターはNetDbから削除され、NetDbストアの試行時にルーターセッションから禁止されます。"
 
 msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
-msgstr ""
+msgstr "trueに設定すると、この設定は自国のすべてのルーターからの直接通信をブロックし、ルーターが再起動するまでそれらを禁止リストに追加します。[デフォルトはfalse]"
 
 msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
-msgstr ""
+msgstr "trueに設定すると、この設定はG輻輻キャップを公開し、到達可能でも到達不可能でもないXティアのすべてのルーターからの直接通信をブロックし、それらをセッション禁止リストに追加します。この設定を有効にするには高度モードを有効にする必要があることに注意してください。[デフォルトはfalse]"
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "この設定により、ルータがファイアウォールであるかどうかを判断するためのSSUテストを無効にすることができます。ファイアウォールでないことが確認されているが、一時的なファイアウォールの問題が発生しているルータに対して有効にすることもできます。テストが無効にされている場合、SSUとNTCPの両方が<a href=/info>ルータ情報ページ</a>で現在の公開IPアドレスを報告するはずです。[再起動が必要です]"
@@ -5842,7 +5842,7 @@ msgid "This setting determines which transport takes priority when communicating
 msgstr "この設定により、ピアとの通信時に優先されるトランスポートを決定します。デフォルトでは、UDP (SSU) よりもNTCPが優先されています。値をtrueに設定すると、事前のNTCP接続が存在しない限り、UDPが優先されます。alwaysに設定すると、事前のNTCP接続の有無に関係なく常にUDPが使用されます。[デフォルトはfalse]"
 
 msgid "miscellaneous"
-msgstr ""
+msgstr "その他"
 
 msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
 msgstr "trueに設定すると、このオプションに基本的なサービス制御オプションを備えたアイコンがシステムトレイ/通知エリアに配置されます。[デフォルトでは無効]"
@@ -6082,13 +6082,13 @@ msgid "For SSL only"
 msgstr "SSLのみの場合"
 
 msgid "How can I configure the console and web services to be accessible on my local network?"
-msgstr ""
+msgstr "コンソールとWebサービスをローカルネットワークでアクセス可能にするにはどうすればよいですか？"
 
 msgid "To make your console accessible on your local network, edit the configuration file 00-net.i2p.router.web.RouterConsoleRunner-clients.config in the clients.config.d folder of your I2P settings directory. Update or add the necessary IP addresses to the existing localhost (127.0.0.1) mapping. Use the -s switch for HTTPS access."
-msgstr ""
+msgstr "コンソールをローカルネットワークでアクセス可能にするには、I2P設定ディレクトリのclients.config.dフォルダにある設定ファイル00-net.i2p.router.web.RouterConsoleRunner-clients.configを編集してください。既存のlocalhost (127.0.0.1)マッピングに必要なIPアドレスを更新または追加してください。HTTPSアクセスには-sスイッチを使用してください。"
 
 msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
-msgstr ""
+msgstr "例: localhostと192.168.1.10からHTTPとHTTPSでアクセスを許可する場合："
 
 msgid "For most client services, change listening address for relevant service in Tunnel Manager's configuration section using <i>reachable by</i> dropdown."
 msgstr ""
@@ -6478,7 +6478,7 @@ msgid "If you are in a hurry and can't wait a few hours, you can tell people to 
 msgstr "急いでいて数時間待つことができない場合は、「ジャンプ」アドレスヘルパーのリダイレクトサービスを使用するよう他の人に伝えることができます。これは、同じサイトでホスト名を登録した後数分以内に通常動作します。まず、ブラウザに<code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code>を入力してテストしてください。動作するようになったら、他の人に使うよう伝えることができます。"
 
 msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skank.i2p</a>, and paste the link where it's required to share it with others."
-msgstr ""
+msgstr "または、ドメインの<i>アドレスヘルパーリンク</i>をコピーできます。これはアドレス帳リストページまたはドメインの詳細ページで示されています。例: <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>skank.i2pの詳細</a>。そして、他の人と共有する必要がある場所にリンクを貼り付けてください。"
 
 msgid "Backup your private key!"
 msgstr "秘密鍵をバックアップしてください。"
@@ -7255,7 +7255,7 @@ msgid "Configure display language, theme and optional console password"
 msgstr "表示言語、テーマ、およびオプションのコンソールパスワードを設定します"
 
 msgid "Language"
-msgstr ""
+msgstr "言語"
 
 msgid "Configure router bandwidth"
 msgstr "ルーターの帯域幅を設定する"
@@ -7322,22 +7322,22 @@ msgid "network database"
 msgstr "ネットワークデータベース"
 
 msgid "Encryption type"
-msgstr ""
+msgstr "暗号化タイプ"
 
 msgid "Encryption types"
-msgstr ""
+msgstr "暗号化タイプ"
 
 msgid "Signature types"
-msgstr ""
+msgstr "署名タイプ"
 
 msgid "Locally hosted private service"
-msgstr ""
+msgstr "ローカルでホストされているプライベートサービス"
 
 msgid "Locally hosted public service"
-msgstr ""
+msgstr "ローカルでホストされているパブリックサービス"
 
 msgid "Requested client leaseset"
-msgstr ""
+msgstr "要求されたクライアントリースセット"
 
 msgid "network database router map"
 msgstr "ネットワークデータベースルータマップ"
@@ -7383,10 +7383,10 @@ msgid "Fast / High Capacity"
 msgstr "高速/大容量"
 
 msgid "router logs"
-msgstr ""
+msgstr "ルーターログ"
 
 msgid "service logs"
-msgstr ""
+msgstr "サービスログ"
 
 msgid "Manage I2P addresses"
 msgstr "I2Pアドレスの管理"
@@ -7593,13 +7593,13 @@ msgid "Toggle Tunnels"
 msgstr "トンネルを切り替え"
 
 msgid "Updating sidebar sections"
-msgstr ""
+msgstr "サイドバーセクションを更新中"
 
 msgid "Peer Profile"
 msgstr "ピアプロフィール"
 
 msgid "Profile View"
-msgstr ""
+msgstr "プロファイル表示"
 
 msgid "Profile for peer"
 msgstr "ピアのプロファイル"

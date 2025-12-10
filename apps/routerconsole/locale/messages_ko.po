@@ -141,7 +141,7 @@ msgid "Unreachable on any transport"
 msgstr "어떤 트랜스포트에도 도달하지 못함"
 
 msgid "Cannot enumerate UPnP devices on Android."
-msgstr ""
+msgstr "Android에서 UPnP 장치를 열거할 수 없습니다."
 
 msgid "UPnP is not enabled"
 msgstr "UPnP가 활성화되지 않았습니다"
@@ -681,7 +681,7 @@ msgid "After reporting, please restart your router"
 msgstr "보고 후 라우터를 다시 시작하십시오"
 
 msgid "Invalid form submission, requires POST"
-msgstr ""
+msgstr "잘못된 양식 제출, POST가 필요합니다"
 
 msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
 msgstr "잘못된 폼 서브미션. 뒤로가기나 새로고침을 누르셨을 수 있습니다. 재시도해주세요."
@@ -814,13 +814,13 @@ msgid "To enable SSL access for the Router Console, see the commented <code>clie
 msgstr "SSL 액세스를 사용하려면 I2P 응용 프로그램 디렉토리에 위치한 주석 처리된 <code>clients.config</code> 파일을 참조하십시오. 자세한 내용은 <code>RouterConsoleRunner</code> 구성 파일이 있는 디렉토리에서 편집해야합니다. "
 
 msgid "Save disabled, edit the router.config file to make changes"
-msgstr ""
+msgstr "저장 비활성화됨, 변경 사항을 적용하려면 router.config 파일을 편집하세요"
 
 msgid "Error updating the configuration - please see the error logs"
 msgstr "설정을 업뎃하는데 실패했습니다 - 에러 로그를 보세요"
 
 msgid "No changes made to the configuration"
-msgstr ""
+msgstr "구성에 변경된 내용이 없습니다"
 
 msgid "Note"
 msgstr "참고"
@@ -841,7 +841,7 @@ msgid "Save Plugin Configuration"
 msgstr "플러그인 설정 저장"
 
 msgid "Plugins disabled"
-msgstr ""
+msgstr "플러그인 비활성화됨"
 
 msgid "Install Plugin"
 msgstr "플러그인 설치"
@@ -853,7 +853,7 @@ msgid "Update All Installed Plugins"
 msgstr "모든  설치된 플러그인 설치"
 
 msgid "Delete client disabled"
-msgstr ""
+msgstr "클라이언트 삭제 비활성화됨"
 
 #, java-format
 msgid "Error stopping plugin {0}"
@@ -937,17 +937,17 @@ msgid "Updating all plugins"
 msgstr "모든 플러그인 업데이트 중"
 
 msgid "Update manager not registered, cannot install"
-msgstr ""
+msgstr "업데이트 관리자가 등록되지 않아 설치할 수 없습니다"
 
 #, java-format
 msgid "Installing plugin from {0}"
 msgstr "{0}에서 플러그인 설치중"
 
 msgid "Cannot install, check logs"
-msgstr ""
+msgstr "설치할 수 없습니다, 로그를 확인하세요"
 
 msgid "Update manager not registered, cannot check"
-msgstr ""
+msgstr "업데이트 관리자가 등록되지 않아 확인할 수 없습니다"
 
 #, java-format
 msgid "Checking plugin {0} for updates"
@@ -1047,17 +1047,17 @@ msgid "Join Family"
 msgstr "가족과 함께하십시오"
 
 msgid "Bad certificate - No Subject CN"
-msgstr ""
+msgstr "잘못된 인증서 - 주체 CN이 없습니다"
 
 msgid "Bad characters in Family: "
-msgstr ""
+msgstr "패밀리에 잘못된 문자: "
 
 #, java-format
 msgid "Keystore {0} already exists for family {1}! Delete or rename it first."
-msgstr ""
+msgstr "키 저장소 {0}가 패밀리 {1}에 이미 존재합니다! 먼저 삭제하거나 이름을 바꾸세요."
 
 msgid "Family key configured for router family: "
-msgstr ""
+msgstr "라우터 패밀리 키가 구성됨: "
 
 msgid "Load from file failed"
 msgstr "파일 로드 실패"
@@ -1075,7 +1075,7 @@ msgid "Restore defaults"
 msgstr "기본설정으로"
 
 msgid "Bad group detected, please retry"
-msgstr ""
+msgstr "잘못된 그룹이 감지되었습니다. 다시 시도하세요"
 
 msgid "Restored default settings"
 msgstr "기본 설정으로 되돌려짐"
@@ -1108,7 +1108,7 @@ msgid "Invalid destination"
 msgstr "잘못된 목적지"
 
 msgid "Cannot add key for local destination. Enable encryption in the Tunnel Manager."
-msgstr ""
+msgstr "로컬 대상에 대한 키를 추가할 수 없습니다. 터널 관리자에서 암호화를 활성화하세요."
 
 #, java-format
 msgid "Key for {0} added to keyring"
@@ -1121,7 +1121,7 @@ msgid "Requires hostname, destination, or blinded Base32"
 msgstr "호스트 이름, 대상 또는 블라인드 Base32가 필요합니다."
 
 msgid "Cannot add key for local destination. Enable encryption in the Hidden Services Manager."
-msgstr ""
+msgstr "로컬 대상에 대한 키를 추가할 수 없습니다. 숨겨진 서비스 관리자에서 암호화를 활성화하세요."
 
 msgid "Destination requires lookup password"
 msgstr "대상에는 조회 비밀번호가 필요합니다."
@@ -1142,7 +1142,7 @@ msgid "Delete key"
 msgstr "키 삭제"
 
 msgid "Cannot remove key for local destination. Disable encryption in the Tunnel Manager."
-msgstr ""
+msgstr "로컬 대상에 대한 키를 제거할 수 없습니다. 터널 관리자에서 암호화를 비활성화하세요."
 
 #, java-format
 msgid "Key for {0} removed from keyring"
@@ -1195,34 +1195,34 @@ msgid "Log overrides updated"
 msgstr "로그 오버라이드 업데이트됨"
 
 msgid "Error updating the log limits - levels not valid"
-msgstr ""
+msgstr "로그 제한 업데이트 오류 - 레벨이 유효하지 않습니다"
 
 msgid "Log limits cleared"
-msgstr ""
+msgstr "로그 제한이 지워졌습니다"
 
 #, java-format
 msgid "Default log level updated from {0} to {1}"
-msgstr ""
+msgstr "기본 로그 레벨이 {0}에서 {1}(으)로 업데이트되었습니다"
 
 msgid "Date format updated"
-msgstr ""
+msgstr "날짜 형식이 업데이트되었습니다"
 
 #, java-format
 msgid "Specified date format is not valid ({0}) - not updated"
-msgstr ""
+msgstr "지정된 날짜 형식이 유효하지 않습니다 ({0}) - 업데이트되지 않았습니다"
 
 msgid "File size updated"
-msgstr ""
+msgstr "파일 크기가 업데이트되었습니다"
 
 #, java-format
 msgid "Specified file size limit is not valid ({0}) - not updated"
-msgstr ""
+msgstr "지정된 파일 크기 제한이 유효하지 않습니다 ({0}) - 업데이트되지 않았습니다"
 
 msgid "Compression setting updated"
-msgstr ""
+msgstr "압축 설정이 업데이트되었습니다"
 
 msgid "Log record format updated"
-msgstr ""
+msgstr "로그 기록 형식이 업데이트되었습니다"
 
 msgid "Log configuration saved"
 msgstr "로그 설정 저장됨"
@@ -1432,10 +1432,10 @@ msgid "Bad capacity value"
 msgstr "나쁜 수용량"
 
 msgid "Bonuses adjusted for: "
-msgstr ""
+msgstr "보너스가 조정됨: "
 
 msgid "No profile exists for: "
-msgstr ""
+msgstr "프로필이 존재하지 않습니다: "
 
 msgid "Unsupported"
 msgstr "지원 안됨"
@@ -1451,7 +1451,7 @@ msgstr "에게"
 
 #, java-format
 msgid "First {0} displayed, see the {1} file for the full list"
-msgstr ""
+msgstr "처음 {0}개가 표시됨, 전체 목록은 {1} 파일을 참조하세요"
 
 msgid "IPs Banned Until Restart"
 msgstr "재시작 이전까지 차단된 IP"
@@ -1549,7 +1549,7 @@ msgid "Save order"
 msgstr "순서 저장"
 
 msgid "Sidebar preferences updated"
-msgstr ""
+msgstr "사이드바 기본 설정이 업데이트되었습니다"
 
 msgid "Refresh interval must be a number"
 msgstr "새로고침 간격은 반드시 숫자여야 합니다"
@@ -1558,16 +1558,16 @@ msgid "Restore full default"
 msgstr "완전판 기본값으로 복구"
 
 msgid "Full sidebar defaults restored."
-msgstr ""
+msgstr "전체 사이드바 기본값이 복원되었습니다."
 
 msgid "Sidebar will refresh shortly."
-msgstr ""
+msgstr "사이드바가 곧 새로고쳐집니다."
 
 msgid "Restore minimal default"
 msgstr "최소 기본값 복원"
 
 msgid "Minimal sidebar defaults restored."
-msgstr ""
+msgstr "최소 사이드바 기본값이 복원되었습니다."
 
 msgid "Order must be an integer"
 msgstr "순서는 반드시 정수값이여야 합니다"
@@ -1596,11 +1596,11 @@ msgstr "그래프 리스트가 업데이트 되었습니다. {0}그래프 페이
 
 #, java-format
 msgid "Internal error: could not resolve pool name {0}."
-msgstr ""
+msgstr "내부 오류: 풀 이름 {0}을(를) 해결할 수 없습니다."
 
 #, java-format
 msgid "Internal error: could not find pool settings for {0}."
-msgstr ""
+msgstr "내부 오류: {0}에 대한 풀 설정을 찾을 수 없습니다."
 
 msgid "Updated settings for all pools."
 msgstr "모든 풀의 설정 저장됨."
@@ -1673,7 +1673,7 @@ msgid "Add user"
 msgstr "유저 추가"
 
 msgid "Cannot save theme choice, theme name has illegal characters"
-msgstr ""
+msgstr "테마 선택을 저장할 수 없습니다. 테마 이름에 잘못된 문자가 포함되어 있습니다"
 
 msgid "Theme change saved."
 msgstr "테마 변경 저장됨."
@@ -1685,7 +1685,7 @@ msgid "No user name entered"
 msgstr "유저네임이 입력되지 않았습니다"
 
 msgid "User name may not contain '='"
-msgstr ""
+msgstr "사용자 이름에 '='을 포함할 수 없습니다"
 
 msgid "Warning: User names outside the ISO-8859-1 character set are not recommended. Support is not standardized and varies by browser."
 msgstr "경고: ISO-8859-1 문자 이외를 유저네임에 사용하는것은 권장되지 않습니다. 지원되지 않는 브라우저가 있을 수 있습니다."
@@ -2007,7 +2007,7 @@ msgid "Show list of all known I2P routers"
 msgstr "모든 알려진 I2P 라우터 리스트 보이기"
 
 msgid "List of recently connected peers with profiling info"
-msgstr ""
+msgstr "프로파일링 정보가 포함된 최근 연결된 피어 목록"
 
 msgid "Peer Profiles"
 msgstr "동료 프로필"
@@ -2175,7 +2175,7 @@ msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Reddit의 대체 개인 정보 중심 프론트 엔드"
 
 msgid "AI Image generation & Chat hub"
-msgstr ""
+msgstr "AI 이미지 생성 및 채팅 허브"
 
 msgid "IRC Logs for multiple networks"
 msgstr "여러 네트워크의 IRC 로그"
@@ -2316,10 +2316,10 @@ msgid "OpenDemocracy"
 msgstr "열린 민주주의"
 
 msgid "Online privacy &amp; tech blog"
-msgstr ""
+msgstr "온라인 개인정보 보호 및 기술 블로그"
 
 msgid "RightToPrivacy"
-msgstr ""
+msgstr "프라이버시투프라이버시"
 
 msgid "Lifestyle magazine"
 msgstr "라이프스타일 매거진"
@@ -2340,7 +2340,7 @@ msgid "Community-driven tech news"
 msgstr "커뮤니티 중심 기술 뉴스"
 
 msgid "Various services"
-msgstr ""
+msgstr "다양한 서비스"
 
 msgid "News for nerds"
 msgstr "너드를 위한 뉴스"
@@ -2416,7 +2416,7 @@ msgid "Add"
 msgstr "추가"
 
 msgid "Error displaying the info page."
-msgstr ""
+msgstr "정보 페이지 표시 오류"
 
 msgid "Identity"
 msgstr "신원"
@@ -2464,7 +2464,7 @@ msgid "Performance"
 msgstr "성능"
 
 msgid "Maximum available RAM"
-msgstr ""
+msgstr "최대 사용 가능 RAM"
 
 msgid "Classified as slow"
 msgstr "느리게 분류됩니다"
@@ -2476,7 +2476,7 @@ msgid "No"
 msgstr "아니오"
 
 msgid "GeoIP Db"
-msgstr ""
+msgstr "GeoIP 데이터베이스"
 
 msgid "Target"
 msgstr "대상"
@@ -2615,19 +2615,19 @@ msgid "Sybil Analysis"
 msgstr "시빌 분석"
 
 msgid "Bad value supplied, please check and try again."
-msgstr ""
+msgstr "잘못된 값이 제공되었습니다. 확인하고 다시 시도하세요."
 
 msgid "Router Map"
 msgstr "루터 지도"
 
 msgid "Network Database Search"
-msgstr ""
+msgstr "네트워크 데이터베이스 검색"
 
 msgid "Capabilities"
 msgstr "능력"
 
 msgid "e.g. f or XOfR"
-msgstr ""
+msgstr "예: f 또는 XOfR"
 
 msgid "Cost"
 msgstr "비용"
@@ -2636,49 +2636,49 @@ msgid "Country"
 msgstr "국가"
 
 msgid "Country Codes"
-msgstr ""
+msgstr "국가 코드"
 
 msgid "Hash Prefix"
-msgstr ""
+msgstr "해시 접두사"
 
 msgid "IPv4 or IPv6, /24,/16,/8 suffixes optional for IPv4, prefix ok for IPv6"
-msgstr ""
+msgstr "IPv4 또는 IPv6, /24,/16,/8 접미사는 IPv4용 선택사항, 접두사는 IPv6용 가능"
 
 msgid "Hostname or b32"
-msgstr ""
+msgstr "호스트 이름 또는 b32"
 
 msgid "IPv6 Prefix"
-msgstr ""
+msgstr "IPv6 접두사"
 
 msgid "Single port or range"
-msgstr ""
+msgstr "단일 포트 또는 범위"
 
 msgid "Signature Type"
-msgstr ""
+msgstr "서명 유형"
 
 msgid "SSU Capabilities"
-msgstr ""
+msgstr "SSU 기능"
 
 msgid "Encryption Type"
-msgstr ""
+msgstr "암호화 유형"
 
 msgid "Router Version"
-msgstr ""
+msgstr "라우터 버전"
 
 msgid "Transport"
 msgstr "전송"
 
 msgid "Add Sybil analysis (must pick at least one above)"
-msgstr ""
+msgstr "Sybil 분석 추가 (위에서 최소 하나 이상 선택해야 함)"
 
 msgid "Sybil close to"
-msgstr ""
+msgstr "Sybil 근처"
 
 msgid "Router hash, destination hash, b32, or from address book"
-msgstr ""
+msgstr "라우터 해시, 대상 해시, b32 또는 주소록에서"
 
 msgid "or Sybil close to this router"
-msgstr ""
+msgstr "또는 Sybil이 이 라우터 근처"
 
 msgid "Lookup"
 msgstr "조회"
@@ -2693,13 +2693,13 @@ msgid "not found in network database"
 msgstr "네트워크 DB에서 발견되지 않음"
 
 msgid "Bad Base64 Router hash"
-msgstr ""
+msgstr "잘못된 Base64 라우터 해시"
 
 msgid "No routers with"
-msgstr ""
+msgstr "라우터가 없음: "
 
 msgid "Hash prefix"
-msgstr ""
+msgstr "해시 접두사"
 
 msgid "Port"
 msgstr "포트"
@@ -2708,10 +2708,10 @@ msgid "MTU"
 msgstr "MTU"
 
 msgid "found in the network database"
-msgstr ""
+msgstr "네트워크 데이터베이스에서 발견됨"
 
 msgid "results"
-msgstr ""
+msgstr "결과"
 
 msgid "Previous Page"
 msgstr "이전 페이지"
@@ -2720,43 +2720,43 @@ msgid "Next Page"
 msgstr "다음 페이지"
 
 msgid "Results per page"
-msgstr ""
+msgstr "페이지당 결과"
 
 msgid "Not initialized"
 msgstr "초기화 안됨"
 
 msgid "Total Remote Leasesets"
-msgstr ""
+msgstr "원격 리스셋 총계"
 
 msgid "Compact mode"
-msgstr ""
+msgstr "컴팩트 모드"
 
 msgid "Local Leasesets"
-msgstr ""
+msgstr "로컬 리스셋"
 
 msgid "Debug Mode"
-msgstr ""
+msgstr "디버그 모드"
 
 msgid "Published (RAP) Leasesets"
-msgstr ""
+msgstr "게시된 (RAP) 리스셋"
 
 msgid "Sorted by hash distance, closest first."
-msgstr ""
+msgstr "해시 거리순으로 정렬, 가장 가까운 것 우선"
 
 msgid "Mod Data"
-msgstr ""
+msgstr "수정 데이터"
 
 msgid "Last Changed"
-msgstr ""
+msgstr "마지막 변경"
 
 msgid "Next Mod Data"
-msgstr ""
+msgstr "다음 수정 데이터"
 
 msgid "Change in"
-msgstr ""
+msgstr "변경 내용"
 
 msgid "Floodfill mode enabled"
-msgstr ""
+msgstr "플러드필 모드 활성화됨"
 
 msgid "Routing Key"
 msgstr "라우팅 키"
@@ -2771,10 +2771,10 @@ msgid "Estimated total leasesets"
 msgstr "전체 리즈셋 예상값"
 
 msgid "Total Local Leasesets"
-msgstr ""
+msgstr "로컬 리스셋 총계"
 
 msgid "Remote Leasesets"
-msgstr ""
+msgstr "원격 리스셋"
 
 #, java-format
 msgid "Hostname {0} not found in network database"
@@ -2785,7 +2785,7 @@ msgid "LeaseSet for {0} not found in network database"
 msgstr ""
 
 msgid "Meta"
-msgstr ""
+msgstr "메타"
 
 msgid "LeaseSet"
 msgstr "리즈셋"
@@ -2817,7 +2817,7 @@ msgid "Signature type"
 msgstr "시그니처 유형"
 
 msgid "Public Key"
-msgstr ""
+msgstr "공개 키"
 
 msgid "Unsupported type"
 msgstr "지원되지 않는 유형"
@@ -2834,10 +2834,10 @@ msgid "Unknown"
 msgstr "알 수 없음"
 
 msgid "Advanced mode - includes all statistics published by floodfills."
-msgstr ""
+msgstr "고급 모드 - 플러드필에 의해 게시된 모든 통계를 포함합니다."
 
 msgid "Compact mode - does not include statistics published by floodfills."
-msgstr ""
+msgstr "컴팩트 모드 - 플러드필에 의해 게시된 통계를 포함하지 않습니다."
 
 msgid "Network Database Router Statistics"
 msgstr "네트워크 데이터베이스 라우터 통계"
@@ -2861,7 +2861,7 @@ msgid "Transports"
 msgstr "전송"
 
 msgid "X Tier"
-msgstr ""
+msgstr "X 계층"
 
 msgid "Floodfills"
 msgstr "홍수"
@@ -2879,10 +2879,10 @@ msgid "Router is banlisted"
 msgstr "라우터가 금지되었습니다."
 
 msgid "Java I2P variant"
-msgstr ""
+msgstr "Java I2P 변형"
 
 msgid "I2Pd variant"
-msgstr ""
+msgstr "I2Pd 변형"
 
 msgid "RouterInfo is compressible"
 msgstr "RouterInfo는 압축 가능합니다."
@@ -2916,7 +2916,7 @@ msgid "Hostname"
 msgstr "호스트 이름"
 
 msgid "direct"
-msgstr ""
+msgstr "직접"
 
 msgid "Verified family (signing certificate is installed and valid)"
 msgstr "확인된 제품군(서명 인증서가 설치되어 있고 유효함)"
@@ -2955,10 +2955,10 @@ msgid "Last heard from"
 msgstr "마지막으로 들은 말"
 
 msgid "Network Id"
-msgstr ""
+msgstr "네트워크 ID"
 
 msgid "Count is always spoofed to avoid indicating router restarts"
-msgstr ""
+msgstr "카운트는 항상 라우터 재시작을 나타내지 않도록 위조되어 있습니다"
 
 msgid "Hidden or starting up"
 msgstr "숨겨짐 혹은 시작중"
@@ -3026,10 +3026,10 @@ msgid "IPv6"
 msgstr "IPv6"
 
 msgid "Active connections / Max permitted"
-msgstr ""
+msgstr "활성 연결 / 최대 허용"
 
 msgid "Connections / Limit"
-msgstr ""
+msgstr "연결 / 제한"
 
 msgid "Current / maximum permitted"
 msgstr "현재/최대 허용"
@@ -3318,7 +3318,7 @@ msgid "Rejected"
 msgstr "거부"
 
 msgid "First Heard About"
-msgstr ""
+msgstr "처음 들은 시기"
 
 msgid "Last Heard From"
 msgstr "마지막으로 들은 곳:"
@@ -3428,7 +3428,7 @@ msgstr "{0} 공유 대역폭"
 
 #, java-format
 msgid "Over {0} KB/s shared bandwidth"
-msgstr ""
+msgstr "{0} KB/s를 초과하는 공유 대역폭"
 
 msgid "status"
 msgstr "상태"
@@ -3491,7 +3491,7 @@ msgid "Total number of banned peers"
 msgstr "금지된 총 피어 수"
 
 msgid "Note: 'LU' class routers have been excluded from the list."
-msgstr ""
+msgstr "참고: 'LU' 클래스 라우터는 목록에서 제외되었습니다."
 
 #, java-format
 msgid "To view, see {0}Session Bans{1}."
@@ -3870,7 +3870,7 @@ msgid "Floodfill enabled"
 msgstr "플로드필 활성화"
 
 msgid "Total number of remote LeaseSets stored in our NetDb"
-msgstr ""
+msgstr "우리 NetDb에 저장된 원격 리스셋 총수"
 
 msgid "Warning: ECDSA is not available. Update your Java or OS"
 msgstr "경고: ECDSA 사용이 발가능합니다. JAVA와 OS를 업그레이드 하세요"
@@ -3885,7 +3885,7 @@ msgid "Peers we've been talking to in the last minute / last hour"
 msgstr "지난 몇 분/시간 동안 교류한 피어"
 
 msgid "Peers we've been talking to in the last minute"
-msgstr ""
+msgstr "지난 1분 동안 대화했던 피어"
 
 msgid "The number of peers available for building client tunnels"
 msgstr "클라이언트 터널 구축에 가용가능한 피어들의 수"
@@ -4392,7 +4392,7 @@ msgid "Data"
 msgstr "데이터"
 
 msgid "Limit"
-msgstr ""
+msgstr "제한"
 
 msgid "Receive on"
 msgstr "받음:"
@@ -4439,7 +4439,7 @@ msgid "No transit tunnels currently active."
 msgstr "현재 운송 터널이 활성화되지 않습니다."
 
 msgid "Transit Tunnels by Peer (Top {0})"
-msgstr ""
+msgstr "피어별 트랜짓 터널 (상위 {0}개)"
 
 msgid "Address"
 msgstr "주소"
@@ -4518,7 +4518,7 @@ msgid "Bandwidth test did not complete"
 msgstr "대역폭 테스트가 완료되지 않았습니다."
 
 msgid "Bad state for test"
-msgstr ""
+msgstr "테스트 상태 불량"
 
 msgid "Bandwidth test started"
 msgstr "대역폭 테스트 시작"
@@ -4533,16 +4533,16 @@ msgid "Bandwidth test was not running"
 msgstr "대역폭 테스트가 실행되지 않았습니다."
 
 msgid "ready"
-msgstr ""
+msgstr "준비됨"
 
 msgid "inbound test"
-msgstr ""
+msgstr "인바운드 테스트"
 
 msgid "outbound test"
-msgstr ""
+msgstr "아웃바운드 테스트"
 
 msgid "done"
-msgstr ""
+msgstr "완료"
 
 msgid "bits per second"
 msgstr "초당 bits"
@@ -4714,7 +4714,7 @@ msgid "Share"
 msgstr "공유"
 
 msgid "NOTE"
-msgstr ""
+msgstr "참고"
 
 #, java-format
 msgid "You have configured I2P+ to share only {0} KBps."
@@ -4741,7 +4741,7 @@ msgstr "고급 설정"
 
 #, java-format
 msgid "Key <b>{0}</b> selected for removal. To commit the change, save the configuration, or cancel to restore the key."
-msgstr ""
+msgstr "키 <b>{0}</b>이(가) 제거용으로 선택되었습니다. 변경을 적용하려면 구성을 저장하거나 취소하여 키를 복원하세요."
 
 msgid "Floodfill Configuration"
 msgstr "플러드 필 설정"
@@ -4771,7 +4771,7 @@ msgid "Advanced I2P+ Configuration"
 msgstr "고급 I2P  설정"
 
 msgid "Help with additional configuration settings"
-msgstr ""
+msgstr "추가 구성 설정에 대한 도움말"
 
 #, java-format
 msgid "To make changes, edit the file: {0}"
@@ -5165,7 +5165,7 @@ msgid "Banning will prevent the participation of this peer in tunnels you create
 msgstr "당신이 만든 터널에 참가하는것을 차단합니다"
 
 msgid "A list of bans by IP address is presented below."
-msgstr ""
+msgstr "IP 주소별 차단 목록이 아래에 표시됩니다."
 
 #, java-format
 msgid "To view all active bans by router hash, see {0}Banned Peers{1}."
@@ -5173,7 +5173,7 @@ msgstr ""
 
 #, java-format
 msgid "A list of {0}session-only bans{1} by hash is also available."
-msgstr ""
+msgstr "해시별 {0}세션 전용 차단{1} 목록도 사용 가능합니다."
 
 msgid "Adjust Profile Bonuses"
 msgstr "프로필 보너스 조절"
@@ -5364,7 +5364,7 @@ msgid "config sidebar"
 msgstr "구성 사이드바"
 
 msgid "Sidebar Options"
-msgstr ""
+msgstr "사이드바 옵션"
 
 msgid "Refresh interval"
 msgstr "새로고침 간격"
@@ -5376,10 +5376,10 @@ msgid "0 to disable"
 msgstr "0 비활성화"
 
 msgid "Unified sidebar"
-msgstr ""
+msgstr "통합 사이드바"
 
 msgid "Use the same sidebar on all pages"
-msgstr ""
+msgstr "모든 페이지에서 동일한 사이드바 사용"
 
 msgid "config stats"
 msgstr "통계 설정"
@@ -5581,7 +5581,7 @@ msgid "Event Log"
 msgstr "이벤트 로그"
 
 msgid "Combined"
-msgstr ""
+msgstr "결합"
 
 msgid "graph"
 msgstr "그래프"
@@ -5662,7 +5662,7 @@ msgid "This setting, when set to true, will display the <i>Sites of Interest</i>
 msgstr "이 설정을 true로 설정할 경우, <a href=/sitemap>사이트맵</a>에 <i>관심 있는 사이트</i> 링크를 표시합니다. [기본값은 false]"
 
 msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
-msgstr ""
+msgstr "이 설정을 true로 설정하면, 홈페이지에 표준 사이드바를 표시하고 <a href=/configsidebar>을 통한 구성을 활성화합니다. [기본값은 false]"
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "이 설정은 라우터가 제공된 <i>blocklist.txt</i> 파일과 사용자가 구성한 블록 목록을 사용하여 해시 또는 IP 주소에 따른 라우터 차단을 활성화할지 여부를 결정합니다. IPv4의 경우 범위와 넷 마스크를 지원하지만 IPv6는 지원하지 않습니다. 자세한 정보는 I2P+ 응용 프로그램 디렉터리에 있는 <i>blocklist.txt</i>를 참조하십시오. [기본적으로 활성화되어 있으며, 재시작이 필요합니다]"
@@ -5677,7 +5677,7 @@ msgid "This setting determines whether or not the router should use the provided
 msgstr "이 설정은 라우터가 Tor 출구 노드 IP 주소에서 작동하는 라우터의 차단을 활성화하기 위해 I2P+ 응용 프로그램 디렉터리의 제공된 <i>blocklist_tor.txt</i> 파일을 사용할지 여부를 결정합니다. [기본적으로 활성화되어 있으며, 재시작이 필요합니다]"
 
 msgid "This setting enables requests from routers in the specified countries to be blocked and banned as soon as a direct tunnel request is made. Countries must be specified as two letter country codes, separated with commas. e.g. router.blockCountries=cn,ru"
-msgstr ""
+msgstr "이 설정은 지정된 국가의 라우터로부터의 요청을 직접 터널 요청이 만들어지자마자 차단하고 금지시킵니다. 국가는 두 글자 국가 코드로 지정해야 하며, 쉼표로 구분해야 합니다. 예: router.blockCountries=cn,ru"
 
 msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
 msgstr "False로 설정되면, 더 느린 또는 도달할 수 없는 라우터에서 실행되는 오래된 버전의 터널 생성 요청이 차단되지 않습니다. [기본값은 True, 재시작 필요]"
@@ -5815,7 +5815,7 @@ msgid "This setting determines whether routers classified as uninteresting (K or
 msgstr "이 설정은 라우터 갱신 프로세스에서 1시간 동안 운영 시간이 지난 후에도 흥미로운 요소로 분류되지 않은(K 또는 L 계층, 도달할 수 없거나 0.9.50 이전 버전) 라우터를 확인할지 여부를 결정합니다. [기본값은 false입니다]"
 
 msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
-msgstr ""
+msgstr "true로 설정하면, 이 설정은 대역폭 사용량이 높다고 판단될 때 라우터가 혼잡 제한을 게시하는 데 필요한 조건을 완화합니다. 다른 조건, 예를 들어 높은 작업 지연이나 라우터가 느리다고 분류되는 경우에도 여전히 제한이 게시되도록 합니다. [기본값은 false]"
 
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
 msgstr "구성되면 이 설정은 라우터가 동시에 구축할 수 있는 터널 수에 대한 엄격한 제한을 설정합니다. 기본적으로 라우터는 평균 구축 시간과 현재 나가는 대역폭을 사용하여 최적의 구축률을 결정합니다. [다시 시작이 필요함]"
@@ -5830,10 +5830,10 @@ msgid "This setting (in minutes) allows you to manually configure how long to wa
 msgstr "이 설정(분 단위)은 시작 후 NetDb의 RouterInfos의 유효성을 확인하기 전까지의 대기 시간을 수동으로 구성할 수 있게 합니다. 이 시점 이후에는 유효한 라우터만 포함됩니다. 유효성 확인 시, 만료된 RouterInfos 및 SSU로만 접속 가능한 응답이 없는 동료는 NetDb에서 제거됩니다. [기본값은 60분] 참고: 이 설정은 NetDb 저장이 시도되자마자 NetDb에서 삭제되고 라우터 세션에 금지되는 기본값인 0.9.29보다 오래된 라우터에 영향을 주지 않습니다."
 
 msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
-msgstr ""
+msgstr "이 설정을 true로 설정하면, 자국의 모든 라우터와의 직접 통신을 차단하고 라우터가 재시작될 때까지 이들을 차단 목록에 추가합니다. [기본값은 false]"
 
 msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
-msgstr ""
+msgstr "이 설정을 true로 설정하면, G 혼잡 제한을 게시하고 도달 가능하지도 않은 X 계층 라우터와의 직접 통신을 차단하고 이들을 세션 차단 목록에 추가합니다. 이 설정이 적용되려면 고급 모드가 활성화되어야 함에 주의하세요. [기본값은 false]"
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "이 설정은 라우터가 방화벽으로 막히고 있는지 여부를 확인하는 SSU 테스트를 비활성화하는 것을 허용하며, 분명히 방화벽으로 막히지 않았지만 간헐적인 방화벽 문제가 있는 라우터에 대해서만 활성화할 수 있습니다. 테스트가 비활성화된 경우, SSU 및 NTCP 모두 <a href=/info>라우터 정보 페이지</a>에서 현재 공인 IP 주소를 보고해야 합니다. [재부팅이 필요함]"
@@ -5842,7 +5842,7 @@ msgid "This setting determines which transport takes priority when communicating
 msgstr "이 설정은 동료들과 통신할 때 어떤 전송 방식을 우선시할지를 결정합니다. 기본적으로 NTCP가 UDP(SSU)보다 우선합니다. 값을 true로 설정하면, 기존의 NTCP 연결이 없으면 UDP를 우선시하며, always로 설정하면 기존의 NTCP 연결과 상관없이 항상 UDP를 사용합니다. [기본값은 false]"
 
 msgid "miscellaneous"
-msgstr ""
+msgstr "기타"
 
 msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
 msgstr "true로 설정한 경우,이 옵션은 기본 서비스 제어 옵션이 있는 시스템 트레이 / 알림 영역에 아이콘을 배치합니다. [기본적으로 비활성화됨]"
@@ -6082,13 +6082,13 @@ msgid "For SSL only"
 msgstr "SSL 전용"
 
 msgid "How can I configure the console and web services to be accessible on my local network?"
-msgstr ""
+msgstr "콘솔과 웹 서비스를 로컬 네트워크에서 접근할 수 있도록 어떻게 구성할 수 있나요?"
 
 msgid "To make your console accessible on your local network, edit the configuration file 00-net.i2p.router.web.RouterConsoleRunner-clients.config in the clients.config.d folder of your I2P settings directory. Update or add the necessary IP addresses to the existing localhost (127.0.0.1) mapping. Use the -s switch for HTTPS access."
-msgstr ""
+msgstr "콘솔을 로컬 네트워크에서 접근 가능하게 하려면 I2P 설정 디렉터리의 clients.config.d 폴더에 있는 구성 파일 00-net.i2p.router.web.RouterConsoleRunner-clients.config을 편집하세요. 기존 localhost (127.0.0.1) 매핑에 필요한 IP 주소를 업데이트하거나 추가하세요. HTTPS 접근에는 -s 스위치를 사용하세요."
 
 msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
-msgstr ""
+msgstr "예: localhost와 192.168.1.10에서 HTTP와 HTTPS를 통한 접근을 허용하려면:"
 
 msgid "For most client services, change listening address for relevant service in Tunnel Manager's configuration section using <i>reachable by</i> dropdown."
 msgstr ""
@@ -6478,7 +6478,7 @@ msgid "If you are in a hurry and can't wait a few hours, you can tell people to 
 msgstr "급하게 시간을 기다릴 수 없다면, 사람들에게 \"점프\" 주소 도우미 리다이렉션 서비스를 사용하도록 알릴 수 있습니다. 이는 주소를 등록한 후 일반적으로 몇 분 내에 작동할 것입니다. 우선 브라우저에 <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code>를 입력하여 테스트해보세요. 작동할 때 다른 사람들에게 알릴 수 있습니다."
 
 msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skank.i2p</a>, and paste the link where it's required to share it with others."
-msgstr ""
+msgstr "또는, 도메인에 대한 <i>주소 도우링크</i>를 복사할 수 있습니다. 이는 주소록 목록 페이지나 도메인의 상세 페이지에서 표시됩니다. 예: <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>skank.i2p의 상세</a>. 그리고 다른 사람과 공유해야 하는 곳에 링크를 붙여넣으세요."
 
 msgid "Backup your private key!"
 msgstr "개인 키를 백업하세요!"
@@ -7255,7 +7255,7 @@ msgid "Configure display language, theme and optional console password"
 msgstr "표시 언어, 테마 및 선택적 콘솔 비밀번호 설정"
 
 msgid "Language"
-msgstr ""
+msgstr "언어"
 
 msgid "Configure router bandwidth"
 msgstr "라우터 대역폭 설정"
@@ -7322,22 +7322,22 @@ msgid "network database"
 msgstr "네트워크 데이터베이스"
 
 msgid "Encryption type"
-msgstr ""
+msgstr "암호화 유형"
 
 msgid "Encryption types"
-msgstr ""
+msgstr "암호화 유형"
 
 msgid "Signature types"
-msgstr ""
+msgstr "서명 유형"
 
 msgid "Locally hosted private service"
-msgstr ""
+msgstr "로컬에서 호스팅된 개인 서비스"
 
 msgid "Locally hosted public service"
-msgstr ""
+msgstr "로컬에서 호스팅된 공개 서비스"
 
 msgid "Requested client leaseset"
-msgstr ""
+msgstr "요청된 클라이언트 리스셋"
 
 msgid "network database router map"
 msgstr "네트워크 데이터베이스 라우터 지도"
@@ -7383,10 +7383,10 @@ msgid "Fast / High Capacity"
 msgstr "빠른/고용량"
 
 msgid "router logs"
-msgstr ""
+msgstr "라우터 로그"
 
 msgid "service logs"
-msgstr ""
+msgstr "서비스 로그"
 
 msgid "Manage I2P addresses"
 msgstr "I2P 주소 관리"
@@ -7593,13 +7593,13 @@ msgid "Toggle Tunnels"
 msgstr "터널 전환"
 
 msgid "Updating sidebar sections"
-msgstr ""
+msgstr "사이드바 섹션 업데이트 중"
 
 msgid "Peer Profile"
 msgstr "피어 프로필"
 
 msgid "Profile View"
-msgstr ""
+msgstr "프로필 보기"
 
 msgid "Profile for peer"
 msgstr "피어에 대한 프로필"

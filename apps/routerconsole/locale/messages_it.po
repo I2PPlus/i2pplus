@@ -144,7 +144,7 @@ msgid "Unreachable on any transport"
 msgstr "Irraggiungibile su ogni trasporto"
 
 msgid "Cannot enumerate UPnP devices on Android."
-msgstr ""
+msgstr "Impossibile enumerare i dispositivi UPnP su Android."
 
 msgid "UPnP is not enabled"
 msgstr "UPnP non è abilitato"
@@ -684,7 +684,7 @@ msgid "After reporting, please restart your router"
 msgstr "Dopo la segnalazione, riavviare il router"
 
 msgid "Invalid form submission, requires POST"
-msgstr ""
+msgstr "Invio modulo non valido, richiede POST"
 
 msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
 msgstr "Sottomissione di form non valida, probabilmente hai usato il pulsante 'indietro' o 'aggiorna' del tuo browser. Per favore rimandalo."
@@ -818,13 +818,13 @@ msgid "To enable SSL access for the Router Console, see the commented <code>clie
 msgstr "Per abilitare l'accesso SSL per la console del router, guarda il file commentato <code>clients.config</code> situato nella tua directory I2P per più informazioni. Avrai bisogno di modificare il file di configurazione RouterConsoleRunner situato nella directory: "
 
 msgid "Save disabled, edit the router.config file to make changes"
-msgstr ""
+msgstr "Salvataggio disabilitato, modifica il file router.config per apportare modifiche"
 
 msgid "Error updating the configuration - please see the error logs"
 msgstr "Errore nell'aggiornamento della configurazione - vedere i log di errore"
 
 msgid "No changes made to the configuration"
-msgstr ""
+msgstr "Nessuna modifica apportata alla configurazione"
 
 msgid "Note"
 msgstr "NOTA"
@@ -845,7 +845,7 @@ msgid "Save Plugin Configuration"
 msgstr "Salva configurazione dei plugin"
 
 msgid "Plugins disabled"
-msgstr ""
+msgstr "Plugin disabilitati"
 
 msgid "Install Plugin"
 msgstr "Installa plugin"
@@ -857,7 +857,7 @@ msgid "Update All Installed Plugins"
 msgstr "Aggiorna tutti i plugin installati"
 
 msgid "Delete client disabled"
-msgstr ""
+msgstr "Elimina client disabilitato"
 
 #, java-format
 msgid "Error stopping plugin {0}"
@@ -941,17 +941,17 @@ msgid "Updating all plugins"
 msgstr "Aggiornando tutti i plugin"
 
 msgid "Update manager not registered, cannot install"
-msgstr ""
+msgstr "Gestore aggiornamenti non registrato, impossibile installare"
 
 #, java-format
 msgid "Installing plugin from {0}"
 msgstr "Installazione in corso di plugin da {0}"
 
 msgid "Cannot install, check logs"
-msgstr ""
+msgstr "Impossibile installare, controlla i log"
 
 msgid "Update manager not registered, cannot check"
-msgstr ""
+msgstr "Gestore aggiornamenti non registrato, impossibile controllare"
 
 #, java-format
 msgid "Checking plugin {0} for updates"
@@ -1051,17 +1051,17 @@ msgid "Join Family"
 msgstr "Entra in una famiglia"
 
 msgid "Bad certificate - No Subject CN"
-msgstr ""
+msgstr "Certificato errato - Nessun Subject CN"
 
 msgid "Bad characters in Family: "
-msgstr ""
+msgstr "Caratteri errati in Famiglia: "
 
 #, java-format
 msgid "Keystore {0} already exists for family {1}! Delete or rename it first."
-msgstr ""
+msgstr "Il keystore {0} esiste già per la famiglia {1}! Eliminalo o rinominalo prima."
 
 msgid "Family key configured for router family: "
-msgstr ""
+msgstr "Chiave famiglia configurata per la famiglia di router: "
 
 msgid "Load from file failed"
 msgstr "È fallito il caricamento da file"
@@ -1079,7 +1079,7 @@ msgid "Restore defaults"
 msgstr "Ripristina"
 
 msgid "Bad group detected, please retry"
-msgstr ""
+msgstr "Gruppo errato rilevato, riprova"
 
 msgid "Restored default settings"
 msgstr "Ripristina impostazioni di default"
@@ -1112,7 +1112,7 @@ msgid "Invalid destination"
 msgstr "Destinazione non valida"
 
 msgid "Cannot add key for local destination. Enable encryption in the Tunnel Manager."
-msgstr ""
+msgstr "Impossibile aggiungere chiave per destinazione locale. Abilita la crittografia nel Tunnel Manager."
 
 #, java-format
 msgid "Key for {0} added to keyring"
@@ -1125,7 +1125,7 @@ msgid "Requires hostname, destination, or blinded Base32"
 msgstr "Richiesti hostname, destinazione, o base32 nascosto"
 
 msgid "Cannot add key for local destination. Enable encryption in the Hidden Services Manager."
-msgstr ""
+msgstr "Impossibile aggiungere chiave per destinazione locale. Abilita la crittografia nel Gestore Servizi Nascosti."
 
 msgid "Destination requires lookup password"
 msgstr "Destinazione richiede password di ricerca"
@@ -1146,7 +1146,7 @@ msgid "Delete key"
 msgstr "Elimina chiave"
 
 msgid "Cannot remove key for local destination. Disable encryption in the Tunnel Manager."
-msgstr ""
+msgstr "Impossibile rimuovere chiave per destinazione locale. Disabilita la crittografia nel Tunnel Manager."
 
 #, java-format
 msgid "Key for {0} removed from keyring"
@@ -1199,34 +1199,34 @@ msgid "Log overrides updated"
 msgstr "Sovrascrittura dei log aggiornata"
 
 msgid "Error updating the log limits - levels not valid"
-msgstr ""
+msgstr "Errore nell'aggiornare i limiti del log - livelli non validi"
 
 msgid "Log limits cleared"
-msgstr ""
+msgstr "Limiti del log cancellati"
 
 #, java-format
 msgid "Default log level updated from {0} to {1}"
-msgstr ""
+msgstr "Livello log predefinito aggiornato da {0} a {1}"
 
 msgid "Date format updated"
-msgstr ""
+msgstr "Formato data aggiornato"
 
 #, java-format
 msgid "Specified date format is not valid ({0}) - not updated"
-msgstr ""
+msgstr "Il formato data specificato non è valido ({0}) - non aggiornato"
 
 msgid "File size updated"
-msgstr ""
+msgstr "Dimensione file aggiornata"
 
 #, java-format
 msgid "Specified file size limit is not valid ({0}) - not updated"
-msgstr ""
+msgstr "Il limite dimensione file specificato non è valido ({0}) - non aggiornato"
 
 msgid "Compression setting updated"
-msgstr ""
+msgstr "Impostazione compressione aggiornata"
 
 msgid "Log record format updated"
-msgstr ""
+msgstr "Formato record log aggiornato"
 
 msgid "Log configuration saved"
 msgstr "Configurazione eventi salvata"
@@ -1436,10 +1436,10 @@ msgid "Bad capacity value"
 msgstr "Valore di capacità scorretto"
 
 msgid "Bonuses adjusted for: "
-msgstr ""
+msgstr "Bonus aggiustati per: "
 
 msgid "No profile exists for: "
-msgstr ""
+msgstr "Nessun profilo esiste per: "
 
 msgid "Unsupported"
 msgstr "Non supportato"
@@ -1455,7 +1455,7 @@ msgstr "A"
 
 #, java-format
 msgid "First {0} displayed, see the {1} file for the full list"
-msgstr ""
+msgstr "Primi {0} visualizzati, vedere il file {1} per l'elenco completo"
 
 msgid "IPs Banned Until Restart"
 msgstr "IP bannati fino al riavvio"
@@ -1556,7 +1556,7 @@ msgid "Save order"
 msgstr "Salva ordine"
 
 msgid "Sidebar preferences updated"
-msgstr ""
+msgstr "Preferenze barra laterale aggiornate"
 
 msgid "Refresh interval must be a number"
 msgstr "L'intervallo di aggiornamento deve essere un numero"
@@ -1565,16 +1565,16 @@ msgid "Restore full default"
 msgstr "Ripristina tutti i default"
 
 msgid "Full sidebar defaults restored."
-msgstr ""
+msgstr "Impostazioni predefinite barra laterale completa ripristinate."
 
 msgid "Sidebar will refresh shortly."
-msgstr ""
+msgstr "La barra laterale si aggiornerà a breve."
 
 msgid "Restore minimal default"
 msgstr "Ripristina impostazione di default minime"
 
 msgid "Minimal sidebar defaults restored."
-msgstr ""
+msgstr "Impostazioni predefinite barra laterale minima ripristinate."
 
 msgid "Order must be an integer"
 msgstr "Ordine deve essere un numero intero"
@@ -1603,11 +1603,11 @@ msgstr "Grafo aggiornato, potrebbe impiegare fino a 60s per riflettersi sul Graf
 
 #, java-format
 msgid "Internal error: could not resolve pool name {0}."
-msgstr ""
+msgstr "Errore interno: impossibile risolvere il nome pool {0}."
 
 #, java-format
 msgid "Internal error: could not find pool settings for {0}."
-msgstr ""
+msgstr "Errore interno: impossibile trovare impostazioni pool per {0}."
 
 msgid "Updated settings for all pools."
 msgstr "Impostazioni aggiornate per tutti i pool."
@@ -1682,7 +1682,7 @@ msgid "Add user"
 msgstr "Aggiungi utente"
 
 msgid "Cannot save theme choice, theme name has illegal characters"
-msgstr ""
+msgstr "Impossibile salvare scelta tema, il nome tema contiene caratteri illegali"
 
 msgid "Theme change saved."
 msgstr "Modifica del tema salvata."
@@ -1694,7 +1694,7 @@ msgid "No user name entered"
 msgstr "Nessuna username inserita"
 
 msgid "User name may not contain '='"
-msgstr ""
+msgstr "Il nome utente non può contenere '='"
 
 msgid "Warning: User names outside the ISO-8859-1 character set are not recommended. Support is not standardized and varies by browser."
 msgstr "Attenzione: Usernames al di fuori del set di caratteri ISO-8859-1 non sono consigliati. Il supporto non è standardizzato e varia in base al browser."
@@ -2016,7 +2016,7 @@ msgid "Show list of all known I2P routers"
 msgstr "Mostra la lista di tutti i router I2P conosciuti"
 
 msgid "List of recently connected peers with profiling info"
-msgstr ""
+msgstr "Elenco dei peer connessi di recente con informazioni di profiling"
 
 msgid "Peer Profiles"
 msgstr "Profili dei pari"
@@ -2184,7 +2184,7 @@ msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Front-end alternativo incentrato sulla privacy per Reddit"
 
 msgid "AI Image generation & Chat hub"
-msgstr ""
+msgstr "Hub generazione immagini AI e chat"
 
 msgid "IRC Logs for multiple networks"
 msgstr "Log IRC per più reti"
@@ -2325,10 +2325,10 @@ msgid "OpenDemocracy"
 msgstr "Democrazia aperta"
 
 msgid "Online privacy &amp; tech blog"
-msgstr ""
+msgstr "Blog privacy online e tecnologia"
 
 msgid "RightToPrivacy"
-msgstr ""
+msgstr "DirittoAllaPrivacy"
 
 msgid "Lifestyle magazine"
 msgstr "Rivista sullo stile di vita"
@@ -2349,7 +2349,7 @@ msgid "Community-driven tech news"
 msgstr "Notizie tecnologiche promosse dalla comunità"
 
 msgid "Various services"
-msgstr ""
+msgstr "Servizi vari"
 
 msgid "News for nerds"
 msgstr "Notizie per nerd"
@@ -2425,7 +2425,7 @@ msgid "Add"
 msgstr "Aggiungi"
 
 msgid "Error displaying the info page."
-msgstr ""
+msgstr "Errore nella visualizzazione della pagina informazioni."
 
 msgid "Identity"
 msgstr "Identità"
@@ -2473,7 +2473,7 @@ msgid "Performance"
 msgstr "Prestazioni"
 
 msgid "Maximum available RAM"
-msgstr ""
+msgstr "RAM massima disponibile"
 
 msgid "Classified as slow"
 msgstr "Classificato come lento"
@@ -2485,7 +2485,7 @@ msgid "No"
 msgstr "No"
 
 msgid "GeoIP Db"
-msgstr ""
+msgstr "Database GeoIP"
 
 msgid "Target"
 msgstr "Bersaglio"
@@ -2624,19 +2624,19 @@ msgid "Sybil Analysis"
 msgstr "Analisi Sybil"
 
 msgid "Bad value supplied, please check and try again."
-msgstr ""
+msgstr "Valore errato fornito, controlla e riprova."
 
 msgid "Router Map"
 msgstr "Mappa del router"
 
 msgid "Network Database Search"
-msgstr ""
+msgstr "Ricerca database di rete"
 
 msgid "Capabilities"
 msgstr "Capacità"
 
 msgid "e.g. f or XOfR"
-msgstr ""
+msgstr "es. f o XOfR"
 
 msgid "Cost"
 msgstr "Costo"
@@ -2645,49 +2645,49 @@ msgid "Country"
 msgstr "Paese"
 
 msgid "Country Codes"
-msgstr ""
+msgstr "Codici paese"
 
 msgid "Hash Prefix"
-msgstr ""
+msgstr "Prefisso hash"
 
 msgid "IPv4 or IPv6, /24,/16,/8 suffixes optional for IPv4, prefix ok for IPv6"
-msgstr ""
+msgstr "IPv4 o IPv6, suffissi /24,/16,/8 opzionali per IPv4, prefisso ok per IPv6"
 
 msgid "Hostname or b32"
-msgstr ""
+msgstr "Hostname o b32"
 
 msgid "IPv6 Prefix"
-msgstr ""
+msgstr "Prefisso IPv6"
 
 msgid "Single port or range"
-msgstr ""
+msgstr "Porta singola o intervallo"
 
 msgid "Signature Type"
-msgstr ""
+msgstr "Tipo firma"
 
 msgid "SSU Capabilities"
-msgstr ""
+msgstr "Capacità SSU"
 
 msgid "Encryption Type"
-msgstr ""
+msgstr "Tipo crittografia"
 
 msgid "Router Version"
-msgstr ""
+msgstr "Versione router"
 
 msgid "Transport"
 msgstr "Trasporto"
 
 msgid "Add Sybil analysis (must pick at least one above)"
-msgstr ""
+msgstr "Aggiungi analisi Sybil (devi scegliere almeno uno sopra)"
 
 msgid "Sybil close to"
-msgstr ""
+msgstr "Sybil vicino a"
 
 msgid "Router hash, destination hash, b32, or from address book"
-msgstr ""
+msgstr "Hash router, hash destinazione, b32, o da rubrica"
 
 msgid "or Sybil close to this router"
-msgstr ""
+msgstr "o Sybil vicino a questo router"
 
 msgid "Lookup"
 msgstr "Cercare"
@@ -2702,13 +2702,13 @@ msgid "not found in network database"
 msgstr "non trovato nel database della rete"
 
 msgid "Bad Base64 Router hash"
-msgstr ""
+msgstr "Hash router Base64 errato"
 
 msgid "No routers with"
-msgstr ""
+msgstr "Nessun router con"
 
 msgid "Hash prefix"
-msgstr ""
+msgstr "Prefisso hash"
 
 msgid "Port"
 msgstr "Porta"
@@ -2717,10 +2717,10 @@ msgid "MTU"
 msgstr "MTU"
 
 msgid "found in the network database"
-msgstr ""
+msgstr "trovato nel database di rete"
 
 msgid "results"
-msgstr ""
+msgstr "risultati"
 
 msgid "Previous Page"
 msgstr "Pagina precedente"
@@ -2729,43 +2729,43 @@ msgid "Next Page"
 msgstr "Prossima pagina"
 
 msgid "Results per page"
-msgstr ""
+msgstr "Risultati per pagina"
 
 msgid "Not initialized"
 msgstr "Non inizializzata"
 
 msgid "Total Remote Leasesets"
-msgstr ""
+msgstr "Totale LeaseSet remoti"
 
 msgid "Compact mode"
-msgstr ""
+msgstr "Modalità compatta"
 
 msgid "Local Leasesets"
-msgstr ""
+msgstr "LeaseSet locali"
 
 msgid "Debug Mode"
-msgstr ""
+msgstr "Modalità debug"
 
 msgid "Published (RAP) Leasesets"
-msgstr ""
+msgstr "LeaseSet pubblicati (RAP)"
 
 msgid "Sorted by hash distance, closest first."
-msgstr ""
+msgstr "Ordinato per distanza hash, più vicino prima."
 
 msgid "Mod Data"
-msgstr ""
+msgstr "Dati mod"
 
 msgid "Last Changed"
-msgstr ""
+msgstr "Ultima modifica"
 
 msgid "Next Mod Data"
-msgstr ""
+msgstr "Prossimi dati mod"
 
 msgid "Change in"
-msgstr ""
+msgstr "Modifica in"
 
 msgid "Floodfill mode enabled"
-msgstr ""
+msgstr "Modalità floodfill abilitata"
 
 msgid "Routing Key"
 msgstr "Chiave di instradamento"
@@ -2780,10 +2780,10 @@ msgid "Estimated total leasesets"
 msgstr "Numero totale di Leasesets stimato"
 
 msgid "Total Local Leasesets"
-msgstr ""
+msgstr "Totale LeaseSet locali"
 
 msgid "Remote Leasesets"
-msgstr ""
+msgstr "LeaseSet remoti"
 
 #, java-format
 msgid "Hostname {0} not found in network database"
@@ -2794,7 +2794,7 @@ msgid "LeaseSet for {0} not found in network database"
 msgstr ""
 
 msgid "Meta"
-msgstr ""
+msgstr "Meta"
 
 msgid "LeaseSet"
 msgstr "Serie di Lease"
@@ -2826,7 +2826,7 @@ msgid "Signature type"
 msgstr "Tipo di firma"
 
 msgid "Public Key"
-msgstr ""
+msgstr "Chiave pubblica"
 
 msgid "Unsupported type"
 msgstr "Tipo non supportato"
@@ -2843,10 +2843,10 @@ msgid "Unknown"
 msgstr "Sconosciuto"
 
 msgid "Advanced mode - includes all statistics published by floodfills."
-msgstr ""
+msgstr "Modalità avanzata - include tutte le statistiche pubblicate dai floodfills."
 
 msgid "Compact mode - does not include statistics published by floodfills."
-msgstr ""
+msgstr "Modalità compatta - non include statistiche pubblicate dai floodfills."
 
 msgid "Network Database Router Statistics"
 msgstr "Statistiche del router nel database della rete"
@@ -2870,7 +2870,7 @@ msgid "Transports"
 msgstr "Trasporti"
 
 msgid "X Tier"
-msgstr ""
+msgstr "Livello X"
 
 msgid "Floodfills"
 msgstr "Riempimenti"
@@ -2888,10 +2888,10 @@ msgid "Router is banlisted"
 msgstr "Il router è stato escluso dall'elenco"
 
 msgid "Java I2P variant"
-msgstr ""
+msgstr "Variante Java I2P"
 
 msgid "I2Pd variant"
-msgstr ""
+msgstr "Variante I2Pd"
 
 msgid "RouterInfo is compressible"
 msgstr "RouterInfo è comprimibile"
@@ -2925,7 +2925,7 @@ msgid "Hostname"
 msgstr "Nome host"
 
 msgid "direct"
-msgstr ""
+msgstr "diretto"
 
 msgid "Verified family (signing certificate is installed and valid)"
 msgstr "Famiglia verificata (il certificato di firma è installato e valido)"
@@ -2964,10 +2964,10 @@ msgid "Last heard from"
 msgstr "Ultima notizia"
 
 msgid "Network Id"
-msgstr ""
+msgstr "ID rete"
 
 msgid "Count is always spoofed to avoid indicating router restarts"
-msgstr ""
+msgstr "Il conteggio è sempre falsificato per evitare di indicare riavvii del router"
 
 msgid "Hidden or starting up"
 msgstr "Nascosto o in avvio"
@@ -3035,10 +3035,10 @@ msgid "IPv6"
 msgstr "IPv6"
 
 msgid "Active connections / Max permitted"
-msgstr ""
+msgstr "Connessioni attive / Max permesse"
 
 msgid "Connections / Limit"
-msgstr ""
+msgstr "Connessioni / Limite"
 
 msgid "Current / maximum permitted"
 msgstr "Corrente / massimo consentito"
@@ -3332,7 +3332,7 @@ msgid "Rejected"
 msgstr "Rifiutato"
 
 msgid "First Heard About"
-msgstr ""
+msgstr "Prima sentito parlare di"
 
 msgid "Last Heard From"
 msgstr "Sentito l'ultima volta da"
@@ -3445,7 +3445,7 @@ msgstr "{0} banda condivisa"
 
 #, java-format
 msgid "Over {0} KB/s shared bandwidth"
-msgstr ""
+msgstr "Oltre {0} KB/s di larghezza di banda condivisa"
 
 msgid "status"
 msgstr "stato"
@@ -3508,11 +3508,11 @@ msgid "Total number of banned peers"
 msgstr "Numero totale di peer esclusi"
 
 msgid "Note: 'LU' class routers have been excluded from the list."
-msgstr ""
+msgstr "Nota: i router di classe 'LU' sono stati esclusi dall'elenco."
 
 #, java-format
 msgid "To view, see {0}Session Bans{1}."
-msgstr ""
+msgstr "Per visualizzare, vedere {0}Ban Sessioni{1}."
 
 msgid "Select search engine"
 msgstr "Seleziona motore di ricerca"
@@ -3887,7 +3887,7 @@ msgid "Floodfill enabled"
 msgstr "Floodfill abilitato"
 
 msgid "Total number of remote LeaseSets stored in our NetDb"
-msgstr ""
+msgstr "Numero totale di LeaseSet remoti memorizzati nella nostra NetDb"
 
 msgid "Warning: ECDSA is not available. Update your Java or OS"
 msgstr "Attenzione: ECDSA non disponibile. Aggiorna Java o l'OS"
@@ -3902,7 +3902,7 @@ msgid "Peers we've been talking to in the last minute / last hour"
 msgstr "Peers con i quali abbiamo comunicato negli ultimi minuti/ultima ora"
 
 msgid "Peers we've been talking to in the last minute"
-msgstr ""
+msgstr "Peer con cui abbiamo parlato nell'ultimo minuto"
 
 msgid "The number of peers available for building client tunnels"
 msgstr "Numero di peers disponibili per costruire i client-tunnel"
@@ -4411,7 +4411,7 @@ msgid "Data"
 msgstr "Dati"
 
 msgid "Limit"
-msgstr ""
+msgstr "Limite"
 
 msgid "Receive on"
 msgstr "Ricevi su"
@@ -4458,7 +4458,7 @@ msgid "No transit tunnels currently active."
 msgstr "Nessun tunnel di transito attualmente attivo."
 
 msgid "Transit Tunnels by Peer (Top {0})"
-msgstr ""
+msgstr "Tunnel di transito per Peer (Top {0})"
 
 msgid "Address"
 msgstr "Indirizzo"
@@ -4537,7 +4537,7 @@ msgid "Bandwidth test did not complete"
 msgstr "Test di banda non completato"
 
 msgid "Bad state for test"
-msgstr ""
+msgstr "Stato errato per test"
 
 msgid "Bandwidth test started"
 msgstr "Test di banda iniziato"
@@ -4552,16 +4552,16 @@ msgid "Bandwidth test was not running"
 msgstr "Il test di banda non era in esecuzione"
 
 msgid "ready"
-msgstr ""
+msgstr "pronto"
 
 msgid "inbound test"
-msgstr ""
+msgstr "test in entrata"
 
 msgid "outbound test"
-msgstr ""
+msgstr "test in uscita"
 
 msgid "done"
-msgstr ""
+msgstr "fatto"
 
 msgid "bits per second"
 msgstr "bit al secondo"
@@ -4733,7 +4733,7 @@ msgid "Share"
 msgstr "Condivisione"
 
 msgid "NOTE"
-msgstr ""
+msgstr "NOTA"
 
 #, java-format
 msgid "You have configured I2P+ to share only {0} KBps."
@@ -4760,7 +4760,7 @@ msgstr "configurazione avanzata"
 
 #, java-format
 msgid "Key <b>{0}</b> selected for removal. To commit the change, save the configuration, or cancel to restore the key."
-msgstr ""
+msgstr "Chiave <b>{0}</b> selezionata per la rimozione. Per confermare la modifica, salva la configurazione, o annulla per ripristinare la chiave."
 
 msgid "Floodfill Configuration"
 msgstr "Configurazione Floodfill"
@@ -4790,7 +4790,7 @@ msgid "Advanced I2P+ Configuration"
 msgstr "Configurazione avanzata I2P"
 
 msgid "Help with additional configuration settings"
-msgstr ""
+msgstr "Aiuto con impostazioni di configurazione aggiuntive"
 
 #, java-format
 msgid "To make changes, edit the file: {0}"
@@ -5184,15 +5184,15 @@ msgid "Banning will prevent the participation of this peer in tunnels you create
 msgstr "L'interdizione impedirà la partecipazione di questo peer nei tunnel da te creati."
 
 msgid "A list of bans by IP address is presented below."
-msgstr ""
+msgstr "Di seguito viene presentata una lista di ban per indirizzo IP."
 
 #, java-format
 msgid "To view all active bans by router hash, see {0}Banned Peers{1}."
-msgstr ""
+msgstr "Per visualizzare tutti i ban attivi per hash router, vedere {0}Peer Bannati{1}."
 
 #, java-format
 msgid "A list of {0}session-only bans{1} by hash is also available."
-msgstr ""
+msgstr "È disponibile anche un elenco di {0}ban solo sessione{1} per hash."
 
 msgid "Adjust Profile Bonuses"
 msgstr "Regola i bonus del profilo"
@@ -5383,7 +5383,7 @@ msgid "config sidebar"
 msgstr "configura barra laterale"
 
 msgid "Sidebar Options"
-msgstr ""
+msgstr "Opzioni barra laterale"
 
 msgid "Refresh interval"
 msgstr "Intervallo di aggiornamento"
@@ -5395,10 +5395,10 @@ msgid "0 to disable"
 msgstr "0 per disabilitare"
 
 msgid "Unified sidebar"
-msgstr ""
+msgstr "Barra laterale unificata"
 
 msgid "Use the same sidebar on all pages"
-msgstr ""
+msgstr "Usa la stessa barra laterale su tutte le pagine"
 
 msgid "config stats"
 msgstr "configura statistiche"
@@ -5600,7 +5600,7 @@ msgid "Event Log"
 msgstr "Registro Eventi"
 
 msgid "Combined"
-msgstr ""
+msgstr "Combinato"
 
 msgid "graph"
 msgstr "grafico"
@@ -5681,7 +5681,7 @@ msgid "This setting, when set to true, will display the <i>Sites of Interest</i>
 msgstr "Questa impostazione, quando impostata su true, visualizzerà i link <i>Siti di interesse</ i> sulla <a href=/sitemap> mappa del sito </a>. [Il valore predefinito è false]"
 
 msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
-msgstr ""
+msgstr "Questa impostazione, se impostata a true, presenterà la barra laterale standard nella homepage, abilitando la configurazione tramite <a href=/configsidebar>. [Predefinito è false]"
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "Questa impostazione determina se il router deve utilizzare il file <i>blocklist.txt</i> fornito e eventuali blocklist configurate dall'utente per consentire il divieto di accesso ai router tramite hash o indirizzo IP. Gli intervalli e le maschere di rete sono supportate per IPv4 ma non per IPv6. Consultare <i>blocklist.txt</i> nella directory dell'applicazione I2P+ per ulteriori informazioni. [Abilitato per impostazione predefinita, riavvio richiesto]"
@@ -5696,7 +5696,7 @@ msgid "This setting determines whether or not the router should use the provided
 msgstr "Questa impostazione determina se il router deve utilizzare il file <i>blocklist_tor.txt</i> fornito nella directory dell'applicazione I2P+ per consentire il divieto di accesso ai router che operano dagli indirizzi IP dei nodi di uscita di Tor. [Abilitato per impostazione predefinita, riavvio richiesto]"
 
 msgid "This setting enables requests from routers in the specified countries to be blocked and banned as soon as a direct tunnel request is made. Countries must be specified as two letter country codes, separated with commas. e.g. router.blockCountries=cn,ru"
-msgstr ""
+msgstr "Questa impostazione abilita le richieste dai router nei paesi specificati di essere bloccate e bannate non appena viene fatta una richiesta tunnel diretto. I paesi devono essere specificati come codici paese di due lettere, separati da virgole. es. router.blockCountries=cn,ru"
 
 msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
 msgstr "Quando impostato su falso, il router non blocca le richieste di creazione di tunnel da router più lenti o non raggiungibili che eseguono versioni precedenti. [Predefinito vero, richiede riavvio]"
@@ -5834,7 +5834,7 @@ msgid "This setting determines whether routers classified as uninteresting (K or
 msgstr "Questa impostazione determina se i router classificati come non interessanti (tier K o L, irraggiungibili o più vecchi di 0.9.50) vengono controllati durante il processo di aggiornamento dei router dopo 1 ora di uptime. [Il valore predefinito è falso]"
 
 msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
-msgstr ""
+msgstr "Quando impostato a true, questa impostazione rilasserà le condizioni richieste per il tuo router di pubblicare limiti di congestione, specificamente quando è determinato che il tuo utilizzo della larghezza di banda è alto. Altre condizioni, come alto lag dei job o un router classificato come lento, causeranno comunque la pubblicazione dei limiti. [Predefinito è false]"
 
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
 msgstr "Quando configurato, questo imposta un limite rigido per il numero di tunnel che il router è autorizzato a costruire contemporaneamente. Per impostazione predefinita, il router utilizza il tempo medio di creazione e la larghezza di banda in uscita corrente per determinare il tasso di costruzione ottimale. [Richiede riavvio]"
@@ -5849,10 +5849,10 @@ msgid "This setting (in minutes) allows you to manually configure how long to wa
 msgstr "Questa impostazione (in minuti) consente di configurare manualmente il tempo di attesa dopo l'avvio prima che venga verificata la validità degli RouterInfos nel NetDb, dopo il quale saranno accettati solo router validi per l'inclusione. Quando avviene la validazione, gli RouterInfos scaduti e i peer non responsivi accessibili solo tramite SSU verranno rimossi dal NetDb. [Il valore predefinito è di 60 minuti] Nota: questa impostazione non ha alcuna incidenza sui router più vecchi (più vecchi di 0,9,29 per impostazione predefinita) che vengono rimossi dal NetDb e banditi per la sessione del router non appena viene tentato uno store del NetDb"
 
 msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
-msgstr ""
+msgstr "Questa impostazione, se impostata a true, bloccherà la comunicazione diretta da tutti i router nel tuo stesso paese e li aggiungerà alla tua banlist finché il tuo router non si riavvia. [Predefinito è false]"
 
 msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
-msgstr ""
+msgstr "Questa impostazione, se impostata a true, bloccherà la comunicazione diretta da tutti i router di livello X che pubblicano un limite di congestione G e non sono né raggiungibili né irraggiungibili, aggiungendoli alla banlist di sessione. Notare che la modalità avanzata deve essere abilitata perché questa impostazione abbia effetto. [Predefinito è false]"
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "Questa impostazione consente di disabilitare i test SSU per determinare se il tuo router è protetto da firewall e può essere abilitata per i router che sicuramente non sono protetti da firewall ma che riscontrano problemi di protezione intermittent. Se i test sono disabilitati, sia SSU che NTCP dovrebbero riportare il tuo indirizzo IP pubblico corrente sulla <a href=/info>pagina delle informazioni del router</a>. [Richiede riavvio]"
@@ -5861,7 +5861,7 @@ msgid "This setting determines which transport takes priority when communicating
 msgstr "Questa impostazione determina quale trasporto ha la priorità durante la comunicazione con gli altri utenti. Per impostazione predefinita, NTCP prevale su UDP (SSU). Impostando il valore su true, UDP avrà la priorità a meno che non esista una connessione NTCP preesistente; quando impostato su always, UDP verrà sempre utilizzato indipendentemente da eventuali connessioni NTCP preesistenti. [Il valore predefinito è false]"
 
 msgid "miscellaneous"
-msgstr ""
+msgstr "varie"
 
 msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
 msgstr "Se impostato su true, questa opzione inserirà un'icona nella tray bar del sistema / area di notifica, con le opzioni di controllo di base del servizio. [Disabilitato per impostazione predefinita]"
@@ -6101,13 +6101,13 @@ msgid "For SSL only"
 msgstr "Solo per SSL"
 
 msgid "How can I configure the console and web services to be accessible on my local network?"
-msgstr ""
+msgstr "Come posso configurare la console e i servizi web per renderli accessibili sulla mia rete locale?"
 
 msgid "To make your console accessible on your local network, edit the configuration file 00-net.i2p.router.web.RouterConsoleRunner-clients.config in the clients.config.d folder of your I2P settings directory. Update or add the necessary IP addresses to the existing localhost (127.0.0.1) mapping. Use the -s switch for HTTPS access."
-msgstr ""
+msgstr "Per rendere la tua console accessibile sulla tua rete locale, modifica il file di configurazione 00-net.i2p.router.web.RouterConsoleRunner-clients.config nella cartella clients.config.d della tua directory impostazioni I2P. Aggiorna o aggiungi gli indirizzi IP necessari al mapping localhost esistente (127.0.0.1). Usa l'interruttore -s per l'accesso HTTPS."
 
 msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
-msgstr ""
+msgstr "Esempio: Per consentire l'accesso da localhost e 192.168.1.10 su HTTP e HTTPS:"
 
 msgid "For most client services, change listening address for relevant service in Tunnel Manager's configuration section using <i>reachable by</i> dropdown."
 msgstr ""
@@ -6497,7 +6497,7 @@ msgid "If you are in a hurry and can't wait a few hours, you can tell people to 
 msgstr "Se hai fretta e non puoi aspettare qualche ora, puoi dire alle persone di utilizzare un servizio di reindirizzamento dell'indirizzo \"jump\". Di solito ciò funziona entro pochi minuti dalla registrazione del tuo hostname sullo stesso sito. Provalo tu stesso inserendo <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>nomescelto.i2p</i></code> nel tuo browser. Una volta che funziona, puoi dirlo agli altri."
 
 msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skank.i2p</a>, and paste the link where it's required to share it with others."
-msgstr ""
+msgstr "In alternativa, puoi copiare il <i>link helper indirizzo</i> per il tuo dominio, indicato sia sulla pagina elenco rubrica, sia sulla pagina dettagli per il tuo dominio es. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>dettagli per skank.i2p</a>, e incollare il link dove è richiesto condividerlo con altri."
 
 msgid "Backup your private key!"
 msgstr "Eseguire il backup della chiave privata!"
@@ -6734,7 +6734,7 @@ msgid "Getting Support Online"
 msgstr "Ricevere supporto online"
 
 msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> on I2P's internal IRC network."
-msgstr ""
+msgstr "Potresti anche voler rivedere le informazioni sul <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>sito web I2P</a>, postare messaggi al <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>forum di discussione I2P</a> o passare da <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> o <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> sulla rete IRC interna di I2P."
 
 msgid "Reporting Bugs"
 msgstr "Segnalazione Errori"
@@ -7274,7 +7274,7 @@ msgid "Configure display language, theme and optional console password"
 msgstr "Configura la lingua di visualizzazione, il tema e la password della console opzionale"
 
 msgid "Language"
-msgstr ""
+msgstr "Lingua"
 
 msgid "Configure router bandwidth"
 msgstr "Configura la larghezza di banda del router"
@@ -7341,22 +7341,22 @@ msgid "network database"
 msgstr "database della rete"
 
 msgid "Encryption type"
-msgstr ""
+msgstr "Tipo crittografia"
 
 msgid "Encryption types"
-msgstr ""
+msgstr "Tipi crittografia"
 
 msgid "Signature types"
-msgstr ""
+msgstr "Tipi firma"
 
 msgid "Locally hosted private service"
-msgstr ""
+msgstr "Servizio privato ospitato localmente"
 
 msgid "Locally hosted public service"
-msgstr ""
+msgstr "Servizio pubblico ospitato localmente"
 
 msgid "Requested client leaseset"
-msgstr ""
+msgstr "LeaseSet client richiesto"
 
 msgid "network database router map"
 msgstr "Mappa del router della base dati di rete"
@@ -7402,10 +7402,10 @@ msgid "Fast / High Capacity"
 msgstr "Veloce / Alta capacità"
 
 msgid "router logs"
-msgstr ""
+msgstr "log del router"
 
 msgid "service logs"
-msgstr ""
+msgstr "log del servizio"
 
 msgid "Manage I2P addresses"
 msgstr "Gestisci indirizzi I2P"
@@ -7612,13 +7612,13 @@ msgid "Toggle Tunnels"
 msgstr "Attiva/Disattiva tunnel"
 
 msgid "Updating sidebar sections"
-msgstr ""
+msgstr "Aggiornamento sezioni barra laterale"
 
 msgid "Peer Profile"
 msgstr "Profilo del peer"
 
 msgid "Profile View"
-msgstr ""
+msgstr "Vista profilo"
 
 msgid "Profile for peer"
 msgstr "Profilo per peer"
