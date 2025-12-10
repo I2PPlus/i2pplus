@@ -2794,11 +2794,11 @@ msgstr "Zdalne zestawy dzierżawy"
 
 #, java-format
 msgid "Hostname {0} not found in network database"
-msgstr "Hostname {0} not found in network database"
+msgstr ""
 
 #, java-format
 msgid "LeaseSet for {0} not found in network database"
-msgstr "LeaseSet for {0} not found in network database"
+msgstr ""
 
 msgid "Meta"
 msgstr "Meta"
@@ -3527,7 +3527,7 @@ msgstr "Uwaga: routery klasy 'LU' zostały wykluczone z listy."
 
 #, java-format
 msgid "To view, see {0}Session Bans{1}."
-msgstr "To view, see {0}Session Bans{1}."
+msgstr ""
 
 msgid "Select search engine"
 msgstr "Wybierz wyszukiwrkę"
@@ -3775,7 +3775,7 @@ msgid "An introduction to hosting websites on the I2P network"
 msgstr "Wprowadzenie do hostingu stron internetowych w sieci I2P"
 
 msgid "New hosts in last 24 hours"
-msgstr "New hosts in last 24 hours"
+msgstr ""
 
 msgid "I2PControl"
 msgstr "Kontroler I2P"
@@ -5205,7 +5205,7 @@ msgstr "Poniżej przedstawiono listę banów według adresu IP."
 
 #, java-format
 msgid "To view all active bans by router hash, see {0}Banned Peers{1}."
-msgstr "To view all active bans by router hash, see {0}Banned Peers{1}."
+msgstr ""
 
 #, java-format
 msgid "A list of {0}session-only bans{1} by hash is also available."
@@ -6127,7 +6127,7 @@ msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP a
 msgstr "Przykład: Aby zezwolić dostęp z localhost i 192.168.1.10 przez HTTP i HTTPS:"
 
 msgid "For most client services, change listening address for relevant service in Tunnel Manager's configuration section using <i>reachable by</i> dropdown."
-msgstr "For most client services, change listening address for relevant service in Tunnel Manager's configuration section using <i>reachable by</i> dropdown."
+msgstr ""
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "Jak mam się połączyć do IRC na I2P?"
@@ -6751,7 +6751,7 @@ msgid "Getting Support Online"
 msgstr "Uzyskiwanie pomocy online"
 
 msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> on I2P's internal IRC network."
-msgstr "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> on I2P's internal IRC network."
+msgstr ""
 
 msgid "Reporting Bugs"
 msgstr "Raportowanie błędów"
