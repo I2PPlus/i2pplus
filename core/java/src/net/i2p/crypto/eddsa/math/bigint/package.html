@@ -1,11 +1,44 @@
+<!DOCTYPE HTML>
 <html>
 <head>
     <title>BigInteger Mathematical Implementation Package</title>
 </head>
 <body>
 <p>
-    Low-level, non-optimized implementation using BigIntegers for any curve.
-    Unused. See <a href="../ed25519/package-summary.html">ed25519</a> implementation for Curve 25519.
+    Generic mathematical implementation using Java BigIntegers for arbitrary elliptic curves.
+</p>
+
+<p>
+    This package provides a low-level, non-optimized implementation of elliptic curve
+    mathematical operations using Java's built-in BigInteger class. The implementation
+    is designed to work with any elliptic curve, making it suitable for testing,
+    compatibility, or curves without specialized optimizations.
+</p>
+
+<p>
+    <strong>Characteristics:</strong>
+</p>
+<ul>
+    <li><strong>Generic Support:</strong> Works with any elliptic curve parameters</li>
+    <li><strong>BigInteger Based:</strong> Uses standard Java BigInteger arithmetic</li>
+    <li><strong>Reference Implementation:</strong> Clear, readable mathematical operations</li>
+    <li><strong>Compatibility:</strong> Ensures correctness across different curve types</li>
+</ul>
+
+<p>
+    <strong>Usage:</strong>
+</p>
+<ul>
+    <li>Testing and verification of optimized implementations</li>
+    <li>Support for non-standard curves</li>
+    <li>Educational purposes and algorithm understanding</li>
+    <li>Fallback implementation when optimizations are unavailable</li>
+</ul>
+
+<p>
+    <strong>Note:</strong> This implementation is currently unused in production I2P code.
+    For Curve25519 operations, the optimized <a href="../ed25519/package-summary.html">ed25519</a>
+    implementation provides significantly better performance.
 </p>
 </body>
 </html>

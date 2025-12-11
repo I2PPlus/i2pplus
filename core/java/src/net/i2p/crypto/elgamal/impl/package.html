@@ -1,14 +1,40 @@
+<!DOCTYPE HTML>
 <html>
 <head>
     <title>ElGamal Implementation Package</title>
 </head>
 <body>
 <p>
-Implementation of ElGamal keys, used for I2PProvider. Modified from Bouncy Castle 1.53. See net.i2p.crypto.elgamal for license info.
+    Concrete implementations of ElGamal cryptographic keys for I2P.
 </p>
 
 <p>
-Since 0.9.25.
+    This package provides the actual implementation classes for ElGamal public and private keys,
+    designed for use with the I2P security provider. The implementations are based on
+    Bouncy Castle 1.53 and have been modified for I2P's specific requirements.
+</p>
+
+<p>
+    <strong>Key Components:</strong>
+</p>
+<ul>
+    <li><strong>ElGamalPublicKey Implementation:</strong> Concrete public key class</li>
+    <li><strong>ElGamalPrivateKey Implementation:</strong> Concrete private key class</li>
+    <li><strong>Key Encoding:</strong> Support for PKCS#8 and X.509 standard formats</li>
+    <li><strong>I2P Integration:</strong> Optimized for I2P security provider usage</li>
+</ul>
+
+<p>
+    These implementations are used internally by the I2PProvider to provide
+    Java Security API compatibility for ElGamal operations throughout the I2P network.
+</p>
+
+<p>
+    <strong>License:</strong> Modified from Bouncy Castle 1.53. See net.i2p.crypto.elgamal for license information.
+</p>
+
+<p>
+    Since 0.9.25.
 </p>
 </body>
 </html>

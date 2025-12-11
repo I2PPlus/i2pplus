@@ -44,6 +44,7 @@ caption{text-shadow: var(--txt_shadow)}
 code,tt{font-family:var(--monospaced);font-size:14px;font-weight:500;padding-top:4px;margin-top:8px;line-height:1.4em}
 div.block div.deprecationComment,div.block div.block span.emphasizedPhrase,div.block div.block span.interfaceName{font-style:normal}
 div.block{font-size:15px;font-family:var(--bodyfont)}
+h2+div.block{margin:0 auto;padding:12px 16px 16px;width:calc(100% - 72px);border:var(--border_thick);background:#060633}
 div.inheritance div.inheritance{margin-left:2em}
 div.inheritance{margin:0;padding:0}
 div.memberSignature span.annotations{white-space:pre-wrap}
@@ -68,6 +69,7 @@ h4{font-size:17px}
 h5{font-size:16px}
 h6{font-size:15px}
 hr{margin:15px 0;height:1px;border:0;background:var(--hr)}
+a[name="package.description"]+h2{margin:10px 0 0px 15px;padding:8px 12px;width:auto;font-size:100%;display:inline-block;background:#1f389c}
 hr+br,.description hr{display:none}
 html{min-height:100%;scrollbar-color:var(--scrollbar)}
 iframe{margin:0;padding:0;height:100%;width:100%;overflow-y:scroll;border:0}

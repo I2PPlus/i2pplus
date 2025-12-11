@@ -1,11 +1,42 @@
+<!DOCTYPE HTML>
 <html>
 <head>
     <title>Ed25519 Mathematical Implementation Package</title>
 </head>
 <body>
 <p>
-    Low-level, optimized implementation using Radix $2^{51}$ for Curve 25519.
-    See <a href="../bigint/package-summary.html">bigint</a> implementation for other curves.
+    High-performance, optimized mathematical implementation for Ed25519 using Radix 2^51 representation.
+</p>
+
+<p>
+    This package provides a low-level, highly optimized implementation of the mathematical
+    operations required for Ed25519 signatures on Curve25519. The implementation uses
+    Radix 2^51 representation for maximum performance on modern processors.
+</p>
+
+<p>
+    <strong>Key Features:</strong>
+</p>
+<ul>
+    <li><strong>Performance Optimization:</strong> Radix 2^51 representation for efficient arithmetic</li>
+    <li><strong>Curve25519 Support:</strong> Specialized implementation for Ed25519 curve</li>
+    <li><strong>Field Operations:</strong> Optimized finite field arithmetic</li>
+    <li><strong>Group Operations:</strong> Fast elliptic curve point operations</li>
+</ul>
+
+<p>
+    <strong>Components:</strong>
+</p>
+<ul>
+    <li><strong>Field Elements:</strong> Optimized representation and operations</li>
+    <li><strong>Group Elements:</strong> Efficient curve point arithmetic</li>
+    <li><strong>Scalar Operations:</strong> Fast scalar multiplication and addition</li>
+</ul>
+
+<p>
+    This implementation is significantly faster than the generic BigInteger-based approach
+    and is used by default for Ed25519 operations in I2P. For other curves, see the
+    <a href="../bigint/package-summary.html">bigint</a> implementation.
 </p>
 </body>
 </html>

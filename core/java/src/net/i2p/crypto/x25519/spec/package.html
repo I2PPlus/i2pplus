@@ -1,11 +1,37 @@
+<!DOCTYPE HTML>
 <html>
 <head>
     <title>X25519 Specifications Package</title>
 </head>
 <body>
 <p>
-    AlgorithmParameterSpec for X25519.
+    Parameter specifications and algorithm configuration for X25519 operations.
 </p>
+
+<p>
+    This package provides {@link java.security.spec.AlgorithmParameterSpec} implementations
+    that define the parameters and configuration for X25519 Diffie-Hellman key exchange.
+    These specifications enable proper initialization and configuration of X25519 operations
+    through the Java Cryptography Architecture (JCA).
+</p>
+
+<p>
+    <strong>Key Components:</strong>
+</p>
+<ul>
+    <li><strong>X25519Spec:</strong> Parameter specification for X25519 key operations</li>
+    <li><strong>Configuration:</strong> Standardized parameter definitions for algorithm initialization</li>
+    <li><strong>JCA Integration:</strong> Compatibility with Java security provider framework</li>
+</ul>
+
+<p>
+    These specifications are used when:
+</p>
+<ul>
+    <li>Initializing X25519 key generators</li>
+    <li>Configuring key agreement operations</li>
+    <li>Providing algorithm parameters to JCA instances</li>
+</ul>
 
 <p>
     Since 0.9.38.

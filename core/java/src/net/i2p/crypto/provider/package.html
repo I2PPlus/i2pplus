@@ -1,15 +1,53 @@
+<!DOCTYPE HTML>
 <html>
 <head>
     <title>I2P Security Provider Package</title>
 </head>
 <body>
 <p>
-    I2P implementation of java.security.Provider for EdDSA.
+    Java Security Provider implementation for I2P cryptographic algorithms.
 </p>
 
 <p>
-    This should only be required when using runtime registration of provider with the <code>Security.addProvider()</code> mechanism.
+    This package provides a {@link java.security.Provider} implementation that registers
+    I2P's cryptographic algorithms with the Java Cryptography Architecture (JCA).
+    The provider enables seamless integration of I2P algorithms with standard Java security APIs.
 </p>
+
+<p>
+    <strong>Supported Algorithms:</strong>
+</p>
+<ul>
+    <li><strong>EdDSA:</strong> Edwards-curve Digital Signature Algorithm (Ed25519)</li>
+    <li><strong>Future Support:</strong> Additional I2P algorithms may be added in subsequent versions</li>
+</ul>
+
+<p>
+    <strong>Usage:</strong>
+</p>
+<p>
+    This provider is primarily needed when using runtime registration with:
+</p>
+<pre>
+    Security.addProvider(new I2PProvider());
+</pre>
+<p>
+    Once registered, algorithms can be accessed through standard JCA APIs such as:
+</p>
+<ul>
+    <li>{@link java.security.Signature} for digital signatures</li>
+    <li>{@link java.security.KeyPairGenerator} for key generation</li>
+    <li>{@link java.security.KeyFactory} for key conversion</li>
+</ul>
+
+<p>
+    <strong>When to Use:</strong>
+</p>
+<ul>
+    <li>Applications requiring JCA compatibility with I2P algorithms</li>
+    <li>Integration with existing Java security frameworks</li>
+    <li>Standardized algorithm access patterns</li>
+</ul>
 
 <p>
     Since 0.9.15. Other I2P algorithms may be added later.

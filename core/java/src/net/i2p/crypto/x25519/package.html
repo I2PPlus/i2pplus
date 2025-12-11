@@ -1,10 +1,35 @@
+<!DOCTYPE HTML>
 <html>
 <head>
     <title>X25519 Diffie-Hellman Package</title>
 </head>
 <body>
 <p>
-    DH for X25519.
+    Implementation of X25519 elliptic curve Diffie-Hellman key exchange for I2P.
+</p>
+
+<p>
+    This package provides X25519 functionality based on RFC 7748, offering:
+</p>
+<ul>
+    <li><strong>Key Exchange:</strong> Secure Diffie-Hellman operations using Curve25519</li>
+    <li><strong>Performance:</strong> Optimized implementation suitable for high-throughput routing</li>
+    <li><strong>Security:</strong> Modern elliptic curve cryptography with 128-bit security level</li>
+    <li><strong>Compatibility:</strong> Standards-compliant implementation for interoperability</li>
+</ul>
+
+<p>
+    X25519 is used throughout I2P for:
+</p>
+<ul>
+    <li>Session key establishment in encrypted tunnels</li>
+    <li>Key agreement in garlic routing</li>
+    <li>Ephemeral key exchange for forward secrecy</li>
+</ul>
+
+<p>
+    The implementation wraps Noise's Curve25519 DH operations and provides
+    Java Security API compatibility through parameter specifications.
 </p>
 
 <p>
