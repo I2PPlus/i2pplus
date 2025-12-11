@@ -545,7 +545,7 @@ public class UDPTransport extends TransportImpl {
 
         int newPort = startEndpointsAndGetPort();
         if (_endpoints.isEmpty()) {
-            _log.log(Log.CRIT, "[UDP] Unable to open port");
+            _log.log(Log.CRIT, "[SSU] Unable to open port");
             setReachabilityStatus(Status.HOSED);
             return;
         }
@@ -3439,7 +3439,7 @@ public class UDPTransport extends TransportImpl {
         boolean isBlocklisted = _context.blocklist().isBlocklisted(peer);
         if (ps != null) {
             if (_log.shouldWarn()) {
-                _log.warn("[UDP] Forcing immediate disconnection of " +
+                _log.warn("[SSU] Forcing immediate disconnection of " +
                           (isBannedHard ? "permanently banned " : isBanned ? "temp banned " : isBlocklisted ? "blocklisted " : "") +
                           "Router [" + peer.toBase64().substring(0,6) + "]");
             }

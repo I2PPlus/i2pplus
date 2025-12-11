@@ -306,7 +306,7 @@ class PacketHandler {
             if (manager.answerPings()) {
                 receivePing(null, packet);
             } else if (log.shouldWarn()) {
-                log.warn("Dropping ECHO packet on unknown connection -> " + packet);
+                log.warn("Dropping ECHO packet on unknown connection" + (packet != null ? " -> " + packet : "..."));
             }
         } else if (packet.getReceiveStreamId() > 0) {
             receivePong(packet);
@@ -330,7 +330,7 @@ class PacketHandler {
 
         if (!verified) {
             if (log.shouldWarn())
-                log.warn("BAD ping, signature verification failed -> Dropping " + packet);
+                log.warn("BAD ping: Signature verification failed -> Dropping" + (packet != null ? ' ' + packet : "..."));
             return;
         }
 

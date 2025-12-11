@@ -121,7 +121,7 @@ public class TestJob extends JobImpl {
             return;
         } else if (lag > 500) {
             if (_log.shouldWarn()) {
-                _log.warn("Max permitted job lag exceeded (" + lag + "ms) -> Suspending " + _cfg + " tests...");
+                _log.warn("Max permitted job lag exceeded (" + lag + "ms) -> Suspending test of " + _cfg);
             }
             ctx.statManager().addRateData("tunnel.testAborted", _cfg.getLength());
             return; // Exit without rescheduling
@@ -134,7 +134,7 @@ public class TestJob extends JobImpl {
         if (totalCount >= HARD_TEST_JOB_LIMIT) {
             if (_log.shouldWarn()) {
                 _log.warn("TestJob hard limit reached (" + totalCount + " >= " + HARD_TEST_JOB_LIMIT +
-                          ") -> Cancelling " + _cfg + " test...");
+                          ") -> Cancelling test of " + _cfg);
             }
             ctx.statManager().addRateData("tunnel.testThrottled", _cfg.getLength());
             ctx.statManager().addRateData("jobQueue.testJobHardLimit", 1);
@@ -144,7 +144,7 @@ public class TestJob extends JobImpl {
         if (queuedCount >= MAX_QUEUED_TESTS) {
             if (_log.shouldInfo()) {
                 _log.info("TestJob queue saturated (" + queuedCount + " >= " + MAX_QUEUED_TESTS +
-                          ") -> Rescheduling " + _cfg + " test...");
+                          ") -> Rescheduling test of " + _cfg);
             }
             ctx.statManager().addRateData("tunnel.testThrottled", _cfg.getLength());
             scheduleRetest();
@@ -170,7 +170,7 @@ public class TestJob extends JobImpl {
             if (current >= maxTests) {
                 if (_log.shouldInfo()) {
                     _log.info("Max " + maxTests + " concurrent tunnel tests reached -> Rescheduling test for " + _cfg +
-                              " (queued: " + queuedCount + ")...");
+                              " (Queued: " + queuedCount + ")");
                 }
                 ctx.statManager().addRateData("tunnel.testThrottled", _cfg.getLength());
                 scheduleRetest();
@@ -326,13 +326,12 @@ public class TestJob extends JobImpl {
         _cfg.testJobSuccessful(ms);
 
         if (_log.shouldDebug()) {
-            _log.debug("Tunnel Test [#" + _id + "] succeeded in " + ms + "ms → " + _cfg + " (concurrent tests: " +
-                      CONCURRENT_TESTS.get() + ")");
+            _log.debug("Tunnel Test [#" + _id + "] succeeded in " + ms + "ms → " + _cfg + " (Concurrent tests: " +
+                       CONCURRENT_TESTS.get() + ")");
         }
 
         // Clean up session tags
         clearTestTags();
-
         scheduleRetest();
     }
 

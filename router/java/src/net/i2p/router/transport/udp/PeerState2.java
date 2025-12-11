@@ -933,8 +933,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                         }
                     } else {
                         if (_log.shouldWarn()) {
-                            _log.warn("[SSU] Path response from unexpected address. Expected: " + _pendingRemoteHostId
-                                    + " Received from: " + from + this);
+                            _log.warn("[SSU] Path response from unexpected address... \n* Expected: " + _pendingRemoteHostId
+                                    + " -> Received from: " + from + this);
                         }
                         _migrationState = MigrationState.MIGRATION_STATE_NONE; // Reset on failure
                         messagePartiallyReceived(); // ACK-eliciting
