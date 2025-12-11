@@ -1561,7 +1561,7 @@ public class PeerState {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(256);
-        buf.append("\n* Router: ").append(_remoteHostId.toString());
+        buf.append("Router: ").append(_remoteHostId.toString());
         buf.append(" [").append(_remotePeer.toBase64().substring(0,6)).append("]");
 
         if (getVersion() == 2) {buf.append(_isInbound? " Inbound v2 " : " Outbound v2 ");}

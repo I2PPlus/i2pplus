@@ -509,7 +509,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                                     _transport.isValid(from.getIP())) {
                                     // send challenge
                                     if (shouldLogDebug) {
-                                        _log.debug("[SSU] Starting connection migration to " + from + this);
+                                        _log.debug("[SSU] Starting connection migration to " + from + ' ' + this);
                                     }
                                     _migrationState = MigrationState.MIGRATION_STATE_PENDING;
                                     _migrationStarted = _context.clock().now();
@@ -522,7 +522,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                                     setLastSendTime(_migrationStarted);
                                 } else {
                                     // don't attempt to switch
-                                    if (shouldLogDebug) {_log.debug("[SSU] Not migrating connection to " + from + this);}
+                                    if (shouldLogDebug) {_log.debug("[SSU] Not migrating connection to " + from + ' ' + this);}
                                 }
                                 limitSending = true;
                             }
@@ -540,10 +540,10 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                                     _pathChallengeSendCount > MAX_PATH_CHALLENGE_SENDS) {
                                     // time exceeded
                                     _migrationState = MigrationState.MIGRATION_STATE_NONE;
-                                    if (shouldLog) {_log.warn("[SSU] Connection migration failed " + this);}
+                                    if (shouldLog) {_log.warn("[SSU] Connection migration failed for " + this);}
                                 } else if (from.equals(_pendingRemoteHostId)) {
                                     if (shouldLogDebug) {
-                                        _log.debug("[SSU] Connection migration pending, received another packet from " + from + this);
+                                        _log.debug("[SSU] Connection migration pending, received another packet from " + from + ' ' + this);
                                     }
                                     if (now > _migrationNextSendTime) {
                                         // retransmit challenge
@@ -556,7 +556,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                                 } else {
                                     // a third ip/port ???
                                     if (shouldLogDebug) {
-                                        _log.debug("[SSU] Connection migration pending, received packet from 3rd address " + from + this);
+                                        _log.debug("[SSU] Connection migration pending, received packet from 3rd address " + from + ' ' + this);
                                     }
                                     limitSending = true;
                                 }
@@ -880,7 +880,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
 
     public void gotPathResponse(RemoteHostId from, byte[] data) {
         if (shouldLogDebug) {
-            _log.debug("Received PATH RESPONSE block, length: " + data.length + " from " + from + this);
+            _log.debug("Received PATH RESPONSE block, length: " + data.length + " from " + from + ' ' + this);
         }
 
         synchronized (_migrationLock) {
@@ -893,7 +893,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                             _pathChallengeData = null;
 
                             if (shouldLogDebug) {
-                                _log.debug("Connection migration successful, changed address from " + _remoteHostId + " to " + from + this);
+                                _log.debug("Connection migration successful, changed address from " + _remoteHostId + " to " + from + ' ' + this);
                             }
 
                             _transport.changePeerAddress(this, from);
@@ -915,7 +915,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                                     setLastReceiveTime(now);
                                 } catch (IOException ioe) {
                                     if (_log.shouldWarn()) {
-                                        _log.warn("[SSU] Failed to send NewToken after successful migration to " + from + this + " -> " + ioe.getMessage());
+                                        _log.warn("[SSU] Failed to send NewToken after successful migration to " + from + ' ' + this + " -> " + ioe.getMessage());
                                     }
                                 }
                             } else {
@@ -934,7 +934,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                     } else {
                         if (_log.shouldWarn()) {
                             _log.warn("[SSU] Path response from unexpected address... \n* Expected: " + _pendingRemoteHostId
-                                    + " -> Received from: " + from + this);
+                                    + " -> Received from: " + from + ' ' + this);
                         }
                         _migrationState = MigrationState.MIGRATION_STATE_NONE; // Reset on failure
                         messagePartiallyReceived(); // ACK-eliciting
