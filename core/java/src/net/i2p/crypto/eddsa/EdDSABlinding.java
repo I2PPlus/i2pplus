@@ -11,8 +11,8 @@ import net.i2p.crypto.eddsa.spec.EdDSAPrivateKeySpec;
 import net.i2p.crypto.eddsa.spec.EdDSAPublicKeySpec;
 
 /**
- * Utilities for Blinding EdDSA keys.
- * PRELIMINARY - Subject to change - see proposal 123
+ * Utilities for EdDSA key blinding operations.
+ * Provides methods to blind and unblind EdDSA keys for privacy protection.
  *
  * @since 0.9.38
  */

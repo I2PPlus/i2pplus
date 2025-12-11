@@ -16,17 +16,8 @@ import java.util.Arrays;
 import net.i2p.crypto.eddsa.Utils;
 
 /**
- * A point $(x,y)$ on an EdDSA curve.
- * <p>
- * Reviewed/commented by Bloody Rookie (nemproject@gmx.de)
- * <p>
- * Literature:<br>
- * [1] Daniel J. Bernstein, Niels Duif, Tanja Lange, Peter Schwabe and Bo-Yin Yang : High-speed high-security signatures<br>
- * [2] Huseyin Hisil, Kenneth Koon-Ho Wong, Gary Carter, Ed Dawson: Twisted Edwards Curves Revisited<br>
- * [3] Daniel J. Bernsteina, Tanja Lange: A complete set of addition laws for incomplete Edwards curves<br>
- * [4] Daniel J. Bernstein, Peter Birkner, Marc Joye, Tanja Lange and Christiane Peters: Twisted Edwards Curves<br>
- * [5] Christiane Pascale Peters: Curves, Codes, and Cryptography (PhD thesis)<br>
- * [6] Daniel J. Bernstein, Peter Birkner, Tanja Lange and Christiane Peters: Optimizing double-base elliptic-curve single-scalar multiplication<br>
+ * Represents a point on an EdDSA curve with support for multiple coordinate representations.
+ * Provides operations for point addition, doubling, and scalar multiplication.
  *
  * @since 0.9.15
  * @author str4d
@@ -35,42 +26,34 @@ public class GroupElement implements Serializable {
     private static final long serialVersionUID = 2395879087349587L;
 
     /**
-     * Available representations for a group element.
-     * <ul>
-     * <li>P2: Projective representation $(X:Y:Z)$ satisfying $x=X/Z, y=Y/Z$.
-     * <li>P3: Extended projective representation $(X:Y:Z:T)$ satisfying $x=X/Z, y=Y/Z, XY=ZT$.
-     * <li>P3PrecomputedDouble: P3 but with dblPrecmp populated.
-     * <li>P1P1: Completed representation $((X:Z), (Y:T))$ satisfying $x=X/Z, y=Y/T$.
-     * <li>PRECOMP: Precomputed representation $(y+x, y-x, 2dxy)$.
-     * <li>CACHED: Cached representation $(Y+X, Y-X, Z, 2dT)$
-     * </ul>
+     * Available coordinate representations for a group element.
      */
     public enum Representation {
-        /** Projective ($P^2$): $(X:Y:Z)$ satisfying $x=X/Z, y=Y/Z$ */
+        /** Projective representation (X:Y:Z) */
         P2,
-        /** Extended ($P^3$): $(X:Y:Z:T)$ satisfying $x=X/Z, y=Y/Z, XY=ZT$ */
+        /** Extended projective representation (X:Y:Z:T) */
         P3,
         /**
-         * Can only be requested.  Results in P3 representation but also populates dblPrecmp.
+         * Extended representation with precomputed doubles.
          * @since 0.9.36
          */
         P3PrecomputedDouble,
-        /** Completed ($P \times P$): $((X:Z),(Y:T))$ satisfying $x=X/Z, y=Y/T$ */
+        /** Completed representation for addition results */
         P1P1,
-        /** Precomputed (Duif): $(y+x,y-x,2dxy)$ */
+        /** Precomputed representation for optimized operations */
         PRECOMP,
-        /** Cached: $(Y+X,Y-X,Z,2dT)$ */
+        /** Cached representation for intermediate calculations */
         CACHED
     }
 
     /**
      * Creates a new group element in P2 representation.
      *
-     * @param curve The curve.
-     * @param X The $X$ coordinate.
-     * @param Y The $Y$ coordinate.
-     * @param Z The $Z$ coordinate.
-     * @return The group element in P2 representation.
+     * @param curve The curve
+     * @param X The X coordinate
+     * @param Y The Y coordinate
+     * @param Z The Z coordinate
+     * @return The group element in P2 representation
      */
     public static GroupElement p2(
             final Curve curve,

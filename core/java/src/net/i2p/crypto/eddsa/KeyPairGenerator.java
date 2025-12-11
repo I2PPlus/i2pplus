@@ -28,9 +28,22 @@ import net.i2p.crypto.eddsa.spec.EdDSAPublicKeySpec;
 import net.i2p.util.RandomSource;
 
 /**
- *  Default keysize is 256 (Ed25519)
+ * Key pair generator for EdDSA (Edwards-curve Digital Signature Algorithm) keys.
+ * 
+ * This implementation generates EdDSA key pairs with a default key size of 256 bits
+ * using the Ed25519 curve, which provides strong security with excellent performance
+ * characteristics. EdDSA is the recommended signature algorithm for new I2P applications.
+ * 
+ * <p>Generated keys are suitable for:</p>
+ * <ul>
+ *   <li>Digital signatures and verification</li>
+ *   <li>I2P destination keys</li>
+ *   <li>Router identity and communication</li>
+ * </ul>
  *
- *  @since 0.9.15
+ * @since 0.9.15
+ * @author str4d
+ * @see <a href="https://tools.ietf.org/html/rfc8032">RFC 8032 - EdDSA</a>
  */
 public class KeyPairGenerator extends KeyPairGeneratorSpi {
     protected static final int DEFAULT_KEYSIZE = 256;

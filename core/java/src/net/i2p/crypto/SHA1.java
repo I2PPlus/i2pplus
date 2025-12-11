@@ -22,9 +22,8 @@ import java.security.NoSuchAlgorithmException;
 import net.i2p.util.SystemVersion;
 
 /**
- * NOTE: As of 0.8.7, use getInstance() instead of new SHA1(), which will
- * return the JVM's MessageDigest if it is faster.
- *
+ * Implementation of the SHA-1 secure hash algorithm as specified in FIPS PUB 180-2.
+ * 
  * <p>The FIPS PUB 180-2 standard specifies four secure hash algorithms (SHA-1,
  * SHA-256, SHA-384 and SHA-512) for computing a condensed representation of
  * electronic data (message).  When a message of any length &lt; 2^^64 bits (for
@@ -109,7 +108,12 @@ public final class SHA1 extends MessageDigest implements Cloneable {
 
     /**
      * Creates a SHA1 object with default initial state.
-     * NOTE: Use getInstance() to get the fastest implementation.
+     * 
+     * <p><strong>Performance Note:</strong> For optimal performance, use {@link #getInstance()}
+     * instead of direct construction. getInstance() will return the JVM's native
+     * MessageDigest implementation if it's faster than the local implementation.</p>
+     * 
+     * @see #getInstance()
      */
     public SHA1() {
         super("SHA-1");
@@ -118,8 +122,14 @@ public final class SHA1 extends MessageDigest implements Cloneable {
     }
 
     /**
-     *  @return the fastest digest, either new SHA1() or MessageDigest.getInstance("SHA-1")
-     *  @since 0.8.7
+     * Returns the fastest available SHA-1 MessageDigest implementation.
+     * 
+     * <p>This method automatically selects between the local SHA1 implementation
+     * and the JVM's native MessageDigest based on performance characteristics.
+     * On most systems, the JVM's native implementation is preferred for speed.</p>
+     * 
+     * @return fastest digest, either new SHA1() or MessageDigest.getInstance("SHA-1")
+     * @since 0.8.7
      */
     public static MessageDigest getInstance() {
         if (!_useBitzi) {

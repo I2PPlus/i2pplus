@@ -7,15 +7,22 @@ import java.security.spec.EllipticCurve;
 import net.i2p.util.NativeBigInteger;
 
 /**
- *  Used by KeyGenerator.getSigningPublicKey()
+ * Elliptic curve utility functions for cryptographic operations.
+ * 
+ * This class provides essential mathematical operations for elliptic curve cryptography
+ * used throughout I2P, including scalar multiplication, point operations,
+ * and curve parameter handling. It supports multiple curve types with optimized
+ * implementations for common cryptographic operations.
+ * 
+ * <p>Key operations include:</p>
+ * <ul>
+ *   <li>Scalar multiplication of curve points</li>
+ *   <li>Point addition and doubling operations</li>
+ *   <li>Curve parameter validation and extraction</li>
+ *   <li>Support for standard NIST curves (P-192, P-256, P-384, P-521)</li>
+ * </ul>
  *
- *  Modified from
- *  http://stackoverflow.com/questions/15727147/scalar-multiplication-of-point-over-elliptic-curve
- *  Apparently public domain.
- *  Supported P-192 only.
- *  Added curve parameters to support all curves.
- *
- *  @since 0.9.16
+ * @since 0.9.16
  */
 final class ECUtil {
 

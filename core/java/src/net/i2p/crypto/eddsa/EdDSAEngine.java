@@ -32,40 +32,11 @@ import net.i2p.crypto.eddsa.math.ScalarOps;
 import net.i2p.crypto.eddsa.math.bigint.BigIntegerLittleEndianEncoding;
 
 /**
- * Signing and verification for EdDSA.
- *<p>
- * The EdDSA sign and verify algorithms do not interact well with
- * the Java Signature API, as one or more update() methods must be
- * called before sign() or verify(). Using the standard API,
- * this implementation must copy and buffer all data passed in
- * via update().
- *</p><p>
- * This implementation offers two ways to avoid this copying,
- * but only if all data to be signed or verified is available
- * in a single byte array.
- *</p><p>
- *Option 1:
- *</p><ol>
- *<li>Call initSign() or initVerify() as usual.
- *</li><li>Call setParameter(ONE_SHOT_MODE)
- *</li><li>Call update(byte[]) or update(byte[], int, int) exactly once
- *</li><li>Call sign() or verify() as usual.
- *</li><li>If doing additional one-shot signs or verifies with this object, you must
- *         call setParameter(ONE_SHOT_MODE) each time
- *</li></ol>
- *
- *<p>
- *Option 2:
- *</p><ol>
- *<li>Call initSign() or initVerify() as usual.
- *</li><li>Call one of the signOneShot() or verifyOneShot() methods.
- *</li><li>If doing additional one-shot signs or verifies with this object,
- *         just call signOneShot() or verifyOneShot() again.
- *</li></ol>
+ * EdDSA signature engine implementing the Java Signature API.
+ * Supports both standard streaming and one-shot operation modes for efficiency.
  *
  * @since 0.9.15
  * @author str4d
- *
  */
 public class EdDSAEngine extends Signature {
     public static final String SIGNATURE_ALGORITHM = "NONEwithEdDSA";

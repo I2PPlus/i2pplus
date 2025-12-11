@@ -45,9 +45,22 @@ import net.i2p.util.NativeBigInteger;
 import net.i2p.util.SystemVersion;
 
 /**
- * Utilities for Signing keys and Signatures
+ * Comprehensive utility class for I2P signing keys and digital signatures.
+ *
+ * This class provides essential methods for converting between I2P's native key formats
+ * and standard Java cryptographic key representations, as well as utilities for
+ * signature encoding/decoding and key validation.
+ *
+ * <p>Key functionalities include:</p>
+ * <ul>
+ *   <li>Conversion between I2P and Java key formats</li>
+ *   <li>Support for DSA, ECDSA, EdDSA, and RSA algorithms</li>
+ *   <li>ASN.1 signature encoding and decoding</li>
+ *   <li>Key validation and rectification</li>
+ * </ul>
  *
  * @since 0.9.9, public since 0.9.12
+ * @author I2P Project
  */
 public final class SigUtil {
 

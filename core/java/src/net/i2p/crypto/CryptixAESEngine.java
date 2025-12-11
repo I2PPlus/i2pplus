@@ -1,12 +1,8 @@
 package net.i2p.crypto;
 
 /*
- * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
  * with no warranty of any kind, either expressed or implied.
- * It probably won't  make your computer catch on fire, or eat
- * your children, but it might.  Use at your own risk.
- *
  */
 
 import freenet.support.CPUInformation.CPUID;
@@ -25,12 +21,10 @@ import net.i2p.util.SimpleByteCache;
 import net.i2p.util.SystemVersion;
 
 /**
- * Wrapper for AES cypher operation using Cryptix's Rijndael implementation.  Implements
- * CBC with a 16 byte IV.
- * Problems:
- * Only supports data of size mod 16 bytes - no inherent padding.
+ * AES encryption engine using Cryptix's Rijndael implementation with CBC mode.
+ * Supports 128-bit block size with 16-byte IV. No padding is provided.
  *
- * @author jrandom, thecrypto
+ * @author jrandom,crypto
  */
 public final class CryptixAESEngine extends AESEngine {
     private final LinkedBlockingQueue<Cipher> _ciphers;
@@ -38,7 +32,6 @@ public final class CryptixAESEngine extends AESEngine {
     // keys are now cached in the SessionKey objects
     //private CryptixAESKeyCache _cache;
 
-    /** see test results below */
     private static final int MIN_SYSTEM_AES_LENGTH = 640;
     private static final boolean USE_SYSTEM_AES = hasAESNI() && CryptoCheck.isUnlimited();
 
@@ -48,10 +41,8 @@ public final class CryptixAESEngine extends AESEngine {
     private static final IvParameterSpec ZERO_IV = new IvParameterSpec(new byte[16], 0, 16);
 
     /**
-     *  Do we have AES-NI support in the processor and JVM?
-     *  Only on 64-bit x86 Java 7 fast JVMs, with AES-NI support.
-     *  See comments in main() below.
-     *  @since 0.9.14
+     * Check for AES-NI support in processor and JVM.
+     * @since 0.9.14
      */
     private static boolean hasAESNI() {
         if (SystemVersion.isX86() && SystemVersion.is64Bit() && SystemVersion.isJava7() &&

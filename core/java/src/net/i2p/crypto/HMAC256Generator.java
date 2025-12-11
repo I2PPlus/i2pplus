@@ -11,12 +11,25 @@ import net.i2p.data.DataHelper;
 import net.i2p.data.SessionKey;
 
 /**
- * Calculate the HMAC-SHA256 of a key+message.
- * This is compatible with javax.crypto.Mac.getInstance("HmacSHA256").
+ * HMAC-SHA256 message authentication code generator for I2P cryptographic operations.
+ * 
+ * This class provides HMAC-SHA256 calculation using the standard JCA Mac interface,
+ * ensuring compatibility with {@code javax.crypto.Mac.getInstance("HmacSHA256")}.
+ * It offers both one-shot calculation and streaming operations for different use cases.
+ * 
+ * <p>Key features:</p>
+ * <ul>
+ *   <li>HMAC-SHA256 algorithm implementation for message authentication</li>
+ *   <li>Thread-safe operation with Mac instance pooling</li>
+ *   <li>Optimized for both small and large data processing</li>
+ *   <li>Integration with I2P's session key management</li>
+ * </ul>
  *
- * As of 0.9.12, uses javax.crypto.Mac.
+ * <p><strong>Compatibility Note:</strong> As of 0.9.12, this class
+ * uses the standard javax.crypto.Mac implementation for improved security
+ * and compatibility.</p>
  *
- * Warning - used by Syndie, don't break it.
+ * @since 0.9.12
  */
 public final class HMAC256Generator extends HMACGenerator {
 
@@ -127,12 +140,18 @@ public final class HMAC256Generator extends HMACGenerator {
     }
 
     /**
-     *  Like SecretKeySpec but doesn't copy the key in the construtor, for speed.
-     *  It still returns a copy in getEncoded(), because Mac relies
-     *  on that, doesn't work otherwise.
-     *  First 32 bytes are returned in getEncoded(), data may be longer.
+     * Performance-optimized SecretKey implementation for HMAC operations.
+     * 
+     * This class provides an efficient SecretKey implementation that avoids
+     * unnecessary key data copying during construction for improved performance.
+     * Unlike standard SecretKeySpec, this implementation maintains a direct reference
+     * to the key data while maintaining compatibility with Mac operations.
+     * 
+     * <p><strong>Implementation Note:</strong> getEncoded() returns a copy of the
+     * first 32 bytes because the Mac class requires this behavior for proper
+     * operation. The full key data may be longer than 32 bytes.</p>
      *
-     *  @since 0.9.38
+     * @since 0.9.38
      */
     static final class HMACKey implements SecretKey {
         private final byte[] _data;

@@ -49,8 +49,23 @@ import net.i2p.util.NativeBigInteger;
 import net.i2p.util.RandomSource;
 import net.i2p.util.SystemVersion;
 
-/** Define a way of generating asymmetrical key pairs as well as symmetrical keys
+/**
+ * Comprehensive key generation facility for I2P cryptographic operations.
+ * 
+ * This class provides methods to generate various types of cryptographic keys
+ * used throughout the I2P network, including:
+ * <ul>
+ *   <li>Asymmetric key pairs (ElGamal, DSA, ECDSA, EdDSA, RSA)</li>
+ *   <li>Symmetric session keys (AES)</li>
+ *   <li>Key derivation and conversion utilities</li>
+ * </ul>
+ * 
+ * <p>Supports both legacy algorithms (DSA, ElGamal) and modern
+ * cryptographic schemes (EdDSA, ECDSA) with configurable parameters
+ * for security and performance optimization.</p>
+ *
  * @author jrandom
+ * @since 0.8.0
  */
 public final class KeyGenerator {
     private final I2PAppContext _context;

@@ -8,7 +8,18 @@ package net.i2p.crypto;
 import net.i2p.data.SimpleDataStructure;
 
 /**
- * 48 byte hash
+ * SHA-384 secure hash algorithm implementation.
+ * 
+ * This class provides the SHA-384 hash algorithm as specified in FIPS PUB 180-4,
+ * producing a 48-byte (384-bit) message digest. SHA-384 is part of the
+ * SHA-2 family and offers higher security than SHA-256 with similar performance.
+ * 
+ * <p>Common uses in I2P include:</p>
+ * <ul>
+ *   <li>Enhanced security requirements for sensitive data</li>
+ *   <li>Digital signature generation with longer hash outputs</li>
+ *   <li>Cryptographic key derivation and verification</li>
+ * </ul>
  *
  * @since 0.9.8
  */

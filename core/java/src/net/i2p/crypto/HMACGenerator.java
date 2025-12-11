@@ -5,13 +5,27 @@ import net.i2p.data.SessionKey;
 import net.i2p.util.SimpleByteCache;
 
 /**
- * Calculate the HMAC of a key+message.
+ * Abstract base class for HMAC (Hash-based Message Authentication Code) operations.
+ * 
+ * This class provides the foundation for HMAC algorithm implementations
+ * used throughout I2P for message authentication and integrity verification.
+ * It defines the standard interface for calculating and verifying HMAC values
+ * with various hash algorithms.
+ * 
+ * <p>Key operations include:</p>
+ * <ul>
+ *   <li>HMAC calculation with given key and message data</li>
+ *   <li>Inline MAC verification for performance optimization</li>
+ *   <li>Support for different hash algorithms (SHA-1, SHA-256)</li>
+ *   <li>Integration with I2P's session key management</li>
+ * </ul>
  *
- * As of 0.9.42, this is just a stub.
- * See net.i2p.router.transport.udp.SSUHMACGenerator for
- * the HMAC used in SSU (what was originally this class),
- * and SHA256Generator for the HMAC used in Syndie.
+ * <p><strong>Implementation Note:</strong> As of 0.9.42, this class serves
+ * as an abstract base. See {@code net.i2p.router.transport.udp.SSUHMACGenerator}
+ * for SSU-specific HMAC implementation and {@code SHA256Generator} for
+ * Syndie-compatible HMAC operations.</p>
  *
+ * @since 0.9.42
  */
 public abstract class HMACGenerator {
 

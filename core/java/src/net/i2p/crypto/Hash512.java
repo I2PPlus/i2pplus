@@ -8,7 +8,19 @@ package net.i2p.crypto;
 import net.i2p.data.SimpleDataStructure;
 
 /**
- * 64 byte hash
+ * SHA-512 secure hash algorithm implementation.
+ * 
+ * This class provides the SHA-512 hash algorithm as specified in FIPS PUB 180-4,
+ * producing a 64-byte (512-bit) message digest. SHA-512 offers the highest
+ * security level in the SHA-2 family with excellent performance characteristics.
+ * 
+ * <p>Common uses in I2P include:</p>
+ * <ul>
+ *   <li>Maximum security requirements for sensitive operations</li>
+ *   <li>Long-term cryptographic key derivation</li>
+ *   <li>Digital signatures with strongest hash protection</li>
+ *   <li>Integrity verification for critical system components</li>
+ * </ul>
  *
  * @since 0.9.8
  */

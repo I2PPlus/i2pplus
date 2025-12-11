@@ -42,16 +42,28 @@ import net.i2p.util.SimpleByteCache;
 import net.i2p.util.SystemVersion;
 
 /**
- * Wrapper for ElGamal encryption/signature schemes.
+ * ElGamal cryptographic engine for I2P encryption and signature operations.
+ * 
+ * This class implements the ElGamal public-key cryptosystem for encrypting data
+ * up to 222 bytes in size. It incorporates integrity protection by prepending
+ * a random byte and SHA-256 hash to data before encryption, which are
+ * verified and stripped during decryption.
+ * 
+ * <p><strong>Security Note:</strong> This implementation is deprecated and not
+ * recommended for new applications. Use modern alternatives like ECIES or post-quantum
+ * schemes when available.</p>
+ * 
+ * <p>The encryption process:</p>
+ * <ol>
+ *   <li>Generate random nonce byte</li>
+ *   <li>Calculate SHA-256 hash of plaintext</li>
+ *   <li>Prepend nonce + hash + plaintext</li>
+ *   <li>Apply ElGamal encryption</li>
+ * </ol>
  *
- * Does all of Elgamal now for data sizes of 222 bytes and less.  The data to be
- * encrypted is first prepended with a random nonzero byte, then the 32 bytes
- * making up the SHA256 of the data, then the data itself.  The random byte and
- * the SHA256 hash is stripped on decrypt so the original data is returned.
- *
- * Not recommended for new applications.
- *
- * @author thecrypto, jrandom
+ * @author crypto, jrandom
+ * @since 0.8.0
+ * @deprecated Use modern encryption schemes such as ECIES when available
  */
 
 public final class ElGamalEngine {

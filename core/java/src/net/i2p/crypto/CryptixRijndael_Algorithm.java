@@ -6,26 +6,9 @@ package net.i2p.crypto;
 
 import java.security.InvalidKeyException;
 
-//...........................................................................
 /**
- * Rijndael --pronounced Reindaal-- is a variable block-size (128-, 192- and
- * 256-bit), variable key-size (128-, 192- and 256-bit) symmetric cipher.<p>
- *
- * Rijndael was written by <a href="mailto:rijmen@esat.kuleuven.ac.be">Vincent
- * Rijmen</a> and <a href="mailto:Joan.Daemen@village.uunet.be">Joan Daemen</a>.<p>
- *
- * Portions of this code are <b>Copyright</b> &copy; 1997, 1998
- * <a href="http://www.systemics.com/">Systemics Ltd</a> on behalf of the
- * <a href="http://www.systemics.com/docs/cryptix/">Cryptix Development Team</a>.
- * <br>All rights reserved.<p>
- * This implementation is based on the Rijndael algorithm.
- * <p>
- * This implementation provides cryptographic operations using the Rijndael algorithm.
- *
- * @author  Raif S. Naffah
- * @author  Paulo S. L. M. Barreto
- *
- * License is apparently available from http://www.cryptix.org/docs/license.html
+ * Rijndael AES algorithm implementation.
+ * Supports 128, 192, and 256-bit keys with 128-bit block size.
  */
 public final class CryptixRijndael_Algorithm // implicit no-argument constructor
 {

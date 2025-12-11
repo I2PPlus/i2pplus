@@ -53,24 +53,10 @@ import net.i2p.util.Log;
 import net.i2p.util.NativeBigInteger;
 
 /**
- *  Sign and verify using DSA-SHA1 and other signature algorithms.
- *  Also contains methods to sign and verify using a SHA-256 Hash.
+ * Digital signature algorithm engine supporting DSA, ECDSA, RSA, and EdDSA.
+ * Provides signing and verification operations for all supported signature types.
  *
- *  The primary implementation is code from TheCryto.
- *  As of 0.8.7, also included is an alternate implementation using java.security libraries, which
- *  is slightly slower. This implementation could in the future be easily modified
- *  to use a new signing algorithm from java.security when we change the signing algorithm.
- *
- *  Params and rv's changed from Hash to SHA1Hash for version 0.8.1
- *  Hash variants of sign() and verifySignature() restored in 0.8.3, required by Syndie.
- *
- *  As of 0.9.9, certain methods support RSA and ECDSA keys and signatures, i.e. all types
- *  specified in SigType. The type is specified by the getType() method in
- *  Signature, SigningPublicKey, and SigningPrivateKey. See Javadocs for individual
- *  methods for the supported types. Methods encountering an unsupported type
- *  will throw an IllegalArgumentException.
- *
- *  EdDSA support added in 0.9.15
+ * @since 0.8.1
  */
 public final class DSAEngine {
     private final Log _log;
@@ -89,8 +75,12 @@ public final class DSAEngine {
     }
 
     /**
-     *  Verify using any sig type.
-     *  Uses TheCrypto code for DSA-SHA1 unless configured to use the java.security libraries.
+     * Verify a signature using any supported signature type.
+     *
+     * @param signature the signature to verify
+     * @param signedData the data that was signed
+     * @param verifyingKey the public key to verify with
+     * @return true if the signature is valid, false otherwise
      */
     public boolean verifySignature(Signature signature, byte signedData[], SigningPublicKey verifyingKey) {
         return verifySignature(signature, signedData, 0, signedData.length, verifyingKey);

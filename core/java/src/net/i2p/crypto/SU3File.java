@@ -35,10 +35,10 @@ import net.i2p.data.SimpleDataStructure;
 import net.i2p.util.SecureFileOutputStream;
 
 /**
- *  Succesor to the ".sud" format used in TrustedUpdate.
- *  Format specified in http://www.i2p2.de/updates
+ * I2P update file format handler for .su3 files.
+ * Supports reading, writing, and verification of signed update packages.
  *
- *  @since 0.9.8
+ * @since 0.9.8
  */
 public class SU3File {
 

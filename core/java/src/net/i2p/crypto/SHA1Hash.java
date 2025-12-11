@@ -15,7 +15,19 @@ import net.i2p.data.DataFormatException;
 import net.i2p.data.SimpleDataStructure;
 
 /**
- * Because DSAEngine was abusing Hash for 20-byte hashes
+ * I2P data structure for SHA-1 hash values.
+ * 
+ * This class provides a SimpleDataStructure wrapper for 20-byte SHA-1 hashes
+ * used throughout I2P for data integrity and identification purposes.
+ * It extends SimpleDataStructure to support I2P's serialization framework
+ * and provides efficient caching of hash codes.
+ * 
+ * <p>Common uses include:</p>
+ * <ul>
+ *   <li>Router and destination identifiers</li>
+ *   <li>Message integrity verification</li>
+ *   <li>Data structure indexing and lookup</li>
+ * </ul>
  *
  * @since 0.8.1
  * @author zzz

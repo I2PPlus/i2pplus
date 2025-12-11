@@ -8,11 +8,23 @@ import net.i2p.I2PAppContext;
 import net.i2p.crypto.HMAC256Generator.HMACKey;
 
 /**
- * Various flavors of HKDF using HMAC-SHA256.
- * See RFC 5869.
- * One or two outputs, with or without "info".
- * All keys and outputs are exactly 32 bytes.
+ * HMAC-based Key Derivation Function (HKDF) implementation using HMAC-SHA256.
+ * 
+ * This class implements the HKDF algorithm as specified in RFC 5869 for
+ * deriving cryptographic keys from input key material. It provides secure key
+ * expansion functionality essential for I2P's cryptographic operations including
+ * session key generation and key derivation.
+ * 
+ * <p>Features and capabilities:</p>
+ * <ul>
+ *   <li>HMAC-SHA256 based derivation for cryptographic security</li>
+ *   <li>Support for one or two output keys with optional info parameter</li>
+ *   <li>Thread-safe operation with no internal state</li>
+ *   <li>Fixed 32-byte output size for consistency across I2P</li>
+ *   <li>Reusable instances for performance optimization</li>
+ * </ul>
  *
+ * @see <a href="https://tools.ietf.org/html/rfc5869">RFC 5869 - HKDF</a>
  * @since 0.9.38
  */
 public final class HKDF {

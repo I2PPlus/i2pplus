@@ -1,12 +1,8 @@
 package net.i2p.crypto;
 
 /*
- * free (adj.): unencumbered; not under the control of others
  * Written by jrandom in 2003 and released into the public domain
  * with no warranty of any kind, either expressed or implied.
- * It probably won't  make your computer catch on fire, or eat
- * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.I2PAppContext;
@@ -17,9 +13,23 @@ import net.i2p.util.Log;
 import net.i2p.util.SimpleByteCache;
 
 /**
- * Dummy wrapper for AES cipher operation.
- * Warning - most methods UNUSED.
- * See CryptixAESEngine overrides for the real thing.
+ * Abstract base class for AES cipher operations in I2P.
+ * 
+ * This class provides the interface and common functionality for AES encryption
+ * and decryption operations. The base implementation contains placeholder methods
+ * that log warnings when called. The actual AES implementation is provided
+ * by {@link CryptixAESEngine} which extends this class.
+ * 
+ * <p>This design pattern allows for:</p>
+ * <ul>
+ *   <li>Consistent API across different AES implementations</li>
+ *   <li>Graceful fallback when AES is unavailable</li>
+ *   <li>Easy swapping of underlying AES providers</li>
+ * </ul>
+ *
+ * @since 0.8.0
+ * @author I2P Project
+ * @see CryptixAESEngine
  */
 public class AESEngine {
     /** Logger instance */
