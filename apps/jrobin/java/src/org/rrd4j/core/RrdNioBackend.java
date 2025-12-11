@@ -142,10 +142,14 @@ public class RrdNioBackend extends ByteBufferBackend implements RrdFileBackend {
         }
 
         if (!readOnly) {
-            tempBufferFilePath = Files.createTempFile("rrd_stats_buffer_", ".tmp");
+            tempBufferFilePath = Paths.get(System.getProperty("java.io.tmpdir"), "rrd_stats_buffer.tmp");
             tempBufferFileChannel =
                     FileChannel.open(
-                            tempBufferFilePath, StandardOpenOption.READ, StandardOpenOption.WRITE);
+                            tempBufferFilePath, 
+                            StandardOpenOption.READ, 
+                            StandardOpenOption.WRITE, 
+                            StandardOpenOption.CREATE,
+                            StandardOpenOption.TRUNCATE_EXISTING);
         }
 
         try {
