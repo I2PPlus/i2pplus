@@ -644,9 +644,9 @@ class EventPumper implements Runnable {
             }
         } catch (IOException ioe) {
             if (_log.shouldDebug()) {
-                _log.debug("[NTCP2] Failed outbound connection to " + con.getRemotePeer(), ioe);
+                _log.debug("[NTCP] Failed outbound connection to " + con.getRemotePeer(), ioe);
             } else if (_log.shouldWarn()) {
-                _log.warn("[NTCP2] Failed outbound connection to " + con.getRemotePeer());
+                _log.warn("[NTCP] Failed outbound connection to " + con.getRemotePeer());
             }
             con.closeOnTimeout("Connect failed: " + ioe.getMessage(), ioe);
             RouterIdentity remote = con.getRemotePeer();
@@ -975,9 +975,9 @@ class EventPumper implements Runnable {
                 }
             } catch (IOException | UnresolvedAddressException e) {
                 if (debug) {
-                    _log.debug("[NTCP2] Failed outbound connection to " + con.getRemotePeer(), e);
+                    _log.debug("[NTCP] Failed outbound connection to " + con.getRemotePeer(), e);
                 } else if (warn) {
-                    _log.warn("[NTCP2] Failed outbound connection to " + con.getRemotePeer());
+                    _log.warn("[NTCP] Failed outbound connection to " + con.getRemotePeer());
                 }
                 con.closeOnTimeout("Connect failed: " + e.getMessage(), e);
                 _transport.markUnreachable(con.getRemotePeer().calculateHash());
@@ -994,22 +994,22 @@ class EventPumper implements Runnable {
             } catch (Exception e) {
                 // Determine if this is a networking exception vs unexpected error
                 String exceptionType = e.getClass().getSimpleName();
-                boolean isNetworkingError = exceptionType.contains("Blocking") || 
+                boolean isNetworkingError = exceptionType.contains("Blocking") ||
                                         exceptionType.contains("Connection") ||
                                         exceptionType.contains("Selector") ||
                                         exceptionType.contains("Address") ||
                                         exceptionType.equals("IllegalArgumentException") ||
                                         exceptionType.equals("NullPointerException");
-                
+
                 if (debug) {
-                    _log.debug("[NTCP2] " + (isNetworkingError ? "Connection setup error" : "Unexpected error") + 
+                    _log.debug("[NTCP] " + (isNetworkingError ? "Connection setup error" : "Unexpected error") +
                               " during outbound registration for " + con.getRemotePeer(), e);
                 } else if (warn) {
-                    _log.warn("[NTCP2] " + (isNetworkingError ? "Connection setup error" : "Unexpected error") + 
-                              " during outbound registration for " + con.getRemotePeer() + 
+                    _log.warn("[NTCP] " + (isNetworkingError ? "Connection setup error" : "Unexpected error") +
+                              " during outbound registration for " + con.getRemotePeer() +
                               (isNetworkingError ? ": " + exceptionType : ": " + exceptionType + " - " + e.getMessage()));
                 }
-                
+
                 if (isNetworkingError) {
                     _transport.markUnreachable(con.getRemotePeer().calculateHash());
                 }
