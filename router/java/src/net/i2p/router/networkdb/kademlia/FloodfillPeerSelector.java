@@ -69,6 +69,11 @@ class FloodfillPeerSelector extends PeerSelector {
      * @return List of Hash for the peers selected
      */
     @Override
+    List<Hash> selectNearestExplicit(Hash key, int maxNumRouters, Set<Hash> peersToIgnore, KBucketSet<Hash> kbuckets) {
+        return selectNearestExplicitThin(key, maxNumRouters, peersToIgnore, kbuckets, false);
+    }
+
+    @Override
     List<Hash> selectNearestExplicitThin(Hash key, int maxNumRouters, Set<Hash> peersToIgnore, KBucketSet<Hash> kbuckets) {
         return selectNearestExplicitThin(key, maxNumRouters, peersToIgnore, kbuckets, false);
     }
