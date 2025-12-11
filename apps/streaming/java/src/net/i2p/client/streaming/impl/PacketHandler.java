@@ -330,7 +330,7 @@ class PacketHandler {
 
         if (!verified) {
             if (log.shouldWarn())
-                log.warn("BAD ping: Signature verification failed -> Dropping" + (packet != null ? ' ' + packet : "..."));
+                log.warn("BAD ping: Signature verification failed -> Dropping" + (packet != null ? " " + packet : "..."));
             return;
         }
 
