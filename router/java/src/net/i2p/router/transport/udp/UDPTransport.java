@@ -1934,7 +1934,7 @@ public class UDPTransport extends TransportImpl {
                             if (count == 0 || sinceSelected > 2*60*1000) {
                                 // Rate limit to prevent rapid churn after transition to firewalled or at startup
                                 if (_log.shouldWarn())
-                                    _log.warn("Rebuilding address, new introducer added, current count " + count + ": " + peer);
+                                    _log.warn("Rebuilding address -> New introducer (Total: " + count + ") " + peer);
                                 rebuildExternalAddress(ipv6);
                             }
                         }
@@ -2044,7 +2044,7 @@ public class UDPTransport extends TransportImpl {
                     break;
                 if (itag.equals(stag)) {
                     if (_log.shouldWarn())
-                        _log.warn("Rebuilding address, published introducer dropped: " + peer);
+                        _log.warn("Rebuilding address -> Dropped published introducer " + peer);
                     synchronized (_rebuildLock) {rebuildExternalAddress(ipv6);}
                     break;
                 }

@@ -1199,7 +1199,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             } else {
                 // if we created it, there's no blind data, but it's still decrypted
                 if (encls.getDecryptedLeaseSet() == null && _log.shouldWarn()) {
-                    _log.warn("No blind data found for encrypted LeaseSet: " + leaseSet);
+                    _log.warn("No blind data found for " + leaseSet);
                 }
             }
         }
