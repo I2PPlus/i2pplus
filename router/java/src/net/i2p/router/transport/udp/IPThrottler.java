@@ -5,7 +5,9 @@ import net.i2p.util.SimpleTimer;
 import net.i2p.util.SimpleTimer2;
 
 /**
- * Count IPs
+ * Throttles connection attempts by IP address to prevent abuse.
+ * Counts and limits requests from individual IPs within a time window.
+ * Supports both IPv4 (direct IP) and IPv6 (hashed first 8 bytes) addresses.
  *
  * @since 0.9.3
  */

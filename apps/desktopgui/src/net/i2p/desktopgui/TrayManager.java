@@ -30,7 +30,9 @@ import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
 /**
- * Manages the tray icon life.
+ * Abstract base class for managing system tray icons and menus for I2P.
+ * Handles tray icon lifecycle, notifications, and provides platform-specific
+ * menu creation for both AWT and Swing implementations.
  */
 abstract class TrayManager {
 

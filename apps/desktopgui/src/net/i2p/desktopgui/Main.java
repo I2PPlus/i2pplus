@@ -25,7 +25,9 @@ import net.i2p.util.SystemVersion;
 import net.i2p.util.Translate;
 
 /**
- * The main class of the application.
+ * Main entry point for the I2P Desktop GUI application.
+ * Implements RouterApp and NotificationService to provide system tray functionality
+ * with full router context access for comprehensive I2P management.
  */
 public class Main implements RouterApp, NotificationService {
 

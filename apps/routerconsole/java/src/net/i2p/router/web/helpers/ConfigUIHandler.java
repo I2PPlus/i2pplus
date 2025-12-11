@@ -10,7 +10,12 @@ import net.i2p.router.web.ConsolePasswordManager;
 import net.i2p.router.web.FormHandler;
 import net.i2p.router.web.RouterConsoleRunner;
 
-/** Set the theme */
+/**
+ * Handles router console UI configuration and theme management.
+ * Processes theme selection, mobile console settings, user management,
+ * language settings, password configuration, and display preferences
+ * for the router console interface.
+ */
 public class ConfigUIHandler extends FormHandler {
     private boolean _shouldSave;
     private boolean _universalTheming;

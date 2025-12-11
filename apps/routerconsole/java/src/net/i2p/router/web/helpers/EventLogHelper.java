@@ -15,7 +15,10 @@ import net.i2p.router.web.FormHandler;
 import net.i2p.router.web.HelperBase;
 
 /**
- *  /events.jsp
+ * Helper for router event log display and filtering.
+ * Renders system events including startup, crashes, network changes,
+ * and configuration updates. Provides filtering by event type and time range.
+ * Supports /events.jsp page in router console.
  */
 public class EventLogHelper extends FormHandler {
     private long _from, _age;

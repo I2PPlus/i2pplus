@@ -39,7 +39,9 @@ import net.i2p.util.SecureFileOutputStream;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 
 /**
- *  Saves changes to clients.config or webapps.config
+ * Handles configuration changes for I2P client applications and web apps.
+ * Saves changes to clients.config and webapps.config files, manages client
+ * installation, updates, and startup configuration.
  */
 public class ConfigClientsHandler extends FormHandler {
 

@@ -1,7 +1,9 @@
 package net.i2p.router.tunnel;
 
 /**
- * accept everything
+ * IV validator that accepts all initialization vectors without validation.
+ * Used for testing or scenarios where IV validation is not required.
+ * Implements IVValidator interface with permissive validation behavior.
  */
 class DummyValidator implements IVValidator {
     private static final DummyValidator _instance = new DummyValidator();

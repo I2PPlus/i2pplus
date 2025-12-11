@@ -26,25 +26,18 @@ import net.i2p.util.HexDump;
 import net.i2p.util.Log;
 
 /**
- * Component to manage the munging of hashes into routing keys - given a hash,
- * perform some consistent transformation against it and return the result.
- * This transformation is fed by the current "mod data".
+ * Generates routing keys from hashes using date-based modification to prevent Sybil attacks.
+ * Transforms input hashes by appending current GMT date (yyyyMMdd format) and computing SHA256.
+ * The modification data changes daily at midnight GMT to randomize routing keys consistently.
+ * 
+ * The transformation takes the original hash, appends the bytes of the current mod data,
+ * then returns the SHA256 of that concatenation. This makes Sybil attacks much harder
+ * as she needs to essentially take over the whole keyspace.
+ * 
+ * Note: generateDateBasedModData() should be called after midnight GMT once per day
+ * to generate the correct routing keys.
  *
- * Right now the mod data is the current date (GMT) as a string: "yyyyMMdd",
- * and the transformation takes the original hash, appends the bytes of that mod data,
- * then returns the SHA256 of that concatenation.
- *
- * Do we want this to simply do the XOR of the SHA256 of the current mod data and
- * the key?  does that provide the randomization we need?  It'd save an SHA256 op.
- * Bah, too much effort to think about for so little gain.  Other algorithms may come
- * into play layer on about making periodic updates to the routing key for data elements
- * to mess with Sybil.  This may be good enough though.
- *
- * Also - the method generateDateBasedModData() should be called after midnight GMT
- * once per day to generate the correct routing keys!
- *
- * @since 0.9.16 moved from net.i2p.data.RoutingKeyGenerator..
- *
+ * @since 0.9.16 moved from net.i2p.data.RoutingKeyGenerator
  */
 public class RouterKeyGenerator extends RoutingKeyGenerator {
     private final Log _log;

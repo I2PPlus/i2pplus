@@ -20,7 +20,10 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.web.Messages;
 
 /**
- *  Moved from Banlist.java
+ * Renders HTML display of banned routers for the router console.
+ * Displays banlist entries including expiration times, reasons,
+ * and provides management interface for router bans.
+ * Moved from Banlist.java for separation of concerns.
  */
 class BanlistRenderer {
     private final RouterContext _context;

@@ -18,7 +18,8 @@ import java.util.List;
 import net.i2p.data.DataStructure;
 
 /**
- * The sorting of addresses in RIs
+ * Utility class for sorting DataStructure objects by their hash.
+ * Provides consistent network-wide sorting of RouterInfo addresses.
  *
  * @since 0.9.16 moved from DataHelper
  */

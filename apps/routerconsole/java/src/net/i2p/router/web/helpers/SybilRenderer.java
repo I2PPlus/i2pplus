@@ -44,12 +44,12 @@ import net.i2p.util.Log;
 import net.i2p.util.Translate;
 
 /**
- *  For debugging only.
- *  Parts may later move to router as a periodic monitor.
- *  Adapted from NetDbRenderer.
+ * Renders Sybil attack analysis and detection information for debugging.
+ * Displays router relationships, clustering analysis, and potential attack patterns.
+ * Provides visualization of network topology and security metrics.
+ * Adapted from NetDbRenderer; may become periodic router monitor.
  *
- *  @since 0.9.24
- *
+ * @since 0.9.24
  */
 public class SybilRenderer {
 

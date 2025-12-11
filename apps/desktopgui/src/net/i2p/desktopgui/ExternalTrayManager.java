@@ -11,11 +11,10 @@ import net.i2p.I2PAppContext;
 import net.i2p.desktopgui.router.RouterManager;
 
 /**
- *  When started before the router, e.g. with
- *  java -cp i2p.jar:router.jar:desktopgui.jar net.i2p.desktopgui.Main
- *
- *  No access to context, very limited abilities.
- *  Not fully supported.
+ * Tray manager for external use without router context access.
+ * Provides minimal I2P management when started before the router.
+ * Limited to starting I2P and basic notification controls.
+ * Not fully supported - use InternalTrayManager when possible.
  */
 class ExternalTrayManager extends TrayManager {
 

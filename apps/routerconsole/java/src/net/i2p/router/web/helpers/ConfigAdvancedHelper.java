@@ -13,6 +13,9 @@ import net.i2p.router.web.RouterConsoleRunner;
 
 /**
  * Helper for advanced configuration page rendering and form processing.
+ * Organizes router configuration properties by category, hides sensitive settings,
+ * and provides structured display of advanced router options.
+ *
  * @since 0.9.33
  */
 public class ConfigAdvancedHelper extends HelperBase {

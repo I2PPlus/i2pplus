@@ -15,10 +15,11 @@ import net.i2p.data.PrivateKeyFile;
 import net.i2p.data.SigningPrivateKey;
 
 /**
- *  Same format as super, simply adds a method to
- *  treat it as a RouterIdentity instead of a Destination.
+ * Handles router private key files, extending PrivateKeyFile to provide
+ * RouterIdentity access instead of Destination. Maintains the same file format
+ * as the parent class while adding router-specific functionality.
  *
- *  @since 0.9.16
+ * @since 0.9.16
  */
 public class RouterPrivateKeyFile extends PrivateKeyFile {
 

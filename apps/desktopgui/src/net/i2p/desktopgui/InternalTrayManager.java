@@ -20,9 +20,10 @@ import net.i2p.util.Log;
 import net.i2p.util.Translate;
 
 /**
- *  java -cp i2p.jar:router.jar:desktopgui.jar net.i2p.desktopgui.Main
- *
- *  Full access to router context.
+ * Tray manager for internal use with full router context access.
+ * Provides comprehensive I2P management through system tray including
+ * restart, shutdown, browser launch, and configuration options.
+ * Requires router.jar for complete functionality.
  */
 class InternalTrayManager extends TrayManager {
 

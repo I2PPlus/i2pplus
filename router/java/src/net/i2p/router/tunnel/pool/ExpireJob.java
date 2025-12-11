@@ -6,9 +6,10 @@ import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 
 /**
- *  This runs twice for each tunnel.
- *  The first time, remove it from the LeaseSet.
- *  The second time, stop accepting data for it.
+ * Handles tunnel expiration in two phases for graceful shutdown.
+ * First run removes tunnel from LeaseSet and triggers refresh.
+ * Second run stops accepting data for the tunnel entirely.
+ * Uses randomized early expiration with different timing for inbound vs outbound tunnels.
  */
 class ExpireJob extends JobImpl {
     private final PooledTunnelCreatorConfig _cfg;

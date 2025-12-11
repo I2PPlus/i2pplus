@@ -12,9 +12,9 @@ import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import net.i2p.router.web.FormHandler;
 
 /**
- * Handler to deal with form submissions from the advanced config form and act
- * upon the values.
- *
+ * Handles form submissions from the advanced configuration page.
+ * Processes and saves changes to router configuration including floodfill settings
+ * and advanced router properties. Validates permissions and applies configuration changes.
  */
 public class ConfigAdvancedHandler extends FormHandler {
     private boolean _shouldSave;

@@ -6,6 +6,9 @@ import net.i2p.router.web.HelperBase;
 
 /**
  * Helper for tunnel status page rendering and form processing.
+ * Provides tunnel summary information, status display, and configuration
+ * guidance for I2P tunnel management.
+ *
  * @since 0.9.33
  */
 public class TunnelHelper extends HelperBase {

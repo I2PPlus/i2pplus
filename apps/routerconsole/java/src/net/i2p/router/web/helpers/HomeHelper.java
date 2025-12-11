@@ -18,9 +18,12 @@ import net.i2p.router.web.PluginStarter;
 import net.i2p.util.PortMapper;
 
 /**
- *  For /home and /confighome
+ * Helper for router console home page and configuration.
+ * Renders main dashboard with service links, favorites, monitoring,
+ * and quick access to router management features.
+ * Supports both /home and /confighome pages.
  *
- *  @since 0.9
+ * @since 0.9
  */
 public class HomeHelper extends HelperBase {
 

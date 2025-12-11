@@ -26,9 +26,12 @@ import net.i2p.router.transport.udp.SSU2Payload.Block;
 import net.i2p.util.Log;
 
 /**
- *  SSU2 only
+ * Builds and encrypts SSU2 protocol packets for UDP transport.
+ * Handles all SSU2 message types including data packets, session establishment,
+ * peer testing, relay requests, and hole punching. Provides packet fragmentation,
+ * padding, and encryption for secure UDP communication.
  *
- *  @since 0.9.54
+ * @since 0.9.54
  */
 class PacketBuilder2 {
     private final RouterContext _context;
