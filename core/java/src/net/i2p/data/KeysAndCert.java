@@ -17,6 +17,8 @@ import net.i2p.crypto.EncType;
 import net.i2p.crypto.SHA256Generator;
 import net.i2p.crypto.SigType;
 import net.i2p.util.ByteArrayStream;
+import net.i2p.I2PAppContext;
+import net.i2p.util.Log;
 
 /**
  * KeysAndCert has a public key, a signing key, and a certificate, in that order.
@@ -45,6 +47,7 @@ public class KeysAndCert extends DataStructureImpl {
     protected int _paddingBlocks;
 
     private static final int PAD_COMP_LEN = 32;
+    private static final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(KeysAndCert.class);
 
     public Certificate getCertificate() {
         return _certificate;
@@ -285,25 +288,30 @@ public class KeysAndCert extends DataStructureImpl {
         String cls = getClass().getSimpleName();
         if (cls.equals("RouterIdentity")) {cls = "Router";}
         buf.append(cls);
-        buf.append("\n* Hash: ");
+        buf.append(" [");
         if (cls.equals("Destination")) {
-            buf.append(getHash().toBase32());
+            buf.append(getHash().toBase32().substring(0,8));
         } else {
-            buf.append(getHash().toBase64());
+            buf.append(getHash().toBase64().substring(0,6));
         }
-        buf.append("\n* Certificate: ").append(_certificate);
-        if ((_publicKey != null && _publicKey.getType() != EncType.ELGAMAL_2048) ||
-            !cls.equals("Destination")) {
-            buf.append("\n* Public Key: ").append(_publicKey); // router identities only
-        }
-        buf.append("\n* Public Signing Key: ").append(_signingKey);
-        if (_padding != null) {
-            int len = _padding.length;
-            if (_paddingBlocks > 1) {
-                len *= _paddingBlocks;
+        buf.append("]");
+
+        if (_log.shouldInfo()) {
+            buf.append("\n* Certificate: ").append(_certificate);
+            if ((_publicKey != null && _publicKey.getType() != EncType.ELGAMAL_2048) ||
+                !cls.equals("Destination")) {
+                buf.append("\n* Public Key: ").append(_publicKey); // router identities only
             }
-            buf.append("\n* Padding: ").append(len).append(" bytes");
+            buf.append("\n* Public Signing Key: ").append(_signingKey);
+            if (_padding != null) {
+                int len = _padding.length;
+                if (_paddingBlocks > 1) {
+                    len *= _paddingBlocks;
+                }
+                buf.append("\n* Padding: ").append(len).append(" bytes");
+            }
         }
+
         return buf.toString();
     }
 
