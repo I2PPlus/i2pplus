@@ -770,7 +770,7 @@ class SidebarRenderer {
                   .append("<td><b>")
                   .append(_t("Memory"))
                   .append("</b></td><td class=digits><span class=volatile>")
-                  .append(_helper.getMemory().replace("iB", ""))
+                  .append(_helper.getMemory())
                   .append("</span></td></tr>\n");
            }
            buf.append("</table>\n");
@@ -780,7 +780,7 @@ class SidebarRenderer {
     /** @since 0.9.57+ */
     public String renderMemoryBarHTML() {
         if (_helper == null) {return "";}
-        return _helper.getMemory();
+        return _helper.getMemoryBar();
     }
 
     /** @since 0.9.57+ */

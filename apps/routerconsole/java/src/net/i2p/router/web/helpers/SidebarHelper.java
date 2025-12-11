@@ -354,7 +354,7 @@ public class SidebarHelper extends HelperBase {
         used /= 1024*1024;
         long total = tot / (1024*1024);
         if (used > total) {used = total;}
-        return integerFormatter.format(used) + " / " + total + " MiB";
+        return integerFormatter.format(used) + " / " + total + " M";
     }
 
     /** @since 0.9.32 */
