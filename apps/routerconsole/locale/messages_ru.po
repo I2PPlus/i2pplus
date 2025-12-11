@@ -75,8 +75,17 @@ msgstr "Получена информация о маршрутизаторе {0
 msgid "Acquired {0} router infos from reseed hosts ({1} errors)"
 msgstr "Получена информация о маршрутизаторе {0} от повторно заданных хостов (ошибки {1})."
 
+msgid "Clock step adjustment (ms)"
+msgstr "Регулировка шага часов (мс)"
+
+msgid "Size of tunnel acceptor backlog"
+msgstr "Размер очереди приёма туннелей"
+
 msgid "Message receive rate (B/s)"
 msgstr "Скорость приема сообщений (Б/с)"
+
+msgid "Low-level receive rate (B/s)"
+msgstr "Скорость приема низкого уровня (Б/с)"
 
 msgid "Message send rate (B/s)"
 msgstr "Скорость отправки сообщений (Б/с)"
@@ -84,41 +93,35 @@ msgstr "Скорость отправки сообщений (Б/с)"
 msgid "Low-level send rate (B/s)"
 msgstr "Скорость передачи низкого уровня (Б/с)"
 
-msgid "Low-level receive rate (B/s)"
-msgstr "Скорость приема низкого уровня (Б/с)"
-
-msgid "Total peers in our NetDb"
-msgstr "Общее количество пиров в нашей NetDb"
-
 msgid "Peers active in the last minute"
 msgstr "Сверстники активны в последнюю минуту"
-
-msgid "Known high capacity peers"
-msgstr "Известные коллеги с высокой производительностью"
 
 msgid "Peers sent to in the last minute"
 msgstr "Пиры, отправленные в последнюю минуту"
 
+msgid "Total peers in our banlist"
+msgstr "Всего запрещенных сверстников"
+
+msgid "CPU load average of the JVM"
+msgstr "Средняя загрузка процессора JVM"
+
 msgid "Known fast peers"
 msgstr "Известные быстрые узлы"
+
+msgid "Known high capacity peers"
+msgstr "Известные коллеги с высокой производительностью"
 
 msgid "Known integrated (floodfill) peers"
 msgstr "Известные интегрированные (заполняемые) узлы"
 
-msgid "Total peers in our banlist"
-msgstr "Всего запрещенных сверстников"
+msgid "Total peers in our NetDb"
+msgstr "Общее количество пиров в нашей NetDb"
+
+msgid "Total number of threads in use"
+msgstr ""
 
 msgid "Peers without a published IP address"
 msgstr "Сверстники без опубликованного IP-адреса"
-
-msgid "Size of tunnel acceptor backlog"
-msgstr "Размер очереди приёма туннелей"
-
-msgid "Clock step adjustment (ms)"
-msgstr "Регулировка шага часов (мс)"
-
-msgid "CPU load average of the JVM"
-msgstr "Средняя загрузка процессора JVM"
 
 msgid "Average tunnel build success %"
 msgstr "Средний процент успешности строительства туннеля"
@@ -1560,29 +1563,29 @@ msgstr "Перезапуск через {0}"
 msgid "Save order"
 msgstr "Сохранить порядок"
 
+msgid "Restore full default"
+msgstr "Восстановить полные умолчания"
+
+msgid "Restore minimal default"
+msgstr "Восстановить минимальные умолчания"
+
 msgid "Sidebar preferences updated"
 msgstr "Настройки боковой панели обновлены"
 
 msgid "Refresh interval must be a number"
 msgstr "Интервал обновления должен быть числом"
 
-msgid "Restore full default"
-msgstr "Восстановить полные умолчания"
-
 msgid "Full sidebar defaults restored."
 msgstr "Стандартные настройки боковой панели восстановлены."
 
-msgid "Sidebar will refresh shortly."
-msgstr "Боковая панель скоро обновится."
-
-msgid "Restore minimal default"
-msgstr "Восстановить минимальные умолчания"
-
-msgid "Minimal sidebar defaults restored."
-msgstr "Минимальные настройки боковой панели восстановлены."
-
 msgid "Order must be an integer"
 msgstr "Порядок должен быть целым числом"
+
+msgid "Saved order of sections."
+msgstr "Сохранен порядок секций."
+
+msgid "Sidebar will refresh shortly."
+msgstr "Боковая панель скоро обновится."
 
 msgid "No section selected"
 msgstr "Секция не выбрана"
@@ -1592,9 +1595,6 @@ msgstr "Порядок следования не введен"
 
 msgid "Moved"
 msgstr "Перемещено"
-
-msgid "Saved order of sections."
-msgstr "Сохранен порядок секций."
 
 msgid "Full statistics enabled"
 msgstr "Полная статистика включена"
@@ -2425,6 +2425,9 @@ msgstr "HTTP-прокси не запущен"
 msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
 msgstr "Ваш браузер не настроен должным образом для использования HTTP-прокси {0}"
 
+msgid "Errors"
+msgstr ""
+
 msgid "URL"
 msgstr "URL"
 
@@ -2699,29 +2702,23 @@ msgstr "или Сивилла рядом с этим маршрутизатор�
 msgid "Lookup"
 msgstr "Искать"
 
-msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
-msgstr "Никогда никому не сообщайте информацию о вашем маршрутизаторе, так как она уникальна для каждого IP-адреса в сетевой базе данных."
+msgid "Select the field to search on"
+msgstr ""
 
-msgid "is banned"
-msgstr "запрещен"
-
-msgid "not found in network database"
-msgstr "не найден в сетевой базе данных"
-
-msgid "Bad Base64 Router hash"
-msgstr "Плохой хэш маршрутизатора Base64"
-
-msgid "No routers with"
-msgstr "Нет маршрутизаторов с"
-
-msgid "Hash prefix"
-msgstr "Префикс хэша"
-
-msgid "Port"
-msgstr "Порт"
+msgid "e.g. cn hk"
+msgstr ""
 
 msgid "MTU"
 msgstr "MTU"
+
+msgid "Enter search value here"
+msgstr ""
+
+msgid "Router not found"
+msgstr ""
+
+msgid "No routers with"
+msgstr "Нет маршрутизаторов с"
 
 msgid "found in the network database"
 msgstr "найдено в сетевой базе данных"
@@ -2849,17 +2846,17 @@ msgstr "Истек {0} назад"
 msgid "Unknown"
 msgstr "Неизвестно"
 
-msgid "Advanced mode - includes all statistics published by floodfills."
-msgstr "Расширенный режим - включает всю статистику, опубликованную floodfills."
-
-msgid "Compact mode - does not include statistics published by floodfills."
-msgstr "Компактный режим - не включает статистику, опубликованную floodfills."
-
 msgid "Network Database Router Statistics"
 msgstr "Статистика маршрутизаторов"
 
 msgid "Count"
 msgstr "Количество"
+
+msgid "Under 12 KB/s"
+msgstr ""
+
+msgid "Over 2048 KB/s"
+msgstr ""
 
 msgid "Bandwidth Tier"
 msgstr "Уровень пропускной способности"
@@ -2931,6 +2928,9 @@ msgstr "Опубликовано"
 msgid "Hostname"
 msgstr "Имя хоста"
 
+msgid "Whois"
+msgstr ""
+
 msgid "direct"
 msgstr "прямой"
 
@@ -2946,20 +2946,26 @@ msgstr "Показать все маршрутизаторы с этим тип�
 msgid "Show all routers with this encryption type in the NetDb"
 msgstr "Показать все маршрутизаторы с этим типом шифрования в NetDb"
 
-msgid "Addresses"
-msgstr "Адреса"
-
-msgid "n/a"
-msgstr "н/д"
-
 msgid "Show all routers with this address in the NetDb"
 msgstr "Показать все маршрутизаторы с этим адресом в NetDb"
 
 msgid "Show all routers with this port in the NetDb"
 msgstr "Показать все маршрутизаторы с этим портом в NetDb"
 
-msgid "Routers"
-msgstr "Маршрутизаторы"
+msgid "Maximum Transmission Unit"
+msgstr ""
+
+msgid "Show all routers with this MTU in the NetDb"
+msgstr ""
+
+msgid "Addresses"
+msgstr "Адреса"
+
+msgid "Introducers"
+msgstr ""
+
+msgid "Network Id"
+msgstr "Идентификатор сети"
 
 msgid "First heard about"
 msgstr "Впервые услышал о"
@@ -2970,11 +2976,8 @@ msgstr "Последний раз слышали о"
 msgid "Last heard from"
 msgstr "Последнее сообщение от"
 
-msgid "Network Id"
-msgstr "Идентификатор сети"
-
-msgid "Count is always spoofed to avoid indicating router restarts"
-msgstr "Количество всегда подделывается, чтобы избежать указания на перезапуски маршрутизатора"
+msgid "Info"
+msgstr "Информация"
 
 msgid "Hidden or starting up"
 msgstr "В скрытом режиме или недавно запущен"
@@ -3003,17 +3006,32 @@ msgstr "SSU [IPv6]"
 msgid "SSU [IPv6] with Introducers"
 msgstr "IPv6 SSU, представители"
 
+msgid "NTCP &amp; SSU with Introducers [IPv6 Only]"
+msgstr "Только IPv6 NTCP, SSU, представители"
+
 msgid "NTCP [IPv6]"
 msgstr "NTCP [IPv6]"
 
 msgid "NTCP [IPv6] &amp; SSU"
 msgstr "NTCP [IPv6] &amp; SSU"
 
-msgid "NTCP &amp; SSU with Introducers [IPv6 Only]"
-msgstr "Только IPv6 NTCP, SSU, представители"
-
 msgid "NTCP [IPv6] &amp; SSU with Introducers"
 msgstr "IPv6 NTCP, SSU, представители"
+
+msgid "Local"
+msgstr "Локальный"
+
+msgid "Fast Tier"
+msgstr ""
+
+msgid "High Capacity Tier"
+msgstr ""
+
+msgid "Integrated Tier"
+msgstr ""
+
+msgid "Standard Tier"
+msgstr ""
 
 msgid "No peer connections available"
 msgstr "Нет доступных одноранговых соединений"
@@ -3352,14 +3370,17 @@ msgstr "Посл. прием"
 msgid "View/Edit"
 msgstr "Просмотр/редакт"
 
-msgid "Unreachable"
-msgstr "Недоступные"
-
 msgid "OK"
 msgstr "OK"
 
 msgid "Test Fails"
 msgstr "Неудачных тестов"
+
+msgid "Unreachable"
+msgstr "Недоступные"
+
+msgid "Most tests passing"
+msgstr ""
 
 msgid "Fast, High Capacity"
 msgstr "Быстрые, высокоемкие"
@@ -3375,6 +3396,9 @@ msgstr "Сбоящие"
 
 msgid "Integrated"
 msgstr "Интегрированные"
+
+msgid "Configure Peer"
+msgstr ""
 
 msgid "Thresholds"
 msgstr "Пороговые значения"
@@ -3445,11 +3469,11 @@ msgstr "Посл. неудачн. передача"
 msgid "Last Bad Store"
 msgstr "Посл. неудачн. размещение"
 
-msgid "Capabilities in the NetDb, not used to determine profiles"
-msgstr "Возможности в NetDb, не используемые для определения профилей"
-
 msgid "caps"
 msgstr "ограничения"
+
+msgid "Capabilities in the NetDb, not used to determine profiles"
+msgstr "Возможности в NetDb, не используемые для определения профилей"
 
 msgid "Reachable"
 msgstr "Доступный"
@@ -3622,6 +3646,9 @@ msgstr "Перезапустите I2P-маршрутизатор для уст�
 
 msgid "Click Shutdown and restart to install"
 msgstr "Остановите и снова запустите I2P-маршрутизатор для установки"
+
+msgid "Unable"
+msgstr ""
 
 #, java-format
 msgid "{0}"
@@ -3816,9 +3843,6 @@ msgstr "График производительности маршрутизат
 msgid "Router Help and FAQ"
 msgstr "Помощь и часто задаваемые вопросы о маршрутизаторе"
 
-msgid "Info"
-msgstr "Информация"
-
 msgid "Router information including transport addresses and UPnP scan"
 msgstr "Информация о маршрутизаторе, включая транспортные адреса и сканирование UPnP"
 
@@ -3904,6 +3928,34 @@ msgstr "Функция floodfill включена"
 msgid "Total number of remote LeaseSets stored in our NetDb"
 msgstr "Общее количество удаленных наборов аренды в нашей NetDb"
 
+msgid "Declining transit tunnel requests during startup phase"
+msgstr "Запросы на участвующие туннели не принимаются в течение первых 10 минут, пока маршрутизатор стабилизируется"
+
+msgid "Declining transit tunnel requests as we are shutting down"
+msgstr "Отклонение запросов на участие в туннелях, поскольку мы завершаем работу"
+
+msgid "Router or network performance is impeding the building of transit tunnels"
+msgstr "Маршрутизатор или производительность сети препятствуют созданию участвующих туннелей"
+
+msgid "Router is currently hosting the configured maximum number of transit tunnels"
+msgstr "Роутер в данный момент поддерживает максимальное количество транзитных туннелей, настроенных"
+
+msgid "Router is currently using the configured maximum share bandwidth"
+msgstr "Роутер в настоящее время использует максимальную настроенную ширину полосы пропускания для обмена"
+
+msgid "Router is ready to build participating tunnels"
+msgstr "Роутер готов построить участвующие туннели"
+
+#, java-format
+msgid "Accepting transit tunnel requests; hosting {0} tunnels"
+msgstr "Принятие участвующих запросов туннеля; Участие в {0} туннелях"
+
+msgid "No transit tunnels are built when Hidden mode is active"
+msgstr "Участвующие туннели не строится, когда активен скрытый режим"
+
+msgid "Router is configured to reject all transit tunnel requests"
+msgstr "Маршрутизатор настроен на отклонение всех участвующих запросов туннеля"
+
 msgid "Warning: ECDSA is not available. Update your Java or OS"
 msgstr "Внимание: ECDSA недоступно. Обновите Java или ОС"
 
@@ -3939,6 +3991,9 @@ msgstr "Число заблокированных узлов"
 
 msgid "The total number of peers in our network database"
 msgstr "Общее число узлов в нашей сетевой БД"
+
+msgid "Total RouterInfos stored on disk"
+msgstr ""
 
 msgid "Known"
 msgstr "Известные"
@@ -4050,34 +4105,6 @@ msgstr "Очередь запросов от других маршрутизат
 
 msgid "Backlog"
 msgstr "Очередь"
-
-msgid "Declining transit tunnel requests during startup phase"
-msgstr "Запросы на участвующие туннели не принимаются в течение первых 10 минут, пока маршрутизатор стабилизируется"
-
-msgid "Declining transit tunnel requests as we are shutting down"
-msgstr "Отклонение запросов на участие в туннелях, поскольку мы завершаем работу"
-
-msgid "Router or network performance is impeding the building of transit tunnels"
-msgstr "Маршрутизатор или производительность сети препятствуют созданию участвующих туннелей"
-
-msgid "Router is currently hosting the configured maximum number of transit tunnels"
-msgstr "Роутер в данный момент поддерживает максимальное количество транзитных туннелей, настроенных"
-
-msgid "Router is currently using the configured maximum share bandwidth"
-msgstr "Роутер в настоящее время использует максимальную настроенную ширину полосы пропускания для обмена"
-
-msgid "Router is ready to build participating tunnels"
-msgstr "Роутер готов построить участвующие туннели"
-
-#, java-format
-msgid "Accepting transit tunnel requests; hosting {0} tunnels"
-msgstr "Принятие участвующих запросов туннеля; Участие в {0} туннелях"
-
-msgid "No transit tunnels are built when Hidden mode is active"
-msgstr "Участвующие туннели не строится, когда активен скрытый режим"
-
-msgid "Router is configured to reject all transit tunnel requests"
-msgstr "Маршрутизатор настроен на отклонение всех участвующих запросов туннеля"
 
 msgid "Statistics gathered during this router's uptime"
 msgstr "Статистика собрана за время с последнего запуска маршрутизатора"
@@ -4211,8 +4238,14 @@ msgstr "Нет сохраненного анализа"
 msgid "Select stored analysis"
 msgstr "Выберите сохраненный анализ"
 
+msgid "Review"
+msgstr ""
+
 msgid "Run analysis on Floodfills only"
 msgstr "Анализ запуска только на заводках"
+
+msgid "Start Scan"
+msgstr ""
 
 msgid "Run analysis on all routers in NetDb"
 msgstr "Запустить анализ на всех маршрутизаторах в NetDb"
@@ -4376,6 +4409,12 @@ msgstr "Макс"
 msgid "Show all routers for this family in NetDb"
 msgstr "Показать все маршрутизаторы этого семейства в NetDb"
 
+msgid "Routers"
+msgstr "Маршрутизаторы"
+
+msgid "n/a"
+msgstr "н/д"
+
 msgid "Last lookup successful"
 msgstr "Последний поиск успешно"
 
@@ -4427,9 +4466,6 @@ msgstr "Данные переданы"
 msgid "Data"
 msgstr "Данные"
 
-msgid "Limit"
-msgstr "Лимит"
-
 msgid "Receive on"
 msgstr "ID принимающего туннеля"
 
@@ -4474,6 +4510,7 @@ msgstr "Маршрутизатор в настоящее время работа
 msgid "No transit tunnels currently active."
 msgstr "Нет транзитных туннелей в настоящее время."
 
+#, java-format
 msgid "Transit Tunnels by Peer (Top {0})"
 msgstr "Транзитные туннели по пиру (Топ {0})"
 
@@ -4485,9 +4522,6 @@ msgstr "Все туннели по узлам"
 
 msgid "Primary IP address"
 msgstr "Основной IP -адрес"
-
-msgid "Local"
-msgstr "Локальный"
 
 msgid "unique peers"
 msgstr "уникальные сверстники"
@@ -4501,6 +4535,9 @@ msgstr "транзит"
 msgid "No local or transit tunnels currently active."
 msgstr "Нет местных или транзитных туннелей в настоящее время."
 
+msgid "PRIVATE IP ADDRESS"
+msgstr ""
+
 msgid "Bandwidth Tiers"
 msgstr "Уровни пропускной способности"
 
@@ -4510,6 +4547,9 @@ msgstr "Более {0} общей пропускной способности"
 
 msgid "Inbound or outbound?"
 msgstr "Входящий или исходящий?"
+
+msgid "In/Out"
+msgstr ""
 
 msgid "Gateway"
 msgstr "Шлюз"
@@ -4626,6 +4666,9 @@ msgstr "Веб-сервер I2P (eepsite)"
 msgid "Browser launch at startup"
 msgstr "Запуск браузера при старте I2P"
 
+msgid "I2P Router Console"
+msgstr ""
+
 msgid "Open Router Console in web browser at startup"
 msgstr "Открывать консоль маршрутизатора в веб-браузере при старте I2P"
 
@@ -4701,12 +4744,6 @@ msgstr "key"
 msgid "port"
 msgstr "port"
 
-msgid "config UI"
-msgstr "конфигурация интерфейса"
-
-msgid "User Interface Configuration"
-msgstr "Конфигурация пользовательского интерфейса"
-
 msgid "Certificates"
 msgstr "Сертификаты"
 
@@ -4722,8 +4759,8 @@ msgstr "Ограничение скорости"
 msgid "Advanced Network Configuration"
 msgstr "Дополнительные сетевые настройки"
 
-msgid "I2P+ will work best if you configure your rates to match the speed of your internet connection."
-msgstr "I2P будет работать лучше, если Вы настроите ограничение скорости в соответствии со скоростью Вашего подключения к Интернету."
+msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
+msgstr ""
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
 msgstr "Примечание. Ваш вклад в сеть (доля сети) определяется распределением восходящей полосы пропускания (скоростью загрузки)."
@@ -4753,11 +4790,11 @@ msgid "NOTE"
 msgstr "ПРИМЕЧАНИЕ"
 
 #, java-format
-msgid "You have configured I2P+ to share only {0} KBps."
-msgstr "Вы настроили очень низкий лимит для транзитного трафика (всего {0} килобайт/секунду)."
+msgid "You have configured I2P to share only {0} KBps."
+msgstr ""
 
-msgid "I2P+ requires at least 12KBps to enable sharing. "
-msgstr "I2P нужно как минимум 12 килобайт/секунду для включения этой функции. "
+msgid "I2P requires at least 12KBps to enable sharing. "
+msgstr ""
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
 msgstr "Пожалуйста, увеличьте долю транзитного трафика, указав бóльшую пропускную способность"
@@ -5254,8 +5291,8 @@ msgstr "конфигурация начальной загрузки"
 msgid "Reseeding is the bootstrapping process used to find other routers when you first install I2P, or when your router has too few router references remaining."
 msgstr "Начальная загрузка (англ. reseeding) - процесс, используемый для нахождения других маршрутизаторов, когда вы впервые установили I2P, или когда ваш маршрутизатор имеет слишком мало данных о других маршрутизаторах."
 
-msgid "To enable the configuration of reseed urls, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
-msgstr "Чтобы включить настройку повторного заполнения URL-адресов, активируйте <a href=/help/advancedsettings>Расширенный режим</a> консоли."
+msgid "To enable the configuration of reseed urls, activate the console's <a href=/help/advancedsettings>Advanced mode</a>."
+msgstr ""
 
 msgid "Reseeding Configuration"
 msgstr "Конфигурация начальной загрузки"
@@ -5265,9 +5302,6 @@ msgstr "Помощь с пересевом"
 
 msgid "Reseeding Help"
 msgstr "Переработка помощи"
-
-msgid "Change these only if HTTPS is blocked by a restrictive firewall and reseed has failed."
-msgstr "Измените эти настройки, только если у вас заблокирован HTTPS и не удалось провести начальную загрузку."
 
 msgid "Reseed URLs"
 msgstr "URL начальной загрузки"
@@ -5304,6 +5338,9 @@ msgstr "В этой опции будет использоваться HTTP -out
 
 msgid "I2P Outproxy"
 msgstr "Выходной прокси I2P"
+
+msgid "Port"
+msgstr "Порт"
 
 msgid "Use HTTP Proxy for HTTP Reseed Hosts"
 msgstr "Используйте HTTP-прокси для HTTP-хостов повторного заполнения"
@@ -5417,6 +5454,12 @@ msgstr "Единая боковая панель"
 msgid "Use the same sidebar on all pages"
 msgstr "Использовать ту же боковую панель на всех страницах"
 
+msgid "Sticky sidebar"
+msgstr ""
+
+msgid "Enable conditional fixed sidebar"
+msgstr ""
+
 msgid "config stats"
 msgstr "конфигурация статистики"
 
@@ -5473,6 +5516,12 @@ msgstr "Чтобы изменить настройки клиентского т
 
 msgid "To enable session-only changes to the client tunnels, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
 msgstr "Чтобы включить изменения клиентских туннелей только для сеанса, активируйте <a href=/help/advancedsettings>Расширенный режим</a> консоли."
+
+msgid "config UI"
+msgstr "конфигурация интерфейса"
+
+msgid "User Interface Configuration"
+msgstr "Конфигурация пользовательского интерфейса"
 
 msgid "Router Console Theme"
 msgstr "Тема оформления консоли маршрутизатора"
@@ -5610,14 +5659,20 @@ msgstr "Ошибка 404"
 msgid "not found"
 msgstr "не найдено"
 
+msgid "router logs"
+msgstr "журналы маршрутизатора"
+
+msgid "Critical / Error Level Logs"
+msgstr "Журналы критических уровней/ошибок"
+
+msgid "Clear logs"
+msgstr "Очистить журналы"
+
 msgid "events"
 msgstr "события"
 
 msgid "Event Log"
 msgstr "Журнал событий"
-
-msgid "Combined"
-msgstr "Объединенный"
 
 msgid "graph"
 msgstr "График"
@@ -6126,8 +6181,8 @@ msgstr "Чтобы сделать вашу консоль доступной в 
 msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
 msgstr "Пример: Чтобы разрешить доступ с localhost и 192.168.1.10 по HTTP и HTTPS:"
 
-msgid "For most client services, change listening address for relevant service in Tunnel Manager's configuration section using <i>reachable by</i> dropdown."
-msgstr "Для большинства клиентских сервисов измените прослушивающий адрес для соответствующей службы в разделе конфигурации Менеджера туннелей, используя выпадающий список <i>доступен через</i>."
+msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager's configuration section using the <i>reachable by</i> dropdown."
+msgstr ""
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "Как попасть в IRC внутри сети I2P?"
@@ -7326,34 +7381,6 @@ msgstr "статистика очереди работ"
 msgid "Job Queue Stats"
 msgstr "Статистика очереди работы"
 
-msgid "logs"
-msgstr "журналы"
-
-msgid "Please include your I2P version and running environment information in bug reports"
-msgstr "Пожалуйста, укажите вашу версию I2P и информацию о среде выполнения в сообщениях об ошибках"
-
-#, java-format
-msgid "Please report bugs on {0} or {1}."
-msgstr "Пожалуйста сообщайте об ошибках по адресу {0} или {1}."
-
-msgid "View event log"
-msgstr "Просмотреть журнал событий"
-
-msgid "Critical / Error Level Logs"
-msgstr "Журналы критических уровней/ошибок"
-
-msgid "Clear logs"
-msgstr "Очистить журналы"
-
-msgid "Configure router logging options"
-msgstr "Настройка опций журналирования маршрутизатора"
-
-msgid "Filter Router log output"
-msgstr "Фильтрация вывода журнала роутера"
-
-msgid "Service (Wrapper) Logs"
-msgstr "Журналы службы"
-
 msgid "network database"
 msgstr "сетевая БД"
 
@@ -7374,6 +7401,9 @@ msgstr "Локально размещенный общественный сер�
 
 msgid "Requested client leaseset"
 msgstr "Запрошенный набор аренды клиента"
+
+msgid "Remote"
+msgstr ""
 
 msgid "network database router map"
 msgstr "Карта роутера базы данных сети"
@@ -7418,164 +7448,26 @@ msgstr "Заблокированные узлы"
 msgid "Fast / High Capacity"
 msgstr "Быстрая/большая емкость"
 
-msgid "router logs"
-msgstr "журналы маршрутизатора"
+msgid "Configure router logging options"
+msgstr "Настройка опций журналирования маршрутизатора"
+
+msgid "View event log"
+msgstr "Просмотреть журнал событий"
+
+msgid "Filter Router log output"
+msgstr "Фильтрация вывода журнала роутера"
 
 msgid "service logs"
 msgstr "журналы сервисов"
 
-msgid "Manage I2P addresses"
-msgstr "Управление адресами I2P"
-
-msgid "Imagegen"
-msgstr "Генератор изображений"
-
-msgid "Create and download torrents"
-msgstr "Создание и загрузка торрентов"
-
-msgid "Manage client and server tunnels"
-msgstr "Управление клиентскими и серверными туннелями"
-
-msgid "Webmail client"
-msgstr "Клиент веб-почты"
-
-msgid "Webmail"
-msgstr "Е-мейл"
-
-msgid "Local webserver for hosting content on the I2P network"
-msgstr "Локальный веб-сервер для размещения контента в сети I2P"
+msgid "Service (Wrapper) Logs"
+msgstr "Журналы службы"
 
 msgid "Information &amp; Diagnostics"
 msgstr "Информация и диагностика"
 
-msgid "Review recent updates to I2P"
-msgstr "Просмотрите последние обновления в I2P"
-
-msgid "View debugging information"
-msgstr "Посмотреть информацию отладки"
-
-msgid "View router performance graphs"
-msgstr "Просмотреть графики производительности маршрутизатора"
-
-msgid "Router help section"
-msgstr "Секция помощи маршрутизатора"
-
-msgid "Router homepage"
-msgstr "Роутер домашняя страница"
-
-msgid "Home"
-msgstr "Дома"
-
-msgid "View news relating to I2P"
-msgstr "Посмотреть новости, связанные с i2p"
-
-msgid "I2P News"
-msgstr "Новости I2P"
-
-msgid "View router workload and stats"
-msgstr "Просмотреть рабочую нагрузку и статистику маршрутизатора"
-
-msgid "Router Jobs"
-msgstr "Работа с маршрутизатором"
-
-msgid "View router logs"
-msgstr "Просмотреть журналы маршрутизатора"
-
-msgid "View information and stats regarding all known peers"
-msgstr "Просмотреть информацию и статистику относительно всех известных сверстников"
-
-msgid "View active peers"
-msgstr "Просмотреть активных сверстников"
-
-msgid "View peer performance profiles"
-msgstr "Посмотреть профили производительности сверстников"
-
-msgid "View information about router and running environment"
-msgstr "Просмотреть информацию о маршрутизаторе и управляемой среде"
-
-msgid "Statistics"
-msgstr "Статистика"
-
-msgid "Current console and webapp translation report"
-msgstr "Текущий отчет о переводе консоли и веб-приложения"
-
-msgid "Translation Status"
-msgstr "Статус перевода"
-
-msgid "View active tunnels"
-msgstr "Просмотреть активные туннели"
-
-msgid "Customize homepage"
-msgstr "Настройка домашней страницы"
-
-msgid "Homepage"
-msgstr "Главная страница"
-
-msgid "Configure I2P Client Control Interface"
-msgstr "Настройка интерфейса управления клиентом I2P"
-
-msgid "View or edit router keyring for encrypted destinations"
-msgstr "Просмотреть или редактировать маршрутизатор для зашифрованных направлений"
-
-msgid "Configure router networking options"
-msgstr "Настройка параметров сети маршрутизатора"
-
-msgid "Manually edit peers and view banned peers and blocklist"
-msgstr "Вручную редактировать пиры и просматривать заблокированные пиры и черный список"
-
-msgid "Install and manage router plugins"
-msgstr "Установить и управлять плагинами маршрутизатора"
-
-msgid "Router reseeding and configuration"
-msgstr "Резутер и конфигурация"
-
-msgid "Configure and manage Router family"
-msgstr "Настройка семейства маршрутизаторов и управление ими"
-
-msgid "Manage Router service"
-msgstr "Управление услугами маршрутизатора"
-
-msgid "Configure stat collection for graphing"
-msgstr "Настройка сбора статистики для построения графиков"
-
-msgid "Router Stats"
-msgstr "Статистика маршрутизатора"
-
-msgid "Configure router updates"
-msgstr "Настройка обновлений маршрутизатора"
-
-msgid "Configuration wizard for new users"
-msgstr "Мастер настройки для новых пользователей"
-
-msgid "Setup Wizard"
-msgstr "Мастер настройки"
-
-msgid "Customize sidebar"
-msgstr "Настроить боковую панель"
-
-msgid "Configure tunnel options"
-msgstr "Настройка параметров туннеля"
-
-msgid "Configure router user interface and optional console password"
-msgstr "Настройте пользовательский интерфейс маршрутизатора и дополнительный пароль консоли"
-
-msgid "Configuring I2P for optimal performance"
-msgstr "Настройка I2P для оптимальной производительности"
-
-msgid "Information for new users"
-msgstr "Информация для новых пользователей"
-
-msgid "A guide to reseeding your I2P router"
-msgstr "Руководство по переработке вашего маршрутизатора I2P+"
-
-msgid "What to do in the event I2P isn't working"
-msgstr "Что делать, если I2P+ не работает"
-
-msgid "Introduction to tunnel filters"
-msgstr "Введение в туннельную фильтрацию"
-
-msgid "Tunnel Filters"
-msgstr "Туннельные фильтры"
+msgid "Customize"
+msgstr ""
 
 msgid "statistics"
 msgstr "статистика"
@@ -7628,9 +7520,6 @@ msgstr "Переключение ИД туннелей"
 msgid "Toggle Tunnels"
 msgstr "Переключение туннелей"
 
-msgid "Updating sidebar sections"
-msgstr "Обновление разделов боковой панели"
-
 msgid "Peer Profile"
 msgstr "Профиль узла"
 
@@ -7655,14 +7544,17 @@ msgstr "Вернуться на вершину"
 msgid "webmail"
 msgstr "веб-почта"
 
+msgid "Webmail"
+msgstr "Е-мейл"
+
 msgid "New Install Wizard"
 msgstr "Мастер первоначальной настройки"
 
 msgid "Skip Setup"
 msgstr "Пропустить настройку"
 
-msgid "Select the language to be used for the router console and web applications (<a href=/webmail target=_blank rel=noreferrer>webmail</a>, <a href=/torrents target=_blank rel=noreferrer>torrents</a>, <a href=/i2ptunnelmgr target=_blank rel=noreferrer>tunnel manager</a> etc). If you wish to change the language in future, change the router console theme, or configure a password to access the console, you may do so on the <a href=/configui target=_blank rel=noreferrer>User Interface configuration page</a>."
-msgstr "Выберите язык, который будет использоваться для консоли роутера и веб-приложений (<a href=/webmail target=_blank rel=noreferrer>веб-почта</a>, <a href=/torrents target=_blank rel=noreferrer>торренты</a>, <a href=/i2ptunnelmgr target=_blank rel=noreferrer>менеджер туннелей</a> и т.д.). Если вы захотите изменить язык в будущем, изменить тему консоли роутера или настроить пароль для доступа к консоли, вы можете сделать это на <a href=/configui target=_blank rel=noreferrer>странице настройки пользовательского интерфейса</a>."
+msgid "Select the language to be used for the router console and web applications ("
+msgstr ""
 
 msgid "Router Console &amp; WebApps Display Language"
 msgstr "Консоль маршрутизатора и веб -приложения отображают язык"
@@ -7731,6 +7623,13 @@ msgid "Bandwidth Configuration"
 msgstr "Настройка пропускной способности"
 
 #, java-format
+msgid "You have configured I2P+ to share only {0} KBps."
+msgstr "Вы настроили очень низкий лимит для транзитного трафика (всего {0} килобайт/секунду)."
+
+msgid "I2P+ requires at least 12KBps to enable sharing. "
+msgstr "I2P нужно как минимум 12 килобайт/секунду для включения этой функции. "
+
+#, java-format
 msgid "You have configured I2P+ to share {0} KBps."
 msgstr "Вы задали долю транзитного трафика {0} килобайт/секунду."
 
@@ -7740,8 +7639,8 @@ msgstr "I2P+ требует, чтобы веб-браузер был настр�
 msgid "Browser Setup"
 msgstr "Настройка браузера"
 
-msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. For more help, see <a href=https://geti2p.net/htproxyports target=_blank rel=noreferrer>the configuration guide</a>, or <a href=/help/configuration#browserconfig>the mini-tutorial for Firefox</a>."
-msgstr "Для доступа к веб-сайтам, размещенным в сети I2P, и, при желании, использования стандартного аутпрокси для подключения к веб-сайтам в обычном интернете, вам необходимо настроить ваш браузер на использование <b>HTTP</b> прокси I2P+, который по умолчанию работает на <code>127.0.0.1 порт 4444</code>. Для дополнительной помощи смотрите <a href=https://geti2p.net/htproxyports target=_blank rel=noreferrer>руководство по настройке</a>, или <a href=/help/configuration#browserconfig>мини-руководство для Firefox</a>."
+msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. "
+msgstr ""
 
 msgid "Welcome to I2P+!"
 msgstr "Добро пожаловать в I2P+!"
@@ -7749,8 +7648,8 @@ msgstr "Добро пожаловать в I2P+!"
 msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
 msgstr "После запуска I2P может потребоваться несколько минут для завершения процесса интеграции в сеть и поиска дополнительных узлов. Будьте терпеливы."
 
-msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P+."
-msgstr "После того, как напротив элементов «локальных туннелей» появились зелёные звёзды, можно начинать работать с сетью I2P."
+msgid "Once green stars are indicated next to your Service Tunnels, there is a wide variety of things you can do with I2P+."
+msgstr ""
 
 msgid "Unknown Wizard page"
 msgstr "Неизвестная страница мастера"
@@ -7769,4 +7668,75 @@ msgstr "Далее"
 
 msgid "Finished"
 msgstr "Завершено"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#, java-format
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

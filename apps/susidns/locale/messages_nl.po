@@ -28,11 +28,29 @@ msgstr "Hostnaam kan \"{0}\" niet bevatten"
 msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
 msgstr "Hostnaam \"{0}\" vereist conversie naar ASCII, maar de conversiebibliotheek is niet beschikbaar in deze JVM"
 
+msgid "Source"
+msgstr "Bron"
+
+msgid "Imported from file hosts.txt"
+msgstr ""
+
+msgid "Manually added via SusiDNS"
+msgstr "Handmatig toegevoegd via SusiDNS"
+
+msgid "Manually added"
+msgstr ""
+
+msgid "Added via address helper"
+msgstr ""
+
+msgid "Via helper"
+msgstr ""
+
+msgid "Via helper from"
+msgstr ""
+
 msgid "None"
 msgstr "Geen"
-
-msgid "Hashcash"
-msgstr "Hashcash"
 
 msgid "Hidden"
 msgstr "Verborgen"
@@ -177,9 +195,6 @@ msgstr "{0} adresboek in {1} database"
 msgid "Host name {0} is not in the address book."
 msgstr "Host naam {0} komt niet in het adresboek voor."
 
-msgid "Manually added via SusiDNS"
-msgstr "Handmatig toegevoegd via SusiDNS"
-
 #, java-format
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr "Toevoegen van Bestemming voor {0} naar naamdienst {1} mislukt"
@@ -305,6 +320,9 @@ msgstr "Link (b32)"
 
 msgid "Destination"
 msgstr "Destination"
+
+msgid "Added"
+msgstr ""
 
 msgid "Select hosts for deletion from addressbook"
 msgstr "Selecteer hosts om uit adresboek te verwijderen"
@@ -446,9 +464,6 @@ msgstr "nee"
 
 msgid "yes"
 msgstr "ja"
-
-msgid "Source"
-msgstr "Bron"
 
 msgid "Added Date"
 msgstr "Datum toegevoegd"
@@ -599,3 +614,4 @@ msgstr "Adressen die handmatig aan uw masteradresboek zijn toegevoegd, worden sa
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Hosts die u via uw abonnementen ontvangt, worden samengevoegd met het adresboek van uw router."
+

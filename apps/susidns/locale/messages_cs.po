@@ -28,11 +28,29 @@ msgstr "Jméno hostitele nesmí obsahovat \"{0}\""
 msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
 msgstr "Název hostitele \"{0}\" vyžaduje převod do ASCII, ale knihovna převodu není v tomto JVM dostupnáJméno hostitele \"{0}\" vyžaduje konverzi do ASCII ale konverzní knihovna je na tomto JVM nedostupná"
 
+msgid "Source"
+msgstr "Zdrojový kód"
+
+msgid "Imported from file hosts.txt"
+msgstr ""
+
+msgid "Manually added via SusiDNS"
+msgstr "Ručně přidáno přes SusiDNS"
+
+msgid "Manually added"
+msgstr ""
+
+msgid "Added via address helper"
+msgstr ""
+
+msgid "Via helper"
+msgstr ""
+
+msgid "Via helper from"
+msgstr ""
+
 msgid "None"
 msgstr "Žádný"
-
-msgid "Hashcash"
-msgstr "Hashcash"
 
 msgid "Hidden"
 msgstr "Skryté"
@@ -182,9 +200,6 @@ msgstr "{0} adresář v databázi {1}"
 msgid "Host name {0} is not in the address book."
 msgstr "Název hostitele {0} není v adresáři."
 
-msgid "Manually added via SusiDNS"
-msgstr "Ručně přidáno přes SusiDNS"
-
 #, java-format
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr "Nepodařilo se přidat cíl pro {0} do služby pojmenování {1}"
@@ -312,6 +327,9 @@ msgstr "Link (B32)"
 
 msgid "Destination"
 msgstr "Cíl"
+
+msgid "Added"
+msgstr ""
 
 msgid "Select hosts for deletion from addressbook"
 msgstr "Vyberte hostitele pro smazání z adresáře"
@@ -453,9 +471,6 @@ msgstr "č"
 
 msgid "yes"
 msgstr "ano"
-
-msgid "Source"
-msgstr "Zdrojový kód"
 
 msgid "Added Date"
 msgstr "Datum přidání"
@@ -606,3 +621,4 @@ msgstr "Adresy ručně přidané do hlavního adresáře se sloučí s adresář
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Hostitelé, které obdržíte z vašich předplatných, se sloučí s vaším adresářem routeru."
+

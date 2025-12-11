@@ -217,12 +217,6 @@ msgstr "i2pmail"
 msgid "No new messages"
 msgstr "Немає нових повідомлень"
 
-msgid "Checking for new messages on server"
-msgstr "Перевірка нових повідомлень на сервері"
-
-msgid "Refresh the page for updates"
-msgstr "Оновіть сторінку для оновлень"
-
 #, java-format
 msgid "{0} is an I2P-exclusive service provided by {1}."
 msgstr "{0}-це ексклюзивна служба I2p, що надається {1}."
@@ -230,6 +224,12 @@ msgstr "{0}-це ексклюзивна служба I2p, що надаєтьс�
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
 msgstr "{0} webmail client &copy Susi 2004-2005."
+
+msgid "Checking for new messages on server"
+msgstr "Перевірка нових повідомлень на сервері"
+
+msgid "Refresh the page for updates"
+msgstr "Оновіть сторінку для оновлень"
 
 msgid "Removed tracking image placeholder"
 msgstr "Видалено місце резервування слідчого зображення"
@@ -341,6 +341,9 @@ msgstr "Перевірити пошту"
 msgid "Refresh Page"
 msgstr "Оновити сторінку"
 
+msgid "Change to Folder"
+msgstr "Змінити на папку"
+
 #, java-format
 msgid "1 Message"
 msgid_plural "{0} Messages"
@@ -360,18 +363,6 @@ msgstr "Розмір"
 msgid "Mark for deletion"
 msgstr "Позначити для видалення"
 
-msgid "Message contains HTML"
-msgstr "Повідомлення містить HTML"
-
-msgid "Message is new"
-msgstr "Нове повідомлення"
-
-msgid "Message is spam"
-msgstr "Повідомлення є спамом"
-
-msgid "Message body not downloaded"
-msgstr "Тіло повідомлення не завантажено"
-
 msgid "Really delete the marked messages?"
 msgstr "Ви дійсно хочете видалити позначені повідомлення?"
 
@@ -387,8 +378,17 @@ msgstr "Позначити всі"
 msgid "Clear All"
 msgstr "Очистити все"
 
-msgid "Change to Folder"
-msgstr "Змінити на папку"
+msgid "Message contains HTML"
+msgstr "Повідомлення містить HTML"
+
+msgid "Message is new"
+msgstr "Нове повідомлення"
+
+msgid "Message is spam"
+msgstr "Повідомлення є спамом"
+
+msgid "Message body not downloaded"
+msgstr "Тіло повідомлення не завантажено"
 
 msgid "First"
 msgstr "Перше"

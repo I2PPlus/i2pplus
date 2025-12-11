@@ -28,11 +28,29 @@ msgstr "Isäntänimi ei voi sisältää \"{0}\""
 msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
 msgstr "Isäntänimi \"{0}\" vaatii muuntamisen ASCII:ksi, mutta muunnoskirjasto ei ole käytettävissä tässä JVM:ssä"
 
+msgid "Source"
+msgstr "Lähde"
+
+msgid "Imported from file hosts.txt"
+msgstr ""
+
+msgid "Manually added via SusiDNS"
+msgstr "Lisätty manuaalisesti SusiDNS:n kautta"
+
+msgid "Manually added"
+msgstr ""
+
+msgid "Added via address helper"
+msgstr ""
+
+msgid "Via helper"
+msgstr ""
+
+msgid "Via helper from"
+msgstr ""
+
 msgid "None"
 msgstr "Ei mitään"
-
-msgid "Hashcash"
-msgstr "Hashcash"
 
 msgid "Hidden"
 msgstr "Piilotettu"
@@ -177,9 +195,6 @@ msgstr "{0} osoitekirja {1} tietokannassa"
 msgid "Host name {0} is not in the address book."
 msgstr "Isäntänimi {0} ei ole osoitekirjassa."
 
-msgid "Manually added via SusiDNS"
-msgstr "Lisätty manuaalisesti SusiDNS:n kautta"
-
 #, java-format
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr "Kohteen {0} lisääminen nimeämispalveluun {1} epäonnistui"
@@ -305,6 +320,9 @@ msgstr "Linkki (b32)"
 
 msgid "Destination"
 msgstr "Kohde"
+
+msgid "Added"
+msgstr ""
 
 msgid "Select hosts for deletion from addressbook"
 msgstr "Valitse osoitekirjasta poistettavat isännät"
@@ -446,9 +464,6 @@ msgstr "ei"
 
 msgid "yes"
 msgstr "kyllä"
-
-msgid "Source"
-msgstr "Lähde"
 
 msgid "Added Date"
 msgstr "Lisäyspäivämäärä"
@@ -599,3 +614,4 @@ msgstr "Pääosoitekirjaasi manuaalisesti lisätyt osoitteet yhdistetään reiti
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Tilauksistasi saamasi isännät yhdistetään reitittimen osoitekirjaasi."
+

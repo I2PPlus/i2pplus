@@ -28,11 +28,29 @@ msgstr "Nazwa hosta nie może zawierać \"{0}\""
 msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
 msgstr "Nazwa hosta \"{0}\" wymaga konwersji na ASCII, ale ta biblioteka konwersji jest niedostępna w tym JVM"
 
+msgid "Source"
+msgstr "Źródło"
+
+msgid "Imported from file hosts.txt"
+msgstr ""
+
+msgid "Manually added via SusiDNS"
+msgstr "Dodane ręcznie przez SusiDNS"
+
+msgid "Manually added"
+msgstr ""
+
+msgid "Added via address helper"
+msgstr ""
+
+msgid "Via helper"
+msgstr ""
+
+msgid "Via helper from"
+msgstr ""
+
 msgid "None"
 msgstr "Brak"
-
-msgid "Hashcash"
-msgstr "Hashcash"
 
 msgid "Hidden"
 msgstr "Ukryty"
@@ -182,9 +200,6 @@ msgstr "{0} książka adresowa w bazie {1}"
 msgid "Host name {0} is not in the address book."
 msgstr "Brak nazwy hosta {0} w książce adresowej."
 
-msgid "Manually added via SusiDNS"
-msgstr "Dodane ręcznie przez SusiDNS"
-
 #, java-format
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr "Nie udało się dodać Miejsca Przeznaczenia dla {0} do serwisu nazewnictwa {1}"
@@ -312,6 +327,9 @@ msgstr "Odnośnik (b32)"
 
 msgid "Destination"
 msgstr "Miejsce przeznaczenia"
+
+msgid "Added"
+msgstr ""
 
 msgid "Select hosts for deletion from addressbook"
 msgstr "Wybierz hosty do usunięcia z książki adresowej"
@@ -453,9 +471,6 @@ msgstr "nie"
 
 msgid "yes"
 msgstr "tak"
-
-msgid "Source"
-msgstr "Źródło"
 
 msgid "Added Date"
 msgstr "Data dodania"
@@ -606,3 +621,4 @@ msgstr "Adresy ręcznie dodane do Twojej głównej książki adresowej zostaną 
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Adresy pobrane z subskrypcji zostaną scalone do Twojej książki adresowej węzła."
+

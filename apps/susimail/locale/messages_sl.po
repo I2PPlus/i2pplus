@@ -220,12 +220,6 @@ msgstr "I2PMail"
 msgid "No new messages"
 msgstr "Ni novih sporočil"
 
-msgid "Checking for new messages on server"
-msgstr "Preverjam novih sporočil na strežniku"
-
-msgid "Refresh the page for updates"
-msgstr "Osveži stran za posodobitve"
-
 #, java-format
 msgid "{0} is an I2P-exclusive service provided by {1}."
 msgstr "{0} je storitev, ki jo pruža {1} izključno za I2P."
@@ -233,6 +227,12 @@ msgstr "{0} je storitev, ki jo pruža {1} izključno za I2P."
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
 msgstr "{0} spletni klient za e-pošto &copy Susi 2004-2005."
+
+msgid "Checking for new messages on server"
+msgstr "Preverjam novih sporočil na strežniku"
+
+msgid "Refresh the page for updates"
+msgstr "Osveži stran za posodobitve"
 
 msgid "Removed tracking image placeholder"
 msgstr "Odstranjen omenjak sledilne slike"
@@ -344,6 +344,9 @@ msgstr "Preveri pošto"
 msgid "Refresh Page"
 msgstr "Osveži stran"
 
+msgid "Change to Folder"
+msgstr "Spremeni v mapo"
+
 #, java-format
 msgid "1 Message"
 msgid_plural "{0} Messages"
@@ -364,18 +367,6 @@ msgstr "Velikost"
 msgid "Mark for deletion"
 msgstr "Označi za izbrisanje"
 
-msgid "Message contains HTML"
-msgstr "Sporočilo vsebuje HTML"
-
-msgid "Message is new"
-msgstr "Sporočilo je novo"
-
-msgid "Message is spam"
-msgstr "Sporočilo je spam"
-
-msgid "Message body not downloaded"
-msgstr "Telo sporočila ni bilo preneseno"
-
 msgid "Really delete the marked messages?"
 msgstr "Res želite izbrisati označena sporočila?"
 
@@ -391,8 +382,17 @@ msgstr "Označi vse"
 msgid "Clear All"
 msgstr "Počisti vse"
 
-msgid "Change to Folder"
-msgstr "Spremeni v mapo"
+msgid "Message contains HTML"
+msgstr "Sporočilo vsebuje HTML"
+
+msgid "Message is new"
+msgstr "Sporočilo je novo"
+
+msgid "Message is spam"
+msgstr "Sporočilo je spam"
+
+msgid "Message body not downloaded"
+msgstr "Telo sporočila ni bilo preneseno"
 
 msgid "First"
 msgstr "Prvi"

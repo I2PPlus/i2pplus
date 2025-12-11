@@ -211,12 +211,6 @@ msgstr "I2PMail"
 msgid "No new messages"
 msgstr "Không có tin nhắn mới"
 
-msgid "Checking for new messages on server"
-msgstr "Kiểm tra tin nhắn mới trên máy chủ"
-
-msgid "Refresh the page for updates"
-msgstr "Làm mới trang để cập nhật"
-
 #, java-format
 msgid "{0} is an I2P-exclusive service provided by {1}."
 msgstr "{0} là dịch vụ độc quyền I2P do {1} cung cấp."
@@ -224,6 +218,12 @@ msgstr "{0} là dịch vụ độc quyền I2P do {1} cung cấp."
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
 msgstr "{0} webmail client &copy Susi 2004-2005."
+
+msgid "Checking for new messages on server"
+msgstr "Kiểm tra tin nhắn mới trên máy chủ"
+
+msgid "Refresh the page for updates"
+msgstr "Làm mới trang để cập nhật"
 
 msgid "Removed tracking image placeholder"
 msgstr "Đã xóa phần giữ chỗ cho hình ảnh theo dõi"
@@ -335,6 +335,9 @@ msgstr "Lấy thư"
 msgid "Refresh Page"
 msgstr "Làm mới trang"
 
+msgid "Change to Folder"
+msgstr "Thay đổi thư mục"
+
 #, java-format
 msgid "1 Message"
 msgid_plural "{0} Messages"
@@ -352,18 +355,6 @@ msgstr "Kích thước"
 msgid "Mark for deletion"
 msgstr "Đánh dấu để xóa"
 
-msgid "Message contains HTML"
-msgstr "Thông điệp chứa HTML"
-
-msgid "Message is new"
-msgstr "Tin nhắn mới"
-
-msgid "Message is spam"
-msgstr "Tin nhắn là thư rác"
-
-msgid "Message body not downloaded"
-msgstr "Nội dung thư chưa được tải xuống"
-
 msgid "Really delete the marked messages?"
 msgstr "Thực sự xóa các thư đánh dấu?"
 
@@ -379,8 +370,17 @@ msgstr "Đánh dấu tất cả"
 msgid "Clear All"
 msgstr "Làm sạch tất cả"
 
-msgid "Change to Folder"
-msgstr "Thay đổi thư mục"
+msgid "Message contains HTML"
+msgstr "Thông điệp chứa HTML"
+
+msgid "Message is new"
+msgstr "Tin nhắn mới"
+
+msgid "Message is spam"
+msgstr "Tin nhắn là thư rác"
+
+msgid "Message body not downloaded"
+msgstr "Nội dung thư chưa được tải xuống"
 
 msgid "First"
 msgstr "Đầu tiên"

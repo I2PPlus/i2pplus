@@ -214,12 +214,6 @@ msgstr "I2PMmail"
 msgid "No new messages"
 msgstr "Κανένα νέο μήνυμα"
 
-msgid "Checking for new messages on server"
-msgstr "Έλεγχος για νέα μηνύματα στο διακομιστή"
-
-msgid "Refresh the page for updates"
-msgstr "Ανανεώστε τη σελίδα για ενημερώσεις"
-
 #, java-format
 msgid "{0} is an I2P-exclusive service provided by {1}."
 msgstr "Το {0} είναι μια αποκλειστική υπηρεσία I2P που παρέχεται από την {1}."
@@ -227,6 +221,12 @@ msgstr "Το {0} είναι μια αποκλειστική υπηρεσία I2P
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
 msgstr "{0} webmail client &copy Susi 2004-2005."
+
+msgid "Checking for new messages on server"
+msgstr "Έλεγχος για νέα μηνύματα στο διακομιστή"
+
+msgid "Refresh the page for updates"
+msgstr "Ανανεώστε τη σελίδα για ενημερώσεις"
 
 msgid "Removed tracking image placeholder"
 msgstr "Αφαιρέθηκε το κεντρικό στοιχείο εικόνας παρακολούθησης"
@@ -338,6 +338,9 @@ msgstr "Ελέγξτε την αλληλογραφία"
 msgid "Refresh Page"
 msgstr "Ανανέωση σελίδας"
 
+msgid "Change to Folder"
+msgstr "Αλλαγή σε Φάκελο"
+
 #, java-format
 msgid "1 Message"
 msgid_plural "{0} Messages"
@@ -356,18 +359,6 @@ msgstr "Μέγεθος"
 msgid "Mark for deletion"
 msgstr "Επιλογή προς διαγραφή"
 
-msgid "Message contains HTML"
-msgstr "Το μήνυμα περιλαμβάνει HTML"
-
-msgid "Message is new"
-msgstr "Το μήνυμα είναι νέο"
-
-msgid "Message is spam"
-msgstr "Το μήνυμα είναι ανεπιθύμητο"
-
-msgid "Message body not downloaded"
-msgstr "Δεν έγινε λήψη του σώματος του μηνύματος"
-
 msgid "Really delete the marked messages?"
 msgstr "Αλήθεια να διαγραφούν τα επισημασμένα μηνύματα?"
 
@@ -383,8 +374,17 @@ msgstr "Επιλογή Όλων"
 msgid "Clear All"
 msgstr "Καθαρισμός Όλων"
 
-msgid "Change to Folder"
-msgstr "Αλλαγή σε Φάκελο"
+msgid "Message contains HTML"
+msgstr "Το μήνυμα περιλαμβάνει HTML"
+
+msgid "Message is new"
+msgstr "Το μήνυμα είναι νέο"
+
+msgid "Message is spam"
+msgstr "Το μήνυμα είναι ανεπιθύμητο"
+
+msgid "Message body not downloaded"
+msgstr "Δεν έγινε λήψη του σώματος του μηνύματος"
 
 msgid "First"
 msgstr "Πρώτο"

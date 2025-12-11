@@ -214,12 +214,6 @@ msgstr "I2PMMail"
 msgid "No new messages"
 msgstr "Yeni ismarış yoxdur"
 
-msgid "Checking for new messages on server"
-msgstr "Serverdə yeni mesajlar yoxlanılır"
-
-msgid "Refresh the page for updates"
-msgstr "Yeniləmələr üçün səhifəni yeniləyin"
-
 #, java-format
 msgid "{0} is an I2P-exclusive service provided by {1}."
 msgstr "{0} {1} tərəfindən təmin edilən I2P-eksklüziv xidmətdir."
@@ -227,6 +221,12 @@ msgstr "{0} {1} tərəfindən təmin edilən I2P-eksklüziv xidmətdir."
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
 msgstr "{0} webmail client &copy Susi 2004-2005."
+
+msgid "Checking for new messages on server"
+msgstr "Serverdə yeni mesajlar yoxlanılır"
+
+msgid "Refresh the page for updates"
+msgstr "Yeniləmələr üçün səhifəni yeniləyin"
 
 msgid "Removed tracking image placeholder"
 msgstr "İzləmə şəkli yer tutucusunu silindi"
@@ -338,6 +338,9 @@ msgstr "Emaili yoxla"
 msgid "Refresh Page"
 msgstr "Səhifəni yeniləyin"
 
+msgid "Change to Folder"
+msgstr "Qovluğu dəyişdir"
+
 #, java-format
 msgid "1 Message"
 msgid_plural "{0} Messages"
@@ -356,18 +359,6 @@ msgstr "Ölçü"
 msgid "Mark for deletion"
 msgstr "Silinmə üçün işarələ"
 
-msgid "Message contains HTML"
-msgstr "Mesajda HTML var"
-
-msgid "Message is new"
-msgstr "İsmarış yenidir"
-
-msgid "Message is spam"
-msgstr "İsmarış spamdır"
-
-msgid "Message body not downloaded"
-msgstr "Mesajın mətni endirilmədi"
-
 msgid "Really delete the marked messages?"
 msgstr "İşarələnmiş ismarışlar həqiqətən də silinsinmi?"
 
@@ -383,8 +374,17 @@ msgstr "Hamısını işarələ"
 msgid "Clear All"
 msgstr "Hamısını təmizlə"
 
-msgid "Change to Folder"
-msgstr "Qovluğu dəyişdir"
+msgid "Message contains HTML"
+msgstr "Mesajda HTML var"
+
+msgid "Message is new"
+msgstr "İsmarış yenidir"
+
+msgid "Message is spam"
+msgstr "İsmarış spamdır"
+
+msgid "Message body not downloaded"
+msgstr "Mesajın mətni endirilmədi"
 
 msgid "First"
 msgstr "İlk"

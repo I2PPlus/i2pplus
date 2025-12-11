@@ -28,11 +28,29 @@ msgstr "لا يمكن ان يحتوي اسم العنوان على \"{0}\""
 msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
 msgstr "اسم المضيف \"{0}\" يتطلب التحويل إلى ASCII ولكن مكتبة التحويل غير متوفرة في JVM هذااسم العنوان \"{0}\" يحتاج للتحويل إلى صيغة آسكي ولكن برنامج التحويل غير متوفر."
 
+msgid "Source"
+msgstr "المصدر"
+
+msgid "Imported from file hosts.txt"
+msgstr ""
+
+msgid "Manually added via SusiDNS"
+msgstr "محذوف يدويا عن طريق SusiDNS"
+
+msgid "Manually added"
+msgstr ""
+
+msgid "Added via address helper"
+msgstr ""
+
+msgid "Via helper"
+msgstr ""
+
+msgid "Via helper from"
+msgstr ""
+
 msgid "None"
 msgstr "لاشيئ"
-
-msgid "Hashcash"
-msgstr "هاشكاش"
 
 msgid "Hidden"
 msgstr "مختفي"
@@ -197,9 +215,6 @@ msgstr "{0} دفتر عناوين في {1} قاعدة البيانات"
 msgid "Host name {0} is not in the address book."
 msgstr "اسم المضيف {0} غير موجود في دفتر العناوين."
 
-msgid "Manually added via SusiDNS"
-msgstr "محذوف يدويا عن طريق SusiDNS"
-
 #, java-format
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr "فشل في إضافة وجهة {0} إلى خدمة التسمية {1}"
@@ -333,6 +348,9 @@ msgstr "الرابط (b32)"
 
 msgid "Destination"
 msgstr "الوجهة"
+
+msgid "Added"
+msgstr ""
 
 msgid "Select hosts for deletion from addressbook"
 msgstr "حدد المضيفين للحذف من دفتر العناوين"
@@ -474,9 +492,6 @@ msgstr "لا"
 
 msgid "yes"
 msgstr "نعم"
-
-msgid "Source"
-msgstr "المصدر"
 
 msgid "Added Date"
 msgstr "التاريخ"
@@ -627,3 +642,4 @@ msgstr "العناوين التي تمت إضافتها يدويًا إلى دف
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "سيتم دمج المضيفين الذين تستقبلهم من اشتراكاتك مع دفتر عناوين جهاز التوجيه الخاص بك."
+

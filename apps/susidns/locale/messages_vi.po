@@ -28,11 +28,29 @@ msgstr "Tên máy chủ không được chứa \"{0}\""
 msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
 msgstr "Tên máy chủ \"{0}\" yêu cầu chuyển đổi sang ASCII nhưng thư viện chuyển đổi không có sẵn trong JVM này"
 
+msgid "Source"
+msgstr "Nguồn"
+
+msgid "Imported from file hosts.txt"
+msgstr ""
+
+msgid "Manually added via SusiDNS"
+msgstr "Được thêm thủ công qua SusiDNS"
+
+msgid "Manually added"
+msgstr ""
+
+msgid "Added via address helper"
+msgstr ""
+
+msgid "Via helper"
+msgstr ""
+
+msgid "Via helper from"
+msgstr ""
+
 msgid "None"
 msgstr "Không có"
-
-msgid "Hashcash"
-msgstr "Tiền băm"
 
 msgid "Hidden"
 msgstr "Dấu"
@@ -172,9 +190,6 @@ msgstr "{0} sổ địa chỉ trong cơ sở dữ liệu {1}"
 msgid "Host name {0} is not in the address book."
 msgstr "Tên máy chủ {0} không có trong sổ địa chỉ."
 
-msgid "Manually added via SusiDNS"
-msgstr "Được thêm thủ công qua SusiDNS"
-
 #, java-format
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr "Không thể thêm Đích cho {0} vào dịch vụ đặt tên {1}"
@@ -298,6 +313,9 @@ msgstr "Liên kết (b32)"
 
 msgid "Destination"
 msgstr "Đích đến"
+
+msgid "Added"
+msgstr ""
 
 msgid "Select hosts for deletion from addressbook"
 msgstr "Chọn máy chủ để xóa khỏi sổ địa chỉ"
@@ -439,9 +457,6 @@ msgstr "không"
 
 msgid "yes"
 msgstr "đồng ý"
-
-msgid "Source"
-msgstr "Nguồn"
 
 msgid "Added Date"
 msgstr "Ngày thêm"
@@ -592,3 +607,4 @@ msgstr "Các địa chỉ được thêm thủ công vào sổ địa chỉ Chí
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Máy chủ bạn nhận được từ đăng ký của mình sẽ hợp nhất với sổ địa chỉ Bộ định tuyến của bạn."
+

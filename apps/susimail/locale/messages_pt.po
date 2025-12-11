@@ -214,12 +214,6 @@ msgstr "I2PMe-mail"
 msgid "No new messages"
 msgstr "Sem novas mensagens"
 
-msgid "Checking for new messages on server"
-msgstr "Verificando novas mensagens no servidor"
-
-msgid "Refresh the page for updates"
-msgstr "Atualize a página para atualizações"
-
 #, java-format
 msgid "{0} is an I2P-exclusive service provided by {1}."
 msgstr "{0} é um serviço exclusivo I2P fornecido por {1}."
@@ -227,6 +221,12 @@ msgstr "{0} é um serviço exclusivo I2P fornecido por {1}."
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
 msgstr "{0} webmail client &copy Susi 2004-2005."
+
+msgid "Checking for new messages on server"
+msgstr "Verificando novas mensagens no servidor"
+
+msgid "Refresh the page for updates"
+msgstr "Atualize a página para atualizações"
 
 msgid "Removed tracking image placeholder"
 msgstr "Removido o marcador de posição da imagem de rastreamento"
@@ -338,6 +338,9 @@ msgstr "Verificar Mensagens"
 msgid "Refresh Page"
 msgstr "Atualizar página"
 
+msgid "Change to Folder"
+msgstr "Mudar para pasta"
+
 #, java-format
 msgid "1 Message"
 msgid_plural "{0} Messages"
@@ -356,18 +359,6 @@ msgstr "Tamanho"
 msgid "Mark for deletion"
 msgstr "Marcar para excluir"
 
-msgid "Message contains HTML"
-msgstr "A mensagem contém HTML"
-
-msgid "Message is new"
-msgstr "A mensagem é nova"
-
-msgid "Message is spam"
-msgstr "A mensagem é spam"
-
-msgid "Message body not downloaded"
-msgstr "Corpo da mensagem não baixado"
-
 msgid "Really delete the marked messages?"
 msgstr "Eliminar, realmente, as mensagens marcadas?"
 
@@ -383,8 +374,17 @@ msgstr "Marcar todos"
 msgid "Clear All"
 msgstr "Limpar tudo"
 
-msgid "Change to Folder"
-msgstr "Mudar para pasta"
+msgid "Message contains HTML"
+msgstr "A mensagem contém HTML"
+
+msgid "Message is new"
+msgstr "A mensagem é nova"
+
+msgid "Message is spam"
+msgstr "A mensagem é spam"
+
+msgid "Message body not downloaded"
+msgstr "Corpo da mensagem não baixado"
 
 msgid "First"
 msgstr "Primeiro"

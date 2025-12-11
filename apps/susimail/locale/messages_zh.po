@@ -211,12 +211,6 @@ msgstr "I2P网络邮件"
 msgid "No new messages"
 msgstr "没有新邮件"
 
-msgid "Checking for new messages on server"
-msgstr "检查服务器上的新邮件"
-
-msgid "Refresh the page for updates"
-msgstr "刷新页面来更新"
-
 #, java-format
 msgid "{0} is an I2P-exclusive service provided by {1}."
 msgstr "{0}是一个由{1}提供的I2P专属服务。"
@@ -224,6 +218,12 @@ msgstr "{0}是一个由{1}提供的I2P专属服务。"
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
 msgstr "{0} 网络邮件客户端版权归Susi 2004-2005所有"
+
+msgid "Checking for new messages on server"
+msgstr "检查服务器上的新邮件"
+
+msgid "Refresh the page for updates"
+msgstr "刷新页面来更新"
 
 msgid "Removed tracking image placeholder"
 msgstr "已移除跟踪图片占位符"
@@ -335,6 +335,9 @@ msgstr "检查邮件"
 msgid "Refresh Page"
 msgstr "刷新页面"
 
+msgid "Change to Folder"
+msgstr "更改到文件夹"
+
 #, java-format
 msgid "1 Message"
 msgid_plural "{0} Messages"
@@ -352,18 +355,6 @@ msgstr "大小"
 msgid "Mark for deletion"
 msgstr "标记为删除"
 
-msgid "Message contains HTML"
-msgstr "消息包含HTML"
-
-msgid "Message is new"
-msgstr "是新邮件"
-
-msgid "Message is spam"
-msgstr "邮件是垃圾邮件"
-
-msgid "Message body not downloaded"
-msgstr "消息ID无效"
-
 msgid "Really delete the marked messages?"
 msgstr "真要删除标记的邮件？"
 
@@ -379,8 +370,17 @@ msgstr "全部标记"
 msgid "Clear All"
 msgstr "全部清除"
 
-msgid "Change to Folder"
-msgstr "更改到文件夹"
+msgid "Message contains HTML"
+msgstr "消息包含HTML"
+
+msgid "Message is new"
+msgstr "是新邮件"
+
+msgid "Message is spam"
+msgstr "邮件是垃圾邮件"
+
+msgid "Message body not downloaded"
+msgstr "消息ID无效"
 
 msgid "First"
 msgstr "第一页"

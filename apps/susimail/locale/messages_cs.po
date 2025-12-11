@@ -217,12 +217,6 @@ msgstr "I2PMmail"
 msgid "No new messages"
 msgstr "Žádné nové zprávy"
 
-msgid "Checking for new messages on server"
-msgstr "Kontrola nových zpráv na serveru"
-
-msgid "Refresh the page for updates"
-msgstr "Obnovte stránku kvůli aktualizacím"
-
 #, java-format
 msgid "{0} is an I2P-exclusive service provided by {1}."
 msgstr "{0} je exkluzivní služba I2P poskytovaná společností {1}."
@@ -230,6 +224,12 @@ msgstr "{0} je exkluzivní služba I2P poskytovaná společností {1}."
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
 msgstr "{0} webmail client &copy Susi 2004-2005."
+
+msgid "Checking for new messages on server"
+msgstr "Kontrola nových zpráv na serveru"
+
+msgid "Refresh the page for updates"
+msgstr "Obnovte stránku kvůli aktualizacím"
 
 msgid "Removed tracking image placeholder"
 msgstr "Odebrán placeholder sledovacího obrázku"
@@ -341,6 +341,9 @@ msgstr "Zkontrolovat mail"
 msgid "Refresh Page"
 msgstr "Obnovit stránku"
 
+msgid "Change to Folder"
+msgstr "Změna na složku"
+
 #, java-format
 msgid "1 Message"
 msgid_plural "{0} Messages"
@@ -360,18 +363,6 @@ msgstr "Velikost"
 msgid "Mark for deletion"
 msgstr "Označit pro smazání"
 
-msgid "Message contains HTML"
-msgstr "Zpráva obsahuje HTML"
-
-msgid "Message is new"
-msgstr "Zpráva je nová"
-
-msgid "Message is spam"
-msgstr "Zpráva je spam"
-
-msgid "Message body not downloaded"
-msgstr "Tělo zprávy nebylo staženo"
-
 msgid "Really delete the marked messages?"
 msgstr "Opravdu vymazat označené zprávy?"
 
@@ -387,8 +378,17 @@ msgstr "Označit vše"
 msgid "Clear All"
 msgstr "Smazat vše"
 
-msgid "Change to Folder"
-msgstr "Změna na složku"
+msgid "Message contains HTML"
+msgstr "Zpráva obsahuje HTML"
+
+msgid "Message is new"
+msgstr "Zpráva je nová"
+
+msgid "Message is spam"
+msgstr "Zpráva je spam"
+
+msgid "Message body not downloaded"
+msgstr "Tělo zprávy nebylo staženo"
 
 msgid "First"
 msgstr "První"

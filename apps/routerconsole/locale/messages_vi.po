@@ -71,8 +71,17 @@ msgstr "Đã nhận được thông tin bộ định tuyến {0} từ máy chủ
 msgid "Acquired {0} router infos from reseed hosts ({1} errors)"
 msgstr "Có được {0} thông tin bộ định tuyến từ các máy chủ reseed ({1} lỗi)"
 
+msgid "Clock step adjustment (ms)"
+msgstr "Điều chỉnh bước đồng hồ (ms)"
+
+msgid "Size of tunnel acceptor backlog"
+msgstr "Kích thước tồn đọng của đường hầm chấp nhận"
+
 msgid "Message receive rate (B/s)"
 msgstr "Tốc độ nhận tin nhắn (B/s)"
+
+msgid "Low-level receive rate (B/s)"
+msgstr "Tốc độ nhận ở mức thấp (B/s)"
 
 msgid "Message send rate (B/s)"
 msgstr "Tốc độ gửi tin nhắn (B/s)"
@@ -80,41 +89,35 @@ msgstr "Tốc độ gửi tin nhắn (B/s)"
 msgid "Low-level send rate (B/s)"
 msgstr "Tỷ lệ gửi cấp thấp (B/s)"
 
-msgid "Low-level receive rate (B/s)"
-msgstr "Tốc độ nhận ở mức thấp (B/s)"
-
-msgid "Total peers in our NetDb"
-msgstr "Tổng số đồng nghiệp trong NetDb của chúng tôi"
-
 msgid "Peers active in the last minute"
 msgstr "Đồng nghiệp hoạt động vào phút cuối"
-
-msgid "Known high capacity peers"
-msgstr "Các đồng nghiệp có năng lực cao được biết đến"
 
 msgid "Peers sent to in the last minute"
 msgstr "Các đồng nghiệp được gửi tới vào phút cuối"
 
+msgid "Total peers in our banlist"
+msgstr "Tổng số đồng nghiệp trong danh sách cấm của chúng tôi"
+
+msgid "CPU load average of the JVM"
+msgstr "Tải CPU trung bình của JVM"
+
 msgid "Known fast peers"
 msgstr "Các mạng ngang hàng kết nối nhanh đã biết"
+
+msgid "Known high capacity peers"
+msgstr "Các đồng nghiệp có năng lực cao được biết đến"
 
 msgid "Known integrated (floodfill) peers"
 msgstr "Các đồng nghiệp tích hợp (lũ lụt) đã biết"
 
-msgid "Total peers in our banlist"
-msgstr "Tổng số đồng nghiệp trong danh sách cấm của chúng tôi"
+msgid "Total peers in our NetDb"
+msgstr "Tổng số đồng nghiệp trong NetDb của chúng tôi"
+
+msgid "Total number of threads in use"
+msgstr ""
 
 msgid "Peers without a published IP address"
 msgstr "Các máy ngang hàng không có địa chỉ IP được công bố"
-
-msgid "Size of tunnel acceptor backlog"
-msgstr "Kích thước tồn đọng của đường hầm chấp nhận"
-
-msgid "Clock step adjustment (ms)"
-msgstr "Điều chỉnh bước đồng hồ (ms)"
-
-msgid "CPU load average of the JVM"
-msgstr "Tải CPU trung bình của JVM"
 
 msgid "Average tunnel build success %"
 msgstr "Tỷ lệ xây dựng đường hầm trung bình thành công"
@@ -1548,29 +1551,29 @@ msgstr "Khởi động lại sau {0}"
 msgid "Save order"
 msgstr "Lưu đơn hàng"
 
+msgid "Restore full default"
+msgstr "Khôi phục mặc định đầy đủ"
+
+msgid "Restore minimal default"
+msgstr "Khôi phục mặc định tối thiểu"
+
 msgid "Sidebar preferences updated"
 msgstr "Tùy chọn thanh bên được cập nhật"
 
 msgid "Refresh interval must be a number"
 msgstr "Khoảng thời gian làm mới phải là một số"
 
-msgid "Restore full default"
-msgstr "Khôi phục mặc định đầy đủ"
-
 msgid "Full sidebar defaults restored."
 msgstr "Mặc định thanh bên đầy đủ được khôi phục."
 
-msgid "Sidebar will refresh shortly."
-msgstr "Thanh bên sẽ làm mới trong giây lát."
-
-msgid "Restore minimal default"
-msgstr "Khôi phục mặc định tối thiểu"
-
-msgid "Minimal sidebar defaults restored."
-msgstr "Mặc định thanh bên tối thiểu được khôi phục."
-
 msgid "Order must be an integer"
 msgstr "Thứ tự phải là số nguyên"
+
+msgid "Saved order of sections."
+msgstr "Đã lưu thứ tự các phần."
+
+msgid "Sidebar will refresh shortly."
+msgstr "Thanh bên sẽ làm mới trong giây lát."
 
 msgid "No section selected"
 msgstr "Không có phần nào được chọn"
@@ -1580,9 +1583,6 @@ msgstr "Chưa nhập lệnh"
 
 msgid "Moved"
 msgstr "Đã di chuyển"
-
-msgid "Saved order of sections."
-msgstr "Đã lưu thứ tự các phần."
 
 msgid "Full statistics enabled"
 msgstr "Đã bật thống kê đầy đủ"
@@ -2409,6 +2409,9 @@ msgstr "Proxy HTTP không tăng"
 msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
 msgstr "Trình duyệt của bạn không được cấu hình đúng cách để sử dụng proxy HTTP tại {0}"
 
+msgid "Errors"
+msgstr ""
+
 msgid "URL"
 msgstr "Đường dẫn"
 
@@ -2683,29 +2686,23 @@ msgstr "hoặc Sybil gần với bộ định tuyến này"
 msgid "Lookup"
 msgstr "Tra cứu"
 
-msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
-msgstr "Không bao giờ tiết lộ danh tính bộ định tuyến của bạn cho bất kỳ ai vì nó được liên kết duy nhất với địa chỉ IP của bạn trong cơ sở dữ liệu mạng."
+msgid "Select the field to search on"
+msgstr ""
 
-msgid "is banned"
-msgstr "bị cấm"
-
-msgid "not found in network database"
-msgstr "không tìm thấy trong cơ sở dữ liệu mạng"
-
-msgid "Bad Base64 Router hash"
-msgstr "Băm Bộ định tuyến Base64 xấu"
-
-msgid "No routers with"
-msgstr "Không có bộ định tuyến với"
-
-msgid "Hash prefix"
-msgstr "Tiền tố băm"
-
-msgid "Port"
-msgstr "Cổng"
+msgid "e.g. cn hk"
+msgstr ""
 
 msgid "MTU"
 msgstr "MTU"
+
+msgid "Enter search value here"
+msgstr ""
+
+msgid "Router not found"
+msgstr ""
+
+msgid "No routers with"
+msgstr "Không có bộ định tuyến với"
 
 msgid "found in the network database"
 msgstr "tìm thấy trong cơ sở dữ liệu mạng"
@@ -2833,17 +2830,17 @@ msgstr "Đã hết hạn {0} trước"
 msgid "Unknown"
 msgstr "Không rõ"
 
-msgid "Advanced mode - includes all statistics published by floodfills."
-msgstr "Chế độ nâng cao - bao gồm tất cả thống kê được xuất bản bởi floodfills."
-
-msgid "Compact mode - does not include statistics published by floodfills."
-msgstr "Chế độ thu gọn - không bao gồm thống kê được xuất bản bởi floodfills."
-
 msgid "Network Database Router Statistics"
 msgstr "Thống kê bộ định tuyến cơ sở dữ liệu mạng"
 
 msgid "Count"
 msgstr "Số lượng"
+
+msgid "Under 12 KB/s"
+msgstr ""
+
+msgid "Over 2048 KB/s"
+msgstr ""
 
 msgid "Bandwidth Tier"
 msgstr "Cấp băng thông"
@@ -2915,6 +2912,9 @@ msgstr "Đã xuất bản"
 msgid "Hostname"
 msgstr "Tên máy chủ"
 
+msgid "Whois"
+msgstr ""
+
 msgid "direct"
 msgstr "trực tiếp"
 
@@ -2930,20 +2930,26 @@ msgstr "Hiển thị tất cả các bộ định tuyến có loại chữ ký n
 msgid "Show all routers with this encryption type in the NetDb"
 msgstr "Hiển thị tất cả các bộ định tuyến có loại mã hóa này trong NetDb"
 
-msgid "Addresses"
-msgstr "Địa chỉ"
-
-msgid "n/a"
-msgstr "chưa rõ"
-
 msgid "Show all routers with this address in the NetDb"
 msgstr "Hiển thị tất cả các bộ định tuyến có địa chỉ này trong NetDb"
 
 msgid "Show all routers with this port in the NetDb"
 msgstr "Hiển thị tất cả các bộ định tuyến có cổng này trong NetDb"
 
-msgid "Routers"
-msgstr "Bộ định tuyến"
+msgid "Maximum Transmission Unit"
+msgstr ""
+
+msgid "Show all routers with this MTU in the NetDb"
+msgstr ""
+
+msgid "Addresses"
+msgstr "Địa chỉ"
+
+msgid "Introducers"
+msgstr ""
+
+msgid "Network Id"
+msgstr "ID mạng"
 
 msgid "First heard about"
 msgstr "Lần đầu tiên nghe nói về"
@@ -2954,11 +2960,8 @@ msgstr "Lần cuối nghe nói về"
 msgid "Last heard from"
 msgstr "Nghe tin lần cuối từ"
 
-msgid "Network Id"
-msgstr "ID mạng"
-
-msgid "Count is always spoofed to avoid indicating router restarts"
-msgstr "Số lượng luôn bị giả mạo để tránh chỉ ra việc khởi động lại bộ định tuyến"
+msgid "Info"
+msgstr "Thông tin"
 
 msgid "Hidden or starting up"
 msgstr "Ẩn hoặc khởi động"
@@ -2987,17 +2990,32 @@ msgstr "SSU IPv6"
 msgid "SSU [IPv6] with Introducers"
 msgstr "IPv6 SSU, người giới thiệu"
 
+msgid "NTCP &amp; SSU with Introducers [IPv6 Only]"
+msgstr "IPv6 Chỉ NTCP, SSU, người giới thiệu"
+
 msgid "NTCP [IPv6]"
 msgstr "NTCP [IPv6]"
 
 msgid "NTCP [IPv6] &amp; SSU"
 msgstr "NTCP [IPv6] &amp; SSU"
 
-msgid "NTCP &amp; SSU with Introducers [IPv6 Only]"
-msgstr "IPv6 Chỉ NTCP, SSU, người giới thiệu"
-
 msgid "NTCP [IPv6] &amp; SSU with Introducers"
 msgstr "IPv6 NTCP, SSU, người giới thiệu"
+
+msgid "Local"
+msgstr "Địa phương"
+
+msgid "Fast Tier"
+msgstr ""
+
+msgid "High Capacity Tier"
+msgstr ""
+
+msgid "Integrated Tier"
+msgstr ""
+
+msgid "Standard Tier"
+msgstr ""
 
 msgid "No peer connections available"
 msgstr "Không có kết nối ngang hàng"
@@ -3326,14 +3344,17 @@ msgstr "Tin nhắn cuối cùng từ"
 msgid "View/Edit"
 msgstr "Xem/Chỉnh sửa"
 
-msgid "Unreachable"
-msgstr "Không thể truy cập"
-
 msgid "OK"
 msgstr "OK"
 
 msgid "Test Fails"
 msgstr "Kiểm tra không thành"
+
+msgid "Unreachable"
+msgstr "Không thể truy cập"
+
+msgid "Most tests passing"
+msgstr ""
 
 msgid "Fast, High Capacity"
 msgstr "Nhanh, Dung lượng cao"
@@ -3349,6 +3370,9 @@ msgstr "Thất bại"
 
 msgid "Integrated"
 msgstr "Tích hợp"
+
+msgid "Configure Peer"
+msgstr ""
 
 msgid "Thresholds"
 msgstr "Ngưỡng"
@@ -3413,11 +3437,11 @@ msgstr "Lần gửi xấu cuối cùng"
 msgid "Last Bad Store"
 msgstr "Cửa hàng xấu cuối cùng"
 
-msgid "Capabilities in the NetDb, not used to determine profiles"
-msgstr "Khả năng trong NetDb, không được sử dụng để xác định hồ sơ"
-
 msgid "caps"
 msgstr "Caps"
+
+msgid "Capabilities in the NetDb, not used to determine profiles"
+msgstr "Khả năng trong NetDb, không được sử dụng để xác định hồ sơ"
 
 msgid "Reachable"
 msgstr "Có thể tiếp cận"
@@ -3590,6 +3614,9 @@ msgstr "Nhấp vào Khởi động lại để cài đặt"
 
 msgid "Click Shutdown and restart to install"
 msgstr "Nhấp vào Shutdown và khởi động lại để cài đặt"
+
+msgid "Unable"
+msgstr ""
 
 #, java-format
 msgid "{0}"
@@ -3784,9 +3811,6 @@ msgstr "Hiệu suất bộ định tuyến đồ thị"
 msgid "Router Help and FAQ"
 msgstr "Trợ giúp và Câu hỏi thường gặp về Bộ định tuyến"
 
-msgid "Info"
-msgstr "Thông tin"
-
 msgid "Router information including transport addresses and UPnP scan"
 msgstr "Thông tin bộ định tuyến bao gồm địa chỉ vận chuyển và quét UPnP"
 
@@ -3872,6 +3896,34 @@ msgstr "Floodfill được kích hoạt"
 msgid "Total number of remote LeaseSets stored in our NetDb"
 msgstr "Tổng số LeaseSet từ xa được lưu trữ trong NetDb của chúng tôi"
 
+msgid "Declining transit tunnel requests during startup phase"
+msgstr "Không có yêu cầu đường hầm tham gia nào được chấp nhận trong 10 phút đầu tiên trong khi bộ định tuyến ổn định"
+
+msgid "Declining transit tunnel requests as we are shutting down"
+msgstr "Từ chối các yêu cầu đường hầm tham gia khi chúng tôi ngừng hoạt động"
+
+msgid "Router or network performance is impeding the building of transit tunnels"
+msgstr "Bộ định tuyến hoặc hiệu suất mạng đang cản trở việc xây dựng các đường hầm tham gia"
+
+msgid "Router is currently hosting the configured maximum number of transit tunnels"
+msgstr "Máy chủ đang lưu trữ số lượng tối đa đường hầm trung chuyển đã cấu hình"
+
+msgid "Router is currently using the configured maximum share bandwidth"
+msgstr "Máy chủ đang sử dụng băng thông chia sẻ tối đa đã cấu hình"
+
+msgid "Router is ready to build participating tunnels"
+msgstr "Bộ định tuyến đã sẵn sàng để xây dựng các đường hầm tham gia"
+
+#, java-format
+msgid "Accepting transit tunnel requests; hosting {0} tunnels"
+msgstr "Chấp nhận các yêu cầu đường hầm tham gia; tham gia vào các đường hầm {0}"
+
+msgid "No transit tunnels are built when Hidden mode is active"
+msgstr "Không có đường hầm tham gia nào được xây dựng khi Chế độ ẩn đang hoạt động"
+
+msgid "Router is configured to reject all transit tunnel requests"
+msgstr "Bộ định tuyến được cấu hình để từ chối tất cả các yêu cầu đường hầm tham gia"
+
 msgid "Warning: ECDSA is not available. Update your Java or OS"
 msgstr "Cảnh báo: ECDSA không khả dụng. Cập nhật Java hoặc HĐH của bạn"
 
@@ -3907,6 +3959,9 @@ msgstr "Số lượng đồng nghiệp bị cấm"
 
 msgid "The total number of peers in our network database"
 msgstr "Tổng số đồng nghiệp trong cơ sở dữ liệu mạng của chúng tôi"
+
+msgid "Total RouterInfos stored on disk"
+msgstr ""
 
 msgid "Known"
 msgstr "Được biết"
@@ -4018,34 +4073,6 @@ msgstr "Yêu cầu xếp hàng từ các bộ định tuyến khác để tham g
 
 msgid "Backlog"
 msgstr "Backlog"
-
-msgid "Declining transit tunnel requests during startup phase"
-msgstr "Không có yêu cầu đường hầm tham gia nào được chấp nhận trong 10 phút đầu tiên trong khi bộ định tuyến ổn định"
-
-msgid "Declining transit tunnel requests as we are shutting down"
-msgstr "Từ chối các yêu cầu đường hầm tham gia khi chúng tôi ngừng hoạt động"
-
-msgid "Router or network performance is impeding the building of transit tunnels"
-msgstr "Bộ định tuyến hoặc hiệu suất mạng đang cản trở việc xây dựng các đường hầm tham gia"
-
-msgid "Router is currently hosting the configured maximum number of transit tunnels"
-msgstr "Máy chủ đang lưu trữ số lượng tối đa đường hầm trung chuyển đã cấu hình"
-
-msgid "Router is currently using the configured maximum share bandwidth"
-msgstr "Máy chủ đang sử dụng băng thông chia sẻ tối đa đã cấu hình"
-
-msgid "Router is ready to build participating tunnels"
-msgstr "Bộ định tuyến đã sẵn sàng để xây dựng các đường hầm tham gia"
-
-#, java-format
-msgid "Accepting transit tunnel requests; hosting {0} tunnels"
-msgstr "Chấp nhận các yêu cầu đường hầm tham gia; tham gia vào các đường hầm {0}"
-
-msgid "No transit tunnels are built when Hidden mode is active"
-msgstr "Không có đường hầm tham gia nào được xây dựng khi Chế độ ẩn đang hoạt động"
-
-msgid "Router is configured to reject all transit tunnel requests"
-msgstr "Bộ định tuyến được cấu hình để từ chối tất cả các yêu cầu đường hầm tham gia"
 
 msgid "Statistics gathered during this router's uptime"
 msgstr "Số liệu thống kê được thu thập trong thời gian hoạt động của bộ định tuyến này"
@@ -4175,8 +4202,14 @@ msgstr "Không có phân tích được lưu trữ"
 msgid "Select stored analysis"
 msgstr "Chọn phân tích đã lưu"
 
+msgid "Review"
+msgstr ""
+
 msgid "Run analysis on Floodfills only"
 msgstr "Chỉ chạy phân tích trên vùng lấp lũ"
+
+msgid "Start Scan"
+msgstr ""
 
 msgid "Run analysis on all routers in NetDb"
 msgstr "Chạy phân tích trên tất cả các bộ định tuyến trong NetDb"
@@ -4340,6 +4373,12 @@ msgstr "TỐI ĐA"
 msgid "Show all routers for this family in NetDb"
 msgstr "Hiển thị tất cả các bộ định tuyến cho dòng này trong NetDb"
 
+msgid "Routers"
+msgstr "Bộ định tuyến"
+
+msgid "n/a"
+msgstr "chưa rõ"
+
 msgid "Last lookup successful"
 msgstr "Tra cứu lần cuối thành công"
 
@@ -4391,9 +4430,6 @@ msgstr "Dữ liệu được truyền"
 msgid "Data"
 msgstr "Dữ liệu"
 
-msgid "Limit"
-msgstr "Giới hạn"
-
 msgid "Receive on"
 msgstr "Bật nhận"
 
@@ -4438,6 +4474,7 @@ msgstr "Bộ định tuyến hiện đang hoạt động ở Chế độ ẩn, c
 msgid "No transit tunnels currently active."
 msgstr "Hiện không có đường hầm chuyển tuyến nào đang hoạt động."
 
+#, java-format
 msgid "Transit Tunnels by Peer (Top {0})"
 msgstr "Đường hầm chuyển tiếp theo đồng đẳng (Top {0})"
 
@@ -4449,9 +4486,6 @@ msgstr "Tất cả các đường hầm ngang hàng"
 
 msgid "Primary IP address"
 msgstr "Địa chỉ IP chính"
-
-msgid "Local"
-msgstr "Địa phương"
 
 msgid "unique peers"
 msgstr "đồng nghiệp duy nhất"
@@ -4465,6 +4499,9 @@ msgstr "chuyển tuyến"
 msgid "No local or transit tunnels currently active."
 msgstr "Hiện không có đường hầm cục bộ hoặc chuyển tuyến nào đang hoạt động."
 
+msgid "PRIVATE IP ADDRESS"
+msgstr ""
+
 msgid "Bandwidth Tiers"
 msgstr "Tầng băng thông"
 
@@ -4474,6 +4511,9 @@ msgstr "Trên {0} băng thông chia sẻ"
 
 msgid "Inbound or outbound?"
 msgstr "Vào hay ra?"
+
+msgid "In/Out"
+msgstr ""
 
 msgid "Gateway"
 msgstr "Cổng"
@@ -4590,6 +4630,9 @@ msgstr "Máy chủ Web I2P (trang web trực tuyến)"
 msgid "Browser launch at startup"
 msgstr "Khởi chạy trình duyệt khi khởi động"
 
+msgid "I2P Router Console"
+msgstr ""
+
 msgid "Open Router Console in web browser at startup"
 msgstr "Mở Bảng điều khiển Bộ định tuyến trong trình duyệt web khi khởi động"
 
@@ -4665,12 +4708,6 @@ msgstr "chìa khóa"
 msgid "port"
 msgstr "hải cảng"
 
-msgid "config UI"
-msgstr "Giao diện người dùng cấu hình"
-
-msgid "User Interface Configuration"
-msgstr "Cấu hình giao diện người dùng"
-
 msgid "Certificates"
 msgstr "Giấy chứng nhận"
 
@@ -4686,8 +4723,8 @@ msgstr "Giới hạn băng thông"
 msgid "Advanced Network Configuration"
 msgstr "Cấu hình mạng nâng cao"
 
-msgid "I2P+ will work best if you configure your rates to match the speed of your internet connection."
-msgstr "I2P sẽ hoạt động tốt nhất nếu bạn định cấu hình tốc độ phù hợp với tốc độ kết nối internet của mình."
+msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
+msgstr ""
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
 msgstr "Lưu ý: Đóng góp của bạn cho mạng (chia sẻ mạng) được xác định bằng việc phân bổ băng thông ngược dòng (tốc độ tải lên)."
@@ -4717,11 +4754,11 @@ msgid "NOTE"
 msgstr "LƯU Ý"
 
 #, java-format
-msgid "You have configured I2P+ to share only {0} KBps."
-msgstr "Bạn đã cấu hình I2P để chia sẻ chỉ {0} KB/s."
+msgid "You have configured I2P to share only {0} KBps."
+msgstr ""
 
-msgid "I2P+ requires at least 12KBps to enable sharing. "
-msgstr "I2P yêu cầu ít nhất 12KBps để cho phép chia sẻ."
+msgid "I2P requires at least 12KBps to enable sharing. "
+msgstr ""
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
 msgstr "Vui lòng cho phép chia sẻ (tham gia vào các đường hầm) bằng cách định cấu hình nhiều băng thông hơn. "
@@ -5218,8 +5255,8 @@ msgstr "gieo hạt lại cấu hình"
 msgid "Reseeding is the bootstrapping process used to find other routers when you first install I2P, or when your router has too few router references remaining."
 msgstr "Reseeding là quá trình khởi động được sử dụng để tìm các bộ định tuyến khác khi bạn cài đặt I2P lần đầu tiên hoặc khi bộ định tuyến của bạn còn lại quá ít tham chiếu bộ định tuyến."
 
-msgid "To enable the configuration of reseed urls, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
-msgstr "Để bật cấu hình của url reseed, hãy kích hoạt <a href=\"/help/advancedsettings\">Chế độ nâng cao</a> của bảng điều khiển."
+msgid "To enable the configuration of reseed urls, activate the console's <a href=/help/advancedsettings>Advanced mode</a>."
+msgstr ""
 
 msgid "Reseeding Configuration"
 msgstr "Cấu hình lại"
@@ -5229,9 +5266,6 @@ msgstr "Trợ giúp gieo hạt"
 
 msgid "Reseeding Help"
 msgstr "Reseeding giúp đỡ"
-
-msgid "Change these only if HTTPS is blocked by a restrictive firewall and reseed has failed."
-msgstr "Chỉ thay đổi những điều này nếu HTTPS bị chặn bởi tường lửa hạn chế và việc gieo hạt lại không thành công."
 
 msgid "Reseed URLs"
 msgstr "Thay đổi URL"
@@ -5268,6 +5302,9 @@ msgstr "Tùy chọn này sẽ sử dụng proxy outproxy HTTP của I2P để gi
 
 msgid "I2P Outproxy"
 msgstr "Ủy quyền đi I2P"
+
+msgid "Port"
+msgstr "Cổng"
 
 msgid "Use HTTP Proxy for HTTP Reseed Hosts"
 msgstr "Sử dụng Proxy HTTP cho máy chủ HTTP Reseed"
@@ -5381,6 +5418,12 @@ msgstr "Thanh bên thống nhất"
 msgid "Use the same sidebar on all pages"
 msgstr "Sử dụng cùng một thanh bên trên tất cả các trang"
 
+msgid "Sticky sidebar"
+msgstr ""
+
+msgid "Enable conditional fixed sidebar"
+msgstr ""
+
 msgid "config stats"
 msgstr "Cấu hình thống kê"
 
@@ -5437,6 +5480,12 @@ msgstr "Để sửa đổi cài đặt đường hầm khách hàng, hãy sử d
 
 msgid "To enable session-only changes to the client tunnels, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
 msgstr "Để kích hoạt những thay đổi chỉ trong phiên cho các đường hầm khách hàng, hãy kích hoạt chế độ <a href=\"/help/advancedsettings\">Nâng cao</a> của console."
+
+msgid "config UI"
+msgstr "Giao diện người dùng cấu hình"
+
+msgid "User Interface Configuration"
+msgstr "Cấu hình giao diện người dùng"
 
 msgid "Router Console Theme"
 msgstr "Chủ đề Bảng điều khiển bộ định tuyến"
@@ -5574,14 +5623,20 @@ msgstr "Lỗi 404"
 msgid "not found"
 msgstr "không tìm thấy"
 
+msgid "router logs"
+msgstr "nhật ký bộ định tuyến"
+
+msgid "Critical / Error Level Logs"
+msgstr "Nhật ký mức độ nghiêm trọng/lỗi"
+
+msgid "Clear logs"
+msgstr "Xóa nhật ký"
+
 msgid "events"
 msgstr "sự kiện"
 
 msgid "Event Log"
 msgstr "Nhật ký sự kiện"
-
-msgid "Combined"
-msgstr "Kết hợp"
 
 msgid "graph"
 msgstr "Biểu đồ"
@@ -6090,8 +6145,8 @@ msgstr "Để làm cho bảng điều khiển của bạn có thể truy cập �
 msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
 msgstr "Ví dụ: Để cho phép truy cập từ cả localhost và 192.168.1.10 qua HTTP và HTTPS:"
 
-msgid "For most client services, change listening address for relevant service in Tunnel Manager's configuration section using <i>reachable by</i> dropdown."
-msgstr "Đối với hầu hết các dịch vụ khách hàng, hãy thay đổi địa chỉ nghe cho dịch vụ liên quan trong phần cấu hình của Trình quản lý Đường hầm bằng cách sử dụng menu thả xuống <i>có thể tiếp cận bởi</i>."
+msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager's configuration section using the <i>reachable by</i> dropdown."
+msgstr ""
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "Tôi có thể kết nối đến IRC trong I2P như thế nào?"
@@ -7290,34 +7345,6 @@ msgstr "Thống kê"
 msgid "Job Queue Stats"
 msgstr "Thống kê hàng đợi công việc"
 
-msgid "logs"
-msgstr "nhật ký"
-
-msgid "Please include your I2P version and running environment information in bug reports"
-msgstr "Vui lòng đưa phiên bản I2P và thông tin môi trường đang chạy của bạn vào báo cáo lỗi"
-
-#, java-format
-msgid "Please report bugs on {0} or {1}."
-msgstr "Vui lòng báo cáo lỗi trên {0} hoặc {1}."
-
-msgid "View event log"
-msgstr "Xem nhật ký sự kiện"
-
-msgid "Critical / Error Level Logs"
-msgstr "Nhật ký mức độ nghiêm trọng/lỗi"
-
-msgid "Clear logs"
-msgstr "Xóa nhật ký"
-
-msgid "Configure router logging options"
-msgstr "Cấu hình tùy chọn ghi nhật ký bộ định tuyến"
-
-msgid "Filter Router log output"
-msgstr "Lọc kết quả nhật ký Router"
-
-msgid "Service (Wrapper) Logs"
-msgstr "Nhật ký dịch vụ (Trình bao bọc)"
-
 msgid "network database"
 msgstr "cơ sở dữ liệu mạng"
 
@@ -7338,6 +7365,9 @@ msgstr "Dịch vụ công cộng được lưu trữ cục bộ"
 
 msgid "Requested client leaseset"
 msgstr "Bộ hợp đồng thuê khách hàng được yêu cầu"
+
+msgid "Remote"
+msgstr ""
 
 msgid "network database router map"
 msgstr "Bản đồ router cơ sở dữ liệu mạng"
@@ -7382,164 +7412,26 @@ msgstr "Đồng nghiệp bị cấm"
 msgid "Fast / High Capacity"
 msgstr "Nhanh / Dung lượng lớn"
 
-msgid "router logs"
-msgstr "nhật ký bộ định tuyến"
+msgid "Configure router logging options"
+msgstr "Cấu hình tùy chọn ghi nhật ký bộ định tuyến"
+
+msgid "View event log"
+msgstr "Xem nhật ký sự kiện"
+
+msgid "Filter Router log output"
+msgstr "Lọc kết quả nhật ký Router"
 
 msgid "service logs"
 msgstr "nhật ký dịch vụ"
 
-msgid "Manage I2P addresses"
-msgstr "Quản lý địa chỉ I2P"
-
-msgid "Imagegen"
-msgstr "Tạo ảnh"
-
-msgid "Create and download torrents"
-msgstr "Tạo và tải xuống torrent"
-
-msgid "Manage client and server tunnels"
-msgstr "Quản lý đường hầmhách hàng và máy chủ"
-
-msgid "Webmail client"
-msgstr "Máy khách webmail"
-
-msgid "Webmail"
-msgstr "Webmail"
-
-msgid "Local webserver for hosting content on the I2P network"
-msgstr "Máy chủ web cục bộ để lưu trữ nội dung trên mạng I2P"
+msgid "Service (Wrapper) Logs"
+msgstr "Nhật ký dịch vụ (Trình bao bọc)"
 
 msgid "Information &amp; Diagnostics"
 msgstr "Thông tin"
 
-msgid "Review recent updates to I2P"
-msgstr "Xem lại các bản cập nhật gần đây cho I2P"
-
-msgid "View debugging information"
-msgstr "Xem thông tin gỡ lỗi"
-
-msgid "View router performance graphs"
-msgstr "Xem biểu đồ hiệu suất của bộ định tuyến"
-
-msgid "Router help section"
-msgstr "Phần trợ giúp bộ định tuyến"
-
-msgid "Router homepage"
-msgstr "Trang chủ bộ định tuyến"
-
-msgid "Home"
-msgstr "Trang chủ"
-
-msgid "View news relating to I2P"
-msgstr "Xem tin tức liên quan đến I2P"
-
-msgid "I2P News"
-msgstr "Tin tức I2P"
-
-msgid "View router workload and stats"
-msgstr "Xem khối lượng công việc và số liệu thống kê của bộ định tuyến"
-
-msgid "Router Jobs"
-msgstr "Công việc của bộ định tuyến"
-
-msgid "View router logs"
-msgstr "Xem nhật ký bộ định tuyến"
-
-msgid "View information and stats regarding all known peers"
-msgstr "Xem thông tin và số liệu thống kê về tất cả các đồng nghiệp đã biết"
-
-msgid "View active peers"
-msgstr "Xem các đồng nghiệp đang hoạt động"
-
-msgid "View peer performance profiles"
-msgstr "Xem hồ sơ hiệu suất ngang hàng"
-
-msgid "View information about router and running environment"
-msgstr "Xem thông tin về bộ định tuyến và môi trường đang chạy"
-
-msgid "Statistics"
-msgstr "Số liệu thống kê"
-
-msgid "Current console and webapp translation report"
-msgstr "Báo cáo dịch ngôn ngữ của trình điều khiển hiện tại và ứng dụng web"
-
-msgid "Translation Status"
-msgstr "Trạng thái dịch"
-
-msgid "View active tunnels"
-msgstr "Xem các đường hầm đang hoạt động"
-
-msgid "Customize homepage"
-msgstr "Tùy chỉnh trang chủ"
-
-msgid "Homepage"
-msgstr "Trang chủ"
-
-msgid "Configure I2P Client Control Interface"
-msgstr "Cấu hình giao diện điều khiển máy khách I2P"
-
-msgid "View or edit router keyring for encrypted destinations"
-msgstr "Xem hoặc chỉnh sửa khóa bộ định tuyến cho các đích được mã hóa"
-
-msgid "Configure router networking options"
-msgstr "Cấu hình các tùy chọn mạng của bộ định tuyến"
-
-msgid "Manually edit peers and view banned peers and blocklist"
-msgstr "Chỉnh sửa thủ công các đồng nghiệp và xem các đồng nghiệp và danh sách chặn bị cấm"
-
-msgid "Install and manage router plugins"
-msgstr "Cài đặt và quản lý plugin bộ định tuyến"
-
-msgid "Router reseeding and configuration"
-msgstr "Tái cấu hình và tái cấu trúc router"
-
-msgid "Configure and manage Router family"
-msgstr "Cấu hình và quản lý dòng Router"
-
-msgid "Manage Router service"
-msgstr "Quản lý dịch vụ Router"
-
-msgid "Configure stat collection for graphing"
-msgstr "Cấu hình thu thập chỉ số để vẽ đồ thị"
-
-msgid "Router Stats"
-msgstr "Số liệu thống kê về bộ định tuyến"
-
-msgid "Configure router updates"
-msgstr "Cấu hình cập nhật bộ định tuyến"
-
-msgid "Configuration wizard for new users"
-msgstr "Hướng dẫn cấu hình cho người dùng mới"
-
-msgid "Setup Wizard"
-msgstr "Trình hướng dẫn cài đặt"
-
-msgid "Customize sidebar"
-msgstr "Tùy chỉnh thanh bên"
-
-msgid "Configure tunnel options"
-msgstr "Định cấu hình tùy chọn đường hầm"
-
-msgid "Configure router user interface and optional console password"
-msgstr "Định cấu hình giao diện người dùng bộ định tuyến và mật khẩu bảng điều khiển tùy chọn"
-
-msgid "Configuring I2P for optimal performance"
-msgstr "Cấu hình I2P để có hiệu suất tối ưu"
-
-msgid "Information for new users"
-msgstr "Thông tin cho người dùng mới"
-
-msgid "A guide to reseeding your I2P router"
-msgstr "Hướng dẫn cài đặt lại bộ định tuyến I2P của bạn"
-
-msgid "What to do in the event I2P isn't working"
-msgstr "Phải làm gì trong trường hợp I2P không hoạt động"
-
-msgid "Introduction to tunnel filters"
-msgstr "Giới thiệu về bộ lọc đường hầm"
-
-msgid "Tunnel Filters"
-msgstr "Bộ lọc đường hầm"
+msgid "Customize"
+msgstr ""
 
 msgid "statistics"
 msgstr "thống kê"
@@ -7592,9 +7484,6 @@ msgstr "Bật/Tắt ID đường đào"
 msgid "Toggle Tunnels"
 msgstr "Bật/Tắt Đường đào"
 
-msgid "Updating sidebar sections"
-msgstr "Đang cập nhật các phần thanh bên"
-
 msgid "Peer Profile"
 msgstr "Hồ sơ ngang hàng"
 
@@ -7619,14 +7508,17 @@ msgstr "Trở lại đầu trang"
 msgid "webmail"
 msgstr "thư điện tử"
 
+msgid "Webmail"
+msgstr "Webmail"
+
 msgid "New Install Wizard"
 msgstr "Trình hướng dẫn cài đặt mới"
 
 msgid "Skip Setup"
 msgstr "Bỏ qua thiết lập"
 
-msgid "Select the language to be used for the router console and web applications (<a href=/webmail target=_blank rel=noreferrer>webmail</a>, <a href=/torrents target=_blank rel=noreferrer>torrents</a>, <a href=/i2ptunnelmgr target=_blank rel=noreferrer>tunnel manager</a> etc). If you wish to change the language in future, change the router console theme, or configure a password to access the console, you may do so on the <a href=/configui target=_blank rel=noreferrer>User Interface configuration page</a>."
-msgstr "Chọn ngôn ngữ sẽ được sử dụng cho bảng điều khiển bộ định tuyến và các ứng dụng web (<a href=/webmail target=_blank rel=noreferrer>webmail</a>, <a href=/torrents target=_blank rel=noreferrer>torrents</a >, <a href=/i2ptunnelmgr target=_blank rel=noreferrer>người quản lý đường hầm</a>, v.v.). Nếu bạn muốn thay đổi ngôn ngữ trong tương lai, thay đổi chủ đề bảng điều khiển bộ định tuyến hoặc định cấu hình mật khẩu để truy cập bảng điều khiển, bạn có thể thực hiện việc đó trên <a href=/configui target=_blank rel=noreferrer>trang cấu hình Giao diện người dùng</ a>."
+msgid "Select the language to be used for the router console and web applications ("
+msgstr ""
 
 msgid "Router Console &amp; WebApps Display Language"
 msgstr "Bảng điều khiển bộ định tuyến"
@@ -7695,6 +7587,13 @@ msgid "Bandwidth Configuration"
 msgstr "Cấu hình băng thông"
 
 #, java-format
+msgid "You have configured I2P+ to share only {0} KBps."
+msgstr "Bạn đã cấu hình I2P để chia sẻ chỉ {0} KB/s."
+
+msgid "I2P+ requires at least 12KBps to enable sharing. "
+msgstr "I2P yêu cầu ít nhất 12KBps để cho phép chia sẻ."
+
+#, java-format
 msgid "You have configured I2P+ to share {0} KBps."
 msgstr "Bạn đã định cấu hình I2P để chia sẻ {0} KBps."
 
@@ -7704,8 +7603,8 @@ msgstr "I2P yêu cầu trình duyệt web được định cấu hình để s�
 msgid "Browser Setup"
 msgstr "Thiết lập trình duyệt"
 
-msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. For more help, see <a href=https://geti2p.net/htproxyports target=_blank rel=noreferrer>the configuration guide</a>, or <a href=/help/configuration#browserconfig>the mini-tutorial for Firefox</a>."
-msgstr "Để truy cập các trang web được lưu trữ trên mạng I2P và tùy ý sử dụng proxy ngoài mặc định để kết nối với các trang web trên Clearnet, bạn sẽ cần định cấu hình trình duyệt của mình để sử dụng proxy I2P+ <b>HTTP</b>, theo mặc định chạy trên < mã>127.0.0.1 cổng 4444</code>. Để được trợ giúp thêm, hãy xem <a href=https://geti2p.net/htproxyports target=_blank rel=noreferrer>hướng dẫn cấu hình</a> hoặc <a href=/help/configuration#browserconfig>hướng dẫn nhỏ dành cho Firefox</a>."
+msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. "
+msgstr ""
 
 msgid "Welcome to I2P+!"
 msgstr "Chào mừng đến với I2P+"
@@ -7713,8 +7612,8 @@ msgstr "Chào mừng đến với I2P+"
 msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
 msgstr "Khi bạn bắt đầu I2P, có thể mất vài phút để bootstrap (tích hợp) bộ định tuyến của bạn vào mạng và tìm thêm các đồng nghiệp, vì vậy hãy kiên nhẫn."
 
-msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P+."
-msgstr "Sau khi các ngôi sao màu xanh lá cây được chỉ định bên cạnh Đường hầm cục bộ của bạn, bạn có thể làm rất nhiều việc với I2P."
+msgid "Once green stars are indicated next to your Service Tunnels, there is a wide variety of things you can do with I2P+."
+msgstr ""
 
 msgid "Unknown Wizard page"
 msgstr "Trang Wizard không xác định"
@@ -7733,4 +7632,75 @@ msgstr "Kế tiếp"
 
 msgid "Finished"
 msgstr "Đã kết thúc"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#, java-format
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

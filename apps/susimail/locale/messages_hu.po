@@ -214,12 +214,6 @@ msgstr "I2PMmail"
 msgid "No new messages"
 msgstr "Nincsenek új üzenetek"
 
-msgid "Checking for new messages on server"
-msgstr "Új üzenetek keresése a szerveren"
-
-msgid "Refresh the page for updates"
-msgstr "Frissítse az oldalt a frissítésekhez"
-
 #, java-format
 msgid "{0} is an I2P-exclusive service provided by {1}."
 msgstr "{0} egy kizárólagos I2P szolgáltatás, amelyet a(z) {1} biztosít."
@@ -227,6 +221,12 @@ msgstr "{0} egy kizárólagos I2P szolgáltatás, amelyet a(z) {1} biztosít."
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
 msgstr "{0} webmail client &copy Susi 2004-2005."
+
+msgid "Checking for new messages on server"
+msgstr "Új üzenetek keresése a szerveren"
+
+msgid "Refresh the page for updates"
+msgstr "Frissítse az oldalt a frissítésekhez"
 
 msgid "Removed tracking image placeholder"
 msgstr "Követő kép helyőrzője eltávolítva"
@@ -338,6 +338,9 @@ msgstr "Új Levelek Ellenőrzése"
 msgid "Refresh Page"
 msgstr "Frisssítsd az oldalt"
 
+msgid "Change to Folder"
+msgstr "Váltás Mappára"
+
 #, java-format
 msgid "1 Message"
 msgid_plural "{0} Messages"
@@ -356,18 +359,6 @@ msgstr "Méret"
 msgid "Mark for deletion"
 msgstr "Törlésre kijelöl"
 
-msgid "Message contains HTML"
-msgstr "Az üzenet tartalmaz HTML-t"
-
-msgid "Message is new"
-msgstr "Az üzenet új"
-
-msgid "Message is spam"
-msgstr "Az üzenet spam"
-
-msgid "Message body not downloaded"
-msgstr "Az üzenet törzse nem lett letöltve"
-
 msgid "Really delete the marked messages?"
 msgstr "A kijelölt üzenetek tényleg törlésre kerüljenek?"
 
@@ -383,8 +374,17 @@ msgstr "Mindet Kijelöli"
 msgid "Clear All"
 msgstr "Mindent kitöröl"
 
-msgid "Change to Folder"
-msgstr "Váltás Mappára"
+msgid "Message contains HTML"
+msgstr "Az üzenet tartalmaz HTML-t"
+
+msgid "Message is new"
+msgstr "Az üzenet új"
+
+msgid "Message is spam"
+msgstr "Az üzenet spam"
+
+msgid "Message body not downloaded"
+msgstr "Az üzenet törzse nem lett letöltve"
 
 msgid "First"
 msgstr "Első"

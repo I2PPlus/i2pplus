@@ -71,8 +71,17 @@ msgstr "Memperoleh info router {0} dari host yang di-reseed"
 msgid "Acquired {0} router infos from reseed hosts ({1} errors)"
 msgstr "Memperoleh info router {0} dari host yang di-reset ({1} kesalahan)"
 
+msgid "Clock step adjustment (ms)"
+msgstr "Penyesuaian langkah jam (ms)"
+
+msgid "Size of tunnel acceptor backlog"
+msgstr "Ukuran backlog tunnel penerima"
+
 msgid "Message receive rate (B/s)"
 msgstr "Tingkat penerimaan pesan (B/s)"
+
+msgid "Low-level receive rate (B/s)"
+msgstr "Tingkat penerimaan tingkat rendah (B/s)"
 
 msgid "Message send rate (B/s)"
 msgstr "Kecepatan pengiriman pesan (B/s)"
@@ -80,41 +89,35 @@ msgstr "Kecepatan pengiriman pesan (B/s)"
 msgid "Low-level send rate (B/s)"
 msgstr "Kecepatan pengiriman tingkat rendah (B/s)"
 
-msgid "Low-level receive rate (B/s)"
-msgstr "Tingkat penerimaan tingkat rendah (B/s)"
-
-msgid "Total peers in our NetDb"
-msgstr "Total rekan di NetDb kami"
-
 msgid "Peers active in the last minute"
 msgstr "Rekan aktif di menit terakhir"
-
-msgid "Known high capacity peers"
-msgstr "Dikenal sebagai rekan berkapasitas tinggi"
 
 msgid "Peers sent to in the last minute"
 msgstr "Rekan dikirim ke menit terakhir"
 
+msgid "Total peers in our banlist"
+msgstr "Jumlah rekan dalam daftar larangan kami"
+
+msgid "CPU load average of the JVM"
+msgstr "Rata-rata beban CPU JVM"
+
 msgid "Known fast peers"
 msgstr "Peer cepat yang dikenal"
+
+msgid "Known high capacity peers"
+msgstr "Dikenal sebagai rekan berkapasitas tinggi"
 
 msgid "Known integrated (floodfill) peers"
 msgstr "Rekan terintegrasi (floodfill) yang diketahui"
 
-msgid "Total peers in our banlist"
-msgstr "Jumlah rekan dalam daftar larangan kami"
+msgid "Total peers in our NetDb"
+msgstr "Total rekan di NetDb kami"
+
+msgid "Total number of threads in use"
+msgstr ""
 
 msgid "Peers without a published IP address"
 msgstr "Rekan tanpa alamat IP yang dipublikasikan"
-
-msgid "Size of tunnel acceptor backlog"
-msgstr "Ukuran backlog tunnel penerima"
-
-msgid "Clock step adjustment (ms)"
-msgstr "Penyesuaian langkah jam (ms)"
-
-msgid "CPU load average of the JVM"
-msgstr "Rata-rata beban CPU JVM"
 
 msgid "Average tunnel build success %"
 msgstr "Rata-rata keberhasilan pembangunan terowongan %"
@@ -1548,29 +1551,29 @@ msgstr "Restart dalam {0}"
 msgid "Save order"
 msgstr "Simpan urutan"
 
+msgid "Restore full default"
+msgstr "Kembalikan ke default penuh"
+
+msgid "Restore minimal default"
+msgstr "Mengembalikan pengaturan default minimal"
+
 msgid "Sidebar preferences updated"
 msgstr ""
 
 msgid "Refresh interval must be a number"
 msgstr "Refresh interval harus berbentuk angka"
 
-msgid "Restore full default"
-msgstr "Kembalikan ke default penuh"
-
 msgid "Full sidebar defaults restored."
-msgstr ""
-
-msgid "Sidebar will refresh shortly."
-msgstr ""
-
-msgid "Restore minimal default"
-msgstr "Mengembalikan pengaturan default minimal"
-
-msgid "Minimal sidebar defaults restored."
 msgstr ""
 
 msgid "Order must be an integer"
 msgstr "Order harus berupa integer"
+
+msgid "Saved order of sections."
+msgstr "Urutan dari bagian telah tersimpan."
+
+msgid "Sidebar will refresh shortly."
+msgstr ""
 
 msgid "No section selected"
 msgstr "Tidak ada bagian dipilih"
@@ -1580,9 +1583,6 @@ msgstr "Tidak ada order masuk"
 
 msgid "Moved"
 msgstr "Dipindahkan"
-
-msgid "Saved order of sections."
-msgstr "Urutan dari bagian telah tersimpan."
 
 msgid "Full statistics enabled"
 msgstr "Statistik penuh diaktifkan"
@@ -2409,6 +2409,9 @@ msgstr "HTTP proxy sedang tidak aktif"
 msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
 msgstr "Browser Anda adalah tidak dikonfigurasi dengan benar untuk menggunakan HTTP proxy pada {0}"
 
+msgid "Errors"
+msgstr ""
+
 msgid "URL"
 msgstr "URL"
 
@@ -2683,29 +2686,23 @@ msgstr ""
 msgid "Lookup"
 msgstr "Pencarian"
 
-msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
-msgstr "Jangan pernah mengungkapkan identitas router Anda kepada siapa pun, karena identitas tersebut tertaut secara unik ke alamat IP Anda di database jaringan."
+msgid "Select the field to search on"
+msgstr ""
 
-msgid "is banned"
-msgstr "dilarang"
+msgid "e.g. cn hk"
+msgstr ""
 
-msgid "not found in network database"
-msgstr "Tidak ditemukan di database jaringan"
+msgid "MTU"
+msgstr "MTU"
 
-msgid "Bad Base64 Router hash"
+msgid "Enter search value here"
+msgstr ""
+
+msgid "Router not found"
 msgstr ""
 
 msgid "No routers with"
 msgstr ""
-
-msgid "Hash prefix"
-msgstr ""
-
-msgid "Port"
-msgstr "Port"
-
-msgid "MTU"
-msgstr "MTU"
 
 msgid "found in the network database"
 msgstr ""
@@ -2833,17 +2830,17 @@ msgstr "Kadaluarsa dalam {0} yang lalu"
 msgid "Unknown"
 msgstr "Tidak Diketahui"
 
-msgid "Advanced mode - includes all statistics published by floodfills."
-msgstr ""
-
-msgid "Compact mode - does not include statistics published by floodfills."
-msgstr ""
-
 msgid "Network Database Router Statistics"
 msgstr "Statistik Database Router Jaringan"
 
 msgid "Count"
 msgstr "Jumlah"
+
+msgid "Under 12 KB/s"
+msgstr ""
+
+msgid "Over 2048 KB/s"
+msgstr ""
 
 msgid "Bandwidth Tier"
 msgstr "Tingkat Bandwidth"
@@ -2915,6 +2912,9 @@ msgstr "Telah dipublikasikan"
 msgid "Hostname"
 msgstr "Nama host"
 
+msgid "Whois"
+msgstr ""
+
 msgid "direct"
 msgstr ""
 
@@ -2930,20 +2930,26 @@ msgstr "Tampilkan semua router dengan tipe tanda tangan ini di NetDb"
 msgid "Show all routers with this encryption type in the NetDb"
 msgstr "Tampilkan semua router dengan jenis enkripsi ini di NetDb"
 
-msgid "Addresses"
-msgstr "Alamat"
-
-msgid "n/a"
-msgstr "tidak ada"
-
 msgid "Show all routers with this address in the NetDb"
 msgstr "Tampilkan semua router dengan alamat ini di NetDb"
 
 msgid "Show all routers with this port in the NetDb"
 msgstr "Tampilkan semua router dengan port ini di NetDb"
 
-msgid "Routers"
-msgstr "Router"
+msgid "Maximum Transmission Unit"
+msgstr ""
+
+msgid "Show all routers with this MTU in the NetDb"
+msgstr ""
+
+msgid "Addresses"
+msgstr "Alamat"
+
+msgid "Introducers"
+msgstr ""
+
+msgid "Network Id"
+msgstr ""
 
 msgid "First heard about"
 msgstr "Pertama kali mendengarnya"
@@ -2954,11 +2960,8 @@ msgstr "Terakhir dengar"
 msgid "Last heard from"
 msgstr "Terakhir terdengar kabarnya"
 
-msgid "Network Id"
-msgstr ""
-
-msgid "Count is always spoofed to avoid indicating router restarts"
-msgstr ""
+msgid "Info"
+msgstr "Informasi"
 
 msgid "Hidden or starting up"
 msgstr "Tersembunyi atau sedang diaktifkan"
@@ -2987,17 +2990,32 @@ msgstr "IPv6 SSU "
 msgid "SSU [IPv6] with Introducers"
 msgstr "IPv6 SSU, introducer"
 
+msgid "NTCP &amp; SSU with Introducers [IPv6 Only]"
+msgstr "Hanya IPv6 NTCP, SSU, introducers"
+
 msgid "NTCP [IPv6]"
 msgstr "IPv6 NTCP "
 
 msgid "NTCP [IPv6] &amp; SSU"
 msgstr "IPv6 NTCP, SSU "
 
-msgid "NTCP &amp; SSU with Introducers [IPv6 Only]"
-msgstr "Hanya IPv6 NTCP, SSU, introducers"
-
 msgid "NTCP [IPv6] &amp; SSU with Introducers"
 msgstr "IPv6 NTCP, SSU, introducer"
+
+msgid "Local"
+msgstr "Lokal"
+
+msgid "Fast Tier"
+msgstr ""
+
+msgid "High Capacity Tier"
+msgstr ""
+
+msgid "Integrated Tier"
+msgstr ""
+
+msgid "Standard Tier"
+msgstr ""
 
 msgid "No peer connections available"
 msgstr "Tidak ada koneksi rekan yang tersedia"
@@ -3326,14 +3344,17 @@ msgstr "Terakhir mendengar dari"
 msgid "View/Edit"
 msgstr "Tampilkan/Edit"
 
-msgid "Unreachable"
-msgstr "Tidak dapat dijangkau"
-
 msgid "OK"
 msgstr "Oke"
 
 msgid "Test Fails"
 msgstr "Tes gagal"
+
+msgid "Unreachable"
+msgstr "Tidak dapat dijangkau"
+
+msgid "Most tests passing"
+msgstr ""
 
 msgid "Fast, High Capacity"
 msgstr "Cepat, kapasitas tinggi"
@@ -3349,6 +3370,9 @@ msgstr "Gagal"
 
 msgid "Integrated"
 msgstr "Terintegrasi"
+
+msgid "Configure Peer"
+msgstr ""
 
 msgid "Thresholds"
 msgstr "Threshold"
@@ -3413,11 +3437,11 @@ msgstr "Kirim terakhir dengan buruk"
 msgid "Last Bad Store"
 msgstr "Store Terakhir yang Buruk"
 
-msgid "Capabilities in the NetDb, not used to determine profiles"
-msgstr "Kemampuan di NetDb, tidak digunakan untuk menentukan profil"
-
 msgid "caps"
 msgstr "cap"
+
+msgid "Capabilities in the NetDb, not used to determine profiles"
+msgstr "Kemampuan di NetDb, tidak digunakan untuk menentukan profil"
 
 msgid "Reachable"
 msgstr "Dapat dijangkau"
@@ -3590,6 +3614,9 @@ msgstr "Klik Restart untuk menginstal"
 
 msgid "Click Shutdown and restart to install"
 msgstr "Klik Shutdown lalu restart untuk menginstal"
+
+msgid "Unable"
+msgstr ""
 
 #, java-format
 msgid "{0}"
@@ -3784,9 +3811,6 @@ msgstr "Grafik kinerja router"
 msgid "Router Help and FAQ"
 msgstr "Bantuan dan FAQ Router"
 
-msgid "Info"
-msgstr "Informasi"
-
 msgid "Router information including transport addresses and UPnP scan"
 msgstr "Informasi router termasuk alamat transportasi dan pemindaian UPnP"
 
@@ -3872,6 +3896,34 @@ msgstr "Floodfill diaktifkan"
 msgid "Total number of remote LeaseSets stored in our NetDb"
 msgstr ""
 
+msgid "Declining transit tunnel requests during startup phase"
+msgstr "Tidak ada permintaan terowongan yang berpartisipasi yang diterima selama 10 menit pertama saat router stabil"
+
+msgid "Declining transit tunnel requests as we are shutting down"
+msgstr "Menolak permintaan terowongan yang berpartisipasi karena kami menutupnya"
+
+msgid "Router or network performance is impeding the building of transit tunnels"
+msgstr "Kinerja router atau jaringan menghambat pembangunan terowongan yang berpartisipasi"
+
+msgid "Router is currently hosting the configured maximum number of transit tunnels"
+msgstr "Router saat ini menyediakan jumlah maksimal terowongan transit yang dikonfigurasi"
+
+msgid "Router is currently using the configured maximum share bandwidth"
+msgstr "Router saat ini menggunakan bandwith bagian terbesar yang dikonfigurasi"
+
+msgid "Router is ready to build participating tunnels"
+msgstr "Router siap membangun terowongan yang berpartisipasi"
+
+#, java-format
+msgid "Accepting transit tunnel requests; hosting {0} tunnels"
+msgstr "Menerima permintaan terowongan yang berpartisipasi; berpartisipasi dalam terowongan {0}"
+
+msgid "No transit tunnels are built when Hidden mode is active"
+msgstr "Tidak ada terowongan yang berpartisipasi yang dibangun ketika mode Tersembunyi aktif"
+
+msgid "Router is configured to reject all transit tunnel requests"
+msgstr "Router dikonfigurasi untuk menolak semua permintaan terowongan yang berpartisipasi"
+
 msgid "Warning: ECDSA is not available. Update your Java or OS"
 msgstr "Peringatan: ECDSA tidak tersedia. Memperbarui Java atau OS"
 
@@ -3907,6 +3959,9 @@ msgstr "Jumlah peer yang diblokir"
 
 msgid "The total number of peers in our network database"
 msgstr "Jumlah peer dalam database jaringan kami"
+
+msgid "Total RouterInfos stored on disk"
+msgstr ""
 
 msgid "Known"
 msgstr "Diketahui"
@@ -4018,34 +4073,6 @@ msgstr "Antrian request dari router lain untuk berpartisipasi dalam tunnel"
 
 msgid "Backlog"
 msgstr "Simpanan"
-
-msgid "Declining transit tunnel requests during startup phase"
-msgstr "Tidak ada permintaan terowongan yang berpartisipasi yang diterima selama 10 menit pertama saat router stabil"
-
-msgid "Declining transit tunnel requests as we are shutting down"
-msgstr "Menolak permintaan terowongan yang berpartisipasi karena kami menutupnya"
-
-msgid "Router or network performance is impeding the building of transit tunnels"
-msgstr "Kinerja router atau jaringan menghambat pembangunan terowongan yang berpartisipasi"
-
-msgid "Router is currently hosting the configured maximum number of transit tunnels"
-msgstr "Router saat ini menyediakan jumlah maksimal terowongan transit yang dikonfigurasi"
-
-msgid "Router is currently using the configured maximum share bandwidth"
-msgstr "Router saat ini menggunakan bandwith bagian terbesar yang dikonfigurasi"
-
-msgid "Router is ready to build participating tunnels"
-msgstr "Router siap membangun terowongan yang berpartisipasi"
-
-#, java-format
-msgid "Accepting transit tunnel requests; hosting {0} tunnels"
-msgstr "Menerima permintaan terowongan yang berpartisipasi; berpartisipasi dalam terowongan {0}"
-
-msgid "No transit tunnels are built when Hidden mode is active"
-msgstr "Tidak ada terowongan yang berpartisipasi yang dibangun ketika mode Tersembunyi aktif"
-
-msgid "Router is configured to reject all transit tunnel requests"
-msgstr "Router dikonfigurasi untuk menolak semua permintaan terowongan yang berpartisipasi"
 
 msgid "Statistics gathered during this router's uptime"
 msgstr "Statistik dikumpulkan selama router ini menyala"
@@ -4175,8 +4202,14 @@ msgstr "Tidak ada analisis tersimpan"
 msgid "Select stored analysis"
 msgstr "Pilih analisis yang tersimpan"
 
+msgid "Review"
+msgstr ""
+
 msgid "Run analysis on Floodfills only"
 msgstr "Jalankan analisis pada Floodfills saja"
+
+msgid "Start Scan"
+msgstr ""
 
 msgid "Run analysis on all routers in NetDb"
 msgstr "Jalankan analisis pada semua router di NetDb"
@@ -4340,6 +4373,12 @@ msgstr "MAKS"
 msgid "Show all routers for this family in NetDb"
 msgstr "Tampilkan semua router untuk keluarga ini di NetDb"
 
+msgid "Routers"
+msgstr "Router"
+
+msgid "n/a"
+msgstr "tidak ada"
+
 msgid "Last lookup successful"
 msgstr "Pencarian terakhir berhasil"
 
@@ -4391,9 +4430,6 @@ msgstr "Data ditransfer"
 msgid "Data"
 msgstr "Data"
 
-msgid "Limit"
-msgstr ""
-
 msgid "Receive on"
 msgstr "Diterima pada"
 
@@ -4438,6 +4474,7 @@ msgstr "Router saat ini beroperasi dalam Mode Tersembunyi yang mencegah terowong
 msgid "No transit tunnels currently active."
 msgstr "Saat ini tidak ada terowongan transit yang aktif."
 
+#, java-format
 msgid "Transit Tunnels by Peer (Top {0})"
 msgstr ""
 
@@ -4449,9 +4486,6 @@ msgstr "Semua Terowongan Berdasarkan Peer"
 
 msgid "Primary IP address"
 msgstr "Alamat IP Utama"
-
-msgid "Local"
-msgstr "Lokal"
 
 msgid "unique peers"
 msgstr "peer unik"
@@ -4465,6 +4499,9 @@ msgstr "transit"
 msgid "No local or transit tunnels currently active."
 msgstr "Saat ini tidak ada terowongan lokal atau transit yang aktif."
 
+msgid "PRIVATE IP ADDRESS"
+msgstr ""
+
 msgid "Bandwidth Tiers"
 msgstr "Bandwidth Tiers "
 
@@ -4474,6 +4511,9 @@ msgstr "Lebih dari {0} shared bandwidth"
 
 msgid "Inbound or outbound?"
 msgstr "Inbound atau outbound?"
+
+msgid "In/Out"
+msgstr ""
 
 msgid "Gateway"
 msgstr "Gateway "
@@ -4590,6 +4630,9 @@ msgstr "I2P Web Server (eepsite)"
 msgid "Browser launch at startup"
 msgstr "Peluncuran browser pada saat startup"
 
+msgid "I2P Router Console"
+msgstr ""
+
 msgid "Open Router Console in web browser at startup"
 msgstr "Buka Router Console di web browser pada saat startup"
 
@@ -4665,12 +4708,6 @@ msgstr "key "
 msgid "port"
 msgstr "port "
 
-msgid "config UI"
-msgstr "konfigurasi UI"
-
-msgid "User Interface Configuration"
-msgstr "Konfigurasi Antarmuka Pengguna"
-
 msgid "Certificates"
 msgstr "Sertifikat"
 
@@ -4686,8 +4723,8 @@ msgstr "Pembatas bandwidth"
 msgid "Advanced Network Configuration"
 msgstr "Konfigurasi Jaringan Tingkat Lanjut"
 
-msgid "I2P+ will work best if you configure your rates to match the speed of your internet connection."
-msgstr "I2P akan bekerja paling baik jika anda mengkonfigurasi rate anda sesuai kecepatan koneksi internet anda."
+msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
+msgstr ""
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
 msgstr "Catatan: Kontribusi Anda ke jaringan (jaringan berbagi) ditentukan oleh alokasi bandwidth upstream (kecepatan unggah)."
@@ -4717,11 +4754,11 @@ msgid "NOTE"
 msgstr ""
 
 #, java-format
-msgid "You have configured I2P+ to share only {0} KBps."
-msgstr "Anda telah mengkonfigurasi I2P untuk sharing hanya {0} KBps."
+msgid "You have configured I2P to share only {0} KBps."
+msgstr ""
 
-msgid "I2P+ requires at least 12KBps to enable sharing. "
-msgstr "I2P membutuhkan setidaknya 12KBps untuk memungkinkan sharing. "
+msgid "I2P requires at least 12KBps to enable sharing. "
+msgstr ""
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
 msgstr "Mohon aktifkan sharing (partisipasi dalam tunnel) dengan mengkonfigurasi lebih banyak bandwidth. "
@@ -5218,8 +5255,8 @@ msgstr "konfigurasi reseeding"
 msgid "Reseeding is the bootstrapping process used to find other routers when you first install I2P, or when your router has too few router references remaining."
 msgstr "Reseeding adalah proses bootstrap yang digunakan untuk menemukan router lain saat anda menginstal I2P pertama kali, atau bila router anda memiliki terlalu sedikit referensi router yang tersisa."
 
-msgid "To enable the configuration of reseed urls, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
-msgstr "Untuk mengaktifkan konfigurasi url reseed, aktifkan mode <a href=\"/help/advancedsettings\">Lanjutan</a> dari konsol ini."
+msgid "To enable the configuration of reseed urls, activate the console's <a href=/help/advancedsettings>Advanced mode</a>."
+msgstr ""
 
 msgid "Reseeding Configuration"
 msgstr "Konfigurasi Reseed"
@@ -5229,9 +5266,6 @@ msgstr "Bantuan dalam penyemaian ulang"
 
 msgid "Reseeding Help"
 msgstr "Menyemai Ulang Bantuan"
-
-msgid "Change these only if HTTPS is blocked by a restrictive firewall and reseed has failed."
-msgstr "Ubah ini hanya jika HTTPS diblokir oleh firewall dan reseed telah gagal."
 
 msgid "Reseed URLs"
 msgstr "Reseed URL"
@@ -5268,6 +5302,9 @@ msgstr "Opsi ini akan menggunakan outproxy HTTP I2P untuk melakukan reseed, atau
 
 msgid "I2P Outproxy"
 msgstr "Outproxy I2P"
+
+msgid "Port"
+msgstr "Port"
 
 msgid "Use HTTP Proxy for HTTP Reseed Hosts"
 msgstr "Gunakan Proxy HTTP untuk Host HTTP Reseed"
@@ -5381,6 +5418,12 @@ msgstr ""
 msgid "Use the same sidebar on all pages"
 msgstr ""
 
+msgid "Sticky sidebar"
+msgstr ""
+
+msgid "Enable conditional fixed sidebar"
+msgstr ""
+
 msgid "config stats"
 msgstr "statistik konfigurasi"
 
@@ -5437,6 +5480,12 @@ msgstr "Untuk mengubah pengaturan terowongan klien, gunakan <a href=\"/i2ptunnel
 
 msgid "To enable session-only changes to the client tunnels, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
 msgstr "Untuk mengaktifkan perubahan sesi saja pada terowongan klien, aktifkan mode <a href=\"/help/advancedsettings\">Lanjutan</a> dari konsol ini."
+
+msgid "config UI"
+msgstr "konfigurasi UI"
+
+msgid "User Interface Configuration"
+msgstr "Konfigurasi Antarmuka Pengguna"
 
 msgid "Router Console Theme"
 msgstr "Tema Konsol Router"
@@ -5574,14 +5623,20 @@ msgstr "Error 404 "
 msgid "not found"
 msgstr "tidak ditemukan"
 
+msgid "router logs"
+msgstr ""
+
+msgid "Critical / Error Level Logs"
+msgstr "Log Tingkat Kritis / Kesalahan"
+
+msgid "Clear logs"
+msgstr "Hapus log"
+
 msgid "events"
 msgstr "event"
 
 msgid "Event Log"
 msgstr "Catatan Peristiwa"
-
-msgid "Combined"
-msgstr ""
 
 msgid "graph"
 msgstr "Grafik"
@@ -6090,7 +6145,7 @@ msgstr ""
 msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
 msgstr ""
 
-msgid "For most client services, change listening address for relevant service in Tunnel Manager's configuration section using <i>reachable by</i> dropdown."
+msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager's configuration section using the <i>reachable by</i> dropdown."
 msgstr ""
 
 msgid "How do I connect to IRC within I2P?"
@@ -7290,34 +7345,6 @@ msgstr "statistik antrian pekerjaan"
 msgid "Job Queue Stats"
 msgstr "Statistik Antrean Pekerjaan"
 
-msgid "logs"
-msgstr "logs "
-
-msgid "Please include your I2P version and running environment information in bug reports"
-msgstr "Mohon sertakan versi I2P anda dan informasi running environment dalam laporan bug"
-
-#, java-format
-msgid "Please report bugs on {0} or {1}."
-msgstr "Mohon laporkan bug di {0} atau {1}."
-
-msgid "View event log"
-msgstr "Lihat log peristiwa"
-
-msgid "Critical / Error Level Logs"
-msgstr "Log Tingkat Kritis / Kesalahan"
-
-msgid "Clear logs"
-msgstr "Hapus log"
-
-msgid "Configure router logging options"
-msgstr "Konfigurasi pilihan router log"
-
-msgid "Filter Router log output"
-msgstr "Filtrasi keluaran log router"
-
-msgid "Service (Wrapper) Logs"
-msgstr "Service (Wrapper) Logs "
-
 msgid "network database"
 msgstr "database jaringan"
 
@@ -7337,6 +7364,9 @@ msgid "Locally hosted public service"
 msgstr ""
 
 msgid "Requested client leaseset"
+msgstr ""
+
+msgid "Remote"
 msgstr ""
 
 msgid "network database router map"
@@ -7382,164 +7412,26 @@ msgstr "Peers yang Diblokir"
 msgid "Fast / High Capacity"
 msgstr "Cepat / Kapasitas Tinggi"
 
-msgid "router logs"
-msgstr ""
+msgid "Configure router logging options"
+msgstr "Konfigurasi pilihan router log"
+
+msgid "View event log"
+msgstr "Lihat log peristiwa"
+
+msgid "Filter Router log output"
+msgstr "Filtrasi keluaran log router"
 
 msgid "service logs"
 msgstr ""
 
-msgid "Manage I2P addresses"
-msgstr "Kelola alamat I2P"
-
-msgid "Imagegen"
-msgstr "Gen Gambar"
-
-msgid "Create and download torrents"
-msgstr "Membuat dan mengunduh torrent"
-
-msgid "Manage client and server tunnels"
-msgstr "Kelola terowongan klien dan server"
-
-msgid "Webmail client"
-msgstr "Klien email web"
-
-msgid "Webmail"
-msgstr "Email web"
-
-msgid "Local webserver for hosting content on the I2P network"
-msgstr "Server web lokal untuk menghosting konten di jaringan I2P"
+msgid "Service (Wrapper) Logs"
+msgstr "Service (Wrapper) Logs "
 
 msgid "Information &amp; Diagnostics"
 msgstr "Informasi dan Diagnostik"
 
-msgid "Review recent updates to I2P"
-msgstr "Tinjau pembaruan terkini untuk I2P+"
-
-msgid "View debugging information"
-msgstr "Lihat informasi debug"
-
-msgid "View router performance graphs"
-msgstr "Lihat grafik kinerja router"
-
-msgid "Router help section"
-msgstr "Bagian bantuan router"
-
-msgid "Router homepage"
-msgstr "Beranda router"
-
-msgid "Home"
-msgstr "Rumah"
-
-msgid "View news relating to I2P"
-msgstr "Lihat berita terkait I2P"
-
-msgid "I2P News"
-msgstr "Berita I2P"
-
-msgid "View router workload and stats"
-msgstr "Lihat beban kerja dan statistik router"
-
-msgid "Router Jobs"
-msgstr "Pekerjaan Router"
-
-msgid "View router logs"
-msgstr "Melihat log router"
-
-msgid "View information and stats regarding all known peers"
-msgstr "Melihat informasi dan statistik mengenai semua rekan yang dikenal"
-
-msgid "View active peers"
-msgstr "Lihat rekan aktif"
-
-msgid "View peer performance profiles"
-msgstr "Lihat profil kinerja rekan"
-
-msgid "View information about router and running environment"
-msgstr "Melihat informasi tentang router dan lingkungan yang berjalan"
-
-msgid "Statistics"
-msgstr "Statistik"
-
-msgid "Current console and webapp translation report"
-msgstr "Laporan penerjemahan konsol dan aplikasi web saat ini"
-
-msgid "Translation Status"
-msgstr "Status Penerjemahan"
-
-msgid "View active tunnels"
-msgstr "Lihat terowongan aktif"
-
-msgid "Customize homepage"
-msgstr "Sesuaikan beranda"
-
-msgid "Homepage"
-msgstr "Beranda"
-
-msgid "Configure I2P Client Control Interface"
-msgstr "Konfigurasikan Antarmuka Kontrol Klien I2P"
-
-msgid "View or edit router keyring for encrypted destinations"
-msgstr "Melihat atau mengedit keyring router untuk tujuan terenkripsi"
-
-msgid "Configure router networking options"
-msgstr "Konfigurasikan opsi jaringan router"
-
-msgid "Manually edit peers and view banned peers and blocklist"
-msgstr "Edit rekan secara manual dan lihat rekan yang diblokir dan daftar blokir"
-
-msgid "Install and manage router plugins"
-msgstr "Instal dan kelola plugin router"
-
-msgid "Router reseeding and configuration"
-msgstr "Penyemaian ulang dan konfigurasi router"
-
-msgid "Configure and manage Router family"
-msgstr "Konfigurasikan dan kelola keluarga Router"
-
-msgid "Manage Router service"
-msgstr "Kelola layanan Router"
-
-msgid "Configure stat collection for graphing"
-msgstr "Konfigurasikan pengumpulan stat untuk grafik"
-
-msgid "Router Stats"
-msgstr "Statistik Router"
-
-msgid "Configure router updates"
-msgstr "Konfigurasikan pembaruan router"
-
-msgid "Configuration wizard for new users"
-msgstr "Wizard konfigurasi untuk pengguna baru"
-
-msgid "Setup Wizard"
-msgstr "Wisaya Pengaturan"
-
-msgid "Customize sidebar"
-msgstr "Sesuaikan bilah sisi"
-
-msgid "Configure tunnel options"
-msgstr "Konfigurasikan opsi terowongan"
-
-msgid "Configure router user interface and optional console password"
-msgstr "Konfigurasikan antarmuka pengguna router dan kata sandi konsol opsional"
-
-msgid "Configuring I2P for optimal performance"
-msgstr "Mengonfigurasi I2P untuk kinerja optimal"
-
-msgid "Information for new users"
-msgstr "Informasi untuk pengguna baru"
-
-msgid "A guide to reseeding your I2P router"
-msgstr "Panduan untuk melakukan penyemaian ulang router I2P Anda"
-
-msgid "What to do in the event I2P isn't working"
-msgstr "Apa yang harus dilakukan jika I2P tidak berfungsi"
-
-msgid "Introduction to tunnel filters"
-msgstr "Pengenalan filter terowongan"
-
-msgid "Tunnel Filters"
-msgstr "Filter Terowongan"
+msgid "Customize"
+msgstr ""
 
 msgid "statistics"
 msgstr "Statistik"
@@ -7592,9 +7484,6 @@ msgstr "Beralih ID Terowongan"
 msgid "Toggle Tunnels"
 msgstr "Beralih Terowongan"
 
-msgid "Updating sidebar sections"
-msgstr ""
-
 msgid "Peer Profile"
 msgstr "Peer Profile "
 
@@ -7619,14 +7508,17 @@ msgstr "Kembali ke Atas"
 msgid "webmail"
 msgstr "webmail "
 
+msgid "Webmail"
+msgstr "Email web"
+
 msgid "New Install Wizard"
 msgstr "Wizard Penginstalan Baru"
 
 msgid "Skip Setup"
 msgstr "Lewati Pengaturan"
 
-msgid "Select the language to be used for the router console and web applications (<a href=/webmail target=_blank rel=noreferrer>webmail</a>, <a href=/torrents target=_blank rel=noreferrer>torrents</a>, <a href=/i2ptunnelmgr target=_blank rel=noreferrer>tunnel manager</a> etc). If you wish to change the language in future, change the router console theme, or configure a password to access the console, you may do so on the <a href=/configui target=_blank rel=noreferrer>User Interface configuration page</a>."
-msgstr "Pilih bahasa yang akan digunakan untuk konsol router dan aplikasi web (<a href=/webmail target=_blank rel=noreferrer>webmail</a>, <a href=/torrents target=_blank rel=noreferrer>torrents</a>, <a href=/i2ptunnelmgr target=_blank rel=noreferrer>pengelola terowongan</a> dan lainnya). Jika Anda ingin mengubah bahasa di masa mendatang, mengubah tema konsol router, atau mengkonfigurasi kata sandi untuk mengakses konsol, Anda dapat melakukannya di halaman <a href=/configui target=_blank rel=noreferrer>konfigurasi Antarmuka Pengguna</a>."
+msgid "Select the language to be used for the router console and web applications ("
+msgstr ""
 
 msgid "Router Console &amp; WebApps Display Language"
 msgstr "Bahasa Tampilan Konsol Router & Aplikasi Web"
@@ -7695,6 +7587,13 @@ msgid "Bandwidth Configuration"
 msgstr "Konfigurasi Bandwidth"
 
 #, java-format
+msgid "You have configured I2P+ to share only {0} KBps."
+msgstr "Anda telah mengkonfigurasi I2P untuk sharing hanya {0} KBps."
+
+msgid "I2P+ requires at least 12KBps to enable sharing. "
+msgstr "I2P membutuhkan setidaknya 12KBps untuk memungkinkan sharing. "
+
+#, java-format
 msgid "You have configured I2P+ to share {0} KBps."
 msgstr "Anda telah mengkonfigurasi I2P untuk sharing {0} KBps."
 
@@ -7704,8 +7603,8 @@ msgstr "I2P+ memerlukan browser web yang dikonfigurasi untuk menggunakan proksi 
 msgid "Browser Setup"
 msgstr "Pengaturan Peramban"
 
-msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. For more help, see <a href=https://geti2p.net/htproxyports target=_blank rel=noreferrer>the configuration guide</a>, or <a href=/help/configuration#browserconfig>the mini-tutorial for Firefox</a>."
-msgstr "Untuk mengakses situs web yang di-hosting pada jaringan I2P, dan secara opsional menggunakan outproxy default untuk terhubung ke situs web di internet bebas, Anda perlu mengkonfigurasi browser Anda untuk menggunakan proxy <b>HTTP</b> I2P+, secara default berjalan pada <code>127.0.0.1 port 4444</code>. Untuk bantuan lebih lanjut, lihat <a href=https://geti2p.net/htproxyports target=_blank rel=noreferrer>panduan konfigurasi</a>, atau <a href=/help/configuration#browserconfig>mini-tutorial untuk Firefox</a>."
+msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. "
+msgstr ""
 
 msgid "Welcome to I2P+!"
 msgstr "Selamat datang di I2P!"
@@ -7713,8 +7612,8 @@ msgstr "Selamat datang di I2P!"
 msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
 msgstr "Saat Anda memulai I2P, mungkin diperlukan beberapa menit untuk melakukan bootstrap (mengintegrasikan) router Anda ke dalam jaringan dan menemukan rekan tambahan, jadi harap bersabar."
 
-msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P+."
-msgstr "Setelah bintang hijau ditunjukkan di sebelah Terowongan Lokal Anda, ada berbagai macam hal yang dapat Anda lakukan dengan I2P."
+msgid "Once green stars are indicated next to your Service Tunnels, there is a wide variety of things you can do with I2P+."
+msgstr ""
 
 msgid "Unknown Wizard page"
 msgstr "Halaman Wisaya Tidak Diketahui"
@@ -7733,4 +7632,65 @@ msgstr "Selanjutnya"
 
 msgid "Finished"
 msgstr "Selesai"
+
+
+
+
+
+
+
+
+
+#, java-format
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

@@ -28,11 +28,29 @@ msgstr "Værtnavnet kan ikke inneholde \"{0}\""
 msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
 msgstr "Værtnavnet \"{0}\" krever konvertering til ASCII, men konverteringsbiblioteket er ikke tilgjengelig i denne JVM"
 
+msgid "Source"
+msgstr "Kilde"
+
+msgid "Imported from file hosts.txt"
+msgstr ""
+
+msgid "Manually added via SusiDNS"
+msgstr "Tilføjet manuelt via SusiDNS"
+
+msgid "Manually added"
+msgstr ""
+
+msgid "Added via address helper"
+msgstr ""
+
+msgid "Via helper"
+msgstr ""
+
+msgid "Via helper from"
+msgstr ""
+
 msgid "None"
 msgstr "Ingen"
-
-msgid "Hashcash"
-msgstr "Hashcash"
 
 msgid "Hidden"
 msgstr "Skjult"
@@ -177,9 +195,6 @@ msgstr "{0} adressbok i {1} database"
 msgid "Host name {0} is not in the address book."
 msgstr "Værtnavnet {0} er ikke i adressoboken."
 
-msgid "Manually added via SusiDNS"
-msgstr "Tilføjet manuelt via SusiDNS"
-
 #, java-format
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr "Kunne ikke legge til Destinasjon for {0} til navnetjeneste {1}"
@@ -305,6 +320,9 @@ msgstr "Lenke (b32)"
 
 msgid "Destination"
 msgstr "Destinasjon"
+
+msgid "Added"
+msgstr ""
 
 msgid "Select hosts for deletion from addressbook"
 msgstr "Velg vertshoster for sletting fra adressoboken"
@@ -446,9 +464,6 @@ msgstr "nei"
 
 msgid "yes"
 msgstr "ja"
-
-msgid "Source"
-msgstr "Kilde"
 
 msgid "Added Date"
 msgstr "Tilleggsdato"
@@ -599,3 +614,4 @@ msgstr "Adresser som legges til manuelt i din Hoved adressebok vil bli slått sa
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Vertene du mottar fra dine abonnementer vil bli slått sammen med din Ruter adressebok."
+

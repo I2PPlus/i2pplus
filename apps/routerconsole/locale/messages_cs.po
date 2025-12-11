@@ -75,8 +75,17 @@ msgstr "Získané informace o směrovači {0} od hostitelů s reseed"
 msgid "Acquired {0} router infos from reseed hosts ({1} errors)"
 msgstr "Získané informace o směrovači o počtu {0} od hostitelů s reseed (chyby: {1})"
 
+msgid "Clock step adjustment (ms)"
+msgstr "Nastavení kroku hodin (ms)"
+
+msgid "Size of tunnel acceptor backlog"
+msgstr "Velikost nevyřízeného akceptoru tunelu"
+
 msgid "Message receive rate (B/s)"
 msgstr "Rychlost přijímání zpráv (B/s)"
+
+msgid "Low-level receive rate (B/s)"
+msgstr "Rychlost příjmu nízké úrovně (B/s)"
 
 msgid "Message send rate (B/s)"
 msgstr "Rychlost odesílání zpráv (B/s)"
@@ -84,41 +93,35 @@ msgstr "Rychlost odesílání zpráv (B/s)"
 msgid "Low-level send rate (B/s)"
 msgstr "Rychlost odesílání nízké úrovně (B/s)"
 
-msgid "Low-level receive rate (B/s)"
-msgstr "Rychlost příjmu nízké úrovně (B/s)"
-
-msgid "Total peers in our NetDb"
-msgstr "Celkový počet kolegů v naší NetDb"
-
 msgid "Peers active in the last minute"
 msgstr "Peers aktivní v poslední minutě"
-
-msgid "Known high capacity peers"
-msgstr "Známí kolegové s vysokou kapacitou"
 
 msgid "Peers sent to in the last minute"
 msgstr "Peers poslán do na poslední chvíli"
 
+msgid "Total peers in our banlist"
+msgstr "Celkový počet kolegů v našem banlistu"
+
+msgid "CPU load average of the JVM"
+msgstr "Průměrná zátěž CPU JVM"
+
 msgid "Known fast peers"
 msgstr "Známé rychlé peery"
+
+msgid "Known high capacity peers"
+msgstr "Známí kolegové s vysokou kapacitou"
 
 msgid "Known integrated (floodfill) peers"
 msgstr "Známí integrovaní (floodfill) kolegové"
 
-msgid "Total peers in our banlist"
-msgstr "Celkový počet kolegů v našem banlistu"
+msgid "Total peers in our NetDb"
+msgstr "Celkový počet kolegů v naší NetDb"
+
+msgid "Total number of threads in use"
+msgstr ""
 
 msgid "Peers without a published IP address"
 msgstr "Peers bez zveřejněné IP adresy"
-
-msgid "Size of tunnel acceptor backlog"
-msgstr "Velikost nevyřízeného akceptoru tunelu"
-
-msgid "Clock step adjustment (ms)"
-msgstr "Nastavení kroku hodin (ms)"
-
-msgid "CPU load average of the JVM"
-msgstr "Průměrná zátěž CPU JVM"
 
 msgid "Average tunnel build success %"
 msgstr "Průměrná úspěšnost výstavby tunelu v %"
@@ -1560,29 +1563,29 @@ msgstr "Restartujte za {0}"
 msgid "Save order"
 msgstr "Uložte objednávku"
 
+msgid "Restore full default"
+msgstr "Obnovit úplné výchozí nastavení"
+
+msgid "Restore minimal default"
+msgstr "Obnovte minimální výchozí nastavení"
+
 msgid "Sidebar preferences updated"
 msgstr "Předvolby postranní lišty aktualizovány"
 
 msgid "Refresh interval must be a number"
 msgstr "Interval obnovy musí být číslo"
 
-msgid "Restore full default"
-msgstr "Obnovit úplné výchozí nastavení"
-
 msgid "Full sidebar defaults restored."
 msgstr "Výchozí nastavení plné postranní lišty obnovena."
 
-msgid "Sidebar will refresh shortly."
-msgstr "Postranní lišta se brzy obnoví."
-
-msgid "Restore minimal default"
-msgstr "Obnovte minimální výchozí nastavení"
-
-msgid "Minimal sidebar defaults restored."
-msgstr "Minimální výchozí nastavení postranní lišty obnovena."
-
 msgid "Order must be an integer"
 msgstr "Pořadí musí být celé číslo"
+
+msgid "Saved order of sections."
+msgstr "Uložené pořadí sekcí."
+
+msgid "Sidebar will refresh shortly."
+msgstr "Postranní lišta se brzy obnoví."
 
 msgid "No section selected"
 msgstr "Není vybrána žádná sekce"
@@ -1592,9 +1595,6 @@ msgstr "Nebyla zadána žádná objednávka"
 
 msgid "Moved"
 msgstr "Přesunuto"
-
-msgid "Saved order of sections."
-msgstr "Uložené pořadí sekcí."
 
 msgid "Full statistics enabled"
 msgstr "Úplná statistika povolena"
@@ -2425,6 +2425,9 @@ msgstr "HTTP proxy není aktivní"
 msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
 msgstr "Váš prohlížeč není správně nakonfigurován pro použití HTTP proxy na adrese {0}"
 
+msgid "Errors"
+msgstr ""
+
 msgid "URL"
 msgstr "URL"
 
@@ -2699,29 +2702,23 @@ msgstr "nebo Sybil blízko tomuto routeru"
 msgid "Lookup"
 msgstr "Vyhledání"
 
-msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
-msgstr "Nikdy nikomu neprozrazujte identitu vašeho routeru, protože je jednoznačně spojena s vaší IP adresou v síťové databázi."
+msgid "Select the field to search on"
+msgstr ""
 
-msgid "is banned"
-msgstr "je zakázáno"
-
-msgid "not found in network database"
-msgstr "nenalezeno v síťové databázi"
-
-msgid "Bad Base64 Router hash"
-msgstr "Špatný Base64 hash routeru"
-
-msgid "No routers with"
-msgstr "Žádné routery s"
-
-msgid "Hash prefix"
-msgstr "Prefix hashe"
-
-msgid "Port"
-msgstr "Port"
+msgid "e.g. cn hk"
+msgstr ""
 
 msgid "MTU"
 msgstr "MTU"
+
+msgid "Enter search value here"
+msgstr ""
+
+msgid "Router not found"
+msgstr ""
+
+msgid "No routers with"
+msgstr "Žádné routery s"
 
 msgid "found in the network database"
 msgstr "nalezeno v databázi sítě"
@@ -2849,17 +2846,17 @@ msgstr "Platnost vypršela před {0}"
 msgid "Unknown"
 msgstr "Neznámý"
 
-msgid "Advanced mode - includes all statistics published by floodfills."
-msgstr "Pokročilý režim - zahrnuje všechny statistiky publikované floodfills."
-
-msgid "Compact mode - does not include statistics published by floodfills."
-msgstr "Kompaktní režim - nezahrnuje statistiky publikované floodfills."
-
 msgid "Network Database Router Statistics"
 msgstr "Statistika směrovače síťové databáze"
 
 msgid "Count"
 msgstr "Počítejte"
+
+msgid "Under 12 KB/s"
+msgstr ""
+
+msgid "Over 2048 KB/s"
+msgstr ""
 
 msgid "Bandwidth Tier"
 msgstr "Úroveň šířky pásma"
@@ -2931,6 +2928,9 @@ msgstr "Zveřejněný"
 msgid "Hostname"
 msgstr "Název hostitele"
 
+msgid "Whois"
+msgstr ""
+
 msgid "direct"
 msgstr "přímý"
 
@@ -2946,20 +2946,26 @@ msgstr "Zobrazit všechny routery s tímto typem podpisu v NetDb"
 msgid "Show all routers with this encryption type in the NetDb"
 msgstr "Zobrazit všechny routery s tímto typem šifrování v NetDb"
 
-msgid "Addresses"
-msgstr "Adresy"
-
-msgid "n/a"
-msgstr "neaplikovatelné"
-
 msgid "Show all routers with this address in the NetDb"
 msgstr "Zobrazit všechny routery s touto adresou v NetDb"
 
 msgid "Show all routers with this port in the NetDb"
 msgstr "Zobrazit všechny routery s tímto portem v NetDb"
 
-msgid "Routers"
-msgstr "Směrovače"
+msgid "Maximum Transmission Unit"
+msgstr ""
+
+msgid "Show all routers with this MTU in the NetDb"
+msgstr ""
+
+msgid "Addresses"
+msgstr "Adresy"
+
+msgid "Introducers"
+msgstr ""
+
+msgid "Network Id"
+msgstr "ID sítě"
 
 msgid "First heard about"
 msgstr "Poprvé slyšel o"
@@ -2970,11 +2976,8 @@ msgstr "Naposledy slyšel o"
 msgid "Last heard from"
 msgstr "Naposledy slyšel od"
 
-msgid "Network Id"
-msgstr "ID sítě"
-
-msgid "Count is always spoofed to avoid indicating router restarts"
-msgstr "Počet je vždy padělen, aby se zabránilo indikaci restartů routeru."
+msgid "Info"
+msgstr "Informace"
 
 msgid "Hidden or starting up"
 msgstr "Skryto nebo spouštění"
@@ -3003,17 +3006,32 @@ msgstr "SSU [IPv6]"
 msgid "SSU [IPv6] with Introducers"
 msgstr "IPv6 SSU, zavaděče"
 
+msgid "NTCP &amp; SSU with Introducers [IPv6 Only]"
+msgstr "IPv6 Pouze NTCP, SSU, zavaděče"
+
 msgid "NTCP [IPv6]"
 msgstr "NTCP [IPv6]"
 
 msgid "NTCP [IPv6] &amp; SSU"
 msgstr "NTCP [IPv6] &amp; SSU"
 
-msgid "NTCP &amp; SSU with Introducers [IPv6 Only]"
-msgstr "IPv6 Pouze NTCP, SSU, zavaděče"
-
 msgid "NTCP [IPv6] &amp; SSU with Introducers"
 msgstr "IPv6 NTCP, SSU, zavaděče"
+
+msgid "Local"
+msgstr "Místní"
+
+msgid "Fast Tier"
+msgstr ""
+
+msgid "High Capacity Tier"
+msgstr ""
+
+msgid "Integrated Tier"
+msgstr ""
+
+msgid "Standard Tier"
+msgstr ""
 
 msgid "No peer connections available"
 msgstr "Nejsou k dispozici žádná peer připojení"
@@ -3352,14 +3370,17 @@ msgstr "Poslední odezva"
 msgid "View/Edit"
 msgstr "Zobrazit/Upravit"
 
-msgid "Unreachable"
-msgstr "Nedosažitelné"
-
 msgid "OK"
 msgstr "OK"
 
 msgid "Test Fails"
 msgstr "Test se nezdařil"
+
+msgid "Unreachable"
+msgstr "Nedosažitelné"
+
+msgid "Most tests passing"
+msgstr ""
 
 msgid "Fast, High Capacity"
 msgstr "Rychlý, vysoká kapacita"
@@ -3375,6 +3396,9 @@ msgstr "Selhání"
 
 msgid "Integrated"
 msgstr "Integrovaný"
+
+msgid "Configure Peer"
+msgstr ""
 
 msgid "Thresholds"
 msgstr "Prahové hodnoty"
@@ -3445,11 +3469,11 @@ msgstr "Poslední špatné odeslání"
 msgid "Last Bad Store"
 msgstr "Poslední špatný obchod"
 
-msgid "Capabilities in the NetDb, not used to determine profiles"
-msgstr "Schopnosti v NetDb, které se nepoužívají k určení profilů"
-
 msgid "caps"
 msgstr "čepice"
+
+msgid "Capabilities in the NetDb, not used to determine profiles"
+msgstr "Schopnosti v NetDb, které se nepoužívají k určení profilů"
 
 msgid "Reachable"
 msgstr "Dosažitelný"
@@ -3622,6 +3646,9 @@ msgstr "Klikněte na Restartovat pro instalaci"
 
 msgid "Click Shutdown and restart to install"
 msgstr "Pro instalaci klikněte na Vypnout a restartovat"
+
+msgid "Unable"
+msgstr ""
 
 #, java-format
 msgid "{0}"
@@ -3816,9 +3843,6 @@ msgstr "Graf výkonu routeru"
 msgid "Router Help and FAQ"
 msgstr "Nápověda a časté dotazy k routeru"
 
-msgid "Info"
-msgstr "Informace"
-
 msgid "Router information including transport addresses and UPnP scan"
 msgstr "Informace o směrovači včetně přenosových adres a skenování UPnP"
 
@@ -3904,6 +3928,34 @@ msgstr "Floodfill je povolen"
 msgid "Total number of remote LeaseSets stored in our NetDb"
 msgstr "Celkový počet vzdálených LeaseSetů uložených v naší NetDb"
 
+msgid "Declining transit tunnel requests during startup phase"
+msgstr "Během prvních 10 minut, dokud se router stabilizuje, nejsou přijímány žádné zúčastněné požadavky na tunely"
+
+msgid "Declining transit tunnel requests as we are shutting down"
+msgstr "Odmítání zúčastněných požadavků na tunel, protože se vypínáme"
+
+msgid "Router or network performance is impeding the building of transit tunnels"
+msgstr "Výkon směrovače nebo sítě brání budování zúčastněných tunelů"
+
+msgid "Router is currently hosting the configured maximum number of transit tunnels"
+msgstr "Router aktuálně hostuje maximální počet nakonfigurovaných přesunových tunelů"
+
+msgid "Router is currently using the configured maximum share bandwidth"
+msgstr "Router aktuálně používá maximální nastavenou šířku pásma pro sdílení"
+
+msgid "Router is ready to build participating tunnels"
+msgstr "Router je připraven vybudovat zúčastněné tunely"
+
+#, java-format
+msgid "Accepting transit tunnel requests; hosting {0} tunnels"
+msgstr "Přijímání zúčastněných požadavků na tunel; účastnící se {0} tunelů"
+
+msgid "No transit tunnels are built when Hidden mode is active"
+msgstr "Když je aktivní skrytý režim, nevybudují se žádné zúčastněné tunely"
+
+msgid "Router is configured to reject all transit tunnel requests"
+msgstr "Směrovač je nakonfigurován tak, aby odmítal všechny zúčastněné požadavky na tunel"
+
 msgid "Warning: ECDSA is not available. Update your Java or OS"
 msgstr "Varování: ECDSA není k dispozici. "
 
@@ -3939,6 +3991,9 @@ msgstr "Počet zakázaných vrstevníků"
 
 msgid "The total number of peers in our network database"
 msgstr "Celkový počet peerů v naší síťové databázi"
+
+msgid "Total RouterInfos stored on disk"
+msgstr ""
 
 msgid "Known"
 msgstr "Známý"
@@ -4050,34 +4105,6 @@ msgstr "Požadavky od jiných směrovačů ve frontě na účast v tunelech"
 
 msgid "Backlog"
 msgstr "Nevyřízené věci"
-
-msgid "Declining transit tunnel requests during startup phase"
-msgstr "Během prvních 10 minut, dokud se router stabilizuje, nejsou přijímány žádné zúčastněné požadavky na tunely"
-
-msgid "Declining transit tunnel requests as we are shutting down"
-msgstr "Odmítání zúčastněných požadavků na tunel, protože se vypínáme"
-
-msgid "Router or network performance is impeding the building of transit tunnels"
-msgstr "Výkon směrovače nebo sítě brání budování zúčastněných tunelů"
-
-msgid "Router is currently hosting the configured maximum number of transit tunnels"
-msgstr "Router aktuálně hostuje maximální počet nakonfigurovaných přesunových tunelů"
-
-msgid "Router is currently using the configured maximum share bandwidth"
-msgstr "Router aktuálně používá maximální nastavenou šířku pásma pro sdílení"
-
-msgid "Router is ready to build participating tunnels"
-msgstr "Router je připraven vybudovat zúčastněné tunely"
-
-#, java-format
-msgid "Accepting transit tunnel requests; hosting {0} tunnels"
-msgstr "Přijímání zúčastněných požadavků na tunel; účastnící se {0} tunelů"
-
-msgid "No transit tunnels are built when Hidden mode is active"
-msgstr "Když je aktivní skrytý režim, nevybudují se žádné zúčastněné tunely"
-
-msgid "Router is configured to reject all transit tunnel requests"
-msgstr "Směrovač je nakonfigurován tak, aby odmítal všechny zúčastněné požadavky na tunel"
 
 msgid "Statistics gathered during this router's uptime"
 msgstr "Statistiky shromážděné během provozu tohoto routeru"
@@ -4211,8 +4238,14 @@ msgstr "Žádná uložená analýza"
 msgid "Select stored analysis"
 msgstr "Vyberte uloženou analýzu"
 
+msgid "Review"
+msgstr ""
+
 msgid "Run analysis on Floodfills only"
 msgstr "Spusťte analýzu pouze na Floodfillech"
+
+msgid "Start Scan"
+msgstr ""
 
 msgid "Run analysis on all routers in NetDb"
 msgstr "Spusťte analýzu na všech směrovačích v NetDb"
@@ -4376,6 +4409,12 @@ msgstr "MAX"
 msgid "Show all routers for this family in NetDb"
 msgstr "Zobrazit všechny routery pro tuto rodinu v NetDb"
 
+msgid "Routers"
+msgstr "Směrovače"
+
+msgid "n/a"
+msgstr "neaplikovatelné"
+
 msgid "Last lookup successful"
 msgstr "Poslední vyhledávání bylo úspěšné"
 
@@ -4427,9 +4466,6 @@ msgstr "Data přenesena"
 msgid "Data"
 msgstr "Data"
 
-msgid "Limit"
-msgstr "Limit"
-
 msgid "Receive on"
 msgstr "Příjem na"
 
@@ -4474,6 +4510,7 @@ msgstr "Router aktuálně pracuje ve skrytém režimu, který zabraňuje budová
 msgid "No transit tunnels currently active."
 msgstr "Momentálně nejsou aktivní žádné tranzitní tunely."
 
+#, java-format
 msgid "Transit Tunnels by Peer (Top {0})"
 msgstr "Tranzitní tunely podle protěje (Top {0})"
 
@@ -4485,9 +4522,6 @@ msgstr "Všechny tunely od Peer"
 
 msgid "Primary IP address"
 msgstr "Primární IP adresa"
-
-msgid "Local"
-msgstr "Místní"
 
 msgid "unique peers"
 msgstr "Unikátní vrstevníci"
@@ -4501,6 +4535,9 @@ msgstr "tranzit"
 msgid "No local or transit tunnels currently active."
 msgstr "Momentálně nejsou aktivní žádné místní ani tranzitní tunely."
 
+msgid "PRIVATE IP ADDRESS"
+msgstr ""
+
 msgid "Bandwidth Tiers"
 msgstr "Vrstvy šířky pásma"
 
@@ -4510,6 +4547,9 @@ msgstr "Více než {0} sdílená šířka pásma"
 
 msgid "Inbound or outbound?"
 msgstr "Příchozí nebo odchozí?"
+
+msgid "In/Out"
+msgstr ""
 
 msgid "Gateway"
 msgstr "Brána"
@@ -4626,6 +4666,9 @@ msgstr "Webový server I2P (eepsite)"
 msgid "Browser launch at startup"
 msgstr "Spuštění prohlížeče při spuštění"
 
+msgid "I2P Router Console"
+msgstr ""
+
 msgid "Open Router Console in web browser at startup"
 msgstr "Otevřete Router Console ve webovém prohlížeči při spuštění"
 
@@ -4701,12 +4744,6 @@ msgstr "klíč"
 msgid "port"
 msgstr "přístav"
 
-msgid "config UI"
-msgstr "konfigurační uživatelské rozhraní"
-
-msgid "User Interface Configuration"
-msgstr "Konfigurace uživatelského rozhraní"
-
 msgid "Certificates"
 msgstr "Certifikáty"
 
@@ -4722,8 +4759,8 @@ msgstr "Omezovač šířky pásma"
 msgid "Advanced Network Configuration"
 msgstr "Pokročilá konfigurace sítě"
 
-msgid "I2P+ will work best if you configure your rates to match the speed of your internet connection."
-msgstr "I2P bude nejlépe fungovat, pokud své sazby nakonfigurujete tak, aby odpovídaly rychlosti vašeho internetového připojení."
+msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
+msgstr ""
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
 msgstr "Poznámka: Váš příspěvek k síti (sdílení sítě) je určen přidělením šířky pásma pro odesílání dat (rychlost odesílání)."
@@ -4753,11 +4790,11 @@ msgid "NOTE"
 msgstr "POZNÁMKA"
 
 #, java-format
-msgid "You have configured I2P+ to share only {0} KBps."
-msgstr "Nastavili jste I2P pro sdílení pouze {0} kB/s."
+msgid "You have configured I2P to share only {0} KBps."
+msgstr ""
 
-msgid "I2P+ requires at least 12KBps to enable sharing. "
-msgstr "I2P vyžaduje pro sdílení alespoň 12 kB/s."
+msgid "I2P requires at least 12KBps to enable sharing. "
+msgstr ""
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
 msgstr "Povolte sdílení (účast v tunelech) konfigurací větší šířky pásma."
@@ -5254,8 +5291,8 @@ msgstr "přenastavení konfigurace"
 msgid "Reseeding is the bootstrapping process used to find other routers when you first install I2P, or when your router has too few router references remaining."
 msgstr "Reseeding je proces bootstrapping, který se používá k nalezení dalších směrovačů při první instalaci I2P nebo když má váš směrovač příliš málo odkazů na směrovač."
 
-msgid "To enable the configuration of reseed urls, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
-msgstr "Chcete-li povolit konfiguraci reseed adres URL, aktivujte <a href=\"/help/advancedsettings\">Pokročilý režim</a> konzoly."
+msgid "To enable the configuration of reseed urls, activate the console's <a href=/help/advancedsettings>Advanced mode</a>."
+msgstr ""
 
 msgid "Reseeding Configuration"
 msgstr "Konfigurace opětovného setí"
@@ -5265,9 +5302,6 @@ msgstr "Pomoc s přesetím"
 
 msgid "Reseeding Help"
 msgstr "Nápověda k opětovnému setí"
-
-msgid "Change these only if HTTPS is blocked by a restrictive firewall and reseed has failed."
-msgstr "Změňte je pouze v případě, že je HTTPS blokováno restriktivním firewallem a znovu se nezdařilo."
 
 msgid "Reseed URLs"
 msgstr "Reseed URL"
@@ -5304,6 +5338,9 @@ msgstr "Tato možnost použije I2P HTTP OutProxy k reseed nebo plugin orchideje,
 
 msgid "I2P Outproxy"
 msgstr "Externí I2P proxy"
+
+msgid "Port"
+msgstr "Port"
 
 msgid "Use HTTP Proxy for HTTP Reseed Hosts"
 msgstr "Použít HTTP Proxy pro HTTP Reseed hostitele"
@@ -5417,6 +5454,12 @@ msgstr "Jednotná postranní lišta"
 msgid "Use the same sidebar on all pages"
 msgstr "Použijte stejnou postranní lištu na všech stránkách"
 
+msgid "Sticky sidebar"
+msgstr ""
+
+msgid "Enable conditional fixed sidebar"
+msgstr ""
+
 msgid "config stats"
 msgstr "config statistiky"
 
@@ -5473,6 +5516,12 @@ msgstr "Chcete-li upravit nastavení klientského tunelu, použijte <a href=\"/i
 
 msgid "To enable session-only changes to the client tunnels, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
 msgstr "Chcete-li povolit změny v klientských tunelech pouze pro relaci, aktivujte <a href=\"/help/advancedsettings\">Pokročilý režim</a> konzoly."
+
+msgid "config UI"
+msgstr "konfigurační uživatelské rozhraní"
+
+msgid "User Interface Configuration"
+msgstr "Konfigurace uživatelského rozhraní"
 
 msgid "Router Console Theme"
 msgstr "Téma konzoly směrovače"
@@ -5610,14 +5659,20 @@ msgstr "Chyba 404"
 msgid "not found"
 msgstr "nenalezeno"
 
+msgid "router logs"
+msgstr "Protokoly routeru"
+
+msgid "Critical / Error Level Logs"
+msgstr "Kritické / Chybové úrovně záznamů"
+
+msgid "Clear logs"
+msgstr "Vymažte protokoly"
+
 msgid "events"
 msgstr "události"
 
 msgid "Event Log"
 msgstr "Záznam událostí"
-
-msgid "Combined"
-msgstr "Kombinované"
 
 msgid "graph"
 msgstr "Graf"
@@ -6126,7 +6181,7 @@ msgstr "Chcete-li zpřístupnit konzoli ve vaší místní síti, upravte konfig
 msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
 msgstr "Příklad: Chcete-li povolit přístup z localhost a 192.168.1.10 přes HTTP a HTTPS:"
 
-msgid "For most client services, change listening address for relevant service in Tunnel Manager's configuration section using <i>reachable by</i> dropdown."
+msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager's configuration section using the <i>reachable by</i> dropdown."
 msgstr ""
 
 msgid "How do I connect to IRC within I2P?"
@@ -7332,34 +7387,6 @@ msgstr "Statistika fronty úloh"
 msgid "Job Queue Stats"
 msgstr "Statistika fronty úloh"
 
-msgid "logs"
-msgstr "logy"
-
-msgid "Please include your I2P version and running environment information in bug reports"
-msgstr "Uveďte prosím svou I2P verzi a informace o provozním prostředí v hlášeních o chybách"
-
-#, java-format
-msgid "Please report bugs on {0} or {1}."
-msgstr "Nahlaste prosím chyby na {0} nebo {1}."
-
-msgid "View event log"
-msgstr "Zobrazení protokolu událostí"
-
-msgid "Critical / Error Level Logs"
-msgstr "Kritické / Chybové úrovně záznamů"
-
-msgid "Clear logs"
-msgstr "Vymažte protokoly"
-
-msgid "Configure router logging options"
-msgstr "Konfigurace možností protokolování routeru"
-
-msgid "Filter Router log output"
-msgstr "Filtrovat výstup logu routeru"
-
-msgid "Service (Wrapper) Logs"
-msgstr "Protokoly služby (Wrapper)."
-
 msgid "network database"
 msgstr "síťová databáze"
 
@@ -7380,6 +7407,9 @@ msgstr "Místně hostovaná veřejná služba"
 
 msgid "Requested client leaseset"
 msgstr "Požadovaný klient LeaseSet"
+
+msgid "Remote"
+msgstr ""
 
 msgid "network database router map"
 msgstr "Mapa routeru v síťové databázi"
@@ -7424,164 +7454,26 @@ msgstr "Zakázaní vrstevníci"
 msgid "Fast / High Capacity"
 msgstr "Rychlý / Vysoká kapacita"
 
-msgid "router logs"
-msgstr "Protokoly routeru"
+msgid "Configure router logging options"
+msgstr "Konfigurace možností protokolování routeru"
+
+msgid "View event log"
+msgstr "Zobrazení protokolu událostí"
+
+msgid "Filter Router log output"
+msgstr "Filtrovat výstup logu routeru"
 
 msgid "service logs"
 msgstr "Protokoly služeb"
 
-msgid "Manage I2P addresses"
-msgstr "Správa I2P adres"
-
-msgid "Imagegen"
-msgstr "Imagegen"
-
-msgid "Create and download torrents"
-msgstr "Vytváření a stahování torrentů"
-
-msgid "Manage client and server tunnels"
-msgstr "Správa klientských a serverových tunelů"
-
-msgid "Webmail client"
-msgstr "Webový poštovní klient"
-
-msgid "Webmail"
-msgstr "Webová pošta"
-
-msgid "Local webserver for hosting content on the I2P network"
-msgstr "Místní webový server pro hostování obsahu v síti I2P"
+msgid "Service (Wrapper) Logs"
+msgstr "Protokoly služby (Wrapper)."
 
 msgid "Information &amp; Diagnostics"
 msgstr "Informace"
 
-msgid "Review recent updates to I2P"
-msgstr "Přehled nedávných aktualizací I2P"
-
-msgid "View debugging information"
-msgstr "Zobrazit informace pro ladění"
-
-msgid "View router performance graphs"
-msgstr "Zobrazit grafy výkonu směrovače"
-
-msgid "Router help section"
-msgstr "Sekce nápovědy pro směrovač"
-
-msgid "Router homepage"
-msgstr "Domovská stránka směrovače"
-
-msgid "Home"
-msgstr "Domů"
-
-msgid "View news relating to I2P"
-msgstr "Zobrazit novinky týkající se I2P"
-
-msgid "I2P News"
-msgstr "Zprávy o I2P"
-
-msgid "View router workload and stats"
-msgstr "Zobrazit zátěž a statistiky směrovače"
-
-msgid "Router Jobs"
-msgstr "Úlohy směrovače"
-
-msgid "View router logs"
-msgstr "Zobrazit protokoly směrovače"
-
-msgid "View information and stats regarding all known peers"
-msgstr "Zobrazte informace a statistiky týkající se všech známých kolegů"
-
-msgid "View active peers"
-msgstr "Zobrazit aktivní partnery"
-
-msgid "View peer performance profiles"
-msgstr "Zobrazení profilů výkonu vrstevníků"
-
-msgid "View information about router and running environment"
-msgstr "Zobrazení informací o routeru a běžícím prostředí"
-
-msgid "Statistics"
-msgstr "Statistika"
-
-msgid "Current console and webapp translation report"
-msgstr "Aktuální zpráva o překladu konzole a webové aplikace"
-
-msgid "Translation Status"
-msgstr "Stav překladu"
-
-msgid "View active tunnels"
-msgstr "Zobrazení aktivních tunelů"
-
-msgid "Customize homepage"
-msgstr "Přizpůsobte domovskou stránku"
-
-msgid "Homepage"
-msgstr "Domovská stránka"
-
-msgid "Configure I2P Client Control Interface"
-msgstr "Konfigurace rozhraní I2P Client Control Interface"
-
-msgid "View or edit router keyring for encrypted destinations"
-msgstr "Zobrazte nebo upravte svazek klíčů směrovače pro šifrované cíle"
-
-msgid "Configure router networking options"
-msgstr "Konfigurace možností sítě routeru"
-
-msgid "Manually edit peers and view banned peers and blocklist"
-msgstr "Ručně upravte partnery a prohlédněte si zakázané partnery a seznam blokovaných uživatelů"
-
-msgid "Install and manage router plugins"
-msgstr "Instalujte a spravujte zásuvné moduly routeru"
-
-msgid "Router reseeding and configuration"
-msgstr "Přenastavení a konfigurace směrovače"
-
-msgid "Configure and manage Router family"
-msgstr "Konfigurujte a spravujte rodinu směrovačů"
-
-msgid "Manage Router service"
-msgstr "Spravovat službu směrovače"
-
-msgid "Configure stat collection for graphing"
-msgstr "Nakonfigurujte sběr statistik pro vykreslování grafů"
-
-msgid "Router Stats"
-msgstr "Statistiky Routeru"
-
-msgid "Configure router updates"
-msgstr "Nakonfigurujte aktualizace routeru"
-
-msgid "Configuration wizard for new users"
-msgstr "Průvodce konfigurací pro nové uživatele"
-
-msgid "Setup Wizard"
-msgstr "Průvodce nastavením"
-
-msgid "Customize sidebar"
-msgstr "Přizpůsobte postranní panel"
-
-msgid "Configure tunnel options"
-msgstr "Konfigurace možností tunelu"
-
-msgid "Configure router user interface and optional console password"
-msgstr "Konfigurace uživatelského rozhraní routeru a volitelného hesla konzoly"
-
-msgid "Configuring I2P for optimal performance"
-msgstr "Konfigurace I2P pro optimální výkon"
-
-msgid "Information for new users"
-msgstr "Informace pro nové uživatele"
-
-msgid "A guide to reseeding your I2P router"
-msgstr "Průvodce přenastavením vašeho I2P routeru"
-
-msgid "What to do in the event I2P isn't working"
-msgstr "Co dělat v případě, že I2P nefunguje"
-
-msgid "Introduction to tunnel filters"
-msgstr "Úvod do tunelových filtrů"
-
-msgid "Tunnel Filters"
-msgstr "Tunelové filtry"
+msgid "Customize"
+msgstr ""
 
 msgid "statistics"
 msgstr "statistika"
@@ -7634,9 +7526,6 @@ msgstr "Přepnout ID tunelů"
 msgid "Toggle Tunnels"
 msgstr "Přepnout tunely"
 
-msgid "Updating sidebar sections"
-msgstr "Aktualizace sekcí postranní lišty"
-
 msgid "Peer Profile"
 msgstr "Profil peeru"
 
@@ -7661,14 +7550,17 @@ msgstr "Návrat nahoru"
 msgid "webmail"
 msgstr "webmail"
 
+msgid "Webmail"
+msgstr "Webová pošta"
+
 msgid "New Install Wizard"
 msgstr "Průvodce novou instalací"
 
 msgid "Skip Setup"
 msgstr "Přeskočit nastavení"
 
-msgid "Select the language to be used for the router console and web applications (<a href=/webmail target=_blank rel=noreferrer>webmail</a>, <a href=/torrents target=_blank rel=noreferrer>torrents</a>, <a href=/i2ptunnelmgr target=_blank rel=noreferrer>tunnel manager</a> etc). If you wish to change the language in future, change the router console theme, or configure a password to access the console, you may do so on the <a href=/configui target=_blank rel=noreferrer>User Interface configuration page</a>."
-msgstr "Vyberte jazyk, který se má použít pro ovládací pult a webové aplikace směrovače (<a href=/webmail target=_blank rel=noreferrer>webmail</a>, <a href=/torrents target=_blank rel=noreferrer>torrents</a>, <a href=/i2ptunnelmgr target=_blank rel=noreferrer>správce tunelů</a> atd.). Pokud si přejete v budoucnu změnit jazyk, změnit motiv ovládacího pultu nebo nastavit heslo pro přístup k ovládacímu panelu, můžete to udělat na stránce <a href=/configui target=_blank rel=noreferrer>nastavení uživatelského rozhraní</a>."
+msgid "Select the language to be used for the router console and web applications ("
+msgstr ""
 
 msgid "Router Console &amp; WebApps Display Language"
 msgstr "Jazyk zobrazení ovládacího pultu směrovače a webových aplikací"
@@ -7737,6 +7629,13 @@ msgid "Bandwidth Configuration"
 msgstr "Konfigurace šířky pásma"
 
 #, java-format
+msgid "You have configured I2P+ to share only {0} KBps."
+msgstr "Nastavili jste I2P pro sdílení pouze {0} kB/s."
+
+msgid "I2P+ requires at least 12KBps to enable sharing. "
+msgstr "I2P vyžaduje pro sdílení alespoň 12 kB/s."
+
+#, java-format
 msgid "You have configured I2P+ to share {0} KBps."
 msgstr "Nastavili jste I2P pro sdílení {0} kB/s."
 
@@ -7746,8 +7645,8 @@ msgstr "I2P vyžaduje webový prohlížeč nakonfigurovaný tak, aby používal 
 msgid "Browser Setup"
 msgstr "Nastavení prohlížeče"
 
-msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. For more help, see <a href=https://geti2p.net/htproxyports target=_blank rel=noreferrer>the configuration guide</a>, or <a href=/help/configuration#browserconfig>the mini-tutorial for Firefox</a>."
-msgstr "Za účelem přístupu k webovým stránkám hostovaným v síti I2P a volitelným použitím výchozího vystupujícího proxy pro připojení k webovým stránkám na clearnetu, je nutné nakonfigurovat váš prohlížeč k použití I2P+ <b>HTTP</b> proxy, která standardně běží na <code>127.0.0.1 port 4444</code>. Pro více informací navštivte <a href=https://geti2p.net/htproxyports target=_blank rel=noreferrer>průvodce konfigurací</a> nebo <a href=/help/configuration#browserconfig>návod pro Firefox</a>."
+msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. "
+msgstr ""
 
 msgid "Welcome to I2P+!"
 msgstr "Vítejte v I2P!"
@@ -7755,8 +7654,8 @@ msgstr "Vítejte v I2P!"
 msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
 msgstr "Když spustíte I2P, může zavádění (integrace) vašeho routeru do sítě a nalezení dalších kolegů trvat několik minut, takže buďte trpěliví."
 
-msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P+."
-msgstr "Jakmile jsou vedle vašich místních tunelů označeny zelené hvězdičky, existuje široká škála věcí, které můžete s I2P dělat."
+msgid "Once green stars are indicated next to your Service Tunnels, there is a wide variety of things you can do with I2P+."
+msgstr ""
 
 msgid "Unknown Wizard page"
 msgstr "Stránka Neznámý průvodce"
@@ -7775,4 +7674,74 @@ msgstr "Další"
 
 msgid "Finished"
 msgstr "Hotové"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#, java-format
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

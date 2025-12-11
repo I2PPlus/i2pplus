@@ -28,11 +28,29 @@ msgstr "Hostname  darf kein \"{0}\" enthalten."
 msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
 msgstr "Der Hostname \"{0}\" bedarf einer Überführung ins ASCII-Format, jedoch ist die Konversionsbibliothek in dieser JVM nicht verfügbar."
 
+msgid "Source"
+msgstr "Quelle"
+
+msgid "Imported from file hosts.txt"
+msgstr ""
+
+msgid "Manually added via SusiDNS"
+msgstr "Manuell via SusiDNS hinzugefügt"
+
+msgid "Manually added"
+msgstr ""
+
+msgid "Added via address helper"
+msgstr ""
+
+msgid "Via helper"
+msgstr ""
+
+msgid "Via helper from"
+msgstr ""
+
 msgid "None"
 msgstr "Keiner"
-
-msgid "Hashcash"
-msgstr "Hashcash"
 
 msgid "Hidden"
 msgstr "versteckt"
@@ -177,9 +195,6 @@ msgstr "{0} Adressbuch in {1} Datenbank"
 msgid "Host name {0} is not in the address book."
 msgstr "Hostname {0} ist nicht im Adressbuch."
 
-msgid "Manually added via SusiDNS"
-msgstr "Manuell via SusiDNS hinzugefügt"
-
 #, java-format
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr "Konnte das Ziel für {0} nicht dem Domainnamenservice {1} hinzufügen"
@@ -305,6 +320,9 @@ msgstr "Link (b32)"
 
 msgid "Destination"
 msgstr "Ziel"
+
+msgid "Added"
+msgstr ""
 
 msgid "Select hosts for deletion from addressbook"
 msgstr "Wählen Sie die zu löschende Hosts aus dem Adressbuch aus"
@@ -446,9 +464,6 @@ msgstr "Nein"
 
 msgid "yes"
 msgstr "Ja"
-
-msgid "Source"
-msgstr "Quelle"
 
 msgid "Added Date"
 msgstr "Datum hinzugefügt"
@@ -599,3 +614,4 @@ msgstr "Manuell ins Master Adressbuch hinzugefügte Einträge werden mit ins Rou
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Einträge aus den Subskriptionen werden mit ins Router Adressbuch eingetragen."
+

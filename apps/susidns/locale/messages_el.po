@@ -28,11 +28,29 @@ msgstr "Το όνομα κεντρικού υπολογιστή δεν μπορ�
 msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
 msgstr "Το όνομα κεντρικού υπολογιστή \"{0}\" απαιτεί μετατροπή σε ASCII, αλλά η βιβλιοθήκη μετατροπών δεν είναι διαθέσιμη σε αυτό το JVM"
 
+msgid "Source"
+msgstr "Πηγή"
+
+msgid "Imported from file hosts.txt"
+msgstr ""
+
+msgid "Manually added via SusiDNS"
+msgstr "Προστέθηκε μη αυτόματα μέσω SusiDNS"
+
+msgid "Manually added"
+msgstr ""
+
+msgid "Added via address helper"
+msgstr ""
+
+msgid "Via helper"
+msgstr ""
+
+msgid "Via helper from"
+msgstr ""
+
 msgid "None"
 msgstr "Κανένα"
-
-msgid "Hashcash"
-msgstr "Hashcash"
 
 msgid "Hidden"
 msgstr "Κρυφό"
@@ -177,9 +195,6 @@ msgstr "{0} βιβλίο διευθύνσεων στη βάση δεδομένω
 msgid "Host name {0} is not in the address book."
 msgstr "Το όνομα κεντρικού υπολογιστή {0} δεν υπάρχει στο βιβλίο διευθύνσεων."
 
-msgid "Manually added via SusiDNS"
-msgstr "Προστέθηκε μη αυτόματα μέσω SusiDNS"
-
 #, java-format
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr "Απέτυχε η προσθήκη Προορισμού για το {0} στην υπηρεσία ονομασίας {1}"
@@ -305,6 +320,9 @@ msgstr "Σύνδεσμος (b32)"
 
 msgid "Destination"
 msgstr "Προορισμός"
+
+msgid "Added"
+msgstr ""
 
 msgid "Select hosts for deletion from addressbook"
 msgstr "Επιλέξτε κεντρικούς υπολογιστές για διαγραφή από το βιβλίο διευθύνσεων"
@@ -446,9 +464,6 @@ msgstr "Όχι"
 
 msgid "yes"
 msgstr "ναι"
-
-msgid "Source"
-msgstr "Πηγή"
 
 msgid "Added Date"
 msgstr "Ημερομηνία προσθήκης"
@@ -599,3 +614,4 @@ msgstr "Οι διευθύνσεις που προστέθηκαν χειροκί
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Οι κεντρικοί υπολογιστές που λαμβάνετε από τις συνδρομές σας θα συγχωνευθούν με το βιβλίο διευθύνσεων του δρομολογητή σας."
+

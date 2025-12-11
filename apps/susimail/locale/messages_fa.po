@@ -214,12 +214,6 @@ msgstr "I2PMmail"
 msgid "No new messages"
 msgstr "هیچ پیام جدید"
 
-msgid "Checking for new messages on server"
-msgstr "بررسی پیام های جدید در سرور"
-
-msgid "Refresh the page for updates"
-msgstr "تازه سازی صفحه برای بروزرسانی ها"
-
 #, java-format
 msgid "{0} is an I2P-exclusive service provided by {1}."
 msgstr "{0} یک سرویس انحصاری I2P است که توسط {1} ارائه شده است."
@@ -227,6 +221,12 @@ msgstr "{0} یک سرویس انحصاری I2P است که توسط {1} ارائ
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
 msgstr "{0} webmail client &copy Susi 2004-2005."
+
+msgid "Checking for new messages on server"
+msgstr "بررسی پیام های جدید در سرور"
+
+msgid "Refresh the page for updates"
+msgstr "تازه سازی صفحه برای بروزرسانی ها"
 
 msgid "Removed tracking image placeholder"
 msgstr "جایگزین تصویر ردیابی حذف شد"
@@ -338,6 +338,9 @@ msgstr "بررسی ایمیل"
 msgid "Refresh Page"
 msgstr "صفحه را رفرش کن"
 
+msgid "Change to Folder"
+msgstr "تغییر به پوشه"
+
 #, java-format
 msgid "1 Message"
 msgid_plural "{0} Messages"
@@ -356,18 +359,6 @@ msgstr "اندازه"
 msgid "Mark for deletion"
 msgstr "علامت دهی برای حذف"
 
-msgid "Message contains HTML"
-msgstr "پیام شامل HTML است"
-
-msgid "Message is new"
-msgstr "پیام جدید می باشد"
-
-msgid "Message is spam"
-msgstr "پیام اسپم می باشد"
-
-msgid "Message body not downloaded"
-msgstr "متن پیام دانلود نشد"
-
 msgid "Really delete the marked messages?"
 msgstr "حذف پیام های علامت زده شده؟"
 
@@ -383,8 +374,17 @@ msgstr "علامت زدن همه"
 msgid "Clear All"
 msgstr "پاک کردن همه"
 
-msgid "Change to Folder"
-msgstr "تغییر به پوشه"
+msgid "Message contains HTML"
+msgstr "پیام شامل HTML است"
+
+msgid "Message is new"
+msgstr "پیام جدید می باشد"
+
+msgid "Message is spam"
+msgstr "پیام اسپم می باشد"
+
+msgid "Message body not downloaded"
+msgstr "متن پیام دانلود نشد"
 
 msgid "First"
 msgstr "اولین"

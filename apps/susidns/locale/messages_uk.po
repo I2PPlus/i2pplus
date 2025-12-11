@@ -28,11 +28,29 @@ msgstr "Назва хоста не може містити \"{0}\""
 msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
 msgstr "Ім’я хосту \"{0}\" вимагає перетворення в ASCII, але бібліотека перетворення недоступна в цій JVMНазва хосту  \"{0}\" потребує коверсію у ASCII але конверсаційна бібліотека недоступна у цьому JVM"
 
+msgid "Source"
+msgstr "Джерело"
+
+msgid "Imported from file hosts.txt"
+msgstr ""
+
+msgid "Manually added via SusiDNS"
+msgstr "Додано вручну через SusiDNS"
+
+msgid "Manually added"
+msgstr ""
+
+msgid "Added via address helper"
+msgstr ""
+
+msgid "Via helper"
+msgstr ""
+
+msgid "Via helper from"
+msgstr ""
+
 msgid "None"
 msgstr "Немає"
-
-msgid "Hashcash"
-msgstr "Hashcash"
 
 msgid "Hidden"
 msgstr "Прихований"
@@ -182,9 +200,6 @@ msgstr "{0} адресна книга у  {1} базі даних"
 msgid "Host name {0} is not in the address book."
 msgstr "Хост {0} відсутній в адресній книзі."
 
-msgid "Manually added via SusiDNS"
-msgstr "Додано вручну через SusiDNS"
-
 #, java-format
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr "Не вдалося додати адресу призначення для {0} до служби імен {1}"
@@ -312,6 +327,9 @@ msgstr "Посилання (b32)"
 
 msgid "Destination"
 msgstr "Адрес призначення"
+
+msgid "Added"
+msgstr ""
 
 msgid "Select hosts for deletion from addressbook"
 msgstr "Виберіть хости для видалення з адресної книги"
@@ -453,9 +471,6 @@ msgstr "ні"
 
 msgid "yes"
 msgstr "так"
-
-msgid "Source"
-msgstr "Джерело"
 
 msgid "Added Date"
 msgstr "Дата додавання"
@@ -606,3 +621,4 @@ msgstr "Адреси, додані вручну до головної адрес
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Хости, отримані від ваших підписок, будуть об’єднані з адресною книгою вашого маршрутизатора."
+

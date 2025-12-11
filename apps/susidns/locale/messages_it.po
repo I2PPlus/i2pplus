@@ -28,11 +28,29 @@ msgstr "Il nome del nodo non può contenere il carattere \"{0}\""
 msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
 msgstr "Il nome host \"{0}\" richiede la conversione in ASCII ma la libreria di conversione non è disponibile in questa JVMIl nome del nodo \"{0}\" deve essere convertito in formato ASCII ma la libreria di conversione non è disponibile in questa JVM"
 
+msgid "Source"
+msgstr "Sorgente"
+
+msgid "Imported from file hosts.txt"
+msgstr ""
+
+msgid "Manually added via SusiDNS"
+msgstr "Aggiunto manualmente con SusiDNS"
+
+msgid "Manually added"
+msgstr ""
+
+msgid "Added via address helper"
+msgstr ""
+
+msgid "Via helper"
+msgstr ""
+
+msgid "Via helper from"
+msgstr ""
+
 msgid "None"
 msgstr "Nessuno"
-
-msgid "Hashcash"
-msgstr "Hashcash"
 
 msgid "Hidden"
 msgstr "Nascosto"
@@ -177,9 +195,6 @@ msgstr "{0} rubriche in {1} database"
 msgid "Host name {0} is not in the address book."
 msgstr "Il nome del nodo {0} non è nella rubrica."
 
-msgid "Manually added via SusiDNS"
-msgstr "Aggiunto manualmente con SusiDNS"
-
 #, java-format
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr "Impossibile aggiungere la destinazione per {0} al servizio di denominazione {1}Operazione di aggiunta della Destinazione per {0} al servizio di naming {1} fallita"
@@ -305,6 +320,9 @@ msgstr "Link (base32)"
 
 msgid "Destination"
 msgstr "Destinazione"
+
+msgid "Added"
+msgstr ""
 
 msgid "Select hosts for deletion from addressbook"
 msgstr "Seleziona gli host da cancellare dalla rubrica"
@@ -446,9 +464,6 @@ msgstr "no"
 
 msgid "yes"
 msgstr "sì"
-
-msgid "Source"
-msgstr "Sorgente"
 
 msgid "Added Date"
 msgstr "Data aggiunta"
@@ -599,3 +614,4 @@ msgstr "Gli indirizzi aggiunti manualmente alla rubrica principale verranno unit
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Gli host che ricevi dai tuoi abbonamenti verranno uniti alla rubrica del tuo router."
+

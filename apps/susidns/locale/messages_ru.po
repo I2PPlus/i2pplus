@@ -28,11 +28,29 @@ msgstr "Имя хоста не может содержать \"{0}\""
 msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
 msgstr "Имя хоста \"{0}\" требует преобразования в ASCII, но библиотека преобразований недоступна в этой JVM"
 
+msgid "Source"
+msgstr "Источник"
+
+msgid "Imported from file hosts.txt"
+msgstr ""
+
+msgid "Manually added via SusiDNS"
+msgstr "Добавлен вручную через SusiDNS"
+
+msgid "Manually added"
+msgstr ""
+
+msgid "Added via address helper"
+msgstr ""
+
+msgid "Via helper"
+msgstr ""
+
+msgid "Via helper from"
+msgstr ""
+
 msgid "None"
 msgstr "Нет"
-
-msgid "Hashcash"
-msgstr "Hashcash"
 
 msgid "Hidden"
 msgstr "Скрытый"
@@ -182,9 +200,6 @@ msgstr "{0} адресная книга в {1} базе данных"
 msgid "Host name {0} is not in the address book."
 msgstr "Имя хоста {0} не в адресной книге."
 
-msgid "Manually added via SusiDNS"
-msgstr "Добавлен вручную через SusiDNS"
-
 #, java-format
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr "Не удалось добавить адрес назначения для {0} в сервис именования {1}"
@@ -312,6 +327,9 @@ msgstr "Ссылка (b32)"
 
 msgid "Destination"
 msgstr "Адрес назначения"
+
+msgid "Added"
+msgstr ""
 
 msgid "Select hosts for deletion from addressbook"
 msgstr "Выберите узлы для удаления из адресной книги"
@@ -453,9 +471,6 @@ msgstr "нет"
 
 msgid "yes"
 msgstr "да"
-
-msgid "Source"
-msgstr "Источник"
 
 msgid "Added Date"
 msgstr "Дата добавления"
@@ -606,3 +621,4 @@ msgstr "Адреса, добавленные в основную адресну�
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Узлы из подписок будут объединены с адресной книгой маршрутизатора."
+

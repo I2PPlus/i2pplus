@@ -214,12 +214,6 @@ msgstr "I2PMail"
 msgid "No new messages"
 msgstr "Geen nieuwe berichten"
 
-msgid "Checking for new messages on server"
-msgstr "Controleren op nieuwe berichten op de server"
-
-msgid "Refresh the page for updates"
-msgstr "Vernieuw de pagina voor updates"
-
 #, java-format
 msgid "{0} is an I2P-exclusive service provided by {1}."
 msgstr "{0} is een exclusieve I2P-service die wordt aangeboden door {1}."
@@ -227,6 +221,12 @@ msgstr "{0} is een exclusieve I2P-service die wordt aangeboden door {1}."
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
 msgstr "{0} webmail client &copy Susi 2004-2005."
+
+msgid "Checking for new messages on server"
+msgstr "Controleren op nieuwe berichten op de server"
+
+msgid "Refresh the page for updates"
+msgstr "Vernieuw de pagina voor updates"
 
 msgid "Removed tracking image placeholder"
 msgstr "Plaatshouders voor volgsjablonen verwijderd"
@@ -338,6 +338,9 @@ msgstr "Controleren op mail"
 msgid "Refresh Page"
 msgstr "Pagina vernieuwen"
 
+msgid "Change to Folder"
+msgstr "Wijzigen naar map"
+
 #, java-format
 msgid "1 Message"
 msgid_plural "{0} Messages"
@@ -356,18 +359,6 @@ msgstr "Grootte"
 msgid "Mark for deletion"
 msgstr "Markeren voor verwijdering"
 
-msgid "Message contains HTML"
-msgstr "Bericht bevat HTML"
-
-msgid "Message is new"
-msgstr "Bericht is nieuw"
-
-msgid "Message is spam"
-msgstr "Bericht is spam"
-
-msgid "Message body not downloaded"
-msgstr "Berichttekst niet gedownload"
-
 msgid "Really delete the marked messages?"
 msgstr "Wil je de gemarkeerde berichten echt verwijderen?"
 
@@ -383,8 +374,17 @@ msgstr "Alles markeren"
 msgid "Clear All"
 msgstr "Alles wissen"
 
-msgid "Change to Folder"
-msgstr "Wijzigen naar map"
+msgid "Message contains HTML"
+msgstr "Bericht bevat HTML"
+
+msgid "Message is new"
+msgstr "Bericht is nieuw"
+
+msgid "Message is spam"
+msgstr "Bericht is spam"
+
+msgid "Message body not downloaded"
+msgstr "Berichttekst niet gedownload"
 
 msgid "First"
 msgstr "Eerste"

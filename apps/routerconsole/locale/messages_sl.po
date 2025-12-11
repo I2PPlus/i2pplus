@@ -77,8 +77,17 @@ msgstr "Prizobljenih je {0} informacij o usmerjevalnikih od gostiteljev ponovneg
 msgid "Acquired {0} router infos from reseed hosts ({1} errors)"
 msgstr "Prizobljenih je {0} informacij o usmerjevalnikih od gostiteljev ponovnega semenjenja ({1} napak)"
 
+msgid "Clock step adjustment (ms)"
+msgstr "Prilagajanje koraka ura (ms)"
+
+msgid "Size of tunnel acceptor backlog"
+msgstr "Velikost niza pripravljenosti tunela"
+
 msgid "Message receive rate (B/s)"
 msgstr "Hitrost prejema sporočil (B/s)"
+
+msgid "Low-level receive rate (B/s)"
+msgstr "Osnovna hitrost prejema (B/s)"
 
 msgid "Message send rate (B/s)"
 msgstr "Hitrost pošiljanja sporočil (B/s)"
@@ -86,41 +95,35 @@ msgstr "Hitrost pošiljanja sporočil (B/s)"
 msgid "Low-level send rate (B/s)"
 msgstr "Osnovna hitrost pošiljanja (B/s)"
 
-msgid "Low-level receive rate (B/s)"
-msgstr "Osnovna hitrost prejema (B/s)"
-
-msgid "Total peers in our NetDb"
-msgstr "Skupaj parterjev v naši mrežni bazi"
-
 msgid "Peers active in the last minute"
 msgstr "Parterji, ki so bili aktivni v zadnjem minutu"
-
-msgid "Known high capacity peers"
-msgstr "Znani parterji z visoko kapaciteto"
 
 msgid "Peers sent to in the last minute"
 msgstr "Parterji, do katerega smo poslali v zadnjem minutu"
 
+msgid "Total peers in our banlist"
+msgstr "Skupaj prepovedanih partnerjev v naši črni listi"
+
+msgid "CPU load average of the JVM"
+msgstr "Povprečje obremenitve CPU za JVM"
+
 msgid "Known fast peers"
 msgstr "Znani hitri parterji"
+
+msgid "Known high capacity peers"
+msgstr "Znani parterji z visoko kapaciteto"
 
 msgid "Known integrated (floodfill) peers"
 msgstr "Znani integrirani (zalivni) parterji"
 
-msgid "Total peers in our banlist"
-msgstr "Skupaj prepovedanih partnerjev v naši črni listi"
+msgid "Total peers in our NetDb"
+msgstr "Skupaj parterjev v naši mrežni bazi"
+
+msgid "Total number of threads in use"
+msgstr ""
 
 msgid "Peers without a published IP address"
 msgstr "Parterji brez objavljenega IP naslova"
-
-msgid "Size of tunnel acceptor backlog"
-msgstr "Velikost niza pripravljenosti tunela"
-
-msgid "Clock step adjustment (ms)"
-msgstr "Prilagajanje koraka ura (ms)"
-
-msgid "CPU load average of the JVM"
-msgstr "Povprečje obremenitve CPU za JVM"
 
 msgid "Average tunnel build success %"
 msgstr "Povprečen uspeh izgradnje tunela (%)"
@@ -1566,29 +1569,29 @@ msgstr "Ponovni zagon v {0}"
 msgid "Save order"
 msgstr "Shrani vrstni red"
 
+msgid "Restore full default"
+msgstr "Obnovi celoten privzeto"
+
+msgid "Restore minimal default"
+msgstr "Obnovi minimalno privzeto"
+
 msgid "Sidebar preferences updated"
 msgstr "Nastavitve stranske vrstice so posodobljene."
 
 msgid "Refresh interval must be a number"
 msgstr "Interval osveževanja mora biti število"
 
-msgid "Restore full default"
-msgstr "Obnovi celoten privzeto"
-
 msgid "Full sidebar defaults restored."
 msgstr "Privzete nastavitve stranske vrstice so bile obnovljene."
 
-msgid "Sidebar will refresh shortly."
-msgstr "Stranska vrstica se bo kmalu posodobila."
-
-msgid "Restore minimal default"
-msgstr "Obnovi minimalno privzeto"
-
-msgid "Minimal sidebar defaults restored."
-msgstr "Minimalne privzete nastavitve stranske vrstice so bile obnovljene."
-
 msgid "Order must be an integer"
 msgstr "Red mora biti celo število"
+
+msgid "Saved order of sections."
+msgstr "Shrani vrstni red sekcij."
+
+msgid "Sidebar will refresh shortly."
+msgstr "Stranska vrstica se bo kmalu posodobila."
 
 msgid "No section selected"
 msgstr "Ni izbrana sekcija"
@@ -1598,9 +1601,6 @@ msgstr "Ni vnesen vrstni red"
 
 msgid "Moved"
 msgstr "Premik"
-
-msgid "Saved order of sections."
-msgstr "Shrani vrstni red sekcij."
 
 msgid "Full statistics enabled"
 msgstr "Polna statistika je omogočena"
@@ -2433,6 +2433,9 @@ msgstr "HTTP proxy ni v tem"
 msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
 msgstr "Vaš brskalnik ni pravilno nastavljen za uporabo HTTP proxyja na {0}"
 
+msgid "Errors"
+msgstr ""
+
 msgid "URL"
 msgstr "URL"
 
@@ -2707,29 +2710,23 @@ msgstr "ali Sybil je blizu temu routerju"
 msgid "Lookup"
 msgstr "Iskanje"
 
-msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
-msgstr "Nikoli ne razkrivajte svoje identitete usmerjevalnika nikomur, saj je edinstveno povezana z vašim IP naslovom v omrežni bazi."
+msgid "Select the field to search on"
+msgstr ""
 
-msgid "is banned"
-msgstr "je prepovedan"
-
-msgid "not found in network database"
-msgstr "ni najden v omrežni bazi"
-
-msgid "Bad Base64 Router hash"
-msgstr "Slab Base64 razpršila routerja"
-
-msgid "No routers with"
-msgstr "Ni routerjev z: "
-
-msgid "Hash prefix"
-msgstr "Predpona razpršila"
-
-msgid "Port"
-msgstr "Vrata"
+msgid "e.g. cn hk"
+msgstr ""
 
 msgid "MTU"
 msgstr "MTU"
+
+msgid "Enter search value here"
+msgstr ""
+
+msgid "Router not found"
+msgstr ""
+
+msgid "No routers with"
+msgstr "Ni routerjev z: "
 
 msgid "found in the network database"
 msgstr "najdeno v podatkovni zbirki"
@@ -2857,17 +2854,17 @@ msgstr "Isteklo {0} pred tem"
 msgid "Unknown"
 msgstr "Neznano"
 
-msgid "Advanced mode - includes all statistics published by floodfills."
-msgstr "Napredni način - vključuje vse statistike, objavljene s floodfills."
-
-msgid "Compact mode - does not include statistics published by floodfills."
-msgstr "Kompaktni način - ne vključuje statistike, objavljene s floodfills."
-
 msgid "Network Database Router Statistics"
 msgstr "Statistika usmerjevalnika v omrežni bazi"
 
 msgid "Count"
 msgstr "Število"
+
+msgid "Under 12 KB/s"
+msgstr ""
+
+msgid "Over 2048 KB/s"
+msgstr ""
 
 msgid "Bandwidth Tier"
 msgstr "Raven širine pasma"
@@ -2939,6 +2936,9 @@ msgstr "Objavljeno"
 msgid "Hostname"
 msgstr "Ime gostitelja"
 
+msgid "Whois"
+msgstr ""
+
 msgid "direct"
 msgstr "neposredno"
 
@@ -2954,20 +2954,26 @@ msgstr "Prikaži vse usmerjevalnike z to vrsto podpisa v NetDb"
 msgid "Show all routers with this encryption type in the NetDb"
 msgstr "Prikaži vse usmerjevalnike z to vrsto šifriranja v NetDb"
 
-msgid "Addresses"
-msgstr "Naslovi"
-
-msgid "n/a"
-msgstr "n/a"
-
 msgid "Show all routers with this address in the NetDb"
 msgstr "Prikaži vse usmerjevalnike z tem naslovom v NetDb"
 
 msgid "Show all routers with this port in the NetDb"
 msgstr "Prikaži vse usmerjevalnike z tem vratom v NetDb"
 
-msgid "Routers"
-msgstr "Usmerjevalniki"
+msgid "Maximum Transmission Unit"
+msgstr ""
+
+msgid "Show all routers with this MTU in the NetDb"
+msgstr ""
+
+msgid "Addresses"
+msgstr "Naslovi"
+
+msgid "Introducers"
+msgstr ""
+
+msgid "Network Id"
+msgstr "ID omrežja"
 
 msgid "First heard about"
 msgstr "Prvič sem slišal o"
@@ -2978,11 +2984,8 @@ msgstr "Zadnjič sem slišal o"
 msgid "Last heard from"
 msgstr "Zadnjič sem slišal od"
 
-msgid "Network Id"
-msgstr "ID omrežja"
-
-msgid "Count is always spoofed to avoid indicating router restarts"
-msgstr "Številka je vedno prirejanj, da bi se izognjali restarti routerja."
+msgid "Info"
+msgstr "Informacije"
 
 msgid "Hidden or starting up"
 msgstr "Skrito ali se zagonja"
@@ -3011,17 +3014,32 @@ msgstr "SSU [IPv6]"
 msgid "SSU [IPv6] with Introducers"
 msgstr "IPv6 SSU, predstavljeni"
 
+msgid "NTCP &amp; SSU with Introducers [IPv6 Only]"
+msgstr "IPv6 le NTCP, SSU, predstavljeni"
+
 msgid "NTCP [IPv6]"
 msgstr "NTCP [IPv6]"
 
 msgid "NTCP [IPv6] &amp; SSU"
 msgstr "NTCP [IPv6] &amp; SSU"
 
-msgid "NTCP &amp; SSU with Introducers [IPv6 Only]"
-msgstr "IPv6 le NTCP, SSU, predstavljeni"
-
 msgid "NTCP [IPv6] &amp; SSU with Introducers"
 msgstr "IPv6 NTCP, SSU, predstavljeni"
+
+msgid "Local"
+msgstr "Lokalno"
+
+msgid "Fast Tier"
+msgstr ""
+
+msgid "High Capacity Tier"
+msgstr ""
+
+msgid "Integrated Tier"
+msgstr ""
+
+msgid "Standard Tier"
+msgstr ""
 
 msgid "No peer connections available"
 msgstr "Nobene povezave z partnerji na voljo"
@@ -3365,14 +3383,17 @@ msgstr "Zadnjič slišan od"
 msgid "View/Edit"
 msgstr "Oglej/Uredi"
 
-msgid "Unreachable"
-msgstr "Ne dosegljivo"
-
 msgid "OK"
 msgstr "V redu"
 
 msgid "Test Fails"
 msgstr "Test ne uspe"
+
+msgid "Unreachable"
+msgstr "Ne dosegljivo"
+
+msgid "Most tests passing"
+msgstr ""
 
 msgid "Fast, High Capacity"
 msgstr "Hitro, visoka kapaciteta"
@@ -3388,6 +3409,9 @@ msgstr "Neuspešno"
 
 msgid "Integrated"
 msgstr "Integrirano"
+
+msgid "Configure Peer"
+msgstr ""
 
 msgid "Thresholds"
 msgstr "Pragi"
@@ -3461,11 +3485,11 @@ msgstr "Zadnje slabo pošiljanje"
 msgid "Last Bad Store"
 msgstr "Zadnje slabo shranjevanje"
 
-msgid "Capabilities in the NetDb, not used to determine profiles"
-msgstr "Možnosti v NetDb, ki se ne uporabljajo za določanje profila"
-
 msgid "caps"
 msgstr "možnosti"
+
+msgid "Capabilities in the NetDb, not used to determine profiles"
+msgstr "Možnosti v NetDb, ki se ne uporabljajo za določanje profila"
 
 msgid "Reachable"
 msgstr "Dosegljivo"
@@ -3638,6 +3662,9 @@ msgstr "Kliknite Ponovni zagon za namestitev"
 
 msgid "Click Shutdown and restart to install"
 msgstr "Kliknite Zapri in ponovno zagni za namestitev"
+
+msgid "Unable"
+msgstr ""
 
 #, java-format
 msgid "{0}"
@@ -3832,9 +3859,6 @@ msgstr "Graf za zmogljivost usmerjevalnika"
 msgid "Router Help and FAQ"
 msgstr "Pomoč usmerjevalnika in ČPP"
 
-msgid "Info"
-msgstr "Informacije"
-
 msgid "Router information including transport addresses and UPnP scan"
 msgstr "Informacije o usmerjevalniku, vključno z naslovi prevoznika in skenom UPnP"
 
@@ -3920,6 +3944,34 @@ msgstr "Zalivni je omogočen"
 msgid "Total number of remote LeaseSets stored in our NetDb"
 msgstr "Skupno število oddaljenih LeaseSetov, shranjenih v naši NetDb"
 
+msgid "Declining transit tunnel requests during startup phase"
+msgstr "V prvih 10 minutah se ne sprejme nobenih zahtev za prenosne tunelje, dokler se usmerjevalnik ne stabilizira"
+
+msgid "Declining transit tunnel requests as we are shutting down"
+msgstr "Zmanjšujemo zahteve za prenosne tunelje, ker se zapiramo"
+
+msgid "Router or network performance is impeding the building of transit tunnels"
+msgstr "Zmožnost usmerjevalnika ali omrežja ovira izgradnjo prenosnih tuneljev"
+
+msgid "Router is currently hosting the configured maximum number of transit tunnels"
+msgstr "Usmerjevalnik trenutno gosti konfigurirano maksimalno število prenosnih tuneljev"
+
+msgid "Router is currently using the configured maximum share bandwidth"
+msgstr "Usmerjevalnik trenutno uporablja konfigurirano maksimalno delež širine pasma"
+
+msgid "Router is ready to build participating tunnels"
+msgstr "Usmerjevalnik je pripravljen izgraditi sodelujoče tunele"
+
+#, java-format
+msgid "Accepting transit tunnel requests; hosting {0} tunnels"
+msgstr "Sprejmemo zahteve za prenosne tunelje; gostimo {0} tuneljev"
+
+msgid "No transit tunnels are built when Hidden mode is active"
+msgstr "Nobeni prenosni tuneli se ne izgrajajo, ko je aktiviran skriti način"
+
+msgid "Router is configured to reject all transit tunnel requests"
+msgstr "Usmerjevalnik je konfiguriran za zavrnitev vseh zahtev za prenosne tunelje"
+
 msgid "Warning: ECDSA is not available. Update your Java or OS"
 msgstr "Opozorilo: ECDSA ni na voljo. Posodobite Java ali OS"
 
@@ -3955,6 +4007,9 @@ msgstr "Število prepovedanih parterjev"
 
 msgid "The total number of peers in our network database"
 msgstr "Skupno število parterjev v naši omrežni bazi"
+
+msgid "Total RouterInfos stored on disk"
+msgstr ""
 
 msgid "Known"
 msgstr "Znani"
@@ -4066,34 +4121,6 @@ msgstr "Čakajoče zahteve od drugih usmerjevalnikov za sodelovanje v tunelih"
 
 msgid "Backlog"
 msgstr "Nazočenje"
-
-msgid "Declining transit tunnel requests during startup phase"
-msgstr "V prvih 10 minutah se ne sprejme nobenih zahtev za prenosne tunelje, dokler se usmerjevalnik ne stabilizira"
-
-msgid "Declining transit tunnel requests as we are shutting down"
-msgstr "Zmanjšujemo zahteve za prenosne tunelje, ker se zapiramo"
-
-msgid "Router or network performance is impeding the building of transit tunnels"
-msgstr "Zmožnost usmerjevalnika ali omrežja ovira izgradnjo prenosnih tuneljev"
-
-msgid "Router is currently hosting the configured maximum number of transit tunnels"
-msgstr "Usmerjevalnik trenutno gosti konfigurirano maksimalno število prenosnih tuneljev"
-
-msgid "Router is currently using the configured maximum share bandwidth"
-msgstr "Usmerjevalnik trenutno uporablja konfigurirano maksimalno delež širine pasma"
-
-msgid "Router is ready to build participating tunnels"
-msgstr "Usmerjevalnik je pripravljen izgraditi sodelujoče tunele"
-
-#, java-format
-msgid "Accepting transit tunnel requests; hosting {0} tunnels"
-msgstr "Sprejmemo zahteve za prenosne tunelje; gostimo {0} tuneljev"
-
-msgid "No transit tunnels are built when Hidden mode is active"
-msgstr "Nobeni prenosni tuneli se ne izgrajajo, ko je aktiviran skriti način"
-
-msgid "Router is configured to reject all transit tunnel requests"
-msgstr "Usmerjevalnik je konfiguriran za zavrnitev vseh zahtev za prenosne tunelje"
 
 msgid "Statistics gathered during this router's uptime"
 msgstr "Statistika, zbrana med časom delovanja tega usmerjevalnika"
@@ -4229,8 +4256,14 @@ msgstr "Nobena shranjena analiza"
 msgid "Select stored analysis"
 msgstr "Izberite shranjeno analizo"
 
+msgid "Review"
+msgstr ""
+
 msgid "Run analysis on Floodfills only"
 msgstr "Zaženi analizo le na zalivnih"
+
+msgid "Start Scan"
+msgstr ""
 
 msgid "Run analysis on all routers in NetDb"
 msgstr "Zaženi analizo na vseh usmerjevalnikih v NetDb"
@@ -4394,6 +4427,12 @@ msgstr "MAX"
 msgid "Show all routers for this family in NetDb"
 msgstr "Prikaži vse usmerjevalnike za to družino v NetDb"
 
+msgid "Routers"
+msgstr "Usmerjevalniki"
+
+msgid "n/a"
+msgstr "n/a"
+
 msgid "Last lookup successful"
 msgstr "Zadnje iskanje je uspešno"
 
@@ -4445,9 +4484,6 @@ msgstr "Prenešeni podatki"
 msgid "Data"
 msgstr "Podatki"
 
-msgid "Limit"
-msgstr "Omejitev"
-
 msgid "Receive on"
 msgstr "Prejmi na"
 
@@ -4492,6 +4528,7 @@ msgstr "Usmerjevalnik trenutno deluje v skriti načini, ki preprečuje izgradnjo
 msgid "No transit tunnels currently active."
 msgstr "Trenutno ni aktivnih prenosnih tuneljev."
 
+#, java-format
 msgid "Transit Tunnels by Peer (Top {0})"
 msgstr "Tranzitni tuneli po Vrstniku (Top {0})"
 
@@ -4503,9 +4540,6 @@ msgstr "Vsi tuneli glede na parterje"
 
 msgid "Primary IP address"
 msgstr "Glavni IP naslov"
-
-msgid "Local"
-msgstr "Lokalno"
 
 msgid "unique peers"
 msgstr "edinstveni parterji"
@@ -4519,6 +4553,9 @@ msgstr "tranzit"
 msgid "No local or transit tunnels currently active."
 msgstr "Trenutno ni aktivnih lokalnih ali prenosnih tuneljev."
 
+msgid "PRIVATE IP ADDRESS"
+msgstr ""
+
 msgid "Bandwidth Tiers"
 msgstr "Raven širine pasma"
 
@@ -4528,6 +4565,9 @@ msgstr "Preko {0} deljene širine pasma"
 
 msgid "Inbound or outbound?"
 msgstr "Vhodno ali izhodno?"
+
+msgid "In/Out"
+msgstr ""
 
 msgid "Gateway"
 msgstr "Vrata"
@@ -4644,6 +4684,9 @@ msgstr "Spletni strežnik I2P (eepsite)"
 msgid "Browser launch at startup"
 msgstr "Zagon brskalnika pri zagonu"
 
+msgid "I2P Router Console"
+msgstr ""
+
 msgid "Open Router Console in web browser at startup"
 msgstr "Odpri konzolo usmerjevalnika v spletnem brskalniku pri zagonu"
 
@@ -4719,12 +4762,6 @@ msgstr "ključ"
 msgid "port"
 msgstr "vrata"
 
-msgid "config UI"
-msgstr "konfig UI"
-
-msgid "User Interface Configuration"
-msgstr "Nastavitve uporabniškega vmesnika"
-
 msgid "Certificates"
 msgstr "Certifikati"
 
@@ -4740,8 +4777,8 @@ msgstr "Omejevalnik širine pasma"
 msgid "Advanced Network Configuration"
 msgstr "Napredna omrežna konfiguracija"
 
-msgid "I2P+ will work best if you configure your rates to match the speed of your internet connection."
-msgstr "I2P bo delal najbolje, če konfigurirate svoje stopnje tako, da ujemajo z hitrostjo vaše internetske povezave."
+msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
+msgstr ""
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
 msgstr "Opomba: Vaš doprinos omrežju (delenje omrežja) je določen s dodelitvijo gorazne širine pasma (hitrost pošiljanja)."
@@ -4771,11 +4808,11 @@ msgid "NOTE"
 msgstr "OPOMBA"
 
 #, java-format
-msgid "You have configured I2P+ to share only {0} KBps."
-msgstr "Konfigurirali ste I2P, da deli le {0} KBps."
+msgid "You have configured I2P to share only {0} KBps."
+msgstr ""
 
-msgid "I2P+ requires at least 12KBps to enable sharing. "
-msgstr "I2P zahteva vsaj 12KBps za omogočanje deljenja."
+msgid "I2P requires at least 12KBps to enable sharing. "
+msgstr ""
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
 msgstr "Prosimo, omogočite deljenje (sodelovanje v tuneljih), konfigurirajte več širine pasma."
@@ -5272,8 +5309,8 @@ msgstr "konfig ponovno semenjenje"
 msgid "Reseeding is the bootstrapping process used to find other routers when you first install I2P, or when your router has too few router references remaining."
 msgstr "Ponovno semenjenje je postopek zaženitve, ki se uporablja za iskanje drugih usmerjevalnikov, ko prvič namestite I2P, ali ko vaš usmerjevalnik ima pre malo ostalih referenc usmerjevalnikov."
 
-msgid "To enable the configuration of reseed urls, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
-msgstr "Da bi omogočili konfiguracijo URL-jev za ponovno semenjenje, aktivirajte napredni način konzole <a href=\"/help/advancedsettings\">Napredni način</a>."
+msgid "To enable the configuration of reseed urls, activate the console's <a href=/help/advancedsettings>Advanced mode</a>."
+msgstr ""
 
 msgid "Reseeding Configuration"
 msgstr "Konfiguracija ponovnega semenjenja"
@@ -5283,9 +5320,6 @@ msgstr "Pomoč pri ponovnem semenjenju"
 
 msgid "Reseeding Help"
 msgstr "Pomoč pri ponovnem semenjenju"
-
-msgid "Change these only if HTTPS is blocked by a restrictive firewall and reseed has failed."
-msgstr "Spremenite ta le, če je HTTPS preprečen s strogo konfiguriranim firewallom in ponovno semenjenje je spodletelo."
 
 msgid "Reseed URLs"
 msgstr "URL-ji za ponovno semenjenje"
@@ -5322,6 +5356,9 @@ msgstr "Ta možnost bo uporabila HTTP izhodnega posredniškega strežnika I2P za
 
 msgid "I2P Outproxy"
 msgstr "I2P Izproxy"
+
+msgid "Port"
+msgstr "Vrata"
 
 msgid "Use HTTP Proxy for HTTP Reseed Hosts"
 msgstr "Uporabi HTTP posredniški strežnik za gostitelje HTTP ponovnega semenjenja"
@@ -5435,6 +5472,12 @@ msgstr "Enotna stranska vrstica"
 msgid "Use the same sidebar on all pages"
 msgstr "Uporabite enako stransko vrstico na vseh straneh."
 
+msgid "Sticky sidebar"
+msgstr ""
+
+msgid "Enable conditional fixed sidebar"
+msgstr ""
+
 msgid "config stats"
 msgstr "konfig statistika"
 
@@ -5491,6 +5534,12 @@ msgstr "Da spremenite nastavitve klientovih tuneljev, uporabite <a href=\"/i2ptu
 
 msgid "To enable session-only changes to the client tunnels, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
 msgstr "Da bi omogočili spremembe, namenjene le sejanski za klientove tunele, aktivirajte <a href=\"/help/advancedsettings\">Napredni način</a> konzole."
+
+msgid "config UI"
+msgstr "konfig UI"
+
+msgid "User Interface Configuration"
+msgstr "Nastavitve uporabniškega vmesnika"
 
 msgid "Router Console Theme"
 msgstr "Tema konzole usmerjevalnika"
@@ -5628,14 +5677,20 @@ msgstr "Napaka 404"
 msgid "not found"
 msgstr "ni najden"
 
+msgid "router logs"
+msgstr "Dnevniki routerja"
+
+msgid "Critical / Error Level Logs"
+msgstr "Kritični / napakne raven dnevnikov"
+
+msgid "Clear logs"
+msgstr "Izbriši dnevnike"
+
 msgid "events"
 msgstr "dogodki"
 
 msgid "Event Log"
 msgstr "Dnevnik dogodkov"
-
-msgid "Combined"
-msgstr "Kombinirano"
 
 msgid "graph"
 msgstr "graf"
@@ -6144,7 +6199,7 @@ msgstr "Da bi bila konzola dostopna na mojem lokalnem omrežju, uredite datoteko
 msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
 msgstr "Primer: Za dovoljenje dostopa iz localhost in 192.168.1.10 preko HTTP in HTTPS:"
 
-msgid "For most client services, change listening address for relevant service in Tunnel Manager's configuration section using <i>reachable by</i> dropdown."
+msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager's configuration section using the <i>reachable by</i> dropdown."
 msgstr ""
 
 msgid "How do I connect to IRC within I2P?"
@@ -7344,34 +7399,6 @@ msgstr "statistika vrsta nalog"
 msgid "Job Queue Stats"
 msgstr "Statistika vrsta nalog"
 
-msgid "logs"
-msgstr "dnevniki"
-
-msgid "Please include your I2P version and running environment information in bug reports"
-msgstr "Prosim, vključite informacije o različici I2P in informacije o delovnem okolju v poročilih o napakah"
-
-#, java-format
-msgid "Please report bugs on {0} or {1}."
-msgstr "Prosim, poročite o napakah na {0} ali {1}."
-
-msgid "View event log"
-msgstr "Ogled dnevnika dogodka"
-
-msgid "Critical / Error Level Logs"
-msgstr "Kritični / napakne raven dnevnikov"
-
-msgid "Clear logs"
-msgstr "Izbriši dnevnike"
-
-msgid "Configure router logging options"
-msgstr "Konfigurirajte možnosti dnevnikovanja strežnika"
-
-msgid "Filter Router log output"
-msgstr "Filtriraj izhod dnevnika strežnika"
-
-msgid "Service (Wrapper) Logs"
-msgstr "Dnevniki storitve (Omotnik)"
-
 msgid "network database"
 msgstr "baza podatkov omrežja"
 
@@ -7392,6 +7419,9 @@ msgstr "Lokalno gostovana javna storitev"
 
 msgid "Requested client leaseset"
 msgstr "Zahtevan LeaseSet klienta"
+
+msgid "Remote"
+msgstr ""
 
 msgid "network database router map"
 msgstr "karta strežnika baze podatkov omrežja"
@@ -7436,164 +7466,26 @@ msgstr "Prepovedani parterji"
 msgid "Fast / High Capacity"
 msgstr "Hitro / Visoka zmogljivost"
 
-msgid "router logs"
-msgstr "Dnevniki routerja"
+msgid "Configure router logging options"
+msgstr "Konfigurirajte možnosti dnevnikovanja strežnika"
+
+msgid "View event log"
+msgstr "Ogled dnevnika dogodka"
+
+msgid "Filter Router log output"
+msgstr "Filtriraj izhod dnevnika strežnika"
 
 msgid "service logs"
 msgstr "Dnevniki storitev"
 
-msgid "Manage I2P addresses"
-msgstr "Upravljanje naslovov I2P"
-
-msgid "Imagegen"
-msgstr "Imagegen"
-
-msgid "Create and download torrents"
-msgstr "Ustvari in prenesi torrente"
-
-msgid "Manage client and server tunnels"
-msgstr "Upravljanje tunelov klienta in strežnika"
-
-msgid "Webmail client"
-msgstr "Klient za webmail"
-
-msgid "Webmail"
-msgstr "Webmail"
-
-msgid "Local webserver for hosting content on the I2P network"
-msgstr "Lokalni spletne strežnik za gostovanje vsebine na omrežju I2P"
+msgid "Service (Wrapper) Logs"
+msgstr "Dnevniki storitve (Omotnik)"
 
 msgid "Information &amp; Diagnostics"
 msgstr "Informacije &amp; Diagnostika"
 
-msgid "Review recent updates to I2P"
-msgstr "Preverite nedavne posodobitve I2P"
-
-msgid "View debugging information"
-msgstr "Ogled informacij o iskanju napak"
-
-msgid "View router performance graphs"
-msgstr "Ogled grafov zmogljivosti strežnika"
-
-msgid "Router help section"
-msgstr "Seznam pomoči strežnika"
-
-msgid "Router homepage"
-msgstr "Domov strežnika"
-
-msgid "Home"
-msgstr "Doma"
-
-msgid "View news relating to I2P"
-msgstr "Oglejte novice, povezane z I2P"
-
-msgid "I2P News"
-msgstr "Novice o I2P"
-
-msgid "View router workload and stats"
-msgstr "Oglejte obremenitveno nalogo strežnika in statistike"
-
-msgid "Router Jobs"
-msgstr "Naloge strežnika"
-
-msgid "View router logs"
-msgstr "Oglejte dnevnike strežnika"
-
-msgid "View information and stats regarding all known peers"
-msgstr "Oglejte informacije in statistike o vseh znanih sosednjih strežnikih"
-
-msgid "View active peers"
-msgstr "Oglejte aktivne sosednje strežnike"
-
-msgid "View peer performance profiles"
-msgstr "Oglejte profila zmogljivosti sosednjih strežnikov"
-
-msgid "View information about router and running environment"
-msgstr "Oglejte informacije o strežniku in delovnem okolju"
-
-msgid "Statistics"
-msgstr "Statistika"
-
-msgid "Current console and webapp translation report"
-msgstr "Trenutno poročilo o prevedbi konzole in spletnih aplikacij"
-
-msgid "Translation Status"
-msgstr "Stanje prevoza"
-
-msgid "View active tunnels"
-msgstr "Oglejte aktivne tunele"
-
-msgid "Customize homepage"
-msgstr "Prilagodba domačega mesta"
-
-msgid "Homepage"
-msgstr "Naslovna stran"
-
-msgid "Configure I2P Client Control Interface"
-msgstr "Konfigurirajte vmesnik za nadzor klienta I2P"
-
-msgid "View or edit router keyring for encrypted destinations"
-msgstr "Oglejte ali urejajte zapestre strežnika za šifrirane namene"
-
-msgid "Configure router networking options"
-msgstr "Konfigurirajte možnosti omrežja strežnika"
-
-msgid "Manually edit peers and view banned peers and blocklist"
-msgstr "Ročno uredite sosednje strežnike in ogled prepovedanih sosednjih strežnikov in blokiranega seznama"
-
-msgid "Install and manage router plugins"
-msgstr "Namestitev in upravljanje vstavk strežnika"
-
-msgid "Router reseeding and configuration"
-msgstr "Ponovno zalaganje in konfiguracija strežnika"
-
-msgid "Configure and manage Router family"
-msgstr "Konfiguracija in upravljanje družine strežnikov"
-
-msgid "Manage Router service"
-msgstr "Upravljanje storitve strežnika"
-
-msgid "Configure stat collection for graphing"
-msgstr "Konfiguracija zbiranja statistik za grafe"
-
-msgid "Router Stats"
-msgstr "Statistika strežnika"
-
-msgid "Configure router updates"
-msgstr "Konfiguracija posodobitev strežnika"
-
-msgid "Configuration wizard for new users"
-msgstr "Čarobnjak za konfiguracijo za nove uporabnike"
-
-msgid "Setup Wizard"
-msgstr "Čarobnjak za nastavitev"
-
-msgid "Customize sidebar"
-msgstr "Prilagodba straničnega pobočja"
-
-msgid "Configure tunnel options"
-msgstr "Konfiguracija možnosti tunela"
-
-msgid "Configure router user interface and optional console password"
-msgstr "Konfiguracija uporabniškega vmesnika strežnika in nepovrženega gesla konzole"
-
-msgid "Configuring I2P for optimal performance"
-msgstr "Konfiguriranje I2P za optimalno delovanje"
-
-msgid "Information for new users"
-msgstr "Informacije za nove uporabnike"
-
-msgid "A guide to reseeding your I2P router"
-msgstr "Primerilo za ponovno zalaganje vašega strežnika I2P"
-
-msgid "What to do in the event I2P isn't working"
-msgstr "Kaj storiti, če I2P ne deluje"
-
-msgid "Introduction to tunnel filters"
-msgstr "Uvod v filtriranje tunela"
-
-msgid "Tunnel Filters"
-msgstr "Filtre tunela"
+msgid "Customize"
+msgstr ""
 
 msgid "statistics"
 msgstr "statistika"
@@ -7646,9 +7538,6 @@ msgstr "Preklopi ID-jev tunela"
 msgid "Toggle Tunnels"
 msgstr "Preklopi tunele"
 
-msgid "Updating sidebar sections"
-msgstr "Posodabljanje odsekov stranske vrstice"
-
 msgid "Peer Profile"
 msgstr "Profil sosednjega strežnika"
 
@@ -7673,14 +7562,17 @@ msgstr "Vrni se na vrh"
 msgid "webmail"
 msgstr "webmail"
 
+msgid "Webmail"
+msgstr "Webmail"
+
 msgid "New Install Wizard"
 msgstr "Čarobnjak za novo namestitve"
 
 msgid "Skip Setup"
 msgstr "Preskoči nastavitev"
 
-msgid "Select the language to be used for the router console and web applications (<a href=/webmail target=_blank rel=noreferrer>webmail</a>, <a href=/torrents target=_blank rel=noreferrer>torrents</a>, <a href=/i2ptunnelmgr target=_blank rel=noreferrer>tunnel manager</a> etc). If you wish to change the language in future, change the router console theme, or configure a password to access the console, you may do so on the <a href=/configui target=_blank rel=noreferrer>User Interface configuration page</a>."
-msgstr "Izberite jezik, ki ga želite uporabiti za konzolo strežnika in spletna aplikacija (<a href=/webmail target=_blank rel=noreferrer>webmail</a>, <a href=/torrents target=_blank rel=noreferrer>torrenti</a>, <a href=/i2ptunnelmgr target=_blank rel=noreferrer>menadžer tunela</a> itd.). Če želite v prihodnosti spremeniti jezik, spremeniti temo konzole strežnika, ali konfigurirati geslo za dostop do konzole, lahko to storite na <a href=/configui target=_blank rel=noreferrer>strani za konfiguracijo uporabniškega vmesnika</a>."
+msgid "Select the language to be used for the router console and web applications ("
+msgstr ""
 
 msgid "Router Console &amp; WebApps Display Language"
 msgstr "Jezik prikaza konzole strežnika &amp; WebApps"
@@ -7749,6 +7641,13 @@ msgid "Bandwidth Configuration"
 msgstr "Konfiguracija širine pasma"
 
 #, java-format
+msgid "You have configured I2P+ to share only {0} KBps."
+msgstr "Konfigurirali ste I2P, da deli le {0} KBps."
+
+msgid "I2P+ requires at least 12KBps to enable sharing. "
+msgstr "I2P zahteva vsaj 12KBps za omogočanje deljenja."
+
+#, java-format
 msgid "You have configured I2P+ to share {0} KBps."
 msgstr "Konfigurirali ste I2P za deljenje {0} KBps."
 
@@ -7758,8 +7657,8 @@ msgstr "I2P+ zahteva spletni brskalnik, konfiguriran za uporabo bivalčega HTTP 
 msgid "Browser Setup"
 msgstr "Nastavitev brskalnika"
 
-msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. For more help, see <a href=https://geti2p.net/htproxyports target=_blank rel=noreferrer>the configuration guide</a>, or <a href=/help/configuration#browserconfig>the mini-tutorial for Firefox</a>."
-msgstr "Da bi dostopali do spletnih strani, gostiteljih na omrežju I2P, in po želji uporabljali privzeti outproxy za povezavo z spletnimi stranmi na odkriti mreži, morate svoj brskalnik nastaviti na uporabo I2P+ <b>HTTP</b> posredniškega strežnika, ki po privzemu deluje na <code>127.0.0.1 vrata 4444</code>. Za več pomoči, glejte <a href=https://geti2p.net/htproxyports target=_blank rel=noreferrer>vodilo za konfiguracijo</a>, ali <a href=/help/configuration#browserconfig>mini-tutorijal za Firefox</a>."
+msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. "
+msgstr ""
 
 msgid "Welcome to I2P+!"
 msgstr "Dobrodošli v I2P+!"
@@ -7767,8 +7666,8 @@ msgstr "Dobrodošli v I2P+!"
 msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
 msgstr "Ko zagnate I2P, lahko potrebuje nekaj minut za ujemanje (integracija) vašega strežnika v omrežje in iskanje dodatnih sosednjih strežnikov, zato prosim, da budete strpelni."
 
-msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P+."
-msgstr "Kotmile zelene zvezde prikazane ob vaših Lokalnih tunelih, obstaja širok spekter stvari, ki jih lahko storite z I2P."
+msgid "Once green stars are indicated next to your Service Tunnels, there is a wide variety of things you can do with I2P+."
+msgstr ""
 
 msgid "Unknown Wizard page"
 msgstr "Neznana stran čarobnjaka"
@@ -7787,4 +7686,74 @@ msgstr "Naslednje"
 
 msgid "Finished"
 msgstr "Končano"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#, java-format
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

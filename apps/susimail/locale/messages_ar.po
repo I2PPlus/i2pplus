@@ -226,12 +226,6 @@ msgstr "I2PMail"
 msgid "No new messages"
 msgstr "لا توجد رسائل جديدة"
 
-msgid "Checking for new messages on server"
-msgstr "التحقق من رسائل البريد الإلكتروني الجديدة على الخادم"
-
-msgid "Refresh the page for updates"
-msgstr "قم بتحديث الصفحة للحصول على التحديثات"
-
 #, java-format
 msgid "{0} is an I2P-exclusive service provided by {1}."
 msgstr "{0} هي خدمة حصرية لـ I2P مقدمة من {1}."
@@ -239,6 +233,12 @@ msgstr "{0} هي خدمة حصرية لـ I2P مقدمة من {1}."
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
 msgstr "{0} webmail client &copy Susi 2004-2005."
+
+msgid "Checking for new messages on server"
+msgstr "التحقق من رسائل البريد الإلكتروني الجديدة على الخادم"
+
+msgid "Refresh the page for updates"
+msgstr "قم بتحديث الصفحة للحصول على التحديثات"
 
 msgid "Removed tracking image placeholder"
 msgstr "تم إزالة مكان الحفظ للصورة المُتبعَة"
@@ -350,6 +350,9 @@ msgstr "فحص البريد"
 msgid "Refresh Page"
 msgstr "تحديث الصفحة"
 
+msgid "Change to Folder"
+msgstr "التغيير إلى مجلد"
+
 #, java-format
 msgid "1 Message"
 msgid_plural "{0} Messages"
@@ -372,18 +375,6 @@ msgstr "الحجم"
 msgid "Mark for deletion"
 msgstr "اختر للحذف"
 
-msgid "Message contains HTML"
-msgstr "الرسالة تحتوي على HTML"
-
-msgid "Message is new"
-msgstr "الرسالة جديدة"
-
-msgid "Message is spam"
-msgstr "الرسالة غير مرغوب فيها"
-
-msgid "Message body not downloaded"
-msgstr "نص الرسالة لم يتم تحميله"
-
 msgid "Really delete the marked messages?"
 msgstr "هل تريد حذف الرسائل المحددة حقًا؟"
 
@@ -399,8 +390,17 @@ msgstr "حدد الكل"
 msgid "Clear All"
 msgstr "امسح الكل"
 
-msgid "Change to Folder"
-msgstr "التغيير إلى مجلد"
+msgid "Message contains HTML"
+msgstr "الرسالة تحتوي على HTML"
+
+msgid "Message is new"
+msgstr "الرسالة جديدة"
+
+msgid "Message is spam"
+msgstr "الرسالة غير مرغوب فيها"
+
+msgid "Message body not downloaded"
+msgstr "نص الرسالة لم يتم تحميله"
 
 msgid "First"
 msgstr "اﻷول"

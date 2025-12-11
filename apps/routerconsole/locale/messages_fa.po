@@ -73,8 +73,17 @@ msgstr "اطلاعات روتر {0} را از میزبان های reseed به د
 msgid "Acquired {0} router infos from reseed hosts ({1} errors)"
 msgstr "اطلاعات روتر {0} را از میزبان های reseed به دست آورد ({1} خطا)"
 
+msgid "Clock step adjustment (ms)"
+msgstr "تنظیم مرحله ساعت (ms)"
+
+msgid "Size of tunnel acceptor backlog"
+msgstr "اندازه بک لاگ پذیرنده تونل"
+
 msgid "Message receive rate (B/s)"
 msgstr "نرخ دریافت پیام (B/s)"
+
+msgid "Low-level receive rate (B/s)"
+msgstr "نرخ دریافت سطح پایین (B/s)"
 
 msgid "Message send rate (B/s)"
 msgstr "نرخ ارسال پیام (B/s)"
@@ -82,41 +91,35 @@ msgstr "نرخ ارسال پیام (B/s)"
 msgid "Low-level send rate (B/s)"
 msgstr "نرخ ارسال سطح پایین (B/s)"
 
-msgid "Low-level receive rate (B/s)"
-msgstr "نرخ دریافت سطح پایین (B/s)"
-
-msgid "Total peers in our NetDb"
-msgstr "مجموع همتایان در NetDb ما"
-
 msgid "Peers active in the last minute"
 msgstr "همسالان فعال در آخرین دقیقه"
-
-msgid "Known high capacity peers"
-msgstr "همتایان با ظرفیت بالا"
 
 msgid "Peers sent to in the last minute"
 msgstr "ارسال همتایان به در دقیقه آخر"
 
+msgid "Total peers in our banlist"
+msgstr "مجموع همتایان در فهرست ممنوعه ما"
+
+msgid "CPU load average of the JVM"
+msgstr "میانگین بار CPU JVM"
+
 msgid "Known fast peers"
 msgstr "همسالان سریع شناخته شده"
+
+msgid "Known high capacity peers"
+msgstr "همتایان با ظرفیت بالا"
 
 msgid "Known integrated (floodfill) peers"
 msgstr "همتایان یکپارچه (سیلاب) شناخته شده"
 
-msgid "Total peers in our banlist"
-msgstr "مجموع همتایان در فهرست ممنوعه ما"
+msgid "Total peers in our NetDb"
+msgstr "مجموع همتایان در NetDb ما"
+
+msgid "Total number of threads in use"
+msgstr ""
 
 msgid "Peers without a published IP address"
 msgstr "همتایان بدون آدرس IP منتشر شده"
-
-msgid "Size of tunnel acceptor backlog"
-msgstr "اندازه بک لاگ پذیرنده تونل"
-
-msgid "Clock step adjustment (ms)"
-msgstr "تنظیم مرحله ساعت (ms)"
-
-msgid "CPU load average of the JVM"
-msgstr "میانگین بار CPU JVM"
 
 msgid "Average tunnel build success %"
 msgstr "درصد موفقیت متوسط ​​ساخت تونل"
@@ -1554,29 +1557,29 @@ msgstr "راه اندازی مجدد در {0}"
 msgid "Save order"
 msgstr "ذخیره ترتیب"
 
+msgid "Restore full default"
+msgstr "بازیابی کامل پیش فرض"
+
+msgid "Restore minimal default"
+msgstr "حداقل پیش فرض را بازیابی کنید"
+
 msgid "Sidebar preferences updated"
 msgstr "ترجیحات نوار کناری به‌روزرسانی شد"
 
 msgid "Refresh interval must be a number"
 msgstr "فاصله بازخوانی باید یک عدد باشد"
 
-msgid "Restore full default"
-msgstr "بازیابی کامل پیش فرض"
-
 msgid "Full sidebar defaults restored."
 msgstr "پیش‌فرض‌های نوار کناری کامل بازیابی شد."
 
-msgid "Sidebar will refresh shortly."
-msgstr "نوار کناری به زودی تازه‌سازی خواهد شد."
-
-msgid "Restore minimal default"
-msgstr "حداقل پیش فرض را بازیابی کنید"
-
-msgid "Minimal sidebar defaults restored."
-msgstr "پیش‌فرض‌های نوار کناری حداقلی بازیابی شد."
-
 msgid "Order must be an integer"
 msgstr "ترتیب باید یک عدد صحیح باشد"
+
+msgid "Saved order of sections."
+msgstr "ترتیب بخش ها ذخیره شده است."
+
+msgid "Sidebar will refresh shortly."
+msgstr "نوار کناری به زودی تازه‌سازی خواهد شد."
 
 msgid "No section selected"
 msgstr "هیچ بخشی انتخاب نشده است"
@@ -1586,9 +1589,6 @@ msgstr "هیچ سفارشی وارد نشده است"
 
 msgid "Moved"
 msgstr "نقل مکان کرد"
-
-msgid "Saved order of sections."
-msgstr "ترتیب بخش ها ذخیره شده است."
 
 msgid "Full statistics enabled"
 msgstr "آمار کامل فعال شد"
@@ -2417,6 +2417,9 @@ msgstr "پراکسی HTTP فعال نیست"
 msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
 msgstr "مرورگر شما برای استفاده از پروکسی HTTP در {0} به درستی پیکربندی نشده است."
 
+msgid "Errors"
+msgstr ""
+
 msgid "URL"
 msgstr "آدرس اینترنتی"
 
@@ -2691,29 +2694,23 @@ msgstr "یا Sybil نزدیک به این روتر"
 msgid "Lookup"
 msgstr "جستجو"
 
-msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
-msgstr "هرگز هویت روتر خود را برای کسی فاش نکنید، زیرا به صورت منحصر به فرد به آدرس IP شما در پایگاه داده شبکه مرتبط است."
+msgid "Select the field to search on"
+msgstr ""
 
-msgid "is banned"
-msgstr "ممنوع است"
-
-msgid "not found in network database"
-msgstr "در پایگاه داده شبکه یافت نشد"
-
-msgid "Bad Base64 Router hash"
-msgstr "هش Base64 روتر نامعتبر"
-
-msgid "No routers with"
-msgstr "هیچ روتری با"
-
-msgid "Hash prefix"
-msgstr "پیشوند هش"
-
-msgid "Port"
-msgstr "پورت"
+msgid "e.g. cn hk"
+msgstr ""
 
 msgid "MTU"
 msgstr "MTU"
+
+msgid "Enter search value here"
+msgstr ""
+
+msgid "Router not found"
+msgstr ""
+
+msgid "No routers with"
+msgstr "هیچ روتری با"
 
 msgid "found in the network database"
 msgstr "در پایگاه داده شبکه یافت شد"
@@ -2841,17 +2838,17 @@ msgstr "{0} پیش منقضی شده است"
 msgid "Unknown"
 msgstr "ناشناس"
 
-msgid "Advanced mode - includes all statistics published by floodfills."
-msgstr "حالت پیشرفته - شامل تمام آمار منتشر شده توسط floodfills."
-
-msgid "Compact mode - does not include statistics published by floodfills."
-msgstr "حالت فشرده - شامل آمار منتشر شده توسط floodfills نیست."
-
 msgid "Network Database Router Statistics"
 msgstr "آمار روتر پایگاه داده شبکه"
 
 msgid "Count"
 msgstr "شمارش"
+
+msgid "Under 12 KB/s"
+msgstr ""
+
+msgid "Over 2048 KB/s"
+msgstr ""
 
 msgid "Bandwidth Tier"
 msgstr "ردیف پهنای باند"
@@ -2923,6 +2920,9 @@ msgstr "منتشرشده"
 msgid "Hostname"
 msgstr "نام میزبان"
 
+msgid "Whois"
+msgstr ""
+
 msgid "direct"
 msgstr "مستقیم"
 
@@ -2938,20 +2938,26 @@ msgstr "نمایش همه مسیریاب‌ها با این نوع امضا در
 msgid "Show all routers with this encryption type in the NetDb"
 msgstr "نمایش همه مسیریاب‌ها با این نوع رمزنگاری در NetDb"
 
-msgid "Addresses"
-msgstr "آدرسها"
-
-msgid "n/a"
-msgstr "n/a"
-
 msgid "Show all routers with this address in the NetDb"
 msgstr "نمایش همه روترها با این آدرس در NetDb"
 
 msgid "Show all routers with this port in the NetDb"
 msgstr "نمایش تمام روترهای دارای این پورت در NetDb"
 
-msgid "Routers"
-msgstr "روترها"
+msgid "Maximum Transmission Unit"
+msgstr ""
+
+msgid "Show all routers with this MTU in the NetDb"
+msgstr ""
+
+msgid "Addresses"
+msgstr "آدرسها"
+
+msgid "Introducers"
+msgstr ""
+
+msgid "Network Id"
+msgstr "شناسه شبکه"
 
 msgid "First heard about"
 msgstr "اولین بار در مورد آن شنیدم"
@@ -2962,11 +2968,8 @@ msgstr "آخرین شنیده شدن در مورد"
 msgid "Last heard from"
 msgstr "آخرین خبر از"
 
-msgid "Network Id"
-msgstr "شناسه شبکه"
-
-msgid "Count is always spoofed to avoid indicating router restarts"
-msgstr "شمارش همیشه جعل می‌شود تا از نشان دادن راه‌اندازی مجدد روتر جلوگیری کند"
+msgid "Info"
+msgstr "اطلاعات"
 
 msgid "Hidden or starting up"
 msgstr "پنهان یا راه اندازی"
@@ -2995,17 +2998,32 @@ msgstr "SSU [IPv6]"
 msgid "SSU [IPv6] with Introducers"
 msgstr "IPv6 SSU، معرفی کنندگان"
 
+msgid "NTCP &amp; SSU with Introducers [IPv6 Only]"
+msgstr "IPv6 فقط NTCP، SSU، معرفی‌کنندگان"
+
 msgid "NTCP [IPv6]"
 msgstr "NTCP [IPv6]"
 
 msgid "NTCP [IPv6] &amp; SSU"
 msgstr "IPv6 NTCP، SSU"
 
-msgid "NTCP &amp; SSU with Introducers [IPv6 Only]"
-msgstr "IPv6 فقط NTCP، SSU، معرفی‌کنندگان"
-
 msgid "NTCP [IPv6] &amp; SSU with Introducers"
 msgstr "IPv6 NTCP، SSU، معرفی‌کنندگان"
+
+msgid "Local"
+msgstr "محلی"
+
+msgid "Fast Tier"
+msgstr ""
+
+msgid "High Capacity Tier"
+msgstr ""
+
+msgid "Integrated Tier"
+msgstr ""
+
+msgid "Standard Tier"
+msgstr ""
 
 msgid "No peer connections available"
 msgstr "اتصال همتا موجود نیست"
@@ -3339,14 +3357,17 @@ msgstr "آخرین شنیده از"
 msgid "View/Edit"
 msgstr "مشاهده/ویرایش"
 
-msgid "Unreachable"
-msgstr "غیر قابل دسترس"
-
 msgid "OK"
 msgstr "تایید"
 
 msgid "Test Fails"
 msgstr "آزمون ناموفق است"
+
+msgid "Unreachable"
+msgstr "غیر قابل دسترس"
+
+msgid "Most tests passing"
+msgstr ""
 
 msgid "Fast, High Capacity"
 msgstr "سریع، ظرفیت بالا"
@@ -3362,6 +3383,9 @@ msgstr "شکست"
 
 msgid "Integrated"
 msgstr "یکپارچه"
+
+msgid "Configure Peer"
+msgstr ""
 
 msgid "Thresholds"
 msgstr "آستانه ها"
@@ -3429,11 +3453,11 @@ msgstr "آخرین ارسال بد"
 msgid "Last Bad Store"
 msgstr "آخرین فروشگاه بد"
 
-msgid "Capabilities in the NetDb, not used to determine profiles"
-msgstr "قابلیت های موجود در NetDb که برای تعیین نمایه ها استفاده نمی شود"
-
 msgid "caps"
 msgstr "کلاه"
+
+msgid "Capabilities in the NetDb, not used to determine profiles"
+msgstr "قابلیت های موجود در NetDb که برای تعیین نمایه ها استفاده نمی شود"
 
 msgid "Reachable"
 msgstr "قابل دسترس"
@@ -3606,6 +3630,9 @@ msgstr "برای نصب روی راه اندازی مجدد کلیک کنید"
 
 msgid "Click Shutdown and restart to install"
 msgstr "برای نصب کلیک کنید و دوباره راه اندازی کنید"
+
+msgid "Unable"
+msgstr ""
 
 #, java-format
 msgid "{0}"
@@ -3800,9 +3827,6 @@ msgstr "عملکرد روتر نمودار"
 msgid "Router Help and FAQ"
 msgstr "کمک روتر و سؤالات متداول"
 
-msgid "Info"
-msgstr "اطلاعات"
-
 msgid "Router information including transport addresses and UPnP scan"
 msgstr "اطلاعات روتر از جمله آدرس های حمل و نقل و اسکن UPNP"
 
@@ -3888,6 +3912,34 @@ msgstr "فعال کردن floodfill"
 msgid "Total number of remote LeaseSets stored in our NetDb"
 msgstr "مجموع تعداد LeaseSet‌های از راه دور ذخیره شده در NetDb ما"
 
+msgid "Declining transit tunnel requests during startup phase"
+msgstr "هیچ درخواست تونل مشارکتی در 10 دقیقه اول پذیرفته نمی شود در حالی که روتر تثبیت می شود"
+
+msgid "Declining transit tunnel requests as we are shutting down"
+msgstr "رد درخواست‌های تونل شرکت‌کننده چون در حال تعطیلی هستیم"
+
+msgid "Router or network performance is impeding the building of transit tunnels"
+msgstr "عملکرد روتر یا شبکه مانع ساخت تونل های شرکت کننده می شود"
+
+msgid "Router is currently hosting the configured maximum number of transit tunnels"
+msgstr "روتر در حال حاضر تعداد حداکثر تونل‌های انتقالی را که تنظیم شده است، ارائه می‌دهد"
+
+msgid "Router is currently using the configured maximum share bandwidth"
+msgstr "روتر در حال حاضر از باند‌بندی حداکثر مشترک تنظیم شده استفاده می‌کند"
+
+msgid "Router is ready to build participating tunnels"
+msgstr "روتر آماده ساخت تونل های مشارکت کننده است"
+
+#, java-format
+msgid "Accepting transit tunnel requests; hosting {0} tunnels"
+msgstr "پذیرش درخواست‌های تونل ترانزیت؛ میزبانی {0} تونل"
+
+msgid "No transit tunnels are built when Hidden mode is active"
+msgstr "هنگامی که حالت پنهان فعال است، هیچ تونل مشارکتی ساخته نمی شود"
+
+msgid "Router is configured to reject all transit tunnel requests"
+msgstr "روتر به گونه ای پیکربندی شده است که تمام درخواست های تونل شرکت کننده را رد کند"
+
 msgid "Warning: ECDSA is not available. Update your Java or OS"
 msgstr "هشدار: ECDSA در دسترس نیست."
 
@@ -3923,6 +3975,9 @@ msgstr "تعداد همتایان ممنوعه"
 
 msgid "The total number of peers in our network database"
 msgstr "تعداد کل همتاها در پایگاه داده شبکه ما"
+
+msgid "Total RouterInfos stored on disk"
+msgstr ""
 
 msgid "Known"
 msgstr "معروف"
@@ -4034,34 +4089,6 @@ msgstr "درخواست‌های روترهای دیگر برای شرکت در �
 
 msgid "Backlog"
 msgstr "عقب ماندگی"
-
-msgid "Declining transit tunnel requests during startup phase"
-msgstr "هیچ درخواست تونل مشارکتی در 10 دقیقه اول پذیرفته نمی شود در حالی که روتر تثبیت می شود"
-
-msgid "Declining transit tunnel requests as we are shutting down"
-msgstr "رد درخواست‌های تونل شرکت‌کننده چون در حال تعطیلی هستیم"
-
-msgid "Router or network performance is impeding the building of transit tunnels"
-msgstr "عملکرد روتر یا شبکه مانع ساخت تونل های شرکت کننده می شود"
-
-msgid "Router is currently hosting the configured maximum number of transit tunnels"
-msgstr "روتر در حال حاضر تعداد حداکثر تونل‌های انتقالی را که تنظیم شده است، ارائه می‌دهد"
-
-msgid "Router is currently using the configured maximum share bandwidth"
-msgstr "روتر در حال حاضر از باند‌بندی حداکثر مشترک تنظیم شده استفاده می‌کند"
-
-msgid "Router is ready to build participating tunnels"
-msgstr "روتر آماده ساخت تونل های مشارکت کننده است"
-
-#, java-format
-msgid "Accepting transit tunnel requests; hosting {0} tunnels"
-msgstr "پذیرش درخواست‌های تونل ترانزیت؛ میزبانی {0} تونل"
-
-msgid "No transit tunnels are built when Hidden mode is active"
-msgstr "هنگامی که حالت پنهان فعال است، هیچ تونل مشارکتی ساخته نمی شود"
-
-msgid "Router is configured to reject all transit tunnel requests"
-msgstr "روتر به گونه ای پیکربندی شده است که تمام درخواست های تونل شرکت کننده را رد کند"
 
 msgid "Statistics gathered during this router's uptime"
 msgstr "آمار جمع آوری شده در طول زمان کار این روتر"
@@ -4193,8 +4220,14 @@ msgstr "بدون تجزیه و تحلیل ذخیره شده"
 msgid "Select stored analysis"
 msgstr "تجزیه و تحلیل ذخیره شده را انتخاب کنید"
 
+msgid "Review"
+msgstr ""
+
 msgid "Run analysis on Floodfills only"
 msgstr "آنالیز را فقط روی Floodfills اجرا کنید"
+
+msgid "Start Scan"
+msgstr ""
 
 msgid "Run analysis on all routers in NetDb"
 msgstr "تجزیه و تحلیل را روی همه روترها در NetDb اجرا کنید"
@@ -4358,6 +4391,12 @@ msgstr "حداکثر"
 msgid "Show all routers for this family in NetDb"
 msgstr "نمایش همه روترهای این خانواده در NetDb"
 
+msgid "Routers"
+msgstr "روترها"
+
+msgid "n/a"
+msgstr "n/a"
+
 msgid "Last lookup successful"
 msgstr "آخرین جستجو با موفقیت انجام شد"
 
@@ -4409,9 +4448,6 @@ msgstr "داده ها منتقل شده است"
 msgid "Data"
 msgstr "داده ها"
 
-msgid "Limit"
-msgstr "محدودیت"
-
 msgid "Receive on"
 msgstr "دریافت کنید"
 
@@ -4456,6 +4492,7 @@ msgstr "روتر در حال حاضر در حالت مخفی کار می کند 
 msgid "No transit tunnels currently active."
 msgstr "در حال حاضر هیچ تونل ترانزیت فعال نیست."
 
+#, java-format
 msgid "Transit Tunnels by Peer (Top {0})"
 msgstr "تونل‌های ترانزیت بر اساس همتا (برتر {0})"
 
@@ -4467,9 +4504,6 @@ msgstr "همه تونل ها توسط Peer"
 
 msgid "Primary IP address"
 msgstr "آدرس IP اصلی"
-
-msgid "Local"
-msgstr "محلی"
 
 msgid "unique peers"
 msgstr "همتایان منحصر به فرد"
@@ -4483,6 +4517,9 @@ msgstr "ترانزیت"
 msgid "No local or transit tunnels currently active."
 msgstr "در حال حاضر هیچ تونل محلی یا ترانزیت فعال نیست."
 
+msgid "PRIVATE IP ADDRESS"
+msgstr ""
+
 msgid "Bandwidth Tiers"
 msgstr "ردیف های پهنای باند"
 
@@ -4492,6 +4529,9 @@ msgstr "بیش از {0} پهنای باند مشترک"
 
 msgid "Inbound or outbound?"
 msgstr "ورودی یا خروجی؟"
+
+msgid "In/Out"
+msgstr ""
 
 msgid "Gateway"
 msgstr "دروازه"
@@ -4608,6 +4648,9 @@ msgstr "وب سرور I2P (eepsite)"
 msgid "Browser launch at startup"
 msgstr "راه اندازی مرورگر در هنگام راه اندازی"
 
+msgid "I2P Router Console"
+msgstr ""
+
 msgid "Open Router Console in web browser at startup"
 msgstr "هنگام راه اندازی، کنسول روتر را در مرورگر وب باز کنید"
 
@@ -4683,12 +4726,6 @@ msgstr "کلید"
 msgid "port"
 msgstr "درگاه"
 
-msgid "config UI"
-msgstr "پیکربندی UI"
-
-msgid "User Interface Configuration"
-msgstr "پیکربندی رابط کاربری"
-
 msgid "Certificates"
 msgstr "گواهینامه ها"
 
@@ -4704,8 +4741,8 @@ msgstr "محدود کننده پهنای باند"
 msgid "Advanced Network Configuration"
 msgstr "پیکربندی شبکه پیشرفته"
 
-msgid "I2P+ will work best if you configure your rates to match the speed of your internet connection."
-msgstr "I2P اگر نرخ های خود را پیکربندی کنید تا با سرعت اتصال اینترنت خود مطابقت داشته باشد ، بهترین کار خواهد بود."
+msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
+msgstr ""
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
 msgstr "توجه: سهم شما در شبکه (سهم شبکه) با تخصیص پهنای باند بالادست (سرعت بارگذاری) تعیین می شود."
@@ -4735,11 +4772,11 @@ msgid "NOTE"
 msgstr "توجه"
 
 #, java-format
-msgid "You have configured I2P+ to share only {0} KBps."
-msgstr "شما I2P را طوری پیکربندی کرده اید که فقط {0} کیلوبایت بر ثانیه به اشتراک گذاشته شود."
+msgid "You have configured I2P to share only {0} KBps."
+msgstr ""
 
-msgid "I2P+ requires at least 12KBps to enable sharing. "
-msgstr "I2P به حداقل 12KBps برای فعال کردن اشتراک‌گذاری نیاز دارد."
+msgid "I2P requires at least 12KBps to enable sharing. "
+msgstr ""
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
 msgstr "لطفاً اشتراک گذاری (شرکت در تونل ها) را با پیکربندی پهنای باند بیشتر فعال کنید."
@@ -5236,8 +5273,8 @@ msgstr "پیکربندی مجدد"
 msgid "Reseeding is the bootstrapping process used to find other routers when you first install I2P, or when your router has too few router references remaining."
 msgstr "بازیابی منابع فرآیند راه‌اندازی استفاده شده برای پیدا کردن روترهای دیگر هنگام نصب اولیه I2P یا هنگامی که روتر شما تنها چند ارجاع دهنده روتر دارد."
 
-msgid "To enable the configuration of reseed urls, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
-msgstr "برای فعال کردن تنظیم urlهای بازیابی، حالت <a href=\"/help/advancedsettings\">پیشرفته</a> کنسول را فعال کنید."
+msgid "To enable the configuration of reseed urls, activate the console's <a href=/help/advancedsettings>Advanced mode</a>."
+msgstr ""
 
 msgid "Reseeding Configuration"
 msgstr "پیکربندی مجدد بذر"
@@ -5247,9 +5284,6 @@ msgstr "کمک به کاشت مجدد"
 
 msgid "Reseeding Help"
 msgstr "کمک به بذرپاشی مجدد"
-
-msgid "Change these only if HTTPS is blocked by a restrictive firewall and reseed has failed."
-msgstr "فقط در صورتی این موارد را تغییر دهید که HTTPS توسط یک فایروال محدود کننده مسدود شده باشد و reseed ناموفق باشد."
 
 msgid "Reseed URLs"
 msgstr "نشانی‌های اینترنتی را مجدداً مشاهده کنید"
@@ -5286,6 +5320,9 @@ msgstr "در این گزینه از HTTP از HTTP I2P برای RESEED استف�
 
 msgid "I2P Outproxy"
 msgstr "I2P Outproxy"
+
+msgid "Port"
+msgstr "پورت"
 
 msgid "Use HTTP Proxy for HTTP Reseed Hosts"
 msgstr "از پروکسی HTTP برای هاست های HTTP Reseed استفاده کنید"
@@ -5399,6 +5436,12 @@ msgstr "نوار کناری یکپارچه"
 msgid "Use the same sidebar on all pages"
 msgstr "از همان نوار کناری در تمام صفحات استفاده کنید"
 
+msgid "Sticky sidebar"
+msgstr ""
+
+msgid "Enable conditional fixed sidebar"
+msgstr ""
+
 msgid "config stats"
 msgstr "آمار پیکربندی"
 
@@ -5455,6 +5498,12 @@ msgstr "برای تغییر تنظیمات تونل مشتری، از <a href=\"
 
 msgid "To enable session-only changes to the client tunnels, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
 msgstr "برای فعال کردن تغییرات فقط در جلسه در تونل های سرویس گیرنده، <a href=\"/help/advancedsettings\">حالت پیشرفته</a> کنسول را فعال کنید."
+
+msgid "config UI"
+msgstr "پیکربندی UI"
+
+msgid "User Interface Configuration"
+msgstr "پیکربندی رابط کاربری"
 
 msgid "Router Console Theme"
 msgstr "موضوع کنسول روتر"
@@ -5592,14 +5641,20 @@ msgstr "خطا 404"
 msgid "not found"
 msgstr "یافت نشد"
 
+msgid "router logs"
+msgstr "لاگ‌های روتر"
+
+msgid "Critical / Error Level Logs"
+msgstr "گزارش های سطح بحرانی / خطا"
+
+msgid "Clear logs"
+msgstr "سیاهههای مربوط را پاک کنید"
+
 msgid "events"
 msgstr "رویدادها"
 
 msgid "Event Log"
 msgstr "گزارش رویداد"
-
-msgid "Combined"
-msgstr "ترکیبی"
 
 msgid "graph"
 msgstr "گراف"
@@ -5832,8 +5887,8 @@ msgstr "این تنظیم (در چند ثانیه) به شما اجازه می �
 msgid "This setting determines whether routers classified as uninteresting (K or L tier, unreachable or older than 0.9.50) are checked during the refresh router process after 1 hour of uptime. [Default is false]"
 msgstr "این تنظیم تعیین می‌کند که آیا روترهای طبقه‌بندی‌شده به‌عنوان غیرجالب (سطح K یا L، غیرقابل دسترس یا قدیمی‌تر از 0.9.50) در طول فرآیند تازه‌سازی روتر پس از 1 ساعت کارکرد بررسی می‌شوند. "
 
-msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
-msgstr "وقتی روی true تنظیم شود، این تنظیم شرایط لازم برای روتر شما برای انتشار محدودیت‌های تراکم را تسهیل می‌کند، به خصوص زمانی که مشخص شود استفاده از پهنای باند شما بالا است. شرایط دیگر، مانند تأخیر بالای کار یا روتر طبقه‌بندی شده به عنوان کند، همچنان باعث انتشار محدودیت‌ها می‌شود. [پیش‌فرض false است]"
+msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
+msgstr ""
 
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
 msgstr "هنگامی که پیکربندی می شود، محدودیت سختی برای تعداد تونل هایی که روتر مجاز به ساخت همزمان است تعیین می کند. "
@@ -6108,8 +6163,8 @@ msgstr "برای اینکه کنسول شما در شبکه محلی قابل د
 msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
 msgstr "مثال: برای اجازه دسترسی از هر دو localhost و 192.168.1.10 از طریق HTTP و HTTPS:"
 
-msgid "For most client services, change listening address for relevant service in Tunnel Manager's configuration section using <i>reachable by</i> dropdown."
-msgstr "برای اکثر خدمات کلاینت، آدرس شنیداری را برای سرویس مربوطه در بخش پیکربندی مدیر تونل با استفاده از منوی کشویی <i>قابل دسترسی توسط</i> تغییر دهید."
+msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager's configuration section using the <i>reachable by</i> dropdown."
+msgstr ""
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "چطور از طریق I2P به IRC متصل شوم؟"
@@ -7308,34 +7363,6 @@ msgstr "آمار صف شغل"
 msgid "Job Queue Stats"
 msgstr "آمار صف شغل"
 
-msgid "logs"
-msgstr "سیاهههای مربوط"
-
-msgid "Please include your I2P version and running environment information in bug reports"
-msgstr "لطفاً نسخه I2P و اطلاعات محیط در حال اجرا خود را در گزارش های اشکال وارد کنید"
-
-#, java-format
-msgid "Please report bugs on {0} or {1}."
-msgstr "لطفاً اشکالات مربوط به {0} یا {1} را گزارش کنید."
-
-msgid "View event log"
-msgstr "مشاهده گزارش رویداد"
-
-msgid "Critical / Error Level Logs"
-msgstr "گزارش های سطح بحرانی / خطا"
-
-msgid "Clear logs"
-msgstr "سیاهههای مربوط را پاک کنید"
-
-msgid "Configure router logging options"
-msgstr "گزینه های گزارش روتر را پیکربندی کنید"
-
-msgid "Filter Router log output"
-msgstr "فیلتر کردن خروجی روتر"
-
-msgid "Service (Wrapper) Logs"
-msgstr "سیاهههای مربوط به سرویس (Wrapper)"
-
 msgid "network database"
 msgstr "پایگاه داده شبکه"
 
@@ -7356,6 +7383,9 @@ msgstr "سرویس عمومی میزبانی شده محلی"
 
 msgid "Requested client leaseset"
 msgstr "LeaseSet کلاینت درخواست شده"
+
+msgid "Remote"
+msgstr ""
 
 msgid "network database router map"
 msgstr "نقشه روتر بانک اطلاعاتی شبکه"
@@ -7400,164 +7430,26 @@ msgstr "همتایان ممنوع"
 msgid "Fast / High Capacity"
 msgstr "سریع / ظرفیت بالا"
 
-msgid "router logs"
-msgstr "لاگ‌های روتر"
+msgid "Configure router logging options"
+msgstr "گزینه های گزارش روتر را پیکربندی کنید"
+
+msgid "View event log"
+msgstr "مشاهده گزارش رویداد"
+
+msgid "Filter Router log output"
+msgstr "فیلتر کردن خروجی روتر"
 
 msgid "service logs"
 msgstr "لاگ‌های سرویس"
 
-msgid "Manage I2P addresses"
-msgstr "آدرس های I2P را مدیریت کنید"
-
-msgid "Imagegen"
-msgstr "تصویر"
-
-msgid "Create and download torrents"
-msgstr "ایجاد و دانلود تورنت"
-
-msgid "Manage client and server tunnels"
-msgstr "تونل های سرویس گیرنده و سرور را مدیریت کنید"
-
-msgid "Webmail client"
-msgstr "سرویس گیرنده ایمیل"
-
-msgid "Webmail"
-msgstr "وب میل"
-
-msgid "Local webserver for hosting content on the I2P network"
-msgstr "وب سرور محلی برای میزبانی محتوا در شبکه I2P"
+msgid "Service (Wrapper) Logs"
+msgstr "سیاهههای مربوط به سرویس (Wrapper)"
 
 msgid "Information &amp; Diagnostics"
 msgstr "اطلاعات"
 
-msgid "Review recent updates to I2P"
-msgstr "به روز رسانی های اخیر I2P را مرور کنید"
-
-msgid "View debugging information"
-msgstr "اطلاعات اشکال زدایی را مشاهده کنید"
-
-msgid "View router performance graphs"
-msgstr "نمودارهای عملکرد روتر را مشاهده کنید"
-
-msgid "Router help section"
-msgstr "بخش راهنمای روتر"
-
-msgid "Router homepage"
-msgstr "صفحه اصلی روتر"
-
-msgid "Home"
-msgstr "خانه"
-
-msgid "View news relating to I2P"
-msgstr "اخبار مربوط به I2P را مشاهده کنید"
-
-msgid "I2P News"
-msgstr "اخبار I2P"
-
-msgid "View router workload and stats"
-msgstr "حجم کار و آمار روتر را مشاهده کنید"
-
-msgid "Router Jobs"
-msgstr "مشاغل روتر"
-
-msgid "View router logs"
-msgstr "گزارش های روتر را مشاهده کنید"
-
-msgid "View information and stats regarding all known peers"
-msgstr "اطلاعات و آمار مربوط به همه همتایان شناخته شده را مشاهده کنید"
-
-msgid "View active peers"
-msgstr "مشاهده همتایان فعال"
-
-msgid "View peer performance profiles"
-msgstr "نمایه های عملکرد همتا را مشاهده کنید"
-
-msgid "View information about router and running environment"
-msgstr "اطلاعات مربوط به روتر و محیط در حال اجرا را مشاهده کنید"
-
-msgid "Statistics"
-msgstr "آمار"
-
-msgid "Current console and webapp translation report"
-msgstr "گزارش ترجمه کنسول فعلی و برنامه وب"
-
-msgid "Translation Status"
-msgstr "وضعیت ترجمه"
-
-msgid "View active tunnels"
-msgstr "مشاهده تونل های فعال"
-
-msgid "Customize homepage"
-msgstr "سفارشی کردن صفحه اصلی"
-
-msgid "Homepage"
-msgstr "صفحه اصلی"
-
-msgid "Configure I2P Client Control Interface"
-msgstr "رابط کنترل مشتری I2P را پیکربندی کنید"
-
-msgid "View or edit router keyring for encrypted destinations"
-msgstr "کلید روتر را برای مقاصد رمزگذاری شده مشاهده یا ویرایش کنید"
-
-msgid "Configure router networking options"
-msgstr "گزینه های شبکه روتر را پیکربندی کنید"
-
-msgid "Manually edit peers and view banned peers and blocklist"
-msgstr "همتاها را به صورت دستی ویرایش کنید و همتاهای ممنوعه و لیست بلاک را مشاهده کنید"
-
-msgid "Install and manage router plugins"
-msgstr "پلاگین های روتر را نصب و مدیریت کنید"
-
-msgid "Router reseeding and configuration"
-msgstr "بذر و پیکربندی مجدد روتر"
-
-msgid "Configure and manage Router family"
-msgstr "خانواده روتر را پیکربندی و مدیریت کنید"
-
-msgid "Manage Router service"
-msgstr "سرویس روتر را مدیریت کنید"
-
-msgid "Configure stat collection for graphing"
-msgstr "پیکربندی مجموعه آمار برای نمودار"
-
-msgid "Router Stats"
-msgstr "آمار روتر"
-
-msgid "Configure router updates"
-msgstr "به روز رسانی روتر را پیکربندی کنید"
-
-msgid "Configuration wizard for new users"
-msgstr "جادوگر پیکربندی برای کاربران جدید"
-
-msgid "Setup Wizard"
-msgstr "جادوگر راه اندازی"
-
-msgid "Customize sidebar"
-msgstr "نوار کناری را سفارشی کنید"
-
-msgid "Configure tunnel options"
-msgstr "گزینه های تونل را پیکربندی کنید"
-
-msgid "Configure router user interface and optional console password"
-msgstr "رابط کاربری روتر و رمز عبور اختیاری کنسول را پیکربندی کنید"
-
-msgid "Configuring I2P for optimal performance"
-msgstr "پیکربندی I2P برای عملکرد بهینه"
-
-msgid "Information for new users"
-msgstr "اطلاعات برای کاربران جدید"
-
-msgid "A guide to reseeding your I2P router"
-msgstr "راهنمای نصب مجدد روتر I2P شما"
-
-msgid "What to do in the event I2P isn't working"
-msgstr "در صورتی که I2P کار نمی کند چه باید کرد"
-
-msgid "Introduction to tunnel filters"
-msgstr "مقدمه ای بر فیلترهای تونل"
-
-msgid "Tunnel Filters"
-msgstr "فیلترهای تونل"
+msgid "Customize"
+msgstr ""
 
 msgid "statistics"
 msgstr "آمار"
@@ -7610,9 +7502,6 @@ msgstr "باز و بستن شناسه‌های تونل"
 msgid "Toggle Tunnels"
 msgstr "باز و بستن تونل‌ها"
 
-msgid "Updating sidebar sections"
-msgstr "به‌روزرسانی بخش‌های نوار کناری"
-
 msgid "Peer Profile"
 msgstr "پروفایل همتا"
 
@@ -7637,14 +7526,17 @@ msgstr "بازگشت به بالا"
 msgid "webmail"
 msgstr "ایمیل"
 
+msgid "Webmail"
+msgstr "وب میل"
+
 msgid "New Install Wizard"
 msgstr "جادوگر نصب جدید"
 
 msgid "Skip Setup"
 msgstr "نصب را نادیده بگیرید"
 
-msgid "Select the language to be used for the router console and web applications (<a href=/webmail target=_blank rel=noreferrer>webmail</a>, <a href=/torrents target=_blank rel=noreferrer>torrents</a>, <a href=/i2ptunnelmgr target=_blank rel=noreferrer>tunnel manager</a> etc). If you wish to change the language in future, change the router console theme, or configure a password to access the console, you may do so on the <a href=/configui target=_blank rel=noreferrer>User Interface configuration page</a>."
-msgstr "زبان مورد استفاده برای کنسول مسیریاب و برنامه‌های وب (<a href=/webmail target=_blank rel=noreferrer>ایمیل</a>، <a href=/torrents target=_blank rel=noreferrer>تورنت</a>، <a href=/i2ptunnelmgr target=_blank rel=noreferrer>مدیر تونل</a> و غیره) را انتخاب کنید. اگر مایلید در آینده زبان را تغییر دهید، تم مسیریاب را تغییر دهید یا برای ورود به کنسول رمز عبور تعریف کنید، می‌توانید از طریق صفحه تنظیمات <a href=/configui target=_blank rel=noreferrer>رابط کاربری</a> اقدام نمایید."
+msgid "Select the language to be used for the router console and web applications ("
+msgstr ""
 
 msgid "Router Console &amp; WebApps Display Language"
 msgstr "زبان نمایش کنسول مسیریاب و برنامه‌های وب"
@@ -7713,6 +7605,13 @@ msgid "Bandwidth Configuration"
 msgstr "پیکربندی پهنای باند"
 
 #, java-format
+msgid "You have configured I2P+ to share only {0} KBps."
+msgstr "شما I2P را طوری پیکربندی کرده اید که فقط {0} کیلوبایت بر ثانیه به اشتراک گذاشته شود."
+
+msgid "I2P+ requires at least 12KBps to enable sharing. "
+msgstr "I2P به حداقل 12KBps برای فعال کردن اشتراک‌گذاری نیاز دارد."
+
+#, java-format
 msgid "You have configured I2P+ to share {0} KBps."
 msgstr "شما I2P را برای اشتراک گذاری {0} کیلوبایت بر ثانیه پیکربندی کرده اید."
 
@@ -7722,8 +7621,8 @@ msgstr "I2P+ به یک مرورگر وب نیاز دارد که برای است�
 msgid "Browser Setup"
 msgstr "راه اندازی مرورگر"
 
-msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. For more help, see <a href=https://geti2p.net/htproxyports target=_blank rel=noreferrer>the configuration guide</a>, or <a href=/help/configuration#browserconfig>the mini-tutorial for Firefox</a>."
-msgstr "برای دسترسی به وب‌سایت‌های میزبانی شده در شبکه I2P، و اختیارا استفاده از اوت‌پراکسی پیش‌فرض برای اتصال به وب‌سایت‌های رزه باید مرورگر خود را تنظیم کنید تا از پراکسی HTTP I2P+ استفاده کند، که پیش‌فرض بر روی <code>127.0.0.1 درگاه 4444</code> اجرا می‌شود. برای راهنمای بیشتر می‌توانید <a href=https://geti2p.net/htproxyports target=_blank rel=noreferrer>راهنمای تنظیمات</a> یا <a href=/help/configuration#browserconfig>آموزش کوتاه فایرفاکس</a> را مطالعه فرمایید."
+msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. "
+msgstr ""
 
 msgid "Welcome to I2P+!"
 msgstr "به I2P خوش آمدید!"
@@ -7731,8 +7630,8 @@ msgstr "به I2P خوش آمدید!"
 msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
 msgstr "هنگامی که I2P را راه اندازی می کنید، ممکن است چند دقیقه طول بکشد تا روتر خود را در شبکه راه اندازی کنید (ادغام کنید) و همتاهای بیشتری پیدا کنید، بنابراین لطفا صبور باشید."
 
-msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P+."
-msgstr "هنگامی که ستاره های سبز در کنار تونل های محلی شما نشان داده می شوند، کارهای بسیار متنوعی وجود دارد که می توانید با I2P انجام دهید."
+msgid "Once green stars are indicated next to your Service Tunnels, there is a wide variety of things you can do with I2P+."
+msgstr ""
 
 msgid "Unknown Wizard page"
 msgstr "صفحه جادوگر ناشناخته"
@@ -7751,4 +7650,76 @@ msgstr "بعدی"
 
 msgid "Finished"
 msgstr "به پایان رسیده"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#, java-format
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

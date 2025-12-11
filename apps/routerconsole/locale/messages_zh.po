@@ -71,8 +71,17 @@ msgstr "从播种路由获得{0}路由器信息"
 msgid "Acquired {0} router infos from reseed hosts ({1} errors)"
 msgstr "从补种服务器获得{0}个路由器信息（{1}个错误）。"
 
+msgid "Clock step adjustment (ms)"
+msgstr "时钟步长调整（ms）"
+
+msgid "Size of tunnel acceptor backlog"
+msgstr "隧道接受器积压大小"
+
 msgid "Message receive rate (B/s)"
 msgstr "低级别接收速率（B/s）"
+
+msgid "Low-level receive rate (B/s)"
+msgstr "低级别接收速率（字节/秒）"
 
 msgid "Message send rate (B/s)"
 msgstr "低级别发送速率（B/s）"
@@ -80,41 +89,35 @@ msgstr "低级别发送速率（B/s）"
 msgid "Low-level send rate (B/s)"
 msgstr "低级别发送速率（字节/秒）"
 
-msgid "Low-level receive rate (B/s)"
-msgstr "低级别接收速率（字节/秒）"
-
-msgid "Total peers in our NetDb"
-msgstr "我方数据库中记录的对等节点总数量"
-
 msgid "Peers active in the last minute"
 msgstr "最近一分钟活跃的对等节点"
-
-msgid "Known high capacity peers"
-msgstr "已知的高容量节点"
 
 msgid "Peers sent to in the last minute"
 msgstr "最近一分钟活跃的对等节点"
 
+msgid "Total peers in our banlist"
+msgstr "我方网络数据库中记录的封禁节点数量"
+
+msgid "CPU load average of the JVM"
+msgstr "JVM的CPU平均负载"
+
 msgid "Known fast peers"
 msgstr "已知快速对等节点"
+
+msgid "Known high capacity peers"
+msgstr "已知的高容量节点"
 
 msgid "Known integrated (floodfill) peers"
 msgstr "已知的高容量节点"
 
-msgid "Total peers in our banlist"
-msgstr "我方网络数据库中记录的封禁节点数量"
+msgid "Total peers in our NetDb"
+msgstr "我方数据库中记录的对等节点总数量"
+
+msgid "Total number of threads in use"
+msgstr ""
 
 msgid "Peers without a published IP address"
 msgstr "没有已发布 IP 地址的对等方"
-
-msgid "Size of tunnel acceptor backlog"
-msgstr "隧道接受器积压大小"
-
-msgid "Clock step adjustment (ms)"
-msgstr "时钟步长调整（ms）"
-
-msgid "CPU load average of the JVM"
-msgstr "JVM的CPU平均负载"
 
 msgid "Average tunnel build success %"
 msgstr "平均隧道建立成功百分比"
@@ -1548,29 +1551,29 @@ msgstr "{0} 后重启"
 msgid "Save order"
 msgstr "保存顺序"
 
+msgid "Restore full default"
+msgstr "恢复完整默认值"
+
+msgid "Restore minimal default"
+msgstr "恢复迷你默认值"
+
 msgid "Sidebar preferences updated"
 msgstr "侧边栏偏好设置已更新"
 
 msgid "Refresh interval must be a number"
 msgstr "刷新间隔必须为数字"
 
-msgid "Restore full default"
-msgstr "恢复完整默认值"
-
 msgid "Full sidebar defaults restored."
 msgstr "完整侧边栏默认设置已恢复。"
 
-msgid "Sidebar will refresh shortly."
-msgstr "侧边栏将很快刷新。"
-
-msgid "Restore minimal default"
-msgstr "恢复迷你默认值"
-
-msgid "Minimal sidebar defaults restored."
-msgstr "迷你侧边栏默认设置已恢复。"
-
 msgid "Order must be an integer"
 msgstr "顺序必须是整数"
+
+msgid "Saved order of sections."
+msgstr "已保存的各部分顺序。"
+
+msgid "Sidebar will refresh shortly."
+msgstr "侧边栏将很快刷新。"
 
 msgid "No section selected"
 msgstr "未选中任何部分"
@@ -1580,9 +1583,6 @@ msgstr "没有输入顺序"
 
 msgid "Moved"
 msgstr "已移动"
-
-msgid "Saved order of sections."
-msgstr "已保存的各部分顺序。"
 
 msgid "Full statistics enabled"
 msgstr "统计已全部启用"
@@ -2409,6 +2409,9 @@ msgstr "HTTP 代理未启动"
 msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
 msgstr "您的浏览器尚未配置使用 HTTP 代理 {0}"
 
+msgid "Errors"
+msgstr ""
+
 msgid "URL"
 msgstr "URL"
 
@@ -2683,29 +2686,23 @@ msgstr "或 Sybil 接近此路由器"
 msgid "Lookup"
 msgstr "查找"
 
-msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
-msgstr "绝对不要向任何人泄露您的路由身份，因为它在网络数据库中独一无二的联系到您的 IP 地址。"
+msgid "Select the field to search on"
+msgstr ""
 
-msgid "is banned"
-msgstr "已封禁"
-
-msgid "not found in network database"
-msgstr "在网络数据库中未找到"
-
-msgid "Bad Base64 Router hash"
-msgstr "错误的 Base64 路由器哈希"
-
-msgid "No routers with"
-msgstr "没有具有...的路由器"
-
-msgid "Hash prefix"
-msgstr "哈希前缀"
-
-msgid "Port"
-msgstr "端口"
+msgid "e.g. cn hk"
+msgstr ""
 
 msgid "MTU"
 msgstr "MTU"
+
+msgid "Enter search value here"
+msgstr ""
+
+msgid "Router not found"
+msgstr ""
+
+msgid "No routers with"
+msgstr "没有具有...的路由器"
 
 msgid "found in the network database"
 msgstr "在网络数据库中找到"
@@ -2833,17 +2830,17 @@ msgstr "{0} 前过期"
 msgid "Unknown"
 msgstr "未知"
 
-msgid "Advanced mode - includes all statistics published by floodfills."
-msgstr "高级模式 - 包含洪泛节点发布的所有统计信息。"
-
-msgid "Compact mode - does not include statistics published by floodfills."
-msgstr "紧凑模式 - 不包含洪泛节点发布的统计信息。"
-
 msgid "Network Database Router Statistics"
 msgstr "网络数据库路由统计"
 
 msgid "Count"
 msgstr "计数"
+
+msgid "Under 12 KB/s"
+msgstr ""
+
+msgid "Over 2048 KB/s"
+msgstr ""
 
 msgid "Bandwidth Tier"
 msgstr "带宽等级"
@@ -2915,6 +2912,9 @@ msgstr "发布"
 msgid "Hostname"
 msgstr "域名"
 
+msgid "Whois"
+msgstr ""
+
 msgid "direct"
 msgstr "直接"
 
@@ -2930,20 +2930,26 @@ msgstr "在 NetDb 中显示具有此签名类型的所有路由器"
 msgid "Show all routers with this encryption type in the NetDb"
 msgstr "在 NetDb 中显示具有此加密类型的所有路由器"
 
-msgid "Addresses"
-msgstr "地址"
-
-msgid "n/a"
-msgstr "不适用"
-
 msgid "Show all routers with this address in the NetDb"
 msgstr "在NetDb中显示有此地址的所有路由器"
 
 msgid "Show all routers with this port in the NetDb"
 msgstr "显示NetDb中具有此端口的所有路由器"
 
-msgid "Routers"
-msgstr "包括非泛洪路由器"
+msgid "Maximum Transmission Unit"
+msgstr ""
+
+msgid "Show all routers with this MTU in the NetDb"
+msgstr ""
+
+msgid "Addresses"
+msgstr "地址"
+
+msgid "Introducers"
+msgstr ""
+
+msgid "Network Id"
+msgstr "网络 ID"
 
 msgid "First heard about"
 msgstr "初次接收"
@@ -2954,11 +2960,8 @@ msgstr "上一次接收"
 msgid "Last heard from"
 msgstr "上一次接收来自"
 
-msgid "Network Id"
-msgstr "网络 ID"
-
-msgid "Count is always spoofed to avoid indicating router restarts"
-msgstr "计数总是被伪造以避免指示路由器重启"
+msgid "Info"
+msgstr "信息"
 
 msgid "Hidden or starting up"
 msgstr "隐身或正在启动"
@@ -2987,17 +2990,32 @@ msgstr "SSU [IPv6]"
 msgid "SSU [IPv6] with Introducers"
 msgstr "IPv6 SSU, 中介"
 
+msgid "NTCP &amp; SSU with Introducers [IPv6 Only]"
+msgstr "IPv6 仅 NTCP, SSU, 中介"
+
 msgid "NTCP [IPv6]"
 msgstr "NTCP [IPv6]"
 
 msgid "NTCP [IPv6] &amp; SSU"
 msgstr "NTCP [IPv6] &amp; SSU"
 
-msgid "NTCP &amp; SSU with Introducers [IPv6 Only]"
-msgstr "IPv6 仅 NTCP, SSU, 中介"
-
 msgid "NTCP [IPv6] &amp; SSU with Introducers"
 msgstr "IPv6 NTCP, SSU, 中介"
+
+msgid "Local"
+msgstr "本地"
+
+msgid "Fast Tier"
+msgstr ""
+
+msgid "High Capacity Tier"
+msgstr ""
+
+msgid "Integrated Tier"
+msgstr ""
+
+msgid "Standard Tier"
+msgstr ""
 
 msgid "No peer connections available"
 msgstr "没有可用的连接"
@@ -3326,14 +3344,17 @@ msgstr "上次连接"
 msgid "View/Edit"
 msgstr "查看/编辑"
 
-msgid "Unreachable"
-msgstr "不可达"
-
 msgid "OK"
 msgstr "正常"
 
 msgid "Test Fails"
 msgstr "测试失败"
+
+msgid "Unreachable"
+msgstr "不可达"
+
+msgid "Most tests passing"
+msgstr ""
 
 msgid "Fast, High Capacity"
 msgstr "快速，高容量"
@@ -3349,6 +3370,9 @@ msgstr "失败"
 
 msgid "Integrated"
 msgstr "已整合"
+
+msgid "Configure Peer"
+msgstr ""
 
 msgid "Thresholds"
 msgstr "临界值"
@@ -3413,11 +3437,11 @@ msgstr "上次发送失败"
 msgid "Last Bad Store"
 msgstr "上次保存失败"
 
-msgid "Capabilities in the NetDb, not used to determine profiles"
-msgstr "节点数据库中的容量与描述信息无关"
-
 msgid "caps"
 msgstr "容量"
+
+msgid "Capabilities in the NetDb, not used to determine profiles"
+msgstr "节点数据库中的容量与描述信息无关"
 
 msgid "Reachable"
 msgstr "可达"
@@ -3590,6 +3614,9 @@ msgstr "点击重启完成安装"
 
 msgid "Click Shutdown and restart to install"
 msgstr "点击关闭并重新启动I2P即可完成安装"
+
+msgid "Unable"
+msgstr ""
 
 #, java-format
 msgid "{0}"
@@ -3784,9 +3811,6 @@ msgstr "路由性能统计图"
 msgid "Router Help and FAQ"
 msgstr "路由帮助和常见问题"
 
-msgid "Info"
-msgstr "信息"
-
 msgid "Router information including transport addresses and UPnP scan"
 msgstr "路由器信息，包括传输地址和 UPnP 扫描"
 
@@ -3872,6 +3896,34 @@ msgstr "启用泛洪填充"
 msgid "Total number of remote LeaseSets stored in our NetDb"
 msgstr "我们网络数据库中存储的远程租约集总数"
 
+msgid "Declining transit tunnel requests during startup phase"
+msgstr "在路由器稳定时，前 10 分钟内不接受任何参与隧道请求"
+
+msgid "Declining transit tunnel requests as we are shutting down"
+msgstr "在我们关闭时拒绝参与的隧道请求"
+
+msgid "Router or network performance is impeding the building of transit tunnels"
+msgstr "路由器或网络性能阻碍了参与隧道的建设"
+
+msgid "Router is currently hosting the configured maximum number of transit tunnels"
+msgstr "路由器当前承载着配置的最大中继隧道数量"
+
+msgid "Router is currently using the configured maximum share bandwidth"
+msgstr "路由器当前使用的是配置的最大共享带宽"
+
+msgid "Router is ready to build participating tunnels"
+msgstr "路由器已准备好参与构建中继隧道"
+
+#, java-format
+msgid "Accepting transit tunnel requests; hosting {0} tunnels"
+msgstr "接受参与隧道请求;参与{0}隧道"
+
+msgid "No transit tunnels are built when Hidden mode is active"
+msgstr "隐藏模式处于活动状态时，不会构建任何参与隧道"
+
+msgid "Router is configured to reject all transit tunnel requests"
+msgstr "路由器配置为拒绝所有参与的隧道请求"
+
 msgid "Warning: ECDSA is not available. Update your Java or OS"
 msgstr "警告：ECDSA 不可用。请更新您的 Java 或操作系统"
 
@@ -3907,6 +3959,9 @@ msgstr "已封禁对等节点数量"
 
 msgid "The total number of peers in our network database"
 msgstr "我方网络数据库中记录的对等节点总数量"
+
+msgid "Total RouterInfos stored on disk"
+msgstr ""
 
 msgid "Known"
 msgstr "已知"
@@ -4018,34 +4073,6 @@ msgstr "请求队列中来自其他路由的加入隧道请求"
 
 msgid "Backlog"
 msgstr "积压"
-
-msgid "Declining transit tunnel requests during startup phase"
-msgstr "在路由器稳定时，前 10 分钟内不接受任何参与隧道请求"
-
-msgid "Declining transit tunnel requests as we are shutting down"
-msgstr "在我们关闭时拒绝参与的隧道请求"
-
-msgid "Router or network performance is impeding the building of transit tunnels"
-msgstr "路由器或网络性能阻碍了参与隧道的建设"
-
-msgid "Router is currently hosting the configured maximum number of transit tunnels"
-msgstr "路由器当前承载着配置的最大中继隧道数量"
-
-msgid "Router is currently using the configured maximum share bandwidth"
-msgstr "路由器当前使用的是配置的最大共享带宽"
-
-msgid "Router is ready to build participating tunnels"
-msgstr "路由器已准备好参与构建中继隧道"
-
-#, java-format
-msgid "Accepting transit tunnel requests; hosting {0} tunnels"
-msgstr "接受参与隧道请求;参与{0}隧道"
-
-msgid "No transit tunnels are built when Hidden mode is active"
-msgstr "隐藏模式处于活动状态时，不会构建任何参与隧道"
-
-msgid "Router is configured to reject all transit tunnel requests"
-msgstr "路由器配置为拒绝所有参与的隧道请求"
 
 msgid "Statistics gathered during this router's uptime"
 msgstr "路由运行时收集的统计数据"
@@ -4175,8 +4202,14 @@ msgstr "无存储分析"
 msgid "Select stored analysis"
 msgstr "选择存储的分析"
 
+msgid "Review"
+msgstr ""
+
 msgid "Run analysis on Floodfills only"
 msgstr "仅对洪泛节点运行分析"
+
+msgid "Start Scan"
+msgstr ""
 
 msgid "Run analysis on all routers in NetDb"
 msgstr "在 NetDb 中的所有路由器上运行分析"
@@ -4340,6 +4373,12 @@ msgstr "最大"
 msgid "Show all routers for this family in NetDb"
 msgstr "在NetDb中显示这个家族的所有路由器"
 
+msgid "Routers"
+msgstr "包括非泛洪路由器"
+
+msgid "n/a"
+msgstr "不适用"
+
 msgid "Last lookup successful"
 msgstr "最后一次查询成功"
 
@@ -4391,9 +4430,6 @@ msgstr "转移数据"
 msgid "Data"
 msgstr "数据"
 
-msgid "Limit"
-msgstr "限制"
-
 msgid "Receive on"
 msgstr "接收"
 
@@ -4438,6 +4474,7 @@ msgstr "路由器目前正在以隐藏模式运行，该模式可防止运输隧
 msgid "No transit tunnels currently active."
 msgstr "目前没有参与的隧道在运行。"
 
+#, java-format
 msgid "Transit Tunnels by Peer (Top {0})"
 msgstr "按对等节点统计的传输隧道（前{0}名）"
 
@@ -4449,9 +4486,6 @@ msgstr "同行的所有隧道"
 
 msgid "Primary IP address"
 msgstr "主要IP地址"
-
-msgid "Local"
-msgstr "本地"
 
 msgid "unique peers"
 msgstr "唯一节点"
@@ -4465,6 +4499,9 @@ msgstr "中转"
 msgid "No local or transit tunnels currently active."
 msgstr "目前没有本地或过境隧道。"
 
+msgid "PRIVATE IP ADDRESS"
+msgstr ""
+
 msgid "Bandwidth Tiers"
 msgstr "带宽等级"
 
@@ -4474,6 +4511,9 @@ msgstr "共享带宽超过 {0}"
 
 msgid "Inbound or outbound?"
 msgstr "入站或出站？"
+
+msgid "In/Out"
+msgstr ""
 
 msgid "Gateway"
 msgstr "网关"
@@ -4590,6 +4630,9 @@ msgstr "匿名网站服务"
 msgid "Browser launch at startup"
 msgstr "路由器启动时启动浏览器"
 
+msgid "I2P Router Console"
+msgstr ""
+
 msgid "Open Router Console in web browser at startup"
 msgstr "路由启动时打开网页版路由控制台"
 
@@ -4665,12 +4708,6 @@ msgstr "密钥"
 msgid "port"
 msgstr "端口"
 
-msgid "config UI"
-msgstr "界面设置"
-
-msgid "User Interface Configuration"
-msgstr "用户界面配置"
-
 msgid "Certificates"
 msgstr "证书"
 
@@ -4686,8 +4723,8 @@ msgstr "带宽限制器"
 msgid "Advanced Network Configuration"
 msgstr "高级网络配置"
 
-msgid "I2P+ will work best if you configure your rates to match the speed of your internet connection."
-msgstr "与联网环境相符的速度能使 I2P 以最佳的状态工作。"
+msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
+msgstr ""
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
 msgstr "注意：您对网络（网络共享）的贡献取决于上行带宽（上传速度）的分配。"
@@ -4717,11 +4754,11 @@ msgid "NOTE"
 msgstr "注意"
 
 #, java-format
-msgid "You have configured I2P+ to share only {0} KBps."
-msgstr "您已设置 I2P 仅共享 {0} KB/s。"
+msgid "You have configured I2P to share only {0} KBps."
+msgstr ""
 
-msgid "I2P+ requires at least 12KBps to enable sharing. "
-msgstr "I2P 需要至少 12KB/s 才能进行共享。 "
+msgid "I2P requires at least 12KBps to enable sharing. "
+msgstr ""
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
 msgstr "请设置更多的带宽以便启用共享功能（参与到其他节点的隧道创建中）。 "
@@ -5218,8 +5255,8 @@ msgstr "设置补种"
 msgid "Reseeding is the bootstrapping process used to find other routers when you first install I2P, or when your router has too few router references remaining."
 msgstr "补种是一个网络引导过程，用于发现其他路由，当您首次安装 I2P 或您的路由仅有很少路由信息。"
 
-msgid "To enable the configuration of reseed urls, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
-msgstr "要启用重新设定种子的 URL 的配置，请激活控制台的<a href=\"/help/advancedsettings\">高级模式</a>。"
+msgid "To enable the configuration of reseed urls, activate the console's <a href=/help/advancedsettings>Advanced mode</a>."
+msgstr ""
 
 msgid "Reseeding Configuration"
 msgstr "补种设置"
@@ -5229,9 +5266,6 @@ msgstr "帮助播种"
 
 msgid "Reseeding Help"
 msgstr "补种帮助"
-
-msgid "Change these only if HTTPS is blocked by a restrictive firewall and reseed has failed."
-msgstr "仅在防火墙严格封锁 HTTPS 并且补种失败时更改这些。"
 
 msgid "Reseed URLs"
 msgstr "补种 URL"
@@ -5268,6 +5302,9 @@ msgstr "此选项将使用 I2P 的 HTTP 出口代理 来重新设定种子，或
 
 msgid "I2P Outproxy"
 msgstr "I2P 出口代理"
+
+msgid "Port"
+msgstr "端口"
 
 msgid "Use HTTP Proxy for HTTP Reseed Hosts"
 msgstr "使用HTTP代理补种"
@@ -5381,6 +5418,12 @@ msgstr "统一侧边栏"
 msgid "Use the same sidebar on all pages"
 msgstr "在所有页面使用相同的侧边栏"
 
+msgid "Sticky sidebar"
+msgstr ""
+
+msgid "Enable conditional fixed sidebar"
+msgstr ""
+
 msgid "config stats"
 msgstr "设置统计"
 
@@ -5437,6 +5480,12 @@ msgstr "要修改客户端隧道设置，请使用<a href=\"/i2ptunnelmgr\">隧�
 
 msgid "To enable session-only changes to the client tunnels, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
 msgstr "要启用对客户端隧道的仅会话更改，请激活控制台的<a href=\"/help/advancedsettings\">高级模式</a>。"
+
+msgid "config UI"
+msgstr "界面设置"
+
+msgid "User Interface Configuration"
+msgstr "用户界面配置"
 
 msgid "Router Console Theme"
 msgstr "路由控制台主题"
@@ -5574,14 +5623,20 @@ msgstr "错误 404"
 msgid "not found"
 msgstr "未找到"
 
+msgid "router logs"
+msgstr "路由器日志"
+
+msgid "Critical / Error Level Logs"
+msgstr "关键/错误级别日志"
+
+msgid "Clear logs"
+msgstr "清空日志"
+
 msgid "events"
 msgstr "事件"
 
 msgid "Event Log"
 msgstr "事件日志"
-
-msgid "Combined"
-msgstr "组合"
 
 msgid "graph"
 msgstr "图表"
@@ -6090,8 +6145,8 @@ msgstr "要使您的控制台在本地网络中可访问，请编辑I2P设置目
 msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
 msgstr "示例：允许从localhost和192.168.1.10通过HTTP和HTTPS访问："
 
-msgid "For most client services, change listening address for relevant service in Tunnel Manager's configuration section using <i>reachable by</i> dropdown."
-msgstr "对于大多数客户端服务，请在隧道管理器的配置部分使用<i>可被...访问</i>下拉菜单更改相关服务的监听地址。"
+msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager's configuration section using the <i>reachable by</i> dropdown."
+msgstr ""
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "如何使用 I2P 连接至 IRC?"
@@ -7290,34 +7345,6 @@ msgstr "作业队列统计"
 msgid "Job Queue Stats"
 msgstr "工作队列统计"
 
-msgid "logs"
-msgstr "日志"
-
-msgid "Please include your I2P version and running environment information in bug reports"
-msgstr "请在错误报告中包括您的 I2P 版本和运行环境信息"
-
-#, java-format
-msgid "Please report bugs on {0} or {1}."
-msgstr "错误报告请到 {0} 或 {1}。"
-
-msgid "View event log"
-msgstr "查看事件日志"
-
-msgid "Critical / Error Level Logs"
-msgstr "关键/错误级别日志"
-
-msgid "Clear logs"
-msgstr "清空日志"
-
-msgid "Configure router logging options"
-msgstr "配置路由器日志选项"
-
-msgid "Filter Router log output"
-msgstr "过滤路由器日志输出"
-
-msgid "Service (Wrapper) Logs"
-msgstr "服务（封装）日志"
-
 msgid "network database"
 msgstr "网络数据库"
 
@@ -7338,6 +7365,9 @@ msgstr "本地托管的公共服务"
 
 msgid "Requested client leaseset"
 msgstr "请求的客户端租约集"
+
+msgid "Remote"
+msgstr ""
 
 msgid "network database router map"
 msgstr "网络数据库路由器映射"
@@ -7382,164 +7412,26 @@ msgstr "已封禁对等节点"
 msgid "Fast / High Capacity"
 msgstr "快速/高容量"
 
-msgid "router logs"
-msgstr "路由器日志"
+msgid "Configure router logging options"
+msgstr "配置路由器日志选项"
+
+msgid "View event log"
+msgstr "查看事件日志"
+
+msgid "Filter Router log output"
+msgstr "过滤路由器日志输出"
 
 msgid "service logs"
 msgstr "服务日志"
 
-msgid "Manage I2P addresses"
-msgstr "地址"
-
-msgid "Imagegen"
-msgstr "身份图像生成器"
-
-msgid "Create and download torrents"
-msgstr "创建和下载BT种子"
-
-msgid "Manage client and server tunnels"
-msgstr "管理 I2P 客户端和服务器隧道"
-
-msgid "Webmail client"
-msgstr "Web 邮件客户端"
-
-msgid "Webmail"
-msgstr "邮箱"
-
-msgid "Local webserver for hosting content on the I2P network"
-msgstr "在 I2P 上托管您自己的内容的本地网络服务器"
+msgid "Service (Wrapper) Logs"
+msgstr "服务（封装）日志"
 
 msgid "Information &amp; Diagnostics"
 msgstr "诊断信息"
 
-msgid "Review recent updates to I2P"
-msgstr "查看I2P最近的更新"
-
-msgid "View debugging information"
-msgstr "查看路由器调试信息"
-
-msgid "View router performance graphs"
-msgstr "查看路由器的性能图表"
-
-msgid "Router help section"
-msgstr "路由帮助和常见问题"
-
-msgid "Router homepage"
-msgstr "主页"
-
-msgid "Home"
-msgstr "主页"
-
-msgid "View news relating to I2P"
-msgstr "I2P 新闻"
-
-msgid "I2P News"
-msgstr "I2P 新闻"
-
-msgid "View router workload and stats"
-msgstr "显示路由工作负载及性能"
-
-msgid "Router Jobs"
-msgstr "工作"
-
-msgid "View router logs"
-msgstr "查看路由器日志"
-
-msgid "View information and stats regarding all known peers"
-msgstr "查看有关所有已知对等节点的信息和统计数据"
-
-msgid "View active peers"
-msgstr "查看活跃的对等节点"
-
-msgid "View peer performance profiles"
-msgstr "显示当前对等节点的性能记录"
-
-msgid "View information about router and running environment"
-msgstr "查看有关路由器和运行环境的信息"
-
-msgid "Statistics"
-msgstr "统计数据"
-
-msgid "Current console and webapp translation report"
-msgstr "当前控制台和Web应用翻译报告"
-
-msgid "Translation Status"
-msgstr "翻译状态"
-
-msgid "View active tunnels"
-msgstr "查看活动隧道"
-
-msgid "Customize homepage"
-msgstr "自定义主页"
-
-msgid "Homepage"
-msgstr "主页"
-
-msgid "Configure I2P Client Control Interface"
-msgstr "配置I2P客户端控制界面"
-
-msgid "View or edit router keyring for encrypted destinations"
-msgstr "在此处添加远程加密目标的密钥"
-
-msgid "Configure router networking options"
-msgstr "配置路由器日志选项"
-
-msgid "Manually edit peers and view banned peers and blocklist"
-msgstr "手动编辑对等方并查看被禁止的对等方和黑名单"
-
-msgid "Install and manage router plugins"
-msgstr "安装和管理路由器插件"
-
-msgid "Router reseeding and configuration"
-msgstr "补种设置"
-
-msgid "Configure and manage Router family"
-msgstr "本地路由器家族证书"
-
-msgid "Manage Router service"
-msgstr "管理路由器服务"
-
-msgid "Configure stat collection for graphing"
-msgstr "配置路由器图形记录"
-
-msgid "Router Stats"
-msgstr "统计"
-
-msgid "Configure router updates"
-msgstr "配置路由更新"
-
-msgid "Configuration wizard for new users"
-msgstr "安装配置向导"
-
-msgid "Setup Wizard"
-msgstr "配置向导"
-
-msgid "Customize sidebar"
-msgstr "自定义侧栏"
-
-msgid "Configure tunnel options"
-msgstr "设置隧道选项"
-
-msgid "Configure router user interface and optional console password"
-msgstr "配置路由器用户界面和可选控制台密码"
-
-msgid "Configuring I2P for optimal performance"
-msgstr "配置 I2P 以获得最佳性能"
-
-msgid "Information for new users"
-msgstr "新用户须知"
-
-msgid "A guide to reseeding your I2P router"
-msgstr "重新设定 I2P 路由器种子的指南"
-
-msgid "What to do in the event I2P isn't working"
-msgstr "如果 I2P 不起作用该怎么办"
-
-msgid "Introduction to tunnel filters"
-msgstr "隧道过滤器简介"
-
-msgid "Tunnel Filters"
-msgstr "隧道过滤"
+msgid "Customize"
+msgstr ""
 
 msgid "statistics"
 msgstr "统计"
@@ -7592,9 +7484,6 @@ msgstr "切换隧道ID"
 msgid "Toggle Tunnels"
 msgstr "切换隧道"
 
-msgid "Updating sidebar sections"
-msgstr "更新侧边栏部分"
-
 msgid "Peer Profile"
 msgstr "对等节点摘要"
 
@@ -7619,14 +7508,17 @@ msgstr "返回上一层"
 msgid "webmail"
 msgstr "网页邮箱"
 
+msgid "Webmail"
+msgstr "邮箱"
+
 msgid "New Install Wizard"
 msgstr "新安装向导"
 
 msgid "Skip Setup"
 msgstr "跳过设置"
 
-msgid "Select the language to be used for the router console and web applications (<a href=/webmail target=_blank rel=noreferrer>webmail</a>, <a href=/torrents target=_blank rel=noreferrer>torrents</a>, <a href=/i2ptunnelmgr target=_blank rel=noreferrer>tunnel manager</a> etc). If you wish to change the language in future, change the router console theme, or configure a password to access the console, you may do so on the <a href=/configui target=_blank rel=noreferrer>User Interface configuration page</a>."
-msgstr "选择用于路由器控制台和网络应用（<a href=/webmail target=_blank rel=noreferrer>webmail</a>、<a href=/torrents target=_blank rel=noreferrer>torrents</a>、<a href=/i2ptunnelmgr target=_blank rel=noreferrer>隧道管理器</a> 等）的语言。如果你想在将来改变语言，改变路由器控制台的主题或者配置访问控制台的密码，都可以在用户界面配置页上进行。"
+msgid "Select the language to be used for the router console and web applications ("
+msgstr ""
 
 msgid "Router Console &amp; WebApps Display Language"
 msgstr "路由器控制台和 WebApps显示语言"
@@ -7695,6 +7587,13 @@ msgid "Bandwidth Configuration"
 msgstr "带宽配置"
 
 #, java-format
+msgid "You have configured I2P+ to share only {0} KBps."
+msgstr "您已设置 I2P 仅共享 {0} KB/s。"
+
+msgid "I2P+ requires at least 12KBps to enable sharing. "
+msgstr "I2P 需要至少 12KB/s 才能进行共享。 "
+
+#, java-format
 msgid "You have configured I2P+ to share {0} KBps."
 msgstr "您已设置 I2P 共享 {0} KB/s。"
 
@@ -7704,8 +7603,8 @@ msgstr "I2P+需要一个配置为使用本地HTTP代理的网络浏览器，才�
 msgid "Browser Setup"
 msgstr "浏览器设置"
 
-msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. For more help, see <a href=https://geti2p.net/htproxyports target=_blank rel=noreferrer>the configuration guide</a>, or <a href=/help/configuration#browserconfig>the mini-tutorial for Firefox</a>."
-msgstr "为了访问I2P上的网站，并可使用默认的出口代理连接到Clearnet上的网站，您需要配置您的浏览器使用I2P的HTTP代理，默认运行于<code>127.0.0.1:4444</code>。大多数浏览器都提供了一个配置代理的选项；在这个迷你教程中，我们主要介绍Firefox。"
+msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. "
+msgstr ""
 
 msgid "Welcome to I2P+!"
 msgstr "欢迎来到 I2P！"
@@ -7713,8 +7612,8 @@ msgstr "欢迎来到 I2P！"
 msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
 msgstr "当你启动 I2P 时, 可能需要数分钟的时间将你的路由引导（整合）至网络当中并发现其它对等节点，所以请耐心等待。"
 
-msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P+."
-msgstr "一旦您的本地隧道旁显示绿星，你将可以通过 I2P 做大量事情。"
+msgid "Once green stars are indicated next to your Service Tunnels, there is a wide variety of things you can do with I2P+."
+msgstr ""
 
 msgid "Unknown Wizard page"
 msgstr "未知向导页面"
@@ -7733,4 +7632,75 @@ msgstr "下一步"
 
 msgid "Finished"
 msgstr "完成"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#, java-format
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

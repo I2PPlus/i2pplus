@@ -73,8 +73,17 @@ msgstr "Hankittu {0} reititintiedot reseed-isänniltä"
 msgid "Acquired {0} router infos from reseed hosts ({1} errors)"
 msgstr "Hankittu {0} reititintietoa reseed-isännistä ({1} virhettä)"
 
+msgid "Clock step adjustment (ms)"
+msgstr "Kellon askelsäätö (ms)"
+
+msgid "Size of tunnel acceptor backlog"
+msgstr "Tunnelin vastaanottajan ruuhkan koko"
+
 msgid "Message receive rate (B/s)"
 msgstr "Viestin vastaanottonopeus (B/s)"
+
+msgid "Low-level receive rate (B/s)"
+msgstr "Matala vastaanottonopeus (B/s)"
 
 msgid "Message send rate (B/s)"
 msgstr "Viestin lähetysnopeus (B/s)"
@@ -82,41 +91,35 @@ msgstr "Viestin lähetysnopeus (B/s)"
 msgid "Low-level send rate (B/s)"
 msgstr "Alhainen lähetysnopeus (B/s)"
 
-msgid "Low-level receive rate (B/s)"
-msgstr "Matala vastaanottonopeus (B/s)"
-
-msgid "Total peers in our NetDb"
-msgstr "Yhteensä vertaisverkkomme NetDb:ssä"
-
 msgid "Peers active in the last minute"
 msgstr "Kaverit olivat aktiivisia viime minuutilla"
-
-msgid "Known high capacity peers"
-msgstr "Tunnetut suuren kapasiteetin vertaiset"
 
 msgid "Peers sent to in the last minute"
 msgstr "Kaverit lähetettiin viime hetkellä"
 
+msgid "Total peers in our banlist"
+msgstr "Kaikki ikäisensä banlistissamme"
+
+msgid "CPU load average of the JVM"
+msgstr "JVM:n suorittimen kuormituksen keskiarvo"
+
 msgid "Known fast peers"
 msgstr "Tunnetut nopeat vertaiset"
+
+msgid "Known high capacity peers"
+msgstr "Tunnetut suuren kapasiteetin vertaiset"
 
 msgid "Known integrated (floodfill) peers"
 msgstr "Tunnetut integroidut (tulvatäyte) -vertaiset"
 
-msgid "Total peers in our banlist"
-msgstr "Kaikki ikäisensä banlistissamme"
+msgid "Total peers in our NetDb"
+msgstr "Yhteensä vertaisverkkomme NetDb:ssä"
+
+msgid "Total number of threads in use"
+msgstr ""
 
 msgid "Peers without a published IP address"
 msgstr "Vertaisversiot, joilla ei ole julkaistua IP-osoitetta"
-
-msgid "Size of tunnel acceptor backlog"
-msgstr "Tunnelin vastaanottajan ruuhkan koko"
-
-msgid "Clock step adjustment (ms)"
-msgstr "Kellon askelsäätö (ms)"
-
-msgid "CPU load average of the JVM"
-msgstr "JVM:n suorittimen kuormituksen keskiarvo"
 
 msgid "Average tunnel build success %"
 msgstr "Keskimääräinen tunnelin rakentamisen onnistuminen %"
@@ -1554,29 +1557,29 @@ msgstr "Uudelleenkäynnistykseen aikaa  {0}"
 msgid "Save order"
 msgstr "Tallenna tilaus"
 
+msgid "Restore full default"
+msgstr "Palauta täysi oletus"
+
+msgid "Restore minimal default"
+msgstr "Palauta minimioletus"
+
 msgid "Sidebar preferences updated"
 msgstr "Sivupalkin asetukset päivitetty"
 
 msgid "Refresh interval must be a number"
 msgstr "Päivitysvälin on oltava numero"
 
-msgid "Restore full default"
-msgstr "Palauta täysi oletus"
-
 msgid "Full sidebar defaults restored."
 msgstr "Täydellisen sivupalkin oletusarvot palautettu."
 
-msgid "Sidebar will refresh shortly."
-msgstr "Sivupalki päivittyy pian."
-
-msgid "Restore minimal default"
-msgstr "Palauta minimioletus"
-
-msgid "Minimal sidebar defaults restored."
-msgstr "Minimaalinen sivupalkin oletusarvot palautettu."
-
 msgid "Order must be an integer"
 msgstr "Järjestyksen on oltava kokonaisluku"
+
+msgid "Saved order of sections."
+msgstr "Tallennettu osioiden järjestys."
+
+msgid "Sidebar will refresh shortly."
+msgstr "Sivupalki päivittyy pian."
 
 msgid "No section selected"
 msgstr "Osia ei ole valittu"
@@ -1586,9 +1589,6 @@ msgstr "Tilausta ei ole annettu"
 
 msgid "Moved"
 msgstr "Siirretty"
-
-msgid "Saved order of sections."
-msgstr "Tallennettu osioiden järjestys."
 
 msgid "Full statistics enabled"
 msgstr "Täysi tilastot käytössä"
@@ -2417,6 +2417,9 @@ msgstr "HTTP-välityspalvelin ei ole päällä"
 msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
 msgstr "Selaintasi ei ole määritetty oikein käyttämään HTTP-välityspalvelinta osoitteessa {0}"
 
+msgid "Errors"
+msgstr ""
+
 msgid "URL"
 msgstr "Verkko-osoite"
 
@@ -2691,29 +2694,23 @@ msgstr "tai Sybil lähellä tätä reititintä"
 msgid "Lookup"
 msgstr "Haku"
 
-msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
-msgstr "Älä koskaan paljasta reitittimesi identiteettiäsi kenellekään, koska se on yksilöllisesti linkitetty IP-osoitteeseesi verkkotietokannassa."
+msgid "Select the field to search on"
+msgstr ""
 
-msgid "is banned"
-msgstr "on kielletty"
-
-msgid "not found in network database"
-msgstr "ei löytynyt verkkotietokannasta"
-
-msgid "Bad Base64 Router hash"
-msgstr "Huono Base64-reititin tiiviste"
-
-msgid "No routers with"
-msgstr "Reitittimiä ei ole: "
-
-msgid "Hash prefix"
-msgstr "Tiiviste-etuliite"
-
-msgid "Port"
-msgstr "Portti"
+msgid "e.g. cn hk"
+msgstr ""
 
 msgid "MTU"
 msgstr "MTU"
+
+msgid "Enter search value here"
+msgstr ""
+
+msgid "Router not found"
+msgstr ""
+
+msgid "No routers with"
+msgstr "Reitittimiä ei ole: "
 
 msgid "found in the network database"
 msgstr "löytyi verkkotietokannasta"
@@ -2841,17 +2838,17 @@ msgstr "Vanhentunut {0} sitten"
 msgid "Unknown"
 msgstr "Tuntematon"
 
-msgid "Advanced mode - includes all statistics published by floodfills."
-msgstr "Kehittyn tila - sisältää kaikki floodfillien julkaisematilastatistiikka."
-
-msgid "Compact mode - does not include statistics published by floodfills."
-msgstr "Tiivis tila - ei sisällä floodfillien julkaisematilastatistiikkaa."
-
 msgid "Network Database Router Statistics"
 msgstr "Verkkotietokantareitittimen tilastot"
 
 msgid "Count"
 msgstr "Lukumäärä"
+
+msgid "Under 12 KB/s"
+msgstr ""
+
+msgid "Over 2048 KB/s"
+msgstr ""
 
 msgid "Bandwidth Tier"
 msgstr "Kaistanleveystaso"
@@ -2923,6 +2920,9 @@ msgstr "Julkaistu"
 msgid "Hostname"
 msgstr "Isäntänimi"
 
+msgid "Whois"
+msgstr ""
+
 msgid "direct"
 msgstr "suora"
 
@@ -2938,20 +2938,26 @@ msgstr "Näytä kaikki tämän allekirjoitustyypin reitittimet NetDb:ssä"
 msgid "Show all routers with this encryption type in the NetDb"
 msgstr "Näytä kaikki tämän salaustyypin reitittimet NetDb:ssä"
 
-msgid "Addresses"
-msgstr "Osoitteet"
-
-msgid "n/a"
-msgstr "-"
-
 msgid "Show all routers with this address in the NetDb"
 msgstr "Näytä kaikki tällä osoitteella varustetut reitittimet NetDb:ssä"
 
 msgid "Show all routers with this port in the NetDb"
 msgstr "Näytä kaikki tällä portilla varustetut reitittimet NetDb:ssä"
 
-msgid "Routers"
-msgstr "Reitittimet"
+msgid "Maximum Transmission Unit"
+msgstr ""
+
+msgid "Show all routers with this MTU in the NetDb"
+msgstr ""
+
+msgid "Addresses"
+msgstr "Osoitteet"
+
+msgid "Introducers"
+msgstr ""
+
+msgid "Network Id"
+msgstr "Verkonkotunniste"
 
 msgid "First heard about"
 msgstr "Kuulin ensin"
@@ -2962,11 +2968,8 @@ msgstr "Viimeksi kuultu"
 msgid "Last heard from"
 msgstr "Viimeksi kuultu"
 
-msgid "Network Id"
-msgstr "Verkonkotunniste"
-
-msgid "Count is always spoofed to avoid indicating router restarts"
-msgstr "Lukumäärä on aina peitelty välttämään reitittimen uudelleenkäynnistystä."
+msgid "Info"
+msgstr "Info"
 
 msgid "Hidden or starting up"
 msgstr "Piilotettu tai käynnistynyt"
@@ -2995,17 +2998,32 @@ msgstr "SSU [IPv6]"
 msgid "SSU [IPv6] with Introducers"
 msgstr "IPv6 SSU, esittelijät"
 
+msgid "NTCP &amp; SSU with Introducers [IPv6 Only]"
+msgstr "IPv6 vain NTCP, SSU, esittelijät"
+
 msgid "NTCP [IPv6]"
 msgstr "NTCP [IPv6]"
 
 msgid "NTCP [IPv6] &amp; SSU"
 msgstr "NTCP [IPv6] &amp; SSU"
 
-msgid "NTCP &amp; SSU with Introducers [IPv6 Only]"
-msgstr "IPv6 vain NTCP, SSU, esittelijät"
-
 msgid "NTCP [IPv6] &amp; SSU with Introducers"
 msgstr "IPv6 NTCP, SSU, esittelijät"
+
+msgid "Local"
+msgstr "Paikallinen"
+
+msgid "Fast Tier"
+msgstr ""
+
+msgid "High Capacity Tier"
+msgstr ""
+
+msgid "Integrated Tier"
+msgstr ""
+
+msgid "Standard Tier"
+msgstr ""
 
 msgid "No peer connections available"
 msgstr "Ei vertaisyhteyksiä saatavilla"
@@ -3339,14 +3357,17 @@ msgstr "Viimeksi kuultu"
 msgid "View/Edit"
 msgstr "Näytä/muokkaa"
 
-msgid "Unreachable"
-msgstr "Ei saavutettavissa"
-
 msgid "OK"
 msgstr "OK"
 
 msgid "Test Fails"
 msgstr "Testi epäonnistui"
+
+msgid "Unreachable"
+msgstr "Ei saavutettavissa"
+
+msgid "Most tests passing"
+msgstr ""
 
 msgid "Fast, High Capacity"
 msgstr "Nopea, suuri kapasiteetti"
@@ -3362,6 +3383,9 @@ msgstr "Epäonnistui"
 
 msgid "Integrated"
 msgstr "Integroitu"
+
+msgid "Configure Peer"
+msgstr ""
 
 msgid "Thresholds"
 msgstr "Kynnykset"
@@ -3429,11 +3453,11 @@ msgstr "Viimeinen huono lähetys"
 msgid "Last Bad Store"
 msgstr "Viimeinen huono kauppa"
 
-msgid "Capabilities in the NetDb, not used to determine profiles"
-msgstr "NetDb:n ominaisuudet, joita ei käytetä profiilien määrittämiseen"
-
 msgid "caps"
 msgstr "caps"
+
+msgid "Capabilities in the NetDb, not used to determine profiles"
+msgstr "NetDb:n ominaisuudet, joita ei käytetä profiilien määrittämiseen"
 
 msgid "Reachable"
 msgstr "Saavutettavissa"
@@ -3606,6 +3630,9 @@ msgstr "Napsauta Käynnistä uudelleen asentaaksesi"
 
 msgid "Click Shutdown and restart to install"
 msgstr "Napsauta Sammuta ja käynnistä uudelleen asentaaksesi"
+
+msgid "Unable"
+msgstr ""
 
 #, java-format
 msgid "{0}"
@@ -3800,9 +3827,6 @@ msgstr "Kuvaa reitittimen suorituskyky"
 msgid "Router Help and FAQ"
 msgstr "Reitittimen ohje ja usein kysytyt kysymykset"
 
-msgid "Info"
-msgstr "Info"
-
 msgid "Router information including transport addresses and UPnP scan"
 msgstr "Reitittimen tiedot, mukaan lukien siirtoosoitteet ja UPnP-skannaus"
 
@@ -3888,6 +3912,34 @@ msgstr "Floodfill käytössä"
 msgid "Total number of remote LeaseSets stored in our NetDb"
 msgstr "Etälease-setien kokonaismäärä NetDb:ssämme tallennettu"
 
+msgid "Declining transit tunnel requests during startup phase"
+msgstr "Osallistuvia tunneleita koskevia pyyntöjä ei hyväksytä ensimmäisten 10 minuutin aikana, kun reititin vakautuu"
+
+msgid "Declining transit tunnel requests as we are shutting down"
+msgstr "Osallistuvia tunnelipyyntöjä hylätään, kun olemme sulkemassa"
+
+msgid "Router or network performance is impeding the building of transit tunnels"
+msgstr "Reitittimen tai verkon suorituskyky estää osallistuvien tunnelien rakentamisen"
+
+msgid "Router is currently hosting the configured maximum number of transit tunnels"
+msgstr "Reititin isännöi tällä hetkellä konfiguroituja maksimimäärää siirtotunnelia"
+
+msgid "Router is currently using the configured maximum share bandwidth"
+msgstr "Reititin käyttää tällä hetkellä konfiguroitua maksimijako-kaistanleveyttä"
+
+msgid "Router is ready to build participating tunnels"
+msgstr "Reititin on valmis rakentamaan osallistuvia tunneleita"
+
+#, java-format
+msgid "Accepting transit tunnel requests; hosting {0} tunnels"
+msgstr "Osallistuvien tunnelipyyntöjen hyväksyminen; osallistuu {0} tunneliin"
+
+msgid "No transit tunnels are built when Hidden mode is active"
+msgstr "Osallistuvia tunneleita ei rakenneta, kun piilotila on aktiivinen"
+
+msgid "Router is configured to reject all transit tunnel requests"
+msgstr "Reititin on määritetty hylkäämään kaikki osallistuvat tunnelipyynnöt"
+
 msgid "Warning: ECDSA is not available. Update your Java or OS"
 msgstr "Varoitus: ECDSA ei ole saatavilla. "
 
@@ -3923,6 +3975,9 @@ msgstr "Kiellettyjen ikäisensä määrä"
 
 msgid "The total number of peers in our network database"
 msgstr "Verkon tietokannassamme olevien vertaiskäyttäjien kokonaismäärä"
+
+msgid "Total RouterInfos stored on disk"
+msgstr ""
 
 msgid "Known"
 msgstr "Tuttu"
@@ -4034,34 +4089,6 @@ msgstr "Muiden reitittimien jonossa olevat pyynnöt osallistua tunneleihin"
 
 msgid "Backlog"
 msgstr "Työn viive"
-
-msgid "Declining transit tunnel requests during startup phase"
-msgstr "Osallistuvia tunneleita koskevia pyyntöjä ei hyväksytä ensimmäisten 10 minuutin aikana, kun reititin vakautuu"
-
-msgid "Declining transit tunnel requests as we are shutting down"
-msgstr "Osallistuvia tunnelipyyntöjä hylätään, kun olemme sulkemassa"
-
-msgid "Router or network performance is impeding the building of transit tunnels"
-msgstr "Reitittimen tai verkon suorituskyky estää osallistuvien tunnelien rakentamisen"
-
-msgid "Router is currently hosting the configured maximum number of transit tunnels"
-msgstr "Reititin isännöi tällä hetkellä konfiguroituja maksimimäärää siirtotunnelia"
-
-msgid "Router is currently using the configured maximum share bandwidth"
-msgstr "Reititin käyttää tällä hetkellä konfiguroitua maksimijako-kaistanleveyttä"
-
-msgid "Router is ready to build participating tunnels"
-msgstr "Reititin on valmis rakentamaan osallistuvia tunneleita"
-
-#, java-format
-msgid "Accepting transit tunnel requests; hosting {0} tunnels"
-msgstr "Osallistuvien tunnelipyyntöjen hyväksyminen; osallistuu {0} tunneliin"
-
-msgid "No transit tunnels are built when Hidden mode is active"
-msgstr "Osallistuvia tunneleita ei rakenneta, kun piilotila on aktiivinen"
-
-msgid "Router is configured to reject all transit tunnel requests"
-msgstr "Reititin on määritetty hylkäämään kaikki osallistuvat tunnelipyynnöt"
 
 msgid "Statistics gathered during this router's uptime"
 msgstr "Tilastot kerättiin tämän reitittimen käyttöajan aikana"
@@ -4193,8 +4220,14 @@ msgstr "Ei tallennettua analyysiä"
 msgid "Select stored analysis"
 msgstr "Valitse tallennettu analyysi"
 
+msgid "Review"
+msgstr ""
+
 msgid "Run analysis on Floodfills only"
 msgstr "Suorita analyysi vain tulvatäytöille"
+
+msgid "Start Scan"
+msgstr ""
 
 msgid "Run analysis on all routers in NetDb"
 msgstr "Suorita analyysi kaikilla NetDb:n reitittimillä"
@@ -4358,6 +4391,12 @@ msgstr "MAX"
 msgid "Show all routers for this family in NetDb"
 msgstr "Näytä kaikki tämän perheen reitittimet NetDb:ssä"
 
+msgid "Routers"
+msgstr "Reitittimet"
+
+msgid "n/a"
+msgstr "-"
+
 msgid "Last lookup successful"
 msgstr "Viimeinen haku onnistui"
 
@@ -4409,9 +4448,6 @@ msgstr "Tiedot siirretty"
 msgid "Data"
 msgstr "Data"
 
-msgid "Limit"
-msgstr "Rajoitus"
-
 msgid "Receive on"
 msgstr "Vastaanota"
 
@@ -4456,6 +4492,7 @@ msgstr "Reititin toimii tällä hetkellä piilotilassa, mikä estää liikennetu
 msgid "No transit tunnels currently active."
 msgstr "Ei tällä hetkellä aktiivisia liikennetunneleita."
 
+#, java-format
 msgid "Transit Tunnels by Peer (Top {0})"
 msgstr "Siirtotunnelit vertaisen mukaan (Top {0})"
 
@@ -4467,9 +4504,6 @@ msgstr "Peerin kaikki tunnelit"
 
 msgid "Primary IP address"
 msgstr "Ensisijainen IP-osoite"
-
-msgid "Local"
-msgstr "Paikallinen"
 
 msgid "unique peers"
 msgstr "ainutlaatuiset vertaiset"
@@ -4483,6 +4517,9 @@ msgstr "transit"
 msgid "No local or transit tunnels currently active."
 msgstr "Ei tällä hetkellä aktiivisia paikallis- tai julkisen liikenteen tunneleita."
 
+msgid "PRIVATE IP ADDRESS"
+msgstr ""
+
 msgid "Bandwidth Tiers"
 msgstr "Kaistanleveystasot"
 
@@ -4492,6 +4529,9 @@ msgstr "Yli {0} jaettua kaistanleveyttä"
 
 msgid "Inbound or outbound?"
 msgstr "saapuva vai lähtevä?"
+
+msgid "In/Out"
+msgstr ""
 
 msgid "Gateway"
 msgstr "Yhdyskäytävä"
@@ -4608,6 +4648,9 @@ msgstr "I2P-verkkopalvelin (eepsite)"
 msgid "Browser launch at startup"
 msgstr "Selain käynnistyy käynnistyksen yhteydessä"
 
+msgid "I2P Router Console"
+msgstr ""
+
 msgid "Open Router Console in web browser at startup"
 msgstr "Avaa Router Console verkkoselaimessa käynnistyksen yhteydessä"
 
@@ -4683,12 +4726,6 @@ msgstr "avain"
 msgid "port"
 msgstr "portti"
 
-msgid "config UI"
-msgstr "käyttöliittymäasetukset"
-
-msgid "User Interface Configuration"
-msgstr "Käyttöliittymän asetukset"
-
 msgid "Certificates"
 msgstr "Varmenteet"
 
@@ -4704,8 +4741,8 @@ msgstr "Kaistanleveyden rajoitin"
 msgid "Advanced Network Configuration"
 msgstr "Verkon Lisäasetukset"
 
-msgid "I2P+ will work best if you configure your rates to match the speed of your internet connection."
-msgstr "I2P toimii parhaiten, jos määrität hinnat vastaamaan Internet-yhteytesi nopeutta."
+msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
+msgstr ""
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
 msgstr "Huomautus: Panoksesi verkkoon (verkkoosuus) määräytyy ylävirran kaistanleveyden (latausnopeuden) varauksen mukaan."
@@ -4735,11 +4772,11 @@ msgid "NOTE"
 msgstr "HUOMIO"
 
 #, java-format
-msgid "You have configured I2P+ to share only {0} KBps."
-msgstr "Olet määrittänyt I2P:n jakamaan vain {0} kt/s."
+msgid "You have configured I2P to share only {0} KBps."
+msgstr ""
 
-msgid "I2P+ requires at least 12KBps to enable sharing. "
-msgstr "I2P vaatii vähintään 12 kt/s jakamisen mahdollistamiseksi."
+msgid "I2P requires at least 12KBps to enable sharing. "
+msgstr ""
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
 msgstr "Ota jakaminen käyttöön (tunneleihin osallistuminen) määrittämällä lisää kaistanleveyttä."
@@ -5236,8 +5273,8 @@ msgstr "määritä reseeding"
 msgid "Reseeding is the bootstrapping process used to find other routers when you first install I2P, or when your router has too few router references remaining."
 msgstr "Reseeding on käynnistysprosessi, jota käytetään muiden reitittimien etsimiseen, kun asennat ensimmäisen kerran I2P:n tai kun reitittimessä on liian vähän reititinviitteitä jäljellä."
 
-msgid "To enable the configuration of reseed urls, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
-msgstr "Ota uudelleenseed-URL-osoitteiden määrittäminen käyttöön aktivoimalla konsolin <a href=\"/help/advancedsettings\">Lisäasetukset-tila</a>."
+msgid "To enable the configuration of reseed urls, activate the console's <a href=/help/advancedsettings>Advanced mode</a>."
+msgstr ""
 
 msgid "Reseeding Configuration"
 msgstr "Määrityksen uudelleen lähettäminen"
@@ -5247,9 +5284,6 @@ msgstr "Apua uudelleenkylvössä"
 
 msgid "Reseeding Help"
 msgstr "Uudelleenkylvöohje"
-
-msgid "Change these only if HTTPS is blocked by a restrictive firewall and reseed has failed."
-msgstr "Muuta näitä vain, jos rajoittava palomuuri on estänyt HTTPS:n ja uudelleensyöttö on epäonnistunut."
 
 msgid "Reseed URLs"
 msgstr "Lähetä URL-osoitteet uudelleen"
@@ -5286,6 +5320,9 @@ msgstr "Tämä vaihtoehto käyttää I2P: n HTTP -OutProxy -ohjelmaa uudelleen t
 
 msgid "I2P Outproxy"
 msgstr "I2P Outproxy"
+
+msgid "Port"
+msgstr "Portti"
 
 msgid "Use HTTP Proxy for HTTP Reseed Hosts"
 msgstr "Käytä HTTP-välityspalvelinta HTTP-uudelleensyöttöisännille"
@@ -5399,6 +5436,12 @@ msgstr "Yhtenistetty sivupalkki"
 msgid "Use the same sidebar on all pages"
 msgstr "Käytä samaa sivupalkkia kaikilla sivuilla"
 
+msgid "Sticky sidebar"
+msgstr ""
+
+msgid "Enable conditional fixed sidebar"
+msgstr ""
+
 msgid "config stats"
 msgstr "tilastoasetukset"
 
@@ -5455,6 +5498,12 @@ msgstr "Jos haluat muokata asiakastunnelin asetuksia, käytä <a href=\"/i2ptunn
 
 msgid "To enable session-only changes to the client tunnels, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
 msgstr "Jos haluat ottaa käyttöön vain istunnon mukaiset muutokset asiakastunneleissa, aktivoi konsolin <a href=\"/help/advancedsettings\">Lisäasetustila</a>."
+
+msgid "config UI"
+msgstr "käyttöliittymäasetukset"
+
+msgid "User Interface Configuration"
+msgstr "Käyttöliittymän asetukset"
 
 msgid "Router Console Theme"
 msgstr "Reitittimen ohjauspaneelin teema"
@@ -5592,14 +5641,20 @@ msgstr "Virhe 404"
 msgid "not found"
 msgstr "ei löytynyt"
 
+msgid "router logs"
+msgstr "Reititin lokit"
+
+msgid "Critical / Error Level Logs"
+msgstr "Kriittisen / virhetason lokit"
+
+msgid "Clear logs"
+msgstr "Tyhjennä lokit"
+
 msgid "events"
 msgstr "tapahtumat"
 
 msgid "Event Log"
 msgstr "Tapahtumaloki"
-
-msgid "Combined"
-msgstr "Yhdistetty"
 
 msgid "graph"
 msgstr "Grafiikki"
@@ -6108,7 +6163,7 @@ msgstr "Tehdäksesi konsolin saataville paikallisverkossa, muokkaa asetustiedost
 msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
 msgstr "Esimerkki: Salli pääsy localhostista ja 192.168.1.10 HTTP:n ja HTTPS:n kautta:"
 
-msgid "For most client services, change listening address for relevant service in Tunnel Manager's configuration section using <i>reachable by</i> dropdown."
+msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager's configuration section using the <i>reachable by</i> dropdown."
 msgstr ""
 
 msgid "How do I connect to IRC within I2P?"
@@ -7308,34 +7363,6 @@ msgstr "työjonotilastot"
 msgid "Job Queue Stats"
 msgstr "Työjonotilastot"
 
-msgid "logs"
-msgstr "lokit"
-
-msgid "Please include your I2P version and running environment information in bug reports"
-msgstr "Liitä I2P-versiosi ja käyttöympäristösi tiedot virheraportteihin"
-
-#, java-format
-msgid "Please report bugs on {0} or {1}."
-msgstr "Ilmoita virheistä {0} tai {1}."
-
-msgid "View event log"
-msgstr "Näytä tapahtumaloki"
-
-msgid "Critical / Error Level Logs"
-msgstr "Kriittisen / virhetason lokit"
-
-msgid "Clear logs"
-msgstr "Tyhjennä lokit"
-
-msgid "Configure router logging options"
-msgstr "Määritä reitittimen lokiasetukset"
-
-msgid "Filter Router log output"
-msgstr "Suodata reititin lokitehdas"
-
-msgid "Service (Wrapper) Logs"
-msgstr "Palvelus (Wrapper) lokit"
-
 msgid "network database"
 msgstr "verkkotietokanta"
 
@@ -7356,6 +7383,9 @@ msgstr "Paikallisesti isännätty julkinen palvelu"
 
 msgid "Requested client leaseset"
 msgstr "Pyydetty asiakkaan lease-setin"
+
+msgid "Remote"
+msgstr ""
 
 msgid "network database router map"
 msgstr "Verkkotietokanta-reittikartta"
@@ -7400,164 +7430,26 @@ msgstr "Estetyt vertaissolmut"
 msgid "Fast / High Capacity"
 msgstr "Nopea / suuri kapasiteetti"
 
-msgid "router logs"
-msgstr "Reititin lokit"
+msgid "Configure router logging options"
+msgstr "Määritä reitittimen lokiasetukset"
+
+msgid "View event log"
+msgstr "Näytä tapahtumaloki"
+
+msgid "Filter Router log output"
+msgstr "Suodata reititin lokitehdas"
 
 msgid "service logs"
 msgstr "Palvelulokit"
 
-msgid "Manage I2P addresses"
-msgstr "Hallitse I2P-osoitteita"
-
-msgid "Imagegen"
-msgstr "Kuva"
-
-msgid "Create and download torrents"
-msgstr "Luo ja lataa torrentteja"
-
-msgid "Manage client and server tunnels"
-msgstr "Hallitse asiakas- ja palvelintunneleita"
-
-msgid "Webmail client"
-msgstr "Webmail-asiakas"
-
-msgid "Webmail"
-msgstr "Webmail"
-
-msgid "Local webserver for hosting content on the I2P network"
-msgstr "Paikallinen verkkopalvelin sisällön isännöintiin I2P-verkossa"
+msgid "Service (Wrapper) Logs"
+msgstr "Palvelus (Wrapper) lokit"
 
 msgid "Information &amp; Diagnostics"
 msgstr "Tiedot ja Diagnostiikka"
 
-msgid "Review recent updates to I2P"
-msgstr "Tarkista viimeisimmät I2P-päivitykset"
-
-msgid "View debugging information"
-msgstr "Näytä virheenkorjaustiedot"
-
-msgid "View router performance graphs"
-msgstr "Näytä reitittimen suorituskykykaaviot"
-
-msgid "Router help section"
-msgstr "Reitittimen ohjeosio"
-
-msgid "Router homepage"
-msgstr "Reitittimen kotisivu"
-
-msgid "Home"
-msgstr "Kotiin"
-
-msgid "View news relating to I2P"
-msgstr "Katso I2P-uutisia"
-
-msgid "I2P News"
-msgstr "I2P-uutiset"
-
-msgid "View router workload and stats"
-msgstr "Näytä reitittimen työmäärä ja tilastot"
-
-msgid "Router Jobs"
-msgstr "Reititintyöt"
-
-msgid "View router logs"
-msgstr "Näytä reitittimen lokit"
-
-msgid "View information and stats regarding all known peers"
-msgstr "Tarkastele tietoja ja tilastoja kaikista tunnetuista vertaisversioista"
-
-msgid "View active peers"
-msgstr "Näytä aktiiviset vertaisryhmät"
-
-msgid "View peer performance profiles"
-msgstr "Näytä vertaissuoritusprofiilit"
-
-msgid "View information about router and running environment"
-msgstr "Näytä tiedot reitittimestä ja käyttöympäristöstä"
-
-msgid "Statistics"
-msgstr "Tilastot"
-
-msgid "Current console and webapp translation report"
-msgstr "Nykyinen konsoli- ja web-sovellusten käännöskertomus"
-
-msgid "Translation Status"
-msgstr "Käännöksen tila"
-
-msgid "View active tunnels"
-msgstr "Näytä aktiiviset tunnelit"
-
-msgid "Customize homepage"
-msgstr "Mukauta kotisivua"
-
-msgid "Homepage"
-msgstr "Kotisivu"
-
-msgid "Configure I2P Client Control Interface"
-msgstr "Määritä I2P-asiakashallintaliittymä"
-
-msgid "View or edit router keyring for encrypted destinations"
-msgstr "Tarkastele tai muokkaa salattujen kohteiden reitittimen avaimenperää"
-
-msgid "Configure router networking options"
-msgstr "Määritä reitittimen verkkoasetukset"
-
-msgid "Manually edit peers and view banned peers and blocklist"
-msgstr "Muokkaa vertaisversioita manuaalisesti ja tarkastele kiellettyjä vertaisohjelmia ja estolistaa"
-
-msgid "Install and manage router plugins"
-msgstr "Asenna ja hallitse reitittimen laajennuksia"
-
-msgid "Router reseeding and configuration"
-msgstr "Reitittimen uudelleensyöttö ja konfigurointi"
-
-msgid "Configure and manage Router family"
-msgstr "Määritä ja hallitse reititinperhettä"
-
-msgid "Manage Router service"
-msgstr "Hallitse reititinpalvelua"
-
-msgid "Configure stat collection for graphing"
-msgstr "Määritä tilastokokoelma kuvaajaa varten"
-
-msgid "Router Stats"
-msgstr "Reitittimen tilastot"
-
-msgid "Configure router updates"
-msgstr "Määritä reitittimen päivitykset"
-
-msgid "Configuration wizard for new users"
-msgstr "Ohjattu määritystoiminto uusille käyttäjille"
-
-msgid "Setup Wizard"
-msgstr "Ohjattu asennustoiminto"
-
-msgid "Customize sidebar"
-msgstr "Mukauta sivupalkkia"
-
-msgid "Configure tunnel options"
-msgstr "Määritä tunneliasetukset"
-
-msgid "Configure router user interface and optional console password"
-msgstr "Määritä reitittimen käyttöliittymä ja valinnainen konsolin salasana"
-
-msgid "Configuring I2P for optimal performance"
-msgstr "I2P:n määrittäminen optimaalista suorituskykyä varten"
-
-msgid "Information for new users"
-msgstr "Tietoa uusille käyttäjille"
-
-msgid "A guide to reseeding your I2P router"
-msgstr "Opas I2P-reitittimen uudelleenkytkemiseen"
-
-msgid "What to do in the event I2P isn't working"
-msgstr "Mitä tehdä, jos I2P ei toimi"
-
-msgid "Introduction to tunnel filters"
-msgstr "Johdatus tunnelisuodattimiin"
-
-msgid "Tunnel Filters"
-msgstr "Tunnelisuodattimet"
+msgid "Customize"
+msgstr ""
 
 msgid "statistics"
 msgstr "tilastot"
@@ -7610,9 +7502,6 @@ msgstr "Käytä/loptaa tunneltunnisteita"
 msgid "Toggle Tunnels"
 msgstr "Käytä/loptaa tuneleja"
 
-msgid "Updating sidebar sections"
-msgstr "Päivitetään sivupalkin osioita"
-
 msgid "Peer Profile"
 msgstr "Vertaisprofiili"
 
@@ -7637,14 +7526,17 @@ msgstr "Palaa alkuun"
 msgid "webmail"
 msgstr "webmail"
 
+msgid "Webmail"
+msgstr "Webmail"
+
 msgid "New Install Wizard"
 msgstr "Uusi ohjattu asennustoiminto"
 
 msgid "Skip Setup"
 msgstr "Ohita asennus"
 
-msgid "Select the language to be used for the router console and web applications (<a href=/webmail target=_blank rel=noreferrer>webmail</a>, <a href=/torrents target=_blank rel=noreferrer>torrents</a>, <a href=/i2ptunnelmgr target=_blank rel=noreferrer>tunnel manager</a> etc). If you wish to change the language in future, change the router console theme, or configure a password to access the console, you may do so on the <a href=/configui target=_blank rel=noreferrer>User Interface configuration page</a>."
-msgstr "Valitse käytettävä kieli reitittimen konsolissa ja verkkosovelluksissa (<a href=/webmail target=_blank rel=noreferrer>webmail</a>, <a href=/torrents target=_blank rel=noreferrer>torrents</a>, <a href=/i2ptunnelmgr target=_blank rel=noreferrer>tunnelin hallinta</a> jne). Jos haluat vaihtaa kieltä tulevaisuudessa, vaihtaa reitittimen konsoliteemaa tai määrittää salasanan konsoliin pääsemiseksi, voit tehdä sen <a href=/configui target=_blank rel=noreferrer>Käyttöliittymän konfigurointisivulla</a>."
+msgid "Select the language to be used for the router console and web applications ("
+msgstr ""
 
 msgid "Router Console &amp; WebApps Display Language"
 msgstr "Reititinkonsoli ja WebApps -näyttökieli"
@@ -7713,6 +7605,13 @@ msgid "Bandwidth Configuration"
 msgstr "Kaistanleveyden määritys"
 
 #, java-format
+msgid "You have configured I2P+ to share only {0} KBps."
+msgstr "Olet määrittänyt I2P:n jakamaan vain {0} kt/s."
+
+msgid "I2P+ requires at least 12KBps to enable sharing. "
+msgstr "I2P vaatii vähintään 12 kt/s jakamisen mahdollistamiseksi."
+
+#, java-format
 msgid "You have configured I2P+ to share {0} KBps."
 msgstr "Olet määrittänyt I2P:n jakamaan {0} kt/s."
 
@@ -7722,8 +7621,8 @@ msgstr "I2P vaatii verkkoselaimen, joka on määritetty käyttämään paikallis
 msgid "Browser Setup"
 msgstr "Selaimen asetukset"
 
-msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. For more help, see <a href=https://geti2p.net/htproxyports target=_blank rel=noreferrer>the configuration guide</a>, or <a href=/help/configuration#browserconfig>the mini-tutorial for Firefox</a>."
-msgstr "Jotta voit käyttää I2P-verkossa sijaitsevia verkkosivustoja ja valinnaisesti käyttää oletusarvoista ulkoproksia yhdistääksesi verkkosivustoihin selkeissä verkko-olosuhteissa, sinun on määritettävä selain käyttämään I2P+ <b>HTTP</b> välityspalvelinta, joka oletuksena toimii osoitteessa <code>127.0.0.1 portti 4444</code>. Lisäohjeita saat katsomalla <a href=https://geti2p.net/htproxyports target=_blank rel=noreferrer>konfigurointioppaan</a> tai <a href=/help/configuration#browserconfig>mini-oppaan Firefox-selainta varten</a>."
+msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. "
+msgstr ""
 
 msgid "Welcome to I2P+!"
 msgstr "Tervetuloa I2P:hen!"
@@ -7731,8 +7630,8 @@ msgstr "Tervetuloa I2P:hen!"
 msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
 msgstr "Kun käynnistät I2P:n, reitittimen käynnistäminen (integroiminen) verkkoon ja muiden vertaiskumppanien löytäminen voi kestää muutaman minuutin, joten ole kärsivällinen."
 
-msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P+."
-msgstr "Kun vihreät tähdet on merkitty paikallisten tunneleidesi viereen, voit tehdä I2P:llä monia asioita."
+msgid "Once green stars are indicated next to your Service Tunnels, there is a wide variety of things you can do with I2P+."
+msgstr ""
 
 msgid "Unknown Wizard page"
 msgstr "Tuntematon ohjatun toiminnon sivu"
@@ -7751,4 +7650,74 @@ msgstr "Seuraava"
 
 msgid "Finished"
 msgstr "Valmistunut"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#, java-format
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

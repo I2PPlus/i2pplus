@@ -73,8 +73,17 @@ msgstr "Anskaffet {0} routeroplysninger fra reseed-værter"
 msgid "Acquired {0} router infos from reseed hosts ({1} errors)"
 msgstr "Erhvervet {0} routeroplysninger fra reseed-værter ({1} fejl)"
 
+msgid "Clock step adjustment (ms)"
+msgstr "Justering af urtrin (ms)"
+
+msgid "Size of tunnel acceptor backlog"
+msgstr "Størrelse af tunnel acceptor backlogg"
+
 msgid "Message receive rate (B/s)"
 msgstr "Beskedmodtagelseshastighed (B/s)"
+
+msgid "Low-level receive rate (B/s)"
+msgstr "Modtagelseshastighed på lavt niveau (B/s)"
 
 msgid "Message send rate (B/s)"
 msgstr "Beskedafsendelseshastighed (B/s)"
@@ -82,41 +91,35 @@ msgstr "Beskedafsendelseshastighed (B/s)"
 msgid "Low-level send rate (B/s)"
 msgstr "Sendehastighed på lavt niveau (B/s)"
 
-msgid "Low-level receive rate (B/s)"
-msgstr "Modtagelseshastighed på lavt niveau (B/s)"
-
-msgid "Total peers in our NetDb"
-msgstr "Samlet peers i vores NetDb"
-
 msgid "Peers active in the last minute"
 msgstr "Peers aktive i sidste minut"
-
-msgid "Known high capacity peers"
-msgstr "Kendte kammerater med høj kapacitet"
 
 msgid "Peers sent to in the last minute"
 msgstr "Peers sendt til i sidste minut"
 
+msgid "Total peers in our banlist"
+msgstr "Samlet jævnaldrende i vores banliste"
+
+msgid "CPU load average of the JVM"
+msgstr "CPU-belastningsgennemsnit af JVM"
+
 msgid "Known fast peers"
 msgstr "Kendte hurtige peers"
+
+msgid "Known high capacity peers"
+msgstr "Kendte kammerater med høj kapacitet"
 
 msgid "Known integrated (floodfill) peers"
 msgstr "Kendte integrerede (floodfill) peers"
 
-msgid "Total peers in our banlist"
-msgstr "Samlet jævnaldrende i vores banliste"
+msgid "Total peers in our NetDb"
+msgstr "Samlet peers i vores NetDb"
+
+msgid "Total number of threads in use"
+msgstr ""
 
 msgid "Peers without a published IP address"
 msgstr "Peers uden en offentliggjort IP-adresse"
-
-msgid "Size of tunnel acceptor backlog"
-msgstr "Størrelse af tunnel acceptor backlogg"
-
-msgid "Clock step adjustment (ms)"
-msgstr "Justering af urtrin (ms)"
-
-msgid "CPU load average of the JVM"
-msgstr "CPU-belastningsgennemsnit af JVM"
 
 msgid "Average tunnel build success %"
 msgstr "Gennemsnitlig tunnelbygningssucces %"
@@ -1554,29 +1557,29 @@ msgstr "Genstarter om {0}"
 msgid "Save order"
 msgstr "Gemme orden"
 
+msgid "Restore full default"
+msgstr "Gendanne den fulde standard"
+
+msgid "Restore minimal default"
+msgstr "Gendanne den minimale standard"
+
 msgid "Sidebar preferences updated"
 msgstr ""
 
 msgid "Refresh interval must be a number"
 msgstr "Opdateringsinterval skal være et tal"
 
-msgid "Restore full default"
-msgstr "Gendanne den fulde standard"
-
 msgid "Full sidebar defaults restored."
-msgstr ""
-
-msgid "Sidebar will refresh shortly."
-msgstr ""
-
-msgid "Restore minimal default"
-msgstr "Gendanne den minimale standard"
-
-msgid "Minimal sidebar defaults restored."
 msgstr ""
 
 msgid "Order must be an integer"
 msgstr "Rækkefølge skal være et heltal"
+
+msgid "Saved order of sections."
+msgstr "Sparet rækkefølgen af ​​kapitlerne"
+
+msgid "Sidebar will refresh shortly."
+msgstr ""
 
 msgid "No section selected"
 msgstr "Ingen sektion valgt"
@@ -1586,9 +1589,6 @@ msgstr "Ingen rækkefølge indtastet"
 
 msgid "Moved"
 msgstr "Flyttet"
-
-msgid "Saved order of sections."
-msgstr "Sparet rækkefølgen af ​​kapitlerne"
 
 msgid "Full statistics enabled"
 msgstr "Komplet statistik aktiveret"
@@ -2417,6 +2417,9 @@ msgstr "HTTP proxyn er ikke oppe"
 msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
 msgstr "Din browser er ikke korrekt konfigueret til at bruge HTTP proxyn på {0}"
 
+msgid "Errors"
+msgstr ""
+
 msgid "URL"
 msgstr "URL"
 
@@ -2691,29 +2694,23 @@ msgstr ""
 msgid "Lookup"
 msgstr "Opslag"
 
-msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
-msgstr "Afslør aldrig din router-identitet til nogen, da den er unikt knyttet til din IP-adresse i netværksdatabasen."
+msgid "Select the field to search on"
+msgstr ""
 
-msgid "is banned"
-msgstr "er forbudt"
+msgid "e.g. cn hk"
+msgstr ""
 
-msgid "not found in network database"
-msgstr "ikke fundet i netværksdatabasen"
+msgid "MTU"
+msgstr "MTU"
 
-msgid "Bad Base64 Router hash"
+msgid "Enter search value here"
+msgstr ""
+
+msgid "Router not found"
 msgstr ""
 
 msgid "No routers with"
 msgstr ""
-
-msgid "Hash prefix"
-msgstr ""
-
-msgid "Port"
-msgstr "Port"
-
-msgid "MTU"
-msgstr "MTU"
 
 msgid "found in the network database"
 msgstr ""
@@ -2841,17 +2838,17 @@ msgstr "Udløbet for {0} siden"
 msgid "Unknown"
 msgstr "Ukendt"
 
-msgid "Advanced mode - includes all statistics published by floodfills."
-msgstr ""
-
-msgid "Compact mode - does not include statistics published by floodfills."
-msgstr ""
-
 msgid "Network Database Router Statistics"
 msgstr "Netværksdatabase Router statistik"
 
 msgid "Count"
 msgstr "Antal"
+
+msgid "Under 12 KB/s"
+msgstr ""
+
+msgid "Over 2048 KB/s"
+msgstr ""
 
 msgid "Bandwidth Tier"
 msgstr "Båndbredde niveau"
@@ -2923,6 +2920,9 @@ msgstr "Publiceret"
 msgid "Hostname"
 msgstr "Værtsnavn"
 
+msgid "Whois"
+msgstr ""
+
 msgid "direct"
 msgstr ""
 
@@ -2938,20 +2938,26 @@ msgstr "Vis alle routere med denne signaturtype i NetDb"
 msgid "Show all routers with this encryption type in the NetDb"
 msgstr "Vis alle routere med denne krypteringstype i NetDb"
 
-msgid "Addresses"
-msgstr "Adresser"
-
-msgid "n/a"
-msgstr "Ikke tingængelig "
-
 msgid "Show all routers with this address in the NetDb"
 msgstr "Vis alle routere med denne adresse i NetDb"
 
 msgid "Show all routers with this port in the NetDb"
 msgstr "Vis alle routere med denne port i NetDb"
 
-msgid "Routers"
-msgstr "Routere"
+msgid "Maximum Transmission Unit"
+msgstr ""
+
+msgid "Show all routers with this MTU in the NetDb"
+msgstr ""
+
+msgid "Addresses"
+msgstr "Adresser"
+
+msgid "Introducers"
+msgstr ""
+
+msgid "Network Id"
+msgstr ""
 
 msgid "First heard about"
 msgstr "Først hørt om"
@@ -2962,11 +2968,8 @@ msgstr "Sidst hørt om"
 msgid "Last heard from"
 msgstr "Sidst hørt fra"
 
-msgid "Network Id"
-msgstr ""
-
-msgid "Count is always spoofed to avoid indicating router restarts"
-msgstr ""
+msgid "Info"
+msgstr "Info"
 
 msgid "Hidden or starting up"
 msgstr "Gemt eller under opstart"
@@ -2995,17 +2998,32 @@ msgstr "SSU [IPv6]"
 msgid "SSU [IPv6] with Introducers"
 msgstr "IPv6, introducers"
 
+msgid "NTCP &amp; SSU with Introducers [IPv6 Only]"
+msgstr "IPv6 kun NTCP, SSU, introducers"
+
 msgid "NTCP [IPv6]"
 msgstr "NTCP [IPv6]"
 
 msgid "NTCP [IPv6] &amp; SSU"
 msgstr "NTCP [IPv6] &amp; SSU"
 
-msgid "NTCP &amp; SSU with Introducers [IPv6 Only]"
-msgstr "IPv6 kun NTCP, SSU, introducers"
-
 msgid "NTCP [IPv6] &amp; SSU with Introducers"
 msgstr "NTCP [IPv6] &amp; SSU with Introducers"
+
+msgid "Local"
+msgstr "Lokal"
+
+msgid "Fast Tier"
+msgstr ""
+
+msgid "High Capacity Tier"
+msgstr ""
+
+msgid "Integrated Tier"
+msgstr ""
+
+msgid "Standard Tier"
+msgstr ""
 
 msgid "No peer connections available"
 msgstr "Ingen peer-forbindelser tilgængelige"
@@ -3339,14 +3357,17 @@ msgstr "Hørte senest fra"
 msgid "View/Edit"
 msgstr "Se/Rediger"
 
-msgid "Unreachable"
-msgstr "Utilgængelig"
-
 msgid "OK"
 msgstr "OK"
 
 msgid "Test Fails"
 msgstr "Testen mislykkedes"
+
+msgid "Unreachable"
+msgstr "Utilgængelig"
+
+msgid "Most tests passing"
+msgstr ""
 
 msgid "Fast, High Capacity"
 msgstr "Hurtig, Høj kapacitet"
@@ -3362,6 +3383,9 @@ msgstr "Svigtende"
 
 msgid "Integrated"
 msgstr "Integreret"
+
+msgid "Configure Peer"
+msgstr ""
 
 msgid "Thresholds"
 msgstr "Tærskler"
@@ -3429,11 +3453,11 @@ msgstr "Seneste dårlige afsendelse"
 msgid "Last Bad Store"
 msgstr "Seneste dårlige lagring"
 
-msgid "Capabilities in the NetDb, not used to determine profiles"
-msgstr "Kapaciteter i NetDb, bruges ikke til at bestemme profiler"
-
 msgid "caps"
 msgstr "caps"
+
+msgid "Capabilities in the NetDb, not used to determine profiles"
+msgstr "Kapaciteter i NetDb, bruges ikke til at bestemme profiler"
 
 msgid "Reachable"
 msgstr "Kan nås"
@@ -3606,6 +3630,9 @@ msgstr "Klik på Genstart for at installere"
 
 msgid "Click Shutdown and restart to install"
 msgstr "Klik på Luk Ned og Genstart for at installerer"
+
+msgid "Unable"
+msgstr ""
 
 #, java-format
 msgid "{0}"
@@ -3800,9 +3827,6 @@ msgstr "Graf over routerens ydelse"
 msgid "Router Help and FAQ"
 msgstr "Router Hjælp og FAQ"
 
-msgid "Info"
-msgstr "Info"
-
 msgid "Router information including transport addresses and UPnP scan"
 msgstr "Routerinformation inklusive transportadresser og UPnP-scanning"
 
@@ -3888,6 +3912,34 @@ msgstr "Floodfill aktiveret"
 msgid "Total number of remote LeaseSets stored in our NetDb"
 msgstr ""
 
+msgid "Declining transit tunnel requests during startup phase"
+msgstr "Ingen anmodninger om deltagende tunneler accepteres i de første 10 minutter, mens routeren stabiliserer sig"
+
+msgid "Declining transit tunnel requests as we are shutting down"
+msgstr "Afviser deltagende tunnelanmodninger, da vi lukker ned"
+
+msgid "Router or network performance is impeding the building of transit tunnels"
+msgstr "Router- eller netværksydelse hæmmer bygningen af ​​deltagende tunneler"
+
+msgid "Router is currently hosting the configured maximum number of transit tunnels"
+msgstr "Routeren hoster i øjeblikket det maksimale antal transit-tunneller, der er konfigureret"
+
+msgid "Router is currently using the configured maximum share bandwidth"
+msgstr "Routeren bruger i øjeblikket den maksimale delte båndbredde, der er konfigureret"
+
+msgid "Router is ready to build participating tunnels"
+msgstr "Routeren er klar til at bygge deltagende tunneler"
+
+#, java-format
+msgid "Accepting transit tunnel requests; hosting {0} tunnels"
+msgstr "Accept af deltagende tunnelanmodninger; deltager i {0} tunneler"
+
+msgid "No transit tunnels are built when Hidden mode is active"
+msgstr "Der bygges ingen deltagende tunneler, når skjult tilstand er aktiv"
+
+msgid "Router is configured to reject all transit tunnel requests"
+msgstr "Routeren er konfigureret til at afvise alle deltagende tunnelanmodninger"
+
 msgid "Warning: ECDSA is not available. Update your Java or OS"
 msgstr "Advarsel: ECDSA er ikke tilgængelig. Opdater din Java eller OS"
 
@@ -3923,6 +3975,9 @@ msgstr "Antallet af forbudte jævnaldrende"
 
 msgid "The total number of peers in our network database"
 msgstr "Det samlade antal peers i vores netværkdatabase"
+
+msgid "Total RouterInfos stored on disk"
+msgstr ""
 
 msgid "Known"
 msgstr "Kendte"
@@ -4034,34 +4089,6 @@ msgstr "Kø anmodninger fra andre routere til at deltage i tunneler"
 
 msgid "Backlog"
 msgstr "Efterslæb"
-
-msgid "Declining transit tunnel requests during startup phase"
-msgstr "Ingen anmodninger om deltagende tunneler accepteres i de første 10 minutter, mens routeren stabiliserer sig"
-
-msgid "Declining transit tunnel requests as we are shutting down"
-msgstr "Afviser deltagende tunnelanmodninger, da vi lukker ned"
-
-msgid "Router or network performance is impeding the building of transit tunnels"
-msgstr "Router- eller netværksydelse hæmmer bygningen af ​​deltagende tunneler"
-
-msgid "Router is currently hosting the configured maximum number of transit tunnels"
-msgstr "Routeren hoster i øjeblikket det maksimale antal transit-tunneller, der er konfigureret"
-
-msgid "Router is currently using the configured maximum share bandwidth"
-msgstr "Routeren bruger i øjeblikket den maksimale delte båndbredde, der er konfigureret"
-
-msgid "Router is ready to build participating tunnels"
-msgstr "Routeren er klar til at bygge deltagende tunneler"
-
-#, java-format
-msgid "Accepting transit tunnel requests; hosting {0} tunnels"
-msgstr "Accept af deltagende tunnelanmodninger; deltager i {0} tunneler"
-
-msgid "No transit tunnels are built when Hidden mode is active"
-msgstr "Der bygges ingen deltagende tunneler, når skjult tilstand er aktiv"
-
-msgid "Router is configured to reject all transit tunnel requests"
-msgstr "Routeren er konfigureret til at afvise alle deltagende tunnelanmodninger"
 
 msgid "Statistics gathered during this router's uptime"
 msgstr "Statistik der er blevet opsamlet imens denne router har været oppe"
@@ -4193,8 +4220,14 @@ msgstr "Ingen gemt analyse"
 msgid "Select stored analysis"
 msgstr "Vælg gemt analyse"
 
+msgid "Review"
+msgstr ""
+
 msgid "Run analysis on Floodfills only"
 msgstr "Kør kun analyse på Floodfills"
+
+msgid "Start Scan"
+msgstr ""
 
 msgid "Run analysis on all routers in NetDb"
 msgstr "Kør analyse på alle routere i NetDb"
@@ -4358,6 +4391,12 @@ msgstr "MAX"
 msgid "Show all routers for this family in NetDb"
 msgstr "Vis alle routere for denne familie i NetDb"
 
+msgid "Routers"
+msgstr "Routere"
+
+msgid "n/a"
+msgstr "Ikke tingængelig "
+
 msgid "Last lookup successful"
 msgstr "Sidste opslag lykkedes"
 
@@ -4409,9 +4448,6 @@ msgstr "Data overført"
 msgid "Data"
 msgstr "Data"
 
-msgid "Limit"
-msgstr ""
-
 msgid "Receive on"
 msgstr "Modtager på"
 
@@ -4456,6 +4492,7 @@ msgstr "Router kører i øjeblikket i skjult tilstand, som forhindrer transittun
 msgid "No transit tunnels currently active."
 msgstr "Ingen transittunneler er i øjeblikket aktive."
 
+#, java-format
 msgid "Transit Tunnels by Peer (Top {0})"
 msgstr ""
 
@@ -4467,9 +4504,6 @@ msgstr "Alle tunneler af Peer"
 
 msgid "Primary IP address"
 msgstr "Primær IP-adresse"
-
-msgid "Local"
-msgstr "Lokal"
 
 msgid "unique peers"
 msgstr "unikke jævnaldrende"
@@ -4483,6 +4517,9 @@ msgstr "transit"
 msgid "No local or transit tunnels currently active."
 msgstr "Ingen lokale eller transittunneler er i øjeblikket aktive."
 
+msgid "PRIVATE IP ADDRESS"
+msgstr ""
+
 msgid "Bandwidth Tiers"
 msgstr "Båndbredde niveauer"
 
@@ -4492,6 +4529,9 @@ msgstr "Over {0} delt båndbredde"
 
 msgid "Inbound or outbound?"
 msgstr "Indgående eller udgående?"
+
+msgid "In/Out"
+msgstr ""
 
 msgid "Gateway"
 msgstr "Gateway"
@@ -4608,6 +4648,9 @@ msgstr "I2P Webserver (eepsite)"
 msgid "Browser launch at startup"
 msgstr "Browseren åbnes ved opstart"
 
+msgid "I2P Router Console"
+msgstr ""
+
 msgid "Open Router Console in web browser at startup"
 msgstr "Åben Router Konsol in webbrowseren ved opstart"
 
@@ -4683,12 +4726,6 @@ msgstr "nøgle"
 msgid "port"
 msgstr "port"
 
-msgid "config UI"
-msgstr "config UI"
-
-msgid "User Interface Configuration"
-msgstr "Brugergrænsefladekonfiguration"
-
 msgid "Certificates"
 msgstr "Certifikater"
 
@@ -4704,8 +4741,8 @@ msgstr "Båndbreddebegrænser"
 msgid "Advanced Network Configuration"
 msgstr "Avanceret netværkskonfiguration"
 
-msgid "I2P+ will work best if you configure your rates to match the speed of your internet connection."
-msgstr "I2P fungerer bedst hvis du konfigurer dine forhold til at matche hastigheden på din internet forbindelse"
+msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
+msgstr ""
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
 msgstr "Bemærk: Dit bidrag til netværket (netværksandel) bestemmes af allokeringen af ​​upstream-båndbredde (uploadhastighed)."
@@ -4735,11 +4772,11 @@ msgid "NOTE"
 msgstr ""
 
 #, java-format
-msgid "You have configured I2P+ to share only {0} KBps."
-msgstr "Du har konfigureret I2P til kun at dele {0} KBps."
+msgid "You have configured I2P to share only {0} KBps."
+msgstr ""
 
-msgid "I2P+ requires at least 12KBps to enable sharing. "
-msgstr "I2P kræver mindst 12KBps for at kunne aktivere deling."
+msgid "I2P requires at least 12KBps to enable sharing. "
+msgstr ""
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
 msgstr "Vær venlig at aktivere deling (deling under tunneler) ved at konfigurere mere båndbredde. "
@@ -5236,8 +5273,8 @@ msgstr "konfigurer reseeding"
 msgid "Reseeding is the bootstrapping process used to find other routers when you first install I2P, or when your router has too few router references remaining."
 msgstr "Reseeding er systemregenererings processen der bliver brugt til at finde andre routere da du installerede I2P, eller når din router har for lidt router referencer tilbage."
 
-msgid "To enable the configuration of reseed urls, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
-msgstr "For at aktivere konfigurationen af reseed -URL'er skal du aktivere konsolens <a href=/help/advancedSettings>avanceret tilstand</a>."
+msgid "To enable the configuration of reseed urls, activate the console's <a href=/help/advancedsettings>Advanced mode</a>."
+msgstr ""
 
 msgid "Reseeding Configuration"
 msgstr "Reseeding Konfiguration"
@@ -5247,9 +5284,6 @@ msgstr "Hjælp til gensåning"
 
 msgid "Reseeding Help"
 msgstr "Gensøgning af hjælp"
-
-msgid "Change these only if HTTPS is blocked by a restrictive firewall and reseed has failed."
-msgstr "Ændre disse kun hvis HTTPS er blokeret af en restriktiv firewall og reseed mislykkedes."
 
 msgid "Reseed URLs"
 msgstr "Reseed URLer"
@@ -5286,6 +5320,9 @@ msgstr "Denne indstilling vil bruge I2Ps HTTP -outproxy til at genindføre eller
 
 msgid "I2P Outproxy"
 msgstr "I2P Ekstern Proxy"
+
+msgid "Port"
+msgstr "Port"
 
 msgid "Use HTTP Proxy for HTTP Reseed Hosts"
 msgstr "Brug HTTP Proxy til HTTP Reseed-værter"
@@ -5399,6 +5436,12 @@ msgstr ""
 msgid "Use the same sidebar on all pages"
 msgstr ""
 
+msgid "Sticky sidebar"
+msgstr ""
+
+msgid "Enable conditional fixed sidebar"
+msgstr ""
+
 msgid "config stats"
 msgstr "konfigurations statistikker"
 
@@ -5455,6 +5498,12 @@ msgstr "For at ændre klienttunnelindstillinger skal du bruge <a href=/i2ptunnel
 
 msgid "To enable session-only changes to the client tunnels, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
 msgstr "For at aktivere kun sessionsændringer til klienttunnelerne skal du aktivere konsollens <a href=/help/advancedsettings>Avanceret tilstand</a>."
+
+msgid "config UI"
+msgstr "config UI"
+
+msgid "User Interface Configuration"
+msgstr "Brugergrænsefladekonfiguration"
 
 msgid "Router Console Theme"
 msgstr "Router Konsol Tema"
@@ -5592,14 +5641,20 @@ msgstr "Fejl 404"
 msgid "not found"
 msgstr "ikke fundet"
 
+msgid "router logs"
+msgstr ""
+
+msgid "Critical / Error Level Logs"
+msgstr "Kritiske / Fejl Logniveauer"
+
+msgid "Clear logs"
+msgstr "Ryd logfiler"
+
 msgid "events"
 msgstr "hændelser"
 
 msgid "Event Log"
 msgstr "Hændelseslog"
-
-msgid "Combined"
-msgstr ""
 
 msgid "graph"
 msgstr "Graf"
@@ -6108,7 +6163,7 @@ msgstr ""
 msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
 msgstr ""
 
-msgid "For most client services, change listening address for relevant service in Tunnel Manager's configuration section using <i>reachable by</i> dropdown."
+msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager's configuration section using the <i>reachable by</i> dropdown."
 msgstr ""
 
 msgid "How do I connect to IRC within I2P?"
@@ -7308,34 +7363,6 @@ msgstr "jobkøstatistik"
 msgid "Job Queue Stats"
 msgstr "Jobkøstatistik"
 
-msgid "logs"
-msgstr "Logge"
-
-msgid "Please include your I2P version and running environment information in bug reports"
-msgstr "Venligst inkluder din I2P-version og information om kørende miljø i fejlrapporter"
-
-#, java-format
-msgid "Please report bugs on {0} or {1}."
-msgstr "Venligst indsend fejlrapporter på {0} eller {1}."
-
-msgid "View event log"
-msgstr "Vis hændelseslog"
-
-msgid "Critical / Error Level Logs"
-msgstr "Kritiske / Fejl Logniveauer"
-
-msgid "Clear logs"
-msgstr "Ryd logfiler"
-
-msgid "Configure router logging options"
-msgstr "Konfigurér router logningsindstillinger"
-
-msgid "Filter Router log output"
-msgstr "Filtre routerens logudskrift"
-
-msgid "Service (Wrapper) Logs"
-msgstr "Tjeneste (Wrapper) Logge"
-
 msgid "network database"
 msgstr "netværksdatabasen"
 
@@ -7355,6 +7382,9 @@ msgid "Locally hosted public service"
 msgstr ""
 
 msgid "Requested client leaseset"
+msgstr ""
+
+msgid "Remote"
 msgstr ""
 
 msgid "network database router map"
@@ -7400,164 +7430,26 @@ msgstr "Bannede peers"
 msgid "Fast / High Capacity"
 msgstr "Hurtig / høj kapacitet"
 
-msgid "router logs"
-msgstr ""
+msgid "Configure router logging options"
+msgstr "Konfigurér router logningsindstillinger"
+
+msgid "View event log"
+msgstr "Vis hændelseslog"
+
+msgid "Filter Router log output"
+msgstr "Filtre routerens logudskrift"
 
 msgid "service logs"
 msgstr ""
 
-msgid "Manage I2P addresses"
-msgstr "Administrer I2P-adresser"
-
-msgid "Imagegen"
-msgstr "Billede"
-
-msgid "Create and download torrents"
-msgstr "Opret og download torrents"
-
-msgid "Manage client and server tunnels"
-msgstr "Administrer klient- og servertunneler"
-
-msgid "Webmail client"
-msgstr "Webmail-klient"
-
-msgid "Webmail"
-msgstr "Webmail"
-
-msgid "Local webserver for hosting content on the I2P network"
-msgstr "Lokal webserver til hosting af indhold på I2P-netværket"
+msgid "Service (Wrapper) Logs"
+msgstr "Tjeneste (Wrapper) Logge"
 
 msgid "Information &amp; Diagnostics"
 msgstr "Information og Diagnostik"
 
-msgid "Review recent updates to I2P"
-msgstr "Gennemgå de seneste opdateringer til I2P"
-
-msgid "View debugging information"
-msgstr "Se fejlfindingsoplysninger"
-
-msgid "View router performance graphs"
-msgstr "Se grafer for routerens ydeevne"
-
-msgid "Router help section"
-msgstr "Router hjælpesektion"
-
-msgid "Router homepage"
-msgstr "Routerens hjemmeside"
-
-msgid "Home"
-msgstr "Hjemme"
-
-msgid "View news relating to I2P"
-msgstr "Se nyheder vedrørende I2P"
-
-msgid "I2P News"
-msgstr "I2P Nyheder"
-
-msgid "View router workload and stats"
-msgstr "Se routerens arbejdsbelastning og statistik"
-
-msgid "Router Jobs"
-msgstr "Routerjob"
-
-msgid "View router logs"
-msgstr "Se routerlogfiler"
-
-msgid "View information and stats regarding all known peers"
-msgstr "Se information og statistik vedrørende alle kendte peers"
-
-msgid "View active peers"
-msgstr "Se aktive jævnaldrende"
-
-msgid "View peer performance profiles"
-msgstr "Se peer-præstationsprofiler"
-
-msgid "View information about router and running environment"
-msgstr "Se oplysninger om router og køremiljø"
-
-msgid "Statistics"
-msgstr "Statistik"
-
-msgid "Current console and webapp translation report"
-msgstr "Aktuel rapport over oversættelse af konsol og webapp"
-
-msgid "Translation Status"
-msgstr "Oversættelsesstatus"
-
-msgid "View active tunnels"
-msgstr "Se aktive tunneler"
-
-msgid "Customize homepage"
-msgstr "Tilpas hjemmeside"
-
-msgid "Homepage"
-msgstr "Hjemmeside"
-
-msgid "Configure I2P Client Control Interface"
-msgstr "Konfigurer I2P Client Control Interface"
-
-msgid "View or edit router keyring for encrypted destinations"
-msgstr "Se eller rediger routerens nøglering til krypterede destinationer"
-
-msgid "Configure router networking options"
-msgstr "Konfigurer routerens netværksindstillinger"
-
-msgid "Manually edit peers and view banned peers and blocklist"
-msgstr "Rediger peers manuelt og se forbudte peers og blokeringsliste"
-
-msgid "Install and manage router plugins"
-msgstr "Installer og administrer router-plugins"
-
-msgid "Router reseeding and configuration"
-msgstr "Reseeding og konfiguration af routeren"
-
-msgid "Configure and manage Router family"
-msgstr "Konfigurer og administrer routerfamilien"
-
-msgid "Manage Router service"
-msgstr "Administrer routerservice"
-
-msgid "Configure stat collection for graphing"
-msgstr "Konfigurer statistisk samling til graftegning"
-
-msgid "Router Stats"
-msgstr "Routerstatistik"
-
-msgid "Configure router updates"
-msgstr "Konfigurer routeropdateringer"
-
-msgid "Configuration wizard for new users"
-msgstr "Konfigurationsguide til nye brugere"
-
-msgid "Setup Wizard"
-msgstr "Opsætningsguide"
-
-msgid "Customize sidebar"
-msgstr "Tilpas sidebjælke"
-
-msgid "Configure tunnel options"
-msgstr "Konfigurer tunnelindstillinger"
-
-msgid "Configure router user interface and optional console password"
-msgstr "Konfigurer routerens brugergrænseflade og valgfri konsoladgangskode"
-
-msgid "Configuring I2P for optimal performance"
-msgstr "Konfiguration af I2P for optimal ydeevne"
-
-msgid "Information for new users"
-msgstr "Information til nye brugere"
-
-msgid "A guide to reseeding your I2P router"
-msgstr "En guide til at gense din I2P-router"
-
-msgid "What to do in the event I2P isn't working"
-msgstr "Hvad skal man gøre, hvis I2P ikke virker"
-
-msgid "Introduction to tunnel filters"
-msgstr "Introduktion til tunnelfiltre"
-
-msgid "Tunnel Filters"
-msgstr "Tunnelfiltre"
+msgid "Customize"
+msgstr ""
 
 msgid "statistics"
 msgstr "statistikker"
@@ -7610,9 +7502,6 @@ msgstr "Skift tunnel-ID'er"
 msgid "Toggle Tunnels"
 msgstr "Skift tunneller"
 
-msgid "Updating sidebar sections"
-msgstr ""
-
 msgid "Peer Profile"
 msgstr "Peer Profil"
 
@@ -7637,14 +7526,17 @@ msgstr "Tilbage til toppen"
 msgid "webmail"
 msgstr "webmail"
 
+msgid "Webmail"
+msgstr "Webmail"
+
 msgid "New Install Wizard"
 msgstr "Ny installationsguide"
 
 msgid "Skip Setup"
 msgstr "Spring opsætning over"
 
-msgid "Select the language to be used for the router console and web applications (<a href=/webmail target=_blank rel=noreferrer>webmail</a>, <a href=/torrents target=_blank rel=noreferrer>torrents</a>, <a href=/i2ptunnelmgr target=_blank rel=noreferrer>tunnel manager</a> etc). If you wish to change the language in future, change the router console theme, or configure a password to access the console, you may do so on the <a href=/configui target=_blank rel=noreferrer>User Interface configuration page</a>."
-msgstr "Vælg det sprog, der skal anvendes til routerkonsollen og webapplikationer (<a href=/webmail target=_blank rel=noreferrer>webmail</a>, <a href=/torrents target=_blank rel=noreferrer>torrents</a>, <a href=/i2ptunnelmgr target=_blank rel=noreferrer>tunnel manager</a> osv.). Hvis du ønsker at ændre sproget i fremtiden, ændre routerkonsoltemaet eller konfigurere et adgangskode for at få adgang til konsollen, kan du gøre det på siden for <a href=/configui target=_blank rel=noreferrer>brugergrænsefladekonfiguration</a>."
+msgid "Select the language to be used for the router console and web applications ("
+msgstr ""
 
 msgid "Router Console &amp; WebApps Display Language"
 msgstr "Routerkonsol og Webapps Viser Sprog"
@@ -7713,6 +7605,13 @@ msgid "Bandwidth Configuration"
 msgstr "Båndbreddekonfiguration"
 
 #, java-format
+msgid "You have configured I2P+ to share only {0} KBps."
+msgstr "Du har konfigureret I2P til kun at dele {0} KBps."
+
+msgid "I2P+ requires at least 12KBps to enable sharing. "
+msgstr "I2P kræver mindst 12KBps for at kunne aktivere deling."
+
+#, java-format
 msgid "You have configured I2P+ to share {0} KBps."
 msgstr "Du har konfigureret I2P til at dele {0} KBps."
 
@@ -7722,8 +7621,8 @@ msgstr "I2P+ kræver en webbrowser konfigureret til at bruge den residente HTTP-
 msgid "Browser Setup"
 msgstr "Browseropsætning"
 
-msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. For more help, see <a href=https://geti2p.net/htproxyports target=_blank rel=noreferrer>the configuration guide</a>, or <a href=/help/configuration#browserconfig>the mini-tutorial for Firefox</a>."
-msgstr "For at få adgang til websites hostet på I2P-netværket og valgfrit bruge standard outproxy til at forbinde til websites på clearnet, skal du konfigurere din browser til at bruge I2P+ <b>HTTP</b> proxy, der som standard kører på <code>127.0.0.1 port 4444</code>. For mere hjælp, se <a href=https://geti2p.net/htproxyports target=_blank rel=noreferrer>konfigurationsguiden</a> eller <a href=/help/configuration#browserconfig>mini-guiden til Firefox</a>."
+msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. "
+msgstr ""
 
 msgid "Welcome to I2P+!"
 msgstr "Velkommen til I2P+!"
@@ -7731,8 +7630,8 @@ msgstr "Velkommen til I2P+!"
 msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
 msgstr "Når du starter I2P, kan det tage et par minutter at bootstrap (integrere) din router i netværket og finde yderligere peers, så vær tålmodig."
 
-msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P+."
-msgstr "Når grønne stjerner er angivet ved siden af ​​dine lokale tunneler, er der en lang række ting, du kan gøre med I2P."
+msgid "Once green stars are indicated next to your Service Tunnels, there is a wide variety of things you can do with I2P+."
+msgstr ""
 
 msgid "Unknown Wizard page"
 msgstr "Ukendt guide-side"
@@ -7751,4 +7650,65 @@ msgstr "Næste"
 
 msgid "Finished"
 msgstr "Færdig"
+
+
+
+
+
+
+
+
+
+#, java-format
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

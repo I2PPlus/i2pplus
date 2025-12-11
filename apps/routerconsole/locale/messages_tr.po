@@ -73,8 +73,17 @@ msgstr "Yeniden tohumlanan ana bilgisayarlardan {0} yönlendirici bilgisi alınd
 msgid "Acquired {0} router infos from reseed hosts ({1} errors)"
 msgstr "Yeniden tohumlanan ana bilgisayarlardan {0} yönlendirici bilgisi alındı ​​({1} hata)"
 
+msgid "Clock step adjustment (ms)"
+msgstr "Saat adım ayarı (ms)"
+
+msgid "Size of tunnel acceptor backlog"
+msgstr "Tünel kabul etme günlük sırasının boyutu"
+
 msgid "Message receive rate (B/s)"
 msgstr "Mesaj alma hızı (B/s)"
+
+msgid "Low-level receive rate (B/s)"
+msgstr "Düşük seviye alım hızı (B/s)"
 
 msgid "Message send rate (B/s)"
 msgstr "Mesaj gönderme hızı (B/s)"
@@ -82,41 +91,35 @@ msgstr "Mesaj gönderme hızı (B/s)"
 msgid "Low-level send rate (B/s)"
 msgstr "Düşük seviye gönderme hızı (B/s)"
 
-msgid "Low-level receive rate (B/s)"
-msgstr "Düşük seviye alım hızı (B/s)"
-
-msgid "Total peers in our NetDb"
-msgstr "NetDb'deki toplam eşler"
-
 msgid "Peers active in the last minute"
 msgstr "Akranlar son dakikada aktif"
-
-msgid "Known high capacity peers"
-msgstr "Bilinen yüksek kapasiteli eşler"
 
 msgid "Peers sent to in the last minute"
 msgstr "Son dakikada gönderilen akranlar"
 
+msgid "Total peers in our banlist"
+msgstr "Yasaklama listemizdeki toplam akran sayısı"
+
+msgid "CPU load average of the JVM"
+msgstr "JVM'nin CPU yük ortalaması"
+
 msgid "Known fast peers"
 msgstr "Bilinen hızlı eşler"
+
+msgid "Known high capacity peers"
+msgstr "Bilinen yüksek kapasiteli eşler"
 
 msgid "Known integrated (floodfill) peers"
 msgstr "Bilinen entegre (taşkın) eşler"
 
-msgid "Total peers in our banlist"
-msgstr "Yasaklama listemizdeki toplam akran sayısı"
+msgid "Total peers in our NetDb"
+msgstr "NetDb'deki toplam eşler"
+
+msgid "Total number of threads in use"
+msgstr ""
 
 msgid "Peers without a published IP address"
 msgstr "Yayınlanmış bir IP adresi olmayan eşler"
-
-msgid "Size of tunnel acceptor backlog"
-msgstr "Tünel kabul etme günlük sırasının boyutu"
-
-msgid "Clock step adjustment (ms)"
-msgstr "Saat adım ayarı (ms)"
-
-msgid "CPU load average of the JVM"
-msgstr "JVM'nin CPU yük ortalaması"
 
 msgid "Average tunnel build success %"
 msgstr "Ortalama tünel inşa başarısı %"
@@ -1554,29 +1557,29 @@ msgstr "{0} içinde yeniden başlatılıyor"
 msgid "Save order"
 msgstr "Sıralamayı kaydet"
 
+msgid "Restore full default"
+msgstr "Tüm varsayılanları geri yükle"
+
+msgid "Restore minimal default"
+msgstr "En küçük varsayılanları geri yükle"
+
 msgid "Sidebar preferences updated"
 msgstr "Kenar çubuğu tercihleri güncellendi"
 
 msgid "Refresh interval must be a number"
 msgstr "Yenileme sıklığı bir sayı olmalıdır"
 
-msgid "Restore full default"
-msgstr "Tüm varsayılanları geri yükle"
-
 msgid "Full sidebar defaults restored."
 msgstr "Tam kenar çubuğu varsayılanları geri yüklendi."
 
-msgid "Sidebar will refresh shortly."
-msgstr "Kenar çubuğu kısa süre içinde yenilenecek."
-
-msgid "Restore minimal default"
-msgstr "En küçük varsayılanları geri yükle"
-
-msgid "Minimal sidebar defaults restored."
-msgstr "Minimal kenar çubuğu varsayılanları geri yüklendi."
-
 msgid "Order must be an integer"
 msgstr "Sıralama bir tamsayı olmalıdır"
+
+msgid "Saved order of sections."
+msgstr "Bölüm sıralaması kaydedildi."
+
+msgid "Sidebar will refresh shortly."
+msgstr "Kenar çubuğu kısa süre içinde yenilenecek."
 
 msgid "No section selected"
 msgstr "Bir bölüm seçilmemiş"
@@ -1586,9 +1589,6 @@ msgstr "Bir sıralama yazılmamış"
 
 msgid "Moved"
 msgstr "Taşındı"
-
-msgid "Saved order of sections."
-msgstr "Bölüm sıralaması kaydedildi."
 
 msgid "Full statistics enabled"
 msgstr "Tam istatistikler etkinleştirildi"
@@ -2417,6 +2417,9 @@ msgstr "HTTP vekil sunucusu çalışmıyor"
 msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
 msgstr "Web tarayıcınız {0} üzerindeki HTTP vekil sunucusunu doğru olarak kullanacak şekilde yapılandırılmamış"
 
+msgid "Errors"
+msgstr ""
+
 msgid "URL"
 msgstr "Adres"
 
@@ -2691,29 +2694,23 @@ msgstr "veya bu yönlendiriciye yakın Sybil"
 msgid "Lookup"
 msgstr "Arama"
 
-msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
-msgstr "Ağ veritabanında yöneltici kimliği ile IP adresi ilişkilendirilmiş olduğundan, yöneltici kimliğiniz asla kimseyle paylaşmayın."
+msgid "Select the field to search on"
+msgstr ""
 
-msgid "is banned"
-msgstr "yasaklandı"
-
-msgid "not found in network database"
-msgstr "ağ veritabanında bulunamadı"
-
-msgid "Bad Base64 Router hash"
-msgstr "Kötü Base64 Yönlendirici hash'i"
-
-msgid "No routers with"
-msgstr "Şu ile yönlendirici yok:"
-
-msgid "Hash prefix"
-msgstr "Hash ön eki"
-
-msgid "Port"
-msgstr "Kapı numarası"
+msgid "e.g. cn hk"
+msgstr ""
 
 msgid "MTU"
 msgstr "MTU"
+
+msgid "Enter search value here"
+msgstr ""
+
+msgid "Router not found"
+msgstr ""
+
+msgid "No routers with"
+msgstr "Şu ile yönlendirici yok:"
 
 msgid "found in the network database"
 msgstr "ağ veritabanında bulundu"
@@ -2841,17 +2838,17 @@ msgstr "{0} önce bitti"
 msgid "Unknown"
 msgstr "Bilinmiyor"
 
-msgid "Advanced mode - includes all statistics published by floodfills."
-msgstr "Gelişmiş mod - floodfill tarafından yayınlanan tüm istatistikleri içerir."
-
-msgid "Compact mode - does not include statistics published by floodfills."
-msgstr "Sıkışık mod - floodfill tarafından yayınlanan istatistikleri içermez."
-
 msgid "Network Database Router Statistics"
 msgstr "Ağ Veritabanı Yöneltici İstatistikleri"
 
 msgid "Count"
 msgstr "Sayı"
+
+msgid "Under 12 KB/s"
+msgstr ""
+
+msgid "Over 2048 KB/s"
+msgstr ""
 
 msgid "Bandwidth Tier"
 msgstr "Bant Genişliği Katmanı"
@@ -2923,6 +2920,9 @@ msgstr "Yayınlanmış"
 msgid "Hostname"
 msgstr "Ana bilgisayar adı"
 
+msgid "Whois"
+msgstr ""
+
 msgid "direct"
 msgstr "doğrudan"
 
@@ -2938,20 +2938,26 @@ msgstr "Bu imza türüne sahip tüm yönlendiricileri NetDb'de göster"
 msgid "Show all routers with this encryption type in the NetDb"
 msgstr "NetDb'de bu şifreleme türüne sahip tüm yönlendiricileri göster"
 
-msgid "Addresses"
-msgstr "Adresler"
-
-msgid "n/a"
-msgstr "kullanılamaz"
-
 msgid "Show all routers with this address in the NetDb"
 msgstr "NetDb'de bu adrese sahip tüm yönlendiricileri göster"
 
 msgid "Show all routers with this port in the NetDb"
 msgstr "NetDb'de bu bağlantı noktasına sahip tüm yönlendiricileri göster"
 
-msgid "Routers"
-msgstr "Yönlendiriciler"
+msgid "Maximum Transmission Unit"
+msgstr ""
+
+msgid "Show all routers with this MTU in the NetDb"
+msgstr ""
+
+msgid "Addresses"
+msgstr "Adresler"
+
+msgid "Introducers"
+msgstr ""
+
+msgid "Network Id"
+msgstr "Ağ Kimliği"
 
 msgid "First heard about"
 msgstr "İlk defa duydum"
@@ -2962,11 +2968,8 @@ msgstr "En son duyulanlar"
 msgid "Last heard from"
 msgstr "Son haber"
 
-msgid "Network Id"
-msgstr "Ağ Kimliği"
-
-msgid "Count is always spoofed to avoid indicating router restarts"
-msgstr "Sayı, yönlendirici yeniden başlatmalarını belirtmekten kaçınmak için her zaman sahtelenir"
+msgid "Info"
+msgstr "Bilgi"
 
 msgid "Hidden or starting up"
 msgstr "Gizli ya da başlatılıyor"
@@ -2995,17 +2998,32 @@ msgstr "SSU [IPv6]"
 msgid "SSU [IPv6] with Introducers"
 msgstr "IPv6 SSU, rehberler"
 
+msgid "NTCP &amp; SSU with Introducers [IPv6 Only]"
+msgstr "Yalnız IPv6 NTCP, SSU, rehberler"
+
 msgid "NTCP [IPv6]"
 msgstr "NTCP [IPv6]"
 
 msgid "NTCP [IPv6] &amp; SSU"
 msgstr "NTCP [IPv6] &amp; SSU"
 
-msgid "NTCP &amp; SSU with Introducers [IPv6 Only]"
-msgstr "Yalnız IPv6 NTCP, SSU, rehberler"
-
 msgid "NTCP [IPv6] &amp; SSU with Introducers"
 msgstr "IPv6 NTCP, SSU, rehberler"
+
+msgid "Local"
+msgstr "Yerel"
+
+msgid "Fast Tier"
+msgstr ""
+
+msgid "High Capacity Tier"
+msgstr ""
+
+msgid "Integrated Tier"
+msgstr ""
+
+msgid "Standard Tier"
+msgstr ""
 
 msgid "No peer connections available"
 msgstr "Eş bağlantı yok"
@@ -3339,14 +3357,17 @@ msgstr "Son Duyulan"
 msgid "View/Edit"
 msgstr "Görüntüle/Düzenle"
 
-msgid "Unreachable"
-msgstr "Erişilemeyen"
-
 msgid "OK"
 msgstr "Tamam"
 
 msgid "Test Fails"
 msgstr "Sınama Başarısız"
+
+msgid "Unreachable"
+msgstr "Erişilemeyen"
+
+msgid "Most tests passing"
+msgstr ""
 
 msgid "Fast, High Capacity"
 msgstr "Hızlı, Yüksek Kapasiteli"
@@ -3362,6 +3383,9 @@ msgstr "Başasırız"
 
 msgid "Integrated"
 msgstr "Bütünleştirilmiş"
+
+msgid "Configure Peer"
+msgstr ""
 
 msgid "Thresholds"
 msgstr "Eşikler"
@@ -3429,11 +3453,11 @@ msgstr "Son Kötü Gönderim"
 msgid "Last Bad Store"
 msgstr "Son Kötü Saklama"
 
-msgid "Capabilities in the NetDb, not used to determine profiles"
-msgstr "NetDb'deki yetenekler, profilleri belirlemek için kullanılmaz"
-
 msgid "caps"
 msgstr "kapasiteler"
+
+msgid "Capabilities in the NetDb, not used to determine profiles"
+msgstr "NetDb'deki yetenekler, profilleri belirlemek için kullanılmaz"
 
 msgid "Reachable"
 msgstr "Erişilebilir"
@@ -3606,6 +3630,9 @@ msgstr "Kurmak için yeniden başlatın"
 
 msgid "Click Shutdown and restart to install"
 msgstr "Kurmak için kapatıp yeniden başlatın"
+
+msgid "Unable"
+msgstr ""
 
 #, java-format
 msgid "{0}"
@@ -3800,9 +3827,6 @@ msgstr "Yöneltici başarımı çizelgesi"
 msgid "Router Help and FAQ"
 msgstr "Yöneltici Yardımı ve SSS"
 
-msgid "Info"
-msgstr "Bilgi"
-
 msgid "Router information including transport addresses and UPnP scan"
 msgstr "Aktarım adresleri ve UPnP taraması dahil yönlendirici bilgileri"
 
@@ -3888,6 +3912,34 @@ msgstr "Floodfill etkinleştirildi"
 msgid "Total number of remote LeaseSets stored in our NetDb"
 msgstr "NetDb'mizde depolanan uzak Kiralama Kümelerinin toplam sayısı"
 
+msgid "Declining transit tunnel requests during startup phase"
+msgstr "Yönlendirici stabil hale gelirken ilk 10 dakika boyunca hiçbir katılımcı tünel isteği kabul edilmez"
+
+msgid "Declining transit tunnel requests as we are shutting down"
+msgstr "Kapandığımız için tünele katılım talepleri reddediliyor"
+
+msgid "Router or network performance is impeding the building of transit tunnels"
+msgstr "Yönlendirici veya ağ performansı, katılımcı tünellerin inşasını engelliyor"
+
+msgid "Router is currently hosting the configured maximum number of transit tunnels"
+msgstr "Router şu anda yapılandırılmış maksimum geçiş tüneli sayısını barındırmaktadır"
+
+msgid "Router is currently using the configured maximum share bandwidth"
+msgstr "Router şu anda yapılandırılmış maksimum paylaşım bant genişliğini kullanmaktadır"
+
+msgid "Router is ready to build participating tunnels"
+msgstr "Yönlendirici katılımcı tüneller oluşturmaya hazır"
+
+#, java-format
+msgid "Accepting transit tunnel requests; hosting {0} tunnels"
+msgstr "Katılan tünel taleplerini kabul etmek; {0} tünellerine katılmak"
+
+msgid "No transit tunnels are built when Hidden mode is active"
+msgstr "Gizli mod etkinken hiçbir katılımcı tünel inşa edilmiyor"
+
+msgid "Router is configured to reject all transit tunnel requests"
+msgstr "Yönlendirici, katılan tüm tünel isteklerini reddedecek şekilde yapılandırılmıştır"
+
 msgid "Warning: ECDSA is not available. Update your Java or OS"
 msgstr "Uyarı: ECDSA kullanılamıyor. Kullandığınız Java ya da İşletim Sistemi sürümünü yükseltin"
 
@@ -3923,6 +3975,9 @@ msgstr "Engellenmiş eş sayısı"
 
 msgid "The total number of peers in our network database"
 msgstr "Ağ veritabanındaki toplam eş sayısı"
+
+msgid "Total RouterInfos stored on disk"
+msgstr ""
 
 msgid "Known"
 msgstr "Bilinen"
@@ -4034,34 +4089,6 @@ msgstr "Diğer yönelticilerden gelen ve kuyrukta tünellere katılmak için bek
 
 msgid "Backlog"
 msgstr "Günlük sırası"
-
-msgid "Declining transit tunnel requests during startup phase"
-msgstr "Yönlendirici stabil hale gelirken ilk 10 dakika boyunca hiçbir katılımcı tünel isteği kabul edilmez"
-
-msgid "Declining transit tunnel requests as we are shutting down"
-msgstr "Kapandığımız için tünele katılım talepleri reddediliyor"
-
-msgid "Router or network performance is impeding the building of transit tunnels"
-msgstr "Yönlendirici veya ağ performansı, katılımcı tünellerin inşasını engelliyor"
-
-msgid "Router is currently hosting the configured maximum number of transit tunnels"
-msgstr "Router şu anda yapılandırılmış maksimum geçiş tüneli sayısını barındırmaktadır"
-
-msgid "Router is currently using the configured maximum share bandwidth"
-msgstr "Router şu anda yapılandırılmış maksimum paylaşım bant genişliğini kullanmaktadır"
-
-msgid "Router is ready to build participating tunnels"
-msgstr "Yönlendirici katılımcı tüneller oluşturmaya hazır"
-
-#, java-format
-msgid "Accepting transit tunnel requests; hosting {0} tunnels"
-msgstr "Katılan tünel taleplerini kabul etmek; {0} tünellerine katılmak"
-
-msgid "No transit tunnels are built when Hidden mode is active"
-msgstr "Gizli mod etkinken hiçbir katılımcı tünel inşa edilmiyor"
-
-msgid "Router is configured to reject all transit tunnel requests"
-msgstr "Yönlendirici, katılan tüm tünel isteklerini reddedecek şekilde yapılandırılmıştır"
 
 msgid "Statistics gathered during this router's uptime"
 msgstr "Bu yönelticinin çalıştığı sürede toplanan istatistikler"
@@ -4193,8 +4220,14 @@ msgstr "Saklanan analiz yok"
 msgid "Select stored analysis"
 msgstr "Saklanan analizi seçin"
 
+msgid "Review"
+msgstr ""
+
 msgid "Run analysis on Floodfills only"
 msgstr "Analizi yalnızca Taşkın Dolgularında çalıştırın"
+
+msgid "Start Scan"
+msgstr ""
 
 msgid "Run analysis on all routers in NetDb"
 msgstr "NetDb'deki tüm yönlendiricilerde analiz çalıştırın"
@@ -4358,6 +4391,12 @@ msgstr "MAKS"
 msgid "Show all routers for this family in NetDb"
 msgstr "Bu aile için tüm yönlendiricileri NetDb'de göster"
 
+msgid "Routers"
+msgstr "Yönlendiriciler"
+
+msgid "n/a"
+msgstr "kullanılamaz"
+
 msgid "Last lookup successful"
 msgstr "Son arama başarılı"
 
@@ -4409,9 +4448,6 @@ msgstr "Veri aktarıldı"
 msgid "Data"
 msgstr "Veri"
 
-msgid "Limit"
-msgstr "Limit"
-
 msgid "Receive on"
 msgstr "Alınma zamanı"
 
@@ -4456,6 +4492,7 @@ msgstr "Yönlendirici şu anda gizli modda çalışıyor ve bu da transit tünel
 msgid "No transit tunnels currently active."
 msgstr "Şu anda aktif transit tünel yok."
 
+#, java-format
 msgid "Transit Tunnels by Peer (Top {0})"
 msgstr "Eşe Göre Geçiş Tünelleri (İlk {0})"
 
@@ -4467,9 +4504,6 @@ msgstr "Eşlere Göre Tüm Tüneller"
 
 msgid "Primary IP address"
 msgstr "Birincil IP adresi"
-
-msgid "Local"
-msgstr "Yerel"
 
 msgid "unique peers"
 msgstr "benzersiz akranlar"
@@ -4483,6 +4517,9 @@ msgstr "geçiş"
 msgid "No local or transit tunnels currently active."
 msgstr "Şu anda aktif yerel veya transit tünel yok."
 
+msgid "PRIVATE IP ADDRESS"
+msgstr ""
+
 msgid "Bandwidth Tiers"
 msgstr "Bant Genişliği Katmanları"
 
@@ -4492,6 +4529,9 @@ msgstr "{0} üzerinde paylaşılmış bant genişliği"
 
 msgid "Inbound or outbound?"
 msgstr "Geliş ya da gidiş?"
+
+msgid "In/Out"
+msgstr ""
 
 msgid "Gateway"
 msgstr "Geçit"
@@ -4608,6 +4648,9 @@ msgstr "I2P web sunucusu (eepsitesi)"
 msgid "Browser launch at startup"
 msgstr "Başlangıçta açılacak tarayıcı"
 
+msgid "I2P Router Console"
+msgstr ""
+
 msgid "Open Router Console in web browser at startup"
 msgstr "Yöneltici panosu başlangıçta web tarayıcı içinde açılsın"
 
@@ -4683,12 +4726,6 @@ msgstr "anahtar"
 msgid "port"
 msgstr "kapı numarası"
 
-msgid "config UI"
-msgstr "arayüz yapılandırması"
-
-msgid "User Interface Configuration"
-msgstr "Kullanıcı Arayüzü Yapılandırması"
-
 msgid "Certificates"
 msgstr "Sertifikalar"
 
@@ -4704,8 +4741,8 @@ msgstr "Bant Genişliği Sınırlayıcı"
 msgid "Advanced Network Configuration"
 msgstr "Gelişmiş Ağ Yapılandırması"
 
-msgid "I2P+ will work best if you configure your rates to match the speed of your internet connection."
-msgstr "En iyi sonucu almak için I2P hızlarını İnternet bağlantınıza uygun olarak yapılandırın."
+msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
+msgstr ""
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
 msgstr "Not: Ağa katkınız (ağ paylaşımı), yukarı akış bant genişliğinin (yükleme hızı) tahsisine göre belirlenir."
@@ -4735,11 +4772,11 @@ msgid "NOTE"
 msgstr "NOT"
 
 #, java-format
-msgid "You have configured I2P+ to share only {0} KBps."
-msgstr "I2P paylaşımı {0} KBps hızına ayarlanmış."
+msgid "You have configured I2P to share only {0} KBps."
+msgstr ""
 
-msgid "I2P+ requires at least 12KBps to enable sharing. "
-msgstr "Paylaşımı etkinleştirmek için I2P en az 12KBps hıza gerek duyar."
+msgid "I2P requires at least 12KBps to enable sharing. "
+msgstr ""
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
 msgstr "Lütfen bant genişliğini arttırarak (tünellere katkıda bulunarak) paylaşımı etkinleştirin."
@@ -5236,8 +5273,8 @@ msgstr "yeniden tohumlama yapılandırması"
 msgid "Reseeding is the bootstrapping process used to find other routers when you first install I2P, or when your router has too few router references remaining."
 msgstr "Yeniden tohumlama, I2P ilk kez kurulduğunda ya da yönelticinizde çok az sayıda yöneltici referansı kaldığında diğer yönelticileri bulmak için yapılan başlatma işlemidir."
 
-msgid "To enable the configuration of reseed urls, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
-msgstr "Yeniden tohumlama URL'lerinin yapılandırmasını etkinleştirmek için konsolun <a href=\"/help/advancedsettings\">Gelişmiş modunu</a> etkinleştirin."
+msgid "To enable the configuration of reseed urls, activate the console's <a href=/help/advancedsettings>Advanced mode</a>."
+msgstr ""
 
 msgid "Reseeding Configuration"
 msgstr "Yeniden Tohumlama Yapılandırması"
@@ -5247,9 +5284,6 @@ msgstr "Yeniden tohumlama konusunda yardım"
 
 msgid "Reseeding Help"
 msgstr "Yeniden Tohumlama Yardımı"
-
-msgid "Change these only if HTTPS is blocked by a restrictive firewall and reseed has failed."
-msgstr "Bunu yalnız HTTPS bir güvenlik tarafından engelleniyor ve yeniden tohumlama yapılamıyor ise değiştirin."
 
 msgid "Reseed URLs"
 msgstr "Yeniden Tohumlama İnternet Adresleri"
@@ -5286,6 +5320,9 @@ msgstr "Bu seçenek, I2P'nin HTTP Outproxy'sini yeniden düzenlemek için veya y
 
 msgid "I2P Outproxy"
 msgstr "I2P Giden Vekil Sunucusu"
+
+msgid "Port"
+msgstr "Kapı numarası"
 
 msgid "Use HTTP Proxy for HTTP Reseed Hosts"
 msgstr "HTTP Yeniden Yayınlama Ana Bilgisayarları için HTTP Proxy'yi kullanın"
@@ -5399,6 +5436,12 @@ msgstr "Birleşik kenar çubuğu"
 msgid "Use the same sidebar on all pages"
 msgstr "Tüm sayfalarda aynı kenar çubuğunu kullan"
 
+msgid "Sticky sidebar"
+msgstr ""
+
+msgid "Enable conditional fixed sidebar"
+msgstr ""
+
 msgid "config stats"
 msgstr "istatistik yapılandırması"
 
@@ -5455,6 +5498,12 @@ msgstr "İstemci tüneli ayarlarını değiştirmek için <a href=\"/i2ptunnelmg
 
 msgid "To enable session-only changes to the client tunnels, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
 msgstr "İstemci tünellerinde yalnızca oturuma yönelik değişiklikleri etkinleştirmek için konsolun <a href=\"/help/advancedsettings\">Gelişmiş modunu</a> etkinleştirin."
+
+msgid "config UI"
+msgstr "arayüz yapılandırması"
+
+msgid "User Interface Configuration"
+msgstr "Kullanıcı Arayüzü Yapılandırması"
 
 msgid "Router Console Theme"
 msgstr "Yöneltici Konsolu Teması"
@@ -5592,14 +5641,20 @@ msgstr "404 Hatası"
 msgid "not found"
 msgstr "bulunamadı"
 
+msgid "router logs"
+msgstr "yönlendirici günlükleri"
+
+msgid "Critical / Error Level Logs"
+msgstr "Kritik / Hata Seviyesi Logları"
+
+msgid "Clear logs"
+msgstr "Günlükleri temizle"
+
 msgid "events"
 msgstr "işlemler"
 
 msgid "Event Log"
 msgstr "Olay Günlüğü"
-
-msgid "Combined"
-msgstr "Birleşik"
 
 msgid "graph"
 msgstr "grafik"
@@ -6108,8 +6163,8 @@ msgstr "Konsolunuzu yerel ağınızda erişilebilir yapmak için, I2P ayarlar di
 msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
 msgstr "Örnek: Hem localhost hem de 192.168.1.10'dan HTTP ve HTTPS üzerinden erişime izin vermek için:"
 
-msgid "For most client services, change listening address for relevant service in Tunnel Manager's configuration section using <i>reachable by</i> dropdown."
-msgstr "Çoğu istemci hizmeti için, Tünel Yöneticisi'nin yapılandırma bölümünde ilgili hizmetin dinleme adresini <i>tarafından erişilebilir</i> açılır menüsünü kullanarak değiştirin."
+msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager's configuration section using the <i>reachable by</i> dropdown."
+msgstr ""
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "I2P içinde IRC'ye nasıl bağlanırım?"
@@ -7308,34 +7363,6 @@ msgstr "iş kuyruğu istatistikleri"
 msgid "Job Queue Stats"
 msgstr "İş Kuyruğu İstatistikleri"
 
-msgid "logs"
-msgstr "günlükler"
-
-msgid "Please include your I2P version and running environment information in bug reports"
-msgstr "Lütfen hata ayıklama raporlarına I2P sürümünüzü ve I2P çalıştırdığınız ortam bilgilerini de ekleyin"
-
-#, java-format
-msgid "Please report bugs on {0} or {1}."
-msgstr "Lütfen hataları {0} ya da {1} üzerinden bildirin."
-
-msgid "View event log"
-msgstr "Olay günlüğünü görüntüle"
-
-msgid "Critical / Error Level Logs"
-msgstr "Kritik / Hata Seviyesi Logları"
-
-msgid "Clear logs"
-msgstr "Günlükleri temizle"
-
-msgid "Configure router logging options"
-msgstr "Yöneltici günlüğü yapılandırması"
-
-msgid "Filter Router log output"
-msgstr "Router günlük çıktısını filtrele"
-
-msgid "Service (Wrapper) Logs"
-msgstr "Hizmet (Kapsayıcı) Günlükleri"
-
 msgid "network database"
 msgstr "ağ veritabanı"
 
@@ -7356,6 +7383,9 @@ msgstr "Yerel olarak barındırılan genel hizmet"
 
 msgid "Requested client leaseset"
 msgstr "İstenen istemci kiralama kümesi"
+
+msgid "Remote"
+msgstr ""
 
 msgid "network database router map"
 msgstr "ağ veritabanı router haritası"
@@ -7400,164 +7430,26 @@ msgstr "Engellenmiş Eşler"
 msgid "Fast / High Capacity"
 msgstr "Hızlı / Yüksek Kapasite"
 
-msgid "router logs"
-msgstr "yönlendirici günlükleri"
+msgid "Configure router logging options"
+msgstr "Yöneltici günlüğü yapılandırması"
+
+msgid "View event log"
+msgstr "Olay günlüğünü görüntüle"
+
+msgid "Filter Router log output"
+msgstr "Router günlük çıktısını filtrele"
 
 msgid "service logs"
 msgstr "hizmet günlükleri"
 
-msgid "Manage I2P addresses"
-msgstr "I2P adreslerini yönet"
-
-msgid "Imagegen"
-msgstr "Resimgen"
-
-msgid "Create and download torrents"
-msgstr "Torrentleri oluştur ve indir"
-
-msgid "Manage client and server tunnels"
-msgstr "İstemci ve sunucu tünellerini yönetin"
-
-msgid "Webmail client"
-msgstr "Web posta istemcisi"
-
-msgid "Webmail"
-msgstr "Web postası"
-
-msgid "Local webserver for hosting content on the I2P network"
-msgstr "I2P ağında içerik barındırmak için yerel web sunucusu"
+msgid "Service (Wrapper) Logs"
+msgstr "Hizmet (Kapsayıcı) Günlükleri"
 
 msgid "Information &amp; Diagnostics"
 msgstr "Bilgi"
 
-msgid "Review recent updates to I2P"
-msgstr "I2P'ye yönelik son güncellemeleri inceleyin"
-
-msgid "View debugging information"
-msgstr "Hata ayıklama bilgilerini görüntüleyin"
-
-msgid "View router performance graphs"
-msgstr "Yönlendirici performans grafiklerini görüntüleyin"
-
-msgid "Router help section"
-msgstr "Yönlendirici yardım bölümü"
-
-msgid "Router homepage"
-msgstr "Yönlendirici ana sayfası"
-
-msgid "Home"
-msgstr "Ev"
-
-msgid "View news relating to I2P"
-msgstr "I2P ile ilgili haberleri görüntüleyin"
-
-msgid "I2P News"
-msgstr "I2P Haberleri"
-
-msgid "View router workload and stats"
-msgstr "Yönlendiricinin iş yükünü ve istatistiklerini görüntüleyin"
-
-msgid "Router Jobs"
-msgstr "Yönlendirici İşleri"
-
-msgid "View router logs"
-msgstr "Yönlendirici günlüklerini görüntüle"
-
-msgid "View information and stats regarding all known peers"
-msgstr "Bilinen tüm akranlarla ilgili bilgileri ve istatistikleri görüntüleyin"
-
-msgid "View active peers"
-msgstr "Aktif akranları görüntüle"
-
-msgid "View peer performance profiles"
-msgstr "Akran performans profillerini görüntüleyin"
-
-msgid "View information about router and running environment"
-msgstr "Yönlendirici ve çalışma ortamı hakkındaki bilgileri görüntüleyin"
-
-msgid "Statistics"
-msgstr "İstatistikler"
-
-msgid "Current console and webapp translation report"
-msgstr "Mevcut konsol ve web uygulaması çevirisi raporu"
-
-msgid "Translation Status"
-msgstr "Çeviri Durumu"
-
-msgid "View active tunnels"
-msgstr "Aktif tünelleri görüntüle"
-
-msgid "Customize homepage"
-msgstr "Ana sayfayı özelleştirin"
-
-msgid "Homepage"
-msgstr "Anasayfa"
-
-msgid "Configure I2P Client Control Interface"
-msgstr "I2P İstemci Kontrol Arayüzünü Yapılandırın"
-
-msgid "View or edit router keyring for encrypted destinations"
-msgstr "Şifrelenmiş hedefler için yönlendirici anahtarlığını görüntüleyin veya düzenleyin"
-
-msgid "Configure router networking options"
-msgstr "Yönlendirici ağ seçeneklerini yapılandırın"
-
-msgid "Manually edit peers and view banned peers and blocklist"
-msgstr "Eşleri manuel olarak düzenleyin ve yasaklı eşleri ve engellenenler listesini görüntüleyin"
-
-msgid "Install and manage router plugins"
-msgstr "Yönlendirici eklentilerini kurun ve yönetin"
-
-msgid "Router reseeding and configuration"
-msgstr "Yönlendiricinin yeniden yerleştirilmesi ve yapılandırılması"
-
-msgid "Configure and manage Router family"
-msgstr "Yönlendirici ailesini yapılandırın ve yönetin"
-
-msgid "Manage Router service"
-msgstr "Yönlendirici hizmetini yönet"
-
-msgid "Configure stat collection for graphing"
-msgstr "Grafik oluşturmak için istatistik toplamayı yapılandırın"
-
-msgid "Router Stats"
-msgstr "Yönlendirici İstatistikleri"
-
-msgid "Configure router updates"
-msgstr "Yönlendirici güncellemelerini yapılandırın"
-
-msgid "Configuration wizard for new users"
-msgstr "Yeni kullanıcılar için yapılandırma sihirbazı"
-
-msgid "Setup Wizard"
-msgstr "Kurulum Sihirbazı"
-
-msgid "Customize sidebar"
-msgstr "Kenar çubuğunu özelleştirin"
-
-msgid "Configure tunnel options"
-msgstr "Tünel seçeneklerini yapılandırın"
-
-msgid "Configure router user interface and optional console password"
-msgstr "Yönlendirici kullanıcı arayüzünü ve isteğe bağlı konsol şifresini yapılandırın"
-
-msgid "Configuring I2P for optimal performance"
-msgstr "I2P'yi optimum performans için yapılandırma"
-
-msgid "Information for new users"
-msgstr "Yeni kullanıcılar için bilgi"
-
-msgid "A guide to reseeding your I2P router"
-msgstr "I2P yönlendiricinizi yeniden beslemeye yönelik bir kılavuz"
-
-msgid "What to do in the event I2P isn't working"
-msgstr "I2P'nin çalışmaması durumunda ne yapılmalı"
-
-msgid "Introduction to tunnel filters"
-msgstr "Tünel filtrelerine giriş"
-
-msgid "Tunnel Filters"
-msgstr "Tünel Filtreleri"
+msgid "Customize"
+msgstr ""
 
 msgid "statistics"
 msgstr "istatistikler"
@@ -7610,9 +7502,6 @@ msgstr "Tunnel İD'lerini Değiştir"
 msgid "Toggle Tunnels"
 msgstr "Tünelleri Değiştir"
 
-msgid "Updating sidebar sections"
-msgstr "Kenar çubuğu bölümlerini güncelleme"
-
 msgid "Peer Profile"
 msgstr "Eş Profili"
 
@@ -7637,14 +7526,17 @@ msgstr "Başa Dön"
 msgid "webmail"
 msgstr "webposta"
 
+msgid "Webmail"
+msgstr "Web postası"
+
 msgid "New Install Wizard"
 msgstr "Yeni Kurulum Yardımcısı"
 
 msgid "Skip Setup"
 msgstr "Kurulumu Atla"
 
-msgid "Select the language to be used for the router console and web applications (<a href=/webmail target=_blank rel=noreferrer>webmail</a>, <a href=/torrents target=_blank rel=noreferrer>torrents</a>, <a href=/i2ptunnelmgr target=_blank rel=noreferrer>tunnel manager</a> etc). If you wish to change the language in future, change the router console theme, or configure a password to access the console, you may do so on the <a href=/configui target=_blank rel=noreferrer>User Interface configuration page</a>."
-msgstr "Bu yönlendirici konsolu ve web uygulamaları (<a href=/webmail target=_blank rel=noreferrer>webmail</a>, <a href=/torrents target=_blank rel=noreferrer>torrentlar</a>, <a href=/i2ptunnelmgr target=_blank rel=noreferrer>tünel yöneticisi</a> vb.) için kullanılacak dili seçin. Dilinizi ileride değiştirmek, yönlendirici konsolu temasını değiştirmek veya konsola erişmek için bir şifre yapılandırmak isterseniz, bunu <a href=/configui target=_blank rel=noreferrer>Kullanıcı Arayüzü yapılandırma sayfasında</a> yapabilirsiniz."
+msgid "Select the language to be used for the router console and web applications ("
+msgstr ""
 
 msgid "Router Console &amp; WebApps Display Language"
 msgstr "Yönlendirici Konsolu ve WebApps Görüntü Dili"
@@ -7713,6 +7605,13 @@ msgid "Bandwidth Configuration"
 msgstr "Bant Genişliği Yapılandırması"
 
 #, java-format
+msgid "You have configured I2P+ to share only {0} KBps."
+msgstr "I2P paylaşımı {0} KBps hızına ayarlanmış."
+
+msgid "I2P+ requires at least 12KBps to enable sharing. "
+msgstr "Paylaşımı etkinleştirmek için I2P en az 12KBps hıza gerek duyar."
+
+#, java-format
 msgid "You have configured I2P+ to share {0} KBps."
 msgstr "I2P paylaşım hızı {0} KBps olarak ayarlanmış."
 
@@ -7722,8 +7621,8 @@ msgstr "I2P, I2P ağındaki web sitelerine göz atmak için yerleşik HTTP proxy
 msgid "Browser Setup"
 msgstr "Tarayıcı Kurulumu"
 
-msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. For more help, see <a href=https://geti2p.net/htproxyports target=_blank rel=noreferrer>the configuration guide</a>, or <a href=/help/configuration#browserconfig>the mini-tutorial for Firefox</a>."
-msgstr "I2P ağında barındırılan web sitelerine erişmek ve isteğe bağlı olarak ClearNet'teki web sitelerine bağlanmak için varsayılan outproxy kullanabilmek için, tarayıcınızı varsayılan olarak çalışarak I2P+ <b>HTTP</b> proxy'ini kullanacak şekilde yapılandırmanız gerekecektir. Kod>127.0.0.1 bağlantı noktası 4444</code>. Daha fazla yardım için bkz. <a href=https://geti2p.net/htproxyports target=_blank rel=noreferrer>Yapılandırma Kılavuzu</a> veya <a href=/help/configuration#browserconfig>Firefox için Mini-Tutorical</a>."
+msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. "
+msgstr ""
 
 msgid "Welcome to I2P+!"
 msgstr "I2P+ Yazılımına Hoş Geldiniz!"
@@ -7731,8 +7630,8 @@ msgstr "I2P+ Yazılımına Hoş Geldiniz!"
 msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
 msgstr "I2P uygulamasını başlattığınızda yönelticinizin başlatılarak ağ ile bütünleşmesi ve diğer eşleri bulması bir kaç dakika sürebilir. Lütfen sabırlı olun."
 
-msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P+."
-msgstr "Yerel Tünellerin yanında yeşil yıldızlar görüntülendiğinde I2P ile yapabileceğiniz pek çok işlemden birini seçebilirsiniz."
+msgid "Once green stars are indicated next to your Service Tunnels, there is a wide variety of things you can do with I2P+."
+msgstr ""
 
 msgid "Unknown Wizard page"
 msgstr "Bilinmeyen Sihirbaz sayfası"
@@ -7751,4 +7650,75 @@ msgstr "Sonraki"
 
 msgid "Finished"
 msgstr "Tamamlandı"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#, java-format
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

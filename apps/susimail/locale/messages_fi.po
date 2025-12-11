@@ -214,12 +214,6 @@ msgstr "I2PMmail"
 msgid "No new messages"
 msgstr "Ei uusia viestejä"
 
-msgid "Checking for new messages on server"
-msgstr "Tarkistaa uusia viestejä palvelimelta"
-
-msgid "Refresh the page for updates"
-msgstr "Päivitä sivu päivityksiä varten"
-
 #, java-format
 msgid "{0} is an I2P-exclusive service provided by {1}."
 msgstr "{0} on I2P-yksinomainen palvelu, jonka tarjoaa {1}."
@@ -227,6 +221,12 @@ msgstr "{0} on I2P-yksinomainen palvelu, jonka tarjoaa {1}."
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
 msgstr "{0} webmail client &copy Susi 2004-2005."
+
+msgid "Checking for new messages on server"
+msgstr "Tarkistaa uusia viestejä palvelimelta"
+
+msgid "Refresh the page for updates"
+msgstr "Päivitä sivu päivityksiä varten"
 
 msgid "Removed tracking image placeholder"
 msgstr "Seuranta-kuvan paikkaaja poistettu"
@@ -338,6 +338,9 @@ msgstr "Tarkista posti"
 msgid "Refresh Page"
 msgstr "Päivitä sivu"
 
+msgid "Change to Folder"
+msgstr "Vaihda kansioon"
+
 #, java-format
 msgid "1 Message"
 msgid_plural "{0} Messages"
@@ -356,18 +359,6 @@ msgstr "Koko"
 msgid "Mark for deletion"
 msgstr "Merkitse poistettavaksi"
 
-msgid "Message contains HTML"
-msgstr "Viesti sisältää HTML"
-
-msgid "Message is new"
-msgstr "Viesti on uusi"
-
-msgid "Message is spam"
-msgstr "Viesti on roskapostia"
-
-msgid "Message body not downloaded"
-msgstr "Viestin runkoa ei ladattu"
-
 msgid "Really delete the marked messages?"
 msgstr "Poistetaanko merkityt viestit oikeasti?"
 
@@ -383,8 +374,17 @@ msgstr "Merkitse kaikki"
 msgid "Clear All"
 msgstr "Nollaa kaikki"
 
-msgid "Change to Folder"
-msgstr "Vaihda kansioon"
+msgid "Message contains HTML"
+msgstr "Viesti sisältää HTML"
+
+msgid "Message is new"
+msgstr "Viesti on uusi"
+
+msgid "Message is spam"
+msgstr "Viesti on roskapostia"
+
+msgid "Message body not downloaded"
+msgstr "Viestin runkoa ei ladattu"
 
 msgid "First"
 msgstr "Ensimmäinen"

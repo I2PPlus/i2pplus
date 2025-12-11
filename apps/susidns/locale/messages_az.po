@@ -28,11 +28,29 @@ msgstr "Mənzil adı \"{0}\" əhatə etməlidir"
 msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
 msgstr "Mənzil adı \"{0}\" ASCIIyə çevrilməli, amma bu JVM-də dəyişdirici kitabxana mövcud deyil"
 
+msgid "Source"
+msgstr "Mənbə"
+
+msgid "Imported from file hosts.txt"
+msgstr ""
+
+msgid "Manually added via SusiDNS"
+msgstr "İstifadəçi tərəfindən SusiDNS vasitəsilə əlavə edildi"
+
+msgid "Manually added"
+msgstr ""
+
+msgid "Added via address helper"
+msgstr ""
+
+msgid "Via helper"
+msgstr ""
+
+msgid "Via helper from"
+msgstr ""
+
 msgid "None"
 msgstr "Heç biri"
-
-msgid "Hashcash"
-msgstr "Hashcash"
 
 msgid "Hidden"
 msgstr "Gizləndirilmiş"
@@ -177,9 +195,6 @@ msgstr "{0} adres kitabı {1} verilənlər bazasında"
 msgid "Host name {0} is not in the address book."
 msgstr "Mənzil adı {0} adres kitabında yoxdur."
 
-msgid "Manually added via SusiDNS"
-msgstr "İstifadəçi tərəfindən SusiDNS vasitəsilə əlavə edildi"
-
 #, java-format
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr "{0} üçün {1} adlandırma xidmətinə Nöqtə əlavə etməkdə uğursuz oldu"
@@ -305,6 +320,9 @@ msgstr "Keçid (b32)"
 
 msgid "Destination"
 msgstr "Nöqtə"
+
+msgid "Added"
+msgstr ""
 
 msgid "Select hosts for deletion from addressbook"
 msgstr "Adres kitabından silmək üçün mənzilləri seçin"
@@ -446,9 +464,6 @@ msgstr "yox"
 
 msgid "yes"
 msgstr "bəli"
-
-msgid "Source"
-msgstr "Mənbə"
 
 msgid "Added Date"
 msgstr "Əlavə olunma tarixi"
@@ -599,3 +614,4 @@ msgstr "Sizin Üst adres kitabınıza manuel olaraq əlavə etdiyiniz ünvandıl
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Abunələrinizdən ala biləcəyiniz mənzillər Ruternin adres kitabınıza birləşdiriləcəkdir."
+

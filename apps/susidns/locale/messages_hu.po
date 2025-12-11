@@ -28,11 +28,29 @@ msgstr "Hoszt név nem tartalmahatja a következőt: \"{0}\""
 msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
 msgstr "ASCII átalakításra van szükség a következő hoszton \"{0}\", azonban az átalakító könyvtár nem érhető el ezen a Java Virtuális Gépen"
 
+msgid "Source"
+msgstr "Forrás"
+
+msgid "Imported from file hosts.txt"
+msgstr ""
+
+msgid "Manually added via SusiDNS"
+msgstr "A SusiDNS-en keresztül manuálisan hozzáadva"
+
+msgid "Manually added"
+msgstr ""
+
+msgid "Added via address helper"
+msgstr ""
+
+msgid "Via helper"
+msgstr ""
+
+msgid "Via helper from"
+msgstr ""
+
 msgid "None"
 msgstr "Semmi"
-
-msgid "Hashcash"
-msgstr "Hashcash"
 
 msgid "Hidden"
 msgstr "Rejtett"
@@ -177,9 +195,6 @@ msgstr "{0} címjegyzék a {1} adatbázisban"
 msgid "Host name {0} is not in the address book."
 msgstr "A(z) {0} gazdagépnév nem szerepel a címjegyzékben."
 
-msgid "Manually added via SusiDNS"
-msgstr "A SusiDNS-en keresztül manuálisan hozzáadva"
-
 #, java-format
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr "{0} Célállomás hozzáadása sikertelen a {1} névszolgáltatóhoz"
@@ -305,6 +320,9 @@ msgstr "Link (b32)"
 
 msgid "Destination"
 msgstr "Célállomás"
+
+msgid "Added"
+msgstr ""
 
 msgid "Select hosts for deletion from addressbook"
 msgstr "Válassza ki a címjegyzékből törölni kívánt gazdagépeket"
@@ -446,9 +464,6 @@ msgstr "nem"
 
 msgid "yes"
 msgstr "igen"
-
-msgid "Source"
-msgstr "Forrás"
 
 msgid "Added Date"
 msgstr "Hozzáadott Dátum"
@@ -599,3 +614,4 @@ msgstr "A fő címjegyzékbe kézzel hozzáadott címek egyesülnek az útválas
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Az előfizetésekből kapott gazdagépek egyesülnek az útválasztó címjegyzékével."
+

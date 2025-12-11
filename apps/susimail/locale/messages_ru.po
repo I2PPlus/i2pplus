@@ -220,12 +220,6 @@ msgstr "I2PПочта"
 msgid "No new messages"
 msgstr "Нет новых сообщений"
 
-msgid "Checking for new messages on server"
-msgstr "Проверка новых сообщений на сервере"
-
-msgid "Refresh the page for updates"
-msgstr "Обновите страницу для получения свежей информации"
-
 #, java-format
 msgid "{0} is an I2P-exclusive service provided by {1}."
 msgstr "{0} — это эксклюзивная услуга I2P, предоставляемая {1}."
@@ -233,6 +227,12 @@ msgstr "{0} — это эксклюзивная услуга I2P, предост
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
 msgstr "{0} webmail client &copy Susi 2004-2005."
+
+msgid "Checking for new messages on server"
+msgstr "Проверка новых сообщений на сервере"
+
+msgid "Refresh the page for updates"
+msgstr "Обновите страницу для получения свежей информации"
 
 msgid "Removed tracking image placeholder"
 msgstr "Удален временный элемент для изображения с отслеживанием"
@@ -344,6 +344,9 @@ msgstr "Проверить почту"
 msgid "Refresh Page"
 msgstr "Обновить страницу"
 
+msgid "Change to Folder"
+msgstr "Перейти в папку"
+
 #, java-format
 msgid "1 Message"
 msgid_plural "{0} Messages"
@@ -364,18 +367,6 @@ msgstr "Размер"
 msgid "Mark for deletion"
 msgstr "Пометить для удаления"
 
-msgid "Message contains HTML"
-msgstr "Сообщение содержит HTML"
-
-msgid "Message is new"
-msgstr "Новое письмо"
-
-msgid "Message is spam"
-msgstr "Письмо является спамом"
-
-msgid "Message body not downloaded"
-msgstr "Тело сообщения не загружено"
-
 msgid "Really delete the marked messages?"
 msgstr "Действительно удалить отмеченые сообщения?"
 
@@ -391,8 +382,17 @@ msgstr "Отметить всё"
 msgid "Clear All"
 msgstr "Удалить все"
 
-msgid "Change to Folder"
-msgstr "Перейти в папку"
+msgid "Message contains HTML"
+msgstr "Сообщение содержит HTML"
+
+msgid "Message is new"
+msgstr "Новое письмо"
+
+msgid "Message is spam"
+msgstr "Письмо является спамом"
+
+msgid "Message body not downloaded"
+msgstr "Тело сообщения не загружено"
 
 msgid "First"
 msgstr "Первое"

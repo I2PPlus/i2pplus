@@ -211,12 +211,6 @@ msgstr "I2P메일"
 msgid "No new messages"
 msgstr "새 메시지가 없습니다."
 
-msgid "Checking for new messages on server"
-msgstr "서버에서 새 메시지를 확인하는 중"
-
-msgid "Refresh the page for updates"
-msgstr "업데이트를 위해 페이지를 새로 고치세요."
-
 #, java-format
 msgid "{0} is an I2P-exclusive service provided by {1}."
 msgstr "{0}은 {1}에서 제공하는 I2P 전용 서비스입니다."
@@ -224,6 +218,12 @@ msgstr "{0}은 {1}에서 제공하는 I2P 전용 서비스입니다."
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
 msgstr "{0} webmail client &copy Susi 2004-2005."
+
+msgid "Checking for new messages on server"
+msgstr "서버에서 새 메시지를 확인하는 중"
+
+msgid "Refresh the page for updates"
+msgstr "업데이트를 위해 페이지를 새로 고치세요."
 
 msgid "Removed tracking image placeholder"
 msgstr "추적 이미지 플레이스홀더 제거"
@@ -335,6 +335,9 @@ msgstr "메일 확인"
 msgid "Refresh Page"
 msgstr "페이지 새로 고침"
 
+msgid "Change to Folder"
+msgstr "폴더로 변경"
+
 #, java-format
 msgid "1 Message"
 msgid_plural "{0} Messages"
@@ -352,18 +355,6 @@ msgstr "큭"
 msgid "Mark for deletion"
 msgstr "삭제표시"
 
-msgid "Message contains HTML"
-msgstr "메시지에는 HTML이 포함되어 있습니다"
-
-msgid "Message is new"
-msgstr "새로운 메세지"
-
-msgid "Message is spam"
-msgstr "스팸 메세지"
-
-msgid "Message body not downloaded"
-msgstr "메시지 본문이 다운로드되지 않았습니다."
-
 msgid "Really delete the marked messages?"
 msgstr "해당 메세지들을 삭제합니까?"
 
@@ -379,8 +370,17 @@ msgstr "모두 선택"
 msgid "Clear All"
 msgstr "모두 소거"
 
-msgid "Change to Folder"
-msgstr "폴더로 변경"
+msgid "Message contains HTML"
+msgstr "메시지에는 HTML이 포함되어 있습니다"
+
+msgid "Message is new"
+msgstr "새로운 메세지"
+
+msgid "Message is spam"
+msgstr "스팸 메세지"
+
+msgid "Message body not downloaded"
+msgstr "메시지 본문이 다운로드되지 않았습니다."
 
 msgid "First"
 msgstr "첫번째"

@@ -28,10 +28,28 @@ msgstr ""
 msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
 msgstr ""
 
-msgid "None"
+msgid "Source"
 msgstr ""
 
-msgid "Hashcash"
+msgid "Imported from file hosts.txt"
+msgstr ""
+
+msgid "Manually added via SusiDNS"
+msgstr ""
+
+msgid "Manually added"
+msgstr ""
+
+msgid "Added via address helper"
+msgstr ""
+
+msgid "Via helper"
+msgstr ""
+
+msgid "Via helper from"
+msgstr ""
+
+msgid "None"
 msgstr ""
 
 msgid "Hidden"
@@ -177,9 +195,6 @@ msgstr ""
 msgid "Host name {0} is not in the address book."
 msgstr ""
 
-msgid "Manually added via SusiDNS"
-msgstr ""
-
 #, java-format
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr ""
@@ -304,6 +319,9 @@ msgid "Link (b32)"
 msgstr ""
 
 msgid "Destination"
+msgstr ""
+
+msgid "Added"
 msgstr ""
 
 msgid "Select hosts for deletion from addressbook"
@@ -445,9 +463,6 @@ msgid "no"
 msgstr ""
 
 msgid "yes"
-msgstr ""
-
-msgid "Source"
 msgstr ""
 
 msgid "Added Date"

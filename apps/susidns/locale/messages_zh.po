@@ -28,11 +28,29 @@ msgstr "主机名称不能包含“{0}”"
 msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
 msgstr "主机名称“{0}”需要转化为ASCIIb编码，但您的JavaJVM缺少转换需要的库。"
 
+msgid "Source"
+msgstr "来源"
+
+msgid "Imported from file hosts.txt"
+msgstr ""
+
+msgid "Manually added via SusiDNS"
+msgstr "通过 SusiDNS 手工添加。"
+
+msgid "Manually added"
+msgstr ""
+
+msgid "Added via address helper"
+msgstr ""
+
+msgid "Via helper"
+msgstr ""
+
+msgid "Via helper from"
+msgstr ""
+
 msgid "None"
 msgstr "无"
-
-msgid "Hashcash"
-msgstr "Hashcash"
 
 msgid "Hidden"
 msgstr "隐身"
@@ -172,9 +190,6 @@ msgstr "{1}数据库中{0}地址簿"
 msgid "Host name {0} is not in the address book."
 msgstr "主机名 {0} 不在地址簿中。"
 
-msgid "Manually added via SusiDNS"
-msgstr "通过 SusiDNS 手工添加。"
-
 #, java-format
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr "域名服务{1}中的目标{0}添加失败。"
@@ -298,6 +313,9 @@ msgstr "链接 (b32)"
 
 msgid "Destination"
 msgstr "目标"
+
+msgid "Added"
+msgstr ""
 
 msgid "Select hosts for deletion from addressbook"
 msgstr "从地址簿中选择要删除的主机"
@@ -439,9 +457,6 @@ msgstr "否"
 
 msgid "yes"
 msgstr "是"
-
-msgid "Source"
-msgstr "来源"
 
 msgid "Added Date"
 msgstr "添加时间"
@@ -592,3 +607,4 @@ msgstr "手动添加到您的主地址簿中的地址将与您的路由器地址
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "您从订阅中取得的主机将与路由器地址簿合并。"
+

@@ -75,8 +75,17 @@ msgstr "informații despre router {0} achiziționate de la gazde reseed"
 msgid "Acquired {0} router infos from reseed hosts ({1} errors)"
 msgstr "informații despre router {0} achiziționate de la gazde reseed ({1} erori)"
 
+msgid "Clock step adjustment (ms)"
+msgstr "Ajustarea pasului ceasului (ms)"
+
+msgid "Size of tunnel acceptor backlog"
+msgstr "Dimensiune log de tunnel acceptor nesoluționate "
+
 msgid "Message receive rate (B/s)"
 msgstr "Rata de primire a mesajelor (B/s)"
+
+msgid "Low-level receive rate (B/s)"
+msgstr "Rată de primire la nivel scăzut (B/s)"
 
 msgid "Message send rate (B/s)"
 msgstr "Rata de trimitere a mesajelor (B/s)"
@@ -84,41 +93,35 @@ msgstr "Rata de trimitere a mesajelor (B/s)"
 msgid "Low-level send rate (B/s)"
 msgstr "Rata de trimitere la nivel scăzut (B/s)"
 
-msgid "Low-level receive rate (B/s)"
-msgstr "Rată de primire la nivel scăzut (B/s)"
-
-msgid "Total peers in our NetDb"
-msgstr "Total de colegi din NetDb-ul nostru"
-
 msgid "Peers active in the last minute"
 msgstr "Colegii activi în ultimul minut"
-
-msgid "Known high capacity peers"
-msgstr "Peers cunoscuți de mare capacitate"
 
 msgid "Peers sent to in the last minute"
 msgstr "Colegii trimiși către în ultimul minut"
 
+msgid "Total peers in our banlist"
+msgstr "Numărul total de colegi din lista noastră de bani"
+
+msgid "CPU load average of the JVM"
+msgstr "Încărcarea medie a CPU a JVM-ului"
+
 msgid "Known fast peers"
 msgstr "Parteneri rapizi cunoscuți"
+
+msgid "Known high capacity peers"
+msgstr "Peers cunoscuți de mare capacitate"
 
 msgid "Known integrated (floodfill) peers"
 msgstr "Colegii integrati (de inundare) cunoscuți"
 
-msgid "Total peers in our banlist"
-msgstr "Numărul total de colegi din lista noastră de bani"
+msgid "Total peers in our NetDb"
+msgstr "Total de colegi din NetDb-ul nostru"
+
+msgid "Total number of threads in use"
+msgstr ""
 
 msgid "Peers without a published IP address"
 msgstr "Peers fără o adresă IP publicată"
-
-msgid "Size of tunnel acceptor backlog"
-msgstr "Dimensiune log de tunnel acceptor nesoluționate "
-
-msgid "Clock step adjustment (ms)"
-msgstr "Ajustarea pasului ceasului (ms)"
-
-msgid "CPU load average of the JVM"
-msgstr "Încărcarea medie a CPU a JVM-ului"
 
 msgid "Average tunnel build success %"
 msgstr "Succesul mediu la construirea tunelului %"
@@ -1560,29 +1563,29 @@ msgstr "Repornire în {0}"
 msgid "Save order"
 msgstr "Ordinea salvarii"
 
+msgid "Restore full default"
+msgstr "Restabiliți la setările de bază"
+
+msgid "Restore minimal default"
+msgstr "Restabileşte implicitele minimale"
+
 msgid "Sidebar preferences updated"
 msgstr "Preferințele barei laterale actualizate"
 
 msgid "Refresh interval must be a number"
 msgstr "Intervalul reinnoirii trebuie sa fie un număr"
 
-msgid "Restore full default"
-msgstr "Restabiliți la setările de bază"
-
 msgid "Full sidebar defaults restored."
 msgstr "Setările implicite complete ale barei laterale au fost restaurate."
 
-msgid "Sidebar will refresh shortly."
-msgstr "Bara laterală se va reîmprospăta în curând."
-
-msgid "Restore minimal default"
-msgstr "Restabileşte implicitele minimale"
-
-msgid "Minimal sidebar defaults restored."
-msgstr "Setările implicite minime ale barei laterale au fost restaurate."
-
 msgid "Order must be an integer"
 msgstr "Ordinea trebuie să fie un număr întreg"
+
+msgid "Saved order of sections."
+msgstr "Ordinea sectiunilor este salvata"
+
+msgid "Sidebar will refresh shortly."
+msgstr "Bara laterală se va reîmprospăta în curând."
 
 msgid "No section selected"
 msgstr "Nici o sectiune selectată"
@@ -1592,9 +1595,6 @@ msgstr "Nu a fost introdusa ordinea"
 
 msgid "Moved"
 msgstr "Mutat"
-
-msgid "Saved order of sections."
-msgstr "Ordinea sectiunilor este salvata"
 
 msgid "Full statistics enabled"
 msgstr "Statistici complete activate"
@@ -2425,6 +2425,9 @@ msgstr "Proxy HTTP nu este pornit"
 msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
 msgstr "Browser-ul dumneavoastră nu este corect configurat să utilizeze proxy HTTP la {0}"
 
+msgid "Errors"
+msgstr ""
+
 msgid "URL"
 msgstr "URL"
 
@@ -2699,29 +2702,23 @@ msgstr "sau Sybil aproape de acest router"
 msgid "Lookup"
 msgstr "Căutare"
 
-msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
-msgstr "Nu dezvălui niciodată identitatea routerului nimănui, deoarece este legată în mod unic de adresa dvs. IP din baza de date a rețelei."
+msgid "Select the field to search on"
+msgstr ""
 
-msgid "is banned"
-msgstr "este interzis"
-
-msgid "not found in network database"
-msgstr "nu a fost găsit în rețeaua bazei de date"
-
-msgid "Bad Base64 Router hash"
-msgstr "Hash router Base64 greșit"
-
-msgid "No routers with"
-msgstr "Nu există routere cu: "
-
-msgid "Hash prefix"
-msgstr "Prefix de hash"
-
-msgid "Port"
-msgstr "Port"
+msgid "e.g. cn hk"
+msgstr ""
 
 msgid "MTU"
 msgstr "MTU"
+
+msgid "Enter search value here"
+msgstr ""
+
+msgid "Router not found"
+msgstr ""
+
+msgid "No routers with"
+msgstr "Nu există routere cu: "
 
 msgid "found in the network database"
 msgstr "găsit în baza de date de rețea"
@@ -2849,17 +2846,17 @@ msgstr "Expirat în urmă cu {0}"
 msgid "Unknown"
 msgstr "Necunoscut"
 
-msgid "Advanced mode - includes all statistics published by floodfills."
-msgstr "Mod avansat - include toate statisticile publicate de floodfills."
-
-msgid "Compact mode - does not include statistics published by floodfills."
-msgstr "Mod compact - nu include statisticile publicate de floodfills."
-
 msgid "Network Database Router Statistics"
 msgstr "Statisticile Router-ului in rețeaua bazei de date"
 
 msgid "Count"
 msgstr "Număra"
+
+msgid "Under 12 KB/s"
+msgstr ""
+
+msgid "Over 2048 KB/s"
+msgstr ""
 
 msgid "Bandwidth Tier"
 msgstr "Nivelul de lățime de bandă"
@@ -2931,6 +2928,9 @@ msgstr "Publicat"
 msgid "Hostname"
 msgstr "Nume gazdă"
 
+msgid "Whois"
+msgstr ""
+
 msgid "direct"
 msgstr "direct"
 
@@ -2946,20 +2946,26 @@ msgstr "Afișați toate routerele cu acest tip de semnătură în NetDb"
 msgid "Show all routers with this encryption type in the NetDb"
 msgstr "Afișați toate routerele cu acest tip de criptare în NetDb"
 
-msgid "Addresses"
-msgstr "Adrese"
-
-msgid "n/a"
-msgstr "n/a"
-
 msgid "Show all routers with this address in the NetDb"
 msgstr "Afișați toate routerele cu această adresă în NetDb"
 
 msgid "Show all routers with this port in the NetDb"
 msgstr "Afișați toate routerele cu acest port în NetDb"
 
-msgid "Routers"
-msgstr "Routere"
+msgid "Maximum Transmission Unit"
+msgstr ""
+
+msgid "Show all routers with this MTU in the NetDb"
+msgstr ""
+
+msgid "Addresses"
+msgstr "Adrese"
+
+msgid "Introducers"
+msgstr ""
+
+msgid "Network Id"
+msgstr "ID rețea"
 
 msgid "First heard about"
 msgstr "Am auzit prima dată despre"
@@ -2970,11 +2976,8 @@ msgstr "Ultima dată despre"
 msgid "Last heard from"
 msgstr "Ultimul auzit"
 
-msgid "Network Id"
-msgstr "ID rețea"
-
-msgid "Count is always spoofed to avoid indicating router restarts"
-msgstr "Numărul este mereu falsificat pentru a evita indicarea repornirilor routerului."
+msgid "Info"
+msgstr "Informații"
 
 msgid "Hidden or starting up"
 msgstr "Ascuns sau pentru pornire"
@@ -3003,17 +3006,32 @@ msgstr "SSU [IPv6]"
 msgid "SSU [IPv6] with Introducers"
 msgstr "IPv6 SSU, introducere"
 
+msgid "NTCP &amp; SSU with Introducers [IPv6 Only]"
+msgstr "IPv6 doar NTCP, SSU, introducere"
+
 msgid "NTCP [IPv6]"
 msgstr "NTCP [IPv6]"
 
 msgid "NTCP [IPv6] &amp; SSU"
 msgstr "NTCP [IPv6] &amp; SSU"
 
-msgid "NTCP &amp; SSU with Introducers [IPv6 Only]"
-msgstr "IPv6 doar NTCP, SSU, introducere"
-
 msgid "NTCP [IPv6] &amp; SSU with Introducers"
 msgstr "IPv6 NTCP, SSU, introducere"
+
+msgid "Local"
+msgstr "Local"
+
+msgid "Fast Tier"
+msgstr ""
+
+msgid "High Capacity Tier"
+msgstr ""
+
+msgid "Integrated Tier"
+msgstr ""
+
+msgid "Standard Tier"
+msgstr ""
 
 msgid "No peer connections available"
 msgstr "Nu există conexiuni peer disponibile"
@@ -3352,14 +3370,17 @@ msgstr "Ultima dată când am auzit de la"
 msgid "View/Edit"
 msgstr "Vizualizare/Editare"
 
-msgid "Unreachable"
-msgstr "Indisponibil"
-
 msgid "OK"
 msgstr "OK"
 
 msgid "Test Fails"
 msgstr "Testul a eșuat"
+
+msgid "Unreachable"
+msgstr "Indisponibil"
+
+msgid "Most tests passing"
+msgstr ""
 
 msgid "Fast, High Capacity"
 msgstr "Rapid, de mare capacitate"
@@ -3375,6 +3396,9 @@ msgstr "Eșuat"
 
 msgid "Integrated"
 msgstr "Integrat"
+
+msgid "Configure Peer"
+msgstr ""
 
 msgid "Thresholds"
 msgstr "Limite"
@@ -3445,11 +3469,11 @@ msgstr "Ultima transmitere nereușită"
 msgid "Last Bad Store"
 msgstr "Ultimul depozit nepotrivit"
 
-msgid "Capabilities in the NetDb, not used to determine profiles"
-msgstr "Capabilități în NetDb, nu sunt utilizate pentru a determina profiluri"
-
 msgid "caps"
 msgstr "majuscule"
+
+msgid "Capabilities in the NetDb, not used to determine profiles"
+msgstr "Capabilități în NetDb, nu sunt utilizate pentru a determina profiluri"
 
 msgid "Reachable"
 msgstr "Accesibil"
@@ -3622,6 +3646,9 @@ msgstr "Apăsați restart pentru a instala"
 
 msgid "Click Shutdown and restart to install"
 msgstr "Apăsați oprire și reporniți pentru a instala"
+
+msgid "Unable"
+msgstr ""
 
 #, java-format
 msgid "{0}"
@@ -3816,9 +3843,6 @@ msgstr "Grafic performanța router"
 msgid "Router Help and FAQ"
 msgstr "Ajutor router și întrebări frecvente"
 
-msgid "Info"
-msgstr "Informații"
-
 msgid "Router information including transport addresses and UPnP scan"
 msgstr "Informații despre router, inclusiv adrese de transport și scanare UPnP"
 
@@ -3904,6 +3928,34 @@ msgstr "Floodfill activat"
 msgid "Total number of remote LeaseSets stored in our NetDb"
 msgstr "Numărul total de LeaseSet-uri la distanță stocate în NetDb-ul nostru"
 
+msgid "Declining transit tunnel requests during startup phase"
+msgstr "Nu sunt acceptate solicitări de tuneluri participante în primele 10 minute în timp ce routerul se stabilizează"
+
+msgid "Declining transit tunnel requests as we are shutting down"
+msgstr "Declinul cererilor de tunel participante pe măsură ce închidem"
+
+msgid "Router or network performance is impeding the building of transit tunnels"
+msgstr "Performanța routerului sau a rețelei împiedică construirea tunelurilor participante"
+
+msgid "Router is currently hosting the configured maximum number of transit tunnels"
+msgstr "Routerul gazduiește în prezent numărul maxim de tuneluri de tranzit configurat"
+
+msgid "Router is currently using the configured maximum share bandwidth"
+msgstr "Routerul folosește în prezent banda de împărțire maximă configurată"
+
+msgid "Router is ready to build participating tunnels"
+msgstr "Routerul este gata să construiască tuneluri participante"
+
+#, java-format
+msgid "Accepting transit tunnel requests; hosting {0} tunnels"
+msgstr "Acceptarea cererilor de tunel participante; participând la {0} tuneluri"
+
+msgid "No transit tunnels are built when Hidden mode is active"
+msgstr "Nu sunt construite tuneluri participante când modul Ascuns este activ"
+
+msgid "Router is configured to reject all transit tunnel requests"
+msgstr "Routerul este configurat să respingă toate solicitările de tunel participante"
+
 msgid "Warning: ECDSA is not available. Update your Java or OS"
 msgstr "Atenție: ECDSA nu este disponibil. Actualizați Java sau OS"
 
@@ -3939,6 +3991,9 @@ msgstr "Numărul de colegi interzise"
 
 msgid "The total number of peers in our network database"
 msgstr "Numărul total de utilizatori în baza noastră de date a rețelei"
+
+msgid "Total RouterInfos stored on disk"
+msgstr ""
 
 msgid "Known"
 msgstr "Cunoscute"
@@ -4050,34 +4105,6 @@ msgstr "Cereri din coada de așteptare a altor routere pentru a participa în tu
 
 msgid "Backlog"
 msgstr "Comenzi nerezolvate"
-
-msgid "Declining transit tunnel requests during startup phase"
-msgstr "Nu sunt acceptate solicitări de tuneluri participante în primele 10 minute în timp ce routerul se stabilizează"
-
-msgid "Declining transit tunnel requests as we are shutting down"
-msgstr "Declinul cererilor de tunel participante pe măsură ce închidem"
-
-msgid "Router or network performance is impeding the building of transit tunnels"
-msgstr "Performanța routerului sau a rețelei împiedică construirea tunelurilor participante"
-
-msgid "Router is currently hosting the configured maximum number of transit tunnels"
-msgstr "Routerul gazduiește în prezent numărul maxim de tuneluri de tranzit configurat"
-
-msgid "Router is currently using the configured maximum share bandwidth"
-msgstr "Routerul folosește în prezent banda de împărțire maximă configurată"
-
-msgid "Router is ready to build participating tunnels"
-msgstr "Routerul este gata să construiască tuneluri participante"
-
-#, java-format
-msgid "Accepting transit tunnel requests; hosting {0} tunnels"
-msgstr "Acceptarea cererilor de tunel participante; participând la {0} tuneluri"
-
-msgid "No transit tunnels are built when Hidden mode is active"
-msgstr "Nu sunt construite tuneluri participante când modul Ascuns este activ"
-
-msgid "Router is configured to reject all transit tunnel requests"
-msgstr "Routerul este configurat să respingă toate solicitările de tunel participante"
 
 msgid "Statistics gathered during this router's uptime"
 msgstr "Statisticile colectate în timpul uptime al acestui router"
@@ -4211,8 +4238,14 @@ msgstr "Nicio analiză stocată"
 msgid "Select stored analysis"
 msgstr "Selectați analiza stocată"
 
+msgid "Review"
+msgstr ""
+
 msgid "Run analysis on Floodfills only"
 msgstr "Executați analiza numai pentru inundații"
+
+msgid "Start Scan"
+msgstr ""
 
 msgid "Run analysis on all routers in NetDb"
 msgstr "Executați analiza pe toate routerele din NetDb"
@@ -4376,6 +4409,12 @@ msgstr "MAX"
 msgid "Show all routers for this family in NetDb"
 msgstr "Afișați toate routerele pentru această familie în NetDb"
 
+msgid "Routers"
+msgstr "Routere"
+
+msgid "n/a"
+msgstr "n/a"
+
 msgid "Last lookup successful"
 msgstr "Ultima căutare reușită"
 
@@ -4427,9 +4466,6 @@ msgstr "Datele transferate"
 msgid "Data"
 msgstr "Date"
 
-msgid "Limit"
-msgstr "Limită"
-
 msgid "Receive on"
 msgstr "Primite în "
 
@@ -4474,6 +4510,7 @@ msgstr "Routerul funcționează în prezent în modul ascuns, ceea ce împiedic�
 msgid "No transit tunnels currently active."
 msgstr "Niciun tunel de tranzit activ în prezent."
 
+#, java-format
 msgid "Transit Tunnels by Peer (Top {0})"
 msgstr "Tuneluri de tranzit pe Partener (Top {0})"
 
@@ -4485,9 +4522,6 @@ msgstr "Toate tunelurile de la Peer"
 
 msgid "Primary IP address"
 msgstr "Adresă IP principală"
-
-msgid "Local"
-msgstr "Local"
 
 msgid "unique peers"
 msgstr "semeni unici"
@@ -4501,6 +4535,9 @@ msgstr "tranzit"
 msgid "No local or transit tunnels currently active."
 msgstr "Niciun tunel local sau de tranzit activ în prezent."
 
+msgid "PRIVATE IP ADDRESS"
+msgstr ""
+
 msgid "Bandwidth Tiers"
 msgstr "Nivele de lățime de bandă"
 
@@ -4510,6 +4547,9 @@ msgstr "Peste {0} lățime de bandă partajată"
 
 msgid "Inbound or outbound?"
 msgstr "De intrare sau de iesire?"
+
+msgid "In/Out"
+msgstr ""
 
 msgid "Gateway"
 msgstr "Gateway"
@@ -4626,6 +4666,9 @@ msgstr "I2P Webserver (eepsite)"
 msgid "Browser launch at startup"
 msgstr "Lansează browser-ul la pornire"
 
+msgid "I2P Router Console"
+msgstr ""
+
 msgid "Open Router Console in web browser at startup"
 msgstr "Deschideți consola router în browser-ul web la pornire"
 
@@ -4701,12 +4744,6 @@ msgstr "cheie"
 msgid "port"
 msgstr "port"
 
-msgid "config UI"
-msgstr "configurare UI"
-
-msgid "User Interface Configuration"
-msgstr "Configurare interfață utilizator"
-
 msgid "Certificates"
 msgstr "Certificate"
 
@@ -4722,8 +4759,8 @@ msgstr "Limitator Lățime de bandă"
 msgid "Advanced Network Configuration"
 msgstr "Configurarea avansată a rețelei"
 
-msgid "I2P+ will work best if you configure your rates to match the speed of your internet connection."
-msgstr "I2P va funcționa mai bine dacă vă configurați rata lățimii de bandă pentru a se potrivi cu viteza conexiunii dumneavoastră la internet."
+msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
+msgstr ""
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
 msgstr "Notă: Contribuția dvs. la rețea (cota de rețea) este determinată de alocarea lățimii de bandă în amonte (viteza de încărcare)."
@@ -4753,11 +4790,11 @@ msgid "NOTE"
 msgstr "NOTĂ"
 
 #, java-format
-msgid "You have configured I2P+ to share only {0} KBps."
-msgstr "Ați configurat I2P să partajeaze doar {0} kbps."
+msgid "You have configured I2P to share only {0} KBps."
+msgstr ""
 
-msgid "I2P+ requires at least 12KBps to enable sharing. "
-msgstr "I2P necesită cel puțin 12KBps pentru a permite partajarea."
+msgid "I2P requires at least 12KBps to enable sharing. "
+msgstr ""
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
 msgstr "Vă rugăm să activați partajarea (participarea în tuneluri) prin configurarea mai mare a lățimii de bandă."
@@ -5254,8 +5291,8 @@ msgstr "config reseeding"
 msgid "Reseeding is the bootstrapping process used to find other routers when you first install I2P, or when your router has too few router references remaining."
 msgstr "Restabilirea este procesul de bootstrapping folosit pentru a găsi alte routere atunci când instalați prima data I2P, sau atunci când router-ul are prea puține referințe router rămase."
 
-msgid "To enable the configuration of reseed urls, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
-msgstr "Pentru a activa configurarea URL-urilor de resedare, activați <a href=\"/help/advancedsettings\">Modul avansat</a> al consolei."
+msgid "To enable the configuration of reseed urls, activate the console's <a href=/help/advancedsettings>Advanced mode</a>."
+msgstr ""
 
 msgid "Reseeding Configuration"
 msgstr "Configurație Reseeding"
@@ -5265,9 +5302,6 @@ msgstr "Ajutor la reînsămânțare"
 
 msgid "Reseeding Help"
 msgstr "Ajutor pentru reînsămânțare"
-
-msgid "Change these only if HTTPS is blocked by a restrictive firewall and reseed has failed."
-msgstr "Schimbă acestea numai dacă HTTP este blocat de un firewall şi reseed-ul transferului a eşuat."
 
 msgid "Reseed URLs"
 msgstr "Reseed URLs"
@@ -5304,6 +5338,9 @@ msgstr "Această opțiune va folosi HTTP Outproxy de la I2P pentru Reseed sau pl
 
 msgid "I2P Outproxy"
 msgstr "I2P Outproxy"
+
+msgid "Port"
+msgstr "Port"
 
 msgid "Use HTTP Proxy for HTTP Reseed Hosts"
 msgstr "Utilizați proxy HTTP pentru gazdele de reseed HTTP"
@@ -5417,6 +5454,12 @@ msgstr "Bară laterală unificată"
 msgid "Use the same sidebar on all pages"
 msgstr "Folosiți aceeași bară laterală pe toate paginile"
 
+msgid "Sticky sidebar"
+msgstr ""
+
+msgid "Enable conditional fixed sidebar"
+msgstr ""
+
 msgid "config stats"
 msgstr "config statistici"
 
@@ -5473,6 +5516,12 @@ msgstr "Pentru a modifica setările tunelului client, utilizați <a href=/i2ptun
 
 msgid "To enable session-only changes to the client tunnels, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
 msgstr "Pentru a activa modificările numai pentru sesiune ale tunelurilor client, activați <a href=/help/advancedsettings>modul avansat</a> al consolei."
+
+msgid "config UI"
+msgstr "configurare UI"
+
+msgid "User Interface Configuration"
+msgstr "Configurare interfață utilizator"
 
 msgid "Router Console Theme"
 msgstr "Tema Consolei Router-ului"
@@ -5610,14 +5659,20 @@ msgstr "Eroare 404"
 msgid "not found"
 msgstr "nu s-a găsit"
 
+msgid "router logs"
+msgstr "Jurnale router"
+
+msgid "Critical / Error Level Logs"
+msgstr "Jurnale cu nivel critic/eroare"
+
+msgid "Clear logs"
+msgstr "Șterge jurnale"
+
 msgid "events"
 msgstr "evenimente"
 
 msgid "Event Log"
 msgstr "Jurnal de evenimente"
-
-msgid "Combined"
-msgstr "Combinat"
 
 msgid "graph"
 msgstr "grafic"
@@ -6126,7 +6181,7 @@ msgstr "Pentru a face consola accesibilă în rețeaua mea locală, editați fi�
 msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
 msgstr "Exemplu: Pentru a permite accesul de la localhost și 192.168.1.10 prin HTTP și HTTPS:"
 
-msgid "For most client services, change listening address for relevant service in Tunnel Manager's configuration section using <i>reachable by</i> dropdown."
+msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager's configuration section using the <i>reachable by</i> dropdown."
 msgstr ""
 
 msgid "How do I connect to IRC within I2P?"
@@ -7326,34 +7381,6 @@ msgstr "statistici coadă de locuri de muncă"
 msgid "Job Queue Stats"
 msgstr "Statistici coadă de locuri de muncă"
 
-msgid "logs"
-msgstr "Jurnale"
-
-msgid "Please include your I2P version and running environment information in bug reports"
-msgstr "Vă rugăm să includeți versiunea I2P și informațiile despre mediul de funcționare în rapoartele de erori"
-
-#, java-format
-msgid "Please report bugs on {0} or {1}."
-msgstr "Vă rugăm să raportați bug-uri pe {0} sau {1}."
-
-msgid "View event log"
-msgstr "Vizualizare jurnal evenimente"
-
-msgid "Critical / Error Level Logs"
-msgstr "Jurnale cu nivel critic/eroare"
-
-msgid "Clear logs"
-msgstr "Șterge jurnale"
-
-msgid "Configure router logging options"
-msgstr "Configurați opțiunile de înregistrare a routerului"
-
-msgid "Filter Router log output"
-msgstr "Filtrează ieșirea log-ului routerului"
-
-msgid "Service (Wrapper) Logs"
-msgstr "Servicii (Wrapper) jurnale"
-
 msgid "network database"
 msgstr "baza de date a rețelei"
 
@@ -7374,6 +7401,9 @@ msgstr "Serviciu public găzduit local"
 
 msgid "Requested client leaseset"
 msgstr "LeaseSet client solicitat"
+
+msgid "Remote"
+msgstr ""
 
 msgid "network database router map"
 msgstr "Harta routerului din bază de date de rețea"
@@ -7418,164 +7448,26 @@ msgstr "Parteneri blocați"
 msgid "Fast / High Capacity"
 msgstr "Rapid / Capacitate mare"
 
-msgid "router logs"
-msgstr "Jurnale router"
+msgid "Configure router logging options"
+msgstr "Configurați opțiunile de înregistrare a routerului"
+
+msgid "View event log"
+msgstr "Vizualizare jurnal evenimente"
+
+msgid "Filter Router log output"
+msgstr "Filtrează ieșirea log-ului routerului"
 
 msgid "service logs"
 msgstr "Jurnale de servicii"
 
-msgid "Manage I2P addresses"
-msgstr "Gestionați adresele I2P"
-
-msgid "Imagegen"
-msgstr "Imagegen"
-
-msgid "Create and download torrents"
-msgstr "Creați și descărcați torrente"
-
-msgid "Manage client and server tunnels"
-msgstr "Gestionați tunelurile client și server"
-
-msgid "Webmail client"
-msgstr "Client webmail"
-
-msgid "Webmail"
-msgstr "Webmail"
-
-msgid "Local webserver for hosting content on the I2P network"
-msgstr "Server web local pentru găzduirea conținutului în rețeaua I2P"
+msgid "Service (Wrapper) Logs"
+msgstr "Servicii (Wrapper) jurnale"
 
 msgid "Information &amp; Diagnostics"
 msgstr "Informații"
 
-msgid "Review recent updates to I2P"
-msgstr "Examinați actualizările recente ale I2P"
-
-msgid "View debugging information"
-msgstr "Vizualizați informațiile de depanare"
-
-msgid "View router performance graphs"
-msgstr "Vizualizați graficele de performanță a routerului"
-
-msgid "Router help section"
-msgstr "Secțiunea de ajutor pentru router"
-
-msgid "Router homepage"
-msgstr "Pagina principală a routerului"
-
-msgid "Home"
-msgstr "Acasă"
-
-msgid "View news relating to I2P"
-msgstr "Vezi știri referitoare la I2P"
-
-msgid "I2P News"
-msgstr "Noutăți I2P"
-
-msgid "View router workload and stats"
-msgstr "Vezi volumul de lucru și statisticile routerului"
-
-msgid "Router Jobs"
-msgstr "Lucrări de router"
-
-msgid "View router logs"
-msgstr "Vizualizați jurnalele routerului"
-
-msgid "View information and stats regarding all known peers"
-msgstr "Vizualizați informații și statistici cu privire la toți colegii cunoscuți"
-
-msgid "View active peers"
-msgstr "Vedeți colegii activi"
-
-msgid "View peer performance profiles"
-msgstr "Vizualizați profilurile de performanță ale colegilor"
-
-msgid "View information about router and running environment"
-msgstr "Vizualizați informații despre router și mediul de rulare"
-
-msgid "Statistics"
-msgstr "Statistici"
-
-msgid "Current console and webapp translation report"
-msgstr "Raportul actual de traducere a consolii și a aplicației web"
-
-msgid "Translation Status"
-msgstr "Starea traducerii"
-
-msgid "View active tunnels"
-msgstr "Vezi tunelurile active"
-
-msgid "Customize homepage"
-msgstr "Personalizați pagina de pornire"
-
-msgid "Homepage"
-msgstr "Pagina de pornire"
-
-msgid "Configure I2P Client Control Interface"
-msgstr "Configurați interfața de control client I2P"
-
-msgid "View or edit router keyring for encrypted destinations"
-msgstr "Vizualizați sau editați cheile routerului pentru destinații criptate"
-
-msgid "Configure router networking options"
-msgstr "Configurați opțiunile de rețea a routerului"
-
-msgid "Manually edit peers and view banned peers and blocklist"
-msgstr "Editați manual colegii și vizualizați colegii interziși și lista blocată"
-
-msgid "Install and manage router plugins"
-msgstr "Instalați și gestionați pluginurile de router"
-
-msgid "Router reseeding and configuration"
-msgstr "Reînsămânțare și configurare router"
-
-msgid "Configure and manage Router family"
-msgstr "Configurați și gestionați familia de routere"
-
-msgid "Manage Router service"
-msgstr "Gestionați serviciul Router"
-
-msgid "Configure stat collection for graphing"
-msgstr "Configurați colecția de statistici pentru graficare"
-
-msgid "Router Stats"
-msgstr "Statistici router"
-
-msgid "Configure router updates"
-msgstr "Configurați actualizările routerului"
-
-msgid "Configuration wizard for new users"
-msgstr "Asistent de configurare pentru utilizatori noi"
-
-msgid "Setup Wizard"
-msgstr "Asistent de configurare"
-
-msgid "Customize sidebar"
-msgstr "Personalizați bara laterală"
-
-msgid "Configure tunnel options"
-msgstr "Configurați opțiunile de tunel"
-
-msgid "Configure router user interface and optional console password"
-msgstr "Configurați interfața de utilizator a routerului și parola opțională a consolei"
-
-msgid "Configuring I2P for optimal performance"
-msgstr "Configurarea I2P pentru performanță optimă"
-
-msgid "Information for new users"
-msgstr "Informații pentru utilizatori noi"
-
-msgid "A guide to reseeding your I2P router"
-msgstr "Un ghid pentru resemântarea routerului dvs. I2P"
-
-msgid "What to do in the event I2P isn't working"
-msgstr "Ce să faceți în cazul în care I2P nu funcționează"
-
-msgid "Introduction to tunnel filters"
-msgstr "Introducere în filtrele tunel"
-
-msgid "Tunnel Filters"
-msgstr "Filtre de tunel"
+msgid "Customize"
+msgstr ""
 
 msgid "statistics"
 msgstr "statistici"
@@ -7628,9 +7520,6 @@ msgstr "Comută identificatorii tunelurilor"
 msgid "Toggle Tunnels"
 msgstr "Comută tunelurile"
 
-msgid "Updating sidebar sections"
-msgstr "Actualizare secțiuni bară laterală"
-
 msgid "Peer Profile"
 msgstr "Profil partener"
 
@@ -7655,14 +7544,17 @@ msgstr "Înapoi la început"
 msgid "webmail"
 msgstr "webmail"
 
+msgid "Webmail"
+msgstr "Webmail"
+
 msgid "New Install Wizard"
 msgstr "Expertul de instalare nou"
 
 msgid "Skip Setup"
 msgstr "Sari peste configurare"
 
-msgid "Select the language to be used for the router console and web applications (<a href=/webmail target=_blank rel=noreferrer>webmail</a>, <a href=/torrents target=_blank rel=noreferrer>torrents</a>, <a href=/i2ptunnelmgr target=_blank rel=noreferrer>tunnel manager</a> etc). If you wish to change the language in future, change the router console theme, or configure a password to access the console, you may do so on the <a href=/configui target=_blank rel=noreferrer>User Interface configuration page</a>."
-msgstr "Selectați limba care va fi utilizată pentru consola și aplicațiile web ale ruterei (<a href=/webmail target=_blank rel=noreferrer>webmail</a>, <a href=/torrents target=_blank rel=noreferrer>torrents</a>, <a href=/i2ptunnelmgr target=_blank rel=noreferrer>gestionar tunnel</a> etc). Dacă doriți să schimbați limba în viitor, să schimbați tema consolei routerului sau să configurați o parolă pentru a accesa consola, puteți face acest lucru pe pagina de configurare a <a href=/configui target=_blank rel=noreferrer>interfeței utilizatorului</a>."
+msgid "Select the language to be used for the router console and web applications ("
+msgstr ""
 
 msgid "Router Console &amp; WebApps Display Language"
 msgstr "Limbă de afișare consolă router și aplicații web"
@@ -7731,6 +7623,13 @@ msgid "Bandwidth Configuration"
 msgstr "Configurarea lățimii de bandă"
 
 #, java-format
+msgid "You have configured I2P+ to share only {0} KBps."
+msgstr "Ați configurat I2P să partajeaze doar {0} kbps."
+
+msgid "I2P+ requires at least 12KBps to enable sharing. "
+msgstr "I2P necesită cel puțin 12KBps pentru a permite partajarea."
+
+#, java-format
 msgid "You have configured I2P+ to share {0} KBps."
 msgstr "Ați configurat I2P să partajeze {0} kbps."
 
@@ -7740,8 +7639,8 @@ msgstr "I2P necesită un browser web configurat să utilizeze proxy-ul HTTP rezi
 msgid "Browser Setup"
 msgstr "Configurare browser"
 
-msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. For more help, see <a href=https://geti2p.net/htproxyports target=_blank rel=noreferrer>the configuration guide</a>, or <a href=/help/configuration#browserconfig>the mini-tutorial for Firefox</a>."
-msgstr "Pentru a accesa site-uri găzduite în rețeaua I2P și, opțional, pentru a utiliza proxy-ul HTTP implicit pentru a se conecta la site-uri pe clearnet, va trebui să configurați browserul să utilizeze proxy-ul I2P+ <b>HTTP</b>, care rulează implicit pe <code>127.0.0.1 port 4444</code>. Pentru mai multe informații, consultați <a href=https://geti2p.net/htproxyports target=_blank rel=noreferrer>ghidul de configurare</a>, sau <a href=/help/configuration#browserconfig>mini-tutorialul pentru Firefox</a>."
+msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. "
+msgstr ""
 
 msgid "Welcome to I2P+!"
 msgstr "Bine ați venit la I2P+!"
@@ -7749,8 +7648,8 @@ msgstr "Bine ați venit la I2P+!"
 msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
 msgstr "Când porniți I2P, este posibil să dureze câteva minute pentru a încărca routerul (integra) routerul în rețea și pentru a găsi colegi suplimentari, așa că vă rugăm să aveți răbdare."
 
-msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P+."
-msgstr "Odată ce stelele verzi sunt indicate lângă tunelurile dvs. locale, există o mare varietate de lucruri pe care le puteți face cu I2P."
+msgid "Once green stars are indicated next to your Service Tunnels, there is a wide variety of things you can do with I2P+."
+msgstr ""
 
 msgid "Unknown Wizard page"
 msgstr "Pagină Expert necunoscut"
@@ -7769,4 +7668,74 @@ msgstr "Următorul"
 
 msgid "Finished"
 msgstr "Finalizat"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#, java-format
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

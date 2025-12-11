@@ -214,12 +214,6 @@ msgstr "I2PMail"
 msgid "No new messages"
 msgstr "Keine neue Nachricht"
 
-msgid "Checking for new messages on server"
-msgstr "Überprüfe auf neue Emails vom Server"
-
-msgid "Refresh the page for updates"
-msgstr "Seite aktualisieren für Updates "
-
 #, java-format
 msgid "{0} is an I2P-exclusive service provided by {1}."
 msgstr "{0} ist ein I2P-exklusiver Dienst, der von {1} bereitgestellt wird."
@@ -227,6 +221,12 @@ msgstr "{0} ist ein I2P-exklusiver Dienst, der von {1} bereitgestellt wird."
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
 msgstr "{0} webmail client &copy Susi 2004-2005."
+
+msgid "Checking for new messages on server"
+msgstr "Überprüfe auf neue Emails vom Server"
+
+msgid "Refresh the page for updates"
+msgstr "Seite aktualisieren für Updates "
 
 msgid "Removed tracking image placeholder"
 msgstr "Platzhalter für Verfolgungsbild entfernt"
@@ -338,6 +338,9 @@ msgstr "Nachrichten abrufen"
 msgid "Refresh Page"
 msgstr "Seite aktualisieren"
 
+msgid "Change to Folder"
+msgstr "Zu Verzeichnis wechseln"
+
 #, java-format
 msgid "1 Message"
 msgid_plural "{0} Messages"
@@ -356,18 +359,6 @@ msgstr "Größe"
 msgid "Mark for deletion"
 msgstr "Zur Löschung markieren"
 
-msgid "Message contains HTML"
-msgstr "Nachricht enthält HTML"
-
-msgid "Message is new"
-msgstr "Nachricht ist neu"
-
-msgid "Message is spam"
-msgstr "Nachricht ist SPAM"
-
-msgid "Message body not downloaded"
-msgstr "Nachrichtentext nicht heruntergeladen"
-
 msgid "Really delete the marked messages?"
 msgstr "Sollen die markierten Nachrichten wirklich gelöscht werden?"
 
@@ -383,8 +374,17 @@ msgstr "Alles markieren"
 msgid "Clear All"
 msgstr "Alle Markierungen aufheben"
 
-msgid "Change to Folder"
-msgstr "Zu Verzeichnis wechseln"
+msgid "Message contains HTML"
+msgstr "Nachricht enthält HTML"
+
+msgid "Message is new"
+msgstr "Nachricht ist neu"
+
+msgid "Message is spam"
+msgstr "Nachricht ist SPAM"
+
+msgid "Message body not downloaded"
+msgstr "Nachrichtentext nicht heruntergeladen"
 
 msgid "First"
 msgstr "erste"

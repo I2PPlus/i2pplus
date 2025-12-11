@@ -214,12 +214,6 @@ msgstr "I2PMail"
 msgid "No new messages"
 msgstr "Yeni bir ileti yok"
 
-msgid "Checking for new messages on server"
-msgstr "Sunucu üzerindeki yeni e-postalar denetleniyor"
-
-msgid "Refresh the page for updates"
-msgstr "Güncellemek için sayfayı yenileyin"
-
 #, java-format
 msgid "{0} is an I2P-exclusive service provided by {1}."
 msgstr "{0}, {1} tarafından sağlanan I2P'ye özel bir hizmettir."
@@ -227,6 +221,12 @@ msgstr "{0}, {1} tarafından sağlanan I2P'ye özel bir hizmettir."
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
 msgstr "{0} webmail client &copy Susi 2004-2005."
+
+msgid "Checking for new messages on server"
+msgstr "Sunucu üzerindeki yeni e-postalar denetleniyor"
+
+msgid "Refresh the page for updates"
+msgstr "Güncellemek için sayfayı yenileyin"
 
 msgid "Removed tracking image placeholder"
 msgstr "İzleme görseli yer tutucusu kaldırıldı"
@@ -338,6 +338,9 @@ msgstr "Postaları Denetle"
 msgid "Refresh Page"
 msgstr "Sayfayı Yenile"
 
+msgid "Change to Folder"
+msgstr "Klasörü Değiştir"
+
 #, java-format
 msgid "1 Message"
 msgid_plural "{0} Messages"
@@ -356,18 +359,6 @@ msgstr "Boyut"
 msgid "Mark for deletion"
 msgstr "Silinmek üzere işaretleyin"
 
-msgid "Message contains HTML"
-msgstr "Mesaj HTML içeriyor"
-
-msgid "Message is new"
-msgstr "İleti yeni"
-
-msgid "Message is spam"
-msgstr "İleti spam"
-
-msgid "Message body not downloaded"
-msgstr "Mesaj gövdesi indirilmedi"
-
 msgid "Really delete the marked messages?"
 msgstr "Seçilmiş iletileri gerçekten silmek istiyor musunuz?"
 
@@ -383,8 +374,17 @@ msgstr "Tümünü Seç"
 msgid "Clear All"
 msgstr "Tümünü Bırak"
 
-msgid "Change to Folder"
-msgstr "Klasörü Değiştir"
+msgid "Message contains HTML"
+msgstr "Mesaj HTML içeriyor"
+
+msgid "Message is new"
+msgstr "İleti yeni"
+
+msgid "Message is spam"
+msgstr "İleti spam"
+
+msgid "Message body not downloaded"
+msgstr "Mesaj gövdesi indirilmedi"
 
 msgid "First"
 msgstr "İlk"

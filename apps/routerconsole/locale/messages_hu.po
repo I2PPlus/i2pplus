@@ -73,8 +73,17 @@ msgstr "Szerzett {0} router-információkat a reseed gazdagépektől"
 msgid "Acquired {0} router infos from reseed hosts ({1} errors)"
 msgstr "Megszerzett {0} útválasztó információ az újraolvasott gazdagépektől ({1} hiba)"
 
+msgid "Clock step adjustment (ms)"
+msgstr "Óralépés beállítása (ms)"
+
+msgid "Size of tunnel acceptor backlog"
+msgstr "Az alagút elfogadó lemaradás mérete"
+
 msgid "Message receive rate (B/s)"
 msgstr "Üzenetfogadási sebesség (B/s)"
+
+msgid "Low-level receive rate (B/s)"
+msgstr "Alacsony szintű vételi sebesség (B/s)"
 
 msgid "Message send rate (B/s)"
 msgstr "Üzenetküldési sebesség (B/s)"
@@ -82,41 +91,35 @@ msgstr "Üzenetküldési sebesség (B/s)"
 msgid "Low-level send rate (B/s)"
 msgstr "Alacsony szintű küldési sebesség (B/s)"
 
-msgid "Low-level receive rate (B/s)"
-msgstr "Alacsony szintű vételi sebesség (B/s)"
-
-msgid "Total peers in our NetDb"
-msgstr "Összes társ a NetDb-nkban"
-
 msgid "Peers active in the last minute"
 msgstr "Az utolsó percben aktív társak"
-
-msgid "Known high capacity peers"
-msgstr "Ismert nagy kapacitású társak"
 
 msgid "Peers sent to in the last minute"
 msgstr "Az utolsó percben küldött társak"
 
+msgid "Total peers in our banlist"
+msgstr "Összes társa a banlistánkon"
+
+msgid "CPU load average of the JVM"
+msgstr "A JVM processzorterhelésének átlaga"
+
 msgid "Known fast peers"
 msgstr "Ismert gyors társak"
+
+msgid "Known high capacity peers"
+msgstr "Ismert nagy kapacitású társak"
 
 msgid "Known integrated (floodfill) peers"
 msgstr "Ismert integrált (flodfill) társak"
 
-msgid "Total peers in our banlist"
-msgstr "Összes társa a banlistánkon"
+msgid "Total peers in our NetDb"
+msgstr "Összes társ a NetDb-nkban"
+
+msgid "Total number of threads in use"
+msgstr ""
 
 msgid "Peers without a published IP address"
 msgstr "közzétett IP-cím nélküli társak"
-
-msgid "Size of tunnel acceptor backlog"
-msgstr "Az alagút elfogadó lemaradás mérete"
-
-msgid "Clock step adjustment (ms)"
-msgstr "Óralépés beállítása (ms)"
-
-msgid "CPU load average of the JVM"
-msgstr "A JVM processzorterhelésének átlaga"
 
 msgid "Average tunnel build success %"
 msgstr "Átlagos alagútépítési siker %"
@@ -1554,29 +1557,29 @@ msgstr "Újraindítás: {0}"
 msgid "Save order"
 msgstr "Megrendelés mentése"
 
+msgid "Restore full default"
+msgstr "Alapértelmezett értékek visszaállítása"
+
+msgid "Restore minimal default"
+msgstr "Minimális alapértelmezés visszaállítása"
+
 msgid "Sidebar preferences updated"
 msgstr "Az oldalsáv beállítások frissítve"
 
 msgid "Refresh interval must be a number"
 msgstr "A frissítési időköz csak szám lehet"
 
-msgid "Restore full default"
-msgstr "Alapértelmezett értékek visszaállítása"
-
 msgid "Full sidebar defaults restored."
 msgstr "A teljes oldalsáv alapértelmezett állapotok helyreállítva."
 
-msgid "Sidebar will refresh shortly."
-msgstr "Az oldalsáv hamarosan frissülni."
-
-msgid "Restore minimal default"
-msgstr "Minimális alapértelmezés visszaállítása"
-
-msgid "Minimal sidebar defaults restored."
-msgstr "A minimális oldalsáv alapértelmezett állapotok helyreállítva."
-
 msgid "Order must be an integer"
 msgstr "A sorrendnek egész számnak kell lennie"
+
+msgid "Saved order of sections."
+msgstr "A szakaszok elmentett sorrendje."
+
+msgid "Sidebar will refresh shortly."
+msgstr "Az oldalsáv hamarosan frissülni."
 
 msgid "No section selected"
 msgstr "Nincs szekció kiválasztva"
@@ -1586,9 +1589,6 @@ msgstr "Nincs rendelés"
 
 msgid "Moved"
 msgstr "Áthelyezve"
-
-msgid "Saved order of sections."
-msgstr "A szakaszok elmentett sorrendje."
 
 msgid "Full statistics enabled"
 msgstr "Teljes statisztika engedélyezve"
@@ -2417,6 +2417,9 @@ msgstr "A HTTP proxy nincs bekapcsolva"
 msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
 msgstr "A böngésződ nincs megfelelően beállítva, hogy HTTP proxyt használjon a következőn: {0}"
 
+msgid "Errors"
+msgstr ""
+
 msgid "URL"
 msgstr "URL"
 
@@ -2691,29 +2694,23 @@ msgstr "vagy Sybil közel ehhez a routerhez"
 msgid "Lookup"
 msgstr "Lookup"
 
-msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
-msgstr "Soha ne tegye fel az útválasztó identitását, mivel felhasználható a helyének azonosításához."
+msgid "Select the field to search on"
+msgstr ""
 
-msgid "is banned"
-msgstr "be van tiltva"
-
-msgid "not found in network database"
-msgstr "nem található a hálózati adatbázisban"
-
-msgid "Bad Base64 Router hash"
-msgstr "Rossz Base64 Router hash"
-
-msgid "No routers with"
-msgstr "Nincs router ezzel: "
-
-msgid "Hash prefix"
-msgstr "Hash előtag"
-
-msgid "Port"
-msgstr "Port"
+msgid "e.g. cn hk"
+msgstr ""
 
 msgid "MTU"
 msgstr "MTU"
+
+msgid "Enter search value here"
+msgstr ""
+
+msgid "Router not found"
+msgstr ""
+
+msgid "No routers with"
+msgstr "Nincs router ezzel: "
 
 msgid "found in the network database"
 msgstr "megtalálva a hálózati adatbázisban"
@@ -2841,17 +2838,17 @@ msgstr "Lejárt {0} ezelőtt"
 msgid "Unknown"
 msgstr "Ismeretlen"
 
-msgid "Advanced mode - includes all statistics published by floodfills."
-msgstr "Haladó mód - tartalmazza az összes, floodfill által közzétett statisztikát."
-
-msgid "Compact mode - does not include statistics published by floodfills."
-msgstr "Kompakt mód - nem tartalmazza a floodfill által közzétett statisztikát."
-
 msgid "Network Database Router Statistics"
 msgstr "Hálózati Adatbázis Router Statisztika"
 
 msgid "Count"
 msgstr "Mennyiség"
+
+msgid "Under 12 KB/s"
+msgstr ""
+
+msgid "Over 2048 KB/s"
+msgstr ""
 
 msgid "Bandwidth Tier"
 msgstr "Sávszélesség szint"
@@ -2923,6 +2920,9 @@ msgstr "Közzétett"
 msgid "Hostname"
 msgstr "Hostnév"
 
+msgid "Whois"
+msgstr ""
+
 msgid "direct"
 msgstr "közvetlen"
 
@@ -2938,20 +2938,26 @@ msgstr "Az összes ilyen aláírástípusú útválasztó megjelenítése a NetD
 msgid "Show all routers with this encryption type in the NetDb"
 msgstr "Az összes ilyen titkosítási típussal rendelkező útválasztó megjelenítése a NetDb-ben"
 
-msgid "Addresses"
-msgstr "Címek"
-
-msgid "n/a"
-msgstr "nem elérhető"
-
 msgid "Show all routers with this address in the NetDb"
 msgstr "Az összes ezzel a címmel rendelkező útválasztó megjelenítése a NetDb-ben"
 
 msgid "Show all routers with this port in the NetDb"
 msgstr "Az ezzel a porttal rendelkező összes útválasztó megjelenítése a NetDb-ben"
 
-msgid "Routers"
-msgstr "Routerek"
+msgid "Maximum Transmission Unit"
+msgstr ""
+
+msgid "Show all routers with this MTU in the NetDb"
+msgstr ""
+
+msgid "Addresses"
+msgstr "Címek"
+
+msgid "Introducers"
+msgstr ""
+
+msgid "Network Id"
+msgstr "Hálózati azonosító"
 
 msgid "First heard about"
 msgstr "Először hallottam róla"
@@ -2962,11 +2968,8 @@ msgstr "Utoljára hallottam róla"
 msgid "Last heard from"
 msgstr "Utolsó hír"
 
-msgid "Network Id"
-msgstr "Hálózati azonosító"
-
-msgid "Count is always spoofed to avoid indicating router restarts"
-msgstr "A számlálás mindig hamisítva, hogy elkerülje a router újraindítások jelzését."
+msgid "Info"
+msgstr "Info"
 
 msgid "Hidden or starting up"
 msgstr "Rejtett vagy indul"
@@ -2995,17 +2998,32 @@ msgstr "SSU [IPv6]"
 msgid "SSU [IPv6] with Introducers"
 msgstr "IPv6 SSU, bevezetők"
 
+msgid "NTCP &amp; SSU with Introducers [IPv6 Only]"
+msgstr "IPv6 Csak NTCP, SSU, bevezetők"
+
 msgid "NTCP [IPv6]"
 msgstr "NTCP [IPv6]"
 
 msgid "NTCP [IPv6] &amp; SSU"
 msgstr "NTCP [IPv6] &amp; SSU"
 
-msgid "NTCP &amp; SSU with Introducers [IPv6 Only]"
-msgstr "IPv6 Csak NTCP, SSU, bevezetők"
-
 msgid "NTCP [IPv6] &amp; SSU with Introducers"
 msgstr "IPv6 NTCP, SSU, bevezetők"
+
+msgid "Local"
+msgstr "Helyi"
+
+msgid "Fast Tier"
+msgstr ""
+
+msgid "High Capacity Tier"
+msgstr ""
+
+msgid "Integrated Tier"
+msgstr ""
+
+msgid "Standard Tier"
+msgstr ""
 
 msgid "No peer connections available"
 msgstr "Nincsenek peer kapcsolatok"
@@ -3339,14 +3357,17 @@ msgstr "Legutoljára Hallott a Következőtől:"
 msgid "View/Edit"
 msgstr "Megtekintés/Szerkesztés"
 
-msgid "Unreachable"
-msgstr "Nem elérhető"
-
 msgid "OK"
 msgstr "Rendben"
 
 msgid "Test Fails"
 msgstr "Teszt sikertelen"
+
+msgid "Unreachable"
+msgstr "Nem elérhető"
+
+msgid "Most tests passing"
+msgstr ""
 
 msgid "Fast, High Capacity"
 msgstr "Gyors, Nagy Kapacitású"
@@ -3362,6 +3383,9 @@ msgstr "Elromló"
 
 msgid "Integrated"
 msgstr "Integrált"
+
+msgid "Configure Peer"
+msgstr ""
 
 msgid "Thresholds"
 msgstr "Küszöb"
@@ -3429,11 +3453,11 @@ msgstr "Legutolsó Helytelen Küldés"
 msgid "Last Bad Store"
 msgstr "Legutolsó Helytelen Tárolás"
 
-msgid "Capabilities in the NetDb, not used to determine profiles"
-msgstr "A NetDb képességei, amelyek nem használatosak profilok meghatározására"
-
 msgid "caps"
 msgstr "tető"
+
+msgid "Capabilities in the NetDb, not used to determine profiles"
+msgstr "A NetDb képességei, amelyek nem használatosak profilok meghatározására"
 
 msgid "Reachable"
 msgstr "Elérhető"
@@ -3606,6 +3630,9 @@ msgstr "Telepítéshez kattints az újraindításra"
 
 msgid "Click Shutdown and restart to install"
 msgstr "Telepítéshez kattints a lekapcsolás és újraindítás -ra"
+
+msgid "Unable"
+msgstr ""
 
 #, java-format
 msgid "{0}"
@@ -3800,9 +3827,6 @@ msgstr "Ábra router teljesítmény"
 msgid "Router Help and FAQ"
 msgstr "Router Súgó és GYIK"
 
-msgid "Info"
-msgstr "Info"
-
 msgid "Router information including transport addresses and UPnP scan"
 msgstr "Router információk, beleértve a szállítási címeket és az UPnP szkennelést"
 
@@ -3888,6 +3912,34 @@ msgstr "Floodfill engedélyezve"
 msgid "Total number of remote LeaseSets stored in our NetDb"
 msgstr "A NetDb-ben tárolt távoli LeaseSetek teljes száma"
 
+msgid "Declining transit tunnel requests during startup phase"
+msgstr "Az első 10 percben nem fogadunk el részt vevő alagút kérelmeket, amíg a router stabilizálódik"
+
+msgid "Declining transit tunnel requests as we are shutting down"
+msgstr "A részt vevő alagútkérelmek elutasítása a leállítás során"
+
+msgid "Router or network performance is impeding the building of transit tunnels"
+msgstr "Az útválasztó vagy a hálózat teljesítménye akadályozza a részt vevő alagutak építését"
+
+msgid "Router is currently hosting the configured maximum number of transit tunnels"
+msgstr "A router jelenleg a konfigurált maximális számú átjáró alagutat szolgáltatja"
+
+msgid "Router is currently using the configured maximum share bandwidth"
+msgstr "A router jelenleg a konfigurált maximális megosztott sávszélességet használja"
+
+msgid "Router is ready to build participating tunnels"
+msgstr "A router készen áll a részt vevő alagutak építésére"
+
+#, java-format
+msgid "Accepting transit tunnel requests; hosting {0} tunnels"
+msgstr "Résztvevő alagútkérések elfogadása; részvétel {0} alagútban"
+
+msgid "No transit tunnels are built when Hidden mode is active"
+msgstr "Nem épülnek részt vevő alagutak, ha a Rejtett üzemmód aktív"
+
+msgid "Router is configured to reject all transit tunnel requests"
+msgstr "Az útválasztó úgy van konfigurálva, hogy elutasítsa az összes részt vevő alagútkérést"
+
 msgid "Warning: ECDSA is not available. Update your Java or OS"
 msgstr "Figyelmeztetés: Az ECDSA nem elérhető. Frissítsd a Javádat vagy az operációs rendszeredet"
 
@@ -3923,6 +3975,9 @@ msgstr "A kitiltott társak száma"
 
 msgid "The total number of peers in our network database"
 msgstr "A hálózati adatbázisban szereplő összes kapcsolat száma"
+
+msgid "Total RouterInfos stored on disk"
+msgstr ""
 
 msgid "Known"
 msgstr "Ismert"
@@ -4034,34 +4089,6 @@ msgstr "Más útválasztók várólistán szereplő kérelmei az alagutakban val
 
 msgid "Backlog"
 msgstr "Vissznapló"
-
-msgid "Declining transit tunnel requests during startup phase"
-msgstr "Az első 10 percben nem fogadunk el részt vevő alagút kérelmeket, amíg a router stabilizálódik"
-
-msgid "Declining transit tunnel requests as we are shutting down"
-msgstr "A részt vevő alagútkérelmek elutasítása a leállítás során"
-
-msgid "Router or network performance is impeding the building of transit tunnels"
-msgstr "Az útválasztó vagy a hálózat teljesítménye akadályozza a részt vevő alagutak építését"
-
-msgid "Router is currently hosting the configured maximum number of transit tunnels"
-msgstr "A router jelenleg a konfigurált maximális számú átjáró alagutat szolgáltatja"
-
-msgid "Router is currently using the configured maximum share bandwidth"
-msgstr "A router jelenleg a konfigurált maximális megosztott sávszélességet használja"
-
-msgid "Router is ready to build participating tunnels"
-msgstr "A router készen áll a részt vevő alagutak építésére"
-
-#, java-format
-msgid "Accepting transit tunnel requests; hosting {0} tunnels"
-msgstr "Résztvevő alagútkérések elfogadása; részvétel {0} alagútban"
-
-msgid "No transit tunnels are built when Hidden mode is active"
-msgstr "Nem épülnek részt vevő alagutak, ha a Rejtett üzemmód aktív"
-
-msgid "Router is configured to reject all transit tunnel requests"
-msgstr "Az útválasztó úgy van konfigurálva, hogy elutasítsa az összes részt vevő alagútkérést"
 
 msgid "Statistics gathered during this router's uptime"
 msgstr "E router indítása óta gyűjtött statisztika"
@@ -4193,8 +4220,14 @@ msgstr "Nincs tárolt elemzés"
 msgid "Select stored analysis"
 msgstr "Válassza ki a tárolt elemzést"
 
+msgid "Review"
+msgstr ""
+
 msgid "Run analysis on Floodfills only"
 msgstr "Elemzés futtatása csak az árvízvédelmi tölteteken"
+
+msgid "Start Scan"
+msgstr ""
 
 msgid "Run analysis on all routers in NetDb"
 msgstr "Elemzés futtatása a NetDb összes routerén"
@@ -4358,6 +4391,12 @@ msgstr "MAX"
 msgid "Show all routers for this family in NetDb"
 msgstr "A család összes routerének megjelenítése a NetDb-ben"
 
+msgid "Routers"
+msgstr "Routerek"
+
+msgid "n/a"
+msgstr "nem elérhető"
+
 msgid "Last lookup successful"
 msgstr "Az utolsó keresés sikeres volt"
 
@@ -4409,9 +4448,6 @@ msgstr "Adatátvitel"
 msgid "Data"
 msgstr "Adatok"
 
-msgid "Limit"
-msgstr "Korlát"
-
 msgid "Receive on"
 msgstr "Fogadás a következőn"
 
@@ -4456,6 +4492,7 @@ msgstr "A router jelenleg rejtett üzemmódban működik, ami megakadályozza a 
 msgid "No transit tunnels currently active."
 msgstr "Jelenleg nincsenek aktív tranzitalagutak."
 
+#, java-format
 msgid "Transit Tunnels by Peer (Top {0})"
 msgstr "Tranzit alagutak partnerek szerint (Top {0})"
 
@@ -4467,9 +4504,6 @@ msgstr "Minden alagút Peer szerint"
 
 msgid "Primary IP address"
 msgstr "Elsődleges IP-cím"
-
-msgid "Local"
-msgstr "Helyi"
 
 msgid "unique peers"
 msgstr "egyedi társak"
@@ -4483,6 +4517,9 @@ msgstr "Transit"
 msgid "No local or transit tunnels currently active."
 msgstr "Jelenleg nincs aktív helyi vagy tranzitalagút."
 
+msgid "PRIVATE IP ADDRESS"
+msgstr ""
+
 msgid "Bandwidth Tiers"
 msgstr "Sávszélességszintek"
 
@@ -4492,6 +4529,9 @@ msgstr "Több mint {0} megosztott sávszélesség"
 
 msgid "Inbound or outbound?"
 msgstr "Bejövő vagy kimenő?"
+
+msgid "In/Out"
+msgstr ""
 
 msgid "Gateway"
 msgstr "Átjáró (Gateway)"
@@ -4608,6 +4648,9 @@ msgstr "I2P webszerver (eepsite)"
 msgid "Browser launch at startup"
 msgstr "Böngésző betöltése indításkor"
 
+msgid "I2P Router Console"
+msgstr ""
+
 msgid "Open Router Console in web browser at startup"
 msgstr "Indításkor a Router Konzol megnyitása böngészőben"
 
@@ -4683,12 +4726,6 @@ msgstr "kulcs"
 msgid "port"
 msgstr "port"
 
-msgid "config UI"
-msgstr "Kezelőfelüle"
-
-msgid "User Interface Configuration"
-msgstr "Felhasználói felület konfigurálása"
-
 msgid "Certificates"
 msgstr "Tanúsítványok"
 
@@ -4704,8 +4741,8 @@ msgstr "Sávszélesség-korlátozó"
 msgid "Advanced Network Configuration"
 msgstr "Speciális hálózati konfiguráció"
 
-msgid "I2P+ will work best if you configure your rates to match the speed of your internet connection."
-msgstr "Az I2P akkor működik legjobban, ha a sebesség értékeidet úgy állítod be, hogy egyezzen az internetkapcsolatod sebességével."
+msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
+msgstr ""
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
 msgstr "Megjegyzés: A hálózathoz való hozzájárulását (hálózati részesedés) az upstream sávszélesség (feltöltési sebesség) felosztása határozza meg."
@@ -4735,11 +4772,11 @@ msgid "NOTE"
 msgstr "MEGJEGYZÉS"
 
 #, java-format
-msgid "You have configured I2P+ to share only {0} KBps."
-msgstr "Az I2P-t úgy állítottad be, hogy csak {0} KB-t osszon meg másodpercenként."
+msgid "You have configured I2P to share only {0} KBps."
+msgstr ""
 
-msgid "I2P+ requires at least 12KBps to enable sharing. "
-msgstr "A megosztás engedélyezéséhez az I2P-nek legalább 12 KB/mp-re van szüksége."
+msgid "I2P requires at least 12KBps to enable sharing. "
+msgstr ""
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
 msgstr "Kérlek, engedélyezd a megosztást (részvételt az alagutakban) több sávszélesség beállítása által."
@@ -5236,8 +5273,8 @@ msgstr "újratáplálás beállítása"
 msgid "Reseeding is the bootstrapping process used to find other routers when you first install I2P, or when your router has too few router references remaining."
 msgstr "Újratáplálás (reseeding) az az előtöltési folyamat, mely más routerek keresésére szolgál az I2P telepítésekor, vagy amikor a routernek túl kevés router referenciája marad."
 
-msgid "To enable the configuration of reseed urls, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
-msgstr "Az újraolvasott URL-ek beállításának engedélyezéséhez aktiválja a konzol <a href=/help/advancedsettings>Speciális módját</a>."
+msgid "To enable the configuration of reseed urls, activate the console's <a href=/help/advancedsettings>Advanced mode</a>."
+msgstr ""
 
 msgid "Reseeding Configuration"
 msgstr "Újratáplálási (reseed) Beállítások"
@@ -5247,9 +5284,6 @@ msgstr "Segítség az újravetésben"
 
 msgid "Reseeding Help"
 msgstr "Újravetés Súgó"
-
-msgid "Change these only if HTTPS is blocked by a restrictive firewall and reseed has failed."
-msgstr "Csak akkor módosítsa ezeket, ha a HTTPS-t korlátozó tűzfal blokkolja, és az újratöltés sikertelen."
 
 msgid "Reseed URLs"
 msgstr "Újratáplálási URL-ek"
@@ -5286,6 +5320,9 @@ msgstr "Ez az opció az I2P HTTP outproxyját fogja használni az újratöltésh
 
 msgid "I2P Outproxy"
 msgstr "I2P Külső Proxy"
+
+msgid "Port"
+msgstr "Port"
 
 msgid "Use HTTP Proxy for HTTP Reseed Hosts"
 msgstr "Használjon HTTP proxyt a HTTP újraolvasó gazdagépekhez"
@@ -5399,6 +5436,12 @@ msgstr "Egységesített oldalsáv"
 msgid "Use the same sidebar on all pages"
 msgstr "Ugyanazon oldalsáv használata az összes oldalon"
 
+msgid "Sticky sidebar"
+msgstr ""
+
+msgid "Enable conditional fixed sidebar"
+msgstr ""
+
 msgid "config stats"
 msgstr "státusz beállításai"
 
@@ -5455,6 +5498,12 @@ msgstr "Az ügyfél alagút beállításainak módosításához használja a <a 
 
 msgid "To enable session-only changes to the client tunnels, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
 msgstr "A kliens alagutakhoz csak a munkamenet során módosításokat tenni aktiválja a konzol <a href=\"/help/advancedsettings\">Speciális módját</a>."
+
+msgid "config UI"
+msgstr "Kezelőfelüle"
+
+msgid "User Interface Configuration"
+msgstr "Felhasználói felület konfigurálása"
 
 msgid "Router Console Theme"
 msgstr "Router Konzol Téma"
@@ -5592,14 +5641,20 @@ msgstr "Hiba 404"
 msgid "not found"
 msgstr "nem található"
 
+msgid "router logs"
+msgstr "Router naplók"
+
+msgid "Critical / Error Level Logs"
+msgstr "Kritikus / hibaszintű naplók"
+
+msgid "Clear logs"
+msgstr "Tiszta naplók"
+
 msgid "events"
 msgstr "események"
 
 msgid "Event Log"
 msgstr "Eseménynapló"
-
-msgid "Combined"
-msgstr "Kombinált"
 
 msgid "graph"
 msgstr "Grafikon"
@@ -6108,7 +6163,7 @@ msgstr "Ahhoz, hogy a konzol elérhető legyen a helyi hálózaton, szerkessze m
 msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
 msgstr "Példa: Hozzáférés engedélyezése localhost-ról és 192.168.1.10-ről HTTP-n és HTTPS-en keresztül:"
 
-msgid "For most client services, change listening address for relevant service in Tunnel Manager's configuration section using <i>reachable by</i> dropdown."
+msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager's configuration section using the <i>reachable by</i> dropdown."
 msgstr ""
 
 msgid "How do I connect to IRC within I2P?"
@@ -7308,34 +7363,6 @@ msgstr "feladatsor statisztika"
 msgid "Job Queue Stats"
 msgstr "Feladatsorok statisztikái"
 
-msgid "logs"
-msgstr "napló"
-
-msgid "Please include your I2P version and running environment information in bug reports"
-msgstr "Kérjük, adja meg az I2P verzióját és a futókörnyezet adatait a hibajelentésekben"
-
-#, java-format
-msgid "Please report bugs on {0} or {1}."
-msgstr "Kérlek, jelentsd a hibákat a következőkön: {0} vagy {1}."
-
-msgid "View event log"
-msgstr "Eseménynapló megtekintése"
-
-msgid "Critical / Error Level Logs"
-msgstr "Kritikus / hibaszintű naplók"
-
-msgid "Clear logs"
-msgstr "Tiszta naplók"
-
-msgid "Configure router logging options"
-msgstr "Az útválasztó naplózási beállításainak konfigurálása"
-
-msgid "Filter Router log output"
-msgstr "Router naplófájl kimenetének szűrése"
-
-msgid "Service (Wrapper) Logs"
-msgstr "Szolgáltatás (Wrapper) Napló"
-
 msgid "network database"
 msgstr "hálózati adatbázis"
 
@@ -7356,6 +7383,9 @@ msgstr "Helyile hosztolt publikus szolgáltatás"
 
 msgid "Requested client leaseset"
 msgstr "Kért kliens LeaseSet"
+
+msgid "Remote"
+msgstr ""
 
 msgid "network database router map"
 msgstr "Hálózati adatbázis router térképe"
@@ -7400,164 +7430,26 @@ msgstr "Kitiltott Társak"
 msgid "Fast / High Capacity"
 msgstr "Gyors / Nagy kapacitás"
 
-msgid "router logs"
-msgstr "Router naplók"
+msgid "Configure router logging options"
+msgstr "Az útválasztó naplózási beállításainak konfigurálása"
+
+msgid "View event log"
+msgstr "Eseménynapló megtekintése"
+
+msgid "Filter Router log output"
+msgstr "Router naplófájl kimenetének szűrése"
 
 msgid "service logs"
 msgstr "Szolgáltatás naplók"
 
-msgid "Manage I2P addresses"
-msgstr "I2P-címek kezelése"
-
-msgid "Imagegen"
-msgstr "Imagegen"
-
-msgid "Create and download torrents"
-msgstr "Torrentek létrehozása és letöltése"
-
-msgid "Manage client and server tunnels"
-msgstr "Ügyfél- és szerveralagutak kezelése"
-
-msgid "Webmail client"
-msgstr "Webmail kliens"
-
-msgid "Webmail"
-msgstr "Webmail"
-
-msgid "Local webserver for hosting content on the I2P network"
-msgstr "Helyi webszerver tartalom tárolására az I2P hálózaton"
+msgid "Service (Wrapper) Logs"
+msgstr "Szolgáltatás (Wrapper) Napló"
 
 msgid "Information &amp; Diagnostics"
 msgstr "Információ"
 
-msgid "Review recent updates to I2P"
-msgstr "Tekintse át az I2P legutóbbi frissítéseit"
-
-msgid "View debugging information"
-msgstr "Hibakeresési információk megtekintése"
-
-msgid "View router performance graphs"
-msgstr "Az útválasztó teljesítménydiagramjainak megtekintése"
-
-msgid "Router help section"
-msgstr "A router súgója"
-
-msgid "Router homepage"
-msgstr "Router honlapja"
-
-msgid "Home"
-msgstr "Otthon"
-
-msgid "View news relating to I2P"
-msgstr "Az I2P-vel kapcsolatos hírek megtekintése"
-
-msgid "I2P News"
-msgstr "I2P Hírek"
-
-msgid "View router workload and stats"
-msgstr "Az útválasztó munkaterhelésének és statisztikáinak megtekintése"
-
-msgid "Router Jobs"
-msgstr "Útválasztó feladatok"
-
-msgid "View router logs"
-msgstr "Az útválasztó naplóinak megtekintése"
-
-msgid "View information and stats regarding all known peers"
-msgstr "Információk és statisztikák megtekintése az összes ismert társról"
-
-msgid "View active peers"
-msgstr "Aktív társak megtekintése"
-
-msgid "View peer performance profiles"
-msgstr "Peer teljesítményprofilok megtekintése"
-
-msgid "View information about router and running environment"
-msgstr "Információk megtekintése az útválasztóról és a futó környezetről"
-
-msgid "Statistics"
-msgstr "Statisztika"
-
-msgid "Current console and webapp translation report"
-msgstr "Jelenlegi konzol és webalkalmazás fordítási jelentés"
-
-msgid "Translation Status"
-msgstr "Fordítási állapot"
-
-msgid "View active tunnels"
-msgstr "Aktív alagutak megtekintése"
-
-msgid "Customize homepage"
-msgstr "A kezdőlap testreszabása"
-
-msgid "Homepage"
-msgstr "Honlap"
-
-msgid "Configure I2P Client Control Interface"
-msgstr "I2P kliens vezérlőfelület konfigurálása"
-
-msgid "View or edit router keyring for encrypted destinations"
-msgstr "Az útválasztó kulcstartójának megtekintése vagy szerkesztése titkosított célállomásokhoz"
-
-msgid "Configure router networking options"
-msgstr "Az útválasztó hálózati beállításainak konfigurálása"
-
-msgid "Manually edit peers and view banned peers and blocklist"
-msgstr "Manuálisan szerkessze a társakat, és tekintse meg a kitiltott partnereket és a blokklistát"
-
-msgid "Install and manage router plugins"
-msgstr "Az útválasztó beépülő moduljainak telepítése és kezelése"
-
-msgid "Router reseeding and configuration"
-msgstr "Router újravetése és konfigurálása"
-
-msgid "Configure and manage Router family"
-msgstr "A router család konfigurálása és kezelése"
-
-msgid "Manage Router service"
-msgstr "Router szolgáltatás kezelése"
-
-msgid "Configure stat collection for graphing"
-msgstr "Statisztikai gyűjtemény konfigurálása grafikus ábrázoláshoz"
-
-msgid "Router Stats"
-msgstr "Útválasztó statisztika"
-
-msgid "Configure router updates"
-msgstr "Az útválasztó frissítéseinek konfigurálása"
-
-msgid "Configuration wizard for new users"
-msgstr "Konfigurációs varázsló új felhasználók számára"
-
-msgid "Setup Wizard"
-msgstr "Telepítő varázsló"
-
-msgid "Customize sidebar"
-msgstr "Az oldalsáv testreszabása"
-
-msgid "Configure tunnel options"
-msgstr "Az alagútbeállítások konfigurálása"
-
-msgid "Configure router user interface and optional console password"
-msgstr "Az útválasztó felhasználói felületének és az opcionális konzoljelszó konfigurálása"
-
-msgid "Configuring I2P for optimal performance"
-msgstr "I2P konfigurálása az optimális teljesítmény érdekében"
-
-msgid "Information for new users"
-msgstr "Információ új felhasználóknak"
-
-msgid "A guide to reseeding your I2P router"
-msgstr "Útmutató az I2P útválasztó újratöltéséhez"
-
-msgid "What to do in the event I2P isn't working"
-msgstr "Mi a teendő, ha az I2P nem működik"
-
-msgid "Introduction to tunnel filters"
-msgstr "Bevezetés az alagútszűrőkbe"
-
-msgid "Tunnel Filters"
-msgstr "Alagútszűrők"
+msgid "Customize"
+msgstr ""
 
 msgid "statistics"
 msgstr "statisztika"
@@ -7610,9 +7502,6 @@ msgstr "Alagútazonosítók váltása"
 msgid "Toggle Tunnels"
 msgstr "Alagutak váltása"
 
-msgid "Updating sidebar sections"
-msgstr "Oldalsáv szakaszok frissítése"
-
 msgid "Peer Profile"
 msgstr "Társ Profil"
 
@@ -7637,14 +7526,17 @@ msgstr "Vissza a lap tetejére"
 msgid "webmail"
 msgstr "webmail"
 
+msgid "Webmail"
+msgstr "Webmail"
+
 msgid "New Install Wizard"
 msgstr "Új telepítő varázsló"
 
 msgid "Skip Setup"
 msgstr "Beállítás kihagyása"
 
-msgid "Select the language to be used for the router console and web applications (<a href=/webmail target=_blank rel=noreferrer>webmail</a>, <a href=/torrents target=_blank rel=noreferrer>torrents</a>, <a href=/i2ptunnelmgr target=_blank rel=noreferrer>tunnel manager</a> etc). If you wish to change the language in future, change the router console theme, or configure a password to access the console, you may do so on the <a href=/configui target=_blank rel=noreferrer>User Interface configuration page</a>."
-msgstr "Válassza ki a nyelvet, amelyet a hangosító konzol és webes alkalmazások (<a href=/webmail target=_blank rel=noreferrer>webmail</a>, <a href=/torrents target=_blank rel=noreferrer>torrentek</a>, <a href=/i2ptunnelmgr target=_blank rel=noreferrer>tunnelkezelő</a> stb.) használjanak. Ha a jövőben meg szeretné változtatni a nyelvet, a hangosító konzol témáját, vagy beállítani egy jelszót a konzolhoz való hozzáféréshez, megteheti a <a href=/configui target=_blank rel=noreferrer>Felhasználói felület beállítások oldalon</a>."
+msgid "Select the language to be used for the router console and web applications ("
+msgstr ""
 
 msgid "Router Console &amp; WebApps Display Language"
 msgstr "Az útválasztó konzol és a WebApps megjelenítési nyelve"
@@ -7713,6 +7605,13 @@ msgid "Bandwidth Configuration"
 msgstr "Sávszélesség-konfiguráció"
 
 #, java-format
+msgid "You have configured I2P+ to share only {0} KBps."
+msgstr "Az I2P-t úgy állítottad be, hogy csak {0} KB-t osszon meg másodpercenként."
+
+msgid "I2P+ requires at least 12KBps to enable sharing. "
+msgstr "A megosztás engedélyezéséhez az I2P-nek legalább 12 KB/mp-re van szüksége."
+
+#, java-format
 msgid "You have configured I2P+ to share {0} KBps."
 msgstr "Úgy állítottad be az I2P-t, hogy {0} KB/mp-t osszon meg."
 
@@ -7722,8 +7621,8 @@ msgstr "Az I2P+ olyan webböngészőt igényel, amely a rezidens HTTP-proxy hasz
 msgid "Browser Setup"
 msgstr "Böngésző beállítása"
 
-msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. For more help, see <a href=https://geti2p.net/htproxyports target=_blank rel=noreferrer>the configuration guide</a>, or <a href=/help/configuration#browserconfig>the mini-tutorial for Firefox</a>."
-msgstr "Annak érdekében, hogy hozzáférhess a weboldalakhoz az I2P hálózaton keresztül, és opcionálisan használhassanak egy alapértelmezett kimeneti proxyt a weboldalakhoz való kapcsolódáshoz a tiszta interneten, be kell állítanod a böngésződet, hogy használja az I2P+ <b>HTTP</b> proxyt, alapértelmezetten működik a <code>127.0.0.1 port 4444</code> címen. További információért lásd a <a href=https://geti2p.net/htproxyports target=_blank rel=noreferrer>konfigurációs útmutatót</a>, vagy <a href=/help/configuration#browserconfig>a mini-tanulóanyagot a Firefox számára</a>."
+msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. "
+msgstr ""
 
 msgid "Welcome to I2P+!"
 msgstr "Üdvözöl az I2P+!"
@@ -7731,8 +7630,8 @@ msgstr "Üdvözöl az I2P+!"
 msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
 msgstr "Amikor elindítja az I2P-t, eltarthat néhány percig, amíg az útválasztót beindítja (integrálja) a hálózatba, és további társakat talál, ezért kérjük, legyen türelemmel."
 
-msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P+."
-msgstr "Ha a helyi alagutak mellett zöld csillagok láthatók, sokféle dolgot tehetsz az I2P-vel."
+msgid "Once green stars are indicated next to your Service Tunnels, there is a wide variety of things you can do with I2P+."
+msgstr ""
 
 msgid "Unknown Wizard page"
 msgstr "Ismeretlen varázsló oldal"
@@ -7751,4 +7650,74 @@ msgstr "Következő"
 
 msgid "Finished"
 msgstr "Befejeződött"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#, java-format
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

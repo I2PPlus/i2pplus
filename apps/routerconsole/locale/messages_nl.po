@@ -73,8 +73,17 @@ msgstr "{0} routerinformatie verkregen van opnieuw geplaatste hosts"
 msgid "Acquired {0} router infos from reseed hosts ({1} errors)"
 msgstr "{0} routergegevens verkregen van opnieuw geplaatste hosts ({1} fouten)"
 
+msgid "Clock step adjustment (ms)"
+msgstr "Klokstapaanpassing (ms)"
+
+msgid "Size of tunnel acceptor backlog"
+msgstr "Grootte van tunnel acceptor backlog"
+
 msgid "Message receive rate (B/s)"
 msgstr "Ontvangstsnelheid van berichten (B/s)"
+
+msgid "Low-level receive rate (B/s)"
+msgstr "Ontvangstsnelheid op laag niveau (B/s)"
 
 msgid "Message send rate (B/s)"
 msgstr "Verzendsnelheid van berichten (B/s)"
@@ -82,41 +91,35 @@ msgstr "Verzendsnelheid van berichten (B/s)"
 msgid "Low-level send rate (B/s)"
 msgstr "Lage verzendsnelheid (B/s)"
 
-msgid "Low-level receive rate (B/s)"
-msgstr "Ontvangstsnelheid op laag niveau (B/s)"
-
-msgid "Total peers in our NetDb"
-msgstr "Totaal aantal peers in onze NetDb"
-
 msgid "Peers active in the last minute"
 msgstr "Peers actief in de laatste minuut"
-
-msgid "Known high capacity peers"
-msgstr "Bekende peers met hoge capaciteit"
 
 msgid "Peers sent to in the last minute"
 msgstr "Peers waarnaar in de laatste minuut is gestuurd"
 
+msgid "Total peers in our banlist"
+msgstr "Totaal aantal peers op onze banlijst"
+
+msgid "CPU load average of the JVM"
+msgstr "Gemiddelde CPU-belasting van de JVM"
+
 msgid "Known fast peers"
 msgstr "Bekende snelle peers"
+
+msgid "Known high capacity peers"
+msgstr "Bekende peers met hoge capaciteit"
 
 msgid "Known integrated (floodfill) peers"
 msgstr "Bekende geïntegreerde (floodfill) peers"
 
-msgid "Total peers in our banlist"
-msgstr "Totaal aantal peers op onze banlijst"
+msgid "Total peers in our NetDb"
+msgstr "Totaal aantal peers in onze NetDb"
+
+msgid "Total number of threads in use"
+msgstr ""
 
 msgid "Peers without a published IP address"
 msgstr "Peers zonder gepubliceerd IP-adres"
-
-msgid "Size of tunnel acceptor backlog"
-msgstr "Grootte van tunnel acceptor backlog"
-
-msgid "Clock step adjustment (ms)"
-msgstr "Klokstapaanpassing (ms)"
-
-msgid "CPU load average of the JVM"
-msgstr "Gemiddelde CPU-belasting van de JVM"
 
 msgid "Average tunnel build success %"
 msgstr "Gemiddeld succespercentage tunnelbouw"
@@ -1554,29 +1557,29 @@ msgstr "Herstart in {0}"
 msgid "Save order"
 msgstr "Volgorde van opslaan"
 
+msgid "Restore full default"
+msgstr "Volledige standaard herstellen"
+
+msgid "Restore minimal default"
+msgstr "Herstel minimale standaard"
+
 msgid "Sidebar preferences updated"
 msgstr "Zijbalkvoorkeuren bijgewerkt"
 
 msgid "Refresh interval must be a number"
 msgstr "Verversingsinterval moet een nummer zijn"
 
-msgid "Restore full default"
-msgstr "Volledige standaard herstellen"
-
 msgid "Full sidebar defaults restored."
 msgstr "Volledige zijbalkstandaarden hersteld."
 
-msgid "Sidebar will refresh shortly."
-msgstr "Zijbalk wordt zo ververst."
-
-msgid "Restore minimal default"
-msgstr "Herstel minimale standaard"
-
-msgid "Minimal sidebar defaults restored."
-msgstr "Minimale zijbalkstandaarden hersteld."
-
 msgid "Order must be an integer"
 msgstr "Volgorde moet een heel getal zijn"
+
+msgid "Saved order of sections."
+msgstr "Volgorde van onderdelen opgeslagen."
+
+msgid "Sidebar will refresh shortly."
+msgstr "Zijbalk wordt zo ververst."
 
 msgid "No section selected"
 msgstr "Geen selectie geselecteerd"
@@ -1586,9 +1589,6 @@ msgstr "Geen volgorde opgegeven"
 
 msgid "Moved"
 msgstr "Verplaatst"
-
-msgid "Saved order of sections."
-msgstr "Volgorde van onderdelen opgeslagen."
 
 msgid "Full statistics enabled"
 msgstr "Volledige statistieken ingeschakeld"
@@ -2417,6 +2417,9 @@ msgstr "De HTTP proxy is niet ingeschakeld"
 msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
 msgstr "Je browser is niet juist geconfigureerd om de HTTP proxy op {0} te gebruiken"
 
+msgid "Errors"
+msgstr ""
+
 msgid "URL"
 msgstr "URL"
 
@@ -2691,29 +2694,23 @@ msgstr "of Sybil dicht bij deze router"
 msgid "Lookup"
 msgstr "Opzoeken"
 
-msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
-msgstr "Onthul nooit uw routeridentiteit aan iemand, aangezien deze uniek gekoppeld is aan uw IP-adres in de netwerkdatabase."
+msgid "Select the field to search on"
+msgstr ""
 
-msgid "is banned"
-msgstr "is verboden"
-
-msgid "not found in network database"
-msgstr "niet gevonden in netwerk database"
-
-msgid "Bad Base64 Router hash"
-msgstr "Slechte Base64 Router hash"
-
-msgid "No routers with"
-msgstr "Geen routers met"
-
-msgid "Hash prefix"
-msgstr "Hash-voorvoegsel"
-
-msgid "Port"
-msgstr "Poort"
+msgid "e.g. cn hk"
+msgstr ""
 
 msgid "MTU"
 msgstr "MTU"
+
+msgid "Enter search value here"
+msgstr ""
+
+msgid "Router not found"
+msgstr ""
+
+msgid "No routers with"
+msgstr "Geen routers met"
 
 msgid "found in the network database"
 msgstr "gevonden in de netwerkdatabase"
@@ -2841,17 +2838,17 @@ msgstr "Verliep {0} geleden"
 msgid "Unknown"
 msgstr "Onbekend"
 
-msgid "Advanced mode - includes all statistics published by floodfills."
-msgstr "Geavanceerde modus - omvat alle statistieken gepubliceerd door floodfills."
-
-msgid "Compact mode - does not include statistics published by floodfills."
-msgstr "Compacte modus - omvat geen statistieken gepubliceerd door floodfills."
-
 msgid "Network Database Router Statistics"
 msgstr "Netwerk Database Router Statistieken"
 
 msgid "Count"
 msgstr "Aantal"
+
+msgid "Under 12 KB/s"
+msgstr ""
+
+msgid "Over 2048 KB/s"
+msgstr ""
 
 msgid "Bandwidth Tier"
 msgstr "Bandbreedtelaag"
@@ -2923,6 +2920,9 @@ msgstr "Gepubliceerd"
 msgid "Hostname"
 msgstr "Hostnaam"
 
+msgid "Whois"
+msgstr ""
+
 msgid "direct"
 msgstr "direct"
 
@@ -2938,20 +2938,26 @@ msgstr "Toon alle routers met dit handtekeningtype in de NetDb"
 msgid "Show all routers with this encryption type in the NetDb"
 msgstr "Toon alle routers met dit coderingstype in de NetDb"
 
-msgid "Addresses"
-msgstr "Adressen"
-
-msgid "n/a"
-msgstr "nvt"
-
 msgid "Show all routers with this address in the NetDb"
 msgstr "Toon alle routers met dit adres in de NetDb"
 
 msgid "Show all routers with this port in the NetDb"
 msgstr "Toon alle routers met deze poort in de NetDb"
 
-msgid "Routers"
-msgstr "Routers"
+msgid "Maximum Transmission Unit"
+msgstr ""
+
+msgid "Show all routers with this MTU in the NetDb"
+msgstr ""
+
+msgid "Addresses"
+msgstr "Adressen"
+
+msgid "Introducers"
+msgstr ""
+
+msgid "Network Id"
+msgstr "Netwerk Id"
 
 msgid "First heard about"
 msgstr "Eerste van gehoord"
@@ -2962,11 +2968,8 @@ msgstr "Laatst van gehoord"
 msgid "Last heard from"
 msgstr "Laatst gehoord van"
 
-msgid "Network Id"
-msgstr "Netwerk Id"
-
-msgid "Count is always spoofed to avoid indicating router restarts"
-msgstr "Aantal wordt altijd vervalst om router herstarts te voorkomen"
+msgid "Info"
+msgstr "Informatie"
 
 msgid "Hidden or starting up"
 msgstr "Verborgen of aan het opstarten"
@@ -2995,17 +2998,32 @@ msgstr "SSU [IPv6]"
 msgid "SSU [IPv6] with Introducers"
 msgstr "IPv6 SSU, aanbieders"
 
+msgid "NTCP &amp; SSU with Introducers [IPv6 Only]"
+msgstr "IPv6 Only NTCP, SSU, aanbieders"
+
 msgid "NTCP [IPv6]"
 msgstr "NTCP [IPv6]"
 
 msgid "NTCP [IPv6] &amp; SSU"
 msgstr "NTCP [IPv6] &amp; SSU"
 
-msgid "NTCP &amp; SSU with Introducers [IPv6 Only]"
-msgstr "IPv6 Only NTCP, SSU, aanbieders"
-
 msgid "NTCP [IPv6] &amp; SSU with Introducers"
 msgstr "IPv6 NTCP, SSU, aanbieders"
+
+msgid "Local"
+msgstr "Lokaal"
+
+msgid "Fast Tier"
+msgstr ""
+
+msgid "High Capacity Tier"
+msgstr ""
+
+msgid "Integrated Tier"
+msgstr ""
+
+msgid "Standard Tier"
+msgstr ""
 
 msgid "No peer connections available"
 msgstr "Geen peer-verbindingen beschikbaar"
@@ -3339,14 +3357,17 @@ msgstr "Laatst Vernomen Van"
 msgid "View/Edit"
 msgstr "Bekijken/bewerken"
 
-msgid "Unreachable"
-msgstr "Onbereikbaar"
-
 msgid "OK"
 msgstr "OK"
 
 msgid "Test Fails"
 msgstr "Test Faalt"
+
+msgid "Unreachable"
+msgstr "Onbereikbaar"
+
+msgid "Most tests passing"
+msgstr ""
 
 msgid "Fast, High Capacity"
 msgstr "Snel, Hoge Capaciteit"
@@ -3362,6 +3383,9 @@ msgstr "Gefaald"
 
 msgid "Integrated"
 msgstr "Geïntegreerd"
+
+msgid "Configure Peer"
+msgstr ""
 
 msgid "Thresholds"
 msgstr "Drempelwaarden"
@@ -3429,11 +3453,11 @@ msgstr "Laatste Foute Verzending"
 msgid "Last Bad Store"
 msgstr "Laatste Foute Opslag"
 
-msgid "Capabilities in the NetDb, not used to determine profiles"
-msgstr "Mogelijkheden in de NetDb, niet gebruikt om profielen te bepalen"
-
 msgid "caps"
 msgstr "caps"
+
+msgid "Capabilities in the NetDb, not used to determine profiles"
+msgstr "Mogelijkheden in de NetDb, niet gebruikt om profielen te bepalen"
 
 msgid "Reachable"
 msgstr "Bereikbaar"
@@ -3606,6 +3630,9 @@ msgstr "Klik Herstart om te installeren"
 
 msgid "Click Shutdown and restart to install"
 msgstr "Klik Afsluiten and herstart om te installeren"
+
+msgid "Unable"
+msgstr ""
 
 #, java-format
 msgid "{0}"
@@ -3800,9 +3827,6 @@ msgstr "Grafieken router prestatie"
 msgid "Router Help and FAQ"
 msgstr "Router help en FAQ"
 
-msgid "Info"
-msgstr "Informatie"
-
 msgid "Router information including transport addresses and UPnP scan"
 msgstr "Routerinformatie inclusief transportadressen en UPnP-scan"
 
@@ -3888,6 +3912,34 @@ msgstr "Floodfill ingeschakeld"
 msgid "Total number of remote LeaseSets stored in our NetDb"
 msgstr "Totaal aantal externe LeaseSets opgeslagen in onze NetDb"
 
+msgid "Declining transit tunnel requests during startup phase"
+msgstr "Er worden de eerste 10 minuten geen aanvragen voor deelnemende tunnels geaccepteerd terwijl de router stabiliseert"
+
+msgid "Declining transit tunnel requests as we are shutting down"
+msgstr "Weigeren deelnemende tunnelaanvragen omdat we sluiten"
+
+msgid "Router or network performance is impeding the building of transit tunnels"
+msgstr "De prestaties van de router of het netwerk belemmeren de bouw van deelnemende tunnels"
+
+msgid "Router is currently hosting the configured maximum number of transit tunnels"
+msgstr "De router draagt momenteel het maximum aantal transit-tunnels dat is ingesteld"
+
+msgid "Router is currently using the configured maximum share bandwidth"
+msgstr "De router gebruikt momenteel het maximum gedeelde bandbreedte dat is ingesteld"
+
+msgid "Router is ready to build participating tunnels"
+msgstr "Router is klaar om deelnemende tunnels te bouwen"
+
+#, java-format
+msgid "Accepting transit tunnel requests; hosting {0} tunnels"
+msgstr "Het accepteren van deelnemende tunnelverzoeken; Deelnemen aan {0} tunnels"
+
+msgid "No transit tunnels are built when Hidden mode is active"
+msgstr "Er worden geen deelnemende tunnels gebouwd als de verborgen modus actief is"
+
+msgid "Router is configured to reject all transit tunnel requests"
+msgstr "Router is geconfigureerd om alle deelnemende tunnelaanvragen te weigeren"
+
 msgid "Warning: ECDSA is not available. Update your Java or OS"
 msgstr "Waarschuwing: ECDSA is niet beschikbaar. Werk Java of je besturingssysteem bij"
 
@@ -3923,6 +3975,9 @@ msgstr "Het aantal verboden peers"
 
 msgid "The total number of peers in our network database"
 msgstr "Het totaal aantal peers in onze netwerkdatabase"
+
+msgid "Total RouterInfos stored on disk"
+msgstr ""
 
 msgid "Known"
 msgstr "Bekend"
@@ -4034,34 +4089,6 @@ msgstr "Wachtrij van verzoeken van andere routers om deel te nemen in tunnels"
 
 msgid "Backlog"
 msgstr "Achterstand"
-
-msgid "Declining transit tunnel requests during startup phase"
-msgstr "Er worden de eerste 10 minuten geen aanvragen voor deelnemende tunnels geaccepteerd terwijl de router stabiliseert"
-
-msgid "Declining transit tunnel requests as we are shutting down"
-msgstr "Weigeren deelnemende tunnelaanvragen omdat we sluiten"
-
-msgid "Router or network performance is impeding the building of transit tunnels"
-msgstr "De prestaties van de router of het netwerk belemmeren de bouw van deelnemende tunnels"
-
-msgid "Router is currently hosting the configured maximum number of transit tunnels"
-msgstr "De router draagt momenteel het maximum aantal transit-tunnels dat is ingesteld"
-
-msgid "Router is currently using the configured maximum share bandwidth"
-msgstr "De router gebruikt momenteel het maximum gedeelde bandbreedte dat is ingesteld"
-
-msgid "Router is ready to build participating tunnels"
-msgstr "Router is klaar om deelnemende tunnels te bouwen"
-
-#, java-format
-msgid "Accepting transit tunnel requests; hosting {0} tunnels"
-msgstr "Het accepteren van deelnemende tunnelverzoeken; Deelnemen aan {0} tunnels"
-
-msgid "No transit tunnels are built when Hidden mode is active"
-msgstr "Er worden geen deelnemende tunnels gebouwd als de verborgen modus actief is"
-
-msgid "Router is configured to reject all transit tunnel requests"
-msgstr "Router is geconfigureerd om alle deelnemende tunnelaanvragen te weigeren"
 
 msgid "Statistics gathered during this router's uptime"
 msgstr "Statistieken verzameld gedurende de uptime van deze router"
@@ -4193,8 +4220,14 @@ msgstr "Geen opgeslagen analyse"
 msgid "Select stored analysis"
 msgstr "Selecteer opgeslagen analyse"
 
+msgid "Review"
+msgstr ""
+
 msgid "Run analysis on Floodfills only"
 msgstr "Voer de analyse alleen uit op volstortingen"
+
+msgid "Start Scan"
+msgstr ""
 
 msgid "Run analysis on all routers in NetDb"
 msgstr "Voer een analyse uit op alle routers in NetDb"
@@ -4358,6 +4391,12 @@ msgstr "MAX"
 msgid "Show all routers for this family in NetDb"
 msgstr "Toon alle routers voor deze familie in NetDb"
 
+msgid "Routers"
+msgstr "Routers"
+
+msgid "n/a"
+msgstr "nvt"
+
 msgid "Last lookup successful"
 msgstr "Laatste zoekopdracht succesvol"
 
@@ -4409,9 +4448,6 @@ msgstr "Gegevens overgedragen"
 msgid "Data"
 msgstr "Gegevens"
 
-msgid "Limit"
-msgstr "Limiet"
-
 msgid "Receive on"
 msgstr "Ontvangen op"
 
@@ -4456,6 +4492,7 @@ msgstr "De router werkt momenteel in de verborgen modus, waardoor er geen doorga
 msgid "No transit tunnels currently active."
 msgstr "Momenteel zijn er geen transittunnels actief."
 
+#, java-format
 msgid "Transit Tunnels by Peer (Top {0})"
 msgstr "Transittunnels per Peer (Top {0})"
 
@@ -4467,9 +4504,6 @@ msgstr "Alle tunnels van Peer"
 
 msgid "Primary IP address"
 msgstr "Primair IP-adres"
-
-msgid "Local"
-msgstr "Lokaal"
 
 msgid "unique peers"
 msgstr "unieke leeftijdsgenoten"
@@ -4483,6 +4517,9 @@ msgstr "doorvoer"
 msgid "No local or transit tunnels currently active."
 msgstr "Momenteel zijn er geen lokale of transittunnels actief."
 
+msgid "PRIVATE IP ADDRESS"
+msgstr ""
+
 msgid "Bandwidth Tiers"
 msgstr "Bandbreedteniveaus"
 
@@ -4492,6 +4529,9 @@ msgstr "Meer dan {0} gedeelde bandbreedte"
 
 msgid "Inbound or outbound?"
 msgstr "Inkomend of uitgaand?"
+
+msgid "In/Out"
+msgstr ""
 
 msgid "Gateway"
 msgstr "Gateway"
@@ -4608,6 +4648,9 @@ msgstr "I2P-webserver (eepsite)"
 msgid "Browser launch at startup"
 msgstr "Browser start bij opstarten"
 
+msgid "I2P Router Console"
+msgstr ""
+
 msgid "Open Router Console in web browser at startup"
 msgstr "Open Router Console in web browser bij opstarten"
 
@@ -4683,12 +4726,6 @@ msgstr "key"
 msgid "port"
 msgstr "port"
 
-msgid "config UI"
-msgstr "configureer UI"
-
-msgid "User Interface Configuration"
-msgstr "Configuratie gebruikersinterface"
-
 msgid "Certificates"
 msgstr "Certificaten"
 
@@ -4704,8 +4741,8 @@ msgstr "Bandbreedtebegrenzer"
 msgid "Advanced Network Configuration"
 msgstr "Geavanceerde netwerkconfiguratie"
 
-msgid "I2P+ will work best if you configure your rates to match the speed of your internet connection."
-msgstr "I2P werkt het beste als u uw tarieven configureert op basis van de snelheid van uw internetverbinding."
+msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
+msgstr ""
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
 msgstr "Opmerking: Uw bijdrage aan het netwerk (netwerkaandeel) wordt bepaald door de toewijzing van upstream-bandbreedte (uploadsnelheid)."
@@ -4735,11 +4772,11 @@ msgid "NOTE"
 msgstr "OPMERKING"
 
 #, java-format
-msgid "You have configured I2P+ to share only {0} KBps."
-msgstr "Je hebt I2P geconfigureerd om slechts {0} KBps te delen."
+msgid "You have configured I2P to share only {0} KBps."
+msgstr ""
 
-msgid "I2P+ requires at least 12KBps to enable sharing. "
-msgstr "I2P vereist tenminste 12KBps om sharing in te schakelen."
+msgid "I2P requires at least 12KBps to enable sharing. "
+msgstr ""
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
 msgstr "Schakel sharing in (deelname aan tunnels) door meer bandbreedte toe te kennen."
@@ -5236,8 +5273,8 @@ msgstr "configureer reseeden"
 msgid "Reseeding is the bootstrapping process used to find other routers when you first install I2P, or when your router has too few router references remaining."
 msgstr "Reseeden is het opstart proces dat gebruikt wordt om andere routers te vinden wanneer je I2P voor het eerst installeert, of wanneer je router te weinig router referenties heeft."
 
-msgid "To enable the configuration of reseed urls, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
-msgstr "Om de configuratie van reseed-URL 's in te schakelen, activeert u de <a href=\"/help/advancedsettings\">geavanceerde modus</a> van de console."
+msgid "To enable the configuration of reseed urls, activate the console's <a href=/help/advancedsettings>Advanced mode</a>."
+msgstr ""
 
 msgid "Reseeding Configuration"
 msgstr "Reseeden Configuratie"
@@ -5247,9 +5284,6 @@ msgstr "Hulp bij opnieuw zaaien"
 
 msgid "Reseeding Help"
 msgstr "Reseeden Hulp"
-
-msgid "Change these only if HTTPS is blocked by a restrictive firewall and reseed has failed."
-msgstr "Verander dit alleen als HTTPS geblokkeerd is door een firewall en reseeden is mislukt."
 
 msgid "Reseed URLs"
 msgstr "Reseed URLs"
@@ -5286,6 +5320,9 @@ msgstr "Deze optie zal de HTTP -outproxy van I2P gebruiken om te reseed of de or
 
 msgid "I2P Outproxy"
 msgstr "I2P Outproxy"
+
+msgid "Port"
+msgstr "Poort"
 
 msgid "Use HTTP Proxy for HTTP Reseed Hosts"
 msgstr "Gebruik HTTP-proxy voor http Reseed-hosts"
@@ -5399,6 +5436,12 @@ msgstr "Geanificeerde zijbalk"
 msgid "Use the same sidebar on all pages"
 msgstr "Gebruik dezelfde zijbalk op alle pagina's"
 
+msgid "Sticky sidebar"
+msgstr ""
+
+msgid "Enable conditional fixed sidebar"
+msgstr ""
+
 msgid "config stats"
 msgstr "configureer statistieken"
 
@@ -5455,6 +5498,12 @@ msgstr "Om de instellingen van de clienttunnel te wijzigen, gebruikt u de <a hre
 
 msgid "To enable session-only changes to the client tunnels, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
 msgstr "Om alleen-sessiewijzigingen in de clienttunnels in te schakelen, activeert u de <a href=/help/advancedsettings>geavanceerde modus</a> van de console."
+
+msgid "config UI"
+msgstr "configureer UI"
+
+msgid "User Interface Configuration"
+msgstr "Configuratie gebruikersinterface"
 
 msgid "Router Console Theme"
 msgstr "Router Console Thema"
@@ -5592,14 +5641,20 @@ msgstr "Fout 404"
 msgid "not found"
 msgstr "niet gevonden"
 
+msgid "router logs"
+msgstr "router logs"
+
+msgid "Critical / Error Level Logs"
+msgstr "Logboeken van kritieke/foutniveaus"
+
+msgid "Clear logs"
+msgstr "Logboeken wissen"
+
 msgid "events"
 msgstr "gebeurtenissen"
 
 msgid "Event Log"
 msgstr "Evenementenlogboek"
-
-msgid "Combined"
-msgstr "Gecombineerd"
 
 msgid "graph"
 msgstr "grafiek"
@@ -6108,8 +6163,8 @@ msgstr "Om uw console toegankelijk te maken op uw lokale netwerk, bewerk het con
 msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
 msgstr "Voorbeeld: Om toegang toe te staan vanaf zowel localhost als 192.168.1.10 via HTTP en HTTPS:"
 
-msgid "For most client services, change listening address for relevant service in Tunnel Manager's configuration section using <i>reachable by</i> dropdown."
-msgstr "Voor de meeste clientdiensten, wijzig het luisteradres voor de relevante service in de configuratiesectie van de Tunnelbeheerder met behulp van de <i>bereikbaar via</i> dropdown."
+msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager's configuration section using the <i>reachable by</i> dropdown."
+msgstr ""
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "Hoe verbind ik met IRC binnen I2P?"
@@ -7308,34 +7363,6 @@ msgstr "statistieken van taakwachtrijen"
 msgid "Job Queue Stats"
 msgstr "Statistieken van taakwachtrijen"
 
-msgid "logs"
-msgstr "logs"
-
-msgid "Please include your I2P version and running environment information in bug reports"
-msgstr "Vermeld alstublieft uw I2P-versie en informatie over de actieve omgeving in bugrapporten"
-
-#, java-format
-msgid "Please report bugs on {0} or {1}."
-msgstr "Rapporteer bugs op {0} of {1}."
-
-msgid "View event log"
-msgstr "Gebeurtenislogboek bekijken"
-
-msgid "Critical / Error Level Logs"
-msgstr "Logboeken van kritieke/foutniveaus"
-
-msgid "Clear logs"
-msgstr "Logboeken wissen"
-
-msgid "Configure router logging options"
-msgstr "Configureer opties voor routerlogboekregistratie"
-
-msgid "Filter Router log output"
-msgstr "Routerloguitvoer filteren"
-
-msgid "Service (Wrapper) Logs"
-msgstr "Service (Wrapper) Logs"
-
 msgid "network database"
 msgstr "netwerk database"
 
@@ -7356,6 +7383,9 @@ msgstr "Lokaal gehoste publieke service"
 
 msgid "Requested client leaseset"
 msgstr "Gevraagde client leaseset"
+
+msgid "Remote"
+msgstr ""
 
 msgid "network database router map"
 msgstr "Netwerkdatabase-routerkaart"
@@ -7400,164 +7430,26 @@ msgstr "Verbannen Peers"
 msgid "Fast / High Capacity"
 msgstr "Snel / Hoge capaciteit"
 
-msgid "router logs"
-msgstr "router logs"
+msgid "Configure router logging options"
+msgstr "Configureer opties voor routerlogboekregistratie"
+
+msgid "View event log"
+msgstr "Gebeurtenislogboek bekijken"
+
+msgid "Filter Router log output"
+msgstr "Routerloguitvoer filteren"
 
 msgid "service logs"
 msgstr "service logs"
 
-msgid "Manage I2P addresses"
-msgstr "Beheer I2P-adressen"
-
-msgid "Imagegen"
-msgstr "Afbeeldingen"
-
-msgid "Create and download torrents"
-msgstr "Torrents maken en downloaden"
-
-msgid "Manage client and server tunnels"
-msgstr "Beheer client- en servertunnels"
-
-msgid "Webmail client"
-msgstr "Webmailclient"
-
-msgid "Webmail"
-msgstr "Webmail"
-
-msgid "Local webserver for hosting content on the I2P network"
-msgstr "Lokale webserver voor het hosten van inhoud op het I2P-netwerk"
+msgid "Service (Wrapper) Logs"
+msgstr "Service (Wrapper) Logs"
 
 msgid "Information &amp; Diagnostics"
 msgstr "Informatie"
 
-msgid "Review recent updates to I2P"
-msgstr "Bekijk recente updates voor I2P"
-
-msgid "View debugging information"
-msgstr "Foutopsporingsinformatie bekijken"
-
-msgid "View router performance graphs"
-msgstr "Bekijk de prestatiegrafieken van de router"
-
-msgid "Router help section"
-msgstr "Hulpsectie voor router"
-
-msgid "Router homepage"
-msgstr "Routerstartpagina"
-
-msgid "Home"
-msgstr "Thuis"
-
-msgid "View news relating to I2P"
-msgstr "Bekijk nieuws met betrekking tot I2P"
-
-msgid "I2P News"
-msgstr "I2P Nieuws"
-
-msgid "View router workload and stats"
-msgstr "Bekijk de werklast en statistieken van de router"
-
-msgid "Router Jobs"
-msgstr "Routertaken"
-
-msgid "View router logs"
-msgstr "Bekijk routerlogboeken"
-
-msgid "View information and stats regarding all known peers"
-msgstr "Bekijk informatie en statistieken over alle bekende peers"
-
-msgid "View active peers"
-msgstr "Bekijk actieve collega's"
-
-msgid "View peer performance profiles"
-msgstr "Peerprestatieprofielen bekijken"
-
-msgid "View information about router and running environment"
-msgstr "Bekijk informatie over de router en de gebruiksomgeving"
-
-msgid "Statistics"
-msgstr "Statistieken"
-
-msgid "Current console and webapp translation report"
-msgstr "Huidige rapport van de console- en webapp-vertaling"
-
-msgid "Translation Status"
-msgstr "Vertaalstatus"
-
-msgid "View active tunnels"
-msgstr "Bekijk actieve tunnels"
-
-msgid "Customize homepage"
-msgstr "Startpagina aanpassen"
-
-msgid "Homepage"
-msgstr "Startpagina"
-
-msgid "Configure I2P Client Control Interface"
-msgstr "I2P-clientbesturingsinterface configureren"
-
-msgid "View or edit router keyring for encrypted destinations"
-msgstr "Routersleutelhanger voor gecodeerde bestemmingen bekijken of bewerken"
-
-msgid "Configure router networking options"
-msgstr "Routernetwerkopties configureren"
-
-msgid "Manually edit peers and view banned peers and blocklist"
-msgstr "Peers handmatig bewerken en verboden peers en blokkeerlijst bekijken"
-
-msgid "Install and manage router plugins"
-msgstr "Routerplug-ins installeren en beheren"
-
-msgid "Router reseeding and configuration"
-msgstr "Router opnieuw zaaien en configureren"
-
-msgid "Configure and manage Router family"
-msgstr "Routerfamilie configureren en beheren"
-
-msgid "Manage Router service"
-msgstr "Routerservice beheren"
-
-msgid "Configure stat collection for graphing"
-msgstr "Statistiekverzameling configureren voor grafieken"
-
-msgid "Router Stats"
-msgstr "Routerstatistieken"
-
-msgid "Configure router updates"
-msgstr "Routerupdates configureren"
-
-msgid "Configuration wizard for new users"
-msgstr "Configuratiewizard voor nieuwe gebruikers"
-
-msgid "Setup Wizard"
-msgstr "Installatiewizard"
-
-msgid "Customize sidebar"
-msgstr "Zijbalk aanpassen"
-
-msgid "Configure tunnel options"
-msgstr "Tunnelopties configureren"
-
-msgid "Configure router user interface and optional console password"
-msgstr "Configureer de gebruikersinterface van de router en het optionele consolewachtwoord"
-
-msgid "Configuring I2P for optimal performance"
-msgstr "I2P configureren voor optimale prestaties"
-
-msgid "Information for new users"
-msgstr "Informatie voor nieuwe gebruikers"
-
-msgid "A guide to reseeding your I2P router"
-msgstr "Een handleiding voor het opnieuw instellen van uw I2P-router"
-
-msgid "What to do in the event I2P isn't working"
-msgstr "Wat te doen als I2P niet werkt"
-
-msgid "Introduction to tunnel filters"
-msgstr "Inleiding tot tunnelfilters"
-
-msgid "Tunnel Filters"
-msgstr "Tunnelfilters"
+msgid "Customize"
+msgstr ""
 
 msgid "statistics"
 msgstr "statistieken"
@@ -7610,9 +7502,6 @@ msgstr "Tunnel-Ids wisselen"
 msgid "Toggle Tunnels"
 msgstr "Tunnels wisselen"
 
-msgid "Updating sidebar sections"
-msgstr "Zijbalksecties bijwerken"
-
 msgid "Peer Profile"
 msgstr "Peer Profiel"
 
@@ -7637,14 +7526,17 @@ msgstr "Terug naar boven"
 msgid "webmail"
 msgstr "webmail"
 
+msgid "Webmail"
+msgstr "Webmail"
+
 msgid "New Install Wizard"
 msgstr "Nieuwe installatiewizard"
 
 msgid "Skip Setup"
 msgstr "Setup overslaan"
 
-msgid "Select the language to be used for the router console and web applications (<a href=/webmail target=_blank rel=noreferrer>webmail</a>, <a href=/torrents target=_blank rel=noreferrer>torrents</a>, <a href=/i2ptunnelmgr target=_blank rel=noreferrer>tunnel manager</a> etc). If you wish to change the language in future, change the router console theme, or configure a password to access the console, you may do so on the <a href=/configui target=_blank rel=noreferrer>User Interface configuration page</a>."
-msgstr "Selecteer de taal die moet worden gebruikt voor de routerconsole en webtoepassingen (<a href=/webmail target=_blank rel=noreferrer>webmail</a>, <a href=/torrents target=_blank rel=noreferrer>torrents</a>, <a href=/i2ptunnelmgr target=_blank rel=noreferrer>tunnelbeheerder</a>, enz.). Als u de taal in de toekomst wilt wijzigen, de consolethema wilt wijzigen of een wachtwoord wilt configureren om toegang te krijgen tot de console, kunt u dit doen op de pagina <a href=/configui target=_blank rel=noreferrer>Configuratie van de gebruikersinterface</a>."
+msgid "Select the language to be used for the router console and web applications ("
+msgstr ""
 
 msgid "Router Console &amp; WebApps Display Language"
 msgstr "Router Console en WebApps tonen taal"
@@ -7713,6 +7605,13 @@ msgid "Bandwidth Configuration"
 msgstr "Bandbreedteconfiguratie"
 
 #, java-format
+msgid "You have configured I2P+ to share only {0} KBps."
+msgstr "Je hebt I2P geconfigureerd om slechts {0} KBps te delen."
+
+msgid "I2P+ requires at least 12KBps to enable sharing. "
+msgstr "I2P vereist tenminste 12KBps om sharing in te schakelen."
+
+#, java-format
 msgid "You have configured I2P+ to share {0} KBps."
 msgstr "Je hebt I2P geconfigureerd om {0} KBps te delen."
 
@@ -7722,8 +7621,8 @@ msgstr "I2P vereist een webbrowser die is geconfigureerd om de lokale HTTP-proxy
 msgid "Browser Setup"
 msgstr "Browserinstellingen"
 
-msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. For more help, see <a href=https://geti2p.net/htproxyports target=_blank rel=noreferrer>the configuration guide</a>, or <a href=/help/configuration#browserconfig>the mini-tutorial for Firefox</a>."
-msgstr "Om toegang te krijgen tot websites die gehost worden op het I2P-netwerk, en optioneel gebruik te maken van de standaard outproxy om verbinding te maken met websites op het clearnet, moet je je browser configureren om de I2P+ <b>HTTP</b> proxy te gebruiken. Deze proxy draait standaard op <code>127.0.0.1 poort 4444</code>. Voor meer hulp, zie <a href=https://geti2p.net/htproxyports target=_blank rel=noreferrer>de configuratiegids</a>, of <a href=/help/configuration#browserconfig>de mini-tutorial voor Firefox</a>."
+msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. "
+msgstr ""
 
 msgid "Welcome to I2P+!"
 msgstr "Welkom bij I2P!"
@@ -7731,8 +7630,8 @@ msgstr "Welkom bij I2P!"
 msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
 msgstr "Wanneer u I2P start, kan het een paar minuten duren voordat uw router in het netwerk is opgestart (geïntegreerd) en extra peers zijn gevonden, dus wees geduldig."
 
-msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P+."
-msgstr "Zodra er groene sterren worden aangegeven naast uw lokale tunnels, kunt u met I2P een grote verscheidenheid aan dingen doen."
+msgid "Once green stars are indicated next to your Service Tunnels, there is a wide variety of things you can do with I2P+."
+msgstr ""
 
 msgid "Unknown Wizard page"
 msgstr "Onbekende wizardpagina"
@@ -7751,4 +7650,75 @@ msgstr "Volgende"
 
 msgid "Finished"
 msgstr "Klaar"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#, java-format
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

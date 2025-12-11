@@ -214,12 +214,6 @@ msgstr "I2PMail"
 msgid "No new messages"
 msgstr "Ingen nye beskeder"
 
-msgid "Checking for new messages on server"
-msgstr "Søger efter nye beskeder på serveren"
-
-msgid "Refresh the page for updates"
-msgstr "Opdater siden for opdateringer"
-
 #, java-format
 msgid "{0} is an I2P-exclusive service provided by {1}."
 msgstr "{0} er en I2P-eksklusiv tjeneste leveret af {1}."
@@ -227,6 +221,12 @@ msgstr "{0} er en I2P-eksklusiv tjeneste leveret af {1}."
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
 msgstr "{0} webmail client &copy Susi 2004-2005."
+
+msgid "Checking for new messages on server"
+msgstr "Søger efter nye beskeder på serveren"
+
+msgid "Refresh the page for updates"
+msgstr "Opdater siden for opdateringer"
 
 msgid "Removed tracking image placeholder"
 msgstr "Fjernet pladsholder for sporing af billede"
@@ -338,6 +338,9 @@ msgstr "Tjek Mail"
 msgid "Refresh Page"
 msgstr "Opdater side"
 
+msgid "Change to Folder"
+msgstr "Skift til mappe"
+
 #, java-format
 msgid "1 Message"
 msgid_plural "{0} Messages"
@@ -356,18 +359,6 @@ msgstr "Størrelse"
 msgid "Mark for deletion"
 msgstr "Marker for sletning"
 
-msgid "Message contains HTML"
-msgstr "Besked indeholder HTML"
-
-msgid "Message is new"
-msgstr "Besked er ny"
-
-msgid "Message is spam"
-msgstr "Meddelelsen er spam"
-
-msgid "Message body not downloaded"
-msgstr "Meddelelsestekst blev ikke downloadet"
-
 msgid "Really delete the marked messages?"
 msgstr "Slet virkelig de markerede beskeder?"
 
@@ -383,8 +374,17 @@ msgstr "Marker alle"
 msgid "Clear All"
 msgstr "Slet alt"
 
-msgid "Change to Folder"
-msgstr "Skift til mappe"
+msgid "Message contains HTML"
+msgstr "Besked indeholder HTML"
+
+msgid "Message is new"
+msgstr "Besked er ny"
+
+msgid "Message is spam"
+msgstr "Meddelelsen er spam"
+
+msgid "Message body not downloaded"
+msgstr "Meddelelsestekst blev ikke downloadet"
 
 msgid "First"
 msgstr "Første"

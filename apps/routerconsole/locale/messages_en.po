@@ -73,7 +73,16 @@ msgstr ""
 msgid "Acquired {0} router infos from reseed hosts ({1} errors)"
 msgstr ""
 
+msgid "Clock step adjustment (ms)"
+msgstr ""
+
+msgid "Size of tunnel acceptor backlog"
+msgstr ""
+
 msgid "Message receive rate (B/s)"
+msgstr ""
+
+msgid "Low-level receive rate (B/s)"
 msgstr ""
 
 msgid "Message send rate (B/s)"
@@ -82,40 +91,34 @@ msgstr ""
 msgid "Low-level send rate (B/s)"
 msgstr ""
 
-msgid "Low-level receive rate (B/s)"
-msgstr ""
-
-msgid "Total peers in our NetDb"
-msgstr ""
-
 msgid "Peers active in the last minute"
-msgstr ""
-
-msgid "Known high capacity peers"
 msgstr ""
 
 msgid "Peers sent to in the last minute"
 msgstr ""
 
+msgid "Total peers in our banlist"
+msgstr ""
+
+msgid "CPU load average of the JVM"
+msgstr ""
+
 msgid "Known fast peers"
+msgstr ""
+
+msgid "Known high capacity peers"
 msgstr ""
 
 msgid "Known integrated (floodfill) peers"
 msgstr ""
 
-msgid "Total peers in our banlist"
+msgid "Total peers in our NetDb"
+msgstr ""
+
+msgid "Total number of threads in use"
 msgstr ""
 
 msgid "Peers without a published IP address"
-msgstr ""
-
-msgid "Size of tunnel acceptor backlog"
-msgstr ""
-
-msgid "Clock step adjustment (ms)"
-msgstr ""
-
-msgid "CPU load average of the JVM"
 msgstr ""
 
 msgid "Average tunnel build success %"
@@ -1554,28 +1557,28 @@ msgstr ""
 msgid "Save order"
 msgstr ""
 
+msgid "Restore full default"
+msgstr ""
+
+msgid "Restore minimal default"
+msgstr ""
+
 msgid "Sidebar preferences updated"
 msgstr ""
 
 msgid "Refresh interval must be a number"
 msgstr ""
 
-msgid "Restore full default"
-msgstr ""
-
 msgid "Full sidebar defaults restored."
 msgstr ""
 
-msgid "Sidebar will refresh shortly."
-msgstr ""
-
-msgid "Restore minimal default"
-msgstr ""
-
-msgid "Minimal sidebar defaults restored."
-msgstr ""
-
 msgid "Order must be an integer"
+msgstr ""
+
+msgid "Saved order of sections."
+msgstr ""
+
+msgid "Sidebar will refresh shortly."
 msgstr ""
 
 msgid "No section selected"
@@ -1585,9 +1588,6 @@ msgid "No order entered"
 msgstr ""
 
 msgid "Moved"
-msgstr ""
-
-msgid "Saved order of sections."
 msgstr ""
 
 msgid "Full statistics enabled"
@@ -2417,6 +2417,9 @@ msgstr ""
 msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
 msgstr ""
 
+msgid "Errors"
+msgstr ""
+
 msgid "URL"
 msgstr ""
 
@@ -2691,28 +2694,22 @@ msgstr ""
 msgid "Lookup"
 msgstr ""
 
-msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
+msgid "Select the field to search on"
 msgstr ""
 
-msgid "is banned"
-msgstr ""
-
-msgid "not found in network database"
-msgstr ""
-
-msgid "Bad Base64 Router hash"
-msgstr ""
-
-msgid "No routers with"
-msgstr ""
-
-msgid "Hash prefix"
-msgstr ""
-
-msgid "Port"
+msgid "e.g. cn hk"
 msgstr ""
 
 msgid "MTU"
+msgstr ""
+
+msgid "Enter search value here"
+msgstr ""
+
+msgid "Router not found"
+msgstr ""
+
+msgid "No routers with"
 msgstr ""
 
 msgid "found in the network database"
@@ -2841,16 +2838,16 @@ msgstr ""
 msgid "Unknown"
 msgstr ""
 
-msgid "Advanced mode - includes all statistics published by floodfills."
-msgstr ""
-
-msgid "Compact mode - does not include statistics published by floodfills."
-msgstr ""
-
 msgid "Network Database Router Statistics"
 msgstr ""
 
 msgid "Count"
+msgstr ""
+
+msgid "Under 12 KB/s"
+msgstr ""
+
+msgid "Over 2048 KB/s"
 msgstr ""
 
 msgid "Bandwidth Tier"
@@ -2923,6 +2920,9 @@ msgstr ""
 msgid "Hostname"
 msgstr ""
 
+msgid "Whois"
+msgstr ""
+
 msgid "direct"
 msgstr ""
 
@@ -2938,19 +2938,25 @@ msgstr ""
 msgid "Show all routers with this encryption type in the NetDb"
 msgstr ""
 
-msgid "Addresses"
-msgstr ""
-
-msgid "n/a"
-msgstr ""
-
 msgid "Show all routers with this address in the NetDb"
 msgstr ""
 
 msgid "Show all routers with this port in the NetDb"
 msgstr ""
 
-msgid "Routers"
+msgid "Maximum Transmission Unit"
+msgstr ""
+
+msgid "Show all routers with this MTU in the NetDb"
+msgstr ""
+
+msgid "Addresses"
+msgstr ""
+
+msgid "Introducers"
+msgstr ""
+
+msgid "Network Id"
 msgstr ""
 
 msgid "First heard about"
@@ -2962,10 +2968,7 @@ msgstr ""
 msgid "Last heard from"
 msgstr ""
 
-msgid "Network Id"
-msgstr ""
-
-msgid "Count is always spoofed to avoid indicating router restarts"
+msgid "Info"
 msgstr ""
 
 msgid "Hidden or starting up"
@@ -2995,16 +2998,31 @@ msgstr ""
 msgid "SSU [IPv6] with Introducers"
 msgstr ""
 
+msgid "NTCP &amp; SSU with Introducers [IPv6 Only]"
+msgstr ""
+
 msgid "NTCP [IPv6]"
 msgstr ""
 
 msgid "NTCP [IPv6] &amp; SSU"
 msgstr ""
 
-msgid "NTCP &amp; SSU with Introducers [IPv6 Only]"
+msgid "NTCP [IPv6] &amp; SSU with Introducers"
 msgstr ""
 
-msgid "NTCP [IPv6] &amp; SSU with Introducers"
+msgid "Local"
+msgstr ""
+
+msgid "Fast Tier"
+msgstr ""
+
+msgid "High Capacity Tier"
+msgstr ""
+
+msgid "Integrated Tier"
+msgstr ""
+
+msgid "Standard Tier"
 msgstr ""
 
 msgid "No peer connections available"
@@ -3339,13 +3357,16 @@ msgstr ""
 msgid "View/Edit"
 msgstr ""
 
-msgid "Unreachable"
-msgstr ""
-
 msgid "OK"
 msgstr ""
 
 msgid "Test Fails"
+msgstr ""
+
+msgid "Unreachable"
+msgstr ""
+
+msgid "Most tests passing"
 msgstr ""
 
 msgid "Fast, High Capacity"
@@ -3361,6 +3382,9 @@ msgid "Failing"
 msgstr ""
 
 msgid "Integrated"
+msgstr ""
+
+msgid "Configure Peer"
 msgstr ""
 
 msgid "Thresholds"
@@ -3429,10 +3453,10 @@ msgstr ""
 msgid "Last Bad Store"
 msgstr ""
 
-msgid "Capabilities in the NetDb, not used to determine profiles"
+msgid "caps"
 msgstr ""
 
-msgid "caps"
+msgid "Capabilities in the NetDb, not used to determine profiles"
 msgstr ""
 
 msgid "Reachable"
@@ -3605,6 +3629,9 @@ msgid "Click Restart to install"
 msgstr ""
 
 msgid "Click Shutdown and restart to install"
+msgstr ""
+
+msgid "Unable"
 msgstr ""
 
 #, java-format
@@ -3800,9 +3827,6 @@ msgstr ""
 msgid "Router Help and FAQ"
 msgstr ""
 
-msgid "Info"
-msgstr ""
-
 msgid "Router information including transport addresses and UPnP scan"
 msgstr ""
 
@@ -3888,6 +3912,34 @@ msgstr ""
 msgid "Total number of remote LeaseSets stored in our NetDb"
 msgstr ""
 
+msgid "Declining transit tunnel requests during startup phase"
+msgstr ""
+
+msgid "Declining transit tunnel requests as we are shutting down"
+msgstr ""
+
+msgid "Router or network performance is impeding the building of transit tunnels"
+msgstr ""
+
+msgid "Router is currently hosting the configured maximum number of transit tunnels"
+msgstr ""
+
+msgid "Router is currently using the configured maximum share bandwidth"
+msgstr ""
+
+msgid "Router is ready to build participating tunnels"
+msgstr ""
+
+#, java-format
+msgid "Accepting transit tunnel requests; hosting {0} tunnels"
+msgstr ""
+
+msgid "No transit tunnels are built when Hidden mode is active"
+msgstr ""
+
+msgid "Router is configured to reject all transit tunnel requests"
+msgstr ""
+
 msgid "Warning: ECDSA is not available. Update your Java or OS"
 msgstr ""
 
@@ -3922,6 +3974,9 @@ msgid "The number of banned peers"
 msgstr ""
 
 msgid "The total number of peers in our network database"
+msgstr ""
+
+msgid "Total RouterInfos stored on disk"
 msgstr ""
 
 msgid "Known"
@@ -4033,34 +4088,6 @@ msgid "Queued requests from other routers to participate in tunnels"
 msgstr ""
 
 msgid "Backlog"
-msgstr ""
-
-msgid "Declining transit tunnel requests during startup phase"
-msgstr ""
-
-msgid "Declining transit tunnel requests as we are shutting down"
-msgstr ""
-
-msgid "Router or network performance is impeding the building of transit tunnels"
-msgstr ""
-
-msgid "Router is currently hosting the configured maximum number of transit tunnels"
-msgstr ""
-
-msgid "Router is currently using the configured maximum share bandwidth"
-msgstr ""
-
-msgid "Router is ready to build participating tunnels"
-msgstr ""
-
-#, java-format
-msgid "Accepting transit tunnel requests; hosting {0} tunnels"
-msgstr ""
-
-msgid "No transit tunnels are built when Hidden mode is active"
-msgstr ""
-
-msgid "Router is configured to reject all transit tunnel requests"
 msgstr ""
 
 msgid "Statistics gathered during this router's uptime"
@@ -4193,7 +4220,13 @@ msgstr ""
 msgid "Select stored analysis"
 msgstr ""
 
+msgid "Review"
+msgstr ""
+
 msgid "Run analysis on Floodfills only"
+msgstr ""
+
+msgid "Start Scan"
 msgstr ""
 
 msgid "Run analysis on all routers in NetDb"
@@ -4358,6 +4391,12 @@ msgstr ""
 msgid "Show all routers for this family in NetDb"
 msgstr ""
 
+msgid "Routers"
+msgstr ""
+
+msgid "n/a"
+msgstr ""
+
 msgid "Last lookup successful"
 msgstr ""
 
@@ -4409,9 +4448,6 @@ msgstr ""
 msgid "Data"
 msgstr ""
 
-msgid "Limit"
-msgstr ""
-
 msgid "Receive on"
 msgstr ""
 
@@ -4456,6 +4492,7 @@ msgstr ""
 msgid "No transit tunnels currently active."
 msgstr ""
 
+#, java-format
 msgid "Transit Tunnels by Peer (Top {0})"
 msgstr ""
 
@@ -4466,9 +4503,6 @@ msgid "All Tunnels by Peer"
 msgstr ""
 
 msgid "Primary IP address"
-msgstr ""
-
-msgid "Local"
 msgstr ""
 
 msgid "unique peers"
@@ -4483,6 +4517,9 @@ msgstr ""
 msgid "No local or transit tunnels currently active."
 msgstr ""
 
+msgid "PRIVATE IP ADDRESS"
+msgstr ""
+
 msgid "Bandwidth Tiers"
 msgstr ""
 
@@ -4491,6 +4528,9 @@ msgid "Over {0} shared bandwidth"
 msgstr ""
 
 msgid "Inbound or outbound?"
+msgstr ""
+
+msgid "In/Out"
 msgstr ""
 
 msgid "Gateway"
@@ -4608,6 +4648,9 @@ msgstr ""
 msgid "Browser launch at startup"
 msgstr ""
 
+msgid "I2P Router Console"
+msgstr ""
+
 msgid "Open Router Console in web browser at startup"
 msgstr ""
 
@@ -4683,12 +4726,6 @@ msgstr ""
 msgid "port"
 msgstr ""
 
-msgid "config UI"
-msgstr ""
-
-msgid "User Interface Configuration"
-msgstr ""
-
 msgid "Certificates"
 msgstr ""
 
@@ -4704,7 +4741,7 @@ msgstr ""
 msgid "Advanced Network Configuration"
 msgstr ""
 
-msgid "I2P+ will work best if you configure your rates to match the speed of your internet connection."
+msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
 msgstr ""
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
@@ -4735,10 +4772,10 @@ msgid "NOTE"
 msgstr ""
 
 #, java-format
-msgid "You have configured I2P+ to share only {0} KBps."
+msgid "You have configured I2P to share only {0} KBps."
 msgstr ""
 
-msgid "I2P+ requires at least 12KBps to enable sharing. "
+msgid "I2P requires at least 12KBps to enable sharing. "
 msgstr ""
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
@@ -5236,7 +5273,7 @@ msgstr ""
 msgid "Reseeding is the bootstrapping process used to find other routers when you first install I2P, or when your router has too few router references remaining."
 msgstr ""
 
-msgid "To enable the configuration of reseed urls, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
+msgid "To enable the configuration of reseed urls, activate the console's <a href=/help/advancedsettings>Advanced mode</a>."
 msgstr ""
 
 msgid "Reseeding Configuration"
@@ -5246,9 +5283,6 @@ msgid "Help with reseeding"
 msgstr ""
 
 msgid "Reseeding Help"
-msgstr ""
-
-msgid "Change these only if HTTPS is blocked by a restrictive firewall and reseed has failed."
 msgstr ""
 
 msgid "Reseed URLs"
@@ -5285,6 +5319,9 @@ msgid "This option will use I2P's HTTP outproxy to reseed, or the Orchid plugin 
 msgstr ""
 
 msgid "I2P Outproxy"
+msgstr ""
+
+msgid "Port"
 msgstr ""
 
 msgid "Use HTTP Proxy for HTTP Reseed Hosts"
@@ -5399,6 +5436,12 @@ msgstr ""
 msgid "Use the same sidebar on all pages"
 msgstr ""
 
+msgid "Sticky sidebar"
+msgstr ""
+
+msgid "Enable conditional fixed sidebar"
+msgstr ""
+
 msgid "config stats"
 msgstr ""
 
@@ -5454,6 +5497,12 @@ msgid "To modify client tunnel settings, use the <a href=\"/i2ptunnelmgr\">Tunne
 msgstr ""
 
 msgid "To enable session-only changes to the client tunnels, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
+msgstr ""
+
+msgid "config UI"
+msgstr ""
+
+msgid "User Interface Configuration"
 msgstr ""
 
 msgid "Router Console Theme"
@@ -5592,13 +5641,19 @@ msgstr ""
 msgid "not found"
 msgstr ""
 
+msgid "router logs"
+msgstr ""
+
+msgid "Critical / Error Level Logs"
+msgstr ""
+
+msgid "Clear logs"
+msgstr ""
+
 msgid "events"
 msgstr ""
 
 msgid "Event Log"
-msgstr ""
-
-msgid "Combined"
 msgstr ""
 
 msgid "graph"
@@ -6108,7 +6163,7 @@ msgstr ""
 msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
 msgstr ""
 
-msgid "For most client services, change listening address for relevant service in Tunnel Manager's configuration section using <i>reachable by</i> dropdown."
+msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager's configuration section using the <i>reachable by</i> dropdown."
 msgstr ""
 
 msgid "How do I connect to IRC within I2P?"
@@ -7308,34 +7363,6 @@ msgstr ""
 msgid "Job Queue Stats"
 msgstr ""
 
-msgid "logs"
-msgstr ""
-
-msgid "Please include your I2P version and running environment information in bug reports"
-msgstr ""
-
-#, java-format
-msgid "Please report bugs on {0} or {1}."
-msgstr ""
-
-msgid "View event log"
-msgstr ""
-
-msgid "Critical / Error Level Logs"
-msgstr ""
-
-msgid "Clear logs"
-msgstr ""
-
-msgid "Configure router logging options"
-msgstr ""
-
-msgid "Filter Router log output"
-msgstr ""
-
-msgid "Service (Wrapper) Logs"
-msgstr ""
-
 msgid "network database"
 msgstr ""
 
@@ -7355,6 +7382,9 @@ msgid "Locally hosted public service"
 msgstr ""
 
 msgid "Requested client leaseset"
+msgstr ""
+
+msgid "Remote"
 msgstr ""
 
 msgid "network database router map"
@@ -7400,163 +7430,25 @@ msgstr ""
 msgid "Fast / High Capacity"
 msgstr ""
 
-msgid "router logs"
+msgid "Configure router logging options"
+msgstr ""
+
+msgid "View event log"
+msgstr ""
+
+msgid "Filter Router log output"
 msgstr ""
 
 msgid "service logs"
 msgstr ""
 
-msgid "Manage I2P addresses"
-msgstr ""
-
-msgid "Imagegen"
-msgstr ""
-
-msgid "Create and download torrents"
-msgstr ""
-
-msgid "Manage client and server tunnels"
-msgstr ""
-
-msgid "Webmail client"
-msgstr ""
-
-msgid "Webmail"
-msgstr ""
-
-msgid "Local webserver for hosting content on the I2P network"
+msgid "Service (Wrapper) Logs"
 msgstr ""
 
 msgid "Information &amp; Diagnostics"
 msgstr ""
 
-msgid "Review recent updates to I2P"
-msgstr ""
-
-msgid "View debugging information"
-msgstr ""
-
-msgid "View router performance graphs"
-msgstr ""
-
-msgid "Router help section"
-msgstr ""
-
-msgid "Router homepage"
-msgstr ""
-
-msgid "Home"
-msgstr ""
-
-msgid "View news relating to I2P"
-msgstr ""
-
-msgid "I2P News"
-msgstr ""
-
-msgid "View router workload and stats"
-msgstr ""
-
-msgid "Router Jobs"
-msgstr ""
-
-msgid "View router logs"
-msgstr ""
-
-msgid "View information and stats regarding all known peers"
-msgstr ""
-
-msgid "View active peers"
-msgstr ""
-
-msgid "View peer performance profiles"
-msgstr ""
-
-msgid "View information about router and running environment"
-msgstr ""
-
-msgid "Statistics"
-msgstr ""
-
-msgid "Current console and webapp translation report"
-msgstr ""
-
-msgid "Translation Status"
-msgstr ""
-
-msgid "View active tunnels"
-msgstr ""
-
-msgid "Customize homepage"
-msgstr ""
-
-msgid "Homepage"
-msgstr ""
-
-msgid "Configure I2P Client Control Interface"
-msgstr ""
-
-msgid "View or edit router keyring for encrypted destinations"
-msgstr ""
-
-msgid "Configure router networking options"
-msgstr ""
-
-msgid "Manually edit peers and view banned peers and blocklist"
-msgstr ""
-
-msgid "Install and manage router plugins"
-msgstr ""
-
-msgid "Router reseeding and configuration"
-msgstr ""
-
-msgid "Configure and manage Router family"
-msgstr ""
-
-msgid "Manage Router service"
-msgstr ""
-
-msgid "Configure stat collection for graphing"
-msgstr ""
-
-msgid "Router Stats"
-msgstr ""
-
-msgid "Configure router updates"
-msgstr ""
-
-msgid "Configuration wizard for new users"
-msgstr ""
-
-msgid "Setup Wizard"
-msgstr ""
-
-msgid "Customize sidebar"
-msgstr ""
-
-msgid "Configure tunnel options"
-msgstr ""
-
-msgid "Configure router user interface and optional console password"
-msgstr ""
-
-msgid "Configuring I2P for optimal performance"
-msgstr ""
-
-msgid "Information for new users"
-msgstr ""
-
-msgid "A guide to reseeding your I2P router"
-msgstr ""
-
-msgid "What to do in the event I2P isn't working"
-msgstr ""
-
-msgid "Introduction to tunnel filters"
-msgstr ""
-
-msgid "Tunnel Filters"
+msgid "Customize"
 msgstr ""
 
 msgid "statistics"
@@ -7610,9 +7502,6 @@ msgstr ""
 msgid "Toggle Tunnels"
 msgstr ""
 
-msgid "Updating sidebar sections"
-msgstr ""
-
 msgid "Peer Profile"
 msgstr ""
 
@@ -7637,13 +7526,16 @@ msgstr ""
 msgid "webmail"
 msgstr ""
 
+msgid "Webmail"
+msgstr ""
+
 msgid "New Install Wizard"
 msgstr ""
 
 msgid "Skip Setup"
 msgstr ""
 
-msgid "Select the language to be used for the router console and web applications (<a href=/webmail target=_blank rel=noreferrer>webmail</a>, <a href=/torrents target=_blank rel=noreferrer>torrents</a>, <a href=/i2ptunnelmgr target=_blank rel=noreferrer>tunnel manager</a> etc). If you wish to change the language in future, change the router console theme, or configure a password to access the console, you may do so on the <a href=/configui target=_blank rel=noreferrer>User Interface configuration page</a>."
+msgid "Select the language to be used for the router console and web applications ("
 msgstr ""
 
 msgid "Router Console &amp; WebApps Display Language"
@@ -7713,6 +7605,13 @@ msgid "Bandwidth Configuration"
 msgstr ""
 
 #, java-format
+msgid "You have configured I2P+ to share only {0} KBps."
+msgstr ""
+
+msgid "I2P+ requires at least 12KBps to enable sharing. "
+msgstr ""
+
+#, java-format
 msgid "You have configured I2P+ to share {0} KBps."
 msgstr ""
 
@@ -7722,7 +7621,7 @@ msgstr ""
 msgid "Browser Setup"
 msgstr ""
 
-msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. For more help, see <a href=https://geti2p.net/htproxyports target=_blank rel=noreferrer>the configuration guide</a>, or <a href=/help/configuration#browserconfig>the mini-tutorial for Firefox</a>."
+msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. "
 msgstr ""
 
 msgid "Welcome to I2P+!"
@@ -7731,7 +7630,7 @@ msgstr ""
 msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
 msgstr ""
 
-msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P+."
+msgid "Once green stars are indicated next to your Service Tunnels, there is a wide variety of things you can do with I2P+."
 msgstr ""
 
 msgid "Unknown Wizard page"

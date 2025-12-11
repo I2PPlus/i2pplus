@@ -214,12 +214,6 @@ msgstr "I2PMail"
 msgid "No new messages"
 msgstr "Ühtegi uut sõnumit"
 
-msgid "Checking for new messages on server"
-msgstr "Kontrollin uute sõnumite olemasolu serveris"
-
-msgid "Refresh the page for updates"
-msgstr "Värskenda lehte uuenduste jaoks"
-
 #, java-format
 msgid "{0} is an I2P-exclusive service provided by {1}."
 msgstr "{0} on I2P-uueksiline teenus, mida pakub {1}."
@@ -227,6 +221,12 @@ msgstr "{0} on I2P-uueksiline teenus, mida pakub {1}."
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
 msgstr "{0} veebipõhine e-postiklient &copy Susi 2004-2005."
+
+msgid "Checking for new messages on server"
+msgstr "Kontrollin uute sõnumite olemasolu serveris"
+
+msgid "Refresh the page for updates"
+msgstr "Värskenda lehte uuenduste jaoks"
 
 msgid "Removed tracking image placeholder"
 msgstr "Eemaldati jälgimispildi asendaja"
@@ -338,6 +338,9 @@ msgstr "Kontrolli e-postit"
 msgid "Refresh Page"
 msgstr "Värskenda lehte"
 
+msgid "Change to Folder"
+msgstr "Muuda kausta"
+
 #, java-format
 msgid "1 Message"
 msgid_plural "{0} Messages"
@@ -356,18 +359,6 @@ msgstr "Suurus"
 msgid "Mark for deletion"
 msgstr "Märkida kustutamiseks"
 
-msgid "Message contains HTML"
-msgstr "Sõnum sisaldab HTML-i"
-
-msgid "Message is new"
-msgstr "Sõnum on uus"
-
-msgid "Message is spam"
-msgstr "Sõnum on rämpspost"
-
-msgid "Message body not downloaded"
-msgstr "Sõnumi tekst ei ole alla laetud"
-
 msgid "Really delete the marked messages?"
 msgstr "Kustutan ma tegelikult märgitud sõnumid?"
 
@@ -383,8 +374,17 @@ msgstr "Märki kõik"
 msgid "Clear All"
 msgstr "Puhasta kõik"
 
-msgid "Change to Folder"
-msgstr "Muuda kausta"
+msgid "Message contains HTML"
+msgstr "Sõnum sisaldab HTML-i"
+
+msgid "Message is new"
+msgstr "Sõnum on uus"
+
+msgid "Message is spam"
+msgstr "Sõnum on rämpspost"
+
+msgid "Message body not downloaded"
+msgstr "Sõnumi tekst ei ole alla laetud"
 
 msgid "First"
 msgstr "Esimene"

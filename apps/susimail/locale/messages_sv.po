@@ -214,12 +214,6 @@ msgstr "I2PMail"
 msgid "No new messages"
 msgstr "Inga nya meddelanden"
 
-msgid "Checking for new messages on server"
-msgstr "Söker efter nya e-postmeddelanden på servern"
-
-msgid "Refresh the page for updates"
-msgstr "Uppdatera sidan för uppdateringar"
-
 #, java-format
 msgid "{0} is an I2P-exclusive service provided by {1}."
 msgstr "{0} är en I2P-exklusiv tjänst som tillhandahålls av {1}."
@@ -227,6 +221,12 @@ msgstr "{0} är en I2P-exklusiv tjänst som tillhandahålls av {1}."
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
 msgstr "{0} webmail client &copy Susi 2004-2005."
+
+msgid "Checking for new messages on server"
+msgstr "Söker efter nya e-postmeddelanden på servern"
+
+msgid "Refresh the page for updates"
+msgstr "Uppdatera sidan för uppdateringar"
 
 msgid "Removed tracking image placeholder"
 msgstr "Borttagen plats hållare för spårningsbild"
@@ -338,6 +338,9 @@ msgstr "Kontrollera e-post"
 msgid "Refresh Page"
 msgstr "Uppdatera sidan"
 
+msgid "Change to Folder"
+msgstr "Ändra till mapp"
+
 #, java-format
 msgid "1 Message"
 msgid_plural "{0} Messages"
@@ -356,18 +359,6 @@ msgstr "Storlek"
 msgid "Mark for deletion"
 msgstr "Markera för borttagning"
 
-msgid "Message contains HTML"
-msgstr "Meddelande innehåller HTML"
-
-msgid "Message is new"
-msgstr "Meddelandet är nytt"
-
-msgid "Message is spam"
-msgstr "Meddelandet är skräppost"
-
-msgid "Message body not downloaded"
-msgstr "Meddelandetext har inte laddats ner"
-
 msgid "Really delete the marked messages?"
 msgstr "Vill du verkligen radera valda meddelanden?"
 
@@ -383,8 +374,17 @@ msgstr "Markera alla"
 msgid "Clear All"
 msgstr "Radera alla"
 
-msgid "Change to Folder"
-msgstr "Ändra till mapp"
+msgid "Message contains HTML"
+msgstr "Meddelande innehåller HTML"
+
+msgid "Message is new"
+msgstr "Meddelandet är nytt"
+
+msgid "Message is spam"
+msgstr "Meddelandet är skräppost"
+
+msgid "Message body not downloaded"
+msgstr "Meddelandetext har inte laddats ner"
 
 msgid "First"
 msgstr "Första"

@@ -73,8 +73,17 @@ msgstr "{0} राउटर जानकारियाँ रीसीड ह�
 msgid "Acquired {0} router infos from reseed hosts ({1} errors)"
 msgstr "{0} राउटर जानकारियाँ रीसीड होस्ट्स से प्राप्त की गईं ({1} त्रुटियाँ)"
 
+msgid "Clock step adjustment (ms)"
+msgstr "घड़ी के कदम समायोजन (मिलीसेकंड)"
+
+msgid "Size of tunnel acceptor backlog"
+msgstr "टंनल स्वीकारक की बैकलॉग का आकार"
+
 msgid "Message receive rate (B/s)"
 msgstr "संदेश प्राप्ति दर (बाइट/सेकंड)"
+
+msgid "Low-level receive rate (B/s)"
+msgstr "निम्न स्तरीय प्राप्ति दर (बाइट/सेकंड)"
 
 msgid "Message send rate (B/s)"
 msgstr "संदेश भेजने की दर (बाइट/सेकंड)"
@@ -82,41 +91,35 @@ msgstr "संदेश भेजने की दर (बाइट/सेकं
 msgid "Low-level send rate (B/s)"
 msgstr "निम्न स्तरीय भेजने की दर (बाइट/सेकंड)"
 
-msgid "Low-level receive rate (B/s)"
-msgstr "निम्न स्तरीय प्राप्ति दर (बाइट/सेकंड)"
-
-msgid "Total peers in our NetDb"
-msgstr "हमारे NetDb में कुल पीयर"
-
 msgid "Peers active in the last minute"
 msgstr "अंतिम मिनट में सक्रिय पीयर"
-
-msgid "Known high capacity peers"
-msgstr "ज्ञात उच्च क्षमता वाले पीयर"
 
 msgid "Peers sent to in the last minute"
 msgstr "अंतिम मिनट में भेजे गए पीयर"
 
+msgid "Total peers in our banlist"
+msgstr "हमारी प्रतिबंध सूची में कुल पीयर"
+
+msgid "CPU load average of the JVM"
+msgstr "JVM की औसत CPU लोड"
+
 msgid "Known fast peers"
 msgstr "ज्ञात तेजी से कार्य करने वाले पीयर"
+
+msgid "Known high capacity peers"
+msgstr "ज्ञात उच्च क्षमता वाले पीयर"
 
 msgid "Known integrated (floodfill) peers"
 msgstr "ज्ञात समेत (फ्लूडफिल) पीयर"
 
-msgid "Total peers in our banlist"
-msgstr "हमारी प्रतिबंध सूची में कुल पीयर"
+msgid "Total peers in our NetDb"
+msgstr "हमारे NetDb में कुल पीयर"
+
+msgid "Total number of threads in use"
+msgstr ""
 
 msgid "Peers without a published IP address"
 msgstr "प्रकाशित आईपी पता नहीं वाले पीयर"
-
-msgid "Size of tunnel acceptor backlog"
-msgstr "टंनल स्वीकारक की बैकलॉग का आकार"
-
-msgid "Clock step adjustment (ms)"
-msgstr "घड़ी के कदम समायोजन (मिलीसेकंड)"
-
-msgid "CPU load average of the JVM"
-msgstr "JVM की औसत CPU लोड"
 
 msgid "Average tunnel build success %"
 msgstr "औसत टंनल निर्माण सफलता प्रतिशत"
@@ -1554,29 +1557,29 @@ msgstr "{0} में पुनः शुरू होने की संभा
 msgid "Save order"
 msgstr "राज़ी बनाएं"
 
+msgid "Restore full default"
+msgstr "पूर्ण मानक वापस स्थापित करें"
+
+msgid "Restore minimal default"
+msgstr "अंतर्निहित मानक वापस स्थापित करें"
+
 msgid "Sidebar preferences updated"
 msgstr "साइडबार प्राथमिकताएं अपडेट की गईं"
 
 msgid "Refresh interval must be a number"
 msgstr "ताज़ा करने का अंतराल एक संख्या होना चाहिए"
 
-msgid "Restore full default"
-msgstr "पूर्ण मानक वापस स्थापित करें"
-
 msgid "Full sidebar defaults restored."
 msgstr "पूर्ण साइडबार डिफ़ॉल्ट्स पुनर्स्थापित।"
 
-msgid "Sidebar will refresh shortly."
-msgstr "साइडबार जल्द ही रिफ्रेश होगा।"
-
-msgid "Restore minimal default"
-msgstr "अंतर्निहित मानक वापस स्थापित करें"
-
-msgid "Minimal sidebar defaults restored."
-msgstr "न्यूनतम साइडबार डिफ़ॉल्ट्स पुनर्स्थापित।"
-
 msgid "Order must be an integer"
 msgstr "राज़ी एक पूर्ण संख्या होनी चाहिए"
+
+msgid "Saved order of sections."
+msgstr "खंडों की राज़ी सहेजी गई।"
+
+msgid "Sidebar will refresh shortly."
+msgstr "साइडबार जल्द ही रिफ्रेश होगा।"
 
 msgid "No section selected"
 msgstr "कोई खंड चुना नहीं"
@@ -1586,9 +1589,6 @@ msgstr "कोई राज़ी नहीं दर्ज की"
 
 msgid "Moved"
 msgstr "चलाया गया"
-
-msgid "Saved order of sections."
-msgstr "खंडों की राज़ी सहेजी गई।"
 
 msgid "Full statistics enabled"
 msgstr "पूर्ण स्टैटिस्टिक्स सक्षम किए गए"
@@ -2417,6 +2417,9 @@ msgstr "HTTP प्रॉक्सी चालू नहीं है"
 msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
 msgstr "{0} पर HTTP प्रॉक्सी का उपयोग करने के लिए आपका ब्राउज़र सही ढंग से सेट नहीं हुआ है"
 
+msgid "Errors"
+msgstr ""
+
 msgid "URL"
 msgstr "URL"
 
@@ -2691,29 +2694,23 @@ msgstr "या इस राउटर के करीब Sybil"
 msgid "Lookup"
 msgstr "खोज"
 
-msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
-msgstr "कभी भी अपनी राउटर पहचान किसी को न बताएँ, क्योंकि यह आपके आईपी पते के साथ नेटवर्क डेटाबेस में अद्वितीय रूप से जुड़ी हुई है।"
+msgid "Select the field to search on"
+msgstr ""
 
-msgid "is banned"
-msgstr "बैन हुआ है"
-
-msgid "not found in network database"
-msgstr "नेटवर्क डेटाबेस में नहीं मिला"
-
-msgid "Bad Base64 Router hash"
-msgstr "खराब Base64 राउटर हैश"
-
-msgid "No routers with"
-msgstr "के साथ कोई राउटर नहीं"
-
-msgid "Hash prefix"
-msgstr "हैश उपसर्ग"
-
-msgid "Port"
-msgstr "पोर्ट"
+msgid "e.g. cn hk"
+msgstr ""
 
 msgid "MTU"
 msgstr "MTU"
+
+msgid "Enter search value here"
+msgstr ""
+
+msgid "Router not found"
+msgstr ""
+
+msgid "No routers with"
+msgstr "के साथ कोई राउटर नहीं"
 
 msgid "found in the network database"
 msgstr "नेटवर्क डेटाबेस में पाया गया"
@@ -2841,17 +2838,17 @@ msgstr "{0} पहले समाप्त हो गया"
 msgid "Unknown"
 msgstr "अज्ञात"
 
-msgid "Advanced mode - includes all statistics published by floodfills."
-msgstr "उन्नत मोड - फ्लडफिल द्वारा प्रकाशित सभी आँकड़े शामिल हैं।"
-
-msgid "Compact mode - does not include statistics published by floodfills."
-msgstr "सघन मोड - फ्लडफिल द्वारा प्रकाशित आँकड़े शामिल नहीं हैं।"
-
 msgid "Network Database Router Statistics"
 msgstr "नेटवर्क डेटाबेस राउटर स्टैटिस्टिक्स"
 
 msgid "Count"
 msgstr "गिनती"
+
+msgid "Under 12 KB/s"
+msgstr ""
+
+msgid "Over 2048 KB/s"
+msgstr ""
 
 msgid "Bandwidth Tier"
 msgstr "बैंडविड्थ टायर"
@@ -2923,6 +2920,9 @@ msgstr "प्रकाशित"
 msgid "Hostname"
 msgstr "होस्टनाम"
 
+msgid "Whois"
+msgstr ""
+
 msgid "direct"
 msgstr "प्रत्यक्ष"
 
@@ -2938,20 +2938,26 @@ msgstr "NetDb में इस साइनेचर तरीके के स�
 msgid "Show all routers with this encryption type in the NetDb"
 msgstr "NetDb में इस एन्क्रिप्शन तरीके के साथ सभी राउटर दिखाएं"
 
-msgid "Addresses"
-msgstr "पते"
-
-msgid "n/a"
-msgstr "न/ए"
-
 msgid "Show all routers with this address in the NetDb"
 msgstr "NetDb में इस पते के साथ सभी राउटर दिखाएं"
 
 msgid "Show all routers with this port in the NetDb"
 msgstr "NetDb में इस पोर्ट के साथ सभी राउटर दिखाएं"
 
-msgid "Routers"
-msgstr "राउटर"
+msgid "Maximum Transmission Unit"
+msgstr ""
+
+msgid "Show all routers with this MTU in the NetDb"
+msgstr ""
+
+msgid "Addresses"
+msgstr "पते"
+
+msgid "Introducers"
+msgstr ""
+
+msgid "Network Id"
+msgstr "नेटवर्क आईडी"
 
 msgid "First heard about"
 msgstr "पहली बार सुना"
@@ -2962,11 +2968,8 @@ msgstr "अंतिम बार सुना"
 msgid "Last heard from"
 msgstr "अंतिम बार से सुना"
 
-msgid "Network Id"
-msgstr "नेटवर्क आईडी"
-
-msgid "Count is always spoofed to avoid indicating router restarts"
-msgstr "गिनती हमेशा राउटर पुनःप्रारंभ को इंगित करने से बचने के लिए स्पूफ की जाती है"
+msgid "Info"
+msgstr "जानकारी"
 
 msgid "Hidden or starting up"
 msgstr "छिपा हुआ या शुरू हो रहा"
@@ -2995,17 +2998,32 @@ msgstr "SSU [IPv6]"
 msgid "SSU [IPv6] with Introducers"
 msgstr "IPv6 SSU, परिचयक"
 
+msgid "NTCP &amp; SSU with Introducers [IPv6 Only]"
+msgstr "IPv6 केवल NTCP, SSU, परिचयक"
+
 msgid "NTCP [IPv6]"
 msgstr "NTCP [IPv6]"
 
 msgid "NTCP [IPv6] &amp; SSU"
 msgstr "NTCP [IPv6] &amp; SSU"
 
-msgid "NTCP &amp; SSU with Introducers [IPv6 Only]"
-msgstr "IPv6 केवल NTCP, SSU, परिचयक"
-
 msgid "NTCP [IPv6] &amp; SSU with Introducers"
 msgstr "IPv6 NTCP, SSU, परिचयक"
+
+msgid "Local"
+msgstr "स्थानीय"
+
+msgid "Fast Tier"
+msgstr ""
+
+msgid "High Capacity Tier"
+msgstr ""
+
+msgid "Integrated Tier"
+msgstr ""
+
+msgid "Standard Tier"
+msgstr ""
 
 msgid "No peer connections available"
 msgstr "समकक्ष कनेक्शन उपलब्ध नहीं"
@@ -3339,14 +3357,17 @@ msgstr "अंतिम बार सुना"
 msgid "View/Edit"
 msgstr "देखें/संपादित करें"
 
-msgid "Unreachable"
-msgstr "पहुँच不到"
-
 msgid "OK"
 msgstr "ठीक"
 
 msgid "Test Fails"
 msgstr "परीक्षण विफल होता है"
+
+msgid "Unreachable"
+msgstr "पहुँच不到"
+
+msgid "Most tests passing"
+msgstr ""
 
 msgid "Fast, High Capacity"
 msgstr "तेज़, उच्च क्षमता"
@@ -3362,6 +3383,9 @@ msgstr "असफल"
 
 msgid "Integrated"
 msgstr "समेकित"
+
+msgid "Configure Peer"
+msgstr ""
 
 msgid "Thresholds"
 msgstr "सीमाएँ"
@@ -3429,11 +3453,11 @@ msgstr "अंतिम खराब भेजना"
 msgid "Last Bad Store"
 msgstr "अंतिम खराब संग्रह"
 
-msgid "Capabilities in the NetDb, not used to determine profiles"
-msgstr "NetDb में क्षमताएँ, प्रोफ़ाइल निर्धारित करने के लिए उपयोग नहीं की जाती हैं"
-
 msgid "caps"
 msgstr "क्षमताएँ"
+
+msgid "Capabilities in the NetDb, not used to determine profiles"
+msgstr "NetDb में क्षमताएँ, प्रोफ़ाइल निर्धारित करने के लिए उपयोग नहीं की जाती हैं"
 
 msgid "Reachable"
 msgstr "पहुँच सकता है"
@@ -3606,6 +3630,9 @@ msgstr "इंस्टॉल करने के लिए रीस्टा�
 
 msgid "Click Shutdown and restart to install"
 msgstr "इंस्टॉल करने के लिए बंद करें और फिर से शुरू करें"
+
+msgid "Unable"
+msgstr ""
 
 #, java-format
 msgid "{0}"
@@ -3800,9 +3827,6 @@ msgstr "रूटर की प्रदर्शन को ग्राफ़ �
 msgid "Router Help and FAQ"
 msgstr "रूटर मदद और सामान्य प्रश्न"
 
-msgid "Info"
-msgstr "जानकारी"
-
 msgid "Router information including transport addresses and UPnP scan"
 msgstr "ट्रांसपोर्ट पते और UPnP स्कैन सहित रूटर की जानकारी"
 
@@ -3888,6 +3912,34 @@ msgstr "फ्लॉडफिल सक्षम"
 msgid "Total number of remote LeaseSets stored in our NetDb"
 msgstr "हमारे NetDb में संग्रहीत दूरस्थ लीज़सेट की कुल संख्या"
 
+msgid "Declining transit tunnel requests during startup phase"
+msgstr "रूटर स्थिर होने तक पहले 10 मिनटों में कोई पारगम्यता टनल अनुरोध स्वीकार नहीं किया जाता"
+
+msgid "Declining transit tunnel requests as we are shutting down"
+msgstr "हम बंद कर रहे होंगे, इसलिए पारगम्यता टनल अनुरोध को अस्वीकार कर रहे हैं"
+
+msgid "Router or network performance is impeding the building of transit tunnels"
+msgstr "रूटर या नेटवर्क का प्रदर्शन ट्रांजिट टनल बनाने को रोक रहा है"
+
+msgid "Router is currently hosting the configured maximum number of transit tunnels"
+msgstr "रूटर वर्तमान में प्रारंभिक सेट किए गए पारगम्यता टनल की संख्या को मेजबानी कर रहा है"
+
+msgid "Router is currently using the configured maximum share bandwidth"
+msgstr "रूटर वर्तमान में सेट किए गए मौजूदा शेयर बैंडविड्थ का उपयोग कर रहा है"
+
+msgid "Router is ready to build participating tunnels"
+msgstr "रूटर भाग लेने वाले टनल बनाने के लिए तैयार है"
+
+#, java-format
+msgid "Accepting transit tunnel requests; hosting {0} tunnels"
+msgstr "{0} टनल मेजबानी करते हुए पारगम्यता टनल अनुरोध स्वीकार कर रहा है"
+
+msgid "No transit tunnels are built when Hidden mode is active"
+msgstr "छिपा मोड सक्रिय होने पर कोई पारगम्यता टनल नहीं बनाया जाता"
+
+msgid "Router is configured to reject all transit tunnel requests"
+msgstr "रूटर सभी पारगम्यता टनल अनुरोधों को अस्वीकार करने के लिए सेट किया गया है"
+
 msgid "Warning: ECDSA is not available. Update your Java or OS"
 msgstr "सावधानी: ECDSA उपलब्ध नहीं है। अपने जावा या ऑपरेटिंग सिस्टम को अपडेट करें"
 
@@ -3923,6 +3975,9 @@ msgstr "प्रतिबंधित पीयर की संख्या"
 
 msgid "The total number of peers in our network database"
 msgstr "हमारे नेटवर्क डेटाबेस में कुल पीयर की संख्या"
+
+msgid "Total RouterInfos stored on disk"
+msgstr ""
 
 msgid "Known"
 msgstr "परिचित"
@@ -4034,34 +4089,6 @@ msgstr "अन्य रूटरों से टनल में भाग ल
 
 msgid "Backlog"
 msgstr "पुराने कार्य"
-
-msgid "Declining transit tunnel requests during startup phase"
-msgstr "रूटर स्थिर होने तक पहले 10 मिनटों में कोई पारगम्यता टनल अनुरोध स्वीकार नहीं किया जाता"
-
-msgid "Declining transit tunnel requests as we are shutting down"
-msgstr "हम बंद कर रहे होंगे, इसलिए पारगम्यता टनल अनुरोध को अस्वीकार कर रहे हैं"
-
-msgid "Router or network performance is impeding the building of transit tunnels"
-msgstr "रूटर या नेटवर्क का प्रदर्शन ट्रांजिट टनल बनाने को रोक रहा है"
-
-msgid "Router is currently hosting the configured maximum number of transit tunnels"
-msgstr "रूटर वर्तमान में प्रारंभिक सेट किए गए पारगम्यता टनल की संख्या को मेजबानी कर रहा है"
-
-msgid "Router is currently using the configured maximum share bandwidth"
-msgstr "रूटर वर्तमान में सेट किए गए मौजूदा शेयर बैंडविड्थ का उपयोग कर रहा है"
-
-msgid "Router is ready to build participating tunnels"
-msgstr "रूटर भाग लेने वाले टनल बनाने के लिए तैयार है"
-
-#, java-format
-msgid "Accepting transit tunnel requests; hosting {0} tunnels"
-msgstr "{0} टनल मेजबानी करते हुए पारगम्यता टनल अनुरोध स्वीकार कर रहा है"
-
-msgid "No transit tunnels are built when Hidden mode is active"
-msgstr "छिपा मोड सक्रिय होने पर कोई पारगम्यता टनल नहीं बनाया जाता"
-
-msgid "Router is configured to reject all transit tunnel requests"
-msgstr "रूटर सभी पारगम्यता टनल अनुरोधों को अस्वीकार करने के लिए सेट किया गया है"
 
 msgid "Statistics gathered during this router's uptime"
 msgstr "इस रूटर के चलने के दौरान इकट्ठी सांख्यिकी"
@@ -4193,8 +4220,14 @@ msgstr "संग्रहित विश्लेषण नहीं"
 msgid "Select stored analysis"
 msgstr "संग्रहित विश्लेषण चुनें"
 
+msgid "Review"
+msgstr ""
+
 msgid "Run analysis on Floodfills only"
 msgstr "केवल Floodfills पर विश्लेषण चलाएं"
+
+msgid "Start Scan"
+msgstr ""
 
 msgid "Run analysis on all routers in NetDb"
 msgstr "NetDb में सभी रूटर पर विश्लेषण चलाएं"
@@ -4358,6 +4391,12 @@ msgstr "मैक्स"
 msgid "Show all routers for this family in NetDb"
 msgstr "NetDb में इस परिवार के सभी रूटर दिखाएं"
 
+msgid "Routers"
+msgstr "राउटर"
+
+msgid "n/a"
+msgstr "न/ए"
+
 msgid "Last lookup successful"
 msgstr "अंतिम ढूँढ़ना सफल था"
 
@@ -4409,9 +4448,6 @@ msgstr "डेटा स्थानांतरित किया गया"
 msgid "Data"
 msgstr "डेटा"
 
-msgid "Limit"
-msgstr "सीमा"
-
 msgid "Receive on"
 msgstr "प्राप्त करें"
 
@@ -4456,6 +4492,7 @@ msgstr "रूटर क्रेन्टली हाइडन मोड म�
 msgid "No transit tunnels currently active."
 msgstr "वर्तमान में कोई सक्रिय ट्रांजिट टनल नहीं है।"
 
+#, java-format
 msgid "Transit Tunnels by Peer (Top {0})"
 msgstr "पीयर द्वारा ट्रांजिट टनल (शीर्ष {0})"
 
@@ -4467,9 +4504,6 @@ msgstr "पीयर द्वारा सभी टनल"
 
 msgid "Primary IP address"
 msgstr "मुख्य आईपी पता"
-
-msgid "Local"
-msgstr "स्थानीय"
 
 msgid "unique peers"
 msgstr "अद्वितीय पीयर"
@@ -4483,6 +4517,9 @@ msgstr "ट्रांजिट"
 msgid "No local or transit tunnels currently active."
 msgstr "वर्तमान में कोई स्थानीय या ट्रांजिट टनल सक्रिय नहीं है।"
 
+msgid "PRIVATE IP ADDRESS"
+msgstr ""
+
 msgid "Bandwidth Tiers"
 msgstr "बैंडविड्थ स्तर"
 
@@ -4492,6 +4529,9 @@ msgstr "{0} से अधिक साझा बैंडविड्थ"
 
 msgid "Inbound or outbound?"
 msgstr "आगंतुकीय या निर्गमनीय?"
+
+msgid "In/Out"
+msgstr ""
 
 msgid "Gateway"
 msgstr "गेटवे"
@@ -4608,6 +4648,9 @@ msgstr "I2P वेब सर्वर (eepsite)"
 msgid "Browser launch at startup"
 msgstr "ब्राउज़र को शुरुआत के समय लॉन्च करें"
 
+msgid "I2P Router Console"
+msgstr ""
+
 msgid "Open Router Console in web browser at startup"
 msgstr "शुरुआत के समय वेब ब्राउज़र में रूटर कंसोल खोलें"
 
@@ -4683,12 +4726,6 @@ msgstr "कुंजी"
 msgid "port"
 msgstr "पोर्ट"
 
-msgid "config UI"
-msgstr "सेटिंग यूजर इंटरफेस"
-
-msgid "User Interface Configuration"
-msgstr "उपयोगकर्ता इंटरफेस के सेटिंग"
-
 msgid "Certificates"
 msgstr "सर्टिफिकेट"
 
@@ -4704,8 +4741,8 @@ msgstr "बैंडविड्ध सीमावाहक"
 msgid "Advanced Network Configuration"
 msgstr "उन्नत नेटवर्क सेटिंग"
 
-msgid "I2P+ will work best if you configure your rates to match the speed of your internet connection."
-msgstr "I2P को सबसे अच्छी तरह से कार्य करने के लिए, आपको अपनी इंटरनेट कनेक्शन की गति के मापदंड के अनुसार बैंडविड्ध की सेटिंग करनी चाहिए।"
+msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
+msgstr ""
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
 msgstr "टिप्पणी: आपकी नेटवर्क के प्रतिभाग (नेटवर्क शेयर) अपस्ट्रीम बैंडविड्ध के आवंटन (अपलोड गति) द्वारा निर्धारित होती है।"
@@ -4735,11 +4772,11 @@ msgid "NOTE"
 msgstr "नोट"
 
 #, java-format
-msgid "You have configured I2P+ to share only {0} KBps."
-msgstr "आपने I2P को केवल {0} KBps साझा करने के लिए सेट किया है।"
+msgid "You have configured I2P to share only {0} KBps."
+msgstr ""
 
-msgid "I2P+ requires at least 12KBps to enable sharing. "
-msgstr "I2P को कम से कम 12KBps की गति की आवश्यकता होती है शेयरिंग को सक्षम करने के लिए।"
+msgid "I2P requires at least 12KBps to enable sharing. "
+msgstr ""
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
 msgstr "कृपया अधिक बैंडविड्ध के आवंटन करके शेयरिंग (टनल में भाग लेने) को सक्षम करें।"
@@ -5236,8 +5273,8 @@ msgstr "रीसीडिंग की सेटिंग करें"
 msgid "Reseeding is the bootstrapping process used to find other routers when you first install I2P, or when your router has too few router references remaining."
 msgstr "रीसीडिंग एक बूटस्ट्रैपिंग प्रक्रिया है जिसका उपयोग आप I2P पहली बार स्थापित करते ही करते हैं, या जब आपके राउटर के पास बाकी बहुत कम राउटर संदर्भ होते हैं।"
 
-msgid "To enable the configuration of reseed urls, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
-msgstr "बीजीकरण यूआरएल की सेटिंग को सक्षम करने के लिए, कंसोल के <a href=\"/help/advancedsettings\">Advance मोड</a> को सक्रिय करें।"
+msgid "To enable the configuration of reseed urls, activate the console's <a href=/help/advancedsettings>Advanced mode</a>."
+msgstr ""
 
 msgid "Reseeding Configuration"
 msgstr "रीसीडिंग की संरचना"
@@ -5247,9 +5284,6 @@ msgstr "रीसीडिंग के साथ मदद"
 
 msgid "Reseeding Help"
 msgstr "रीसीडिंग की मदद"
-
-msgid "Change these only if HTTPS is blocked by a restrictive firewall and reseed has failed."
-msgstr "HTTPS को एक सख्त फायरवॉल द्वारा रोक दिया जाता है और रीसीडिंग असफल हो गई है, तब ही इन्हें बदलें।"
 
 msgid "Reseed URLs"
 msgstr "रीसीडिंग यूआरएल"
@@ -5286,6 +5320,9 @@ msgstr "इस विकल्प का उपयोग I2P के HTTP आउ�
 
 msgid "I2P Outproxy"
 msgstr "I2P आउटप्रॉक्सी"
+
+msgid "Port"
+msgstr "पोर्ट"
 
 msgid "Use HTTP Proxy for HTTP Reseed Hosts"
 msgstr "HTTP रीसीडिंग होस्ट के लिए HTTP प्रोक्सी का उपयोग करें"
@@ -5399,6 +5436,12 @@ msgstr "एकीकृत साइडबार"
 msgid "Use the same sidebar on all pages"
 msgstr "सभी पृष्ठों पर एक ही साइडबार का उपयोग करें"
 
+msgid "Sticky sidebar"
+msgstr ""
+
+msgid "Enable conditional fixed sidebar"
+msgstr ""
+
 msgid "config stats"
 msgstr "स्टैट्स की सेटिंग करें"
 
@@ -5455,6 +5498,12 @@ msgstr "क्लाइंट टंनल सेटिंग को संश�
 
 msgid "To enable session-only changes to the client tunnels, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
 msgstr "केवल सत्र के लिए क्लाइंट टंनल में परिवर्तन को सक्षम करने के लिए, कंसोल के <a href=\"/help/advancedsettings\">Advance मोड</a> को सक्रिय करें।"
+
+msgid "config UI"
+msgstr "सेटिंग यूजर इंटरफेस"
+
+msgid "User Interface Configuration"
+msgstr "उपयोगकर्ता इंटरफेस के सेटिंग"
 
 msgid "Router Console Theme"
 msgstr "राउटर कंसोल थीम"
@@ -5592,14 +5641,20 @@ msgstr "त्रुटि 404"
 msgid "not found"
 msgstr "नहीं मिला"
 
+msgid "router logs"
+msgstr "राउटर लॉग"
+
+msgid "Critical / Error Level Logs"
+msgstr "विशेष महत्वपूर्ण / त्रुटि स्तर के लॉग"
+
+msgid "Clear logs"
+msgstr "लॉग को साफ़ करें"
+
 msgid "events"
 msgstr "घटनाएं"
 
 msgid "Event Log"
 msgstr "घटना लॉग"
-
-msgid "Combined"
-msgstr "संयुक्त"
 
 msgid "graph"
 msgstr "ग्राफ़"
@@ -6108,8 +6163,8 @@ msgstr "अपने कंसोल को अपने स्थानीय �
 msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
 msgstr "उदाहरण: HTTP और HTTPS दोनों पर localhost और 192.168.1.10 से एक्सेस की अनुमति देने के लिए:"
 
-msgid "For most client services, change listening address for relevant service in Tunnel Manager's configuration section using <i>reachable by</i> dropdown."
-msgstr "अधिकांश क्लाइंट सेवाओं के लिए, टनल मैनेजर के कॉन्फ़िगरेशन अनुभाग में <i>द्वारा पहुंचने योग्य</i> ड्रॉपडाउन का उपयोग करके संबंधित सेवा के लिए सुनने पते को बदलें।"
+msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager's configuration section using the <i>reachable by</i> dropdown."
+msgstr ""
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "I2P के भीतर IRC कैसे जोड़ें?"
@@ -7308,34 +7363,6 @@ msgstr "कार्य क्वी स्टैटिस्टिक्स"
 msgid "Job Queue Stats"
 msgstr "कार्य क्वी स्टैट्स"
 
-msgid "logs"
-msgstr "लॉग"
-
-msgid "Please include your I2P version and running environment information in bug reports"
-msgstr "गिर्फ्तारी रिपोर्ट में अपनी I2P संस्करण और चल रहे पर्यावरण की जानकारी शामिल करें"
-
-#, java-format
-msgid "Please report bugs on {0} or {1}."
-msgstr "{0} या {1} पर गिर्फ्तारी रिपोर्ट करें।"
-
-msgid "View event log"
-msgstr "घटना लॉग देखें"
-
-msgid "Critical / Error Level Logs"
-msgstr "विशेष महत्वपूर्ण / त्रुटि स्तर के लॉग"
-
-msgid "Clear logs"
-msgstr "लॉग को साफ़ करें"
-
-msgid "Configure router logging options"
-msgstr "राउटर लॉगिंग विकल्प सेट करें"
-
-msgid "Filter Router log output"
-msgstr "राउटर लॉग आउटपुट को फ़िल्टर करें"
-
-msgid "Service (Wrapper) Logs"
-msgstr "सेवा (Wrapper) लॉग"
-
 msgid "network database"
 msgstr "नेटवर्क डेटाबेस"
 
@@ -7356,6 +7383,9 @@ msgstr "स्थानीय रूप से होस्ट की गई स
 
 msgid "Requested client leaseset"
 msgstr "अनुरोधित क्लाइंट लीज़सेट"
+
+msgid "Remote"
+msgstr ""
 
 msgid "network database router map"
 msgstr "नेटवर्क डेटाबेस राउटर मानचित्र"
@@ -7400,164 +7430,26 @@ msgstr "बैन किए गए समकक्ष"
 msgid "Fast / High Capacity"
 msgstr "तेज़ / उच्च क्षमता"
 
-msgid "router logs"
-msgstr "राउटर लॉग"
+msgid "Configure router logging options"
+msgstr "राउटर लॉगिंग विकल्प सेट करें"
+
+msgid "View event log"
+msgstr "घटना लॉग देखें"
+
+msgid "Filter Router log output"
+msgstr "राउटर लॉग आउटपुट को फ़िल्टर करें"
 
 msgid "service logs"
 msgstr "सेवा लॉग"
 
-msgid "Manage I2P addresses"
-msgstr "I2P पताओं का प्रबंधन करें"
-
-msgid "Imagegen"
-msgstr "Imagegen"
-
-msgid "Create and download torrents"
-msgstr "टॉरेंट बनाएं और डाउनलोड करें"
-
-msgid "Manage client and server tunnels"
-msgstr "क्लाइंट और सर्वर टंनल का प्रबंधन करें"
-
-msgid "Webmail client"
-msgstr "वेबमेल क्लाइंट"
-
-msgid "Webmail"
-msgstr "वेबमेल"
-
-msgid "Local webserver for hosting content on the I2P network"
-msgstr "I2P नेटवर्क पर सामग्री होस्ट करने के लिए स्थानीय वेबसर्वर"
+msgid "Service (Wrapper) Logs"
+msgstr "सेवा (Wrapper) लॉग"
 
 msgid "Information &amp; Diagnostics"
 msgstr "जानकारी &amp; डायग्नोस्टिक्स"
 
-msgid "Review recent updates to I2P"
-msgstr "I2P के हालिया अपडेट की समीक्षा करें"
-
-msgid "View debugging information"
-msgstr "डीबगिंग जानकारी देखें"
-
-msgid "View router performance graphs"
-msgstr "राउटर प्रदर्शन ग्राफ़ देखें"
-
-msgid "Router help section"
-msgstr "राउटर मदद का खंड"
-
-msgid "Router homepage"
-msgstr "राउटर होमपेज"
-
-msgid "Home"
-msgstr "घर"
-
-msgid "View news relating to I2P"
-msgstr "I2P से संबंधित समाचार देखें"
-
-msgid "I2P News"
-msgstr "I2P समाचार"
-
-msgid "View router workload and stats"
-msgstr "राउटर कार्यबल और स्टैट्स देखें"
-
-msgid "Router Jobs"
-msgstr "राउटर कार्य"
-
-msgid "View router logs"
-msgstr "राउटर लॉग देखें"
-
-msgid "View information and stats regarding all known peers"
-msgstr "सभी जाने माने पीयर के बारे में जानकारी और स्टैट्स देखें"
-
-msgid "View active peers"
-msgstr "सक्रिय पीयर देखें"
-
-msgid "View peer performance profiles"
-msgstr "पीयर प्रदर्शन प्रोफ़ाइल देखें"
-
-msgid "View information about router and running environment"
-msgstr "राउटर और चल रहे पर्यावरण के बारे में जानकारी देखें"
-
-msgid "Statistics"
-msgstr "स्टैटिस्टिक्स"
-
-msgid "Current console and webapp translation report"
-msgstr "वर्तमान कंसोल और वेबएप अनुवाद रिपोर्ट"
-
-msgid "Translation Status"
-msgstr "अनुवाद स्थिति"
-
-msgid "View active tunnels"
-msgstr "सक्रिय टंनल देखें"
-
-msgid "Customize homepage"
-msgstr "घर पृष्ठ कस्टमाइज़ करें"
-
-msgid "Homepage"
-msgstr "घर पृष्ठ"
-
-msgid "Configure I2P Client Control Interface"
-msgstr "I2P क्लाइंट कंट्रोल इंटरफेस का सेट करें"
-
-msgid "View or edit router keyring for encrypted destinations"
-msgstr "एन्क्रिप्टेड गंतव्यों के लिए राउटर की कुंजीपत्र देखें या संपादित करें"
-
-msgid "Configure router networking options"
-msgstr "राउटर नेटवर्किंग विकल्प सेट करें"
-
-msgid "Manually edit peers and view banned peers and blocklist"
-msgstr "मैन्युअल रूप से पीयर संपादित करें और प्रतिबंधित पीयर और ब्लॉकलिस्ट देखें"
-
-msgid "Install and manage router plugins"
-msgstr "राउटर प्लगइन्स को इंस्टॉल और प्रबंधित करें"
-
-msgid "Router reseeding and configuration"
-msgstr "राउटर रीसीडिंग और कन्फ़िगरेशन"
-
-msgid "Configure and manage Router family"
-msgstr "राउटर परिवार को सेट करें और प्रबंधित करें"
-
-msgid "Manage Router service"
-msgstr "राउटर सेवा का प्रबंधन करें"
-
-msgid "Configure stat collection for graphing"
-msgstr "ग्राफ़ बनाने के लिए स्टैट कलेक्शन का सेट करें"
-
-msgid "Router Stats"
-msgstr "राउटर स्टैट्स"
-
-msgid "Configure router updates"
-msgstr "राउटर अपडेट का सेट करें"
-
-msgid "Configuration wizard for new users"
-msgstr "नए उपयोगकर्ताओं के लिए सेटिंग विज़ार्ड"
-
-msgid "Setup Wizard"
-msgstr "सेटअप विज़ार्ड"
-
-msgid "Customize sidebar"
-msgstr "साइडबार कस्टमाइज़ करें"
-
-msgid "Configure tunnel options"
-msgstr "टंनल विकल्प सेट करें"
-
-msgid "Configure router user interface and optional console password"
-msgstr "राउटर उपयोगकर्ता इंटरफेस और वैकल्पिक कंसोल पासवर्ड सेट करें"
-
-msgid "Configuring I2P for optimal performance"
-msgstr "I2P के लिए अधिकतम प्रदर्शन के लिए सेटिंग"
-
-msgid "Information for new users"
-msgstr "नए उपयोगकर्ताओं के लिए जानकारी"
-
-msgid "A guide to reseeding your I2P router"
-msgstr "आपके I2P राउटर को रीसीड करने का गाइड"
-
-msgid "What to do in the event I2P isn't working"
-msgstr "यदि I2P कार्य नहीं कर रहा है, तो क्या करें"
-
-msgid "Introduction to tunnel filters"
-msgstr "टंनल फ़िल्टर के बारे में प्रस्तावना"
-
-msgid "Tunnel Filters"
-msgstr "टंनल फ़िल्टर"
+msgid "Customize"
+msgstr ""
 
 msgid "statistics"
 msgstr "स्टैटिस्टिक्स"
@@ -7610,9 +7502,6 @@ msgstr "टंनल आईडी को स्विच करें"
 msgid "Toggle Tunnels"
 msgstr "टंनल स्विच करें"
 
-msgid "Updating sidebar sections"
-msgstr "साइडबार अनुभाग अपडेट कर रहा है"
-
 msgid "Peer Profile"
 msgstr "पीयर प्रोफ़ाइल"
 
@@ -7637,14 +7526,17 @@ msgstr "शीर्ष पर वापस जाएं"
 msgid "webmail"
 msgstr "वेबमेल"
 
+msgid "Webmail"
+msgstr "वेबमेल"
+
 msgid "New Install Wizard"
 msgstr "नया इंस्टॉलेशन विज़ार्ड"
 
 msgid "Skip Setup"
 msgstr "सेटअप को स्किप करें"
 
-msgid "Select the language to be used for the router console and web applications (<a href=/webmail target=_blank rel=noreferrer>webmail</a>, <a href=/torrents target=_blank rel=noreferrer>torrents</a>, <a href=/i2ptunnelmgr target=_blank rel=noreferrer>tunnel manager</a> etc). If you wish to change the language in future, change the router console theme, or configure a password to access the console, you may do so on the <a href=/configui target=_blank rel=noreferrer>User Interface configuration page</a>."
-msgstr "राउटर कंसोल और वेब एप्लीकेशनों (जैसे <a href=/webmail target=_blank rel=noreferrer>वेबमेल</a>, <a href=/torrents target=_blank rel=noreferrer>टॉरेंट्स</a>, <a href=/i2ptunnelmgr target=_blank rel=noreferrer>टंनल मैनेजर</a> आदि) के लिए उपयोग की जाने वाली भाषा चुनें। यदि आप भविष्य में भाषा बदलना चाहते हैं, कंसोल थीम बदलना चाहते हैं, या कंसोल पहुँच के लिए पासवर्ड सेट करना चाहते हैं, तो आप <a href=/configui target=_blank rel=noreferrer>उपयोगकर्ता इंटरफेस के सेटिंग पेज</a> पर ऐसा कर सकते हैं।"
+msgid "Select the language to be used for the router console and web applications ("
+msgstr ""
 
 msgid "Router Console &amp; WebApps Display Language"
 msgstr "राउटर कंसोल &amp; वेबएप्लिकेशन डिस्प्ले भाषा"
@@ -7713,6 +7605,13 @@ msgid "Bandwidth Configuration"
 msgstr "बैंडविड्थ सेटिंग"
 
 #, java-format
+msgid "You have configured I2P+ to share only {0} KBps."
+msgstr "आपने I2P को केवल {0} KBps साझा करने के लिए सेट किया है।"
+
+msgid "I2P+ requires at least 12KBps to enable sharing. "
+msgstr "I2P को कम से कम 12KBps की गति की आवश्यकता होती है शेयरिंग को सक्षम करने के लिए।"
+
+#, java-format
 msgid "You have configured I2P+ to share {0} KBps."
 msgstr "आपने I2P को {0} KBps शेयर करने के लिए सेट किया है।"
 
@@ -7722,8 +7621,8 @@ msgstr "I2P+ के लिए आवश्यक है कि आपका व�
 msgid "Browser Setup"
 msgstr "ब्राउज़र सेटिंग"
 
-msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. For more help, see <a href=https://geti2p.net/htproxyports target=_blank rel=noreferrer>the configuration guide</a>, or <a href=/help/configuration#browserconfig>the mini-tutorial for Firefox</a>."
-msgstr "I2P नेटवर्क पर मेज़बानी करने वाले वेबसाइटों को पहुंचने के लिए और विकल्प के रूप में स्वचालित आउटप्रॉक्सी का उपयोग करके स्पष्टनेट पर वेबसाइटों के साथ कनेक्शन करने के लिए, आपको अपने ब्राउज़र को I2P+ <b>HTTP</b> प्रोक्सी का उपयोग करने के लिए सेट करने की आवश्यकता होगी, जो आमतौर पर <code>127.0.0.1 पोर्ट 4444</code> पर चल रहा होता है। अतिरिक्त मदद के लिए, <a href=https://geti2p.net/htproxyports target=_blank rel=noreferrer>सेटिंग गाइड</a> को देखें, या <a href=/help/configuration#browserconfig>Firefox के लिए मिनी-ट्यूटोरियल</a>।"
+msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. "
+msgstr ""
 
 msgid "Welcome to I2P+!"
 msgstr "I2P+ में स्वागत है!"
@@ -7731,8 +7630,8 @@ msgstr "I2P+ में स्वागत है!"
 msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
 msgstr "I2P शुरू करने पर, यह आपके राउटर को नेटवर्क में बीजीकरण करने और अतिरिक्त पीयर खोजने में कुछ मिनट ले सकता है, इसलिए कृपया सहनशील रहें।"
 
-msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P+."
-msgstr "जब आपके स्थानिक टंनल के बगल में हरे तारे दिखाई देंगे, तो I2P के साथ आपके पास विभिन्न कार्य करने की संभावनाएँ होंगी।"
+msgid "Once green stars are indicated next to your Service Tunnels, there is a wide variety of things you can do with I2P+."
+msgstr ""
 
 msgid "Unknown Wizard page"
 msgstr "अज्ञात विज़ार्ड पेज"
@@ -7751,4 +7650,75 @@ msgstr "अगला"
 
 msgid "Finished"
 msgstr "समाप्त"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#, java-format
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

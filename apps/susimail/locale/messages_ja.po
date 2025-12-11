@@ -211,12 +211,6 @@ msgstr "I2Pメール"
 msgid "No new messages"
 msgstr "新しいメッセージはありません"
 
-msgid "Checking for new messages on server"
-msgstr "サーバー上の新しいメッセージをチェックしています"
-
-msgid "Refresh the page for updates"
-msgstr "更新情報についてはページを更新してください"
-
 #, java-format
 msgid "{0} is an I2P-exclusive service provided by {1}."
 msgstr "{0} は、{1} によって提供される I2P 専用サービスです。"
@@ -224,6 +218,12 @@ msgstr "{0} は、{1} によって提供される I2P 専用サービスです�
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
 msgstr "{0} webmail client &copy Susi 2004-2005."
+
+msgid "Checking for new messages on server"
+msgstr "サーバー上の新しいメッセージをチェックしています"
+
+msgid "Refresh the page for updates"
+msgstr "更新情報についてはページを更新してください"
 
 msgid "Removed tracking image placeholder"
 msgstr "追跡画像のプレースホルダーを削除しました"
@@ -335,6 +335,9 @@ msgstr "メールをチェック"
 msgid "Refresh Page"
 msgstr "ページの更新"
 
+msgid "Change to Folder"
+msgstr "フォルダーに変更"
+
 #, java-format
 msgid "1 Message"
 msgid_plural "{0} Messages"
@@ -352,18 +355,6 @@ msgstr "サイズ"
 msgid "Mark for deletion"
 msgstr "削除にマーク"
 
-msgid "Message contains HTML"
-msgstr "メッセージにHTMLが含まれています"
-
-msgid "Message is new"
-msgstr "新着メールです"
-
-msgid "Message is spam"
-msgstr "迷惑メールです"
-
-msgid "Message body not downloaded"
-msgstr "メッセージ本文がダウンロードされていません"
-
 msgid "Really delete the marked messages?"
 msgstr "本当にマークされたメッセージを削除しますか？"
 
@@ -379,8 +370,17 @@ msgstr "全てマーク"
 msgid "Clear All"
 msgstr "全てクリア"
 
-msgid "Change to Folder"
-msgstr "フォルダーに変更"
+msgid "Message contains HTML"
+msgstr "メッセージにHTMLが含まれています"
+
+msgid "Message is new"
+msgstr "新着メールです"
+
+msgid "Message is spam"
+msgstr "迷惑メールです"
+
+msgid "Message body not downloaded"
+msgstr "メッセージ本文がダウンロードされていません"
 
 msgid "First"
 msgstr "最初"

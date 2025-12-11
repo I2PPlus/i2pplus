@@ -28,11 +28,29 @@ msgstr "Sunucu adında \"{0}\" bulunamaz"
 msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
 msgstr "\"{0}\" ana bilgisayar adı ASCII'ye dönüştürülmeyi gerektiriyor ancak dönüştürme kitaplığı bu JVM'de kullanılamıyor\"{0}\" sunucu adının ASCII karakterlerine dönüştürülmesi gerekiyor ancak bu JVM için dönüştürme kitaplığı kullanılamıyor"
 
+msgid "Source"
+msgstr "Kaynak"
+
+msgid "Imported from file hosts.txt"
+msgstr ""
+
+msgid "Manually added via SusiDNS"
+msgstr "SusiDNS üzerine el ile eklendi"
+
+msgid "Manually added"
+msgstr ""
+
+msgid "Added via address helper"
+msgstr ""
+
+msgid "Via helper"
+msgstr ""
+
+msgid "Via helper from"
+msgstr ""
+
 msgid "None"
 msgstr "Yok"
-
-msgid "Hashcash"
-msgstr "Hashcash"
 
 msgid "Hidden"
 msgstr "Gizli"
@@ -177,9 +195,6 @@ msgstr "{0} adres defteri {1} veritabanında"
 msgid "Host name {0} is not in the address book."
 msgstr "{0} sunucu adı adres defterinde yok."
 
-msgid "Manually added via SusiDNS"
-msgstr "SusiDNS üzerine el ile eklendi"
-
 #, java-format
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr "{0} hedefi {1} ad hizmetine eklenemedi"
@@ -305,6 +320,9 @@ msgstr "Bağlantı (b32)"
 
 msgid "Destination"
 msgstr "Hedef"
+
+msgid "Added"
+msgstr ""
 
 msgid "Select hosts for deletion from addressbook"
 msgstr "Adres defterinden silinecek sunucuları işaretleyin"
@@ -446,9 +464,6 @@ msgstr "hayır"
 
 msgid "yes"
 msgstr "evet"
-
-msgid "Source"
-msgstr "Kaynak"
 
 msgid "Added Date"
 msgstr "Eklendiği Tarih"
@@ -599,3 +614,4 @@ msgstr "Ana adres defterinize manuel olarak eklenen adresler, Yönlendirici adre
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Aboneliklerinizden aldığınız ana bilgisayarlar Yönlendiricinizin adres defteriyle birleşecek.Aboneliklerden gelen sunucular Yöneltici adres defteriniz ile birleştirilir."
+

@@ -214,12 +214,6 @@ msgstr "I2PMail"
 msgid "No new messages"
 msgstr "Aucun nouveau message"
 
-msgid "Checking for new messages on server"
-msgstr "Recherche de nouveaux courriels sur le serveur"
-
-msgid "Refresh the page for updates"
-msgstr "Actualiser la page pour les mises à jour"
-
 #, java-format
 msgid "{0} is an I2P-exclusive service provided by {1}."
 msgstr "{0} est un service exclusif à I2P fourni par {1}."
@@ -227,6 +221,12 @@ msgstr "{0} est un service exclusif à I2P fourni par {1}."
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
 msgstr "{0} webmail client &copy Susi 2004-2005."
+
+msgid "Checking for new messages on server"
+msgstr "Recherche de nouveaux courriels sur le serveur"
+
+msgid "Refresh the page for updates"
+msgstr "Actualiser la page pour les mises à jour"
 
 msgid "Removed tracking image placeholder"
 msgstr "Placeholder de l'image de suivi supprimé"
@@ -338,6 +338,9 @@ msgstr "Relever les courriels"
 msgid "Refresh Page"
 msgstr "Actualiser la page"
 
+msgid "Change to Folder"
+msgstr "Changer vers le dossier"
+
 #, java-format
 msgid "1 Message"
 msgid_plural "{0} Messages"
@@ -356,18 +359,6 @@ msgstr "Taille"
 msgid "Mark for deletion"
 msgstr "Marquer pour suppression"
 
-msgid "Message contains HTML"
-msgstr "Le message contient de l'HTML"
-
-msgid "Message is new"
-msgstr "Le message est nouveau"
-
-msgid "Message is spam"
-msgstr "Le message est un pourriel"
-
-msgid "Message body not downloaded"
-msgstr "L’ID du message est invalide"
-
 msgid "Really delete the marked messages?"
 msgstr "Voulez-vous vraiment supprimer les messages sélectionnés ?"
 
@@ -383,8 +374,17 @@ msgstr "Tout sélectionner"
 msgid "Clear All"
 msgstr "Tout dessélectionner"
 
-msgid "Change to Folder"
-msgstr "Changer vers le dossier"
+msgid "Message contains HTML"
+msgstr "Le message contient de l'HTML"
+
+msgid "Message is new"
+msgstr "Le message est nouveau"
+
+msgid "Message is spam"
+msgstr "Le message est un pourriel"
+
+msgid "Message body not downloaded"
+msgstr "L’ID du message est invalide"
 
 msgid "First"
 msgstr "Premier"

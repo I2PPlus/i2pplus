@@ -214,12 +214,6 @@ msgstr "I2PCorreo"
 msgid "No new messages"
 msgstr "No hay mensajes nuevos"
 
-msgid "Checking for new messages on server"
-msgstr "Comprobando si hay correos electrónicos nuevos en el servidor"
-
-msgid "Refresh the page for updates"
-msgstr "Actualice la página para actualizar"
-
 #, java-format
 msgid "{0} is an I2P-exclusive service provided by {1}."
 msgstr "{0} es un servicio exclusivo de I2P proporcionado por {1}."
@@ -227,6 +221,12 @@ msgstr "{0} es un servicio exclusivo de I2P proporcionado por {1}."
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
 msgstr "{0} webmail client &copy Susi 2004-2005."
+
+msgid "Checking for new messages on server"
+msgstr "Comprobando si hay correos electrónicos nuevos en el servidor"
+
+msgid "Refresh the page for updates"
+msgstr "Actualice la página para actualizar"
 
 msgid "Removed tracking image placeholder"
 msgstr "Se eliminó el marcador de posición de la imagen de seguimiento"
@@ -338,6 +338,9 @@ msgstr "Comprobar correo"
 msgid "Refresh Page"
 msgstr "Actualizar página"
 
+msgid "Change to Folder"
+msgstr "Cambiar a carpeta"
+
 #, java-format
 msgid "1 Message"
 msgid_plural "{0} Messages"
@@ -356,18 +359,6 @@ msgstr "Tamaño"
 msgid "Mark for deletion"
 msgstr "Marcar para borrado"
 
-msgid "Message contains HTML"
-msgstr "El mensaje contiene HTML"
-
-msgid "Message is new"
-msgstr "El mensaje es nuevo"
-
-msgid "Message is spam"
-msgstr "El mensaje es spam"
-
-msgid "Message body not downloaded"
-msgstr "cuerpo del mensaje no descargado"
-
 msgid "Really delete the marked messages?"
 msgstr "¿Realmente deseas borrar los mensajes marcados?"
 
@@ -383,8 +374,17 @@ msgstr "Marcar todos"
 msgid "Clear All"
 msgstr "Borrar todos"
 
-msgid "Change to Folder"
-msgstr "Cambiar a carpeta"
+msgid "Message contains HTML"
+msgstr "El mensaje contiene HTML"
+
+msgid "Message is new"
+msgstr "El mensaje es nuevo"
+
+msgid "Message is spam"
+msgstr "El mensaje es spam"
+
+msgid "Message body not downloaded"
+msgstr "cuerpo del mensaje no descargado"
 
 msgid "First"
 msgstr "Primero"

@@ -81,8 +81,17 @@ msgstr "تم الحصول على معلومات جهاز التوجيه {0} من
 msgid "Acquired {0} router infos from reseed hosts ({1} errors)"
 msgstr "تم الحصول على معلومات جهاز التوجيه {0} من المضيفين المعاد زرعهم (أخطاء {1})"
 
+msgid "Clock step adjustment (ms)"
+msgstr "تعديل خطوة الساعة (مللي ثانية)"
+
+msgid "Size of tunnel acceptor backlog"
+msgstr "حجم تراكم متقبل النفق"
+
 msgid "Message receive rate (B/s)"
 msgstr "معدل استقبال الرسائل (B/s)"
+
+msgid "Low-level receive rate (B/s)"
+msgstr "معدل الاستقبال منخفض المستوى (B/s)"
 
 msgid "Message send rate (B/s)"
 msgstr "معدل إرسال الرسالة (B/s)"
@@ -90,41 +99,35 @@ msgstr "معدل إرسال الرسالة (B/s)"
 msgid "Low-level send rate (B/s)"
 msgstr "معدل الإرسال منخفض المستوى (B/s)"
 
-msgid "Low-level receive rate (B/s)"
-msgstr "معدل الاستقبال منخفض المستوى (B/s)"
-
-msgid "Total peers in our NetDb"
-msgstr "إجمالي الأقران في NetDb الخاص بنا"
-
 msgid "Peers active in the last minute"
 msgstr "أقرانهم نشطة في اللحظة الأخيرة"
-
-msgid "Known high capacity peers"
-msgstr "أقرانهم ذوي القدرات العالية المعروفة"
 
 msgid "Peers sent to in the last minute"
 msgstr "أرسل أقرانهم إلى في اللحظة الأخيرة"
 
+msgid "Total peers in our banlist"
+msgstr "إجمالي أقرانهم في قائمة الحظر لدينا"
+
+msgid "CPU load average of the JVM"
+msgstr "متوسط حمل وحدة المعالجة المركزية لـ JVM"
+
 msgid "Known fast peers"
 msgstr "أقرانهم سريعون معروفون"
+
+msgid "Known high capacity peers"
+msgstr "أقرانهم ذوي القدرات العالية المعروفة"
 
 msgid "Known integrated (floodfill) peers"
 msgstr "الأقران المتكاملة (الغمرية) المعروفة"
 
-msgid "Total peers in our banlist"
-msgstr "إجمالي أقرانهم في قائمة الحظر لدينا"
+msgid "Total peers in our NetDb"
+msgstr "إجمالي الأقران في NetDb الخاص بنا"
+
+msgid "Total number of threads in use"
+msgstr ""
 
 msgid "Peers without a published IP address"
 msgstr "أقرانهم بدون عنوان IP منشور"
-
-msgid "Size of tunnel acceptor backlog"
-msgstr "حجم تراكم متقبل النفق"
-
-msgid "Clock step adjustment (ms)"
-msgstr "تعديل خطوة الساعة (مللي ثانية)"
-
-msgid "CPU load average of the JVM"
-msgstr "متوسط حمل وحدة المعالجة المركزية لـ JVM"
 
 msgid "Average tunnel build success %"
 msgstr "متوسط نجاح بناء النفق %"
@@ -1578,29 +1581,29 @@ msgstr "اعادة التشغيل في مدة {0}"
 msgid "Save order"
 msgstr "حفظ النظام"
 
+msgid "Restore full default"
+msgstr "استعادة الافتراضي الكامل"
+
+msgid "Restore minimal default"
+msgstr "استعادة الحد الأدنى من الافتراضي"
+
 msgid "Sidebar preferences updated"
 msgstr "تم تحديث تفضيلات الشريط الجانبي"
 
 msgid "Refresh interval must be a number"
 msgstr "يجب أن يكون الفاصل الزمني للتحديث رقمًا"
 
-msgid "Restore full default"
-msgstr "استعادة الافتراضي الكامل"
-
 msgid "Full sidebar defaults restored."
 msgstr "تم استعادة الإعدادات الافتراضية للشريط الجانبي الكامل."
 
-msgid "Sidebar will refresh shortly."
-msgstr "سيتم تحديث الشريط الجانبي قريباً."
-
-msgid "Restore minimal default"
-msgstr "استعادة الحد الأدنى من الافتراضي"
-
-msgid "Minimal sidebar defaults restored."
-msgstr "تم استعادة الإعدادات الافتراضية للشريط الجانبي الأدنى."
-
 msgid "Order must be an integer"
 msgstr "الأمر يجب أن يكون عددا صحيحا"
+
+msgid "Saved order of sections."
+msgstr "ترتيب الأقسام المحفوظة."
+
+msgid "Sidebar will refresh shortly."
+msgstr "سيتم تحديث الشريط الجانبي قريباً."
 
 msgid "No section selected"
 msgstr "لم يتم تحديد أي قسم"
@@ -1610,9 +1613,6 @@ msgstr "لم يتم إدخال أي أمر"
 
 msgid "Moved"
 msgstr "منقول"
-
-msgid "Saved order of sections."
-msgstr "ترتيب الأقسام المحفوظة."
 
 msgid "Full statistics enabled"
 msgstr "تم تمكين الإحصائيات الكاملة"
@@ -2449,6 +2449,9 @@ msgstr "وكيل HTTP لا يعمل"
 msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
 msgstr "لم يتم تكوين متصفحك بشكل صحيح لاستخدام وكيل HTTP في {0}"
 
+msgid "Errors"
+msgstr ""
+
 msgid "URL"
 msgstr "العنوان"
 
@@ -2723,29 +2726,23 @@ msgstr "أو سibil بالقرب من جهاز التوجيه هذا"
 msgid "Lookup"
 msgstr "بحث"
 
-msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
-msgstr "لا تكشف أبدًا عن هوية جهاز التوجيه الخاص بك لأي شخص، لأنه مرتبط بشكل فريد بعنوان IP الخاص بك في قاعدة بيانات الشبكة."
+msgid "Select the field to search on"
+msgstr ""
 
-msgid "is banned"
-msgstr "محظور"
-
-msgid "not found in network database"
-msgstr "غير موجود في قاعدة الشبكة"
-
-msgid "Bad Base64 Router hash"
-msgstr "بصمة جهاز التوجيه Base64 سيئة"
-
-msgid "No routers with"
-msgstr "لا توجد أجهزة توجيه مع"
-
-msgid "Hash prefix"
-msgstr "بادئة البصمة"
-
-msgid "Port"
-msgstr "منفذ"
+msgid "e.g. cn hk"
+msgstr ""
 
 msgid "MTU"
 msgstr "MTU"
+
+msgid "Enter search value here"
+msgstr ""
+
+msgid "Router not found"
+msgstr ""
+
+msgid "No routers with"
+msgstr "لا توجد أجهزة توجيه مع"
 
 msgid "found in the network database"
 msgstr "تم العثور عليها في قاعدة بيانات الشبكة"
@@ -2873,17 +2870,17 @@ msgstr "انتهى {0} منذ"
 msgid "Unknown"
 msgstr "غير معروف"
 
-msgid "Advanced mode - includes all statistics published by floodfills."
-msgstr "الوضع المتقدم - يشمل جميع الإحصائيات المنشورة بواسطة ملء الفيضان."
-
-msgid "Compact mode - does not include statistics published by floodfills."
-msgstr "الوضع المضغوط - لا يشمل الإحصائيات المنشورة بواسطة ملء الفيضان."
-
 msgid "Network Database Router Statistics"
 msgstr "احصائيات قاعدة البيانات I2P"
 
 msgid "Count"
 msgstr "عدد"
+
+msgid "Under 12 KB/s"
+msgstr ""
+
+msgid "Over 2048 KB/s"
+msgstr ""
 
 msgid "Bandwidth Tier"
 msgstr "طبقة عرض النطاق الترددي"
@@ -2955,6 +2952,9 @@ msgstr "تم نشره منذ"
 msgid "Hostname"
 msgstr "اسم المضيف"
 
+msgid "Whois"
+msgstr ""
+
 msgid "direct"
 msgstr "مباشر"
 
@@ -2970,20 +2970,26 @@ msgstr "إظهار كافة أجهزة التوجيه التي تحتوي على
 msgid "Show all routers with this encryption type in the NetDb"
 msgstr "إظهار جميع أجهزة التوجيه التي تحتوي على هذا النوع من التشفير في NetDb"
 
-msgid "Addresses"
-msgstr "عناوين"
-
-msgid "n/a"
-msgstr "غير متوفر"
-
 msgid "Show all routers with this address in the NetDb"
 msgstr "إظهار جميع أجهزة التوجيه بهذا العنوان في NetDb"
 
 msgid "Show all routers with this port in the NetDb"
 msgstr "إظهار كافة أجهزة التوجيه التي تحتوي على هذا المنفذ في NetDb"
 
-msgid "Routers"
-msgstr "الموجهات"
+msgid "Maximum Transmission Unit"
+msgstr ""
+
+msgid "Show all routers with this MTU in the NetDb"
+msgstr ""
+
+msgid "Addresses"
+msgstr "عناوين"
+
+msgid "Introducers"
+msgstr ""
+
+msgid "Network Id"
+msgstr "معرف الشبكة"
 
 msgid "First heard about"
 msgstr "أول مرة سمعت عنها"
@@ -2994,11 +3000,8 @@ msgstr "آخر ما سمعت عنه"
 msgid "Last heard from"
 msgstr "آخر سماع من"
 
-msgid "Network Id"
-msgstr "معرف الشبكة"
-
-msgid "Count is always spoofed to avoid indicating router restarts"
-msgstr "يتم دائماً تزييف العدد لتجنب الإشارة إلى إعادة تشغيل جهاز التوجيه"
+msgid "Info"
+msgstr "معلومات"
 
 msgid "Hidden or starting up"
 msgstr "مختفي"
@@ -3027,17 +3030,32 @@ msgstr "SSU [IPv6]"
 msgid "SSU [IPv6] with Introducers"
 msgstr "SSU [IPv6] مع المقدمون"
 
+msgid "NTCP &amp; SSU with Introducers [IPv6 Only]"
+msgstr "NTCP و SSU مع المُقدمين [IPv6 فقط]"
+
 msgid "NTCP [IPv6]"
 msgstr "NTCP [IPv6]"
 
 msgid "NTCP [IPv6] &amp; SSU"
 msgstr "NTCP [IPv6] و SSU"
 
-msgid "NTCP &amp; SSU with Introducers [IPv6 Only]"
-msgstr "NTCP و SSU مع المُقدمين [IPv6 فقط]"
-
 msgid "NTCP [IPv6] &amp; SSU with Introducers"
 msgstr "NTCP [IPv6] و SSU مع المُقدمين"
+
+msgid "Local"
+msgstr "محلي"
+
+msgid "Fast Tier"
+msgstr ""
+
+msgid "High Capacity Tier"
+msgstr ""
+
+msgid "Integrated Tier"
+msgstr ""
+
+msgid "Standard Tier"
+msgstr ""
 
 msgid "No peer connections available"
 msgstr "لا تتوفر اتصالات نظير"
@@ -3391,14 +3409,17 @@ msgstr "آخر سماع من"
 msgid "View/Edit"
 msgstr "عرض/تحرير"
 
-msgid "Unreachable"
-msgstr "لا يمكن الوصول له"
-
 msgid "OK"
 msgstr "موافق"
 
 msgid "Test Fails"
 msgstr "فشل التجربة"
+
+msgid "Unreachable"
+msgstr "لا يمكن الوصول له"
+
+msgid "Most tests passing"
+msgstr ""
 
 msgid "Fast, High Capacity"
 msgstr "سريع ، قدرة عالية"
@@ -3414,6 +3435,9 @@ msgstr "فشل"
 
 msgid "Integrated"
 msgstr "مدمج"
+
+msgid "Configure Peer"
+msgstr ""
 
 msgid "Thresholds"
 msgstr "العتبات"
@@ -3493,11 +3517,11 @@ msgstr "آخر إرسال سيء"
 msgid "Last Bad Store"
 msgstr "آخر حفظ غير جيد"
 
-msgid "Capabilities in the NetDb, not used to determine profiles"
-msgstr "القدرات الموجودة في NetDb، لا تستخدم لتحديد الملفات الشخصية"
-
 msgid "caps"
 msgstr "قبعات"
+
+msgid "Capabilities in the NetDb, not used to determine profiles"
+msgstr "القدرات الموجودة في NetDb، لا تستخدم لتحديد الملفات الشخصية"
 
 msgid "Reachable"
 msgstr "في متناول اليد"
@@ -3670,6 +3694,9 @@ msgstr "أنقر اعادة التشغبل للتثبيت"
 
 msgid "Click Shutdown and restart to install"
 msgstr "انقر زر التوقف وأعد التشغيل للتثبيت"
+
+msgid "Unable"
+msgstr ""
 
 #, java-format
 msgid "{0}"
@@ -3864,9 +3891,6 @@ msgstr "أظهر اشتغال الموجه بريم بياني"
 msgid "Router Help and FAQ"
 msgstr "تعليمات جهاز التوجيه والأسئلة الشائعة"
 
-msgid "Info"
-msgstr "معلومات"
-
 msgid "Router information including transport addresses and UPnP scan"
 msgstr "معلومات جهاز التوجيه بما في ذلك عناوين النقل ومسح UPnP"
 
@@ -3952,6 +3976,34 @@ msgstr "تم تمكين floodfill"
 msgid "Total number of remote LeaseSets stored in our NetDb"
 msgstr "إجمالي عدد مجموعات الإيجار عن بعد المخزنة في NetDb الخاص بنا"
 
+msgid "Declining transit tunnel requests during startup phase"
+msgstr "لا يتم قبول أي طلبات للأنفاق المشاركة خلال أول 10 دقائق أثناء استقرار جهاز التوجيه"
+
+msgid "Declining transit tunnel requests as we are shutting down"
+msgstr "رفض طلبات الأنفاق المشاركة أثناء إغلاقنا"
+
+msgid "Router or network performance is impeding the building of transit tunnels"
+msgstr "يعيق أداء جهاز التوجيه أو الشبكة بناء الأنفاق المشاركة"
+
+msgid "Router is currently hosting the configured maximum number of transit tunnels"
+msgstr "ال router يقوم حالياً باستضافتهدف العدد الأقصى المحدد من الأنفاق الانتقالية"
+
+msgid "Router is currently using the configured maximum share bandwidth"
+msgstr "ال router يستخدم حالياً سرعة الإشتراك الأقصى المحددة"
+
+msgid "Router is ready to build participating tunnels"
+msgstr "جهاز التوجيه جاهز لبناء الأنفاق المشاركة"
+
+#, java-format
+msgid "Accepting transit tunnel requests; hosting {0} tunnels"
+msgstr "قبول طلبات الأنفاق المشاركة؛ المشاركة في {0} أنفاق"
+
+msgid "No transit tunnels are built when Hidden mode is active"
+msgstr "لا يتم إنشاء أنفاق مشاركة عندما يكون الوضع المخفي نشطًا"
+
+msgid "Router is configured to reject all transit tunnel requests"
+msgstr "تم تكوين جهاز التوجيه لرفض كافة طلبات النفق المشاركة"
+
 msgid "Warning: ECDSA is not available. Update your Java or OS"
 msgstr "تحذير: ECDSA غير متوفر. "
 
@@ -3987,6 +4039,9 @@ msgstr "عدد الأقران المحظورين"
 
 msgid "The total number of peers in our network database"
 msgstr "العدد الإجمالي للأقران في قاعدة بيانات شبكتنا"
+
+msgid "Total RouterInfos stored on disk"
+msgstr ""
 
 msgid "Known"
 msgstr "معروف"
@@ -4098,34 +4153,6 @@ msgstr "الطلبات الموجودة في قائمة الانتظار من أ
 
 msgid "Backlog"
 msgstr "تراكم"
-
-msgid "Declining transit tunnel requests during startup phase"
-msgstr "لا يتم قبول أي طلبات للأنفاق المشاركة خلال أول 10 دقائق أثناء استقرار جهاز التوجيه"
-
-msgid "Declining transit tunnel requests as we are shutting down"
-msgstr "رفض طلبات الأنفاق المشاركة أثناء إغلاقنا"
-
-msgid "Router or network performance is impeding the building of transit tunnels"
-msgstr "يعيق أداء جهاز التوجيه أو الشبكة بناء الأنفاق المشاركة"
-
-msgid "Router is currently hosting the configured maximum number of transit tunnels"
-msgstr "ال router يقوم حالياً باستضافتهدف العدد الأقصى المحدد من الأنفاق الانتقالية"
-
-msgid "Router is currently using the configured maximum share bandwidth"
-msgstr "ال router يستخدم حالياً سرعة الإشتراك الأقصى المحددة"
-
-msgid "Router is ready to build participating tunnels"
-msgstr "جهاز التوجيه جاهز لبناء الأنفاق المشاركة"
-
-#, java-format
-msgid "Accepting transit tunnel requests; hosting {0} tunnels"
-msgstr "قبول طلبات الأنفاق المشاركة؛ المشاركة في {0} أنفاق"
-
-msgid "No transit tunnels are built when Hidden mode is active"
-msgstr "لا يتم إنشاء أنفاق مشاركة عندما يكون الوضع المخفي نشطًا"
-
-msgid "Router is configured to reject all transit tunnel requests"
-msgstr "تم تكوين جهاز التوجيه لرفض كافة طلبات النفق المشاركة"
 
 msgid "Statistics gathered during this router's uptime"
 msgstr "تجمع الاحصاءات العامة خلال خدمة الموجه"
@@ -4265,8 +4292,14 @@ msgstr "لا يوجد تحليل مخزن"
 msgid "Select stored analysis"
 msgstr "اختر التحليل المخزن"
 
+msgid "Review"
+msgstr ""
+
 msgid "Run analysis on Floodfills only"
 msgstr "تشغيل التحليل على مدافن الفيضانات فقط"
+
+msgid "Start Scan"
+msgstr ""
 
 msgid "Run analysis on all routers in NetDb"
 msgstr "قم بتشغيل التحليل على كافة أجهزة التوجيه في NetDb"
@@ -4430,6 +4463,12 @@ msgstr "ماكس"
 msgid "Show all routers for this family in NetDb"
 msgstr "إظهار كافة أجهزة التوجيه لهذه العائلة في NetDb"
 
+msgid "Routers"
+msgstr "الموجهات"
+
+msgid "n/a"
+msgstr "غير متوفر"
+
 msgid "Last lookup successful"
 msgstr "البحث الأخير ناجح"
 
@@ -4481,9 +4520,6 @@ msgstr "نقل البيانات"
 msgid "Data"
 msgstr "البيانات"
 
-msgid "Limit"
-msgstr "الحد"
-
 msgid "Receive on"
 msgstr "استقبل في"
 
@@ -4528,6 +4564,7 @@ msgstr "يعمل جهاز التوجيه حاليًا في الوضع المخف
 msgid "No transit tunnels currently active."
 msgstr "لا توجد أنفاق عبور نشطة حاليًا."
 
+#, java-format
 msgid "Transit Tunnels by Peer (Top {0})"
 msgstr "أنفاق العبور حسب النظير (أعلى {0})"
 
@@ -4539,9 +4576,6 @@ msgstr "جميع الأنفاق حسب النظير"
 
 msgid "Primary IP address"
 msgstr "عنوان IP الأساسي"
-
-msgid "Local"
-msgstr "محلي"
 
 msgid "unique peers"
 msgstr "أقرانهم فريدة من نوعها"
@@ -4555,6 +4589,9 @@ msgstr "العبور"
 msgid "No local or transit tunnels currently active."
 msgstr "لا يوجد أنفاق محلية أو أنفاق عابرة نشطة حاليا."
 
+msgid "PRIVATE IP ADDRESS"
+msgstr ""
+
 msgid "Bandwidth Tiers"
 msgstr "طبقات عرض النطاق الترددي"
 
@@ -4564,6 +4601,9 @@ msgstr "أكثر من {0} عرض النطاق الترددي المشترك"
 
 msgid "Inbound or outbound?"
 msgstr "الواردة أو الصادرة؟"
+
+msgid "In/Out"
+msgstr ""
 
 msgid "Gateway"
 msgstr "البوابة"
@@ -4680,6 +4720,9 @@ msgstr "خادم الويب I2P (eepsite)"
 msgid "Browser launch at startup"
 msgstr "اطلاق المتصفح عند البداية"
 
+msgid "I2P Router Console"
+msgstr ""
+
 msgid "Open Router Console in web browser at startup"
 msgstr "فتح شاشة التحكم في المتصفح عند البداية"
 
@@ -4755,12 +4798,6 @@ msgstr "مفتاح"
 msgid "port"
 msgstr "منفذ"
 
-msgid "config UI"
-msgstr "اعدادات واجهة المستخدم"
-
-msgid "User Interface Configuration"
-msgstr "تكوين واجهة المستخدم"
-
 msgid "Certificates"
 msgstr "الشهادات"
 
@@ -4776,8 +4813,8 @@ msgstr "محدد عرض النطاق الترددي"
 msgid "Advanced Network Configuration"
 msgstr "تكوين الشبكة المتقدم"
 
-msgid "I2P+ will work best if you configure your rates to match the speed of your internet connection."
-msgstr "سيشتغلI2P بفعالية أكبر اذا حددت سرعة الاتصال."
+msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
+msgstr ""
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
 msgstr "ملاحظة: يتم تحديد مساهمتك في الشبكة (مشاركة الشبكة) من خلال تخصيص النطاق الترددي المنبع (سرعة التحميل)."
@@ -4807,11 +4844,11 @@ msgid "NOTE"
 msgstr "ملاحظة"
 
 #, java-format
-msgid "You have configured I2P+ to share only {0} KBps."
-msgstr "لقد قمت باعداد I2P لمشاركة {0} KOps."
+msgid "You have configured I2P to share only {0} KBps."
+msgstr ""
 
-msgid "I2P+ requires at least 12KBps to enable sharing. "
-msgstr "يحتاج I2P على الاقل الى 12KBps لتفعيل المشاركة."
+msgid "I2P requires at least 12KBps to enable sharing. "
+msgstr ""
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
 msgstr "يرجى تمكين المشاركة (المشاركة في الأنفاق) عن طريق تكوين المزيد من النطاق الترددي."
@@ -5308,8 +5345,8 @@ msgstr "اعدادات اعادة التوزيع"
 msgid "Reseeding is the bootstrapping process used to find other routers when you first install I2P, or when your router has too few router references remaining."
 msgstr "إعادة البذر هي عملية التمهيد المستخدمة للعثور على أجهزة توجيه أخرى عند تثبيت I2P لأول مرة، أو عندما يكون لدى جهاز التوجيه الخاص بك عدد قليل جدًا من مراجع جهاز التوجيه المتبقية."
 
-msgid "To enable the configuration of reseed urls, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
-msgstr "لتمكين تكوين عناوين URL المعاد زرعها، قم بتنشيط <a href=\"/help/advancedsettings\">الوضع المتقدم</a> لوحدة التحكم."
+msgid "To enable the configuration of reseed urls, activate the console's <a href=/help/advancedsettings>Advanced mode</a>."
+msgstr ""
 
 msgid "Reseeding Configuration"
 msgstr "اعدادات اعادة التوزيع"
@@ -5319,9 +5356,6 @@ msgstr "المساعدة في إعادة البذر"
 
 msgid "Reseeding Help"
 msgstr "إعادة البذر المساعدة"
-
-msgid "Change these only if HTTPS is blocked by a restrictive firewall and reseed has failed."
-msgstr "قم بتغيير هذه الإعدادات فقط إذا تم حظر HTTPS بواسطة جدار حماية مقيد وفشلت عملية إعادة الزرع."
 
 msgid "Reseed URLs"
 msgstr "اعادة توزيع العناوين"
@@ -5358,6 +5392,9 @@ msgstr "سيستخدم هذا الخيار وكيل HTTP الخارجي الخا
 
 msgid "I2P Outproxy"
 msgstr "وكيل I2P"
+
+msgid "Port"
+msgstr "منفذ"
 
 msgid "Use HTTP Proxy for HTTP Reseed Hosts"
 msgstr "استخدم وكيل HTTP لمضيفي HTTP Reseed"
@@ -5471,6 +5508,12 @@ msgstr "شريط جانبي موحد"
 msgid "Use the same sidebar on all pages"
 msgstr "استخدام نفس الشريط الجانبي على جميع الصفحات"
 
+msgid "Sticky sidebar"
+msgstr ""
+
+msgid "Enable conditional fixed sidebar"
+msgstr ""
+
 msgid "config stats"
 msgstr "احصائيات التكوين"
 
@@ -5527,6 +5570,12 @@ msgstr "لتعديل إعدادات نفق العميل، استخدم <a href=\
 
 msgid "To enable session-only changes to the client tunnels, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
 msgstr "لتمكين تغييرات الجلسة فقط على أنفاق العميل، قم بتنشيط <a href=\"/help/advancedsettings\">الوضع المتقدم</a> لوحدة التحكم."
+
+msgid "config UI"
+msgstr "اعدادات واجهة المستخدم"
+
+msgid "User Interface Configuration"
+msgstr "تكوين واجهة المستخدم"
 
 msgid "Router Console Theme"
 msgstr "تيمة واجهة المستخدم"
@@ -5664,14 +5713,20 @@ msgstr "خطأ 404"
 msgid "not found"
 msgstr "غير موجود"
 
+msgid "router logs"
+msgstr "سجلات جهاز التوجيه"
+
+msgid "Critical / Error Level Logs"
+msgstr "سجلات مستوى الخطأ/الحرجة"
+
+msgid "Clear logs"
+msgstr "مسح السجلات"
+
 msgid "events"
 msgstr "الأحداث"
 
 msgid "Event Log"
 msgstr "سجل الأحداث"
-
-msgid "Combined"
-msgstr "مجمع"
 
 msgid "graph"
 msgstr "رسم بياني"
@@ -6180,8 +6235,8 @@ msgstr "لجعل وحدة التحكم الخاصة بك متاحة على شب�
 msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
 msgstr "مثال: للسماح بالوصول من كل من localhost و 192.168.1.10 عبر HTTP و HTTPS:"
 
-msgid "For most client services, change listening address for relevant service in Tunnel Manager's configuration section using <i>reachable by</i> dropdown."
-msgstr "لمعظم خدمات العملاء، قم بتغيير عنوان الاستماع للخدمة ذات الصلة في قسم تكوين مدير الأنفاق باستخدام القائمة المنسدلة <i>قابل للوصول بواسطة</i>."
+msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager's configuration section using the <i>reachable by</i> dropdown."
+msgstr ""
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "كيف أتصل بخادم IRC داخل I2P؟"
@@ -7380,34 +7435,6 @@ msgstr "إحصائيات طابور العمل"
 msgid "Job Queue Stats"
 msgstr "إحصائيات قائمة انتظار الوظائف"
 
-msgid "logs"
-msgstr "السجلات"
-
-msgid "Please include your I2P version and running environment information in bug reports"
-msgstr "يرجى تضمين إصدار I2P الخاص بك ومعلومات بيئة التشغيل في تقارير الأخطاء"
-
-#, java-format
-msgid "Please report bugs on {0} or {1}."
-msgstr "الرجاء الإبلاغ عن الأخطاء في {0} أو {1}."
-
-msgid "View event log"
-msgstr "عرض سجل الأحداث"
-
-msgid "Critical / Error Level Logs"
-msgstr "سجلات مستوى الخطأ/الحرجة"
-
-msgid "Clear logs"
-msgstr "مسح السجلات"
-
-msgid "Configure router logging options"
-msgstr "تكوين خيارات تسجيل جهاز التوجيه"
-
-msgid "Filter Router log output"
-msgstr "فلتر خرج سجل router"
-
-msgid "Service (Wrapper) Logs"
-msgstr "سجلات الخدمة (المجمع)."
-
 msgid "network database"
 msgstr "قاعدة بيانات الشبكة"
 
@@ -7428,6 +7455,9 @@ msgstr "خدمة عامة مستضافة محلياً"
 
 msgid "Requested client leaseset"
 msgstr "مجموعة إيجار العميل المطلوبة"
+
+msgid "Remote"
+msgstr ""
 
 msgid "network database router map"
 msgstr "خريطة router قاعدة البيانات الشبكة"
@@ -7472,164 +7502,26 @@ msgstr "مستخدمون ممنوعون"
 msgid "Fast / High Capacity"
 msgstr "سريع/عالي السعة"
 
-msgid "router logs"
-msgstr "سجلات جهاز التوجيه"
+msgid "Configure router logging options"
+msgstr "تكوين خيارات تسجيل جهاز التوجيه"
+
+msgid "View event log"
+msgstr "عرض سجل الأحداث"
+
+msgid "Filter Router log output"
+msgstr "فلتر خرج سجل router"
 
 msgid "service logs"
 msgstr "سجلات الخدمة"
 
-msgid "Manage I2P addresses"
-msgstr "إدارة عناوين I2P"
-
-msgid "Imagegen"
-msgstr "إيماجينج"
-
-msgid "Create and download torrents"
-msgstr "إنشاء وتنزيل السيول"
-
-msgid "Manage client and server tunnels"
-msgstr "إدارة أنفاق العميل والخادم"
-
-msgid "Webmail client"
-msgstr "عميل بريد الويب"
-
-msgid "Webmail"
-msgstr "بريد الويب"
-
-msgid "Local webserver for hosting content on the I2P network"
-msgstr "خادم الويب المحلي لاستضافة المحتوى على شبكة I2P"
+msgid "Service (Wrapper) Logs"
+msgstr "سجلات الخدمة (المجمع)."
 
 msgid "Information &amp; Diagnostics"
 msgstr "المعلومات والتشخيص"
 
-msgid "Review recent updates to I2P"
-msgstr "مراجعة التحديثات الأخيرة لـ I2P"
-
-msgid "View debugging information"
-msgstr "عرض معلومات التصحيح"
-
-msgid "View router performance graphs"
-msgstr "عرض الرسوم البيانية لأداء جهاز التوجيه"
-
-msgid "Router help section"
-msgstr "قسم مساعدة جهاز التوجيه"
-
-msgid "Router homepage"
-msgstr "الصفحة الرئيسية لجهاز التوجيه"
-
-msgid "Home"
-msgstr "المنزل"
-
-msgid "View news relating to I2P"
-msgstr "عرض الأخبار المتعلقة بـ I2P"
-
-msgid "I2P News"
-msgstr "أخبار I2P"
-
-msgid "View router workload and stats"
-msgstr "عرض عبء عمل جهاز التوجيه والإحصائيات"
-
-msgid "Router Jobs"
-msgstr "وظائف جهاز التوجيه"
-
-msgid "View router logs"
-msgstr "عرض سجلات جهاز التوجيه"
-
-msgid "View information and stats regarding all known peers"
-msgstr "عرض المعلومات والإحصائيات المتعلقة بجميع أقرانهم المعروفين"
-
-msgid "View active peers"
-msgstr "عرض أقرانهم النشطين"
-
-msgid "View peer performance profiles"
-msgstr "عرض ملفات تعريف أداء الأقران"
-
-msgid "View information about router and running environment"
-msgstr "عرض معلومات حول جهاز التوجيه وبيئة التشغيل"
-
-msgid "Statistics"
-msgstr "الإحصائيات"
-
-msgid "Current console and webapp translation report"
-msgstr "تقرير حالة ترجمة القنوات الحالية والموقع الإلكتروني"
-
-msgid "Translation Status"
-msgstr "حالة الترجمة"
-
-msgid "View active tunnels"
-msgstr "عرض الأنفاق النشطة"
-
-msgid "Customize homepage"
-msgstr "تخصيص الصفحة الرئيسية"
-
-msgid "Homepage"
-msgstr "الصفحة الرئيسية"
-
-msgid "Configure I2P Client Control Interface"
-msgstr "تكوين واجهة التحكم في عميل I2P"
-
-msgid "View or edit router keyring for encrypted destinations"
-msgstr "عرض أو تحرير حلقة مفاتيح جهاز التوجيه للوجهات المشفرة"
-
-msgid "Configure router networking options"
-msgstr "تكوين خيارات شبكة جهاز التوجيه"
-
-msgid "Manually edit peers and view banned peers and blocklist"
-msgstr "تحرير الأقران يدويًا وعرض الأقران المحظورين وقائمة الحظر"
-
-msgid "Install and manage router plugins"
-msgstr "تثبيت وإدارة المكونات الإضافية لجهاز التوجيه"
-
-msgid "Router reseeding and configuration"
-msgstr "إعادة زرع جهاز التوجيه وتكوينه"
-
-msgid "Configure and manage Router family"
-msgstr "تكوين وإدارة عائلة جهاز التوجيه"
-
-msgid "Manage Router service"
-msgstr "إدارة خدمة جهاز التوجيه"
-
-msgid "Configure stat collection for graphing"
-msgstr "تكوين مجموعة الإحصائيات للرسوم البيانية"
-
-msgid "Router Stats"
-msgstr "إحصائيات جهاز التوجيه"
-
-msgid "Configure router updates"
-msgstr "تكوين تحديثات جهاز التوجيه"
-
-msgid "Configuration wizard for new users"
-msgstr "معالج التكوين للمستخدمين الجدد"
-
-msgid "Setup Wizard"
-msgstr "معالج الإعداد"
-
-msgid "Customize sidebar"
-msgstr "تخصيص الشريط الجانبي"
-
-msgid "Configure tunnel options"
-msgstr "تكوين خيارات النفق"
-
-msgid "Configure router user interface and optional console password"
-msgstr "تكوين واجهة مستخدم جهاز التوجيه وكلمة مرور وحدة التحكم الاختيارية"
-
-msgid "Configuring I2P for optimal performance"
-msgstr "تكوين I2P للحصول على الأداء الأمثل"
-
-msgid "Information for new users"
-msgstr "معلومات للمستخدمين الجدد"
-
-msgid "A guide to reseeding your I2P router"
-msgstr "دليل لإعادة زرع جهاز توجيه I2P الخاص بك"
-
-msgid "What to do in the event I2P isn't working"
-msgstr "ما يجب فعله في حالة عدم عمل I2P"
-
-msgid "Introduction to tunnel filters"
-msgstr "مقدمة لمرشحات الأنفاق"
-
-msgid "Tunnel Filters"
-msgstr "مرشحات الأنفاق"
+msgid "Customize"
+msgstr ""
 
 msgid "statistics"
 msgstr "احصائيات"
@@ -7682,9 +7574,6 @@ msgstr "تبديل أرقام الأنفاق"
 msgid "Toggle Tunnels"
 msgstr "تبديل الأنفاق"
 
-msgid "Updating sidebar sections"
-msgstr "تحديث أقسام الشريط الجانبي"
-
 msgid "Peer Profile"
 msgstr "ملف تعريف الأقران"
 
@@ -7709,14 +7598,17 @@ msgstr "العودة إلى الأعلى"
 msgid "webmail"
 msgstr "بريد الويب"
 
+msgid "Webmail"
+msgstr "بريد الويب"
+
 msgid "New Install Wizard"
 msgstr "معالج التثبيت الجديد"
 
 msgid "Skip Setup"
 msgstr "تخطي الإعداد"
 
-msgid "Select the language to be used for the router console and web applications (<a href=/webmail target=_blank rel=noreferrer>webmail</a>, <a href=/torrents target=_blank rel=noreferrer>torrents</a>, <a href=/i2ptunnelmgr target=_blank rel=noreferrer>tunnel manager</a> etc). If you wish to change the language in future, change the router console theme, or configure a password to access the console, you may do so on the <a href=/configui target=_blank rel=noreferrer>User Interface configuration page</a>."
-msgstr "اختر اللغة التي سوف تستخدم لواجهة التحكم في الموجه والتطبيقات الويب (<a href=/webmail target=_blank rel=noreferrer>البريد الإلكتروني</a>، <a href=/torrents target=_blank rel=noreferrer>البت تورنت</a>، <a href=/i2ptunnelmgr target=_blank rel=noreferrer>مدير الأنفاق</a> الخ). إذا كنت ترغب في تغيير اللغة في المستقبل، تغيير مظهر واجهة التحكم في الموجه، أو تكوين كلمة مرور للوصول إلى واجهة التحكم، يمكنك القيام بذلك على صفحة <a href=/configui target=_blank rel=noreferrer>تكوين واجهة المستخدم</a>."
+msgid "Select the language to be used for the router console and web applications ("
+msgstr ""
 
 msgid "Router Console &amp; WebApps Display Language"
 msgstr "لغة واجهة تحكم الموجه وعرض تطبيقات الويب"
@@ -7785,6 +7677,13 @@ msgid "Bandwidth Configuration"
 msgstr "تكوين عرض النطاق الترددي"
 
 #, java-format
+msgid "You have configured I2P+ to share only {0} KBps."
+msgstr "لقد قمت باعداد I2P لمشاركة {0} KOps."
+
+msgid "I2P+ requires at least 12KBps to enable sharing. "
+msgstr "يحتاج I2P على الاقل الى 12KBps لتفعيل المشاركة."
+
+#, java-format
 msgid "You have configured I2P+ to share {0} KBps."
 msgstr "قمت باعداد I2P لمشاركة {0} KOps."
 
@@ -7794,8 +7693,8 @@ msgstr "يتطلب I2P متصفح ويب تم تكوينه لاستخدام وك
 msgid "Browser Setup"
 msgstr "إعداد المتصفح"
 
-msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. For more help, see <a href=https://geti2p.net/htproxyports target=_blank rel=noreferrer>the configuration guide</a>, or <a href=/help/configuration#browserconfig>the mini-tutorial for Firefox</a>."
-msgstr "للوصول إلى مواقع الويب المستضافة على شبكة I2P واستخدام البروكسي الافتراضي للاتصال بمواقع الويب على الشبكة العادية اختياريًا، ستحتاج إلى تكوين المتصفح الخاص بك لاستخدام البروكسي <b>HTTP</b> لـ I2P +، والذي يعمل بشكل افتراضي على <code>127.0.0.1 البورت 4444</code>. لمزيد من المساعدة، انظر <a href=https://geti2p.net/htproxyports target=_blank rel=noreferrer>دليل التكوين </a> ، أو <a href=/help/configuration#browserconfig>البرنامج التعليمي الصغير لفايرفوكس</a>."
+msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. "
+msgstr ""
 
 msgid "Welcome to I2P+!"
 msgstr "!I2P مرحبا بك في شبكة"
@@ -7803,8 +7702,8 @@ msgstr "!I2P مرحبا بك في شبكة"
 msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
 msgstr "عند بدء تشغيل I2P، قد يستغرق الأمر بضع دقائق لبدء (دمج) جهاز التوجيه الخاص بك في الشبكة والعثور على أقران إضافيين، لذا يرجى التحلي بالصبر."
 
-msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P+."
-msgstr "بمجرد الإشارة إلى النجوم الخضراء بجوار أنفاقك المحلية، هناك مجموعة واسعة من الأشياء التي يمكنك القيام بها باستخدام I2P."
+msgid "Once green stars are indicated next to your Service Tunnels, there is a wide variety of things you can do with I2P+."
+msgstr ""
 
 msgid "Unknown Wizard page"
 msgstr "صفحة معالج غير معروفة"
@@ -7823,4 +7722,75 @@ msgstr "التالي"
 
 msgid "Finished"
 msgstr "منتهي"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#, java-format
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

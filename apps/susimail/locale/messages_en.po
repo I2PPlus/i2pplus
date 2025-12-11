@@ -214,18 +214,18 @@ msgstr ""
 msgid "No new messages"
 msgstr ""
 
-msgid "Checking for new messages on server"
-msgstr ""
-
-msgid "Refresh the page for updates"
-msgstr ""
-
 #, java-format
 msgid "{0} is an I2P-exclusive service provided by {1}."
 msgstr ""
 
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
+msgstr ""
+
+msgid "Checking for new messages on server"
+msgstr ""
+
+msgid "Refresh the page for updates"
 msgstr ""
 
 msgid "Removed tracking image placeholder"
@@ -338,6 +338,9 @@ msgstr ""
 msgid "Refresh Page"
 msgstr ""
 
+msgid "Change to Folder"
+msgstr ""
+
 #, java-format
 msgid "1 Message"
 msgid_plural "{0} Messages"
@@ -356,18 +359,6 @@ msgstr ""
 msgid "Mark for deletion"
 msgstr ""
 
-msgid "Message contains HTML"
-msgstr ""
-
-msgid "Message is new"
-msgstr ""
-
-msgid "Message is spam"
-msgstr ""
-
-msgid "Message body not downloaded"
-msgstr ""
-
 msgid "Really delete the marked messages?"
 msgstr ""
 
@@ -383,7 +374,16 @@ msgstr ""
 msgid "Clear All"
 msgstr ""
 
-msgid "Change to Folder"
+msgid "Message contains HTML"
+msgstr ""
+
+msgid "Message is new"
+msgstr ""
+
+msgid "Message is spam"
+msgstr ""
+
+msgid "Message body not downloaded"
 msgstr ""
 
 msgid "First"

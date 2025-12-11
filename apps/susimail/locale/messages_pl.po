@@ -220,12 +220,6 @@ msgstr "I2PMail"
 msgid "No new messages"
 msgstr "Brak nowych wiadomości"
 
-msgid "Checking for new messages on server"
-msgstr "Sprawdzanie nowych wiadomości na serwerze"
-
-msgid "Refresh the page for updates"
-msgstr "Odśwież stronę, aby zaktualizować"
-
 #, java-format
 msgid "{0} is an I2P-exclusive service provided by {1}."
 msgstr "{0} to usługa wyłącznie I2P świadczona przez firmę {1}."
@@ -233,6 +227,12 @@ msgstr "{0} to usługa wyłącznie I2P świadczona przez firmę {1}."
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
 msgstr "{0} webmail client &copy Susi 2004-2005."
+
+msgid "Checking for new messages on server"
+msgstr "Sprawdzanie nowych wiadomości na serwerze"
+
+msgid "Refresh the page for updates"
+msgstr "Odśwież stronę, aby zaktualizować"
 
 msgid "Removed tracking image placeholder"
 msgstr "Usunięto miejsce holdera obrazka śledzącego"
@@ -344,6 +344,9 @@ msgstr "Sprawdź pocztę"
 msgid "Refresh Page"
 msgstr "Odśwież stronę"
 
+msgid "Change to Folder"
+msgstr "Przejdź do katalogu"
+
 #, java-format
 msgid "1 Message"
 msgid_plural "{0} Messages"
@@ -364,18 +367,6 @@ msgstr "Rozmiar"
 msgid "Mark for deletion"
 msgstr "Zaznacz do usunięcia"
 
-msgid "Message contains HTML"
-msgstr "Wiadomość zawiera HTML"
-
-msgid "Message is new"
-msgstr "Wiadomość jest nowa"
-
-msgid "Message is spam"
-msgstr "Wiadomość jest spamem"
-
-msgid "Message body not downloaded"
-msgstr "Treść wiadomości nie została pobrana"
-
 msgid "Really delete the marked messages?"
 msgstr "Czy na pewno usunąć zaznaczone wiadomości?"
 
@@ -391,8 +382,17 @@ msgstr "Zaznacz wszystkie"
 msgid "Clear All"
 msgstr "Wyczyść wszystko"
 
-msgid "Change to Folder"
-msgstr "Przejdź do katalogu"
+msgid "Message contains HTML"
+msgstr "Wiadomość zawiera HTML"
+
+msgid "Message is new"
+msgstr "Wiadomość jest nowa"
+
+msgid "Message is spam"
+msgstr "Wiadomość jest spamem"
+
+msgid "Message body not downloaded"
+msgstr "Treść wiadomości nie została pobrana"
 
 msgid "First"
 msgstr "Pierwsze"

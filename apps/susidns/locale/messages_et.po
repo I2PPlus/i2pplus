@@ -28,11 +28,29 @@ msgstr "Määri nimi ei saa sisaldada \"{0}\""
 msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
 msgstr "Määri nimi \"{0}\" vajab ASCII-d muundamist, kuid JVM-s pole muundusbiblioteek"
 
+msgid "Source"
+msgstr "Allikas"
+
+msgid "Imported from file hosts.txt"
+msgstr ""
+
+msgid "Manually added via SusiDNS"
+msgstr "Manuaalselt lisatud läbi SusiDNS"
+
+msgid "Manually added"
+msgstr ""
+
+msgid "Added via address helper"
+msgstr ""
+
+msgid "Via helper"
+msgstr ""
+
+msgid "Via helper from"
+msgstr ""
+
 msgid "None"
 msgstr "Puudub"
-
-msgid "Hashcash"
-msgstr "Hashcash"
 
 msgid "Hidden"
 msgstr "Peidetud"
@@ -177,9 +195,6 @@ msgstr "{0} aadressiraamat {1} andmebaas"
 msgid "Host name {0} is not in the address book."
 msgstr "Määri nimi {0} ei ole aadressiraamatust."
 
-msgid "Manually added via SusiDNS"
-msgstr "Manuaalselt lisatud läbi SusiDNS"
-
 #, java-format
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr "Sihtkoha lisamine ebaõnnestus {0} jaoks nimeandmeteenusele {1}"
@@ -305,6 +320,9 @@ msgstr "Link (b32)"
 
 msgid "Destination"
 msgstr "Sihtkoht"
+
+msgid "Added"
+msgstr ""
 
 msgid "Select hosts for deletion from addressbook"
 msgstr "Vali määrid aadressiraamatust kustutamiseks"
@@ -446,9 +464,6 @@ msgstr "ei"
 
 msgid "yes"
 msgstr "jah"
-
-msgid "Source"
-msgstr "Allikas"
 
 msgid "Added Date"
 msgstr "Lisa kuupäev"
@@ -599,3 +614,4 @@ msgstr "Käsitselt põhi aadressiraamatusse lisatud aadressid ühendatakse sinu 
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Tellimuste kaudu saadud hostid ühendatakse sinu Rooteri aadressiraamatusse."
+

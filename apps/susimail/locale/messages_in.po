@@ -211,12 +211,6 @@ msgstr "I2PMail"
 msgid "No new messages"
 msgstr "Tidak ada pesan baru"
 
-msgid "Checking for new messages on server"
-msgstr "Memeriksa email baru di server"
-
-msgid "Refresh the page for updates"
-msgstr "Refresh halaman untuk melihat pembaruan"
-
 #, java-format
 msgid "{0} is an I2P-exclusive service provided by {1}."
 msgstr "{0} adalah layanan eksklusif I2P yang disediakan oleh {1}."
@@ -224,6 +218,12 @@ msgstr "{0} adalah layanan eksklusif I2P yang disediakan oleh {1}."
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
 msgstr "{0} webmail client &copy Susi 2004-2005."
+
+msgid "Checking for new messages on server"
+msgstr "Memeriksa email baru di server"
+
+msgid "Refresh the page for updates"
+msgstr "Refresh halaman untuk melihat pembaruan"
 
 msgid "Removed tracking image placeholder"
 msgstr "Menghapus tempat penempatan gambar pelacakan"
@@ -335,6 +335,9 @@ msgstr "Periksa Surat"
 msgid "Refresh Page"
 msgstr "Segarkan Halaman"
 
+msgid "Change to Folder"
+msgstr "Ubah ke Folder"
+
 #, java-format
 msgid "1 Message"
 msgid_plural "{0} Messages"
@@ -352,18 +355,6 @@ msgstr "Ukuran"
 msgid "Mark for deletion"
 msgstr "Tandai untuk dihapus"
 
-msgid "Message contains HTML"
-msgstr "Pesan mengandung HTML"
-
-msgid "Message is new"
-msgstr "Pesan ini baru"
-
-msgid "Message is spam"
-msgstr "Pesan ini spam"
-
-msgid "Message body not downloaded"
-msgstr "Isi pesan tidak diunduh"
-
 msgid "Really delete the marked messages?"
 msgstr "Benar ingin menghapus pesan yang ditandai?"
 
@@ -379,8 +370,17 @@ msgstr "Tandai Semua"
 msgid "Clear All"
 msgstr "Tandai Kosong"
 
-msgid "Change to Folder"
-msgstr "Ubah ke Folder"
+msgid "Message contains HTML"
+msgstr "Pesan mengandung HTML"
+
+msgid "Message is new"
+msgstr "Pesan ini baru"
+
+msgid "Message is spam"
+msgstr "Pesan ini spam"
+
+msgid "Message body not downloaded"
+msgstr "Isi pesan tidak diunduh"
 
 msgid "First"
 msgstr "Pertama"

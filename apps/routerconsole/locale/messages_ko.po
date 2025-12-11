@@ -71,8 +71,17 @@ msgstr "리시드 호스트로부터 {0} 라우터 정보를 획득했습니다"
 msgid "Acquired {0} router infos from reseed hosts ({1} errors)"
 msgstr "리시드 호스트에서 {0} 라우터 정보를 획득했습니다({1} 오류)."
 
+msgid "Clock step adjustment (ms)"
+msgstr "시계 단계 조정 (MS)"
+
+msgid "Size of tunnel acceptor backlog"
+msgstr "터널 어셉터 백로그 사이즈"
+
 msgid "Message receive rate (B/s)"
 msgstr "메시지 수신 속도(B/s)"
+
+msgid "Low-level receive rate (B/s)"
+msgstr "낮은 수준의 수신 속도(B/s)"
 
 msgid "Message send rate (B/s)"
 msgstr "메시지 전송 속도(B/s)"
@@ -80,41 +89,35 @@ msgstr "메시지 전송 속도(B/s)"
 msgid "Low-level send rate (B/s)"
 msgstr "낮은 수준의 전송 속도(B/s)"
 
-msgid "Low-level receive rate (B/s)"
-msgstr "낮은 수준의 수신 속도(B/s)"
-
-msgid "Total peers in our NetDb"
-msgstr "NetDb의 총 피어"
-
 msgid "Peers active in the last minute"
 msgstr "마지막 순간에 활동한 피어"
-
-msgid "Known high capacity peers"
-msgstr "알려진 고용량 피어"
 
 msgid "Peers sent to in the last minute"
 msgstr "마지막 순간에 전송된 피어"
 
+msgid "Total peers in our banlist"
+msgstr "금지 목록의 총 피어"
+
+msgid "CPU load average of the JVM"
+msgstr "JVM의 CPU 부하 평균"
+
 msgid "Known fast peers"
 msgstr "알려진 빠른 피어들"
+
+msgid "Known high capacity peers"
+msgstr "알려진 고용량 피어"
 
 msgid "Known integrated (floodfill) peers"
 msgstr "알려진 통합 (플러드필) 피어"
 
-msgid "Total peers in our banlist"
-msgstr "금지 목록의 총 피어"
+msgid "Total peers in our NetDb"
+msgstr "NetDb의 총 피어"
+
+msgid "Total number of threads in use"
+msgstr ""
 
 msgid "Peers without a published IP address"
 msgstr "Peers without a published IP address"
-
-msgid "Size of tunnel acceptor backlog"
-msgstr "터널 어셉터 백로그 사이즈"
-
-msgid "Clock step adjustment (ms)"
-msgstr "시계 단계 조정 (MS)"
-
-msgid "CPU load average of the JVM"
-msgstr "JVM의 CPU 부하 평균"
 
 msgid "Average tunnel build success %"
 msgstr "평균 터널 빌드 성공 %"
@@ -1548,29 +1551,29 @@ msgstr "{0} 안에 재시작"
 msgid "Save order"
 msgstr "순서 저장"
 
+msgid "Restore full default"
+msgstr "완전판 기본값으로 복구"
+
+msgid "Restore minimal default"
+msgstr "최소 기본값 복원"
+
 msgid "Sidebar preferences updated"
 msgstr "사이드바 기본 설정이 업데이트되었습니다"
 
 msgid "Refresh interval must be a number"
 msgstr "새로고침 간격은 반드시 숫자여야 합니다"
 
-msgid "Restore full default"
-msgstr "완전판 기본값으로 복구"
-
 msgid "Full sidebar defaults restored."
 msgstr "전체 사이드바 기본값이 복원되었습니다."
 
-msgid "Sidebar will refresh shortly."
-msgstr "사이드바가 곧 새로고쳐집니다."
-
-msgid "Restore minimal default"
-msgstr "최소 기본값 복원"
-
-msgid "Minimal sidebar defaults restored."
-msgstr "최소 사이드바 기본값이 복원되었습니다."
-
 msgid "Order must be an integer"
 msgstr "순서는 반드시 정수값이여야 합니다"
+
+msgid "Saved order of sections."
+msgstr "섹션 순서 저장됨."
+
+msgid "Sidebar will refresh shortly."
+msgstr "사이드바가 곧 새로고쳐집니다."
 
 msgid "No section selected"
 msgstr "섹션 선택안됨"
@@ -1580,9 +1583,6 @@ msgstr "순서 입력안됨"
 
 msgid "Moved"
 msgstr "옮겨짐"
-
-msgid "Saved order of sections."
-msgstr "섹션 순서 저장됨."
 
 msgid "Full statistics enabled"
 msgstr "완전판 상태 활성화"
@@ -2409,6 +2409,9 @@ msgstr "HTTP 프록시가 켜져있지 않습니다"
 msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
 msgstr "브라우저 HTTP 프록시를 {0}으로 설정하지 않은 것 같습니다"
 
+msgid "Errors"
+msgstr ""
+
 msgid "URL"
 msgstr "URL"
 
@@ -2683,29 +2686,23 @@ msgstr "또는 Sybil이 이 라우터 근처"
 msgid "Lookup"
 msgstr "조회"
 
-msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
-msgstr "네트워크 데이터베이스의 IP 주소에 고유하게 연결되어 있으므로 라우터 ID를 누구에게도 밝히지 마십시오."
+msgid "Select the field to search on"
+msgstr ""
 
-msgid "is banned"
-msgstr "금지됨"
-
-msgid "not found in network database"
-msgstr "네트워크 DB에서 발견되지 않음"
-
-msgid "Bad Base64 Router hash"
-msgstr "잘못된 Base64 라우터 해시"
-
-msgid "No routers with"
-msgstr "라우터가 없음: "
-
-msgid "Hash prefix"
-msgstr "해시 접두사"
-
-msgid "Port"
-msgstr "포트"
+msgid "e.g. cn hk"
+msgstr ""
 
 msgid "MTU"
 msgstr "MTU"
+
+msgid "Enter search value here"
+msgstr ""
+
+msgid "Router not found"
+msgstr ""
+
+msgid "No routers with"
+msgstr "라우터가 없음: "
 
 msgid "found in the network database"
 msgstr "네트워크 데이터베이스에서 발견됨"
@@ -2833,17 +2830,17 @@ msgstr "{0} 전에 만료됨"
 msgid "Unknown"
 msgstr "알 수 없음"
 
-msgid "Advanced mode - includes all statistics published by floodfills."
-msgstr "고급 모드 - 플러드필에 의해 게시된 모든 통계를 포함합니다."
-
-msgid "Compact mode - does not include statistics published by floodfills."
-msgstr "컴팩트 모드 - 플러드필에 의해 게시된 통계를 포함하지 않습니다."
-
 msgid "Network Database Router Statistics"
 msgstr "네트워크 데이터베이스 라우터 통계"
 
 msgid "Count"
 msgstr "횟수"
+
+msgid "Under 12 KB/s"
+msgstr ""
+
+msgid "Over 2048 KB/s"
+msgstr ""
 
 msgid "Bandwidth Tier"
 msgstr "대역폭 계층"
@@ -2915,6 +2912,9 @@ msgstr "게시됨"
 msgid "Hostname"
 msgstr "호스트 이름"
 
+msgid "Whois"
+msgstr ""
+
 msgid "direct"
 msgstr "직접"
 
@@ -2930,20 +2930,26 @@ msgstr "NetDb에서 이 서명 유형을 가진 모든 라우터를 표시합니
 msgid "Show all routers with this encryption type in the NetDb"
 msgstr "NetDb에서 이 암호화 유형을 사용하는 모든 라우터를 표시합니다."
 
-msgid "Addresses"
-msgstr "주소록"
-
-msgid "n/a"
-msgstr "n/a"
-
 msgid "Show all routers with this address in the NetDb"
 msgstr "NetDb에서 이 주소를 가진 모든 라우터를 표시합니다."
 
 msgid "Show all routers with this port in the NetDb"
 msgstr "NetDb에서 이 포트가 있는 모든 라우터를 표시합니다."
 
-msgid "Routers"
-msgstr "라우터"
+msgid "Maximum Transmission Unit"
+msgstr ""
+
+msgid "Show all routers with this MTU in the NetDb"
+msgstr ""
+
+msgid "Addresses"
+msgstr "주소록"
+
+msgid "Introducers"
+msgstr ""
+
+msgid "Network Id"
+msgstr "네트워크 ID"
 
 msgid "First heard about"
 msgstr "처음 듣는 말"
@@ -2954,11 +2960,8 @@ msgstr "마지막으로 들은 이야기"
 msgid "Last heard from"
 msgstr "마지막으로 들은 말"
 
-msgid "Network Id"
-msgstr "네트워크 ID"
-
-msgid "Count is always spoofed to avoid indicating router restarts"
-msgstr "카운트는 항상 라우터 재시작을 나타내지 않도록 위조되어 있습니다"
+msgid "Info"
+msgstr "정보"
 
 msgid "Hidden or starting up"
 msgstr "숨겨짐 혹은 시작중"
@@ -2987,17 +2990,32 @@ msgstr "SSU [IPv6]"
 msgid "SSU [IPv6] with Introducers"
 msgstr "IPv6 SSU, 소개자"
 
+msgid "NTCP &amp; SSU with Introducers [IPv6 Only]"
+msgstr "IPv6 전용 NTCP, SSU, 소개자"
+
 msgid "NTCP [IPv6]"
 msgstr "NTCP [IPv6]"
 
 msgid "NTCP [IPv6] &amp; SSU"
 msgstr "NTCP [IPv6] &amp; SSU"
 
-msgid "NTCP &amp; SSU with Introducers [IPv6 Only]"
-msgstr "IPv6 전용 NTCP, SSU, 소개자"
-
 msgid "NTCP [IPv6] &amp; SSU with Introducers"
 msgstr "IPv6 NTCP, SSU, 소개자"
+
+msgid "Local"
+msgstr "로컬"
+
+msgid "Fast Tier"
+msgstr ""
+
+msgid "High Capacity Tier"
+msgstr ""
+
+msgid "Integrated Tier"
+msgstr ""
+
+msgid "Standard Tier"
+msgstr ""
 
 msgid "No peer connections available"
 msgstr "사용 가능한 피어 연결이 없습니다."
@@ -3326,14 +3344,17 @@ msgstr "마지막으로 들은 곳:"
 msgid "View/Edit"
 msgstr "보기/편집"
 
-msgid "Unreachable"
-msgstr "접근불가능"
-
 msgid "OK"
 msgstr "OK"
 
 msgid "Test Fails"
 msgstr "테스트 실패"
+
+msgid "Unreachable"
+msgstr "접근불가능"
+
+msgid "Most tests passing"
+msgstr ""
 
 msgid "Fast, High Capacity"
 msgstr "빠르고, 높은 수용력"
@@ -3349,6 +3370,9 @@ msgstr "결함"
 
 msgid "Integrated"
 msgstr "통합된"
+
+msgid "Configure Peer"
+msgstr ""
 
 msgid "Thresholds"
 msgstr "기준치"
@@ -3413,11 +3437,11 @@ msgstr "마지막 나쁜 송신"
 msgid "Last Bad Store"
 msgstr "마지막 나쁜 저장"
 
-msgid "Capabilities in the NetDb, not used to determine profiles"
-msgstr "프로필을 결정하는 데 사용되지 않는 NetDb의 기능"
-
 msgid "caps"
 msgstr "대문자"
+
+msgid "Capabilities in the NetDb, not used to determine profiles"
+msgstr "프로필을 결정하는 데 사용되지 않는 NetDb의 기능"
 
 msgid "Reachable"
 msgstr "접근가능"
@@ -3590,6 +3614,9 @@ msgstr "설치하려면 재시작을 누르세요"
 
 msgid "Click Shutdown and restart to install"
 msgstr "설치하려면 종료 후 재시작하세요"
+
+msgid "Unable"
+msgstr ""
 
 #, java-format
 msgid "{0}"
@@ -3784,9 +3811,6 @@ msgstr "그래프 라우터 퍼포먼스"
 msgid "Router Help and FAQ"
 msgstr "라우터 도움말 및 FAQ"
 
-msgid "Info"
-msgstr "정보"
-
 msgid "Router information including transport addresses and UPnP scan"
 msgstr "전송 주소 및 UPnP 스캔을 포함한 라우터 정보"
 
@@ -3872,6 +3896,34 @@ msgstr "플로드필 활성화"
 msgid "Total number of remote LeaseSets stored in our NetDb"
 msgstr "우리 NetDb에 저장된 원격 리스셋 총수"
 
+msgid "Declining transit tunnel requests during startup phase"
+msgstr "라우터가 안정화되는 동안 처음 10분 동안 참여 터널 요청이 허용되지 않습니다."
+
+msgid "Declining transit tunnel requests as we are shutting down"
+msgstr "우리가 종료 할 때 대중 교통 터널 요청이 감소합니다"
+
+msgid "Router or network performance is impeding the building of transit tunnels"
+msgstr "라우터 또는 네트워크 성능이 참여 터널 구축을 방해하고 있습니다."
+
+msgid "Router is currently hosting the configured maximum number of transit tunnels"
+msgstr "현재 라우터는 구성된 최대 트랜지스터 터널 수를 호스팅하고 있습니다."
+
+msgid "Router is currently using the configured maximum share bandwidth"
+msgstr "현재 라우터는 구성된 최대 공유 대역폭을 사용하고 있습니다."
+
+msgid "Router is ready to build participating tunnels"
+msgstr "라우터가 참여 터널을 구축할 준비가 되었습니다."
+
+#, java-format
+msgid "Accepting transit tunnel requests; hosting {0} tunnels"
+msgstr "참여 터널 요청을 수락하고 {0} 터널에 참여 중입니다"
+
+msgid "No transit tunnels are built when Hidden mode is active"
+msgstr "숨김 모드가 활성화되면 참여 터널이 건설되지 않습니다."
+
+msgid "Router is configured to reject all transit tunnel requests"
+msgstr "라우터는 참여하는 모든 터널 요청을 거부하도록 구성됩니다."
+
 msgid "Warning: ECDSA is not available. Update your Java or OS"
 msgstr "경고: ECDSA 사용이 발가능합니다. JAVA와 OS를 업그레이드 하세요"
 
@@ -3907,6 +3959,9 @@ msgstr "금지된 피어 수"
 
 msgid "The total number of peers in our network database"
 msgstr "내 네트워크 데이터베이스의 피어들의 총 수"
+
+msgid "Total RouterInfos stored on disk"
+msgstr ""
 
 msgid "Known"
 msgstr "알려진"
@@ -4018,34 +4073,6 @@ msgstr "터널에 참여한 다른 라우터의 리퀘스트를 큐에 넣었습
 
 msgid "Backlog"
 msgstr "백로그"
-
-msgid "Declining transit tunnel requests during startup phase"
-msgstr "라우터가 안정화되는 동안 처음 10분 동안 참여 터널 요청이 허용되지 않습니다."
-
-msgid "Declining transit tunnel requests as we are shutting down"
-msgstr "우리가 종료 할 때 대중 교통 터널 요청이 감소합니다"
-
-msgid "Router or network performance is impeding the building of transit tunnels"
-msgstr "라우터 또는 네트워크 성능이 참여 터널 구축을 방해하고 있습니다."
-
-msgid "Router is currently hosting the configured maximum number of transit tunnels"
-msgstr "현재 라우터는 구성된 최대 트랜지스터 터널 수를 호스팅하고 있습니다."
-
-msgid "Router is currently using the configured maximum share bandwidth"
-msgstr "현재 라우터는 구성된 최대 공유 대역폭을 사용하고 있습니다."
-
-msgid "Router is ready to build participating tunnels"
-msgstr "라우터가 참여 터널을 구축할 준비가 되었습니다."
-
-#, java-format
-msgid "Accepting transit tunnel requests; hosting {0} tunnels"
-msgstr "참여 터널 요청을 수락하고 {0} 터널에 참여 중입니다"
-
-msgid "No transit tunnels are built when Hidden mode is active"
-msgstr "숨김 모드가 활성화되면 참여 터널이 건설되지 않습니다."
-
-msgid "Router is configured to reject all transit tunnel requests"
-msgstr "라우터는 참여하는 모든 터널 요청을 거부하도록 구성됩니다."
 
 msgid "Statistics gathered during this router's uptime"
 msgstr "라우터 동작시간 동안 수집한 통계"
@@ -4175,8 +4202,14 @@ msgstr "저장된 분석 없음"
 msgid "Select stored analysis"
 msgstr "저장된 분석 선택"
 
+msgid "Review"
+msgstr ""
+
 msgid "Run analysis on Floodfills only"
 msgstr "홍수 채우기에 대해서만 분석 실행"
+
+msgid "Start Scan"
+msgstr ""
 
 msgid "Run analysis on all routers in NetDb"
 msgstr "NetDb의 모든 라우터에 대한 분석 실행"
@@ -4340,6 +4373,12 @@ msgstr "최대"
 msgid "Show all routers for this family in NetDb"
 msgstr "NetDb에서 이 계열의 모든 라우터 표시"
 
+msgid "Routers"
+msgstr "라우터"
+
+msgid "n/a"
+msgstr "n/a"
+
 msgid "Last lookup successful"
 msgstr "마지막 조회 성공"
 
@@ -4391,9 +4430,6 @@ msgstr "데이터 전송됨"
 msgid "Data"
 msgstr "데이터"
 
-msgid "Limit"
-msgstr "제한"
-
 msgid "Receive on"
 msgstr "받음:"
 
@@ -4438,6 +4474,7 @@ msgstr "라우터는 현재 대중교통 터널이 건설되는 것을 방지하
 msgid "No transit tunnels currently active."
 msgstr "현재 운송 터널이 활성화되지 않습니다."
 
+#, java-format
 msgid "Transit Tunnels by Peer (Top {0})"
 msgstr "피어별 트랜짓 터널 (상위 {0}개)"
 
@@ -4449,9 +4486,6 @@ msgstr "피어별 모든 터널"
 
 msgid "Primary IP address"
 msgstr "기본 IP 주소"
-
-msgid "Local"
-msgstr "로컬"
 
 msgid "unique peers"
 msgstr "고유 피어"
@@ -4465,6 +4499,9 @@ msgstr "환승"
 msgid "No local or transit tunnels currently active."
 msgstr "현재 활성화된 로컬 또는 통과 터널이 없습니다."
 
+msgid "PRIVATE IP ADDRESS"
+msgstr ""
+
 msgid "Bandwidth Tiers"
 msgstr "대역폭 계층"
 
@@ -4474,6 +4511,9 @@ msgstr "공유 대역폭이 {0} 이상입니다."
 
 msgid "Inbound or outbound?"
 msgstr "인바운드인가 아웃바운드인가?"
+
+msgid "In/Out"
+msgstr ""
 
 msgid "Gateway"
 msgstr "게이트웨이"
@@ -4590,6 +4630,9 @@ msgstr "I2P 웹서버 (eepSite)"
 msgid "Browser launch at startup"
 msgstr "시작때 브라우저 열기"
 
+msgid "I2P Router Console"
+msgstr ""
+
 msgid "Open Router Console in web browser at startup"
 msgstr "시작때 브라우저에서 라우터 콘솔 열기"
 
@@ -4665,12 +4708,6 @@ msgstr "키"
 msgid "port"
 msgstr "포트"
 
-msgid "config UI"
-msgstr "UI 설정"
-
-msgid "User Interface Configuration"
-msgstr "사용자 인터페이스 구성"
-
 msgid "Certificates"
 msgstr "인증서"
 
@@ -4686,8 +4723,8 @@ msgstr "대역폭 리미터"
 msgid "Advanced Network Configuration"
 msgstr "고급 네트워크 구성"
 
-msgid "I2P+ will work best if you configure your rates to match the speed of your internet connection."
-msgstr "I2P를 최적화 하시려면 인터넷 연결속도와 맞춰 대역폭 비율을 설정하십시오."
+msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
+msgstr ""
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
 msgstr "참고 : 네트워크 (네트워크 공유)에 대한 귀하의 기여는 업스트림 대역폭의 할당 (업로드 속도)에 의해 결정됩니다."
@@ -4717,11 +4754,11 @@ msgid "NOTE"
 msgstr "참고"
 
 #, java-format
-msgid "You have configured I2P+ to share only {0} KBps."
-msgstr "I2P에 오직 {0} KBps만 사용하도록 설정되었습니다."
+msgid "You have configured I2P to share only {0} KBps."
+msgstr ""
 
-msgid "I2P+ requires at least 12KBps to enable sharing. "
-msgstr "I2P는 최소 12KBps 를 공유하도록 해야합니다."
+msgid "I2P requires at least 12KBps to enable sharing. "
+msgstr ""
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
 msgstr "더 많은 대역폭을 공유하도록 설정해 주십시오. (더 많은 터널들에 참가하세요!)"
@@ -5218,8 +5255,8 @@ msgstr "리시딩 설정"
 msgid "Reseeding is the bootstrapping process used to find other routers when you first install I2P, or when your router has too few router references remaining."
 msgstr "리시딩은 처음 I2P를 설치했을 때 다룬 라우터를 찾기위해 사용되는 부트스트랩 방식의 프로세스입니다. 또는 너무 적은 수의 라우터 레퍼런스를 가지고 있을 때도 사용됩니다."
 
-msgid "To enable the configuration of reseed urls, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
-msgstr "파일 재구성 URL의 구성을 활성화하려면 콘솔의 <a href=/help/advancedsettings>고급 모드</a>를 활성화하십시오."
+msgid "To enable the configuration of reseed urls, activate the console's <a href=/help/advancedsettings>Advanced mode</a>."
+msgstr ""
 
 msgid "Reseeding Configuration"
 msgstr "재시딩 설정"
@@ -5229,9 +5266,6 @@ msgstr "재시딩에 도움"
 
 msgid "Reseeding Help"
 msgstr "재시드 도움말"
-
-msgid "Change these only if HTTPS is blocked by a restrictive firewall and reseed has failed."
-msgstr "HTTPS가 방화벽에 의해 막히거나 리시딩이 실패할때만 변경하세요."
 
 msgid "Reseed URLs"
 msgstr "리시드 URL"
@@ -5268,6 +5302,9 @@ msgstr "이 옵션은 I2P의 HTTP 아웃프록시를 사용하여 리시드(재�
 
 msgid "I2P Outproxy"
 msgstr "I2P 아웃프록시"
+
+msgid "Port"
+msgstr "포트"
 
 msgid "Use HTTP Proxy for HTTP Reseed Hosts"
 msgstr "HTTP 재시드 호스트에 HTTP 프록시 사용"
@@ -5381,6 +5418,12 @@ msgstr "통합 사이드바"
 msgid "Use the same sidebar on all pages"
 msgstr "모든 페이지에서 동일한 사이드바 사용"
 
+msgid "Sticky sidebar"
+msgstr ""
+
+msgid "Enable conditional fixed sidebar"
+msgstr ""
+
 msgid "config stats"
 msgstr "통계 설정"
 
@@ -5437,6 +5480,12 @@ msgstr "클라이언트 터널 설정을 변경하려면 <a href=/i2ptunnelmgr>�
 
 msgid "To enable session-only changes to the client tunnels, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
 msgstr "세션에만 클라이언트 터널 변경을 활성화하려면 콘솔의 <a href=/help/advancedsettings>고급 모드</a>를 활성화하세요."
+
+msgid "config UI"
+msgstr "UI 설정"
+
+msgid "User Interface Configuration"
+msgstr "사용자 인터페이스 구성"
 
 msgid "Router Console Theme"
 msgstr "라우터 콘솔 테마"
@@ -5574,14 +5623,20 @@ msgstr "404 오류"
 msgid "not found"
 msgstr "찾을 수 없음"
 
+msgid "router logs"
+msgstr "라우터 로그"
+
+msgid "Critical / Error Level Logs"
+msgstr "중대한 / 오류 수준 로그"
+
+msgid "Clear logs"
+msgstr "로그 비우기"
+
 msgid "events"
 msgstr "이벤트"
 
 msgid "Event Log"
 msgstr "이벤트 로그"
-
-msgid "Combined"
-msgstr "결합"
 
 msgid "graph"
 msgstr "그래프"
@@ -6090,7 +6145,7 @@ msgstr "콘솔을 로컬 네트워크에서 접근 가능하게 하려면 I2P �
 msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
 msgstr "예: localhost와 192.168.1.10에서 HTTP와 HTTPS를 통한 접근을 허용하려면:"
 
-msgid "For most client services, change listening address for relevant service in Tunnel Manager's configuration section using <i>reachable by</i> dropdown."
+msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager's configuration section using the <i>reachable by</i> dropdown."
 msgstr ""
 
 msgid "How do I connect to IRC within I2P?"
@@ -7290,34 +7345,6 @@ msgstr "작업 대기열 통계"
 msgid "Job Queue Stats"
 msgstr "작업 대기열 통계"
 
-msgid "logs"
-msgstr "로그"
-
-msgid "Please include your I2P version and running environment information in bug reports"
-msgstr "버그 보고서에 I2P 버전과 실행 환경 정보를 포함하십시오."
-
-#, java-format
-msgid "Please report bugs on {0} or {1}."
-msgstr "{0} 또는 {1}에 버그를 제보해주세요."
-
-msgid "View event log"
-msgstr "이벤트 로그 보기"
-
-msgid "Critical / Error Level Logs"
-msgstr "중대한 / 오류 수준 로그"
-
-msgid "Clear logs"
-msgstr "로그 비우기"
-
-msgid "Configure router logging options"
-msgstr "라우터 로깅 옵션 구성"
-
-msgid "Filter Router log output"
-msgstr "로그 출력 필터링"
-
-msgid "Service (Wrapper) Logs"
-msgstr "서비스 (Wrapper) 로그"
-
 msgid "network database"
 msgstr "네트워크 데이터베이스"
 
@@ -7338,6 +7365,9 @@ msgstr "로컬에서 호스팅된 공개 서비스"
 
 msgid "Requested client leaseset"
 msgstr "요청된 클라이언트 리스셋"
+
+msgid "Remote"
+msgstr ""
 
 msgid "network database router map"
 msgstr "네트워크 데이터베이스 라우터 지도"
@@ -7382,164 +7412,26 @@ msgstr "차단된 피어"
 msgid "Fast / High Capacity"
 msgstr "빠른/고용량"
 
-msgid "router logs"
-msgstr "라우터 로그"
+msgid "Configure router logging options"
+msgstr "라우터 로깅 옵션 구성"
+
+msgid "View event log"
+msgstr "이벤트 로그 보기"
+
+msgid "Filter Router log output"
+msgstr "로그 출력 필터링"
 
 msgid "service logs"
 msgstr "서비스 로그"
 
-msgid "Manage I2P addresses"
-msgstr "I2P 주소 관리"
-
-msgid "Imagegen"
-msgstr "이미지 생성기"
-
-msgid "Create and download torrents"
-msgstr "토렌트 생성 및 다운로드"
-
-msgid "Manage client and server tunnels"
-msgstr "클라이언트 및 서버 터널 관리"
-
-msgid "Webmail client"
-msgstr "웹메일 클라이언트"
-
-msgid "Webmail"
-msgstr "웹메일"
-
-msgid "Local webserver for hosting content on the I2P network"
-msgstr "I2P 네트워크에서 콘텐츠를 호스팅하기 위한 로컬 웹서버"
+msgid "Service (Wrapper) Logs"
+msgstr "서비스 (Wrapper) 로그"
 
 msgid "Information &amp; Diagnostics"
 msgstr "정보 및 진단"
 
-msgid "Review recent updates to I2P"
-msgstr "I2P에 대한 최근 업데이트 검토"
-
-msgid "View debugging information"
-msgstr "디버깅 정보 보기"
-
-msgid "View router performance graphs"
-msgstr "라우터 성능 그래프 보기"
-
-msgid "Router help section"
-msgstr "라우터 도움말 섹션"
-
-msgid "Router homepage"
-msgstr "라우터 홈페이지"
-
-msgid "Home"
-msgstr "홈"
-
-msgid "View news relating to I2P"
-msgstr "I2P 관련 뉴스 보기"
-
-msgid "I2P News"
-msgstr "I2P 뉴스"
-
-msgid "View router workload and stats"
-msgstr "라우터 작업 부하 및 통계 보기"
-
-msgid "Router Jobs"
-msgstr "라우터 작업"
-
-msgid "View router logs"
-msgstr "라우터 로그 보기"
-
-msgid "View information and stats regarding all known peers"
-msgstr "알려진 모든 피어에 관한 정보 및 통계 보기"
-
-msgid "View active peers"
-msgstr "활성 피어 보기"
-
-msgid "View peer performance profiles"
-msgstr "피어 성능 프로필 보기"
-
-msgid "View information about router and running environment"
-msgstr "라우터 및 실행 환경에 대한 정보 보기"
-
-msgid "Statistics"
-msgstr "통계"
-
-msgid "Current console and webapp translation report"
-msgstr "현재 콘솔 및 웹 애플리케이션 번역 보고서"
-
-msgid "Translation Status"
-msgstr "번역 상태"
-
-msgid "View active tunnels"
-msgstr "활성 터널을 봅니다"
-
-msgid "Customize homepage"
-msgstr "홈페이지 사용자 정의"
-
-msgid "Homepage"
-msgstr "홈페이지"
-
-msgid "Configure I2P Client Control Interface"
-msgstr "I2P 클라이언트 제어 인터페이스 구성"
-
-msgid "View or edit router keyring for encrypted destinations"
-msgstr "암호화된 대상에 대한 라우터 키링 보기 또는 편집"
-
-msgid "Configure router networking options"
-msgstr "라우터 네트워킹 옵션 구성"
-
-msgid "Manually edit peers and view banned peers and blocklist"
-msgstr "피어를 수동으로 편집하고 금지된 피어와 차단 목록을 봅니다."
-
-msgid "Install and manage router plugins"
-msgstr "라우터 플러그인 설치 및 관리"
-
-msgid "Router reseeding and configuration"
-msgstr "라우터 재시드 및 구성"
-
-msgid "Configure and manage Router family"
-msgstr "라우터 제품군 구성 및 관리"
-
-msgid "Manage Router service"
-msgstr "라우터 서비스를 관리합니다"
-
-msgid "Configure stat collection for graphing"
-msgstr "그래프 작성을 위한 통계 수집 구성"
-
-msgid "Router Stats"
-msgstr "라우터 통계"
-
-msgid "Configure router updates"
-msgstr "라우터 업데이트 구성"
-
-msgid "Configuration wizard for new users"
-msgstr "신규 사용자를 위한 구성 마법사"
-
-msgid "Setup Wizard"
-msgstr "설치 마법사"
-
-msgid "Customize sidebar"
-msgstr "사이드 바를 사용자 정의하십시오"
-
-msgid "Configure tunnel options"
-msgstr "터널 옵션을 구성합니다"
-
-msgid "Configure router user interface and optional console password"
-msgstr "라우터 사용자 인터페이스 및 선택적 콘솔 비밀번호 구성"
-
-msgid "Configuring I2P for optimal performance"
-msgstr "최적의 성능을 위한 I2P 구성"
-
-msgid "Information for new users"
-msgstr "새로운 사용자를위한 정보"
-
-msgid "A guide to reseeding your I2P router"
-msgstr "I2P 라우터를 다시 조정하는 안내서"
-
-msgid "What to do in the event I2P isn't working"
-msgstr "I2P가 작동하지 않는 경우해야 할 일"
-
-msgid "Introduction to tunnel filters"
-msgstr "터널 필터 소개"
-
-msgid "Tunnel Filters"
-msgstr "터널 필터"
+msgid "Customize"
+msgstr ""
 
 msgid "statistics"
 msgstr "통계"
@@ -7592,9 +7484,6 @@ msgstr "터널 ID 전환"
 msgid "Toggle Tunnels"
 msgstr "터널 전환"
 
-msgid "Updating sidebar sections"
-msgstr "사이드바 섹션 업데이트 중"
-
 msgid "Peer Profile"
 msgstr "피어 프로필"
 
@@ -7619,14 +7508,17 @@ msgstr "맨 위로 돌아가기"
 msgid "webmail"
 msgstr "웹메일"
 
+msgid "Webmail"
+msgstr "웹메일"
+
 msgid "New Install Wizard"
 msgstr "새 설치 마법사"
 
 msgid "Skip Setup"
 msgstr "설정을 건너 뜁니다"
 
-msgid "Select the language to be used for the router console and web applications (<a href=/webmail target=_blank rel=noreferrer>webmail</a>, <a href=/torrents target=_blank rel=noreferrer>torrents</a>, <a href=/i2ptunnelmgr target=_blank rel=noreferrer>tunnel manager</a> etc). If you wish to change the language in future, change the router console theme, or configure a password to access the console, you may do so on the <a href=/configui target=_blank rel=noreferrer>User Interface configuration page</a>."
-msgstr "라우터 콘솔 및 웹 응용 프로그램에 사용할 언어를 선택하십시오.(<a href=/webmail target=_blank rel=noreferrer> webmail </a>, <a href =/급류 대상 = _blank rel = noreferrer> 토렌트 </a>, <a href =/i2ptunnelmgr대상 = _blank rel = noreferrer> 터널 관리자 </a> 등). 변경하려면미래의 언어, 라우터 콘솔 테마를 변경하거나 구성하십시오.콘솔에 액세스하는 비밀번호, <a href =/configui에서 그렇게 할 수 있습니다.대상 = _blank rel = noreferrer> 사용자 인터페이스 구성 페이지 </a>."
+msgid "Select the language to be used for the router console and web applications ("
+msgstr ""
 
 msgid "Router Console &amp; WebApps Display Language"
 msgstr "라우터 콘솔 및 WebApps 표시 언어"
@@ -7695,6 +7587,13 @@ msgid "Bandwidth Configuration"
 msgstr "대역폭 구성"
 
 #, java-format
+msgid "You have configured I2P+ to share only {0} KBps."
+msgstr "I2P에 오직 {0} KBps만 사용하도록 설정되었습니다."
+
+msgid "I2P+ requires at least 12KBps to enable sharing. "
+msgstr "I2P는 최소 12KBps 를 공유하도록 해야합니다."
+
+#, java-format
 msgid "You have configured I2P+ to share {0} KBps."
 msgstr "{0} KBps를 I2P와 공유하도록 설정했습니다."
 
@@ -7704,8 +7603,8 @@ msgstr "I2P+는 I2P 네트워크에서 웹 사이트를 탐색하기 위해 상�
 msgid "Browser Setup"
 msgstr "브라우저 설정"
 
-msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. For more help, see <a href=https://geti2p.net/htproxyports target=_blank rel=noreferrer>the configuration guide</a>, or <a href=/help/configuration#browserconfig>the mini-tutorial for Firefox</a>."
-msgstr "I2P 네트워크에서 호스팅 된 웹 사이트에 액세스하고 선택적으로 Default OutProxy를 사용하여 Clearnet의 웹 사이트에 연결하려면 구성해야합니다.<code> 127.0.0.1 포트 4444 </code>에서 기본적으로 i2p+ <b> http </b> 프록시를 사용하는 브라우저. 더 많은 도움은 <a href = https : //geti2p.net/를 참조하십시오. htproxyports target = _blank rel = noreferrer> 구성 안내서 </a> 또는 <a href=/help/configuration#browserconfig> firefox의 미니-튜닝 </a>."
+msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. "
+msgstr ""
 
 msgid "Welcome to I2P+!"
 msgstr "I2P에 환영합니다!"
@@ -7713,8 +7612,8 @@ msgstr "I2P에 환영합니다!"
 msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
 msgstr "I2P를 시작하면 라우터를 네트워크에 부트 스트랩 (통합)하고 추가 피어를 찾는 데 몇 분이 걸릴 수 있으므로 인내하십시오."
 
-msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P+."
-msgstr "로컬 터널 옆에 녹색 별이 표시되면 i2p로 할 수있는 다양한 일이 있습니다."
+msgid "Once green stars are indicated next to your Service Tunnels, there is a wide variety of things you can do with I2P+."
+msgstr ""
 
 msgid "Unknown Wizard page"
 msgstr "알 수없는 마법사 페이지"
@@ -7733,4 +7632,74 @@ msgstr "다음"
 
 msgid "Finished"
 msgstr "완료됨"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#, java-format
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

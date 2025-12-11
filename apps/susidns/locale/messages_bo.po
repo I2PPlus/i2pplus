@@ -28,11 +28,29 @@ msgstr "གཟིགས་མིང་ལ་\"{0}\"བཞག་མི་ཆོ�
 msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
 msgstr "གཟིགས་མིང་\"{0}\" ASCIIརུ་བསྒྱུར་དགོས་པ་ཐུབ་མ་བྱུང་། འོད་སྐྱོན་འདིའི་JVMལ་བསྒྱུར་རིགས་ཀྱི་ཚོད་མེད་པ་བཞག"
 
+msgid "Source"
+msgstr "རིགས་འབྲེལ།"
+
+msgid "Imported from file hosts.txt"
+msgstr ""
+
+msgid "Manually added via SusiDNS"
+msgstr "SusiDNSགྱི་རྒྱུ་མཐུད་སྣོན་པ།"
+
+msgid "Manually added"
+msgstr ""
+
+msgid "Added via address helper"
+msgstr ""
+
+msgid "Via helper"
+msgstr ""
+
+msgid "Via helper from"
+msgstr ""
+
 msgid "None"
 msgstr "མེད"
-
-msgid "Hashcash"
-msgstr "Hashcash"
 
 msgid "Hidden"
 msgstr "སྒྲིབས་པ།"
@@ -177,9 +195,6 @@ msgstr "{1}གྱི་ཚོད་ཀྱི་ནང་ཡིག་ཆ་བང
 msgid "Host name {0} is not in the address book."
 msgstr "གཟིགས་མིང་{0}ཡིག་ཆ་བང་གི་ནང་མེད།"
 
-msgid "Manually added via SusiDNS"
-msgstr "SusiDNSགྱི་རྒྱུ་མཐུད་སྣོན་པ།"
-
 #, java-format
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr "{0}གི་འབྲས་བུ་{1}གྱི་མིང་གི་རིགས་སུ་སྣོན་མི་ཐུབ།"
@@ -305,6 +320,9 @@ msgstr "རྒྱུ་མཐུད་(b32)"
 
 msgid "Destination"
 msgstr "འབྲས་བུ།"
+
+msgid "Added"
+msgstr ""
 
 msgid "Select hosts for deletion from addressbook"
 msgstr "ཡིག་ཆ་བང་ནས་གཟིགས་མིང་སོར་ཆུབ་པར་འདེམས་པ།"
@@ -446,9 +464,6 @@ msgstr "མེད།"
 
 msgid "yes"
 msgstr "ཡོད།"
-
-msgid "Source"
-msgstr "རིགས་འབྲེལ།"
 
 msgid "Added Date"
 msgstr "སྣོན་པའི་དུས།"
@@ -599,3 +614,4 @@ msgstr "གཙོ་བོའི་ཡིག་ཆ་བང་ནས་མཐུ
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "ཁྱོད་ཀྱི་འབྲེལ་ཡོད་པའི་རིགས་ནས་བཞེད་པའི་གཟིགས་མིང་གཞི་གྲངས་གཙོ་བོའི་ཡིག་ཆ་བང་ནས་བཞེད་པ་བཞག"
+

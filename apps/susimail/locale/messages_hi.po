@@ -214,12 +214,6 @@ msgstr "I2PMail"
 msgid "No new messages"
 msgstr "कोई नया संदेश नहीं"
 
-msgid "Checking for new messages on server"
-msgstr "सर्वर पर नए संदेश की जाँच कर रहा है"
-
-msgid "Refresh the page for updates"
-msgstr "अपडेट के लिए पृष्ठ ताजा करें"
-
 #, java-format
 msgid "{0} is an I2P-exclusive service provided by {1}."
 msgstr "{0} {1} द्वारा प्रदान की जाने वाली I2P-अनुकूल सेवा है."
@@ -227,6 +221,12 @@ msgstr "{0} {1} द्वारा प्रदान की जाने वा
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
 msgstr "{0} वेबमेल क्लाइंट &copy Susi 2004-2005."
+
+msgid "Checking for new messages on server"
+msgstr "सर्वर पर नए संदेश की जाँच कर रहा है"
+
+msgid "Refresh the page for updates"
+msgstr "अपडेट के लिए पृष्ठ ताजा करें"
 
 msgid "Removed tracking image placeholder"
 msgstr "ट्रैकिंग छवि के स्थानीयकरण को हटा दिया"
@@ -338,6 +338,9 @@ msgstr "ईमेल जाँचें"
 msgid "Refresh Page"
 msgstr "पृष्ठ ताजा करें"
 
+msgid "Change to Folder"
+msgstr "फ़ोल्डर में बदलें"
+
 #, java-format
 msgid "1 Message"
 msgid_plural "{0} Messages"
@@ -356,18 +359,6 @@ msgstr "कार"
 msgid "Mark for deletion"
 msgstr "हटाने के लिए चिह्नित करें"
 
-msgid "Message contains HTML"
-msgstr "संदेश में HTML है"
-
-msgid "Message is new"
-msgstr "संदेश नया है"
-
-msgid "Message is spam"
-msgstr "संदेश स्पैम है"
-
-msgid "Message body not downloaded"
-msgstr "संदेश का शरीर डाउनलोड नहीं किया गया"
-
 msgid "Really delete the marked messages?"
 msgstr "चिह्नित संदेशों को वास्तव में हटाना?"
 
@@ -383,8 +374,17 @@ msgstr "सभी को चिह्नित करें"
 msgid "Clear All"
 msgstr "सभी को साफ करें"
 
-msgid "Change to Folder"
-msgstr "फ़ोल्डर में बदलें"
+msgid "Message contains HTML"
+msgstr "संदेश में HTML है"
+
+msgid "Message is new"
+msgstr "संदेश नया है"
+
+msgid "Message is spam"
+msgstr "संदेश स्पैम है"
+
+msgid "Message body not downloaded"
+msgstr "संदेश का शरीर डाउनलोड नहीं किया गया"
 
 msgid "First"
 msgstr "पहला"

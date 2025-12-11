@@ -214,12 +214,6 @@ msgstr "I2PMail"
 msgid "No new messages"
 msgstr "གསར་པའི་གློག་ཐུང་མི་འདུག"
 
-msgid "Checking for new messages on server"
-msgstr "ཞབས་ཞུ་ཁང་ནས་གསར་པའི་གློག་ཐུང་བཟོ་བར་བྱེད་བཞིན་པ།"
-
-msgid "Refresh the page for updates"
-msgstr "བཅོས་པར་ཤོག་ངོས་བསྐྱར་དུ་བྱེད་རོགས།"
-
 #, java-format
 msgid "{0} is an I2P-exclusive service provided by {1}."
 msgstr "{0} ནི་{1} གིས་སྐྱོང་བའི་I2P དོན་ཚན་གྱི་ཞབས་ཞུ་ཁང་།"
@@ -227,6 +221,12 @@ msgstr "{0} ནི་{1} གིས་སྐྱོང་བའི་I2P དོན
 #, java-format
 msgid "{0} webmail client &copy Susi 2004-2005."
 msgstr "{0} གློག་ཐུང་གི་སྒྲིག་ཆས་&copy Susi 2004-2005."
+
+msgid "Checking for new messages on server"
+msgstr "ཞབས་ཞུ་ཁང་ནས་གསར་པའི་གློག་ཐུང་བཟོ་བར་བྱེད་བཞིན་པ།"
+
+msgid "Refresh the page for updates"
+msgstr "བཅོས་པར་ཤོག་ངོས་བསྐྱར་དུ་བྱེད་རོགས།"
 
 msgid "Removed tracking image placeholder"
 msgstr "བཟོ་བཅོས་པའི་རི་མོའི་སྟོན་བཟོ་བརྒྱབ།"
@@ -338,6 +338,9 @@ msgstr "གློག་ཐུང་བཟོ་བར་བྱེད་པ།"
 msgid "Refresh Page"
 msgstr "ཤོག་ངོས་བསྐྱར་དུ་བྱེད་པ།"
 
+msgid "Change to Folder"
+msgstr "ཞབས་ཞུ་ཁང་དུ་བཟོ་བཅོས་བྱེད་པ།"
+
 #, java-format
 msgid "1 Message"
 msgid_plural "{0} Messages"
@@ -356,18 +359,6 @@ msgstr "ཆེ་ཚོར།"
 msgid "Mark for deletion"
 msgstr "བསུབས་པར་མཚོན་པ།"
 
-msgid "Message contains HTML"
-msgstr "གློག་ཐུང་ནི་HTML དོན་ཚན་ཚུགས་པ།"
-
-msgid "Message is new"
-msgstr "གློག་ཐུང་གསར་པ།"
-
-msgid "Message is spam"
-msgstr "གློག་ཐུང་ནི་སྙིགས་སྣོད་ཡིན།"
-
-msgid "Message body not downloaded"
-msgstr "གློག་ཐུང་གི་ནང་དོན་ཕབ་མི་བྱེད་པ།"
-
 msgid "Really delete the marked messages?"
 msgstr "མཚོན་བའི་གློག་ཐུང་བསུབས་རྒྱུ་ནམ་།"
 
@@ -383,8 +374,17 @@ msgstr "ཐམས་ཅད་མཚོན་པ།"
 msgid "Clear All"
 msgstr "ཐམས་ཅད་བཟོ་བཅོས་བྱེད་པ།"
 
-msgid "Change to Folder"
-msgstr "ཞབས་ཞུ་ཁང་དུ་བཟོ་བཅོས་བྱེད་པ།"
+msgid "Message contains HTML"
+msgstr "གློག་ཐུང་ནི་HTML དོན་ཚན་ཚུགས་པ།"
+
+msgid "Message is new"
+msgstr "གློག་ཐུང་གསར་པ།"
+
+msgid "Message is spam"
+msgstr "གློག་ཐུང་ནི་སྙིགས་སྣོད་ཡིན།"
+
+msgid "Message body not downloaded"
+msgstr "གློག་ཐུང་གི་ནང་དོན་ཕབ་མི་བྱེད་པ།"
 
 msgid "First"
 msgstr "ཐོག་མ།"

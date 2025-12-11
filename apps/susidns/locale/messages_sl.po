@@ -28,11 +28,29 @@ msgstr "Ime gostitelja ne more vsebovati \"{0}\""
 msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
 msgstr "Ime gostitelja \"{0}\" zahteva pretvorbo v ASCII, vendar je knjižnica za pretvorbo v tem JVM neodvisna"
 
+msgid "Source"
+msgstr "Vir"
+
+msgid "Imported from file hosts.txt"
+msgstr ""
+
+msgid "Manually added via SusiDNS"
+msgstr "Ročno dodano preko SusiDNS"
+
+msgid "Manually added"
+msgstr ""
+
+msgid "Added via address helper"
+msgstr ""
+
+msgid "Via helper"
+msgstr ""
+
+msgid "Via helper from"
+msgstr ""
+
 msgid "None"
 msgstr "Brez"
-
-msgid "Hashcash"
-msgstr "Hashcash"
 
 msgid "Hidden"
 msgstr "Skrito"
@@ -187,9 +205,6 @@ msgstr "{0} imenik naslovov v {1} podatkovniku"
 msgid "Host name {0} is not in the address book."
 msgstr "Ime gostitelja {0} ni v imeniku naslovov."
 
-msgid "Manually added via SusiDNS"
-msgstr "Ročno dodano preko SusiDNS"
-
 #, java-format
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr "Dodajanje destinacije za {0} v storitev imenovanja {1} je spodletelo"
@@ -319,6 +334,9 @@ msgstr "Povezava (b32)"
 
 msgid "Destination"
 msgstr "Destinacija"
+
+msgid "Added"
+msgstr ""
 
 msgid "Select hosts for deletion from addressbook"
 msgstr "Izberite gostitelje za izbris iz imenika naslovov"
@@ -460,9 +478,6 @@ msgstr "ne"
 
 msgid "yes"
 msgstr "da"
-
-msgid "Source"
-msgstr "Vir"
 
 msgid "Added Date"
 msgstr "Datum dodajanja"
@@ -613,3 +628,4 @@ msgstr "Naslovi, ki jih ročno dodate v svoj glavni imenik naslovov, se bodo zdr
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Gostitelji, ki jih prejmete iz svojih prijav, se bodo združili z vašim imenikom naslovov maršrutnika."
+

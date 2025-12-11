@@ -28,11 +28,29 @@ msgstr "ホスト名は \"{0}\" を含めません"
 msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
 msgstr "ホスト名 \"{0}\" は ASCII への変換が必要ですが、この JVM では変換ライブラリが使用できませんホスト名 \"{0}\" は ASCII への変換が必要ですが、変換ライブラリはこの JVM では利用できません"
 
+msgid "Source"
+msgstr "ソース"
+
+msgid "Imported from file hosts.txt"
+msgstr ""
+
+msgid "Manually added via SusiDNS"
+msgstr "SusiDNS を通じて手動で追加されました"
+
+msgid "Manually added"
+msgstr ""
+
+msgid "Added via address helper"
+msgstr ""
+
+msgid "Via helper"
+msgstr ""
+
+msgid "Via helper from"
+msgstr ""
+
 msgid "None"
 msgstr "なし"
-
-msgid "Hashcash"
-msgstr "Hashcash"
 
 msgid "Hidden"
 msgstr "非表示"
@@ -172,9 +190,6 @@ msgstr "{1} データベース内に {0} アドレスブック"
 msgid "Host name {0} is not in the address book."
 msgstr "ホスト名 {0} がアドレス帳にありません。"
 
-msgid "Manually added via SusiDNS"
-msgstr "SusiDNS を通じて手動で追加されました"
-
 #, java-format
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr "ネーミング・サービス {1} への {0} の宛先を追加するのに失敗しました"
@@ -298,6 +313,9 @@ msgstr "リンク(b32)"
 
 msgid "Destination"
 msgstr "宛先"
+
+msgid "Added"
+msgstr ""
 
 msgid "Select hosts for deletion from addressbook"
 msgstr "アドレス帳から削除するホストを選択してください"
@@ -439,9 +457,6 @@ msgstr "いいえ"
 
 msgid "yes"
 msgstr "はい"
-
-msgid "Source"
-msgstr "ソース"
 
 msgid "Added Date"
 msgstr "日付が追加されました"
@@ -592,3 +607,4 @@ msgstr "マスター アドレス帳に手動で追加されたアドレスは�
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "サブスクリプションから受け取ったホストは、ルーターのアドレス帳と統合されます。"
+

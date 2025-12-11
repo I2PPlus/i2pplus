@@ -28,11 +28,29 @@ msgstr "호스트 이름은 \"{0}\"을 포함할 수 없음"
 msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
 msgstr "호스트 이름 \"{0}\"은(는) ASCII로 변환해야 하지만 이 JVM에서는 변환 라이브러리를 사용할 수 없습니다.호스트 이름 \"{0}\"은 ASCII 글자로 치환이 필요하지만 변환 라이브러리가 해당 JVM 에서 지원되지 않습니다"
 
+msgid "Source"
+msgstr "출저"
+
+msgid "Imported from file hosts.txt"
+msgstr ""
+
+msgid "Manually added via SusiDNS"
+msgstr "SusiDNS를 통해 수동으로 저장됨"
+
+msgid "Manually added"
+msgstr ""
+
+msgid "Added via address helper"
+msgstr ""
+
+msgid "Via helper"
+msgstr ""
+
+msgid "Via helper from"
+msgstr ""
+
 msgid "None"
 msgstr "없음"
-
-msgid "Hashcash"
-msgstr "해시캐시"
 
 msgid "Hidden"
 msgstr "숨김"
@@ -172,9 +190,6 @@ msgstr "{1} 데이터베이스의 {0} 주소록"
 msgid "Host name {0} is not in the address book."
 msgstr "호스트 이름 {0}이(가) 주소록에 없습니다."
 
-msgid "Manually added via SusiDNS"
-msgstr "SusiDNS를 통해 수동으로 저장됨"
-
 #, java-format
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr "네이밍 서비스 {1}으로 {0} 목적지 추가 실패"
@@ -298,6 +313,9 @@ msgstr "링크(b32)"
 
 msgid "Destination"
 msgstr "목적지"
+
+msgid "Added"
+msgstr ""
 
 msgid "Select hosts for deletion from addressbook"
 msgstr "주소록에서 삭제할 호스트를 선택하세요."
@@ -439,9 +457,6 @@ msgstr "아니오"
 
 msgid "yes"
 msgstr "예"
-
-msgid "Source"
-msgstr "출저"
 
 msgid "Added Date"
 msgstr "추가된 날짜"
@@ -592,3 +607,4 @@ msgstr "마스터 주소록에 수동으로 추가된 주소는 라우터 주소
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "구독을 통해 받은 호스트는 라우터 주소록과 병합됩니다."
+

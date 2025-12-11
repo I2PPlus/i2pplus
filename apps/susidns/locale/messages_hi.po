@@ -28,11 +28,29 @@ msgstr "होस्ट नाम में \"{0}\" शामिल नहीं
 msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
 msgstr "होस्ट नाम \"{0}\" को ASCII में परिवर्तित करने की आवश्यकता है, लेकिन परिवर्तन के लिए लाइब्रेरी इस JVM में उपलब्ध नहीं है"
 
+msgid "Source"
+msgstr "स्रोत"
+
+msgid "Imported from file hosts.txt"
+msgstr ""
+
+msgid "Manually added via SusiDNS"
+msgstr "SusiDNS के माध्यम से हस्ताक्षरित जोड़ा गया"
+
+msgid "Manually added"
+msgstr ""
+
+msgid "Added via address helper"
+msgstr ""
+
+msgid "Via helper"
+msgstr ""
+
+msgid "Via helper from"
+msgstr ""
+
 msgid "None"
 msgstr "कोई"
-
-msgid "Hashcash"
-msgstr "Hashcash"
 
 msgid "Hidden"
 msgstr "छिपा"
@@ -177,9 +195,6 @@ msgstr "{0} पत्रिका {1} डेटाबेस में"
 msgid "Host name {0} is not in the address book."
 msgstr "होस्ट नाम {0} पत्रिका में नहीं है।"
 
-msgid "Manually added via SusiDNS"
-msgstr "SusiDNS के माध्यम से हस्ताक्षरित जोड़ा गया"
-
 #, java-format
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr "{0} के लिए गंतव्य को नामिंग सेवा {1} में जोड़ने में विफलता"
@@ -305,6 +320,9 @@ msgstr "लिंक (b32)"
 
 msgid "Destination"
 msgstr "गंतव्य"
+
+msgid "Added"
+msgstr ""
 
 msgid "Select hosts for deletion from addressbook"
 msgstr "पत्रिका से हटाने के लिए होस्ट चुनें"
@@ -446,9 +464,6 @@ msgstr "नहीं"
 
 msgid "yes"
 msgstr "हाँ"
-
-msgid "Source"
-msgstr "स्रोत"
 
 msgid "Added Date"
 msgstr "जोड़ा गया तारीख"
@@ -599,3 +614,4 @@ msgstr "मास्टर पत्रिका में मानवीय �
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "सब्सक्रिप्शन से आपको मिले मेजबान आपकी राउटर पत्रिका में मिलेंगे।"
+

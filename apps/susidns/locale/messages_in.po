@@ -28,11 +28,29 @@ msgstr "Nama host tidak boleh berisi \"{0}\""
 msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
 msgstr "Nama host \"{0}\" memerlukan konversi ke ASCII namun library konversi tidak tersedia di JVM ini"
 
+msgid "Source"
+msgstr "Sumber"
+
+msgid "Imported from file hosts.txt"
+msgstr ""
+
+msgid "Manually added via SusiDNS"
+msgstr "Ditambahkan secara manual dengan SusiDNS"
+
+msgid "Manually added"
+msgstr ""
+
+msgid "Added via address helper"
+msgstr ""
+
+msgid "Via helper"
+msgstr ""
+
+msgid "Via helper from"
+msgstr ""
+
 msgid "None"
 msgstr "Tidak ada"
-
-msgid "Hashcash"
-msgstr "Hashcash"
 
 msgid "Hidden"
 msgstr "Tersembunyi"
@@ -172,9 +190,6 @@ msgstr "{0} address book di dalam {1} database"
 msgid "Host name {0} is not in the address book."
 msgstr "Nama host {0} tidak ada di address book."
 
-msgid "Manually added via SusiDNS"
-msgstr "Ditambahkan secara manual dengan SusiDNS"
-
 #, java-format
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr "Gagal menambahkan Destinasi untuk {0} ke naming service {1}"
@@ -298,6 +313,9 @@ msgstr "Link (b32) "
 
 msgid "Destination"
 msgstr "Destinasi"
+
+msgid "Added"
+msgstr ""
 
 msgid "Select hosts for deletion from addressbook"
 msgstr "Pilih host untuk dihapus dari address book"
@@ -439,9 +457,6 @@ msgstr "Tidak"
 
 msgid "yes"
 msgstr "Ya"
-
-msgid "Source"
-msgstr "Sumber"
 
 msgid "Added Date"
 msgstr "Tanggal Ditambahkan"
@@ -592,3 +607,4 @@ msgstr "Addressbook yang ditambahkan secara manual ke addressbook master akan be
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Host yang Anda dapatkan dari langganan akan bergabung dengan addressbook router."
+

@@ -28,11 +28,29 @@ msgstr "Le nom d’hôte ne peut pas contenir « {0} »"
 msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
 msgstr "Le nom d'hôte \"{0}\" nécessite une conversion en ASCII mais la bibliothèque de conversion n'est pas disponible dans cette JVMLe nom d’hôte « {0} » exige une conversion en ASCII, mais la bibliothèque de conversion n’est pas proposée dans cette MVJ"
 
+msgid "Source"
+msgstr "Source"
+
+msgid "Imported from file hosts.txt"
+msgstr ""
+
+msgid "Manually added via SusiDNS"
+msgstr "Ajouté manuellement par SusiDNS"
+
+msgid "Manually added"
+msgstr ""
+
+msgid "Added via address helper"
+msgstr ""
+
+msgid "Via helper"
+msgstr ""
+
+msgid "Via helper from"
+msgstr ""
+
 msgid "None"
 msgstr "Aucun"
-
-msgid "Hashcash"
-msgstr "Hashcash"
 
 msgid "Hidden"
 msgstr "Caché"
@@ -177,9 +195,6 @@ msgstr "{0} carnet d’adresses dans {1} base de données"
 msgid "Host name {0} is not in the address book."
 msgstr "Le nom d’hôte {0} n’est pas dans le carnet d’adresses."
 
-msgid "Manually added via SusiDNS"
-msgstr "Ajouté manuellement par SusiDNS"
-
 #, java-format
 msgid "Failed to add Destination for {0} to naming service {1}"
 msgstr "Échec d’ajout de destination pour {0} au système de noms {1}"
@@ -305,6 +320,9 @@ msgstr "Lien (b32)"
 
 msgid "Destination"
 msgstr "Destination"
+
+msgid "Added"
+msgstr ""
 
 msgid "Select hosts for deletion from addressbook"
 msgstr "Sélectionner les hôtes à supprimer du carnet d’adresses"
@@ -446,9 +464,6 @@ msgstr "non"
 
 msgid "yes"
 msgstr "oui"
-
-msgid "Source"
-msgstr "Source"
 
 msgid "Added Date"
 msgstr "Ajouté le"
@@ -599,3 +614,4 @@ msgstr "les adresses ajoutées manuellement à votre carnet d'adresses principal
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Les hôtes que vous recevez de vos abonnements seront fusionnés avec le carnet d'adresses de votre routeur.Les hôtes que vous recevez de vos abonnements seront fusionnés avec votre Carnet d'adresses du routeur"
+

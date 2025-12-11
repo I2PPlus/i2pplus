@@ -73,8 +73,17 @@ msgstr "Αποκτήθηκαν πληροφορίες δρομολογητή {0}
 msgid "Acquired {0} router infos from reseed hosts ({1} errors)"
 msgstr "Αποκτήθηκαν πληροφορίες δρομολογητή {0} από κεντρικούς υπολογιστές reseed ({1} σφάλματα)"
 
+msgid "Clock step adjustment (ms)"
+msgstr "Ρύθμιση βήματος ρολογιού (ms)"
+
+msgid "Size of tunnel acceptor backlog"
+msgstr "Μέγεθος του αποθέματος αποδέκτη σήραγγας"
+
 msgid "Message receive rate (B/s)"
 msgstr "Ποσοστό λήψης μηνύματος (B/s)"
+
+msgid "Low-level receive rate (B/s)"
+msgstr "Χαμηλό ποσοστό λήψης (B/s)"
 
 msgid "Message send rate (B/s)"
 msgstr "Ρυθμός αποστολής μηνύματος (B/s)"
@@ -82,41 +91,35 @@ msgstr "Ρυθμός αποστολής μηνύματος (B/s)"
 msgid "Low-level send rate (B/s)"
 msgstr "Χαμηλό ποσοστό αποστολής (B/s)"
 
-msgid "Low-level receive rate (B/s)"
-msgstr "Χαμηλό ποσοστό λήψης (B/s)"
-
-msgid "Total peers in our NetDb"
-msgstr "Σύνολο ομοτίμων στο NetDb μας"
-
 msgid "Peers active in the last minute"
 msgstr "Συνομήλικοι ενεργοί το τελευταίο λεπτό"
-
-msgid "Known high capacity peers"
-msgstr "Γνωστοί συνομήλικοι υψηλής χωρητικότητας"
 
 msgid "Peers sent to in the last minute"
 msgstr "Οι συνομήλικοι αποστέλλονται στο τελευταίο λεπτό"
 
+msgid "Total peers in our banlist"
+msgstr "Σύνολο συνομήλικων στο banlist μας"
+
+msgid "CPU load average of the JVM"
+msgstr "Μέσος όρος φορτίου CPU του JVM"
+
 msgid "Known fast peers"
 msgstr "Γνωστοί fast peers"
+
+msgid "Known high capacity peers"
+msgstr "Γνωστοί συνομήλικοι υψηλής χωρητικότητας"
 
 msgid "Known integrated (floodfill) peers"
 msgstr "Γνωστά ολοκληρωμένα (floodfill) peers"
 
-msgid "Total peers in our banlist"
-msgstr "Σύνολο συνομήλικων στο banlist μας"
+msgid "Total peers in our NetDb"
+msgstr "Σύνολο ομοτίμων στο NetDb μας"
+
+msgid "Total number of threads in use"
+msgstr ""
 
 msgid "Peers without a published IP address"
 msgstr "Ομότιμοι χωρίς δημοσιευμένη διεύθυνση IP"
-
-msgid "Size of tunnel acceptor backlog"
-msgstr "Μέγεθος του αποθέματος αποδέκτη σήραγγας"
-
-msgid "Clock step adjustment (ms)"
-msgstr "Ρύθμιση βήματος ρολογιού (ms)"
-
-msgid "CPU load average of the JVM"
-msgstr "Μέσος όρος φορτίου CPU του JVM"
 
 msgid "Average tunnel build success %"
 msgstr "Μέση % επιτυχίας κατασκευής σήραγγας"
@@ -1554,29 +1557,29 @@ msgstr "Επανεκκίνηση σε {0}"
 msgid "Save order"
 msgstr "Αποθήκευση παραγγελίας"
 
+msgid "Restore full default"
+msgstr "Επαναφορά πλήρους προεπιλεγμένης μπάρας"
+
+msgid "Restore minimal default"
+msgstr "Επαναφορά ελάχιστης προεπιλεγμένης μπάρας"
+
 msgid "Sidebar preferences updated"
 msgstr ""
 
 msgid "Refresh interval must be a number"
 msgstr "Το διάστημα ανανέωσης πρέπει να είναι αριθμός"
 
-msgid "Restore full default"
-msgstr "Επαναφορά πλήρους προεπιλεγμένης μπάρας"
-
 msgid "Full sidebar defaults restored."
-msgstr ""
-
-msgid "Sidebar will refresh shortly."
-msgstr ""
-
-msgid "Restore minimal default"
-msgstr "Επαναφορά ελάχιστης προεπιλεγμένης μπάρας"
-
-msgid "Minimal sidebar defaults restored."
 msgstr ""
 
 msgid "Order must be an integer"
 msgstr "Η σειρά πρέπει να είναι ακέραιος"
+
+msgid "Saved order of sections."
+msgstr "Αποθηκευμένη σειρά ενοτήτων."
+
+msgid "Sidebar will refresh shortly."
+msgstr ""
 
 msgid "No section selected"
 msgstr "Δεν επιλέχθηκε ενότητα"
@@ -1586,9 +1589,6 @@ msgstr "Δεν έχει καταχωρηθεί παραγγελία"
 
 msgid "Moved"
 msgstr "Μετακινήθηκε"
-
-msgid "Saved order of sections."
-msgstr "Αποθηκευμένη σειρά ενοτήτων."
 
 msgid "Full statistics enabled"
 msgstr "Ενεργοποιήθηκαν τα πλήρη στατιστικά στοιχεία"
@@ -2417,6 +2417,9 @@ msgstr "Ο HTTP proxy server δεν είναι σε λειτουργία"
 msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
 msgstr "Ο browser σας δεν είναι σωστά ρυθμισμένος να χρησιμοποιεί HTTP proxy στο {0}"
 
+msgid "Errors"
+msgstr ""
+
 msgid "URL"
 msgstr "URL"
 
@@ -2691,29 +2694,23 @@ msgstr ""
 msgid "Lookup"
 msgstr "Ψάχνω"
 
-msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
-msgstr "Ποτέ μην αποκαλύπτετε την ταυτότητα του δρομολογητή σας σε κανέναν, καθώς είναι μοναδικά συνδεδεμένος με τη διεύθυνση IP σας στη βάση δεδομένων δικτύου."
+msgid "Select the field to search on"
+msgstr ""
 
-msgid "is banned"
-msgstr "είναι απαγορευμένο"
+msgid "e.g. cn hk"
+msgstr ""
 
-msgid "not found in network database"
-msgstr "δεν βρέθηκε στη βάση δεδομένων του δικτύου"
+msgid "MTU"
+msgstr "MTU"
 
-msgid "Bad Base64 Router hash"
+msgid "Enter search value here"
+msgstr ""
+
+msgid "Router not found"
 msgstr ""
 
 msgid "No routers with"
 msgstr ""
-
-msgid "Hash prefix"
-msgstr ""
-
-msgid "Port"
-msgstr "Θύρα"
-
-msgid "MTU"
-msgstr "MTU"
 
 msgid "found in the network database"
 msgstr ""
@@ -2841,17 +2838,17 @@ msgstr "Έληξε {0} πριν"
 msgid "Unknown"
 msgstr "Άγνωστο"
 
-msgid "Advanced mode - includes all statistics published by floodfills."
-msgstr ""
-
-msgid "Compact mode - does not include statistics published by floodfills."
-msgstr ""
-
 msgid "Network Database Router Statistics"
 msgstr "Στατιστικά στοιχεία δρομολογητή βάσης δεδομένων δικτύου"
 
 msgid "Count"
 msgstr "Υπολογισμός"
+
+msgid "Under 12 KB/s"
+msgstr ""
+
+msgid "Over 2048 KB/s"
+msgstr ""
 
 msgid "Bandwidth Tier"
 msgstr "Εύρος ζώνης βαθμίδας"
@@ -2923,6 +2920,9 @@ msgstr "Δημοσιεύτηκε"
 msgid "Hostname"
 msgstr "Όνομα κεντρικού υπολογιστή"
 
+msgid "Whois"
+msgstr ""
+
 msgid "direct"
 msgstr ""
 
@@ -2938,20 +2938,26 @@ msgstr "Εμφάνιση όλων των δρομολογητών με αυτό�
 msgid "Show all routers with this encryption type in the NetDb"
 msgstr "Εμφάνιση όλων των δρομολογητών με αυτόν τον τύπο κρυπτογράφησης στο NetDb"
 
-msgid "Addresses"
-msgstr "Διευθύνσεις"
-
-msgid "n/a"
-msgstr "Μ/Δ"
-
 msgid "Show all routers with this address in the NetDb"
 msgstr "Εμφάνιση όλων των δρομολογητών με αυτήν τη διεύθυνση στο NetDb"
 
 msgid "Show all routers with this port in the NetDb"
 msgstr "Εμφάνιση όλων των δρομολογητών με αυτήν τη θύρα στο NetDb"
 
-msgid "Routers"
-msgstr "Δρομολογητές"
+msgid "Maximum Transmission Unit"
+msgstr ""
+
+msgid "Show all routers with this MTU in the NetDb"
+msgstr ""
+
+msgid "Addresses"
+msgstr "Διευθύνσεις"
+
+msgid "Introducers"
+msgstr ""
+
+msgid "Network Id"
+msgstr ""
 
 msgid "First heard about"
 msgstr "Πρώτη φορά μαθαίνουμε για"
@@ -2962,11 +2968,8 @@ msgstr "Τελευταία φορά μάθαμε για"
 msgid "Last heard from"
 msgstr "Τελευταία ενημέρωση από"
 
-msgid "Network Id"
-msgstr ""
-
-msgid "Count is always spoofed to avoid indicating router restarts"
-msgstr ""
+msgid "Info"
+msgstr "Πληροφορίες"
 
 msgid "Hidden or starting up"
 msgstr "Κρυμμένο κατά την εκκίνηση"
@@ -2995,17 +2998,32 @@ msgstr "SSU [IPv6]"
 msgid "SSU [IPv6] with Introducers"
 msgstr "IPv6 SSU, εισαγωγείς"
 
+msgid "NTCP &amp; SSU with Introducers [IPv6 Only]"
+msgstr "IPv6 Μόνο NTCP, SSU, εισαγωγείς"
+
 msgid "NTCP [IPv6]"
 msgstr "NTCP [IPv6]"
 
 msgid "NTCP [IPv6] &amp; SSU"
 msgstr "NTCP [IPv6] &amp; SSU"
 
-msgid "NTCP &amp; SSU with Introducers [IPv6 Only]"
-msgstr "IPv6 Μόνο NTCP, SSU, εισαγωγείς"
-
 msgid "NTCP [IPv6] &amp; SSU with Introducers"
 msgstr "IPv6 NTCP, SSU, εισαγωγείς"
+
+msgid "Local"
+msgstr "Τοπικό"
+
+msgid "Fast Tier"
+msgstr ""
+
+msgid "High Capacity Tier"
+msgstr ""
+
+msgid "Integrated Tier"
+msgstr ""
+
+msgid "Standard Tier"
+msgstr ""
 
 msgid "No peer connections available"
 msgstr "Δεν υπάρχουν διαθέσιμες ομότιμες συνδέσεις"
@@ -3339,14 +3357,17 @@ msgstr "Τελευταία ακρόαση από"
 msgid "View/Edit"
 msgstr "Προβολή/Επεξεργασία"
 
-msgid "Unreachable"
-msgstr "Απροσπέλαστος"
-
 msgid "OK"
 msgstr "ΟΚ"
 
 msgid "Test Fails"
 msgstr "Η δοκιμή αποτυγχάνει"
+
+msgid "Unreachable"
+msgstr "Απροσπέλαστος"
+
+msgid "Most tests passing"
+msgstr ""
 
 msgid "Fast, High Capacity"
 msgstr "Γρήγοροι, Υψηλής Χωρητικότητας"
@@ -3362,6 +3383,9 @@ msgstr "Αποτυχία"
 
 msgid "Integrated"
 msgstr "Ενσωματωμένος"
+
+msgid "Configure Peer"
+msgstr ""
 
 msgid "Thresholds"
 msgstr "Κατώφλια"
@@ -3429,11 +3453,11 @@ msgstr "Τελευταία κακή αποστολή"
 msgid "Last Bad Store"
 msgstr "Τελευταία κακή αποθήκευση"
 
-msgid "Capabilities in the NetDb, not used to determine profiles"
-msgstr "Δυνατότητες στο NetDb, που δεν χρησιμοποιούνται για τον προσδιορισμό προφίλ"
-
 msgid "caps"
 msgstr "καπάκια"
+
+msgid "Capabilities in the NetDb, not used to determine profiles"
+msgstr "Δυνατότητες στο NetDb, που δεν χρησιμοποιούνται για τον προσδιορισμό προφίλ"
 
 msgid "Reachable"
 msgstr "Προσβάσιμο"
@@ -3606,6 +3630,9 @@ msgstr "Κάνε κλικ στην επανεκκίνηση για εγκατά�
 
 msgid "Click Shutdown and restart to install"
 msgstr "Κάνε κλικ στο σβήσιμο και στη επανεκκίνησε για εγκατάσταση"
+
+msgid "Unable"
+msgstr ""
 
 #, java-format
 msgid "{0}"
@@ -3800,9 +3827,6 @@ msgstr "Απόδοση δρομολογητή γραφήματος"
 msgid "Router Help and FAQ"
 msgstr "Βοήθεια δρομολογητή και Συχνές ερωτήσεις"
 
-msgid "Info"
-msgstr "Πληροφορίες"
-
 msgid "Router information including transport addresses and UPnP scan"
 msgstr "Πληροφορίες δρομολογητή, συμπεριλαμβανομένων των διευθύνσεων μεταφοράς και της σάρωσης UPnP"
 
@@ -3888,6 +3912,34 @@ msgstr "Η λειτουργία Floodfill είναι ενεργοποιημέν�
 msgid "Total number of remote LeaseSets stored in our NetDb"
 msgstr ""
 
+msgid "Declining transit tunnel requests during startup phase"
+msgstr "Δεν γίνονται δεκτά αιτήματα για τις συμμετέχουσες σήραγγες για τα πρώτα 10 λεπτά, ενώ ο δρομολογητής σταθεροποιείται"
+
+msgid "Declining transit tunnel requests as we are shutting down"
+msgstr "Απόρριψη συμμετοχικών αιτημάτων για σήραγγες καθώς κλείνουμε"
+
+msgid "Router or network performance is impeding the building of transit tunnels"
+msgstr "Η απόδοση του δρομολογητή ή του δικτύου εμποδίζει την κατασκευή των σηράγγων που συμμετέχουν"
+
+msgid "Router is currently hosting the configured maximum number of transit tunnels"
+msgstr "Το διακομιστήριο φιλοξενεί τώρα τον μέγιστο αριθμό διαμετακομιστικών διαδρόμων που έχει ρυθμιστεί"
+
+msgid "Router is currently using the configured maximum share bandwidth"
+msgstr "Το διακομιστήριο χρησιμοποιεί τώρα την καθορισμένη μέγιστη διακομιστική ταχύτητα μετάδοσης"
+
+msgid "Router is ready to build participating tunnels"
+msgstr "Ο δρομολογητής είναι έτοιμος να κατασκευάσει συμμετέχουσες σήραγγες"
+
+#, java-format
+msgid "Accepting transit tunnel requests; hosting {0} tunnels"
+msgstr "Αποδοχή συμμετεχόντων αιτημάτων για σήραγγες, συμμετοχή σε {0} σήραγγες"
+
+msgid "No transit tunnels are built when Hidden mode is active"
+msgstr "Δεν κατασκευάζονται συμμετέχουσες σήραγγες όταν είναι ενεργή η Κρυφή λειτουργία"
+
+msgid "Router is configured to reject all transit tunnel requests"
+msgstr "Ο δρομολογητής έχει διαμορφωθεί ώστε να απορρίπτει όλα τα συμμετέχοντα αιτήματα σήραγγας"
+
 msgid "Warning: ECDSA is not available. Update your Java or OS"
 msgstr "ΠΡΟΕΙΔΟΠΟΙΗΣΗ: Το ECDSA δεν είναι διαθέσιμο. Ενημερώστε την Java ή το λειτουργικό σας σύστημα"
 
@@ -3923,6 +3975,9 @@ msgstr "Ο αριθμός των απαγορευμένων συνομηλίκω
 
 msgid "The total number of peers in our network database"
 msgstr "Ο συνολικός αριθμός συνομηλίκων στη βάση δεδομένων του δικτύου μας"
+
+msgid "Total RouterInfos stored on disk"
+msgstr ""
 
 msgid "Known"
 msgstr "Γνωστό"
@@ -4034,34 +4089,6 @@ msgstr "Αιτήματα σε αναμονή από άλλους δρομολο�
 
 msgid "Backlog"
 msgstr "Ανεκτέλεστες"
-
-msgid "Declining transit tunnel requests during startup phase"
-msgstr "Δεν γίνονται δεκτά αιτήματα για τις συμμετέχουσες σήραγγες για τα πρώτα 10 λεπτά, ενώ ο δρομολογητής σταθεροποιείται"
-
-msgid "Declining transit tunnel requests as we are shutting down"
-msgstr "Απόρριψη συμμετοχικών αιτημάτων για σήραγγες καθώς κλείνουμε"
-
-msgid "Router or network performance is impeding the building of transit tunnels"
-msgstr "Η απόδοση του δρομολογητή ή του δικτύου εμποδίζει την κατασκευή των σηράγγων που συμμετέχουν"
-
-msgid "Router is currently hosting the configured maximum number of transit tunnels"
-msgstr "Το διακομιστήριο φιλοξενεί τώρα τον μέγιστο αριθμό διαμετακομιστικών διαδρόμων που έχει ρυθμιστεί"
-
-msgid "Router is currently using the configured maximum share bandwidth"
-msgstr "Το διακομιστήριο χρησιμοποιεί τώρα την καθορισμένη μέγιστη διακομιστική ταχύτητα μετάδοσης"
-
-msgid "Router is ready to build participating tunnels"
-msgstr "Ο δρομολογητής είναι έτοιμος να κατασκευάσει συμμετέχουσες σήραγγες"
-
-#, java-format
-msgid "Accepting transit tunnel requests; hosting {0} tunnels"
-msgstr "Αποδοχή συμμετεχόντων αιτημάτων για σήραγγες, συμμετοχή σε {0} σήραγγες"
-
-msgid "No transit tunnels are built when Hidden mode is active"
-msgstr "Δεν κατασκευάζονται συμμετέχουσες σήραγγες όταν είναι ενεργή η Κρυφή λειτουργία"
-
-msgid "Router is configured to reject all transit tunnel requests"
-msgstr "Ο δρομολογητής έχει διαμορφωθεί ώστε να απορρίπτει όλα τα συμμετέχοντα αιτήματα σήραγγας"
 
 msgid "Statistics gathered during this router's uptime"
 msgstr "Στατιστικά στοιχεία που συγκεντρώθηκαν κατά τη διάρκεια του χρόνου λειτουργίας αυτού του δρομολογητή"
@@ -4193,8 +4220,14 @@ msgstr "Χωρίς αποθηκευμένη ανάλυση"
 msgid "Select stored analysis"
 msgstr "Επιλέξτε την αποθηκευμένη ανάλυση"
 
+msgid "Review"
+msgstr ""
+
 msgid "Run analysis on Floodfills only"
 msgstr "Εκτέλεση ανάλυσης μόνο σε Floodfills"
+
+msgid "Start Scan"
+msgstr ""
 
 msgid "Run analysis on all routers in NetDb"
 msgstr "Εκτέλεση ανάλυσης σε όλους τους δρομολογητές στο NetDb"
@@ -4358,6 +4391,12 @@ msgstr "ΜΕΓ"
 msgid "Show all routers for this family in NetDb"
 msgstr "Εμφάνιση όλων των δρομολογητών για αυτήν την οικογένεια στο NetDb"
 
+msgid "Routers"
+msgstr "Δρομολογητές"
+
+msgid "n/a"
+msgstr "Μ/Δ"
+
 msgid "Last lookup successful"
 msgstr "Επιτυχής τελευταία αναζήτηση"
 
@@ -4409,9 +4448,6 @@ msgstr "Μεταφέρθηκαν δεδομένα"
 msgid "Data"
 msgstr "Δεδομένα"
 
-msgid "Limit"
-msgstr ""
-
 msgid "Receive on"
 msgstr "Λήψη σε"
 
@@ -4456,6 +4492,7 @@ msgstr "Ο δρομολογητής λειτουργεί επί του παρό�
 msgid "No transit tunnels currently active."
 msgstr "Επί του παρόντος δεν υπάρχουν ενεργές σήραγγες διέλευσης."
 
+#, java-format
 msgid "Transit Tunnels by Peer (Top {0})"
 msgstr ""
 
@@ -4467,9 +4504,6 @@ msgstr "Όλες οι σήραγγες ανά ομότιμο"
 
 msgid "Primary IP address"
 msgstr "Κύρια διεύθυνση IP"
-
-msgid "Local"
-msgstr "Τοπικό"
 
 msgid "unique peers"
 msgstr "μοναδικούς συνομηλίκους"
@@ -4483,6 +4517,9 @@ msgstr "διαμετακόμιση"
 msgid "No local or transit tunnels currently active."
 msgstr "Δεν υπάρχουν ενεργές τοπικές σήραγγες ή διαμετακόμισης."
 
+msgid "PRIVATE IP ADDRESS"
+msgstr ""
+
 msgid "Bandwidth Tiers"
 msgstr "Επίπεδοεύρους ζώνης"
 
@@ -4492,6 +4529,9 @@ msgstr "Πάνω από {0} κοινόχρηστο εύρος ζώνης"
 
 msgid "Inbound or outbound?"
 msgstr "Εισερχόμενο ή εξερχόμενο?"
+
+msgid "In/Out"
+msgstr ""
 
 msgid "Gateway"
 msgstr "Πύλη"
@@ -4608,6 +4648,9 @@ msgstr "Διακομιστής I2P (eepsite)"
 msgid "Browser launch at startup"
 msgstr "Εκκίνηση περιηγητή κατά την εκκίνηση"
 
+msgid "I2P Router Console"
+msgstr ""
+
 msgid "Open Router Console in web browser at startup"
 msgstr "Άνοιγμα κονσόλας δρομολογητή στον περιηγητή κατά την εκκίνηση"
 
@@ -4683,12 +4726,6 @@ msgstr "κλειδί"
 msgid "port"
 msgstr "πόρτα"
 
-msgid "config UI"
-msgstr "διεπαφή χρήστη διαμόρφωσης"
-
-msgid "User Interface Configuration"
-msgstr "Διαμόρφωση διεπαφής χρήστη"
-
 msgid "Certificates"
 msgstr "Πιστοποιητικά"
 
@@ -4704,8 +4741,8 @@ msgstr "Περιοριστής εύρους ζώνης"
 msgid "Advanced Network Configuration"
 msgstr "Προηγμένη διαμόρφωση δικτύου"
 
-msgid "I2P+ will work best if you configure your rates to match the speed of your internet connection."
-msgstr "Το I2P θα δουλεύει καλύτερα αν ρυθμίσεις τους ρυθμούς μεταφοράς σε αντιστοιχεία με την ταχύτητα της διαδικτυακής σου σύνδεσης."
+msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
+msgstr ""
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
 msgstr "Σημείωση: Η συνεισφορά σας στο δίκτυο (μερίδιο δικτύου) καθορίζεται από την κατανομή του εύρους ζώνης ανάντη (ταχύτητα μεταφόρτωσης)."
@@ -4735,11 +4772,11 @@ msgid "NOTE"
 msgstr ""
 
 #, java-format
-msgid "You have configured I2P+ to share only {0} KBps."
-msgstr "Έχετε ρυθμίσει το I2P να μοιράζεται μόνο {0} KBps."
+msgid "You have configured I2P to share only {0} KBps."
+msgstr ""
 
-msgid "I2P+ requires at least 12KBps to enable sharing. "
-msgstr "Το I2P απαιτεί τουλάχιστο 12KBps για την ενεργοποιήση του διαμοιρασμού. "
+msgid "I2P requires at least 12KBps to enable sharing. "
+msgstr ""
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
 msgstr "Παρακαλούμε ενεργοποιήστε τον διαμοιρασμό (συμμετέχοντας σε τούνελ) ρυθμίζοντας περισσότερο εύρος ζώνης. "
@@ -5236,8 +5273,8 @@ msgstr "επανασπορά παραμέτρων"
 msgid "Reseeding is the bootstrapping process used to find other routers when you first install I2P, or when your router has too few router references remaining."
 msgstr "Το Reseeding είναι η διαδικασία εκκίνησης που χρησιμοποιείται για την εύρεση άλλων δρομολογητών κατά την πρώτη εγκατάσταση του I2P ή όταν ο δρομολογητής σας έχει πολύ λίγες αναφορές δρομολογητή."
 
-msgid "To enable the configuration of reseed urls, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
-msgstr "Για να ενεργοποιήσετε τη διαμόρφωση των url επανασύνδεσης, ενεργοποιήστε τη <a href=\"/help/advancedsettings\">Σύνθετη λειτουργία</a> της κονσόλας."
+msgid "To enable the configuration of reseed urls, activate the console's <a href=/help/advancedsettings>Advanced mode</a>."
+msgstr ""
 
 msgid "Reseeding Configuration"
 msgstr "Διαμόρφωση επανασποράς"
@@ -5247,9 +5284,6 @@ msgstr "Βοήθεια με την επανασπορά"
 
 msgid "Reseeding Help"
 msgstr "Βοήθεια για επανασπορά"
-
-msgid "Change these only if HTTPS is blocked by a restrictive firewall and reseed has failed."
-msgstr "Αλλάξτε τα μόνο εάν το HTTPS έχει αποκλειστεί από ένα περιοριστικό τείχος προστασίας και το reseed έχει αποτύχει."
 
 msgid "Reseed URLs"
 msgstr "Επαναφορά διευθύνσεων URL"
@@ -5286,6 +5320,9 @@ msgstr "Αυτή η επιλογή θα χρησιμοποιήσει το http o
 
 msgid "I2P Outproxy"
 msgstr "Εξερχόμενος διαμεσολαβητής I2P"
+
+msgid "Port"
+msgstr "Θύρα"
 
 msgid "Use HTTP Proxy for HTTP Reseed Hosts"
 msgstr "Χρησιμοποιήστε διακομιστή μεσολάβησης http για οικοδεσπότες που έχουν λάβει νέα έγκριση http"
@@ -5399,6 +5436,12 @@ msgstr ""
 msgid "Use the same sidebar on all pages"
 msgstr ""
 
+msgid "Sticky sidebar"
+msgstr ""
+
+msgid "Enable conditional fixed sidebar"
+msgstr ""
+
 msgid "config stats"
 msgstr "στατιστικά ρυθμίσεων"
 
@@ -5455,6 +5498,12 @@ msgstr "Για να τροποποιήσετε τις ρυθμίσεις της 
 
 msgid "To enable session-only changes to the client tunnels, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
 msgstr "Για να ενεργοποιήσετε τις αλλαγές μόνο συνεδρίας στις σήραγγες του προγράμματος-πελάτη, ενεργοποιήστε τη <a href=\"/help/advancedsettings\">λειτουργία για προχωρημένους</a> της κονσόλας."
+
+msgid "config UI"
+msgstr "διεπαφή χρήστη διαμόρφωσης"
+
+msgid "User Interface Configuration"
+msgstr "Διαμόρφωση διεπαφής χρήστη"
 
 msgid "Router Console Theme"
 msgstr "Θέμα κονσόλας δρομολογητή"
@@ -5592,14 +5641,20 @@ msgstr "Σφάλμα 404"
 msgid "not found"
 msgstr "δεν βρέθηκε"
 
+msgid "router logs"
+msgstr ""
+
+msgid "Critical / Error Level Logs"
+msgstr "Κρίσιμα / Καταγραφή επιπέδων σφάλματος"
+
+msgid "Clear logs"
+msgstr "Εκκαθάριση αρχείων καταγραφής"
+
 msgid "events"
 msgstr "εκδηλώσεις"
 
 msgid "Event Log"
 msgstr "Αρχείο καταγραφής συμβάντων"
-
-msgid "Combined"
-msgstr ""
 
 msgid "graph"
 msgstr "Γράφημα"
@@ -6108,7 +6163,7 @@ msgstr ""
 msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
 msgstr ""
 
-msgid "For most client services, change listening address for relevant service in Tunnel Manager's configuration section using <i>reachable by</i> dropdown."
+msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager's configuration section using the <i>reachable by</i> dropdown."
 msgstr ""
 
 msgid "How do I connect to IRC within I2P?"
@@ -7308,34 +7363,6 @@ msgstr "στατιστικά ουράς εργασίας"
 msgid "Job Queue Stats"
 msgstr "Στατιστικά ουράς εργασίας"
 
-msgid "logs"
-msgstr "εγγραφές"
-
-msgid "Please include your I2P version and running environment information in bug reports"
-msgstr "Συμπεριλάβετε την έκδοση I2P και τις πληροφορίες περιβάλλοντος λειτουργίας στις αναφορές σφαλμάτων"
-
-#, java-format
-msgid "Please report bugs on {0} or {1}."
-msgstr "Παρακαλούμε αναφέρετε τα σφάλματα στο {0} ή στο {1}."
-
-msgid "View event log"
-msgstr "Προβολή αρχείου καταγραφής συμβάντων"
-
-msgid "Critical / Error Level Logs"
-msgstr "Κρίσιμα / Καταγραφή επιπέδων σφάλματος"
-
-msgid "Clear logs"
-msgstr "Εκκαθάριση αρχείων καταγραφής"
-
-msgid "Configure router logging options"
-msgstr "Διαμόρφωση επιλογών καταγραφής δρομολογητή"
-
-msgid "Filter Router log output"
-msgstr "Φίλτρα αποτελεσμάτων καταγραφής διακομιστή"
-
-msgid "Service (Wrapper) Logs"
-msgstr "Logs του Service (Wrapper)"
-
 msgid "network database"
 msgstr "βάση δεδομένων δικτύου"
 
@@ -7355,6 +7382,9 @@ msgid "Locally hosted public service"
 msgstr ""
 
 msgid "Requested client leaseset"
+msgstr ""
+
+msgid "Remote"
 msgstr ""
 
 msgid "network database router map"
@@ -7400,164 +7430,26 @@ msgstr "Απαγορευμένοι συνομήλικοι"
 msgid "Fast / High Capacity"
 msgstr "Γρήγορο / Υψηλή χωρητικότητα"
 
-msgid "router logs"
-msgstr ""
+msgid "Configure router logging options"
+msgstr "Διαμόρφωση επιλογών καταγραφής δρομολογητή"
+
+msgid "View event log"
+msgstr "Προβολή αρχείου καταγραφής συμβάντων"
+
+msgid "Filter Router log output"
+msgstr "Φίλτρα αποτελεσμάτων καταγραφής διακομιστή"
 
 msgid "service logs"
 msgstr ""
 
-msgid "Manage I2P addresses"
-msgstr "Διαχείριση διευθύνσεων I2P"
-
-msgid "Imagegen"
-msgstr "Εικόνα"
-
-msgid "Create and download torrents"
-msgstr "Δημιουργία και λήψη torrents"
-
-msgid "Manage client and server tunnels"
-msgstr "Διαχείριση τούνελ πελάτη και διακομιστή"
-
-msgid "Webmail client"
-msgstr "Πελάτης webmail"
-
-msgid "Webmail"
-msgstr "Webmail"
-
-msgid "Local webserver for hosting content on the I2P network"
-msgstr "Τοπικός διακομιστής ιστού για τη φιλοξενία περιεχομένου στο δίκτυο I2P"
+msgid "Service (Wrapper) Logs"
+msgstr "Logs του Service (Wrapper)"
 
 msgid "Information &amp; Diagnostics"
 msgstr "Πληροφορίες"
 
-msgid "Review recent updates to I2P"
-msgstr "Ελέγξτε τις πρόσφατες ενημερώσεις στο I2P"
-
-msgid "View debugging information"
-msgstr "Προβολή πληροφοριών εντοπισμού σφαλμάτων"
-
-msgid "View router performance graphs"
-msgstr "Προβολή γραφημάτων απόδοσης δρομολογητή"
-
-msgid "Router help section"
-msgstr "Ενότητα βοήθειας δρομολογητή"
-
-msgid "Router homepage"
-msgstr "Αρχική σελίδα δρομολογητή"
-
-msgid "Home"
-msgstr "Σπίτι"
-
-msgid "View news relating to I2P"
-msgstr "Προβολή ειδήσεων σχετικά με το I2P"
-
-msgid "I2P News"
-msgstr "Νέα I2P"
-
-msgid "View router workload and stats"
-msgstr "Προβολή φόρτου εργασίας και στατιστικών στοιχείων του δρομολογητή"
-
-msgid "Router Jobs"
-msgstr "Εργασίες δρομολογητή"
-
-msgid "View router logs"
-msgstr "Προβολή αρχείων καταγραφής δρομολογητή"
-
-msgid "View information and stats regarding all known peers"
-msgstr "Προβολή πληροφοριών και στατιστικών σχετικά με όλους τους γνωστούς συνομηλίκους"
-
-msgid "View active peers"
-msgstr "Προβολή ενεργών συνομηλίκων"
-
-msgid "View peer performance profiles"
-msgstr "Προβολή προφίλ απόδοσης ομοτίμων"
-
-msgid "View information about router and running environment"
-msgstr "Προβολή πληροφοριών σχετικά με το δρομολογητή και το περιβάλλον λειτουργίας"
-
-msgid "Statistics"
-msgstr "Στατιστική"
-
-msgid "Current console and webapp translation report"
-msgstr "Αναφορά των τρέχουσων μεταφράσεων συνολικής και ιστοεφαρμογής"
-
-msgid "Translation Status"
-msgstr "Κατάσταση μετάφρασης"
-
-msgid "View active tunnels"
-msgstr "Προβολή ενεργών σηράγγων"
-
-msgid "Customize homepage"
-msgstr "Προσαρμογή αρχικής σελίδας"
-
-msgid "Homepage"
-msgstr "Αρχική σελίδα"
-
-msgid "Configure I2P Client Control Interface"
-msgstr "Διαμόρφωση διεπαφής ελέγχου πελάτη I2P"
-
-msgid "View or edit router keyring for encrypted destinations"
-msgstr "Προβολή ή επεξεργασία μπρελόκ δρομολογητή για κρυπτογραφημένους προορισμούς"
-
-msgid "Configure router networking options"
-msgstr "Διαμόρφωση επιλογών δικτύου δρομολογητή"
-
-msgid "Manually edit peers and view banned peers and blocklist"
-msgstr "Μη αυτόματη επεξεργασία ομότιμων και προβολή αποκλεισμένων ομότιμων και λίστα αποκλεισμού"
-
-msgid "Install and manage router plugins"
-msgstr "Εγκατάσταση και διαχείριση προσθηκών δρομολογητή"
-
-msgid "Router reseeding and configuration"
-msgstr "Επανασπορά και διαμόρφωση δρομολογητή"
-
-msgid "Configure and manage Router family"
-msgstr "Διαμόρφωση και διαχείριση της οικογένειας δρομολογητών"
-
-msgid "Manage Router service"
-msgstr "Διαχείριση υπηρεσίας δρομολογητή"
-
-msgid "Configure stat collection for graphing"
-msgstr "Διαμόρφωση συλλογής στατιστικών στοιχείων για γραφική παράσταση"
-
-msgid "Router Stats"
-msgstr "Στατιστικά δρομολογητή"
-
-msgid "Configure router updates"
-msgstr "Διαμόρφωση ενημερώσεων δρομολογητή"
-
-msgid "Configuration wizard for new users"
-msgstr "Οδηγός διαμόρφωσης για νέους χρήστες"
-
-msgid "Setup Wizard"
-msgstr "Οδηγός εγκατάστασης"
-
-msgid "Customize sidebar"
-msgstr "Προσαρμογή πλαϊνής γραμμής"
-
-msgid "Configure tunnel options"
-msgstr "Διαμόρφωση επιλογών σήραγγας"
-
-msgid "Configure router user interface and optional console password"
-msgstr "Διαμόρφωση διεπαφής χρήστη δρομολογητή και προαιρετικό κωδικό πρόσβασης κονσόλας"
-
-msgid "Configuring I2P for optimal performance"
-msgstr "Διαμόρφωση I2P για βέλτιστη απόδοση"
-
-msgid "Information for new users"
-msgstr "Πληροφορίες για νέους χρήστες"
-
-msgid "A guide to reseeding your I2P router"
-msgstr "Ένας οδηγός για την επανασπορά του δρομολογητή I2P"
-
-msgid "What to do in the event I2P isn't working"
-msgstr "Τι πρέπει να κάνετε σε περίπτωση που το I2P δεν λειτουργεί"
-
-msgid "Introduction to tunnel filters"
-msgstr "Εισαγωγή στα φίλτρα σήραγγας"
-
-msgid "Tunnel Filters"
-msgstr "Φίλτρα τούνελ"
+msgid "Customize"
+msgstr ""
 
 msgid "statistics"
 msgstr "στατιστικά"
@@ -7610,9 +7502,6 @@ msgstr "Εναλλαγή Αναγνωριστικών Διαδρόμων"
 msgid "Toggle Tunnels"
 msgstr "Εναλλαγή Διαδρόμων"
 
-msgid "Updating sidebar sections"
-msgstr ""
-
 msgid "Peer Profile"
 msgstr "Προφίλ Ομότιμου"
 
@@ -7637,14 +7526,17 @@ msgstr "Επιστροφή στην κορυφή"
 msgid "webmail"
 msgstr "webmail"
 
+msgid "Webmail"
+msgstr "Webmail"
+
 msgid "New Install Wizard"
 msgstr "Νέος οδηγός εγκατάστασης"
 
 msgid "Skip Setup"
 msgstr "Παράλειψη εγκατάστασης"
 
-msgid "Select the language to be used for the router console and web applications (<a href=/webmail target=_blank rel=noreferrer>webmail</a>, <a href=/torrents target=_blank rel=noreferrer>torrents</a>, <a href=/i2ptunnelmgr target=_blank rel=noreferrer>tunnel manager</a> etc). If you wish to change the language in future, change the router console theme, or configure a password to access the console, you may do so on the <a href=/configui target=_blank rel=noreferrer>User Interface configuration page</a>."
-msgstr "Επιλέξτε τη γλώσσα που θα χρησιμοποιηθεί για τη συντροφοδοσία του δρομολογητή και τις διαδικτυακές εφαρμογές (<a href=/webmail target=_blank rel=noreferrer>webmail</a>, <a href=/torrents target=_blank rel=noreferrer>torrents</a>, <a href=/i2ptunnelmgr target=_blank rel=noreferrer>tunnel manager</a> etc). Εάν επιθυμείτε να αλλάξετε τη γλώσσα στο μέλλον, να αλλάξετε το θέμα του δρομολογητή ή να διαμορφώσετε έναν κωδικό πρόσβασης για πρόσβαση στη συντροφική, μπορείτε να το κάνετε στη <a href=/configui target=_blank rel=noreferrer>σελίδα διαμόρφωσης του χρήστη διεπαφής</a>."
+msgid "Select the language to be used for the router console and web applications ("
+msgstr ""
 
 msgid "Router Console &amp; WebApps Display Language"
 msgstr "Γλώσσα εμφάνισης δρομολογητή και δικτυακών εφαρμογών"
@@ -7713,6 +7605,13 @@ msgid "Bandwidth Configuration"
 msgstr "Διαμόρφωση εύρους ζώνης"
 
 #, java-format
+msgid "You have configured I2P+ to share only {0} KBps."
+msgstr "Έχετε ρυθμίσει το I2P να μοιράζεται μόνο {0} KBps."
+
+msgid "I2P+ requires at least 12KBps to enable sharing. "
+msgstr "Το I2P απαιτεί τουλάχιστο 12KBps για την ενεργοποιήση του διαμοιρασμού. "
+
+#, java-format
 msgid "You have configured I2P+ to share {0} KBps."
 msgstr "Έχετε ρυθμίσει το I2P να μοιράζεται {0} KBps."
 
@@ -7722,8 +7621,8 @@ msgstr "Το I2P  απαιτεί ένα πρόγραμμα περιήγησης 
 msgid "Browser Setup"
 msgstr "Ρύθμιση προγράμματος περιήγησης"
 
-msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. For more help, see <a href=https://geti2p.net/htproxyports target=_blank rel=noreferrer>the configuration guide</a>, or <a href=/help/configuration#browserconfig>the mini-tutorial for Firefox</a>."
-msgstr "Για να έχετε πρόσβαση σε ιστότοπους που φιλοξενούνται στο δίκτυο I2P και προαιρετικά χρησιμοποιήσετε τον προεπιλεγμένο outproxy για να συνδεθείτε σε ιστότοπους στο καθαρό διαδίκτυο, θα πρέπει να ρυθμίσετε τον περιηγητή σας να χρησιμοποιεί τον I2P+ <b>HTTP</b> διαμεσολαβητή, που εκτελείται από προεπιλογή στη διεύθυνση <code>127.0.0.1 θύρα 4444</code>. Για περισσότερη βοήθεια, ανατρέξτε στο <a href=https://geti2p.net/htproxyports target=_blank rel=noreferrer>οδηγό ρύθμισης</a>, ή στο <a href=/help/configuration#browserconfig>μικρό οδηγό για τον Firefox</a>."
+msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. "
+msgstr ""
 
 msgid "Welcome to I2P+!"
 msgstr "Καλώς ήρθατε στο  I2P!"
@@ -7731,8 +7630,8 @@ msgstr "Καλώς ήρθατε στο  I2P!"
 msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
 msgstr "Όταν εκκινείτε το I2P, μπορεί να χρειαστούν μερικά λεπτά για την εκκίνηση (ενσωμάτωση) του δρομολογητή σας στο δίκτυο και την εύρεση επιπλέον συνομηλίκων, οπότε παρακαλούμε να είστε υπομονετικοί."
 
-msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P+."
-msgstr "Μόλις επισημανθούν πράσινα αστέρια δίπλα στις τοπικές σας σήραγγες, υπάρχει μια μεγάλη ποικιλία από πράγματα που μπορείτε να κάνετε με το I2P."
+msgid "Once green stars are indicated next to your Service Tunnels, there is a wide variety of things you can do with I2P+."
+msgstr ""
 
 msgid "Unknown Wizard page"
 msgstr "Σελίδα Άγνωστου Οδηγού"
@@ -7751,4 +7650,65 @@ msgstr "Επόμενο"
 
 msgid "Finished"
 msgstr "Τελειωμέν"
+
+
+
+
+
+
+
+
+
+#, java-format
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
