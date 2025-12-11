@@ -426,6 +426,9 @@ public class I2PAppContext {
         // fixme don't synchronize every time
         synchronized (_lock1) {
             if (_tmpDir == null) {
+                // Clean up stale temp directories from previous sessions
+                cleanupStaleTempDirs();
+
                 String d = getProperty("i2p.dir.temp", System.getProperty("java.io.tmpdir"));
                 // our random() probably isn't warmed up yet
                 byte[] rand = new byte[6];
@@ -466,6 +469,34 @@ public class I2PAppContext {
             if (_tmpDir != null) {
                 FileUtil.rmdir(_tmpDir, false);
                 _tmpDir = null;
+            }
+        }
+    }
+
+    /**
+     * Clean up stale i2p- temp directories from previous sessions.
+     * Since we're starting a new session, all existing i2p-*.tmp folders
+     * are from previous sessions and can be safely deleted.
+     */
+    private void cleanupStaleTempDirs() {
+        String tempParent = getProperty("i2p.dir.temp", System.getProperty("java.io.tmpdir"));
+        File parentDir = new File(tempParent);
+        if (!parentDir.exists() || !parentDir.isDirectory()) {
+            return;
+        }
+
+        File[] files = parentDir.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                String name = file.getName();
+                if (file.isDirectory() && name.startsWith("i2p-") && name.endsWith(".tmp")) {
+                    try {
+                        // Delete all existing i2p-*.tmp directories since they're from previous sessions
+                        FileUtil.rmdir(file, false);
+                    } catch (Exception e) {
+                        // Ignore cleanup errors, just continue
+                    }
+                }
             }
         }
     }
