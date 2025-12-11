@@ -1013,7 +1013,9 @@ public class SidebarHelper extends HelperBase {
                 } else {
                     buf.append(_t("Click Shutdown and restart to install").replace("Click ", ""));
                 }
-                buf.append("\"><b>");
+                buf.append("\"><b");
+                if (status.contains(_t("Unable"))) {buf.append(" class=fail");}
+                buf.append(">");
                 if (source != null && source.contains("skank")) {buf.append("I2P+ ");}
                 buf.append(_t("Update downloaded")).append("<br>")
                    .append("[").append(_t("{0}", DataHelper.escapeHTML(dver))).append("]")
