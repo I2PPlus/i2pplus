@@ -13,15 +13,54 @@ import java.util.Arrays;
 import net.i2p.crypto.SigType;
 
 /**
- * Defines the signature as defined by the I2P data structure spec.
- * By default, a signature is a 40-byte array verifying the authenticity of some data
- * using the DSA-SHA1 algorithm.
- *
- * The signature is the 20-byte R followed by the 20-byte S,
- * both are unsigned integers.
- *
- * As of release 0.9.8, signatures of arbitrary length and type are supported.
- * See SigType.
+ * Cryptographic signature implementation for I2P data structures and identity verification.
+ * 
+ * <p>Signature provides digital signature capabilities with support for multiple algorithms:</p>
+ * <ul>
+ *   <li><strong>Default Algorithm:</strong> DSA-SHA1 (40 bytes: 20-byte R + 20-byte S)</li>
+ *   <li><strong>Modern Algorithms:</strong> ECDSA-P256, EdDSA-Ed25519 with variable lengths</li>
+ *   <li><strong>Algorithm Support:</strong> Extensible design for future signature types</li>
+ *   <li><strong>Verification:</strong> Used throughout I2P for identity and data integrity</li>
+ * </ul>
+ * 
+ * <p><strong>Signature Structure:</strong></p>
+ * <ul>
+ *   <li><strong>DSA-SHA1:</strong> 40 bytes total (R: 20 bytes, S: 20 bytes)</li>
+ *   <li><strong>ECDSA-P256:</strong> Variable length (typically 64-72 bytes)</li>
+ *   <li><strong>EdDSA-Ed25519:</strong> 64 bytes (fixed length)</li>
+ *   <li><strong>Type Information:</strong> Embedded in signature data for verification</li>
+ * </ul>
+ * 
+ * <p><strong>Supported Algorithms:</strong></p>
+ * <ul>
+ *   <li><strong>DSA-SHA1:</strong> Legacy algorithm, 1024-bit keys</li>
+ *   <li><strong>ECDSA-P256:</strong> Modern algorithm, 256-bit elliptic curve</li>
+ *   <li><strong>EdDSA-Ed25519:</strong> Modern algorithm, 25519 elliptic curve</li>
+ *   <li><strong>RSA:</strong> Supported but discouraged due to performance issues</li>
+ * </ul>
+ * 
+ * <p><strong>Usage:</strong></p>
+ * <ul>
+ *   <li><strong>Identity Verification:</strong> Proves ownership of {@link Destination}</li>
+ *   <li><strong>Data Integrity:</strong> Ensures data hasn't been tampered with</li>
+ *   <li><strong>NetDb Entries:</strong> Signs RouterInfo and LeaseSet structures</li>
+ *   <li><strong>Messages:</strong> Authenticates I2NP messages and I2CP communications</li>
+ * </ul>
+ * 
+ * <p><strong>Security Considerations:</strong></p>
+ * <ul>
+ *   <li><strong>Algorithm Selection:</strong> Prefer modern algorithms (Ed25519, ECDSA-P256)</li>
+ *   <li><strong>Key Management:</strong> Protect private signing keys</li>
+ *   <li><strong>Verification:</strong> Always verify signatures before trusting data</li>
+ *   <li><strong>Performance:</strong> RSA signatures are slow and may be used for DoS</li>
+ * </ul>
+ * 
+ * <p><strong>Evolution:</strong></p>
+ * <ul>
+ *   <li><strong>Pre-0.9.8:</strong> Only DSA-SHA1 supported (40 bytes fixed)</li>
+ *   <li><strong>Post-0.9.8:</strong> Arbitrary length and type support via {@link SigType}</li>
+ *   <li><strong>Current:</strong> Multiple algorithms with automatic type detection</li>
+ * </ul>
  *
  * @author jrandom
  */

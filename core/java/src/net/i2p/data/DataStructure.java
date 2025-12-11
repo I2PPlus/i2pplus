@@ -14,20 +14,72 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * Defines the class as a standard object with particular bit representation,
- * exposing methods to read and write that representation.
- *<p>
- * Do not reuse objects.
- * Many of modifying methods contain checks to prevent
- * altering a DataStructure after it is initialized. This protects the netdb,
- * messages that contain DataStructures,
- * caches, and the object itself from simple causes of corruption, by
- * throwing IllegalStateExceptions.
- * These checks are not necessarily thread-safe, and are not guaranteed
- * to catch all possible means of corruption.
- * Beware of other avenues of corruption, such as directly modifying data
- * stored in byte[] objects.
- *</p>
+ * Base interface defining standard binary representation for I2P data structures.
+ * 
+ * <p>DataStructure provides the foundation for all I2P protocol data:</p>
+ * <ul>
+ *   <li><strong>Binary Protocol:</strong> Defines exact bit-level representation</li>
+ *   <li><strong>Serialization:</strong> Standard methods for reading/writing to streams</li>
+ *   <li><strong>Network Compatibility:</strong> Ensures consistent data encoding</li>
+ *   <li><strong>Validation:</strong> Built-in integrity and format checking</li>
+ * </ul>
+ * 
+ * <p><strong>Core Operations:</strong></p>
+ * <ul>
+ *   <li>{@link #readBytes(InputStream)} - Deserialize from binary stream</li>
+ *   <li>{@link #writeBytes(OutputStream)} - Serialize to binary stream</li>
+ *   <li><strong>Format Compliance:</strong> Follows I2P data structure specification</li>
+ *   <li><strong>Error Handling:</strong> Proper exception reporting for invalid data</li>
+ * </ul>
+ * 
+ * <p><strong>Integrity Protection:</strong></p>
+ * <ul>
+ *   <li><strong>Immutable After Initialization:</strong> Prevents modification after deserialization</li>
+ *   <li><strong>IllegalStateException:</strong> Thrown when modification is attempted</li>
+ *   <li><strong>NetDb Protection:</strong> Safeguards network database from corruption</li>
+ *   <li><strong>Message Safety:</strong> Protects I2NP messages during transmission</li>
+ * </ul>
+ * 
+ * <p><strong>Usage Throughout I2P:</strong></p>
+ * <ul>
+ *   <li><strong>I2NP Messages:</strong> All protocol messages implement DataStructure</li>
+ *   <li><strong>NetDb Entries:</strong> RouterInfo and LeaseSet storage format</li>
+ *   <li><strong>I2CP Protocol:</strong> Client-router communication data</li>
+ *   <li><strong>Cryptography:</strong> Keys, signatures, and certificates</li>
+ *   <li><strong>Routing:</strong> Tunnel IDs, leases, and routing information</li>
+ * </ul>
+ * 
+ * <p><strong>Implementation Guidelines:</strong></p>
+ * <ul>
+ *   <li><strong>Do Not Reuse:</strong> Create new instances for each data element</li>
+ *   <li><strong>Thread Safety:</strong> Protection is not guaranteed to be thread-safe</li>
+ *   <li><strong>Corruption Prevention:</strong> Multiple protection layers but not foolproof</li>
+ *   <li><strong>Direct Modification:</strong> Avoid modifying internal byte[] arrays</li>
+ * </ul>
+ * 
+ * <p><strong>Security Considerations:</strong></p>
+ * <ul>
+ *   <li><strong>Input Validation:</strong> Always validate deserialized data</li>
+ *   <li><strong>Bounds Checking:</strong> Prevent buffer overflows and underflows</li>
+ *   <li><strong>Exception Handling:</strong> Properly handle DataFormatException</li>
+ *   <li><strong>Memory Safety:</strong> Be cautious with direct byte array access</li>
+ * </ul>
+ * 
+ * <p><strong>Performance Aspects:</strong></p>
+ * <ul>
+ *   <li><strong>Efficient Serialization:</strong> Optimized for network transmission</li>
+ *   <li><strong>Minimal Overhead:</strong> Compact binary representation</li>
+ *   <li><strong>Fast Validation:</strong> Quick integrity and format checking</li>
+ *   <li><strong>Memory Management:</strong> Careful allocation and cleanup</li>
+ * </ul>
+ * 
+ * <p><strong>Common Implementations:</strong></p>
+ * <ul>
+ *   <li>{@link DataStructureImpl} - Base class with common functionality</li>
+ *   <li>{@link SimpleDataStructure} - Fixed-size byte array structures</li>
+ *   <li>{@link DatabaseEntry} - NetDb-storable objects with signatures</li>
+ *   <li>All I2P protocol message classes</li>
+ * </ul>
  *
  * @author jrandom
  */

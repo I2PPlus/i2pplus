@@ -21,14 +21,52 @@ import net.i2p.I2PAppContext;
 import net.i2p.util.Log;
 
 /**
- * KeysAndCert has a public key, a signing key, and a certificate, in that order.
- * We also store a cached Hash.
- *
- * Implemented in 0.8.2 and retrofitted over Destination and RouterIdentity.
- * There's actually no difference between the two of them.
- *
- * As of 0.9.9 this data structure is immutable after the two keys and the certificate
- * are set; attempts to change them will throw an IllegalStateException.
+ * Container for cryptographic keys and certificate as used by I2P identities.
+ * 
+ * <p>KeysAndCert provides the fundamental cryptographic identity components:</p>
+ * <ul>
+ *   <li><strong>Public Key:</strong> Encryption key for encrypted communication</li>
+ *   <li><strong>Signing Public Key:</strong> Key for verifying signatures and identity</li>
+ *   <li><strong>Certificate:</strong> Optional metadata about the keys and identity</li>
+ *   <li><strong>Cached Hash:</strong> Pre-computed SHA-256 hash for efficient identification</li>
+ * </ul>
+ * 
+ * <p><strong>Structure:</strong></p>
+ * <ul>
+ *   <li>Public key (variable length, typically 256 bytes for ElGamal)</li>
+ *   <li>Signing public key (variable length, typically 128 bytes for DSA, 32 bytes for Ed25519)</li>
+ *   <li>Certificate (type + length + payload)</li>
+ *   <li>Optional padding for consistent serialization</li>
+ * </ul>
+ * 
+ * <p><strong>Usage:</strong></p>
+ * <ul>
+ *   <li><strong>Base Class:</strong> Extended by {@link Destination} and {@link net.i2p.data.router.RouterIdentity}</li>
+ *   <li><strong>Identity:</strong> Forms the core of I2P cryptographic identities</li>
+ *   <li><strong>Verification:</strong> Provides keys for signature verification</li>
+ *   <li><strong>Encryption:</strong> Contains encryption key for secure communication</li>
+ * </ul>
+ * 
+ * <p><strong>Key Types:</strong></p>
+ * <ul>
+ *   <li><strong>Encryption:</strong> ElGamal 2048-bit (legacy) or ECIES X25519 (modern)</li>
+ *   <li><strong>Signing:</strong> DSA-SHA1 (legacy), ECDSA-P256, or EdDSA-Ed25519 (modern)</li>
+ *   <li><strong>Certificates:</strong> NULL, HIDDEN, SIGNED, MULTIPLE, or KEY types</li>
+ * </ul>
+ * 
+ * <p><strong>Immutability:</strong></p>
+ * <ul>
+ *   <li>As of 0.9.9, instances are immutable after keys and certificate are set</li>
+ *   <li>Attempts to modify will throw {@link IllegalStateException}</li>
+ *   <li>Ensures thread safety and prevents accidental corruption</li>
+ * </ul>
+ * 
+ * <p><strong>History:</strong></p>
+ * <ul>
+ *   <li>Implemented in 0.8.2 and retrofitted over existing Destination and RouterIdentity classes</li>
+ *   <li>No functional difference between Destination and RouterIdentity at this level</li>
+ *   <li>Provides unified interface for identity management across I2P</li>
+ * </ul>
  *
  * @since 0.8.2
  * @author zzz

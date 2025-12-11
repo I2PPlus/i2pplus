@@ -17,13 +17,75 @@ import net.i2p.crypto.SigType;
 import net.i2p.util.SimpleByteCache;
 
 /**
- * Defines the SigningPrivateKey as defined by the I2P data structure spec.
- * A signing private key is by default a 20 byte Integer. The private key represents only the
- * exponent, not the primes, which are constant and defined in the crypto spec.
- * This key varies from the PrivateKey in its usage (signing, not decrypting)
- *
- * As of release 0.9.8, keys of arbitrary length and type are supported.
- * See SigType.
+ * Cryptographic private key for digital signature generation in I2P.
+ * 
+ * <p>SigningPrivateKey provides signature generation capabilities:</p>
+ * <ul>
+ *   <li><strong>Default Algorithm:</strong> DSA-SHA1 (20 bytes)</li>
+ *   <li><strong>Modern Support:</strong> Variable length and type support since 0.9.8</li>
+ *   <li><strong>Key Structure:</strong> Contains only private exponent/coordinates</li>
+ *   <li><strong>Security:</strong> Implements {@link Destroyable} for secure cleanup</li>
+ * </ul>
+ * 
+ * <p><strong>Supported Algorithms:</strong></p>
+ * <ul>
+ *   <li><strong>DSA-SHA1:</strong> Legacy algorithm, 20-byte keys</li>
+ *   <li><strong>ECDSA-P256:</strong> Modern algorithm, variable length keys</li>
+ *   <li><strong>EdDSA-Ed25519:</strong> Modern algorithm, 32-byte keys</li>
+ *   <li><strong>Future Types:</strong> Extensible design for new algorithms</li>
+ * </ul>
+ * 
+ * <p><strong>Key Format:</strong></p>
+ * <ul>
+ *   <li><strong>DSA:</strong> 20-byte private exponent (x)</li>
+ *   <li><strong>ECDSA:</strong> Variable length private scalar</li>
+ *   <li><strong>EdDSA:</strong> 32-byte private seed</li>
+ *   <li><strong>Type Encoding:</strong> Algorithm type embedded in data</li>
+ * </ul>
+ * 
+ * <p><strong>Usage:</strong></p>
+ * <ul>
+ *   <li><strong>Signature Generation:</strong> Sign data with corresponding {@link SigningPublicKey}</li>
+ *   <li><strong>Identity Creation:</strong> Part of {@link Destination} identity</li>
+ *   <li><strong>LeaseSet Signing:</strong> Sign LeaseSet for network publication</li>
+ *   <li><strong>Router Identity:</strong> Sign router information for NetDb</li>
+ * </ul>
+ * 
+ * <p><strong>Security Considerations:</strong></p>
+ * <ul>
+ *   <li><strong>Confidentiality:</strong> Private signing keys must never be exposed</li>
+ *   <li><strong>Secure Destruction:</strong> Call {@link #destroy()} when no longer needed</li>
+ *   <li><strong>Memory Protection:</strong> Zeroize memory after use</li>
+ *   <li><strong>Algorithm Choice:</strong> Prefer modern algorithms (Ed25519, ECDSA-P256)</li>
+ * </ul>
+ * 
+ * <p><strong>Blinding Support:</strong></p>
+ * <ul>
+ *   <li><strong>Key Blinding:</strong> Support for generating blinded key variants</li>
+ *   <li><strong>Privacy:</strong> Enable anonymous service endpoints</li>
+ *   <li><strong>BlindData:</strong> Integration with {@link BlindData} for blinding operations</li>
+ * </ul>
+ * 
+ * <p><strong>Performance Features:</strong></p>
+ * <ul>
+ *   <li><strong>Efficient Storage:</strong> Optimized byte representation</li>
+ *   <li><strong>Factory Methods:</strong> Static creation methods for consistency</li>
+ *   <li><strong>Fast Operations:</strong> Optimized for high-frequency signing</li>
+ * </ul>
+ * 
+ * <p><strong>Migration Path:</strong></p>
+ * <ul>
+ *   <li><strong>Legacy:</strong> DSA-SHA1 for backward compatibility</li>
+ *   <li><strong>Modern:</strong> Ed25519 for better performance and security</li>
+ *   <li><strong>Transition:</strong> Mixed algorithm support during migration</li>
+ * </ul>
+ * 
+ * <p><strong>Thread Safety:</strong></p>
+ * <ul>
+ *   <li><strong>Immutable Data:</strong> Key data cannot be modified after creation</li>
+ *   <li><strong>Safe Destruction:</strong> Thread-safe key zeroization</li>
+ *   <li><strong>Exclusive Use:</strong> Each instance should be used by only one thread</li>
+ * </ul>
  *
  * @author jrandom
  */

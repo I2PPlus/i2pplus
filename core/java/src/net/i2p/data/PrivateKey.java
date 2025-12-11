@@ -16,12 +16,68 @@ import net.i2p.crypto.KeyGenerator;
 import net.i2p.util.SimpleByteCache;
 
 /**
- * Defines the PrivateKey as defined by the I2P data structure spec.
- * A private key is 256byte Integer. The private key represents only the
- * exponent, not the primes, which are constant and defined in the crypto spec.
- *
- * As of release 0.9.38, keys of arbitrary length and type are supported.
- * See EncType.
+ * Cryptographic private key for asymmetric encryption in I2P.
+ * 
+ * <p>PrivateKey provides the decryption component of I2P's asymmetric cryptography:</p>
+ * <ul>
+ *   <li><strong>Default Algorithm:</strong> ElGamal 2048-bit (256 bytes)</li>
+ *   <li><strong>Modern Support:</strong> Variable length and type support since 0.9.38</li>
+ *   <li><strong>Key Structure:</strong> Contains only the private exponent</li>
+ *   <li><strong>Security:</strong> Implements {@link Destroyable} for secure cleanup</li>
+ * </ul>
+ * 
+ * <p><strong>Supported Algorithms:</strong></p>
+ * <ul>
+ *   <li><strong>ElGamal 2048:</strong> Legacy algorithm, 256-byte keys</li>
+ *   <li><strong>ECIES X25519:</strong> Modern elliptic curve, 32-byte keys</li>
+ *   <li><strong>Future Types:</strong> Extensible design for new algorithms</li>
+ * </ul>
+ * 
+ * <p><strong>Key Format:</strong></p>
+ * <ul>
+ *   <li><strong>ElGamal:</strong> 256-byte private exponent only</li>
+ *   <li><strong>Constants:</strong> Prime numbers defined in crypto specification</li>
+ *   <li><strong>Efficiency:</strong> Only stores variable private component</li>
+ *   <li><strong>Validation:</strong> Type-specific length and format checking</li>
+ * </ul>
+ * 
+ * <p><strong>Usage:</strong></p>
+ * <ul>
+ *   <li><strong>Decryption:</strong> Decrypt messages encrypted with corresponding {@link PublicKey}</li>
+ *   <li><strong>Key Exchange:</strong> Participate in ElGamal key exchange protocols</li>
+ *   <li><strong>Identity:</strong> Part of {@link Destination} cryptographic identity</li>
+ *   <li><strong>Storage:</strong> Securely stored in keyring or keystore</li>
+ * </ul>
+ * 
+ * <p><strong>Security Considerations:</strong></p>
+ * <ul>
+ *   <li><strong>Confidentiality:</strong> Private keys must never be exposed</li>
+ *   <li><strong>Secure Destruction:</strong> Call {@link #destroy()} when no longer needed</li>
+ *   <li><strong>Memory Protection:</strong> Zeroize memory after use</li>
+ *   <li><strong>Algorithm Choice:</strong> Prefer modern algorithms (X25519) when possible</li>
+ * </ul>
+ * 
+ * <p><strong>Performance Features:</strong></p>
+ * <ul>
+ *   <li><strong>Caching:</strong> LRU cache for frequently used keys</li>
+ *   <li><strong>Public Key Derivation:</strong> Cached derived public key</li>
+ *   <li><strong>Efficient Storage:</strong> Optimized byte representation</li>
+ *   <li><strong>Factory Methods:</strong> Static creation methods for cache access</li>
+ * </ul>
+ * 
+ * <p><strong>Migration Path:</strong></p>
+ * <ul>
+ *   <li><strong>Legacy:</strong> ElGamal 2048-bit for backward compatibility</li>
+ *   <li><strong>Modern:</strong> ECIES X25519 for better performance and security</li>
+ *   <li><strong>Transition:</strong> Mixed algorithm support during migration</li>
+ * </ul>
+ * 
+ * <p><strong>Thread Safety:</strong></p>
+ * <ul>
+ *   <li><strong>Immutable Data:</strong> Key data cannot be modified after creation</li>
+ *   <li><strong>Safe Destruction:</strong> Thread-safe key zeroization</li>
+ *   <li><strong>Cache Access:</strong> Thread-safe factory methods</li>
+ * </ul>
  *
  * @author jrandom
  */

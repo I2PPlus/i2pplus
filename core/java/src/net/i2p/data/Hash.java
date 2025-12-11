@@ -13,8 +13,70 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Defines the hash as defined by the I2P data structure spec.
- * A hash is the SHA-256 of some data, taking up 32 bytes.
+ * SHA-256 hash implementation for I2P data identification and integrity.
+ * 
+ * <p>Hash provides cryptographic hash functionality throughout I2P:</p>
+ * <ul>
+ *   <li><strong>Algorithm:</strong> SHA-256 cryptographic hash function</li>
+ *   <li><strong>Fixed Size:</strong> Always 32 bytes (256 bits)</li>
+ *   <li><strong>Uniqueness:</strong> Extremely low collision probability</li>
+ *   <li><strong>Standardized:</strong> Consistent hash across all I2P components</li>
+ * </ul>
+ * 
+ * <p><strong>Key Uses:</strong></p>
+ * <ul>
+ *   <li><strong>Identification:</strong> Unique identifiers for destinations and routers</li>
+ *   <li><strong>Integrity:</strong> Verify data hasn't been modified or corrupted</li>
+ *   <li><strong>Indexing:</strong> Fast lookup keys in network database (NetDb)</li>
+ *   <li><strong>Routing:</strong> Keys for distributed hash table (DHT) operations</li>
+ *   <li><strong>Caching:</strong> Efficient storage and retrieval of frequently used hashes</li>
+ * </ul>
+ * 
+ * <p><strong>Performance Features:</strong></p>
+ * <ul>
+ *   <li><strong>LRU Caching:</strong> Least-recently-used cache with size limits</li>
+ *   <li><strong>Factory Methods:</strong> Static creation methods for cache efficiency</li>
+ *   <li><strong>Efficient Comparison:</strong> Optimized equals() and hashCode() methods</li>
+ *   <li><strong>Base32 Conversion:</strong> Cached .b32.i2p address generation</li>
+ *   <li><strong>Memory Management:</strong> Automatic cache size adjustment</li>
+ * </ul>
+ * 
+ * <p><strong>Security Properties:</strong></p>
+ * <ul>
+ *   <li><strong>Cryptographic Strength:</strong> SHA-256 provides 128-bit security against collisions</li>
+ *   <li><strong>Preimage Resistance:</strong> Computationally infeasible to reverse</li>
+ *   <li><strong>Second Preimage:</strong> Computationally infeasible to find similar inputs</li>
+ *   <li><strong>Collision Resistance:</strong> Practically impossible to find colliding inputs</li>
+ * </ul>
+ * 
+ * <p><strong>Common Operations:</strong></p>
+ * <ul>
+ *   <li><strong>Data Hashing:</strong> Calculate hash of any byte array or data structure</li>
+ *   <li><strong>Stream Hashing:</strong> Incremental hashing of large data streams</li>
+ *   <li><strong>File Verification:</strong> Verify file integrity using hash comparison</li>
+ *   <li><strong>Address Generation:</strong> Convert to Base32 for .b32.i2p addresses</li>
+ * </ul>
+ * 
+ * <p><strong>Constants:</strong></p>
+ * <ul>
+ *   <li>{@link #HASH_LENGTH} - Standard 32-byte hash size</li>
+ *   <li>{@link #FAKE_HASH} - All-zero hash for testing/placeholder use</li>
+ * </ul>
+ * 
+ * <p><strong>Thread Safety:</strong></p>
+ * <ul>
+ *   <li><strong>Immutable Data:</strong> Hash data cannot be modified after creation</li>
+ *   <li><strong>Thread-Safe Cache:</strong> Static factory methods are thread-safe</li>
+ *   <li><strong>Safe Sharing:</strong> Instances can be safely shared between threads</li>
+ * </ul>
+ * 
+ * <p><strong>Best Practices:</strong></p>
+ * <ul>
+ *   <li><strong>Factory Methods:</strong> Use static create() methods for cache efficiency</li>
+ *   <li><strong>Hash Verification:</strong> Always verify critical data hashes</li>
+ *   <li><strong>Constant Time:</strong> Use hash comparison for data integrity checks</li>
+ *   <li><strong>Memory Efficiency:</strong> Reuse hash instances when possible</li>
+ * </ul>
  *
  * @author jrandom
  */

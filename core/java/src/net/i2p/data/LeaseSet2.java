@@ -19,7 +19,25 @@ import net.i2p.util.Log;
 import net.i2p.util.OrderedProperties;
 
 /**
- * See proposal 123
+ * Implementation of LeaseSet2 as specified in 
+ * <a href="https://geti2p.net/spec/proposals/123-new-netdb-entries">Proposal 123: New NetDb Entries</a>.
+ * 
+ * <p>LeaseSet2 provides several enhancements over the original LeaseSet format:</p>
+ * <ul>
+ *   <li>Support for multiple encryption keys with server preference ordering</li>
+ *   <li>Offline signature support for reduced router load</li>
+ *   <li>Published and expiration timestamps independent of lease times</li>
+ *   <li>Options and statistics support</li>
+ *   <li>Blinded and encrypted LeaseSet support</li>
+ * </ul>
+ *
+ * <p>Key differences from LeaseSet:</p>
+ * <ul>
+ *   <li>Uses {@link #getPublished()} for version comparison instead of lease dates</li>
+ *   <li>Supports multiple encryption keys via {@link #getEncryptionKeys()}</li>
+ *   <li>Includes offline signing capabilities via {@link #setOfflineSignature(long, SigningPublicKey, Signature)}</li>
+ *   <li>Has separate published and expires timestamps</li>
+ * </ul>
  *
  * @since 0.9.38
  */

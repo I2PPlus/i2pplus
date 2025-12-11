@@ -25,29 +25,63 @@ import net.i2p.util.Log;
 import net.i2p.util.RandomSource;
 
 /**
- * Defines the set of leases a destination currently has.
- *
- * Support encryption and decryption with a supplied key.
- * Only the gateways and tunnel IDs in the individual
- * leases are encrypted.
- *
- * WARNING:
- * Encryption is poorly designed and probably insecure.
- * Not recommended.
- *
- * Encrypted leases are not indicated as such.
- * The only way to tell a lease is encrypted is to
- * determine that the listed gateways do not exist.
- * Routers wishing to decrypt a leaseset must have the
- * desthash and key in their keyring.
- * This is required for the local router as well, since
- * the encryption is done on the client side of I2CP, the
- * router must decrypt it back again for local usage
- * (but not for transmission to the floodfills)
- *
- * Decrypted leases are only available through the getLease()
- * method, so that storage and network transmission via
- * writeBytes() will output the original encrypted
+ * Defines the set of leases that a destination currently has available for routing messages.
+ * 
+ * <p>LeaseSet is the fundamental routing structure in I2P, containing:</p>
+ * <ul>
+ *   <li><strong>Destination:</strong> The service endpoint identity</li>
+ *   <li><strong>Encryption Key:</strong> Public key for encrypting messages to the destination</li>
+ *   <li><strong>Signing Key:</strong> Public key for verifying LeaseSet authenticity</li>
+ *   <li><strong>Leases:</strong> List of tunnel endpoints and their validity periods</li>
+ *   <li><strong>Signature:</strong> Cryptographic signature proving authenticity</li>
+ * </ul>
+ * 
+ * <p><strong>Lease Structure:</strong></p>
+ * <ul>
+ *   <li><strong>Gateway:</strong> Router identity that hosts the tunnel endpoint</li>
+ *   <li><strong>Tunnel ID:</strong> Unique identifier for the tunnel on the gateway</li>
+ *   <li><strong>Expiration:</strong> Time when the lease becomes invalid</li>
+ * </ul>
+ * 
+ * <p><strong>Encryption Support (Legacy):</strong></p>
+ * <ul>
+ *   <li><strong>⚠️ SECURITY WARNING:</strong> Encryption is poorly designed and probably insecure</li>
+ *   <li><strong>Not Recommended:</strong> Use modern alternatives like EncryptedLeaseSet</li>
+ *   <li><strong>Limited Scope:</strong> Only encrypts gateway and tunnel ID data</li>
+ *   <li><strong>No Indication:</strong> Encrypted leases appear identical to unencrypted ones</li>
+ *   <li><strong>Keyring Required:</strong> Routers need desthash and key to decrypt</li>
+ * </ul>
+ * 
+ * <p><strong>Encryption Process:</strong></p>
+ * <ul>
+ *   <li><strong>Client Side:</strong> Encryption performed in I2CP client</li>
+ *   <li><strong>Router Side:</strong> Local router must decrypt for usage</li>
+ *   <li><strong>Network:</strong> Encrypted form transmitted to floodfills</li>
+ *   <li><strong>Access:</strong> Decrypted leases only available via {@link #getLease(int)}</li>
+ * </ul>
+ * 
+ * <p><strong>Usage:</strong></p>
+ * <ul>
+ *   <li><strong>Routing:</strong> Primary mechanism for message delivery in I2P</li>
+ *   <li><strong>Load Balancing:</strong> Multiple leases provide redundancy and distribution</li>
+ *   <li><strong>Mobility:</strong> Leases can be updated as endpoints change</li>
+ *   <li><strong>Discovery:</strong> Published to network database for lookup</li>
+ * </ul>
+ * 
+ * <p><strong>Security Considerations:</strong></p>
+ * <ul>
+ *   <li><strong>Signature Verification:</strong> Always verify LeaseSet signatures</li>
+ *   <li><strong>Expiration Checking:</strong> Ensure leases are still valid</li>
+ *   <li><strong>Encryption Avoidance:</strong> Legacy encryption should not be used</li>
+ *   <li><strong>Modern Alternatives:</strong> Use LeaseSet2, EncryptedLeaseSet, or MetaLeaseSet</li>
+ * </ul>
+ * 
+ * <p><strong>Migration Path:</strong></p>
+ * <ul>
+ *   <li><strong>LeaseSet2:</strong> Enhanced format with better security and features</li>
+ *   <li><strong>EncryptedLeaseSet:</strong> Proper encryption with authentication</li>
+ *   <li><strong>MetaLeaseSet:</strong> Advanced routing and load balancing</li>
+ * </ul>
  * leases and the original leaseset signature.
  *
  * Revocation (zero leases) isn't used anywhere. In addition:

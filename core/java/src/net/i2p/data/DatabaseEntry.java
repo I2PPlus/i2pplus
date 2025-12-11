@@ -16,28 +16,71 @@ import net.i2p.crypto.SigAlgo;
 import net.i2p.crypto.SigType;
 
 /**
- *<p>
- * Base implementation of common methods for the two data structures
- * that are stored in the netDb, i.e. LeaseSet and RouterInfo.
- * Implemented in 0.8.2 and retrofitted over LeaseSet and RouterInfo.
- *
- * This consolidates some common code and makes it easier to
- * implement the NetDB and I2NP without doing instanceof all over the place.
- *</p><p>
- * DatabaseEntries have a SHA256 hash, a routing key, a timestamp, and
- * signatures.
- *</p><p>
- * Do not reuse objects.
- * Many of the setters and other methods contain checks to prevent
- * altering a DatabaseEntry after it is signed. This protects the netdb,
- * messages that contain DatabaseEntries,
- * and the object itself from simple causes of corruption, by
- * throwing IllegalStateExceptions.
- * These checks are not necessarily thread-safe, and are not guaranteed
- * to catch all possible means of corruption.
- * Beware of other avenues of corruption, such as directly modifying data
- * stored in byte[] objects.
- *</p>
+ * Base class for data structures stored in the I2P network database (NetDb).
+ * 
+ * <p>DatabaseEntry provides common infrastructure for NetDb-storable objects:</p>
+ * <ul>
+ *   <li><strong>Core Types:</strong> Base for {@link LeaseSet} and {@link net.i2p.data.router.RouterInfo}</li>
+ *   <li><strong>Unified Interface:</strong> Simplifies NetDB and I2NP implementation</li>
+ *   <li><strong>Common Operations:</strong> Shared methods for hashing, routing, and signing</li>
+ *   <li><strong>Integrity Protection:</strong> Prevents modification after signing</li>
+ * </ul>
+ * 
+ * <p><strong>Key Features:</strong></p>
+ * <ul>
+ *   <li><strong>SHA-256 Hash:</strong> Unique identifier for database storage and lookup</li>
+ *   <li><strong>Routing Key:</strong> Modified hash for distributed hash Table (DHT) routing</li>
+ *   <li><strong>Timestamp:</strong> Creation or last-modified time for cache management</li>
+ *   <li><strong>Signatures:</strong> Cryptographic signatures for authenticity verification</li>
+ *   <li><strong>Type Constants:</strong> Standardized type identifiers for all NetDb entries</li>
+ * </ul>
+ * 
+ * <p><strong>Supported Entry Types:</strong></p>
+ * <ul>
+ *   <li>{@link #KEY_TYPE_ROUTERINFO} - Router information and capabilities</li>
+ *   <li>{@link #KEY_TYPE_LEASESET} - Legacy LeaseSet format</li>
+ *   <li>{@link #KEY_TYPE_LS2} - Modern LeaseSet2 format</li>
+ *   <li>{@link #KEY_TYPE_META_LS2} - MetaLeaseSet for advanced routing</li>
+ * </ul>
+ * 
+ * <p><strong>Integrity Protection:</strong></p>
+ * <ul>
+ *   <li><strong>Immutable After Signing:</strong> Objects cannot be modified once signed</li>
+ *   <li><strong>IllegalStateException:</strong> Thrown when modification is attempted</li>
+ *   <li><strong>NetDb Protection:</strong> Prevents corruption of network database</li>
+ *   <li><strong>Message Safety:</strong> Protects I2NP messages from tampering</li>
+ * </ul>
+ * 
+ * <p><strong>Usage Patterns:</strong></p>
+ * <ul>
+ *   <li><strong>Network Storage:</strong> Entries stored in distributed hash table</li>
+ *   <li><strong>Lookup Operations:</strong> Fast retrieval by hash or routing key</li>
+ *   <li><strong>Cache Management:</strong> Timestamp-based expiration and refresh</li>
+ *   <li><strong>Floodfill:</strong> Distribution of new and updated entries</li>
+ * </ul>
+ * 
+ * <p><strong>Security Considerations:</strong></p>
+ * <ul>
+ *   <li><strong>Signature Verification:</strong> Always verify before trusting entries</li>
+ *   <li><strong>Timestamp Validation:</strong> Check for stale or expired entries</li>
+ *   <li><strong>Hash Collision:</strong> Verify SHA-256 hash matches content</li>
+ *   <li><strong>Routing Key Security:</strong> Protect against routing attacks</li>
+ * </ul>
+ * 
+ * <p><strong>Implementation Notes:</strong></p>
+ * <ul>
+ *   <li><strong>0.8.2:</strong> Initial implementation with retrofitting</li>
+ *   <li><strong>Code Consolidation:</strong> Reduces instanceof usage throughout codebase</li>
+ *   <li><strong>Thread Safety:</strong> Protection not guaranteed to be thread-safe</li>
+ *   <li><strong>Object Reuse:</strong> Do not reuse DatabaseEntry instances</li>
+ * </ul>
+ * 
+ * <p><strong>Warning:</strong></p>
+ * <ul>
+ *   <li><strong>Direct Modification:</strong> Avoid modifying internal byte[] objects</li>
+ *   <li><strong>Corruption Avenues:</strong> Multiple paths can bypass protection</li>
+ *   <li><strong>Careful Usage:</strong> Protection is not foolproof against all attacks</li>
+ * </ul>
  *
  * @author zzz
  * @since 0.8.2

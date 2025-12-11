@@ -56,7 +56,73 @@ import net.i2p.util.SystemVersion;
 import net.i2p.util.Translate;
 
 /**
- * Defines some simple IO routines for dealing with marshalling data structures
+ * Comprehensive utility class for I2P data structure serialization, encoding, and manipulation.
+ * 
+ * <p>DataHelper provides essential utilities for working with I2P data structures:</p>
+ * <ul>
+ *   <li><strong>Serialization:</strong> Read/write primitive types to/from streams</li>
+ *   <li><strong>Encoding:</strong> Base64 and Base32 encoding/decoding</li>
+ *   <li><strong>Validation:</strong> Data format verification and bounds checking</li>
+ *   <li><strong>Conversion:</strong> Between different data representations</li>
+ *   <li><strong>Utilities:</strong> Common operations on collections and arrays</li>
+ * </ul>
+ * 
+ * <p><strong>Core Operations:</strong></p>
+ * <ul>
+ *   <li><strong>Primitive I/O:</strong> readLong(), writeLong(), readString(), writeString()</li>
+ *   <li><strong>Base64:</strong> encode(), decode() with filesystem-safe variants</li>
+ *   <li><strong>Base32:</strong> encodeBase32(), decodeBase32() for addresses</li>
+ *   <li><strong>Properties:</strong> readProperties(), writeProperties() for metadata</li>
+ *   <li><strong>Collections:</strong> toMap(), toString() for data structures</li>
+ * </ul>
+ * 
+ * <p><strong>Encoding Support:</strong></p>
+ * <ul>
+ *   <li><strong>Base64:</strong> Standard and URL-safe variants with/without padding</li>
+ *   <li><strong>Base32:</strong> RFC 3548 compliant for .b32.i2p addresses</li>
+ *   <li><strong>Hex:</strong> Hexadecimal encoding for debugging and display</li>
+ *   <li><strong>UTF-8:</strong> String encoding with proper byte handling</li>
+ * </ul>
+ * 
+ * <p><strong>Data Structure Support:</strong></p>
+ * <ul>
+ *   <li><strong>Arrays:</strong> Efficient reading/writing of byte arrays</li>
+ *   <li><strong>Collections:</strong> Map, List, and Set serialization</li>
+ *   <li><strong>Dates:</strong> Timestamp handling with proper timezones</li>
+ *   <li><strong>Properties:</strong> Key-value pair serialization</li>
+ * </ul>
+ * 
+ * <p><strong>Validation and Safety:</strong></p>
+ * <ul>
+ *   <li><strong>Bounds Checking:</strong> Prevent buffer overflows and underflows</li>
+ *   <li><strong>Null Handling:</strong> Safe null value processing</li>
+ *   <li><strong>Size Limits:</strong> Protection against excessive memory allocation</li>
+ *   <li><strong>Format Validation:</strong> Data structure integrity checks</li>
+ * </ul>
+ * 
+ * <p><strong>Performance Features:</strong></p>
+ * <ul>
+ *   <li><strong>Buffer Reuse:</strong> ByteArrayStream for efficient operations</li>
+ *   <li><strong>Caching:</strong> Frequently used constants and computations</li>
+ *   <li><strong>Bulk Operations:</strong> Optimized for large data sets</li>
+ *   <li><strong>Memory Management:</strong> Careful allocation and cleanup</li>
+ * </ul>
+ * 
+ * <p><strong>Common Use Cases:</strong></p>
+ * <ul>
+ *   <li><strong>Network Protocol:</strong> I2NP message serialization</li>
+ *   <li><strong>Configuration:</strong> Properties file handling</li>
+ *   <li><strong>Address Display:</strong> Base32 encoding for .b32.i2p</li>
+ *   <li><strong>Data Storage:</strong> File format serialization</li>
+ *   <li><strong>Debugging:</strong> Hex dumps and data inspection</li>
+ * </ul>
+ * 
+ * <p><strong>Thread Safety:</strong></p>
+ * <ul>
+ *   <li><strong>Static Methods:</strong> All operations are thread-safe</li>
+ *   <li><strong>No State:</strong> Class maintains no mutable instance state</li>
+ *   <li><strong>Immutable Data:</strong> Input data is not modified</li>
+ * </ul>
  *
  * @author jrandom
  */

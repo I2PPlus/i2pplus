@@ -23,9 +23,41 @@ import net.i2p.util.Clock;
 import net.i2p.util.Log;
 
 /**
- * Use getSigningKey() / setSigningKey() (revocation key in super) for the blinded key.
- *
- * PRELIMINARY - Subject to change - see proposal 123
+ * Implementation of EncryptedLeaseSet as specified in 
+ * <a href="https://geti2p.net/spec/proposals/123-new-netdb-entries">Proposal 123: New NetDb Entries</a>.
+ * 
+ * <p>EncryptedLeaseSet provides privacy and authentication enhancements over standard LeaseSet2:</p>
+ * <ul>
+ *   <li>LeaseSet content is encrypted using authenticated encryption</li>
+ *   <li>Supports per-client and group-based access control</li>
+ *   <li>Uses blinded keys for enhanced privacy</li>
+ *   <li>Requires authentication data for decryption</li>
+ *   <li>Protects tunnel endpoints from unauthorized discovery</li>
+ * </ul>
+ * 
+ * <p><strong>Key Features:</strong></p>
+ * <ul>
+ *   <li><strong>Authentication Types:</strong> Supports DH, PSK, and no authentication</li>
+ *   <li><strong>Blinded Keys:</strong> Uses {@link #getSigningKey()} for the blinded key (revocation key in super)</li>
+ *   <li><strong>Encryption:</strong> Content encrypted with ChaCha20-Poly1305 AEAD</li>
+ *   <li><strong>Access Control:</strong> Fine-grained control over who can decrypt the LeaseSet</li>
+ * </ul>
+ * 
+ * <p><strong>Usage:</strong></p>
+ * <ul>
+ *   <li>Services requiring restricted access to tunnel endpoints</li>
+ *   <li>Private services with authenticated client access</li>
+ *   <li>Situations where tunnel endpoint discovery must be controlled</li>
+ * </ul>
+ * 
+ * <p><strong>Authentication Methods:</strong></p>
+ * <ul>
+ *   <li>{@link BlindData#AUTH_NONE} - No authentication required</li>
+ *   <li>{@link BlindData#AUTH_DH} - Diffie-Hellman key exchange authentication</li>
+ *   <li>{@link BlindData#AUTH_PSK} - Pre-shared key authentication</li>
+ * </ul>
+ * 
+ * <p><strong>Implementation Status:</strong> PRELIMINARY - Subject to change as the proposal evolves</p>
  *
  * @since 0.9.38
  */

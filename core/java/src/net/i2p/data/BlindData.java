@@ -6,8 +6,50 @@ import net.i2p.crypto.Blinding;
 import net.i2p.crypto.SigType;
 
 /**
- * Cache data for Blinding EdDSA keys.
- * PRELIMINARY - Subject to change - see proposal 123
+ * Cache data for EdDSA key blinding as specified in 
+ * <a href="https://geti2p.net/spec/proposals/123-new-netdb-entries">Proposal 123: New NetDb Entries</a>.
+ * 
+ * <p>BlindData provides the infrastructure for cryptographic key blinding in I2P:</p>
+ * <ul>
+ *   <li>Manages blinded and unblinded EdDSA signing key pairs</li>
+ *   <li>Supports multiple authentication methods for encrypted LeaseSets</li>
+ *   <li>Caches computed blinded keys and related metadata</li>
+ *   <li>Handles time-based key rotation and expiration</li>
+ *   <li>Generates blinded destination addresses (.b32.i2p)</li>
+ * </ul>
+ * 
+ * <p><strong>Key Components:</strong></p>
+ * <ul>
+ *   <li><strong>Key Blinding:</strong> Transforms clear signing keys into blinded equivalents</li>
+ *   <li><strong>Authentication:</strong> Supports DH, PSK, and no-authentication modes</li>
+ *   <li><strong>Caching:</strong> Stores computed values to avoid expensive recalculation</li>
+ *   <li><strong>Address Generation:</strong> Creates blinded .b32 addresses for services</li>
+ * </ul>
+ * 
+ * <p><strong>Authentication Types:</strong></p>
+ * <ul>
+ *   <li>{@link #AUTH_NONE} - No authentication required</li>
+ *   <li>{@link #AUTH_DH} - Diffie-Hellman key exchange for per-client keys</li>
+ *   <li>{@link #AUTH_PSK} - Pre-shared key authentication</li>
+ * </ul>
+ * 
+ * <p><strong>Usage Scenarios:</strong></p>
+ * <ul>
+ *   <li><strong>Encrypted LeaseSets:</strong> Generate blinded keys for restricted access</li>
+ *   <li><strong>Destination Blinding:</strong> Create anonymous service endpoints</li>
+ *   <li><strong>Access Control:</strong> Implement authentication for private services</li>
+ *   <li><strong>Key Rotation:</strong> Manage time-based blinded key updates</li>
+ * </ul>
+ * 
+ * <p><strong>Security Considerations:</strong></p>
+ * <ul>
+ *   <li>Blinded keys provide unlinkability between clear and blinded identities</li>
+ *   <li>Authentication data must be securely stored and transmitted</li>
+ *   <li>Key rotation intervals should balance security and usability</li>
+ *   <li>Proper validation of blinded signatures is essential</li>
+ * </ul>
+ * 
+ * <p><strong>Implementation Status:</strong> PRELIMINARY - Subject to change as proposal evolves</p>
  *
  * @since 0.9.40
  */

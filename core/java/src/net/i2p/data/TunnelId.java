@@ -13,20 +13,61 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * Defines the tunnel ID that messages are passed through on a set of routers.
- * This is not globally unique, but must be unique on each router making up
- * the tunnel (otherwise they would get confused and send messages down the
- * wrong one).
- *
- * Note that a TunnelId must be greater than zero,
- * as the DatabaseStoreMessage uses a zero ID to request
- * a direct reply.
- *
- * 4 bytes, usually of random data.
- *
- * Not recommended for external use, subject to change.
- *
- * As of 0.9.48, does NOT extend DataStructureImpl, to save space
+ * Tunnel identifier for routing messages through a sequence of routers in I2P.
+ * 
+ * <p>TunnelId provides unique identification within tunnel routing:</p>
+ * <ul>
+ *   <li><strong>Local Uniqueness:</strong> Must be unique on each router in tunnel</li>
+ *   <li><strong>4-Byte Value:</strong> 32-bit identifier (1 to 0xffffffff)</li>
+ *   <li><strong>Random Generation:</strong> Typically generated from cryptographically secure random</li>
+ *   <li><strong>Routing Coordination:</strong> Prevents message delivery to wrong tunnels</li>
+ * </ul>
+ * 
+ * <p><strong>Constraints and Validation:</strong></p>
+ * <ul>
+ *   <li><strong>Minimum Value:</strong> Must be greater than zero (ID > 0)</li>
+ *   <li><strong>Maximum Value:</strong> Limited to 0xffffffff (32-bit unsigned integer)</li>
+ *   <li><strong>Special Case:</strong> Zero reserved for direct replies in DatabaseStoreMessage</li>
+ *   <li><strong>Uniqueness:</strong> Router must enforce uniqueness across its tunnels</li>
+ * </ul>
+ * 
+ * <p><strong>Usage in I2P:</strong></p>
+ * <ul>
+ *   <li><strong>Tunnel Routing:</strong> Messages forwarded through tunnel chain</li>
+ *   <li><strong>Message Delivery:</strong> Ensures messages reach correct tunnel endpoint</li>
+ *   <li><strong>Tunnel Management:</strong> Creation, configuration, and teardown</li>
+ *   <li><strong>Load Balancing:</strong> Multiple tunnels for traffic distribution</li>
+ *   <li><strong>Client Communication:</strong> I2CP tunnel establishment and management</li>
+ * </ul>
+ * 
+ * <p><strong>Performance Considerations:</strong></p>
+ * <ul>
+ *   <li><strong>Efficient Storage:</strong> Compact 4-byte representation</li>
+ *   <li><strong>Fast Comparison:</strong> Optimized equals() and hashCode() methods</li>
+ *   <li><strong>Minimal Overhead:</strong> No object inheritance since 0.9.48</li>
+ *   <li><strong>Memory Efficiency:</strong> Primitive long storage</li>
+ * </ul>
+ * 
+ * <p><strong>Security Aspects:</strong></p>
+ * <ul>
+ *   <li><strong>ID Randomness:</strong> Use cryptographically secure random generation</li>
+ *   <li><strong>ID Unpredictability:</strong> Prevent tunnel ID guessing attacks</li>
+ *   <li><strong>Collision Avoidance:</strong> Local uniqueness prevents routing confusion</li>
+ *   <li><strong>Isolation:</strong> Different tunnels have separate ID spaces</li>
+ * </ul>
+ * 
+ * <p><strong>Implementation Notes:</strong></p>
+ * <ul>
+ *   <li><strong>Space Optimization:</strong> Does not extend DataStructureImpl since 0.9.48</li>
+ *   <li><strong>External Use:</strong> Not recommended for external use, subject to change</li>
+ *   <li><strong>Thread Safety:</strong> Immutable objects are inherently thread-safe</li>
+ *   <li><strong>Validation:</strong> Constructor enforces valid ID range</li>
+ * </ul>
+ * 
+ * <p><strong>Constants:</strong></p>
+ * <ul>
+ *   <li>{@link #MAX_ID_VALUE} - Maximum allowed tunnel ID (0xffffffff)</li>
+ * </ul>
  *
  * @author jrandom
  */

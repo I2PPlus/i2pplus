@@ -17,13 +17,76 @@ import net.i2p.crypto.Blinding;
 import net.i2p.crypto.SigType;
 
 /**
- * Defines the SigningPublicKey as defined by the I2P data structure spec.
- * A signing public key is by default 128 byte Integer. The public key represents only the
- * exponent, not the primes, which are constant and defined in the crypto spec.
- * This key varies from the PrivateKey in its usage (verifying signatures, not encrypting)
- *
- * As of release 0.9.8, keys of arbitrary length and type are supported.
- * See SigType.
+ * Cryptographic public key for digital signature verification in I2P.
+ * 
+ * <p>SigningPublicKey provides signature verification capabilities:</p>
+ * <ul>
+ *   <li><strong>Default Algorithm:</strong> DSA-SHA1 (128 bytes)</li>
+ *   <li><strong>Modern Support:</strong> Variable length and type support since 0.9.8</li>
+ *   <li><strong>Key Structure:</strong> Contains only public exponent/coordinates</li>
+ *   <li><strong>Verification:</strong> Used to verify signatures and identities</li>
+ * </ul>
+ * 
+ * <p><strong>Supported Algorithms:</strong></p>
+ * <ul>
+ *   <li><strong>DSA-SHA1:</strong> Legacy algorithm, 128-byte keys</li>
+ *   <li><strong>ECDSA-P256:</strong> Modern algorithm, variable length keys</li>
+ *   <li><strong>EdDSA-Ed25519:</strong> Modern algorithm, 32-byte keys</li>
+ *   <li><strong>Future Types:</strong> Extensible design for new algorithms</li>
+ * </ul>
+ * 
+ * <p><strong>Key Format:</strong></p>
+ * <ul>
+ *   <li><strong>DSA:</strong> 128-byte public parameters (p, q, g, y)</li>
+ *   <li><strong>ECDSA:</strong> Variable length elliptic curve coordinates</li>
+ *   <li><strong>EdDSA:</strong> 32-byte compressed curve point</li>
+ *   <li><strong>Type Encoding:</strong> Algorithm type embedded in data</li>
+ * </ul>
+ * 
+ * <p><strong>Usage:</strong></p>
+ * <ul>
+ *   <li><strong>Signature Verification:</strong> Verify signatures from {@link SigningPrivateKey}</li>
+ *   <li><strong>Identity Verification:</strong> Part of {@link Destination} identity</li>
+ *   <li><strong>LeaseSet Verification:</strong> Verify LeaseSet authenticity</li>
+ *   <li><strong>Router Identity:</strong> Verify router signatures in NetDb</li>
+ * </ul>
+ * 
+ * <p><strong>Performance Features:</strong></p>
+ * <ul>
+ *   <li><strong>LRU Caching:</strong> Frequently used keys cached for efficiency</li>
+ *   <li><strong>Factory Methods:</strong> Static creation methods for cache access</li>
+ *   <li><strong>Efficient Storage:</strong> Optimized byte representation</li>
+ *   <li><strong>Fast Comparison:</strong> Optimized equals() and hashCode()</li>
+ * </ul>
+ * 
+ * <p><strong>Security Considerations:</strong></p>
+ * <ul>
+ *   <li><strong>Algorithm Choice:</strong> Prefer modern algorithms (Ed25519, ECDSA-P256)</li>
+ *   <li><strong>Key Validation:</strong> Verify key parameters before use</li>
+ *   <li><strong>Signature Verification:</strong> Always verify with correct algorithm</li>
+ *   <li><strong>Key Distribution:</strong> Safely transmit public keys</li>
+ * </ul>
+ * 
+ * <p><strong>Blinding Support:</strong></p>
+ * <ul>
+ *   <li><strong>Key Blinding:</strong> Support for blinded key variants</li>
+ *   <li><strong>Privacy:</strong> Enable anonymous service endpoints</li>
+ *   <li><strong>BlindData:</strong> Integration with {@link BlindData} for blinding</li>
+ * </ul>
+ * 
+ * <p><strong>Migration Path:</strong></p>
+ * <ul>
+ *   <li><strong>Legacy:</strong> DSA-SHA1 for backward compatibility</li>
+ *   <li><strong>Modern:</strong> Ed25519 for better performance and security</li>
+ *   <li><strong>Transition:</strong> Mixed algorithm support during migration</li>
+ * </ul>
+ * 
+ * <p><strong>Thread Safety:</strong></p>
+ * <ul>
+ *   <li><strong>Immutable Data:</strong> Key data cannot be modified after creation</li>
+ *   <li><strong>Thread-Safe Cache:</strong> Static factory methods are thread-safe</li>
+ *   <li><strong>Safe Sharing:</strong> Instances can be safely shared between threads</li>
+ * </ul>
  *
  * @author jrandom
  */

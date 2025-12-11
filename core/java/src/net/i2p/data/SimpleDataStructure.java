@@ -11,17 +11,80 @@ import java.util.Arrays;
 import net.i2p.crypto.SHA256Generator;
 
 /**
- * A SimpleDataStructure contains only a single fixed-length byte array.
- *
- * Implemented in 0.8.2 and retrofitted over several of the classes in this package.
- *
- * As of 0.8.3, SDS objects may be cached. An SDS may be instantiated with null data,
- * and setData(null) is also OK. However,
- * once non-null data is set, the data reference is immutable;
- * subsequent attempts to set the data via setData(), readBytes(),
- * fromByteArray(), or fromBase64() will throw a RuntimeException.
- *
- * As of 0.9.48, no longer extends DataStrucureImpl to save space
+ * Base class for I2P data structures containing a single fixed-length byte array.
+ * 
+ * <p>SimpleDataStructure provides efficient storage and caching for fixed-size data:</p>
+ * <ul>
+ *   <li><strong>Fixed Length:</strong> Each subclass defines exact byte array size</li>
+ *   <li><strong>Caching Support:</strong> Built-in LRU caching for frequently used objects</li>
+ *   <li><strong>Immutability:</strong> Data becomes immutable after first non-null assignment</li>
+ *   <li><strong>Memory Efficient:</strong> Optimized for high-performance scenarios</li>
+ * </ul>
+ * 
+ * <p><strong>Key Features:</strong></p>
+ * <ul>
+ *   <li><strong>Length Specification:</strong> Abstract {@link #length()} method defines size</li>
+ *   <li><strong>Data Access:</strong> Direct byte array access via {@link #getData()}</li>
+ *   <li><strong>Serialization:</strong> Standard read/write operations for streams</li>
+ *   <li><strong>Encoding:</strong> Base64 and byte array conversions</li>
+ * </ul>
+ * 
+ * <p><strong>Caching System:</strong></p>
+ * <ul>
+ *   <li><strong>LRU Cache:</strong> Least-recently-used caching with size limits</li>
+ *   <li><strong>Static Factories:</strong> {@code create()} methods for cache access</li>
+ *   <li><strong>Efficient Lookup:</strong> First 4 bytes used as cache index</li>
+ *   <li><strong>Memory Management:</strong> Automatic cache size adjustment based on memory</li>
+ * </ul>
+ * 
+ * <p><strong>Immutability Model:</strong></p>
+ * <ul>
+ *   <li><strong>Initial State:</strong> Can be created with null data</li>
+ *   <li><strong>First Assignment:</strong> setData(), readBytes(), fromByteArray(), fromBase64()</li>
+ *   <li><strong>Immutable After:</strong> Once non-null data is set, cannot be changed</li>
+ *   <li><strong>Protection:</strong> Subsequent modifications throw {@link RuntimeException}</li>
+ * </ul>
+ * 
+ * <p><strong>Usage Patterns:</strong></p>
+ * <ul>
+ *   <li><strong>Creation:</strong> Use static factory methods for cache efficiency</li>
+ *   <li><strong>Comparison:</strong> Efficient equals() and hashCode() implementations</li>
+ *   <li><strong>Storage:</strong> Minimal memory footprint for large collections</li>
+ *   <li><strong>Network:</strong> Fast serialization for protocol messages</li>
+ * </ul>
+ * 
+ * <p><strong>Performance Optimizations:</strong></p>
+ * <ul>
+ *   <li><strong>No DataStructureImpl:</strong> As of 0.9.48, extends DataStructure directly</li>
+ *   <li><strong>Byte Caching:</strong> Shared byte arrays via SimpleByteCache</li>
+ *   <li><strong>Reduced Overhead:</strong> Minimal object size and memory usage</li>
+ *   <li><strong>Fast Hashing:</strong> Optimized hashCode() for collections</li>
+ * </ul>
+ * 
+ * <p><strong>Common Subclasses:</strong></p>
+ * <ul>
+ *   <li>{@link Hash} - 32-byte SHA-256 hashes</li>
+ *   <li>{@link PublicKey} - Variable-length encryption keys</li>
+ *   <li>{@link PrivateKey} - Variable-length decryption keys</li>
+ *   <li>{@link SigningPublicKey} - Variable-length signing keys</li>
+ *   <li>{@link SigningPrivateKey} - Variable-length signing private keys</li>
+ *   <li>{@link SessionKey} - 32-byte session encryption keys</li>
+ *   <li>{@link Signature} - Variable-length digital signatures</li>
+ * </ul>
+ * 
+ * <p><strong>Thread Safety:</strong></p>
+ * <ul>
+ *   <li><strong>Immutable Data:</strong> Thread-safe after data is set</li>
+ *   <li><strong>Static Caches:</strong> Thread-safe LRU cache implementation</li>
+ *   <li><strong>Factory Methods:</strong> Thread-safe object creation</li>
+ * </ul>
+ * 
+ * <p><strong>Evolution:</strong></p>
+ * <ul>
+ *   <li><strong>0.8.2:</strong> Initial implementation with retrofitted classes</li>
+ *   <li><strong>0.8.3:</strong> Added caching support and immutability</li>
+ *   <li><strong>0.9.48:</strong> Removed DataStructureImpl inheritance for space savings</li>
+ * </ul>
  *
  * @since 0.8.2
  * @author zzz
