@@ -67,6 +67,7 @@ public class RepublishLeaseSetJob extends JobImpl {
                             _log.info("Attempting to publish LeaseSet" + name + " [" + _dest.toBase32().substring(0,8) + "]...");
                         }
                         getContext().statManager().addRateData("netDb.republishLeaseSetCount", 1);
+                        failCount.set(0);
                         _facade.sendStore(_dest, ls, null, new OnRepublishFailure(ls), REPUBLISH_LEASESET_TIMEOUT, null);
                         _lastPublished = getContext().clock().now();
                     }
