@@ -42,8 +42,8 @@ msgid "Total uploaders limit changed to {0}"
 msgstr "Ümumi yükləyicilərin limiti {0} olaraq dəyişdirildi"
 
 #, java-format
-msgid "Minimum total uploaders limit is {0}"
-msgstr "Ümumi yükləyicilərin minimum limiti {0}dir"
+msgid "Minimum uploaders limit is {0}"
+msgstr ""
 
 #, java-format
 msgid "Up BW limit changed to {0}KBps"
@@ -292,12 +292,12 @@ msgstr "{0} əlavə olunur"
 msgid "Download already running: {0}"
 msgstr "Endirmə artıq işləyir: {0}"
 
-msgid " - torrent file already exists"
-msgstr " - torrent faylı artıq mövcuddur"
-
 #, java-format
 msgid "Failed to copy torrent file to {0}"
 msgstr "Torrent faylı {0}-a kopyalanmadı"
+
+msgid " - torrent file already exists"
+msgstr " - torrent faylı artıq mövcuddur"
 
 #, java-format
 msgid "Too many files in \"{0}\" ({1})!"
@@ -483,11 +483,35 @@ msgstr "Torrent artıq siyahıda var: {0}"
 msgid "Torrent at {0} was not valid"
 msgstr "{0}-dakı torrent səhv idi"
 
-msgid "Configuration"
-msgstr "Tənzimləmə"
+msgid "Torrents"
+msgstr "Torrentlər"
+
+msgid "Refresh page"
+msgstr "Səhifəni yenilə"
+
+msgid "Configure"
+msgstr "Tənzimlə"
+
+msgid "Torrent &amp; filesharing forum"
+msgstr "Torrent və fayl paylaşma forumu"
+
+msgid "Forum"
+msgstr "Forum"
+
+msgid "Search torrents"
+msgstr "Torrentləri axtar"
+
+msgid "Clear search"
+msgstr "Axtarışı sil"
+
+msgid "Click \"Add torrent\" button to fetch torrent"
+msgstr "Torrent əldə etmək üçün \"Torrent əlavə et\" düyməsini basın"
 
 msgid "Anonymous BitTorrent Client"
 msgstr "Anonim BitTorrent Mütəxəssisi"
+
+msgid "Configuration"
+msgstr "Tənzimləmə"
 
 #, java-format
 msgid "Are you sure you want to delete {0} and all downloaded data?"
@@ -508,36 +532,6 @@ msgstr ""
 msgid "Deleting {0} and associated metadata only..."
 msgstr ""
 
-msgid "I2PSnark has stopped"
-msgstr "I2PSnark dayandı"
-
-msgid "Router is down"
-msgstr "Ruter aşağıda"
-
-msgid "Torrents"
-msgstr "Torrentlər"
-
-msgid "Refresh page"
-msgstr "Səhifəni yenilə"
-
-msgid "Configure"
-msgstr "Tənzimlə"
-
-msgid "Forum"
-msgstr "Forum"
-
-msgid "Torrent &amp; filesharing forum"
-msgstr "Torrent və fayl paylaşma forumu"
-
-msgid "Search torrents"
-msgstr "Torrentləri axtar"
-
-msgid "Clear search"
-msgstr "Axtarışı sil"
-
-msgid "Click \"Add torrent\" button to fetch torrent"
-msgstr "Torrent əldə etmək üçün \"Torrent əlavə et\" düyməsini basın"
-
 msgid "clear messages"
 msgstr "xəbərləri sil"
 
@@ -557,18 +551,17 @@ msgstr "səhifə yenilənməsi"
 msgid "Warning - No I2P"
 msgstr "Xəbərdarlıq - Heç bir I2P"
 
+msgid "No torrents found."
+msgstr "Heç bir torrent tapılmadı."
+
+msgid "No torrents loaded."
+msgstr "Yüklənmiş torrent yoxdur."
+
+msgid "No DHT Peers"
+msgstr "DHT qarşılıqları yoxdur"
+
 msgid "Status"
 msgstr "Vəziyyət"
-
-#, java-format
-msgid "Sort by {0}"
-msgstr "{0} ilə tərtibləşdir"
-
-msgid "Hide Peers"
-msgstr "Qarşılıqlıları gizlət"
-
-msgid "Show Peers"
-msgstr "Qarşılıqlıları göstər"
 
 msgid "Torrent"
 msgstr "Torrend"
@@ -582,38 +575,20 @@ msgstr "Torrent adı"
 msgid "ETA"
 msgstr "ETA"
 
-msgid "Estimated time remaining"
-msgstr "Qalıq vaxt"
-
 msgid "RX"
 msgstr "RX"
-
-msgid "Downloaded"
-msgstr "Endirildi"
-
-msgid "Size"
-msgstr "Ölçül"
 
 msgid "RX Rate"
 msgstr "RX sürəti"
 
-msgid "Down Rate"
-msgstr "Yuxarı sürəti"
-
 msgid "TX"
 msgstr "TX"
-
-msgid "Upload ratio"
-msgstr ""
-
-msgid "Uploaded"
-msgstr "Yükləndi"
 
 msgid "TX Rate"
 msgstr "TX sürəti"
 
-msgid "Up Rate"
-msgstr "Yükləmə sürəti"
+msgid "Start All"
+msgstr "Başlama gecikməsi"
 
 msgid "Stop All"
 msgstr "Hamısını dayandır"
@@ -621,26 +596,24 @@ msgstr "Hamısını dayandır"
 msgid "Stop all torrents and the I2P tunnel"
 msgstr "Hamı torrentləri və I2P tünelini dayandır"
 
-msgid "Start All"
-msgstr "Başlama gecikməsi"
+msgid "Start all torrents and the I2P tunnel"
+msgstr "Bütün torrentləri və I2P tünelini başlat"
 
 msgid "Start all stopped torrents"
 msgstr "Torrent {0}-i başlamaq"
 
-msgid "Start all torrents and the I2P tunnel"
-msgstr "Bütün torrentləri və I2P tünelini başlat"
+msgid "Hide Peers"
+msgstr "Qarşılıqlıları gizlət"
 
-msgid "No torrents found."
-msgstr "Heç bir torrent tapılmadı."
-
-msgid "No torrents loaded."
-msgstr "Yüklənmiş torrent yoxdur."
+msgid "Show Peers"
+msgstr "Qarşılıqlıları göstər"
 
 #, java-format
-msgid "1 torrent"
-msgid_plural "{0} torrents"
-msgstr[0] "1 torrent"
-msgstr[1] "{0} torrent"
+msgid "Sort by {0}"
+msgstr "{0} ilə tərtibləşdir"
+
+msgid "Up Rate"
+msgstr "Yükləmə sürəti"
 
 msgid "Total size of loaded torrents"
 msgstr ""
@@ -650,12 +623,6 @@ msgid "1 connected peer"
 msgid_plural "{0} peer connections"
 msgstr[0] ""
 msgstr[1] ""
-
-#, java-format
-msgid "1 DHT peer"
-msgid_plural "{0} DHT peers"
-msgstr[0] "1 DHT qarşılıqlı"
-msgstr[1] "{0} DHT qarşılıqlı"
 
 msgid "Active downloads"
 msgstr ""
@@ -684,14 +651,20 @@ msgstr "Ümumi yüklənmiş məlumatlar (siyahıda olan torrentlər üçün)"
 msgid "Total upload speed"
 msgstr "Ümumi yükləmə sürəti"
 
+msgid "Toggle Debug Panel"
+msgstr ""
+
 msgid "Debug Mode"
 msgstr "Debug rejimi"
 
 msgid "Normal Mode"
 msgstr "Normal rejim"
 
-msgid "No DHT Peers"
-msgstr "DHT qarşılıqları yoxdur"
+#, java-format
+msgid "1 torrent"
+msgid_plural "{0} torrents"
+msgstr[0] "1 torrent"
+msgstr[1] "{0} torrent"
 
 msgid "Search"
 msgstr "Axtarış"
@@ -744,6 +717,13 @@ msgstr "Sonuncu"
 msgid "Last page"
 msgstr "Son səhifə"
 
+msgid "Enter URL or select torrent file"
+msgstr "URL daxil edin və ya torrent faylını seçin"
+
+#, java-format
+msgid "Error uploading the torrent file: {0}"
+msgstr ""
+
 #, java-format
 msgid "Cannot add torrent {0} inside another torrent: {1}"
 msgstr "{0} torrentunu digər bir torrent içində əlavə etmək mümkün deyil: {1}"
@@ -752,12 +732,12 @@ msgstr "{0} torrentunu digər bir torrent içində əlavə etmək mümkün deyil
 msgid "Download from non-I2P location {0} is not supported"
 msgstr "Non-I2P yeri {0}dən endirmə dəstəklənmir"
 
+msgid "Error: Version 2 info hashes are not supported"
+msgstr ""
+
 #, java-format
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
 msgstr "Səhv URL: \"{0}\" və ya \"{1}\" ilə başlamalıdır"
-
-msgid "Enter URL or select torrent file"
-msgstr "URL daxil edin və ya torrent faylını seçin"
 
 #, java-format
 msgid "Magnet deleted: {0}"
@@ -766,10 +746,6 @@ msgstr "Magnet silindi: {0}"
 #, java-format
 msgid "Torrent file could not be deleted: {0}"
 msgstr "Torrent faylı silinə bilmədi: {0}"
-
-#, java-format
-msgid "Download deleted: {0}"
-msgstr "Endirmə silindi: {0}"
 
 #, java-format
 msgid "Data file deleted: {0}"
@@ -786,6 +762,13 @@ msgstr "Kataloq silinə bilmədi: {0}"
 #, java-format
 msgid "Directory deleted: {0}"
 msgstr "Kataloq silindi: {0}"
+
+msgid "Error creating torrent - you must specify a file or directory"
+msgstr "Torrent yaratma xətası - siz fayl və ya qovluğu daxil etməlisiniz"
+
+#, java-format
+msgid "Cannot create a torrent for the nonexistent data: {0}"
+msgstr "Mövcud olmayan məlumatlar üçün torrent yaratmaq mümkün deyil: {0}"
 
 #, java-format
 msgid "Cannot add a torrent ending in \".torrent\": {0}"
@@ -829,13 +812,6 @@ msgstr "Bir çox I2P trackerləri, bölcəmə öncə yeni torrentləri qeydiyyat
 msgid "Error creating a torrent for \"{0}\""
 msgstr "{0} üçün torrent yaratma xətası"
 
-#, java-format
-msgid "Cannot create a torrent for the nonexistent data: {0}"
-msgstr "Mövcud olmayan məlumatlar üçün torrent yaratmaq mümkün deyil: {0}"
-
-msgid "Error creating torrent - you must specify a file or directory"
-msgstr "Torrent yaratma xətası - siz fayl və ya qovluğu daxil etməlisiniz"
-
 msgid "Delete selected"
 msgstr "Seçilmişləri sil"
 
@@ -869,61 +845,17 @@ msgstr "Səhv olmayan adı və filter şablonunu daxil edin"
 msgid "Restored default torrent create filters"
 msgstr "Standart torrent yaratma filtrləri bərpa olundu"
 
-msgid "Checking"
-msgstr "Yoxlama"
-
-msgid "Allocating"
-msgstr "Təyinat"
-
-msgid "Starting"
-msgstr "Başlamaq"
-
-#, java-format
-msgid "Seeding to {0} peer"
-msgid_plural "Seeding to {0} peers"
-msgstr[0] "{0} qarşılıqlıya bölcəmə"
-msgstr[1] "{0} qarşılıqlıya bölcəmə"
-
-#, java-format
-msgid "Seeding to {0} of {1} peers in swarm"
-msgstr "{1} qarşılıqlıdan {0}-a bölcəmə"
-
-msgid "OK"
-msgstr "OK"
-
-#, java-format
-msgid "Downloading from {0} peer"
-msgid_plural "Downloading from {0} peers"
-msgstr[0] "{0} qarşılıqlıdan endirilmə"
-msgstr[1] "{0} qarşılıqlıdan endirilmə"
-
-msgid "Stalled"
-msgstr "Dayandırıldı"
-
-#, java-format
-msgid "Connected to {0} of {1} peers in swarm"
-msgstr "{1} qarşılıqlıdan {0}-a bağlandı"
-
-msgid "No Peers"
-msgstr "Qarşılıqlar Yoxdur"
-
 msgid "Torrent details"
 msgstr "Torrent Detalları"
 
 msgid "Torrent has comments"
 msgstr "Torrent Şərhlərə Sahibdir"
 
-msgid "View files"
-msgstr "Faylları Görüntülə"
-
 msgid "Open file"
 msgstr "Faylı Aç"
 
-msgid "complete"
-msgstr "Tamamlandı"
-
-msgid "remaining"
-msgstr "Qalıq"
+msgid "View files"
+msgstr "Faylları Görüntülə"
 
 msgid "Completed"
 msgstr "Tamamlanan"
@@ -958,14 +890,51 @@ msgstr "Sil"
 msgid "Delete .torrent file and associated data files"
 msgstr ".torrent faylı və əlaqəli verilənlər fayllarını sil"
 
+msgid "Checking"
+msgstr "Yoxlama"
+
+msgid "Allocating"
+msgstr "Təyinat"
+
+msgid "Starting"
+msgstr "Başlamaq"
+
+#, java-format
+msgid "Seeding to {0} peer"
+msgid_plural "Seeding to {0} peers"
+msgstr[0] "{0} qarşılıqlıya bölcəmə"
+msgstr[1] "{0} qarşılıqlıya bölcəmə"
+
+#, java-format
+msgid "Connected to {0} of {1} peers in swarm"
+msgstr "{1} qarşılıqlıdan {0}-a bağlandı"
+
+msgid "Stalled"
+msgstr "Dayandırıldı"
+
+#, java-format
+msgid "Seeding to {0} peer in swarm"
+msgid_plural "Seeding to {0} peers in swarm"
+msgstr[0] ""
+msgstr[1] ""
+
+#, java-format
+msgid "Downloading from {0} peer"
+msgid_plural "Downloading from {0} peers"
+msgstr[0] "{0} qarşılıqlıdan endirilmə"
+msgstr[1] "{0} qarşılıqlıdan endirilmə"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "No Peers"
+msgstr "Qarşılıqlar Yoxdur"
+
 msgid "Peer attached to swarm"
 msgstr "Qarşılıqlı, təbii qrupa bağlandı"
 
 msgid "Destination (identity) of peer"
 msgstr "Qarşılıqlının hədəfi (kimliyi)"
-
-msgid "Version"
-msgstr "Versiya"
 
 msgid "seconds"
 msgstr "saniyələr"
@@ -1340,14 +1309,68 @@ msgstr ""
 msgid "Please retry form submission (bad nonce)"
 msgstr ""
 
+msgid "Resource Does Not Exist"
+msgstr "Resurs mövcud deyil"
+
+msgid "Resource"
+msgstr "Resurs"
+
+msgid "Base"
+msgstr "Temel"
+
+msgid "Files"
+msgstr "Fayllar"
+
+msgid "Directory"
+msgstr "Kataloq"
+
+msgid "Size"
+msgstr "Ölçül"
+
+msgid "Download Status"
+msgstr "Endirmə statusu"
+
+msgid "Remaining"
+msgstr "Qalıqlı"
+
+msgid "Download Priority"
+msgstr "Endirmə prioriteti"
+
+msgid "up"
+msgstr ""
+
+msgid "Parent directory"
+msgstr "Yüksək səviyyəli kataloqu qədər"
+
+msgid "Audio Playlist"
+msgstr "Səs siyahısı"
+
+msgid "Not found"
+msgstr "Tapılmadı"
+
+msgid "File not found in torrent"
+msgstr "Torrentdə fayl tapılmadı"
+
+msgid "Unrecognized"
+msgstr "Tanınmayan"
+
+msgid "Preview"
+msgstr "Proqnoz"
+
+msgid "Save priorities"
+msgstr "Prioritetləri saxla"
+
+msgid "Comments"
+msgstr "Şərhlər"
+
+msgid "Resource Not found"
+msgstr "Resurs Tapılmadı"
+
 msgid "Info hash"
 msgstr "Info haş"
 
 msgid "Created"
 msgstr "Yaradılmış"
-
-msgid "Files"
-msgstr "Fayllar"
 
 msgid "Added"
 msgstr "Əlavə edilmiş"
@@ -1363,9 +1386,6 @@ msgstr ""
 
 msgid "Completion"
 msgstr "Tamamlanma"
-
-msgid "Remaining"
-msgstr "Qalıqlı"
 
 msgid "Skipped"
 msgstr "Atılıb"
@@ -1391,51 +1411,6 @@ msgstr "Fayl bütövlüyünü yoxlamaq üçün torrenti dayandırın"
 msgid "Check integrity of the downloaded files"
 msgstr "Endirilən faylların bütövlüyünü yoxla"
 
-msgid "Resource Not found"
-msgstr "Resurs Tapılmadı"
-
-msgid "Base"
-msgstr "Temel"
-
-msgid "Resource Does Not Exist"
-msgstr "Resurs mövcud deyil"
-
-msgid "Resource"
-msgstr "Resurs"
-
-msgid "Audio file: "
-msgstr "Səs faylı: "
-
-msgid "Video file: "
-msgstr "Video faylı: "
-
-msgid "Directory"
-msgstr "Kataloq"
-
-msgid "Download Status"
-msgstr "Endirmə statusu"
-
-msgid "Download Priority"
-msgstr "Endirmə prioriteti"
-
-msgid "Parent directory"
-msgstr "Yüksək səviyyəli kataloqu qədər"
-
-msgid "Audio Playlist"
-msgstr "Səs siyahısı"
-
-msgid "Not found"
-msgstr "Tapılmadı"
-
-msgid "File not found in torrent"
-msgstr "Torrentdə fayl tapılmadı"
-
-msgid "Unrecognized"
-msgstr "Tanınmayan"
-
-msgid "Preview"
-msgstr "Proqnoz"
-
 msgid "Download file at high priority"
 msgstr "Yüksək prioritetdə faylı endirin"
 
@@ -1454,11 +1429,11 @@ msgstr "Bu faylı endirmə"
 msgid "Skip"
 msgstr "Atla"
 
-msgid "Save priorities"
-msgstr "Prioritetləri saxla"
+msgid "complete"
+msgstr "Tamamlandı"
 
-msgid "Comments"
-msgstr "Şərhlər"
+msgid "remaining"
+msgstr "Qalıq"
 
 msgid "Ratings and Comments"
 msgstr "Qiymətləndirmələr və Şərhlər"
@@ -1528,4 +1503,20 @@ msgstr "Dəyişiklikləri Saxla"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent dayandırılmalıdır"
+
 #, java-format
+
+
+
+
+
+
+
+#, java-format
+
+#, java-format
+
+#, java-format
+
+
+

@@ -1521,4 +1521,3 @@ msgstr "Lưu thay đổi"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent phải dừng lại"
-#, java-format

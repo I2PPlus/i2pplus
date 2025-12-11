@@ -43,8 +43,8 @@ msgid "Total uploaders limit changed to {0}"
 msgstr "تم تغببر مجموع حد الرفع الى {0}"
 
 #, java-format
-msgid "Minimum total uploaders limit is {0}"
-msgstr "اقل حد الرفع الى {0}"
+msgid "Minimum uploaders limit is {0}"
+msgstr ""
 
 #, java-format
 msgid "Up BW limit changed to {0}KBps"
@@ -293,12 +293,12 @@ msgstr "اضافة {0}"
 msgid "Download already running: {0}"
 msgstr "التنزيل قيد التشغيل بالفعل: {0}"
 
-msgid " - torrent file already exists"
-msgstr " - ملف التورنت بالفعل موجود"
-
 #, java-format
 msgid "Failed to copy torrent file to {0}"
 msgstr "فشل في نسخ التورنت الى {0}"
+
+msgid " - torrent file already exists"
+msgstr " - ملف التورنت بالفعل موجود"
 
 #, java-format
 msgid "Too many files in \"{0}\" ({1})!"
@@ -484,11 +484,35 @@ msgstr "تورنت في قائمة الانتظار: {0}"
 msgid "Torrent at {0} was not valid"
 msgstr "تورنت غير صحيح {0}"
 
-msgid "Configuration"
-msgstr "اعدادات"
+msgid "Torrents"
+msgstr "تورنت"
+
+msgid "Refresh page"
+msgstr "أنعش الصفحة"
+
+msgid "Configure"
+msgstr "الضبط"
+
+msgid "Torrent &amp; filesharing forum"
+msgstr "سيل"
+
+msgid "Forum"
+msgstr "المنتدى"
+
+msgid "Search torrents"
+msgstr "ابحث عن السيول"
+
+msgid "Clear search"
+msgstr "مسح البحث"
+
+msgid "Click \"Add torrent\" button to fetch torrent"
+msgstr "انقر فوق الزر \"إضافة تورنت\" لجلب التورنت"
 
 msgid "Anonymous BitTorrent Client"
 msgstr "عميل تورنت مجهول"
+
+msgid "Configuration"
+msgstr "اعدادات"
 
 #, java-format
 msgid "Are you sure you want to delete {0} and all downloaded data?"
@@ -509,36 +533,6 @@ msgstr ""
 msgid "Deleting {0} and associated metadata only..."
 msgstr ""
 
-msgid "I2PSnark has stopped"
-msgstr "توقف I2PSnark"
-
-msgid "Router is down"
-msgstr "جهاز التوجيه معطل"
-
-msgid "Torrents"
-msgstr "تورنت"
-
-msgid "Refresh page"
-msgstr "أنعش الصفحة"
-
-msgid "Configure"
-msgstr "الضبط"
-
-msgid "Forum"
-msgstr "المنتدى"
-
-msgid "Torrent &amp; filesharing forum"
-msgstr "سيل"
-
-msgid "Search torrents"
-msgstr "ابحث عن السيول"
-
-msgid "Clear search"
-msgstr "مسح البحث"
-
-msgid "Click \"Add torrent\" button to fetch torrent"
-msgstr "انقر فوق الزر \"إضافة تورنت\" لجلب التورنت"
-
 msgid "clear messages"
 msgstr "رسائل واضحة"
 
@@ -558,18 +552,17 @@ msgstr "تحديث الصفحة"
 msgid "Warning - No I2P"
 msgstr "تحذير - لا I2P"
 
+msgid "No torrents found."
+msgstr "لم يتم العثور على السيول."
+
+msgid "No torrents loaded."
+msgstr "لم يحمل تورنت."
+
+msgid "No DHT Peers"
+msgstr "لا يوجد أقران DHT"
+
 msgid "Status"
 msgstr "الحالة"
-
-#, java-format
-msgid "Sort by {0}"
-msgstr "فرز حسب {0}"
-
-msgid "Hide Peers"
-msgstr "اخفاء النظائر"
-
-msgid "Show Peers"
-msgstr "أظهر النظائر"
 
 msgid "Torrent"
 msgstr "تورنت"
@@ -583,38 +576,20 @@ msgstr "اسم التورنت"
 msgid "ETA"
 msgstr "إيتا"
 
-msgid "Estimated time remaining"
-msgstr "تقدير للوقت الباقي"
-
 msgid "RX"
 msgstr "آر إكس"
-
-msgid "Downloaded"
-msgstr "محمل"
-
-msgid "Size"
-msgstr "الحجم"
 
 msgid "RX Rate"
 msgstr "معدل الاستقبال"
 
-msgid "Down Rate"
-msgstr "معدل التحميل"
-
 msgid "TX"
 msgstr "تكس"
-
-msgid "Upload ratio"
-msgstr ""
-
-msgid "Uploaded"
-msgstr "رفع"
 
 msgid "TX Rate"
 msgstr "معدل تكساس"
 
-msgid "Up Rate"
-msgstr "معدل أعلى"
+msgid "Start All"
+msgstr "شغل الجمبع"
 
 msgid "Stop All"
 msgstr "توقيف الجمبع"
@@ -622,30 +597,24 @@ msgstr "توقيف الجمبع"
 msgid "Stop all torrents and the I2P tunnel"
 msgstr "توقيف جمبع التورنت و النفق I2P"
 
-msgid "Start All"
-msgstr "شغل الجمبع"
+msgid "Start all torrents and the I2P tunnel"
+msgstr "شغل جمبع التورنت و النفق I2P"
 
 msgid "Start all stopped torrents"
 msgstr "بدء جميع السيول المتوقفة"
 
-msgid "Start all torrents and the I2P tunnel"
-msgstr "شغل جمبع التورنت و النفق I2P"
+msgid "Hide Peers"
+msgstr "اخفاء النظائر"
 
-msgid "No torrents found."
-msgstr "لم يتم العثور على السيول."
-
-msgid "No torrents loaded."
-msgstr "لم يحمل تورنت."
+msgid "Show Peers"
+msgstr "أظهر النظائر"
 
 #, java-format
-msgid "1 torrent"
-msgid_plural "{0} torrents"
-msgstr[0] "0 سيل"
-msgstr[1] "1 سيل"
-msgstr[2] "{0} السيول"
-msgstr[3] "{0} السيول"
-msgstr[4] "{0} السيول"
-msgstr[5] "{0} السيول"
+msgid "Sort by {0}"
+msgstr "فرز حسب {0}"
+
+msgid "Up Rate"
+msgstr "معدل أعلى"
 
 msgid "Total size of loaded torrents"
 msgstr ""
@@ -659,16 +628,6 @@ msgstr[2] ""
 msgstr[3] ""
 msgstr[4] ""
 msgstr[5] ""
-
-#, java-format
-msgid "1 DHT peer"
-msgid_plural "{0} DHT peers"
-msgstr[0] "DHT نظير"
-msgstr[1] "1 نظير DHT"
-msgstr[2] "{0} أقران DHT"
-msgstr[3] "{0} أقران DHT"
-msgstr[4] "{0} أقران DHT"
-msgstr[5] "{0} أقران DHT"
 
 msgid "Active downloads"
 msgstr ""
@@ -697,14 +656,24 @@ msgstr "إجمالي البيانات التي تم تحميلها (للسيول
 msgid "Total upload speed"
 msgstr "سرعة التحميل الكلية"
 
+msgid "Toggle Debug Panel"
+msgstr ""
+
 msgid "Debug Mode"
 msgstr "وضع التصحيح"
 
 msgid "Normal Mode"
 msgstr "الوضع العادي"
 
-msgid "No DHT Peers"
-msgstr "لا يوجد أقران DHT"
+#, java-format
+msgid "1 torrent"
+msgid_plural "{0} torrents"
+msgstr[0] "0 سيل"
+msgstr[1] "1 سيل"
+msgstr[2] "{0} السيول"
+msgstr[3] "{0} السيول"
+msgstr[4] "{0} السيول"
+msgstr[5] "{0} السيول"
 
 msgid "Search"
 msgstr "يبحث"
@@ -757,6 +726,13 @@ msgstr "اﻷخير"
 msgid "Last page"
 msgstr "الصفحة الأخيرة"
 
+msgid "Enter URL or select torrent file"
+msgstr "أدخل عنوان URL أو حدد ملف تورنت"
+
+#, java-format
+msgid "Error uploading the torrent file: {0}"
+msgstr ""
+
 #, java-format
 msgid "Cannot add torrent {0} inside another torrent: {1}"
 msgstr "لا يمكن إضافة سيل {0} داخل سيل آخر: {1}"
@@ -765,12 +741,12 @@ msgstr "لا يمكن إضافة سيل {0} داخل سيل آخر: {1}"
 msgid "Download from non-I2P location {0} is not supported"
 msgstr "التنزيل من موقع غير I2P {0} غير مدعوم"
 
+msgid "Error: Version 2 info hashes are not supported"
+msgstr ""
+
 #, java-format
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
 msgstr "عنوان URL غير صالح: يجب أن يبدأ بـ \"{0}\" أو \"{1}\""
-
-msgid "Enter URL or select torrent file"
-msgstr "أدخل عنوان URL أو حدد ملف تورنت"
 
 #, java-format
 msgid "Magnet deleted: {0}"
@@ -779,10 +755,6 @@ msgstr "تم حذف ملف مغناطيس: {0}"
 #, java-format
 msgid "Torrent file could not be deleted: {0}"
 msgstr "تعذر حذف ملف تورنت: {0}"
-
-#, java-format
-msgid "Download deleted: {0}"
-msgstr "تم حذف التنزيل: {0}"
 
 #, java-format
 msgid "Data file deleted: {0}"
@@ -799,6 +771,13 @@ msgstr "لا يمكن حذف الدليل: {0}"
 #, java-format
 msgid "Directory deleted: {0}"
 msgstr "تم حذف الدليل: {0}"
+
+msgid "Error creating torrent - you must specify a file or directory"
+msgstr "فشل في انشاء تورنت - عليك اختيار ملف أو مجلد"
+
+#, java-format
+msgid "Cannot create a torrent for the nonexistent data: {0}"
+msgstr "لا يمكن انشاء تورنت لبيانات غير موجودة: {0}"
 
 #, java-format
 msgid "Cannot add a torrent ending in \".torrent\": {0}"
@@ -842,13 +821,6 @@ msgstr "يطلب منك العديد من متتبعي I2P تسجيل ملفات
 msgid "Error creating a torrent for \"{0}\""
 msgstr "فشل في انشاء تورنت لـ \"{0}\""
 
-#, java-format
-msgid "Cannot create a torrent for the nonexistent data: {0}"
-msgstr "لا يمكن انشاء تورنت لبيانات غير موجودة: {0}"
-
-msgid "Error creating torrent - you must specify a file or directory"
-msgstr "فشل في انشاء تورنت - عليك اختيار ملف أو مجلد"
-
 msgid "Delete selected"
 msgstr "حذف المحدد"
 
@@ -882,69 +854,17 @@ msgstr "أدخل الاسم والنمط الصحيح للتنقية"
 msgid "Restored default torrent create filters"
 msgstr "استعادة تنقية إنشاء التورنت الافتراضية"
 
-msgid "Checking"
-msgstr "الفحص"
-
-msgid "Allocating"
-msgstr "التخصيص"
-
-msgid "Starting"
-msgstr "جاري البدأ"
-
-#, java-format
-msgid "Seeding to {0} peer"
-msgid_plural "Seeding to {0} peers"
-msgstr[0] "البذر إلى {0} نظير"
-msgstr[1] "البذر إلى {0} نظير"
-msgstr[2] "البذر إلى {0} نظير"
-msgstr[3] "البذر إلى {0} نظير"
-msgstr[4] "البذر إلى {0} نظير"
-msgstr[5] "البذر إلى {0} نظير"
-
-#, java-format
-msgid "Seeding to {0} of {1} peers in swarm"
-msgstr "البذر إلى {0} من {1} أقران في السرب"
-
-msgid "OK"
-msgstr "موافق"
-
-#, java-format
-msgid "Downloading from {0} peer"
-msgid_plural "Downloading from {0} peers"
-msgstr[0] "التنزيل من نظير {0}"
-msgstr[1] "التنزيل من نظير {0}"
-msgstr[2] "التنزيل من نظير {0}"
-msgstr[3] "التنزيل من نظير {0}"
-msgstr[4] "التنزيل من نظير {0}"
-msgstr[5] "التنزيل من نظير {0}"
-
-msgid "Stalled"
-msgstr "متوقف"
-
-#, java-format
-msgid "Connected to {0} of {1} peers in swarm"
-msgstr "متصل بـ {0} من {1} أقران في السرب"
-
-msgid "No Peers"
-msgstr "لا بوجد نظائر"
-
 msgid "Torrent details"
 msgstr "تفاصيل التورنت"
 
 msgid "Torrent has comments"
 msgstr "السيل لديه تعليقات"
 
-msgid "View files"
-msgstr "أظهر الملفات"
-
 msgid "Open file"
 msgstr "فتح ملف"
 
-msgid "complete"
-msgstr "اكتمل"
-
-msgid "remaining"
-msgstr "باقي"
+msgid "View files"
+msgstr "أظهر الملفات"
 
 msgid "Completed"
 msgstr "اكتمل"
@@ -979,14 +899,63 @@ msgstr "حذف"
 msgid "Delete .torrent file and associated data files"
 msgstr "احذف ملف .torrent وملفات البيانات المرتبطة به"
 
+msgid "Checking"
+msgstr "الفحص"
+
+msgid "Allocating"
+msgstr "التخصيص"
+
+msgid "Starting"
+msgstr "جاري البدأ"
+
+#, java-format
+msgid "Seeding to {0} peer"
+msgid_plural "Seeding to {0} peers"
+msgstr[0] "البذر إلى {0} نظير"
+msgstr[1] "البذر إلى {0} نظير"
+msgstr[2] "البذر إلى {0} نظير"
+msgstr[3] "البذر إلى {0} نظير"
+msgstr[4] "البذر إلى {0} نظير"
+msgstr[5] "البذر إلى {0} نظير"
+
+#, java-format
+msgid "Connected to {0} of {1} peers in swarm"
+msgstr "متصل بـ {0} من {1} أقران في السرب"
+
+msgid "Stalled"
+msgstr "متوقف"
+
+#, java-format
+msgid "Seeding to {0} peer in swarm"
+msgid_plural "Seeding to {0} peers in swarm"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
+
+#, java-format
+msgid "Downloading from {0} peer"
+msgid_plural "Downloading from {0} peers"
+msgstr[0] "التنزيل من نظير {0}"
+msgstr[1] "التنزيل من نظير {0}"
+msgstr[2] "التنزيل من نظير {0}"
+msgstr[3] "التنزيل من نظير {0}"
+msgstr[4] "التنزيل من نظير {0}"
+msgstr[5] "التنزيل من نظير {0}"
+
+msgid "OK"
+msgstr "موافق"
+
+msgid "No Peers"
+msgstr "لا بوجد نظائر"
+
 msgid "Peer attached to swarm"
 msgstr "نظير مرتبط بالسرب"
 
 msgid "Destination (identity) of peer"
 msgstr "الوجهة (الهوية) للنظير"
-
-msgid "Version"
-msgstr "الإصدار"
 
 msgid "seconds"
 msgstr "ثواني"
@@ -1369,14 +1338,68 @@ msgstr ""
 msgid "Please retry form submission (bad nonce)"
 msgstr ""
 
+msgid "Resource Does Not Exist"
+msgstr "المورد غير موجود"
+
+msgid "Resource"
+msgstr "موارد"
+
+msgid "Base"
+msgstr "القاعدة"
+
+msgid "Files"
+msgstr "الملفات"
+
+msgid "Directory"
+msgstr "المجلد"
+
+msgid "Size"
+msgstr "الحجم"
+
+msgid "Download Status"
+msgstr "حالة التنزيل"
+
+msgid "Remaining"
+msgstr "متبقي"
+
+msgid "Download Priority"
+msgstr "أولوية التنزيل"
+
+msgid "up"
+msgstr ""
+
+msgid "Parent directory"
+msgstr "ما يصل إلى دليل المستوى الأعلى"
+
+msgid "Audio Playlist"
+msgstr "قائمة تشغيل الصوت"
+
+msgid "Not found"
+msgstr "غير موجود"
+
+msgid "File not found in torrent"
+msgstr "الملف غير موجود في التورنت؟"
+
+msgid "Unrecognized"
+msgstr "غير معترف به"
+
+msgid "Preview"
+msgstr "معاينة"
+
+msgid "Save priorities"
+msgstr "حفظ الأولويات"
+
+msgid "Comments"
+msgstr "تعليقات"
+
+msgid "Resource Not found"
+msgstr "لم يتم العثور على المورد"
+
 msgid "Info hash"
 msgstr "تجزئة المعلومات"
 
 msgid "Created"
 msgstr "أُنشيء"
-
-msgid "Files"
-msgstr "الملفات"
 
 msgid "Added"
 msgstr "أضيفت"
@@ -1392,9 +1415,6 @@ msgstr ""
 
 msgid "Completion"
 msgstr "انتهاء"
-
-msgid "Remaining"
-msgstr "متبقي"
 
 msgid "Skipped"
 msgstr "تخطي"
@@ -1420,51 +1440,6 @@ msgstr "أوقف السيل للتحقق من سلامة الملف"
 msgid "Check integrity of the downloaded files"
 msgstr "التحقق من سلامة الملفات التي تم تنزيلها"
 
-msgid "Resource Not found"
-msgstr "لم يتم العثور على المورد"
-
-msgid "Base"
-msgstr "القاعدة"
-
-msgid "Resource Does Not Exist"
-msgstr "المورد غير موجود"
-
-msgid "Resource"
-msgstr "موارد"
-
-msgid "Audio file: "
-msgstr "ملف صوتي: "
-
-msgid "Video file: "
-msgstr "ملف فيديو: "
-
-msgid "Directory"
-msgstr "المجلد"
-
-msgid "Download Status"
-msgstr "حالة التنزيل"
-
-msgid "Download Priority"
-msgstr "أولوية التنزيل"
-
-msgid "Parent directory"
-msgstr "ما يصل إلى دليل المستوى الأعلى"
-
-msgid "Audio Playlist"
-msgstr "قائمة تشغيل الصوت"
-
-msgid "Not found"
-msgstr "غير موجود"
-
-msgid "File not found in torrent"
-msgstr "الملف غير موجود في التورنت؟"
-
-msgid "Unrecognized"
-msgstr "غير معترف به"
-
-msgid "Preview"
-msgstr "معاينة"
-
 msgid "Download file at high priority"
 msgstr "تنزيل الملف بأولوية عالية"
 
@@ -1483,11 +1458,11 @@ msgstr "لا تقم بتنزيل هذا الملف"
 msgid "Skip"
 msgstr "تجاوز"
 
-msgid "Save priorities"
-msgstr "حفظ الأولويات"
+msgid "complete"
+msgstr "اكتمل"
 
-msgid "Comments"
-msgstr "تعليقات"
+msgid "remaining"
+msgstr "باقي"
 
 msgid "Ratings and Comments"
 msgstr "التقييمات والتعليقات"
@@ -1561,4 +1536,20 @@ msgstr "حفظ التغييرات"
 
 msgid "Torrent must be stopped"
 msgstr "يجب إيقاف السيل"
+
 #, java-format
+
+
+
+
+
+
+
+#, java-format
+
+#, java-format
+
+#, java-format
+
+
+

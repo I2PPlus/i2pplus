@@ -43,8 +43,8 @@ msgid "Total uploaders limit changed to {0}"
 msgstr "Den samlede grænse for uploadere er ændret til {0}"
 
 #, java-format
-msgid "Minimum total uploaders limit is {0}"
-msgstr "Minimumsgrænsen for samlede uploadere er {0}"
+msgid "Minimum uploaders limit is {0}"
+msgstr ""
 
 #, java-format
 msgid "Up BW limit changed to {0}KBps"
@@ -293,12 +293,12 @@ msgstr "Tilføjer {0}"
 msgid "Download already running: {0}"
 msgstr "Download kører allerede: {0}"
 
-msgid " - torrent file already exists"
-msgstr " - torrent-filen eksisterer allerede"
-
 #, java-format
 msgid "Failed to copy torrent file to {0}"
 msgstr "Det lykkedes ikke at kopiere torrentfilen til {0}"
+
+msgid " - torrent file already exists"
+msgstr " - torrent-filen eksisterer allerede"
 
 #, java-format
 msgid "Too many files in \"{0}\" ({1})!"
@@ -484,11 +484,35 @@ msgstr "Torrent allerede i køen: {0}"
 msgid "Torrent at {0} was not valid"
 msgstr "Torrent på {0} var ikke gyldig"
 
-msgid "Configuration"
-msgstr "Konfiguration"
+msgid "Torrents"
+msgstr "Torrents"
+
+msgid "Refresh page"
+msgstr "Opdater side"
+
+msgid "Configure"
+msgstr "Konfigurer"
+
+msgid "Torrent &amp; filesharing forum"
+msgstr "Torrent"
+
+msgid "Forum"
+msgstr "Forum"
+
+msgid "Search torrents"
+msgstr "Søg i torrents"
+
+msgid "Clear search"
+msgstr "Ryd søgning"
+
+msgid "Click \"Add torrent\" button to fetch torrent"
+msgstr "Klik på knappen \"Tilføj torrent\" for at hente torrent"
 
 msgid "Anonymous BitTorrent Client"
 msgstr "Anonym BitTorrent-klient"
+
+msgid "Configuration"
+msgstr "Konfiguration"
 
 #, java-format
 msgid "Are you sure you want to delete {0} and all downloaded data?"
@@ -509,36 +533,6 @@ msgstr ""
 msgid "Deleting {0} and associated metadata only..."
 msgstr ""
 
-msgid "I2PSnark has stopped"
-msgstr "I2PSnark er stoppet"
-
-msgid "Router is down"
-msgstr "Routeren kører ikke"
-
-msgid "Torrents"
-msgstr "Torrents"
-
-msgid "Refresh page"
-msgstr "Opdater side"
-
-msgid "Configure"
-msgstr "Konfigurer"
-
-msgid "Forum"
-msgstr "Forum"
-
-msgid "Torrent &amp; filesharing forum"
-msgstr "Torrent"
-
-msgid "Search torrents"
-msgstr "Søg i torrents"
-
-msgid "Clear search"
-msgstr "Ryd søgning"
-
-msgid "Click \"Add torrent\" button to fetch torrent"
-msgstr "Klik på knappen \"Tilføj torrent\" for at hente torrent"
-
 msgid "clear messages"
 msgstr "klar beskeder"
 
@@ -558,18 +552,17 @@ msgstr "sideopdatering"
 msgid "Warning - No I2P"
 msgstr "Advarsel - Ingen I2P"
 
+msgid "No torrents found."
+msgstr "Ingen torrents fundet."
+
+msgid "No torrents loaded."
+msgstr "Ingen torrents indlæst."
+
+msgid "No DHT Peers"
+msgstr "Ingen DHT Peers"
+
 msgid "Status"
 msgstr "Status"
-
-#, java-format
-msgid "Sort by {0}"
-msgstr "Sortér efter {0}"
-
-msgid "Hide Peers"
-msgstr "Skjul jævnaldrende"
-
-msgid "Show Peers"
-msgstr "Vis jævnaldrende"
 
 msgid "Torrent"
 msgstr "Torrent"
@@ -583,38 +576,20 @@ msgstr "Torrent navn"
 msgid "ETA"
 msgstr "ETA"
 
-msgid "Estimated time remaining"
-msgstr "Anslået resterende tid"
-
 msgid "RX"
 msgstr "RX"
 
-msgid "Downloaded"
-msgstr "Downloaded"
-
-msgid "Size"
-msgstr "Størrelse"
-
 msgid "RX Rate"
-msgstr "Download sats"
-
-msgid "Down Rate"
 msgstr "Download sats"
 
 msgid "TX"
 msgstr "TX"
 
-msgid "Upload ratio"
-msgstr ""
-
-msgid "Uploaded"
-msgstr "Uploadet"
-
 msgid "TX Rate"
 msgstr "Send sats"
 
-msgid "Up Rate"
-msgstr "Op rate"
+msgid "Start All"
+msgstr "Start alt"
 
 msgid "Stop All"
 msgstr "Stop alt"
@@ -622,26 +597,24 @@ msgstr "Stop alt"
 msgid "Stop all torrents and the I2P tunnel"
 msgstr "Stop alle torrents og I2P-tunnelen"
 
-msgid "Start All"
-msgstr "Start alt"
+msgid "Start all torrents and the I2P tunnel"
+msgstr "Start alle torrents og I2P-tunnelen"
 
 msgid "Start all stopped torrents"
 msgstr "Start alle stoppede torrents"
 
-msgid "Start all torrents and the I2P tunnel"
-msgstr "Start alle torrents og I2P-tunnelen"
+msgid "Hide Peers"
+msgstr "Skjul jævnaldrende"
 
-msgid "No torrents found."
-msgstr "Ingen torrents fundet."
-
-msgid "No torrents loaded."
-msgstr "Ingen torrents indlæst."
+msgid "Show Peers"
+msgstr "Vis jævnaldrende"
 
 #, java-format
-msgid "1 torrent"
-msgid_plural "{0} torrents"
-msgstr[0] "1 torrent"
-msgstr[1] "{0} torrents"
+msgid "Sort by {0}"
+msgstr "Sortér efter {0}"
+
+msgid "Up Rate"
+msgstr "Op rate"
 
 msgid "Total size of loaded torrents"
 msgstr ""
@@ -651,12 +624,6 @@ msgid "1 connected peer"
 msgid_plural "{0} peer connections"
 msgstr[0] ""
 msgstr[1] ""
-
-#, java-format
-msgid "1 DHT peer"
-msgid_plural "{0} DHT peers"
-msgstr[0] "1 DHT peer"
-msgstr[1] "{0} DHT peers"
 
 msgid "Active downloads"
 msgstr ""
@@ -685,14 +652,20 @@ msgstr "Samlet uploadede data (for listede torrents)"
 msgid "Total upload speed"
 msgstr "Samlet uploadhastighed"
 
+msgid "Toggle Debug Panel"
+msgstr ""
+
 msgid "Debug Mode"
 msgstr "Fejlretningstilstand"
 
 msgid "Normal Mode"
 msgstr "Normal tilstand"
 
-msgid "No DHT Peers"
-msgstr "Ingen DHT Peers"
+#, java-format
+msgid "1 torrent"
+msgid_plural "{0} torrents"
+msgstr[0] "1 torrent"
+msgstr[1] "{0} torrents"
 
 msgid "Search"
 msgstr "Søg"
@@ -745,6 +718,13 @@ msgstr "Sidste"
 msgid "Last page"
 msgstr "Sidste side"
 
+msgid "Enter URL or select torrent file"
+msgstr "Indtast URL eller vælg torrent-fil"
+
+#, java-format
+msgid "Error uploading the torrent file: {0}"
+msgstr ""
+
 #, java-format
 msgid "Cannot add torrent {0} inside another torrent: {1}"
 msgstr "Kan ikke tilføje torrent {0} i en anden torrent: {1}"
@@ -753,12 +733,12 @@ msgstr "Kan ikke tilføje torrent {0} i en anden torrent: {1}"
 msgid "Download from non-I2P location {0} is not supported"
 msgstr "Download fra ikke-I2P-placering {0} understøttes ikke"
 
+msgid "Error: Version 2 info hashes are not supported"
+msgstr ""
+
 #, java-format
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
 msgstr "Ugyldig URL: Skal starte med \"{0}\" eller \"{1}\""
-
-msgid "Enter URL or select torrent file"
-msgstr "Indtast URL eller vælg torrent-fil"
 
 #, java-format
 msgid "Magnet deleted: {0}"
@@ -767,10 +747,6 @@ msgstr "Magnet slettet: {0}"
 #, java-format
 msgid "Torrent file could not be deleted: {0}"
 msgstr "Torrent-fil kunne ikke slettes: {0}"
-
-#, java-format
-msgid "Download deleted: {0}"
-msgstr "Download slettet: {0}"
 
 #, java-format
 msgid "Data file deleted: {0}"
@@ -787,6 +763,13 @@ msgstr "Mappen kunne ikke slettes: {0}"
 #, java-format
 msgid "Directory deleted: {0}"
 msgstr "Mappe slettet: {0}"
+
+msgid "Error creating torrent - you must specify a file or directory"
+msgstr "Fejl ved oprettelse af torrent - du skal indtaste en fil eller mappe"
+
+#, java-format
+msgid "Cannot create a torrent for the nonexistent data: {0}"
+msgstr "Kan ikke oprette en torrent for de ikke-eksisterende data: {0}"
 
 #, java-format
 msgid "Cannot add a torrent ending in \".torrent\": {0}"
@@ -830,13 +813,6 @@ msgstr "Mange I2P-trackere kræver, at du registrerer nye torrents før såning 
 msgid "Error creating a torrent for \"{0}\""
 msgstr "Fejl ved oprettelse af en torrent til \"{0}\""
 
-#, java-format
-msgid "Cannot create a torrent for the nonexistent data: {0}"
-msgstr "Kan ikke oprette en torrent for de ikke-eksisterende data: {0}"
-
-msgid "Error creating torrent - you must specify a file or directory"
-msgstr "Fejl ved oprettelse af torrent - du skal indtaste en fil eller mappe"
-
 msgid "Delete selected"
 msgstr "Slet valgte"
 
@@ -870,61 +846,17 @@ msgstr "Indtast gyldigt navn og filtermønster"
 msgid "Restored default torrent create filters"
 msgstr "Gendannet standard torrent oprettelsesfiltre"
 
-msgid "Checking"
-msgstr "Tjekker"
-
-msgid "Allocating"
-msgstr "Tildeling"
-
-msgid "Starting"
-msgstr "Starter"
-
-#, java-format
-msgid "Seeding to {0} peer"
-msgid_plural "Seeding to {0} peers"
-msgstr[0] "Podning til {0} peer"
-msgstr[1] "Podning til {0} peers"
-
-#, java-format
-msgid "Seeding to {0} of {1} peers in swarm"
-msgstr "Seeding til {0} af {1} jævnaldrende i sværm"
-
-msgid "OK"
-msgstr "OK"
-
-#, java-format
-msgid "Downloading from {0} peer"
-msgid_plural "Downloading from {0} peers"
-msgstr[0] "Download fra {0} peer"
-msgstr[1] "Download fra {0} peers"
-
-msgid "Stalled"
-msgstr "Går i stå"
-
-#, java-format
-msgid "Connected to {0} of {1} peers in swarm"
-msgstr "Forbundet til {0} af {1} jævnaldrende i sværm"
-
-msgid "No Peers"
-msgstr "Ingen jævnaldrende"
-
 msgid "Torrent details"
 msgstr "Torrent detaljer"
 
 msgid "Torrent has comments"
 msgstr "Torrent har kommentarer"
 
-msgid "View files"
-msgstr "Se filer"
-
 msgid "Open file"
 msgstr "Åben fil"
 
-msgid "complete"
-msgstr "komplet"
-
-msgid "remaining"
-msgstr "rest"
+msgid "View files"
+msgstr "Se filer"
 
 msgid "Completed"
 msgstr "Fuldført"
@@ -959,14 +891,51 @@ msgstr "Slet"
 msgid "Delete .torrent file and associated data files"
 msgstr "Slet .torrent-filen og de tilhørende datafiler"
 
+msgid "Checking"
+msgstr "Tjekker"
+
+msgid "Allocating"
+msgstr "Tildeling"
+
+msgid "Starting"
+msgstr "Starter"
+
+#, java-format
+msgid "Seeding to {0} peer"
+msgid_plural "Seeding to {0} peers"
+msgstr[0] "Podning til {0} peer"
+msgstr[1] "Podning til {0} peers"
+
+#, java-format
+msgid "Connected to {0} of {1} peers in swarm"
+msgstr "Forbundet til {0} af {1} jævnaldrende i sværm"
+
+msgid "Stalled"
+msgstr "Går i stå"
+
+#, java-format
+msgid "Seeding to {0} peer in swarm"
+msgid_plural "Seeding to {0} peers in swarm"
+msgstr[0] ""
+msgstr[1] ""
+
+#, java-format
+msgid "Downloading from {0} peer"
+msgid_plural "Downloading from {0} peers"
+msgstr[0] "Download fra {0} peer"
+msgstr[1] "Download fra {0} peers"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "No Peers"
+msgstr "Ingen jævnaldrende"
+
 msgid "Peer attached to swarm"
 msgstr "Peer knyttet til sværm"
 
 msgid "Destination (identity) of peer"
 msgstr "Perens destination (identitet)"
-
-msgid "Version"
-msgstr "Version"
 
 msgid "seconds"
 msgstr "sekunder"
@@ -1341,14 +1310,68 @@ msgstr ""
 msgid "Please retry form submission (bad nonce)"
 msgstr ""
 
+msgid "Resource Does Not Exist"
+msgstr "Resource findes ikke"
+
+msgid "Resource"
+msgstr "Ressource"
+
+msgid "Base"
+msgstr "Grundlag"
+
+msgid "Files"
+msgstr "Filer"
+
+msgid "Directory"
+msgstr "Vegbog"
+
+msgid "Size"
+msgstr "Størrelse"
+
+msgid "Download Status"
+msgstr "Downloadstatus"
+
+msgid "Remaining"
+msgstr "Tilbage"
+
+msgid "Download Priority"
+msgstr "Download Prioritet"
+
+msgid "up"
+msgstr ""
+
+msgid "Parent directory"
+msgstr "Op til højere niveau bibliotek"
+
+msgid "Audio Playlist"
+msgstr "Lydafspilningsliste"
+
+msgid "Not found"
+msgstr "Ikke fundet"
+
+msgid "File not found in torrent"
+msgstr "Fil ikke fundet i torrent"
+
+msgid "Unrecognized"
+msgstr "Ugenkendt"
+
+msgid "Preview"
+msgstr "Forhåndsvisning"
+
+msgid "Save priorities"
+msgstr "Gem prioriteringer"
+
+msgid "Comments"
+msgstr "Kommentarer"
+
+msgid "Resource Not found"
+msgstr "Resource ikke fundet"
+
 msgid "Info hash"
 msgstr "Infohash"
 
 msgid "Created"
 msgstr "Oprettet"
-
-msgid "Files"
-msgstr "Filer"
 
 msgid "Added"
 msgstr "Tilføjet"
@@ -1364,9 +1387,6 @@ msgstr ""
 
 msgid "Completion"
 msgstr "Færdiggørelse"
-
-msgid "Remaining"
-msgstr "Tilbage"
 
 msgid "Skipped"
 msgstr "Skippet"
@@ -1392,51 +1412,6 @@ msgstr "Stop torrenten for at kontrollere filens integritet"
 msgid "Check integrity of the downloaded files"
 msgstr "Tjek integriteten af ​​de downloadede filer"
 
-msgid "Resource Not found"
-msgstr "Resource ikke fundet"
-
-msgid "Base"
-msgstr "Grundlag"
-
-msgid "Resource Does Not Exist"
-msgstr "Resource findes ikke"
-
-msgid "Resource"
-msgstr "Ressource"
-
-msgid "Audio file: "
-msgstr "Lydfil: "
-
-msgid "Video file: "
-msgstr "Videofil: "
-
-msgid "Directory"
-msgstr "Vegbog"
-
-msgid "Download Status"
-msgstr "Downloadstatus"
-
-msgid "Download Priority"
-msgstr "Download Prioritet"
-
-msgid "Parent directory"
-msgstr "Op til højere niveau bibliotek"
-
-msgid "Audio Playlist"
-msgstr "Lydafspilningsliste"
-
-msgid "Not found"
-msgstr "Ikke fundet"
-
-msgid "File not found in torrent"
-msgstr "Fil ikke fundet i torrent"
-
-msgid "Unrecognized"
-msgstr "Ugenkendt"
-
-msgid "Preview"
-msgstr "Forhåndsvisning"
-
 msgid "Download file at high priority"
 msgstr "Download fil med høj prioritet"
 
@@ -1455,11 +1430,11 @@ msgstr "Download ikke denne fil"
 msgid "Skip"
 msgstr "Spring over"
 
-msgid "Save priorities"
-msgstr "Gem prioriteringer"
+msgid "complete"
+msgstr "komplet"
 
-msgid "Comments"
-msgstr "Kommentarer"
+msgid "remaining"
+msgstr "rest"
 
 msgid "Ratings and Comments"
 msgstr "Bedømmelser og kommentarer"
@@ -1529,3 +1504,20 @@ msgstr "Gem ændringer"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent skal stoppes"
+
+#, java-format
+
+
+
+
+
+
+
+#, java-format
+
+#, java-format
+
+#, java-format
+
+
+

@@ -1537,4 +1537,3 @@ msgstr "Зберегти зміни"
 
 msgid "Torrent must be stopped"
 msgstr "Торрент потрібно зупинити"
-#, java-format
