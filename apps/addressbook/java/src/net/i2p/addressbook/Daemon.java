@@ -38,6 +38,7 @@ import net.i2p.data.Destination;
 import net.i2p.util.OrderedProperties;
 import net.i2p.util.SecureDirectory;
 import net.i2p.util.SystemVersion;
+import net.i2p.addressbook.PingTester;
 
 /**
  * Main class of addressbook.  Performs updates, and runs the main loop.
@@ -50,6 +51,8 @@ class Daemon {
     public static final String VERSION = "2.0.4";
     private volatile boolean _running;
     private static final boolean DEBUG = false;
+    private static PingTester _pingTester;
+    private final Log _log = new Log(new File(I2PAppContext.getGlobalContext().getLogDir(), "addressbook.log"));
     // If you change this, change in SusiDNS SubscriptionBean also
     private static final String DEFAULT_SUB = "http://stats.i2p/cgi-bin/newhosts.txt" + "\n" +
                                               "http://skank.i2p/hosts.txt" + "\n" +
@@ -844,6 +847,18 @@ class Daemon {
         File settingsFile = new File(homeFile, settingsLocation);
 
         Map<String, String> settings = ConfigParser.parse(settingsFile, defaultSettings);
+        // Initialize PingTester for address book monitoring
+        try {
+            _log.append("Initializing PingTester for address book monitoring");
+            _pingTester = new PingTester();
+            _pingTester.setPingInterval(2 * 60 * 60 * 1000L); // 2 hours
+            _pingTester.setPingTimeout(15 * 1000L); // 15 seconds
+            _pingTester.start();
+            _log.append("PingTester started successfully");
+        } catch (Exception e) {
+            _log.append("Failed to initialize PingTester: " + e.getMessage());
+        }
+
         // wait
         try {
             Thread.sleep(5*60*1000 + I2PAppContext.getGlobalContext().random().nextLong(5*60*1000));
@@ -875,6 +890,30 @@ class Daemon {
             _running = false;
             notifyAll();
         }
+        if (_pingTester != null) {
+            try {
+                _log.append("Stopping PingTester");
+                _pingTester.stop();
+            } catch (Exception e) {
+                _log.append("Error stopping PingTester: " + e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * Get the PingTester instance for use by web applications
+     * @return PingTester instance or null if not initialized
+     */
+    public static PingTester getPingTester() {
+        return _pingTester;
+    }
+
+    /**
+     * Get the PingTester instance via reflection-safe method
+     * @return PingTester instance or null if not initialized
+     */
+    public static Object getPingTesterInstance() {
+        return _pingTester;
     }
 
 }

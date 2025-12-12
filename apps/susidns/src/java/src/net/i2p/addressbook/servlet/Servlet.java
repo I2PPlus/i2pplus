@@ -69,7 +69,8 @@ public class Servlet extends HttpServlet {
         args[0] = config.getInitParameter("home");
         try {
             ClassLoader cl = getServletContext().getClassLoader();
-            Class cls = Class.forName("net.i2p.addressbook.DaemonThread", true, cl);
+            @SuppressWarnings("rawtypes")
+            Class<?> cls = Class.forName("net.i2p.addressbook.DaemonThread", true, cl);
             // We do it this way so that if we can't find addressbook, the whole thing doesn't die.
             // We do add addressbook.jar in WebAppConfiguration, so this is just in case.
             //Thread t = new DaemonThread(args);
@@ -78,6 +79,19 @@ public class Servlet extends HttpServlet {
             t.setName("Addressbook");
             t.start();
             this.thread = t;
+            
+            // Store PingTester in servlet context for JSP access
+            try {
+                ClassLoader cl2 = getServletContext().getClassLoader();
+                Class<?> daemonClass = Class.forName("net.i2p.addressbook.Daemon", true, cl2);
+                Object pingTester = daemonClass.getDeclaredMethod("getPingTesterInstance").invoke(null);
+                if (pingTester != null) {
+                    getServletContext().setAttribute("pingTester", pingTester);
+                    I2PAppContext.getGlobalContext().logManager().getLog(Servlet.class).info("PingTester stored in servlet context");
+                }
+            } catch (Exception e) {
+                I2PAppContext.getGlobalContext().logManager().getLog(Servlet.class).warn("Failed to store PingTester in servlet context: " + e.getMessage());
+            }
         } catch (Throwable t) {
             // addressbook.jar may not be in the classpath
             I2PAppContext.getGlobalContext().logManager().getLog(Servlet.class).logAlways(Log.WARN, "Addressbook thread not started: " + t);

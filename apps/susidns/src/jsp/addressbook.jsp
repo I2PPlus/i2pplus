@@ -148,31 +148,71 @@
 <input type=hidden name=action value="<%=intl._t("Delete Selected")%>">
 <div id=book>
 <table class=book id=host_list>
-<tr class=head>
-<%  if (book.getEntries().length > 0) { /* Don't show if no results. Can't figure out how to do this with c:if */ %>
-<th class=info><%=intl._t("Info")%></th><th class=names><%=intl._t("Hostname")%></th><th class=b32link><%=intl._t("Link (b32)")%></th><th class=helper>Helper</th><th class=destinations><%=intl._t("Destination")%> (b64)</th><th class=source><%=intl._t("Source")%></th><th class=added><%=intl._t("Added")%></th>
-<c:if test="${book.validBook}"><th class=checkbox title="<%=intl._t("Select hosts for deletion from addressbook")%>"></th></c:if>
-</tr>
+ <tr class=head>
+ <%  if (book.getEntries().length > 0) { /* Don't show if no results. Can't figure out how to do this with c:if */ %>
+ <th class=info><%=intl._t("Info")%></th><th class=status><%=intl._t("Status")%></th><th class=names><%=intl._t("Hostname")%></th><th class=b32link><%=intl._t("Link (b32)")%></th><th class=helper>Helper</th><th class=destinations><%=intl._t("Destination")%> (b64)</th><th class=source><%=intl._t("Source")%></th><th class=added><%=intl._t("Added")%></th>
+ <c:if test="${book.validBook}"><th class=checkbox title="<%=intl._t("Select hosts for deletion from addressbook")%>"></th></c:if>
+ </tr>
 <% /* limit iterator, or "Form too large" may result on submit, and is a huge web page if we don't */ %>
 <c:forEach items="${book.entries}" var="addr" begin="${book.resultBegin}" end="${book.resultEnd}">
-<tr class=lazy>
-<td class=info>
-<%      boolean haveImagegen = book.haveImagegen();
-        if (haveImagegen) {
-%>
-<a href="details?h=${addr.name}&amp;book=${book.book}" title="<%=intl._t("More information on this entry")%>"><svg width="24" height="24" class=identicon data-jdenticon-value="${addr.b32}" xmlns="http://www.w3.org/2000/svg"></svg><noscript><img src="/imagegen/id?s=24&amp;c=${addr.b32}" loading=lazy><style>.identicon{display:none!important}</style></noscript></a>
-<%      }  else { /* haveImagegen */ %>
-<a href="details?h=${addr.name}&amp;book=${book.book}" title="<%=intl._t("More information on this entry")%>"><img width=20 height=20 src="/themes/console/images/info.svg"></a>
-<%      } %>
-</td>
-<td class=names><a href="http://${addr.name}/" target=_blank>${addr.displayName}</a></td>
-<td class=b32link><span class=addrhlpr><a href="http://${addr.b32}/" target=_blank rel=noreferrer title="<%=intl._t("Base 32 address")%>">b32</a></span></td>
-<td class=helper><a href="http://${addr.name}/?i2paddresshelper=${addr.destination}" target=_blank rel=noreferrer title="<%=intl._t("Helper link to share host address with option to add to addressbook")%>">link</a></td>
-<td class=destinations><div class="destaddress resetScrollLeft" name="dest_${addr.name}" width=200px tabindex=0>${addr.destination}</div></td>
-<td class=source>${addr.sourceHostname}</td>
-<td class=added>${addr.added}</td>
-<c:if test="${book.validBook}"><td class=checkbox><input type=checkbox class=optbox name="checked" value="${addr.name}" title="<%=intl._t("Mark for deletion")%>"></td></c:if>
-</tr>
+ <tr class=lazy>
+ <td class=info>
+ <%      boolean haveImagegen = book.haveImagegen();
+         if (haveImagegen) {
+ %>
+ <a href="details?h=${addr.name}&amp;book=${book.book}" title="<%=intl._t("More information on this entry")%>"><svg width="24" height="24" class=identicon data-jdenticon-value="${addr.b32}" xmlns="http://www.w3.org/2000/svg"></svg><noscript><img src="/imagegen/id?s=24&amp;c=${addr.b32}" loading=lazy><style>.identicon{display:none!important}</style></noscript></a>
+ <%      }  else { /* haveImagegen */ %>
+ <a href="details?h=${addr.name}&amp;book=${book.book}" title="<%=intl._t("More information on this entry")%>"><img width=20 height=20 src="/themes/console/images/info.svg"></a>
+ <%      } /* haveImagegen */ %>
+ </td>
+ <td class=status>
+ <%
+     // Get ping status for this hostname
+     String pingStatus = "untested";
+     try {
+         // Get current address entry from the loop
+         String hostname = addr.getName();
+
+         // Try to get ping tester from application context
+         Object pingTesterObj = application.getAttribute("pingTester");
+         if (pingTesterObj != null) {
+             try {
+                 // Use reflection to avoid classpath issues
+                 java.lang.reflect.Method getPingResult = pingTesterObj.getClass().getMethod("getPingResult", String.class);
+                 Object pingResult = getPingResult.invoke(pingTesterObj, hostname);
+
+                 if (pingResult != null) {
+                     // Use reflection to get the reachable field
+                     java.lang.reflect.Field reachableField = pingResult.getClass().getField("reachable");
+                     boolean reachable = reachableField.getBoolean(pingResult);
+
+                     if (reachable) {
+                         pingStatus = "up";
+                     } else {
+                         pingStatus = "down";
+                     }
+                 }
+             } catch (Exception e) {
+                 // Ignore reflection errors
+             }
+         }
+ %>
+ <% if ("up".equals(pingStatus)) { %>
+ <span class=up></span>
+ <% } else if ("down".equals(pingStatus)) { %>
+ <span class=down></span>
+ <% } else { %>
+ <span class=untested></span>
+ <% } %>
+ </td>
+ <td class=names><a href="http://${addr.name}/" target=_blank>${addr.displayName}</a></td>
+ <td class=b32link><span class=addrhlpr><a href="http://${addr.b32}/" target=_blank rel=noreferrer title="<%=intl._t("Base 32 address")%>">b32</a></span></td>
+ <td class=helper><a href="http://${addr.name}/?i2paddresshelper=${addr.destination}" target=_blank rel=noreferrer title="<%=intl._t("Helper link to share host address with option to add to addressbook")%>">link</a></td>
+ <td class=destinations><div class="destaddress resetScrollLeft" name="dest_${addr.name}" width=200px tabindex=0>${addr.destination}</div></td>
+ <td class=source>${addr.sourceHostname}</td>
+ <td class=added>${addr.added}</td>
+ <c:if test="${book.validBook}"><td class=checkbox><input type=checkbox class=optbox name="checked" value="${addr.name}" title="<%=intl._t("Mark for deletion")%>"></td></c:if>
+ </tr>
 </c:forEach>
 <%  } /* book..getEntries().length() > 0 */ %>
 </table>
