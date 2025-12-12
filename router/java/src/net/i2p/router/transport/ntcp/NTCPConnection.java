@@ -697,7 +697,7 @@ public class NTCPConnection implements Closeable {
      * @param buf we use buf.enencrypted only
      * @since 0.9.36
      */
-    private synchronized void prepareNextWriteNTCP2(PrepBuffer buf) {
+    private void prepareNextWriteNTCP2(PrepBuffer buf) {
         int size = OutboundNTCP2State.MAC_SIZE;
         List<Block> blocks = new ArrayList<Block>(4);
         long now = _context.clock().now();
