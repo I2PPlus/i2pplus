@@ -69,7 +69,6 @@ h4{font-size:17px}
 h5{font-size:16px}
 h6{font-size:15px}
 hr{margin:15px 0;height:1px;border:0;background:var(--hr)}
-a[name="package.description"]+h2{margin:10px 0 0px 15px;padding:8px 12px;width:auto;font-size:100%;display:inline-block;background:#1f389c}
 hr+br,.description hr{display:none}
 html{min-height:100%;scrollbar-color:var(--scrollbar)}
 iframe{margin:0;padding:0;height:100%;width:100%;overflow-y:scroll;border:0}
@@ -173,6 +172,7 @@ li.blockList h3+code{margin:0 30px 0;display: inline-block;padding:0}
 .overviewSummary table,.memberSummary table,.typeSummary table,.useSummary table,.constantsSummary table,.deprecatedSummary table,.requiresSummary table,.packagesSummary table,.providesSummary table,.usesSummary table,.systemPropertiesSummary table{width:100%;border-spacing:0;border:var(--border_inner);margin-top:15px}
 .overviewSummary td,.memberSummary td,.typeSummary td,.useSummary td,.constantsSummary td,.deprecatedSummary td,.requiresSummary td,.packagesSummary td,.providesSummary td,.usesSummary td,.systemPropertiesSummary td{text-align:left;padding:5px 10px;box-shadow:0 0 0 1px var(--white) inset}
 .overviewSummary td.colFirst,.overviewSummary th.colFirst,.requiresSummary td.colFirst,.requiresSummary th.colFirst,.packagesSummary td.colFirst,.packagesSummary td.colSecond,.packagesSummary th.colFirst,.packagesSummary th,.usesSummary td.colFirst,.usesSummary th.colFirst,.providesSummary td.colFirst,.providesSummary th.colFirst,.memberSummary td.colFirst,.memberSummary th.colFirst,.memberSummary td.colSecond,.memberSummary th.colSecond,.memberSummary th.colConstructorName,.typeSummary td.colFirst,.typeSummary th.colFirst{vertical-align:middle}
+a[name="package.description"]+h2{margin:10px 0 0px 15px;padding:8px 20px 6px;width:auto;min-width:260px;text-align:center;font-size:100%;display:inline-block;background:#1f389c}
 .packagesSummary th.colLast,.packagesSummary td.colLast{white-space:normal}
 .providesSummary th.colFirst,.providesSummary th.colLast,.providesSummary td.colFirst,.providesSummary td.colLast{white-space:normal;font-size:13px}
 .resultHighlight{font-weight:bold}
