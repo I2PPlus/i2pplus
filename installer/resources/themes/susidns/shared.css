@@ -2,7 +2,7 @@ main{position:relative}
 .displayPanels #book,.displayPanels #buttons{pointer-events:none!important;user-select:none!important}
 .displayPanels main::after{display:block;position:fixed;z-index:1000;backdrop-filter:blur(2px) saturate(.5);content:"";pointer-events:none;will-change:transform}
 #host_list th{font-size:90%}
-#host_list .added,#host_list .b32link,#host_list .helper,#host_list .source{padding:4px 10px;width:5%;text-align:center;white-space:nowrap}
+#host_list .added,#host_list .b32link,#host_list .helper,#host_list .source,#host_list .status{padding:4px 10px;width:5%;text-align:center;white-space:nowrap}
 #host_list .source a{width:24px;height:24px;overflow:hidden;display:inline-block;vertical-align:middle;color:#0000;text-shadow:none;background:url(/themes/console/images/eepsites/registrar.svg) no-repeat center center/20px;transition:ease all .1s}
 #host_list .source a.manualAdd{background-image:var(--add);background-size:17px}
 #host_list .source a.viaHelper{background-image:var(--helper)}
@@ -12,6 +12,9 @@ main{position:relative}
 #host_list .source a[href^="http://skank.i2p"]{background-image:url(/themes/console/images/plus.svg)}
 #host_list .source a[href^="http://stats.i2p"]{background-image:url(/themes/console/images/stats.svg)}
 #host_list .source a:hover{transform:scale(1.2);transition:ease all .1s}
+#host_list .up,#host_list .down,#host_list .untested{width:10px;height:10px;display:inline-block;border-radius:50%;background:#0f0}
+#host_list .down{background:#f00}
+#host_list .untested{background:#ff0}
 #add,#import{will-change:transform}
 .iframed .displayPanels #add,.iframed .displayPanels #import{top:-9px;left:-13px;right:-13px}
 .displayPanels #add,.displayPanels #import{margin:0;position:absolute;z-index:1500;top:-13px;left:0;right:0;animation:slideDown .8s ease-out 0s both}

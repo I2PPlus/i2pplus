@@ -79,19 +79,43 @@ public class Servlet extends HttpServlet {
             t.setName("Addressbook");
             t.start();
             this.thread = t;
-            
-            // Store PingTester in servlet context for JSP access
-            try {
-                ClassLoader cl2 = getServletContext().getClassLoader();
-                Class<?> daemonClass = Class.forName("net.i2p.addressbook.Daemon", true, cl2);
-                Object pingTester = daemonClass.getDeclaredMethod("getPingTesterInstance").invoke(null);
-                if (pingTester != null) {
-                    getServletContext().setAttribute("pingTester", pingTester);
-                    I2PAppContext.getGlobalContext().logManager().getLog(Servlet.class).info("PingTester stored in servlet context");
+
+            // Store HostChecker in servlet context for JSP access with retry mechanism
+            // HostChecker is initialized asynchronously in Daemon.run(), so we need to wait
+            java.util.concurrent.ScheduledExecutorService scheduler = java.util.concurrent.Executors.newSingleThreadScheduledExecutor();
+            scheduler.scheduleAtFixedRate(new Runnable() {
+                private int retryCount = 0;
+                private final int maxRetries = 30; // Try for 5 minutes (30 * 10 seconds)
+
+                public void run() {
+                    try {
+                        ClassLoader cl2 = getServletContext().getClassLoader();
+                        Class<?> daemonClass = Class.forName("net.i2p.addressbook.Daemon", true, cl2);
+                        Object hostChecker = daemonClass.getDeclaredMethod("getHostCheckerInstance").invoke(null);
+
+                        if (hostChecker != null) {
+                            getServletContext().setAttribute("hostChecker", hostChecker);
+                            I2PAppContext.getGlobalContext().logManager().getLog(Servlet.class).info("HostChecker stored in servlet context as 'hostChecker': " + hostChecker.getClass().getSimpleName());
+                            scheduler.shutdown();
+                            return;
+                        } else {
+                            retryCount++;
+                            if (retryCount >= maxRetries) {
+                                I2PAppContext.getGlobalContext().logManager().getLog(Servlet.class).warn("HostChecker instance still null after " + maxRetries + " attempts, giving up");
+                                scheduler.shutdown();
+                            } else {
+                                I2PAppContext.getGlobalContext().logManager().getLog(Servlet.class).info("HostChecker instance is null, retry " + retryCount + "/" + maxRetries);
+                            }
+                        }
+                    } catch (Exception e) {
+                        I2PAppContext.getGlobalContext().logManager().getLog(Servlet.class).warn("Failed to get HostChecker instance (retry " + retryCount + "): " + e.getMessage());
+                        retryCount++;
+                        if (retryCount >= maxRetries) {
+                            scheduler.shutdown();
+                        }
+                    }
                 }
-            } catch (Exception e) {
-                I2PAppContext.getGlobalContext().logManager().getLog(Servlet.class).warn("Failed to store PingTester in servlet context: " + e.getMessage());
-            }
+            }, 10, 10, java.util.concurrent.TimeUnit.SECONDS); // Start after 10 seconds, retry every 10 seconds
         } catch (Throwable t) {
             // addressbook.jar may not be in the classpath
             I2PAppContext.getGlobalContext().logManager().getLog(Servlet.class).logAlways(Log.WARN, "Addressbook thread not started: " + t);

@@ -223,8 +223,8 @@ public class AddressBean {
                 // If URL parsing fails, fall back to original behavior
                 rv = "<a href=\"" + rv + "\" target=_blank title=\"" + _t("Source") + ": " + rv + "\">" + rv + "</a>";
             }
-        } else if (_t("Imported from file hosts.txt").equals(rv)) {
-           rv = "<a class=hostsImport title=\"" + _t("Imported from file hosts.txt") + "\"></a>";
+        } else if (rv.startsWith(_t("Imported from"))) {
+           rv = "<a class=hostsImport title=\"" + _t("Imported from file") + "\"></a>";
         } else if (_t("Manually added via SusiDNS").equals(rv)) {
            rv = "<a class=manualAdd title=\"" + _t("Manually added") + "\"></a>";
         } else if (_t("Added via address helper").equals(rv)) {

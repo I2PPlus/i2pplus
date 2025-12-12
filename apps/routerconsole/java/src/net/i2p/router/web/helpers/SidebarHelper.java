@@ -9,12 +9,14 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.TreeMap;
 import net.i2p.app.ClientAppManager;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
 import net.i2p.stat.RateConstants;
 import net.i2p.data.Hash;
+import net.i2p.data.i2cp.SessionConfig;
 import net.i2p.data.LeaseSet;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
@@ -655,15 +657,15 @@ public class SidebarHelper extends HelperBase {
                 String name = getTunnelName(client);
                 Hash h = client.calculateHash();
                 Boolean server = _context.clientManager().shouldPublishLeaseSet(h);
-                Boolean isPing = (name.startsWith("Ping") && name.contains("[")) || name.equals("I2Ping");
+                Boolean isPing = name.startsWith("Ping [") || name.equals("I2Ping");
                 Boolean isSnark = name.equals(_t("I2PSnark"));
                 Boolean isI2PChat = name.equals(_t("Messenger")) || name.toLowerCase().equals(_t("i2pchat"));
 
                 buf.append("<tr><td ");
                 if (isSnark) {buf.append("class=tunnelI2PSnark ");}
                 else if (isI2PChat) {buf.append("class=tunnelI2PChat ");}
-                else if (server) {buf.append("class=tunnelServer ");}
                 else if (isPing) {buf.append("class=ping ");}
+                else if (server) {buf.append("class=tunnelServer ");}
                 buf.append("><img src=/themes/console/images/");
                 if (isSnark) {buf.append("snark.svg alt=I2PSnark title=\"").append(_t("Torrents"));}
                 else if (isI2PChat) {buf.append("i2pchat.svg alt=I2PChat title=\"").append(_t("I2PChat"));}
@@ -771,6 +773,23 @@ public class SidebarHelper extends HelperBase {
 
     /** translate here so collation works above */
     private String getTunnelName(Destination d) {
+        // First try to get nickname from SessionConfig (for socket manager clients like HostChecker)
+        try {
+            SessionConfig config = _context.clientManager().getClientSessionConfig(d);
+            if (config != null) {
+                Properties options = config.getOptions();
+                if (options != null) {
+                    String nickname = options.getProperty("inbound.nickname");
+                    if (nickname != null) {
+                        return _t(nickname);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            // Ignore errors and fall back to tunnel manager
+        }
+
+        // Fall back to TunnelPoolSettings (for managed tunnels)
         TunnelPoolSettings in = _context.tunnelManager().getInboundSettings(d.calculateHash());
         String name = (in != null ? in.getDestinationNickname() : null);
         if (name == null) {

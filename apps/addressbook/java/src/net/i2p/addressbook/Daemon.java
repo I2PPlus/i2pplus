@@ -38,7 +38,8 @@ import net.i2p.data.Destination;
 import net.i2p.util.OrderedProperties;
 import net.i2p.util.SecureDirectory;
 import net.i2p.util.SystemVersion;
-import net.i2p.addressbook.PingTester;
+import net.i2p.addressbook.HostChecker;
+import net.i2p.addressbook.HostCheckerBridge;
 
 /**
  * Main class of addressbook.  Performs updates, and runs the main loop.
@@ -47,11 +48,11 @@ import net.i2p.addressbook.PingTester;
  * @author Ragnarok
  *
  */
-class Daemon {
+public class Daemon {
     public static final String VERSION = "2.0.4";
     private volatile boolean _running;
     private static final boolean DEBUG = false;
-    private static PingTester _pingTester;
+    private static HostChecker _hostChecker;
     private final Log _log = new Log(new File(I2PAppContext.getGlobalContext().getLogDir(), "addressbook.log"));
     // If you change this, change in SusiDNS SubscriptionBean also
     private static final String DEFAULT_SUB = "http://stats.i2p/cgi-bin/newhosts.txt" + "\n" +
@@ -847,16 +848,21 @@ class Daemon {
         File settingsFile = new File(homeFile, settingsLocation);
 
         Map<String, String> settings = ConfigParser.parse(settingsFile, defaultSettings);
-        // Initialize PingTester for address book monitoring
+        // Initialize HostChecker for address book monitoring
         try {
-            _log.append("Initializing PingTester for address book monitoring");
-            _pingTester = new PingTester();
-            _pingTester.setPingInterval(2 * 60 * 60 * 1000L); // 2 hours
-            _pingTester.setPingTimeout(15 * 1000L); // 15 seconds
-            _pingTester.start();
-            _log.append("PingTester started successfully");
+            _log.append("Initializing HostChecker for address book monitoring...");
+            _hostChecker = new HostChecker();
+            _log.append("HostChecker created: " + (_hostChecker != null ? "success" : "null"));
+            
+            // Set the instance in HostCheckerBridge to avoid duplicate instances
+            HostCheckerBridge.setInstance(_hostChecker);
+            _log.append("HostChecker instance set in bridge");
+            
+            _hostChecker.start();
+            _log.append("HostChecker started successfully");
         } catch (Exception e) {
-            _log.append("Failed to initialize PingTester: " + e.getMessage());
+            _log.append("Failed to initialize HostChecker: " + e.getMessage());
+            e.printStackTrace();
         }
 
         // wait
@@ -890,30 +896,35 @@ class Daemon {
             _running = false;
             notifyAll();
         }
-        if (_pingTester != null) {
+        if (_hostChecker != null) {
             try {
-                _log.append("Stopping PingTester");
-                _pingTester.stop();
+                _log.append("Stopping HostChecker");
+                _hostChecker.stop();
             } catch (Exception e) {
-                _log.append("Error stopping PingTester: " + e.getMessage());
+                _log.append("Error stopping HostChecker: " + e.getMessage());
             }
         }
     }
 
     /**
-     * Get the PingTester instance for use by web applications
-     * @return PingTester instance or null if not initialized
+     * Get the HostChecker instance for use by web applications
+     * @return HostChecker instance or null if not initialized
      */
-    public static PingTester getPingTester() {
-        return _pingTester;
+    public static HostChecker getHostChecker() {
+        return _hostChecker;
     }
 
     /**
-     * Get the PingTester instance via reflection-safe method
-     * @return PingTester instance or null if not initialized
+     * Get HostChecker instance via reflection-safe method
+     * @return HostChecker instance or null if not initialized
      */
-    public static Object getPingTesterInstance() {
-        return _pingTester;
+    public static Object getHostCheckerInstance() {
+        if (_hostChecker == null) {
+            System.err.println("getHostCheckerInstance() called but _hostChecker is null");
+        } else {
+            System.err.println("getHostCheckerInstance() returning: " + _hostChecker.getClass().getSimpleName());
+        }
+        return _hostChecker;
     }
 
 }
