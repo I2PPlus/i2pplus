@@ -24,7 +24,7 @@ msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr "Eroare de conectare la I2P - verificați setările I2CP!"
 
 msgid "Download already running: "
-msgstr ""
+msgstr "Descărcare deja în execuție: "
 
 msgid "Downloading"
 msgstr "Descărcarea"
@@ -56,14 +56,14 @@ msgstr "Limita de lățime de bandă minima la incărcarea este {0} Kbps"
 
 #, java-format
 msgid "Maximum download speed changed to {0}KB/s"
-msgstr ""
+msgstr "Viteza maximă de descărcare schimbată la {0}KB/s"
 
 #, java-format
 msgid "Download speed limit is {0}KB/s"
-msgstr ""
+msgstr "Limita de viteză descărcare este {0}KB/s"
 
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
-msgstr ""
+msgstr "Notă: S-ar putea fi necesar să opriți și să reporniți torrentelele sau să reporniți I2PSnark pentru ca această modificare să aibă efect."
 
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "Randomizarea sarelor de tunel +0/1 a fost activată pe tunelurile de intrare"
@@ -202,7 +202,7 @@ msgid "Add and Create sections to display only on first page of multipage torren
 msgstr "Adăugați și creați secțiuni pentru a fi afișate numai pe prima pagină a paginilor cu listare torrent cu mai multe pagini."
 
 msgid "API key updated."
-msgstr ""
+msgstr "Cheia API actualizată."
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "Lista Open Tracker a fost schimbată - este necesară repornirea torrentului pentru a intra în vigoare.Lista trackerelor deschise s-a schimbat - repornirea torrentui este necesara pentru a avea efect."
@@ -358,13 +358,13 @@ msgstr "Limita maximă de lățime de bandă este de {0} KBps"
 
 #, java-format
 msgid "Connecting to I2CP port on I2P instance at {0}"
-msgstr ""
+msgstr "Conectare la portul I2CP pe instanța I2P de la {0}"
 
 msgid "Connecting to I2P"
 msgstr "Se conectează la I2P"
 
 msgid "Connected to I2P at"
-msgstr ""
+msgstr "Conectat la I2P la"
 
 #, java-format
 msgid "Starting up torrent {0}"
@@ -376,7 +376,7 @@ msgstr "Limita lățimii de bandă de încărcare este de {0} KBps până la max
 
 #, java-format
 msgid "Storage: {0}GB currently available for downloads on configured data partition"
-msgstr ""
+msgstr "Stocare: {0}GB disponibil pentru descărcări pe partiția de date configurată"
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
@@ -420,16 +420,16 @@ msgstr "Închiderea tunelului I2P după notificarea trackerelor."
 
 #, java-format
 msgid "Cannot check {0}"
-msgstr ""
+msgstr "Nu se poate verifica {0}"
 
 msgid "Torrent already started"
-msgstr ""
+msgstr "Torrentul deja pornit"
 
 msgid "No storage"
-msgstr ""
+msgstr "Nu există spațiu"
 
 msgid "Starting recheck of {}"
-msgstr ""
+msgstr "Pornit verificarea de {}"
 
 #, java-format
 msgid "Finished recheck of torrent {0}, now {1} complete"
@@ -444,10 +444,10 @@ msgid "Error checking torrent {0}"
 msgstr "Eroare la verificarea torrentului {0}"
 
 msgid "Cannot create diskspace bar"
-msgstr ""
+msgstr "Nu se poate crea bara de spațiu pe disc"
 
 msgid "Data partition"
-msgstr ""
+msgstr "Partiția de date"
 
 #, java-format
 msgid "No valid trackers for {0} - enable opentrackers or DHT?"
@@ -492,22 +492,22 @@ msgstr "Client BitTorrent Anonim"
 
 #, java-format
 msgid "Are you sure you want to delete {0} and all downloaded data?"
-msgstr ""
+msgstr "Sunteți sigur că doriți să ștergeți {0} și toate datele descărcate?"
 
 #, java-format
 msgid "Deleting <b>{0}</b> and all associated data..."
-msgstr ""
+msgstr "Ștergând <b>{0}</b> și toate datele asociate..."
 
 #, java-format
 msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
 msgstr "Sigur doriți să ștergeți dosarul \\'' {0} \\'' (datele descărcate nu vor fi șterse)?"
 
 msgid "Note: Downloaded data will not be deleted."
-msgstr ""
+msgstr "Notă: Datelele descărcate nu vor fi șterse."
 
 #, java-format
 msgid "Deleting {0} and associated metadata only..."
-msgstr ""
+msgstr "Ștergând {0} și doar metadatelele asociate..."
 
 msgid "I2PSnark has stopped"
 msgstr "I2PSnark s-a oprit"
@@ -605,7 +605,7 @@ msgid "TX"
 msgstr "TX"
 
 msgid "Upload ratio"
-msgstr ""
+msgstr "Raport de încărcare"
 
 msgid "Uploaded"
 msgstr "Încărcat"
@@ -645,14 +645,13 @@ msgstr[1] "{0} torrente"
 msgstr[2] "{0} torrenturi"
 
 msgid "Total size of loaded torrents"
-msgstr ""
+msgstr "Dimensiunea totală a torrentelor încărcate"
 
 #, java-format
 msgid "1 connected peer"
 msgid_plural "{0} peer connections"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "1 peer conectat"
+msgstr[1] "{0} peer-uri conectate"
 
 #, java-format
 msgid "1 DHT peer"
@@ -662,16 +661,16 @@ msgstr[1] "{0} parteneri DHT"
 msgstr[2] "{0} parteneri DHT"
 
 msgid "Active downloads"
-msgstr ""
+msgstr "Descărcări active"
 
 msgid "Active uploads"
-msgstr ""
+msgstr "Încărcări active"
 
 msgid "Active Inbound tunnels"
-msgstr ""
+msgstr "Tunele de intrare active"
 
 msgid "Active Outbound tunnels"
-msgstr ""
+msgstr "Tunele de ieșire active"
 
 msgid "Estimated download time for all torrents"
 msgstr "Timpul de descărcare estimat pentru toate torrentele"
@@ -1343,10 +1342,10 @@ msgid "Sequential piece or file order not saved - feature currently broken."
 msgstr ""
 
 msgid "Unknown command"
-msgstr ""
+msgstr "Comandă necunoscut"
 
 msgid "Please retry form submission (bad nonce)"
-msgstr ""
+msgstr "Vă rugăm să reîncercați trimiterea formularului (nonce invalid)"
 
 msgid "Info hash"
 msgstr "Informație index"
@@ -1364,10 +1363,10 @@ msgid "Pieces"
 msgstr "Bucăți"
 
 msgid "Average download speed for torrent"
-msgstr ""
+msgstr "Viteza medie de descărcare pentru torrent"
 
 msgid "Download speed"
-msgstr ""
+msgstr "Viteză de descărcare"
 
 msgid "Completion"
 msgstr "Completare"
@@ -1515,7 +1514,7 @@ msgid "Delete Selected"
 msgstr "Ștergeți selectate"
 
 msgid "File downloading priorities updated for torrent "
-msgstr ""
+msgstr "Prioritățile de descărcare pentru torrentul "
 
 msgid "Edit Torrent"
 msgstr "Editează torrent"

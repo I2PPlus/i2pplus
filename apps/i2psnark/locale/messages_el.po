@@ -24,7 +24,7 @@ msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr "Σφάλμα σύνδεσης στο I2P - ελέγξτε τις ρυθμίσεις I2CP!"
 
 msgid "Download already running: "
-msgstr ""
+msgstr "Λήφη λήψε ήδη εκτελείται: "
 
 msgid "Downloading"
 msgstr "Λήψη"
@@ -43,8 +43,9 @@ msgid "Total uploaders limit changed to {0}"
 msgstr "Το συνολικό όριο μεταφορτωτών άλλαξε σε {0}"
 
 #, java-format
+#, java-format
 msgid "Minimum uploaders limit is {0}"
-msgstr ""
+msgstr "Ελάχιστο όριο ανεβασισμένων είναι {0}"
 
 #, java-format
 msgid "Up BW limit changed to {0}KBps"
@@ -55,12 +56,14 @@ msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "Το ελάχιστο ανώτατο όριο εύρους ζώνης είναι {0}KBps"
 
 #, java-format
+#, java-format
 msgid "Maximum download speed changed to {0}KB/s"
-msgstr ""
+msgstr "Η μέγιστη ταχύτητα λήψε άλλαξε σε {0}KB/s"
 
 #, java-format
+#, java-format
 msgid "Download speed limit is {0}KB/s"
-msgstr ""
+msgstr "Το όριο ταχύτητας λήψε είναι {0}KB/s"
 
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
 msgstr ""
@@ -444,10 +447,10 @@ msgid "Error checking torrent {0}"
 msgstr "Σφάλμα κατά τον έλεγχο του torrent {0}"
 
 msgid "Cannot create diskspace bar"
-msgstr ""
+msgstr "Δεν είναι δυνατή η δημιουργία μπάρας διαστήματος δίσκου"
 
 msgid "Data partition"
-msgstr ""
+msgstr "Κατάλογος δεδομένων"
 
 #, java-format
 msgid "No valid trackers for {0} - enable opentrackers or DHT?"

@@ -56,14 +56,14 @@ msgstr "कम से कम अपलोड बैंडविड्थ सी�
 
 #, java-format
 msgid "Maximum download speed changed to {0}KB/s"
-msgstr ""
+msgstr "अधिकतम डाउनलोड गति {0}KB/s में बदल दी गई"
 
 #, java-format
 msgid "Download speed limit is {0}KB/s"
-msgstr ""
+msgstr "डाउनलोड गति सीमा {0}KB/s है"
 
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
-msgstr ""
+msgstr "नोट: इस परिवर्तन को लागू करने के लिए आपको अपने टॉरेंट को रोकना पड़ा हो सकता है या I2PSnark को पुनः आरंभ करना पड़ सकता है।"
 
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "आगंतुक टनल में +0/1 टनल हॉप रैंडमाइज़ेशन सक्षम कर दिया गया है"
@@ -202,7 +202,7 @@ msgid "Add and Create sections to display only on first page of multipage torren
 msgstr "अधिक पृष्ठों वाली टॉरेंट सूची पृष्ठों के पहले पृष्ठ पर केवल जोड़ने और बनाने के खंड दिखाएं।"
 
 msgid "API key updated."
-msgstr ""
+msgstr "API कुंजी अपडेट किया गया।"
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "ओपन ट्रैकर सूची बदल दी गई - टॉरेंट को रीस्टार्ट करना आवश्यक है।"
@@ -358,13 +358,13 @@ msgstr "अपलोड बैंडविड्थ सीमा {0} KBps है
 
 #, java-format
 msgid "Connecting to I2CP port on I2P instance at {0}"
-msgstr ""
+msgstr "{0} पर I2P इंस्टैंस के I2CP पोर्ट से जुड़ रहा है"
 
 msgid "Connecting to I2P"
 msgstr "I2P के साथ कनेक्ट कर रहे हैं"
 
 msgid "Connected to I2P at"
-msgstr ""
+msgstr "I2P से जुड़ा हुआ है"
 
 #, java-format
 msgid "Starting up torrent {0}"
@@ -492,18 +492,18 @@ msgstr "अनाम बिटटॉरेंट क्लाइंट"
 
 #, java-format
 msgid "Are you sure you want to delete {0} and all downloaded data?"
-msgstr ""
+msgstr "क्या आप {0} और सभी डाउनलोड किए गए डेटा को हटाना चाहते हैं?"
 
 #, java-format
 msgid "Deleting <b>{0}</b> and all associated data..."
-msgstr ""
+msgstr "<b>{0}</b> और सभी संबद्ध डेटा हटा रहा है..."
 
 #, java-format
 msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
 msgstr "क्या आप सुनिश्चित हैं कि आप फ़ाइल {0} को हटाना चाहते हैं? (डाउनलोड की डेटा नहीं हटाई जाएगी)"
 
 msgid "Note: Downloaded data will not be deleted."
-msgstr ""
+msgstr "नोट: डाउनलोड किए गए डेटा हटाया नहीं जाएगा।"
 
 #, java-format
 msgid "Deleting {0} and associated metadata only..."
@@ -644,13 +644,13 @@ msgstr[0] "{0} टॉरेंट"
 msgstr[1] "{0} टॉरेंट"
 
 msgid "Total size of loaded torrents"
-msgstr ""
+msgstr "लोड किए गए टॉरेंट का कुल आकार"
 
 #, java-format
 msgid "1 connected peer"
 msgid_plural "{0} peer connections"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 कनेक्टेड पीयर"
+msgstr[1] "{0} कनेक्टेड पीयर"
 
 #, java-format
 msgid "1 DHT peer"
@@ -659,16 +659,16 @@ msgstr[0] "{0} DHT पीयर"
 msgstr[1] "{0} DHT पीयर"
 
 msgid "Active downloads"
-msgstr ""
+msgstr "सक्रिय डाउनलोड"
 
 msgid "Active uploads"
-msgstr ""
+msgstr "सक्रिय अपलोड"
 
 msgid "Active Inbound tunnels"
-msgstr ""
+msgstr "सक्रिय इनबाउंड टनल"
 
 msgid "Active Outbound tunnels"
-msgstr ""
+msgstr "सक्रिय आउटबाउंड टनल"
 
 msgid "Estimated download time for all torrents"
 msgstr "सभी टॉरेंट के लिए अनुमानित डाउनलोड समय"
@@ -1333,13 +1333,13 @@ msgid "Changing this setting to less than 3 hops may improve speed at the expens
 msgstr "इस सेटिंग को 3 हॉप से कम करने से गुप्तता के खाते में गति में सुधार हो सकता है, लेकिन यह सुझावित नहीं है"
 
 msgid "Sequential piece or file order not saved - feature currently broken."
-msgstr ""
+msgstr "अनुक्रमिक टुकड़े या फ़ाइल क्रम सहेज़ा नहीं गया - विशेषत वर्तमान में टूट है।"
 
 msgid "Unknown command"
-msgstr ""
+msgstr "अज्ञात आदेश"
 
 msgid "Please retry form submission (bad nonce)"
-msgstr ""
+msgstr "कृपया जमा करने के लिए पुनः प्रयास करें (खराब nonce)"
 
 msgid "Info hash"
 msgstr "जानकारी हैश"
@@ -1357,10 +1357,10 @@ msgid "Pieces"
 msgstr "टुकड़े"
 
 msgid "Average download speed for torrent"
-msgstr ""
+msgstr "टॉरेंट के लिए औसत डाउनलोड गति"
 
 msgid "Download speed"
-msgstr ""
+msgstr "डाउनलोड गति"
 
 msgid "Completion"
 msgstr "पूर्णता"
@@ -1507,7 +1507,7 @@ msgid "Delete Selected"
 msgstr "चुने हुए हटाएं"
 
 msgid "File downloading priorities updated for torrent "
-msgstr ""
+msgstr "टॉरेंट के लिए फ़ाइल डाउनलोड प्राथमिकताएं अपडेट किया गया "
 
 msgid "Edit Torrent"
 msgstr "टॉरेंट संपादित करें"

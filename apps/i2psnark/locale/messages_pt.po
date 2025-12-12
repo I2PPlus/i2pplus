@@ -24,7 +24,7 @@ msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr "Erro ao se conectar com I2P - Verifique a sua configuração I2CP!"
 
 msgid "Download already running: "
-msgstr ""
+msgstr "Download já em execução: "
 
 msgid "Downloading"
 msgstr "Baixando"
@@ -56,14 +56,14 @@ msgstr "Largura de banda mínima para envio é {0}KBps"
 
 #, java-format
 msgid "Maximum download speed changed to {0}KB/s"
-msgstr ""
+msgstr "Velocidade máxima de download alterada para {0}KB/s"
 
 #, java-format
 msgid "Download speed limit is {0}KB/s"
-msgstr ""
+msgstr "Limite de velocidade de download é {0}KB/s"
 
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
-msgstr ""
+msgstr "Nota: Pode ser necessário parar e reiniciar seus torrents ou reiniciar o I2PSnark para que esta alteração tenha efeito."
 
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "Randomização de pulo de túnel +0/1 ativada em túneis de entrada"
@@ -202,7 +202,7 @@ msgid "Add and Create sections to display only on first page of multipage torren
 msgstr "Adicione e crie seções para serem exibidas apenas na primeira página de páginas de listagem de torrents de várias páginas."
 
 msgid "API key updated."
-msgstr ""
+msgstr "Chave API atualizada."
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "Lista de Open Tracker alterada - é necessário reiniciar o torrent para entrar em vigor.Listado de rastreadores abertos mudado - Para ter efeito é necesário reiniciar os torrentes."
@@ -358,13 +358,13 @@ msgstr "O limite de largura de banda é de {0} KBps"
 
 #, java-format
 msgid "Connecting to I2CP port on I2P instance at {0}"
-msgstr ""
+msgstr "Conectando à porta I2CP na instância I2P em {0}"
 
 msgid "Connecting to I2P"
 msgstr "Conectando com I2P"
 
 msgid "Connected to I2P at"
-msgstr ""
+msgstr "Conectado ao I2P em"
 
 #, java-format
 msgid "Starting up torrent {0}"
@@ -376,7 +376,7 @@ msgstr "O limite de largura de banda de upload é de {0} KBps para um máximo de
 
 #, java-format
 msgid "Storage: {0}GB currently available for downloads on configured data partition"
-msgstr ""
+msgstr "Armazenamento: {0}GB atualmente disponível para downloads na partição de dados configurada"
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
@@ -420,16 +420,16 @@ msgstr "Fechando túnel I2P após notificar os rastreadores."
 
 #, java-format
 msgid "Cannot check {0}"
-msgstr ""
+msgstr "Não é possível verificar {0}"
 
 msgid "Torrent already started"
-msgstr ""
+msgstr "Torrent já em execução"
 
 msgid "No storage"
-msgstr ""
+msgstr "Sem armazenamento"
 
 msgid "Starting recheck of {}"
-msgstr ""
+msgstr "Iniciando verificação de {}"
 
 #, java-format
 msgid "Finished recheck of torrent {0}, now {1} complete"
@@ -444,10 +444,10 @@ msgid "Error checking torrent {0}"
 msgstr "Erro ao verificar o torrent {0}"
 
 msgid "Cannot create diskspace bar"
-msgstr ""
+msgstr "Não é possível criar barra de espaço em disco"
 
 msgid "Data partition"
-msgstr ""
+msgstr "Partição de dados"
 
 #, java-format
 msgid "No valid trackers for {0} - enable opentrackers or DHT?"
@@ -492,22 +492,22 @@ msgstr "Cliente BitTorrent Anônimo"
 
 #, java-format
 msgid "Are you sure you want to delete {0} and all downloaded data?"
-msgstr ""
+msgstr "Tem certeza que deseja excluir {0} e todos os dados baixados?"
 
 #, java-format
 msgid "Deleting <b>{0}</b> and all associated data..."
-msgstr ""
+msgstr "Excluindo <b>{0}</b> e todos os dados associados..."
 
 #, java-format
 msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
 msgstr "Tem certeza que deseja excluir o arquivo \\''{0}\\'' (os dados baixados não serão excluídos) ?Tem a certeza que deseja apagar o ficheiro \\\"{0}\\\" (dados transferidos não serão apagados) ?"
 
 msgid "Note: Downloaded data will not be deleted."
-msgstr ""
+msgstr "Nota: Os dados baixados não serão excluídos."
 
 #, java-format
 msgid "Deleting {0} and associated metadata only..."
-msgstr ""
+msgstr "Excluindo {0} e apenas metadados associados..."
 
 msgid "I2PSnark has stopped"
 msgstr "I2PSnark parou"
@@ -605,7 +605,7 @@ msgid "TX"
 msgstr "Subido"
 
 msgid "Upload ratio"
-msgstr ""
+msgstr "Rácio de upload"
 
 msgid "Uploaded"
 msgstr "Subido"
@@ -644,13 +644,13 @@ msgstr[0] "1 torrente"
 msgstr[1] "{0} torrentes"
 
 msgid "Total size of loaded torrents"
-msgstr ""
+msgstr "Tamanho total dos torrents carregados"
 
 #, java-format
 msgid "1 connected peer"
 msgid_plural "{0} peer connections"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 peer conectado"
+msgstr[1] "{0} peers conectados"
 
 #, java-format
 msgid "1 DHT peer"
@@ -659,16 +659,16 @@ msgstr[0] "1 parceiros DHT"
 msgstr[1] "{0} parceiros DHT"
 
 msgid "Active downloads"
-msgstr ""
+msgstr "Downloads ativos"
 
 msgid "Active uploads"
-msgstr ""
+msgstr "Uploads ativos"
 
 msgid "Active Inbound tunnels"
-msgstr ""
+msgstr "Túneis de entrada ativos"
 
 msgid "Active Outbound tunnels"
-msgstr ""
+msgstr "Túneis de saída ativos"
 
 msgid "Estimated download time for all torrents"
 msgstr "Tempo estimado de download para todos os torrents"
@@ -1336,10 +1336,10 @@ msgid "Sequential piece or file order not saved - feature currently broken."
 msgstr ""
 
 msgid "Unknown command"
-msgstr ""
+msgstr "Comando desconhecido"
 
 msgid "Please retry form submission (bad nonce)"
-msgstr ""
+msgstr "Por favor, tente enviar o formulário novamente (nonce inválido)"
 
 msgid "Info hash"
 msgstr "Hash de informações"
@@ -1357,10 +1357,10 @@ msgid "Pieces"
 msgstr "Peças"
 
 msgid "Average download speed for torrent"
-msgstr ""
+msgstr "Velocidade média de download para o torrent"
 
 msgid "Download speed"
-msgstr ""
+msgstr "Velocidade de download"
 
 msgid "Completion"
 msgstr "Finalização"

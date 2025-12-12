@@ -24,7 +24,7 @@ msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr "连接I2P时发生错误 - 请检查I2CP设置!"
 
 msgid "Download already running: "
-msgstr ""
+msgstr "下载已在运行："
 
 msgid "Downloading"
 msgstr "正在下载"
@@ -55,15 +55,16 @@ msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "最小上传带宽限制为 {0} KB/s"
 
 #, java-format
+#, java-format
 msgid "Maximum download speed changed to {0}KB/s"
-msgstr ""
+msgstr "最大下载速度已更改为{0}KB/s"
 
 #, java-format
 msgid "Download speed limit is {0}KB/s"
-msgstr ""
+msgstr "下载速度限制为 {0}KB/s"
 
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
-msgstr ""
+msgstr "注意：您可能需要停止并重新启动您的种子或重新启动I2PSnark才能使此更改生效。"
 
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "已在入站隧道上启用了+0/1隧道跳随机化"
@@ -202,7 +203,7 @@ msgid "Add and Create sections to display only on first page of multipage torren
 msgstr "添加和创建部分，只在多页洪流列表页的第一页显示。"
 
 msgid "API key updated."
-msgstr ""
+msgstr "API密钥已更新。"
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "OpenTracker列表已改变 - 重新启动种子后生效."
@@ -358,13 +359,13 @@ msgstr "最小上传带宽限制为 {0} KB/s"
 
 #, java-format
 msgid "Connecting to I2CP port on I2P instance at {0}"
-msgstr ""
+msgstr "正在连接到位于{0}的I2P实例上的I2CP端口"
 
 msgid "Connecting to I2P"
 msgstr "正在连接到I2P"
 
 msgid "Connected to I2P at"
-msgstr ""
+msgstr "已连接到I2P，位于"
 
 #, java-format
 msgid "Starting up torrent {0}"
@@ -444,10 +445,10 @@ msgid "Error checking torrent {0}"
 msgstr "检查种子 {0} 时出错"
 
 msgid "Cannot create diskspace bar"
-msgstr ""
+msgstr "无法创建磁盘空间栏"
 
 msgid "Data partition"
-msgstr ""
+msgstr "数据分区"
 
 #, java-format
 msgid "No valid trackers for {0} - enable opentrackers or DHT?"
@@ -492,22 +493,22 @@ msgstr "匿名的 BitTorrent 客户端"
 
 #, java-format
 msgid "Are you sure you want to delete {0} and all downloaded data?"
-msgstr ""
+msgstr "您确定要删除{0}和所有已下载的数据吗？"
 
 #, java-format
 msgid "Deleting <b>{0}</b> and all associated data..."
-msgstr ""
+msgstr "正在删除<b>{0}</b>和所有相关数据..."
 
 #, java-format
 msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
 msgstr "你确定你要删除文件 \\“{0} \\” (下载的数据不会被删除)？"
 
 msgid "Note: Downloaded data will not be deleted."
-msgstr ""
+msgstr "注意：已下载的数据不会被删除。"
 
 #, java-format
 msgid "Deleting {0} and associated metadata only..."
-msgstr ""
+msgstr "正在删除{0}和仅相关的元数据..."
 
 msgid "I2PSnark has stopped"
 msgstr "I2PSnark 已停止运行"
@@ -643,12 +644,12 @@ msgid_plural "{0} torrents"
 msgstr[0] "{0}个种子"
 
 msgid "Total size of loaded torrents"
-msgstr ""
+msgstr "已加载种子的总大小"
 
 #, java-format
 msgid "1 connected peer"
 msgid_plural "{0} peer connections"
-msgstr[0] ""
+msgstr[0] "1个连接的节点"
 
 #, java-format
 msgid "1 DHT peer"
@@ -656,16 +657,16 @@ msgid_plural "{0} DHT peers"
 msgstr[0] "{0}个DHT节点"
 
 msgid "Active downloads"
-msgstr ""
+msgstr "活跃下载"
 
 msgid "Active uploads"
-msgstr ""
+msgstr "活跃上传"
 
 msgid "Active Inbound tunnels"
-msgstr ""
+msgstr "活跃入站隧道"
 
 msgid "Active Outbound tunnels"
-msgstr ""
+msgstr "活跃出站隧道"
 
 msgid "Estimated download time for all torrents"
 msgstr "所有洪流的估计下载时间"
@@ -1326,13 +1327,13 @@ msgid "Changing this setting to less than 3 hops may improve speed at the expens
 msgstr "将此设置更改为少于 3 跳可能会提高速度，但会牺牲匿名性，因此不建议将此设置改为小于3跳，可能会以牺牲匿名性为代价来提高速度，因此不建议这样做"
 
 msgid "Sequential piece or file order not saved - feature currently broken."
-msgstr ""
+msgstr "顺序片段或文件顺序未保存 - 功能当前损坏。"
 
 msgid "Unknown command"
-msgstr ""
+msgstr "未知命令"
 
 msgid "Please retry form submission (bad nonce)"
-msgstr ""
+msgstr "请重试表单提交（错误的随机数）"
 
 msgid "Info hash"
 msgstr "信息哈希"
@@ -1350,10 +1351,10 @@ msgid "Pieces"
 msgstr "分块数量"
 
 msgid "Average download speed for torrent"
-msgstr ""
+msgstr "种子的平均下载速度"
 
 msgid "Download speed"
-msgstr ""
+msgstr "下载速度"
 
 msgid "Completion"
 msgstr "完成"
@@ -1499,7 +1500,7 @@ msgid "Delete Selected"
 msgstr "删除所选"
 
 msgid "File downloading priorities updated for torrent "
-msgstr ""
+msgstr "文件下载优先级已为种子更新"
 
 msgid "Edit Torrent"
 msgstr "编辑种子"

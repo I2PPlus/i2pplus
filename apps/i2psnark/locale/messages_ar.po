@@ -24,7 +24,7 @@ msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr "فشل في الاتصال ب I2P - تخقق من اعدادات I2CP !"
 
 msgid "Download already running: "
-msgstr ""
+msgstr "التنزيل قيد التشغيل بالفعل: "
 
 msgid "Downloading"
 msgstr "جارى التحميل"
@@ -44,7 +44,7 @@ msgstr "تم تغببر مجموع حد الرفع الى {0}"
 
 #, java-format
 msgid "Minimum uploaders limit is {0}"
-msgstr ""
+msgstr "الحد الأدنى لعدد المرفعين هو {0}"
 
 #, java-format
 msgid "Up BW limit changed to {0}KBps"
@@ -56,14 +56,14 @@ msgstr "اقل سرعة رفع هي{0}KBps"
 
 #, java-format
 msgid "Maximum download speed changed to {0}KB/s"
-msgstr ""
+msgstr "تم تغيير أقصى سرعة للتنزيل إلى {0} كيلوبايت في الثانية"
 
 #, java-format
 msgid "Download speed limit is {0}KB/s"
-msgstr ""
+msgstr "حد سرعة التنزيل هو {0} كيلوبايت في الثانية"
 
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
-msgstr ""
+msgstr "ملاحظة: قد تحتاج إلى إيقاف وإعادة تشغيل التورنتات أو إعادة تشغيل I2PSnark لتفعيل هذا التغيير."
 
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "تم تفعيل تعدد القفزات العشوائي +0/1 في الأنفاق الواردة"
@@ -202,7 +202,7 @@ msgid "Add and Create sections to display only on first page of multipage torren
 msgstr "إضافة وإنشاء أقسام لعرضها فقط على الصفحة الأولى من صفحات قائمة التورنت متعددة الصفحات."
 
 msgid "API key updated."
-msgstr ""
+msgstr "تم تحديث مفتاح API."
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "تغيير open trackers - يجب اعادة تشغيل التورنت لتفعيل التغيير."
@@ -358,13 +358,13 @@ msgstr "الحد الأقصى لعرض النطاق الترددي هو {0} كي
 
 #, java-format
 msgid "Connecting to I2CP port on I2P instance at {0}"
-msgstr ""
+msgstr "الاتصال بمنفذ I2CP على مثيل I2P في {0}"
 
 msgid "Connecting to I2P"
 msgstr "جاري الاتصال بشبكة I2P"
 
 msgid "Connected to I2P at"
-msgstr ""
+msgstr "متصل بـ I2P في"
 
 #, java-format
 msgid "Starting up torrent {0}"
@@ -376,7 +376,7 @@ msgstr "حد النطاق الترددي للتحميل هو {0} كيلو باي
 
 #, java-format
 msgid "Storage: {0}GB currently available for downloads on configured data partition"
-msgstr ""
+msgstr "التخزين: {0} جيجابايت متاحة حالياً للتنزيلات على قسم البيانات المكون"
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
@@ -419,17 +419,18 @@ msgid "Closing I2P tunnel after notifying trackers."
 msgstr "إغلاق نفق I2P بعد إخطار المتتبعين."
 
 #, java-format
+#, java-format
 msgid "Cannot check {0}"
-msgstr ""
+msgstr "لا يمكن التحقق من {0}"
 
 msgid "Torrent already started"
-msgstr ""
+msgstr "التورنت بدأ بالفعل"
 
 msgid "No storage"
-msgstr ""
+msgstr "لا يوجد تخزين"
 
 msgid "Starting recheck of {}"
-msgstr ""
+msgstr "بدء إعادة التحقق من {}"
 
 #, java-format
 msgid "Finished recheck of torrent {0}, now {1} complete"
@@ -444,10 +445,10 @@ msgid "Error checking torrent {0}"
 msgstr "خطأ في فحص السيل {0}"
 
 msgid "Cannot create diskspace bar"
-msgstr ""
+msgstr "لا يمكن إنشاء شريط مساحة القرص"
 
 msgid "Data partition"
-msgstr ""
+msgstr "قسم البيانات"
 
 #, java-format
 msgid "No valid trackers for {0} - enable opentrackers or DHT?"
@@ -516,22 +517,22 @@ msgstr "اعدادات"
 
 #, java-format
 msgid "Are you sure you want to delete {0} and all downloaded data?"
-msgstr ""
+msgstr "هل أنت متأكد أنك تريد حذف {0} وجميع البيانات التي تم تنزيلها؟"
 
 #, java-format
 msgid "Deleting <b>{0}</b> and all associated data..."
-msgstr ""
+msgstr "جاري حذف <b>{0}</b> وجميع البيانات المرتبطة..."
 
 #, java-format
 msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
 msgstr "هل أنت متأكد أنك تريد حذف الملف \\''{0}\\'' (لن يتم حذف البيانات التي تم تنزيلها)؟"
 
 msgid "Note: Downloaded data will not be deleted."
-msgstr ""
+msgstr "ملاحظة: لن يتم حذف البيانات التي تم تنزيلها."
 
 #, java-format
 msgid "Deleting {0} and associated metadata only..."
-msgstr ""
+msgstr "جاري حذف {0} والبيانات الوصفية المرتبطة فقط..."
 
 msgid "clear messages"
 msgstr "رسائل واضحة"
@@ -617,29 +618,29 @@ msgid "Up Rate"
 msgstr "معدل أعلى"
 
 msgid "Total size of loaded torrents"
-msgstr ""
+msgstr "الحجم الإجمالي للتورنتات المحملة"
 
 #, java-format
 msgid "1 connected peer"
 msgid_plural "{0} peer connections"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "لا يوجد أقران متصل"
+msgstr[1] "قران واحد متصل"
+msgstr[2] "قرآنان متصلان"
+msgstr[3] "{0} أقران متصلة"
+msgstr[4] "{0} قراناً متصلاً"
+msgstr[5] "{0} قراناً متصلاً"
 
 msgid "Active downloads"
-msgstr ""
+msgstr "التنزيلات النشطة"
 
 msgid "Active uploads"
-msgstr ""
+msgstr "الرفعات النشطة"
 
 msgid "Active Inbound tunnels"
-msgstr ""
+msgstr "الأنفاق الواردة النشطة"
 
 msgid "Active Outbound tunnels"
-msgstr ""
+msgstr "الأنفاق الصادرة النشطة"
 
 msgid "Estimated download time for all torrents"
 msgstr "وقت التنزيل المقدر لجميع السيول"
@@ -657,7 +658,7 @@ msgid "Total upload speed"
 msgstr "سرعة التحميل الكلية"
 
 msgid "Toggle Debug Panel"
-msgstr ""
+msgstr "تبديل لوحة التصحيح"
 
 msgid "Debug Mode"
 msgstr "وضع التصحيح"
@@ -742,7 +743,7 @@ msgid "Download from non-I2P location {0} is not supported"
 msgstr "التنزيل من موقع غير I2P {0} غير مدعوم"
 
 msgid "Error: Version 2 info hashes are not supported"
-msgstr ""
+msgstr "خطأ: تجزئة المعلومات الإصدار 2 غير مدعومة"
 
 #, java-format
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
@@ -928,12 +929,12 @@ msgstr "متوقف"
 #, java-format
 msgid "Seeding to {0} peer in swarm"
 msgid_plural "Seeding to {0} peers in swarm"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "البذر إلى {0} نظير في السرب"
+msgstr[1] "البذر إلى {0} نظير في السرب"
+msgstr[2] "البذر إلى {0} نظير في السرب"
+msgstr[3] "البذر إلى {0} نظير في السرب"
+msgstr[4] "البذر إلى {0} نظير في السرب"
+msgstr[5] "البذر إلى {0} نظير في السرب"
 
 #, java-format
 msgid "Downloading from {0} peer"
@@ -1330,13 +1331,13 @@ msgid "Changing this setting to less than 3 hops may improve speed at the expens
 msgstr "تغيير هذا الإعداد إلى أقل من 3 قفزات قد يؤدي إلى تحسين السرعة على حساب عدم الكشف عن هويته ولا ينصح به"
 
 msgid "Sequential piece or file order not saved - feature currently broken."
-msgstr ""
+msgstr "لم يتم حفظ ترتيب القطع أو الملفات التسلسلي - الميزة معطلة حالياً."
 
 msgid "Unknown command"
-msgstr ""
+msgstr "أمر غير معروف"
 
 msgid "Please retry form submission (bad nonce)"
-msgstr ""
+msgstr "يرجى إعادة محاولة تقديم النموذج (nonce غير صالح)"
 
 msgid "Resource Does Not Exist"
 msgstr "المورد غير موجود"
@@ -1366,7 +1367,7 @@ msgid "Download Priority"
 msgstr "أولوية التنزيل"
 
 msgid "up"
-msgstr ""
+msgstr "أعلى"
 
 msgid "Parent directory"
 msgstr "ما يصل إلى دليل المستوى الأعلى"
@@ -1408,10 +1409,10 @@ msgid "Pieces"
 msgstr "القطع"
 
 msgid "Average download speed for torrent"
-msgstr ""
+msgstr "متوسط سرعة التنزيل للتورنت"
 
 msgid "Download speed"
-msgstr ""
+msgstr "سرعة التنزيل"
 
 msgid "Completion"
 msgstr "انتهاء"
@@ -1514,7 +1515,7 @@ msgid "Delete Selected"
 msgstr "حذف"
 
 msgid "File downloading priorities updated for torrent "
-msgstr ""
+msgstr "تم تحديث أولويات تنزيل الملفات للتورنت "
 
 msgid "Edit Torrent"
 msgstr "تحرير تورنت"

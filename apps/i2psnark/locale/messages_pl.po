@@ -24,7 +24,7 @@ msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr "Nie można się połączyć z I2P, sprawdź swoje ustawienia I2CP!"
 
 msgid "Download already running: "
-msgstr ""
+msgstr "Pobieranie już uruchomione: "
 
 msgid "Downloading"
 msgstr "Pobieranie"
@@ -56,14 +56,14 @@ msgstr "Minimalne pasmo wyjściowe to: {0} KB/s"
 
 #, java-format
 msgid "Maximum download speed changed to {0}KB/s"
-msgstr ""
+msgstr "Maksymalna prędkość pobierania zmieniona na {0}KB/s"
 
 #, java-format
 msgid "Download speed limit is {0}KB/s"
-msgstr ""
+msgstr "Limit prędkości pobierania wynosi {0}KB/s"
 
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
-msgstr ""
+msgstr "Uwaga: Może być konieczne zatrzymanie i ponowne uruchomienie torrentów lub ponowne uruchomienie I2PSnark, aby zmiany weszły w życie."
 
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "+0/1 tunnelhop randomisatie ingeschakeld op inbound tunnels"
@@ -202,7 +202,7 @@ msgid "Add and Create sections to display only on first page of multipage torren
 msgstr "Dodaj i utwórz sekcje, które będą wyświetlane tylko na pierwszej stronie wielostronicowych stron z listami torrentów."
 
 msgid "API key updated."
-msgstr ""
+msgstr "Klucz API zaktualizowany."
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "Zmieniono listę Open Tracker - aby zadziałało, wymagane jest ponowne uruchomienie torrenta.Lista otwartych trackerów została zmieniona – wymagane ponowne uruchomienie torrenta."
@@ -358,13 +358,13 @@ msgstr "Limit przepustowości w górę wynosi {0} KB/s"
 
 #, java-format
 msgid "Connecting to I2CP port on I2P instance at {0}"
-msgstr ""
+msgstr "Łączenie z portem I2CP instancji I2P pod adresem {0}"
 
 msgid "Connecting to I2P"
 msgstr "Łączenie z I2P"
 
 msgid "Connected to I2P at"
-msgstr ""
+msgstr "Połączono z I2P pod adresem"
 
 #, java-format
 msgid "Starting up torrent {0}"
@@ -376,7 +376,7 @@ msgstr "Limit przepustowości przesyłania wynosi {0} KB/s do maksymalnie {1} r�
 
 #, java-format
 msgid "Storage: {0}GB currently available for downloads on configured data partition"
-msgstr ""
+msgstr "Pamięć masowa: {0}GB aktualnie dostępna do pobierania na skonfigurowanej partycji danych"
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
@@ -420,16 +420,16 @@ msgstr "Zamknięcie tunelu I2P po powiadomieniu trackerów."
 
 #, java-format
 msgid "Cannot check {0}"
-msgstr ""
+msgstr "Nie można sprawdzić {0}"
 
 msgid "Torrent already started"
-msgstr ""
+msgstr "Torrent już uruchomiony"
 
 msgid "No storage"
-msgstr ""
+msgstr "Brak miejsca"
 
 msgid "Starting recheck of {}"
-msgstr ""
+msgstr "Rozpoczynianie ponownej weryfikacji {}"
 
 #, java-format
 msgid "Finished recheck of torrent {0}, now {1} complete"
@@ -444,10 +444,10 @@ msgid "Error checking torrent {0}"
 msgstr "Błąd sprawdzania torrenta {0}"
 
 msgid "Cannot create diskspace bar"
-msgstr ""
+msgstr "Nie można utworzyć paska miejsca na dysku"
 
 msgid "Data partition"
-msgstr ""
+msgstr "Partycja danych"
 
 #, java-format
 msgid "No valid trackers for {0} - enable opentrackers or DHT?"
@@ -492,22 +492,22 @@ msgstr "Anonimowy klient protokołu BitTorrent"
 
 #, java-format
 msgid "Are you sure you want to delete {0} and all downloaded data?"
-msgstr ""
+msgstr "Czy na pewno chcesz usunąć {0} i wszystkie pobrane dane?"
 
 #, java-format
 msgid "Deleting <b>{0}</b> and all associated data..."
-msgstr ""
+msgstr "Usuwanie <b>{0}</b> i wszystkich powiązanych danych..."
 
 #, java-format
 msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
 msgstr "Czy na pewno chcesz usunąć plik \\''{0}\\'' (pobrane dane nie zostaną usunięte)?Czy jesteś pewnien, że chcesz usunąć plik \\''{0}\\'' (pobrane dane nie będą usunięte) ?"
 
 msgid "Note: Downloaded data will not be deleted."
-msgstr ""
+msgstr "Uwaga: Pobrane dane nie zostaną usunięte."
 
 #, java-format
 msgid "Deleting {0} and associated metadata only..."
-msgstr ""
+msgstr "Usuwanie {0} i tylko powiązanych metadanych..."
 
 msgid "I2PSnark has stopped"
 msgstr "I2PSnark został zatrzymany"
@@ -605,7 +605,7 @@ msgid "TX"
 msgstr "TX"
 
 msgid "Upload ratio"
-msgstr ""
+msgstr "Współczynnik wysyłania"
 
 msgid "Uploaded"
 msgstr "Wysłano"
@@ -645,14 +645,14 @@ msgstr[1] "{0} torrenty"
 msgstr[2] "{0} torrentów"
 
 msgid "Total size of loaded torrents"
-msgstr ""
+msgstr "Całkowity rozmiar załadowanych torrentów"
 
 #, java-format
 msgid "1 connected peer"
 msgid_plural "{0} peer connections"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "1 połączony peer"
+msgstr[1] "{0} połączone peer'y"
+msgstr[2] "{0} połączonych peer'ów"
 
 #, java-format
 msgid "1 DHT peer"
@@ -662,16 +662,16 @@ msgstr[1] "{0} peery DHT"
 msgstr[2] "{0} peerów DHT"
 
 msgid "Active downloads"
-msgstr ""
+msgstr "Aktywne pobierania"
 
 msgid "Active uploads"
-msgstr ""
+msgstr "Aktywne wysyłania"
 
 msgid "Active Inbound tunnels"
-msgstr ""
+msgstr "Aktywne tunele przychodzące"
 
 msgid "Active Outbound tunnels"
-msgstr ""
+msgstr "Aktywne tunele wychodzące"
 
 msgid "Estimated download time for all torrents"
 msgstr "Szacowany czas pobierania dla wszystkich torrentów"
@@ -1340,13 +1340,13 @@ msgid "Changing this setting to less than 3 hops may improve speed at the expens
 msgstr "Zmiana tego ustawienia na mniej niż 3 przeskoki może poprawić prędkość kosztem anonimowości i nie jest zalecana"
 
 msgid "Sequential piece or file order not saved - feature currently broken."
-msgstr ""
+msgstr "Kolejność części lub kolejność plików nie została zapisana - funkcja obecnie nie działa."
 
 msgid "Unknown command"
-msgstr ""
+msgstr "Nieznane polecenie"
 
 msgid "Please retry form submission (bad nonce)"
-msgstr ""
+msgstr "Proszę ponowić wysłanie formularza (nieprawidłowy nonce)"
 
 msgid "Info hash"
 msgstr "Info hash"
@@ -1364,10 +1364,10 @@ msgid "Pieces"
 msgstr "Części"
 
 msgid "Average download speed for torrent"
-msgstr ""
+msgstr "Średnia prędkość pobierania dla torrenta"
 
 msgid "Download speed"
-msgstr ""
+msgstr "Prędkość pobierania"
 
 msgid "Completion"
 msgstr "Zakończono"
@@ -1515,7 +1515,7 @@ msgid "Delete Selected"
 msgstr "Usuń zaznaczone"
 
 msgid "File downloading priorities updated for torrent "
-msgstr ""
+msgstr "Zaktualizowano priorytety pobierania plików dla torrenta "
 
 msgid "Edit Torrent"
 msgstr "Edytuj torrent"

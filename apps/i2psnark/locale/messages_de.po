@@ -21,7 +21,7 @@ msgid "Unable to connect to I2P"
 msgstr "Keine Verbindung zu I2P möglich"
 
 msgid "Error connecting to I2P - check your I2CP settings!"
-msgstr "Fehler beim Herstellen der Verbindung zu I2P – überprüfen Sie Ihre I2CP-Einstellungen!Fehler beim Verbinden mit I2P - Überprüfen Sie Ihre I2CP-Einstellungen!"
+msgstr "Fehler beim Herstellen der Verbindung zu I2P – überprüfen Sie Ihre I2CP-Einstellungen!"
 
 msgid "Download already running: "
 msgstr "Download läuft bereits: "
@@ -44,7 +44,7 @@ msgstr "Gesamthochladerbegrenzung geändert auf {0}"
 
 #, java-format
 msgid "Minimum uploaders limit is {0}"
-msgstr ""
+msgstr "Minimale Hochladerbegrenzung ist {0}"
 
 #, java-format
 msgid "Up BW limit changed to {0}KBps"
@@ -93,7 +93,7 @@ msgid "Page size changed to {0}"
 msgstr "Seitengröße geändert auf {0}"
 
 msgid "New files will be publicly readable"
-msgstr "Neu Dateien werden allgemein lesbar sein"
+msgstr "Neue Dateien werden allgemein lesbar sein"
 
 msgid "New files will not be publicly readable"
 msgstr "Neue Dateien werden nicht allgemein lesbar sein"
@@ -118,7 +118,7 @@ msgid "Data directory changed to {0}"
 msgstr "Datenverzeichnis geändert auf {0}"
 
 msgid "I2CP and tunnel changes will take effect after stopping all torrents"
-msgstr "I2CP- und Tunneländerungen werden wirksam, nachdem alle Torrents gestoppt wurdenÄnderungen an I2CP und am Tunnel werden nach dem Stoppen aller Torrents wirksam"
+msgstr "I2CP- und Tunneländerungen werden wirksam, nachdem alle Torrents gestoppt wurden"
 
 #, java-format
 msgid "I2CP options changed to: {0}"
@@ -128,7 +128,7 @@ msgid "Disconnecting old I2CP destination"
 msgstr "Altes I2CP-Ziel wird getrennt"
 
 msgid "Unable to connect with the new settings, reverting to the old I2CP settings"
-msgstr "Mit den neuen Einstellungen kann keine Verbindung hergestellt werden, es wird auf die alten I2CP-Einstellungen zurückgesetztMit den neuen Einstellungen kann keine Verbindung hergestellt werden, es wird auf die alten I2CP-Einstellungen zurückgesetztEs konnte keine Verbindung mit den neuen Einstellungen hergestellt werden, es wird auf die alten I2CP-Einstellungen zurückgesetztVerbinden mit den neuen Einstellungen nicht möglich, benutze wieder die alten I2CP-Einstellungen"
+msgstr "Mit den neuen Einstellungen kann keine Verbindung hergestellt werden, es wird auf die alten I2CP-Einstellungen zurückgesetzt"
 
 msgid "Unable to reconnect with the old settings!"
 msgstr "Verbinden mit den alten Einstellungen nicht möglich!"
@@ -622,8 +622,8 @@ msgstr "Gesamtgröße der geladenen Torrents"
 #, java-format
 msgid "1 connected peer"
 msgid_plural "{0} peer connections"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 verbundener Teilnehmer"
+msgstr[1] "{0} Teilnehmerverbindungen"
 
 msgid "Active downloads"
 msgstr "Aktive Downloads"
@@ -653,7 +653,7 @@ msgid "Total upload speed"
 msgstr "Gesamt-Upload-Geschwindigkeit"
 
 msgid "Toggle Debug Panel"
-msgstr ""
+msgstr "Debug-Bereich umschalten"
 
 msgid "Debug Mode"
 msgstr "Debug-Modus"
@@ -722,8 +722,9 @@ msgid "Enter URL or select torrent file"
 msgstr "Geben Sie eine URL ein oder wählen Sie eine Torrent-Datei aus"
 
 #, java-format
+#, java-format
 msgid "Error uploading the torrent file: {0}"
-msgstr ""
+msgstr "Fehler beim Hochladen der Torrent-Datei: {0}"
 
 #, java-format
 msgid "Cannot add torrent {0} inside another torrent: {1}"
@@ -734,7 +735,7 @@ msgid "Download from non-I2P location {0} is not supported"
 msgstr "Herunterladen aus nicht-I2P Quellen {0} ist nicht unterstützt"
 
 msgid "Error: Version 2 info hashes are not supported"
-msgstr ""
+msgstr "Fehler: Version 2 Info-Hashes werden nicht unterstützt"
 
 #, java-format
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
@@ -916,8 +917,8 @@ msgstr "Stillstand"
 #, java-format
 msgid "Seeding to {0} peer in swarm"
 msgid_plural "Seeding to {0} peers in swarm"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Verteile an {0} Teilnehmer im Schwarm"
+msgstr[1] "Verteile an {0} Teilnehmer im Schwarm"
 
 #, java-format
 msgid "Downloading from {0} peer"
@@ -1338,7 +1339,7 @@ msgid "Download Priority"
 msgstr "Download Priorität"
 
 msgid "up"
-msgstr ""
+msgstr "nach oben"
 
 msgid "Parent directory"
 msgstr "Eine Hierarchie nach oben"
@@ -1504,8 +1505,6 @@ msgstr "Änderungen speichern"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent muss gestoppt werden"
-
-#, java-format
 
 
 

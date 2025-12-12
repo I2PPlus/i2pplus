@@ -238,6 +238,7 @@ msgid "Torrent with this info hash is already running: {0}"
 msgstr "Un torrent avec ce hachage d’informations est déjà en cours: {0}"
 
 #, java-format
+#, java-format
 msgid "Torrent with the same data location is already running: {0}"
 msgstr "Torrent avec le même emplacement de données est déjà en cours d'exécution: {0}"
 
@@ -648,8 +649,8 @@ msgstr "Taille totale des torrents chargés"
 #, java-format
 msgid "1 connected peer"
 msgid_plural "{0} peer connections"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 pair connecté"
+msgstr[1] "{0} connexions de pairs"
 
 #, java-format
 msgid "1 DHT peer"
@@ -686,6 +687,9 @@ msgstr "Vitesse de téléchargement totale"
 
 msgid "Debug Mode"
 msgstr "Mode débogage"
+
+msgid "Toggle Debug Panel"
+msgstr "Basculer le panneau de débogage"
 
 msgid "Normal Mode"
 msgstr "Mode normal"

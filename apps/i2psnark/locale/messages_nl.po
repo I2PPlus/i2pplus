@@ -24,7 +24,7 @@ msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr "Fout bij verbinden met I2P - controlleer je I2CP instellingen!"
 
 msgid "Download already running: "
-msgstr ""
+msgstr "Download draait al: "
 
 msgid "Downloading"
 msgstr "Downloaden"
@@ -56,14 +56,14 @@ msgstr "Minimum up bandbreedte limiet is {0}KBps"
 
 #, java-format
 msgid "Maximum download speed changed to {0}KB/s"
-msgstr ""
+msgstr "Maximum downloadsnelheid gewijzigd naar {0}KB/s"
 
 #, java-format
 msgid "Download speed limit is {0}KB/s"
-msgstr ""
+msgstr "Downloadsnelheidslimiet is {0}KB/s"
 
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
-msgstr ""
+msgstr "Let op: Mogelijk moet u uw torrents stoppen en opnieuw starten of I2PSnark opnieuw starten om deze wijziging door te voeren."
 
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "+0/1 tunnelhop randomisatie ingeschakeld op inbound tunnels"

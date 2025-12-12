@@ -24,7 +24,7 @@ msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr "Помилка з’єднання з I2P - перевірте ваші налаштування I2CP!"
 
 msgid "Download already running: "
-msgstr ""
+msgstr "Завантаження вже запущено: "
 
 msgid "Downloading"
 msgstr "Завантаження"
@@ -56,14 +56,14 @@ msgstr "Mінімальна пропускна здатність станови
 
 #, java-format
 msgid "Maximum download speed changed to {0}KB/s"
-msgstr ""
+msgstr "Максимальну швидкість завантаження змінено на {0}КБ/с"
 
 #, java-format
 msgid "Download speed limit is {0}KB/s"
-msgstr ""
+msgstr "Ліміт завантаження становить {0}КБ/с"
 
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
-msgstr ""
+msgstr "Примітка: Можливо, вам доведеться зупинити та перезапустити ваші торренти або перезапустити I2PSnark, щоб ця зміна набрала чинності."
 
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "Увімкнена рандомізація +0/1 перехопу в тунелю для входжих тунелів"
@@ -202,7 +202,7 @@ msgid "Add and Create sections to display only on first page of multipage torren
 msgstr "Додати та створити розділи для відображення лише на першій сторінці багатосторінкових сторінок зі списком торрентів."
 
 msgid "API key updated."
-msgstr ""
+msgstr "Ключ API оновлено."
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "Список відкритих трекерів змінено - для вступу в силу потрібно перезапустити торрент."
@@ -358,13 +358,13 @@ msgstr "Максимальна пропускна здатність стано�
 
 #, java-format
 msgid "Connecting to I2CP port on I2P instance at {0}"
-msgstr ""
+msgstr "Підключення до порту I2CP екземпляра I2P за адресою {0}"
 
 msgid "Connecting to I2P"
 msgstr "З’єднання з I2P"
 
 msgid "Connected to I2P at"
-msgstr ""
+msgstr "Підключено до I2P за адресою"
 
 #, java-format
 msgid "Starting up torrent {0}"
@@ -376,7 +376,7 @@ msgstr "Обмеження пропускної здатності завант�
 
 #, java-format
 msgid "Storage: {0}GB currently available for downloads on configured data partition"
-msgstr ""
+msgstr "Сховище: {0}ГБ наразі доступне для завантажень на сконфігурованому розділі даних"
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
@@ -420,16 +420,16 @@ msgstr "Виключення тунелю I2P після попередженн�
 
 #, java-format
 msgid "Cannot check {0}"
-msgstr ""
+msgstr "Не можна перевірити {0}"
 
 msgid "Torrent already started"
-msgstr ""
+msgstr "Торрент вже запущено"
 
 msgid "No storage"
-msgstr ""
+msgstr "Немає місця"
 
 msgid "Starting recheck of {}"
-msgstr ""
+msgstr "Початок повторної перевірки {}"
 
 #, java-format
 msgid "Finished recheck of torrent {0}, now {1} complete"
@@ -444,10 +444,10 @@ msgid "Error checking torrent {0}"
 msgstr "Помилка перевірки торрента {0}"
 
 msgid "Cannot create diskspace bar"
-msgstr ""
+msgstr "Не можна створити панель місця на диску"
 
 msgid "Data partition"
-msgstr ""
+msgstr "Розділ даних"
 
 #, java-format
 msgid "No valid trackers for {0} - enable opentrackers or DHT?"
@@ -492,22 +492,22 @@ msgstr "Анонімний BitTorrent клієнт"
 
 #, java-format
 msgid "Are you sure you want to delete {0} and all downloaded data?"
-msgstr ""
+msgstr "Ви впевнені, що хочете видалити {0} і всі завантажені дані?"
 
 #, java-format
 msgid "Deleting <b>{0}</b> and all associated data..."
-msgstr ""
+msgstr "Видалення <b>{0}</b> і всіх пов'язаних даних..."
 
 #, java-format
 msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
 msgstr "Ви впевнені, що хочете видалити файл \\''{0}\\'' (завантажені дані не будуть видалені)?Ви дійсно хочете видалити файл \\\"{0}\\\" (завантажені дані не буде видалено)?"
 
 msgid "Note: Downloaded data will not be deleted."
-msgstr ""
+msgstr "Примітка: Завантажені дані не будуть видалені."
 
 #, java-format
 msgid "Deleting {0} and associated metadata only..."
-msgstr ""
+msgstr "Видалення {0} і лише пов'язаних метаданих..."
 
 msgid "I2PSnark has stopped"
 msgstr "I2PSnark зупинено"
@@ -605,7 +605,7 @@ msgid "TX"
 msgstr "Передано"
 
 msgid "Upload ratio"
-msgstr ""
+msgstr "Коефіцієнт відвантаження"
 
 msgid "Uploaded"
 msgstr "Вивантажено"
@@ -645,14 +645,14 @@ msgstr[1] "{0} торрентів"
 msgstr[2] "{0} торрентів"
 
 msgid "Total size of loaded torrents"
-msgstr ""
+msgstr "Загальний розмір завантажених торрентів"
 
 #, java-format
 msgid "1 connected peer"
 msgid_plural "{0} peer connections"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "1 підключений учасник"
+msgstr[1] "{0} підключених учасників"
+msgstr[2] "{0} підключених учасників"
 
 #, java-format
 msgid "1 DHT peer"
@@ -662,16 +662,16 @@ msgstr[1] "{0} DHT пірів"
 msgstr[2] "{0} DHT пірів"
 
 msgid "Active downloads"
-msgstr ""
+msgstr "Активні завантаження"
 
 msgid "Active uploads"
-msgstr ""
+msgstr "Активні відвантаження"
 
 msgid "Active Inbound tunnels"
-msgstr ""
+msgstr "Активні вхідні тунелі"
 
 msgid "Active Outbound tunnels"
-msgstr ""
+msgstr "Активні вихідні тунелі"
 
 msgid "Estimated download time for all torrents"
 msgstr "Приблизний час завантаження для всіх торрентів"
@@ -1343,10 +1343,10 @@ msgid "Sequential piece or file order not saved - feature currently broken."
 msgstr ""
 
 msgid "Unknown command"
-msgstr ""
+msgstr "Невідома команда"
 
 msgid "Please retry form submission (bad nonce)"
-msgstr ""
+msgstr "Будь ласка повторно надсилити форму (поганий nonce)"
 
 msgid "Info hash"
 msgstr "Інфо хеш"
@@ -1364,10 +1364,10 @@ msgid "Pieces"
 msgstr "Частин"
 
 msgid "Average download speed for torrent"
-msgstr ""
+msgstr "Середня швидкість завантаження для торрента"
 
 msgid "Download speed"
-msgstr ""
+msgstr "Швидкість завантаження"
 
 msgid "Completion"
 msgstr "Завершення"

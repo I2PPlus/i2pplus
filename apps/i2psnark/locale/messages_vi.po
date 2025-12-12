@@ -24,7 +24,7 @@ msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr "Lỗi kết nối với I2P - hãy kiểm tra cài đặt I2CP của bạn!"
 
 msgid "Download already running: "
-msgstr ""
+msgstr "Tải xuống đã đang chạy: "
 
 msgid "Downloading"
 msgstr "Đang tải xuống"
@@ -55,8 +55,9 @@ msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "Tối thiểu băng thông lên là {0}KBps"
 
 #, java-format
+#, java-format
 msgid "Maximum download speed changed to {0}KB/s"
-msgstr ""
+msgstr "Tốc độ tải xuống tối đa đã được thay đổi thành {0}KB/s"
 
 #, java-format
 msgid "Download speed limit is {0}KB/s"
@@ -444,10 +445,10 @@ msgid "Error checking torrent {0}"
 msgstr "Lỗi kiểm tra torrent {0}"
 
 msgid "Cannot create diskspace bar"
-msgstr ""
+msgstr "Không thể tạo thanh không gian đĩa"
 
 msgid "Data partition"
-msgstr ""
+msgstr "Phân vùng dữ liệu"
 
 #, java-format
 msgid "No valid trackers for {0} - enable opentrackers or DHT?"

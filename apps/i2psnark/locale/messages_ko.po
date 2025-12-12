@@ -56,14 +56,14 @@ msgstr "최소 속도는 {0}KBps입니다"
 
 #, java-format
 msgid "Maximum download speed changed to {0}KB/s"
-msgstr ""
+msgstr "최대 다운로드 속도가 {0}KB/s로 변경되었습니다"
 
 #, java-format
 msgid "Download speed limit is {0}KB/s"
-msgstr ""
+msgstr "다운로드 속도 제한은 {0}KB/s입니다"
 
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
-msgstr ""
+msgstr "참고: 이 변경 사항을 적용하려면 토렌트를 중지하고 다시 시작하거나 I2PSnark을 다시 시작해야 할 수 있습니다."
 
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "입간 터널에서 +0/1 터널 점프 무작위화가 활성화되었습니다."
@@ -202,7 +202,7 @@ msgid "Add and Create sections to display only on first page of multipage torren
 msgstr "여러 페이지로 구성된 토렌트 목록 페이지의 첫 번째 페이지에만 표시할 섹션을 추가하고 생성하세요."
 
 msgid "API key updated."
-msgstr ""
+msgstr "API 키가 업데이트되었습니다."
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "오픈 트래커 리스트가 변경되었습니다 - 토렌트를 재시작해야 적용됩니다."
@@ -358,13 +358,13 @@ msgstr "최대 대역폭 제한은 {0}KBps입니다"
 
 #, java-format
 msgid "Connecting to I2CP port on I2P instance at {0}"
-msgstr ""
+msgstr "{0}의 I2P 인스턴스에서 I2CP 포트에 연결 중"
 
 msgid "Connecting to I2P"
 msgstr "I2P에 연결중"
 
 msgid "Connected to I2P at"
-msgstr ""
+msgstr "I2P에 연결됨 - 위치:"
 
 #, java-format
 msgid "Starting up torrent {0}"
@@ -376,7 +376,7 @@ msgstr "업로드 대역폭 제한은 최대 {1}개의 동시 피어에 대해 {
 
 #, java-format
 msgid "Storage: {0}GB currently available for downloads on configured data partition"
-msgstr ""
+msgstr "저장소: 구성된 데이터 파티션에서 다운로드에 현재 {0}GB 사용 가능"
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
@@ -419,17 +419,18 @@ msgid "Closing I2P tunnel after notifying trackers."
 msgstr "트래커에게 알린 후 I2P 터널을 닫는 중입니다."
 
 #, java-format
+#, java-format
 msgid "Cannot check {0}"
-msgstr ""
+msgstr "{0}을(를) 확인할 수 없습니다"
 
 msgid "Torrent already started"
-msgstr ""
+msgstr "토렌트가 이미 시작되었습니다"
 
 msgid "No storage"
-msgstr ""
+msgstr "저장 공간 없음"
 
 msgid "Starting recheck of {}"
-msgstr ""
+msgstr "{}의 재확인 시작"
 
 #, java-format
 msgid "Finished recheck of torrent {0}, now {1} complete"
@@ -444,10 +445,10 @@ msgid "Error checking torrent {0}"
 msgstr "토렌트 {0}를 확인하는데 오류가 있습니다"
 
 msgid "Cannot create diskspace bar"
-msgstr ""
+msgstr "디스크 공간 막대를 생성할 수 없습니다"
 
 msgid "Data partition"
-msgstr ""
+msgstr "데이터 파티션"
 
 #, java-format
 msgid "No valid trackers for {0} - enable opentrackers or DHT?"
@@ -492,22 +493,22 @@ msgstr "익명 비트토렌트 클라이언트"
 
 #, java-format
 msgid "Are you sure you want to delete {0} and all downloaded data?"
-msgstr ""
+msgstr "{0}과(와) 모든 다운로드된 데이터를 삭제하시겠습니까?"
 
 #, java-format
 msgid "Deleting <b>{0}</b> and all associated data..."
-msgstr ""
+msgstr "<b>{0}</b>과(와) 모든 관련 데이터를 삭제 중..."
 
 #, java-format
 msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
 msgstr "\\''{0}\\'' 파일을 삭제하시겠습니까(다운로드한 데이터는 삭제되지 않습니다)?\\''{0}\\'' 파일을 삭제하시겠습니까(다운로드한 데이터는 삭제되지 않습니다)?정말 \\''{0}\\'' 파일을 지우겠습니까? (다운로드된 데이터는 지워지지 않습니다) ?"
 
 msgid "Note: Downloaded data will not be deleted."
-msgstr ""
+msgstr "참고: 다운로드된 데이터는 삭제되지 않습니다."
 
 #, java-format
 msgid "Deleting {0} and associated metadata only..."
-msgstr ""
+msgstr "{0}과(와) 관련 메타데이터만 삭제 중..."
 
 msgid "I2PSnark has stopped"
 msgstr "I2PSnark가 정지되었습니다"
@@ -643,12 +644,12 @@ msgid_plural "{0} torrents"
 msgstr[0] "토렌트: {0}"
 
 msgid "Total size of loaded torrents"
-msgstr ""
+msgstr "로드된 토렌트의 총 크기"
 
 #, java-format
 msgid "1 connected peer"
 msgid_plural "{0} peer connections"
-msgstr[0] ""
+msgstr[0] "1개 연결된 피어"
 
 #, java-format
 msgid "1 DHT peer"
@@ -656,16 +657,16 @@ msgid_plural "{0} DHT peers"
 msgstr[0] "DHT 피어: {0}"
 
 msgid "Active downloads"
-msgstr ""
+msgstr "활성 다운로드"
 
 msgid "Active uploads"
-msgstr ""
+msgstr "활성 업로드"
 
 msgid "Active Inbound tunnels"
-msgstr ""
+msgstr "활성 인바운드 터널"
 
 msgid "Active Outbound tunnels"
-msgstr ""
+msgstr "활성 출발 터널"
 
 msgid "Estimated download time for all torrents"
 msgstr "모든 토렌트의 예상 다운로드 시간"
@@ -1326,13 +1327,13 @@ msgid "Changing this setting to less than 3 hops may improve speed at the expens
 msgstr "이 설정을 3홉 미만으로 변경하면 익명성이 희생되어 속도가 향상될 수 있으므로 권장되지 않습니다"
 
 msgid "Sequential piece or file order not saved - feature currently broken."
-msgstr ""
+msgstr "순차적 조각 또는 파일 순서가 저장되지 않음 - 기능이 현재 손상되었습니다."
 
 msgid "Unknown command"
-msgstr ""
+msgstr "알 수 없는 명령어"
 
 msgid "Please retry form submission (bad nonce)"
-msgstr ""
+msgstr "양식 제출을 다시 시도해 주십시오 (잘못된 nonce)"
 
 msgid "Info hash"
 msgstr "정보 해시"
@@ -1350,10 +1351,10 @@ msgid "Pieces"
 msgstr "조각"
 
 msgid "Average download speed for torrent"
-msgstr ""
+msgstr "토렌트의 평균 다운로드 속도"
 
 msgid "Download speed"
-msgstr ""
+msgstr "다운로드 속도"
 
 msgid "Completion"
 msgstr "완료"
@@ -1499,7 +1500,7 @@ msgid "Delete Selected"
 msgstr "선택된 것 삭제"
 
 msgid "File downloading priorities updated for torrent "
-msgstr ""
+msgstr "토렌트의 파일 다운로드 우선순위가 업데이트되었습니다 "
 
 msgid "Edit Torrent"
 msgstr "토렌트 편집"

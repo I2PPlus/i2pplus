@@ -56,14 +56,14 @@ msgstr "En düşük bant genişliği sınırı {0}KBps"
 
 #, java-format
 msgid "Maximum download speed changed to {0}KB/s"
-msgstr ""
+msgstr "Maksimum indirme hızı {0}KB/s olarak değiştirildi"
 
 #, java-format
 msgid "Download speed limit is {0}KB/s"
-msgstr ""
+msgstr "İndirme hızı sınırı {0}KB/s"
 
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
-msgstr ""
+msgstr "Not: Bu değişikliğin etkili olması için torrentlerinizi durdurup yeniden başlatmanız veya I2PSnark'ı yeniden başlatmanız gerekebilir."
 
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "Gelen tünel kanalları üzerinde +0/1 tünel atlama rastgeleleştirme etkinleştirildi"
@@ -202,7 +202,7 @@ msgid "Add and Create sections to display only on first page of multipage torren
 msgstr "Çok sayfalı torrent listeleme sayfalarının yalnızca ilk sayfasında görüntülenecek bölümler ekleme ve oluşturma."
 
 msgid "API key updated."
-msgstr ""
+msgstr "API anahtarı güncellendi."
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "Açık İzleyici listesi değiştirildi - etkili olması için torrentin yeniden başlatılması gerekiyor.Açık İzleyici listesi değiştirildi - etkili olması için torrentin yeniden başlatılması gerekiyor.Açık İzleyici listesi değiştirildi - etkili olması için torrentin yeniden başlatılması gerekiyor.Açık İzleyiciler listesi değiştirildi - değişikliklerin etkili olması için torrenti yeniden başlatmalısınız."
@@ -358,13 +358,13 @@ msgstr "Yukarı bant genişliği sınırı {0} KBps"
 
 #, java-format
 msgid "Connecting to I2CP port on I2P instance at {0}"
-msgstr ""
+msgstr "{0} konumundaki I2P örneğinin I2CP portuna bağlanıyor"
 
 msgid "Connecting to I2P"
 msgstr "I2P bağlantısı kuruluyor"
 
 msgid "Connected to I2P at"
-msgstr ""
+msgstr "I2P'ye bağlandı - konum:"
 
 #, java-format
 msgid "Starting up torrent {0}"
@@ -376,7 +376,7 @@ msgstr "Yükleme bant genişliği sınırı, maksimum {1} eşzamanlı eşe yöne
 
 #, java-format
 msgid "Storage: {0}GB currently available for downloads on configured data partition"
-msgstr ""
+msgstr "Depolama: Yapılandırılmış veri bölümünde indirmeler için şu anda {0}GB mevcut"
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
@@ -419,17 +419,18 @@ msgid "Closing I2P tunnel after notifying trackers."
 msgstr "İzleyiciler bilgilendirilerek I2P tüneli kapatılıyor."
 
 #, java-format
+#, java-format
 msgid "Cannot check {0}"
-msgstr ""
+msgstr "{0} kontrol edilemiyor"
 
 msgid "Torrent already started"
-msgstr ""
+msgstr "Torrent zaten başlatıldı"
 
 msgid "No storage"
-msgstr ""
+msgstr "Depolama alanı yok"
 
 msgid "Starting recheck of {}"
-msgstr ""
+msgstr "{} yeniden kontrolü başlatılıyor"
 
 #, java-format
 msgid "Finished recheck of torrent {0}, now {1} complete"
@@ -444,10 +445,10 @@ msgid "Error checking torrent {0}"
 msgstr "{0} torrenti denetlenirken bir sorun çıktı"
 
 msgid "Cannot create diskspace bar"
-msgstr ""
+msgstr "Disk alanı çubuğu oluşturulamıyor"
 
 msgid "Data partition"
-msgstr ""
+msgstr "Veri bölümü"
 
 #, java-format
 msgid "No valid trackers for {0} - enable opentrackers or DHT?"
@@ -492,22 +493,22 @@ msgstr "Anonim BitTorrent İstemcisi"
 
 #, java-format
 msgid "Are you sure you want to delete {0} and all downloaded data?"
-msgstr ""
+msgstr "{0} ve tüm indirilen verileri silmek istediğinizden emin misiniz?"
 
 #, java-format
 msgid "Deleting <b>{0}</b> and all associated data..."
-msgstr ""
+msgstr "<b>{0}</b> ve tüm ilişkili veriler siliniyor..."
 
 #, java-format
 msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
 msgstr "\\''{0}\\'' dosyasını silmek istediğinizden emin misiniz (indirilen veriler silinmeyecektir)?\\''{0}\\'' dosyasını silmek istediğinizden emin misiniz (indirilen veriler silinmeyecektir)?\\''{0}\\'' dosyasını silmek istediğinizden emin misiniz (indirilen veriler silinmeyecektir)?\\\"{0}\\\" dosyasını silmek istediğinize emin misiniz (indirilmiş veriler silinmez)?"
 
 msgid "Note: Downloaded data will not be deleted."
-msgstr ""
+msgstr "Not: İndirilen veriler silinmeyecektir."
 
 #, java-format
 msgid "Deleting {0} and associated metadata only..."
-msgstr ""
+msgstr "{0} ve sadece ilişkili üst veriler siliniyor..."
 
 msgid "I2PSnark has stopped"
 msgstr "I2PSnark durduruldu"
@@ -644,13 +645,13 @@ msgstr[0] "{0} torrent"
 msgstr[1] "{0} torrent"
 
 msgid "Total size of loaded torrents"
-msgstr ""
+msgstr "Yüklenen torrentlerin toplam boyutu"
 
 #, java-format
 msgid "1 connected peer"
 msgid_plural "{0} peer connections"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 bağlı eş"
+msgstr[1] "{0} bağlı eş"
 
 #, java-format
 msgid "1 DHT peer"
@@ -659,16 +660,16 @@ msgstr[0] "{0} DHT eş"
 msgstr[1] "{0} DHT eş"
 
 msgid "Active downloads"
-msgstr ""
+msgstr "Aktif indirmeler"
 
 msgid "Active uploads"
-msgstr ""
+msgstr "Aktif yüklemeler"
 
 msgid "Active Inbound tunnels"
-msgstr ""
+msgstr "Aktif gelen tüneller"
 
 msgid "Active Outbound tunnels"
-msgstr ""
+msgstr "Aktif giden tüneller"
 
 msgid "Estimated download time for all torrents"
 msgstr "Tüm torrentler için tahmini indirme süresi"
@@ -1333,13 +1334,13 @@ msgid "Changing this setting to less than 3 hops may improve speed at the expens
 msgstr "Bu ayarın 3 atlamadan daha düşük bir değere değiştirilmesi, anonimlik pahasına hızı artırabilir ve önerilmez"
 
 msgid "Sequential piece or file order not saved - feature currently broken."
-msgstr ""
+msgstr "Sıralı parça veya dosya sırası kaydedilmedi - özellik şu anda bozuk."
 
 msgid "Unknown command"
-msgstr ""
+msgstr "Bilinmeyen komut"
 
 msgid "Please retry form submission (bad nonce)"
-msgstr ""
+msgstr "Lütfen form gönderimini yeniden deneyin (kötü nonce)"
 
 msgid "Info hash"
 msgstr "Bilgi karması"
@@ -1357,10 +1358,10 @@ msgid "Pieces"
 msgstr "Parçalar"
 
 msgid "Average download speed for torrent"
-msgstr ""
+msgstr "Torrent için ortalama indirme hızı"
 
 msgid "Download speed"
-msgstr ""
+msgstr "İndirme hızı"
 
 msgid "Completion"
 msgstr "Tamamlanma"
@@ -1507,7 +1508,7 @@ msgid "Delete Selected"
 msgstr "Seçilmişleri Sil"
 
 msgid "File downloading priorities updated for torrent "
-msgstr ""
+msgstr "Torrent için dosya indirme öncelikleri güncellendi "
 
 msgid "Edit Torrent"
 msgstr "Torrent'i Düzenle"

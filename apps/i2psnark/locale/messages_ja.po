@@ -74,7 +74,7 @@ msgid "Disabled tunnel hop randomization on Inbound tunnels"
 msgstr "インバウンドトンネルでのトンネルホップのランダム化が無効になりました"
 
 msgid "Enabled +0/1 tunnel hop randomization on Outbound tunnels"
-msgstr ""
+msgstr "アウトバウンドトンネルで+0/1トンネルホップのランダム化を有効にしました"
 "アウトバウンドトンネルで+0/1トンネルホップのランダム化が有効になりました"
 
 msgid "Disabled tunnel hop randomization on Outbound tunnels"
@@ -200,7 +200,7 @@ msgid "Lightbox disabled for image thumbnails."
 msgstr "画像サムネイルのライトボックスが無効になっています。"
 
 msgid "Add and Create sections enabled on all torrent listing pages."
-msgstr ""
+msgstr "すべてのトレント一覧ページで追加・作成セクションを有効にしました"
 "すべての torrent リスト ページでセクションの追加と作成が有効になりました。"
 
 msgid ""
@@ -214,14 +214,14 @@ msgid "API key updated."
 msgstr "APIキーが更新されました。"
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
-msgstr ""
+msgstr "オープントラッカーリストが変更されました - トレントの再起動が必要です。"
 "オープン トラッカー リストが変更されました - 有効にするには torrent を再起動"
 "する必要があります。オープン トラッカー リストが変更されました - 有効にするに"
 "はトレントの再起動が必要です。オープントラッカーリストが変更されました - この"
 "オプションは再起動が必要です。"
 
 msgid "Private tracker list changed - affects newly created torrents only."
-msgstr ""
+msgstr "プライベートトラッカーリストが変更されました - 新しく作成されたトレントにのみ影響します。"
 "プライベート トラッカー リストが変更されました - 新しく作成されたトレントのみ"
 "に影響します。プライベート トラッカー リストが変更されました - 新しく作成され"
 "たトレントのみに影響します。プライベートトラッカーリストが変更されました - 新"
@@ -491,10 +491,10 @@ msgid "Error checking torrent {0}"
 msgstr "トレント {0} のチェック中にエラーが発生しました"
 
 msgid "Cannot create diskspace bar"
-msgstr ""
+msgstr "ディスクスペースバーを作成できません"
 
 msgid "Data partition"
-msgstr ""
+msgstr "データパーティション"
 
 #, java-format
 msgid "No valid trackers for {0} - enable opentrackers or DHT?"

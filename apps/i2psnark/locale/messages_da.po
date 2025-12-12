@@ -24,7 +24,7 @@ msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr "Fejl ved forbindelse til I2P - tjek dine I2CP-indstillinger!"
 
 msgid "Download already running: "
-msgstr ""
+msgstr "Download kører allerede: "
 
 msgid "Downloading"
 msgstr "Downloader"
@@ -43,8 +43,9 @@ msgid "Total uploaders limit changed to {0}"
 msgstr "Den samlede grænse for uploadere er ændret til {0}"
 
 #, java-format
+#, java-format
 msgid "Minimum uploaders limit is {0}"
-msgstr ""
+msgstr "Minimum uploaders grænse er {0}"
 
 #, java-format
 msgid "Up BW limit changed to {0}KBps"
@@ -56,14 +57,14 @@ msgstr "Minimum op-båndbredde er {0}KBps"
 
 #, java-format
 msgid "Maximum download speed changed to {0}KB/s"
-msgstr ""
+msgstr "Maksimal downloadhastighed ændret til {0}KB/s"
 
 #, java-format
 msgid "Download speed limit is {0}KB/s"
-msgstr ""
+msgstr "Downloadhastighedsgrænse er {0}KB/s"
 
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
-msgstr ""
+msgstr "Bemærk: Du skal muligvis stoppe og genstarte dine torrents eller genstarte I2PSnark for at denne ændring træder i kraft."
 
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "Aktiveret +0/1 tunnel hop randomisering på indkommende tunneller"
@@ -444,10 +445,10 @@ msgid "Error checking torrent {0}"
 msgstr "Fejl ved kontrol af torrenten {0}"
 
 msgid "Cannot create diskspace bar"
-msgstr ""
+msgstr "Kan ikke oprette diskpladsbjælke"
 
 msgid "Data partition"
-msgstr ""
+msgstr "Datapartition"
 
 #, java-format
 msgid "No valid trackers for {0} - enable opentrackers or DHT?"

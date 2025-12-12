@@ -24,7 +24,7 @@ msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr "Chyba při připojování k I2P – zkontrolujte nastavení I2CP!Při připojování k I2P nastala chyba, zkontrolujte prosím nastavení I2CP!"
 
 msgid "Download already running: "
-msgstr ""
+msgstr "Stahování již probíhá: "
 
 msgid "Downloading"
 msgstr "Stahování"
@@ -56,14 +56,13 @@ msgstr "Nejmenší horní limit přenosové rychlist je {0}KBps"
 
 #, java-format
 msgid "Maximum download speed changed to {0}KB/s"
-msgstr ""
+msgstr "Maximální rychlost stahování změněna na {0}KB/s"
 
 #, java-format
 msgid "Download speed limit is {0}KB/s"
-msgstr ""
+msgstr "Limit rychlosti stahování je {0}KB/s"
 
-msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
-msgstr ""
+
 
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "Povoleno náhodné přeskočení +0/1 na příchozích tunelích"
@@ -358,13 +357,13 @@ msgstr "Limit vyšší šířky pásma je {0} kB/s"
 
 #, java-format
 msgid "Connecting to I2CP port on I2P instance at {0}"
-msgstr ""
+msgstr "Připojuji se k I2CP portu na instanci I2P na adrese {0}"
 
 msgid "Connecting to I2P"
 msgstr "Připojuji se k I2P"
 
 msgid "Connected to I2P at"
-msgstr ""
+msgstr "Připojeno k I2P na"
 
 #, java-format
 msgid "Starting up torrent {0}"
@@ -376,7 +375,7 @@ msgstr "Omezení šířky pásma za nahrávání je {0} KB/s s maximálním poč
 
 #, java-format
 msgid "Storage: {0}GB currently available for downloads on configured data partition"
-msgstr ""
+msgstr "Úložiště: {0}GB aktuálně dostupné pro stahování na nakonfigurovaném oddílu dat"
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
@@ -420,13 +419,12 @@ msgstr "Uzavření I2P tunelu po upozornění sledovačů."
 
 #, java-format
 msgid "Cannot check {0}"
-msgstr ""
+msgstr "Nelze ověřit {0}"
 
 msgid "Torrent already started"
-msgstr ""
+msgstr "Torrent již spuštěn"
 
-msgid "No storage"
-msgstr ""
+
 
 msgid "Starting recheck of {}"
 msgstr ""
