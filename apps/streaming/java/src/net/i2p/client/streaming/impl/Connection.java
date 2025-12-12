@@ -69,6 +69,11 @@ class Connection {
     private final ActivityTimer _activityTimer;
     private long _lastCongestionTime;
     private volatile long _lastCongestionHighestUnacked;
+
+    // Pacing fields for smooth transmission
+    private volatile long _pacingRate; // bytes per second
+    private volatile long _lastPacketSendTime;
+    private final Object _pacingLock = new Object();
     /** has the other side choked us? */
     private volatile boolean _isChoked;
     /** are we choking the other side? */
@@ -168,12 +173,69 @@ class Connection {
         _ackSinceCongestion = new AtomicBoolean(true);
         _connectLock = new Object();
         _nextSendLock = new Object();
+
+        // Initialize pacing
+        _pacingRate = calculatePacingRate();
+        _lastPacketSendTime = 0;
+        
+        // Initialize connection event and retransmit event
         _connectionEvent = new ConEvent();
         _retransmitEvent = new RetransmitEvent();
-        _bwEstimator = new SimpleBandwidthEstimator(ctx, _options);
-        _randomWait = _context.random().nextInt(10*1000); // just do this once to reduce usage
-        // all createRateStats in ConnectionManager
-        if (_log.shouldInfo()) {_log.info("New connection created\n\t Options: " + _options);}
+        
+        // Initialize random wait for activity timer randomization and bandwidth estimator
+        _randomWait = _context.random().nextInt(3*1000); // 0-3 seconds randomization
+        _bwEstimator = new SimpleBandwidthEstimator(_context, _options);
+    }
+
+    /**
+     * Calculate pacing rate based on current congestion window and RTT.
+     * Rate = (cwnd * mss) / rtt to smooth transmission.
+     */
+    private long calculatePacingRate() {
+        int cwnd = _options.getWindowSize();
+        int mss = _options.getMaxMessageSize();
+        int rtt = _options.getRTT();
+
+        if (rtt <= 0 || cwnd <= 0 || mss <= 0) {
+            return Long.MAX_VALUE; // No pacing if parameters invalid
+        }
+
+        // Calculate rate in bytes per second
+        long rateBytesPerSec = (long) cwnd * mss * 1000 / rtt;
+
+        // Ensure minimum rate to prevent excessive delays
+        long minRate = 64 * 1024; // 64 KB/s minimum
+        return Math.max(rateBytesPerSec, minRate);
+    }
+
+    /**
+     * Update pacing rate when congestion window changes.
+     */
+    private void updatePacingRate() {
+        synchronized (_pacingLock) {
+            _pacingRate = calculatePacingRate();
+        }
+    }
+
+    /**
+     * Calculate delay needed for pacing based on packet size and current rate.
+     */
+    private long calculatePacingDelay(int packetSize) {
+        synchronized (_pacingLock) {
+            if (_pacingRate == Long.MAX_VALUE) {
+                return 0; // No pacing
+            }
+
+            long now = _context.clock().now();
+            long timeSinceLastPacket = now - _lastPacketSendTime;
+            long expectedInterval = (long) packetSize * 1000 / _pacingRate;
+
+            if (timeSinceLastPacket >= expectedInterval) {
+                return 0; // Can send immediately
+            }
+
+            return expectedInterval - timeSinceLastPacket;
+        }
     }
 
     /**
@@ -387,7 +449,26 @@ class Connection {
         // warning, getStatLog() can be null
         //_context.statManager().getStatLog().addData(Packet.toId(_sendStreamId), "stream.rtt", _options.getRTT(), _options.getWindowSize());
 
+        // Apply pacing to smooth transmission
+        long pacingDelay = calculatePacingDelay(packet.getPayloadSize());
+        if (pacingDelay > 0) {
+            // Schedule packet with pacing delay
+            PacedPacketEvent pacedEvent = new PacedPacketEvent(packet);
+            pacedEvent.schedule(pacingDelay);
+        } else {
+            // Send immediately
+            enqueuePacket(packet);
+        }
+    }
+
+    /**
+     * Actually enqueue the packet after pacing delay.
+     */
+    private void enqueuePacket(PacketLocal packet) {
         if (_outboundQueue.enqueue(packet)) {
+            synchronized (_pacingLock) {
+                _lastPacketSendTime = _context.clock().now();
+            }
             _unackedPacketsReceived.set(0);
             _lastSendTime = _context.clock().now();
             resetActivityTimer();
@@ -1003,6 +1084,7 @@ class Connection {
              * of packets do the "attempted recovery".
              */
             _options.setWindowSize(1);
+            updatePacingRate(); // Update pacing when window changes
         }
     }
 
@@ -1452,6 +1534,22 @@ class Connection {
     }
 
     /**
+     * Inner class for paced packet transmission
+     */
+    private class PacedPacketEvent extends SimpleTimer2.TimedEvent {
+        private final PacketLocal _packet;
+
+        public PacedPacketEvent(PacketLocal packet) {
+            super(_context.simpleTimer2());
+            _packet = packet;
+        }
+
+        public void timeReached() {
+            enqueuePacket(_packet);
+        }
+    }
+
+    /**
      * fired to reschedule event notification
      */
     class ConEvent implements SimpleTimer.TimedEvent {
@@ -1556,6 +1654,7 @@ class Connection {
                         _ssthresh = Math.min(ConnectionPacketHandler.MAX_SLOW_START_WINDOW, _ssthresh);
                         int wsize = _options.getWindowSize();
                         _options.setWindowSize(Math.min(_ssthresh, wsize));
+                        updatePacingRate(); // Update pacing when window changes
                     }
 
                     if (_log.shouldInfo()) {
