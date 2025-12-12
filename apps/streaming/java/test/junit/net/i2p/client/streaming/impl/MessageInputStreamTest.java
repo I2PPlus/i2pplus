@@ -41,7 +41,7 @@ public class MessageInputStreamTest {
         _options = new ConnectionOptions();
 
         in = new MessageInputStream(_context, _options.getMaxMessageSize(),
-                _options.getMaxWindowSize(), _options.getInboundBufferSize());
+                _options.getMaxWindowSize(), _options.getInboundBufferSize(), _options.getMaxPacketCount());
     }
 
     @After

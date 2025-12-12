@@ -866,12 +866,20 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     }
 
     /**
-     * how much data are we willing to accept in our buffer?
+     * What is the maximum size of the buffer used to accept data?
      *
      * @return size of the buffer used to accept data
      */
     public int getInboundBufferSize() {return _inboundBufferSize;}
     public void setInboundBufferSize(int bytes) {_inboundBufferSize = bytes;}
+    
+    /**
+     * What is the maximum number of packets to buffer regardless of byte size?
+     * This provides a hybrid approach with both byte and packet limits.
+     *
+     * @return maximum number of packets to buffer
+     */
+    public int getMaxPacketCount() {return 1024;} // Fixed value for optimal performance
 
     /**
      * When we're in congestion avoidance, we grow the window size at the rate

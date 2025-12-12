@@ -139,7 +139,8 @@ class Connection {
         _receiver = new ConnectionDataReceiver(_context, this);
         _options = (opts != null ? opts : new ConnectionOptions());
         _inputStream = new MessageInputStream(_context, _options.getMaxMessageSize(),
-                                              _options.getMaxWindowSize(), _options.getInboundBufferSize());
+                                              _options.getMaxWindowSize(), _options.getInboundBufferSize(),
+                                              _options.getMaxPacketCount());
         // FIXME pass through a passive flush delay setting as the 4th arg
         _outputStream = new MessageOutputStream(_context, timer, _receiver,
                                                 _options.getMaxMessageSize(), _options.getMaxInitialMessageSize());

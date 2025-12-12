@@ -58,6 +58,13 @@ class MessageInputStream extends InputStream {
      * Helps prevent unnecessary buffering limits on slow systems.
      */
     private static final int MIN_READY_BUFFERS = SystemVersion.isSlow() ? 128 : 1024;
+    
+    /**
+     * Maximum number of packets to buffer regardless of byte size.
+     * Prevents excessive memory usage with small packets while allowing
+     * higher packet counts for better throughput.
+     */
+    private static final int MAX_PACKET_COUNT = 1024;
 
     private final Log _log;
     private final List<ByteArray> _readyDataBlocks; // Ordered list of ready data blocks
@@ -75,6 +82,7 @@ class MessageInputStream extends InputStream {
     private final int _maxMessageSize; // Max size per message block
     private final int _maxWindowSize;  // Max number of messages in window
     private final int _maxBufferSize;  // Max total buffer size in bytes
+    private final int _maxPacketCount; // Max number of packets regardless of size
 
     private final byte[] _oneByte = new byte[1]; // For single-byte reads
     private final Object _dataLock = new Object(); // Lock for synchronized access
@@ -94,6 +102,19 @@ class MessageInputStream extends InputStream {
      * @param maxBufferSize Max total size of all buffered data
      */
     public MessageInputStream(I2PAppContext ctx, int maxMessageSize, int maxWindowSize, int maxBufferSize) {
+        this(ctx, maxMessageSize, maxWindowSize, maxBufferSize, MAX_PACKET_COUNT);
+    }
+    
+    /**
+     * Constructs a new MessageInputStream with the specified buffer limits.
+     *
+     * @param ctx Application context for logging and utilities
+     * @param maxMessageSize Max size of a single message block
+     * @param maxWindowSize Max number of messages in the window
+     * @param maxBufferSize Max total size of all buffered data
+     * @param maxPacketCount Max number of packets regardless of byte size
+     */
+    public MessageInputStream(I2PAppContext ctx, int maxMessageSize, int maxWindowSize, int maxBufferSize, int maxPacketCount) {
         _log = ctx.logManager().getLog(MessageInputStream.class);
         _readyDataBlocks = new ArrayList<>(INITIAL_CAPACITY);
         _notYetReadyBlocks = new HashMap<>(INITIAL_CAPACITY);
@@ -102,6 +123,7 @@ class MessageInputStream extends InputStream {
         _maxMessageSize = maxMessageSize;
         _maxWindowSize = maxWindowSize;
         _maxBufferSize = maxBufferSize;
+        _maxPacketCount = maxPacketCount;
     }
 
     /**
@@ -177,7 +199,9 @@ class MessageInputStream extends InputStream {
                 return true;
             }
 
-            if ((_readyDataBlocks.size() + _notYetReadyBlocks.size()) * _maxMessageSize < _maxBufferSize) {
+            // Check both byte-based and packet-based limits
+            int totalPackets = _readyDataBlocks.size() + _notYetReadyBlocks.size();
+            if (totalPackets * _maxMessageSize < _maxBufferSize && totalPackets < _maxPacketCount) {
                 return true;
             }
 
