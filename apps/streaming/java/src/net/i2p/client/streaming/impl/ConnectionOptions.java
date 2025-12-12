@@ -18,6 +18,7 @@ import net.i2p.util.Log;
  * somewhere so they aren't copied for every connection
  */
 class ConnectionOptions extends I2PSocketOptionsImpl {
+    private final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(ConnectionOptions.class);
     private int _connectDelay;
     private boolean _fullySigned;
     private boolean _answerPings;
@@ -130,8 +131,9 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
 
 
     //private static final int TREND_COUNT = 3;
-    /** RFC 5681 sec. 3.1 */
-    static final int INITIAL_WINDOW_SIZE = 3;
+    /** RFC 6928 recommends 10 segments for better initial throughput, 
+     *  but we use a more conservative 6 for I2P's high-latency environment */
+    static final int INITIAL_WINDOW_SIZE = 6;
     static final int DEFAULT_MAX_SENDS = 8;
     public static final int DEFAULT_INITIAL_RTT = 8*1000;
     private static final int MAX_RTT = 60*1000;
@@ -415,7 +417,19 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
         setMaxResends(getInt(opts, PROP_MAX_RESENDS, DEFAULT_MAX_SENDS));
         setInactivityTimeout(getInt(opts, PROP_INACTIVITY_TIMEOUT, DEFAULT_INACTIVITY_TIMEOUT));
         setInactivityAction(getInt(opts, PROP_INACTIVITY_ACTION, DEFAULT_INACTIVITY_ACTION));
-        setInboundBufferSize(getMaxMessageSize() * (getMaxWindowSize() + 2));
+        
+        // Calculate minimum required inbound buffer size to accommodate full window
+        // Use 1.5*maxWindowSize to handle dynamic window growth while keeping memory usage sane
+        int minRequiredBufferSize = getMaxMessageSize() * ((3 * getMaxWindowSize()) / 2 + 2);
+        setInboundBufferSize(minRequiredBufferSize);
+        
+        // Validate buffer size is sufficient for window size
+        if (_inboundBufferSize < minRequiredBufferSize) {
+            _log.warn("Inbound buffer size (" + _inboundBufferSize + ") is too small for window size (" + 
+                     getMaxWindowSize() + "). Adjusting to " + minRequiredBufferSize + " bytes");
+            setInboundBufferSize(minRequiredBufferSize);
+        }
+        
         setCongestionAvoidanceGrowthRateFactor(getInt(opts, PROP_CONGESTION_AVOIDANCE_GROWTH_RATE_FACTOR,
                                                       DEFAULT_CONGESTION_AVOIDANCE_GROWTH_RATE_FACTOR));
         setSlowStartGrowthRateFactor(getInt(opts, PROP_SLOW_START_GROWTH_RATE_FACTOR,
@@ -483,7 +497,19 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
         if (opts.getProperty(PROP_INACTIVITY_ACTION) != null) {
             setInactivityAction(getInt(opts, PROP_INACTIVITY_ACTION, DEFAULT_INACTIVITY_ACTION));
         }
-        setInboundBufferSize(getMaxMessageSize() * (getMaxWindowSize() + 2));
+        
+        // Calculate minimum required inbound buffer size to accommodate full window
+        // Use 1.5*maxWindowSize to handle dynamic window growth while keeping memory usage sane
+        int minRequiredBufferSize = getMaxMessageSize() * ((3 * getMaxWindowSize()) / 2 + 2);
+        setInboundBufferSize(minRequiredBufferSize);
+        
+        // Validate buffer size is sufficient for window size
+        if (_inboundBufferSize < minRequiredBufferSize) {
+            _log.warn("Inbound buffer size (" + _inboundBufferSize + ") is too small for window size (" + 
+                     getMaxWindowSize() + "). Adjusting to " + minRequiredBufferSize + " bytes");
+            setInboundBufferSize(minRequiredBufferSize);
+        }
+        
         if (opts.getProperty(PROP_CONGESTION_AVOIDANCE_GROWTH_RATE_FACTOR) != null) {
             setCongestionAvoidanceGrowthRateFactor(getInt(opts, PROP_CONGESTION_AVOIDANCE_GROWTH_RATE_FACTOR,
                                                           DEFAULT_CONGESTION_AVOIDANCE_GROWTH_RATE_FACTOR));

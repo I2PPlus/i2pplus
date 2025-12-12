@@ -111,8 +111,9 @@ class Connection {
     /**
      *  This is the default maximum. See ConnectionOptions.setMaxWindowSize()
      *  where the configured maximum is enforced.
+     *  Increased for better throughput on high-bandwidth I2P connections.
      */
-    public static final int MAX_WINDOW_SIZE = SystemVersion.isSlow() ? 128 : 256;
+    public static final int MAX_WINDOW_SIZE = SystemVersion.isSlow() ? 192 : 384;
 
     private static final int UNCHOKES_TO_SEND = 8;
 

@@ -16,7 +16,11 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
     private int _localPort;
     private int _remotePort;
 
-    public static final int DEFAULT_BUFFER_SIZE = SystemVersion.isSlow() || SystemVersion.getMaxMemory() < 256*1024*1024 ? 64*1024 : 256*1024;
+    public static final int DEFAULT_BUFFER_SIZE = SystemVersion.isSlow() || SystemVersion.getMaxMemory() < 512*1024*1024 ? 
+        // Slow systems: 1730 * (1.5*192 + 2) = 500KB, rounded to 512KB for safety margin
+        512*1024 : 
+        // Normal systems: 1730 * (1.5*384 + 2) = 998KB, rounded to 1MB for safety margin  
+        1024*1024;
     public static final int DEFAULT_READ_TIMEOUT = -1;
     public static final int DEFAULT_WRITE_TIMEOUT = -1;
     public static final int DEFAULT_CONNECT_TIMEOUT = 60*1000;
