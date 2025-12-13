@@ -277,7 +277,7 @@ td.peerCount:empty{text-align:center}
 .active.downloading .peerCount b::before{border-color:#0000 #252 #0000 #0000}
 .active.seeding.complete .peerCount b{background:repeating-linear-gradient(135deg,#937,#937 8px,#826 9px,#826 17px)}
 .active.seeding.complete .peerCount b::before{border-color:#0000 #937 #0000 #0000}
-.inactive.downloading .peerCount b,.active.starting.processing .peerCount b{background:#fc0}
+.inactive.downloading .peerCount b,.active.starting.processing .peerCount b,.inactive.connected b{background:#fc0}
 .inactive.downloading .peerCount b::before,.active.starting.processing .peerCount b::before{border-color:#0000 #fc0 #0000 #0000}
 .inactive.downloading .peerCount b,.peerCount b .right,.peerCount b .left{text-shadow:0 1px 1px #222}
 .nopeers.incomplete .peerCount b{background:#aaa}
@@ -287,7 +287,7 @@ td.peerCount:empty{text-align:center}
 .stopped.complete .peerCount b::before{border-color:#0000 #28f #0000 #0000}
 .stopped.incomplete .peerCount b::before,.inactive.neterror .peerCount b::before{border-color:#0000 #900 #0000 #0000}
 .stopped.incomplete .peerCount b,.inactive.neterror .peerCount b{background:#900}
-.starting .peerCount b::before{border-color:#0000 #fc0 #0000 #0000}
+.starting .peerCount b::before,.inactive.connected b::before{border-color:#0000 #fc0 #0000 #0000}
 .starting .peerCount b{height:10px;background:repeating-linear-gradient(135deg,#fc0,#fc0 8px,#c90 9px,#c90 17px)}
 
 /* download bars */

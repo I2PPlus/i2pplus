@@ -95,7 +95,6 @@ public class Servlet extends HttpServlet {
 
                         if (hostChecker != null) {
                             getServletContext().setAttribute("hostChecker", hostChecker);
-                            I2PAppContext.getGlobalContext().logManager().getLog(Servlet.class).info("HostChecker stored in servlet context as 'hostChecker': " + hostChecker.getClass().getSimpleName());
                             scheduler.shutdown();
                             return;
                         } else {

@@ -77,6 +77,7 @@
 <input form="exportlist" type=hidden name="filter" value="${book.filter}">
 <%      String filter = book.getFilter();
         if ("latest".equals(filter)) {filter = intl._t(filter);}
+        else if ("alive".equals(filter)) {filter = intl._t(filter);}
         else if ("xn--".equals(filter)) {filter = intl._t("other");}
 %>
 </c:if>
@@ -120,7 +121,7 @@
         {"u", "U"}, {"v", "V"}, {"w", "W"}, {"x", "X"},
         {"y", "Y"}, {"z", "Z"}, {"0-9", "0-9"},
         {"xn--", intl._t("other")}, {"latest", intl._t("latest")},
-        {"none", intl._t("all")}
+        {"alive", intl._t("Alive")}, {"none", intl._t("all")}
     };
 
     for (String[] filter : filters) {

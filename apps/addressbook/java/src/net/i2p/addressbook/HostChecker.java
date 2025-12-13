@@ -49,8 +49,8 @@ public class HostChecker {
     private final Semaphore _pingSemaphore;
 
     // Configuration defaults
-    private static final long DEFAULT_PING_INTERVAL = 8 * 60 * 60 * 1000L; // 2 hours
-    private static final long DEFAULT_PING_TIMEOUT = 3 * 60 * 1000L; // 3 minutes
+    private static final long DEFAULT_PING_INTERVAL = 8 * 60 * 60 * 1000L; // 8 hours
+    private static final long DEFAULT_PING_TIMEOUT = 2 * 60 * 1000L; // 2 minutes
     private static final int DEFAULT_MAX_CONCURRENT = 12;
 
     // Startup delay to allow router and socket manager to fully initialize
@@ -72,11 +72,6 @@ public class HostChecker {
             this.reachable = reachable;
             this.timestamp = timestamp;
             this.responseTime = responseTime;
-        }
-
-        @Override
-        public String toString() {
-            return reachable ? "✔" : "✖";
         }
     }
 
@@ -174,7 +169,6 @@ public class HostChecker {
             return new PingResult(false, System.currentTimeMillis(), -1);
         }
 
-        // Use the same ping logic as pingDestinationWithRetry but for single test
         return pingDestination(hostname, destination);
     }
 
@@ -211,8 +205,8 @@ public class HostChecker {
             }
 
             long tunnelBuildTime = System.currentTimeMillis() - tunnelBuildStart;
-            if (_log.shouldInfo()) {
-                _log.info("SocketManager ready for HostChecker in " + tunnelBuildTime + " ms -> " + hostname);
+            if (_log.shouldDebug()) {
+                _log.debug("SocketManager ready for HostChecker in " + tunnelBuildTime + "ms -> " + hostname);
             }
 
             // Use I2PSocketManager ping method like I2Ping does
@@ -227,7 +221,7 @@ public class HostChecker {
             }
 
             if (_log.shouldInfo()) {
-                _log.info("HostChecker for " + hostname + ": " + (reachable ? "SUCCESS" : "FAILED") + " in " + pingTime + "ms");
+                _log.info("HostChecker results for " + hostname + " -> " + (reachable ? "SUCCESS" : "FAILED") + " in " + pingTime + "ms");
             }
 
             // Save results immediately after ping
@@ -238,7 +232,7 @@ public class HostChecker {
             long responseTime = System.currentTimeMillis() - startTime;
             String errorMsg = "Error: " + e.getMessage();
             if (_log.shouldError()) {
-                _log.error("✗ " + hostname + " ERROR: " + errorMsg, e);
+                _log.error("HostChecker error for " + hostname + " -> " + errorMsg, e);
             }
 
             PingResult result = new PingResult(false, startTime, responseTime);
@@ -255,11 +249,11 @@ public class HostChecker {
                 try {
                     pingSocketManager.destroySocketManager();
                     if (_log.shouldDebug()) {
-                        _log.debug("Destroyed socket manager for: " + hostname);
+                        _log.debug("Destroyed SocketManager for: " + hostname);
                     }
                 } catch (Exception e) {
                     if (_log.shouldWarn()) {
-                        _log.warn("Error destroying socket manager for " + hostname + ": " + e.getMessage());
+                        _log.warn("Error destroying SocketManager for " + hostname + ": " + e.getMessage());
                     }
                 }
             }
@@ -311,21 +305,59 @@ public class HostChecker {
             return;
         }
 
+        // Read all lines first and identify valid ones
+        List<String> validLines = new ArrayList<>();
+        boolean hasInvalidLines = false;
+
         try (BufferedReader reader = new BufferedReader(new FileReader(_hostsCheckFile))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
                 if (line.isEmpty() || line.startsWith("#")) {
+                    validLines.add(line);
                     continue;
                 }
 
                 String[] parts = line.split(",", 4);
+                boolean isValid = false;
+
                 if (parts.length >= 3) {
-                    long timestamp = Long.parseLong(parts[0]);
-                    String hostname = parts[1];
-                    boolean reachable = "y".equals(parts[2]);
-                    PingResult result = new PingResult(reachable, timestamp, -1);
-                    _pingResults.put(hostname, result);
+                    // Validate timestamp before parsing
+                    if (parts[0] != null && !parts[0].isEmpty()) {
+                        try {
+                            long timestamp = Long.parseLong(parts[0]);
+                            String hostname = parts[1];
+                            boolean reachable = "y".equals(parts[2]);
+                            PingResult result = new PingResult(reachable, timestamp, -1);
+                            _pingResults.put(hostname, result);
+                            isValid = true;
+                        } catch (NumberFormatException e) {
+                            // Invalid timestamp - mark for removal
+                        }
+                    }
+                }
+
+                if (isValid) {
+                    validLines.add(line);
+                } else {
+                    hasInvalidLines = true;
+                    if (_log.shouldWarn()) {
+                        _log.warn("Removing malformed line from hosts_check.txt: " + line);
+                    }
+                }
+            }
+
+            // Clean up the file if we found invalid lines
+            if (hasInvalidLines) {
+                try {
+                    writeCleanHostsCheckFile(validLines);
+                    if (_log.shouldInfo()) {
+                        _log.info("Cleaned up malformed entries from hosts_check.txt");
+                    }
+                } catch (Exception e) {
+                    if (_log.shouldWarn()) {
+                        _log.warn("Failed to clean up hosts_check.txt file", e);
+                    }
                 }
             }
 
@@ -386,6 +418,18 @@ public class HostChecker {
             }
         } catch (Exception e) {
             _log.error("Unexpected error saving ping results: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Write cleaned hosts_check.txt file with only valid entries
+     */
+    private void writeCleanHostsCheckFile(List<String> validLines) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(_hostsCheckFile))) {
+            for (String line : validLines) {
+                writer.write(line);
+                writer.newLine();
+            }
         }
     }
 
