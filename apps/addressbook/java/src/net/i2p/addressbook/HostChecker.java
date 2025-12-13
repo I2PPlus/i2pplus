@@ -212,7 +212,7 @@ public class HostChecker {
 
             long tunnelBuildTime = System.currentTimeMillis() - tunnelBuildStart;
             if (_log.shouldInfo()) {
-                _log.info("Socket manager ready for " + hostname + " in " + tunnelBuildTime + "ms");
+                _log.info("SocketManager ready for HostChecker in " + tunnelBuildTime + " ms -> " + hostname);
             }
 
             // Use I2PSocketManager ping method like I2Ping does
@@ -227,7 +227,7 @@ public class HostChecker {
             }
 
             if (_log.shouldInfo()) {
-                _log.info("Ping result for " + hostname + ": " + (reachable ? "SUCCESS" : "FAILED") + " in " + pingTime + "ms");
+                _log.info("HostChecker for " + hostname + ": " + (reachable ? "SUCCESS" : "FAILED") + " in " + pingTime + "ms");
             }
 
             // Save results immediately after ping
@@ -346,9 +346,6 @@ public class HostChecker {
         try {
             // Ensure we have absolute path and directory exists
             String absolutePath = _hostsCheckFile.getAbsolutePath();
-            if (_log.shouldInfo()) {
-                _log.info("Ping results map size: " + _pingResults.size() + " entries");
-            }
 
             // Ensure parent directory exists
             File parentDir = _hostsCheckFile.getParentFile();
@@ -358,7 +355,7 @@ public class HostChecker {
 
             // Write file with explicit error handling
             StringBuilder content = new StringBuilder();
-            content.append("# I2P+ Address Book Ping Results\n");
+            content.append("# I2P+ Address Book Host Check\n");
             content.append("# Format: timestamp,host,reachable\n");
             content.append("# Generated: ").append(new java.util.Date()).append("\n\n");
 
@@ -377,9 +374,9 @@ public class HostChecker {
                 java.nio.file.StandardOpenOption.TRUNCATE_EXISTING,
                 java.nio.file.StandardOpenOption.WRITE);
 
-            if (_log.shouldInfo()) {
-                _log.info("Saved " + _pingResults.size() + " ping results to: " + absolutePath +
-                          " (Size: " + _hostsCheckFile.length() + " bytes)");
+            if (_log.shouldInfo() && _pingResults.size() % 10 == 0) {
+                _log.info("HostChecker results saved to: " + absolutePath +
+                          " -> Total hosts: " + _pingResults.size() + " (Size: " + _hostsCheckFile.length() + " bytes)");
             }
 
         } catch (java.io.IOException e) {
@@ -425,7 +422,7 @@ public class HostChecker {
         @Override
         public void run() {
             // Set custom thread name for better debugging
-            Thread.currentThread().setName("HostCheck");
+            Thread.currentThread().setName("HostChecker");
 
             if (!_running.get()) {
                 return;
