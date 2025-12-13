@@ -12,24 +12,24 @@
 <h2>Core Components</h2>
 
 <ul>
-    <li><strong>{@link I2PSnarkServlet}</strong> - Main servlet handling all HTTP requests for the I2PSnark web interface,
+    <li><strong>{@link org.klomp.snark.web.I2PSnarkServlet}</strong> - Main servlet handling all HTTP requests for the I2PSnark web interface,
         including torrent management, file browsing, and configuration.</li>
-    <li><strong>{@link BasicServlet}</strong> - Base servlet class providing common functionality for HTTP request handling,
+    <li><strong>{@link org.klomp.snark.web.BasicServlet}</strong> - Base servlet class providing common functionality for HTTP request handling,
         file serving, and utility methods used throughout the web interface.</li>
-    <li><strong>{@link FetchAndAdd}</strong> - Torrent file downloader that fetches torrent files from remote locations
+    <li><strong>{@link org.klomp.snark.web.FetchAndAdd}</strong> - Torrent file downloader that fetches torrent files from remote locations
         and automatically adds them to the I2PSnark manager.</li>
 </ul>
 
 <h2>Utility Classes</h2>
 
 <ul>
-    <li><strong>{@link MimeTypes}</strong> - MIME type detection and mapping for various file formats,
+    <li><strong>{@link org.klomp.snark.web.MimeTypes}</strong> - MIME type detection and mapping for various file formats,
         enabling proper content-type headers when serving files through the web interface.</li>
-    <li><strong>{@link Sorters}</strong> - Collection of comparators for sorting torrents and files by various criteria
+    <li><strong>{@link org.klomp.snark.web.Sorters}</strong> - Collection of comparators for sorting torrents and files by various criteria
         such as name, size, progress, and speed in multiple locales.</li>
-    <li><strong>{@link InclusiveByteRange}</strong> - HTTP byte range handling for partial content requests,
+    <li><strong>{@link org.klomp.snark.web.InclusiveByteRange}</strong> - HTTP byte range handling for partial content requests,
         supporting resumable downloads and efficient file streaming.</li>
-    <li><strong>{@link Mp3Tags}</strong> - MP3 metadata extraction utility for reading ID3v1 and ID3v2 tags,
+    <li><strong>{@link org.klomp.snark.web.Mp3Tags}</strong> - MP3 metadata extraction utility for reading ID3v1 and ID3v2 tags,
         enhancing the file browsing experience with rich media information.</li>
 </ul>
 
