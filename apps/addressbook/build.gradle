@@ -9,4 +9,5 @@ sourceSets {
 dependencies {
     implementation project(':core')
     implementation project(':apps:jetty')
+    implementation project(':apps:ministreaming')
 }
