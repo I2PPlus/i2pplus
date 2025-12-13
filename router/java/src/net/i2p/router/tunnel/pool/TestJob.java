@@ -182,6 +182,16 @@ public class TestJob extends JobImpl {
         _found = false;
         boolean isExploratory = _pool.getSettings().isExploratory();
         long now = ctx.clock().now();
+        
+        // Skip tunnel testing for ping tunnels - they're short-lived and don't need testing
+        String tunnelNickname = _cfg.getTunnelPool().getSettings().getDestinationNickname();
+        if (tunnelNickname != null && tunnelNickname.startsWith("Ping [")) {
+            if (_log.shouldDebug()) {
+                _log.debug("Skipping tunnel test for ping tunnel: " + tunnelNickname);
+            }
+            CONCURRENT_TESTS.decrementAndGet();
+            return; // Skip testing for ping tunnels
+        }
 
         if (_cfg.isInbound()) {
             _replyTunnel = _cfg;
