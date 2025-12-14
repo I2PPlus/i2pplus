@@ -13,6 +13,7 @@
 --btn_active:linear-gradient(180deg,#fff,#eef);
 --btnAction_hover:linear-gradient(180deg,#fff 50%,#ddf 50%);
 --btnAction:linear-gradient(180deg,#fff 50%,#eef 50%);
+--header:linear-gradient(180deg,#fff 50%,rgb(240,240,255));
 --ink_btn:#7483be;
 --nav_hover:linear-gradient(180deg,#fcfaf7 50%,#ffe8bf 50%,#efd9b3 100%);
 --nav:linear-gradient(180deg,#fff 50%,#eef 51%,#eef 100%);
@@ -327,8 +328,9 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 #enableInOrder{margin-left:0;margin-right:12px}
 #setPriority th{border-bottom:0}
 #mediaContainer{background:#f0f0ff}
-#mediaContainer th{padding:8px 5px 8px 30px;background:url(/i2psnark/.res/icons/video.svg) no-repeat 8px center,linear-gradient(180deg,#fff 50%,rgb(240,240,255))}
-#mediaContainer th.audio{background:url(/i2psnark/.res/icons/audio.svg) no-repeat 8px center,linear-gradient(180deg,#fff 50%,rgb(240,240,255))}
+#mediaContainer th{padding:8px 5px 8px 30px}
+#mediaContainer th.video{background:url(/i2psnark/.res/icons/video.svg) no-repeat 8px center/ 18px,var(--header)}
+#mediaContainer th.audio{background:url(/i2psnark/.res/icons/audio.svg) no-repeat 8px center/18px,var(--header)}
 #mediaContainer td{padding:20px 15px;text-align:center}
 #mediaContainer video{width:auto;max-width:calc(100% - 10px)}
 
@@ -572,7 +574,7 @@ td.commentAuthor .commentAuthorName{margin-left:2px;padding:2px 5px 2px 22px;wid
 #commentInfo td,#userComments td{padding:5px}
 #commentInfo textarea{font-family:var(--bodyfont);font-weight:400;font-size:10pt;width:100%;min-height:64px;height:64px;resize:vertical}
 #commentInfo th,#userComments th{padding:8px 5px}
-#commentInfo th{padding-left:30px;position:relative;background:var(--comment) no-repeat scroll 8px center/16px,linear-gradient(180deg,#fff 50%,rgb(240,240,255))}
+#commentInfo th{padding-left:30px;position:relative;background:var(--comment) no-repeat scroll 8px center/16px,var(--header)}
 #commentsConfig .optbox{vertical-align:middle}
 #myRating td:empty{display:none}
 #myRating .commentRating{text-align:left}
