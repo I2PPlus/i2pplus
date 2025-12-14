@@ -197,14 +197,14 @@ public class HostChecker {
 
             if (pingSocketManager == null) {
                 if (_log.shouldWarn()) {
-                    _log.warn("Failed to create HostChecker SocketManager for ping: " + hostname);
+                    _log.warn("Failed to create SocketManager for HostChecker ping: " + hostname);
                 }
                 return fallbackToEepHead(hostname, startTime);
             }
 
             long tunnelBuildTime = System.currentTimeMillis() - tunnelBuildStart;
             if (_log.shouldDebug()) {
-                _log.debug("SocketManager ready for HostChecker in " + tunnelBuildTime + "ms -> " + hostname);
+                _log.debug("SocketManager ready for HostChecker ping in " + tunnelBuildTime + "ms -> " + hostname);
             }
 
             // Use I2PSocketManager ping method like I2Ping does
@@ -245,11 +245,11 @@ public class HostChecker {
                 try {
                     pingSocketManager.destroySocketManager();
                     if (_log.shouldDebug()) {
-                        _log.debug("Destroyed HostChecker SocketManager for: " + hostname);
+                        _log.debug("Destroyed SocketManager for HostChecker ping for: " + hostname);
                     }
                 } catch (Exception e) {
                     if (_log.shouldWarn()) {
-                        _log.warn("Error destroying HostChecker SocketManager for " + hostname + ": " + e.getMessage());
+                        _log.warn("Error destroying SocketManager HostChecker ping for: " + hostname + ": " + e.getMessage());
                     }
                 }
             }
@@ -280,9 +280,9 @@ public class HostChecker {
 
             if (_log.shouldInfo()) {
                 if (success) {
-                    _log.info("HostChecker eephead fallback [SUCCESS] -> Received response from " + hostname + " in " + responseTime + "ms");
+                    _log.info("HostChecker eephead [SUCCESS] -> Received response from " + hostname + " in " + responseTime + "ms");
                 } else {
-                    _log.info("HostChecker eephead fallback [FAILURE] -> No response from " + hostname + " in " + responseTime + "ms");
+                    _log.info("HostChecker eephead [FAILURE] -> No response from " + hostname + " in " + responseTime + "ms");
                 }
             }
 
