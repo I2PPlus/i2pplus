@@ -93,6 +93,7 @@ tr:hover .destaddress{color:#333}
 .info a[href^="http"],.helper a{width:100%;display:inline-block}
 #page{margin:-4px 0;padding:10px 0;min-width:700px;font-size:9pt;border:0;border-radius:2px}
 .selected,#activefilter{font-weight:700;color:#999;box-shadow:var(--highlight),inset 2px 2px 2px #aaa}
+.source a{filter:drop-shadow(2px 2px 2px #0004)}
 .storage::-moz-selection{background:#373}
 .storage::selection{background:#373}
 .storage{user-select:all;color:#050}
@@ -191,7 +192,7 @@ tr:hover .destaddress{color:#333}
 #subsLog .date{margin:2px -8px 2px 4px;padding:1px 8px;display:inline-block}
 
 /* host list */
-td.destinations{padding:0 4px 0 6px;max-width:50px;border-left:var(--border_soft);border-right:var(--border_soft)}
+td.destinations{padding:0 4px 0 6px;max-width:50px}
 td.destinations textarea{height:28px;box-shadow:none}
 .b32link a,.names a,.helper a{padding:4px 0;width:100%;display:inline-block;vertical-align:middle}
 .names a[href$=".i2p/"]{max-width:260px;overflow:hidden;text-overflow:ellipsis}
@@ -209,7 +210,7 @@ td.destinations textarea{height:28px;box-shadow:none}
 #host_list td.b32link a::after{background:var(--link) no-repeat center center}
 #host_list td:first-child:hover,#host_list td:nth-child(2):hover,#host_list td:nth-child(3):hover,#host_list td:nth-child(4):hover,#host_list td:hover{background-color:rgba(256,96,0,.1)}
 #host_list td.helper a::after{background:var(--helper) no-repeat center center}
-#host_list td:nth-last-child(n+4),#host_details td:nth-last-child(n+4),#host_details td:first-child{border-right:var(--border_soft)}
+#host_list td,#host_details td:nth-last-child(n+4),#host_details td:first-child{border-right:var(--border_soft)}
 #host_list th.checkbox{width:16px;background:var(--nuke) no-repeat center center/14px,linear-gradient(180deg,#fcfcff 51%,#fafaff 51%,#f6f6ff 100%)}
 
 /* host details page */
