@@ -61,8 +61,8 @@ public class ProfileOrganizer {
     private static final int ABSOLUTE_MAX_HIGHCAP_PEERS = 800;
 
     public static final String PROP_MAX_PROFILES = "profileOrganizer.maxProfiles";
-    public static final int DEFAULT_MAX_PROFILES = SystemVersion.isSlow() ? 1000 : 2000;
-    public static final int ABSOLUTE_MAX_PROFILES = 4000;
+    public static final int DEFAULT_MAX_PROFILES = SystemVersion.isSlow() ? 800 : 1200;
+    public static final int ABSOLUTE_MAX_PROFILES = 2000;
 
     private static final long[] RATES = {
         RateConstants.ONE_MINUTE,
