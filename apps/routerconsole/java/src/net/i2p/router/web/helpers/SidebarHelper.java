@@ -764,8 +764,8 @@ public class SidebarHelper extends HelperBase {
             if (!lServer && rServer) return 1;
             if (lClient && !rClient) return -1;
             if (!lClient && rClient) return 1;
-            if (lPing && !rPing) return -1;
-            if (!lPing && rPing) return 1;
+            if (lPing && !rPing) return 1;
+            if (!lPing && rPing) return -1;
 
             return Collator.getInstance().compare(lname.toLowerCase(), rname.toLowerCase());
         }
