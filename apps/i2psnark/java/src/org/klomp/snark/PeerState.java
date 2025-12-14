@@ -76,12 +76,10 @@ class PeerState implements DataLoader {
     /**
      * @since public since 0.9.47
      */
-    public static final int MAX_PIPELINE = 8; // this is for outbound requests
-
+    public static final int MAX_PIPELINE = 16; // this is for outbound requests
     public static final int PARTSIZE = 16 * 1024; // outbound request
-    private static final int MAX_PIPELINE_BYTES =
-            (MAX_PIPELINE + 2) * PARTSIZE; // this is for inbound requests
-    private static final int MAX_PARTSIZE = 64 * 1024; // Don't let anybody request more than this
+    private static final int MAX_PIPELINE_BYTES = (MAX_PIPELINE + 2) * PARTSIZE; // this is for inbound requests
+    private static final int MAX_PARTSIZE = 128 * 1024; // Don't let anybody request more than this
     private static final Integer PIECE_ALL = Integer.valueOf(-1);
 
     /**
@@ -118,13 +116,9 @@ class PeerState implements DataLoader {
     }
 
     void chokeMessage(boolean choke) {
-        if (_log.shouldDebug())
-            _log.debug(
-                    "Received "
-                            + (choke ? "" : "un")
-                            + "choked status message from ["
-                            + peer
-                            + "]");
+        if (_log.shouldDebug()) {
+            _log.debug("Received " + (choke ? "" : "un") + "choked status message from [" + peer + "]");
+        }
 
         boolean resend = choked && !choke;
         choked = choke;

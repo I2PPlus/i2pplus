@@ -44,7 +44,7 @@ class PartialPiece implements Comparable<PartialPiece> {
     private int off; // offset of next expected chunk start
 
     private static final int BUFSIZE = PeerState.PARTSIZE; // size of chunk parts
-    private static final ByteCache _cache = ByteCache.getInstance(32, BUFSIZE);
+    private static final ByteCache _cache = ByteCache.getInstance(48, BUFSIZE);
 
     // Threshold for using in-memory storage vs temp file; can be dynamically reduced on OOM
     private static final int MAX_IN_MEM = 1024 * 1024;

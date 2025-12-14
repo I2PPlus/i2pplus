@@ -29,10 +29,7 @@ class PeerConnectionIn implements Runnable {
     // The biggest is the piece message, for which the length is the
     // request size (32K) plus 9. (we could also check if Storage.MAX_PIECES / 8
     // in the bitfield message is bigger but it's currently 5000/8 = 625 so don't bother)
-    private static final int MAX_MSG_SIZE =
-            Math.max(
-                    PeerState.PARTSIZE + 9,
-                    MagnetState.CHUNK_SIZE + 100); // 100 for the ext msg dictionary
+    private static final int MAX_MSG_SIZE = Math.max(PeerState.PARTSIZE + 9, MagnetState.CHUNK_SIZE + 100); // 100 for the ext msg dictionary
 
     private volatile Thread thread;
     private volatile boolean quit;
