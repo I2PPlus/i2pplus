@@ -197,7 +197,7 @@ public class HostChecker {
 
             if (pingSocketManager == null) {
                 if (_log.shouldWarn()) {
-                    _log.warn("Failed to create socket manager for ping: " + hostname);
+                    _log.warn("Failed to create HostChecker SocketManager for ping: " + hostname);
                 }
                 return fallbackToEepHead(hostname, startTime);
             }
@@ -245,11 +245,11 @@ public class HostChecker {
                 try {
                     pingSocketManager.destroySocketManager();
                     if (_log.shouldDebug()) {
-                        _log.debug("Destroyed SocketManager for: " + hostname);
+                        _log.debug("Destroyed HostChecker SocketManager for: " + hostname);
                     }
                 } catch (Exception e) {
                     if (_log.shouldWarn()) {
-                        _log.warn("Error destroying SocketManager for " + hostname + ": " + e.getMessage());
+                        _log.warn("Error destroying HostChecker SocketManager for " + hostname + ": " + e.getMessage());
                     }
                 }
             }
@@ -280,9 +280,9 @@ public class HostChecker {
 
             if (_log.shouldInfo()) {
                 if (success) {
-                    _log.info("HostChecker EepHead fallback [SUCCESS] -> Received response from " + hostname + " in " + responseTime + "ms");
+                    _log.info("HostChecker eephead fallback [SUCCESS] -> Received response from " + hostname + " in " + responseTime + "ms");
                 } else {
-                    _log.info("HostChecker EepHead fallback [FAILURE] -> No response from " + hostname + " in " + responseTime + "ms");
+                    _log.info("HostChecker eephead fallback [FAILURE] -> No response from " + hostname + " in " + responseTime + "ms");
                 }
             }
 
@@ -407,11 +407,11 @@ public class HostChecker {
             }
 
             if (_log.shouldInfo()) {
-                _log.info("Loaded " + _pingResults.size() + " ping results from " + _hostsCheckFile.getName());
+                _log.info("Loaded " + _pingResults.size() + " HostChecker ping results from " + _hostsCheckFile.getName());
             }
         } catch (Exception e) {
             if (_log.shouldWarn()) {
-                _log.warn("Error loading ping results from " + _hostsCheckFile.getAbsolutePath(), e);
+                _log.warn("Error loading HostChecker ping results from " + _hostsCheckFile.getAbsolutePath(), e);
             }
         }
     }
@@ -467,11 +467,11 @@ public class HostChecker {
 
         } catch (java.io.IOException e) {
             if (_log.shouldError()) {
-                _log.error("IOException saving ping results: " + e.getMessage() +
+                _log.error("IOException saving HostChecker ping results: " + e.getMessage() +
                            "\n* File path: " + _hostsCheckFile.getAbsolutePath());
             }
         } catch (Exception e) {
-            _log.error("Unexpected error saving ping results: " + e.getMessage(), e);
+            _log.error("Unexpected error saving HostChecker ping results: " + e.getMessage(), e);
         }
     }
 
@@ -578,10 +578,8 @@ public class HostChecker {
                                     if (_log.shouldInfo()) {
                                         _log.info("Starting HostChecker ping for: " + hostname + "...");
                                     }
+
                                     pingDestination(hostname, dest);
-                                    if (_log.shouldInfo()) {
-                                        _log.info("HostChecker ping complete for: " + hostname);
-                                    }
                                     return null;
                                 } finally {
                                     // Always release semaphore permit
@@ -604,7 +602,7 @@ public class HostChecker {
                         future.get();
                     } catch (Exception e) {
                         if (_log.shouldWarn()) {
-                            _log.warn("Error waiting for ping completion: " + e.getMessage(), e);
+                            _log.warn("Error waiting for HostChecker ping completion: " + e.getMessage(), e);
                         }
                     }
                 }
@@ -624,7 +622,7 @@ public class HostChecker {
                 savePingResults();
             } catch (Exception e) {
                 if (_log.shouldWarn()) {
-                    _log.warn("Error during ping cycle", e);
+                    _log.warn("Error during HostChecker ping cycle", e);
                 }
             }
         }
@@ -646,7 +644,7 @@ public class HostChecker {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
         Log log = ctx.logManager().getLog(HostChecker.class);
 
-        log.info("Ping Results:");
+        log.info("HostChecker ping results:");
         for (Map.Entry<String, PingResult> entry : tester.getAllPingResults().entrySet()) {
             PingResult result = entry.getValue();
             log.info(entry.getKey() + ": " + result + (result.reachable ? " (" + result.responseTime + "ms)" : ""));
