@@ -4,10 +4,16 @@ sourceSets {
             srcDir 'java/src'
         }
     }
+    test {
+        java {
+            srcDir 'java/test'
+        }
+    }
 }
 
 dependencies {
     implementation project(':core')
     implementation project(':apps:jetty')
     implementation project(':apps:ministreaming')
+    testImplementation 'junit:junit:4.13.2'
 }

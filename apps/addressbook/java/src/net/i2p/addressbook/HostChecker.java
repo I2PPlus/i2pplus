@@ -29,6 +29,7 @@ import net.i2p.client.streaming.I2PSocketManagerFactory;
 import net.i2p.data.Destination;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
+import net.i2p.util.EepHead;
 
 /**
  * Ping tester for address book entries.
@@ -174,6 +175,7 @@ public class HostChecker {
 
     /**
      * Ping destination using single tunnel and I2Ping-style retry handling
+     * Falls back to EepHead HTTP HEAD request if ping fails
      */
     private PingResult pingDestination(String hostname, Destination destination) {
         long startTime = System.currentTimeMillis();
@@ -197,11 +199,7 @@ public class HostChecker {
                 if (_log.shouldWarn()) {
                     _log.warn("Failed to create socket manager for ping: " + hostname);
                 }
-                PingResult result = new PingResult(false, startTime, System.currentTimeMillis() - startTime);
-                synchronized (_pingResults) {
-                    _pingResults.put(hostname, result);
-                }
-                return result;
+                return fallbackToEepHead(hostname, startTime);
             }
 
             long tunnelBuildTime = System.currentTimeMillis() - tunnelBuildStart;
@@ -214,34 +212,32 @@ public class HostChecker {
             long pingStart = System.currentTimeMillis();
             boolean reachable = pingSocketManager.ping(destination, 0, 0, _pingTimeout);
             long pingTime = System.currentTimeMillis() - pingStart;
-            PingResult result = new PingResult(reachable, startTime, pingTime);
 
-            synchronized (_pingResults) {
-                _pingResults.put(hostname, result);
+            if (reachable) {
+                PingResult result = new PingResult(true, startTime, pingTime);
+                synchronized (_pingResults) {
+                    _pingResults.put(hostname, result);
+                }
+                if (_log.shouldInfo()) {
+                    _log.info("HostChecker ping [SUCCESS] -> Received response from " + hostname + " in " + pingTime + "ms");
+                }
+                savePingResults();
+                return result;
+            } else {
+                if (_log.shouldInfo()) {
+                    _log.info("HostChecker ping [FAILURE] -> No response from " + hostname + ", performing eephead probe...");
+                }
+                return fallbackToEepHead(hostname, startTime);
             }
-
-            if (_log.shouldInfo()) {
-                _log.info("HostChecker results for " + hostname + " -> " + (reachable ? "SUCCESS" : "FAILED") + " in " + pingTime + "ms");
-            }
-
-            // Save results immediately after ping
-            savePingResults();
-            return result;
 
         } catch (Exception e) {
             long responseTime = System.currentTimeMillis() - startTime;
             String errorMsg = "Error: " + e.getMessage();
-            if (_log.shouldError()) {
-                _log.error("HostChecker error for " + hostname + " -> " + errorMsg, e);
+            if (_log.shouldInfo()) {
+                _log.info("HostChecker ping [ERROR] -> No response from " + hostname + " (" + errorMsg + "), performing eephead probe...");
             }
 
-            PingResult result = new PingResult(false, startTime, responseTime);
-            synchronized (_pingResults) {
-                _pingResults.put(hostname, result);
-            }
-
-            savePingResults();
-            return result;
+            return fallbackToEepHead(hostname, startTime);
 
         } finally {
             // Clean up the single socket manager
@@ -257,6 +253,55 @@ public class HostChecker {
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * Fallback method to use EepHead for HTTP HEAD request testing
+     * Marks site as up if any response is received
+     */
+    private PingResult fallbackToEepHead(String hostname, long startTime) {
+        long eepHeadStart = System.currentTimeMillis();
+        try {
+            String url = "http://" + hostname;
+            EepHead eepHead = new EepHead(_context, "127.0.0.1", 4444, 1, url);
+
+            // Use a shorter timeout for the fallback
+            int eepHeadTimeout = 30000; // 30 seconds
+
+            boolean success = eepHead.fetch(eepHeadTimeout, -1, eepHeadTimeout);
+            long responseTime = System.currentTimeMillis() - startTime;
+
+            // Any response (even errors like 404, 500, etc.) indicates the site is up
+            PingResult result = new PingResult(success, startTime, responseTime);
+            synchronized (_pingResults) {
+                _pingResults.put(hostname, result);
+            }
+
+            if (_log.shouldInfo()) {
+                if (success) {
+                    _log.info("HostChecker EepHead fallback [SUCCESS] -> Received response from " + hostname + " in " + responseTime + "ms");
+                } else {
+                    _log.info("HostChecker EepHead fallback [FAILURE] -> No response from " + hostname + " in " + responseTime + "ms");
+                }
+            }
+
+            savePingResults();
+            return result;
+
+        } catch (Exception e) {
+            long responseTime = System.currentTimeMillis() - startTime;
+            if (_log.shouldInfo()) {
+                _log.info("HostChecker eephead probe error for " + hostname + " -> " + e.getMessage());
+            }
+
+            PingResult result = new PingResult(false, startTime, responseTime);
+            synchronized (_pingResults) {
+                _pingResults.put(hostname, result);
+            }
+
+            savePingResults();
+            return result;
         }
     }
 
@@ -407,8 +452,17 @@ public class HostChecker {
                 java.nio.file.StandardOpenOption.WRITE);
 
             if (_log.shouldInfo() && _pingResults.size() % 10 == 0) {
+                int upCount = 0;
+                int downCount = 0;
+                for (PingResult result : _pingResults.values()) {
+                    if (result.reachable) {
+                        upCount++;
+                    } else {
+                        downCount++;
+                    }
+                }
                 _log.info("HostChecker results saved to: " + absolutePath +
-                          " -> Total hosts: " + _pingResults.size() + " (Size: " + _hostsCheckFile.length() + " bytes)");
+                          " -> Total hosts: " + _pingResults.size() + " (Up: " + upCount + " / Down: " + downCount + ")");
             }
 
         } catch (java.io.IOException e) {
