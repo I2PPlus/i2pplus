@@ -342,9 +342,9 @@ h3:hover .toggleSection{display:inline-block;z-index:999}
 #sb_updatesection.collapsed>*:not(h3){display:none}
 #updatespinner{display:inline-block;height:20px;width:20px;background:var(--update) no-repeat fixed center center/20px;animation:spin 3s ease 0s both}
 #sidebar #localtunnelsActive,#sidebar #localtunnelsActive td{text-align:center;background:none;padding:3px 0;line-height:16px;vertical-align:middle;text-align:center}
-#sidebar #localtunnelsActive span{display:inline-block;font-size:90%;font-weight:600;text-transform:lowercase;vertical-align:middle;margin:1px 5px;line-height:16px;width:auto;letter-spacing:3px}
+#sidebar #localtunnelsActive span{display:inline-block;font-size:90%;font-weight:600;text-transform:lowercase;vertical-align:middle;margin:1px 5px;line-height:16px;width:auto;letter-spacing:2px}
 #sidebar #localtunnelsActive span.count_0{display:none}
-#sidebar #localtunnelsActive img{width:16px;height:16px;line-height:16px;margin:0 0 0 -3px;vertical-align:middle;display:inline-block}
+#sidebar #localtunnelsActive img{width:16px;height:16px;line-height:16px;margin:0 0 0 -2px;vertical-align:middle;display:inline-block}
 #sidebar #localtunnelSummary{margin:-7px auto -8px -1px}
 #sidebar #sb_internals.collapsed td,#sidebar #sb_advanced.collapsed td,#sidebar #sb_services.collapsed td{padding:1px;vertical-align:middle;display:flex;width:calc(100% - 2px);max-width:100%}
 #sidebar #sb_internals.collapsed a:not(.sb_icon),#sidebar #sb_advanced.collapsed a:not(.sb_icon),#sidebar #sb_services.collapsed a:not(.sb_icon){display:none}
