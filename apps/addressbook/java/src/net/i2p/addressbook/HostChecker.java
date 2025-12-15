@@ -51,7 +51,7 @@ public class HostChecker {
 
     // Configuration defaults
     private static final long DEFAULT_PING_INTERVAL = 8 * 60 * 60 * 1000L; // 8 hours
-    private static final long DEFAULT_PING_TIMEOUT = 2 * 60 * 1000L; // 2 minutes
+    private static final long DEFAULT_PING_TIMEOUT = 90 * 1000L; // 90 seconds
     private static final int DEFAULT_MAX_CONCURRENT = 12;
 
     // Startup delay to allow router and socket manager to fully initialize
@@ -197,14 +197,14 @@ public class HostChecker {
 
             if (pingSocketManager == null) {
                 if (_log.shouldWarn()) {
-                    _log.warn("Failed to create SocketManager for HostChecker ping: " + hostname);
+                    _log.warn("Failed to create SocketManager for HostChecker ping -> " + hostname + " [6,4]");
                 }
                 return fallbackToEepHead(hostname, startTime);
             }
 
             long tunnelBuildTime = System.currentTimeMillis() - tunnelBuildStart;
             if (_log.shouldDebug()) {
-                _log.debug("SocketManager ready for HostChecker ping in " + tunnelBuildTime + "ms -> " + hostname);
+                _log.debug("SocketManager ready for HostChecker ping in " + tunnelBuildTime + "ms -> " + hostname + " [6,4]");
             }
 
             // Use I2PSocketManager ping method like I2Ping does
@@ -219,13 +219,122 @@ public class HostChecker {
                     _pingResults.put(hostname, result);
                 }
                 if (_log.shouldInfo()) {
-                    _log.info("HostChecker ping [SUCCESS] -> Received response from " + hostname + " in " + pingTime + "ms");
+                    _log.info("HostChecker ping [SUCCESS] -> Received response from " + hostname + " [6,4] in " + pingTime + "ms");
                 }
                 savePingResults();
                 return result;
             } else {
                 if (_log.shouldInfo()) {
-                    _log.info("HostChecker ping [FAILURE] -> No response from " + hostname + ", performing eephead probe...");
+                    _log.info("HostChecker ping [FAILURE] -> No response from " + hostname + " [6,4], trying ElGamal...");
+                }
+                // Clean up 6,4 SocketManager before trying 4,0
+                try {
+                    if (pingSocketManager != null) {
+                        pingSocketManager.destroySocketManager();
+                        //if (_log.shouldDebug()) {
+                        //    _log.debug("Destroyed SocketManager [6,4] before trying ElGamal for " + hostname);
+                        //}
+                    }
+                } catch (Exception e) {
+                    if (_log.shouldWarn()) {
+                        _log.warn("Error destroying SocketManager [6,4] before trying ElGamal for " + hostname + " -> " + e.getMessage());
+                    }
+                }
+            // Clean up 6,4 SocketManager before trying 4,0
+            try {
+                if (pingSocketManager != null) {
+                    pingSocketManager.destroySocketManager();
+                    pingSocketManager = null; // Prevent double-destroy in finally
+                    //if (_log.shouldDebug()) {
+                    //    _log.debug("Destroyed SocketManager [6,4] before trying ElGamal for " + hostname);
+                    //}
+                }
+            } catch (Exception destroyEx) {
+                if (_log.shouldWarn()) {
+                    _log.warn("Error destroying SocketManager [6,4] before trying ElGamal for " + hostname + " -> " + destroyEx.getMessage());
+                }
+            }
+
+            return tryWithFallbackEncryption(hostname, destination, startTime);
+            }
+
+        } catch (Exception e) {
+            long responseTime = System.currentTimeMillis() - startTime;
+            String errorMsg = "Error: " + e.getMessage();
+            if (_log.shouldInfo()) {
+                _log.info("HostChecker ping [ERROR] -> No response from " + hostname + " [6,4] (" + errorMsg + "), trying ElGamal...");
+            }
+
+            return tryWithFallbackEncryption(hostname, destination, startTime);
+
+        } finally {
+            // Clean up the single socket manager (only if not already cleaned up)
+            if (pingSocketManager != null) {
+                try {
+                    pingSocketManager.destroySocketManager();
+                    //if (_log.shouldDebug()) {
+                    //    _log.debug("Destroyed SocketManager for HostChecker ping for " + hostname);
+                    //}
+                } catch (Exception e) {
+                    if (_log.shouldWarn()) {
+                        _log.warn("Error destroying SocketManager HostChecker ping for " + hostname + " [6,4] -> " + e.getMessage());
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Try ping with fallback encryption type 4,0
+     * Falls back to EepHead HTTP HEAD request if ping fails
+     */
+    private PingResult tryWithFallbackEncryption(String hostname, Destination destination, long startTime) {
+        I2PSocketManager pingSocketManager = null;
+
+        try {
+            long tunnelBuildStart = System.currentTimeMillis();
+            Properties options = new Properties();
+            options.setProperty("inbound.nickname", "Ping [" + hostname.replace(".i2p", "") + "]");
+            options.setProperty("outbound.nickname", "Ping [" + hostname.replace(".i2p", "") + "]");
+            options.setProperty("inbound.quantity", "1");
+            options.setProperty("outbound.quantity", "1");
+            options.setProperty("i2cp.leaseSetType", "3");
+            options.setProperty("i2cp.leaseSetEncType", "0"); // ElGamal legacy check
+            options.setProperty("i2cp.dontPublishLeaseSet", "true");
+
+            pingSocketManager = I2PSocketManagerFactory.createManager(options);
+
+            if (pingSocketManager == null) {
+                if (_log.shouldWarn()) {
+                    _log.warn("Failed to create SocketManager for HostChecker ping -> " + hostname + " [ElGamal]");
+                }
+                return fallbackToEepHead(hostname, startTime);
+            }
+
+            long tunnelBuildTime = System.currentTimeMillis() - tunnelBuildStart;
+            if (_log.shouldDebug()) {
+                _log.debug("SocketManager ready for HostChecker ping in " + tunnelBuildTime + "ms -> " + hostname + " [ElGamal]");
+            }
+
+            // Use I2PSocketManager ping method like I2Ping does
+            // Parameters: destination, localPort, remotePort, timeout
+            long pingStart = System.currentTimeMillis();
+            boolean reachable = pingSocketManager.ping(destination, 0, 0, _pingTimeout);
+            long pingTime = System.currentTimeMillis() - pingStart;
+
+            if (reachable) {
+                PingResult result = new PingResult(true, startTime, pingTime);
+                synchronized (_pingResults) {
+                    _pingResults.put(hostname, result);
+                }
+                if (_log.shouldInfo()) {
+                    _log.info("HostChecker ping [SUCCESS] -> Received response from " + hostname + " [ElGamal] in " + pingTime + "ms");
+                }
+                savePingResults();
+                return result;
+            } else {
+                if (_log.shouldInfo()) {
+                    _log.info("HostChecker ping [FAILURE] -> No response from " + hostname + " [ElGamal], performing eephead probe...");
                 }
                 return fallbackToEepHead(hostname, startTime);
             }
@@ -234,7 +343,7 @@ public class HostChecker {
             long responseTime = System.currentTimeMillis() - startTime;
             String errorMsg = "Error: " + e.getMessage();
             if (_log.shouldInfo()) {
-                _log.info("HostChecker ping [ERROR] -> No response from " + hostname + " (" + errorMsg + "), performing eephead probe...");
+                _log.info("HostChecker ping [ERROR] -> No response from " + hostname + " [ElGamal] (" + errorMsg + "), performing eephead probe...");
             }
 
             return fallbackToEepHead(hostname, startTime);
@@ -244,12 +353,12 @@ public class HostChecker {
             if (pingSocketManager != null) {
                 try {
                     pingSocketManager.destroySocketManager();
-                    if (_log.shouldDebug()) {
-                        _log.debug("Destroyed SocketManager for HostChecker ping for: " + hostname);
-                    }
+                    //if (_log.shouldDebug()) {
+                    //    _log.debug("Destroyed SocketManager for HostChecker ping for " + hostname);
+                    //}
                 } catch (Exception e) {
                     if (_log.shouldWarn()) {
-                        _log.warn("Error destroying SocketManager HostChecker ping for: " + hostname + ": " + e.getMessage());
+                        _log.warn("Error destroying SocketManager HostChecker for " + hostname + ": " + e.getMessage());
                     }
                 }
             }
@@ -280,9 +389,9 @@ public class HostChecker {
 
             if (_log.shouldInfo()) {
                 if (success) {
-                    _log.info("HostChecker eephead [SUCCESS] -> Received response from " + hostname + " in " + responseTime + "ms");
+                    _log.info("HostChecker head [SUCCESS] -> Received response from " + hostname + " in " + responseTime + "ms");
                 } else {
-                    _log.info("HostChecker eephead [FAILURE] -> No response from " + hostname + " in " + responseTime + "ms");
+                    _log.info("HostChecker head [FAILURE] -> No response from " + hostname + " in " + responseTime + "ms");
                 }
             }
 
@@ -407,11 +516,11 @@ public class HostChecker {
             }
 
             if (_log.shouldInfo()) {
-                _log.info("Loaded " + _pingResults.size() + " HostChecker ping results from " + _hostsCheckFile.getName());
+                _log.info("Loaded " + _pingResults.size() + " HostChecker results from " + _hostsCheckFile.getName());
             }
         } catch (Exception e) {
             if (_log.shouldWarn()) {
-                _log.warn("Error loading HostChecker ping results from " + _hostsCheckFile.getAbsolutePath(), e);
+                _log.warn("Error loading HostChecker results from " + _hostsCheckFile.getAbsolutePath(), e);
             }
         }
     }
@@ -467,11 +576,11 @@ public class HostChecker {
 
         } catch (java.io.IOException e) {
             if (_log.shouldError()) {
-                _log.error("IOException saving HostChecker ping results: " + e.getMessage() +
+                _log.error("IOException saving HostChecker results: " + e.getMessage() +
                            "\n* File path: " + _hostsCheckFile.getAbsolutePath());
             }
         } catch (Exception e) {
-            _log.error("Unexpected error saving HostChecker ping results: " + e.getMessage(), e);
+            _log.error("Unexpected error saving HostChecker results: " + e.getMessage(), e);
         }
     }
 
@@ -576,7 +685,7 @@ public class HostChecker {
                                     Thread.sleep(randomDelay);
 
                                     if (_log.shouldInfo()) {
-                                        _log.info("Starting HostChecker ping for: " + hostname + "...");
+                                        _log.info("Starting HostChecker for " + hostname + "...");
                                     }
 
                                     pingDestination(hostname, dest);
@@ -602,7 +711,7 @@ public class HostChecker {
                         future.get();
                     } catch (Exception e) {
                         if (_log.shouldWarn()) {
-                            _log.warn("Error waiting for HostChecker ping completion: " + e.getMessage(), e);
+                            _log.warn("Error waiting for HostChecker completion -> " + e.getMessage(), e);
                         }
                     }
                 }
@@ -622,7 +731,7 @@ public class HostChecker {
                 savePingResults();
             } catch (Exception e) {
                 if (_log.shouldWarn()) {
-                    _log.warn("Error during HostChecker ping cycle", e);
+                    _log.warn("Error during HostChecker cycle", e);
                 }
             }
         }
@@ -644,7 +753,7 @@ public class HostChecker {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
         Log log = ctx.logManager().getLog(HostChecker.class);
 
-        log.info("HostChecker ping results:");
+        log.info("HostChecker results:");
         for (Map.Entry<String, PingResult> entry : tester.getAllPingResults().entrySet()) {
             PingResult result = entry.getValue();
             log.info(entry.getKey() + ": " + result + (result.reachable ? " (" + result.responseTime + "ms)" : ""));
