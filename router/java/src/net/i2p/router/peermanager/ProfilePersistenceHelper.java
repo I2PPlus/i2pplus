@@ -202,13 +202,34 @@ class ProfilePersistenceHelper {
     public List<PeerProfile> readProfiles() {
         long start = System.currentTimeMillis();
         long down = _context.router().getEstimatedDowntime();
-//        long cutoff = down < 15*24*60*60*1000L ? start - down - 24*60*60*1000 : start;
-        long cutoff = down < 15*24*60*60*1000L ? start - down - 14*24*60*60*1000 : start - 7*24*60*60*1000;
+        long cutoff;
+        if (down < 24*60*60*1000L) {
+            cutoff = start - 3*24*60*60*1000;  // 3 days for low downtime
+        } else if (down < 15*24*60*60*1000L) {
+            cutoff = start - down - 14*24*60*60*1000;  // 14 days minus downtime
+        } else {
+            cutoff = start - 7*24*60*60*1000;  // 7 days default
+        }
         List<File> files = selectFiles();
-        if (files.size() > LIMIT_PROFILES) {Collections.shuffle(files, _context.random());}
-        List<PeerProfile> profiles = new ArrayList<PeerProfile>(Math.min(LIMIT_PROFILES, files.size()));
-        int count = 0;
+        // Pre-filter stale files by file timestamp to avoid reading them
+        List<File> freshFiles = new ArrayList<File>(files.size());
+        int staleDeleted = 0;
         for (File f : files) {
+            if (f.lastModified() >= cutoff) {
+                freshFiles.add(f);
+            } else {
+                f.delete();
+                staleDeleted++;
+            }
+        }
+        if (staleDeleted > 0 && _log.shouldInfo()) {
+            _log.info("Deleted " + staleDeleted + " stale profile files by timestamp");
+        }
+        
+        if (freshFiles.size() > LIMIT_PROFILES) {Collections.shuffle(freshFiles, _context.random());}
+        List<PeerProfile> profiles = new ArrayList<PeerProfile>(Math.min(LIMIT_PROFILES, freshFiles.size()));
+        int count = 0;
+        for (File f : freshFiles) {
             if (count >= LIMIT_PROFILES) {
                 f.delete();
                 continue;
@@ -219,6 +240,7 @@ class ProfilePersistenceHelper {
                 count++;
             }
         }
+        
         long duration = System.currentTimeMillis() - start;
         if (_log.shouldInfo()) {_log.info("Loaded " + count + " peer profiles in " + duration + "ms");}
         return profiles;
