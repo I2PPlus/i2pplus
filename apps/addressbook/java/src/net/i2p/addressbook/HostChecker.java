@@ -30,6 +30,12 @@ import net.i2p.data.Destination;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
 import net.i2p.util.EepHead;
+import net.i2p.router.NetworkDatabaseFacade;
+import net.i2p.router.RouterContext;
+import net.i2p.data.LeaseSet;
+import net.i2p.data.Hash;
+import net.i2p.router.Job;
+import net.i2p.router.JobTiming;
 
 /**
  * Ping tester for address book entries.
@@ -60,6 +66,7 @@ public class HostChecker {
     private long _pingInterval = DEFAULT_PING_INTERVAL;
     private long _pingTimeout = DEFAULT_PING_TIMEOUT;
     private int _maxConcurrent = DEFAULT_MAX_CONCURRENT;
+    private boolean _useLeaseSetCheck = true;
 
     /**
      * Ping result data structure
@@ -98,6 +105,15 @@ public class HostChecker {
         _destinations = new ConcurrentHashMap<String, Destination>();
         _running = new AtomicBoolean(false);
         _pingSemaphore = new Semaphore(_maxConcurrent);
+
+        // Only enable LeaseSet checking if we have access to the network database
+        // This will be true when running inside the router (RouterContext)
+        _useLeaseSetCheck = (_context instanceof RouterContext);
+
+        if (_log.shouldInfo()) {
+            _log.info("HostChecker initialized with LeaseSet checking " +
+                     (_useLeaseSetCheck ? "enabled" : "disabled"));
+        }
 
         // Use config directory/addressbook for hosts_check.txt
         File configDir = _context.getConfigDir();
@@ -170,7 +186,209 @@ public class HostChecker {
             return new PingResult(false, System.currentTimeMillis(), -1);
         }
 
-        return pingDestination(hostname, destination);
+        // First try ping (I2PSocketManager)
+        PingResult pingResult = pingDestination(hostname, destination);
+        if (pingResult.reachable) {
+            return pingResult; // Ping successful, host is reachable
+        }
+
+        // If ping failed, try EepHead HTTP HEAD request
+        PingResult eepHeadResult = fallbackToEepHead(hostname, pingResult.timestamp);
+        if (eepHeadResult.reachable) {
+            return eepHeadResult; // EepHead successful, host is reachable
+        }
+
+        // Both ping and EepHead failed - perform final LeaseSet check
+        if (_useLeaseSetCheck) {
+            if (_log.shouldInfo()) {
+                _log.info("HostChecker head [FAILURE] -> No response from " + hostname + ", trying LeaseSet lookup...");
+            }
+            return checkLeaseSetFinal(hostname, destination);
+        } else {
+            // No LeaseSet checking available, return the failed EepHead result
+            return eepHeadResult;
+        }
+    }
+
+    /**
+     * Perform final reachability check using LeaseSet lookup via floodfill
+     * This is the definitive check - if no LeaseSet is found anywhere in the network,
+     * the host is considered permanently offline and should be removed from the addressbook
+     */
+    private PingResult checkLeaseSetFinal(String hostname, Destination destination) {
+        long startTime = System.currentTimeMillis();
+
+        try {
+            // Get the network database (only available in RouterContext)
+            if (!(_context instanceof RouterContext)) {
+                if (_log.shouldDebug()) {
+                    _log.debug("Not running in RouterContext for LeaseSet check: " + hostname);
+                }
+                return pingDestination(hostname, destination); // fallback to ping
+            }
+
+            RouterContext routerContext = (RouterContext) _context;
+            NetworkDatabaseFacade netDb = routerContext.netDb();
+
+            // Look up the LeaseSet for this destination via floodfill
+            Hash destHash = destination.calculateHash();
+
+            // Try local lookup first (faster)
+            LeaseSet leaseSet = netDb.lookupLeaseSetLocally(destHash);
+
+            if (leaseSet != null) {
+                long responseTime = System.currentTimeMillis() - startTime;
+
+                // Check if leases are still current and valid
+                boolean isCurrent = leaseSet.isCurrent(_context.clock().now());
+
+                PingResult result = new PingResult(isCurrent, startTime, responseTime);
+                synchronized (_pingResults) {
+                    _pingResults.put(hostname, result);
+                }
+
+                savePingResults();
+                return result;
+            } else {
+                // LeaseSet not found locally, perform remote lookup via floodfill
+                return lookupLeaseSetRemotely(hostname, destination, destHash, startTime);
+            }
+
+        } catch (Exception e) {
+            long responseTime = System.currentTimeMillis() - startTime;
+            if (_log.shouldWarn()) {
+                _log.warn("HostChecker LeaseSet lookup error for " + hostname + " -> " + e.getMessage());
+            }
+
+            // LeaseSet lookup error - HOST IS PERMANENTLY OFFLINE
+            PingResult result = new PingResult(false, startTime, responseTime);
+            synchronized (_pingResults) {
+                _pingResults.put(hostname, result);
+            }
+
+            savePingResults();
+            return result;
+        }
+    }
+
+    /**
+     * Perform remote LeaseSet lookup via floodfill network
+     */
+    private PingResult lookupLeaseSetRemotely(String hostname, Destination destination,
+                                           Hash destHash, long startTime) {
+        try {
+            if (!(_context instanceof RouterContext)) {
+                return pingDestination(hostname, destination);
+            }
+
+            RouterContext routerContext = (RouterContext) _context;
+            NetworkDatabaseFacade netDb = routerContext.netDb();
+
+            // Use a simple callback approach to wait for the lookup result
+            final boolean[] lookupResult = {false};
+            final boolean[] lookupComplete = {false};
+            final Exception[] lookupError = {null};
+
+            // Create success and failure callbacks
+            Job onSuccess = new Job() {
+                public String getName() { return "LeaseSet lookup success"; }
+                public long getJobId() { return System.currentTimeMillis(); }
+                public JobTiming getTiming() { return new JobTiming(routerContext); }
+                public void runJob() {
+                    lookupResult[0] = true;
+                    lookupComplete[0] = true;
+                    synchronized (lookupComplete) {
+                        lookupComplete.notify();
+                    }
+                }
+                public void dropped() {
+                    // Handle job being dropped
+                    lookupResult[0] = false;
+                    lookupComplete[0] = true;
+                    synchronized (lookupComplete) {
+                        lookupComplete.notify();
+                    }
+                }
+            };
+
+            Job onFailure = new Job() {
+                public String getName() { return "LeaseSet lookup failure"; }
+                public long getJobId() { return System.currentTimeMillis(); }
+                public JobTiming getTiming() { return new JobTiming(routerContext); }
+                public void runJob() {
+                    lookupResult[0] = false;
+                    lookupComplete[0] = true;
+                    synchronized (lookupComplete) {
+                        lookupComplete.notify();
+                    }
+                }
+                public void dropped() {
+                    // Handle job being dropped
+                    lookupResult[0] = false;
+                    lookupComplete[0] = true;
+                    synchronized (lookupComplete) {
+                        lookupComplete.notify();
+                    }
+                }
+            };
+
+            // Start the lookup with a timeout
+            netDb.lookupLeaseSet(destHash, onSuccess, onFailure, 10000); // 30 second timeout
+
+            // Wait for lookup to complete with timeout
+            synchronized (lookupComplete) {
+                if (!lookupComplete[0]) {
+                    lookupComplete.wait(10000);
+                }
+            }
+
+            long responseTime = System.currentTimeMillis() - startTime;
+
+            if (lookupResult[0] && lookupComplete[0]) {
+                // Successfully found LeaseSet via floodfill
+                PingResult result = new PingResult(true, startTime, responseTime);
+                synchronized (_pingResults) {
+                    _pingResults.put(hostname, result);
+                }
+
+                if (_log.shouldInfo()) {
+                    _log.info("HostChecker LeaseSet check [SUCCESS] -> Found LeaseSet for " +
+                             hostname + " in " + responseTime + "ms");
+                }
+
+                savePingResults();
+                return result;
+            } else {
+                // LeaseSet not found via floodfill - HOST IS PERMANENTLY OFFLINE
+                PingResult result = new PingResult(false, startTime, responseTime);
+                synchronized (_pingResults) {
+                    _pingResults.put(hostname, result);
+                }
+
+                if (_log.shouldInfo()) {
+                    _log.info("HostChecker LeaseSet check [FAILURE] -> No LeaseSet found for " +
+                              hostname + " in " + responseTime + "ms");
+                }
+
+                savePingResults();
+                return result;
+            }
+
+        } catch (Exception e) {
+            long responseTime = System.currentTimeMillis() - startTime;
+            if (_log.shouldWarn()) {
+                _log.warn("HostChecker LeaseSet lookup error for " + hostname + " -> " + e.getMessage());
+            }
+
+            // LeaseSet lookup error - HOST IS PERMANENTLY OFFLINE
+            PingResult result = new PingResult(false, startTime, responseTime);
+            synchronized (_pingResults) {
+                _pingResults.put(hostname, result);
+            }
+
+            savePingResults();
+            return result;
+        }
     }
 
     /**
@@ -199,7 +417,7 @@ public class HostChecker {
                 if (_log.shouldWarn()) {
                     _log.warn("Failed to create SocketManager for HostChecker ping -> " + hostname + " [6,4]");
                 }
-                return fallbackToEepHead(hostname, startTime);
+                return new PingResult(false, startTime, System.currentTimeMillis() - startTime);
             }
 
             long tunnelBuildTime = System.currentTimeMillis() - tunnelBuildStart;
@@ -286,7 +504,7 @@ public class HostChecker {
 
     /**
      * Try ping with fallback encryption type 4,0
-     * Falls back to EepHead HTTP HEAD request if ping fails
+     * Returns failure result if ping fails (no automatic fallback)
      */
     private PingResult tryWithFallbackEncryption(String hostname, Destination destination, long startTime) {
         I2PSocketManager pingSocketManager = null;
@@ -308,7 +526,7 @@ public class HostChecker {
                 if (_log.shouldWarn()) {
                     _log.warn("Failed to create SocketManager for HostChecker ping -> " + hostname + " [ElGamal]");
                 }
-                return fallbackToEepHead(hostname, startTime);
+                return new PingResult(false, startTime, System.currentTimeMillis() - startTime);
             }
 
             long tunnelBuildTime = System.currentTimeMillis() - tunnelBuildStart;
@@ -334,19 +552,19 @@ public class HostChecker {
                 return result;
             } else {
                 if (_log.shouldInfo()) {
-                    _log.info("HostChecker ping [FAILURE] -> No response from " + hostname + " [ElGamal], performing eephead probe...");
+                    _log.info("HostChecker ping [FAILURE] -> No response from " + hostname + " [ElGamal]");
                 }
-                return fallbackToEepHead(hostname, startTime);
+                return new PingResult(false, startTime, System.currentTimeMillis() - startTime);
             }
 
         } catch (Exception e) {
             long responseTime = System.currentTimeMillis() - startTime;
             String errorMsg = "Error: " + e.getMessage();
             if (_log.shouldInfo()) {
-                _log.info("HostChecker ping [ERROR] -> No response from " + hostname + " [ElGamal] (" + errorMsg + "), performing eephead probe...");
+                _log.info("HostChecker ping [ERROR] -> No response from " + hostname + " [ElGamal] (" + errorMsg + ")");
             }
 
-            return fallbackToEepHead(hostname, startTime);
+            return new PingResult(false, startTime, System.currentTimeMillis() - startTime);
 
         } finally {
             // Clean up the single socket manager
@@ -441,6 +659,28 @@ public class HostChecker {
     public void setMaxConcurrent(int max) {
         _maxConcurrent = max;
     }
+
+    /**
+     * Set whether to use LeaseSet checking
+     *
+     * @param useLeaseSetCheck true to use LeaseSet lookup first
+     */
+    public void setUseLeaseSetCheck(boolean useLeaseSetCheck) {
+        _useLeaseSetCheck = useLeaseSetCheck;
+    }
+
+
+
+    /**
+     * Get whether to use LeaseSet checking
+     *
+     * @return true if LeaseSet checking is enabled
+     */
+    public boolean getUseLeaseSetCheck() {
+        return _useLeaseSetCheck;
+    }
+
+
 
     /**
      * Check if ping tester is running
@@ -688,7 +928,7 @@ public class HostChecker {
                                         _log.info("Starting HostChecker for " + hostname + "...");
                                     }
 
-                                    pingDestination(hostname, dest);
+                                    testDestination(hostname);
                                     return null;
                                 } finally {
                                     // Always release semaphore permit

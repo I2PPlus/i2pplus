@@ -15,5 +15,6 @@ dependencies {
     implementation project(':core')
     implementation project(':apps:jetty')
     implementation project(':apps:ministreaming')
+    implementation project(':router')
     testImplementation 'junit:junit:4.13.2'
 }

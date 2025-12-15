@@ -36,6 +36,7 @@
       <!-- Depend on classes instead of jars where available -->
       <classpath>
         <pathelement location="../../core/java/build/obj"/>
+        <pathelement location="../../router/java/build/obj"/>
         <pathelement location="../../ministreaming/java/build/obj"/>
         <pathelement location="../../streaming/java/build/obj"/>
       </classpath>
@@ -51,6 +52,7 @@
       <compilerarg line="${javac.compilerargs}"/>
       <classpath>
         <pathelement location="../../core/java/build/i2p.jar"/>
+        <pathelement location="../../router/java/build/router.jar"/>
         <pathelement location="../../build/mstreaming.jar"/>
         <pathelement location="../../build/streaming.jar"/>
       </classpath>
