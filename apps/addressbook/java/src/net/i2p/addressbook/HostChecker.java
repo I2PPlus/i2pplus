@@ -905,7 +905,7 @@ public class HostChecker {
             }
 
             if (removedCount > 0 && _log.shouldInfo()) {
-                _log.info("HostChecker cleanup: removed " + removedCount + " stale hosts");
+                _log.info("HostChecker cleanup: removed " + removedCount + " stale hosts from hosts_check.txt");
             }
         } catch (Exception e) {
             if (_log.shouldWarn()) {
