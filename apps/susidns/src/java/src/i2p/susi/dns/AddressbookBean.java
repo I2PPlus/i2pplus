@@ -419,7 +419,7 @@ public class AddressbookBean extends BaseBean {
                     String name = null;
                     int deleted = 0;
                     
-                    if (action.equals(_t("Delete All"))) {
+                    if (action.equals(_t("Delete All Dead Hosts"))) {
                         // Delete all dead hosts - get all entries and filter for dead ones
                         AddressBean[] allEntries = getEntries();
                         for (AddressBean entry : allEntries) {
@@ -434,6 +434,7 @@ public class AddressbookBean extends BaseBean {
                                         if (deleted++ == 0) {
                                             name = hostname; // Use first deleted host as example
                                         }
+                                        changed = true; // Mark that changes were made
                                     }
                                 }
                             } catch (Exception e) {
