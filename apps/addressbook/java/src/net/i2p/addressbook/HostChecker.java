@@ -353,7 +353,7 @@ public class HostChecker {
                 }
 
                 if (_log.shouldInfo()) {
-                    _log.info("HostChecker LeaseSet check [SUCCESS] -> Found LeaseSet for " +
+                    _log.info("HostChecker LSet [SUCCESS] -> Found LeaseSet for " +
                              hostname + " in " + responseTime + "ms");
                 }
 
@@ -367,7 +367,7 @@ public class HostChecker {
                 }
 
                 if (_log.shouldInfo()) {
-                    _log.info("HostChecker LeaseSet check [FAILURE] -> No LeaseSet found for " +
+                    _log.info("HostChecker LSet [FAILURE] -> No LeaseSet found for " +
                               hostname + " in " + responseTime + "ms");
                 }
 
@@ -381,7 +381,7 @@ public class HostChecker {
                 _log.warn("HostChecker LeaseSet lookup error for " + hostname + " -> " + e.getMessage());
             }
 
-            // LeaseSet lookup error - HOST IS PERMANENTLY OFFLINE
+            // LeaseSet lookup error - host is down
             PingResult result = new PingResult(false, startTime, responseTime);
             synchronized (_pingResults) {
                 _pingResults.put(hostname, result);
