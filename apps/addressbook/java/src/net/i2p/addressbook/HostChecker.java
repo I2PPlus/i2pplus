@@ -759,6 +759,12 @@ public class HostChecker {
             if (_log.shouldInfo()) {
                 _log.info("Loaded " + _pingResults.size() + " HostChecker results from " + _hostsCheckFile.getName());
             }
+
+            // Clean up stale hosts after loading to remove entries no longer in the address book
+            cleanupStaleHosts();
+
+            // Save the cleaned-up results back to file immediately to remove stale entries from hosts_check.txt
+            savePingResults();
         } catch (Exception e) {
             if (_log.shouldWarn()) {
                 _log.warn("Error loading HostChecker results from " + _hostsCheckFile.getAbsolutePath(), e);
@@ -771,6 +777,9 @@ public class HostChecker {
      */
     private void savePingResults() {
         try {
+            // Clean up stale hosts before saving to ensure we don't persist entries for deleted hosts
+            cleanupStaleHosts();
+
             // Ensure we have absolute path and directory exists
             String absolutePath = _hostsCheckFile.getAbsolutePath();
 
@@ -861,6 +870,48 @@ public class HostChecker {
             hostnames.addAll(names);
         }
         return hostnames;
+    }
+
+    /**
+     * Remove hosts from _pingResults that are no longer in the address book
+     * This prevents stale entries from accumulating in hosts_check.txt
+     */
+    private void cleanupStaleHosts() {
+        try {
+            Set<String> currentHostnames = getAllHostnames();
+            Set<String> cachedHostnames = new HashSet<String>(_pingResults.keySet());
+
+            // Safety check: only run cleanup if we have current hosts from the naming service
+            // This prevents removing all hosts during startup when naming service might not be ready
+            if (currentHostnames.isEmpty() && !cachedHostnames.isEmpty()) {
+                if (_log.shouldDebug()) {
+                    _log.debug("HostChecker cleanup skipped: no current hosts available, possibly during startup");
+                }
+                return;
+            }
+
+            // Remove hosts from cache that are no longer in the address book
+            int removedCount = 0;
+            for (String cachedHostname : cachedHostnames) {
+                if (!currentHostnames.contains(cachedHostname)) {
+                    _pingResults.remove(cachedHostname);
+                    _destinations.remove(cachedHostname);
+                    removedCount++;
+
+                    if (_log.shouldDebug()) {
+                        _log.debug("Removed stale host from HostChecker cache: " + cachedHostname);
+                    }
+                }
+            }
+
+            if (removedCount > 0 && _log.shouldInfo()) {
+                _log.info("HostChecker cleanup: removed " + removedCount + " stale hosts");
+            }
+        } catch (Exception e) {
+            if (_log.shouldWarn()) {
+                _log.warn("Error during HostChecker stale host cleanup", e);
+            }
+        }
     }
 
     /**
