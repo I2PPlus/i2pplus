@@ -679,7 +679,7 @@ table[id$="logs"] ul li:last-child{margin-bottom:10px}
 #criticallogs .log_debug,#criticallogs .log_info,#criticallogs .log_warn,#criticallogs .log_error,#criticallogs .log_crit,#criticallogs .log_omitted{margin:1px 1px -1px}
 #criticallogs tr:first-child{display:none}
 #logs #criticallogs ul li{margin-bottom:-2px}
-#routerlogs,#wrapperlogs{margin-bottom:10px;width:100%;table-layout:fixed}
+#routerlogs,#wrapperlogs{margin-bottom:10px;table-layout:fixed}
 #routerlogs.single,#wrapperlogs.single{margin-bottom:5px}
 #routerlogs ul{margin-top:-5px;margin-bottom:-19px;word-wrap:break-word}
 #routerlogs ul li{width:calc(100% - 11px)}
