@@ -121,7 +121,7 @@
         {"u", "U"}, {"v", "V"}, {"w", "W"}, {"x", "X"},
         {"y", "Y"}, {"z", "Z"}, {"0-9", "0-9"},
         {"xn--", intl._t("other")}, {"latest", intl._t("latest")},
-        {"alive", intl._t("Alive")}, {"none", intl._t("all")}
+        {"alive", intl._t("Alive")}, {"dead", intl._t("Dead")}, {"none", intl._t("all")}
     };
 
     for (String[] filter : filters) {

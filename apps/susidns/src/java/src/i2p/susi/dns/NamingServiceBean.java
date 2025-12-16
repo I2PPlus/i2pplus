@@ -137,7 +137,7 @@ public class NamingServiceBean extends AddressbookBean {
             boolean sortByDate = "latest".equals(filter);
             Properties searchProps = new Properties();
             searchProps.setProperty("list", getFileName()); // only blockfile needs this
-            if (filter != null && !sortByDate && !filter.equals("alive")) {
+            if (filter != null && !sortByDate && !filter.equals("alive") && !filter.equals("dead")) {
                 String startsAt = filter.equals("0-9") ? "[0-9]" : filter;
                 searchProps.setProperty("startsWith", startsAt);
             }
@@ -196,6 +196,23 @@ public class NamingServiceBean extends AddressbookBean {
                             continue;
                         }
                         if (!isAlive) {continue;}
+                    }
+                    else if (filter.equals("dead")) {
+                        // Check if host is dead using cached ping results from HostCheckerBridge
+                        boolean isDead = false;
+                        try {
+                            java.util.Map<String, net.i2p.addressbook.HostChecker.PingResult> allResults = net.i2p.addressbook.HostCheckerBridge.getAllPingResults();
+                            if (allResults != null) {
+                                net.i2p.addressbook.HostChecker.PingResult pingResult = allResults.get(name);
+                                if (pingResult != null && !pingResult.reachable) {
+                                    isDead = true;
+                                }
+                            }
+                        } catch (Exception e) {
+                            // If we can't get status, skip this host for dead filter
+                            continue;
+                        }
+                        if (!isDead) {continue;}
                     }
                     else if (! name.toLowerCase(Locale.US).startsWith(filter.toLowerCase(Locale.US))) {
                         continue;

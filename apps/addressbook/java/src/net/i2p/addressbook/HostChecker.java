@@ -32,6 +32,7 @@ import net.i2p.util.Log;
 import net.i2p.util.EepHead;
 import net.i2p.router.NetworkDatabaseFacade;
 import net.i2p.router.RouterContext;
+import net.i2p.router.Router;
 import net.i2p.data.LeaseSet;
 import net.i2p.data.Hash;
 import net.i2p.router.Job;
@@ -905,6 +906,23 @@ public class HostChecker {
                 for (String hostname : allHostnames) {
                     if (!_running.get()) {
                         break;
+                    }
+
+
+                    // Check if router is shutting down or restarting
+                    if (_context instanceof RouterContext) {
+                        RouterContext routerContext = (RouterContext) _context;
+                        Router router = routerContext.router();
+                        boolean isShuttingDown = router.gracefulShutdownInProgress() || router.isFinalShutdownInProgress();
+                        boolean isRestarting = router.isRestarting();
+
+                        // Check for graceful shutdown in progress
+                        if (isShuttingDown || isRestarting) {
+                            if (_log.shouldInfo()) {
+                                _log.info("HostChecker stopping -> Router is " + (isShuttingDown ? "shutting down" : "restarting") + "...");
+                            }
+                            break;
+                        }
                     }
 
                     Destination dest = getDestination(hostname);
