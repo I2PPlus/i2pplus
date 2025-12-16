@@ -346,6 +346,7 @@ public class LogsHelper extends HelperBase {
             msg = msg.replace(" -&gt;", " &#10140;");
             msg = msg.replace("-&gt;", " &#10140; ");
             msg = msg.replace("  &#10140;  ", " &#10140; ");
+            msg = msg.replace("&amp;hellip;", "...");
             msg = msg.replace("…obQueue", "JobQueue");
             msg = msg.replace("[DBWriter   ]", "[NetDB Writer]");
             msg = msg.replace("[NTCP Pumper", "[ NTCP Pumper");
