@@ -158,7 +158,7 @@
 <c:if test="${book.validBook}">
 <th class=checkbox title="<%=intl._t("Select hosts for deletion from addressbook")%>">
 <c:if test="${book.getFilter() == 'dead'}">
-<a href="javascript:toggleAll(true)" id="selectAll" class=selectall><%=intl._t("Select all")%></a> | <a href="javascript:toggleAll(false)" id="deselectAll" class=selectall style="display:none"><%=intl._t("Deselect all")%></a>
+<a href="#" onclick="toggleAll(true)" id="selectAll" class=selectall><%=intl._t("Select all")%></a> | <a href="#" onclick="toggleAll(false)" id="deselectAll" class=selectall style="display:none"><%=intl._t("Deselect all")%></a>
 </c:if>
 </th></c:if>
 </tr>
