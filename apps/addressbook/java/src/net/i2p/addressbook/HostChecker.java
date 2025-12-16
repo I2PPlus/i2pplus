@@ -553,7 +553,7 @@ public class HostChecker {
                 return result;
             } else {
                 if (_log.shouldInfo()) {
-                    _log.info("HostChecker ping [FAILURE] -> No response from " + hostname + " [ElGamal]");
+                    _log.info("HostChecker ping [FAILURE] -> No response from " + hostname + " [ElGamal], trying eephead...");
                 }
                 return new PingResult(false, startTime, System.currentTimeMillis() - startTime);
             }
