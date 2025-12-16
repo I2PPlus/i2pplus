@@ -21,6 +21,10 @@ main{position:relative}
 .noscroll{overflow-y:hidden;contain:paint}
 #add.isHidden,#import.isHidden{animation:slideUp 1s ease 0s both}
 #navi{position:relative;z-index:2000}
+#toggleAllHosts{margin:0;width:16px;height:16px;opacity:0}
+#toggleAllHosts:hover{cursor:pointer}
+#deadHosts:hover{background-size:18px!important}
+#deadHosts:active{background-size:16px!important}
 @keyframes slideDown{from{transform:translateY(-800px)}to{transform:translateY(0)}}
 @keyframes slideUp{from{transform:translateY(0)}to{transform:translateY(-800px)}}
 @media (max-width:1199px){

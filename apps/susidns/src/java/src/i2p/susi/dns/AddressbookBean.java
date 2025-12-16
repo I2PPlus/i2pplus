@@ -28,12 +28,16 @@ import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
 import net.i2p.util.SecureFileOutputStream;
+import net.i2p.util.Log;
 
 /**
  * Bean for managing I2P address books.
  * Provides functionality for loading, filtering, and managing address entries.
  */
 public class AddressbookBean extends BaseBean {
+    /** Logger instance */
+    private static final Log _log = new Log(AddressbookBean.class);
+
     /** The address book name */
     protected String book;
     /** The filter string */
@@ -415,47 +419,11 @@ public class AddressbookBean extends BaseBean {
                         }
                     } else {message = _t("Please enter a host name and destination");}
                     search = null; // clear search when adding
-                } else if (action.equals(_t("Delete Selected")) || action.equals(_t("Delete Entry")) || action.equals(_t("Delete All"))) {
+                } else if (action.equals(_t("Delete Selected")) || action.equals(_t("Delete Entry"))) {
                     String name = null;
                     int deleted = 0;
-                    
-                    if (action.equals(_t("Delete All Dead Hosts"))) {
-                        // Delete all dead hosts - get all entries and filter for dead ones
-                        AddressBean[] allEntries = getEntries();
-                        for (AddressBean entry : allEntries) {
-                            String hostname = entry.getName();
-                            // Check if host is dead using HostCheckerBridge
-                            try {
-                                java.util.Map<String, net.i2p.addressbook.HostChecker.PingResult> allResults = net.i2p.addressbook.HostCheckerBridge.getAllPingResults();
-                                if (allResults != null) {
-                                    net.i2p.addressbook.HostChecker.PingResult pingResult = allResults.get(hostname);
-                                    if (pingResult != null && !pingResult.reachable) {
-                                        addressbook.remove(hostname);
-                                        if (deleted++ == 0) {
-                                            name = hostname; // Use first deleted host as example
-                                        }
-                                        changed = true; // Mark that changes were made
-                                    }
-                                }
-                            } catch (Exception e) {
-                                // Skip if can't determine status
-                                continue;
-                            }
-                        }
-                    } else {
-                        // Delete selected entries (existing logic)
-                        for (String n : deletionMarks) {
-                            addressbook.remove(n);
-                            String uni = AddressBean.toUnicode(n);
-                            String displayHost = uni.equals(n) ? n :  uni + " (" + n + ')';
-                            if (deleted++ == 0) {
-                                changed = true;
-                                name = displayHost;
-                            }
-                        }
-                    }
-                    
-                    if (changed || action.equals(_t("Delete All"))) {
+
+                    if (changed) {
                         if (deleted == 1) {message = _t("Destination {0} deleted.", name);}
                         else {message = ngettext("1 destination deleted.", "{0} destinations deleted.", deleted);} // parameter will always be >= 2
                     } else {message = _t("No valid entries selected to delete.");}

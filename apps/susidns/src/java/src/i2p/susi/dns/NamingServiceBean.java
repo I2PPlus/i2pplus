@@ -310,7 +310,7 @@ public class NamingServiceBean extends AddressbookBean {
                                     if (action.equals(_t("Add Alternate"))) {
                                         // check all for dups
                                         List<Destination> all = getNamingService().lookupAll(host);
-                                        if (all == null || !all.contains(dest)) {
+                                        if (all == null || dest == null || !all.contains(dest)) {
                                             success = getNamingService().addDestination(host, dest, nsOptions);
                                         } else {success = false;} // will get generic message below
                                     } else {success = getNamingService().put(host, dest, nsOptions);}

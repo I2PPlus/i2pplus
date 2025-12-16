@@ -49,9 +49,6 @@
 <link href="<%=base.getTheme()%>../../fonts/OpenSans.css" rel=stylesheet><% } %>
 <% if (overrideCssActive) { %><link rel=stylesheet href="<%=base.getTheme()%>override.css"><% } %>
 <script nonce="<%=cspNonce%>">const theme = <%=theme%>;</script>
-<c:if test="${book.getFilter() == 'dead'}">
-<script src="toggleAll.js"></script>
-</c:if>
 </head>
 <body id=bk class="<%=book.getThemeName()%>" style=display:none;pointer-events:none>
 <div id=page>
@@ -81,6 +78,7 @@
 <%      String filter = book.getFilter();
         if ("latest".equals(filter)) {filter = intl._t(filter);}
         else if ("alive".equals(filter)) {filter = intl._t(filter);}
+        else if ("dead".equals(filter)) {filter = intl._t(filter);}
         else if ("xn--".equals(filter)) {filter = intl._t("other");}
 %>
 </c:if>
@@ -156,10 +154,7 @@
 <%  if (book.getEntries().length > 0) { /* Don't show if no results. Can't figure out how to do this with c:if */ %>
 <th class=info><%=intl._t("Info")%></th><th class=names><%=intl._t("Hostname")%></th><th class=b32link><%=intl._t("Link (b32)")%></th><th class=helper>Helper</th><th class=destinations><%=intl._t("Destination")%> (b64)</th><th class=source><%=intl._t("Source")%></th><th class=added><%=intl._t("Added")%></th><th class=status><%=intl._t("Status")%></th>
 <c:if test="${book.validBook}">
-<th class=checkbox title="<%=intl._t("Select hosts for deletion from addressbook")%>">
-<c:if test="${book.getFilter() == 'dead'}">
-<a href="#" onclick="toggleAll(true)" id="selectAll" class=selectall><%=intl._t("Select all")%></a> | <a href="#" onclick="toggleAll(false)" id="deselectAll" class=selectall style="display:none"><%=intl._t("Deselect all")%></a>
-</c:if>
+<th class=checkbox <c:if test="${book.getFilter() == 'dead'}">id=deadHosts</c:if> title="<%=intl._t("Select hosts for deletion from addressbook")%>">
 </th></c:if>
 </tr>
 <% /* limit iterator, or "Form too large" may result on submit, and is a huge web page if we don't */ %>
@@ -233,7 +228,7 @@
 <div id=buttons>
 <p class=buttons>
 <input class=cancel type=reset value="<%=intl._t("Cancel")%>">
-
+<input class=delete type=submit name=action value="<%=intl._t("Delete Selected")%>">
 </p>
 </div>
 </c:if>
@@ -296,5 +291,6 @@
 <script src=/js/jdenticon.js></script>
 <script src=/susidns/js/clearSearch.js></script>
 <script nonce=<%=cspNonce%>>window.jdenticon_config = { padding: 0, saturation: {color: 1, grayscale: 0} };</script>
+<script src=/susidns/js/toggleAllHosts.js></script>
 </body>
 </html>
