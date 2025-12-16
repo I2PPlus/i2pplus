@@ -227,7 +227,7 @@
 <input class=cancel type=reset value="<%=intl._t("Cancel")%>">
 <input class=delete type=submit name=action value="<%=intl._t("Delete Selected")%>">
 <% if ("dead".equals(book.getFilter())) { %>
-<input class=delete type=submit name=action value="<%=intl._t("Delete All")%>">
+<input class=delete type=submit name=action value="<%=intl._t("Delete All Dead Hosts")%>">
 <% } %>
 </p>
 </div>
