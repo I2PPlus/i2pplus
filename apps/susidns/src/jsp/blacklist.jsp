@@ -63,7 +63,7 @@
 <div class=help id=helpblacklist>
 <p class=help>
 <%=intl._t("The blacklist file contains a list of I2P addresses that should be blocked from access via the HTTP proxy, and excluded from the address book display.")%>&nbsp;<wbr>
-<%=intl._t("Enter hostnames, b32 addresses, or b64 keys (one per line).")%>
+<%=intl._t("Enter hostnames (one per line).")%>
 </p>
 </div>
 </div>
