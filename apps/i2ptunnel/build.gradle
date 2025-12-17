@@ -23,6 +23,7 @@ dependencies {
     api project(':apps:ministreaming')
     api 'gnu.getopt:java-getopt:1.0.13'
     api project(':apps:jetty')
+}
 
     // seems like it should be compileOnly but that doesn't work
     implementation 'org.apache.ant:ant:1.10.14'

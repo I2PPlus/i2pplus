@@ -60,6 +60,11 @@
   </servlet-mapping>
 
   <servlet-mapping>
+    <servlet-name>i2p.susi.dns.jsp.blacklist_jsp</servlet-name>
+    <url-pattern>/blacklist</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
     <servlet-name>i2p.susi.dns.jsp.addressbook_jsp</servlet-name>
     <url-pattern>/addressbook</url-pattern>
   </servlet-mapping>

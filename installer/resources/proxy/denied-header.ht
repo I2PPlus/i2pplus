@@ -27,6 +27,5 @@ Connection: close
 <h3>_("Warning: Request Denied")</h3>
 <p id="denied">
 _("This address appears to be malformed. Please verify you have supplied a valid address!")
-<!--_("You attempted to connect to a non-I2P website or location.")-->
 </p>
 </div>

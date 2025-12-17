@@ -40,6 +40,7 @@
 <a class="abook private" href="addressbook?book=private&amp;filter=none"><%=intl._t("Private")%></a>&nbsp;
 <a class="abook published" href="addressbook?book=published&amp;filter=none"><%=intl._t("Published")%></a>&nbsp;
 <a id=subs href="subscriptions"><%=intl._t("Subscriptions")%></a>&nbsp;
+<a id=blacklist href="blacklist"><%=intl._t("Blacklist")%></a>&nbsp;
 <a id=configlink class=selected href="config"><%=intl._t("Configuration")%></a>&nbsp;
 <a id=overview href="index"><%=intl._t("Help")%></a>
 </div>

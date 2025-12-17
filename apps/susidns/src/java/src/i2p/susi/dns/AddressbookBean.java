@@ -84,9 +84,9 @@ public class AddressbookBean extends BaseBean {
      */
     public boolean isHasFilter() {return filter != null && filter.length() > 0;}
 
-    /**
+/**
      * Sets the table row class.
-     * @param trClass the table row class
+     * @param trClass table row class
      */
     public void setTrClass(int trClass) {this.trClass = trClass;}
 
@@ -258,6 +258,15 @@ public class AddressbookBean extends BaseBean {
                     }
                 }
                 if (search != null && search.length() > 0 && name.indexOf(search) == -1) {continue;}
+
+                // Check if host is blacklisted
+                BlacklistBean blacklist = new BlacklistBean();
+                boolean isBlacklisted = blacklist.isBlacklisted(name);
+                _log.debug("Addressbook checking host " + name + " - blacklisted: " + isBlacklisted);
+                if (isBlacklisted) {
+                    _log.warn("Addressbook filtering out blacklisted host: " + name);
+                    continue;
+                }
                 AddressBean bean = new AddressBean(name, destination);
                 // For published addressbook, we need to parse properties from the raw file
                 // since Properties.load() doesn't preserve the hosts.txt format with #! properties
@@ -291,12 +300,13 @@ public class AddressbookBean extends BaseBean {
         String message;
         String filterArg = "";
         int resultCount = resultSize();
+        boolean noResults = resultCount <= 0;
         if (filter != null && filter.length() > 0) {
             if (search != null && search.length() > 0) {
                 message = ngettext("Search for <span class=active>" + search + "</span> with filter <span class=active>" + filter + "</span> returned 1 result",
                                    "Search for <span class=active>" + search + "</span> with filter <span class=active>" + filter + "</span> returned {0} results",
                                    resultCount);
-                message = "</span><span id=results>" + message + "</span>";
+                message = "</span><span " + (noResults ? "class=noResults " : "") + "id=results>" + message + "</span>";
             } else {
                 message = ngettext("Filtered list contains 1 entry.",
                                    "Filtered list contains {0} entries.",

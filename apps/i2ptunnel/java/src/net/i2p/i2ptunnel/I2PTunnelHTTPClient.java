@@ -40,6 +40,7 @@ import net.i2p.util.DNSOverHTTPS;
 import net.i2p.util.EventDispatcher;
 import net.i2p.util.InternalSocket;
 import net.i2p.util.PortMapper;
+import net.i2p.i2ptunnel.BlacklistBean;
 
 /**
  * HTTP proxy that tunnels requests through I2P.
@@ -102,6 +103,15 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         "\r\n" +
         "<html><body><H1>I2P ERROR: REQUEST DENIED</H1>" +
         "The requested address appears to be invalid.<BR>";
+
+    private final static String ERR_BLACKLISTED =
+        "HTTP/1.1 403 Address Blacklisted\r\n" +
+        "Content-Type: text/html; charset=iso-8859-1\r\n" +
+        "Cache-Control: no-cache\r\n" +
+        "Connection: close\r\n"+
+        "\r\n" +
+        "<html><body><H1>I2P ERROR: ADDRESS BLACKLISTED</H1>" +
+        "The requested address has been blacklisted.<BR>";
 
     private final static String ERR_NO_OUTPROXY =
         "HTTP/1.1 503 Service Unavailable\r\n" +
@@ -238,7 +248,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     /**
      * Execute a runnable task, running inline when called from an unlimited thread pool
      * to avoid creating unnecessary threads, otherwise start a new thread.
-     * 
+     *
      * @param task Thread task to execute
      */
     private void executeTask(Thread task) {
@@ -1300,6 +1310,22 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 if (_log.shouldInfo())
                     _log.info("[HTTPClient] Looking up hostname: " + destName);
                 clientDest = _context.namingService().lookup(destination);
+            }
+
+            // Check if the requested destination is blacklisted
+            if (clientDest != null && destination != null) {
+                BlacklistBean blacklist = new BlacklistBean();
+                if (blacklist.isBlacklisted(destination)) {
+                    if (_log.shouldWarn()) {
+                        _log.warn("[HTTPClient] Blacklisted destination access denied: " + destination);
+                    }
+                    try {
+                        out.write(getErrorPage("blacklist", ERR_BLACKLISTED).getBytes("UTF-8"));
+                        writeFooter(out);
+                        reader.drain();
+                    } catch (IOException ioe) {} // ignore
+                    return;
+                }
             }
 
             if (clientDest == null) {

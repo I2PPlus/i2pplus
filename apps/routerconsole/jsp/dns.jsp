@@ -15,6 +15,7 @@
         else if (query.contains("config")) {requestURL = "/susidns/config";}
         else if (query.contains("help")) {requestURL = "/susidns/";}
         else if (query.contains("logs")) {requestURL = "/susidns/log.jsp";}
+        else if (query.contains("blacklist")) {requestURL = "/susidns/blacklist.jsp";}
         else if (query.contains("details")) {requestURL = "/susidns/details?" + query;}
         else {requestURL = "/susidns/addressbook?" + query;}
     } else {requestURL = "/susidns/addressbook?book=router&amp;filter=none";}

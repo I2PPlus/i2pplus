@@ -5,6 +5,7 @@
 @import url(../images/images.css);
 @import url(images/images.css);
 @import url(../lazyload.css);
+@import url(../shared.css);
 
 :root{
 --nav:linear-gradient(180deg,#141424 50%,#000 50%);
@@ -44,10 +45,10 @@ td{padding:5px}
 #navi #subs:hover,#navi #subs:focus{background:var(--subs_hover) no-repeat 6px center/14px,var(--btn_hover_radial),var(--nav_hover)}
 #navi #subs:active{background:#652787 var(--subs_hover) no-repeat 6px center/14px}
 #navi #subs.selected{background:var(--subs) no-repeat 6px center/14px,var(--nav_selected)}
-#navi #configlink{padding:5px 8px 5px 23px;background:var(--configure) no-repeat 6px center/14px,var(--nav),var(--configure_hover)}
-#navi #configlink:hover,#navi #configlink:focus{background:var(--configure_hover) no-repeat 6px center/14px,var(--btn_hover_radial),var(--nav_hover)}
-#navi #configlink:active{background:#652787 var(--configure_hover) no-repeat 6px center/ 14px}
-#navi #configlink.selected{var(--configure) no-repeat 6px center/14px,var(--nav_selected)}
+#navi #configlink,#navi #blacklist{padding:5px 8px 5px 23px;background:var(--configure) no-repeat 6px center/14px,var(--nav),var(--configure_hover)}
+#navi #configlink:hover,#navi #configlink:focus,#navi #blacklist:hover,#navi #blacklist:focus{background:var(--configure_hover) no-repeat 6px center/14px,var(--btn_hover_radial),var(--nav_hover)}
+#navi #configlink:active,#navi #blacklist:active{background:#652787 var(--configure_hover) no-repeat 6px center/ 14px}
+#navi #configlink.selected,#navi #blacklist.selected{var(--configure) no-repeat 6px center/14px,var(--nav_selected)}
 #navi #overview{padding:5px 8px 5px 23px;background:var(--overview) no-repeat 6px center/14px,var(--nav),var(--overview_hover)}
 #navi #overview:hover,#navi #overview:focus{background:var(--overview_hover) no-repeat 6px center/14px,var(--btn_hover_radial),var(--nav_hover)}
 #navi #overview:active{background:#652787 var(--overview_hover) no-repeat 6px center/14px}
@@ -116,7 +117,7 @@ p#filtered{margin:-26px 0 10px}
 #filter span b{margin:-3px 5px 0;line-height:.8;text-transform:uppercase;font-size:11pt;color:#fff}
 
 form[action="subscriptions"]{margin:0}
-#helpsubs{margin:-16px 0 -11px;padding:20px 15px 15px 48px;background:#001 var(--infohelp) no-repeat 12px center/24px}
+#helpsubs,#helpblacklist{margin:-16px 0 -11px;padding:20px 15px 15px 48px;background:#001 var(--infohelp) no-repeat 12px center/24px}
 #host_list tr{background:var(--row)}
 #messages+p,p.book{padding:20px 20px 20px 42px;border:var(--border);background:#001 var(--addressbook) no-repeat 10px center/24px}
 
@@ -161,7 +162,8 @@ input#exporthosts:active{text-shadow:0 1px 1px #3C1751;box-shadow:var(--highligh
 #add td:last-child,#import td:last-child{width:94%}
 #add input[type=text],#import input[type=file]{width:calc(100% - 16px)}
 #import .buttons,#add .buttons{margin:10px -10px 0;padding:9px 8px 8px;border:0;border-top:var(--border)}
- #add .buttons{margin-top:12px}
+#add .buttons{margin-top:12px}
+.iframed #importHostsForm{margin-bottom:4px}
 #import table{margin-top:-2px}
 #import input[type=file]{margin-left:-5px}
 #import td:first-child{padding-left:15px}
@@ -321,8 +323,8 @@ svg #arrow stop:last-child{stop-color:#001}
 .iframed #config+#buttons,.iframed #content+#buttons{margin:12px 10px}
 .iframed #emptybook{margin:-15px 10px 20px}
 .iframed #filter{margin:-1px 10px -29px}
-.iframed #helpsubs,.iframed #helpconfig,.iframed #add,.iframed #import,.iframed #book,.iframed #book+#buttons{margin-left:10px;margin-right:10px}
-.iframed #helpsubs{margin-bottom:0}
+.iframed #helpsubs,.iframed #helpconfig,.iframed #helpblacklist,.iframed #add,.iframed #import,.iframed #book,.iframed #book+#buttons{margin-left:10px;margin-right:10px}
+.iframed #helpsubs,.iframed #helpblacklist{margin-bottom:5px}
 .iframed #import{margin:10px 10px 0}
 .iframed input.export{margin-right:14px}
 .iframed #messages>.messages{margin:5px 10px 10px}
@@ -332,7 +334,7 @@ svg #arrow stop:last-child{stop-color:#001}
 .iframed #visualid{margin-bottom:10px}
 .iframed #visualid td[colspan="2"]{padding:22px 19px 20px}
 .iframed #dtls .headline h3{margin:-1px 10px 24px}
-.iframed #sbs #content,.iframed #config,.iframed #config+#buttons,.iframed #subsLog #config{margin:-27px 10px -13px}
+.iframed #sbs #content,.iframed #config,.iframed #config+#buttons,.iframed #subsLog #config,.iframed #bls #content{margin:-27px 10px -13px}
 .iframed #subsLog .headline h3:first-child+h4{margin:-1px 10px 26px}
 .iframed #subsLog ul{margin:0}
 

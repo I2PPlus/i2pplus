@@ -33,6 +33,7 @@ import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
 import net.i2p.servlet.RequestWrapper;
+import net.i2p.util.Log;
 
 /**
  *  Talk to the NamingService API instead of modifying the hosts.txt files directly,
@@ -41,6 +42,7 @@ import net.i2p.servlet.RequestWrapper;
  *  @since 0.8.7
  */
 public class NamingServiceBean extends AddressbookBean {
+    private static final Log _log = new Log(NamingServiceBean.class);
     private static final String DEFAULT_NS = "BlockfileNamingService";
     private String detail;
     private String notes;
@@ -130,6 +132,8 @@ public class NamingServiceBean extends AddressbookBean {
         if (isDirect()) {return super.getLoadBookMessages();}
         NamingService service = getNamingService();
         debug("[" + service + "] Performing search for: '" + search + "' with filter: '" + filter + "'");
+
+        debug("DEBUG: Entering getLoadBookMessages for book=" + getBook());
         String message = "";
         try {
             LinkedList<AddressBean> list = new LinkedList<AddressBean>();
@@ -173,6 +177,8 @@ public class NamingServiceBean extends AddressbookBean {
             } else {results = service.getEntries(searchProps);}
 
             debug("Results returned by search: " + results.size());
+            debug("DEBUG: Total results before filtering: " + (results != null ? results.size() : 0));
+            System.err.println("DEBUG: Total results before filtering: " + (results != null ? results.size() : 0));
             for (Map.Entry<String, Destination> entry : results.entrySet()) {
                 String name = entry.getKey();
                 if (filter != null && filter.length() > 0 && !sortByDate) {
@@ -221,6 +227,16 @@ public class NamingServiceBean extends AddressbookBean {
                 if (search != null && search.length() > 0 && reverse == null) {
                     if (name.indexOf(search) == -1) {continue;}
                 }
+                
+                // Check if host is blacklisted
+                BlacklistBean blacklist = new BlacklistBean();
+                boolean isBlacklisted = blacklist.isBlacklisted(name);
+                _log.debug("Checking host '" + name + "' - blacklisted: " + isBlacklisted);
+                if (isBlacklisted) {
+                    _log.warn("Filtering out blacklisted host: " + name);
+                    continue;
+                }
+                
                 String destination = entry.getValue().toBase64();
                 AddressBean bean = new AddressBean(name, entry.getValue());
                 Properties p = new Properties();
@@ -232,6 +248,7 @@ public class NamingServiceBean extends AddressbookBean {
             if (sortByDate) {Arrays.sort(array, new AddressByDateSorter());}
             else if (!(results instanceof SortedMap)) {Arrays.sort(array, sorter);}
             entries = array;
+            _log.debug("Final entries count after filtering: " + (entries != null ? entries.length : 0));
             message = generateLoadMessage();
         } catch (RuntimeException e) {warn(e);}
         if (message.length() > 0) {
@@ -240,6 +257,13 @@ public class NamingServiceBean extends AddressbookBean {
             } else {message = "<span id=showing>" + message;}
         }
         return message;
+    }
+
+    @Override
+    public AddressBean[] getEntries() {
+        // Force reload of entries to ensure blacklist filtering is applied
+        getLoadBookMessages();
+        return entries;
     }
 
     /** Perform actions, returning messages about this. */
@@ -478,7 +502,14 @@ public class NamingServiceBean extends AddressbookBean {
         if (this.detail == null) {return null;}
         if (isDirect()) {
             AddressBean ab = getLookup(); // won't work for the published addressbook
-            if (ab != null) {return Collections.singletonList(ab);}
+            if (ab != null) {
+                // Check if host is blacklisted
+                BlacklistBean blacklist = new BlacklistBean();
+                if (blacklist.isBlacklisted(this.detail)) {
+                    return null;
+                }
+                return Collections.singletonList(ab);
+            }
             return null;
         }
         Properties nsOptions = new Properties();
@@ -486,6 +517,13 @@ public class NamingServiceBean extends AddressbookBean {
         nsOptions.setProperty("list", getFileName());
         List<Destination> dests = getNamingService().lookupAll(this.detail, nsOptions, propsList);
         if (dests == null) {return null;}
+        
+        // Check if host is blacklisted
+        BlacklistBean blacklist = new BlacklistBean();
+        if (blacklist.isBlacklisted(this.detail)) {
+            return null;
+        }
+        
         List<AddressBean> rv = new ArrayList<AddressBean>(dests.size());
         for (int i = 0; i < dests.size(); i++) {
             AddressBean ab = new AddressBean(this.detail, dests.get(i));
@@ -509,8 +547,27 @@ public class NamingServiceBean extends AddressbookBean {
         if (search != null && search.length() > 0) {
             searchProps.setProperty("search", search.toLowerCase(Locale.US));
         }
-        getNamingService().export(out, searchProps);
-        // No post-filtering for hosts.txt naming services. It is what it is.
+        
+        // Get all results to apply blacklist filtering
+        Map<String, Destination> allEntries = getNamingService().getEntries(searchProps);
+        if (allEntries != null) {
+            BlacklistBean blacklist = new BlacklistBean();
+            for (Map.Entry<String, Destination> entry : allEntries.entrySet()) {
+                String name = entry.getKey();
+                Destination dest = entry.getValue();
+                
+                // Skip blacklisted entries
+                if (blacklist.isBlacklisted(name)) {
+                    continue;
+                }
+                
+                // Write to output
+                out.write(name);
+                out.write('=');
+                out.write(dest.toBase64());
+                out.write('\n');
+            }
+        }
     }
 
     /**

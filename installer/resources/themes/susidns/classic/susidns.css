@@ -6,6 +6,7 @@
 @import url(../images/images.css);
 @import url(images/images.css);
 @import url(../lazyload.css);
+@import url(../shared.css);
 
 :root{
 --buttons_bg:linear-gradient(180deg,#fafaff 50%,rgba(220,220,255,.3)),repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(221,221,255,.3) 3px,#fff 5px),#fff;
@@ -52,8 +53,8 @@ td{font-size:9pt}
 #navi #subs{background:var(--subs) no-repeat 6px center/14px,var(--nav),var(--subs_hover)}
 #navi #subs:hover,#navi #subs:focus{background:var(--subs_hover) no-repeat 6px center/14px,var(--nav)}
 #navi #subs:active{background:var(--subs_active) no-repeat 6px center/14px,var(--nav)}
-#navi #configlink{background:var(--configure) no-repeat 6px center/14px,var(--nav),var(--configure_hover)}
-#navi #configlink:hover,#navi #configlink:focus{background:var(--configure_hover) no-repeat 6px center/14px,var(--nav)}
+#navi #configlink,#navi #blacklist{background:var(--configure) no-repeat 6px center/14px,var(--nav),var(--configure_hover)}
+#navi #configlink:hover,#navi #configlink:focus,#navi #blacklist:hover,#navi #blacklist:focus{background:var(--configure_hover) no-repeat 6px center/14px,var(--nav)}
 #navi #configlink:active{background:var(--configure_active) no-repeat 6px center/14px,var(--nav)}
 #navi #overview{background:var(--overview) no-repeat 6px center/14px,var(--nav),var(--overview_hover)}
 #navi #overview:hover,#navi #overview:focus{background:var(--overview_hover) no-repeat 6px center/14px,var(--nav)}
@@ -173,7 +174,7 @@ tr:hover .destaddress{color:#333}
 
 
 /* host list */
-td.destinations{padding:0 4px 0 6px;max-width:50px;border-left:var(--border_soft);border-right:var(--border_soft)}
+td.destinations{padding:0 4px 0 6px;max-width:50px}
 td.destinations textarea{height:28px;box-shadow:none}
 .b32link a,.names a,.helper a{padding:4px 0;width:100%;display:inline-block;vertical-align:middle}
 .names a[href$=".i2p/"]{max-width:260px;overflow:hidden;text-overflow:ellipsis}
@@ -191,7 +192,7 @@ td.destinations textarea{height:28px;box-shadow:none}
 #host_list td.b32link a::after{background:var(--link) no-repeat center center}
 #host_list td:first-child:hover,#host_list td:nth-child(2):hover,#host_list td:nth-child(3):hover,#host_list td:nth-child(4):hover,#host_list td:hover{background-color:rgba(256,96,0,.1)}
 #host_list td.helper a::after{background:var(--helper) no-repeat center center}
-#host_list td:nth-last-child(n+4),#host_details td:nth-last-child(n+4),#host_details td:first-child{border-right:var(--border_soft)}
+#host_list td,#host_details td:first-child{border-right:var(--border_soft)}
 #host_list th.checkbox{width:16px;background:var(--nuke) no-repeat center center/14px,linear-gradient(180deg,#fcfcff 51%,#fafaff 51%,#f6f6ff 100%)}
 
 /* host details page */
@@ -313,7 +314,7 @@ input.search[type=submit]{padding:6px 5px}
 
 @media (max-width:680px){
 #navi{padding:5px 3px}
-#navi a.abook,#navi a#configlink,#navi a#overview,#navi a#subs,#navi a.abook:hover,#navi a#configlink:hover,#navi a#overview:hover,#navi a#subs:hover,#navi a.abook:focus,#navi a#configlink:focus,#navi a#overview:focus,#navi a#subs:focus{padding:3px 10px;min-width:50px;background:var(--nav) #fff}
+#navi a.abook,#navi a#configlink,#navi a#overview,#navi a#subs,#navi a.abook:hover,#navi a#configlink:hover,#navi a#overview:hover,#navi a#subs:hover,#navi a.abook:focus,#navi a#configlink:focus,#navi a#overview:focus,#navi a#subs:focus,#navi a#blacklist,#navi a#blacklist:hover,#navi a#blacklist:focus{padding:3px 10px;min-width:50px;background:var(--nav) #fff}
 #visualid img[src^="/imagegen"]{width:228px;height:228px}
 }
 
@@ -330,7 +331,7 @@ td.destinations textarea{height:32px}
 .headline h4{background:var(--files) no-repeat 10px 8px/16px}
 #content p{font-size:120%}
 #filter span,#filter a{font-size:11pt}
-#host_list .b32link,#host_list .helper{padding:0 20px;width:6%}
+#host_list .b32link,#host_list .helper,#host_list .source,#host_list .status{padding:0 20px;width:6%}
 #host_list td.b32link a::after,#host_list td.helper a::after{width:18px;height:18px}
-#navi a.abook,#navi a#configlink,#navi a#overview,#navi a#subs{padding-left:25px;font-size:11pt;background-size:15px,100%}
+#navi a.abook,#navi a#configlink,#navi a#overview,#navi a#subs,#navi a#blacklist{padding-left:25px;font-size:11pt;background-size:15px,100%}
 }

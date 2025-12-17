@@ -54,9 +54,9 @@ td{font-size:9pt}
 #navi #subs{background:var(--subs) no-repeat 6px center/14px,var(--nav),var(--subs_hover)}
 #navi #subs:hover,#navi #subs:focus{background:var(--subs_hover) no-repeat 6px center/14px,var(--nav)}
 #navi #subs:active,#navi #subs.selected{background:var(--subs_active) no-repeat 6px center/14px,var(--nav_active)}
-#navi #configlink{background:var(--configure) no-repeat 6px center/14px,var(--nav),var(--configure_hover)}
-#navi #configlink:hover,#navi #configlink:focus{background:var(--configure_hover) no-repeat 6px center/14px,var(--nav)}
-#navi #configlink:active,#navi #configlink.selected{background:var(--configure_active) no-repeat 6px center/14px,var(--nav_active)}
+#navi #configlink,#navi #blacklist{background:var(--configure) no-repeat 6px center/14px,var(--nav),var(--configure_hover)}
+#navi #configlink:hover,#navi #configlink:focus,#navi #blacklist:hover,#navi #blacklist:focus{background:var(--configure_hover) no-repeat 6px center/14px,var(--nav)}
+#navi #configlink:active,#navi #configlink.selected,#navi #blacklist:active,#navi #blacklist.selected{background:var(--configure_active) no-repeat 6px center/14px,var(--nav_active)}
 #navi #overview{background:var(--overview) no-repeat 6px center/14px,var(--nav),var(--overview_hover)}
 #navi #overview:hover,#navi #overview:focus{background:var(--overview_hover) no-repeat 6px center/14px,var(--nav)}
 #navi #overview:active,#navi #overview.selected{background:var(--overview_active) no-repeat 6px center/14px,var(--nav_active)}
@@ -89,7 +89,7 @@ tr:hover .destaddress{color:#333}
 .headline h3{font-size:11.5pt;background:#fcfcff var(--addressbook) no-repeat 7px center/20px}
 .headline h4{margin:5px -6px 0;padding:8px 10px 0 33px;border-top:var(--border_inner);background:var(--files) no-repeat 9px 7px/16px}
 .headline{margin:-1px 0 -2px;padding:8px 5px;border:var(--border_inner);background:linear-gradient(135deg,#fafaff,#f2f2ff)}
-.help#helpsubs{padding:0 15px 0 45px;font-size:10pt;background:var(--infohelp) no-repeat 10px center/26px,linear-gradient(135deg,#fafaff,#f8f8ff)}
+.help#helpsubs,.help#helpblacklist{padding:0 15px 0 45px;font-size:10pt;background:var(--infohelp) no-repeat 10px center/26px,linear-gradient(135deg,#fafaff,#f8f8ff)}
 .info a[href^="http"],.helper a{width:100%;display:inline-block}
 #page{margin:-4px 0;padding:10px 0;min-width:700px;font-size:9pt;border:0;border-radius:2px}
 .selected,#activefilter{font-weight:700;color:#999;box-shadow:var(--highlight),inset 2px 2px 2px #aaa}
@@ -176,7 +176,7 @@ tr:hover .destaddress{color:#333}
 .iframed #content h3{margin-top:3px}
 .iframed #content{padding:0;overflow:hidden;border:0;background:none}
 .iframed #content textarea{margin:0;border:var(--border_inner)}
-.iframed #helpconfig,.iframed #helpsubs{margin:10px auto 12px;border-radius:0;box-shadow:var(--highlight)}
+.iframed #helpconfig,.iframed #helpsubs,.iframed #helpblacklist{margin:10px auto 12px;border-radius:0;box-shadow:var(--highlight)}
 .iframed #empty{margin-bottom:20px;border:0;border-top:var(--border_inner);border-bottom:var(--border_inner)}
 .iframed #messages{border:0}
 #bk.iframed #page{padding-bottom:18px}
@@ -335,8 +335,8 @@ input.search[type=submit]{padding:6px 5px}
 
 @media (max-width:680px){
 #navi{padding:5px 3px}
-#navi a.abook,#navi a#configlink,#navi a#overview,#navi a#subs,#navi a.abook:hover,#navi a#configlink:hover,#navi a#overview:hover,#navi a#subs:hover,#navi a.abook:focus,#navi a#configlink:focus,#navi a#overview:focus,#navi a#subs:focus{padding:3px 10px;min-width:50px;background:var(--nav) #fff}
-#navi .abook:active, #navi .abook.selected{background:var(--nav_active)}
+#navi a.abook,#navi a#configlink,#navi a#overview,#navi a#subs,#navi a.abook:hover,#navi a#configlink:hover,#navi a#overview:hover,#navi a#subs:hover,#navi a.abook:focus,#navi a#configlink:focus,#navi a#overview:focus,#navi a#subs:focus,#navi a#blacklist,#navi a#blacklist:hover,#navi a#blacklist:focus,#navi a#blacklist:active{padding:3px 10px;min-width:50px;background:var(--nav) #fff}
+#navi .abook.selected,#navi .abook:active,#navi a#blacklist.active,#navi a#blacklist.selected,#navi a#configlink.active,#navi a#configlink.selected,#navi a#overview.active,#navi a#overview.selected,#navi a#subs.active,#navi a#subs.selected{background:var(--nav_active)}
 #visualid img[src^="/imagegen"]{width:228px;height:228px}
 }
 
@@ -356,5 +356,5 @@ td.destinations textarea{height:32px}
 #filter span,#filter a{font-size:11pt}
 #host_list .b32link,#host_list .helper{padding:0 20px;width:6%}
 #host_list td.b32link a::after,#host_list td.helper a::after{width:18px;height:18px}
-#navi a.abook,#navi a#configlink,#navi a#overview,#navi a#subs{padding-left:25px;font-size:11pt;background-size:15px,100%}
+#navi a.abook,#navi a#configlink,#navi a#overview,#navi a#subs,#navi #blacklist{padding-left:25px;font-size:11pt;background-size:15px,100%}
 }

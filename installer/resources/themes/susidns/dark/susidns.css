@@ -69,10 +69,10 @@ th{padding:5px 10px;text-align:left;color:var(--ink)}
 #navi a#subs:hover,#navi a#subs:focus{background:#000 var(--subs_hover) no-repeat 6px center/14px}
 #navi a#subs:active{background:#f60 var(--subs_active) no-repeat 6px center/14px}
 #navi a#subs.selected{background:var(--subs) no-repeat 6px center/14px,var(--nav_selected)}
-#navi a#configlink{background:var(--configure) no-repeat 6px center/14px,var(--nav),var(--configure_hover)}
-#navi a#configlink:hover,#navi a#configlink:focus{background:#000 var(--configure_hover) no-repeat 6px center/14px}
-#navi a#configlink:active{background:#f60 var(--configure_active) no-repeat 6px center/14px}
-#navi a#configlink.selected{background:var(--configure) no-repeat 6px center/14px,var(--nav_selected)}
+#navi a#configlink,#navi a#blacklist{background:var(--configure) no-repeat 6px center/14px,var(--nav),var(--configure_hover)}
+#navi a#configlink:hover,#navi a#configlink:focus,#navi a#blacklist:hover,#navi a#blacklist:focus{background:#000 var(--configure_hover) no-repeat 6px center/14px}
+#navi a#configlink:active,#navi a#blacklsit:active{background:#f60 var(--configure_active) no-repeat 6px center/14px}
+#navi a#configlink.selected,#navi a#blacklist.selected{background:var(--configure) no-repeat 6px center/14px,var(--nav_selected)}
 #navi a#overview{background:var(--overview) no-repeat 6px center/14px,var(--nav),var(--overview_hover)}
 #navi a#overview:hover,#navi a#overview:focus{background:#000 var(--overview_hover) no-repeat 6px center/14px}
 #navi a#overview:active{background:#f60 var(--overview_active) no-repeat 6px center/14px}
@@ -267,8 +267,8 @@ td>img[width="320"],td>img[src^="/imagegen"],#visualid .identicon{margin:10px 3p
 #content h3{padding-left:34px;letter-spacing:.12em;word-spacing:.1em;border:var(--border);background:var(--question) no-repeat 8px center,linear-gradient(180deg,#0000 50%,#000 50%),repeating-linear-gradient(90deg,rgba(0,0,0,.5) 2px,rgba(0,16,0,.5) 4px),linear-gradient(180deg,#004000,#000 75%);background-size:18px,100%,4px 100%,100%}
 #content p{margin-bottom:8px;padding:0 10px;line-height:1.6;font-size:110%}
 #ovrvw #content{padding:10px 10px 20px}
-#helpsubs{padding:15px 0 10px 40px;background:var(--infohelp) no-repeat 15px center,var(--help);background-size:32px,4px 100%}
-#helpsubs p{padding:15px;line-height:1.3;border:0}
+#helpsubs,#helpblacklist{padding:15px 0 10px 40px;background:var(--infohelp) no-repeat 15px center,var(--help);background-size:32px,4px 100%}
+#helpsubs p,#helpblacklist p{padding:15px;line-height:1.3;border:0}
 
 /* svg */
 .illustrate{margin:20px auto 10px;padding:0 11px;max-width:700px;height:auto;font-size:10pt;border:var(--border);border-radius:4px;box-shadow:var(--highlight),inset 0 0 2px 1px #242;background:#000;opacity:.8}
@@ -330,9 +330,9 @@ svg #arrow stop:last-child{stop-color:#010}
 @media (max-width:1000px){.illustrate{margin:15px auto 10px;width:90%;min-width:450px}}
 
 @media (max-width:710px){
-#navi a.abook,#navi a#overview,#navi a#subs,#navi a#configlink{padding:5px 8px;background:linear-gradient(180deg,#020 50%,#000 50%)}
-#navi a.abook:hover,#navi a#overview:hover,#navi a#subs:hover,#navi a#configlink:hover,#navi a.abook:focus,#navi a#overview:focus,#navi a#subs:focus,#navi a#configlink:focus{padding:5px 8px;background:#000}
-#navi a.abook:active,#navi a#overview:active,#navi a#subs:active,#navi a#configlink:active{background:#f60}
+#navi a.abook,#navi a#overview,#navi a#subs,#navi a#configlink,#navi a#blacklist{padding:5px 8px;background:linear-gradient(180deg,#020 50%,#000 50%)}
+#navi a.abook:hover,#navi a#overview:hover,#navi a#subs:hover,#navi a#configlink:hover,#navi a#blacklist:hover,#navi a.abook:focus,#navi a#overview:focus,#navi a#subs:focus,#navi a#configlink:focus,#navi a#blacklist:focus{padding:5px 8px;background:#000}
+#navi a.abook:active,#navi a#overview:active,#navi a#subs:active,#navi a#configlink:active,#navi a#blacklist:active{background:#f60}
 #subsLog .subhost{display:none}
 }
 
@@ -345,7 +345,7 @@ body,input[type=submit],input[type=reset],.fakebutton,input,select,h4,td.names a
 p,#content p{font-size:10pt}
 textarea{font-size:9pt}
 #navi{padding:6px 5px}
-#navi a.abook,#navi a.abook:hover,#navi a.abook:focus,#navi a.abook:active,#navi a#overview,#navi a#overview:hover,#navi a#overview:focus,#navi a#overview:active,#navi a#subs,#navi a#subs:hover,#navi a#subs:focus,#navi a#subs:active,#navi a#configlink,#navi a#configlink:hover,#navi a#configlink:focus,#navi a#configlink:active,#navi a.selected,#navi a[class].selected,#navi a[id].selected{padding:8px 10px 8px 29px!important;letter-spacing:.1em;font-size:10pt;background-position:10px center!important}
+#navi a.abook,#navi a.abook:hover,#navi a.abook:focus,#navi a.abook:active,#navi a#overview,#navi a#overview:hover,#navi a#overview:focus,#navi a#overview:active,#navi a#subs,#navi a#subs:hover,#navi a#subs:focus,#navi a#subs:active,#navi a#configlink,#navi a#configlink:hover,#navi a#configlink:focus,#navi a#configlink:active,#navi a#blacklist,#navi a#blacklist:hover,#navi a#blacklist:focus,#navi a#blacklist:active,#navi a.selected,#navi a[class].selected,#navi a[id].selected{padding:8px 10px 8px 29px!important;letter-spacing:.1em;font-size:10pt;background-position:10px center!important}
 h3{font-size:12pt}
 #filter a{margin:0 2px -2px;min-width:14px}
 #filter{background:linear-gradient(90deg,#000,#001000 10%,#001000 90%,#000)}
