@@ -52,8 +52,8 @@
 <div id=messages class=canClose>${blacklist.messages}</div>
 <form method=POST action="blacklist#navi">
 <div id=content>
-<input type=hidden name="serial" value="${blacklist.serial}" >
-<textarea name="content" rows="15" cols="80" placeholder="<%=intl._t("Enter I2P addresses to blacklist (one per line)")%>">${blacklist.content}</textarea>
+<input type=hidden name=serial value="${blacklist.serial}" >
+<textarea name=content rows=15 cols=80 spellcheck=false placeholder="<%=intl._t("Enter I2P addresses to blacklist (one per line)")%>">${blacklist.content}</textarea>
 </div>
 <div id=buttons>
 <input class=update style=float:left type=submit name=action value="<%=intl._t("Reload")%>">

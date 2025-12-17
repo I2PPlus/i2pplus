@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 import net.i2p.data.DataHelper;
+import net.i2p.util.Log;
 import net.i2p.util.SecureFileOutputStream;
 import net.i2p.servlet.RequestWrapper;
 
@@ -29,7 +30,10 @@ import net.i2p.servlet.RequestWrapper;
  */
 public class BlacklistBean extends BaseBean {
     private String fileName, content;
+    private static String cachedContent = null;
+    private static long lastModified = 0;
     private static final String BLACKLIST_FILE = "blacklist.txt";
+    private static final Log _log = new Log(BlacklistBean.class);
 
     // Pattern to validate I2P addresses (hostnames, b32, b64)
     private static final Pattern I2P_ADDRESS_PATTERN = Pattern.compile(
@@ -62,6 +66,13 @@ public class BlacklistBean extends BaseBean {
     private void locked_reloadBlacklist() {
         File file = blacklistFile();
         if (file.isFile()) {
+            long currentModified = file.lastModified();
+            // Use cached content if file hasn't changed
+            if (cachedContent != null && currentModified == lastModified) {
+                content = cachedContent;
+                return;
+            }
+
             StringBuilder buf = new StringBuilder();
             BufferedReader br = null;
             try {
@@ -72,10 +83,24 @@ public class BlacklistBean extends BaseBean {
                     buf.append("\n");
                 }
                 content = buf.toString();
-                debug("Loaded blacklist from file: " + file.getAbsolutePath() + " (" + content.length() + " chars)");
+                cachedContent = content;
+                lastModified = currentModified;
+
+                // Count valid entries (non-empty, non-comment lines)
+                int validEntries = 0;
+                String[] entryLines = content.split("\\n");
+                for (String entryLine : entryLines) {
+                    String trimmed = entryLine.trim();
+                    if (trimmed.length() > 0 && !trimmed.startsWith("#")) {
+                        validEntries++;
+                    }
+                }
+
+                debug("Loaded blacklist from file: " + file.getAbsolutePath() + " (" + validEntries + " entries)");
             } catch (IOException e) {
                 warn(e);
                 content = "";
+                cachedContent = content;
             }
             finally {
                 if (br != null) {
@@ -85,6 +110,7 @@ public class BlacklistBean extends BaseBean {
             }
         } else {
             content = "";
+            cachedContent = content;
             debug("Blacklist file does not exist: " + file.getAbsolutePath());
         }
     }
@@ -149,6 +175,122 @@ public class BlacklistBean extends BaseBean {
                 return true;
             }
         }
+        return false;
+    }
+
+    /**
+     * Check if a hostname is blacklisted (exact match)
+     */
+    public boolean isHostnameBlacklisted(String hostname) {
+        return isBlacklisted(hostname);
+    }
+
+    /**
+     * Check if a b32 address is blacklisted (exact match or hostname match)
+     */
+    public boolean isB32Blacklisted(String b32) {
+        if (b32 == null) return false;
+
+        // Check exact b32 match
+        if (isBlacklisted(b32)) {
+            return true;
+        }
+
+        // Try to resolve b32 to hostname and check if that hostname is blacklisted
+        try {
+            net.i2p.data.Destination dest = _context.namingService().lookup(b32);
+            List<String> names = dest != null ? _context.namingService().reverseLookupAll(dest.calculateHash()) : null;
+            if (names != null) {
+                for (String name : names) {
+                    if (isBlacklisted(name)) {
+                        return true;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            // Log at debug level only for HostChecker to avoid spam
+            if (_log.shouldDebug()) {
+                _log.debug("Error checking b32 blacklist for " + b32 + ": " + e.getMessage());
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Check if a b64 address is blacklisted (exact match or hostname/b32 match)
+     */
+    public boolean isB64Blacklisted(String b64) {
+        if (b64 == null) return false;
+
+        // Check exact b64 match
+        if (isBlacklisted(b64)) {
+            return true;
+        }
+
+        try {
+            // Convert b64 to Destination and try reverse lookups
+            net.i2p.data.Destination dest = new net.i2p.data.Destination(b64);
+            net.i2p.data.Hash hash = dest.calculateHash();
+
+            // Try b32 lookup
+            String b32 = hash.toBase32() + ".b32.i2p";
+            if (isBlacklisted(b32)) {
+                return true;
+            }
+
+            // Try hostname reverse lookup
+            List<String> names = _context.namingService().reverseLookupAll(hash);
+            if (names != null) {
+                for (String name : names) {
+                    if (isBlacklisted(name)) {
+                        return true;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            // Log at debug level only for HostChecker to avoid spam
+            if (_log.shouldDebug()) {
+                _log.debug("Error checking b64 blacklist for " + b64.substring(0, Math.min(10, b64.length())) + "...: " + e.getMessage());
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Enhanced blacklist check that tries hostname, b32, and b64 variations
+     */
+    public boolean isBlacklistedByAnyForm(String address) {
+        if (isBlacklisted(address)) {
+            return true;
+        }
+
+        // Try as b32
+        if (address.endsWith(".b32.i2p")) {
+            return isB32Blacklisted(address);
+        }
+
+        // Try as b64
+        if (address.length() > 500) { // Rough b64 length check
+            return isB64Blacklisted(address);
+        }
+
+        // Try as hostname - check if any of its destinations are blacklisted
+        try {
+            List<net.i2p.data.Destination> dests = _context.namingService().lookupAll(address);
+            if (dests != null) {
+                for (net.i2p.data.Destination dest : dests) {
+                    if (isB64Blacklisted(dest.toBase64())) {
+                        return true;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            // Log at debug level only for HostChecker to avoid spam
+            if (_log.shouldDebug()) {
+                _log.debug("Error checking hostname blacklist for " + address + ": " + e.getMessage());
+            }
+        }
+
         return false;
     }
 

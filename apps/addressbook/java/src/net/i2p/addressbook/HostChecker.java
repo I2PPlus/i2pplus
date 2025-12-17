@@ -6,37 +6,37 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.concurrent.Future;
-import java.util.concurrent.Semaphore;
 
-import java.util.Properties;
 import net.i2p.I2PAppContext;
 import net.i2p.client.I2PSessionException;
 import net.i2p.client.naming.NamingService;
 import net.i2p.client.streaming.I2PSocketManager;
 import net.i2p.client.streaming.I2PSocketManagerFactory;
 import net.i2p.data.Destination;
-import net.i2p.util.I2PAppThread;
-import net.i2p.util.Log;
-import net.i2p.util.EepHead;
-import net.i2p.router.NetworkDatabaseFacade;
-import net.i2p.router.RouterContext;
-import net.i2p.router.Router;
-import net.i2p.data.LeaseSet;
 import net.i2p.data.Hash;
+import net.i2p.data.LeaseSet;
 import net.i2p.router.Job;
 import net.i2p.router.JobTiming;
+import net.i2p.router.NetworkDatabaseFacade;
+import net.i2p.router.Router;
+import net.i2p.router.RouterContext;
+import net.i2p.util.EepHead;
+import net.i2p.util.I2PAppThread;
+import net.i2p.util.Log;
 
 /**
  * Ping tester for address book entries.
@@ -810,20 +810,6 @@ public class HostChecker {
                 java.nio.file.StandardOpenOption.TRUNCATE_EXISTING,
                 java.nio.file.StandardOpenOption.WRITE);
 
-            if (_log.shouldInfo() && _pingResults.size() % 10 == 0) {
-                int upCount = 0;
-                int downCount = 0;
-                for (PingResult result : _pingResults.values()) {
-                    if (result.reachable) {
-                        upCount++;
-                    } else {
-                        downCount++;
-                    }
-                }
-                _log.info("HostChecker results saved to: " + absolutePath +
-                          " -> Total hosts: " + _pingResults.size() + " (Up: " + upCount + " / Down: " + downCount + ")");
-            }
-
         } catch (java.io.IOException e) {
             if (_log.shouldError()) {
                 _log.error("IOException saving HostChecker results: " + e.getMessage() +
@@ -977,8 +963,9 @@ public class HostChecker {
                     }
 
                     Destination dest = getDestination(hostname);
+                    boolean isBlacklisted = isHostBlacklisted(hostname);
 
-                    if (dest != null) {
+                    if (dest != null && !isBlacklisted) {
                         total++;
 
                         // Submit ping task for concurrent execution with semaphore limit
@@ -1008,8 +995,12 @@ public class HostChecker {
                         futures.add(future);
                     } else {
                         skipped++;
-                        if (_log.shouldDebug()) {
-                            _log.debug("Skipping entry with empty destination: " + hostname);
+                        if (_log.shouldInfo()) {
+                            if (dest == null) {
+                                _log.info("Skipping entry with empty destination: " + hostname);
+                            } else {
+                                _log.info("Skipping blacklisted destination: " + hostname);
+                            }
                         }
                     }
                 }
@@ -1043,6 +1034,30 @@ public class HostChecker {
                     _log.warn("Error during HostChecker cycle", e);
                 }
             }
+        }
+    }
+
+    private boolean isHostBlacklisted(String hostname) {
+        try {
+            File blacklistFile = new File(_context.getConfigDir(), "addressbook/blacklist.txt");
+            if (!blacklistFile.exists()) {
+                return false;
+            }
+
+            // Simple exact match check
+            List<String> lines = java.nio.file.Files.readAllLines(blacklistFile.toPath());
+            for (String line : lines) {
+                line = line.trim().toLowerCase();
+                if (!line.isEmpty() && !line.startsWith("#") && line.equals(hostname.toLowerCase())) {
+                    return true;
+                }
+            }
+            return false;
+        } catch (Exception e) {
+            if (_log.shouldDebug()) {
+                _log.debug("Error checking blacklist for " + hostname + ": " + e.getMessage());
+            }
+            return false; // Assume not blacklisted on error
         }
     }
 

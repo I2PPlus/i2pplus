@@ -132,8 +132,6 @@ public class NamingServiceBean extends AddressbookBean {
         if (isDirect()) {return super.getLoadBookMessages();}
         NamingService service = getNamingService();
         debug("[" + service + "] Performing search for: '" + search + "' with filter: '" + filter + "'");
-
-        debug("DEBUG: Entering getLoadBookMessages for book=" + getBook());
         String message = "";
         try {
             LinkedList<AddressBean> list = new LinkedList<AddressBean>();
@@ -177,8 +175,7 @@ public class NamingServiceBean extends AddressbookBean {
             } else {results = service.getEntries(searchProps);}
 
             debug("Results returned by search: " + results.size());
-            debug("DEBUG: Total results before filtering: " + (results != null ? results.size() : 0));
-            System.err.println("DEBUG: Total results before filtering: " + (results != null ? results.size() : 0));
+            int blacklistedHosts = 0;
             for (Map.Entry<String, Destination> entry : results.entrySet()) {
                 String name = entry.getKey();
                 if (filter != null && filter.length() > 0 && !sortByDate) {
@@ -227,16 +224,16 @@ public class NamingServiceBean extends AddressbookBean {
                 if (search != null && search.length() > 0 && reverse == null) {
                     if (name.indexOf(search) == -1) {continue;}
                 }
-                
+
                 // Check if host is blacklisted
                 BlacklistBean blacklist = new BlacklistBean();
-                boolean isBlacklisted = blacklist.isBlacklisted(name);
-                _log.debug("Checking host '" + name + "' - blacklisted: " + isBlacklisted);
+                boolean isBlacklisted = blacklist.isBlacklistedByAnyForm(name);
                 if (isBlacklisted) {
-                    _log.warn("Filtering out blacklisted host: " + name);
+                    //_log.warn("Filtering out blacklisted host: " + name);
+                    blacklistedHosts++;
                     continue;
                 }
-                
+
                 String destination = entry.getValue().toBase64();
                 AddressBean bean = new AddressBean(name, entry.getValue());
                 Properties p = new Properties();
@@ -248,7 +245,8 @@ public class NamingServiceBean extends AddressbookBean {
             if (sortByDate) {Arrays.sort(array, new AddressByDateSorter());}
             else if (!(results instanceof SortedMap)) {Arrays.sort(array, sorter);}
             entries = array;
-            _log.debug("Final entries count after filtering: " + (entries != null ? entries.length : 0));
+            _log.debug("Final entries count after filtering: " + (entries != null ? entries.length : 0) +
+                       (blacklistedHosts > 0 ? " (Blacklisted: " + blacklistedHosts + ")" : ""));
             message = generateLoadMessage();
         } catch (RuntimeException e) {warn(e);}
         if (message.length() > 0) {
@@ -505,7 +503,7 @@ public class NamingServiceBean extends AddressbookBean {
             if (ab != null) {
                 // Check if host is blacklisted
                 BlacklistBean blacklist = new BlacklistBean();
-                if (blacklist.isBlacklisted(this.detail)) {
+                if (blacklist.isBlacklistedByAnyForm(this.detail)) {
                     return null;
                 }
                 return Collections.singletonList(ab);
@@ -517,13 +515,13 @@ public class NamingServiceBean extends AddressbookBean {
         nsOptions.setProperty("list", getFileName());
         List<Destination> dests = getNamingService().lookupAll(this.detail, nsOptions, propsList);
         if (dests == null) {return null;}
-        
+
         // Check if host is blacklisted
         BlacklistBean blacklist = new BlacklistBean();
-        if (blacklist.isBlacklisted(this.detail)) {
+        if (blacklist.isBlacklistedByAnyForm(this.detail)) {
             return null;
         }
-        
+
         List<AddressBean> rv = new ArrayList<AddressBean>(dests.size());
         for (int i = 0; i < dests.size(); i++) {
             AddressBean ab = new AddressBean(this.detail, dests.get(i));
@@ -547,7 +545,7 @@ public class NamingServiceBean extends AddressbookBean {
         if (search != null && search.length() > 0) {
             searchProps.setProperty("search", search.toLowerCase(Locale.US));
         }
-        
+
         // Get all results to apply blacklist filtering
         Map<String, Destination> allEntries = getNamingService().getEntries(searchProps);
         if (allEntries != null) {
@@ -555,12 +553,12 @@ public class NamingServiceBean extends AddressbookBean {
             for (Map.Entry<String, Destination> entry : allEntries.entrySet()) {
                 String name = entry.getKey();
                 Destination dest = entry.getValue();
-                
+
                 // Skip blacklisted entries
-                if (blacklist.isBlacklisted(name)) {
+                if (blacklist.isBlacklistedByAnyForm(name)) {
                     continue;
                 }
-                
+
                 // Write to output
                 out.write(name);
                 out.write('=');
