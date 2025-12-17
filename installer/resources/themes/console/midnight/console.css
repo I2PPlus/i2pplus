@@ -1211,6 +1211,7 @@ th.th_title{padding:9px 10px;text-align:left;box-shadow:var(--highlight)}
 .configtable td.tabletextarea{padding:0}
 .configtable tr:last-child{border-top:var(--border_inner)}
 .logtable,#enviro{margin-top:-1px}
+.logtable{margin-bottom:12px}
 #advconf{margin-bottom:-4px}
 #advconf td{padding:2px 8px}
 #advconf td:first-child{font-weight:600}
