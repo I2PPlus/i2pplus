@@ -442,6 +442,15 @@ public class CPUID {
      */
     private static final boolean loadGeneric() {
         try {
+            // Use reflection to bypass module restrictions in Java 9+
+            try {
+                java.lang.reflect.Method method = Class.class.getDeclaredMethod("module");
+                Object module = method.invoke(System.class);
+                java.lang.reflect.Method addOpens = Class.class.getMethod("addOpens", String.class, String.class);
+                addOpens.invoke(module, "java.base/java.lang", CPUID.class.getClassLoader());
+            } catch (Exception e) {
+                // Ignore reflection errors, fall back to normal loading
+            }
             System.loadLibrary("jcpuid");
             return true;
         } catch (UnsatisfiedLinkError ule) {} // fallthrough, try the OS-specific filename
