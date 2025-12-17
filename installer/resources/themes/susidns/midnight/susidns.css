@@ -120,6 +120,7 @@ form[action="subscriptions"]{margin:0}
 #helpsubs,#helpblacklist{margin:-16px 0 -11px;padding:20px 15px 15px 48px;background:#001 var(--infohelp) no-repeat 12px center/24px}
 #host_list tr{background:var(--row)}
 #messages+p,p.book{padding:20px 20px 20px 42px;border:var(--border);background:#001 var(--addressbook) no-repeat 10px center/24px}
+#noentries {padding:15px 15px 12px}
 
 /* notifications */
 #messages{position:fixed;left:0;right:0;top:16px;z-index:999}
@@ -143,7 +144,6 @@ textarea[name="config"]{height:220px;overflow-y:scroll;resize:none}
 .destinations textarea{margin:0;padding:1px 1px 1px 2px;width:100%;height:32px;resize:none;overflow-x:auto;overflow-y:hidden;border-radius:0;border:0;border-left:var(--border_soft);border-right:3px solid #17142f}
 #host_details{margin-top:-25px}
 #idAddress{text-transform:none}
-
 
 /* export */
 #export{height:39px;position:absolute;top:0;right:7px;border-left:var(--border)}
@@ -294,7 +294,7 @@ tr:hover td.destinations{color:#aa0}
 #next::after{left:calc(50% - 3px);right:0;border-color:#0000 #0000 #0000 #89f}
 #prev:not(.inactive):hover::after,#prev:not(.inactive) a:focus::after{border-color:#0000 var(--hover) #0000 #0000}
 #next:not(.inactive):hover::after,#next:not(.inactive) a:focus::after{border-color:#0000 #0000 #0000 var(--hover)}
-#empty{margin:20px 0 30px;height:1px;background:linear-gradient(90deg,#0000,#26235c,#0000)}
+#empty{margin:10px 10px 20px;border:var(--border);background:linear-gradient(90deg,#0000,#26235c,#0000)}
 
 /* svg */
 .illustrate{margin:20px auto 15px;padding:10px;max-width:700px;height:auto;font-size:10pt;border-radius:2px;border:1px solid #557;box-shadow:inset 0 0 0 1px #001,inset 0 0 1px 1px #889;background:#001}
