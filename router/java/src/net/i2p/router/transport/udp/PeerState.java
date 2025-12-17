@@ -305,9 +305,9 @@ public class PeerState {
         if (rtt > 0) {recalculateTimeouts(rtt);}
         else {_rttDeviation = _rtt;}
 
-        _inboundMessages = new ConcurrentHashMap<>(64);
+        _inboundMessages = new ConcurrentHashMap<>(16);
         _outboundMessages = new CachedIteratorCollection<OutboundMessageState>();
-        _outboundQueue = new PriBlockingQueue<OutboundMessageState>(ctx, "UDP-PeerState", 64);
+        _outboundQueue = new PriBlockingQueue<OutboundMessageState>(ctx, "UDP-PeerState", 16);
         _remotePeer = remotePeer;
         _isInbound = isInbound;
         _remoteHostId = new RemoteHostId(_remoteIP, _remotePort);

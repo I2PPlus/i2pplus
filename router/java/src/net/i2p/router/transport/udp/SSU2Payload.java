@@ -465,7 +465,13 @@ class SSU2Payload {
             // which may be inefficient
             // off is where the length goes
             int rv = writeData(tgt, off + 2);
-            DataHelper.toLong(tgt, off, 2, rv - (off + 2));
+            int blockSize = rv - (off + 2);
+            if (blockSize < 0) {
+                // Handle edge case where data is empty
+                blockSize = 0;
+                rv = off + 2;
+            }
+            DataHelper.toLong(tgt, off, 2, blockSize);
             return rv;
         }
 

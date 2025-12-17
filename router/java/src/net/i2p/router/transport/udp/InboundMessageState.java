@@ -15,7 +15,7 @@ class InboundMessageState implements CDQEntry {
     private final Log _log;
     private final long _messageId;
     private final Hash _from;
-    private final ByteArray _fragments[];
+    private ByteArray _fragments[];
     private int _lastFragment;
     private final long _receiveBegin;
     private long _enqueueTime;
@@ -25,9 +25,9 @@ class InboundMessageState implements CDQEntry {
     private final Object lock = new Object();
 
     private static final long MAX_RECEIVE_TIME = 10*1000;
-    public static final int MAX_FRAGMENTS = 64;
+    public static final int MAX_FRAGMENTS = 32;
     private static final int MAX_FRAGMENT_SIZE = UDPPacket.MAX_PACKET_SIZE;
-    private static final ByteCache _fragmentCache = ByteCache.getInstance(64, MAX_FRAGMENT_SIZE);
+    private static final ByteCache _fragmentCache = ByteCache.getInstance(8, MAX_FRAGMENT_SIZE);
 
     /**
      * Constructs a new InboundMessageState with no fragments.
@@ -37,7 +37,7 @@ class InboundMessageState implements CDQEntry {
         _log = ctx.logManager().getLog(InboundMessageState.class);
         _messageId = messageId;
         _from = from;
-        _fragments = new ByteArray[MAX_FRAGMENTS];
+        _fragments = new ByteArray[8]; // Start small, grow as needed
         _lastFragment = -1;
         _completeSize = -1;
         _receivedCount = 0;
@@ -58,9 +58,10 @@ class InboundMessageState implements CDQEntry {
         if (isLast) {
             if (fragmentNum > MAX_FRAGMENTS)
                 throw new DataFormatException("corrupt - too many fragments: " + fragmentNum);
-            _fragments = new ByteArray[fragmentNum + 1];
+            int neededSize = fragmentNum + 1;
+            _fragments = new ByteArray[Math.min(neededSize, MAX_FRAGMENTS)];
         } else {
-            _fragments = new ByteArray[MAX_FRAGMENTS];
+            _fragments = new ByteArray[8]; // Start small, grow as needed
         }
         _lastFragment = -1;
         _completeSize = -1;
@@ -76,10 +77,16 @@ class InboundMessageState implements CDQEntry {
      */
     public boolean receiveFragment(byte[] data, int off, int len, int fragmentNum, boolean isLast) throws DataFormatException {
         synchronized(lock) {
+            // Grow array if needed, but cap at MAX_FRAGMENTS
             if (fragmentNum >= _fragments.length) {
-                if (_log.shouldWarn())
-                    _log.warn("Invalid fragment " + fragmentNum + '/' + _fragments.length);
-                return false;
+                if (fragmentNum >= MAX_FRAGMENTS) {
+                    if (_log.shouldWarn())
+                        _log.warn("Invalid fragment " + fragmentNum + '/' + MAX_FRAGMENTS);
+                    return false;
+                }
+                // Grow the array to accommodate the fragment
+                int newSize = Math.min(fragmentNum + 1, MAX_FRAGMENTS);
+                _fragments = java.util.Arrays.copyOf(_fragments, newSize);
             }
             if (_fragments[fragmentNum] == null) {
                 ByteArray message = _fragmentCache.acquire();

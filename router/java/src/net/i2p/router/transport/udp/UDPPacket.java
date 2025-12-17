@@ -86,15 +86,15 @@ class UDPPacket implements CDPQEntry {
     }
 
     private static final boolean CACHE = true;
-    private static final int MIN_CACHE_SIZE = 256;
-    private static final int MAX_CACHE_SIZE = 2048;
+    private static final int MIN_CACHE_SIZE = 16;
+    private static final int MAX_CACHE_SIZE = 128;
     private static final TryCache.ObjectFactory<UDPPacket> _packetFactory;
     private static final TryCache<UDPPacket> _packetCache;
 
     static {
         if (CACHE) {
             long maxMemory = SystemVersion.getMaxMemory();
-            int csize = (int) Math.max(MIN_CACHE_SIZE, Math.min(MAX_CACHE_SIZE, maxMemory / (1024 * 1024)));
+            int csize = (int) Math.max(MIN_CACHE_SIZE, Math.min(MAX_CACHE_SIZE, Math.min(32, maxMemory / (32 * 1024 * 1024))));
             _packetFactory = new PacketFactory();
             _packetCache = new TryCache<>(_packetFactory, csize);
         } else {
@@ -153,8 +153,9 @@ class UDPPacket implements CDPQEntry {
      * @param ctx RouterContext for logging and timing
      */
     private UDPPacket(RouterContext ctx) {
-        _data = new byte[MAX_PACKET_SIZE];
-        _packet = new DatagramPacket(_data, MAX_PACKET_SIZE);
+        // Moderate buffer sizing - balance memory reduction with functionality
+        _data = new byte[1480]; // Slightly smaller than max (1572) but handles most cases
+        _packet = new DatagramPacket(_data, _data.length);
         init(ctx);
     }
 
@@ -401,6 +402,18 @@ class UDPPacket implements CDPQEntry {
     }
 
     /**
+     * Reduces cache size under memory pressure.
+     */
+    public static void reduceCacheSize() {
+        if (CACHE && _packetCache.size() > MIN_CACHE_SIZE) {
+            int targetSize = Math.max(MIN_CACHE_SIZE, _packetCache.size() / 2);
+            while (_packetCache.size() > targetSize) {
+                _packetCache.acquire().release();
+            }
+        }
+    }
+
+    /**
      * Logs an error if an operation is attempted on a packet that has already been released.
      * This helps prevent bugs caused by reusing or accessing stale packet instances.
      */
@@ -422,7 +435,11 @@ class UDPPacket implements CDPQEntry {
         if (_released)
             return "RELEASED PACKET";
 
-        StringBuilder buf = new StringBuilder(256);
+        // Only build detailed string if debug logging is enabled
+        if (!_context.logManager().getLog(UDPPacket.class).shouldDebug())
+            return "UDPPacket[size=" + _packet.getLength() + "]";
+            
+        StringBuilder buf = new StringBuilder(128);
         InetAddress addr = _packet.getAddress();
 
         if (addr != null && addr.getAddress() != null) {

@@ -32,10 +32,11 @@ class OutboundMessageFragments {
 
     /**
      *  List of peers currently sending outbound messages.
-     *  Thread-safe for iteration and modification.
+     *  Thread-safe for iteration and modification with reduced array copying.
      */
     private final List<PeerState> _activePeers = new CopyOnWriteArrayList<>();
     private int _peerIndex = 0;
+    private final List<PeerState> _peersToRemove = new ArrayList<>();
     private final Object _waitLock = new Object();
     private volatile boolean _alive;
     private final PacketBuilder2 _builder2;
@@ -49,6 +50,7 @@ class OutboundMessageFragments {
         _builder2 = transport.getBuilder2();
         _alive = true;
         _context.statManager().createRateStat("udp.outboundActivePeers", "Number of peers we are actively sending to", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.memory.activePeers", "Memory usage tracking for active peers", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.packetsRetransmitted", "Lifetime (ms) of packets during retransmission", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.partialACKReceived", "Number of partially ACKed fragments", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.peerPacketsRetransmitted", "Resent packets during burst (period = pkts sent, lifetime)", "Transport [UDP]", UDPTransport.RATES);
@@ -149,6 +151,7 @@ class OutboundMessageFragments {
             }
         }
         _context.statManager().addRateData("udp.outboundActivePeers", _activePeers.size());
+        _context.statManager().addRateData("udp.memory.activePeers", _activePeers.size());
 
         // Avoid sync if possible ... no, this doesn't always work.
         // Also note that the iterator in getNextVolley may have alreay passed us, or not reflected the addition.
@@ -190,7 +193,7 @@ class OutboundMessageFragments {
             // Clean up completed messages
             int remaining = p.finishMessages(now);
             if (remaining <= 0) {
-                removePeer(p);
+                _peersToRemove.add(p);
                 continue;
             }
 
@@ -209,6 +212,12 @@ class OutboundMessageFragments {
 
             // If we've gone through all peers, wait or retry
             if (peersProcessed >= _activePeers.size()) {
+                // Batch remove peers to reduce CopyOnWriteArrayList copying
+                if (!_peersToRemove.isEmpty()) {
+                    _activePeers.removeAll(_peersToRemove);
+                    _peersToRemove.clear();
+                }
+                
                 if (nextSendDelay > 0) {
                     int toWait = Math.min(Math.max(nextSendDelay, 10), MAX_WAIT);
                     waitForMessages(toWait);

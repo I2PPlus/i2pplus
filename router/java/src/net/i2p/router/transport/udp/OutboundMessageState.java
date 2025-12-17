@@ -541,7 +541,7 @@ class OutboundMessageState implements CDPQEntry {
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder(256);
+        StringBuilder buf = new StringBuilder(128);
         buf.append("\n* Outbound Message: [").append(_i2npMessage.getUniqueId());
         buf.append("] Seq: ").append(_seqNum);
         buf.append("; Type: ").append(_i2npMessage.getType());

@@ -45,8 +45,8 @@ class UDPSender {
      * Minimum and maximum queue sizes depend on system performance.
      * Queue sizes are tuned to compete with NTCP bandwidth requests and to optimize CoDel behavior.
      */
-    private static final int MIN_QUEUE_SIZE = SystemVersion.isSlow() ? 128 : 256;
-    private static final int MAX_QUEUE_SIZE = SystemVersion.isSlow() ? 512 : 1024;
+    private static final int MIN_QUEUE_SIZE = 16;
+    private static final int MAX_QUEUE_SIZE = 64;
 
     /**
      * CoDel algorithm target delay in milliseconds and interval to control pacing.
@@ -85,7 +85,7 @@ class UDPSender {
         _log = ctx.logManager().getLog(UDPSender.class);
 
         long maxMemory = SystemVersion.getMaxMemory();
-        int qsize = (int) Math.max(MIN_QUEUE_SIZE, Math.min(MAX_QUEUE_SIZE, (maxMemory * 4) / (1024 * 1024)));
+        int qsize = (int) Math.max(MIN_QUEUE_SIZE, Math.min(MAX_QUEUE_SIZE, Math.min(32, (maxMemory) / (64 * 1024 * 1024))));
 
         _outboundQueue = new CoDelPriorityBlockingQueue<>(ctx, "UDP-Sender", qsize,
                 ctx.getProperty(PROP_CODEL_TARGET, CODEL_TARGET),
