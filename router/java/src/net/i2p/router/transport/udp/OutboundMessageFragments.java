@@ -194,6 +194,11 @@ class OutboundMessageFragments {
             int remaining = p.finishMessages(now);
             if (remaining <= 0) {
                 _peersToRemove.add(p);
+                // Immediate cleanup if list gets too large to prevent OOM
+                if (_peersToRemove.size() > 1000) {
+                    _activePeers.removeAll(_peersToRemove);
+                    _peersToRemove.clear();
+                }
                 continue;
             }
 
@@ -217,7 +222,7 @@ class OutboundMessageFragments {
                     _activePeers.removeAll(_peersToRemove);
                     _peersToRemove.clear();
                 }
-                
+
                 if (nextSendDelay > 0) {
                     int toWait = Math.min(Math.max(nextSendDelay, 10), MAX_WAIT);
                     waitForMessages(toWait);
@@ -231,6 +236,11 @@ class OutboundMessageFragments {
         }
 
         if (peer == null || states == null) {
+            // Cleanup _peersToRemove list before returning to prevent memory leak
+            if (!_peersToRemove.isEmpty()) {
+                _activePeers.removeAll(_peersToRemove);
+                _peersToRemove.clear();
+            }
             return null;
         }
 
