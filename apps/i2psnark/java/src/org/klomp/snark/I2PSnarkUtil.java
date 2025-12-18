@@ -486,7 +486,7 @@ public class I2PSnarkUtil implements DisconnectListener {
                 opts.setProperty("i2p.streaming.inactivityAction", "1");
             } // 1 == disconnect, 2 == ping
             if (opts.getProperty("i2p.streaming.initialWindowSize") == null) {
-                opts.setProperty("i2p.streaming.initialWindowSize", "3");
+                opts.setProperty("i2p.streaming.initialWindowSize", "8");
             }
             if (opts.getProperty("i2p.streaming.slowStartGrowthRateFactor") == null) {
                 opts.setProperty("i2p.streaming.slowStartGrowthRateFactor", "2");
