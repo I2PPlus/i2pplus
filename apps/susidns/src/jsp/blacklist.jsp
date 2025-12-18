@@ -53,7 +53,7 @@
 <form method=POST action="blacklist#navi">
 <div id=content>
 <input type=hidden name=serial value="${blacklist.serial}" >
-<textarea name=content rows=15 cols=80 spellcheck=false placeholder="<%=intl._t("Enter I2P addresses to blacklist (one per line)")%>">${blacklist.content}</textarea>
+<textarea name=content rows=32 cols=80 spellcheck=false placeholder="<%=intl._t("Enter I2P addresses to blacklist (one per line)")%>">${blacklist.content}</textarea>
 </div>
 <div id=buttons>
 <input class=update style=float:left type=submit name=action value="<%=intl._t("Reload")%>">
@@ -61,10 +61,7 @@
 </div>
 </form>
 <div class=help id=helpblacklist>
-<p class=help>
-<%=intl._t("The blacklist file contains a list of I2P addresses that should be blocked from access via the HTTP proxy, and excluded from the address book display.")%>&nbsp;<wbr>
-<%=intl._t("Enter hostnames (one per line).")%>
-</p>
+<p class=help><%=intl._t("The blacklist file contains a list of I2P addresses that should be blocked from access via the HTTP proxy, and excluded from the address book display.")%></p>
 </div>
 </div>
 <span data-iframe-height></span>

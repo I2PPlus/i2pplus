@@ -8,8 +8,10 @@ package net.i2p.i2ptunnel;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.regex.Pattern;
 
 /**
@@ -63,7 +65,6 @@ public class BlacklistBean {
                     buf.append("\n");
                 }
                 content = buf.toString();
-                System.err.println("[BlacklistBean] Loaded blacklist from file: " + file.getAbsolutePath() + " (" + content.length() + " chars)");
             } catch (IOException e) {
                 System.err.println("[BlacklistBean] Error loading blacklist: " + e.getMessage());
                 content = "";
@@ -76,7 +77,17 @@ public class BlacklistBean {
             }
         } else {
             content = "";
-            System.err.println("[BlacklistBean] Blacklist file does not exist: " + file.getAbsolutePath());
+            try {
+                // Create parent directories if they don't exist
+                File parentDir = file.getParentFile();
+                if (parentDir != null && !parentDir.exists()) {
+                    parentDir.mkdirs();
+                }
+                // Create empty blacklist file
+                new FileOutputStream(file).close();
+            } catch (IOException e) {
+                System.err.println("[BlacklistBean] Could not create blacklist file: " + file.getAbsolutePath() + " - " + e.getMessage());
+            }
         }
     }
 

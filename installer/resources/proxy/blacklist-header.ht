@@ -29,7 +29,6 @@ Connection: close
 _("The requested destination is in your blacklist and access has been blocked.")
 </p>
 <p id="blacklist_info">
-_("You can manage your blacklist by visiting the {0}Blacklist Configuration{1} page in the router console.", <a href=\"/dns?blacklist">", "</a>"))
-<!--_("To allow access to this site, remove it from your blacklist in the SusiDNS address book management.")-->
+_("To allow access to this site, remove it from your blacklist on the SusiDNS blacklist management page.")
 </p>
 </div>

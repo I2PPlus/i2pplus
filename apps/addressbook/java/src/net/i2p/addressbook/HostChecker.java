@@ -999,7 +999,7 @@ public class HostChecker {
                             if (dest == null) {
                                 _log.info("Skipping entry with empty destination: " + hostname);
                             } else {
-                                _log.info("Skipping blacklisted destination: " + hostname);
+                                _log.info("Skipping blacklisted host: " + hostname);
                             }
                         }
                     }
@@ -1024,7 +1024,7 @@ public class HostChecker {
                 }
 
                 if (_log.shouldInfo()) {
-                    _log.info("HostChecker cycle completed: " + success + "/" + total + " reachable, " + skipped + " skipped");
+                    _log.info("HostChecker cycle completed: " + success + " / " + total + " reachable (" + skipped + " skipped)");
                 }
 
                 // Save ping results to file after each cycle
