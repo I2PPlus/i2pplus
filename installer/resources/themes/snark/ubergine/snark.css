@@ -277,9 +277,9 @@ td.peerCount:empty{text-align:center}
 .active.downloading .peerCount b::before{border-color:#0000 #252 #0000 #0000}
 .active.seeding.complete .peerCount b{background:repeating-linear-gradient(135deg,#937,#937 8px,#826 9px,#826 17px)}
 .active.seeding.complete .peerCount b::before{border-color:#0000 #937 #0000 #0000}
-.inactive.downloading .peerCount b,.active.starting.processing .peerCount b,.inactive.connected.downloading b{background:#fc0}
-.inactive.downloading .peerCount b::before,.active.starting.processing .peerCount b::before{border-color:#0000 #fc0 #0000 #0000}
-.inactive.downloading .peerCount b,.peerCount b .right,.peerCount b .left{text-shadow:0 1px 1px #222}
+.inactive.incomplete.connected .peerCount b,.active.starting.processing .peerCount b{background:#fc0}
+.inactive.incomplete.connected .peerCount b::before,.active.starting.processing .peerCount b::before{border-color:#0000 #fc0 #0000 #0000}
+.inactive.incomplete.connected .peerCount b,.peerCount b .right,.peerCount b .left{text-shadow:0 1px 1px #222}
 .nopeers.incomplete .peerCount b{background:#aaa}
 .nopeers.incomplete .peerCount b::before{border-color:#0000 #aaa #0000 #0000}
 .nopeers .peerCount b .left,.nopeers .peerCount b .right{color:#101;text-shadow:0 1px 1px #aaa}
