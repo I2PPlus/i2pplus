@@ -153,7 +153,7 @@
 <table class=book id=host_list>
 <tr class=head>
 <%  if (book.getEntries().length > 0) { /* Don't show if no results. Can't figure out how to do this with c:if */ %>
-<th class=info><%=intl._t("Info")%></th><th class=names><%=intl._t("Hostname")%></th><th class=b32link><%=intl._t("Link (b32)")%></th><th class=helper>Helper</th><th class=destinations><%=intl._t("Destination")%> (b64)</th><th class=source><%=intl._t("Source")%></th><th class=added><%=intl._t("Added")%></th><th class=status><%=intl._t("Status")%></th>
+<th class=info><%=intl._t("Info")%></th><th class=type><%=intl._t("Type")%></th><th class=names><%=intl._t("Hostname")%></th><th class=b32link><%=intl._t("Link (b32)")%></th><th class=helper>Helper</th><th class=destinations><%=intl._t("Destination")%> (b64)</th><th class=source><%=intl._t("Source")%></th><th class=added><%=intl._t("Added")%></th><th class=status><%=intl._t("Status")%></th>
 <c:if test="${book.validBook}">
 <th class=checkbox <c:if test="${book.getFilter() == 'dead'}">id=deadHosts</c:if> title="<%=intl._t("Select hosts for deletion from addressbook")%>">
 </th></c:if>
@@ -170,6 +170,27 @@
 <%      } %>
 </a>
 </td>
+<td class=type>
+<c:set var="hostnameForCategory" value="${addr.name}"/>
+<%
+    // Get category for this hostname
+    String category = "";
+    try {
+        Object hostCheckerObj = application.getAttribute("hostChecker");
+        if (hostCheckerObj != null) {
+            java.lang.reflect.Method getCategory = hostCheckerObj.getClass().getMethod("getCategory", String.class);
+            String hostNameForCategory = (String) pageContext.getAttribute("hostnameForCategory");
+            Object categoryResult = getCategory.invoke(hostCheckerObj, hostNameForCategory);
+            if (categoryResult != null) {
+                category = (String) categoryResult;
+            }
+        }
+    } catch (Exception e) {
+        // Silently ignore category errors
+    }
+    if (!category.isEmpty()) { %><span class=<%=category%> title=<%=category%>><%=category%></span><% }
+    else { %><span class=unknown title="<%=intl._t("unknown")%>"><%=intl._t("unknown")%></span><% } %>
+</td>
 <td class=names><a href="http://${addr.name}/" target=_blank>${addr.displayName}</a></td>
 <td class=b32link><span class=addrhlpr><a href="http://${addr.b32}/" target=_blank rel=noreferrer title="<%=intl._t("Base 32 address")%>">b32</a></span></td>
 <td class=helper><a href="http://${addr.name}/?i2paddresshelper=${addr.destination}" target=_blank rel=noreferrer title="<%=intl._t("Helper link to share host address with option to add to addressbook")%>">link</a></td>
@@ -180,7 +201,7 @@
 <c:set var="hostname" value="${addr.name}"/>
 <%    // Get ping status for this hostname
       String pingStatus = "untested";
-      String hostname = (String) pageContext.getAttribute("hostname");
+       String hostnameForPing = (String) pageContext.getAttribute("hostname");
 
       // Now try to get ping status using the hostname
       try {
@@ -190,7 +211,7 @@
               try {
                   // Use reflection to avoid classpath issues
                   java.lang.reflect.Method getPingResult = hostCheckerObj.getClass().getMethod("getPingResult", String.class);
-                  Object pingResult = getPingResult.invoke(hostCheckerObj, hostname);
+                   Object pingResult = getPingResult.invoke(hostCheckerObj, hostnameForPing);
 
                   if (pingResult != null) {
                       // Use reflection to get the reachable field
@@ -203,17 +224,17 @@
                           pingStatus = "down";
                       }
                   }
-              } catch (Exception e) {
-                  // Log reflection errors for debugging
-                  System.err.println("Reflection error getting ping status for " + hostname + ": " + e.getMessage());
-              }
+               } catch (Exception e) {
+                   // Log reflection errors for debugging
+                   System.err.println("Reflection error getting ping status for " + hostnameForPing + ": " + e.getMessage());
+               }
           } else {
               System.err.println("hostCheckerObj is null in application context");
           }
-      } catch (Exception e) {
-          // Log ping status errors for debugging
-          System.err.println("Error getting ping status for " + hostname + ": " + e.getMessage());
-      }
+       } catch (Exception e) {
+           // Log ping status errors for debugging
+           System.err.println("Error getting ping status for " + hostnameForPing + ": " + e.getMessage());
+       }
       if ("up".equals(pingStatus)) { %><span class=up></span><% }
       else if ("down".equals(pingStatus)) { %><span class=down></span><% }
       else { %><span class=untested></span><% } %>

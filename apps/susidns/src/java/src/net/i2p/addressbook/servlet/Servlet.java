@@ -100,10 +100,10 @@ public class Servlet extends HttpServlet {
                         } else {
                             retryCount++;
                             if (retryCount >= maxRetries) {
-                                I2PAppContext.getGlobalContext().logManager().getLog(Servlet.class).warn("HostChecker instance still null after " + maxRetries + " attempts, giving up");
+                                I2PAppContext.getGlobalContext().logManager().getLog(Servlet.class).warn("HostChecker instance still null after " + maxRetries + " attempts, giving up...");
                                 scheduler.shutdown();
                             } else {
-                                I2PAppContext.getGlobalContext().logManager().getLog(Servlet.class).info("HostChecker instance is null, retry " + retryCount + "/" + maxRetries);
+                                //I2PAppContext.getGlobalContext().logManager().getLog(Servlet.class).debug("HostChecker instance is null, retry " + retryCount + "/" + maxRetries);
                             }
                         }
                     } catch (Exception e) {

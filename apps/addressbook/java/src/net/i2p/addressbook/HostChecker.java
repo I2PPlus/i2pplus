@@ -7,12 +7,16 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.text.SimpleDateFormat;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -34,6 +38,7 @@ import net.i2p.router.JobTiming;
 import net.i2p.router.NetworkDatabaseFacade;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
+import net.i2p.util.EepGet;
 import net.i2p.util.EepHead;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
@@ -52,8 +57,11 @@ public class HostChecker {
     private final ScheduledExecutorService _scheduler;
     private final Map<String, PingResult> _pingResults;
     private final Map<String, Destination> _destinations;
+    private Map<String, String> _hostCategories;
     private final AtomicBoolean _running;
+    private final AtomicBoolean _categoriesDownloaded;
     private final File _hostsCheckFile;
+    private final File _categoriesFile;
     private final Semaphore _pingSemaphore;
 
     // Configuration defaults
@@ -63,6 +71,14 @@ public class HostChecker {
 
     // Startup delay to allow router and socket manager to fully initialize
     private static final long STARTUP_DELAY_MS = 60 * 1000L; // 1 minute
+
+    // Additional delay for category download to allow HTTP proxy to be ready
+    private static final long CATEGORY_DOWNLOAD_DELAY_MS = 120 * 1000L; // 2 minutes
+
+    // Category download timeout settings
+    private static final int CATEGORY_CONNECT_TIMEOUT = 60 * 1000; // 1 minute
+    private static final int CATEGORY_INACTIVITY_TIMEOUT = 60 * 1000; // 1 minute
+    private static final int CATEGORY_TOTAL_TIMEOUT = 120 * 1000; // 2 minutes
 
     private long _pingInterval = DEFAULT_PING_INTERVAL;
     private long _pingTimeout = DEFAULT_PING_TIMEOUT;
@@ -76,11 +92,17 @@ public class HostChecker {
         public final boolean reachable;
         public final long timestamp;
         public final long responseTime;
+        public final String category;
 
-        public PingResult(boolean reachable, long timestamp, long responseTime) {
+        public PingResult(boolean reachable, long timestamp, long responseTime, String category) {
             this.reachable = reachable;
             this.timestamp = timestamp;
             this.responseTime = responseTime;
+            this.category = category;
+        }
+
+        public PingResult(boolean reachable, long timestamp, long responseTime) {
+            this(reachable, timestamp, responseTime, null);
         }
     }
 
@@ -105,6 +127,7 @@ public class HostChecker {
         _pingResults = new ConcurrentHashMap<String, PingResult>();
         _destinations = new ConcurrentHashMap<String, Destination>();
         _running = new AtomicBoolean(false);
+        _categoriesDownloaded = new AtomicBoolean(false);
         _pingSemaphore = new Semaphore(_maxConcurrent);
 
         // Only enable LeaseSet checking if we have access to the network database
@@ -126,9 +149,12 @@ public class HostChecker {
             addressbookDir.mkdirs();
         }
         _hostsCheckFile = new File(addressbookDir, "hosts_check.txt");
+        _categoriesFile = new File(addressbookDir, "categories.txt");
 
-        // Load existing ping results
+        // Download categories and load existing ping results
+        downloadCategories();
         loadPingResults();
+        loadCategories();
     }
 
     /**
@@ -144,8 +170,37 @@ public class HostChecker {
             _log.info("Starting HostChecker with a " + (_pingInterval/1000/60) + " minute interval...");
         }
 
-        // Schedule periodic ping testing with startup delay
-        _scheduler.scheduleAtFixedRate(new PingTask(), STARTUP_DELAY_MS, _pingInterval, TimeUnit.MILLISECONDS);
+        // Wait for categories to be downloaded before starting ping cycle
+        Thread categoryWaiter = new Thread("CategoryDownloadWaiter") {
+            @Override
+            public void run() {
+                try {
+                    // Wait up to 5 minutes for category download to complete
+                    for (int i = 0; i < 300; i++) {
+                        if (_categoriesDownloaded.get()) {
+                            if (_log.shouldInfo()) {
+                                _log.info("Categories downloaded successfully from notbob.i2p -> Starting ping cycle...");
+                            }
+                            _scheduler.scheduleAtFixedRate(new PingTask(), STARTUP_DELAY_MS, _pingInterval, TimeUnit.MILLISECONDS);
+                            return;
+                        }
+                        Thread.sleep(1000); // Wait 1 second
+                    }
+
+                    // Timeout reached - start ping cycle anyway
+                    if (_log.shouldWarn()) {
+                        _log.warn("Categories failed to download from notbob.i2p (timeout) -> Starting ping cycle...");
+                    }
+                    _scheduler.scheduleAtFixedRate(new PingTask(), STARTUP_DELAY_MS, _pingInterval, TimeUnit.MILLISECONDS);
+                } catch (InterruptedException e) {
+                    if (_log.shouldWarn()) {
+                        _log.warn("Category download waiter interrupted");
+                    }
+                }
+            }
+        };
+        categoryWaiter.setDaemon(true);
+        categoryWaiter.start();
     }
 
     /**
@@ -184,7 +239,7 @@ public class HostChecker {
     public PingResult testDestination(String hostname) {
         Destination destination = getDestination(hostname);
         if (destination == null) {
-            return new PingResult(false, System.currentTimeMillis(), -1);
+            return createPingResult(false, System.currentTimeMillis(), -1, hostname);
         }
 
         // First try ping (I2PSocketManager)
@@ -243,7 +298,7 @@ public class HostChecker {
                 // Check if leases are still current and valid
                 boolean isCurrent = leaseSet.isCurrent(_context.clock().now());
 
-                PingResult result = new PingResult(isCurrent, startTime, responseTime);
+                PingResult result = createPingResult(isCurrent, startTime, responseTime, hostname);
                 synchronized (_pingResults) {
                     _pingResults.put(hostname, result);
                 }
@@ -262,7 +317,7 @@ public class HostChecker {
             }
 
             // LeaseSet lookup error - HOST IS PERMANENTLY OFFLINE
-            PingResult result = new PingResult(false, startTime, responseTime);
+            PingResult result = createPingResult(false, startTime, responseTime, hostname);
             synchronized (_pingResults) {
                 _pingResults.put(hostname, result);
             }
@@ -347,7 +402,7 @@ public class HostChecker {
 
             if (lookupResult[0] && lookupComplete[0]) {
                 // Successfully found LeaseSet via floodfill
-                PingResult result = new PingResult(true, startTime, responseTime);
+                PingResult result = createPingResult(true, startTime, responseTime, hostname);
                 synchronized (_pingResults) {
                     _pingResults.put(hostname, result);
                 }
@@ -361,7 +416,7 @@ public class HostChecker {
                 return result;
             } else {
                 // LeaseSet not found via floodfill - HOST IS PERMANENTLY OFFLINE
-                PingResult result = new PingResult(false, startTime, responseTime);
+            PingResult result = createPingResult(false, startTime, responseTime, hostname);
                 synchronized (_pingResults) {
                     _pingResults.put(hostname, result);
                 }
@@ -382,7 +437,7 @@ public class HostChecker {
             }
 
             // LeaseSet lookup error - host is down
-            PingResult result = new PingResult(false, startTime, responseTime);
+            PingResult result = createPingResult(false, startTime, responseTime, hostname);
             synchronized (_pingResults) {
                 _pingResults.put(hostname, result);
             }
@@ -399,7 +454,8 @@ public class HostChecker {
     private PingResult pingDestination(String hostname, Destination destination) {
         long startTime = System.currentTimeMillis();
         I2PSocketManager pingSocketManager = null;
-        if (hostname.length() > 30) {hostname = hostname.substring(0,29) + "&hellip;";}
+        String displayHostname = hostname;
+        if (hostname.length() > 30) {displayHostname = hostname.substring(0,29) + "&hellip;";}
 
         try {
             long tunnelBuildStart = System.currentTimeMillis();
@@ -416,14 +472,14 @@ public class HostChecker {
 
             if (pingSocketManager == null) {
                 if (_log.shouldWarn()) {
-                    _log.warn("Failed to create SocketManager for HostChecker ping -> " + hostname + " [6,4]");
+                    _log.warn("Failed to create SocketManager for HostChecker ping -> " + displayHostname + " [6,4]");
                 }
-                return new PingResult(false, startTime, System.currentTimeMillis() - startTime);
+                return createPingResult(false, startTime, System.currentTimeMillis() - startTime, hostname);
             }
 
             long tunnelBuildTime = System.currentTimeMillis() - tunnelBuildStart;
             if (_log.shouldDebug()) {
-                _log.debug("SocketManager ready for HostChecker ping in " + tunnelBuildTime + "ms -> " + hostname + " [6,4]");
+                _log.debug("SocketManager ready for HostChecker ping in " + tunnelBuildTime + "ms -> " + displayHostname + " [6,4]");
             }
 
             // Use I2PSocketManager ping method like I2Ping does
@@ -433,151 +489,39 @@ public class HostChecker {
             long pingTime = System.currentTimeMillis() - pingStart;
 
             if (reachable) {
-                PingResult result = new PingResult(true, startTime, pingTime);
+                PingResult result = createPingResult(true, startTime, pingTime, hostname);
                 synchronized (_pingResults) {
                     _pingResults.put(hostname, result);
                 }
                 if (_log.shouldInfo()) {
-                    _log.info("HostChecker ping [SUCCESS] -> Received response from " + hostname + " [6,4] in " + pingTime + "ms");
+                    _log.info("HostChecker ping [SUCCESS] -> Received response from " + displayHostname + " [6,4] in " + pingTime + "ms");
                 }
                 savePingResults();
                 return result;
             } else {
                 if (_log.shouldInfo()) {
-                    _log.info("HostChecker ping [FAILURE] -> No response from " + hostname + " [6,4], trying ElGamal...");
+                    _log.info("HostChecker ping [FAILURE] -> No response from " + displayHostname + " [6,4], trying eephead...");
                 }
-                // Clean up 6,4 SocketManager before trying 4,0
-                try {
-                    if (pingSocketManager != null) {
-                        pingSocketManager.destroySocketManager();
-                        //if (_log.shouldDebug()) {
-                        //    _log.debug("Destroyed SocketManager [6,4] before trying ElGamal for " + hostname);
-                        //}
-                    }
-                } catch (Exception e) {
-                    if (_log.shouldWarn()) {
-                        _log.warn("Error destroying SocketManager [6,4] before trying ElGamal for " + hostname + " -> " + e.getMessage());
-                    }
-                }
-            // Clean up 6,4 SocketManager before trying 4,0
-            try {
-                if (pingSocketManager != null) {
-                    pingSocketManager.destroySocketManager();
-                    pingSocketManager = null; // Prevent double-destroy in finally
-                    //if (_log.shouldDebug()) {
-                    //    _log.debug("Destroyed SocketManager [6,4] before trying ElGamal for " + hostname);
-                    //}
-                }
-            } catch (Exception destroyEx) {
-                if (_log.shouldWarn()) {
-                    _log.warn("Error destroying SocketManager [6,4] before trying ElGamal for " + hostname + " -> " + destroyEx.getMessage());
-                }
-            }
-
-            return tryWithFallbackEncryption(hostname, destination, startTime);
+                return fallbackToEepHead(hostname, startTime);
             }
 
         } catch (Exception e) {
             long responseTime = System.currentTimeMillis() - startTime;
-            String errorMsg = "Error: " + e.getMessage();
-            if (_log.shouldInfo()) {
-                _log.info("HostChecker ping [ERROR] -> No response from " + hostname + " [6,4] (" + errorMsg + "), trying ElGamal...");
+            if (_log.shouldWarn()) {
+                _log.warn("HostChecker ping error for " + displayHostname + " -> " + e.getMessage());
             }
-
-            return tryWithFallbackEncryption(hostname, destination, startTime);
-
-        } finally {
-            // Clean up the single socket manager (only if not already cleaned up)
-            if (pingSocketManager != null) {
-                try {
-                    pingSocketManager.destroySocketManager();
-                    //if (_log.shouldDebug()) {
-                    //    _log.debug("Destroyed SocketManager for HostChecker ping for " + hostname);
-                    //}
-                } catch (Exception e) {
-                    if (_log.shouldWarn()) {
-                        _log.warn("Error destroying SocketManager HostChecker ping for " + hostname + " [6,4] -> " + e.getMessage());
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Try ping with fallback encryption type 4,0
-     * Returns failure result if ping fails (no automatic fallback)
-     */
-    private PingResult tryWithFallbackEncryption(String hostname, Destination destination, long startTime) {
-        I2PSocketManager pingSocketManager = null;
-
-        try {
-            long tunnelBuildStart = System.currentTimeMillis();
-            Properties options = new Properties();
-            options.setProperty("inbound.nickname", "Ping [" + hostname.replace(".i2p", "") + "]");
-            options.setProperty("outbound.nickname", "Ping [" + hostname.replace(".i2p", "") + "]");
-            options.setProperty("inbound.quantity", "1");
-            options.setProperty("outbound.quantity", "1");
-            options.setProperty("i2cp.leaseSetType", "3");
-            options.setProperty("i2cp.leaseSetEncType", "0"); // ElGamal legacy check
-            options.setProperty("i2cp.dontPublishLeaseSet", "true");
-
-            pingSocketManager = I2PSocketManagerFactory.createManager(options);
-
-            if (pingSocketManager == null) {
-                if (_log.shouldWarn()) {
-                    _log.warn("Failed to create SocketManager for HostChecker ping -> " + hostname + " [ElGamal]");
-                }
-                return new PingResult(false, startTime, System.currentTimeMillis() - startTime);
-            }
-
-            long tunnelBuildTime = System.currentTimeMillis() - tunnelBuildStart;
-            if (_log.shouldDebug()) {
-                _log.debug("SocketManager ready for HostChecker ping in " + tunnelBuildTime + "ms -> " + hostname + " [ElGamal]");
-            }
-
-            // Use I2PSocketManager ping method like I2Ping does
-            // Parameters: destination, localPort, remotePort, timeout
-            long pingStart = System.currentTimeMillis();
-            boolean reachable = pingSocketManager.ping(destination, 0, 0, _pingTimeout);
-            long pingTime = System.currentTimeMillis() - pingStart;
-
-            if (reachable) {
-                PingResult result = new PingResult(true, startTime, pingTime);
-                synchronized (_pingResults) {
-                    _pingResults.put(hostname, result);
-                }
-                if (_log.shouldInfo()) {
-                    _log.info("HostChecker ping [SUCCESS] -> Received response from " + hostname + " [ElGamal] in " + pingTime + "ms");
-                }
-                savePingResults();
-                return result;
-            } else {
-                if (_log.shouldInfo()) {
-                    _log.info("HostChecker ping [FAILURE] -> No response from " + hostname + " [ElGamal], trying eephead...");
-                }
-                return new PingResult(false, startTime, System.currentTimeMillis() - startTime);
-            }
-
-        } catch (Exception e) {
-            long responseTime = System.currentTimeMillis() - startTime;
-            String errorMsg = "Error: " + e.getMessage();
-            if (_log.shouldInfo()) {
-                _log.info("HostChecker ping [ERROR] -> No response from " + hostname + " [ElGamal] (" + errorMsg + ")");
-            }
-
-            return new PingResult(false, startTime, System.currentTimeMillis() - startTime);
-
+            return createPingResult(false, startTime, responseTime, hostname);
         } finally {
             // Clean up the single socket manager
             if (pingSocketManager != null) {
                 try {
                     pingSocketManager.destroySocketManager();
-                    //if (_log.shouldDebug()) {
-                    //    _log.debug("Destroyed SocketManager for HostChecker ping for " + hostname);
-                    //}
+                    if (_log.shouldDebug()) {
+                        _log.debug("Destroyed SocketManager for HostChecker ping for " + displayHostname);
+                    }
                 } catch (Exception e) {
                     if (_log.shouldWarn()) {
-                        _log.warn("Error destroying SocketManager HostChecker for " + hostname + ": " + e.getMessage());
+                        _log.warn("Error destroying SocketManager HostChecker for " + displayHostname + ": " + e.getMessage());
                     }
                 }
             }
@@ -601,7 +545,7 @@ public class HostChecker {
             long responseTime = System.currentTimeMillis() - startTime;
 
             // Any response (even errors like 404, 500, etc.) indicates the site is up
-            PingResult result = new PingResult(success, startTime, responseTime);
+            PingResult result = createPingResult(success, startTime, responseTime, hostname);
             synchronized (_pingResults) {
                 _pingResults.put(hostname, result);
             }
@@ -623,7 +567,7 @@ public class HostChecker {
                 _log.info("HostChecker eephead probe error for " + hostname + " -> " + e.getMessage());
             }
 
-            PingResult result = new PingResult(false, startTime, responseTime);
+            PingResult result = createPingResult(false, startTime, responseTime, hostname);
             synchronized (_pingResults) {
                 _pingResults.put(hostname, result);
             }
@@ -670,8 +614,6 @@ public class HostChecker {
         _useLeaseSetCheck = useLeaseSetCheck;
     }
 
-
-
     /**
      * Get whether to use LeaseSet checking
      *
@@ -680,8 +622,6 @@ public class HostChecker {
     public boolean getUseLeaseSetCheck() {
         return _useLeaseSetCheck;
     }
-
-
 
     /**
      * Check if ping tester is running
@@ -723,7 +663,8 @@ public class HostChecker {
                             long timestamp = Long.parseLong(parts[0]);
                             String hostname = parts[1];
                             boolean reachable = "y".equals(parts[2]);
-                            PingResult result = new PingResult(reachable, timestamp, -1);
+                            String category = parts.length > 3 ? parts[3] : null;
+                            PingResult result = new PingResult(reachable, timestamp, -1, category);
                             _pingResults.put(hostname, result);
                             isValid = true;
                         } catch (NumberFormatException e) {
@@ -792,15 +733,18 @@ public class HostChecker {
             // Write file with explicit error handling
             StringBuilder content = new StringBuilder();
             content.append("# I2P+ Address Book Host Check\n");
-            content.append("# Format: timestamp,host,reachable\n");
+            content.append("# Format: timestamp,host,reachable,category\n");
             content.append("# Generated: ").append(new java.util.Date()).append("\n\n");
 
             for (Map.Entry<String, PingResult> entry : _pingResults.entrySet()) {
                 String hostname = entry.getKey();
                 PingResult result = entry.getValue();
                 content.append(result.timestamp).append(",").append(hostname)
-                       .append(",").append(result.reachable ? "y" : "n")
-                       .append("\n");
+                       .append(",").append(result.reachable ? "y" : "n");
+                if (result.category != null) {
+                    content.append(",").append(result.category);
+                }
+                content.append("\n");
             }
 
             // Write using Files.write with explicit options
@@ -898,6 +842,172 @@ public class HostChecker {
                 _log.warn("Error during HostChecker stale host cleanup", e);
             }
         }
+    }
+
+    /**
+     * Download categories file from notbob.i2p
+     * Falls back to existing stale categories.txt if download fails
+     */
+    private void downloadCategories() {
+        boolean downloadSuccess = false;
+        boolean hadExistingFile = _categoriesFile.exists();
+
+        try {
+            String categoryUrl = "http://notbob.i2p/graphs/cats.txt";
+            if (_log.shouldInfo()) {
+                _log.info("Will download categories from " + categoryUrl + " after " + (CATEGORY_DOWNLOAD_DELAY_MS/1000) + " seconds");
+            }
+
+            // Wait for HTTP proxy to be ready
+            if (_log.shouldInfo()) {
+                _log.info("Waiting " + (CATEGORY_DOWNLOAD_DELAY_MS/1000) + " seconds for HTTP proxy to be ready before downloading categories...");
+            }
+            Thread.sleep(CATEGORY_DOWNLOAD_DELAY_MS);
+
+            if (_log.shouldInfo()) {
+                _log.info("Downloading categories from " + categoryUrl);
+            }
+
+            EepGet get = new EepGet(_context, "127.0.0.1", 4444, 3, _categoriesFile.getAbsolutePath(), categoryUrl);
+            get.addHeader("User-Agent", "I2P+ HostChecker");
+            downloadSuccess = get.fetch(CATEGORY_CONNECT_TIMEOUT, CATEGORY_TOTAL_TIMEOUT, CATEGORY_INACTIVITY_TIMEOUT);
+
+            if (downloadSuccess) {
+                // Add header after successful download
+                addCategoriesHeader();
+                if (_log.shouldInfo()) {
+                    _log.info("Successfully downloaded categories to " + _categoriesFile.getAbsolutePath());
+                }
+            } else {
+                if (_log.shouldWarn()) {
+                    _log.warn("Failed to download categories, result: " + downloadSuccess);
+                }
+            }
+        } catch (Exception e) {
+            if (_log.shouldWarn()) {
+                _log.warn("Exception downloading categories", e);
+            }
+        }
+
+        // If download failed but we have an existing stale file, continue with that
+        if (!downloadSuccess && hadExistingFile) {
+            if (_log.shouldInfo()) {
+                _log.info("Using stale categories.txt file at " + _categoriesFile.getAbsolutePath());
+            }
+        }
+
+        // Mark category download as complete (whether successful or not)
+        _categoriesDownloaded.set(true);
+        if (_log.shouldInfo()) {
+            _log.info("Category download phase completed (success: " + downloadSuccess + "), starting ping cycle...");
+        }
+    }
+
+    /**
+     * Add header to categories file with timestamp
+     */
+    private void addCategoriesHeader() {
+        try {
+            // Read current content
+            List<String> lines = new ArrayList<>();
+            if (_categoriesFile.exists()) {
+                try (BufferedReader reader = new BufferedReader(new FileReader(_categoriesFile))) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        lines.add(line);
+                    }
+                }
+            }
+
+            // Write file with header
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(_categoriesFile))) {
+                writer.write("# I2P+ Address Book Host Categories");
+                writer.newLine();
+                writer.write("# Format: hostname,category");
+                writer.newLine();
+                writer.write("# Source: http://notbob.i2p/graphs/cats.txt");
+                writer.newLine();
+                writer.write("# Generated: " + new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US).format(new Date()));
+                writer.newLine();
+                writer.newLine();
+                
+                // Write original content, skipping any existing header lines
+                for (String line : lines) {
+                    if (!line.startsWith("#")) {
+                        writer.write(line);
+                        writer.newLine();
+                    }
+                }
+            }
+        } catch (Exception e) {
+            if (_log.shouldWarn()) {
+                _log.warn("Failed to add header to categories file", e);
+            }
+        }
+    }
+
+    /**
+     * Load categories from categories.txt file
+     */
+    private void loadCategories() {
+        if (_hostCategories == null) {
+            _hostCategories = new ConcurrentHashMap<String, String>();
+        }
+
+        if (!_categoriesFile.exists()) {
+            if (_log.shouldInfo()) {
+                _log.info("Categories file not found at " + _categoriesFile.getAbsolutePath());
+            }
+            return;
+        }
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(_categoriesFile))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty() || line.startsWith("#")) {
+                    continue;
+                }
+
+                // Format: hostname,category
+                String[] parts = line.split(",", 2);
+                if (parts.length == 2) {
+                    String hostname = parts[0].trim();
+                    String category = parts[1].trim();
+                    _hostCategories.put(hostname, category);
+                }
+            }
+
+            if (_log.shouldInfo()) {
+                _log.info("Loaded " + _hostCategories.size() + " host categories from " + _categoriesFile.getName());
+            }
+        } catch (Exception e) {
+            if (_log.shouldWarn()) {
+                _log.warn("Error loading categories from " + _categoriesFile.getAbsolutePath(), e);
+            }
+        }
+    }
+
+    /**
+     * Get category for a hostname
+     */
+    public String getCategory(String hostname) {
+        return _hostCategories.get(hostname);
+    }
+
+    /**
+     * Helper method to create PingResult with category
+     */
+    private PingResult createPingResult(boolean reachable, long timestamp, long responseTime, String hostname) {
+        String category = _hostCategories.get(hostname);
+        return new PingResult(reachable, timestamp, responseTime, category);
+    }
+
+    /**
+     * Get all host categories
+     */
+    public Map<String, String> getAllCategories() {
+        return new HashMap<String, String>(_hostCategories);
     }
 
     /**
