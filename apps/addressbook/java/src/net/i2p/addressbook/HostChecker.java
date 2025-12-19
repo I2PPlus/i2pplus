@@ -60,9 +60,11 @@ public class HostChecker {
     private Map<String, String> _hostCategories;
     private final AtomicBoolean _running;
     private final AtomicBoolean _categoriesDownloaded;
+    private final AtomicBoolean _categoriesDownloadSuccessful;
     private final File _hostsCheckFile;
     private final File _categoriesFile;
     private final Semaphore _pingSemaphore;
+    private int _categoryRetryCount = 0;
 
     // Configuration defaults
     private static final long DEFAULT_PING_INTERVAL = 8 * 60 * 60 * 1000L; // 8 hours
@@ -79,6 +81,10 @@ public class HostChecker {
     private static final int CATEGORY_CONNECT_TIMEOUT = 60 * 1000; // 1 minute
     private static final int CATEGORY_INACTIVITY_TIMEOUT = 60 * 1000; // 1 minute
     private static final int CATEGORY_TOTAL_TIMEOUT = 120 * 1000; // 2 minutes
+
+    // Category retry settings
+    private static final long CATEGORY_RETRY_INTERVAL = 10 * 60 * 1000L; // 10 minutes
+    private static final int MAX_CATEGORY_RETRIES = -1; // -1 for infinite retries
 
     private long _pingInterval = DEFAULT_PING_INTERVAL;
     private long _pingTimeout = DEFAULT_PING_TIMEOUT;
@@ -128,6 +134,7 @@ public class HostChecker {
         _destinations = new ConcurrentHashMap<String, Destination>();
         _running = new AtomicBoolean(false);
         _categoriesDownloaded = new AtomicBoolean(false);
+        _categoriesDownloadSuccessful = new AtomicBoolean(false);
         _pingSemaphore = new Semaphore(_maxConcurrent);
 
         // Only enable LeaseSet checking if we have access to the network database
@@ -155,6 +162,9 @@ public class HostChecker {
         downloadCategories();
         loadPingResults();
         loadCategories();
+
+        // Schedule periodic category retries
+        scheduleCategoryRetries();
     }
 
     /**
@@ -389,12 +399,12 @@ public class HostChecker {
             };
 
             // Start the lookup with a timeout
-            netDb.lookupLeaseSet(destHash, onSuccess, onFailure, 10000); // 30 second timeout
+            netDb.lookupLeaseSet(destHash, onSuccess, onFailure, 15000); // 15 second timeout
 
             // Wait for lookup to complete with timeout
             synchronized (lookupComplete) {
                 if (!lookupComplete[0]) {
-                    lookupComplete.wait(10000);
+                    lookupComplete.wait(15000);
                 }
             }
 
@@ -408,7 +418,7 @@ public class HostChecker {
                 }
 
                 if (_log.shouldInfo()) {
-                    _log.info("HostChecker LSet [SUCCESS] -> Found LeaseSet for " +
+                    _log.info("HostChecker lset [SUCCESS] -> Found LeaseSet for " +
                              hostname + " in " + responseTime + "ms");
                 }
 
@@ -422,7 +432,7 @@ public class HostChecker {
                 }
 
                 if (_log.shouldInfo()) {
-                    _log.info("HostChecker LSet [FAILURE] -> No LeaseSet found for " +
+                    _log.info("HostChecker lset [FAILURE] -> No LeaseSet found for " +
                               hostname + " in " + responseTime + "ms");
                 }
 
@@ -815,7 +825,7 @@ public class HostChecker {
             // This prevents removing all hosts during startup when naming service might not be ready
             if (currentHostnames.isEmpty() && !cachedHostnames.isEmpty()) {
                 if (_log.shouldDebug()) {
-                    _log.debug("HostChecker cleanup skipped: no current hosts available, possibly during startup");
+                    _log.debug("HostChecker cleanup skipped: no current hosts available...");
                 }
                 return;
             }
@@ -835,7 +845,7 @@ public class HostChecker {
             }
 
             if (removedCount > 0 && _log.shouldInfo()) {
-                _log.info("HostChecker cleanup: removed " + removedCount + " stale hosts from hosts_check.txt");
+                _log.info("HostChecker cleanup -> Removed " + removedCount + " stale hosts from hosts_check.txt");
             }
         } catch (Exception e) {
             if (_log.shouldWarn()) {
@@ -854,13 +864,10 @@ public class HostChecker {
 
         try {
             String categoryUrl = "http://notbob.i2p/graphs/cats.txt";
-            if (_log.shouldInfo()) {
-                _log.info("Will download categories from " + categoryUrl + " after " + (CATEGORY_DOWNLOAD_DELAY_MS/1000) + " seconds");
-            }
 
             // Wait for HTTP proxy to be ready
             if (_log.shouldInfo()) {
-                _log.info("Waiting " + (CATEGORY_DOWNLOAD_DELAY_MS/1000) + " seconds for HTTP proxy to be ready before downloading categories...");
+                _log.info("Waiting " + (CATEGORY_DOWNLOAD_DELAY_MS/1000) + "s before downloading categories from " + categoryUrl + "...");
             }
             Thread.sleep(CATEGORY_DOWNLOAD_DELAY_MS);
 
@@ -880,7 +887,7 @@ public class HostChecker {
                 }
             } else {
                 if (_log.shouldWarn()) {
-                    _log.warn("Failed to download categories, result: " + downloadSuccess);
+                    _log.warn("Failed to download categories from notbob.i2p -> Retrying...");
                 }
             }
         } catch (Exception e) {
@@ -896,8 +903,9 @@ public class HostChecker {
             }
         }
 
-        // Mark category download as complete (whether successful or not)
+        // Mark category download as complete and track success
         _categoriesDownloaded.set(true);
+        _categoriesDownloadSuccessful.set(downloadSuccess);
         if (_log.shouldInfo()) {
             _log.info("Category download phase completed (success: " + downloadSuccess + "), starting ping cycle...");
         }
@@ -930,7 +938,7 @@ public class HostChecker {
                 writer.write("# Generated: " + new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US).format(new Date()));
                 writer.newLine();
                 writer.newLine();
-                
+
                 // Write original content, skipping any existing header lines
                 for (String line : lines) {
                     if (!line.startsWith("#")) {
@@ -1008,6 +1016,149 @@ public class HostChecker {
      */
     public Map<String, String> getAllCategories() {
         return new HashMap<String, String>(_hostCategories);
+    }
+
+    /**
+     * Schedule periodic category download retries
+     */
+    private void scheduleCategoryRetries() {
+        _scheduler.scheduleWithFixedDelay(new CategoryRetryTask(),
+            CATEGORY_RETRY_INTERVAL, CATEGORY_RETRY_INTERVAL, TimeUnit.MILLISECONDS);
+    }
+
+    /**
+     * Task to retry category downloads if they initially failed
+     */
+    private class CategoryRetryTask implements Runnable {
+        @Override
+        public void run() {
+            Thread.currentThread().setName("CategoryRetry");
+
+            if (!_running.get()) {
+                return;
+            }
+
+            // Only retry if categories download was not successful
+            if (!_categoriesDownloadSuccessful.get()) {
+                // Check if we've exceeded max retries (if set)
+                if (MAX_CATEGORY_RETRIES > 0 && _categoryRetryCount >= MAX_CATEGORY_RETRIES) {
+                    if (_log.shouldDebug()) {
+                        _log.debug("Category retry limit reached (" + MAX_CATEGORY_RETRIES + "), stopping retries");
+                    }
+                    return;
+                }
+
+                _categoryRetryCount++;
+                if (_log.shouldInfo()) {
+                    _log.info("Retrying category download (attempt " + _categoryRetryCount + ")...");
+                }
+
+                boolean retrySuccess = attemptCategoryDownload();
+
+                if (retrySuccess) {
+                    _categoriesDownloadSuccessful.set(true);
+
+                    // Reload categories after successful download
+                    loadCategories();
+
+                    // Update hosts_check.txt with new category information
+                    updateHostsWithCategories();
+
+                    if (_log.shouldInfo()) {
+                        _log.info("Category download successful on retry " + _categoryRetryCount +
+                                 ", updated hosts_check.txt with categories");
+                    }
+                } else {
+                    if (_log.shouldInfo()) {
+                        _log.info("Category download retry " + _categoryRetryCount + " failed");
+                    }
+                }
+            } else {
+                if (_log.shouldDebug()) {
+                    _log.debug("Categories already successfully downloaded, no retry needed");
+                }
+            }
+        }
+    }
+
+    /**
+     * Attempt to download categories file
+     * Returns true if successful, false otherwise
+     */
+    private boolean attemptCategoryDownload() {
+        try {
+            String categoryUrl = "http://notbob.i2p/graphs/cats.txt";
+
+            EepGet get = new EepGet(_context, "127.0.0.1", 4444, 3, _categoriesFile.getAbsolutePath(), categoryUrl);
+            get.addHeader("User-Agent", "I2P+ HostChecker");
+            boolean downloadSuccess = get.fetch(CATEGORY_CONNECT_TIMEOUT, CATEGORY_TOTAL_TIMEOUT, CATEGORY_INACTIVITY_TIMEOUT);
+
+            if (downloadSuccess) {
+                addCategoriesHeader();
+                if (_log.shouldInfo()) {
+                    _log.info("Successfully downloaded categories on retry to " + _categoriesFile.getAbsolutePath());
+                }
+                return true;
+            } else {
+                if (_log.shouldWarn()) {
+                    _log.warn("Failed to download categories on retry, result: " + downloadSuccess);
+                }
+                return false;
+            }
+        } catch (Exception e) {
+            if (_log.shouldWarn()) {
+                _log.warn("Exception during category download retry", e);
+            }
+            return false;
+        }
+    }
+
+    /**
+     * Update hosts_check.txt with category information after successful category download
+     */
+    private void updateHostsWithCategories() {
+        try {
+            int updatedCount = 0;
+
+            // Iterate through existing ping results and update them with category information
+            for (Map.Entry<String, PingResult> entry : _pingResults.entrySet()) {
+                String hostname = entry.getKey();
+                PingResult existingResult = entry.getValue();
+                String category = _hostCategories.get(hostname);
+
+                // Create new PingResult with category information
+                if (category != null && !category.equals(existingResult.category)) {
+                    PingResult updatedResult = new PingResult(existingResult.reachable,
+                                                           existingResult.timestamp,
+                                                           existingResult.responseTime,
+                                                           category);
+                    _pingResults.put(hostname, updatedResult);
+                    updatedCount++;
+
+                    if (_log.shouldDebug()) {
+                        _log.debug("Updated category for " + hostname + ": " + category);
+                    }
+                }
+            }
+
+            if (updatedCount > 0) {
+                // Save the updated results to hosts_check.txt
+                savePingResults();
+
+                if (_log.shouldInfo()) {
+                    _log.info("Updated " + updatedCount + " hosts with category information in hosts_check.txt");
+                }
+            } else {
+                if (_log.shouldInfo()) {
+                    _log.info("No host categories needed updating in hosts_check.txt");
+                }
+            }
+
+        } catch (Exception e) {
+            if (_log.shouldWarn()) {
+                _log.warn("Error updating hosts with categories", e);
+            }
+        }
     }
 
     /**
