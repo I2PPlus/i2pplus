@@ -906,9 +906,6 @@ public class HostChecker {
         // Mark category download as complete and track success
         _categoriesDownloaded.set(true);
         _categoriesDownloadSuccessful.set(downloadSuccess);
-        if (_log.shouldInfo()) {
-            _log.info("Category download phase completed (success: " + downloadSuccess + "), starting ping cycle...");
-        }
     }
 
     /**
