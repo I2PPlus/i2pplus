@@ -143,10 +143,10 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     public static final int DEFAULT_INITIAL_RTT = 8*1000;
     /**
      *  Maximum RTT to prevent pathological cases from breaking RTO calculations.
-     *  I2P typically has 2-10 second RTT, so 30 seconds provides a safe upper bound
+     *  I2P typically has 2-10 second RTT, so 45 seconds provides a safe upper bound
      *  while preventing excessively high timeout values after network disturbances.
      */
-    private static final int MAX_RTT = 30*1000;
+    private static final int MAX_RTT = 45*1000;
     /**
      *  Ref: RFC 5681 sec. 4.3, RFC 1122 sec. 4.2.3.3, ticket #2706
      */
