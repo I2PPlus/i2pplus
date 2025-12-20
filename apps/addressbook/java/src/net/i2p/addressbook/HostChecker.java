@@ -1282,7 +1282,7 @@ public class HostChecker {
                 }
 
                 if (_log.shouldInfo()) {
-                    _log.info("HostChecker cycle completed: " + success + " / " + total + " reachable (" + skipped + " skipped)");
+                    _log.info("HostChecker cycle completed: " + success + " / " + total + " reachable (" + skipped + " blacklisted hosts skipped)");
                 }
 
                 // Save ping results to file after each cycle
