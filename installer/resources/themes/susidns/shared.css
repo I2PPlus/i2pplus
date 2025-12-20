@@ -4,6 +4,7 @@
 main{position:relative}
 .displayPanels #book,.displayPanels #buttons{pointer-events:none!important;user-select:none!important}
 .displayPanels main::after{display:block;position:fixed;z-index:1000;backdrop-filter:blur(2px) saturate(.5);content:"";pointer-events:none;will-change:transform}
+#bls textarea{height:400px;resize:vertical}
 #host_list th{font-size:90%}
 #host_list .added,#host_list .b32link,#host_list .helper,#host_list .source,#host_list .status,#host_list .type{padding:4px 10px!important;width:5%!important;text-align:center;white-space:nowrap}
 #host_list .source a{width:24px;height:24px;overflow:hidden;display:inline-block;vertical-align:middle;color:#0000;text-shadow:none;background:url(/themes/console/images/eepsites/registrar.svg) no-repeat center center/20px;transition:ease all .1s}
