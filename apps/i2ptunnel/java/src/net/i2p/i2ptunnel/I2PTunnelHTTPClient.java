@@ -1323,6 +1323,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         out.write(getErrorPage("blacklist", ERR_BLACKLISTED).getBytes("UTF-8"));
                         writeFooter(out);
                         reader.drain();
+                        out.close();
                     } catch (IOException ioe) {} // ignore
                     return;
                 }
