@@ -177,11 +177,11 @@ class Connection {
         // Initialize pacing
         _pacingRate = calculatePacingRate();
         _lastPacketSendTime = 0;
-        
+
         // Initialize connection event and retransmit event
         _connectionEvent = new ConEvent();
         _retransmitEvent = new RetransmitEvent();
-        
+
         // Initialize random wait for activity timer randomization and bandwidth estimator
         _randomWait = _context.random().nextInt(3*1000); // 0-3 seconds randomization
         _bwEstimator = new SimpleBandwidthEstimator(_context, _options);

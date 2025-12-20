@@ -91,7 +91,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     public static final String PROP_CONNECT_DELAY = "i2p.streaming.connectDelay";
     public static final String PROP_MAX_MESSAGE_SIZE = "i2p.streaming.maxMessageSize";
     public static final String PROP_MAX_RESENDS = "i2p.streaming.maxResends";
-    public static final String PROP_INITIAL_RESEND_DELAY = "i2p.strea ming.initialResendDelay";
+    public static final String PROP_INITIAL_RESEND_DELAY = "i2p.streaming.initialResendDelay";
     public static final String PROP_INITIAL_ACK_DELAY = "i2p.streaming.initialAckDelay";
     public static final String PROP_INITIAL_WINDOW_SIZE = "i2p.streaming.initialWindowSize";
     /** unused */
@@ -131,16 +131,26 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
 
 
     //private static final int TREND_COUNT = 3;
-    /** RFC 6928 recommends 10 segments for better initial throughput, 
+    /** RFC 6928 recommends 10 segments for better initial throughput,
      *  but we use a more conservative 6 for I2P's high-latency environment */
     static final int INITIAL_WINDOW_SIZE = 6;
     static final int DEFAULT_MAX_SENDS = 8;
+    /**
+     *  Initial RTT estimate for new connections before first measurement.
+     *  I2P typically has 2-10 second RTT, so 8 seconds provides a conservative
+     *  starting point that adapts quickly via updateRTT().
+     */
     public static final int DEFAULT_INITIAL_RTT = 8*1000;
-    private static final int MAX_RTT = 60*1000;
+    /**
+     *  Maximum RTT to prevent pathological cases from breaking RTO calculations.
+     *  I2P typically has 2-10 second RTT, so 30 seconds provides a safe upper bound
+     *  while preventing excessively high timeout values after network disturbances.
+     */
+    private static final int MAX_RTT = 30*1000;
     /**
      *  Ref: RFC 5681 sec. 4.3, RFC 1122 sec. 4.2.3.3, ticket #2706
      */
-    private static final int DEFAULT_INITIAL_ACK_DELAY = 500;
+    private static final int DEFAULT_INITIAL_ACK_DELAY = 100;
     static final int MIN_WINDOW_SIZE = 1;
     private static final boolean DEFAULT_ANSWER_PINGS = true;
     private static final int DEFAULT_INACTIVITY_TIMEOUT = 90*1000;
@@ -313,6 +323,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      */
     public ConnectionOptions() {
         super();
+        _rtt = DEFAULT_INITIAL_RTT;
         cinit(System.getProperties());
     }
 
@@ -326,6 +337,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      */
     public ConnectionOptions(Properties opts) {
         super(opts);
+        _rtt = DEFAULT_INITIAL_RTT;
         cinit(opts);
     }
 
@@ -335,6 +347,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      */
     public ConnectionOptions(I2PSocketOptions opts) {
         super(opts);
+        _rtt = DEFAULT_INITIAL_RTT;
         cinit(System.getProperties());
     }
 
@@ -344,6 +357,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      */
     public ConnectionOptions(ConnectionOptions opts) {
         super(opts);
+        _rtt = DEFAULT_INITIAL_RTT;
         cinit(System.getProperties());
         if (opts != null) {update(opts);}
     }
@@ -411,25 +425,25 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
         setProfile(getInt(opts, PROP_PROFILE, PROFILE_BULK));
         setMaxMessageSize(getInt(opts, PROP_MAX_MESSAGE_SIZE, DEFAULT_MAX_MESSAGE_SIZE));
         setReceiveWindow(getInt(opts, PROP_INITIAL_RECEIVE_WINDOW, 1));
-        setResendDelay(getInt(opts, PROP_INITIAL_RESEND_DELAY, 1000));
+        setResendDelay(getInt(opts, PROP_INITIAL_RESEND_DELAY, 100));
         setSendAckDelay(getInt(opts, PROP_INITIAL_ACK_DELAY, DEFAULT_INITIAL_ACK_DELAY));
         setWindowSize(getInt(opts, PROP_INITIAL_WINDOW_SIZE, INITIAL_WINDOW_SIZE));
         setMaxResends(getInt(opts, PROP_MAX_RESENDS, DEFAULT_MAX_SENDS));
         setInactivityTimeout(getInt(opts, PROP_INACTIVITY_TIMEOUT, DEFAULT_INACTIVITY_TIMEOUT));
         setInactivityAction(getInt(opts, PROP_INACTIVITY_ACTION, DEFAULT_INACTIVITY_ACTION));
-        
+
         // Calculate minimum required inbound buffer size to accommodate full window
         // Use 1.5*maxWindowSize to handle dynamic window growth while keeping memory usage sane
         int minRequiredBufferSize = getMaxMessageSize() * ((3 * getMaxWindowSize()) / 2 + 2);
         setInboundBufferSize(minRequiredBufferSize);
-        
+
         // Validate buffer size is sufficient for window size
         if (_inboundBufferSize < minRequiredBufferSize) {
-            _log.warn("Inbound buffer size (" + _inboundBufferSize + ") is too small for window size (" + 
+            _log.warn("Inbound buffer size (" + _inboundBufferSize + ") is too small for window size (" +
                      getMaxWindowSize() + "). Adjusting to " + minRequiredBufferSize + " bytes");
             setInboundBufferSize(minRequiredBufferSize);
         }
-        
+
         setCongestionAvoidanceGrowthRateFactor(getInt(opts, PROP_CONGESTION_AVOIDANCE_GROWTH_RATE_FACTOR,
                                                       DEFAULT_CONGESTION_AVOIDANCE_GROWTH_RATE_FACTOR));
         setSlowStartGrowthRateFactor(getInt(opts, PROP_SLOW_START_GROWTH_RATE_FACTOR,
@@ -480,7 +494,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
             setReceiveWindow(getInt(opts, PROP_INITIAL_RECEIVE_WINDOW, 1));
         }
         if (opts.getProperty(PROP_INITIAL_RESEND_DELAY) != null) {
-            setResendDelay(getInt(opts, PROP_INITIAL_RESEND_DELAY, 1000));
+setResendDelay(getInt(opts, PROP_INITIAL_RESEND_DELAY, 100));
         }
         if (opts.getProperty(PROP_INITIAL_ACK_DELAY) != null) {
             setSendAckDelay(getInt(opts, PROP_INITIAL_ACK_DELAY, DEFAULT_INITIAL_ACK_DELAY));
@@ -497,19 +511,19 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
         if (opts.getProperty(PROP_INACTIVITY_ACTION) != null) {
             setInactivityAction(getInt(opts, PROP_INACTIVITY_ACTION, DEFAULT_INACTIVITY_ACTION));
         }
-        
+
         // Calculate minimum required inbound buffer size to accommodate full window
         // Use 1.5*maxWindowSize to handle dynamic window growth while keeping memory usage sane
         int minRequiredBufferSize = getMaxMessageSize() * ((3 * getMaxWindowSize()) / 2 + 2);
         setInboundBufferSize(minRequiredBufferSize);
-        
+
         // Validate buffer size is sufficient for window size
         if (_inboundBufferSize < minRequiredBufferSize) {
-            _log.warn("Inbound buffer size (" + _inboundBufferSize + ") is too small for window size (" + 
+            _log.warn("Inbound buffer size (" + _inboundBufferSize + ") is too small for window size (" +
                      getMaxWindowSize() + "). Adjusting to " + minRequiredBufferSize + " bytes");
             setInboundBufferSize(minRequiredBufferSize);
         }
-        
+
         if (opts.getProperty(PROP_CONGESTION_AVOIDANCE_GROWTH_RATE_FACTOR) != null) {
             setCongestionAvoidanceGrowthRateFactor(getInt(opts, PROP_CONGESTION_AVOIDANCE_GROWTH_RATE_FACTOR,
                                                           DEFAULT_CONGESTION_AVOIDANCE_GROWTH_RATE_FACTOR));
@@ -774,7 +788,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      * @return delay for a retransmission in ms
      */
     public int getResendDelay() {return _resendDelay;}
-    public void setResendDelay(int ms) {_resendDelay = ms;}
+    public void setResendDelay(int ms) {_resendDelay = Math.min(ms, 100);}
 
     /**
      * if there are packets we haven't ACKed yet and we don't
@@ -796,7 +810,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      *  Ref: RFC 5681 sec. 4.3, RFC 1122 sec. 4.2.3.3, ticket #2706
      *
      */
-    public void setSendAckDelay(int delayMs) {_sendAckDelay = delayMs;}
+    public void setSendAckDelay(int delayMs) {_sendAckDelay = Math.min(delayMs, 100);}
 
     /** What is the largest message we want to send or receive?
      * @return Maximum message size (MTU/MRU)
@@ -872,7 +886,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      */
     public int getInboundBufferSize() {return _inboundBufferSize;}
     public void setInboundBufferSize(int bytes) {_inboundBufferSize = bytes;}
-    
+
     /**
      * What is the maximum number of packets to buffer regardless of byte size?
      * This provides a hybrid approach with both byte and packet limits.
