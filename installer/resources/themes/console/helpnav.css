@@ -11,6 +11,7 @@
 .confignav a[href="/help/glossary"],.tab2#gloss span{background:var(--question)}
 .confignav a[href="/help/legal"],.tab2#leg span{background:var(--legal)}
 .confignav a[href="/help/changelog"],.tab2#hist span{background:var(--changelog)}
+.confignav a[href="/help/jsonrpc"],.tab2#json span{background:url(images/i2cp.svg)}
 .confignav a[href],.tab2 span{display:inline-block;width:26px;height:28px;vertical-align:middle;line-height:0;font-size:0;background-size:20px;background-repeat:no-repeat!important;background-position:center center}
 .confignav a[href]{filter:saturate(.6)}
 .confignav a[href]:hover,.confignav a[href]:focus{transform:scale(1.2);filter:saturate(1)}

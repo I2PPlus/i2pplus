@@ -2411,14 +2411,16 @@ h1::first-letter{font-size:107%}
 #help #configinfo .infowarn{padding:7px 10px 7px 40px;border:0;border-bottom:1px inset #010008;box-shadow:none;background-size:20px 20px}
 #help .confignav .tab:hover a,#help .confignav .tab a:hover{background-color:#0000}
 #help h3{padding:6px 10px;font-size:10pt}
+#help h4{margin:24px 0 16px;padding:6px 10px;box-shadow:none}
 #help li{padding-right:5px}
 #help li{text-align:justify}
 #help p,#help li,#help td{line-height:1.5}
+#help p,#help ul{padding:8px 20px}
 #help td{background-color:#000}
 #help td.infohelp,#help td.infowarn{padding-left:46px;background-size:24px}
 #legal h2+p{padding-top:10px}
-#legal h2,#sidebarhelp h2,#volunteer h2,#reachabilityhelp h2,#configurationhelp h2,#themeoverride h2,#tunnman h2,#browserconfig h2,#faq h2,#reseedhelp h2,#troubleshoot h2,#newuserguide h2,#filterlist h2,#webhosting h2,#glossary h2{margin:-1px -21px 10px;padding:10px;text-transform:uppercase;font-size:11pt;text-align:left;letter-spacing:.08em;word-spacing:.1em;border-radius:0}
-#legal,#sidebarhelp,#volunteer,#reachabilityhelp,#configurationhelp,#faq,#tunnman,#browserconfig,#reseedhelp,#troubleshoot,#newuserguide,#filterlist,#webhosting,#themeoverride,#glossary{margin:10px 0;padding:0 20px;border:var(--border_inner);background:#000}
+#legal h2,#sidebarhelp h2,#volunteer h2,#reachabilityhelp h2,#configurationhelp h2,#themeoverride h2,#tunnman h2,#browserconfig h2,#faq h2,#reseedhelp h2,#troubleshoot h2,#newuserguide h2,#filterlist h2,#webhosting h2,#glossary h2,#jsonrpchelp h2{margin:-1px -21px 10px;padding:10px;text-transform:uppercase;font-size:11pt;text-align:left;letter-spacing:.08em;word-spacing:.1em;border-radius:0}
+#legal,#sidebarhelp,#volunteer,#reachabilityhelp,#configurationhelp,#faq,#tunnman,#browserconfig,#reseedhelp,#troubleshoot,#newuserguide,#filterlist,#webhosting,#themeoverride,#glossary,#jsonrpchelp{margin:10px 0;padding:0 20px;border:var(--border_inner);background:#000}
 #newuserguide,#reseedhelp{padding-bottom:20px}
 #sidebarhelp h3,#faq h3,#reseedhelp h3{margin:0 -21px 10px;padding:8px 10px;word-spacing:.1em;letter-spacing:.08em;text-align:left;text-transform:uppercase;font-size:10.5pt;border:var(--border_inner);border-radius:0}
 #upnphelp li:last-child,#legal ul li:last-child{padding-bottom:0}
@@ -2442,6 +2444,7 @@ h1::first-letter{font-size:107%}
 #help_legal{background:var(--legal) no-repeat 15px center,var(--helpsection);background-size:32px,100% 4px}
 #help_changelog{background:var(--logs) no-repeat 15px center,var(--helpsection);background-size:32px,100% 4px}
 #help_webhosting{background:var(--webserver) no-repeat 15px center,var(--helpsection);background-size:32px,100% 4px}
+#help_jsonrpc{background:url(../images/i2cp.svg) no-repeat 15px center,var(--helpsection);background-size:32px,100% 4px}
 #help h2{font-size:12pt}
 #help .confignav+div>h2,#help .confignav+.infohelp+div>h2{margin-top:-5px}
 
@@ -2459,6 +2462,7 @@ h1::first-letter{font-size:107%}
 #tunnman h2{padding-left:38px;background:var(--hardhat) no-repeat 10px center/20px,var(--title)}
 #changelog h2,#advancedsettings h2{margin:0 0 -11px;word-spacing:.1em;letter-spacing:.08em;text-align:left;text-transform:uppercase;font-size:11pt;border-radius:0}
 #changelog h2{padding-left:38px;background:var(--changelog) no-repeat 10px center/20px,var(--title)}
+#jsonrpchelp h2{padding-left:38px;background:url(../images/i2cp.svg) no-repeat 10px center/20px,var(--title)}
 #advancedsettings h2{margin-bottom:-13px}
 #advancedsettings p.infohelp{margin-top:12px;margin-bottom:-2px}
 #advancedsettings #configinfo{margin-bottom:9px}

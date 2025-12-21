@@ -2405,7 +2405,7 @@ td#pw_adduser input{margin:5px 20px 5px 5px}
 
 /* help */
 .confignav+#sidebarhelp{margin-top:13px}
-#advancedsettings,#browserconfig,#changelog,#configurationhelp,#faq,#filterlist,#glossary,#legal,#newuserguide,#reachabilityhelp,#reseedhelp,#sidebarhelp,#themeoverride,#troubleshoot,#tunnman,#volunteer,#webhosting{border:var(--border_inner);border-radius:2px;margin-bottom:10px;padding:0 10px 5px;background:#fafaff}
+#advancedsettings,#browserconfig,#changelog,#configurationhelp,#faq,#filterlist,#glossary,#legal,#newuserguide,#reachabilityhelp,#reseedhelp,#sidebarhelp,#themeoverride,#troubleshoot,#tunnman,#volunteer,#webhosting,#jsonrpchelp{border:var(--border_inner);border-radius:2px;margin-bottom:10px;padding:0 10px 5px;background:#fafaff}
 #changelog{margin-bottom:5px;padding:0 0 0 10px}
 #changelog pre{margin:-10px 0 0;padding:8px 0;width:100%;height:600px;white-space:pre-wrap;font-size:9pt;will-change:transform}
 #changelog .bullet,#changelog .star{font-size:0}
@@ -2432,6 +2432,7 @@ td#pw_adduser input{margin:5px 20px 5px 5px}
 #help div,.logtable tr:nth-child(n+2) td,.debug_container{background:linear-gradient(180deg,rgba(248,248,255,.5),rgba(250,250,255,.3)),repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(221,221,255,.3) 3px,#fff 4px) #fafaff;margin-bottom:13px;box-shadow:var(--highlight)}
 #help h2{margin:-1px -11px 10px;border-radius:2px 2px 0 0;text-transform:uppercase;filter:none}
 #help h3{margin-bottom:-3px}
+#help h3+h4{margin-top:18px}
 #help li{text-align:justify}
 #help ul{margin:20px 0}
 #help p+ul{margin:0 0 20px}
@@ -2474,12 +2475,14 @@ td#pw_adduser input{margin:5px 20px 5px 5px}
 #help_changelog{background:var(--changelog) no-repeat 15px center/32px,linear-gradient(135deg,#fff,#f8f8ff)}
 #help_newusers{background:url(images/favicon.svg) no-repeat 15px center/32px,linear-gradient(135deg,#fff,#f8f8ff)}
 #help_webhosting{background:var(--webserver) no-repeat 15px center/32px,linear-gradient(135deg,#fff,#f8f8ff)}
+#help_jsonrpc{background:url(../images/i2cp.svg) no-repeat 15px center/32px,linear-gradient(135deg,#fff,#f8f8ff)}
 #configurationhelp h2,#advancedsettings h2{background:var(--configure) no-repeat 8px center,var(--h2)}
 #filterlist h2{background:var(--filter) no-repeat 8px center,var(--h2)}
 #browserconfig h2{background:var(--firefox) no-repeat 8px center,var(--h2)}
 #tunnman h2{background:var(--hardhat) no-repeat 8px center,var(--h2)}
 #sidebarhelp h2,#reachabilityhelp h2{background:url(/themes/console/images/sidebar.svg) no-repeat 8px center,var(--h2)}
 #reseedhelp h2{background:var(--reseed) no-repeat 8px center,var(--h2)}
+#jsonrpchelp h2{background:url(../images/i2cp.svg) no-repeat 8px center,var(--h2)}
 #faq h2,#glossary h2{background:var(--question) no-repeat 8px center,var(--h2)}
 #troubleshoot h2{background:var(--wrench) no-repeat 8px center,var(--h2)}
 #legal h2{background:var(--legal) no-repeat 8px center,var(--h2)}

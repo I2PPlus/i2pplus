@@ -1965,7 +1965,7 @@ table[id*="connections"] .tablefooter td:first-child{text-align:left}
 
 /* help section */
 #advancedsettings{margin-top:-4px}
-#browserconfig,#changelog,#configurationhelp,#faq,#filterlist,#glossary,#legal,#newuserguide,#reachabilityhelp,#reseedhelp,#sidebarhelp,#themeoverride,#troubleshoot,#tunnman,#volunteer,#webhosting{margin-top:15px;margin-bottom:20px;padding:10px 15px 5px;border:var(--border);background:rgba(240,240,255,.5);box-shadow:var(--highlight)}
+#browserconfig,#changelog,#configurationhelp,#faq,#filterlist,#glossary,#legal,#newuserguide,#reachabilityhelp,#reseedhelp,#sidebarhelp,#themeoverride,#troubleshoot,#tunnman,#volunteer,#webhosting,#jsonrpchelp{margin-top:15px;margin-bottom:20px;padding:10px 15px 5px;border:var(--border);background:rgba(240,240,255,.5);box-shadow:var(--highlight)}
 #browserconfig,#configurationhelp{margin-bottom:8px}
 #changelog{margin-top:14px;margin-bottom:11px;padding:0}
 #changelog h2{margin:-1px -1px 5px}
@@ -1984,6 +1984,7 @@ table[id*="connections"] .tablefooter td:first-child{text-align:left}
 #help li,#help p,#help td{line-height:1.4}
 #help p:not(.infohelp):not(.infowarn){padding:5px 10px 0;margin-top:0}
 #help pre{margin:-5px 0 5px 10px;padding-left:0;padding-bottom:20px;width:calc(100% - 10px);height:600px;white-space:pre-wrap;overflow:auto;font-size:9pt}
+#help #jsonrpchelp pre{height:auto}
 #help td.infohelp,#help td.infowarn,#help td.infohelp,#help p.infohelp{padding-left:46px;background-size:24px}
 #help ul{margin-bottom:8px;margin-top:8px;padding-left:15px}
 #help ul.links{margin-left:20px;padding-top:10px}
@@ -2046,11 +2047,13 @@ p+.twocol{margin:10px 30px}
 #help_changelog{background:var(--changelog) no-repeat 15px center/32px,var(--th)}
 #help_newusers{background:url(images/favicon.svg) no-repeat 15px center,var(--th)}
 #help_webhosting{background:var(--webserver) no-repeat 15px center/32px,var(--th)}
+#help_jsonrpc{background:url(../images/i2cp.svg) no-repeat 15px center/32px,var(--th)}
 #configurationhelp h2,#advancedsettings h2,#filterlist h2{padding-left:38px;background:var(--configure) no-repeat 8px center/24px,var(--header)}
 #advancedsettings h2{margin:10px 0 0}
 #advancedsettings p.infohelp{margin:-1px 0}
 #sidebarhelp h2,#reachabilityhelp h2{padding-left:38px;background:url(/themes/console/images/sidebar.svg) no-repeat 8px center/24px,var(--header)}
 #reseedhelp h2{padding-left:38px;background:var(--reseed) no-repeat 8px center/24px,var(--header)}
+#jsonrpchelp h2{padding-left:38px;background:url(../images/i2cp.svg) no-repeat 8px center/24px,var(--header)}
 #faq h2,#glossary h2{padding-left:38px;background:var(--faq) no-repeat 8px center/24px,var(--header)}
 #troubleshoot h2{padding-left:38px;background:var(--wrench) no-repeat 8px center/24px,var(--header)}
 #legal h2{padding-left:38px;background:var(--legal) no-repeat 8px center/24px,var(--header)}

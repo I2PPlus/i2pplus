@@ -21,14 +21,15 @@ public class HelpSectionHelper extends HelperBase {
     /** help-X.jsp */
     private static final String pages[] =
                                           {"", "configuration", "sidebar", "reseeding", "advancedsettings",
-                                           "faq", "reachability", "reseed", "legal" };
+                                           "faq", "reachability", "reseed", "jsonrpc", "legal" };
 
     private static final String titles[] =
                                           {_x("Overview"),
                                            _x("Configuration"),
                                            _x("Sidebar"),
                                            _x("Reseeding"),
-                                           _x("FAQ") };
+                                           _x("FAQ"),
+                                           _x("JSON-RPC API") };
 
     /** @since 0.9.19 */
     private static class Tab {

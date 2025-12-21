@@ -2680,7 +2680,7 @@ p+.twocol{margin:10px 25px}
 .twocol{display:block;columns:2 400px;column-gap:0}
 .twocol li{break-inside:avoid}
 ul#upnphelp li:last-child,#legal ul li:last-child{padding-bottom:0}
-#advancedsettings,#browserconfig,#configurationhelp,#faq,#filterlist,#glossary,#legal,#newuserguide,#reachabilityhelp,#reseedhelp,#sidebarhelp,#themeoverride,#troubleshoot,#tunnman,#volunteer,#webhosting{border:var(--border);padding:0 20px;margin:9px 0;background:#000}
+#advancedsettings,#browserconfig,#configurationhelp,#faq,#filterlist,#glossary,#legal,#newuserguide,#reachabilityhelp,#reseedhelp,#sidebarhelp,#themeoverride,#troubleshoot,#tunnman,#volunteer,#webhosting,#jsonrpchelp{border:var(--border);padding:0 20px;margin:9px 0;background:#000}
 #changelog{height:calc(100vh - 129px);position:relative}
 #changelog::after,#service_logs::after{height:228px;width:180px;display:inline-block;position:absolute;z-index:0;bottom:10px;right:16px;background:var(--tank) no-repeat center center/180px auto;opacity:.4;content:""}
 #service_logs::after{height:274px;width:258px;bottom:-45px;right:8px;z-index:-1;background-size:256px auto}
@@ -2729,7 +2729,7 @@ body.hasExpandedElement #configinfo tr.config:not(.expanded) th{color:#770;trans
 #help #terms{box-shadow:none}
 #config_update td.infohelp code{user-select:all}
 #legal{background:#000 url(images/chimp.webp) no-repeat bottom right/180px}
-#advancedsettings h2,#browserconfig h2,#configurationhelp h2,#faq h2,#filterlist h2,#glossary h2,#legal h2,#newuserguide h2,#reachabilityhelp h2,#reseedhelp h2,#sidebarhelp h2,#themeoverride h2,#troubleshoot h2,#tunnman h2,#volunteer h2,#webhosting h2{margin:-1px -21px 10px;padding:10px;word-spacing:.1em;letter-spacing:.08em;text-align:left;text-transform:uppercase;font-size:11pt;border-radius:0;background:linear-gradient(90deg,#000,#001000 70%,#001300 90%)}
+#advancedsettings h2,#browserconfig h2,#configurationhelp h2,#faq h2,#filterlist h2,#glossary h2,#legal h2,#newuserguide h2,#reachabilityhelp h2,#reseedhelp h2,#sidebarhelp h2,#themeoverride h2,#troubleshoot h2,#tunnman h2,#volunteer h2,#webhosting h2,#jsonrpchelp h2{margin:-1px -21px 10px;padding:10px;word-spacing:.1em;letter-spacing:.08em;text-align:left;text-transform:uppercase;font-size:11pt;border-radius:0;background:linear-gradient(90deg,#000,#001000 70%,#001300 90%)}
 #newuserguide div[lang]{margin:0;padding:0;box-shadow:none}
 #newuserguide{padding-bottom:20px}
 #sidebarhelp h3,#faq h3,#reseedhelp h3{margin:0 -21px 10px;padding:10px;word-spacing:.1em;letter-spacing:.08em;text-align:left;text-transform:uppercase;font-size:10.5pt;border-radius:0;background:linear-gradient(90deg,#000,#001000 70%,#001300 90%);border:var(--border)}
@@ -2744,6 +2744,7 @@ body.hasExpandedElement #configinfo tr.config:not(.expanded) th{color:#770;trans
 #help_faq{background:var(--faq) no-repeat 15px center/32px,var(--helpbox)}
 #help_filter{background:var(--filter) no-repeat 15px center/32px,var(--helpbox)}
 #help_glossary{background:var(--ask) no-repeat 15px center/32px,var(--helpbox)}
+#help_jsonrpc{background:url(../images/i2cp.svg) no-repeat 15px center/32px,var(--helpbox)}
 #help_legal{background:var(--legal) no-repeat 15px center/32px,var(--helpbox)}
 #help_newusers{background:url(images/favicon.svg) no-repeat 15px center/32px,var(--helpbox)}
 #help_reseed{background:var(--reseed) no-repeat 15px center/32px,var(--helpbox)}
@@ -2803,6 +2804,8 @@ body.hasExpandedElement #configinfo tr.config:not(.expanded) th{color:#770;trans
 /* filters */
 #filterlist{padding-bottom:10px}
 #filterlist code{margin:0 10px 15px 20px;padding-left:12px;display:inline-block;border-left:2px solid #990}
+#jsonrpchelp pre{padding:8px 12px;width:calc(100% - 24px);display:inline-block;box-shadow:0 0 0 2px #030 inset;background:#010}
+#jsonrpchelp pre code{}
 #filterlist code+h3,#filterlist ul+h3,#filterlist code+p{margin-top:5px}
 #filterlist .example{margin-right:2px;color:#dd0;font-weight:700}
 

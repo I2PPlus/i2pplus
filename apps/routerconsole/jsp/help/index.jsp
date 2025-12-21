@@ -21,6 +21,7 @@
 <li id=help_reseed><a href="reseed"><b><%=intl._t("Reseeding")%></b></a><br><%=intl._t("A guide to reseeding your I2P+ router")%></li>
 <li id=help_troubleshoot><a href="troubleshoot"><b><%=intl._t("Troubleshooting")%></b></a><br><%=intl._t("What to do in the event I2P+ isn't working")%></li>
 <li id=help_filter><a href="tunnelfilter"><b><%=intl._t("Tunnel Filtering")%></b></a><br><%=intl._t("An introduction to tunnel access lists")%></li>
+<li id=help_jsonrpc><a href="jsonrpc"><b><%=intl._t("I2PControl API")%></b></a><br><%=intl._t("JSON-RPC API for remote router control and monitoring")%></li>
 <li id=help_ui><a href="ui"><b><%=intl._t("User Interface")%></b></a><br><%=intl._t("Information about the sidebar, network status messages, and theme overrides")%></li>
 <li id=help_webhosting><a href="webhosting"><b><%=intl._t("Webhosting on I2P")%></b></a><br><%=intl._t("An introduction to hosting websites on the I2P network")%></li>
 </ul>
