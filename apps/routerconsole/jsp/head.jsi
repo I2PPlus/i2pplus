@@ -44,8 +44,8 @@ else if (lang.equals("bo")) {%> <link rel=stylesheet href="<%=themePath%>console
 <script nonce=<%=cspNonce%>>
   if (top.location.href !== location.href) top.location.href = location.href;
   const refresh = parseInt(<%=intl.getRefresh()%>, 10);
-  const theme = "<%=theme%>";
   const cspNonce = "<%=cspNonce%>";
+  window.theme = "<%=theme%>";
   window.stickySidebarEnabled = <%=useStickySidebar%>;
   progressx.show(theme);progressx.progress(0.1);
 </script>
