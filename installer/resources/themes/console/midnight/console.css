@@ -2503,7 +2503,7 @@ h1::first-letter{font-size:107%}
 /* mini faq */
 #faq h3{padding:8px 10px 8px 35px;word-spacing:0;letter-spacing:0;text-transform:none;font-size:10.5pt;background:var(--question) no-repeat 10px 55%,var(--th);background-size:18px,4px 100%,100%;background-blend-mode:luminosity,normal}
 #faq h3.toggle{margin-bottom:0}
-#faq p.infohelp{margin:10px -10px}
+#faq p.infohelp{margin:10px -10px;padding:20px 20px 20px 52px}
 #faq ul+h3{margin-top:15px}
 #faq li code{margin-left:10px}
 #faq code,#help code{user-select:all}
