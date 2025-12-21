@@ -51,4 +51,5 @@ else if (lang.equals("bo")) {%> <link rel=stylesheet href="<%=themePath%>console
 </script>
 <% if (!isWizardPage) {%> <script src=/js/refreshSidebar.js type=module></script> <% } %>
 <script src=/js/detectPageZoom.js></script>
+<script src=/js/snowflakes/snowflakes.js></script>
 <noscript><style>.script{display:none!important}</style></noscript>
