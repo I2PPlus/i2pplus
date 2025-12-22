@@ -28,9 +28,7 @@ function initSnowflakes() {
   window.addEventListener('resize', resizeCanvas);
 
   const urlParams = new URLSearchParams(window.location.search);
-  console.log("Detected theme = " + theme);
-  const baseColor = ({ light: '#87CEEB', dark: '#337733', classic: '#B0E0E6', midnight: '#9662ca' })[theme] || '#87CEEB';
-
+  const baseColor = ({ light: '#87ceeb', dark: '#5a9d68', classic: '#b0e0e6', midnight: '#9662ca' })[theme] || '#87ceeb';
   const svgCache = {};
   const windTypes = ['gentle', 'moderate', 'strong', 'gusty', 'swirling'];
   const windSpeeds = { gentle: 0.12, moderate: 0.22, strong: 0.35, gusty: 0.5, swirling: 0.65 };
@@ -49,13 +47,12 @@ function initSnowflakes() {
   class CanvasSnowflake {
     constructor(baseColor, canvas) {
       this.canvas = canvas;
-      this.initialSize = Math.random() * 6 + 8;
+      this.initialSize = Math.random() * 9 + 8;
       this.size = this.initialSize;
       this.x = Math.random() * canvas.width;
       this.y = Math.random() * canvas.height - this.size;
-      this.color = this.varyColor(baseColor, 8);
-      const baseSpeed = Math.random() * 0.08 + 0.05;
-      this.speed = Math.max(0.35, baseSpeed * (this.size / 11));
+      this.color = this.varyColor(baseColor, 10);
+      this.speed = Math.max(0.35, 0.03 + (this.size / 11) * 0.08);
       this.initialOpacity = Math.random() * 0.3 + 0.7;
       this.opacity = this.initialOpacity;
       this.rotation = Math.random() * Math.PI * 3;
@@ -90,9 +87,31 @@ function initSnowflakes() {
         g: parseInt(r[2], 16),
         b: parseInt(r[3], 16)
       };
-      const vr = (Math.random() * maxVar * 2 - maxVar) | 0;
-      const vg = (Math.random() * maxVar * 2 - maxVar) | 0;
-      const vb = (Math.random() * maxVar * 2 - maxVar) | 0;
+
+      const festiveTints = [
+        { r: 255, g: 69, b: 0 },
+        { r: 255, g: 140, b: 0 },
+        { r: 255, g: 215, b: 0 },
+        { r: 255, g: 192, b: 203 },
+        { r: 186, g: 85, b: 211 },
+        { r: 220, g: 20, b: 60 }
+      ];
+
+      if (Math.random() < 0.5) {
+        const tint = festiveTints[Math.floor(Math.random() * festiveTints.length)];
+        const mixRatio = 0.05;
+        const nr = Math.round(c.r * (1 - mixRatio) + tint.r * mixRatio);
+        const ng = Math.round(c.g * (1 - mixRatio) + tint.g * mixRatio);
+        const nb = Math.round(c.b * (1 - mixRatio) + tint.b * mixRatio);
+        const vr = (Math.random() * maxVar - maxVar/2) | 0;
+        const vg = (Math.random() * maxVar - maxVar/2) | 0;
+        const vb = (Math.random() * maxVar - maxVar/2) | 0;
+        return `rgb(${Math.max(0, Math.min(255, nr + vr))},${Math.max(0, Math.min(255, ng + vg))},${Math.max(0, Math.min(255, nb + vb))})`;
+      }
+
+      const vr = (Math.random() * maxVar * 3 - maxVar) | 0;
+      const vg = (Math.random() * maxVar * 3 - maxVar) | 0;
+      const vb = (Math.random() * maxVar * 3 - maxVar) | 0;
       return `rgb(${Math.max(0, Math.min(255, c.r + vr))},${Math.max(0, Math.min(255, c.g + vg))},${Math.max(0, Math.min(255, c.b + vb))})`;
     }
 
@@ -122,6 +141,36 @@ function initSnowflakes() {
         this.opacity = this.initialOpacity * (0.4 - 0.3 * progress);
       }
 
+      if (this.opacity <= 0.2) {
+        this.y = -this.initialSize;
+        this.x = Math.random() * this.canvas.width;
+        this.totalDistance = 0;
+        this.size = this.initialSize;
+        this.opacity = this.initialOpacity;
+        return;
+      }
+
+      if (this.size < 8) {
+        this.y = -this.initialSize;
+        this.x = Math.random() * this.canvas.width;
+        this.totalDistance = 0;
+        this.size = this.initialSize;
+        this.opacity = this.initialOpacity;
+        return;
+      }
+
+      if (this.opacity < 0.5) {
+        this.targetSize = Math.max(0, this.size - this.initialSize * 0.25);
+        this.size += (this.targetSize - this.size) * 0.3;
+        if (this.size <= 10) {
+          this.y = -this.initialSize;
+          this.x = Math.random() * this.canvas.width;
+          this.totalDistance = 0;
+          this.size = this.initialSize;
+          this.opacity = this.initialOpacity;
+        }
+      }
+
       if (this.x > this.canvas.width + this.size) this.x = -this.size;
       else if (this.x < -this.size) this.x = this.canvas.width + this.size;
 
@@ -135,7 +184,7 @@ function initSnowflakes() {
     }
 
     draw(ctx) {
-      if (!this.svgImage || !this.svgImage.complete) return;
+      if (!this.svgImage || !this.svgImage.complete || this.size <= 0) return;
       ctx.save();
       ctx.globalAlpha = this.opacity;
       ctx.translate(this.x, this.y);
