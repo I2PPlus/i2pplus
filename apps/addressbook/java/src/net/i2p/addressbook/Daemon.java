@@ -626,21 +626,6 @@ public class Daemon {
                             log.append("Bad hostname " + key + " [" + addressbook.getLocation() + "]");
                             invalid++;
                         }
-                  /****
-                    } else if (false && DEBUG && log != null) {
-                        // lookup the conflict if we haven't yet (O(n**2) for text file)
-                        if (isTextFile)
-                            oldDest = router.lookup(key);
-                        if (oldDest != null && !oldDest.toBase64().equals(entry.getValue())) {
-                            log.append("Conflict for " + key + ". From: "
-                                       + addressbook.getLocation()
-                                       + ". Destination in remote addressbook is "
-                                       + entry.getValue());
-                            conflict++;
-                        } else {
-                            old++;
-                        }
-                   ****/
                     } else {
                         old++;
                     }
@@ -853,11 +838,11 @@ public class Daemon {
             _log.append("Initializing HostChecker for address book monitoring...");
             _hostChecker = new HostChecker();
             _log.append("HostChecker created: " + (_hostChecker != null ? "success" : "null"));
-            
+
             // Set the instance in HostCheckerBridge to avoid duplicate instances
             HostCheckerBridge.setInstance(_hostChecker);
             _log.append("HostChecker instance set in bridge");
-            
+
             _hostChecker.start();
             _log.append("HostChecker started successfully");
         } catch (Exception e) {
@@ -919,11 +904,6 @@ public class Daemon {
      * @return HostChecker instance or null if not initialized
      */
     public static Object getHostCheckerInstance() {
-        if (_hostChecker == null) {
-            System.err.println("getHostCheckerInstance() called but _hostChecker is null");
-        } else {
-            System.err.println("getHostCheckerInstance() returning: " + _hostChecker.getClass().getSimpleName());
-        }
         return _hostChecker;
     }
 
