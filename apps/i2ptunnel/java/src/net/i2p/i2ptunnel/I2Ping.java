@@ -16,10 +16,15 @@ import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
 import net.i2p.client.I2PSession;
 import net.i2p.client.I2PSessionException;
+import net.i2p.client.streaming.I2PSocket;
+import net.i2p.client.streaming.I2PSocketAddress;
+import net.i2p.client.streaming.I2PSocketException;
+import net.i2p.data.Base32;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
 import net.i2p.util.EventDispatcher;
 import net.i2p.util.I2PAppThread;
+import net.i2p.util.Log;
 
 /**
  * I2P ping utility for CLI use.
@@ -32,15 +37,25 @@ public class I2Ping extends I2PTunnelClientBase {
     public static final String PROP_COMMAND = "command";
     private static final int PING_COUNT = 10;
     private static final int CPING_COUNT = 5;
-    private static final int PING_TIMEOUT = 8*1000;
+    private static final int PING_TIMEOUT = 90 * 1000;
     private static final long PING_DISTANCE = 1000;
-    private int MAX_SIMUL_PINGS = 16;
+    private int MAX_SIMUL_PINGS = 16; // matches usage text
     private volatile boolean finished;
 
     private final Object simulLock = new Object();
     private int simulPings;
     private long lastPingTime;
     private boolean fromList = false;
+
+    private static class PingResult {
+        final boolean success;
+        final long duration;
+
+        PingResult(boolean success, long duration) {
+            this.success = success;
+            this.duration = duration;
+        }
+    }
 
     /**
      *  tunnel.getOptions must contain "command".
@@ -49,7 +64,6 @@ public class I2Ping extends I2PTunnelClientBase {
     public I2Ping(Logging l, boolean ownDest, EventDispatcher notifyThis, I2PTunnel tunnel) {
         super(-1, ownDest, l, notifyThis, "I2Ping", tunnel);
         if (!tunnel.getClientOptions().containsKey(PROP_COMMAND)) {
-            // todo clean up
             throw new IllegalArgumentException("Options does not contain " + PROP_COMMAND);
         }
     }
@@ -59,16 +73,26 @@ public class I2Ping extends I2PTunnelClientBase {
      */
     @Override
     public void run() {
-        // Notify constructor that port is ready
+        try {
+            verifySocketManager();
+            l.log(" • Tunnels established for I2Ping client");
+            notifyEvent("openBaseClientResult", "ok");
+        } catch (Exception e) {
+            l.log(" ✖ Failed to establish tunnels: " + e.getMessage());
+            notifyEvent("openBaseClientResult", "error");
+            close(false);
+            return;
+        }
+
         synchronized (this) {
             listenerReady = true;
             notifyAll();
-            l.log(" • Tunnels ready for I2Ping client");
         }
+
         try {
             runCommand(getTunnel().getClientOptions().getProperty(PROP_COMMAND));
         } catch (InterruptedException ex) {
-            l.log(" ✖ Interrupted");
+            l.log(" ✖ I2Ping was interrupted during execution");
             _log.error("Pinger interrupted", ex);
         } catch (IOException ex) {
             _log.error("Pinger exception", ex);
@@ -78,119 +102,113 @@ public class I2Ping extends I2PTunnelClientBase {
     }
 
     public void runCommand(String cmd) throws InterruptedException, IOException {
-      long timeout = PING_TIMEOUT;
-      int count = PING_COUNT;
-      boolean countPing = false;
-      boolean reportTimes = true;
-      String hostListFile = null;
-      int localPort = 0;
-      int remotePort = 0;
-      boolean error = false;
-      String[] argv = DataHelper.split(cmd, " ");
-      Getopt g = new Getopt("ping", argv, "t:m:n:chl:f:p:");
-      int c;
-      while ((c = g.getopt()) != -1) {
-        switch (c) {
-          case 't':  // timeout
-            timeout = Long.parseLong(g.getOptarg());
-                // convenience, convert msec to sec
-                if (timeout < 100)
-                    timeout *= 1000;
-            break;
-
-          case 'm': // max simultaneous pings
-            MAX_SIMUL_PINGS = Integer.parseInt(g.getOptarg());
-            break;
-
-          case 'n': // number of pings
-            count = Integer.parseInt(g.getOptarg());
-            break;
-
-          case 'c': // "count" ping
-            countPing = true;
-            count = CPING_COUNT;
-            break;
-
-          case 'h': // ping all hosts
-            fromList = true;
-            if (hostListFile != null)
-                error = true;
-            else
-                hostListFile = "hosts.txt";
-            break;
-
-          case 'l':  // ping a list of hosts
-            fromList = true;
-            if (hostListFile != null)
-                error = true;
-            else
-                hostListFile = g.getOptarg();
-            break;
-
-          case 'f': // local port
-            localPort = Integer.parseInt(g.getOptarg());
-            break;
-
-          case 'p': // remote port
-            remotePort = Integer.parseInt(g.getOptarg());
-            break;
-
-          case '?':
-          case ':':
-          default:
-            error = true;
-        }
-      }
-
-      int remaining = argv.length - g.getOptind();
-
-      if (error || remaining > 1 || (remaining <= 0 && hostListFile == null) || (remaining > 0 && hostListFile != null)) {
-          System.out.println(usage());
-          return;
-      }
-
-      if (hostListFile != null) {
-        BufferedReader br = null;
-        try {
-            br = new BufferedReader(new InputStreamReader(new FileInputStream(hostListFile), "UTF-8"));
-            String line;
-            List<PingHandler> pingHandlers = new ArrayList<PingHandler>();
-            int i = 0;
-            while ((line = br.readLine()) != null) {
-                if (line.startsWith("#")) continue; // comments
-                if (line.startsWith(";")) continue;
-                if (line.startsWith("!")) continue;
-                if (line.indexOf('=') != -1) { // maybe file is hosts.txt?
-                    line = line.substring(0, line.indexOf('='));
-                }
-                PingHandler ph = new PingHandler(line, count, localPort, remotePort,
-                                                 timeout, countPing, reportTimes);
-                ph.start();
-                pingHandlers.add(ph);
-                if (++i > 1)
-                    reportTimes = false;
+        long timeout = PING_TIMEOUT;
+        int count = PING_COUNT;
+        boolean countPing = false;
+        boolean reportTimes = true;
+        String hostListFile = null;
+        int localPort = 0;
+        int remotePort = 0;
+        boolean error = false;
+        String[] argv = DataHelper.split(cmd, " ");
+        Getopt g = new Getopt("ping", argv, "t:m:n:chl:f:p:");
+        int c;
+        while ((c = g.getopt()) != -1) {
+            switch (c) {
+                case 't':
+                    timeout = Long.parseLong(g.getOptarg());
+                    if (timeout < 100) {
+                        timeout *= 1000;
+                    }
+                    break;
+                case 'm':
+                    MAX_SIMUL_PINGS = Integer.parseInt(g.getOptarg());
+                    break;
+                case 'n':
+                    count = Integer.parseInt(g.getOptarg());
+                    break;
+                case 'c':
+                    countPing = true;
+                    count = CPING_COUNT;
+                    break;
+                case 'h':
+                    fromList = true;
+                    if (hostListFile != null) {
+                        error = true;
+                    } else {
+                        hostListFile = "hosts.txt";
+                    }
+                    break;
+                case 'l':
+                    fromList = true;
+                    if (hostListFile != null) {
+                        error = true;
+                    } else {
+                        hostListFile = g.getOptarg();
+                    }
+                    break;
+                case 'f':
+                    localPort = Integer.parseInt(g.getOptarg());
+                    break;
+                case 'p':
+                    remotePort = Integer.parseInt(g.getOptarg());
+                    break;
+                case '?':
+                case ':':
+                default:
+                    error = true;
             }
-            br.close();
-            for (Thread t : pingHandlers)
-                t.join();
-            return;
-        } finally {
-            if (br != null) try { br.close(); } catch (IOException ioe) {}
         }
-      }
 
-      String host = argv[g.getOptind()];
-      Thread t = new PingHandler(host, count, localPort, remotePort,
-                                 timeout, countPing, reportTimes);
-      t.setPriority(Thread.NORM_PRIORITY);
-      t.start();
-      t.join();
+        int remaining = argv.length - g.getOptind();
+        if (error || remaining > 1 || (remaining <= 0 && hostListFile == null) || (remaining > 0 && hostListFile != null)) {
+            System.out.println(usage());
+            return;
+        }
+
+        if (hostListFile != null) {
+            BufferedReader br = null;
+            try {
+                br = new BufferedReader(new InputStreamReader(new FileInputStream(hostListFile), "UTF-8"));
+                String line;
+                List<PingHandler> pingHandlers = new ArrayList<PingHandler>();
+                int i = 0;
+                while ((line = br.readLine()) != null) {
+                    line = line.trim();
+                    if (line.isEmpty() || line.startsWith("#") || line.startsWith(";") || line.startsWith("!")) {
+                        continue;
+                    }
+                    if (line.indexOf('=') != -1) {
+                        line = line.substring(0, line.indexOf('=')).trim();
+                    }
+                    if (line.isEmpty()) continue;
+                    PingHandler ph = new PingHandler(line, count, localPort, remotePort, timeout, countPing, reportTimes);
+                    ph.start();
+                    pingHandlers.add(ph);
+                    if (++i > 1) {
+                        reportTimes = false;
+                    }
+                }
+                for (Thread t : pingHandlers) {
+                    t.join();
+                }
+            } finally {
+                if (br != null) {
+                    try {
+                        br.close();
+                    } catch (IOException ignored) {}
+                }
+            }
+            return;
+        }
+
+        String host = argv[g.getOptind()];
+        Thread t = new PingHandler(host, count, localPort, remotePort, timeout, countPing, reportTimes);
+        t.setPriority(Thread.NORM_PRIORITY);
+        t.start();
+        t.join();
     }
 
-    /**
-     *  With newlines except for last line
-     *  @since 0.9.12
-     */
     public static String usage() {
         return
             "Usage:\n" +
@@ -211,53 +229,30 @@ public class I2Ping extends I2PTunnelClientBase {
         if (!open) return true;
         super.close(forced);
         if (!forced && !finished) {
-            l.log(" ‣ There are still pings running!");
+            l.log(" • There are still pings running!");
             return false;
         }
-        l.log(" ‣ I2Ping client closed");
+        l.log(" • I2Ping client closed");
         return true;
     }
 
-    private boolean ping(Destination dest, int fromPort, int toPort, long timeout) throws I2PException {
+    /**
+     * Attempts to "ping" by opening an I2P socket to the destination.
+     * Returns true if connection succeeds within timeout.
+     */
+    private PingResult ping(Destination dest, int fromPort, int toPort, long timeout) throws I2PException {
+        long pingStart = System.currentTimeMillis();
         try {
-            long sleepTime = 0;
-            synchronized (simulLock) {
-                while (simulPings >= MAX_SIMUL_PINGS) {
-                    simulLock.wait();
-                }
-                simulPings++;
-                long now = System.currentTimeMillis();
-                if (lastPingTime + PING_DISTANCE > now) {
-                    sleepTime = PING_DISTANCE / 2;
-                }
-                lastPingTime = now;
-            }
-            
-            // Sleep outside of synchronized block to avoid holding lock while sleeping
-            if (sleepTime > 0) {
-                Thread.sleep(sleepTime);
-            }
-            
-            boolean sent = sockMgr.ping(dest, fromPort, toPort, timeout);
-            synchronized (simulLock) {
-                simulPings--;
-                simulLock.notifyAll();
-            }
-            return sent;
-        } catch (InterruptedException ex) {
-            _log.error("Interrupted", ex);
-            synchronized (simulLock) {
-                simulPings--;
-                simulLock.notifyAll();
-            }
-            return false;
+            boolean success = sockMgr.ping(dest, fromPort, toPort, timeout);
+            long duration = System.currentTimeMillis() - pingStart;
+            return new PingResult(success, duration);
+        } catch (IllegalArgumentException e) {
+            _log.error("Invalid ping parameters", e);
+            return new PingResult(false, System.currentTimeMillis() - pingStart);
         }
     }
 
-    /**
-     *  Does nothing.
-     *  @since 0.9.11
-     */
+    @Override
     protected void clientConnectionRun(Socket s) {}
 
     private class PingHandler extends I2PAppThread {
@@ -269,11 +264,6 @@ public class I2Ping extends I2PTunnelClientBase {
         private final int localPort;
         private final int remotePort;
 
-        /**
-         *  As of 0.9.11, does NOT start itself.
-         *  Caller must call start()
-         *  @param dest b64 or b32 or host name
-         */
         public PingHandler(String dest, int count, int fromPort, int toPort,
                            long timeout, boolean countPings, boolean report) {
             this.destination = dest;
@@ -288,80 +278,185 @@ public class I2Ping extends I2PTunnelClientBase {
 
         @Override
         public void run() {
+            l.log(" • PingHandler starting for destination: " + destination);
+            Destination dest;
             try {
-                Destination dest = lookup(destination);
-                if (dest == null) {
-                    l.log(" • Ignoring unresolvable destination: " + destination);
+                dest = lookup(destination);
+            } catch (I2PException e) {
+                l.log(" ✖ Destination lookup failed for '" + destination + "': " + e.getMessage());
+                return;
+            }
+            if (dest == null) {
+                l.log(" • Ignoring unresolvable destination: " + destination);
+                return;
+            }
+            l.log(" ✔ Destination resolved: " + dest.toBase32());
+
+            // Wait up to 30 seconds for tunnels
+            long tunnelReadyTimeout = System.currentTimeMillis() + 30000;
+            while (System.currentTimeMillis() < tunnelReadyTimeout) {
+                if (sockMgr != null && !sockMgr.isDestroyed()) {
+                    try {
+                        I2PSession session = sockMgr.getSession();
+                        if (session != null && !session.isClosed()) {
+                            break;
+                        }
+                    } catch (Exception e) {
+                        // ignore
+                    }
+                }
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException ie) {
+                    l.log(" ✖ Interrupted while waiting for tunnels");
                     return;
                 }
-                int pass = 0;
-                int fail = 0;
-                long totalTime = 0;
-                StringBuilder pingResults = new StringBuilder(2 * cnt + destination.length() + 3);
-                for (int i = 0; i < cnt; i++) {
-                    boolean sent = ping(dest, localPort, remotePort, timeout);
-                    if (countPing) {
-                        if (!sent) {
-                            pingResults.append(i).append(" ");
-                            break;
-                        } else if (i == cnt - 1) {
-                            pingResults.append("+ ");
-                        }
-                    } else {
-                        if (reportTimes && !fromList) {
-                            if (sent) {
-                                pass++;
-                                long rtt = System.currentTimeMillis() - lastPingTime;
-                                totalTime += rtt;
-                                l.log(" ✔ " + (i+1) + ":   \t " + rtt + "ms");
-                            } else {
-                                fail++;
-                                l.log(" ✖ " + (i+1) + ":   \t ------");
-                            }
-                        } else {
-                            pingResults.append(sent ? " ✔" : " ✖");
-                        }
-                    }
-                    //System.out.println(sent + " -> " + destination);
-                }
-
-                if (reportTimes && !fromList) {
-                    pingResults.append(" • Results for ").append(destination).append(": ");
-                    pingResults.append(pass).append(" / ").append(pass + fail).append(" pongs received");
-                } else {
-                    pingResults.append(" ‣ ").append(destination);
-                }
-                if (pass > 0 && reportTimes && !fromList)
-                    pingResults.append(", average response ").append(totalTime/pass).append("ms");
-                l.log(pingResults.toString());
-            } catch (I2PException ex) {
-                _log.error("Error pinging " + destination, ex);
             }
-        }
 
-        /**
-         *  @param name b64 or b32 or host name
-         *  @since 0.9.11
-         */
-        private Destination lookup(String name) {
-            I2PAppContext ctx = I2PAppContext.getGlobalContext();
-            boolean b32 = name.length() == 60 && name.toLowerCase(Locale.US).endsWith(".b32.i2p");
-            if (ctx.isRouterContext() && !b32) {
-                // Local lookup.
-                // Even though we could do b32 outside router ctx here,
-                // we do it below instead so we can use the session,
-                // which we can't do with lookup()
-                Destination dest = ctx.namingService().lookup(name);
-                if (dest != null || ctx.isRouterContext() || name.length() >= 516)
-                    return dest;
+            if (sockMgr == null || sockMgr.isDestroyed()) {
+                l.log(" ✖ Socket manager unavailable, aborting ping");
+                return;
             }
             try {
-                I2PSession sess = sockMgr.getSession();
-                return sess.lookupDest(name);
-            } catch (I2PSessionException ise) {
-                _log.error("Error looking up " + name, ise);
+                I2PSession session = sockMgr.getSession();
+                if (session == null || session.isClosed()) {
+                    l.log(" ✖ Session not ready, aborting ping");
+                    return;
+                }
+            } catch (Exception e) {
+                l.log(" ✖ Session check failed: " + e.getMessage());
+                return;
+            }
+
+            int pass = 0;
+            long totalTime = 0;
+            boolean allSuccess = true;
+            List<PingResult> results = new ArrayList<PingResult>();
+
+            for (int i = 0; i < cnt; i++) {
+                l.log(" • Attempting ping " + (i + 1) + "/" + cnt + "...");
+                PingResult result;
+                try {
+                    result = ping(dest, localPort, remotePort, timeout);
+                } catch (I2PException e) {
+                    l.log(" ✖ Ping error: " + e.getMessage());
+                    result = new PingResult(false, 0);
+                }
+
+                results.add(result);
+
+                if (countPing) {
+                    if (!result.success) {
+                        allSuccess = false;
+                    }
+                } else {
+                    if (reportTimes && !fromList) {
+                        if (result.success) {
+                            pass++;
+                            totalTime += result.duration;
+                            l.log(" ✔ " + (i + 1) + ": \t " + result.duration + "ms");
+                        } else {
+                            l.log(" ✖ " + (i + 1) + ": \t ------");
+                        }
+                    }
+                }
+            }
+
+            StringBuilder result = new StringBuilder();
+            if (countPing) {
+                if (allSuccess) {
+                    result.append(" ✔ + (").append(cnt).append(" consecutive successes) ");
+                } else {
+                    result.append(" ✖ (not all pings succeeded) ");
+                }
+                result.append("‣ ").append(destination);
+            } else {
+                int successful = 0;
+                long totalDuration = 0;
+                for (PingResult pr : results) {
+                    if (pr.success) {
+                        successful++;
+                        totalDuration += pr.duration;
+                    }
+                }
+                result.append(" • Results for ").append(destination).append(": ");
+                result.append(successful).append(" / ").append(cnt).append(" pongs received");
+                if (successful > 0) {
+                    result.append(", average response ").append(totalDuration / successful).append("ms");
+                }
+            }
+            l.log(result.toString());
+        }
+
+        private Destination lookup(String name) throws I2PException {
+            if (name == null || name.isEmpty()) {
                 return null;
             }
+
+            name = name.trim();
+
+            // Handle .b32.i2p
+            if (name.toLowerCase(Locale.US).endsWith(".b32.i2p")) {
+                String b32 = name.substring(0, name.length() - 8);
+                if (b32.length() != 52) {
+                    return null;
+                }
+                try {
+                    byte[] data = Base32.decode(b32);
+                    if (data != null) {
+                        Destination dest = new Destination();
+                        dest.fromByteArray(data);
+                        return dest;
+                    }
+                } catch (Exception e) {
+                    l.log(" ✖ B32 decode failed for: " + name + ": " + e.getMessage());
+                    _log.warn("B32 decode failed for: " + name, e);
+                }
+                return null;
+            }
+
+            // Handle base64 (exactly 516 chars, no whitespace)
+            if (name.length() == 516) {
+                try {
+                    return new Destination(name);
+                } catch (Exception e) {
+                    // not base64, fall through
+                }
+            }
+
+            // Use naming service (hostname like stats.i2p)
+            I2PAppContext ctx = I2PAppContext.getGlobalContext();
+            Destination dest = ctx.namingService().lookup(name);
+            if (dest != null) {
+                return dest;
+            }
+
+            // Fallback: tunnel context
+            try {
+                I2PAppContext tunnelCtx = getTunnel().getContext();
+                if (tunnelCtx != ctx) {
+                    dest = tunnelCtx.namingService().lookup(name);
+                    if (dest != null) {
+                        return dest;
+                    }
+                }
+            } catch (Exception e) {
+                // ignore
+            }
+
+            // Final fallback: session lookup
+            if (sockMgr != null) {
+                try {
+                    I2PSession session = sockMgr.getSession();
+                    if (session != null) {
+                        return session.lookupDest(name);
+                    }
+                } catch (I2PSessionException e) {
+                    _log.warn("Session lookup failed for: " + name, e);
+                }
+            }
+
+            return null;
         }
     }
 }

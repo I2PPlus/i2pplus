@@ -18,13 +18,16 @@ sourceSets {
     }
 }
 
+repositories {
+    mavenCentral()
+}
+
 dependencies {
     api project(':core')
     api project(':apps:ministreaming')
     api 'gnu.getopt:java-getopt:1.0.13'
     api project(':apps:jetty')
-}
-
+    
     // seems like it should be compileOnly but that doesn't work
     implementation 'org.apache.ant:ant:1.10.14'
     api fileTree("../jetty/apache-tomcat-${tomcatVersion}")
@@ -99,7 +102,7 @@ task copyJsps(type: Copy) {
 
 task precompileJsp(type : JavaExec) {
     dependsOn copyJsps
-    classpath = java.sourceSets.main.runtimeClasspath
+    classpath = sourceSets.main.runtimeClasspath
     mainClass.set('net.i2p.servlet.util.JspC')
 
     jvmArgs "-Dtomcat.util.scan.StandardJarScanFilter.jarsToSkip=commons-collections.jar,junit.jar,junit4.jar"
@@ -118,7 +121,7 @@ task precompileJsp(type : JavaExec) {
         def output = new File("$buildDir/compiledJsps")
         output.mkdirs()
         ant.javac(srcDir: "jsp/WEB-INF/classes",
-                    classpath: java.sourceSets.main.runtimeClasspath.asPath,
+                    classpath: sourceSets.main.runtimeClasspath.asPath,
                     debug : true,
                     includeAntRuntime : false,
                     deprecation : "on",
