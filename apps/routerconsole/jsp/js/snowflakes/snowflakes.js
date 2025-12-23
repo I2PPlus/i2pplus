@@ -47,7 +47,7 @@ function initSnowflakes() {
   class CanvasSnowflake {
     constructor(baseColor, canvas) {
       this.canvas = canvas;
-      this.initialSize = Math.random() * 9 + 8;
+      this.initialSize = Math.max(10, Math.random() * 9 + 8);
       this.size = this.initialSize;
       this.x = Math.random() * canvas.width;
       this.y = Math.random() * canvas.height - this.size;
@@ -57,6 +57,8 @@ function initSnowflakes() {
       this.opacity = this.initialOpacity;
       this.rotation = Math.random() * Math.PI * 3;
       this.rotationSpeed = (Math.random() - 0.5) * 0.045;
+      this.isDying = false;
+      this.deathSpinSpeed = 0;
       this.flakeType = (Math.floor(Math.random() * 6) + 1);
       this.windType = windTypes[(Math.random() * windTypes.length) | 0];
       this.windPhase = Math.random() * Math.PI * 2;
@@ -141,33 +143,37 @@ function initSnowflakes() {
         this.opacity = this.initialOpacity * (0.4 - 0.3 * progress);
       }
 
-      if (this.opacity <= 0.2) {
-        this.y = -this.initialSize;
-        this.x = Math.random() * this.canvas.width;
-        this.totalDistance = 0;
-        this.size = this.initialSize;
-        this.opacity = this.initialOpacity;
-        return;
-      }
-
-      if (this.size < 8) {
-        this.y = -this.initialSize;
-        this.x = Math.random() * this.canvas.width;
-        this.totalDistance = 0;
-        this.size = this.initialSize;
-        this.opacity = this.initialOpacity;
-        return;
-      }
-
-      if (this.opacity < 0.5) {
-        this.targetSize = Math.max(0, this.size - this.initialSize * 0.25);
-        this.size += (this.targetSize - this.size) * 0.3;
-        if (this.size <= 10) {
+      const shouldRemove = this.opacity <= 0.2 || this.size < 8 || this.opacity < 0.5 && this.size <= 10;
+      
+      if (shouldRemove) {
+        if (!this.isDying) {
+          this.isDying = true;
+          this.deathSpinSpeed = 0.5;
+          this.deathFallSpeed = this.vy;
+        }
+        
+        this.rotation += this.deathSpinSpeed;
+        this.deathSpinSpeed += 0.02;
+        this.deathFallSpeed += 0.3;
+        this.vy = this.deathFallSpeed;
+        this.y += this.vy;
+        
+        if (this.opacity <= 0.05 || this.size <= 2 || this.y > this.canvas.height + this.size) {
           this.y = -this.initialSize;
           this.x = Math.random() * this.canvas.width;
           this.totalDistance = 0;
           this.size = this.initialSize;
           this.opacity = this.initialOpacity;
+          this.vy = this.speed;
+          this.isDying = false;
+          this.deathSpinSpeed = 0;
+          this.deathFallSpeed = 0;
+          return;
+        }
+      } else {
+        if (this.opacity < 0.5) {
+          this.targetSize = Math.max(0, this.size - this.initialSize * 0.25);
+          this.size += (this.targetSize - this.size) * 0.3;
         }
       }
 
