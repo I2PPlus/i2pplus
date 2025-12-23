@@ -2,21 +2,24 @@
 # HostPing - I2P destination ping tool using HostChecker
 # Drop-in replacement for i2ping using HostChecker instead of I2PTunnel
 
+# Get the directory where this script is located
+SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
+
 # This is the location of ./i2prouter
 # If lib/addressbook.jar not found please specify location, example: I2P="/home/user/apps/i2p"
 I2P=""
 
 if [ -z "$I2P" ]; then
-    I2P="./"
+    I2P="$SCRIPT_DIR"
 fi
 
 # Can we find the addressbook.jar?
-if [ -f "./build/addressbook.jar" ]; then
-    ADDRESSBOOK_JAR="./build/addressbook.jar"
-    I2P_JAR="./build/i2p.jar"
-    ROUTER_JAR="./build/router.jar"
-    STREAMING_JAR="./build/streaming.jar"
-    MSTREAMING_JAR="./build/mstreaming.jar"
+if [ -f "$I2P/build/addressbook.jar" ]; then
+    ADDRESSBOOK_JAR="$I2P/build/addressbook.jar"
+    I2P_JAR="$I2P/build/i2p.jar"
+    ROUTER_JAR="$I2P/build/router.jar"
+    STREAMING_JAR="$I2P/build/streaming.jar"
+    MSTREAMING_JAR="$I2P/build/mstreaming.jar"
 elif [ -f "$I2P/lib/addressbook.jar" ]; then
     ADDRESSBOOK_JAR="$I2P/lib/addressbook.jar"
     I2P_JAR="$I2P/lib/i2p.jar"
@@ -24,7 +27,28 @@ elif [ -f "$I2P/lib/addressbook.jar" ]; then
     STREAMING_JAR="$I2P/lib/streaming.jar"
     MSTREAMING_JAR="$I2P/lib/mstreaming.jar"
 else
-    echo " ✖ File addressbook.jar not found in ./build/ or $I2P/lib/, edit $0 and change the I2P variable (normally the I2P+ application directory)"
+    echo " ✖ File addressbook.jar not found in $I2P/build/ or $I2P/lib/, edit $0 and change the I2P variable (normally the I2P+ application directory)"
+    exit 1
+fi
+
+# Verify all required jar files exist
+missing_jars=""
+for jar in "$ADDRESSBOOK_JAR" "$I2P_JAR" "$ROUTER_JAR" "$STREAMING_JAR" "$MSTREAMING_JAR"; do
+    if [ ! -f "$jar" ]; then
+        if [ -z "$missing_jars" ]; then
+            missing_jars="$jar"
+        else
+            missing_jars="$missing_jars, $jar"
+        fi
+    fi
+done
+
+if [ -n "$missing_jars" ]; then
+    echo " ✖ Required jar files not found:"
+    echo "   $missing_jars"
+    echo ""
+    echo "   Please ensure you're running this script from the correct I2P+ directory,"
+    echo "   or edit the I2P variable in $0 to point to the correct location."
     exit 1
 fi
 
@@ -172,13 +196,13 @@ done
 if [ $host_file ] && [ $list_file ]; then
     echo " ✖ Unable to use -h and -l together"
     send_help 1
-elif [ $host_file ] && [ -f $host_file ]; then
+ elif [ $host_file ] && [ -f $host_file ]; then
     echo " • Found $host_file, initiating ping..."
     debug "$(cat $host_file | wc -l) hosts to ping"
     echo " • Starting HostChecker ping..."
     cmd="java --enable-native-access=ALL-UNNAMED -cp \"$ADDRESSBOOK_JAR:$I2P_JAR:$ROUTER_JAR:$STREAMING_JAR:$MSTREAMING_JAR\" net.i2p.addressbook.HostPing $java_args"
     debug "Executing: $cmd"
-    eval ${cmd}
+    (cd "$I2P" && eval ${cmd})
     exit $?
 elif [ $list_file ] && [ -f $list_file ]; then
     echo " • Found list file $list_file, initiating ping..."
@@ -186,7 +210,7 @@ elif [ $list_file ] && [ -f $list_file ]; then
     echo " • Starting HostChecker ping..."
     cmd="java --enable-native-access=ALL-UNNAMED -cp \"$ADDRESSBOOK_JAR:$I2P_JAR:$ROUTER_JAR:$STREAMING_JAR:$MSTREAMING_JAR\" net.i2p.addressbook.HostPing $java_args"
     debug "Executing: $cmd"
-    eval ${cmd}
+    (cd "$I2P" && eval ${cmd})
     exit $?
 elif [ "$address" ]; then # Do we really have an address?
 
@@ -208,7 +232,7 @@ elif [ "$address" ]; then # Do we really have an address?
     echo " ➤ Initiating ping of $address"
 
     # Try to resolve B64 address using naming service
-    lookup=$(java --enable-native-access=ALL-UNNAMED -cp "$ADDRESSBOOK_JAR:$I2P_JAR:$ROUTER_JAR" -Xms16m -Xmx16m net.i2p.addressbook.HostPing --help 2>/dev/null)
+    lookup=$(cd "$I2P" && java --enable-native-access=ALL-UNNAMED -cp "$ADDRESSBOOK_JAR:$I2P_JAR:$ROUTER_JAR" -Xms16m -Xmx16m net.i2p.addressbook.HostPing --help 2>/dev/null)
     if [ $? -eq 0 ]; then
         debug "HostChecker class found and working"
     fi
@@ -217,7 +241,7 @@ elif [ "$address" ]; then # Do we really have an address?
     echo " • Starting HostChecker ping..."
     cmd="java --enable-native-access=ALL-UNNAMED -cp \"$ADDRESSBOOK_JAR:$I2P_JAR:$ROUTER_JAR:$STREAMING_JAR:$MSTREAMING_JAR\" net.i2p.addressbook.HostPing $java_args $address"
     debug "Executing: $cmd"
-    eval ${cmd}
+    (cd "$I2P" && eval ${cmd})
     exit $?
 else
     echo " ✖ Missing address field"
