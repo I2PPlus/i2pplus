@@ -1,0 +1,227 @@
+#!/bin/sh
+# HostPing - I2P destination ping tool using HostChecker
+# Drop-in replacement for i2ping using HostChecker instead of I2PTunnel
+
+# This is the location of ./i2prouter
+# If lib/addressbook.jar not found please specify location, example: I2P="/home/user/apps/i2p"
+I2P=""
+
+if [ -z "$I2P" ]; then
+    I2P="./"
+fi
+
+# Can we find the addressbook.jar?
+if [ -f "./build/addressbook.jar" ]; then
+    ADDRESSBOOK_JAR="./build/addressbook.jar"
+    I2P_JAR="./build/i2p.jar"
+    ROUTER_JAR="./build/router.jar"
+    STREAMING_JAR="./build/streaming.jar"
+    MSTREAMING_JAR="./build/mstreaming.jar"
+elif [ -f "$I2P/lib/addressbook.jar" ]; then
+    ADDRESSBOOK_JAR="$I2P/lib/addressbook.jar"
+    I2P_JAR="$I2P/lib/i2p.jar"
+    ROUTER_JAR="$I2P/lib/router.jar"
+    STREAMING_JAR="$I2P/lib/streaming.jar"
+    MSTREAMING_JAR="$I2P/lib/mstreaming.jar"
+else
+    echo " ✖ File addressbook.jar not found in ./build/ or $I2P/lib/, edit $0 and change the I2P variable (normally the I2P+ application directory)"
+    exit 1
+fi
+
+# Show help with option for exit number
+send_help() {
+    echo "HostPing - I2P destination ping tool using HostChecker"
+    echo ""
+    echo "Usage: $0 [options] destination"
+    echo "       $0 [options] -h"
+    echo "       $0 [options] -l <file>"
+    echo ""
+    echo "Options:"
+    echo "  -n  <count>     Number of pings to send (default: 10)"
+    echo "  -t  <timeout>   Timeout in milliseconds (default: 8000)"
+    echo "  -ls <type>      LeaseSet encryption types (default: 6,4)"
+    echo "  -c              Consecutive mode (require 5 consecutive successes)"
+    echo "  -d              Enable debug output"
+    echo "  -h              Ping all hosts in ./hosts.txt"
+    echo "  -l  <file>      Ping all hosts in specified file"
+    echo "  --help          Show this help message"
+    echo ""
+    echo "Destination formats:"
+    echo "  B64 destination (full Base64 string)"
+    echo "  B32 address (xxx.b32.i2p)"
+    echo "  .i2p hostname"
+    echo ""
+    echo "LeaseSet types:"
+    echo "  0    - ElGamal only"
+    echo "  4    - ECIES only"
+    echo "  5    - ML-KEM-512 only"
+    echo "  6    - ML-KEM-768 only"
+    echo "  7    - ML-KEM-1024 only"
+    echo "  0,4  - ElGamal and ECIES"
+    echo "  5,4  - ML-KEM-512 and ECIES"
+    echo "  6,4  - ML-KEM-768 and ECIES (default)"
+    echo "  7,4  - ML-KEM-1024 and ECIES"
+    echo ""
+    echo "Hosts.txt formats supported:"
+    echo "  hostname.i2p"
+    echo "  hostname.i2p=b64..."
+    echo "  xxx.b32.i2p"
+    echo "  full B64 destination"
+    echo ""
+    echo "Examples:"
+    echo "  $0 notbob.i2p"
+    echo "  $0 -n 5 -t 5000 notbob.i2p"
+    echo "  $0 -ls 0 notbob.i2p"
+    echo "  $0 -ls 0,4 notbob.i2p"
+    echo "  $0 -ls 4 notbob.i2p"
+    echo "  $0 -ls 5 notbob.i2p"
+    echo "  $0 -ls 6 notbob.i2p"
+    echo "  $0 -ls 7,4 -c notbob.i2p"
+    echo "  $0 -h"
+    echo "  $0 -l myhosts.txt"
+    if [ "$1" ]; then exit $1; else exit 0; fi
+}
+
+debug() {
+    if [ "$debug" ]; then
+        echo "DEBUG> : $@"
+    fi
+}
+
+# Is input empty?
+if [ ! "$1" ]; then
+    send_help
+fi
+
+# Filter arguments
+java_args=""
+for a in $@; do
+    case $a in
+        -c) # -c (require 5 consecutive pings to report success)
+            sec_five=true
+            java_args="$java_args -c "
+            shift
+            ;;
+        -d) # -d Enable debug output
+            debug=true
+            java_args="$java_args -d "
+            shift
+            ;;
+        -ls) # -ls LeaseSet encryption types
+            shift
+            leaseSetType=$1
+            if [ -z "$leaseSetType" ]; then
+                echo " ✖ LeaseSet type is missing"
+                send_help 1
+            fi
+            debug "Using LeaseSet type: $leaseSetType"
+            java_args="$java_args -ls $leaseSetType"
+            shift
+            ;;
+        -h) # -h (pings all hosts in hosts.txt in current directory)
+            host_file=./hosts.txt
+            if [ ! -f $host_file ]; then
+                echo " ✖ Required hosts file ./hosts.txt not found"
+                send_help 1
+            fi
+            java_args="$java_args -h"
+            shift
+            ;;
+        -l) # -l <destlistfile> (pings a list of hosts in a file)
+            shift
+            list_file=$1
+            if [ ! -f $list_file ]; then
+                echo " ✖ File $list_file not found"
+                send_help 1
+            fi
+            java_args="$java_args -l $list_file"
+            shift
+            ;;
+        -m) # -m maxSimultaneousPings (default 16)
+            shift
+            max=$1
+            java_args="$java_args -m $max"
+            shift
+            ;;
+        -n) # -n numberOfPings (default 10)
+            shift
+            pings=$1
+            java_args="$java_args -n $pings"
+            shift
+            ;;
+        -t) # -t timeout (ms, default 8000)
+            shift
+            timeout=$1
+            if [ $timeout -gt 0 ] && [ $timeout -lt 9 ]; then
+                echo " ✖ Timeout is in milliseconds e.g. for 6 seconds: -t 6000"
+                send_help 1
+            fi
+            java_args="$java_args -t $timeout"
+            shift
+            ;;
+        --help)
+            send_help
+            shift
+            ;;
+        *)
+            address="$1"
+            ;;
+    esac
+done
+
+if [ $host_file ] && [ $list_file ]; then
+    echo " ✖ Unable to use -h and -l together"
+    send_help 1
+elif [ $host_file ] && [ -f $host_file ]; then
+    echo " • Found $host_file, initiating ping..."
+    debug "$(cat $host_file | wc -l) hosts to ping"
+    echo " • Starting HostChecker ping..."
+    cmd="java --enable-native-access=ALL-UNNAMED -cp \"$ADDRESSBOOK_JAR:$I2P_JAR:$ROUTER_JAR:$STREAMING_JAR:$MSTREAMING_JAR\" net.i2p.addressbook.HostPing $java_args"
+    debug "Executing: $cmd"
+    eval ${cmd}
+    exit $?
+elif [ $list_file ] && [ -f $list_file ]; then
+    echo " • Found list file $list_file, initiating ping..."
+    debug "$(cat $list_file | wc -l) hosts to ping"
+    echo " • Starting HostChecker ping..."
+    cmd="java --enable-native-access=ALL-UNNAMED -cp \"$ADDRESSBOOK_JAR:$I2P_JAR:$ROUTER_JAR:$STREAMING_JAR:$MSTREAMING_JAR\" net.i2p.addressbook.HostPing $java_args"
+    debug "Executing: $cmd"
+    eval ${cmd}
+    exit $?
+elif [ "$address" ]; then # Do we really have an address?
+
+    # Check address type
+    if [ $(echo $address | wc -c) -eq 525 ]; then
+        debug "Address is B64 format"
+        lookup=""
+    elif [ "$(echo $address | grep -oiE 'b32.i2p$')" = 'b32.i2p' ] && [ $(echo $address | wc -c) -eq 61 ]; then
+        debug "Address is b32.i2p format"
+        lookup=""
+    elif [ "$(echo $address | grep -ioE '.i2p$')" = '.i2p' ]; then
+        debug "Address is .i2p format"
+        lookup=""
+    else
+        echo " ✖ Address is an unknown format"
+        send_help 1
+    fi
+
+    echo " ➤ Initiating ping of $address"
+
+    # Try to resolve B64 address using naming service
+    lookup=$(java --enable-native-access=ALL-UNNAMED -cp "$ADDRESSBOOK_JAR:$I2P_JAR:$ROUTER_JAR" -Xms16m -Xmx16m net.i2p.addressbook.HostPing --help 2>/dev/null)
+    if [ $? -eq 0 ]; then
+        debug "HostChecker class found and working"
+    fi
+
+    # Start single ping command
+    echo " • Starting HostChecker ping..."
+    cmd="java --enable-native-access=ALL-UNNAMED -cp \"$ADDRESSBOOK_JAR:$I2P_JAR:$ROUTER_JAR:$STREAMING_JAR:$MSTREAMING_JAR\" net.i2p.addressbook.HostPing $java_args $address"
+    debug "Executing: $cmd"
+    eval ${cmd}
+    exit $?
+else
+    echo " ✖ Missing address field"
+    send_help 1
+fi
+
+exit 0
