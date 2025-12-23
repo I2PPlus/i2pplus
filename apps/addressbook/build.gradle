@@ -8,6 +8,9 @@ sourceSets {
         java {
             srcDir 'java/test'
         }
+        resources {
+            srcDir 'java/test/junit'
+        }
     }
 }
 

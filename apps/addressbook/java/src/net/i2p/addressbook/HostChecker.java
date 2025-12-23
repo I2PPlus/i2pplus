@@ -470,6 +470,9 @@ public class HostChecker {
         try {
             long tunnelBuildStart = System.currentTimeMillis();
             Properties options = new Properties();
+            // Use a unique port to avoid conflicts with I2Ping and other clients
+            options.setProperty("i2cp.host", "127.0.0.1");
+            options.setProperty("i2cp.port", "7611");  // Different from default 7654
             options.setProperty("inbound.nickname", "Ping [" + hostname.replace(".i2p", "") + "]");
             options.setProperty("outbound.nickname", "Ping [" + hostname.replace(".i2p", "") + "]");
             options.setProperty("inbound.quantity", "1");
