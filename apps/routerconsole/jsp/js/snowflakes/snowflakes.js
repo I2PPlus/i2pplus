@@ -59,6 +59,7 @@ function initSnowflakes() {
       this.rotationSpeed = (Math.random() - 0.5) * 0.045;
       this.isDying = false;
       this.deathSpinSpeed = 0;
+      this.deathStartTime = 0;
       this.flakeType = (Math.floor(Math.random() * 6) + 1);
       this.windType = windTypes[(Math.random() * windTypes.length) | 0];
       this.windPhase = Math.random() * Math.PI * 2;
@@ -150,13 +151,20 @@ function initSnowflakes() {
           this.isDying = true;
           this.deathSpinSpeed = 0.5;
           this.deathFallSpeed = this.vy;
+          this.deathStartTime = Date.now();
         }
         
-        this.rotation += this.deathSpinSpeed;
-        this.deathSpinSpeed += 0.02;
-        this.deathFallSpeed += 0.3;
-        this.vy = this.deathFallSpeed;
-        this.y += this.vy;
+        const deathDelay = 500;
+        if (Date.now() - this.deathStartTime < deathDelay) {
+          this.rotation += this.deathSpinSpeed;
+          this.deathSpinSpeed += 0.02;
+        } else {
+          this.rotation += this.deathSpinSpeed;
+          this.deathSpinSpeed += 0.02;
+          this.deathFallSpeed += 0.3;
+          this.vy = this.deathFallSpeed;
+          this.y += this.vy;
+        }
         
         if (this.opacity <= 0.05 || this.size <= 2 || this.y > this.canvas.height + this.size) {
           this.y = -this.initialSize;
@@ -168,6 +176,7 @@ function initSnowflakes() {
           this.isDying = false;
           this.deathSpinSpeed = 0;
           this.deathFallSpeed = 0;
+          this.deathStartTime = 0;
           return;
         }
       } else {
