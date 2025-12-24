@@ -28,8 +28,7 @@ function initSnowflakes() {
   window.addEventListener('resize', resizeCanvas);
 
   const urlParams = new URLSearchParams(window.location.search);
-  //const baseColor = ({ light: '#87ceeb', dark: '#a6f35b', classic: '#b0e0e6', midnight: '#9662ca' })[theme] || '#87ceeb';
-  const baseColor = ({ light: '#87ceeb', dark: '#5a9d68', classic: '#b0e0e6', midnight: '#9662ca' })[theme] || '#87ceeb';
+  const baseColor = ({ light: '#78c3f2', dark: '#5a9d68', classic: '#b0e0e6', midnight: '#9662ca' })[theme] || '#87ceeb';
   const svgCache = {};
   const windTypes = ['gentle', 'moderate', 'strong', 'gusty', 'swirling'];
   const windSpeeds = { gentle: 0.15, moderate: 0.25, strong: 0.35, gusty: 0.5, swirling: 0.8 };
@@ -48,7 +47,7 @@ function initSnowflakes() {
   class CanvasSnowflake {
     constructor(baseColor, canvas) {
       this.canvas = canvas;
-      this.initialSize = Math.max(11, Math.random() * 9 + 8);
+      this.initialSize = Math.max(11, Math.random() * 9 + 7);
       this.size = this.initialSize;
       this.x = Math.random() * canvas.width;
       this.y = Math.random() * canvas.height - this.size;
@@ -130,18 +129,18 @@ function initSnowflakes() {
       this.rotation += Math.max(this.rotationSpeed * sizeMultiplier, 0.01);
       this.totalDistance += this.vy;
       const deteriorationProgress = Math.min(1, this.totalDistance / this.maxDistance);
-      const windProgress = Math.floor(deteriorationProgress * windTypes.length);
-      if (windProgress > 0) {
-        const newWindType = windTypes[Math.min(windProgress, windTypes.length - 1)];
-        if (newWindType !== this.windType) {
-          this.windType = newWindType;
-          this.windSpeed = windSpeeds[this.windType] || 0.3;
-        }
-      }
+      const windIndex = deteriorationProgress * (windTypes.length - 1);
+      const lowerIndex = Math.floor(windIndex);
+      const upperIndex = Math.min(lowerIndex + 1, windTypes.length - 1);
+      const t = windIndex - lowerIndex;
+      const lowerSpeed = windSpeeds[windTypes[lowerIndex]];
+      const upperSpeed = windSpeeds[windTypes[upperIndex]];
+      const targetWindSpeed = lowerSpeed + (upperSpeed - lowerSpeed) * t;
+      this.windSpeed += (targetWindSpeed - this.windSpeed) * 0.05;
       if (deteriorationProgress < 0.25) {
         const progress = deteriorationProgress * 4;
         this.size = this.initialSize * (1 - 0.05 * progress);
-        this.opacity = Math.max(0.5, this.initialOpacity * (1 - 0.1 * progress));
+        this.opacity = Math.max(0.6, this.initialOpacity * (1 - 0.1 * progress));
       } else if (deteriorationProgress < 0.5) {
         const progress = (deteriorationProgress - 0.25) * 4;
         this.size = this.initialSize * (0.95 - 0.1 * progress);
@@ -156,7 +155,7 @@ function initSnowflakes() {
         this.opacity = Math.max(0.5, this.initialOpacity * (0.4 - 0.3 * progress));
       }
       this.opacityPhase += this.opacitySpeed;
-      const sparkle = 0.92 + Math.sin(this.opacityPhase) * 0.08 + (Math.random() - 0.5) * 0.04;
+      const sparkle = 0.92 + Math.sin(this.opacityPhase) * 0.09 + (Math.random() - 0.5) * 0.05;
       this.opacity *= sparkle;
 
       const shouldRemove = this.size < 9;
@@ -226,7 +225,7 @@ function initSnowflakes() {
     }
   }
 
-  const flakeCount = Math.max(12, (Math.random() * 10 + 8)) | 0;
+  const flakeCount = Math.max(12, (Math.random() * 10 + 10)) | 0;
 
   loadSvgFlakes().then(() => {
     const snowflakes = Array.from({ length: flakeCount }, () => new CanvasSnowflake(baseColor, canvas));
