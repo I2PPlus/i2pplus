@@ -28,10 +28,11 @@ function initSnowflakes() {
   window.addEventListener('resize', resizeCanvas);
 
   const urlParams = new URLSearchParams(window.location.search);
+  //const baseColor = ({ light: '#87ceeb', dark: '#a6f35b', classic: '#b0e0e6', midnight: '#9662ca' })[theme] || '#87ceeb';
   const baseColor = ({ light: '#87ceeb', dark: '#5a9d68', classic: '#b0e0e6', midnight: '#9662ca' })[theme] || '#87ceeb';
   const svgCache = {};
   const windTypes = ['gentle', 'moderate', 'strong', 'gusty', 'swirling'];
-  const windSpeeds = { gentle: 0.12, moderate: 0.22, strong: 0.35, gusty: 0.5, swirling: 0.65 };
+  const windSpeeds = { gentle: 0.15, moderate: 0.25, strong: 0.35, gusty: 0.5, swirling: 0.8 };
 
   const loadSvgFlakes = async () => {
     for (let i = 1; i <= 6; i++) {
@@ -47,23 +48,25 @@ function initSnowflakes() {
   class CanvasSnowflake {
     constructor(baseColor, canvas) {
       this.canvas = canvas;
-      this.initialSize = Math.max(10, Math.random() * 9 + 8);
+      this.initialSize = Math.max(11, Math.random() * 9 + 8);
       this.size = this.initialSize;
       this.x = Math.random() * canvas.width;
       this.y = Math.random() * canvas.height - this.size;
       this.color = this.varyColor(baseColor, 10);
-      this.speed = Math.max(0.35, 0.03 + (this.size / 11) * 0.08);
-      this.initialOpacity = Math.random() * 0.3 + 0.7;
+      this.speed = 0.3 + (this.size / 17) * 0.6;
+      this.initialOpacity = Math.random() * 0.2 + 0.8;
       this.opacity = this.initialOpacity;
+      this.opacityPhase = Math.random() * Math.PI * 2;
+      this.opacitySpeed = Math.random() * 0.075 + 0.015;
       this.rotation = Math.random() * Math.PI * 3;
-      this.rotationSpeed = (Math.random() - 0.5) * 0.045;
+      this.rotationSpeed = Math.max(0.02, (Math.random() - 0.6) * 0.15);
       this.isDying = false;
       this.deathSpinSpeed = 0;
       this.deathStartTime = 0;
       this.flakeType = (Math.floor(Math.random() * 6) + 1);
       this.windType = windTypes[(Math.random() * windTypes.length) | 0];
       this.windPhase = Math.random() * Math.PI * 2;
-      this.windSpeed = windSpeeds[this.windType] || 0.22;
+      this.windSpeed = windSpeeds[this.windType] || 0.3;
       this.vx = 0;
       this.vy = this.speed;
       this.totalDistance = 0;
@@ -102,7 +105,7 @@ function initSnowflakes() {
 
       if (Math.random() < 0.5) {
         const tint = festiveTints[Math.floor(Math.random() * festiveTints.length)];
-        const mixRatio = 0.05;
+        const mixRatio = 0.075;
         const nr = Math.round(c.r * (1 - mixRatio) + tint.r * mixRatio);
         const ng = Math.round(c.g * (1 - mixRatio) + tint.g * mixRatio);
         const nb = Math.round(c.b * (1 - mixRatio) + tint.b * mixRatio);
@@ -123,29 +126,41 @@ function initSnowflakes() {
       this.vx = Math.sin(this.windPhase) * this.windSpeed;
       this.x += this.vx;
       this.y += this.vy;
-      this.rotation += Math.max(this.rotationSpeed, 0.01);
+      const sizeMultiplier = Math.max(1, this.initialSize / this.size);
+      this.rotation += Math.max(this.rotationSpeed * sizeMultiplier, 0.01);
       this.totalDistance += this.vy;
       const deteriorationProgress = Math.min(1, this.totalDistance / this.maxDistance);
+      const windProgress = Math.floor(deteriorationProgress * windTypes.length);
+      if (windProgress > 0) {
+        const newWindType = windTypes[Math.min(windProgress, windTypes.length - 1)];
+        if (newWindType !== this.windType) {
+          this.windType = newWindType;
+          this.windSpeed = windSpeeds[this.windType] || 0.3;
+        }
+      }
       if (deteriorationProgress < 0.25) {
         const progress = deteriorationProgress * 4;
         this.size = this.initialSize * (1 - 0.05 * progress);
-        this.opacity = this.initialOpacity * (1 - 0.1 * progress);
+        this.opacity = Math.max(0.5, this.initialOpacity * (1 - 0.1 * progress));
       } else if (deteriorationProgress < 0.5) {
         const progress = (deteriorationProgress - 0.25) * 4;
         this.size = this.initialSize * (0.95 - 0.1 * progress);
-        this.opacity = this.initialOpacity * (0.9 - 0.2 * progress);
+        this.opacity = Math.max(0.5, this.initialOpacity * (0.9 - 0.2 * progress));
       } else if (deteriorationProgress < 0.75) {
         const progress = (deteriorationProgress - 0.5) * 4;
         this.size = this.initialSize * (0.85 - 0.15 * progress);
-        this.opacity = this.initialOpacity * (0.7 - 0.3 * progress);
+        this.opacity = Math.max(0.5, this.initialOpacity * (0.7 - 0.3 * progress));
       } else {
         const progress = (deteriorationProgress - 0.75) * 4;
         this.size = this.initialSize * (0.7 - 0.2 * progress);
-        this.opacity = this.initialOpacity * (0.4 - 0.3 * progress);
+        this.opacity = Math.max(0.5, this.initialOpacity * (0.4 - 0.3 * progress));
       }
+      this.opacityPhase += this.opacitySpeed;
+      const sparkle = 0.92 + Math.sin(this.opacityPhase) * 0.08 + (Math.random() - 0.5) * 0.04;
+      this.opacity *= sparkle;
 
-      const shouldRemove = this.opacity <= 0.2 || this.size < 8 || this.opacity < 0.5 && this.size <= 10;
-      
+      const shouldRemove = this.size < 9;
+
       if (shouldRemove) {
         if (!this.isDying) {
           this.isDying = true;
@@ -153,8 +168,8 @@ function initSnowflakes() {
           this.deathFallSpeed = this.vy;
           this.deathStartTime = Date.now();
         }
-        
-        const deathDelay = 500;
+
+        const deathDelay = 200;
         if (Date.now() - this.deathStartTime < deathDelay) {
           this.rotation += this.deathSpinSpeed;
           this.deathSpinSpeed += 0.02;
@@ -165,8 +180,8 @@ function initSnowflakes() {
           this.vy = this.deathFallSpeed;
           this.y += this.vy;
         }
-        
-        if (this.opacity <= 0.05 || this.size <= 2 || this.y > this.canvas.height + this.size) {
+
+        if (this.size <= 2 || this.y > this.canvas.height + this.size) {
           this.y = -this.initialSize;
           this.x = Math.random() * this.canvas.width;
           this.totalDistance = 0;
@@ -180,7 +195,7 @@ function initSnowflakes() {
           return;
         }
       } else {
-        if (this.opacity < 0.5) {
+        if (this.opacity < 0.6) {
           this.targetSize = Math.max(0, this.size - this.initialSize * 0.25);
           this.size += (this.targetSize - this.size) * 0.3;
         }
@@ -195,6 +210,7 @@ function initSnowflakes() {
         this.totalDistance = 0;
         this.size = this.initialSize;
         this.opacity = this.initialOpacity;
+        this.vy = this.speed;
       }
     }
 
@@ -210,7 +226,7 @@ function initSnowflakes() {
     }
   }
 
-  const flakeCount = (Math.random() * 6 + 8) | 0;
+  const flakeCount = Math.max(12, (Math.random() * 10 + 8)) | 0;
 
   loadSvgFlakes().then(() => {
     const snowflakes = Array.from({ length: flakeCount }, () => new CanvasSnowflake(baseColor, canvas));
