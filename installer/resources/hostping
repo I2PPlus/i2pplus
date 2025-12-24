@@ -14,20 +14,14 @@ if [ -z "$I2P" ]; then
 fi
 
 # Can we find the addressbook.jar?
-if [ -f "$I2P/build/addressbook.jar" ]; then
-    ADDRESSBOOK_JAR="$I2P/build/addressbook.jar"
-    I2P_JAR="$I2P/build/i2p.jar"
-    ROUTER_JAR="$I2P/build/router.jar"
-    STREAMING_JAR="$I2P/build/streaming.jar"
-    MSTREAMING_JAR="$I2P/build/mstreaming.jar"
-elif [ -f "$I2P/lib/addressbook.jar" ]; then
+if [ -f "$I2P/lib/addressbook.jar" ]; then
     ADDRESSBOOK_JAR="$I2P/lib/addressbook.jar"
     I2P_JAR="$I2P/lib/i2p.jar"
     ROUTER_JAR="$I2P/lib/router.jar"
     STREAMING_JAR="$I2P/lib/streaming.jar"
     MSTREAMING_JAR="$I2P/lib/mstreaming.jar"
 else
-    echo " ✖ File addressbook.jar not found in $I2P/build/ or $I2P/lib/, edit $0 and change the I2P variable (normally the I2P+ application directory)"
+    echo " ✖ File addressbook.jar not found in $I2P/lib/, edit $0 and change the I2P variable (normally the I2P+ application directory)"
     exit 1
 fi
 
