@@ -148,7 +148,6 @@
 <input type=hidden name="serial" value="<%=susiNonce%>">
 <input type=hidden name="begin" value="0">
 <input type=hidden name="end" value="99">
-<input type=hidden name=action value="<%=intl._t("Delete Selected")%>">
 <div id=book>
 <table class=book id=host_list>
 <tr class=head>
@@ -251,6 +250,7 @@
 <p class=buttons>
 <input class=cancel type=reset value="<%=intl._t("Cancel")%>">
 <input class=delete type=submit name=action value="<%=intl._t("Delete Selected")%>">
+<input class=delete type=submit name=action value="<%=intl._t("Blacklist Selected")%>">
 </p>
 </div>
 </c:if>

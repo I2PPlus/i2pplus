@@ -85,7 +85,7 @@ public class Servlet extends HttpServlet {
             java.util.concurrent.ScheduledExecutorService scheduler = java.util.concurrent.Executors.newSingleThreadScheduledExecutor();
             scheduler.scheduleAtFixedRate(new Runnable() {
                 private int retryCount = 0;
-                private final int maxRetries = 30; // Try for 5 minutes (30 * 10 seconds)
+                private final int maxRetries = 60; // Try for 10 minutes (60 * 10 seconds)
 
                 public void run() {
                     try {

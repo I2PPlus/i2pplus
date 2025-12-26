@@ -399,6 +399,19 @@ public class NamingServiceBean extends AddressbookBean {
                         else {message = ngettext("1 destination deleted.", "{0} destinations deleted.", deleted);} // parameter will always be >= 2
                     } else {message = _t("No valid entries selected to delete.");}
                     if (action.equals(_t("Delete Entry"))) {search = null;} // clear search when deleting
+                } else if (action.equals(_t("Blacklist Selected"))) {
+                    List<String> hostsToBlacklist = new ArrayList<String>();
+                    for (String n : deletionMarks) {
+                        hostsToBlacklist.add(n);
+                    }
+                    BlacklistBean blacklist = new BlacklistBean();
+                    int added = blacklist.addEntries(hostsToBlacklist);
+                    if (added > 0) {
+                        message = ngettext("1 destination blacklisted.", "{0} destinations blacklisted.", added);
+                    } else {
+                        message = _t("No valid entries selected to blacklist.");
+                        fail = true;
+                    }
                 }
                 if (changed) {
                     message += "<br>" + _t("Address book saved.");

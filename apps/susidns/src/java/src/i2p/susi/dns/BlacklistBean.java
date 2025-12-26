@@ -140,6 +140,9 @@ public class BlacklistBean extends BaseBean {
             for (String entry : entries) {out.println(entry);}
             out.close();
             if (out.checkError()) {throw new IOException("Failed write to " + file);}
+            // Update static cache after saving
+            cachedContent = null; // Force reload on next read
+            lastModified = 0; // Reset modification time to trigger reload
             debug("Saved blacklist to file: " + file.getAbsolutePath() + " (" + entries.size() + " entries)");
         } catch (IOException e) {warn(e);}
     }
@@ -324,5 +327,115 @@ public class BlacklistBean extends BaseBean {
             reloadBlacklist();
         }
         return content != null ? content : "";
+    }
+
+    /**
+      * Add entries to the blacklist
+      * @param entries List of hostnames or addresses to add to the blacklist
+      * @return Number of entries successfully added
+      */
+    public int addEntries(List<String> entries) {
+        if (entries == null || entries.isEmpty()) {
+            return 0;
+        }
+        // Load current content from file (not cache) to avoid static field issues
+        String currentContent = loadContentFromFile();
+        int added = 0;
+        List<String> newEntries = new ArrayList<String>();
+        for (String entry : entries) {
+            if (entry != null && entry.trim().length() > 0) {
+                String trimmedEntry = entry.trim();
+                if (isValidI2PAddress(trimmedEntry) && !isEntryInContent(trimmedEntry, currentContent)) {
+                    newEntries.add(trimmedEntry);
+                    added++;
+                    debug("Added to blacklist: " + trimmedEntry);
+                }
+            }
+        }
+        if (added > 0) {
+            appendEntriesToFile(newEntries, currentContent);
+        }
+        return added;
+    }
+
+    /**
+     * Load content directly from file, bypassing cache
+     */
+    private String loadContentFromFile() {
+        File file = blacklistFile();
+        if (file.isFile()) {
+            StringBuilder buf = new StringBuilder();
+            BufferedReader br = null;
+            try {
+                br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
+                String line;
+                while((line = br.readLine()) != null) {
+                    buf.append(line);
+                    buf.append("\n");
+                }
+                debug("Loaded blacklist from file: " + file.getAbsolutePath());
+            } catch (IOException e) {
+                warn(e);
+            }
+            finally {
+                if (br != null) {
+                    try {br.close();}
+                    catch (IOException ioe) {}
+                }
+            }
+            return buf.toString();
+        }
+        return "";
+    }
+
+    /**
+     * Check if an entry exists in the given content string
+     */
+    private boolean isEntryInContent(String entry, String content) {
+        if (content == null || content.isEmpty()) {
+            return false;
+        }
+        String[] lines = content.split("\\n");
+        for (String line : lines) {
+            if (line.trim().equalsIgnoreCase(entry)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Append new entries to file
+     */
+    private void appendEntriesToFile(List<String> newEntries, String currentContent) {
+        File file = blacklistFile();
+        try {
+            List<String> allEntries = new ArrayList<String>();
+            // Add existing entries
+            if (currentContent != null && !currentContent.isEmpty()) {
+                String[] lines = currentContent.split("\\n");
+                for (String line : lines) {
+                    line = line.trim();
+                    if (line.length() > 0 && isValidI2PAddress(line)) {
+                        allEntries.add(line);
+                    }
+                }
+            }
+            // Add new entries
+            allEntries.addAll(newEntries);
+            // Sort all entries
+            Collections.sort(allEntries, String.CASE_INSENSITIVE_ORDER);
+            // Write to file
+            PrintWriter out = new PrintWriter(new OutputStreamWriter(new SecureFileOutputStream(file), "UTF-8"));
+            for (String entry : allEntries) {out.println(entry);}
+            out.close();
+            if (out.checkError()) {throw new IOException("Failed write to " + file);}
+            debug("Saved blacklist to file: " + file.getAbsolutePath() + " (" + allEntries.size() + " entries)");
+            // Update static cache after saving
+            synchronized(BlacklistBean.class) {
+                cachedContent = null;
+                lastModified = 0;
+            }
+        } catch (IOException e) {warn(e);}
     }
 }
