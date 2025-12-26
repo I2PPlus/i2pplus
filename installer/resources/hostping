@@ -193,7 +193,6 @@ if [ $host_file ] && [ $list_file ]; then
  elif [ $host_file ] && [ -f $host_file ]; then
     echo " • Found $host_file, initiating ping..."
     debug "$(cat $host_file | wc -l) hosts to ping"
-    echo " • Starting HostChecker ping..."
     cmd="java --enable-native-access=ALL-UNNAMED -cp \"$ADDRESSBOOK_JAR:$I2P_JAR:$ROUTER_JAR:$STREAMING_JAR:$MSTREAMING_JAR\" net.i2p.addressbook.HostPing $java_args"
     debug "Executing: $cmd"
     (cd "$I2P" && eval ${cmd})
@@ -201,7 +200,6 @@ if [ $host_file ] && [ $list_file ]; then
 elif [ $list_file ] && [ -f $list_file ]; then
     echo " • Found list file $list_file, initiating ping..."
     debug "$(cat $list_file | wc -l) hosts to ping"
-    echo " • Starting HostChecker ping..."
     cmd="java --enable-native-access=ALL-UNNAMED -cp \"$ADDRESSBOOK_JAR:$I2P_JAR:$ROUTER_JAR:$STREAMING_JAR:$MSTREAMING_JAR\" net.i2p.addressbook.HostPing $java_args"
     debug "Executing: $cmd"
     (cd "$I2P" && eval ${cmd})
@@ -223,8 +221,6 @@ elif [ "$address" ]; then # Do we really have an address?
         send_help 1
     fi
 
-    echo " ➤ Initiating ping of $address"
-
     # Try to resolve B64 address using naming service
     lookup=$(cd "$I2P" && java --enable-native-access=ALL-UNNAMED -cp "$ADDRESSBOOK_JAR:$I2P_JAR:$ROUTER_JAR" -Xms16m -Xmx16m net.i2p.addressbook.HostPing --help 2>/dev/null)
     if [ $? -eq 0 ]; then
@@ -232,7 +228,6 @@ elif [ "$address" ]; then # Do we really have an address?
     fi
 
     # Start single ping command
-    echo " • Starting HostChecker ping..."
     cmd="java --enable-native-access=ALL-UNNAMED -cp \"$ADDRESSBOOK_JAR:$I2P_JAR:$ROUTER_JAR:$STREAMING_JAR:$MSTREAMING_JAR\" net.i2p.addressbook.HostPing $java_args $address"
     debug "Executing: $cmd"
     (cd "$I2P" && eval ${cmd})
