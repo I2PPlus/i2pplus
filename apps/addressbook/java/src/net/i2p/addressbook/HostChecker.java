@@ -939,9 +939,9 @@ public class HostChecker {
                 writer.newLine();
                 writer.newLine();
 
-                // Write original content, skipping any existing header lines
+                // Write original content, skipping any existing header lines and empty lines
                 for (String line : lines) {
-                    if (!line.startsWith("#")) {
+                    if (!line.startsWith("#") && !line.trim().isEmpty()) {
                         writer.write(line);
                         writer.newLine();
                     }
@@ -950,6 +950,18 @@ public class HostChecker {
         } catch (Exception e) {
             if (_log.shouldWarn()) {
                 _log.warn("Failed to add header to categories file", e);
+            }
+        }
+    }
+
+    /**
+     * Write cleaned categories.txt file with only valid entries (no empty lines)
+     */
+    private void writeCleanCategoriesFile(List<String> validLines) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(_categoriesFile))) {
+            for (String line : validLines) {
+                writer.write(line);
+                writer.newLine();
             }
         }
     }
@@ -969,25 +981,48 @@ public class HostChecker {
             return;
         }
 
+        List<String> validLines = new ArrayList<>();
+        boolean hasEmptyLines = false;
+
         try (BufferedReader reader = new BufferedReader(new FileReader(_categoriesFile))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                line = line.trim();
-                if (line.isEmpty() || line.startsWith("#")) {
+                String trimmedLine = line.trim();
+                if (trimmedLine.isEmpty()) {
+                    hasEmptyLines = true;
+                    continue;
+                }
+                if (trimmedLine.startsWith("#")) {
+                    validLines.add(line);
                     continue;
                 }
 
                 // Format: hostname,category
-                String[] parts = line.split(",", 2);
+                String[] parts = trimmedLine.split(",", 2);
                 if (parts.length == 2) {
                     String hostname = parts[0].trim();
                     String category = parts[1].trim();
                     _hostCategories.put(hostname, category);
+                    validLines.add(line);
                 }
             }
 
             if (_log.shouldInfo()) {
                 _log.info("Loaded " + _hostCategories.size() + " host categories from " + _categoriesFile.getName());
+            }
+
+            // Clean up the file if we found empty lines
+            if (hasEmptyLines) {
+                try {
+                    writeCleanCategoriesFile(validLines);
+                    if (_log.shouldInfo()) {
+                        _log.info("Cleaned up empty lines from categories.txt");
+                    }
+                } catch (Exception e) {
+                    if (_log.shouldWarn()) {
+                        _log.warn("Failed to clean up categories.txt file", e);
+                    }
+                }
             }
         } catch (Exception e) {
             if (_log.shouldWarn()) {
