@@ -114,7 +114,7 @@ msgid "Total peers in our NetDb"
 msgstr "Total rekan di NetDb kami"
 
 msgid "Total number of threads in use"
-msgstr ""
+msgstr "Total jumlah thread yang digunakan"
 
 msgid "Peers without a published IP address"
 msgstr "Rekan tanpa alamat IP yang dipublikasikan"
@@ -2410,7 +2410,7 @@ msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
 msgstr "Browser Anda adalah tidak dikonfigurasi dengan benar untuk menggunakan HTTP proxy pada {0}"
 
 msgid "Errors"
-msgstr ""
+msgstr "Kesalahan"
 
 msgid "URL"
 msgstr "URL"
@@ -2690,16 +2690,16 @@ msgid "Select the field to search on"
 msgstr ""
 
 msgid "e.g. cn hk"
-msgstr ""
+msgstr "cth. cn hk"
 
 msgid "MTU"
 msgstr "MTU"
 
 msgid "Enter search value here"
-msgstr ""
+msgstr "Masukkan nilai pencarian di sini"
 
 msgid "Router not found"
-msgstr ""
+msgstr "Router tidak ditemukan"
 
 msgid "No routers with"
 msgstr ""
@@ -2775,11 +2775,11 @@ msgstr ""
 
 #, java-format
 msgid "Hostname {0} not found in network database"
-msgstr ""
+msgstr "Hostname {0} tidak ditemukan dalam database jaringan"
 
 #, java-format
 msgid "LeaseSet for {0} not found in network database"
-msgstr ""
+msgstr "LeaseSet untuk {0} tidak ditemukan dalam database jaringan"
 
 msgid "Meta"
 msgstr ""
@@ -2837,10 +2837,10 @@ msgid "Count"
 msgstr "Jumlah"
 
 msgid "Under 12 KB/s"
-msgstr ""
+msgstr "Di bawah 12 KB/s"
 
 msgid "Over 2048 KB/s"
-msgstr ""
+msgstr "Di atas 2048 KB/s"
 
 msgid "Bandwidth Tier"
 msgstr "Tingkat Bandwidth"
@@ -2913,7 +2913,7 @@ msgid "Hostname"
 msgstr "Nama host"
 
 msgid "Whois"
-msgstr ""
+msgstr "Whois"
 
 msgid "direct"
 msgstr ""
@@ -2937,7 +2937,7 @@ msgid "Show all routers with this port in the NetDb"
 msgstr "Tampilkan semua router dengan port ini di NetDb"
 
 msgid "Maximum Transmission Unit"
-msgstr ""
+msgstr "Unit transmisi maksimum"
 
 msgid "Show all routers with this MTU in the NetDb"
 msgstr ""
@@ -2946,7 +2946,7 @@ msgid "Addresses"
 msgstr "Alamat"
 
 msgid "Introducers"
-msgstr ""
+msgstr "Perkenal"
 
 msgid "Network Id"
 msgstr ""
@@ -3006,16 +3006,16 @@ msgid "Local"
 msgstr "Lokal"
 
 msgid "Fast Tier"
-msgstr ""
+msgstr "Tingkat cepat"
 
 msgid "High Capacity Tier"
-msgstr ""
+msgstr "Tingkat kapasitas tinggi"
 
 msgid "Integrated Tier"
-msgstr ""
+msgstr "Tingkat terpadu"
 
 msgid "Standard Tier"
-msgstr ""
+msgstr "Tingkat standar"
 
 msgid "No peer connections available"
 msgstr "Tidak ada koneksi rekan yang tersedia"
@@ -3354,7 +3354,7 @@ msgid "Unreachable"
 msgstr "Tidak dapat dijangkau"
 
 msgid "Most tests passing"
-msgstr ""
+msgstr "Kebanyakan tes lulus"
 
 msgid "Fast, High Capacity"
 msgstr "Cepat, kapasitas tinggi"
@@ -3372,7 +3372,7 @@ msgid "Integrated"
 msgstr "Terintegrasi"
 
 msgid "Configure Peer"
-msgstr ""
+msgstr "Konfigurasi peer"
 
 msgid "Thresholds"
 msgstr "Threshold"
@@ -3519,7 +3519,7 @@ msgstr ""
 
 #, java-format
 msgid "To view, see {0}Session Bans{1}."
-msgstr ""
+msgstr "Untuk melihat, lihat {0}Larangan Sesi{1}"
 
 msgid "Select search engine"
 msgstr "Pilih mesin pencari"
@@ -3616,7 +3616,7 @@ msgid "Click Shutdown and restart to install"
 msgstr "Klik Shutdown lalu restart untuk menginstal"
 
 msgid "Unable"
-msgstr ""
+msgstr "Tidak tersedia"
 
 #, java-format
 msgid "{0}"
@@ -3770,7 +3770,7 @@ msgid "An introduction to hosting websites on the I2P network"
 msgstr "Pengantar hosting situs web di jaringan I2P"
 
 msgid "New hosts in last 24 hours"
-msgstr ""
+msgstr "Host baru dalam 24 jam terakhir"
 
 msgid "I2PControl"
 msgstr "Kontrol I2P"
@@ -3961,7 +3961,7 @@ msgid "The total number of peers in our network database"
 msgstr "Jumlah peer dalam database jaringan kami"
 
 msgid "Total RouterInfos stored on disk"
-msgstr ""
+msgstr "Total RouterInfos yang disimpan di disk"
 
 msgid "Known"
 msgstr "Diketahui"
@@ -4203,13 +4203,13 @@ msgid "Select stored analysis"
 msgstr "Pilih analisis yang tersimpan"
 
 msgid "Review"
-msgstr ""
+msgstr "Tinjau"
 
 msgid "Run analysis on Floodfills only"
 msgstr "Jalankan analisis pada Floodfills saja"
 
 msgid "Start Scan"
-msgstr ""
+msgstr "Mulai pemindaian"
 
 msgid "Run analysis on all routers in NetDb"
 msgstr "Jalankan analisis pada semua router di NetDb"
@@ -4500,7 +4500,7 @@ msgid "No local or transit tunnels currently active."
 msgstr "Saat ini tidak ada terowongan lokal atau transit yang aktif."
 
 msgid "PRIVATE IP ADDRESS"
-msgstr ""
+msgstr "ALAMAT IP ADDRESS"
 
 msgid "Bandwidth Tiers"
 msgstr "Bandwidth Tiers "
@@ -4513,7 +4513,7 @@ msgid "Inbound or outbound?"
 msgstr "Inbound atau outbound?"
 
 msgid "In/Out"
-msgstr ""
+msgstr "Masuk/Keluar"
 
 msgid "Gateway"
 msgstr "Gateway "
@@ -4631,7 +4631,7 @@ msgid "Browser launch at startup"
 msgstr "Peluncuran browser pada saat startup"
 
 msgid "I2P Router Console"
-msgstr ""
+msgstr "Konsol Router I2P"
 
 msgid "Open Router Console in web browser at startup"
 msgstr "Buka Router Console di web browser pada saat startup"
@@ -4724,7 +4724,7 @@ msgid "Advanced Network Configuration"
 msgstr "Konfigurasi Jaringan Tingkat Lanjut"
 
 msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
-msgstr ""
+msgstr "I2P akan bekerja paling baik jika Anda mengkonfigurasi tarif untuk mencocokkan dengan kecepatan koneksi internet Anda."
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
 msgstr "Catatan: Kontribusi Anda ke jaringan (jaringan berbagi) ditentukan oleh alokasi bandwidth upstream (kecepatan unggah)."
@@ -4755,10 +4755,10 @@ msgstr ""
 
 #, java-format
 msgid "You have configured I2P to share only {0} KBps."
-msgstr ""
+msgstr "Anda telah mengonfigurasi I2P untuk berbagi hanya {0} KB/s."
 
 msgid "I2P requires at least 12KBps to enable sharing. "
-msgstr ""
+msgstr "I2P memerlukan setidaknya 12 KB/s untuk mengaktifkan berbagi. "
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
 msgstr "Mohon aktifkan sharing (partisipasi dalam tunnel) dengan mengkonfigurasi lebih banyak bandwidth. "
@@ -5206,7 +5206,7 @@ msgstr ""
 
 #, java-format
 msgid "To view all active bans by router hash, see {0}Banned Peers{1}."
-msgstr ""
+msgstr "Untuk melihat semua bans aktif berdasarkan hash router, lihat {0}Peer Dilarangkan{1}."
 
 #, java-format
 msgid "A list of {0}session-only bans{1} by hash is also available."
@@ -5256,7 +5256,7 @@ msgid "Reseeding is the bootstrapping process used to find other routers when yo
 msgstr "Reseeding adalah proses bootstrap yang digunakan untuk menemukan router lain saat anda menginstal I2P pertama kali, atau bila router anda memiliki terlalu sedikit referensi router yang tersisa."
 
 msgid "To enable the configuration of reseed urls, activate the console's <a href=/help/advancedsettings>Advanced mode</a>."
-msgstr ""
+msgstr "Untuk mengaktifkan konfigurasi URL reseed, aktifkan <a href=/help/advancedsettings>mode lanjutan</a> di konsol."
 
 msgid "Reseeding Configuration"
 msgstr "Konfigurasi Reseed"
@@ -5419,10 +5419,10 @@ msgid "Use the same sidebar on all pages"
 msgstr ""
 
 msgid "Sticky sidebar"
-msgstr ""
+msgstr "Sidebar tetap"
 
 msgid "Enable conditional fixed sidebar"
-msgstr ""
+msgstr "Aktifkan sidebar tetap bersyarat"
 
 msgid "config stats"
 msgstr "statistik konfigurasi"
@@ -7367,7 +7367,7 @@ msgid "Requested client leaseset"
 msgstr ""
 
 msgid "Remote"
-msgstr ""
+msgstr "Jarak jauh"
 
 msgid "network database router map"
 msgstr "Peta router basis data jaringan"
@@ -7431,7 +7431,7 @@ msgid "Information &amp; Diagnostics"
 msgstr "Informasi dan Diagnostik"
 
 msgid "Customize"
-msgstr ""
+msgstr "Sesuaikan"
 
 msgid "statistics"
 msgstr "Statistik"
@@ -7604,7 +7604,7 @@ msgid "Browser Setup"
 msgstr "Pengaturan Peramban"
 
 msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. "
-msgstr ""
+msgstr "Untuk mengakses situs web yang dihosting di jaringan I2P dan secara opsional menggunakan outproxy default untuk terhubung ke situs di clearnet, Anda perlu mengonfigurasi browser Anda untuk menggunakan proxy <b>HTTP</b> I2P+, yang secara default berjalan pada <code>127.0.0.1 port 4444</code>. "
 
 msgid "Welcome to I2P+!"
 msgstr "Selamat datang di I2P!"
@@ -7613,7 +7613,7 @@ msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) y
 msgstr "Saat Anda memulai I2P, mungkin diperlukan beberapa menit untuk melakukan bootstrap (mengintegrasikan) router Anda ke dalam jaringan dan menemukan rekan tambahan, jadi harap bersabar."
 
 msgid "Once green stars are indicated next to your Service Tunnels, there is a wide variety of things you can do with I2P+."
-msgstr ""
+msgstr "Segerada bintang hijau yang menunjukkan di samping Service Tunnels Anda, ada banyak hal berbeda yang dapat Anda lakukan dengan I2P+."
 
 msgid "Unknown Wizard page"
 msgstr "Halaman Wisaya Tidak Diketahui"

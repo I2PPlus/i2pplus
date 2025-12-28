@@ -116,7 +116,7 @@ msgid "Total peers in our NetDb"
 msgstr "हमारे NetDb में कुल पीयर"
 
 msgid "Total number of threads in use"
-msgstr ""
+msgstr "उपयोग में धागे की कुल संख्या"
 
 msgid "Peers without a published IP address"
 msgstr "प्रकाशित आईपी पता नहीं वाले पीयर"
@@ -2418,7 +2418,7 @@ msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
 msgstr "{0} पर HTTP प्रॉक्सी का उपयोग करने के लिए आपका ब्राउज़र सही ढंग से सेट नहीं हुआ है"
 
 msgid "Errors"
-msgstr ""
+msgstr "त्रुटियाँ"
 
 msgid "URL"
 msgstr "URL"
@@ -2698,16 +2698,16 @@ msgid "Select the field to search on"
 msgstr ""
 
 msgid "e.g. cn hk"
-msgstr ""
+msgstr "उदा. cn hk"
 
 msgid "MTU"
 msgstr "MTU"
 
 msgid "Enter search value here"
-msgstr ""
+msgstr "खोज मान यहाँ दर्ज करें"
 
 msgid "Router not found"
-msgstr ""
+msgstr "राउटर नहीं मिला"
 
 msgid "No routers with"
 msgstr "के साथ कोई राउटर नहीं"
@@ -2845,10 +2845,10 @@ msgid "Count"
 msgstr "गिनती"
 
 msgid "Under 12 KB/s"
-msgstr ""
+msgstr "12 KB/s से कम"
 
 msgid "Over 2048 KB/s"
-msgstr ""
+msgstr "2048 KB/s से अधिक"
 
 msgid "Bandwidth Tier"
 msgstr "बैंडविड्थ टायर"
@@ -2921,7 +2921,7 @@ msgid "Hostname"
 msgstr "होस्टनाम"
 
 msgid "Whois"
-msgstr ""
+msgstr "Whois"
 
 msgid "direct"
 msgstr "प्रत्यक्ष"
@@ -2945,7 +2945,7 @@ msgid "Show all routers with this port in the NetDb"
 msgstr "NetDb में इस पोर्ट के साथ सभी राउटर दिखाएं"
 
 msgid "Maximum Transmission Unit"
-msgstr ""
+msgstr "अधिकतम संचारण इकाई"
 
 msgid "Show all routers with this MTU in the NetDb"
 msgstr ""
@@ -2954,7 +2954,7 @@ msgid "Addresses"
 msgstr "पते"
 
 msgid "Introducers"
-msgstr ""
+msgstr "परिचयक्ता"
 
 msgid "Network Id"
 msgstr "नेटवर्क आईडी"
@@ -3014,16 +3014,16 @@ msgid "Local"
 msgstr "स्थानीय"
 
 msgid "Fast Tier"
-msgstr ""
+msgstr "तीव्र स्तर"
 
 msgid "High Capacity Tier"
-msgstr ""
+msgstr "उच्च क्षमता स्तर"
 
 msgid "Integrated Tier"
-msgstr ""
+msgstr "एकीकृत स्तर"
 
 msgid "Standard Tier"
-msgstr ""
+msgstr "मानक स्तर"
 
 msgid "No peer connections available"
 msgstr "समकक्ष कनेक्शन उपलब्ध नहीं"
@@ -3367,7 +3367,7 @@ msgid "Unreachable"
 msgstr "पहुँच不到"
 
 msgid "Most tests passing"
-msgstr ""
+msgstr "अधिकांश परीक्षण उत्तीर्ण"
 
 msgid "Fast, High Capacity"
 msgstr "तेज़, उच्च क्षमता"
@@ -3385,7 +3385,7 @@ msgid "Integrated"
 msgstr "समेकित"
 
 msgid "Configure Peer"
-msgstr ""
+msgstr "पीयर कॉन्फ़िगर करें"
 
 msgid "Thresholds"
 msgstr "सीमाएँ"
@@ -3632,7 +3632,7 @@ msgid "Click Shutdown and restart to install"
 msgstr "इंस्टॉल करने के लिए बंद करें और फिर से शुरू करें"
 
 msgid "Unable"
-msgstr ""
+msgstr "असमर्थ"
 
 #, java-format
 msgid "{0}"
@@ -3977,7 +3977,7 @@ msgid "The total number of peers in our network database"
 msgstr "हमारे नेटवर्क डेटाबेस में कुल पीयर की संख्या"
 
 msgid "Total RouterInfos stored on disk"
-msgstr ""
+msgstr "डिस्क पर संग्रहित RouterInfos की कुल संख्या"
 
 msgid "Known"
 msgstr "परिचित"
@@ -4221,13 +4221,13 @@ msgid "Select stored analysis"
 msgstr "संग्रहित विश्लेषण चुनें"
 
 msgid "Review"
-msgstr ""
+msgstr "समीक्षण"
 
 msgid "Run analysis on Floodfills only"
 msgstr "केवल Floodfills पर विश्लेषण चलाएं"
 
 msgid "Start Scan"
-msgstr ""
+msgstr "स्कैन प्रारम्भ"
 
 msgid "Run analysis on all routers in NetDb"
 msgstr "NetDb में सभी रूटर पर विश्लेषण चलाएं"
@@ -4518,7 +4518,7 @@ msgid "No local or transit tunnels currently active."
 msgstr "वर्तमान में कोई स्थानीय या ट्रांजिट टनल सक्रिय नहीं है।"
 
 msgid "PRIVATE IP ADDRESS"
-msgstr ""
+msgstr "निजी IP पता"
 
 msgid "Bandwidth Tiers"
 msgstr "बैंडविड्थ स्तर"
@@ -4531,7 +4531,7 @@ msgid "Inbound or outbound?"
 msgstr "आगंतुकीय या निर्गमनीय?"
 
 msgid "In/Out"
-msgstr ""
+msgstr "इनपुट/निर्गत"
 
 msgid "Gateway"
 msgstr "गेटवे"
@@ -4649,7 +4649,7 @@ msgid "Browser launch at startup"
 msgstr "ब्राउज़र को शुरुआत के समय लॉन्च करें"
 
 msgid "I2P Router Console"
-msgstr ""
+msgstr "I2P राउटर कंसोल"
 
 msgid "Open Router Console in web browser at startup"
 msgstr "शुरुआत के समय वेब ब्राउज़र में रूटर कंसोल खोलें"
@@ -4742,7 +4742,7 @@ msgid "Advanced Network Configuration"
 msgstr "उन्नत नेटवर्क सेटिंग"
 
 msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
-msgstr ""
+msgstr "I2P सबेे काम करेगा यदि आपने अपने दरें को इंटरनेट कनेक्शन की गति से मेल खां हैं."
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
 msgstr "टिप्पणी: आपकी नेटवर्क के प्रतिभाग (नेटवर्क शेयर) अपस्ट्रीम बैंडविड्ध के आवंटन (अपलोड गति) द्वारा निर्धारित होती है।"
@@ -4773,10 +4773,10 @@ msgstr "नोट"
 
 #, java-format
 msgid "You have configured I2P to share only {0} KBps."
-msgstr ""
+msgstr "आपने I2P को केवल {0} KB/s तक साझां करने के लिए विन्यासित किया है."
 
 msgid "I2P requires at least 12KBps to enable sharing. "
-msgstr ""
+msgstr "I2P को साझां सक्षम करने के लिए कम से 12 KB/s आवश्यकता है. "
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
 msgstr "कृपया अधिक बैंडविड्ध के आवंटन करके शेयरिंग (टनल में भाग लेने) को सक्षम करें।"
@@ -5274,7 +5274,7 @@ msgid "Reseeding is the bootstrapping process used to find other routers when yo
 msgstr "रीसीडिंग एक बूटस्ट्रैपिंग प्रक्रिया है जिसका उपयोग आप I2P पहली बार स्थापित करते ही करते हैं, या जब आपके राउटर के पास बाकी बहुत कम राउटर संदर्भ होते हैं।"
 
 msgid "To enable the configuration of reseed urls, activate the console's <a href=/help/advancedsettings>Advanced mode</a>."
-msgstr ""
+msgstr "रीसीड URL कॉन्फ़िगरेशन को सक्रिय करने के लिए, कंसोल में <a href=/help/advancedsettings>उन्नत अवस्था</a> सक्रिय करें."
 
 msgid "Reseeding Configuration"
 msgstr "रीसीडिंग की संरचना"
@@ -5437,10 +5437,10 @@ msgid "Use the same sidebar on all pages"
 msgstr "सभी पृष्ठों पर एक ही साइडबार का उपयोग करें"
 
 msgid "Sticky sidebar"
-msgstr ""
+msgstr "सशर्त साइडबार"
 
 msgid "Enable conditional fixed sidebar"
-msgstr ""
+msgstr "सशर्त निश्चित साइडबार"
 
 msgid "config stats"
 msgstr "स्टैट्स की सेटिंग करें"
@@ -7385,7 +7385,7 @@ msgid "Requested client leaseset"
 msgstr "अनुरोधित क्लाइंट लीज़सेट"
 
 msgid "Remote"
-msgstr ""
+msgstr "दूर"
 
 msgid "network database router map"
 msgstr "नेटवर्क डेटाबेस राउटर मानचित्र"
@@ -7449,7 +7449,7 @@ msgid "Information &amp; Diagnostics"
 msgstr "जानकारी &amp; डायग्नोस्टिक्स"
 
 msgid "Customize"
-msgstr ""
+msgstr "अनुकूलित करें"
 
 msgid "statistics"
 msgstr "स्टैटिस्टिक्स"
@@ -7622,7 +7622,7 @@ msgid "Browser Setup"
 msgstr "ब्राउज़र सेटिंग"
 
 msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. "
-msgstr ""
+msgstr "I2P नेटवर्क पर होस्ट कीगई वेबसाइटों तक पहुंच करने और clearnet पर वेबसाइटों से जुड़ने के लिए वैकल्पिक outproxy का उपयोग करने के लिए, आपको अपने ब्राउजर को कॉन्फ़िगर करना होगा ताकि वह I2P+ <b>HTTP</b> प्रॉक्सी का उपयोग करे, जो डिफ़ॉ्ट <code>127.0.0.1 port 4444</code> पर चल रहा है। "
 
 msgid "Welcome to I2P+!"
 msgstr "I2P+ में स्वागत है!"
@@ -7631,7 +7631,7 @@ msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) y
 msgstr "I2P शुरू करने पर, यह आपके राउटर को नेटवर्क में बीजीकरण करने और अतिरिक्त पीयर खोजने में कुछ मिनट ले सकता है, इसलिए कृपया सहनशील रहें।"
 
 msgid "Once green stars are indicated next to your Service Tunnels, there is a wide variety of things you can do with I2P+."
-msgstr ""
+msgstr "जैसे ही आपके सर्विस टनल के पास उन्नेट हरे हो गएं, I2P+ के साथ करने लिए बहुत सारी चीजें हैं."
 
 msgid "Unknown Wizard page"
 msgstr "अज्ञात विज़ार्ड पेज"

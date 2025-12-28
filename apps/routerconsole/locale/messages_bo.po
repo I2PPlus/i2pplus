@@ -114,7 +114,7 @@ msgid "Total peers in our NetDb"
 msgstr "ང་ཚོའི་ NetDb ནང་གི་མཐུད་སྣེ་བསྡོམས།"
 
 msgid "Total number of threads in use"
-msgstr ""
+msgstr "སྲོལ་ཁག་གི་གི་སྤྱོས་པའི་གི་ཁག་གི་སྤྱོས་པ"
 
 msgid "Peers without a published IP address"
 msgstr "IP ཁ་བྱང་སྤེལ་མེད་པའི་མཐུད་སྣེ།"
@@ -2410,7 +2410,7 @@ msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
 msgstr "ཁྱེད་ཀྱི་བརའུ་སར་ {0} ཐོག་ HTTP ཚབ་སྤྱོད་བེད་སྤྱོད་བྱེད་པར་ཡང་དག་པར་བཀོད་སྒྲིག་བྱས་མེད།"
 
 msgid "Errors"
-msgstr ""
+msgstr "སྲོག་པ"
 
 msgid "URL"
 msgstr "URL"
@@ -2690,16 +2690,16 @@ msgid "Select the field to search on"
 msgstr ""
 
 msgid "e.g. cn hk"
-msgstr ""
+msgstr "བ. cn hk"
 
 msgid "MTU"
 msgstr "MTU"
 
 msgid "Enter search value here"
-msgstr ""
+msgstr "བརྒྱུག་གི་གི་སྲོད་པའི་གི་སྲོད་པ"
 
 msgid "Router not found"
-msgstr ""
+msgstr "བརྒྱུག་པ"
 
 msgid "No routers with"
 msgstr "འདི་དང་ལྡན་པའི་རོ་ཌེར་མེད།"
@@ -2837,10 +2837,10 @@ msgid "Count"
 msgstr "གྲངས་ཀ།"
 
 msgid "Under 12 KB/s"
-msgstr ""
+msgstr "12 KB/s མན་པ"
 
 msgid "Over 2048 KB/s"
-msgstr ""
+msgstr "2048 KB/s མཐར"
 
 msgid "Bandwidth Tier"
 msgstr "དྲ་རྒྱུད་རིམ་པ།"
@@ -2913,7 +2913,7 @@ msgid "Hostname"
 msgstr "ཧོས་ནས་མིང་།"
 
 msgid "Whois"
-msgstr ""
+msgstr "Whois"
 
 msgid "direct"
 msgstr "ཐད་ཀྱི།"
@@ -2937,7 +2937,7 @@ msgid "Show all routers with this port in the NetDb"
 msgstr "NetDb ནང་གི་འདིའི་སྒོ་མོ་ཡོད་པའི་རོ་ཌེར་ཚང་མ་སྟོན།"
 
 msgid "Maximum Transmission Unit"
-msgstr ""
+msgstr "སྲོད་པའི་སྤྱོས་པའི་གི་སྲོད་པ"
 
 msgid "Show all routers with this MTU in the NetDb"
 msgstr ""
@@ -2946,7 +2946,7 @@ msgid "Addresses"
 msgstr "ཁ་བྱང་།"
 
 msgid "Introducers"
-msgstr ""
+msgstr "བརྒྱུག་པ"
 
 msgid "Network Id"
 msgstr "དྲ་ལམ་གྱི་ཐོན་པ།"
@@ -3006,16 +3006,16 @@ msgid "Local"
 msgstr "ནང་ཁུག་"
 
 msgid "Fast Tier"
-msgstr ""
+msgstr "མྲ་མག་གི་སྲོད་པ"
 
 msgid "High Capacity Tier"
-msgstr ""
+msgstr "སྲོད་པའི་གི་སྲོད་པ"
 
 msgid "Integrated Tier"
-msgstr ""
+msgstr "བརྒྱུག་པའི་སྲོད་པ"
 
 msgid "Standard Tier"
-msgstr ""
+msgstr "སྲོད་པའི་སྤྱོས་པ"
 
 msgid "No peer connections available"
 msgstr "ལག་གདང་འབྲེལ་བ་མེད་པ།"
@@ -3354,7 +3354,7 @@ msgid "Unreachable"
 msgstr "འབྲེལ་ཐུབ་མེད་པ།"
 
 msgid "Most tests passing"
-msgstr ""
+msgstr "བརྒྱུག་པའི་གི་སྲོད་པ"
 
 msgid "Fast, High Capacity"
 msgstr "མྱུར་བ། ནུས་པོ་ཆེ་བ།"
@@ -3372,7 +3372,7 @@ msgid "Integrated"
 msgstr "མཉམ་འདྲེས་བྱུང་བ།"
 
 msgid "Configure Peer"
-msgstr ""
+msgstr "Peer སྲོད་བརྒྱུག་པ"
 
 msgid "Thresholds"
 msgstr "ཚད་གཞི།"
@@ -3616,7 +3616,7 @@ msgid "Click Shutdown and restart to install"
 msgstr "བཙོན་པ་དང་བསྐྱར་འགོ་ཚོགས་པར་གནས་སྣོན་བརྒྱུག་པར་རོགས།"
 
 msgid "Unable"
-msgstr ""
+msgstr "སྤྱོས་མེད"
 
 #, java-format
 msgid "{0}"
@@ -3961,7 +3961,7 @@ msgid "The total number of peers in our network database"
 msgstr "ང་ཚོའི་དྲ་ལམ་གནད་དོན་ནང་གི་རྒྱུན་དུ་བཙོན་པའི་ཚོགས་པའི་སྡོམ་གྲངས།"
 
 msgid "Total RouterInfos stored on disk"
-msgstr ""
+msgstr "བརྒྱུག་གི་བརྒྱུག་གི་སྲོད་པའི་སྲོད་པའི་གི་སྲོད་པ"
 
 msgid "Known"
 msgstr "ཤེས་པ།"
@@ -4203,13 +4203,13 @@ msgid "Select stored analysis"
 msgstr "ཉར་ཡོད་པའི་དབྱེད་ཞིབ་བཤོལ་གདམ་པ།"
 
 msgid "Review"
-msgstr ""
+msgstr "བརྒྱུག་པ"
 
 msgid "Run analysis on Floodfills only"
 msgstr "Floodfills ཙམ་ལ་དབྱེད་ཞིབ་བཤོལ་བ།"
 
 msgid "Start Scan"
-msgstr ""
+msgstr "བརྒྱུག་པ"
 
 msgid "Run analysis on all routers in NetDb"
 msgstr "NetDb ནང་གི་རོ་ཌེར་ཆ་ཚང་ལ་དབྱེད་ཞིབ་བཤོལ་བ།"
@@ -4500,7 +4500,7 @@ msgid "No local or transit tunnels currently active."
 msgstr "ད་ལོའི་ནང་ཁུག་ཡང་ན་གྲུང་ནེལ་ད་ལོའི་སྐར་འགོ་ཚུགས་པ་ད་ལོའི་སྐར་འགོ་ཚུགས་པ་མེད།"
 
 msgid "PRIVATE IP ADDRESS"
-msgstr ""
+msgstr "སྲོད་པ"
 
 msgid "Bandwidth Tiers"
 msgstr "བརྒྱུད་བཏོན་ཚད་གྱི་རིམ་པ།"
@@ -4513,7 +4513,7 @@ msgid "Inbound or outbound?"
 msgstr "ནང་འདྲེན་ཡང་ཕྱི་འདྲེན་?"
 
 msgid "In/Out"
-msgstr ""
+msgstr "དི/ཐུང"
 
 msgid "Gateway"
 msgstr "སྒུད་ཝེ།"
@@ -4631,7 +4631,7 @@ msgid "Browser launch at startup"
 msgstr "འགོ་ཚུགས་སྐབས་འགྲུབ་འཕེལ་བ།"
 
 msgid "I2P Router Console"
-msgstr ""
+msgstr "I2P བརྒྱུག་པ"
 
 msgid "Open Router Console in web browser at startup"
 msgstr "འགོ་ཚུགས་སྐབས་web འགྲུབ་འཕེལ་ནང་རོ་ཌེར་རོགས་སྒྱུར་བཞིན་པ་ཁ་ཕྱེ་བ།"
@@ -4724,7 +4724,7 @@ msgid "Advanced Network Configuration"
 msgstr "མཐོ་རིམ་དྲ་བ་རྒྱུད་འཛུགས"
 
 msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
-msgstr ""
+msgstr "I2Pསྲོད་པརྒྱུག་གི་སྤྱོས་པའི་གི་བརྒྱུག་གི་གི་སྲོད་པའི་མཐར་པམར་པ བརྒྱུག་པ."
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
 msgstr "དྲོན་བརྡ་བ། ཁྱེད་ཀྱི་དྲ་ལམ་ལ་རམ་འདེགས་(དྲ་ལམ་སྤེལ་བ)ནི་གོང་ཐོན་སྐུད་རྒྱུད་ཁྲི་ཚོ་བགོ་སྤྱོད་(སྐྱེལ་བའི་མྱུར་ཚད)གྱིས་གཏན་འཁེལ་བྱེད།"
@@ -4755,10 +4755,10 @@ msgstr "དྲོན་བརྟག"
 
 #, java-format
 msgid "You have configured I2P to share only {0} KBps."
-msgstr ""
+msgstr "I2Pསྲོད་པརྒྱུག་གི་གི་བརྒྱུག་མད་པ་གི་{0} KB/s མཐར་པམར་པརྒྱུག་གི་བརྒྱུག་གི་བརྒྱུག་མད་པ."
 
 msgid "I2P requires at least 12KBps to enable sharing. "
-msgstr ""
+msgstr "I2Pསཾ�ོད་པརྒྱུག་གི་སྤྱོས་པའི་གི་བརྒྱུག་གི་མད་པ་གི་མཐར་པ "
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
 msgstr "སྤེལ་བ་རྒྱུན་སྒྲིག་སྟེན་བྱེད་པར་བརྒྱུད་བཏོན་ཚད་མང་མཐའི་བརྒྱུན་སྒྲིག་སྟེན་བྱེད་པར་རོགས་སོ། "
@@ -5256,7 +5256,7 @@ msgid "Reseeding is the bootstrapping process used to find other routers when yo
 msgstr "རྒྱུན་དུ་བཙོན་པ་ནི་ཁྱེད་ཀྱིས་ཐོག་མར་ I2P སྒྲིག་བསྡུད་བྱེད་སྐབས་ཡང་ན་ཁྱེད་རང་གི་རོ་ཌེར་ལ་རོ་ཌེར་དྲན་ཐོ་ཉུང་དྲགས་པ་ལྷག་སྐབས་གཞན་རོ་ཌེར་འཚོལ་བར་བེད་སྤྱོད་བྱེད་པའི་སྒོ་ནས་འགོ་ཚུགས་པའི་བརྒྱུས་རིམ་ཞིག"
 
 msgid "To enable the configuration of reseed urls, activate the console's <a href=/help/advancedsettings>Advanced mode</a>."
-msgstr ""
+msgstr "བརྒྱུག་པའི་གི་སྲོད་པའི་གི་བརྒྱུག་གི་སྲོད་པའི་གི་བརྒྱུག་པའི་གི་སྲོད་པའི་གི་བརྒྱུག་པའི་གི་མཐར་པའི་གི་ <a href=/help/advancedsettings>སྤྱོས་པའི་གི་བརྒྱུག་པ</a> "
 
 msgid "Reseeding Configuration"
 msgstr "རྒྱུན་དུ་བཙོན་པའི་བཀོད་སྒྲིག"
@@ -5419,10 +5419,10 @@ msgid "Use the same sidebar on all pages"
 msgstr "ཤོག་ངོས་ཆ་ཚང་ལ་ཟུར་ངོས་ཕྲེང་རིང་གཅིག་པ་བེད་སྤྱོད་བྱོས།"
 
 msgid "Sticky sidebar"
-msgstr ""
+msgstr "གི་པུང"
 
 msgid "Enable conditional fixed sidebar"
-msgstr ""
+msgstr "རང་མཐོད་པའི་གི་གི་པུངང"
 
 msgid "config stats"
 msgstr "བཀོད་སྒྲིག་ཚད་རྩིས།"
@@ -7367,7 +7367,7 @@ msgid "Requested client leaseset"
 msgstr "བླང་བའི་ client leaseset"
 
 msgid "Remote"
-msgstr ""
+msgstr "བརྒྱུག་པ"
 
 msgid "network database router map"
 msgstr "དྲ་བའི་གཞི་གྲངས་རོ་ཌེར་ས་ཁྲ།"
@@ -7431,7 +7431,7 @@ msgid "Information &amp; Diagnostics"
 msgstr ""
 
 msgid "Customize"
-msgstr ""
+msgstr "སྲོད་པ"
 
 msgid "statistics"
 msgstr "སྡོམ་རྟགས།"
@@ -7604,7 +7604,7 @@ msgid "Browser Setup"
 msgstr "བརའུ་སར་སྒྲིག་འཛུགས།"
 
 msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. "
-msgstr ""
+msgstr "I2Pདོག་གི་བརྒྱུག་པའི་སྤྱོས་པའི་གི་བརྒྱུག་གི་སྲོད་པའི་གི་མཐར་པའི་གི་བརྒྱུག་པའི་གི་བརྒྱུག་པར་བརྒྱུག་གི་བརྒྱུག་གི་སྲོད་པ <code>127.0.0.1 port 4444</code> སྲོད་པའི་གི་བརྒྱུག་པར་བརྒྱུག་གི་བརྒྱུག་པའི་གི་སྲོད་པའི་གི་སྤྱོས་པ <b>HTTP</b> སྲོད་པའི་གི་བརྒྱུག་པར་བརྒྱུག་གི་བརྒྱུག་པའི་གི་གི་བརྒྱུག་པར་བརྒྱུག་པའི་གི་བརྒྱུག་པའི་གི་མཐར་པའི་གི་བརྒྱུག་པ <code>127.0.0.1 port 4444</code> བརྒྱུག་པར་བརྒྱུག་གི་སྲོད་པའི་གི་བརྒྱུག་པར་བརྒྱུག་པའི་གི་བརྒྱུག་པ "
 
 msgid "Welcome to I2P+!"
 msgstr "I2P+ ལ་དགའ་བསུ་ཞུ།"
@@ -7613,7 +7613,7 @@ msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) y
 msgstr "ཁྱེད་ཀྱིས་ I2P+ འགོ་ཚུགས་སྐབས་ཁྱེད་ཀྱི་རོ་ཌེར་དྲ་བར་འཇུག་པ་དང་། གཞན་པའི་ peers འཚོལ་བར་སྐར་མ་ཁ་ཤས་འགོར་སྲིད་པས་བཟོད་སྒོམ་བྱོས་རོགས།"
 
 msgid "Once green stars are indicated next to your Service Tunnels, there is a wide variety of things you can do with I2P+."
-msgstr ""
+msgstr "I2P+དི་པའི་སྤྱོས་པ གི་མཐར་པའི་གི་བརྒྱུག་པའི་གི་བརྒྱུག་གི་སྲོད་པའི་གི་བརྒྱུག་གི་བརྒྱུག་པའི་གི་སྲོད་པའི་གི་མཐར་པ་གི་བརྒྱུག་གི་སྲོད་པའི་གི་བརྒྱུག་པའི་གི་བརྒྱུག་པ "
 
 msgid "Unknown Wizard page"
 msgstr "མ་ཤེས་པའི་ Wizard ཤོག་ངོས།"

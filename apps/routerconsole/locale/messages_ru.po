@@ -118,7 +118,7 @@ msgid "Total peers in our NetDb"
 msgstr "Общее количество пиров в нашей NetDb"
 
 msgid "Total number of threads in use"
-msgstr ""
+msgstr "Общее количество используемых потоков"
 
 msgid "Peers without a published IP address"
 msgstr "Сверстники без опубликованного IP-адреса"
@@ -2426,7 +2426,7 @@ msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
 msgstr "Ваш браузер не настроен должным образом для использования HTTP-прокси {0}"
 
 msgid "Errors"
-msgstr ""
+msgstr "Ошибки"
 
 msgid "URL"
 msgstr "URL"
@@ -2706,16 +2706,16 @@ msgid "Select the field to search on"
 msgstr ""
 
 msgid "e.g. cn hk"
-msgstr ""
+msgstr "например cn hk"
 
 msgid "MTU"
 msgstr "MTU"
 
 msgid "Enter search value here"
-msgstr ""
+msgstr "Введите значение поиска здесь"
 
 msgid "Router not found"
-msgstr ""
+msgstr "Маршрутизатор не найден"
 
 msgid "No routers with"
 msgstr "Нет маршрутизаторов с"
@@ -2853,10 +2853,10 @@ msgid "Count"
 msgstr "Количество"
 
 msgid "Under 12 KB/s"
-msgstr ""
+msgstr "Менее 12 КБ/с"
 
 msgid "Over 2048 KB/s"
-msgstr ""
+msgstr "Более 2048 КБ/с"
 
 msgid "Bandwidth Tier"
 msgstr "Уровень пропускной способности"
@@ -2929,7 +2929,7 @@ msgid "Hostname"
 msgstr "Имя хоста"
 
 msgid "Whois"
-msgstr ""
+msgstr "Whois"
 
 msgid "direct"
 msgstr "прямой"
@@ -2953,7 +2953,7 @@ msgid "Show all routers with this port in the NetDb"
 msgstr "Показать все маршрутизаторы с этим портом в NetDb"
 
 msgid "Maximum Transmission Unit"
-msgstr ""
+msgstr "Максимальная единица передачи"
 
 msgid "Show all routers with this MTU in the NetDb"
 msgstr ""
@@ -2962,7 +2962,7 @@ msgid "Addresses"
 msgstr "Адреса"
 
 msgid "Introducers"
-msgstr ""
+msgstr "Вводящие"
 
 msgid "Network Id"
 msgstr "Идентификатор сети"
@@ -3022,16 +3022,16 @@ msgid "Local"
 msgstr "Локальный"
 
 msgid "Fast Tier"
-msgstr ""
+msgstr "Быстрый уровень"
 
 msgid "High Capacity Tier"
-msgstr ""
+msgstr "Уровень высокой емкости"
 
 msgid "Integrated Tier"
-msgstr ""
+msgstr "Интегрированный уровень"
 
 msgid "Standard Tier"
-msgstr ""
+msgstr "Стандартный уровень"
 
 msgid "No peer connections available"
 msgstr "Нет доступных одноранговых соединений"
@@ -3380,7 +3380,7 @@ msgid "Unreachable"
 msgstr "Недоступные"
 
 msgid "Most tests passing"
-msgstr ""
+msgstr "Большинство тестов пройдено"
 
 msgid "Fast, High Capacity"
 msgstr "Быстрые, высокоемкие"
@@ -3398,7 +3398,7 @@ msgid "Integrated"
 msgstr "Интегрированные"
 
 msgid "Configure Peer"
-msgstr ""
+msgstr "Настроить пир"
 
 msgid "Thresholds"
 msgstr "Пороговые значения"
@@ -3648,7 +3648,7 @@ msgid "Click Shutdown and restart to install"
 msgstr "Остановите и снова запустите I2P-маршрутизатор для установки"
 
 msgid "Unable"
-msgstr ""
+msgstr "Недоступно"
 
 #, java-format
 msgid "{0}"
@@ -3993,7 +3993,7 @@ msgid "The total number of peers in our network database"
 msgstr "Общее число узлов в нашей сетевой БД"
 
 msgid "Total RouterInfos stored on disk"
-msgstr ""
+msgstr "Всего RouterInfos сохранено на диске"
 
 msgid "Known"
 msgstr "Известные"
@@ -4239,13 +4239,13 @@ msgid "Select stored analysis"
 msgstr "Выберите сохраненный анализ"
 
 msgid "Review"
-msgstr ""
+msgstr "Просмотр"
 
 msgid "Run analysis on Floodfills only"
 msgstr "Анализ запуска только на заводках"
 
 msgid "Start Scan"
-msgstr ""
+msgstr "Начать сканирование"
 
 msgid "Run analysis on all routers in NetDb"
 msgstr "Запустить анализ на всех маршрутизаторах в NetDb"
@@ -4536,7 +4536,7 @@ msgid "No local or transit tunnels currently active."
 msgstr "Нет местных или транзитных туннелей в настоящее время."
 
 msgid "PRIVATE IP ADDRESS"
-msgstr ""
+msgstr "ЧАСТНЫЙ IP-АДРЕС"
 
 msgid "Bandwidth Tiers"
 msgstr "Уровни пропускной способности"
@@ -4549,7 +4549,7 @@ msgid "Inbound or outbound?"
 msgstr "Входящий или исходящий?"
 
 msgid "In/Out"
-msgstr ""
+msgstr "Вход/Выход"
 
 msgid "Gateway"
 msgstr "Шлюз"
@@ -4667,7 +4667,7 @@ msgid "Browser launch at startup"
 msgstr "Запуск браузера при старте I2P"
 
 msgid "I2P Router Console"
-msgstr ""
+msgstr "Консоль маршрутизатора I2P"
 
 msgid "Open Router Console in web browser at startup"
 msgstr "Открывать консоль маршрутизатора в веб-браузере при старте I2P"
@@ -4760,7 +4760,7 @@ msgid "Advanced Network Configuration"
 msgstr "Дополнительные сетевые настройки"
 
 msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
-msgstr ""
+msgstr "I2P будет работать лучше всего, если вы настроите скорости так, чтобы они соответствовали скорости вашего интернет-соединения."
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
 msgstr "Примечание. Ваш вклад в сеть (доля сети) определяется распределением восходящей полосы пропускания (скоростью загрузки)."
@@ -4791,10 +4791,10 @@ msgstr "ПРИМЕЧАНИЕ"
 
 #, java-format
 msgid "You have configured I2P to share only {0} KBps."
-msgstr ""
+msgstr "Вы настроили I2P для совместного использования только {0} КБ/с."
 
 msgid "I2P requires at least 12KBps to enable sharing. "
-msgstr ""
+msgstr "I2P требуется не менее 12 КБ/с для включения совместного использования. "
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
 msgstr "Пожалуйста, увеличьте долю транзитного трафика, указав бóльшую пропускную способность"
@@ -5292,7 +5292,7 @@ msgid "Reseeding is the bootstrapping process used to find other routers when yo
 msgstr "Начальная загрузка (англ. reseeding) - процесс, используемый для нахождения других маршрутизаторов, когда вы впервые установили I2P, или когда ваш маршрутизатор имеет слишком мало данных о других маршрутизаторах."
 
 msgid "To enable the configuration of reseed urls, activate the console's <a href=/help/advancedsettings>Advanced mode</a>."
-msgstr ""
+msgstr "Для включения конфигурации URL reseed, активируйте <a href=/help/advancedsettings>расширенный режим</a> в консоли."
 
 msgid "Reseeding Configuration"
 msgstr "Конфигурация начальной загрузки"
@@ -5455,10 +5455,10 @@ msgid "Use the same sidebar on all pages"
 msgstr "Использовать ту же боковую панель на всех страницах"
 
 msgid "Sticky sidebar"
-msgstr ""
+msgstr "Фиксированная боковая панель"
 
 msgid "Enable conditional fixed sidebar"
-msgstr ""
+msgstr "Включить условную фиксированную боковую панель"
 
 msgid "config stats"
 msgstr "конфигурация статистики"
@@ -7403,7 +7403,7 @@ msgid "Requested client leaseset"
 msgstr "Запрошенный набор аренды клиента"
 
 msgid "Remote"
-msgstr ""
+msgstr "Удаленный"
 
 msgid "network database router map"
 msgstr "Карта роутера базы данных сети"
@@ -7467,7 +7467,7 @@ msgid "Information &amp; Diagnostics"
 msgstr "Информация и диагностика"
 
 msgid "Customize"
-msgstr ""
+msgstr "Настроить"
 
 msgid "statistics"
 msgstr "статистика"
@@ -7640,7 +7640,7 @@ msgid "Browser Setup"
 msgstr "Настройка браузера"
 
 msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. "
-msgstr ""
+msgstr "Для доступа к веб-сайтам, размещенным в сети I2P, и опционального использования стандартного outproxy для подключения к веб-сайтам в clearnet, вам необходимо настроить браузер на использование I2P+ <b>HTTP</b> прокси, который по умолчанию работает на <code>127.0.0.1 port 4444</code>. "
 
 msgid "Welcome to I2P+!"
 msgstr "Добро пожаловать в I2P+!"
@@ -7649,7 +7649,7 @@ msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) y
 msgstr "После запуска I2P может потребоваться несколько минут для завершения процесса интеграции в сеть и поиска дополнительных узлов. Будьте терпеливы."
 
 msgid "Once green stars are indicated next to your Service Tunnels, there is a wide variety of things you can do with I2P+."
-msgstr ""
+msgstr "Как только рядом с вашими служебными туннелями будут показаны зеленые звезды, можно сделать множество вещей с I2P+."
 
 msgid "Unknown Wizard page"
 msgstr "Неизвестная страница мастера"

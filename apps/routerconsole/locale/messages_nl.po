@@ -116,7 +116,7 @@ msgid "Total peers in our NetDb"
 msgstr "Totaal aantal peers in onze NetDb"
 
 msgid "Total number of threads in use"
-msgstr ""
+msgstr "Totaal aantal actieve threads"
 
 msgid "Peers without a published IP address"
 msgstr "Peers zonder gepubliceerd IP-adres"
@@ -2418,7 +2418,7 @@ msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
 msgstr "Je browser is niet juist geconfigureerd om de HTTP proxy op {0} te gebruiken"
 
 msgid "Errors"
-msgstr ""
+msgstr "Fouten"
 
 msgid "URL"
 msgstr "URL"
@@ -2698,16 +2698,16 @@ msgid "Select the field to search on"
 msgstr ""
 
 msgid "e.g. cn hk"
-msgstr ""
+msgstr "bijv. cn hk"
 
 msgid "MTU"
 msgstr "MTU"
 
 msgid "Enter search value here"
-msgstr ""
+msgstr "Voer zoekwaarde hier in"
 
 msgid "Router not found"
-msgstr ""
+msgstr "Router niet gevonden"
 
 msgid "No routers with"
 msgstr "Geen routers met"
@@ -2845,10 +2845,10 @@ msgid "Count"
 msgstr "Aantal"
 
 msgid "Under 12 KB/s"
-msgstr ""
+msgstr "Onder 12 KB/s"
 
 msgid "Over 2048 KB/s"
-msgstr ""
+msgstr "Boven 2048 KB/s"
 
 msgid "Bandwidth Tier"
 msgstr "Bandbreedtelaag"
@@ -2921,7 +2921,7 @@ msgid "Hostname"
 msgstr "Hostnaam"
 
 msgid "Whois"
-msgstr ""
+msgstr "Whois"
 
 msgid "direct"
 msgstr "direct"
@@ -2945,7 +2945,7 @@ msgid "Show all routers with this port in the NetDb"
 msgstr "Toon alle routers met deze poort in de NetDb"
 
 msgid "Maximum Transmission Unit"
-msgstr ""
+msgstr "Maximum Transmission Unit"
 
 msgid "Show all routers with this MTU in the NetDb"
 msgstr ""
@@ -2954,7 +2954,7 @@ msgid "Addresses"
 msgstr "Adressen"
 
 msgid "Introducers"
-msgstr ""
+msgstr "Introducteurs"
 
 msgid "Network Id"
 msgstr "Netwerk Id"
@@ -3014,16 +3014,16 @@ msgid "Local"
 msgstr "Lokaal"
 
 msgid "Fast Tier"
-msgstr ""
+msgstr "Snel niveau"
 
 msgid "High Capacity Tier"
-msgstr ""
+msgstr "Hoog capaciteitsniveau"
 
 msgid "Integrated Tier"
-msgstr ""
+msgstr "Geïntegreerd niveau"
 
 msgid "Standard Tier"
-msgstr ""
+msgstr "Standaardniveau"
 
 msgid "No peer connections available"
 msgstr "Geen peer-verbindingen beschikbaar"
@@ -3367,7 +3367,7 @@ msgid "Unreachable"
 msgstr "Onbereikbaar"
 
 msgid "Most tests passing"
-msgstr ""
+msgstr "Meeste tests geslaagd"
 
 msgid "Fast, High Capacity"
 msgstr "Snel, Hoge Capaciteit"
@@ -3385,7 +3385,7 @@ msgid "Integrated"
 msgstr "Geïntegreerd"
 
 msgid "Configure Peer"
-msgstr ""
+msgstr "Peer configureren"
 
 msgid "Thresholds"
 msgstr "Drempelwaarden"
@@ -3632,7 +3632,7 @@ msgid "Click Shutdown and restart to install"
 msgstr "Klik Afsluiten and herstart om te installeren"
 
 msgid "Unable"
-msgstr ""
+msgstr "Niet beschikbaar"
 
 #, java-format
 msgid "{0}"
@@ -3977,7 +3977,7 @@ msgid "The total number of peers in our network database"
 msgstr "Het totaal aantal peers in onze netwerkdatabase"
 
 msgid "Total RouterInfos stored on disk"
-msgstr ""
+msgstr "Totaal RouterInfos opgeslagen op schijf"
 
 msgid "Known"
 msgstr "Bekend"
@@ -4221,13 +4221,13 @@ msgid "Select stored analysis"
 msgstr "Selecteer opgeslagen analyse"
 
 msgid "Review"
-msgstr ""
+msgstr "Beoordeling"
 
 msgid "Run analysis on Floodfills only"
 msgstr "Voer de analyse alleen uit op volstortingen"
 
 msgid "Start Scan"
-msgstr ""
+msgstr "Scan starten"
 
 msgid "Run analysis on all routers in NetDb"
 msgstr "Voer een analyse uit op alle routers in NetDb"
@@ -4518,7 +4518,7 @@ msgid "No local or transit tunnels currently active."
 msgstr "Momenteel zijn er geen lokale of transittunnels actief."
 
 msgid "PRIVATE IP ADDRESS"
-msgstr ""
+msgstr "PRIVÉ IP-ADRES"
 
 msgid "Bandwidth Tiers"
 msgstr "Bandbreedteniveaus"
@@ -4531,7 +4531,7 @@ msgid "Inbound or outbound?"
 msgstr "Inkomend of uitgaand?"
 
 msgid "In/Out"
-msgstr ""
+msgstr "In/Uit"
 
 msgid "Gateway"
 msgstr "Gateway"
@@ -4649,7 +4649,7 @@ msgid "Browser launch at startup"
 msgstr "Browser start bij opstarten"
 
 msgid "I2P Router Console"
-msgstr ""
+msgstr "I2P Router Console"
 
 msgid "Open Router Console in web browser at startup"
 msgstr "Open Router Console in web browser bij opstarten"
@@ -4742,7 +4742,7 @@ msgid "Advanced Network Configuration"
 msgstr "Geavanceerde netwerkconfiguratie"
 
 msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
-msgstr ""
+msgstr "I2P werkt het beste als u uw tarieven instelt zodat ze overeenkomen met de snelheid van uw internetverbinding."
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
 msgstr "Opmerking: Uw bijdrage aan het netwerk (netwerkaandeel) wordt bepaald door de toewijzing van upstream-bandbreedte (uploadsnelheid)."
@@ -4773,10 +4773,10 @@ msgstr "OPMERKING"
 
 #, java-format
 msgid "You have configured I2P to share only {0} KBps."
-msgstr ""
+msgstr "U heeft I2P geconfigureerd om slechts {0} KB/s te delen."
 
 msgid "I2P requires at least 12KBps to enable sharing. "
-msgstr ""
+msgstr "I2P vereist minimaal 12 KB/s om delen te activeren. "
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
 msgstr "Schakel sharing in (deelname aan tunnels) door meer bandbreedte toe te kennen."
@@ -5274,7 +5274,7 @@ msgid "Reseeding is the bootstrapping process used to find other routers when yo
 msgstr "Reseeden is het opstart proces dat gebruikt wordt om andere routers te vinden wanneer je I2P voor het eerst installeert, of wanneer je router te weinig router referenties heeft."
 
 msgid "To enable the configuration of reseed urls, activate the console's <a href=/help/advancedsettings>Advanced mode</a>."
-msgstr ""
+msgstr "Om de configuratie van reseed URL's te activeren, activeer <a href=/help/advancedsettings>geavanceerde modus</a> in de console."
 
 msgid "Reseeding Configuration"
 msgstr "Reseeden Configuratie"
@@ -5437,10 +5437,10 @@ msgid "Use the same sidebar on all pages"
 msgstr "Gebruik dezelfde zijbalk op alle pagina's"
 
 msgid "Sticky sidebar"
-msgstr ""
+msgstr "Vaste zijbalk"
 
 msgid "Enable conditional fixed sidebar"
-msgstr ""
+msgstr "Voorwaardelijke vaste zijbalk inschakelen"
 
 msgid "config stats"
 msgstr "configureer statistieken"
@@ -7385,7 +7385,7 @@ msgid "Requested client leaseset"
 msgstr "Gevraagde client leaseset"
 
 msgid "Remote"
-msgstr ""
+msgstr "Extern"
 
 msgid "network database router map"
 msgstr "Netwerkdatabase-routerkaart"
@@ -7449,7 +7449,7 @@ msgid "Information &amp; Diagnostics"
 msgstr "Informatie"
 
 msgid "Customize"
-msgstr ""
+msgstr "Aanpassen"
 
 msgid "statistics"
 msgstr "statistieken"
@@ -7622,7 +7622,7 @@ msgid "Browser Setup"
 msgstr "Browserinstellingen"
 
 msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. "
-msgstr ""
+msgstr "Om toegang te krijgen tot websites die op het I2P-netwerk worden gehost en optioneel de standaard outproxy te gebruiken om verbinding te maken met websites op clearnet, moet u uw browser configureren om de I2P+ <b>HTTP</b> proxy te gebruiken, die standaard draait op <code>127.0.0.1 poort 4444</code>. "
 
 msgid "Welcome to I2P+!"
 msgstr "Welkom bij I2P!"
@@ -7631,7 +7631,7 @@ msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) y
 msgstr "Wanneer u I2P start, kan het een paar minuten duren voordat uw router in het netwerk is opgestart (geïntegreerd) en extra peers zijn gevonden, dus wees geduldig."
 
 msgid "Once green stars are indicated next to your Service Tunnels, there is a wide variety of things you can do with I2P+."
-msgstr ""
+msgstr "Zodra de groene sterren naast uw Servicetunnels zijn aangegeven, is er een grote verscheidenheid aan dingen die u met I2P+ kunt doen."
 
 msgid "Unknown Wizard page"
 msgstr "Onbekende wizardpagina"

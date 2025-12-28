@@ -114,7 +114,7 @@ msgid "Total peers in our NetDb"
 msgstr "Tổng số đồng nghiệp trong NetDb của chúng tôi"
 
 msgid "Total number of threads in use"
-msgstr ""
+msgstr "Tổng số lượng luồng đang sử dụng"
 
 msgid "Peers without a published IP address"
 msgstr "Các máy ngang hàng không có địa chỉ IP được công bố"
@@ -2410,7 +2410,7 @@ msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
 msgstr "Trình duyệt của bạn không được cấu hình đúng cách để sử dụng proxy HTTP tại {0}"
 
 msgid "Errors"
-msgstr ""
+msgstr "Lỗi"
 
 msgid "URL"
 msgstr "Đường dẫn"
@@ -2690,16 +2690,16 @@ msgid "Select the field to search on"
 msgstr ""
 
 msgid "e.g. cn hk"
-msgstr ""
+msgstr "ví dụ. cn hk"
 
 msgid "MTU"
 msgstr "MTU"
 
 msgid "Enter search value here"
-msgstr ""
+msgstr "Nhập giá trị tìm kiếm ở đây"
 
 msgid "Router not found"
-msgstr ""
+msgstr "Không tìm thấy router"
 
 msgid "No routers with"
 msgstr "Không có bộ định tuyến với"
@@ -2837,10 +2837,10 @@ msgid "Count"
 msgstr "Số lượng"
 
 msgid "Under 12 KB/s"
-msgstr ""
+msgstr "Dưới 12 KB/s"
 
 msgid "Over 2048 KB/s"
-msgstr ""
+msgstr "Trên 2048 KB/s"
 
 msgid "Bandwidth Tier"
 msgstr "Cấp băng thông"
@@ -2913,7 +2913,7 @@ msgid "Hostname"
 msgstr "Tên máy chủ"
 
 msgid "Whois"
-msgstr ""
+msgstr "Whois"
 
 msgid "direct"
 msgstr "trực tiếp"
@@ -2937,7 +2937,7 @@ msgid "Show all routers with this port in the NetDb"
 msgstr "Hiển thị tất cả các bộ định tuyến có cổng này trong NetDb"
 
 msgid "Maximum Transmission Unit"
-msgstr ""
+msgstr "Đơn vị truyền tải tối đa"
 
 msgid "Show all routers with this MTU in the NetDb"
 msgstr ""
@@ -2946,7 +2946,7 @@ msgid "Addresses"
 msgstr "Địa chỉ"
 
 msgid "Introducers"
-msgstr ""
+msgstr "Người giới thiệu"
 
 msgid "Network Id"
 msgstr "ID mạng"
@@ -3006,16 +3006,16 @@ msgid "Local"
 msgstr "Địa phương"
 
 msgid "Fast Tier"
-msgstr ""
+msgstr "Tầng nhanh"
 
 msgid "High Capacity Tier"
-msgstr ""
+msgstr "Tầng dung lượng cao"
 
 msgid "Integrated Tier"
-msgstr ""
+msgstr "Tầng tích hợp"
 
 msgid "Standard Tier"
-msgstr ""
+msgstr "Tầng tiêu chuẩn"
 
 msgid "No peer connections available"
 msgstr "Không có kết nối ngang hàng"
@@ -3354,7 +3354,7 @@ msgid "Unreachable"
 msgstr "Không thể truy cập"
 
 msgid "Most tests passing"
-msgstr ""
+msgstr "Đa số các bài kiểm tra vượt qua"
 
 msgid "Fast, High Capacity"
 msgstr "Nhanh, Dung lượng cao"
@@ -3372,7 +3372,7 @@ msgid "Integrated"
 msgstr "Tích hợp"
 
 msgid "Configure Peer"
-msgstr ""
+msgstr "Cấu hình peer"
 
 msgid "Thresholds"
 msgstr "Ngưỡng"
@@ -3616,7 +3616,7 @@ msgid "Click Shutdown and restart to install"
 msgstr "Nhấp vào Shutdown và khởi động lại để cài đặt"
 
 msgid "Unable"
-msgstr ""
+msgstr "Không thể"
 
 #, java-format
 msgid "{0}"
@@ -3961,7 +3961,7 @@ msgid "The total number of peers in our network database"
 msgstr "Tổng số đồng nghiệp trong cơ sở dữ liệu mạng của chúng tôi"
 
 msgid "Total RouterInfos stored on disk"
-msgstr ""
+msgstr "Tổng số RouterInfos được lưu trên đĩa"
 
 msgid "Known"
 msgstr "Được biết"
@@ -4203,13 +4203,13 @@ msgid "Select stored analysis"
 msgstr "Chọn phân tích đã lưu"
 
 msgid "Review"
-msgstr ""
+msgstr "Xem lại"
 
 msgid "Run analysis on Floodfills only"
 msgstr "Chỉ chạy phân tích trên vùng lấp lũ"
 
 msgid "Start Scan"
-msgstr ""
+msgstr "Bắt đầu quét"
 
 msgid "Run analysis on all routers in NetDb"
 msgstr "Chạy phân tích trên tất cả các bộ định tuyến trong NetDb"
@@ -4500,7 +4500,7 @@ msgid "No local or transit tunnels currently active."
 msgstr "Hiện không có đường hầm cục bộ hoặc chuyển tuyến nào đang hoạt động."
 
 msgid "PRIVATE IP ADDRESS"
-msgstr ""
+msgstr "ĐỊA CHỦ RIÊNG TƯ"
 
 msgid "Bandwidth Tiers"
 msgstr "Tầng băng thông"
@@ -4513,7 +4513,7 @@ msgid "Inbound or outbound?"
 msgstr "Vào hay ra?"
 
 msgid "In/Out"
-msgstr ""
+msgstr "Vào/Ra"
 
 msgid "Gateway"
 msgstr "Cổng"
@@ -4631,7 +4631,7 @@ msgid "Browser launch at startup"
 msgstr "Khởi chạy trình duyệt khi khởi động"
 
 msgid "I2P Router Console"
-msgstr ""
+msgstr "Bảng điều khiển Router I2P"
 
 msgid "Open Router Console in web browser at startup"
 msgstr "Mở Bảng điều khiển Bộ định tuyến trong trình duyệt web khi khởi động"
@@ -4724,7 +4724,7 @@ msgid "Advanced Network Configuration"
 msgstr "Cấu hình mạng nâng cao"
 
 msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
-msgstr ""
+msgstr "I2P sẽ hoạt động tốt nhất nếu bạn cấu hình tỷ lệ để phù hợp với tốc độ kết nối internet của bạn."
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
 msgstr "Lưu ý: Đóng góp của bạn cho mạng (chia sẻ mạng) được xác định bằng việc phân bổ băng thông ngược dòng (tốc độ tải lên)."
@@ -4755,10 +4755,10 @@ msgstr "LƯU Ý"
 
 #, java-format
 msgid "You have configured I2P to share only {0} KBps."
-msgstr ""
+msgstr "Bạn đã cấu hình I2P để chỉ chia sẻ {0} KB/s."
 
 msgid "I2P requires at least 12KBps to enable sharing. "
-msgstr ""
+msgstr "I2P yêu cầu tối thiểu 12 KB/s để bật chia sẻ. "
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
 msgstr "Vui lòng cho phép chia sẻ (tham gia vào các đường hầm) bằng cách định cấu hình nhiều băng thông hơn. "
@@ -5256,7 +5256,7 @@ msgid "Reseeding is the bootstrapping process used to find other routers when yo
 msgstr "Reseeding là quá trình khởi động được sử dụng để tìm các bộ định tuyến khác khi bạn cài đặt I2P lần đầu tiên hoặc khi bộ định tuyến của bạn còn lại quá ít tham chiếu bộ định tuyến."
 
 msgid "To enable the configuration of reseed urls, activate the console's <a href=/help/advancedsettings>Advanced mode</a>."
-msgstr ""
+msgstr "Để kích hoạt cấu hình URL reseed, hãy kích hoạt <a href=/help/advancedsettings>chế độ nâng cao</a> trong bảng điều khiển."
 
 msgid "Reseeding Configuration"
 msgstr "Cấu hình lại"
@@ -5419,10 +5419,10 @@ msgid "Use the same sidebar on all pages"
 msgstr "Sử dụng cùng một thanh bên trên tất cả các trang"
 
 msgid "Sticky sidebar"
-msgstr ""
+msgstr "Thanh bên cố định"
 
 msgid "Enable conditional fixed sidebar"
-msgstr ""
+msgstr "Bật thanh bên cố định có điều kiện"
 
 msgid "config stats"
 msgstr "Cấu hình thống kê"
@@ -7367,7 +7367,7 @@ msgid "Requested client leaseset"
 msgstr "Bộ hợp đồng thuê khách hàng được yêu cầu"
 
 msgid "Remote"
-msgstr ""
+msgstr "Từ xa"
 
 msgid "network database router map"
 msgstr "Bản đồ router cơ sở dữ liệu mạng"
@@ -7431,7 +7431,7 @@ msgid "Information &amp; Diagnostics"
 msgstr "Thông tin"
 
 msgid "Customize"
-msgstr ""
+msgstr "Tùy chỉnh"
 
 msgid "statistics"
 msgstr "thống kê"
@@ -7604,7 +7604,7 @@ msgid "Browser Setup"
 msgstr "Thiết lập trình duyệt"
 
 msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. "
-msgstr ""
+msgstr "Để truy cập các trang web được lưu trữ trên mạng I2P và tùy chọn sử dụng outproxy mặc định để kết nối đến các trang web trên clearnet, bạn cần cấu hình trình duyệt của mình để sử dụng proxy <b>HTTP</b> của I2P+, chạy mặc định trên <code>127.0.0.1 port 4444</code>. "
 
 msgid "Welcome to I2P+!"
 msgstr "Chào mừng đến với I2P+"
@@ -7613,7 +7613,7 @@ msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) y
 msgstr "Khi bạn bắt đầu I2P, có thể mất vài phút để bootstrap (tích hợp) bộ định tuyến của bạn vào mạng và tìm thêm các đồng nghiệp, vì vậy hãy kiên nhẫn."
 
 msgid "Once green stars are indicated next to your Service Tunnels, there is a wide variety of things you can do with I2P+."
-msgstr ""
+msgstr "Khi ngôi sao xanh được hiển thị cạnh các Dịch vụ Tunnels của bạn, có rất nhiều thứ bạn có thể làm với I2P+."
 
 msgid "Unknown Wizard page"
 msgstr "Trang Wizard không xác định"

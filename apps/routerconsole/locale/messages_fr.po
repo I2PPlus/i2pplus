@@ -116,7 +116,7 @@ msgid "Total peers in our NetDb"
 msgstr "Total des pairs dans notre NetDb"
 
 msgid "Total number of threads in use"
-msgstr ""
+msgstr "Nombre total de threads en cours d'utilisation"
 
 msgid "Peers without a published IP address"
 msgstr "Pairs sans adresse IP publiée"
@@ -2418,7 +2418,7 @@ msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
 msgstr "Votre navigateur n'est pas configuré correctement pour utiliser le mandataire HTTP à {0}"
 
 msgid "Errors"
-msgstr ""
+msgstr "Erreurs"
 
 msgid "URL"
 msgstr "URL"
@@ -2698,16 +2698,16 @@ msgid "Select the field to search on"
 msgstr ""
 
 msgid "e.g. cn hk"
-msgstr ""
+msgstr "ex. cn hk"
 
 msgid "MTU"
 msgstr "MTU"
 
 msgid "Enter search value here"
-msgstr ""
+msgstr "Entrez la valeur de recherche ici"
 
 msgid "Router not found"
-msgstr ""
+msgstr "Routeur introuvable"
 
 msgid "No routers with"
 msgstr "Aucun routeur avec"
@@ -2845,10 +2845,10 @@ msgid "Count"
 msgstr "Nombre"
 
 msgid "Under 12 KB/s"
-msgstr ""
+msgstr "Moins de 12 KB/s"
 
 msgid "Over 2048 KB/s"
-msgstr ""
+msgstr "Plus de 2048 KB/s"
 
 msgid "Bandwidth Tier"
 msgstr "Niveau de bande passante"
@@ -2921,7 +2921,7 @@ msgid "Hostname"
 msgstr "Nom d'hôte"
 
 msgid "Whois"
-msgstr ""
+msgstr "Whois"
 
 msgid "direct"
 msgstr "direct"
@@ -2945,7 +2945,7 @@ msgid "Show all routers with this port in the NetDb"
 msgstr "Afficher tous les routeurs dotés de ce port dans NetDb"
 
 msgid "Maximum Transmission Unit"
-msgstr ""
+msgstr "Unité de transmission maximale"
 
 msgid "Show all routers with this MTU in the NetDb"
 msgstr ""
@@ -2954,7 +2954,7 @@ msgid "Addresses"
 msgstr "Adresses"
 
 msgid "Introducers"
-msgstr ""
+msgstr "Introducers"
 
 msgid "Network Id"
 msgstr "ID réseau"
@@ -3014,16 +3014,16 @@ msgid "Local"
 msgstr "Locale"
 
 msgid "Fast Tier"
-msgstr ""
+msgstr "Niveau rapide"
 
 msgid "High Capacity Tier"
-msgstr ""
+msgstr "Niveau de haute capacité"
 
 msgid "Integrated Tier"
-msgstr ""
+msgstr "Niveau intégré"
 
 msgid "Standard Tier"
-msgstr ""
+msgstr "Niveau standard"
 
 msgid "No peer connections available"
 msgstr "Aucune connexion homologue disponible"
@@ -3367,7 +3367,7 @@ msgid "Unreachable"
 msgstr "Inaccessible"
 
 msgid "Most tests passing"
-msgstr ""
+msgstr "La plupart des tests réussissent"
 
 msgid "Fast, High Capacity"
 msgstr "Rapide, à grande capacité"
@@ -3385,7 +3385,7 @@ msgid "Integrated"
 msgstr "Intégrés"
 
 msgid "Configure Peer"
-msgstr ""
+msgstr "Configurer le pair"
 
 msgid "Thresholds"
 msgstr "Seuils"
@@ -3632,7 +3632,7 @@ msgid "Click Shutdown and restart to install"
 msgstr "Cliquer sur Fermeture et redémarrer pour installer"
 
 msgid "Unable"
-msgstr ""
+msgstr "Impossible"
 
 #, java-format
 msgid "{0}"
@@ -3977,7 +3977,7 @@ msgid "The total number of peers in our network database"
 msgstr "Le nombre total de pairs dans notre base de données de réseau"
 
 msgid "Total RouterInfos stored on disk"
-msgstr ""
+msgstr "Total des RouterInfos stockés sur le disque"
 
 msgid "Known"
 msgstr "Connus"
@@ -4221,13 +4221,13 @@ msgid "Select stored analysis"
 msgstr "Sélectionnez l'analyse stockée"
 
 msgid "Review"
-msgstr ""
+msgstr "Révision"
 
 msgid "Run analysis on Floodfills only"
 msgstr "Exécuter l'analyse sur les remplissages uniquement"
 
 msgid "Start Scan"
-msgstr ""
+msgstr "Démarrer le scan"
 
 msgid "Run analysis on all routers in NetDb"
 msgstr "Exécuter une analyse sur tous les routeurs dans NetDb"
@@ -4518,7 +4518,7 @@ msgid "No local or transit tunnels currently active."
 msgstr "Aucun tunnel local ou de transit actuellement actif."
 
 msgid "PRIVATE IP ADDRESS"
-msgstr ""
+msgstr "ADRESSE IP PRIVÉE"
 
 msgid "Bandwidth Tiers"
 msgstr "Niveaux de bande passante"
@@ -4531,7 +4531,7 @@ msgid "Inbound or outbound?"
 msgstr "Entrants ou sortants ?"
 
 msgid "In/Out"
-msgstr ""
+msgstr "Entrée/Sortie"
 
 msgid "Gateway"
 msgstr "Passerelle"
@@ -4649,7 +4649,7 @@ msgid "Browser launch at startup"
 msgstr "Lancement du navigateur au démarrage"
 
 msgid "I2P Router Console"
-msgstr ""
+msgstr "Console Routeur I2P"
 
 msgid "Open Router Console in web browser at startup"
 msgstr "Ouvrir la console du routeur dans le navigateur Web au démarrage"
@@ -4742,7 +4742,7 @@ msgid "Advanced Network Configuration"
 msgstr "Configuration avancée du réseau"
 
 msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
-msgstr ""
+msgstr "I2P fonctionnera au mieux si vous configurez vos tarifs pour qu'ils correspondent à la vitesse de votre connexion Internet."
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
 msgstr "Remarque : votre contribution au réseau (part de réseau) est déterminée par l'allocation de la bande passante en amont (vitesse de téléchargement)."
@@ -4773,10 +4773,10 @@ msgstr "NOTE"
 
 #, java-format
 msgid "You have configured I2P to share only {0} KBps."
-msgstr ""
+msgstr "Vous avez configuré I2P pour partager seulement {0} KB/s."
 
 msgid "I2P requires at least 12KBps to enable sharing. "
-msgstr ""
+msgstr "I2P nécessite au moins 12 KB/s pour activer le partage. "
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
 msgstr "Veuillez activer le partage (la participation aux tunnels) en configurant plus de bande passante. "
@@ -5274,7 +5274,7 @@ msgid "Reseeding is the bootstrapping process used to find other routers when yo
 msgstr "Le réensemencement est le processus d'amorçage utilisé pour trouver d'autres routeurs lors de la première installation d'I2P ou s'il reste trop peu de références de routeurs à votre routeur."
 
 msgid "To enable the configuration of reseed urls, activate the console's <a href=/help/advancedsettings>Advanced mode</a>."
-msgstr ""
+msgstr "Pour activer la configuration des URL de réensemencement, activez le <a href=/help/advancedsettings>mode avancé</a> dans la console."
 
 msgid "Reseeding Configuration"
 msgstr "Configuration du réensemencement"
@@ -5437,10 +5437,10 @@ msgid "Use the same sidebar on all pages"
 msgstr "Utiliser la même barre latérale sur toutes les pages"
 
 msgid "Sticky sidebar"
-msgstr ""
+msgstr "Barre latérale fixe"
 
 msgid "Enable conditional fixed sidebar"
-msgstr ""
+msgstr "Activer la barre latérale fixe conditionnelle"
 
 msgid "config stats"
 msgstr "config statistiques"
@@ -7385,7 +7385,7 @@ msgid "Requested client leaseset"
 msgstr "Jeu de baux client demandé"
 
 msgid "Remote"
-msgstr ""
+msgstr "Distant"
 
 msgid "network database router map"
 msgstr "Carte du réseau de la base de données du routeur"
@@ -7449,7 +7449,7 @@ msgid "Information &amp; Diagnostics"
 msgstr "Informations"
 
 msgid "Customize"
-msgstr ""
+msgstr "Personnaliser"
 
 msgid "statistics"
 msgstr "statistiques"
@@ -7622,7 +7622,7 @@ msgid "Browser Setup"
 msgstr "Configuration du navigateur"
 
 msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. "
-msgstr ""
+msgstr "Pour accéder aux sites web hébergés sur le réseau I2P et utiliser facultativement l'outproxy par défaut pour se connecter aux sites sur le clearnet, vous devrez configurer votre navigateur pour utiliser le proxy <b>HTTP</b> d'I2P+, qui fonctionne par défaut sur <code>127.0.0.1 port 4444</code>. "
 
 msgid "Welcome to I2P+!"
 msgstr "Bienvenue à I2P+!"
@@ -7631,7 +7631,7 @@ msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) y
 msgstr "Quand vous démarrez I2P, quelques minutes sont nécessaires pour amorcer (intégrer) votre routeur dans le réseau et trouver des pairs supplémentaires. Veuillez donc faire preuve de patience."
 
 msgid "Once green stars are indicated next to your Service Tunnels, there is a wide variety of things you can do with I2P+."
-msgstr ""
+msgstr "Une fois que les étoiles vertes sont indiquées à côté de vos Tunnels de Service, il y a une grande variété de choses que vous pouvez faire avec I2P+."
 
 msgid "Unknown Wizard page"
 msgstr "Page Assistant inconnu"

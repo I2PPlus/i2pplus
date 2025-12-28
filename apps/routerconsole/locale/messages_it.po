@@ -117,7 +117,7 @@ msgid "Total peers in our NetDb"
 msgstr "Totale peer nel nostro NetDb"
 
 msgid "Total number of threads in use"
-msgstr ""
+msgstr "Numero totale di thread in uso"
 
 msgid "Peers without a published IP address"
 msgstr "Peers senza un IP pubblicato"
@@ -2419,7 +2419,7 @@ msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
 msgstr "Il tuo browser non è configurato correttamente per usare il proxy HTTP al {0}"
 
 msgid "Errors"
-msgstr ""
+msgstr "Errori"
 
 msgid "URL"
 msgstr "URL"
@@ -2699,16 +2699,16 @@ msgid "Select the field to search on"
 msgstr ""
 
 msgid "e.g. cn hk"
-msgstr ""
+msgstr "es. cn hk"
 
 msgid "MTU"
 msgstr "MTU"
 
 msgid "Enter search value here"
-msgstr ""
+msgstr "Inserisci il valore di ricerca qui"
 
 msgid "Router not found"
-msgstr ""
+msgstr "Router non trovato"
 
 msgid "No routers with"
 msgstr "Nessun router con"
@@ -2784,11 +2784,11 @@ msgstr "LeaseSet remoti"
 
 #, java-format
 msgid "Hostname {0} not found in network database"
-msgstr ""
+msgstr "Hostname {0} non trovato nel database di rete"
 
 #, java-format
 msgid "LeaseSet for {0} not found in network database"
-msgstr ""
+msgstr "LeaseSet per {0} non trovato nel database di rete"
 
 msgid "Meta"
 msgstr "Meta"
@@ -2846,10 +2846,10 @@ msgid "Count"
 msgstr "Conto"
 
 msgid "Under 12 KB/s"
-msgstr ""
+msgstr "Sotto 12 KB/s"
 
 msgid "Over 2048 KB/s"
-msgstr ""
+msgstr "Oltre 2048 KB/s"
 
 msgid "Bandwidth Tier"
 msgstr "Livello di larghezza di banda"
@@ -2922,7 +2922,7 @@ msgid "Hostname"
 msgstr "Nome host"
 
 msgid "Whois"
-msgstr ""
+msgstr "Whois"
 
 msgid "direct"
 msgstr "diretto"
@@ -2946,7 +2946,7 @@ msgid "Show all routers with this port in the NetDb"
 msgstr "Mostra tutti i router con questa porta nel NetDb"
 
 msgid "Maximum Transmission Unit"
-msgstr ""
+msgstr "Maximum Transmission Unit"
 
 msgid "Show all routers with this MTU in the NetDb"
 msgstr ""
@@ -2955,7 +2955,7 @@ msgid "Addresses"
 msgstr "Indirizzi"
 
 msgid "Introducers"
-msgstr ""
+msgstr "Introduttori"
 
 msgid "Network Id"
 msgstr "ID rete"
@@ -3015,16 +3015,16 @@ msgid "Local"
 msgstr "Locale"
 
 msgid "Fast Tier"
-msgstr ""
+msgstr "Livello veloce"
 
 msgid "High Capacity Tier"
-msgstr ""
+msgstr "Livello ad alta capacità"
 
 msgid "Integrated Tier"
-msgstr ""
+msgstr "Livello integrato"
 
 msgid "Standard Tier"
-msgstr ""
+msgstr "Livello standard"
 
 msgid "No peer connections available"
 msgstr "Nessuna connessione peer disponibile"
@@ -3368,7 +3368,7 @@ msgid "Unreachable"
 msgstr "Non raggiungibile"
 
 msgid "Most tests passing"
-msgstr ""
+msgstr "La maggior parte dei test passa"
 
 msgid "Fast, High Capacity"
 msgstr "Veloce, Alta Capacità"
@@ -3386,7 +3386,7 @@ msgid "Integrated"
 msgstr "Integrato"
 
 msgid "Configure Peer"
-msgstr ""
+msgstr "Configura peer"
 
 msgid "Thresholds"
 msgstr "Soglie"
@@ -3633,7 +3633,7 @@ msgid "Click Shutdown and restart to install"
 msgstr "Cliccare Spegni per riavviare e installare"
 
 msgid "Unable"
-msgstr ""
+msgstr "Impossibile"
 
 #, java-format
 msgid "{0}"
@@ -3787,7 +3787,7 @@ msgid "An introduction to hosting websites on the I2P network"
 msgstr "Un'introduzione all'hosting di siti web sulla rete I2P"
 
 msgid "New hosts in last 24 hours"
-msgstr ""
+msgstr "Nuovi host nelle ultime 24 ore"
 
 msgid "I2PControl"
 msgstr "I2PControl"
@@ -3978,7 +3978,7 @@ msgid "The total number of peers in our network database"
 msgstr "Numero totale di peers nel nostro database di reti"
 
 msgid "Total RouterInfos stored on disk"
-msgstr ""
+msgstr "Totale RouterInfos salvati su disco"
 
 msgid "Known"
 msgstr "Conosciuto"
@@ -4222,13 +4222,13 @@ msgid "Select stored analysis"
 msgstr "Seleziona analisi memorizzata"
 
 msgid "Review"
-msgstr ""
+msgstr "Revisione"
 
 msgid "Run analysis on Floodfills only"
 msgstr "Esegui analisi solo sui Floofill"
 
 msgid "Start Scan"
-msgstr ""
+msgstr "Avvia scansione"
 
 msgid "Run analysis on all routers in NetDb"
 msgstr "Esegui analisi su tutti i router del NetDb"
@@ -4519,7 +4519,7 @@ msgid "No local or transit tunnels currently active."
 msgstr "Nessun tunnel locale o di transito attualmente attivo."
 
 msgid "PRIVATE IP ADDRESS"
-msgstr ""
+msgstr "INDIRIZZO IP PRIVATO"
 
 msgid "Bandwidth Tiers"
 msgstr "Gradi di banda"
@@ -4532,7 +4532,7 @@ msgid "Inbound or outbound?"
 msgstr "In entrata o in uscita?"
 
 msgid "In/Out"
-msgstr ""
+msgstr "Ingresso/Uscita"
 
 msgid "Gateway"
 msgstr "Gateway"
@@ -4650,7 +4650,7 @@ msgid "Browser launch at startup"
 msgstr "Lancia il browser all'avvio"
 
 msgid "I2P Router Console"
-msgstr ""
+msgstr "Console Router I2P"
 
 msgid "Open Router Console in web browser at startup"
 msgstr "Apri la console del router nel browser all'avvio"
@@ -4743,7 +4743,7 @@ msgid "Advanced Network Configuration"
 msgstr "Configurazione di rete avanzata"
 
 msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
-msgstr ""
+msgstr "I2P funzionerà al meglio se configuri le tariffe in modo che corrispondano alla velocità della tua connessione a Internet."
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
 msgstr "Nota: Il tuo contributo alla rete (condivisione di rete) è determinato dall'allocazione della larghezza di banda di upload (velocità di upload)."
@@ -4774,10 +4774,10 @@ msgstr "NOTA"
 
 #, java-format
 msgid "You have configured I2P to share only {0} KBps."
-msgstr ""
+msgstr "Hai configurato I2P per condividere solo {0} KB/s."
 
 msgid "I2P requires at least 12KBps to enable sharing. "
-msgstr ""
+msgstr "I2P richiede almeno 12 KB/s per abilitare la condivisione. "
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
 msgstr "Per favore attiva la condivisione (partecipando a tunnel) abilitando più banda. "
@@ -5275,7 +5275,7 @@ msgid "Reseeding is the bootstrapping process used to find other routers when yo
 msgstr "Il Reseeding è il processo di bootstrapping utilizzato per trovare altri router quando installi per la prima volta I2P o quando il tuo router ha troppi pochi riferimenti di router rimanenti."
 
 msgid "To enable the configuration of reseed urls, activate the console's <a href=/help/advancedsettings>Advanced mode</a>."
-msgstr ""
+msgstr "Per attivare la configurazione degli URL di reseed, attiva la <a href=/help/advancedsettings>modalità avanzata</a> nella console."
 
 msgid "Reseeding Configuration"
 msgstr "Configurazione reseeding"
@@ -5438,10 +5438,10 @@ msgid "Use the same sidebar on all pages"
 msgstr "Usa la stessa barra laterale su tutte le pagine"
 
 msgid "Sticky sidebar"
-msgstr ""
+msgstr "Barra laterale fissa"
 
 msgid "Enable conditional fixed sidebar"
-msgstr ""
+msgstr "Attiva barra laterale fissa condizionale"
 
 msgid "config stats"
 msgstr "configura statistiche"
@@ -7386,7 +7386,7 @@ msgid "Requested client leaseset"
 msgstr "LeaseSet client richiesto"
 
 msgid "Remote"
-msgstr ""
+msgstr "Remoto"
 
 msgid "network database router map"
 msgstr "Mappa del router della base dati di rete"
@@ -7450,7 +7450,7 @@ msgid "Information &amp; Diagnostics"
 msgstr "Informazioni &amp; Diagnostica"
 
 msgid "Customize"
-msgstr ""
+msgstr "Personalizza"
 
 msgid "statistics"
 msgstr "statistiche"
@@ -7623,7 +7623,7 @@ msgid "Browser Setup"
 msgstr "Impostazione del browser"
 
 msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. "
-msgstr ""
+msgstr "Per accedere ai siti web ospitati sulla rete I2P e usare facoltativamente l'outproxy predefinito per connettersi ai siti su clearnet, dovrai configurare il tuo browser per usare il proxy <b>HTTP</b> di I2P+, che in esecuzione predefinita su <code>127.0.0.1 port 4444</code>. "
 
 msgid "Welcome to I2P+!"
 msgstr "Benvenuto su I2P+!"
@@ -7632,7 +7632,7 @@ msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) y
 msgstr "Quando tu avvii I2P, potrebbero essere necessari alcuni minuti per il bootstrap (integrazione) del tuo router nella rete e per trovare altri peer, perfavore sii paziente."
 
 msgid "Once green stars are indicated next to your Service Tunnels, there is a wide variety of things you can do with I2P+."
-msgstr ""
+msgstr "Una volta che le stelle verdi sono indicate accanto ai tuoi Tunnels di Servizio, c'è un'ampia varietà di cose che puoi fare con I2P+."
 
 msgid "Unknown Wizard page"
 msgstr "Pagina della procedura guidata sconosciuta"

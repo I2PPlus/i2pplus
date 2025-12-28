@@ -114,7 +114,7 @@ msgid "Total peers in our NetDb"
 msgstr "NetDb 内のピアの合計数"
 
 msgid "Total number of threads in use"
-msgstr ""
+msgstr "使用中のスレッドの合計数"
 
 msgid "Peers without a published IP address"
 msgstr "IPアドレスが公開されていないピア"
@@ -2410,7 +2410,7 @@ msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
 msgstr "あなたのブラウザは {0} で HTTP プロキシを使用するように正しく設定されていません"
 
 msgid "Errors"
-msgstr ""
+msgstr "エラー"
 
 msgid "URL"
 msgstr "URL"
@@ -2690,16 +2690,16 @@ msgid "Select the field to search on"
 msgstr ""
 
 msgid "e.g. cn hk"
-msgstr ""
+msgstr "例: cn hk"
 
 msgid "MTU"
 msgstr "男"
 
 msgid "Enter search value here"
-msgstr ""
+msgstr "ここに検索値を入力してください"
 
 msgid "Router not found"
-msgstr ""
+msgstr "ルーターが見つかりません"
 
 msgid "No routers with"
 msgstr "ルーターが存在しません: "
@@ -2775,11 +2775,11 @@ msgstr "リモートリースセット"
 
 #, java-format
 msgid "Hostname {0} not found in network database"
-msgstr ""
+msgstr "ホスト名 {0} がネットワークデータベースで見つかりません"
 
 #, java-format
 msgid "LeaseSet for {0} not found in network database"
-msgstr ""
+msgstr "{0} の LeaseSet がネットワークデータベースで見つかりません"
 
 msgid "Meta"
 msgstr "メタ"
@@ -2837,10 +2837,10 @@ msgid "Count"
 msgstr "カウント"
 
 msgid "Under 12 KB/s"
-msgstr ""
+msgstr "12 KB/s 未満"
 
 msgid "Over 2048 KB/s"
-msgstr ""
+msgstr "2048 KB/s 以上"
 
 msgid "Bandwidth Tier"
 msgstr "帯域幅階層"
@@ -2913,7 +2913,7 @@ msgid "Hostname"
 msgstr "ホスト名"
 
 msgid "Whois"
-msgstr ""
+msgstr "Whois"
 
 msgid "direct"
 msgstr "直接"
@@ -2937,7 +2937,7 @@ msgid "Show all routers with this port in the NetDb"
 msgstr "NetDb 内のこのポートを持つすべてのルーターを表示します"
 
 msgid "Maximum Transmission Unit"
-msgstr ""
+msgstr "最大伝送単位"
 
 msgid "Show all routers with this MTU in the NetDb"
 msgstr ""
@@ -2946,7 +2946,7 @@ msgid "Addresses"
 msgstr "アドレス"
 
 msgid "Introducers"
-msgstr ""
+msgstr "紹介者"
 
 msgid "Network Id"
 msgstr "ネットワークID"
@@ -3006,16 +3006,16 @@ msgid "Local"
 msgstr "ローカル"
 
 msgid "Fast Tier"
-msgstr ""
+msgstr "高速階層"
 
 msgid "High Capacity Tier"
-msgstr ""
+msgstr "高容量階層"
 
 msgid "Integrated Tier"
-msgstr ""
+msgstr "統合階層"
 
 msgid "Standard Tier"
-msgstr ""
+msgstr "標準階層"
 
 msgid "No peer connections available"
 msgstr "ピア接続は利用できません"
@@ -3354,7 +3354,7 @@ msgid "Unreachable"
 msgstr "到達不可"
 
 msgid "Most tests passing"
-msgstr ""
+msgstr "ほとんどのテストに合格"
 
 msgid "Fast, High Capacity"
 msgstr "高速、高許容数"
@@ -3372,7 +3372,7 @@ msgid "Integrated"
 msgstr "統合済み"
 
 msgid "Configure Peer"
-msgstr ""
+msgstr "ピアを設定"
 
 msgid "Thresholds"
 msgstr "しきい値"
@@ -3519,7 +3519,7 @@ msgstr "注意: 'LU'クラスのルーターはリストから除外されてい
 
 #, java-format
 msgid "To view, see {0}Session Bans{1}."
-msgstr ""
+msgstr "表示するには、{0}セッション禁止{1}を参照してください。"
 
 msgid "Select search engine"
 msgstr "検索エンジンを選択"
@@ -3616,7 +3616,7 @@ msgid "Click Shutdown and restart to install"
 msgstr "インストールするにはシャットダウンをクリックして再起動"
 
 msgid "Unable"
-msgstr ""
+msgstr "使用不可"
 
 #, java-format
 msgid "{0}"
@@ -3770,7 +3770,7 @@ msgid "An introduction to hosting websites on the I2P network"
 msgstr "I2P ネットワーク上で Web サイトをホスティングする方法の概要"
 
 msgid "New hosts in last 24 hours"
-msgstr ""
+msgstr "過去24時間の新しいホスト"
 
 msgid "I2PControl"
 msgstr "I2Pコントロール"
@@ -3961,7 +3961,7 @@ msgid "The total number of peers in our network database"
 msgstr "ネットワークデータベース内の合計ピア数"
 
 msgid "Total RouterInfos stored on disk"
-msgstr ""
+msgstr "ディスクに保存されたRouterInfoの総数"
 
 msgid "Known"
 msgstr "既知"
@@ -4203,13 +4203,13 @@ msgid "Select stored analysis"
 msgstr "保存された分析を選択"
 
 msgid "Review"
-msgstr ""
+msgstr "レビュー"
 
 msgid "Run analysis on Floodfills only"
 msgstr "フラッドフィルのみで分析を実行する"
 
 msgid "Start Scan"
-msgstr ""
+msgstr "スキャン開始"
 
 msgid "Run analysis on all routers in NetDb"
 msgstr "NetDb のすべてのルーターで分析を実行する"
@@ -4500,7 +4500,7 @@ msgid "No local or transit tunnels currently active."
 msgstr "現在アクティブなローカル トンネルまたはトランジット トンネルはありません。"
 
 msgid "PRIVATE IP ADDRESS"
-msgstr ""
+msgstr "プライベートIPアドレス"
 
 msgid "Bandwidth Tiers"
 msgstr "帯域幅階層"
@@ -4513,7 +4513,7 @@ msgid "Inbound or outbound?"
 msgstr "インバウンドかアウトバウンドか？"
 
 msgid "In/Out"
-msgstr ""
+msgstr "入力/出力"
 
 msgid "Gateway"
 msgstr "ゲートウェイ"
@@ -4631,7 +4631,7 @@ msgid "Browser launch at startup"
 msgstr "スタートアップ時にブラウザーが起動"
 
 msgid "I2P Router Console"
-msgstr ""
+msgstr "I2Pルーターコンソール"
 
 msgid "Open Router Console in web browser at startup"
 msgstr "スタートアップ時にウェブブラウザでルーターコンソールを開く"
@@ -4724,7 +4724,7 @@ msgid "Advanced Network Configuration"
 msgstr "高度なネットワーク構成"
 
 msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
-msgstr ""
+msgstr "I2Pは、インターネット接続の速度に合わせてレートを設定すると最も良く動作します。"
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
 msgstr "注: ネットワークへの貢献度 (ネットワーク シェア) は、アップストリーム帯域幅の割り当て (アップロード速度) によって決まります。"
@@ -4755,10 +4755,10 @@ msgstr "注記"
 
 #, java-format
 msgid "You have configured I2P to share only {0} KBps."
-msgstr ""
+msgstr "I2Pを{0} KB/sのみ共有するように設定しました。"
 
 msgid "I2P requires at least 12KBps to enable sharing. "
-msgstr ""
+msgstr "I2Pは共有を有効にするために最低12KB/sが必要です。 "
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
 msgstr "より多くの帯域幅を構成して、共有 (トンネルへの参加) を有効にしてください。"
@@ -5206,7 +5206,7 @@ msgstr "IPアドレス別の禁止リストが以下に表示されています�
 
 #, java-format
 msgid "To view all active bans by router hash, see {0}Banned Peers{1}."
-msgstr ""
+msgstr "ルーターハッシュによるすべてのアクティブな禁止を表示するには、{0}禁止されたピア{1}を参照してください。"
 
 #, java-format
 msgid "A list of {0}session-only bans{1} by hash is also available."
@@ -5256,7 +5256,7 @@ msgid "Reseeding is the bootstrapping process used to find other routers when yo
 msgstr "再シードは、最初に I2P をインストールするとき、またはルーターに残っているルーター参照が少なすぎるときに、他のルーターを見つけるために使用されるブートストラップ プロセスです。"
 
 msgid "To enable the configuration of reseed urls, activate the console's <a href=/help/advancedsettings>Advanced mode</a>."
-msgstr ""
+msgstr "再シードURLの設定を有効にするには、コンソールで<a href=/help/advancedsettings>詳細モード</a>を有効にしてください。"
 
 msgid "Reseeding Configuration"
 msgstr "構成の再シード"
@@ -5419,10 +5419,10 @@ msgid "Use the same sidebar on all pages"
 msgstr "すべてのページで同じサイドバーを使用する"
 
 msgid "Sticky sidebar"
-msgstr ""
+msgstr "固定サイドバー"
 
 msgid "Enable conditional fixed sidebar"
-msgstr ""
+msgstr "条件付き固定サイドバーを有効にする"
 
 msgid "config stats"
 msgstr "構成統計"
@@ -7367,7 +7367,7 @@ msgid "Requested client leaseset"
 msgstr "要求されたクライアントリースセット"
 
 msgid "Remote"
-msgstr ""
+msgstr "リモート"
 
 msgid "network database router map"
 msgstr "ネットワークデータベースルータマップ"
@@ -7431,7 +7431,7 @@ msgid "Information &amp; Diagnostics"
 msgstr "情報と診断"
 
 msgid "Customize"
-msgstr ""
+msgstr "カスタマイズ"
 
 msgid "statistics"
 msgstr "統計"
@@ -7604,7 +7604,7 @@ msgid "Browser Setup"
 msgstr "ブラウザのセットアップ"
 
 msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. "
-msgstr ""
+msgstr "I2Pネットワーク上のウェブサイトにアクセスするには、clearnet上のウェブサイトに接続するためにオプションでデフォルトのoutproxyを使用します。ブラウザをI2P+ <b>HTTP</b>プロキシを使用するように設定する必要があります。これはデフォルトで<code>127.0.0.1 port 4444</code>で動作しています。"
 
 msgid "Welcome to I2P+!"
 msgstr "I2P+ にようこそ！"
@@ -7613,7 +7613,7 @@ msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) y
 msgstr "I2P を開始すると、ルーターをネットワークにブートストラップ (統合) し、追加のピアを検索するのに数分かかることがありますので、しばらくお待ちください。"
 
 msgid "Once green stars are indicated next to your Service Tunnels, there is a wide variety of things you can do with I2P+."
-msgstr ""
+msgstr "サービストンネルの隣に緑色の星が表示されると、I2P+でできることがは広範囲に及びます。"
 
 msgid "Unknown Wizard page"
 msgstr "未知のウィザードページ"

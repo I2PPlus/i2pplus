@@ -116,7 +116,7 @@ msgid "Total peers in our NetDb"
 msgstr "مجموع همتایان در NetDb ما"
 
 msgid "Total number of threads in use"
-msgstr ""
+msgstr "مجموع تعداد رشته های در حال استفاده"
 
 msgid "Peers without a published IP address"
 msgstr "همتایان بدون آدرس IP منتشر شده"
@@ -2418,7 +2418,7 @@ msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
 msgstr "مرورگر شما برای استفاده از پروکسی HTTP در {0} به درستی پیکربندی نشده است."
 
 msgid "Errors"
-msgstr ""
+msgstr "خطاها"
 
 msgid "URL"
 msgstr "آدرس اینترنتی"
@@ -2698,16 +2698,16 @@ msgid "Select the field to search on"
 msgstr ""
 
 msgid "e.g. cn hk"
-msgstr ""
+msgstr "مثال cn hk"
 
 msgid "MTU"
 msgstr "MTU"
 
 msgid "Enter search value here"
-msgstr ""
+msgstr "مقدار جستجو را اینجا وارد کنید"
 
 msgid "Router not found"
-msgstr ""
+msgstr "روتر یافت نشد"
 
 msgid "No routers with"
 msgstr "هیچ روتری با"
@@ -2845,10 +2845,10 @@ msgid "Count"
 msgstr "شمارش"
 
 msgid "Under 12 KB/s"
-msgstr ""
+msgstr "کمتر از 12 کیلوبایت/ثانیه"
 
 msgid "Over 2048 KB/s"
-msgstr ""
+msgstr "بیشتر از 2048 کیلوبایت/ثانیه"
 
 msgid "Bandwidth Tier"
 msgstr "ردیف پهنای باند"
@@ -2921,7 +2921,7 @@ msgid "Hostname"
 msgstr "نام میزبان"
 
 msgid "Whois"
-msgstr ""
+msgstr "Whois"
 
 msgid "direct"
 msgstr "مستقیم"
@@ -2945,7 +2945,7 @@ msgid "Show all routers with this port in the NetDb"
 msgstr "نمایش تمام روترهای دارای این پورت در NetDb"
 
 msgid "Maximum Transmission Unit"
-msgstr ""
+msgstr "حداکثر واحد انتقال"
 
 msgid "Show all routers with this MTU in the NetDb"
 msgstr ""
@@ -2954,7 +2954,7 @@ msgid "Addresses"
 msgstr "آدرسها"
 
 msgid "Introducers"
-msgstr ""
+msgstr "معرفی کننده ها"
 
 msgid "Network Id"
 msgstr "شناسه شبکه"
@@ -3014,16 +3014,16 @@ msgid "Local"
 msgstr "محلی"
 
 msgid "Fast Tier"
-msgstr ""
+msgstr "لایه سریع"
 
 msgid "High Capacity Tier"
-msgstr ""
+msgstr "لایه ظرفیت بالا"
 
 msgid "Integrated Tier"
-msgstr ""
+msgstr "لایه یکپارچه"
 
 msgid "Standard Tier"
-msgstr ""
+msgstr "لایه استاندارد"
 
 msgid "No peer connections available"
 msgstr "اتصال همتا موجود نیست"
@@ -3367,7 +3367,7 @@ msgid "Unreachable"
 msgstr "غیر قابل دسترس"
 
 msgid "Most tests passing"
-msgstr ""
+msgstr "بیشتر تست ها پاس می کنند"
 
 msgid "Fast, High Capacity"
 msgstr "سریع، ظرفیت بالا"
@@ -3385,7 +3385,7 @@ msgid "Integrated"
 msgstr "یکپارچه"
 
 msgid "Configure Peer"
-msgstr ""
+msgstr "تنظیم همتا"
 
 msgid "Thresholds"
 msgstr "آستانه ها"
@@ -3632,7 +3632,7 @@ msgid "Click Shutdown and restart to install"
 msgstr "برای نصب کلیک کنید و دوباره راه اندازی کنید"
 
 msgid "Unable"
-msgstr ""
+msgstr "غیرقابل"
 
 #, java-format
 msgid "{0}"
@@ -3977,7 +3977,7 @@ msgid "The total number of peers in our network database"
 msgstr "تعداد کل همتاها در پایگاه داده شبکه ما"
 
 msgid "Total RouterInfos stored on disk"
-msgstr ""
+msgstr "مجموع RouterInfos ذخیره شده روی دیسک"
 
 msgid "Known"
 msgstr "معروف"
@@ -4221,13 +4221,13 @@ msgid "Select stored analysis"
 msgstr "تجزیه و تحلیل ذخیره شده را انتخاب کنید"
 
 msgid "Review"
-msgstr ""
+msgstr "بررسی"
 
 msgid "Run analysis on Floodfills only"
 msgstr "آنالیز را فقط روی Floodfills اجرا کنید"
 
 msgid "Start Scan"
-msgstr ""
+msgstr "شروع اسکن"
 
 msgid "Run analysis on all routers in NetDb"
 msgstr "تجزیه و تحلیل را روی همه روترها در NetDb اجرا کنید"
@@ -4518,7 +4518,7 @@ msgid "No local or transit tunnels currently active."
 msgstr "در حال حاضر هیچ تونل محلی یا ترانزیت فعال نیست."
 
 msgid "PRIVATE IP ADDRESS"
-msgstr ""
+msgstr "آدرس IP خصوصی"
 
 msgid "Bandwidth Tiers"
 msgstr "ردیف های پهنای باند"
@@ -4531,7 +4531,7 @@ msgid "Inbound or outbound?"
 msgstr "ورودی یا خروجی؟"
 
 msgid "In/Out"
-msgstr ""
+msgstr "ورودی/خروجی"
 
 msgid "Gateway"
 msgstr "دروازه"
@@ -4649,7 +4649,7 @@ msgid "Browser launch at startup"
 msgstr "راه اندازی مرورگر در هنگام راه اندازی"
 
 msgid "I2P Router Console"
-msgstr ""
+msgstr "کنسول روتر I2P"
 
 msgid "Open Router Console in web browser at startup"
 msgstr "هنگام راه اندازی، کنسول روتر را در مرورگر وب باز کنید"
@@ -4773,10 +4773,10 @@ msgstr "توجه"
 
 #, java-format
 msgid "You have configured I2P to share only {0} KBps."
-msgstr ""
+msgstr "شما I2P را برای اشتراک تنها {0} کیلوبایت/ثانیه پیکربندی کرده‌اید."
 
 msgid "I2P requires at least 12KBps to enable sharing. "
-msgstr ""
+msgstr "I2P برای فعال‌سازی اشتراک حداقل 12 کیلوبایت/ثانیه نیاز دارد. "
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
 msgstr "لطفاً اشتراک گذاری (شرکت در تونل ها) را با پیکربندی پهنای باند بیشتر فعال کنید."
@@ -5274,7 +5274,7 @@ msgid "Reseeding is the bootstrapping process used to find other routers when yo
 msgstr "بازیابی منابع فرآیند راه‌اندازی استفاده شده برای پیدا کردن روترهای دیگر هنگام نصب اولیه I2P یا هنگامی که روتر شما تنها چند ارجاع دهنده روتر دارد."
 
 msgid "To enable the configuration of reseed urls, activate the console's <a href=/help/advancedsettings>Advanced mode</a>."
-msgstr ""
+msgstr "برای فعال‌سازی پیکربندی روابط دوباره، حالت پیشرفته را در کنسول از طریق لینک <a href=/help/advancedsettings>حالت پیشرفته</a> فعال کنید."
 
 msgid "Reseeding Configuration"
 msgstr "پیکربندی مجدد بذر"
@@ -5437,10 +5437,10 @@ msgid "Use the same sidebar on all pages"
 msgstr "از همان نوار کناری در تمام صفحات استفاده کنید"
 
 msgid "Sticky sidebar"
-msgstr ""
+msgstr "نوار کناری ثابت"
 
 msgid "Enable conditional fixed sidebar"
-msgstr ""
+msgstr "فعال‌سازی نوار کناری شرطی"
 
 msgid "config stats"
 msgstr "آمار پیکربندی"
@@ -7385,7 +7385,7 @@ msgid "Requested client leaseset"
 msgstr "LeaseSet کلاینت درخواست شده"
 
 msgid "Remote"
-msgstr ""
+msgstr "دور"
 
 msgid "network database router map"
 msgstr "نقشه روتر بانک اطلاعاتی شبکه"
@@ -7449,7 +7449,7 @@ msgid "Information &amp; Diagnostics"
 msgstr "اطلاعات"
 
 msgid "Customize"
-msgstr ""
+msgstr "شخصی‌سازی"
 
 msgid "statistics"
 msgstr "آمار"
@@ -7622,7 +7622,7 @@ msgid "Browser Setup"
 msgstr "راه اندازی مرورگر"
 
 msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. "
-msgstr ""
+msgstr "برای دسترسی به وب‌سایت‌های میزبانی شده در شبکه I2P و به صورت اختیاری از outproxy پیش‌فرض برای اتصال به وب‌سایت‌های clearnet، باید مرورگر خود را پیکربندی کنید تا از پروکسی <b>HTTP</b> I2P+ استفاده کند که به طور پیش‌فرض روی پورت <code>127.0.0.1 port 4444</code> اجرا می‌شود. "
 
 msgid "Welcome to I2P+!"
 msgstr "به I2P خوش آمدید!"
@@ -7631,7 +7631,7 @@ msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) y
 msgstr "هنگامی که I2P را راه اندازی می کنید، ممکن است چند دقیقه طول بکشد تا روتر خود را در شبکه راه اندازی کنید (ادغام کنید) و همتاهای بیشتری پیدا کنید، بنابراین لطفا صبور باشید."
 
 msgid "Once green stars are indicated next to your Service Tunnels, there is a wide variety of things you can do with I2P+."
-msgstr ""
+msgstr "به محض آنکه ستاره‌های سبز در کنار تونل‌های سرویس شما مشخص شد، طیف وسیعی از کارهایی است که می‌توانید با I2P+ انجام دهید."
 
 msgid "Unknown Wizard page"
 msgstr "صفحه جادوگر ناشناخته"

@@ -117,7 +117,7 @@ msgid "Total peers in our NetDb"
 msgstr "meie NetDb eakaaslased kokku"
 
 msgid "Total number of threads in use"
-msgstr ""
+msgstr "Kokkuhulk kasutatavate lõimede arv"
 
 msgid "Peers without a published IP address"
 msgstr "Avaldatud IP-aadressita kaaslased"
@@ -2419,7 +2419,7 @@ msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
 msgstr "teie brauser ei ole õigesti konfigureeritud kasutama HTTP-puhverserverit aadressil {0}"
 
 msgid "Errors"
-msgstr ""
+msgstr "Vead"
 
 msgid "URL"
 msgstr "URL"
@@ -2699,16 +2699,16 @@ msgid "Select the field to search on"
 msgstr ""
 
 msgid "e.g. cn hk"
-msgstr ""
+msgstr "nt. cn hk"
 
 msgid "MTU"
 msgstr "MTU"
 
 msgid "Enter search value here"
-msgstr ""
+msgstr "Sisesta otsingu väärtus siia"
 
 msgid "Router not found"
-msgstr ""
+msgstr "Marsruuterit ei leitud"
 
 msgid "No routers with"
 msgstr ""
@@ -2784,11 +2784,11 @@ msgstr ""
 
 #, java-format
 msgid "Hostname {0} not found in network database"
-msgstr ""
+msgstr "Hostinimi {0} ei leitud võrgustiku andmebaasist"
 
 #, java-format
 msgid "LeaseSet for {0} not found in network database"
-msgstr ""
+msgstr "{0} LeaseSet ei leitud võrgustiku andmebaasist"
 
 msgid "Meta"
 msgstr ""
@@ -2846,10 +2846,10 @@ msgid "Count"
 msgstr "Arv"
 
 msgid "Under 12 KB/s"
-msgstr ""
+msgstr "Alla 12 KB/s"
 
 msgid "Over 2048 KB/s"
-msgstr ""
+msgstr "Üle 2048 KB/s"
 
 msgid "Bandwidth Tier"
 msgstr "Ribalaiuse tase"
@@ -2922,7 +2922,7 @@ msgid "Hostname"
 msgstr "Hostinimi"
 
 msgid "Whois"
-msgstr ""
+msgstr "Whois"
 
 msgid "direct"
 msgstr ""
@@ -2946,7 +2946,7 @@ msgid "Show all routers with this port in the NetDb"
 msgstr "Kuva NetDb-s kõik selle pordiga ruuterid"
 
 msgid "Maximum Transmission Unit"
-msgstr ""
+msgstr "Maksimaalne ülekandevahendik"
 
 msgid "Show all routers with this MTU in the NetDb"
 msgstr ""
@@ -2955,7 +2955,7 @@ msgid "Addresses"
 msgstr "Aadressid"
 
 msgid "Introducers"
-msgstr ""
+msgstr "Sisseviijad"
 
 msgid "Network Id"
 msgstr ""
@@ -3015,16 +3015,16 @@ msgid "Local"
 msgstr "Kohalik"
 
 msgid "Fast Tier"
-msgstr ""
+msgstr "Kiire tase"
 
 msgid "High Capacity Tier"
-msgstr ""
+msgstr "Suurema võimekusega tase"
 
 msgid "Integrated Tier"
-msgstr ""
+msgstr "Integreeritud tase"
 
 msgid "Standard Tier"
-msgstr ""
+msgstr "Standardne tase"
 
 msgid "No peer connections available"
 msgstr "Peer-ühendused pole saadaval"
@@ -3368,7 +3368,7 @@ msgid "Unreachable"
 msgstr "Kättesaadamatud"
 
 msgid "Most tests passing"
-msgstr ""
+msgstr "Enamik testid läbivad"
 
 msgid "Fast, High Capacity"
 msgstr "Kiired, Kõrge mahuga"
@@ -3386,7 +3386,7 @@ msgid "Integrated"
 msgstr "Hästi integreerunud"
 
 msgid "Configure Peer"
-msgstr ""
+msgstr "Seadista peer"
 
 msgid "Thresholds"
 msgstr "Läved"
@@ -3536,7 +3536,7 @@ msgstr ""
 
 #, java-format
 msgid "To view, see {0}Session Bans{1}."
-msgstr ""
+msgstr "Nägemiseks, vt {0}Sessiooni Keelustamiseid{1}."
 
 msgid "Select search engine"
 msgstr "valige otsingumootor"
@@ -3633,7 +3633,7 @@ msgid "Click Shutdown and restart to install"
 msgstr "Lülita välja et uuesti käivitamisel paigaldada"
 
 msgid "Unable"
-msgstr ""
+msgstr "Pole võimalik"
 
 #, java-format
 msgid "{0}"
@@ -3787,7 +3787,7 @@ msgid "An introduction to hosting websites on the I2P network"
 msgstr "Sissejuhatus veebisaitide hostimisse I2P-võrgus"
 
 msgid "New hosts in last 24 hours"
-msgstr ""
+msgstr "Viimased 24 tunni jooksul hostid"
 
 msgid "I2PControl"
 msgstr "I2PCkontroll"
@@ -3978,7 +3978,7 @@ msgid "The total number of peers in our network database"
 msgstr "eakaaslaste koguarv meie võrguandmebaasis"
 
 msgid "Total RouterInfos stored on disk"
-msgstr ""
+msgstr "Kettüles salvestatud RouterInfos"
 
 msgid "Known"
 msgstr "Tuntud"
@@ -4222,13 +4222,13 @@ msgid "Select stored analysis"
 msgstr "Valige salvestatud analüüs"
 
 msgid "Review"
-msgstr ""
+msgstr "Ülevaada"
 
 msgid "Run analysis on Floodfills only"
 msgstr "Käitage analüüsi ainult üleujutustes"
 
 msgid "Start Scan"
-msgstr ""
+msgstr "Alusta skanneerimist"
 
 msgid "Run analysis on all routers in NetDb"
 msgstr "Käivitage analüüs kõigis NetDb ruuterites"
@@ -4519,7 +4519,7 @@ msgid "No local or transit tunnels currently active."
 msgstr "Hetkel ei ole aktiivseid kohalikke ega ühistransporditunneleid."
 
 msgid "PRIVATE IP ADDRESS"
-msgstr ""
+msgstr "ERADELIK IP AADRESS"
 
 msgid "Bandwidth Tiers"
 msgstr "Ribalaiuse tasemed"
@@ -4532,7 +4532,7 @@ msgid "Inbound or outbound?"
 msgstr "sissetulev või väljaminev?"
 
 msgid "In/Out"
-msgstr ""
+msgstr "Sisse/Välja"
 
 msgid "Gateway"
 msgstr "Lüüs"
@@ -4650,7 +4650,7 @@ msgid "Browser launch at startup"
 msgstr "Brauseri käivitamine koos ruuteriga"
 
 msgid "I2P Router Console"
-msgstr ""
+msgstr "I2P marsruuteri konsool"
 
 msgid "Open Router Console in web browser at startup"
 msgstr "Ava ruuteri konsool brauseris ruuteri käivitumisel"
@@ -4743,7 +4743,7 @@ msgid "Advanced Network Configuration"
 msgstr "Täpsem võrgukonfiguratsioon"
 
 msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
-msgstr ""
+msgstr "I2P töötab paremini, kui seadistad kiirused vastavad internetiühenduse kiirusele."
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
 msgstr "Märkus. Teie panuse võrku (võrgujagamine) määrab ülesvoolu ribalaiuse jaotus (üleslaadimiskiirus)."
@@ -4774,10 +4774,10 @@ msgstr ""
 
 #, java-format
 msgid "You have configured I2P to share only {0} KBps."
-msgstr ""
+msgstr "Olete seadistanudud I2P jagama jagama ainult {0} KB/s."
 
 msgid "I2P requires at least 12KBps to enable sharing. "
-msgstr ""
+msgstr "I2P jagab vähemalt 12 KB/s jagamise lubatamise lubamiseks. "
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
 msgstr "Palun võimaldage tunnelites osalemise jaoks rohkem jagatud ribalaiust. "
@@ -5225,7 +5225,7 @@ msgstr ""
 
 #, java-format
 msgid "To view all active bans by router hash, see {0}Banned Peers{1}."
-msgstr ""
+msgstr "Kõigi aktiivsed keelustat marsruuteri hashi alusel, vt {0}Keelustatud Peers{1}."
 
 #, java-format
 msgid "A list of {0}session-only bans{1} by hash is also available."
@@ -5275,7 +5275,7 @@ msgid "Reseeding is the bootstrapping process used to find other routers when yo
 msgstr "Kontaktide hange on I2P esmakordse tööle seadmise protsessi osa mille käigus sinu ruuter hangib omale algse komplekti teiste ruuterite kontaktandmeid. See toimub ka siis, kui sinu ruuteril on teiste toimivaid kontaktandmeid väheks jäänud."
 
 msgid "To enable the configuration of reseed urls, activate the console's <a href=/help/advancedsettings>Advanced mode</a>."
-msgstr ""
+msgstr "Taaskasuste te konfiguratsiooni, et aktiveeriksid <a href=/help/advancedsettings>Edendrežiim</a> konsoolis."
 
 msgid "Reseeding Configuration"
 msgstr "Ruuterite kontaktide hanke häälestus"
@@ -5438,10 +5438,10 @@ msgid "Use the same sidebar on all pages"
 msgstr ""
 
 msgid "Sticky sidebar"
-msgstr ""
+msgstr "Tingitud külgriba"
 
 msgid "Enable conditional fixed sidebar"
-msgstr ""
+msgstr "Luba tingitud külgriba"
 
 msgid "config stats"
 msgstr "konfiguratsioonistatistika"
@@ -7386,7 +7386,7 @@ msgid "Requested client leaseset"
 msgstr ""
 
 msgid "Remote"
-msgstr ""
+msgstr "Kaug"
 
 msgid "network database router map"
 msgstr "Võrguandmebaasi routteri kaart"
@@ -7450,7 +7450,7 @@ msgid "Information &amp; Diagnostics"
 msgstr "Teave"
 
 msgid "Customize"
-msgstr ""
+msgstr "Kohanda"
 
 msgid "statistics"
 msgstr "statistika"
@@ -7623,7 +7623,7 @@ msgid "Browser Setup"
 msgstr "Brauseri häälestus"
 
 msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. "
-msgstr ""
+msgstr "I2P võrgustikus hostitudud veebisaitide juuripääsemiseks ja valikult välisproxy kasutamiseks clearneti saitidele ühendamiseks peab se oma brauseri konfigurima nii, et see kasutaks I2P+ <b>HTTP</b> proxy, mis vaikimisi töötab <code>127.0.0.1 port 4444</code>-s. "
 
 msgid "Welcome to I2P+!"
 msgstr "Tere tulemast I2P-sse!"
@@ -7632,7 +7632,7 @@ msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) y
 msgstr "Kui käivitate I2P, võib teie ruuteri võrku alglaadimine (integreerimine) ja täiendavate partnerite leidmine võtta paar minutit, seega olge kannatlik."
 
 msgid "Once green stars are indicated next to your Service Tunnels, there is a wide variety of things you can do with I2P+."
-msgstr ""
+msgstr "Kui te tuneliteen teenäteen on märgitud, on lai valik asju I2P+ teha."
 
 msgid "Unknown Wizard page"
 msgstr "Tundmatu viisardi leht"

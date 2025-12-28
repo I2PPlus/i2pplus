@@ -120,7 +120,7 @@ msgid "Total peers in our NetDb"
 msgstr "Skupaj parterjev v naši mrežni bazi"
 
 msgid "Total number of threads in use"
-msgstr ""
+msgstr "Skupno število niti v uporabi"
 
 msgid "Peers without a published IP address"
 msgstr "Parterji brez objavljenega IP naslova"
@@ -2434,7 +2434,7 @@ msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
 msgstr "Vaš brskalnik ni pravilno nastavljen za uporabo HTTP proxyja na {0}"
 
 msgid "Errors"
-msgstr ""
+msgstr "Napake"
 
 msgid "URL"
 msgstr "URL"
@@ -2714,16 +2714,16 @@ msgid "Select the field to search on"
 msgstr ""
 
 msgid "e.g. cn hk"
-msgstr ""
+msgstr "npr. cn hk"
 
 msgid "MTU"
 msgstr "MTU"
 
 msgid "Enter search value here"
-msgstr ""
+msgstr "Vnesite vrednost iskanja tukaj"
 
 msgid "Router not found"
-msgstr ""
+msgstr "Router ni bil najden"
 
 msgid "No routers with"
 msgstr "Ni routerjev z: "
@@ -2799,11 +2799,11 @@ msgstr "Oddaljeni LeaseSeti"
 
 #, java-format
 msgid "Hostname {0} not found in network database"
-msgstr ""
+msgstr "Hostname {0} ni najden v omrežni podatkovni zbirki"
 
 #, java-format
 msgid "LeaseSet for {0} not found in network database"
-msgstr ""
+msgstr "LeaseSet za {0} ni najden v omrežni podatkovni zbirki"
 
 msgid "Meta"
 msgstr "Meta"
@@ -2861,10 +2861,10 @@ msgid "Count"
 msgstr "Število"
 
 msgid "Under 12 KB/s"
-msgstr ""
+msgstr "Pod 12 KB/s"
 
 msgid "Over 2048 KB/s"
-msgstr ""
+msgstr "Nad 2048 KB/s"
 
 msgid "Bandwidth Tier"
 msgstr "Raven širine pasma"
@@ -2937,7 +2937,7 @@ msgid "Hostname"
 msgstr "Ime gostitelja"
 
 msgid "Whois"
-msgstr ""
+msgstr "Whois"
 
 msgid "direct"
 msgstr "neposredno"
@@ -2961,7 +2961,7 @@ msgid "Show all routers with this port in the NetDb"
 msgstr "Prikaži vse usmerjevalnike z tem vratom v NetDb"
 
 msgid "Maximum Transmission Unit"
-msgstr ""
+msgstr "Največja prenosna enota"
 
 msgid "Show all routers with this MTU in the NetDb"
 msgstr ""
@@ -2970,7 +2970,7 @@ msgid "Addresses"
 msgstr "Naslovi"
 
 msgid "Introducers"
-msgstr ""
+msgstr "Uvajalci"
 
 msgid "Network Id"
 msgstr "ID omrežja"
@@ -3030,16 +3030,16 @@ msgid "Local"
 msgstr "Lokalno"
 
 msgid "Fast Tier"
-msgstr ""
+msgstr "Hitra raven"
 
 msgid "High Capacity Tier"
-msgstr ""
+msgstr "Raven visoke zmogljivosti"
 
 msgid "Integrated Tier"
-msgstr ""
+msgstr "Integrirana raven"
 
 msgid "Standard Tier"
-msgstr ""
+msgstr "Standardna raven"
 
 msgid "No peer connections available"
 msgstr "Nobene povezave z partnerji na voljo"
@@ -3393,7 +3393,7 @@ msgid "Unreachable"
 msgstr "Ne dosegljivo"
 
 msgid "Most tests passing"
-msgstr ""
+msgstr "Večina testov se opravi"
 
 msgid "Fast, High Capacity"
 msgstr "Hitro, visoka kapaciteta"
@@ -3411,7 +3411,7 @@ msgid "Integrated"
 msgstr "Integrirano"
 
 msgid "Configure Peer"
-msgstr ""
+msgstr "Konfiguriraj peer"
 
 msgid "Thresholds"
 msgstr "Pragi"
@@ -3567,7 +3567,7 @@ msgstr "Opomba: Routerji razreda 'LU' so izključeni s seznama."
 
 #, java-format
 msgid "To view, see {0}Session Bans{1}."
-msgstr ""
+msgstr "Za prikaz oglejte {0}Prepovedov Zased {1}."
 
 msgid "Select search engine"
 msgstr "Izberi motor iskanja"
@@ -3664,7 +3664,7 @@ msgid "Click Shutdown and restart to install"
 msgstr "Kliknite Zapri in ponovno zagni za namestitev"
 
 msgid "Unable"
-msgstr ""
+msgstr "Ni na voljo"
 
 #, java-format
 msgid "{0}"
@@ -3818,7 +3818,7 @@ msgid "An introduction to hosting websites on the I2P network"
 msgstr "Uvod v gostiteljstvo spletnih strani na omrežju I2P"
 
 msgid "New hosts in last 24 hours"
-msgstr ""
+msgstr "Novi gostitelji v zadnjih 24 urah"
 
 msgid "I2PControl"
 msgstr "I2PControl"
@@ -4009,7 +4009,7 @@ msgid "The total number of peers in our network database"
 msgstr "Skupno število parterjev v naši omrežni bazi"
 
 msgid "Total RouterInfos stored on disk"
-msgstr ""
+msgstr "Skupno RouterInfos shranjenih na disku"
 
 msgid "Known"
 msgstr "Znani"
@@ -4257,13 +4257,13 @@ msgid "Select stored analysis"
 msgstr "Izberite shranjeno analizo"
 
 msgid "Review"
-msgstr ""
+msgstr "Pregled"
 
 msgid "Run analysis on Floodfills only"
 msgstr "Zaženi analizo le na zalivnih"
 
 msgid "Start Scan"
-msgstr ""
+msgstr "Začni skeniranje"
 
 msgid "Run analysis on all routers in NetDb"
 msgstr "Zaženi analizo na vseh usmerjevalnikih v NetDb"
@@ -4554,7 +4554,7 @@ msgid "No local or transit tunnels currently active."
 msgstr "Trenutno ni aktivnih lokalnih ali prenosnih tuneljev."
 
 msgid "PRIVATE IP ADDRESS"
-msgstr ""
+msgstr "ZASEBNI IP NASLOV"
 
 msgid "Bandwidth Tiers"
 msgstr "Raven širine pasma"
@@ -4567,7 +4567,7 @@ msgid "Inbound or outbound?"
 msgstr "Vhodno ali izhodno?"
 
 msgid "In/Out"
-msgstr ""
+msgstr "Vhod/Izhod"
 
 msgid "Gateway"
 msgstr "Vrata"
@@ -4685,7 +4685,7 @@ msgid "Browser launch at startup"
 msgstr "Zagon brskalnika pri zagonu"
 
 msgid "I2P Router Console"
-msgstr ""
+msgstr "I2P Routerjevska konzola"
 
 msgid "Open Router Console in web browser at startup"
 msgstr "Odpri konzolo usmerjevalnika v spletnem brskalniku pri zagonu"
@@ -4778,7 +4778,7 @@ msgid "Advanced Network Configuration"
 msgstr "Napredna omrežna konfiguracija"
 
 msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
-msgstr ""
+msgstr "I2P bo deloval najbolje, če konfigurirate hitrosti tako, da se ujemajo s hitrostjo vašega internetnega povezave."
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
 msgstr "Opomba: Vaš doprinos omrežju (delenje omrežja) je določen s dodelitvijo gorazne širine pasma (hitrost pošiljanja)."
@@ -4809,10 +4809,10 @@ msgstr "OPOMBA"
 
 #, java-format
 msgid "You have configured I2P to share only {0} KBps."
-msgstr ""
+msgstr "Nastavili ste I2P, da deli le {0} KB/s."
 
 msgid "I2P requires at least 12KBps to enable sharing. "
-msgstr ""
+msgstr "I2P zahteva vsaj 12 KB/s za omogočitev deljenja. "
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
 msgstr "Prosimo, omogočite deljenje (sodelovanje v tuneljih), konfigurirajte več širine pasma."
@@ -5260,7 +5260,7 @@ msgstr "Spodaj je seznam prepovedov po IP naslovih."
 
 #, java-format
 msgid "To view all active bans by router hash, see {0}Banned Peers{1}."
-msgstr ""
+msgstr "Za prikaz vseh aktivnih prepovedov glede na hash routerja, oglejte {0}Prepovedani Peer{1}."
 
 #, java-format
 msgid "A list of {0}session-only bans{1} by hash is also available."
@@ -5310,7 +5310,7 @@ msgid "Reseeding is the bootstrapping process used to find other routers when yo
 msgstr "Ponovno semenjenje je postopek zaženitve, ki se uporablja za iskanje drugih usmerjevalnikov, ko prvič namestite I2P, ali ko vaš usmerjevalnik ima pre malo ostalih referenc usmerjevalnikov."
 
 msgid "To enable the configuration of reseed urls, activate the console's <a href=/help/advancedsettings>Advanced mode</a>."
-msgstr ""
+msgstr "Za aktivacijo konfiguracije URL-jev za reseed, aktivirajte <a href=/help/advancedsettings>Napreden način</a> v konzoli."
 
 msgid "Reseeding Configuration"
 msgstr "Konfiguracija ponovnega semenjenja"
@@ -5473,10 +5473,10 @@ msgid "Use the same sidebar on all pages"
 msgstr "Uporabite enako stransko vrstico na vseh straneh."
 
 msgid "Sticky sidebar"
-msgstr ""
+msgstr "Fiksno dno letnico okno"
 
 msgid "Enable conditional fixed sidebar"
-msgstr ""
+msgstr "Omogoči pogojeno dno letnico orodno okno"
 
 msgid "config stats"
 msgstr "konfig statistika"
@@ -7421,7 +7421,7 @@ msgid "Requested client leaseset"
 msgstr "Zahtevan LeaseSet klienta"
 
 msgid "Remote"
-msgstr ""
+msgstr "Oddaljen"
 
 msgid "network database router map"
 msgstr "karta strežnika baze podatkov omrežja"
@@ -7485,7 +7485,7 @@ msgid "Information &amp; Diagnostics"
 msgstr "Informacije &amp; Diagnostika"
 
 msgid "Customize"
-msgstr ""
+msgstr "Prilagodi"
 
 msgid "statistics"
 msgstr "statistika"
@@ -7658,7 +7658,7 @@ msgid "Browser Setup"
 msgstr "Nastavitev brskalnika"
 
 msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. "
-msgstr ""
+msgstr "Za dostop do spletnih strani, gostitvenih v omrežju I2P, in po možnosti za uporabo privzeti outproxy za povezovanje na spletiših mestih na clearnetu, morate konfigurirati svoj brskalnik za uporabo I2P+ <b>HTTP</b> proxy, ki se privzeto izvaja na <code>127.0.0.1 port 4444</code>. "
 
 msgid "Welcome to I2P+!"
 msgstr "Dobrodošli v I2P+!"
@@ -7667,7 +7667,7 @@ msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) y
 msgstr "Ko zagnate I2P, lahko potrebuje nekaj minut za ujemanje (integracija) vašega strežnika v omrežje in iskanje dodatnih sosednjih strežnikov, zato prosim, da budete strpelni."
 
 msgid "Once green stars are indicated next to your Service Tunnels, there is a wide variety of things you can do with I2P+."
-msgstr ""
+msgstr "Ko se vedo zelenih zvezdic poleg vaših tunelovih storitev, obstaja veliko različnih stvari, ki jih lahko naredite z I2P+."
 
 msgid "Unknown Wizard page"
 msgstr "Neznana stran čarobnjaka"

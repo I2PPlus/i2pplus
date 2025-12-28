@@ -118,7 +118,7 @@ msgid "Total peers in our NetDb"
 msgstr "Total de colegi din NetDb-ul nostru"
 
 msgid "Total number of threads in use"
-msgstr ""
+msgstr "Numărul total de fire în utilizare"
 
 msgid "Peers without a published IP address"
 msgstr "Peers fără o adresă IP publicată"
@@ -2426,7 +2426,7 @@ msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
 msgstr "Browser-ul dumneavoastră nu este corect configurat să utilizeze proxy HTTP la {0}"
 
 msgid "Errors"
-msgstr ""
+msgstr "Erori"
 
 msgid "URL"
 msgstr "URL"
@@ -2706,16 +2706,16 @@ msgid "Select the field to search on"
 msgstr ""
 
 msgid "e.g. cn hk"
-msgstr ""
+msgstr "ex. cn hk"
 
 msgid "MTU"
 msgstr "MTU"
 
 msgid "Enter search value here"
-msgstr ""
+msgstr "Introduceți valoarea de căutare aici"
 
 msgid "Router not found"
-msgstr ""
+msgstr "Router negăsit"
 
 msgid "No routers with"
 msgstr "Nu există routere cu: "
@@ -2791,11 +2791,11 @@ msgstr "LeaseSet-uri la distanță"
 
 #, java-format
 msgid "Hostname {0} not found in network database"
-msgstr ""
+msgstr "Hostname-ul {0} negăsit în baza de date de rețea"
 
 #, java-format
 msgid "LeaseSet for {0} not found in network database"
-msgstr ""
+msgstr "LeaseSet pentru {0} negăsit în baza de date de rețea"
 
 msgid "Meta"
 msgstr "Meta"
@@ -2853,10 +2853,10 @@ msgid "Count"
 msgstr "Număra"
 
 msgid "Under 12 KB/s"
-msgstr ""
+msgstr "Sub 12 KB/s"
 
 msgid "Over 2048 KB/s"
-msgstr ""
+msgstr "Peste 2048 KB/s"
 
 msgid "Bandwidth Tier"
 msgstr "Nivelul de lățime de bandă"
@@ -2929,7 +2929,7 @@ msgid "Hostname"
 msgstr "Nume gazdă"
 
 msgid "Whois"
-msgstr ""
+msgstr "Whois"
 
 msgid "direct"
 msgstr "direct"
@@ -2953,7 +2953,7 @@ msgid "Show all routers with this port in the NetDb"
 msgstr "Afișați toate routerele cu acest port în NetDb"
 
 msgid "Maximum Transmission Unit"
-msgstr ""
+msgstr "Unitate maximă de transmisie"
 
 msgid "Show all routers with this MTU in the NetDb"
 msgstr ""
@@ -2962,7 +2962,7 @@ msgid "Addresses"
 msgstr "Adrese"
 
 msgid "Introducers"
-msgstr ""
+msgstr "Introducători"
 
 msgid "Network Id"
 msgstr "ID rețea"
@@ -3022,16 +3022,16 @@ msgid "Local"
 msgstr "Local"
 
 msgid "Fast Tier"
-msgstr ""
+msgstr "Nivel rapid"
 
 msgid "High Capacity Tier"
-msgstr ""
+msgstr "Nivel de capacitate ridicată"
 
 msgid "Integrated Tier"
-msgstr ""
+msgstr "Nivel integrat"
 
 msgid "Standard Tier"
-msgstr ""
+msgstr "Nivel standard"
 
 msgid "No peer connections available"
 msgstr "Nu există conexiuni peer disponibile"
@@ -3380,7 +3380,7 @@ msgid "Unreachable"
 msgstr "Indisponibil"
 
 msgid "Most tests passing"
-msgstr ""
+msgstr "Cea mai multe teste trec"
 
 msgid "Fast, High Capacity"
 msgstr "Rapid, de mare capacitate"
@@ -3398,7 +3398,7 @@ msgid "Integrated"
 msgstr "Integrat"
 
 msgid "Configure Peer"
-msgstr ""
+msgstr "Configurează peer"
 
 msgid "Thresholds"
 msgstr "Limite"
@@ -3551,7 +3551,7 @@ msgstr "Notă: Routerele de clasă 'LU' au fost excluse din listă."
 
 #, java-format
 msgid "To view, see {0}Session Bans{1}."
-msgstr ""
+msgstr "Pentru a viziona, vezi {0}Interdicții de Sesiune{1}."
 
 msgid "Select search engine"
 msgstr "Selectează motor de căutare..."
@@ -3648,7 +3648,7 @@ msgid "Click Shutdown and restart to install"
 msgstr "Apăsați oprire și reporniți pentru a instala"
 
 msgid "Unable"
-msgstr ""
+msgstr "Indisponibil"
 
 #, java-format
 msgid "{0}"
@@ -3802,7 +3802,7 @@ msgid "An introduction to hosting websites on the I2P network"
 msgstr "O introducere în găzduirea site-urilor web în rețeaua I2P"
 
 msgid "New hosts in last 24 hours"
-msgstr ""
+msgstr "Noi gazde în ultimele 24 de ore"
 
 msgid "I2PControl"
 msgstr "I2PControl"
@@ -3993,7 +3993,7 @@ msgid "The total number of peers in our network database"
 msgstr "Numărul total de utilizatori în baza noastră de date a rețelei"
 
 msgid "Total RouterInfos stored on disk"
-msgstr ""
+msgstr "RouterInfos totale stocate pe disc"
 
 msgid "Known"
 msgstr "Cunoscute"
@@ -4239,13 +4239,13 @@ msgid "Select stored analysis"
 msgstr "Selectați analiza stocată"
 
 msgid "Review"
-msgstr ""
+msgstr "Revizuire"
 
 msgid "Run analysis on Floodfills only"
 msgstr "Executați analiza numai pentru inundații"
 
 msgid "Start Scan"
-msgstr ""
+msgstr "Începeți scanarea"
 
 msgid "Run analysis on all routers in NetDb"
 msgstr "Executați analiza pe toate routerele din NetDb"
@@ -4536,7 +4536,7 @@ msgid "No local or transit tunnels currently active."
 msgstr "Niciun tunel local sau de tranzit activ în prezent."
 
 msgid "PRIVATE IP ADDRESS"
-msgstr ""
+msgstr "ADRESĂ IP PRIVATĂ"
 
 msgid "Bandwidth Tiers"
 msgstr "Nivele de lățime de bandă"
@@ -4549,7 +4549,7 @@ msgid "Inbound or outbound?"
 msgstr "De intrare sau de iesire?"
 
 msgid "In/Out"
-msgstr ""
+msgstr "Intrare/Ieşire"
 
 msgid "Gateway"
 msgstr "Gateway"
@@ -4667,7 +4667,7 @@ msgid "Browser launch at startup"
 msgstr "Lansează browser-ul la pornire"
 
 msgid "I2P Router Console"
-msgstr ""
+msgstr "Consolă Router I2P"
 
 msgid "Open Router Console in web browser at startup"
 msgstr "Deschideți consola router în browser-ul web la pornire"
@@ -4760,7 +4760,7 @@ msgid "Advanced Network Configuration"
 msgstr "Configurarea avansată a rețelei"
 
 msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
-msgstr ""
+msgstr "I2P va funcționa cel mai bine dacă vă configurați ratele pentru a se potrivi cu viteza conexiunii dvs. la internet."
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
 msgstr "Notă: Contribuția dvs. la rețea (cota de rețea) este determinată de alocarea lățimii de bandă în amonte (viteza de încărcare)."
@@ -4791,10 +4791,10 @@ msgstr "NOTĂ"
 
 #, java-format
 msgid "You have configured I2P to share only {0} KBps."
-msgstr ""
+msgstr "Ați configurat I2P să partajeze doar {0} KB/s."
 
 msgid "I2P requires at least 12KBps to enable sharing. "
-msgstr ""
+msgstr "I2P necesită cel puțin 12 KB/s pentru a activa partajarea. "
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
 msgstr "Vă rugăm să activați partajarea (participarea în tuneluri) prin configurarea mai mare a lățimii de bandă."
@@ -5242,7 +5242,7 @@ msgstr "Mai jos este prezentată o listă de interdicții după adresă IP."
 
 #, java-format
 msgid "To view all active bans by router hash, see {0}Banned Peers{1}."
-msgstr ""
+msgstr "Pentru a vedea toate interdicțiile active după hash de router, vezi {0}Peer Banați{1}."
 
 #, java-format
 msgid "A list of {0}session-only bans{1} by hash is also available."
@@ -5292,7 +5292,7 @@ msgid "Reseeding is the bootstrapping process used to find other routers when yo
 msgstr "Restabilirea este procesul de bootstrapping folosit pentru a găsi alte routere atunci când instalați prima data I2P, sau atunci când router-ul are prea puține referințe router rămase."
 
 msgid "To enable the configuration of reseed urls, activate the console's <a href=/help/advancedsettings>Advanced mode</a>."
-msgstr ""
+msgstr "Pentru a activa configurarea URL-urilor de reseed, activați <a href=/help/advancedsettings>modul avansat</a> în consolă."
 
 msgid "Reseeding Configuration"
 msgstr "Configurație Reseeding"
@@ -5455,10 +5455,10 @@ msgid "Use the same sidebar on all pages"
 msgstr "Folosiți aceeași bară laterală pe toate paginile"
 
 msgid "Sticky sidebar"
-msgstr ""
+msgstr "Bară laterală fixă"
 
 msgid "Enable conditional fixed sidebar"
-msgstr ""
+msgstr "Activează bara laterală fixă condițional"
 
 msgid "config stats"
 msgstr "config statistici"
@@ -7403,7 +7403,7 @@ msgid "Requested client leaseset"
 msgstr "LeaseSet client solicitat"
 
 msgid "Remote"
-msgstr ""
+msgstr "Distant"
 
 msgid "network database router map"
 msgstr "Harta routerului din bază de date de rețea"
@@ -7467,7 +7467,7 @@ msgid "Information &amp; Diagnostics"
 msgstr "Informații"
 
 msgid "Customize"
-msgstr ""
+msgstr "Personaliza"
 
 msgid "statistics"
 msgstr "statistici"
@@ -7640,7 +7640,7 @@ msgid "Browser Setup"
 msgstr "Configurare browser"
 
 msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. "
-msgstr ""
+msgstr "Pentru a accesa site-urile web găzduite în rețeaua I2P și opțional pentru a utiliza outproxy-ul implicit pentru a vă conecta la site-uri în clearnet, va trebui să vă configurați browserul pentru a utiliza proxy-ul <b>HTTP</b> I2P+, care rulează implicit pe <code>127.0.0.1 port 4444</code>. "
 
 msgid "Welcome to I2P+!"
 msgstr "Bine ați venit la I2P+!"
@@ -7649,7 +7649,7 @@ msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) y
 msgstr "Când porniți I2P, este posibil să dureze câteva minute pentru a încărca routerul (integra) routerul în rețea și pentru a găsi colegi suplimentari, așa că vă rugăm să aveți răbdare."
 
 msgid "Once green stars are indicated next to your Service Tunnels, there is a wide variety of things you can do with I2P+."
-msgstr ""
+msgstr "Odată ce sunt indicate stelele verzi lângă tunelurile dvs. de Serviciu, există o gamă largă de lucruri pe care le puteți face cu I2P+."
 
 msgid "Unknown Wizard page"
 msgstr "Pagină Expert necunoscut"

@@ -114,7 +114,7 @@ msgid "Total peers in our NetDb"
 msgstr "我方数据库中记录的对等节点总数量"
 
 msgid "Total number of threads in use"
-msgstr ""
+msgstr "使用的线程总数"
 
 msgid "Peers without a published IP address"
 msgstr "没有已发布 IP 地址的对等方"
@@ -2410,7 +2410,7 @@ msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
 msgstr "您的浏览器尚未配置使用 HTTP 代理 {0}"
 
 msgid "Errors"
-msgstr ""
+msgstr "错误"
 
 msgid "URL"
 msgstr "URL"
@@ -2690,16 +2690,16 @@ msgid "Select the field to search on"
 msgstr ""
 
 msgid "e.g. cn hk"
-msgstr ""
+msgstr "例如 cn hk"
 
 msgid "MTU"
 msgstr "MTU"
 
 msgid "Enter search value here"
-msgstr ""
+msgstr "在此输入搜索值"
 
 msgid "Router not found"
-msgstr ""
+msgstr "未找到路由器"
 
 msgid "No routers with"
 msgstr "没有具有...的路由器"
@@ -2837,10 +2837,10 @@ msgid "Count"
 msgstr "计数"
 
 msgid "Under 12 KB/s"
-msgstr ""
+msgstr "低于 12 KB/s"
 
 msgid "Over 2048 KB/s"
-msgstr ""
+msgstr "高于 2048 KB/s"
 
 msgid "Bandwidth Tier"
 msgstr "带宽等级"
@@ -2913,7 +2913,7 @@ msgid "Hostname"
 msgstr "域名"
 
 msgid "Whois"
-msgstr ""
+msgstr "Whois"
 
 msgid "direct"
 msgstr "直接"
@@ -2937,7 +2937,7 @@ msgid "Show all routers with this port in the NetDb"
 msgstr "显示NetDb中具有此端口的所有路由器"
 
 msgid "Maximum Transmission Unit"
-msgstr ""
+msgstr "最大传输单元"
 
 msgid "Show all routers with this MTU in the NetDb"
 msgstr ""
@@ -2946,7 +2946,7 @@ msgid "Addresses"
 msgstr "地址"
 
 msgid "Introducers"
-msgstr ""
+msgstr "引入者"
 
 msgid "Network Id"
 msgstr "网络 ID"
@@ -3006,16 +3006,16 @@ msgid "Local"
 msgstr "本地"
 
 msgid "Fast Tier"
-msgstr ""
+msgstr "快速层"
 
 msgid "High Capacity Tier"
-msgstr ""
+msgstr "高容量层"
 
 msgid "Integrated Tier"
-msgstr ""
+msgstr "集成层"
 
 msgid "Standard Tier"
-msgstr ""
+msgstr "标准层"
 
 msgid "No peer connections available"
 msgstr "没有可用的连接"
@@ -3354,7 +3354,7 @@ msgid "Unreachable"
 msgstr "不可达"
 
 msgid "Most tests passing"
-msgstr ""
+msgstr "大多数测试通过"
 
 msgid "Fast, High Capacity"
 msgstr "快速，高容量"
@@ -3372,7 +3372,7 @@ msgid "Integrated"
 msgstr "已整合"
 
 msgid "Configure Peer"
-msgstr ""
+msgstr "配置对等节点"
 
 msgid "Thresholds"
 msgstr "临界值"
@@ -3616,7 +3616,7 @@ msgid "Click Shutdown and restart to install"
 msgstr "点击关闭并重新启动I2P即可完成安装"
 
 msgid "Unable"
-msgstr ""
+msgstr "无法"
 
 #, java-format
 msgid "{0}"
@@ -3961,7 +3961,7 @@ msgid "The total number of peers in our network database"
 msgstr "我方网络数据库中记录的对等节点总数量"
 
 msgid "Total RouterInfos stored on disk"
-msgstr ""
+msgstr "磁盘上存储的RouterInfo总数"
 
 msgid "Known"
 msgstr "已知"
@@ -4203,13 +4203,13 @@ msgid "Select stored analysis"
 msgstr "选择存储的分析"
 
 msgid "Review"
-msgstr ""
+msgstr "审查"
 
 msgid "Run analysis on Floodfills only"
 msgstr "仅对洪泛节点运行分析"
 
 msgid "Start Scan"
-msgstr ""
+msgstr "开始扫描"
 
 msgid "Run analysis on all routers in NetDb"
 msgstr "在 NetDb 中的所有路由器上运行分析"
@@ -4500,7 +4500,7 @@ msgid "No local or transit tunnels currently active."
 msgstr "目前没有本地或过境隧道。"
 
 msgid "PRIVATE IP ADDRESS"
-msgstr ""
+msgstr "私有IP地址"
 
 msgid "Bandwidth Tiers"
 msgstr "带宽等级"
@@ -4513,7 +4513,7 @@ msgid "Inbound or outbound?"
 msgstr "入站或出站？"
 
 msgid "In/Out"
-msgstr ""
+msgstr "入/出"
 
 msgid "Gateway"
 msgstr "网关"
@@ -4631,7 +4631,7 @@ msgid "Browser launch at startup"
 msgstr "路由器启动时启动浏览器"
 
 msgid "I2P Router Console"
-msgstr ""
+msgstr "I2P路由器控制台"
 
 msgid "Open Router Console in web browser at startup"
 msgstr "路由启动时打开网页版路由控制台"
@@ -4724,7 +4724,7 @@ msgid "Advanced Network Configuration"
 msgstr "高级网络配置"
 
 msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
-msgstr ""
+msgstr "I2P如果您将费率配置为与互联网连接速度相匹配，将获得最佳性能。"
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
 msgstr "注意：您对网络（网络共享）的贡献取决于上行带宽（上传速度）的分配。"
@@ -4755,10 +4755,10 @@ msgstr "注意"
 
 #, java-format
 msgid "You have configured I2P to share only {0} KBps."
-msgstr ""
+msgstr "您已配置I2P仅共享{0} KB/s。"
 
 msgid "I2P requires at least 12KBps to enable sharing. "
-msgstr ""
+msgstr "I2P启用共享至少需要12 KB/s。 "
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
 msgstr "请设置更多的带宽以便启用共享功能（参与到其他节点的隧道创建中）。 "
@@ -5256,7 +5256,7 @@ msgid "Reseeding is the bootstrapping process used to find other routers when yo
 msgstr "补种是一个网络引导过程，用于发现其他路由，当您首次安装 I2P 或您的路由仅有很少路由信息。"
 
 msgid "To enable the configuration of reseed urls, activate the console's <a href=/help/advancedsettings>Advanced mode</a>."
-msgstr ""
+msgstr "要启用重新种子URL配置，请在控制台中激活<a href=/help/advancedsettings>高级模式</a>。"
 
 msgid "Reseeding Configuration"
 msgstr "补种设置"
@@ -5419,10 +5419,10 @@ msgid "Use the same sidebar on all pages"
 msgstr "在所有页面使用相同的侧边栏"
 
 msgid "Sticky sidebar"
-msgstr ""
+msgstr "固定侧边栏"
 
 msgid "Enable conditional fixed sidebar"
-msgstr ""
+msgstr "启用条件固定侧边栏"
 
 msgid "config stats"
 msgstr "设置统计"
@@ -7367,7 +7367,7 @@ msgid "Requested client leaseset"
 msgstr "请求的客户端租约集"
 
 msgid "Remote"
-msgstr ""
+msgstr "远程"
 
 msgid "network database router map"
 msgstr "网络数据库路由器映射"
@@ -7431,7 +7431,7 @@ msgid "Information &amp; Diagnostics"
 msgstr "诊断信息"
 
 msgid "Customize"
-msgstr ""
+msgstr "自定义"
 
 msgid "statistics"
 msgstr "统计"
@@ -7604,7 +7604,7 @@ msgid "Browser Setup"
 msgstr "浏览器设置"
 
 msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. "
-msgstr ""
+msgstr "要访问托管在I2P网络上的网站，并选择性地使用默认outproxy连接到clearnet上的网站，您需要配置浏览器以使用I2P+ <b>HTTP</b>代理，该代理默认在<code>127.0.0.1 port 4444</code>上运行。"
 
 msgid "Welcome to I2P+!"
 msgstr "欢迎来到 I2P！"
@@ -7613,7 +7613,7 @@ msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) y
 msgstr "当你启动 I2P 时, 可能需要数分钟的时间将你的路由引导（整合）至网络当中并发现其它对等节点，所以请耐心等待。"
 
 msgid "Once green stars are indicated next to your Service Tunnels, there is a wide variety of things you can do with I2P+."
-msgstr ""
+msgstr "一旦您的服务隧道旁边出现绿色星星，您就可以用I2P+做很多事情。"
 
 msgid "Unknown Wizard page"
 msgstr "未知向导页面"

@@ -114,7 +114,7 @@ msgid "Total peers in our NetDb"
 msgstr "NetDb의 총 피어"
 
 msgid "Total number of threads in use"
-msgstr ""
+msgstr "사용 중인 스레드의 총 수"
 
 msgid "Peers without a published IP address"
 msgstr "Peers without a published IP address"
@@ -2410,7 +2410,7 @@ msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
 msgstr "브라우저 HTTP 프록시를 {0}으로 설정하지 않은 것 같습니다"
 
 msgid "Errors"
-msgstr ""
+msgstr "오류"
 
 msgid "URL"
 msgstr "URL"
@@ -2690,16 +2690,16 @@ msgid "Select the field to search on"
 msgstr ""
 
 msgid "e.g. cn hk"
-msgstr ""
+msgstr "예: cn hk"
 
 msgid "MTU"
 msgstr "MTU"
 
 msgid "Enter search value here"
-msgstr ""
+msgstr "검색 값을 여기에 입력하세요"
 
 msgid "Router not found"
-msgstr ""
+msgstr "라우터를 찾을 수 없습니다"
 
 msgid "No routers with"
 msgstr "라우터가 없음: "
@@ -2775,11 +2775,11 @@ msgstr "원격 리스셋"
 
 #, java-format
 msgid "Hostname {0} not found in network database"
-msgstr ""
+msgstr "네트워크 데이터베이스에서 호스트 이름 {0}을 찾을 수 없습니다"
 
 #, java-format
 msgid "LeaseSet for {0} not found in network database"
-msgstr ""
+msgstr "네트워크 데이터베이스에서 {0}의 LeaseSet을 찾을 수 없습니다"
 
 msgid "Meta"
 msgstr "메타"
@@ -2837,10 +2837,10 @@ msgid "Count"
 msgstr "횟수"
 
 msgid "Under 12 KB/s"
-msgstr ""
+msgstr "12 KB/s 미만"
 
 msgid "Over 2048 KB/s"
-msgstr ""
+msgstr "2048 KB/s 이상"
 
 msgid "Bandwidth Tier"
 msgstr "대역폭 계층"
@@ -2913,7 +2913,7 @@ msgid "Hostname"
 msgstr "호스트 이름"
 
 msgid "Whois"
-msgstr ""
+msgstr "Whois"
 
 msgid "direct"
 msgstr "직접"
@@ -2937,7 +2937,7 @@ msgid "Show all routers with this port in the NetDb"
 msgstr "NetDb에서 이 포트가 있는 모든 라우터를 표시합니다."
 
 msgid "Maximum Transmission Unit"
-msgstr ""
+msgstr "최대 전송 단위"
 
 msgid "Show all routers with this MTU in the NetDb"
 msgstr ""
@@ -2946,7 +2946,7 @@ msgid "Addresses"
 msgstr "주소록"
 
 msgid "Introducers"
-msgstr ""
+msgstr "소개자"
 
 msgid "Network Id"
 msgstr "네트워크 ID"
@@ -3006,16 +3006,16 @@ msgid "Local"
 msgstr "로컬"
 
 msgid "Fast Tier"
-msgstr ""
+msgstr "빠른 계층"
 
 msgid "High Capacity Tier"
-msgstr ""
+msgstr "고용량 계층"
 
 msgid "Integrated Tier"
-msgstr ""
+msgstr "통합 계층"
 
 msgid "Standard Tier"
-msgstr ""
+msgstr "표준 계층"
 
 msgid "No peer connections available"
 msgstr "사용 가능한 피어 연결이 없습니다."
@@ -3354,7 +3354,7 @@ msgid "Unreachable"
 msgstr "접근불가능"
 
 msgid "Most tests passing"
-msgstr ""
+msgstr "대부분의 테스트 통과"
 
 msgid "Fast, High Capacity"
 msgstr "빠르고, 높은 수용력"
@@ -3372,7 +3372,7 @@ msgid "Integrated"
 msgstr "통합된"
 
 msgid "Configure Peer"
-msgstr ""
+msgstr "피어 구성"
 
 msgid "Thresholds"
 msgstr "기준치"
@@ -3519,7 +3519,7 @@ msgstr "참고: 'LU' 클래스 라우터는 목록에서 제외되었습니다."
 
 #, java-format
 msgid "To view, see {0}Session Bans{1}."
-msgstr ""
+msgstr "보려면, {0}세션 차단{1}을 참조하세요."
 
 msgid "Select search engine"
 msgstr "검색엔진 선택"
@@ -3616,7 +3616,7 @@ msgid "Click Shutdown and restart to install"
 msgstr "설치하려면 종료 후 재시작하세요"
 
 msgid "Unable"
-msgstr ""
+msgstr "사용 불가"
 
 #, java-format
 msgid "{0}"
@@ -3770,7 +3770,7 @@ msgid "An introduction to hosting websites on the I2P network"
 msgstr "I2P 네트워크에서 웹 사이트 호스팅 소개"
 
 msgid "New hosts in last 24 hours"
-msgstr ""
+msgstr "최근 24시간 내의 새로운 호스트"
 
 msgid "I2PControl"
 msgstr "I2P제어"
@@ -3961,7 +3961,7 @@ msgid "The total number of peers in our network database"
 msgstr "내 네트워크 데이터베이스의 피어들의 총 수"
 
 msgid "Total RouterInfos stored on disk"
-msgstr ""
+msgstr "디스크에 저장된 RouterInfo의 총수"
 
 msgid "Known"
 msgstr "알려진"
@@ -4203,13 +4203,13 @@ msgid "Select stored analysis"
 msgstr "저장된 분석 선택"
 
 msgid "Review"
-msgstr ""
+msgstr "검토"
 
 msgid "Run analysis on Floodfills only"
 msgstr "홍수 채우기에 대해서만 분석 실행"
 
 msgid "Start Scan"
-msgstr ""
+msgstr "스캔 시작"
 
 msgid "Run analysis on all routers in NetDb"
 msgstr "NetDb의 모든 라우터에 대한 분석 실행"
@@ -4500,7 +4500,7 @@ msgid "No local or transit tunnels currently active."
 msgstr "현재 활성화된 로컬 또는 통과 터널이 없습니다."
 
 msgid "PRIVATE IP ADDRESS"
-msgstr ""
+msgstr "개인 IP 주소"
 
 msgid "Bandwidth Tiers"
 msgstr "대역폭 계층"
@@ -4513,7 +4513,7 @@ msgid "Inbound or outbound?"
 msgstr "인바운드인가 아웃바운드인가?"
 
 msgid "In/Out"
-msgstr ""
+msgstr "입력/출력"
 
 msgid "Gateway"
 msgstr "게이트웨이"
@@ -4631,7 +4631,7 @@ msgid "Browser launch at startup"
 msgstr "시작때 브라우저 열기"
 
 msgid "I2P Router Console"
-msgstr ""
+msgstr "I2P 라우터 콘솔"
 
 msgid "Open Router Console in web browser at startup"
 msgstr "시작때 브라우저에서 라우터 콘솔 열기"
@@ -4724,7 +4724,7 @@ msgid "Advanced Network Configuration"
 msgstr "고급 네트워크 구성"
 
 msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
-msgstr ""
+msgstr "I2P는 인터넷 연결 속도에 맞게 요금을 설정하면 최상의 성능을 발�합니다."
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
 msgstr "참고 : 네트워크 (네트워크 공유)에 대한 귀하의 기여는 업스트림 대역폭의 할당 (업로드 속도)에 의해 결정됩니다."
@@ -4755,10 +4755,10 @@ msgstr "참고"
 
 #, java-format
 msgid "You have configured I2P to share only {0} KBps."
-msgstr ""
+msgstr "I2P를 {0} KB/s만 공유하도록 구성했습니다."
 
 msgid "I2P requires at least 12KBps to enable sharing. "
-msgstr ""
+msgstr "I2P 공유를 활성화하려면 최소 12 KB/s가 필요합니다. "
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
 msgstr "더 많은 대역폭을 공유하도록 설정해 주십시오. (더 많은 터널들에 참가하세요!)"
@@ -5206,7 +5206,7 @@ msgstr "IP 주소별 차단 목록이 아래에 표시됩니다."
 
 #, java-format
 msgid "To view all active bans by router hash, see {0}Banned Peers{1}."
-msgstr ""
+msgstr "라우터 해시에 따른 모든 활성 차단을 보려면, {0}차단된 피어{1}를 참조하세요."
 
 #, java-format
 msgid "A list of {0}session-only bans{1} by hash is also available."
@@ -5256,7 +5256,7 @@ msgid "Reseeding is the bootstrapping process used to find other routers when yo
 msgstr "리시딩은 처음 I2P를 설치했을 때 다룬 라우터를 찾기위해 사용되는 부트스트랩 방식의 프로세스입니다. 또는 너무 적은 수의 라우터 레퍼런스를 가지고 있을 때도 사용됩니다."
 
 msgid "To enable the configuration of reseed urls, activate the console's <a href=/help/advancedsettings>Advanced mode</a>."
-msgstr ""
+msgstr "리시드 URL 구성을 활성화하려면 콘솔에서 <a href=/help/advancedsettings>고급 모드</a>를 활성화하세요."
 
 msgid "Reseeding Configuration"
 msgstr "재시딩 설정"
@@ -5419,10 +5419,10 @@ msgid "Use the same sidebar on all pages"
 msgstr "모든 페이지에서 동일한 사이드바 사용"
 
 msgid "Sticky sidebar"
-msgstr ""
+msgstr "고정 사이드바"
 
 msgid "Enable conditional fixed sidebar"
-msgstr ""
+msgstr "조건부 고정 사이드바 활성화"
 
 msgid "config stats"
 msgstr "통계 설정"
@@ -7367,7 +7367,7 @@ msgid "Requested client leaseset"
 msgstr "요청된 클라이언트 리스셋"
 
 msgid "Remote"
-msgstr ""
+msgstr "원격"
 
 msgid "network database router map"
 msgstr "네트워크 데이터베이스 라우터 지도"
@@ -7431,7 +7431,7 @@ msgid "Information &amp; Diagnostics"
 msgstr "정보 및 진단"
 
 msgid "Customize"
-msgstr ""
+msgstr "사용자 정의"
 
 msgid "statistics"
 msgstr "통계"
@@ -7604,7 +7604,7 @@ msgid "Browser Setup"
 msgstr "브라우저 설정"
 
 msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. "
-msgstr ""
+msgstr "I2P 네트워크에서 호스팅된 웹사이트에 액세스하고 clearnet의 웹사이트에 연결하기 위해 선택적으로 기본 outproxy를 사용하려면, I2P+ <b>HTTP</b> 프록시를 사용하도록 브라우저를 구성해야 합니다. 이 프록시는 기본적으로 <code>127.0.0.1 port 4444</code>에서 실행됩니다. "
 
 msgid "Welcome to I2P+!"
 msgstr "I2P에 환영합니다!"
@@ -7613,7 +7613,7 @@ msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) y
 msgstr "I2P를 시작하면 라우터를 네트워크에 부트 스트랩 (통합)하고 추가 피어를 찾는 데 몇 분이 걸릴 수 있으므로 인내하십시오."
 
 msgid "Once green stars are indicated next to your Service Tunnels, there is a wide variety of things you can do with I2P+."
-msgstr ""
+msgstr "서비스 터널 옆에 녹색 별이 표시되면, I2P+로 할 수 있는 다양한 일들을 할 수 있습니다."
 
 msgid "Unknown Wizard page"
 msgstr "알 수없는 마법사 페이지"

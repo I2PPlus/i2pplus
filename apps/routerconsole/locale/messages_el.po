@@ -116,7 +116,7 @@ msgid "Total peers in our NetDb"
 msgstr "Σύνολο ομοτίμων στο NetDb μας"
 
 msgid "Total number of threads in use"
-msgstr ""
+msgstr "Συνολικός αριθμός νημάτων σε χρήση"
 
 msgid "Peers without a published IP address"
 msgstr "Ομότιμοι χωρίς δημοσιευμένη διεύθυνση IP"
@@ -2418,7 +2418,7 @@ msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
 msgstr "Ο browser σας δεν είναι σωστά ρυθμισμένος να χρησιμοποιεί HTTP proxy στο {0}"
 
 msgid "Errors"
-msgstr ""
+msgstr "Σφάλματα"
 
 msgid "URL"
 msgstr "URL"
@@ -2698,16 +2698,16 @@ msgid "Select the field to search on"
 msgstr ""
 
 msgid "e.g. cn hk"
-msgstr ""
+msgstr "π.χ. cn hk"
 
 msgid "MTU"
 msgstr "MTU"
 
 msgid "Enter search value here"
-msgstr ""
+msgstr "Εισάγετε την τιμή αναζήτησης εδώ"
 
 msgid "Router not found"
-msgstr ""
+msgstr "Ο router δεν βρέθηκε"
 
 msgid "No routers with"
 msgstr ""
@@ -2783,11 +2783,11 @@ msgstr ""
 
 #, java-format
 msgid "Hostname {0} not found in network database"
-msgstr ""
+msgstr "Το Hostname {0} δεν βρέθηκε στη βάση δεδομένων του δικτύου"
 
 #, java-format
 msgid "LeaseSet for {0} not found in network database"
-msgstr ""
+msgstr "Το LeaseSet για {0} δεν βρέθηκε στη βάση δεδομένων"
 
 msgid "Meta"
 msgstr ""
@@ -2845,10 +2845,10 @@ msgid "Count"
 msgstr "Υπολογισμός"
 
 msgid "Under 12 KB/s"
-msgstr ""
+msgstr "Λίγοτερο από 12 KB/s"
 
 msgid "Over 2048 KB/s"
-msgstr ""
+msgstr "Πάνω από 2048 KB/s"
 
 msgid "Bandwidth Tier"
 msgstr "Εύρος ζώνης βαθμίδας"
@@ -2921,7 +2921,7 @@ msgid "Hostname"
 msgstr "Όνομα κεντρικού υπολογιστή"
 
 msgid "Whois"
-msgstr ""
+msgstr "Whois"
 
 msgid "direct"
 msgstr ""
@@ -2945,7 +2945,7 @@ msgid "Show all routers with this port in the NetDb"
 msgstr "Εμφάνιση όλων των δρομολογητών με αυτήν τη θύρα στο NetDb"
 
 msgid "Maximum Transmission Unit"
-msgstr ""
+msgstr "Μέγιστη μονάδα μετάδοσης"
 
 msgid "Show all routers with this MTU in the NetDb"
 msgstr ""
@@ -2954,7 +2954,7 @@ msgid "Addresses"
 msgstr "Διευθύνσεις"
 
 msgid "Introducers"
-msgstr ""
+msgstr "Εισαγωγείς"
 
 msgid "Network Id"
 msgstr ""
@@ -3014,16 +3014,16 @@ msgid "Local"
 msgstr "Τοπικό"
 
 msgid "Fast Tier"
-msgstr ""
+msgstr "Γρήγορο επίπεδο"
 
 msgid "High Capacity Tier"
-msgstr ""
+msgstr "Επίπεδο υψηλής ικανότητας"
 
 msgid "Integrated Tier"
-msgstr ""
+msgstr "Ολοκληρωμένο επίπεδο"
 
 msgid "Standard Tier"
-msgstr ""
+msgstr "Τυπικό επίπεδο"
 
 msgid "No peer connections available"
 msgstr "Δεν υπάρχουν διαθέσιμες ομότιμες συνδέσεις"
@@ -3367,7 +3367,7 @@ msgid "Unreachable"
 msgstr "Απροσπέλαστος"
 
 msgid "Most tests passing"
-msgstr ""
+msgstr "Οι περισσότερες δοκιμές πέρασαν"
 
 msgid "Fast, High Capacity"
 msgstr "Γρήγοροι, Υψηλής Χωρητικότητας"
@@ -3385,7 +3385,7 @@ msgid "Integrated"
 msgstr "Ενσωματωμένος"
 
 msgid "Configure Peer"
-msgstr ""
+msgstr "Ρύθμιση ομότιμου"
 
 msgid "Thresholds"
 msgstr "Κατώφλια"
@@ -3535,7 +3535,7 @@ msgstr ""
 
 #, java-format
 msgid "To view, see {0}Session Bans{1}."
-msgstr ""
+msgstr "Για προβολή, δείτε {0}Απαγορεύσεις Συνεδρίας{1}."
 
 msgid "Select search engine"
 msgstr "Επιλογή μηχανής αναζήτησης"
@@ -3632,7 +3632,7 @@ msgid "Click Shutdown and restart to install"
 msgstr "Κάνε κλικ στο σβήσιμο και στη επανεκκίνησε για εγκατάσταση"
 
 msgid "Unable"
-msgstr ""
+msgstr "Δεν είναι δυνατό"
 
 #, java-format
 msgid "{0}"
@@ -3786,7 +3786,7 @@ msgid "An introduction to hosting websites on the I2P network"
 msgstr "Εισαγωγή στη φιλοξενία ιστοσελίδων στο δίκτυο I2P"
 
 msgid "New hosts in last 24 hours"
-msgstr ""
+msgstr "Νέοι hosts τις τελευταίες 24 ώρες"
 
 msgid "I2PControl"
 msgstr "I2PControl"
@@ -3977,7 +3977,7 @@ msgid "The total number of peers in our network database"
 msgstr "Ο συνολικός αριθμός συνομηλίκων στη βάση δεδομένων του δικτύου μας"
 
 msgid "Total RouterInfos stored on disk"
-msgstr ""
+msgstr "Συνολικά RouterInfos αποθηκευμένα στον δίσκο"
 
 msgid "Known"
 msgstr "Γνωστό"
@@ -4221,13 +4221,13 @@ msgid "Select stored analysis"
 msgstr "Επιλέξτε την αποθηκευμένη ανάλυση"
 
 msgid "Review"
-msgstr ""
+msgstr "Ανασκόπηση"
 
 msgid "Run analysis on Floodfills only"
 msgstr "Εκτέλεση ανάλυσης μόνο σε Floodfills"
 
 msgid "Start Scan"
-msgstr ""
+msgstr "Εκκίνηση σάρωσης"
 
 msgid "Run analysis on all routers in NetDb"
 msgstr "Εκτέλεση ανάλυσης σε όλους τους δρομολογητές στο NetDb"
@@ -4518,7 +4518,7 @@ msgid "No local or transit tunnels currently active."
 msgstr "Δεν υπάρχουν ενεργές τοπικές σήραγγες ή διαμετακόμισης."
 
 msgid "PRIVATE IP ADDRESS"
-msgstr ""
+msgstr "ΙΔΙΩΤΙΚΗ ΔΙΕΥΘΥΝΣΗ IP"
 
 msgid "Bandwidth Tiers"
 msgstr "Επίπεδοεύρους ζώνης"
@@ -4531,7 +4531,7 @@ msgid "Inbound or outbound?"
 msgstr "Εισερχόμενο ή εξερχόμενο?"
 
 msgid "In/Out"
-msgstr ""
+msgstr "Είσοδος/Έξοδος"
 
 msgid "Gateway"
 msgstr "Πύλη"
@@ -4649,7 +4649,7 @@ msgid "Browser launch at startup"
 msgstr "Εκκίνηση περιηγητή κατά την εκκίνηση"
 
 msgid "I2P Router Console"
-msgstr ""
+msgstr "Κονσόλα I2P Router"
 
 msgid "Open Router Console in web browser at startup"
 msgstr "Άνοιγμα κονσόλας δρομολογητή στον περιηγητή κατά την εκκίνηση"
@@ -4742,7 +4742,7 @@ msgid "Advanced Network Configuration"
 msgstr "Προηγμένη διαμόρφωση δικτύου"
 
 msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
-msgstr ""
+msgstr "Το I2P θα λειτουργεί καλύτερα, αν ρυθμίσετε τις ρυθμίσεις σας ώστε να ταιριάζουν με την ταχύτητα της σύνδεσής στο ίντερνετ."
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
 msgstr "Σημείωση: Η συνεισφορά σας στο δίκτυο (μερίδιο δικτύου) καθορίζεται από την κατανομή του εύρους ζώνης ανάντη (ταχύτητα μεταφόρτωσης)."
@@ -4773,10 +4773,10 @@ msgstr ""
 
 #, java-format
 msgid "You have configured I2P to share only {0} KBps."
-msgstr ""
+msgstr "Έχετε ρυθμίσει το I2P για να μοιράζει μόνο {0} KB/s."
 
 msgid "I2P requires at least 12KBps to enable sharing. "
-msgstr ""
+msgstr "Το I2P απαιτεί τουλάχιστον 12 KB/s για να ενεργοποιήσει τη διαμοιρασία. "
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
 msgstr "Παρακαλούμε ενεργοποιήστε τον διαμοιρασμό (συμμετέχοντας σε τούνελ) ρυθμίζοντας περισσότερο εύρος ζώνης. "
@@ -5224,7 +5224,7 @@ msgstr ""
 
 #, java-format
 msgid "To view all active bans by router hash, see {0}Banned Peers{1}."
-msgstr ""
+msgstr "Για να δείτε όλα τα ενεργά αποκλεισμένα βάσει του hash του router, δείτε {0}Αποκλεισμένοι Peers{1}."
 
 #, java-format
 msgid "A list of {0}session-only bans{1} by hash is also available."
@@ -5274,7 +5274,7 @@ msgid "Reseeding is the bootstrapping process used to find other routers when yo
 msgstr "Το Reseeding είναι η διαδικασία εκκίνησης που χρησιμοποιείται για την εύρεση άλλων δρομολογητών κατά την πρώτη εγκατάσταση του I2P ή όταν ο δρομολογητής σας έχει πολύ λίγες αναφορές δρομολογητή."
 
 msgid "To enable the configuration of reseed urls, activate the console's <a href=/help/advancedsettings>Advanced mode</a>."
-msgstr ""
+msgstr "Για να ενεργοποιήσετε τη ρύθμιση των URL επανασποράς, ενεργοποιήστε την <a href=/help/advancedsettings>Προχωρημένη κατάσταση</a> στην κονσόλα."
 
 msgid "Reseeding Configuration"
 msgstr "Διαμόρφωση επανασποράς"
@@ -5437,10 +5437,10 @@ msgid "Use the same sidebar on all pages"
 msgstr ""
 
 msgid "Sticky sidebar"
-msgstr ""
+msgstr "Σταθερή πλευρική μπάρα"
 
 msgid "Enable conditional fixed sidebar"
-msgstr ""
+msgstr "Ενεργοποίηση στάθερης πλευρικής μπάρας"
 
 msgid "config stats"
 msgstr "στατιστικά ρυθμίσεων"
@@ -7385,7 +7385,7 @@ msgid "Requested client leaseset"
 msgstr ""
 
 msgid "Remote"
-msgstr ""
+msgstr "Απομακρυσμένος"
 
 msgid "network database router map"
 msgstr "Χάρτης διακομιστή βάσης δεδομένων δικτύου"
@@ -7449,7 +7449,7 @@ msgid "Information &amp; Diagnostics"
 msgstr "Πληροφορίες"
 
 msgid "Customize"
-msgstr ""
+msgstr "Προσαρμογή"
 
 msgid "statistics"
 msgstr "στατιστικά"
@@ -7622,7 +7622,7 @@ msgid "Browser Setup"
 msgstr "Ρύθμιση προγράμματος περιήγησης"
 
 msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. "
-msgstr ""
+msgstr "Για να αποκτήσετε ιστοσελίδες που φιλοξενοξεονται στο δίκτυο I2P και προαιρετικά να χρησιμοποιήσετε το προεπιλεγμένο outproxy για να συνδεθείτε σε ιστότοπους στο clearnet, θα πρέπει να ρυθμίσετε τον περιηγητή σας ώστε να χρησιμοποιεί το I2P+ <b>HTTP</b> proxy, που τρέχει από προεπιλογή στο <code>127.0.0.1 port 4444</code>. "
 
 msgid "Welcome to I2P+!"
 msgstr "Καλώς ήρθατε στο  I2P!"
@@ -7631,7 +7631,7 @@ msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) y
 msgstr "Όταν εκκινείτε το I2P, μπορεί να χρειαστούν μερικά λεπτά για την εκκίνηση (ενσωμάτωση) του δρομολογητή σας στο δίκτυο και την εύρεση επιπλέον συνομηλίκων, οπότε παρακαλούμε να είστε υπομονετικοί."
 
 msgid "Once green stars are indicated next to your Service Tunnels, there is a wide variety of things you can do with I2P+."
-msgstr ""
+msgstr "Μόλις εμφανίζονται οι πράσινοι αστέρες δίπλασμααν οι υπηρεσίες Tunnel Σας, υπάρχει μια μεγάλη ποικιλία πραγμάτων που μπορείτε να κάνετε με το I2P+."
 
 msgid "Unknown Wizard page"
 msgstr "Σελίδα Άγνωστου Οδηγού"

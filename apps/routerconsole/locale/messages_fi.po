@@ -116,7 +116,7 @@ msgid "Total peers in our NetDb"
 msgstr "Yhteensä vertaisverkkomme NetDb:ssä"
 
 msgid "Total number of threads in use"
-msgstr ""
+msgstr "Käytettyjen säikeiden kokonaismäärä"
 
 msgid "Peers without a published IP address"
 msgstr "Vertaisversiot, joilla ei ole julkaistua IP-osoitetta"
@@ -2418,7 +2418,7 @@ msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
 msgstr "Selaintasi ei ole määritetty oikein käyttämään HTTP-välityspalvelinta osoitteessa {0}"
 
 msgid "Errors"
-msgstr ""
+msgstr "Virheet"
 
 msgid "URL"
 msgstr "Verkko-osoite"
@@ -2698,16 +2698,16 @@ msgid "Select the field to search on"
 msgstr ""
 
 msgid "e.g. cn hk"
-msgstr ""
+msgstr "esim. cn hk"
 
 msgid "MTU"
 msgstr "MTU"
 
 msgid "Enter search value here"
-msgstr ""
+msgstr "Syötä hakuarvo tähän"
 
 msgid "Router not found"
-msgstr ""
+msgstr "Reitintä ei löytynyt"
 
 msgid "No routers with"
 msgstr "Reitittimiä ei ole: "
@@ -2783,11 +2783,11 @@ msgstr "Etälease-setit"
 
 #, java-format
 msgid "Hostname {0} not found in network database"
-msgstr ""
+msgstr "Isäntänimi {0} ei löytynyt verkko-omistukannasta"
 
 #, java-format
 msgid "LeaseSet for {0} not found in network database"
-msgstr ""
+msgstr "LeaseSet kohteelle {0} ei löytynyt verkko-omistukannasta"
 
 msgid "Meta"
 msgstr "Metatiedot"
@@ -2845,10 +2845,10 @@ msgid "Count"
 msgstr "Lukumäärä"
 
 msgid "Under 12 KB/s"
-msgstr ""
+msgstr "Alle 12 KB/s"
 
 msgid "Over 2048 KB/s"
-msgstr ""
+msgstr "Yli 2048 KB/s"
 
 msgid "Bandwidth Tier"
 msgstr "Kaistanleveystaso"
@@ -2921,7 +2921,7 @@ msgid "Hostname"
 msgstr "Isäntänimi"
 
 msgid "Whois"
-msgstr ""
+msgstr "Whois"
 
 msgid "direct"
 msgstr "suora"
@@ -2945,7 +2945,7 @@ msgid "Show all routers with this port in the NetDb"
 msgstr "Näytä kaikki tällä portilla varustetut reitittimet NetDb:ssä"
 
 msgid "Maximum Transmission Unit"
-msgstr ""
+msgstr "Maksimi siirtoyksikkö"
 
 msgid "Show all routers with this MTU in the NetDb"
 msgstr ""
@@ -2954,7 +2954,7 @@ msgid "Addresses"
 msgstr "Osoitteet"
 
 msgid "Introducers"
-msgstr ""
+msgstr "Johdattimet"
 
 msgid "Network Id"
 msgstr "Verkonkotunniste"
@@ -3014,16 +3014,16 @@ msgid "Local"
 msgstr "Paikallinen"
 
 msgid "Fast Tier"
-msgstr ""
+msgstr "Nopea taso"
 
 msgid "High Capacity Tier"
-msgstr ""
+msgstr "Suuren kapasiteetin taso"
 
 msgid "Integrated Tier"
-msgstr ""
+msgstr "Integroitu taso"
 
 msgid "Standard Tier"
-msgstr ""
+msgstr "Vakiotaso"
 
 msgid "No peer connections available"
 msgstr "Ei vertaisyhteyksiä saatavilla"
@@ -3367,7 +3367,7 @@ msgid "Unreachable"
 msgstr "Ei saavutettavissa"
 
 msgid "Most tests passing"
-msgstr ""
+msgstr "Useimmat testit läpäisevät"
 
 msgid "Fast, High Capacity"
 msgstr "Nopea, suuri kapasiteetti"
@@ -3385,7 +3385,7 @@ msgid "Integrated"
 msgstr "Integroitu"
 
 msgid "Configure Peer"
-msgstr ""
+msgstr "Määritä vertaiskumppani"
 
 msgid "Thresholds"
 msgstr "Kynnykset"
@@ -3535,7 +3535,7 @@ msgstr "Huom: 'LU'-luokan reitittimet on poistettu listalta."
 
 #, java-format
 msgid "To view, see {0}Session Bans{1}."
-msgstr ""
+msgstr "Katso, näet {0}Istuntokielte{1}."
 
 msgid "Select search engine"
 msgstr "Valitse hakukone"
@@ -3632,7 +3632,7 @@ msgid "Click Shutdown and restart to install"
 msgstr "Napsauta Sammuta ja käynnistä uudelleen asentaaksesi"
 
 msgid "Unable"
-msgstr ""
+msgstr "Ei käytettävissä"
 
 #, java-format
 msgid "{0}"
@@ -3786,7 +3786,7 @@ msgid "An introduction to hosting websites on the I2P network"
 msgstr "Johdatus verkkosivustojen isännöintiin I2P-verkossa"
 
 msgid "New hosts in last 24 hours"
-msgstr ""
+msgstr "Uusia hosteja viimeisen 24 tunnin aikana"
 
 msgid "I2PControl"
 msgstr "I2PC-ohjaus"
@@ -3977,7 +3977,7 @@ msgid "The total number of peers in our network database"
 msgstr "Verkon tietokannassamme olevien vertaiskäyttäjien kokonaismäärä"
 
 msgid "Total RouterInfos stored on disk"
-msgstr ""
+msgstr "RouterInfos tallennettu levylle yhteensä"
 
 msgid "Known"
 msgstr "Tuttu"
@@ -4221,13 +4221,13 @@ msgid "Select stored analysis"
 msgstr "Valitse tallennettu analyysi"
 
 msgid "Review"
-msgstr ""
+msgstr "Tarkista"
 
 msgid "Run analysis on Floodfills only"
 msgstr "Suorita analyysi vain tulvatäytöille"
 
 msgid "Start Scan"
-msgstr ""
+msgstr "Aloita skannaus"
 
 msgid "Run analysis on all routers in NetDb"
 msgstr "Suorita analyysi kaikilla NetDb:n reitittimillä"
@@ -4518,7 +4518,7 @@ msgid "No local or transit tunnels currently active."
 msgstr "Ei tällä hetkellä aktiivisia paikallis- tai julkisen liikenteen tunneleita."
 
 msgid "PRIVATE IP ADDRESS"
-msgstr ""
+msgstr "YKSITYINEN IP-OSOITE"
 
 msgid "Bandwidth Tiers"
 msgstr "Kaistanleveystasot"
@@ -4531,7 +4531,7 @@ msgid "Inbound or outbound?"
 msgstr "saapuva vai lähtevä?"
 
 msgid "In/Out"
-msgstr ""
+msgstr "Sisään/Ulos"
 
 msgid "Gateway"
 msgstr "Yhdyskäytävä"
@@ -4649,7 +4649,7 @@ msgid "Browser launch at startup"
 msgstr "Selain käynnistyy käynnistyksen yhteydessä"
 
 msgid "I2P Router Console"
-msgstr ""
+msgstr "I2P-reititin konsoli"
 
 msgid "Open Router Console in web browser at startup"
 msgstr "Avaa Router Console verkkoselaimessa käynnistyksen yhteydessä"
@@ -4742,7 +4742,7 @@ msgid "Advanced Network Configuration"
 msgstr "Verkon Lisäasetukset"
 
 msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
-msgstr ""
+msgstr "I2P toimii parhaiten, jos määrität nopeudet vastaamaan internetyhteytesi nopeudet."
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
 msgstr "Huomautus: Panoksesi verkkoon (verkkoosuus) määräytyy ylävirran kaistanleveyden (latausnopeuden) varauksen mukaan."
@@ -4773,10 +4773,10 @@ msgstr "HUOMIO"
 
 #, java-format
 msgid "You have configured I2P to share only {0} KBps."
-msgstr ""
+msgstr "Olet määrittänyt I2P jakamaan vain {0} KB/s."
 
 msgid "I2P requires at least 12KBps to enable sharing. "
-msgstr ""
+msgstr "I2P vaatii vähintään 12 KB/s jaamisen jakamiseen ottamiseksi. "
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
 msgstr "Ota jakaminen käyttöön (tunneleihin osallistuminen) määrittämällä lisää kaistanleveyttä."
@@ -5224,7 +5224,7 @@ msgstr "Alla on esitetty IP-osoitteen mukana kieltolista."
 
 #, java-format
 msgid "To view all active bans by router hash, see {0}Banned Peers{1}."
-msgstr ""
+msgstr "Kaikki aktiiviset porttukiut routerin hashin perusteella, katso {0}Estetyneet Peer{1}."
 
 #, java-format
 msgid "A list of {0}session-only bans{1} by hash is also available."
@@ -5274,7 +5274,7 @@ msgid "Reseeding is the bootstrapping process used to find other routers when yo
 msgstr "Reseeding on käynnistysprosessi, jota käytetään muiden reitittimien etsimiseen, kun asennat ensimmäisen kerran I2P:n tai kun reitittimessä on liian vähän reititinviitteitä jäljellä."
 
 msgid "To enable the configuration of reseed urls, activate the console's <a href=/help/advancedsettings>Advanced mode</a>."
-msgstr ""
+msgstr "Ota käyttöön asetusasetukset, aktivoi <a href=/help/advancedsettings>Kehittynyt tila</a> konsolista."
 
 msgid "Reseeding Configuration"
 msgstr "Määrityksen uudelleen lähettäminen"
@@ -5437,10 +5437,10 @@ msgid "Use the same sidebar on all pages"
 msgstr "Käytä samaa sivupalkkia kaikilla sivuilla"
 
 msgid "Sticky sidebar"
-msgstr ""
+msgstr "Kiinteä sivupalkki"
 
 msgid "Enable conditional fixed sidebar"
-msgstr ""
+msgstr "Aktivoi ehdollinen sivupalkki"
 
 msgid "config stats"
 msgstr "tilastoasetukset"
@@ -7385,7 +7385,7 @@ msgid "Requested client leaseset"
 msgstr "Pyydetty asiakkaan lease-setin"
 
 msgid "Remote"
-msgstr ""
+msgstr "Etäinen"
 
 msgid "network database router map"
 msgstr "Verkkotietokanta-reittikartta"
@@ -7449,7 +7449,7 @@ msgid "Information &amp; Diagnostics"
 msgstr "Tiedot ja Diagnostiikka"
 
 msgid "Customize"
-msgstr ""
+msgstr "Mukauta"
 
 msgid "statistics"
 msgstr "tilastot"
@@ -7622,7 +7622,7 @@ msgid "Browser Setup"
 msgstr "Selaimen asetukset"
 
 msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. "
-msgstr ""
+msgstr "Jotta pääsisit I2P-verkossa isännettyihin verkkosivustoiin ja halutessasi ulkopuukin käyttää sellessivustoihin sellessel, sinun on konfiguroitava selaimesi käyttämään I2P+ <b>HTTP</b> välitystä, joka oletuksena käytössä portissa <code>127.0.0.1 port 4444</code>. "
 
 msgid "Welcome to I2P+!"
 msgstr "Tervetuloa I2P:hen!"
@@ -7631,7 +7631,7 @@ msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) y
 msgstr "Kun käynnistät I2P:n, reitittimen käynnistäminen (integroiminen) verkkoon ja muiden vertaiskumppanien löytäminen voi kestää muutaman minuutin, joten ole kärsivällinen."
 
 msgid "Once green stars are indicated next to your Service Tunnels, there is a wide variety of things you can do with I2P+."
-msgstr ""
+msgstr "Kun vihreät tähdet ovat osoittu palvelutunneleillesi, on paljon erilaisia asioita, joita voit tehdä I2P+:lla."
 
 msgid "Unknown Wizard page"
 msgstr "Tuntematon ohjatun toiminnon sivu"

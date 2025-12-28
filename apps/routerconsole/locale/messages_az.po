@@ -116,7 +116,7 @@ msgid "Total peers in our NetDb"
 msgstr "NetDb-də cəmi həmkarlar"
 
 msgid "Total number of threads in use"
-msgstr ""
+msgstr "İstifadə iplik mühərələrin ümumi sayı"
 
 msgid "Peers without a published IP address"
 msgstr "Dərc edilmiş IP ünvanı olmayan həmkarlar"
@@ -2418,7 +2418,7 @@ msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
 msgstr "Brauzeriniz {0} ünvanında HTTP proksisini istifadə etmək üçün düzgün konfiqurasiya edilməyib"
 
 msgid "Errors"
-msgstr ""
+msgstr "Səhvlər"
 
 msgid "URL"
 msgstr "URL"
@@ -2698,16 +2698,16 @@ msgid "Select the field to search on"
 msgstr ""
 
 msgid "e.g. cn hk"
-msgstr ""
+msgstr "məs. cn hk"
 
 msgid "MTU"
 msgstr "MTU"
 
 msgid "Enter search value here"
-msgstr ""
+msgstr "Axtarış dəyərini buraya daxil edin"
 
 msgid "Router not found"
-msgstr ""
+msgstr "Marşrutizator tapılmadı"
 
 msgid "No routers with"
 msgstr ""
@@ -2783,11 +2783,11 @@ msgstr ""
 
 #, java-format
 msgid "Hostname {0} not found in network database"
-msgstr ""
+msgstr "{0} hostadı şəbədə tapılmadı"
 
 #, java-format
 msgid "LeaseSet for {0} not found in network database"
-msgstr ""
+msgstr "{0} üçün LeaseSet-i şəbədə tapılmadı"
 
 msgid "Meta"
 msgstr ""
@@ -2845,10 +2845,10 @@ msgid "Count"
 msgstr "Count"
 
 msgid "Under 12 KB/s"
-msgstr ""
+msgstr "12 KB/s-dən az"
 
 msgid "Over 2048 KB/s"
-msgstr ""
+msgstr "2048 KB/s-dən çox"
 
 msgid "Bandwidth Tier"
 msgstr "Bant genişliyi səviyyəsi"
@@ -2921,7 +2921,7 @@ msgid "Hostname"
 msgstr "Host adı"
 
 msgid "Whois"
-msgstr ""
+msgstr "Whois"
 
 msgid "direct"
 msgstr ""
@@ -2945,7 +2945,7 @@ msgid "Show all routers with this port in the NetDb"
 msgstr "NetDb-də bu portu olan bütün marşrutlaşdırıcıları göstərin"
 
 msgid "Maximum Transmission Unit"
-msgstr ""
+msgstr "Maksimum ötürüləm vahidi"
 
 msgid "Show all routers with this MTU in the NetDb"
 msgstr ""
@@ -2954,7 +2954,7 @@ msgid "Addresses"
 msgstr "Ünvanlar"
 
 msgid "Introducers"
-msgstr ""
+msgstr "Təqdimatçılar"
 
 msgid "Network Id"
 msgstr ""
@@ -3014,16 +3014,16 @@ msgid "Local"
 msgstr "Yerli"
 
 msgid "Fast Tier"
-msgstr ""
+msgstr "Sürətli təbəqə"
 
 msgid "High Capacity Tier"
-msgstr ""
+msgstr "Yüksək tutum təbəqəsi"
 
 msgid "Integrated Tier"
-msgstr ""
+msgstr "İnteqrasiya olunmuş təbəqə"
 
 msgid "Standard Tier"
-msgstr ""
+msgstr "Standart təbəqə"
 
 msgid "No peer connections available"
 msgstr "Peer əlaqələri mövcud deyil"
@@ -3367,7 +3367,7 @@ msgid "Unreachable"
 msgstr "Əlçatmaz"
 
 msgid "Most tests passing"
-msgstr ""
+msgstr "Çox sınaqlar keçir"
 
 msgid "Fast, High Capacity"
 msgstr "Sürətli, Yüksək Tutumlu"
@@ -3385,7 +3385,7 @@ msgid "Integrated"
 msgstr "İnteqrasiya edilmiş"
 
 msgid "Configure Peer"
-msgstr ""
+msgstr "Peer konfiqurasiya edin"
 
 msgid "Thresholds"
 msgstr "Eşiklər"
@@ -3535,7 +3535,7 @@ msgstr ""
 
 #, java-format
 msgid "To view, see {0}Session Bans{1}."
-msgstr ""
+msgstr "Görmək üçün, {0}Sessiya Qadağları{1} görün."
 
 msgid "Select search engine"
 msgstr "Axtarış motorunu seçin"
@@ -3632,7 +3632,7 @@ msgid "Click Shutdown and restart to install"
 msgstr "Quraşdırmaq üçün Bağlama üzərinə klikləyin və yenidən başladın"
 
 msgid "Unable"
-msgstr ""
+msgstr "Qeyri-adi"
 
 #, java-format
 msgid "{0}"
@@ -3786,7 +3786,7 @@ msgid "An introduction to hosting websites on the I2P network"
 msgstr "I2P şəbəkəsində veb saytların yerləşdirilməsinə giriş"
 
 msgid "New hosts in last 24 hours"
-msgstr ""
+msgstr "Son 24 saatdə yeni hostlar"
 
 msgid "I2PControl"
 msgstr "I2Pnəzarət"
@@ -3977,7 +3977,7 @@ msgid "The total number of peers in our network database"
 msgstr "Şəbəkə verilənlər bazamızda olan həmyaşıdların ümumi sayı"
 
 msgid "Total RouterInfos stored on disk"
-msgstr ""
+msgstr "Diskdə saxlanmış RouterInfos ümumi sayı"
 
 msgid "Known"
 msgstr "Məlumdur"
@@ -4221,13 +4221,13 @@ msgid "Select stored analysis"
 msgstr "Saxlanılmış analizi seçin"
 
 msgid "Review"
-msgstr ""
+msgstr "Rəyəy"
 
 msgid "Run analysis on Floodfills only"
 msgstr "Yalnız daşqın sahələrində analiz icra edin"
 
 msgid "Start Scan"
-msgstr ""
+msgstr "Skanı başla"
 
 msgid "Run analysis on all routers in NetDb"
 msgstr "NetDb-də bütün routerlərdə analiz icra edin"
@@ -4518,7 +4518,7 @@ msgid "No local or transit tunnels currently active."
 msgstr "Hal-hazırda aktiv olan yerli və ya tranzit tunel yoxdur."
 
 msgid "PRIVATE IP ADDRESS"
-msgstr ""
+msgstr "ÖZƏL IP ÜNVANI"
 
 msgid "Bandwidth Tiers"
 msgstr "Bant genişliyi səviyyələri"
@@ -4531,7 +4531,7 @@ msgid "Inbound or outbound?"
 msgstr "Gələn və ya gedən?"
 
 msgid "In/Out"
-msgstr ""
+msgstr "Giriş/Çıxış"
 
 msgid "Gateway"
 msgstr "Darvaza"
@@ -4649,7 +4649,7 @@ msgid "Browser launch at startup"
 msgstr "Brauzer işə salındıqda işə salın"
 
 msgid "I2P Router Console"
-msgstr ""
+msgstr "I2P Marşrutizator Konsolu"
 
 msgid "Open Router Console in web browser at startup"
 msgstr "Başlanğıcda veb brauzerdə Router Konsolunu açın"
@@ -4742,7 +4742,7 @@ msgid "Advanced Network Configuration"
 msgstr "Qabaqcıl Şəbəkə Konfiqurasiyası"
 
 msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
-msgstr ""
+msgstr "I2P ən yaxşı işləməsi üçün sürəti internet bağlantınzın sürətinə uyğunlaşdırın."
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
 msgstr "Qeyd: Şəbəkəyə töhfəniz (şəbəkə payı) yuxarı axın bant genişliyinin (yükləmə sürəti) ayrılması ilə müəyyən edilir."
@@ -4773,10 +4773,10 @@ msgstr ""
 
 #, java-format
 msgid "You have configured I2P to share only {0} KBps."
-msgstr ""
+msgstr "I2P-ni paylamını yalnız {0} KB/s bölüşdürdüyünüz."
 
 msgid "I2P requires at least 12KBps to enable sharing. "
-msgstr ""
+msgstr "I2P paylaşımı aktivləşdirmək üçün ən az 12 KB/s tələb edir. "
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
 msgstr "Lütfən, daha çox bant genişliyini konfiqurasiya etməklə paylaşmanı (tunellərdə iştirak) aktiv edin. "
@@ -5224,7 +5224,7 @@ msgstr ""
 
 #, java-format
 msgid "To view all active bans by router hash, see {0}Banned Peers{1}."
-msgstr ""
+msgstr "Marşrutizatorin hash-ina görə aktiv qadağların hamısına baxmaq üçün, {0}Qadağlaşdırılmış Peer{1} görün."
 
 #, java-format
 msgid "A list of {0}session-only bans{1} by hash is also available."
@@ -5274,7 +5274,7 @@ msgid "Reseeding is the bootstrapping process used to find other routers when yo
 msgstr "Reseeding, I2P-ni ilk dəfə quraşdırdığınız zaman və ya marşrutlaşdırıcınızda çox az marşrutlaşdırıcı istinadları qalanda digər marşrutlaşdırıcıları tapmaq üçün istifadə edilən yükləmə prosesidir."
 
 msgid "To enable the configuration of reseed urls, activate the console's <a href=/help/advancedsettings>Advanced mode</a>."
-msgstr ""
+msgstr "Reed URL-lərindən konfiqurasiyasını aktivləşdirmək üçün konsolda <a href=/help/advancedsettings>Advanced modu</a>-a keçin."
 
 msgid "Reseeding Configuration"
 msgstr "Konfiqurasiyanın yenidən əkilməsi"
@@ -5437,10 +5437,10 @@ msgid "Use the same sidebar on all pages"
 msgstr ""
 
 msgid "Sticky sidebar"
-msgstr ""
+msgstr "Sabit yan panel"
 
 msgid "Enable conditional fixed sidebar"
-msgstr ""
+msgstr "Şərti sabit yan paneli aktivləşdirin"
 
 msgid "config stats"
 msgstr "konfiqurasiya statistikası"
@@ -7385,7 +7385,7 @@ msgid "Requested client leaseset"
 msgstr ""
 
 msgid "Remote"
-msgstr ""
+msgstr "Uzaq"
 
 msgid "network database router map"
 msgstr "Şəbəkə bazası ruter xəritəsi"
@@ -7449,7 +7449,7 @@ msgid "Information &amp; Diagnostics"
 msgstr "Məlumat"
 
 msgid "Customize"
-msgstr ""
+msgstr "Fərdiləşdir"
 
 msgid "statistics"
 msgstr "statistika"
@@ -7622,7 +7622,7 @@ msgid "Browser Setup"
 msgstr "Brauzerin qurulması"
 
 msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. "
-msgstr ""
+msgstr "I2P şəbəsində ev olan veb-saytlərə çatmaq üçün və istiadadı çıxış proksi istifadə etmək istəyə bilərsiniz, brauzerinizI2P+ <b>HTTP</b> proksi proqramını istifadə etmək üçün konfiqurasiya etməlisiniz, normal olaraq <code>127.0.0.1 port 4444</code>-da çalışır. "
 
 msgid "Welcome to I2P+!"
 msgstr "I2P-yə xoş gəlmisiz!"
@@ -7631,7 +7631,7 @@ msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) y
 msgstr "I2P-ni işə saldıqda, marşrutlaşdırıcınızı şəbəkəyə yükləmək (inteqrasiya etmək) və əlavə həmyaşıdlar tapmaq bir neçə dəqiqə çəkə bilər, buna görə də səbirli olun."
 
 msgid "Once green stars are indicated next to your Service Tunnels, there is a wide variety of things you can do with I2P+."
-msgstr ""
+msgstr "Göyul ulduzlarınızın yanına Service Tunnels üçün göstərildikdə, I2P+ ilə çoxlu şeylər edə bilərsiniz."
 
 msgid "Unknown Wizard page"
 msgstr "Naməlum Sehrbaz səhifəsi"

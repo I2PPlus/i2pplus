@@ -116,7 +116,7 @@ msgid "Total peers in our NetDb"
 msgstr "Totalt peers i vår NetDb"
 
 msgid "Total number of threads in use"
-msgstr ""
+msgstr "Totalt antal trådar som används"
 
 msgid "Peers without a published IP address"
 msgstr "Peers utan en publicerad IP-adress"
@@ -2418,7 +2418,7 @@ msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
 msgstr "Din webbläsare är inte korrekt konfigurerad för att använda HTTP-proxy på {0}"
 
 msgid "Errors"
-msgstr ""
+msgstr "Fel"
 
 msgid "URL"
 msgstr "URL"
@@ -2698,16 +2698,16 @@ msgid "Select the field to search on"
 msgstr ""
 
 msgid "e.g. cn hk"
-msgstr ""
+msgstr "t.ex. cn hk"
 
 msgid "MTU"
 msgstr "MTU"
 
 msgid "Enter search value here"
-msgstr ""
+msgstr "Ange sökvärde här"
 
 msgid "Router not found"
-msgstr ""
+msgstr "Router hittades inte"
 
 msgid "No routers with"
 msgstr "Inga routrar med"
@@ -2845,10 +2845,10 @@ msgid "Count"
 msgstr "Antal"
 
 msgid "Under 12 KB/s"
-msgstr ""
+msgstr "Under 12 KB/s"
 
 msgid "Over 2048 KB/s"
-msgstr ""
+msgstr "Över 2048 KB/s"
 
 msgid "Bandwidth Tier"
 msgstr "Bandbreddsnivå"
@@ -2921,7 +2921,7 @@ msgid "Hostname"
 msgstr "Värdnamn"
 
 msgid "Whois"
-msgstr ""
+msgstr "Whois"
 
 msgid "direct"
 msgstr "direkt"
@@ -2945,7 +2945,7 @@ msgid "Show all routers with this port in the NetDb"
 msgstr "Visa alla routrar med denna port i NetDb"
 
 msgid "Maximum Transmission Unit"
-msgstr ""
+msgstr "Maximal överföringsenhet"
 
 msgid "Show all routers with this MTU in the NetDb"
 msgstr ""
@@ -2954,7 +2954,7 @@ msgid "Addresses"
 msgstr "Adresser"
 
 msgid "Introducers"
-msgstr ""
+msgstr "Introducerer"
 
 msgid "Network Id"
 msgstr "Nätverks-ID"
@@ -3014,16 +3014,16 @@ msgid "Local"
 msgstr "Lokal"
 
 msgid "Fast Tier"
-msgstr ""
+msgstr "Snabb nivå"
 
 msgid "High Capacity Tier"
-msgstr ""
+msgstr "Hög kapacitetsnivå"
 
 msgid "Integrated Tier"
-msgstr ""
+msgstr "Integrerad nivå"
 
 msgid "Standard Tier"
-msgstr ""
+msgstr "Standardnivå"
 
 msgid "No peer connections available"
 msgstr "Inga peer-anslutningar tillgängliga"
@@ -3367,7 +3367,7 @@ msgid "Unreachable"
 msgstr "Onåbar"
 
 msgid "Most tests passing"
-msgstr ""
+msgstr "De flesta tester lyckades"
 
 msgid "Fast, High Capacity"
 msgstr "Snabb, hög kapacitet"
@@ -3385,7 +3385,7 @@ msgid "Integrated"
 msgstr "Integrerade"
 
 msgid "Configure Peer"
-msgstr ""
+msgstr "Konfigurera peer"
 
 msgid "Thresholds"
 msgstr "Trösklar"
@@ -3632,7 +3632,7 @@ msgid "Click Shutdown and restart to install"
 msgstr "Klicka Stäng av och starta om för att installera"
 
 msgid "Unable"
-msgstr ""
+msgstr "Ej tillgänglig"
 
 #, java-format
 msgid "{0}"
@@ -3977,7 +3977,7 @@ msgid "The total number of peers in our network database"
 msgstr "Totala antalet noder i vår nätverksdatabas"
 
 msgid "Total RouterInfos stored on disk"
-msgstr ""
+msgstr "RouterInfos sammanlagrat på disk"
 
 msgid "Known"
 msgstr "Kända"
@@ -4221,13 +4221,13 @@ msgid "Select stored analysis"
 msgstr "Välj lagrad analys"
 
 msgid "Review"
-msgstr ""
+msgstr "Granskning"
 
 msgid "Run analysis on Floodfills only"
 msgstr "Kör analys endast på översvämningar"
 
 msgid "Start Scan"
-msgstr ""
+msgstr "Starta skanning"
 
 msgid "Run analysis on all routers in NetDb"
 msgstr "Kör analys på alla routrar i NetDb"
@@ -4518,7 +4518,7 @@ msgid "No local or transit tunnels currently active."
 msgstr "Inga lokala eller transittunnlar är aktiva för närvarande."
 
 msgid "PRIVATE IP ADDRESS"
-msgstr ""
+msgstr "PRIVAT IP-ADRESS"
 
 msgid "Bandwidth Tiers"
 msgstr "Bandbreddsnivåer"
@@ -4531,7 +4531,7 @@ msgid "Inbound or outbound?"
 msgstr "Inkommande eller utgående?"
 
 msgid "In/Out"
-msgstr ""
+msgstr "In/Ut"
 
 msgid "Gateway"
 msgstr "Inkörsport"
@@ -4649,7 +4649,7 @@ msgid "Browser launch at startup"
 msgstr "Starta webbläsare vid uppstart"
 
 msgid "I2P Router Console"
-msgstr ""
+msgstr "I2P-routerkonsoll"
 
 msgid "Open Router Console in web browser at startup"
 msgstr "Öppna routerkonsolen i webbläsare vid uppstart"
@@ -4742,7 +4742,7 @@ msgid "Advanced Network Configuration"
 msgstr "Avancerad nätverkskonfiguration"
 
 msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
-msgstr ""
+msgstr "I2P kommer att fungera bäst om du konfigurerar dina priser så att de matchar hastigheten på din internetanslutning."
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
 msgstr "Obs: Ditt bidrag till nätverket (nätverksandel) bestäms av allokeringen av uppströms bandbredd (uppladdningshastighet)."
@@ -4773,10 +4773,10 @@ msgstr "NOTERA"
 
 #, java-format
 msgid "You have configured I2P to share only {0} KBps."
-msgstr ""
+msgstr "Du har konfigurerat I2P för att endast dela {0} KB/s."
 
 msgid "I2P requires at least 12KBps to enable sharing. "
-msgstr ""
+msgstr "I2P kräver minst 12 KB/s för att aktivera delning. "
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
 msgstr "Snälla slå på delning (deltagande i andras tunnlar) genom att konfigurera mer bandbredd. "
@@ -5274,7 +5274,7 @@ msgid "Reseeding is the bootstrapping process used to find other routers when yo
 msgstr "Återdistribuering är en uppstarts (bootstrapping) process som används för att hitta andra routrar när du först installerar I2P, eller när din router har för få routern referenser kvar."
 
 msgid "To enable the configuration of reseed urls, activate the console's <a href=/help/advancedsettings>Advanced mode</a>."
-msgstr ""
+msgstr "För att aktivera konfiguration av reseed URL-er, aktivera <a href=/help/advancedsettings>avancerat läge</a> i konsollen."
 
 msgid "Reseeding Configuration"
 msgstr "Återdistribuerings konfiguration"
@@ -5437,10 +5437,10 @@ msgid "Use the same sidebar on all pages"
 msgstr "Använd samma sidopanel på alla sidor"
 
 msgid "Sticky sidebar"
-msgstr ""
+msgstr "Fast sidebar"
 
 msgid "Enable conditional fixed sidebar"
-msgstr ""
+msgstr "Aktivera villkorlig fast sidebar"
 
 msgid "config stats"
 msgstr "konfigurera statistik"
@@ -7385,7 +7385,7 @@ msgid "Requested client leaseset"
 msgstr "Begärd klientleasinguppsättning"
 
 msgid "Remote"
-msgstr ""
+msgstr "Fjärran"
 
 msgid "network database router map"
 msgstr "nätverksdatabasrouternyktert"
@@ -7449,7 +7449,7 @@ msgid "Information &amp; Diagnostics"
 msgstr "Information och Diagnostik"
 
 msgid "Customize"
-msgstr ""
+msgstr "Anpassa"
 
 msgid "statistics"
 msgstr "statistik"
@@ -7622,7 +7622,7 @@ msgid "Browser Setup"
 msgstr "Webbläsarinställningar"
 
 msgid "In order to access websites hosted on the I2P network, and optionally use the default outproxy to connect to websites on clearnet, you will need to configure your browser to use the I2P+ <b>HTTP</b> proxy, by default running on <code>127.0.0.1 port 4444</code>. "
-msgstr ""
+msgstr "För att få tillgång till webbsidor som är värdar på I2P-nätverket och valfritt använda standard outproxy för att ansluta till webbsidor på clearnet, måste du konfigurera din webbläsare för att använda I2P+ <b>HTTP</b> proxy, som som standard körs på <code>127.0.0.1 port 4444</code>. "
 
 msgid "Welcome to I2P+!"
 msgstr "Välkommen till I2P!"
@@ -7631,7 +7631,7 @@ msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) y
 msgstr "När du startar I2P kan det ta några minuter att bootstrap (integrera) din router i nätverket och hitta ytterligare peers, så ha tålamod."
 
 msgid "Once green stars are indicated next to your Service Tunnels, there is a wide variety of things you can do with I2P+."
-msgstr ""
+msgstr "När gröna stjärnor har visats bredvid dina Servicetunnlar, finns det ett brett utbud av saker du kan göra med I2P+."
 
 msgid "Unknown Wizard page"
 msgstr "Okänd guidesida"
