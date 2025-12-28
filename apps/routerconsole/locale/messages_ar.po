@@ -1481,7 +1481,7 @@ msgid "IPv6 Addresses"
 msgstr "عناوين IPv6"
 
 msgid "Reseed now"
-msgstr "Reseed الآن"
+msgstr "إعادة البذر الآن"
 
 msgid "Reseeding is already in progress"
 msgstr "جاري اعادة التوزيع"
@@ -1496,7 +1496,7 @@ msgid "Reseed from URL"
 msgstr "إعادة النشر من URL"
 
 msgid "No URL specified. Please supply a valid reseed URL."
-msgstr "لم يحدد عنوان URL. يرجى تقديم عنوان URL Reseed صالح."
+msgstr "لم يحدد عنوان URL. يرجى تقديم عنوان URL لإعادة البذر صالح."
 
 msgid "Reseed in progress, check summary bar for status"
 msgstr "إعادة البذر قيد التقدم، تحقق من شريط الملخص لمعرفة الحالة"
@@ -1511,17 +1511,17 @@ msgid "No file specified. Please select a valid .zip or .su3 file to reseed from
 msgstr "لم يحدد ملف. يرجى تحديد ملف .zip أو .su3 صالح من."
 
 msgid "Reseed from file failed"
-msgstr "فشلت Reseed من الملف"
+msgstr "فشلت عملية إعادة البذر من الملف"
 
 #, java-format
 msgid "Reseed successful, loaded {0} router info from file."
 msgid_plural "Reseed successful, loaded {0} router infos from file."
-msgstr[0] "Reseed ناجح ، محمّل {0} infos من ملف."
-msgstr[1] "Reseed ناجح ، محمّل {0} infos من ملف."
-msgstr[2] "Reseed ناجح ، محمّل {0} infos من ملف."
-msgstr[3] "Reseed ناجح ، محمّل {0} infos من ملف."
-msgstr[4] "Reseed ناجح ، محمّل {0} infos من ملف."
-msgstr[5] "Reseed ناجح ، محمّل {0} infos من ملف."
+msgstr[0] "عملية إعادة البذر ناجحة، تم تحميل {0} معلومة جهاز توجيه من ملف."
+msgstr[1] "عملية إعادة البذر ناجحة، تم تحميل {0} معلومات جهاز توجيه من ملف."
+msgstr[2] "عملية إعادة البذر ناجحة، تم تحميل {0} معلومات جهاز توجيه من ملف."
+msgstr[3] "عملية إعادة البذر ناجحة، تم تحميل {0} معلومات جهاز توجيه من ملف."
+msgstr[4] "عملية إعادة البذر ناجحة، تم تحميل {0} معلومات جهاز توجيه من ملف."
+msgstr[5] "عملية إعادة البذر ناجحة، تم تحميل {0} معلومات جهاز توجيه من ملف."
 
 msgid "Reset URL list"
 msgstr "إعادة تعيين قائمة URL"
@@ -1751,7 +1751,7 @@ msgid "Force the mobile console to be used"
 msgstr "فرض استخدام وحدة التحكم المحمولة"
 
 msgid "Enabling the Universal Theming option is recommended when embedding these applications"
-msgstr "يوصى بتمكين خيار Universal Theming عند تضمين هذه التطبيقات"
+msgstr "يوصى بتمكين خيار التنسيق الموحد عند تضمين هذه التطبيقات"
 
 msgid "Embed I2PSnark and I2PMail in the console"
 msgstr "قم بتضمين I2PSnark وI2PMail في وحدة التحكم"
@@ -2248,7 +2248,7 @@ msgid "DuckDuckGo Search Engine (no javascript)"
 msgstr "محرك بحث DuckDuckGo (بدون جافا سكريبت)"
 
 msgid "Privacy-focused Clearnet Search Engine"
-msgstr "محرك بحث Clearnet الذي يركز على الخصوصية"
+msgstr "محرك بحث الإنترنت العادي الذي يركز على الخصوصية"
 
 msgid "I2P Web Search Engine"
 msgstr "محرك بحث الويب I2P"
@@ -2727,7 +2727,7 @@ msgid "Lookup"
 msgstr "بحث"
 
 msgid "Select the field to search on"
-msgstr ""
+msgstr "اختر الحقل للبحث فيه"
 
 msgid "e.g. cn hk"
 msgstr "مثال cn hk"
@@ -2953,7 +2953,7 @@ msgid "Hostname"
 msgstr "اسم المضيف"
 
 msgid "Whois"
-msgstr "Whois"
+msgstr "من هو"
 
 msgid "direct"
 msgstr "مباشر"
@@ -6236,7 +6236,7 @@ msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP a
 msgstr "مثال: للسماح بالوصول من كل من localhost و 192.168.1.10 عبر HTTP و HTTPS:"
 
 msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager's configuration section using the <i>reachable by</i> dropdown."
-msgstr ""
+msgstr "بالنسبة لمعظم خدمات العملاء، قم بتغيير عنوان الاستماع للخدمة ذات الصلة في قسم تكوين مدير الأنفاق باستخدام القائمة المنسدلة <i>يمكن الوصول إليه بواسطة</i>."
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "كيف أتصل بخادم IRC داخل I2P؟"
@@ -7608,7 +7608,7 @@ msgid "Skip Setup"
 msgstr "تخطي الإعداد"
 
 msgid "Select the language to be used for the router console and web applications ("
-msgstr ""
+msgstr "اختر اللغة التي سيتم استخدامها لوحدة تحكم الموجه والتطبيقات على الويب ("
 
 msgid "Router Console &amp; WebApps Display Language"
 msgstr "لغة واجهة تحكم الموجه وعرض تطبيقات الويب"
@@ -7722,75 +7722,3 @@ msgstr "التالي"
 
 msgid "Finished"
 msgstr "منتهي"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#, java-format
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
