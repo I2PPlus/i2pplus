@@ -50,6 +50,7 @@ public class TunnelPool {
     private final long _firstInstalled;
     private final AtomicInteger _consecutiveBuildTimeouts = new AtomicInteger();
     private long _lastTimeoutWarningTime;
+    private long _lastNoTunnelsWarningTime;
 
     private static final int TUNNEL_LIFETIME = 10*60*1000;
     /** if less than one success in this many, reduce quantity (exploratory only) */
@@ -185,11 +186,10 @@ public class TunnelPool {
 
         long now = _context.clock().now();
         long uptime = _context.router().getUptime();
+        boolean shouldWarn = false;
         synchronized (_tunnels) {
             if (_tunnels.isEmpty()) {
-               if (_log.shouldWarn() && uptime > STARTUP_TIME) {
-                   _log.warn(toString() + " -> No tunnels available");
-               }
+               shouldWarn = _log.shouldWarn() && uptime > STARTUP_TIME && shouldLogNoTunnelsWarning();
             } else {
                 // if there are nonzero hop tunnels and the zero hop tunnels are fallbacks,
                 // avoid the zero hop tunnels
@@ -236,6 +236,21 @@ public class TunnelPool {
             }
         }
 
+        if (shouldWarn) {
+            String warning;
+            if (!_settings.isExploratory()) {
+                boolean destReachable = isDestinationReachable();
+                if (!destReachable) {
+                    warning = toString() + " -> Destination not reachable (no LeaseSet found)";
+                } else {
+                    warning = toString() + " -> No tunnels available";
+                }
+            } else {
+                warning = toString() + " -> No tunnels available";
+            }
+            _log.warn(warning);
+        }
+
         if (_alive && !avoidZeroHop) {buildFallback();}
         if (allowRecurseOnFail) {return selectTunnel(false);}
         else {return null;}
@@ -257,6 +272,8 @@ public class TunnelPool {
         boolean avoidZeroHop = !_settings.getAllowZeroHop();
         TunnelInfo rv = null;
         long now = _context.clock().now();
+        long uptime = _context.router().getUptime();
+        boolean shouldWarn = false;
         synchronized (_tunnels) {
             if (!_tunnels.isEmpty()) {
                 if (_tunnels.size() > 1) {
@@ -266,13 +283,25 @@ public class TunnelPool {
                     if (info.getExpiration() > now) {rv = info; break;}
                 }
             }
+            if (rv == null && _log.shouldWarn() && uptime > STARTUP_TIME) {
+                shouldWarn = shouldLogNoTunnelsWarning();
+            }
         }
         if (rv != null) {
             _context.statManager().addRateData("tunnel.matchLease", closestTo.equals(rv.getFarEnd()) ? 1 : 0);
-        } else {
-            long uptime = _context.router().getUptime();
-            if (_log.shouldWarn() && uptime > STARTUP_TIME) {
-                _log.warn(toString() + " -> No tunnels available");}
+        } else if (shouldWarn) {
+            String warning;
+            if (!_settings.isExploratory()) {
+                boolean destReachable = isDestinationReachable();
+                if (!destReachable) {
+                    warning = toString() + " -> Destination not reachable (no LeaseSet found)";
+                } else {
+                    warning = toString() + " -> No tunnels available";
+                }
+            } else {
+                warning = toString() + " -> No tunnels available";
+            }
+            _log.warn(warning);
         }
         return rv;
     }
@@ -1368,6 +1397,46 @@ public class TunnelPool {
 
         _lastTimeoutWarningTime = now;
         return false;
+    }
+
+    /**
+     * Check if the destination is reachable by looking up its LeaseSet
+     */
+    private boolean isDestinationReachable() {
+        if (_settings.isExploratory()) {
+            return true; // Exploratory tunnels don't have a specific destination
+        }
+
+        Hash destHash = _settings.getDestination().calculateHash();
+        boolean hasLeaseSet = _context.netDb().lookupLeaseSetLocally(destHash) != null;
+
+        if (!hasLeaseSet && _log.shouldDebug()) {
+            _log.debug("Destination " + toString() + " has no LeaseSet in local network DB");
+        }
+
+        return hasLeaseSet;
+    }
+
+    /**
+     * Suppress "no tunnels available" warning spam with rate limiting
+     * Uses adaptive suppression between 5 and 10 minutes based on failures
+     */
+    private boolean shouldLogNoTunnelsWarning() {
+        long uptime = _context.router().getUptime();
+        if (uptime < STARTUP_TIME) {
+            return false;
+        }
+
+        long now = System.currentTimeMillis();
+        int failures = _consecutiveBuildTimeouts.get();
+        long suppressionPeriod = Math.min(5*60*1000 + (failures * 30*1000), 10*60*1000);
+
+        if (now - _lastNoTunnelsWarningTime < suppressionPeriod) {
+            return false;
+        }
+
+        _lastNoTunnelsWarningTime = now;
+        return true;
     }
 
     /**
