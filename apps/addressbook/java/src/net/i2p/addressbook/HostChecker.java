@@ -63,7 +63,10 @@ public class HostChecker {
     private final AtomicBoolean _categoriesDownloadSuccessful;
     private final File _hostsCheckFile;
     private final File _categoriesFile;
+    private final File _blacklistFile;
     private final Semaphore _pingSemaphore;
+    private Set<String> _blacklistedHosts;
+    private volatile long _blacklistLastModified;
     private int _categoryRetryCount = 0;
 
     // Configuration defaults
@@ -157,6 +160,9 @@ public class HostChecker {
         }
         _hostsCheckFile = new File(addressbookDir, "hosts_check.txt");
         _categoriesFile = new File(addressbookDir, "categories.txt");
+        _blacklistFile = new File(addressbookDir, "blacklist.txt");
+        _blacklistedHosts = new ConcurrentHashMap<String, String>().keySet();
+        loadBlacklist();
 
         // Download categories and load existing ping results
         downloadCategories();
@@ -247,6 +253,13 @@ public class HostChecker {
      * @return ping result
      */
     public PingResult testDestination(String hostname) {
+        if (isHostBlacklisted(hostname)) {
+            if (_log.shouldInfo()) {
+                _log.info("Skipping blacklisted host in testDestination: " + hostname);
+            }
+            return createPingResult(false, System.currentTimeMillis(), -1, hostname);
+        }
+
         Destination destination = getDestination(hostname);
         if (destination == null) {
             return createPingResult(false, System.currentTimeMillis(), -1, hostname);
@@ -1333,27 +1346,54 @@ public class HostChecker {
         }
     }
 
-    private boolean isHostBlacklisted(String hostname) {
+    private void loadBlacklist() {
         try {
-            File blacklistFile = new File(_context.getConfigDir(), "addressbook/blacklist.txt");
-            if (!blacklistFile.exists()) {
-                return false;
+            if (!_blacklistFile.exists()) {
+                _blacklistedHosts.clear();
+                _blacklistLastModified = 0;
+                return;
             }
 
-            // Simple exact match check
-            List<String> lines = java.nio.file.Files.readAllLines(blacklistFile.toPath());
+            long lastModified = _blacklistFile.lastModified();
+            if (lastModified == _blacklistLastModified) {
+                return;
+            }
+
+            Set<String> newBlacklist = new HashSet<String>();
+            List<String> lines = java.nio.file.Files.readAllLines(_blacklistFile.toPath());
             for (String line : lines) {
                 line = line.trim().toLowerCase();
-                if (!line.isEmpty() && !line.startsWith("#") && line.equals(hostname.toLowerCase())) {
-                    return true;
+                if (!line.isEmpty() && !line.startsWith("#")) {
+                    newBlacklist.add(line);
                 }
             }
-            return false;
+
+            synchronized (this) {
+                _blacklistedHosts = newBlacklist;
+                _blacklistLastModified = lastModified;
+            }
+
+            if (_log.shouldInfo()) {
+                _log.info("Loaded " + _blacklistedHosts.size() + " blacklisted hosts from " + _blacklistFile.getName());
+            }
+        } catch (Exception e) {
+            if (_log.shouldWarn()) {
+                _log.warn("Error loading blacklist from " + _blacklistFile.getAbsolutePath(), e);
+            }
+        }
+    }
+
+    private boolean isHostBlacklisted(String hostname) {
+        try {
+            loadBlacklist();
+            synchronized (this) {
+                return _blacklistedHosts.contains(hostname.toLowerCase());
+            }
         } catch (Exception e) {
             if (_log.shouldDebug()) {
                 _log.debug("Error checking blacklist for " + hostname + ": " + e.getMessage());
             }
-            return false; // Assume not blacklisted on error
+            return false;
         }
     }
 
