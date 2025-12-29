@@ -163,6 +163,10 @@ public abstract class CommSystemFacade implements Service {
         return ipAddress;
     }
 
+    public String getCanonicalHostNameSync(String ipAddress) {
+        return ipAddress;
+    }
+
     /**
      *  @return SortedMap of style to Transport (a copy)
      *  @since 0.9.31

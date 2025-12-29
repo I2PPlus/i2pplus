@@ -81,12 +81,12 @@ import org.apache.commons.net.whois.WhoisClient;
 
 /**
  * Primary implementation of the communication system facade for I2P network operations.
- * 
+ *
  * This class provides the main interface between the router core and
  * all transport protocols. It coordinates message sending,
  * peer management, address configuration, and network monitoring
  * while abstracting the underlying transport details.
- * 
+ *
  * <strong>Core Responsibilities:</strong>
  * <ul>
  *   <li>Message routing and delivery across all transports</li>
@@ -98,7 +98,7 @@ import org.apache.commons.net.whois.WhoisClient;
  *   <li>Geographic IP filtering and country blocking</li>
  *   <li>Communication system status and health monitoring</li>
  * </ul>
- * 
+ *
  * <strong>Transport Integration:</strong>
  * <ul>
  *   <li>Manages NTCP, UDP, and SSU transports</li>
@@ -106,7 +106,7 @@ import org.apache.commons.net.whois.WhoisClient;
  *   <li>Coordinates address updates across protocols</li>
  *   <li>Provides unified API for router components</li>
  * </ul>
- * 
+ *
  * <strong>Configuration Features:</strong>
  * <ul>
  *   <li>Transport enable/disable controls</li>
@@ -115,7 +115,7 @@ import org.apache.commons.net.whois.WhoisClient;
  *   <li>Network monitoring and testing options</li>
  *   <li>IPv4 and IPv6 addressing support</li>
  * </ul>
- * 
+ *
  * <strong>Security Features:</strong>
  * <ul>
  *   <li>Geographic IP filtering</li>
@@ -135,12 +135,12 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      * Property to disable all network connections for testing purposes.
-     * 
+     *
      * When this property is set to true, the communication
      * system will not establish any outbound connections or accept
      * inbound connections. This is useful for testing scenarios
      * or when running in debug mode.
-     * 
+     *
      * @since IPv6 support was added
      */
     private static final String PROP_DISABLED = "i2np.disable";
@@ -162,12 +162,12 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      * Start the communication system and all transport protocols.
-     * 
+     *
      * This method initializes the communication system, starts all
      * configured transports, and begins network operations. It handles
      * transport discovery, address configuration, and peer management
      * setup.
-     * 
+     *
      * <strong>Startup Process:</strong>
      * <ul>
      *   <li>Initialize geographic IP filtering</li>
@@ -176,7 +176,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *   <li>Begin peer discovery and connection attempts</li>
      *   <li>Setup address change notifications</li>
      * </ul>
-     * 
+     *
      * @throws IllegalStateException if already running
      */
     public synchronized void startup() {
@@ -192,12 +192,12 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      */
     /**
      * Gracefully shutdown the communication system.
-     * 
+     *
      * This method performs a clean shutdown of all transport
      * protocols and network operations. It stops accepting
      * new connections, closes existing ones, and performs
      * cleanup of system resources.
-     * 
+     *
      * <strong>Shutdown Process:</strong>
      * <ul>
      *   <li>Stop network monitoring</li>
@@ -206,7 +206,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *   <li>Cleanup system resources and caches</li>
      *   <li>Save final state and statistics</li>
      * </ul>
-     * 
+     *
      * @throws IllegalStateException if not running
      */
     public synchronized void shutdown() {
@@ -216,12 +216,12 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      * Restart the communication system.
-     * 
+     *
      * This method performs a complete restart of all transport
      * protocols while preserving router state. It stops all
      * transports, reinitializes system components, and restarts
      * network operations.
-     * 
+     *
      * <strong>Restart Process:</strong>
      * <ul>
      *   <li>Stop all transport protocols gracefully</li>
@@ -230,7 +230,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *   <li>Resume network operations and monitoring</li>
      *   <li>Reconfigure address management</li>
      * </ul>
-     * 
+     *
      * @throws IllegalStateException if not running
      */
     public synchronized void restart() {
@@ -311,11 +311,11 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     /** Send the message out */
     /**
      * Process and route an outbound message through the transport system.
-     * 
+     *
      * This method is the central entry point for sending messages
      * to other I2P peers. It selects appropriate transport,
      * handles message queuing, and manages delivery tracking.
-     * 
+     *
      * <strong>Message Processing:</strong>
      * <ul>
      *   <li>Transport selection based on destination</li>
@@ -325,7 +325,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *   <li>Failure handling and retry logic</li>
      *   <li>Callback execution for send completion</li>
      * </ul>
-     * 
+     *
      * @param msg the outbound message to be processed and delivered
      */
     public void processMessage(OutNetMessage msg) {
@@ -443,12 +443,12 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     @Override
     /**
      * Create router addresses for all configured transport protocols.
-     * 
+     *
      * This method generates RouterAddress objects for each
      * transport protocol based on current configuration and
      * network conditions. It handles address discovery,
      * validation, and format conversion.
-     * 
+     *
      * <strong>Address Creation:</strong>
      * <ul>
      *   <li>Iterates through all registered transports</li>
@@ -457,7 +457,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *   <li>Handles IPv4 and IPv6 address generation</li>
      *   <li>Applies geographic and network filtering</li>
      * </ul>
-     * 
+     *
      * @return list of RouterAddress objects for all active transports,
      *         may be empty if no addresses available
      */
@@ -1063,41 +1063,86 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             return _t("unknown");
         }
         long now = System.currentTimeMillis();
-        CacheEntry cacheEntry = rdnsCache.compute(ipAddress, (key, existingEntry) -> {
-            if (existingEntry != null && (now - existingEntry.getTimestamp() <= EXPIRE_TIME)) {
-                return existingEntry;
-            }
-            String hostName;
-            try {
-                hostName = InetAddress.getByName(key).getCanonicalHostName();
-                if ((hostName.equals(key) || _t("unknown").equals(hostName)) && enableWhoisLookups()) {
-                    String countryCode = getCountryFromIPAddress(key);
-                    String whoisData = null;
+
+        CacheEntry existingEntry = rdnsCache.get(ipAddress);
+        if (existingEntry != null && (now - existingEntry.getTimestamp() <= EXPIRE_TIME)) {
+            return existingEntry.getHostname();
+        }
+
+        if (pendingLookups.putIfAbsent(ipAddress, true) == null) {
+            REVERSE_DNS_EXECUTOR.submit(() -> {
+                try {
+                    String hostName = ipAddress;
                     try {
-                        whoisData = queryWhoisServers(key, countryCode).get();
-                    } catch (InterruptedException | ExecutionException e) {
-                        hostName = _t("unknown");
-                        if (e instanceof InterruptedException) {
-                            Thread.currentThread().interrupt(); // restore interrupt status
+                        hostName = InetAddress.getByName(ipAddress).getCanonicalHostName();
+                        if ((hostName.equals(ipAddress) || _t("unknown").equals(hostName)) && enableWhoisLookups()) {
+                            String countryCode = getCountryFromIPAddress(ipAddress);
+                            String whoisData = null;
+                            try {
+                                whoisData = queryWhoisServers(ipAddress, countryCode).get();
+                            } catch (InterruptedException | ExecutionException e) {
+                                if (e instanceof InterruptedException) {
+                                    Thread.currentThread().interrupt();
+                                }
+                            }
+                            if (whoisData != null && !whoisData.isEmpty()) {
+                                String whoisHost = parseWhois(whoisData);
+                                if (whoisHost != null && !whoisHost.isEmpty()) {
+                                    hostName = whoisHost;
+                                }
+                            }
                         }
+                    } catch (UnknownHostException e) {
+                        hostName = _t("unknown");
                     }
-                    if (whoisData != null && !whoisData.isEmpty()) {
-                        String whoisHost = parseWhois(whoisData);
-                        if (whoisHost == null || whoisHost.isEmpty()) {
-                            hostName = _t("unknown");
-                        } else {
-                            hostName = whoisHost;
-                        }
-                    } else if (hostName == null || hostName.equals(key)) {
-                        hostName = _t("unknown");
+                    rdnsCache.put(ipAddress, new CacheEntry(ipAddress, hostName, System.currentTimeMillis()));
+                } finally {
+                    pendingLookups.remove(ipAddress);
+                }
+            });
+        }
+
+        return ipAddress;
+    }
+
+    @Override
+    public String getCanonicalHostNameSync(String ipAddress) {
+        if (ipAddress == null || ipAddress.equals("null")) {
+            return _t("unknown");
+        }
+        long now = System.currentTimeMillis();
+
+        CacheEntry existingEntry = rdnsCache.get(ipAddress);
+        if (existingEntry != null && (now - existingEntry.getTimestamp() <= EXPIRE_TIME)) {
+            return existingEntry.getHostname();
+        }
+
+        String hostName = ipAddress;
+        try {
+            hostName = InetAddress.getByName(ipAddress).getCanonicalHostName();
+            if ((hostName.equals(ipAddress) || _t("unknown").equals(hostName)) && enableWhoisLookups()) {
+                String countryCode = getCountryFromIPAddress(ipAddress);
+                String whoisData = null;
+                try {
+                    whoisData = queryWhoisServers(ipAddress, countryCode).get();
+                } catch (InterruptedException | ExecutionException e) {
+                    if (e instanceof InterruptedException) {
+                        Thread.currentThread().interrupt();
                     }
                 }
-            } catch (UnknownHostException e) {
-                hostName = _t("unknown");
+                if (whoisData != null && !whoisData.isEmpty()) {
+                    String whoisHost = parseWhois(whoisData);
+                    if (whoisHost != null && !whoisHost.isEmpty()) {
+                        hostName = whoisHost;
+                    }
+                }
             }
-            return new CacheEntry(key, hostName, now);
-        });
-        return cacheEntry.getHostname();
+        } catch (UnknownHostException e) {
+            hostName = _t("unknown");
+        }
+
+        rdnsCache.put(ipAddress, new CacheEntry(ipAddress, hostName, now));
+        return hostName;
     }
 
     /**
@@ -1191,6 +1236,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         new LinkedBlockingQueue<>(500),
         new ThreadPoolExecutor.CallerRunsPolicy()
     );
+
+    private static final ConcurrentMap<String, Boolean> pendingLookups = new ConcurrentHashMap<>();
 
     private String queryWhoisServerWithFallback(String query, String whoisServer) {
         // Skip server if marked down and timeout not expired
@@ -1926,6 +1973,59 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         return buf.toString();
     }
 
+    public String renderPeerFlag(Hash peer) {
+        StringBuilder buf = new StringBuilder(128);
+        RouterInfo ri = getRouterInfoCached(peer);
+        String unknownFlag = "<img class=unknownflag width=24 height=18 alt=\"??\" src=\"/flags.jsp?c=xx\">";
+        String countryCode = getCountry(peer);
+        if (countryCode == null) {countryCode = "xx";}
+        String countryName = getCountryName(countryCode);
+        if (countryName.length() > 2)
+            countryName = Translate.getString(countryName, _context, COUNTRY_BUNDLE_NAME);
+        buf.append("<span class=cc hidden>").append(countryCode.toUpperCase(Locale.US)).append("</span>");
+        buf.append("<span class=peerFlag title=\"");
+        if (ri != null) {
+            String ip = net.i2p.util.Addresses.toString(getValidIP(ri));
+            if (ip == null || ip.isEmpty() || "null".equals(ip)) {
+                byte[] transportIP = getIP(ri);
+                if (transportIP != null)
+                    ip = net.i2p.util.Addresses.toString(transportIP);
+            }
+            if (!"xx".equals(countryCode) && countryName.length() > 2) {
+                buf.append(countryName);
+                if (ip != null && ip.length() > 6) {
+                    buf.append(" &bullet; ");
+                    if (enableReverseLookups()) {
+                        String canonicalHost = reverseLookupCache.computeIfAbsent(ip, k -> {
+                            try {
+                                return CompletableFuture.supplyAsync(() -> {
+                                    try {
+                                        return _context.commSystem().getCanonicalHostName(k);
+                                     } catch (Exception e) {
+                                        return _t("unknown");
+                                     }
+                                }, REVERSE_DNS_EXECUTOR).get(3, TimeUnit.SECONDS);
+                            } catch (Exception e) {
+                                return _t("unknown");
+                            }
+                        });
+                        if (canonicalHost != null && !"unknown".equals(canonicalHost)) {
+                            buf.append(canonicalHost).append(" (").append(ip).append(")");
+                        } else {buf.append(ip);}
+                    } else {buf.append(ip);}
+                }
+            } else {buf.append(_t("unknown"));}
+            buf.append("\">");
+            if (!"xx".equals(countryCode)) {
+                buf.append("<a href=\"/netdb?c=").append(countryCode).append("\"><img width=24 height=18 alt=\"")
+                   .append(countryCode.toUpperCase(Locale.US)).append("\" src=\"/flags.jsp?c=")
+                   .append(countryCode).append("\"></a>");
+            } else {buf.append(unknownFlag);}
+        } else {buf.append(_t("unknown")).append("\">").append(unknownFlag);}
+        buf.append("</span>");
+        return buf.toString();
+    }
+
     /**
      * Renders the peer's capability HTML block.
      * Caches data and removes unnecessary repeated computation.
@@ -1995,72 +2095,12 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         return '?';
     }
 
-    /** Cache for reverse DNS lookups */
-    private final Map<String, String> reverseLookupCache = new ConcurrentHashMap<>();
-
-    /**
-     * Renders a peer's country flag with optional reverse DNS.
-     *
-     * @param peer Peer Hash
-     * @return HTML snippet of peer flag with country and hostname
-     */
-    @Override
-    public String renderPeerFlag(Hash peer) {
-        StringBuilder buf = new StringBuilder(128);
-        RouterInfo ri = getRouterInfoCached(peer);
-        String unknownFlag = "<img class=unknownflag width=24 height=18 alt=\"??\" src=\"/flags.jsp?c=xx\">";
-        String countryCode = getCountry(peer);
-        if (countryCode == null) {countryCode = "xx";}
-        String countryName = getCountryName(countryCode);
-        if (countryName.length() > 2)
-            countryName = Translate.getString(countryName, _context, COUNTRY_BUNDLE_NAME);
-        buf.append("<span class=cc hidden>").append(countryCode.toUpperCase(Locale.US)).append("</span>");
-        buf.append("<span class=peerFlag title=\"");
-        if (ri != null) {
-            String ip = net.i2p.util.Addresses.toString(getValidIP(ri));
-            if (ip == null || ip.isEmpty() || "null".equals(ip)) {
-                byte[] transportIP = getIP(ri);
-                if (transportIP != null)
-                    ip = net.i2p.util.Addresses.toString(transportIP);
-            }
-            if (!"xx".equals(countryCode) && countryName.length() > 2) {
-                buf.append(countryName);
-                if (ip != null && ip.length() > 6) {
-                    buf.append(" &bullet; ");
-                    if (enableReverseLookups()) {
-                        String canonicalHost = reverseLookupCache.computeIfAbsent(ip, k -> {
-                            try {
-                                return CompletableFuture.supplyAsync(() -> {
-                                    try {
-                                        return _context.commSystem().getCanonicalHostName(k);
-                                     } catch (Exception e) {
-                                        return _t("unknown");
-                                     }
-                                }, REVERSE_DNS_EXECUTOR).get(3, TimeUnit.SECONDS);
-                            } catch (Exception e) {
-                                return _t("unknown");
-                            }
-                        });
-                        if (canonicalHost != null && !"unknown".equals(canonicalHost)) {
-                            buf.append(canonicalHost).append(" (").append(ip).append(")");
-                        } else {buf.append(ip);}
-                    } else {buf.append(ip);}
-                }
-            } else {buf.append(_t("unknown"));}
-            buf.append("\">");
-            if (!"xx".equals(countryCode)) {
-                buf.append("<a href=\"/netdb?c=").append(countryCode).append("\"><img width=24 height=18 alt=\"")
-                   .append(countryCode.toUpperCase(Locale.US)).append("\" src=\"/flags.jsp?c=")
-                   .append(countryCode).append("\"></a>");
-            } else {buf.append(unknownFlag);}
-        } else {buf.append(_t("unknown")).append("\">").append(unknownFlag);}
-        buf.append("</span>");
-        return buf.toString();
-    }
+    /** Cache for reverse DNS lookups - small since we rely on file-backed rdnsCache */
+    private final ConcurrentHashMap<String, String> reverseLookupCache = new ConcurrentHashMap<>(50);
 
     // Cache RouterInfo and Capacity to improve repeated lookup efficiency
-    private final Map<Hash, RouterInfo> routerInfoCache = new ConcurrentHashMap<>();
-    private final Map<Hash, String> capacityCache = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<Hash, RouterInfo> routerInfoCache = new ConcurrentHashMap<>(5000);
+    private final ConcurrentHashMap<Hash, String> capacityCache = new ConcurrentHashMap<>(5000);
 
     private RouterInfo getRouterInfoCached(Hash peer) {
         return routerInfoCache.computeIfAbsent(peer, p -> (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(p));
