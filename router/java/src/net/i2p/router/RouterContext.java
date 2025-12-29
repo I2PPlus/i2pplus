@@ -123,6 +123,7 @@ public class RouterContext extends I2PAppContext {
             // Bad practice, adding this to static List in constructor.
             // doInit will be false when instantiated via Router.
             _contexts.add(this);
+            _finalShutdownTasks.add(new CleanupTask(this));
         }
     }
 
@@ -136,6 +137,7 @@ public class RouterContext extends I2PAppContext {
      */
     static boolean setGlobalContext(RouterContext ctx) {
         _contexts.add(ctx);
+        ctx._finalShutdownTasks.add(new CleanupTask(ctx));
         return I2PAppContext.setGlobalContext(ctx);
     }
 
@@ -743,5 +745,22 @@ public class RouterContext extends I2PAppContext {
         if (_router == null)
             return 0L;
         return _router.getEstimatedDowntime();
+    }
+
+    /**
+     * Cleanup task to remove this context from the static contexts list.
+     * This prevents memory leaks when routers are shut down.
+     */
+    private static class CleanupTask implements Runnable {
+        private final RouterContext _ctx;
+
+        CleanupTask(RouterContext ctx) {
+            _ctx = ctx;
+        }
+
+        @Override
+        public void run() {
+            _contexts.remove(_ctx);
+        }
     }
 }
