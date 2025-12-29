@@ -629,6 +629,33 @@ public class PluginStarter implements Runnable {
         // remove summary bar link
         NavHelper.getInstance(ctx).unregisterApp(appName);
 
+        // Cleanup static resources to prevent memory leaks
+        ThreadGroup tg = pluginThreadGroups.remove(appName);
+        if (tg != null) {
+            tg.interrupt();
+        }
+
+        Collection<SimpleTimer2.TimedEvent> pending = _pendingPluginClients.remove(appName);
+        if (pending != null) {
+            for (SimpleTimer2.TimedEvent event : pending) {
+                try {
+                    event.cancel();
+                } catch (Throwable t) {
+                    if (log.shouldWarn())
+                        log.warn("Error cancelling timer event for plugin: " + appName, t);
+                }
+            }
+            pending.clear();
+        }
+
+        ClassLoader cl = _clCache.remove(appName);
+        if (cl != null) {
+            // Null out the ClassLoader reference to help with GC
+            // This is especially important in plugin reload scenarios
+            if (log.shouldDebug())
+                log.debug("Removed ClassLoader for plugin: " + appName);
+        }
+
         return true;
     }
 
