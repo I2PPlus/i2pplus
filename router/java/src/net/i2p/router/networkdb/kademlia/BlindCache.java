@@ -10,6 +10,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.crypto.Blinding;
 import net.i2p.crypto.EncType;
@@ -47,6 +48,7 @@ class BlindCache {
     private boolean _changed;
 
     private static final String PERSIST_FILE = "router.blindcache.dat";
+    private static final int MAX_CACHE_SIZE = 32;
 
     /**
      *  Caller MUST call startup() to load persistent cache from disk
@@ -64,9 +66,25 @@ class BlindCache {
     public synchronized void shutdown() {
         if (_changed)
             store();
+        _context.statManager().addRateData("netdb.blindCache.size", _cache.size());
         _cache.clear();
         _reverseCache.clear();
         _hashCache.clear();
+    }
+
+    /**
+     *  Enforce maximum cache size
+     */
+    private void enforceMaxSize() {
+        while (_cache.size() > MAX_CACHE_SIZE) {
+            SigningPublicKey key = _cache.keySet().iterator().next();
+            BlindData bd = _cache.remove(key);
+            if (bd != null) {
+                _reverseCache.remove(bd.getBlindedPubKey());
+                Hash h = bd.getDestHash();
+                if (h != null) _hashCache.remove(h);
+            }
+        }
     }
 
     public synchronized void startup() {
@@ -183,6 +201,7 @@ class BlindCache {
         } else {
             synchronized(this) { _changed = true; }
         }
+        enforceMaxSize();
     }
 
     /**
