@@ -35,6 +35,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -2072,7 +2073,20 @@ public class DataHelper {
         return split(s, regex, 0);
     }
 
-    private static final ConcurrentHashMap<String, Pattern> patterns = new ConcurrentHashMap<String, Pattern>();
+    private static final class PatternCache extends LinkedHashMap<String, Pattern> {
+        private static final int MAX_ENTRIES = 500;
+
+        PatternCache() {
+            super(64, 0.75f, true);
+        }
+
+        @Override
+        protected boolean removeEldestEntry(Map.Entry<String, Pattern> eldest) {
+            return size() > MAX_ENTRIES;
+        }
+    }
+
+    private static final PatternCache patterns = new PatternCache();
 
     /**
      *  Same as s.split(regex, limit) but caches the compiled pattern for speed.
