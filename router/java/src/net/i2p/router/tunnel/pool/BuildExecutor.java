@@ -44,7 +44,18 @@ class BuildExecutor implements Runnable {
     private final ConcurrentHashMap<Long, PooledTunnelCreatorConfig> _recentlyBuildingMap; // indexed by ptcc.getReplyMessageId()
     private volatile boolean _isRunning;
     private boolean _repoll;
-    private static final int MAX_CONCURRENT_BUILDS = Math.max(SystemVersion.getCores() * 2, 16);
+    // Increased from cores*2 to cores*4 for faster tunnel churn handling
+    // Makes build concurrency configurable via router.buildConcurrencyMultiplier property (default: 4)
+    private int getMaxConcurrentBuilds() {
+        int multiplier = _context.getProperty("router.buildConcurrencyMultiplier", 4);
+        int cores = SystemVersion.getCores();
+        int result = Math.max(cores * multiplier, 16);
+        if (_log.shouldDebug()) {
+            _log.debug("Max concurrent tunnel builds: " + result +
+                       " (cores=" + cores + " * multiplier=" + multiplier + ")");
+        }
+        return result;
+    }
     private static final int LOOP_TIME = 500;
     private static final int TUNNEL_POOLS = SystemVersion.isSlow() ? 24 : 48;
     private static final long GRACE_PERIOD = 60*1000; // accept replies up to a minute after we gave up on them
@@ -59,8 +70,9 @@ class BuildExecutor implements Runnable {
         _log = ctx.logManager().getLog(getClass());
         _manager = mgr;
         _currentlyBuilding = new Object();
-        _currentlyBuildingMap = new ConcurrentHashMap<Long, PooledTunnelCreatorConfig>(MAX_CONCURRENT_BUILDS);
-        _recentlyBuildingMap = new ConcurrentHashMap<Long, PooledTunnelCreatorConfig>(4 * MAX_CONCURRENT_BUILDS);
+        int maxConcurrentBuilds = getMaxConcurrentBuilds();
+        _currentlyBuildingMap = new ConcurrentHashMap<Long, PooledTunnelCreatorConfig>(maxConcurrentBuilds);
+        _recentlyBuildingMap = new ConcurrentHashMap<Long, PooledTunnelCreatorConfig>(4 * maxConcurrentBuilds);
         _context.statManager().createRateStat("tunnel.buildFailFirstHop", "OB tunnel build failure frequency (can't contact 1st hop)", "Tunnels", RATES);
         _context.statManager().createRateStat("tunnel.buildReplySlow", "Build reply late, but not too late", "Tunnels", RATES);
         _context.statManager().createRateStat("tunnel.concurrentBuildsLagged", "Concurrent build count before rejecting (job lag)", "Tunnels", RATES); // (period is lag)
@@ -174,13 +186,14 @@ class BuildExecutor implements Runnable {
             double avg = (r != null) ? r.getAverageValue() : rs.getLifetimeAverageValue();
             int throttleFactor = isSlow ? 100 : 200;
             if (avg > 100) { // If builds take more than 100ms, start throttling
-                int throttle = (int) (throttleFactor * MAX_CONCURRENT_BUILDS / avg);
+                int maxConcurrentBuilds = getMaxConcurrentBuilds();
+                int throttle = (int) (throttleFactor * maxConcurrentBuilds / avg);
                 if (throttle < allowed) {
                     allowed = throttle;
                     if (!isSlow && avg < 100) {
                         allowed *= 2;
                     }
-                    if (allowed > MAX_CONCURRENT_BUILDS && _log.shouldInfo()) {
+                    if (allowed > maxConcurrentBuilds && _log.shouldInfo()) {
                         _log.info("Throttling concurrent tunnel builds to " + allowed + " -> Average build time is " + ((int) avg) + "ms");
                     }
                 }
@@ -200,8 +213,9 @@ class BuildExecutor implements Runnable {
         }
 
         // Cap allowed to max concurrent builds
-        if (allowed > MAX_CONCURRENT_BUILDS) {
-            allowed = MAX_CONCURRENT_BUILDS;
+        int maxConcurrentBuilds = getMaxConcurrentBuilds();
+        if (allowed > maxConcurrentBuilds) {
+            allowed = maxConcurrentBuilds;
         }
 
         // Allow override through property
@@ -330,7 +344,8 @@ class BuildExecutor implements Runnable {
      * and waiting for new build opportunities with appropriate backoff.
      */
     private void run2() {
-        List<TunnelPool> wanted = new ArrayList<>(MAX_CONCURRENT_BUILDS);
+        int maxConcurrentBuilds = getMaxConcurrentBuilds();
+        List<TunnelPool> wanted = new ArrayList<>(maxConcurrentBuilds);
         List<TunnelPool> pools = new ArrayList<>(TUNNEL_POOLS);
 
         while (_isRunning && !_manager.isShutdown()) {
