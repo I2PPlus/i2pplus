@@ -1564,12 +1564,24 @@ public class EepGet {
                     int port = url.getPort();
                     if (port == -1)
                         port = 80;
-                    if (_fetchHeaderTimeout > 0) {
-                        _proxy = new Socket();
-                        _proxy.setSoTimeout(_fetchHeaderTimeout);
-                        _proxy.connect(new InetSocketAddress(host, port), _fetchHeaderTimeout);
-                    } else {
-                        _proxy = new Socket(host, port);
+                    Socket tempSocket = null;
+                    try {
+                        if (_fetchHeaderTimeout > 0) {
+                            tempSocket = new Socket();
+                            tempSocket.setSoTimeout(_fetchHeaderTimeout);
+                            tempSocket.connect(new InetSocketAddress(host, port), _fetchHeaderTimeout);
+                        } else {
+                            tempSocket = new Socket(host, port);
+                        }
+                        _proxy = tempSocket;
+                        tempSocket = null; // Successfully assigned, don't close
+                    } finally {
+                        // Clean up socket if creation failed or exception occurred
+                        if (tempSocket != null && tempSocket != _proxy) {
+                            try {
+                                tempSocket.close();
+                            } catch (IOException ioe) {}
+                        }
                     }
                 } else {
                     throw new MalformedURLException("URL is not supported: " + _actualURL);
