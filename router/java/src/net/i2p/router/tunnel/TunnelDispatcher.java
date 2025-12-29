@@ -652,11 +652,11 @@ public class TunnelDispatcher implements Service {
     boolean shouldDropParticipatingMessage(Location loc, int type, int length, SyntheticREDQueue bwe) {
         if (length <= 0) return false;
 
-        // Enable moderate throttling to prevent queue overflow during congestion
-        // Configurable via router.transitThrottleFactor property (default: 0.4f)
+        // Enable adaptive throttling to prevent queue overflow during congestion
+        // Configurable via router.transitThrottleFactor property (default: 0.1f)
         // 0.0f disables all RED-based dropping
         // 1.0f is aggressive (up to 100% drop at high load)
-        float factor = _context.getProperty("router.transitThrottleFactor", 0.4f);
+        float factor = _context.getProperty("router.transitThrottleFactor", 0.1f);
 
         int percentage = (int) Math.min(Math.round((factor - 1.0f) * 100.0f), 100.0f);
 

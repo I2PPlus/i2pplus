@@ -292,14 +292,14 @@ public class RouterThrottleImpl implements RouterThrottle {
 
     /**
      * This is the estimated number of 1 KB tunnel messages that we'll see in
-     * the 10 minute lifetime of an exploratory tunnel. We use it as a baseline
+     * 10 minute lifetime of an exploratory tunnel. We use it as a baseline
      * minimum for estimating tunnel bandwidth, if accepted.
      *
-     * 40 KB in 10 minutes equals 67 Bps.
+     * 200 KB in 10 minutes equals 340 Bps - optimized for high bandwidth contexts.
      *
      * @since public since 0.9.66, was package private
      */
-    public static final int DEFAULT_MESSAGES_PER_TUNNEL_ESTIMATE = 40; // .067KBps
+    public static final int DEFAULT_MESSAGES_PER_TUNNEL_ESTIMATE = 200; // .340KBps
     /** also limited to 90% - see below */
     private static final int MIN_AVAILABLE_BPS = 4*1024; // always leave at least 4KBps free when allowing
     //private static final String LIMIT_STR = _x("Declining Tunnel Requests" + ":<br>" + "Bandwidth limit");

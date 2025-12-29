@@ -88,9 +88,9 @@ class BuildHandler implements Runnable {
     private static final long[] RATES = RateConstants.SHORT_TERM_RATES;
     /**
      * This is the baseline minimum for estimating tunnel bandwidth, if accepted.
-     * We use an estimate of 40 messages (1 KB each) in 10 minutes.
+     * We use an estimate of 200 messages (1 KB each) in 10 minutes.
      *
-     * 40 KB in 10 minutes equals 67 Bps.
+     * 200 KB in 10 minutes equals 340 Bps - optimized for high bandwidth contexts.
      */
     private static final int DEFAULT_BW_PER_TUNNEL_ESTIMATE = RouterThrottleImpl.DEFAULT_MESSAGES_PER_TUNNEL_ESTIMATE * 4096 / (10*60);
 
@@ -938,7 +938,7 @@ class BuildHandler implements Runnable {
                 }
                 if ((min > 0 || rqu > 0 || ibgwmax > 0) && response == 0) {
                     int share = 1000 * TunnelDispatcher.getShareBandwidth(_context);
-                    int max = share / 20;
+                    int max = share / 5;
                     if (min > max) {response = TunnelHistory.TUNNEL_REJECT_BANDWIDTH;}
                     else {
                         RateStat stat = _context.statManager().getRate("tunnel.participatingBandwidth");

@@ -34,6 +34,7 @@ class TunnelParticipant {
     private static final long MAX_LOOKUP_TIME = 15 * 1000;
     private static final long LONG_MAX_LOOKUP_TIME = 25 * 1000;
     private static final int PRIORITY = OutNetMessage.PRIORITY_PARTICIPATING;
+    // 200 messages * 2KB in 10 minutes = 340 Bps - optimized for high bandwidth contexts
     static final int DEFAULT_BW_PER_TUNNEL_ESTIMATE = RouterThrottleImpl.DEFAULT_MESSAGES_PER_TUNNEL_ESTIMATE * 2048 / (10 * 60);
 
     /**
@@ -70,17 +71,17 @@ class TunnelParticipant {
             _inboundDistributor = null;
         }
 
-        if (inEndProc == null && config != null) {
-            // Set bandwidth and RED queue
-            int max = config.getAllocatedBW();
-            if (max <= DEFAULT_BW_PER_TUNNEL_ESTIMATE) {
-                max = ctx.tunnelDispatcher().getMaxPerTunnelBandwidth(TunnelDispatcher.Location.PARTICIPANT);
-                config.setAllocatedBW(max);
-            }
-            // Extremely permissive RED thresholds - prevent any artificial drops
-            int minThreshold = Math.max(1024, max / 16);
-            int maxThreshold = Math.max(2048, max / 4);
-            _partBWE = new SyntheticREDQueue(ctx, max, minThreshold, maxThreshold);
+            if (inEndProc == null && config != null) {
+                // Set bandwidth and RED queue
+                int max = config.getAllocatedBW();
+                if (max <= DEFAULT_BW_PER_TUNNEL_ESTIMATE) {
+                    max = ctx.tunnelDispatcher().getMaxPerTunnelBandwidth(TunnelDispatcher.Location.PARTICIPANT);
+                    config.setAllocatedBW(max);
+                }
+                // Optimized RED thresholds for high bandwidth - minimize artificial drops
+                int minThreshold = Math.max(1024, max / 8);
+                int maxThreshold = Math.max(4096, max / 2);
+                _partBWE = new SyntheticREDQueue(ctx, max, minThreshold, maxThreshold);
         } else {
             _partBWE = null;
         }

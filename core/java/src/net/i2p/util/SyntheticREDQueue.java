@@ -208,7 +208,8 @@ public class SyntheticREDQueue implements BandwidthEstimator {
                 float rand = _random.nextFloat(); // Random float
                 if (rand < pa) {
                     if (_log.shouldWarn()) {
-                        _log.warn(String.format("Dropping bytes (probabilistic): %d; Factor: %.2f; Probability: %.4f; deltaTQueue: %d %s", bytes, factor, pa, deltaTQueue, this));
+                        _log.warn(String.format("Dropping bytes (probabilistic): %d; Factor: %.2f; Probability: %.4f; deltaTQueue: %d %s",
+                                                bytes, factor, pa, deltaTQueue, this));
                     }
                     _dropCount = 0;
                     return false;
