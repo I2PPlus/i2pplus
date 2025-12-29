@@ -652,8 +652,11 @@ public class TunnelDispatcher implements Service {
     boolean shouldDropParticipatingMessage(Location loc, int type, int length, SyntheticREDQueue bwe) {
         if (length <= 0) return false;
 
-        // Completely disabled throttling - maximum bandwidth allocation
-        float factor = 0.0f; // 0.0f disables all RED-based dropping
+        // Enable moderate throttling to prevent queue overflow during congestion
+        // Configurable via router.transitThrottleFactor property (default: 0.4f)
+        // 0.0f disables all RED-based dropping
+        // 1.0f is aggressive (up to 100% drop at high load)
+        float factor = _context.getProperty("router.transitThrottleFactor", 0.4f);
 
         int percentage = (int) Math.min(Math.round((factor - 1.0f) * 100.0f), 100.0f);
 
@@ -773,9 +776,14 @@ public class TunnelDispatcher implements Service {
             long now = getContext().clock().now() + 1000;
             long nextTime = now + 10 * 60 * 1000;
 
-            if (getParticipatingCount() > 500) {nextTime = now + 3 * 60 * 1000;}
-            else if (getParticipatingCount() > 1000) {nextTime = now + 1 * 60 * 1000;}
-            else if (getParticipatingCount() > 2000) {nextTime = now + 60 * 1000;}
+            // Scale expiration more gradually with tunnel count to reduce churn
+            // High tunnel counts expire faster to maintain pool health
+            int count = getParticipatingCount();
+            if (count > 4000) {nextTime = now + 60 * 1000;}      // 4000+: 1 min
+            else if (count > 2500) {nextTime = now + 90 * 1000;}    // 2500-4000: 1.5 min
+            else if (count > 1500) {nextTime = now + 120 * 1000;}   // 1500-2500: 2 min
+            else if (count > 500) {nextTime = now + 180 * 1000;}     // 500-1500: 3 min
+            else if (count > 1000) {nextTime = now + 1 * 60 * 1000;}    // 1000-500: 10 min
 
             while (true) {
                 HopConfig cur = _configs.peek();
