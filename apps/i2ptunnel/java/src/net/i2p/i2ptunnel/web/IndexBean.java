@@ -18,6 +18,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
@@ -78,10 +79,12 @@ public class IndexBean {
     private static final int MAX_NONCES = 8;
     /** store nonces in a static FIFO instead of in System Properties @since 0.8.1 */
     private static final List<String> _nonces = new ArrayList<String>(MAX_NONCES + 1);
+    private static final int MAX_FORM_KEYS = 100;
     private static final Map<Integer, SessionKey> _formKeys = new HashMap<Integer, SessionKey>();
     private static final UIMessages _messages = new UIMessages(100);
     private static final List<TimestampedMessage> _timestampedMessages = new ArrayList<>(100);
-    private static final Set<String> _seenMessages = new LinkedHashSet<>(100);
+    private static final int MAX_SEEN_MESSAGES = 500;
+    private static final Set<String> _seenMessages = new LinkedHashSet<>(MAX_SEEN_MESSAGES);
     private static final String PROP_THEME_NAME = "routerconsole.theme";
     private static final String DEFAULT_THEME = "dark";
     /** From CSSHelper */
@@ -490,6 +493,16 @@ public class IndexBean {
     /* @since 0.9.67+ */
     private void addUniqueMessage(String message) {
         synchronized (_seenMessages) {
+            // Clean up old messages if we're approaching the limit
+            if (_seenMessages.size() >= MAX_SEEN_MESSAGES) {
+                // Remove half of the oldest entries
+                Iterator<String> it = _seenMessages.iterator();
+                int toRemove = _seenMessages.size() / 2;
+                for (int i = 0; i < toRemove && it.hasNext(); i++) {
+                    it.next();
+                    it.remove();
+                }
+            }
             if (!_seenMessages.contains(message)) {
                 _seenMessages.add(message);
                 _timestampedMessages.add(new TimestampedMessage(message));
@@ -1462,6 +1475,16 @@ public class IndexBean {
         byte[] dec = DataHelper.getUTF8(v);
         SessionKey key;
         synchronized(_formKeys) {
+            // Clean up old form keys if we're approaching the limit
+            if (_formKeys.size() >= MAX_FORM_KEYS) {
+                // Remove half of the entries (FIFO order for HashMap is insertion order since Java 8)
+                Iterator<Integer> it = _formKeys.keySet().iterator();
+                int toRemove = _formKeys.size() / 2;
+                for (int i = 0; i < toRemove && it.hasNext(); i++) {
+                    it.next();
+                    it.remove();
+                }
+            }
             key = _formKeys.get(Integer.valueOf(tunnel));
             if (key == null) {
                 byte[] keyb = new byte[32];
