@@ -13,7 +13,11 @@ import java.util.Set;
 import java.util.TreeSet;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
+import net.i2p.stat.Rate;
 import net.i2p.stat.RateConstants;
+import net.i2p.stat.RateAverages;
+import net.i2p.stat.RateStat;
+import net.i2p.util.Addresses;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
@@ -22,13 +26,10 @@ import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.router.peermanager.ProfileOrganizer;
 import net.i2p.router.transport.CommSystemFacadeImpl;
 import net.i2p.router.web.Messages;
-import net.i2p.stat.Rate;
-import net.i2p.stat.RateAverages;
-import net.i2p.stat.RateStat;
-import net.i2p.util.Addresses;
+import net.i2p.util.LHMCache;
 
 /**
- * Helper class to refactor the HTML rendering from out of the ProfileOrganizer
+ * Helper class to refactor HTML rendering from out of the ProfileOrganizer
  *
  */
 class ProfileOrganizerRenderer {
@@ -90,7 +91,7 @@ class ProfileOrganizerRenderer {
         StringBuilder buf = new StringBuilder(32*1024);
 
         // Cache for reverse DNS lookups
-        Map<String, String> reverseLookupCache = new HashMap<>();
+        LHMCache<String, String> reverseLookupCache = new LHMCache<>(50);
 
         if (mode < 2) {
             buf.append("<p id=profiles_overview class=infohelp>")

@@ -31,10 +31,14 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import net.i2p.util.LHMCache;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import net.i2p.crypto.EncType;
@@ -804,26 +808,37 @@ class NetDbRenderer {
         int cores = Math.max(1, SystemVersion.getCores());
         int poolSize = Math.max(1, Math.min(Math.max(cores/2, 4), Math.max(1, ipSet.size())));
         ExecutorService dnsExecutor = Executors.newFixedThreadPool(poolSize);
-        List<Future<Void>> dnsFutures = new ArrayList<>();
+        List<Future<String>> dnsFutures = new ArrayList<>();
 
         for (String ip : ipSet) {
             dnsFutures.add(dnsExecutor.submit(() -> {
-                String hostname = _context.commSystem().getCanonicalHostName(ip);
-                if (hostname != null && !hostname.equals(ip) && !hostname.equals("unknown")) {
-                    synchronized (rdnsLookups) {
-                        rdnsLookups.put(ip, hostname);
-                    }
-                    // Also update global cache
-                    putCachedReverseDNS(ip, hostname);
-                }
-                return null;
+                String hostname = _context.commSystem().getCanonicalHostNameSync(ip);
+                return hostname;
             }));
         }
 
-        dnsExecutor.shutdown();
-        try {Thread.sleep(3000);}
-        catch (InterruptedException ie) {Thread.currentThread().interrupt();}
-        if (!dnsExecutor.isTerminated()) {dnsExecutor.shutdownNow();}
+        long start = System.currentTimeMillis();
+        long timeout = 2500;
+        for (int i = 0; i < dnsFutures.size(); i++) {
+            Future<String> future = dnsFutures.get(i);
+            String ip = ipSet.toArray(new String[0])[i];
+            try {
+                long remaining = timeout - (System.currentTimeMillis() - start);
+                if (remaining <= 0) break;
+                String hostname = future.get(remaining, TimeUnit.MILLISECONDS);
+                if (hostname != null && !hostname.equals(ip) && !hostname.equals("unknown")) {
+                    rdnsLookups.put(ip, hostname);
+                    putCachedReverseDNS(ip, hostname);
+                }
+            } catch (TimeoutException e) {
+                break;
+            } catch (InterruptedException | ExecutionException e) {
+                if (e instanceof InterruptedException) Thread.currentThread().interrupt();
+            }
+        }
+
+        dnsExecutor.shutdownNow();
+        try {dnsExecutor.awaitTermination(1, TimeUnit.SECONDS);} catch (InterruptedException e) {Thread.currentThread().interrupt();}
 
         return rdnsLookups;
     }
@@ -1668,13 +1683,14 @@ class NetDbRenderer {
     }
 
     /**
-     * Reverse DNS cache with TTL (1 hour).
+     * Reverse DNS cache with TTL (24 hours).
+     * Small cache since we rely on file-backed rdnsCache in CommSystemFacadeImpl
      */
-    private final Map<String, CacheEntry> reverseLookupCache = new HashMap<>();
-    private static final long TTL_24_HOURS = 60 * 60 * 1000; // 1 hour
+    private final LHMCache<String, CacheEntry> reverseLookupCache = new LHMCache<>(50);
+    private static final long TTL_24_HOURS = 24 * 60 * 60 * 1000; // 24 hours
 
     /**
-     * Gets a value from the cache if it's still valid.
+     * Gets a value from cache if it's still valid.
      */
     private String getCachedReverseDNS(String ip) {
         CacheEntry entry = reverseLookupCache.get(ip);
