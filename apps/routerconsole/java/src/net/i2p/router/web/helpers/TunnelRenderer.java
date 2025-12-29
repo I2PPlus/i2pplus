@@ -11,9 +11,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.TunnelId;
@@ -45,6 +47,34 @@ class TunnelRenderer {
     private final RouterContext _context;
     private final Log _log;
 
+    /**
+     *  A bounded LRU cache extending LinkedHashMap with computeIfAbsent support.
+     */
+    private static class BoundedCache<K, V> extends LinkedHashMap<K, V> {
+        private final int _maxSize;
+
+        public BoundedCache(int maxSize) {
+            super(maxSize, 0.75f, true);
+            _maxSize = maxSize;
+        }
+
+        @Override
+        protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
+            return size() > _maxSize;
+        }
+
+        public V computeIfAbsent(K key, Function<? super K, ? extends V> mappingFunction) {
+            V value = get(key);
+            if (value == null) {
+                value = mappingFunction.apply(key);
+                if (value != null) {
+                    put(key, value);
+                }
+            }
+            return value;
+        }
+    }
+
     private int DISPLAY_LIMIT = 100;
     private int displayed;
     private final DecimalFormat fmt = new DecimalFormat("#0.00");
@@ -59,9 +89,9 @@ class TunnelRenderer {
         _log = _context.logManager().getLog(TunnelRenderer.class);
     }
 
-    private final Map<Hash, RouterInfo> routerInfoCache = new HashMap<>();
-    private final Map<Hash, ReverseLookupResult> reverseLookupResults = new HashMap<>();
-    private final Map<Hash, String> peerToIP = new HashMap<>();
+    private final BoundedCache<Hash, RouterInfo> routerInfoCache = new BoundedCache<>(5000);
+    private final BoundedCache<Hash, ReverseLookupResult> reverseLookupResults = new BoundedCache<>(5000);
+    private final BoundedCache<Hash, String> peerToIP = new BoundedCache<>(5000);
 
     public void renderStatusHTML(Writer out) throws IOException {
         boolean isAdvanced = _context.getBooleanProperty(HelperBase.PROP_ADVANCED);
@@ -196,6 +226,8 @@ class TunnelRenderer {
                 if (rs != null) {processed = (long)rs.getRate(RateConstants.TEN_MINUTES).getLifetimeTotalValue();}
                 int inactive = 0;
                 displayed = 0;
+                if (bySpeed) {DataHelper.sort(participating, new TunnelComparatorBySpeed());}
+                else {DataHelper.sort(participating, new TunnelComparator());}
                 for (int i = 0; i < participating.size(); i++) {
                     HopConfig cfg = participating.get(i);
                     int count = cfg.getProcessedMessagesCount();
@@ -203,8 +235,6 @@ class TunnelRenderer {
                         inactive++;
                         continue;
                     }
-                    if (bySpeed) {DataHelper.sort(participating, new TunnelComparatorBySpeed());}
-                    else {DataHelper.sort(participating, new TunnelComparator());}
                     Hash to = cfg.getSendTo();
                     Hash from = cfg.getReceiveFrom();
                     // everything that isn't 'recent' is already in the tunnel.participatingMessageCount stat
@@ -318,7 +348,7 @@ class TunnelRenderer {
         sb.setLength(0);
     }
 
-    private final Map<String, String> reverseLookupCache = new HashMap<>();
+    private final BoundedCache<String, String> reverseLookupCache = new BoundedCache<>(1000);
 
     public void renderTransitSummary(Writer out) throws IOException {
         List<HopConfig> participating = _context.tunnelDispatcher().listParticipatingTunnels();
@@ -373,14 +403,15 @@ class TunnelRenderer {
             StringBuilder sb = new StringBuilder(4 * 512);
 
             for (Hash h : sorted) {
-                if (++displayed > DISPLAY_LIMIT) break;
-
                 int count = counts.count(h);
-                //RouterInfo info = _context.netDb().lookupRouterInfoLocally(h);
-                RouterInfo info = routerInfoCache.computeIfAbsent(h, hash -> (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(hash));
 
                 // Defensive - skip if count <= 0 (unlikely due to sorted list but just in case)
                 if (count <= 0) continue;
+
+                if (++displayed > DISPLAY_LIMIT) break;
+
+                //RouterInfo info = _context.netDb().lookupRouterInfoLocally(h);
+                RouterInfo info = routerInfoCache.computeIfAbsent(h, hash -> (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(hash));
 
                 String truncHash = h.toBase64().substring(0,4);
 
@@ -397,7 +428,6 @@ class TunnelRenderer {
                 String version = (info != null) ? info.getOption("router.version") : null;
                 ReverseLookupResult rlResult = getReverseLookupInfo(h, info, uptime);
                 boolean isBanned = _context.banlist().isBanlisted(h) ||
-                                   _context.banlist().isBanlisted(h) ||
                                    _context.banlist().isBanlistedHostile(h);
 
                 sb.append("<tr class=lazy><td>")
@@ -527,7 +557,7 @@ class TunnelRenderer {
             headerSb.append("<th class=tcount colspan=2 title=\"Client and Exploratory Tunnels\" data-sort-method=number data-sort-column-key=localCount>")
                   .append(_t("Local"))
                   .append("</th>");
-            if (!peerList.isEmpty()) {
+            if (partCount > 0) {
                 headerSb.append("<th class=tcount colspan=2 data-sort-method=number data-sort-column-key=transitCount>")
                       .append(_t("Transit"))
                       .append("</th>");
@@ -540,10 +570,11 @@ class TunnelRenderer {
             out.write(headerSb.toString());
             out.flush();
 
+            List<Hash> validPeerList = new ArrayList<>(peerList.size());
             for (Hash h : peerList) {
-                //RouterInfo info = routerInfoCache.computeIfAbsent(h, hash -> _context.netDb().lookupRouterInfoLocally(hash));
                 RouterInfo info = routerInfoCache.computeIfAbsent(h, hash -> (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(hash));
                 if (info == null) continue;
+                validPeerList.add(h);
                 byte[] direct = TransportImpl.getIP(h);
                 String directIP = (direct != null) ? Addresses.toString(direct) : "";
                 String ip = !directIP.isEmpty() ? directIP : Addresses.toString(CommSystemFacadeImpl.getValidIP(info));
@@ -556,14 +587,13 @@ class TunnelRenderer {
             }
 
             final int chunkSize = 50;
-            for (int start = 0; start < peerList.size(); start += chunkSize) {
-                int end = Math.min(start + chunkSize, peerList.size());
+            for (int start = 0; start < validPeerList.size(); start += chunkSize) {
+                int end = Math.min(start + chunkSize, validPeerList.size());
 
                 StringBuilder chunkSb = new StringBuilder();
                 for (int i = start; i < end; i++) {
-                    Hash h = peerList.get(i);
+                    Hash h = validPeerList.get(i);
                     RouterInfo info = routerInfoCache.get(h);
-                    if (info == null) continue;
 
                     int localTunnelCount = localCount.count(h);
                     int transitTunnelCount = transitCount.count(h);
@@ -651,7 +681,7 @@ class TunnelRenderer {
             }
             StringBuilder footerSb = new StringBuilder();
             footerSb.append("</tbody>\n<tfoot class=lazy><tr class=tablefooter data-sort-method=none><td colspan=4><b>")
-                  .append(peerList.size())
+                  .append(validPeerList.size())
                   .append(" ")
                   .append(_t("unique peers"))
                   .append("</b></td><td></td>");
@@ -663,7 +693,7 @@ class TunnelRenderer {
                   .append(" ")
                   .append(_t("local"))
                   .append("</b></td>");
-            if (!peerList.isEmpty()) {
+            if (partCount > 0) {
                 footerSb.append("<td colspan=2><b>")
                       .append(partCount)
                       .append(" ")
