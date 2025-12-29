@@ -212,6 +212,52 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     public synchronized void shutdown() {
         _manager.shutdown();
         _geoIP.shutdown();
+
+        if (_rdnsTimer != null) {
+            _rdnsTimer.cancel();
+            _rdnsTimer = null;
+        }
+
+        shutdownStatic();
+    }
+
+    /**
+     * Cleanup static resources.
+     * This should be called when the router is shutting down to prevent memory leaks.
+     */
+    private static synchronized void shutdownStatic() {
+        if (!WHOIS_QUERY_EXECUTOR.isShutdown()) {
+            WHOIS_QUERY_EXECUTOR.shutdown();
+            try {
+                if (!WHOIS_QUERY_EXECUTOR.awaitTermination(5, TimeUnit.SECONDS)) {
+                    WHOIS_QUERY_EXECUTOR.shutdownNow();
+                }
+            } catch (InterruptedException e) {
+                WHOIS_QUERY_EXECUTOR.shutdownNow();
+                Thread.currentThread().interrupt();
+            }
+        }
+
+        if (!REVERSE_DNS_EXECUTOR.isShutdown()) {
+            REVERSE_DNS_EXECUTOR.shutdown();
+            try {
+                if (!REVERSE_DNS_EXECUTOR.awaitTermination(5, TimeUnit.SECONDS)) {
+                    REVERSE_DNS_EXECUTOR.shutdownNow();
+                }
+            } catch (InterruptedException e) {
+                REVERSE_DNS_EXECUTOR.shutdownNow();
+                Thread.currentThread().interrupt();
+            }
+        }
+
+        // Clean up expired entries from downServers
+        long now = System.currentTimeMillis();
+        for (Map.Entry<String, Long> entry : downServers.entrySet()) {
+            if (now - entry.getValue() >= SERVER_DOWN_TIMEOUT_MS) {
+                downServers.remove(entry.getKey());
+            }
+        }
+        pendingLookups.clear();
     }
 
     /**
@@ -826,9 +872,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             createRdnsCacheFile();
             ex.printStackTrace();
         }
-        Timer timer = new Timer(true);
+        _rdnsTimer = new Timer(true);
         long delay = RDNS_WRITE_INTERVAL;
-        timer.schedule(new RDNSCacheFileWriter(), delay, delay);
+        _rdnsTimer.schedule(new RDNSCacheFileWriter(), delay, delay);
     }
 
     // CacheEntry to string includes timestamp for persistence
@@ -1228,16 +1274,19 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     private static final long SERVER_DOWN_TIMEOUT_MS = 60 * 60 * 1000L;
+
     private static final ConcurrentMap<String, Long> downServers = new ConcurrentHashMap<>();
 
    private static final ExecutorService REVERSE_DNS_EXECUTOR = new ThreadPoolExecutor(
-        10, 20,
-        60L, TimeUnit.SECONDS,
-        new LinkedBlockingQueue<>(500),
-        new ThreadPoolExecutor.CallerRunsPolicy()
-    );
+         10, 20,
+         60L, TimeUnit.SECONDS,
+         new LinkedBlockingQueue<>(500),
+         new ThreadPoolExecutor.CallerRunsPolicy()
+     );
 
     private static final ConcurrentMap<String, Boolean> pendingLookups = new ConcurrentHashMap<>();
+
+    private static Timer _rdnsTimer;
 
     private String queryWhoisServerWithFallback(String query, String whoisServer) {
         // Skip server if marked down and timeout not expired
