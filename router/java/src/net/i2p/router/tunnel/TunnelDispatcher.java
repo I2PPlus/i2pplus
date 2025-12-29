@@ -148,6 +148,11 @@ public class TunnelDispatcher implements Service {
         _context.statManager().createRateStat("tunnel.dispatchParticipant", "Messages we sent through a tunnel we are participating in", "Tunnels [Participating]", RATES);
         _context.statManager().createRateStat("tunnel.dispatchEndpoint", "Messages received as Outbound Endpoint of a tunnel", "Tunnels [Participating]", RATES);
         _context.statManager().createRateStat("tunnel.joinOutboundGateway", "Tunnels joined as Outbound Gateway", "Tunnels [Participating]", RATES);
+        _context.statManager().createRateStat("tunnel.cache.outboundGateways", "Outbound gateway cache size", "Tunnels [Memory]", RATES);
+        _context.statManager().createRateStat("tunnel.cache.outboundEndpoints", "Outbound endpoint cache size", "Tunnels [Memory]", RATES);
+        _context.statManager().createRateStat("tunnel.cache.participants", "Participant cache size", "Tunnels [Memory]", RATES);
+        _context.statManager().createRateStat("tunnel.cache.inboundGateways", "Inbound gateway cache size", "Tunnels [Memory]", RATES);
+        _context.statManager().createRateStat("tunnel.cache.participatingConfig", "Participating config cache size", "Tunnels [Memory]", RATES);
         _context.statManager().createRateStat("tunnel.joinOutboundGatewayZeroHop", "Zero hop tunnels joined as Outbound Gateway", "Tunnels [Participating]", RATES);
         _context.statManager().createRateStat("tunnel.joinInboundEndpoint", "Tunnels joined as Inbound Endpoint", "Tunnels [Participating]", RATES);
         _context.statManager().createRateStat("tunnel.joinInboundEndpointZeroHop", "Zero hop tunnels joined as Inbound Endpoint", "Tunnels [Participating]", RATES);
@@ -695,7 +700,7 @@ public class TunnelDispatcher implements Service {
     }
 
     /**
-     * Shut down the TunnelDispatcher
+     * Shut down TunnelDispatcher
      */
     public synchronized void shutdown() {
         if (_validator != null) {
@@ -703,6 +708,11 @@ public class TunnelDispatcher implements Service {
             _validator = null;
         }
         _pumper.stopPumping();
+        _context.statManager().addRateData("tunnel.cache.outboundGateways", _outboundGateways.size());
+        _context.statManager().addRateData("tunnel.cache.outboundEndpoints", _outboundEndpoints.size());
+        _context.statManager().addRateData("tunnel.cache.participants", _participants.size());
+        _context.statManager().addRateData("tunnel.cache.inboundGateways", _inboundGateways.size());
+        _context.statManager().addRateData("tunnel.cache.participatingConfig", _participatingConfig.size());
         _outboundGateways.clear();
         _outboundEndpoints.clear();
         _participants.clear();
