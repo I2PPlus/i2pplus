@@ -35,10 +35,14 @@ class ParticipatingThrottler {
     private static final String PROP_BLOCK_OLD_ROUTERS = "router.blockOldRouters";
     private static final String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
     private static final String PROP_SHOULD_THROTTLE = "router.enableTransitThrottle";
-    private static final int LIFETIME_PORTION = 3; // portion of the tunnel lifetime
+    // Increased from 3 to 8 for more stable throttling (cleanup every ~10 min vs ~3.3 min)
+    // Prevents peers from temporarily exceeding limits between cleanups
+    private static final int LIFETIME_PORTION = 8; // portion of tunnel lifetime
     private static final int MIN_LIMIT = (isSlow ? 100 : 150) / LIFETIME_PORTION;
     private static final int MAX_LIMIT = (isSlow ? 1200 : 1800) / LIFETIME_PORTION;
-    private static final int PERCENT_LIMIT = 15 / LIFETIME_PORTION;
+    // Increased from 15 to 21.4 to increase per-peer limits from ~2.5% to ~7%
+    // This allows high-bandwidth routers to participate in more transit tunnels
+    private static final int PERCENT_LIMIT = 21 / LIFETIME_PORTION;
     private static final long CLEAN_TIME = 11 * 60 * 1000 / LIFETIME_PORTION;
     private static final String MIN_VERSION = "0.9.64";
 
