@@ -227,10 +227,17 @@ class NetDbRenderer {
                 return routerCountry != null && countryCodes.contains(routerCountry.toLowerCase(Locale.US));
             });
         }
-        if (capabilities != null) {
+        if (capabilities != null && capabilities.length() > 0) {
             routerStream = routerStream.filter(ri -> {
                 String caps = ri.getCapabilities();
-                return capabilities.chars().allMatch(c -> caps.indexOf(c) >= 0);
+                // Include router only if it contains ALL characters in the filter string
+                // e.g., filter="f" matches routers with caps="f", "fR", "Mf" etc.
+                for (int i = 0; i < capabilities.length(); i++) {
+                    if (caps.indexOf(capabilities.charAt(i)) < 0) {
+                        return false;
+                    }
+                }
+                return true;
             });
         }
         if (signatureType != null) {
@@ -297,7 +304,14 @@ class NetDbRenderer {
         Collections.sort(allRouters, RouterInfoComparator.getInstance());
 
         // Pagination
-        int fromIndex = Math.min(page * pageSize, totalSize - 1);
+        int fromIndex = page * pageSize;
+        if (totalSize == 0 || fromIndex >= totalSize) {
+            // Requested page is beyond available results or no results at all
+            writeNoResults(buf, routerPrefix, version, country, family, capabilities, ipAddress, port, highPort,
+                           mtu, ipv6Address, ssuCapabilities, cost, signatureType, encryptionType, transport);
+            out.append(buf);
+            return;
+        }
         int toIndex = Math.min(fromIndex + pageSize, totalSize);
         List<RouterInfo> routersToRender = allRouters.subList(fromIndex, toIndex);
 
@@ -306,7 +320,7 @@ class NetDbRenderer {
             ? precacheReverseDNSLookups(routersToRender)
             : Collections.emptyMap();
 
-        renderRoutersToWriter(routersToRender, out, false, page, pageSize);
+        renderRoutersToWriter(routersToRender, out, false, page, pageSize, false);
 
         if (sybil != null) {
             sybilHashes.addAll(routersToRender.stream()
@@ -1378,18 +1392,35 @@ class NetDbRenderer {
     }
 
     /**
-     * Renders a list of RouterInfo objects to the given Writer.
+     * Renders a list of RouterInfo objects to given Writer.
      * Uses parallel rendering for small sets (&lt; 300), streams for large sets.
      */
     public void renderRoutersToWriter(Collection<RouterInfo> routers, Writer out, boolean isLocal, int page, int pageSize) throws IOException {
+        renderRoutersToWriter(routers, out, isLocal, page, pageSize, true);
+    }
+
+    /**
+     * Renders a list of RouterInfo objects to given Writer.
+     * Uses parallel rendering for small sets (&lt; 300), streams for large sets.
+     * @param applyPagination whether to apply pagination internally (false if list is already paginated)
+     */
+    public void renderRoutersToWriter(Collection<RouterInfo> routers, Writer out, boolean isLocal, int page, int pageSize, boolean applyPagination) throws IOException {
         if (routers == null || routers.isEmpty()) return;
 
         List<RouterInfo> list = new ArrayList<>(routers);
-        int total = list.size();
-        int fromIndex = Math.min(page * pageSize, total - 1);
-        int toIndex = Math.min(fromIndex + pageSize, total);
-
-        List<RouterInfo> pageList = list.subList(fromIndex, toIndex);
+        List<RouterInfo> pageList;
+        if (applyPagination) {
+            int total = list.size();
+            int fromIndex = page * pageSize;
+            if (fromIndex >= total) {
+                // Requested page is beyond available results, just return early
+                return;
+            }
+            int toIndex = Math.min(fromIndex + pageSize, total);
+            pageList = list.subList(fromIndex, toIndex);
+        } else {
+            pageList = list;
+        }
 
         int maxBeforeStreaming = enableReverseLookups() ? 100 : 200;
 
