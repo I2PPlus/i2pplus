@@ -56,7 +56,10 @@ public class DemuxOutputStream extends OutputStream {
     @SuppressWarnings("resource") // we actually close the stream here
     @Override
     public void close() throws IOException {
-        IOUtils.close(outputStreamThreadLocal.get());
+        OutputStream output = outputStreamThreadLocal.get();
+        IOUtils.close(output);
+        // Remove ThreadLocal entry to prevent memory leaks in thread pool environments
+        outputStreamThreadLocal.remove();
     }
 
     /**
