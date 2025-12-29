@@ -49,9 +49,9 @@ class ThrottledPumpedTunnelGateway extends PumpedTunnelGateway {
             _config.setAllocatedBW(allocated);
         }
         int effectiveBw = allocated;
-        // Optimized RED thresholds for high bandwidth - minimize artificial drops
-        int minThreshold = Math.max(1024, effectiveBw / 8);
-        int maxThreshold = Math.max(4096, effectiveBw / 2);
+        // Dynamic RED thresholds scaled to bandwidth - handle bursts without drops
+        int minThreshold = Math.max(2048, effectiveBw / 4);
+        int maxThreshold = Math.max(8192, effectiveBw);
         _partBWE = new SyntheticREDQueue(context, effectiveBw, minThreshold, maxThreshold);
     }
 

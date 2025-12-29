@@ -938,7 +938,7 @@ class BuildHandler implements Runnable {
                 }
                 if ((min > 0 || rqu > 0 || ibgwmax > 0) && response == 0) {
                     int share = 1000 * TunnelDispatcher.getShareBandwidth(_context);
-                    int max = share / 5;
+                    int max = share / 2;
                     if (min > max) {response = TunnelHistory.TUNNEL_REJECT_BANDWIDTH;}
                     else {
                         RateStat stat = _context.statManager().getRate("tunnel.participatingBandwidth");
@@ -946,7 +946,8 @@ class BuildHandler implements Runnable {
                             Rate rate = stat.getRate(RateConstants.TEN_MINUTES);
                             if (rate != null) {
                                 int used = (int) rate.getAvgOrLifetimeAvg();
-                                avail = Math.min(max, (share - used) / 4);
+                                int available = share - used;
+                                avail = Math.min(max, available);
                                 if (min > avail) {
                                     if (_log.shouldInfo())
                                         _log.info("Rejecting transit tunnel request -> Insufficient bandwidth available (Required / Available: " +

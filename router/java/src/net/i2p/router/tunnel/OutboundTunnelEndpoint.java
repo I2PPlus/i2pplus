@@ -39,9 +39,9 @@ class OutboundTunnelEndpoint {
             _config.setAllocatedBW(allocated);
         }
         int effectiveBw = allocated;
-        // Optimized RED thresholds for high bandwidth - minimize artificial drops
-        int minThreshold = Math.max(1024, effectiveBw / 8);
-        int maxThreshold = Math.max(4096, effectiveBw / 2);
+        // Dynamic RED thresholds scaled to bandwidth - handle bursts without drops
+        int minThreshold = Math.max(2048, effectiveBw / 4);
+        int maxThreshold = Math.max(8192, effectiveBw);
         _partBWE = new SyntheticREDQueue(_context, effectiveBw, minThreshold, maxThreshold);
         _outDistributor = new OutboundMessageDistributor(ctx, OutNetMessage.PRIORITY_PARTICIPATING, _partBWE);
         _totalmsg = _lsdsm = _ridsm = _i2npmsg = 0;

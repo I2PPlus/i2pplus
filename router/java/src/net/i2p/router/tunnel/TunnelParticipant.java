@@ -71,17 +71,17 @@ class TunnelParticipant {
             _inboundDistributor = null;
         }
 
-            if (inEndProc == null && config != null) {
-                // Set bandwidth and RED queue
-                int max = config.getAllocatedBW();
-                if (max <= DEFAULT_BW_PER_TUNNEL_ESTIMATE) {
-                    max = ctx.tunnelDispatcher().getMaxPerTunnelBandwidth(TunnelDispatcher.Location.PARTICIPANT);
-                    config.setAllocatedBW(max);
-                }
-                // Optimized RED thresholds for high bandwidth - minimize artificial drops
-                int minThreshold = Math.max(1024, max / 8);
-                int maxThreshold = Math.max(4096, max / 2);
-                _partBWE = new SyntheticREDQueue(ctx, max, minThreshold, maxThreshold);
+        if (inEndProc == null && config != null) {
+            // Set bandwidth and RED queue
+            int max = config.getAllocatedBW();
+            if (max <= DEFAULT_BW_PER_TUNNEL_ESTIMATE) {
+                max = ctx.tunnelDispatcher().getMaxPerTunnelBandwidth(TunnelDispatcher.Location.PARTICIPANT);
+                config.setAllocatedBW(max);
+            }
+            // Dynamic RED thresholds scaled to bandwidth - handle bursts without drops
+            int minThreshold = Math.max(2048, max / 4);
+            int maxThreshold = Math.max(8192, max);
+            _partBWE = new SyntheticREDQueue(ctx, max, minThreshold, maxThreshold);
         } else {
             _partBWE = null;
         }
