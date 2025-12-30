@@ -87,12 +87,24 @@ class BuildHandler implements Runnable {
     private static final long JOB_LAG_LIMIT_TUNNEL = isSlow ? 800 : 500;
     private static final long[] RATES = RateConstants.SHORT_TERM_RATES;
     /**
-     * This is the baseline minimum for estimating tunnel bandwidth, if accepted.
+     * This is baseline minimum for estimating tunnel bandwidth, if accepted.
      * We use an estimate of 200 messages (1 KB each) in 10 minutes.
      *
      * 200 KB in 10 minutes equals 340 Bps - optimized for high bandwidth contexts.
      */
     private static final int DEFAULT_BW_PER_TUNNEL_ESTIMATE = RouterThrottleImpl.DEFAULT_MESSAGES_PER_TUNNEL_ESTIMATE * 4096 / (10*60);
+
+    private static String formatBandwidth(int bps) {
+        if (bps >= 1000000000) {
+            return String.format("%.2fGB/s", bps / 1000000000.0);
+        } else if (bps >= 1000000) {
+            return String.format("%.2fMB/s", bps / 1000000.0);
+        } else if (bps >= 1000) {
+            return String.format("%.2fKB/s", bps / 1000.0);
+        } else {
+            return bps + "B/s";
+        }
+    }
 
     public BuildHandler(RouterContext ctx, TunnelPoolManager manager, BuildExecutor exec) {
         _context = ctx;
@@ -945,13 +957,13 @@ class BuildHandler implements Runnable {
                         if (stat != null) {
                             Rate rate = stat.getRate(RateConstants.TEN_MINUTES);
                             if (rate != null) {
-                                int used = (int) rate.getAvgOrLifetimeAvg();
-                                int available = share - used;
-                                avail = Math.min(max, available);
+                            int used = (int) rate.getAvgOrLifetimeAvg();
+                            int available = share - used;
+                            avail = Math.min(max, available);
                                 if (_log.shouldDebug())
-                                    _log.debug("Tunnel bandwidth - share: " + share + 
-                                              " used: " + used + " max: " + max + 
-                                              " avail: " + avail);
+                                    _log.debug("Tunnel bandwidth - share: " + formatBandwidth(share) +
+                                              " used: " + formatBandwidth(used) + " max: " + formatBandwidth(max) +
+                                              " avail: " + formatBandwidth(avail));
                                 if (min > avail) {
                                     if (_log.shouldInfo())
                                         _log.info("Rejecting transit tunnel request -> Insufficient bandwidth available (Required / Available: " +
@@ -1000,7 +1012,7 @@ class BuildHandler implements Runnable {
             if (avail > 0) {cfg.setAllocatedBW(avail);}
             else {cfg.setAllocatedBW(DEFAULT_BW_PER_TUNNEL_ESTIMATE);}
             if (_log.shouldDebug())
-                _log.debug("Tunnel join - Allocated: " + cfg.getAllocatedBW());
+                _log.debug("Tunnel join - Allocated: " + formatBandwidth(cfg.getAllocatedBW()));
             // now "actually" join
             boolean success;
             if (isOutEnd) {success = _context.tunnelDispatcher().joinOutboundEndpoint(cfg);}

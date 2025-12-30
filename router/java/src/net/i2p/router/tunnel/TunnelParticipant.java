@@ -24,6 +24,18 @@ class TunnelParticipant {
     private final Log _log;
     private final HopConfig _config;
     private final HopProcessor _processor;
+
+    private static String formatBandwidth(int bps) {
+        if (bps >= 1000000000) {
+            return String.format("%.2fGB/s", bps / 1000000000.0);
+        } else if (bps >= 1000000) {
+            return String.format("%.2fMB/s", bps / 1000000.0);
+        } else if (bps >= 1000) {
+            return String.format("%.2fKB/s", bps / 1000.0);
+        } else {
+            return bps + "B/s";
+        }
+    }
     private final InboundEndpointProcessor _inboundEndpointProcessor;
     private final InboundMessageDistributor _inboundDistributor;
     private final FragmentHandler _handler;
@@ -75,18 +87,19 @@ class TunnelParticipant {
             // Set bandwidth and RED queue
             int oldAllocated = config.getAllocatedBW();
             int max = oldAllocated;
-            if (_log.shouldWarn()) {
-                _log.warn("TunnelParticipant init - Allocated: " + oldAllocated + 
-                          " DEFAULT: " + DEFAULT_BW_PER_TUNNEL_ESTIMATE +
-                          " Share: " + TunnelDispatcher.getShareBandwidth(ctx));
+            int shareKBps = TunnelDispatcher.getShareBandwidth(ctx);
+            if (_log.shouldInfo()) {
+                _log.info("TunnelParticipant init - Allocated: " + formatBandwidth(oldAllocated) +
+                          " DEFAULT: " + formatBandwidth(DEFAULT_BW_PER_TUNNEL_ESTIMATE) +
+                          " Share: " + formatBandwidth(shareKBps * 1000));
             }
-            int shareBps = 1000 * TunnelDispatcher.getShareBandwidth(ctx);
+            int shareBps = 1000 * shareKBps;
             int reasonableMax = shareBps / 2;
             if (oldAllocated <= DEFAULT_BW_PER_TUNNEL_ESTIMATE || oldAllocated < reasonableMax / 10) {
                 max = ctx.tunnelDispatcher().getMaxPerTunnelBandwidth(TunnelDispatcher.Location.PARTICIPANT);
                 config.setAllocatedBW(max);
-                if (_log.shouldWarn())
-                    _log.warn("Updated tunnel bandwidth from " + oldAllocated + " to: " + max);
+                if (_log.shouldInfo())
+                    _log.info("Updated tunnel bandwidth from " + formatBandwidth(oldAllocated) + " to: " + formatBandwidth(max));
             }
             // Dynamic RED thresholds scaled to bandwidth - handle bursts without drops
             int minThreshold = Math.max(2048, max / 4);
