@@ -136,7 +136,15 @@ public class GraphHelper extends FormHandler {
     public void setPersistent(String foo) {_persistent = true;}
 
     /** @since 0.9.32 */
-    public void setHideLegend(String foo) {_graphHideLegend = true;}
+    public void setHideLegend(String foo) {
+        if ("true".equalsIgnoreCase(foo)) {
+            _graphHideLegend = true;
+            setSingleHideLegend(true);
+        } else if ("false".equalsIgnoreCase(foo)) {
+            _graphHideLegend = false;
+            setSingleHideLegend(false);
+        }
+    }
 
     /**
      *  For single stat page
