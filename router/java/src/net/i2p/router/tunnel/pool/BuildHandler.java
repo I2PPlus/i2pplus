@@ -948,6 +948,10 @@ class BuildHandler implements Runnable {
                                 int used = (int) rate.getAvgOrLifetimeAvg();
                                 int available = share - used;
                                 avail = Math.min(max, available);
+                                if (_log.shouldDebug())
+                                    _log.debug("Tunnel bandwidth - share: " + share + 
+                                              " used: " + used + " max: " + max + 
+                                              " avail: " + avail);
                                 if (min > avail) {
                                     if (_log.shouldInfo())
                                         _log.info("Rejecting transit tunnel request -> Insufficient bandwidth available (Required / Available: " +
@@ -996,11 +1000,7 @@ class BuildHandler implements Runnable {
             if (avail > 0) {cfg.setAllocatedBW(avail);}
             else {cfg.setAllocatedBW(DEFAULT_BW_PER_TUNNEL_ESTIMATE);}
             if (_log.shouldDebug())
-                _log.debug("Tunnel join - Allocated: " + cfg.getAllocatedBW() + 
-                          " share: " + share);
-            if (_log.shouldDebug())
-                _log.debug("Tunnel join - Allocated: " + cfg.getAllocatedBW() + 
-                          " share: " + share + " used: " + (used > 0 ? used : 0));
+                _log.debug("Tunnel join - Allocated: " + cfg.getAllocatedBW());
             // now "actually" join
             boolean success;
             if (isOutEnd) {success = _context.tunnelDispatcher().joinOutboundEndpoint(cfg);}
