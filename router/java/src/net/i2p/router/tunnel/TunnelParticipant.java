@@ -73,17 +73,20 @@ class TunnelParticipant {
 
         if (inEndProc == null && config != null) {
             // Set bandwidth and RED queue
-            int max = config.getAllocatedBW();
+            int oldAllocated = config.getAllocatedBW();
+            int max = oldAllocated;
             if (_log.shouldWarn()) {
-                _log.warn("TunnelParticipant init - Allocated: " + max + 
+                _log.warn("TunnelParticipant init - Allocated: " + oldAllocated + 
                           " DEFAULT: " + DEFAULT_BW_PER_TUNNEL_ESTIMATE +
                           " Share: " + TunnelDispatcher.getShareBandwidth(ctx));
             }
-            if (max <= DEFAULT_BW_PER_TUNNEL_ESTIMATE) {
+            int shareBps = 1000 * TunnelDispatcher.getShareBandwidth(ctx);
+            int reasonableMax = shareBps / 2;
+            if (oldAllocated <= DEFAULT_BW_PER_TUNNEL_ESTIMATE || oldAllocated < reasonableMax / 10) {
                 max = ctx.tunnelDispatcher().getMaxPerTunnelBandwidth(TunnelDispatcher.Location.PARTICIPANT);
                 config.setAllocatedBW(max);
                 if (_log.shouldWarn())
-                    _log.warn("Updated tunnel bandwidth to: " + max);
+                    _log.warn("Updated tunnel bandwidth from " + oldAllocated + " to: " + max);
             }
             // Dynamic RED thresholds scaled to bandwidth - handle bursts without drops
             int minThreshold = Math.max(2048, max / 4);
