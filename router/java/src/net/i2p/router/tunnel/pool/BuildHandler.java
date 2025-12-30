@@ -995,6 +995,12 @@ class BuildHandler implements Runnable {
             }
             if (avail > 0) {cfg.setAllocatedBW(avail);}
             else {cfg.setAllocatedBW(DEFAULT_BW_PER_TUNNEL_ESTIMATE);}
+            if (_log.shouldDebug())
+                _log.debug("Tunnel join - Allocated: " + cfg.getAllocatedBW() + 
+                          " share: " + share);
+            if (_log.shouldDebug())
+                _log.debug("Tunnel join - Allocated: " + cfg.getAllocatedBW() + 
+                          " share: " + share + " used: " + (used > 0 ? used : 0));
             // now "actually" join
             boolean success;
             if (isOutEnd) {success = _context.tunnelDispatcher().joinOutboundEndpoint(cfg);}
