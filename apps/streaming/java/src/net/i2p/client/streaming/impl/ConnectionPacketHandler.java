@@ -179,7 +179,7 @@ class ConnectionPacketHandler {
             isNew = con.getInputStream().messageReceived(seqNum, packet.getPayload()) && allowAck;
         } else {isNew = false;}
 
-        if (isNew && packet.getPayloadSize() > 1500) {
+        if (isNew && packet.getPayloadSize() > 512) {
             // don't clear choking unless it was new, and a big packet
             // this will call ackImmediately() if changed
             // TODO if this filled in a hole, we shouldn't unchoke

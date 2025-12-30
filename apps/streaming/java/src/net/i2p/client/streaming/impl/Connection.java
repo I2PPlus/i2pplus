@@ -122,8 +122,11 @@ class Connection {
 
     private static final int UNCHOKES_TO_SEND = 8;
 
-    /** Maximum number of packets to retransmit when the timer hits */
-    private static final int MAX_RTX = 16;
+    /**
+     * Maximum number of packets to retransmit when the timer hits.
+     * Increased from 16 to 32 for faster loss recovery.
+     */
+    private static final int MAX_RTX = 32;
 
     /**
      *  @param opts may be null
@@ -204,7 +207,7 @@ class Connection {
         long rateBytesPerSec = (long) cwnd * mss * 1000 / rtt;
 
         // Ensure minimum rate to prevent excessive delays
-        long minRate = 64 * 1024; // 64 KB/s minimum
+        long minRate = 256 * 1024; // 256 KB/s minimum for better bandwidth utilization
         return Math.max(rateBytesPerSec, minRate);
     }
 

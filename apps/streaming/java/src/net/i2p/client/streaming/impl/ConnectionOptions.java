@@ -130,10 +130,12 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     public static final String PROP_TAG_THRESHOLD = "crypto.lowTagThreshold";
 
 
-    //private static final int TREND_COUNT = 3;
-    /** RFC 6928 recommends 10 segments for better initial throughput,
-     *  but we use a more conservative 6 for I2P's high-latency environment */
-    static final int INITIAL_WINDOW_SIZE = 6;
+     //private static final int TREND_COUNT = 3;
+    /**
+     * RFC 6928 recommends 10 segments for better initial throughput.
+     * Increased to 12 for I2P's high-latency environment to improve initial bandwidth utilization.
+     */
+    static final int INITIAL_WINDOW_SIZE = 12;
     static final int DEFAULT_MAX_SENDS = 8;
     /**
      *  Initial RTT estimate for new connections before first measurement.
@@ -148,9 +150,10 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      */
     private static final int MAX_RTT = 45*1000;
     /**
-     *  Ref: RFC 5681 sec. 4.3, RFC 1122 sec. 4.2.3.3, ticket #2706
+     * Ref: RFC 5681 sec. 4.3, RFC 1122 sec. 4.2.3.3, ticket #2706
+     * Reduced from 100ms to 30ms to reduce latency while maintaining reasonable ACK aggregation.
      */
-    private static final int DEFAULT_INITIAL_ACK_DELAY = 100;
+    private static final int DEFAULT_INITIAL_ACK_DELAY = 30;
     static final int MIN_WINDOW_SIZE = 1;
     private static final boolean DEFAULT_ANSWER_PINGS = true;
     private static final int DEFAULT_INACTIVITY_TIMEOUT = 90*1000;
