@@ -864,7 +864,10 @@ public class HostChecker {
             content.append("# Format: timestamp,host,reachable,category,responseTime,leaseSetTypes\n");
             content.append("# Generated: ").append(new java.util.Date()).append("\n\n");
 
-            for (Map.Entry<String, PingResult> entry : _pingResults.entrySet()) {
+            java.util.List<Map.Entry<String, PingResult>> sortedEntries = new java.util.ArrayList<>(_pingResults.entrySet());
+            sortedEntries.sort(java.util.Comparator.comparingLong(e -> e.getValue().timestamp));
+
+            for (Map.Entry<String, PingResult> entry : sortedEntries) {
                 String hostname = entry.getKey();
                 PingResult result = entry.getValue();
                 content.append(result.timestamp).append(",").append(hostname)
