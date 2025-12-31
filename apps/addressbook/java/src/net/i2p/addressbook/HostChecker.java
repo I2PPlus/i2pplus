@@ -1169,6 +1169,14 @@ public class HostChecker {
      */
     private PingResult createPingResult(boolean reachable, long timestamp, long responseTime, String hostname, String leaseSetTypes) {
         String category = _hostCategories.get(hostname);
+
+        PingResult existing = _pingResults.get(hostname);
+        if (existing != null && existing.leaseSetTypes != null && !existing.leaseSetTypes.equals("[]")) {
+            if (leaseSetTypes == null || leaseSetTypes.equals("[]") || existing.leaseSetTypes.equals(leaseSetTypes)) {
+                leaseSetTypes = existing.leaseSetTypes;
+            }
+        }
+
         return new PingResult(reachable, timestamp, responseTime, category, leaseSetTypes);
     }
 
