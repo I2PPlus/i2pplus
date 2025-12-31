@@ -4983,7 +4983,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 .replaceAll(r4sasb32, "opentracker.r4sas.i2p")
                 .replaceAll(skankb32, "opentracker.skank.i2p")
                 .replaceAll(simpb32, "opentracker.simp.i2p")
-                .replaceAll(theblandb32, "tracker.thebland.i2p");
+                .replaceAll(theblandb32, "tracker.thebland.i2p")
                 .replaceAll(sigmab32, "sigmatracker.i2p");
         }
         if (meta != null && !meta.isPrivate()) {
