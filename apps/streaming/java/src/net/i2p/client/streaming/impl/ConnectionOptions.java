@@ -128,9 +128,6 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     public static final String PROP_TAGS_TO_SEND = "crypto.tagsToSend";
     /** @since 0.9.34 */
     public static final String PROP_TAG_THRESHOLD = "crypto.lowTagThreshold";
-
-
-     //private static final int TREND_COUNT = 3;
     /**
      * RFC 6928 recommends 10 segments for better initial throughput.
      * Increased to 12 for I2P's high-latency environment to improve initial bandwidth utilization.
@@ -145,10 +142,10 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     public static final int DEFAULT_INITIAL_RTT = 8*1000;
     /**
      *  Maximum RTT to prevent pathological cases from breaking RTO calculations.
-     *  I2P typically has 2-10 second RTT, so 45 seconds provides a safe upper bound
+     *  I2P typically has 2-10 second RTT, so 60 seconds provides a safe upper bound
      *  while preventing excessively high timeout values after network disturbances.
      */
-    private static final int MAX_RTT = 45*1000;
+    private static final int MAX_RTT = 60*1000;
     /**
      * Ref: RFC 5681 sec. 4.3, RFC 1122 sec. 4.2.3.3, ticket #2706
      * Reduced from 100ms to 30ms to reduce latency while maintaining reasonable ACK aggregation.
@@ -173,8 +170,6 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      *  @since 0.9.1
      */
     private static final boolean DEFAULT_ENFORCE_PROTO = true;
-
-    //private final int _trend[] = new int[TREND_COUNT];
 
     /**
      *  OK, here is the calculation on the message size to fit in a single
