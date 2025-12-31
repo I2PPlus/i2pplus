@@ -77,7 +77,7 @@ public class HostChecker {
 
     // Configuration property names
     private static final String PROP_PING_INTERVAL = "pingInterval";
-    private static final String PROP_MAX_CONCURRENT = "maxConcurrent";
+    private static final String PROP_MAX_CONCURRENT = "maxConcurrentPings";
 
     /**
      * Load configuration from addressbook/config.txt file
@@ -86,10 +86,10 @@ public class HostChecker {
      * @param configDir addressbook configuration directory
      */
     private void loadConfiguration(File configDir) {
-        File configFile = new File(new File(configDir, "addressbook"), "config.txt");
+        File configFile = new File(configDir, "config.txt");
         if (!configFile.exists()) {
             if (_log.shouldInfo()) {
-                _log.info("No addressbook config.txt found, using defaults");
+                _log.info("No addressbook config.txt found -> Using default interval and concurrency values...");
             }
             return;
         }
@@ -111,7 +111,7 @@ public class HostChecker {
                         try {
                             _pingInterval = Long.parseLong(value) * 60 * 60 * 1000L;
                             if (_log.shouldInfo()) {
-                                _log.info("Loaded ping interval from config: " + value + " hours");
+                                _log.info("Loaded ping interval from config: " + value + (Integer.parseInt(value) > 1 ? " hours" : " hour"));
                             }
                         } catch (NumberFormatException e) {
                             if (_log.shouldWarn()) {
@@ -121,9 +121,14 @@ public class HostChecker {
                         }
                     } else if (PROP_MAX_CONCURRENT.equals(key)) {
                         try {
-                            _maxConcurrent = Integer.parseInt(value);
+                            int concurrentValue = Integer.parseInt(value);
+                            if (concurrentValue > 100) {
+                                _log.warn("Configured concurrency " + concurrentValue + " is higher than permitted maximum -> Setting to 100");
+                                concurrentValue = 100;
+                            }
+                            _maxConcurrent = concurrentValue;
                             if (_log.shouldInfo()) {
-                                _log.info("Loaded max concurrent from config: " + value);
+                                _log.info("Loaded max concurrent from config: " + _maxConcurrent);
                             }
                         } catch (NumberFormatException e) {
                             if (_log.shouldWarn()) {
@@ -144,7 +149,7 @@ public class HostChecker {
     private static final long STARTUP_DELAY_MS = 60 * 1000L; // 1 minute
 
     // Additional delay for category download to allow HTTP proxy to be ready
-    private static final long CATEGORY_DOWNLOAD_DELAY_MS = 120 * 1000L; // 2 minutes
+    private static final long CATEGORY_DOWNLOAD_DELAY_MS = 90 * 1000L; // 90 seconds
 
     // Category download timeout settings
     private static final int CATEGORY_CONNECT_TIMEOUT = 60 * 1000; // 1 minute
@@ -204,13 +209,11 @@ public class HostChecker {
         _context = I2PAppContext.getGlobalContext();
         _log = _context.logManager().getLog(HostChecker.class);
         _namingService = namingService;
-        _scheduler = Executors.newScheduledThreadPool(_maxConcurrent + 2);
         _pingResults = new ConcurrentHashMap<String, PingResult>();
         _destinations = new ConcurrentHashMap<String, Destination>();
         _running = new AtomicBoolean(false);
         _categoriesDownloaded = new AtomicBoolean(false);
         _categoriesDownloadSuccessful = new AtomicBoolean(false);
-        _pingSemaphore = new Semaphore(_maxConcurrent);
 
         // Only enable LeaseSet checking if we have access to the network database
         // This will be true when running inside the router (RouterContext)
@@ -239,6 +242,10 @@ public class HostChecker {
         // Load configuration from addressbook/config.txt
         loadConfiguration(addressbookDir);
 
+        // Initialize scheduler and semaphore AFTER loading config to use configured values
+        _scheduler = Executors.newScheduledThreadPool(_maxConcurrent + 2);
+        _pingSemaphore = new Semaphore(_maxConcurrent);
+
         // Download categories and load existing ping results
         downloadCategories();
         loadPingResults();
@@ -257,6 +264,7 @@ public class HostChecker {
         }
 
         _running.set(true);
+
         if (_log.shouldInfo()) {
             _log.info("Starting HostChecker with a " + (_pingInterval/1000/60) + " minute interval...");
         }
@@ -269,9 +277,7 @@ public class HostChecker {
                     // Wait up to 5 minutes for category download to complete
                     for (int i = 0; i < 300; i++) {
                         if (_categoriesDownloaded.get()) {
-                            if (_log.shouldInfo()) {
-                                _log.info("Categories downloaded successfully from notbob.i2p -> Starting ping cycle...");
-                            }
+                            _log.info("Categories downloaded successfully from notbob.i2p -> Starting ping cycle...");
                             _scheduler.scheduleAtFixedRate(new PingTask(), STARTUP_DELAY_MS, _pingInterval, TimeUnit.MILLISECONDS);
                             return;
                         }
@@ -279,9 +285,7 @@ public class HostChecker {
                     }
 
                     // Timeout reached - start ping cycle anyway
-                    if (_log.shouldWarn()) {
-                        _log.warn("Categories failed to download from notbob.i2p (timeout) -> Starting ping cycle...");
-                    }
+                    _log.warn("Categories failed to download from notbob.i2p (timeout) -> Starting ping cycle...");
                     _scheduler.scheduleAtFixedRate(new PingTask(), STARTUP_DELAY_MS, _pingInterval, TimeUnit.MILLISECONDS);
                 } catch (InterruptedException e) {
                     if (_log.shouldWarn()) {
@@ -347,6 +351,14 @@ public class HostChecker {
 
         PingResult existing = _pingResults.get(hostname);
         long existingResponseTime = (existing != null && existing.responseTime > -1) ? existing.responseTime : -1;
+
+        // Add random delay (2-5s) to avoid overwhelming floodfills with concurrent lookups
+        try {
+            int randomDelay = 2000 + _context.random().nextInt(3000);
+            Thread.sleep(randomDelay);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
 
         try {
             LeaseSet leaseSet = netDb.lookupLeaseSetLocally(destHash);
