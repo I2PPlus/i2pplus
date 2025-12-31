@@ -333,12 +333,12 @@ public class HostChecker {
             if (_log.shouldInfo()) {
                 _log.info("Skipping blacklisted host in testDestination: " + hostname);
             }
-            return createPingResult(false, System.currentTimeMillis(), -1, hostname);
+            return createPingResult(false, System.currentTimeMillis(), -1, hostname, "[]");
         }
 
         Destination destination = getDestination(hostname);
         if (destination == null) {
-            return createPingResult(false, System.currentTimeMillis(), -1, hostname);
+            return createPingResult(false, System.currentTimeMillis(), -1, hostname, "[]");
         }
 
         if (_useLeaseSetCheck) {
@@ -352,12 +352,12 @@ public class HostChecker {
                 _log.info("HostChecker lset [SUCCESS] -> LeaseSet " + leaseSetResult.leaseSetTypes + " found for " + hostname + ", continuing with ping...");
             }
 
-            PingResult pingResult = pingDestination(hostname, destination);
+            PingResult pingResult = pingDestination(hostname, destination, leaseSetResult.leaseSetTypes);
             if (pingResult.reachable) {
                 return pingResult;
             }
 
-            return fallbackToEepHead(hostname, pingResult.timestamp);
+            return fallbackToEepHead(hostname, pingResult.timestamp, leaseSetResult.leaseSetTypes);
         } else {
             PingResult pingResult = pingDestination(hostname, destination);
             if (pingResult.reachable) {
