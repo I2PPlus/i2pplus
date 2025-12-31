@@ -61,7 +61,7 @@
 </div>
 </form>
 <div class=help id=helpblacklist>
-<p class=help><%=intl._t("The blacklist file contains a list of I2P addresses that should be blocked from access via the HTTP proxy, and excluded from the address book display.")%></p>
+<p class=help><%=intl._t("The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display.")%></p>
 </div>
 </div>
 <span data-iframe-height></span>
