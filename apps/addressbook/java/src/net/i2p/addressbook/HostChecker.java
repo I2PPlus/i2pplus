@@ -360,7 +360,7 @@ public class HostChecker {
 
             return fallbackToEepHead(hostname, pingResult.timestamp, leaseSetResult.leaseSetTypes);
         } else {
-            PingResult pingResult = pingDestination(hostname, destination, leaseSetResult.leaseSetTypes);
+            PingResult pingResult = pingDestination(hostname, destination);
             if (pingResult.reachable) {
                 return pingResult;
             }
