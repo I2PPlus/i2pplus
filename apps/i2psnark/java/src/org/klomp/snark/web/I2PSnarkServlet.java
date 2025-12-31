@@ -4961,6 +4961,7 @@ public class I2PSnarkServlet extends BasicServlet {
         String simpb32 = "wc4sciqgkceddn6twerzkfod6p2npm733p7z3zwsjfzhc4yulita.b32.i2p";
         String skankb32 = "by7luzwhx733fhc5ug2o75dcaunblq2ztlshzd7qvptaoa73nqua.b32.i2p";
         String theblandb32 = "s5ikrdyjwbcgxmqetxb3nyheizftms7euacuub2hic7defkh3xhq.b32.i2p";
+        String sigmab32 = "qimlze77z7w32lx2ntnwkuqslrzlsqy7774v3urueuarafyqik5a.b32.i2p";
 
         if (meta != null) {
             announce = meta.getAnnounce();
@@ -4983,6 +4984,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 .replaceAll(skankb32, "opentracker.skank.i2p")
                 .replaceAll(simpb32, "opentracker.simp.i2p")
                 .replaceAll(theblandb32, "tracker.thebland.i2p");
+                .replaceAll(sigmab32, "sigmatracker.i2p");
         }
         if (meta != null && !meta.isPrivate()) {
             buf.append("<a class=magnetlink href=\"").append(MagnetURI.MAGNET_FULL).append(hex);
