@@ -477,7 +477,7 @@ public class LogsHelper extends HelperBase {
             }
             return i;
         } catch (IOException ioe) {return -1;}
-        } finally {
+        finally {
             if (in != null) {
                 try {in.close();}
                 catch (IOException ioe) {}
