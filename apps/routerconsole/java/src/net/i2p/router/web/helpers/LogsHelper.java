@@ -23,16 +23,28 @@ import net.i2p.router.web.RouterConsoleRunner;
 import net.i2p.util.Translate;
 import net.i2p.util.UIMessages;
 
-/**
- * Helper for logs page rendering and form processing.
- * @since 0.9.33
- */
+/** @since 0.9.33 */
 public class LogsHelper extends HelperBase {
+
+    private static final Pattern LOG_LEVEL_PATTERN = Pattern.compile("\\|\\s*(DEBUG|INFO|WARN|ERROR|CRIT)\\s");
+    private static final Pattern AMP_DARR_PATTERN = Pattern.compile("&amp;(darr|uarr|#10140|hellip;)");
+    private static final Pattern BRACKET_CLEANUP_PATTERN = Pattern.compile("\\[\\[(&#10004;|&#10008;)\\]\\]");
+    private static final Pattern NEWLINE_STAR_PATTERN = Pattern.compile("\n(\\t)?\\* ");
+    private static final Pattern[] FILTER_PATTERNS = {
+        Pattern.compile("\\|.*\\[.*hutd.*\\].*?:"),
+        Pattern.compile("\\|.*\\[.*date.*\\].*?:"),
+        Pattern.compile("\\|.*\\[.*-Connection].*?:"),
+        Pattern.compile("\\|.*\\[.*Restart].*?:"),
+        Pattern.compile("\\|.*\\[.*Read.*\\].*?:"),
+        Pattern.compile("\\|.*\\[.*DirMon.*\\].*?:"),
+        Pattern.compile("\\|.*\\[.*Queue.*\\].*?:")
+    };
 
     public void setContext(RouterContext context) {this._context = context;}
     private static final String _jstlVersion = jstlVersion();
-    private static final int MAX_WRAPPER_LINES = 500;
+    private static final int MAX_WRAPPER_LINES = 320;
     private static final String PROP_LAST_WRAPPER = "routerconsole.lastWrapperLogEntry";
+    private final StringBuilder _msgBuf = new StringBuilder(12*1024);
 
     /** @since 0.8.12 */
     public String getJettyVersion() {return RouterConsoleRunner.jettyVersion();}
@@ -212,46 +224,52 @@ public class LogsHelper extends HelperBase {
                                     .replaceAll("\\|.*\\[.*Read.*\\].*?:", "|")
                                     .replaceAll("\\|.*\\[.*DirMon.*\\].*?:", "|")
                                     .replaceAll("\\|.*\\[.*Queue.*\\].*?:", "|");
-                // Remove lines containing unwanted strings
-                StringBuilder filtered = new StringBuilder();
-                String[] logLines = str.split("\n");
-                for (String line : logLines) {
-                    if (!line.contains("Copyright") &&
-                        !line.contains("tanukisoftware") &&
-                        !line.contains("STATUS") &&
-                        !line.contains("If you would like to submit a bug report") &&
-                        !line.contains("Problematic frame:") &&
-                        !line.contains("INFO | #   Unknown") &&
-                        !line.contains("Unable to build") &&
-                        !line.contains("HTTPServer") &&
-                        !line.contains("Incrementing failed invocation") &&
-                        !line.contains("than the successful invocation time") &&
-                        !line.contains("Disconnect Message received") &&
-                        !line.contains("Cannot send to TunnelGateway") &&
-                        !line.contains("Unable to connect to I2P") &&
-                        !line.contains("Unable to add torrent") &&
-                        !line.contains("Error creating session") &&
-                        !line.contains("ContextHandler") &&
-                        !line.contains("AbstractConnector") &&
-                        !line.contains("I2PSessionException") &&
-                        !line.contains("LOCAL LeaseSet for") &&
-                        !line.contains("info_hash") &&
-                        !line.contains("\\.\\.\\..*?more\n") &&
-                        !line.contains("at net.i2p") &&
-                        !line.contains("at java.base") &&
-                        !line.matches("^.*[^\\n]#\\s*$") &&
-                        !line.matches(".*#$") &&
-                        !line.matches(".*\\* $") &&
-                        !line.endsWith("java.lang.IllegalStateException") &&
-                        !line.contains("at org.eclipse.jetty") &&
-                        !line.contains("at javax.servlet.http") &&
-                        !line.contains("  \n")) {
-                        filtered.append(line).append("\n");
+                // Remove lines containing unwanted strings - process line by line to avoid array allocation
+                StringBuilder filtered = new StringBuilder(str.length());
+                int start = 0;
+                int end;
+                while ((end = str.indexOf('\n', start)) >= 0) {
+                    String line = str.substring(start, end);
+                    start = end + 1;
+                    // Fast path: skip lines with common unwanted substrings
+                    if (line.indexOf("Copyright") >= 0 ||
+                        line.indexOf("tanukisoftware") >= 0 ||
+                        line.indexOf("STATUS") >= 0 ||
+                        line.indexOf("If you would like to submit a bug report") >= 0 ||
+                        line.indexOf("Problematic frame:") >= 0 ||
+                        line.indexOf("INFO | #   Unknown") >= 0 ||
+                        line.indexOf("Unable to build") >= 0 ||
+                        line.indexOf("HTTPServer") >= 0 ||
+                        line.indexOf("Incrementing failed invocation") >= 0 ||
+                        line.indexOf("than the successful invocation time") >= 0 ||
+                        line.indexOf("Disconnect Message received") >= 0 ||
+                        line.indexOf("Cannot send to TunnelGateway") >= 0 ||
+                        line.indexOf("Unable to connect to I2P") >= 0 ||
+                        line.indexOf("Unable to add torrent") >= 0 ||
+                        line.indexOf("Error creating session") >= 0 ||
+                        line.indexOf("ContextHandler") >= 0 ||
+                        line.indexOf("AbstractConnector") >= 0 ||
+                        line.indexOf("I2PSessionException") >= 0 ||
+                        line.indexOf("LOCAL LeaseSet for") >= 0 ||
+                        line.indexOf("info_hash") >= 0 ||
+                        line.contains("at net.i2p") ||
+                        line.contains("at java.base") ||
+                        line.contains("at org.eclipse.jetty") ||
+                        line.contains("at javax.servlet.http") ||
+                        line.endsWith("java.lang.IllegalStateException") ||
+                        line.contains("  \n")) {
+                        continue;
                     }
+                    // Skip empty lines and certain patterns
+                    if (line.isEmpty() || line.endsWith("#") || line.endsWith("* ")) {
+                        continue;
+                    }
+                    filtered.append(line).append("\n");
                 }
 
                 // Sort lines first by timestamp and then by content
                 String[] lines = filtered.toString().split("\n");
+                final int len = lines.length;
                 Arrays.sort(lines, (a, b) -> {
                     String[] aParts = a.split(" ");
                     String[] bParts = b.split(" ");
@@ -260,9 +278,9 @@ public class LogsHelper extends HelperBase {
                     return result;
                 });
 
-                filtered = new StringBuilder(); // Reset filtered StringBuilder
-                // Append filtered lines to StringBuilder in reverse order
-                for (int i = lines.length - 1; i >= 0; i--) {filtered.append(lines[i]).append("\n");}
+                // Reuse filtered StringBuilder and append in reverse order
+                filtered.setLength(0);
+                for (int i = len - 1; i >= 0; i--) {filtered.append(lines[i]).append("\n");}
                 str = filtered.toString();
             }
             toSkip = ntoSkip;
@@ -272,8 +290,8 @@ public class LogsHelper extends HelperBase {
             obuf.append("<p>").append(_t("File not found")).append(": <b><code>").append(loc).append("</code></b></p>");
             toSkip = -1;
         } else {
-            obuf.append("<p>").append(_t("File location")).append(": <a href=\"/wrapper.log\" target=_blank>").append(loc).append("</a>")
-                .append("</p></td></tr>\n<tr><td>");
+            obuf.append("<p>").append(_t("File location")).append(": <a href=\"/wrapper.log\" target=_blank>")
+                .append(loc).append("</a>").append("</p></td></tr>\n<tr><td>");
             if (str.length() > 0) {
                 str = str.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
                 obuf.append("<pre id=service_logs>").append(str).append("</pre>");
@@ -316,9 +334,7 @@ public class LogsHelper extends HelperBase {
             if (rev != null && by.contains("|z3d")) {
                 return "<a id=revision target=_blank rel=\"noreferrer\" href=\"http://git.skank.i2p/i2pplus/I2P.Plus/src/commit/" +
                         rev + "\">" + rev + "</a> (Build date: " + date + ")";
-            } else {
-                return rev + " (Build date: " + date + ")";
-            }
+            } else {return rev + " (Build date: " + date + ")";}
         }
         return "";
     }
@@ -329,7 +345,8 @@ public class LogsHelper extends HelperBase {
     private String formatMessages(List<String> msgs) {
         if (msgs.isEmpty()) {return "</td></tr><tr><td><p class=nologs><i>" + _t("No log messages") + "</i></p>";}
         boolean colorize = _context.getBooleanPropertyDefaultTrue("routerconsole.logs.color");
-        StringBuilder buf = new StringBuilder(16*1024);
+        StringBuilder buf = _msgBuf;
+        buf.setLength(0);
         buf.append("</td></tr><tr><td><ul>");
         boolean displayed = false;
         // newest first
@@ -361,8 +378,9 @@ public class LogsHelper extends HelperBase {
             msg = msg.replace("false", "[&#10008;]"); // no (cross)
             msg = msg.replace("[&#10008;] positives", "false positives");
             msg = msg.replace("true", "[&#10004;]"); // yes (tick)
-            msg = msg.replace("[[&#10004;]]", "[&#10004;]");
-            msg = msg.replace("[[&#10008;]]", "[&#10008;]");
+            // Use regex to clean up double brackets
+            Matcher bm = BRACKET_CLEANUP_PATTERN.matcher(msg);
+            msg = bm.replaceAll("[$1]");
             msg = msg.replace("=[&#10004;]", "=true");
             msg = msg.replace("=[&#10008;]", "=false");
             msg = msg.replace("[IRC Client] Inbound message", "[IRC Client] &#11167;");
@@ -370,8 +388,9 @@ public class LogsHelper extends HelperBase {
             msg = msg.replace("not publishing old one: RouterInfo:", "not publishing old one:");
             msg = msg.replace("Publishing our RouterInfo after delay: RouterInfo:", "Publishing our RouterInfo after delay:");
             msg = msg.replace(":  ", ": ");
-            msg = msg.replace("\n* ", "\n&bullet; ");
-            msg = msg.replace("\n\t* ", "\n\t&bullet; ");
+            // Use regex for bullet replacements
+            Matcher nm = NEWLINE_STAR_PATTERN.matcher(msg);
+            msg = nm.replaceAll("\n$1&bullet; ");
             msg = msg.replace("\r\n\r\n", "");
             msg = msg.replace("<br>:", " ");
             msg = msg.replace("<b>", "");
@@ -380,14 +399,14 @@ public class LogsHelper extends HelperBase {
             msg = msg.replace("&lt;/b&gt;", "");
             msg = msg.replace("...", "&hellip;");
             msg = msg.replace("]]", "]");
-            // highlight log level indicators
-            msg = msg.replace("| DEBUG", " <span class=log_level>DEBUG</span> ");
-            msg = msg.replace("| INFO ", " <span class=log_level>INFO</span> ");
-            msg = msg.replace("| WARN ", " <span class=log_level>WARN</span> ");
-            msg = msg.replace("| ERROR", " <span class=log_level>ERROR</span> ");
-            msg = msg.replace("| CRIT ", " <span class=log_level>CRIT</span> ");
-            msg = msg.replace("| &darr;&darr;&darr; ", " <span class=log_omitted>&darr;&darr;&darr;</span> "); // LogWriter BUFFER_DISPLAYED_REVERSE = true;
-            msg = msg.replace("| &uarr;&uarr;&uarr; ", " <span class=log_omitted>&uarr;&uarr;&uarr;</span> ");
+            // highlight log level indicators using regex
+            Matcher m = LOG_LEVEL_PATTERN.matcher(msg);
+            if (m.find()) {
+                String level = m.group(1);
+                msg = m.replaceFirst("| <span class=log_level>" + level + "</span> ");
+            }
+            if (msg.contains("| &darr;&darr;&darr; ")) {msg = msg.replace("| &darr;&darr;&darr; ", " <span class=log_omitted>&darr;&darr;&darr;</span> ");} // LogWriter BUFFER_DISPLAYED_REVERSE = true;
+            if (msg.contains("| &uarr;&uarr;&uarr; ")) {msg = msg.replace("| &uarr;&uarr;&uarr; ", " <span class=log_omitted>&uarr;&uarr;&uarr;</span> ");}
             // remove  last \n that LogRecordFormatter added
             if (msg.endsWith(NL)) {msg = msg.substring(0, msg.length() - NL.length());}
             // replace \n so that exception stack traces will format correctly and will paste nicely into pastebin
@@ -431,43 +450,38 @@ public class LogsHelper extends HelperBase {
      * @since 0.9.11 modded from FileUtil.readTextFile()
      */
     private static long readTextFile(File f, boolean utf8, int maxNumLines, long skipLines, StringBuilder buf) {
-        if (!f.exists())
-            return -1;
+        if (!f.exists()) {return -1;}
         BufferedReader in = null;
         try {
-            if (utf8)
-                in = new BufferedReader(new InputStreamReader(new FileInputStream(f), StandardCharsets.UTF_8));
-            else
-                in = new BufferedReader(new InputStreamReader(new FileInputStream(f), StandardCharsets.UTF_8));
+            if (utf8) {in = new BufferedReader(new InputStreamReader(new FileInputStream(f), StandardCharsets.UTF_8));}
+            else {in = new BufferedReader(new InputStreamReader(new FileInputStream(f), StandardCharsets.UTF_8));}
             long i = 0;
             while (i < skipLines) {
                 // skip without readLine() to avoid object churn
                 int c;
                 do {
                     c = in.read();
-                    if (c < 0)
-                        return i;  // truncated
+                    if (c < 0) {return i;} // truncated
                 } while (c != '\n');
                 i++;
             }
             Queue<String> lines = new ArrayBlockingQueue<String>(maxNumLines);
             synchronized(lines) {
                 String line = null;
-                while ( (line = in.readLine()) != null) {
+                while ((line = in.readLine()) != null) {
                     i++;
-                    if (lines.size() >= maxNumLines)
-                        lines.poll();
+                    if (lines.size() >= maxNumLines) {lines.poll();}
                     lines.offer(line);
                 }
-                for (String ln : lines) {
-                    buf.append(ln).append('\n');
-                }
+                for (String ln : lines) {buf.append(ln).append('\n');}
             }
             return i;
-        } catch (IOException ioe) {
-            return -1;
+        } catch (IOException ioe) {return -1;}
         } finally {
-            if (in != null) try { in.close(); } catch (IOException ioe) {}
+            if (in != null) {
+                try {in.close();}
+                catch (IOException ioe) {}
+            }
         }
     }
 

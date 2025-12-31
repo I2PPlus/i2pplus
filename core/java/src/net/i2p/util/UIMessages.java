@@ -20,6 +20,8 @@ public class UIMessages {
     private final int _maxSize;
     private int _count;
     private final LinkedList<Message> _messages;
+    private List<String> _cachedStrings;
+    private int _cachedCount = -1;
 
     /**
      *  @param maxSize
@@ -53,6 +55,8 @@ public class UIMessages {
         while (_messages.size() > _maxSize) {
             _messages.poll();
         }
+        _cachedStrings = null;
+        _cachedCount = -1;
         return _count;
     }
 
@@ -76,22 +80,31 @@ public class UIMessages {
 
     /**
      * Newest last, or empty list.
-     * @return a copy
+     * @return a copy (cached)
      * @since 0.9.46
      */
     public synchronized List<String> getMessageStrings() {
         if (_messages.peekLast() == null)
             return Collections.emptyList();
+        // Return cached version if available and messages haven't changed
+        if (_cachedStrings != null && _cachedCount == _count - 1) {
+            return _cachedStrings;
+        }
+        // Build cache
         List<String> rv = new ArrayList<String>(_messages.size());
         for (Message m : _messages) {
             rv.add(m.message);
         }
+        _cachedStrings = rv;
+        _cachedCount = _count - 1;
         return rv;
     }
 
     /** clear all */
     public synchronized void clear() {
         _messages.clear();
+        _cachedStrings = null;
+        _cachedCount = -1;
     }
 
     /** clear all up to and including this id */
@@ -102,12 +115,20 @@ public class UIMessages {
         } else if (m.id <= id) {
             // easy way
             _messages.clear();
+            _cachedStrings = null;
+            _cachedCount = -1;
         } else {
+            boolean modified = false;
             for (Iterator<Message> iter = _messages.iterator(); iter.hasNext(); ) {
                 Message msg = iter.next();
                 if (msg.id > id)
                     break;
                 iter.remove();
+                modified = true;
+            }
+            if (modified) {
+                _cachedStrings = null;
+                _cachedCount = -1;
             }
         }
     }
