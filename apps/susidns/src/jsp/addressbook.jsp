@@ -209,7 +209,14 @@
                         String typesStr = lsTypes.replaceAll("[\\[\\]]", "");
                         String[] types = typesStr.split(",");
                         for (int i = 0; i < types.length; i++) {
-                            encryptionTypes += "<span>" + types[i].trim() + "</span>";
+                            String encType = types[i].trim();
+                            String tooltip = "";
+                            if ("0".equals(encType)) { tooltip = "ElGamal"; }
+                            else if ("4".equals(encType)) { tooltip = "ECIES"; }
+                            else if ("5".equals(encType)) { tooltip = "MLKEM-512"; }
+                            else if ("6".equals(encType)) { tooltip = "MLKEM-768"; }
+                            else if ("7".equals(encType)) { tooltip = "MLKEM-1024"; }
+                            encryptionTypes += "<span title=\"" + tooltip + "\">" + encType + "</span>";
                             if (i < types.length - 1) {
                                 encryptionTypes += " ";
                             }
