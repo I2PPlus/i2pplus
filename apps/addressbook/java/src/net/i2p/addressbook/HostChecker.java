@@ -75,6 +75,71 @@ public class HostChecker {
     private static final long DEFAULT_PING_TIMEOUT = 90 * 1000L; // 90 seconds
     private static final int DEFAULT_MAX_CONCURRENT = 12;
 
+    // Configuration property names
+    private static final String PROP_PING_INTERVAL = "pingInterval";
+    private static final String PROP_MAX_CONCURRENT = "maxConcurrent";
+
+    /**
+     * Load configuration from addressbook/config.txt file
+     * Reads pingInterval and maxConcurrent properties if present
+     *
+     * @param configDir addressbook configuration directory
+     */
+    private void loadConfiguration(File configDir) {
+        File configFile = new File(new File(configDir, "addressbook"), "config.txt");
+        if (!configFile.exists()) {
+            if (_log.shouldInfo()) {
+                _log.info("No addressbook config.txt found, using defaults");
+            }
+            return;
+        }
+
+        Properties config = new Properties();
+        try (BufferedReader reader = new BufferedReader(new FileReader(configFile))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty() || line.startsWith("#")) {
+                    continue;
+                }
+                int equalsIndex = line.indexOf('=');
+                if (equalsIndex > 0) {
+                    String key = line.substring(0, equalsIndex).trim();
+                    String value = line.substring(equalsIndex + 1).trim();
+
+                    if (PROP_PING_INTERVAL.equals(key)) {
+                        try {
+                            _pingInterval = Long.parseLong(value) * 60 * 60 * 1000L;
+                            if (_log.shouldInfo()) {
+                                _log.info("Loaded ping interval from config: " + value + " hours");
+                            }
+                        } catch (NumberFormatException e) {
+                            if (_log.shouldWarn()) {
+                                _log.warn("Invalid ping interval in config: " + value + ", using default " +
+                                           (DEFAULT_PING_INTERVAL / (60 * 60 * 1000L)) + " hours");
+                            }
+                        }
+                    } else if (PROP_MAX_CONCURRENT.equals(key)) {
+                        try {
+                            _maxConcurrent = Integer.parseInt(value);
+                            if (_log.shouldInfo()) {
+                                _log.info("Loaded max concurrent from config: " + value);
+                            }
+                        } catch (NumberFormatException e) {
+                            if (_log.shouldWarn()) {
+                                _log.warn("Invalid max concurrent in config: " + value + ", using default " + DEFAULT_MAX_CONCURRENT);
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (IOException e) {
+            if (_log.shouldWarn()) {
+                _log.warn("Error loading addressbook config.txt", e);
+            }
+        }
+    }
+
     // Startup delay to allow router and socket manager to fully initialize
     private static final long STARTUP_DELAY_MS = 60 * 1000L; // 1 minute
 
@@ -170,6 +235,9 @@ public class HostChecker {
         _blacklistFile = new File(addressbookDir, "blacklist.txt");
         _blacklistedHosts = new ConcurrentHashMap<String, String>().keySet();
         loadBlacklist();
+
+        // Load configuration from addressbook/config.txt
+        loadConfiguration(addressbookDir);
 
         // Download categories and load existing ping results
         downloadCategories();
@@ -720,15 +788,6 @@ public class HostChecker {
      */
     public Map<String, PingResult> getAllPingResults() {
         return new ConcurrentHashMap<String, PingResult>(_pingResults);
-    }
-
-    /**
-     * Set maximum concurrent pings
-     *
-     * @param max maximum concurrent pings
-     */
-    public void setMaxConcurrent(int max) {
-        _maxConcurrent = max;
     }
 
     /**
