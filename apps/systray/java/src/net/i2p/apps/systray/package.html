@@ -1,10 +1,32 @@
 <html>
 <head>
-    <title>I2P System Tray Package</title>
+<title>I2P System Tray Package</title>
 </head>
 <body>
 <p>
-    A system tray control for launching the I2P router console.
+System tray integration and URL launcher for the I2P router console.
+Provides platform-specific browser launching capabilities with automatic server readiness detection.
+</p>
+
+<p>
+Key features:
+<ul>
+<li>Multi-platform URL launcher supporting Windows, macOS, and Linux</li>
+<li>Automatic browser detection and fallback for popular browsers</li>
+<li>Server readiness detection before launching the console</li>
+<li>Simple configuration file management</li>
+<li>ClientApp interface integration for router client management</li>
+</ul>
+</p>
+
+<p>
+The primary component is UrlLauncher, which handles launching the I2P router console
+or custom URLs using the system's default browser or a configured browser. It automatically
+detects the platform and attempts multiple browsers in order of preference.
+</p>
+
+<p>
+Entry point is UrlLauncher, started from clients.config.
 </p>
 </body>
 </html>

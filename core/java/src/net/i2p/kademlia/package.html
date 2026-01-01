@@ -4,7 +4,26 @@
 </head>
 <body>
 <p>
-This is a major rewrite of KBucket, KBucketSet, and KBucketImpl from net.i2p.router.networkdb.kademlia. The classes are now generic to support SHA1. SHA256, or other key lengths. Packaged in i2psnark since 0.9.2, and moved to core in 0.9.10 so that network database can use it.
+    Generic Kademlia distributed hash table implementation supporting
+    multiple hash algorithms (SHA1, SHA256, etc.).
+</p>
+
+<p>
+    This package provides:
+</p>
+<ul>
+<li>KBucket implementation for peer storage</li>
+<li>KBucketSet for managing multiple buckets</li>
+<li>Generic key support for different hash lengths</li>
+<li>Kademlia routing table management</li>
+</ul>
+
+<p>
+    Major rewrite of KBucket, KBucketSet, and KBucketImpl from
+    net.i2p.router.networkdb.kademlia. The classes are now generic
+    to support SHA1, SHA256, or other key lengths. Packaged in
+    i2psnark since 0.9.2, and moved to core in 0.9.10 so that
+    network database can use it.
 </p>
 </body>
 </html>

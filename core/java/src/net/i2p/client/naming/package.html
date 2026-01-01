@@ -4,7 +4,25 @@
 </head>
 <body>
 <p>
-Provides a standard way for querying the local naming service to resolve a name into a {@link net.i2p.data.Destination} (without the complexity of JNDI). The default implementation is a simple hosts.txt driven system, though that can be overridden by specifying the "i2p.naming.impl" environment property to point at the requested classname.
+    Naming service for resolving human-readable names to I2P destinations,
+    providing a standard interface without JNDI complexity.
+</p>
+
+<p>
+    This package provides:
+</p>
+<ul>
+<li>Hostname to Destination resolution</li>
+<li>Configurable naming service implementations</li>
+<li>Hosts.txt file support</li>
+<li>Caching of resolved names</li>
+<li>Subscription-based address book updates</li>
+</ul>
+
+<p>
+    The default implementation uses a simple hosts.txt driven system, but this
+    can be overridden by specifying the "i2p.naming.impl" environment
+    property to point to a custom naming service implementation.
 </p>
 </body>
 </html>

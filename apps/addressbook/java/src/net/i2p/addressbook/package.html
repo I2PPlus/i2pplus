@@ -4,11 +4,28 @@
 </head>
 <body>
 <p>
-    The addressbook application, which fetches hosts.txt files from subscription URLs via
-    HTTP and adds new hosts to the local database.
-    While implemented as a webapp, this application contains no user interface.
-    May also be packaged as a jar, as is done for Android.
-    The webapp named 'addressbook' in the console is actually SusiDNS.
+    Address book application for fetching and maintaining I2P host
+    databases from subscription sources.
+</p>
+
+<p>
+    This package provides:
+</p>
+<ul>
+<li>HTTP-based subscription fetching</li>
+<li>Hosts.txt file parsing and processing</li>
+<li>Local database management</li>
+<li>Incremental updates and conflict resolution</li>
+<li>Background update daemon</li>
+</ul>
+
+<p>
+    The addressbook application fetches hosts.txt files from configured
+    subscription URLs via HTTP, processes them, and adds new hosts to the
+    local BlockfileNamingService database. While implemented as a webapp,
+    this application contains no user interface itself. May also be packaged
+    as a jar for Android. The webapp named 'addressbook' in the
+    console is actually SusiDNS.
 </p>
 </body>
 </html>

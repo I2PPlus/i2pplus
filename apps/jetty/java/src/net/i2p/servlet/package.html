@@ -4,7 +4,21 @@
 </head>
 <body>
 <p>
-    RequestWrapper was a susimail class, moved from susimail to jetty-i2p.jar when we needed them in the router console also. As of 0.9.19. Requires org.mortbay classes also in this jar. Will be maintained as a public API until we move to Tomcat 7 (servlet 3.0).
+    Servlet utility classes for I2P web applications, originally from susimail
+    and moved to jetty-i2p.jar in 0.9.19 for shared use across all I2P webapps.
+</p>
+
+<p>
+    Key components:
+</p>
+<ul>
+<li>RequestWrapper - HTTP request wrapping and processing</li>
+<li>ResponseWrapper - HTTP response wrapping utilities</li>
+</ul>
+
+<p>
+    These classes require org.mortbay classes and will be maintained as a public
+    API until migration to a newer servlet container (servlet 3.0+).
 </p>
 </body>
 </html>

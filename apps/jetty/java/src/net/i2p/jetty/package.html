@@ -4,7 +4,24 @@
 </head>
 <body>
 <p>
-    Classes for starting Jetty, logging requests, and debug logging to I2P router log.
+    I2P integration layer for the Jetty web server, providing embedded
+    Jetty startup, configuration, and logging integration with the I2P router.
+</p>
+
+<p>
+    This package handles:
+</p>
+<ul>
+<li>Jetty server lifecycle management</li>
+<li>Connector configuration for I2P network</li>
+<li>Request logging to I2P router logs</li>
+<li>Debug logging integration</li>
+<li>SSL/TLS configuration for secure connections</li>
+</ul>
+
+<p>
+    All I2P web applications (router console, i2ptunnel, i2psnark, etc.)
+    are served through this Jetty integration.
 </p>
 </body>
 </html>

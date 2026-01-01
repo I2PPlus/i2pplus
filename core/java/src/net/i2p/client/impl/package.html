@@ -4,11 +4,25 @@
 </head>
 <body>
 <p>
-    Implements the base I2P SDK for developing applications that communicate through I2P.
+    Internal implementation of the I2P client SDK, providing the client
+    side of the I2CP protocol for applications communicating through I2P.
 </p>
 
 <p>
-    These classes are for implementing the client side of I2CP and are not to be used externally. Subject to change and not part of the public API. Moved from net.i2p.client in 0.9.21.
+    This package contains:
+</p>
+<ul>
+<li>I2PSession implementation and management</li>
+<li>I2CP protocol message handling</li>
+<li>Client connection lifecycle management</li>
+<li>Session configuration and state handling</li>
+<li>Message sending and receiving logic</li>
+</ul>
+
+<p>
+    These classes implement the client side of I2CP and are not to be used
+    externally. Subject to change and not part of the public API. Moved from
+    net.i2p.client in 0.9.21 to separate implementation from interface.
 </p>
 </body>
 </html>

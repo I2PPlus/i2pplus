@@ -4,7 +4,25 @@
 </head>
 <body>
 <p>
-    Interface and classes for a router and client within the same JVM to directly pass I2CP messages using Queues instead of serialized messages over socket streams.
+    Internal communication interfaces for router and client within
+    same JVM, using queues instead of socket-based I2CP.
+</p>
+
+<p>
+    This package provides:
+</p>
+<ul>
+<li>Direct message passing between router and client</li>
+<li>Queue-based I2CP communication</li>
+<li>In-JVM communication optimization</li>
+<li>Reduced serialization overhead</li>
+</ul>
+
+<p>
+    When a router and client are running in the same JVM, this
+    package allows them to communicate directly using queues rather than
+    serializing messages over socket streams. This provides improved
+    performance and reduced overhead compared to standard I2CP communication.
 </p>
 </body>
 </html>
