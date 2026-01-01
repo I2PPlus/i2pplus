@@ -4,28 +4,28 @@
 </head>
 <body>
 <p>
-    HTTP connection utilities from Apache HttpClient 4.4.1, providing
-    connection management and verification classes.
+    HTTP connection utilities from Apache HttpClient 4.4.1, providing connection management, network address utilities, and public suffix matching.
 </p>
 
 <p>
-    This package provides:
+    This package provides essential connection utilities:
 </p>
 <ul>
-<li>Connection pooling utilities</li>
-<li>SSL/TLS connection helpers</li>
-<li>Hostname verification for secure connections</li>
+<li><strong>PublicSuffixList:</strong> Domain suffix data structure for cookie and security purposes</li>
+<li><strong>PublicSuffixMatcher:</strong> Matching engine for public suffix detection</li>
+<li><strong>InetAddressUtils:</strong> Network address validation and parsing utilities</li>
 </ul>
 
 <p>
-    Extracted from Apache HttpClient 4.4.1 with minimal modifications
-    to remove additional Apache dependencies while maintaining core
-    connection functionality. Used by I2P for HTTP client operations
-    requiring secure connections.
+    Extracted from Apache HttpClient 4.4.1 with minimal modifications to remove additional Apache dependencies while maintaining core connection functionality.
+    Used by I2P for HTTP client operations requiring connection pooling and security features.
+</p>
 
 <p>
-    Apache 2.0 license. Moved to net.i2p.apache.* packages in
-    release 1.8.0 (API 0.9.54).
+    <strong>License:</strong> Apache 2.0 License
+</p>
+<p>
+    <strong>Moved to:</strong> net.i2p.apache.* packages in release 1.8.0 (API 0.9.54)
 </p>
 </body>
 </html>

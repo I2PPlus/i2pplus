@@ -4,29 +4,28 @@
 </head>
 <body>
 <p>
-    SSL/TLS socket factory from Apache HttpClient 4.4.1, providing
-    I2PSSSLSocketFactory for secure HTTP connections.
+    SSL/TLS socket factory and hostname verification from Apache HttpClient 4.4.1, providing secure HTTP connection support for I2P.
 </p>
 
 <p>
-    This package provides:
+    This package contains SSL/TLS networking components:
 </p>
 <ul>
-<li>I2PSSSLSocketFactory for SSL connections</li>
-<li>Custom SSL context management</li>
-<li>Certificate validation helpers</li>
+<li><strong>DefaultHostnameVerifier:</strong> SSL certificate hostname verification implementation</li>
+<li><strong>SSL context management:</strong> Custom SSL socket factory for I2P-specific connections</li>
+<li><strong>Certificate validation:</strong> Helpers for X.509 certificate validation and trust management</li>
 </ul>
 
 <p>
-    Extracted from Apache HttpClient 4.4.1 with minimal modifications
-    to remove additional Apache dependencies. I2PSSSLSocketFactory
-    provides I2P-specific SSL socket factory for HTTP client
-    operations, integrating with I2P's certificate validation
-    and trust management.
+    Extracted from Apache HttpClient 4.4.1 with minimal modifications to remove additional Apache dependencies while maintaining core SSL functionality.
+    The I2P-specific integration provides secure HTTP client operations with proper certificate validation.
+</p>
 
 <p>
-    Apache 2.0 license. Moved to net.i2p.apache.* packages in
-    release 1.8.0 (API 0.9.54).
+    <strong>License:</strong> Apache 2.0 License
+</p>
+<p>
+    <strong>Moved to:</strong> net.i2p.apache.* packages in release 1.8.0 (API 0.9.54)
 </p>
 </body>
 </html>
