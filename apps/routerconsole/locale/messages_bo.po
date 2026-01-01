@@ -2506,7 +2506,7 @@ msgid "Updated"
 msgstr "གསར་བརྗེ་བྱས།"
 
 msgid "Update Policy"
-msgstr ""
+msgstr "གསར་བསྐྱར་སིིད་སིིག"
 
 msgid "Development updates enabled"
 msgstr "གསར་སྐྲུན་གསར་བརྗེ་བྱིན་ཡོད།"
@@ -2687,7 +2687,7 @@ msgid "Lookup"
 msgstr "འཚོལ་བ།"
 
 msgid "Select the field to search on"
-msgstr ""
+msgstr "འཚོལ་བའི་ས་གནས་གདམ་རོགས།"
 
 msgid "e.g. cn hk"
 msgstr "བ. cn hk"
@@ -2940,7 +2940,7 @@ msgid "Maximum Transmission Unit"
 msgstr "སྲོད་པའི་སྤྱོས་པའི་གི་སྲོད་པ"
 
 msgid "Show all routers with this MTU in the NetDb"
-msgstr ""
+msgstr "NetDb ནང་གི་ MTU འདི་ལྡན་པའི་རྒྱུད་པ་ཚང་མ་སྟོན།"
 
 msgid "Addresses"
 msgstr "ཁ་བྱང་།"
@@ -3025,7 +3025,7 @@ msgstr "ཁྱེད་ཀྱི་གྲོལ་ཐབས་འབྲེལ་
 
 #, java-format
 msgid "To override these limits, add the settings {0} and {1}"
-msgstr ""
+msgstr "ཚད་འདི་དག་ཁ་བསྐང་འགལ་བར། སྒྲིག་འཛུགས་ {0} དང་ {1} ཁ་སྣོན་གནང་རོགས།"
 
 #, java-format
 msgid "on the {0}Advanced Configuration page{1}."
@@ -4778,7 +4778,7 @@ msgstr "རྒྱུན་སྒྲིག་སྟེན་མཐོ་རིམ
 
 #, java-format
 msgid "Key <b>{0}</b> selected for removal. To commit the change, save the configuration, or cancel to restore the key."
-msgstr ""
+msgstr "<b>{0}</b> ལྡེ་མིག་བསུབ་རྒྱུར་གདམ་གནང་ཡོད། འགྱུར་བ་འདི་ལག་བསྟར་བྱེད་འདོད་ན། རྒྱུན་ལྡན་རྣམ་གཞག་ཉར་རོགས། ཡང་ན་ལྡེ་མིག་སླར་གསོ་བྱེད་འདོད་ན་འདོར་རོགས།"
 
 msgid "Floodfill Configuration"
 msgstr "Floodfill རྒྱུན་སྒྲིག་སྟེན་བྱེད་པ།"
@@ -5374,7 +5374,7 @@ msgstr "རྐྱེན་སྟོགས་བརྒྱུན་པ།"
 
 #, java-format
 msgid "To assist in debugging I2P, it may be helpful to generate a thread dump which will be written to the {0}wrapper log{1}."
-msgstr ""
+msgstr "I2P ཀྱི་ནོར་འཁྲུལ་རྩད་བཤད་ལ་རམ་འདེགས་བྱེད་པའི་ཆེད་དུ། thread dump ཞིག་བསྐྲུན་ནས་ {0}wrapper log{1} ནང་བྲི་བ་ནི་ཕན་པོ་ཡོད།"
 
 msgid "If I2P appears to be using too much ram, you can force the router to run the garbage collection routine to free up memory."
 msgstr "I2P དེ་ཀྱི་ram མང་མང་བསྤེལ་བཞིན་པ་ན་རོ་ཌེར་ལ་garbage collection ལས་རིམ་དེ་བཞིན་པར་དྲོག་པའི་དབརྒྱུན་སྒྲག་བྱེད་པ་རེད་བཞིན་པ།"
@@ -5738,7 +5738,7 @@ msgid "When set to false, the router will not block tunnel build requests from s
 msgstr "false ལ་བཀོད་སྒྲིག་བྱས་སྐབས། རོ་ཌེར་གྱིས་དལ་བའམ་འཛུལ་མི་ཐུབ་པའི་རོ་ཌེར་རྙིང་པ་ཐོན་རིམ་ནས་འཁོར་བའི་གྲུ་བཞི་བཟོ་བའི་བླང་བ་བཀག་མི་སྲིད། [སྔོན་སྒྲིག་ true ཡིན། བསྐྱར་འགོ་ཚུགས་དགོས།]"
 
 msgid "Allocate number of processor threads for building tunnels. If your processor supports hyperthreading or simultaneous multithreading, you may multiply the number of processor cores by 2 to get the maximum number of threads to allocate, otherwise number of processor cores = maximum number of threads available. Note that you may wish to allocate less than the theoretical maximum to ensure you have headroom for other tasks."
-msgstr ""
+msgstr "གདོང་ལམ་བཟོ་སྐྲུན་བྱེད་པའི་ཆེད་དུ་གསོག་འཕྲུལ་གྱི་སྙིང་པོ་འི་གྲངས་གཏོང་དགོས། གསོག་འཕྲུལ་ལི་ hyperthreading ཡང་ན་ simultaneous multithreading རྒྱབ་སྐྱོར་བྱེད་ཐུབ་ན། ཁྱེད་རྒྱུར་ number of processor cores ལ་ 2 བསྒྱུར་བས་ན་ གསོག་འཕྲུལ་གྱི་སྙིང་པོ་འི་གྲངས་གཏོང་དགོས་ནས་བཤོར་བཞིན་པ། དེ་མིན་ number of processor cores = maximum number of threads available ཡིན། དེ་བཞིན་བཞིན་རེད་པར་ ཁྱེད་ theoretical maximum ལ་ཉུང་བས་ན་ ཁྱེད་གཞན་ལས་གཞིབ་མི་མང་རྒྱབ་སྐྱོར་བྱེད་པར་ གནས་ལས་རྣམ་པའི་དོན་ལ་དགོས་པར་རོགས།"
 
 msgid "This setting (in milliseconds) determines how long a packet may stay in the CoDel queue before it is dropped. Default is 1000ms. [Restart required]"
 msgstr "འདིའི་བཀོད་སྒྲིག་ (སྐར་ཆ་ནང་) གིས་ packet ཅིག་ CoDel queue ནང་བརླག་སྐབས་གང་འགར་བར་སྡོད་ཆོག་གཏན་འཁེལ་བྱེད། སྔོན་སྒྲིག་ 1000ms ཡིན། [བསྐྱར་འགོ་ཚུགས་དགོས།]"
@@ -5753,7 +5753,7 @@ msgid "This setting (in milliseconds) allows you to manually configure the queue
 msgstr "འདིའི་བཀོད་སྒྲིག་ (སྐར་ཆ་ནང་) གིས་ CoDel queue management system ལ་གྲལ་སྒྲིག་ཕྱིར་འགྱངས་དམིགས་ཡུལ་གནས་གསལ་ལག་ཐོག་བཀོད་སྒྲིག་བྱེད་ཆོག སྔོན་སྒྲིག་ 50ms ཡིན། [བསྐྱར་འགོ་ཚུགས་དགོས།]"
 
 msgid "This setting, in milliseconds, overrides the default message processing time limit (indicated as <i>Message Delay</i> in the Congestion sidebar section) before the router is determined to be congested and transit tunnel requests are rejected. [Default is 750ms or 1500ms if the router is flagged as slow]"
-msgstr ""
+msgstr "འདི་འི་སྒྲིག་ (སྐར་ཆ་ནང་) Congestion ཟུར་ངོས་གྱལ་མཚན་གནས་བརྒྱབ་བཀོད་ message processing time limit བསྒྱུར་བ་ (indicated as <i>Message Delay</i> ) ལག་སྟོགས་མི་ན་ router དབྲ་མང་སེལ་རྒྱུར་བ་བཀོད་པ་ transit tunnel requests དབྲ་བསུབ་ཡོད། [Default is 750ms or 1500ms if router is flagged as slow]"
 
 msgid "Periodically test tunnels to determine the average lag, and display the results in the Congestion sidepanel section. To enable, set this value to false. [Default is false]"
 msgstr "དུས་ཚོད་རེས་གྲུ་བཞི་ཚོད་ལྟ་བྱས་ནས་སྤྱི་ཁོག་ཕྱིར་འགྱངས་གཏན་འཁེལ་བྱེད། འབྲས་བུ་འགག་འདུག་ཟུར་ངོས་ཆ་ཤས་ནང་བཀྲ་བ་ཡོད། བྱིན་པར་འདི་ false ལ་བཀོད་སྒྲིག་བྱེད། [སྔོན་སྒྲིག་ false]"
@@ -5810,7 +5810,7 @@ msgid "When set to true, the router info files stored in your profile's netDB di
 msgstr "true ལ་བཀོད་སྒྲིག་བྱས་སྐབས། ཁྱེད་ཀྱི་གི་གསལ་མཚོན་ netDB སྣོད་ཁོར་ནང་གནས་པའི་རོ་ཌེར་གཅིག་པ་ཡིག་ཆ་ཚང་ལ་ 64 ཡན་ཁོར་ནང་གནས་པར་མི་མེད་པར་བསྒྱུར་བར་ཐུབ་པ། [སྔོན་སྒྲིག་བྱས་པའི་ false]"
 
 msgid "When set to true, your router will not be classified as slow, regardless of the specifications of your host system. Ordinarily, routers running on hosts with the following characteristics will be classified as slow, and various performance-related router options will be modified accordingly:"
-msgstr ""
+msgstr "true ལ་བཀོད་སྒྲིག་བྱས་སྐབས། ཁྱེད་ router དབྲ་མང་སེལ་རྒྱུར་བ་ host system ཀྱི་གི་ specifications ཀྱི་མི་ལ་མི་དང་གཞན་གཏོང་མེད་པར་ host ཐོག་ནས་རྒྱུར་བ་གནས་བརྒྱབ་བཀོད་གི་གནད་རྒྱུར་བ་ routers slow དབྲ་མང་སེལ་རྒྱུར་བ་ performance-related router options སྒྲིག་བསྒྱུར་བ་ཡོད།:"
 
 msgid "Host OS running Android"
 msgstr "Host OS Android ལ་གཡོ་བར་ན།"
@@ -6146,7 +6146,7 @@ msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP a
 msgstr "དཔེར་ན། localhost དང་ 192.168.1.10 གཉིས་ནས་ HTTP དང་ HTTPS བརྒྱུད་ནས་འཛུལ་སྤྱོད་ཆོག་པར།"
 
 msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager's configuration section using the <i>reachable by</i> dropdown."
-msgstr ""
+msgstr "ལེན་གནད་མཁན་གནས་པ་མང་ཚང་མ་ལ་ host ཁ་བྱང་གནས་ལ་གང་ Tunnel Manager ཀྱི་བཀོད་མིག་སྒྲིག་སྟེན་ལེན་རྒྱུར་ using <i>reachable by</i> dropdown བསྒྱུར་བས་ན།"
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "ངས་ I2P ནང་ IRC ལ་ཇི་ལྟར་འབྲེལ་དགོས།"
@@ -6716,10 +6716,10 @@ msgid "Be Patient!"
 msgstr "ཞི་བར་བཟོས་རོགས།"
 
 msgid "I2P+ may be slow to integrate into network the first time you run it as it bootstraps into the network and learns of additional peers. The longer your I2P+ router is running, the better it will perform, so try and keep your router on as long as you can, 24/7 if possible! If, after 30 minutes, your <i>Active: [connected/recent]</i> count still has less than 10 peers, or your total number of <i>Integrated</i> peers is less than 5, there are several things you can do to check for problems:"
-msgstr ""
+msgstr "I2P+ དང་པར་དུ་དྲ་བརྒྱུད་ལས་པར་ནང་ network ནང་ལ་བར་དུས་པར་མདོ་པ་འབྲི་ནས་ network ལ་ bootstraps into network དང་ peers ཤེས་དོས་པ་དེ་བསྟོན། ཁྱེད་ I2P+ router འཁོར་ལས་གནས་པར་མདོ་པ་རིང་མད་པ་ network ཀྱི་མཆོ་བ་འདྲ་པ། རྒྱུར་གོ་ network ལ་གཞན་བར་ network ལ་ router འཕྲེལ་རྒྱུད་བ་འདེ་ནས་ network ལ་ peers སྒྲིག་བཞིན་བའི་རོགས། 24/7 ལ་རོགས་པར་མདོ་པ་འདེ་ན། གལ་སྐར་ 30 སྐར་མ་རྗེས་པར་མདོ་པ་རིང་མདོ་པ་རྗེས་པར་མདོ་པ། ཁྱེད་ <i>Active: [connected/recent]</i> count སློག་སྐར་པར་ 10 ལས་ཉུང་བ་པའི་ཡོད་པའི་ network ལ་ <i>Integrated</i> peers ཀྱི་མཆོ་ 5 ལས་ཉུང་བ་པའི་ཡོད་པ་མེད། དེའི་དོན་ལ་བརྒྱུད་པ་ལ་ problems ལ་ check བརྒྱུད་པ་ལེད་བསྟོན།:"
 
 msgid "Check your Configuration &amp; Bandwidth Allocation"
-msgstr ""
+msgstr "ཁྱེད་རྒྱུར་བ་ Configuration &amp; Bandwidth Allocation བལྟོགས་པར་བཞིན་བརྒྱུར་བ།"
 
 msgid "I2P+ functions best when you can accurately reflect the speed of your network connection in the <a href=/config>bandwidth configuration section</a>. By default I2P+ is configured with some fairly conservative values that will not suit many use cases, so please take time to review these settings and correct where necessary. The more bandwidth you allocate, <i>specifically</i> upstream bandwidth, the more you will benefit from the network."
 msgstr ""
@@ -6985,8 +6985,8 @@ msgstr "ཁྱོད་ཀྱི་བྲོགཟར་གྱིས་སྐུ
 msgid "Participating"
 msgstr "སྤྱོད་པའི་བརྒྱུད་རིམ།"
 
-msgid "Tunnels built by other routers through your router. This may vary widely depending on network demand, your shared bandwidth, and amount of locally-generated traffic. The recommended method for limiting participating tunnels is to change your share percentage on the <a  href='/config'>Bandwidth Configuration page</a>. You may also limit the total number by setting <code>router.maxParticipatingTunnels=nnn</code> on the <a href='/configadvanced'>Advanced configuration page</a>. <a href='/configstats#tunnel.participatingTunnels'>[Enable graphing]</a>."
-msgstr ""
+msgid "Tunnels built by other routers through your router. This may vary widely depending on network demand, your shared bandwidth, and amount of locally-generated traffic. The recommended method for limiting participating tunnels is to change your share percentage on the <a  href='/config'>Bandwidth Configuration page</a>. You may also limit the total number by setting <code>router.maxParticipatingTunnels=nnn</code> on the <a  href='/configadvanced'>Advanced configuration page</a>. <a  href='/configstats#tunnel.participatingTunnels'>[Enable graphing]</a>."
+msgstr "གཞི་གྲང་གིས་པ་བཞིན་པ་རྒྱུད་པ་ལ་བཞིན་པ་ཚང་བཏོ་གནས་པའི་ཁུ་བ་གནས་པ་གང་སྟར་མེད། དྲ་བའི་གནས་པའི་དུས་པའི་མང་འཕྲུལ་པ་ལ་གནས་དུས་པ་རྒྱུད་པའི་ལྡན་པ་རྟགས་མེད། དེ་རྟག་པ་ <a  href='/config'>Bandwidth Configuration page</a> ལ་ <code>router.maxParticipatingTunnels=nnn</code> <a  href='/configadvanced'>Advanced configuration page</a> ལ་ <a  href='/configstats#tunnel.participatingTunnels'>[Enable graphing]</a>"
 
 msgid "Share Ratio"
 msgstr "གསང་རྟགས་གི་གནས་ཁག"
@@ -7428,7 +7428,7 @@ msgid "Service (Wrapper) Logs"
 msgstr "ཞབས་ཞུ་ (Wrapper) ཟིན་ཐོ།"
 
 msgid "Information &amp; Diagnostics"
-msgstr ""
+msgstr "ཆ་འཕྲན་ &amp; ཀྱི་ནོར་བཤད་བཞིན་པ།"
 
 msgid "Customize"
 msgstr "སྲོད་པ"
@@ -7518,10 +7518,10 @@ msgid "Skip Setup"
 msgstr "སྒྲིག་འཛུགས་གཡོལ་བ།"
 
 msgid "Select the language to be used for the router console and web applications ("
-msgstr ""
+msgstr "router console དང་ web applications ལ་སྤྱོད་བསྒྱུད་ལས་པར་གནས་པར་མདོ་པའི་སྤྱོད་བསྒྱུད་ language དགམ་རོགས་ ("
 
 msgid "Router Console &amp; WebApps Display Language"
-msgstr ""
+msgstr "Router Console &amp; WebApps Display Language"
 
 msgid "Your I2P+ router by default contributes to the network by routing internal, end-to-end encrypted traffic for other routers, known as <i>participation</i>. Bandwidth participation improves the anonymity level of all users on the network and maximizes your download speed."
 msgstr "ཁྱེད་ཀྱི་ I2P+ རོ་ཌེར་སྔོན་སྒྲིག་ལྟར་གཞན་པའི་རོ་ཌེར་ལ་ནང་ཁུངས་ཀྱི་མཐའ་ནས་མཐའ་བར་གསང་བཅད་བྱས་པའི་འགྲུལ་རྟགས་ལམ་སྲང་བརྒྱུད་ནས་དྲ་བར་རམ་འདེགས་བྱེད། དེ་ལ་ <i>participation</i> ཟེར། སྐུད་རྒྱ་རམ་འདེགས་ཀྱིས་དྲ་བའི་སྤྱོད་མཁན་ཡོངས་ཀྱི་མིང་མེད་རང་བཞིན་ལེགས་བཅོས་བྱེད་པ་དང་། ཁྱེད་ཀྱི་ཕབ་ལེན་མྱུར་ཚད་མཐོ་ཤོས་སུ་གཏོང་བ་བྱེད།"

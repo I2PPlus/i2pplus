@@ -146,7 +146,7 @@ msgid "Unreachable on any transport"
 msgstr "Utilgængelig for alle transporter"
 
 msgid "Cannot enumerate UPnP devices on Android."
-msgstr ""
+msgstr "Kan ikke opregne UPnP-enheder på Android."
 
 msgid "UPnP is not enabled"
 msgstr "UPnP er ikke aktiveret."
@@ -686,7 +686,7 @@ msgid "After reporting, please restart your router"
 msgstr "Efter rapportering skal du genstarte din router"
 
 msgid "Invalid form submission, requires POST"
-msgstr ""
+msgstr "Ugyldig indsendelse af formular, kræver POST"
 
 msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
 msgstr "Ugyldig formularafsendelse, sandsynligvis fordi du brugte 'tilbage' eller 'reload' knappen på din browser. Prøv venligst at sende formularen igen."
@@ -820,13 +820,13 @@ msgid "To enable SSL access for the Router Console, see the commented <code>clie
 msgstr "For at aktivere SSL -adgang til routerkonsollen, skal du se den kommenterede <code>clients.config</code> fil placeret i dit I2P -applikationsmappe for mere information. Du bliver nødt til at redigere routerconsolerunner -konfigurationsfilen, der er placeret i biblioteket: "
 
 msgid "Save disabled, edit the router.config file to make changes"
-msgstr ""
+msgstr "Gem deaktiveret, rediger router.config-filen for at foretage ændringer"
 
 msgid "Error updating the configuration - please see the error logs"
 msgstr "Fejl ved opdatering af konfiguration - Se venligst fejlloggen"
 
 msgid "No changes made to the configuration"
-msgstr ""
+msgstr "Ingen ændringer foretaget i konfigurationen"
 
 msgid "Note"
 msgstr "NOTE"
@@ -847,7 +847,7 @@ msgid "Save Plugin Configuration"
 msgstr "Gem Plugin Konfigurationen"
 
 msgid "Plugins disabled"
-msgstr ""
+msgstr "Plugins deaktiveret"
 
 msgid "Install Plugin"
 msgstr "Installer Plugin "
@@ -859,7 +859,7 @@ msgid "Update All Installed Plugins"
 msgstr "Opdatere Alle installerede Plugins"
 
 msgid "Delete client disabled"
-msgstr ""
+msgstr "Slet klient deaktiveret"
 
 #, java-format
 msgid "Error stopping plugin {0}"
@@ -943,17 +943,17 @@ msgid "Updating all plugins"
 msgstr "Opdaterer alle plugins"
 
 msgid "Update manager not registered, cannot install"
-msgstr ""
+msgstr "Opdateringsadministrator ikke registreret, kan ikke installere"
 
 #, java-format
 msgid "Installing plugin from {0}"
 msgstr "Installerer plugin fra {0}"
 
 msgid "Cannot install, check logs"
-msgstr ""
+msgstr "Kan ikke installere, tjek logfiler"
 
 msgid "Update manager not registered, cannot check"
-msgstr ""
+msgstr "Opdateringsadministrator ikke registreret, kan ikke tjekke"
 
 #, java-format
 msgid "Checking plugin {0} for updates"
@@ -1053,17 +1053,17 @@ msgid "Join Family"
 msgstr "Slut dig til familien"
 
 msgid "Bad certificate - No Subject CN"
-msgstr ""
+msgstr "Dårligt certifikat - Intet emne CN"
 
 msgid "Bad characters in Family: "
-msgstr ""
+msgstr "Dårlige tegn i familie: "
 
 #, java-format
 msgid "Keystore {0} already exists for family {1}! Delete or rename it first."
-msgstr ""
+msgstr "Nøglelager {0} findes allerede til familie {1}! Slet eller omdøb det først."
 
 msgid "Family key configured for router family: "
-msgstr ""
+msgstr "Familie-nøgle konfigureret til routerfamilie: "
 
 msgid "Load from file failed"
 msgstr "Indlæsning fra fil mislykkedes"
@@ -1081,7 +1081,7 @@ msgid "Restore defaults"
 msgstr "Gendanne standarder"
 
 msgid "Bad group detected, please retry"
-msgstr ""
+msgstr "Dårlig gruppe fundet, prøv igen"
 
 msgid "Restored default settings"
 msgstr "Genoprettet standardindstillinger"
@@ -1114,7 +1114,7 @@ msgid "Invalid destination"
 msgstr "Ugyldig destination"
 
 msgid "Cannot add key for local destination. Enable encryption in the Tunnel Manager."
-msgstr ""
+msgstr "Kan ikke tilføje nøgle til lokal destination. Aktiver kryptering i Tunnel Manager."
 
 #, java-format
 msgid "Key for {0} added to keyring"
@@ -1127,7 +1127,7 @@ msgid "Requires hostname, destination, or blinded Base32"
 msgstr "Kræver værtsnavn, destination eller blindet Base32"
 
 msgid "Cannot add key for local destination. Enable encryption in the Hidden Services Manager."
-msgstr ""
+msgstr "Kan ikke tilføje nøgle til lokal destination. Aktiver kryptering i Hidden Services Manager."
 
 msgid "Destination requires lookup password"
 msgstr "Destination kræver opslagsadgangskode"
@@ -1148,7 +1148,7 @@ msgid "Delete key"
 msgstr "Slet nøgle"
 
 msgid "Cannot remove key for local destination. Disable encryption in the Tunnel Manager."
-msgstr ""
+msgstr "Kan ikke fjerne nøgle fra lokal destination. Deaktiver kryptering i Tunnel Manager."
 
 #, java-format
 msgid "Key for {0} removed from keyring"
@@ -1201,34 +1201,34 @@ msgid "Log overrides updated"
 msgstr "Log tilsidesætter opdateret log"
 
 msgid "Error updating the log limits - levels not valid"
-msgstr ""
+msgstr "Fejl ved opdatering af log-grænser - niveauer ugyldige"
 
 msgid "Log limits cleared"
-msgstr ""
+msgstr "Log-grænser ryddet"
 
 #, java-format
 msgid "Default log level updated from {0} to {1}"
-msgstr ""
+msgstr "Standard log-niveau opdateret fra {0} til {1}"
 
 msgid "Date format updated"
-msgstr ""
+msgstr "Datoformat opdateret"
 
 #, java-format
 msgid "Specified date format is not valid ({0}) - not updated"
-msgstr ""
+msgstr "Angivet datoformat er ikke gyldigt ({0}) - ikke opdateret"
 
 msgid "File size updated"
-msgstr ""
+msgstr "Filstørrelse opdateret"
 
 #, java-format
 msgid "Specified file size limit is not valid ({0}) - not updated"
-msgstr ""
+msgstr "Angivet filstørrelsesgrænse er ikke gyldig ({0}) - ikke opdateret"
 
 msgid "Compression setting updated"
-msgstr ""
+msgstr "Komprimeringsindstilling opdateret"
 
 msgid "Log record format updated"
-msgstr ""
+msgstr "Logpostformat opdateret"
 
 msgid "Log configuration saved"
 msgstr "Log konfiguration gemt"
@@ -1438,10 +1438,10 @@ msgid "Bad capacity value"
 msgstr "Dårlig kapacitets værdi"
 
 msgid "Bonuses adjusted for: "
-msgstr ""
+msgstr "Bonusser justeret for: "
 
 msgid "No profile exists for: "
-msgstr ""
+msgstr "Ingen profil eksisterer for: "
 
 msgid "Unsupported"
 msgstr "Ikke understøttet"
@@ -1457,7 +1457,7 @@ msgstr "Til"
 
 #, java-format
 msgid "First {0} displayed, see the {1} file for the full list"
-msgstr ""
+msgstr "Første {0} vist, se {1}-filen for den fulde liste"
 
 msgid "IPs Banned Until Restart"
 msgstr "IP'er Forbudt Indtil Genstart"
@@ -1564,13 +1564,13 @@ msgid "Restore minimal default"
 msgstr "Gendanne den minimale standard"
 
 msgid "Sidebar preferences updated"
-msgstr ""
+msgstr "Sidebjælkepræferencer opdateret"
 
 msgid "Refresh interval must be a number"
 msgstr "Opdateringsinterval skal være et tal"
 
 msgid "Full sidebar defaults restored."
-msgstr ""
+msgstr "Fuld sidebjælkestandard gendannet."
 
 msgid "Order must be an integer"
 msgstr "Rækkefølge skal være et heltal"
@@ -1579,7 +1579,7 @@ msgid "Saved order of sections."
 msgstr "Sparet rækkefølgen af ​​kapitlerne"
 
 msgid "Sidebar will refresh shortly."
-msgstr ""
+msgstr "Sidebjælken opdateres snart."
 
 msgid "No section selected"
 msgstr "Ingen sektion valgt"
@@ -1602,11 +1602,11 @@ msgstr "Graflisten opdateret, kan tage op til 60 sekunder til at blive afspejlet
 
 #, java-format
 msgid "Internal error: could not resolve pool name {0}."
-msgstr ""
+msgstr "Intern fejl: kunne ikke løse pool-navnet {0}."
 
 #, java-format
 msgid "Internal error: could not find pool settings for {0}."
-msgstr ""
+msgstr "Intern fejl: kunne ikke finde pool-indstillinger for {0}."
 
 msgid "Updated settings for all pools."
 msgstr "Opdateret indstillinger for alle sammenlægninger"
@@ -1681,7 +1681,7 @@ msgid "Add user"
 msgstr "Tilføje bruger"
 
 msgid "Cannot save theme choice, theme name has illegal characters"
-msgstr ""
+msgstr "Kan ikke gemte temavalg, tema-navnet har ugyldige tegn"
 
 msgid "Theme change saved."
 msgstr "Tema ændringen blev gemt."
@@ -1693,7 +1693,7 @@ msgid "No user name entered"
 msgstr "Ingen brugernavn indtastet"
 
 msgid "User name may not contain '='"
-msgstr ""
+msgstr "Brugernavn må ikke indeholde '='"
 
 msgid "Warning: User names outside the ISO-8859-1 character set are not recommended. Support is not standardized and varies by browser."
 msgstr "ADVARSEL: Brugernavne uden for ISO-8859-1-tegnsættet anbefales ikke. Support er ikke standardiseret og varierer efter browser."
@@ -2015,7 +2015,7 @@ msgid "Show list of all known I2P routers"
 msgstr "Vis liste over kendte I2P routere"
 
 msgid "List of recently connected peers with profiling info"
-msgstr ""
+msgstr "Liste over for nylig tilsluttede peers med profilinformation"
 
 msgid "Peer Profiles"
 msgstr "Peer-profiler"
@@ -2183,7 +2183,7 @@ msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Alternativ privatlivsfokuseret frontend til Reddit"
 
 msgid "AI Image generation & Chat hub"
-msgstr ""
+msgstr "AI billedgenerering & Chat-hub"
 
 msgid "IRC Logs for multiple networks"
 msgstr "IRC-logfiler til flere netværk"
@@ -2324,10 +2324,10 @@ msgid "OpenDemocracy"
 msgstr "OpenDemocracy"
 
 msgid "Online privacy &amp; tech blog"
-msgstr ""
+msgstr "Online privatliv & tech-blog"
 
 msgid "RightToPrivacy"
-msgstr ""
+msgstr "RetTilPrivatliv"
 
 msgid "Lifestyle magazine"
 msgstr "Livsstilsmagasin"
@@ -2348,7 +2348,7 @@ msgid "Community-driven tech news"
 msgstr "Samfundsdrevne teknologinyheder"
 
 msgid "Various services"
-msgstr ""
+msgstr "Forskellige tjenester"
 
 msgid "News for nerds"
 msgstr "Nyheder til nørder"
@@ -2427,7 +2427,7 @@ msgid "Add"
 msgstr "Tilføje"
 
 msgid "Error displaying the info page."
-msgstr ""
+msgstr "Fejl ved visning af infosiden."
 
 msgid "Identity"
 msgstr "Identitet"
@@ -2475,7 +2475,7 @@ msgid "Performance"
 msgstr "Forestilling"
 
 msgid "Maximum available RAM"
-msgstr ""
+msgstr "Maksimal tilgængelig RAM"
 
 msgid "Classified as slow"
 msgstr "Klassificeret som langsom"
@@ -2487,7 +2487,7 @@ msgid "No"
 msgstr "Nej"
 
 msgid "GeoIP Db"
-msgstr ""
+msgstr "GeoIP-database"
 
 msgid "Target"
 msgstr "Mål"
@@ -2626,19 +2626,19 @@ msgid "Sybil Analysis"
 msgstr "Sybilanalyse"
 
 msgid "Bad value supplied, please check and try again."
-msgstr ""
+msgstr "Ugyldig værdi angivet, tjek venligst og prøv igen."
 
 msgid "Router Map"
 msgstr "Routerkort"
 
 msgid "Network Database Search"
-msgstr ""
+msgstr "Søg i netværksdatabase"
 
 msgid "Capabilities"
 msgstr "Evner"
 
 msgid "e.g. f or XOfR"
-msgstr ""
+msgstr "f.eks. f eller XOfR"
 
 msgid "Cost"
 msgstr "Omkostninger"
@@ -2647,55 +2647,55 @@ msgid "Country"
 msgstr "Land"
 
 msgid "Country Codes"
-msgstr ""
+msgstr "Landekoder"
 
 msgid "Hash Prefix"
-msgstr ""
+msgstr "Hash-præfiks"
 
 msgid "IPv4 or IPv6, /24,/16,/8 suffixes optional for IPv4, prefix ok for IPv6"
-msgstr ""
+msgstr "IPv4 eller IPv6, /24,/16,/8 suffixer valgfrie for IPv4, præfiks ok for IPv6"
 
 msgid "Hostname or b32"
-msgstr ""
+msgstr "Værtsnavn eller b32"
 
 msgid "IPv6 Prefix"
-msgstr ""
+msgstr "IPv6-præfiks"
 
 msgid "Single port or range"
-msgstr ""
+msgstr "Enkelt port eller område"
 
 msgid "Signature Type"
-msgstr ""
+msgstr "Signaturtype"
 
 msgid "SSU Capabilities"
-msgstr ""
+msgstr "SSU-evner"
 
 msgid "Encryption Type"
-msgstr ""
+msgstr "Krypteringstype"
 
 msgid "Router Version"
-msgstr ""
+msgstr "Routerversion"
 
 msgid "Transport"
 msgstr "Transport"
 
 msgid "Add Sybil analysis (must pick at least one above)"
-msgstr ""
+msgstr "Tilføj Sybil-analyse (skal vælge mindst en ovenfor)"
 
 msgid "Sybil close to"
-msgstr ""
+msgstr "Sybil tæt på"
 
 msgid "Router hash, destination hash, b32, or from address book"
-msgstr ""
+msgstr "Router-hash, destinations-hash, b32 eller fra adressebog"
 
 msgid "or Sybil close to this router"
-msgstr ""
+msgstr "eller Sybil tæt på denne router"
 
 msgid "Lookup"
 msgstr "Opslag"
 
 msgid "Select the field to search on"
-msgstr ""
+msgstr "Vælg feltet der skal søges på"
 
 msgid "e.g. cn hk"
 msgstr "f.eks. cn hk"
@@ -2710,13 +2710,13 @@ msgid "Router not found"
 msgstr "Router ikke fundet"
 
 msgid "No routers with"
-msgstr ""
+msgstr "Ingen routere med"
 
 msgid "found in the network database"
-msgstr ""
+msgstr "fundet i netværksdatabasen"
 
 msgid "results"
-msgstr ""
+msgstr "resultater"
 
 msgid "Previous Page"
 msgstr "Forrige side"
@@ -2725,43 +2725,43 @@ msgid "Next Page"
 msgstr "Næste side"
 
 msgid "Results per page"
-msgstr ""
+msgstr "Resultater pr. side"
 
 msgid "Not initialized"
 msgstr "Ikke initialiseret"
 
 msgid "Total Remote Leasesets"
-msgstr ""
+msgstr "Samlede fjern-leasesets"
 
 msgid "Compact mode"
-msgstr ""
+msgstr "Kompakt tilstand"
 
 msgid "Local Leasesets"
-msgstr ""
+msgstr "Lokale leasesets"
 
 msgid "Debug Mode"
-msgstr ""
+msgstr "Fejlfindingstilstand"
 
 msgid "Published (RAP) Leasesets"
-msgstr ""
+msgstr "Publicerede (RAP) leasesets"
 
 msgid "Sorted by hash distance, closest first."
-msgstr ""
+msgstr "Sorteret efter hash-afstand, tætteste først."
 
 msgid "Mod Data"
-msgstr ""
+msgstr "Mod-data"
 
 msgid "Last Changed"
-msgstr ""
+msgstr "Sidst ændret"
 
 msgid "Next Mod Data"
-msgstr ""
+msgstr "Næste mod-data"
 
 msgid "Change in"
-msgstr ""
+msgstr "Ændring i"
 
 msgid "Floodfill mode enabled"
-msgstr ""
+msgstr "Floodfill-tilstand aktiveret"
 
 msgid "Routing Key"
 msgstr "Rutenøgle"
@@ -2776,10 +2776,10 @@ msgid "Estimated total leasesets"
 msgstr "Estimeret samlede lejemål"
 
 msgid "Total Local Leasesets"
-msgstr ""
+msgstr "Samlede lokale leasesets"
 
 msgid "Remote Leasesets"
-msgstr ""
+msgstr "Fjern-leasesets"
 
 #, java-format
 msgid "Hostname {0} not found in network database"
@@ -2790,7 +2790,7 @@ msgid "LeaseSet for {0} not found in network database"
 msgstr "LeaseSet for {0} ikke fundet i netværksdatabasen"
 
 msgid "Meta"
-msgstr ""
+msgstr "Meta"
 
 msgid "LeaseSet"
 msgstr "LeaseSet"
@@ -2822,7 +2822,7 @@ msgid "Signature type"
 msgstr "Signaturtype"
 
 msgid "Public Key"
-msgstr ""
+msgstr "Offentlig nøgle"
 
 msgid "Unsupported type"
 msgstr "Ikke-understøttet type"
@@ -2866,7 +2866,7 @@ msgid "Transports"
 msgstr "Transporter"
 
 msgid "X Tier"
-msgstr ""
+msgstr "X-lag"
 
 msgid "Floodfills"
 msgstr "Oversvømmelser"
@@ -2884,10 +2884,10 @@ msgid "Router is banlisted"
 msgstr "Routeren er udelukket"
 
 msgid "Java I2P variant"
-msgstr ""
+msgstr "Java I2P-variant"
 
 msgid "I2Pd variant"
-msgstr ""
+msgstr "I2Pd-variant"
 
 msgid "RouterInfo is compressible"
 msgstr "RouterInfo er komprimerbar"
@@ -2924,7 +2924,7 @@ msgid "Whois"
 msgstr "Whois"
 
 msgid "direct"
-msgstr ""
+msgstr "direkte"
 
 msgid "Verified family (signing certificate is installed and valid)"
 msgstr "Verificeret familie (signeringscertifikat er installeret og gyldigt)"
@@ -2948,7 +2948,7 @@ msgid "Maximum Transmission Unit"
 msgstr "Maksimal overførselsesenhed"
 
 msgid "Show all routers with this MTU in the NetDb"
-msgstr ""
+msgstr "Vis alle routere med denne MTU i NetDb"
 
 msgid "Addresses"
 msgstr "Adresser"
@@ -2957,7 +2957,7 @@ msgid "Introducers"
 msgstr "Introduceres"
 
 msgid "Network Id"
-msgstr ""
+msgstr "Netværks-ID"
 
 msgid "First heard about"
 msgstr "Først hørt om"
@@ -3052,10 +3052,10 @@ msgid "IPv6"
 msgstr "IPv6"
 
 msgid "Active connections / Max permitted"
-msgstr ""
+msgstr "Aktive forbindelser / Maks tilladt"
 
 msgid "Connections / Limit"
-msgstr ""
+msgstr "Forbindelser / Grænse"
 
 msgid "Current / maximum permitted"
 msgstr "Strøm / maksimum tilladt"
@@ -3349,7 +3349,7 @@ msgid "Rejected"
 msgstr "Afvist"
 
 msgid "First Heard About"
-msgstr ""
+msgstr "Først hørt om"
 
 msgid "Last Heard From"
 msgstr "Hørte senest fra"
@@ -3468,7 +3468,7 @@ msgstr "{0} delt båndbredde"
 
 #, java-format
 msgid "Over {0} KB/s shared bandwidth"
-msgstr ""
+msgstr "Over {0} KB/s delt båndbredde"
 
 msgid "status"
 msgstr "status"
@@ -3531,7 +3531,7 @@ msgid "Total number of banned peers"
 msgstr "Samlet antal udelukkede jævnaldrende"
 
 msgid "Note: 'LU' class routers have been excluded from the list."
-msgstr ""
+msgstr "Bemærk: 'LU'-klasse routere er blevet udelukket fra listen."
 
 #, java-format
 msgid "To view, see {0}Session Bans{1}."
@@ -3910,7 +3910,7 @@ msgid "Floodfill enabled"
 msgstr "Floodfill aktiveret"
 
 msgid "Total number of remote LeaseSets stored in our NetDb"
-msgstr ""
+msgstr "Samlet antal fjern-LeaseSets gemt i vores NetDb"
 
 msgid "Declining transit tunnel requests during startup phase"
 msgstr "Ingen anmodninger om deltagende tunneler accepteres i de første 10 minutter, mens routeren stabiliserer sig"
@@ -3953,7 +3953,7 @@ msgid "Peers we've been talking to in the last minute / last hour"
 msgstr "Peers som vi snakket med de sidste minutter/ sidste time"
 
 msgid "Peers we've been talking to in the last minute"
-msgstr ""
+msgstr "Peers vi har talt med i det sidste minut"
 
 msgid "The number of peers available for building client tunnels"
 msgstr "Antallet af peers til rådighed at bygge klienttunneler "
@@ -4494,7 +4494,7 @@ msgstr "Ingen transittunneler er i øjeblikket aktive."
 
 #, java-format
 msgid "Transit Tunnels by Peer (Top {0})"
-msgstr ""
+msgstr "Transit-tunnler efter peer (Top {0})"
 
 msgid "Address"
 msgstr "Adresse"
@@ -4576,7 +4576,7 @@ msgid "Bandwidth test did not complete"
 msgstr "Båndbreddetest blev ikke fuldført"
 
 msgid "Bad state for test"
-msgstr ""
+msgstr "Dårlig tilstand for test"
 
 msgid "Bandwidth test started"
 msgstr "Båndbreddetest startet"
@@ -4591,16 +4591,16 @@ msgid "Bandwidth test was not running"
 msgstr "Båndbreddetest kørte ikke"
 
 msgid "ready"
-msgstr ""
+msgstr "klar"
 
 msgid "inbound test"
-msgstr ""
+msgstr "indgående test"
 
 msgid "outbound test"
-msgstr ""
+msgstr "udgående test"
 
 msgid "done"
-msgstr ""
+msgstr "færdig"
 
 msgid "bits per second"
 msgstr "bits per sekund"
@@ -4769,7 +4769,7 @@ msgid "Share"
 msgstr "Del"
 
 msgid "NOTE"
-msgstr ""
+msgstr "BEMÆRK"
 
 #, java-format
 msgid "You have configured I2P to share only {0} KBps."
@@ -4796,7 +4796,7 @@ msgstr "Avanceret konfiguration"
 
 #, java-format
 msgid "Key <b>{0}</b> selected for removal. To commit the change, save the configuration, or cancel to restore the key."
-msgstr ""
+msgstr "Nøgle <b>{0}</b> valgt til fjernelse. For at gemme ændringen, gem konfigurationen, eller annuller for at gendanne nøglen."
 
 msgid "Floodfill Configuration"
 msgstr "Floodfillkonfiguration"
@@ -4826,7 +4826,7 @@ msgid "Advanced I2P+ Configuration"
 msgstr "Avanceret I2P konfiguration"
 
 msgid "Help with additional configuration settings"
-msgstr ""
+msgstr "Hjælp med yderligere konfigurationsindstillinger"
 
 #, java-format
 msgid "To make changes, edit the file: {0}"
@@ -5220,7 +5220,7 @@ msgid "Banning will prevent the participation of this peer in tunnels you create
 msgstr "Banning vil forhindre at deltagelsen af denne peer i tunneler som du laver."
 
 msgid "A list of bans by IP address is presented below."
-msgstr ""
+msgstr "En liste over bans efter IP-adresse præsenteres nedenfor."
 
 #, java-format
 msgid "To view all active bans by router hash, see {0}Banned Peers{1}."
@@ -5228,7 +5228,7 @@ msgstr "Se alle aktive forbud efter router hash, se {0}Banned Peers{1}."
 
 #, java-format
 msgid "A list of {0}session-only bans{1} by hash is also available."
-msgstr ""
+msgstr "En liste over {0}session-only bans{1} efter hash er også tilgængelig."
 
 msgid "Adjust Profile Bonuses"
 msgstr "Juster Profil Bonusser"
@@ -5419,7 +5419,7 @@ msgid "config sidebar"
 msgstr "config sidebjælke"
 
 msgid "Sidebar Options"
-msgstr ""
+msgstr "Sidebjælkeindstillinger"
 
 msgid "Refresh interval"
 msgstr "Opdateringinterval"
@@ -5431,10 +5431,10 @@ msgid "0 to disable"
 msgstr "0 for at deaktivere"
 
 msgid "Unified sidebar"
-msgstr ""
+msgstr "Forenet sidebjælke"
 
 msgid "Use the same sidebar on all pages"
-msgstr ""
+msgstr "Brug samme sidebjælke på alle sider"
 
 msgid "Sticky sidebar"
 msgstr "Fast sidebar"
@@ -5642,7 +5642,7 @@ msgid "not found"
 msgstr "ikke fundet"
 
 msgid "router logs"
-msgstr ""
+msgstr "router logs"
 
 msgid "Critical / Error Level Logs"
 msgstr "Kritiske / Fejl Logniveauer"
@@ -5735,7 +5735,7 @@ msgid "This setting, when set to true, will display the <i>Sites of Interest</i>
 msgstr "Denne indstilling, når den er indstillet på sand, viser linkene <i>Sider af Interesse</i> på <a href=/sitemap>sitekortet</a>. [Standard er falsk]"
 
 msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
-msgstr ""
+msgstr "Denne indstilling, når den er sat til sand, vil præsentere standard sidebjælken på startsiden, hvilket muliggør konfiguration via <a href=/configsidebar>. [Standard er falsk]"
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "Denne indstilling afgør, om routeren skal bruge den medfølgende <i>blocklist.txt</i> fil og eventuelle brugerdefinerede blocklister til at muliggøre forbud mod routere ved hash eller ip-adresse. Områder og netmasker understøttes for IPv4, men ikke IPv6. Se <i>blocklist.txt</i> i din I2P+ applikationsmappe for mere information. [Slået til som standard, genstart krævet]"
@@ -5750,7 +5750,7 @@ msgid "This setting determines whether or not the router should use the provided
 msgstr "Denne indstilling afgør, om routeren skal bruge den medfølgende <i>blocklist_tor.txt</i> fil i din I2P+ applikationsmappe til at muliggøre forbud mod routere, der opererer fra Tor exit-node-ip-adresser. [Slået til som standard, genstart krævet]"
 
 msgid "This setting enables requests from routers in the specified countries to be blocked and banned as soon as a direct tunnel request is made. Countries must be specified as two letter country codes, separated with commas. e.g. router.blockCountries=cn,ru"
-msgstr ""
+msgstr "Denne indstilling muliggør at anmodninger fra routere i de angivne lande blokeres og bannes så snart en direkte tunnelanmodning foretages. Lande skal angives som to-bogstavede landekoder, adskilt med kommaer. f.eks. router.blockCountries=cn,ru"
 
 msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
 msgstr "Når sat til falsk, vil routeren ikke blokere tunnelopbygningsanmodninger fra langsommere eller utilgængelige routere, der kører ældre versioner. [Standardværdi er sand, genstart kræves]"
@@ -5888,7 +5888,7 @@ msgid "This setting determines whether routers classified as uninteresting (K or
 msgstr "Denne indstilling bestemmer, om routere, der er klassificeret som uinteressante (K eller L-tier, utilgængelige eller ældre end 0.9.50), kontrolleres under opdateringsprocessen for routeren efter 1 times drift. [Standard er falsk]"
 
 msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
-msgstr ""
+msgstr "Når den er sat til sand, vil denne indstilling lemppe betingelserne krævet for din router til at publicere trængselsgrænser, især når det er bestemt at din båndbreddebrug er høj. Andre betingelser, såsom høj job-forsinkelse eller en router klassificeret som langsom, vil stadig forårsage at grænser publiceres. [Standard er falsk]"
 
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
 msgstr "Når det er konfigureret, sættes der en maksimal grænse for antallet af tunneller, som routeren har tilladelse til at opbygge samtidigt. Som standard bruger routeren den gennemsnitlige opbygningstid og den aktuelle udgående båndbredde til at bestemme den optimale opbygningshastighed. [Genstart kræves]"
@@ -5903,10 +5903,10 @@ msgid "This setting (in minutes) allows you to manually configure how long to wa
 msgstr "Denne indstilling (i minutter) giver dig mulighed for manuelt at konfigurere, hvor længe der skal ventes efter opstart, før RouterInfos i NetDb kontrolleres for gyldighed, hvorefter kun gyldige routere accepteres til inkludering. Når valideringen foretages, fjernes udløbne RouterInfos og ikke-responsivt lede kun tilgængelige via SSU fra NetDb. [Standard er 60 minutter]. Bemærk: Denne indstilling har ingen indflydelse på ældre routere (ældre end 0.9.29 som standard), der fjernes fra NetDb og er udelukket for router-sessionen, så snart der forsøges en NetDb-butik."
 
 msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
-msgstr ""
+msgstr "Denne indstilling, når den er sat til sand, vil blokere direkte kommunikation fra alle routere i dit eget land og tilføje dem til din banliste indtil din router genstarter. [Standard er falsk]"
 
 msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
-msgstr ""
+msgstr "Denne indstilling, når den er sat til sand, vil blokere direkte kommunikation fra alle X-lag routere der publicerer en G trængselsgrænse og hverken er tilgængelige eller utilgængelige, hvilket tilføjer dem til sessions-banlisten. Bemærk at avanceret tilstand skal være aktiveret for at denne indstilling træder i kraft. [Standard er falsk]"
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "Denne indstilling tillader at deaktivere SSU-test for at afgøre om din router er firewall-sikret og kan aktiveres for routere, der helt sikkert ikke er firewall-sikret, men oplever intermittent firewalling-problemer. Hvis testning er deaktiveret, bør både SSU og NTCP rapportere din aktuelle offentlige ip-adresse på <a href=/info>router informationssiden</a>. [Genstart krævet]"
@@ -5915,7 +5915,7 @@ msgid "This setting determines which transport takes priority when communicating
 msgstr "Denne indstilling afgør hvilken transport der prioriteres ved kommunikation med peers. Som standard vælges NTCP frem for UDP (SSU). Ved at sætte værdien til true vil UDP blive prioriteret, medmindre der findes en eksisterende NTCP-forbindelse; når værdien sættes til always, vil UDP altid blive brugt uanset eventuelle eksisterende NTCP-forbindelser. [Standardværdien er false]"
 
 msgid "miscellaneous"
-msgstr ""
+msgstr "diverse"
 
 msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
 msgstr "Hvis dette er indstillet til sandt, vil denne indstilling placere et ikon i systembakken / meddelelsesområdet med grundlæggende kontrolindstillinger. [Deaktiveret som standard]"
@@ -6155,16 +6155,16 @@ msgid "For SSL only"
 msgstr "Kun for SSL"
 
 msgid "How can I configure the console and web services to be accessible on my local network?"
-msgstr ""
+msgstr "Hvordan kan jeg konfigurere konsollen og web-tjenester til at være tilgængelige på mit lokale netværk?"
 
 msgid "To make your console accessible on your local network, edit the configuration file 00-net.i2p.router.web.RouterConsoleRunner-clients.config in the clients.config.d folder of your I2P settings directory. Update or add the necessary IP addresses to the existing localhost (127.0.0.1) mapping. Use the -s switch for HTTPS access."
-msgstr ""
+msgstr "For at gøre din konsol tilgængelig på dit lokale netværk, rediger konfigurationsfilen 00-net.i2p.router.web.RouterConsoleRunner-clients.config i clients.config.d mappen i din I2P-indstillingsmappe. Opdater eller tilføj de nødvendige IP-adresser til den eksisterende localhost (127.0.0.1) mapping. Brug -s switchen for HTTPS adgang."
 
 msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
-msgstr ""
+msgstr "Eksempel: For at tillade adgang fra både localhost og 192.168.1.10 over HTTP og HTTPS:"
 
 msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager's configuration section using the <i>reachable by</i> dropdown."
-msgstr ""
+msgstr "For de fleste klienttjenester, ændr lytteadressen for den relevante tjeneste i Tunnel Manager's konfigurationssektion ved hjælp af <i>reachable by</i> dropdown."
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "Hvordan opretter jeg forbindelse til IRC inden for I2P?"
@@ -6551,7 +6551,7 @@ msgid "If you are in a hurry and can't wait a few hours, you can tell people to 
 msgstr "Hvis du har travlt og ikke kan vente et par timer, kan du fortælle folk at bruge en hjælpeeroutingservice til \"jump\"-adressen. Dette vil normalt virke inden for et par minutter efter du har registreret dit værtsnavn på samme websted. Test det selv først ved at indtaste <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code> i din browser. Når det virker, kan du fortælle andre at bruge den."
 
 msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skank.i2p</a>, and paste the link where it's required to share it with others."
-msgstr ""
+msgstr "Alternativt kan du kopiere <i>address helper link</i> for dit domæne, angivet enten på adressebogslistesiden, eller på detaljesiden for dit domæne f.eks. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>detaljer for skank.i2p</a>, og indsætte linket hvor det er krævet for at dele det med andre."
 
 msgid "Backup your private key!"
 msgstr "Backup din private nøgle!"
@@ -6788,7 +6788,7 @@ msgid "Getting Support Online"
 msgstr "Få online support"
 
 msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> on I2P's internal IRC network."
-msgstr ""
+msgstr "Du kan også ønske at gennemgå informationen på <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, poste beskeder til <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P diskussionsforum</a> eller kigge forbi <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> eller <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> på I2P's interne IRC-netværk."
 
 msgid "Reporting Bugs"
 msgstr "Fejlrapportering"
@@ -7328,7 +7328,7 @@ msgid "Configure display language, theme and optional console password"
 msgstr "Konfigurér sprog, tema og valgfrit konsoladgangskode"
 
 msgid "Language"
-msgstr ""
+msgstr "Sprog"
 
 msgid "Configure router bandwidth"
 msgstr "Konfigurér router båndbredde"
@@ -7367,22 +7367,22 @@ msgid "network database"
 msgstr "netværksdatabasen"
 
 msgid "Encryption type"
-msgstr ""
+msgstr "Krypteringstype"
 
 msgid "Encryption types"
-msgstr ""
+msgstr "Krypteringstyper"
 
 msgid "Signature types"
-msgstr ""
+msgstr "Signaturtyper"
 
 msgid "Locally hosted private service"
-msgstr ""
+msgstr "Lokalt hostet privat tjeneste"
 
 msgid "Locally hosted public service"
-msgstr ""
+msgstr "Lokalt hostet offentlig tjeneste"
 
 msgid "Requested client leaseset"
-msgstr ""
+msgstr "Anmodet klient leaseset"
 
 msgid "Remote"
 msgstr "Fjern"
@@ -7440,7 +7440,7 @@ msgid "Filter Router log output"
 msgstr "Filtre routerens logudskrift"
 
 msgid "service logs"
-msgstr ""
+msgstr "tjeneste logs"
 
 msgid "Service (Wrapper) Logs"
 msgstr "Tjeneste (Wrapper) Logge"
@@ -7506,7 +7506,7 @@ msgid "Peer Profile"
 msgstr "Peer Profil"
 
 msgid "Profile View"
-msgstr ""
+msgstr "Profilvisning"
 
 msgid "Profile for peer"
 msgstr "Profil til peer"
@@ -7536,7 +7536,7 @@ msgid "Skip Setup"
 msgstr "Spring opsætning over"
 
 msgid "Select the language to be used for the router console and web applications ("
-msgstr ""
+msgstr "Vælg det sprog der skal bruges til router-konsollen og web-applikationer ("
 
 msgid "Router Console &amp; WebApps Display Language"
 msgstr "Routerkonsol og Webapps Viser Sprog"
