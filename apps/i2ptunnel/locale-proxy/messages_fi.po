@@ -214,9 +214,6 @@ msgstr "Varoitus: Pyyntö hylätty"
 msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
 msgstr "Tämä osoite näyttää olevan epämuodostunut. Varmista, että olet toimittanut kelvollisen osoitteen!"
 
-msgid "You attempted to connect to a non-I2P website or location."
-msgstr "Yritit muodostaa yhteyden muuhun kuin I2P-verkkosivustoon tai -paikkaan."
-
 msgid "Warning: Bad Address Helper"
 msgstr "Varoitus: Huono osoiteapuohjelma"
 
@@ -229,6 +226,15 @@ msgstr "Se näyttää olevan roskatietoa tai väärin kirjoitettu Base 32 -osoit
 
 msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
 msgstr "Tarkista URL-osoitteesi yrittääksesi korjata apuavaimen kelvolliseksi Base 32 -isäntänimeksi tai Base 64 -avaimeksi."
+
+msgid "Warning: Address Blacklisted"
+msgstr ""
+
+msgid "The requested destination is in your blacklist and access has been blocked."
+msgstr ""
+
+msgid "To allow access to this site, remove it from your blacklist on the SusiDNS blacklist management page."
+msgstr ""
 
 msgid "Warning: Invalid Destination"
 msgstr "Varoitus: virheellinen kohde"
@@ -420,3 +426,4 @@ msgstr "Napsauta tästä, jos sinua ei ohjata automaattisesti."
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
 msgstr "Tallennettu todennus verkkotunnukselle {0}, uudelleenohjaus nyt."
+

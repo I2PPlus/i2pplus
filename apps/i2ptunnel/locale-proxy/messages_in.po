@@ -214,9 +214,6 @@ msgstr "Peringatan: Permintaan Ditolak"
 msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
 msgstr "Alamat ini tampaknya salah format. "
 
-msgid "You attempted to connect to a non-I2P website or location."
-msgstr "Anda mencoba untuk terhubung ke website atau lokasi non-I2P."
-
 msgid "Warning: Bad Address Helper"
 msgstr "Peringatan: Alamat Pembantu Buruk"
 
@@ -229,6 +226,15 @@ msgstr "Sepertinya datanya sampah, atau alamat Base 32 salah ketik.Sepertinya da
 
 msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
 msgstr "Periksa URL Anda untuk mencoba dan memperbaiki kunci pembantu menjadi nama host Base 32 atau kunci Base 64 yang valid.Periksa URL Anda untuk mencoba dan memperbaiki kunci pembantu untuk menjadi hostname Base 32 valid atau kunci Base 64."
+
+msgid "Warning: Address Blacklisted"
+msgstr ""
+
+msgid "The requested destination is in your blacklist and access has been blocked."
+msgstr ""
+
+msgid "To allow access to this site, remove it from your blacklist on the SusiDNS blacklist management page."
+msgstr ""
 
 msgid "Warning: Invalid Destination"
 msgstr "Peringatan: Tujuan Tidak Valid"
@@ -420,3 +426,4 @@ msgstr "Klik disini jika Anda tidak dialihkan secara otomatis."
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
 msgstr "Menyimpan autentikasi untuk {0}, mengalihkannya sekarang."
+

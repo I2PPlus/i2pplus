@@ -1503,20 +1503,3 @@ msgstr "Dəyişiklikləri Saxla"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent dayandırılmalıdır"
-
-#, java-format
-
-
-
-
-
-
-
-#, java-format
-
-#, java-format
-
-#, java-format
-
-
-

@@ -31,8 +31,11 @@ msgstr "Määri nimi \"{0}\" vajab ASCII-d muundamist, kuid JVM-s pole muundusbi
 msgid "Source"
 msgstr "Allikas"
 
-msgid "Imported from file hosts.txt"
+msgid "Imported from"
 msgstr ""
+
+msgid "Imported from file"
+msgstr "Imporditud failist"
 
 msgid "Manually added via SusiDNS"
 msgstr "Manuaalselt lisatud läbi SusiDNS"
@@ -172,11 +175,17 @@ msgstr "Kui probleem jätkub, kontrollige, et teie brauseris on küpsised lubatu
 msgid "Save"
 msgstr "Salvesta"
 
-msgid "Configuration saved."
-msgstr "Seaded salvestatud."
+msgid "Blacklist saved."
+msgstr ""
 
 msgid "Reload"
 msgstr "Laadi uuesti"
+
+msgid "Blacklist reloaded from file."
+msgstr ""
+
+msgid "Configuration saved."
+msgstr "Seaded salvestatud."
 
 msgid "Configuration reloaded."
 msgstr "Seaded laaditi uuesti."
@@ -203,6 +212,18 @@ msgstr "Sihtkoha lisamine ebaõnnestus {0} jaoks nimeandmeteenusele {1}"
 msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "Sihtkoha kustutamine ebaõnnestus {0} jaoks nimeandmeteenusest {1}"
 
+msgid "Blacklist Selected"
+msgstr ""
+
+#, java-format
+msgid "1 destination blacklisted."
+msgid_plural "{0} destinations blacklisted."
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "No valid entries selected to blacklist."
+msgstr ""
+
 msgid "Save Notes"
 msgstr "Salvesta märkused"
 
@@ -215,9 +236,6 @@ msgstr "Failis kirju ei leitud"
 #, java-format
 msgid "Imported from file {0}"
 msgstr "Imporditud failist {0}"
-
-msgid "Imported from file"
-msgstr "Imporditud failist"
 
 #, java-format
 msgid "Loaded {0} entry from file"
@@ -270,6 +288,9 @@ msgstr "Avaldatud"
 msgid "Subscriptions"
 msgstr "Tellimused"
 
+msgid "Blacklist"
+msgstr ""
+
 msgid "Configuration"
 msgstr "Seaded"
 
@@ -306,14 +327,26 @@ msgstr "Otsi"
 msgid "latest"
 msgstr ""
 
+msgid "Alive"
+msgstr ""
+
+msgid "Dead"
+msgstr ""
+
 msgid "all"
 msgstr "puhasta filtr"
 
 msgid "Info"
 msgstr "Info"
 
+msgid "Type"
+msgstr ""
+
 msgid "Hostname"
 msgstr "Määri nimi"
+
+msgid "Encryption"
+msgstr ""
 
 msgid "Link (b32)"
 msgstr "Link (b32)"
@@ -324,11 +357,17 @@ msgstr "Sihtkoht"
 msgid "Added"
 msgstr ""
 
+msgid "Status"
+msgstr ""
+
 msgid "Select hosts for deletion from addressbook"
 msgstr "Vali määrid aadressiraamatust kustutamiseks"
 
 msgid "More information on this entry"
 msgstr "Lisateave selle kirje kohta"
+
+msgid "unknown"
+msgstr ""
 
 msgid "Base 32 address"
 msgstr "Baas 32 aadress"
@@ -357,11 +396,23 @@ msgstr "Täielik sihtkoht või b32 aadress"
 msgid "Select file"
 msgstr "Vali fail"
 
-msgid "configuration"
-msgstr "seaded"
+msgid "blacklist"
+msgstr ""
+
+msgid "Blacklist Management"
+msgstr ""
 
 msgid "File location"
 msgstr "Faili asukoht"
+
+msgid "Enter I2P addresses to blacklist (one per line)"
+msgstr ""
+
+msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
+msgstr ""
+
+msgid "configuration"
+msgstr "seaded"
 
 msgid "Hints"
 msgstr "Nohutused"
@@ -422,6 +473,12 @@ msgstr "Fail, kuhu tegevust logida (muuda /dev/null, kui soovite)"
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "Ülevalvava teema nimi, mida kasutada (vaikeväärtus on konsooli valitud teema)"
+
+msgid "Interval (in hours) for running host checker (default is 8 hours)"
+msgstr ""
+
+msgid "How many pings to perform concurrently when running host checker (Default is 12, max is 100)"
+msgstr ""
 
 msgid "delete hosts"
 msgstr ""
@@ -485,6 +542,9 @@ msgstr "Loo oma identifitseerimispuudutised pildid"
 
 msgid "Launch Image Generator"
 msgstr "Käivita pildi genereerija"
+
+msgid "Export"
+msgstr ""
 
 msgid "Introduction"
 msgstr "Esitus"
@@ -614,4 +674,3 @@ msgstr "Käsitselt põhi aadressiraamatusse lisatud aadressid ühendatakse sinu 
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Tellimuste kaudu saadud hostid ühendatakse sinu Rooteri aadressiraamatusse."
-

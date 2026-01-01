@@ -43,8 +43,8 @@ msgid "Total uploaders limit changed to {0}"
 msgstr "Batas penguploadr total diubah menjadi {0}"
 
 #, java-format
-msgid "Minimum total uploaders limit is {0}"
-msgstr "Batas total pengupload minimum adalah {0}"
+msgid "Minimum uploaders limit is {0}"
+msgstr ""
 
 #, java-format
 msgid "Up BW limit changed to {0}KBps"
@@ -293,12 +293,12 @@ msgstr "Menambah {0}"
 msgid "Download already running: {0}"
 msgstr "Download sudah berjalan: {0}"
 
-msgid " - torrent file already exists"
-msgstr " - berkas torrent sudah ada"
-
 #, java-format
 msgid "Failed to copy torrent file to {0}"
 msgstr "Gagal mengkopi torrent file kepada {0}"
+
+msgid " - torrent file already exists"
+msgstr " - berkas torrent sudah ada"
 
 #, java-format
 msgid "Too many files in \"{0}\" ({1})!"
@@ -484,11 +484,35 @@ msgstr "Torrent sudah dalam antrian: {0}"
 msgid "Torrent at {0} was not valid"
 msgstr "Torrent di {0} tidak valid"
 
-msgid "Configuration"
+msgid "Torrents"
+msgstr "Torrent"
+
+msgid "Refresh page"
+msgstr "Halaman Refresh"
+
+msgid "Configure"
 msgstr "Konfigurasi"
+
+msgid "Torrent &amp; filesharing forum"
+msgstr "Torn"
+
+msgid "Forum"
+msgstr "Forum"
+
+msgid "Search torrents"
+msgstr "Cari torrent"
+
+msgid "Clear search"
+msgstr "Hapus pencarian"
+
+msgid "Click \"Add torrent\" button to fetch torrent"
+msgstr "Klik tombol \"Add Torrent\" untuk mengambil torrent"
 
 msgid "Anonymous BitTorrent Client"
 msgstr "Anonymous BitTorrent Client"
+
+msgid "Configuration"
+msgstr "Konfigurasi"
 
 #, java-format
 msgid "Are you sure you want to delete {0} and all downloaded data?"
@@ -509,36 +533,6 @@ msgstr ""
 msgid "Deleting {0} and associated metadata only..."
 msgstr ""
 
-msgid "I2PSnark has stopped"
-msgstr "I2PSnark sudah berhenti"
-
-msgid "Router is down"
-msgstr "Router tidak aktif"
-
-msgid "Torrents"
-msgstr "Torrent"
-
-msgid "Refresh page"
-msgstr "Halaman Refresh"
-
-msgid "Configure"
-msgstr "Konfigurasi"
-
-msgid "Forum"
-msgstr "Forum"
-
-msgid "Torrent &amp; filesharing forum"
-msgstr "Torn"
-
-msgid "Search torrents"
-msgstr "Cari torrent"
-
-msgid "Clear search"
-msgstr "Hapus pencarian"
-
-msgid "Click \"Add torrent\" button to fetch torrent"
-msgstr "Klik tombol \"Add Torrent\" untuk mengambil torrent"
-
 msgid "clear messages"
 msgstr "hapus pesan"
 
@@ -558,18 +552,17 @@ msgstr "penyegaran halaman"
 msgid "Warning - No I2P"
 msgstr "Peringatan - Tidak ada I2P"
 
+msgid "No torrents found."
+msgstr "Tidak ditemukan torrent."
+
+msgid "No torrents loaded."
+msgstr "Tidak ada torrent dimuat."
+
+msgid "No DHT Peers"
+msgstr "Tidak Ada Rekan DHT"
+
 msgid "Status"
 msgstr "Status"
-
-#, java-format
-msgid "Sort by {0}"
-msgstr "Urutkan dengan {0}"
-
-msgid "Hide Peers"
-msgstr "Sembunyikan peer"
-
-msgid "Show Peers"
-msgstr "Tunjukkan peer"
 
 msgid "Torrent"
 msgstr "Torrent"
@@ -583,38 +576,20 @@ msgstr "Nama torrent"
 msgid "ETA"
 msgstr "Waktu selesai"
 
-msgid "Estimated time remaining"
-msgstr "Perkiraan waktu tersisa"
-
 msgid "RX"
 msgstr "RX"
-
-msgid "Downloaded"
-msgstr "Telah terdonwload"
-
-msgid "Size"
-msgstr "Ukuran"
 
 msgid "RX Rate"
 msgstr "Tingkat RX"
 
-msgid "Down Rate"
-msgstr "Kecepatan download"
-
 msgid "TX"
 msgstr "TX"
-
-msgid "Upload ratio"
-msgstr ""
-
-msgid "Uploaded"
-msgstr "Telah terupload"
 
 msgid "TX Rate"
 msgstr "Tingkat TX"
 
-msgid "Up Rate"
-msgstr "Kecepatan upload"
+msgid "Start All"
+msgstr "Mulai semua"
 
 msgid "Stop All"
 msgstr "Hentikan semua"
@@ -622,25 +597,24 @@ msgstr "Hentikan semua"
 msgid "Stop all torrents and the I2P tunnel"
 msgstr "Hentikan semua torrents dan tunnel I2P"
 
-msgid "Start All"
-msgstr "Mulai semua"
+msgid "Start all torrents and the I2P tunnel"
+msgstr "Mulai semua torrents dan tunnel I2P"
 
 msgid "Start all stopped torrents"
 msgstr "Mulai semua torrents yang berhenti"
 
-msgid "Start all torrents and the I2P tunnel"
-msgstr "Mulai semua torrents dan tunnel I2P"
+msgid "Hide Peers"
+msgstr "Sembunyikan peer"
 
-msgid "No torrents found."
-msgstr "Tidak ditemukan torrent."
-
-msgid "No torrents loaded."
-msgstr "Tidak ada torrent dimuat."
+msgid "Show Peers"
+msgstr "Tunjukkan peer"
 
 #, java-format
-msgid "1 torrent"
-msgid_plural "{0} torrents"
-msgstr[0] "{0} torrent"
+msgid "Sort by {0}"
+msgstr "Urutkan dengan {0}"
+
+msgid "Up Rate"
+msgstr "Kecepatan upload"
 
 msgid "Total size of loaded torrents"
 msgstr ""
@@ -649,11 +623,6 @@ msgstr ""
 msgid "1 connected peer"
 msgid_plural "{0} peer connections"
 msgstr[0] ""
-
-#, java-format
-msgid "1 DHT peer"
-msgid_plural "{0} DHT peers"
-msgstr[0] "{0} peer DHT"
 
 msgid "Active downloads"
 msgstr ""
@@ -682,14 +651,19 @@ msgstr "Total data yang diunggah (untuk torrent yang terdaftar)"
 msgid "Total upload speed"
 msgstr "Total kecepatan unggah"
 
+msgid "Toggle Debug Panel"
+msgstr ""
+
 msgid "Debug Mode"
 msgstr "Mode Debug"
 
 msgid "Normal Mode"
 msgstr "Modus Biasa"
 
-msgid "No DHT Peers"
-msgstr "Tidak Ada Rekan DHT"
+#, java-format
+msgid "1 torrent"
+msgid_plural "{0} torrents"
+msgstr[0] "{0} torrent"
 
 msgid "Search"
 msgstr "Mencari"
@@ -742,6 +716,13 @@ msgstr "Terakhir"
 msgid "Last page"
 msgstr "Halaman terakhir"
 
+msgid "Enter URL or select torrent file"
+msgstr "Masukkan URL atau pilih file torrent"
+
+#, java-format
+msgid "Error uploading the torrent file: {0}"
+msgstr ""
+
 #, java-format
 msgid "Cannot add torrent {0} inside another torrent: {1}"
 msgstr "Tidak dapat menambahkan torrent {0} dalam torrent lain: {1}"
@@ -750,12 +731,12 @@ msgstr "Tidak dapat menambahkan torrent {0} dalam torrent lain: {1}"
 msgid "Download from non-I2P location {0} is not supported"
 msgstr "Pengunduhan dari lokasi non-I2P {0} tidak didukung"
 
+msgid "Error: Version 2 info hashes are not supported"
+msgstr ""
+
 #, java-format
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
 msgstr "URL tidak valid: Harus diawali dengan \"{0}\" atau \"{1}\""
-
-msgid "Enter URL or select torrent file"
-msgstr "Masukkan URL atau pilih file torrent"
 
 #, java-format
 msgid "Magnet deleted: {0}"
@@ -764,10 +745,6 @@ msgstr "Magnet dihapus: {0}"
 #, java-format
 msgid "Torrent file could not be deleted: {0}"
 msgstr "File torrent tidak dapat dihapus: {0}"
-
-#, java-format
-msgid "Download deleted: {0}"
-msgstr "Download dihapus: {0}"
 
 #, java-format
 msgid "Data file deleted: {0}"
@@ -784,6 +761,13 @@ msgstr "Direktori tidak dapat dihapus: {0}"
 #, java-format
 msgid "Directory deleted: {0}"
 msgstr "Direktori telah dihapus: {0}"
+
+msgid "Error creating torrent - you must specify a file or directory"
+msgstr "Kesalahan membuat torrent - anda harus memasukkan file atau direktori"
+
+#, java-format
+msgid "Cannot create a torrent for the nonexistent data: {0}"
+msgstr "Tidak dapat membuat torrent untuk data yang tidak ada: {0}"
 
 #, java-format
 msgid "Cannot add a torrent ending in \".torrent\": {0}"
@@ -827,13 +811,6 @@ msgstr "Banyak pelacak I2P mengharuskan Anda mendaftarkan torrent baru sebelum m
 msgid "Error creating a torrent for \"{0}\""
 msgstr "Error membuat torrent untuk \"{0}\""
 
-#, java-format
-msgid "Cannot create a torrent for the nonexistent data: {0}"
-msgstr "Tidak dapat membuat torrent untuk data yang tidak ada: {0}"
-
-msgid "Error creating torrent - you must specify a file or directory"
-msgstr "Kesalahan membuat torrent - anda harus memasukkan file atau direktori"
-
 msgid "Delete selected"
 msgstr "Hapus pilihan"
 
@@ -867,59 +844,17 @@ msgstr "Masukkan nama dan pola filter yang valid"
 msgid "Restored default torrent create filters"
 msgstr "Filter pembuatan torrent bawaan telah dipulihkan"
 
-msgid "Checking"
-msgstr "Memeriksa"
-
-msgid "Allocating"
-msgstr "Mengalokasikan"
-
-msgid "Starting"
-msgstr "Memulai"
-
-#, java-format
-msgid "Seeding to {0} peer"
-msgid_plural "Seeding to {0} peers"
-msgstr[0] "Seeding kepada {0} peer"
-
-#, java-format
-msgid "Seeding to {0} of {1} peers in swarm"
-msgstr "Penyemaian ke {0} dari {1} rekan dalam gerombolan"
-
-msgid "OK"
-msgstr "OKE"
-
-#, java-format
-msgid "Downloading from {0} peer"
-msgid_plural "Downloading from {0} peers"
-msgstr[0] "Men-download dari {0} peer"
-
-msgid "Stalled"
-msgstr "Stalled"
-
-#, java-format
-msgid "Connected to {0} of {1} peers in swarm"
-msgstr "Terhubung ke {0} dari peer {1} di dalam swarm"
-
-msgid "No Peers"
-msgstr "Tidak ada peer"
-
 msgid "Torrent details"
 msgstr "Rincian torrent"
 
 msgid "Torrent has comments"
 msgstr "Torrent mempunyai komentar"
 
-msgid "View files"
-msgstr "Lihat file"
-
 msgid "Open file"
 msgstr "Buka file"
 
-msgid "complete"
-msgstr "selesai"
-
-msgid "remaining"
-msgstr "tersisa"
+msgid "View files"
+msgstr "Lihat file"
 
 msgid "Completed"
 msgstr "Selesai"
@@ -954,14 +889,48 @@ msgstr "Hapus"
 msgid "Delete .torrent file and associated data files"
 msgstr "Hapus file .torrent dan file data terkait"
 
+msgid "Checking"
+msgstr "Memeriksa"
+
+msgid "Allocating"
+msgstr "Mengalokasikan"
+
+msgid "Starting"
+msgstr "Memulai"
+
+#, java-format
+msgid "Seeding to {0} peer"
+msgid_plural "Seeding to {0} peers"
+msgstr[0] "Seeding kepada {0} peer"
+
+#, java-format
+msgid "Connected to {0} of {1} peers in swarm"
+msgstr "Terhubung ke {0} dari peer {1} di dalam swarm"
+
+msgid "Stalled"
+msgstr "Stalled"
+
+#, java-format
+msgid "Seeding to {0} peer in swarm"
+msgid_plural "Seeding to {0} peers in swarm"
+msgstr[0] ""
+
+#, java-format
+msgid "Downloading from {0} peer"
+msgid_plural "Downloading from {0} peers"
+msgstr[0] "Men-download dari {0} peer"
+
+msgid "OK"
+msgstr "OKE"
+
+msgid "No Peers"
+msgstr "Tidak ada peer"
+
 msgid "Peer attached to swarm"
 msgstr "Rekan melekat ke swarm"
 
 msgid "Destination (identity) of peer"
 msgstr "Destinasi (identitas) peer"
-
-msgid "Version"
-msgstr "Versi"
 
 msgid "seconds"
 msgstr "detik"
@@ -1334,14 +1303,68 @@ msgstr ""
 msgid "Please retry form submission (bad nonce)"
 msgstr ""
 
+msgid "Resource Does Not Exist"
+msgstr "Sumber daya tidak ada"
+
+msgid "Resource"
+msgstr "Sumber daya"
+
+msgid "Base"
+msgstr "Base"
+
+msgid "Files"
+msgstr "FIle"
+
+msgid "Directory"
+msgstr "Direktori"
+
+msgid "Size"
+msgstr "Ukuran"
+
+msgid "Download Status"
+msgstr "Status Download"
+
+msgid "Remaining"
+msgstr "Tersisa"
+
+msgid "Download Priority"
+msgstr "Prioritas Download"
+
+msgid "up"
+msgstr ""
+
+msgid "Parent directory"
+msgstr "Ke tingkat direktori yang lebih tinggi"
+
+msgid "Audio Playlist"
+msgstr "Daftar Putar Audio"
+
+msgid "Not found"
+msgstr "Tidak ditemukan"
+
+msgid "File not found in torrent"
+msgstr "File tidak ditemukan di torrent"
+
+msgid "Unrecognized"
+msgstr "Tidak dikenali"
+
+msgid "Preview"
+msgstr "Preview"
+
+msgid "Save priorities"
+msgstr "Simpan prioritas"
+
+msgid "Comments"
+msgstr "Komentar"
+
+msgid "Resource Not found"
+msgstr "Sumber daya yang tidak ditemukan"
+
 msgid "Info hash"
 msgstr "Info hash"
 
 msgid "Created"
 msgstr "Dibuat"
-
-msgid "Files"
-msgstr "FIle"
 
 msgid "Added"
 msgstr "Telah ditambah"
@@ -1357,9 +1380,6 @@ msgstr ""
 
 msgid "Completion"
 msgstr "Selesai dalam"
-
-msgid "Remaining"
-msgstr "Tersisa"
 
 msgid "Skipped"
 msgstr "Dilewatkan"
@@ -1385,51 +1405,6 @@ msgstr "Hentikan torrent untuk memeriksa integritas file"
 msgid "Check integrity of the downloaded files"
 msgstr "Priksa integritas file yang telah di-download"
 
-msgid "Resource Not found"
-msgstr "Sumber daya yang tidak ditemukan"
-
-msgid "Base"
-msgstr "Base"
-
-msgid "Resource Does Not Exist"
-msgstr "Sumber daya tidak ada"
-
-msgid "Resource"
-msgstr "Sumber daya"
-
-msgid "Audio file: "
-msgstr "Berkas audio: "
-
-msgid "Video file: "
-msgstr "Berkas video: "
-
-msgid "Directory"
-msgstr "Direktori"
-
-msgid "Download Status"
-msgstr "Status Download"
-
-msgid "Download Priority"
-msgstr "Prioritas Download"
-
-msgid "Parent directory"
-msgstr "Ke tingkat direktori yang lebih tinggi"
-
-msgid "Audio Playlist"
-msgstr "Daftar Putar Audio"
-
-msgid "Not found"
-msgstr "Tidak ditemukan"
-
-msgid "File not found in torrent"
-msgstr "File tidak ditemukan di torrent"
-
-msgid "Unrecognized"
-msgstr "Tidak dikenali"
-
-msgid "Preview"
-msgstr "Preview"
-
 msgid "Download file at high priority"
 msgstr "Men-download file pada prioritas tinggi"
 
@@ -1448,11 +1423,11 @@ msgstr "Jangan download file ini"
 msgid "Skip"
 msgstr "Lewati"
 
-msgid "Save priorities"
-msgstr "Simpan prioritas"
+msgid "complete"
+msgstr "selesai"
 
-msgid "Comments"
-msgstr "Komentar"
+msgid "remaining"
+msgstr "tersisa"
 
 msgid "Ratings and Comments"
 msgstr "Rating dan Komentar"
@@ -1521,3 +1496,20 @@ msgstr "Simpan Perubahan"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent harus dihentikan"
+
+#, java-format
+
+
+
+
+
+
+
+#, java-format
+
+#, java-format
+
+#, java-format
+
+
+

@@ -31,8 +31,11 @@ msgstr "Nazwa hosta \"{0}\" wymaga konwersji na ASCII, ale ta biblioteka konwers
 msgid "Source"
 msgstr "Źródło"
 
-msgid "Imported from file hosts.txt"
+msgid "Imported from"
 msgstr ""
+
+msgid "Imported from file"
+msgstr "Importowano z pliku"
 
 msgid "Manually added via SusiDNS"
 msgstr "Dodane ręcznie przez SusiDNS"
@@ -177,11 +180,17 @@ msgstr "Jeśli problem będzie się powtarzał, sprawdź, czy masz włączoną o
 msgid "Save"
 msgstr "Zapisz"
 
-msgid "Configuration saved."
-msgstr "Konfiguracja zapisana."
+msgid "Blacklist saved."
+msgstr ""
 
 msgid "Reload"
 msgstr "Przeładuj"
+
+msgid "Blacklist reloaded from file."
+msgstr ""
+
+msgid "Configuration saved."
+msgstr "Konfiguracja zapisana."
 
 msgid "Configuration reloaded."
 msgstr "Konfiguracja przeładowana."
@@ -208,6 +217,19 @@ msgstr "Nie udało się dodać Miejsca Przeznaczenia dla {0} do serwisu nazewnic
 msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "Nie udało się usunąć Miejsca Przeznaczenia dla {0} z serwisu nazewnictwa {1}"
 
+msgid "Blacklist Selected"
+msgstr ""
+
+#, java-format
+msgid "1 destination blacklisted."
+msgid_plural "{0} destinations blacklisted."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "No valid entries selected to blacklist."
+msgstr ""
+
 msgid "Save Notes"
 msgstr "Zapisz notatki"
 
@@ -220,9 +242,6 @@ msgstr "Nie znaleziono wpisów w pliku"
 #, java-format
 msgid "Imported from file {0}"
 msgstr "Importowano z pliku {0}"
-
-msgid "Imported from file"
-msgstr "Importowano z pliku"
 
 #, java-format
 msgid "Loaded {0} entry from file"
@@ -277,6 +296,9 @@ msgstr "Opublikowane"
 msgid "Subscriptions"
 msgstr "Subskrypcje"
 
+msgid "Blacklist"
+msgstr ""
+
 msgid "Configuration"
 msgstr "Konfiguracja"
 
@@ -313,14 +335,26 @@ msgstr "Szukaj"
 msgid "latest"
 msgstr ""
 
+msgid "Alive"
+msgstr ""
+
+msgid "Dead"
+msgstr ""
+
 msgid "all"
 msgstr "wyczyść filtr"
 
 msgid "Info"
 msgstr "Informacje"
 
+msgid "Type"
+msgstr ""
+
 msgid "Hostname"
 msgstr "Nazwa hosta"
+
+msgid "Encryption"
+msgstr ""
 
 msgid "Link (b32)"
 msgstr "Odnośnik (b32)"
@@ -331,11 +365,17 @@ msgstr "Miejsce przeznaczenia"
 msgid "Added"
 msgstr ""
 
+msgid "Status"
+msgstr ""
+
 msgid "Select hosts for deletion from addressbook"
 msgstr "Wybierz hosty do usunięcia z książki adresowej"
 
 msgid "More information on this entry"
 msgstr "Więcej informacji na temat tego wpisu"
+
+msgid "unknown"
+msgstr ""
 
 msgid "Base 32 address"
 msgstr "Adres Base 32"
@@ -364,11 +404,23 @@ msgstr "Pełny adres docelowy lub adres b32"
 msgid "Select file"
 msgstr "Wybierz plik"
 
-msgid "configuration"
-msgstr "konfiguracja"
+msgid "blacklist"
+msgstr ""
+
+msgid "Blacklist Management"
+msgstr ""
 
 msgid "File location"
 msgstr "Lokalizacja pliku"
+
+msgid "Enter I2P addresses to blacklist (one per line)"
+msgstr ""
+
+msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
+msgstr ""
+
+msgid "configuration"
+msgstr "konfiguracja"
 
 msgid "Hints"
 msgstr "Wskazówki"
@@ -429,6 +481,12 @@ msgstr "Plik do logowania działalności (zmień na /dev/null, jeśli chcesz)"
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "Nazwa motywu zastępującego do użycia (domyślnie jest to motyw wybrany w konsoli)"
+
+msgid "Interval (in hours) for running host checker (default is 8 hours)"
+msgstr ""
+
+msgid "How many pings to perform concurrently when running host checker (Default is 12, max is 100)"
+msgstr ""
 
 msgid "delete hosts"
 msgstr ""
@@ -492,6 +550,9 @@ msgstr "Utwórz swoje własne obrazki identyfikacyjne"
 
 msgid "Launch Image Generator"
 msgstr "Uruchom generator obrazów"
+
+msgid "Export"
+msgstr ""
 
 msgid "Introduction"
 msgstr "Wprowadzenie"
@@ -621,4 +682,3 @@ msgstr "Adresy ręcznie dodane do Twojej głównej książki adresowej zostaną 
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Adresy pobrane z subskrypcji zostaną scalone do Twojej książki adresowej węzła."
-

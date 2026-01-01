@@ -43,8 +43,8 @@ msgid "Total uploaders limit changed to {0}"
 msgstr "最大アップロード制限は{0}に変更されました"
 
 #, java-format
-msgid "Minimum total uploaders limit is {0}"
-msgstr "最低アップロードリミットは{0}に変更されました"
+msgid "Minimum uploaders limit is {0}"
+msgstr ""
 
 #, java-format
 msgid "Up BW limit changed to {0}KBps"
@@ -62,9 +62,7 @@ msgstr "最大ダウンロード速度が{0}KB/sに変更されました"
 msgid "Download speed limit is {0}KB/s"
 msgstr "ダウンロード速度制限は{0}KB/sです"
 
-msgid ""
-"Note: You may need to stop and restart your torrents or restart I2PSnark in "
-"order to effect this change."
+msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
 msgstr "注：この変更を有効にするには、Torrentを停止して再起動するか、I2PSnarkを再起動する必要がある場合があります。"
 
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
@@ -74,8 +72,7 @@ msgid "Disabled tunnel hop randomization on Inbound tunnels"
 msgstr "インバウンドトンネルでのトンネルホップのランダム化が無効になりました"
 
 msgid "Enabled +0/1 tunnel hop randomization on Outbound tunnels"
-msgstr "アウトバウンドトンネルで+0/1トンネルホップのランダム化を有効にしました"
-"アウトバウンドトンネルで+0/1トンネルホップのランダム化が有効になりました"
+msgstr "アウトバウンドトンネルで+0/1トンネルホップのランダム化を有効にしましたアウトバウンドトンネルで+0/1トンネルホップのランダム化が有効になりました"
 
 msgid "Disabled tunnel hop randomization on Outbound tunnels"
 msgstr "アウトバウンドトンネルでのトンネルホップのランダム化が無効になりました"
@@ -130,8 +127,7 @@ msgstr "I2CPオプションは{0}に変更されました"
 msgid "Disconnecting old I2CP destination"
 msgstr "古いI2CP送信先を切断しています"
 
-msgid ""
-"Unable to connect with the new settings, reverting to the old I2CP settings"
+msgid "Unable to connect with the new settings, reverting to the old I2CP settings"
 msgstr "新しい設定では接続できません。古い I2CP 設定に戻ります"
 
 msgid "Unable to reconnect with the old settings!"
@@ -200,32 +196,19 @@ msgid "Lightbox disabled for image thumbnails."
 msgstr "画像サムネイルのライトボックスが無効になっています。"
 
 msgid "Add and Create sections enabled on all torrent listing pages."
-msgstr "すべてのトレント一覧ページで追加・作成セクションを有効にしました"
-"すべての torrent リスト ページでセクションの追加と作成が有効になりました。"
+msgstr "すべてのトレント一覧ページで追加・作成セクションを有効にしましたすべての torrent リスト ページでセクションの追加と作成が有効になりました。"
 
-msgid ""
-"Add and Create sections to display only on first page of multipage torrent "
-"listing pages."
-msgstr ""
-"複数ページの torrent リスト ページの最初のページにのみ表示されるセクションを"
-"追加および作成します。"
+msgid "Add and Create sections to display only on first page of multipage torrent listing pages."
+msgstr "複数ページの torrent リスト ページの最初のページにのみ表示されるセクションを追加および作成します。"
 
 msgid "API key updated."
 msgstr "APIキーが更新されました。"
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
-msgstr "オープントラッカーリストが変更されました - トレントの再起動が必要です。"
-"オープン トラッカー リストが変更されました - 有効にするには torrent を再起動"
-"する必要があります。オープン トラッカー リストが変更されました - 有効にするに"
-"はトレントの再起動が必要です。オープントラッカーリストが変更されました - この"
-"オプションは再起動が必要です。"
+msgstr "オープントラッカーリストが変更されました - トレントの再起動が必要です。オープン トラッカー リストが変更されました - 有効にするには torrent を再起動する必要があります。オープン トラッカー リストが変更されました - 有効にするにはトレントの再起動が必要です。オープントラッカーリストが変更されました - このオプションは再起動が必要です。"
 
 msgid "Private tracker list changed - affects newly created torrents only."
-msgstr "プライベートトラッカーリストが変更されました - 新しく作成されたトレントにのみ影響します。"
-"プライベート トラッカー リストが変更されました - 新しく作成されたトレントのみ"
-"に影響します。プライベート トラッカー リストが変更されました - 新しく作成され"
-"たトレントのみに影響します。プライベートトラッカーリストが変更されました - 新"
-"しく作成されたtorrentのみに影響します."
+msgstr "プライベートトラッカーリストが変更されました - 新しく作成されたトレントにのみ影響します。プライベート トラッカー リストが変更されました - 新しく作成されたトレントのみに影響します。プライベート トラッカー リストが変更されました - 新しく作成されたトレントのみに影響します。プライベートトラッカーリストが変更されました - 新しく作成されたtorrentのみに影響します."
 
 #, java-format
 msgid "Unable to save the config to {0}"
@@ -283,45 +266,24 @@ msgid "ERROR - No I2P trackers in private torrent \"{0}\""
 msgstr "エラー - プライベート トレント \"{0}\" に I2P トラッカーがありません"
 
 #, java-format
-msgid ""
-"Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and "
-"DHT only."
-msgstr ""
-"警告 - \"{0}\" には I2P トラッカーがありません。I2P オープン トラッカーと "
-"DHT のみにアナウンスされます。"
+msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
+msgstr "警告 - \"{0}\" には I2P トラッカーがありません。I2P オープン トラッカーと DHT のみにアナウンスされます。"
 
 #, java-format
-msgid ""
-"Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will "
-"announce to DHT only."
-msgstr ""
-"警告 - \"{0}\" には I2P トラッカーがなく、オープン トラッカーが無効になってい"
-"るため、DHT のみにアナウンスされます。"
+msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
+msgstr "警告 - \"{0}\" には I2P トラッカーがなく、オープン トラッカーが無効になっているため、DHT のみにアナウンスされます。"
 
 #, java-format
-msgid ""
-"Warning - No I2P trackers in \"{0}\", and DHT and open trackers are "
-"disabled, you should enable open trackers or DHT before starting the torrent."
-msgstr ""
-"警告 - \"{0}\" には I2P トラッカーがなく、DHT とオープン トラッカーが無効に"
-"なっています。トレントを開始する前にオープン トラッカーまたは DHT を有効にす"
-"る必要があります。警告 - \"{0}\" には I2P トラッカーがなく、DHT とオープン ト"
-"ラッカーが無効になっています。トレントを開始する前にオープン トラッカーまた"
-"は DHT を有効にする必要があります。"
+msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
+msgstr "警告 - \"{0}\" には I2P トラッカーがなく、DHT とオープン トラッカーが無効になっています。トレントを開始する前にオープン トラッカーまたは DHT を有効にする必要があります。警告 - \"{0}\" には I2P トラッカーがなく、DHT とオープン トラッカーが無効になっています。トレントを開始する前にオープン トラッカーまたは DHT を有効にする必要があります。"
 
 #, java-format
 msgid "Fetching {0}"
 msgstr "{0}を取得しています"
 
 #, java-format
-msgid ""
-"Open trackers are disabled and we have no DHT peers. Fetch of {0} may not "
-"succeed until you start another torrent, enable open trackers, or enable DHT."
-msgstr ""
-"オープン トラッカーが無効になっており、DHT ピアがありません。オープントラッ"
-"カーは無効になっており、DHTピアはありません。 {0}のフェッチは、別のトレントを"
-"起動したり、オープントラッカーを有効にしたり、DHTを有効にするまで成功しない場"
-"合があります。"
+msgid "Open trackers are disabled and we have no DHT peers. Fetch of {0} may not succeed until you start another torrent, enable open trackers, or enable DHT."
+msgstr "オープン トラッカーが無効になっており、DHT ピアがありません。オープントラッカーは無効になっており、DHTピアはありません。 {0}のフェッチは、別のトレントを起動したり、オープントラッカーを有効にしたり、DHTを有効にするまで成功しない場合があります。"
 
 #, java-format
 msgid "Adding {0}"
@@ -331,12 +293,12 @@ msgstr "{0}の追加"
 msgid "Download already running: {0}"
 msgstr "すでにダウンロードされています {0}"
 
-msgid " - torrent file already exists"
-msgstr " - トロントファイルが 이미存在しています"
-
 #, java-format
 msgid "Failed to copy torrent file to {0}"
 msgstr "{0} へのtorrentファイルのコピーに失敗しました。"
+
+msgid " - torrent file already exists"
+msgstr " - トロントファイルが 이미存在しています"
 
 #, java-format
 msgid "Too many files in \"{0}\" ({1})!"
@@ -409,29 +371,20 @@ msgid "Starting up torrent {0}"
 msgstr "トレント {0} の起動"
 
 #, java-format
-msgid ""
-"Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
-msgstr ""
-"アップロード帯域幅制限は、最大 {1} 個の同時ピアに対して {0} KBps です。"
+msgid "Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
+msgstr "アップロード帯域幅制限は、最大 {1} 個の同時ピアに対して {0} KBps です。"
 
 #, java-format
-msgid ""
-"Storage: {0}GB currently available for downloads on configured data partition"
+msgid "Storage: {0}GB currently available for downloads on configured data partition"
 msgstr "ストレージ: 設定されたデータパーティションで現在 {0}GB のダウンロード容量があります"
 
 #, java-format
-msgid ""
-"Storage: {0}MB currently available for downloads on configured data partition"
-msgstr ""
-"ストレージ: 設定されたデータパーティションで現在 {0}MB のダウンロード容量があ"
-"ります"
+msgid "Storage: {0}MB currently available for downloads on configured data partition"
+msgstr "ストレージ: 設定されたデータパーティションで現在 {0}MB のダウンロード容量があります"
 
 #, java-format
-msgid ""
-"Warning - Only {0}MB available for downloads on configured data partition"
-msgstr ""
-"警告 - 設定されたデータパーティション上でダウンロードができる容量は {0}MBだけ"
-"です"
+msgid "Warning - Only {0}MB available for downloads on configured data partition"
+msgstr "警告 - 設定されたデータパーティション上でダウンロードができる容量は {0}MBだけです"
 
 #, java-format
 msgid "Download finished: {0}"
@@ -498,9 +451,7 @@ msgstr "データパーティション"
 
 #, java-format
 msgid "No valid trackers for {0} - enable opentrackers or DHT?"
-msgstr ""
-"{0} の有効なトラッカーがありません - opentrackers または DHT を有効にします"
-"か?"
+msgstr "{0} の有効なトラッカーがありません - opentrackers または DHT を有効にしますか?"
 
 msgid "Updating"
 msgstr "更新中"
@@ -533,33 +484,6 @@ msgstr "Torrent はすでにキューに入っています: {0}"
 msgid "Torrent at {0} was not valid"
 msgstr "{0} のトレントは無効でした"
 
-msgid "Configuration"
-msgstr "設定"
-
-msgid "Anonymous BitTorrent Client"
-msgstr "匿名の BitTorrent クライアント"
-
-#, java-format
-msgid "Are you sure you want to delete {0} and all downloaded data?"
-msgstr "{0}とすべてのダウンロードデータを削除してもよろしいですか？"
-
-#, java-format
-msgid "Deleting <b>{0}</b> and all associated data..."
-msgstr "<b>{0}</b>とすべての関連データを削除しています..."
-
-msgid "Note: Downloaded data will not be deleted."
-msgstr "注：ダウンロードされたデータは削除されません。"
-
-#, java-format
-msgid "Deleting {0} and associated metadata only..."
-msgstr "{0}と関連メタデータのみを削除しています..."
-
-msgid "I2PSnark has stopped"
-msgstr "I2PSnark が停止しました"
-
-msgid "Router is down"
-msgstr "ルーターがダウンしています"
-
 msgid "Torrents"
 msgstr "Torrent"
 
@@ -569,11 +493,11 @@ msgstr "ページを更新する"
 msgid "Configure"
 msgstr "設定"
 
-msgid "Forum"
-msgstr "フォーラム"
-
 msgid "Torrent &amp; filesharing forum"
 msgstr "トレント"
+
+msgid "Forum"
+msgstr "フォーラム"
 
 msgid "Search torrents"
 msgstr "トレントの検索"
@@ -583,6 +507,31 @@ msgstr "クリア検索"
 
 msgid "Click \"Add torrent\" button to fetch torrent"
 msgstr "トレントを取得するには、\"トレントを追加 \"ボタンをクリックします"
+
+msgid "Anonymous BitTorrent Client"
+msgstr "匿名の BitTorrent クライアント"
+
+msgid "Configuration"
+msgstr "設定"
+
+#, java-format
+msgid "Are you sure you want to delete {0} and all downloaded data?"
+msgstr "{0}とすべてのダウンロードデータを削除してもよろしいですか？"
+
+#, java-format
+msgid "Deleting <b>{0}</b> and all associated data..."
+msgstr "<b>{0}</b>とすべての関連データを削除しています..."
+
+#, java-format
+msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
+msgstr ""
+
+msgid "Note: Downloaded data will not be deleted."
+msgstr "注：ダウンロードされたデータは削除されません。"
+
+#, java-format
+msgid "Deleting {0} and associated metadata only..."
+msgstr "{0}と関連メタデータのみを削除しています..."
 
 msgid "clear messages"
 msgstr "クリアメッセージ"
@@ -594,12 +543,8 @@ msgid "Shrink"
 msgstr "シュリンク"
 
 #, java-format
-msgid ""
-"Warning! Javascript is disabled in your browser. If {0} is enabled, you will "
-"lose any input in the add/create torrent sections when a refresh occurs."
-msgstr ""
-"警告！ JavaScriptはブラウザで無効になっています。 {0}が有効になっている場合、"
-"更新が発生したときに追加/作成セクションで入力が失われます。"
+msgid "Warning! Javascript is disabled in your browser. If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs."
+msgstr "警告！ JavaScriptはブラウザで無効になっています。 {0}が有効になっている場合、更新が発生したときに追加/作成セクションで入力が失われます。"
 
 msgid "page refresh"
 msgstr "ページ更新"
@@ -607,18 +552,17 @@ msgstr "ページ更新"
 msgid "Warning - No I2P"
 msgstr "警告 - I2P なし"
 
+msgid "No torrents found."
+msgstr "トレントが見つかりませんでした。"
+
+msgid "No torrents loaded."
+msgstr "トレントがロードされていません。"
+
+msgid "No DHT Peers"
+msgstr "DHT ピアがありません"
+
 msgid "Status"
 msgstr "状態"
-
-#, java-format
-msgid "Sort by {0}"
-msgstr "{0}で並べ替え"
-
-msgid "Hide Peers"
-msgstr "ピアを非表示にする"
-
-msgid "Show Peers"
-msgstr "ピアを表示"
 
 msgid "Torrent"
 msgstr "トレント"
@@ -632,38 +576,20 @@ msgstr "トレント名"
 msgid "ETA"
 msgstr "ETA"
 
-msgid "Estimated time remaining"
-msgstr "推定残り時間"
-
 msgid "RX"
 msgstr "RX"
-
-msgid "Downloaded"
-msgstr "ダウンロード済み"
-
-msgid "Size"
-msgstr "サイズ"
 
 msgid "RX Rate"
 msgstr "受信レート"
 
-msgid "Down Rate"
-msgstr "ダウン率"
-
 msgid "TX"
 msgstr "TX"
-
-msgid "Upload ratio"
-msgstr "アップロード比率"
-
-msgid "Uploaded"
-msgstr "アップロードされました"
 
 msgid "TX Rate"
 msgstr "TXレート"
 
-msgid "Up Rate"
-msgstr "アップレート"
+msgid "Start All"
+msgstr "全て開始"
 
 msgid "Stop All"
 msgstr "全て停止"
@@ -671,25 +597,24 @@ msgstr "全て停止"
 msgid "Stop all torrents and the I2P tunnel"
 msgstr "すべての torrent と I2P トンネルを停止します"
 
-msgid "Start All"
-msgstr "全て開始"
+msgid "Start all torrents and the I2P tunnel"
+msgstr "すべての torrent と I2P トンネルを開始します"
 
 msgid "Start all stopped torrents"
 msgstr "停止しているすべての torrent を開始する"
 
-msgid "Start all torrents and the I2P tunnel"
-msgstr "すべての torrent と I2P トンネルを開始します"
+msgid "Hide Peers"
+msgstr "ピアを非表示にする"
 
-msgid "No torrents found."
-msgstr "トレントが見つかりませんでした。"
-
-msgid "No torrents loaded."
-msgstr "トレントがロードされていません。"
+msgid "Show Peers"
+msgstr "ピアを表示"
 
 #, java-format
-msgid "1 torrent"
-msgid_plural "{0} torrents"
-msgstr[0] "{0}急流"
+msgid "Sort by {0}"
+msgstr "{0}で並べ替え"
+
+msgid "Up Rate"
+msgstr "アップレート"
 
 msgid "Total size of loaded torrents"
 msgstr "読み込まれたtorrentの合計サイズ"
@@ -698,11 +623,6 @@ msgstr "読み込まれたtorrentの合計サイズ"
 msgid "1 connected peer"
 msgid_plural "{0} peer connections"
 msgstr[0] ""
-
-#, java-format
-msgid "1 DHT peer"
-msgid_plural "{0} DHT peers"
-msgstr[0] "{0} DHTピア"
 
 msgid "Active downloads"
 msgstr "アクティブなダウンロード"
@@ -731,14 +651,19 @@ msgstr "アップロードされた合計データ (リストされたトレン�
 msgid "Total upload speed"
 msgstr "総アップロード速度"
 
+msgid "Toggle Debug Panel"
+msgstr ""
+
 msgid "Debug Mode"
 msgstr "デバッグモード"
 
 msgid "Normal Mode"
 msgstr "ノーマルモード"
 
-msgid "No DHT Peers"
-msgstr "DHT ピアがありません"
+#, java-format
+msgid "1 torrent"
+msgid_plural "{0} torrents"
+msgstr[0] "{0}急流"
 
 msgid "Search"
 msgstr "検索"
@@ -791,6 +716,13 @@ msgstr "最終"
 msgid "Last page"
 msgstr "最後のページ"
 
+msgid "Enter URL or select torrent file"
+msgstr "URLを入力するか、トレントファイルを選択してください"
+
+#, java-format
+msgid "Error uploading the torrent file: {0}"
+msgstr ""
+
 #, java-format
 msgid "Cannot add torrent {0} inside another torrent: {1}"
 msgstr "トレント {0} を別のトレント内に追加できません: {1}"
@@ -799,12 +731,12 @@ msgstr "トレント {0} を別のトレント内に追加できません: {1}"
 msgid "Download from non-I2P location {0} is not supported"
 msgstr "非 I2P ロケーション {0} からのダウンロードはサポートされていません"
 
+msgid "Error: Version 2 info hashes are not supported"
+msgstr ""
+
 #, java-format
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
 msgstr "無効な URL: \"{0}\" または \"{1}\" で始める必要があります"
-
-msgid "Enter URL or select torrent file"
-msgstr "URLを入力するか、トレントファイルを選択してください"
 
 #, java-format
 msgid "Magnet deleted: {0}"
@@ -813,10 +745,6 @@ msgstr "マグネットが削除されました: {0}"
 #, java-format
 msgid "Torrent file could not be deleted: {0}"
 msgstr "Torrent ファイルを削除できませんでした: {0}"
-
-#, java-format
-msgid "Download deleted: {0}"
-msgstr "ダウンロードが削除されました: {0}"
 
 #, java-format
 msgid "Data file deleted: {0}"
@@ -833,6 +761,13 @@ msgstr "ディレクトリを削除できませんでした: {0}"
 #, java-format
 msgid "Directory deleted: {0}"
 msgstr "ディレクトリが削除されました: {0}"
+
+msgid "Error creating torrent - you must specify a file or directory"
+msgstr "トレント作成エラー - ファイルまたはディレクトリを入力する必要があります"
+
+#, java-format
+msgid "Cannot create a torrent for the nonexistent data: {0}"
+msgstr "存在しないデータのトレントを作成できません: {0}"
 
 #, java-format
 msgid "Cannot add a torrent ending in \".torrent\": {0}"
@@ -851,51 +786,30 @@ msgid "Cannot add torrent {0} including another torrent: {1}"
 msgstr "別のトレントを含むトレント {0} を追加できません: {1}"
 
 msgid "Error - Cannot include alternate trackers without a primary tracker"
-msgstr ""
-"エラー - プライマリ トラッカーがなければ代替トラッカーを含めることはできませ"
-"ん"
+msgstr "エラー - プライマリ トラッカーがなければ代替トラッカーを含めることはできません"
 
 msgid "Error - Cannot mix private and public trackers in a torrent"
-msgstr ""
-"エラー - トレント内でプライベート トラッカーとパブリック トラッカーを混在させ"
-"ることはできません"
+msgstr "エラー - トレント内でプライベート トラッカーとパブリック トラッカーを混在させることはできません"
 
 #, java-format
 msgid " files or folders were excluded from \"{0}\" due to filter rules."
-msgstr ""
-" \"{0}\"から {0} 個のファイルやフォルダーがフィルター規則により除外されまし"
-"た。"
+msgstr " \"{0}\"から {0} 個のファイルやフォルダーがフィルター規則により除外されました。"
 
 #, java-format
-msgid ""
-"The following files or folders were excluded from \"{0}\" due to filter "
-"rules: "
-msgstr ""
-"\"{0}\"から以下のファイルやフォルダーがフィルター規則により除外されました: "
+msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
+msgstr "\"{0}\"から以下のファイルやフォルダーがフィルター規則により除外されました: "
 
 #, java-format
 msgid "Torrent created for \"{0}\""
 msgstr "「{0}」用のトレントが作成されました"
 
 #, java-format
-msgid ""
-"Many I2P trackers require you to register new torrents before seeding - "
-"please do so before starting \"{0}\""
-msgstr ""
-"多くの I2P トラッカーでは、シードする前に新しいトレントを登録する必要がありま"
-"す。「{0}」を開始する前に登録してください。"
+msgid "Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\""
+msgstr "多くの I2P トラッカーでは、シードする前に新しいトレントを登録する必要があります。「{0}」を開始する前に登録してください。"
 
 #, java-format
 msgid "Error creating a torrent for \"{0}\""
 msgstr "「{0}」の torrent 作成中にエラーが発生しました"
-
-#, java-format
-msgid "Cannot create a torrent for the nonexistent data: {0}"
-msgstr "存在しないデータのトレントを作成できません: {0}"
-
-msgid "Error creating torrent - you must specify a file or directory"
-msgstr ""
-"トレント作成エラー - ファイルまたはディレクトリを入力する必要があります"
 
 msgid "Delete selected"
 msgstr "選択削除"
@@ -930,59 +844,17 @@ msgstr "有効な名前とフィルターパターンを入力してください
 msgid "Restored default torrent create filters"
 msgstr "標準のトロント作成フィルターを復元しました"
 
-msgid "Checking"
-msgstr "チェック中"
-
-msgid "Allocating"
-msgstr "割り当て中"
-
-msgid "Starting"
-msgstr "起動中"
-
-#, java-format
-msgid "Seeding to {0} peer"
-msgid_plural "Seeding to {0} peers"
-msgstr[0] "{0}ピアへのシード"
-
-#, java-format
-msgid "Seeding to {0} of {1} peers in swarm"
-msgstr "Swarm 内の {1} ピア中 {0} にシード"
-
-msgid "OK"
-msgstr "OK"
-
-#, java-format
-msgid "Downloading from {0} peer"
-msgid_plural "Downloading from {0} peers"
-msgstr[0] "{0}ピアからのダウンロード"
-
-msgid "Stalled"
-msgstr "停止"
-
-#, java-format
-msgid "Connected to {0} of {1} peers in swarm"
-msgstr "Swarm 内の {1} ピア中 {0} に接続しました"
-
-msgid "No Peers"
-msgstr "ピアがありません"
-
 msgid "Torrent details"
 msgstr "トレントの詳細"
 
 msgid "Torrent has comments"
 msgstr "Torrent にコメントがあります"
 
-msgid "View files"
-msgstr "ファイルの表示"
-
 msgid "Open file"
 msgstr "ファイルを開く"
 
-msgid "complete"
-msgstr "完了"
-
-msgid "remaining"
-msgstr "残り"
+msgid "View files"
+msgstr "ファイルの表示"
 
 msgid "Completed"
 msgstr "完了しました"
@@ -1017,14 +889,48 @@ msgstr "削除"
 msgid "Delete .torrent file and associated data files"
 msgstr "Torrent ファイルと関連データ ファイルを削除します"
 
+msgid "Checking"
+msgstr "チェック中"
+
+msgid "Allocating"
+msgstr "割り当て中"
+
+msgid "Starting"
+msgstr "起動中"
+
+#, java-format
+msgid "Seeding to {0} peer"
+msgid_plural "Seeding to {0} peers"
+msgstr[0] "{0}ピアへのシード"
+
+#, java-format
+msgid "Connected to {0} of {1} peers in swarm"
+msgstr "Swarm 内の {1} ピア中 {0} に接続しました"
+
+msgid "Stalled"
+msgstr "停止"
+
+#, java-format
+msgid "Seeding to {0} peer in swarm"
+msgid_plural "Seeding to {0} peers in swarm"
+msgstr[0] ""
+
+#, java-format
+msgid "Downloading from {0} peer"
+msgid_plural "Downloading from {0} peers"
+msgstr[0] "{0}ピアからのダウンロード"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "No Peers"
+msgstr "ピアがありません"
+
 msgid "Peer attached to swarm"
 msgstr "ピアが swarm に接続されました"
 
 msgid "Destination (identity) of peer"
 msgstr "ピアの宛先(アイデンティティ)"
-
-msgid "Version"
-msgstr "バージョン"
 
 msgid "seconds"
 msgstr "秒"
@@ -1060,11 +966,8 @@ msgstr "トレントの追加"
 msgid "From URL"
 msgstr "URLから"
 
-msgid ""
-"Enter the torrent file download URL (I2P only), magnet link, or info hash"
-msgstr ""
-"トレント ファイルのダウンロード URL (I2P のみ)、マグネット リンク、または情報"
-"ハッシュを入力してください"
+msgid "Enter the torrent file download URL (I2P only), magnet link, or info hash"
+msgstr "トレント ファイルのダウンロード URL (I2P のみ)、マグネット リンク、または情報ハッシュを入力してください"
 
 msgid "Add torrent"
 msgstr "トレントの追加"
@@ -1087,8 +990,7 @@ msgstr "シードするデータ"
 
 #, java-format
 msgid "File or directory to seed (full path or within the directory {0} )"
-msgstr ""
-"シードするファイルまたはディレクトリ (フルパスまたはディレクトリ {0} 内)"
+msgstr "シードするファイルまたはディレクトリ (フルパスまたはディレクトリ {0} 内)"
 
 msgid "Create torrent"
 msgstr "トレントの作成"
@@ -1168,20 +1070,14 @@ msgstr "折りたたみパネル"
 msgid "Your browser does not support this feature."
 msgstr "お使いのブラウザはこの機能をサポートしていません。"
 
-msgid ""
-"Allow the 'Add Torrent' and 'Create Torrent' panels to be collapsed, and "
-"collapse by default in non-embedded mode"
-msgstr ""
-"「トレントの追加」パネルと「トレントの作成」パネルを折りたたむことを許可し、"
-"非埋め込みモードではデフォルトで折りたたむ"
+msgid "Allow the 'Add Torrent' and 'Create Torrent' panels to be collapsed, and collapse by default in non-embedded mode"
+msgstr "「トレントの追加」パネルと「トレントの作成」パネルを折りたたむことを許可し、非埋め込みモードではデフォルトで折りたたむ"
 
 msgid "Torrent filter bar"
 msgstr "トレントフィルターバー"
 
 msgid "Show filter bar above torrents for selective display based on status"
-msgstr ""
-"ステータスに基づいて選択的に表示するために、Torrent の上にフィルター バーを表"
-"示します"
+msgstr "ステータスに基づいて選択的に表示するために、Torrent の上にフィルター バーを表示します"
 
 msgid "requires javascript"
 msgstr "JavaScriptが必要です"
@@ -1195,12 +1091,8 @@ msgstr "ライトボックスを使用してサムネイルをクリックした
 msgid "Persist Add/Create"
 msgstr "永続的な追加/作成"
 
-msgid ""
-"Display the 'Add' and 'Create' sections on all torrent listing pages when in "
-"multipage mode"
-msgstr ""
-"マルチページ モードの場合、すべての torrent リスト ページに「追加」セクション"
-"と「作成」セクションを表示します"
+msgid "Display the 'Add' and 'Create' sections on all torrent listing pages when in multipage mode"
+msgstr "マルチページ モードの場合、すべての torrent リスト ページに「追加」セクションと「作成」セクションを表示します"
 
 msgid "Comments &amp; Ratings"
 msgstr "コメント"
@@ -1253,12 +1145,8 @@ msgstr "ピア"
 msgid "Use open trackers also"
 msgstr "オープントラッカーも使用する"
 
-msgid ""
-"Announce torrents to open trackers as well as trackers listed in the torrent "
-"file"
-msgstr ""
-"トレント ファイルにリストされているトラッカーだけでなく、トラッカーを開くため"
-"のトレントもアナウンスします"
+msgid "Announce torrents to open trackers as well as trackers listed in the torrent file"
+msgstr "トレント ファイルにリストされているトラッカーだけでなく、トラッカーを開くためのトレントもアナウンスします"
 
 msgid "Enable DHT"
 msgstr "DHTを有効にする"
@@ -1269,11 +1157,8 @@ msgstr "DHT を使用して追加のピアを検索します"
 msgid "Auto start torrents"
 msgstr "トレントの自動開始"
 
-msgid ""
-"Automatically start torrents when added and restart torrents when I2PSnark "
-"starts"
-msgstr ""
-"追加時にトレントを自動的に開始し、I2PSnark の開始時にトレントを再起動する"
+msgid "Automatically start torrents when added and restart torrents when I2PSnark starts"
+msgstr "追加時にトレントを自動的に開始し、I2PSnark の開始時にトレントを再起動する"
 
 msgid "Startup delay"
 msgstr "起動遅延"
@@ -1296,28 +1181,14 @@ msgstr "トレントおよびダウンロード/共有ファイルが保存さ�
 msgid "Files readable by all"
 msgstr "全員が読み取れるファイル"
 
-msgid ""
-"Set file permissions to allow other local users to access the downloaded "
-"files"
-msgstr ""
-"他のローカル ユーザーがダウンロードしたファイルにアクセスできるようにファイル"
-"権限を設定します"
+msgid "Set file permissions to allow other local users to access the downloaded files"
+msgstr "他のローカル ユーザーがダウンロードしたファイルにアクセスできるようにファイル権限を設定します"
 
 msgid "Max files per torrent"
 msgstr "トレントごとの最大ファイル数"
 
-msgid ""
-"Maximum number of files permitted per torrent - note that trackers may set "
-"their own limits, and your OS may limit the number of open files, preventing "
-"torrents with many files (and subsequent torrents) from loading"
-msgstr ""
-"トレントごとに許可されるファイルの最大数 - トラッカーが独自の制限を設定する場"
-"合があり、OS によってオープン ファイルの数が制限され、多くのファイルを含むト"
-"レント (および後続のトレント) がロードされなくなる場合があることに注意してく"
-"ださい。トレントごとに許可されるファイルの最大数 - トラッカーが独自の制限を設"
-"定する場合があり、OS によってオープン ファイルの数が制限され、多くのファイル"
-"を含むトレント (および後続のトレント) がロードされなくなる場合があることに注"
-"意してください"
+msgid "Maximum number of files permitted per torrent - note that trackers may set their own limits, and your OS may limit the number of open files, preventing torrents with many files (and subsequent torrents) from loading"
+msgstr "トレントごとに許可されるファイルの最大数 - トラッカーが独自の制限を設定する場合があり、OS によってオープン ファイルの数が制限され、多くのファイルを含むトレント (および後続のトレント) がロードされなくなる場合があることに注意してください。トレントごとに許可されるファイルの最大数 - トラッカーが独自の制限を設定する場合があり、OS によってオープン ファイルの数が制限され、多くのファイルを含むトレント (および後続のトレント) がロードされなくなる場合があることに注意してください"
 
 msgid "Tunnel Configuration"
 msgstr "トンネル構成"
@@ -1401,9 +1272,7 @@ msgid "Mark tracker for deletion"
 msgstr "トラッカーに削除のマークを付ける"
 
 msgid "Cannot add magnet: Version 2 magnet links are not supported"
-msgstr ""
-"マグネットリンクを追加できません: バージョン2のマグネットリンクはサポートされ"
-"ていません"
+msgstr "マグネットリンクを追加できません: バージョン2のマグネットリンクはサポートされていません"
 
 #, java-format
 msgid "Invalid magnet URL {0}"
@@ -1419,21 +1288,11 @@ msgid "1 tunnel"
 msgid_plural "{0} tunnels"
 msgstr[0] "{0}トンネル"
 
-msgid ""
-"This configures the maximum number of tunnels to open, determined by the "
-"number of connected peers (actual usage may be less)"
-msgstr ""
-"これは、接続されているピアの数によって決定される、開くトンネルの最大数を構成"
-"します (実際の使用量はこれより少ない場合があります)これは、接続されているピア"
-"の数によって決定される、開くトンネルの最大数を構成します (実際の使用量はこれ"
-"より少ない場合があります)"
+msgid "This configures the maximum number of tunnels to open, determined by the number of connected peers (actual usage may be less)"
+msgstr "これは、接続されているピアの数によって決定される、開くトンネルの最大数を構成します (実際の使用量はこれより少ない場合があります)これは、接続されているピアの数によって決定される、開くトンネルの最大数を構成します (実際の使用量はこれより少ない場合があります)"
 
-msgid ""
-"Changing this setting to less than 3 hops may improve speed at the expense "
-"of anonymity and is not recommended"
-msgstr ""
-"この設定を 3 ホップ未満に変更すると、匿名性を犠牲にして速度が向上する可能性が"
-"あるため、お勧めできません"
+msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
+msgstr "この設定を 3 ホップ未満に変更すると、匿名性を犠牲にして速度が向上する可能性があるため、お勧めできません"
 
 msgid "Sequential piece or file order not saved - feature currently broken."
 msgstr "シーケンシャルなピースまたはファイルの順序が保存されません - 機能が現在壊れています。"
@@ -1444,14 +1303,68 @@ msgstr "不明なコマンド"
 msgid "Please retry form submission (bad nonce)"
 msgstr "フォームの送信を再試行してください（不正なnonce）"
 
+msgid "Resource Does Not Exist"
+msgstr "リソースが存在しません"
+
+msgid "Resource"
+msgstr "リソース"
+
+msgid "Base"
+msgstr "基地"
+
+msgid "Files"
+msgstr "ファイル"
+
+msgid "Directory"
+msgstr "ディレクトリ"
+
+msgid "Size"
+msgstr "サイズ"
+
+msgid "Download Status"
+msgstr "ダウンロードステータス"
+
+msgid "Remaining"
+msgstr "リネーム"
+
+msgid "Download Priority"
+msgstr "ダウンロードの優先順位"
+
+msgid "up"
+msgstr ""
+
+msgid "Parent directory"
+msgstr "上位ディレクトリまで"
+
+msgid "Audio Playlist"
+msgstr "オーディオプレイリスト"
+
+msgid "Not found"
+msgstr "見つからない"
+
+msgid "File not found in torrent"
+msgstr "Torrent でファイルが見つかりませんか"
+
+msgid "Unrecognized"
+msgstr "認識されない"
+
+msgid "Preview"
+msgstr "プレビュー"
+
+msgid "Save priorities"
+msgstr "優先順位を保存する"
+
+msgid "Comments"
+msgstr "コメント"
+
+msgid "Resource Not found"
+msgstr "リソースが見つかりません"
+
 msgid "Info hash"
 msgstr "情報ハッシュ"
 
 msgid "Created"
 msgstr "生成"
-
-msgid "Files"
-msgstr "ファイル"
 
 msgid "Added"
 msgstr "追加されました"
@@ -1468,15 +1381,10 @@ msgstr "ダウンロード速度"
 msgid "Completion"
 msgstr "完成"
 
-msgid "Remaining"
-msgstr "リネーム"
-
 msgid "Skipped"
 msgstr "スキップしました"
 
-msgid ""
-"Only I2P trackers will be used; non-I2P trackers are displayed for "
-"informational purposes only"
+msgid "Only I2P trackers will be used; non-I2P trackers are displayed for informational purposes only"
 msgstr "I2P トラッカーのみが使用されます"
 
 msgid "Tracker"
@@ -1497,51 +1405,6 @@ msgstr "ファイルの整合性をチェックするために torrent を停止
 msgid "Check integrity of the downloaded files"
 msgstr "ダウンロードされたファイルの整合性をチェックする"
 
-msgid "Resource Not found"
-msgstr "リソースが見つかりません"
-
-msgid "Base"
-msgstr "基地"
-
-msgid "Resource Does Not Exist"
-msgstr "リソースが存在しません"
-
-msgid "Resource"
-msgstr "リソース"
-
-msgid "Audio file: "
-msgstr "音声ファイル: "
-
-msgid "Video file: "
-msgstr "ビデオファイル: "
-
-msgid "Directory"
-msgstr "ディレクトリ"
-
-msgid "Download Status"
-msgstr "ダウンロードステータス"
-
-msgid "Download Priority"
-msgstr "ダウンロードの優先順位"
-
-msgid "Parent directory"
-msgstr "上位ディレクトリまで"
-
-msgid "Audio Playlist"
-msgstr "オーディオプレイリスト"
-
-msgid "Not found"
-msgstr "見つからない"
-
-msgid "File not found in torrent"
-msgstr "Torrent でファイルが見つかりませんか"
-
-msgid "Unrecognized"
-msgstr "認識されない"
-
-msgid "Preview"
-msgstr "プレビュー"
-
 msgid "Download file at high priority"
 msgstr "ファイルを高優先でダウンロードする"
 
@@ -1560,11 +1423,11 @@ msgstr "このファイルをダウンロードしないでください"
 msgid "Skip"
 msgstr "スキップ"
 
-msgid "Save priorities"
-msgstr "優先順位を保存する"
+msgid "complete"
+msgstr "完了"
 
-msgid "Comments"
-msgstr "コメント"
+msgid "remaining"
+msgstr "残り"
 
 msgid "Ratings and Comments"
 msgstr "評価とコメント"
@@ -1633,3 +1496,21 @@ msgstr "変更を保存"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent を停止する必要があります"
+
+#, java-format
+
+
+
+
+
+
+
+
+#, java-format
+
+#, java-format
+
+#, java-format
+
+
+

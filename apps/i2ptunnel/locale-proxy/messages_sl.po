@@ -214,9 +214,6 @@ msgstr "Opozorilo: Zadaja je bila zavrnjena"
 msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
 msgstr "Ta naslov se zdi deformiran. Prosimo, potrdite, da ste vnesli veljaven naslov!"
 
-msgid "You attempted to connect to a non-I2P website or location."
-msgstr "Poskusili ste povezati se z spletnim mestom ali lokacijo, ki ni I2P."
-
 msgid "Warning: Bad Address Helper"
 msgstr "Opozorilo: Slabo pomagalsko naslove"
 
@@ -229,6 +226,15 @@ msgstr "Izgleda, da je to odpadek podatkov ali napačno tipkano Base 32 naslove.
 
 msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
 msgstr "Preverite vaš URL, da bi si poskusili popraviti pomagalski ključ tako, da je veljavno Base 32 imenom domena ali ključ Base 64."
+
+msgid "Warning: Address Blacklisted"
+msgstr ""
+
+msgid "The requested destination is in your blacklist and access has been blocked."
+msgstr ""
+
+msgid "To allow access to this site, remove it from your blacklist on the SusiDNS blacklist management page."
+msgstr ""
 
 msgid "Warning: Invalid Destination"
 msgstr "Opozorilo: Neveljavno naslovišče"
@@ -420,3 +426,4 @@ msgstr "Kliknite tukaj, če si ne preusmerjeno avtomatsko."
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
 msgstr "Shranjeni so podatki za vstop v {0} in trenutno preusmerjam."
+

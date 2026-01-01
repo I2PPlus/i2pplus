@@ -62,7 +62,8 @@ msgstr "Maximální rychlost stahování změněna na {0}KB/s"
 msgid "Download speed limit is {0}KB/s"
 msgstr "Limit rychlosti stahování je {0}KB/s"
 
-
+msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
+msgstr ""
 
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "Povoleno náhodné přeskočení +0/1 na příchozích tunelích"
@@ -424,7 +425,8 @@ msgstr "Nelze ověřit {0}"
 msgid "Torrent already started"
 msgstr "Torrent již spuštěn"
 
-
+msgid "No storage"
+msgstr ""
 
 msgid "Starting recheck of {}"
 msgstr ""
@@ -1510,20 +1512,3 @@ msgstr "Uložit změny"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent musí být zastaven"
-
-#, java-format
-
-
-
-
-
-
-
-#, java-format
-
-#, java-format
-
-#, java-format
-
-
-

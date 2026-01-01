@@ -214,9 +214,6 @@ msgstr "Попередження: запит відхилено"
 msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
 msgstr "Ця адреса, здається, є неправильною. Будь ласка, переконайтеся, що ви постачали дійсну адресу!"
 
-msgid "You attempted to connect to a non-I2P website or location."
-msgstr "Ви намагалися підключитися до веб-сайту чи місця, що не є I2P."
-
 msgid "Warning: Bad Address Helper"
 msgstr "Попередження: Помічник неправильної адреси"
 
@@ -229,6 +226,15 @@ msgstr "Здається, це сміттєві дані або неправил
 
 msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
 msgstr "Перевірте свою URL-адресу, щоб спробувати виправити допоміжний ключ на дійсне ім’я хосту Base 32 або ключ Base 64."
+
+msgid "Warning: Address Blacklisted"
+msgstr ""
+
+msgid "The requested destination is in your blacklist and access has been blocked."
+msgstr ""
+
+msgid "To allow access to this site, remove it from your blacklist on the SusiDNS blacklist management page."
+msgstr ""
 
 msgid "Warning: Invalid Destination"
 msgstr "Локальний адрес призначення"
@@ -420,3 +426,4 @@ msgstr "Клацніть тут якщо вас не перенаправило 
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
 msgstr "Збережено автентифікацію для {0}, переспрямування зараз."
+

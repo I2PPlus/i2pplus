@@ -214,9 +214,6 @@ msgstr "Cảnh báo: Yêu cầu bị từ chối"
 msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
 msgstr "Địa chỉ này dường như bị dị tật. Vui lòng xác minh bạn đã cung cấp một địa chỉ hợp lệ!"
 
-msgid "You attempted to connect to a non-I2P website or location."
-msgstr "Bạn đã cố gắng kết nối với một trang web hoặc vị trí không phải I2P."
-
 msgid "Warning: Bad Address Helper"
 msgstr "Cảnh báo: Trình trợ giúp địa chỉ sai"
 
@@ -229,6 +226,15 @@ msgstr "Có vẻ như đó là dữ liệu rác hoặc địa chỉ Base 32 bị
 
 msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
 msgstr "Kiểm tra URL của bạn để thử và sửa khóa trợ giúp thành tên máy chủ Base 32 hoặc khóa Base 64 hợp lệ."
+
+msgid "Warning: Address Blacklisted"
+msgstr ""
+
+msgid "The requested destination is in your blacklist and access has been blocked."
+msgstr ""
+
+msgid "To allow access to this site, remove it from your blacklist on the SusiDNS blacklist management page."
+msgstr ""
 
 msgid "Warning: Invalid Destination"
 msgstr "Điểm đến nội bộ"
@@ -420,3 +426,4 @@ msgstr "Nhấp vào đây nếu bạn không được chuyển hướng tự đ�
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
 msgstr "Đã lưu xác thực cho {0}, đang chuyển hướng."
+

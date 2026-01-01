@@ -43,8 +43,8 @@ msgid "Total uploaders limit changed to {0}"
 msgstr "Palvelimelle kopioijien enimmäismääräraja vaihdettu arvoon {0}"
 
 #, java-format
-msgid "Minimum total uploaders limit is {0}"
-msgstr "Palvelimelle kopioijien vähimmäismääräraja vaihdettu arvoon {0}"
+msgid "Minimum uploaders limit is {0}"
+msgstr ""
 
 #, java-format
 msgid "Up BW limit changed to {0}KBps"
@@ -293,12 +293,12 @@ msgstr "Lisätään {0}"
 msgid "Download already running: {0}"
 msgstr "Lataus on jo käynnissä: {0}"
 
-msgid " - torrent file already exists"
-msgstr " - torrent-tiedosto on jo olemassa"
-
 #, java-format
 msgid "Failed to copy torrent file to {0}"
 msgstr "Vertaisverkkotiedoston kopioiminen kohteeseen {0} epäonnistui"
+
+msgid " - torrent file already exists"
+msgstr " - torrent-tiedosto on jo olemassa"
 
 #, java-format
 msgid "Too many files in \"{0}\" ({1})!"
@@ -484,11 +484,35 @@ msgstr "Vertaisverkko on jo jonossa: {0}"
 msgid "Torrent at {0} was not valid"
 msgstr "Vertaisverkko osoitteessa {0} ei ollut kelvollinen"
 
-msgid "Configuration"
-msgstr "Asetukset"
+msgid "Torrents"
+msgstr "Vertaisverkot"
+
+msgid "Refresh page"
+msgstr "Päivitä sivua"
+
+msgid "Configure"
+msgstr "Aseta"
+
+msgid "Torrent &amp; filesharing forum"
+msgstr "Torrent"
+
+msgid "Forum"
+msgstr "Foorumi"
+
+msgid "Search torrents"
+msgstr "Etsi torrentteja"
+
+msgid "Clear search"
+msgstr "Tyhjennä haku"
+
+msgid "Click \"Add torrent\" button to fetch torrent"
+msgstr "Hae torrent napsauttamalla \"Lisää torrent\" -painiketta"
 
 msgid "Anonymous BitTorrent Client"
 msgstr "Anonyymi BitTorrent-asiakas"
+
+msgid "Configuration"
+msgstr "Asetukset"
 
 #, java-format
 msgid "Are you sure you want to delete {0} and all downloaded data?"
@@ -509,36 +533,6 @@ msgstr ""
 msgid "Deleting {0} and associated metadata only..."
 msgstr ""
 
-msgid "I2PSnark has stopped"
-msgstr "I2PSnark on lopettanut"
-
-msgid "Router is down"
-msgstr "Reititin ei ole käynnissä"
-
-msgid "Torrents"
-msgstr "Vertaisverkot"
-
-msgid "Refresh page"
-msgstr "Päivitä sivua"
-
-msgid "Configure"
-msgstr "Aseta"
-
-msgid "Forum"
-msgstr "Foorumi"
-
-msgid "Torrent &amp; filesharing forum"
-msgstr "Torrent"
-
-msgid "Search torrents"
-msgstr "Etsi torrentteja"
-
-msgid "Clear search"
-msgstr "Tyhjennä haku"
-
-msgid "Click \"Add torrent\" button to fetch torrent"
-msgstr "Hae torrent napsauttamalla \"Lisää torrent\" -painiketta"
-
 msgid "clear messages"
 msgstr "nollaa viestit"
 
@@ -558,18 +552,17 @@ msgstr "sivun päivitys"
 msgid "Warning - No I2P"
 msgstr "Varoitus - Ei I2P:tä"
 
+msgid "No torrents found."
+msgstr "Torrenteja ei löytynyt."
+
+msgid "No torrents loaded."
+msgstr "Yhtään vertaisverkkoa ei ole ladattu."
+
+msgid "No DHT Peers"
+msgstr "Ei DHT-vertaisia"
+
 msgid "Status"
 msgstr "Tila"
-
-#, java-format
-msgid "Sort by {0}"
-msgstr "Lajitteluperuste: {0}"
-
-msgid "Hide Peers"
-msgstr "Piilota vertaiset"
-
-msgid "Show Peers"
-msgstr "Näytä vertaiset"
 
 msgid "Torrent"
 msgstr "Vertaisverkko"
@@ -583,38 +576,20 @@ msgstr "Torrentin nimi"
 msgid "ETA"
 msgstr "ETA"
 
-msgid "Estimated time remaining"
-msgstr "Arvioitu jäljellä oleva aika"
-
 msgid "RX"
 msgstr "RX"
-
-msgid "Downloaded"
-msgstr "Ladattu"
-
-msgid "Size"
-msgstr "Koko"
 
 msgid "RX Rate"
 msgstr "Latausaste"
 
-msgid "Down Rate"
-msgstr "Latausnopeus"
-
 msgid "TX"
 msgstr "TX"
-
-msgid "Upload ratio"
-msgstr ""
-
-msgid "Uploaded"
-msgstr "Kopioitu palvelimelle"
 
 msgid "TX Rate"
 msgstr "TX-nopeus"
 
-msgid "Up Rate"
-msgstr "Kopiointinopeus palvelimelle"
+msgid "Start All"
+msgstr "Käynnistä kaikki"
 
 msgid "Stop All"
 msgstr "Pysäytä kaikki"
@@ -622,26 +597,24 @@ msgstr "Pysäytä kaikki"
 msgid "Stop all torrents and the I2P tunnel"
 msgstr "Pysäytä kaikki vertaisverkot ja I2P-tunneli"
 
-msgid "Start All"
-msgstr "Käynnistä kaikki"
+msgid "Start all torrents and the I2P tunnel"
+msgstr "Käynnistä kaikki vertaisverkot ja I2P-tunneli"
 
 msgid "Start all stopped torrents"
 msgstr "Käynnistä kaikki pysäytetyt vertaisverkot"
 
-msgid "Start all torrents and the I2P tunnel"
-msgstr "Käynnistä kaikki vertaisverkot ja I2P-tunneli"
+msgid "Hide Peers"
+msgstr "Piilota vertaiset"
 
-msgid "No torrents found."
-msgstr "Torrenteja ei löytynyt."
-
-msgid "No torrents loaded."
-msgstr "Yhtään vertaisverkkoa ei ole ladattu."
+msgid "Show Peers"
+msgstr "Näytä vertaiset"
 
 #, java-format
-msgid "1 torrent"
-msgid_plural "{0} torrents"
-msgstr[0] "1 vertaisverkko"
-msgstr[1] "{0} vertaisverkkoa"
+msgid "Sort by {0}"
+msgstr "Lajitteluperuste: {0}"
+
+msgid "Up Rate"
+msgstr "Kopiointinopeus palvelimelle"
 
 msgid "Total size of loaded torrents"
 msgstr ""
@@ -651,12 +624,6 @@ msgid "1 connected peer"
 msgid_plural "{0} peer connections"
 msgstr[0] ""
 msgstr[1] ""
-
-#, java-format
-msgid "1 DHT peer"
-msgid_plural "{0} DHT peers"
-msgstr[0] "1 DHT-vertainen"
-msgstr[1] "{0} DHT-vertaista"
 
 msgid "Active downloads"
 msgstr ""
@@ -685,14 +652,20 @@ msgstr "Lähetetyt tiedot yhteensä (luetteloiduille torrenteille)"
 msgid "Total upload speed"
 msgstr "Kokonaislatausnopeus"
 
+msgid "Toggle Debug Panel"
+msgstr ""
+
 msgid "Debug Mode"
 msgstr "Debug-tilassa"
 
 msgid "Normal Mode"
 msgstr "Normaali tila"
 
-msgid "No DHT Peers"
-msgstr "Ei DHT-vertaisia"
+#, java-format
+msgid "1 torrent"
+msgid_plural "{0} torrents"
+msgstr[0] "1 vertaisverkko"
+msgstr[1] "{0} vertaisverkkoa"
 
 msgid "Search"
 msgstr "Hae"
@@ -745,6 +718,13 @@ msgstr "Viimeinen"
 msgid "Last page"
 msgstr "Viimeinen sivu"
 
+msgid "Enter URL or select torrent file"
+msgstr "Anna URL-osoite tai valitse torrent-tiedosto"
+
+#, java-format
+msgid "Error uploading the torrent file: {0}"
+msgstr ""
+
 #, java-format
 msgid "Cannot add torrent {0} inside another torrent: {1}"
 msgstr "Torrentia {0} ei voi lisätä toiseen torrentiin: {1}Vertaisverkon {0} lisääminen toisen vertaisverkon sisälle epäonnistui: {1}"
@@ -753,12 +733,12 @@ msgstr "Torrentia {0} ei voi lisätä toiseen torrentiin: {1}Vertaisverkon {0} l
 msgid "Download from non-I2P location {0} is not supported"
 msgstr "Latausta ei-I2P-sijainnista {0} ei tueta"
 
+msgid "Error: Version 2 info hashes are not supported"
+msgstr ""
+
 #, java-format
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
 msgstr "Virheellinen URL-osoite: täytyy alkaa \"{0}\" tai \"{1}\""
-
-msgid "Enter URL or select torrent file"
-msgstr "Anna URL-osoite tai valitse torrent-tiedosto"
 
 #, java-format
 msgid "Magnet deleted: {0}"
@@ -767,10 +747,6 @@ msgstr "Magnet poistettu: {0}"
 #, java-format
 msgid "Torrent file could not be deleted: {0}"
 msgstr "Torrent-tiedostoa ei voitu poistaa: {0}"
-
-#, java-format
-msgid "Download deleted: {0}"
-msgstr "Lataus poistettu: {0}"
 
 #, java-format
 msgid "Data file deleted: {0}"
@@ -787,6 +763,13 @@ msgstr "Hakemiston poistaminen epäonnistui: {0}"
 #, java-format
 msgid "Directory deleted: {0}"
 msgstr "Hakemisto poistettu: {0}"
+
+msgid "Error creating torrent - you must specify a file or directory"
+msgstr "Virhe luotaessa torrentia - sinun on syötettävä tiedosto tai hakemistoVirhe vertaisverkon luomisessa - sinun on kirjoitettava tiedosto tai hakemisto"
+
+#, java-format
+msgid "Cannot create a torrent for the nonexistent data: {0}"
+msgstr "Ei voi luoda torrentia olemattomille tiedoille: {0}"
 
 #, java-format
 msgid "Cannot add a torrent ending in \".torrent\": {0}"
@@ -830,13 +813,6 @@ msgstr "Monet I2P-seuraajat edellyttävät uusien torrentien rekisteröintiä en
 msgid "Error creating a torrent for \"{0}\""
 msgstr "Virhe luotaessa torrentia kohteelle \"{0}\""
 
-#, java-format
-msgid "Cannot create a torrent for the nonexistent data: {0}"
-msgstr "Ei voi luoda torrentia olemattomille tiedoille: {0}"
-
-msgid "Error creating torrent - you must specify a file or directory"
-msgstr "Virhe luotaessa torrentia - sinun on syötettävä tiedosto tai hakemistoVirhe vertaisverkon luomisessa - sinun on kirjoitettava tiedosto tai hakemisto"
-
 msgid "Delete selected"
 msgstr "Poista valittu"
 
@@ -870,61 +846,17 @@ msgstr "Anna kelvollinen nimi ja suodattumallipohja"
 msgid "Restored default torrent create filters"
 msgstr "Palautettu oletusarvoiset torrent-luontisuodattimet"
 
-msgid "Checking"
-msgstr "Tarkistetaan"
-
-msgid "Allocating"
-msgstr "Varataan"
-
-msgid "Starting"
-msgstr "Käynnistetään"
-
-#, java-format
-msgid "Seeding to {0} peer"
-msgid_plural "Seeding to {0} peers"
-msgstr[0] "Kylvö {0} vertaisarjaan"
-msgstr[1] "Kylvö {0} ikätovereihin"
-
-#, java-format
-msgid "Seeding to {0} of {1} peers in swarm"
-msgstr "Siemennys {0}/{1} parveen"
-
-msgid "OK"
-msgstr "Valmis"
-
-#, java-format
-msgid "Downloading from {0} peer"
-msgid_plural "Downloading from {0} peers"
-msgstr[0] "Lataaminen {0} vertaisarjasta"
-msgstr[1] "Lataaminen {0} ikätovereista"
-
-msgid "Stalled"
-msgstr "Jumissa"
-
-#, java-format
-msgid "Connected to {0} of {1} peers in swarm"
-msgstr "Yhdistetty {0}/{1} parveen"
-
-msgid "No Peers"
-msgstr "Ei vertaisia"
-
 msgid "Torrent details"
 msgstr "Vertaisverkon lisätiedot"
 
 msgid "Torrent has comments"
 msgstr "Torrentilla on kommentteja"
 
-msgid "View files"
-msgstr "Katso tiedostoja"
-
 msgid "Open file"
 msgstr "Avaa tiedosto"
 
-msgid "complete"
-msgstr "valmis"
-
-msgid "remaining"
-msgstr "jäljellä"
+msgid "View files"
+msgstr "Katso tiedostoja"
 
 msgid "Completed"
 msgstr "Valmistunut"
@@ -959,14 +891,51 @@ msgstr "Poista"
 msgid "Delete .torrent file and associated data files"
 msgstr "Poista .torrent-tiedosto ja siihen liittyvät datatiedostot"
 
+msgid "Checking"
+msgstr "Tarkistetaan"
+
+msgid "Allocating"
+msgstr "Varataan"
+
+msgid "Starting"
+msgstr "Käynnistetään"
+
+#, java-format
+msgid "Seeding to {0} peer"
+msgid_plural "Seeding to {0} peers"
+msgstr[0] "Kylvö {0} vertaisarjaan"
+msgstr[1] "Kylvö {0} ikätovereihin"
+
+#, java-format
+msgid "Connected to {0} of {1} peers in swarm"
+msgstr "Yhdistetty {0}/{1} parveen"
+
+msgid "Stalled"
+msgstr "Jumissa"
+
+#, java-format
+msgid "Seeding to {0} peer in swarm"
+msgid_plural "Seeding to {0} peers in swarm"
+msgstr[0] ""
+msgstr[1] ""
+
+#, java-format
+msgid "Downloading from {0} peer"
+msgid_plural "Downloading from {0} peers"
+msgstr[0] "Lataaminen {0} vertaisarjasta"
+msgstr[1] "Lataaminen {0} ikätovereista"
+
+msgid "OK"
+msgstr "Valmis"
+
+msgid "No Peers"
+msgstr "Ei vertaisia"
+
 msgid "Peer attached to swarm"
 msgstr "Peer kiinnitetty parveen"
 
 msgid "Destination (identity) of peer"
 msgstr "Version kohde (identiteetti)"
-
-msgid "Version"
-msgstr "Versio"
 
 msgid "seconds"
 msgstr "sekuntia"
@@ -1341,14 +1310,68 @@ msgstr ""
 msgid "Please retry form submission (bad nonce)"
 msgstr ""
 
+msgid "Resource Does Not Exist"
+msgstr "Resurssia ei ole olemassa"
+
+msgid "Resource"
+msgstr "Resurssi"
+
+msgid "Base"
+msgstr "Perus"
+
+msgid "Files"
+msgstr "Tiedostot"
+
+msgid "Directory"
+msgstr "Hakemisto"
+
+msgid "Size"
+msgstr "Koko"
+
+msgid "Download Status"
+msgstr "Latauksen tila"
+
+msgid "Remaining"
+msgstr "Jäljellä"
+
+msgid "Download Priority"
+msgstr "Lataa prioriteetti"
+
+msgid "up"
+msgstr ""
+
+msgid "Parent directory"
+msgstr "Siirry hakemistohierarkiassa ylöspäin"
+
+msgid "Audio Playlist"
+msgstr "Äänisoittolista"
+
+msgid "Not found"
+msgstr "Ei löydy"
+
+msgid "File not found in torrent"
+msgstr "Tiedostoa ei löytynyt vertaisverkossa"
+
+msgid "Unrecognized"
+msgstr "Tuntematon"
+
+msgid "Preview"
+msgstr "Esikatselu"
+
+msgid "Save priorities"
+msgstr "Tallenna prioriteetit"
+
+msgid "Comments"
+msgstr "Kommentit"
+
+msgid "Resource Not found"
+msgstr "Resurssia ei löydy"
+
 msgid "Info hash"
 msgstr "Info Hash"
 
 msgid "Created"
 msgstr "Luotu"
-
-msgid "Files"
-msgstr "Tiedostot"
 
 msgid "Added"
 msgstr "Lisätty"
@@ -1364,9 +1387,6 @@ msgstr ""
 
 msgid "Completion"
 msgstr "Valmistui"
-
-msgid "Remaining"
-msgstr "Jäljellä"
 
 msgid "Skipped"
 msgstr "Ohitettu"
@@ -1392,51 +1412,6 @@ msgstr "Pysäytä torrent tarkistaaksesi tiedoston eheyden"
 msgid "Check integrity of the downloaded files"
 msgstr "Tarkista ladattujen tiedostojen eheys"
 
-msgid "Resource Not found"
-msgstr "Resurssia ei löydy"
-
-msgid "Base"
-msgstr "Perus"
-
-msgid "Resource Does Not Exist"
-msgstr "Resurssia ei ole olemassa"
-
-msgid "Resource"
-msgstr "Resurssi"
-
-msgid "Audio file: "
-msgstr "Äänitiedosto: "
-
-msgid "Video file: "
-msgstr "Videotiedosto: "
-
-msgid "Directory"
-msgstr "Hakemisto"
-
-msgid "Download Status"
-msgstr "Latauksen tila"
-
-msgid "Download Priority"
-msgstr "Lataa prioriteetti"
-
-msgid "Parent directory"
-msgstr "Siirry hakemistohierarkiassa ylöspäin"
-
-msgid "Audio Playlist"
-msgstr "Äänisoittolista"
-
-msgid "Not found"
-msgstr "Ei löydy"
-
-msgid "File not found in torrent"
-msgstr "Tiedostoa ei löytynyt vertaisverkossa"
-
-msgid "Unrecognized"
-msgstr "Tuntematon"
-
-msgid "Preview"
-msgstr "Esikatselu"
-
 msgid "Download file at high priority"
 msgstr "Lataa tiedosto korkealla prioriteetilla"
 
@@ -1455,11 +1430,11 @@ msgstr "Älä lataa tätä tiedostoa"
 msgid "Skip"
 msgstr "Ohita"
 
-msgid "Save priorities"
-msgstr "Tallenna prioriteetit"
+msgid "complete"
+msgstr "valmis"
 
-msgid "Comments"
-msgstr "Kommentit"
+msgid "remaining"
+msgstr "jäljellä"
 
 msgid "Ratings and Comments"
 msgstr "Arviot ja kommentit"
@@ -1529,3 +1504,20 @@ msgstr "Tallenna muutokset"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent on pysäytettävä"
+
+#, java-format
+
+
+
+
+
+
+
+#, java-format
+
+#, java-format
+
+#, java-format
+
+
+

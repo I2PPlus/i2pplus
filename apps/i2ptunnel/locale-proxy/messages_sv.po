@@ -214,9 +214,6 @@ msgstr "Varning: Förfrågan Nekad"
 msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
 msgstr "Den här adressen verkar vara felaktig. Vänligen kontrollera att du har angett en giltig adress!"
 
-msgid "You attempted to connect to a non-I2P website or location."
-msgstr "Du försökte ansluta till en icke-I2P webbplats eller plats."
-
 msgid "Warning: Bad Address Helper"
 msgstr "Varning: Dålig Adresshjälpare"
 
@@ -229,6 +226,15 @@ msgstr "Det verkar vara skräp-data eller en felskriven Base32 adress."
 
 msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
 msgstr "Kontrollera din URL för att försöka fixa hjälpar-nyckeln så att den är ett giltigt Base32 värdnamn eller Base64 nyckel."
+
+msgid "Warning: Address Blacklisted"
+msgstr ""
+
+msgid "The requested destination is in your blacklist and access has been blocked."
+msgstr ""
+
+msgid "To allow access to this site, remove it from your blacklist on the SusiDNS blacklist management page."
+msgstr ""
 
 msgid "Warning: Invalid Destination"
 msgstr "Varning: Ogiltigt Mål"
@@ -420,3 +426,4 @@ msgstr "Klicka här om du inte omdirigeras automatiskt."
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
 msgstr "Sparade autentiseringen för {0}, omdirigerar nu."
+

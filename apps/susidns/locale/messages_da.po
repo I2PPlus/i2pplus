@@ -31,8 +31,11 @@ msgstr "Værtsnavn \"{0}\" kræver konvertering til ASCII, men konverteringsbibl
 msgid "Source"
 msgstr "Kilde"
 
-msgid "Imported from file hosts.txt"
+msgid "Imported from"
 msgstr ""
+
+msgid "Imported from file"
+msgstr "Importeret fra fil"
 
 msgid "Manually added via SusiDNS"
 msgstr "Manuel tilføjet via SusiDNS"
@@ -172,11 +175,17 @@ msgstr "Hvis problemet fortsætter, skal du kontrollere, at du har aktiveret coo
 msgid "Save"
 msgstr "Gem"
 
-msgid "Configuration saved."
-msgstr "Konfiguration gemt."
+msgid "Blacklist saved."
+msgstr ""
 
 msgid "Reload"
 msgstr "Genindlæs"
+
+msgid "Blacklist reloaded from file."
+msgstr ""
+
+msgid "Configuration saved."
+msgstr "Konfiguration gemt."
 
 msgid "Configuration reloaded."
 msgstr "Konfiguration genindlæst."
@@ -203,6 +212,18 @@ msgstr "Kunne ikke tilføje destination for {0} til navnetjenesten {1}"
 msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "Destination for {0} kunne ikke slettes fra navnetjenesten {1}"
 
+msgid "Blacklist Selected"
+msgstr ""
+
+#, java-format
+msgid "1 destination blacklisted."
+msgid_plural "{0} destinations blacklisted."
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "No valid entries selected to blacklist."
+msgstr ""
+
 msgid "Save Notes"
 msgstr "Gem noter"
 
@@ -215,9 +236,6 @@ msgstr "Ingen poster fundet i filen"
 #, java-format
 msgid "Imported from file {0}"
 msgstr "Importeret fra fil {0}"
-
-msgid "Imported from file"
-msgstr "Importeret fra fil"
 
 #, java-format
 msgid "Loaded {0} entry from file"
@@ -270,6 +288,9 @@ msgstr "Publiceret"
 msgid "Subscriptions"
 msgstr "Abonnementer"
 
+msgid "Blacklist"
+msgstr ""
+
 msgid "Configuration"
 msgstr "Konfiguration"
 
@@ -306,14 +327,26 @@ msgstr "Søg"
 msgid "latest"
 msgstr ""
 
+msgid "Alive"
+msgstr ""
+
+msgid "Dead"
+msgstr ""
+
 msgid "all"
 msgstr "ryd filter"
 
 msgid "Info"
 msgstr "Information"
 
+msgid "Type"
+msgstr ""
+
 msgid "Hostname"
 msgstr "Hostnavn"
+
+msgid "Encryption"
+msgstr ""
 
 msgid "Link (b32)"
 msgstr "Link (b32)"
@@ -324,11 +357,17 @@ msgstr "Destination"
 msgid "Added"
 msgstr ""
 
+msgid "Status"
+msgstr ""
+
 msgid "Select hosts for deletion from addressbook"
 msgstr "Vælg værter til sletning fra adressebogen"
 
 msgid "More information on this entry"
 msgstr "Mere information om dette indlæg"
+
+msgid "unknown"
+msgstr ""
 
 msgid "Base 32 address"
 msgstr "Base 32 adresse"
@@ -357,11 +396,23 @@ msgstr "Fuld destination eller b32-adresse"
 msgid "Select file"
 msgstr "Vælg fil"
 
-msgid "configuration"
-msgstr "konfiguration"
+msgid "blacklist"
+msgstr ""
+
+msgid "Blacklist Management"
+msgstr ""
 
 msgid "File location"
 msgstr "Filplacering"
+
+msgid "Enter I2P addresses to blacklist (one per line)"
+msgstr ""
+
+msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
+msgstr ""
+
+msgid "configuration"
+msgstr "konfiguration"
 
 msgid "Hints"
 msgstr "Ledetråde"
@@ -422,6 +473,12 @@ msgstr "Fil at logge aktivitet til (skift til /dev/null, hvis du vil)"
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "Navn på tilsidesættelsestema, der skal bruges (standard til konsolvalgt tema)"
+
+msgid "Interval (in hours) for running host checker (default is 8 hours)"
+msgstr ""
+
+msgid "How many pings to perform concurrently when running host checker (Default is 12, max is 100)"
+msgstr ""
 
 msgid "delete hosts"
 msgstr ""
@@ -485,6 +542,9 @@ msgstr "Opret dine egne identifikationsbilleder"
 
 msgid "Launch Image Generator"
 msgstr "Start Image Generator"
+
+msgid "Export"
+msgstr ""
 
 msgid "Introduction"
 msgstr "Introduktion"
@@ -614,4 +674,3 @@ msgstr "Adresser, der manuelt tilføjes til din masteradressebog, vil fusionere 
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Værter, du modtager fra dine abonnementer, fusionerer med din routeradressebog."
-

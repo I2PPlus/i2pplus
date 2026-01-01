@@ -31,8 +31,11 @@ msgstr "主机名称“{0}”需要转化为ASCIIb编码，但您的JavaJVM缺�
 msgid "Source"
 msgstr "来源"
 
-msgid "Imported from file hosts.txt"
+msgid "Imported from"
 msgstr ""
+
+msgid "Imported from file"
+msgstr "从文件导入"
 
 msgid "Manually added via SusiDNS"
 msgstr "通过 SusiDNS 手工添加。"
@@ -167,11 +170,17 @@ msgstr "如果问题持续出现，请检查您的浏览器是否已启用cookie
 msgid "Save"
 msgstr "保存"
 
-msgid "Configuration saved."
-msgstr "配置已保存"
+msgid "Blacklist saved."
+msgstr ""
 
 msgid "Reload"
 msgstr "刷新"
+
+msgid "Blacklist reloaded from file."
+msgstr ""
+
+msgid "Configuration saved."
+msgstr "配置已保存"
 
 msgid "Configuration reloaded."
 msgstr "配置已重新载入"
@@ -198,6 +207,17 @@ msgstr "域名服务{1}中的目标{0}添加失败。"
 msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "域名服务{1}中的目标{0}删除失败。"
 
+msgid "Blacklist Selected"
+msgstr ""
+
+#, java-format
+msgid "1 destination blacklisted."
+msgid_plural "{0} destinations blacklisted."
+msgstr[0] ""
+
+msgid "No valid entries selected to blacklist."
+msgstr ""
+
 msgid "Save Notes"
 msgstr "保存备注"
 
@@ -210,9 +230,6 @@ msgstr "没有在文件中找到条目"
 #, java-format
 msgid "Imported from file {0}"
 msgstr "从文件 {0} 导入"
-
-msgid "Imported from file"
-msgstr "从文件导入"
 
 #, java-format
 msgid "Loaded {0} entry from file"
@@ -263,6 +280,9 @@ msgstr "发布"
 msgid "Subscriptions"
 msgstr "订阅"
 
+msgid "Blacklist"
+msgstr ""
+
 msgid "Configuration"
 msgstr "配置"
 
@@ -299,14 +319,26 @@ msgstr "搜索"
 msgid "latest"
 msgstr ""
 
+msgid "Alive"
+msgstr ""
+
+msgid "Dead"
+msgstr ""
+
 msgid "all"
 msgstr "清除过滤器"
 
 msgid "Info"
 msgstr "信息"
 
+msgid "Type"
+msgstr ""
+
 msgid "Hostname"
 msgstr "主机名"
+
+msgid "Encryption"
+msgstr ""
 
 msgid "Link (b32)"
 msgstr "链接 (b32)"
@@ -317,11 +349,17 @@ msgstr "目标"
 msgid "Added"
 msgstr ""
 
+msgid "Status"
+msgstr ""
+
 msgid "Select hosts for deletion from addressbook"
 msgstr "从地址簿中选择要删除的主机"
 
 msgid "More information on this entry"
 msgstr "此记录的更多信息"
+
+msgid "unknown"
+msgstr ""
 
 msgid "Base 32 address"
 msgstr "Base 32 地址"
@@ -350,11 +388,23 @@ msgstr "完整目的地或 b32 地址"
 msgid "Select file"
 msgstr "选择文件"
 
-msgid "configuration"
-msgstr "配置"
+msgid "blacklist"
+msgstr ""
+
+msgid "Blacklist Management"
+msgstr ""
 
 msgid "File location"
 msgstr "文件位置"
+
+msgid "Enter I2P addresses to blacklist (one per line)"
+msgstr ""
+
+msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
+msgstr ""
+
+msgid "configuration"
+msgstr "配置"
 
 msgid "Hints"
 msgstr "提示"
@@ -415,6 +465,12 @@ msgstr "活动日志文件(关闭可设为/dev/null [Linux])"
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "要使用的覆盖主题的名称（默认为控制台选择的主题）"
+
+msgid "Interval (in hours) for running host checker (default is 8 hours)"
+msgstr ""
+
+msgid "How many pings to perform concurrently when running host checker (Default is 12, max is 100)"
+msgstr ""
 
 msgid "delete hosts"
 msgstr ""
@@ -478,6 +534,9 @@ msgstr "创建自己的身份图像"
 
 msgid "Launch Image Generator"
 msgstr "查看图像生成器"
+
+msgid "Export"
+msgstr ""
 
 msgid "Introduction"
 msgstr "介绍"
@@ -607,4 +666,3 @@ msgstr "手动添加到您的主地址簿中的地址将与您的路由器地址
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "您从订阅中取得的主机将与路由器地址簿合并。"
-

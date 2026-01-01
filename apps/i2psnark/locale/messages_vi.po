@@ -43,8 +43,8 @@ msgid "Total uploaders limit changed to {0}"
 msgstr "Tổng giới hạn người tải lên đã thay đổi thành {0}"
 
 #, java-format
-msgid "Minimum total uploaders limit is {0}"
-msgstr "Giới hạn tổng số người tải lên tối thiểu là {0}"
+msgid "Minimum uploaders limit is {0}"
+msgstr ""
 
 #, java-format
 msgid "Up BW limit changed to {0}KBps"
@@ -54,7 +54,6 @@ msgstr "Giới hạn băng thông lên đổi thành {0}KBps"
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "Tối thiểu băng thông lên là {0}KBps"
 
-#, java-format
 #, java-format
 msgid "Maximum download speed changed to {0}KB/s"
 msgstr "Tốc độ tải xuống tối đa đã được thay đổi thành {0}KB/s"
@@ -294,12 +293,12 @@ msgstr "Thêm {0}"
 msgid "Download already running: {0}"
 msgstr "Tải xuống đã chạy: {0}"
 
-msgid " - torrent file already exists"
-msgstr " - Tập tin torrent đã tồn tại"
-
 #, java-format
 msgid "Failed to copy torrent file to {0}"
 msgstr "Không sao chép được tệp torrent vào {0}"
+
+msgid " - torrent file already exists"
+msgstr " - Tập tin torrent đã tồn tại"
 
 #, java-format
 msgid "Too many files in \"{0}\" ({1})!"
@@ -485,11 +484,35 @@ msgstr "Torrent đã có trong hàng đợi: {0}"
 msgid "Torrent at {0} was not valid"
 msgstr "Torrent tại {0} không hợp lệ"
 
-msgid "Configuration"
+msgid "Torrents"
+msgstr "Torrent"
+
+msgid "Refresh page"
+msgstr "Nạp lại trang"
+
+msgid "Configure"
 msgstr "Cấu hình"
+
+msgid "Torrent &amp; filesharing forum"
+msgstr "Torrent"
+
+msgid "Forum"
+msgstr "Diễn đàn"
+
+msgid "Search torrents"
+msgstr "Tìm kiếm torrent"
+
+msgid "Clear search"
+msgstr "Xóa tìm kiếm"
+
+msgid "Click \"Add torrent\" button to fetch torrent"
+msgstr "Nhấp vào nút \"Thêm torrent\" để tìm nạp torrent"
 
 msgid "Anonymous BitTorrent Client"
 msgstr "Ứng dụng khách BitTorrent ẩn danh"
+
+msgid "Configuration"
+msgstr "Cấu hình"
 
 #, java-format
 msgid "Are you sure you want to delete {0} and all downloaded data?"
@@ -510,36 +533,6 @@ msgstr ""
 msgid "Deleting {0} and associated metadata only..."
 msgstr ""
 
-msgid "I2PSnark has stopped"
-msgstr "I2PSnark đã dừng"
-
-msgid "Router is down"
-msgstr "Bộ định tuyến bị hỏng"
-
-msgid "Torrents"
-msgstr "Torrent"
-
-msgid "Refresh page"
-msgstr "Nạp lại trang"
-
-msgid "Configure"
-msgstr "Cấu hình"
-
-msgid "Forum"
-msgstr "Diễn đàn"
-
-msgid "Torrent &amp; filesharing forum"
-msgstr "Torrent"
-
-msgid "Search torrents"
-msgstr "Tìm kiếm torrent"
-
-msgid "Clear search"
-msgstr "Xóa tìm kiếm"
-
-msgid "Click \"Add torrent\" button to fetch torrent"
-msgstr "Nhấp vào nút \"Thêm torrent\" để tìm nạp torrent"
-
 msgid "clear messages"
 msgstr "xóa tin nhắn"
 
@@ -559,18 +552,17 @@ msgstr "làm mới trang"
 msgid "Warning - No I2P"
 msgstr "Cảnh báo - Không có I2P"
 
+msgid "No torrents found."
+msgstr "Không tìm thấy torrent."
+
+msgid "No torrents loaded."
+msgstr "Không tải được torrent."
+
+msgid "No DHT Peers"
+msgstr "Không có đồng nghiệp DHT"
+
 msgid "Status"
 msgstr "Tình trạng"
-
-#, java-format
-msgid "Sort by {0}"
-msgstr "Sắp xếp theo {0}"
-
-msgid "Hide Peers"
-msgstr "Ẩn đồng nghiệp"
-
-msgid "Show Peers"
-msgstr "Hiển thị ngang hàng"
 
 msgid "Torrent"
 msgstr "Torrent"
@@ -584,38 +576,20 @@ msgstr "Tên torrent"
 msgid "ETA"
 msgstr "ETA"
 
-msgid "Estimated time remaining"
-msgstr "Thời gian ước tính còn lại"
-
 msgid "RX"
 msgstr "RX"
-
-msgid "Downloaded"
-msgstr "Đã tải xuống"
-
-msgid "Size"
-msgstr "Kích thước"
 
 msgid "RX Rate"
 msgstr "Tỷ lệ RX"
 
-msgid "Down Rate"
-msgstr "Tỷ lệ giảm"
-
 msgid "TX"
 msgstr "TX"
-
-msgid "Upload ratio"
-msgstr ""
-
-msgid "Uploaded"
-msgstr "Đã tải lên"
 
 msgid "TX Rate"
 msgstr "Tỷ lệ tải lên"
 
-msgid "Up Rate"
-msgstr "Tỷ lệ tăng"
+msgid "Start All"
+msgstr "Bắt đầu tất cả"
 
 msgid "Stop All"
 msgstr "Ngưng tất cả"
@@ -623,25 +597,24 @@ msgstr "Ngưng tất cả"
 msgid "Stop all torrents and the I2P tunnel"
 msgstr "Dừng tất cả torrent và đường hầm I2P"
 
-msgid "Start All"
-msgstr "Bắt đầu tất cả"
+msgid "Start all torrents and the I2P tunnel"
+msgstr "Bắt đầu tất cả torrent và đường hầm I2P"
 
 msgid "Start all stopped torrents"
 msgstr "Bắt đầu tất cả các torrent đã dừng"
 
-msgid "Start all torrents and the I2P tunnel"
-msgstr "Bắt đầu tất cả torrent và đường hầm I2P"
+msgid "Hide Peers"
+msgstr "Ẩn đồng nghiệp"
 
-msgid "No torrents found."
-msgstr "Không tìm thấy torrent."
-
-msgid "No torrents loaded."
-msgstr "Không tải được torrent."
+msgid "Show Peers"
+msgstr "Hiển thị ngang hàng"
 
 #, java-format
-msgid "1 torrent"
-msgid_plural "{0} torrents"
-msgstr[0] "{0} torrent"
+msgid "Sort by {0}"
+msgstr "Sắp xếp theo {0}"
+
+msgid "Up Rate"
+msgstr "Tỷ lệ tăng"
 
 msgid "Total size of loaded torrents"
 msgstr ""
@@ -650,11 +623,6 @@ msgstr ""
 msgid "1 connected peer"
 msgid_plural "{0} peer connections"
 msgstr[0] ""
-
-#, java-format
-msgid "1 DHT peer"
-msgid_plural "{0} DHT peers"
-msgstr[0] "{0} DHT Peers"
 
 msgid "Active downloads"
 msgstr ""
@@ -683,14 +651,19 @@ msgstr "Tổng dữ liệu được tải lên (đối với các torrent đư�
 msgid "Total upload speed"
 msgstr "Tổng tốc độ tải lên"
 
+msgid "Toggle Debug Panel"
+msgstr ""
+
 msgid "Debug Mode"
 msgstr "Chế độ gỡ lỗi"
 
 msgid "Normal Mode"
 msgstr "Chế độ bình thường"
 
-msgid "No DHT Peers"
-msgstr "Không có đồng nghiệp DHT"
+#, java-format
+msgid "1 torrent"
+msgid_plural "{0} torrents"
+msgstr[0] "{0} torrent"
 
 msgid "Search"
 msgstr "Tìm kiếm"
@@ -743,6 +716,13 @@ msgstr "Chót"
 msgid "Last page"
 msgstr "Trang cuối cùng"
 
+msgid "Enter URL or select torrent file"
+msgstr "Nhập URL hoặc chọn file torrent"
+
+#, java-format
+msgid "Error uploading the torrent file: {0}"
+msgstr ""
+
 #, java-format
 msgid "Cannot add torrent {0} inside another torrent: {1}"
 msgstr "Không thể thêm torrent {0} vào trong một torrent khác: {1}"
@@ -751,12 +731,12 @@ msgstr "Không thể thêm torrent {0} vào trong một torrent khác: {1}"
 msgid "Download from non-I2P location {0} is not supported"
 msgstr "Tải xuống từ vị trí không phải I2P {0} không được hỗ trợ"
 
+msgid "Error: Version 2 info hashes are not supported"
+msgstr ""
+
 #, java-format
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
 msgstr "URL không hợp lệ: Phải bắt đầu bằng \"{0}\" hoặc \"{1}\""
-
-msgid "Enter URL or select torrent file"
-msgstr "Nhập URL hoặc chọn file torrent"
 
 #, java-format
 msgid "Magnet deleted: {0}"
@@ -765,10 +745,6 @@ msgstr "Đã xóa nam châm: {0}"
 #, java-format
 msgid "Torrent file could not be deleted: {0}"
 msgstr "Không thể xóa tệp torrent: {0}"
-
-#, java-format
-msgid "Download deleted: {0}"
-msgstr "Đã xóa tải xuống: {0}"
 
 #, java-format
 msgid "Data file deleted: {0}"
@@ -785,6 +761,13 @@ msgstr "Không thể xóa thư mục: {0}"
 #, java-format
 msgid "Directory deleted: {0}"
 msgstr "Đã xóa thư mục: {0}"
+
+msgid "Error creating torrent - you must specify a file or directory"
+msgstr "Lỗi tạo torrent - bạn phải nhập tệp hoặc thư mục"
+
+#, java-format
+msgid "Cannot create a torrent for the nonexistent data: {0}"
+msgstr "Không thể tạo torrent cho dữ liệu không tồn tại: {0}"
 
 #, java-format
 msgid "Cannot add a torrent ending in \".torrent\": {0}"
@@ -828,13 +811,6 @@ msgstr "Nhiều trình theo dõi I2P yêu cầu bạn đăng ký torrent mới t
 msgid "Error creating a torrent for \"{0}\""
 msgstr "Lỗi khi tạo torrent cho \"{0}\""
 
-#, java-format
-msgid "Cannot create a torrent for the nonexistent data: {0}"
-msgstr "Không thể tạo torrent cho dữ liệu không tồn tại: {0}"
-
-msgid "Error creating torrent - you must specify a file or directory"
-msgstr "Lỗi tạo torrent - bạn phải nhập tệp hoặc thư mục"
-
 msgid "Delete selected"
 msgstr "Xóa đã chọn"
 
@@ -868,59 +844,17 @@ msgstr "Nhập tên hợp lệ và mẫu bộ lọc"
 msgid "Restored default torrent create filters"
 msgstr "Khôi phục bộ lọc tạo torrent mặc định"
 
-msgid "Checking"
-msgstr "Đang kiểm tra"
-
-msgid "Allocating"
-msgstr "Phân bổ"
-
-msgid "Starting"
-msgstr "Bắt đầu"
-
-#, java-format
-msgid "Seeding to {0} peer"
-msgid_plural "Seeding to {0} peers"
-msgstr[0] "Gieo hạt cho {0} ngang hàng"
-
-#, java-format
-msgid "Seeding to {0} of {1} peers in swarm"
-msgstr "Gieo mầm cho {0} trong số {1} đồng nghiệp trong bầy đàn"
-
-msgid "OK"
-msgstr "OK"
-
-#, java-format
-msgid "Downloading from {0} peer"
-msgid_plural "Downloading from {0} peers"
-msgstr[0] "Tải xuống từ {0} ngang hàng"
-
-msgid "Stalled"
-msgstr "Khựng"
-
-#, java-format
-msgid "Connected to {0} of {1} peers in swarm"
-msgstr "Đã kết nối với {0} trong số {1} đồng nghiệp trong bầy đàn"
-
-msgid "No Peers"
-msgstr "Không có đồng nghiệp"
-
 msgid "Torrent details"
 msgstr "Chi tiết torrent"
 
 msgid "Torrent has comments"
 msgstr "Torrent có bình luận"
 
-msgid "View files"
-msgstr "Xem tập tin"
-
 msgid "Open file"
 msgstr "Mở tập tin"
 
-msgid "complete"
-msgstr "hoàn tất"
-
-msgid "remaining"
-msgstr "còn lại"
+msgid "View files"
+msgstr "Xem tập tin"
 
 msgid "Completed"
 msgstr "Đã hoàn thành"
@@ -955,14 +889,48 @@ msgstr "Xóa"
 msgid "Delete .torrent file and associated data files"
 msgstr "Xóa file .torrent và các file dữ liệu liên quan"
 
+msgid "Checking"
+msgstr "Đang kiểm tra"
+
+msgid "Allocating"
+msgstr "Phân bổ"
+
+msgid "Starting"
+msgstr "Bắt đầu"
+
+#, java-format
+msgid "Seeding to {0} peer"
+msgid_plural "Seeding to {0} peers"
+msgstr[0] "Gieo hạt cho {0} ngang hàng"
+
+#, java-format
+msgid "Connected to {0} of {1} peers in swarm"
+msgstr "Đã kết nối với {0} trong số {1} đồng nghiệp trong bầy đàn"
+
+msgid "Stalled"
+msgstr "Khựng"
+
+#, java-format
+msgid "Seeding to {0} peer in swarm"
+msgid_plural "Seeding to {0} peers in swarm"
+msgstr[0] ""
+
+#, java-format
+msgid "Downloading from {0} peer"
+msgid_plural "Downloading from {0} peers"
+msgstr[0] "Tải xuống từ {0} ngang hàng"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "No Peers"
+msgstr "Không có đồng nghiệp"
+
 msgid "Peer attached to swarm"
 msgstr "Ngang hàng gắn liền với bầy đàn"
 
 msgid "Destination (identity) of peer"
 msgstr "Đích (danh tính) của ngang hàng"
-
-msgid "Version"
-msgstr "Phiên bản"
 
 msgid "seconds"
 msgstr "giây"
@@ -1335,14 +1303,68 @@ msgstr ""
 msgid "Please retry form submission (bad nonce)"
 msgstr ""
 
+msgid "Resource Does Not Exist"
+msgstr "Tài nguyên không tồn tại"
+
+msgid "Resource"
+msgstr "Tài nguyên"
+
+msgid "Base"
+msgstr "Căn cứ"
+
+msgid "Files"
+msgstr "Tập tin"
+
+msgid "Directory"
+msgstr "Danh mục"
+
+msgid "Size"
+msgstr "Kích thước"
+
+msgid "Download Status"
+msgstr "Trạng thái tải xuống"
+
+msgid "Remaining"
+msgstr "Phần còn lại"
+
+msgid "Download Priority"
+msgstr "Ưu tiên tải xuống"
+
+msgid "up"
+msgstr ""
+
+msgid "Parent directory"
+msgstr "Lên thư mục cấp cao hơn"
+
+msgid "Audio Playlist"
+msgstr "Danh sách phát âm thanh"
+
+msgid "Not found"
+msgstr "Không tìm thấy"
+
+msgid "File not found in torrent"
+msgstr "Không tìm thấy tập tin trong torrent"
+
+msgid "Unrecognized"
+msgstr "Không được công nhận"
+
+msgid "Preview"
+msgstr "Xem trước"
+
+msgid "Save priorities"
+msgstr "Ưu tiên lưu lại"
+
+msgid "Comments"
+msgstr "Bình luận"
+
+msgid "Resource Not found"
+msgstr "Không tìm thấy tài nguyên"
+
 msgid "Info hash"
 msgstr "Băm thông tin"
 
 msgid "Created"
 msgstr "Đã tạo"
-
-msgid "Files"
-msgstr "Tập tin"
 
 msgid "Added"
 msgstr "Đã thêm"
@@ -1358,9 +1380,6 @@ msgstr ""
 
 msgid "Completion"
 msgstr "Hoàn thành"
-
-msgid "Remaining"
-msgstr "Phần còn lại"
 
 msgid "Skipped"
 msgstr "Bỏ qua"
@@ -1386,51 +1405,6 @@ msgstr "Dừng torrent để kiểm tra tính toàn vẹn của tệp"
 msgid "Check integrity of the downloaded files"
 msgstr "Kiểm tra tính toàn vẹn của các tệp đã tải xuống"
 
-msgid "Resource Not found"
-msgstr "Không tìm thấy tài nguyên"
-
-msgid "Base"
-msgstr "Căn cứ"
-
-msgid "Resource Does Not Exist"
-msgstr "Tài nguyên không tồn tại"
-
-msgid "Resource"
-msgstr "Tài nguyên"
-
-msgid "Audio file: "
-msgstr "Tập tin âm thanh: "
-
-msgid "Video file: "
-msgstr "Tệp video: "
-
-msgid "Directory"
-msgstr "Danh mục"
-
-msgid "Download Status"
-msgstr "Trạng thái tải xuống"
-
-msgid "Download Priority"
-msgstr "Ưu tiên tải xuống"
-
-msgid "Parent directory"
-msgstr "Lên thư mục cấp cao hơn"
-
-msgid "Audio Playlist"
-msgstr "Danh sách phát âm thanh"
-
-msgid "Not found"
-msgstr "Không tìm thấy"
-
-msgid "File not found in torrent"
-msgstr "Không tìm thấy tập tin trong torrent"
-
-msgid "Unrecognized"
-msgstr "Không được công nhận"
-
-msgid "Preview"
-msgstr "Xem trước"
-
 msgid "Download file at high priority"
 msgstr "Tải file ở mức ưu tiên cao"
 
@@ -1449,11 +1423,11 @@ msgstr "Không tải file này xuống"
 msgid "Skip"
 msgstr "Lờ"
 
-msgid "Save priorities"
-msgstr "Ưu tiên lưu lại"
+msgid "complete"
+msgstr "hoàn tất"
 
-msgid "Comments"
-msgstr "Bình luận"
+msgid "remaining"
+msgstr "còn lại"
 
 msgid "Ratings and Comments"
 msgstr "Xếp hạng và Bình luận"
@@ -1522,3 +1496,20 @@ msgstr "Lưu thay đổi"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent phải dừng lại"
+
+#, java-format
+
+
+
+
+
+
+
+#, java-format
+
+#, java-format
+
+#, java-format
+
+
+

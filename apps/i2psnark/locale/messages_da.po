@@ -43,7 +43,6 @@ msgid "Total uploaders limit changed to {0}"
 msgstr "Den samlede grænse for uploadere er ændret til {0}"
 
 #, java-format
-#, java-format
 msgid "Minimum uploaders limit is {0}"
 msgstr "Minimum uploaders grænse er {0}"
 
@@ -1505,20 +1504,3 @@ msgstr "Gem ændringer"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent skal stoppes"
-
-#, java-format
-
-
-
-
-
-
-
-#, java-format
-
-#, java-format
-
-#, java-format
-
-
-

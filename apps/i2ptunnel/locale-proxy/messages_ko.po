@@ -214,9 +214,6 @@ msgstr "경고: 요청 거부됨"
 msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
 msgstr "이 주소는 기형으로 보입니다. 유효한 주소를 제공했는지 확인하십시오!"
 
-msgid "You attempted to connect to a non-I2P website or location."
-msgstr "브라우저가 I2P 웹사이트가 아닌 곳에 연결하려고 시도합니다."
-
 msgid "Warning: Bad Address Helper"
 msgstr "경고: 올바르지 않은 주소록 도우미"
 
@@ -229,6 +226,15 @@ msgstr "잘못된 Base 32 주소입니다."
 
 msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
 msgstr "URL을 확인하여 도우미 키가 유효한 Base 32 호스트 이름 또는 Base 64 키가 되도록 수정해 보세요.URL을 확인해 helper key를 올바른 Base 32 / Base 64 주소로 변경하십시오."
+
+msgid "Warning: Address Blacklisted"
+msgstr ""
+
+msgid "The requested destination is in your blacklist and access has been blocked."
+msgstr ""
+
+msgid "To allow access to this site, remove it from your blacklist on the SusiDNS blacklist management page."
+msgstr ""
 
 msgid "Warning: Invalid Destination"
 msgstr "경고: 비정상적인 목적지"
@@ -420,3 +426,4 @@ msgstr "자동으로 리다이렉트 되지않으면 여기를 클릭하세요."
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
 msgstr "{0}에 대한 인증을 저장했습니다. 지금 리디렉션 중입니다."
+

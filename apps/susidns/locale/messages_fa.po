@@ -31,8 +31,11 @@ msgstr "نام میزبان \"{0}\" نیاز به تبدیل به ASCII دارد
 msgid "Source"
 msgstr "منبع"
 
-msgid "Imported from file hosts.txt"
+msgid "Imported from"
 msgstr ""
+
+msgid "Imported from file"
+msgstr "از فایل وارد شده است"
 
 msgid "Manually added via SusiDNS"
 msgstr "به صورت دستی از طریق SusiDNS اضافه شده است"
@@ -172,11 +175,17 @@ msgstr "اگر همچنان مشکل پابرجاست، مطمئن شوید که
 msgid "Save"
 msgstr "ذخيره"
 
-msgid "Configuration saved."
-msgstr "پیکربندی ذخیره شد."
+msgid "Blacklist saved."
+msgstr ""
 
 msgid "Reload"
 msgstr "بارگذاری مجدد"
+
+msgid "Blacklist reloaded from file."
+msgstr ""
+
+msgid "Configuration saved."
+msgstr "پیکربندی ذخیره شد."
 
 msgid "Configuration reloaded."
 msgstr "پیکربندی مجددا بارگذاری شد."
@@ -203,6 +212,18 @@ msgstr "افزودن مقصد برای {0} به سرویس نامگذاری {1} 
 msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "حذف مقصد برای {0} از سرویس نامگذاری {1} انجام نشد"
 
+msgid "Blacklist Selected"
+msgstr ""
+
+#, java-format
+msgid "1 destination blacklisted."
+msgid_plural "{0} destinations blacklisted."
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "No valid entries selected to blacklist."
+msgstr ""
+
 msgid "Save Notes"
 msgstr "ذخیره یادداشت ها"
 
@@ -215,9 +236,6 @@ msgstr "هیچ ورودی در فایل یافت نشد"
 #, java-format
 msgid "Imported from file {0}"
 msgstr "وارد شده از فایل {0}"
-
-msgid "Imported from file"
-msgstr "از فایل وارد شده است"
 
 #, java-format
 msgid "Loaded {0} entry from file"
@@ -270,6 +288,9 @@ msgstr "منتشرشده"
 msgid "Subscriptions"
 msgstr "اشتراک ها"
 
+msgid "Blacklist"
+msgstr ""
+
 msgid "Configuration"
 msgstr "پیکربندی"
 
@@ -306,14 +327,26 @@ msgstr "جستجو"
 msgid "latest"
 msgstr ""
 
+msgid "Alive"
+msgstr ""
+
+msgid "Dead"
+msgstr ""
+
 msgid "all"
 msgstr "پاکسازی فیلتر"
 
 msgid "Info"
 msgstr "اطلاعات"
 
+msgid "Type"
+msgstr ""
+
 msgid "Hostname"
 msgstr "نام سرور"
+
+msgid "Encryption"
+msgstr ""
 
 msgid "Link (b32)"
 msgstr "پیوند (b32)"
@@ -324,11 +357,17 @@ msgstr "مقصد"
 msgid "Added"
 msgstr ""
 
+msgid "Status"
+msgstr ""
+
 msgid "Select hosts for deletion from addressbook"
 msgstr "میزبان ها را برای حذف از دفترچه آدرس انتخاب کنید"
 
 msgid "More information on this entry"
 msgstr "اطلاعات بیشتر در مورد این ورودی"
+
+msgid "unknown"
+msgstr ""
 
 msgid "Base 32 address"
 msgstr "آدرس پایگاه 32"
@@ -357,11 +396,23 @@ msgstr "آدرس کامل مقصد یا b32"
 msgid "Select file"
 msgstr "فایل را انتخاب کنید"
 
-msgid "configuration"
-msgstr "پیکربندی"
+msgid "blacklist"
+msgstr ""
+
+msgid "Blacklist Management"
+msgstr ""
 
 msgid "File location"
 msgstr "موقعیت فایل"
+
+msgid "Enter I2P addresses to blacklist (one per line)"
+msgstr ""
+
+msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
+msgstr ""
+
+msgid "configuration"
+msgstr "پیکربندی"
 
 msgid "Hints"
 msgstr "نکات"
@@ -422,6 +473,12 @@ msgstr "فایل برای ثبت فعالیت (در صورت تمایل به /de
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "نام طرح زمینه نادیده گرفته شده برای استفاده (پیش‌فرض به طرح زمینه انتخاب‌شده توسط کنسول)"
+
+msgid "Interval (in hours) for running host checker (default is 8 hours)"
+msgstr ""
+
+msgid "How many pings to perform concurrently when running host checker (Default is 12, max is 100)"
+msgstr ""
 
 msgid "delete hosts"
 msgstr ""
@@ -485,6 +542,9 @@ msgstr "تصاویر شناسایی خود را ایجاد کنید"
 
 msgid "Launch Image Generator"
 msgstr "مولد تصویر را راه اندازی کنید"
+
+msgid "Export"
+msgstr ""
 
 msgid "Introduction"
 msgstr "معرفی"
@@ -614,4 +674,3 @@ msgstr "آدرس هایی که به صورت دستی به دفترچه آدرس
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "میزبان هایی که از اشتراک های خود دریافت می کنید با دفترچه آدرس روتر شما ادغام می شوند."
-

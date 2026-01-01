@@ -43,8 +43,8 @@ msgid "Total uploaders limit changed to {0}"
 msgstr "전역 업로더 숫자가 {0}으로 변경되었습니다."
 
 #, java-format
-msgid "Minimum total uploaders limit is {0}"
-msgstr "최소 전역 업로더 숫자는 {0}입니다."
+msgid "Minimum uploaders limit is {0}"
+msgstr ""
 
 #, java-format
 msgid "Up BW limit changed to {0}KBps"
@@ -293,12 +293,12 @@ msgstr "{0} 추가중"
 msgid "Download already running: {0}"
 msgstr "이미 다운로드 중입니다: {0}"
 
-msgid " - torrent file already exists"
-msgstr " - 토렌트 파일이 이미 존재합니다."
-
 #, java-format
 msgid "Failed to copy torrent file to {0}"
 msgstr "{0}에 토렌트 파일 복사 실패."
+
+msgid " - torrent file already exists"
+msgstr " - 토렌트 파일이 이미 존재합니다."
 
 #, java-format
 msgid "Too many files in \"{0}\" ({1})!"
@@ -419,7 +419,6 @@ msgid "Closing I2P tunnel after notifying trackers."
 msgstr "트래커에게 알린 후 I2P 터널을 닫는 중입니다."
 
 #, java-format
-#, java-format
 msgid "Cannot check {0}"
 msgstr "{0}을(를) 확인할 수 없습니다"
 
@@ -485,11 +484,35 @@ msgstr "이미 대기열에 있습니다: {0}"
 msgid "Torrent at {0} was not valid"
 msgstr "토렌트 {0}이 올바로지 않습니다"
 
-msgid "Configuration"
-msgstr "설정"
+msgid "Torrents"
+msgstr "토렌트"
+
+msgid "Refresh page"
+msgstr "페이지 새로고침"
+
+msgid "Configure"
+msgstr "구성"
+
+msgid "Torrent &amp; filesharing forum"
+msgstr "토렌트 및 파일 공유 포럼"
+
+msgid "Forum"
+msgstr "포럼"
+
+msgid "Search torrents"
+msgstr "토렌트 검색"
+
+msgid "Clear search"
+msgstr "검색 지우기"
+
+msgid "Click \"Add torrent\" button to fetch torrent"
+msgstr "\"토렌트 추가\" 버튼으로 다운로드 시작"
 
 msgid "Anonymous BitTorrent Client"
 msgstr "익명 비트토렌트 클라이언트"
+
+msgid "Configuration"
+msgstr "설정"
 
 #, java-format
 msgid "Are you sure you want to delete {0} and all downloaded data?"
@@ -510,36 +533,6 @@ msgstr "참고: 다운로드된 데이터는 삭제되지 않습니다."
 msgid "Deleting {0} and associated metadata only..."
 msgstr "{0}과(와) 관련 메타데이터만 삭제 중..."
 
-msgid "I2PSnark has stopped"
-msgstr "I2PSnark가 정지되었습니다"
-
-msgid "Router is down"
-msgstr "라우터가 꺼져있습니다"
-
-msgid "Torrents"
-msgstr "토렌트"
-
-msgid "Refresh page"
-msgstr "페이지 새로고침"
-
-msgid "Configure"
-msgstr "구성"
-
-msgid "Forum"
-msgstr "포럼"
-
-msgid "Torrent &amp; filesharing forum"
-msgstr "토렌트 및 파일 공유 포럼"
-
-msgid "Search torrents"
-msgstr "토렌트 검색"
-
-msgid "Clear search"
-msgstr "검색 지우기"
-
-msgid "Click \"Add torrent\" button to fetch torrent"
-msgstr "\"토렌트 추가\" 버튼으로 다운로드 시작"
-
 msgid "clear messages"
 msgstr "메세지 지우기"
 
@@ -559,18 +552,17 @@ msgstr "페이지 새로고침"
 msgid "Warning - No I2P"
 msgstr "경고 - I2P 없음"
 
+msgid "No torrents found."
+msgstr "토렌트를 찾을 수 없습니다."
+
+msgid "No torrents loaded."
+msgstr "토렌트가 없습니다."
+
+msgid "No DHT Peers"
+msgstr "DHT 피어 없음"
+
 msgid "Status"
 msgstr "상태"
-
-#, java-format
-msgid "Sort by {0}"
-msgstr "{0}로 정렬"
-
-msgid "Hide Peers"
-msgstr "피어 감추기"
-
-msgid "Show Peers"
-msgstr "피어 보이기"
 
 msgid "Torrent"
 msgstr "토렌트"
@@ -584,38 +576,20 @@ msgstr "토렌트 이름"
 msgid "ETA"
 msgstr "ETA"
 
-msgid "Estimated time remaining"
-msgstr "예상 소요시간"
-
 msgid "RX"
 msgstr "RX"
-
-msgid "Downloaded"
-msgstr "완료된 다운로드"
-
-msgid "Size"
-msgstr "크기"
 
 msgid "RX Rate"
 msgstr "RX 비율"
 
-msgid "Down Rate"
-msgstr "다운로드 비율"
-
 msgid "TX"
 msgstr "TX"
-
-msgid "Upload ratio"
-msgstr ""
-
-msgid "Uploaded"
-msgstr "완료된 업로드"
 
 msgid "TX Rate"
 msgstr "TX 비율"
 
-msgid "Up Rate"
-msgstr "업로드 비율"
+msgid "Start All"
+msgstr "모두 시작"
 
 msgid "Stop All"
 msgstr "모두 멈춤"
@@ -623,25 +597,24 @@ msgstr "모두 멈춤"
 msgid "Stop all torrents and the I2P tunnel"
 msgstr "모든 토렌트와 I2P 터널을 멈춤"
 
-msgid "Start All"
-msgstr "모두 시작"
+msgid "Start all torrents and the I2P tunnel"
+msgstr "모든 토렌트와 I2P 터널 시작"
 
 msgid "Start all stopped torrents"
 msgstr "모든  멈춰진 토렌트 시작"
 
-msgid "Start all torrents and the I2P tunnel"
-msgstr "모든 토렌트와 I2P 터널 시작"
+msgid "Hide Peers"
+msgstr "피어 감추기"
 
-msgid "No torrents found."
-msgstr "토렌트를 찾을 수 없습니다."
-
-msgid "No torrents loaded."
-msgstr "토렌트가 없습니다."
+msgid "Show Peers"
+msgstr "피어 보이기"
 
 #, java-format
-msgid "1 torrent"
-msgid_plural "{0} torrents"
-msgstr[0] "토렌트: {0}"
+msgid "Sort by {0}"
+msgstr "{0}로 정렬"
+
+msgid "Up Rate"
+msgstr "업로드 비율"
 
 msgid "Total size of loaded torrents"
 msgstr "로드된 토렌트의 총 크기"
@@ -650,11 +623,6 @@ msgstr "로드된 토렌트의 총 크기"
 msgid "1 connected peer"
 msgid_plural "{0} peer connections"
 msgstr[0] "1개 연결된 피어"
-
-#, java-format
-msgid "1 DHT peer"
-msgid_plural "{0} DHT peers"
-msgstr[0] "DHT 피어: {0}"
 
 msgid "Active downloads"
 msgstr "활성 다운로드"
@@ -683,14 +651,19 @@ msgstr "업로드된 총 데이터(나열된 토렌트의 경우)"
 msgid "Total upload speed"
 msgstr "총 업로드 속도"
 
+msgid "Toggle Debug Panel"
+msgstr ""
+
 msgid "Debug Mode"
 msgstr "디버그 모드"
 
 msgid "Normal Mode"
 msgstr "일반 모드"
 
-msgid "No DHT Peers"
-msgstr "DHT 피어 없음"
+#, java-format
+msgid "1 torrent"
+msgid_plural "{0} torrents"
+msgstr[0] "토렌트: {0}"
 
 msgid "Search"
 msgstr "찾다"
@@ -743,6 +716,13 @@ msgstr "마지막"
 msgid "Last page"
 msgstr "마지막 페이지"
 
+msgid "Enter URL or select torrent file"
+msgstr "URL을 입력하거나 토렌트 파일을 선택하세요"
+
+#, java-format
+msgid "Error uploading the torrent file: {0}"
+msgstr ""
+
 #, java-format
 msgid "Cannot add torrent {0} inside another torrent: {1}"
 msgstr "{1} 안의 {0} 토렌트를 추가할 수 없음"
@@ -751,12 +731,12 @@ msgstr "{1} 안의 {0} 토렌트를 추가할 수 없음"
 msgid "Download from non-I2P location {0} is not supported"
 msgstr "I2P가 아닌 위치 {0}에서의 다운로드는 지원되지 않습니다"
 
+msgid "Error: Version 2 info hashes are not supported"
+msgstr ""
+
 #, java-format
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
 msgstr "잘못된 URL: \"{0}\" 또는 \"{1}\"로 시작해야 합니다."
-
-msgid "Enter URL or select torrent file"
-msgstr "URL을 입력하거나 토렌트 파일을 선택하세요"
 
 #, java-format
 msgid "Magnet deleted: {0}"
@@ -765,10 +745,6 @@ msgstr "마그넷 삭제됨: {0}"
 #, java-format
 msgid "Torrent file could not be deleted: {0}"
 msgstr "Torrent 파일을 삭제할 수 없습니다: {0}"
-
-#, java-format
-msgid "Download deleted: {0}"
-msgstr "삭제된 다운로드: {0}"
 
 #, java-format
 msgid "Data file deleted: {0}"
@@ -785,6 +761,13 @@ msgstr "디렉토리를 삭제할 수 없습니다: {0}"
 #, java-format
 msgid "Directory deleted: {0}"
 msgstr "삭제된 디렉토리: {0}"
+
+msgid "Error creating torrent - you must specify a file or directory"
+msgstr "토렌트 생성 오류 - 파일이나 디렉토리를 입력하세요"
+
+#, java-format
+msgid "Cannot create a torrent for the nonexistent data: {0}"
+msgstr "존재하지 않는 데이터 \"{0}\"을 토렌트로 만들 수 없습니다"
 
 #, java-format
 msgid "Cannot add a torrent ending in \".torrent\": {0}"
@@ -828,13 +811,6 @@ msgstr "많은 I2P 추적기에서는 시드하기 전에 새 토렌트를 등�
 msgid "Error creating a torrent for \"{0}\""
 msgstr "\"{0}\" 토렌트 시작 오류"
 
-#, java-format
-msgid "Cannot create a torrent for the nonexistent data: {0}"
-msgstr "존재하지 않는 데이터 \"{0}\"을 토렌트로 만들 수 없습니다"
-
-msgid "Error creating torrent - you must specify a file or directory"
-msgstr "토렌트 생성 오류 - 파일이나 디렉토리를 입력하세요"
-
 msgid "Delete selected"
 msgstr "선택된 항목 지우기"
 
@@ -868,59 +844,17 @@ msgstr "유효한 이름과 필터 패턴을 입력하세요."
 msgid "Restored default torrent create filters"
 msgstr "기본 토렌트 생성 필터 복원"
 
-msgid "Checking"
-msgstr "확인중"
-
-msgid "Allocating"
-msgstr "할당중"
-
-msgid "Starting"
-msgstr "시작중"
-
-#, java-format
-msgid "Seeding to {0} peer"
-msgid_plural "Seeding to {0} peers"
-msgstr[0] "{0} 피어에게 시드"
-
-#, java-format
-msgid "Seeding to {0} of {1} peers in swarm"
-msgstr "떼의 {1} 피어 중 {0}에 시드"
-
-msgid "OK"
-msgstr "OK"
-
-#, java-format
-msgid "Downloading from {0} peer"
-msgid_plural "Downloading from {0} peers"
-msgstr[0] "{0} 피어에서 다운로드"
-
-msgid "Stalled"
-msgstr "정체됨"
-
-#, java-format
-msgid "Connected to {0} of {1} peers in swarm"
-msgstr "떼의 {1} 피어 중 {0}에 연결됨"
-
-msgid "No Peers"
-msgstr "피어 없음"
-
 msgid "Torrent details"
 msgstr "토렌트 세부정보"
 
 msgid "Torrent has comments"
 msgstr "토렌트에 댓글이 있습니다"
 
-msgid "View files"
-msgstr "파일 보기"
-
 msgid "Open file"
 msgstr "파일 열기"
 
-msgid "complete"
-msgstr "완료"
-
-msgid "remaining"
-msgstr "남은"
+msgid "View files"
+msgstr "파일 보기"
 
 msgid "Completed"
 msgstr "완료된"
@@ -955,14 +889,48 @@ msgstr "삭제"
 msgid "Delete .torrent file and associated data files"
 msgstr "Torrent 파일 및 관련 데이터 파일을 삭제합니다"
 
+msgid "Checking"
+msgstr "확인중"
+
+msgid "Allocating"
+msgstr "할당중"
+
+msgid "Starting"
+msgstr "시작중"
+
+#, java-format
+msgid "Seeding to {0} peer"
+msgid_plural "Seeding to {0} peers"
+msgstr[0] "{0} 피어에게 시드"
+
+#, java-format
+msgid "Connected to {0} of {1} peers in swarm"
+msgstr "떼의 {1} 피어 중 {0}에 연결됨"
+
+msgid "Stalled"
+msgstr "정체됨"
+
+#, java-format
+msgid "Seeding to {0} peer in swarm"
+msgid_plural "Seeding to {0} peers in swarm"
+msgstr[0] ""
+
+#, java-format
+msgid "Downloading from {0} peer"
+msgid_plural "Downloading from {0} peers"
+msgstr[0] "{0} 피어에서 다운로드"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "No Peers"
+msgstr "피어 없음"
+
 msgid "Peer attached to swarm"
 msgstr "떼에 연결된 피어"
 
 msgid "Destination (identity) of peer"
 msgstr "피어의 대상(ID)"
-
-msgid "Version"
-msgstr "버전"
 
 msgid "seconds"
 msgstr "초"
@@ -1335,14 +1303,68 @@ msgstr "알 수 없는 명령어"
 msgid "Please retry form submission (bad nonce)"
 msgstr "양식 제출을 다시 시도해 주십시오 (잘못된 nonce)"
 
+msgid "Resource Does Not Exist"
+msgstr "리소스가 존재하지 않습니다."
+
+msgid "Resource"
+msgstr "자원"
+
+msgid "Base"
+msgstr "베이스"
+
+msgid "Files"
+msgstr "파일"
+
+msgid "Directory"
+msgstr "디렉토리"
+
+msgid "Size"
+msgstr "크기"
+
+msgid "Download Status"
+msgstr "다운로드 상태"
+
+msgid "Remaining"
+msgstr "남은"
+
+msgid "Download Priority"
+msgstr "다운로드 우선순위"
+
+msgid "up"
+msgstr ""
+
+msgid "Parent directory"
+msgstr "상위 디렉토리로 이동"
+
+msgid "Audio Playlist"
+msgstr "오디오 재생 목록"
+
+msgid "Not found"
+msgstr "찾을 수 없음"
+
+msgid "File not found in torrent"
+msgstr "토렌트에 파일 없음"
+
+msgid "Unrecognized"
+msgstr "인식되지 않음"
+
+msgid "Preview"
+msgstr "미리보기"
+
+msgid "Save priorities"
+msgstr "우선순위 저장"
+
+msgid "Comments"
+msgstr "코멘트"
+
+msgid "Resource Not found"
+msgstr "리소스를 찾을 수 없습니다."
+
 msgid "Info hash"
 msgstr "정보 해시"
 
 msgid "Created"
 msgstr "생성됨"
-
-msgid "Files"
-msgstr "파일"
 
 msgid "Added"
 msgstr "추가된"
@@ -1358,9 +1380,6 @@ msgstr "다운로드 속도"
 
 msgid "Completion"
 msgstr "완료"
-
-msgid "Remaining"
-msgstr "남은"
 
 msgid "Skipped"
 msgstr "스킵된"
@@ -1386,51 +1405,6 @@ msgstr "파일 무결성을 확인하려면 토렌트를 중지하세요"
 msgid "Check integrity of the downloaded files"
 msgstr "다운로드한 파일의 무결성을 확인하세요"
 
-msgid "Resource Not found"
-msgstr "리소스를 찾을 수 없습니다."
-
-msgid "Base"
-msgstr "베이스"
-
-msgid "Resource Does Not Exist"
-msgstr "리소스가 존재하지 않습니다."
-
-msgid "Resource"
-msgstr "자원"
-
-msgid "Audio file: "
-msgstr "오디오 파일: "
-
-msgid "Video file: "
-msgstr "비디오 파일: "
-
-msgid "Directory"
-msgstr "디렉토리"
-
-msgid "Download Status"
-msgstr "다운로드 상태"
-
-msgid "Download Priority"
-msgstr "다운로드 우선순위"
-
-msgid "Parent directory"
-msgstr "상위 디렉토리로 이동"
-
-msgid "Audio Playlist"
-msgstr "오디오 재생 목록"
-
-msgid "Not found"
-msgstr "찾을 수 없음"
-
-msgid "File not found in torrent"
-msgstr "토렌트에 파일 없음"
-
-msgid "Unrecognized"
-msgstr "인식되지 않음"
-
-msgid "Preview"
-msgstr "미리보기"
-
 msgid "Download file at high priority"
 msgstr "높은 우선순위로 파일 다운로드"
 
@@ -1449,11 +1423,11 @@ msgstr "이 파일을 다운로드하지 마세요"
 msgid "Skip"
 msgstr "스킵"
 
-msgid "Save priorities"
-msgstr "우선순위 저장"
+msgid "complete"
+msgstr "완료"
 
-msgid "Comments"
-msgstr "코멘트"
+msgid "remaining"
+msgstr "남은"
 
 msgid "Ratings and Comments"
 msgstr "평가 및 의견"
@@ -1522,3 +1496,20 @@ msgstr "변경 사항 저장"
 
 msgid "Torrent must be stopped"
 msgstr "토렌트를 중지해야 합니다"
+
+#, java-format
+
+
+
+
+
+
+
+#, java-format
+
+#, java-format
+
+#, java-format
+
+
+

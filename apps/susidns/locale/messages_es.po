@@ -31,8 +31,11 @@ msgstr "El nombre de servidor \"{0}\" requiere ser convertido a ASCII, pero la l
 msgid "Source"
 msgstr "Fuente"
 
-msgid "Imported from file hosts.txt"
+msgid "Imported from"
 msgstr ""
+
+msgid "Imported from file"
+msgstr "Importado desde archivo"
 
 msgid "Manually added via SusiDNS"
 msgstr "Agregado manualmente vía SusiDNS"
@@ -172,11 +175,17 @@ msgstr "Si el problema persiste, verique que tiene activas las cookies en su nav
 msgid "Save"
 msgstr "Guardar"
 
-msgid "Configuration saved."
-msgstr "Configuración guardada."
+msgid "Blacklist saved."
+msgstr ""
 
 msgid "Reload"
 msgstr "Recargar"
+
+msgid "Blacklist reloaded from file."
+msgstr ""
+
+msgid "Configuration saved."
+msgstr "Configuración guardada."
 
 msgid "Configuration reloaded."
 msgstr "Configuración recargada."
@@ -203,6 +212,18 @@ msgstr "Error al agregar la dirección de destino {0} al servicio de nombrado {1
 msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "Error al borrar la dirección de destino {0} del servicio de nombrado {1}"
 
+msgid "Blacklist Selected"
+msgstr ""
+
+#, java-format
+msgid "1 destination blacklisted."
+msgid_plural "{0} destinations blacklisted."
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "No valid entries selected to blacklist."
+msgstr ""
+
 msgid "Save Notes"
 msgstr "Guardar notas"
 
@@ -215,9 +236,6 @@ msgstr "No se encontraron entradas en el archivo"
 #, java-format
 msgid "Imported from file {0}"
 msgstr "Importado del archivo {0}"
-
-msgid "Imported from file"
-msgstr "Importado desde archivo"
 
 #, java-format
 msgid "Loaded {0} entry from file"
@@ -270,6 +288,9 @@ msgstr "Publicado"
 msgid "Subscriptions"
 msgstr "Suscripciones"
 
+msgid "Blacklist"
+msgstr ""
+
 msgid "Configuration"
 msgstr "Configuración"
 
@@ -306,14 +327,26 @@ msgstr "Buscar"
 msgid "latest"
 msgstr ""
 
+msgid "Alive"
+msgstr ""
+
+msgid "Dead"
+msgstr ""
+
 msgid "all"
 msgstr "filtro actual"
 
 msgid "Info"
 msgstr "Información"
 
+msgid "Type"
+msgstr ""
+
 msgid "Hostname"
 msgstr "Nombre de servidor"
+
+msgid "Encryption"
+msgstr ""
 
 msgid "Link (b32)"
 msgstr "Enlace (b32)"
@@ -324,11 +357,17 @@ msgstr "Destino"
 msgid "Added"
 msgstr ""
 
+msgid "Status"
+msgstr ""
+
 msgid "Select hosts for deletion from addressbook"
 msgstr "Seleccione servidores para eliminarlos de la libreta de direcciones"
 
 msgid "More information on this entry"
 msgstr "Más información sobre esta entrada"
+
+msgid "unknown"
+msgstr ""
 
 msgid "Base 32 address"
 msgstr "Dirección a base de 32"
@@ -357,11 +396,23 @@ msgstr "Destino completo o dirección b32"
 msgid "Select file"
 msgstr "Seleccionar archivo"
 
-msgid "configuration"
-msgstr "configuración"
+msgid "blacklist"
+msgstr ""
+
+msgid "Blacklist Management"
+msgstr ""
 
 msgid "File location"
 msgstr "Ubicación del fichero"
+
+msgid "Enter I2P addresses to blacklist (one per line)"
+msgstr ""
+
+msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
+msgstr ""
+
+msgid "configuration"
+msgstr "configuración"
 
 msgid "Hints"
 msgstr "Consejos"
@@ -422,6 +473,12 @@ msgstr "El archivo en el que se guarda el registro de actividad (Cámbialo a /de
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "Nombre del tema de anulación a usar (el valor predeterminado es el tema seleccionado por la consola)"
+
+msgid "Interval (in hours) for running host checker (default is 8 hours)"
+msgstr ""
+
+msgid "How many pings to perform concurrently when running host checker (Default is 12, max is 100)"
+msgstr ""
 
 msgid "delete hosts"
 msgstr ""
@@ -485,6 +542,9 @@ msgstr "Cree sus propias imágenes de identificación"
 
 msgid "Launch Image Generator"
 msgstr "Iniciar el generador de imágenes"
+
+msgid "Export"
+msgstr ""
 
 msgid "Introduction"
 msgstr "Introducción"
@@ -614,4 +674,3 @@ msgstr "Las direcciones añadidas manualmente a su libreta de direcciones Master
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Los equipos que recibe desde sus suscripciones se combinarán con su libreta de direcciones Router."
-

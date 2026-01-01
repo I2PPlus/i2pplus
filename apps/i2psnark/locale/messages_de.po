@@ -722,7 +722,6 @@ msgid "Enter URL or select torrent file"
 msgstr "Geben Sie eine URL ein oder wählen Sie eine Torrent-Datei aus"
 
 #, java-format
-#, java-format
 msgid "Error uploading the torrent file: {0}"
 msgstr "Fehler beim Hochladen der Torrent-Datei: {0}"
 
@@ -1505,19 +1504,3 @@ msgstr "Änderungen speichern"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent muss gestoppt werden"
-
-
-
-
-
-
-
-
-#, java-format
-
-#, java-format
-
-#, java-format
-
-
-

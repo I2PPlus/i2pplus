@@ -31,8 +31,11 @@ msgstr "\"{0}\" ana bilgisayar adı ASCII'ye dönüştürülmeyi gerektiriyor an
 msgid "Source"
 msgstr "Kaynak"
 
-msgid "Imported from file hosts.txt"
+msgid "Imported from"
 msgstr ""
+
+msgid "Imported from file"
+msgstr "Dosyadan içeri aktarıldı"
 
 msgid "Manually added via SusiDNS"
 msgstr "SusiDNS üzerine el ile eklendi"
@@ -172,11 +175,17 @@ msgstr "Sorun devam ederse tarayıcınızda çerezlerin etkinleştirildiğini do
 msgid "Save"
 msgstr "Kaydet"
 
-msgid "Configuration saved."
-msgstr "Yapılandırma kaydedildi."
+msgid "Blacklist saved."
+msgstr ""
 
 msgid "Reload"
 msgstr "Yeniden yükle"
+
+msgid "Blacklist reloaded from file."
+msgstr ""
+
+msgid "Configuration saved."
+msgstr "Yapılandırma kaydedildi."
 
 msgid "Configuration reloaded."
 msgstr "Yapılandırma yeniden yüklendi"
@@ -203,6 +212,18 @@ msgstr "{0} hedefi {1} ad hizmetine eklenemedi"
 msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "{0} hedefi {1} ad hizmetinden silinemedi"
 
+msgid "Blacklist Selected"
+msgstr ""
+
+#, java-format
+msgid "1 destination blacklisted."
+msgid_plural "{0} destinations blacklisted."
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "No valid entries selected to blacklist."
+msgstr ""
+
 msgid "Save Notes"
 msgstr "Notları Kaydet"
 
@@ -215,9 +236,6 @@ msgstr "Dosyada herhangi bir kayıt bulunamadı"
 #, java-format
 msgid "Imported from file {0}"
 msgstr "{0} dosyasından içe aktarıldı"
-
-msgid "Imported from file"
-msgstr "Dosyadan içeri aktarıldı"
 
 #, java-format
 msgid "Loaded {0} entry from file"
@@ -270,6 +288,9 @@ msgstr "Yayınlanmış"
 msgid "Subscriptions"
 msgstr "Abonelikler"
 
+msgid "Blacklist"
+msgstr ""
+
 msgid "Configuration"
 msgstr "Yapılandırma"
 
@@ -306,14 +327,26 @@ msgstr "Arayın"
 msgid "latest"
 msgstr ""
 
+msgid "Alive"
+msgstr ""
+
+msgid "Dead"
+msgstr ""
+
 msgid "all"
 msgstr "süzgeci temizleyin"
 
 msgid "Info"
 msgstr "Bilgi"
 
+msgid "Type"
+msgstr ""
+
 msgid "Hostname"
 msgstr "Sunucu Adı"
+
+msgid "Encryption"
+msgstr ""
 
 msgid "Link (b32)"
 msgstr "Bağlantı (b32)"
@@ -324,11 +357,17 @@ msgstr "Hedef"
 msgid "Added"
 msgstr ""
 
+msgid "Status"
+msgstr ""
+
 msgid "Select hosts for deletion from addressbook"
 msgstr "Adres defterinden silinecek sunucuları işaretleyin"
 
 msgid "More information on this entry"
 msgstr "Kayıtla ilgili diğer bilgiler"
+
+msgid "unknown"
+msgstr ""
 
 msgid "Base 32 address"
 msgstr "Base 32 adresi"
@@ -357,11 +396,23 @@ msgstr "Tam hedef veya b32 adresi"
 msgid "Select file"
 msgstr "Dosya seç"
 
-msgid "configuration"
-msgstr "yapılandırma"
+msgid "blacklist"
+msgstr ""
+
+msgid "Blacklist Management"
+msgstr ""
 
 msgid "File location"
 msgstr "Dosya konumu"
+
+msgid "Enter I2P addresses to blacklist (one per line)"
+msgstr ""
+
+msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
+msgstr ""
+
+msgid "configuration"
+msgstr "yapılandırma"
 
 msgid "Hints"
 msgstr "İpuçları"
@@ -422,6 +473,12 @@ msgstr "Etkinliğin kaydedileceği dosya (isterseniz /dev/null olarak değiştir
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "Kullanılacak geçersiz kılma temasının adı (varsayılan olarak konsol tarafından seçilen temadır)"
+
+msgid "Interval (in hours) for running host checker (default is 8 hours)"
+msgstr ""
+
+msgid "How many pings to perform concurrently when running host checker (Default is 12, max is 100)"
+msgstr ""
 
 msgid "delete hosts"
 msgstr ""
@@ -485,6 +542,9 @@ msgstr "Kendi tanıtım görsellerinizi oluşturun"
 
 msgid "Launch Image Generator"
 msgstr "Görsel Üretecini Başlat"
+
+msgid "Export"
+msgstr ""
 
 msgid "Introduction"
 msgstr "Giriş"
@@ -614,4 +674,3 @@ msgstr "Ana adres defterinize manuel olarak eklenen adresler, Yönlendirici adre
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Aboneliklerinizden aldığınız ana bilgisayarlar Yönlendiricinizin adres defteriyle birleşecek.Aboneliklerden gelen sunucular Yöneltici adres defteriniz ile birleştirilir."
-

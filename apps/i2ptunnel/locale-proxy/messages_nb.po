@@ -214,9 +214,6 @@ msgstr "Advarsel: Forespørsel avslått"
 msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
 msgstr "Denne adressen ser ut til å være feil utformet. Vennligst bekreft at du har oppgitt en gyldig adresse!"
 
-msgid "You attempted to connect to a non-I2P website or location."
-msgstr "Du forsøkte å koble til et ikke-I2P-nettsted eller sted."
-
 msgid "Warning: Bad Address Helper"
 msgstr "Advarsel: Dårlig adressehjelper"
 
@@ -229,6 +226,15 @@ msgstr "Det ser ut til å være søppeldata, eller en feiltastet Base 32-adresse
 
 msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
 msgstr "Sjekk URL-en din for å prøve å fikse hjelpenøkkelen til å være et gyldig Base 32-vertsnavn eller Base 64-nøkkel."
+
+msgid "Warning: Address Blacklisted"
+msgstr ""
+
+msgid "The requested destination is in your blacklist and access has been blocked."
+msgstr ""
+
+msgid "To allow access to this site, remove it from your blacklist on the SusiDNS blacklist management page."
+msgstr ""
 
 msgid "Warning: Invalid Destination"
 msgstr "Lokal destinasjon"
@@ -420,3 +426,4 @@ msgstr "Klikk her hvis du ikke blir videresendt automatisk."
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
 msgstr "Lagret autentiseringen for {0}, omdirigerer nå."
+

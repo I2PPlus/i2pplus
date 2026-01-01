@@ -31,8 +31,11 @@ msgstr "O nome do anfitrião \"{0}\" requer conversão para ASCII mas a bibliote
 msgid "Source"
 msgstr "Origem"
 
-msgid "Imported from file hosts.txt"
+msgid "Imported from"
 msgstr ""
+
+msgid "Imported from file"
+msgstr "Importado do arquivo"
 
 msgid "Manually added via SusiDNS"
 msgstr "Adicionado manualmente via SusiDNS"
@@ -172,11 +175,17 @@ msgstr "Se o problema persistir, verificar se o seu navegador está aceitando co
 msgid "Save"
 msgstr "Salvar"
 
-msgid "Configuration saved."
-msgstr "Configuração salva."
+msgid "Blacklist saved."
+msgstr ""
 
 msgid "Reload"
 msgstr "Recarregar"
+
+msgid "Blacklist reloaded from file."
+msgstr ""
+
+msgid "Configuration saved."
+msgstr "Configuração salva."
 
 msgid "Configuration reloaded."
 msgstr "Configuração recarregada."
@@ -203,6 +212,18 @@ msgstr "Falha ao adicionar o Destino para {0} ao serviço de nomes {1}"
 msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "Falha ao remover o Destino para {0} do serviço de nomes {1}"
 
+msgid "Blacklist Selected"
+msgstr ""
+
+#, java-format
+msgid "1 destination blacklisted."
+msgid_plural "{0} destinations blacklisted."
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "No valid entries selected to blacklist."
+msgstr ""
+
 msgid "Save Notes"
 msgstr "Salvar notas"
 
@@ -215,9 +236,6 @@ msgstr "Nenhuma entrada encontrada no arquivo"
 #, java-format
 msgid "Imported from file {0}"
 msgstr "Importado do arquivo {0}"
-
-msgid "Imported from file"
-msgstr "Importado do arquivo"
 
 #, java-format
 msgid "Loaded {0} entry from file"
@@ -270,6 +288,9 @@ msgstr "Publicado"
 msgid "Subscriptions"
 msgstr "Inscrições"
 
+msgid "Blacklist"
+msgstr ""
+
 msgid "Configuration"
 msgstr "Configuração"
 
@@ -306,14 +327,26 @@ msgstr "Procurar"
 msgid "latest"
 msgstr ""
 
+msgid "Alive"
+msgstr ""
+
+msgid "Dead"
+msgstr ""
+
 msgid "all"
 msgstr "limpar filtro"
 
 msgid "Info"
 msgstr "Informações"
 
+msgid "Type"
+msgstr ""
+
 msgid "Hostname"
 msgstr "Nome do host"
+
+msgid "Encryption"
+msgstr ""
 
 msgid "Link (b32)"
 msgstr "Ligação (b32)"
@@ -324,11 +357,17 @@ msgstr "Destino"
 msgid "Added"
 msgstr ""
 
+msgid "Status"
+msgstr ""
+
 msgid "Select hosts for deletion from addressbook"
 msgstr "Selecione hosts para exclusão do catálogo de endereços"
 
 msgid "More information on this entry"
 msgstr "Mais informações para esta entrada"
+
+msgid "unknown"
+msgstr ""
 
 msgid "Base 32 address"
 msgstr "Endereço Base 32"
@@ -357,11 +396,23 @@ msgstr "Destino completo ou endereço b32"
 msgid "Select file"
 msgstr "Selecionar arquivo"
 
-msgid "configuration"
-msgstr "configuração"
+msgid "blacklist"
+msgstr ""
+
+msgid "Blacklist Management"
+msgstr ""
 
 msgid "File location"
 msgstr "Local do arquivo"
+
+msgid "Enter I2P addresses to blacklist (one per line)"
+msgstr ""
+
+msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
+msgstr ""
+
+msgid "configuration"
+msgstr "configuração"
 
 msgid "Hints"
 msgstr "Dicas"
@@ -422,6 +473,12 @@ msgstr "Arquivo de log (alterar para /dev/null se você preferir)"
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "Nome do tema de substituição a ser usado (o padrão é o tema selecionado pelo console)"
+
+msgid "Interval (in hours) for running host checker (default is 8 hours)"
+msgstr ""
+
+msgid "How many pings to perform concurrently when running host checker (Default is 12, max is 100)"
+msgstr ""
 
 msgid "delete hosts"
 msgstr ""
@@ -485,6 +542,9 @@ msgstr "Crie suas próprias imagens de identificação"
 
 msgid "Launch Image Generator"
 msgstr "Iniciar Gerador de Imagens"
+
+msgid "Export"
+msgstr ""
 
 msgid "Introduction"
 msgstr "Início"
@@ -614,4 +674,3 @@ msgstr "Endereços adicionados manualmente ao catálogo de endereços mestre ser
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Os hosts que você recebe de suas assinaturas serão mesclados com o catálogo de endereços do seu roteador."
-

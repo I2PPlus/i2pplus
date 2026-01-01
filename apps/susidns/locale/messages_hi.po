@@ -31,8 +31,11 @@ msgstr "होस्ट नाम \"{0}\" को ASCII में परिवर
 msgid "Source"
 msgstr "स्रोत"
 
-msgid "Imported from file hosts.txt"
+msgid "Imported from"
 msgstr ""
+
+msgid "Imported from file"
+msgstr "फ़ाइल से आयात किया"
 
 msgid "Manually added via SusiDNS"
 msgstr "SusiDNS के माध्यम से हस्ताक्षरित जोड़ा गया"
@@ -172,11 +175,17 @@ msgstr "अगर समस्या जारी रहती है, तो �
 msgid "Save"
 msgstr "सहेजें"
 
-msgid "Configuration saved."
-msgstr "निर्माण सहेजा गया।"
+msgid "Blacklist saved."
+msgstr ""
 
 msgid "Reload"
 msgstr "पुनः लोड करें"
+
+msgid "Blacklist reloaded from file."
+msgstr ""
+
+msgid "Configuration saved."
+msgstr "निर्माण सहेजा गया।"
 
 msgid "Configuration reloaded."
 msgstr "निर्माण पुनः लोड किया गया।"
@@ -203,6 +212,18 @@ msgstr "{0} के लिए गंतव्य को नामिंग से
 msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "{0} के लिए गंतव्य को नामिंग सेवा {1} से हटाने में विफलता"
 
+msgid "Blacklist Selected"
+msgstr ""
+
+#, java-format
+msgid "1 destination blacklisted."
+msgid_plural "{0} destinations blacklisted."
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "No valid entries selected to blacklist."
+msgstr ""
+
 msgid "Save Notes"
 msgstr "नोट्स सहेजें"
 
@@ -215,9 +236,6 @@ msgstr "फ़ाइल में कोई प्रविष्टि नह�
 #, java-format
 msgid "Imported from file {0}"
 msgstr "{0} फ़ाइल से आयात किया"
-
-msgid "Imported from file"
-msgstr "फ़ाइल से आयात किया"
 
 #, java-format
 msgid "Loaded {0} entry from file"
@@ -270,6 +288,9 @@ msgstr "प्रकाशित"
 msgid "Subscriptions"
 msgstr "सब्सक्रिप्शन"
 
+msgid "Blacklist"
+msgstr ""
+
 msgid "Configuration"
 msgstr "निर्माण"
 
@@ -306,14 +327,26 @@ msgstr "खोज"
 msgid "latest"
 msgstr ""
 
+msgid "Alive"
+msgstr ""
+
+msgid "Dead"
+msgstr ""
+
 msgid "all"
 msgstr "फ़िल्टर साफ़ करें"
 
 msgid "Info"
 msgstr "जानकारी"
 
+msgid "Type"
+msgstr ""
+
 msgid "Hostname"
 msgstr "होस्टनाम"
+
+msgid "Encryption"
+msgstr ""
 
 msgid "Link (b32)"
 msgstr "लिंक (b32)"
@@ -324,11 +357,17 @@ msgstr "गंतव्य"
 msgid "Added"
 msgstr ""
 
+msgid "Status"
+msgstr ""
+
 msgid "Select hosts for deletion from addressbook"
 msgstr "पत्रिका से हटाने के लिए होस्ट चुनें"
 
 msgid "More information on this entry"
 msgstr "इस प्रविष्टि के बारे में अधिक जानकारी"
+
+msgid "unknown"
+msgstr ""
 
 msgid "Base 32 address"
 msgstr "बेस 32 पता"
@@ -357,11 +396,23 @@ msgstr "पूर्ण गंतव्य या b32 पता"
 msgid "Select file"
 msgstr "फ़ाइल चुनें"
 
-msgid "configuration"
-msgstr "निर्माण"
+msgid "blacklist"
+msgstr ""
+
+msgid "Blacklist Management"
+msgstr ""
 
 msgid "File location"
 msgstr "फ़ाइल स्थान"
+
+msgid "Enter I2P addresses to blacklist (one per line)"
+msgstr ""
+
+msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
+msgstr ""
+
+msgid "configuration"
+msgstr "निर्माण"
 
 msgid "Hints"
 msgstr "सुझाव"
@@ -422,6 +473,12 @@ msgstr "गतिविधि को लॉग करने के लिए फ
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "उपयोग करने के लिए ओवरराइड थीम का नाम (डिफ़ॉल्ट के रूप में कंसोल-चुने गए थीम का होता है)"
+
+msgid "Interval (in hours) for running host checker (default is 8 hours)"
+msgstr ""
+
+msgid "How many pings to perform concurrently when running host checker (Default is 12, max is 100)"
+msgstr ""
 
 msgid "delete hosts"
 msgstr ""
@@ -485,6 +542,9 @@ msgstr "अपने खुद के पहचान छवियों को 
 
 msgid "Launch Image Generator"
 msgstr "इमेज जनरेटर लॉन्च करें"
+
+msgid "Export"
+msgstr ""
 
 msgid "Introduction"
 msgstr "परिचय"
@@ -614,4 +674,3 @@ msgstr "मास्टर पत्रिका में मानवीय �
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "सब्सक्रिप्शन से आपको मिले मेजबान आपकी राउटर पत्रिका में मिलेंगे।"
-

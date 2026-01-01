@@ -214,9 +214,6 @@ msgstr "Figyelmeztetés: Kérelem elutasítva"
 msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
 msgstr "Úgy tűnik, hogy ez a cím hibás. Kérjük, ellenőrizze, hogy adott -e érvényes címet!"
 
-msgid "You attempted to connect to a non-I2P website or location."
-msgstr "Nem I2P webhelyhez vagy helyhez próbált csatlakozni."
-
 msgid "Warning: Bad Address Helper"
 msgstr "Figyelmeztetés: Hibás cím segítő"
 
@@ -229,6 +226,15 @@ msgstr "Úgy tűnik, hogy szemét adatról van szó, vagy rosszul írta be a Bas
 
 msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
 msgstr "Ellenőrizze az URL-címét, és próbálja meg kijavítani a segítőkulcsot érvényes Base 32 gazdagépnévre vagy Base 64 kulcsra."
+
+msgid "Warning: Address Blacklisted"
+msgstr ""
+
+msgid "The requested destination is in your blacklist and access has been blocked."
+msgstr ""
+
+msgid "To allow access to this site, remove it from your blacklist on the SusiDNS blacklist management page."
+msgstr ""
 
 msgid "Warning: Invalid Destination"
 msgstr "Helyi célállomást"
@@ -420,3 +426,4 @@ msgstr "Kattints ide, amennyiben nem történt meg az automatikus átirányítá
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
 msgstr "Mentettük a(z) {0} hitelesítését, átirányítás most."
+

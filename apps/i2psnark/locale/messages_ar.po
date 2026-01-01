@@ -419,7 +419,6 @@ msgid "Closing I2P tunnel after notifying trackers."
 msgstr "إغلاق نفق I2P بعد إخطار المتتبعين."
 
 #, java-format
-#, java-format
 msgid "Cannot check {0}"
 msgstr "لا يمكن التحقق من {0}"
 
@@ -1537,20 +1536,3 @@ msgstr "حفظ التغييرات"
 
 msgid "Torrent must be stopped"
 msgstr "يجب إيقاف السيل"
-
-#, java-format
-
-
-
-
-
-
-
-#, java-format
-
-#, java-format
-
-#, java-format
-
-
-

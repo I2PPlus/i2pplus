@@ -43,7 +43,6 @@ msgid "Total uploaders limit changed to {0}"
 msgstr "Το συνολικό όριο μεταφορτωτών άλλαξε σε {0}"
 
 #, java-format
-#, java-format
 msgid "Minimum uploaders limit is {0}"
 msgstr "Ελάχιστο όριο ανεβασισμένων είναι {0}"
 
@@ -56,11 +55,9 @@ msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "Το ελάχιστο ανώτατο όριο εύρους ζώνης είναι {0}KBps"
 
 #, java-format
-#, java-format
 msgid "Maximum download speed changed to {0}KB/s"
 msgstr "Η μέγιστη ταχύτητα λήψε άλλαξε σε {0}KB/s"
 
-#, java-format
 #, java-format
 msgid "Download speed limit is {0}KB/s"
 msgstr "Το όριο ταχύτητας λήψε είναι {0}KB/s"
@@ -1507,20 +1504,3 @@ msgstr "Αποθήκευση αλλαγών"
 
 msgid "Torrent must be stopped"
 msgstr "Το torrent πρέπει να σταματήσει"
-
-#, java-format
-
-
-
-
-
-
-
-#, java-format
-
-#, java-format
-
-#, java-format
-
-
-

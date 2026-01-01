@@ -214,9 +214,6 @@ msgstr "Предупреждение: Отказ в выполнении зап�
 msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
 msgstr "Похоже, этот адрес имеет неправильный формат. Похоже, что этот адрес неправильно сформирован. Пожалуйста, проверьте, что вы указали правильный адрес!"
 
-msgid "You attempted to connect to a non-I2P website or location."
-msgstr "Вы попытались соединиться с сайтом не в сети I2P."
-
 msgid "Warning: Bad Address Helper"
 msgstr "Предупреждение: Некорректный AddressHelper"
 
@@ -229,6 +226,15 @@ msgstr "Возможно, он содержит ненужные данные и
 
 msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
 msgstr "Проверьте свой URL-адрес, чтобы попытаться исправить вспомогательный ключ, чтобы он был действительным именем хоста Base 32 или ключом Base 64.Проверьте URL и попробуйте исправить ссылку с использованием корректной ссылки Base32 или Base64."
+
+msgid "Warning: Address Blacklisted"
+msgstr ""
+
+msgid "The requested destination is in your blacklist and access has been blocked."
+msgstr ""
+
+msgid "To allow access to this site, remove it from your blacklist on the SusiDNS blacklist management page."
+msgstr ""
 
 msgid "Warning: Invalid Destination"
 msgstr "Локальный адрес назначения"
@@ -420,3 +426,4 @@ msgstr "Нажмите сюда если автоматическое перен
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
 msgstr "Для {0} аутентификация сохранена, перенаправляем дальше."
+

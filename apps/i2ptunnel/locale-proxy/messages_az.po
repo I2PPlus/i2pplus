@@ -214,9 +214,6 @@ msgstr "Xəbərdarlıq: Istəy Red Etildi"
 msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
 msgstr "Bu ünvan səhv görünür. Lütfən, düzgün bir ünvan təmin etdiyinizdən əmin olun!"
 
-msgid "You attempted to connect to a non-I2P website or location."
-msgstr "Siz I2P-dən başqa bir veb sayt və ya nöqtə ilə əlaqə saxlamağa çalışdınız."
-
 msgid "Warning: Bad Address Helper"
 msgstr "Xəbərdarlıq: Pis Ünvan Köməkçisi"
 
@@ -229,6 +226,15 @@ msgstr "Bu, çöp məlumatı kimi görünür, və ya yanlış yazılmış Base 3
 
 msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
 msgstr "URL-nizi yoxlayın və köməkçi açarı düzgün Base 32 xost adı və ya Base 64 açarı olaraq düzəltməyə çalışın."
+
+msgid "Warning: Address Blacklisted"
+msgstr ""
+
+msgid "The requested destination is in your blacklist and access has been blocked."
+msgstr ""
+
+msgid "To allow access to this site, remove it from your blacklist on the SusiDNS blacklist management page."
+msgstr ""
 
 msgid "Warning: Invalid Destination"
 msgstr "Xəbərdarlıq: Səhv Nöqtə"
@@ -420,3 +426,4 @@ msgstr "Avtomatik olaraq yönləndirilməyəsəniz, buraya klikləyin."
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
 msgstr "{0} üçün təsdiqləməni saxladık, indi yönləndiririk."
+

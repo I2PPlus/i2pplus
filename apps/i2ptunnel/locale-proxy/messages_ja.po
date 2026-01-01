@@ -214,9 +214,6 @@ msgstr "警告: 要求が拒否されました"
 msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
 msgstr "このアドレスは奇形であるように見えます。 有効なアドレスが提供されていることを確認してください！"
 
-msgid "You attempted to connect to a non-I2P website or location."
-msgstr "非 I2P Web サイトまたは場所に接続しようとしました。"
-
 msgid "Warning: Bad Address Helper"
 msgstr "警告: 悪いアドレスヘルパー"
 
@@ -229,6 +226,15 @@ msgstr "それはゴミデータ、または Base 32 アドレスの入力ミス
 
 msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
 msgstr "URL を確認して、有効な Base 32 ホスト名または Base 64 キーになるようにヘルパー キーを修正してください。"
+
+msgid "Warning: Address Blacklisted"
+msgstr ""
+
+msgid "The requested destination is in your blacklist and access has been blocked."
+msgstr ""
+
+msgid "To allow access to this site, remove it from your blacklist on the SusiDNS blacklist management page."
+msgstr ""
 
 msgid "Warning: Invalid Destination"
 msgstr "警告: 無効な宛先"
@@ -420,3 +426,4 @@ msgstr "自動的にリダイレクトされない場合は、ここをクリッ
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
 msgstr "{0} の認証を保存し、今リダイレクトします。"
+

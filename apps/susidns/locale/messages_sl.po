@@ -31,8 +31,11 @@ msgstr "Ime gostitelja \"{0}\" zahteva pretvorbo v ASCII, vendar je knjižnica z
 msgid "Source"
 msgstr "Vir"
 
-msgid "Imported from file hosts.txt"
+msgid "Imported from"
 msgstr ""
+
+msgid "Imported from file"
+msgstr "Uvoženo iz datoteke"
 
 msgid "Manually added via SusiDNS"
 msgstr "Ročno dodano preko SusiDNS"
@@ -182,11 +185,17 @@ msgstr "Če težava obstaja, preverite, ali so v vašem brskalniku omogočeni pi
 msgid "Save"
 msgstr "Shrani"
 
-msgid "Configuration saved."
-msgstr "Konfiguracija shranjena."
+msgid "Blacklist saved."
+msgstr ""
 
 msgid "Reload"
 msgstr "Osveži"
+
+msgid "Blacklist reloaded from file."
+msgstr ""
+
+msgid "Configuration saved."
+msgstr "Konfiguracija shranjena."
 
 msgid "Configuration reloaded."
 msgstr "Konfiguracija ponovno naložena."
@@ -213,6 +222,20 @@ msgstr "Dodajanje destinacije za {0} v storitev imenovanja {1} je spodletelo"
 msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "Brisanje destinacije za {0} iz storitve imenovanja {1} je spodletelo"
 
+msgid "Blacklist Selected"
+msgstr ""
+
+#, java-format
+msgid "1 destination blacklisted."
+msgid_plural "{0} destinations blacklisted."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+msgid "No valid entries selected to blacklist."
+msgstr ""
+
 msgid "Save Notes"
 msgstr "Shrani bilance"
 
@@ -225,9 +248,6 @@ msgstr "V datoteki ni najdenih vnosov"
 #, java-format
 msgid "Imported from file {0}"
 msgstr "Uvoženo iz datoteke {0}"
-
-msgid "Imported from file"
-msgstr "Uvoženo iz datoteke"
 
 #, java-format
 msgid "Loaded {0} entry from file"
@@ -284,6 +304,9 @@ msgstr "Objavljeno"
 msgid "Subscriptions"
 msgstr "Prijave"
 
+msgid "Blacklist"
+msgstr ""
+
 msgid "Configuration"
 msgstr "Konfiguracija"
 
@@ -320,14 +343,26 @@ msgstr "Iskanje"
 msgid "latest"
 msgstr ""
 
+msgid "Alive"
+msgstr ""
+
+msgid "Dead"
+msgstr ""
+
 msgid "all"
 msgstr "počisti filtr"
 
 msgid "Info"
 msgstr "Informacije"
 
+msgid "Type"
+msgstr ""
+
 msgid "Hostname"
 msgstr "Ime gostitelja"
+
+msgid "Encryption"
+msgstr ""
 
 msgid "Link (b32)"
 msgstr "Povezava (b32)"
@@ -338,11 +373,17 @@ msgstr "Destinacija"
 msgid "Added"
 msgstr ""
 
+msgid "Status"
+msgstr ""
+
 msgid "Select hosts for deletion from addressbook"
 msgstr "Izberite gostitelje za izbris iz imenika naslovov"
 
 msgid "More information on this entry"
 msgstr "Več informacij o tem vnosu"
+
+msgid "unknown"
+msgstr ""
 
 msgid "Base 32 address"
 msgstr "Naslov Base 32"
@@ -371,11 +412,23 @@ msgstr "Celotna destinacija ali naslov b32"
 msgid "Select file"
 msgstr "Izberi datoteko"
 
-msgid "configuration"
-msgstr "konfiguracija"
+msgid "blacklist"
+msgstr ""
+
+msgid "Blacklist Management"
+msgstr ""
 
 msgid "File location"
 msgstr "Lokacija datoteke"
+
+msgid "Enter I2P addresses to blacklist (one per line)"
+msgstr ""
+
+msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
+msgstr ""
+
+msgid "configuration"
+msgstr "konfiguracija"
 
 msgid "Hints"
 msgstr "Navodila"
@@ -436,6 +489,12 @@ msgstr "Datoteka za dnevnik dejavnosti (premenite na /dev/null, če želite)"
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "Ime nadomestnega teme za uporabo (privzeto je teme izbrano v konzoli)"
+
+msgid "Interval (in hours) for running host checker (default is 8 hours)"
+msgstr ""
+
+msgid "How many pings to perform concurrently when running host checker (Default is 12, max is 100)"
+msgstr ""
 
 msgid "delete hosts"
 msgstr ""
@@ -499,6 +558,9 @@ msgstr "Ustvarite svoje slike za identifikacijo"
 
 msgid "Launch Image Generator"
 msgstr "Zaženi generator slik"
+
+msgid "Export"
+msgstr ""
 
 msgid "Introduction"
 msgstr "Vstopno besedilo"
@@ -628,4 +690,3 @@ msgstr "Naslovi, ki jih ročno dodate v svoj glavni imenik naslovov, se bodo zdr
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Gostitelji, ki jih prejmete iz svojih prijav, se bodo združili z vašim imenikom naslovov maršrutnika."
-

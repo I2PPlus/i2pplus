@@ -214,9 +214,6 @@ msgstr "Hoiatus: Päring tagasi lükatud"
 msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
 msgstr "Selles aadressil tundub midagi valesti olevat. Palun kontrolli, et sisestasid korrektse aadressi!"
 
-msgid "You attempted to connect to a non-I2P website or location."
-msgstr "Sa püüdsid ühendust luua mitte I2P veebisaidiga või asukohaga."
-
 msgid "Warning: Bad Address Helper"
 msgstr "Hoiatus: Vale aadressiabi"
 
@@ -229,6 +226,15 @@ msgstr "See tundub olla prügisisand või valesti kirjutatud Base 32 aadress."
 
 msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
 msgstr "Kontrolli oma URL-i, et püüda abi võitu muuta kehtivaks Base 32 hosti nimeks või Base 64 võtmeks."
+
+msgid "Warning: Address Blacklisted"
+msgstr ""
+
+msgid "The requested destination is in your blacklist and access has been blocked."
+msgstr ""
+
+msgid "To allow access to this site, remove it from your blacklist on the SusiDNS blacklist management page."
+msgstr ""
 
 msgid "Warning: Invalid Destination"
 msgstr "Hoiatus: Kehtetu sihtkoht"
@@ -420,3 +426,4 @@ msgstr "Klõpsa siia, kui sa ei suunata automaatselt ümber."
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
 msgstr "Salvestas autentimise {0} ja suuname praegu ümber."
+

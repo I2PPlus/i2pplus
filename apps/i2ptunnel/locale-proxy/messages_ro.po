@@ -214,9 +214,6 @@ msgstr "Atenție: Cerere interzisa"
 msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
 msgstr "Această adresă pare a fi malformată. Vă rugăm să verificați că ați furnizat o adresă validă!"
 
-msgid "You attempted to connect to a non-I2P website or location."
-msgstr "Ați încercat să vă conectați la un site sau locație non-I2P ."
-
 msgid "Warning: Bad Address Helper"
 msgstr "Atenție: Adress Helper incorect"
 
@@ -229,6 +226,15 @@ msgstr "Se pare a fi date de gunoi, sau de o bază adresa 32 introdusă greșit.
 
 msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
 msgstr "Verificați adresa URL pentru a încerca să remediați cheia de ajutor pentru a fi un nume de gazdă validă Base 32 sau cheie Base 64.Verificați URL-ul dvs. pentru a încercarea și stabilirea cheii de ajutor pentru a fi nume de gazdă Base34 sau cheie Base 64 validă."
+
+msgid "Warning: Address Blacklisted"
+msgstr ""
+
+msgid "The requested destination is in your blacklist and access has been blocked."
+msgstr ""
+
+msgid "To allow access to this site, remove it from your blacklist on the SusiDNS blacklist management page."
+msgstr ""
 
 msgid "Warning: Invalid Destination"
 msgstr "Atenție: Destinație incorecta"
@@ -420,3 +426,4 @@ msgstr "Clic aici dacă nu sunteți redirecționat automat."
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
 msgstr "Am salvat autentificarea pentru {0}, redirecționând acum."
+

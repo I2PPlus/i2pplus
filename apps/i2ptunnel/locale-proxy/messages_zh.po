@@ -214,9 +214,6 @@ msgstr "警告：请求被拒绝"
 msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
 msgstr "这个地址似乎是错误的。请确认你提供了一个有效的地址!"
 
-msgid "You attempted to connect to a non-I2P website or location."
-msgstr "您尝试连接的网站非 I2P 站点或位置。"
-
 msgid "Warning: Bad Address Helper"
 msgstr "警告：无效地址助手"
 
@@ -229,6 +226,15 @@ msgstr "它看起来可能是无效数据或输入有误的 Base32 地址。"
 
 msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
 msgstr "请检查您的链接尝试修复助手密钥为有效的 Base32 地址或 Base64 密钥。"
+
+msgid "Warning: Address Blacklisted"
+msgstr ""
+
+msgid "The requested destination is in your blacklist and access has been blocked."
+msgstr ""
+
+msgid "To allow access to this site, remove it from your blacklist on the SusiDNS blacklist management page."
+msgstr ""
 
 msgid "Warning: Invalid Destination"
 msgstr "警告：无效目标"
@@ -420,3 +426,4 @@ msgstr "如果未能自动转到，请点击这里。"
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
 msgstr "已保存 {0} 的凭据，正在重定向。"
+

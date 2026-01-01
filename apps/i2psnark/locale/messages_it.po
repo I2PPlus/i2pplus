@@ -2,11 +2,6 @@
 # Copyright (C) 2009 The I2P Project
 msgid ""
 msgstr ""
-"Project-Id-Version: I2PSnark\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: Italian\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -48,8 +43,8 @@ msgid "Total uploaders limit changed to {0}"
 msgstr "Limite del totale di uploaders modificato a {0}"
 
 #, java-format
-msgid "Minimum total uploaders limit is {0}"
-msgstr "Il minimo limite del totale di uploaders è {0}"
+msgid "Minimum uploaders limit is {0}"
+msgstr ""
 
 #, java-format
 msgid "Up BW limit changed to {0}KBps"
@@ -298,12 +293,12 @@ msgstr "{0} in aggiunta"
 msgid "Download already running: {0}"
 msgstr "Download già attivo: {0}"
 
-msgid " - torrent file already exists"
-msgstr " - il file torrent esiste già"
-
 #, java-format
 msgid "Failed to copy torrent file to {0}"
 msgstr "Fallimento nella copia del file torrent su {0}"
+
+msgid " - torrent file already exists"
+msgstr " - il file torrent esiste già"
 
 #, java-format
 msgid "Too many files in \"{0}\" ({1})!"
@@ -361,7 +356,6 @@ msgstr "Il limite di larghezza di banda in download è di {0} KBps"
 msgid "Up bandwidth limit is {0} KB/s"
 msgstr "Il limite della larghezza di banda è {0} KBps"
 
-#, java-format
 #, java-format
 msgid "Connecting to I2CP port on I2P instance at {0}"
 msgstr "Connessione alla porta I2CP sull'istanza I2P a {0}"
@@ -753,10 +747,6 @@ msgstr "Magnet eliminato: {0}"
 #, java-format
 msgid "Torrent file could not be deleted: {0}"
 msgstr "Impossibile eliminare il file torrent: {0}"
-
-#, java-format
-msgid "Download deleted: {0}"
-msgstr "Download eliminato: {0}"
 
 #, java-format
 msgid "Data file deleted: {0}"
@@ -1320,17 +1310,14 @@ msgstr "Comando sconosciuto"
 msgid "Please retry form submission (bad nonce)"
 msgstr "Per favore riprova l'invio del modulo (nonce errato)"
 
-msgid "Resource Not found"
-msgstr "Risorsa non trovata"
-
-msgid "Base"
-msgstr "Base"
-
 msgid "Resource Does Not Exist"
 msgstr "La risorsa non esiste"
 
 msgid "Resource"
 msgstr "Risorsa"
+
+msgid "Base"
+msgstr "Base"
 
 msgid "Files"
 msgstr "File"
@@ -1376,6 +1363,9 @@ msgstr "Salva priorità"
 
 msgid "Comments"
 msgstr "Commenti"
+
+msgid "Resource Not found"
+msgstr "Risorsa non trovata"
 
 msgid "Info hash"
 msgstr "Hash info"
@@ -1515,37 +1505,17 @@ msgstr "Salva modifiche"
 msgid "Torrent must be stopped"
 msgstr "Il torrent deve essere fermato"
 
-msgid "I2PSnark has stopped"
-msgstr "I2PSnark si è arrestato"
+#, java-format
 
-msgid "Router is down"
-msgstr "Il router non è in funzione"
+#, java-format
 
-msgid "Estimated time remaining"
-msgstr "Stima del tempo rimanente"
 
-msgid "Downloaded"
-msgstr "Scaricato"
 
-msgid "Upload ratio"
-msgstr "Rapporto di upload"
 
-msgid "Uploaded"
-msgstr "Inviato"
 
-msgid "Down Rate"
-msgstr "Tasso di Download"
 
-msgid "1 DHT peer"
-msgid_plural "{0} DHT peers"
-msgstr[0] "1 peer DHT"
-msgstr[1] "{0} peer DHT"
 
-msgid "Version"
-msgstr "Versione"
 
-msgid "Audio file: "
-msgstr "File audio: "
 
-msgid "Video file: "
-msgstr "File video: "
+
+

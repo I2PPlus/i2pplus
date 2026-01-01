@@ -214,9 +214,6 @@ msgstr "Προσοχή:Αίτημα Απορίφθηκε"
 msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
 msgstr "Αυτή η διεύθυνση φαίνεται να είναι κακολογημένη. Επαληθεύστε ότι έχετε προμηθεύσει μια έγκυρη διεύθυνση!"
 
-msgid "You attempted to connect to a non-I2P website or location."
-msgstr "Προσπαθήσατε να συνδεθείτε σε ιστότοπο ή τοποθεσία που δεν ανήκει στο I2P."
-
 msgid "Warning: Bad Address Helper"
 msgstr "Προειδοποίηση: Βοηθός κακής διεύθυνσης"
 
@@ -229,6 +226,15 @@ msgstr "Φαίνεται ότι πρόκειται για δεδομένα σκ�
 
 msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
 msgstr "Ελέγξτε τη διεύθυνση URL σας για να προσπαθήσετε να διορθώσετε το βοηθητικό κλειδί ώστε να είναι έγκυρο όνομα κεντρικού υπολογιστή Base 32 ή κλειδί Βάσης 64."
+
+msgid "Warning: Address Blacklisted"
+msgstr ""
+
+msgid "The requested destination is in your blacklist and access has been blocked."
+msgstr ""
+
+msgid "To allow access to this site, remove it from your blacklist on the SusiDNS blacklist management page."
+msgstr ""
 
 msgid "Warning: Invalid Destination"
 msgstr "Προειδοποίηση: Μη έγκυρος προορισμός"
@@ -420,3 +426,4 @@ msgstr "Κάντε κλικ εδώ εάν δεν ανακατευθυνθείτ�
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
 msgstr "Αποθηκεύτηκε ο έλεγχος ταυτότητας για το {0}, ανακατεύθυνση τώρα."
+

@@ -31,8 +31,11 @@ msgstr "གཟིགས་མིང་\"{0}\" ASCIIརུ་བསྒྱུར�
 msgid "Source"
 msgstr "རིགས་འབྲེལ།"
 
-msgid "Imported from file hosts.txt"
+msgid "Imported from"
 msgstr ""
+
+msgid "Imported from file"
+msgstr "ཡིག་ཆ་ནས་བཞེད་པ་བཞག"
 
 msgid "Manually added via SusiDNS"
 msgstr "SusiDNSགྱི་རྒྱུ་མཐུད་སྣོན་པ།"
@@ -172,11 +175,17 @@ msgstr "གནད་དོན་འདི་བརྟན་ན་ཤོག་ག
 msgid "Save"
 msgstr "བརྟན་པོར་བཞག"
 
-msgid "Configuration saved."
-msgstr "སྒྲིག་འཇུག་བརྟན་པོར་བཞག"
+msgid "Blacklist saved."
+msgstr ""
 
 msgid "Reload"
 msgstr "ཡང་དག་བཞེངས་པ།"
+
+msgid "Blacklist reloaded from file."
+msgstr ""
+
+msgid "Configuration saved."
+msgstr "སྒྲིག་འཇུག་བརྟན་པོར་བཞག"
 
 msgid "Configuration reloaded."
 msgstr "སྒྲིག་འཇུག་ཡང་དག་བཞེངས་པ།"
@@ -203,6 +212,17 @@ msgstr "{0}གི་འབྲས་བུ་{1}གྱི་མིང་གི་
 msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "{0}གི་འབྲས་བུ་{1}གྱི་མིང་གི་རིགས་ནས་སོར་ཆུབ་མི་ཐུབ།"
 
+msgid "Blacklist Selected"
+msgstr ""
+
+#, java-format
+msgid "1 destination blacklisted."
+msgid_plural "{0} destinations blacklisted."
+msgstr[0] ""
+
+msgid "No valid entries selected to blacklist."
+msgstr ""
+
 msgid "Save Notes"
 msgstr "ཐོ་ཡིག་བརྟན་པོར་བཞག"
 
@@ -215,9 +235,6 @@ msgstr "ཡིག་ཆ་ནང་ཁ་པ་མེད་པ།"
 #, java-format
 msgid "Imported from file {0}"
 msgstr "ཡིག་ཆ་{0}ནས་བཞེད་པ་བཞག"
-
-msgid "Imported from file"
-msgstr "ཡིག་ཆ་ནས་བཞེད་པ་བཞག"
 
 #, java-format
 msgid "Loaded {0} entry from file"
@@ -270,6 +287,9 @@ msgstr "བཀོད་པའི་ཡིག་ཆ་བང"
 msgid "Subscriptions"
 msgstr "འབྲེལ་ཡོད་པ།"
 
+msgid "Blacklist"
+msgstr ""
+
 msgid "Configuration"
 msgstr "སྒྲིག་འཇུག"
 
@@ -306,14 +326,26 @@ msgstr "འཚོལ་བ།"
 msgid "latest"
 msgstr "གསར་ཤོས།"
 
+msgid "Alive"
+msgstr ""
+
+msgid "Dead"
+msgstr ""
+
 msgid "all"
 msgstr "ཐམས་ཅད།"
 
 msgid "Info"
 msgstr "ཤེས་བྱ།"
 
+msgid "Type"
+msgstr ""
+
 msgid "Hostname"
 msgstr "གཟིགས་མིང"
+
+msgid "Encryption"
+msgstr ""
 
 msgid "Link (b32)"
 msgstr "རྒྱུ་མཐུད་(b32)"
@@ -324,11 +356,17 @@ msgstr "འབྲས་བུ།"
 msgid "Added"
 msgstr ""
 
+msgid "Status"
+msgstr ""
+
 msgid "Select hosts for deletion from addressbook"
 msgstr "ཡིག་ཆ་བང་ནས་གཟིགས་མིང་སོར་ཆུབ་པར་འདེམས་པ།"
 
 msgid "More information on this entry"
 msgstr "ཁ་པ་འདིར་གྱི་ཤེས་བྱ་རྒྱས་པ།"
+
+msgid "unknown"
+msgstr ""
 
 msgid "Base 32 address"
 msgstr "32 གཞི་གྲངས་ཀྱི་གཟིགས་མིང།"
@@ -357,11 +395,23 @@ msgstr "འབྲས་བུ་གོང་དུ་ཡང་ན་b32གཟི
 msgid "Select file"
 msgstr "ཡིག་ཆ་འདེམས་པ།"
 
-msgid "configuration"
-msgstr "སྒྲིག་འཇུག"
+msgid "blacklist"
+msgstr ""
+
+msgid "Blacklist Management"
+msgstr ""
 
 msgid "File location"
 msgstr "ཡིག་ཆ་གནས་ས།"
+
+msgid "Enter I2P addresses to blacklist (one per line)"
+msgstr ""
+
+msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
+msgstr ""
+
+msgid "configuration"
+msgstr "སྒྲིག་འཇུག"
 
 msgid "Hints"
 msgstr "མཚོན་བྱ།"
@@ -422,6 +472,12 @@ msgstr "བྱ་བའི་ཉིན་ཐོག་བཟོ་བཅོས་
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "བཟོ་རིགས་ཀྱི་ཞབས་ཐབས་(རིགས་ལྡན་གྱི་ཞབས་ཐབས་རུ་བཞག)"
+
+msgid "Interval (in hours) for running host checker (default is 8 hours)"
+msgstr ""
+
+msgid "How many pings to perform concurrently when running host checker (Default is 12, max is 100)"
+msgstr ""
 
 msgid "delete hosts"
 msgstr "གཟིགས་མིང་སོར་ཆུབ།"
@@ -485,6 +541,9 @@ msgstr "རང་གི་རིགས་འབྲེལ་གྱི་བརྙ
 
 msgid "Launch Image Generator"
 msgstr "བརྙན་བཟོ་རིགས་འགོ་འཛུགས་པ།"
+
+msgid "Export"
+msgstr ""
 
 msgid "Introduction"
 msgstr "མདུན་ཚེག"
@@ -614,4 +673,3 @@ msgstr "གཙོ་བོའི་ཡིག་ཆ་བང་ནས་མཐུ
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "ཁྱོད་ཀྱི་འབྲེལ་ཡོད་པའི་རིགས་ནས་བཞེད་པའི་གཟིགས་མིང་གཞི་གྲངས་གཙོ་བོའི་ཡིག་ཆ་བང་ནས་བཞེད་པ་བཞག"
-

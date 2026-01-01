@@ -31,8 +31,11 @@ msgstr "Tên máy chủ \"{0}\" yêu cầu chuyển đổi sang ASCII nhưng th�
 msgid "Source"
 msgstr "Nguồn"
 
-msgid "Imported from file hosts.txt"
+msgid "Imported from"
 msgstr ""
+
+msgid "Imported from file"
+msgstr "Đã nhập từ tệp"
 
 msgid "Manually added via SusiDNS"
 msgstr "Được thêm thủ công qua SusiDNS"
@@ -167,11 +170,17 @@ msgstr "Nếu sự cố vẫn tiếp diễn, hãy xác minh rằng bạn đã b�
 msgid "Save"
 msgstr "Lưu trữ"
 
-msgid "Configuration saved."
-msgstr "Cấu hình được lưu trữ."
+msgid "Blacklist saved."
+msgstr ""
 
 msgid "Reload"
 msgstr "Nạp lại"
+
+msgid "Blacklist reloaded from file."
+msgstr ""
+
+msgid "Configuration saved."
+msgstr "Cấu hình được lưu trữ."
 
 msgid "Configuration reloaded."
 msgstr "Cấu hình được nạp lại."
@@ -198,6 +207,17 @@ msgstr "Không thể thêm Đích cho {0} vào dịch vụ đặt tên {1}"
 msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "Không thể xóa Đích cho {0} khỏi dịch vụ đặt tên {1}"
 
+msgid "Blacklist Selected"
+msgstr ""
+
+#, java-format
+msgid "1 destination blacklisted."
+msgid_plural "{0} destinations blacklisted."
+msgstr[0] ""
+
+msgid "No valid entries selected to blacklist."
+msgstr ""
+
 msgid "Save Notes"
 msgstr "Lưu ghi chú"
 
@@ -210,9 +230,6 @@ msgstr "Không tìm thấy mục nào trong tệp"
 #, java-format
 msgid "Imported from file {0}"
 msgstr "Đã nhập từ tệp {0}"
-
-msgid "Imported from file"
-msgstr "Đã nhập từ tệp"
 
 #, java-format
 msgid "Loaded {0} entry from file"
@@ -263,6 +280,9 @@ msgstr "Đã xuất bản"
 msgid "Subscriptions"
 msgstr "Đăng ký"
 
+msgid "Blacklist"
+msgstr ""
+
 msgid "Configuration"
 msgstr "Cấu hình"
 
@@ -299,14 +319,26 @@ msgstr "Tìm"
 msgid "latest"
 msgstr ""
 
+msgid "Alive"
+msgstr ""
+
+msgid "Dead"
+msgstr ""
+
 msgid "all"
 msgstr "bộ lọc rõ ràng"
 
 msgid "Info"
 msgstr "Thông tin"
 
+msgid "Type"
+msgstr ""
+
 msgid "Hostname"
 msgstr "Tên máy chủ"
+
+msgid "Encryption"
+msgstr ""
 
 msgid "Link (b32)"
 msgstr "Liên kết (b32)"
@@ -317,11 +349,17 @@ msgstr "Đích đến"
 msgid "Added"
 msgstr ""
 
+msgid "Status"
+msgstr ""
+
 msgid "Select hosts for deletion from addressbook"
 msgstr "Chọn máy chủ để xóa khỏi sổ địa chỉ"
 
 msgid "More information on this entry"
 msgstr "Thông tin thêm về mục này"
+
+msgid "unknown"
+msgstr ""
 
 msgid "Base 32 address"
 msgstr "Địa chỉ cơ sở 32"
@@ -350,11 +388,23 @@ msgstr "Địa chỉ đích đầy đủ hoặc địa chỉ b32"
 msgid "Select file"
 msgstr "Chọn tập tin"
 
-msgid "configuration"
-msgstr "cấu hình"
+msgid "blacklist"
+msgstr ""
+
+msgid "Blacklist Management"
+msgstr ""
 
 msgid "File location"
 msgstr "Vị trí tệp"
+
+msgid "Enter I2P addresses to blacklist (one per line)"
+msgstr ""
+
+msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
+msgstr ""
+
+msgid "configuration"
+msgstr "cấu hình"
 
 msgid "Hints"
 msgstr "Gợi ý"
@@ -415,6 +465,12 @@ msgstr "Tệp để ghi nhật ký hoạt động (đổi thành /dev/null nếu
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "Tên của chủ đề ghi đè sẽ sử dụng (mặc định là chủ đề do bảng điều khiển chọn)"
+
+msgid "Interval (in hours) for running host checker (default is 8 hours)"
+msgstr ""
+
+msgid "How many pings to perform concurrently when running host checker (Default is 12, max is 100)"
+msgstr ""
 
 msgid "delete hosts"
 msgstr ""
@@ -478,6 +534,9 @@ msgstr "Tạo hình ảnh nhận dạng của riêng bạn"
 
 msgid "Launch Image Generator"
 msgstr "Khởi chạy Trình tạo hình ảnh"
+
+msgid "Export"
+msgstr ""
 
 msgid "Introduction"
 msgstr "Giới thiệu"
@@ -607,4 +666,3 @@ msgstr "Các địa chỉ được thêm thủ công vào sổ địa chỉ Chí
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Máy chủ bạn nhận được từ đăng ký của mình sẽ hợp nhất với sổ địa chỉ Bộ định tuyến của bạn."
-

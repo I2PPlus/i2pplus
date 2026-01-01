@@ -31,8 +31,11 @@ msgstr "Värdnamnet  \"{0}\" kräver konvertering till ASCII men konverterings b
 msgid "Source"
 msgstr "Källa"
 
-msgid "Imported from file hosts.txt"
+msgid "Imported from"
 msgstr ""
+
+msgid "Imported from file"
+msgstr "Importerad från fil"
 
 msgid "Manually added via SusiDNS"
 msgstr "Manuellt tillagda via SusiDNS"
@@ -172,11 +175,17 @@ msgstr "Om problemet kvarstår, bekräfta att du har cookies påslaget i din bro
 msgid "Save"
 msgstr "Spara"
 
-msgid "Configuration saved."
-msgstr "Inställningar sparade."
+msgid "Blacklist saved."
+msgstr ""
 
 msgid "Reload"
 msgstr "Ladda om"
+
+msgid "Blacklist reloaded from file."
+msgstr ""
+
+msgid "Configuration saved."
+msgstr "Inställningar sparade."
 
 msgid "Configuration reloaded."
 msgstr "Inställningar omladdade."
@@ -203,6 +212,18 @@ msgstr "Kunde inte lägga till målet för {0} till namntjänsten {1}"
 msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "Det gick inte att ta bort målet för {0} från namntjänsten {1}"
 
+msgid "Blacklist Selected"
+msgstr ""
+
+#, java-format
+msgid "1 destination blacklisted."
+msgid_plural "{0} destinations blacklisted."
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "No valid entries selected to blacklist."
+msgstr ""
+
 msgid "Save Notes"
 msgstr "Spara anteckningar"
 
@@ -215,9 +236,6 @@ msgstr "Inga poster hittades i filen"
 #, java-format
 msgid "Imported from file {0}"
 msgstr "Importerad från fil {0}"
-
-msgid "Imported from file"
-msgstr "Importerad från fil"
 
 #, java-format
 msgid "Loaded {0} entry from file"
@@ -270,6 +288,9 @@ msgstr "Publicerad"
 msgid "Subscriptions"
 msgstr "Prenumerationer"
 
+msgid "Blacklist"
+msgstr ""
+
 msgid "Configuration"
 msgstr "Konfiguration"
 
@@ -306,14 +327,26 @@ msgstr "Sök"
 msgid "latest"
 msgstr ""
 
+msgid "Alive"
+msgstr ""
+
+msgid "Dead"
+msgstr ""
+
 msgid "all"
 msgstr "rensa filter"
 
 msgid "Info"
 msgstr "Information"
 
+msgid "Type"
+msgstr ""
+
 msgid "Hostname"
 msgstr "Värdnamn"
+
+msgid "Encryption"
+msgstr ""
 
 msgid "Link (b32)"
 msgstr "Länk (b32)"
@@ -324,11 +357,17 @@ msgstr "Mål"
 msgid "Added"
 msgstr ""
 
+msgid "Status"
+msgstr ""
+
 msgid "Select hosts for deletion from addressbook"
 msgstr "Välj värdar för radering från adressboken"
 
 msgid "More information on this entry"
 msgstr "Mer information om den här posten"
+
+msgid "unknown"
+msgstr ""
 
 msgid "Base 32 address"
 msgstr "Base32 adress"
@@ -357,11 +396,23 @@ msgstr "Fullständig destination eller b32-adress"
 msgid "Select file"
 msgstr "Välj fil"
 
-msgid "configuration"
-msgstr "inställningar"
+msgid "blacklist"
+msgstr ""
+
+msgid "Blacklist Management"
+msgstr ""
 
 msgid "File location"
 msgstr "Filposition"
+
+msgid "Enter I2P addresses to blacklist (one per line)"
+msgstr ""
+
+msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
+msgstr ""
+
+msgid "configuration"
+msgstr "inställningar"
 
 msgid "Hints"
 msgstr "Tips"
@@ -422,6 +473,12 @@ msgstr "Fil där loggaktivitet sparas till (ändra till / dev / null om du vill)
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "Namn på åsidosättningstema som ska användas (standard för konsolvalt tema)"
+
+msgid "Interval (in hours) for running host checker (default is 8 hours)"
+msgstr ""
+
+msgid "How many pings to perform concurrently when running host checker (Default is 12, max is 100)"
+msgstr ""
 
 msgid "delete hosts"
 msgstr ""
@@ -485,6 +542,9 @@ msgstr "Skapa dina egna identifieringsbilder"
 
 msgid "Launch Image Generator"
 msgstr "Starta Image Generator"
+
+msgid "Export"
+msgstr ""
 
 msgid "Introduction"
 msgstr "Introduktion"
@@ -614,4 +674,3 @@ msgstr "Adresser som läggs till manuellt i din masteradressbok kommer att slås
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Värdar du får från dina prenumerationer kommer att slås samman med din routeradressbok."
-

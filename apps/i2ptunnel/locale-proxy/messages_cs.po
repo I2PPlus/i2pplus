@@ -214,9 +214,6 @@ msgstr "Varování: Požadavek zamítnut"
 msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
 msgstr "Tato adresa se zdá být malformovaná. Ověřte prosím, že jste dodali platnou adresu!"
 
-msgid "You attempted to connect to a non-I2P website or location."
-msgstr "Pokusili jste se připojit k webu nebo umístění bez I2P."
-
 msgid "Warning: Bad Address Helper"
 msgstr "Varování: Špatná adresa pomocník"
 
@@ -229,6 +226,15 @@ msgstr "Zdá se, že jsou to nesmyslná data nebo chybně zadaná adresa Base 32
 
 msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
 msgstr "Zkontrolujte svou adresu URL a pokuste se opravit pomocný klíč tak, aby byl platným názvem hostitele Base 32 nebo klíčem Base 64."
+
+msgid "Warning: Address Blacklisted"
+msgstr ""
+
+msgid "The requested destination is in your blacklist and access has been blocked."
+msgstr ""
+
+msgid "To allow access to this site, remove it from your blacklist on the SusiDNS blacklist management page."
+msgstr ""
 
 msgid "Warning: Invalid Destination"
 msgstr "Cíl tunelu"
@@ -420,3 +426,4 @@ msgstr "Pokud nebudete automaticky přesměrováni, klikněte sem."
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
 msgstr "Uloženo ověření pro {0}, nyní probíhá přesměrování."
+

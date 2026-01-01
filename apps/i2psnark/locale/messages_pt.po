@@ -43,8 +43,8 @@ msgid "Total uploaders limit changed to {0}"
 msgstr "Limite total de uploaders alterado para {0}"
 
 #, java-format
-msgid "Minimum total uploaders limit is {0}"
-msgstr "Limite mínimo de uploaders alterado para {0}"
+msgid "Minimum uploaders limit is {0}"
+msgstr ""
 
 #, java-format
 msgid "Up BW limit changed to {0}KBps"
@@ -293,12 +293,12 @@ msgstr "Adicionando {0}"
 msgid "Download already running: {0}"
 msgstr "Arquivo já descarregando: {0}"
 
-msgid " - torrent file already exists"
-msgstr " - arquivo torrent já existe"
-
 #, java-format
 msgid "Failed to copy torrent file to {0}"
 msgstr "Não se pode copiar o torrente para {0}."
+
+msgid " - torrent file already exists"
+msgstr " - arquivo torrent já existe"
 
 #, java-format
 msgid "Too many files in \"{0}\" ({1})!"
@@ -484,11 +484,35 @@ msgstr "Torrente já na cola: {0}"
 msgid "Torrent at {0} was not valid"
 msgstr "Torrente em {0} não foi válido"
 
-msgid "Configuration"
-msgstr "Preferências"
+msgid "Torrents"
+msgstr "Torrentes"
+
+msgid "Refresh page"
+msgstr "Atualizar página"
+
+msgid "Configure"
+msgstr "Configurar"
+
+msgid "Torrent &amp; filesharing forum"
+msgstr "Torrent"
+
+msgid "Forum"
+msgstr "Fórum"
+
+msgid "Search torrents"
+msgstr "Pesquisar torrents"
+
+msgid "Clear search"
+msgstr "Limpar pesquisa"
+
+msgid "Click \"Add torrent\" button to fetch torrent"
+msgstr "Clique no botão \"Adicionar torrent\" para obter o torrent"
 
 msgid "Anonymous BitTorrent Client"
 msgstr "Cliente BitTorrent Anônimo"
+
+msgid "Configuration"
+msgstr "Preferências"
 
 #, java-format
 msgid "Are you sure you want to delete {0} and all downloaded data?"
@@ -509,36 +533,6 @@ msgstr "Nota: Os dados baixados não serão excluídos."
 msgid "Deleting {0} and associated metadata only..."
 msgstr "Excluindo {0} e apenas metadados associados..."
 
-msgid "I2PSnark has stopped"
-msgstr "I2PSnark parou"
-
-msgid "Router is down"
-msgstr "Roteador não está funcionando"
-
-msgid "Torrents"
-msgstr "Torrentes"
-
-msgid "Refresh page"
-msgstr "Atualizar página"
-
-msgid "Configure"
-msgstr "Configurar"
-
-msgid "Forum"
-msgstr "Fórum"
-
-msgid "Torrent &amp; filesharing forum"
-msgstr "Torrent"
-
-msgid "Search torrents"
-msgstr "Pesquisar torrents"
-
-msgid "Clear search"
-msgstr "Limpar pesquisa"
-
-msgid "Click \"Add torrent\" button to fetch torrent"
-msgstr "Clique no botão \"Adicionar torrent\" para obter o torrent"
-
 msgid "clear messages"
 msgstr "limpar mensagens"
 
@@ -558,18 +552,17 @@ msgstr "atualização de página"
 msgid "Warning - No I2P"
 msgstr "Aviso - Sem I2P"
 
+msgid "No torrents found."
+msgstr "Nenhum torrent encontrado."
+
+msgid "No torrents loaded."
+msgstr "Não carregado nenhum torrente."
+
+msgid "No DHT Peers"
+msgstr "Nenhum par DHT"
+
 msgid "Status"
 msgstr "Estado"
-
-#, java-format
-msgid "Sort by {0}"
-msgstr "Classificar por {0}"
-
-msgid "Hide Peers"
-msgstr "Ocultar parceiros"
-
-msgid "Show Peers"
-msgstr "Mostrar parceiros"
 
 msgid "Torrent"
 msgstr "Torrente"
@@ -583,38 +576,20 @@ msgstr "Nome do torrent"
 msgid "ETA"
 msgstr "Tempo"
 
-msgid "Estimated time remaining"
-msgstr "Tempo que falta para completar"
-
 msgid "RX"
 msgstr "Baixado"
-
-msgid "Downloaded"
-msgstr "Descarregado"
-
-msgid "Size"
-msgstr "Tamanho"
 
 msgid "RX Rate"
 msgstr "Taxa de recepção"
 
-msgid "Down Rate"
-msgstr "Taxa de descarga"
-
 msgid "TX"
-msgstr "Subido"
-
-msgid "Upload ratio"
-msgstr "Rácio de upload"
-
-msgid "Uploaded"
 msgstr "Subido"
 
 msgid "TX Rate"
 msgstr "Taxa de transmissão"
 
-msgid "Up Rate"
-msgstr "Taxa de subida"
+msgid "Start All"
+msgstr "Arrancar todos"
 
 msgid "Stop All"
 msgstr "Deter tudos"
@@ -622,26 +597,24 @@ msgstr "Deter tudos"
 msgid "Stop all torrents and the I2P tunnel"
 msgstr "Deter todos os torrentes e o túnel I2P"
 
-msgid "Start All"
-msgstr "Arrancar todos"
+msgid "Start all torrents and the I2P tunnel"
+msgstr "Iniciar todos os torrentes e o túnel I2P"
 
 msgid "Start all stopped torrents"
 msgstr "Iniciar todos os torrents interrompidos"
 
-msgid "Start all torrents and the I2P tunnel"
-msgstr "Iniciar todos os torrentes e o túnel I2P"
+msgid "Hide Peers"
+msgstr "Ocultar parceiros"
 
-msgid "No torrents found."
-msgstr "Nenhum torrent encontrado."
-
-msgid "No torrents loaded."
-msgstr "Não carregado nenhum torrente."
+msgid "Show Peers"
+msgstr "Mostrar parceiros"
 
 #, java-format
-msgid "1 torrent"
-msgid_plural "{0} torrents"
-msgstr[0] "1 torrente"
-msgstr[1] "{0} torrentes"
+msgid "Sort by {0}"
+msgstr "Classificar por {0}"
+
+msgid "Up Rate"
+msgstr "Taxa de subida"
 
 msgid "Total size of loaded torrents"
 msgstr "Tamanho total dos torrents carregados"
@@ -651,12 +624,6 @@ msgid "1 connected peer"
 msgid_plural "{0} peer connections"
 msgstr[0] "1 peer conectado"
 msgstr[1] "{0} peers conectados"
-
-#, java-format
-msgid "1 DHT peer"
-msgid_plural "{0} DHT peers"
-msgstr[0] "1 parceiros DHT"
-msgstr[1] "{0} parceiros DHT"
 
 msgid "Active downloads"
 msgstr "Downloads ativos"
@@ -685,14 +652,20 @@ msgstr "Total de dados carregados (para torrents listados)"
 msgid "Total upload speed"
 msgstr "Velocidade total de upload"
 
+msgid "Toggle Debug Panel"
+msgstr ""
+
 msgid "Debug Mode"
 msgstr "Modo de depuração"
 
 msgid "Normal Mode"
 msgstr "Modo Normal"
 
-msgid "No DHT Peers"
-msgstr "Nenhum par DHT"
+#, java-format
+msgid "1 torrent"
+msgid_plural "{0} torrents"
+msgstr[0] "1 torrente"
+msgstr[1] "{0} torrentes"
 
 msgid "Search"
 msgstr "Procurar"
@@ -745,6 +718,13 @@ msgstr "Últ."
 msgid "Last page"
 msgstr "Última página"
 
+msgid "Enter URL or select torrent file"
+msgstr "Digite o URL ou selecione o arquivo torrent"
+
+#, java-format
+msgid "Error uploading the torrent file: {0}"
+msgstr ""
+
 #, java-format
 msgid "Cannot add torrent {0} inside another torrent: {1}"
 msgstr "Não é possível adicionar o torrent {0} dentro de outro torrent: {1}"
@@ -753,12 +733,12 @@ msgstr "Não é possível adicionar o torrent {0} dentro de outro torrent: {1}"
 msgid "Download from non-I2P location {0} is not supported"
 msgstr "O download de um local não I2P {0} não é suportado"
 
+msgid "Error: Version 2 info hashes are not supported"
+msgstr ""
+
 #, java-format
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
 msgstr "URL inválido: deve começar com \"{0}\" ou \"{1}\""
-
-msgid "Enter URL or select torrent file"
-msgstr "Digite o URL ou selecione o arquivo torrent"
 
 #, java-format
 msgid "Magnet deleted: {0}"
@@ -767,10 +747,6 @@ msgstr "Apagada o magnet: {0}"
 #, java-format
 msgid "Torrent file could not be deleted: {0}"
 msgstr "Não foi possível excluir o arquivo torrent: {0}"
-
-#, java-format
-msgid "Download deleted: {0}"
-msgstr "Download excluído: {0}"
 
 #, java-format
 msgid "Data file deleted: {0}"
@@ -787,6 +763,13 @@ msgstr "Pasta não pôde ser excluída: {0}"
 #, java-format
 msgid "Directory deleted: {0}"
 msgstr "Pasta excluída: {0}"
+
+msgid "Error creating torrent - you must specify a file or directory"
+msgstr "Erro ao criar torrent - você deve inserir um arquivo ou diretórioErro ao criar o torrente - Tens que especificar um arquivo ou uma pasta"
+
+#, java-format
+msgid "Cannot create a torrent for the nonexistent data: {0}"
+msgstr "Não se pode criar um torrente para dados que não existam: {0}"
 
 #, java-format
 msgid "Cannot add a torrent ending in \".torrent\": {0}"
@@ -830,13 +813,6 @@ msgstr "Muitos rastreadores I2P exigem que você registre novos torrents antes d
 msgid "Error creating a torrent for \"{0}\""
 msgstr "Erro ao criar o torrente \"{0}\""
 
-#, java-format
-msgid "Cannot create a torrent for the nonexistent data: {0}"
-msgstr "Não se pode criar um torrente para dados que não existam: {0}"
-
-msgid "Error creating torrent - you must specify a file or directory"
-msgstr "Erro ao criar torrent - você deve inserir um arquivo ou diretórioErro ao criar o torrente - Tens que especificar um arquivo ou uma pasta"
-
 msgid "Delete selected"
 msgstr "Excluir selecionado"
 
@@ -870,61 +846,17 @@ msgstr "Insira um nome válido e padrão de filtro"
 msgid "Restored default torrent create filters"
 msgstr "Restaurados filtros padrão para criação de torrent"
 
-msgid "Checking"
-msgstr "Verificando"
-
-msgid "Allocating"
-msgstr "Reservando espaço"
-
-msgid "Starting"
-msgstr "Iniciando"
-
-#, java-format
-msgid "Seeding to {0} peer"
-msgid_plural "Seeding to {0} peers"
-msgstr[0] "Semeando para {0} par"
-msgstr[1] "Semeando para {0} pares"
-
-#, java-format
-msgid "Seeding to {0} of {1} peers in swarm"
-msgstr "Semeando para {0} de {1} pares no enxame"
-
-msgid "OK"
-msgstr "bem"
-
-#, java-format
-msgid "Downloading from {0} peer"
-msgid_plural "Downloading from {0} peers"
-msgstr[0] "Baixando de {0} par"
-msgstr[1] "Baixando de {0} pares"
-
-msgid "Stalled"
-msgstr "Estancado"
-
-#, java-format
-msgid "Connected to {0} of {1} peers in swarm"
-msgstr "Conectado a {0} de {1} pares no enxame"
-
-msgid "No Peers"
-msgstr "Sem parceiros"
-
 msgid "Torrent details"
 msgstr "Detalhes do torrente"
 
 msgid "Torrent has comments"
 msgstr "Torrent tem comentários"
 
-msgid "View files"
-msgstr "Mostrar arquivos"
-
 msgid "Open file"
 msgstr "Abrir arquivo"
 
-msgid "complete"
-msgstr "completo"
-
-msgid "remaining"
-msgstr "restantes"
+msgid "View files"
+msgstr "Mostrar arquivos"
 
 msgid "Completed"
 msgstr "Concluído"
@@ -959,14 +891,51 @@ msgstr "Apagar"
 msgid "Delete .torrent file and associated data files"
 msgstr "Exclua o arquivo .torrent e os arquivos de dados associados"
 
+msgid "Checking"
+msgstr "Verificando"
+
+msgid "Allocating"
+msgstr "Reservando espaço"
+
+msgid "Starting"
+msgstr "Iniciando"
+
+#, java-format
+msgid "Seeding to {0} peer"
+msgid_plural "Seeding to {0} peers"
+msgstr[0] "Semeando para {0} par"
+msgstr[1] "Semeando para {0} pares"
+
+#, java-format
+msgid "Connected to {0} of {1} peers in swarm"
+msgstr "Conectado a {0} de {1} pares no enxame"
+
+msgid "Stalled"
+msgstr "Estancado"
+
+#, java-format
+msgid "Seeding to {0} peer in swarm"
+msgid_plural "Seeding to {0} peers in swarm"
+msgstr[0] ""
+msgstr[1] ""
+
+#, java-format
+msgid "Downloading from {0} peer"
+msgid_plural "Downloading from {0} peers"
+msgstr[0] "Baixando de {0} par"
+msgstr[1] "Baixando de {0} pares"
+
+msgid "OK"
+msgstr "bem"
+
+msgid "No Peers"
+msgstr "Sem parceiros"
+
 msgid "Peer attached to swarm"
 msgstr "Peer anexado ao enxame"
 
 msgid "Destination (identity) of peer"
 msgstr "Destino (identidade) do par"
-
-msgid "Version"
-msgstr "Versão"
 
 msgid "seconds"
 msgstr "segundos"
@@ -1341,14 +1310,68 @@ msgstr "Comando desconhecido"
 msgid "Please retry form submission (bad nonce)"
 msgstr "Por favor, tente enviar o formulário novamente (nonce inválido)"
 
+msgid "Resource Does Not Exist"
+msgstr "Recurso não existe"
+
+msgid "Resource"
+msgstr "Recurso"
+
+msgid "Base"
+msgstr "Base"
+
+msgid "Files"
+msgstr "Arquivos"
+
+msgid "Directory"
+msgstr "Pasta"
+
+msgid "Size"
+msgstr "Tamanho"
+
+msgid "Download Status"
+msgstr "Status do download"
+
+msgid "Remaining"
+msgstr "Restantes"
+
+msgid "Download Priority"
+msgstr "Prioridade de download"
+
+msgid "up"
+msgstr ""
+
+msgid "Parent directory"
+msgstr "Subir uma herarquia"
+
+msgid "Audio Playlist"
+msgstr "Lista de reprodução de áudio"
+
+msgid "Not found"
+msgstr "Não encontrado"
+
+msgid "File not found in torrent"
+msgstr "Arquivo não achado no torrente"
+
+msgid "Unrecognized"
+msgstr "Não reconhecido"
+
+msgid "Preview"
+msgstr "Prévia"
+
+msgid "Save priorities"
+msgstr "Guardar prioridades"
+
+msgid "Comments"
+msgstr "Comentários"
+
+msgid "Resource Not found"
+msgstr "Recurso não encontrado"
+
 msgid "Info hash"
 msgstr "Hash de informações"
 
 msgid "Created"
 msgstr "Criado"
-
-msgid "Files"
-msgstr "Arquivos"
 
 msgid "Added"
 msgstr "Adicionado"
@@ -1364,9 +1387,6 @@ msgstr "Velocidade de download"
 
 msgid "Completion"
 msgstr "Finalização"
-
-msgid "Remaining"
-msgstr "Restantes"
 
 msgid "Skipped"
 msgstr "Ignorado"
@@ -1392,51 +1412,6 @@ msgstr "Pare o torrent para verificar a integridade do arquivo"
 msgid "Check integrity of the downloaded files"
 msgstr "Verifique a integridade dos arquivos baixados"
 
-msgid "Resource Not found"
-msgstr "Recurso não encontrado"
-
-msgid "Base"
-msgstr "Base"
-
-msgid "Resource Does Not Exist"
-msgstr "Recurso não existe"
-
-msgid "Resource"
-msgstr "Recurso"
-
-msgid "Audio file: "
-msgstr "Arquivo de áudio: "
-
-msgid "Video file: "
-msgstr "Arquivo de vídeo: "
-
-msgid "Directory"
-msgstr "Pasta"
-
-msgid "Download Status"
-msgstr "Status do download"
-
-msgid "Download Priority"
-msgstr "Prioridade de download"
-
-msgid "Parent directory"
-msgstr "Subir uma herarquia"
-
-msgid "Audio Playlist"
-msgstr "Lista de reprodução de áudio"
-
-msgid "Not found"
-msgstr "Não encontrado"
-
-msgid "File not found in torrent"
-msgstr "Arquivo não achado no torrente"
-
-msgid "Unrecognized"
-msgstr "Não reconhecido"
-
-msgid "Preview"
-msgstr "Prévia"
-
 msgid "Download file at high priority"
 msgstr "Baixar arquivo em alta prioridade"
 
@@ -1455,11 +1430,11 @@ msgstr "Não baixe este arquivo"
 msgid "Skip"
 msgstr "Ignorar"
 
-msgid "Save priorities"
-msgstr "Guardar prioridades"
+msgid "complete"
+msgstr "completo"
 
-msgid "Comments"
-msgstr "Comentários"
+msgid "remaining"
+msgstr "restantes"
 
 msgid "Ratings and Comments"
 msgstr "Avaliações e comentários"
@@ -1529,3 +1504,21 @@ msgstr "Salvar alterações"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent deve ser interrompido"
+
+#, java-format
+
+
+
+
+
+
+
+
+#, java-format
+
+#, java-format
+
+#, java-format
+
+
+

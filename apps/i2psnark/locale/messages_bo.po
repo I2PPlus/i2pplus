@@ -1503,29 +1503,3 @@ msgstr "བསྒྱུར་བཅོས་ཚུ་སྲུང་།"
 
 msgid "Torrent must be stopped"
 msgstr "ཊོ་རེནཊི་བཀག་དགོས་པ།"
-
-#, java-format
-
-#, java-format
-
-#, java-format
-
-#, java-format
-
-
-
-
-
-
-
-
-#, java-format
-
-#, java-format
-
-#, java-format
-
-
-#, java-format
-
-

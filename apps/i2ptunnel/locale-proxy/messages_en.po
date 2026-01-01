@@ -214,9 +214,6 @@ msgstr ""
 msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
 msgstr ""
 
-msgid "You attempted to connect to a non-I2P website or location."
-msgstr ""
-
 msgid "Warning: Bad Address Helper"
 msgstr ""
 
@@ -228,6 +225,15 @@ msgid "It seems to be garbage data, or a mistyped Base 32 address."
 msgstr ""
 
 msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
+msgstr ""
+
+msgid "Warning: Address Blacklisted"
+msgstr ""
+
+msgid "The requested destination is in your blacklist and access has been blocked."
+msgstr ""
+
+msgid "To allow access to this site, remove it from your blacklist on the SusiDNS blacklist management page."
 msgstr ""
 
 msgid "Warning: Invalid Destination"

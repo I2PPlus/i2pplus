@@ -214,9 +214,6 @@ msgstr "अहत्यार: अनुरोध अस्वीकृत"
 msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
 msgstr "यह पता दुर्बल दिखने लगा है। कृपया सुनिश्चित करें कि आपने एक मान्य पता प्रदान किया है!"
 
-msgid "You attempted to connect to a non-I2P website or location."
-msgstr "आपने I2P के बाहरी एक वेबसाइट या स्थान के साथ कनेक्ट करने की कोशिश की।"
-
 msgid "Warning: Bad Address Helper"
 msgstr "अहत्यार: खराब पता सहायक"
 
@@ -229,6 +226,15 @@ msgstr "यह कचरा डेटा लग सकता है, या ग�
 
 msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
 msgstr "अपनी URL की जाँच करें और प्रयास करें कि सहायक कुंजी को एक मान्य Base 32 होस्टनेम या Base 64 कुंजी के रूप में सुधारें।"
+
+msgid "Warning: Address Blacklisted"
+msgstr ""
+
+msgid "The requested destination is in your blacklist and access has been blocked."
+msgstr ""
+
+msgid "To allow access to this site, remove it from your blacklist on the SusiDNS blacklist management page."
+msgstr ""
 
 msgid "Warning: Invalid Destination"
 msgstr "अहत्यार: अवैध गंतव्य"
@@ -420,3 +426,4 @@ msgstr "अगर आपको स्वचालित रूप से री�
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
 msgstr "{0} के लिए प्रमाणीकरण सहेजा गया है, अब रीडायरेक्ट हो रहा है।"
+

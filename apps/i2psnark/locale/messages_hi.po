@@ -43,8 +43,8 @@ msgid "Total uploaders limit changed to {0}"
 msgstr "कुल अपलोडर की सीमा {0} तक बदल दी गई"
 
 #, java-format
-msgid "Minimum total uploaders limit is {0}"
-msgstr "कम से कम कुल अपलोडर सीमा {0} होनी चाहिए"
+msgid "Minimum uploaders limit is {0}"
+msgstr ""
 
 #, java-format
 msgid "Up BW limit changed to {0}KBps"
@@ -293,12 +293,12 @@ msgstr "{0} जोड़ रहे हैं"
 msgid "Download already running: {0}"
 msgstr "{0} पहले से ही डाउनलोड हो रहा है"
 
-msgid " - torrent file already exists"
-msgstr " - टॉरेंट फ़ाइल पहले से ही मौजूद है"
-
 #, java-format
 msgid "Failed to copy torrent file to {0}"
 msgstr "{0} में टॉरेंट फ़ाइल को कॉपी करने में असमर्थ"
+
+msgid " - torrent file already exists"
+msgstr " - टॉरेंट फ़ाइल पहले से ही मौजूद है"
 
 #, java-format
 msgid "Too many files in \"{0}\" ({1})!"
@@ -484,11 +484,35 @@ msgstr "{0} पहले से ही क्वे में है"
 msgid "Torrent at {0} was not valid"
 msgstr "{0} पर टॉरेंट मान्य नहीं था"
 
-msgid "Configuration"
-msgstr "सेटिंग"
+msgid "Torrents"
+msgstr "टॉरेंट्स"
+
+msgid "Refresh page"
+msgstr "पेज ताज़ा करें"
+
+msgid "Configure"
+msgstr "सेटिंग करें"
+
+msgid "Torrent &amp; filesharing forum"
+msgstr "टॉरेंट और फ़ाइल शेयरिंग फ़ॉरम"
+
+msgid "Forum"
+msgstr "फ़ॉरम"
+
+msgid "Search torrents"
+msgstr "टॉरेंट खोजें"
+
+msgid "Clear search"
+msgstr "खोज साफ़ करें"
+
+msgid "Click \"Add torrent\" button to fetch torrent"
+msgstr "टॉरेंट प्राप्त करने के लिए \"टॉरेंट जोड़ें\" बटन पर क्लिक करें"
 
 msgid "Anonymous BitTorrent Client"
 msgstr "अनाम बिटटॉरेंट क्लाइंट"
+
+msgid "Configuration"
+msgstr "सेटिंग"
 
 #, java-format
 msgid "Are you sure you want to delete {0} and all downloaded data?"
@@ -509,36 +533,6 @@ msgstr "नोट: डाउनलोड किए गए डेटा हटा
 msgid "Deleting {0} and associated metadata only..."
 msgstr ""
 
-msgid "I2PSnark has stopped"
-msgstr "I2PSnark रोक दिया गया है"
-
-msgid "Router is down"
-msgstr "रूटर बंद है"
-
-msgid "Torrents"
-msgstr "टॉरेंट्स"
-
-msgid "Refresh page"
-msgstr "पेज ताज़ा करें"
-
-msgid "Configure"
-msgstr "सेटिंग करें"
-
-msgid "Forum"
-msgstr "फ़ॉरम"
-
-msgid "Torrent &amp; filesharing forum"
-msgstr "टॉरेंट और फ़ाइल शेयरिंग फ़ॉरम"
-
-msgid "Search torrents"
-msgstr "टॉरेंट खोजें"
-
-msgid "Clear search"
-msgstr "खोज साफ़ करें"
-
-msgid "Click \"Add torrent\" button to fetch torrent"
-msgstr "टॉरेंट प्राप्त करने के लिए \"टॉरेंट जोड़ें\" बटन पर क्लिक करें"
-
 msgid "clear messages"
 msgstr " संदेश हटाएं"
 
@@ -558,18 +552,17 @@ msgstr " पेज ताजा करें"
 msgid "Warning - No I2P"
 msgstr "सचेतना - कोई I2P नहीं"
 
+msgid "No torrents found."
+msgstr "कोई टॉरेंट नहीं मिला।"
+
+msgid "No torrents loaded."
+msgstr "कोई टॉरेंट लोड नहीं किया गया।"
+
+msgid "No DHT Peers"
+msgstr "कोई DHT पीयर नहीं"
+
 msgid "Status"
 msgstr " स्थिति"
-
-#, java-format
-msgid "Sort by {0}"
-msgstr "{0} के आधार पर ढालें"
-
-msgid "Hide Peers"
-msgstr " पीयर्स छिपाएं"
-
-msgid "Show Peers"
-msgstr " पीयर्स दिखाएं"
 
 msgid "Torrent"
 msgstr " टॉरेंट"
@@ -583,38 +576,20 @@ msgstr " टॉरेंट नाम"
 msgid "ETA"
 msgstr "预计到达时间 (ETA)"
 
-msgid "Estimated time remaining"
-msgstr "剰余估计时间"
-
 msgid "RX"
 msgstr "RD"
 
-msgid "Downloaded"
-msgstr "डाउनलोड किया"
-
-msgid "Size"
-msgstr "कार"
-
 msgid "RX Rate"
-msgstr "डाउनलोड गति"
-
-msgid "Down Rate"
 msgstr "डाउनलोड गति"
 
 msgid "TX"
 msgstr "UL"
 
-msgid "Upload ratio"
-msgstr ""
-
-msgid "Uploaded"
-msgstr "अपलोड किया"
-
 msgid "TX Rate"
 msgstr "अपलोड गति"
 
-msgid "Up Rate"
-msgstr "अपलोड गति"
+msgid "Start All"
+msgstr "सभी शुरू करें"
 
 msgid "Stop All"
 msgstr "सभी रोकें"
@@ -622,26 +597,24 @@ msgstr "सभी रोकें"
 msgid "Stop all torrents and the I2P tunnel"
 msgstr "सभी टॉरेंट और I2P टंनल को रोकें"
 
-msgid "Start All"
-msgstr "सभी शुरू करें"
+msgid "Start all torrents and the I2P tunnel"
+msgstr "सभी टॉरेंट और I2P टंनल को शुरू करें"
 
 msgid "Start all stopped torrents"
 msgstr "सभी रोके हुए टॉरेंट शुरू करें"
 
-msgid "Start all torrents and the I2P tunnel"
-msgstr "सभी टॉरेंट और I2P टंनल को शुरू करें"
+msgid "Hide Peers"
+msgstr " पीयर्स छिपाएं"
 
-msgid "No torrents found."
-msgstr "कोई टॉरेंट नहीं मिला।"
-
-msgid "No torrents loaded."
-msgstr "कोई टॉरेंट लोड नहीं किया गया।"
+msgid "Show Peers"
+msgstr " पीयर्स दिखाएं"
 
 #, java-format
-msgid "1 torrent"
-msgid_plural "{0} torrents"
-msgstr[0] "{0} टॉरेंट"
-msgstr[1] "{0} टॉरेंट"
+msgid "Sort by {0}"
+msgstr "{0} के आधार पर ढालें"
+
+msgid "Up Rate"
+msgstr "अपलोड गति"
 
 msgid "Total size of loaded torrents"
 msgstr "लोड किए गए टॉरेंट का कुल आकार"
@@ -651,12 +624,6 @@ msgid "1 connected peer"
 msgid_plural "{0} peer connections"
 msgstr[0] "1 कनेक्टेड पीयर"
 msgstr[1] "{0} कनेक्टेड पीयर"
-
-#, java-format
-msgid "1 DHT peer"
-msgid_plural "{0} DHT peers"
-msgstr[0] "{0} DHT पीयर"
-msgstr[1] "{0} DHT पीयर"
 
 msgid "Active downloads"
 msgstr "सक्रिय डाउनलोड"
@@ -685,14 +652,20 @@ msgstr "कुल डेटा अपलोड किया गया (सूच
 msgid "Total upload speed"
 msgstr "कुल अपलोड गति"
 
+msgid "Toggle Debug Panel"
+msgstr ""
+
 msgid "Debug Mode"
 msgstr "डिबग मोड"
 
 msgid "Normal Mode"
 msgstr "नॉर्मल मोड"
 
-msgid "No DHT Peers"
-msgstr "कोई DHT पीयर नहीं"
+#, java-format
+msgid "1 torrent"
+msgid_plural "{0} torrents"
+msgstr[0] "{0} टॉरेंट"
+msgstr[1] "{0} टॉरेंट"
 
 msgid "Search"
 msgstr " खोजें"
@@ -745,6 +718,13 @@ msgstr "अंतिम"
 msgid "Last page"
 msgstr "अंतिम पृष्ठ"
 
+msgid "Enter URL or select torrent file"
+msgstr "URL दर्ज करें या टॉरेंट फ़ाइल चुनें"
+
+#, java-format
+msgid "Error uploading the torrent file: {0}"
+msgstr ""
+
 #, java-format
 msgid "Cannot add torrent {0} inside another torrent: {1}"
 msgstr "{0} टॉरेंट को दूसरे टॉरेंट के अंदर जोड़ना संभव नहीं है: {1}"
@@ -753,12 +733,12 @@ msgstr "{0} टॉरेंट को दूसरे टॉरेंट के 
 msgid "Download from non-I2P location {0} is not supported"
 msgstr "{0} जैसे non-I2P स्थान से डाउनलोड का समर्थन नहीं किया जाता है"
 
+msgid "Error: Version 2 info hashes are not supported"
+msgstr ""
+
 #, java-format
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
 msgstr "अवैध URL: मुख्य रूप से \"{0}\" या \"{1}\" से शुरू होना चाहिए"
-
-msgid "Enter URL or select torrent file"
-msgstr "URL दर्ज करें या टॉरेंट फ़ाइल चुनें"
 
 #, java-format
 msgid "Magnet deleted: {0}"
@@ -767,10 +747,6 @@ msgstr "मैग्नेट हटाया गया: {0}"
 #, java-format
 msgid "Torrent file could not be deleted: {0}"
 msgstr "टॉरेंट फ़ाइल हटाने में असमर्थ: {0}"
-
-#, java-format
-msgid "Download deleted: {0}"
-msgstr "डाउनलोड हटाया गया: {0}"
 
 #, java-format
 msgid "Data file deleted: {0}"
@@ -787,6 +763,13 @@ msgstr "डायरेक्टरी हटाने में असमर्
 #, java-format
 msgid "Directory deleted: {0}"
 msgstr "डायरेक्टरी हटाई गई: {0}"
+
+msgid "Error creating torrent - you must specify a file or directory"
+msgstr "टॉरेंट बनाने में त्रुटि - आपको एक फ़ाइल या डायरेक्टरी दर्ज करना होगा"
+
+#, java-format
+msgid "Cannot create a torrent for the nonexistent data: {0}"
+msgstr "अस्तित्वहीन डेटा के लिए टॉरेंट बनाना संभव नहीं है: {0}"
 
 #, java-format
 msgid "Cannot add a torrent ending in \".torrent\": {0}"
@@ -830,13 +813,6 @@ msgstr "कई I2P ट्रैकरों को नए टॉरेंट क
 msgid "Error creating a torrent for \"{0}\""
 msgstr "{0} के लिए टॉरेंट बनाने में त्रुटि हुई"
 
-#, java-format
-msgid "Cannot create a torrent for the nonexistent data: {0}"
-msgstr "अस्तित्वहीन डेटा के लिए टॉरेंट बनाना संभव नहीं है: {0}"
-
-msgid "Error creating torrent - you must specify a file or directory"
-msgstr "टॉरेंट बनाने में त्रुटि - आपको एक फ़ाइल या डायरेक्टरी दर्ज करना होगा"
-
 msgid "Delete selected"
 msgstr "चुनिंदा हटाएं"
 
@@ -870,61 +846,17 @@ msgstr "वैध नाम और फ़िल्टर पैटर्न द�
 msgid "Restored default torrent create filters"
 msgstr "डिफ़ॉल्ट टॉरेंट बनाने के लिए फ़िल्टर वापस लाए गए"
 
-msgid "Checking"
-msgstr "तालीम"
-
-msgid "Allocating"
-msgstr "अल्लोकेशन"
-
-msgid "Starting"
-msgstr "शुरू हो रहा है"
-
-#, java-format
-msgid "Seeding to {0} peer"
-msgid_plural "Seeding to {0} peers"
-msgstr[0] "{0} पीयर को सीडिंग कर रहा है"
-msgstr[1] "{0} पीयरों को सीडिंग कर रहा है"
-
-#, java-format
-msgid "Seeding to {0} of {1} peers in swarm"
-msgstr "{0} स्वार्म में {1} पीयरों में सीडिंग कर रहा है"
-
-msgid "OK"
-msgstr "ठीक है"
-
-#, java-format
-msgid "Downloading from {0} peer"
-msgid_plural "Downloading from {0} peers"
-msgstr[0] "{0} पीयर से डाउनलोड कर रहा है"
-msgstr[1] "{0} पीयरों से डाउनलोड कर रहा है"
-
-msgid "Stalled"
-msgstr "रुका"
-
-#, java-format
-msgid "Connected to {0} of {1} peers in swarm"
-msgstr "{0} स्वार्म में {1} पीयर के साथ जुड़ा हुआ है"
-
-msgid "No Peers"
-msgstr "कोई पीयर नहीं"
-
 msgid "Torrent details"
 msgstr "टॉरेंट का विवरण"
 
 msgid "Torrent has comments"
 msgstr "टॉरेंट में टिप्पणी है"
 
-msgid "View files"
-msgstr "फ़ाइल देखें"
-
 msgid "Open file"
 msgstr "फ़ाइल खोलें"
 
-msgid "complete"
-msgstr "पूर्ण"
-
-msgid "remaining"
-msgstr "बाकी"
+msgid "View files"
+msgstr "फ़ाइल देखें"
 
 msgid "Completed"
 msgstr "पूरा किया"
@@ -959,14 +891,51 @@ msgstr "हटाएं"
 msgid "Delete .torrent file and associated data files"
 msgstr ".torrent फ़ाइल और संबंधित डेटा फ़ाइलें हटाएं"
 
+msgid "Checking"
+msgstr "तालीम"
+
+msgid "Allocating"
+msgstr "अल्लोकेशन"
+
+msgid "Starting"
+msgstr "शुरू हो रहा है"
+
+#, java-format
+msgid "Seeding to {0} peer"
+msgid_plural "Seeding to {0} peers"
+msgstr[0] "{0} पीयर को सीडिंग कर रहा है"
+msgstr[1] "{0} पीयरों को सीडिंग कर रहा है"
+
+#, java-format
+msgid "Connected to {0} of {1} peers in swarm"
+msgstr "{0} स्वार्म में {1} पीयर के साथ जुड़ा हुआ है"
+
+msgid "Stalled"
+msgstr "रुका"
+
+#, java-format
+msgid "Seeding to {0} peer in swarm"
+msgid_plural "Seeding to {0} peers in swarm"
+msgstr[0] ""
+msgstr[1] ""
+
+#, java-format
+msgid "Downloading from {0} peer"
+msgid_plural "Downloading from {0} peers"
+msgstr[0] "{0} पीयर से डाउनलोड कर रहा है"
+msgstr[1] "{0} पीयरों से डाउनलोड कर रहा है"
+
+msgid "OK"
+msgstr "ठीक है"
+
+msgid "No Peers"
+msgstr "कोई पीयर नहीं"
+
 msgid "Peer attached to swarm"
 msgstr "पीयर स्वार्म से जुड़ा हुआ है"
 
 msgid "Destination (identity) of peer"
 msgstr "पीयर का गंतव्य (Identity)"
-
-msgid "Version"
-msgstr "संस्करण"
 
 msgid "seconds"
 msgstr "सेकंड"
@@ -1341,14 +1310,68 @@ msgstr "अज्ञात आदेश"
 msgid "Please retry form submission (bad nonce)"
 msgstr "कृपया जमा करने के लिए पुनः प्रयास करें (खराब nonce)"
 
+msgid "Resource Does Not Exist"
+msgstr "संसाधन मौजूद नहीं है"
+
+msgid "Resource"
+msgstr "संसाधन"
+
+msgid "Base"
+msgstr "मूल"
+
+msgid "Files"
+msgstr "फ़ाइलें"
+
+msgid "Directory"
+msgstr "डायरेक्टरी"
+
+msgid "Size"
+msgstr "कार"
+
+msgid "Download Status"
+msgstr "डाउनलोड स्थिति"
+
+msgid "Remaining"
+msgstr "बाकी"
+
+msgid "Download Priority"
+msgstr "डाउनलोड प्राथमिकता"
+
+msgid "up"
+msgstr ""
+
+msgid "Parent directory"
+msgstr "ऊपर के स्तर की डायरेक्टरी तक"
+
+msgid "Audio Playlist"
+msgstr "ऑडियो प्ले लिस्ट"
+
+msgid "Not found"
+msgstr "नहीं मिला"
+
+msgid "File not found in torrent"
+msgstr "टॉरेंट में फ़ाइल नहीं मिली"
+
+msgid "Unrecognized"
+msgstr "अनाजान"
+
+msgid "Preview"
+msgstr "पूर्वानुमान"
+
+msgid "Save priorities"
+msgstr "प्राथमिकताओं को सहेजें"
+
+msgid "Comments"
+msgstr "टिप्पणियाँ"
+
+msgid "Resource Not found"
+msgstr "संसाधन नहीं मिला"
+
 msgid "Info hash"
 msgstr "जानकारी हैश"
 
 msgid "Created"
 msgstr "बनाया"
-
-msgid "Files"
-msgstr "फ़ाइलें"
 
 msgid "Added"
 msgstr "ोड़ा"
@@ -1364,9 +1387,6 @@ msgstr "डाउनलोड गति"
 
 msgid "Completion"
 msgstr "पूर्णता"
-
-msgid "Remaining"
-msgstr "बाकी"
 
 msgid "Skipped"
 msgstr "छोड़ा"
@@ -1392,51 +1412,6 @@ msgstr "फ़ाइल की पूर्णता जांचने के �
 msgid "Check integrity of the downloaded files"
 msgstr "डाउनलोड की फ़ाइलों की पूर्णता की जाँच करें"
 
-msgid "Resource Not found"
-msgstr "संसाधन नहीं मिला"
-
-msgid "Base"
-msgstr "मूल"
-
-msgid "Resource Does Not Exist"
-msgstr "संसाधन मौजूद नहीं है"
-
-msgid "Resource"
-msgstr "संसाधन"
-
-msgid "Audio file: "
-msgstr "ऑडियो फ़ाइल: "
-
-msgid "Video file: "
-msgstr "वीडियो फ़ाइल: "
-
-msgid "Directory"
-msgstr "डायरेक्टरी"
-
-msgid "Download Status"
-msgstr "डाउनलोड स्थिति"
-
-msgid "Download Priority"
-msgstr "डाउनलोड प्राथमिकता"
-
-msgid "Parent directory"
-msgstr "ऊपर के स्तर की डायरेक्टरी तक"
-
-msgid "Audio Playlist"
-msgstr "ऑडियो प्ले लिस्ट"
-
-msgid "Not found"
-msgstr "नहीं मिला"
-
-msgid "File not found in torrent"
-msgstr "टॉरेंट में फ़ाइल नहीं मिली"
-
-msgid "Unrecognized"
-msgstr "अनाजान"
-
-msgid "Preview"
-msgstr "पूर्वानुमान"
-
 msgid "Download file at high priority"
 msgstr "उच्च प्राथमिकता पर फ़ाइल डाउनलोड करें"
 
@@ -1455,11 +1430,11 @@ msgstr "इस फ़ाइल को डाउनलोड न करें"
 msgid "Skip"
 msgstr "छोड़ें"
 
-msgid "Save priorities"
-msgstr "प्राथमिकताओं को सहेजें"
+msgid "complete"
+msgstr "पूर्ण"
 
-msgid "Comments"
-msgstr "टिप्पणियाँ"
+msgid "remaining"
+msgstr "बाकी"
 
 msgid "Ratings and Comments"
 msgstr "रेटिंग और टिप्पणियाँ"
@@ -1529,3 +1504,20 @@ msgstr "बदलाव सहेजें"
 
 msgid "Torrent must be stopped"
 msgstr "टॉरेंट को रोकना होगा"
+
+#, java-format
+
+
+
+
+
+
+
+#, java-format
+
+#, java-format
+
+#, java-format
+
+
+

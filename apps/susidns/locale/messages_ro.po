@@ -31,8 +31,11 @@ msgstr "Numele de gazdă \"{0}\", necesită o conversie a ASCII, dar biblioteca 
 msgid "Source"
 msgstr "Sursă"
 
-msgid "Imported from file hosts.txt"
+msgid "Imported from"
 msgstr ""
+
+msgid "Imported from file"
+msgstr "Importat din fișier"
 
 msgid "Manually added via SusiDNS"
 msgstr "Adăugate manual prin SusiDNS"
@@ -177,11 +180,17 @@ msgstr "Dacă problema persistă, verificați dacă aveți activate cookie-urile
 msgid "Save"
 msgstr "Salvează"
 
-msgid "Configuration saved."
-msgstr "Configurare salvată."
+msgid "Blacklist saved."
+msgstr ""
 
 msgid "Reload"
 msgstr "Reîncarcă"
+
+msgid "Blacklist reloaded from file."
+msgstr ""
+
+msgid "Configuration saved."
+msgstr "Configurare salvată."
 
 msgid "Configuration reloaded."
 msgstr "Configurare reîncărcată."
@@ -208,6 +217,19 @@ msgstr "Adăugarea destinație pentru {0} la serviciul-nume {1} e eșuat"
 msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "Ștergerea destinației pentru {0} la serviciul-nume {1} a eșuat"
 
+msgid "Blacklist Selected"
+msgstr ""
+
+#, java-format
+msgid "1 destination blacklisted."
+msgid_plural "{0} destinations blacklisted."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "No valid entries selected to blacklist."
+msgstr ""
+
 msgid "Save Notes"
 msgstr "Salvați note"
 
@@ -220,9 +242,6 @@ msgstr "Nu au fost găsite intrări în fișier"
 #, java-format
 msgid "Imported from file {0}"
 msgstr "Importat din fișierul {0}"
-
-msgid "Imported from file"
-msgstr "Importat din fișier"
 
 #, java-format
 msgid "Loaded {0} entry from file"
@@ -277,6 +296,9 @@ msgstr "Publicat"
 msgid "Subscriptions"
 msgstr "Abonamente"
 
+msgid "Blacklist"
+msgstr ""
+
 msgid "Configuration"
 msgstr "Configurație"
 
@@ -313,14 +335,26 @@ msgstr "Caută"
 msgid "latest"
 msgstr ""
 
+msgid "Alive"
+msgstr ""
+
+msgid "Dead"
+msgstr ""
+
 msgid "all"
 msgstr "ștergeți filtrul"
 
 msgid "Info"
 msgstr "Informații"
 
+msgid "Type"
+msgstr ""
+
 msgid "Hostname"
 msgstr "Nume host "
+
+msgid "Encryption"
+msgstr ""
 
 msgid "Link (b32)"
 msgstr "Link (b32)"
@@ -331,11 +365,17 @@ msgstr "Destinație"
 msgid "Added"
 msgstr ""
 
+msgid "Status"
+msgstr ""
+
 msgid "Select hosts for deletion from addressbook"
 msgstr "Selectați gazdele pentru ștergere din agenda de adrese"
 
 msgid "More information on this entry"
 msgstr "Mai multe informații despre această intrare"
+
+msgid "unknown"
+msgstr ""
 
 msgid "Base 32 address"
 msgstr "Adresa Base32"
@@ -364,11 +404,23 @@ msgstr "Destinație completă sau adresa b32"
 msgid "Select file"
 msgstr "Selectați fișierul"
 
-msgid "configuration"
-msgstr "configurație"
+msgid "blacklist"
+msgstr ""
+
+msgid "Blacklist Management"
+msgstr ""
 
 msgid "File location"
 msgstr "Locația fișierului"
+
+msgid "Enter I2P addresses to blacklist (one per line)"
+msgstr ""
+
+msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
+msgstr ""
+
+msgid "configuration"
+msgstr "configurație"
 
 msgid "Hints"
 msgstr "Sugestii"
@@ -429,6 +481,12 @@ msgstr "Fișier la jurnalul de activitate pentru ( modifică cu /dev/null dacă 
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "Numele temei de înlocuire de utilizat (implicit pentru tema selectată de consolă)"
+
+msgid "Interval (in hours) for running host checker (default is 8 hours)"
+msgstr ""
+
+msgid "How many pings to perform concurrently when running host checker (Default is 12, max is 100)"
+msgstr ""
 
 msgid "delete hosts"
 msgstr ""
@@ -492,6 +550,9 @@ msgstr "Creați propriile imagini de identificare"
 
 msgid "Launch Image Generator"
 msgstr "Lansați generatorul de imagini"
+
+msgid "Export"
+msgstr ""
 
 msgid "Introduction"
 msgstr "Introducere"
@@ -621,4 +682,3 @@ msgstr "Adresele adăugate manual în agenda dvs. de adrese Master se vor contop
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Gazdele pe care le primiți de la abonamentele dvs. se vor contopi cu agenda de adrese a routerului."
-

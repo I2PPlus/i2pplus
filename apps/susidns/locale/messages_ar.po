@@ -31,8 +31,11 @@ msgstr "اسم المضيف \"{0}\" يتطلب التحويل إلى ASCII ول�
 msgid "Source"
 msgstr "المصدر"
 
-msgid "Imported from file hosts.txt"
+msgid "Imported from"
 msgstr ""
+
+msgid "Imported from file"
+msgstr "مستورد من الملف"
 
 msgid "Manually added via SusiDNS"
 msgstr "محذوف يدويا عن طريق SusiDNS"
@@ -192,11 +195,17 @@ msgstr "إذا استمرت المشكلة، فتأكد من تمكين ملفا
 msgid "Save"
 msgstr "حفظ"
 
-msgid "Configuration saved."
-msgstr "حفظ الخيارات"
+msgid "Blacklist saved."
+msgstr ""
 
 msgid "Reload"
 msgstr "أعد تشغيل"
+
+msgid "Blacklist reloaded from file."
+msgstr ""
+
+msgid "Configuration saved."
+msgstr "حفظ الخيارات"
 
 msgid "Configuration reloaded."
 msgstr "اعادة تحميل الاعدادات"
@@ -223,6 +232,22 @@ msgstr "فشل في إضافة وجهة {0} إلى خدمة التسمية {1}"
 msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "فشل في حذف الوجهة لـ {0} من خدمة التسمية {1}"
 
+msgid "Blacklist Selected"
+msgstr ""
+
+#, java-format
+msgid "1 destination blacklisted."
+msgid_plural "{0} destinations blacklisted."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
+
+msgid "No valid entries selected to blacklist."
+msgstr ""
+
 msgid "Save Notes"
 msgstr "حفظ الملاحظات"
 
@@ -235,9 +260,6 @@ msgstr "لم يتم العثور على إدخالات في الملف"
 #, java-format
 msgid "Imported from file {0}"
 msgstr "مستورد من الملف {0}"
-
-msgid "Imported from file"
-msgstr "مستورد من الملف"
 
 #, java-format
 msgid "Loaded {0} entry from file"
@@ -298,6 +320,9 @@ msgstr "تم نشره منذ"
 msgid "Subscriptions"
 msgstr "اشتراك"
 
+msgid "Blacklist"
+msgstr ""
+
 msgid "Configuration"
 msgstr "خيارات"
 
@@ -334,14 +359,26 @@ msgstr "بحث"
 msgid "latest"
 msgstr ""
 
+msgid "Alive"
+msgstr ""
+
+msgid "Dead"
+msgstr ""
+
 msgid "all"
 msgstr "الغاء الترشيح"
 
 msgid "Info"
 msgstr "معلومات"
 
+msgid "Type"
+msgstr ""
+
 msgid "Hostname"
 msgstr "اسم الخادوم"
+
+msgid "Encryption"
+msgstr ""
 
 msgid "Link (b32)"
 msgstr "الرابط (b32)"
@@ -352,11 +389,17 @@ msgstr "الوجهة"
 msgid "Added"
 msgstr ""
 
+msgid "Status"
+msgstr ""
+
 msgid "Select hosts for deletion from addressbook"
 msgstr "حدد المضيفين للحذف من دفتر العناوين"
 
 msgid "More information on this entry"
 msgstr "المزيد من المعلومات حول هذا العنصر"
+
+msgid "unknown"
+msgstr ""
 
 msgid "Base 32 address"
 msgstr "عنوان الأساس 32"
@@ -385,11 +428,23 @@ msgstr "الوجهة الكاملة أو عنوان b32"
 msgid "Select file"
 msgstr "اختر الملف"
 
-msgid "configuration"
-msgstr "خيارات"
+msgid "blacklist"
+msgstr ""
+
+msgid "Blacklist Management"
+msgstr ""
 
 msgid "File location"
 msgstr "عنوان الملف"
+
+msgid "Enter I2P addresses to blacklist (one per line)"
+msgstr ""
+
+msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
+msgstr ""
+
+msgid "configuration"
+msgstr "خيارات"
 
 msgid "Hints"
 msgstr "إشارة"
@@ -450,6 +505,12 @@ msgstr "ملف لحفظ الأخطاء"
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "اسم سمة التجاوز المطلوب استخدامها (الإعداد الافتراضي للسمات المحددة بواسطة وحدة التحكم)"
+
+msgid "Interval (in hours) for running host checker (default is 8 hours)"
+msgstr ""
+
+msgid "How many pings to perform concurrently when running host checker (Default is 12, max is 100)"
+msgstr ""
 
 msgid "delete hosts"
 msgstr ""
@@ -513,6 +574,9 @@ msgstr "قم بإنشاء صور التعريف الخاصة بك"
 
 msgid "Launch Image Generator"
 msgstr "إطلاق مولد الصور"
+
+msgid "Export"
+msgstr ""
 
 msgid "Introduction"
 msgstr "تقديم"
@@ -642,4 +706,3 @@ msgstr "العناوين التي تمت إضافتها يدويًا إلى دف
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "سيتم دمج المضيفين الذين تستقبلهم من اشتراكاتك مع دفتر عناوين جهاز التوجيه الخاص بك."
-

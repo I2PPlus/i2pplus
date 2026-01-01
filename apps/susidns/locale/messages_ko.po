@@ -31,8 +31,11 @@ msgstr "호스트 이름 \"{0}\"은(는) ASCII로 변환해야 하지만 이 JVM
 msgid "Source"
 msgstr "출저"
 
-msgid "Imported from file hosts.txt"
+msgid "Imported from"
 msgstr ""
+
+msgid "Imported from file"
+msgstr "파일에서 가져옴"
 
 msgid "Manually added via SusiDNS"
 msgstr "SusiDNS를 통해 수동으로 저장됨"
@@ -167,11 +170,17 @@ msgstr "문제가 지속되면 브라우저의 쿠키가 활성화되어 있는�
 msgid "Save"
 msgstr "저장"
 
-msgid "Configuration saved."
-msgstr "설정 저장됨."
+msgid "Blacklist saved."
+msgstr ""
 
 msgid "Reload"
 msgstr "다시 읽기"
+
+msgid "Blacklist reloaded from file."
+msgstr ""
+
+msgid "Configuration saved."
+msgstr "설정 저장됨."
 
 msgid "Configuration reloaded."
 msgstr "설정 다시 불러옴"
@@ -198,6 +207,17 @@ msgstr "네이밍 서비스 {1}으로 {0} 목적지 추가 실패"
 msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "네이밍 서비스 {1}에서 {0} 목적지 삭제 실패"
 
+msgid "Blacklist Selected"
+msgstr ""
+
+#, java-format
+msgid "1 destination blacklisted."
+msgid_plural "{0} destinations blacklisted."
+msgstr[0] ""
+
+msgid "No valid entries selected to blacklist."
+msgstr ""
+
 msgid "Save Notes"
 msgstr "메모 저장"
 
@@ -210,9 +230,6 @@ msgstr "파일에 항목이 없습니다."
 #, java-format
 msgid "Imported from file {0}"
 msgstr "파일 {0}에서 가져옴"
-
-msgid "Imported from file"
-msgstr "파일에서 가져옴"
 
 #, java-format
 msgid "Loaded {0} entry from file"
@@ -263,6 +280,9 @@ msgstr "게시됨"
 msgid "Subscriptions"
 msgstr "구독"
 
+msgid "Blacklist"
+msgstr ""
+
 msgid "Configuration"
 msgstr "설정"
 
@@ -299,14 +319,26 @@ msgstr "검색"
 msgid "latest"
 msgstr ""
 
+msgid "Alive"
+msgstr ""
+
+msgid "Dead"
+msgstr ""
+
 msgid "all"
 msgstr "필터 소거"
 
 msgid "Info"
 msgstr "정보"
 
+msgid "Type"
+msgstr ""
+
 msgid "Hostname"
 msgstr "호스트 이름"
+
+msgid "Encryption"
+msgstr ""
 
 msgid "Link (b32)"
 msgstr "링크(b32)"
@@ -317,11 +349,17 @@ msgstr "목적지"
 msgid "Added"
 msgstr ""
 
+msgid "Status"
+msgstr ""
+
 msgid "Select hosts for deletion from addressbook"
 msgstr "주소록에서 삭제할 호스트를 선택하세요."
 
 msgid "More information on this entry"
 msgstr "해당 항목들 상세정보"
+
+msgid "unknown"
+msgstr ""
 
 msgid "Base 32 address"
 msgstr "Base32 주소"
@@ -350,11 +388,23 @@ msgstr "전체 대상 또는 b32 주소"
 msgid "Select file"
 msgstr "파일 선택"
 
-msgid "configuration"
-msgstr "설정"
+msgid "blacklist"
+msgstr ""
+
+msgid "Blacklist Management"
+msgstr ""
 
 msgid "File location"
 msgstr "파일 위치"
+
+msgid "Enter I2P addresses to blacklist (one per line)"
+msgstr ""
+
+msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
+msgstr ""
+
+msgid "configuration"
+msgstr "설정"
 
 msgid "Hints"
 msgstr "힌트"
@@ -415,6 +465,12 @@ msgstr "로그 기록 파일 저장장소 (원한다면 /dev/null로 변경하�
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "사용할 재정의 테마 이름(기본값은 콘솔 선택 테마)"
+
+msgid "Interval (in hours) for running host checker (default is 8 hours)"
+msgstr ""
+
+msgid "How many pings to perform concurrently when running host checker (Default is 12, max is 100)"
+msgstr ""
 
 msgid "delete hosts"
 msgstr ""
@@ -478,6 +534,9 @@ msgstr "나만의 식별 이미지 만들기"
 
 msgid "Launch Image Generator"
 msgstr "이미지 생성기 실행"
+
+msgid "Export"
+msgstr ""
 
 msgid "Introduction"
 msgstr "소개"
@@ -607,4 +666,3 @@ msgstr "마스터 주소록에 수동으로 추가된 주소는 라우터 주소
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "구독을 통해 받은 호스트는 라우터 주소록과 병합됩니다."
-

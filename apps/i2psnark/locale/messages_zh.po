@@ -43,8 +43,8 @@ msgid "Total uploaders limit changed to {0}"
 msgstr "总上传种子数限制已更新为{0}"
 
 #, java-format
-msgid "Minimum total uploaders limit is {0}"
-msgstr "最低上传种子数限制为{0}"
+msgid "Minimum uploaders limit is {0}"
+msgstr ""
 
 #, java-format
 msgid "Up BW limit changed to {0}KBps"
@@ -54,7 +54,6 @@ msgstr "上传带宽限制改为 {0} KB/s"
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "最小上传带宽限制为 {0} KB/s"
 
-#, java-format
 #, java-format
 msgid "Maximum download speed changed to {0}KB/s"
 msgstr "最大下载速度已更改为{0}KB/s"
@@ -294,12 +293,12 @@ msgstr "正在添加{0}"
 msgid "Download already running: {0}"
 msgstr "已经在下载中:{0}"
 
-msgid " - torrent file already exists"
-msgstr " - 种子文件已存在"
-
 #, java-format
 msgid "Failed to copy torrent file to {0}"
 msgstr "无法复制种子文件到{0}"
+
+msgid " - torrent file already exists"
+msgstr " - 种子文件已存在"
 
 #, java-format
 msgid "Too many files in \"{0}\" ({1})!"
@@ -485,11 +484,35 @@ msgstr "种子排队中:{0}"
 msgid "Torrent at {0} was not valid"
 msgstr "{0}的种子中有错误"
 
-msgid "Configuration"
-msgstr "设置"
+msgid "Torrents"
+msgstr "种子"
+
+msgid "Refresh page"
+msgstr "刷新页面"
+
+msgid "Configure"
+msgstr "配置"
+
+msgid "Torrent &amp; filesharing forum"
+msgstr "Torrent &amp; 文件共享论坛"
+
+msgid "Forum"
+msgstr "论坛"
+
+msgid "Search torrents"
+msgstr "搜索种子"
+
+msgid "Clear search"
+msgstr "清除搜索"
+
+msgid "Click \"Add torrent\" button to fetch torrent"
+msgstr "点击 \"添加种子\" 按钮来获取种子"
 
 msgid "Anonymous BitTorrent Client"
 msgstr "匿名的 BitTorrent 客户端"
+
+msgid "Configuration"
+msgstr "设置"
 
 #, java-format
 msgid "Are you sure you want to delete {0} and all downloaded data?"
@@ -510,36 +533,6 @@ msgstr "注意：已下载的数据不会被删除。"
 msgid "Deleting {0} and associated metadata only..."
 msgstr "正在删除{0}和仅相关的元数据..."
 
-msgid "I2PSnark has stopped"
-msgstr "I2PSnark 已停止运行"
-
-msgid "Router is down"
-msgstr "路由器已关闭"
-
-msgid "Torrents"
-msgstr "种子"
-
-msgid "Refresh page"
-msgstr "刷新页面"
-
-msgid "Configure"
-msgstr "配置"
-
-msgid "Forum"
-msgstr "论坛"
-
-msgid "Torrent &amp; filesharing forum"
-msgstr "Torrent &amp; 文件共享论坛"
-
-msgid "Search torrents"
-msgstr "搜索种子"
-
-msgid "Clear search"
-msgstr "清除搜索"
-
-msgid "Click \"Add torrent\" button to fetch torrent"
-msgstr "点击 \"添加种子\" 按钮来获取种子"
-
 msgid "clear messages"
 msgstr "清除消息"
 
@@ -559,18 +552,17 @@ msgstr "页面刷新"
 msgid "Warning - No I2P"
 msgstr "正在连接到I2P"
 
+msgid "No torrents found."
+msgstr "未找到种子。"
+
+msgid "No torrents loaded."
+msgstr "未载入任何种子."
+
+msgid "No DHT Peers"
+msgstr "没有DHT节点"
+
 msgid "Status"
 msgstr "状态"
-
-#, java-format
-msgid "Sort by {0}"
-msgstr "排序按 {0}"
-
-msgid "Hide Peers"
-msgstr "隐藏用户"
-
-msgid "Show Peers"
-msgstr "显示用户"
 
 msgid "Torrent"
 msgstr "种子"
@@ -584,38 +576,20 @@ msgstr "Torrent文件"
 msgid "ETA"
 msgstr "预计剩余时间"
 
-msgid "Estimated time remaining"
-msgstr "预计剩余时间"
-
 msgid "RX"
 msgstr "已接收"
-
-msgid "Downloaded"
-msgstr "已下载"
-
-msgid "Size"
-msgstr "大小"
 
 msgid "RX Rate"
 msgstr "接收速度"
 
-msgid "Down Rate"
-msgstr "下载速度"
-
 msgid "TX"
 msgstr "已发送"
-
-msgid "Upload ratio"
-msgstr ""
-
-msgid "Uploaded"
-msgstr "已上传"
 
 msgid "TX Rate"
 msgstr "发送速度"
 
-msgid "Up Rate"
-msgstr "上传速度"
+msgid "Start All"
+msgstr "启动全部"
 
 msgid "Stop All"
 msgstr "停止全部"
@@ -623,25 +597,24 @@ msgstr "停止全部"
 msgid "Stop all torrents and the I2P tunnel"
 msgstr "停止全部种子及I2P隧道"
 
-msgid "Start All"
-msgstr "启动全部"
+msgid "Start all torrents and the I2P tunnel"
+msgstr "启动全部种子及I2P隧道"
 
 msgid "Start all stopped torrents"
 msgstr "启动所有已停止的种子"
 
-msgid "Start all torrents and the I2P tunnel"
-msgstr "启动全部种子及I2P隧道"
+msgid "Hide Peers"
+msgstr "隐藏用户"
 
-msgid "No torrents found."
-msgstr "未找到种子。"
-
-msgid "No torrents loaded."
-msgstr "未载入任何种子."
+msgid "Show Peers"
+msgstr "显示用户"
 
 #, java-format
-msgid "1 torrent"
-msgid_plural "{0} torrents"
-msgstr[0] "{0}个种子"
+msgid "Sort by {0}"
+msgstr "排序按 {0}"
+
+msgid "Up Rate"
+msgstr "上传速度"
 
 msgid "Total size of loaded torrents"
 msgstr "已加载种子的总大小"
@@ -650,11 +623,6 @@ msgstr "已加载种子的总大小"
 msgid "1 connected peer"
 msgid_plural "{0} peer connections"
 msgstr[0] "1个连接的节点"
-
-#, java-format
-msgid "1 DHT peer"
-msgid_plural "{0} DHT peers"
-msgstr[0] "{0}个DHT节点"
 
 msgid "Active downloads"
 msgstr "活跃下载"
@@ -683,14 +651,19 @@ msgstr "上传的总数据（对于列出的种子）。"
 msgid "Total upload speed"
 msgstr "限制总上传速度为"
 
+msgid "Toggle Debug Panel"
+msgstr ""
+
 msgid "Debug Mode"
 msgstr "调试模式"
 
 msgid "Normal Mode"
 msgstr "正常模式"
 
-msgid "No DHT Peers"
-msgstr "没有DHT节点"
+#, java-format
+msgid "1 torrent"
+msgid_plural "{0} torrents"
+msgstr[0] "{0}个种子"
 
 msgid "Search"
 msgstr "搜索"
@@ -743,6 +716,13 @@ msgstr "末页"
 msgid "Last page"
 msgstr "最后一页"
 
+msgid "Enter URL or select torrent file"
+msgstr "输入 URL 或选择 torrent 文件"
+
+#, java-format
+msgid "Error uploading the torrent file: {0}"
+msgstr ""
+
 #, java-format
 msgid "Cannot add torrent {0} inside another torrent: {1}"
 msgstr "无法添加内含另一个种子的种子 {0}：{1}"
@@ -751,12 +731,12 @@ msgstr "无法添加内含另一个种子的种子 {0}：{1}"
 msgid "Download from non-I2P location {0} is not supported"
 msgstr "不支持从非I2P地点{0}下载"
 
+msgid "Error: Version 2 info hashes are not supported"
+msgstr ""
+
 #, java-format
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
 msgstr "无效链接 - 链接必须以“{0}”或“{1}”开头"
-
-msgid "Enter URL or select torrent file"
-msgstr "输入 URL 或选择 torrent 文件"
 
 #, java-format
 msgid "Magnet deleted: {0}"
@@ -765,10 +745,6 @@ msgstr "Magnet 已删除:{0}"
 #, java-format
 msgid "Torrent file could not be deleted: {0}"
 msgstr "种子不能被删除: {0}"
-
-#, java-format
-msgid "Download deleted: {0}"
-msgstr "下载已删除: {0}"
 
 #, java-format
 msgid "Data file deleted: {0}"
@@ -785,6 +761,13 @@ msgstr "无法删除目录:{0}"
 #, java-format
 msgid "Directory deleted: {0}"
 msgstr "目录已经删除: {0}"
+
+msgid "Error creating torrent - you must specify a file or directory"
+msgstr "创建种子时发生错误 - 必须指定文件或文件夹"
+
+#, java-format
+msgid "Cannot create a torrent for the nonexistent data: {0}"
+msgstr "无法为不存在的数据文件创建种子:{0}"
 
 #, java-format
 msgid "Cannot add a torrent ending in \".torrent\": {0}"
@@ -828,13 +811,6 @@ msgstr "许多 I2P 跟踪器要求您在播种前注册新的种子 - 请在开�
 msgid "Error creating a torrent for \"{0}\""
 msgstr "创建种子时发生错误 \"{0}\""
 
-#, java-format
-msgid "Cannot create a torrent for the nonexistent data: {0}"
-msgstr "无法为不存在的数据文件创建种子:{0}"
-
-msgid "Error creating torrent - you must specify a file or directory"
-msgstr "创建种子时发生错误 - 必须指定文件或文件夹"
-
 msgid "Delete selected"
 msgstr "删除选中项目"
 
@@ -868,59 +844,17 @@ msgstr "请输入有效名称和过滤模式"
 msgid "Restored default torrent create filters"
 msgstr "已恢复默认的创建种子过滤器"
 
-msgid "Checking"
-msgstr "正在检查"
-
-msgid "Allocating"
-msgstr "正在分配空间"
-
-msgid "Starting"
-msgstr "正在启动"
-
-#, java-format
-msgid "Seeding to {0} peer"
-msgid_plural "Seeding to {0} peers"
-msgstr[0] "正向 {0} 个用户做种"
-
-#, java-format
-msgid "Seeding to {0} of {1} peers in swarm"
-msgstr "从{0}个用户（总计{1}个）处连接"
-
-msgid "OK"
-msgstr "正常"
-
-#, java-format
-msgid "Downloading from {0} peer"
-msgid_plural "Downloading from {0} peers"
-msgstr[0] "从{0}个用户中下载"
-
-msgid "Stalled"
-msgstr "等待"
-
-#, java-format
-msgid "Connected to {0} of {1} peers in swarm"
-msgstr "从{0}个用户（总计{1}个）处连接"
-
-msgid "No Peers"
-msgstr "没有用户"
-
 msgid "Torrent details"
 msgstr "种子详情"
 
 msgid "Torrent has comments"
 msgstr "种子评论"
 
-msgid "View files"
-msgstr "浏览文件"
-
 msgid "Open file"
 msgstr "打开文件"
 
-msgid "complete"
-msgstr "完成"
-
-msgid "remaining"
-msgstr "剩余"
+msgid "View files"
+msgstr "浏览文件"
 
 msgid "Completed"
 msgstr "已完成"
@@ -955,14 +889,48 @@ msgstr "删除"
 msgid "Delete .torrent file and associated data files"
 msgstr "删除.torrent文件并删除数据文件"
 
+msgid "Checking"
+msgstr "正在检查"
+
+msgid "Allocating"
+msgstr "正在分配空间"
+
+msgid "Starting"
+msgstr "正在启动"
+
+#, java-format
+msgid "Seeding to {0} peer"
+msgid_plural "Seeding to {0} peers"
+msgstr[0] "正向 {0} 个用户做种"
+
+#, java-format
+msgid "Connected to {0} of {1} peers in swarm"
+msgstr "从{0}个用户（总计{1}个）处连接"
+
+msgid "Stalled"
+msgstr "等待"
+
+#, java-format
+msgid "Seeding to {0} peer in swarm"
+msgid_plural "Seeding to {0} peers in swarm"
+msgstr[0] ""
+
+#, java-format
+msgid "Downloading from {0} peer"
+msgid_plural "Downloading from {0} peers"
+msgstr[0] "从{0}个用户中下载"
+
+msgid "OK"
+msgstr "正常"
+
+msgid "No Peers"
+msgstr "没有用户"
+
 msgid "Peer attached to swarm"
 msgstr "连接的用户"
 
 msgid "Destination (identity) of peer"
 msgstr "用户的信息"
-
-msgid "Version"
-msgstr "版本"
 
 msgid "seconds"
 msgstr "秒"
@@ -1335,14 +1303,68 @@ msgstr "未知命令"
 msgid "Please retry form submission (bad nonce)"
 msgstr "请重试表单提交（错误的随机数）"
 
+msgid "Resource Does Not Exist"
+msgstr "资源不存在"
+
+msgid "Resource"
+msgstr "资源"
+
+msgid "Base"
+msgstr "基础"
+
+msgid "Files"
+msgstr "文件"
+
+msgid "Directory"
+msgstr "文件夹"
+
+msgid "Size"
+msgstr "大小"
+
+msgid "Download Status"
+msgstr "下载状态"
+
+msgid "Remaining"
+msgstr "剩余"
+
+msgid "Download Priority"
+msgstr "下载优先级"
+
+msgid "up"
+msgstr ""
+
+msgid "Parent directory"
+msgstr "上一层文件夹"
+
+msgid "Audio Playlist"
+msgstr "音频播放列表"
+
+msgid "Not found"
+msgstr "找不到资源"
+
+msgid "File not found in torrent"
+msgstr "种子中没有发现文件？"
+
+msgid "Unrecognized"
+msgstr "未认识到的"
+
+msgid "Preview"
+msgstr "预览"
+
+msgid "Save priorities"
+msgstr "保存优先级"
+
+msgid "Comments"
+msgstr "注释"
+
+msgid "Resource Not found"
+msgstr "找不到资源"
+
 msgid "Info hash"
 msgstr "信息哈希"
 
 msgid "Created"
 msgstr "已创建"
-
-msgid "Files"
-msgstr "文件"
 
 msgid "Added"
 msgstr "已添加"
@@ -1358,9 +1380,6 @@ msgstr "下载速度"
 
 msgid "Completion"
 msgstr "完成"
-
-msgid "Remaining"
-msgstr "剩余"
 
 msgid "Skipped"
 msgstr "已跳过"
@@ -1386,51 +1405,6 @@ msgstr "为检查文件完整性停止种子"
 msgid "Check integrity of the downloaded files"
 msgstr "检查文件完整性"
 
-msgid "Resource Not found"
-msgstr "找不到资源"
-
-msgid "Base"
-msgstr "基础"
-
-msgid "Resource Does Not Exist"
-msgstr "资源不存在"
-
-msgid "Resource"
-msgstr "资源"
-
-msgid "Audio file: "
-msgstr "音频文件： "
-
-msgid "Video file: "
-msgstr "视频文件： "
-
-msgid "Directory"
-msgstr "文件夹"
-
-msgid "Download Status"
-msgstr "下载状态"
-
-msgid "Download Priority"
-msgstr "下载优先级"
-
-msgid "Parent directory"
-msgstr "上一层文件夹"
-
-msgid "Audio Playlist"
-msgstr "音频播放列表"
-
-msgid "Not found"
-msgstr "找不到资源"
-
-msgid "File not found in torrent"
-msgstr "种子中没有发现文件？"
-
-msgid "Unrecognized"
-msgstr "未认识到的"
-
-msgid "Preview"
-msgstr "预览"
-
 msgid "Download file at high priority"
 msgstr "以高优先级下载文件"
 
@@ -1449,11 +1423,11 @@ msgstr "不要下载这个文件"
 msgid "Skip"
 msgstr "跳过"
 
-msgid "Save priorities"
-msgstr "保存优先级"
+msgid "complete"
+msgstr "完成"
 
-msgid "Comments"
-msgstr "注释"
+msgid "remaining"
+msgstr "剩余"
 
 msgid "Ratings and Comments"
 msgstr "评分与评论"
@@ -1522,3 +1496,20 @@ msgstr "保存更改"
 
 msgid "Torrent must be stopped"
 msgstr "必须停止洪流"
+
+#, java-format
+
+
+
+
+
+
+
+#, java-format
+
+#, java-format
+
+#, java-format
+
+
+

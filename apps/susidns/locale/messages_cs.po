@@ -31,8 +31,11 @@ msgstr "Název hostitele \"{0}\" vyžaduje převod do ASCII, ale knihovna převo
 msgid "Source"
 msgstr "Zdrojový kód"
 
-msgid "Imported from file hosts.txt"
+msgid "Imported from"
 msgstr ""
+
+msgid "Imported from file"
+msgstr "Importováno ze souboru"
 
 msgid "Manually added via SusiDNS"
 msgstr "Ručně přidáno přes SusiDNS"
@@ -177,11 +180,17 @@ msgstr "Pokud problém přetrvává, ověřte, zda máte ve svém prohlížeči 
 msgid "Save"
 msgstr "Uložit"
 
-msgid "Configuration saved."
-msgstr "Nastavení uloženo."
+msgid "Blacklist saved."
+msgstr ""
 
 msgid "Reload"
 msgstr "Načíst znovu"
+
+msgid "Blacklist reloaded from file."
+msgstr ""
+
+msgid "Configuration saved."
+msgstr "Nastavení uloženo."
 
 msgid "Configuration reloaded."
 msgstr "Konfigurace znovu načtena."
@@ -208,6 +217,19 @@ msgstr "Nepodařilo se přidat cíl pro {0} do služby pojmenování {1}"
 msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "Nepodařilo se odstranit cíl pro {0} ze služby pojmenování {1}"
 
+msgid "Blacklist Selected"
+msgstr ""
+
+#, java-format
+msgid "1 destination blacklisted."
+msgid_plural "{0} destinations blacklisted."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "No valid entries selected to blacklist."
+msgstr ""
+
 msgid "Save Notes"
 msgstr "Uložit poznámky"
 
@@ -220,9 +242,6 @@ msgstr "V souboru nebyly nalezeny žádné záznamy"
 #, java-format
 msgid "Imported from file {0}"
 msgstr "Importováno ze souboru {0}"
-
-msgid "Imported from file"
-msgstr "Importováno ze souboru"
 
 #, java-format
 msgid "Loaded {0} entry from file"
@@ -277,6 +296,9 @@ msgstr "Zveřejněný"
 msgid "Subscriptions"
 msgstr "Předplatné"
 
+msgid "Blacklist"
+msgstr ""
+
 msgid "Configuration"
 msgstr "Konfigurace"
 
@@ -313,14 +335,26 @@ msgstr "Hledat"
 msgid "latest"
 msgstr ""
 
+msgid "Alive"
+msgstr ""
+
+msgid "Dead"
+msgstr ""
+
 msgid "all"
 msgstr "průhledný filtr"
 
 msgid "Info"
 msgstr "Informace"
 
+msgid "Type"
+msgstr ""
+
 msgid "Hostname"
 msgstr "Hostitelské jméno"
+
+msgid "Encryption"
+msgstr ""
 
 msgid "Link (b32)"
 msgstr "Link (B32)"
@@ -331,11 +365,17 @@ msgstr "Cíl"
 msgid "Added"
 msgstr ""
 
+msgid "Status"
+msgstr ""
+
 msgid "Select hosts for deletion from addressbook"
 msgstr "Vyberte hostitele pro smazání z adresáře"
 
 msgid "More information on this entry"
 msgstr "Více informací o tomto záznamu"
+
+msgid "unknown"
+msgstr ""
 
 msgid "Base 32 address"
 msgstr "Adresa základny 32"
@@ -364,11 +404,23 @@ msgstr "Úplný cíl nebo adresa b32"
 msgid "Select file"
 msgstr "Vyberte soubor"
 
-msgid "configuration"
-msgstr "konfigurace"
+msgid "blacklist"
+msgstr ""
+
+msgid "Blacklist Management"
+msgstr ""
 
 msgid "File location"
 msgstr "Umístění souboru"
+
+msgid "Enter I2P addresses to blacklist (one per line)"
+msgstr ""
+
+msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
+msgstr ""
+
+msgid "configuration"
+msgstr "konfigurace"
 
 msgid "Hints"
 msgstr "Rady"
@@ -429,6 +481,12 @@ msgstr "File, do kterého se má zaznamenávat aktivita (změňte na /dev/null, 
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "Název přepsaného motivu, který se má použít (výchozí pro motiv vybraný v konzole)"
+
+msgid "Interval (in hours) for running host checker (default is 8 hours)"
+msgstr ""
+
+msgid "How many pings to perform concurrently when running host checker (Default is 12, max is 100)"
+msgstr ""
 
 msgid "delete hosts"
 msgstr ""
@@ -492,6 +550,9 @@ msgstr "Vytvořte si vlastní identifikační obrázky"
 
 msgid "Launch Image Generator"
 msgstr "Spusťte generátor obrázků"
+
+msgid "Export"
+msgstr ""
 
 msgid "Introduction"
 msgstr "Úvod"
@@ -621,4 +682,3 @@ msgstr "Adresy ručně přidané do hlavního adresáře se sloučí s adresář
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Hostitelé, které obdržíte z vašich předplatných, se sloučí s vaším adresářem routeru."
-

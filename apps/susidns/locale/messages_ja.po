@@ -31,8 +31,11 @@ msgstr "ホスト名 \"{0}\" は ASCII への変換が必要ですが、この J
 msgid "Source"
 msgstr "ソース"
 
-msgid "Imported from file hosts.txt"
+msgid "Imported from"
 msgstr ""
+
+msgid "Imported from file"
+msgstr "ファイルからインポート"
 
 msgid "Manually added via SusiDNS"
 msgstr "SusiDNS を通じて手動で追加されました"
@@ -167,11 +170,17 @@ msgstr "問題が解決しない場合は、ブラウザで Cookie が有効に�
 msgid "Save"
 msgstr "保存"
 
-msgid "Configuration saved."
-msgstr "設定が保存されました。"
+msgid "Blacklist saved."
+msgstr ""
 
 msgid "Reload"
 msgstr "再読込"
+
+msgid "Blacklist reloaded from file."
+msgstr ""
+
+msgid "Configuration saved."
+msgstr "設定が保存されました。"
 
 msgid "Configuration reloaded."
 msgstr "設定が再読込されました。"
@@ -198,6 +207,17 @@ msgstr "ネーミング・サービス {1} への {0} の宛先を追加する�
 msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "ネーミング・サービス {1} から {0} の宛先を削除するのに失敗しました"
 
+msgid "Blacklist Selected"
+msgstr ""
+
+#, java-format
+msgid "1 destination blacklisted."
+msgid_plural "{0} destinations blacklisted."
+msgstr[0] ""
+
+msgid "No valid entries selected to blacklist."
+msgstr ""
+
 msgid "Save Notes"
 msgstr "メモの保存"
 
@@ -210,9 +230,6 @@ msgstr "ファイルにエントリが見つかりませんでした"
 #, java-format
 msgid "Imported from file {0}"
 msgstr "ファイル {0} からインポートされました"
-
-msgid "Imported from file"
-msgstr "ファイルからインポート"
 
 #, java-format
 msgid "Loaded {0} entry from file"
@@ -263,6 +280,9 @@ msgstr "公開済み"
 msgid "Subscriptions"
 msgstr "購読"
 
+msgid "Blacklist"
+msgstr ""
+
 msgid "Configuration"
 msgstr "設定"
 
@@ -299,14 +319,26 @@ msgstr "検索"
 msgid "latest"
 msgstr ""
 
+msgid "Alive"
+msgstr ""
+
+msgid "Dead"
+msgstr ""
+
 msgid "all"
 msgstr "フィルターをクリア"
 
 msgid "Info"
 msgstr "情報"
 
+msgid "Type"
+msgstr ""
+
 msgid "Hostname"
 msgstr "ホスト名"
+
+msgid "Encryption"
+msgstr ""
 
 msgid "Link (b32)"
 msgstr "リンク(b32)"
@@ -317,11 +349,17 @@ msgstr "宛先"
 msgid "Added"
 msgstr ""
 
+msgid "Status"
+msgstr ""
+
 msgid "Select hosts for deletion from addressbook"
 msgstr "アドレス帳から削除するホストを選択してください"
 
 msgid "More information on this entry"
 msgstr "このエントリに関する詳細"
+
+msgid "unknown"
+msgstr ""
 
 msgid "Base 32 address"
 msgstr "Base 32 アドレス"
@@ -350,11 +388,23 @@ msgstr "完全な宛先または b32 アドレス"
 msgid "Select file"
 msgstr "ファイルを選択"
 
-msgid "configuration"
-msgstr "設定"
+msgid "blacklist"
+msgstr ""
+
+msgid "Blacklist Management"
+msgstr ""
 
 msgid "File location"
 msgstr "ファイル位置"
+
+msgid "Enter I2P addresses to blacklist (one per line)"
+msgstr ""
+
+msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
+msgstr ""
+
+msgid "configuration"
+msgstr "設定"
 
 msgid "Hints"
 msgstr "ヒント"
@@ -415,6 +465,12 @@ msgstr "アクティビティを記録するファイル (お好みで /dev/null
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "使用するオーバーライドテーマの名前 (デフォルトはコンソールで選択したテーマ)"
+
+msgid "Interval (in hours) for running host checker (default is 8 hours)"
+msgstr ""
+
+msgid "How many pings to perform concurrently when running host checker (Default is 12, max is 100)"
+msgstr ""
 
 msgid "delete hosts"
 msgstr ""
@@ -478,6 +534,9 @@ msgstr "独自の識別画像を作成する"
 
 msgid "Launch Image Generator"
 msgstr "画像ジェネレーターの起動"
+
+msgid "Export"
+msgstr ""
 
 msgid "Introduction"
 msgstr "紹介"
@@ -607,4 +666,3 @@ msgstr "マスター アドレス帳に手動で追加されたアドレスは�
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "サブスクリプションから受け取ったホストは、ルーターのアドレス帳と統合されます。"
-

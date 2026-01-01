@@ -43,8 +43,8 @@ msgid "Total uploaders limit changed to {0}"
 msgstr "Omejitev celotnih pošiljateljev spremenjena na {0}"
 
 #, java-format
-msgid "Minimum total uploaders limit is {0}"
-msgstr "Minimalna omejitev celotnih pošiljateljev je {0}"
+msgid "Minimum uploaders limit is {0}"
+msgstr ""
 
 #, java-format
 msgid "Up BW limit changed to {0}KBps"
@@ -293,12 +293,12 @@ msgstr "Dodajanje {0}"
 msgid "Download already running: {0}"
 msgstr "Prenos že v teku: {0}"
 
-msgid " - torrent file already exists"
-msgstr " - datoteka torrenta že obstaja"
-
 #, java-format
 msgid "Failed to copy torrent file to {0}"
 msgstr "Kopiranje datoteke torrenta v {0} ni uspelo"
+
+msgid " - torrent file already exists"
+msgstr " - datoteka torrenta že obstaja"
 
 #, java-format
 msgid "Too many files in \"{0}\" ({1})!"
@@ -484,11 +484,35 @@ msgstr "Torrent že v vrsti: {0}"
 msgid "Torrent at {0} was not valid"
 msgstr "Torrent v {0} ni bil veljaven"
 
-msgid "Configuration"
-msgstr "Nastavitve"
+msgid "Torrents"
+msgstr "Torrenti"
+
+msgid "Refresh page"
+msgstr "Osveži stran"
+
+msgid "Configure"
+msgstr "Nastavi"
+
+msgid "Torrent &amp; filesharing forum"
+msgstr "Forum za deljenje datotek s pomočjo torrentov"
+
+msgid "Forum"
+msgstr "Foruma"
+
+msgid "Search torrents"
+msgstr "Iskanje torrentov"
+
+msgid "Clear search"
+msgstr "Počisti iskanje"
+
+msgid "Click \"Add torrent\" button to fetch torrent"
+msgstr "Kliknite gumb \"Dodaj torrent\", da pridobite torrent"
 
 msgid "Anonymous BitTorrent Client"
 msgstr "Nepoznat BitTorrent odjemalnik"
+
+msgid "Configuration"
+msgstr "Nastavitve"
 
 #, java-format
 msgid "Are you sure you want to delete {0} and all downloaded data?"
@@ -509,36 +533,6 @@ msgstr ""
 msgid "Deleting {0} and associated metadata only..."
 msgstr ""
 
-msgid "I2PSnark has stopped"
-msgstr "I2PSnark je ustal"
-
-msgid "Router is down"
-msgstr "Maršrutirnik je padel"
-
-msgid "Torrents"
-msgstr "Torrenti"
-
-msgid "Refresh page"
-msgstr "Osveži stran"
-
-msgid "Configure"
-msgstr "Nastavi"
-
-msgid "Forum"
-msgstr "Foruma"
-
-msgid "Torrent &amp; filesharing forum"
-msgstr "Forum za deljenje datotek s pomočjo torrentov"
-
-msgid "Search torrents"
-msgstr "Iskanje torrentov"
-
-msgid "Clear search"
-msgstr "Počisti iskanje"
-
-msgid "Click \"Add torrent\" button to fetch torrent"
-msgstr "Kliknite gumb \"Dodaj torrent\", da pridobite torrent"
-
 msgid "clear messages"
 msgstr "počisti sporočila"
 
@@ -558,18 +552,17 @@ msgstr "osveževanje strani"
 msgid "Warning - No I2P"
 msgstr "Opozorilo - Ni I2P"
 
+msgid "No torrents found."
+msgstr "Torrentov ni najdenih."
+
+msgid "No torrents loaded."
+msgstr "Ni naloženih torrentov."
+
+msgid "No DHT Peers"
+msgstr "Ni DHT sosedov"
+
 msgid "Status"
 msgstr "Stanje"
-
-#, java-format
-msgid "Sort by {0}"
-msgstr "Uredi po {0}"
-
-msgid "Hide Peers"
-msgstr "Skrij sosedove"
-
-msgid "Show Peers"
-msgstr "Prikaži sosedove"
 
 msgid "Torrent"
 msgstr "Torrent"
@@ -583,38 +576,20 @@ msgstr "Ime torrenta"
 msgid "ETA"
 msgstr "ETA"
 
-msgid "Estimated time remaining"
-msgstr "Ocenjeno preostalo časovno trajanje"
-
 msgid "RX"
 msgstr "RX"
-
-msgid "Downloaded"
-msgstr "Preneseno"
-
-msgid "Size"
-msgstr "Velikost"
 
 msgid "RX Rate"
 msgstr "RX hitrost"
 
-msgid "Down Rate"
-msgstr "Dolavna hitrost"
-
 msgid "TX"
 msgstr "TX"
-
-msgid "Upload ratio"
-msgstr ""
-
-msgid "Uploaded"
-msgstr "Pošiljano"
 
 msgid "TX Rate"
 msgstr "TX hitrost"
 
-msgid "Up Rate"
-msgstr "Hitrost pošiljanja"
+msgid "Start All"
+msgstr "Zaženi vse"
 
 msgid "Stop All"
 msgstr "Ustavi vse"
@@ -622,28 +597,24 @@ msgstr "Ustavi vse"
 msgid "Stop all torrents and the I2P tunnel"
 msgstr "Ustavi vse torrente in tunel I2P"
 
-msgid "Start All"
-msgstr "Zaženi vse"
+msgid "Start all torrents and the I2P tunnel"
+msgstr "Zaženi vse torrente in tunel I2P"
 
 msgid "Start all stopped torrents"
 msgstr "Zaženi vse ustavljene torrente"
 
-msgid "Start all torrents and the I2P tunnel"
-msgstr "Zaženi vse torrente in tunel I2P"
+msgid "Hide Peers"
+msgstr "Skrij sosedove"
 
-msgid "No torrents found."
-msgstr "Torrentov ni najdenih."
-
-msgid "No torrents loaded."
-msgstr "Ni naloženih torrentov."
+msgid "Show Peers"
+msgstr "Prikaži sosedove"
 
 #, java-format
-msgid "1 torrent"
-msgid_plural "{0} torrents"
-msgstr[0] "{0} torrent"
-msgstr[1] "{0} torrenti"
-msgstr[2] "{0} torrentov"
-msgstr[3] "{0} torrentov"
+msgid "Sort by {0}"
+msgstr "Uredi po {0}"
+
+msgid "Up Rate"
+msgstr "Hitrost pošiljanja"
 
 msgid "Total size of loaded torrents"
 msgstr ""
@@ -655,14 +626,6 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
-
-#, java-format
-msgid "1 DHT peer"
-msgid_plural "{0} DHT peers"
-msgstr[0] "{0} DHT sosed"
-msgstr[1] "{0} DHT sosedovi"
-msgstr[2] "{0} DHT sosedov"
-msgstr[3] "{0} DHT sosedov"
 
 msgid "Active downloads"
 msgstr ""
@@ -691,14 +654,22 @@ msgstr "Skupni podatki, ki so bili pošiljani (za navedene torrente)"
 msgid "Total upload speed"
 msgstr "Skupna hitrost pošiljanja"
 
+msgid "Toggle Debug Panel"
+msgstr ""
+
 msgid "Debug Mode"
 msgstr "Način razhroščanja"
 
 msgid "Normal Mode"
 msgstr "Normalni način"
 
-msgid "No DHT Peers"
-msgstr "Ni DHT sosedov"
+#, java-format
+msgid "1 torrent"
+msgid_plural "{0} torrents"
+msgstr[0] "{0} torrent"
+msgstr[1] "{0} torrenti"
+msgstr[2] "{0} torrentov"
+msgstr[3] "{0} torrentov"
 
 msgid "Search"
 msgstr "Iskanje"
@@ -751,6 +722,13 @@ msgstr "Zadnja"
 msgid "Last page"
 msgstr "Zadnja stran"
 
+msgid "Enter URL or select torrent file"
+msgstr "Vnesite URL ali izberite datoteko torrenta"
+
+#, java-format
+msgid "Error uploading the torrent file: {0}"
+msgstr ""
+
 #, java-format
 msgid "Cannot add torrent {0} inside another torrent: {1}"
 msgstr "Torrent {0} ni mogoče dodati v drug torrent: {1}"
@@ -759,12 +737,12 @@ msgstr "Torrent {0} ni mogoče dodati v drug torrent: {1}"
 msgid "Download from non-I2P location {0} is not supported"
 msgstr "Prenos iz lokacije, ki ni I2P {0}, ni podprt"
 
+msgid "Error: Version 2 info hashes are not supported"
+msgstr ""
+
 #, java-format
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
 msgstr "Neveljavna URL: Morajo začeti z \"{0}\" ali \"{1}\""
-
-msgid "Enter URL or select torrent file"
-msgstr "Vnesite URL ali izberite datoteko torrenta"
 
 #, java-format
 msgid "Magnet deleted: {0}"
@@ -773,10 +751,6 @@ msgstr "Magnet izbrisan: {0}"
 #, java-format
 msgid "Torrent file could not be deleted: {0}"
 msgstr "Datoteke torrenta ni mogoče izbrisati: {0}"
-
-#, java-format
-msgid "Download deleted: {0}"
-msgstr "Prenos izbrisan: {0}"
 
 #, java-format
 msgid "Data file deleted: {0}"
@@ -793,6 +767,13 @@ msgstr "Mape ni mogoče izbrisati: {0}"
 #, java-format
 msgid "Directory deleted: {0}"
 msgstr "Mapa izbrisana: {0}"
+
+msgid "Error creating torrent - you must specify a file or directory"
+msgstr "Napaka pri ustvarjanju torrenta - morate vnesti datoteko ali mapo"
+
+#, java-format
+msgid "Cannot create a torrent for the nonexistent data: {0}"
+msgstr "Torrenta za neobstoječe podatke ni mogoče ustvariti: {0}"
 
 #, java-format
 msgid "Cannot add a torrent ending in \".torrent\": {0}"
@@ -836,13 +817,6 @@ msgstr "Večina I2P trackerjev zahteva registracijo novih torrentov pred sejanje
 msgid "Error creating a torrent for \"{0}\""
 msgstr "Napaka pri ustvarjanju torrenta za \"{0}\""
 
-#, java-format
-msgid "Cannot create a torrent for the nonexistent data: {0}"
-msgstr "Torrenta za neobstoječe podatke ni mogoče ustvariti: {0}"
-
-msgid "Error creating torrent - you must specify a file or directory"
-msgstr "Napaka pri ustvarjanju torrenta - morate vnesti datoteko ali mapo"
-
 msgid "Delete selected"
 msgstr "Izbriši izbrane"
 
@@ -876,65 +850,17 @@ msgstr "Vnesite veljavno ime in vzorec filtra"
 msgid "Restored default torrent create filters"
 msgstr "Obnovljeni privzeti filtri za ustvarjanje torrenta"
 
-msgid "Checking"
-msgstr "Preverjanje"
-
-msgid "Allocating"
-msgstr "Dodeljevanje"
-
-msgid "Starting"
-msgstr "Zagon"
-
-#, java-format
-msgid "Seeding to {0} peer"
-msgid_plural "Seeding to {0} peers"
-msgstr[0] "Sejanje {0} sosedovi"
-msgstr[1] "Sejanje {0} sosedov"
-msgstr[2] "Sejanje {0} sosedov"
-msgstr[3] "Sejanje {0} sosedov"
-
-#, java-format
-msgid "Seeding to {0} of {1} peers in swarm"
-msgstr "Sejanje {0} od {1} sosedov v grudbi"
-
-msgid "OK"
-msgstr "V redu"
-
-#, java-format
-msgid "Downloading from {0} peer"
-msgid_plural "Downloading from {0} peers"
-msgstr[0] "Prenos iz {0} sosedov"
-msgstr[1] "Prenos iz {0} sosedov"
-msgstr[2] "Prenos iz {0} sosedov"
-msgstr[3] "Prenos iz {0} sosedov"
-
-msgid "Stalled"
-msgstr "Zastavljen"
-
-#, java-format
-msgid "Connected to {0} of {1} peers in swarm"
-msgstr "Povezan z {0} od {1} sosedov v grudbi"
-
-msgid "No Peers"
-msgstr "Ni sosedov"
-
 msgid "Torrent details"
 msgstr "Podrobnosti torrenta"
 
 msgid "Torrent has comments"
 msgstr "Torrent ima komentarje"
 
-msgid "View files"
-msgstr "Oglej datoteke"
-
 msgid "Open file"
 msgstr "Odpri datoteko"
 
-msgid "complete"
-msgstr "popolnoma"
-
-msgid "remaining"
-msgstr "preostalo"
+msgid "View files"
+msgstr "Oglej datoteke"
 
 msgid "Completed"
 msgstr "Končano"
@@ -969,14 +895,57 @@ msgstr "Izbriši"
 msgid "Delete .torrent file and associated data files"
 msgstr "Izbriši .torrent datoteko in povezane datoteke podatkov"
 
+msgid "Checking"
+msgstr "Preverjanje"
+
+msgid "Allocating"
+msgstr "Dodeljevanje"
+
+msgid "Starting"
+msgstr "Zagon"
+
+#, java-format
+msgid "Seeding to {0} peer"
+msgid_plural "Seeding to {0} peers"
+msgstr[0] "Sejanje {0} sosedovi"
+msgstr[1] "Sejanje {0} sosedov"
+msgstr[2] "Sejanje {0} sosedov"
+msgstr[3] "Sejanje {0} sosedov"
+
+#, java-format
+msgid "Connected to {0} of {1} peers in swarm"
+msgstr "Povezan z {0} od {1} sosedov v grudbi"
+
+msgid "Stalled"
+msgstr "Zastavljen"
+
+#, java-format
+msgid "Seeding to {0} peer in swarm"
+msgid_plural "Seeding to {0} peers in swarm"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#, java-format
+msgid "Downloading from {0} peer"
+msgid_plural "Downloading from {0} peers"
+msgstr[0] "Prenos iz {0} sosedov"
+msgstr[1] "Prenos iz {0} sosedov"
+msgstr[2] "Prenos iz {0} sosedov"
+msgstr[3] "Prenos iz {0} sosedov"
+
+msgid "OK"
+msgstr "V redu"
+
+msgid "No Peers"
+msgstr "Ni sosedov"
+
 msgid "Peer attached to swarm"
 msgstr "Sosed priložen k grudbi"
 
 msgid "Destination (identity) of peer"
 msgstr "Cilj (identiteta) sosedov"
-
-msgid "Version"
-msgstr "Različica"
 
 msgid "seconds"
 msgstr "sekunde"
@@ -1355,14 +1324,68 @@ msgstr ""
 msgid "Please retry form submission (bad nonce)"
 msgstr ""
 
+msgid "Resource Does Not Exist"
+msgstr "Vira ne obstaja"
+
+msgid "Resource"
+msgstr "Vira"
+
+msgid "Base"
+msgstr "Baza"
+
+msgid "Files"
+msgstr "Datoteke"
+
+msgid "Directory"
+msgstr "Mapa"
+
+msgid "Size"
+msgstr "Velikost"
+
+msgid "Download Status"
+msgstr "Stanje prenosa"
+
+msgid "Remaining"
+msgstr "Preostalo"
+
+msgid "Download Priority"
+msgstr "Prioriteta prenosa"
+
+msgid "up"
+msgstr ""
+
+msgid "Parent directory"
+msgstr "Nadaljevanje do višje mape"
+
+msgid "Audio Playlist"
+msgstr "Seznam reprodukcije zvoka"
+
+msgid "Not found"
+msgstr "Ni najdeno"
+
+msgid "File not found in torrent"
+msgstr "Datoteke ni mogoče najeti v torrentu"
+
+msgid "Unrecognized"
+msgstr "Neznan"
+
+msgid "Preview"
+msgstr "Predogled"
+
+msgid "Save priorities"
+msgstr "Shrani prioritete"
+
+msgid "Comments"
+msgstr "Komentarji"
+
+msgid "Resource Not found"
+msgstr "Vira ni najdena"
+
 msgid "Info hash"
 msgstr "Informacijski hash"
 
 msgid "Created"
 msgstr "Ustvarjeno"
-
-msgid "Files"
-msgstr "Datoteke"
 
 msgid "Added"
 msgstr "Dodano"
@@ -1378,9 +1401,6 @@ msgstr ""
 
 msgid "Completion"
 msgstr "Končanje"
-
-msgid "Remaining"
-msgstr "Preostalo"
 
 msgid "Skipped"
 msgstr "Preskočeno"
@@ -1406,51 +1426,6 @@ msgstr "Ustavite torrent, da preverite celovitost datotek"
 msgid "Check integrity of the downloaded files"
 msgstr "Preveri celovitost prenesenih datotek"
 
-msgid "Resource Not found"
-msgstr "Vira ni najdena"
-
-msgid "Base"
-msgstr "Baza"
-
-msgid "Resource Does Not Exist"
-msgstr "Vira ne obstaja"
-
-msgid "Resource"
-msgstr "Vira"
-
-msgid "Audio file: "
-msgstr "Audioklips: "
-
-msgid "Video file: "
-msgstr "Video datoteka: "
-
-msgid "Directory"
-msgstr "Mapa"
-
-msgid "Download Status"
-msgstr "Stanje prenosa"
-
-msgid "Download Priority"
-msgstr "Prioriteta prenosa"
-
-msgid "Parent directory"
-msgstr "Nadaljevanje do višje mape"
-
-msgid "Audio Playlist"
-msgstr "Seznam reprodukcije zvoka"
-
-msgid "Not found"
-msgstr "Ni najdeno"
-
-msgid "File not found in torrent"
-msgstr "Datoteke ni mogoče najeti v torrentu"
-
-msgid "Unrecognized"
-msgstr "Neznan"
-
-msgid "Preview"
-msgstr "Predogled"
-
 msgid "Download file at high priority"
 msgstr "Prenesi datoteko na visoki prioriteti"
 
@@ -1469,11 +1444,11 @@ msgstr "Datoteko ne prenesi"
 msgid "Skip"
 msgstr "Preskoči"
 
-msgid "Save priorities"
-msgstr "Shrani prioritete"
+msgid "complete"
+msgstr "popolnoma"
 
-msgid "Comments"
-msgstr "Komentarji"
+msgid "remaining"
+msgstr "preostalo"
 
 msgid "Ratings and Comments"
 msgstr "Ocene in komentarji"
@@ -1545,3 +1520,20 @@ msgstr "Shrani spremembe"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent mora biti ustavljen"
+
+#, java-format
+
+
+
+
+
+
+
+#, java-format
+
+#, java-format
+
+#, java-format
+
+
+

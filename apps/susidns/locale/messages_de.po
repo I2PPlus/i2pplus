@@ -31,8 +31,11 @@ msgstr "Der Hostname \"{0}\" bedarf einer Überführung ins ASCII-Format, jedoch
 msgid "Source"
 msgstr "Quelle"
 
-msgid "Imported from file hosts.txt"
+msgid "Imported from"
 msgstr ""
+
+msgid "Imported from file"
+msgstr "Importiert aus Datei"
 
 msgid "Manually added via SusiDNS"
 msgstr "Manuell via SusiDNS hinzugefügt"
@@ -172,11 +175,17 @@ msgstr "Falls das Problem weiterhin besteht: Stellen Sie sicher, dass Sie in Ihr
 msgid "Save"
 msgstr "Speichern"
 
-msgid "Configuration saved."
-msgstr "Einstellungen gespeichert"
+msgid "Blacklist saved."
+msgstr ""
 
 msgid "Reload"
 msgstr "Neu laden"
+
+msgid "Blacklist reloaded from file."
+msgstr ""
+
+msgid "Configuration saved."
+msgstr "Einstellungen gespeichert"
 
 msgid "Configuration reloaded."
 msgstr "Einstellungen neu geladen"
@@ -203,6 +212,18 @@ msgstr "Konnte das Ziel für {0} nicht dem Domainnamenservice {1} hinzufügen"
 msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "Konnte das Ziel für {0} nicht aus dem Domainnamenservice {1} löschen"
 
+msgid "Blacklist Selected"
+msgstr ""
+
+#, java-format
+msgid "1 destination blacklisted."
+msgid_plural "{0} destinations blacklisted."
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "No valid entries selected to blacklist."
+msgstr ""
+
 msgid "Save Notes"
 msgstr "Hinweise speichern"
 
@@ -215,9 +236,6 @@ msgstr "Keine Einträge gefunden in Datei"
 #, java-format
 msgid "Imported from file {0}"
 msgstr "Importiert aus Datei {0}"
-
-msgid "Imported from file"
-msgstr "Importiert aus Datei"
 
 #, java-format
 msgid "Loaded {0} entry from file"
@@ -270,6 +288,9 @@ msgstr "Veröffentlicht"
 msgid "Subscriptions"
 msgstr "Abonnements"
 
+msgid "Blacklist"
+msgstr ""
+
 msgid "Configuration"
 msgstr "Konfiguration"
 
@@ -306,14 +327,26 @@ msgstr "Suche"
 msgid "latest"
 msgstr ""
 
+msgid "Alive"
+msgstr ""
+
+msgid "Dead"
+msgstr ""
+
 msgid "all"
 msgstr "Filter löschen"
 
 msgid "Info"
 msgstr "Info"
 
+msgid "Type"
+msgstr ""
+
 msgid "Hostname"
 msgstr "Hostname"
+
+msgid "Encryption"
+msgstr ""
 
 msgid "Link (b32)"
 msgstr "Link (b32)"
@@ -324,11 +357,17 @@ msgstr "Ziel"
 msgid "Added"
 msgstr ""
 
+msgid "Status"
+msgstr ""
+
 msgid "Select hosts for deletion from addressbook"
 msgstr "Wählen Sie die zu löschende Hosts aus dem Adressbuch aus"
 
 msgid "More information on this entry"
 msgstr "Weitere Informationen über diesen Eintrag"
+
+msgid "unknown"
+msgstr ""
 
 msgid "Base 32 address"
 msgstr "Adresse (Basis32)"
@@ -357,11 +396,23 @@ msgstr "Vollständiges Ziel oder B32-Adresse"
 msgid "Select file"
 msgstr "Datei auswählen"
 
-msgid "configuration"
-msgstr "Konfiguration"
+msgid "blacklist"
+msgstr ""
+
+msgid "Blacklist Management"
+msgstr ""
 
 msgid "File location"
 msgstr "Dateipfad"
+
+msgid "Enter I2P addresses to blacklist (one per line)"
+msgstr ""
+
+msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
+msgstr ""
+
+msgid "configuration"
+msgstr "Konfiguration"
 
 msgid "Hints"
 msgstr "Hinweise"
@@ -422,6 +473,12 @@ msgstr "Berichte zu Aktivitäten werden in dieser Datei gespeichert. (Ändern Si
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "Name des zu verwendenden Override-Designs (standardmäßig das von der Konsole ausgewählte Design)"
+
+msgid "Interval (in hours) for running host checker (default is 8 hours)"
+msgstr ""
+
+msgid "How many pings to perform concurrently when running host checker (Default is 12, max is 100)"
+msgstr ""
 
 msgid "delete hosts"
 msgstr ""
@@ -485,6 +542,9 @@ msgstr "Erzeugen Sie ihr eigenes Identifikationsbild"
 
 msgid "Launch Image Generator"
 msgstr "Bildgenerator starten"
+
+msgid "Export"
+msgstr ""
 
 msgid "Introduction"
 msgstr "Einführung"
@@ -614,4 +674,3 @@ msgstr "Manuell ins Master Adressbuch hinzugefügte Einträge werden mit ins Rou
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Einträge aus den Subskriptionen werden mit ins Router Adressbuch eingetragen."
-

@@ -31,8 +31,11 @@ msgstr "Ім’я хосту \"{0}\" вимагає перетворення в 
 msgid "Source"
 msgstr "Джерело"
 
-msgid "Imported from file hosts.txt"
+msgid "Imported from"
 msgstr ""
+
+msgid "Imported from file"
+msgstr "Імпортовано з файлу"
 
 msgid "Manually added via SusiDNS"
 msgstr "Додано вручну через SusiDNS"
@@ -177,11 +180,17 @@ msgstr "Якщо проблема не зникає, переконайтеся,
 msgid "Save"
 msgstr "Зберегти"
 
-msgid "Configuration saved."
-msgstr "Налаштування збережені."
+msgid "Blacklist saved."
+msgstr ""
 
 msgid "Reload"
 msgstr "Перезавантажити"
+
+msgid "Blacklist reloaded from file."
+msgstr ""
+
+msgid "Configuration saved."
+msgstr "Налаштування збережені."
 
 msgid "Configuration reloaded."
 msgstr "Налаштування перезавантажені."
@@ -208,6 +217,19 @@ msgstr "Не вдалося додати адресу призначення д�
 msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "Не вдалося видалити адресу призначення для {0} із служби імен {1}"
 
+msgid "Blacklist Selected"
+msgstr ""
+
+#, java-format
+msgid "1 destination blacklisted."
+msgid_plural "{0} destinations blacklisted."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+msgid "No valid entries selected to blacklist."
+msgstr ""
+
 msgid "Save Notes"
 msgstr "Зберегти нотатки"
 
@@ -220,9 +242,6 @@ msgstr "Немає записів у файлі"
 #, java-format
 msgid "Imported from file {0}"
 msgstr "Імпортовано з файлу {0}"
-
-msgid "Imported from file"
-msgstr "Імпортовано з файлу"
 
 #, java-format
 msgid "Loaded {0} entry from file"
@@ -277,6 +296,9 @@ msgstr "Опубліковано"
 msgid "Subscriptions"
 msgstr "Підписки"
 
+msgid "Blacklist"
+msgstr ""
+
 msgid "Configuration"
 msgstr "Налаштування"
 
@@ -313,14 +335,26 @@ msgstr "Шукати"
 msgid "latest"
 msgstr ""
 
+msgid "Alive"
+msgstr ""
+
+msgid "Dead"
+msgstr ""
+
 msgid "all"
 msgstr "очистити фільтр"
 
 msgid "Info"
 msgstr "Інформація"
 
+msgid "Type"
+msgstr ""
+
 msgid "Hostname"
 msgstr "Ім'я хосту"
+
+msgid "Encryption"
+msgstr ""
 
 msgid "Link (b32)"
 msgstr "Посилання (b32)"
@@ -331,11 +365,17 @@ msgstr "Адрес призначення"
 msgid "Added"
 msgstr ""
 
+msgid "Status"
+msgstr ""
+
 msgid "Select hosts for deletion from addressbook"
 msgstr "Виберіть хости для видалення з адресної книги"
 
 msgid "More information on this entry"
 msgstr "Більше інформації про цей запис"
+
+msgid "unknown"
+msgstr ""
 
 msgid "Base 32 address"
 msgstr "Base 32 адреса"
@@ -364,11 +404,23 @@ msgstr "Повна адреса або адреса b32"
 msgid "Select file"
 msgstr "Виберіть файл"
 
-msgid "configuration"
-msgstr "налаштування"
+msgid "blacklist"
+msgstr ""
+
+msgid "Blacklist Management"
+msgstr ""
 
 msgid "File location"
 msgstr "Місцезнаходження файлу"
+
+msgid "Enter I2P addresses to blacklist (one per line)"
+msgstr ""
+
+msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
+msgstr ""
+
+msgid "configuration"
+msgstr "налаштування"
 
 msgid "Hints"
 msgstr "Примітки"
@@ -429,6 +481,12 @@ msgstr "Файл для запису журналу дій (логів)"
 
 msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "Назва перевизначеної теми для використання (за замовчуванням тема, вибрана на консолі)"
+
+msgid "Interval (in hours) for running host checker (default is 8 hours)"
+msgstr ""
+
+msgid "How many pings to perform concurrently when running host checker (Default is 12, max is 100)"
+msgstr ""
 
 msgid "delete hosts"
 msgstr ""
@@ -492,6 +550,9 @@ msgstr "Створіть власні ідентифікаційні зобра�
 
 msgid "Launch Image Generator"
 msgstr "Запустіть генератор зображень"
+
+msgid "Export"
+msgstr ""
 
 msgid "Introduction"
 msgstr "Введення"
@@ -621,4 +682,3 @@ msgstr "Адреси, додані вручну до головної адрес
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Хости, отримані від ваших підписок, будуть об’єднані з адресною книгою вашого маршрутизатора."
-

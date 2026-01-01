@@ -214,9 +214,6 @@ msgstr "هشدار: درخواست رد شد"
 msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
 msgstr "به نظر می رسد این آدرس ناقص است. لطفاً تأیید کنید که یک آدرس معتبر تهیه کرده اید!"
 
-msgid "You attempted to connect to a non-I2P website or location."
-msgstr "شما سعی کردید به یک وب سایت یا مکان غیر I2P متصل شوید."
-
 msgid "Warning: Bad Address Helper"
 msgstr "هشدار: راهنمای آدرس بد"
 
@@ -229,6 +226,15 @@ msgstr "به نظر می رسد داده های زباله یا آدرس پای�
 
 msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
 msgstr "URL خود را بررسی کنید و سعی کنید کلید کمکی را به عنوان یک نام میزبان پایه 32 یا کلید پایه 64 درست کنید."
+
+msgid "Warning: Address Blacklisted"
+msgstr ""
+
+msgid "The requested destination is in your blacklist and access has been blocked."
+msgstr ""
+
+msgid "To allow access to this site, remove it from your blacklist on the SusiDNS blacklist management page."
+msgstr ""
 
 msgid "Warning: Invalid Destination"
 msgstr "هشدار: مقصد نامعتبر"
@@ -420,3 +426,4 @@ msgstr "اگر به طور خودکار هدایت نشدید، اینجا را 
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
 msgstr "احراز هویت برای {0} ذخیره شد، اکنون هدایت می شود."
+
