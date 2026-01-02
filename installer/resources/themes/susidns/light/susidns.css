@@ -181,7 +181,7 @@ tr:hover .destaddress{color:#333}
 .iframed #messages{border:0}
 #bk.iframed #page{padding-bottom:18px}
 #bk.iframed #published#page{padding-bottom:3px}
-#categoryFilter{margin:-12px 0 22px;padding:0 5px 5px}
+#categoryFilter{margin:-12px 0 11px;padding:0 5px 5px}
 #categoryFilter a{padding:4px;display:inline-block}
 #categoryFilter span{transition:ease all .15s}
 #categoryFilter a:hover span{transform:scale(1.2)}
