@@ -1190,7 +1190,7 @@ public class HostChecker {
                 String[] parts = trimmedLine.split(",", 2);
                 if (parts.length == 2) {
                     String hostname = parts[0].trim();
-                    String category = parts[1].trim();
+                    String category = parts[1].trim().toLowerCase(Locale.US);
                     _hostCategories.put(hostname, category);
                     validLines.add(line);
                 }
@@ -1225,6 +1225,47 @@ public class HostChecker {
      */
     public String getCategory(String hostname) {
         return _hostCategories.get(hostname);
+    }
+
+    /**
+     * Get description for a category
+     * @param category the category name
+     * @return the category description, or the category itself if unknown
+     */
+    public String getCategoryDescription(String category) {
+        if (category == null || category.isEmpty()) {
+            category = "unknown";
+        }
+        switch (category) {
+            case "cryptocoin": return "Cryptocurrency related services";
+            case "drugs": return "Controlled substances marketplaces";
+            case "ebook": return "E-book libraries and publishing";
+            case "filehost": return "File hosting and storage services";
+            case "fileshare": return "Peer-to-peer file sharing";
+            case "forum": return "Discussion forums and message boards";
+            case "gallery": return "Image galleries and photo sharing";
+            case "game": return "Gaming servers and communities";
+            case "git": return "Git repositories and code hosting";
+            case "help": return "Help and support resources";
+            case "humanrights": return "Human rights and civil liberties";
+            case "i2p": return "Official I2P infrastructure services";
+            case "news": return "News and media outlets";
+            case "pastebin": return "Text/code paste services";
+            case "personal": return "Personal websites and blogs";
+            case "radio": return "Internet radio and streaming";
+            case "search": return "Search engines and directories";
+            case "software": return "Software repositories and downloads";
+            case "stats": return "Statistics and analytics";
+            case "tool": return "Utilities and web tools";
+            case "tracker": return "Torrent and content trackers";
+            case "uhoh": return "Conspiracy / Religious content";
+            case "unknown": return "Unclassified or pending review";
+            case "untested": return "Not yet categorized";
+            case "video": return "Video streaming and media";
+            case "wiki": return "Wiki and collaborative documentation";
+            case "wip": return "Work in progress / development";
+            default: return category;
+        }
     }
 
     /**

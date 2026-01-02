@@ -469,7 +469,7 @@ msgstr "使用するオーバーライドテーマの名前 (デフォルトは�
 msgid "Interval (in hours) for running host checker (default is 8 hours)"
 msgstr ""
 
-msgid "How many pings to perform concurrently when running host checker (Default is 12, max is 100)"
+msgid "Maximum concurrent pings when running host checker (Default is 12, max is 100)"
 msgstr ""
 
 msgid "delete hosts"

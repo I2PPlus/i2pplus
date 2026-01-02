@@ -174,7 +174,7 @@ td.destinations{max-width:50px;padding:1px 8px}
 #booksearch input[type=submit]:active{box-shadow:inset 0 0 0 1px var(--hover),inset 0 0 0 2px #000,var(--btn_shadow_active);background:var(--hover) var(--search) no-repeat center center/14px;background-blend-mode:luminosity}
 #booksearch{padding:6px;text-align:center}
 #booksearch input{vertical-align:middle;line-height:1.3}
-#filter{margin-top:-1px;padding:15px 5px;border:var(--border);text-align:center;background:#001000}
+#categoryFilter,#filter{margin-top:-1px;padding:7px 5px 9px;border:var(--border);text-align:center;background:#001000}
 #filter a,#activefilter{margin:1px 0 2px;padding:2px 8px;min-width:12px;display:inline-block;line-height:1.6;white-space:nowrap;text-transform:capitalize;font-size:105%;box-shadow:0 0 0 1px #030,0 0 2px 1px #000c,var(--highlight);background:var(--th)}
 #filter a:hover,#filter a:focus{text-decoration:none;color:#f60;text-shadow:0 1px 1px #000c;box-shadow:0 0 0 1px #030,var(--highlight),inset 0 0 0 2px #930;background:#030;transform:scale(1.15)}
 #filter a:active{color:#930;box-shadow:0 0 0 1px #252,var(--btn_shadow_active);transform:scale(.95)}
@@ -182,8 +182,13 @@ td.destinations{max-width:50px;padding:1px 8px}
 #filter p:first-child{padding-bottom:0}
 #filter p{margin:8px 0 -8px;padding:0 10px;line-height:2.1;word-spacing:.1em;font-weight:700;text-align:center;text-transform:capitalize}
 p#filtered{margin:-27px 0 10px;padding:12px 10px 8px 20px;font-size:10pt;box-shadow:var(--highlight),inset 0 0 2px 1px #030;background:repeating-linear-gradient(180deg,#000c,rgba(0,16,0,.6) 1px,rgba(0,16,0,.6) 2px),url(/themes/console/dark/images/camotile2.png)}
-#activefilter,.selected{font-weight:700;color:#999;box-shadow:var(--btn_shadow_active)!important}
-#activefilter{margin:1px 1px 2px;padding:3px 10px 2px;color:var(--ink);text-shadow:0 -1px 1px #000c;box-shadow:0 0 0 1px #252,var(--btn_shadow_active)!important;background:#030}
+#filter #activefilter,.selected{font-weight:700;color:#999;box-shadow:var(--btn_shadow_active)!important}
+#filter #activefilter{margin:0;padding:3px 10px 2px;color:var(--ink);text-shadow:0 -1px 1px #000c;box-shadow:0 0 0 1px #252,var(--btn_shadow_active)!important;background:#030}
+#categoryFilter{padding:0 5px 6px}
+#categoryFilter a,#categoryFilter span{width:20px;height:20px;}
+#categoryFilter a{margin:-1px 2px 0;padding:4px;display:inline-block;box-shadow:0 0 0 1px #030,0 0 2px 1px #000c,var(--highlight);background:var(--th)}
+#categoryFilter a#activefilter{box-shadow:0 0 0 1px #030,var(--btn_shadow_active);background:#030;pointer-events:none}
+#categoryFilter a:hover span{transform:scale(1.2)}
 
 /* add/import/export */
 #add,#import{margin-top:23px;padding:0 0 10px;border:var(--border);box-shadow:var(--bevel);background:var(--th)}
@@ -348,7 +353,7 @@ textarea{font-size:9pt}
 #navi a.abook,#navi a.abook:hover,#navi a.abook:focus,#navi a.abook:active,#navi a#overview,#navi a#overview:hover,#navi a#overview:focus,#navi a#overview:active,#navi a#subs,#navi a#subs:hover,#navi a#subs:focus,#navi a#subs:active,#navi a#configlink,#navi a#configlink:hover,#navi a#configlink:focus,#navi a#configlink:active,#navi a#blacklist,#navi a#blacklist:hover,#navi a#blacklist:focus,#navi a#blacklist:active,#navi a.selected,#navi a[class].selected,#navi a[id].selected{padding:8px 10px 8px 29px!important;letter-spacing:.1em;font-size:10pt;background-position:10px center!important}
 h3{font-size:12pt}
 #filter a{margin:0 2px -2px;min-width:14px}
-#filter{background:linear-gradient(90deg,#000,#001000 10%,#001000 90%,#000)}
+#filter,#categoryFilter{background:linear-gradient(90deg,#000,#001000 10%,#001000 90%,#000)}
 form[action="addressbook"]>p.buttons{margin-bottom:-20px}
 textarea[name="config"]{height:280px}
 }

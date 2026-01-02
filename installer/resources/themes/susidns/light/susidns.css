@@ -145,11 +145,11 @@ tr:hover .destaddress{color:#333}
 .displayPanels #add,.displayPanels #import{top:0px;z-index:10000}
 .iframed .displayPanels #add,.iframed .displayPanels #import{margin:13px auto 10px;width:80%;min-width:600px;top:-25px;box-shadow:0 0 3px 3px #0002}
 
-#filter a,#filter a:visited,#activefilter{margin:2px 1px;padding:4px 8px;min-width:10px;display:inline-block;text-align:center;text-transform:capitalize;color:#3b6bbf;border:var(--border_input);box-shadow:var(--btn_shadow);background:var(--btn);filter:drop-shadow(0 0 1px rgba(220,220,255,.7))}
+#filter a,#filter a:visited,#activefilter,#categoryFilter a{margin:2px 1px;padding:4px 8px;min-width:10px;display:inline-block;text-align:center;text-transform:capitalize;color:#3b6bbf;border:var(--border_input);box-shadow:var(--btn_shadow);background:var(--btn);filter:drop-shadow(0 0 1px rgba(220,220,255,.7))}
 #activefilter{box-shadow:var(--btn_shadow_active)}
 #filter a:hover{color:var(--hover);border:1px solid var(--hover)}
 #filter a:active{text-decoration:none;color:#fff;box-shadow:var(--highlight),inset 3px 3px 3px var(--ink);background:var(--hover)}
-#filter,#search{margin-bottom:-1px;padding:5px 15px;text-align:center;border:var(--border_inner);background:#fafaff}
+#categoryFilter,#filter,#search{margin-bottom:-1px;padding:5px 15px;text-align:center;border:var(--border_inner);background:#fafaff}
 #filter{margin:-2px 0 11px;padding:6px 6px 4px;font-weight:700;text-align:center}
 #filtered,#paginate,#results{margin-right:4px;float:right;word-spacing:0;letter-spacing:0;text-transform:none}
 #filtered,#results{margin:-5px 6px -3px;padding:4px 12px;display:inline-block;float:none;vertical-align:middle;line-height:1.4;font-size:80%;border-radius:2px;box-shadow:0 0 0 1px #bbc8 inset,0 0 0 2px #fffd inset;background:#ddf8}
@@ -181,6 +181,12 @@ tr:hover .destaddress{color:#333}
 .iframed #messages{border:0}
 #bk.iframed #page{padding-bottom:18px}
 #bk.iframed #published#page{padding-bottom:3px}
+#categoryFilter{margin:-12px 0 22px;padding:0 5px 5px}
+#categoryFilter a{padding:4px;display:inline-block}
+#categoryFilter span{transition:ease all .15s}
+#categoryFilter a:hover span{transform:scale(1.2)}
+#categoryFilter #activefilter{border:var(--border_inner);box-shadow:var(--btn_shadow_active);background:var(--btn);pointer-events:none}
+#categoryFilter #activefilter span{transform:scale(.8) translateY(1px)}
 
 /* subscription log */
 #subsLog h3 span{margin:2px 4px 0 0;float:right;text-transform:none;letter-spacing:0;word-spacing:0;font-weight:500;font-size:80%;opacity:.9}

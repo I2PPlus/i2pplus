@@ -61,7 +61,7 @@ public class NamingServiceBean extends AddressbookBean {
     @Override
     protected int resultSize() {
         if (isDirect()) {return super.resultSize();}
-        return isPrefiltered() ? totalSize() : entries.length;
+        return entries.length;
     }
 
     @Override
@@ -139,17 +139,20 @@ public class NamingServiceBean extends AddressbookBean {
             boolean sortByDate = "latest".equals(filter);
             Properties searchProps = new Properties();
             searchProps.setProperty("list", getFileName()); // only blockfile needs this
-            if (filter != null && !sortByDate && !filter.equals("alive") && !filter.equals("dead")) {
+            // Only set startsWith for letter filters, not for status or category filters
+            if (filter != null && !sortByDate && !filter.equals("alive") && !filter.equals("dead") && category == null) {
                 String startsAt = filter.equals("0-9") ? "[0-9]" : filter;
                 searchProps.setProperty("startsWith", startsAt);
             }
-            if (isPrefiltered()) {
+            // Don't apply skip/limit when filtering by category - we need all results to filter by category
+            if (isPrefiltered() && category == null) {
                 // Only limit if we not searching or filtering, so we will know the total number of results
                 if (beginIndex > 0) {searchProps.setProperty("skip", Integer.toString(beginIndex));}
-                int limit = 1 + endIndex - beginIndex;
+                int limit =1 + endIndex - beginIndex;
                 if (limit > 0) {searchProps.setProperty("limit", Integer.toString(limit));}
             }
 
+            debug("Search props for category='" + category + "' filter='" + filter + "': " + searchProps);
             Hash reverse = null;
             if (search != null && search.length() > 0) {
                 if (search.length() == 60 && search.endsWith(".b32.i2p")) {
@@ -178,6 +181,26 @@ public class NamingServiceBean extends AddressbookBean {
             int blacklistedHosts = 0;
             for (Map.Entry<String, Destination> entry : results.entrySet()) {
                 String name = entry.getKey();
+
+                // Check category filter first
+                if (category != null) {
+                    String hostCategory = null;
+                    try {
+                        net.i2p.addressbook.HostChecker hostChecker = net.i2p.addressbook.HostCheckerBridge.getInstance();
+                        if (hostChecker != null) {
+                            hostCategory = hostChecker.getCategory(name);
+                        } else {
+                            debug("HostChecker is null, cannot get category for: " + name);
+                        }
+                    } catch (Exception e) {
+                        debug("Error getting category for " + name + ": " + e.getMessage());
+                    }
+                    if (hostCategory == null || !category.equalsIgnoreCase(hostCategory)) {
+                        debug("Skipping " + name + " - category: " + hostCategory + " != filter: " + category);
+                        continue;
+                    }
+                }
+
                 if (filter != null && filter.length() > 0 && !sortByDate) {
                     if (filter.equals("0-9")) {
                         char first = name.charAt(0);
@@ -186,9 +209,11 @@ public class NamingServiceBean extends AddressbookBean {
                     else if (filter.equals("alive")) {
                         // Check if host is alive using cached ping results from HostCheckerBridge
                         boolean isAlive = false;
+                        boolean haveResult = false;
                         try {
                             java.util.Map<String, net.i2p.addressbook.HostChecker.PingResult> allResults = net.i2p.addressbook.HostCheckerBridge.getAllPingResults();
-                            if (allResults != null) {
+                            if (allResults != null && !allResults.isEmpty()) {
+                                haveResult = true;
                                 net.i2p.addressbook.HostChecker.PingResult pingResult = allResults.get(name);
                                 if (pingResult != null && pingResult.reachable) {
                                     isAlive = true;
@@ -198,14 +223,16 @@ public class NamingServiceBean extends AddressbookBean {
                             // If we can't get status, skip this host for alive filter
                             continue;
                         }
-                        if (!isAlive) {continue;}
+                        if (haveResult && !isAlive) {continue;}
                     }
                     else if (filter.equals("dead")) {
                         // Check if host is dead using cached ping results from HostCheckerBridge
                         boolean isDead = false;
+                        boolean haveResult = false;
                         try {
                             java.util.Map<String, net.i2p.addressbook.HostChecker.PingResult> allResults = net.i2p.addressbook.HostCheckerBridge.getAllPingResults();
-                            if (allResults != null) {
+                            if (allResults != null && !allResults.isEmpty()) {
+                                haveResult = true;
                                 net.i2p.addressbook.HostChecker.PingResult pingResult = allResults.get(name);
                                 if (pingResult != null && !pingResult.reachable) {
                                     isDead = true;
@@ -215,9 +242,9 @@ public class NamingServiceBean extends AddressbookBean {
                             // If we can't get status, skip this host for dead filter
                             continue;
                         }
-                        if (!isDead) {continue;}
+                        if (haveResult && !isDead) {continue;}
                     }
-                    else if (! name.toLowerCase(Locale.US).startsWith(filter.toLowerCase(Locale.US))) {
+                    else if (category == null && ! name.toLowerCase(Locale.US).startsWith(filter.toLowerCase(Locale.US))) {
                         continue;
                     }
                 }
@@ -242,15 +269,31 @@ public class NamingServiceBean extends AddressbookBean {
                 list.addLast(bean);
             }
             AddressBean array[] = list.toArray(new AddressBean[list.size()]);
-            if (sortByDate) {Arrays.sort(array, new AddressByDateSorter());}
-            else if (!(results instanceof SortedMap)) {Arrays.sort(array, sorter);}
-            entries = array;
+            // Apply pagination - only apply manual pagination when NOT filtering by category
+            int fromIndex, toIndex;
+            if (category == null) {
+                // Not filtering by category, use manual begin/end pagination
+                if (sortByDate) {
+                    Arrays.sort(array, new AddressByDateSorter());
+                } else if (!(results instanceof SortedMap)) {
+                    Arrays.sort(array, sorter);
+                }
+                fromIndex = Math.max(0, Math.min(beginIndex, array.length));
+                toIndex = Math.min(endIndex, array.length - 1);
+                List<AddressBean> paginatedList = Arrays.asList(Arrays.copyOfRange(array, fromIndex, toIndex + 1));
+                entries = paginatedList.toArray(new AddressBean[paginatedList.size()]);
+            } else {
+                // When filtering by category, ensure alphabetical sorting by hostname
+                Arrays.sort(array, new AddressByNameSorter());
+                // Use category filter's own pagination, ignore begin/end from request
+                entries = array;
+            }
             _log.debug("Final entries count after filtering: " + (entries != null ? entries.length : 0) +
                        (blacklistedHosts > 0 ? " (Blacklisted: " + blacklistedHosts + ")" : ""));
             message = generateLoadMessage();
         } catch (RuntimeException e) {warn(e);}
         if (message.length() > 0) {
-            if (filter != null && filter.length() > 0) {
+            if ((filter != null && filter.length() > 0)) {
                 message = "<span id=filtered>" + message; // span closed in AddressbookBean
             } else {message = "<span id=showing>" + message;}
         }

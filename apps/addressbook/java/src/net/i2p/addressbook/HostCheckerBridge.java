@@ -13,7 +13,7 @@ public class HostCheckerBridge {
     private static final Object lock = new Object();
 
     /**
-     * Get the singleton HostChecker instance
+     * Get singleton HostChecker instance
      * This should be set by Daemon.java to avoid duplicate instances
      */
     public static HostChecker getInstance() {
@@ -23,7 +23,7 @@ public class HostCheckerBridge {
     }
 
     /**
-     * Set the HostChecker instance (should be called by Daemon.java)
+     * Set HostChecker instance (should be called by Daemon.java)
      */
     public static void setInstance(HostChecker checker) {
         synchronized (lock) {
@@ -32,8 +32,8 @@ public class HostCheckerBridge {
     }
 
     /**
-     * Ping a single host and return the result as a Map
-     * @param host the hostname to ping
+     * Ping a single host and return as result as a Map
+     * @param host hostname to ping
      * @return Map containing ping results (status, reachable, responseTime, timestamp)
      */
     public static Map<String, String> ping(String host) {
@@ -78,7 +78,7 @@ public class HostCheckerBridge {
     }
 
     /**
-     * Start the periodic ping checking
+     * Start periodic ping checking
      */
     public static void startPeriodicChecking() {
         HostChecker checker = getInstance();
@@ -88,13 +88,26 @@ public class HostCheckerBridge {
     }
 
     /**
-     * Stop the periodic ping checking
+     * Stop periodic ping checking
      */
     public static void stopPeriodicChecking() {
         HostChecker checker = getInstance();
         if (checker != null) {
             checker.stop();
         }
+    }
+
+    /**
+     * Get description for a category
+     * @param category category name
+     * @return category description, or category itself if unknown
+     */
+    public static String getCategoryDescription(String category) {
+        HostChecker checker = getInstance();
+        if (checker == null) {
+            return category;
+        }
+        return checker.getCategoryDescription(category);
     }
 
 }

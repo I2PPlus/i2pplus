@@ -48,6 +48,16 @@ public class AddressbookBean extends BaseBean {
     protected String hostname;
     /** The destination */
     protected String destination;
+    /** The category filter string */
+    protected String category;
+    /** Valid category names */
+    private static final String[] VALID_CATEGORIES = {
+        "cryptocoin", "drugs", "ebook", "filehost", "fileshare",
+        "forum", "gallery", "game", "git", "help",
+        "humanrights", "i2p", "news", "pastebin", "personal",
+        "radio", "search", "software", "stats", "tool",
+        "tracker", "uhoh", "unknown", "video", "wiki", "wip"
+    };
     /** Beginning index for pagination */
     protected int beginIndex;
     /** Ending index for pagination */
@@ -233,6 +243,26 @@ public class AddressbookBean extends BaseBean {
             for(Map.Entry<Object, Object> entry : addressbook.entrySet()) {
                 String name = (String) entry.getKey();
                 String destination = (String) entry.getValue();
+
+                // Check category filter first
+                if (category != null) {
+                    String hostCategory = null;
+                    try {
+                        net.i2p.addressbook.HostChecker hostChecker = net.i2p.addressbook.HostCheckerBridge.getInstance();
+                        if (hostChecker != null) {
+                            hostCategory = hostChecker.getCategory(name);
+                        } else {
+                            _log.warn("HostChecker is null, cannot get category for: " + name);
+                        }
+                    } catch (Exception e) {
+                        _log.error("Error getting category for " + name + ": " + e.getMessage());
+                    }
+                    if (hostCategory == null || !category.equalsIgnoreCase(hostCategory)) {
+                        _log.debug("Skipping " + name + " - category: " + hostCategory + " != filter: " + category);
+                        continue;
+                    }
+                }
+
                 if (filter != null && filter.length() > 0) {
                     if (filter.equals("0-9")) {
                         char first = name.charAt(0);
@@ -240,9 +270,11 @@ public class AddressbookBean extends BaseBean {
                     } else if (filter.equals("alive")) {
                         // Check if host is alive using cached ping results from HostCheckerBridge
                         boolean isAlive = false;
+                        boolean haveResult = false;
                         try {
                             java.util.Map<String, net.i2p.addressbook.HostChecker.PingResult> allResults = net.i2p.addressbook.HostCheckerBridge.getAllPingResults();
-                            if (allResults != null) {
+                            if (allResults != null && !allResults.isEmpty()) {
+                                haveResult = true;
                                 net.i2p.addressbook.HostChecker.PingResult pingResult = allResults.get(name);
                                 if (pingResult != null && pingResult.reachable) {
                                     isAlive = true;
@@ -252,8 +284,26 @@ public class AddressbookBean extends BaseBean {
                             // If we can't get status, skip this host for alive filter
                             continue;
                         }
-                        if (!isAlive) {continue;}
-                    } else if (! name.toLowerCase(Locale.US).startsWith(filter.toLowerCase(Locale.US))) {
+                        if (haveResult && !isAlive) {continue;}
+                    } else if (filter.equals("dead")) {
+                        // Check if host is dead using cached ping results from HostCheckerBridge
+                        boolean isDead = false;
+                        boolean haveResult = false;
+                        try {
+                            java.util.Map<String, net.i2p.addressbook.HostChecker.PingResult> allResults = net.i2p.addressbook.HostCheckerBridge.getAllPingResults();
+                            if (allResults != null && !allResults.isEmpty()) {
+                                haveResult = true;
+                                net.i2p.addressbook.HostChecker.PingResult pingResult = allResults.get(name);
+                                if (pingResult != null && !pingResult.reachable) {
+                                    isDead = true;
+                                }
+                            }
+                        } catch (Exception e) {
+                            // If we can't get status, skip this host for dead filter
+                            continue;
+                        }
+                        if (haveResult && !isDead) {continue;}
+                    } else if (category == null && ! name.toLowerCase(Locale.US).startsWith(filter.toLowerCase(Locale.US))) {
                         continue;
                     }
                 }
@@ -274,8 +324,21 @@ public class AddressbookBean extends BaseBean {
                 list.addLast(bean);
             }
             AddressBean array[] = list.toArray(new AddressBean[list.size()]);
-            Arrays.sort(array, sorter);
-            entries = array;
+            // Apply pagination - only apply manual pagination when NOT filtering by category
+            int fromIndex, toIndex;
+            if (category == null) {
+                // Not filtering by category, use manual begin/end pagination
+                Arrays.sort(array, sorter);
+                fromIndex = Math.max(0, Math.min(beginIndex, array.length));
+                toIndex = Math.min(endIndex, array.length - 1);
+                List<AddressBean> paginatedList = Arrays.asList(Arrays.copyOfRange(array, fromIndex, toIndex + 1));
+                entries = paginatedList.toArray(new AddressBean[paginatedList.size()]);
+            } else {
+                // When filtering by category, ensure alphabetical sorting by hostname
+                Arrays.sort(array, new AddressByNameSorter());
+                // Use category filter's own pagination, ignore begin/end from request
+                entries = array;
+            }
 
             message = generateLoadMessage();
         }
@@ -318,6 +381,10 @@ public class AddressbookBean extends BaseBean {
                                "{0} results for: " + "<span class=active>" + search + "</span>",
                                resultCount);
             message = "</span><span id=results>" + message + "</span>";
+        } else if (category != null) {
+            message = ngettext("Filtered list contains 1 entry.",
+                               "Filtered list contains {0} entries.",
+                               resultCount).replace(".", "");
         } else {
             if (resultCount <= 0) {message = "";} // covered in jsp
             else {
@@ -326,7 +393,15 @@ public class AddressbookBean extends BaseBean {
             }
         }
         if (resultCount <= 0) {} // nothing to display
-        else if (getBeginInt() == 0 && getEndInt() == resultCount - 1) {message += "</span>";}
+        else if (category != null) {message += "</span>";}
+        else if (getBeginInt() == 0 && getEndInt() >= totalSize() - 1) {message += "</span>";}
+        else {
+            message = ngettext("1 entry", "{0} entries", resultCount);
+            message = " (" + message + ")";
+        }
+        if (resultCount <= 0) {} // nothing to display
+        else if (category != null) {message += "</span>";}
+        else if (getBeginInt() == 0 && getEndInt() >= totalSize() - 1) {message += "</span>";}
         else {
             message += "</span><span id=paginate>";
             if (getBeginInt() > 0) {
@@ -500,7 +575,7 @@ public class AddressbookBean extends BaseBean {
 
     /**
      * Sets the filter string.
-     * @param filter the filter string to set
+     * @param filter filter string to set
      */
     public void setFilter(String filter) {
         if (filter != null && (filter.length() == 0 || filter.equalsIgnoreCase("none"))) {
@@ -508,6 +583,17 @@ public class AddressbookBean extends BaseBean {
             search = null;
         }
         this.filter = DataHelper.stripHTML(filter); // XSS
+        // Reset category - will be set if filter is a category name
+        this.category = null;
+        // Check if filter is a category name
+        if (filter != null && !filter.equals("none")) {
+            for (String validCat : VALID_CATEGORIES) {
+                if (filter.equalsIgnoreCase(validCat)) {
+                    this.category = filter.toLowerCase(Locale.US);
+                    break;
+                }
+            }
+        }
     }
 
     /**
@@ -521,6 +607,12 @@ public class AddressbookBean extends BaseBean {
      * @param destination the destination string to set
      */
     public void setDestination(String destination) {this.destination = DataHelper.stripHTML(destination).trim();} // XSS
+
+    /**
+     * Returns the category filter string.
+     * @return the category filter string
+     */
+    public String getCategoryFilter() {return category;}
 
     /**
      * Returns the hostname string.

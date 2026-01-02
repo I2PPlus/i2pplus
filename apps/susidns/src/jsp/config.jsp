@@ -84,7 +84,7 @@
 <li><b>log</b> - <%=intl._t("File to log activity to (change to /dev/null if you like)")%></li>
 <li><b>theme</b> - <%=intl._t("Name of override theme to use (defaults to console-selected theme)")%></li>
 <li><b>pingInterval</b> - <%=intl._t("Interval (in hours) for running host checker (default is 8 hours)")%></li>
-<li><b>maxConcurrentPings</b> - <%=intl._t("How many pings to perform concurrently when running host checker (Default is 12, max is 100)")%></li>
+<li><b>maxConcurrentPings</b> - <%=intl._t("Maximum concurrent pings when running host checker (Default is 12, max is 100)")%></li>
 </ul>
 </div>
 </div>

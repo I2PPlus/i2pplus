@@ -19,8 +19,7 @@
 <c:forEach items="${paramValues.checked}" var="checked">
 <jsp:setProperty name="book" property="markedForDeletion" value="${checked}"/>
 </c:forEach>
-<%
-    String importMessages = null;
+<%  String importMessages = null;
     String query = request.getQueryString();
     RequestWrapper bookRequest = new RequestWrapper(request);
     String here = bookRequest.getParameter("book");
@@ -45,9 +44,9 @@
 <link rel=preload href="<%=book.getTheme()%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" as="style">
 <link rel=stylesheet href="<%=book.getTheme()%>susidns.css?<%=net.i2p.CoreVersion.VERSION%>">
 <link rel="icon shortcut" href=/themes/console/images/addressbook.svg type=image/svg+xml>
-<% if (base.useSoraFont()) { %><link href="<%=base.getTheme()%>../../fonts/Sora.css" rel=stylesheet><% } else { %>
+<%  if (base.useSoraFont()) { %><link href="<%=base.getTheme()%>../../fonts/Sora.css" rel=stylesheet><% } else { %>
 <link href="<%=base.getTheme()%>../../fonts/OpenSans.css" rel=stylesheet><% } %>
-<% if (overrideCssActive) { %><link rel=stylesheet href="<%=base.getTheme()%>override.css"><% } %>
+<%  if (overrideCssActive) { %><link rel=stylesheet href="<%=base.getTheme()%>override.css"><% } %>
 <script nonce="<%=cspNonce%>">const theme = <%=theme%>;</script>
 </head>
 <body id=bk class="<%=book.getThemeName()%>" style=display:none;pointer-events:none>
@@ -92,7 +91,7 @@
 </span></h3></div>
 <% /* need this whether book is empty or not to display the form messages */ %>
 <div id=messages class=canClose><%=formMessages%>
-<% if (importMessages != null) { %><%=importMessages%><% } %>
+<%  if (importMessages != null) { %><%=importMessages%><% } %>
 </div>
 <div id=search>
 <form method=GET action="/susidns/addressbook?book=${book.book}">
@@ -102,11 +101,11 @@
 <input type=hidden name="filter" value="${book.filter}">
 <div id=booksearch>
 <span id=searchInput>
-<% if (book.getSearch() == null) { %>
+<%  if (book.getSearch() == null) { %>
 <input class=search type=text name="search" value="" size=20>
-<% } else { %>
+<%  } else { %>
 <input class=search type=text name="search" value="${book.search}" size=20>
-<% } %>
+<%  } %>
 <a id=clearSearch></a>
 <input class=search type=submit name="submitsearch" value="<%=intl._t("Search")%>">
 </span>
@@ -130,16 +129,38 @@
         String filterValue = filter[0];
         String displayText = filter[1];
         boolean notActive = query != null && !query.matches(".*[?&]filter=" + filterValue + "(&|$).*");
-        boolean showAll = query == null || query.contains("none") || !query.contains("filter");
-
         if (notActive) {
 %>
-<a href="/susidns/addressbook?book=${book.book}&amp;filter=<%=filterValue %>&amp;begin=0"><%=displayText%></a>
+<a href="/susidns/addressbook?book=${book.book}&amp;filter=<%=filterValue %>&amp;begin=0&amp;end=99"><%=displayText%></a>
 <%      } else { %>
-<span id="activefilter"><%=displayText%></span>
+<span id=activefilter><%=displayText%></span>
 <%      }
     }
 %>
+</div>
+<div id=categoryFilter>
+<%  String[][] categories = {
+        {"cryptocoin"}, {"drugs"}, {"ebook"}, {"filehost"}, {"fileshare"},
+        {"forum"}, {"gallery"}, {"game"}, {"git"}, {"help"},
+        {"humanrights"}, {"i2p"}, {"news"}, {"pastebin"}, {"personal"},
+        {"radio"}, {"search"}, {"software"}, {"stats"}, {"tool"},
+        {"tracker"}, {"uhoh"}, {"unknown"}, {"video"}, {"wiki"}, {"wip"}
+    };
+
+    for (String[] catArray : categories) {
+        String cat = catArray[0];
+        String catDisplay = cat;
+        String categoryTooltip = "";
+        try {String catTooltip = net.i2p.addressbook.HostCheckerBridge.getCategoryDescription(cat);}
+        catch (Exception e) {categoryTooltip = cat;}
+        boolean notActive = query != null && !query.matches(".*[?&]filter=" + cat + "(&|$).*");
+        if (notActive) {
+%>
+<a href="/susidns/addressbook?book=${book.book}&amp;filter=<%=cat%>" title="<%=categoryTooltip%>"><span class=<%=cat%>><%=catDisplay%></span></a>
+<%      } else { %>
+<a id=activefilter href="/susidns/addressbook?book=${book.book}&amp;filter=<%=cat%>" title="<%=categoryTooltip%>"><span class=<%=cat%>><%=catDisplay%></span></a>
+<%      } %>
+<%  } %>
 </div>
 </c:if>
 <c:if test="${book.notEmpty}">
@@ -171,65 +192,61 @@
 </td>
 <td class=type>
 <c:set var="hostnameForCategory" value="${addr.name}"/>
-<%
-    // Get category for this hostname
-    String category = "";
-    try {
-        Object hostCheckerObj = application.getAttribute("hostChecker");
-        if (hostCheckerObj != null) {
-            java.lang.reflect.Method getCategory = hostCheckerObj.getClass().getMethod("getCategory", String.class);
-            String hostNameForCategory = (String) pageContext.getAttribute("hostnameForCategory");
-            Object categoryResult = getCategory.invoke(hostCheckerObj, hostNameForCategory);
-            if (categoryResult != null) {
-                category = (String) categoryResult;
+<%      // Get category and description for this hostname
+        String category = "";
+        String categoryTooltip = "";
+        try {
+            Object hostCheckerObj = application.getAttribute("hostChecker");
+            if (hostCheckerObj != null) {
+                java.lang.reflect.Method getCategory = hostCheckerObj.getClass().getMethod("getCategory", String.class);
+                String hostNameForCategory = (String) pageContext.getAttribute("hostnameForCategory");
+                Object categoryResult = getCategory.invoke(hostCheckerObj, hostNameForCategory);
+                if (categoryResult != null) {
+                    category = (String) categoryResult;
+                }
+                categoryTooltip = net.i2p.addressbook.HostCheckerBridge.getCategoryDescription(category);
             }
+        } catch (Exception e) {
+            // Silently ignore category errors
         }
-    } catch (Exception e) {
-        // Silently ignore category errors
-    }
-    if (!category.isEmpty()) { %><span class=<%=category%> title=<%=category%>><%=category%></span><% }
-    else { %><span class=unknown title="<%=intl._t("unknown")%>"><%=intl._t("unknown")%></span><% } %>
+        if (!category.isEmpty()) { %><span class=<%=category%> title="<%=categoryTooltip.isEmpty() ? category : categoryTooltip%>"><%=category%></span><% }
+        else { %><span class=unknown title="<%=categoryTooltip.isEmpty() ? intl._t("unknown") : categoryTooltip%>"><%=intl._t("unknown")%></span><% } %>
 </td>
 <td class=names><a href="http://${addr.name}/" target=_blank>${addr.displayName}</a></td>
 <td class=encryption>
- <c:set var="hostname" value="${addr.name}"/>
- <%
-    String encryptionTypes = "";
-    String hostnameForEncryption = (String) pageContext.getAttribute("hostname");
-    try {
-        Object hostCheckerObj = application.getAttribute("hostChecker");
-        if (hostCheckerObj != null) {
-            try {
-                java.lang.reflect.Method getPingResult = hostCheckerObj.getClass().getMethod("getPingResult", String.class);
-                Object pingResult = getPingResult.invoke(hostCheckerObj, hostnameForEncryption);
-                if (pingResult != null) {
-                    java.lang.reflect.Field leaseSetTypesField = pingResult.getClass().getField("leaseSetTypes");
-                    String lsTypes = (String) leaseSetTypesField.get(pingResult);
-                    if (lsTypes != null && !lsTypes.equals("[]")) {
-                        String typesStr = lsTypes.replaceAll("[\\[\\]]", "");
-                        String[] types = typesStr.split(",");
-                        for (int i = 0; i < types.length; i++) {
-                            String encType = types[i].trim();
-                            String tooltip = "";
-                            if ("0".equals(encType)) { tooltip = "ElGamal"; }
-                            else if ("4".equals(encType)) { tooltip = "ECIES"; }
-                            else if ("5".equals(encType)) { tooltip = "MLKEM-512"; }
-                            else if ("6".equals(encType)) { tooltip = "MLKEM-768"; }
-                            else if ("7".equals(encType)) { tooltip = "MLKEM-1024"; }
-                            encryptionTypes += "<span title=\"" + tooltip + "\">" + encType + "</span>";
-                            if (i < types.length - 1) {
-                                encryptionTypes += " ";
+<c:set var="hostname" value="${addr.name}"/>
+<%      String encryptionTypes = "";
+        String hostnameForEncryption = (String) pageContext.getAttribute("hostname");
+        try {
+            Object hostCheckerObj = application.getAttribute("hostChecker");
+            if (hostCheckerObj != null) {
+                try {
+                    java.lang.reflect.Method getPingResult = hostCheckerObj.getClass().getMethod("getPingResult", String.class);
+                    Object pingResult = getPingResult.invoke(hostCheckerObj, hostnameForEncryption);
+                    if (pingResult != null) {
+                        java.lang.reflect.Field leaseSetTypesField = pingResult.getClass().getField("leaseSetTypes");
+                        String lsTypes = (String) leaseSetTypesField.get(pingResult);
+                        if (lsTypes != null && !lsTypes.equals("[]")) {
+                            String typesStr = lsTypes.replaceAll("[\\[\\]]", "");
+                            String[] types = typesStr.split(",");
+                            for (int i = 0; i < types.length; i++) {
+                                String encType = types[i].trim();
+                                String tooltip = "";
+                                if ("0".equals(encType)) {tooltip = "ElGamal";}
+                                else if ("4".equals(encType)) {tooltip = "ECIES";}
+                                else if ("5".equals(encType)) {tooltip = "MLKEM-512";}
+                                else if ("6".equals(encType)) {tooltip = "MLKEM-768";}
+                                else if ("7".equals(encType)) {tooltip = "MLKEM-1024";}
+                                encryptionTypes += "<span title=\"" + tooltip + "\">" + encType + "</span>";
+                                if (i < types.length - 1) {encryptionTypes += " ";}
                             }
                         }
                     }
-                }
-            } catch (Exception e) {
+                } catch (Exception e) { /* ignore */ }
             }
-        }
-    } catch (Exception e) {
-    }
-    out.print(encryptionTypes);
- %>
+        } catch (Exception e) { /* ignore */ }
+        out.print(encryptionTypes);
+%>
 </td>
 <td class=b32link><span class=addrhlpr><a href="http://${addr.b32}/" target=_blank rel=noreferrer title="<%=intl._t("Base 32 address")%>">b32</a></span></td>
 <td class=helper><a href="http://${addr.name}/?i2paddresshelper=${addr.destination}" target=_blank rel=noreferrer title="<%=intl._t("Helper link to share host address with option to add to addressbook")%>">link</a></td>
@@ -238,65 +255,58 @@
 <td class=added>${addr.added}</td>
 <td class=status>
  <c:set var="hostname" value="${addr.name}"/>
- <%    // Get ping status for this hostname
-       String pingStatus = "untested";
-       String leaseSetTypes = "[]";
-       String responseTimeStr = "";
+ <%     // Get ping status for this hostname
+        String pingStatus = "untested";
+        String leaseSetTypes = "[]";
+        String responseTimeStr = "";
         String hostnameForPing = (String) pageContext.getAttribute("hostname");
-
-       // Now try to get ping status using hostname
-       try {
-           // Try to get ping tester from application context
-           Object hostCheckerObj = application.getAttribute("hostChecker");
-           if (hostCheckerObj != null) {
-               try {
-                   // Use reflection to avoid classpath issues
-                   java.lang.reflect.Method getPingResult = hostCheckerObj.getClass().getMethod("getPingResult", String.class);
+        // Now try to get ping status using hostname
+        try {
+            // Try to get ping tester from application context
+            Object hostCheckerObj = application.getAttribute("hostChecker");
+            if (hostCheckerObj != null) {
+                try {
+                    // Use reflection to avoid classpath issues
+                    java.lang.reflect.Method getPingResult = hostCheckerObj.getClass().getMethod("getPingResult", String.class);
                     Object pingResult = getPingResult.invoke(hostCheckerObj, hostnameForPing);
-
-                   if (pingResult != null) {
-                       // Use reflection to get the reachable field
-                       java.lang.reflect.Field reachableField = pingResult.getClass().getField("reachable");
-                       boolean reachable = reachableField.getBoolean(pingResult);
-
-                       if (reachable) {
-                           pingStatus = "up";
-                       } else {
-                           pingStatus = "down";
-                       }
-
-                       // Get leaseSetTypes field
-                       java.lang.reflect.Field leaseSetTypesField = pingResult.getClass().getField("leaseSetTypes");
-                       String lsTypes = (String) leaseSetTypesField.get(pingResult);
-                       if (lsTypes != null && !lsTypes.equals("[]")) {
-                           leaseSetTypes = lsTypes;
-                       }
-
-                       // Get responseTime field
-                       java.lang.reflect.Field responseTimeField = pingResult.getClass().getField("responseTime");
-                       long responseTime = responseTimeField.getLong(pingResult);
-                       if (responseTime > 0) {
-                           responseTimeStr = String.valueOf(responseTime) + "ms";
-                       } else if (responseTime == 0) {
-                           responseTimeStr = "0ms";
-                       } else {
-                           responseTimeStr = "";
-                       }
-                   }
+                    if (pingResult != null) {
+                        // Use reflection to get the reachable field
+                        java.lang.reflect.Field reachableField = pingResult.getClass().getField("reachable");
+                        boolean reachable = reachableField.getBoolean(pingResult);
+                        if (reachable) {pingStatus = "up";}
+                        else {pingStatus = "down";}
+                        // Get leaseSetTypes field
+                        java.lang.reflect.Field leaseSetTypesField = pingResult.getClass().getField("leaseSetTypes");
+                        String lsTypes = (String) leaseSetTypesField.get(pingResult);
+                        if (lsTypes != null && !lsTypes.equals("[]")) {
+                            leaseSetTypes = lsTypes;
+                        }
+                        // Get responseTime field
+                        java.lang.reflect.Field responseTimeField = pingResult.getClass().getField("responseTime");
+                        long responseTime = responseTimeField.getLong(pingResult);
+                        if (responseTime > 0) {
+                            responseTimeStr = String.valueOf(responseTime) + "ms";
+                        } else if (responseTime == 0) {
+                            responseTimeStr = "0ms";
+                        } else {
+                            responseTimeStr = "";
+                        }
+                    }
                 } catch (Exception e) {
                     // Log reflection errors for debugging
                     System.err.println("Reflection error getting ping status for " + hostnameForPing + ": " + e.getMessage());
                 }
-           } else {
-               System.err.println("hostCheckerObj is null in application context");
-           }
+            } else {
+                System.err.println("hostCheckerObj is null in application context");
+            }
         } catch (Exception e) {
             // Log ping status errors for debugging
             System.err.println("Error getting ping status for " + hostnameForPing + ": " + e.getMessage());
         }
-       if ("up".equals(pingStatus)) { %><span class=up></span><% }
-       else if ("down".equals(pingStatus)) { %><span class=down></span><% }
-       else { %><span class=untested></span><% } %>
+
+        if ("up".equals(pingStatus)) { %><span class=up></span><% }
+        else if ("down".equals(pingStatus)) { %><span class=down></span><% }
+        else { %><span class=untested></span><% } %>
 </td>
 <c:if test="${book.validBook}"><td class=checkbox><input type=checkbox class=optbox name="checked" value="${addr.name}" title="<%=intl._t("Mark for deletion")%>"></td></c:if>
 </tr>

@@ -41,31 +41,35 @@ main{position:relative}
   #host_list .added,#host_list .b32link,#host_list .helper,#host_list .source{padding-left:4px;padding-right:4px;min-width:0!important}
 }
 
-td.type {font-size:0}
-td.type span,td.type span.unknown{padding:0;width:20px;height:20px;display:inline-block;border:0;background:url(/themes/console/images/planet.svg) no-repeat center center/20px}
-td.type span.cryptocoin{background-image:url(/themes/console/images/eepsites/cryptocoin.svg)}
-td.type span.drugs{background-image:url(/themes/console/images/eepsites/cannabis.svg)}
-td.type span.ebook{background-image:url(/themes/console/images/eepsites/books.svg)}
-td.type span.filehost{background-image:url(/themes/console/images/eepsites/filehost.svg)}
-td.type span.fileshare{background-image:url(/themes/console/images/eepsites/fileshare.svg)}
-td.type span.forum{background-image:url(/themes/console/images/eepsites/forum.svg)}
-td.type span.gallery{background-image:url(/themes/console/images/eepsites/gallery.svg)}
-td.type span.game{background-image:url(/themes/console/images/eepsites/game.svg)}
-td.type span.git{background-image:url(/themes/console/images/eepsites/git.svg)}
-td.type span.help{background-image:url(/themes/console/images/help.svg)}
-td.type span.humanrights{background-image:url(/themes/console/images/eepsites/humanrights.svg)}
-td.type span.i2p{background-image:url(/themes/console/images/eepsites/i2p.svg)}
-td.type span.news{background-image:url(/themes/console/images/news.svg)}
-td.type span.pastebin{background-image:url(/themes/console/images/paste.svg)}
-td.type span.personal{background-image:url(/themes/console/images/eepsites/personal.svg)}
-td.type span.radio{background-image:url(/themes/console/images/eepsites/radio.svg)}
-td.type span.search{background-image:url(/themes/console/images/search.svg)}
-td.type span.software{background-image:url(/themes/console/images/package.svg)}
-td.type span.stats{background-image:url(/themes/console/images/stats.svg)}
-td.type span.tool{background-image:url(/themes/console/images/wrench.svg)}
-td.type span.tracker{background-image:url(/themes/console/images/magnet.svg)}
-td.type span.uhoh{background-image:url(/themes/console/images/eepsites/uhoh.svg)}
-td.type span.video{background-image:url(/themes/console/images/eepsites/video.svg)}
-td.type span.warning{background-image:url(/themes/console/images/eepsites/warning.svg)}
-td.type span.wiki{background-image:url(/themes/console/images/wiki.svg)}
-td.type span.wip{background-image:url(/themes/console/images/eepsites/wip.svg)}
+td.type,#categoryFilter a,#categoryFilter #activefilter{font-size:0}
+td.type span,td.type span.unknown,#categoryFilter span,#categoryFilter #activefilter{padding:0;width:20px;height:20px;display:inline-block;border:0;background:url(/themes/console/images/planet.svg) no-repeat center center/20px}
+#categoryFilter #activefilter{padding:4px}
+td.type span.cryptocoin,#categoryFilter span.cryptocoin{background-image:url(/themes/console/images/eepsites/cryptocoin.svg)}
+td.type span.drugs,#categoryFilter span.drugs{background-image:url(/themes/console/images/eepsites/cannabis.svg)}
+td.type span.ebook,#categoryFilter span.ebook{background-image:url(/themes/console/images/eepsites/books.svg)}
+td.type span.filehost,#categoryFilter span.filehost{background-image:url(/themes/console/images/eepsites/filehost.svg)}
+td.type span.fileshare,#categoryFilter span.fileshare{background-image:url(/themes/console/images/eepsites/fileshare.svg)}
+td.type span.forum,#categoryFilter span.forum{background-image:url(/themes/console/images/eepsites/forum.svg)}
+td.type span.gallery,#categoryFilter span.gallery{background-image:url(/themes/console/images/eepsites/gallery.svg)}
+td.type span.game,#categoryFilter span.game{background-image:url(/themes/console/images/eepsites/game.svg)}
+td.type span.git,#categoryFilter span.git{background-image:url(/themes/console/images/eepsites/git.svg)}
+td.type span.help,#categoryFilter span.help{background-image:url(/themes/console/images/help.svg)}
+td.type span.humanrights,#categoryFilter span.humanrights{background-image:url(/themes/console/images/eepsites/humanrights.svg)}
+td.type span.i2p,#categoryFilter span.i2p{background-image:url(/themes/console/images/eepsites/i2p.svg)}
+td.type span.news,#categoryFilter span.news{background-image:url(/themes/console/images/news.svg)}
+td.type span.pastebin,#categoryFilter span.pastebin{background-image:url(/themes/console/images/paste.svg)}
+td.type span.personal,#categoryFilter span.personal{background-image:url(/themes/console/images/eepsites/personal.svg)}
+td.type span.radio,#categoryFilter span.radio{background-image:url(/themes/console/images/eepsites/radio.svg)}
+td.type span.search,#categoryFilter span.search{background-image:url(/themes/console/images/search.svg)}
+td.type span.software,#categoryFilter span.software{background-image:url(/themes/console/images/package.svg)}
+td.type span.stats,#categoryFilter span.stats{background-image:url(/themes/console/images/stats.svg)}
+td.type span.tool,#categoryFilter span.tool{background-image:url(/themes/console/images/wrench.svg)}
+td.type span.tracker,#categoryFilter span.tracker{background-image:url(/themes/console/images/magnet.svg)}
+td.type span.uhoh,#categoryFilter span.uhoh{background-image:url(/themes/console/images/eepsites/uhoh.svg)}
+td.type span.video,#categoryFilter span.video{background-image:url(/themes/console/images/eepsites/video.svg)}
+td.type span.warning,#categoryFilter span.warning{background-image:url(/themes/console/images/eepsites/warning.svg)}
+td.type span.wiki,#categoryFilter span.wiki{background-image:url(/themes/console/images/wiki.svg)}
+td.type span.wip,#categoryFilter span.wip{background-image:url(/themes/console/images/eepsites/wip.svg)}
+
+/* TODO: classic, midnight themes */
+.classic #categoryFilter,.midnight #categoryFilter {display:none!important}
