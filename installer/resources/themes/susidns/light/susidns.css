@@ -69,7 +69,6 @@ form[action="subscriptions"] #content{margin-top:1px}
 p.book{padding:5px 5px 5px 24px;background:var(--addressbook) no-repeat 2px center/16px}
 p.buttons{margin:0;padding:0;text-align:right}
 p.messages{color:#fff;text-align:center;font-weight:700}
-p#filtered{margin-bottom:16px;padding:15px 200px 18px 32px;box-shadow:var(--highlight),inset 0 0 2px 1px #ddf;background:var(--filter) no-repeat 8px center/28px,repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(240,240,255,.5) 2px,#fff 4px),#fff}
 p#help{margin:0;padding:0}
 span.addrhlpr{font-size:9pt}
 span.location{word-spacing:normal;letter-spacing:normal;text-transform:none;font-size:9pt;font-weight:400}
@@ -152,7 +151,7 @@ tr:hover .destaddress{color:#333}
 #categoryFilter,#filter,#search{margin-bottom:-1px;padding:5px 15px;text-align:center;border:var(--border_inner);background:#fafaff}
 #filter{margin:-2px 0 11px;padding:6px 6px 4px;font-weight:700;text-align:center}
 #filtered,#paginate,#results{margin-right:4px;float:right;word-spacing:0;letter-spacing:0;text-transform:none}
-#filtered,#results{margin:-5px 6px -3px;padding:4px 12px;display:inline-block;float:none;vertical-align:middle;line-height:1.4;font-size:80%;border-radius:2px;box-shadow:0 0 0 1px #bbc8 inset,0 0 0 2px #fffd inset;background:#ddf8}
+#filtered,#results,#showing{margin:-5px 6px -3px;padding:4px 12px;display:inline-block;float:none;vertical-align:middle;line-height:1.4;letter-spacing:0;text-transform:none!important;font-size:80%;border-radius:2px;box-shadow:0 0 0 1px #bbc8 inset,0 0 0 2px #fffd inset;background:#ddf8}
 #filtered:empty,#results:empty{display:none}
 #import input[type="file"]{width:calc(100% - 7px)}
 #messages{margin:0 3%;padding:10px 20px;top:0;left:0;right:0;position:fixed;z-index:9999999;line-height:150%;text-align:center;opacity:.9;border-radius:0 0 4px 4px;box-shadow:0 1px 2px rgba(100,100,200,.7);background:#224 var(--no) no-repeat right 8px top 8px/12px;cursor:crosshair;animation:2s hide-up 7s ease-out forwards}
@@ -164,7 +163,6 @@ tr:hover .destaddress{color:#333}
 #paginate,#showing{display:inline-block}
 #paginate{margin:-5px 67px -2px 0;position:relative;overflow:hidden;font-size:0;text-align:center;border:var(--border_inner);border-radius:2px;background:var(--row)}
 #search{margin:1px 0 -2px;padding-top:4px;position:sticky;top:40px;z-index:999}
-#showing{margin-left:5px}
 #subscriptions a{margin:2px 2px 0 0;float:right;font-size:80%}
 #subscriptions h3{background:#fcfcff var(--subscription) no-repeat 6px center/18px}
 .iframed div.help{border-radius:0 0 2px 2px}

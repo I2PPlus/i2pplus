@@ -131,8 +131,8 @@ tr:hover .destaddress{color:#333}
 #filter a:active{text-decoration:none;color:#fff;box-shadow:var(--highlight),inset 3px 3px 3px var(--ink);background:var(--hover)}
 #filter,#search{margin-bottom:-1px;padding:5px 15px;text-align:center;border:var(--border_inner);background:#fafaff}
 #filter{margin:-2px 0 11px;padding:6px 6px 4px;font-weight:700;text-align:center}
-#filtered,#paginate,#results{margin-right:4px;float:right;word-spacing:0;letter-spacing:0;text-transform:none}
-#filtered,#results{margin-left:6px;padding:3px 8px;font-size:80%;float:none;vertical-align:middle;border:var(--border_inner);background:var(--badge)}
+#filtered,#paginate,#results,#showing{margin-right:4px;float:right;word-spacing:0;letter-spacing:0;text-transform:none}
+#filtered,#results,#showing{margin-left:6px;padding:3px 8px;font-size:80%;float:none;vertical-align:middle;border:var(--border_inner);background:var(--badge)}
 #import input[type="file"]{width:calc(100% - 7px)}
 #messages{margin:0 3%;padding:5px 20px;top:0;left:0;right:0;position:fixed;z-index:999;line-height:150%;text-align:center;opacity:.9;border-radius:0 0 4px 4px;box-shadow:0 1px 2px rgba(100,100,200,.7);background:#113 var(--no) no-repeat right 8px top 8px/12px;cursor:crosshair;animation:2s hide-up 5s ease-out forwards}
 #messages:hover{background:#113 var(--no) no-repeat right 8px top 8px/12px}
@@ -143,7 +143,6 @@ tr:hover .destaddress{color:#333}
 #paginate,#showing{display:inline-block}
 #paginate{margin:-2px 40px 0 0;position:relative;overflow:hidden;font-size:0;text-align:center;border:var(--border_inner);border-radius:2px;background:var(--row)}
 #search{margin:1px 0 -2px;padding-top:4px;position:sticky;top:40px;z-index:999}
-#showing{margin-left:5px}
 #subscriptions a{margin:2px 2px 0 0;float:right;font-size:80%}
 #subscriptions h3{background:#fcfcff var(--subscription) no-repeat 6px center/18px}
 #subscriptions h3,.headline#configure h3,.headline#addressbook h3,.headline h3{margin:-8px -5px -6px;padding:9px 5px 8px 30px}
