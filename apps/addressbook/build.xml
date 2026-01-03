@@ -57,10 +57,20 @@
         <pathelement location="../../build/streaming.jar"/>
         <pathelement location="../susidns/src/WEB-INF/classes"/>
       </classpath>
+      <src>
+        <pathelement location="${src}"/>
+        <pathelement location="java/build/messages-src"/>
+      </src>
     </javac>
   </target>
 
-  <target name="jar" depends="compile, changes">
+  <target name="bundle">
+    <exec dir="java" executable="sh" failonerror="false">
+      <arg value="bundle-messages.sh"/>
+    </exec>
+  </target>
+
+  <target name="jar" depends="bundle, compile, changes">
     <!-- set if unset -->
     <property name="workspace.changes.tr" value=""/>
     <jar basedir="${build}" destfile="${dist}/${jar}">

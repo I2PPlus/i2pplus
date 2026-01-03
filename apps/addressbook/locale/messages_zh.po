@@ -1,0 +1,90 @@
+# I2P+
+# Copyright (C) 2026 I2P+
+msgid ""
+msgstr ""
+"Language: zh\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Cryptocurrency related services"
+msgstr "加密货币相关服务"
+
+msgid "Controlled substances marketplaces"
+msgstr "管制药物市场"
+
+msgid "E-book libraries and publishing"
+msgstr "电子书库和出版"
+
+msgid "File hosting and storage services"
+msgstr "文件托管和存储服务"
+
+msgid "Peer-to-peer file sharing"
+msgstr "点对点文件共享"
+
+msgid "Discussion forums and message boards"
+msgstr "讨论论坛和留言板"
+
+msgid "Image galleries and photo sharing"
+msgstr "图片库和照片共享"
+
+msgid "Gaming servers and communities"
+msgstr "游戏服务器和社区"
+
+msgid "Git repositories and code hosting"
+msgstr "Git 代码库和代码托管"
+
+msgid "Help and support resources"
+msgstr "帮助和支持资源"
+
+msgid "Human rights and civil liberties"
+msgstr "人权和公民自由"
+
+msgid "Official I2P infrastructure services"
+msgstr "官方 I2P 基础设施服务"
+
+msgid "News and media outlets"
+msgstr "新闻和媒体"
+
+msgid "Text/code paste services"
+msgstr "文本/代码粘贴服务"
+
+msgid "Personal websites and blogs"
+msgstr "个人网站和博客"
+
+msgid "Internet radio and streaming"
+msgstr "互联网广播和流媒体"
+
+msgid "Search engines and directories"
+msgstr "搜索引擎和目录"
+
+msgid "Software repositories and downloads"
+msgstr "软件仓库和下载"
+
+msgid "Statistics and analytics"
+msgstr "统计和分析"
+
+msgid "Utilities and web tools"
+msgstr "实用工具和网页工具"
+
+msgid "Torrent and content trackers"
+msgstr "种子和内容追踪器"
+
+msgid "Conspiracy / Religious content"
+msgstr "阴谋论/宗教内容"
+
+msgid "Unclassified or pending review"
+msgstr "未分类或待审核"
+
+msgid "Not yet categorized"
+msgstr "尚未分类"
+
+msgid "Video streaming and media"
+msgstr "视频流媒体"
+
+msgid "Wiki and collaborative documentation"
+msgstr "维基和协作文档"
+
+msgid "Work in progress / development"
+msgstr "进行中/开发中"

@@ -1,0 +1,90 @@
+# I2P+
+# Copyright (C) 2026 I2P+
+msgid ""
+msgstr ""
+"Language: vi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Cryptocurrency related services"
+msgstr "Dịch vụ liên quan đến tiền điện tử"
+
+msgid "Controlled substances marketplaces"
+msgstr "Chợ chất bị kiểm soát"
+
+msgid "E-book libraries and publishing"
+msgstr "Thư viện sách điện tử và xuất bản"
+
+msgid "File hosting and storage services"
+msgstr "Dịch vụ lưu trữ và lưu trữ tệp"
+
+msgid "Peer-to-peer file sharing"
+msgstr "Chia sẻ tệp P2P"
+
+msgid "Discussion forums and message boards"
+msgstr "Diễn đàn thảo luận và bảng tin"
+
+msgid "Image galleries and photo sharing"
+msgstr "Thư viện hình ảnh và chia sẻ ảnh"
+
+msgid "Gaming servers and communities"
+msgstr "Máy chủ trò chơi và cộng đồng"
+
+msgid "Git repositories and code hosting"
+msgstr "Kho lưu trữ Git và lưu trữ mã"
+
+msgid "Help and support resources"
+msgstr "Tài nguyên trợ giúp và hỗ trợ"
+
+msgid "Human rights and civil liberties"
+msgstr "Quyền con người và tự do dân sự"
+
+msgid "Official I2P infrastructure services"
+msgstr "Dịch vụ cơ sở hạ tầng chính thức của I2P"
+
+msgid "News and media outlets"
+msgstr "Báo chí và phương tiện truyền thông"
+
+msgid "Text/code paste services"
+msgstr "Dịch vụ dán văn bản/mã"
+
+msgid "Personal websites and blogs"
+msgstr "Trang web cá nhân và blog"
+
+msgid "Internet radio and streaming"
+msgstr "Radio internet và phát trực tiếp"
+
+msgid "Search engines and directories"
+msgstr "Công cụ tìm kiếm và thư mục"
+
+msgid "Software repositories and downloads"
+msgstr "Kho lưu trữ phần mềm và tải xuống"
+
+msgid "Statistics and analytics"
+msgstr "Thống kê và phân tích"
+
+msgid "Utilities and web tools"
+msgstr "Tiện ích và công cụ web"
+
+msgid "Torrent and content trackers"
+msgstr "Trình theo dõi torrent và nội dung"
+
+msgid "Conspiracy / Religious content"
+msgstr "Nội dung thuyết âm mưu / Tôn giáo"
+
+msgid "Unclassified or pending review"
+msgstr "Chưa phân loại hoặc đang chờ kiểm tra"
+
+msgid "Not yet categorized"
+msgstr "Chưa được phân loại"
+
+msgid "Video streaming and media"
+msgstr "Phát trực tiếp video và phương tiện"
+
+msgid "Wiki and collaborative documentation"
+msgstr "Wiki và tài liệu cộng tác"
+
+msgid "Work in progress / development"
+msgstr "Đang thực hiện / Đang phát triển"

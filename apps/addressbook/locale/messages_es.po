@@ -1,0 +1,90 @@
+# I2P+
+# Copyright (C) 2026 I2P+
+msgid ""
+msgstr ""
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Cryptocurrency related services"
+msgstr "Servicios relacionados con criptomonedas"
+
+msgid "Controlled substances marketplaces"
+msgstr "Mercados de sustancias controladas"
+
+msgid "E-book libraries and publishing"
+msgstr "Bibliotecas de libros electrónicos y publicaciones"
+
+msgid "File hosting and storage services"
+msgstr "Servicios de alojamiento y almacenamiento de archivos"
+
+msgid "Peer-to-peer file sharing"
+msgstr "Intercambio de archivos P2P"
+
+msgid "Discussion forums and message boards"
+msgstr "Foros de discusión y tablones de mensajes"
+
+msgid "Image galleries and photo sharing"
+msgstr "Galerías de imágenes y compartir fotos"
+
+msgid "Gaming servers and communities"
+msgstr "Servidores de juegos y comunidades"
+
+msgid "Git repositories and code hosting"
+msgstr "Repositorios Git y alojamiento de código"
+
+msgid "Help and support resources"
+msgstr "Recursos de ayuda y soporte"
+
+msgid "Human rights and civil liberties"
+msgstr "Derechos humanos y libertades civiles"
+
+msgid "Official I2P infrastructure services"
+msgstr "Servicios oficiales de infraestructura de I2P"
+
+msgid "News and media outlets"
+msgstr "Medios de comunicación y noticias"
+
+msgid "Text/code paste services"
+msgstr "Servicios para pegar texto/código"
+
+msgid "Personal websites and blogs"
+msgstr "Sitios web personales y blogs"
+
+msgid "Internet radio and streaming"
+msgstr "Radio de internet y streaming"
+
+msgid "Search engines and directories"
+msgstr "Motores de búsqueda y directorios"
+
+msgid "Software repositories and downloads"
+msgstr "Repositorios de software y descargas"
+
+msgid "Statistics and analytics"
+msgstr "Estadísticas y análisis"
+
+msgid "Utilities and web tools"
+msgstr "Utilidades y herramientas web"
+
+msgid "Torrent and content trackers"
+msgstr "Trackers de torrent y contenido"
+
+msgid "Conspiracy / Religious content"
+msgstr "Contenido conspirativo / religioso"
+
+msgid "Unclassified or pending review"
+msgstr "Sin clasificar o pendiente de revisión"
+
+msgid "Not yet categorized"
+msgstr "Aún no categorizado"
+
+msgid "Video streaming and media"
+msgstr "Streaming de video y medios"
+
+msgid "Wiki and collaborative documentation"
+msgstr "Documentación colaborativa y wiki"
+
+msgid "Work in progress / development"
+msgstr "En desarrollo"

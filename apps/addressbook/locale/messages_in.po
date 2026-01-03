@@ -1,0 +1,90 @@
+# I2P+
+# Copyright (C) 2026 I2P+
+msgid ""
+msgstr ""
+"Language: in\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Cryptocurrency related services"
+msgstr "Layanan terkait kriptokurensi"
+
+msgid "Controlled substances marketplaces"
+msgstr "Pasar bahan terkontrol"
+
+msgid "E-book libraries and publishing"
+msgstr "Perpustakaan e-book dan penerbitan"
+
+msgid "File hosting and storage services"
+msgstr "Layanan hosting dan penyimpanan file"
+
+msgid "Peer-to-peer file sharing"
+msgstr "Berbagi file P2P"
+
+msgid "Discussion forums and message boards"
+msgstr "Forum diskusi dan papan pesan"
+
+msgid "Image galleries and photo sharing"
+msgstr "Galeri gambar dan berbagi foto"
+
+msgid "Gaming servers and communities"
+msgstr "Server game dan komunitas game"
+
+msgid "Git repositories and code hosting"
+msgstr "Repositori Git dan hosting kode"
+
+msgid "Help and support resources"
+msgstr "Sumber daya bantuan dan dukungan"
+
+msgid "Human rights and civil liberties"
+msgstr "Hak asasi dan kebebasan sipil"
+
+msgid "Official I2P infrastructure services"
+msgstr "Layanan infrastruktur I2P resmi"
+
+msgid "News and media outlets"
+msgstr "Media dan sumber berita"
+
+msgid "Text/code paste services"
+msgstr "Layanan tempel teks/kode"
+
+msgid "Personal websites and blogs"
+msgstr "Situs web pribadi dan blog"
+
+msgid "Internet radio and streaming"
+msgstr "Radio internet dan streaming"
+
+msgid "Search engines and directories"
+msgstr "Mesin pencari dan direktori"
+
+msgid "Software repositories and downloads"
+msgstr "Repositori perangkat lunak dan unduhan"
+
+msgid "Statistics and analytics"
+msgstr "Statistik dan analitik"
+
+msgid "Utilities and web tools"
+msgstr "Utilitas dan alat web"
+
+msgid "Torrent and content trackers"
+msgstr "Tracker torrent dan konten"
+
+msgid "Conspiracy / Religious content"
+msgstr "Konten konspirasi / Agama"
+
+msgid "Unclassified or pending review"
+msgstr "Belum diklasifikasi atau menunggu tinjauan"
+
+msgid "Not yet categorized"
+msgstr "Belum dikategorikan"
+
+msgid "Video streaming and media"
+msgstr "Streaming video dan media"
+
+msgid "Wiki and collaborative documentation"
+msgstr "Wiki dan dokumentasi kolaboratif"
+
+msgid "Work in progress / development"
+msgstr "Sedang dilakukan / Pengembangan"

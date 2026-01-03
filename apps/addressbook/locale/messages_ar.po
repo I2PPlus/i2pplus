@@ -1,0 +1,90 @@
+# I2P+
+# Copyright (C) 2026 I2P+
+msgid ""
+msgstr ""
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Cryptocurrency related services"
+msgstr "خدمات ذات صلة بالعملات المشفرة"
+
+msgid "Controlled substances marketplaces"
+msgstr "أسواق المواد الخاضعة للرقابة"
+
+msgid "E-book libraries and publishing"
+msgstr "مكتبات الكتب الإلكترونية والنشر"
+
+msgid "File hosting and storage services"
+msgstr "خدمات استضافة وتخزين الملفات"
+
+msgid "Peer-to-peer file sharing"
+msgstr "مشاركة الملفات من نظير إلى نظير"
+
+msgid "Discussion forums and message boards"
+msgstr "منتديات النقاش ولوحات الرسائل"
+
+msgid "Image galleries and photo sharing"
+msgstr "معارض الصور ومشاركة الصور"
+
+msgid "Gaming servers and communities"
+msgstr "خوادم الألعاب والمجتمعات"
+
+msgid "Git repositories and code hosting"
+msgstr "مستودعات Git واستضافة الكود"
+
+msgid "Help and support resources"
+msgstr "موارد المساعدة والدعم"
+
+msgid "Human rights and civil liberties"
+msgstr "حقوق الإنسان والحريات المدنية"
+
+msgid "Official I2P infrastructure services"
+msgstr "خدمات البنية التحتية الرسمية لـ I2P"
+
+msgid "News and media outlets"
+msgstr "المصادر الإعلامية والأخبار"
+
+msgid "Text/code paste services"
+msgstr "خدمات لصق النص/الكود"
+
+msgid "Personal websites and blogs"
+msgstr "المواقع الشخصية والمدونات"
+
+msgid "Internet radio and streaming"
+msgstr "راديو الإنترنت والبث المباشر"
+
+msgid "Search engines and directories"
+msgstr "محركات البحث والأدلة"
+
+msgid "Software repositories and downloads"
+msgstr "مستودعات البرمجيات والتنزيلات"
+
+msgid "Statistics and analytics"
+msgstr "الإحصاءات والتحليلات"
+
+msgid "Utilities and web tools"
+msgstr "الأدوات المساعدة وأدوات الويب"
+
+msgid "Torrent and content trackers"
+msgstr "تتبعات التورنت والمحتوى"
+
+msgid "Conspiracy / Religious content"
+msgstr "محتوى نظريات المؤامرة/الديني"
+
+msgid "Unclassified or pending review"
+msgstr "غير مصنف أو قيد المراجعة"
+
+msgid "Not yet categorized"
+msgstr "لم يتم تصنيفه بعد"
+
+msgid "Video streaming and media"
+msgstr "بث الفيديو والوسائط"
+
+msgid "Wiki and collaborative documentation"
+msgstr "الويكي والتوثيق التعاوني"
+
+msgid "Work in progress / development"
+msgstr "قيد العمل / التطوير"

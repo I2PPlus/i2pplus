@@ -246,10 +246,9 @@ public class HostChecker {
         _scheduler = Executors.newScheduledThreadPool(_maxConcurrent + 2);
         _pingSemaphore = new Semaphore(_maxConcurrent);
 
-        // Download categories and load existing ping results
-        downloadCategories();
-        loadPingResults();
+        // Load existing categories file first (non-blocking)
         loadCategories();
+        loadPingResults();
 
         // Schedule periodic category retries
         scheduleCategoryRetries();
@@ -268,6 +267,16 @@ public class HostChecker {
         if (_log.shouldInfo()) {
             _log.info("Starting HostChecker with a " + (_pingInterval/1000/60) + " minute interval...");
         }
+
+        // Start category download in a separate thread with delay
+        Thread categoryDownloader = new Thread("CategoryDownloader") {
+            @Override
+            public void run() {
+                downloadCategories();
+            }
+        };
+        categoryDownloader.setDaemon(true);
+        categoryDownloader.start();
 
         // Wait for categories to be downloaded before starting ping cycle
         Thread categoryWaiter = new Thread("CategoryDownloadWaiter") {
@@ -1237,33 +1246,33 @@ public class HostChecker {
             category = "unknown";
         }
         switch (category) {
-            case "cryptocoin": return "Cryptocurrency related services";
-            case "drugs": return "Controlled substances marketplaces";
-            case "ebook": return "E-book libraries and publishing";
-            case "filehost": return "File hosting and storage services";
-            case "fileshare": return "Peer-to-peer file sharing";
-            case "forum": return "Discussion forums and message boards";
-            case "gallery": return "Image galleries and photo sharing";
-            case "game": return "Gaming servers and communities";
-            case "git": return "Git repositories and code hosting";
-            case "help": return "Help and support resources";
-            case "humanrights": return "Human rights and civil liberties";
-            case "i2p": return "Official I2P infrastructure services";
-            case "news": return "News and media outlets";
-            case "pastebin": return "Text/code paste services";
-            case "personal": return "Personal websites and blogs";
-            case "radio": return "Internet radio and streaming";
-            case "search": return "Search engines and directories";
-            case "software": return "Software repositories and downloads";
-            case "stats": return "Statistics and analytics";
-            case "tool": return "Utilities and web tools";
-            case "tracker": return "Torrent and content trackers";
-            case "uhoh": return "Conspiracy / Religious content";
-            case "unknown": return "Unclassified or pending review";
-            case "untested": return "Not yet categorized";
-            case "video": return "Video streaming and media";
-            case "wiki": return "Wiki and collaborative documentation";
-            case "wip": return "Work in progress / development";
+            case "cryptocoin": return _t("Cryptocurrency related services");
+            case "drugs": return _t("Controlled substances marketplaces");
+            case "ebook": return _t("E-book libraries and publishing");
+            case "filehost": return _t("File hosting and storage services");
+            case "fileshare": return _t("Peer-to-peer file sharing");
+            case "forum": return _t("Discussion forums and message boards");
+            case "gallery": return _t("Image galleries and photo sharing");
+            case "game": return _t("Gaming servers and communities");
+            case "git": return _t("Git repositories and code hosting");
+            case "help": return _t("Help and support resources");
+            case "humanrights": return _t("Human rights and civil liberties");
+            case "i2p": return _t("Official I2P infrastructure services");
+            case "news": return _t("News and media outlets");
+            case "pastebin": return _t("Text/code paste services");
+            case "personal": return _t("Personal websites and blogs");
+            case "radio": return _t("Internet radio and streaming");
+            case "search": return _t("Search engines and directories");
+            case "software": return _t("Software repositories and downloads");
+            case "stats": return _t("Statistics and analytics");
+            case "tool": return _t("Utilities and web tools");
+            case "tracker": return _t("Torrent and content trackers");
+            case "uhoh": return _t("Conspiracy / Religious content");
+            case "unknown": return _t("Unclassified or pending review");
+            case "untested": return _t("Not yet categorized");
+            case "video": return _t("Video streaming and media");
+            case "wiki": return _t("Wiki and collaborative documentation");
+            case "wip": return _t("Work in progress / development");
             default: return category;
         }
     }
@@ -1698,6 +1707,16 @@ public class HostChecker {
         return "[" + sb.toString() + "]";
     }
 
+
+    /** translate */
+    private static String _t(String s) {return Messages.getString(s);}
+
+    /** translate */
+    private static String _t(String s, Object o) {return Messages.getString(s, o);}
+
+    /** translate */
+    private static String _t(String s, Object o, Object o2) {return Messages.getString(s, o, o2);}
+
     /**
      * Test method
      */
@@ -1720,4 +1739,5 @@ public class HostChecker {
             log.info(entry.getKey() + ": " + result + (result.reachable ? " (" + result.responseTime + "ms)" : ""));
         }
     }
+
 }

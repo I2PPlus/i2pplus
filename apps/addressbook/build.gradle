@@ -2,6 +2,7 @@ sourceSets {
     main {
         java {
             srcDir 'java/src'
+            srcDir 'java/build/messages-src'
         }
     }
     test {
@@ -21,3 +22,15 @@ dependencies {
     implementation project(':router')
     testImplementation 'junit:junit:4.13.2'
 }
+
+// Create the java files from the po files. The jar task will compile them.
+// This requires gettext 0.19 or higher.
+// We don't support the "slow way"
+task bundle {
+    doLast {
+        if (!(new File("$buildDir/classes/java/main/net/i2p/addressbook/messages_de.class")).exists())
+            println "apps/addressbook/java/bundle-messages.sh".execute().text
+    }
+}
+
+jar.dependsOn bundle

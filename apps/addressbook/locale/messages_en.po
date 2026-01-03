@@ -1,0 +1,90 @@
+# I2P+
+# Copyright (C) 2026 I2P+
+msgid ""
+msgstr ""
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Cryptocurrency related services"
+msgstr ""
+
+msgid "Controlled substances marketplaces"
+msgstr ""
+
+msgid "E-book libraries and publishing"
+msgstr ""
+
+msgid "File hosting and storage services"
+msgstr ""
+
+msgid "Peer-to-peer file sharing"
+msgstr ""
+
+msgid "Discussion forums and message boards"
+msgstr ""
+
+msgid "Image galleries and photo sharing"
+msgstr ""
+
+msgid "Gaming servers and communities"
+msgstr ""
+
+msgid "Git repositories and code hosting"
+msgstr ""
+
+msgid "Help and support resources"
+msgstr ""
+
+msgid "Human rights and civil liberties"
+msgstr ""
+
+msgid "Official I2P infrastructure services"
+msgstr ""
+
+msgid "News and media outlets"
+msgstr ""
+
+msgid "Text/code paste services"
+msgstr ""
+
+msgid "Personal websites and blogs"
+msgstr ""
+
+msgid "Internet radio and streaming"
+msgstr ""
+
+msgid "Search engines and directories"
+msgstr ""
+
+msgid "Software repositories and downloads"
+msgstr ""
+
+msgid "Statistics and analytics"
+msgstr ""
+
+msgid "Utilities and web tools"
+msgstr ""
+
+msgid "Torrent and content trackers"
+msgstr ""
+
+msgid "Conspiracy / Religious content"
+msgstr ""
+
+msgid "Unclassified or pending review"
+msgstr ""
+
+msgid "Not yet categorized"
+msgstr ""
+
+msgid "Video streaming and media"
+msgstr ""
+
+msgid "Wiki and collaborative documentation"
+msgstr ""
+
+msgid "Work in progress / development"
+msgstr ""

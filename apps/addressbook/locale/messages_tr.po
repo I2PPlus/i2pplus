@@ -1,0 +1,90 @@
+# I2P+
+# Copyright (C) 2026 I2P+
+msgid ""
+msgstr ""
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Cryptocurrency related services"
+msgstr "Kripto para birik hizmetler"
+
+msgid "Controlled substances marketplaces"
+msgstr "Kontrollü maddeler pazarları"
+
+msgid "E-book libraries and publishing"
+msgstr "E-kitaplık kütüphaneleri ve yayıncılık"
+
+msgid "File hosting and storage services"
+msgstr "Dosya barındırma ve depolama hizmetleri"
+
+msgid "Peer-to-peer file sharing"
+msgstr "P2P dosya paylaşımı"
+
+msgid "Discussion forums and message boards"
+msgstr "Tartışma forumları ve mesaj panoları"
+
+msgid "Image galleries and photo sharing"
+msgstr "Resim galerileri ve fotoğraf paylaşımı"
+
+msgid "Gaming servers and communities"
+msgstr "Oyun sunucuları ve topluluklar"
+
+msgid "Git repositories and code hosting"
+msgstr "Git depoları ve kod barındırma"
+
+msgid "Help and support resources"
+msgstr "Yardım ve destek kaynakları"
+
+msgid "Human rights and civil liberties"
+msgstr "İnsan hakları ve sivil özgürlükler"
+
+msgid "Official I2P infrastructure services"
+msgstr "Resmi I2P altyapı hizmetleri"
+
+msgid "News and media outlets"
+msgstr "Haber ve medya organları"
+
+msgid "Text/code paste services"
+msgstr "Metin/kod yapıştırma hizmetleri"
+
+msgid "Personal websites and blogs"
+msgstr "Kişisel web siteleri ve bloglar"
+
+msgid "Internet radio and streaming"
+msgstr "İnternet radyosu ve yayın akışı"
+
+msgid "Search engines and directories"
+msgstr "Arama motorları ve dizinler"
+
+msgid "Software repositories and downloads"
+msgstr "Yazılım depoları ve indirmeler"
+
+msgid "Statistics and analytics"
+msgstr "İstatistikler ve analizler"
+
+msgid "Utilities and web tools"
+msgstr "Yardımcı programlar ve web araçları"
+
+msgid "Torrent and content trackers"
+msgstr "Torrent ve içerik izleyicileri"
+
+msgid "Conspiracy / Religious content"
+msgstr "Komplo / Dini içerik"
+
+msgid "Unclassified or pending review"
+msgstr "Sınıflandırılmamış veya incelemeyi bekliyor"
+
+msgid "Not yet categorized"
+msgstr "Henüz kategorize edilmedi"
+
+msgid "Video streaming and media"
+msgstr "Video akışı ve medya"
+
+msgid "Wiki and collaborative documentation"
+msgstr "Wiki ve işbirliği belgeleri"
+
+msgid "Work in progress / development"
+msgstr "Devam ediyor / Geliştirme"

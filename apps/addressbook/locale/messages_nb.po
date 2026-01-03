@@ -1,0 +1,90 @@
+# I2P+
+# Copyright (C) 2026 I2P+
+msgid ""
+msgstr ""
+"Language: nb\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Cryptocurrency related services"
+msgstr "Kryptovalutarelaterede tjenester"
+
+msgid "Controlled substances marketplaces"
+msgstr "Markedspladser for kontrollerte stoffer"
+
+msgid "E-book libraries and publishing"
+msgstr "E-bokbiblioteker og utgivelse"
+
+msgid "File hosting and storage services"
+msgstr "Filhosting og lagringstjenester"
+
+msgid "Peer-to-peer file sharing"
+msgstr "Peer-to-peer fildeling"
+
+msgid "Discussion forums and message boards"
+msgstr "Diskusjonsforum og oppslagstavler"
+
+msgid "Image galleries and photo sharing"
+msgstr "Billedgallerier og bildedeling"
+
+msgid "Gaming servers and communities"
+msgstr "Spillservere og spillfellesskaper"
+
+msgid "Git repositories and code hosting"
+msgstr "Git repositories og kodehosting"
+
+msgid "Help and support resources"
+msgstr "Hjelp- og støtteressurser"
+
+msgid "Human rights and civil liberties"
+msgstr "Menneskeretter og borgerlige friheter"
+
+msgid "Official I2P infrastructure services"
+msgstr "Offisielle I2P infrastrukturtjenester"
+
+msgid "News and media outlets"
+msgstr "Nyhets- og mediakanaler"
+
+msgid "Text/code paste services"
+msgstr "Tekst-/kode-klistringstjenester"
+
+msgid "Personal websites and blogs"
+msgstr "Personlige nettsider og blogger"
+
+msgid "Internet radio and streaming"
+msgstr "Internettradio og strømming"
+
+msgid "Search engines and directories"
+msgstr "Søkemotorer og kataloger"
+
+msgid "Software repositories and downloads"
+msgstr "Softwarerepositories og nedlastinger"
+
+msgid "Statistics and analytics"
+msgstr "Statistikk og analyser"
+
+msgid "Utilities and web tools"
+msgstr "Verktyy og webverktøy"
+
+msgid "Torrent and content trackers"
+msgstr "Torrent- og innholdssporere"
+
+msgid "Conspiracy / Religious content"
+msgstr "Konspiratorisk / Religiøst innhold"
+
+msgid "Unclassified or pending review"
+msgstr "Ikke klassifisert eller avventer gjennomgang"
+
+msgid "Not yet categorized"
+msgstr "Ikke klassifisert ennå"
+
+msgid "Video streaming and media"
+msgstr "Videostreaming og media"
+
+msgid "Wiki and collaborative documentation"
+msgstr "Wiki og samarbeidsdokumentasjon"
+
+msgid "Work in progress / development"
+msgstr "Pågående / Utvikling"

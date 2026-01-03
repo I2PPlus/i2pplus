@@ -1,0 +1,90 @@
+# I2P+
+# Copyright (C) 2026 I2P+
+msgid ""
+msgstr ""
+"Language: fi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Cryptocurrency related services"
+msgstr "Kryptovaluuttiin liittyvät palvelut"
+
+msgid "Controlled substances marketplaces"
+msgstr "Valvottujen aineiden markkinapaikat"
+
+msgid "E-book libraries and publishing"
+msgstr "Sähkökirjastot ja julkaisut"
+
+msgid "File hosting and storage services"
+msgstr "Tiedostointi- ja tallennuspalvelut"
+
+msgid "Peer-to-peer file sharing"
+msgstr "P2P-tiedostojako"
+
+msgid "Discussion forums and message boards"
+msgstr "Keskustelufoorumit ja viestilaudat"
+
+msgid "Image galleries and photo sharing"
+msgstr "Kuvagalleriat ja kuvien jakoaminen"
+
+msgid "Gaming servers and communities"
+msgstr "Pelipalvelimet ja yhteisöt"
+
+msgid "Git repositories and code hosting"
+msgstr "Git-varastot ja koodin isännnti"
+
+msgid "Help and support resources"
+msgstr "Ohje- ja tukiresurssit"
+
+msgid "Human rights and civil liberties"
+msgstr "Ihmisuoikeudet ja kansalaisvapaudet"
+
+msgid "Official I2P infrastructure services"
+msgstr "Viralliset I2P-infrastuktuuripalvelut"
+
+msgid "News and media outlets"
+msgstr "Uutiset ja median lähteet"
+
+msgid "Text/code paste services"
+msgstr "Teksti/koodi-liitäntipalvelut"
+
+msgid "Personal websites and blogs"
+msgstr "Henkilökohtaiset verkkosivut ja blogit"
+
+msgid "Internet radio and streaming"
+msgstr "Internetradio ja striimaus"
+
+msgid "Search engines and directories"
+msgstr "Hakukoneet ja hakemistot"
+
+msgid "Software repositories and downloads"
+msgstr "Ohjelmistot ja lataukset"
+
+msgid "Statistics and analytics"
+msgstr "Tilastot ja analytiikka"
+
+msgid "Utilities and web tools"
+msgstr "Hyötyohjelmat ja verkkotyökalut"
+
+msgid "Torrent and content trackers"
+msgstr "Torrent- ja sisällönseurantaajat"
+
+msgid "Conspiracy / Religious content"
+msgstr "Salaliittoteoria / Uskonnollinen sisältö"
+
+msgid "Unclassified or pending review"
+msgstr "Luokittelemättömät tai tarkistettavana"
+
+msgid "Not yet categorized"
+msgstr "Ei vielä luokiteltu"
+
+msgid "Video streaming and media"
+msgstr "Videostriimaus ja media"
+
+msgid "Wiki and collaborative documentation"
+msgstr "Wiki ja yhteistyöllinen dokumentaatio"
+
+msgid "Work in progress / development"
+msgstr "Kesken / Kehitys"

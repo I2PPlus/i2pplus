@@ -1,0 +1,90 @@
+# I2P+
+# Copyright (C) 2026 I2P+
+msgid ""
+msgstr ""
+"Language: fa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Cryptocurrency related services"
+msgstr "خدمات مرتبط با رمزارها"
+
+msgid "Controlled substances marketplaces"
+msgstr "بازارهای مواد کنترل شده"
+
+msgid "E-book libraries and publishing"
+msgstr "کتابخانه‌های کتاب الکترونیک و نشر"
+
+msgid "File hosting and storage services"
+msgstr "خدمات میزبانی و ذخیره فایل"
+
+msgid "Peer-to-peer file sharing"
+msgstr "اشتراک فایل P2P"
+
+msgid "Discussion forums and message boards"
+msgstr "انجمن‌های گفتگو و تابلوهای پیام"
+
+msgid "Image galleries and photo sharing"
+msgstr "گالری‌های تصویر و اشتراک عکس"
+
+msgid "Gaming servers and communities"
+msgstr "سرورهای بازی و جوامع بازی"
+
+msgid "Git repositories and code hosting"
+msgstr "مخازن Git و میزبانی کد"
+
+msgid "Help and support resources"
+msgstr "منابع راهنما و پشتیبانی"
+
+msgid "Human rights and civil liberties"
+msgstr "حقوق بشر و آزادی‌های مدنی"
+
+msgid "Official I2P infrastructure services"
+msgstr "خدمات رسمی زیرساختار I2P"
+
+msgid "News and media outlets"
+msgstr "منابع خبری و رسانه"
+
+msgid "Text/code paste services"
+msgstr "خدمات چسباندن متن/کد"
+
+msgid "Personal websites and blogs"
+msgstr "وب‌سایت‌های شخصی و وبلاگ‌ها"
+
+msgid "Internet radio and streaming"
+msgstr "رادیو اینترنت و پخش جریانی"
+
+msgid "Search engines and directories"
+msgstr "موتورهای جستجو و دایرکتوری"
+
+msgid "Software repositories and downloads"
+msgstr "مخازن نرم‌افزار و دانلودها"
+
+msgid "Statistics and analytics"
+msgstr "آمار و تحلیل"
+
+msgid "Utilities and web tools"
+msgstr "برنامه‌های کاربردی و ابزارهای وب"
+
+msgid "Torrent and content trackers"
+msgstr "تکر torrents و ردیاب محتوا"
+
+msgid "Conspiracy / Religious content"
+msgstr "محتوای توطئه گرا / مذهبی"
+
+msgid "Unclassified or pending review"
+msgstr "طبقه بندی نشده یا در انتظار بازبینی"
+
+msgid "Not yet categorized"
+msgstr "هنوز دسته بندی نشده"
+
+msgid "Video streaming and media"
+msgstr "پخش جریان ویدیو و رسانه"
+
+msgid "Wiki and collaborative documentation"
+msgstr "ویکی و مستندات همکاری"
+
+msgid "Work in progress / development"
+msgstr "در حال انجام / توسعه"

@@ -1,0 +1,90 @@
+# I2P+
+# Copyright (C) 2026 I2P+
+msgid ""
+msgstr ""
+"Language: et\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Cryptocurrency related services"
+msgstr "Krüptorahaga seotud teenused"
+
+msgid "Controlled substances marketplaces"
+msgstr "Kontrollitudate aine turgud"
+
+msgid "E-book libraries and publishing"
+msgstr "E-raamatukogud ja kirjastus"
+
+msgid "File hosting and storage services"
+msgstr "Failihosting ja salvestusteenused"
+
+msgid "Peer-to-peer file sharing"
+msgstr "P2P failijagamine"
+
+msgid "Discussion forums and message boards"
+msgstr "Arutelusfoorumid ja teadetahvlad"
+
+msgid "Image galleries and photo sharing"
+msgstr "Pildigaleriid ja fotode jagamine"
+
+msgid "Gaming servers and communities"
+msgstr "Mänguserverid ja kogukonnad"
+
+msgid "Git repositories and code hosting"
+msgstr "Git hoidlad ja koodihosting"
+
+msgid "Help and support resources"
+msgstr "Abi- ja tugiresurssid"
+
+msgid "Human rights and civil liberties"
+msgstr "Inimõigused ja kodanlikud vabadused"
+
+msgid "Official I2P infrastructure services"
+msgstr "Ametlikud I2P infrajstruktuuri teenused"
+
+msgid "News and media outlets"
+msgstr "Uudised ja meediakanalid"
+
+msgid "Text/code paste services"
+msgstr "Teksti/koodi kleebimisteenused"
+
+msgid "Personal websites and blogs"
+msgstr "Isiklikud veebilehed ja blogid"
+
+msgid "Internet radio and streaming"
+msgstr "Internetiraadio ja voogesitus"
+
+msgid "Search engines and directories"
+msgstr "Otsingumootorid ja kataloogid"
+
+msgid "Software repositories and downloads"
+msgstr "Tarkvarahoidlad ja allalaadimised"
+
+msgid "Statistics and analytics"
+msgstr "Statistika ja analüüs"
+
+msgid "Utilities and web tools"
+msgstr "Tööriprogramm ja veebitööriklad"
+
+msgid "Torrent and content trackers"
+msgstr "Torrenti ja sisujälgijad"
+
+msgid "Conspiracy / Religious content"
+msgstr "Vandenooria / Religioosne sisu"
+
+msgid "Unclassified or pending review"
+msgstr "Klassifitseerimata või ootel ülevaatust"
+
+msgid "Not yet categorized"
+msgstr "Pole veel klassifitseeritud"
+
+msgid "Video streaming and media"
+msgstr "Videovoogesitus ja meedia"
+
+msgid "Wiki and collaborative documentation"
+msgstr "Wiki ja koostö dokumentatsioon"
+
+msgid "Work in progress / development"
+msgstr "Töös / Arendus"

@@ -1,0 +1,90 @@
+# I2P+
+# Copyright (C) 2026 I2P+
+msgid ""
+msgstr ""
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Cryptocurrency related services"
+msgstr "Υπηρεσίες σχετικές με κρυπτονομίσματα"
+
+msgid "Controlled substances marketplaces"
+msgstr "Αγορές ελεγχόμενων ουσιών"
+
+msgid "E-book libraries and publishing"
+msgstr "Βιβλιοθήκες ηλεκτρονικών βιβλίων και έκδοση"
+
+msgid "File hosting and storage services"
+msgstr "Υπηρεσίες φιλοξενίας και αποθήκευσης αρχείων"
+
+msgid "Peer-to-peer file sharing"
+msgstr "Κοινή χρήση αρχείων P2P"
+
+msgid "Discussion forums and message boards"
+msgstr "Φόρουμ συζήτησης και πίνακες μηνυμάτων"
+
+msgid "Image galleries and photo sharing"
+msgstr "Συλλογές εικόνων και κοινή χρήση φωτογραφιών"
+
+msgid "Gaming servers and communities"
+msgstr "Διακομιστές παιχνιδιών και κοινότητες"
+
+msgid "Git repositories and code hosting"
+msgstr "Αποθετήρια Git και φιλοξενία κώδικα"
+
+msgid "Help and support resources"
+msgstr "Πόροι βοήθειας και υποστήριξης"
+
+msgid "Human rights and civil liberties"
+msgstr "Δικαιώματα του ανθρώπου και πολιτικές ελευθερίες"
+
+msgid "Official I2P infrastructure services"
+msgstr "Επίσημες υπηρεσίες υποδομής I2P"
+
+msgid "News and media outlets"
+msgstr "Ειδήσεις και μέσα ενημέρωσης"
+
+msgid "Text/code paste services"
+msgstr "Υπηρεσίες επικόλλησης κειμένου/κώδικα"
+
+msgid "Personal websites and blogs"
+msgstr "Προσωπικές ιστοσελίδες και ιστολόγια"
+
+msgid "Internet radio and streaming"
+msgstr "Διαδικακό ραδιόφωνο και ροή"
+
+msgid "Search engines and directories"
+msgstr "Μηχανές αναζήτησης και κατάλογοι"
+
+msgid "Software repositories and downloads"
+msgstr "Αποθετήρια λογισμικού και λήψεις"
+
+msgid "Statistics and analytics"
+msgstr "Στατιστικά και αναλύσεις"
+
+msgid "Utilities and web tools"
+msgstr "Βοηθητικά προγράμματα και εργαλεία ιστού"
+
+msgid "Torrent and content trackers"
+msgstr "Torrent και ιχνηλάριοι περιεχομένου"
+
+msgid "Conspiracy / Religious content"
+msgstr "Περιεχόμενο θεωριών συνωμοσίας / θρησκευτικό"
+
+msgid "Unclassified or pending review"
+msgstr "Μην ταξινομημένο ή υπό αναθεώρηση"
+
+msgid "Not yet categorized"
+msgstr "Δεν έχει ακόμη ταξινομηθεί"
+
+msgid "Video streaming and media"
+msgstr "Ροή βίντεο και μέσα"
+
+msgid "Wiki and collaborative documentation"
+msgstr "Wiki και συνεργατική τεκμηρίωση"
+
+msgid "Work in progress / development"
+msgstr "Σε εξέλιξη / Ανάπτυξη"

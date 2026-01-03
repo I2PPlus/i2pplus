@@ -1,0 +1,90 @@
+# I2P+
+# Copyright (C) 2026 I2P+
+msgid ""
+msgstr ""
+"Language: hu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Cryptocurrency related services"
+msgstr "Kriptovaluta kapcsolatos szolgáltatások"
+
+msgid "Controlled substances marketplaces"
+msgstr "Kontrollált szerek piacterei"
+
+msgid "E-book libraries and publishing"
+msgstr "E-könyvtárak és kiadók"
+
+msgid "File hosting and storage services"
+msgstr "Fájltárolási és tárhely-szolgáltatások"
+
+msgid "Peer-to-peer file sharing"
+msgstr "P2P fájlmegosztás"
+
+msgid "Discussion forums and message boards"
+msgstr "Beszélgető fórumok és üzenőfalak"
+
+msgid "Image galleries and photo sharing"
+msgstr "Képgalériák és fotómegosztás"
+
+msgid "Gaming servers and communities"
+msgstr "Játékszerverek és játékközösségek"
+
+msgid "Git repositories and code hosting"
+msgstr "Git tárolók és kódhosting"
+
+msgid "Help and support resources"
+msgstr "Segítség és támogatási erőforrások"
+
+msgid "Human rights and civil liberties"
+msgstr "Emberi jogok és polgári szabadságjogok"
+
+msgid "Official I2P infrastructure services"
+msgstr "Hivatalos I2P infrastruktúra szolgáltatások"
+
+msgid "News and media outlets"
+msgstr "Hírek és média források"
+
+msgid "Text/code paste services"
+msgstr "Szöveg/kód beillesztési szolgáltatások"
+
+msgid "Personal websites and blogs"
+msgstr "Személyes weboldalak és blogok"
+
+msgid "Internet radio and streaming"
+msgstr "Internetes rádió és streamelés"
+
+msgid "Search engines and directories"
+msgstr "Keresőmotorok és könyvtárak"
+
+msgid "Software repositories and downloads"
+msgstr "Szoftvertárak és letöltések"
+
+msgid "Statistics and analytics"
+msgstr "Statisztikák és elemzések"
+
+msgid "Utilities and web tools"
+msgstr "Segédprogramok és webeszközök"
+
+msgid "Torrent and content trackers"
+msgstr "Torrent és tartalomkövetők"
+
+msgid "Conspiracy / Religious content"
+msgstr "Összeesküvés / Vallási tartalom"
+
+msgid "Unclassified or pending review"
+msgstr "Nem besorolt vagy felülvizsgálat alatt"
+
+msgid "Not yet categorized"
+msgstr "Még nem besorolt"
+
+msgid "Video streaming and media"
+msgstr "Videostreaming és média"
+
+msgid "Wiki and collaborative documentation"
+msgstr "Wiki és közös dokumentáció"
+
+msgid "Work in progress / development"
+msgstr "Folyamatban / Fejlesztés"

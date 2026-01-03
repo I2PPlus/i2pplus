@@ -1,0 +1,90 @@
+# I2P+
+# Copyright (C) 2026 I2P+
+msgid ""
+msgstr ""
+"Language: hi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Cryptocurrency related services"
+msgstr "क्रिप्टोकरेंसी से संबंधित सेवाएं"
+
+msgid "Controlled substances marketplaces"
+msgstr "नियंत्रित पदार्थ बाज़ार"
+
+msgid "E-book libraries and publishing"
+msgstr "ई-बुक पुस्तकालयन और प्रकाशन"
+
+msgid "File hosting and storage services"
+msgstr "फ़ाइल होस्टिंग और संग्रहण सेवाएं"
+
+msgid "Peer-to-peer file sharing"
+msgstr "P2P फ़ाइल साझां"
+
+msgid "Discussion forums and message boards"
+msgstr "चर्चा मंच और संदेश बोर्ड"
+
+msgid "Image galleries and photo sharing"
+msgstr "छवि गैलरी और फ़ोटो साझां"
+
+msgid "Gaming servers and communities"
+msgstr "गेमिंग सर्वर और समुदाय"
+
+msgid "Git repositories and code hosting"
+msgstr "Git रिपॉजिटरी और कोड होस्टिंग"
+
+msgid "Help and support resources"
+msgstr "सहायता और समर्थन संसाधन"
+
+msgid "Human rights and civil liberties"
+msgstr "मानवाधिकार और नागरिक स्वतंत्र"
+
+msgid "Official I2P infrastructure services"
+msgstr "आधिकारिक I2P अवसंरचना सेवाएं"
+
+msgid "News and media outlets"
+msgstr "समाचार और मीडिया आउटलेट"
+
+msgid "Text/code paste services"
+msgstr "पाठ/कोड पेस्ट सेवाएं"
+
+msgid "Personal websites and blogs"
+msgstr "व्यक्तिगत वेबसाइट और ब्लॉग"
+
+msgid "Internet radio and streaming"
+msgstr "इंटरनेट रेडियो और स्ट्रीमिंग"
+
+msgid "Search engines and directories"
+msgstr "खोज इंजन और निर्देशिका"
+
+msgid "Software repositories and downloads"
+msgstr "सॉफ़्टवेयर रिपॉजिटरी और डाउनलोड"
+
+msgid "Statistics and analytics"
+msgstr "आंकड़े और विश्लेषण"
+
+msgid "Utilities and web tools"
+msgstr "उपयोगिती और वेब उपकरण"
+
+msgid "Torrent and content trackers"
+msgstr "टोरेंट और सामग्री ट्रैकर"
+
+msgid "Conspiracy / Religious content"
+msgstr "षड्यांत्रवाद / धार्मिक सामग्री"
+
+msgid "Unclassified or pending review"
+msgstr "वर्गीकृत नहीं या समीक्षा के लिए लंबित"
+
+msgid "Not yet categorized"
+msgstr "अभी वर्गीकृत नहीं"
+
+msgid "Video streaming and media"
+msgstr "वीडियो स्ट्रीमिंग और मीडिया"
+
+msgid "Wiki and collaborative documentation"
+msgstr "विकि और सहयोगी दस्तावेज"
+
+msgid "Work in progress / development"
+msgstr "काम में / विकास"

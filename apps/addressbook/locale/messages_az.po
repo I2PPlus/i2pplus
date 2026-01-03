@@ -1,0 +1,90 @@
+# I2P+
+# Copyright (C) 2026 I2P+
+msgid ""
+msgstr ""
+"Language: az\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Cryptocurrency related services"
+msgstr "Kriptovaluta ilə xidmət xidmətləri"
+
+msgid "Controlled substances marketplaces"
+msgstr "Nəzarə edilən maddələr bazarı"
+
+msgid "E-book libraries and publishing"
+msgstr "Elektron kitabxana və nəşr"
+
+msgid "File hosting and storage services"
+msgstr "Fayl hostinq və saxlama xidmətləri"
+
+msgid "Peer-to-peer file sharing"
+msgstr "P2P fayl paylaşımı"
+
+msgid "Discussion forums and message boards"
+msgstr "Müzakirə forumları və mesaj panelləri"
+
+msgid "Image galleries and photo sharing"
+msgstr "Şəkil qalereyaları və foto paylaşımı"
+
+msgid "Gaming servers and communities"
+msgstr "Oyun serverləri və icmalar"
+
+msgid "Git repositories and code hosting"
+msgstr "Git anbarları və kod hostinqi"
+
+msgid "Help and support resources"
+msgstr "Kömək və dəstək resursları"
+
+msgid "Human rights and civil liberties"
+msgstr "İnsan haqları və vətəndaş azadlıqları"
+
+msgid "Official I2P infrastructure services"
+msgstr "Rəsmi I2P infrastruktura xidmətləri"
+
+msgid "News and media outlets"
+msgstr "Xəbər və media orqanları"
+
+msgid "Text/code paste services"
+msgstr "Mətn/kod yapışdırma xidmətləri"
+
+msgid "Personal websites and blogs"
+msgstr "Şəxsi veb saytları və bloqlar"
+
+msgid "Internet radio and streaming"
+msgstr "İnternet radio və yayım"
+
+msgid "Search engines and directories"
+msgstr "Axtarış mühərrikəri və kataloqlar"
+
+msgid "Software repositories and downloads"
+msgstr "Yazılım anbarları və yükləmələr"
+
+msgid "Statistics and analytics"
+msgstr "Statistika və analiz"
+
+msgid "Utilities and web tools"
+msgstr "Kömək proqramları və veb alətləri"
+
+msgid "Torrent and content trackers"
+msgstr "Torrent və məzmun izləyiciləri"
+
+msgid "Conspiracy / Religious content"
+msgstr "Sui-qəsd / Dini məzmun"
+
+msgid "Unclassified or pending review"
+msgstr "Təsniflənməmiş və ya baxış gözləyir"
+
+msgid "Not yet categorized"
+msgstr "Hələ təsniflənməyib"
+
+msgid "Video streaming and media"
+msgstr "Video yayımı və media"
+
+msgid "Wiki and collaborative documentation"
+msgstr "Viki və kollektiv sənəd"
+
+msgid "Work in progress / development"
+msgstr "Davam edir / İnkişaf"

@@ -1,0 +1,90 @@
+# I2P+
+# Copyright (C) 2026 I2P+
+msgid ""
+msgstr ""
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Cryptocurrency related services"
+msgstr "Cryptocurrency-gerelateerde diensten"
+
+msgid "Controlled substances marketplaces"
+msgstr "Marktplaatsen voor gecontroleerde stoffen"
+
+msgid "E-book libraries and publishing"
+msgstr "E-book bibliotheken en uitgeverij"
+
+msgid "File hosting and storage services"
+msgstr "Bestand hosting en opslagdiensten"
+
+msgid "Peer-to-peer file sharing"
+msgstr "Peer-to-peer bestanden delen"
+
+msgid "Discussion forums and message boards"
+msgstr "Discussiefora's en berichtborden"
+
+msgid "Image galleries and photo sharing"
+msgstr "Beeldgallerijen en foto delen"
+
+msgid "Gaming servers and communities"
+msgstr "Gaming servers en gemeenschappen"
+
+msgid "Git repositories and code hosting"
+msgstr "Git repositories en code hosting"
+
+msgid "Help and support resources"
+msgstr "Hulp en ondersteuningsbronnen"
+
+msgid "Human rights and civil liberties"
+msgstr "Mensenrechten en burgerlijke vrijheden"
+
+msgid "Official I2P infrastructure services"
+msgstr "Officiële I2P infrastructuurdiensten"
+
+msgid "News and media outlets"
+msgstr "Nieuws- en media-uitzendingen"
+
+msgid "Text/code paste services"
+msgstr "Tekst-/code-plakdiensten"
+
+msgid "Personal websites and blogs"
+msgstr "Persoonlijke websites en blogs"
+
+msgid "Internet radio and streaming"
+msgstr "Internetradio en streaming"
+
+msgid "Search engines and directories"
+msgstr "Zoekmachines en mappen"
+
+msgid "Software repositories and downloads"
+msgstr "Software repositories en downloads"
+
+msgid "Statistics and analytics"
+msgstr "Statistieken en analyses"
+
+msgid "Utilities and web tools"
+msgstr "Hulpprogramma's en web tools"
+
+msgid "Torrent and content trackers"
+msgstr "Torrent- en inhoudstrackers"
+
+msgid "Conspiracy / Religious content"
+msgstr "Complottheorie / Religieuze inhoud"
+
+msgid "Unclassified or pending review"
+msgstr "Niet geclassificeerd of in afwachting van beoordeling"
+
+msgid "Not yet categorized"
+msgstr "Nog niet geclassificeerd"
+
+msgid "Video streaming and media"
+msgstr "Videostreaming en media"
+
+msgid "Wiki and collaborative documentation"
+msgstr "Wiki en samenwerkende documentatie"
+
+msgid "Work in progress / development"
+msgstr "Work in progress / ontwikkeling"

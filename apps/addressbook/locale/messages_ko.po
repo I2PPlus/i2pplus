@@ -1,0 +1,90 @@
+# I2P+
+# Copyright (C) 2026 I2P+
+msgid ""
+msgstr ""
+"Language: ko\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Cryptocurrency related services"
+msgstr "암호화폐 관련 서비스"
+
+msgid "Controlled substances marketplaces"
+msgstr "규제 약물 시장"
+
+msgid "E-book libraries and publishing"
+msgstr "전자책 도서관 및 출판"
+
+msgid "File hosting and storage services"
+msgstr "파일 호스팅 및 저장소 서비스"
+
+msgid "Peer-to-peer file sharing"
+msgstr "P2P 파일 공유"
+
+msgid "Discussion forums and message boards"
+msgstr "토롬 게시판 및 메시지 보드"
+
+msgid "Image galleries and photo sharing"
+msgstr "이미지 갤러리 및 사진 공유"
+
+msgid "Gaming servers and communities"
+msgstr "게임 서버 및 커뮤니티"
+
+msgid "Git repositories and code hosting"
+msgstr "Git 리포지토리 및 코드 호스팅"
+
+msgid "Help and support resources"
+msgstr "도움말 및 지원 리소스"
+
+msgid "Human rights and civil liberties"
+msgstr "인권 및 시민 자유"
+
+msgid "Official I2P infrastructure services"
+msgstr "공식 I2P 인프라 서비스"
+
+msgid "News and media outlets"
+msgstr "뉴스 및 미디어"
+
+msgid "Text/code paste services"
+msgstr "텍스트/코드 붙여넣기 서비스"
+
+msgid "Personal websites and blogs"
+msgstr "개인 웹사이트 및 블로그"
+
+msgid "Internet radio and streaming"
+msgstr "인터넷 라디오 및 스트리밍"
+
+msgid "Search engines and directories"
+msgstr "검색 엔진 및 디렉토리"
+
+msgid "Software repositories and downloads"
+msgstr "소프트웨어 저장소 및 다운로드"
+
+msgid "Statistics and analytics"
+msgstr "통계 및 분석"
+
+msgid "Utilities and web tools"
+msgstr "유틸리티 및 웹 도구"
+
+msgid "Torrent and content trackers"
+msgstr "토렌트 및 콘텐츠 트래커"
+
+msgid "Conspiracy / Religious content"
+msgstr "음모론/종교적 콘텐츠"
+
+msgid "Unclassified or pending review"
+msgstr "분류되지 않음 또는 검토 대기 중"
+
+msgid "Not yet categorized"
+msgstr "아직 분류되지 않음"
+
+msgid "Video streaming and media"
+msgstr "비디오 스트리밍 및 미디어"
+
+msgid "Wiki and collaborative documentation"
+msgstr "위키 및 협업 문서"
+
+msgid "Work in progress / development"
+msgstr "작업 중 / 개발 중"

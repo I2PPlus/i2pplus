@@ -1,0 +1,90 @@
+# I2P+
+# Copyright (C) 2026 I2P+
+msgid ""
+msgstr ""
+"Language: bo\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Cryptocurrency related services"
+msgstr "གསལ་ལགར་མཐུད་པའི་ཞབས་སྱོན་པ།"
+
+msgid "Controlled substances marketplaces"
+msgstr "ཚོད་བཀག་པའི་ཚོང་སའི་ཚོང་ཁང་།"
+
+msgid "E-book libraries and publishing"
+msgstr "གླེད་པའི་དེབ་རིག་དཔར་འགྱོན་པ།"
+
+msgid "File hosting and storage services"
+msgstr "ཡིག་སྡོམ་པའི་ཉར་འཇོན་ཞབས་སྱོན་པ།"
+
+msgid "Peer-to-peer file sharing"
+msgstr "P2P ཡིག་སྡོམ་མཉམ་སྲོང་།"
+
+msgid "Discussion forums and message boards"
+msgstr "བགོ་གྲོན་པའི་གསར་མ་བཤད་དང་འཕྲང་བྱང་།"
+
+msgid "Image galleries and photo sharing"
+msgstr "པརྡ་སའི་འདྲོན་ཁང་དང་པརྡ་སའི་མཉམ་སྲོང་།"
+
+msgid "Gaming servers and communities"
+msgstr "རྩེད་རའི་སར་བ་དང་སྲོང་གི་།"
+
+msgid "Git repositories and code hosting"
+msgstr "Git གསོག་མཛོད་དང་ཀོད་སྡོམ་བསྲོང་།"
+
+msgid "Help and support resources"
+msgstr "རོག་དཔ་དང་རོག་སྲོང་གི་།"
+
+msgid "Human rights and civil liberties"
+msgstr "མི་དོན་པའི་དབང་དང་དམངས་སྐྱོན་པ།"
+
+msgid "Official I2P infrastructure services"
+msgstr "I2P རྨོ་སྲོང་གི་མཁོན་སྲོང་གི་།"
+
+msgid "News and media outlets"
+msgstr "གསར་བ་པའི་བརྡ་སྲོང་བརྱ་ཐོག་པ།"
+
+msgid "Text/code paste services"
+msgstr "ཡིག་སྡོམ་ཀོད་སྡོམ་སྲོང་གི་།"
+
+msgid "Personal websites and blogs"
+msgstr "སྐྱོན་པའི་དྲོང་དང་པརློག་དཔ།"
+
+msgid "Internet radio and streaming"
+msgstr "གླེད་རའི་རེ་དིག་དང་སྲོང་།"
+
+msgid "Search engines and directories"
+msgstr "འཚོལ་བཤད་འཚོང་ཁང་དང་དཀར་ཁང་།"
+
+msgid "Software repositories and downloads"
+msgstr "མཉེན་པའི་གསོག་མཛོད་དང་ཕབ་ལེན་པ།"
+
+msgid "Statistics and analytics"
+msgstr "ཚད་རིག་དང་བརྟོན་སྲོང་།"
+
+msgid "Utilities and web tools"
+msgstr "རོག་སྲོང་དང་དྲོང་བརྱ་ལས་གི་།"
+
+msgid "Torrent and content trackers"
+msgstr "Torrent དང་ནང་རླེད་འཇོན་པ།"
+
+msgid "Conspiracy / Religious content"
+msgstr "གསང་དོན་པའི་/ ཆོས་ལུགས་པའི་ནང་རླེད་པ།"
+
+msgid "Unclassified or pending review"
+msgstr "དབྱི་མེད་མ་བཏུང་བཞིག་ཡོད་པ།"
+
+msgid "Not yet categorized"
+msgstr "ད་བར་མེད་མ་བཏུང་བཞིག་ཡོད་པ།"
+
+msgid "Video streaming and media"
+msgstr "བརླེད་པའི་བརྡ་སྲོང་དང་སྲོང་།"
+
+msgid "Wiki and collaborative documentation"
+msgstr "ཝི་ཀི་དང་མཉམ་སྲོང་གི་།"
+
+msgid "Work in progress / development"
+msgstr "བྱི་བཞིག་བཞིག་ཡོད་པ། / གོང་སྲོང་།"

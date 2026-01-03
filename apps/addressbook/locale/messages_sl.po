@@ -1,0 +1,90 @@
+# I2P+
+# Copyright (C) 2026 I2P+
+msgid ""
+msgstr ""
+"Language: sl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Cryptocurrency related services"
+msgstr "Storitve povezane s kriptovalutami"
+
+msgid "Controlled substances marketplaces"
+msgstr "Trži kontroliranih substanc"
+
+msgid "E-book libraries and publishing"
+msgstr "Knjiznice e-knjig in založništvo"
+
+msgid "File hosting and storage services"
+msgstr "Storitve gostovanja in shranjevanja datotek"
+
+msgid "Peer-to-peer file sharing"
+msgstr "Deljenje datotek P2P"
+
+msgid "Discussion forums and message boards"
+msgstr "Forum za razpravo in oglasne deske"
+
+msgid "Image galleries and photo sharing"
+msgstr "Galerije slik in deljenje fotografij"
+
+msgid "Gaming servers and communities"
+msgstr "Igralni strežniki in skupnosti iger"
+
+msgid "Git repositories and code hosting"
+msgstr "Git repozitoriji in gostovanje kode"
+
+msgid "Help and support resources"
+msgstr "Viri pomoči in podpore"
+
+msgid "Human rights and civil liberties"
+msgstr "Človekove pravice in državljanske svoboščine"
+
+msgid "Official I2P infrastructure services"
+msgstr "Uradne storitve infrastrukture I2P"
+
+msgid "News and media outlets"
+msgstr "Novice in medijski viri"
+
+msgid "Text/code paste services"
+msgstr "Storitve za lepljenje besedila/ode"
+
+msgid "Personal websites and blogs"
+msgstr "Osebne spletne strani in blogi"
+
+msgid "Internet radio and streaming"
+msgstr "Internetni radio in pretakanje"
+
+msgid "Search engines and directories"
+msgstr "Iskalniki imeniki in direktoriji"
+
+msgid "Software repositories and downloads"
+msgstr "Skladje programske opreme in prenosi"
+
+msgid "Statistics and analytics"
+msgstr "Statistika in analitika"
+
+msgid "Utilities and web tools"
+msgstr "Pripomniški orodja in spletna orodja"
+
+msgid "Torrent and content trackers"
+msgstr "Torrent in sledilniki vsebine"
+
+msgid "Conspiracy / Religious content"
+msgstr "Vsebina zarote / Verski vsebina"
+
+msgid "Unclassified or pending review"
+msgstr "Neklasificirano ali čaka na pregled"
+
+msgid "Not yet categorized"
+msgstr "Še nekategorizirano"
+
+msgid "Video streaming and media"
+msgstr "Video pretakanje in mediji"
+
+msgid "Wiki and collaborative documentation"
+msgstr "Wiki in sodelovalna dokumentacija"
+
+msgid "Work in progress / development"
+msgstr "V teku / Razvoj"

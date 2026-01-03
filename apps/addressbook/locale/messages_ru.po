@@ -1,0 +1,90 @@
+# I2P+
+# Copyright (C) 2026 I2P+
+msgid ""
+msgstr ""
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Cryptocurrency related services"
+msgstr "Связанные с криптовалютой сервисы"
+
+msgid "Controlled substances marketplaces"
+msgstr "Рынки контролируемых веществ"
+
+msgid "E-book libraries and publishing"
+msgstr "Библиотеки электронных книг и издательство"
+
+msgid "File hosting and storage services"
+msgstr "Сервисы хостинга и хранения файлов"
+
+msgid "Peer-to-peer file sharing"
+msgstr "Обмен файлами P2P"
+
+msgid "Discussion forums and message boards"
+msgstr "Форумы для обсуждений и доски сообщений"
+
+msgid "Image galleries and photo sharing"
+msgstr "Галереи изображений и обмен фотографиями"
+
+msgid "Gaming servers and communities"
+msgstr "Игровые серверы и сообщества"
+
+msgid "Git repositories and code hosting"
+msgstr "Репозитории Git и хостинг кода"
+
+msgid "Help and support resources"
+msgstr "Ресурсы помощи и поддержки"
+
+msgid "Human rights and civil liberties"
+msgstr "Права человека и гражданские свободы"
+
+msgid "Official I2P infrastructure services"
+msgstr "Официальные сервисы инфраструктуры I2P"
+
+msgid "News and media outlets"
+msgstr "Новости и СМИ"
+
+msgid "Text/code paste services"
+msgstr "Сервисы для вставки текста/кода"
+
+msgid "Personal websites and blogs"
+msgstr "Персональные веб-сайты и блоги"
+
+msgid "Internet radio and streaming"
+msgstr "Интернет-радио и стриминг"
+
+msgid "Search engines and directories"
+msgstr "Поисковые системы и каталоги"
+
+msgid "Software repositories and downloads"
+msgstr "Репозитории программного обеспечения и загрузки"
+
+msgid "Statistics and analytics"
+msgstr "Статистика и аналитика"
+
+msgid "Utilities and web tools"
+msgstr "Утилиты и веб-инструменты"
+
+msgid "Torrent and content trackers"
+msgstr "Трекеры торрентов и контента"
+
+msgid "Conspiracy / Religious content"
+msgstr "Содержание конспирологическое / религиозное"
+
+msgid "Unclassified or pending review"
+msgstr "Неклассифицировано или ожидает проверки"
+
+msgid "Not yet categorized"
+msgstr "Ещё не классифицировано"
+
+msgid "Video streaming and media"
+msgstr "Видео-стриминг и медиа"
+
+msgid "Wiki and collaborative documentation"
+msgstr "Вики и совместная документация"
+
+msgid "Work in progress / development"
+msgstr "В работе / разработка"

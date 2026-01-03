@@ -1,0 +1,90 @@
+# I2P+
+# Copyright (C) 2026 I2P+
+msgid ""
+msgstr ""
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Cryptocurrency related services"
+msgstr "暗号通貨関連サービス"
+
+msgid "Controlled substances marketplaces"
+msgstr "規制薬物マーケットプレイス"
+
+msgid "E-book libraries and publishing"
+msgstr "電子書籍ライブラリと出版"
+
+msgid "File hosting and storage services"
+msgstr "ファイルホスティングとストレージサービス"
+
+msgid "Peer-to-peer file sharing"
+msgstr "P2Pファイル共有"
+
+msgid "Discussion forums and message boards"
+msgstr "ディスカッションフォーラムと掲示板"
+
+msgid "Image galleries and photo sharing"
+msgstr "イメージギャラリーと写真共有"
+
+msgid "Gaming servers and communities"
+msgstr "ゲームサーバーとコミュニティ"
+
+msgid "Git repositories and code hosting"
+msgstr "Gitリポジトリとコードホスティング"
+
+msgid "Help and support resources"
+msgstr "ヘルプとサポートリソース"
+
+msgid "Human rights and civil liberties"
+msgstr "人権と市民的自由"
+
+msgid "Official I2P infrastructure services"
+msgstr "公式I2Pインフラストラクチャーサービス"
+
+msgid "News and media outlets"
+msgstr "ニュースとメディアアウトレット"
+
+msgid "Text/code paste services"
+msgstr "テキスト/コード貼り付けサービス"
+
+msgid "Personal websites and blogs"
+msgstr "個人ウェブサイトとブログ"
+
+msgid "Internet radio and streaming"
+msgstr "インターネットラジオとストリーミング"
+
+msgid "Search engines and directories"
+msgstr "検索エンジンとディレクトリ"
+
+msgid "Software repositories and downloads"
+msgstr "ソフトウェアリポジトリとダウンロード"
+
+msgid "Statistics and analytics"
+msgstr "統計と分析"
+
+msgid "Utilities and web tools"
+msgstr "ユーティリティとウェブツール"
+
+msgid "Torrent and content trackers"
+msgstr "トレントとコンテントトラッカー"
+
+msgid "Conspiracy / Religious content"
+msgstr "陰謀論/宗教的コンテント"
+
+msgid "Unclassified or pending review"
+msgstr "未分類または審査待ち"
+
+msgid "Not yet categorized"
+msgstr "まだ分類されていません"
+
+msgid "Video streaming and media"
+msgstr "ビデオストリーミングとメディア"
+
+msgid "Wiki and collaborative documentation"
+msgstr "ウィキと共同ドキュメント"
+
+msgid "Work in progress / development"
+msgstr "作業中/開発中"
