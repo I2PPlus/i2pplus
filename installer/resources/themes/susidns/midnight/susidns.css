@@ -136,9 +136,9 @@ textarea[name="config"]{height:220px;overflow-y:scroll;resize:none}
 
 .book td.names{width:200px;white-space:nowrap}
 .book td:nth-child(2){padding:2px 0 2px 5px;width:30px}
-.book td:nth-child(3) .addrhlpr:hover{filter:drop-shadow(0 0 1px #b73fff)}
-.book td:nth-child(3) a{font-size:0}
-.book td:nth-child(3){padding:2px 25px 2px 0;width:20px;text-align:center}
+.book td.helper .addrhlpr:hover{filter:drop-shadow(0 0 1px #b73fff)}
+.book td.helper a{font-size:0}
+.book td.helper{padding:2px 25px 2px 0;width:20px;text-align:center}
 .book th{padding-top:6px;padding-bottom:6px}
 
 .destinations textarea{margin:0;padding:1px 1px 1px 2px;width:100%;height:32px;resize:none;overflow-x:auto;overflow-y:hidden;border-radius:0;border:0;border-left:var(--border_soft);border-right:3px solid #17142f}
