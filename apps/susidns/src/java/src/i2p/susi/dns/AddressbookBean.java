@@ -94,7 +94,7 @@ public class AddressbookBean extends BaseBean {
      */
     public boolean isHasFilter() {return filter != null && filter.length() > 0;}
 
-/**
+    /**
      * Sets the table row class.
      * @param trClass table row class
      */
@@ -363,17 +363,16 @@ public class AddressbookBean extends BaseBean {
         String message;
         String filterArg = "";
         int resultCount = resultSize();
-        boolean noResults = resultCount <= 0;
         if (filter != null && filter.length() > 0) {
             if (search != null && search.length() > 0) {
                 message = ngettext("Search for <span class=active>" + search + "</span> with filter <span class=active>" + filter + "</span> returned 1 result",
                                    "Search for <span class=active>" + search + "</span> with filter <span class=active>" + filter + "</span> returned {0} results",
-                                   resultCount);
-                message = "</span><span " + (noResults ? "class=noResults " : "") + "id=results>" + message + "</span>";
+                                   getTotalFilteredCount());
+                message = "</span><span id=results>" + message + "</span>";
             } else {
                 message = ngettext("Filtered list contains 1 entry.",
                                    "Filtered list contains {0} entries.",
-                                   resultCount).replace(".", "");
+                                   getTotalFilteredCount()).replace(".", "");
             }
             filterArg = "&amp;filter=" + filter;
         } else if (search != null && search.length() > 0) {
@@ -384,42 +383,35 @@ public class AddressbookBean extends BaseBean {
         } else if (category != null) {
             message = ngettext("Filtered list contains 1 entry.",
                                "Filtered list contains {0} entries.",
-                               resultCount).replace(".", "");
+                               getTotalFilteredCount()).replace(".", "");
         } else {
             if (resultCount <= 0) {message = "";} // covered in jsp
             else {
-                message = ngettext("1 entry", "{0} entries", resultCount);
-                message = " (" + message + ")";
+                message = ngettext("Book contains 1 entry", "Book contains {0} entries", getTotalFilteredCount());
             }
         }
-        if (resultCount <= 0) {} // nothing to display
-        else if (category != null) {message += "</span>";}
-        else if (getBeginInt() == 0 && getEndInt() >= totalSize() - 1) {message += "</span>";}
-        else {
-            message = ngettext("1 entry", "{0} entries", resultCount);
-            message = " (" + message + ")";
-        }
-        if (resultCount <= 0) {} // nothing to display
-        else if (category != null) {message += "</span>";}
-        else if (getBeginInt() == 0 && getEndInt() >= totalSize() - 1) {message += "</span>";}
+        if (resultCount <= 0 || category != null) {} // nothing to display or category filter
+        else if (getPageBegin() == 0 && getEndInt() >= getTotalFilteredCount() - 1) {message += "</span>";}
         else {
             message += "</span><span id=paginate>";
-            if (getBeginInt() > 0) {
-                int newBegin = Math.max(0, getBeginInt() - DISPLAY_SIZE);
-                int newEnd = Math.max(0, getBeginInt() - 1);
+            int pageBegin = getPageBegin();
+            int totalCount = getTotalFilteredCount();
+            int pageEnd = Math.min(pageBegin + DISPLAY_SIZE - 1, totalCount - 1);
+            if (pageBegin > 0) {
+                int newBegin = Math.max(0, pageBegin - DISPLAY_SIZE);
+                int newEnd = Math.max(0, pageBegin - 1);
                 message += " <span id=prev><a href=\"addressbook?book=" + getBook() + filterArg +
                            "&amp;begin=" + newBegin + "&amp;end=" + newEnd + "\">" + (newBegin+1) +
                            " - "  + (newEnd+1) + "</a></span> | ";
-                } else {message += " <span id=prev class=inactive></span> | ";}
-                message += " <span id=current>" + (getBeginInt()+1) + " - " + (getEndInt()+1) + "</span>";
-                if (getEndInt() < resultCount - 1) {
-                    if (getBeginInt() <= 0) {message += " | ";}
-                    int newBegin = Math.min(resultCount - 1, getEndInt() + 1);
-                    int newEnd = Math.min(resultCount, getEndInt() + DISPLAY_SIZE);
-                    if (getBeginInt() > 0) {message += " | ";}
-                    message += "<span id=next><a href=\"addressbook?book=" + getBook() + filterArg +
-                               "&amp;begin=" + newBegin + "&amp;end=" + newEnd + "\">" + (newBegin+1) +
-                               " - " + (newEnd+1) + "</a></span>";
+            }
+            message += " <span id=current>" + (pageBegin+1) + " - " + (pageEnd+1) + "</span>";
+            if (pageEnd < totalCount - 1) {
+                message += " | ";
+                int nextBegin = pageBegin + DISPLAY_SIZE;
+                int nextEnd = Math.min(nextBegin + DISPLAY_SIZE - 1, totalCount - 1);
+                message += "<span id=next><a href=\"addressbook?book=" + getBook() + filterArg +
+                           "&amp;begin=" + nextBegin + "&amp;end=" + nextEnd + "\">" + (nextBegin+1) +
+                           " - " + (nextEnd+1) + "</a></span>";
             } else {message += "<span id=next class=inactive></span>";}
             message += "</span>"; // close #showing span in NamingServiceBean
         }
@@ -585,8 +577,8 @@ public class AddressbookBean extends BaseBean {
         this.filter = DataHelper.stripHTML(filter); // XSS
         // Reset category - will be set if filter is a category name
         this.category = null;
-        // Check if filter is a category name
-        if (filter != null && !filter.equals("none")) {
+        // Check if filter is a category name (but not "xn--" which is a letter filter for non-ASCII)
+        if (filter != null && !filter.equals("none") && !filter.equals("xn--")) {
             for (String validCat : VALID_CATEGORIES) {
                 if (filter.equalsIgnoreCase(validCat)) {
                     this.category = filter.toLowerCase(Locale.US);
@@ -651,11 +643,12 @@ public class AddressbookBean extends BaseBean {
     public String getBegin() {return Integer.toString(getBeginInt());}
 
     /**
-     * Gets the beginning index into results.
-     * @return beginning index into results
-     *  @since 0.8.7
+     * Gets the beginning index into results for display purposes.
+     * Returns the actual page start index, not clamped to resultSize().
+     * @return the page start index (0-based)
+     * @since 0.9.60
      */
-    public String getResultBegin() {return isPrefiltered() ? "0" : Integer.toString(getBeginInt());}
+    public int getPageBegin() {return beginIndex;}
 
     /**
      * Sets the beginning index.
@@ -679,11 +672,28 @@ public class AddressbookBean extends BaseBean {
     public String getEnd() {return Integer.toString(getEndInt());}
 
     /**
+     * Gets the beginning index into results.
+     * @return beginning index into results
+     *  @since 0.8.7
+     */
+    public String getResultBegin() {
+        if (isPrefiltered()) {return "0";}
+        return "0";
+    }
+
+    /**
      * Gets ending index into results.
      * @return ending index into results
      *  @since 0.8.7
      */
-    public String getResultEnd() {return Integer.toString(isPrefiltered() ? resultSize() - 1 : getEndInt());}
+    public String getResultEnd() {
+        if (isPrefiltered()) {
+            int size = resultSize();
+            return size > 0 ? Integer.toString(size - 1) : "0";
+        }
+        int size = entries != null ? entries.length : 0;
+        return size > 0 ? Integer.toString(size - 1) : "0";
+    }
 
     /**
      * Sets the ending index.
@@ -707,6 +717,14 @@ public class AddressbookBean extends BaseBean {
      *  @since 0.8.7
      */
     protected int resultSize() {return entries.length;}
+
+    /**
+     * Gets the total count of filtered results for pagination display.
+     * Subclasses can override to return the count before manual pagination.
+     * @return the total count of filtered results
+     * @since 0.9.60
+     */
+    protected int getTotalFilteredCount() {return resultSize();}
 
     /**
      * Gets the total size of the address book.

@@ -47,12 +47,16 @@ public class NamingServiceBean extends AddressbookBean {
     private String detail;
     private String notes;
     private boolean fail = false;
+    private int filteredCount;
+    private AddressBean[] fullFilteredEntries;
 
     private boolean isDirect() {return getBook().equals("published");}
 
     @Override
     protected boolean isPrefiltered() {
         if (isDirect()) {return super.isPrefiltered();}
+        // Only use server-side pagination for no filter AND no search
+        // For status filters (alive/dead/latest), fetch all and filter client-side
         return (search == null || search.length() <= 0) &&
                (filter == null || filter.length() <= 0) &&
                getNamingService().getName().equals(DEFAULT_NS);
@@ -61,7 +65,19 @@ public class NamingServiceBean extends AddressbookBean {
     @Override
     protected int resultSize() {
         if (isDirect()) {return super.resultSize();}
-        return entries.length;
+        return entries != null ? entries.length : 0;
+    }
+
+    /**
+     * Gets the total count of filtered results for pagination display.
+     * Returns the count BEFORE manual pagination is applied.
+     */
+    protected int getTotalFilteredCount() {
+        if (isDirect()) {return resultSize();}
+        if (fullFilteredEntries != null) {
+            return fullFilteredEntries.length;
+        }
+        return filteredCount > 0 ? filteredCount : resultSize();
     }
 
     @Override
@@ -139,14 +155,18 @@ public class NamingServiceBean extends AddressbookBean {
             boolean sortByDate = "latest".equals(filter);
             Properties searchProps = new Properties();
             searchProps.setProperty("list", getFileName()); // only blockfile needs this
-            // Only set startsWith for letter filters, not for status or category filters
-            if (filter != null && !sortByDate && !filter.equals("alive") && !filter.equals("dead") && category == null) {
+            // Only set startsWith for letter filters (A-Z, 0-9), not for status, category, or no filter
+            if (filter != null && filter.length() > 0 && !sortByDate && !filter.equals("alive") && !filter.equals("dead") && category == null) {
                 String startsAt = filter.equals("0-9") ? "[0-9]" : filter;
                 searchProps.setProperty("startsWith", startsAt);
             }
             // Don't apply skip/limit when filtering by category - we need all results to filter by category
-            if (isPrefiltered() && category == null) {
-                // Only limit if we not searching or filtering, so we will know the total number of results
+            // Don't apply skip/limit for no filter or status filters
+            // Only apply for search or letter filters to use server-side pagination
+            boolean isStatusFilter = filter != null && (filter.equals("alive") || filter.equals("dead") || filter.equals("latest"));
+            boolean isNoFilter = filter == null || filter.length() <= 0;
+            if (isPrefiltered() && category == null && !isNoFilter && !isStatusFilter) {
+                // Only limit if we have a search or letter filter
                 if (beginIndex > 0) {searchProps.setProperty("skip", Integer.toString(beginIndex));}
                 int limit =1 + endIndex - beginIndex;
                 if (limit > 0) {searchProps.setProperty("limit", Integer.toString(limit));}
@@ -242,7 +262,9 @@ public class NamingServiceBean extends AddressbookBean {
                             // If we can't get status, skip this host for dead filter
                             continue;
                         }
-                        if (haveResult && !isDead) {continue;}
+                        // Only show hosts that have been checked and are dead
+                        // Hosts without any ping result are NOT dead (they're untested)
+                        if (!haveResult || !isDead) {continue;}
                     }
                     else if (category == null && ! name.toLowerCase(Locale.US).startsWith(filter.toLowerCase(Locale.US))) {
                         continue;
@@ -269,6 +291,9 @@ public class NamingServiceBean extends AddressbookBean {
                 list.addLast(bean);
             }
             AddressBean array[] = list.toArray(new AddressBean[list.size()]);
+            filteredCount = array.length;
+            // Store the full filtered list BEFORE pagination for accurate count
+            fullFilteredEntries = array;
             // Apply pagination - only apply manual pagination when NOT filtering by category
             int fromIndex, toIndex;
             if (category == null) {
@@ -278,8 +303,12 @@ public class NamingServiceBean extends AddressbookBean {
                 } else if (!(results instanceof SortedMap)) {
                     Arrays.sort(array, sorter);
                 }
-                fromIndex = Math.max(0, Math.min(beginIndex, array.length));
-                toIndex = Math.min(endIndex, array.length - 1);
+                if (beginIndex >= array.length) {
+                    fromIndex = Math.max(0, array.length - 1);
+                } else {
+                    fromIndex = beginIndex;
+                }
+                toIndex = Math.min(fromIndex + (endIndex - beginIndex), array.length - 1);
                 List<AddressBean> paginatedList = Arrays.asList(Arrays.copyOfRange(array, fromIndex, toIndex + 1));
                 entries = paginatedList.toArray(new AddressBean[paginatedList.size()]);
             } else {
@@ -289,6 +318,7 @@ public class NamingServiceBean extends AddressbookBean {
                 entries = array;
             }
             _log.debug("Final entries count after filtering: " + (entries != null ? entries.length : 0) +
+                       " of " + filteredCount + " total" +
                        (blacklistedHosts > 0 ? " (Blacklisted: " + blacklistedHosts + ")" : ""));
             message = generateLoadMessage();
         } catch (RuntimeException e) {warn(e);}
