@@ -149,16 +149,20 @@
 
     for (String[] catArray : categories) {
         String cat = catArray[0];
-        String catDisplay = cat;
-        String categoryTooltip = "";
-        try {String catTooltip = net.i2p.addressbook.HostCheckerBridge.getCategoryDescription(cat);}
+        String categoryTooltip = cat;
+        try {
+            Object hostCheckerObj = application.getAttribute("hostChecker");
+            if (hostCheckerObj != null) {
+                categoryTooltip = net.i2p.addressbook.HostCheckerBridge.getCategoryDescription(cat);
+            }
+        }
         catch (Exception e) {categoryTooltip = cat;}
         boolean notActive = query != null && !query.matches(".*[?&]filter=" + cat + "(&|$).*");
         if (notActive) {
 %>
-<a href="/susidns/addressbook?book=${book.book}&amp;filter=<%=cat%>" title="<%=categoryTooltip%>"><span class=<%=cat%>><%=catDisplay%></span></a>
+<a href="/susidns/addressbook?book=${book.book}&amp;filter=<%=cat%>"><span class=<%=cat%> title="<%=categoryTooltip%>"><%=categoryTooltip%></span></a>
 <%      } else { %>
-<a id=activefilter href="/susidns/addressbook?book=${book.book}&amp;filter=<%=cat%>" title="<%=categoryTooltip%>"><span class=<%=cat%>><%=catDisplay%></span></a>
+<a id=activefilter href="/susidns/addressbook?book=${book.book}&amp;filter=<%=cat%>"><span class=<%=cat%> title="<%=categoryTooltip%>"><%=categoryTooltip%></span></a>
 <%      } %>
 <%  } %>
 </div>
@@ -209,7 +213,7 @@
         } catch (Exception e) {
             // Silently ignore category errors
         }
-        if (!category.isEmpty()) { %><span class=<%=category%> title="<%=categoryTooltip.isEmpty() ? category : categoryTooltip%>"><%=category%></span><% }
+        if (!category.isEmpty()) { %><span class=<%=category%> title="<%=categoryTooltip.isEmpty() ? category : categoryTooltip%>"><%=categoryTooltip.isEmpty() ? category : categoryTooltip%></span><% }
         else { %><span class=unknown title="<%=categoryTooltip.isEmpty() ? intl._t("unknown") : categoryTooltip%>"><%=intl._t("unknown")%></span><% } %>
 </td>
 <td class=names><a href="http://${addr.name}/" target=_blank>${addr.displayName}</a></td>

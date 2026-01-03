@@ -146,6 +146,10 @@ war {
         include '**/*.class'
         into 'WEB-INF/classes'
     }
+    from ("../addressbook/build/classes/java/main") {
+        include 'net/i2p/addressbook/messages*.class'
+        into 'WEB-INF/classes'
+    }
     exclude '*.jsi'
     exclude '*.jsp'
     webXml = file("$buildDir/web.xml")

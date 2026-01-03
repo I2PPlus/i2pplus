@@ -175,6 +175,10 @@
     <copy todir="build/js">
       <fileset dir="js/"/>
     </copy>
+    <!-- Copy addressbook translations -->
+    <copy todir="${bin}">
+      <fileset dir="../../addressbook/build" includes="net/i2p/addressbook/messages*.class"/>
+    </copy>
     <if>
       <isset property="uglifyjs.present"/>
       <then>
