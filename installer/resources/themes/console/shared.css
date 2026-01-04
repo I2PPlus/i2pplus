@@ -3,6 +3,7 @@
 
 .expanded #ffstatus,#ffconf:hover #ffstatus{opacity:0}
 .hasExpandedElement #floodfillconfig{margin-bottom:-1px;display:table!important}
+.log_level{font-weight:900!important}
 .tIn{background:url(/themes/console/images/inbound.svg) no-repeat 6px center/16px,var(--badge)}
 .tOut{background:url(/themes/console/images/outbound.svg) no-repeat 6px center/16px,var(--badge)}
 .toggle:not(.expanded) .tIn,.toggle:not(.expanded) .tOut{min-width:40px;display:inline-block!important}

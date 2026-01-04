@@ -2552,7 +2552,7 @@ a[href^="/netdb"]:hover span{color:var(--hover)}
 
 /* logs */
 .log_level{opacity:.8}
-.log_level{padding:1px 2px;min-width:36px;max-width:36px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block;line-height:1;letter-spacing:.02em;text-align:center;font-weight:600;color:#000c;border-radius:2px}
+.log_level{padding:1px 2px;min-width:36px;max-width:36px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:inline-block;line-height:1;letter-spacing:.02em;text-align:center;color:#000c;border-radius:2px}
 .log_critical.colorize{color:#900}
 .log_critical.colorize::before,.log_critical .log_level{background:#900}
 .log_debug.colorize{color:#346}

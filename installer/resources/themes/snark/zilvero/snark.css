@@ -265,7 +265,7 @@ tr:hover .magnetLabel{opacity:1}
 .peerCount{line-height:1;text-align:center;font-weight:700}
 .peerCount b{min-width:96px;display:inline-block;box-shadow:0 0 0 1px #bbb,var(--highlight);background:linear-gradient(180deg,#f2f2f2,#eee)}
 .peerdata{text-align:left}
-.stopped .peerCount b,.zero .peerCount b{padding:5px 0 2px}
+.stopped .peerCount b{padding:5px 0 2px}
 .active .peerCount b{background:linear-gradient(180deg,#fff,#edd)}
 .peerCount .left,.peerCount .right{padding:5px 3px 2px;min-width:36px;display:inline-block;text-align:center;box-shadow:0 0 0 1px #bbb,var(--highlight),2px 2px 2px rgba(0,0,0,.3) inset}
 .peerCount .left{margin-left:1px}
