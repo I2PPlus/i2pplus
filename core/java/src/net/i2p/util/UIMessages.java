@@ -24,7 +24,7 @@ public class UIMessages {
     private int _cachedCount = -1;
 
     /**
-     *  @param maxSize
+     * @param maxSize the maximum number of messages to keep
      */
     public UIMessages(int maxSize) {
         if (maxSize < 1)
@@ -134,6 +134,7 @@ public class UIMessages {
     }
 
     /**
+     * Check if there are any messages.
      * @since 0.9.46
      */
     public synchronized boolean isEmpty() {

@@ -256,7 +256,9 @@ public class AESEngine {
     }
 
 
-/******
+    /*
+     * Test code
+     *
     public static void main(String args[]) {
         I2PAppContext ctx = new I2PAppContext();
         SessionKey key = ctx.keyGenerator().generateSessionKey();

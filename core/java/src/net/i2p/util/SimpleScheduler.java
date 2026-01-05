@@ -75,9 +75,10 @@ public class SimpleScheduler {
     }
 
     /**
-     * @since 0.8.8
-     */
+      * @since 0.8.8
+      */
     private class Shutdown implements Runnable {
+        @Override
         public void run() {
             stop();
         }
@@ -95,8 +96,8 @@ public class SimpleScheduler {
     /**
      * Queue up the given event to be fired no sooner than timeoutMs from now.
      *
-     * @param event
-     * @param timeoutMs
+     * @param event the event to schedule
+     * @param timeoutMs the delay in milliseconds before the event should fire
      */
     public void addEvent(SimpleTimer.TimedEvent event, long timeoutMs) {
         if (event == null)
@@ -123,9 +124,9 @@ public class SimpleScheduler {
      * subsequent executions (unlike SimpleTimer, where the TimedEvent does
      * its own rescheduling)
      *
-     * @param event
-     * @param initialDelay (ms)
-     * @param timeoutMs
+     * @param event the event to schedule
+     * @param initialDelay the delay in milliseconds before the first execution
+     * @param timeoutMs the period in milliseconds between executions
      */
     public void addPeriodicEvent(SimpleTimer.TimedEvent event, long initialDelay, long timeoutMs) {
         if (event == null)
@@ -135,6 +136,7 @@ public class SimpleScheduler {
     }
 
     private class CustomThreadFactory implements ThreadFactory {
+        @Override
         public Thread newThread(Runnable r) {
             Thread rv = Executors.defaultThreadFactory().newThread(r);
             rv.setName(_name +  ' ' + (++_count) + '/' + _threads);
@@ -159,6 +161,7 @@ public class SimpleScheduler {
         public void schedule() {
             _executor.schedule(this, _scheduled - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
         }
+        @Override
         public void run() {
             if (_log.shouldDebug())
                 _log.debug("Running: " + _timedEvent);

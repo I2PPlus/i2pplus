@@ -76,7 +76,7 @@ public final class PublicSuffixMatcher {
      * Returns registrable part of the domain for the given domain name of {@code null}
      * if given domain represents a public suffix.
      *
-     * @param domain
+     * @param domain the domain name to check
      * @return domain root
      */
     public String getDomainRoot(final String domain) {

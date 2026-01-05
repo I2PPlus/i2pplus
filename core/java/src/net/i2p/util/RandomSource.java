@@ -110,11 +110,13 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
 
     public EntropyHarvester harvester() { return this; }
 
+    @Override
     public void feedEntropy(String source, long data, int bitoffset, int bits) {
         if (bitoffset == 0)
             setSeed(data);
     }
 
+    @Override
     public void feedEntropy(String source, byte[] data, int offset, int len) {
         if ( (offset == 0) && (len == data.length) ) {
             setSeed(data);
@@ -203,6 +205,7 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
             this.buf = buf;
         }
 
+        @Override
         public void run() {
             byte[] buf2 = new byte[SZ];
             // do this 64 bytes at a time, so if system is low on entropy we will
@@ -250,26 +253,4 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
         return false;
     }
 
-/****
-    public static void main(String args[]) {
-        for (int j = 0; j < 2; j++) {
-        RandomSource rs = new RandomSource(I2PAppContext.getGlobalContext());
-        byte buf[] = new byte[1024];
-        boolean seeded = rs.initSeed(buf);
-        System.out.println("PRNG class hierarchy: ");
-        Class c = rs.getClass();
-        while (c != null) {
-            System.out.println("\t" + c.getName());
-            c = c.getSuperclass();
-        }
-        System.out.println("Provider: \n" + rs.getProvider());
-        if (seeded) {
-            System.out.println("Initialized seed: " + Base64.encode(buf));
-            rs.setSeed(buf);
-        }
-        for (int i = 0; i < 64; i++) rs.nextBytes(buf);
-        rs.saveSeed();
-        }
-    }
-****/
 }

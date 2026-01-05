@@ -74,9 +74,10 @@ public class SimpleTimer {
     }
 
     /**
-     * @since 0.8.8
-     */
+      * @since 0.8.8
+      */
     private class Shutdown implements Runnable {
+        @Override
         public void run() {
             removeSimpleTimer();
         }
@@ -99,9 +100,10 @@ public class SimpleTimer {
     }
 
     /**
+     * Reschedule an existing event.
      *
-     * @param event
-     * @param timeoutMs
+     * @param event the event to reschedule
+     * @param timeoutMs the new timeout in milliseconds
      */
     public void reschedule(TimedEvent event, long timeoutMs) {
         addEvent(event, timeoutMs, false);
@@ -113,14 +115,17 @@ public class SimpleTimer {
      * for the earlier of the two timeouts, which may be before this stated
      * timeout.  If this is not the desired behavior, call removeEvent first.
      *
-     * @param event
-     * @param timeoutMs
+     * @param event the event to schedule
+     * @param timeoutMs the delay in milliseconds before the event should fire
      */
     public void addEvent(TimedEvent event, long timeoutMs) { addEvent(event, timeoutMs, true); }
+
     /**
-     * @param event
-     * @param timeoutMs
-     * @param useEarliestTime if its already scheduled, use the earlier of the
+     * Queue up the given event to be fired no sooner than timeoutMs from now.
+     *
+     * @param event the event to schedule
+     * @param timeoutMs the delay in milliseconds before the event should fire
+     * @param useEarliestTime if already scheduled, use the earlier of the
      *                        two timeouts, else use the later
      */
     public void addEvent(TimedEvent event, long timeoutMs, boolean useEarliestTime) {
@@ -209,6 +214,7 @@ public class SimpleTimer {
     // not used
     //  private TimedEvent _recentEvents[] = new TimedEvent[5];
     private class SimpleTimerRunner implements Runnable {
+        @Override
         public void run() {
             List<TimedEvent> eventsToFire = new ArrayList<TimedEvent>(1);
             while(runn.getAnswer()) {

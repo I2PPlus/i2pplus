@@ -25,6 +25,7 @@ public class Timestamper implements Runnable {
     public void timestampNow() {}
 
     /** dummy */
+    @Override
     public void run() {}
 
     /**
@@ -38,7 +39,11 @@ public class Timestamper implements Runnable {
          * The time has been queried and we have a current value for 'now'
          *
          */
-        /** @param stratum 1-15, 1 being the best (added in 0.7.12) */
-        public void setNow(long now, int stratum);
+         /**
+          * Set the current time.
+          * @param now the current time
+          * @param stratum 1-15, 1 being the best (added in 0.7.12)
+          */
+         public void setNow(long now, int stratum);
     }
 }

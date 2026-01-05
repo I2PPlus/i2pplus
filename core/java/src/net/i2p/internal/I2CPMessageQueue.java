@@ -54,6 +54,7 @@ public abstract class I2CPMessageQueue implements Closeable {
     /**
      *  == offer(new PoisonI2CPMessage());
      */
+    @Override
     public void close() {
         offer(new PoisonI2CPMessage());
     }

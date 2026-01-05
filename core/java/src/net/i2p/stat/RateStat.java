@@ -181,9 +181,11 @@ public class RateStat {
     }
 
     /**
-     * @param addComments add comment lines to the output
-     * @since 0.9.41
-     */
+      *  Stores the rate statistics to an output stream.
+      *
+      * @param addComments add comment lines to the output
+      * @since 0.9.41
+      */
     public void store(OutputStream out, String prefix, boolean addComments) throws IOException {
         StringBuilder buf = new StringBuilder(1024);
         if (addComments) {

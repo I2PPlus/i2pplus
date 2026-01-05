@@ -51,7 +51,7 @@ import net.i2p.util.SystemVersion;
 
 /**
  * Comprehensive key generation facility for I2P cryptographic operations.
- * 
+ *
  * This class provides methods to generate various types of cryptographic keys
  * used throughout the I2P network, including:
  * <ul>
@@ -59,7 +59,7 @@ import net.i2p.util.SystemVersion;
  *   <li>Symmetric session keys (AES)</li>
  *   <li>Key derivation and conversion utilities</li>
  * </ul>
- * 
+ *
  * <p>Supports both legacy algorithms (DSA, ElGamal) and modern
  * cryptographic schemes (EdDSA, ECDSA) with configurable parameters
  * for security and performance optimization.</p>
@@ -114,13 +114,12 @@ public final class KeyGenerator {
     private static final int PUBKEY_EXPONENT_SIZE_FULL = 2048;
 
     /**
-     * short exponent size, which should be safe for use with Oakley primes,
+     * Short exponent size, which should be safe for use with Oakley primes,
      * per "On Diffie-Hellman Key Agreement with Short Exponents" - van Oorschot, Weiner
      * at EuroCrypt 96, and crypto++'s benchmarks at http://www.eskimo.com/~weidai/benchmarks.html
      * Also, "Koshiba &amp; Kurosawa: Short Exponent Diffie-Hellman Problems" (PKC 2004, LNCS 2947, pp. 173-186)
      * apparently supports this, according to
      * http://groups.google.com/group/sci.crypt/browse_thread/thread/1855a5efa7416677/339fa2f945cc9ba0#339fa2f945cc9ba0
-     * (damn commercial access to http://www.springerlink.com/(xrkdvv45w0cmnur4aimsxx55)/app/home/contribution.asp?referrer=parent&amp;backto=issue,13,31;journal,893,3280;linkingpublicationresults,1:105633,1 )
      */
     private static final int PUBKEY_EXPONENT_SIZE_SHORT = 226;
 
@@ -138,12 +137,16 @@ public final class KeyGenerator {
 
     private static final String PROP_LONG_EXPONENT = "crypto.elGamal.useLongKey";
 
-    /** @since 0.9.8 */
+    /** Whether to use a long (2048-bit) ElGamal exponent.
+     *  @since 0.9.8
+     */
     public boolean useLongElGamalExponent() {
         return _context.getProperty(PROP_LONG_EXPONENT, DEFAULT_USE_LONG_EXPONENT);
     }
 
-    /** @since 0.9.8 */
+    /** Get the size of the ElGamal exponent in bits.
+     *  @since 0.9.8
+     */
     public int getElGamalExponentSize() {
         return useLongElGamalExponent() ?
                PUBKEY_EXPONENT_SIZE_FULL :
@@ -528,57 +531,4 @@ public final class KeyGenerator {
                            (((double) (stime + vtime)) / runs2) + " s+v");
     }
 
-/******
-    public static void main(String args[]) {
-        Log log = new Log("keygenTest");
-        RandomSource.getInstance().nextBoolean();
-        byte src[] = new byte[200];
-        RandomSource.getInstance().nextBytes(src);
-
-        I2PAppContext ctx = new I2PAppContext();
-        long time = 0;
-        for (int i = 0; i < 10; i++) {
-            long start = Clock.getInstance().now();
-            Object keys[] = KeyGenerator.getInstance().generatePKIKeypair();
-            long end = Clock.getInstance().now();
-            byte ctext[] = ctx.elGamalEngine().encrypt(src, (PublicKey) keys[0]);
-            byte ptext[] = ctx.elGamalEngine().decrypt(ctext, (PrivateKey) keys[1]);
-            time += end - start;
-            if (DataHelper.eq(ptext, src))
-                log.debug("D(E(data)) == data");
-            else
-                log.error("D(E(data)) != data!!!!!!");
-        }
-        log.info("Keygen 10 times: " + time + "ms");
-
-        Object obj[] = KeyGenerator.getInstance().generateSigningKeypair();
-        SigningPublicKey fake = (SigningPublicKey) obj[0];
-        time = 0;
-        for (int i = 0; i < 10; i++) {
-            long start = Clock.getInstance().now();
-            Object keys[] = KeyGenerator.getInstance().generateSigningKeypair();
-            long end = Clock.getInstance().now();
-            Signature sig = DSAEngine.getInstance().sign(src, (SigningPrivateKey) keys[1]);
-            boolean ok = DSAEngine.getInstance().verifySignature(sig, src, (SigningPublicKey) keys[0]);
-            boolean fakeOk = DSAEngine.getInstance().verifySignature(sig, src, fake);
-            time += end - start;
-            log.debug("V(S(data)) == " + ok + " fake verify correctly failed? " + (fakeOk == false));
-        }
-        log.info("Signing Keygen 10 times: " + time + "ms");
-
-        time = 0;
-        for (int i = 0; i < 1000; i++) {
-            long start = Clock.getInstance().now();
-            KeyGenerator.getInstance().generateSessionKey();
-            long end = Clock.getInstance().now();
-            time += end - start;
-        }
-        log.info("Session keygen 1000 times: " + time + "ms");
-
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException ie) { // nop
-        }
-    }
-******/
 }

@@ -49,7 +49,10 @@ public class StatManager {
         _rateStats = new ConcurrentHashMap<String,RateStat>(128);
     }
 
-    /** @since 0.8.8 */
+    /**
+     * Shut down the statistics manager and clear all statistics.
+     * @since 0.8.8
+     */
     public synchronized void shutdown() {
         _frequencyStats.clear();
         _rateStats.clear();
@@ -180,12 +183,18 @@ public class StatManager {
         return _rateStats.get(name);
     }
 
-    /** @return a copy */
+    /**
+     * Get the names of all frequency statistics.
+     * @return a copy of the frequency stat names
+     */
     public Set<String> getFrequencyNames() {
         return new HashSet<String>(_frequencyStats.keySet());
     }
 
-    /** @return a copy */
+    /**
+     * Get the names of all rate statistics.
+     * @return a copy of the rate stat names
+     */
     public Set<String> getRateNames() {
         return new HashSet<String>(_rateStats.keySet());
     }

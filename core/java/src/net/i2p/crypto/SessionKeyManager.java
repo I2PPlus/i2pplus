@@ -98,27 +98,37 @@ public class SessionKeyManager {
     }
 
     /**
-     *  How many to send, IF we need to.
-     *  @since 0.9.2
+     * Get the number of tags to send.
+     * @return the number of tags to send, or 0 if not implemented
+     * @since 0.9.2
      */
     public int getTagsToSend() { return 0; };
 
     /**
-     *  @since 0.9.2
+     * Get the low threshold for tag sending.
+     * @return the low threshold, or 0 if not implemented
+     * @since 0.9.2
      */
     public int getLowThreshold() { return 0; };
 
     /**
-     *  @return true if we have less than the threshold or what we have is about to expire
-     *  @since 0.9.2
+     * Determine if tags should be sent to the target.
+     * @param target the target public key
+     * @param key the session key
+     * @return true if we have less than the threshold or what we have is about to expire
+     * @since 0.9.2
      */
     public boolean shouldSendTags(PublicKey target, SessionKey key) {
         return shouldSendTags(target, key, getLowThreshold());
     }
 
     /**
-     *  @return true if we have less than the threshold or what we have is about to expire
-     *  @since 0.9.2
+     * Determine if tags should be sent to the target with the specified threshold.
+     * @param target the target public key
+     * @param key the session key
+     * @param lowThreshold the low threshold
+     * @return true if we have less than the threshold or what we have is about to expire
+     * @since 0.9.2
      */
     public boolean shouldSendTags(PublicKey target, SessionKey key, int lowThreshold) { return false; }
 

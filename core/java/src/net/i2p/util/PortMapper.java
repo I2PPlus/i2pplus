@@ -29,7 +29,9 @@ public class PortMapper {
     public static final String SVC_HTTP_PROXY = "HTTP";
     public static final String SVC_HTTPS_PROXY = "HTTPS";
     public static final String SVC_EEPSITE = "eepsite";
-    /** @since 0.9.34 */
+    /** HTTPS eepsite service name.
+     *  @since 0.9.34
+     */
     public static final String SVC_HTTPS_EEPSITE = "https_eepsite";
     public static final String SVC_IRC = "irc";
     public static final String SVC_SOCKS = "socks";
@@ -37,18 +39,28 @@ public class PortMapper {
     public static final String SVC_SMTP = "SMTP";
     public static final String SVC_POP = "POP3";
     public static final String SVC_SAM = "SAM";
-    /** @since 0.9.24 */
+    /** SAM-UDP service name.
+     *  @since 0.9.24
+     */
     public static final String SVC_SAM_UDP = "SAM-UDP";
-    /** @since 0.9.24 */
+    /** SAM-SSL service name.
+     *  @since 0.9.24
+     */
     public static final String SVC_SAM_SSL = "SAM-SSL";
     public static final String SVC_BOB = "BOB";
     /** not necessary, already in config? */
     public static final String SVC_I2CP = "I2CP";
-    /** @since 0.9.23 */
+    /** I2CP-SSL service name.
+     *  @since 0.9.23
+     */
     public static final String SVC_I2CP_SSL = "I2CP-SSL";
-    /** @since 0.9.34 */
+    /** HTTP I2PControl service name.
+     *  @since 0.9.34
+     */
     public static final String SVC_HTTP_I2PCONTROL = "http_i2pcontrol";
-    /** @since 0.9.34 */
+    /** HTTPS I2PControl service name.
+     *  @since 0.9.34
+     */
     public static final String SVC_HTTPS_I2PCONTROL = "https_i2pcontrol";
     /**
      *  To indicate presence, alternative to WebAppStarter.isWebappRunning().
@@ -87,15 +99,21 @@ public class PortMapper {
     /**
      *  To indicate presence, alternative to WebAppStarter.isWebappRunning().
      *  For actual base URL, use getConsoleURL()
-     *  @since 0.9.39
-     */
+      *  @since 0.9.39
+      */
     public static final String SVC_JSONRPC = "jsonrpc";
 
-    /** @since 0.9.34 */
+    /** Default HTTP console port.
+     *  @since 0.9.34
+     */
     public static final int DEFAULT_CONSOLE_PORT = 7657;
-    /** @since 0.9.34 */
+    /** Default HTTPS console port.
+     *  @since 0.9.34
+     */
     public static final int DEFAULT_HTTPS_CONSOLE_PORT = 7667;
-    /** @since 0.9.34 */
+    /** Default host for local services.
+     *  @since 0.9.34
+     */
     public static final String DEFAULT_HOST = "127.0.0.1";
 
 
@@ -338,8 +356,9 @@ public class PortMapper {
     }
 
     /**
-     *  @return unsorted, non-empty, or null if none
-     *  @since 0.9.50
+     * Get the list of eepsite URLs.
+     * @return unsorted, non-empty, or null if none
+     * @since 0.9.50
      */
     public List<String> getEepsiteURLs() {
         if (_eepsites.isEmpty())

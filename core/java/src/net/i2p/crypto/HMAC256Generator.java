@@ -158,110 +158,12 @@ public final class HMAC256Generator extends HMACGenerator {
 
         public HMACKey(byte[] data) { _data = data; }
 
+        @Override
         public String getAlgorithm() { return "HmacSHA256"; }
+        @Override
         public byte[] getEncoded() { return Arrays.copyOf(_data, 32); }
+        @Override
         public String getFormat() { return "RAW"; }
     }
 
-/******
-    private static class Sha256ForMAC extends Sha256Standalone implements Digest {
-        public String getAlgorithmName() { return "sha256 for hmac"; }
-        public int getDigestSize() { return 32; }
-        public int doFinal(byte[] out, int outOff) {
-            byte rv[] = digest();
-            System.arraycopy(rv, 0, out, outOff, rv.length);
-            reset();
-            return rv.length;
-        }
-
-    }
-
-    public static void main(String args[]) {
-        I2PAppContext ctx = I2PAppContext.getGlobalContext();
-        byte data[] = new byte[64];
-        ctx.random().nextBytes(data);
-        SessionKey key = ctx.keyGenerator().generateSessionKey();
-        Hash mac = ctx.hmac256().calculate(key, data);
-        System.out.println(Base64.encode(mac.getData()));
-    }
-******/
-
-    /**
-     *  Test the BC and the JVM's implementations for speed
-     *
-     *  Results on 2012 hexcore box, OpenJDK 7:
-     *    BC 9275 ms (before converting to MessageDigest)
-     *    BC 8500 ms (after converting to MessageDigest)
-     *    JVM 8065 ms
-     *
-     */
-/****
-    private static final int LENGTH = 33;
-
-    public static void main(String args[]) {
-        I2PAppContext ctx = I2PAppContext.getGlobalContext();
-        byte[] rand = new byte[32];
-        byte[] data = new byte[LENGTH];
-        SecretKey keyObj = null;
-        SessionKey key = new SessionKey(rand);
-
-        HMAC256Generator gen = new HMAC256Generator(I2PAppContext.getGlobalContext());
-        byte[] result = new byte[32];
-        Mac mac;
-        try {
-            mac = Mac.getInstance("HmacSHA256");
-        } catch (NoSuchAlgorithmException e) {
-            System.err.println("Fatal: " + e);
-            return;
-        }
-        // warmup and comparison
-        System.out.println("Warmup and comparison:");
-        int RUNS = 25000;
-        for (int i = 0; i < RUNS; i++) {
-            ctx.random().nextBytes(rand);
-            ctx.random().nextBytes(data);
-            keyObj = new SecretKeySpec(rand, "HmacSHA256");
-            byte[] keyBytes = keyObj.getEncoded();
-            if (!DataHelper.eq(rand, keyBytes))
-                System.out.println("secret key in != out");
-            gen.calculate(rand, data, 0, data.length, result, 0);
-            try {
-                mac.init(keyObj);
-            } catch (GeneralSecurityException e) {
-                System.err.println("Fatal: " + e);
-                return;
-            }
-            byte[] result2 = mac.doFinal(data);
-            if (!DataHelper.eq(result, result2)) {
-                throw new IllegalStateException("Mismatch on run " + i + ": result1:\n" +
-                                                net.i2p.util.HexDump.dump(result) +
-                                                "result1:\n" +
-                                                net.i2p.util.HexDump.dump(result2));
-            }
-        }
-
-        // real thing
-        System.out.println("Passed");
-        CACHE = false;
-        System.out.println("Without Cache Test:");
-        RUNS = 1000000;
-        long start = System.currentTimeMillis();
-        for (int i = 0; i < RUNS; i++) {
-            gen.calculate(rand, data, 0, data.length, result, 0);
-        }
-        long time = System.currentTimeMillis() - start;
-        System.out.println("Time for " + RUNS + " HMAC-SHA256 computations:");
-        System.out.println("BC time (ms): " + time);
-
-        CACHE = true;
-        System.out.println("With Cache Test:");
-        start = System.currentTimeMillis();
-        for (int i = 0; i < RUNS; i++) {
-            gen.calculate(rand, data, 0, data.length, result, 0);
-        }
-        time = System.currentTimeMillis() - start;
-
-        System.out.println("JVM time (ms): " + time);
-    }
-****/
 }

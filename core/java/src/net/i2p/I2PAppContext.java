@@ -611,6 +611,9 @@ public class I2PAppContext {
     }
 
     /**
+     * Get a boolean property, defaulting to true if not set.
+     * @param propName the property name
+     * @return the boolean value, or true if the property is not set
      * @since 0.7.12
      */
     public boolean getBooleanPropertyDefaultTrue(String propName) {
@@ -957,15 +960,18 @@ public class I2PAppContext {
     }
 
     /**
-     *  @since 0.9.53
+     * Remove a shutdown task.
+     * @param task the task to remove
+     * @since 0.9.53
      */
     public void removeShutdownTask(Runnable task) {
         _shutdownTasks.remove(task);
     }
 
     /**
-     *  @return an unmodifiable Set
-     *  @since 0.7.1
+     * Get the list of shutdown tasks.
+     * @return an unmodifiable Set of shutdown tasks
+     * @since 0.7.1
      */
     public Set<Runnable> getShutdownTasks() {
         return Collections.unmodifiableSet(_shutdownTasks);

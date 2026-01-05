@@ -88,9 +88,10 @@ public class SimpleTimer2 {
     }
 
     /**
-     * @since 0.8.8
-     */
+      * @since 0.8.8
+      */
     private class Shutdown implements Runnable {
+        @Override
         public void run() {
             stop(false);
         }
@@ -137,6 +138,7 @@ public class SimpleTimer2 {
     }
 
     private class CustomThreadFactory implements ThreadFactory {
+        @Override
         public Thread newThread(Runnable r) {
             Thread rv = Executors.defaultThreadFactory().newThread(r);
             rv.setName(_name + ' ' + _count.incrementAndGet() + '/' + _threads);
@@ -453,6 +455,7 @@ public class SimpleTimer2 {
 
         }
 
+        @Override
         public void run() {
             try {
                 run2();

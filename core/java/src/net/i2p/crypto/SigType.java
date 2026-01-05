@@ -160,7 +160,10 @@ public enum SigType {
         return params;
     }
 
-    /** @throws UnsupportedOperationException if not supported */
+    /** Gets a MessageDigest instance for this signature type.
+      *
+      *  @throws UnsupportedOperationException if not supported
+      */
     public MessageDigest getDigestInstance() {
         if (digestName.equals("SHA-1"))
             return SHA1.getInstance();
@@ -174,9 +177,11 @@ public enum SigType {
     }
 
     /**
-     *  @since 0.9.9
-     *  @throws UnsupportedOperationException if not supported
-     */
+      *  Gets a Hash instance for this signature type.
+      *
+      *  @since 0.9.9
+      *  @throws UnsupportedOperationException if not supported
+      */
     public SimpleDataStructure getHashInstance() {
         switch (getHashLen()) {
             case 20:
@@ -211,9 +216,11 @@ public enum SigType {
     }
 
     /**
-     *  @since 0.9.12
-     *  @return true if supported in this JVM
-     */
+      *  Checks if this signature type is available in the JVM.
+      *
+      *  @since 0.9.12
+      *  @return true if supported in this JVM
+      */
     public boolean isAvailable() {
         return isAvail;
     }
@@ -252,9 +259,11 @@ public enum SigType {
     }
 
     /**
-     *  @return true if supported in this JVM
-     *  @since 0.9.15
-     */
+      *  Checks if the signature type with the given code is available.
+      *
+      *  @return true if supported in this JVM
+      *  @since 0.9.15
+      */
     public static boolean isAvailable(int code) {
         SigType type = getByCode(code);
         if (type == null)
@@ -263,10 +272,12 @@ public enum SigType {
     }
 
     /**
-     *  @param stype number or name
-     *  @return true if supported in this JVM
-     *  @since 0.9.15
-     */
+      *  Checks if the signature type with the given name or number is available.
+      *
+      *  @param stype number or name
+      *  @return true if supported in this JVM
+      *  @since 0.9.15
+      */
     public static boolean isAvailable(String stype) {
         SigType type = parseSigType(stype);
         if (type == null)
@@ -288,7 +299,10 @@ public enum SigType {
         }
     }
 
-    /** @return null if not supported */
+    /** Gets the signature type by code.
+      *
+      *  @return null if not supported
+      */
     public static SigType getByCode(int code) {
         if (code < 0 || code >= BY_CODE.length)
             return null;

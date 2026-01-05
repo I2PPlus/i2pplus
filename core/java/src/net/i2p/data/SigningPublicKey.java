@@ -145,8 +145,9 @@ public class SigningPublicKey extends SimpleDataStructure {
     }
 
     /**
-     *  @return if type unknown, the length of the data, or 128 if no data
-     */
+      *  @return if type unknown, the length of the data, or 128 if no data
+      */
+    @Override
     public int length() {
         if (_type != null) {return _type.getPubkeyLen();}
         if (_data != null) {return _data.length;}
@@ -154,13 +155,15 @@ public class SigningPublicKey extends SimpleDataStructure {
     }
 
     /**
-     *  @return null if unknown
-     *  @since 0.9.8
-     */
+      *  Gets the signature type of this public key.
+      *
+      *  @return null if unknown
+      *  @since 0.9.8
+      */
     public SigType getType() {return _type;}
 
     /**
-     *  Up-convert this from an untyped (type 0) SPK to a typed SPK based on the Key Cert given.
+      *  Up-convert this from an untyped (type 0) SPK to a typed SPK based on the Key Cert given.
      *  The type of the returned key will be null if the kcert sigtype is null.
      *
      *  @throws IllegalArgumentException if this is already typed to a different type
@@ -253,8 +256,10 @@ public class SigningPublicKey extends SimpleDataStructure {
     }
 
     /**
-     *  @since 0.9.17
-     */
+      *  Clears the public key cache.
+      *
+      *  @since 0.9.17
+      */
     public static void clearCache() {_cache.clear();}
 
     /**

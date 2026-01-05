@@ -175,7 +175,8 @@ public class Clock implements Timestamper.UpdateListener {
      *
      *  @param stratum ignored
      *  @since 0.7.12
-     */
+      */
+    @Override
     public void setNow(long realTime, int stratum) {
         setNow(realTime);
     }
@@ -210,8 +211,9 @@ public class Clock implements Timestamper.UpdateListener {
     public interface ClockUpdateListener {
 
         /**
-         *  @param delta = (new offset - old offset),
-         *         where each offset = (now() - System.currentTimeMillis())
+         * Called when the clock offset changes.
+         * @param delta = (new offset - old offset),
+         *        where each offset = (now() - System.currentTimeMillis())
          */
         public void offsetChanged(long delta);
     }

@@ -162,6 +162,7 @@ public class PublicKey extends SimpleDataStructure {
         fromBase64(base64Data);
     }
 
+    @Override
     public int length() {
         if (_type != null) {return _type.getPubkeyLen();}
         if (_data != null) {return _data.length;}
@@ -169,15 +170,19 @@ public class PublicKey extends SimpleDataStructure {
     }
 
     /**
-     *  @return null if unknown
-     *  @since 0.9.38
-     */
+      *  Gets the encryption type of this public key.
+      *
+      *  @return null if unknown
+      *  @since 0.9.38
+      */
     public EncType getType() {return _type;}
 
     /**
-     *  Only valid if getType() returns null
-     *  @since 0.9.38
-     */
+      *  Gets the type code for unknown encryption types.
+      *
+      *  Only valid if getType() returns null
+      *  @since 0.9.38
+      */
     public int getUnknownTypeCode() {return _unknownTypeCode;}
 
     /**
@@ -223,8 +228,10 @@ public class PublicKey extends SimpleDataStructure {
     }
 
     /**
-     *  @since 0.9.17
-     */
+      *  Clears the public key cache.
+      *
+      *  @since 0.9.17
+      */
     public static void clearCache() {_cache.clear();}
 
     /**

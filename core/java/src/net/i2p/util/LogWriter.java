@@ -69,13 +69,15 @@ abstract class LogWriter implements Runnable {
     }
 
     /**
-     *  @param interval ms
-     *  @since 0.9.18
+     * Set the flush interval for the log writer.
+     * @param interval the interval in milliseconds
+     * @since 0.9.18
      */
     public void setFlushInterval(long interval) {
         _flushInterval = Math.min(MAX_FLUSH_INTERVAL, Math.max(MIN_FLUSH_INTERVAL, interval));
     }
 
+    @Override
     public void run() {
         _write = true;
         // don't bother on Android

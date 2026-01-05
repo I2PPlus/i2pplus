@@ -117,12 +117,12 @@ class FileLogWriter extends LogWriter {
             } catch (IOException ioe) {}
         }
         if (_manager.shouldGzip() && currentFile != null && currentFile.length() >= _manager.getMinGzipSize()) {
-            Thread gzipper = new Gzipper(currentFile);
+            Gzipper gzipper = new Gzipper(currentFile);
             if (threadGzipper) {
                 gzipper.setPriority(Thread.MIN_PRIORITY);
-                gzipper.start();  // rotate
+                gzipper.start();  // rotate asynchronously
             } else {
-                gzipper.run();  // shutdown
+                gzipper.compress();  // shutdown synchronously
             }
         }
     }
@@ -271,7 +271,12 @@ class FileLogWriter extends LogWriter {
             _f = f;
         }
 
+        @Override
         public void run() {
+            compress();
+        }
+
+        public void compress() {
             File to = new File(_f.getPath() + ".gz");
             InputStream in = null;
             OutputStream out = null;

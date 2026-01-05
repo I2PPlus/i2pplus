@@ -65,18 +65,22 @@ public class FrequencyStat {
     }
 
     /**
-     * @return lifetime event count
-     * @since 0.8.2
-     */
+      *  Gets the lifetime event count.
+      *
+      * @return lifetime event count
+      * @since 0.8.2
+      */
     public long getEventCount() {
         if ( (_frequencies == null) || (_frequencies.length <= 0) ) return 0;
         return _frequencies[0].getEventCount();
     }
 
     /**
-     * @return lifetime average frequency in millisedonds, i.e. the average time between events, or Long.MAX_VALUE if no events ever
-     * @since 0.8.2
-     */
+      *  Gets the lifetime average frequency.
+      *
+      * @return lifetime average frequency in millisedonds, i.e. the average time between events, or Long.MAX_VALUE if no events ever
+      * @since 0.8.2
+      */
     public long getFrequency() {
         if ( (_frequencies == null) || (_frequencies.length <= 0) ) return Long.MAX_VALUE;
         double d = _frequencies[0].getStrictAverageInterval();

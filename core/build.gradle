@@ -1,11 +1,32 @@
 plugins {
     id 'java-library'
     id 'scala'
-    id 'me.champeau.jmh' version '0.7.2'
+    id 'me.champeau.jmh' version '0.7.3'
+    id 'net.ltgt.errorprone' version '4.3.0'
+}
+
+dependencies {
+    errorprone 'com.google.errorprone:error_prone_core:2.35.1'
+}
+
+compileJava {
+    options.errorprone.enabled = true
+    options.errorprone.checks = [
+        DoubleBraceInitialization: 'OFF',
+        DoNotCall: 'OFF',
+        CollectionIncompatibleType: 'OFF',
+        ComparisonOutOfRange: 'OFF'
+    ]
 }
 
 base {
     archivesName = 'i2p'
+}
+
+jmh {
+    javaLauncher = javaToolchains.launcherFor {
+        languageVersion = JavaLanguageVersion.current()
+    }
 }
 
 sourceSets {

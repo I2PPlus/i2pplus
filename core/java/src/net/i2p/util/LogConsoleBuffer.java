@@ -96,7 +96,8 @@ public class LogConsoleBuffer {
     }
 
     /**
-     *  @since 0.8.8
+     * Clear all log entries from the buffer.
+     * @since 0.8.8
      */
     public void clear() {
         _buffer.clear();

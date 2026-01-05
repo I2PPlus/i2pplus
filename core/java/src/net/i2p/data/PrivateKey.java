@@ -140,14 +140,17 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
         fromBase64(base64Data);
     }
 
+    @Override
     public int length() {
         return _type.getPrivkeyLen();
     }
 
     /**
-     *  @return non-null
-     *  @since 0.9.38
-     */
+      *  Gets the encryption type of this private key.
+      *
+      *  @return non-null
+      *  @since 0.9.38
+      */
     public EncType getType() {
         return _type;
     }
@@ -170,7 +173,8 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
      *  javax.security.auth.Destroyable interface
      *
      *  @since 0.9.40
-     */
+      */
+    @Override
     public void destroy() {
         byte[] data = _data;
         if (data != null) {
@@ -185,7 +189,8 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
      *  javax.security.auth.Destroyable interface
      *
      *  @since 0.9.40
-     */
+      */
+    @Override
     public boolean isDestroyed() {
         return _data == null;
     }

@@ -248,8 +248,10 @@ public class KeyCertificate extends Certificate {
     }
 
     /**
-     *  @return -1 if unset
-     */
+      *  Gets the signature type code from the certificate.
+      *
+      *  @return -1 if unset
+      */
     public int getSigTypeCode() {
         if (_payload == null)
             return -1;
@@ -257,8 +259,10 @@ public class KeyCertificate extends Certificate {
     }
 
     /**
-     *  @return -1 if unset
-     */
+      *  Gets the crypto type code from the certificate.
+      *
+      *  @return -1 if unset
+      */
     public int getCryptoTypeCode() {
         if (_payload == null)
             return -1;
@@ -266,16 +270,20 @@ public class KeyCertificate extends Certificate {
     }
 
     /**
-     *  @return null if unset or unknown
-     */
+      *  Gets the signature type from the certificate.
+      *
+      *  @return null if unset or unknown
+      */
     public SigType getSigType() {
         return SigType.getByCode(getSigTypeCode());
     }
 
     /**
-     *  @return null if unset or unknown
-     *  @since 0.9.42
-     */
+      *  Gets the encryption type from the certificate.
+      *
+      *  @return null if unset or unknown
+      *  @since 0.9.42
+      */
     public EncType getEncType() {
         return EncType.getByCode(getCryptoTypeCode());
     }

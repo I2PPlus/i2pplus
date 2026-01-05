@@ -10,13 +10,16 @@ public enum EncAlgo {
     ELGAMAL("ElGamal"),
     EC("EC"),
 
-    /** @since 0.9.38 */
+    /** ECIES encryption.
+      * @since 0.9.38 */
     ECIES("ECIES"),
 
-    /** @since 0.9.67 */
+    /** ECIES-MLKEM hybrid encryption.
+      * @since 0.9.67 */
     ECIES_MLKEM("ECIES-MLKEM"),
 
-    /** @since 0.9.67 */
+    /** ECIES-MLKEM hybrid encryption (internal).
+      * @since 0.9.67 */
     ECIES_MLKEM_INT("ECIES-MLKEM-Internal");
 
 

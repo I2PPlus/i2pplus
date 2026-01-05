@@ -92,8 +92,10 @@ public class KeysAndCert extends DataStructureImpl {
     }
 
     /**
-     * @throws IllegalStateException if was already set
-     */
+      *  Sets the certificate.
+      *
+      * @throws IllegalStateException if was already set
+      */
     public void setCertificate(Certificate cert) {
         if (_certificate != null)
             throw new IllegalStateException();
@@ -101,9 +103,11 @@ public class KeysAndCert extends DataStructureImpl {
     }
 
     /**
-     *  @return null if not set or unknown
-     *  @since 0.9.17
-     */
+      *  Gets the signature type from the certificate.
+      *
+      *  @return null if not set or unknown
+      *  @since 0.9.17
+      */
     public SigType getSigType() {
         if (_certificate == null)
             return null;
@@ -117,9 +121,11 @@ public class KeysAndCert extends DataStructureImpl {
     }
 
     /**
-     *  @return null if not set or unknown
-     *  @since 0.9.42
-     */
+      *  Gets the encryption type from the certificate.
+      *
+      *  @return null if not set or unknown
+      *  @since 0.9.42
+      */
     public EncType getEncType() {
         if (_certificate == null)
             return null;
@@ -141,8 +147,10 @@ public class KeysAndCert extends DataStructureImpl {
     }
 
     /**
-     * @throws IllegalStateException if was already set
-     */
+      *  Sets the public key.
+      *
+      * @throws IllegalStateException if was already set
+      */
     public void setPublicKey(PublicKey key) {
         if (_publicKey != null)
             throw new IllegalStateException();
@@ -154,8 +162,10 @@ public class KeysAndCert extends DataStructureImpl {
     }
 
     /**
-     * @throws IllegalStateException if was already set
-     */
+      *  Sets the signing public key.
+      *
+      * @throws IllegalStateException if was already set
+      */
     public void setSigningPublicKey(SigningPublicKey key) {
         if (_signingKey != null)
             throw new IllegalStateException();
@@ -163,8 +173,10 @@ public class KeysAndCert extends DataStructureImpl {
     }
 
     /**
-     * @since 0.9.16
-     */
+      *  Gets the padding bytes.
+      *
+      * @since 0.9.16
+      */
     public byte[] getPadding() {
         if (_paddingBlocks <= 1) {return _padding;}
         byte[] rv = new byte[PAD_COMP_LEN * _paddingBlocks];
@@ -175,9 +187,11 @@ public class KeysAndCert extends DataStructureImpl {
     }
 
     /**
-     * @throws IllegalStateException if was already set
-     * @since 0.9.12
-     */
+      *  Sets the padding bytes.
+      *
+      * @throws IllegalStateException if was already set
+      * @since 0.9.12
+      */
     public void setPadding(byte[] padding) {
         if (_padding != null) {throw new IllegalStateException();}
         _padding = padding;
@@ -219,9 +233,11 @@ public class KeysAndCert extends DataStructureImpl {
     }
 
     /**
-     * @return null if both are null
-     * @since 0.9.42
-     */
+      *  Combines two padding arrays.
+      *
+      * @return null if both are null
+      * @since 0.9.42
+      */
     protected static byte[] combinePadding(byte[] pad1, byte[] pad2) {
         if (pad1 == null)
             return pad2;

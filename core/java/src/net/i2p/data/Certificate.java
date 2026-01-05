@@ -84,7 +84,8 @@ public class Certificate extends DataStructureImpl {
     public final static int CERTIFICATE_LENGTH_SIGNED_WITH_HASH = Signature.SIGNATURE_BYTES + Hash.HASH_LENGTH;
     /** Contains multiple certs */
     public final static int CERTIFICATE_TYPE_MULTIPLE = 4;
-    /** @since 0.9.12 */
+    /** Key certificate type.
+      * @since 0.9.12 */
     public final static int CERTIFICATE_TYPE_KEY = 5;
 
     /**
@@ -169,15 +170,18 @@ public class Certificate extends DataStructureImpl {
         _payload = payload;
     }
 
-    /** */
+    /** Gets the certificate type.
+      */
     public int getCertificateType() {
         return _type;
     }
 
     /**
-     *  @throws IllegalArgumentException if type &lt; 0
-     *  @throws IllegalStateException if already set
-     */
+      *  Sets the certificate type.
+      *
+      *  @throws IllegalArgumentException if type &lt; 0
+      *  @throws IllegalStateException if already set
+      */
     public void setCertificateType(int type) {
         if (type < 0)
             throw new IllegalArgumentException();
@@ -191,8 +195,10 @@ public class Certificate extends DataStructureImpl {
     }
 
     /**
-     *  @throws IllegalStateException if already set
-     */
+      *  Sets the certificate payload.
+      *
+      *  @throws IllegalStateException if already set
+      */
     public void setPayload(byte[] payload) {
         if (_payload != null)
             throw new IllegalStateException("already set");
@@ -200,8 +206,9 @@ public class Certificate extends DataStructureImpl {
     }
 
     /**
-     *  @throws IllegalStateException if already set
-     */
+      *  @throws IllegalStateException if already set
+      */
+    @Override
     public void readBytes(InputStream in) throws DataFormatException, IOException {
         if (_type != 0 || _payload != null)
             throw new IllegalStateException("already set");
@@ -217,6 +224,7 @@ public class Certificate extends DataStructureImpl {
         }
     }
 
+    @Override
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
         if (_type < 0) throw new DataFormatException("Invalid certificate type: " + _type);
         //if ((_type != 0) && (_payload == null)) throw new DataFormatException("Payload is required for non null type");
@@ -231,8 +239,10 @@ public class Certificate extends DataStructureImpl {
     }
 
     /**
-     *  @return the written length (NOT the new offset)
-     */
+      *  Writes the certificate to the target array.
+      *
+      *  @return the written length (NOT the new offset)
+      */
     public int writeBytes(byte target[], int offset) {
         int cur = offset;
         DataHelper.toLong(target, cur, 1, _type);
@@ -250,8 +260,10 @@ public class Certificate extends DataStructureImpl {
     }
 
     /**
-     *  @throws IllegalStateException if already set
-     */
+      *  Reads the certificate from the source array.
+      *
+      *  @throws IllegalStateException if already set
+      */
     public int readBytes(byte source[], int offset) throws DataFormatException {
         if (_type != 0 || _payload != null)
             throw new IllegalStateException("already set");

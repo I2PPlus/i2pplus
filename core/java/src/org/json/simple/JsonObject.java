@@ -653,7 +653,7 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable{
 	 * @since 2.3.0 to utilize JsonKey
 	 * @deprecated 2.3.0 Jsoner deprecated automatically serializing enums as Strings. */
 	@Deprecated
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked", "CollectionIncompatibleType"})
 	public <T extends Enum<T>> T getEnumOrDefault(final JsonKey key) throws ClassNotFoundException{
 		/* Supressing the unchecked warning because the returnType is dynamically identified and could lead to a
 		 * ClassCastException when returnType is cast to Class<T>, which is acceptable by the method's contract. */

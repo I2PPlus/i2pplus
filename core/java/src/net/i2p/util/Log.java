@@ -174,22 +174,34 @@ public class Log {
         return priority >= _minPriority;
     }
 
-    /** @since 0.9.20 */
+    /**
+     * Check if DEBUG level logging is enabled.
+     * @since 0.9.20
+     */
     public boolean shouldDebug() {
         return DEBUG >= _minPriority;
     }
 
-    /** @since 0.9.20 */
+    /**
+     * Check if INFO level logging is enabled.
+     * @since 0.9.20
+     */
     public boolean shouldInfo() {
         return INFO >= _minPriority;
     }
 
-    /** @since 0.9.20 */
+    /**
+     * Check if WARN level logging is enabled.
+     * @since 0.9.20
+     */
     public boolean shouldWarn() {
         return WARN >= _minPriority;
     }
 
-    /** @since 0.9.20 */
+    /**
+     * Check if ERROR level logging is enabled.
+     * @since 0.9.20
+     */
     public boolean shouldError() {
         return ERROR >= _minPriority;
     }
@@ -233,7 +245,10 @@ public class Log {
         return _name;
     }
 
-    /** @return the LogScope (private class) */
+    /**
+     * Returns the LogScope (private class).
+     * @return the LogScope
+     */
     public Object getScope() { return _scope; }
 
     static String getScope(String name, Class<?> cls) {

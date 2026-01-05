@@ -181,8 +181,10 @@ public enum EncType {
     }
 
     /**
-     *  @return true if supported in this JVM
-     */
+      *  Checks if this encryption type is available in the JVM.
+      *
+      *  @return true if supported in this JVM
+      */
     public boolean isAvailable() {
         return isAvail;
     }
@@ -207,8 +209,10 @@ public enum EncType {
     }
 
     /**
-     *  @return true if supported in this JVM
-     */
+      *  Checks if the encryption type with the given code is available.
+      *
+      *  @return true if supported in this JVM
+      */
     public static boolean isAvailable(int code) {
         EncType type = getByCode(code);
         if (type == null)
@@ -217,9 +221,11 @@ public enum EncType {
     }
 
     /**
-     *  @param stype number or name
-     *  @return true if supported in this JVM
-     */
+      *  Checks if the encryption type with the given name or number is available.
+      *
+      *  @param stype number or name
+      *  @return true if supported in this JVM
+      */
     public static boolean isAvailable(String stype) {
         EncType type = parseEncType(stype);
         if (type == null)
@@ -228,9 +234,11 @@ public enum EncType {
     }
 
     /**
-     *  @since 0.9.67
-     *  @return true if this is a PQ type
-     */
+      *  Checks if this is a post-quantum encryption type.
+      *
+      *  @since 0.9.67
+      *  @return true if this is a PQ type
+      */
     public boolean isPQ() {
         return isPQ;
     }
@@ -249,7 +257,10 @@ public enum EncType {
         }
     }
 
-    /** @return null if not supported */
+    /** Gets the encryption type by code.
+      *
+      *  @return null if not supported
+      */
     public static EncType getByCode(int code) {
         if (code < 0 || code >= BY_CODE.length)
             return null;

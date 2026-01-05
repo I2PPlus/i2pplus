@@ -134,6 +134,7 @@ public class Hash extends SimpleDataStructure {
         setData(data);
     }
 
+    @Override
     public int length() {
         return HASH_LENGTH;
     }
@@ -178,7 +179,7 @@ public class Hash extends SimpleDataStructure {
         return Base32.encode(_data) + ".b32.i2p";
     }
 
-    /**
+    /** Clear the hash cache.
      *  @since 0.9.17
      */
     public static void clearCache() {

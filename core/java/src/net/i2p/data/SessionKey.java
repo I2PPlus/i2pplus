@@ -91,6 +91,7 @@ public class SessionKey extends SimpleDataStructure {
         super(data);
     }
 
+    @Override
     public int length() {
         return KEYSIZE_BYTES;
     }

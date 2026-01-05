@@ -117,8 +117,9 @@ public abstract class NamingService {
     ///// New API Starts Here
 
     /**
-     *  @return Class simple name by default
-     *  @since 0.8.7
+     * Get the name of this naming service.
+     * @return Class simple name by default
+     * @since 0.8.7
      */
     public String getName() {
         return getClass().getSimpleName();
@@ -210,8 +211,9 @@ public abstract class NamingService {
     // that might be better... then addressbook only talks to the 'router' HostsTxtNamingService
 
     /**
-     *  @return number of entries or -1 if unknown
-     *  @since 0.8.7
+     * Get the number of entries in this naming service.
+     * @return number of entries or -1 if unknown
+     * @since 0.8.7
      */
     public int size() {
         return size(null);
@@ -342,21 +344,23 @@ public abstract class NamingService {
     }
 
     /**
-     *  @return all known hostnames
-     *          or empty Set if none;
-     *          Returned Set is not necessarily sorted, implementation dependent
-     *  @since 0.8.7
+     * Get all known hostnames.
+     * @return all known hostnames or empty Set if none;
+     *         Returned Set is not necessarily sorted, implementation dependent
+     * @since 0.8.7
      */
     public Set<String> getNames() {
         return getNames(null);
     }
 
     /**
-     *  @param options NamingService-specific, can be null
-     *  @return all known hostnames (matching the options if non-null)
-     *          or empty Set if none;
-     *          Returned Set is not necessarily sorted, implementation dependent
-     *  @since 0.8.7
+     * Get all known hostnames matching the specified options.
+     *
+     * @param options NamingService-specific, can be null
+     * @return all known hostnames (matching the options if non-null)
+     *         or empty Set if none;
+     *         Returned Set is not necessarily sorted, implementation dependent
+     * @since 0.8.7
      */
     public Set<String> getNames(Properties options) {
         return Collections.emptySet();
@@ -475,28 +479,32 @@ public abstract class NamingService {
     }
 
     /**
-     *  @since 0.8.7
+     * Register a listener for naming service changes.
+     * @since 0.8.7
      */
     public void registerListener(NamingServiceListener nsl) {
         _listeners.add(nsl);
     }
 
     /**
-     *  @since 0.8.7
+     * Unregister a listener for naming service changes.
+     * @since 0.8.7
      */
     public void unregisterListener(NamingServiceListener nsl) {
         _listeners.remove(nsl);
     }
 
     /**
-     *  @since 0.8.7
+     * Register an updater for the naming service.
+     * @since 0.8.7
      */
     public void registerUpdater(NamingServiceUpdater nsu) {
         _updaters.add(nsu);
     }
 
     /**
-     *  @since 0.8.7
+     * Unregister an updater for the naming service.
+     * @since 0.8.7
      */
     public void unregisterUpdater(NamingServiceUpdater nsu) {
         _updaters.remove(nsu);

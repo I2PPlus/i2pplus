@@ -131,9 +131,10 @@ public abstract class SimpleDataStructure implements DataStructure {
 
     /**
      * Sets the data.
-     * @param in the stream to read
-     * @throws RuntimeException if data already set.
-     */
+      * @param in the stream to read
+      * @throws RuntimeException if data already set.
+      */
+    @Override
     public void readBytes(InputStream in) throws DataFormatException, IOException {
         if (_data != null)
             throw new RuntimeException("Data already set");
@@ -153,11 +154,13 @@ public abstract class SimpleDataStructure implements DataStructure {
         return DataHelper.read(in, target);
     }
 
+    @Override
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
         if (_data == null) throw new DataFormatException("No data to write out");
         out.write(_data);
     }
 
+    @Override
     public String toBase64() {
         if (_data == null)
             return null;
@@ -169,6 +172,7 @@ public abstract class SimpleDataStructure implements DataStructure {
      * @throws DataFormatException if decoded data is not the legal number of bytes or on decoding error
      * @throws RuntimeException if data already set.
      */
+    @Override
     public void fromBase64(String data) throws DataFormatException {
         if (data == null) throw new DataFormatException("Null data passed in");
         byte[] d = Base64.decode(data);
@@ -181,6 +185,7 @@ public abstract class SimpleDataStructure implements DataStructure {
     }
 
     /** @return the SHA256 hash of the byte array, or null if the data is null */
+    @Override
     public Hash calculateHash() {
         if (_data != null) return SHA256Generator.getInstance().calculateHash(_data);
         return null;
@@ -189,6 +194,7 @@ public abstract class SimpleDataStructure implements DataStructure {
     /**
      * @return same thing as getData()
      */
+    @Override
     public byte[] toByteArray() {
         return _data;
     }
@@ -199,6 +205,7 @@ public abstract class SimpleDataStructure implements DataStructure {
      * @throws DataFormatException if null or wrong length
      * @throws RuntimeException if data already set.
      */
+    @Override
     public void fromByteArray(byte data[]) throws DataFormatException {
         if (data == null) throw new DataFormatException("Null data passed in");
         if (data.length != length())

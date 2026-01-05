@@ -621,27 +621,35 @@ public class LogManager implements Flushable {
     }
 
     /**
-     *  @since 0.9.56, public since 0.9.57, was pkg private
+     * Check if gzip compression should be used for rotated log files.
+     * @since 0.9.56, public since 0.9.57, was pkg private
      */
     public boolean shouldGzip() {
         return _gzip;
     }
 
     /**
-     *  @since 0.9.57
+     * Enable or disable gzip compression for rotated log files.
+     * @param yes true to enable gzip compression
+     * @since 0.9.57
      */
     public void setGzip(boolean yes) {
         _gzip = yes;
     }
 
     /**
-     *  @since 0.9.56
+     * Get the minimum size for gzip compression.
+     * @return the minimum size in bytes, or Long.MAX_VALUE if gzip is disabled
+     * @since 0.9.56
      */
     long getMinGzipSize() {
         return _gzip ? _minGzipSize : Long.MAX_VALUE;
     }
 
-    /** @return success */
+    /**
+     * Save the current logging configuration to disk.
+     * @return true if the configuration was saved successfully
+     */
     public synchronized boolean saveConfig() {
         Properties props = createConfig();
         try {
@@ -720,9 +728,10 @@ public class LogManager implements Flushable {
 
     /**
      *  Flush any pending records to disk.
-     *  Blocking up to 250 ms.
-     *  @since 0.9.3
-     */
+      *  Blocking up to 250 ms.
+      *  @since 0.9.3
+      */
+    @Override
     public void flush() {
         if (_writer != null) {
             int i = 50;

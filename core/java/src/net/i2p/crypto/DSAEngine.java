@@ -484,7 +484,13 @@ public final class DSAEngine {
         return new SHA1Hash(digest.digest());
     }
 
-    /** @return hash SHA-1 hash, NOT a SHA-256 hash */
+    /**
+     * Calculate a SHA-1 hash of the source data.
+     * @param source the source data
+     * @param offset the offset in the source data
+     * @param len the length of data to hash
+     * @return the SHA-1 hash
+     */
     public static SHA1Hash calculateHash(byte[] source, int offset, int len) {
         MessageDigest h = SHA1.getInstance();
         h.update(source, offset, len);
@@ -739,108 +745,4 @@ public final class DSAEngine {
         throw new UnsupportedOperationException("Raw signatures unsupported for " + key.getClass().getName());
     }
 
-    //private static final int RUNS = 1000;
-
-    /**
-     *  Run consistency and speed tests with both TheCrypto and java.security libraries.
-     *
-     *  TheCrypto is about 5-15% faster than java.security.
-     */
-/****
-    public static void main(String args[]) {
-        I2PAppContext ctx = I2PAppContext.getGlobalContext();
-        byte data[] = new byte[1024];
-        // warmump
-        ctx.random().nextBytes(data);
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException ie) {}
-        SimpleDataStructure keys[] = null;
-
-        System.err.println("100 runs with new data and keys each time");
-        for (int i = 0; i < 100; i++) {
-            ctx.random().nextBytes(data);
-            keys = ctx.keyGenerator().generateSigningKeys();
-            Signature sig = ctx.dsa().sign(data, (SigningPrivateKey)keys[1]);
-            Signature jsig = null;
-            try {
-                 jsig = ctx.dsa().altSignSHA1(data, (SigningPrivateKey)keys[1]);
-            } catch (GeneralSecurityException gse) {
-                gse.printStackTrace();
-            }
-            boolean ok = ctx.dsa().verifySignature(jsig, data, (SigningPublicKey)keys[0]);
-            boolean usok = ctx.dsa().verifySignature(sig, data, (SigningPublicKey)keys[0]);
-            boolean jok = false;
-            try {
-                jok = ctx.dsa().altVerifySigSHA1(sig, data, (SigningPublicKey)keys[0]);
-            } catch (GeneralSecurityException gse) {
-                gse.printStackTrace();
-            }
-            boolean jjok = false;
-            try {
-                jjok = ctx.dsa().altVerifySigSHA1(jsig, data, (SigningPublicKey)keys[0]);
-            } catch (GeneralSecurityException gse) {
-                gse.printStackTrace();
-            }
-            System.err.println("TC->TC OK: " + usok + "  JL->TC OK: " + ok + "  TC->JK OK: " + jok + "  JL->JL OK: " + jjok);
-            if (!(ok && usok && jok && jjok)) {
-                System.out.println("privkey\n" + net.i2p.util.HexDump.dump(keys[1].getData()));
-                return;
-            }
-        }
-
-        System.err.println("Starting speed test");
-        long start = System.currentTimeMillis();
-        for (int i = 0; i < RUNS; i++) {
-            Signature sig = ctx.dsa().sign(data, (SigningPrivateKey)keys[1]);
-            boolean ok = ctx.dsa().verifySignature(sig, data, (SigningPublicKey)keys[0]);
-            if (!ok) {
-                System.err.println("TheCrypto FAIL");
-                return;
-            }
-        }
-        long time = System.currentTimeMillis() - start;
-        System.err.println("Time for " + RUNS + " DSA sign/verifies:");
-        System.err.println("TheCrypto time (ms): " + time);
-
-        start = System.currentTimeMillis();
-        for (int i = 0; i < RUNS; i++) {
-            boolean ok = false;
-            try {
-                Signature jsig = ctx.dsa().altSignSHA1(data, (SigningPrivateKey)keys[1]);
-                ok = ctx.dsa().altVerifySigSHA1(jsig, data, (SigningPublicKey)keys[0]);
-            } catch (GeneralSecurityException gse) {
-                gse.printStackTrace();
-            }
-            if (!ok) {
-                System.err.println("JavaLib FAIL");
-                return;
-            }
-        }
-        time = System.currentTimeMillis() - start;
-        System.err.println("JavaLib time (ms): " + time);
-****/
-/****  yes, arraycopy is slower for 20 bytes
-        start = System.currentTimeMillis();
-	byte b[] = new byte[20];
-        for (int i = 0; i < 10000000; i++) {
-            data[0] = data[i % 256];
-            System.arraycopy(data, 0, b, 0, 20);
-        }
-        time = System.currentTimeMillis() - start;
-        System.err.println("arraycopy time (ms): " + time);
-
-        start = System.currentTimeMillis();
-        for (int i = 0; i < 10000000; i++) {
-            data[0] = data[i % 256];
-            for (int j = 0; j < 20; j++) {
-                 b[j] = data[j];
-            }
-        }
-        time = System.currentTimeMillis() - start;
-        System.err.println("loop time (ms): " + time);
-****/
-/****
-     }
-****/
 }

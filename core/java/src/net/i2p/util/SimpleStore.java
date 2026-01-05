@@ -26,7 +26,7 @@ public class SimpleStore {
         answer = x;
     }
     /**
-     *
+     * Returns the stored answer.
      * @return boolean
      */
     public boolean getAnswer() {

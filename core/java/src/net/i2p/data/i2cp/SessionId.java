@@ -39,9 +39,10 @@ public class SessionId {
     public int getSessionId() {return _sessionId;}
 
     /**
-     *  @param id 0-65535
-     *  @throws IllegalArgumentException
-     *  @throws IllegalStateException if already set
+     * Set the session ID.
+     * @param id 0-65535
+     * @throws IllegalArgumentException if the ID is out of range
+     * @throws IllegalStateException if already set
      */
     public void setSessionId(int id) {
         if (id < 0 || id > 65535) {throw new IllegalArgumentException();}
@@ -50,7 +51,8 @@ public class SessionId {
     }
 
     /**
-     *  @throws IllegalStateException if already set
+     * Read the session ID from a stream.
+     * @throws IllegalStateException if already set
      */
     public void readBytes(InputStream in) throws DataFormatException, IOException {
         if (_sessionId >= 0) {throw new IllegalStateException();}

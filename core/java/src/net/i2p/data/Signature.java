@@ -101,9 +101,11 @@ public class Signature extends SimpleDataStructure {
     public int length() {return _type.getSigLen();}
 
     /**
-     *  @return non-null
-     *  @since 0.9.8
-     */
+      *  Gets the signature type.
+      *
+      *  @return non-null
+      *  @since 0.9.8
+      */
     public SigType getType() {return _type;}
 
     /**

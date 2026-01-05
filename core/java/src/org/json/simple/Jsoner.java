@@ -397,6 +397,7 @@ public class Jsoner{
 	 *         backspace character (\b), form feed character (\f) and other control characters [u0000..u001F] or
 	 *         characters [u007F..u009F], [u2000..u20FF] with a
 	 *         backslash (\) which itself must be escaped by the backslash in a java string. */
+	@SuppressWarnings("ComparisonOutOfRange")
 	public static String escape(final String escapable){
 		final StringBuilder builder = new StringBuilder();
 		final int characters = escapable.length();

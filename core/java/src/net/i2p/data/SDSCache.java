@@ -87,15 +87,17 @@ public class SDSCache<V extends SimpleDataStructure> {
     }
 
     /**
-     * @since 0.8.8
-     */
+      * @since 0.8.8
+      */
     private class Shutdown implements Runnable {
+        @Override
         public void run() {
             clear();
         }
     }
 
     /**
+     * Clear all entries from the cache.
      * @since 0.9.17
      */
     public void clear() {

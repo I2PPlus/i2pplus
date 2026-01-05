@@ -105,7 +105,10 @@ final class YKGenerator {
     /** @return true if successful, false if full */
     private final boolean addValues(BigInteger yk[]) {return _values.offer(yk);}
 
-    /** @return rv[0] = Y; rv[1] = K */
+    /** Gets the next YK value.
+      *
+      *  @return rv[0] = Y; rv[1] = K
+      */
     public BigInteger[] getNextYK() {
         ctx.statManager().addRateData("crypto.YKUsed", 1);
         BigInteger[] rv = _values.poll();
@@ -156,6 +159,7 @@ final class YKGenerator {
             _maxSize = maxSize;
         }
 
+        @Override
         public void run() {
             while (_isRunning) {
                 int startSize = getSize();
