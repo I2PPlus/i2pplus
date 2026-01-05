@@ -23,12 +23,13 @@ hr{margin:5px 0;width:100%;height:1px;display:none;text-align:center;color:#2d29
 ol,ul{margin:0 20px 0 10px;padding:0px 10px;display:table-row}
 li{margin:0;line-height:1.5;list-style:square;font-size:9pt;color:var(--ink)}
 p{color:var(--ink);margin:0 0 4px;font-size:9.5pt;text-align:justify}
+textarea{resize:vertical}
 th,td{font-size:9pt}
 th{padding:5px 10px;text-align:left;background:var(--title);background-size:4px 100%,100%}
 td{padding:5px}
 .buttons,#buttons,#host_list img,#host_list td:nth-child(n+2) a,#host_list tr:first-child,#navi{user-select:none}
-#page{margin:10px 0;padding:0;font-size:9pt;color:var(--ink);background:linear-gradient(180deg,rgba(0,0,16,.2),#0000)}
 .destaddress{scrollbar-color:#114 #0000;scrollbar-width:thin}
+#page{margin:10px 0;padding:0;font-size:9pt;color:var(--ink);background:linear-gradient(180deg,rgba(0,0,16,.2),#0000)}
 #content h3{box-shadow:none}
 
 /* topnav */
@@ -92,7 +93,7 @@ p#filtered{margin:-26px 0 10px}
 #book+#buttons{margin:9px 0 20px}
 #emptybook{margin-bottom:20px}
 
-#booksearch,#filter,#add,#import,p.buttons{box-shadow:var(--bevel);background:var(--panel)}
+#booksearch,#categoryFilter,#filter,#add,#import,p.buttons{box-shadow:var(--bevel);background:var(--panel)}
 
 #booksearch{margin:0;padding:7px 5px;text-align:center;border:var(--border)}
 #buttons{text-align:right;background:linear-gradient(90deg,#001,#000)}
@@ -103,10 +104,10 @@ p#filtered{margin:-26px 0 10px}
 #content p+h3{margin-top:15px}
 #content p{padding:0 30px;line-height:1.4}
 
-#filter a:link,#filter a:visited,#activefilter{margin:2px 0;padding:2px 5px;display:inline-block;text-align:center;text-transform:capitalize;color:#4a42bd;border:1px solid #26225d;background:#000}
+#filter a:link,#filter a:visited,#activefilter,#categoryFilter a{margin:2px 0;padding:2px 5px;display:inline-block;text-align:center;text-transform:capitalize;color:#4a42bd;border:1px solid #26225d;background:#000}
 #filter a:hover,#filter a:focus{color:var(--a_hover);border:1px solid var(--a_hover);transform:scale(1.1)}
 #filter a:active{color:var(--ink);box-shadow:var(--highlight),inset 3px 3px 3px #000;background:#652787}
-#filter{margin:-21px 0 -29px;padding:17px 0 15px;text-align:center;border:var(--border)}
+#categoryFilter,#filter{margin:-21px 0 -29px;padding:6px 0 5px;text-align:center;border:var(--border)}
 #filter p:first-child{padding-bottom:0}
 #filter p{margin:-3px 0 -3px;padding:12px 10px 0}
 #filter p,#search td{font-size:9pt;font-weight:700}
@@ -115,6 +116,12 @@ p#filtered{margin:-26px 0 10px}
 #filter span a:active{background:none;box-shadow:none;color:#4f0519}
 #filter span a,#filter span a:hover{display:inline-block;word-spacing:normal;letter-spacing:normal;border:0;background:none;transform:none}
 #filter span b{margin:-3px 5px 0;line-height:.8;text-transform:uppercase;font-size:11pt;color:#fff}
+#categoryFilter{margin:28px 10px -29px;padding:1px 0 5px}
+#categoryFilter a,#categoryFilter a#activefilter{padding:5px}
+#categoryFilter a .help{margin:0}
+#categoryFilter a:hover span{transform:scale(1.2)}
+#categoryFilter a#activefilter{border: 1px solid #26225d;background:var(--a);box-shadow:var(--btn_shadow_active);pointer-events:none}
+#categoryFilter a#activefilter span{transform:scale(.8) translate(1px,1px)}
 
 form[action="subscriptions"]{margin:0}
 #helpsubs,#helpblacklist{margin:-16px 0 -11px;padding:20px 15px 15px 48px;background:#001 var(--infohelp) no-repeat 12px center/24px}
@@ -131,8 +138,8 @@ form[action="subscriptions"]{margin:0}
 #messages p:hover{background-blend-mode:normal;cursor:crosshair}
 
 #ovrvw #content p{margin-bottom:10px;line-height:1.5}
-textarea[name="config"],textarea[name="content"]{margin:-27px 0 0;resize:none;font-size:8.5pt;border:var(--border);border-radius:0}
-textarea[name="config"]{height:220px;overflow-y:scroll;resize:none}
+textarea[name="config"],textarea[name="content"]{margin:-27px 0 0;font-size:8.5pt;border:var(--border);border-radius:0}
+textarea[name="config"]{height:220px;overflow-y:scroll}
 
 .book td.names{width:200px;white-space:nowrap}
 .book td:nth-child(2){padding:2px 0 2px 5px;width:30px}
@@ -177,7 +184,7 @@ input[type=text]{padding:8px}
 input.update{margin-left:5px}
 input::placeholder{font-weight:400;font-style:italic;color:var(--ink);opacity:.7}
 input:focus::placeholder{opacity:0}
-textarea,#subsLog ul{padding:3px 5px;width:100%;height:200px;resize:none;font:700 8.5pt var(--monospaced);line-height:1.4;color:#7670c2;border:1px solid #26225d;background:#000}
+textarea,#subsLog ul{padding:3px 5px;width:100%;height:200px;font:700 8.5pt var(--monospaced);line-height:1.4;color:#7670c2;border:1px solid #26225d;background:#000}
 textarea[cols="70"]{width:100%;height:40px;white-space:pre-wrap}
 textarea:focus::placeholder{opacity:0}
 .fakebutton:hover,.fakebutton:focus{background-size:auto}
@@ -315,7 +322,7 @@ svg #arrow stop:last-child{stop-color:#001}
 .iframed .book tr.head th{border-top:var(--border);border-bottom:var(--border)}
 .iframed .headline h3:first-child+h4{margin:13px 10px 0}
 .iframed .headline h3,.iframed h4,.iframed #filtered,.iframed #search,.iframed #helpconfig{margin:-1px 10px 0}
-.iframed #page{margin:1px 0 0;overflow:hidden;border:0}
+.iframed #page{margin:1px 0 0;min-width:810px;overflow:hidden;border:0}
 .iframed #book #host_details{border-top:var(--border)}
 .iframed #book,.iframed #book+#buttons,.iframed #book table{border-top:0;border-bottom:0}
 .iframed #config+#buttons,.iframed #content+#buttons{margin:12px 10px}
@@ -333,6 +340,7 @@ svg #arrow stop:last-child{stop-color:#001}
 .iframed #visualid td[colspan="2"]{padding:22px 19px 20px}
 .iframed #dtls .headline h3{margin:-1px 10px 24px}
 .iframed #sbs #content,.iframed #config,.iframed #config+#buttons,.iframed #subsLog #config,.iframed #bls #content{margin:-27px 10px -13px}
+.iframed #config+#buttons{margin:12px 10px}
 .iframed #subsLog .headline h3:first-child+h4{margin:-1px 10px 26px}
 .iframed #subsLog ul{margin:0}
 
@@ -375,7 +383,7 @@ textarea,textarea[name="config"],textarea[name="content"],#subsLog ul{font-size:
 #addressbook.headline h3{padding-right:45px}
 #content h3{font-size:11.5pt}
 #export{padding-left:4px;height:40px;position:absolute;top:-1px;right:6px}
-#filter a,#activefilter{font-size:12pt;padding:2px 8px!important}
+#filter a,#filter #activefilter{font-size:12pt;padding:2px 8px!important}
 #host_list td.b32link a::after,#host_list td.helper a::after{width:18px;height:18px}
 input#exporthosts{margin:6px 0 -2px 2px}
 #ovrvw #content p{line-height:1.6}

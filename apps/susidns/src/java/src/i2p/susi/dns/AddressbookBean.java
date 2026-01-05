@@ -403,6 +403,8 @@ public class AddressbookBean extends BaseBean {
                 message += " <span id=prev><a href=\"addressbook?book=" + getBook() + filterArg +
                            "&amp;begin=" + newBegin + "&amp;end=" + newEnd + "\">" + (newBegin+1) +
                            " - "  + (newEnd+1) + "</a></span> | ";
+            } else {
+                message += " <span id=prev class=inactive></span> | ";
             }
             message += " <span id=current>" + (pageBegin+1) + " - " + (pageEnd+1) + "</span>";
             if (pageEnd < totalCount - 1) {

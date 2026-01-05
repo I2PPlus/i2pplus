@@ -42,7 +42,7 @@ td{padding:5px;vertical-align:middle;color:var(--ink);font-size:9pt}
 textarea,.destaddress,#helpconfig li b{font-family:var(--monospaced)}
 textarea,#subsLog ul{padding:3px 5px;width:100%;height:120px;line-height:1.4;font-weight:700;border:var(--border);box-shadow:var(--highlight)}
 textarea[cols="70"]{width:100%;height:40px}
-textarea[name="config"]{height:250px;overflow-y:scroll;resize:none}
+textarea[name="config"]{height:250px;overflow-y:scroll}
 textarea:focus{filter:none}
 th{padding:5px 10px;text-align:left;color:var(--ink)}
 .active{width:fit-content;max-width:240px;display:inline-block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:text-bottom;color:#ff6}
@@ -182,11 +182,12 @@ td.destinations{max-width:50px;padding:1px 8px}
 #filter p{margin:8px 0 -8px;padding:0 10px;line-height:2.1;word-spacing:.1em;font-weight:700;text-align:center;text-transform:capitalize}
 p#filtered{margin:-27px 0 10px;padding:12px 10px 8px 20px;font-size:10pt;box-shadow:var(--highlight),inset 0 0 2px 1px #030;background:repeating-linear-gradient(180deg,#000c,rgba(0,16,0,.6) 1px,rgba(0,16,0,.6) 2px),url(/themes/console/dark/images/camotile2.png)}
 #filter #activefilter,.selected{font-weight:700;color:#999;box-shadow:var(--btn_shadow_active)!important}
-#filter #activefilter{margin:0;padding:3px 10px 2px;color:var(--ink);text-shadow:0 -1px 1px #000c;box-shadow:0 0 0 1px #252,var(--btn_shadow_active)!important;background:#030}
+#filter #activefilter{margin:3px 0 0;padding:0 10px;color:var(--ink);text-shadow:0 -1px 1px #000c;box-shadow:0 0 0 1px #252,var(--btn_shadow_active)!important;background:#030}
 #categoryFilter{padding:0 5px 6px}
 #categoryFilter a,#categoryFilter span{width:20px;height:20px;}
 #categoryFilter a{margin:-1px 2px 0;padding:4px;display:inline-block;box-shadow:0 0 0 1px #030,0 0 2px 1px #000c,var(--highlight);background:var(--th)}
 #categoryFilter a#activefilter{box-shadow:0 0 0 1px #030,var(--btn_shadow_active);background:#030;pointer-events:none}
+#categoryFilter a#activefilter span{transform:scale(0.8) translate(1px,1px)}
 #categoryFilter a:hover span{transform:scale(1.2)}
 
 /* add/import/export */
@@ -308,7 +309,7 @@ svg #arrow stop:last-child{stop-color:#010}
 
 /* iframe */
 .iframed #helpconfig,.iframed #helpsubs{margin:11px 0 0}
-.iframed #page{margin:0;padding:0 12px;background:#0000}
+.iframed #page{margin:0;padding:0 12px;min-width:783px;background:#0000}
 .iframed #bk #page{margin-bottom:4px}
 .iframed #page::after{content:"";display:inline-block;width:100%;height:14px;vertical-align:bottom}
 .iframed #visualid{margin-top:16px;margin-bottom:1px}
@@ -342,6 +343,7 @@ svg #arrow stop:last-child{stop-color:#010}
 
 @media (min-width:1200px){
 #content h3{padding-top:8px;padding-bottom:8px}
+#filter #activefilter{padding:3px 10px 2px;line-height:1.615}
 }
 
 @media (min-width:1400px){
