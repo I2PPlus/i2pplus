@@ -115,7 +115,9 @@ public class KeysAndCert extends DataStructureImpl {
             try {
                 KeyCertificate kcert = _certificate.toKeyCertificate();
                 return kcert.getSigType();
-            } catch (DataFormatException dfe) {}
+            } catch (DataFormatException dfe) {
+                // invalid certificate format, fall through to default
+            }
         }
         return SigType.DSA_SHA1;
     }
@@ -133,7 +135,9 @@ public class KeysAndCert extends DataStructureImpl {
             try {
                 KeyCertificate kcert = _certificate.toKeyCertificate();
                 return kcert.getEncType();
-            } catch (DataFormatException dfe) {}
+            } catch (DataFormatException dfe) {
+                // invalid certificate format, fall through to default
+            }
         }
         return EncType.ELGAMAL_2048;
     }
@@ -207,8 +211,9 @@ public class KeysAndCert extends DataStructureImpl {
     }
 
     /**
-     * @throws IllegalStateException if data already set
-     */
+      * @throws IllegalStateException if data already set
+      */
+    @Override
     public void readBytes(InputStream in) throws DataFormatException, IOException {
         if (_publicKey != null || _signingKey != null || _certificate != null)
             throw new IllegalStateException();
@@ -290,6 +295,7 @@ public class KeysAndCert extends DataStructureImpl {
         return off;
     }
 
+    @Override
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
         if ((_certificate == null) || (_publicKey == null) || (_signingKey == null))
             throw new DataFormatException("Not enough data to format the router identity");
@@ -370,22 +376,22 @@ public class KeysAndCert extends DataStructureImpl {
     }
 
     /**
-     *  Throws IllegalStateException if keys and cert are not initialized,
-     *  as of 0.9.12. Prior to that, returned null.
-     *
-     *  @throws IllegalStateException
-     */
-    @Override
+      *  Throws IllegalStateException if keys and cert are not initialized,
+      *  as of 0.9.12. Prior to that, returned null.
+      *
+      *  @throws IllegalStateException if keys and cert are not initialized
+      */
+     @Override
     public Hash calculateHash() {
         return getHash();
     }
 
     /**
-     *  Throws IllegalStateException if keys and cert are not initialized,
-     *  as of 0.9.12. Prior to that, returned null.
-     *
-     *  @throws IllegalStateException
-     */
+      *  Throws IllegalStateException if keys and cert are not initialized,
+      *  as of 0.9.12. Prior to that, returned null.
+      *
+      *  @throws IllegalStateException if keys and cert are not initialized
+      */
     public Hash getHash() {
         if (__calculatedHash != null)
             return __calculatedHash;

@@ -85,19 +85,18 @@ import org.klomp.snark.dht.DHT;
  * <li>Configuration management</li>
  * <li>Theme and localization support</li>
  * </ul>
- * </p>
  *
  * <p>The servlet has been refactored to eliminate Jetty-specific dependencies
  * and works with standard servlet containers.</p>
  *
  * <p>Security features include:
+ * </p>
  * <ul>
  * <li>CSRF protection via nonces</li>
  * <li>Content Security Policy headers</li>
  * <li>Input validation and sanitization</li>
  * <li>Secure file handling</li>
  * </ul>
- * </p>
  *
  * @since 0.1.0
  */

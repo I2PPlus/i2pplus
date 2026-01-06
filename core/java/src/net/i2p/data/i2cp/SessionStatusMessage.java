@@ -30,7 +30,8 @@ public class SessionStatusMessage extends I2CPMessageImpl {
     public final static int STATUS_CREATED = 1;
     public final static int STATUS_UPDATED = 2;
     public final static int STATUS_INVALID = 3;
-    /** @since 0.9.12 */
+    /** Session refused status.
+      * @since 0.9.12 */
     public final static int STATUS_REFUSED = 4;
     /**
      *  Used internally, not in spec, will be remapped to STATUS_INVALID before being sent.
@@ -83,6 +84,7 @@ public class SessionStatusMessage extends I2CPMessageImpl {
         return os.toByteArray();
     }
 
+    @Override
     public int getType() {return MESSAGE_TYPE;}
 
     @Override

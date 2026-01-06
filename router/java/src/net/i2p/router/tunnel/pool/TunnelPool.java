@@ -129,6 +129,9 @@ public class TunnelPool {
         }
     }
 
+    /**
+     *  Shut down the pool and clean up resources.
+     */
     synchronized void shutdown() {
         if (_log.shouldInfo()) {_log.info(toString() + ": Shutdown called");}
         _alive = false;
@@ -145,6 +148,7 @@ public class TunnelPool {
     public String getRateName() {return _rateName;}
 
     /**
+     *  Get the average bandwidth per tunnel in the pool.
      *  @return average bandwidth per configured tunnel in Bps
      *  @since 0.9.66
      */
@@ -257,16 +261,17 @@ public class TunnelPool {
     }
 
     /**
-     * Return the tunnel from the pool that is XOR-closet to the target.
-     * By using this instead of the random selectTunnel(),
-     * we force some locality in OBEP-IBGW connections to minimize
-     * those connections network-wide.
+     *  Return the tunnel from the pool that is XOR-closest to the target.
+     *  By using this instead of the random selectTunnel(),
+     *  we force some locality in OBEP-IBGW connections to minimize
+     *  those connections network-wide.
      *
-     * Does not check for backlogged next peer.
-     * Does not return an expired tunnel.
+     *  Does not check for backlogged next peer.
+     *  Does not return an expired tunnel.
      *
-     * @return null on failure
-     * @since 0.8.10
+     *  @param closestTo the hash to find the closest tunnel to
+     *  @return the tunnel closest to the target, or null on failure
+     *  @since 0.8.10
      */
     TunnelInfo selectTunnel(Hash closestTo) {
         boolean avoidZeroHop = !_settings.getAllowZeroHop();
@@ -307,7 +312,9 @@ public class TunnelPool {
     }
 
     /**
+     *  Get a tunnel by its gateway tunnel ID.
      *  @param gatewayId for inbound, the GW rcv tunnel ID; for outbound, the GW send tunnel ID.
+     *  @return the tunnel with the matching gateway ID, or null if not found
      */
     public TunnelInfo getTunnel(TunnelId gatewayId) {
         synchronized (_tunnels) {
@@ -333,9 +340,10 @@ public class TunnelPool {
     }
 
     /**
-     * Do we really need more fallbacks?
-     * Used to prevent a zillion of them.
-     * Does not check config, only call if config allows zero hop.
+     *  Do we really need more fallbacks?
+     *  Used to prevent a zillion of them.
+     *  Does not check config, only call if config allows zero hop.
+     *  @return true if more fallback tunnels are needed
      */
     boolean needFallback() {
         long exp = _context.clock().now() + 120*1000;
@@ -473,10 +481,14 @@ public class TunnelPool {
         _settings.setLengthOverride(-1); // disable
     }
 
-    /** list of tunnelInfo instances of tunnels currently being built */
+    /** list of tunnelInfo instances of tunnels currently being built
+     *  @return the list of tunnels currently being built
+     */
     public List<PooledTunnelCreatorConfig> listPending() {synchronized (_inProgress) {return new ArrayList<PooledTunnelCreatorConfig>(_inProgress);}}
 
-    /** duplicate of size(), let's pick one */
+    /** duplicate of size(), let's pick one
+     *  @return the number of tunnels in the pool
+     */
     int getTunnelCount() {return size();}
 
     public TunnelPoolSettings getSettings() {return _settings;}
@@ -501,18 +513,22 @@ public class TunnelPool {
      *  Is this pool running AND either exploratory, or tracked by the client manager?
      *  A pool will be alive but not tracked after the client manager removes it
      *  but before all the tunnels have expired.
+     *  @return true if the pool is alive and should be tracked
      */
     public boolean isAlive() {
         return _alive && (_settings.isExploratory() || _context.clientManager().isLocal(_settings.getDestination()));
     }
 
-    /** duplicate of getTunnelCount(), let's pick one */
+    /** duplicate of getTunnelCount(), let's pick one
+     *  @return the number of tunnels in the pool
+     */
     public int size() {
         synchronized (_tunnels) {return _tunnels.size();}
     }
 
     /**
-     *  Add to the pool.
+     *  Add a tunnel to the pool.
+     *  @param info the tunnel to add
      */
     protected void addTunnel(TunnelInfo info) {
         if (info == null) {return;}
@@ -529,7 +545,8 @@ public class TunnelPool {
     }
 
     /**
-     *  Remove from the pool.
+     *  Remove a tunnel from the pool.
+     *  @param info the tunnel to remove
      */
     void removeTunnel(TunnelInfo info) {
         if (_log.shouldDebug()) {_log.debug(toString() + " -> Removing tunnel " + info);}
@@ -575,6 +592,7 @@ public class TunnelPool {
      *  Remove tunnel and blame all peers (not necessarily equally).
      *  This may be called multiple times from TestJob.
      *  Enhanced with intelligent failure analysis and recovery.
+     *  @param cfg the tunnel that failed
      */
     void tunnelFailed(TunnelInfo cfg) {
         fail(cfg);
@@ -589,6 +607,8 @@ public class TunnelPool {
      *  Remove the tunnel and blame only one peer.
      *  This may be called multiple times.
      *
+     *  @param cfg the tunnel that failed
+     *  @param blamePeer the peer to blame
      *  @since 0.8.13
      */
     void tunnelFailed(TunnelInfo cfg, Hash blamePeer) {
@@ -597,7 +617,8 @@ public class TunnelPool {
     }
 
     /**
-     *  Remove the tunnel.
+     *  Remove the tunnel from the pool.
+     *  @param cfg the tunnel to remove
      */
     private void fail(TunnelInfo cfg) {
         LeaseSet ls = null;
@@ -624,6 +645,7 @@ public class TunnelPool {
      *  Blame all peers in tunnel, with a probability
      *  inversely related to tunnel length
      *  Enhanced with intelligent blame distribution and recovery consideration.
+     *  @param cfg the failed tunnel
      */
     private void tellProfileFailed(TunnelInfo cfg) {
         long uptime = _context.router().getUptime();
@@ -703,10 +725,10 @@ public class TunnelPool {
     }
 
     /**
-     * This will build a fallback (zero-hop) tunnel ONLY if
-     * this pool is exploratory, or the settings allow it.
+     *  This will build a fallback (zero-hop) tunnel ONLY if
+     *  this pool is exploratory, or the settings allow it.
      *
-     * @return true if a fallback tunnel is built
+     *  @return true if a fallback tunnel is built, false otherwise
      */
     boolean buildFallback() {
         int quantity = getAdjustedTotalQuantity();
@@ -743,9 +765,8 @@ public class TunnelPool {
     }
 
     /**
-     * Find the tunnel with the far-end that is XOR-closest to a given hash
-     *
-     * @since 0.8.10
+     *  Find the tunnel with the far-end that is XOR-closest to a given hash.
+     *  @since 0.8.10
      */
     private static class TunnelInfoComparator implements Comparator<TunnelInfo>, Serializable {
         private final byte[] _base;
@@ -869,6 +890,11 @@ public class TunnelPool {
         return ls;
     }
 
+    /**
+     *  Total lifetime processed bytes for this pool.
+     *  @return the total number of bytes processed through this pool
+     *  @since 0.9.53
+     */
     public long getLifetimeProcessed() {return _lifetimeProcessed;}
 
     /**
@@ -880,9 +906,10 @@ public class TunnelPool {
     }
 
     /**
-     * Gather the data to see how many tunnels to build, and then actually compute that value (delegated to
-     * the countHowManyToBuild function below)
+     *  Gather the data to see how many tunnels to build, and then actually compute that value (delegated to
+     *  the countHowManyToBuild function below)
      *
+     *  @return the number of tunnels to build
      */
     int countHowManyToBuild() {
         if (!isAlive()) {return 0;}
@@ -1148,7 +1175,11 @@ public class TunnelPool {
     PooledTunnelCreatorConfig configureNewTunnel() {return configureNewTunnel(false);}
 
     /**
-     *  @return null on failure
+     *  This only sets the peers and creation/expiration times in the configuration.
+     *  For the crypto, see BuildRequestor and BuildMessageGenerator.
+     *
+     *  @param forceZeroHop if true, force a zero-hop tunnel
+     *  @return the configured tunnel, or null on failure
      */
     private PooledTunnelCreatorConfig configureNewTunnel(boolean forceZeroHop) {
         TunnelPoolSettings settings = getSettings();
@@ -1224,6 +1255,8 @@ public class TunnelPool {
      *  Remove from the _inprogress list and call addTunnel() if result is SUCCESS.
      *  Updates consecutive build timeout count.
      *
+     *  @param cfg the completed tunnel configuration
+     *  @param result the build result
      *  @since 0.9.53 added result parameter
      */
     void buildComplete(PooledTunnelCreatorConfig cfg, BuildExecutor.Result result) {
@@ -1260,6 +1293,8 @@ public class TunnelPool {
     }
 
     /**
+     *  Get the count of consecutive tunnel build timeouts.
+     *  @return the number of consecutive build timeouts
      *  @since 0.9.53
      */
     int getConsecutiveBuildTimeouts() {return _consecutiveBuildTimeouts.get();}

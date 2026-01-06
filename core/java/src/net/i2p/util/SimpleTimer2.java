@@ -395,7 +395,7 @@ public class SimpleTimer2 {
             // don't bother rescheduling if within _fuzz ms
             if ((oldTimeout - _fuzz > timeoutMs && useEarliestTime) ||
                 (oldTimeout + _fuzz < timeoutMs && !useEarliestTime)||
-                (!scheduled)) {
+                !scheduled) {
                 if (scheduled && oldTimeout <= 5) {
                     // don't reschedule to avoid race
                     if (_log.shouldWarn())

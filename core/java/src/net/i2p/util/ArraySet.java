@@ -22,11 +22,17 @@ import java.util.Set;
  *  @param <E> type of elements in this set
  */
 public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
+    /** The maximum capacity for this set */
     public static final int MAX_CAPACITY = 32;
+    /** The underlying array of entries */
     protected final Object[] _entries;
+    /** Whether to throw on overflow */
     private final boolean _throwOnFull;
+    /** The current size of the set */
     private int _size;
+    /** The overflow index for overwrite mode */
     private int _overflowIndex;
+    /** The modification count for fail-fast iterators */
     private transient int modCount;
 
     /**
@@ -41,7 +47,8 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
      *  A fixed capacity of max(MAX_CAPACITY, c.size())
      *  Adds over capacity will throw a SetFullException.
      *
-     *  @since 0.9.55
+     * @param c the collection to copy
+     * @since 0.9.55
      */
     public ArraySet(Set<? extends E> c) {
         this(c, MAX_CAPACITY);
@@ -51,7 +58,9 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
      *  A fixed capacity of max(capacity, c.size())
      *  Adds over capacity will throw a SetFullException.
      *
-     *  @since 0.9.55
+     * @param c the collection to copy
+     * @param capacity the maximum capacity
+     * @since 0.9.55
      */
     public ArraySet(Set<? extends E> c, int capacity) {
         this(Math.max(capacity, c.size()));
@@ -67,6 +76,8 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
      *  Adds over capacity will throw a SetFullException.
      *
      *  Warning: O(n**2).
+     *
+     * @param c the collection to copy
      */
     public ArraySet(Collection<? extends E> c) {
         this(c, MAX_CAPACITY);
@@ -79,7 +90,9 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
      *
      *  Warning: O(n**2).
      *
-     *  @since 0.9.55
+     * @param c the collection to copy
+     * @param capacity the maximum capacity
+     * @since 0.9.55
      */
     public ArraySet(Collection<? extends E> c, int capacity) {
         this(Math.max(capacity, c.size()));
@@ -93,7 +106,8 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
      *  arr must not contain duplicates, no checks are done.
      *  arr may contain nulls but they must be at the end.
      *
-     *  @since 0.9.58
+     * @param arr the array to copy
+     * @since 0.9.58
      */
     public ArraySet(E[] arr) {
         _entries = arr;
@@ -109,8 +123,8 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
     /**
      *  Adds over capacity will throw a SetFullException.
      *
-     *  @param capacity the maximum size
-     *  @throws IllegalArgumentException if capacity less than 1.
+     * @param capacity the maximum size
+     * @throws IllegalArgumentException if capacity less than 1.
      */
     public ArraySet(int capacity) {
         this(capacity, true);
@@ -124,8 +138,9 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
      *  but it prevents unexpected exceptions.
      *  If throwOnFull is true, adds over capacity will throw a SetFullException.
      *
-     *  @param capacity the maximum size
-     *  @throws IllegalArgumentException if capacity less than 1.
+     * @param capacity the maximum size
+     * @param throwOnFull whether to throw on overflow
+     * @throws IllegalArgumentException if capacity less than 1.
      */
     public ArraySet(int capacity, boolean throwOnFull) {
         if (capacity <= 0)
@@ -135,7 +150,10 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
     }
 
     /**
-     *  @return -1 if not found or if o is null
+     *  Finds the index of the given object in the set.
+     *
+     * @param o the object to find the index of
+     * @return -1 if not found or if o is null
      */
     protected int indexOf(Object o) {
         if (o != null) {
@@ -148,8 +166,9 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
     }
 
     /**
-     *  @throws SetFullException if throwOnFull was true in constructor
-     *  @throws NullPointerException if o is null
+     * @param o the element to add
+     * @throws SetFullException if throwOnFull was true in constructor
+     * @throws NullPointerException if o is null
      */
     @Override
     public boolean add(E o) {
@@ -170,8 +189,8 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
      *  responsibility to ensure that o is not a duplicate.
      *  Any duplicate added will appear in the iterator.
      *
-     *  @param o non-null, NPE will not be thrown
-     *  @throws SetFullException if throwOnFull was true in constructor
+     * @param o non-null, NPE will not be thrown
+     * @throws SetFullException if throwOnFull was true in constructor
      *  @since 0.9.55
      */
     public void addUnique(E o) {
@@ -231,8 +250,12 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
     }
 
     /**
-     *  @throws IndexOutOfBoundsException
-     *  @since 0.9.58
+     *  Returns the element at the specified index.
+     *
+     * @param index the index to retrieve
+     * @return the element at the specified index
+     * @throws IndexOutOfBoundsException if index is out of bounds
+     * @since 0.9.58
      */
     @SuppressWarnings("unchecked")
     public E get(int index) {
@@ -244,6 +267,7 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
     /**
      *  Supports remove.
      *  Supports comodification checks.
+     * @return an iterator over this set
      */
     public Iterator<E> iterator() {
         return new ASIterator();
@@ -254,11 +278,20 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
      * Only thrown when the ArraySet was configured to throw on overflow.
      */
     public static class SetFullException extends IllegalStateException {
+        /** The serial version UID */
         private static final long serialVersionUID = 9087390587254111L;
+
+        /**
+         * Constructs a SetFullException.
+         */
+        public SetFullException() {
+            super();
+        }
     }
 
     /**
-     * Modified from CachedIteratorArrayList
+     *  Modified from CachedIteratorArrayList
+     *  Iterator implementation for ArraySet.
      */
     private class ASIterator implements Iterator<E>, Serializable {
         /**

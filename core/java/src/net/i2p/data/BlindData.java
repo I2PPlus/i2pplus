@@ -94,6 +94,11 @@ public class BlindData {
     public static final int AUTH_ON = 999;
 
     /**
+     *  Creates a new BlindData instance for the given destination.
+     *
+     *  @param ctx the application context
+     *  @param dest the destination
+     *  @param blindType the type of blinded signature
      *  @param secret may be null or zero-length
      *  @throws IllegalArgumentException on various errors
      */
@@ -102,7 +107,14 @@ public class BlindData {
     }
 
     /**
+     *  Creates a new BlindData instance for the given destination with authentication.
+     *
+     *  @param ctx the application context
+     *  @param dest the destination
+     *  @param blindType the type of blinded signature
      *  @param secret may be null or zero-length
+     *  @param authType the authentication type
+     *  @param authKey the authentication key
      *  @throws IllegalArgumentException on various errors
      *  @since 0.9.41
      */
@@ -121,7 +133,14 @@ public class BlindData {
     }
 
     /**
+     *  Creates a new BlindData instance for the given signing public key with authentication.
+     *
+     *  @param ctx the application context
+     *  @param spk the signing public key
+     *  @param blindType the type of blinded signature
      *  @param secret may be null or zero-length
+     *  @param authType the authentication type
+     *  @param authKey the authentication key
      *  @throws IllegalArgumentException on various errors
      *  @since 0.9.41
      */
@@ -149,59 +168,76 @@ public class BlindData {
     }
 
     /**
-     *  @return The unblinded SPK, non-null
-     */
+      *  Gets the unblinded signing public key.
+      *
+      *  @return The unblinded SPK, non-null
+      */
     public SigningPublicKey getUnblindedPubKey() {
         return _clearSPK;
     }
 
     /**
-     *  @return The type of the blinded key
-     */
+      *  Gets the type of the blinded signature.
+      *
+      *  @return The type of the blinded key
+      */
     public SigType getBlindedSigType() {
         return _blindType;
     }
 
     /**
-     *  @return The blinded key for the current day, non-null
-     */
+      *  Gets the blinded signing public key for the current day.
+      *
+      *  @return The blinded key for the current day, non-null
+      */
     public synchronized SigningPublicKey getBlindedPubKey() {
         calculate();
         return _blindSPK;
     }
 
     /**
-     *  @return The hash of the destination if known, or null
-     */
+      *  Gets the destination hash if known.
+      *
+      *  @return The hash of the destination if known, or null
+      */
     public synchronized Hash getDestHash() {
         return _dest != null ? _dest.getHash() : null;
     }
 
     /**
-     *  @return The hash of the blinded key for the current day
-     */
+      *  Gets the hash of the blinded key for the current day.
+      *
+      *  @return The hash of the blinded key for the current day
+      */
     public synchronized Hash getBlindedHash() {
         calculate();
         return _blindHash;
     }
 
     /**
-     *  @return Alpha for the current day
-     */
+      *  Gets the alpha value for the current day.
+      *
+      *  @return Alpha for the current day
+      */
     public synchronized SigningPrivateKey getAlpha() {
         calculate();
         return _alpha;
     }
 
     /**
-     *  @return null if unknown
-     */
+      *  Gets the destination if known.
+      *
+      *  @return null if unknown
+      */
     public synchronized Destination getDestination() {
         return _dest;
     }
 
     /**
-     *  @throws IllegalArgumentException on SigningPublicKey mismatch
+     *  Sets the destination for this blinded data.
+     *
+     * @param d the destination to set
+     * @throws IllegalArgumentException on SigningPublicKey mismatch
      */
     public synchronized void setDestination(Destination d) {
         if (_dest != null) {
@@ -215,22 +251,28 @@ public class BlindData {
     }
 
     /**
-     *  @return null if none
-     */
+      *  Gets the secret if set.
+      *
+      *  @return null if none
+      */
     public String getSecret() {
         return _secret;
     }
 
     /**
-     *  @return 0 for no client auth, 1 for DH, 3 for PSK
-     */
+      *  Gets the authentication type.
+      *
+      *  @return 0 for no client auth, 1 for DH, 3 for PSK
+      */
     public int getAuthType() {
         return _authType;
     }
 
     /**
-     *  @return null for no client auth
-     */
+      *  Gets the authentication private key.
+      *
+      *  @return null for no client auth
+      */
     public PrivateKey getAuthPrivKey() {
         return _authKey;
     }
@@ -259,9 +301,13 @@ public class BlindData {
     }
 
     /**
-     *  b33 format
-     *  @since 0.9.41
-     */
+      *  Encodes the blinded key in b33 format.
+       *
+       *  Encodes the blinded key in b33 format.
+       *
+       * @return the b33 encoded string
+       * @since 0.9.41
+       */
     public synchronized String toBase32() {
         if (_b32 == null)
             _b32 = Blinding.encode(_clearSPK, _secretRequired, _authRequired);
@@ -269,38 +315,49 @@ public class BlindData {
     }
 
     /**
-     *  @since 0.9.41
-     */
+      *  Marks that a secret is required for this blinded key.
+      *
+      * @since 0.9.41
+      */
     public synchronized void setSecretRequired() {
         _secretRequired = true;
         _b32 = null;
     }
 
     /**
-     *  @since 0.9.41
-     */
+       *  Checks if a secret is required.
+       *
+       * @return true if a secret is required
+       * @since 0.9.41
+       */
     public boolean getSecretRequired() {
         return _secretRequired;
     }
 
     /**
-     *  @since 0.9.41
-     */
+      *  Marks that authentication is required for this blinded key.
+      *
+      * @since 0.9.41
+      */
     public synchronized void setAuthRequired() {
         _authRequired = true;
         _b32 = null;
     }
 
     /**
-     *  @since 0.9.41
-     */
+       *  Checks if authentication is required.
+       *
+       * @return true if authentication is required
+       * @since 0.9.41
+       */
     public boolean getAuthRequired() {
         return _authRequired;
     }
 
     /**
      *  Creation date. Absolute timestamp.
-     *  @since 0.9.41
+     * @param date the creation date in milliseconds
+     * @since 0.9.41
      */
     public void setDate(long date) {
         _date = date;
@@ -319,7 +376,8 @@ public class BlindData {
 
     /**
      *  Expiration date. Absolute timestamp.
-     *  @since 0.9.43
+     * @param date the expiration date in milliseconds
+     * @since 0.9.43
      */
     public void setExpiration(long date) {
         _expiration = date;

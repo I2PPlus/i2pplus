@@ -20,6 +20,14 @@ public class AliasedTunnelPool extends TunnelPool {
 
     private final TunnelPool _aliasOf;
 
+    /**
+     *  Create an aliased tunnel pool.
+     *
+     *  @param ctx the router context
+     *  @param mgr the tunnel pool manager
+     *  @param settings the pool settings
+     *  @param aliasOf the pool to use for tunnel selection
+     */
     AliasedTunnelPool(RouterContext ctx, TunnelPoolManager mgr, TunnelPoolSettings settings, TunnelPool aliasOf) {
         super(ctx, mgr, settings, null);
         if (settings.isExploratory())

@@ -46,7 +46,8 @@ public class Base64 {
      *  Output will be a multiple of 4 chars, including 0-2 trailing '='
      *  As of 0.9.14, encodes the UTF-8 encoding of source. Prior to that, used the platform's encoding.
      *
-     *  @param source if null will return ""
+     * @param source the string to encode, if null will return ""
+     * @return the Base64 encoded string
      */
     public static String encode(String source) {
         return (source != null ? encode(DataHelper.getUTF8(source)) : "");
@@ -54,7 +55,9 @@ public class Base64 {
 
     /**
      *  Output will be a multiple of 4 chars, including 0-2 trailing '='
-     *  @param source if null will return ""
+     *
+     * @param source the byte array to encode, if null will return ""
+     * @return the Base64 encoded string
      */
     public static String encode(byte[] source) {
         return (source != null ? encode(source, 0, source.length) : "");
@@ -62,7 +65,11 @@ public class Base64 {
 
     /**
      *  Output will be a multiple of 4 chars, including 0-2 trailing '='
-     *  @param source if null will return ""
+     *
+     * @param source the byte array to encode, if null will return ""
+     * @param off the offset in the source array
+     * @param len the length of data to encode
+     * @return the Base64 encoded string
      */
     public static String encode(byte[] source, int off, int len) {
         return (source != null ? encode(source, off, len, false) : "");
@@ -70,8 +77,10 @@ public class Base64 {
 
     /**
      *  Output will be a multiple of 4 chars, including 0-2 trailing '='
-     *  @param source if null will return ""
-     *  @param useStandardAlphabet Warning, must be false for I2P compatibility
+     *
+     * @param source the byte array to encode, if null will return ""
+     * @param useStandardAlphabet Warning, must be false for I2P compatibility
+     * @return the Base64 encoded string
      */
     public static String encode(byte[] source, boolean useStandardAlphabet) {
         return (source != null ? encode(source, 0, source.length, useStandardAlphabet) : "");
@@ -79,8 +88,12 @@ public class Base64 {
 
     /**
      *  Output will be a multiple of 4 chars, including 0-2 trailing '='
-     *  @param source if null will return ""
-     *  @param useStandardAlphabet Warning, must be false for I2P compatibility
+     *
+     * @param source the byte array to encode, if null will return ""
+     * @param off the offset in the source array
+     * @param len the length of data to encode
+     * @param useStandardAlphabet Warning, must be false for I2P compatibility
+     * @return the Base64 encoded string
      */
     public static String encode(byte[] source, int off, int len, boolean useStandardAlphabet) {
         return (source != null ? safeEncode(source, off, len, useStandardAlphabet) : "");
@@ -98,8 +111,8 @@ public class Base64 {
      *  As of 0.9.14, whitespace will cause an error.
      *  Prior to that, it was ignored.
      *
-     *  @param s Base 64 encoded string using the I2P alphabet A-Z, a-z, 0-9, -, ~
-     *  @return the decoded data, null on error
+     * @param s Base 64 encoded string using the I2P alphabet A-Z, a-z, 0-9, -, ~
+     * @return the decoded data, null on error
      */
     public static byte[] decode(String s) {
         return safeDecode(s, false);
@@ -108,8 +121,9 @@ public class Base64 {
     /**
      *  Decodes data from Base64 notation using the I2P alphabet.
      *
-     *  @param useStandardAlphabet Warning, must be false for I2P compatibility
-     *  @return the decoded data, null on error
+     * @param s the Base64 encoded string
+     * @param useStandardAlphabet Warning, must be false for I2P compatibility
+     * @return the decoded data, null on error
      *  @since 0.9.25
      */
     public static byte[] decode(String s, boolean useStandardAlphabet) {
@@ -190,6 +204,10 @@ public class Base64 {
     private Base64() { // nop
     }
 
+    /**
+     *  Command-line tool for encoding and decoding Base64.
+     * @param args command-line arguments
+     */
     public static void main(String[] args) {
         //test();
         if (args.length == 0) {

@@ -26,24 +26,44 @@ import java.util.Arrays;
  */
 public final class ByteMatrix {
 
+  /** internal 2D array of bytes */
   private final byte[][] bytes;
+  /** width of the matrix */
   private final int width;
+  /** height of the matrix */
   private final int height;
 
+  /**
+   * Creates a new ByteMatrix with the specified dimensions.
+   * @param width the width of the matrix
+   * @param height the height of the matrix
+   */
   public ByteMatrix(int width, int height) {
     bytes = new byte[height][width];
     this.width = width;
     this.height = height;
   }
 
+  /**
+   * @return the height of the matrix
+   */
   public int getHeight() {
     return height;
   }
 
+  /**
+   * @return the width of the matrix
+   */
   public int getWidth() {
     return width;
   }
 
+  /**
+   * Gets the value at the specified coordinates.
+   * @param x the x coordinate
+   * @param y the y coordinate
+   * @return the byte value at the specified position
+   */
   public byte get(int x, int y) {
     return bytes[y][x];
   }
@@ -55,24 +75,49 @@ public final class ByteMatrix {
     return bytes;
   }
 
+  /**
+   * Sets the value at the specified coordinates.
+   * @param x the x coordinate
+   * @param y the y coordinate
+   * @param value the byte value to set
+   */
   public void set(int x, int y, byte value) {
     bytes[y][x] = value;
   }
 
+  /**
+   * Sets the value at the specified coordinates using an int value.
+   * @param x the x coordinate
+   * @param y the y coordinate
+   * @param value the int value to set (will be cast to byte)
+   */
   public void set(int x, int y, int value) {
     bytes[y][x] = (byte) value;
   }
 
+  /**
+   * Sets the value at the specified coordinates using a boolean value.
+   * @param x the x coordinate
+   * @param y the y coordinate
+   * @param value the boolean value to set (true = 1, false = 0)
+   */
   public void set(int x, int y, boolean value) {
     bytes[y][x] = (byte) (value ? 1 : 0);
   }
 
+  /**
+   * Clears all cells in the matrix to the specified value.
+   * @param value the byte value to set all cells to
+   */
   public void clear(byte value) {
     for (byte[] aByte : bytes) {
       Arrays.fill(aByte, value);
     }
   }
 
+  /**
+   * @return a string representation of this ByteMatrix
+   */
   @Override
   public String toString() {
     StringBuilder result = new StringBuilder(2 * width * height + 2);

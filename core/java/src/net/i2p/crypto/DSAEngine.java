@@ -97,7 +97,7 @@ public final class DSAEngine {
         if (type != SigType.DSA_SHA1) {
             try {
                 rv = altVerifySig(signature, signedData, offset, size, verifyingKey);
-                if ((!rv) && _log.shouldWarn())
+                if (!rv && _log.shouldWarn())
                     _log.warn(type + " Signature verification failure");
                 return rv;
             } catch (GeneralSecurityException gse) {
@@ -109,7 +109,7 @@ public final class DSAEngine {
         if (_useJavaLibs) {
             try {
                 rv = altVerifySigSHA1(signature, signedData, offset, size, verifyingKey);
-                if ((!rv) && _log.shouldWarn())
+                if (!rv && _log.shouldWarn())
                     _log.warn("Lib DSA Signature verification failure");
                 return rv;
             } catch (GeneralSecurityException gse) {
@@ -119,7 +119,7 @@ public final class DSAEngine {
             }
         }
         rv = verifySignature(signature, calculateHash(signedData, offset, size), verifyingKey);
-        if ((!rv) && _log.shouldWarn())
+        if (!rv && _log.shouldWarn())
             _log.warn("TheCrypto DSA Signature verification failure");
         return rv;
     }
@@ -237,7 +237,7 @@ public final class DSAEngine {
             BigInteger u2 = r.multiply(w).mod(CryptoConstants.dsaq);
             BigInteger modval = CryptoConstants.dsag.modPow(u1, CryptoConstants.dsap);
             BigInteger modmulval = modval.multiply(y.modPow(u2,CryptoConstants.dsap));
-            BigInteger v = (modmulval).mod(CryptoConstants.dsap).mod(CryptoConstants.dsaq);
+            BigInteger v = modmulval.mod(CryptoConstants.dsap).mod(CryptoConstants.dsaq);
 
             boolean ok = v.compareTo(r) == 0;
 
@@ -405,7 +405,7 @@ public final class DSAEngine {
 
         BigInteger M = new NativeBigInteger(1, hash.getData());
         BigInteger x = new NativeBigInteger(1, signingKey.getData());
-        BigInteger s = (kinv.multiply(M.add(x.multiply(r)))).mod(CryptoConstants.dsaq);
+        BigInteger s = kinv.multiply(M.add(x.multiply(r))).mod(CryptoConstants.dsaq);
 
         byte[] rbytes = r.toByteArray();
         byte[] sbytes = s.toByteArray();

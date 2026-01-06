@@ -103,7 +103,7 @@ public class SigningPublicKey extends SimpleDataStructure {
      * Pull from cache or return new.
      * Deprecated - used only by deprecated Destination.readBytes(data, off)
      *
-     * @throws ArrayIndexOutOfBoundsException if not enough bytes, FIXME should throw DataFormatException
+     * @throws DataFormatException if not enough bytes
      * @since 0.8.3
      */
     public static SigningPublicKey create(byte[] data, int off) {return _cache.get(data, off);}

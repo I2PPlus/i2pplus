@@ -8,38 +8,30 @@ package org.xlattice.crypto.filters;
  * This is essential for implementing efficient Bloom filters where each hash function
  * needs to examine specific bits or words from the key.</p>
  *
- * <p>The class supports two types of selectors:<br>
- * - <strong>BitSelector</strong>: Extracts individual bit positions (5-bit stride)<br>
- * - <strong>WordSelector</strong>: Extracts word positions ((m-5)-bit stride)</p>
+ * <p>The class supports two types of selectors:</p>
+ * <ul>
+ * <li><strong>BitSelector</strong>: Extracts individual bit positions (5-bit stride)</li>
+ * <li><strong>WordSelector</strong>: Extracts word positions ((m-5)-bit stride)</li>
+ * </ul>
  *
- * <p>Usage example:<br>
- * <pre>
- * // Create a key selector for a Bloom filter with m=1024, k=5
- * KeySelector selector = new KeySelector(1024, 5);
+ * <p>Usage example: Create a KeySelector with m and k parameters,
+ * then call getOffsets() to extract bit and word offsets from a key.</p>
  *
- * // Extract offsets from a 32-byte key
- * byte[] key = new byte[32]; // your cryptographic key
- * int[] bitOffsets = new int[5];
- * int[] wordOffsets = new int[5];
+ * <p>Example: new KeySelector(1024, 5) creates a selector for m=1024, k=5.</p>
  *
- * selector.getOffsets(key, bitOffsets, wordOffsets);
+ * <p>Constraints and limitations:</p>
+ * <ul>
+ * <li>Maximum supported for 32-byte keys: m=23, k=11</li>
+ * <li>Formula constraint: ((5k + (k-1)(m-5)) / 8) + 2 &le; keySizeInBytes</li>
+ * <li>All methods are thread-safe for concurrent access</li>
+ * </ul>
  *
- * // Use offsets in Bloom filter operations
- * for (int i = 0; i < 5; i++) {
- *     System.out.println("Hash " + i + " uses bit " + bitOffsets[i] +
- *                        ", word " + wordOffsets[i]);
- * }
- * </pre></p>
- *
- * <p>Constraints and limitations:<br>
- * - Maximum supported for 32-byte keys: m=23, k=11<br>
- * - Formula constraint: ((5k + (k-1)(m-5)) / 8) + 2 ≤ keySizeInBytes<br>
- * - All methods are thread-safe for concurrent access</p>
- *
- * <p>Algorithm details:<br>
- * - Bit selectors use 5-bit stride for optimal distribution<br>
- * - Word selectors use (m-5)-bit stride to avoid bit selector overlap<br>
- * - Both use lookup tables (UNMASK/MASK) for efficient bit operations</p>
+ * <p>Algorithm details:</p>
+ * <ul>
+ * <li>Bit selectors use 5-bit stride for optimal distribution</li>
+ * <li>Word selectors use (m-5)-bit stride to avoid bit selector overlap</li>
+ * <li>Both use lookup tables (UNMASK/MASK) for efficient bit operations</li>
+ * </ul>
  *
  * @author <A HREF="mailto:jddixon@users.sourceforge.net">Jim Dixon</A>
  *
@@ -224,27 +216,29 @@ public class KeySelector {
      *
      * @author Jim Dixon
      */
-    public class GenericBitSelector implements BitSelector {
-        /**
-         * Extracts k bit offsets from key data using 5-bit stride algorithm.
-         *
-         * <p>This method processes the key data byte by byte, extracting
-         * bit positions at 5-bit intervals. For each bit position, it
-         * calculates which byte contains the bit and extracts the appropriate
-         * bits using bit masking and shifting operations.</p>
-         *
-         * <p>Algorithm details:<br>
-         * - Tracks current bit position across byte boundaries<br>
-         * - Uses UNMASK array to isolate right-aligned bits<br>
-         * - Uses MASK array to isolate left-aligned bits<br>
-         * - Handles cases where bits span multiple bytes</p>
-         *
-         * @param b key data as byte array
-         * @param offset starting position within key array
-         * @param length number of bytes to process
-         * @param bitOffset output array of length k to store calculated bit offsets
-         */
-        public void getBitSelectors(byte[] b, int offset, int length, int[] bitOffset) {
+     public class GenericBitSelector implements BitSelector {
+         /** Default constructor. */
+         public GenericBitSelector() {}
+         /**
+          * Extracts k bit offsets from key data using 5-bit stride algorithm.
+          *
+          * <p>This method processes the key data byte by byte, extracting
+          * bit positions at 5-bit intervals. For each bit position, it
+          * calculates which byte contains the bit and extracts the appropriate
+          * bits using bit masking and shifting operations.</p>
+          *
+          * <p>Algorithm details:<br>
+          * - Tracks current bit position across byte boundaries<br>
+          * - Uses UNMASK array to isolate right-aligned bits<br>
+          * - Uses MASK array to isolate left-aligned bits<br>
+          * - Handles cases where bits span multiple bytes</p>
+          *
+          * @param b key data as byte array
+          * @param offset starting position within key array
+          * @param length number of bytes to process
+          * @param bitOffset output array of length k to store calculated bit offsets
+          */
+         public void getBitSelectors(byte[] b, int offset, int length, int[] bitOffset) {
             int curBit = 8 * offset;
             int curByte;
             for (int j = 0; j < k; j++) {
@@ -319,9 +313,11 @@ public class KeySelector {
      *
      * @author Jim Dixon
      */
-    public class GenericWordSelector implements WordSelector {
-        /**
-         * Extracts k word offsets from key data using variable stride algorithm.
+     public class GenericWordSelector implements WordSelector {
+         /** Default constructor. */
+         public GenericWordSelector() {}
+         /**
+          * Extracts k word offsets from key data using variable stride algorithm.
          *
          * <p>This method processes the key data to calculate word positions
          * for Bloom filter operations. Each word offset represents the starting
@@ -446,6 +442,8 @@ public class KeySelector {
      * of which has k elements.
      *
      * @param key cryptographic key used in populating the arrays
+     * @param off starting position within the key array
+     * @param len number of bytes to process from the key
      * @param bitOffset Out parameter of length k
      * @param wordOffset Out parameter of length k
      * @since 0.8.11 out parameters added

@@ -125,13 +125,19 @@ import net.i2p.util.Log;
  *
  */
 public class BuildRequestRecord {
+    /** The raw record data */
     private final byte[] _data;
+    /** True if ECIES format, false if ElGamal */
     private final boolean _isEC;
+    /** ChaCha reply key for ECIES */
     private SessionKey _chachaReplyKey;
+    /** ChaCha reply AD for ECIES */
     private byte[] _chachaReplyAD;
-    // derived keys for short records
+    /** Derived layer key for short records */
     private SessionKey _derivedLayerKey;
+    /** Derived IV key for short records */
     private SessionKey _derivedIVKey;
+    /** Derived garlic keys for short OBEP records */
     private OneTimeSession _derivedGarlicKeys;
 
     /**
@@ -147,6 +153,7 @@ public class BuildRequestRecord {
      */
     private static final int FLAG_OUTBOUND_ENDPOINT = (1 << 6);
 
+    /** IV size in bytes */
     public static final int IV_SIZE = 16;
     /** we show 16 bytes of the peer hash outside the elGamal block */
     public static final int PEER_SIZE = 16;
@@ -155,69 +162,110 @@ public class BuildRequestRecord {
     private static final byte[] NULL_KEY = new byte[EC_LEN];
 
     /**
-     *  @return 222 (ElG) or 464 (ECIES) bytes, non-null
+     * Returns the raw record data.
+     * @return 222 (ElG) or 464 (ECIES) bytes, non-null
      */
     public byte[] getData() { return _data; }
 
-    // Original ElGamal format
+    /** Offset for receive tunnel in ElGamal format */
     private static final int OFF_RECV_TUNNEL = 0;
+    /** Offset for local identity hash in ElGamal format */
     private static final int OFF_OUR_IDENT = OFF_RECV_TUNNEL + 4;
+    /** Offset for send tunnel in ElGamal format */
     private static final int OFF_SEND_TUNNEL = OFF_OUR_IDENT + Hash.HASH_LENGTH;
+    /** Offset for send identity hash in ElGamal format */
     private static final int OFF_SEND_IDENT = OFF_SEND_TUNNEL + 4;
+    /** Offset for layer key in ElGamal format */
     private static final int OFF_LAYER_KEY = OFF_SEND_IDENT + Hash.HASH_LENGTH;
+    /** Offset for IV key in ElGamal format */
     private static final int OFF_IV_KEY = OFF_LAYER_KEY + SessionKey.KEYSIZE_BYTES;
+    /** Offset for reply key in ElGamal format */
     public static final int OFF_REPLY_KEY = OFF_IV_KEY + SessionKey.KEYSIZE_BYTES;
+    /** Offset for reply IV in ElGamal format */
     private static final int OFF_REPLY_IV = OFF_REPLY_KEY + SessionKey.KEYSIZE_BYTES;
+    /** Offset for flags in ElGamal format */
     private static final int OFF_FLAG = OFF_REPLY_IV + IV_SIZE;
+    /** Offset for request time in ElGamal format */
     private static final int OFF_REQ_TIME = OFF_FLAG + 1;
+    /** Offset for send message ID in ElGamal format */
     private static final int OFF_SEND_MSG_ID = OFF_REQ_TIME + 4;
+    /** Padding size for ElGamal format */
     private static final int PADDING_SIZE = 29;
-    // 222
+    /** Record length for ElGamal format (222 bytes) */
     private static final int LENGTH = OFF_SEND_MSG_ID + 4 + PADDING_SIZE;
 
-    // ECIES long record format
+    /** Offset for send tunnel in ECIES long format */
     private static final int OFF_SEND_TUNNEL_EC = OFF_OUR_IDENT;
+    /** Offset for send identity hash in ECIES long format */
     private static final int OFF_SEND_IDENT_EC = OFF_SEND_TUNNEL_EC + 4;
+    /** Offset for layer key in ECIES long format */
     private static final int OFF_LAYER_KEY_EC = OFF_SEND_IDENT_EC + Hash.HASH_LENGTH;
+    /** Offset for IV key in ECIES long format */
     private static final int OFF_IV_KEY_EC = OFF_LAYER_KEY_EC + SessionKey.KEYSIZE_BYTES;
+    /** Offset for reply key in ECIES long format */
     public static final int OFF_REPLY_KEY_EC = OFF_IV_KEY_EC + SessionKey.KEYSIZE_BYTES;
+    /** Offset for reply IV in ECIES long format */
     private static final int OFF_REPLY_IV_EC = OFF_REPLY_KEY_EC + SessionKey.KEYSIZE_BYTES;
+    /** Offset for flags in ECIES long format */
     private static final int OFF_FLAG_EC = OFF_REPLY_IV_EC + IV_SIZE;
+    /** Offset for request time in ECIES long format */
     private static final int OFF_REQ_TIME_EC = OFF_FLAG_EC + 4;
+    /** Offset for expiration in ECIES long format */
     private static final int OFF_EXPIRATION = OFF_REQ_TIME_EC + 4;
+    /** Offset for send message ID in ECIES long format */
     private static final int OFF_SEND_MSG_ID_EC = OFF_EXPIRATION + 4;
+    /** Offset for options in ECIES long format */
     private static final int OFF_OPTIONS = OFF_SEND_MSG_ID_EC + 4;
+    /** Record length for ECIES long format (464 bytes) */
     private static final int LENGTH_EC = 464;
-    private static final int MAX_OPTIONS_LENGTH = LENGTH_EC - OFF_OPTIONS; // includes options length
+    /** Maximum options length for ECIES long format */
+    private static final int MAX_OPTIONS_LENGTH = LENGTH_EC - OFF_OPTIONS;
 
-    // ECIES short record format
+    /** Offset for flags in ECIES short format */
     private static final int OFF_FLAG_EC_SHORT = OFF_SEND_IDENT_EC + Hash.HASH_LENGTH;
+    /** Offset for layer encryption type in ECIES short format */
     private static final int OFF_LAYER_ENC_TYPE = OFF_FLAG_EC_SHORT + 3;
+    /** Offset for request time in ECIES short format */
     private static final int OFF_REQ_TIME_EC_SHORT = OFF_LAYER_ENC_TYPE + 1;
+    /** Offset for expiration in ECIES short format */
     private static final int OFF_EXPIRATION_SHORT = OFF_REQ_TIME_EC_SHORT + 4;
+    /** Offset for send message ID in ECIES short format */
     private static final int OFF_SEND_MSG_ID_EC_SHORT = OFF_EXPIRATION_SHORT + 4;
+    /** Offset for options in ECIES short format */
     private static final int OFF_OPTIONS_SHORT = OFF_SEND_MSG_ID_EC_SHORT + 4;
-    // 16 byte trunc. hash, 32 byte eph. key, 16 byte MAC
+    /** Record length for ECIES short format (154 bytes) */
     private static final int LENGTH_EC_SHORT = ShortTunnelBuildMessage.SHORT_RECORD_SIZE - (16 + 32 + 16);
-    private static final int MAX_OPTIONS_LENGTH_SHORT = LENGTH_EC_SHORT - OFF_OPTIONS_SHORT; // includes options length
-    // short record HKDF
+    /** Maximum options length for ECIES short format */
+    private static final int MAX_OPTIONS_LENGTH_SHORT = LENGTH_EC_SHORT - OFF_OPTIONS_SHORT;
+    /** Empty byte array for short record HKDF */
     private static final byte[] ZEROLEN = new byte[0];
+    /** HKDF info string for reply key derivation */
     private static final String INFO_1 = "SMTunnelReplyKey";
+    /** HKDF info string for layer key derivation */
     private static final String INFO_2 = "SMTunnelLayerKey";
+    /** HKDF info string for IV key derivation */
     private static final String INFO_3 = "TunnelLayerIVKey";
+    /** HKDF info string for garlic key and tag derivation */
     private static final String INFO_4 = "RGarlicKeyAndTag";
 
+    /** Test mode flag */
     private static final boolean TEST = false;
+    /** Test key factory */
     private static KeyFactory TESTKF;
 
-    /** what tunnel ID should this receive messages on */
+    /**
+     * Reads the tunnel ID this hop should receive messages on.
+     * @return the tunnel ID
+     */
     public long readReceiveTunnelId() {
         return DataHelper.fromLong(_data, OFF_RECV_TUNNEL, 4);
     }
 
     /**
+     * Reads the next hop's tunnel ID.
      * What tunnel ID the next hop receives messages on.  If this is the outbound tunnel endpoint,
      * this specifies the tunnel ID to which the reply should be sent.
+     * @return the next tunnel ID
      */
     public long readNextTunnelId() {
         int off = _isEC ? OFF_SEND_TUNNEL_EC : OFF_SEND_TUNNEL;
@@ -225,8 +273,10 @@ public class BuildRequestRecord {
     }
 
     /**
+     * Reads the next hop's identity hash.
      * Read the next hop from the record.  If this is the outbound tunnel endpoint, this specifies
      * the gateway to which the reply should be sent.
+     * @return the next hop's identity hash, non-null
      */
     public Hash readNextIdentity() {
         int off = _isEC ? OFF_SEND_IDENT_EC : OFF_SEND_IDENT;
@@ -234,7 +284,9 @@ public class BuildRequestRecord {
     }
 
     /**
+     * Reads the tunnel layer encryption key.
      * Tunnel layer encryption key that the current hop should use
+     * @return the session key for layer encryption
      */
     public SessionKey readLayerKey() {
         if (_data.length == LENGTH_EC_SHORT)
@@ -246,7 +298,9 @@ public class BuildRequestRecord {
     }
 
     /**
+     * Reads the tunnel IV encryption key.
      * Tunnel IV encryption key that the current hop should use
+     * @return the session key for IV encryption
      */
     public SessionKey readIVKey() {
         if (_data.length == LENGTH_EC_SHORT)
@@ -258,8 +312,11 @@ public class BuildRequestRecord {
     }
 
     /**
+     * Reads the reply encryption key.
      * AES Session key that should be used to encrypt the reply.
      * Not to be used for short ECIES records; use the ChaChaReplyKey instead.
+     * @return the session key for reply encryption
+     * @throws IllegalStateException for short ECIES records
      */
     public SessionKey readReplyKey() {
         if (_isEC && _data.length == LENGTH_EC_SHORT)
@@ -271,9 +328,11 @@ public class BuildRequestRecord {
     }
 
     /**
+     * Reads the reply IV.
      * AES IV that should be used to encrypt the reply.
      * Not to be used for short ECIES records.
-     * @return 16 bytes
+     * @return 16 bytes IV data
+     * @throws IllegalStateException for short ECIES records
      */
     public byte[] readReplyIV() {
         if (_isEC && _data.length == LENGTH_EC_SHORT)
@@ -285,9 +344,10 @@ public class BuildRequestRecord {
     }
 
     /**
+     * Reads whether this hop is an inbound gateway.
      * The current hop is the inbound gateway.  If this is true, it means anyone can send messages to
      * this tunnel, but if it is false, only the current predecessor can.
-     *
+     * @return true if inbound gateway, false otherwise
      */
     public boolean readIsInboundGateway() {
         int off = _isEC ? (_data.length == LENGTH_EC_SHORT ? OFF_FLAG_EC_SHORT : OFF_FLAG_EC)
@@ -296,8 +356,10 @@ public class BuildRequestRecord {
     }
 
     /**
+     * Reads whether this hop is an outbound endpoint.
      * The current hop is the outbound endpoint.  If this is true, the next identity and next tunnel
      * fields refer to where the reply should be sent.
+     * @return true if outbound endpoint, false otherwise
      */
     public boolean readIsOutboundEndpoint() {
         int off = _isEC ? (_data.length == LENGTH_EC_SHORT ? OFF_FLAG_EC_SHORT : OFF_FLAG_EC)
@@ -306,9 +368,11 @@ public class BuildRequestRecord {
     }
 
     /**
+     * Reads the request time.
      * For ElGamal, time that the request was sent (ms), truncated to the nearest hour.
      * For ECIES, time that the request was sent (ms), truncated to the nearest minute.
      * This ignores leap seconds.
+     * @return the request time in milliseconds
      */
     public long readRequestTime() {
         if (_isEC) {
@@ -319,8 +383,10 @@ public class BuildRequestRecord {
     }
 
     /**
+     * Reads the reply message ID.
      * What message ID should we send the request to the next hop with.  If this is the outbound tunnel endpoint,
      * this specifies the message ID with which the reply should be sent.
+     * @return the reply message ID
      */
     public long readReplyMessageId() {
         int off = _isEC ? (_data.length == LENGTH_EC_SHORT ? OFF_SEND_MSG_ID_EC_SHORT : OFF_SEND_MSG_ID_EC)
@@ -329,7 +395,9 @@ public class BuildRequestRecord {
     }
 
     /**
+     * Reads the expiration time.
      * The expiration in milliseconds from now.
+     * @return the expiration in milliseconds
      * @since 0.9.48
      */
     public long readExpiration() {
@@ -340,8 +408,9 @@ public class BuildRequestRecord {
     }
 
     /**
+     * Reads the tunnel build options.
      * ECIES only.
-     * @return null for ElGamal or on error
+     * @return the properties, or null for ElGamal or on error
      * @since 0.9.48
      */
     public Properties readOptions() {
@@ -362,8 +431,9 @@ public class BuildRequestRecord {
     }
 
     /**
+     * Reads the layer encryption type.
      * ECIES short record only.
-     * @return 0 for ElGamal or ECIES long record
+     * @return the encryption type (0-255), or 0 for ElGamal or ECIES long record
      * @since 0.9.51
      */
     public int readLayerEncryptionType() {
@@ -373,8 +443,9 @@ public class BuildRequestRecord {
     }
 
     /**
+     * Reads the garlic keys for OBEP.
      * ECIES short OBEP record only.
-     * @return null for ElGamal or ECIES long record or non-OBEP
+     * @return the garlic keys, or null for ElGamal or ECIES long record or non-OBEP
      * @since 0.9.51
      */
     public OneTimeSession readGarlicKeys() {
@@ -382,14 +453,17 @@ public class BuildRequestRecord {
     }
 
     /**
+     * Encrypts the record using ElGamal.
      * Encrypt the record to the specified peer.  The result is formatted as: <pre>
      *   bytes 0-15: truncated SHA-256 of the current hop's identity (the toPeer parameter)
      * bytes 15-527: ElGamal-2048 encrypted block
      * </pre>
-     *
-     * ElGamal only
-     *
-     * @return non-null
+     * ElGamal only.
+     * @param ctx the application context
+     * @param toKey the public key to encrypt to
+     * @param toPeer the peer's identity hash
+     * @return the encrypted build record, non-null
+     * @throws IllegalArgumentException if key type is not ElGamal
      */
     public EncryptedBuildRecord encryptRecord(I2PAppContext ctx, PublicKey toKey, Hash toPeer) {
         EncType type = toKey.getType();
@@ -406,6 +480,7 @@ public class BuildRequestRecord {
     }
 
     /**
+     * Encrypts the record using ECIES.
      * Encrypt the record to the specified peer. ECIES only.
      * The ChaCha reply key and IV will be available via the getters
      * after this call.
@@ -413,8 +488,12 @@ public class BuildRequestRecord {
      * readLayerKey(), readIVKey(), and readGarlicKeys() after this call.
      * See class javadocs for format.
      * See proposals 152 and 157.
-     *
-     * @return non-null
+     * @param ctx the router context
+     * @param toKey the public key to encrypt to
+     * @param toPeer the peer's identity hash
+     * @return the encrypted build record, non-null
+     * @throws IllegalArgumentException if key type is not ECIES
+     * @throws IllegalStateException on encryption failure
      * @since 0.9.48
      */
     public EncryptedBuildRecord encryptECIESRecord(RouterContext ctx, PublicKey toKey, Hash toPeer) {
@@ -473,27 +552,28 @@ public class BuildRequestRecord {
     }
 
     /**
+     * Returns the ChaCha reply key.
      * Valid after calling encryptECIESRecord() or after the decrypting constructor
      * with an ECIES private key.
      * See proposal 152.
-     *
-     * @return null if no ECIES encrypt/decrypt operation was performed
+     * @return the session key, or null if no ECIES encrypt/decrypt operation was performed
      * @since 0.9.48
      */
     public SessionKey getChaChaReplyKey() { return _chachaReplyKey; }
 
     /**
+     * Returns the ChaCha reply AD (Associated Data).
      * Valid after calling encryptECIESRecord() or after the decrypting constructor
      * with an ECIES private key.
      * See proposal 152.
-     *
-     * @return null if no ECIES encrypt/decrypt operation was performed
+     * @return the AD data (32 bytes), or null if no ECIES encrypt/decrypt operation was performed
      * @since 0.9.48
      */
     public byte[] getChaChaReplyAD() { return _chachaReplyAD; }
 
 
     /**
+     * Decrypts an encrypted build request record.
      * Decrypt the data from the specified record, writing the decrypted record into this instance's
      * data buffer
      *
@@ -502,7 +582,9 @@ public class BuildRequestRecord {
      *
      * The ChaCha reply key and IV will be available via the getters
      * after this call if ourKey is ECIES.
-     *
+     * @param ctx the router context
+     * @param ourKey our private key to decrypt with
+     * @param encryptedRecord the encrypted build record
      * @throws DataFormatException on decrypt fail
      * @since 0.9.48
      */
@@ -599,11 +681,13 @@ public class BuildRequestRecord {
     }
 
     /**
+     * Creates a new ElGamal build request record.
      * Populate this instance with data.  A new buffer is created to contain the data, with the
      * necessary randomized padding.
      *
      * ElGamal only. ECIES constructor below.
      *
+     * @param ctx the application context
      * @param receiveTunnelId tunnel the current hop will receive messages on
      * @param peer current hop's identity, unused, no read() method
      * @param nextTunnelId id for the next hop, or where we send the reply (if we are the outbound endpoint)
@@ -660,11 +744,13 @@ public class BuildRequestRecord {
     }
 
     /**
+     * Creates a new ECIES long build request record.
      * Populate this instance with data.  A new buffer is created to contain the data, with the
      * necessary randomized padding.
      *
      * ECIES long record only. ElGamal constructor above.
      *
+     * @param ctx the application context
      * @param receiveTunnelId tunnel the current hop will receive messages on
      * @param nextTunnelId id for the next hop, or where we send the reply (if we are the outbound endpoint)
      * @param nextHop next hop's identity, or where we send the reply (if we are the outbound endpoint)
@@ -676,8 +762,8 @@ public class BuildRequestRecord {
      * @param isInGateway are we the gateway of an inbound tunnel?
      * @param isOutEndpoint are we the endpoint of an outbound tunnel?
      * @param options 296 bytes max when serialized
-     * @since 0.9.48
      * @throws IllegalArgumentException if options too long
+     * @since 0.9.48
      */
     public BuildRequestRecord(I2PAppContext ctx, long receiveTunnelId, long nextTunnelId, Hash nextHop, long nextMsgId,
                              SessionKey layerKey, SessionKey ivKey, SessionKey replyKey, byte iv[], boolean isInGateway,
@@ -716,11 +802,13 @@ public class BuildRequestRecord {
     }
 
     /**
+     * Creates a new ECIES short build request record.
      * Populate this instance with data.  A new buffer is created to contain the data, with the
      * necessary randomized padding.
      *
      * ECIES short record only. ElGamal constructor above.
      *
+     * @param ctx the application context
      * @param receiveTunnelId tunnel the current hop will receive messages on
      * @param nextTunnelId id for the next hop, or where we send the reply (if we are the outbound endpoint)
      * @param nextHop next hop's identity, or where we send the reply (if we are the outbound endpoint)
@@ -728,8 +816,8 @@ public class BuildRequestRecord {
      * @param isInGateway are we the gateway of an inbound tunnel?
      * @param isOutEndpoint are we the endpoint of an outbound tunnel?
      * @param options 98 bytes max when serialized
-     * @since 0.9.51
      * @throws IllegalArgumentException if options too long
+     * @since 0.9.51
      */
     public BuildRequestRecord(I2PAppContext ctx, long receiveTunnelId, long nextTunnelId, Hash nextHop, long nextMsgId,
                               boolean isInGateway, boolean isOutEndpoint, Properties options) {
@@ -765,7 +853,9 @@ public class BuildRequestRecord {
     }
 
     /**
-     *  @since 0.9.24
+     * Returns a string representation of this record.
+     * @return a string representation
+     * @since 0.9.24
      */
     @Override
     public String toString() {

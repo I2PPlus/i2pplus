@@ -227,7 +227,11 @@ public class MessageStatusMessage extends I2CPMessageImpl {
         return _sessionId >= 0 ? new SessionId(_sessionId) : null;
     }
 
-    /** @param id 0-65535 */
+    /**
+      *  Sets the session ID.
+      *
+      * @param id 0-65535
+      */
     public void setSessionId(long id) {
         _sessionId = (int) id;
     }
@@ -236,7 +240,11 @@ public class MessageStatusMessage extends I2CPMessageImpl {
         return _status;
     }
 
-    /** @param status 0-255 */
+    /**
+      *  Sets the status code.
+      *
+      * @param status 0-255
+      */
     public void setStatus(int status) {
         _status = status;
     }
@@ -365,6 +373,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
         throw new UnsupportedOperationException("This shouldn't be called... use writeMessage(out)");
     }
 
+    @Override
     public int getType() {
         return MESSAGE_TYPE;
     }

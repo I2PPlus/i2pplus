@@ -23,18 +23,22 @@ import org.junit.*;
  */
 public class Ed25519FieldElementTest extends AbstractFieldElementTest {
 
+    @Override
     protected FieldElement getRandomFieldElement() {
         return MathUtils.getRandomFieldElement();
     }
 
+    @Override
     protected BigInteger toBigInteger(FieldElement f) {
         return MathUtils.toBigInteger(f);
     }
 
+    @Override
     protected BigInteger getQ() {
         return MathUtils.getQ();
     }
 
+    @Override
     protected Field getField() {
         return MathUtils.getField();
     }
@@ -63,10 +67,12 @@ public class Ed25519FieldElementTest extends AbstractFieldElementTest {
 
     // region isNonZero
 
+    @Override
     protected FieldElement getZeroFieldElement() {
         return new Ed25519FieldElement(MathUtils.getField(), new int[10]);
     }
 
+    @Override
     protected FieldElement getNonZeroFieldElement() {
         final int[] t = new int[10];
         t[0] = 5;

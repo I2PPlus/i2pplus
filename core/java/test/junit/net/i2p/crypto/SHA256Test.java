@@ -19,6 +19,7 @@ import net.i2p.data.Hash;
 public class SHA256Test extends TestCase{
     private I2PAppContext _context;
 
+    @Override
     protected void setUp() {
         _context = I2PAppContext.getGlobalContext();
     }

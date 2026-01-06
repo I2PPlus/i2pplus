@@ -287,9 +287,11 @@ public class Rate {
     }
 
     /**
-     * @return the average or lifetime average depending on last event count
-     * @since 0.9.4
-     */
+      *  Gets the average value, or the lifetime average if no recent data.
+      *
+      * @return the average or lifetime average depending on last event count
+      * @since 0.9.4
+      */
     public synchronized double getAvgOrLifetimeAvg() {
         if (getLastEventCount() > 0)
             return getAverageValue();
@@ -415,20 +417,24 @@ public class Rate {
     }
 
     /**
-     * @return a thread-local temp object containing computed averages.
-     * @since 0.9.4
-     */
+      *  Computes the averages for this rate.
+      *
+      * @return a thread-local temp object containing computed averages.
+      * @since 0.9.4
+      */
     public RateAverages computeAverages() {
         return computeAverages(RateAverages.getTemp(),false);
     }
 
     /**
-     * @param out where to store the computed averages.
-     * @param useLifetime whether the lifetime average should be used if
-     * there are no events.
-     * @return the same RateAverages object for chaining
-     * @since 0.9.4
-     */
+      *  Computes the averages and stores them in the provided object.
+      *
+      * @param out where to store the computed averages.
+      * @param useLifetime whether the lifetime average should be used if
+      * there are no events.
+      * @return the same RateAverages object for chaining
+      * @since 0.9.4
+      */
     public synchronized RateAverages computeAverages(RateAverages out, boolean useLifetime) {
         out.reset();
 
@@ -452,16 +458,19 @@ public class Rate {
     }
 
     /**
-     * Includes comment lines
-     */
+      *  Stores the rate data to a string builder.
+      *  Includes comment lines
+      */
     public synchronized void store(String prefix, StringBuilder buf) throws IOException {
         store(prefix, buf, true);
     }
 
     /**
-     * @param addComments add comment lines to the output
-     * @since 0.9.41
-     */
+      *  Stores the rate data to a string builder.
+      *
+      * @param addComments add comment lines to the output
+      * @since 0.9.41
+      */
     public synchronized void store(String prefix, StringBuilder buf, boolean addComments) throws IOException {
         PersistenceHelper.addDate(buf, addComments, prefix, ".creationDate", "Rate creation time:", _creationDate);
         PersistenceHelper.addDate(buf, addComments, prefix, ".lastCoalesceDate", "Last time rate was coalesced:", _lastCoalesceDate);

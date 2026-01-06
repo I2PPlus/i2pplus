@@ -16,11 +16,13 @@ import net.i2p.data.DataFormatException;
  * @author jrandom
  */
 public class ReceiveMessageBeginMessageTest extends I2CPTstBase {
+    @Override
     public I2CPMessageImpl createDataStructure() throws DataFormatException {
         ReceiveMessageBeginMessage msg = new ReceiveMessageBeginMessage();
         msg.setSessionId(321);
         msg.setMessageId(123);
         return msg;
     }
+    @Override
     public I2CPMessageImpl createStructureToRead() { return new ReceiveMessageBeginMessage(); }
 }

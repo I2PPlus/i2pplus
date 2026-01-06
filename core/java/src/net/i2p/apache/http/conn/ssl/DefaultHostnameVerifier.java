@@ -255,7 +255,9 @@ public final class DefaultHostnameVerifier implements HostnameVerifier {
                             return value.toString();
                         }
                     } catch (NoSuchElementException ignore) {
+                        // CN not present in the RDN
                     } catch (NamingException ignore) {
+                        // naming exception getting CN
                     }
                 }
             }
@@ -270,6 +272,7 @@ public final class DefaultHostnameVerifier implements HostnameVerifier {
         try {
             c = cert.getSubjectAlternativeNames();
         } catch(final CertificateParsingException ignore) {
+            // no subject alternative names
         }
         List<String> subjectAltList = null;
         if (c != null) {

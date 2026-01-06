@@ -40,23 +40,47 @@ import java.io.Flushable;
  * @param <V> type of values
  */
 public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
-	/** This is actually limited by BlockFile.spanSize which is much smaller */
+	/** Maximum number of entries in a span (limited by BlockFile.spanSize) */
 	public static final int MAX_SIZE = 256;
 
+	/** Number of keys in this span */
 	public int nKeys = 0;
+	/** Array of keys */
 	public K[] keys;
+	/** Array of values */
 	public V[] vals;
+	/** Next and previous spans */
 	public SkipSpan<K, V> next, prev;
 
+	/**
+	 *  Create a new instance of this span type.
+	 *
+	 *  @param sl the SkipList to create the span for
+	 *  @return a new SkipSpan instance
+	 */
 	public SkipSpan<K, V> newInstance(SkipList<K, V> sl) { return new SkipSpan<K, V>(keys.length); }
+
+	/**
+	 *  Mark this instance as killed.
+	 */
 	public void killInstance() { }
+
+	/**
+	 *  Flush this span to disk.
+	 */
 	public void flush() { }
 
+	/**
+	 *  Protected constructor for subclasses.
+	 */
 	protected SkipSpan() {
         // Protected constructor for subclasses
     }
 
-	/*
+	/**
+	 *  Create a new SkipSpan with the specified capacity.
+	 *
+	 *  @param size the maximum number of key-value pairs
 	 *  @throws IllegalArgumentException if size too big or too small
 	 */
 	@SuppressWarnings("unchecked")
@@ -67,7 +91,11 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
 		vals = (V[]) new Object[size];
 	}
 
-	/** dumps all the data from here to the end */
+	/**
+	 *  Dump all data from this span to the end.
+	 *
+	 *  @return a string representation of this span and all following spans
+	 */
 	public String print() {
 		StringBuilder buf = new StringBuilder(1024);
 		buf.append("Span with ").append(nKeys).append(" keys\n");
@@ -99,11 +127,23 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
  		return (-1 * (low + 1));
 	}
 
+	/**
+	 *  Get the end span of this chain.
+	 *
+	 *  @return the last SkipSpan in the chain
+	 */
 	public SkipSpan<K, V> getEnd() {
 		if(next == null) { return this; }
 		return next.getEnd();
 	}
 
+	/**
+	 *  Get the span containing the given key.
+	 *
+	 *  @param key the key to search for
+	 *  @param search search parameters and results
+	 *  @return the SkipSpan containing the key
+	 */
 	public SkipSpan<K, V> getSpan(K key, int[] search) {
 		if(nKeys == 0) {
 			search[0] = -1;
@@ -121,6 +161,12 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
 		return this;
 	}
 
+	/**
+	 *  Get the value associated with the given key.
+	 *
+	 *  @param key the key to search for
+	 *  @return the value, or null if not found
+	 */
 	public V get(K key) {
 		if(nKeys == 0) { return null; }
 		if(keys[nKeys - 1].compareTo(key) < 0) {
@@ -201,7 +247,12 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
 	}
 
 	/**
-	 *  @return the new span if it caused a split, else null if it went in an existing span
+	 *  Put a key-value pair into this span.
+	 *
+	 *  @param key the key
+	 *  @param val the value
+	 *  @param sl the SkipList
+	 *  @return the new span if it caused a split, else null if it went in this span
 	 */
 	public SkipSpan<K, V> put(K key, V val, SkipList<K, V> sl)	{
 		if(nKeys == 0) {
@@ -251,6 +302,10 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
 	}
 
 	/**
+	 *  Remove a key-value pair from this span.
+	 *
+	 *  @param key the key to remove
+	 *  @param sl the SkipList
 	 *  @return An array of two objects or null.
 	 *          rv[0] is the removed object.
 	 *          rv[1] is the deleted SkipSpan if the removed object was the last in the SkipSpan.
@@ -320,7 +375,11 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
 		return res;
 	}
 
-	/** I2P */
+	/**
+	 *  Get the first key in this span.
+	 *
+	 *  @return the first key, or null if empty
+	 */
 	public K firstKey() {
 		return keys[0];
 	}

@@ -46,6 +46,7 @@ public abstract class NamingService {
      * application context.  This constructor should only be used by the
      * appropriate application context itself.
      *
+     * @param context the application context
      */
     protected NamingService(I2PAppContext context) {
         _context = context;
@@ -56,6 +57,7 @@ public abstract class NamingService {
 
     /**
      * Look up a hostname.
+     * @param hostname the hostname to look up
      * @return the Destination for this hostname, or
      * <code>null</code> if name is unknown.
      */
@@ -64,10 +66,10 @@ public abstract class NamingService {
     }
 
     /**
-     * Reverse lookup a destination
+     * Reverse lookup a destination.
      * This implementation returns reverseLookup(dest, null).
      *
-     * @param dest non-null
+     * @param dest non-null destination to look up
      * @return a hostname for this Destination, or <code>null</code>
      * if none is known. It is safe for subclasses to always return
      * <code>null</code> if no reverse lookup is possible.
@@ -81,7 +83,7 @@ public abstract class NamingService {
      * This implementation returns null.
      * Subclasses implementing reverse lookups should override.
      *
-     * @param h non-null
+     * @param h non-null hash to look up
      * @return a hostname for this hash, or <code>null</code>
      * if none is known. It is safe for subclasses to always return
      * <code>null</code> if no reverse lookup is possible.
@@ -109,6 +111,10 @@ public abstract class NamingService {
         }
     }
 
+    /**
+     * Returns a string representation of this naming service.
+     * @return the class simple name
+     */
     @Override
     public String toString() {
         return getClass().getSimpleName();
@@ -140,8 +146,9 @@ public abstract class NamingService {
      *  Warning - unimplemented in any subclass.
      *  Returns true always.
      *
-     *  @return success
-     *  @since 0.8.7
+     * @param p the properties to set
+     * @return success
+     * @since 0.8.7
      */
     public boolean setConfiguration(Properties p) {
         return true;
@@ -153,8 +160,8 @@ public abstract class NamingService {
      *  This implementation returns null.
      *  Subclasses implementing chaining should override.
      *
-     *  @return chained naming services or null
-     *  @since 0.8.7
+     * @return chained naming services or null
+     * @since 0.8.7
      */
     public List<NamingService> getNamingServices() {
         return null;
@@ -164,8 +171,8 @@ public abstract class NamingService {
      *  This implementation returns null.
      *  Subclasses implementing chaining should override.
      *
-     *  @return parent naming service or null if this is the root
-     *  @since 0.8.7
+     * @return parent naming service or null if this is the root
+     * @since 0.8.7
      */
     public NamingService getParent() {
         return null;
@@ -173,6 +180,8 @@ public abstract class NamingService {
 
     /**
      * Only for chaining-capable NamingServices. Add to end of the list.
+     *
+     * @param ns the naming service to add
      * @return success
      * @since 0.8.7
      */
@@ -186,6 +195,7 @@ public abstract class NamingService {
      * This implementation returns false.
      * Subclasses implementing chaining should override.
      *
+     * @param ns the naming service to add
      * @param head or tail
      * @return success
      * @since 0.8.7
@@ -199,8 +209,9 @@ public abstract class NamingService {
      * This implementation returns false.
      * Subclasses implementing chaining should override.
      *
-     *  @return success
-     *  @since 0.8.7
+     * @param ns the naming service to remove
+     * @return success
+     * @since 0.8.7
      */
     public boolean removeNamingService(NamingService ns) {
         return false;
@@ -223,9 +234,9 @@ public abstract class NamingService {
      *  This implementation returns -1.
      *  Most subclasses should override.
      *
-     *  @param options NamingService-specific, can be null
-     *  @return number of entries (matching the options if non-null) or -1 if unknown
-     *  @since 0.8.7
+     * @param options NamingService-specific, can be null
+     * @return number of entries (matching the options if non-null) or -1 if unknown
+     * @since 0.8.7
      */
     public int size(Properties options) {
         return -1;
@@ -235,10 +246,10 @@ public abstract class NamingService {
      *  Warning - This obviously brings the whole database into memory,
      *  so use is discouraged.
      *
-     *  @return all mappings
-     *          or empty Map if none;
-     *          Returned Map is not necessarily sorted, implementation dependent
-     *  @since 0.8.7
+     * @return all mappings
+     *         or empty Map if none;
+     *         Returned Map is not necessarily sorted, implementation dependent
+     * @since 0.8.7
      */
     public Map<String, Destination> getEntries() {
         return getEntries(null);
@@ -248,11 +259,11 @@ public abstract class NamingService {
      *  Warning - This will bring the whole database into memory
      *  if options is null, empty, or unsupported, use with caution.
      *
-     *  @param options NamingService-specific, can be null
-     *  @return all mappings (matching the options if non-null)
-     *          or empty Map if none;
-     *          Returned Map is not necessarily sorted, implementation dependent
-     *  @since 0.8.7
+     * @param options NamingService-specific, can be null
+     * @return all mappings (matching the options if non-null)
+     *         or empty Map if none;
+     *         Returned Map is not necessarily sorted, implementation dependent
+     * @since 0.8.7
      */
     public Map<String, Destination> getEntries(Properties options) {
         return Collections.emptyMap();
@@ -267,11 +278,11 @@ public abstract class NamingService {
      *  This implementation calls getEntries(options) and returns a SortedMap.
      *  Subclasses should override if they store base64 natively.
      *
-     *  @param options NamingService-specific, can be null
-     *  @return all mappings (matching the options if non-null)
-     *          or empty Map if none;
-     *          Returned Map is not necessarily sorted, implementation dependent
-     *  @since 0.8.7, implemented in 0.9.20
+     * @param options NamingService-specific, can be null
+     * @return all mappings (matching the options if non-null)
+     *         or empty Map if none;
+     *         Returned Map is not necessarily sorted, implementation dependent
+     * @since 0.8.7, implemented in 0.9.20
      */
     public Map<String, String> getBase64Entries(Properties options) {
         Map<String, Destination> entries = getEntries(options);
@@ -293,7 +304,9 @@ public abstract class NamingService {
      *  This implementation calls getBase64Entries().
      *  Subclasses should override if they store in a hosts.txt format natively.
      *
-     *  @since 0.9.20
+     * @param out the writer to export to
+     * @throws IOException if an I/O error occurs
+     * @since 0.9.20
      */
     public void export(Writer out) throws IOException {
         export(out, null);
@@ -308,8 +321,10 @@ public abstract class NamingService {
      *  This implementation calls getBase64Entries(options).
      *  Subclasses should override if they store in a hosts.txt format natively.
      *
-     *  @param options NamingService-specific, can be null
-     *  @since 0.9.20
+     * @param out the writer to export to
+     * @param options NamingService-specific, can be null
+     * @throws IOException if an I/O error occurs
+     * @since 0.9.20
      */
     public void export(Writer out, Properties options) throws IOException {
         Map<String, String> entries = getBase64Entries(options);
@@ -329,7 +344,7 @@ public abstract class NamingService {
             return;
         }
         out.write("# Exported: ");
-        out.write((new Date()).toString());
+        out.write(new Date().toString());
         out.write(nl);
         if (sz > 1) {
             out.write("# " + sz + " entries");
@@ -371,8 +386,10 @@ public abstract class NamingService {
      *  Overwrites old entry if it exists.
      *  See also putIfAbsent() and update().
      *
-     *  @return success
-     *  @since 0.8.7
+     * @param hostname the hostname to add
+     * @param d the destination for the hostname
+     * @return success
+     * @since 0.8.7
      */
     public boolean put(String hostname, Destination d) {
         return put(hostname, d, null);
@@ -383,9 +400,11 @@ public abstract class NamingService {
      *  Overwrites old entry if it exists.
      *  See also putIfAbsent() and update().
      *
-     *  @param options NamingService-specific, can be null
-     *  @return success
-     *  @since 0.8.7
+     * @param hostname the hostname to add
+     * @param d the destination for the hostname
+     * @param options NamingService-specific, can be null
+     * @return success
+     * @since 0.8.7
      */
     public boolean put(String hostname, Destination d, Properties options) {
         return false;
@@ -396,8 +415,10 @@ public abstract class NamingService {
      *  Fails if entry previously exists.
      *  See also put() and update().
      *
-     *  @return success
-     *  @since 0.8.7
+     * @param hostname the hostname to add
+     * @param d the destination for the hostname
+     * @return success
+     * @since 0.8.7
      */
     public boolean putIfAbsent(String hostname, Destination d) {
         return putIfAbsent(hostname, d, null);
@@ -408,9 +429,11 @@ public abstract class NamingService {
      *  Fails if entry previously exists.
      *  See also put() and update().
      *
-     *  @param options NamingService-specific, can be null
-     *  @return success
-     *  @since 0.8.7
+     * @param hostname the hostname to add
+     * @param d the destination for the hostname
+     * @param options NamingService-specific, can be null
+     * @return success
+     * @since 0.8.7
      */
     public boolean putIfAbsent(String hostname, Destination d, Properties options) {
         return false;
@@ -421,9 +444,10 @@ public abstract class NamingService {
      *  This implementation calls put() for each entry.
      *  Subclasses may override if a more efficient implementation is available.
      *
-     *  @param options NamingService-specific, can be null
-     *  @return total success, or false if any put failed
-     *  @since 0.8.7
+     * @param entries the entries to add
+     * @param options NamingService-specific, can be null
+     * @return total success, or false if any put failed
+     * @since 0.8.7
      */
     public boolean putAll(Map<String, Destination> entries, Properties options) {
         boolean rv = true;
@@ -439,10 +463,11 @@ public abstract class NamingService {
      *  Warning - unimplemented in any subclass.
      *  This implementation returns false.
      *
-     *  @param d may be null if only options are changing
-     *  @param options NamingService-specific, can be null
-     *  @return success
-     *  @since 0.8.7
+     * @param hostname the hostname to update
+     * @param d may be null if only options are changing
+     * @param options NamingService-specific, can be null
+     * @return success
+     * @since 0.8.7
      */
     public boolean update(String hostname, Destination d, Properties options) {
         return false;
@@ -450,8 +475,9 @@ public abstract class NamingService {
 
     /**
      *  Delete the entry.
-     *  @return true if removed successfully, false on error or if it did not exist
-     *  @since 0.8.7
+     * @param hostname the hostname to remove
+     * @return true if removed successfully, false on error or if it did not exist
+     * @since 0.8.7
      */
     public boolean remove(String hostname) {
         return remove(hostname, (Properties) null);
@@ -459,9 +485,10 @@ public abstract class NamingService {
 
     /**
      *  Delete the entry.
-     *  @param options NamingService-specific, can be null
-     *  @return true if removed successfully, false on error or if it did not exist
-     *  @since 0.8.7
+     * @param hostname the hostname to remove
+     * @param options NamingService-specific, can be null
+     * @return true if removed successfully, false on error or if it did not exist
+     * @since 0.8.7
      */
     public boolean remove(String hostname, Properties options) {
         return false;
@@ -469,8 +496,8 @@ public abstract class NamingService {
 
     /**
      *  Ask any registered updaters to update now
-     *  @param options NamingService- or updater-specific, may be null
-     *  @since 0.8.7
+     * @param options NamingService- or updater-specific, may be null
+     * @since 0.8.7
      */
     public void requestUpdate(Properties options) {
         for (NamingServiceUpdater nsu : _updaters) {
@@ -480,6 +507,7 @@ public abstract class NamingService {
 
     /**
      * Register a listener for naming service changes.
+     * @param nsl the listener to register
      * @since 0.8.7
      */
     public void registerListener(NamingServiceListener nsl) {
@@ -488,6 +516,7 @@ public abstract class NamingService {
 
     /**
      * Unregister a listener for naming service changes.
+     * @param nsl the listener to unregister
      * @since 0.8.7
      */
     public void unregisterListener(NamingServiceListener nsl) {
@@ -496,6 +525,7 @@ public abstract class NamingService {
 
     /**
      * Register an updater for the naming service.
+     * @param nsu the updater to register
      * @since 0.8.7
      */
     public void registerUpdater(NamingServiceUpdater nsu) {
@@ -504,6 +534,7 @@ public abstract class NamingService {
 
     /**
      * Unregister an updater for the naming service.
+     * @param nsu the updater to unregister
      * @since 0.8.7
      */
     public void unregisterUpdater(NamingServiceUpdater nsu) {
@@ -515,10 +546,11 @@ public abstract class NamingService {
      *  Note that whether this (and lookup(hostname)) resolve Base 32 addresses
      *  in the form {52 chars}.b32.i2p is NamingService-specific.
      *
-     *  @param lookupOptions input parameter, NamingService-specific, can be null
-     *  @param storedOptions output parameter, NamingService-specific, any stored properties will be added if non-null
-     *  @return dest or null
-     *  @since 0.8.7
+     * @param hostname the hostname to look up
+     * @param lookupOptions input parameter, NamingService-specific, can be null
+     * @param storedOptions output parameter, NamingService-specific, any stored properties will be added if non-null
+     * @return dest or null
+     * @since 0.8.7
      */
     public abstract Destination lookup(String hostname, Properties lookupOptions, Properties storedOptions);
 
@@ -527,10 +559,10 @@ public abstract class NamingService {
      *  This implementation returns null.
      *  Subclasses implementing reverse lookups should override.
      *
-     *  @param d non-null
-     *  @param options NamingService-specific, can be null
-     *  @return hostname or null
-     *  @since 0.8.7
+     * @param d non-null destination to look up
+     * @param options NamingService-specific, can be null
+     * @return hostname or null
+     * @since 0.8.7
      */
     public String reverseLookup(Destination d, Properties options) {
         return null;
@@ -555,9 +587,10 @@ public abstract class NamingService {
      *  Same as lookupBase32() but with the SHA256 Hash precalculated
      *  This implementation returns null.
      *
-     *  @param timeout in seconds; &lt;= 0 means use router default
-     *  @return dest or null
-     *  @since 0.8.7
+     * @param hash the hash to look up
+     * @param timeout in seconds; &lt;= 0 means use router default
+     * @return dest or null
+     * @since 0.8.7
      */
     public Destination lookup(Hash hash, int timeout) {
         return null;
@@ -594,8 +627,9 @@ public abstract class NamingService {
      *  whether this does resolve Base 32 addresses
      *  in the form {52 chars}.b32.i2p is NamingService-specific.
      *
-     *  @return non-empty List of Destinations, or null if nothing found
-     *  @since 0.9.26
+     * @param hostname the hostname to look up
+     * @return non-empty List of Destinations, or null if nothing found
+     * @since 0.9.26
      */
     public List<Destination> lookupAll(String hostname) {
         return lookupAll(hostname, null, null);
@@ -621,10 +655,11 @@ public abstract class NamingService {
      *  This implementation simply calls lookup().
      *  Subclasses implementing multiple destinations per hostname should override.
      *
-     *  @param lookupOptions input parameter, NamingService-specific, may be null
-     *  @param storedOptions output parameter, NamingService-specific, any stored properties will be added if non-null
-     *  @return non-empty List of Destinations, or null if nothing found
-     *  @since 0.9.26
+     * @param hostname the hostname to look up
+     * @param lookupOptions input parameter, NamingService-specific, may be null
+     * @param storedOptions output parameter, NamingService-specific, any stored properties will be added if non-null
+     * @return non-empty List of Destinations, or null if nothing found
+     * @since 0.9.26
      */
     public List<Destination> lookupAll(String hostname, Properties lookupOptions, List<Properties> storedOptions) {
         Properties props = storedOptions != null ? new Properties() : null;
@@ -643,8 +678,10 @@ public abstract class NamingService {
     /**
      *  Add a Destination to an existing hostname's entry in the addressbook.
      *
-     *  @return success
-     *  @since 0.9.26
+     * @param hostname the hostname to add the destination to
+     * @param d the destination to add
+     * @return success
+     * @since 0.9.26
      */
     public boolean addDestination(String hostname, Destination d) {
         return addDestination(hostname, d, null);
@@ -655,9 +692,11 @@ public abstract class NamingService {
      *  This implementation simply calls putIfAbsent().
      *  Subclasses implementing multiple destinations per hostname should override.
      *
-     *  @param options NamingService-specific, may be null
-     *  @return success
-     *  @since 0.9.26
+     * @param hostname the hostname to add the destination to
+     * @param d the destination to add
+     * @param options NamingService-specific, may be null
+     * @return success
+     * @since 0.9.26
      */
     public boolean addDestination(String hostname, Destination d, Properties options) {
         return putIfAbsent(hostname, d, options);
@@ -670,8 +709,10 @@ public abstract class NamingService {
      *  If aditional Destinations remain, it only removes the
      *  specified Destination from the entry.
      *
-     *  @return true if entry containing d was successfully removed.
-     *  @since 0.9.26
+     * @param hostname the hostname to remove
+     * @param d the destination that must be present
+     * @return true if entry containing d was successfully removed.
+     * @since 0.9.26
      */
     public boolean remove(String hostname, Destination d) {
         return remove(hostname, d, null);
@@ -689,9 +730,11 @@ public abstract class NamingService {
      *  or with more efficient implementations, should override.
      *  Fails if entry previously exists.
      *
-     *  @param options NamingService-specific, may be null
-     *  @return true if entry containing d was successfully removed.
-     *  @since 0.9.26
+     * @param hostname the hostname to remove
+     * @param d the destination that must be present
+     * @param options NamingService-specific, may be null
+     * @return true if entry containing d was successfully removed.
+     * @since 0.9.26
      */
     public boolean remove(String hostname, Destination d, Properties options) {
         Destination old = lookup(hostname, options, null);
@@ -720,7 +763,7 @@ public abstract class NamingService {
      * Reverse lookup a destination
      * This implementation returns reverseLookupAll(dest, null).
      *
-     * @param dest non-null
+     * @param dest non-null destination to look up
      * @return a non-empty list of hostnames for this Destination, or <code>null</code>
      * if none is known. It is safe for subclasses to always return
      * <code>null</code> if no reverse lookup is possible.
@@ -812,6 +855,10 @@ public abstract class NamingService {
      * property.
      *
      * FIXME Actually, it doesn't ensure that. Only call this once!!!
+     *
+     * @param context the application context
+     * @return a NamingService instance
+     * @throws RuntimeException if the naming service cannot be loaded
      */
     public static final synchronized NamingService createInstance(I2PAppContext context) {
         NamingService instance = null;

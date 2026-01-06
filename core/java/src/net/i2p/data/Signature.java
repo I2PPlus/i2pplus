@@ -98,6 +98,7 @@ public class Signature extends SimpleDataStructure {
         setData(data);
     }
 
+    @Override
     public int length() {return _type.getSigLen();}
 
     /**

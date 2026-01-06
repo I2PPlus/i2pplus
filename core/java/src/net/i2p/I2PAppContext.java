@@ -161,7 +161,7 @@ public class I2PAppContext {
             }
         }
         System.out.println("Warning - New context not replacing old one, you now have a second one");
-        (new Exception("I did it")).printStackTrace();
+        new Exception("I did it").printStackTrace();
         return false;
     }
 
@@ -546,7 +546,9 @@ public class I2PAppContext {
         if (val != null) {
             try {
                 ival = Integer.parseInt(val);
-            } catch (NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) {
+                // invalid integer, use default
+            }
         }
         return ival;
     }
@@ -566,7 +568,9 @@ public class I2PAppContext {
         if (val != null) {
             try {
                 rv = Long.parseLong(val);
-            } catch (NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) {
+                // invalid long, use default
+            }
         }
         return rv;
     }
@@ -586,7 +590,9 @@ public class I2PAppContext {
         if (val != null) {
             try {
                 rv = Float.parseFloat(val);
-            } catch (NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) {
+                // invalid float, use default
+            }
         }
         return rv;
     }

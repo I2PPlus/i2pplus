@@ -22,6 +22,7 @@ import org.junit.Test;
  */
 public class SigningPrivateKeyTest extends StructureTest {
 
+    @Override
     public DataStructure createDataStructure() throws DataFormatException {
         SigningPrivateKey signingPrivateKey = new SigningPrivateKey();
         byte data[] = new byte[SigningPrivateKey.KEYSIZE_BYTES];
@@ -30,6 +31,7 @@ public class SigningPrivateKeyTest extends StructureTest {
         signingPrivateKey.setData(data);
         return signingPrivateKey;
     }
+    @Override
     public DataStructure createStructureToRead() { return new SigningPrivateKey(); }
 
     @Test
@@ -58,7 +60,7 @@ public class SigningPrivateKeyTest extends StructureTest {
     @Test
     public void testNullData() throws Exception{
         SigningPrivateKey signingPrivateKey = new SigningPrivateKey();
-        signingPrivateKey.toString();
+        assertNotNull(signingPrivateKey.toString());
 
         try {
             signingPrivateKey.writeBytes(new ByteArrayOutputStream());

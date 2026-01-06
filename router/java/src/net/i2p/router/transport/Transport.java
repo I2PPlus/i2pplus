@@ -200,13 +200,11 @@ public interface Transport {
      *  The transport should also do its own checking on whether to accept
      *  notifications from this source.
      *
-     *  This can be called after the transport is running.
-     *
-     *  TODO externalAddressRemoved(source, ip, port)
-     *
-     *  @param source defined in Transport.java
-     *  @since 0.9.20
-     */
+     * This can be called after the transport is running.
+      * @param source the source of the address removal
+      * @param ipv6 true for IPv6, false for IPv4
+      *  @since 0.9.20
+      */
     public void externalAddressRemoved(AddressSource source, boolean ipv6);
 
     /**

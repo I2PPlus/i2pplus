@@ -193,6 +193,13 @@ public abstract class RrdBackend {
         return b;
     }
 
+    /**
+     * Writes a short value to the underlying storage at the given offset.
+     *
+     * @param offset Storage offset.
+     * @param value Short value to write.
+     * @throws java.io.IOException Thrown in case of I/O error.
+     */
     protected void writeShort(long offset, short value) throws IOException {
         byte[] b = new byte[2];
         b[0] = (byte) ((value >>> 8) & 0xFF);
@@ -200,18 +207,47 @@ public abstract class RrdBackend {
         write(offset, b);
     }
 
+    /**
+     * Writes an integer value to the underlying storage at the given offset.
+     *
+     * @param offset Storage offset.
+     * @param value Integer value to write.
+     * @throws java.io.IOException Thrown in case of I/O error.
+     */
     protected void writeInt(long offset, int value) throws IOException {
         write(offset, getIntBytes(value));
     }
 
+    /**
+     * Writes a long value to the underlying storage at the given offset.
+     *
+     * @param offset Storage offset.
+     * @param value Long value to write.
+     * @throws java.io.IOException Thrown in case of I/O error.
+     */
     protected void writeLong(long offset, long value) throws IOException {
         write(offset, getLongBytes(value));
     }
 
+    /**
+     * Writes a double value to the underlying storage at the given offset.
+     *
+     * @param offset Storage offset.
+     * @param value Double value to write.
+     * @throws java.io.IOException Thrown in case of I/O error.
+     */
     protected void writeDouble(long offset, double value) throws IOException {
         write(offset, getDoubleBytes(value));
     }
 
+    /**
+     * Writes multiple copies of a double value to the underlying storage at the given offset.
+     *
+     * @param offset Storage offset.
+     * @param value Double value to write.
+     * @param count Number of times to write the value.
+     * @throws java.io.IOException Thrown in case of I/O error.
+     */
     protected void writeDouble(long offset, double value, int count) throws IOException {
         byte[] b = getDoubleBytes(value);
         byte[] image = new byte[8 * count];
@@ -229,6 +265,13 @@ public abstract class RrdBackend {
         write(offset, image);
     }
 
+    /**
+     * Writes an array of double values to the underlying storage at the given offset.
+     *
+     * @param offset Storage offset.
+     * @param values Array of double values to write.
+     * @throws java.io.IOException Thrown in case of I/O error.
+     */
     protected void writeDouble(long offset, double[] values) throws IOException {
         int count = values.length;
         byte[] image = new byte[8 * count];
@@ -247,6 +290,13 @@ public abstract class RrdBackend {
         write(offset, image);
     }
 
+    /**
+     * Writes a string to the underlying storage at the given offset.
+     *
+     * @param offset Storage offset.
+     * @param value String value to write.
+     * @throws java.io.IOException Thrown in case of I/O error.
+     */
     protected final void writeString(long offset, String value) throws IOException {
         if (nextBigStringOffset < 0) {
             nextBigStringOffset = getLength() - (Short.SIZE / 8);
@@ -282,6 +332,14 @@ public abstract class RrdBackend {
         writeString(offset, value, RrdPrimitive.STRING_LENGTH);
     }
 
+    /**
+     * Writes a string to the underlying storage at the given offset with a fixed length.
+     *
+     * @param offset Storage offset.
+     * @param value String value to write.
+     * @param length Fixed length for the string storage.
+     * @throws java.io.IOException Thrown in case of I/O error.
+     */
     protected void writeString(long offset, String value, int length) throws IOException {
         ByteBuffer bbuf = ByteBuffer.allocate(length * 2);
         bbuf.order(BYTEORDER);
@@ -295,30 +353,66 @@ public abstract class RrdBackend {
         write(offset, bbuf.array());
     }
 
+    /**
+     * Reads a short value from the underlying storage at the given offset.
+     *
+     * @param offset Storage offset.
+     * @return The short value read from storage.
+     * @throws java.io.IOException Thrown in case of I/O error.
+     */
     protected short readShort(long offset) throws IOException {
         byte[] b = new byte[2];
         read(offset, b);
         return (short) (((b[0] << 8) & 0x0000FF00) + (b[1] & 0x000000FF));
     }
 
+    /**
+     * Reads an integer value from the underlying storage at the given offset.
+     *
+     * @param offset Storage offset.
+     * @return The integer value read from storage.
+     * @throws java.io.IOException Thrown in case of I/O error.
+     */
     protected int readInt(long offset) throws IOException {
         byte[] b = new byte[4];
         read(offset, b);
         return getInt(b);
     }
 
+    /**
+     * Reads a long value from the underlying storage at the given offset.
+     *
+     * @param offset Storage offset.
+     * @return The long value read from storage.
+     * @throws java.io.IOException Thrown in case of I/O error.
+     */
     protected long readLong(long offset) throws IOException {
         byte[] b = new byte[8];
         read(offset, b);
         return getLong(b);
     }
 
+    /**
+     * Reads a double value from the underlying storage at the given offset.
+     *
+     * @param offset Storage offset.
+     * @return The double value read from storage.
+     * @throws java.io.IOException Thrown in case of I/O error.
+     */
     protected double readDouble(long offset) throws IOException {
         byte[] b = new byte[8];
         read(offset, b);
         return getDouble(b);
     }
 
+    /**
+     * Reads an array of double values from the underlying storage at the given offset.
+     *
+     * @param offset Storage offset.
+     * @param count Number of double values to read.
+     * @return Array of double values read from storage.
+     * @throws java.io.IOException Thrown in case of I/O error.
+     */
     protected double[] readDouble(long offset, int count) throws IOException {
         int byteCount = 8 * count;
         byte[] image = new byte[byteCount];
@@ -353,6 +447,13 @@ public abstract class RrdBackend {
         return bbuf.asCharBuffer();
     }
 
+    /**
+     * Reads a string from the underlying storage at the given offset.
+     *
+     * @param offset Storage offset.
+     * @return The string value read from storage.
+     * @throws java.io.IOException Thrown in case of I/O error.
+     */
     protected final String readString(long offset) throws IOException {
         CharBuffer cbuf = getCharBuffer(offset, RrdPrimitive.STRING_LENGTH);
         long realStringOffset = 0;
@@ -427,6 +528,11 @@ public abstract class RrdBackend {
         return Double.longBitsToDouble(getLong(b));
     }
 
+    /**
+     * Checks if a backend instance has been created.
+     *
+     * @return true if a backend instance has been created, false otherwise.
+     */
     static boolean isInstanceCreated() {
         return instanceCreated;
     }

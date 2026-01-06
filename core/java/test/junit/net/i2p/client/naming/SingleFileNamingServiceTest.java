@@ -12,10 +12,12 @@ import net.i2p.data.Destination;
 public class SingleFileNamingServiceTest extends TestCase {
     private I2PAppContext _context;
 
+    @Override
     public void setUp() {
         _context = new I2PAppContext();
     }
 
+    @Override
     public void tearDown() {
         File f = new File("testhosts.txt");
         f.delete();

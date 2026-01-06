@@ -19,11 +19,13 @@ import net.i2p.data.StructureTest;
  * @author jrandom
  */
 public class MessageIdTest extends StructureTest {
+    @Override
     public DataStructure createDataStructure() throws DataFormatException {
         MessageIdStructure id = new MessageIdStructure();
         id.setMessageId(101);
         return id;
     }
+    @Override
     public DataStructure createStructureToRead() { return new MessageIdStructure(); }
 
     /**
@@ -31,10 +33,15 @@ public class MessageIdTest extends StructureTest {
      * @since 0.9.48 no longer extends DataStructureImpl
      */
     private static class MessageIdStructure extends MessageId implements DataStructure {
+        @Override
         public Hash calculateHash() { return null; }
+        @Override
         public void fromByteArray(byte[] in) {}
+        @Override
         public byte[] toByteArray() { return null; }
+        @Override
         public void fromBase64(String in) {}
+        @Override
         public String toBase64() { return null; }
     }
 }

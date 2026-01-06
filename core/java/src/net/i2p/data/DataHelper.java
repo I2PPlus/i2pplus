@@ -58,7 +58,7 @@ import net.i2p.util.Translate;
 
 /**
  * Comprehensive utility class for I2P data structure serialization, encoding, and manipulation.
- * 
+ *
  * <p>DataHelper provides essential utilities for working with I2P data structures:</p>
  * <ul>
  *   <li><strong>Serialization:</strong> Read/write primitive types to/from streams</li>
@@ -67,7 +67,7 @@ import net.i2p.util.Translate;
  *   <li><strong>Conversion:</strong> Between different data representations</li>
  *   <li><strong>Utilities:</strong> Common operations on collections and arrays</li>
  * </ul>
- * 
+ *
  * <p><strong>Core Operations:</strong></p>
  * <ul>
  *   <li><strong>Primitive I/O:</strong> readLong(), writeLong(), readString(), writeString()</li>
@@ -76,7 +76,7 @@ import net.i2p.util.Translate;
  *   <li><strong>Properties:</strong> readProperties(), writeProperties() for metadata</li>
  *   <li><strong>Collections:</strong> toMap(), toString() for data structures</li>
  * </ul>
- * 
+ *
  * <p><strong>Encoding Support:</strong></p>
  * <ul>
  *   <li><strong>Base64:</strong> Standard and URL-safe variants with/without padding</li>
@@ -84,7 +84,7 @@ import net.i2p.util.Translate;
  *   <li><strong>Hex:</strong> Hexadecimal encoding for debugging and display</li>
  *   <li><strong>UTF-8:</strong> String encoding with proper byte handling</li>
  * </ul>
- * 
+ *
  * <p><strong>Data Structure Support:</strong></p>
  * <ul>
  *   <li><strong>Arrays:</strong> Efficient reading/writing of byte arrays</li>
@@ -92,7 +92,7 @@ import net.i2p.util.Translate;
  *   <li><strong>Dates:</strong> Timestamp handling with proper timezones</li>
  *   <li><strong>Properties:</strong> Key-value pair serialization</li>
  * </ul>
- * 
+ *
  * <p><strong>Validation and Safety:</strong></p>
  * <ul>
  *   <li><strong>Bounds Checking:</strong> Prevent buffer overflows and underflows</li>
@@ -100,7 +100,7 @@ import net.i2p.util.Translate;
  *   <li><strong>Size Limits:</strong> Protection against excessive memory allocation</li>
  *   <li><strong>Format Validation:</strong> Data structure integrity checks</li>
  * </ul>
- * 
+ *
  * <p><strong>Performance Features:</strong></p>
  * <ul>
  *   <li><strong>Buffer Reuse:</strong> ByteArrayStream for efficient operations</li>
@@ -108,7 +108,7 @@ import net.i2p.util.Translate;
  *   <li><strong>Bulk Operations:</strong> Optimized for large data sets</li>
  *   <li><strong>Memory Management:</strong> Careful allocation and cleanup</li>
  * </ul>
- * 
+ *
  * <p><strong>Common Use Cases:</strong></p>
  * <ul>
  *   <li><strong>Network Protocol:</strong> I2NP message serialization</li>
@@ -117,7 +117,7 @@ import net.i2p.util.Translate;
  *   <li><strong>Data Storage:</strong> File format serialization</li>
  *   <li><strong>Debugging:</strong> Hex dumps and data inspection</li>
  * </ul>
- * 
+ *
  * <p><strong>Thread Safety:</strong></p>
  * <ul>
  *   <li><strong>Static Methods:</strong> All operations are thread-safe</li>
@@ -428,6 +428,7 @@ public class DataHelper {
      * @param source source
      * @param target returned Properties
      * @return new offset
+     * @throws DataFormatException if the data is malformed
      */
     public static int fromProperties(byte source[], int offset, Properties target) throws DataFormatException {
         int size = (int)fromLong(source, offset, 2);
@@ -791,6 +792,7 @@ public class DataHelper {
      * @param numBytes 1-8
      * @param value non-negative
      * @return an array of length numBytes
+     * @throws IllegalArgumentException if numBytes is out of range or value is negative
      */
     public static byte[] toLong(int numBytes, long value) throws IllegalArgumentException {
         byte val[] = new byte[numBytes];
@@ -803,6 +805,7 @@ public class DataHelper {
      *
      * @param numBytes 1-8
      * @param value non-negative
+     * @throws IllegalArgumentException if numBytes is out of range or value is negative
      */
     public static void toLong(byte target[], int offset, int numBytes, long value) throws IllegalArgumentException {
         if (numBytes <= 0 || numBytes > 8) throw new IllegalArgumentException("Invalid number of bytes");
@@ -943,10 +946,22 @@ public class DataHelper {
         else {return toLong(DATE_LENGTH, date.getTime());}
     }
 
+    /**
+     * @param target the target byte array
+     * @param offset the starting offset
+     * @param when the time in milliseconds since epoch
+     * @throws IllegalArgumentException if the offset is invalid
+     */
     public static void toDate(byte target[], int offset, long when) throws IllegalArgumentException {
         toLong(target, offset, DATE_LENGTH, when);
     }
 
+    /**
+     * @param src the source byte array
+     * @param offset the starting offset
+     * @return the date, or null if the time is zero or negative
+     * @throws DataFormatException if there is not enough data
+     */
     public static Date fromDate(byte src[], int offset) throws DataFormatException {
         if ((src == null) || (offset + DATE_LENGTH > src.length)) {
             throw new DataFormatException("Not enough data to read a date");
@@ -1255,6 +1270,10 @@ public class DataHelper {
      *  http://stackoverflow.com/questions/14057720/robust-skipping-of-data-in-a-java-io-inputstream-and-its-subtypes
      *  http://stackoverflow.com/questions/11511093/java-inputstream-skip-return-value-near-end-of-file
      *
+     *  @param in the input stream
+     *  @param n the number of bytes to skip
+     *  @throws IOException if an I/O error occurs or EOF is reached before all bytes are skipped
+     *  @throws IllegalArgumentException if n is negative
      *  @since 0.9.9
      */
     public static void skip(InputStream in, long n) throws IOException {
@@ -1739,7 +1758,9 @@ public class DataHelper {
         return escaped;
     }
 
-    /** */
+    /**
+     * Maximum uncompressed size.
+     */
     public static final int MAX_UNCOMPRESSED = 40*1024;
     /**
      *  Appx. 30% slower, 2.5% smaller than MEDIUM_COMPRESSION

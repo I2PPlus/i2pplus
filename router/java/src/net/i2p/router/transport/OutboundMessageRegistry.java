@@ -91,10 +91,6 @@ public class OutboundMessageRegistry {
      *
      * This is called only by InNetMessagePool.
      *
-     * TODO this calls isMatch() in the selectors from inside the lock, which
-     * can lead to deadlocks if the selector does too much in isMatch().
-     * Remove the lock if possible.
-     *
      * @param message Payload received that may be a reply to something we sent
      * @return non-null List of OutNetMessage describing messages that were waiting for
      *         the payload

@@ -142,7 +142,10 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     }
 
     /**
-     *  @return non-null, creates new if not already registered
+     * Gets the singleton Analysis instance, creating it if necessary.
+     *
+     * @param ctx the router context
+     * @return non-null, creates new if not already registered
      */
     public synchronized static Analysis getInstance(RouterContext ctx) {
         ClientAppManager cmgr = ctx.clientAppManager();
@@ -337,8 +340,11 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     }
 
     /**
-     *  All the floodfills, not including us
-     *  @since 0.9.38 split out from renderRouterInfoHTML
+     * Returns all floodfill routers, excluding our own router.
+     *
+     * @param us our router hash to exclude from the results
+     * @return list of floodfill RouterInfo objects
+     * @since 0.9.38 split out from renderRouterInfoHTML
      */
     public List<RouterInfo> getFloodfills(Hash us) {
         Set<Hash> ffs = _context.peerManager().getPeersByCapability('f');
@@ -354,8 +360,11 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     }
 
     /**
-     *  All the routers, not including us
-     *  @since 0.9.41
+     * Returns all routers in the network DB, excluding our own router.
+     *
+     * @param us our router hash to exclude from the results
+     * @return list of all RouterInfo objects
+     * @since 0.9.41
      */
     public List<RouterInfo> getAllRouters(Hash us) {
         Set<RouterInfo> set = _context.netDb().getRouters();
@@ -382,10 +391,11 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     }
 
     /**
-     *  Analyze threats. No output.
-     *  Return separate maps for each cause instead?
-     *  @param includeAll false for floodfills only
-     *  @since 0.9.38
+     * Analyze threats. No output. Return separate maps for each cause instead?
+     *
+     * @param includeAll false for floodfills only
+     * @return map of router hash to Points containing sybil analysis results
+     * @since 0.9.38
      */
     public synchronized Map<Hash, Points> backgroundAnalysis(boolean includeAll) {
         _wasRun = true;
@@ -510,9 +520,14 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     }
 
     /**
-     *  @param pairs out parameter, sorted
-     *  @return average distance
-     *  @since 0.9.38 split out from renderPairDistance()
+     * Calculate average pairwise distance between floodfills and identifies routers that are
+     * unusually close to each other.
+     *
+     * @param ris the list of router infos to analyze
+     * @param points map to accumulate sybil points
+     * @param pairs out parameter, sorted list of close router pairs
+     * @return average distance
+     * @since 0.9.38 split out from renderPairDistance()
      */
     public double calculatePairDistance(List<RouterInfo> ris, Map<Hash, Points> points, List<Pair> pairs) {
         int sz = ris.size();
@@ -594,12 +609,17 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     }
 
     /**
-     *  @param ri32 out parameter
-     *  @param ri24 out parameter
-     *  @param ri16 out parameter
-     *  @param ri64 out parameter
-     *  @param ri48 out parameter
-     *  @since 0.9.38 split out from renderIPGroupsUs()
+     * Categorize routers by their proximity to our IP address, grouping them by /32, /24, /16
+     * for IPv4 and /64, /48 for IPv6.
+     *
+     * @param ris the list of router infos to analyze
+     * @param points map to accumulate sybil points
+     * @param ri32 out parameter for routers with same IP as us
+     * @param ri24 out parameter for routers in same /24 as us
+     * @param ri16 out parameter for routers in same /16 as us
+     * @param ri64 out parameter for routers in same IPv6 /64 as us
+     * @param ri48 out parameter for routers in same IPv6 /48 as us
+     * @since 0.9.38 split out from renderIPGroupsUs()
      */
     public void calculateIPGroupsUs(List<RouterInfo> ris, Map<Hash, Points> points,
                                     List<RouterInfo> ri32, List<RouterInfo> ri24, List<RouterInfo> ri16,
@@ -698,7 +718,12 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     }
 
     /**
-     *  @since 0.9.38 split out from renderIPGroups32()
+     * Categorize routers by their IP address to identify routers sharing the same IP.
+     *
+     * @param ris the list of router infos to analyze
+     * @param points map to accumulate sybil points
+     * @return map of IP address (as Integer) to list of routers with that IP
+     * @since 0.9.38 split out from renderIPGroups32()
      */
     public Map<Integer, List<RouterInfo>> calculateIPGroups32(List<RouterInfo> ris, Map<Hash, Points> points) {
         ObjectCounterUnsafe<Integer> oc = new ObjectCounterUnsafe<Integer>();
@@ -747,7 +772,12 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     }
 
     /**
-     *  @since 0.9.38 split out from renderIPGroups24()
+     * Categorize routers by their /24 subnet to identify routers in the same /24 network.
+     *
+     * @param ris the list of router infos to analyze
+     * @param points map to accumulate sybil points
+     * @return map of /24 network (as Integer) to list of routers in that network
+     * @since 0.9.38 split out from renderIPGroups24()
      */
     public Map<Integer, List<RouterInfo>> calculateIPGroups24(List<RouterInfo> ris, Map<Hash, Points> points) {
         ObjectCounterUnsafe<Integer> oc = new ObjectCounterUnsafe<Integer>();

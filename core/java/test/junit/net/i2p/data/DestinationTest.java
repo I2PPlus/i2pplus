@@ -15,6 +15,7 @@ package net.i2p.data;
  * @author jrandom
  */
 public class DestinationTest extends StructureTest {
+    @Override
     public DataStructure createDataStructure() throws DataFormatException {
         Destination dest = new Destination();
         StructureTest tst = new CertificateTest();
@@ -25,5 +26,6 @@ public class DestinationTest extends StructureTest {
         dest.setSigningPublicKey((SigningPublicKey)tst.createDataStructure());
         return dest;
     }
+    @Override
     public DataStructure createStructureToRead() { return new Destination(); }
 }

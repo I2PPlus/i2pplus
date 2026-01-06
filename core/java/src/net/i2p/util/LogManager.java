@@ -167,7 +167,9 @@ public class LogManager implements Flushable {
             // In Router Context, the router has its own shutdown hook,
             // and will call our shutdown() from Router.finalShutdown()
             try {Runtime.getRuntime().addShutdownHook(new ShutdownHook());}
-            catch (IllegalStateException ise) {} // shutdown in progress
+            catch (IllegalStateException ise) {
+                // shutdown in progress, ignore
+            }
         }
     }
 
@@ -180,11 +182,17 @@ public class LogManager implements Flushable {
                 Class<? extends LogWriter> clazz = Class.forName("net.i2p.util.AndroidLogWriter").asSubclass(LogWriter.class);
                 Constructor<? extends LogWriter> ctor = clazz.getDeclaredConstructor(LogManager.class);
                 _writer = ctor.newInstance(this);
-            } catch (ClassNotFoundException e) {}
-            catch (InstantiationException e) {}
-            catch (IllegalAccessException e) {}
-            catch (InvocationTargetException e) {}
-            catch (NoSuchMethodException e) {}
+            } catch (ClassNotFoundException e) {
+                // AndroidLogWriter not available
+            } catch (InstantiationException e) {
+                // AndroidLogWriter instantiation failed
+            } catch (IllegalAccessException e) {
+                // AndroidLogWriter access denied
+            } catch (InvocationTargetException e) {
+                // AndroidLogWriter constructor threw exception
+            } catch (NoSuchMethodException e) {
+                // AndroidLogWriter constructor not found
+            }
         }
         // Default writer
         if (_writer == null) {_writer = new FileLogWriter(this);}
@@ -286,7 +294,9 @@ public class LogManager implements Flushable {
             // block as a way of slowing down out-of-control loggers (a little)
             try {
                 _records.put(record);
-            } catch (InterruptedException ie) {}
+            } catch (InterruptedException ie) {
+                // interrupted while waiting to add log record, drop it
+            }
         } else if (_flushInterval <= 0) {
             synchronized (_writer) {
                 _writer.notifyAll();
@@ -381,13 +391,17 @@ public class LogManager implements Flushable {
             String str = config.getProperty(PROP_CONSOLEBUFFERSIZE);
             if (str != null)
                 _consoleBufferSize = Integer.parseInt(str);
-        } catch (NumberFormatException nfe) {}
+        } catch (NumberFormatException nfe) {
+            // invalid console buffer size, use default
+        }
 
         try {
             String str = config.getProperty(PROP_LOG_BUFFER_SIZE);
             if (str != null)
                 _logBufferSize = Integer.parseInt(str);
-        } catch (NumberFormatException nfe) {}
+        } catch (NumberFormatException nfe) {
+            // invalid console buffer size, use default
+        }
 
         try {
             String str = config.getProperty(PROP_FLUSH);
@@ -398,7 +412,9 @@ public class LogManager implements Flushable {
                         _writer.setFlushInterval(_flushInterval * 1000);
                 }
             }
-        } catch (NumberFormatException nfe) {}
+        } catch (NumberFormatException nfe) {
+            // invalid console buffer size, use default
+        }
 
         _dropOnOverflow = Boolean.parseBoolean(config.getProperty(PROP_DROP));
         String str = config.getProperty(PROP_DUP);
@@ -412,7 +428,9 @@ public class LogManager implements Flushable {
                 str = config.getProperty(PROP_MIN_GZIP_SIZE);
                 if (str != null)
                     _minGzipSize = Long.parseLong(str);
-            } catch (NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) {
+            // invalid console buffer size, use default
+        }
         }
         parseLimits(config);
     }
@@ -741,7 +759,9 @@ public class LogManager implements Flushable {
                 }
                 try {
                     Thread.sleep(5);
-                } catch (InterruptedException ie) {}
+                } catch (InterruptedException ie) {
+                    // interrupted during flush sleep, continue
+                }
             }
         }
     }

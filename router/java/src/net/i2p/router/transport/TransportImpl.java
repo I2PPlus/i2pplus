@@ -791,11 +791,9 @@ public abstract class TransportImpl implements Transport {
      *  The transport should also do its own checking on whether to accept
      *  notifications from this source.
      *
-     *  This can be called after the transport is running.
-     *
-     *  TODO externalAddressRemoved(source, ip, port)
-     *
-     *  This implementation does nothing. Transports should override if they want notification.
+     * This can be called after the transport is running.
+      *
+      * This implementation does nothing. Transports should override if they want notification.
      *
      *  @param source defined in Transport.java
      *  @since 0.9.20

@@ -42,6 +42,10 @@ public class BlacklistBean extends BaseBean {
         "^[a-zA-Z0-9+/]{387}={0,2}\\.b64\\.i2p$"       // b64 addresses (387+ chars)
     );
 
+    /**
+     * Get the blacklist file path
+     * @return the absolute path to the blacklist file
+     */
     public String getFileName() {
         loadConfig();
         fileName = blacklistFile().toString();
@@ -51,6 +55,7 @@ public class BlacklistBean extends BaseBean {
 
     /**
      * Get the blacklist file
+     * @return the blacklist file
      */
     private File blacklistFile() {
         return new File(addressbookDir(), BLACKLIST_FILE);
@@ -63,6 +68,9 @@ public class BlacklistBean extends BaseBean {
         synchronized(BlacklistBean.class) {locked_reloadBlacklist();}
     }
 
+    /**
+     * Reload blacklist from file (synchronized wrapper)
+     */
     private void locked_reloadBlacklist() {
         File file = blacklistFile();
         if (file.isFile()) {
@@ -122,6 +130,9 @@ public class BlacklistBean extends BaseBean {
         synchronized(BlacklistBean.class) {locked_save();}
     }
 
+    /**
+     * Save blacklist to file (synchronized wrapper)
+     */
     private void locked_save() {
         File file = blacklistFile();
         try {
@@ -149,6 +160,8 @@ public class BlacklistBean extends BaseBean {
 
     /**
      * Check if an address is a valid I2P address
+     * @param address the address to validate
+     * @return true if the address is a valid I2P address format, false otherwise
      */
     private boolean isValidI2PAddress(String address) {
         if (address == null || address.trim().isEmpty()) {
@@ -159,6 +172,8 @@ public class BlacklistBean extends BaseBean {
 
     /**
      * Check if an address is blacklisted
+     * @param address the address to check
+     * @return true if the address is in the blacklist, false otherwise
      */
     public boolean isBlacklisted(String address) {
         if (address == null) {
@@ -183,6 +198,8 @@ public class BlacklistBean extends BaseBean {
 
     /**
      * Check if a hostname is blacklisted (exact match)
+     * @param hostname the hostname to check
+     * @return true if the hostname is in the blacklist, false otherwise
      */
     public boolean isHostnameBlacklisted(String hostname) {
         return isBlacklisted(hostname);
@@ -190,6 +207,8 @@ public class BlacklistBean extends BaseBean {
 
     /**
      * Check if a b32 address is blacklisted (exact match or hostname match)
+     * @param b32 the b32 address to check
+     * @return true if the b32 address or its resolved hostname is in the blacklist, false otherwise
      */
     public boolean isB32Blacklisted(String b32) {
         if (b32 == null) return false;
@@ -221,6 +240,8 @@ public class BlacklistBean extends BaseBean {
 
     /**
      * Check if a b64 address is blacklisted (exact match or hostname/b32 match)
+     * @param b64 the b64 address to check
+     * @return true if the b64 address or its resolved names are in the blacklist, false otherwise
      */
     public boolean isB64Blacklisted(String b64) {
         if (b64 == null) return false;
@@ -261,6 +282,8 @@ public class BlacklistBean extends BaseBean {
 
     /**
      * Enhanced blacklist check that tries hostname, b32, and b64 variations
+     * @param address the address to check in any form
+     * @return true if the address is found in the blacklist in any form, false otherwise
      */
     public boolean isBlacklistedByAnyForm(String address) {
         if (isBlacklisted(address)) {
@@ -297,6 +320,10 @@ public class BlacklistBean extends BaseBean {
         return false;
     }
 
+    /**
+     * Get status messages for the UI
+     * @return HTML formatted status message
+     */
     public String getMessages() {
         String message = "";
         if (action != null) {
@@ -318,10 +345,18 @@ public class BlacklistBean extends BaseBean {
         return message;
     }
 
+    /**
+     * Set the blacklist content
+     * @param content the new blacklist content
+     */
     public void setContent(String content) {
         this.content = DataHelper.stripHTML(content);
     }
 
+    /**
+     * Get the current blacklist content
+     * @return the blacklist content, or empty string if not loaded
+     */
     public String getContent() {
         if (content == null) {
             reloadBlacklist();
@@ -330,10 +365,10 @@ public class BlacklistBean extends BaseBean {
     }
 
     /**
-      * Add entries to the blacklist
-      * @param entries List of hostnames or addresses to add to the blacklist
-      * @return Number of entries successfully added
-      */
+     * Add entries to the blacklist
+     * @param entries List of hostnames or addresses to add to the blacklist
+     * @return Number of entries successfully added
+     */
     public int addEntries(List<String> entries) {
         if (entries == null || entries.isEmpty()) {
             return 0;
@@ -360,6 +395,7 @@ public class BlacklistBean extends BaseBean {
 
     /**
      * Load content directly from file, bypassing cache
+     * @return the file contents as a string, or empty string if file doesn't exist
      */
     private String loadContentFromFile() {
         File file = blacklistFile();
@@ -390,6 +426,9 @@ public class BlacklistBean extends BaseBean {
 
     /**
      * Check if an entry exists in the given content string
+     * @param entry the entry to search for
+     * @param content the content string to search in
+     * @return true if the entry is found, false otherwise
      */
     private boolean isEntryInContent(String entry, String content) {
         if (content == null || content.isEmpty()) {
@@ -406,6 +445,8 @@ public class BlacklistBean extends BaseBean {
 
     /**
      * Append new entries to file
+     * @param newEntries the entries to add
+     * @param currentContent the current content of the file
      */
     private void appendEntriesToFile(List<String> newEntries, String currentContent) {
         File file = blacklistFile();

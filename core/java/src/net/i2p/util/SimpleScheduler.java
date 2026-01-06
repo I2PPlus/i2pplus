@@ -139,7 +139,7 @@ public class SimpleScheduler {
         @Override
         public Thread newThread(Runnable r) {
             Thread rv = Executors.defaultThreadFactory().newThread(r);
-            rv.setName(_name +  ' ' + (++_count) + '/' + _threads);
+            rv.setName(_name +  ' ' + ++_count + '/' + _threads);
             rv.setDaemon(true);
             return rv;
         }

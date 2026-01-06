@@ -18,10 +18,12 @@ import net.i2p.data.StructureTest;
  * @author jrandom
  */
 public class AbuseSeverityTest extends StructureTest {
+    @Override
     public DataStructure createDataStructure() throws DataFormatException {
         AbuseSeverity sev = new AbuseSeverity();
         sev.setSeverity(64);
         return sev;
     }
+    @Override
     public DataStructure createStructureToRead() { return new AbuseSeverity(); }
 }

@@ -41,7 +41,7 @@ import net.metanotion.io.block.BlockFile;
  * @param <V> type of values
  */
 public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable {
-	/** We can't have more than 2**32 pages */
+	/** Maximum number of levels in a skip list */
 	public static final int MAX_SIZE = 32;
 
 	/*
@@ -49,24 +49,47 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
 	 *	The highest indexed level is the "highest" level in the list.
 	 *	The "bottom" level is the direct pointer to a SkipSpan.
 	 */
-	// levels is almost final
+	/** Array of level pointers at each height */
 	public SkipLevels<K, V>[] levels;
-	// bottom is final
+	/** Bottom level pointer to the actual SkipSpan */
 	public SkipSpan<K, V> bottom;
+	/** Logger for this instance */
 	private final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(BlockFile.class);
 
+	/**
+	 *  Create a new instance of this SkipLevels.
+	 *
+	 *  @param levels the number of levels to create
+	 *  @param ss the SkipSpan to use
+	 *  @param sl the SkipList
+	 *  @return a new SkipLevels instance
+	 */
 	public SkipLevels<K, V> newInstance(int levels, SkipSpan<K, V> ss, SkipList<K, V> sl) {
 		return new SkipLevels<K, V>(levels, ss);
 	}
 
+	/**
+	 *  Mark this instance as killed.
+	 */
 	public void killInstance() { }
+
+	/**
+	 *  Flush this level to disk.
+	 */
 	public void flush() { }
 
+	/**
+	 *  Protected constructor for subclasses.
+	 */
 	protected SkipLevels() {
         // Protected constructor for subclasses
     }
 
-	/*
+	/**
+	 *  Create a new SkipLevels with the specified size.
+	 *
+	 *  @param size the number of levels
+	 *  @param span the bottom SkipSpan
 	 *  @throws IllegalArgumentException if size too big or too small
 	 */
 	@SuppressWarnings("unchecked")
@@ -77,6 +100,11 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
 		bottom = span;
 	}
 
+	/**
+	 *  Print this level and all levels below it.
+	 *
+	 *  @return a string representation of this level
+	 */
 	public String print() {
 		StringBuilder buf = new StringBuilder(128);
 		String k = (bottom.nKeys == 0) ? "empty" : (key() != null) ? key().toString() : "null";
@@ -93,6 +121,11 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
 		return buf.toString();
 	}
 
+	/**
+	 *  Print this level and all levels below it, recursively.
+	 *
+	 *  @return a string representation of all levels
+	 */
 	public String printAll() {
 		StringBuilder buf = new StringBuilder(128);
 		buf.append(print());
@@ -103,6 +136,11 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
 		return buf.toString();
 	}
 
+	/**
+	 *  Get the end span of this level.
+	 *
+	 *  @return the last SkipSpan in this chain
+	 */
 	public SkipSpan<K, V> getEnd() {
 		for(int i=(levels.length - 1);i>=0;i--) {
 			if(levels[i] != null) { return levels[i].getEnd(); }
@@ -110,6 +148,14 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
 		return bottom.getEnd();
 	}
 
+	/**
+	 *  Get the span containing or following the given key.
+	 *
+	 *  @param start the starting level
+	 *  @param key the key to search for
+	 *  @param search search parameters and results
+	 *  @return the SkipSpan containing the key
+	 */
 	public SkipSpan<K, V> getSpan(int start, K key, int[] search) {
 		for(int i=Math.min(start, levels.length - 1);i>=0;i--) {
 			if((levels[i] != null) && (levels[i].key().compareTo(key) <= 0)) {
@@ -119,8 +165,20 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
 		return bottom.getSpan(key, search);
 	}
 
+	/**
+	 *  Get the key at the bottom of this level.
+	 *
+	 *  @return the first key
+	 */
 	public K key() { return bottom.firstKey(); }
 
+	/**
+	 *  Get the value associated with the given key.
+	 *
+	 *  @param start the starting level
+	 *  @param key the key to search for
+	 *  @return the value, or null if not found
+	 */
 	public V get(int start, K key) {
 		for(int i=Math.min(start, levels.length - 1);i>=0;i--) {
 			if((levels[i] != null) && (levels[i].key().compareTo(key) <= 0)) {
@@ -131,6 +189,11 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
 	}
 
 	/**
+	 *  Remove a key-value pair from the skip list.
+	 *
+	 *  @param start the starting level
+	 *  @param key the key to remove
+	 *  @param sl the SkipList
 	 *  @return An array of two objects or null.
 	 *          rv[0] is the removed object.
 	 *          rv[1] is the deleted SkipLevels if the removed object was the last in the SkipLevels,
@@ -221,6 +284,12 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
 	}
 
 	/**
+	 *  Put a key-value pair into the skip list.
+	 *
+	 *  @param start the starting level
+	 *  @param key the key
+	 *  @param val the value
+	 *  @param sl the SkipList
 	 *  @return the new level if it caused a split and we made a new level,
 	 *          and the new level is taller than our level;
 	 *          else null if it went in an existing level or the new level is our height or less.
@@ -278,7 +347,22 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
 		return null;
 	}
 
+	/**
+	 *  Run an integrity check on this level.
+	 *
+	 *  @param fix if true, attempt to fix corruption
+	 *  @return true if corruption was found
+	 */
 	public boolean blvlck(boolean fix) { return false; }
+
+	/**
+	 *  Run an integrity check on this level with additional parameters.
+	 *
+	 *  @param fix if true, attempt to fix corruption
+	 *  @param width the current width
+	 *  @param prevLevels previous levels to check
+	 *  @return true if corruption was found
+	 */
 	public boolean blvlck(boolean fix, int width, SkipLevels<K, V>[] prevLevels) { return false; }
 }
 

@@ -74,9 +74,9 @@ public class BloomSHA1 {
     /**
      * Creates a filter with 2^m bits and k 'hash functions', where
      * each hash function is portion of the 160-bit SHA1 hash.
-
+     *
      * @param m determines number of bits in filter
-     * @param k number of hash functionsx
+     * @param k number of hash functions
      *
      * See KeySelector for important restriction on max m and k
      */
@@ -119,17 +119,24 @@ public class BloomSHA1 {
     public BloomSHA1 () {
         this (20, 8);
     }
-    /** Clear the filter, unsynchronized */
+
+    /**
+     * Clears the filter, unsynchronized.
+     */
     private void doClear() {
         Arrays.fill(filter, 0);
         count = 0;
     }
-    /** Synchronized version */
+
+    /**
+     * Clears the filter, synchronized.
+     */
     public void clear() {
         synchronized (this) {
             doClear();
         }
     }
+
     /**
      * Returns the number of keys which have been inserted.  This
      * class (BloomSHA1) does not guarantee uniqueness in any sense; if the
@@ -143,7 +150,10 @@ public class BloomSHA1 {
             return count;
         }
     }
+
     /**
+     * Returns the number of bits in the filter.
+     *
      * @return number of bits in filter
      */
     public final int capacity () {
@@ -160,14 +170,36 @@ public class BloomSHA1 {
      */
     public void insert (byte[]b) { insert(b, 0, b.length); }
 
+    /**
+     * Add a key to the set represented by the filter.
+     *
+     * XXX This version does not maintain 4-bit counters, it is not
+     * a counting Bloom filter.
+     *
+     * @param b byte array representing a key (SHA1 digest)
+     * @param offset starting offset in the byte array
+     * @param len number of bytes to use
+     */
     public void insert (byte[]b, int offset, int len) {
         synchronized(this) {
             locked_insert(b, offset, len);
         }
     }
 
+    /**
+     * Add a key to the filter without synchronization.
+     *
+     * @param b byte array representing a key (SHA1 digest)
+     */
     public final void locked_insert(byte[]b) { locked_insert(b, 0, b.length); }
 
+    /**
+     * Add a key to the filter without synchronization.
+     *
+     * @param b byte array representing a key (SHA1 digest)
+     * @param offset starting offset in the byte array
+     * @param len number of bytes to use
+     */
     public final void locked_insert(byte[]b, int offset, int len) {
         int[] bitOffset = acquire();
         int[] wordOffset = acquire();
@@ -181,13 +213,21 @@ public class BloomSHA1 {
     }
 
     /**
-     * Is a key in the filter.  Sets up the bit and word offset arrays.
+     * Checks if a key is in the filter. Sets up the bit and word offset arrays.
      *
      * @param b byte array representing a key (SHA1 digest)
      * @return true if b is in the filter
      */
     private final boolean isMember(byte[] b) { return isMember(b, 0, b.length); }
 
+    /**
+     * Checks if a key is in the filter. Sets up the bit and word offset arrays.
+     *
+     * @param b byte array representing a key (SHA1 digest)
+     * @param offset starting offset in the byte array
+     * @param len number of bytes to use
+     * @return true if b is in the filter
+     */
     private final boolean isMember(byte[] b, int offset, int len) {
         int[] bitOffset = acquire();
         int[] wordOffset = acquire();
@@ -204,7 +244,22 @@ public class BloomSHA1 {
         return true;
     }
 
+    /**
+     * Checks if a key is in the filter without synchronization.
+     *
+     * @param b byte array representing a key (SHA1 digest)
+     * @return true if b is in the filter
+     */
     public final boolean locked_member(byte[]b) { return isMember(b); }
+
+    /**
+     * Checks if a key is in the filter without synchronization.
+     *
+     * @param b byte array representing a key (SHA1 digest)
+     * @param offset starting offset in the byte array
+     * @param len number of bytes to use
+     * @return true if b is in the filter
+     */
     public final boolean locked_member(byte[]b, int offset, int len) { return isMember(b, offset, len); }
 
     /**
@@ -214,6 +269,15 @@ public class BloomSHA1 {
      * @return true if b is in the filter
      */
     public final boolean member(byte[]b) { return member(b, 0, b.length); }
+
+    /**
+     * Is a key in the filter.  External interface, internally synchronized.
+     *
+     * @param b byte array representing a key (SHA1 digest)
+     * @param offset starting offset in the byte array
+     * @param len number of bytes to use
+     * @return true if b is in the filter
+     */
     public final boolean member(byte[]b, int offset, int len) {
         synchronized (this) {
             return isMember(b, offset, len);
@@ -223,6 +287,11 @@ public class BloomSHA1 {
     /**
      * Get the bloom filter offsets for reuse.
      * Caller should call release(rv) when done with it.
+     *
+     * @param b byte array representing a key (SHA1 digest)
+     * @param offset starting offset in the byte array
+     * @param len number of bytes to use
+     * @return filter key containing the offsets
      * @since 0.8.11
      */
     public FilterKey getFilterKey(byte[] b, int offset, int len) {
@@ -234,6 +303,8 @@ public class BloomSHA1 {
 
     /**
      * Add the key to the filter.
+     *
+     * @param fk filter key containing offsets
      * @since 0.8.11
      */
     public void locked_insert(FilterKey fk) {
@@ -246,6 +317,9 @@ public class BloomSHA1 {
 
     /**
      * Is the key in the filter.
+     *
+     * @param fk filter key containing offsets
+     * @return true if the key is in the filter
      * @since 0.8.11
      */
     public boolean locked_member(FilterKey fk) {
@@ -257,6 +331,9 @@ public class BloomSHA1 {
     }
 
     /**
+     * Acquires offset arrays from the buffer pool.
+     *
+     * @return int array of size k containing bit offsets
      * @since 0.8.11
      */
     private int[] acquire() {
@@ -267,6 +344,9 @@ public class BloomSHA1 {
     }
 
     /**
+     * Releases filter key arrays back to the buffer pool.
+     *
+     * @param fk filter key to release
      * @since 0.8.11
      */
     public void release(FilterKey fk) {
@@ -275,7 +355,8 @@ public class BloomSHA1 {
     }
 
     /**
-     * Store the (opaque) bloom filter offsets for reuse.
+     * Stores the (opaque) bloom filter offsets for reuse.
+     *
      * @since 0.8.11
      */
     public static class FilterKey {
@@ -290,6 +371,8 @@ public class BloomSHA1 {
     }
 
     /**
+     * Calculates the approximate false positive rate for a given number of set members.
+     *
      * @param n number of set members
      * @return approximate false positive rate
      */
@@ -299,11 +382,16 @@ public class BloomSHA1 {
                 (1l - java.lang.Math.exp(0d- ((double)k) * (long)n / filterBits)), k);
     }
 
+    /**
+     * Calculates the approximate false positive rate for the current number of set members.
+     *
+     * @return approximate false positive rate
+     */
     public final double falsePositives() {
         return falsePositives(count);
     }
 
-/*****
+ /*****
     // DEBUG METHODS
     public static String keyToString(byte[] key) {
         StringBuilder sb = new StringBuilder().append(key[0]);
@@ -312,7 +400,7 @@ public class BloomSHA1 {
         }
         return sb.toString();
     }
-*****/
+ *****/
 
     /** convert 64-bit integer to hex String */
 /*****
@@ -321,7 +409,7 @@ public class BloomSHA1 {
                                 .append(Long.toString(i, 16));
         return sb.toString();
     }
-*****/
+ *****/
 
     /** convert 32-bit integer to String */
 /*****
@@ -330,7 +418,7 @@ public class BloomSHA1 {
                                 .append(Integer.toString(i, 16));
         return sb.toString();
     }
-*****/
+ *****/
 
     /** convert single byte to String */
 /*****
@@ -338,6 +426,5 @@ public class BloomSHA1 {
         int i = 0xff & b;
         return itoh(i);
     }
-*****/
+ *****/
 }
-

@@ -18,10 +18,8 @@ public class SimpleStore {
     }
 
     /**
-     * set the answer
-     *
-     * @param x
-     */
+      * set the answer
+      */
     public void setAnswer(boolean x) {
         answer = x;
     }

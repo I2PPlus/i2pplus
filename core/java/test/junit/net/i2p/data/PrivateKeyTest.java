@@ -22,6 +22,7 @@ import org.junit.Test;
  */
 public class PrivateKeyTest extends StructureTest {
 
+    @Override
     public DataStructure createDataStructure() throws DataFormatException {
         PrivateKey privateKey = new PrivateKey();
         byte data[] = new byte[PrivateKey.KEYSIZE_BYTES];
@@ -30,6 +31,7 @@ public class PrivateKeyTest extends StructureTest {
         privateKey.setData(data);
         return privateKey;
     }
+    @Override
     public DataStructure createStructureToRead() { return new PrivateKey(); }
 
     @Test
@@ -58,7 +60,7 @@ public class PrivateKeyTest extends StructureTest {
     @Test
     public void testNullData() throws Exception{
         PrivateKey privateKey = new PrivateKey();
-        privateKey.toString();
+        assertNotNull(privateKey.toString());
 
         try {
             privateKey.writeBytes(new ByteArrayOutputStream());

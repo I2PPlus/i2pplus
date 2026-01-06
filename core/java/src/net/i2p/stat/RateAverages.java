@@ -11,15 +11,18 @@ public class RateAverages {
     /** thread-local temp instance */
     private static final ThreadLocal<RateAverages> TEMP =
             new ThreadLocal<RateAverages>() {
+        @Override
         public RateAverages initialValue() {
             return new RateAverages();
         }
     };
 
     /**
-     * @since 0.9.4
-     * @return thread-local temp instance.
-     */
+      *  Gets a thread-local temp instance.
+      *
+      * @since 0.9.4
+      * @return thread-local temp instance.
+      */
     public static RateAverages getTemp() {
         return TEMP.get();
     }
@@ -36,13 +39,15 @@ public class RateAverages {
     }
 
     /**
-     * @since 0.9.4
-     * @return one of several things:
-     * if there are any events (current or last) =&gt; weighted average
-     * otherwise if the useLifetime parameter to Rate.computeAverages was:
-     * true =&gt; the lifetime average value
-     * false =&gt; zero
-     */
+      *  Gets the weighted average.
+      *
+      * @since 0.9.4
+      * @return one of several things:
+      * if there are any events (current or last) =&gt; weighted average
+      * otherwise if the useLifetime parameter to Rate.computeAverages was:
+      * true =&gt; the lifetime average value
+      * false =&gt; zero
+      */
     public double getAverage() {
         return average;
     }
@@ -52,9 +57,11 @@ public class RateAverages {
     }
 
     /**
-     * @since 0.9.4
-     * @return the current average == current value / current event count
-     */
+      *  Gets the current average.
+      *
+      * @since 0.9.4
+      * @return the current average == current value / current event count
+      */
     public double getCurrent() {
         return current;
     }
@@ -64,9 +71,11 @@ public class RateAverages {
     }
 
     /**
-     * @since 0.9.4
-     * @return the last average == last value / last event count
-     */
+      *  Gets the last average.
+      *
+      * @since 0.9.4
+      * @return the last average == last value / last event count
+      */
     public double getLast() {
         return last;
     }
@@ -76,9 +85,11 @@ public class RateAverages {
     }
 
     /**
-     * @since 0.9.4
-     * @return the total event count == current + last event counts
-     */
+      *  Gets the total event count.
+      *
+      * @since 0.9.4
+      * @return the total event count == current + last event counts
+      */
     public long getTotalEventCount() {
         return totalEventCount;
     }
@@ -88,9 +99,11 @@ public class RateAverages {
     }
 
     /**
-     * @since 0.9.4
-     * @return the total values == current + last values
-     */
+      *  Gets the total values.
+      *
+      * @since 0.9.4
+      * @return the total values == current + last values
+      */
     public double getTotalValues() {
         return totalValues;
     }

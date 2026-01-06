@@ -16,10 +16,12 @@ import net.i2p.data.DataFormatException;
  * @author jrandom
  */
 public class DisconnectMessageTest extends I2CPTstBase {
+    @Override
     public I2CPMessageImpl createDataStructure() throws DataFormatException {
         DisconnectMessage msg = new DisconnectMessage();
         msg.setReason("Because I say so");
         return msg;
     }
+    @Override
     public I2CPMessageImpl createStructureToRead() { return new DisconnectMessage(); }
 }

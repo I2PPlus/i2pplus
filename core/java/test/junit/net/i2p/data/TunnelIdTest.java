@@ -15,11 +15,13 @@ package net.i2p.data;
  * @author jrandom
  */
 public class TunnelIdTest extends StructureTest {
+    @Override
     public DataStructure createDataStructure() throws DataFormatException {
         TunnelIdStructure id = new TunnelIdStructure();
         id.setTunnelId(42);
         return id;
     }
+    @Override
     public DataStructure createStructureToRead() { return new TunnelIdStructure(); }
 
     /**
@@ -27,10 +29,15 @@ public class TunnelIdTest extends StructureTest {
      * @since 0.9.48 TunnelId no longer extends DataStructureImpl
      */
     private static class TunnelIdStructure extends TunnelId implements DataStructure {
+        @Override
         public Hash calculateHash() { return null; }
+        @Override
         public void fromByteArray(byte[] in) {}
+        @Override
         public byte[] toByteArray() { return null; }
+        @Override
         public void fromBase64(String in) {}
+        @Override
         public String toBase64() { return null; }
     }
 }

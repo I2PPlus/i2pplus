@@ -24,11 +24,13 @@ import net.i2p.data.SessionKey;
 public class BuildResponseRecord {
 
     /**
+     * Creates a new AES-encrypted response record.
      * Create a new encrypted response.
      * AES only for ElGamal routers.
-     *
+     * @param ctx the application context
      * @param status the response 0-255
-     * @param replyIV 16 bytes
+     * @param replyKey the session key for reply encryption
+     * @param replyIV 16 bytes IV
      * @param responseMessageId unused except for debugging
      * @return a 528-byte response record
      */
@@ -44,11 +46,13 @@ public class BuildResponseRecord {
     }
 
     /**
+     * Creates a new ChaCha/Poly-encrypted response record (long format).
      * Create a new encrypted response (long record).
      * ChaCha/Poly only for ECIES routers.
-     *
+     * @param ctx the application context
      * @param status the response 0-255
-     * @param replyAD 32 bytes
+     * @param replyKey the session key for reply encryption
+     * @param replyAD 32 bytes associated data
      * @param options 511 bytes max when serialized
      * @return a 528-byte response record
      * @throws IllegalArgumentException if options too big or on encryption failure
@@ -76,11 +80,13 @@ public class BuildResponseRecord {
     }
 
     /**
+     * Creates a new ChaCha/Poly-encrypted response record (short format).
      * Create a new encrypted response (short record).
      * ChaCha/Poly only for ECIES routers.
-     *
+     * @param ctx the application context
      * @param status the response 0-255
-     * @param replyAD 32 bytes
+     * @param replyKey the session key for reply encryption
+     * @param replyAD 32 bytes associated data
      * @param options 116 bytes max when serialized
      * @param slot the slot number, 0-7
      * @return a 218-byte response record
@@ -109,12 +115,14 @@ public class BuildResponseRecord {
     }
 
     /**
+     * Encrypts a standard record using ChaCha/Poly.
      * Encrypts in place.
      * Handles standard (528) byte records only.
-     *
-     * @param ad non-null
-     * @param data 528 bytes, data will be encrypted in place.
-     * @return success
+     * @param ad non-null associated data (32 bytes)
+     * @param data 528 bytes, data will be encrypted in place
+     * @param key the session key for encryption
+     * @return true on success, false on encryption failure
+     * @throws IllegalArgumentException if data length is incorrect
      * @since 0.9.48
      */
     private static final boolean encryptAEADBlock(byte[] ad, byte data[], SessionKey key) {
@@ -132,16 +140,18 @@ public class BuildResponseRecord {
         return true;
     }
 
-    /*
+    /**
+     * Decrypts a standard ChaCha/Poly-encrypted record.
      * ChaCha/Poly only for ECIES routers.
      * Handles standard (528) byte records only.
      * Decrypts in place.
      * Status will be rec.getData()[511].
      * Properties will be at rec.getData()[0].
-     *
-     * @param rec 528 bytes, data will be decrypted in place.
-     * @param ad non-null
-     * @return success
+     * @param rec 528 bytes, data will be decrypted in place
+     * @param key the session key for decryption
+     * @param ad non-null associated data (32 bytes)
+     * @return true on success, false on decryption failure
+     * @throws IllegalArgumentException if record length is incorrect
      * @since 0.9.48
      */
     public static boolean decrypt(EncryptedBuildRecord rec, SessionKey key, byte[] ad) {
@@ -162,13 +172,15 @@ public class BuildResponseRecord {
     }
 
     /**
+     * Encrypts a short record using ChaCha/Poly.
      * Encrypts in place.
      * Handles short (218) byte records only.
-     *
-     * @param ad non-null
-     * @param data 218 bytes, data will be encrypted in place.
+     * @param ad non-null associated data (32 bytes)
+     * @param data 218 bytes, data will be encrypted in place
+     * @param key the session key for encryption
      * @param nonce the slot number, 0-7
-     * @return success
+     * @return true on success, false on encryption failure
+     * @throws IllegalArgumentException if data length or nonce is invalid
      * @since 0.9.51
      */
     private static final boolean encryptAEADBlock(byte[] ad, byte data[], SessionKey key, int nonce) {
@@ -187,17 +199,19 @@ public class BuildResponseRecord {
         return true;
     }
 
-    /*
+    /**
+     * Decrypts a short ChaCha/Poly-encrypted record.
      * ChaCha/Poly only for ECIES routers.
      * Handles short (218) byte records only.
      * Decrypts in place.
      * Status will be rec.getData()[201].
      * Properties will be at rec.getData()[0].
-     *
-     * @param rec 218 bytes, data will be decrypted in place.
-     * @param ad non-null
+     * @param rec 218 bytes, data will be decrypted in place
+     * @param key the session key for decryption
+     * @param ad non-null associated data (32 bytes)
      * @param nonce the slot number, 0-7
-     * @return success
+     * @return true on success, false on decryption failure
+     * @throws IllegalArgumentException if record length or nonce is invalid
      * @since 0.9.51
      */
     public static boolean decrypt(EncryptedBuildRecord rec, SessionKey key, byte[] ad, int nonce) {
@@ -217,4 +231,9 @@ public class BuildResponseRecord {
         }
         return true;
     }
+
+    /**
+     * Utility class - prevent instantiation.
+     */
+    private BuildResponseRecord() {}
 }

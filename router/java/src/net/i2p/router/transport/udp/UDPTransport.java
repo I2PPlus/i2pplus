@@ -144,7 +144,6 @@ public class UDPTransport extends TransportImpl {
 
     /**
      *  Do we have a public IPv6 address?
-     *  TODO periodically update via CSFI.NetMonitor?
      */
     private volatile boolean _haveIPv6Address;
     private long _lastInboundIPv6;

@@ -60,7 +60,7 @@ import org.klomp.snark.bencode.InvalidBEncodingException;
  *   <li>Blacklist management for unreachable nodes
  * </ul>
  *
- * <h3>I2P-Specific Modifications:</h3>
+ * <h2>I2P-Specific Modifications:</h2>
  *
  * <pre>
  * - The UDP port need not be pinged after receiving a PORT message.

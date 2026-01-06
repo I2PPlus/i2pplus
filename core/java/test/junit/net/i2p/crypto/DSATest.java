@@ -18,6 +18,7 @@ import net.i2p.data.SigningPublicKey;
 public class DSATest extends TestCase{
     private I2PAppContext _context;
 
+    @Override
     protected void setUp() {
         _context = I2PAppContext.getGlobalContext();
     }

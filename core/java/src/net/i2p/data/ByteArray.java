@@ -21,13 +21,17 @@ public class ByteArray implements Serializable, Comparable<ByteArray> {
     private int _valid;
     private int _offset;
 
+    /**
+     *  Creates an empty ByteArray.
+     */
     public ByteArray() {
     }
 
     /**
      *  Sets valid = data.length, unless data is null
      *  Sets offset = 0
-     *  @param data may be null
+     *
+     * @param data the byte array, may be null
      */
     public ByteArray(byte[] data) {
         _data = data;
@@ -37,7 +41,10 @@ public class ByteArray implements Serializable, Comparable<ByteArray> {
     /**
      *  Sets offset = offset
      *  Sets valid = length
-     *  @param data may be null but why would you do that
+     *
+     * @param data the byte array, may be null but why would you do that
+     * @param offset the starting offset
+     * @param length the valid length
      */
     public ByteArray(byte[] data, int offset, int length) {
         _data = data;
@@ -45,11 +52,20 @@ public class ByteArray implements Serializable, Comparable<ByteArray> {
         _valid = length;
     }
 
+    /**
+     *  Returns the underlying byte array.
+     * @return the byte data, may be null
+     */
     public byte[] getData() {
         return _data;
     }
 
-    /** Warning, does not set valid */
+    /**
+     *  Sets the underlying byte array.
+     *  Warning, does not set valid
+     *
+     * @param data the new byte array
+     */
     public void setData(byte[] data) {
         _data = data;
     }
@@ -58,10 +74,30 @@ public class ByteArray implements Serializable, Comparable<ByteArray> {
      * Count how many of the bytes in the array are 'valid'.
      * this property does not necessarily have meaning for all byte
      * arrays.
+     *
+     * @return the number of valid bytes
      */
     public int getValid() { return _valid; }
+
+    /**
+     * Sets the number of valid bytes.
+     *
+     * @param valid the new valid count
+     */
     public void setValid(int valid) { _valid = valid; }
+
+    /**
+     * Returns the offset into the byte array.
+     *
+     * @return the offset
+     */
     public int getOffset() { return _offset; }
+
+    /**
+     * Sets the offset into the byte array.
+     *
+     * @param offset the new offset
+     */
     public void setOffset(int offset) { _offset = offset; }
 
     @Override
@@ -83,6 +119,7 @@ public class ByteArray implements Serializable, Comparable<ByteArray> {
         return (llen == rlen) && DataHelper.eq(lhs, loff, rhs, roff, llen);
     }
 
+    @Override
     public final int compareTo(ByteArray ba) {
         return DataHelper.compareTo(_data, ba.getData());
     }
@@ -97,6 +134,10 @@ public class ByteArray implements Serializable, Comparable<ByteArray> {
         return super.toString() + "/" + DataHelper.toString(getData(), 32) + "." + _valid;
     }
 
+    /**
+     *  Returns this ByteArray as a Base64 encoded string.
+     * @return the Base64 encoded string
+     */
     public final String toBase64() {
         return Base64.encode(_data, _offset, _valid);
     }

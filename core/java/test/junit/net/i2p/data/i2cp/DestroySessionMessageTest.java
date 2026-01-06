@@ -16,10 +16,12 @@ import net.i2p.data.DataFormatException;
  * @author jrandom
  */
 public class DestroySessionMessageTest extends I2CPTstBase {
+    @Override
     public I2CPMessageImpl createDataStructure() throws DataFormatException {
         DestroySessionMessage msg = new DestroySessionMessage();
         msg.setSessionId((SessionId)(new SessionIdTest()).createDataStructure());
         return msg;
     }
+    @Override
     public I2CPMessageImpl createStructureToRead() { return new DestroySessionMessage(); }
 }

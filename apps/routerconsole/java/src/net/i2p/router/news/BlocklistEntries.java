@@ -41,25 +41,50 @@ import net.i2p.util.Log;
  * @since 0.9.28
  */
 public class BlocklistEntries {
-    public final List<String> entries, removes;
+    /**
+     *  List of entries to block.
+     *  Each entry is an IPv4/IPv6 address or base64 router hash.
+     */
+    public final List<String> entries;
+    /**  List of entries to unblock. */
+    public final List<String> removes;
+    /**  Signer certificate name. */
     public String signer;
+    /**  Signature in type:base64 format. */
     public String sig;
+    /**  Updated timestamp as ISO 3339 date string. */
     public String supdated;
+    /**  Updated timestamp as milliseconds since epoch. */
     public long updated;
+    /**  Whether the blocklist signature has been verified. */
     private boolean verified;
+    /**  Maximum number of entries allowed in a blocklist. */
     public static final int MAX_ENTRIES = 2000;
     private static final String CONTENT_ROUTER = "router";
     public static final long MAX_FUTURE = 2*24*60*60*1000L;
 
+    /**
+     *  Creates a new BlocklistEntries with the specified capacity.
+     *  @param capacity the initial capacity for the entries list
+     */
     public BlocklistEntries(int capacity) {
         entries = new ArrayList<String>(capacity);
         removes = new ArrayList<String>(4);
     }
 
+    /**
+     *  Check if the blocklist signature has been verified.
+     *  @return true if verified, false otherwise
+     */
     public synchronized boolean isVerified() {
         return verified;
     }
 
+    /**
+     *  Verify the blocklist signature.
+     *  @param ctx the application context
+     *  @return true if signature is valid, false otherwise
+     */
     public synchronized boolean verify(I2PAppContext ctx) {
         if (verified)
             return true;

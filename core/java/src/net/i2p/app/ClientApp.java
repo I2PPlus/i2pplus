@@ -21,23 +21,26 @@ package net.i2p.app;
  */
 public interface ClientApp {
 
-    /**
-     *  Do not take a long time. Do not block. Start threads here if necessary.
-     *  Client must call ClientAppManager.notify() at least once within this
-     *  method to change the state from INITIALIZED to something else.
-     *  Will not be called multiple times on the same object.
-     */
-    public void startup() throws Throwable;
+     /**
+      *  Do not take a long time. Do not block. Start threads here if necessary.
+      *  Client must call ClientAppManager.notify() at least once within this
+      *  method to change the state from INITIALIZED to something else.
+      *  Will not be called multiple times on the same object.
+      *
+      *  @throws Throwable on startup failure
+      */
+     public void startup() throws Throwable;
 
-    /**
-     *  Do not take a long time. Do not block. Use a thread if necessary.
-     *  If previously running, client must call ClientAppManager.notify() at least once within this
-     *  method to change the state to STOPPING or STOPPED.
-     *  May be called multiple times on the same object, in any state.
-     *
-     *  @param args generally null but could be stopArgs from clients.config
-     */
-    public void shutdown(String[] args) throws Throwable;
+     /**
+      *  Do not take a long time. Do not block. Use a thread if necessary.
+      *  If previously running, client must call ClientAppManager.notify() at least once within this
+      *  method to change the state to STOPPING or STOPPED.
+      *  May be called multiple times on the same object, in any state.
+      *
+      *  @param args generally null but could be stopArgs from clients.config
+      *  @throws Throwable on shutdown failure
+      */
+     public void shutdown(String[] args) throws Throwable;
 
     /**
      *  The current state of the ClientApp.

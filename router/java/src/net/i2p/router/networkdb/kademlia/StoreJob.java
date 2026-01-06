@@ -50,15 +50,25 @@ import net.i2p.util.VersionComparator;
  * Unused directly - see FloodfillStoreJob for the concrete implementation.
  */
 abstract class StoreJob extends JobImpl {
+    /** Logger for this class */
     protected final Log _log;
+    /** Reference to the network database facade */
     private final KademliaNetworkDatabaseFacade _facade;
+    /** Current state of the store operation */
     protected final StoreState _state;
+    /** Job to run on successful store */
     private final Job _onSuccess;
+    /** Job to run on failed store */
     private final Job _onFailure;
+    /** Timeout in milliseconds for the store operation */
     private final long _timeoutMs;
+    /** Expiration time for the store operation */
     private final long _expiration;
+    /** Peer selector for choosing floodfill participants */
     private final PeerSelector _peerSelector;
+    /** Checks if we can connect to a peer directly */
     private final ConnectChecker _connectChecker;
+    /** Bitmask for connection types we can use (IPv4, IPv6, etc.) */
     private final int _connectMask;
     private final static int PARALLELIZATION = 8; // how many sent at a time
     private final static int REDUNDANCY = 4; // we want the data sent to 4 peers
@@ -102,8 +112,21 @@ abstract class StoreJob extends JobImpl {
         }
     }
 
+    /**
+     * Get the name of this job for logging and debugging.
+     *
+     * @return job name
+     */
     public String getName() {return "Process Kademlia NetDb Store";}
+    /**
+     * Execute the job to start sending to the next batch of peers.
+     */
     public void runJob() {sendNext();}
+    /**
+     * Check if the store operation has expired.
+     *
+     * @return true if the operation has timed out
+     */
     private boolean isExpired() {return getContext().clock().now() >= _expiration;}
     private static final int MAX_PEERS_SENT = 8;
     private static final int RESEND_DELAY = 1000; // upstream is 3s
@@ -132,10 +155,18 @@ abstract class StoreJob extends JobImpl {
         }
     }
 
-    /** overridden in FSJ */
+    /**
+     * Get the maximum number of parallel store operations.
+     *
+     * @return number of messages to send simultaneously
+     */
     protected int getParallelization() {return PARALLELIZATION;}
 
-    /** overridden in FSJ */
+    /**
+     * Get the required redundancy level for successful store.
+     *
+     * @return number of peers that must receive the data
+     */
     protected int getRedundancy() {return REDUNDANCY;}
 
     /**
@@ -228,6 +259,14 @@ abstract class StoreJob extends JobImpl {
     }
 
     private List<Hash> getClosestFloodfillRouters(Hash key, int numClosest, Set<Hash> alreadyChecked) {
+        /**
+         * Find the closest floodfill routers to a given key.
+         *
+         * @param key the target hash to find routers near
+         * @param numClosest how many routers to return
+         * @param alreadyChecked set of router hashes to skip
+         * @return list of closest floodfill router hashes
+         */
         Hash rkey = getContext().routingKeyGenerator().getRoutingKey(key);
         KBucketSet<Hash> ks = _facade.getKBuckets();
         if (ks == null) return new ArrayList<Hash>();
@@ -239,9 +278,10 @@ abstract class StoreJob extends JobImpl {
     private static final int MAX_DIRECT_EXPIRATION = 20*1000;
 
     /**
-     * Send a store to the given peer, including a reply
-     * DeliveryStatusMessage so we know it got there
+     * Send a store message directly to a peer.
      *
+     * @param router the router to send to
+     * @param responseTime timeout for the response in milliseconds
      */
     private void sendStore(RouterInfo router, int responseTime) {
         if (!_state.getTarget().equals(_state.getData().getHash())) {
@@ -273,9 +313,11 @@ abstract class StoreJob extends JobImpl {
     }
 
     /**
-     * Send a store to the given peer, including a reply
-     * DeliveryStatusMessage so we know it got there
+     * Send a store message to a peer via the appropriate delivery method.
      *
+     * @param msg the database store message to send
+     * @param peer the router to send to
+     * @param expiration when the message expires
      */
     private void sendStore(DatabaseStoreMessage msg, RouterInfo peer, long expiration) {
         RouterContext ctx = getContext();
@@ -310,9 +352,11 @@ abstract class StoreJob extends JobImpl {
     }
 
     /**
-     * Send directly,
-     * with the reply to come back directly.
+     * Send a store message directly to a peer with direct reply.
      *
+     * @param msg the database store message to send
+     * @param peer the router to send to
+     * @param expiration when the message expires
      */
     private void sendDirect(DatabaseStoreMessage msg, RouterInfo peer, long expiration) {
         if (_facade.isClientDb()) {
@@ -507,10 +551,13 @@ abstract class StoreJob extends JobImpl {
     }
 
     /**
-     * Pick a reply tunnel out of a LeaseSet
+     * Pick a reply tunnel from a LeaseSet for the store response.
      *
-     * @param to pick closest if attempts == 1
-     * @since 0.9.53
+     * @param ls the LeaseSet containing available tunnels
+     * @param attempts number of previous attempts made
+     * @param to the target hash for closest selection
+     * @return the selected lease
+     * @throws IllegalStateException if no leases are available
      */
     private Lease pickReplyTunnel(LeaseSet ls, int attempts, Hash to) {
         int c = ls.getLeaseCount();
@@ -524,18 +571,28 @@ abstract class StoreJob extends JobImpl {
     }
 
     /**
-     * Find the lease that is XOR-closest to a given hash
+     * Compare leases by XOR distance to a target hash.
      *
      * @since 0.9.53 adapted from TunnelPool.TunnelInfoComparator
      */
     private static class LeaseComparator implements Comparator<Lease>, Serializable {
+        /** The target hash for distance comparison */
         private final byte[] _base;
 
         /**
+         * Create a comparator for a target hash.
+         *
          * @param target key to compare distances with
          */
         public LeaseComparator(Hash target) {_base = target.getData();}
 
+        /**
+         * Compare two leases by XOR distance to the target.
+         *
+         * @param lhs first lease to compare
+         * @param rhs second lease to compare
+         * @return negative if lhs is closer, positive if rhs is closer, 0 if equal
+         */
         public int compare(Lease lhs, Lease rhs) {
             byte lhsb[] = lhs.getGateway().getData();
             byte rhsb[] = rhs.getGateway().getData();
@@ -633,12 +690,21 @@ abstract class StoreJob extends JobImpl {
     }
 
     /**
-     * Called to wait a little while
+     * A job that waits briefly before continuing to send store messages.
+     *
      * @since 0.7.10
      */
     private class WaitJob extends JobImpl {
         public WaitJob(RouterContext enclosingContext) {super(enclosingContext);}
+        /**
+         * Execute the wait and then continue sending.
+         */
         public void runJob() {sendNext();}
+        /**
+         * Get the name of this wait job.
+         *
+         * @return job name
+         */
         public String getName() {return "Delay Kademlia Store Send";}
     }
 
@@ -646,7 +712,7 @@ abstract class StoreJob extends JobImpl {
      * Short ECIES tunnel build messages (1.5.0)
      * @since 0.9.28
      */
-    public static final String MIN_STORE_VERSION = "0.9.60";
+    public static final String MIN_STORE_VERSION = "0.9.62";
 
     /**
      * Is it new enough?
@@ -663,7 +729,7 @@ abstract class StoreJob extends JobImpl {
     }
 
     /** @since 0.9.38 */
-    public static final String MIN_STORE_LS2_VERSION = "0.9.60";
+    public static final String MIN_STORE_LS2_VERSION = "0.9.62";
 
     /**
      * Is it new enough?
@@ -678,7 +744,7 @@ abstract class StoreJob extends JobImpl {
      * Was supported in 38, but they're now sigtype 11 which wasn't added until 39
      * @since 0.9.39
      */
-    public static final String MIN_STORE_ENCLS2_VERSION = "0.9.60";
+    public static final String MIN_STORE_ENCLS2_VERSION = "0.9.62";
 
     /**
      * Is it new enough?
@@ -690,21 +756,37 @@ abstract class StoreJob extends JobImpl {
     }
 
     /**
-     * Called after sending a dbStore to a peer successfully,
-     * marking the store as successful
+     * Job to verify successful store delivery and trigger next steps.
      *
+     * Called after sending a dbStore to a peer successfully,
+     * marking the store as successful.
      */
     private class SendSuccessJob extends JobImpl implements ReplyJob {
+        /** The peer we sent to */
         private final RouterInfo _peer;
+        /** The tunnel used for sending (null for direct) */
         private final TunnelInfo _sendThrough;
+        /** Message size in bytes (rounded to 1KB) */
         private final int _msgSize;
 
-        /** direct */
+        /**
+         * Create a success job for direct delivery.
+         *
+         * @param enclosingContext the router context
+         * @param peer the peer we sent to
+         */
         public SendSuccessJob(RouterContext enclosingContext, RouterInfo peer) {
             this(enclosingContext, peer, null, 0);
         }
 
-        /** through tunnel */
+        /**
+         * Create a success job for tunnel delivery.
+         *
+         * @param enclosingContext the router context
+         * @param peer the peer we sent to
+         * @param sendThrough the tunnel used for sending
+         * @param size the message size
+         */
         public SendSuccessJob(RouterContext enclosingContext, RouterInfo peer, TunnelInfo sendThrough, int size) {
             super(enclosingContext);
             _peer = peer;
@@ -713,8 +795,16 @@ abstract class StoreJob extends JobImpl {
             else {_msgSize = ((size + 1023) / 1024) * 1024;}
         }
 
+        /**
+         * Get the name of this job.
+         *
+         * @return job name
+         */
         public String getName() { return "Verify Kademlia Store Send"; }
 
+        /**
+         * Handle the successful delivery acknowledgment.
+         */
         public void runJob() {
             Hash hash = _peer.getIdentity().getHash();
             MessageWrapper.WrappedMessage wm = _state.getPendingMessage(hash);
@@ -746,24 +836,43 @@ abstract class StoreJob extends JobImpl {
             else {sendNext();}
         }
 
+        /**
+         * Set the received message (unused, selector already verified match).
+         *
+         * @param message the received message (ignored)
+         */
         public void setMessage(I2NPMessage message) {} // ignored, since if the selector matched it, its fine by us
     }
 
     /**
+     * Job to handle failed store attempts.
+     *
      * Called when a particular peer failed to respond before the timeout was
      * reached, or if the peer could not be contacted at all.
-     *
      */
     private class FailedJob extends JobImpl {
+        /** The peer that failed to respond */
         private final RouterInfo _peer;
+        /** When the message was sent */
         private final long _sendOn;
+        /** Track if job has already run to prevent duplicate handling */
         private final AtomicBoolean _wasRun = new AtomicBoolean();
 
+        /**
+         * Create a failed job for a peer.
+         *
+         * @param enclosingContext the router context
+         * @param peer the peer that failed
+         * @param sendOn when the message was sent
+         */
         public FailedJob(RouterContext enclosingContext, RouterInfo peer, long sendOn) {
             super(enclosingContext);
             _peer = peer;
             _sendOn = sendOn;
         }
+        /**
+         * Handle the failed store attempt.
+         */
         public void runJob() {
             if (!_wasRun.compareAndSet(false, true)) {return;}
             Hash hash = _peer.getIdentity().getHash();
@@ -781,11 +890,18 @@ abstract class StoreJob extends JobImpl {
 
             sendNext();
         }
+        /**
+         * Get the name of this failed job.
+         *
+         * @return job name
+         */
         public String getName() {return "Timeout Kademlia Store Send";}
     }
 
     /**
-     * Send was totally successful
+     * Handle successful completion of the store operation.
+     *
+     * Called when the required redundancy level is reached.
      */
     protected void succeed() {
         if (_log.shouldDebug()) {_log.debug("State of successful send " + _state);}
@@ -795,7 +911,9 @@ abstract class StoreJob extends JobImpl {
     }
 
     /**
-     * Send totally failed
+     * Handle failed completion of the store operation.
+     *
+     * Called when the store operation has exhausted all options.
      */
     protected void fail() {
         if (_log.shouldInfo()) {

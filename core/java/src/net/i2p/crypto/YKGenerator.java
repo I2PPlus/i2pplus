@@ -171,12 +171,16 @@ final class YKGenerator {
                     while (getSize() < _maxSize && _isRunning) {
                         if (!addValues(generateYK())) {break;}
                         try {Thread.sleep(CALC_DELAY);} // for some relief...
-                        catch (InterruptedException ie) {} // no-op
+                        catch (InterruptedException ie) {
+                            // interrupted during calculation sleep
+                        }
                     }
                 }
                 if (!_isRunning) {break;}
                 try {Thread.sleep(_checkDelay);}
-                catch (InterruptedException ie) {} // no-op
+                catch (InterruptedException ie) {
+                    // interrupted during check sleep
+                }
             }
         }
     }

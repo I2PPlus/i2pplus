@@ -19,11 +19,13 @@ import net.i2p.data.StructureTest;
  * @author jrandom
  */
 public class SessionIdTest extends StructureTest {
+    @Override
     public DataStructure createDataStructure() throws DataFormatException {
         SessionIdStructure id = new SessionIdStructure();
         id.setSessionId(7);
         return id;
     }
+    @Override
     public DataStructure createStructureToRead() { return new SessionIdStructure(); }
 
     /**
@@ -31,10 +33,15 @@ public class SessionIdTest extends StructureTest {
      * @since 0.9.48 no longer extends DataStructureImpl
      */
     private static class SessionIdStructure extends SessionId implements DataStructure {
+        @Override
         public Hash calculateHash() { return null; }
+        @Override
         public void fromByteArray(byte[] in) {}
+        @Override
         public byte[] toByteArray() { return null; }
+        @Override
         public void fromBase64(String in) {}
+        @Override
         public String toBase64() { return null; }
     }
 }

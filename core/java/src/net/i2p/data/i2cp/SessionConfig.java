@@ -119,14 +119,14 @@ public class SessionConfig extends DataStructureImpl {
     public void setSignature(Signature sig) {_signature = sig;}
 
     /**
-     *  Set the offline signing data.
-     *  Does NOT validate the signature.
-     *  Must be called AFTER setOptions(). Will throw ISE otherwise.
-     *  Side effect - modifies options.
-     *
-     *  @throws IllegalStateException
-     *  @since 0.9.38
-     */
+      *  Set the offline signing data.
+      *  Does NOT validate the signature.
+      *  Must be called AFTER setOptions(). Will throw ISE otherwise.
+      *  Side effect - modifies options.
+      *
+      *  @throws IllegalStateException if options are not set
+      *  @since 0.9.38
+      */
     public void setOfflineSignature(long expires, SigningPublicKey transientSPK, Signature offlineSig) {
         if (_options == null) {throw new IllegalStateException();}
         _options.setProperty(PROP_OFFLINE_EXPIRATION, Long.toString(expires / 1000));
@@ -148,9 +148,11 @@ public class SessionConfig extends DataStructureImpl {
     }
 
     /**
-     *  @return null on error or if not initialized or does not have offline keys
-     *  @since 0.9.38
-     */
+      *  Gets the transient signing public key for offline signing.
+      *
+      *  @return null on error or if not initialized or does not have offline keys
+      *  @since 0.9.38
+      */
     public SigningPublicKey getTransientSigningPublicKey() {
         if (_options == null || _destination == null) {return null;}
         String s = _options.getProperty(PROP_TRANSIENT_KEY);
@@ -171,9 +173,11 @@ public class SessionConfig extends DataStructureImpl {
     }
 
     /**
-     *  @return null on error or if not initialized or does not have offline keys
-     *  @since 0.9.38
-     */
+      *  Gets the offline signature from the options.
+      *
+      *  @return null on error or if not initialized or does not have offline keys
+      *  @since 0.9.38
+      */
     public Signature getOfflineSignature() {
         if (_options == null || _destination == null) {return null;}
         String s = _options.getProperty(PROP_OFFLINE_SIGNATURE);
@@ -186,12 +190,12 @@ public class SessionConfig extends DataStructureImpl {
     }
 
     /**
-     * Sign the structure using the supplied private key
-     *
-     * @param signingKey SigningPrivateKey to sign with.
-     *                   If offline data is set, must be with the transient key.
-     * @throws DataFormatException
-     */
+      * Sign the structure using the supplied private key
+      *
+      * @param signingKey SigningPrivateKey to sign with.
+      *                   If offline data is set, must be with the transient key.
+      * @throws DataFormatException if the data cannot be signed
+      */
     public void signSessionConfig(SigningPrivateKey signingKey) throws DataFormatException {
         byte data[] = getBytes();
         if (data == null) throw new DataFormatException("Unable to retrieve bytes for signing");
@@ -279,6 +283,7 @@ public class SessionConfig extends DataStructureImpl {
         return out.toByteArray();
     }
 
+    @Override
     public void readBytes(InputStream rawConfig) throws DataFormatException, IOException {
         _destination = Destination.create(rawConfig);
         _options = DataHelper.readProperties(rawConfig);
@@ -289,6 +294,7 @@ public class SessionConfig extends DataStructureImpl {
         _signature.readBytes(rawConfig);
     }
 
+    @Override
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
         if ((_destination == null) || (_options == null) || (_signature == null) || (_creationDate == null)) {
             throw new DataFormatException("Not enough data to create the session config");

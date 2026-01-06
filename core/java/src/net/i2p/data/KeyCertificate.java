@@ -8,7 +8,7 @@ import net.i2p.crypto.SigType;
 
 /**
  * Specialized certificate for defining cryptographic key types used in I2P identities.
- * 
+ *
  * <p>KeyCertificate specifies the encryption and signature algorithms for I2P identities:</p>
  * <ul>
  *   <li><strong>Signature Type:</strong> Algorithm used for signing (2 bytes)</li>
@@ -16,14 +16,14 @@ import net.i2p.crypto.SigType;
  *   <li><strong>Excess Data:</strong> Additional key-specific data if needed</li>
  *   <li><strong>Optimized:</strong> Frequently used, so has dedicated class for performance</li>
  * </ul>
- * 
+ *
  * <p><strong>Format Structure:</strong></p>
  * <ul>
  *   <li><strong>Header:</strong> 4 bytes total (2-byte sig type + 2-byte crypto type)</li>
  *   <li><strong>Signature Data:</strong> Optional excess data for signature algorithm</li>
  *   <li><strong>Encryption Data:</strong> Optional excess data for encryption algorithm</li>
  * </ul>
- * 
+ *
  * <p><strong>Supported Combinations:</strong></p>
  * <ul>
  *   <li><strong>ElGamal + DSA-SHA1:</strong> Legacy combination (crypto type 0x0000)</li>
@@ -31,14 +31,14 @@ import net.i2p.crypto.SigType;
  *   <li><strong>ElGamal + ECDSA-P256:</strong> Modern signing with legacy encryption</li>
  *   <li><strong>X25519 + Ed25519:</strong> Modern combination (both algorithms)</li>
  * </ul>
- * 
+ *
  * <p><strong>Predefined Certificates:</strong></p>
  * <ul>
  *   <li><strong>Ed25519:</strong> ElGamal + Ed25519 signing key</li>
  *   <li><strong>ECDSA256:</strong> ElGamal + ECDSA-P256 signing key</li>
  *   <li><strong>X25519_Ed25519:</strong> X25519 encryption + Ed25519 signing</li>
  * </ul>
- * 
+ *
  * <p><strong>Usage:</strong></p>
  * <ul>
  *   <li><strong>Identity Specification:</strong> Defines algorithms for {@link Destination}</li>
@@ -46,14 +46,14 @@ import net.i2p.crypto.SigType;
  *   <li><strong>Backward Compatibility:</strong> Supports legacy and modern algorithms</li>
  *   <li><strong>Future Proofing:</strong> Extensible for new algorithm combinations</li>
  * </ul>
- * 
+ *
  * <p><strong>Migration Path:</strong></p>
  * <ul>
  *   <li><strong>Legacy:</strong> ElGamal encryption (assumed 0x0000) with various signing</li>
  *   <li><strong>Modern:</strong> X25519 encryption with Ed25519 signing</li>
  *   <li><strong>Transition:</strong> Mixed combinations during migration period</li>
  * </ul>
- * 
+ *
  * <p><strong>Performance Considerations:</strong></p>
  * <ul>
  *   <li><strong>Frequently Used:</strong> Every Destination contains a KeyCertificate</li>
@@ -73,25 +73,25 @@ public class KeyCertificate extends Certificate {
      * @since 0.9.22 pkg private for Certificate.create()
      */
     static final byte[] Ed25519_PAYLOAD = new byte[] {
-        0, (byte) (SigType.EdDSA_SHA512_Ed25519.getCode()), 0, 0
+        0, (byte) SigType.EdDSA_SHA512_Ed25519.getCode(), 0, 0
     };
 
     /**
-     * ElG + P256
-     *
-     * @since 0.9.22 pkg private for Certificate.create()
-     */
+      * ElG + P256
+      *
+      * @since 0.9.22 pkg private for Certificate.create()
+      */
     static final byte[] ECDSA256_PAYLOAD = new byte[] {
-        0, (byte) (SigType.ECDSA_SHA256_P256.getCode()), 0, 0
+        0, (byte) SigType.ECDSA_SHA256_P256.getCode(), 0, 0
     };
 
     /**
-     * X25519 + Ed25519
-     *
-     * @since 0.9.54
-     */
+      * X25519 + Ed25519
+      *
+      * @since 0.9.54
+      */
     static final byte[] X25519_Ed25519_PAYLOAD = new byte[] {
-        0, (byte) (SigType.EdDSA_SHA512_Ed25519.getCode()), 0, (byte) (EncType.ECIES_X25519.getCode())
+        0, (byte) SigType.EdDSA_SHA512_Ed25519.getCode(), 0, (byte) EncType.ECIES_X25519.getCode()
     };
 
     /**
@@ -134,9 +134,9 @@ public class KeyCertificate extends Certificate {
     }
 
     /**
-     *  @param payload 4 bytes minimum if non-null
-     *  @throws DataFormatException
-     */
+      *  @param payload 4 bytes minimum if non-null
+      *  @throws DataFormatException if payload is too short
+      */
     public KeyCertificate(byte[] payload) throws DataFormatException {
          super(CERTIFICATE_TYPE_KEY, payload);
          if (payload != null && payload.length < HEADER_LENGTH)
@@ -148,7 +148,7 @@ public class KeyCertificate extends Certificate {
      *  and the signature type and extra data from the given public key.
      *
      *  @param spk non-null data non-null
-     *  @throws IllegalArgumentException
+     *  @throws IllegalArgumentException if spk or spk data is null
      */
     public KeyCertificate(SigningPublicKey spk) {
          super(CERTIFICATE_TYPE_KEY, null);
@@ -173,7 +173,7 @@ public class KeyCertificate extends Certificate {
      *
      *  @param spk non-null data non-null
      *  @param pk non-null
-     *  @throws IllegalArgumentException
+     *  @throws IllegalArgumentException if spk, pk, or their data is null
      *  @since 0.9.42
      */
     public KeyCertificate(SigningPublicKey spk, PublicKey pk) {
@@ -203,9 +203,9 @@ public class KeyCertificate extends Certificate {
      *  fill in the extra key data in the payload.
      *
      *  @param type non-null
-     *  @throws IllegalArgumentException
+     *  @throws IllegalArgumentException if type is null
      */
-    public KeyCertificate(SigType type) {
+     public KeyCertificate(SigType type) {
         this(type, EncType.ELGAMAL_2048);
     }
 
@@ -219,7 +219,7 @@ public class KeyCertificate extends Certificate {
      *
      *  @param type non-null
      *  @param etype non-null
-     *  @throws IllegalArgumentException
+     *  @throws IllegalArgumentException if type or etype is null
      *  @since 0.9.42
      */
     public KeyCertificate(SigType type, EncType etype) {
@@ -357,7 +357,7 @@ public class KeyCertificate extends Certificate {
      */
     private static final class ECDSA256Cert extends KeyCertificate {
         private static final byte[] ECDSA256_DATA = new byte[] {
-            CERTIFICATE_TYPE_KEY, 0, HEADER_LENGTH, 0, (byte) (SigType.ECDSA_SHA256_P256.getCode()), 0, 0
+            CERTIFICATE_TYPE_KEY, 0, HEADER_LENGTH, 0, (byte) SigType.ECDSA_SHA256_P256.getCode(), 0, 0
         };
         private static final int ECDSA256_LENGTH = ECDSA256_DATA.length;
         private final int _hashcode;

@@ -53,6 +53,7 @@ public abstract class JobImpl implements Job {
 
     /**
      *  For JobQueue only, not for external use
+     *  @param now the current time in milliseconds
      *  @since 0.9.55
      */
     public void madeReady(long now) { _madeReadyOn = now; }
@@ -63,6 +64,7 @@ public abstract class JobImpl implements Job {
     /**
      *  Warning - only call this from runJob() or if Job is not already queued,
      *  or else it gets the job queue out of order.
+     *  @param delayMs the delay in milliseconds before the job should run again
      */
     protected void requeue(long delayMs) {
         getTiming().setStartAfter(_context.clock().now() + delayMs);

@@ -23,18 +23,38 @@ public class BEValue {
     // This is either a byte[], Number, List or Map.
     private final Object value;
 
+    /**
+     * Creates a new BEValue wrapping a byte array.
+     *
+     * @param value the byte array value to wrap
+     */
     public BEValue(byte[] value) {
         this.value = value;
     }
 
+    /**
+     * Creates a new BEValue wrapping a Number.
+     *
+     * @param value the Number value to wrap
+     */
     public BEValue(Number value) {
         this.value = value;
     }
 
+    /**
+     * Creates a new BEValue wrapping a List.
+     *
+     * @param value the List value to wrap
+     */
     public BEValue(List<BEValue> value) {
         this.value = value;
     }
 
+    /**
+     * Creates a new BEValue wrapping a Map.
+     *
+     * @param value the Map value to wrap
+     */
     public BEValue(Map<String, BEValue> value) {
         this.value = value;
     }
@@ -43,6 +63,9 @@ public class BEValue {
      * Returns this BEValue as a String. This operation only succeeds when the BEValue is a byte[],
      * otherwise it will throw a InvalidBEncodingException. The byte[] will be interpreted as UTF-8
      * encoded characters.
+     *
+     * @return the String value
+     * @throws InvalidBEncodingException if the value is not a byte array
      */
     public String getString() throws InvalidBEncodingException {
         try {
@@ -57,6 +80,9 @@ public class BEValue {
     /**
      * Returns this BEValue as a byte[]. This operation only succeeds when the BEValue is actually a
      * byte[], otherwise it will throw a InvalidBEncodingException.
+     *
+     * @return the byte array value
+     * @throws InvalidBEncodingException if the value is not a byte array
      */
     public byte[] getBytes() throws InvalidBEncodingException {
         try {
@@ -69,6 +95,9 @@ public class BEValue {
     /**
      * Returns this BEValue as a Number. This operation only succeeds when the BEValue is actually a
      * Number, otherwise it will throw a InvalidBEncodingException.
+     *
+     * @return the Number value
+     * @throws InvalidBEncodingException if the value is not a Number
      */
     public Number getNumber() throws InvalidBEncodingException {
         try {
@@ -82,6 +111,9 @@ public class BEValue {
      * Returns this BEValue as int. This operation only succeeds when the BEValue is actually a
      * Number, otherwise it will throw a InvalidBEncodingException. The returned int is the result
      * of <code>Number.intValue()</code>.
+     *
+     * @return the int value
+     * @throws InvalidBEncodingException if the value is not a Number
      */
     public int getInt() throws InvalidBEncodingException {
         return getNumber().intValue();
@@ -91,6 +123,9 @@ public class BEValue {
      * Returns this BEValue as long. This operation only succeeds when the BEValue is actually a
      * Number, otherwise it will throw a InvalidBEncodingException. The returned long is the result
      * of <code>Number.longValue()</code>.
+     *
+     * @return the long value
+     * @throws InvalidBEncodingException if the value is not a Number
      */
     public long getLong() throws InvalidBEncodingException {
         return getNumber().longValue();
@@ -99,6 +134,9 @@ public class BEValue {
     /**
      * Returns this BEValue as a List of BEValues. This operation only succeeds when the BEValue is
      * actually a List, otherwise it will throw a InvalidBEncodingException.
+     *
+     * @return the List value
+     * @throws InvalidBEncodingException if the value is not a List
      */
     @SuppressWarnings("unchecked")
     public List<BEValue> getList() throws InvalidBEncodingException {
@@ -113,6 +151,9 @@ public class BEValue {
      * Returns this BEValue as a Map of BEValue keys and BEValue values. This operation only
      * succeeds when the BEValue is actually a Map, otherwise it will throw a
      * InvalidBEncodingException.
+     *
+     * @return the Map value
+     * @throws InvalidBEncodingException if the value is not a Map
      */
     @SuppressWarnings("unchecked")
     public Map<String, BEValue> getMap() throws InvalidBEncodingException {
@@ -123,7 +164,11 @@ public class BEValue {
         }
     }
 
-    /** return the untyped value */
+    /**
+     * Returns the untyped value contained in this BEValue.
+     *
+     * @return the underlying value (byte[], Number, List, or Map)
+     */
     public Object getValue() {
         return value;
     }

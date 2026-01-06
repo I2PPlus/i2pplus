@@ -26,7 +26,7 @@ import net.i2p.util.RandomSource;
 
 /**
  * Defines the set of leases that a destination currently has available for routing messages.
- * 
+ *
  * <p>LeaseSet is the fundamental routing structure in I2P, containing:</p>
  * <ul>
  *   <li><strong>Destination:</strong> The service endpoint identity</li>
@@ -35,14 +35,14 @@ import net.i2p.util.RandomSource;
  *   <li><strong>Leases:</strong> List of tunnel endpoints and their validity periods</li>
  *   <li><strong>Signature:</strong> Cryptographic signature proving authenticity</li>
  * </ul>
- * 
+ *
  * <p><strong>Lease Structure:</strong></p>
  * <ul>
  *   <li><strong>Gateway:</strong> Router identity that hosts the tunnel endpoint</li>
  *   <li><strong>Tunnel ID:</strong> Unique identifier for the tunnel on the gateway</li>
  *   <li><strong>Expiration:</strong> Time when the lease becomes invalid</li>
  * </ul>
- * 
+ *
  * <p><strong>Encryption Support (Legacy):</strong></p>
  * <ul>
  *   <li><strong>⚠️ SECURITY WARNING:</strong> Encryption is poorly designed and probably insecure</li>
@@ -51,7 +51,7 @@ import net.i2p.util.RandomSource;
  *   <li><strong>No Indication:</strong> Encrypted leases appear identical to unencrypted ones</li>
  *   <li><strong>Keyring Required:</strong> Routers need desthash and key to decrypt</li>
  * </ul>
- * 
+ *
  * <p><strong>Encryption Process:</strong></p>
  * <ul>
  *   <li><strong>Client Side:</strong> Encryption performed in I2CP client</li>
@@ -59,7 +59,7 @@ import net.i2p.util.RandomSource;
  *   <li><strong>Network:</strong> Encrypted form transmitted to floodfills</li>
  *   <li><strong>Access:</strong> Decrypted leases only available via {@link #getLease(int)}</li>
  * </ul>
- * 
+ *
  * <p><strong>Usage:</strong></p>
  * <ul>
  *   <li><strong>Routing:</strong> Primary mechanism for message delivery in I2P</li>
@@ -67,7 +67,7 @@ import net.i2p.util.RandomSource;
  *   <li><strong>Mobility:</strong> Leases can be updated as endpoints change</li>
  *   <li><strong>Discovery:</strong> Published to network database for lookup</li>
  * </ul>
- * 
+ *
  * <p><strong>Security Considerations:</strong></p>
  * <ul>
  *   <li><strong>Signature Verification:</strong> Always verify LeaseSet signatures</li>
@@ -75,7 +75,7 @@ import net.i2p.util.RandomSource;
  *   <li><strong>Encryption Avoidance:</strong> Legacy encryption should not be used</li>
  *   <li><strong>Modern Alternatives:</strong> Use LeaseSet2, EncryptedLeaseSet, or MetaLeaseSet</li>
  * </ul>
- * 
+ *
  * <p><strong>Migration Path:</strong></p>
  * <ul>
  *   <li><strong>LeaseSet2:</strong> Enhanced format with better security and features</li>
@@ -132,12 +132,15 @@ public class LeaseSet extends DatabaseEntry {
     }
 
     /**
-     * Same as getEarliestLeaseDate()
-     */
+      * Same as getEarliestLeaseDate()
+      */
+    @Override
     public long getDate() {return getEarliestLeaseDate();}
 
+    @Override
     public KeysAndCert getKeysAndCert() {return _destination;}
 
+    @Override
     public int getType() {return KEY_TYPE_LEASESET;}
 
     /**
@@ -148,8 +151,10 @@ public class LeaseSet extends DatabaseEntry {
     public Destination getDestination() {return _destination;}
 
     /**
-     * @throws IllegalStateException if already signed
-     */
+      *  Sets the destination for this leaseset.
+      *
+      * @throws IllegalStateException if already signed
+      */
     public void setDestination(Destination dest) {
         if (_signature != null) {throw new IllegalStateException();}
         _destination = dest;
@@ -171,8 +176,10 @@ public class LeaseSet extends DatabaseEntry {
     }
 
     /**
-     * @throws IllegalStateException if already signed
-     */
+      *  Sets the encryption key for this leaseset.
+      *
+      * @throws IllegalStateException if already signed
+      */
     public void setEncryptionKey(PublicKey encryptionKey) {
         if (_signature != null) {throw new IllegalStateException();}
         _encryptionKey = encryptionKey; // subclasses may set an ECIES key
@@ -198,18 +205,21 @@ public class LeaseSet extends DatabaseEntry {
     }
 
     /**
-     * As of 0.9.65, no longer sets receivedAsReply to true
-     * @param localClient may be null
-     * @since 0.9.47
-     */
+      * As of 0.9.65, no longer sets receivedAsReply to true
+      * @param localClient may be null
+      * @since 0.9.47
+      */
+    @Override
     public void setReceivedBy(Hash localClient) {
         super.setReceivedBy(localClient);
         //setReceivedAsReply();
     }
 
     /**
-     * @throws IllegalStateException if already signed
-     */
+      *  Adds a lease to this leaseset.
+      *
+      * @throws IllegalStateException if already signed
+      */
     public void addLease(Lease lease) {
         if (lease == null) throw new IllegalArgumentException("Error:! Null lease!");
         if (lease.getGateway() == null) throw new IllegalArgumentException("Error: Lease has no gateway!");
@@ -227,9 +237,11 @@ public class LeaseSet extends DatabaseEntry {
     }
 
     /**
-     *  @return 0-16
-     *  A LeaseSet with no leases is revoked.
-     */
+      *  Gets the number of leases in this leaseset.
+      *
+      *  @return 0-16
+      *  A LeaseSet with no leases is revoked.
+      */
     public int getLeaseCount() {
         if (isEncrypted()) {return _leases.size() - 1;}
         else {return _leases.size();}
@@ -266,7 +278,7 @@ public class LeaseSet extends DatabaseEntry {
     public long getLatestLeaseDate() {return _lastExpiration;}
 
     /**
-     * Verify that the signature matches the lease set's destination's signing public key.
+     * Verify that the signature matches the leaseset's destination's signing public key.
      * As of 0.9.47, revocation is not checked.
      *
      * @return true only if the signature matches
@@ -275,7 +287,7 @@ public class LeaseSet extends DatabaseEntry {
     public boolean verifySignature() {return super.verifySignature();} // Revocation unused (see above)
 
     /**
-     * Verify that the signature matches the lease set's destination's signing public key.
+     * Verify that the signature matches the leaseset's destination's signing public key.
      * As of 0.9.47, revocation is not checked.
      *
      * @deprecated revocation unused
@@ -297,6 +309,7 @@ public class LeaseSet extends DatabaseEntry {
     }
 
     /** without sig! */
+    @Override
     protected byte[] getBytes() {
         if (_byteified != null) {return _byteified;}
         if ((_destination == null) || (_encryptionKey == null) || (_signingKey == null)) {return null;}
@@ -316,10 +329,11 @@ public class LeaseSet extends DatabaseEntry {
     }
 
     /**
-     *  This does NOT validate the signature
-     *
-     *  @throws IllegalStateException if called more than once or Destination already set
-     */
+      *  This does NOT validate the signature
+      *
+      *  @throws IllegalStateException if called more than once or Destination already set
+      */
+    @Override
     public void readBytes(InputStream in) throws DataFormatException, IOException {
         if (_destination != null) {throw new IllegalStateException();}
         _destination = Destination.create(in);
@@ -348,8 +362,9 @@ public class LeaseSet extends DatabaseEntry {
     }
 
     /**
-     *  This does NOT validate the signature
-     */
+      *  This does NOT validate the signature
+      */
+    @Override
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
         if ((_destination == null) || (_encryptionKey == null) || (_signingKey == null)
             || (_signature == null)) {

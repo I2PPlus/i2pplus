@@ -27,7 +27,6 @@ import net.i2p.data.Payload;
  * @author zzz
  */
 public class SendMessageExpiresMessage extends SendMessageMessage {
-    /* FIXME hides another field FIXME */
     public final static int MESSAGE_TYPE = 36;
     private final DateAndFlags _daf;
 
@@ -93,31 +92,37 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
     }
 
     /**
-     *  @since 0.8.4
-     */
+      *  Sets the message expiration time.
+      *
+      * @since 0.8.4
+      */
     public void setExpiration(long d) {
         _daf.setDate(d);
     }
 
     /**
-     *  @since 0.8.4
-     */
+      *  Gets the message flags.
+      *
+      * @since 0.8.4
+      */
     public int getFlags() {
         return _daf.getFlags();
     }
 
     /**
-     *  @since 0.8.4
-     */
+      *  Sets the message flags.
+      *
+      * @since 0.8.4
+      */
     public void setFlags(int f) {
         _daf.setFlags(f);
     }
 
     /**
-     * Read the body into the data structures
-     *
-     * @throws IOException
-     */
+      * Read the body into the data structures
+      *
+      * @throws IOException if there's an error reading from the stream
+      */
     @Override
     public synchronized void readMessage(InputStream in, int length, int type) throws I2CPMessageException, IOException {
         super.readMessage(in, length, type);
@@ -130,11 +135,11 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
     }
 
     /**
-     * Write out the full message to the stream, including the 4 byte size and 1
-     * byte type header.  Override the parent so we can be more mem efficient
-     *
-     * @throws IOException
-     */
+      * Write out the full message to the stream, including the 4 byte size and 1
+      * byte type header.  Override the parent so we can be more mem efficient
+      *
+      * @throws IOException if there's an error writing to the stream
+      */
     @Override
     public synchronized void writeMessage(OutputStream out) throws I2CPMessageException, IOException {
         if (_sessionId == null)

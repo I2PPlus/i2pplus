@@ -98,8 +98,10 @@ public class SendMessageMessage extends I2CPMessageImpl {
     }
 
     /**
-     * @return 0 to 0xffffffff
-     */
+      *  Gets the message nonce.
+      *
+      * @return 0 to 0xffffffff
+      */
     public synchronized long getNonce() {
         return _nonce;
     }
@@ -119,10 +121,10 @@ public class SendMessageMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Read the body into the data structures
-     *
-     * @throws IOException
-     */
+      * Read the body into the data structures
+      *
+      * @throws IOException if there's an error reading from the stream
+      */
     @Override
     public synchronized void readMessage(InputStream in, int length, int type) throws I2CPMessageException, IOException {
         if (type != getType())
@@ -151,11 +153,11 @@ public class SendMessageMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Write out the full message to the stream, including the 4 byte size and 1
-     * byte type header.  Override the parent so we can be more mem efficient
-     *
-     * @throws IOException
-     */
+      * Write out the full message to the stream, including the 4 byte size and 1
+      * byte type header.  Override the parent so we can be more mem efficient
+      *
+      * @throws IOException if there's an error writing to the stream
+      */
     @Override
     public synchronized void writeMessage(OutputStream out) throws I2CPMessageException, IOException {
         if (_sessionId == null)
@@ -180,6 +182,7 @@ public class SendMessageMessage extends I2CPMessageImpl {
         }
     }
 
+    @Override
     public int getType() {
         return MESSAGE_TYPE;
     }

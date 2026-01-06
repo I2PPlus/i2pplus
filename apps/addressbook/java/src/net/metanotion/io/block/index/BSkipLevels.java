@@ -62,21 +62,31 @@ import net.metanotion.util.skiplist.SkipSpan;
  */
 public class BSkipLevels<K extends Comparable<? super K>, V> extends SkipLevels<K, V> {
 	private static final long MAGIC = 0x42534c6576656c73l;  // "BSLevels"
+	/** Fixed header length in bytes */
 	static final int HEADER_LEN = 16;
+	/** Page number of this level */
 	public final int levelPage;
+	/** Page number of the associated span */
 	public final int spanPage;
+	/** Reference to the BlockFile */
 	public final BlockFile bf;
+	/** Reference to the BSkipList */
 	private final BSkipList<K, V> bsl;
+	/** Whether this level has been killed */
 	private boolean isKilled;
-	// the level pages, passed from the constructor to initializeLevels(),
-	// NOT kept up to date
+	/** The level pages, passed from the constructor to initializeLevels() */
 	private final int[] lps;
 
 	/**
-	 *  Non-recursive initializer initializeLevels()
-	 *  MUST be called on the first BSkipLevel in the skiplist
-	 *  after the constructor, unless it's a new empty
+	 *  Create a BSkipLevels and load it from disk.
+	 *  Non-recursive initializer initializeLevels() MUST be called on the first
+	 *  BSkipLevel in the skiplist after the constructor, unless it's a new empty
 	 *  level and init() was previously called.
+	 *
+	 *  @param bf the BlockFile
+	 *  @param levelPage the page number of this level
+	 *  @param bsl the BSkipList
+	 *  @throws IOException if an I/O error occurs
 	 */
 	@SuppressWarnings("unchecked")
 	public BSkipLevels(BlockFile bf, int levelPage, BSkipList<K, V> bsl) throws IOException {
@@ -197,6 +207,15 @@ public class BSkipLevels<K extends Comparable<? super K>, V> extends SkipLevels<
 		}
 	}
 
+	/**
+	 *  Initialize a new BSkipLevels page on disk.
+	 *
+	 *  @param bf the BlockFile
+	 *  @param page the page number
+	 *  @param spanPage the span page number
+	 *  @param maxHeight the maximum height
+	 *  @throws IOException if an I/O error occurs
+	 */
 	public static void init(BlockFile bf, int page, int spanPage, int maxHeight) throws IOException {
 		BlockFile.pageSeek(bf.file, page);
 		bf.file.writeLong(MAGIC);
@@ -205,6 +224,9 @@ public class BSkipLevels<K extends Comparable<? super K>, V> extends SkipLevels<
 		bf.file.writeInt(spanPage);
 	}
 
+	/**
+	 *  Flush this level to disk.
+	 */
 	@Override
 	public void flush() {
 		if (isKilled) {
@@ -228,6 +250,9 @@ public class BSkipLevels<K extends Comparable<? super K>, V> extends SkipLevels<
 		} catch (IOException ioe) { throw new RuntimeException("Error writing to database", ioe); }
 	}
 
+	/**
+	 *  Mark this level as killed and free its resources.
+	 */
 	@Override
 	public void killInstance() {
 		if (isKilled) {
@@ -241,6 +266,14 @@ public class BSkipLevels<K extends Comparable<? super K>, V> extends SkipLevels<
 		bf.freePage(levelPage);
 	}
 
+	/**
+	 *  Create a new instance of this level type.
+	 *
+	 *  @param levels the number of levels
+	 *  @param ss the SkipSpan
+	 *  @param sl the SkipList
+	 *  @return a new BSkipLevels instance
+	 */
 	@Override
 	public SkipLevels<K, V> newInstance(int levels, SkipSpan<K, V> ss, SkipList<K, V> sl) {
 		try {
@@ -256,10 +289,10 @@ public class BSkipLevels<K extends Comparable<? super K>, V> extends SkipLevels<
 	}
 
 	/**
-	 *  Run an integrity check on the skiplevels from the first,
-	 *  or just fix it if fix == true.
-	 *  Only call from the first level.
-	 *  @return true if the levels were modified.
+	 *  Run an integrity check on this level.
+	 *
+	 *  @param fix if true, attempt to fix corruption
+	 *  @return true if the levels were modified
 	 */
 	@Override
 	public boolean blvlck(boolean fix) {
@@ -360,11 +393,20 @@ public class BSkipLevels<K extends Comparable<? super K>, V> extends SkipLevels<
 	}
 
 	/**
-	 *  For sorting levels in blvlfix()
-         *  Sorts in REVERSE order.
-	 *  @since 0.8.8
+	 *  Comparator for sorting levels in blvlfix().
+	 *  Sorts in REVERSE order.
+	 *
+	 *  @param <K> the key type
+	 *  @param <V> the value type
 	 */
 	private static class LevelComparator<K extends Comparable<? super K>, V> implements Comparator<SkipLevels<K, V>>, Serializable {
+		/**
+		 *  Compare two SkipLevels.
+		 *
+		 *  @param l the first level
+		 *  @param r the second level
+		 *  @return a negative integer, zero, or a positive integer
+		 */
 		public int compare(SkipLevels<K, V> l, SkipLevels<K, V> r) {
 			K lk = l.key();
 			K rk = r.key();
@@ -379,9 +421,13 @@ public class BSkipLevels<K extends Comparable<? super K>, V> extends SkipLevels<
 		}
 	}
 
-	/*
-	 *  Recursively walk through the levels at level 0
-	 *  This needs work.
+	/**
+	 *  Run an integrity check on this level with additional parameters.
+	 *
+	 *  @param fix if true, attempt to fix corruption
+	 *  @param width the current width
+	 *  @param prevLevels previous levels to check
+	 *  @return true if corruption was found
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
@@ -433,6 +479,11 @@ public class BSkipLevels<K extends Comparable<? super K>, V> extends SkipLevels<
 		return false;
 	}
 
+	/**
+	 *  Get a string representation of this level.
+	 *
+	 *  @return a string representation
+	 */
 	@Override
 	public String toString() {
 		String rv = "BSLevel height: " + levels.length + " page: " + levelPage + " span: " + bottom +

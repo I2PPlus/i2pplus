@@ -34,9 +34,13 @@ public abstract class HMACGenerator {
     /**
      * Calculate the HMAC of the data with the given key
      *
-     * @param target out parameter the first 16 bytes contain the HMAC, the last 16 bytes are zero
-     * @param targetOffset offset into target to put the hmac
-     * @throws IllegalArgumentException for bad key or target too small
+     *  @param key the session key
+     *  @param data the data to HMAC
+     *  @param offset the starting offset in data
+     *  @param length the length of data to HMAC
+     *  @param target out parameter the first 16 bytes contain the HMAC, the last 16 bytes are zero
+     *  @param targetOffset offset into target to put the hmac
+     *  @throws IllegalArgumentException for bad key or target too small
      */
     public abstract void calculate(SessionKey key, byte data[], int offset, int length, byte target[], int targetOffset);
 

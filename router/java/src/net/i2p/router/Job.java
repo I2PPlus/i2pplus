@@ -17,12 +17,17 @@ package net.i2p.router;
 public interface Job {
     /**
      * Descriptive name of the task
+     * @return the descriptive name of the task
      */
     public String getName();
-    /** unique id */
+    /**
+     * Unique id for this job.
+     * @return the unique job id
+     */
     public long getJobId();
     /**
      * Timing criteria for the task
+     * @return the job timing object
      */
     public JobTiming getTiming();
     /**

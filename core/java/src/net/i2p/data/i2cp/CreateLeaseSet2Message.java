@@ -31,13 +31,10 @@ import net.i2p.util.ByteArrayStream;
  * not before, so we can infer the types from the LeaseSet.
  *
  * For Meta LS:
- * PrivateKeys are not present.
- *
- * For Encrypted LS:
- * TODO
- *
- * @since 0.9.38
- */
+  * PrivateKeys are not present.
+  *
+  * @since 0.9.38
+  */
 public class CreateLeaseSet2Message extends CreateLeaseSetMessage {
     /**
      *  NOTE: Preliminary format was type 40 in 0.9.38.

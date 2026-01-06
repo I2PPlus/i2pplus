@@ -115,9 +115,9 @@ public class SDSCache<V extends SimpleDataStructure> {
      *  @param data non-null, the byte array for the SimpleDataStructure
      *  @return the cached value if available, otherwise
      *          makes a new object and returns it
-     *  @throws IllegalArgumentException if data is not the correct number of bytes
-     *  @throws NullPointerException
-     */
+      *  @throws IllegalArgumentException if data is not the correct number of bytes
+      *  @throws NullPointerException if data is null
+      */
     public V get(byte[] data) {
         if (data == null)
             throw new NullPointerException("Don't pull null data from the cache");

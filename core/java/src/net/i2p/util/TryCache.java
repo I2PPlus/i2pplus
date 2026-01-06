@@ -15,6 +15,8 @@ public class TryCache<T> {
 
     /**
      * Factory interface for creating new objects in TryCache.
+     *
+     * @param <T> the type of objects created by this factory
      * @since 0.9.35
      */
     public interface ObjectFactory<T> {

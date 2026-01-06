@@ -27,9 +27,11 @@ import net.i2p.data.Hash;
 public class DatagramTest extends TestCase {
     private I2PClient _client;
 
+    @Override
     public void setUp(){
     }
 
+    @Override
     protected void tearDown() {
         System.gc();
     }

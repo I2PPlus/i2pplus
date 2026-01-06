@@ -30,13 +30,17 @@ public class HostReplyMessage extends I2CPMessageImpl {
     public static final int RESULT_SUCCESS = 0;
     /** generic fail, other codes TBD */
     public static final int RESULT_FAILURE = 1;
-    /** @since 0.9.41 */
+    /** Request secret required result code.
+      * @since 0.9.41 */
     public static final int RESULT_SECRET_REQUIRED = 2;
-    /** @since 0.9.41 */
+    /** Request key required result code.
+      * @since 0.9.41 */
     public static final int RESULT_KEY_REQUIRED = 3;
-    /** @since 0.9.41 */
+    /** Request secret and key required result code.
+      * @since 0.9.41 */
     public static final int RESULT_SECRET_AND_KEY_REQUIRED = 4;
-    /** @since 0.9.41 */
+    /** Decryption failure result code.
+      * @since 0.9.41 */
     public static final int RESULT_DECRYPTION_FAILURE = 5;
 
     private static final long MAX_INT = (1L << 32) - 1;
@@ -83,20 +87,27 @@ public class HostReplyMessage extends I2CPMessageImpl {
     public SessionId sessionId() {return _sessionId;}
 
     /**
-     *  @return 0 to 2**32 - 1
-     */
+      *  Gets the request ID.
+      *
+      *  @return 0 to 2**32 - 1
+      */
     public long getReqID() {return _reqID;}
 
     /**
-     *  @return 0 on success, 1-255 on failure
-     */
+      *  Gets the result code.
+      *
+      *  @return 0 on success, 1-255 on failure
+      */
     public int getResultCode() {return _code;}
 
     /**
-     *  @return non-null only if result code is zero
-     */
+      *  Gets the destination.
+      *
+      *  @return non-null only if result code is zero
+      */
     public Destination getDestination() {return _dest;}
 
+    @Override
     protected void doReadMessage(InputStream in, int size) throws I2CPMessageException, IOException {
         try {
             _sessionId = new SessionId();
@@ -108,6 +119,7 @@ public class HostReplyMessage extends I2CPMessageImpl {
         } catch (DataFormatException dfe) {throw new I2CPMessageException("BAD data", dfe);}
     }
 
+    @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {
         int len = 7;
         if (_code == RESULT_SUCCESS) {
@@ -126,6 +138,7 @@ public class HostReplyMessage extends I2CPMessageImpl {
         return os.toByteArray();
     }
 
+    @Override
     public int getType() {
         return MESSAGE_TYPE;
     }

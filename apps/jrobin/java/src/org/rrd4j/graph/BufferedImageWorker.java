@@ -51,16 +51,34 @@ class BufferedImageWorker extends ImageWorker {
             return iwp;
         }
 
+        /**
+         * Sets the width of the image.
+         *
+         * @param width The width in pixels.
+         * @return This builder for method chaining.
+         */
         public Builder setWidth(int width) {
             this.width = width;
             return this;
         }
 
+        /**
+         * Sets the height of the image.
+         *
+         * @param height The height in pixels.
+         * @return This builder for method chaining.
+         */
         public Builder setHeight(int height) {
             this.height = height;
             return this;
         }
 
+        /**
+         * Sets the graph definition for this worker.
+         *
+         * @param gdef The RRD graph definition.
+         * @return This builder for method chaining.
+         */
         public Builder setGdef(RrdGraphDef gdef) {
             this.gdef = gdef;
             if (this.writer == null) {
@@ -72,6 +90,12 @@ class BufferedImageWorker extends ImageWorker {
             return this;
         }
 
+        /**
+         * Sets the image writer for encoding the image.
+         *
+         * @param writer The image writer to use.
+         * @return This builder for method chaining.
+         */
         public Builder setWriter(ImageWriter writer) {
             this.writer = writer;
             if (this.imageWriteParam == null) {
@@ -80,12 +104,23 @@ class BufferedImageWorker extends ImageWorker {
             return this;
         }
 
+        /**
+         * Sets the image write parameters for encoding.
+         *
+         * @param imageWriteParam The image write parameters.
+         * @return This builder for method chaining.
+         */
         public Builder setImageWriteParam(ImageWriteParam imageWriteParam) {
             this.imageWriteParam = imageWriteParam;
             return this;
         }
     }
 
+    /**
+     * Creates a new builder for BufferedImageWorker.
+     *
+     * @return A new builder instance.
+     */
     public static Builder getBuilder() {
         return new Builder();
     }
@@ -116,6 +151,12 @@ class BufferedImageWorker extends ImageWorker {
         resize(imgWidth, imgHeight);
     }
 
+    /**
+     * Resizes the worker to the specified dimensions.
+     *
+     * @param width The new width in pixels.
+     * @param height The new height in pixels.
+     */
     void resize(int width, int height) {
         imgWidth = width;
         imgHeight = height;
@@ -136,6 +177,12 @@ class BufferedImageWorker extends ImageWorker {
         g2d.setClip(0, 0, imgWidth, imgHeight);
     }
 
+    /**
+     * Creates and writes the image to the specified output stream.
+     *
+     * @param stream The output stream to write the image to.
+     * @throws java.io.IOException If an I/O error occurs during writing.
+     */
     void makeImage(OutputStream stream) throws IOException {
         BufferedImage outputImage = img;
 

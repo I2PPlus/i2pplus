@@ -100,10 +100,11 @@ public class SimpleDataStructureTest {
         TestStruct struct = new TestStruct();
 
         // just make sure it doesn't explode in our face
-        struct.hashCode();
+        assertNotEquals(0, struct.hashCode());
     }
 
     public class TestStruct extends SimpleDataStructure {
+        @Override
         public int length() {
             return 3;
         }

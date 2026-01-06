@@ -34,17 +34,24 @@ import java.util.Vector;
  */
 public class AllowedValueList extends Vector<AllowedValue> {
     ////////////////////////////////////////////////
-    //	Constants
+    //  Constants
     ////////////////////////////////////////////////
 
+    /** XML element name for allowed value list in UPnP descriptions. */
     public static final String ELEM_NAME = "allowedValueList";
 
     ////////////////////////////////////////////////
-    //	Constructor
+    //  Constructor
     ////////////////////////////////////////////////
 
+    /** Creates an empty allowed value list. */
     public AllowedValueList() {}
 
+    /**
+     * Creates an allowed value list from an array of value strings.
+     *
+     * @param values the array of value strings to add to the list
+     */
     public AllowedValueList(String[] values) {
         for (int i = 0; i < values.length; i++) {
             add(new AllowedValue(values[i]));
@@ -53,13 +60,25 @@ public class AllowedValueList extends Vector<AllowedValue> {
     }
 
     ////////////////////////////////////////////////
-    //	Methods
+    //  Methods
     ////////////////////////////////////////////////
 
+    /**
+     * Gets the allowed value at the specified index.
+     *
+     * @param n the index of the allowed value to retrieve
+     * @return the allowed value at the specified index
+     */
     public AllowedValue getAllowedValue(int n) {
         return get(n);
     }
 
+    /**
+     * Checks if the specified value is in the allowed value list.
+     *
+     * @param v the value to check
+     * @return true if the value is in the list
+     */
     public boolean isAllowed(String v) {
         for (Iterator<AllowedValue> i = this.iterator(); i.hasNext(); ) {
             AllowedValue av = i.next();

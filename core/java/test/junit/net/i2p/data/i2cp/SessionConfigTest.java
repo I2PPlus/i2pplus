@@ -25,6 +25,7 @@ import net.i2p.data.StructureTest;
  * @author jrandom
  */
 public class SessionConfigTest extends StructureTest {
+    @Override
     public DataStructure createDataStructure() throws DataFormatException {
         SessionConfig cfg = new SessionConfig((Destination)(new DestinationTest()).createDataStructure());
         cfg.setSignature((Signature)(new SignatureTest()).createDataStructure());
@@ -36,5 +37,6 @@ public class SessionConfigTest extends StructureTest {
         cfg.signSessionConfig((SigningPrivateKey)(new SigningPrivateKeyTest()).createDataStructure());
         return cfg;
     }
+    @Override
     public DataStructure createStructureToRead() { return new SessionConfig(); }
 }

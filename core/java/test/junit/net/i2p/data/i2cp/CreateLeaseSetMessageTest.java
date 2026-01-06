@@ -22,6 +22,7 @@ import net.i2p.data.SigningPrivateKeyTest;
  * @author jrandom
  */
 public class CreateLeaseSetMessageTest extends I2CPTstBase {
+    @Override
     public I2CPMessageImpl createDataStructure() throws DataFormatException {
         CreateLeaseSetMessage msg = new CreateLeaseSetMessage();
     	msg.setPrivateKey((PrivateKey)(new PrivateKeyTest()).createDataStructure());
@@ -30,5 +31,6 @@ public class CreateLeaseSetMessageTest extends I2CPTstBase {
         msg.setSessionId((SessionId)(new SessionIdTest()).createDataStructure());
         return msg;
     }
+    @Override
     public I2CPMessageImpl createStructureToRead() { return new CreateLeaseSetMessage(); }
 }

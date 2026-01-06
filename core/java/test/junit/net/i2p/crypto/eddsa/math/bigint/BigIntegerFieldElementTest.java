@@ -41,6 +41,7 @@ public class BigIntegerFieldElementTest extends AbstractFieldElementTest {
     static final FieldElement ONE = new BigIntegerFieldElement(ed25519Field, BigInteger.ONE);
     static final FieldElement TWO = new BigIntegerFieldElement(ed25519Field, BigInteger.valueOf(2));
 
+    @Override
     protected FieldElement getRandomFieldElement() {
         BigInteger r;
         Random rnd = new Random();
@@ -50,14 +51,17 @@ public class BigIntegerFieldElementTest extends AbstractFieldElementTest {
         return new BigIntegerFieldElement(ed25519Field, r);
     }
 
+    @Override
     protected BigInteger toBigInteger(FieldElement f) {
         return ((BigIntegerFieldElement)f).bi;
     }
 
+    @Override
     protected BigInteger getQ() {
         return MathUtils.getQ();
     }
 
+    @Override
     protected Field getField() {
         return ed25519Field;
     }
@@ -92,10 +96,12 @@ public class BigIntegerFieldElementTest extends AbstractFieldElementTest {
 
     // region isNonZero
 
+    @Override
     protected FieldElement getZeroFieldElement() {
         return ZERO;
     }
 
+    @Override
     protected FieldElement getNonZeroFieldElement() {
         return TWO;
     }

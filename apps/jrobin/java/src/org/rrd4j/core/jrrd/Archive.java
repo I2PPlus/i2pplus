@@ -25,32 +25,37 @@ public class Archive {
         RRA_hw_alpha
     }
 
+    /** The parent RRD database. */
     final RRDatabase db;
 
-    /** Header offset within file in bytes */
+    /** Header offset within file in bytes. */
     final long headerOffset;
 
-    /** Header size in bytes */
+    /** Header size in bytes. */
     private final long headerSize;
 
-    /** Data offset within file in bytes */
+    /** Data offset within file in bytes. */
     long dataOffset;
 
+    /** Consolidation function type for this archive. */
     private final ConsolidationFunctionType type;
 
-    /** Data row count */
+    /** Data row count. */
     final int rowCount;
 
+    /** Number of primary data points per consolidated data point. */
     final int pdpCount;
+
+    /** X-Files factor for this archive. */
     final double xff;
 
     /// Following fields are initialized during RRDatabase construction
     /// and in fact immutable
 
-    /** Consolitation data points */
+    /** Consolidation data points status blocks. */
     List<CDPStatusBlock> cdpStatusBlocks;
 
-    /** Row for last modification time of database */
+    /** Row for last modification time of database. */
     int currentRow;
 
     /** Cached content */
@@ -85,6 +90,12 @@ public class Archive {
         return type;
     }
 
+    /**
+     * Loads CDP status blocks from the RRD file.
+     *
+     * @param file The RRD file to read from.
+     * @param numBlocks The number of CDP status blocks to load.
+     */
     void loadCDPStatusBlocks(RRDFile file, int numBlocks) {
 
         cdpStatusBlocks = new ArrayList<>();
@@ -114,10 +125,21 @@ public class Archive {
         return cdpStatusBlocks.iterator();
     }
 
+    /**
+     * Loads the current row index from the RRD file.
+     *
+     * @param file The RRD file to read from.
+     */
     void loadCurrentRow(RRDFile file) {
         currentRow = file.readLong();
     }
 
+    /**
+     * Loads archive data from the RRD file, skipping to the next archive.
+     *
+     * @param file The RRD file to read from.
+     * @param dsCount Number of data sources in the database.
+     */
     void loadData(RRDFile file, int dsCount) {
 
         dataOffset = file.getFilePointer();
@@ -126,6 +148,11 @@ public class Archive {
         file.skipBytes(Constants.SIZE_OF_DOUBLE * rowCount * dsCount);
     }
 
+    /**
+     * Loads archive data from a data chunk.
+     *
+     * @param chunk The data chunk containing archive data.
+     */
     void loadData(DataChunk chunk) {
 
         long rowIndexPointer;
@@ -174,6 +201,13 @@ public class Archive {
         }
     }
 
+    /**
+     * Prints information about this archive to the specified print stream.
+     *
+     * @param s Print stream to write to.
+     * @param numberFormat Number format for displaying values.
+     * @param index Archive index in the database.
+     */
     void printInfo(PrintStream s, NumberFormat numberFormat, int index) {
 
         StringBuilder sb = new StringBuilder("rra[");
@@ -211,6 +245,11 @@ public class Archive {
         }
     }
 
+    /**
+     * Writes XML representation of this archive to the specified print stream.
+     *
+     * @param s Print stream to write to.
+     */
     void toXml(PrintStream s) {
         s.println("\t<rra>");
         s.print("\t\t<cf> ");

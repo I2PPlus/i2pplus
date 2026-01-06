@@ -108,7 +108,12 @@ class BasicServlet extends HttpServlet {
         }
     }
 
-    /** Files are served from here */
+    /**
+     * Files are served from here.
+     *
+     * @param base the directory to serve files from
+     * @throws UnavailableException if the base directory doesn't exist
+     */
     protected synchronized void setResourceBase(File base) throws UnavailableException {
         if (!base.isDirectory()) {
             _log.error("Configured I2PSnark data directory " + base + " does not exist");
@@ -119,7 +124,11 @@ class BasicServlet extends HttpServlet {
         }
     }
 
-    /** Only paths starting with this in the path are served */
+    /**
+     * Only paths starting with this in the path are served.
+     *
+     * @param base the base path that must be matched
+     */
     protected void setWarBase(String base) {
         if (!base.startsWith("/")) {
             base = '/' + base;
@@ -162,6 +171,7 @@ class BasicServlet extends HttpServlet {
      * HttpContext.getResource but derived servlets may provide their own mapping.
      *
      * @param pathInContext The path to find a resource for.
+     * @param limit the maximum content length to serve, or 0 for unlimited
      * @return The resource to serve or null. Returns null for directories
      */
     public HttpContent getContent(String pathInContext, long limit) {
@@ -254,7 +264,11 @@ class BasicServlet extends HttpServlet {
     /**
      * Check modification date headers.
      *
+     * @param request the HTTP request
+     * @param response the HTTP response
+     * @param content the content to check
      * @return true to keep going, false if handled here
+     * @throws IOException if an I/O error occurs
      */
     protected boolean passConditionalHeaders(
             HttpServletRequest request, HttpServletResponse response, HttpContent content)
@@ -350,6 +364,14 @@ class BasicServlet extends HttpServlet {
         copy(in, singleSatisfiableRange.getFirst(content_length), out, singleLength);
     }
 
+    /**
+     * Write response headers for the content.
+     *
+     * @param response the HTTP response
+     * @param content the content to write headers for
+     * @param count the content length
+     * @throws IOException if an I/O error occurs
+     */
     protected void writeHeaders(HttpServletResponse response, HttpContent content, long count)
             throws IOException {
         String rtype = response.getContentType();
@@ -511,7 +533,9 @@ class BasicServlet extends HttpServlet {
     }
 
     /**
-     * @param resourcePath in the classpath, without ".properties" extension
+     * Load MIME type mappings from a resource file.
+     *
+     * @param resourcePath the resource path in the classpath, without ".properties" extension
      */
     protected void loadMimeMap(String resourcePath) {
         _mimeTypes.loadMimeMap(resourcePath);
@@ -531,14 +555,22 @@ class BasicServlet extends HttpServlet {
         return getServletContext().getMimeType(filename);
     }
 
+    /**
+     * Add a MIME type mapping for an extension.
+     *
+     * @param extension the file extension (without the dot)
+     * @param type the MIME type to associate with the extension
+     */
     protected void addMimeMapping(String extension, String type) {
         _mimeTypes.addMimeMapping(extension, type);
     }
 
     /**
-     * Simple version of URIUtil.addPaths()
+     * Simple version of URIUtil.addPaths().
      *
-     * @param path may be null
+     * @param base the base path
+     * @param path the path to add (may be null)
+     * @return the combined path
      */
     protected static String addPaths(String base, String path) {
         if (path == null) {
@@ -557,7 +589,11 @@ class BasicServlet extends HttpServlet {
         return rv;
     }
 
-    /** Simple version of URIUtil.decodePath() */
+    /** Simple version of URIUtil.decodePath().
+     * @param path the path to decode
+     * @return the decoded path
+     * @throws MalformedURLException if the path contains invalid escape sequences
+     */
     protected static String decodePath(String path) throws MalformedURLException {
         if (!path.contains("%")) {
             return path;
@@ -571,7 +607,10 @@ class BasicServlet extends HttpServlet {
         }
     }
 
-    /** Simple version of URIUtil.encodePath() */
+    /** Simple version of URIUtil.encodePath().
+     * @param path the path to encode
+     * @return the encoded path
+     */
     protected static String encodePath(String path) {
         return URIUtil.encodePath(path);
     }
@@ -581,7 +620,15 @@ class BasicServlet extends HttpServlet {
         copy(in, 0, out, -1);
     }
 
-    /** Write from in to out */
+    /**
+     * Copy bytes from input stream to output stream.
+     *
+     * @param in the input stream to read from
+     * @param out the output stream to write to
+     * @param skip the number of bytes to skip before copying
+     * @param len the number of bytes to copy, or -1 for all remaining bytes
+     * @throws IOException if an I/O error occurs
+     */
     private void copy(InputStream in, long skip, OutputStream out, final long len)
             throws IOException {
         ByteArray ba = _cache.acquire();

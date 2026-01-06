@@ -4,23 +4,34 @@ import java.io.Writer;
 import net.i2p.router.RouterContext;
 
 /**
- * Base helper
+ *  Base helper class for JSP helper beans.
+ *  Provides common functionality for router context access,
+ *  translation services, and UI helper methods.
  */
 public abstract class HelperBase {
+    /** the router context */
     protected RouterContext _context;
+    /** the writer for output */
     protected Writer _out;
 
-    /** @since public since 0.9.33, was package private */
+    /**
+     *  Property key for advanced mode.
+     *  @since public since 0.9.33, was package private
+     */
     public static final String PROP_ADVANCED = "routerconsole.advanced";
-    /** @since public since 0.9.33, was package private */
+    /**  Checked attribute for HTML checkboxes.
+     *  @since public since 0.9.33, was package private
+     */
     public static final String CHECKED = " checked ";
-    /** @since 0.9.43 */
+    /**  Selected attribute for HTML select options.
+     *  @since 0.9.43
+     */
     public static final String SELECTED = " selected ";
 
     /**
-     * Configure this bean to query a particular router context
+     *  Configure this bean to query a particular router context.
      *
-     * @param contextId beginning few characters of the routerHash, or null to pick
+     *  @param contextId beginning few characters of the routerHash, or null to pick
      *                  the first one we come across.
      */
     public void setContextId(String contextId) {
@@ -28,7 +39,11 @@ public abstract class HelperBase {
         catch (Throwable t) {t.printStackTrace();}
     }
 
-    /** @since 0.9.9 */
+    /**
+     *  Check if advanced mode is enabled.
+     *  @return true if advanced mode is enabled
+     *  @since 0.9.9
+     */
     public boolean isAdvanced() {
         return _context.getBooleanProperty(PROP_ADVANCED);
     }
@@ -38,16 +53,17 @@ public abstract class HelperBase {
 
 
     /**
-     *  Renamed from setWriter, we realy don't want setFoo(non-String)
-     *  Prevent jsp.error.beans.property.conversion 500 error for ?writer=foo
+     *  Store the writer for output.
+     *  Renamed from setWriter, we really don't want setFoo(non-String)
+     *  to prevent jsp.error.beans.property.conversion 500 error for ?writer=foo
+     *  @param out the writer to store
      *  @since 0.8.2
      */
     public void storeWriter(Writer out) { _out = out; }
 
     /**
-     *  Is a boolean property set to true?
-     *
-     *  @param prop must default to false
+     *  Get the checked attribute for a boolean property.
+     *  @param prop the property name, must default to false
      *  @return non-null, either "" or " checked "
      *  @since 0.9.24 consolidated from various helpers
      */
@@ -56,13 +72,17 @@ public abstract class HelperBase {
         return "";
     }
 
-    /** translate a string */
+    /**
+     *  Translate a string.
+     *  @param s the string to translate
+     *  @return the translated string
+     */
     public String _t(String s) {
         return Messages.getString(s, _context);
     }
 
     /**
-     *  translate a string with a parameter
+     *  Translate a string with a parameter.
      *  This is a lot more expensive than _t(s), so use sparingly.
      *
      *  @param s string to be translated containing {0}
@@ -72,17 +92,32 @@ public abstract class HelperBase {
      *    To translate parameter also, use _t("foo {0} bar", _t("baz"))
      *    Do not double the single quotes in the parameter.
      *    Use autoboxing to call with ints, longs, floats, etc.
+     *  @return the translated string
      */
     public String _t(String s, Object o) {
         return Messages.getString(s, o, _context);
     }
 
-    /** two params @since 0.7.14 */
+    /**
+     *  Translate a string with two parameters.
+     *  @param s string to be translated containing {0} and {1}
+     *  @param o first parameter
+     *  @param o2 second parameter
+     *  @return the translated string
+     *  @since 0.7.14
+     */
     public String _t(String s, Object o, Object o2) {
         return Messages.getString(s, o, o2, _context);
     }
 
-    /** translate (ngettext) @since 0.7.14 */
+    /**
+     *  Translate a string with plural forms (ngettext).
+     *  @param s singular form
+     *  @param p plural form
+     *  @param n the count to determine which form to use
+     *  @return the translated string
+     *  @since 0.7.14
+     */
     public String ngettext(String s, String p, int n) {
         return Messages.getString(n, s, p, _context);
     }
@@ -91,6 +126,7 @@ public abstract class HelperBase {
      *  Mark a string for extraction by xgettext and translation.
      *  Use this only in static initializers.
      *  It does not translate!
+     *  @param s the string to mark
      *  @return s
      */
     public static String _x(String s) {

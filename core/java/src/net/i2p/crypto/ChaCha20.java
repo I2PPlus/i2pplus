@@ -40,8 +40,13 @@ public final class ChaCha20 {
     /**
      * Encrypt from plaintext to ciphertext
      *
-     * @param key first 32 bytes used as the key
-     * @param iv first 12 bytes used as the iv
+     *  @param key first 32 bytes used as the key
+     *  @param iv first 12 bytes used as the iv
+     *  @param plaintext the plaintext to encrypt
+     *  @param plaintextOffset offset in plaintext
+     *  @param ciphertext the ciphertext output buffer
+     *  @param ciphertextOffset offset in ciphertext
+     *  @param length the length to encrypt
      */
     public static void encrypt(byte[] key, byte[] iv,
                                byte[] plaintext, int plaintextOffset,
@@ -99,8 +104,13 @@ public final class ChaCha20 {
     /**
      * Encrypt from ciphertext to plaintext
      *
-     * @param key first 32 bytes used as the key
-     * @param iv first 12 bytes used as the iv
+     *  @param key first 32 bytes used as the key
+     *  @param iv first 12 bytes used as the iv
+     *  @param ciphertext the ciphertext to decrypt
+     *  @param ciphertextOffset offset in ciphertext
+     *  @param plaintext the plaintext output buffer
+     *  @param plaintextOffset offset in plaintext
+     *  @param length the length to decrypt
      */
     public static void decrypt(byte[] key, byte[] iv,
                                byte[] ciphertext, int ciphertextOffset,
@@ -112,9 +122,14 @@ public final class ChaCha20 {
     /**
      * Encrypt from ciphertext to plaintext
      *
-     * @param key first 32 bytes used as the key
-     * @param iv first 12 bytes starting at ivOffset used as the iv
-     * @since 0.9.54
+     *  @param key first 32 bytes used as the key
+     *  @param iv first 12 bytes starting at ivOffset used as the iv
+     *  @param ciphertext the ciphertext to decrypt
+     *  @param ciphertextOffset offset in ciphertext
+     *  @param plaintext the plaintext output buffer
+     *  @param plaintextOffset offset in plaintext
+     *  @param length the length to decrypt
+     *  @since 0.9.54
      */
     public static void decrypt(byte[] key, byte[] iv, int ivOffset,
                                byte[] ciphertext, int ciphertextOffset,

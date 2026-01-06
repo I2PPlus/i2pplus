@@ -21,6 +21,7 @@ import org.junit.Test;
  */
 public class LeaseTest extends StructureTest {
 
+    @Override
     public DataStructure createDataStructure() throws DataFormatException {
         Lease lease = new Lease();
         lease.setEndDate(new Date(1000*60*2));
@@ -31,6 +32,7 @@ public class LeaseTest extends StructureTest {
 
         return lease;
     }
+    @Override
     public DataStructure createStructureToRead() { return new Lease(); }
 
     /* TODO: Delete this if Lease.getNumSuccess() / getNumFailure() get deleted

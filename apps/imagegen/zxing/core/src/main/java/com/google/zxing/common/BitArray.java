@@ -28,11 +28,23 @@ public final class BitArray implements Cloneable {
   private int[] bits;
   private int size;
 
+  /**
+   * Creates a new empty BitArray with zero size.
+   */
   public BitArray() {
     this.size = 0;
     this.bits = new int[1];
   }
 
+  /**
+   * Creates a new BitArray with the specified size.
+   *
+   * @param size the number of bits in the array
+   */
+  /**
+   * Creates a new BitArray with the specified size.
+   * @param size the number of bits in the array
+   */
   public BitArray(int size) {
     this.size = size;
     this.bits = makeArray(size);
@@ -44,10 +56,22 @@ public final class BitArray implements Cloneable {
     this.size = size;
   }
 
+  /**
+   * @return the number of bits in the array
+   */
+  /**
+   * @return the number of bits in the array
+   */
   public int getSize() {
     return size;
   }
 
+  /**
+   * @return the size of the array in bytes (rounded up)
+   */
+  /**
+   * @return the size of the array in bytes (rounded up)
+   */
   public int getSizeInBytes() {
     return (size + 7) / 8;
   }
@@ -138,7 +162,7 @@ public final class BitArray implements Cloneable {
    *
    * @param i first bit to set
    * @param newBits the new value of the next 32 bits. Note again that the least-significant bit
-   * corresponds to bit i, the next-least-significant to i+1, and so on.
+   *        corresponds to bit i, the next-least-significant to i+1, and so on.
    */
   public void setBulk(int i, int newBits) {
     bits[i / 32] = newBits;
@@ -213,6 +237,15 @@ public final class BitArray implements Cloneable {
     return true;
   }
 
+  /**
+   * Appends a single bit to the end of the array.
+   *
+   * @param bit the bit value to append
+   */
+  /**
+   * Appends a single bit to the end of the array.
+   * @param bit the bit value to append
+   */
   public void appendBit(boolean bit) {
     ensureCapacity(size + 1);
     if (bit) {
@@ -239,6 +272,15 @@ public final class BitArray implements Cloneable {
     }
   }
 
+  /**
+   * Appends another BitArray to the end of this array.
+   *
+   * @param other the BitArray to append
+   */
+  /**
+   * Appends another BitArray to the end of this array.
+   * @param other the BitArray to append
+   */
   public void appendBitArray(BitArray other) {
     int otherSize = other.size;
     ensureCapacity(size + otherSize);
@@ -247,6 +289,17 @@ public final class BitArray implements Cloneable {
     }
   }
 
+  /**
+   * Performs a bitwise XOR of this array with another.
+   *
+   * @param other the BitArray to XOR with
+   * @throws IllegalArgumentException if sizes don't match
+   */
+  /**
+   * Performs a bitwise XOR of this array with another.
+   * @param other the BitArray to XOR with
+   * @throws IllegalArgumentException if sizes don't match
+   */
   public void xor(BitArray other) {
     if (size != other.size) {
       throw new IllegalArgumentException("Sizes don't match");
@@ -323,6 +376,14 @@ public final class BitArray implements Cloneable {
     return new int[(size + 31) / 32];
   }
 
+  /**
+   * @param o the object to compare
+   * @return true if this BitArray equals the given object
+   */
+  /**
+   * @param o the object to compare
+   * @return true if this BitArray equals the given object
+   */
   @Override
   public boolean equals(Object o) {
     if (!(o instanceof BitArray)) {
@@ -332,11 +393,23 @@ public final class BitArray implements Cloneable {
     return size == other.size && Arrays.equals(bits, other.bits);
   }
 
+  /**
+   * @return the hash code value for this BitArray
+   */
+  /**
+   * @return the hash code value for this BitArray
+   */
   @Override
   public int hashCode() {
     return 31 * size + Arrays.hashCode(bits);
   }
 
+  /**
+   * @return a string representation of this BitArray
+   */
+  /**
+   * @return a string representation of this BitArray
+   */
   @Override
   public String toString() {
     StringBuilder result = new StringBuilder(size + (size / 8) + 1);
@@ -349,6 +422,12 @@ public final class BitArray implements Cloneable {
     return result.toString();
   }
 
+  /**
+   * @return a copy of this BitArray
+   */
+  /**
+   * @return a copy of this BitArray
+   */
   @Override
   public BitArray clone() {
     return new BitArray(bits.clone(), size);

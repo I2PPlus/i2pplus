@@ -107,9 +107,12 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     }
 
     /**
-     *  For debugging, also possibly for restricted routes?
-     *  Needs analysis and testing
-     *  @return the peers
+     * For debugging, also possibly for restricted routes.
+     * Needs analysis and testing
+     *
+     * @param settings the tunnel pool settings
+     * @param length the desired length of the tunnel
+     * @return the list of explicit peer hashes for the tunnel
      */
     protected List<Hash> selectExplicit(TunnelPoolSettings settings, int length) {
         String peers = null;
@@ -195,7 +198,14 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     }
 
     /**
-     *  @since 0.9.58, previously getExclude()
+     * Check if a peer should be excluded from closest hop selection.
+     * This performs connectivity checks and version capability validation.
+     *
+     * @param peerHash the peer hash to check
+     * @param isInbound true if this is for an inbound tunnel
+     * @param isExploratory true if this is for exploratory tunnels
+     * @return true if the peer should be excluded
+     * @since 0.9.58
      */
     private boolean shouldExclude(Hash peerHash, boolean isInbound, boolean isExploratory) {
         /*
@@ -345,9 +355,12 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     }
 
     /**
-     *  Should the peer be excluded based on its published caps?
+     * Should the peer be excluded based on its published caps, crypto, and version?
      *
-     *  Warning, this is also called by ProfileOrganizer.isSelectable()
+     * @param ctx Router context for peer count checks
+     * @param peer The peer to evaluate
+     * @return true if the peer should be excluded
+     * @since 0.9.17
      */
     public static boolean shouldExclude(RouterContext ctx, RouterInfo peer) {
         return shouldExclude(ctx, peer, getExcludeCaps(ctx));
@@ -360,7 +373,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         return ctx.getProperty("router.excludePeerCaps", DEFAULT_EXCLUDE_CAPS);
     }
 
-    private static final String MIN_VERSION = "0.9.60";
+    /** SSU2 fixes (2.1.0), Congestion fixes (2.2.0) */
+    private static final String MIN_VERSION = "0.9.62";
 
     /**
      * Should the peer be excluded based on its published caps, crypto, and version?
@@ -604,12 +618,9 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     }
 
     /**
-     *  A Set of Hashes that automatically adds to the
-     *  Set in the contains() check.
+     * Excluder that automatically adds peers to the set when they should be excluded.
      *
-     *  So we don't need to generate the exclude set up front.
-     *
-     *  @since 0.9.58
+     * @since 0.9.58
      */
     protected class Excluder extends ExcluderBase {
         private final boolean _isIn, _isExpl;
@@ -636,15 +647,15 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             _isExpl = isExploratory;
         }
 
-        /**
-         *  Overridden to automatically check our exclusion criteria
-         *  and add the Hash to the set if the criteria are met.
-         *
-         *  @param o a Hash
-         *  @return true if peer should be excluded
-         */
-        @Override
-        public boolean contains(Object o) {
+    /**
+     * Check if a peer should be excluded.
+     * Automatically adds to the set if excluded.
+     *
+     * @param o a Hash object to check
+     * @return true if peer should be excluded (and added to set)
+     */
+    @Override
+    public boolean contains(Object o) {
             if (s.contains(o)) {return true;}
             Hash h = (Hash) o;
             if (shouldExclude(h, _isIn, _isExpl)) {
@@ -656,11 +667,11 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     }
 
     /**
-     *  Only for hidden mode and other tough situations.
-     *  See checkClosestHop boolean.
-     *  Not for hidden inbound; use SANFP instead.
+     * Excludes peers that cannot connect as closest hops.
+     * Used for hidden mode and other tough situations.
+     * Not for hidden inbound; use SANFP instead.
      *
-     *  @since 0.9.58
+     * @since 0.9.58
      */
     private class ClosestHopExcluder extends ExcluderBase {
         private final boolean isIn;
@@ -682,12 +693,11 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         }
 
         /**
-         *  Automatically check if peer can connect to us (for inbound)
-         *  or we can connect to it (for outbound)
-         *  and add the Hash to the set if not.
+         * Check if a peer should be excluded from closest hop selection.
+         * Automatically adds to the set if not connectable.
          *
-         *  @param o a Hash
-         *  @return true if peer should be excluded
+         * @param o a Hash object to check
+         * @return true if peer should be excluded (and added to set)
          */
         public boolean contains(Object o) {
             if (s.contains(o)) {return true;}

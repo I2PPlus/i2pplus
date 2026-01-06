@@ -15,6 +15,7 @@ package net.i2p.data;
  * @author jrandom
  */
 public class SessionKeyTest extends StructureTest {
+    @Override
     public DataStructure createDataStructure() throws DataFormatException {
         SessionKey key = new SessionKey();
         byte data[] = new byte[SessionKey.KEYSIZE_BYTES];
@@ -23,5 +24,6 @@ public class SessionKeyTest extends StructureTest {
         key.setData(data);
         return key;
     }
+    @Override
     public DataStructure createStructureToRead() { return new SessionKey(); }
 }

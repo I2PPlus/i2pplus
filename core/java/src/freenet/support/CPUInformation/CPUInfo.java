@@ -77,16 +77,18 @@ public interface CPUInfo
      */
     public boolean hasSSE4A();
 
-    /**
-     * @return true iff the CPU supports the AVX instruction set.
-     * @since 0.9.26
-     */
-    public boolean hasAVX();
+     /**
+      * Checks if CPU supports the AVX instruction set.
+      * @return true iff the CPU supports the AVX instruction set.
+      * @since 0.9.26
+      */
+     public boolean hasAVX();
 
-    /**
-     * @return true iff the CPU supports the AVX2 instruction set.
-     * @since 0.9.26
-     */
+     /**
+      * Checks if CPU supports the AVX2 instruction set.
+      * @return true iff the CPU supports the AVX2 instruction set.
+      * @since 0.9.26
+      */
     public boolean hasAVX2();
 
     /**
@@ -123,40 +125,46 @@ public interface CPUInfo
      */
     public boolean hasTBM();
 
-    /**
-     * @return true iff the CPU supports the AES-NI instruction set.
-     * @since 0.9.14
-     */
-    public boolean hasAES();
+     /**
+      * Checks if CPU supports the AES-NI instruction set.
+      * @return true iff the CPU supports the AES-NI instruction set.
+      * @since 0.9.14
+      */
+     public boolean hasAES();
 
-    /**
-     * @return true iff the CPU supports the 64-bit support
-     * @since 0.9.26
-     */
+     /**
+      * Checks if CPU supports the 64-bit support.
+      * @return true iff the CPU supports the 64-bit support.
+      * @since 0.9.26
+      */
     public boolean hasX64();
 
-    /**
-     * @return true iff the CPU supports the BMI1 instruction set.
-     * @since 0.9.26
-     */
-    public boolean hasBMI1();
+     /**
+      * Checks if CPU supports the BMI1 instruction set.
+      * @return true iff the CPU supports the BMI1 instruction set.
+      * @since 0.9.26
+      */
+     public boolean hasBMI1();
 
-    /**
-     * @return true iff the CPU supports the BMI2 instruction set.
-     * @since 0.9.26
-     */
+     /**
+      * Checks if CPU supports the BMI2 instruction set.
+      * @return true iff the CPU supports the BMI2 instruction set.
+      * @since 0.9.26
+      */
     public boolean hasBMI2();
 
-    /**
-     * @return true iff the CPU supports the FMA3 instruction set.
-     * @since 0.9.26
-     */
-    public boolean hasFMA3();
+     /**
+      * Checks if CPU supports the FMA3 instruction set.
+      * @return true iff the CPU supports the FMA3 instruction set.
+      * @since 0.9.26
+      */
+     public boolean hasFMA3();
 
-    /**
-     * @return true iff the CPU supports the MOVBE instruction set.
-     * @since 0.9.26
-     */
+     /**
+      * Checks if CPU supports the MOVBE instruction set.
+      * @return true iff the CPU supports the MOVBE instruction set.
+      * @since 0.9.26
+      */
     public boolean hasMOVBE();
 
     /**

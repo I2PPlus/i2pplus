@@ -87,36 +87,46 @@ public class HostLookupMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  @return 0 to 2**32 - 1
-     */
+      *  Gets the request ID.
+      *
+      *  @return 0 to 2**32 - 1
+      */
     public long getReqID() {
         return _reqID;
     }
 
     /**
-     *  @return ms 1 to 2**32 - 1
-     */
+      *  Gets the lookup timeout.
+      *
+      *  @return ms 1 to 2**32 - 1
+      */
     public long getTimeout() {
         return _timeout;
     }
 
     /**
-     *  @return 0 (hash) or 1 (host)
-     */
+      *  Gets the lookup type.
+      *
+      *  @return 0 (hash) or 1 (host)
+      */
     public int getLookupType() {
         return _lookupType;
     }
 
     /**
-     *  @return only valid if lookup type == 0
-     */
+      *  Gets the hash for hash-type lookups.
+      *
+      *  @return only valid if lookup type == 0
+      */
     public Hash getHash() {
         return _hash;
     }
 
     /**
-     *  @return only valid if lookup type == 1
-     */
+      *  Gets the hostname for host-type lookups.
+      *
+      *  @return only valid if lookup type == 1
+      */
     public String getHostname() {
         return _host;
     }

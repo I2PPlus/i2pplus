@@ -45,12 +45,15 @@ public class DestReplyMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  @since 0.8.3
-     */
+      *  Gets the hash of the destination.
+      *
+      * @since 0.8.3
+      */
     public Hash getHash() {
         return _hash;
     }
 
+    @Override
     protected void doReadMessage(InputStream in, int size) throws I2CPMessageException, IOException {
         if (size == 0) {
             _dest = null;
@@ -69,6 +72,7 @@ public class DestReplyMessage extends I2CPMessageImpl {
         }
     }
 
+    @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {
         if (_dest == null) {
             if (_hash == null)
@@ -84,6 +88,7 @@ public class DestReplyMessage extends I2CPMessageImpl {
         return os.toByteArray();
     }
 
+    @Override
     public int getType() {
         return MESSAGE_TYPE;
     }

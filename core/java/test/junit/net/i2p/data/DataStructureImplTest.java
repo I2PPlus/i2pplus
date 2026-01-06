@@ -26,12 +26,14 @@ public class DataStructureImplTest {
     public void setUp(){
         _struct = new DataStructureImpl(){
             private int x = 0;
+            @Override
             public void writeBytes(OutputStream out) throws IOException, DataFormatException{
                 if(x++==0)
                     throw new DataFormatException("let it enfold you", new Exception());
                 else
                     throw new IOException();
             }
+            @Override
             public void readBytes(InputStream in) throws IOException{
                 throw new IOException();
             }

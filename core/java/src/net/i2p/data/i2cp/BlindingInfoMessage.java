@@ -26,6 +26,7 @@ import net.i2p.data.SigningPublicKey;
  * @since 0.9.43; do not send to routers older than 0.9.43.
  */
 public class BlindingInfoMessage extends I2CPMessageImpl {
+    /** The message type */
     public final static int MESSAGE_TYPE = 42;
 
     private SessionId _sessionId;
@@ -44,11 +45,16 @@ public class BlindingInfoMessage extends I2CPMessageImpl {
     private static final int FLAG_AUTH = 0x0f;
     private static final int FLAG_SECRET = 0x10;
 
+    /** Endpoint type for hash */
     public static final int TYPE_HASH = 0;
+    /** Endpoint type for hostname */
     public static final int TYPE_HOST = 1;
+    /** Endpoint type for destination */
     public static final int TYPE_DEST = 2;
+    /** Endpoint type for key */
     public static final int TYPE_KEY = 3;
 
+    /** Creates an empty BlindingInfoMessage for reading */
     public BlindingInfoMessage() {}
 
     /**
@@ -56,6 +62,8 @@ public class BlindingInfoMessage extends I2CPMessageImpl {
      *  Will create a DEST or KEY message type, depending on whether
      *  BlindData has the full destination.
      *
+     * @param bd the blinded data
+     * @param id the session ID
      */
     public BlindingInfoMessage(BlindData bd, SessionId id) {
         this(id, bd.getExpiration(), bd.getAuthType(), bd.getBlindedSigType(), bd.getAuthPrivKey(), bd.getSecret());
@@ -77,11 +85,15 @@ public class BlindingInfoMessage extends I2CPMessageImpl {
     /**
      *  HASH not supported by router and may not be useful
      *
-     *  @param authType 0 (none), 1 (DH), 3 (PSK)
-     *  @param expiration ms from now or 0 for forever
-     *  @param privKey null for auth none, non-null for DH/PSK
-     *  @param secret may be null, 255 UTF-8 bytes max
-     *  @deprecated unimplemented on router side
+     * @param h the hash
+     * @param id the session ID
+     * @param expiration ms from now or 0 for forever
+     * @param authType 0 (none), 1 (DH), 3 (PSK)
+     * @param blindType the blinded signature type
+     * @param privKey null for auth none, non-null for DH/PSK
+     * @param secret may be null, 255 UTF-8 bytes max
+     * @throws IllegalArgumentException on invalid inputs
+     * @deprecated unimplemented on router side
      */
     @Deprecated
     public BlindingInfoMessage(Hash h,
@@ -98,12 +110,15 @@ public class BlindingInfoMessage extends I2CPMessageImpl {
     /**
      *  HOST not supported by router and may not be useful
      *
-     *  @param h hostname
-     *  @param authType 0 (none), 1 (DH), 3 (PSK)
-     *  @param expiration ms from now or 0 for forever
-     *  @param privKey null for auth none, non-null for DH/PSK
-     *  @param secret may be null, 255 UTF-8 bytes max
-     *  @deprecated unimplemented on router side
+     * @param h hostname
+     * @param id the session ID
+     * @param expiration ms from now or 0 for forever
+     * @param authType 0 (none), 1 (DH), 3 (PSK)
+     * @param blindType the blinded signature type
+     * @param privKey null for auth none, non-null for DH/PSK
+     * @param secret may be null, 255 UTF-8 bytes max
+     * @throws IllegalArgumentException on invalid inputs
+     * @deprecated unimplemented on router side
      */
     @Deprecated
     public BlindingInfoMessage(String h,
@@ -118,10 +133,16 @@ public class BlindingInfoMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  @param authType 0 (none), 1 (DH), 3 (PSK)
-     *  @param expiration ms from now or 0 for forever
-     *  @param privKey null for auth none, non-null for DH/PSK
-     *  @param secret may be null, 255 UTF-8 bytes max
+     *  Creates a BlindingInfoMessage for a destination.
+     *
+     * @param d the destination
+     * @param id the session ID
+     * @param expiration ms from now or 0 for forever
+     * @param authType 0 (none), 1 (DH), 3 (PSK)
+     * @param blindType the blinded signature type
+     * @param privKey null for auth none, non-null for DH/PSK
+     * @param secret may be null, 255 UTF-8 bytes max
+     * @throws IllegalArgumentException on invalid inputs
      */
     public BlindingInfoMessage(Destination d,
                                SessionId id, int expiration,
@@ -137,10 +158,16 @@ public class BlindingInfoMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  @param authType 0 (none), 1 (DH), 3 (PSK)
-     *  @param expiration ms from now or 0 for forever
-     *  @param privKey null for auth none, non-null for DH/PSK
-     *  @param secret may be null, 255 UTF-8 bytes max
+     *  Creates a BlindingInfoMessage for a signing public key.
+     *
+     * @param s the signing public key
+     * @param id the session ID
+     * @param expiration ms from now or 0 for forever
+     * @param authType 0 (none), 1 (DH), 3 (PSK)
+     * @param blindType the blinded signature type
+     * @param privKey null for auth none, non-null for DH/PSK
+     * @param secret may be null, 255 UTF-8 bytes max
+     * @throws IllegalArgumentException on invalid inputs
      */
     public BlindingInfoMessage(SigningPublicKey s,
                                SessionId id, int expiration,
@@ -176,6 +203,10 @@ public class BlindingInfoMessage extends I2CPMessageImpl {
         _secret = secret;
     }
 
+    /**
+     * Returns the session ID for this message.
+     * @return the session ID
+     */
     public SessionId getSessionId() {
         return _sessionId;
     }
@@ -189,71 +220,91 @@ public class BlindingInfoMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  @return ms 1 to 2**32 - 1
-     */
+      *  Gets the timeout for the blinding info.
+      *
+      *  @return ms 1 to 2**32 - 1
+      */
     public long getTimeout() {
         return _expiration;
     }
 
     /**
-     *  @return 0 (none), 1 (DH), 3 (PSK)
-     */
+      *  Gets the authentication type.
+      *
+      *  @return 0 (none), 1 (DH), 3 (PSK)
+      */
     public int getAuthType() {
         return _authType;
     }
 
     /**
-     *  @return 0 (hash) or 1 (host) or 2 (dest) or 3 (key)
-     */
+      *  Gets the endpoint type.
+      *
+      *  @return 0 (hash) or 1 (host) or 2 (dest) or 3 (key)
+      */
     public int getEndpointType() {
         return _endpointType;
     }
 
     /**
-     *  @return only valid if endpoint type == 0 or 2
-     */
+      *  Gets the hash for hash-type endpoints.
+      *
+      *  @return only valid if endpoint type == 0 or 2
+      */
     public Hash getHash() {
         return _hash;
     }
 
     /**
-     *  @return only valid if endpoint type == 1
-     */
+      *  Gets the hostname for host-type endpoints.
+      *
+      *  @return only valid if endpoint type == 1
+      */
     public String getHostname() {
         return _host;
     }
 
     /**
-     *  @return only valid if endpoint type == 2
-     */
+      *  Gets the destination for dest-type endpoints.
+      *
+      *  @return only valid if endpoint type == 2
+      */
     public String getDestination() {
         return _host;
     }
 
     /**
-     *  @return only valid if endpoint type == 2 or 3
-     */
+      *  Gets the signing public key for key-type endpoints.
+      *
+      *  @return only valid if endpoint type == 2 or 3
+      */
     public SigningPublicKey getSigningPublicKey() {
         return _pubkey;
     }
 
     /**
-     *  @return private key or null
-     */
+      *  Gets the private key for key-type endpoints.
+      *
+      *  @return private key or null
+      */
     public PrivateKey getPrivateKey() {
         return _privkey;
     }
 
     /**
-     *  @return secret or null
-     */
+      *  Gets the secret for PSK authentication.
+      *
+      *  @return secret or null
+      */
     public String getSecret() {
         return _secret;
     }
 
     /**
-     *  @return blind data or null if not enough info
-     */
+      *  Gets the computed blind data.
+      *
+      *  @return blind data or null if not enough info
+      */
     public BlindData getBlindData() {
         if (_blindData != null)
             return _blindData;
@@ -269,6 +320,7 @@ public class BlindingInfoMessage extends I2CPMessageImpl {
         return _blindData;
     }
 
+    @Override
     protected void doReadMessage(InputStream in, int size) throws I2CPMessageException, IOException {
         try {
             _sessionId = new SessionId();
@@ -316,6 +368,7 @@ public class BlindingInfoMessage extends I2CPMessageImpl {
         }
     }
 
+    @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {
         if (_endpointType == TYPE_HASH) {
             if (_hash == null)
@@ -363,6 +416,7 @@ public class BlindingInfoMessage extends I2CPMessageImpl {
         return os.toByteArray();
     }
 
+    @Override
     public int getType() {
         return MESSAGE_TYPE;
     }

@@ -15,6 +15,7 @@ package net.i2p.data;
  * @author jrandom
  */
 public class HashTest extends StructureTest {
+    @Override
     public DataStructure createDataStructure() throws DataFormatException {
         Hash hash = new Hash();
         byte data[] = new byte[32];
@@ -23,5 +24,6 @@ public class HashTest extends StructureTest {
         hash.setData(data);
         return hash;
     }
+    @Override
     public DataStructure createStructureToRead() { return new Hash(); }
 }

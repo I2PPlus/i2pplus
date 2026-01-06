@@ -25,7 +25,17 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo {
     private static boolean isZenCompatible;
     private static boolean isZen2Compatible;
     private static boolean isZen5Compatible;
+
+    /**
+     * Default constructor.
+     */
+    public AMDInfoImpl() {}
+
+     /**
+      * @return true if the CPU present in the machine is at least a 'k6' CPU
+      */
     public boolean IsK6Compatible() {return isK6Compatible;}
+
     public boolean IsK6_2_Compatible() {return isK6_2_Compatible;}
     public boolean IsK6_3_Compatible() {return isK6_3_Compatible;}
     public boolean IsGeodeCompatible() {return isGeodeCompatible;}

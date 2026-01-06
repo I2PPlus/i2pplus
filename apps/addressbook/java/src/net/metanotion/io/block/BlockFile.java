@@ -69,10 +69,14 @@ import net.metanotion.util.skiplist.SkipIterator;
  * <p>Metaindex skiplist is on page 2. Pages are 1 KB and are numbered starting from 1.</p>
  */
 public class BlockFile implements Closeable {
+	/** Page size in bytes for block file pages */
 	public static final int PAGESIZE = 1024;
+	/** File offset where the mounted flag is stored */
 	public static final long OFFSET_MOUNTED = 20;
+	/** Logger instance for this BlockFile */
 	public final Log log = I2PAppContext.getGlobalContext().logManager().getLog(BlockFile.class);
 
+	/** The underlying file interface for this block file */
 	public final RandomAccessInterface file;
 
 	private static final int MAJOR = 0x01;
@@ -83,7 +87,9 @@ public class BlockFile implements Closeable {
 	private static final long MAGIC_BASE = 0x3141de4932500000L;   // 0x3141de I 2 P 00 00
 	private static final long MAGIC = MAGIC_BASE | (MAJOR << 8) | MINOR;
 	private long magicBytes = MAGIC;
+	/** Magic number for continuation pages ("CONT") */
 	public static final int MAGIC_CONT = 0x434f4e54;   // "CONT"
+	/** Page number for the metaindex */
 	public static final int METAINDEX_PAGE = 2;
 	/** 2**32 pages of 1024 bytes each, more or less */
 	private static final long MAX_LEN = (2l << (32 + 10)) - 1;
@@ -92,6 +98,7 @@ public class BlockFile implements Closeable {
 	private long fileLen = PAGESIZE * 2;
 	private int freeListStart = 0;
 	private int mounted = 0;
+	/** Default span size for new skiplists */
 	public int spanSize = 16;
 
 	/** I2P was the file locked when we opened it? */
@@ -137,6 +144,8 @@ public class BlockFile implements Closeable {
 	 *  This only works on skiplists using UTF8StringBytes as a key
 	 *  serializer, unless the exception has been coded in bfck below.
 	 *  Will CORRUPT other skiplists.
+	 *
+	 *  @param args command line arguments (file path)
 	 */
 	public static void main(String args[]) {
 		if (args.length != 1) {
@@ -159,7 +168,7 @@ public class BlockFile implements Closeable {
 	}
 
 	/**
-	 *  Write bytes
+	 *  Write bytes to multiple pages.
 	 *  This will allocate additional continuation pages as necessary.
 	 *
 	 *  @param data data to write
@@ -167,6 +176,7 @@ public class BlockFile implements Closeable {
 	 *  @param curPageOff in (current) and out (new) parameter at index 0
 	 *  @param nextPage in (current) and out (new) parameter at index 0
 	 *  @return current page
+	 *  @throws IOException if an I/O error occurs
 	 */
 	public int writeMultiPageData(byte[] data, int page, int[] curPageOff, int[] nextPage) throws IOException {
 		int pageCounter = curPageOff[0];
@@ -204,13 +214,14 @@ public class BlockFile implements Closeable {
 	}
 
 	/**
-	 *  Read bytes
+	 *  Read bytes from multiple pages.
 	 *
 	 *  @param arr fill this array fully with data
 	 *  @param page current page
 	 *  @param curPageOff in (current) and out (new) parameter at index 0
 	 *  @param nextPage in (current) and out (new) parameter at index 0
 	 *  @return current page
+	 *  @throws IOException if an I/O error occurs or not enough pages to read
 	 */
 	public int readMultiPageData(byte[] arr, int page, int[] curPageOff, int[] nextPage) throws IOException {
 		int pageCounter = curPageOff[0];
@@ -242,7 +253,7 @@ public class BlockFile implements Closeable {
 	}
 
 	/**
-	 *  Skip length bytes
+	 *  Skip length bytes across multiple pages.
 	 *  The same as readMultiPageData() without returning a result
 	 *
 	 *  @param length number of bytes to skip
@@ -250,6 +261,7 @@ public class BlockFile implements Closeable {
 	 *  @param curPageOff in (current) and out (new) parameter at index 0
 	 *  @param nextPage in (current) and out (new) parameter at index 0
 	 *  @return current page
+	 *  @throws IOException if an I/O error occurs or not enough pages to skip
 	 */
 	public int skipMultiPageBytes(int length, int page, int[] curPageOff, int[] nextPage) throws IOException {
 		int pageCounter = curPageOff[0];
@@ -280,19 +292,46 @@ public class BlockFile implements Closeable {
 		return curPage;
 	}
 
-	/** Use this constructor with a readonly RAI for a readonly blockfile */
+	/**
+	 *  Use this constructor with a readonly RAI for a readonly blockfile.
+	 *  @param rai the RandomAccessInterface to use
+	 *  @throws IOException if an I/O error occurs
+	 */
 	public BlockFile(RandomAccessInterface rai) throws IOException { this(rai, false); }
 
-	/** RAF must be writable */
+	/**
+	 *  Create a BlockFile from a RandomAccessFile.
+	 *  RAF must be writable.
+	 *  @param raf the RandomAccessFile to use
+	 *  @throws IOException if an I/O error occurs
+	 */
 	public BlockFile(RandomAccessFile raf) throws IOException { this(new RAIFile(raf), false); }
 
-	/** RAF must be writable */
+	/**
+	 *  Create a BlockFile from a RandomAccessFile with optional initialization.
+	 *  RAF must be writable.
+	 *  @param raf the RandomAccessFile to use
+	 *  @param init if true, initialize the file with a new block structure
+	 *  @throws IOException if an I/O error occurs
+	 */
 	public BlockFile(RandomAccessFile raf, boolean init) throws IOException { this(new RAIFile(raf), init); }
 
-	/** File must be writable */
+	/**
+	 *  Create a BlockFile from a File with optional initialization.
+	 *  File must be writable.
+	 *  @param f the File to use
+	 *  @param init if true, initialize the file with a new block structure
+	 *  @throws IOException if an I/O error occurs
+	 */
 	public BlockFile(File f, boolean init) throws IOException { this(new RAIFile(f, true, true), init); }
 
-	/** Use this constructor with a readonly RAI and init = false for a readonly blockfile */
+	/**
+	 *  Create a BlockFile from a RandomAccessInterface with optional initialization.
+	 *  Use this constructor with a readonly RAI and init = false for a readonly blockfile.
+	 *  @param rai the RandomAccessInterface to use
+	 *  @param init if true, initialize the file with a new block structure
+	 *  @throws IOException if an I/O error occurs
+	 */
 	public BlockFile(RandomAccessInterface rai, boolean init) throws IOException {
 		if(rai==null) { throw new NullPointerException(); }
 		
@@ -330,7 +369,9 @@ public class BlockFile implements Closeable {
 	}
 
 	/**
-	 *  I2P was the file locked when we opened it?
+	 *  Check if the file was locked when opened.
+	 *
+	 *  @return true if the file was mounted
 	 *  @since 0.8.8
 	 */
 	public boolean wasMounted() {
@@ -340,7 +381,9 @@ public class BlockFile implements Closeable {
 	/**
 	 *  Go to any page but the superblock.
 	 *  Page 1 is the superblock, must use file.seek(0) to get there.
-	 *  @param page &gt;= 2
+	 *  @param file the RandomAccessInterface to seek in
+	 *  @param page the page number (&gt;= 2)
+	 *  @throws IOException if page is invalid
 	 */
 	public static void pageSeek(RandomAccessInterface file, int page) throws IOException {
 		if (page < METAINDEX_PAGE)
@@ -348,6 +391,11 @@ public class BlockFile implements Closeable {
 		file.seek((page - 1L) * PAGESIZE );
 	}
 
+	/**
+	 *  Allocate a new page from the free list or extend the file.
+	 *  @return the page number of the newly allocated page
+	 *  @throws IOException if an I/O error occurs
+	 */
 	public int allocPage() throws IOException {
 		if(freeListStart != 0) {
 			try {
@@ -382,6 +430,8 @@ public class BlockFile implements Closeable {
 	 *  Add the page to the free list. The file is never shrunk.
 	 *  TODO: Reclaim free pages at end of file, or even do a full compaction.
 	 *  Does not throw exceptions; logs on failure.
+	 *
+	 *  @param page the page number to free
 	 */
 	public void freePage(int page) {
 		if (page <= METAINDEX_PAGE) {
@@ -444,7 +494,13 @@ public class BlockFile implements Closeable {
 	 *  If the file is writable, this runs an integrity check and repair
 	 *  on first open.
 	 *
-	 *  @return null if not found
+	 *  @param <K> the type of keys in the skiplist
+	 *  @param <V> the type of values in the skiplist
+	 *  @param name the name of the skiplist index
+	 *  @param key the Serializer for keys
+	 *  @param val the Serializer for values
+	 *  @return the BSkipList, or null if not found
+	 *  @throws IOException if an I/O error occurs
 	 */
 	@SuppressWarnings("unchecked")
 	public <K extends Comparable<? super K>, V> BSkipList<K, V> getIndex(String name, Serializer<K> key, Serializer<V> val) throws IOException {
@@ -471,6 +527,12 @@ public class BlockFile implements Closeable {
 	 *  Create and open a new skiplist if it does not exist.
 	 *  Throws IOException if it already exists.
 	 *
+	 *  @param <K> the type of keys in the skiplist
+	 *  @param <V> the type of values in the skiplist
+	 *  @param name the name of the skiplist index
+	 *  @param key the Serializer for keys
+	 *  @param val the Serializer for values
+	 *  @return the newly created BSkipList
 	 *  @throws IOException if already exists or other errors
 	 */
 	public <K extends Comparable<? super K>, V> BSkipList<K, V> makeIndex(String name, Serializer<K> key, Serializer<V> val) throws IOException {
@@ -488,6 +550,7 @@ public class BlockFile implements Closeable {
 	 *  Must be open. Throws IOException if exists but is closed.
 	 *  Broken before 0.9.26.
 	 *
+	 *  @param name the name of the skiplist index to delete
 	 *  @throws IOException if it is closed.
 	 */
 	public void delIndex(String name) throws IOException {
@@ -504,7 +567,7 @@ public class BlockFile implements Closeable {
 	/**
 	 *  Close a skiplist if it is open.
 	 *
-	 *  Added I2P
+	 *  @param name the name of the skiplist index to close
 	 */
 	public void closeIndex(String name) {
 		BSkipList bsl = openIndices.remove(name);
@@ -518,6 +581,13 @@ public class BlockFile implements Closeable {
 	 *  Throws IOException if the skiplist is open.
 	 *  The skiplist will remain closed after completion.
 	 *
+	 *  @param <K> the type of keys in the skiplist
+	 *  @param <V> the type of values in the skiplist
+	 *  @param name the name of the skiplist index
+	 *  @param oldKey the current Serializer for keys
+	 *  @param oldVal the current Serializer for values
+	 *  @param newKey the new Serializer for keys
+	 *  @param newVal the new Serializer for values
 	 *  @throws IOException if it is open or on errors
 	 *  @since 0.9.26
 	 */
@@ -602,7 +672,9 @@ public class BlockFile implements Closeable {
 	}
 
 	/**
-	 *  Run an integrity check on the blockfile and all the skiplists in it
+	 *  Run an integrity check on the blockfile and all the skiplists in it.
+	 *
+	 *  @param fix if true, attempt to fix any corruption found
 	 *  @return true if the levels were modified.
 	 */
 	public boolean bfck(boolean fix) {

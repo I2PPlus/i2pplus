@@ -28,6 +28,7 @@ public class DestLookupMessage extends I2CPMessageImpl {
         return _hash;
     }
 
+    @Override
     protected void doReadMessage(InputStream in, int size) throws I2CPMessageException, IOException {
         try {
             _hash = Hash.create(in);
@@ -36,12 +37,14 @@ public class DestLookupMessage extends I2CPMessageImpl {
         }
     }
 
+    @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {
         if (_hash == null)
             throw new I2CPMessageException("Unable to write out the message as there is not enough data");
         return _hash.getData();
     }
 
+    @Override
     public int getType() {
         return MESSAGE_TYPE;
     }

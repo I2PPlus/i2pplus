@@ -115,10 +115,11 @@ public final class Blinding {
      *  Generate alpha for current time.
      *  Only for SigType EdDSA_SHA512_Ed25519.
      *
-     *  @param destspk must be SigType EdDSA_SHA512_Ed25519
-     *  @param secret may be null or zero-length
-     *  @return SigType RedDSA_SHA512_Ed25519
-     *  @throws IllegalArgumentException on bad inputs or unsupported SigTypes
+     * @param ctx the application context
+     * @param destspk must be SigType EdDSA_SHA512_Ed25519
+     * @param secret may be null or zero-length
+     * @return SigType RedDSA_SHA512_Ed25519
+     * @throws IllegalArgumentException on bad inputs or unsupported SigTypes
      *  @since 0.9.39
      */
     public static SigningPrivateKey generateAlpha(I2PAppContext ctx, SigningPublicKey destspk, String secret) {
@@ -130,11 +131,12 @@ public final class Blinding {
      *  Generate alpha for the given time.
      *  Only for SigType EdDSA_SHA512_Ed25519 or RedDSA_SHA512_Ed25519.
      *
-     *  @param destspk must be SigType EdDSA_SHA512_Ed25519 or RedDSA_SHA512_Ed25519
-     *  @param secret may be null or zero-length
-     *  @param now for what time?
-     *  @return SigType RedDSA_SHA512_Ed25519
-     *  @throws IllegalArgumentException on bad inputs or unsupported SigTypes
+     * @param ctx the application context
+     * @param destspk must be SigType EdDSA_SHA512_Ed25519 or RedDSA_SHA512_Ed25519
+     * @param secret may be null or zero-length
+     * @param now the time in milliseconds for which to generate alpha
+     * @return SigType RedDSA_SHA512_Ed25519
+     * @throws IllegalArgumentException on bad inputs or unsupported SigTypes
      *  @since 0.9.39
      */
     public static SigningPrivateKey generateAlpha(I2PAppContext ctx, SigningPublicKey destspk,
@@ -182,8 +184,9 @@ public final class Blinding {
     /**
      *  What's the default blinded type for a given unblinded type?
      *
-     *  @return non-null
-     *  @since 0.9.40
+     * @param unblindedType the unblinded signature type
+     * @return non-null
+     * @since 0.9.40
      */
     public static SigType getDefaultBlindedType(SigType unblindedType) {
         if (unblindedType == TYPE)
@@ -195,9 +198,10 @@ public final class Blinding {
      *  Decode a new-format b32 address.
      *  See proposal 149.
      *
-     *  @param address ending with ".b32.i2p"
-     *  @return BlindData structure, use getUnblindedPubKey() for the result
-     *  @throws IllegalArgumentException on bad inputs or unsupported SigTypes
+     * @param ctx the application context
+     * @param address ending with ".b32.i2p"
+     * @return BlindData structure, use getUnblindedPubKey() for the result
+     * @throws IllegalArgumentException on bad inputs or unsupported SigTypes
      *  @since 0.9.40
      */
     public static BlindData decode(I2PAppContext ctx, String address) throws IllegalArgumentException {
@@ -217,9 +221,10 @@ public final class Blinding {
      *  See proposal 149.
      *  NOTE: Not for external use, use decode(String)
      *
-     *  @param b 35+ bytes
-     *  @return BlindData structure, use getUnblindedPubKey() for the result
-     *  @throws IllegalArgumentException on bad inputs or unsupported SigTypes
+     * @param ctx the application context
+     * @param b 35+ bytes
+     * @return BlindData structure, use getUnblindedPubKey() for the result
+     * @throws IllegalArgumentException on bad inputs or unsupported SigTypes
      *  @since 0.9.40
      */
     public static BlindData decode(I2PAppContext ctx, byte[] b) throws IllegalArgumentException {
@@ -268,8 +273,9 @@ public final class Blinding {
      *  Encode a public key as a new-format b32 address.
      *  See proposal 149.
      *
-     *  @return (56 chars).b32.i2p
-     *  @throws IllegalArgumentException on bad inputs or unsupported SigTypes
+     * @param key the signing public key to encode
+     * @return (56 chars).b32.i2p
+     * @throws IllegalArgumentException on bad inputs or unsupported SigTypes
      *  @since 0.9.40
      */
     public static String encode(SigningPublicKey key) throws IllegalArgumentException {
@@ -280,8 +286,11 @@ public final class Blinding {
      *  Encode a public key as a new-format b32 address.
      *  See proposal 149.
      *
-     *  @return (56 chars).b32.i2p
-     *  @throws IllegalArgumentException on bad inputs or unsupported SigTypes
+     * @param key the signing public key to encode
+     * @param requireSecret whether a secret is required
+     * @param requireAuth whether authentication is required
+     * @return (56 chars).b32.i2p
+     * @throws IllegalArgumentException on bad inputs or unsupported SigTypes
      *  @since 0.9.40
      */
     public static String encode(SigningPublicKey key,
@@ -309,6 +318,11 @@ public final class Blinding {
         return Base32.encode(b) + ".b32.i2p";
     }
 
+    /**
+     * Command-line tool for encoding/decoding b32 addresses.
+     * @param args command-line arguments
+     * @throws Exception on error
+     */
     public static void main(String args[]) throws Exception {
         if (args.length != 1) {
             System.out.println("Usage: blinding {56 chars}.b32.i2p");

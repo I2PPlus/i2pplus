@@ -47,6 +47,7 @@ public class SHA1Hash extends SimpleDataStructure {
         super(data);
     }
 
+    @Override
     public int length() {
         return HASH_LENGTH;
     }

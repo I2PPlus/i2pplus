@@ -16,9 +16,11 @@ import net.i2p.data.DataFormatException;
  * @author str4d
  */
 public class DestReplyMessageTest extends I2CPTstBase {
+    @Override
     public I2CPMessageImpl createDataStructure() throws DataFormatException {
         DestReplyMessage msg = new DestReplyMessage();
         return msg;
     }
+    @Override
     public I2CPMessageImpl createStructureToRead() { return new DestReplyMessage(); }
 }

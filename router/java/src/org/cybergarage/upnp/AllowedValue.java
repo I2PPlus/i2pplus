@@ -32,15 +32,17 @@ import org.cybergarage.xml.Node;
  */
 public class AllowedValue {
     ////////////////////////////////////////////////
-    //	Constants
+    //  Constants
     ////////////////////////////////////////////////
 
+    /** XML element name for allowed value in UPnP descriptions. */
     public static final String ELEM_NAME = "allowedValue";
 
     ////////////////////////////////////////////////
     //	Member
     ////////////////////////////////////////////////
 
+    /** The underlying XML node containing the allowed value data. */
     private Node allowedValueNode;
 
     public Node getAllowedValueNode() {
@@ -58,7 +60,7 @@ public class AllowedValue {
     /**
      * Create an AllowedValue by the value String, and will create the Node structure by itself
      *
-     * @param value The value that will be associate to thi object
+     * @param value The value that will be associate to this object
      */
     public AllowedValue(String value) {
 
@@ -71,14 +73,25 @@ public class AllowedValue {
     //	isAllowedValueNode
     ////////////////////////////////////////////////
 
+    /**
+     * Checks if the given node is an allowedValue element.
+     *
+     * @param node the XML node to check
+     * @return true if the node is an allowedValue element
+     */
     public static boolean isAllowedValueNode(Node node) {
         return ELEM_NAME.equals(node.getName());
     }
 
     ////////////////////////////////////////////////
-    //	Value
+    //  Value
     ////////////////////////////////////////////////
 
+    /**
+     * Sets the value for this allowed value element.
+     *
+     * @param value the value string to set
+     */
     public void setValue(String value) {
         getAllowedValueNode().setValue(value);
     }

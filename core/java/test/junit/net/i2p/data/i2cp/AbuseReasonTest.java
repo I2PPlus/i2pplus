@@ -18,10 +18,12 @@ import net.i2p.data.StructureTest;
  * @author jrandom
  */
 public class AbuseReasonTest extends StructureTest {
+    @Override
     public DataStructure createDataStructure() throws DataFormatException {
         AbuseReason res = new AbuseReason();
         res.setReason("Because they're mean");
         return res;
     }
+    @Override
     public DataStructure createStructureToRead() { return new AbuseReason(); }
 }

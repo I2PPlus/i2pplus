@@ -15,6 +15,7 @@ package net.i2p.data;
  * @author jrandom
  */
 public class CertificateTest extends StructureTest {
+    @Override
     public DataStructure createDataStructure() throws DataFormatException {
         Certificate cert = new Certificate();
         byte data[] = new byte[32];
@@ -24,5 +25,6 @@ public class CertificateTest extends StructureTest {
         cert.setCertificateType(Certificate.CERTIFICATE_TYPE_NULL);
         return cert;
     }
+    @Override
     public DataStructure createStructureToRead() { return new Certificate(); }
 }

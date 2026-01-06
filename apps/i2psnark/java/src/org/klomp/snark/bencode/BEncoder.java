@@ -47,6 +47,15 @@ import net.i2p.data.DataHelper;
  */
 public class BEncoder {
 
+    /**
+     * Bencode an object to the given OutputStream.
+     *
+     * @param o the object to encode (String, byte[], Number, List, Map, or BEValue)
+     * @param out the OutputStream to write the bencoded data to
+     * @throws IOException if an I/O error occurs
+     * @throws IllegalArgumentException if the object type cannot be encoded
+     * @throws NullPointerException if the object is null
+     */
     public static void bencode(Object o, OutputStream out)
             throws IOException, IllegalArgumentException {
         if (o == null) throw new NullPointerException("Cannot bencode null");
@@ -59,11 +68,25 @@ public class BEncoder {
         else throw new IllegalArgumentException("Cannot bencode: " + o.getClass());
     }
 
+    /**
+     * Bencode a String to the given OutputStream.
+     *
+     * @param s the String to encode (will be UTF-8 encoded)
+     * @param out the OutputStream to write the bencoded data to
+     * @throws IOException if an I/O error occurs
+     */
     public static void bencode(String s, OutputStream out) throws IOException {
         byte[] bs = s.getBytes("UTF-8");
         bencode(bs, out);
     }
 
+    /**
+     * Bencode a Number to the given OutputStream.
+     *
+     * @param n the Number to encode
+     * @param out the OutputStream to write the bencoded data to
+     * @throws IOException if an I/O error occurs
+     */
     public static void bencode(Number n, OutputStream out) throws IOException {
         out.write('i');
         String s = n.toString();
@@ -71,6 +94,13 @@ public class BEncoder {
         out.write('e');
     }
 
+    /**
+     * Bencode a List to the given OutputStream.
+     *
+     * @param l the List to encode
+     * @param out the OutputStream to write the bencoded data to
+     * @throws IOException if an I/O error occurs
+     */
     public static void bencode(List<?> l, OutputStream out) throws IOException {
         out.write('l');
         Iterator<?> it = l.iterator();
@@ -78,6 +108,13 @@ public class BEncoder {
         out.write('e');
     }
 
+    /**
+     * Bencode a byte array to the given OutputStream.
+     *
+     * @param bs the byte array to encode
+     * @param out the OutputStream to write the bencoded data to
+     * @throws IOException if an I/O error occurs
+     */
     public static void bencode(byte[] bs, OutputStream out) throws IOException {
         String l = Integer.toString(bs.length);
         out.write(l.getBytes("UTF-8"));
@@ -86,9 +123,12 @@ public class BEncoder {
     }
 
     /**
-     * Keys must be Strings or (supported as of 0.9.31) byte[]s A mix in the same Map is not
+     * Bencode a Map to a byte array.
+     * Keys must be Strings or (supported as of 0.9.31) byte[]s. A mix in the same Map is not
      * supported.
      *
+     * @param m the Map to encode
+     * @return the bencoded byte array
      * @throws IllegalArgumentException if keys are not all Strings or all byte[]s
      */
     public static byte[] bencode(Map<?, ?> m) {
@@ -102,9 +142,13 @@ public class BEncoder {
     }
 
     /**
-     * Keys must be Strings or (supported as of 0.9.31) byte[]s A mix in the same Map is not
+     * Bencode a Map to the given OutputStream.
+     * Keys must be Strings or (supported as of 0.9.31) byte[]s. A mix in the same Map is not
      * supported.
      *
+     * @param m the Map to encode
+     * @param out the OutputStream to write the bencoded data to
+     * @throws IOException if an I/O error occurs
      * @throws IllegalArgumentException if keys are not all Strings or all byte[]s
      */
     public static void bencode(Map<?, ?> m, OutputStream out)
@@ -157,10 +201,9 @@ public class BEncoder {
     }
 
     /**
-     * Shorter arrays are less. See DataHelper.compareTo() Works for arrays of equal lengths,
-     * otherwise is probably not what the bittorrent spec intends.
+     * Comparator for byte arrays. Shorter arrays are less.
      *
-     * @since 0.9.31
+     * @see DataHelper#compareTo(byte[], byte[])
      */
     private static class BAComparator implements Comparator<byte[]>, Serializable {
         public int compare(byte[] l, byte[] r) {

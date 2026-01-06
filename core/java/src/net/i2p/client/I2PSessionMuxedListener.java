@@ -30,6 +30,7 @@ public interface I2PSessionMuxedListener extends I2PSessionListener {
      * @param msgId message number available
      * @param size size of the message - why it's a long and not an int is a mystery
      */
+    @Override
     void messageAvailable(I2PSession session, int msgId, long size);
 
     /**
@@ -65,6 +66,7 @@ public interface I2PSessionMuxedListener extends I2PSessionListener {
      * @param session session to report abuse to
      * @param severity how bad the abuse is
      */
+    @Override
     void reportAbuse(I2PSession session, int severity);
 
     /**
@@ -72,6 +74,7 @@ public interface I2PSessionMuxedListener extends I2PSessionListener {
      * All registered listeners will be called.
      *
      */
+    @Override
     void disconnected(I2PSession session);
 
     /**
@@ -80,5 +83,6 @@ public interface I2PSessionMuxedListener extends I2PSessionListener {
      *
      * @param error can be null? or not?
      */
+    @Override
     void errorOccurred(I2PSession session, String message, Throwable error);
 }

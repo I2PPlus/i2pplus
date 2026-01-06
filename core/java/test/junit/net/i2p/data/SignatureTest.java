@@ -15,6 +15,7 @@ package net.i2p.data;
  * @author jrandom
  */
 public class SignatureTest extends StructureTest {
+    @Override
     public DataStructure createDataStructure() throws DataFormatException {
         Signature sig = new Signature();
         byte data[] = new byte[Signature.SIGNATURE_BYTES];
@@ -23,5 +24,6 @@ public class SignatureTest extends StructureTest {
         sig.setData(data);
         return sig;
     }
+    @Override
     public DataStructure createStructureToRead() { return new Signature(); }
 }

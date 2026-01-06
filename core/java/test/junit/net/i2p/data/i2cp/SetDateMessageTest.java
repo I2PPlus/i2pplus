@@ -16,9 +16,11 @@ import net.i2p.data.DataFormatException;
  * @author str4d
  */
 public class SetDateMessageTest extends I2CPTstBase {
+    @Override
     public I2CPMessageImpl createDataStructure() throws DataFormatException {
         SetDateMessage msg = new SetDateMessage("0.8.13-0");
         return msg;
     }
+    @Override
     public I2CPMessageImpl createStructureToRead() { return new SetDateMessage(); }
 }

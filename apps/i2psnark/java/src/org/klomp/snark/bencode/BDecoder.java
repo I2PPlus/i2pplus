@@ -54,9 +54,9 @@ public class BDecoder {
     private MessageDigest sha_digest;
 
     /**
-     * Ugly hack. Return the SHA has over bytes that make up the special map.
+     * Ugly hack. Return the SHA hash over bytes that make up the special map.
      *
-     * @return null if there was no special map
+     * @return the SHA-1 digest of the special map bytes, or null if there was no special map
      */
     public byte[] get_special_map_digest() {
         if (sha_digest == null) return null;
@@ -72,7 +72,9 @@ public class BDecoder {
      * }
      ****/
 
-    /** Initalizes a new BDecoder. Nothing is read from the given <code>InputStream</code> yet. */
+    /** Initializes a new BDecoder. Nothing is read from the given InputStream yet.
+     * @param in the InputStream to decode from
+     */
     public BDecoder(InputStream in) {
         this.in = in;
     }
@@ -127,6 +129,9 @@ public class BDecoder {
     /**
      * Gets the next indicator and returns either null when the stream has ended or bdecodes the
      * rest of the stream and returns the appropriate BEValue encoded object.
+     *
+     * @return the next BEValue on the stream, or null if the stream has ended
+     * @throws IOException if an I/O error occurs or the stream is not bencoded
      */
     public BEValue bdecode() throws IOException {
         indicator = getNextIndicator();
@@ -142,6 +147,10 @@ public class BDecoder {
     /**
      * Returns the next bencoded value on the stream and makes sure it is a byte array. If it is not
      * a bencoded byte array it will throw InvalidBEncodingException.
+     *
+     * @return the next BEValue as a byte array
+     * @throws IOException if an I/O error occurs
+     * @throws InvalidBEncodingException if the next value is not a byte array
      */
     public BEValue bdecodeBytes() throws IOException {
         int c = getNextIndicator();
@@ -167,6 +176,10 @@ public class BDecoder {
     /**
      * Returns the next bencoded value on the stream and makes sure it is a number. If it is not a
      * number it will throw InvalidBEncodingException.
+     *
+     * @return the next BEValue as a Number
+     * @throws IOException if an I/O error occurs
+     * @throws InvalidBEncodingException if the next value is not a number
      */
     public BEValue bdecodeNumber() throws IOException {
         int c = getNextIndicator();
@@ -216,6 +229,10 @@ public class BDecoder {
     /**
      * Returns the next bencoded value on the stream and makes sure it is a list. If it is not a
      * list it will throw InvalidBEncodingException.
+     *
+     * @return the next BEValue as a List
+     * @throws IOException if an I/O error occurs
+     * @throws InvalidBEncodingException if the next value is not a list
      */
     public BEValue bdecodeList() throws IOException {
         int c = getNextIndicator();
@@ -236,6 +253,10 @@ public class BDecoder {
     /**
      * Returns the next bencoded value on the stream and makes sure it is a map (dictionary). If it
      * is not a map it will throw InvalidBEncodingException.
+     *
+     * @return the next BEValue as a Map
+     * @throws IOException if an I/O error occurs
+     * @throws InvalidBEncodingException if the next value is not a map
      */
     public BEValue bdecodeMap() throws IOException {
         int c = getNextIndicator();
@@ -275,8 +296,10 @@ public class BDecoder {
     }
 
     /**
-     * Returns the next byte read from the InputStream (as int). Throws EOFException if
-     * InputStream.read() returned -1.
+     * Returns the next byte read from the InputStream (as int).
+     *
+     * @return the next byte as an int (0-255), or -1 if end of stream
+     * @throws IOException if end of stream is reached (EOFException)
      */
     private int read() throws IOException {
         int c = in.read();
@@ -286,10 +309,11 @@ public class BDecoder {
     }
 
     /**
-     * Returns a byte[] containing length valid bytes starting at offset zero. Throws EOFException
-     * if InputStream.read() returned -1 before all requested bytes could be read. Note that the
-     * byte[] returned might be bigger then requested but will only contain length valid bytes. The
-     * returned byte[] will be reused when this method is called again.
+     * Returns a byte[] containing length valid bytes starting at offset zero.
+     *
+     * @param length the number of bytes to read
+     * @return a byte array containing the requested bytes
+     * @throws IOException if end of stream is reached before all bytes are read (EOFException)
      */
     private byte[] read(int length) throws IOException {
         byte[] result = new byte[length];
@@ -306,9 +330,9 @@ public class BDecoder {
     }
 
     /**
-     * prints out the decoded data
+     * Prints out the decoded data from a torrent file.
      *
-     * @since 0.9.14
+     * @param args command line arguments (expects one argument: the torrent file path)
      */
     public static void main(String[] args) {
         if (args.length != 1) {

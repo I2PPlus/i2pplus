@@ -63,9 +63,11 @@ public class GetDateMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  @return may be null
-     *  @since 0.8.7
-     */
+      *  Gets the protocol version.
+      *
+      *  @return may be null
+      *  @since 0.8.7
+      */
     public String getVersion() {
         return _version;
     }
@@ -109,6 +111,7 @@ public class GetDateMessage extends I2CPMessageImpl {
         return os.toByteArray();
     }
 
+    @Override
     public int getType() {
         return MESSAGE_TYPE;
     }

@@ -40,7 +40,11 @@ public final class SHA256Generator {
 
     /**
      * Calculate the hash and cache the result.
-     * @param source what to hash
+     *
+     *  @param source what to hash
+     *  @param start the starting offset
+     *  @param len the length to hash
+     *  @return the hash
      */
     public final Hash calculateHash(byte[] source, int start, int len) {
         MessageDigest digest = acquire();

@@ -94,10 +94,19 @@ public class Blocklist {
     private static final String PROP_BLOCKLIST_DETAIL = "router.blocklist.detail";
     private static final String PROP_BLOCKLIST_FILE = "router.blocklist.file";
     private static final String PROP_BLOCKLIST_EXPIRE_INTERVAL = "router.blocklist.expireInterval";
+    /**
+     * Default blocklist filename in the installation directory.
+     */
     public static final String BLOCKLIST_FILE_DEFAULT = "blocklist.txt";
+    /**
+     * Tor exit nodes blocklist filename.
+     */
     public static final String BLOCKLIST_FILE_TOR_EXITS = "blocklist_tor.txt";
+    /** Feed blocklist file path */
     private static final String BLOCKLIST_FEED_FILE = "docs/feed/blocklist/blocklist.txt";
-    /** @since 0.9.48 */
+    /** Country-based blocklist filename.
+     *  @since 0.9.48
+     */
     public static final String BLOCKLIST_COUNTRY_FILE = "blocklist-country.txt";
 
     /**
@@ -118,15 +127,23 @@ public class Blocklist {
      *  @since 0.9.48
      */
     public static final String ID_FEED = "feed";
+    /** System blocklist ID */
     private static final String ID_SYSTEM = "system";
+    /** User-configured blocklist ID */
     private static final String ID_LOCAL = "local";
+    /** Country-based blocklist ID */
     private static final String ID_COUNTRY = "country";
+    /** User-specified blocklist ID */
     private static final String ID_USER = "user";
+    /** Sybil attack blocklist ID */
     public static final String ID_SYBIL = "sybil";
+    /** Tor exit nodes blocklist ID */
     public static final String ID_TOR = "tor";
 
     /**
+     *  Constructor.
      *  Router MUST call startup()
+     *  @param context the router context
      */
     public Blocklist(RouterContext context) {
         _context = context;
@@ -147,6 +164,10 @@ public class Blocklist {
         _singleIPv6Blocklist = _haveIPv6 ? new LHMCache<BigInteger, Object>(MAX_IPV6_SINGLES) : null;
     }
 
+    /**
+     *  Get the blocklist expiration interval from configuration.
+     *  @return the expiration interval in milliseconds, or 0 if disabled
+     */
     private int expireInterval() {
         String expireIntervalValue = _context.getProperty(PROP_BLOCKLIST_EXPIRE_INTERVAL, "0");
         try {
@@ -391,6 +412,9 @@ public class Blocklist {
         _countryBlocklist = cb;
     }
 
+    /**
+     *  Disable the blocklist and clear all entries.
+     */
     public void disable() {
         // hmm better block out any checks in process
         synchronized (_lock) {
@@ -400,7 +424,9 @@ public class Blocklist {
     }
 
     /**
-     *  @return array or null on failure
+     *  Allocate an array for blocklist entries.
+     *  @param files the list of blocklist files to read
+     *  @return the allocated array, or null on out of memory error
      *  @since 0.9.18 split out from readBlocklistFile()
      */
     private long[] allocate(List<BLFile> files) {
@@ -550,14 +576,24 @@ public class Blocklist {
     }
 
     /**
-     *  The result of parsing one line
+     *  The result of parsing one line.
      */
     private static class Entry {
+        /** the comment extracted from the line */
         final String comment;
+        /** the starting IP address */
         final byte ip1[];
+        /** the ending IP address */
         final byte ip2[];
+        /** the router hash, if this is a hash entry */
         final Hash peer;
 
+        /**
+         *  @param c the comment
+         *  @param h the router hash (may be null)
+         *  @param i1 the starting IP
+         *  @param i2 the ending IP
+         */
         public Entry(String c, Hash h, byte[] i1, byte[] i2) {
              comment = c;
              peer = h;
@@ -646,9 +682,9 @@ public class Blocklist {
     }
 
     /**
-     * Read the file once just to see how many entries are in it,
-     * so we can size our array.
-     * This is i/o inefficient, but memory-efficient, which is what we want.
+     *  Count the number of entries in a blocklist file.
+     *  @param blFile the blocklist file to count
+     *  @return the number of non-comment, non-blank lines
      */
     private int getSize(File blFile) {
         if ( (!blFile.exists()) || (blFile.length() <= 0) ) return 0;
@@ -673,9 +709,11 @@ public class Blocklist {
     }
 
     /**
-     * Merge and remove overlapping entries from a sorted list.
-     * Returns number of removed entries.
-     * Caller must re-sort if return code is > 0.
+     *  Merge and remove overlapping entries from a sorted list.
+     *  Caller must re-sort if return code is > 0.
+     *  @param blist the sorted blocklist array
+     *  @param count the number of valid entries in the array
+     *  @return the number of overlapping entries removed
      */
     private int removeOverlap(long blist[], int count) {
         if (count <= 0) {return 0;}
@@ -889,9 +927,11 @@ public class Blocklist {
     }
 
     /**
-     * Does the peer's IP address appear in the blocklist? If so, and it isn't banlisted, banlist
-     * it forever... or, if the user configured an override, ban it for the override period.
-     * @since 0.9.29
+     *  Check if a peer is blocklisted by IP address.
+     *  If so, and it isn't banlisted, banlist it forever or for the configured override period.
+     *  @param peer the router hash to check
+     *  @return true if the peer's IP is in the blocklist
+     *  @since 0.9.29
      */
     public boolean isBlocklisted(Hash peer) {
         List<byte[]> ips = getAddresses(peer);
@@ -906,11 +946,11 @@ public class Blocklist {
     }
 
     /**
-     * Does the peer's IP address appear in the blocklist?
-     * If so, and it isn't banlisted, banlist it forever...
-     * or, if the user configured an override, ban it for the
-     * override period.
-     * @since 0.9.29
+     *  Check if a peer is blocklisted by IP address.
+     *  If so, and it isn't banlisted, banlist it forever or for the configured override period.
+     *  @param pinfo the router info to check
+     *  @return true if the peer's IP is in the blocklist
+     *  @since 0.9.29
      */
     public boolean isBlocklisted(RouterInfo pinfo) {
         List<byte[]> ips = getAddresses(pinfo);
@@ -926,9 +966,10 @@ public class Blocklist {
     }
 
     /**
-     * Calling this externally won't banlist the peer, this is just an IP check
-     *
-     * @param ip IPv4 or IPv6
+     *  Check if an IP address is blocklisted.
+     *  Calling this externally won't banlist the peer, this is just an IP check.
+     *  @param ip the IP address as a string (IPv4 or IPv6)
+     *  @return true if the IP is blocklisted
      */
     public boolean isBlocklisted(String ip) {
         if (!_haveIPv6 && ip.indexOf(':') >= 0) {return false;}
@@ -938,9 +979,10 @@ public class Blocklist {
     }
 
     /**
-     * Calling this externally won't banlist the peer, this is just an IP check
-     *
-     * @param ip IPv4 or IPv6
+     *  Check if an IP address is blocklisted.
+     *  Calling this externally won't banlist the peer, this is just an IP check.
+     *  @param ip the IP address as a byte array (IPv4 or IPv6)
+     *  @return true if the IP is blocklisted
      */
     public boolean isBlocklisted(byte ip[]) {
         if (ip.length == 4) {return isBlocklisted(toInt(ip));}
@@ -965,13 +1007,11 @@ public class Blocklist {
     }
 
     /**
-     * Do a binary search through the in-memory range list which is a sorted array of longs.
-     * The array is sorted in signed order, but we don't care.
-     * Each long is ((from &lt;&lt; 32) | to)
-     *
-     * Public for console only, not a public API
-     *
-     * @since 0.9.45 split out from above, public since 0.9.48 for console
+     *  Check if an IP is permanently blocklisted using binary search.
+     *  Public for console only, not a public API.
+     *  @param ip the IPv4 address as an integer
+     *  @return true if the IP is in the permanent blocklist
+     *  @since 0.9.45 split out from above, public since 0.9.48 for console
      */
     public boolean isPermanentlyBlocklisted(int ip) {
         return isPermanentlyBlocklisted(ip, _blocklist, _blocklistSize);
@@ -1002,25 +1042,41 @@ public class Blocklist {
         return match(ip, blocklist[cur]);
     }
 
-    // Is the IP included in the compressed entry?
+    /**
+     *  Check if an IP is included in a compressed blocklist entry.
+     *  @param ip the IP to check
+     *  @param entry the compressed blocklist entry
+     *  @return true if the IP is within the entry's range
+     */
     private static boolean match(int ip, long entry) {
         if (getFrom(entry) > ip) {return false;}
         return (ip <= getTo(entry));
     }
 
-    // Is the IP higher than the entry _blocklist[cur] ?
+    /**
+     *  Check if an IP is higher than the entry's starting IP.
+     *  @param ip the IP to check
+     *  @param entry the compressed blocklist entry
+     *  @return true if the IP is higher than the entry's starting IP
+     */
     private static boolean isHigher(int ip, long entry) {return ip > getFrom(entry);}
 
     /* Methods to get and store the from/to values in the array */
 
     /**
-     *  Public for console only, not a public API
+     *  Extract the starting IP from a compressed blocklist entry.
+     *  Public for console only, not a public API.
+     *  @param entry the compressed blocklist entry
+     *  @return the starting IP as an integer
      *  @since public since 0.9.48
      */
     public static int getFrom(long entry) {return (int) ((entry >> 32) & 0xffffffff);}
 
     /**
-     *  Public for console only, not a public API
+     *  Extract the ending IP from a compressed blocklist entry.
+     *  Public for console only, not a public API.
+     *  @param entry the compressed blocklist entry
+     *  @return the ending IP as an integer
      *  @since public since 0.9.48
      */
     public static int getTo(long entry) {return (int) (entry & 0xffffffff);}
@@ -1040,24 +1096,45 @@ public class Blocklist {
     }
 
     /**
-     *  IPv4 only
+     *  Store an IPv4 range as a compressed entry in the blocklist array.
+     *  @param ip1 the starting IP as a byte array
+     *  @param ip2 the ending IP as a byte array
+     *  @param blocklist the blocklist array to store in
+     *  @param idx the index to store at
      */
     private static void store(byte ip1[], byte ip2[], long[] blocklist, int idx) {
         blocklist[idx] = toEntry(ip1, ip2);
     }
 
+    /**
+     *  Store an IPv4 range as a compressed entry in the blocklist array.
+     *  @param ip1 the starting IP as an integer
+     *  @param ip2 the ending IP as an integer
+     *  @param blocklist the blocklist array to store in
+     *  @param idx the index to store at
+     */
     private static void store(int ip1, int ip2, long[] blocklist, int idx) {
         long entry = ((long) ip1) << 32;
         entry |= ((long)ip2) & 0xffffffff;
         blocklist[idx] = entry;
     }
 
+    /**
+     *  Convert an IPv4 address from byte array to integer.
+     *  @param ip the IP address as a byte array
+     *  @return the IP address as an integer
+     */
     private static int toInt(byte ip[]) {
         int rv = 0;
         for (int i = 0; i < 4; i++) {rv |= (ip[i] & 0xff) << ((3-i)*8);}
         return rv;
     }
 
+    /**
+     *  Convert a compressed blocklist entry to a string representation.
+     *  @param entry the compressed blocklist entry
+     *  @return the string representation (e.g., "127.0.0.1-127.0.0.255")
+     */
     private static String toStr(long entry) {
         StringBuilder buf = new StringBuilder(32);
         for (int i = 7; i >= 0; i--) {
@@ -1069,7 +1146,10 @@ public class Blocklist {
     }
 
     /**
-     *  Public for console only, not a public API
+     *  Convert an IPv4 address to a string representation.
+     *  Public for console only, not a public API.
+     *  @param ip the IPv4 address as an integer
+     *  @return the string representation (e.g., "192.168.1.1")
      *  @since public since 0.9.48
      */
     public static String toStr(int ip) {
@@ -1259,10 +1339,9 @@ public class Blocklist {
     }
 
     /**
-     *  Size of permanent blocklist
-     *
-     *  Public for console only, not a public API
-     *
+     *  Get the size of the permanent blocklist.
+     *  Public for console only, not a public API.
+     *  @return the number of entries in the permanent blocklist
      *  @since 0.9.48
      */
     public synchronized int getBlocklistSize() {return _blocklistSize;}

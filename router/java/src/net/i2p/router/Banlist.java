@@ -48,19 +48,44 @@ public class Banlist {
         public String cause;
         /** separate code so cause can contain {0} for translation */
         public String causeCode;
+        /** set of transports to ban, null means all transports */
         public Set<String> transports;
+
+        /**
+         *  Default constructor.
+         */
+        public Entry() {}
     }
 
+    /**
+     * Default ban duration for transient bans.
+     */
     public final static long BANLIST_DURATION_MS = 7*60*1000; // Don't make this too long as the failure may be transient due to connection limits.
+    /**
+     * Maximum ban duration for transient bans.
+     */
     public final static long BANLIST_DURATION_MAX = 30*60*1000;
+    /**
+     * Default ban duration for transport-specific bans.
+     */
     public final static long BANLIST_DURATION_PARTIAL = 10*60*1000;
+    /**
+     * Permanent ban duration (will be rounded down to 180 days on console).
+     */
     public final static long BANLIST_DURATION_FOREVER = 181l*24*60*60*1000; // will get rounded down to 180d on console
 
     /**
      *  Buggy i2pd fork
      *  @since 0.9.52
      */
+    /**
+     *  Buggy i2pd fork
+     *  @since 0.9.52
+     */
     public final static long BANLIST_DURATION_NO_NETWORK = 30*24*60*60*1000L;
+    /**
+     * Ban duration for private IP addresses.
+     */
     public final static long BANLIST_DURATION_PRIVATE = 2*60*60*1000;
     private final static long BANLIST_CLEANER_START_DELAY = BANLIST_DURATION_PARTIAL;
 
@@ -73,6 +98,10 @@ public class Banlist {
      */
     private static final long BANLIST_FOREVER_THRESHOLD = 24*60*60*1000L;
 
+    /**
+     *  Constructor.
+     *  @param context the router context
+     */
     public Banlist(RouterContext context) {
         _context = context;
         _log = context.logManager().getLog(Banlist.class);
@@ -84,6 +113,9 @@ public class Banlist {
 
     private class Cleanup extends JobImpl {
         private List<Hash> _toUnbanlist;
+        /**
+         *  @param ctx the router context
+         */
         public Cleanup(RouterContext ctx) {
             super(ctx);
             _toUnbanlist = new ArrayList<Hash>(4);
@@ -92,6 +124,9 @@ public class Banlist {
 
         public String getName() {return "Expire Banned Peers";}
 
+        /**
+         *  Removes expired ban entries and updates message history.
+         */
         public void runJob() {
             _toUnbanlist.clear();
             long now = getContext().clock().now();
@@ -114,25 +149,40 @@ public class Banlist {
         }
     }
 
+    /**
+     *  Get the number of currently banlisted routers.
+     *  @return the number of currently banlisted routers
+     */
     public int getRouterCount() {return _entries.size();}
 
     /**
+     *  Get the banlist entries.
      *  For BanlistRenderer in router console.
      *  Note - may contain expired entries.
+     *  @return an unmodifiable map of router hashes to banlist entries
      */
     public Map<Hash, Entry> getEntries() {return Collections.unmodifiableMap(_entries);}
 
     /**
+     *  Ban a router with default duration.
+     *  @param peer the router hash to ban
      *  @return true if it WAS previously on the list
      */
     public boolean banlistRouter(Hash peer) {return banlistRouter(peer, null);}
 
     /**
+     *  Ban a router with default duration.
+     *  @param peer the router hash to ban
+     *  @param reason the reason for the ban (may be null)
      *  @return true if it WAS previously on the list
      */
     public boolean banlistRouter(Hash peer, String reason) {return banlistRouter(peer, reason, null);}
 
     /**
+     *  Ban a router with default duration.
+     *  @param reasonCode separate code so cause can contain {0} for translation
+     *  @param peer the router hash to ban
+     *  @param reason the reason for the ban (may be null)
      *  @return true if it WAS previously on the list
      */
     public boolean banlistRouter(String reasonCode, Hash peer, String reason) {
@@ -140,6 +190,10 @@ public class Banlist {
     }
 
     /**
+     *  Ban a router on a specific transport.
+     *  @param peer the router hash to ban
+     *  @param reason the reason for the ban (may be null)
+     *  @param transport the transport to ban (may be null for all transports)
      *  @return true if it WAS previously on the list
      */
     public boolean banlistRouter(Hash peer, String reason, String transport) {
@@ -147,6 +201,9 @@ public class Banlist {
     }
 
     /**
+     *  Permanently ban a router.
+     *  @param peer the router hash to ban
+     *  @param reason the reason for the ban (may be null)
      *  @return true if it WAS previously on the list
      */
     public boolean banlistRouterForever(Hash peer, String reason) {
@@ -154,6 +211,10 @@ public class Banlist {
     }
 
     /**
+     *  Permanently ban a router.
+     *  @param peer the router hash to ban
+     *  @param reason the reason for the ban (may be null)
+     *  @param reasonCode separate code so cause can contain {0} for translation
      *  @return true if it WAS previously on the list
      */
     public boolean banlistRouterForever(Hash peer, String reason, String reasonCode) {
@@ -161,6 +222,11 @@ public class Banlist {
     }
 
     /**
+     *  Ban a router with configurable duration and transport.
+     *  @param peer the router hash to ban
+     *  @param reason the reason for the ban (may be null)
+     *  @param transport the transport to ban (may be null for all transports)
+     *  @param forever if true, ban permanently
      *  @return true if it WAS previously on the list
      */
     public boolean banlistRouter(Hash peer, String reason, String transport, boolean forever) {
@@ -168,6 +234,12 @@ public class Banlist {
     }
 
     /**
+     *  Ban a router with automatic duration calculation.
+     *  @param peer the router hash to ban
+     *  @param reason the reason for the ban (may be null)
+     *  @param reasonCode separate code so cause can contain {0} for translation (may be null)
+     *  @param transport the transport to ban (may be null for all transports)
+     *  @param forever if true, ban permanently
      *  @return true if it WAS previously on the list
      */
     private boolean banlistRouter(Hash peer, String reason, String reasonCode, String transport, boolean forever) {
@@ -183,13 +255,14 @@ public class Banlist {
     }
 
     /**
-     *  So that we may specify an expiration
-     *
-     *  @param reason may be null
-     *  @param reasonCode may be null
-     *  @param expireOn absolute time, not a duration
-     *  @param transport may be null
+     *  Ban a router with a specified expiration time.
+     *  @param peer the router hash to ban
+     *  @param reason the reason for the ban (may be null)
+     *  @param reasonCode separate code so cause can contain {0} for translation (may be null)
+     *  @param transport the transport to ban (may be null for all transports)
+     *  @param expireOn absolute time when the ban expires, not a duration
      *  @return true if it WAS previously on the list
+     *  @throws IllegalArgumentException if expireOn is before the earliest valid time
      *  @since 0.9.18
      */
     public boolean banlistRouter(Hash peer, String reason, String reasonCode, String transport, long expireOn) {
@@ -255,10 +328,29 @@ public class Banlist {
         return wasAlready;
     }
 
+    /**
+     *  Remove a router from the banlist.
+     *  @param peer the router hash to remove from banlist
+     */
     public void unbanlistRouter(Hash peer) {unbanlistRouter(peer, true);}
+    /**
+     *  @param peer the router hash to remove from banlist
+     *  @param realUnbanlist if true, update message history
+     */
     private void unbanlistRouter(Hash peer, boolean realUnbanlist) {unbanlistRouter(peer, realUnbanlist, null);}
+    /**
+     *  Remove a router from the banlist for a specific transport.
+     *  @param peer the router hash to remove from banlist
+     *  @param transport the transport to unban (may be null for all transports)
+     */
     public void unbanlistRouter(Hash peer, String transport) {unbanlistRouter(peer, true, transport);}
 
+    /**
+     *  Remove a router from the banlist.
+     *  @param peer the router hash to remove from banlist
+     *  @param realUnbanlist if true, update message history
+     *  @param transport the transport to unban (may be null for all transports)
+     */
     private void unbanlistRouter(Hash peer, boolean realUnbanlist, String transport) {
         if (peer == null) return;
         if (_log.shouldInfo())
@@ -286,8 +378,19 @@ public class Banlist {
         }
     }
 
+    /**
+     *  Check if a router is banlisted.
+     *  @param peer the router hash to check
+     *  @return true if the router is banlisted on any transport
+     */
     public boolean isBanlisted(Hash peer) {return isBanlisted(peer, null);}
 
+    /**
+     *  Check if a router is banlisted on a specific transport.
+     *  @param peer the router hash to check
+     *  @param transport the transport to check (may be null)
+     *  @return true if the router is banlisted on the specified transport
+     */
     public boolean isBanlisted(Hash peer, String transport) {
         if (peer == null || transport == null) {return false;}
 
@@ -313,12 +416,22 @@ public class Banlist {
         return rv;
     }
 
+    /**
+     *  Check if a router is permanently banlisted.
+     *  @param peer the router hash to check
+     *  @return true if the router is permanently banlisted
+     */
     public boolean isBanlistedForever(Hash peer) {
         Entry entry = _entries.get(peer);
         return entry != null && entry.expireOn > _context.clock().now() + BANLIST_FOREVER_THRESHOLD;
     }
 
-    /** @since 0.9.58+ */
+    /**
+     *  Check if a router is banlisted with a hostile duration (at least 1 hour).
+     *  @param peer the router hash to check
+     *  @return true if the router is banlisted with hostile duration
+     *  @since 0.9.58+
+     */
     public boolean isBanlistedHostile(Hash peer) {
         if (peer != null) {
             Entry entry = _entries.get(peer);

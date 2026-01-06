@@ -37,12 +37,12 @@ public interface I2PClient {
     public final static String PROP_RELIABILITY_BEST_EFFORT = "BestEffort";
     /** Reliability value: guaranteed */
     public final static String PROP_RELIABILITY_GUARANTEED = "Guaranteed";
-    /** @since 0.8.1 */
+    /** Reliability value: none. @since 0.8.1 */
     public final static String PROP_RELIABILITY_NONE = "none";
 
-    /** @since 0.9.12 */
+    /** Destination signature type property. @since 0.9.12 */
     public static final String PROP_SIGTYPE = "i2cp.destination.sigType";
-    /** @since 0.9.12 */
+    /** Default signature type. @since 0.9.12 */
     public static final SigType DEFAULT_SIGTYPE = SigType.EdDSA_SHA512_Ed25519;
 
     /**
@@ -63,13 +63,13 @@ public interface I2PClient {
      */
     public final static String PROP_FAST_RECEIVE = "i2cp.fastReceive";
 
-    /** @since 0.9.44, was protected in I2PSessionImpl */
+    /** Enable SSL for I2CP connection. @since 0.9.44, was protected in I2PSessionImpl */
     public static final String PROP_ENABLE_SSL = "i2cp.SSL";
-    /** @since 0.9.44, was protected in I2PSessionImpl */
+    /** Username for I2CP authentication. @since 0.9.44, was protected in I2PSessionImpl */
     public static final String PROP_USER = "i2cp.username";
-    /** @since 0.9.44, was protected in I2PSessionImpl */
+    /** Password for I2CP authentication. @since 0.9.44, was protected in I2PSessionImpl */
     public static final String PROP_PW = "i2cp.password";
-    /** @since 0.9.46 */
+    /** Enable gzip compression for I2CP messages. @since 0.9.46 */
     public static final String PROP_GZIP = "i2cp.gzip";
 
     /**
@@ -93,6 +93,7 @@ public interface I2PClient {
      *                      format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
      * @param options set of options to configure the router with, if null will use System properties
      * @return new session allowing a Destination to receive all of its messages and send messages to any other Destination.
+     * @throws I2PSessionException if there is a problem creating the session
      */
     public I2PSession createSession(InputStream destKeyStream, Properties options) throws I2PSessionException;
 

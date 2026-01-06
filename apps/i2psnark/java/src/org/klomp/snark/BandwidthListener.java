@@ -9,33 +9,77 @@ package org.klomp.snark;
  */
 public interface BandwidthListener {
 
-    /** The average rate in Bps */
+    /**
+     * Returns the average upload rate in bytes per second.
+     *
+     * @return the average upload rate in Bps
+     */
     public long getUploadRate();
 
-    /** The average rate in Bps */
+    /**
+     * Returns the average download rate in bytes per second.
+     *
+     * @return the average download rate in Bps
+     */
     public long getDownloadRate();
 
-    /** We unconditionally sent this many bytes */
+    /**
+     * Called when bytes are unconditionally sent.
+     *
+     * @param size the number of bytes sent
+     */
     public void uploaded(int size);
 
-    /** We unconditionally received this many bytes */
+    /**
+     * Called when bytes are unconditionally received.
+     *
+     * @param size the number of bytes received
+     */
     public void downloaded(int size);
 
-    /** Should we send this many bytes? Do NOT call uploaded() if this returns true. */
+    /**
+     * Checks if we should send the given number of bytes.
+     * Do NOT call uploaded() if this returns true.
+     *
+     * @param size the number of bytes to send
+     * @return true if the bytes should be sent, false otherwise
+     */
     public boolean shouldSend(int size);
 
-    /** Should we request this many bytes? */
+    /**
+     * Checks if we should request the given number of bytes from a peer.
+     *
+     * @param peer the peer to request from
+     * @param size the number of bytes to request
+     * @return true if the request should be made, false otherwise
+     */
     public boolean shouldRequest(Peer peer, int size);
 
-    /** Current limit in BPS */
+    /**
+     * Returns the current upload bandwidth limit in bytes per second.
+     *
+     * @return the upload limit in Bps
+     */
     public long getUpBWLimit();
 
-    /** Current limit in BPS */
+    /**
+     * Returns the current download bandwidth limit in bytes per second.
+     *
+     * @return the download limit in Bps
+     */
     public long getDownBWLimit();
 
-    /** Are we currently over the limit? */
+    /**
+     * Checks if the current upload bandwidth is over the limit.
+     *
+     * @return true if over the upload limit, false otherwise
+     */
     public boolean overUpBWLimit();
 
-    /** Are we currently over the limit? */
+    /**
+     * Checks if the current download bandwidth is over the limit.
+     *
+     * @return true if over the download limit, false otherwise
+     */
     public boolean overDownBWLimit();
 }

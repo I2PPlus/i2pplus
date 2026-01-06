@@ -58,10 +58,15 @@ import net.metanotion.util.skiplist.*;
  */
 public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V> implements Closeable {
 	private static final long MAGIC = 0x536b69704c697374l;  // "SkipList"
+	/** Page number of the first span */
 	public int firstSpanPage = 0;
+	/** Page number of the first level */
 	public int firstLevelPage = 0;
+	/** Page number of this skiplist header */
 	public int skipPage = 0;
+	/** Reference to the BlockFile */
 	public final BlockFile bf;
+	/** Whether this skiplist is closed */
 	private boolean isClosed;
 
 	final HashMap<Integer, BSkipSpan<K, V>> spanHash = new HashMap<Integer, BSkipSpan<K, V>>();
@@ -69,10 +74,31 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
 
 	private final boolean fileOnly;
 
+	/**
+	 *  Create a BSkipList from a BlockFile.
+	 *
+	 *  @param spanSize the size of spans
+	 *  @param bf the BlockFile
+	 *  @param skipPage the page number of this skiplist
+	 *  @param key the key serializer
+	 *  @param val the value serializer
+	 *  @throws IOException if an I/O error occurs
+	 */
 	public BSkipList(int spanSize, BlockFile bf, int skipPage, Serializer<K> key, Serializer<V> val) throws IOException {
 		this(spanSize, bf, skipPage, key, val, false);
 	}
 
+	/**
+	 *  Create a BSkipList from a BlockFile.
+	 *
+	 *  @param spanSize the size of spans
+	 *  @param bf the BlockFile
+	 *  @param skipPage the page number of this skiplist
+	 *  @param key the key serializer
+	 *  @param val the value serializer
+	 *  @param fileOnly if true, only read from file (no caching)
+	 *  @throws IOException if an I/O error occurs
+	 */
 	public BSkipList(int spanSize, BlockFile bf, int skipPage, Serializer<K> key, Serializer<V> val, boolean fileOnly) throws IOException {
 		if(spanSize < 1) { throw new RuntimeException("Span size too small"); }
 
@@ -117,6 +143,9 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
 		//rng = new Random(System.currentTimeMillis());
 	}
 
+	/**
+	 *  Close this skiplist and flush all data to disk.
+	 */
 	public void close() {
 		//System.out.println("Closing index " + size + " and " + spans);
 		flush();
@@ -125,6 +154,9 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
 		isClosed = true;
 	}
 
+	/**
+	 *  Flush all data to disk.
+	 */
 	@Override
 	public void flush() {
                 if (!bf.file.canWrite())
@@ -145,7 +177,12 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
 		} catch (IOException ioe) { throw new RuntimeException("Error writing to database", ioe); }
 	}
 
-	/** must be open (do not call close() first) */
+	/**
+	 *  Delete this skiplist and free all its pages.
+	 *  Must be open (do not call close() first).
+	 *
+	 *  @throws IOException if an I/O error occurs
+	 */
 	public void delete() throws IOException {
 		if (isClosed) {
 			bf.log.error("Already closed!! " + this, new Exception());
@@ -171,6 +208,14 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
 		isClosed = true;
 	}
 
+	/**
+	 *  Initialize a new skiplist on disk.
+	 *
+	 *  @param bf the BlockFile
+	 *  @param page the page number for the skiplist header
+	 *  @param spanSize the span size to use
+	 *  @throws IOException if an I/O error occurs
+	 */
 	public static void init(BlockFile bf, int page, int spanSize) throws IOException {
 		int firstSpan = bf.allocPage();
 		int firstLevel = bf.allocPage();
@@ -188,6 +233,8 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
 	}
 
 	/**
+	 *  Calculate the maximum number of levels for this skiplist.
+	 *
 	 *  @return log2(span count), minimum 4
 	 */
 	@Override
@@ -204,6 +251,11 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
 		return Math.min(BSkipLevels.MAX_SIZE, max);
 	}
 
+	/**
+	 *  Get an iterator over all entries in this skiplist.
+	 *
+	 *  @return a SkipIterator
+	 */
 	@Override
 	public SkipIterator<K, V> iterator() {
 		if (!this.fileOnly)
@@ -226,7 +278,12 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
 	}
 ****/
 
-	/** find */
+	/**
+	 *  Find the entry with the given key.
+	 *
+	 *  @param key the key to search for
+	 *  @return a SkipIterator pointing to the entry, or end if not found
+	 */
 	@Override
 	public SkipIterator<K, V> find(K key) {
 		if (!this.fileOnly)
@@ -238,7 +295,10 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
 	}
 
 	/**
-	 *  Run an integrity check on the skiplist and all the levels in it
+	 *  Run an integrity check on the skiplist and all the levels in it.
+	 *
+	 *  @param fix if true, attempt to fix any corruption found
+	 *  @param isMeta if true, this is a metaindex skiplist
 	 *  @return true if the levels were modified.
 	 */
 	public boolean bslck(boolean fix, boolean isMeta) {
@@ -273,6 +333,11 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
 		return rv;
 	}
 
+	/**
+	 *  Get a string representation of this skiplist.
+	 *
+	 *  @return a string representation
+	 */
 	@Override
 	public String toString() {
 		String rv = getClass().getSimpleName() + " page " + skipPage;

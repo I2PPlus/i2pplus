@@ -28,10 +28,11 @@ public abstract class I2CPMessageImpl implements I2CPMessage {
     public I2CPMessageImpl() {} // nop
 
     /**
-     * Validate the type and size of the message, and then read the message into the data structures.  <p>
-     *
-     * @throws IOException
-     */
+      * Validate the type and size of the message, and then read the message into the data structures.  <p>
+      *
+       * @throws IOException if there's an error reading from the stream
+       */
+    @Override
     public void readMessage(InputStream in) throws I2CPMessageException, IOException {
         int length = 0;
         try {length = (int) DataHelper.readLong(in, 4);}
@@ -45,11 +46,12 @@ public abstract class I2CPMessageImpl implements I2CPMessage {
     }
 
     /**
-     * Read the body into the data structures
-     *
-     * @param length number of bytes in the message payload
-     * @throws IOException
-     */
+      * Read the body into the data structures
+      *
+      * @param length number of bytes in the message payload
+       * @throws IOException if there's an error reading from the stream
+       */
+    @Override
     public void readMessage(InputStream in, int length, int type) throws I2CPMessageException, IOException {
         if (type != getType()) {
             throw new I2CPMessageException("Invalid message type (found: " + type + " supported: " + getType() +
@@ -61,32 +63,33 @@ public abstract class I2CPMessageImpl implements I2CPMessage {
     }
 
     /**
-     * Read in the payload part of the message (after the initial 4 byte size and 1
-     * byte type)
-     *
-     * @param buf InputStream
-     * @param size payload size
-     * @throws I2CPMessageException
-     * @throws IOException
-     */
+      * Read in the payload part of the message (after the initial 4 byte size and 1
+      * byte type)
+      *
+      * @param buf InputStream
+      * @param size payload size
+      * @throws I2CPMessageException if the message format is invalid
+      * @throws IOException if there's an error reading from the stream
+      */
     protected abstract void doReadMessage(InputStream buf, int size) throws I2CPMessageException, IOException;
 
     /**
-     * Write out the payload part of the message (not including the 4 byte size and
-     * 1 byte type)
-     *
-     * @return byte array
-     * @throws I2CPMessageException
-     * @throws IOException
-     */
+      * Write out the payload part of the message (not including the 4 byte size and
+      * 1 byte type)
+      *
+      * @return byte array
+      * @throws I2CPMessageException if the message cannot be written
+      * @throws IOException if there's an error writing to the stream
+      */
     protected abstract byte[] doWriteMessage() throws I2CPMessageException, IOException;
 
     /**
-     * Write out the full message to the stream, including the 4 byte size and 1
-     * byte type header.
-     *
-     * @throws IOException
-     */
+      * Write out the full message to the stream, including the 4 byte size and 1
+      * byte type header.
+      *
+       * @throws IOException if there's an error writing to the stream
+       */
+    @Override
     public void writeMessage(OutputStream out) throws I2CPMessageException, IOException {
         byte[] data = doWriteMessage();
         try {
@@ -119,8 +122,9 @@ public abstract class I2CPMessageImpl implements I2CPMessage {
      * some return a long, so we define a new method here.
      *
      * @return null always. Extending classes with a SessionId must override.
-     * @since 0.9.21
-     */
+      * @since 0.9.21
+      */
+    @Override
     public SessionId sessionId() {return null;}
 
 }

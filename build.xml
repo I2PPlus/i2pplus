@@ -968,10 +968,10 @@
       failonerror="false"
       charset="utf-8"
       author="no"
-      additionalparam="-notimestamp -stylesheetFile ./javadoc.css -quiet -Xmaxwarns 1000 -nodeprecated"
+      additionalparam="-notimestamp -stylesheetFile ./javadoc.css -quiet -Xmaxwarns 1000 -nodeprecated -nosince"
       doctitle="I2P+ Javadocs [${release.number}-${i2p.build.number}${build.extra}]"
       windowtitle="Javadocs [I2P+ ${release.number}+] - API Version ${api.version}+"
-      excludepackagenames="com.mpatric.mp3agic">
+      excludepackagenames="com.mpatric.mp3agic:org.jfree.svg:org.jfree.svg.*">
       <group title="Core SDK (i2p.jar)" packages="net.i2p:net.i2p.*:net.i2p.client:net.i2p.client.*:net.i2p.internal:net.i2p.internal.*"/>
       <group title="Core SDK Dependencies" packages="freenet.support.CPUInformation:gnu.crypto.*:gnu.getopt:gnu.gettext:com.nettgryppa.security:net.i2p.apache.http.conn.ssl:net.i2p.apache.http.conn.util:net.i2p.apache.http.util:org.json.simple:com.southernstorm.noise.crypto.x25519:com.southernstorm.noise.crypto.chacha20:org.minidns:org.minidns.*"/>
       <group title="Streaming Library" packages="net.i2p.client.streaming:net.i2p.client.streaming.impl"/>
@@ -990,7 +990,6 @@
       <group title="Installer Utilities" packages="net.i2p.installer"/>
       <group title="Jetty Utilities" packages="net.i2p.jetty:net.i2p.servlet:net.i2p.servlet.*"/>
       <group title="RRD4J Library (jrobin.jar)" packages="org.rrd4j:org.rrd4j.*:com.tomgibara.crinch.hashing:eu.bengreen.data.utility"/>
-      <group title="RRD4J SVG Renderer Dependency" packages="org.jfree.svg:org.jfree.svg.*"/>
       <group title="SAM Bridge" packages="net.i2p.sam"/>
       <group title="SAM Demos" packages="net.i2p.sam.client"/>
       <group title="SusiDNS Application" packages="i2p.susi.dns:net.i2p.addressbook.servlet"/>
@@ -1075,12 +1074,12 @@
       source="${javac.version}"
       destdir="./build/javadoc"
       packagenames="*"
-      excludepackagenames="com.mpatric.mp3agic:org.jfree.svg:org.jfree.svg.util"
+      excludepackagenames="com.mpatric.mp3agic:org.jfree.svg.*"
       use="true"
       splitindex="true"
       failonerror="false"
       charset="utf-8"
-      additionalparam="-notimestamp -quiet -Xmaxwarns 1000"
+      additionalparam="-notimestamp -quiet -Xmaxwarns 1000 -nodeprecated"
       doctitle="I2P+ Javadocs [${release.number}-${i2p.build.number}${build.extra}]"
       windowtitle="Javadocs [I2P+ ${release.number}+] - API Version ${api.version}+">
       <group title="Core SDK (i2p.jar)" packages="net.i2p:net.i2p.*:net.i2p.client:net.i2p.client.*:net.i2p.internal:net.i2p.internal.*:freenet.support.CPUInformation:gnu.crypto.*:gnu.getopt:gnu.gettext:com.nettgryppa.security:net.i2p.apache.http.conn.ssl:net.i2p.apache.http.conn.util:net.i2p.apache.http.util:org.json.simple:com.southernstorm.noise.crypto.x25519:com.southernstorm.noise.crypto.chacha20:org.minidns:org.minidns.*"/>

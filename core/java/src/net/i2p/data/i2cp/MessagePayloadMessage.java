@@ -117,11 +117,11 @@ public class MessagePayloadMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Write out the full message to the stream, including the 4 byte size and 1
-     * byte type header.
-     *
-     * @throws IOException
-     */
+      * Write out the full message to the stream, including the 4 byte size and 1
+      * byte type header.
+      *
+      * @throws IOException if there's an error writing to the stream
+      */
     @Override
     public synchronized void writeMessage(OutputStream out) throws I2CPMessageException, IOException {
         if (_sessionId < 0)
@@ -144,6 +144,7 @@ public class MessagePayloadMessage extends I2CPMessageImpl {
         }
     }
 
+    @Override
     public int getType() {
         return MESSAGE_TYPE;
     }

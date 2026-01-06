@@ -89,15 +89,20 @@ public abstract class DatabaseEntry extends DataStructureImpl {
     /** these are the same as in i2np's DatabaseStoreMessage */
     public final static int KEY_TYPE_ROUTERINFO = 0;
     public final static int KEY_TYPE_LEASESET = 1;
-    /** @since 0.9.38 */
+    /** LeaseSet 2 type.
+      * @since 0.9.38 */
     public final static int KEY_TYPE_LS2 = 3;
-    /** @since 0.9.38 */
+    /** Encrypted LeaseSet 2 type.
+      * @since 0.9.38 */
     public final static int KEY_TYPE_ENCRYPTED_LS2 = 5;
-    /** @since 0.9.38 */
+    /** Meta LeaseSet 2 type.
+      * @since 0.9.38 */
     public final static int KEY_TYPE_META_LS2 = 7;
-    /** @since 0.9.38 */
+    /** Service record type.
+      * @since 0.9.38 */
     public final static int KEY_TYPE_SERVICE_RECORD = 9;
-    /** @since 0.9.38 */
+    /** Service list type.
+      * @since 0.9.38 */
     public final static int KEY_TYPE_SERVICE_LIST = 11;
 
     protected volatile Signature _signature;
@@ -123,8 +128,10 @@ public abstract class DatabaseEntry extends DataStructureImpl {
     }
 
     /**
-     * @since 0.9.61
-     */
+      *  Sets the local client that received this entry.
+      *
+      * @since 0.9.61
+      */
     public void setReceivedBy(Hash receivedBy) {
         this._receivedBy = receivedBy;
     }
@@ -213,8 +220,8 @@ public abstract class DatabaseEntry extends DataStructureImpl {
      *
      * Most callers should use writeBytes() or toByteArray() instead.
      *
-     * FIXME RouterInfo throws DFE and LeaseSet returns null
-     * @return null on error ???????????????????????
+     * @return the raw payload data, or null on error (for example, if this is a RouterInfo,
+     *         a DataFormatException is thrown instead)
      */
     protected abstract byte[] getBytes() throws DataFormatException;
 
@@ -240,8 +247,10 @@ public abstract class DatabaseEntry extends DataStructureImpl {
     }
 
     /**
-     * @throws IllegalStateException if not in RouterContext
-     */
+      *  Validates the routing key for this entry.
+      *
+      * @throws IllegalStateException if not in RouterContext
+      */
     public boolean validateRoutingKey() {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
         if (!ctx.isRouterContext())
@@ -342,12 +351,14 @@ public abstract class DatabaseEntry extends DataStructureImpl {
     }
 
     /**
-     * @since 0.9.58 moved up from LeaseSet
-     *
-     * use this carefully, when updating the flags make sure the old and new
-     * leaseSet are actually equivalent, or simply copy over the reply value,
-     * see KademliaNetworkDatabaseFacade.java line 997 for more information.
-     */
+      *  Marks this entry as received via published mode.
+      *
+      * @since 0.9.58 moved up from LeaseSet
+      *
+      * use this carefully, when updating the flags make sure the old and new
+      * leaseSet are actually equivalent, or simply copy over the reply value,
+      * see KademliaNetworkDatabaseFacade.java line 997 for more information.
+      */
     public void setReceivedAsPublished() {
         _receivedAsPublished = true;
     }

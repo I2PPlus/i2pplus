@@ -31,7 +31,11 @@ public class BitField {
     private final int size;
     private int count;
 
-    /** Creates a new BitField that represents <code>size</code> unset bits. */
+    /**
+     * Creates a new BitField that represents the given number of unset bits.
+     *
+     * @param size the number of bits in the bit field
+     */
     public BitField(int size) {
         this.size = size;
         int arraysize = ((size - 1) / 8) + 1;
@@ -39,10 +43,12 @@ public class BitField {
     }
 
     /**
-     * Creates a new BitField that represents <code>size</code> bits as set by the given byte array.
+     * Creates a new BitField that represents the given number of bits as set by the given byte array.
      * This will make a copy of the array. Extra bytes will be ignored.
      *
-     * @throws IndexOutOfBoundsException if give byte array is not large enough.
+     * @param bitfield the byte array containing the bit field data
+     * @param size the number of bits represented
+     * @throws IndexOutOfBoundsException if the byte array is not large enough
      */
     public BitField(byte[] bitfield, int size) {
         this.size = size;
@@ -57,19 +63,23 @@ public class BitField {
     }
 
     /**
-     * This returns the actual byte array used. Changes to this array affect this BitField. Note
+     * Returns the actual byte array used. Changes to this array affect this BitField. Note
      * that some bits at the end of the byte array are supposed to be always unset if they represent
      * bits bigger then the size of the bitfield.
      *
-     * <p>Caller should synch on this and copy!
+     * <p>Caller should synchronize on this and copy!
+     *
+     * @return the internal byte array representing the bit field
      */
     public byte[] getFieldBytes() {
         return bitfield;
     }
 
     /**
-     * Return the size of the BitField. The returned value is one bigger then the last valid bit
+     * Returns the size of the BitField. The returned value is one bigger then the last valid bit
      * number (since bit numbers are counted from zero).
+     *
+     * @return the number of bits in the bit field
      */
     public int size() {
         return size;
@@ -78,7 +88,8 @@ public class BitField {
     /**
      * Sets the given bit to true.
      *
-     * @throws IndexOutOfBoundsException if bit is smaller then zero bigger then size (inclusive).
+     * @param bit the bit index to set
+     * @throws IndexOutOfBoundsException if bit is smaller then zero or bigger then or equal to size
      */
     public void set(int bit) {
         if (bit < 0 || bit >= size) throw new IndexOutOfBoundsException(Integer.toString(bit));
@@ -95,7 +106,8 @@ public class BitField {
     /**
      * Sets the given bit to false.
      *
-     * @throws IndexOutOfBoundsException if bit is smaller then zero bigger then size (inclusive).
+     * @param bit the bit index to clear
+     * @throws IndexOutOfBoundsException if bit is smaller then zero or bigger then or equal to size
      * @since 0.9.22
      */
     public void clear(int bit) {
@@ -121,9 +133,11 @@ public class BitField {
     }
 
     /**
-     * Return true if the bit is set or false if it is not.
+     * Returns true if the bit is set or false if it is not.
      *
-     * @throws IndexOutOfBoundsException if bit is smaller then zero bigger then size (inclusive).
+     * @param bit the bit index to check
+     * @return true if the bit is set, false otherwise
+     * @throws IndexOutOfBoundsException if bit is smaller then zero or bigger then or equal to size
      */
     public boolean get(int bit) {
         if (bit < 0 || bit >= size) throw new IndexOutOfBoundsException(Integer.toString(bit));
@@ -133,17 +147,28 @@ public class BitField {
         return (bitfield[index] & mask) != 0;
     }
 
-    /** Return the number of set bits. */
+    /**
+     * Returns the number of set bits.
+     *
+     * @return the count of bits that are set to true
+     */
     public int count() {
         return count;
     }
 
-    /** Return true if all bits are set. */
+    /**
+     * Returns true if all bits are set.
+     *
+     * @return true if all bits are set (bit field is complete), false otherwise
+     */
     public boolean complete() {
         return count >= size;
     }
 
     /**
+     * Returns a hash code value for this BitField.
+     *
+     * @return a hash code value for this BitField
      * @since 0.9.33
      */
     @Override
@@ -152,6 +177,10 @@ public class BitField {
     }
 
     /**
+     * Compares this BitField to another object for equality.
+     *
+     * @param o the object to compare with
+     * @return true if the objects are equal, false otherwise
      * @since 0.9.33
      */
     @Override

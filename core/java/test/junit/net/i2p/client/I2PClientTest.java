@@ -20,6 +20,7 @@ import junit.framework.TestCase;
 public class I2PClientTest extends TestCase {
     private I2PClient _client;
 
+    @Override
     public void setUp(){
         _client = I2PClientFactory.createClient();
     }

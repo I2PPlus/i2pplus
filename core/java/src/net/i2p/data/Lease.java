@@ -123,13 +123,17 @@ public class Lease extends DataStructureImpl {
     public void setEndDate(Date date) {_end = date.getTime();}
 
     /**
-     * @since 0.9.48
-     */
+      *  Gets the lease end time.
+      *
+      * @since 0.9.48
+      */
     public long getEndTime() {return _end;}
 
     /**
-     * @since 0.9.48
-     */
+      *  Sets the lease end date.
+      *
+      * @since 0.9.48
+      */
     public void setEndDate(long date) {_end = date;}
 
     /** has this lease already expired? */
@@ -140,6 +144,7 @@ public class Lease extends DataStructureImpl {
         return _end < Clock.getInstance().now() - fudgeFactor;
     }
 
+    @Override
     public void readBytes(InputStream in) throws DataFormatException, IOException {
         //_gateway = new Hash();
         //_gateway.readBytes(in);
@@ -149,6 +154,7 @@ public class Lease extends DataStructureImpl {
         _end = DataHelper.readLong(in, 8);
     }
 
+    @Override
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
         if ((_gateway == null) || (_tunnelId == null)) {
             throw new DataFormatException("Not enough data to write out a Lease");

@@ -19,6 +19,7 @@ import org.junit.Test;
  */
 public class LeaseSetTest extends StructureTest {
 
+    @Override
     public DataStructure createDataStructure() throws DataFormatException {
         LeaseSet leaseSet = new LeaseSet();
         leaseSet.setDestination((Destination)(new DestinationTest()).createDataStructure());
@@ -28,6 +29,7 @@ public class LeaseSetTest extends StructureTest {
 	//leaseSet.setVersion(42l);
         return leaseSet;
     }
+    @Override
     public DataStructure createStructureToRead() { return new LeaseSet(); }
 
     @Test

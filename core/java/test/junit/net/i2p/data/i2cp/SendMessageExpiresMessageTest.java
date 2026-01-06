@@ -24,6 +24,7 @@ import net.i2p.data.PayloadTest;
 
  public class SendMessageExpiresMessageTest extends I2CPTstBase {
 
+    @Override
     public I2CPMessageImpl createDataStructure() throws DataFormatException {
         SendMessageExpiresMessage msg = new SendMessageExpiresMessage();
         msg.setDestination((Destination)(new DestinationTest()).createDataStructure());
@@ -35,6 +36,7 @@ import net.i2p.data.PayloadTest;
         msg.setFlags(daf.getFlags());
         return msg;
     }
+    @Override
     public I2CPMessageImpl createStructureToRead() { return new SendMessageExpiresMessage(); }
 
 }

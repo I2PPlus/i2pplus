@@ -45,7 +45,11 @@ public class ReceiveMessageBeginMessage extends I2CPMessageImpl {
         return _sessionId >= 0 ? new SessionId(_sessionId) : null;
     }
 
-    /** @param id 0-65535 */
+    /**
+      *  Sets the session ID.
+      *
+      * @param id 0-65535
+      */
     public void setSessionId(long id) {
         _sessionId = (int) id;
     }

@@ -33,7 +33,7 @@ public final class HKDF {
     private static final byte[] ONE = new byte[] { 1 };
 
     /**
-     * Thread safe, no state, can be reused
+     *  @param context the app context
      */
     public HKDF(I2PAppContext context) {
         _context = context;
@@ -42,8 +42,9 @@ public final class HKDF {
     /**
      * One output, no info.
      *
-     * @param key first 32 bytes used as the key
-     * @param out must be exactly 32 bytes
+     *  @param key first 32 bytes used as the key
+     *  @param data the input data
+     *  @param out must be exactly 32 bytes
      */
     public void calculate(byte[] key, byte[] data, byte[] out) {
         HMAC256Generator hmac = _context.hmac256();
@@ -58,9 +59,10 @@ public final class HKDF {
     /**
      * One output with info.
      *
-     * @param key first 32 bytes used as the key
-     * @param info non-null ASCII, "" if none
-     * @param out must be exactly 32 bytes
+     *  @param key first 32 bytes used as the key
+     *  @param data the input data
+     *  @param info non-null ASCII, "" if none
+     *  @param out must be exactly 32 bytes
      */
     public void calculate(byte[] key, byte[] data, String info, byte[] out) {
         HMAC256Generator hmac = _context.hmac256();

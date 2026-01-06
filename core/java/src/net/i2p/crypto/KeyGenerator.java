@@ -435,7 +435,9 @@ public final class KeyGenerator {
      */
     private static void main2(String args[]) {
         RandomSource.getInstance().nextBoolean();
-        try { Thread.sleep(1000); } catch (InterruptedException ie) {}
+        try { Thread.sleep(1000); } catch (InterruptedException ie) {
+            // interrupted during warmup
+        }
         int runs = 200; // warmup
         Collection<SigType> toTest;
         if (args.length > 0) {

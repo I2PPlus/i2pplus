@@ -20,6 +20,7 @@ import net.i2p.data.TunnelIdTest;
  * @author jrandom
  */
 public class RequestLeaseSetMessageTest extends I2CPTstBase {
+    @Override
     public I2CPMessageImpl createDataStructure() throws DataFormatException {
         RequestLeaseSetMessage msg = new RequestLeaseSetMessage();
         msg.setSessionId((SessionId)(new SessionIdTest()).createDataStructure());
@@ -28,5 +29,6 @@ public class RequestLeaseSetMessageTest extends I2CPTstBase {
         msg.addEndpoint(new Hash(h), (TunnelId)(new TunnelIdTest()).createDataStructure());
         return msg;
     }
+    @Override
     public I2CPMessageImpl createStructureToRead() { return new RequestLeaseSetMessage(); }
 }

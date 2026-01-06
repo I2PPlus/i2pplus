@@ -47,9 +47,11 @@ public class SetDateMessage extends I2CPMessageImpl {
     public void setDate(Date date) {_date = date;}
 
     /**
-     *  @return may be null
-     *  @since 0.8.7
-     */
+      *  Gets the protocol version.
+      *
+      *  @return may be null
+      *  @since 0.8.7
+      */
     public String getVersion() {return _version;}
 
     @Override
@@ -77,6 +79,7 @@ public class SetDateMessage extends I2CPMessageImpl {
         return os.toByteArray();
     }
 
+    @Override
     public int getType() {return MESSAGE_TYPE;}
 
     @Override

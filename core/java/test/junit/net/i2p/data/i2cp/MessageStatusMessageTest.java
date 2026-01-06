@@ -16,6 +16,7 @@ import net.i2p.data.DataFormatException;
  * @author jrandom
  */
 public class MessageStatusMessageTest extends I2CPTstBase {
+    @Override
     public I2CPMessageImpl createDataStructure() throws DataFormatException {
         MessageStatusMessage msg = new MessageStatusMessage();
         msg.setSessionId(42);
@@ -25,5 +26,6 @@ public class MessageStatusMessageTest extends I2CPTstBase {
         msg.setNonce(1);
         return msg;
     }
+    @Override
     public I2CPMessageImpl createStructureToRead() { return new MessageStatusMessage(); }
 }

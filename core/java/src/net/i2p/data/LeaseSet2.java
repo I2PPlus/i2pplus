@@ -19,9 +19,9 @@ import net.i2p.util.Log;
 import net.i2p.util.OrderedProperties;
 
 /**
- * Implementation of LeaseSet2 as specified in 
+ * Implementation of LeaseSet2 as specified in
  * <a href="https://geti2p.net/spec/proposals/123-new-netdb-entries">Proposal 123: New NetDb Entries</a>.
- * 
+ *
  * <p>LeaseSet2 provides several enhancements over the original LeaseSet format:</p>
  * <ul>
  *   <li>Support for multiple encryption keys with server preference ordering</li>
@@ -101,8 +101,10 @@ public class LeaseSet2 extends LeaseSet {
     public boolean isUnpublished() {return (_flags & FLAG_UNPUBLISHED) != 0;}
 
     /**
-     *  @throws IllegalStateException if already signed
-     */
+      *  Marks this leaseset as unpublished.
+      *
+      *  @throws IllegalStateException if already signed
+      */
     public void setUnpublished() {
         if (_signature != null && (_flags & FLAG_UNPUBLISHED) == 0) {
             throw new IllegalStateException();
@@ -146,9 +148,11 @@ public class LeaseSet2 extends LeaseSet {
     }
 
     /**
-     *  @return not a copy, do not modify, or null
-     *  @since 0.9.63
-     */
+      *  Gets the leaseset options.
+      *
+      *  @return not a copy, do not modify, or null
+      *  @since 0.9.63
+      */
     public Properties getOptions() {return _options;}
 
     /**
@@ -242,11 +246,16 @@ public class LeaseSet2 extends LeaseSet {
         _options.putAll(options);
     }
 
+    /**
+      *  Checks if this leaseset uses offline keys.
+      */
     public boolean isOffline() {return (_flags & FLAG_OFFLINE_KEYS) != 0;}
 
     /**
-     *  @return transient public key or null if not offline signed
-     */
+      *  Gets the transient public key for offline signing.
+      *
+      *  @return transient public key or null if not offline signed
+      */
     public SigningPublicKey getTransientSigningKey() {return _transientSigningPublicKey;}
 
     /**

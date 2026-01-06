@@ -46,6 +46,12 @@ class BuildExecutor implements Runnable {
     private boolean _repoll;
     // Increased from cores*2 to cores*4 for faster tunnel churn handling
     // Makes build concurrency configurable via router.buildConcurrencyMultiplier property (default: 4)
+    /**
+     * Get the maximum number of concurrent tunnel builds allowed.
+     * Calculated based on CPU cores and configurable multiplier.
+     *
+     * @return maximum concurrent builds allowed
+     */
     private int getMaxConcurrentBuilds() {
         int multiplier = _context.getProperty("router.buildConcurrencyMultiplier", 4);
         int cores = SystemVersion.getCores();
@@ -60,11 +66,18 @@ class BuildExecutor implements Runnable {
     private static final int TUNNEL_POOLS = SystemVersion.isSlow() ? 24 : 48;
     private static final long GRACE_PERIOD = 60*1000; // accept replies up to a minute after we gave up on them
     private static final long[] RATES = { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR, RateConstants.ONE_DAY };
+    /** @return true if full statistics are enabled */
     public boolean fullStats() {return _context.getBooleanProperty("stat.full");}
 
     /** Build result enumeration. @since 0.9.53 */
     enum Result { SUCCESS, REJECT, TIMEOUT, BAD_RESPONSE, DUP_ID, OTHER_FAILURE }
 
+    /**
+     * Create a new BuildExecutor.
+     *
+     * @param ctx the router context
+     * @param mgr the tunnel pool manager
+     */
     public BuildExecutor(RouterContext ctx, TunnelPoolManager mgr) {
         _context = ctx;
         _log = ctx.logManager().getLog(getClass());
@@ -474,12 +487,27 @@ class BuildExecutor implements Runnable {
      *  WARNING - this sort may be unstable, as a pool's tunnel count may change
      *  during the sort. This will cause Java 7 sort to throw an IAE.
      */
+    /**
+     * Comparator for prioritizing tunnel pools during build selection.
+     * Priority order: Exploratory > Pools without tunnels > Everyone else.
+     *
+     * WARNING - this sort may be unstable, as a pool's tunnel count may change
+     * during the sort. This will cause Java 7 sort to throw an IAE.
+     */
     private static class TunnelPoolComparator implements Comparator<TunnelPool>, Serializable {
 
         private final boolean _preferEmpty;
 
+        /** @param preferEmptyPools if true, prefer pools with no tunnels */
         public TunnelPoolComparator(boolean preferEmptyPools) {_preferEmpty = preferEmptyPools;}
 
+        /**
+         * Compare two tunnel pools for build priority.
+         *
+         * @param tpl left tunnel pool
+         * @param tpr right tunnel pool
+         * @return -1 if tpl has higher priority, 1 if tpr has higher priority, 0 if equal
+         */
         public int compare(TunnelPool tpl, TunnelPool tpr) {
             if (tpl.getSettings().isExploratory() && !tpr.getSettings().isExploratory()) return -1;
             if (tpr.getSettings().isExploratory() && !tpl.getSettings().isExploratory()) return 1;
@@ -515,8 +543,18 @@ class BuildExecutor implements Runnable {
         return allowed;
     }
 
+    /**
+     * Check if the executor is currently running.
+     *
+     * @return true if running, false otherwise
+     */
     public boolean isRunning() {return _isRunning;}
 
+    /**
+     * Build a tunnel with the given configuration.
+     *
+     * @param cfg the tunnel configuration to build
+     */
     void buildTunnel(PooledTunnelCreatorConfig cfg) {
         long beforeBuild = System.currentTimeMillis();
         if (cfg.getLength() > 1) {
@@ -542,13 +580,11 @@ class BuildExecutor implements Runnable {
     }
 
     /**
-     *  This calls TunnelPool.buildComplete which calls TunnelPool.addTunnel()
-     *  on success, and then we wake up the executor.
+     * Handle a completed tunnel build.
      *
-     *  On success, this also calls TunnelPoolManager to optionally start a test job,
-     *  and queues an ExpireJob.
-     *
-     *  @since 0.9.53 added result parameter
+     * @param cfg the tunnel configuration that completed
+     * @param result the build result (success, failure, etc.)
+     * @since 0.9.53 added result parameter
      */
     public void buildComplete(PooledTunnelCreatorConfig cfg, Result result) {
         if (_log.shouldInfo()) {_log.info("Build complete (" + result + ") for " + cfg);}
@@ -575,10 +611,19 @@ class BuildExecutor implements Runnable {
         }
     }
 
+    /**
+     * Check if a tunnel build was recently attempted.
+     *
+     * @param replyId the reply message ID to check
+     * @return true if the build was recently attempted, false otherwise
+     */
     public boolean wasRecentlyBuilding(long replyId) {
         synchronized (_recentBuildIds) {return _recentBuildIds.contains(Long.valueOf(replyId));}
     }
 
+    /**
+     * Signal the executor to repoll for tunnel building opportunities.
+     */
     public void repoll() {
         synchronized (_currentlyBuilding) {
             _repoll = true;
@@ -586,6 +631,12 @@ class BuildExecutor implements Runnable {
         }
     }
 
+    /**
+     * Log that a peer did not reply to a tunnel build request.
+     *
+     * @param tunnel the tunnel ID
+     * @param peer the peer hash that didn't reply
+     */
     private void didNotReply(long tunnel, Hash peer) {
         if (_log.shouldDebug()) {
             _log.debug("No reply from [" + peer.toBase64().substring(0,6) + "] to join [Tunnel " + tunnel + "]");

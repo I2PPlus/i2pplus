@@ -21,6 +21,7 @@ public class AES256Test extends TestCase{
     private I2PAppContext _context;
     private byte[] iv;
 
+    @Override
     protected void setUp() {
         _context = I2PAppContext.getGlobalContext();
     }

@@ -16,6 +16,7 @@ package net.i2p.data;
 
  public class PayloadTest extends StructureTest{
 
+    @Override
     public DataStructure createDataStructure() throws DataFormatException {
         Payload payload = new Payload();
         SessionKey key = (SessionKey)(new SessionKeyTest()).createDataStructure();
@@ -32,6 +33,7 @@ package net.i2p.data;
 
         return payload;
     }
+    @Override
     public DataStructure createStructureToRead() { return new Payload(); }
 
 }

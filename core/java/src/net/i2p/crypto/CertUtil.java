@@ -214,6 +214,7 @@ public final class CertUtil {
      *
      *  Warning - unsupported in Android (no javax.naming), returns null.
      *
+     *  @param p the X500Principal
      *  @param type e.g. "CN"
      *  @return value or null if not found
      */
@@ -449,6 +450,9 @@ public final class CertUtil {
     /**
      *  Is the certificate revoked?
      *
+     *  @param store the cert store containing CRLs
+     *  @param cert the certificate to check
+     *  @return true if revoked
      *  @since 0.9.25
      */
     public static boolean isRevoked(CertStore store, Certificate cert) {
@@ -503,6 +507,8 @@ public final class CertUtil {
     /**
      *  Load CRLs from the directory into the set.
      *
+     *  @param crls the set to add CRLs to
+     *  @param dir the directory to load from
      *  @since 0.9.25
      */
     private static void loadCRLs(Set<X509CRL> crls, File dir) {

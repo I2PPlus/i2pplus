@@ -60,8 +60,10 @@ public class DateAndFlags extends DataStructureImpl {
     }
 
     /**
-     *  @param flags 0 - 65535
-     */
+      *  Sets the flags value.
+      *
+      *  @param flags 0 - 65535
+      */
     public void setFlags(int flags) {
         if (flags < 0 || flags > 65535)
             throw new IllegalArgumentException();
@@ -88,11 +90,13 @@ public class DateAndFlags extends DataStructureImpl {
         _date = date.getTime();
     }
 
+    @Override
     public void readBytes(InputStream in) throws DataFormatException, IOException {
         _flags = (int) DataHelper.readLong(in, 2);
         _date = DataHelper.readLong(in, 6);
     }
 
+    @Override
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
         DataHelper.writeLong(out, 2, _flags);
         DataHelper.writeLong(out, 6, _date);

@@ -485,29 +485,28 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         return _manager.getTransports();
     }
 
-    /** @return non-null, possibly empty */
-    @Override
-    /**
-     * Create router addresses for all configured transport protocols.
-     *
-     * This method generates RouterAddress objects for each
-     * transport protocol based on current configuration and
-     * network conditions. It handles address discovery,
-     * validation, and format conversion.
-     *
-     * <strong>Address Creation:</strong>
-     * <ul>
-     *   <li>Iterates through all registered transports</li>
-     *   <li>Gets current addresses from each transport</li>
-     *   <li>Validates address format and consistency</li>
-     *   <li>Handles IPv4 and IPv6 address generation</li>
-     *   <li>Applies geographic and network filtering</li>
-     * </ul>
-     *
-     * @return list of RouterAddress objects for all active transports,
-     *         may be empty if no addresses available
-     */
-    public List<RouterAddress> createAddresses() {
+     /**
+      * Create router addresses for all configured transport protocols.
+      *
+      * This method generates RouterAddress objects for each
+      * transport protocol based on current configuration and
+      * network conditions. It handles address discovery,
+      * validation, and format conversion.
+      *
+      * <strong>Address Creation:</strong>
+      * <ul>
+      *   <li>Iterates through all registered transports</li>
+      *   <li>Gets current addresses from each transport</li>
+      *   <li>Validates address format and consistency</li>
+      *   <li>Handles IPv4 and IPv6 address generation</li>
+      *   <li>Applies geographic and network filtering</li>
+      * </ul>
+      *
+      * @return list of RouterAddress objects for all active transports,
+      *         may be empty if no addresses available
+      */
+     @Override
+     public List<RouterAddress> createAddresses() {
         List<RouterAddress> addresses = new ArrayList<RouterAddress>(_manager.getAddresses());
         if (addresses.size() > 1) {Collections.sort(addresses, new AddrComparator());}
         return addresses;
