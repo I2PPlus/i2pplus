@@ -99,7 +99,7 @@ public class RepublishLeaseSetJob extends JobImpl {
      * Requeues this job to retry the republish attempt.
      * Adds the job normally on the first failure to avoid aggressive retries,
      * and uses high priority to enqueue the job at the front of the queue
-     * starting from the second consecutive failure to enable faster retries.
+     * every 4th failure to enable faster retries.
      */
     void requeueRepublish() {
         int count = failCount.incrementAndGet();
@@ -108,8 +108,8 @@ public class RepublishLeaseSetJob extends JobImpl {
         String tunnelName = ls != null ? getTunnelName(ls.getDestination()) : "";
         String name = !tunnelName.isEmpty() ? "\'" + tunnelName + "\'" + " [" + b32 + "]" : "[" + b32 + "]";
         String countStr = count > 1 ? " (Attempt: " + count + ")" : "";
-        if (_log.shouldWarn()) {
-            _log.warn("Failed to publish LeaseSet for " + name + " -> Retrying..." + countStr + (highPriority ? " [High priority]" : ""));
+        if (_log.shouldInfo()) {
+            _log.info("Failed to publish LeaseSet for " + name + " -> Retrying..." + countStr + (highPriority ? " [High priority]" : ""));
         }
         getContext().statManager().addRateData("netDb.republishLeaseSetFail", 1);
         getContext().jobQueue().removeJob(this);
