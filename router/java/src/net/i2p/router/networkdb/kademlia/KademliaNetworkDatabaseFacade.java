@@ -902,6 +902,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     private static final long PUBLISH_DELAY = 1000;
+    private static final long PROACTIVE_REPUBLISH_THRESHOLD = 3 * 60 * 1000;
 
     /**
      * Publishes a local LeaseSet by storing it and scheduling republishing if applicable.
@@ -964,20 +965,38 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
     /**
      * Queues the LeaseSet for future republishing, delaying to avoid flooding floodfills.
+     * Proactively starts republishing 3 minutes before lease expiration to ensure
+     * network propagation has ample time before the lease expires.
      */
     private void scheduleRepublish(Hash hash) {
         RepublishLeaseSetJob job = _publishingLeaseSets.computeIfAbsent(hash,
             key -> new RepublishLeaseSetJob(_context, this, key));
 
         long now = _context.clock().now();
-        long nextTime = Math.max(job.lastPublished() + RepublishLeaseSetJob.REPUBLISH_LEASESET_TIMEOUT,
-                                 now + PUBLISH_DELAY);
-        job.getTiming().setStartAfter(Math.max(now, nextTime));
+        long nextTime;
 
-        if (_log.shouldInfo()) {
-            _log.info("Queueing LOCAL LeaseSet [" + hash.toBase32().substring(0, 8) + "] for publication..." +
-                      "\n* Publication time: " + new Date(nextTime));
+        LeaseSet ls = lookupLeaseSetLocally(hash);
+        if (ls != null) {
+            long expiration = ls.getLatestLeaseDate();
+            long proactiveTime = expiration - PROACTIVE_REPUBLISH_THRESHOLD;
+
+            if (proactiveTime > now && job.lastPublished() < proactiveTime) {
+                nextTime = Math.max(proactiveTime, now + PUBLISH_DELAY);
+                if (_log.shouldInfo()) {
+                    _log.info("Scheduling proactive republish for LOCAL LeaseSet [" + hash.toBase32().substring(0, 8) + "]..." +
+                              "\n* Expires: " + new Date(expiration) +
+                              "\n* Republish at: " + new Date(nextTime));
+                }
+            } else {
+                nextTime = Math.max(job.lastPublished() + RepublishLeaseSetJob.REPUBLISH_LEASESET_TIMEOUT,
+                                    now + PUBLISH_DELAY);
+            }
+        } else {
+            nextTime = Math.max(job.lastPublished() + RepublishLeaseSetJob.REPUBLISH_LEASESET_TIMEOUT,
+                                now + PUBLISH_DELAY);
         }
+
+        job.getTiming().setStartAfter(Math.max(now, nextTime));
 
         if (job instanceof JobImpl) {
             ((JobImpl) job).madeReady(now);

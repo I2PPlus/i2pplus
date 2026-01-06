@@ -4,6 +4,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
 import net.i2p.data.LeaseSet;
+import net.i2p.router.Job;
 import net.i2p.router.JobImpl;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
@@ -23,9 +24,10 @@ public class RepublishLeaseSetJob extends JobImpl {
     private final static int RETRY_DELAY = 1000;
     private final Hash _dest;
     private final KademliaNetworkDatabaseFacade _facade;
-    private long _lastPublished; // this is actually last attempted publish
+    private long _lastPublished;
     private final AtomicInteger failCount = new AtomicInteger(0);
     private boolean highPriority;
+    private volatile boolean _lookupInProgress;
 
     /**
      * Create a new RepublishLeaseSetJob for the given destination.
@@ -114,7 +116,6 @@ public class RepublishLeaseSetJob extends JobImpl {
         getContext().statManager().addRateData("netDb.republishLeaseSetFail", 1);
         getContext().jobQueue().removeJob(this);
         // Run high priority every 4th fail
-        boolean highPriority = false;
         if (count % 4 == 0) {highPriority = true;}
         requeue(RETRY_DELAY, highPriority);
     }
@@ -150,17 +151,67 @@ public class RepublishLeaseSetJob extends JobImpl {
         public String getName() {return "Timeout LeaseSet Publication";}
 
         public void runJob() {
+            int count = failCount.get();
             LeaseSet ls = _facade.lookupLeaseSetLocally(_ls.getHash());
-            String tunnelName = "";
-            if (ls != null) {tunnelName = getTunnelName(_ls.getDestination());}
-            if (ls != null && !KademliaNetworkDatabaseFacade.isNewer(ls, _ls)) {requeueRepublish();}
-            else {
+            String tunnelName = ls != null ? getTunnelName(_ls.getDestination()) : "";
+            String name = !tunnelName.isEmpty() ? " for '" + tunnelName + "'" : "";
+
+            if (ls == null || KademliaNetworkDatabaseFacade.isNewer(ls, _ls)) {
                 if (_log.shouldInfo()) {
-                    String name = !tunnelName.isEmpty() ? " for \'" + tunnelName + "\'" : "";
-                    _log.info("Not requeueing failed publication of LeaseSet" + name + " [" +
-                              _ls.getDestination().calculateHash().toBase32().substring(0,8) + "] -> Newer LeaseSet exists");
+                    _log.info("Not requeueing LeaseSet" + name + " [" +
+                              _ls.getDestination().calculateHash().toBase32().substring(0,8) +
+                              "] -> Newer LeaseSet exists locally");
                 }
+                return;
             }
+
+            if (count % 3 == 0 && !_lookupInProgress) {
+                _lookupInProgress = true;
+                if (_log.shouldInfo()) {
+                    _log.info("Verifying LeaseSet publication" + name + " [" +
+                              _ls.getDestination().calculateHash().toBase32().substring(0,8) +
+                              "] via floodfill...");
+                }
+                verifyAndRetry(ls);
+            } else {
+                requeueRepublish();
+            }
+        }
+
+        private void verifyAndRetry(final LeaseSet ls) {
+            String tunnelName = getTunnelName(ls.getDestination());
+            String name = !tunnelName.isEmpty() ? " for '" + tunnelName + "'" : " for key";
+
+            Job onFound = new JobImpl(getContext()) {
+                public String getName() {return "Verify LS Published";}
+                public void runJob() {
+                    _lookupInProgress = false;
+                    LeaseSet local = _facade.lookupLeaseSetLocally(_ls.getHash());
+                    if (local != null && KademliaNetworkDatabaseFacade.isNewer(local, ls)) {
+                        if (_log.shouldInfo()) {
+                            _log.info("Valid LeaseSet" + name + " confirmed via floodfill -> Skipping retry");
+                        }
+                    } else {
+                        if (_log.shouldInfo()) {
+                            _log.info("Valid LeaseSet" + name + " not confirmed via floodfill -> Retrying...");
+                        }
+                        requeueRepublish();
+                    }
+                }
+            };
+
+            Job onFailed = new JobImpl(getContext()) {
+                public String getName() {return "Verify LS Failed";}
+                public void runJob() {
+                    _lookupInProgress = false;
+                    if (_log.shouldInfo()) {
+                        _log.info("Valid LeaseSet" + name + " not found via floodfill -> Retrying...");
+                    }
+                    requeueRepublish();
+                }
+            };
+
+            _facade.lookupLeaseSetRemotely(_ls.getHash(), onFound, onFailed, 10*1000, null);
         }
     }
 
