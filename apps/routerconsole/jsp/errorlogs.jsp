@@ -1,17 +1,14 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb"%>
-<!DOCTYPE HTML>
-<%@include file="head.jsi"%>
-<%=intl.title("router logs")%>
-</head>
-<body id=errorlogs>
 <jsp:useBean class="net.i2p.router.web.helpers.LogsHelper" id="logsHelper" scope="request"/>
-<jsp:setProperty name="logsHelper" property="contextId" value="<%=i2pcontextId%>"/>
-<%@include file="sidebar.jsi"%>
-<%  final String consoleNonce = net.i2p.router.web.CSSHelper.getNonce();
-    final String critParam = request.getParameter("crit");
-    final String nonceParam = request.getParameter("consoleNonce");
-    int last = logsHelper.getLastCriticalMessageNumber();
-    if (critParam != null && nonceParam != null) {
+<%
+   String contextId = request.getParameter("i2p.contextId");
+   if (contextId == null) {contextId = (String) session.getAttribute("i2p.contextId");}
+   logsHelper.setContextId(contextId);
+   final String consoleNonce = net.i2p.router.web.CSSHelper.getNonce();
+   final String critParam = request.getParameter("crit");
+   final String nonceParam = request.getParameter("consoleNonce");
+   int last = logsHelper.getLastCriticalMessageNumber();
+   if (critParam != null && nonceParam != null) {
         int icrit = -1;
         try {icrit = Integer.parseInt(critParam);}
         catch (NumberFormatException nfe) {}
@@ -20,8 +17,14 @@
             response.sendRedirect("errorlogs");
             return;
         }
-    }
+   }
 %>
+<!DOCTYPE HTML>
+<%@include file="head.jsi"%>
+<%=intl.title("router logs")%>
+</head>
+<body id=errorlogs>
+<%@include file="sidebar.jsi"%>
 <h1 class=log><%=intl._t("Logs")%></h1>
 <div class=main id=logs>
 <div class=confignav>
