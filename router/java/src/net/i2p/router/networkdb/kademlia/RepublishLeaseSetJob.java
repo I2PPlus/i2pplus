@@ -20,8 +20,8 @@ import net.i2p.util.Log;
  */
 public class RepublishLeaseSetJob extends JobImpl {
     private final Log _log;
-    public final static long REPUBLISH_LEASESET_TIMEOUT = 15 * 1000;
-    private final static int RETRY_DELAY = 1000;
+    public final static long REPUBLISH_LEASESET_TIMEOUT = 20 * 1000;
+    private final static int RETRY_DELAY = 3000;
     private final Hash _dest;
     private final KademliaNetworkDatabaseFacade _facade;
     private long _lastPublished;
