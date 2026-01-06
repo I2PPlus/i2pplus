@@ -136,9 +136,9 @@ public class HostChecker {
                     } else if (PROP_MAX_CONCURRENT.equals(key)) {
                         try {
                             int concurrentValue = Integer.parseInt(value);
-                            if (concurrentValue > 100) {
-                                _log.warn("Configured concurrency " + concurrentValue + " is higher than permitted maximum -> Setting to 100");
-                                concurrentValue = 100;
+                            if (concurrentValue > 160) {
+                                _log.warn("Configured concurrency " + concurrentValue + " is higher than permitted maximum -> Setting to 160");
+                                concurrentValue = 160;
                             }
                             _maxConcurrent = concurrentValue;
                             if (_log.shouldInfo()) {
@@ -1688,10 +1688,10 @@ public class HostChecker {
 
                 // Adjust interval if cycle takes too long
                 long configuredIntervalMinutes = _pingInterval / 60000;
-                long bufferMinutes = 5;
+                long bufferMinutes = 3;
 
                 if (cycleDurationMinutes > 0 && configuredIntervalMinutes > 0) {
-                    if (cycleDurationMinutes + bufferMinutes >= configuredIntervalMinutes) {
+                    if (cycleDurationMinutes > configuredIntervalMinutes) {
                         long newInterval = cycleDuration + (bufferMinutes * 60000);
                         if (_log.shouldWarn()) {
                             _log.warn("HostChecker cycle took " + cycleDurationMinutes + " minutes, which exceeds configured interval of " +
