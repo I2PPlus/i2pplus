@@ -1,5 +1,6 @@
 package net.i2p.router.networkdb.kademlia;
 
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
@@ -11,17 +12,13 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelPoolSettings;
 import net.i2p.util.Log;
 
-/**
- * Run periodically for each locally created leaseSet to cause it to be republished
- * if the client is still connected.
- *
- * This job is used to ensure that local LeaseSets are periodically republished to the network.
- * Failed republish attempts are requeued with high priority to ensure faster retries.
- */
 public class RepublishLeaseSetJob extends JobImpl {
     private final Log _log;
-    public final static long REPUBLISH_LEASESET_TIMEOUT = 20 * 1000;
-    private final static int RETRY_DELAY = 3000;
+    public final static long REPUBLISH_LEASESET_TIMEOUT = 30 * 1000;
+    private final static int RETRY_DELAY = 4000;
+    private final static long REPUBLISH_INTERVAL = 7 * 60 * 1000;
+    private final static long EXPIRY_WINDOW = 3 * 60 * 1000;
+    private static final ConcurrentHashMap<Hash, Boolean> _retryInProgress = new ConcurrentHashMap<>();
     private final Hash _dest;
     private final KademliaNetworkDatabaseFacade _facade;
     private long _lastPublished;
@@ -29,13 +26,6 @@ public class RepublishLeaseSetJob extends JobImpl {
     private boolean highPriority;
     private volatile boolean _lookupInProgress;
 
-    /**
-     * Create a new RepublishLeaseSetJob for the given destination.
-     *
-     * @param ctx the router context
-     * @param facade the network database facade used to publish the lease set
-     * @param destHash the hash of the destination whose LeaseSet should be republished
-     */
     public RepublishLeaseSetJob(RouterContext ctx, KademliaNetworkDatabaseFacade facade, Hash destHash) {
         super(ctx);
         _log = ctx.logManager().getLog(RepublishLeaseSetJob.class);
@@ -43,53 +33,66 @@ public class RepublishLeaseSetJob extends JobImpl {
         _dest = destHash;
     }
 
-    /**
-     * Get the name of this job.
-     */
     public String getName() {return "Republish Local LeaseSet" + (highPriority ? " [High priority]" : "");}
 
-    /**
-     * Main job logic: checks if the LeaseSet should be republished and publishes it if necessary.
-     */
     public void runJob() {
         long uptime = getContext().router().getUptime();
-        if (!getContext().clientManager().shouldPublishLeaseSet(_dest) || uptime < 45 * 1000) {return;}
+        if (!getContext().clientManager().shouldPublishLeaseSet(_dest)) {
+            LeaseSet ls = _facade.lookupLeaseSetLocally(_dest);
+            if (ls != null) {
+                _facade.fail(_dest);
+                if (_log.shouldDebug()) {
+                    _log.debug("Cleaning up local LeaseSet [" + _dest.toBase32().substring(0,8) + "] on service stop");
+                }
+            }
+            _facade.stopPublishing(_dest);
+            return;
+        }
+        if (uptime < 30 * 1000) {
+            long delay = Math.max(1000, 30 * 1000 - uptime);
+            scheduleRepublish(delay);
+            return;
+        }
         try {
             if (getContext().clientManager().isLocal(_dest)) {
                 LeaseSet ls = _facade.lookupLeaseSetLocally(_dest);
                 if (ls != null) {
                     String tunnelName = getTunnelName(ls.getDestination());
-                    String name = !tunnelName.isEmpty() ? " for \'" + tunnelName + "\'" : " for key";
+                    String name = !tunnelName.isEmpty() ? " for '" + tunnelName + "'" : " for key";
                     if (!ls.isCurrent(Router.CLOCK_FUDGE_FACTOR)) {
                         if (_log.shouldWarn()) {
                             _log.warn("Not publishing expired LOCAL LeaseSet" + name + " [" + _dest.toBase32().substring(0,8) + "]");
                         }
+                        scheduleRepublish(REPUBLISH_INTERVAL);
                     } else {
+                        long timeUntilExpiry = ls.getLatestLeaseDate() - getContext().clock().now();
                         if (_log.shouldInfo()) {
-                            _log.info("Attempting to publish LeaseSet" + name + " [" + _dest.toBase32().substring(0,8) + "]...");
+                            _log.info("Attempting to publish LeaseSet" + name + " [" + _dest.toBase32().substring(0,8) +
+                                       "] (expires in " + (timeUntilExpiry / 1000) + "s)...");
                         }
                         getContext().statManager().addRateData("netDb.republishLeaseSetCount", 1);
                         failCount.set(0);
                         _facade.sendStore(_dest, ls, null, new OnRepublishFailure(ls), REPUBLISH_LEASESET_TIMEOUT, null);
                         _lastPublished = getContext().clock().now();
+                        scheduleRepublish(REPUBLISH_INTERVAL);
                     }
                 } else {
                     if (_log.shouldWarn()) {
                         _log.warn("Client [" + _dest.toBase32().substring(0,8) + "] is LOCAL, but no valid LeaseSet found -> Being rebuilt?");
                     }
+                    clearRetryInProgress();
+                    scheduleRepublish(REPUBLISH_INTERVAL);
                 }
-                return;
             } else {
                 if (_log.shouldInfo()) {
                     _log.info("Client [" + _dest.toBase32().substring(0,8) + "] is no longer LOCAL -> Not republishing LeaseSet");
                 }
-                // Clean up the orphaned LeaseSet to prevent future expiration errors
                 LeaseSet ls = _facade.lookupLeaseSetLocally(_dest);
                 if (ls != null && !ls.isCurrent(Router.CLOCK_FUDGE_FACTOR)) {
                     _facade.fail(_dest);
                 }
+                _facade.stopPublishing(_dest);
             }
-            _facade.stopPublishing(_dest);
         } catch (RuntimeException re) {
             if (_log.shouldError()) {_log.error("Uncaught error republishing the LeaseSet", re);}
             _facade.stopPublishing(_dest);
@@ -97,49 +100,52 @@ public class RepublishLeaseSetJob extends JobImpl {
         }
     }
 
-    /**
-     * Requeues this job to retry the republish attempt.
-     * Adds the job normally on the first failure to avoid aggressive retries,
-     * and uses high priority to enqueue the job at the front of the queue
-     * every 4th failure to enable faster retries.
-     */
+    private void scheduleRepublish(long delayMs) {
+        RepublishLeaseSetJob nextJob = new RepublishLeaseSetJob(getContext(), _facade, _dest);
+        nextJob.getTiming().setStartAfter(getContext().clock().now() + delayMs);
+        getContext().jobQueue().addJob(nextJob);
+    }
+
     void requeueRepublish() {
+        if (_retryInProgress.putIfAbsent(_dest, Boolean.TRUE) != null) {
+            if (_log.shouldDebug()) {
+                _log.debug("Retry already in progress for " + _dest.toBase32().substring(0,8) + "] -> Skipping...");
+            }
+            return;
+        }
         int count = failCount.incrementAndGet();
         LeaseSet ls = getContext().clientManager().isLocal(_dest) ? _facade.lookupLeaseSetLocally(_dest) : null;
         String b32 = _dest.toBase32().substring(0,8);
         String tunnelName = ls != null ? getTunnelName(ls.getDestination()) : "";
-        String name = !tunnelName.isEmpty() ? "\'" + tunnelName + "\'" + " [" + b32 + "]" : "[" + b32 + "]";
+        String name = !tunnelName.isEmpty() ? "'" + tunnelName + "'" + " [" + b32 + "]" : "[" + b32 + "]";
         String countStr = count > 1 ? " (Attempt: " + count + ")" : "";
-        if (_log.shouldInfo()) {
-            _log.info("Failed to publish LeaseSet for " + name + " -> Retrying..." + countStr + (highPriority ? " [High priority]" : ""));
+        if (_log.shouldInfo() && count > 3) {
+            _log.info("Failed to publish LeaseSet for " + name + " -> Retrying..." + countStr);
         }
         getContext().statManager().addRateData("netDb.republishLeaseSetFail", 1);
-        getContext().jobQueue().removeJob(this);
-        // Run high priority every 4th fail
-        if (count % 4 == 0) {highPriority = true;}
-        requeue(RETRY_DELAY, highPriority);
+
+        long retryDelay = RETRY_DELAY;
+        boolean isHighPriority = false;
+        if (count % 4 == 0) {
+            retryDelay = Math.max(100, RETRY_DELAY / 4);
+            isHighPriority = true;
+        }
+        RepublishLeaseSetJob retryJob = new RepublishLeaseSetJob(getContext(), _facade, _dest);
+        retryJob.getTiming().setStartAfter(getContext().clock().now() + retryDelay);
+        if (isHighPriority) {
+            retryJob.highPriority = true;
+            getContext().jobQueue().addJobToTop(retryJob);
+        } else {
+            getContext().jobQueue().addJob(retryJob);
+        }
     }
 
-    /**
-     * Requeues the job after a delay.
-     *
-     * @param delayMs delay in milliseconds before the job is run
-     * @param highPriority if true, adds the job to the front of the queue
-     */
-    private void requeue(long delayMs, boolean highPriority) {
-        requeue(delayMs);
-        if (highPriority) {getContext().jobQueue().addJobToTop(this);}
-        else {getContext().jobQueue().addJob(this);}
+    private void clearRetryInProgress() {
+        _retryInProgress.remove(_dest);
     }
 
-    /**
-     * @return last attempted publish time, or 0 if never
-     */
     public long lastPublished() {return _lastPublished;}
 
-    /**
-     * Callback job executed if the lease set publication fails.
-     */
     private class OnRepublishFailure extends JobImpl {
         private final LeaseSet _ls;
 
@@ -157,6 +163,7 @@ public class RepublishLeaseSetJob extends JobImpl {
             String name = !tunnelName.isEmpty() ? " for '" + tunnelName + "'" : "";
 
             if (ls == null || KademliaNetworkDatabaseFacade.isNewer(ls, _ls)) {
+                clearRetryInProgress();
                 if (_log.shouldInfo()) {
                     _log.info("Not requeueing LeaseSet" + name + " [" +
                               _ls.getDestination().calculateHash().toBase32().substring(0,8) +
@@ -169,8 +176,7 @@ public class RepublishLeaseSetJob extends JobImpl {
                 _lookupInProgress = true;
                 if (_log.shouldInfo()) {
                     _log.info("Verifying LeaseSet publication" + name + " [" +
-                              _ls.getDestination().calculateHash().toBase32().substring(0,8) +
-                              "] via floodfill...");
+                              _ls.getDestination().calculateHash().toBase32().substring(0,8) + "] via floodfill...");
                 }
                 verifyAndRetry(ls);
             } else {
@@ -186,6 +192,7 @@ public class RepublishLeaseSetJob extends JobImpl {
                 public String getName() {return "Verify LS Published";}
                 public void runJob() {
                     _lookupInProgress = false;
+                    clearRetryInProgress();
                     LeaseSet local = _facade.lookupLeaseSetLocally(_ls.getHash());
                     if (local != null && KademliaNetworkDatabaseFacade.isNewer(local, ls)) {
                         if (_log.shouldInfo()) {
@@ -204,6 +211,7 @@ public class RepublishLeaseSetJob extends JobImpl {
                 public String getName() {return "Verify LS Failed";}
                 public void runJob() {
                     _lookupInProgress = false;
+                    clearRetryInProgress();
                     if (_log.shouldInfo()) {
                         _log.info("Valid LeaseSet" + name + " not found via floodfill -> Retrying...");
                     }
@@ -215,12 +223,6 @@ public class RepublishLeaseSetJob extends JobImpl {
         }
     }
 
-    /**
-     * Attempts to get a human-readable tunnel name for the given destination.
-     *
-     * @param d destination to look up
-     * @return nickname if available, otherwise empty string
-     */
     public String getTunnelName(Destination d) {
         TunnelPoolSettings in = getContext().tunnelManager().getInboundSettings(d.calculateHash());
         String name = (in != null ? in.getDestinationNickname() : null);
@@ -228,7 +230,6 @@ public class RepublishLeaseSetJob extends JobImpl {
             TunnelPoolSettings out = getContext().tunnelManager().getOutboundSettings(d.calculateHash());
             name = (out != null ? out.getDestinationNickname() : null);
         }
-        return name != null ? name : "";
+        return name != null ? name : "[" + d.calculateHash().toBase32().substring(0,8) + "]";
     }
-
 }

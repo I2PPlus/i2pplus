@@ -210,6 +210,7 @@ public class JobQueue {
             if (_highPriorityJobs.contains(job)) {
                 _highPriorityJobs.remove(job);
             }
+            if (job instanceof JobImpl) {((JobImpl) job).madeReady(_context.clock().now());}
             _highPriorityJobs.offer(job);
         }
 

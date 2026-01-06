@@ -79,16 +79,13 @@ class ExpireLeasesJob extends JobImpl {
                 LeaseSet ls = (LeaseSet) obj;
                 Hash h = entry.getKey();
                 boolean isLocal = ctx.clientManager().isLocal(h);
+                // Skip local LeaseSets - they're managed by RepublishLeaseSetJob
+                if (isLocal) {
+                    continue;
+                }
                 if (!ls.isCurrent(Router.CLOCK_FUDGE_FACTOR)) {
-                    // Double-check if still local to avoid race conditions
-                    boolean stillLocal = ctx.clientManager().isLocal(h) && ctx.clientManager().shouldPublishLeaseSet(h);
                     toExpire.add(h);
-                    if (stillLocal && ctx.router().getUptime() > 20*60*1000) {
-                        tunnelName = ls != null && getTunnelName(ls.getDestination()) != null ?
-                                     " for \'" + getTunnelName(ls.getDestination()) + "\'" : "";
-                        _log.logAlways(Log.ERROR, "LOCAL LeaseSet" + tunnelName + " [" + h.toBase32().substring(0,8) + "] has expired");
-                    }
-                } else if (!isLocal) {
+                } else {
                     sz++;
                     current.add(ls);
                 }
