@@ -3,10 +3,26 @@ plugins {
     id 'scala'
     id 'me.champeau.jmh' version '0.7.3'
     id 'net.ltgt.errorprone' version '4.3.0'
+    id 'org.danilopianini.gradle-java-qa' version '1.164.0'
 }
 
 dependencies {
     errorprone 'com.google.errorprone:error_prone_core:2.35.1'
+}
+
+spotbugs {
+    showStackTraces = true
+    showProgress = true
+    effort = 'default'
+    reportLevel = 'default'
+    ignoreFailures = true
+}
+
+spotbugsMain {
+    reports {
+        xml.required = true
+        html.required = true
+    }
 }
 
 compileJava {
