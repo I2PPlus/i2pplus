@@ -62,6 +62,7 @@ public class HostChecker {
     private final AtomicBoolean _running;
     private final AtomicBoolean _categoriesDownloaded;
     private final AtomicBoolean _categoriesDownloadSuccessful;
+    private final AtomicBoolean _cycleInProgress;
     private final File _hostsCheckFile;
     private final File _categoriesFile;
     private final File _blacklistFile;
@@ -71,9 +72,9 @@ public class HostChecker {
     private int _categoryRetryCount = 0;
 
     // Configuration defaults
-    private static final long DEFAULT_PING_INTERVAL = 8 * 60 * 60 * 1000L; // 8 hours
-    private static final long DEFAULT_PING_TIMEOUT = 90 * 1000L; // 90 seconds
-    private static final int DEFAULT_MAX_CONCURRENT = 12;
+    private static final long DEFAULT_PING_INTERVAL = 4 * 60 * 60 * 1000L; // 4 hours
+    private static final long DEFAULT_PING_TIMEOUT = 60 * 1000L; // 60 seconds
+    private static final int DEFAULT_MAX_CONCURRENT = 16;
 
     // Configuration property names
     private static final String PROP_PING_INTERVAL = "pingInterval";
@@ -109,9 +110,22 @@ public class HostChecker {
 
                     if (PROP_PING_INTERVAL.equals(key)) {
                         try {
-                            _pingInterval = Long.parseLong(value) * 60 * 60 * 1000L;
-                            if (_log.shouldInfo()) {
-                                _log.info("Loaded ping interval from config: " + value + (Integer.parseInt(value) > 1 ? " hours" : " hour"));
+                            String rawValue = value;
+                            boolean isMinutes = rawValue.toUpperCase().endsWith("M");
+                            if (isMinutes) {
+                                rawValue = rawValue.substring(0, rawValue.length() - 1).trim();
+                            }
+                            long intervalValue = Long.parseLong(rawValue);
+                            if (isMinutes) {
+                                _pingInterval = intervalValue * 60 * 1000L;
+                                if (_log.shouldInfo()) {
+                                    _log.info("Loaded ping interval from config: " + value + " (" + intervalValue + " minutes)");
+                                }
+                            } else {
+                                _pingInterval = intervalValue * 60 * 60 * 1000L;
+                                if (_log.shouldInfo()) {
+                                    _log.info("Loaded ping interval from config: " + value + (intervalValue > 1 ? " hours" : " hour"));
+                                }
                             }
                         } catch (NumberFormatException e) {
                             if (_log.shouldWarn()) {
@@ -166,15 +180,29 @@ public class HostChecker {
     private boolean _useLeaseSetCheck = true;
 
     /**
-     * Ping result data structure
+     * Ping result data structure containing the outcome of a host reachability test.
+     * Immutable - all fields are final.
      */
     public static class PingResult {
+        /** true if the host was reachable via LeaseSet lookup, ping, or HTTP HEAD */
         public final boolean reachable;
+        /** timestamp of when this result was recorded (Java time) */
         public final long timestamp;
+        /** response time in milliseconds, or -1 if not available */
         public final long responseTime;
+        /** the host category from categories.txt, or null */
         public final String category;
+        /** LeaseSet encryption types as a string like "[6,4]", or null */
         public final String leaseSetTypes;
 
+        /**
+         * Create a new PingResult with all fields.
+         * @param reachable true if host was reachable
+         * @param timestamp time of the test result
+         * @param responseTime response time in ms, or -1
+         * @param category the host category
+         * @param leaseSetTypes the LeaseSet encryption types
+         */
         public PingResult(boolean reachable, long timestamp, long responseTime, String category, String leaseSetTypes) {
             this.reachable = reachable;
             this.timestamp = timestamp;
@@ -183,10 +211,16 @@ public class HostChecker {
             this.leaseSetTypes = leaseSetTypes;
         }
 
+        /**
+         * Create a new PingResult without LeaseSet types.
+         */
         public PingResult(boolean reachable, long timestamp, long responseTime, String category) {
             this(reachable, timestamp, responseTime, category, null);
         }
 
+        /**
+         * Create a new PingResult with minimal fields.
+         */
         public PingResult(boolean reachable, long timestamp, long responseTime) {
             this(reachable, timestamp, responseTime, null, null);
         }
@@ -214,6 +248,7 @@ public class HostChecker {
         _running = new AtomicBoolean(false);
         _categoriesDownloaded = new AtomicBoolean(false);
         _categoriesDownloadSuccessful = new AtomicBoolean(false);
+        _cycleInProgress = new AtomicBoolean(false);
 
         // Only enable LeaseSet checking if we have access to the network database
         // This will be true when running inside the router (RouterContext)
@@ -378,8 +413,11 @@ public class HostChecker {
                 boolean isCurrent = leaseSet.isCurrent(_context.clock().now());
                 reachable = isCurrent;
 
-                synchronized (_pingResults) {
-                    _pingResults.put(hostname, createPingResult(reachable, startTime, existingResponseTime, hostname, leaseSetTypes));
+                // Only save if we have a previous result to preserve
+                if (existingResponseTime > -1) {
+                    synchronized (_pingResults) {
+                        _pingResults.put(hostname, createPingResult(reachable, startTime, existingResponseTime, hostname, leaseSetTypes));
+                    }
                 }
 
                 if (_log.shouldInfo()) {
@@ -388,7 +426,9 @@ public class HostChecker {
                     }
                 }
 
-                savePingResults();
+                if (reachable && existingResponseTime > -1) {
+                    savePingResults();
+                }
                 return createPingResult(reachable, startTime, existingResponseTime, hostname, leaseSetTypes);
             } else {
                 return lookupLeaseSetRemotely(hostname, destination, destHash, startTime, existingResponseTime);
@@ -414,6 +454,7 @@ public class HostChecker {
 
     /**
      * Test a single destination immediately
+     * If LeaseSet lookup succeeds, we don't overwrite the result with failed ping/eephead
      *
      * @param hostname hostname to test
      * @return ping result
@@ -442,12 +483,16 @@ public class HostChecker {
                 _log.info("HostChecker lset [SUCCESS] -> LeaseSet " + leaseSetResult.leaseSetTypes + " found for " + hostname + ", continuing with ping...");
             }
 
-            PingResult pingResult = pingDestination(hostname, destination, leaseSetResult.leaseSetTypes);
+            PingResult pingResult = pingDestination(hostname, destination, leaseSetResult.leaseSetTypes, false);
             if (pingResult.reachable) {
                 return pingResult;
             }
 
-            return fallbackToEepHead(hostname, pingResult.timestamp, leaseSetResult.leaseSetTypes);
+            PingResult eepHeadResult = fallbackToEepHead(hostname, pingResult.timestamp, leaseSetResult.leaseSetTypes, false);
+            if (eepHeadResult.reachable) {
+                return eepHeadResult;
+            }
+            return leaseSetResult; // don't mark a host as down if it has a valid leaseset but fails ping/eephead tests
         } else {
             PingResult pingResult = pingDestination(hostname, destination);
             if (pingResult.reachable) {
@@ -528,12 +573,19 @@ public class HostChecker {
                     leaseSetTypes = formatLeaseSetTypes(leaseSet);
                 }
 
+                if (existingResponseTime > -1) {
+                    PingResult result = createPingResult(true, startTime, existingResponseTime, hostname, leaseSetTypes);
+                    synchronized (_pingResults) {
+                        _pingResults.put(hostname, result);
+                    }
+                    savePingResults();
+                    return result;
+                }
+
                 PingResult result = createPingResult(true, startTime, -1, hostname, leaseSetTypes);
                 synchronized (_pingResults) {
                     _pingResults.put(hostname, result);
                 }
-
-                savePingResults();
                 return result;
             } else {
                 PingResult result = createPingResult(false, startTime, -1, hostname, leaseSetTypes);
@@ -577,6 +629,15 @@ public class HostChecker {
      * Falls back to EepHead HTTP HEAD request if ping fails, accepts leaseSetTypes parameter
      */
     private PingResult pingDestination(String hostname, Destination destination, String leaseSetTypes) {
+        return pingDestination(hostname, destination, leaseSetTypes, true);
+    }
+
+    /**
+     * Ping destination using single tunnel and I2Ping-style retry handling
+     * Falls back to EepHead HTTP HEAD request if ping fails, accepts leaseSetTypes parameter
+     * @param saveResult whether to save the result to _pingResults (false when LeaseSet lookup already succeeded)
+     */
+    private PingResult pingDestination(String hostname, Destination destination, String leaseSetTypes, boolean saveResult) {
         long startTime = System.currentTimeMillis();
         I2PSocketManager pingSocketManager = null;
         String displayHostname = hostname;
@@ -652,34 +713,46 @@ public class HostChecker {
 
             if (reachable) {
                 PingResult result = createPingResult(true, startTime, pingTime, hostname, leaseSetTypes);
-                synchronized (_pingResults) {
-                    _pingResults.put(hostname, result);
+                if (saveResult) {
+                    synchronized (_pingResults) {
+                        _pingResults.put(hostname, result);
+                    }
+                    if (_log.shouldInfo()) {
+                        _log.info("HostChecker ping [SUCCESS] -> Received response from " + displayHostname + " " + leaseSetTypes + " in " + pingTime + "ms");
+                    }
+                    savePingResults();
+                } else {
+                    synchronized (_pingResults) {
+                        _pingResults.put(hostname, result);
+                    }
+                    savePingResults();
                 }
-                if (_log.shouldInfo()) {
-                    _log.info("HostChecker ping [SUCCESS] -> Received response from " + displayHostname + " " + leaseSetTypes + " in " + pingTime + "ms");
-                }
-                savePingResults();
                 return result;
             } else {
                 PingResult result = createPingResult(false, startTime, -1, hostname, leaseSetTypes);
-                synchronized (_pingResults) {
-                    _pingResults.put(hostname, result);
+                if (saveResult) {
+                    synchronized (_pingResults) {
+                        _pingResults.put(hostname, result);
+                    }
+                    savePingResults();
+                    if (_log.shouldInfo()) {
+                        _log.info("HostChecker ping [FAILURE] -> No response from " + displayHostname + " " + leaseSetTypes + ", trying eephead...");
+                    }
+                    return fallbackToEepHead(hostname, startTime, leaseSetTypes, saveResult);
                 }
-                savePingResults();
-                if (_log.shouldInfo()) {
-                    _log.info("HostChecker ping [FAILURE] -> No response from " + displayHostname + " " + leaseSetTypes + ", trying eephead...");
-                }
-                return fallbackToEepHead(hostname, startTime, leaseSetTypes);
+                return result;
             }
 
         } catch (Exception e) {
             PingResult result = createPingResult(false, startTime, -1, hostname, leaseSetTypes);
-            synchronized (_pingResults) {
-                _pingResults.put(hostname, result);
-            }
-            savePingResults();
-            if (_log.shouldWarn()) {
-                _log.warn("HostChecker ping error for " + displayHostname + " -> " + e.getMessage());
+            if (saveResult) {
+                synchronized (_pingResults) {
+                    _pingResults.put(hostname, result);
+                }
+                savePingResults();
+                if (_log.shouldWarn()) {
+                    _log.warn("HostChecker ping error for " + displayHostname + " -> " + e.getMessage());
+                }
             }
             return result;
         } finally {
@@ -711,6 +784,15 @@ public class HostChecker {
      * Marks site as up if any response is received
      */
     private PingResult fallbackToEepHead(String hostname, long startTime, String leaseSetTypes) {
+        return fallbackToEepHead(hostname, startTime, leaseSetTypes, true);
+    }
+
+    /**
+     * Fallback method to use EepHead for HTTP HEAD request testing
+     * Marks site as up if any response is received
+     * @param saveResult whether to save the result to _pingResults (false when LeaseSet lookup already succeeded)
+     */
+    private PingResult fallbackToEepHead(String hostname, long startTime, String leaseSetTypes, boolean saveResult) {
         try {
             String url = "http://" + hostname;
             EepHead eepHead = new EepHead(_context, "127.0.0.1", 4444, 1, url);
@@ -764,19 +846,21 @@ public class HostChecker {
             long responseTime = success ? System.currentTimeMillis() - eepHeadStart : -1;
 
             PingResult result = createPingResult(success, startTime, responseTime, hostname, leaseSetTypes);
-            synchronized (_pingResults) {
-                _pingResults.put(hostname, result);
-            }
-
-            if (_log.shouldInfo()) {
-                if (success) {
-                    _log.info("HostChecker head [SUCCESS] -> Received response from " + hostname + " " + leaseSetTypes + " in " + responseTime + "ms");
-                } else {
-                    _log.info("HostChecker head [FAILURE] -> No response from " + hostname + " " + leaseSetTypes);
+            if (saveResult || success) {
+                synchronized (_pingResults) {
+                    _pingResults.put(hostname, result);
                 }
-            }
 
-            savePingResults();
+                if (_log.shouldInfo()) {
+                    if (success) {
+                        _log.info("HostChecker head [SUCCESS] -> Received response from " + hostname + " " + leaseSetTypes + " in " + responseTime + "ms");
+                    } else {
+                        _log.info("HostChecker head [FAILURE] -> No response from " + hostname + " " + leaseSetTypes);
+                    }
+                }
+
+                savePingResults();
+            }
             return result;
 
         } catch (Exception e) {
@@ -785,11 +869,13 @@ public class HostChecker {
             }
 
             PingResult result = createPingResult(false, startTime, -1, hostname, leaseSetTypes != null ? leaseSetTypes : "[]");
-            synchronized (_pingResults) {
-                _pingResults.put(hostname, result);
-            }
+            if (saveResult) {
+                synchronized (_pingResults) {
+                    _pingResults.put(hostname, result);
+                }
 
-            savePingResults();
+                savePingResults();
+            }
             return result;
         }
     }
@@ -1466,6 +1552,14 @@ public class HostChecker {
                 return;
             }
 
+            // Skip if previous cycle is still in progress
+            if (!_cycleInProgress.compareAndSet(false, true)) {
+                if (_log.shouldInfo()) {
+                    _log.info("Skipping HostChecker cycle - previous cycle still in progress");
+                }
+                return;
+            }
+
             // Get all hostnames and randomize order
             Set<String> allHostnamesSet = getAllHostnames();
             java.util.List<String> allHostnames = new java.util.ArrayList<String>(allHostnamesSet);
@@ -1482,8 +1576,11 @@ public class HostChecker {
                 if (_log.shouldWarn()) {
                     _log.warn("HostChecker startup delay interrupted", e);
                 }
+                _cycleInProgress.set(false);
                 return;
             }
+
+            long cycleStartTime = System.currentTimeMillis();
 
             try {
                 int total = 0;
@@ -1576,8 +1673,32 @@ public class HostChecker {
                     }
                 }
 
+                // Calculate cycle duration
+                long cycleDuration = System.currentTimeMillis() - cycleStartTime;
+                long cycleDurationMinutes = cycleDuration / 60000;
+                long cycleDurationSeconds = (cycleDuration / 1000) % 60;
+
                 if (_log.shouldInfo()) {
-                    _log.info("HostChecker cycle completed: " + success + " / " + total + " reachable (" + skipped + " blacklisted hosts skipped)");
+                    String durationStr = cycleDurationMinutes > 0
+                        ? cycleDurationMinutes + "m " + cycleDurationSeconds + "s"
+                        : cycleDurationSeconds + "s";
+                    _log.info("HostChecker cycle completed in " + durationStr + ": " +
+                              success + " / " + total + " reachable (" + skipped + " blacklisted hosts skipped)");
+                }
+
+                // Adjust interval if cycle takes too long
+                long configuredIntervalMinutes = _pingInterval / 60000;
+                long bufferMinutes = 5;
+
+                if (cycleDurationMinutes > 0 && configuredIntervalMinutes > 0) {
+                    if (cycleDurationMinutes + bufferMinutes >= configuredIntervalMinutes) {
+                        long newInterval = cycleDuration + (bufferMinutes * 60000);
+                        if (_log.shouldWarn()) {
+                            _log.warn("HostChecker cycle took " + cycleDurationMinutes + " minutes, which exceeds configured interval of " +
+                                      configuredIntervalMinutes + " minutes -> Adjusting interval to " + (newInterval / 60000) + " minutes");
+                        }
+                        _pingInterval = newInterval;
+                    }
                 }
 
                 // Save ping results to file after each cycle
@@ -1586,6 +1707,8 @@ public class HostChecker {
                 if (_log.shouldWarn()) {
                     _log.warn("Error during HostChecker cycle", e);
                 }
+            } finally {
+                _cycleInProgress.set(false);
             }
         }
     }
