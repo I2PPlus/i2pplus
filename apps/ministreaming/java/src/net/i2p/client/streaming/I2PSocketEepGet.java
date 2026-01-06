@@ -319,6 +319,8 @@ public class I2PSocketEepGet extends EepGet {
         opts.setProperty("i2cp.dontPublishLeaseSet", "true");
         opts.setProperty("inbound.quantity", "1");
         opts.setProperty("outbound.quantity", "1");
+        opts.setProperty("inbound.backupQuantity", "0");
+        opts.setProperty("outbound.backupQuantity", "0");
         opts.setProperty("inbound.length", "1");
         opts.setProperty("outbound.length", "1");
         opts.setProperty("inbound.nickname", "I2PSocketEepGet");

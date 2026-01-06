@@ -595,6 +595,8 @@ public class HostChecker {
             options.setProperty("outbound.nickname", "Ping [" + hostname.replace(".i2p", "") + "]");
             options.setProperty("inbound.quantity", "1");
             options.setProperty("outbound.quantity", "1");
+            options.setProperty("inbound.backupQuantity", "0");
+            options.setProperty("outbound.backupQuantity", "0");
             options.setProperty("i2cp.leaseSetType", "3");
             options.setProperty("i2cp.leaseSetEncType", "6,4");
             options.setProperty("i2cp.dontPublishLeaseSet", "true");

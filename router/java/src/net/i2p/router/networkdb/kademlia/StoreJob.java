@@ -157,6 +157,7 @@ abstract class StoreJob extends JobImpl {
 
     /**
      * Get the maximum number of parallel store operations.
+     * Note: Overridden in Floodfill Search Job.
      *
      * @return number of messages to send simultaneously
      */
@@ -164,6 +165,7 @@ abstract class StoreJob extends JobImpl {
 
     /**
      * Get the required redundancy level for successful store.
+     * Note: Overridden in Floodfill Search Job.
      *
      * @return number of peers that must receive the data
      */
