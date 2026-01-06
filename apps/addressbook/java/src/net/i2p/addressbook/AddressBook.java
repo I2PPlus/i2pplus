@@ -51,6 +51,7 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
     private final File subFile;
     private boolean modified;
     private static final boolean DEBUG = false;
+    private static final net.i2p.util.Log _log = new net.i2p.util.Log(AddressBook.class);
 
     private static final int MIN_DEST_LENGTH = 516;
     private static final int MAX_DEST_LENGTH = MIN_DEST_LENGTH + 100;  // longer than any known cert type for now
@@ -123,10 +124,11 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
                 String eTag = get.getEtag();
                 boolean hasLastMod = get.getLastModified() != null;
                 boolean hasEtag = get.getEtag() != null;
-                System.out.println("Checking [" + loc.replace("http://", "") + "] -> " + (
-                                   hasLastMod ? "Last modified: " + lastMod :
-                                   hasEtag ? "ETag: " + eTag :
-                                   "No ETag or Last Modified headers"));
+                if (_log.shouldInfo()) {
+                    _log.info("Checking [" + loc.replace("http://", "") + "] -> " +
+                              (hasLastMod ? "Last modified: " + lastMod : hasEtag ? "ETag: " +
+                              eTag : "No ETag or Last Modified headers"));
+                }
                 a = Collections.emptyMap(); // Addresses not loaded here, so keep empty map
             } else {
                 a = Collections.emptyMap();
@@ -378,7 +380,7 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
         if (this.modified) {
             try {HostTxtParser.write(this.addresses, file);}
             catch (IOException exp) {
-                System.err.println("Error writing addressbook " + file.getAbsolutePath() + " : " + exp.toString());
+                _log.error("Error writing addressbook " + file.getAbsolutePath(), exp);
             }
         }
     }
