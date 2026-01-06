@@ -36,7 +36,9 @@ function start() {
       processUpdates(doc, els, state);
       requestAnimationFrame(() => {
         state.updates.forEach(fn => fn());
-        applyFilter(els);
+        if ($("routerlogs")) {
+          applyFilter(els);
+        }
         state.updates = [];
       });
     };
@@ -95,9 +97,15 @@ function start() {
   function refreshLogs(state, els) {
     if (document.hidden || !navigator.onLine) return;
     progressx.show(theme);
-    state.worker.port.postMessage({ url: "/logs" });
+    if ($("routerlogs")) {
+      state.worker.port.postMessage({ url: "/routerlogs" });
+      addFilterInput(els);
+    } else if ($("criticallogs")) {
+      state.worker.port.postMessage({ url: "/errorlogs" });
+    } else if ($("wrapperlogs")) {
+      state.worker.port.postMessage({ url: "/servicelogs" });
+    }
     updateInterval(state, els);
-    addFilterInput(els);
     progressx.hide();
   }
 
@@ -131,7 +139,8 @@ function start() {
   }
 
   function addFilterInput(els) {
-    if (!els.routerlogs || els.filterInput._listenerAdded) return;
+    if (!els.routerlogs) return;
+    if (els.filterInput._listenerAdded) return;
 
     const debounce = (fn, delay) => {
       let timeout;
@@ -146,6 +155,7 @@ function start() {
   }
 
   function applyFilter(els) {
+    if (!$("routerlogs")) return;
     const filterValue = els.filterInput.value.toLowerCase();
     if (els.routerlogsList) {
       els.routerlogsList.querySelectorAll("li").forEach(li => {
@@ -313,17 +323,19 @@ function start() {
     addFilterInput(els);
     applyFilter(els);
 
-    els.toggleRefresh.addEventListener("click", () => {
-      const isOn = els.toggleRefresh.classList.contains("enabled");
-      if (isOn) {
-        els.toggleRefresh.classList.replace("enabled", "disabled");
-        stopRefresh();
-      } else {
-        els.toggleRefresh.classList.replace("disabled", "enabled");
-        refreshLogs(state, els);
-        initRefresh();
-      }
-    });
+    if ($("routerlogs")) {
+      els.toggleRefresh.addEventListener("click", () => {
+        const isOn = els.toggleRefresh.classList.contains("enabled");
+        if (isOn) {
+          els.toggleRefresh.classList.replace("enabled", "disabled");
+          stopRefresh();
+        } else {
+          els.toggleRefresh.classList.replace("disabled", "enabled");
+          refreshLogs(state, els);
+          initRefresh();
+        }
+      });
+    }
   });
 }
 
