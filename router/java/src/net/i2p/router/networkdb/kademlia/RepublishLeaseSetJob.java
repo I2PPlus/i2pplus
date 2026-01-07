@@ -19,6 +19,9 @@ public class RepublishLeaseSetJob extends JobImpl {
     private final static long REPUBLISH_INTERVAL = 7 * 60 * 1000;
     private final static long EXPIRY_WINDOW = 3 * 60 * 1000;
     private static final ConcurrentHashMap<Hash, Boolean> _retryInProgress = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<Hash, Long> _lastPublishLogTime = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<Hash, Long> _lastVerifyLogTime = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<Hash, Long> _lastNotRequeueLogTime = new ConcurrentHashMap<>();
     private final Hash _dest;
     private final KademliaNetworkDatabaseFacade _facade;
     private long _lastPublished;
@@ -37,23 +40,23 @@ public class RepublishLeaseSetJob extends JobImpl {
 
     public void runJob() {
         long uptime = getContext().router().getUptime();
-        if (!getContext().clientManager().shouldPublishLeaseSet(_dest)) {
-            LeaseSet ls = _facade.lookupLeaseSetLocally(_dest);
-            if (ls != null) {
-                _facade.fail(_dest);
-                if (_log.shouldDebug()) {
-                    _log.debug("Cleaning up local LeaseSet [" + _dest.toBase32().substring(0,8) + "] on service stop");
-                }
-            }
-            _facade.stopPublishing(_dest);
-            return;
-        }
-        if (uptime < 30 * 1000) {
-            long delay = Math.max(1000, 30 * 1000 - uptime);
-            scheduleRepublish(delay);
-            return;
-        }
         try {
+            if (!getContext().clientManager().shouldPublishLeaseSet(_dest)) {
+                LeaseSet ls = _facade.lookupLeaseSetLocally(_dest);
+                if (ls != null) {
+                    _facade.fail(_dest);
+                    if (_log.shouldDebug()) {
+                        _log.debug("Cleaning up local LeaseSet [" + _dest.toBase32().substring(0,8) + "] on service stop");
+                    }
+                }
+                _facade.stopPublishing(_dest);
+                return;
+            }
+            if (uptime < 30 * 1000) {
+                long delay = Math.max(1000, 30 * 1000 - uptime);
+                scheduleRepublish(delay);
+                return;
+            }
             if (getContext().clientManager().isLocal(_dest)) {
                 LeaseSet ls = _facade.lookupLeaseSetLocally(_dest);
                 if (ls != null) {
@@ -66,14 +69,17 @@ public class RepublishLeaseSetJob extends JobImpl {
                         scheduleRepublish(REPUBLISH_INTERVAL);
                     } else {
                         long timeUntilExpiry = ls.getLatestLeaseDate() - getContext().clock().now();
-                        if (_log.shouldInfo()) {
+                        long now = getContext().clock().now();
+                        Long lastPubLog = _lastPublishLogTime.get(_dest);
+                        if (_log.shouldInfo() && (lastPubLog == null || (now - lastPubLog > 10 * 1000))) {
                             _log.info("Attempting to publish LeaseSet" + name + " [" + _dest.toBase32().substring(0,8) +
                                        "] (expires in " + (timeUntilExpiry / 1000) + "s)...");
+                            _lastPublishLogTime.put(_dest, now);
                         }
                         getContext().statManager().addRateData("netDb.republishLeaseSetCount", 1);
                         failCount.set(0);
                         _facade.sendStore(_dest, ls, null, new OnRepublishFailure(ls), REPUBLISH_LEASESET_TIMEOUT, null);
-                        _lastPublished = getContext().clock().now();
+                        _lastPublished = now;
                         scheduleRepublish(REPUBLISH_INTERVAL);
                     }
                 } else {
@@ -164,19 +170,25 @@ public class RepublishLeaseSetJob extends JobImpl {
 
             if (ls == null || KademliaNetworkDatabaseFacade.isNewer(ls, _ls)) {
                 clearRetryInProgress();
-                if (_log.shouldInfo()) {
+                long now = getContext().clock().now();
+                Long lastNotRequeueLog = _lastNotRequeueLogTime.get(_ls.getHash());
+                if (_log.shouldInfo() && (lastNotRequeueLog == null || (now - lastNotRequeueLog > 10 * 1000))) {
                     _log.info("Not requeueing LeaseSet" + name + " [" +
                               _ls.getDestination().calculateHash().toBase32().substring(0,8) +
                               "] -> Newer LeaseSet exists locally");
+                    _lastNotRequeueLogTime.put(_ls.getHash(), now);
                 }
                 return;
             }
 
             if (count % 3 == 0 && !_lookupInProgress) {
                 _lookupInProgress = true;
-                if (_log.shouldInfo()) {
+                long now = getContext().clock().now();
+                Long lastVerifyLog = _lastVerifyLogTime.get(_ls.getHash());
+                if (_log.shouldInfo() && (lastVerifyLog == null || (now - lastVerifyLog > 10 * 1000))) {
                     _log.info("Verifying LeaseSet publication" + name + " [" +
                               _ls.getDestination().calculateHash().toBase32().substring(0,8) + "] via floodfill...");
+                    _lastVerifyLogTime.put(_ls.getHash(), now);
                 }
                 verifyAndRetry(ls);
             } else {

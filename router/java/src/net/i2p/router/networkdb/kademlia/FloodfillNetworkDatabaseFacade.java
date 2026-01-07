@@ -296,7 +296,14 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                     if (failCount >= 10) {concurrent = 4;}
                     else if (failCount >= 3) {concurrent = 3;}
                     if (_log.shouldWarn()) {
-                        _log.warn("Flood of key [" + key.toBase32().substring(0,8) + "] to [" + peer.toBase64().substring(0,6) + "] failed -> " +
+                        String name;
+                        if (ds instanceof LeaseSet) {
+                            String tunnelName = getTunnelName(((LeaseSet) ds).getDestination());
+                            name = tunnelName != null ? "LeaseSet for '" + tunnelName + "'" : "key for [" + key.toBase32().substring(0,8) + "]";
+                        } else {
+                            name = "key for [" + key.toBase32().substring(0,8) + "]";
+                        }
+                        _log.warn("Flood of " + name + " to [" + peer.toBase64().substring(0,6) + "] (sent " + (failCount == 1 ? "1/1" : "1/1") + ") -> " +
                                   "Resending to " + (concurrent > 1 ? concurrent + " new peers" : "a different peer") + "...");
                     }
                 }
