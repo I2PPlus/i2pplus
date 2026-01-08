@@ -74,7 +74,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     static final long NEXT_RKEY_RI_ADVANCE_TIME = 45*60*1000;
     private static final long NEXT_RKEY_LS_ADVANCE_TIME = 10*60*1000;
     private static final int NEXT_FLOOD_QTY = MAX_TO_FLOOD / 3;
-    private static final int MAX_LAG_BEFORE_SKIP_SEARCH = SystemVersion.isSlow() ? 500 : 200;
+    private static final int MAX_LAG_BEFORE_SKIP_SEARCH = SystemVersion.isSlow() ? 1000 : 500;
     private static final int PUBLISH_JOB_DELAY = 15*1000;
     /** @since 0.9.66 moved from FloodfillMonitorJob */
     public static final String PROP_FLOODFILL_PARTICIPANT = "router.floodfillParticipant";
@@ -154,11 +154,10 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     @Override
     protected void createHandlers() {
         // Only initialize the handlers for the flooodfill netDb.
-       if (!isClientDb()) {
-            if (_log.shouldInfo())
-                _log.info("[" + this +  "] Initializing the message handlers");
-        _context.inNetMessagePool().registerHandlerJobBuilder(DatabaseLookupMessage.MESSAGE_TYPE, new FloodfillDatabaseLookupMessageHandler(_context, this));
-        _context.inNetMessagePool().registerHandlerJobBuilder(DatabaseStoreMessage.MESSAGE_TYPE, new FloodfillDatabaseStoreMessageHandler(_context, this));
+        if (!isClientDb()) {
+            if (_log.shouldInfo()) {_log.info("[" + this +  "] Initializing Floodfill NetDb message handlers...");}
+            _context.inNetMessagePool().registerHandlerJobBuilder(DatabaseLookupMessage.MESSAGE_TYPE, new FloodfillDatabaseLookupMessageHandler(_context, this));
+            _context.inNetMessagePool().registerHandlerJobBuilder(DatabaseStoreMessage.MESSAGE_TYPE, new FloodfillDatabaseStoreMessageHandler(_context, this));
         }
     }
 
@@ -176,9 +175,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         if (floodfillEnabled && !(_context.router().scheduledGracefulExitCode() == Router.EXIT_HARD_RESTART ||
             _context.router().scheduledGracefulExitCode() == Router.EXIT_GRACEFUL_RESTART)) {
             // turn off to build a new RI...
-            synchronized(this) {
-                _floodfillEnabled = false;
-            }
+            synchronized(this) {_floodfillEnabled = false;}
             // true -> publish inline
             // but job queue is already shut down, so sendStore() called by rebuildRouterInfo() won't work...
             _context.router().rebuildRouterInfo(true);
@@ -199,7 +196,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      *  This maybe could be shorter than RepublishLeaseSetJob.REPUBLISH_LEASESET_TIMEOUT,
      *  because we are sending direct, but unresponsive floodfills may take a while due to timeouts.
      */
-    static final long PUBLISH_TIMEOUT = 90*1000;
+    static final long PUBLISH_TIMEOUT = 45*1000;
 
     /**
      * Send our RI to the closest floodfill.
@@ -275,6 +272,9 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
 
     @Override
     void sendStore(Hash key, DatabaseEntry ds, Job onSuccess, Job onFailure, long sendTimeout, Set<Hash> toIgnore) {
+        concurrent = 2;
+        failCount = 0;
+        successCount = 0;
         // If we are a part of the floodfill netDb, don't send out our own leaseSets as part
         // of the flooding - instead, send them to random floodfill peers so they can flood 'em out.
         Set<Hash> floodfillParticipants = selectFloodfillParticipants(toIgnore, getKBuckets(), concurrent);
@@ -291,11 +291,13 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                     successCount++;
                 }
                 else if (successCount == 0) {
+                    try {Thread.sleep(1000);}
+                    catch (InterruptedException ie) {}
                     _context.jobQueue().addJob(new FloodfillStoreJob(_context, this, key, ds, onSuccess, onFailure, sendTimeout, toIgnore));
                     failCount++;
-                    if (failCount >= 10) {concurrent = 4;}
-                    else if (failCount >= 3) {concurrent = 3;}
-                    if (_log.shouldWarn()) {
+                    if (failCount > 9) {concurrent = 3;}
+                    else if (failCount > 4) {concurrent = 2;}
+                    if (_log.shouldInfo()) {
                         String name;
                         if (ds instanceof LeaseSet) {
                             String tunnelName = getTunnelName(((LeaseSet) ds).getDestination());
@@ -303,7 +305,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                         } else {
                             name = "key for [" + key.toBase32().substring(0,8) + "]";
                         }
-                        _log.warn("Flood of " + name + " to [" + peer.toBase64().substring(0,6) + "] (sent " + (failCount == 1 ? "1/1" : "1/1") + ") -> " +
+                        _log.info("Flood of " + name + " to [" + peer.toBase64().substring(0,6) + "] failed -> " +
                                   "Resending to " + (concurrent > 1 ? concurrent + " new peers" : "a different peer") + "...");
                     }
                 }
@@ -610,16 +612,15 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      * @return null always
      * @since 0.9.10
      */
-    // ToDo: With repect to segmented netDb clients, this framework needs
-    // refinement.  A client with a segmented netDb can not use exploratory
-    // tunnels.  The return messages will not have sufficient information
-    // to be directed back to the clientmaking the query.
+    // ToDo: With repect to segmented netDb clients, this framework needs refinement.
+    // A client with a segmented netDb can not use exploratory tunnels.
+    // The return messages will not have sufficient information to be directed back to the client making the query.
     SearchJob search(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs, boolean isLease, Hash fromLocalDest) {
         if (key == null) {
-            if (_log.shouldWarn()) {_log.warn("Not searching for a NULL key!");}
+            if (_log.shouldWarn()) {_log.warn("NULL key search requested -> Dropping...");}
             return null;
         } else if (fromLocalDest == null && isClientDb()) {
-            if (_log.shouldWarn()) {_log.warn("Client subDbs cannot use exploratory tunnels!");}
+            if (_log.shouldWarn()) {_log.warn("Search from Client subDb using Exploratory tunnels requested -> Dropping...");}
             return null;
         } else {
             boolean isNew = false;
