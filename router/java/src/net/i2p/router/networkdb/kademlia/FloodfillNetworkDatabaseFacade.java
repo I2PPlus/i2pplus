@@ -306,7 +306,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                             name = "key for [" + key.toBase32().substring(0,8) + "]";
                         }
                         _log.info("Flood of " + name + " to [" + peer.toBase64().substring(0,6) + "] failed -> " +
-                                  "Resending to " + (concurrent > 1 ? concurrent + " new peers" : "a different peer") + "...");
+                                  "Resending to " + (concurrent > 1 ? concurrent + " new floodfills" : "a different floodfill") + "...");
                     }
                 }
             }

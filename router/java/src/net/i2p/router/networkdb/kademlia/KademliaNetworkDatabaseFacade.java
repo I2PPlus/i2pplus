@@ -336,7 +336,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *  Cannot be restarted.
      */
     public synchronized void shutdown() {
-        if (_log.shouldWarn()) {_log.warn("NetDb shutdown: " + this);}
+        if (_log.shouldInfo()) {_log.info("NetDb shutdown: " + this);}
         _initialized = false;
         if (!_context.commSystem().isDummy() && !isClientDb() &&
             _context.router().getUptime() > ROUTER_INFO_EXPIRATION_FLOODFILL + 11*60*1000) {
@@ -1204,7 +1204,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             encls = (EncryptedLeaseSet) leaseSet;
             BlindData bd = blindCache().getReverseData(leaseSet.getSigningKey());
             if (bd != null) {
-                if (_log.shouldWarn()) {_log.warn("Found blind data for encrypted LeaseSet: " + bd);}
+                if (_log.shouldInfo()) {_log.info("Found blind data for encrypted LeaseSet: " + bd);}
                 // secret must be set before destination
                 String secret = bd.getSecret();
                 if (secret != null) {encls.setSecret(secret);}
@@ -1217,8 +1217,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 }
             } else {
                 // if we created it, there's no blind data, but it's still decrypted
-                if (encls.getDecryptedLeaseSet() == null && _log.shouldWarn()) {
-                    _log.warn("No blind data found for " + leaseSet);
+                if (encls.getDecryptedLeaseSet() == null && _log.shouldInfo()) {
+                    _log.info("No blind data found for " + leaseSet);
                 }
             }
         }
