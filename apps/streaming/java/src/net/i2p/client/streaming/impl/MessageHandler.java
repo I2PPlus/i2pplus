@@ -30,7 +30,9 @@ class MessageHandler implements I2PSessionMuxedListener {
         _context = ctx;
         _listeners = new CopyOnWriteArraySet<DisconnectListener>();
         _log = ctx.logManager().getLog(MessageHandler.class);
-        _context.statManager().createRateStat("stream.packetReceiveFailure", "Number of times we fail to decrypt or otherwise receive a packet sent to us", "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.ONE_HOUR });
+        _context.statManager().createRateStat("stream.packetReceiveFailure",
+                                              "Number of times we fail to decrypt or otherwise receive a packet sent to us",
+                                              "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.ONE_HOUR });
     }
 
     /** Instruct the client that the given session has received a message with
@@ -58,7 +60,7 @@ class MessageHandler implements I2PSessionMuxedListener {
         } catch (I2PSessionException ise) {
             _context.statManager().addRateData("stream.packetReceiveFailure", 1);
             if (_log.shouldWarn())
-                _log.warn("Error receiving the message", ise);
+                _log.warn("Error receiving the message -> " + ise.getMessage());
             return;
         }
         if (data == null) {
@@ -81,11 +83,11 @@ class MessageHandler implements I2PSessionMuxedListener {
         } catch (IndexOutOfBoundsException ioobe) {
             _context.statManager().addRateData("stream.packetReceiveFailure", 1);
             if (_log.shouldWarn())
-                _log.warn("Received an invalid packet", ioobe);
+                _log.warn("Received an invalid packet -> " + ioobe.getMessage());
         } catch (IllegalArgumentException iae) {
             _context.statManager().addRateData("stream.packetReceiveFailure", 1);
             if (_log.shouldWarn())
-                _log.warn("Received an invalid packet", iae);
+                _log.warn("Received an invalid packet -> " + iae.getMessage());
         }
     }
 
@@ -95,8 +97,9 @@ class MessageHandler implements I2PSessionMuxedListener {
      * @param severity how bad the abuse is
      */
     public void reportAbuse(I2PSession session, int severity) {
-        if (_log.shouldError())
+        if (_log.shouldError()) {
             _log.error("Abuse reported with severity " + severity);
+        }
         _manager.disconnectAllHard();
     }
 
@@ -109,8 +112,7 @@ class MessageHandler implements I2PSessionMuxedListener {
      * @param session that has been terminated
      */
     public void disconnected(I2PSession session) {
-        if (_log.shouldWarn())
-            _log.warn("I2PSession disconnected");
+        if (_log.shouldInfo()) {_log.info("I2PSession disconnected");}
         _manager.disconnectAllHard();
         // kill anybody waiting in accept()
         if (_restartPending.compareAndSet(true, false)) {
