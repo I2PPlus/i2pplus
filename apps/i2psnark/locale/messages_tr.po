@@ -24,7 +24,7 @@ msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr "I2P bağlantısı kurulamadı - I2CP ayarlarınızı denetleyin!"
 
 msgid "Download already running: "
-msgstr ""
+msgstr "İndirme zaten çalışıyor: "
 
 msgid "Downloading"
 msgstr "İndiriliyor"
@@ -44,7 +44,7 @@ msgstr "Toplam yükleyici sınırı {0} olarak değiştirildi"
 
 #, java-format
 msgid "Minimum uploaders limit is {0}"
-msgstr ""
+msgstr "Minimum yükleyici sınırı {0}"
 
 #, java-format
 msgid "Up BW limit changed to {0}KBps"
@@ -653,7 +653,7 @@ msgid "Total upload speed"
 msgstr "Toplam yükleme hızı"
 
 msgid "Toggle Debug Panel"
-msgstr ""
+msgstr "Hata Ayıklama Panelini Aç/Kapat"
 
 msgid "Debug Mode"
 msgstr "Hata Ayıklama Modu"
@@ -723,7 +723,7 @@ msgstr "URL'yi girin veya torrent dosyasını seçin"
 
 #, java-format
 msgid "Error uploading the torrent file: {0}"
-msgstr ""
+msgstr "Torrent dosyası yüklenirken hata oluştu: {0}"
 
 #, java-format
 msgid "Cannot add torrent {0} inside another torrent: {1}"
@@ -734,7 +734,7 @@ msgid "Download from non-I2P location {0} is not supported"
 msgstr "I2P olmayan bir konumdan {0} indirme desteklenmiyor"
 
 msgid "Error: Version 2 info hashes are not supported"
-msgstr ""
+msgstr "Hata: Sürüm 2 bilgi karmaları desteklenmiyor"
 
 #, java-format
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
@@ -916,8 +916,8 @@ msgstr "Takılmış"
 #, java-format
 msgid "Seeding to {0} peer in swarm"
 msgid_plural "Seeding to {0} peers in swarm"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Sürüde {0} eşe tohumlanıyor"
+msgstr[1] "Sürüde {0} eşe tohumlanıyor"
 
 #, java-format
 msgid "Downloading from {0} peer"
@@ -1338,7 +1338,7 @@ msgid "Download Priority"
 msgstr "İndirme Önceliği"
 
 msgid "up"
-msgstr ""
+msgstr "yukarı"
 
 msgid "Parent directory"
 msgstr "Bir üst klasöre geç"

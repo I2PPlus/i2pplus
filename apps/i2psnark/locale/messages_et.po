@@ -24,7 +24,7 @@ msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr "Viga ühendamisel I2P-ga - kontrolli oma I2CP seadeid!"
 
 msgid "Download already running: "
-msgstr ""
+msgstr "Allalaadimine juba käib: "
 
 msgid "Downloading"
 msgstr "Allalaadimine"
@@ -44,7 +44,7 @@ msgstr "Kokkuülesaajate piir vahetatud {0}ks"
 
 #, java-format
 msgid "Minimum uploaders limit is {0}"
-msgstr ""
+msgstr "Üleslaadijate miinimum piir on {0}"
 
 #, java-format
 msgid "Up BW limit changed to {0}KBps"
@@ -56,14 +56,14 @@ msgstr "Üleslaadimise bändivõrgu piiri minimaalne väärtus on {0}KBps"
 
 #, java-format
 msgid "Maximum download speed changed to {0}KB/s"
-msgstr ""
+msgstr "Maksimaalne allalaadimiskiirus vahetatud {0}KB/s"
 
 #, java-format
 msgid "Download speed limit is {0}KB/s"
-msgstr ""
+msgstr "Allalaadimiskiiruse piir on {0}KB/s"
 
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
-msgstr ""
+msgstr "Märkus: Selle muudatuse jõustumiseks pead sa võib-olla peatama ja taaskäivitama oma torrentid või taaskäivitama I2PSnarki."
 
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "+0/1 tunnelihüppe juhuslik kättesaadavus sissetulevates tunnelites on lubatud"
@@ -202,7 +202,7 @@ msgid "Add and Create sections to display only on first page of multipage torren
 msgstr "Lisa ja Looge seadmed kuvatakse ainult mitmelehe torrenti loetelu lehtede esimesel lehel."
 
 msgid "API key updated."
-msgstr ""
+msgstr "API võti uuendatud."
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "Avalike trackerite loetelu on muutunud - torrenti tuleb taaskäivitada, et muudatus jõustuks."
@@ -358,13 +358,13 @@ msgstr "Üleslaadimise bändivõrgu piir on {0} KBps"
 
 #, java-format
 msgid "Connecting to I2CP port on I2P instance at {0}"
-msgstr ""
+msgstr "Ühendamine I2CP pordiga I2P instantsil {0}"
 
 msgid "Connecting to I2P"
 msgstr "Ühendamine I2P-ga"
 
 msgid "Connected to I2P at"
-msgstr ""
+msgstr "Ühendatud I2P-ga"
 
 #, java-format
 msgid "Starting up torrent {0}"
@@ -376,7 +376,7 @@ msgstr "Üleslaadimise bändivõrgu piir on {0} KBps maksimaalselt {1} kooslaadi
 
 #, java-format
 msgid "Storage: {0}GB currently available for downloads on configured data partition"
-msgstr ""
+msgstr "Mälu: {0}GB on praegu saadaval allalaadimiseks seadistatud andmekihis"
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
@@ -420,16 +420,16 @@ msgstr "Trackerite teavitamise järel I2P tünneli sulgemine."
 
 #, java-format
 msgid "Cannot check {0}"
-msgstr ""
+msgstr "{0} ei saa kontrollida"
 
 msgid "Torrent already started"
-msgstr ""
+msgstr "Torrent on juba käivitatud"
 
 msgid "No storage"
-msgstr ""
+msgstr "Mälu puudub"
 
 msgid "Starting recheck of {}"
-msgstr ""
+msgstr "Kontrolli alustamine {}"
 
 #, java-format
 msgid "Finished recheck of torrent {0}, now {1} complete"
@@ -444,10 +444,10 @@ msgid "Error checking torrent {0}"
 msgstr "Torrenti {0} kontrollimisel tekkis viga"
 
 msgid "Cannot create diskspace bar"
-msgstr ""
+msgstr "Kettaruumi riba ei saa luua"
 
 msgid "Data partition"
-msgstr ""
+msgstr "Andmete partitsioon"
 
 #, java-format
 msgid "No valid trackers for {0} - enable opentrackers or DHT?"
@@ -516,22 +516,22 @@ msgstr "Seaded"
 
 #, java-format
 msgid "Are you sure you want to delete {0} and all downloaded data?"
-msgstr ""
+msgstr "Kas oled kindel, et soovid kustutada {0} ja kõik allalaaditud andmed?"
 
 #, java-format
 msgid "Deleting <b>{0}</b> and all associated data..."
-msgstr ""
+msgstr "<b>{0}</b> ja kõik seotud andmed kustutatakse..."
 
 #, java-format
 msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
 msgstr "Kas oled kindel, et soovid faili \\''{0}\\'' kustutada (allalaaditud andmed ei kustutata)?"
 
 msgid "Note: Downloaded data will not be deleted."
-msgstr ""
+msgstr "Märkus: Allalaaditud andmeid ei kustutata."
 
 #, java-format
 msgid "Deleting {0} and associated metadata only..."
-msgstr ""
+msgstr "{0} ja seotud metaandmeid ainult kustutatakse..."
 
 msgid "clear messages"
 msgstr "kustuta sildid"
@@ -617,25 +617,25 @@ msgid "Up Rate"
 msgstr "Üles hinnang"
 
 msgid "Total size of loaded torrents"
-msgstr ""
+msgstr "Laetud torrentide kogusuurus"
 
 #, java-format
 msgid "1 connected peer"
 msgid_plural "{0} peer connections"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 ühendatud kaasliige"
+msgstr[1] "{0} ühendatud kaasliiget"
 
 msgid "Active downloads"
-msgstr ""
+msgstr "Aktiivsed allalaadimised"
 
 msgid "Active uploads"
-msgstr ""
+msgstr "Aktiivsed üleslaadimised"
 
 msgid "Active Inbound tunnels"
-msgstr ""
+msgstr "Aktiivsed sissetulevad tunnelid"
 
 msgid "Active Outbound tunnels"
-msgstr ""
+msgstr "Aktiivsed väljaminevad tunnelid"
 
 msgid "Estimated download time for all torrents"
 msgstr "Kõigi torrentide hinnatud allalaadimisaeg"
@@ -653,7 +653,7 @@ msgid "Total upload speed"
 msgstr "Kogüleslaadimise kiirus"
 
 msgid "Toggle Debug Panel"
-msgstr ""
+msgstr "Lülita silumispaneel"
 
 msgid "Debug Mode"
 msgstr "Silumisrežiim"
@@ -723,7 +723,7 @@ msgstr "Sisesta URL või vali torrenti fail"
 
 #, java-format
 msgid "Error uploading the torrent file: {0}"
-msgstr ""
+msgstr "Viga torrenti faili üleslaadimisel: {0}"
 
 #, java-format
 msgid "Cannot add torrent {0} inside another torrent: {1}"
@@ -734,7 +734,7 @@ msgid "Download from non-I2P location {0} is not supported"
 msgstr "Allalaadimine asukohast {0}, mis ei ole I2P, ei ole toetatud"
 
 msgid "Error: Version 2 info hashes are not supported"
-msgstr ""
+msgstr "Viga: Versiooni 2 info räsid ei ole toetatud"
 
 #, java-format
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
@@ -916,8 +916,8 @@ msgstr "Ootus"
 #, java-format
 msgid "Seeding to {0} peer in swarm"
 msgid_plural "Seeding to {0} peers in swarm"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Seemendamine {0} kaasliikme jaoks"
+msgstr[1] "Seemendamine {0} kaasliikmetele"
 
 #, java-format
 msgid "Downloading from {0} peer"
@@ -1302,13 +1302,13 @@ msgid "Changing this setting to less than 3 hops may improve speed at the expens
 msgstr "Selle seadistuse muutmine vähem kui 3 hüppeni võib kiirust parandada anonüümsuse kulul ning seda ei soovita"
 
 msgid "Sequential piece or file order not saved - feature currently broken."
-msgstr ""
+msgstr "Jadapoolitus või failide järjekord ei salvestata - funktsioon hetkel ei tööta."
 
 msgid "Unknown command"
-msgstr ""
+msgstr "Tundmatu käsk"
 
 msgid "Please retry form submission (bad nonce)"
-msgstr ""
+msgstr "Palun proovi vormi uuesti esitada (vigane nonce)"
 
 msgid "Resource Does Not Exist"
 msgstr "Resurssi ei eksisteeri"
@@ -1338,7 +1338,7 @@ msgid "Download Priority"
 msgstr "Allalaadimise prioriteet"
 
 msgid "up"
-msgstr ""
+msgstr "üles"
 
 msgid "Parent directory"
 msgstr "Kõrgema taseme kataloogi"
@@ -1380,10 +1380,10 @@ msgid "Pieces"
 msgstr "Osad"
 
 msgid "Average download speed for torrent"
-msgstr ""
+msgstr "Torrenti keskmine allalaadimiskiirus"
 
 msgid "Download speed"
-msgstr ""
+msgstr "Allalaadimiskiirus"
 
 msgid "Completion"
 msgstr "Lõpetamine"
@@ -1482,7 +1482,7 @@ msgid "Delete Selected"
 msgstr "Kustuta valitud"
 
 msgid "File downloading priorities updated for torrent "
-msgstr ""
+msgstr "Failide allalaadimise prioriteedid uuendatud torrenti jaoks"
 
 msgid "Edit Torrent"
 msgstr "Muuda torrent"

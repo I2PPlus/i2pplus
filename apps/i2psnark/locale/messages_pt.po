@@ -44,7 +44,7 @@ msgstr "Limite total de uploaders alterado para {0}"
 
 #, java-format
 msgid "Minimum uploaders limit is {0}"
-msgstr ""
+msgstr "O limite mínimo de carregadores é {0}"
 
 #, java-format
 msgid "Up BW limit changed to {0}KBps"
@@ -118,7 +118,7 @@ msgid "Data directory changed to {0}"
 msgstr "Diretório de dados alterado para {0}"
 
 msgid "I2CP and tunnel changes will take effect after stopping all torrents"
-msgstr "As alterações no I2CP e no túnel entrarão em vigor após a interrupção de todos os torrentsMudanças do I2CP e do túnel farão efeito após interromper todos os torrents"
+msgstr "As alterações no I2CP e no túnel entrarão em vigor após a interrupção de todos os torrents"
 
 #, java-format
 msgid "I2CP options changed to: {0}"
@@ -128,7 +128,7 @@ msgid "Disconnecting old I2CP destination"
 msgstr "Desconectando destinação anterior do I2CP"
 
 msgid "Unable to connect with the new settings, reverting to the old I2CP settings"
-msgstr "Não é possível conectar com as novas configurações, revertendo para as configurações I2CP antigasConectar-se não foi posível com as novas preferências I2CP, utilizarei as anteriores"
+msgstr "Não foi possível conectar com as novas configurações, revertendo para as configurações I2CP anteriores"
 
 msgid "Unable to reconnect with the old settings!"
 msgstr "Impossível se conectar usando as preferências anteriores!"
@@ -147,10 +147,10 @@ msgid "Disabled autostart"
 msgstr "Desativado o iniciar automáticamente"
 
 msgid "Enabled open trackers - torrent restart required to take effect."
-msgstr "Rastreadores abertos ativados - é necessário reiniciar o torrent para entrar em vigor.Uso de rastreadores abertos ativado - Para ter efeito é necesário reiniciar os torrentes."
+msgstr "Rastreadores abertos ativados - é necessário reiniciar o torrent para entrar em vigor."
 
 msgid "Disabled open trackers - torrent restart required to take effect."
-msgstr "Rastreadores abertos desativados - é necessário reiniciar o torrent para entrar em vigor.Uso dos rastreadores abertos desativado - Para ter efeito é necesário reiniciar os torrentes."
+msgstr "Rastreadores abertos desativados - é necessário reiniciar o torrent para entrar em vigor."
 
 msgid "Enabled DHT."
 msgstr "Habilitar DHT."
@@ -205,10 +205,10 @@ msgid "API key updated."
 msgstr "Chave API atualizada."
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
-msgstr "Lista de Open Tracker alterada - é necessário reiniciar o torrent para entrar em vigor.Listado de rastreadores abertos mudado - Para ter efeito é necesário reiniciar os torrentes."
+msgstr "Lista de rastreadores abertos alterada - é necessário reiniciar o torrent para entrar em vigor."
 
 msgid "Private tracker list changed - affects newly created torrents only."
-msgstr "Lista de rastreadores privados alterada - afeta apenas torrents recém-criados.Lista de rastreadores privados alterada - somente afetará os novos torrentes criados."
+msgstr "Lista de rastreadores privados alterada - afeta apenas torrents recém-criados."
 
 #, java-format
 msgid "Unable to save the config to {0}"
@@ -248,7 +248,7 @@ msgstr "O arquivo .torrent em \"{0}\" não é válido"
 
 #, java-format
 msgid "ERROR - Out of memory, cannot create torrent from {0}"
-msgstr "ERROR - Sem memória, não é possível criar torrent de {0}ERRO - Não ha espaço suficente, não se pode crear um torrente desde {0}."
+msgstr "ERRO - Sem memória, não é possível criar torrent de {0}"
 
 msgid "Initializing I2PSnark and opening tunnels"
 msgstr "Inicializando I2PSnark e abrindo túneis"
@@ -267,15 +267,15 @@ msgstr "ERRO - Não há tracker I2P no torrent privado \"{0}\""
 
 #, java-format
 msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
-msgstr "Aviso - Nenhum rastreador I2P em \"{0}\", será anunciado apenas para rastreadores abertos I2P e DHT.Aviso - Nenhum rastreador I2P em \"{0}\", o anúncio será feito apenas por rastreadores I2P abertos e DHT."
+msgstr "Aviso - Nenhum rastreador I2P em \"{0}\", o anúncio será feito apenas para rastreadores abertos I2P e DHT."
 
 #, java-format
 msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
-msgstr "Aviso - Nenhum rastreador I2P em \"{0}\", e os rastreadores abertos estão desativados, serão anunciados apenas para DHT.Aviso - Nenhum rastreador I2P em \"{0}\", e rastreadores I2P abertos estão desabilitados. O anúncio será feito apenas por DHT."
+msgstr "Aviso - Nenhum rastreador I2P em \"{0}\", e rastreadores abertos estão desabilitados. O anúncio será feito apenas por DHT."
 
 #, java-format
 msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
-msgstr "Aviso - Não há rastreadores I2P em \"{0}\", e DHT e rastreadores abertos estão desativados. Você deve ativar rastreadores abertos ou DHT antes de iniciar o torrent.Aviso - Não há rastreadores I2P em \"{0}\", e DHT e rastreadores abertos estão desativados. Você deve ativar rastreadores abertos ou DHT antes de iniciar o torrent.Aviso - Nenhum rastreador I2P em \"{0}\", e DHT e rastreadores abertos estão desabilitados. Rastreadores abertos ou DHT devem ser habilitados antes de começar o torrente."
+msgstr "Aviso - Não há rastreadores I2P em \"{0}\", e DHT e rastreadores abertos estão desativados. Você deve ativar rastreadores abertos ou DHT antes de iniciar o torrent."
 
 #, java-format
 msgid "Fetching {0}"
@@ -283,7 +283,7 @@ msgstr "Buscando {0}"
 
 #, java-format
 msgid "Open trackers are disabled and we have no DHT peers. Fetch of {0} may not succeed until you start another torrent, enable open trackers, or enable DHT."
-msgstr "Os rastreadores abertos estão desativados e não temos pares DHT. Os rastreadores abertos estão desativados e não temos pares DHT. Rastreadores abertos estão desabilitados e não há participantes DHT. Descarregamento de {0} pode não prosseguir enquanto outra torrente não for iniciada,  rastreadores abertos forem habilitados ou DHT habilitado."
+msgstr "Os rastreadores abertos estão desativados e não há pares DHT. O download de {0} pode não ter sucesso até que você inicie outro torrent, ative rastreadores abertos ou ative DHT."
 
 #, java-format
 msgid "Adding {0}"
@@ -524,7 +524,7 @@ msgstr "Excluindo <b>{0}</b> e todos os dados associados..."
 
 #, java-format
 msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
-msgstr "Tem certeza que deseja excluir o arquivo \\''{0}\\'' (os dados baixados não serão excluídos) ?Tem a certeza que deseja apagar o ficheiro \\\"{0}\\\" (dados transferidos não serão apagados) ?"
+msgstr "Tem certeza que deseja excluir o arquivo torrent {0} (os dados baixados não serão excluídos)?"
 
 msgid "Note: Downloaded data will not be deleted."
 msgstr "Nota: Os dados baixados não serão excluídos."
@@ -653,7 +653,7 @@ msgid "Total upload speed"
 msgstr "Velocidade total de upload"
 
 msgid "Toggle Debug Panel"
-msgstr ""
+msgstr "Alternar Painel de Depuração"
 
 msgid "Debug Mode"
 msgstr "Modo de depuração"
@@ -723,7 +723,7 @@ msgstr "Digite o URL ou selecione o arquivo torrent"
 
 #, java-format
 msgid "Error uploading the torrent file: {0}"
-msgstr ""
+msgstr "Erro ao carregar o arquivo torrent: {0}"
 
 #, java-format
 msgid "Cannot add torrent {0} inside another torrent: {1}"
@@ -734,7 +734,7 @@ msgid "Download from non-I2P location {0} is not supported"
 msgstr "O download de um local não I2P {0} não é suportado"
 
 msgid "Error: Version 2 info hashes are not supported"
-msgstr ""
+msgstr "Erro: os hashes de informação da versão 2 não são suportados"
 
 #, java-format
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
@@ -765,7 +765,7 @@ msgid "Directory deleted: {0}"
 msgstr "Pasta excluída: {0}"
 
 msgid "Error creating torrent - you must specify a file or directory"
-msgstr "Erro ao criar torrent - você deve inserir um arquivo ou diretórioErro ao criar o torrente - Tens que especificar um arquivo ou uma pasta"
+msgstr "Erro ao criar torrent - você deve especificar um arquivo ou diretório"
 
 #, java-format
 msgid "Cannot create a torrent for the nonexistent data: {0}"
@@ -788,10 +788,10 @@ msgid "Cannot add torrent {0} including another torrent: {1}"
 msgstr "Não é possível adicionar torrent {0} incluindo outro torrent: {1}"
 
 msgid "Error - Cannot include alternate trackers without a primary tracker"
-msgstr "Erro - Não é possível incluir rastreadores alternativos sem um rastreador principalErro - Impossível incluir rastreadores alternativos sem o rastreador primário"
+msgstr "Erro - Não é possível incluir rastreadores alternativos sem um rastreador principal"
 
 msgid "Error - Cannot mix private and public trackers in a torrent"
-msgstr "Erro - Não é possível misturar rastreadores públicos e privados em um torrentErro - Impossível misturar rastreadores públicos e privados num torrent"
+msgstr "Erro - Não é possível misturar rastreadores públicos e privados em um torrent"
 
 #, java-format
 msgid " files or folders were excluded from \"{0}\" due to filter rules."
@@ -807,7 +807,7 @@ msgstr "Torrente criado para \"{0}\""
 
 #, java-format
 msgid "Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\""
-msgstr "Muitos rastreadores I2P exigem que você registre novos torrents antes de propagar. Faça isso antes de iniciar \"{0}\"Muitos rastreadores no I2P exigem que você registre novos torrentes antes de poder semeá-los. Por favor, faça isto antes de iniciar \"{0}\"!"
+msgstr "Muitos rastreadores I2P exigem que você registre novos torrents antes de propagar. Por favor, faça isso antes de iniciar \"{0}\""
 
 #, java-format
 msgid "Error creating a torrent for \"{0}\""
@@ -916,8 +916,8 @@ msgstr "Estancado"
 #, java-format
 msgid "Seeding to {0} peer in swarm"
 msgid_plural "Seeding to {0} peers in swarm"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Propagando para {0} peer no enxame"
+msgstr[1] "Propagando para {0} peers no enxame"
 
 #, java-format
 msgid "Downloading from {0} peer"
@@ -947,7 +947,7 @@ msgid "Uninteresting (The peer has no pieces we need)"
 msgstr "Não interessante (O parceiro não tem peças que precisamos.)"
 
 msgid "Choked (The peer is not allowing us to request pieces)"
-msgstr "Sufocado (O peer não está permitindo solicitar peças)Sufocado (De momento o parceiro não está nos permitindo pedir mais peças.c)"
+msgstr "Bloqueado (O peer não está permitindo solicitar peças)"
 
 msgid "Peer is interested but currently idle"
 msgstr "Peer está interessado, mas atualmente ocioso"
@@ -956,7 +956,7 @@ msgid "Uninterested (We have no pieces the peer needs)"
 msgstr "Desinteressado (Não temos as peças que o parceiro quer)"
 
 msgid "Choking (We are not allowing the peer to request pieces)"
-msgstr "Asfixia (Não estamos permitindo que o peer solicite peças)Sufocando (De momento não estamos permitindo que os parceiros peçam mais peças)"
+msgstr "Bloqueando (Não estamos permitindo que o peer solicite peças)"
 
 #, java-format
 msgid "Details at {0} tracker"
@@ -1302,7 +1302,7 @@ msgid "Changing this setting to less than 3 hops may improve speed at the expens
 msgstr "Alterar esta configuração para menos de 3 saltos pode melhorar a velocidade às custas do anonimato e não é recomendado"
 
 msgid "Sequential piece or file order not saved - feature currently broken."
-msgstr ""
+msgstr "Ordem sequencial de peças ou arquivos não guardada - funcionalidade atualmente quebrada."
 
 msgid "Unknown command"
 msgstr "Comando desconhecido"
@@ -1338,7 +1338,7 @@ msgid "Download Priority"
 msgstr "Prioridade de download"
 
 msgid "up"
-msgstr ""
+msgstr "cima"
 
 msgid "Parent directory"
 msgstr "Subir uma herarquia"
@@ -1482,7 +1482,7 @@ msgid "Delete Selected"
 msgstr "Apagar Selecionados"
 
 msgid "File downloading priorities updated for torrent "
-msgstr ""
+msgstr "Prioridades de download de arquivos atualizadas para torrent "
 
 msgid "Edit Torrent"
 msgstr "Editar torrent"

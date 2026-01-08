@@ -731,7 +731,7 @@ msgstr "أدخل عنوان URL أو حدد ملف تورنت"
 
 #, java-format
 msgid "Error uploading the torrent file: {0}"
-msgstr ""
+msgstr "خطأ في رفع ملف التورنت: {0}"
 
 #, java-format
 msgid "Cannot add torrent {0} inside another torrent: {1}"

@@ -44,7 +44,7 @@ msgstr "Teljes feltöltők korlátja megváltoztatva a következőre: {0}"
 
 #, java-format
 msgid "Minimum uploaders limit is {0}"
-msgstr ""
+msgstr "A minimum feltöltők korlátja {0}"
 
 #, java-format
 msgid "Up BW limit changed to {0}KBps"
@@ -205,7 +205,7 @@ msgid "API key updated."
 msgstr "API kulcs frissítve."
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
-msgstr "Az Open Tracker lista megváltozott – a torrent újraindítása szükséges a hatálybalépéshez.Az Open Tracker lista megváltozott – a torrent újraindítása szükséges a hatálybalépéshez.Az Open Tracker lista megváltozott – a torrent újraindítása szükséges a hatálybalépéshez.Az Open Tracker lista megváltozott – a torrent újraindítása szükséges a hatálybalépéshez.Az Open Tracker lista megváltozott – a torrent újraindítása szükséges a hatálybalépéshez.Nyílt Követők (tracker) listája megváltozott - az érvénybe lépéshez a torrent újraindítása szükséges."
+msgstr "Az Open Tracker lista megváltozott – a torrent újraindítása szükséges a hatálybalépéshez."
 
 msgid "Private tracker list changed - affects newly created torrents only."
 msgstr "A privát nyomkövetők listája megváltozott – csak az újonnan létrehozott torrenteket érinti.Megváltozott a privát tracker lista - csak az újonnan létrehozott torrentekre vonatkozik."
@@ -444,10 +444,10 @@ msgid "Error checking torrent {0}"
 msgstr "Hiba a torrent ellenőrzése során {0}"
 
 msgid "Cannot create diskspace bar"
-msgstr ""
+msgstr "A lemezterület-sáv nem hozható létre"
 
 msgid "Data partition"
-msgstr ""
+msgstr "Adatpartíció"
 
 #, java-format
 msgid "No valid trackers for {0} - enable opentrackers or DHT?"
@@ -516,7 +516,7 @@ msgstr "Beállítások"
 
 #, java-format
 msgid "Are you sure you want to delete {0} and all downloaded data?"
-msgstr ""
+msgstr "Biztosan törölni szeretné a következőt: {0} és az összes letöltött adatot?"
 
 #, java-format
 msgid "Deleting <b>{0}</b> and all associated data..."
@@ -531,7 +531,7 @@ msgstr "Megjegyzés: A letöltött adatok nem lesznek törölve."
 
 #, java-format
 msgid "Deleting {0} and associated metadata only..."
-msgstr ""
+msgstr "{0} és a kapcsolódó metaadatok törlése..."
 
 msgid "clear messages"
 msgstr "üzenetek törlése"
@@ -622,14 +622,14 @@ msgstr "A betöltött torrentek teljes mérete"
 #, java-format
 msgid "1 connected peer"
 msgid_plural "{0} peer connections"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 csatlakozott társ"
+msgstr[1] "{0} csatlakozott társ"
 
 msgid "Active downloads"
 msgstr "Aktív letöltések"
 
 msgid "Active uploads"
-msgstr ""
+msgstr "Aktív feltöltések"
 
 msgid "Active Inbound tunnels"
 msgstr "Aktív bejövő tunnelek"
@@ -653,7 +653,7 @@ msgid "Total upload speed"
 msgstr "Teljes feltöltési sebesség"
 
 msgid "Toggle Debug Panel"
-msgstr ""
+msgstr "Hibakereső panel ki-/bekapcsolása"
 
 msgid "Debug Mode"
 msgstr "Hibakeresés mód"
@@ -723,7 +723,7 @@ msgstr "Írja be az URL-t vagy válassza ki a torrent fájlt"
 
 #, java-format
 msgid "Error uploading the torrent file: {0}"
-msgstr ""
+msgstr "Hiba a torrent fájl feltöltésekor: {0}"
 
 #, java-format
 msgid "Cannot add torrent {0} inside another torrent: {1}"
@@ -734,7 +734,7 @@ msgid "Download from non-I2P location {0} is not supported"
 msgstr "A(z) {0} nem I2P helyről történő letöltés nem támogatott"
 
 msgid "Error: Version 2 info hashes are not supported"
-msgstr ""
+msgstr "Hiba: A 2-es verziójú információs hash-ek nem támogatottak"
 
 #, java-format
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
@@ -807,7 +807,7 @@ msgstr "Torrent létrehozva a következőnek: \"{0}\""
 
 #, java-format
 msgid "Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\""
-msgstr "Sok I2P nyomkövető megköveteli, hogy új torrenteket regisztráljon a vetés előtt – kérjük, tegye meg ezt a \"{0}\" elindítása előttSok I2P nyomkövető megköveteli, hogy új torrenteket regisztráljon a vetés előtt – kérjük, tegye meg ezt a \"{0}\" elindítása előttSok I2P nyomkövető megköveteli, hogy új torrenteket regisztráljon a vetés előtt – kérjük, tegye meg ezt a \"{0}\" elindítása előttSok I2P nyomkövető megköveteli, hogy új torrenteket regisztráljon a vetés előtt – kérjük, tegye meg ezt a \"{0}\" elindítása előttSok I2P követő (tracker) megköveteli az új torrentek regisztrációját táplálás (seed) előtt - kérlek, regisztrálj, mielőtt elindítod a következőt:  \"{0}\""
+msgstr "Sok I2P követő (tracker) megköveteli az új torrentek regisztrációját táplálás (seed) előtt - kérlek, regisztrálj, mielőtt elindítod a következőt:  \"{0}\""
 
 #, java-format
 msgid "Error creating a torrent for \"{0}\""
@@ -916,8 +916,8 @@ msgstr "Beragadt"
 #, java-format
 msgid "Seeding to {0} peer in swarm"
 msgid_plural "Seeding to {0} peers in swarm"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Táplálás a raj {0} társához"
+msgstr[1] "Táplálás a raj {0} társához"
 
 #, java-format
 msgid "Downloading from {0} peer"
@@ -1305,10 +1305,10 @@ msgid "Sequential piece or file order not saved - feature currently broken."
 msgstr "A sorrend vagy fájlsorrend nem kerül mentve - a funkció jelenleg hibás."
 
 msgid "Unknown command"
-msgstr ""
+msgstr "Ismeretlen parancs"
 
 msgid "Please retry form submission (bad nonce)"
-msgstr ""
+msgstr "Kérjük, próbálja újra az űrlap beküldését (hibás nonce)"
 
 msgid "Resource Does Not Exist"
 msgstr "Az erőforrás nem létezik"
@@ -1338,7 +1338,7 @@ msgid "Download Priority"
 msgstr "Letöltési prioritás"
 
 msgid "up"
-msgstr ""
+msgstr "fel"
 
 msgid "Parent directory"
 msgstr "Vissza a felsőbb szintű könyvtárba"
@@ -1380,10 +1380,10 @@ msgid "Pieces"
 msgstr "Részek"
 
 msgid "Average download speed for torrent"
-msgstr ""
+msgstr "Átlagos letöltési sebesség a torrent esetében"
 
 msgid "Download speed"
-msgstr ""
+msgstr "Letöltési sebesség"
 
 msgid "Completion"
 msgstr "Befejezés"
@@ -1482,7 +1482,7 @@ msgid "Delete Selected"
 msgstr "Kiválasztottak Törlése"
 
 msgid "File downloading priorities updated for torrent "
-msgstr ""
+msgstr "A fájl letöltési prioritásai frissítve a torrenthez: "
 
 msgid "Edit Torrent"
 msgstr "Torrent szerkesztése"

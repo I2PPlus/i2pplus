@@ -24,7 +24,7 @@ msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr "에러: I2P에 연결할 수 없습니다. I2CP 설정을 확인하세요!"
 
 msgid "Download already running: "
-msgstr ""
+msgstr "이미 다운로드가 실행 중입니다: "
 
 msgid "Downloading"
 msgstr "다운로드"
@@ -44,7 +44,7 @@ msgstr "전역 업로더 숫자가 {0}으로 변경되었습니다."
 
 #, java-format
 msgid "Minimum uploaders limit is {0}"
-msgstr ""
+msgstr "최소 업로더 제한은 {0}입니다"
 
 #, java-format
 msgid "Up BW limit changed to {0}KBps"
@@ -208,7 +208,7 @@ msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "오픈 트래커 리스트가 변경되었습니다 - 토렌트를 재시작해야 적용됩니다."
 
 msgid "Private tracker list changed - affects newly created torrents only."
-msgstr "개인 추적기 목록이 변경됨 - 새로 생성된 토렌트에만 영향을 미칩니다.개인 추적기 목록이 변경됨 - 새로 생성된 토렌트에만 영향을 미칩니다.개인 추적기 목록이 변경됨 - 새로 생성된 토렌트에만 영향을 미칩니다.사설 트래커 리스트가 변경디었습니다 - 새로 만들어진 토렌트에게만 적용됩니다."
+msgstr "사설 트래커 리스트가 변경디었습니다 - 새로 만들어진 토렌트에게만 적용됩니다."
 
 #, java-format
 msgid "Unable to save the config to {0}"
@@ -267,15 +267,15 @@ msgstr "오류 - Private 토렌트 \"{0}\"에 I2P 트래커가 없습니다"
 
 #, java-format
 msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
-msgstr "경고 - \"{0}\"에 I2P 추적기가 없습니다. I2P 공개 추적기와 DHT에만 알립니다.경고 - \"{0}\"에 I2P 추적기가 없습니다. I2P 공개 추적기와 DHT에만 알립니다.경고 - \"{0}\"에 I2P 추적기가 없습니다. I2P 공개 추적기와 DHT에만 알립니다.경고- \"{0}\"에 I2P 트래커가 없습니다. I2P 오픈 트래커와 DHT에게만 전달할 것입니다."
+msgstr "경고- \"{0}\"에 I2P 트래커가 없습니다. I2P 오픈 트래커와 DHT에게만 전달할 것입니다."
 
 #, java-format
 msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
-msgstr "경고 - \"{0}\"에 I2P 추적기가 없으며 공개 추적기가 비활성화되어 DHT에만 알립니다.경고 - \"{0}\"에 I2P 추적기가 없으며 공개 추적기가 비활성화되어 DHT에만 알립니다.경고 - \"{0}\"에 I2P 추적기가 없으며 공개 추적기가 비활성화되어 DHT에만 알립니다.경고- \"{0}\"에 I2P 트래커가 없습니다, 오픈트래커 역시 비활성화 되었으며, DHT에게만 전달합니다."
+msgstr "경고- \"{0}\"에 I2P 트래커가 없습니다, 오픈트래커 역시 비활성화 되었으며, DHT에게만 전달합니다."
 
 #, java-format
 msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
-msgstr "경고 - \"{0}\"에 I2P 추적기가 없으며 DHT 및 공개 추적기가 비활성화되어 있습니다. 토렌트를 시작하기 전에 공개 추적기 또는 DHT를 활성화해야 합니다.경고 - \"{0}\"에 I2P 추적기가 없으며 DHT 및 공개 추적기가 비활성화되어 있습니다. 토렌트를 시작하기 전에 공개 추적기 또는 DHT를 활성화해야 합니다.경고 - \"{0}\"에 I2P 추적기가 없으며 DHT 및 공개 추적기가 비활성화되어 있습니다. 토렌트를 시작하기 전에 공개 추적기 또는 DHT를 활성화해야 합니다.경고- \"{0}\"에 I2P 트래커가 없습니다, 오픈트래커와 DHT도 비활성화 되었으며, 토렌트를 시작하려면 이를 활성화해야 합니다."
+msgstr "경고- \"{0}\"에 I2P 트래커가 없습니다, 오픈트래커와 DHT도 비활성화 되었으며, 토렌트를 시작하려면 이를 활성화해야 합니다."
 
 #, java-format
 msgid "Fetching {0}"
@@ -283,7 +283,7 @@ msgstr "정보를 가져오는 중 {0}"
 
 #, java-format
 msgid "Open trackers are disabled and we have no DHT peers. Fetch of {0} may not succeed until you start another torrent, enable open trackers, or enable DHT."
-msgstr "오픈 트래커가 비활성화되어 있으며 DHT 피어가 없습니다. 오픈 트래커가 비활성화되어 있으며 DHT 피어가 없습니다. 오픈 트래커가 비활성화되어 있으며 DHT 피어가 없습니다. 오픈 트래커가 비활성 되었습니다. 또한 DHT 피어도 없습니다. 다른 토렌트를 시작하거나, 해당 설정들을 활성화하지 않으면 {0}의 정보를 가져오지 못할 수 있습니다."
+msgstr "오픈 트래커가 비활성화되어 있으며 DHT 피어가 없습니다. 다른 토렌트를 시작하거나 해당 설정들을 활성화하지 않으면 {0}의 정보를 가져오지 못할 수 있습니다."
 
 #, java-format
 msgid "Adding {0}"
@@ -524,7 +524,7 @@ msgstr "<b>{0}</b>과(와) 모든 관련 데이터를 삭제 중..."
 
 #, java-format
 msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
-msgstr "\\''{0}\\'' 파일을 삭제하시겠습니까(다운로드한 데이터는 삭제되지 않습니다)?\\''{0}\\'' 파일을 삭제하시겠습니까(다운로드한 데이터는 삭제되지 않습니다)?정말 \\''{0}\\'' 파일을 지우겠습니까? (다운로드된 데이터는 지워지지 않습니다) ?"
+msgstr "정말 \\''{0}\\'' 파일을 지우겠습니까? (다운로드된 데이터는 지워지지 않습니다) ?"
 
 msgid "Note: Downloaded data will not be deleted."
 msgstr "참고: 다운로드된 데이터는 삭제되지 않습니다."
@@ -544,7 +544,7 @@ msgstr "축소"
 
 #, java-format
 msgid "Warning! Javascript is disabled in your browser. If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs."
-msgstr "경고! 경고! 브라우저에서 JavaScript가 비활성화되었습니다. {0}가 활성화되면 새로 고침이 발생하면 토렌트 섹션에 대한 입력을 잃게됩니다."
+msgstr "경고! 브라우저에서 JavaScript가 비활성화되었습니다. {0}가 활성화되면 새로 고침이 발생하면 토렌트 섹션에 대한 입력을 잃게됩니다."
 
 msgid "page refresh"
 msgstr "페이지 새로고침"
@@ -622,7 +622,7 @@ msgstr "로드된 토렌트의 총 크기"
 #, java-format
 msgid "1 connected peer"
 msgid_plural "{0} peer connections"
-msgstr[0] "1개 연결된 피어"
+msgstr[0] "{0}개 연결된 피어"
 
 msgid "Active downloads"
 msgstr "활성 다운로드"
@@ -652,7 +652,7 @@ msgid "Total upload speed"
 msgstr "총 업로드 속도"
 
 msgid "Toggle Debug Panel"
-msgstr ""
+msgstr "디버그 패널 전환"
 
 msgid "Debug Mode"
 msgstr "디버그 모드"
@@ -721,7 +721,7 @@ msgstr "URL을 입력하거나 토렌트 파일을 선택하세요"
 
 #, java-format
 msgid "Error uploading the torrent file: {0}"
-msgstr ""
+msgstr "토렌트 파일 업로드 오류: {0}"
 
 #, java-format
 msgid "Cannot add torrent {0} inside another torrent: {1}"
@@ -732,7 +732,7 @@ msgid "Download from non-I2P location {0} is not supported"
 msgstr "I2P가 아닌 위치 {0}에서의 다운로드는 지원되지 않습니다"
 
 msgid "Error: Version 2 info hashes are not supported"
-msgstr ""
+msgstr "오류: 버전 2 정보 해시는 지원되지 않습니다"
 
 #, java-format
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
@@ -805,7 +805,7 @@ msgstr "\"{0}\" 토렌트 생성됨"
 
 #, java-format
 msgid "Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\""
-msgstr "많은 I2P 추적기에서는 시드하기 전에 새 토렌트를 등록해야 합니다. \"{0}\"을(를) 시작하기 전에 등록하십시오.많은 I2P 추적기에서는 시드하기 전에 새 토렌트를 등록해야 합니다. \"{0}\"을(를) 시작하기 전에 등록하십시오.많은 I2P 추적기에서는 시드하기 전에 새 토렌트를 등록해야 합니다. \"{0}\"을(를) 시작하기 전에 등록하십시오.많은 I2P 트래커들은 토렌트를 시딩하기 전 가입을 요구합니다 - {0}을 시작하기 전 가입해주세요"
+msgstr "많은 I2P 트래커들은 토렌트를 시딩하기 전 가입을 요구합니다 - {0}을 시작하기 전 가입해주세요"
 
 #, java-format
 msgid "Error creating a torrent for \"{0}\""
@@ -913,7 +913,7 @@ msgstr "정체됨"
 #, java-format
 msgid "Seeding to {0} peer in swarm"
 msgid_plural "Seeding to {0} peers in swarm"
-msgstr[0] ""
+msgstr[0] "떼에서 {0} 피어에게 시딩"
 
 #, java-format
 msgid "Downloading from {0} peer"
@@ -1188,7 +1188,7 @@ msgid "Max files per torrent"
 msgstr "토렌트당 최대 파일 수"
 
 msgid "Maximum number of files permitted per torrent - note that trackers may set their own limits, and your OS may limit the number of open files, preventing torrents with many files (and subsequent torrents) from loading"
-msgstr "토렌트당 허용되는 최대 파일 수 - 추적기는 자체 제한을 설정할 수 있으며 OS는 열린 파일 수를 제한하여 파일이 많은 토렌트(및 후속 토렌트)가 로드되지 않도록 할 수 있습니다.토렌트당 허용되는 최대 파일 수 - 추적기는 자체 제한을 설정할 수 있으며 OS는 열린 파일 수를 제한하여 파일이 많은 토렌트(및 후속 토렌트)가 로드되지 않도록 할 수 있습니다.토렌트당 허용되는 최대 파일 수 - 추적기는 자체 제한을 설정할 수 있으며 OS는 열린 파일 수를 제한하여 파일이 많은 토렌트(및 후속 토렌트)가 로드되지 않도록 할 수 있습니다"
+msgstr "토렌트당 허용되는 최대 파일 수 - 추적기는 자체 제한을 설정할 수 있으며 OS는 열린 파일 수를 제한하여 파일이 많은 토렌트(및 후속 토렌트)가 로드되지 않도록 할 수 있습니다."
 
 msgid "Tunnel Configuration"
 msgstr "터널 구성"
@@ -1331,7 +1331,7 @@ msgid "Download Priority"
 msgstr "다운로드 우선순위"
 
 msgid "up"
-msgstr ""
+msgstr "업로드"
 
 msgid "Parent directory"
 msgstr "상위 디렉토리로 이동"

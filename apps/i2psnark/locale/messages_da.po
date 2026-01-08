@@ -202,7 +202,7 @@ msgid "Add and Create sections to display only on first page of multipage torren
 msgstr "Tilføj og opret sektioner for kun at blive vist på den første side af flersidede torrent-listesider."
 
 msgid "API key updated."
-msgstr ""
+msgstr "API-nøgle opdateret."
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "Open Tracker-liste ændret - torrent-genstart kræves for at træde i kraft."
@@ -358,13 +358,13 @@ msgstr "Op båndbreddegrænsen er {0} KBps"
 
 #, java-format
 msgid "Connecting to I2CP port on I2P instance at {0}"
-msgstr ""
+msgstr "Opretter forbindelse til I2CP-port på I2P-instans ved {0}"
 
 msgid "Connecting to I2P"
 msgstr "Opretter forbindelse til I2P"
 
 msgid "Connected to I2P at"
-msgstr ""
+msgstr "Forbundet til I2P ved"
 
 #, java-format
 msgid "Starting up torrent {0}"
@@ -376,7 +376,7 @@ msgstr "Uploadbåndbreddegrænsen er {0} KBps til et maksimum på {1} samtidige 
 
 #, java-format
 msgid "Storage: {0}GB currently available for downloads on configured data partition"
-msgstr ""
+msgstr "Lagring: {0}GB er i øjeblikket tilgængelig til downloads på den konfigurerede datapartition"
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
@@ -420,16 +420,16 @@ msgstr "Lukker I2P-tunnelen efter at have underrettet trackere."
 
 #, java-format
 msgid "Cannot check {0}"
-msgstr ""
+msgstr "Kan ikke tjekke {0}"
 
 msgid "Torrent already started"
-msgstr ""
+msgstr "Torrent allerede startet"
 
 msgid "No storage"
-msgstr ""
+msgstr "Ingen lagring"
 
 msgid "Starting recheck of {}"
-msgstr ""
+msgstr "Starter genkontrol af {}"
 
 #, java-format
 msgid "Finished recheck of torrent {0}, now {1} complete"
@@ -516,22 +516,22 @@ msgstr "Konfiguration"
 
 #, java-format
 msgid "Are you sure you want to delete {0} and all downloaded data?"
-msgstr ""
+msgstr "Er du sikker på, at du vil slette {0} og alle downloadede data?"
 
 #, java-format
 msgid "Deleting <b>{0}</b> and all associated data..."
-msgstr ""
+msgstr "Sletter <b>{0}</b> og alle tilknyttede data..."
 
 #, java-format
 msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
 msgstr "Er du sikker på, at du vil slette filen \\''{0}\\'' (downloadede data vil ikke blive slettet) ?"
 
 msgid "Note: Downloaded data will not be deleted."
-msgstr ""
+msgstr "Bemærk: Downloadede data vil ikke blive slettet."
 
 #, java-format
 msgid "Deleting {0} and associated metadata only..."
-msgstr ""
+msgstr "Sletter {0} og tilknyttede metadata kun..."
 
 msgid "clear messages"
 msgstr "klar beskeder"
@@ -617,25 +617,25 @@ msgid "Up Rate"
 msgstr "Op rate"
 
 msgid "Total size of loaded torrents"
-msgstr ""
+msgstr "Samlet størrelse af indlæste torrents"
 
 #, java-format
 msgid "1 connected peer"
 msgid_plural "{0} peer connections"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 forbundet peer"
+msgstr[1] "{0} peer-forbindelser"
 
 msgid "Active downloads"
-msgstr ""
+msgstr "Aktive downloads"
 
 msgid "Active uploads"
-msgstr ""
+msgstr "Aktive uploads"
 
 msgid "Active Inbound tunnels"
-msgstr ""
+msgstr "Aktive indkommende tunneller"
 
 msgid "Active Outbound tunnels"
-msgstr ""
+msgstr "Aktive udgående tunneller"
 
 msgid "Estimated download time for all torrents"
 msgstr "Anslået downloadtid for alle torrents"
@@ -653,7 +653,7 @@ msgid "Total upload speed"
 msgstr "Samlet uploadhastighed"
 
 msgid "Toggle Debug Panel"
-msgstr ""
+msgstr "Slå fejlfindingspanel til/fra"
 
 msgid "Debug Mode"
 msgstr "Fejlretningstilstand"
@@ -723,7 +723,7 @@ msgstr "Indtast URL eller vælg torrent-fil"
 
 #, java-format
 msgid "Error uploading the torrent file: {0}"
-msgstr ""
+msgstr "Fejl ved upload af torrentfilen: {0}"
 
 #, java-format
 msgid "Cannot add torrent {0} inside another torrent: {1}"
@@ -734,7 +734,7 @@ msgid "Download from non-I2P location {0} is not supported"
 msgstr "Download fra ikke-I2P-placering {0} understøttes ikke"
 
 msgid "Error: Version 2 info hashes are not supported"
-msgstr ""
+msgstr "Fejl: Version 2-info-hashes understøttes ikke"
 
 #, java-format
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
@@ -916,8 +916,8 @@ msgstr "Går i stå"
 #, java-format
 msgid "Seeding to {0} peer in swarm"
 msgid_plural "Seeding to {0} peers in swarm"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Seeder til {0} peer i sværm"
+msgstr[1] "Seeder til {0} peers i sværm"
 
 #, java-format
 msgid "Downloading from {0} peer"
@@ -1302,13 +1302,13 @@ msgid "Changing this setting to less than 3 hops may improve speed at the expens
 msgstr "Ændring af denne indstilling til mindre end 3 hop kan forbedre hastigheden på bekostning af anonymitet og anbefales ikke"
 
 msgid "Sequential piece or file order not saved - feature currently broken."
-msgstr ""
+msgstr "Sekventiel stykke- eller filrækkefølge er ikke gemt - funktionen er i øjeblikket i stykker."
 
 msgid "Unknown command"
-msgstr ""
+msgstr "Ukendt kommando"
 
 msgid "Please retry form submission (bad nonce)"
-msgstr ""
+msgstr "Prøv venligst at sende formularen igen (dårlig nonce)"
 
 msgid "Resource Does Not Exist"
 msgstr "Resource findes ikke"
@@ -1338,7 +1338,7 @@ msgid "Download Priority"
 msgstr "Download Prioritet"
 
 msgid "up"
-msgstr ""
+msgstr "op"
 
 msgid "Parent directory"
 msgstr "Op til højere niveau bibliotek"
@@ -1380,10 +1380,10 @@ msgid "Pieces"
 msgstr "Stykker"
 
 msgid "Average download speed for torrent"
-msgstr ""
+msgstr "Gennemsnitlig downloadhastighed for torrent"
 
 msgid "Download speed"
-msgstr ""
+msgstr "Downloadhastighed"
 
 msgid "Completion"
 msgstr "Færdiggørelse"
@@ -1482,7 +1482,7 @@ msgid "Delete Selected"
 msgstr "Slet markedere"
 
 msgid "File downloading priorities updated for torrent "
-msgstr ""
+msgstr "Prioriteter for fil-download opdateret for torrent "
 
 msgid "Edit Torrent"
 msgstr "Rediger torrent"

@@ -44,7 +44,7 @@ msgstr "Total opplastergrense satt til {0}"
 
 #, java-format
 msgid "Minimum uploaders limit is {0}"
-msgstr ""
+msgstr "Minimum opplastergrense er {0}"
 
 #, java-format
 msgid "Up BW limit changed to {0}KBps"
@@ -128,7 +128,7 @@ msgid "Disconnecting old I2CP destination"
 msgstr "Kobler fra gammelt I2CP-mål"
 
 msgid "Unable to connect with the new settings, reverting to the old I2CP settings"
-msgstr "Kan ikke koble til de nye innstillingene, går tilbake til de gamle I2CP-innstillingeneKlarte ikke å koble til med de nye innstillingene, går tilbake til de gamle I2CP-innstillingene"
+msgstr "Kan ikke koble til de nye innstillingene, går tilbake til de gamle I2CP-innstillingene"
 
 msgid "Unable to reconnect with the old settings!"
 msgstr "Klarte ikke å koble til på nytt med gamle innstillinger!"
@@ -202,13 +202,13 @@ msgid "Add and Create sections to display only on first page of multipage torren
 msgstr "Legg til og opprett seksjoner som bare skal vises på den første siden av flersiders torrent-oppføringssider."
 
 msgid "API key updated."
-msgstr ""
+msgstr "API-nøkkel oppdatert."
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
-msgstr "Open Tracker-liste endret - torrent omstart kreves for å tre i kraft.Liste over åpne sporere endret - torrent-omstart kreves før det tar effekt."
+msgstr "Open Tracker-liste endret - torrent omstart kreves for å tre i kraft."
 
 msgid "Private tracker list changed - affects newly created torrents only."
-msgstr "Privat sporingsliste endret - påvirker kun nyopprettede torrenter.Privat sporerliste endret - vil kun påvirke nylig opprettede torrentfiler."
+msgstr "Privat sporingsliste endret - påvirker kun nyopprettede torrenter."
 
 #, java-format
 msgid "Unable to save the config to {0}"
@@ -267,15 +267,15 @@ msgstr "FEIL - Ingen I2P-sporere i privat torrent \"{0}\""
 
 #, java-format
 msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
-msgstr "Advarsel - Ingen I2P-sporere i \"{0}\", vil kun kunngjøre til I2P åpne sporere og DHT.Advarsel - Ingen I2P-sporere i \"{0}\", vil bare annonsere til åpne I2P-sporere og DHT."
+msgstr "Advarsel - Ingen I2P-sporere i \"{0}\", vil kun kunngjøre til I2P åpne sporere og DHT."
 
 #, java-format
 msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
-msgstr "Advarsel - Ingen I2P-sporere i \"{0}\", og åpne sporere er deaktivert, vil kun kunngjøre til DHT.Advarsel - Ingen I2P-sporer i \"{0}\", og åpne sporere er skrudd av, vil annonsere kun på DHT."
+msgstr "Advarsel - Ingen I2P-sporere i \"{0}\", og åpne sporere er deaktivert, vil kun kunngjøre til DHT."
 
 #, java-format
 msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
-msgstr "Advarsel - Ingen I2P-sporere i \"{0}\", og DHT og åpne sporere er deaktivert, bør du aktivere åpne sporere eller DHT før du starter torrenten.Advarsel - Ingen I2P-sporere i \"{0}\", og DHT og åpne sporere er deaktivert, bør du aktivere åpne sporere eller DHT før du starter torrenten.Advarsel - Ingen I2P-sporere i \"{0}\", og DHT og åpne sporere er deaktivert, bør du aktivere åpne sporere eller DHT før du starter torrenten.Advarsel - Ingen I2P-sporere i \"{0}\", og DHT og åpne sporere er deaktivert, bør du aktivere åpne sporere eller DHT før du starter torrenten.Advarsel - Ingen I2P-sporere i \"{0}\", og DHT og åpne sporere er avskrudd, du burde skru på åpne sporere eller DHT før du starter torrenten."
+msgstr "Advarsel - Ingen I2P-sporere i \"{0}\", og DHT og åpne sporere er deaktivert, bør du aktivere åpne sporere eller DHT før du starter torrenten."
 
 #, java-format
 msgid "Fetching {0}"
@@ -283,7 +283,7 @@ msgstr "Henter {0}"
 
 #, java-format
 msgid "Open trackers are disabled and we have no DHT peers. Fetch of {0} may not succeed until you start another torrent, enable open trackers, or enable DHT."
-msgstr "Open trackers er deaktivert og vi har ingen DHT-peers. Åpne sporere er skrudd av og vi har ingen DHT-likemenn. Mottak av {0} blir muligens ikke fullført før du starter en annen torrent, starter åpne sporere, eller DHT."
+msgstr "Åpne sporere er deaktivert og vi har ingen DHT-likemenn. Mottak av {0} blir muligens ikke fullført før du starter en annen torrent, aktiverer åpne sporere eller DHT."
 
 #, java-format
 msgid "Adding {0}"
@@ -358,13 +358,13 @@ msgstr "Båndbreddegrensen er {0} kbps"
 
 #, java-format
 msgid "Connecting to I2CP port on I2P instance at {0}"
-msgstr ""
+msgstr "Kobler til I2CP-port på I2P-instansen ved {0}"
 
 msgid "Connecting to I2P"
 msgstr "Kobler til I2P"
 
 msgid "Connected to I2P at"
-msgstr ""
+msgstr "Koblet til I2P på"
 
 #, java-format
 msgid "Starting up torrent {0}"
@@ -376,7 +376,7 @@ msgstr "Båndbreddegrense for opplasting er {0} KBps til maksimalt {1} samtidige
 
 #, java-format
 msgid "Storage: {0}GB currently available for downloads on configured data partition"
-msgstr ""
+msgstr "Lagring: {0}GB er for øyeblikket tilgjengelig for nedlastinger på konfigurert datapartisjon"
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
@@ -420,16 +420,16 @@ msgstr "Lukker I2P-tunnel etter å ha meldt fra til sporere."
 
 #, java-format
 msgid "Cannot check {0}"
-msgstr ""
+msgstr "Kan ikke sjekke {0}"
 
 msgid "Torrent already started"
-msgstr ""
+msgstr "Torrent allerede startet"
 
 msgid "No storage"
-msgstr ""
+msgstr "Ingen lagring"
 
 msgid "Starting recheck of {}"
-msgstr ""
+msgstr "Starter ny kontroll av {}"
 
 #, java-format
 msgid "Finished recheck of torrent {0}, now {1} complete"
@@ -444,10 +444,10 @@ msgid "Error checking torrent {0}"
 msgstr "Feil under kontroll av torrenten {0}"
 
 msgid "Cannot create diskspace bar"
-msgstr ""
+msgstr "Kan ikke opprette diskplasslinje"
 
 msgid "Data partition"
-msgstr ""
+msgstr "Datapartisjon"
 
 #, java-format
 msgid "No valid trackers for {0} - enable opentrackers or DHT?"
@@ -516,22 +516,22 @@ msgstr "Oppsett"
 
 #, java-format
 msgid "Are you sure you want to delete {0} and all downloaded data?"
-msgstr ""
+msgstr "Er du sikker på at du vil slette {0} og alle nedlastede data?"
 
 #, java-format
 msgid "Deleting <b>{0}</b> and all associated data..."
-msgstr ""
+msgstr "Sletter <b>{0}</b> og alle tilknyttede data..."
 
 #, java-format
 msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
 msgstr "Er du sikker på at du vil slette filen \\''{0}\\'' (nedlastede data vil ikke bli slettet) ?"
 
 msgid "Note: Downloaded data will not be deleted."
-msgstr ""
+msgstr "Merk: Nedlastede data vil ikke bli slettet."
 
 #, java-format
 msgid "Deleting {0} and associated metadata only..."
-msgstr ""
+msgstr "Sletter {0} og tilknyttede metadata..."
 
 msgid "clear messages"
 msgstr "fjern meldinger"
@@ -617,25 +617,25 @@ msgid "Up Rate"
 msgstr "Opphastighet"
 
 msgid "Total size of loaded torrents"
-msgstr ""
+msgstr "Total størrelse av lastede torrenter"
 
 #, java-format
 msgid "1 connected peer"
 msgid_plural "{0} peer connections"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 tilkoblet peer"
+msgstr[1] "{0} tilkoblede peers"
 
 msgid "Active downloads"
-msgstr ""
+msgstr "Aktive nedlastinger"
 
 msgid "Active uploads"
-msgstr ""
+msgstr "Aktive opplastinger"
 
 msgid "Active Inbound tunnels"
-msgstr ""
+msgstr "Aktive innbøydende tunneler"
 
 msgid "Active Outbound tunnels"
-msgstr ""
+msgstr "Aktive utbøydende tunneler"
 
 msgid "Estimated download time for all torrents"
 msgstr "Estimert nedlastingstid for alle torrenter"
@@ -653,7 +653,7 @@ msgid "Total upload speed"
 msgstr "Total opplastingshastighet"
 
 msgid "Toggle Debug Panel"
-msgstr ""
+msgstr "Veksle feilsøkingspanel"
 
 msgid "Debug Mode"
 msgstr "Feilsøkingsmodus"
@@ -723,7 +723,7 @@ msgstr "Skriv inn URL eller velg torrentfil"
 
 #, java-format
 msgid "Error uploading the torrent file: {0}"
-msgstr ""
+msgstr "Feil ved opplasting av torrentfilen: {0}"
 
 #, java-format
 msgid "Cannot add torrent {0} inside another torrent: {1}"
@@ -734,7 +734,7 @@ msgid "Download from non-I2P location {0} is not supported"
 msgstr "Nedlasting fra ikke-I2P-sted {0} støttes ikke"
 
 msgid "Error: Version 2 info hashes are not supported"
-msgstr ""
+msgstr "Feil: Versjon 2-info-hasher støttes ikke"
 
 #, java-format
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
@@ -807,7 +807,7 @@ msgstr "Torrent laget for \"{0}\""
 
 #, java-format
 msgid "Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\""
-msgstr "Mange I2P-sporere krever at du registrerer nye torrenter før såing - vennligst gjør det før du starter \"{0}\"Mange I2P-sporere krever at du registrerer nye torrenter før deling - Gjør det før du starter \"{0}\""
+msgstr "Mange I2P-sporere krever at du registrerer nye torrenter før seeding - vennligst gjør det før du starter \"{0}\""
 
 #, java-format
 msgid "Error creating a torrent for \"{0}\""
@@ -916,8 +916,8 @@ msgstr "Fastlåst"
 #, java-format
 msgid "Seeding to {0} peer in swarm"
 msgid_plural "Seeding to {0} peers in swarm"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Deler til {0} peer i sverm"
+msgstr[1] "Deler til {0} peers i sverm"
 
 #, java-format
 msgid "Downloading from {0} peer"
@@ -1302,13 +1302,13 @@ msgid "Changing this setting to less than 3 hops may improve speed at the expens
 msgstr "Endring av denne innstillingen til mindre enn 3 hopp kan forbedre hastigheten på bekostning av anonymitet og anbefales ikke"
 
 msgid "Sequential piece or file order not saved - feature currently broken."
-msgstr ""
+msgstr "Sekvensiell bit- eller filrekkefølge er ikke lagret - funksjonen er for øyeblikket defekt."
 
 msgid "Unknown command"
-msgstr ""
+msgstr "Ukjent kommando"
 
 msgid "Please retry form submission (bad nonce)"
-msgstr ""
+msgstr "Vennligst prøv å sende skjemaet på nytt (ugyldig nonce)"
 
 msgid "Resource Does Not Exist"
 msgstr "Ressurs finnes ikke"
@@ -1338,7 +1338,7 @@ msgid "Download Priority"
 msgstr "Nedlastingsprioritet"
 
 msgid "up"
-msgstr ""
+msgstr "opp"
 
 msgid "Parent directory"
 msgstr "Opp et nivå i mappe"
@@ -1380,10 +1380,10 @@ msgid "Pieces"
 msgstr "Biter"
 
 msgid "Average download speed for torrent"
-msgstr ""
+msgstr "Gjennomsnittlig nedlastingshastighet for torrent"
 
 msgid "Download speed"
-msgstr ""
+msgstr "Nedlastingshastighet"
 
 msgid "Completion"
 msgstr "Fullføring"
@@ -1482,7 +1482,7 @@ msgid "Delete Selected"
 msgstr "Slett valgte"
 
 msgid "File downloading priorities updated for torrent "
-msgstr ""
+msgstr "Prioriteter for filnedlasting oppdatert for torrent "
 
 msgid "Edit Torrent"
 msgstr "Rediger torrent"

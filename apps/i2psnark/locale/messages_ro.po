@@ -44,7 +44,7 @@ msgstr "Limita totală de incărcare schimbată la {0}"
 
 #, java-format
 msgid "Minimum uploaders limit is {0}"
-msgstr ""
+msgstr "Limita minimă de încărcători este {0}"
 
 #, java-format
 msgid "Up BW limit changed to {0}KBps"
@@ -624,6 +624,7 @@ msgid "1 connected peer"
 msgid_plural "{0} peer connections"
 msgstr[0] "1 peer conectat"
 msgstr[1] "{0} peer-uri conectate"
+msgstr[2] "{0} de peer-uri conectate"
 
 msgid "Active downloads"
 msgstr "Descărcări active"
@@ -653,7 +654,7 @@ msgid "Total upload speed"
 msgstr "Viteza totală a încărcării"
 
 msgid "Toggle Debug Panel"
-msgstr ""
+msgstr "Comută panoul de depanare"
 
 msgid "Debug Mode"
 msgstr "Mod de depanare"
@@ -724,7 +725,7 @@ msgstr "Introduceți adresa URL sau selectați fișierul torrent"
 
 #, java-format
 msgid "Error uploading the torrent file: {0}"
-msgstr ""
+msgstr "Eroare la încărcarea fișierului torrent: {0}"
 
 #, java-format
 msgid "Cannot add torrent {0} inside another torrent: {1}"
@@ -735,7 +736,7 @@ msgid "Download from non-I2P location {0} is not supported"
 msgstr "Descărcarea din locația non-I2P {0} nu este acceptată"
 
 msgid "Error: Version 2 info hashes are not supported"
-msgstr ""
+msgstr "Eroare: Hash-urile de informații versiunea 2 nu sunt acceptate"
 
 #, java-format
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
@@ -918,9 +919,9 @@ msgstr "Întrerupt"
 #, java-format
 msgid "Seeding to {0} peer in swarm"
 msgid_plural "Seeding to {0} peers in swarm"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Semănare la {0} peer în roi"
+msgstr[1] "Semănare la {0} peer-uri în roi"
+msgstr[2] "Semănare la {0} de peer-uri în roi"
 
 #, java-format
 msgid "Downloading from {0} peer"
@@ -1308,7 +1309,7 @@ msgid "Changing this setting to less than 3 hops may improve speed at the expens
 msgstr "Schimbarea acestei setări la mai puțin de 3 hop poate îmbunătăți viteza în detrimentul anonimatului și nu este recomandată"
 
 msgid "Sequential piece or file order not saved - feature currently broken."
-msgstr ""
+msgstr "Ordinea secvențială a pieselor sau fișierelor nu a fost salvată - funcționalitatea este momentan defectă."
 
 msgid "Unknown command"
 msgstr "Comandă necunoscut"
@@ -1344,7 +1345,7 @@ msgid "Download Priority"
 msgstr "Prioritate pentru descărcare"
 
 msgid "up"
-msgstr ""
+msgstr "sus"
 
 msgid "Parent directory"
 msgstr "Spre dosarul de nivel superior"

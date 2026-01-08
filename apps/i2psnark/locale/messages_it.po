@@ -44,7 +44,7 @@ msgstr "Limite del totale di uploaders modificato a {0}"
 
 #, java-format
 msgid "Minimum uploaders limit is {0}"
-msgstr ""
+msgstr "Il limite minimo di uploaders è {0}"
 
 #, java-format
 msgid "Up BW limit changed to {0}KBps"
@@ -358,7 +358,7 @@ msgstr "Il limite della larghezza di banda è {0} KBps"
 
 #, java-format
 msgid "Connecting to I2CP port on I2P instance at {0}"
-msgstr "Connessione alla porta I2CP sull'istanza I2P a {0}"
+msgstr "Connessione alla porta I2CP sull''istanza I2P a {0}"
 
 msgid "Connecting to I2P"
 msgstr "Connessione in corso ad I2P"
@@ -727,7 +727,7 @@ msgstr "Errore durante il caricamento del file torrent: {0}"
 
 #, java-format
 msgid "Cannot add torrent {0} inside another torrent: {1}"
-msgstr "Impossibile aggiungere il torrent {0} all'interno di un altro torrent: {1}"
+msgstr "Impossibile aggiungere il torrent {0} all''interno di un altro torrent: {1}"
 
 #, java-format
 msgid "Download from non-I2P location {0} is not supported"
@@ -995,7 +995,7 @@ msgstr "Dati da mandare in seed"
 
 #, java-format
 msgid "File or directory to seed (full path or within the directory {0} )"
-msgstr "File o directory da condividere (percorso completo o all'interno della directory {0} )"
+msgstr "File o directory da condividere (percorso completo o all''interno della directory {0} )"
 
 msgid "Create torrent"
 msgstr "Crea torrent"

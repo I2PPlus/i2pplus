@@ -2,6 +2,7 @@
 # Copyright (C) 2009 The I2P Project
 msgid ""
 msgstr ""
+"Language: az\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -23,7 +24,7 @@ msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr "I2P ilə əlaqə qurmaqda xəta - I2CP ayarlarınızı yoxlayın!"
 
 msgid "Download already running: "
-msgstr ""
+msgstr "Endirmə artıq işləyir: "
 
 msgid "Downloading"
 msgstr "Endirmə"
@@ -43,7 +44,7 @@ msgstr "Ümumi yükləyicilərin limiti {0} olaraq dəyişdirildi"
 
 #, java-format
 msgid "Minimum uploaders limit is {0}"
-msgstr ""
+msgstr "Minimum yükləyicilərin limiti {0}-dir"
 
 #, java-format
 msgid "Up BW limit changed to {0}KBps"
@@ -55,14 +56,14 @@ msgstr "Yükləmə band genişliyinin minimum limiti {0}KBpsdir"
 
 #, java-format
 msgid "Maximum download speed changed to {0}KB/s"
-msgstr ""
+msgstr "Maksimum endirmə sürəti {0}KB/s olaraq dəyişdirildi"
 
 #, java-format
 msgid "Download speed limit is {0}KB/s"
-msgstr ""
+msgstr "Endirmə sürətinin limiti {0}KB/s"
 
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
-msgstr ""
+msgstr "Qeyd: Bu dəyişikliyin tətbiqi üçün torrentlərinizi dayandırıb yenidən başlatmalı və ya I2PSnark-ı yenidən başlatmalı ola bilərsiniz."
 
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "Giriş kanallarında +0/1 tüneldə atış rəndomlaşdırması aktivləşdirildi"
@@ -201,7 +202,7 @@ msgid "Add and Create sections to display only on first page of multipage torren
 msgstr "Çoxsayfəli torrent siyahı səhifələrinin ilk səhifəsində yalnız Əlavə Et və Yarat bölmələri göstərilsin."
 
 msgid "API key updated."
-msgstr ""
+msgstr "API açarı yeniləndi."
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "Açıq Tracker siyahısı dəyişdi - effekt göstərmək üçün torrent yenidən başlamaq lazımdır."
@@ -357,13 +358,13 @@ msgstr "Yükləmə band genişliyinin limiti {0} KBps"
 
 #, java-format
 msgid "Connecting to I2CP port on I2P instance at {0}"
-msgstr ""
+msgstr "{0}-da I2P nümunəsindəki I2CP portuna qoşulur"
 
 msgid "Connecting to I2P"
 msgstr "I2P ilə əlaqə qurmaq"
 
 msgid "Connected to I2P at"
-msgstr ""
+msgstr "I2P-yə qoşuldu"
 
 #, java-format
 msgid "Starting up torrent {0}"
@@ -375,7 +376,7 @@ msgstr "Yükləmə band genişliyinin limiti {0} KBpsdir, maksimum {1} simultan 
 
 #, java-format
 msgid "Storage: {0}GB currently available for downloads on configured data partition"
-msgstr ""
+msgstr "Saxlama: {0}GB tənzimlənmiş verilənlər bölməsində endirmələr üçün hazırda mövcuddur"
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
@@ -419,16 +420,16 @@ msgstr "Trackerləri xəbərdar etməkdən sonra I2P tünelini bağlamaq."
 
 #, java-format
 msgid "Cannot check {0}"
-msgstr ""
+msgstr "{0} yoxlanıla bilmir"
 
 msgid "Torrent already started"
-msgstr ""
+msgstr "Torrent artıq başladı"
 
 msgid "No storage"
-msgstr ""
+msgstr "Saxlama yoxdur"
 
 msgid "Starting recheck of {}"
-msgstr ""
+msgstr "{} yenidən yoxlanılır"
 
 #, java-format
 msgid "Finished recheck of torrent {0}, now {1} complete"
@@ -443,10 +444,10 @@ msgid "Error checking torrent {0}"
 msgstr "Torrent {0} yoxlama xətası"
 
 msgid "Cannot create diskspace bar"
-msgstr ""
+msgstr "Diskspace paneli yaradıla bilmir"
 
 msgid "Data partition"
-msgstr ""
+msgstr "Verilənlər bölməsi"
 
 #, java-format
 msgid "No valid trackers for {0} - enable opentrackers or DHT?"
@@ -515,22 +516,22 @@ msgstr "Tənzimləmə"
 
 #, java-format
 msgid "Are you sure you want to delete {0} and all downloaded data?"
-msgstr ""
+msgstr "{0} və bütün endirilən verilənləri silmək istədiyinizə əminsiniz?"
 
 #, java-format
 msgid "Deleting <b>{0}</b> and all associated data..."
-msgstr ""
+msgstr "<b>{0}</b> və bütün əlaqəli verilənlər silinir..."
 
 #, java-format
 msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
 msgstr "Fayl \\''{0}\\''ni silmək istədiyinizə əminsinizmi? (Endirilmiş məlumatlar silinməyəcək)"
 
 msgid "Note: Downloaded data will not be deleted."
-msgstr ""
+msgstr "Qeyd: Endirilən verilənlər silinməyəcək."
 
 #, java-format
 msgid "Deleting {0} and associated metadata only..."
-msgstr ""
+msgstr "Yalnız {0} və əlaqəli metadata silinir..."
 
 msgid "clear messages"
 msgstr "xəbərləri sil"
@@ -616,25 +617,25 @@ msgid "Up Rate"
 msgstr "Yükləmə sürəti"
 
 msgid "Total size of loaded torrents"
-msgstr ""
+msgstr "Ümumi yüklənmiş torrentlərin ölçüsü"
 
 #, java-format
 msgid "1 connected peer"
 msgid_plural "{0} peer connections"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 qoşulmuş qarşılıqlı"
+msgstr[1] "{0} qarşılıqlı əlaqələri"
 
 msgid "Active downloads"
-msgstr ""
+msgstr "Aktiv endirmələr"
 
 msgid "Active uploads"
-msgstr ""
+msgstr "Aktiv yükləmələr"
 
 msgid "Active Inbound tunnels"
-msgstr ""
+msgstr "Aktiv Giriş tünelləri"
 
 msgid "Active Outbound tunnels"
-msgstr ""
+msgstr "Aktiv Çıxış tünelləri"
 
 msgid "Estimated download time for all torrents"
 msgstr "Bütün torrentlərin endirilmə vaxtı təxmin"
@@ -652,7 +653,7 @@ msgid "Total upload speed"
 msgstr "Ümumi yükləmə sürəti"
 
 msgid "Toggle Debug Panel"
-msgstr ""
+msgstr "Debug Panelini dəyişdir"
 
 msgid "Debug Mode"
 msgstr "Debug rejimi"
@@ -722,7 +723,7 @@ msgstr "URL daxil edin və ya torrent faylını seçin"
 
 #, java-format
 msgid "Error uploading the torrent file: {0}"
-msgstr ""
+msgstr "Torrent faylı yüklənərkən xəta: {0}"
 
 #, java-format
 msgid "Cannot add torrent {0} inside another torrent: {1}"
@@ -733,7 +734,7 @@ msgid "Download from non-I2P location {0} is not supported"
 msgstr "Non-I2P yeri {0}dən endirmə dəstəklənmir"
 
 msgid "Error: Version 2 info hashes are not supported"
-msgstr ""
+msgstr "Xəta: Versiya 2 info hash-ləri dəstəklənmir"
 
 #, java-format
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
@@ -915,8 +916,8 @@ msgstr "Dayandırıldı"
 #, java-format
 msgid "Seeding to {0} peer in swarm"
 msgid_plural "Seeding to {0} peers in swarm"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Təbii qrupda {0} qarşılıqlıya bölcəmə"
+msgstr[1] "Təbii qrupda {0} qarşılıqlıya bölcəmə"
 
 #, java-format
 msgid "Downloading from {0} peer"
@@ -1301,13 +1302,13 @@ msgid "Changing this setting to less than 3 hops may improve speed at the expens
 msgstr "Bu ayarı 3 hopdan az olaraq dəyişdirmək sürəti artırmaq olar, amma anonimliyin xətasına salınacaq və tövsiyə olunmur"
 
 msgid "Sequential piece or file order not saved - feature currently broken."
-msgstr ""
+msgstr "Ardıcıl hissə və ya fayl sırası saxlanılmadı - funksiya hazırda pozulmuşdur."
 
 msgid "Unknown command"
-msgstr ""
+msgstr "Bilinməyən əmr"
 
 msgid "Please retry form submission (bad nonce)"
-msgstr ""
+msgstr "Formanın təkrar təqdimatını yenidən cəhd edin (səhv nonce)"
 
 msgid "Resource Does Not Exist"
 msgstr "Resurs mövcud deyil"
@@ -1337,7 +1338,7 @@ msgid "Download Priority"
 msgstr "Endirmə prioriteti"
 
 msgid "up"
-msgstr ""
+msgstr "yükləmə"
 
 msgid "Parent directory"
 msgstr "Yüksək səviyyəli kataloqu qədər"
@@ -1379,10 +1380,10 @@ msgid "Pieces"
 msgstr "Hissələr"
 
 msgid "Average download speed for torrent"
-msgstr ""
+msgstr "Torrent üçün ortalama endirmə sürəti"
 
 msgid "Download speed"
-msgstr ""
+msgstr "Endirmə sürəti"
 
 msgid "Completion"
 msgstr "Tamamlanma"
@@ -1481,7 +1482,7 @@ msgid "Delete Selected"
 msgstr "Seçilmişləri Sil"
 
 msgid "File downloading priorities updated for torrent "
-msgstr ""
+msgstr "Torrent üçün fayl endirmə prioritetləri yeniləndi"
 
 msgid "Edit Torrent"
 msgstr "Torrenti Redaktə Et"

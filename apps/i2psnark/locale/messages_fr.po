@@ -43,7 +43,7 @@ msgstr "La limite totale de téléverseurs a été portée à {0}"
 
 #, java-format
 msgid "Minimum uploaders limit is {0}"
-msgstr ""
+msgstr "La limite minimale de téléverseurs est de {0}"
 
 #, java-format
 msgid "Up BW limit changed to {0}KBps"
@@ -117,7 +117,7 @@ msgid "Data directory changed to {0}"
 msgstr "Le répertoire de données a été changé à {0}"
 
 msgid "I2CP and tunnel changes will take effect after stopping all torrents"
-msgstr "Les modifications apportées à I2CP et au tunnel prendront effet après l'arrêt de tous les torrentsLes modifications apportées à I2CP et au tunnel prendront effet après l'arrêt de tous les torrentsLes modifications d’I2CP et des tunnels prendront effet après arrêt de tous les torrents"
+msgstr "Les modifications d'I2CP et des tunnels prendront effet après l'arrêt de tous les torrents"
 
 #, java-format
 msgid "I2CP options changed to: {0}"
@@ -127,7 +127,7 @@ msgid "Disconnecting old I2CP destination"
 msgstr "Déconnexion de l’ancienne destination I2CP"
 
 msgid "Unable to connect with the new settings, reverting to the old I2CP settings"
-msgstr "Impossible de se connecter avec les nouveaux paramètres, retour aux anciens paramètres I2CPImpossible de se connecter avec les nouveaux paramètres, retour aux anciens paramètres I2CPImpossible de se connecter avec les nouveaux paramètres, retour aux anciens paramètres d’I2CP"
+msgstr "Impossible de se connecter avec les nouveaux paramètres, retour aux anciens paramètres I2CP"
 
 msgid "Unable to reconnect with the old settings!"
 msgstr "Impossible de se reconnecter avec les anciens paramètres !"
@@ -146,10 +146,10 @@ msgid "Disabled autostart"
 msgstr "Le démarrage automatique a été désactivé"
 
 msgid "Enabled open trackers - torrent restart required to take effect."
-msgstr "Activation des trackers ouverts - redémarrage du torrent requis pour prendre effet.Activation des trackers ouverts - redémarrage du torrent requis pour prendre effet.Les traqueurs ouverts ont été activés. Les torrents doivent être redémarrés pour qu’ils prennent effet."
+msgstr "Les traqueurs ouverts ont été activés. Les torrents doivent être redémarrés pour qu'ils prennent effet."
 
 msgid "Disabled open trackers - torrent restart required to take effect."
-msgstr "Trackers ouverts désactivés - redémarrage du torrent requis pour prendre effet.Trackers ouverts désactivés - redémarrage du torrent requis pour prendre effet.Les traqueurs ouverts ont été désactivés. Les torrents doivent être redémarrés pour qu’ils prennent effet."
+msgstr "Les traqueurs ouverts ont été désactivés. Les torrents doivent être redémarrés pour qu'ils prennent effet."
 
 msgid "Enabled DHT."
 msgstr "La table de hachage distribuée a été activée."
@@ -158,7 +158,7 @@ msgid "Disabled DHT."
 msgstr "La table de hachage distribuée a été désactivée."
 
 msgid "DHT change requires tunnel shutdown and reopen"
-msgstr "Le changement DHT nécessite l’arrêt et la réouverture du tunnelLe changement apporté à la table de hachage distribuée exige la fermeture et la réouverture du tunnel"
+msgstr "Le changement de la table de hachage distribuée nécessite la fermeture et la réouverture du tunnel"
 
 msgid "Enabled Ratings."
 msgstr "Les évaluations ont été activées."
@@ -239,7 +239,7 @@ msgstr "Un torrent avec ce hachage d’informations est déjà en cours: {0}"
 
 #, java-format
 msgid "Torrent with the same data location is already running: {0}"
-msgstr "Torrent avec le même emplacement de données est déjà en cours d'exécution: {0}"
+msgstr "Torrent avec le même emplacement de données est déjà en cours d''exécution : {0}"
 
 #, java-format
 msgid "Torrent in \"{0}\" is invalid"
@@ -247,7 +247,7 @@ msgstr "Le torrent situé dans «{0}» est invalide"
 
 #, java-format
 msgid "ERROR - Out of memory, cannot create torrent from {0}"
-msgstr "ERREUR – Mémoire insuffisante, impossible de créer un torrent à partir de {0}ERREUR - Mémoire insuffisante, impossible de créer le torrent à partir de {0}"
+msgstr "ERREUR - Mémoire insuffisante, impossible de créer le torrent à partir de {0}"
 
 msgid "Initializing I2PSnark and opening tunnels"
 msgstr "Initialisation de I2PSnark et ouverture des tunnels"
@@ -329,7 +329,7 @@ msgstr "Le torrent «{0}» ne contient aucunes données !"
 
 #, java-format
 msgid "Torrents larger than {0}B are not supported yet \"{1}\"!"
-msgstr "Les torrents supérieurs à {0}B ne sont pas encore pris en charge \"{1}\"!Les torrents dépassant {0} o ne sont pas encore pris en charge «{1}» !"
+msgstr "Les torrents dépassant {0} o ne sont pas encore pris en charge \" {1}\" !"
 
 #, java-format
 msgid "Error: Could not remove the torrent {0}"
@@ -357,7 +357,7 @@ msgstr "La limite de bande passante supérieure est de {0} Ko/s"
 
 #, java-format
 msgid "Connecting to I2CP port on I2P instance at {0}"
-msgstr "Connexion au port I2CP sur l'instance I2P à {0}"
+msgstr "Connexion au port I2CP sur l''instance I2P à {0}"
 
 msgid "Connecting to I2P"
 msgstr "Connexion à I2P"
@@ -371,7 +371,7 @@ msgstr "Démarrage du torrent {0}"
 
 #, java-format
 msgid "Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
-msgstr "La limite de bande passante de téléchargement est de {0} Ko/s jusqu'à un maximum de {1} homologues simultanés."
+msgstr "La limite de bande passante de téléchargement est de {0} Ko/s jusqu''à un maximum de {1} homologues simultanés."
 
 #, java-format
 msgid "Storage: {0}GB currently available for downloads on configured data partition"
@@ -722,7 +722,7 @@ msgstr "Entrez l'URL ou sélectionnez le fichier torrent"
 
 #, java-format
 msgid "Error uploading the torrent file: {0}"
-msgstr ""
+msgstr "Erreur lors du téléversement du fichier torrent : {0}"
 
 #, java-format
 msgid "Cannot add torrent {0} inside another torrent: {1}"
@@ -733,7 +733,7 @@ msgid "Download from non-I2P location {0} is not supported"
 msgstr "Le téléchargement de l’emplacement {0} extérieur à I2P n’est pas pris en charge"
 
 msgid "Error: Version 2 info hashes are not supported"
-msgstr ""
+msgstr "Erreur : les hachages d'informations de la version 2 ne sont pas pris en charge"
 
 #, java-format
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
@@ -915,8 +915,8 @@ msgstr "Bloqué"
 #, java-format
 msgid "Seeding to {0} peer in swarm"
 msgid_plural "Seeding to {0} peers in swarm"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Propagation vers {0} pair dans l'essaim"
+msgstr[1] "Propagation vers {0} pairs dans l'essaim"
 
 #, java-format
 msgid "Downloading from {0} peer"
@@ -1337,7 +1337,7 @@ msgid "Download Priority"
 msgstr "Priorité de téléchargement"
 
 msgid "up"
-msgstr ""
+msgstr "amont"
 
 msgid "Parent directory"
 msgstr "Vers le répertoire parent"

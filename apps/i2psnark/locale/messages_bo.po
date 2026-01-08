@@ -6,7 +6,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "No more torrents running."
 msgstr "ཊོ་རེནཊི་ཚུ་མ་ལས་མེད།"
@@ -44,7 +44,7 @@ msgstr "ཌཱུལ་ཨཔ་ལོ་ཌར་ཚད་ {0} ལུ་བས�
 
 #, java-format
 msgid "Minimum uploaders limit is {0}"
-msgstr ""
+msgstr "ཨཔ་བེནཌིཊིགི་ཉུང་མཐའ་ཚད་ {0} ཨིན།"
 
 #, java-format
 msgid "Up BW limit changed to {0}KBps"
@@ -212,7 +212,7 @@ msgstr "སྒེར་གྱི་ཊེ་རེཀར་ཐོ་ཡིག་
 
 #, java-format
 msgid "Unable to save the config to {0}"
-msgstr ""
+msgstr "རིམ་སྒྲིག་ {0} ལུ་སྲུང་མ་ཚུགས།"
 
 #, java-format
 msgid "Torrent file deleted: {0}"
@@ -240,7 +240,7 @@ msgstr "བརྡ་དོན་ཧེཤ་འདི་དང་བཅས་པ
 
 #, java-format
 msgid "Torrent with the same data location is already running: {0}"
-msgstr ""
+msgstr "གནད་སྡུད་གནས་ཁོངས་གཅིག་པའི་ཊོ་རེནཊི་ཧེ་མ་ལས་གཡོག་བཀོལ་དོ།: {0}"
 
 #, java-format
 msgid "Torrent in \"{0}\" is invalid"
@@ -334,7 +334,7 @@ msgstr "{0}B ལས་ཆེ་བའི་ཊོ་རེནཊི་ཚུ་�
 
 #, java-format
 msgid "Error: Could not remove the torrent {0}"
-msgstr ""
+msgstr "སྐྱོན།: ཊོ་རེནཊི་ {0} རྩ་བསྐྲད་བཏོན་མ་ཚུགས།"
 
 #, java-format
 msgid "Torrent stopped: {0}"
@@ -653,7 +653,7 @@ msgid "Total upload speed"
 msgstr "བསྡོམས་སྐྱེལ་བའི་མགྱོགས་ཚད།"
 
 msgid "Toggle Debug Panel"
-msgstr ""
+msgstr "རྐྱོང་བཤེར་པེནལ་འགྱུར་བྱེད།"
 
 msgid "Debug Mode"
 msgstr "རྐྱོང་བཤེར་ཐབས།"
@@ -723,7 +723,7 @@ msgstr "URL བརྐྱབ་ནི་ཡང་ན་ཊོ་རེནཊི�
 
 #, java-format
 msgid "Error uploading the torrent file: {0}"
-msgstr ""
+msgstr "ཊོ་རེནཊི་ཡིག་སྣོད་སྐྱེལ་བ་འབད་ནིའི་སྐྱོན།: {0}"
 
 #, java-format
 msgid "Cannot add torrent {0} inside another torrent: {1}"
@@ -734,7 +734,7 @@ msgid "Download from non-I2P location {0} is not supported"
 msgstr "I2P མིན་པའི་གནས་ཁོངས་ {0} ནང་ལས་ཕབ་ལེན་རྒྱབ་སྐྱོངས་མིན་འདུག"
 
 msgid "Error: Version 2 info hashes are not supported"
-msgstr ""
+msgstr "སྐྱོན།: ཐབས་གཞན་ ༢ བརྡ་དོན་ཧེཤ་ཚུ་རྒྱབ་སྐྱོར་མིན་འདུག"
 
 #, java-format
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
@@ -916,7 +916,8 @@ msgstr "ལས་མཐར་བཞག་པ།"
 #, java-format
 msgid "Seeding to {0} peer in swarm"
 msgid_plural "Seeding to {0} peers in swarm"
-msgstr[0] ""
+msgstr[0] "སཝརམ་ནང་པར་མིན་ {0} ལུ་སིཌིང་འབད་དོ།"
+msgstr[1] "སཝརམ་ནང་པར་མིན་ {0} ལུ་སིཌིང་འབད་དོ།"
 
 #, java-format
 msgid "Downloading from {0} peer"
@@ -984,7 +985,7 @@ msgstr "གནད་སྡུད་སྣོད་ཐོ།"
 
 #, java-format
 msgid "Enter the directory to save the data in (default {0})"
-msgstr ""
+msgstr "གནད་སྡུད་སྲུང་ནིའི་སྣོད་ཐོ་བརྐྱབ་གནང་། (སྐོར་ལྡན་ {0})"
 
 msgid "Create Torrent"
 msgstr "ཊོ་རེནཊི་གསར་བསྐྲུན།"
@@ -1337,7 +1338,7 @@ msgid "Download Priority"
 msgstr "ཕབ་ལེན་གོང་རྒྱུགས།"
 
 msgid "up"
-msgstr ""
+msgstr "གོང་ཚུལ།"
 
 msgid "Parent directory"
 msgstr "གཡུམ་སྣོད་ཐོ།"

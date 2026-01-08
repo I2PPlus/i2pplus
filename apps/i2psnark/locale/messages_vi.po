@@ -44,7 +44,7 @@ msgstr "Tổng giới hạn người tải lên đã thay đổi thành {0}"
 
 #, java-format
 msgid "Minimum uploaders limit is {0}"
-msgstr ""
+msgstr "Giới hạn người tải lên tối thiểu là {0}"
 
 #, java-format
 msgid "Up BW limit changed to {0}KBps"
@@ -60,10 +60,10 @@ msgstr "Tốc độ tải xuống tối đa đã được thay đổi thành {0}
 
 #, java-format
 msgid "Download speed limit is {0}KB/s"
-msgstr ""
+msgstr "Giới hạn tốc độ tải xuống là {0}KB/s"
 
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
-msgstr ""
+msgstr "Lưu ý: Bạn có thể cần dừng và khởi động lại torrent hoặc khởi động lại I2PSnark để thay đổi có hiệu lực."
 
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "Ngẫu nhiên hóa nhảy đường hầm +0/1 đã được kích hoạt trên các đường hầm đến"
@@ -202,7 +202,7 @@ msgid "Add and Create sections to display only on first page of multipage torren
 msgstr "Thêm và Tạo các phần để chỉ hiển thị trên trang đầu tiên của các trang liệt kê torrent nhiều trang."
 
 msgid "API key updated."
-msgstr ""
+msgstr "Khóa API đã được cập nhật."
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "Danh sách Trình theo dõi mở đã thay đổi - cần phải khởi động lại torrent để có hiệu lực."
@@ -358,13 +358,13 @@ msgstr "Giới hạn băng thông tối đa là {0} KBps"
 
 #, java-format
 msgid "Connecting to I2CP port on I2P instance at {0}"
-msgstr ""
+msgstr "Đang kết nối đến cổng I2CP trên phiên bản I2P tại {0}"
 
 msgid "Connecting to I2P"
 msgstr "Nối kết vào I2P"
 
 msgid "Connected to I2P at"
-msgstr ""
+msgstr "Đã kết nối với I2P tại"
 
 #, java-format
 msgid "Starting up torrent {0}"
@@ -376,7 +376,7 @@ msgstr "Giới hạn băng thông tải lên là {0} KBps cho tối đa {1} thi�
 
 #, java-format
 msgid "Storage: {0}GB currently available for downloads on configured data partition"
-msgstr ""
+msgstr "Lưu trữ: Hiện có sẵn {0}GB cho tải xuống trên phân vùng dữ liệu được cấu hình"
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
@@ -420,16 +420,16 @@ msgstr "Đóng đường hầm I2P sau khi thông báo cho người theo dõi."
 
 #, java-format
 msgid "Cannot check {0}"
-msgstr ""
+msgstr "Không thể kiểm tra {0}"
 
 msgid "Torrent already started"
-msgstr ""
+msgstr "Torrent đã được bắt đầu"
 
 msgid "No storage"
-msgstr ""
+msgstr "Không có bộ nhớ"
 
 msgid "Starting recheck of {}"
-msgstr ""
+msgstr "Bắt đầu kiểm tra lại {}"
 
 #, java-format
 msgid "Finished recheck of torrent {0}, now {1} complete"
@@ -516,22 +516,22 @@ msgstr "Cấu hình"
 
 #, java-format
 msgid "Are you sure you want to delete {0} and all downloaded data?"
-msgstr ""
+msgstr "Bạn có chắc chắn muốn xóa {0} và tất cả dữ liệu đã tải xuống không?"
 
 #, java-format
 msgid "Deleting <b>{0}</b> and all associated data..."
-msgstr ""
+msgstr "Đang xóa <b>{0}</b> và tất cả dữ liệu liên quan..."
 
 #, java-format
 msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
 msgstr "Bạn có chắc chắn muốn xóa tệp \\''{0}\\'' (dữ liệu đã tải xuống sẽ không bị xóa) ?"
 
 msgid "Note: Downloaded data will not be deleted."
-msgstr ""
+msgstr "Lưu ý: Dữ liệu đã tải xuống sẽ không bị xóa."
 
 #, java-format
 msgid "Deleting {0} and associated metadata only..."
-msgstr ""
+msgstr "Đang xóa {0} và siêu dữ liệu liên quan..."
 
 msgid "clear messages"
 msgstr "xóa tin nhắn"
@@ -617,24 +617,24 @@ msgid "Up Rate"
 msgstr "Tỷ lệ tăng"
 
 msgid "Total size of loaded torrents"
-msgstr ""
+msgstr "Tổng kích thước của các torrent đã tải"
 
 #, java-format
 msgid "1 connected peer"
 msgid_plural "{0} peer connections"
-msgstr[0] ""
+msgstr[0] "{0} ngang hàng đã kết nối"
 
 msgid "Active downloads"
-msgstr ""
+msgstr "Tải xuống đang hoạt động"
 
 msgid "Active uploads"
-msgstr ""
+msgstr "Tải lên đang hoạt động"
 
 msgid "Active Inbound tunnels"
-msgstr ""
+msgstr "Đường hầm đến đang hoạt động"
 
 msgid "Active Outbound tunnels"
-msgstr ""
+msgstr "Đường hầm đi ra đang hoạt động"
 
 msgid "Estimated download time for all torrents"
 msgstr "Thời gian tải xuống ước tính cho tất cả các torrent"
@@ -652,7 +652,7 @@ msgid "Total upload speed"
 msgstr "Tổng tốc độ tải lên"
 
 msgid "Toggle Debug Panel"
-msgstr ""
+msgstr "Bật/tắt Bảng gỡ lỗi"
 
 msgid "Debug Mode"
 msgstr "Chế độ gỡ lỗi"
@@ -721,7 +721,7 @@ msgstr "Nhập URL hoặc chọn file torrent"
 
 #, java-format
 msgid "Error uploading the torrent file: {0}"
-msgstr ""
+msgstr "Lỗi khi tải lên tệp torrent: {0}"
 
 #, java-format
 msgid "Cannot add torrent {0} inside another torrent: {1}"
@@ -732,7 +732,7 @@ msgid "Download from non-I2P location {0} is not supported"
 msgstr "Tải xuống từ vị trí không phải I2P {0} không được hỗ trợ"
 
 msgid "Error: Version 2 info hashes are not supported"
-msgstr ""
+msgstr "Lỗi: Hàm băm thông tin phiên bản 2 không được hỗ trợ"
 
 #, java-format
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
@@ -913,7 +913,7 @@ msgstr "Khựng"
 #, java-format
 msgid "Seeding to {0} peer in swarm"
 msgid_plural "Seeding to {0} peers in swarm"
-msgstr[0] ""
+msgstr[0] "Gieo hạt cho {0} ngang hàng trong bầy đàn"
 
 #, java-format
 msgid "Downloading from {0} peer"
@@ -1295,13 +1295,13 @@ msgid "Changing this setting to less than 3 hops may improve speed at the expens
 msgstr "Thay đổi cài đặt này thành ít hơn 3 bước nhảy có thể cải thiện tốc độ nhưng phải trả giá bằng tính ẩn danh và không được khuyến nghị"
 
 msgid "Sequential piece or file order not saved - feature currently broken."
-msgstr ""
+msgstr "Thứ tự mảnh hoặc tệp tuần tự không được lưu - tính năng hiện đang bị lỗi."
 
 msgid "Unknown command"
-msgstr ""
+msgstr "Lệnh không xác định"
 
 msgid "Please retry form submission (bad nonce)"
-msgstr ""
+msgstr "Vui lòng thử lại việc gửi biểu mẫu (nonce không hợp lệ)"
 
 msgid "Resource Does Not Exist"
 msgstr "Tài nguyên không tồn tại"
@@ -1331,7 +1331,7 @@ msgid "Download Priority"
 msgstr "Ưu tiên tải xuống"
 
 msgid "up"
-msgstr ""
+msgstr "lên"
 
 msgid "Parent directory"
 msgstr "Lên thư mục cấp cao hơn"
@@ -1373,10 +1373,10 @@ msgid "Pieces"
 msgstr "Mảnh"
 
 msgid "Average download speed for torrent"
-msgstr ""
+msgstr "Tốc độ tải xuống trung bình cho torrent"
 
 msgid "Download speed"
-msgstr ""
+msgstr "Tốc độ tải xuống"
 
 msgid "Completion"
 msgstr "Hoàn thành"
@@ -1474,7 +1474,7 @@ msgid "Delete Selected"
 msgstr "Xóa lựa chọn"
 
 msgid "File downloading priorities updated for torrent "
-msgstr ""
+msgstr "Ưu tiên tải xuống tệp đã được cập nhật cho torrent "
 
 msgid "Edit Torrent"
 msgstr "Chỉnh sửa Torrent"

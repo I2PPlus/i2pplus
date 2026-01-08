@@ -24,7 +24,7 @@ msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr "خطا در اتصال به I2P - تنظیمات I2CP خود را بررسی کنید!"
 
 msgid "Download already running: "
-msgstr ""
+msgstr "بارگیری از قبل در حال اجرا است: "
 
 msgid "Downloading"
 msgstr "در حال دانلود"
@@ -44,7 +44,7 @@ msgstr "محدودیت کل آپلودکنندگان به {0} تغییر کرد"
 
 #, java-format
 msgid "Minimum uploaders limit is {0}"
-msgstr ""
+msgstr "حداقل محدودیت آپلودکنندگان {0} است"
 
 #, java-format
 msgid "Up BW limit changed to {0}KBps"
@@ -56,14 +56,14 @@ msgstr "حداقل محدودیت پهنای باند {0}KBps است"
 
 #, java-format
 msgid "Maximum download speed changed to {0}KB/s"
-msgstr ""
+msgstr "حداکثر سرعت دانلود به {0}KB/s تغییر کرد"
 
 #, java-format
 msgid "Download speed limit is {0}KB/s"
-msgstr ""
+msgstr "محدودیت سرعت دانلود {0}KB/s است"
 
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
-msgstr ""
+msgstr "توجه: برای اعمال این تغییر، ممکن است نیاز به توقف و راه اندازی مجدد تورنت ها یا راه اندازی مجدد I2PSnark داشته باشید."
 
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "رندومیزاسیون برد و برگشت +0/1 تونل روی تونل‌های ورودی فعال شد"
@@ -202,7 +202,7 @@ msgid "Add and Create sections to display only on first page of multipage torren
 msgstr "بخش هایی را اضافه و ایجاد کنید تا فقط در صفحه اول صفحات لیست تورنت چند صفحه ای نمایش داده شوند."
 
 msgid "API key updated."
-msgstr ""
+msgstr "کلید API به روز شد."
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "باز کردن لیست ردیاب تغییر کرد - برای اعمال شدن به راه اندازی مجدد تورنت نیاز است."
@@ -358,13 +358,13 @@ msgstr "حداکثر پهنای باند حداکثر {0} کیلوبایت بر 
 
 #, java-format
 msgid "Connecting to I2CP port on I2P instance at {0}"
-msgstr ""
+msgstr "اتصال به پورت I2CP در نمونه I2P در {0}"
 
 msgid "Connecting to I2P"
 msgstr "اتصال به I2P"
 
 msgid "Connected to I2P at"
-msgstr ""
+msgstr "متصل به I2P در"
 
 #, java-format
 msgid "Starting up torrent {0}"
@@ -376,7 +376,7 @@ msgstr "محدودیت پهنای باند آپلود {0} کیلوبایت بر 
 
 #, java-format
 msgid "Storage: {0}GB currently available for downloads on configured data partition"
-msgstr ""
+msgstr "ذخیره سازی: {0}گیگابایت در حال حاضر برای دانلودها در پارتیشن داده پیکربندی شده در دسترس است"
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
@@ -420,16 +420,16 @@ msgstr "بستن تونل I2P پس از اطلاع ردیاب ها."
 
 #, java-format
 msgid "Cannot check {0}"
-msgstr ""
+msgstr "عدم توانایی در بررسی {0}"
 
 msgid "Torrent already started"
-msgstr ""
+msgstr "تورنت از قبل شروع شده است"
 
 msgid "No storage"
-msgstr ""
+msgstr "بدون فضای ذخیره سازی"
 
 msgid "Starting recheck of {}"
-msgstr ""
+msgstr "شروع بررسی مجدد {}"
 
 #, java-format
 msgid "Finished recheck of torrent {0}, now {1} complete"
@@ -444,10 +444,10 @@ msgid "Error checking torrent {0}"
 msgstr "خطا در بررسی تورنت {0}"
 
 msgid "Cannot create diskspace bar"
-msgstr ""
+msgstr "عدم توانایی در ایجاد نوار فضای دیسک"
 
 msgid "Data partition"
-msgstr ""
+msgstr "پارتیشن داده"
 
 #, java-format
 msgid "No valid trackers for {0} - enable opentrackers or DHT?"
@@ -516,22 +516,22 @@ msgstr "پیکربندی"
 
 #, java-format
 msgid "Are you sure you want to delete {0} and all downloaded data?"
-msgstr ""
+msgstr "آیا مطمئن هستید که می‌خواهید {0} و تمام داده‌های دانلود شده را حذف کنید؟"
 
 #, java-format
 msgid "Deleting <b>{0}</b> and all associated data..."
-msgstr ""
+msgstr "در حال حذف <b>{0}</b> و تمام داده‌های مرتبط..."
 
 #, java-format
 msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
 msgstr "آیا مطمئن هستید که می‌خواهید فایل \\''{0}\\'' را حذف کنید (داده‌های دانلود شده حذف نمی‌شوند)؟"
 
 msgid "Note: Downloaded data will not be deleted."
-msgstr ""
+msgstr "توجه: داده‌های دانلود شده حذف نخواهند شد."
 
 #, java-format
 msgid "Deleting {0} and associated metadata only..."
-msgstr ""
+msgstr "در حال حذف {0} و فقط متادیتای مرتبط..."
 
 msgid "clear messages"
 msgstr "پاک کردن پیام ها"
@@ -617,25 +617,25 @@ msgid "Up Rate"
 msgstr "نرخ بالا"
 
 msgid "Total size of loaded torrents"
-msgstr ""
+msgstr "اندازه کل تورنت‌های بارگذاری شده"
 
 #, java-format
 msgid "1 connected peer"
 msgid_plural "{0} peer connections"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} همتای متصل"
+msgstr[1] "{0} اتصال همتا"
 
 msgid "Active downloads"
-msgstr ""
+msgstr "دانلودهای فعال"
 
 msgid "Active uploads"
-msgstr ""
+msgstr "آپلودهای فعال"
 
 msgid "Active Inbound tunnels"
-msgstr ""
+msgstr "تونل‌های ورودی فعال"
 
 msgid "Active Outbound tunnels"
-msgstr ""
+msgstr "تونل‌های خروجی فعال"
 
 msgid "Estimated download time for all torrents"
 msgstr "زمان تخمینی دانلود برای همه تورنت ها"
@@ -653,7 +653,7 @@ msgid "Total upload speed"
 msgstr "سرعت آپلود کل"
 
 msgid "Toggle Debug Panel"
-msgstr ""
+msgstr "تغییر پنل اشکال زدایی"
 
 msgid "Debug Mode"
 msgstr "حالت اشکال زدایی"
@@ -723,7 +723,7 @@ msgstr "URL را وارد کنید یا فایل تورنت را انتخاب ک
 
 #, java-format
 msgid "Error uploading the torrent file: {0}"
-msgstr ""
+msgstr "خطا در آپلود فایل تورنت: {0}"
 
 #, java-format
 msgid "Cannot add torrent {0} inside another torrent: {1}"
@@ -734,7 +734,7 @@ msgid "Download from non-I2P location {0} is not supported"
 msgstr "دانلود از مکان غیر I2P {0} پشتیبانی نمی شود"
 
 msgid "Error: Version 2 info hashes are not supported"
-msgstr ""
+msgstr "خطا: هش‌های اطلاعات نسخه 2 پشتیبانی نمی‌شوند"
 
 #, java-format
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
@@ -916,8 +916,8 @@ msgstr "متوقف شد"
 #, java-format
 msgid "Seeding to {0} peer in swarm"
 msgid_plural "Seeding to {0} peers in swarm"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "بذر به {0} همتا در گروه"
+msgstr[1] "بذر به {0} همتایان در گروه"
 
 #, java-format
 msgid "Downloading from {0} peer"
@@ -1302,13 +1302,13 @@ msgid "Changing this setting to less than 3 hops may improve speed at the expens
 msgstr "تغییر این تنظیم به کمتر از 3 پرش ممکن است سرعت را به قیمت ناشناس بودن بهبود بخشد و توصیه نمی شود"
 
 msgid "Sequential piece or file order not saved - feature currently broken."
-msgstr ""
+msgstr "ترتیب قطعه یا فایل متوالی ذخیره نشد - این ویژگی در حال حاضر خراب است."
 
 msgid "Unknown command"
-msgstr ""
+msgstr "دستور ناشناخته"
 
 msgid "Please retry form submission (bad nonce)"
-msgstr ""
+msgstr "لطفاً ارسال فرم را مجدداً امتحان کنید (nonce نامعتبر)"
 
 msgid "Resource Does Not Exist"
 msgstr "منبع وجود ندارد"
@@ -1338,7 +1338,7 @@ msgid "Download Priority"
 msgstr "اولویت دانلود"
 
 msgid "up"
-msgstr ""
+msgstr "بالا"
 
 msgid "Parent directory"
 msgstr "دایرکتوری تا سطح بالاتر"
@@ -1380,10 +1380,10 @@ msgid "Pieces"
 msgstr "تکه ها"
 
 msgid "Average download speed for torrent"
-msgstr ""
+msgstr "میانگین سرعت دانلود برای تورنت"
 
 msgid "Download speed"
-msgstr ""
+msgstr "سرعت دانلود"
 
 msgid "Completion"
 msgstr "تکمیل"
@@ -1482,7 +1482,7 @@ msgid "Delete Selected"
 msgstr "حذف انتخاب شده"
 
 msgid "File downloading priorities updated for torrent "
-msgstr ""
+msgstr "اولویت‌های دانلود فایل برای تورنت به روز شد"
 
 msgid "Edit Torrent"
 msgstr "ویرایش تورنت"

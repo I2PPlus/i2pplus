@@ -24,7 +24,7 @@ msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr "I2P कनेक्शन में त्रुटि - अपने I2CP सेटिंग की जाँच करें!"
 
 msgid "Download already running: "
-msgstr ""
+msgstr "डाउनलोड पहले से चल रहा है: "
 
 msgid "Downloading"
 msgstr " डाउनलोड कर रहा है"
@@ -44,7 +44,7 @@ msgstr "कुल अपलोडर की सीमा {0} तक बदल �
 
 #, java-format
 msgid "Minimum uploaders limit is {0}"
-msgstr ""
+msgstr "न्यूनतम अपलोडर सीमा {0} है"
 
 #, java-format
 msgid "Up BW limit changed to {0}KBps"
@@ -376,7 +376,7 @@ msgstr "अपलोड बैंडविड्थ सीमा {0} KBps है
 
 #, java-format
 msgid "Storage: {0}GB currently available for downloads on configured data partition"
-msgstr ""
+msgstr "स्टोरेज: कॉन्फ़िग्युर्ड डेटा पैर्टिशन पर वर्तमान में डाउनलोड के लिए {0}GB उपलब्ध है"
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
@@ -420,16 +420,16 @@ msgstr "ट्रैकर्स को सूचित करने के ब�
 
 #, java-format
 msgid "Cannot check {0}"
-msgstr ""
+msgstr "{0} की जाँच नहीं कर सकते"
 
 msgid "Torrent already started"
-msgstr ""
+msgstr "टॉरेंट पहले से शुरू हो चुका है"
 
 msgid "No storage"
-msgstr ""
+msgstr "कोई स्टोरेज नहीं"
 
 msgid "Starting recheck of {}"
-msgstr ""
+msgstr "{} का पुनः जाँच शुरू कर रहे हैं"
 
 #, java-format
 msgid "Finished recheck of torrent {0}, now {1} complete"
@@ -444,10 +444,10 @@ msgid "Error checking torrent {0}"
 msgstr "{0} टॉरेंट की जाँच में त्रुटि"
 
 msgid "Cannot create diskspace bar"
-msgstr ""
+msgstr "डिस्कस्पेस बार नहीं बना सकते"
 
 msgid "Data partition"
-msgstr ""
+msgstr "डेटा पैर्टिशन"
 
 #, java-format
 msgid "No valid trackers for {0} - enable opentrackers or DHT?"
@@ -531,7 +531,7 @@ msgstr "नोट: डाउनलोड किए गए डेटा हटा
 
 #, java-format
 msgid "Deleting {0} and associated metadata only..."
-msgstr ""
+msgstr "केवल {0} और संबद्ध मेटाडेटा हटा रहे हैं..."
 
 msgid "clear messages"
 msgstr " संदेश हटाएं"
@@ -574,7 +574,7 @@ msgid "Torrent name"
 msgstr " टॉरेंट नाम"
 
 msgid "ETA"
-msgstr "预计到达时间 (ETA)"
+msgstr "अनुमानित समय"
 
 msgid "RX"
 msgstr "RD"
@@ -622,7 +622,7 @@ msgstr "लोड किए गए टॉरेंट का कुल आका
 #, java-format
 msgid "1 connected peer"
 msgid_plural "{0} peer connections"
-msgstr[0] "1 कनेक्टेड पीयर"
+msgstr[0] "{0} कनेक्टेड पीयर"
 msgstr[1] "{0} कनेक्टेड पीयर"
 
 msgid "Active downloads"
@@ -653,7 +653,7 @@ msgid "Total upload speed"
 msgstr "कुल अपलोड गति"
 
 msgid "Toggle Debug Panel"
-msgstr ""
+msgstr "डिबग पैनल टॉगल करें"
 
 msgid "Debug Mode"
 msgstr "डिबग मोड"
@@ -723,7 +723,7 @@ msgstr "URL दर्ज करें या टॉरेंट फ़ाइल 
 
 #, java-format
 msgid "Error uploading the torrent file: {0}"
-msgstr ""
+msgstr "टॉरेंट फ़ाइल अपलोड करने में त्रुटि: {0}"
 
 #, java-format
 msgid "Cannot add torrent {0} inside another torrent: {1}"
@@ -734,7 +734,7 @@ msgid "Download from non-I2P location {0} is not supported"
 msgstr "{0} जैसे non-I2P स्थान से डाउनलोड का समर्थन नहीं किया जाता है"
 
 msgid "Error: Version 2 info hashes are not supported"
-msgstr ""
+msgstr "त्रुटि: संस्करण 2 जानकारी हैश समर्थित नहीं हैं"
 
 #, java-format
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
@@ -916,8 +916,8 @@ msgstr "रुका"
 #, java-format
 msgid "Seeding to {0} peer in swarm"
 msgid_plural "Seeding to {0} peers in swarm"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "स्वार्म में {0} पीयर को सीडिंग कर रहा है"
+msgstr[1] "स्वार्म में {0} पीयरों को सीडिंग कर रहा है"
 
 #, java-format
 msgid "Downloading from {0} peer"
@@ -1338,7 +1338,7 @@ msgid "Download Priority"
 msgstr "डाउनलोड प्राथमिकता"
 
 msgid "up"
-msgstr ""
+msgstr "अपलोड"
 
 msgid "Parent directory"
 msgstr "ऊपर के स्तर की डायरेक्टरी तक"

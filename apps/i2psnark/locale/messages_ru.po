@@ -708,7 +708,7 @@ msgid "Prev"
 msgstr "Предыдущий"
 
 msgid "Previous page"
-msgstr ""
+msgstr "Предыдущая страница"
 
 msgid "Next"
 msgstr "Следующий"
@@ -1352,7 +1352,7 @@ msgid "Download Priority"
 msgstr "Приоритет загрузки"
 
 msgid "up"
-msgstr ""
+msgstr "вверх"
 
 msgid "Parent directory"
 msgstr "Перейти в директорию уровнем выше"

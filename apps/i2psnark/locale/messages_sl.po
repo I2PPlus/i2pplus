@@ -24,7 +24,7 @@ msgid "Error connecting to I2P - check your I2CP settings!"
 msgstr "Napaka pri povezovanju z I2P - preverite nastavitve I2CP!"
 
 msgid "Download already running: "
-msgstr ""
+msgstr "Prenos že v teku: "
 
 msgid "Downloading"
 msgstr "Prenos"
@@ -44,7 +44,7 @@ msgstr "Omejitev celotnih pošiljateljev spremenjena na {0}"
 
 #, java-format
 msgid "Minimum uploaders limit is {0}"
-msgstr ""
+msgstr "Najmanjša omejitev pošiljateljev je {0}"
 
 #, java-format
 msgid "Up BW limit changed to {0}KBps"
@@ -56,14 +56,14 @@ msgstr "Minimalna omejitev zgornjega prenosnega širinevja je {0}KBps"
 
 #, java-format
 msgid "Maximum download speed changed to {0}KB/s"
-msgstr ""
+msgstr "Največja hitrost prenosa spremenjena na {0}KB/s"
 
 #, java-format
 msgid "Download speed limit is {0}KB/s"
-msgstr ""
+msgstr "Omejitev hitrosti prenosa je {0}KB/s"
 
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
-msgstr ""
+msgstr "Opomba: Za uveljavitev te spremembe boste morda morali ustaviti in znova zagnati svoje torrente ali znova zagnati I2PSnark."
 
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "Naključna razporeditev +0/1 skoka po tunelu je omogočena na vhodnih tunelah"
@@ -202,7 +202,7 @@ msgid "Add and Create sections to display only on first page of multipage torren
 msgstr "Dodaj in Ustvari sekcije se bodo prikazale le na prvi strani večstranih strani zoznamov torrentov."
 
 msgid "API key updated."
-msgstr ""
+msgstr "API ključ posodobljen."
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "Seznam Odprih trackerjev spremenjen - za uveljavitev je potrebno ponovno zagon torrenta."
@@ -358,13 +358,13 @@ msgstr "Omejitev zgornjega širinevja je {0} KBps"
 
 #, java-format
 msgid "Connecting to I2CP port on I2P instance at {0}"
-msgstr ""
+msgstr "Povezovanje z vrati I2CP na instanci I2P na {0}"
 
 msgid "Connecting to I2P"
 msgstr "Povezovanje z I2P"
 
 msgid "Connected to I2P at"
-msgstr ""
+msgstr "Povezano z I2P na"
 
 #, java-format
 msgid "Starting up torrent {0}"
@@ -376,7 +376,7 @@ msgstr "Omejitev zgornjega širinevja je {0} KBps do maksimuma {1} hkrasnega sos
 
 #, java-format
 msgid "Storage: {0}GB currently available for downloads on configured data partition"
-msgstr ""
+msgstr "Shramba: {0}GB je trenutno na voljo za prenose na nastavljeni podatkovni particiji"
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
@@ -420,16 +420,16 @@ msgstr "Zapiranje tunela I2P po obvestitvi trackerjev."
 
 #, java-format
 msgid "Cannot check {0}"
-msgstr ""
+msgstr "Ni mogoče preveriti {0}"
 
 msgid "Torrent already started"
-msgstr ""
+msgstr "Torrent je že zagnan"
 
 msgid "No storage"
-msgstr ""
+msgstr "Ni shrambe"
 
 msgid "Starting recheck of {}"
-msgstr ""
+msgstr "Začenjanje ponovnega preverjanja {}"
 
 #, java-format
 msgid "Finished recheck of torrent {0}, now {1} complete"
@@ -444,10 +444,10 @@ msgid "Error checking torrent {0}"
 msgstr "Napaka pri preverjanju torrenta {0}"
 
 msgid "Cannot create diskspace bar"
-msgstr ""
+msgstr "Ni mogoče ustvariti vrstice za prostor na disku"
 
 msgid "Data partition"
-msgstr ""
+msgstr "Podatkovna particija"
 
 #, java-format
 msgid "No valid trackers for {0} - enable opentrackers or DHT?"
@@ -516,22 +516,22 @@ msgstr "Nastavitve"
 
 #, java-format
 msgid "Are you sure you want to delete {0} and all downloaded data?"
-msgstr ""
+msgstr "Ali ste prepričani, da želite izbrisati {0} in vse prenesene podatke?"
 
 #, java-format
 msgid "Deleting <b>{0}</b> and all associated data..."
-msgstr ""
+msgstr "Brisanje <b>{0}</b> in vseh povezanih podatkov..."
 
 #, java-format
 msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
 msgstr "Ali ste prepričani, da želite izbrisati datoteko \\''{0}\\'' (preneseni podatki ne bodo izbrisani)?"
 
 msgid "Note: Downloaded data will not be deleted."
-msgstr ""
+msgstr "Opomba: Preneseni podatki ne bodo izbrisani."
 
 #, java-format
 msgid "Deleting {0} and associated metadata only..."
-msgstr ""
+msgstr "Brisanje {0} in samo povezanih metapodatkov..."
 
 msgid "clear messages"
 msgstr "počisti sporočila"
@@ -617,27 +617,27 @@ msgid "Up Rate"
 msgstr "Hitrost pošiljanja"
 
 msgid "Total size of loaded torrents"
-msgstr ""
+msgstr "Skupna velikost naloženih torrentov"
 
 #, java-format
 msgid "1 connected peer"
 msgid_plural "{0} peer connections"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "{0} povezan sosed"
+msgstr[1] "{0} povezana soseda"
+msgstr[2] "{0} povezani sosedje"
+msgstr[3] "{0} povezanih sosedov"
 
 msgid "Active downloads"
-msgstr ""
+msgstr "Aktivni prenosi"
 
 msgid "Active uploads"
-msgstr ""
+msgstr "Aktivna pošiljanja"
 
 msgid "Active Inbound tunnels"
-msgstr ""
+msgstr "Aktivni vhodni tuneli"
 
 msgid "Active Outbound tunnels"
-msgstr ""
+msgstr "Aktivni izhodni tuneli"
 
 msgid "Estimated download time for all torrents"
 msgstr "Ocena časa za prenos vseh torrentov"
@@ -655,7 +655,7 @@ msgid "Total upload speed"
 msgstr "Skupna hitrost pošiljanja"
 
 msgid "Toggle Debug Panel"
-msgstr ""
+msgstr "Preklopi razhroščevalno ploščo"
 
 msgid "Debug Mode"
 msgstr "Način razhroščanja"
@@ -727,7 +727,7 @@ msgstr "Vnesite URL ali izberite datoteko torrenta"
 
 #, java-format
 msgid "Error uploading the torrent file: {0}"
-msgstr ""
+msgstr "Napaka pri nalaganju datoteke torrenta: {0}"
 
 #, java-format
 msgid "Cannot add torrent {0} inside another torrent: {1}"
@@ -738,7 +738,7 @@ msgid "Download from non-I2P location {0} is not supported"
 msgstr "Prenos iz lokacije, ki ni I2P {0}, ni podprt"
 
 msgid "Error: Version 2 info hashes are not supported"
-msgstr ""
+msgstr "Napaka: Informacijski hash različice 2 ni podprt"
 
 #, java-format
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
@@ -922,10 +922,10 @@ msgstr "Zastavljen"
 #, java-format
 msgid "Seeding to {0} peer in swarm"
 msgid_plural "Seeding to {0} peers in swarm"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "Sejanje {0} sosedu v roju"
+msgstr[1] "Sejanje {0} sosedoma v roju"
+msgstr[2] "Sejanje {0} sosedov v roju"
+msgstr[3] "Sejanje {0} sosedov v roju"
 
 #, java-format
 msgid "Downloading from {0} peer"
@@ -1316,13 +1316,13 @@ msgid "Changing this setting to less than 3 hops may improve speed at the expens
 msgstr "Sprememba nastavitve na manj kot 3 skoka lahko izboljša hitrost, vendar na strošek anonimnosti, kar ni priporočljivo"
 
 msgid "Sequential piece or file order not saved - feature currently broken."
-msgstr ""
+msgstr "Zaporedje delov datotek ni shranjeno - funkcija trenutno ne deluje."
 
 msgid "Unknown command"
-msgstr ""
+msgstr "Neznan ukaz"
 
 msgid "Please retry form submission (bad nonce)"
-msgstr ""
+msgstr "Prosimo, poskusite znova oddati obrazec (neveljaven nonce)"
 
 msgid "Resource Does Not Exist"
 msgstr "Vira ne obstaja"
@@ -1352,7 +1352,7 @@ msgid "Download Priority"
 msgstr "Prioriteta prenosa"
 
 msgid "up"
-msgstr ""
+msgstr "gor"
 
 msgid "Parent directory"
 msgstr "Nadaljevanje do višje mape"
@@ -1394,10 +1394,10 @@ msgid "Pieces"
 msgstr "Delci"
 
 msgid "Average download speed for torrent"
-msgstr ""
+msgstr "Povprečna hitrost prenosa za torrent"
 
 msgid "Download speed"
-msgstr ""
+msgstr "Hitrost prenosa"
 
 msgid "Completion"
 msgstr "Končanje"
@@ -1498,7 +1498,7 @@ msgid "Delete Selected"
 msgstr "Izbriši izbrane"
 
 msgid "File downloading priorities updated for torrent "
-msgstr ""
+msgstr "Prioritete prenosa datotek posodobljene za torrent "
 
 msgid "Edit Torrent"
 msgstr "Uredi torrent"

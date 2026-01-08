@@ -44,7 +44,7 @@ msgstr "Gräns för totalt antal uppladdare är ändrat till {0}"
 
 #, java-format
 msgid "Minimum uploaders limit is {0}"
-msgstr ""
+msgstr "Minsta gräns för uppladdare är {0}"
 
 #, java-format
 msgid "Up BW limit changed to {0}KBps"
@@ -202,7 +202,7 @@ msgid "Add and Create sections to display only on first page of multipage torren
 msgstr "Lägg till och skapa sektioner som endast visas på första sidan av flersidiga torrentsidor."
 
 msgid "API key updated."
-msgstr ""
+msgstr "API-nyckeln uppdaterad."
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "Öppen spårningslista ändrad - omstart av torrent krävs för att träda i kraft.Öppen spårningslista ändrad - omstart av torrent krävs för att träda i kraft.Öppen spårningslista ändrad - omstart av torrent krävs för att träda i kraft.Listan över offentliga bevakare förändrad - torrenten måste startas om för att inställningen ska träda i kraft."
@@ -358,13 +358,13 @@ msgstr "Uppbandbreddsgränsen är {0} KBps"
 
 #, java-format
 msgid "Connecting to I2CP port on I2P instance at {0}"
-msgstr ""
+msgstr "Ansluter till I2CP-port på I2P-instansen vid {0}"
 
 msgid "Connecting to I2P"
 msgstr "Ansluter till I2P"
 
 msgid "Connected to I2P at"
-msgstr ""
+msgstr "Ansluten till I2P vid"
 
 #, java-format
 msgid "Starting up torrent {0}"
@@ -376,7 +376,7 @@ msgstr "Uppladdningsbandbreddsgränsen är {0} KBps till maximalt {1} samtidiga 
 
 #, java-format
 msgid "Storage: {0}GB currently available for downloads on configured data partition"
-msgstr ""
+msgstr "Lagring: {0}GB för närvarande tillgängligt för nedladdningar på konfigurerad datapartition"
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
@@ -420,16 +420,16 @@ msgstr "Stänger I2P tunnel efter att ha meddelat bevakare."
 
 #, java-format
 msgid "Cannot check {0}"
-msgstr ""
+msgstr "Kan inte kontrollera {0}"
 
 msgid "Torrent already started"
-msgstr ""
+msgstr "Torrenten har redan startats"
 
 msgid "No storage"
-msgstr ""
+msgstr "Ingen lagring"
 
 msgid "Starting recheck of {}"
-msgstr ""
+msgstr "Startar omkontroll av {}"
 
 #, java-format
 msgid "Finished recheck of torrent {0}, now {1} complete"
@@ -444,10 +444,10 @@ msgid "Error checking torrent {0}"
 msgstr "Fel vid kontroll av torrent {0}"
 
 msgid "Cannot create diskspace bar"
-msgstr ""
+msgstr "Kan inte skapa diskytenhetens statusfält"
 
 msgid "Data partition"
-msgstr ""
+msgstr "Datapartition"
 
 #, java-format
 msgid "No valid trackers for {0} - enable opentrackers or DHT?"
@@ -516,22 +516,22 @@ msgstr "Inställningar"
 
 #, java-format
 msgid "Are you sure you want to delete {0} and all downloaded data?"
-msgstr ""
+msgstr "Är du säker på att du vill radera {0} och all nedladdad data?"
 
 #, java-format
 msgid "Deleting <b>{0}</b> and all associated data..."
-msgstr ""
+msgstr "Raderar <b>{0}</b> och all tillhörande data..."
 
 #, java-format
 msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
 msgstr "Är du säker på att du vill radera filen  \\''{0}\\' (hämtade data kommer inte att raderas) ?"
 
 msgid "Note: Downloaded data will not be deleted."
-msgstr ""
+msgstr "Obs: Nedladdad data kommer inte att raderas."
 
 #, java-format
 msgid "Deleting {0} and associated metadata only..."
-msgstr ""
+msgstr "Raderar {0} och tillhörande metadata endast..."
 
 msgid "clear messages"
 msgstr "rensa meddelandena"
@@ -617,25 +617,25 @@ msgid "Up Rate"
 msgstr "Upphastighet"
 
 msgid "Total size of loaded torrents"
-msgstr ""
+msgstr "Total storlek av inlästa torrenter"
 
 #, java-format
 msgid "1 connected peer"
 msgid_plural "{0} peer connections"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 ansluten jämlike"
+msgstr[1] "{0} anslutna jämlikar"
 
 msgid "Active downloads"
-msgstr ""
+msgstr "Aktiva nedladdningar"
 
 msgid "Active uploads"
-msgstr ""
+msgstr "Aktiva uppladdningar"
 
 msgid "Active Inbound tunnels"
-msgstr ""
+msgstr "Aktiva inkommande tunnlar"
 
 msgid "Active Outbound tunnels"
-msgstr ""
+msgstr "Aktiva utgående tunnlar"
 
 msgid "Estimated download time for all torrents"
 msgstr "Uppskattad nedladdningstid för alla torrenter"
@@ -653,7 +653,7 @@ msgid "Total upload speed"
 msgstr "Total uppladdningshastighet"
 
 msgid "Toggle Debug Panel"
-msgstr ""
+msgstr "Växla felsökningspanel"
 
 msgid "Debug Mode"
 msgstr "Felsökningsläge"
@@ -723,7 +723,7 @@ msgstr "Ange URL eller välj torrentfil"
 
 #, java-format
 msgid "Error uploading the torrent file: {0}"
-msgstr ""
+msgstr "Fel vid uppladdning av torrentfilen: {0}"
 
 #, java-format
 msgid "Cannot add torrent {0} inside another torrent: {1}"
@@ -734,7 +734,7 @@ msgid "Download from non-I2P location {0} is not supported"
 msgstr "Nedladdning från icke-I2P-plats {0} stöds inte"
 
 msgid "Error: Version 2 info hashes are not supported"
-msgstr ""
+msgstr "Fel: Version 2-info-hashes stöds inte"
 
 #, java-format
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
@@ -916,8 +916,8 @@ msgstr "Avstannad"
 #, java-format
 msgid "Seeding to {0} peer in swarm"
 msgid_plural "Seeding to {0} peers in swarm"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Sådd till {0} jämlike i svärm"
+msgstr[1] "Sådd till {0} jämlikar i svärm"
 
 #, java-format
 msgid "Downloading from {0} peer"
@@ -1302,13 +1302,13 @@ msgid "Changing this setting to less than 3 hops may improve speed at the expens
 msgstr "Att ändra denna inställning till mindre än 3 hopp kan förbättra hastigheten på bekostnad av anonymitet och rekommenderas inte"
 
 msgid "Sequential piece or file order not saved - feature currently broken."
-msgstr ""
+msgstr "Sekventiell del- eller filordning sparades inte - funktionen är för närvarande bruten."
 
 msgid "Unknown command"
-msgstr ""
+msgstr "Okänt kommando"
 
 msgid "Please retry form submission (bad nonce)"
-msgstr ""
+msgstr "Vänligen försök skicka formuläret igen (felaktig nonce)"
 
 msgid "Resource Does Not Exist"
 msgstr "Resurs finns inte"
@@ -1338,7 +1338,7 @@ msgid "Download Priority"
 msgstr "Hämtningsprioritet"
 
 msgid "up"
-msgstr ""
+msgstr "upp"
 
 msgid "Parent directory"
 msgstr "Upp till högre mappnivå"
@@ -1380,10 +1380,10 @@ msgid "Pieces"
 msgstr "Delar"
 
 msgid "Average download speed for torrent"
-msgstr ""
+msgstr "Genomsnittlig nedladdningshastighet för torrent"
 
 msgid "Download speed"
-msgstr ""
+msgstr "Nedladdningshastighet"
 
 msgid "Completion"
 msgstr "Färdigställning"
@@ -1482,7 +1482,7 @@ msgid "Delete Selected"
 msgstr "Radera Valda"
 
 msgid "File downloading priorities updated for torrent "
-msgstr ""
+msgstr "Nedladdningsprioriteter uppdaterade för torrent "
 
 msgid "Edit Torrent"
 msgstr "Redigera torrent"

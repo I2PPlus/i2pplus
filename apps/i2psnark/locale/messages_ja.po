@@ -6,7 +6,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "No more torrents running."
 msgstr "これ以上のtorrentを実行しないでください。"
@@ -44,7 +44,7 @@ msgstr "最大アップロード制限は{0}に変更されました"
 
 #, java-format
 msgid "Minimum uploaders limit is {0}"
-msgstr ""
+msgstr "最小アップロード制限は{0}です"
 
 #, java-format
 msgid "Up BW limit changed to {0}KBps"
@@ -275,7 +275,7 @@ msgstr "警告 - \"{0}\" には I2P トラッカーがなく、オープン ト�
 
 #, java-format
 msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
-msgstr "警告 - \"{0}\" には I2P トラッカーがなく、DHT とオープン トラッカーが無効になっています。トレントを開始する前にオープン トラッカーまたは DHT を有効にする必要があります。警告 - \"{0}\" には I2P トラッカーがなく、DHT とオープン トラッカーが無効になっています。トレントを開始する前にオープン トラッカーまたは DHT を有効にする必要があります。"
+msgstr "警告 - \"{0}\" には I2P トラッカーがなく、DHT とオープン トラッカーが無効になっています。トレントを開始する前にオープン トラッカーまたは DHT を有効にする必要があります。"
 
 #, java-format
 msgid "Fetching {0}"
@@ -524,7 +524,7 @@ msgstr "<b>{0}</b>とすべての関連データを削除しています..."
 
 #, java-format
 msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
-msgstr ""
+msgstr "トレントファイル{0}と関連するメタデータを削除してもよろしいですか?"
 
 msgid "Note: Downloaded data will not be deleted."
 msgstr "注：ダウンロードされたデータは削除されません。"
@@ -622,7 +622,8 @@ msgstr "読み込まれたtorrentの合計サイズ"
 #, java-format
 msgid "1 connected peer"
 msgid_plural "{0} peer connections"
-msgstr[0] ""
+msgstr[0] "1 接続されたピア"
+msgstr[1] "{0} ピア接続"
 
 msgid "Active downloads"
 msgstr "アクティブなダウンロード"
@@ -652,7 +653,7 @@ msgid "Total upload speed"
 msgstr "総アップロード速度"
 
 msgid "Toggle Debug Panel"
-msgstr ""
+msgstr "デバッグパネルの切り替え"
 
 msgid "Debug Mode"
 msgstr "デバッグモード"
@@ -664,6 +665,7 @@ msgstr "ノーマルモード"
 msgid "1 torrent"
 msgid_plural "{0} torrents"
 msgstr[0] "{0}急流"
+msgstr[1] "{0} torrent"
 
 msgid "Search"
 msgstr "検索"
@@ -721,7 +723,7 @@ msgstr "URLを入力するか、トレントファイルを選択してくださ
 
 #, java-format
 msgid "Error uploading the torrent file: {0}"
-msgstr ""
+msgstr "トレントファイルのアップロード中にエラーが発生しました: {0}"
 
 #, java-format
 msgid "Cannot add torrent {0} inside another torrent: {1}"
@@ -732,7 +734,7 @@ msgid "Download from non-I2P location {0} is not supported"
 msgstr "非 I2P ロケーション {0} からのダウンロードはサポートされていません"
 
 msgid "Error: Version 2 info hashes are not supported"
-msgstr ""
+msgstr "エラー: バージョン2の情報ハッシュはサポートされていません"
 
 #, java-format
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
@@ -902,6 +904,7 @@ msgstr "起動中"
 msgid "Seeding to {0} peer"
 msgid_plural "Seeding to {0} peers"
 msgstr[0] "{0}ピアへのシード"
+msgstr[1] "{0}ピアへのシード"
 
 #, java-format
 msgid "Connected to {0} of {1} peers in swarm"
@@ -913,12 +916,14 @@ msgstr "停止"
 #, java-format
 msgid "Seeding to {0} peer in swarm"
 msgid_plural "Seeding to {0} peers in swarm"
-msgstr[0] ""
+msgstr[0] "Swarm内の{0}ピアにシード中"
+msgstr[1] "Swarm内の{0}ピアにシード中"
 
 #, java-format
 msgid "Downloading from {0} peer"
 msgid_plural "Downloading from {0} peers"
 msgstr[0] "{0}ピアからのダウンロード"
+msgstr[1] "{0}ピアからのダウンロード"
 
 msgid "OK"
 msgstr "OK"
@@ -1188,7 +1193,7 @@ msgid "Max files per torrent"
 msgstr "トレントごとの最大ファイル数"
 
 msgid "Maximum number of files permitted per torrent - note that trackers may set their own limits, and your OS may limit the number of open files, preventing torrents with many files (and subsequent torrents) from loading"
-msgstr "トレントごとに許可されるファイルの最大数 - トラッカーが独自の制限を設定する場合があり、OS によってオープン ファイルの数が制限され、多くのファイルを含むトレント (および後続のトレント) がロードされなくなる場合があることに注意してください。トレントごとに許可されるファイルの最大数 - トラッカーが独自の制限を設定する場合があり、OS によってオープン ファイルの数が制限され、多くのファイルを含むトレント (および後続のトレント) がロードされなくなる場合があることに注意してください"
+msgstr "トレントごとに許可されるファイルの最大数 - トラッカーが独自の制限を設定する場合があり、OS によってオープン ファイルの数が制限され、多くのファイルを含むトレント (および後続のトレント) がロードされなくなる場合があることに注意してください。"
 
 msgid "Tunnel Configuration"
 msgstr "トンネル構成"
@@ -1282,11 +1287,13 @@ msgstr "マグネット URL {0} が無効です"
 msgid "1 hop"
 msgid_plural "{0} hops"
 msgstr[0] "{0}ホップ"
+msgstr[1] "{0}ホップ"
 
 #, java-format
 msgid "1 tunnel"
 msgid_plural "{0} tunnels"
 msgstr[0] "{0}トンネル"
+msgstr[1] "{0}トンネル"
 
 msgid "This configures the maximum number of tunnels to open, determined by the number of connected peers (actual usage may be less)"
 msgstr "これは、接続されているピアの数によって決定される、開くトンネルの最大数を構成します (実際の使用量はこれより少ない場合があります)これは、接続されているピアの数によって決定される、開くトンネルの最大数を構成します (実際の使用量はこれより少ない場合があります)"
@@ -1331,7 +1338,7 @@ msgid "Download Priority"
 msgstr "ダウンロードの優先順位"
 
 msgid "up"
-msgstr ""
+msgstr "上り"
 
 msgid "Parent directory"
 msgstr "上位ディレクトリまで"
@@ -1442,6 +1449,7 @@ msgstr "公開されたコメントと評価の著者名"
 msgid "1 star"
 msgid_plural "{0} stars"
 msgstr[0] "{0}星"
+msgstr[1] "{0}星"
 
 msgid "No rating"
 msgstr "評価なし"

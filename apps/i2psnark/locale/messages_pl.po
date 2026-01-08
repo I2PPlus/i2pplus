@@ -44,7 +44,7 @@ msgstr "Ograniczenie liczby uploaderów zmieniono do {0}"
 
 #, java-format
 msgid "Minimum uploaders limit is {0}"
-msgstr ""
+msgstr "Minimalny limit nadawców to {0}"
 
 #, java-format
 msgid "Up BW limit changed to {0}KBps"
@@ -128,7 +128,7 @@ msgid "Disconnecting old I2CP destination"
 msgstr "Rozłączanie starych celów I2CP"
 
 msgid "Unable to connect with the new settings, reverting to the old I2CP settings"
-msgstr "Nie można połączyć się z nowymi ustawieniami, powracam do starych ustawień I2CPNie można połączyć się z nowymi ustawieniami, powrót do starych ustawień I2CP"
+msgstr "Nie można połączyć się z nowymi ustawieniami, powracam do starych ustawień I2CP"
 
 msgid "Unable to reconnect with the old settings!"
 msgstr "Nie można się połączyć ze starymi ustawieniami!"
@@ -205,10 +205,10 @@ msgid "API key updated."
 msgstr "Klucz API zaktualizowany."
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
-msgstr "Zmieniono listę Open Tracker - aby zadziałało, wymagane jest ponowne uruchomienie torrenta.Lista otwartych trackerów została zmieniona – wymagane ponowne uruchomienie torrenta."
+msgstr "Zmieniono listę Open Tracker - aby zadziałało, wymagane jest ponowne uruchomienie torrenta."
 
 msgid "Private tracker list changed - affects newly created torrents only."
-msgstr "Zmieniono listę prywatnych trackerów - dotyczy tylko nowo utworzonych torrentów.Lista prywatnych trackerów została zmieniona – dotyczy tylko nowo utworzonych torrentów."
+msgstr "Zmieniono listę prywatnych trackerów - dotyczy tylko nowo utworzonych torrentów."
 
 #, java-format
 msgid "Unable to save the config to {0}"
@@ -267,15 +267,15 @@ msgstr "BŁĄD – brak trackerów w prywatnym torrencie \"{0}\""
 
 #, java-format
 msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
-msgstr "Ostrzeżenie - Brak trackerów I2P w `{0}\", ogłosi tylko otwarte trackery I2P i DHT.Ostrzeżenie - Brak trackerów I2P w `{0}\", ogłosi tylko otwarte trackery I2P i DHT.Ostrzeżenie - Brak trackerów I2P w `{0}\", ogłosi tylko otwarte trackery I2P i DHT.Ostrzeżenie — brak trackerów I2P w `{0}\", ogłosi tylko otwarte trackery I2P i DHT.Uwaga – Nie ma trackerów I2P w \"{0}\", zostanie to zameldowane tylko do otwartych trackerów i DHT."
+msgstr "Ostrzeżenie — brak trackerów I2P w \"{0}\", zostanie to zameldowane tylko do otwartych trackerów i DHT."
 
 #, java-format
 msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
-msgstr "Ostrzeżenie — Brak modułów śledzących I2P w „{0}”, a otwarte moduły śledzące są wyłączone, będą ogłaszane tylko dla DHT.Ostrzeżenie — Brak modułów śledzących I2P w „{0}”, a otwarte moduły śledzące są wyłączone, będą ogłaszane tylko dla DHT.Ostrzeżenie — Brak modułów śledzących I2P w „{0}”, a otwarte moduły śledzące są wyłączone, będą ogłaszane tylko dla DHT.Ostrzeżenie — Brak modułów śledzących I2P w „{0}”, a otwarte moduły śledzące są wyłączone, będą ogłaszane tylko dla DHT.Uwaga – Brak trackerów I2P w \"{0}\", a otwarte trackery są wyłączone. Torrent będzie działał wyłącznie w oparciu o DHT."
+msgstr "Uwaga – Brak trackerów I2P w \"{0}\", a otwarte trackery są wyłączone. Torrent będzie działał wyłącznie w oparciu o DHT."
 
 #, java-format
 msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
-msgstr "Ostrzeżenie - Brak modułów śledzących I2P w \"{0}\", a DHT i otwarte moduły śledzące są wyłączone. Przed uruchomieniem torrenta powinieneś włączyć otwarte moduły śledzące lub DHT.Ostrzeżenie - Brak modułów śledzących I2P w \"{0}\", a DHT i otwarte moduły śledzące są wyłączone. Przed uruchomieniem torrenta powinieneś włączyć otwarte moduły śledzące lub DHT.Ostrzeżenie - Brak modułów śledzących I2P w \"{0}\", a DHT i otwarte moduły śledzące są wyłączone. Przed uruchomieniem torrenta powinieneś włączyć otwarte moduły śledzące lub DHT.Ostrzeżenie - Brak modułów śledzących I2P w \"{0}\", a DHT i otwarte moduły śledzące są wyłączone. Powinieneś włączyć otwarte moduły śledzące lub DHT przed uruchomieniem torrenta.Uwaga – Brak trackerów I2P w \"{0}\". Otwarte trackery i DHT również są wyłączone. Należy włączyć otwarte trackery lub DHT przed rozpoczęciem torrenta."
+msgstr "Uwaga – Brak trackerów I2P w \"{0}\". Otwarte trackery i DHT również są wyłączone. Należy włączyć otwarte trackery lub DHT przed rozpoczęciem torrenta."
 
 #, java-format
 msgid "Fetching {0}"
@@ -283,7 +283,7 @@ msgstr "Pobieranie: {0}"
 
 #, java-format
 msgid "Open trackers are disabled and we have no DHT peers. Fetch of {0} may not succeed until you start another torrent, enable open trackers, or enable DHT."
-msgstr "Open trackery są wyłączone i nie mamy żadnych partnerów DHT. Open trackery są wyłączone i nie mamy żadnych partnerów DHT. Open trackery są wyłączone i nie mamy żadnych partnerów DHT. Open trackery są wyłączone i nie mamy żadnych partnerów DHT. Otwarte trackery są wyłączone i nie mamy żadnych peerów DHT. Pobranie z {0} może się nie udać, dopóki nie uruchomisz innego torrenta, włączysz otwarte trackery lub włączysz DHT."
+msgstr "Otwarte trackery są wyłączone i nie mamy żadnych peerów DHT. Pobranie z {0} może się nie udać, dopóki nie uruchomisz innego torrenta, włączysz otwarte trackery lub włączysz DHT."
 
 #, java-format
 msgid "Adding {0}"
@@ -451,7 +451,7 @@ msgstr "Partycja danych"
 
 #, java-format
 msgid "No valid trackers for {0} - enable opentrackers or DHT?"
-msgstr "Brak prawidłowych trackerów dla {0} - włączyć opentrackery lub DHT?Brak prawidłowych trackerów dla {0} – włączyć otwarte trackery lub DHT?"
+msgstr "Brak prawidłowych trackerów dla {0} – włączyć otwarte trackery lub DHT?"
 
 msgid "Updating"
 msgstr "Aktualizacja"
@@ -524,7 +524,7 @@ msgstr "Usuwanie <b>{0}</b> i wszystkich powiązanych danych..."
 
 #, java-format
 msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
-msgstr "Czy na pewno chcesz usunąć plik \\''{0}\\'' (pobrane dane nie zostaną usunięte)?Czy jesteś pewnien, że chcesz usunąć plik \\''{0}\\'' (pobrane dane nie będą usunięte) ?"
+msgstr "Czy jesteś pewnien, że chcesz usunąć plik \\''{0}\\'' (pobrane dane nie będą usunięte)?"
 
 msgid "Note: Downloaded data will not be deleted."
 msgstr "Uwaga: Pobrane dane nie zostaną usunięte."
@@ -654,7 +654,7 @@ msgid "Total upload speed"
 msgstr "Całkowita prędkość wysyłania"
 
 msgid "Toggle Debug Panel"
-msgstr ""
+msgstr "Przełącz panel debugowania"
 
 msgid "Debug Mode"
 msgstr "Tryb debugowania"
@@ -725,7 +725,7 @@ msgstr "Wprowadź adres URL lub wybierz plik torrent"
 
 #, java-format
 msgid "Error uploading the torrent file: {0}"
-msgstr ""
+msgstr "Błąd podczas przesyłania pliku torrent: {0}"
 
 #, java-format
 msgid "Cannot add torrent {0} inside another torrent: {1}"
@@ -736,7 +736,7 @@ msgid "Download from non-I2P location {0} is not supported"
 msgstr "Pobieranie z lokalizacji innej niż I2P {0} nie jest obsługiwane"
 
 msgid "Error: Version 2 info hashes are not supported"
-msgstr ""
+msgstr "Błąd: Skróty informacyjne w wersji 2 nie są obsługiwane"
 
 #, java-format
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
@@ -793,7 +793,7 @@ msgid "Error - Cannot include alternate trackers without a primary tracker"
 msgstr "Błąd – Nie można dodać alternatywnych trackerów bez głównego trackera"
 
 msgid "Error - Cannot mix private and public trackers in a torrent"
-msgstr "Błąd - Nie można połączyć w torrentie prywatnych i publicznych trackerówBłąd – Nie można mieszać prywatnych i publicznych trackerów w torrencie"
+msgstr "Błąd – Nie można mieszać prywatnych i publicznych trackerów w torrencie"
 
 #, java-format
 msgid " files or folders were excluded from \"{0}\" due to filter rules."
@@ -809,7 +809,7 @@ msgstr "Utworzono torrent dla \"{0}\""
 
 #, java-format
 msgid "Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\""
-msgstr "Wiele trackerów I2P wymaga zarejestrowania nowych torrentów przed wypuszczeniem - zrób to przed rozpoczęciem `{0}\"Wiele trackerów I2P wymaga zarejestrowania nowych torrentów przed wypuszczeniem - zrób to przed rozpoczęciem `{0}\"Wiele trackerów I2P wymaga zarejestrowania nowych torrentów przed wypuszczeniem - zrób to przed rozpoczęciem `{0}\"Wiele trackerów I2P wymaga zarejestrowania nowych torrentów przed wypuszczeniem - zrób to przed rozpoczęciem `{0}\"Wiele trackerów w I2P wymaga zarejestrowania torrenta przed seedowaniem – proszę, zrób tak przed uruchomieniem \"{0}\""
+msgstr "Wiele trackerów w I2P wymaga zarejestrowania torrenta przed seedowaniem – proszę, zrób tak przed uruchomieniem \"{0}\""
 
 #, java-format
 msgid "Error creating a torrent for \"{0}\""
@@ -919,9 +919,9 @@ msgstr "Utknięto"
 #, java-format
 msgid "Seeding to {0} peer in swarm"
 msgid_plural "Seeding to {0} peers in swarm"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Udostępnianie do {0} peer'a w roju"
+msgstr[1] "Udostępnianie do {0} peer'ów w roju"
+msgstr[2] "Udostępnianie do {0} peer'ów w roju"
 
 #, java-format
 msgid "Downloading from {0} peer"
@@ -1000,7 +1000,7 @@ msgstr "Dane do seedowania"
 
 #, java-format
 msgid "File or directory to seed (full path or within the directory {0} )"
-msgstr "Plik lub katalog do zasadzenia (pełna ścieżka lub w katalogu {0} )Plik lub katalog do seedowania (pełna ścieżka lub katalog wewnątrz \"{0}\")"
+msgstr "Plik lub katalog do seedowania (pełna ścieżka lub katalog wewnątrz \"{0}\")"
 
 msgid "Create torrent"
 msgstr "Utwórz torrent"
@@ -1081,7 +1081,7 @@ msgid "Your browser does not support this feature."
 msgstr "Twoja przeglądarka nie wspiera tej funkcji."
 
 msgid "Allow the 'Add Torrent' and 'Create Torrent' panels to be collapsed, and collapse by default in non-embedded mode"
-msgstr "Zezwalaj na zwijanie paneli „Dodaj torrent” i „Utwórz torrent” i domyślnie zwijanie w trybie nieosadzonymZezwalaj na zwijanie paneli „Dodaj torrent” i „Utwórz torrent” i domyślnie zwijanie w trybie nieosadzonymZezwalaj na zwijanie paneli „Dodaj torrent” i „Utwórz torrent” i domyślnie zwijanie w trybie nieosadzonymZezwalaj na zwijanie paneli „Dodaj torrent” i „Utwórz torrent” i domyślnie zwijanie w trybie nieosadzonymPozwala na zwijanie paneli „dodaj torrent” „utwórz torrent” i domyślnie je zwija w trybie nie-wbudowanym"
+msgstr "Zezwalaj na zwijanie paneli „dodaj torrent” „utwórz torrent” i domyślnie je zwija w trybie nie-wbudowanym"
 
 msgid "Torrent filter bar"
 msgstr "Pasek filtra torrenta"
@@ -1345,7 +1345,7 @@ msgid "Download Priority"
 msgstr "Priorytet pobierania"
 
 msgid "up"
-msgstr ""
+msgstr "w górę"
 
 msgid "Parent directory"
 msgstr "Do katalogu nadrzędnego"

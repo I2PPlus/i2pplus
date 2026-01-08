@@ -44,7 +44,7 @@ msgstr "总上传种子数限制已更新为{0}"
 
 #, java-format
 msgid "Minimum uploaders limit is {0}"
-msgstr ""
+msgstr "最小上传种子数限制为 {0}"
 
 #, java-format
 msgid "Up BW limit changed to {0}KBps"
@@ -376,7 +376,7 @@ msgstr "上传带宽限制为{0}KBps，最多{1}个对等节点。"
 
 #, java-format
 msgid "Storage: {0}GB currently available for downloads on configured data partition"
-msgstr ""
+msgstr "存储空间：当前配置的数据分区可用下载空间为 {0}GB"
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
@@ -420,16 +420,16 @@ msgstr "正在关闭 I2P 隧道，已通知 Tracker。"
 
 #, java-format
 msgid "Cannot check {0}"
-msgstr ""
+msgstr "无法检查 {0}"
 
 msgid "Torrent already started"
-msgstr ""
+msgstr "种子已启动"
 
 msgid "No storage"
-msgstr ""
+msgstr "无存储空间"
 
 msgid "Starting recheck of {}"
-msgstr ""
+msgstr "开始重新检查 {}"
 
 #, java-format
 msgid "Finished recheck of torrent {0}, now {1} complete"
@@ -622,7 +622,7 @@ msgstr "已加载种子的总大小"
 #, java-format
 msgid "1 connected peer"
 msgid_plural "{0} peer connections"
-msgstr[0] "1个连接的节点"
+msgstr[0] "{0}个连接的节点"
 
 msgid "Active downloads"
 msgstr "活跃下载"
@@ -652,7 +652,7 @@ msgid "Total upload speed"
 msgstr "限制总上传速度为"
 
 msgid "Toggle Debug Panel"
-msgstr ""
+msgstr "切换调试面板"
 
 msgid "Debug Mode"
 msgstr "调试模式"
@@ -721,7 +721,7 @@ msgstr "输入 URL 或选择 torrent 文件"
 
 #, java-format
 msgid "Error uploading the torrent file: {0}"
-msgstr ""
+msgstr "上传种子文件时出错：{0}"
 
 #, java-format
 msgid "Cannot add torrent {0} inside another torrent: {1}"
@@ -732,7 +732,7 @@ msgid "Download from non-I2P location {0} is not supported"
 msgstr "不支持从非I2P地点{0}下载"
 
 msgid "Error: Version 2 info hashes are not supported"
-msgstr ""
+msgstr "错误：不支持版本2信息哈希"
 
 #, java-format
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
@@ -913,7 +913,7 @@ msgstr "等待"
 #, java-format
 msgid "Seeding to {0} peer in swarm"
 msgid_plural "Seeding to {0} peers in swarm"
-msgstr[0] ""
+msgstr[0] "正在向群组中的 {0} 个节点做种"
 
 #, java-format
 msgid "Downloading from {0} peer"
@@ -1331,7 +1331,7 @@ msgid "Download Priority"
 msgstr "下载优先级"
 
 msgid "up"
-msgstr ""
+msgstr "上传"
 
 msgid "Parent directory"
 msgstr "上一层文件夹"

@@ -44,7 +44,7 @@ msgstr "Celkový limit sdílečů změněn na {0}"
 
 #, java-format
 msgid "Minimum uploaders limit is {0}"
-msgstr ""
+msgstr "Minimální limit sdílečů je {0}"
 
 #, java-format
 msgid "Up BW limit changed to {0}KBps"
@@ -63,7 +63,7 @@ msgid "Download speed limit is {0}KB/s"
 msgstr "Limit rychlosti stahování je {0}KB/s"
 
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
-msgstr ""
+msgstr "Poznámka: Abyste provedli tuto změnu, možná budete muset zastavit a restartovat torrenty nebo restartovat I2PSnark."
 
 msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
 msgstr "Povoleno náhodné přeskočení +0/1 na příchozích tunelích"
@@ -202,7 +202,7 @@ msgid "Add and Create sections to display only on first page of multipage torren
 msgstr "Přidat a vytvořit sekce, které se mají zobrazit pouze na první stránce vícestránkových stránek se seznamem torrentů."
 
 msgid "API key updated."
-msgstr ""
+msgstr "API klíč aktualizován."
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "Open Tracker list změněn - aby se projevil restart torrentu.Seznam otevřených trackerů změněn - aby se změna projevila je nutné restartovat všechny torrenty."
@@ -426,10 +426,10 @@ msgid "Torrent already started"
 msgstr "Torrent již spuštěn"
 
 msgid "No storage"
-msgstr ""
+msgstr "Žádné úložiště"
 
 msgid "Starting recheck of {}"
-msgstr ""
+msgstr "Spouštím novou kontrolu {}"
 
 #, java-format
 msgid "Finished recheck of torrent {0}, now {1} complete"
@@ -444,10 +444,10 @@ msgid "Error checking torrent {0}"
 msgstr "Chyba při kontrole torrentu {0}"
 
 msgid "Cannot create diskspace bar"
-msgstr ""
+msgstr "Nelze vytvořit ukazatel volného místa na disku"
 
 msgid "Data partition"
-msgstr ""
+msgstr "Datový oddíl"
 
 #, java-format
 msgid "No valid trackers for {0} - enable opentrackers or DHT?"
@@ -516,22 +516,22 @@ msgstr "Konfigurace"
 
 #, java-format
 msgid "Are you sure you want to delete {0} and all downloaded data?"
-msgstr ""
+msgstr "Opravdu chcete smazat {0} a všechna stažená data?"
 
 #, java-format
 msgid "Deleting <b>{0}</b> and all associated data..."
-msgstr ""
+msgstr "Mazání <b>{0}</b> a všech souvisejících dat..."
 
 #, java-format
 msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
 msgstr "Opravdu chcete smazat soubor \\''{0}\\'' (stažená data nebudou smazána)?"
 
 msgid "Note: Downloaded data will not be deleted."
-msgstr ""
+msgstr "Poznámka: Stažená data nebudou smazána."
 
 #, java-format
 msgid "Deleting {0} and associated metadata only..."
-msgstr ""
+msgstr "Mazání {0} a pouze souvisejících metadat..."
 
 msgid "clear messages"
 msgstr "jasné zprávy"
@@ -617,26 +617,26 @@ msgid "Up Rate"
 msgstr "Zvýšená rychlost"
 
 msgid "Total size of loaded torrents"
-msgstr ""
+msgstr "Celková velikost načtených torrentů"
 
 #, java-format
 msgid "1 connected peer"
 msgid_plural "{0} peer connections"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "1 připojený peer"
+msgstr[1] "{0} připojení peerů"
+msgstr[2] "{0} připojení peerů"
 
 msgid "Active downloads"
-msgstr ""
+msgstr "Aktivní stahování"
 
 msgid "Active uploads"
-msgstr ""
+msgstr "Aktivní nahrávání"
 
 msgid "Active Inbound tunnels"
-msgstr ""
+msgstr "Aktivní příchozí tunely"
 
 msgid "Active Outbound tunnels"
-msgstr ""
+msgstr "Aktivní odchozí tunely"
 
 msgid "Estimated download time for all torrents"
 msgstr "Odhadovaná doba stahování pro všechny torrenty"
@@ -654,7 +654,7 @@ msgid "Total upload speed"
 msgstr "Celková rychlost odesílání"
 
 msgid "Toggle Debug Panel"
-msgstr ""
+msgstr "Přepnout panel ladění"
 
 msgid "Debug Mode"
 msgstr "Režim ladění"
@@ -725,7 +725,7 @@ msgstr "Zadejte adresu URL nebo vyberte soubor torrent"
 
 #, java-format
 msgid "Error uploading the torrent file: {0}"
-msgstr ""
+msgstr "Chyba při nahrávání souboru torrentu: {0}"
 
 #, java-format
 msgid "Cannot add torrent {0} inside another torrent: {1}"
@@ -736,7 +736,7 @@ msgid "Download from non-I2P location {0} is not supported"
 msgstr "Stahování z jiného než I2P umístění {0} není podporováno"
 
 msgid "Error: Version 2 info hashes are not supported"
-msgstr ""
+msgstr "Chyba: Info haše verze 2 nejsou podporovány"
 
 #, java-format
 msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
@@ -919,9 +919,9 @@ msgstr "Zastaveno"
 #, java-format
 msgid "Seeding to {0} peer in swarm"
 msgid_plural "Seeding to {0} peers in swarm"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Sdílím {0} peerovi v roji"
+msgstr[1] "Sdílím {0} peerům v roji"
+msgstr[2] "Sdílím {0} peerům v roji"
 
 #, java-format
 msgid "Downloading from {0} peer"
@@ -1309,13 +1309,13 @@ msgid "Changing this setting to less than 3 hops may improve speed at the expens
 msgstr "Změna tohoto nastavení na méně než 3 skoky může zvýšit rychlost na úkor anonymity a nedoporučuje se"
 
 msgid "Sequential piece or file order not saved - feature currently broken."
-msgstr ""
+msgstr "Sekvenční pořadí souborů nebo kusů není uloženo - funkce je momentálně nefunkční."
 
 msgid "Unknown command"
-msgstr ""
+msgstr "Neznámý příkaz"
 
 msgid "Please retry form submission (bad nonce)"
-msgstr ""
+msgstr "Prosím, opakujte odeslání formuláře (chybný nonce)"
 
 msgid "Resource Does Not Exist"
 msgstr "Zdroj neexistuje"
@@ -1345,7 +1345,7 @@ msgid "Download Priority"
 msgstr "Priorita stahování"
 
 msgid "up"
-msgstr ""
+msgstr "nahoru"
 
 msgid "Parent directory"
 msgstr "Až do adresáře vyšší úrovně"
@@ -1387,10 +1387,10 @@ msgid "Pieces"
 msgstr "Kusy"
 
 msgid "Average download speed for torrent"
-msgstr ""
+msgstr "Průměrná rychlost stahování torrentu"
 
 msgid "Download speed"
-msgstr ""
+msgstr "Rychlost stahování"
 
 msgid "Completion"
 msgstr "Dokončení"
@@ -1490,7 +1490,7 @@ msgid "Delete Selected"
 msgstr "Smazat vybrané"
 
 msgid "File downloading priorities updated for torrent "
-msgstr ""
+msgstr "Priority stahování souborů aktualizovány pro torrent "
 
 msgid "Edit Torrent"
 msgstr "Upravit Torrent"
