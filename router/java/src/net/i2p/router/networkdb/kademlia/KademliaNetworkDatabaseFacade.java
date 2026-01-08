@@ -1231,6 +1231,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (force) {_ds.forcePut(key, leaseSet);}
         else {_ds.put(key, leaseSet);}
 
+        if (rv == null) {knownLeaseSetsCount.incrementAndGet();}
+
         if (encls != null) {
             // we now have decrypted it, store it as well
             LeaseSet decls = encls.getDecryptedLeaseSet();
