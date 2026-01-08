@@ -4,7 +4,11 @@ import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
-/** Worker thread that executes jobs from the router job queue. Handles job execution, timing collection, error handling, and performance monitoring for individual job processing threads. */
+/**
+  Worker thread that executes jobs from the router job queue.
+  Handles job execution, timing collection, error handling,
+  and performance monitoring for individual job processing threads.
+*/
 class JobQueueRunner extends I2PThread {
     private final Log _log;
     private final RouterContext _context;
@@ -77,12 +81,10 @@ class JobQueueRunner extends I2PThread {
 
                 if (duration > 1500) {
                     _context.statManager().addRateData("jobQueue.jobRunSlow", duration, duration);
-                    if (_log.shouldWarn()) {
-                        if (doStart-origStartAfter > 0) {
-                            _log.warn(_currentJob + " completed in " + duration + "ms -> Lag: " + (doStart-origStartAfter) + "ms");
-                        } else {
-                            _log.warn(_currentJob + " completed in " + duration + "ms");
-                        }
+                    if (_log.shouldWarn() && doStart-origStartAfter > 100) {
+                        _log.warn(_currentJob + " completed in " + duration + "ms -> Lag: " + (doStart-origStartAfter) + "ms");
+                    } else if (_log.shouldInfo()) {
+                        _log.warn(_currentJob + " completed in " + duration + "ms");
                     }
                 }
 
@@ -91,14 +93,7 @@ class JobQueueRunner extends I2PThread {
                         _log.warn("Updating stats for '" + job.getName() + "' took too long (" + diff + "ms)");
                     }
                 }
-                if (_log.shouldInfo()) {
-                    if (doStart-origStartAfter > 0) {
-                        _log.info("[Job " + job.getJobId() + "] " + job.getName() + " completed in " + duration +
-                                  "ms -> Lag: " + (doStart-origStartAfter) + "ms");
-                    } else {
-                        _log.info("[Job " + job.getJobId() + "] " + job.getName() + " completed in " + duration + "ms");
-                    }
-                }
+
                 lastActive = _context.clock().now();
                 _lastJob = _currentJob;
                 _currentJob = null;
