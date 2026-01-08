@@ -24,9 +24,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
@@ -88,16 +90,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     private static final String X_REAL_IP_HEADER = "X-Real-Ip";
 
     /** MUST ALL BE LOWER CASE */
-    private static final String[] CLIENT_SKIPHEADERS = {
-        HASH_HEADER.toLowerCase(Locale.US),
-        DEST64_HEADER.toLowerCase(Locale.US),
-        DEST32_HEADER.toLowerCase(Locale.US),
-        PRIORITY_HEADER.toLowerCase(Locale.US),
-        PROXY_CONN_HEADER,
-        SEC_GPC_HEADER.toLowerCase(Locale.US),
-        //X_FORWARDED_HEADER.toLowerCase(Locale.US),
-        X_REAL_IP_HEADER.toLowerCase(Locale.US)
-    };
+    private static final Set<String> CLIENT_SKIPHEADERS = new HashSet<>();
+    private static final Set<String> SERVER_SKIPHEADERS = new HashSet<>();
 
     /** server response headers to remove */
     private static final String AGE_HEADER = "age"; // possible anonymity implications, informational
@@ -127,34 +121,43 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
     // https://httpoxy.org
     private static final String PROXY_HEADER = "proxy";
-    /** MUST ALL BE LOWER CASE */
-    private static final String[] SERVER_SKIPHEADERS = {
-        AGE_HEADER,
-        ALT_SVC_HEADER,
-        DATE_HEADER,
-        EXPIRES_HEADER,
-        PRAGMA_HEADER,
-        PROXY_CONN_HEADER,
-        PROXY_HEADER,
-        REFERER_HEADER,
-        SERVER_HEADER,
-        STRICT_TRANSPORT_SECURITY_HEADER,
-        VIA_HEADER,
-        X_CACHE_HEADER,
-        X_CACHE_HITS_HEADER,
-        X_CLOUD_TRACE_CONTEXT_HEADER,
-        X_CONTEXTID_HEADER,
-        X_GOOG_GENERATION_HEADER,
-        X_GOOG_HASH_HEADER,
-        X_GUPLOADER_UPLOADID_HEADER,
-        X_HACKER_HEADER,
-        X_NANANANA_HEADER,
-        X_PANTHEON_STYX_HOSTNAME_HEADER,
-        X_POWERED_BY_HEADER,
-        X_RUNTIME_HEADER,
-        X_SERVED_BY_HEADER,
-        X_STYX_REQ_ID_HEADER
-    };
+
+    static {
+        CLIENT_SKIPHEADERS.add(HASH_HEADER.toLowerCase(Locale.US));
+        CLIENT_SKIPHEADERS.add(DEST64_HEADER.toLowerCase(Locale.US));
+        CLIENT_SKIPHEADERS.add(DEST32_HEADER.toLowerCase(Locale.US));
+        CLIENT_SKIPHEADERS.add(PRIORITY_HEADER.toLowerCase(Locale.US));
+        CLIENT_SKIPHEADERS.add(PROXY_CONN_HEADER);
+        CLIENT_SKIPHEADERS.add(SEC_GPC_HEADER.toLowerCase(Locale.US));
+        //CLIENT_SKIPHEADERS.add(X_FORWARDED_HEADER.toLowerCase(Locale.US));
+        CLIENT_SKIPHEADERS.add(X_REAL_IP_HEADER.toLowerCase(Locale.US));
+
+        SERVER_SKIPHEADERS.add(AGE_HEADER);
+        SERVER_SKIPHEADERS.add(ALT_SVC_HEADER);
+        SERVER_SKIPHEADERS.add(DATE_HEADER);
+        SERVER_SKIPHEADERS.add(EXPIRES_HEADER);
+        SERVER_SKIPHEADERS.add(PRAGMA_HEADER);
+        SERVER_SKIPHEADERS.add(PROXY_CONN_HEADER);
+        SERVER_SKIPHEADERS.add(PROXY_HEADER);
+        SERVER_SKIPHEADERS.add(REFERER_HEADER);
+        SERVER_SKIPHEADERS.add(SERVER_HEADER);
+        SERVER_SKIPHEADERS.add(STRICT_TRANSPORT_SECURITY_HEADER);
+        SERVER_SKIPHEADERS.add(VIA_HEADER);
+        SERVER_SKIPHEADERS.add(X_CACHE_HEADER);
+        SERVER_SKIPHEADERS.add(X_CACHE_HITS_HEADER);
+        SERVER_SKIPHEADERS.add(X_CLOUD_TRACE_CONTEXT_HEADER);
+        SERVER_SKIPHEADERS.add(X_CONTEXTID_HEADER);
+        SERVER_SKIPHEADERS.add(X_GOOG_GENERATION_HEADER);
+        SERVER_SKIPHEADERS.add(X_GOOG_HASH_HEADER);
+        SERVER_SKIPHEADERS.add(X_GUPLOADER_UPLOADID_HEADER);
+        SERVER_SKIPHEADERS.add(X_HACKER_HEADER);
+        SERVER_SKIPHEADERS.add(X_NANANANA_HEADER);
+        SERVER_SKIPHEADERS.add(X_PANTHEON_STYX_HOSTNAME_HEADER);
+        SERVER_SKIPHEADERS.add(X_POWERED_BY_HEADER);
+        SERVER_SKIPHEADERS.add(X_RUNTIME_HEADER);
+        SERVER_SKIPHEADERS.add(X_SERVED_BY_HEADER);
+        SERVER_SKIPHEADERS.add(X_STYX_REQ_ID_HEADER);
+    }
 
     /** timeout for first request line */
     private static final long HEADER_TIMEOUT = 45*1000;
@@ -180,7 +183,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     private long _startedOn = 0L;
     private ConnThrottler _postThrottler;
 
-    private final static String ERR_NOT_FOUND =
+    final static String ERR_NOT_FOUND =
          "HTTP/1.1 404 Not Found\r\n" +
          "Content-Type: text/html; charset=utf-8\r\n" +
          "Cache-Control: no-cache\r\n" +
@@ -227,7 +230,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "</html>";
 
     // TODO https://stackoverflow.com/questions/16022624/examples-of-http-api-rate-limiting-http-response-headers
-    private final static String ERR_FORBIDDEN =
+    final static String ERR_FORBIDDEN =
 
          "HTTP/1.1 403 Denied\r\n" +
          "Content-Type: text/html; charset=utf-8\r\n"+
@@ -331,6 +334,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                                                               "How long the blocking handle takes to complete",
                                                               "Tunnels [HTTPServer]", new long[] { 60*1000, 10*60*1000, 3*60*60*1000 });
         readTimeout = DEFAULT_HTTP_READ_TIMEOUT;
+        _blocklistManager = new BlocklistManager(_log, HTTP_BLOCKLIST_CLIENT_LIMIT);
     }
 
     @Override
@@ -581,7 +585,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                                 _log.warn("[HTTPServer] WARNING! Attempt to access localhost or loopback address via [" + hostname + "]" +
                                           " -> Adding dest to clients blocklist file \n* Client: " + peerB32);
                             }
-                            logBlockedDestination(peerB32);
+                            _blocklistManager.logBlockedDestination(peerB32);
                             isValidRequest = false;
                             isPossibleExploit = true;
                         } else if (address.isAnyLocalAddress()) { // check for 0.0.0.0 response (DNS blocking)
@@ -615,7 +619,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                         isPossibleExploit = false;
                     }
                     if (isPossibleExploit) {
-                        logBlockedDestination(peerB32);
+                        _blocklistManager.logBlockedDestination(peerB32);
                         if (_log.shouldWarn()) {
                             _log.warn("[HTTPServer] Client attempted to access private or wildcard address " + hostname +
                                       " -> Sending Error 403 and adding to blocklist \n* Client: " + peerB32);
@@ -827,10 +831,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 // Don't pass this on, outproxies should strip so I2P traffic isn't so obvious but they probably don't
                 if (alt) {headers.remove("X-Accept-Encoding");}
 
-                String modifiedHeader = formatHeaders(headers, command);
+                String modifiedHeader = HttpHeaderFormatter.formatHeaders(headers, command);
                 if (_log.shouldDebug()) {_log.debug("[HTTPServer] Modified headers\n\t" + modifiedHeader);}
                 else if (_log.shouldInfo() && !command.toString().toLowerCase().contains("head")) {
-                    String compactHeaders = formatHeadersCompact(headers, command);
+                    String compactHeaders = HttpHeaderFormatter.formatHeadersCompact(headers, command);
                     _log.info("[HTTPServer] Received request headers" + compactHeaders);
                 }
 
@@ -1043,153 +1047,18 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 // Change headers to protect server identity
                 Map<String, List<String>> headers = readHeaders(null, serverin, command, SERVER_SKIPHEADERS, _ctx, timeout);
 
-                // Check cache-control header for "none" and "post-check" values and remove if present
-                List<String> cacheControlList = headers.get("Cache-Control");
-                if (cacheControlList != null && (cacheControlList.contains("none".toLowerCase()) ||
-                    cacheControlList.contains("post-check".toLowerCase()))) {
-                    headers.remove("Cache-Control");
-                }
+                SecurityHeaderBuilder.filterCacheControlHeaders(headers);
+                SecurityHeaderBuilder.filterSetCookieHeaders(headers);
 
-                // Check Set-Cookie header for specific strings
-                String[] cookieStrings = {"STYXKEY", "visited=yes"};
-                List<String> setCookieList = headers.get("Set-Cookie");
-                if (setCookieList != null) {
-                    List<String> newSetCookieList = new ArrayList<>();
-                    for (String setCookie : setCookieList) {
-                        boolean containsString = false;
-                        for (String cookieString : cookieStrings) {
-                            if (setCookie.contains(cookieString)) {
-                                containsString = true;
-                                break;
-                            }
-                        }
-                        if (!containsString) {newSetCookieList.add(setCookie);}
-                    }
-                    if (newSetCookieList.isEmpty()) {headers.remove("Set-Cookie");}
-                    else {headers.put("Set-Cookie", newSetCookieList);}
-                }
-
-                // Define mimetypes for referrer policy and cache-control treatment
-                String[] customWhitelist = {"text/html", "application/xhtml+xml", "application/xml", "text/plain", "application/json"};
-                String[] immutableCacheWhitelist = {"application/pdf", "audio", "audio/midi", "audio/mpeg", "audio/ogg", "audio/wav", "audio/webm",
-                                                    "font", "font/woff", "font/woff2", "image", "image/apng", "image/bmp", "image/gif", "image/jpeg",
-                                                    "image/png", "image/svg+xml", "image/tiff", "image/webp", "image/x-icon", "text/css", "video",
-                                                    "video/mp4", "video/ogg", "video/webm"};
-
-                // Check MIME type of response
                 List<String> contentTypeList = headers.get("Content-Type");
-                // Set a generic default MIME type
                 String mimeType = "application/octet-stream";
-                int index = url != null ? url.indexOf("?") : -1;
-                if (url != null && index != -1) {url = url.substring(0, index);}
-                if (url != null) {url = url.toLowerCase();}
-                // Set default MIME type based on the resource being requested if no mimetype header found
-                // https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
-                if (contentTypeList != null && !contentTypeList.isEmpty()) {mimeType = headers.get("Content-Type").get(0);}
-                else if (url.endsWith(".3g2")) {mimeType = "video/3gpp2";}
-                else if (url.endsWith(".3gp")) {mimeType = "video/3gpp";}
-                else if (url.endsWith(".aac")) {mimeType = "audio/aac";}
-                else if (url.endsWith(".abw")) {mimeType = "application/x-abiword";}
-                else if (url.endsWith(".arc")) {mimeType = "application/x-freearc";}
-                else if (url.endsWith(".avif")) {mimeType = "image/avif";}
-                else if (url.endsWith(".avi")) {mimeType = "video/x-msvideo";}
-                else if (url.endsWith(".azw")) {mimeType = "application/vnd.amazon.ebook";}
-                else if (url.endsWith(".bin")) {mimeType = "application/octet-stream";}
-                else if (url.endsWith(".bmp")) {mimeType = "image/bmp";}
-                else if (url.endsWith(".bz")) {mimeType = "application/x-bzip";}
-                else if (url.endsWith(".bz2")) {mimeType = "application/x-bzip2";}
-                else if (url.endsWith(".cda")) {mimeType = "application/x-cdf";}
-                else if (url.endsWith(".css")) {mimeType = "text/css";}
-                else if (url.endsWith(".csv")) {mimeType = "text/csv";}
-                else if (url.endsWith(".doc")) {mimeType = "application/msword";}
-                else if (url.endsWith(".docx")) {mimeType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";}
-                else if (url.endsWith(".eot")) {mimeType = "application/vnd.ms-fontobject";}
-                else if (url.endsWith(".epub")) {mimeType = "application/epub+zip";}
-                else if (url.endsWith(".gif")) {mimeType = "image/gif";}
-                else if (url.endsWith(".gz")) {mimeType = "application/gzip";}
-                else if (url.endsWith(".htm") || url.endsWith(".html")) {mimeType = "text/html";}
-                else if (url.endsWith(".ico")) {mimeType = "image/vnd.microsoft.icon";}
-                else if (url.endsWith(".ics")) {mimeType = "text/calendar";}
-                else if (url.endsWith(".jar")) {mimeType = "application/java-archive";}
-                else if (url.endsWith(".jpeg") || url.endsWith(".jpg")) {mimeType = "image/jpeg";}
-                else if (url.endsWith(".json")) {mimeType = "application/json";}
-                else if (url.endsWith(".jsonld")) {mimeType = "application/ld+json";}
-                else if (url.endsWith(".js")) {mimeType = "text/javascript";}
-                else if (url.endsWith(".mid") || url.endsWith(".midi")) {mimeType = "audio/midi";}
-                else if (url.endsWith(".mjs")) {mimeType = "text/javascript";}
-                else if (url.endsWith(".mp3")) {mimeType = "audio/mpeg";}
-                else if (url.endsWith(".mp4")) {mimeType = "video/mp4";}
-                else if (url.endsWith(".mpeg")) {mimeType = "video/mpeg";}
-                else if (url.endsWith(".mpkg")) {mimeType = "application/vnd.apple.installer+xml";}
-                else if (url.endsWith(".ods")) {mimeType = "application/vnd.oasis.opendocument.spreadsheet";}
-                else if (url.endsWith(".odt")) {mimeType = "application/vnd.oasis.opendocument.text";}
-                else if (url.endsWith(".odp")) {mimeType = "application/vnd.oasis.opendocument.presentation";}
-                else if (url.endsWith(".oga")) {mimeType = "audio/ogg";}
-                else if (url.endsWith(".ogv")) {mimeType = "video/ogg";}
-                else if (url.endsWith(".ogx")) {mimeType = "application/ogg";}
-                else if (url.endsWith(".opus")) {mimeType = "audio/opus";}
-                else if (url.endsWith(".otf")) {mimeType = "font/otf";}
-                else if (url.endsWith(".pdf")) {mimeType = "application/pdf";}
-                else if (url.endsWith(".php")) {mimeType = "application/x-httpd-php";}
-                else if (url.endsWith(".png")) {mimeType = "image/png";}
-                else if (url.endsWith(".ppt")) {mimeType = "application/vnd.ms-powerpoint";}
-                else if (url.endsWith(".pptx")) {mimeType = "application/vnd.openxmlformats-officedocument.presentationml.presentation";}
-                else if (url.endsWith(".rar")) {mimeType = "application/x-rar-compressed";}
-                else if (url.endsWith(".rtf")) {mimeType = "application/rtf";}
-                else if (url.endsWith(".sh")) {mimeType = "application/x-sh";}
-                else if (url.endsWith(".svg")) {mimeType = "image/svg+xml";}
-                else if (url.endsWith(".tar")) {mimeType = "application/x-tar";}
-                else if (url.endsWith(".tif") || url.endsWith(".tiff")) {mimeType = "image/tiff";}
-                else if (url.endsWith(".ts")) {mimeType = "video/mp2t";}
-                else if (url.endsWith(".txt")) {mimeType = "text/plain";}
-                else if (url.endsWith(".tif") || url.endsWith(".tiff")) {mimeType = "image/tiff";}
-                else if (url.endsWith(".ttf")) {mimeType = "font/ttf";}
-                else if (url.endsWith(".vsd")) {mimeType = "application/vnd.visio";}
-                else if (url.endsWith(".wav")) {mimeType = "audio/wav";}
-                else if (url.endsWith(".weba")) {mimeType = "audio/webm";}
-                else if (url.endsWith(".webm")) {mimeType = "video/webm";}
-                else if (url.endsWith(".woff")) {mimeType = "font/woff";}
-                else if (url.endsWith(".woff2")) {mimeType = "font/woff2";}
-                else if (url.endsWith(".xhtml")) {mimeType = "application/xhtml+xml";}
-                else if (url.endsWith(".xls")) {mimeType = "application/vnd.ms-excel";}
-                else if (url.endsWith(".xlsx")) {mimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";}
-                else if (url.endsWith(".xml")) {mimeType = "application/xml";}
-                else if (url.endsWith(".xul")) {mimeType = "application/vnd.mozilla.xul+xml";}
-                else if (url.endsWith(".zip")) {mimeType = "application/zip";}
-
-                // Add referrer-policy headers if not set
-                boolean securityHeaders = Arrays.asList(customWhitelist).contains(mimeType);
-                if (_headers != null && securityHeaders) {
-                    boolean rp = headers.keySet().stream().anyMatch(key -> key.equalsIgnoreCase("Referrer-Policy"));
-                    if (!rp) {setEntry(headers, "Referrer-Policy", "same-origin");}
-                    // Set restrictive allow headers if not set
-                    boolean allow = headers.keySet().stream().anyMatch(key -> key.equalsIgnoreCase("Allow"));
-                    if (!allow) {setEntry(headers, "Allow", "GET, POST, HEAD");}
+                if (contentTypeList != null && !contentTypeList.isEmpty()) {
+                    mimeType = contentTypeList.get(0);
                 }
 
-                // Set cache-control to immutable if not set for custom mimetypes, no-cache for everything else
-                boolean immutableCache = Arrays.stream(immutableCacheWhitelist).anyMatch(mimeType::matches);
-                if (_headers != null) {
-                    boolean cc = headers.keySet().stream().anyMatch(key -> key.equalsIgnoreCase("Cache-Control"));
-                    if (cacheControlList != null) {
-                        boolean hasNoCache = cc && headers.get("Cache-Control").contains("no-cache".toLowerCase());
-                        // Override cache-control for static content with no-cache policy
-                        if (hasNoCache && immutableCache) {
-                            headers.remove("Cache-Control");
-                            setEntry(headers, "Cache-Control", "private, max-age=31536000, immutable");}
-                        else if (immutableCache && !cc) {setEntry(headers, "Cache-Control", "private, max-age=31536000, immutable");}
-                        else if (!cc) {setEntry(headers, "Cache-Control", "private, no-cache, max-age=604800");}
-                    }
-                }
+                SecurityHeaderBuilder.addSecurityHeaders(headers, command, mimeType);
 
-                // Add x-xss-protection header if not present
-                boolean xss = headers.keySet().stream().anyMatch(key -> key.equalsIgnoreCase("X-XSS-Protection"));
-                if (_headers != null && !xss) {setEntry(headers, "X-XSS-Protection", "1; mode=block");}
-
-                boolean nosniff = headers.keySet().stream().anyMatch(key -> key.equalsIgnoreCase("X-Content-Type-Options"));
-                if (_headers != null && !nosniff) {setEntry(headers, "X-Content-Type-Options", "nosniff");}
-
-                String modifiedHeaders = formatHeaders(headers, command);
+                String modifiedHeaders = HttpHeaderFormatter.formatHeaders(headers, command);
                 // after the headers, set a short timeout
                 _webserver.setSoTimeout(SERVER_READ_TIMEOUT_GET);
 
@@ -1284,15 +1153,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
     /** @since 0.9.63+ */
     private static synchronized String getHostFromHeaders(String headers) {
-        String[] headerLines = headers.split("\r\n");
-        for (String headerLine : headerLines) {
-            if (headerLine.startsWith("Host:")) {
-                String hostHeader = headerLine.substring(6).trim();
-                int index = hostHeader.indexOf(":");
-                return index != -1 ? hostHeader.substring(0, index) : hostHeader;
-            }
-        }
-        return null;
+        return HttpHeaderFormatter.getHostFromHeaders(headers);
     }
 
     private static class Sender implements Runnable {
@@ -1448,16 +1309,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      *  @return the command followed by the header lines
      */
     protected static String formatHeaders(Map<String, List<String>> headers, StringBuilder command) {
-        StringBuilder buf = new StringBuilder(command.length() + headers.size() * 64);
-        buf.append(command.toString().trim()).append("\r\n");
-        for (Map.Entry<String, List<String>> e : headers.entrySet()) {
-            String name = e.getKey();
-            for (String val: e.getValue()) {
-                buf.append(name.trim()).append(": ").append(val.trim()).append("\r\n");
-            }
-        }
-        buf.append("\r\n");
-        return buf.toString();
+        return HttpHeaderFormatter.formatHeaders(headers, command);
     }
 
     /**
@@ -1466,40 +1318,13 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      *  @since 0.9.63+
      */
     protected static String formatHeadersCompact(Map<String, List<String>> headers, StringBuilder command) {
-        StringBuilder buf = new StringBuilder(command.length() + headers.size() * 64);
-        String request = command.toString().trim();
-        if (request.contains("peer_id")) {
-          int ampersand = request.indexOf("&");
-          String truncatedRequest = request.substring(0, ampersand) + "...";
-          if (request.endsWith("HTTP/1.1")) {truncatedRequest += " HTTP/1.1";}
-          else if (request.endsWith("HTTP/1.0")) {truncatedRequest += " HTTP/1.0";}
-          request = truncatedRequest;
-        }
-        if (!request.toLowerCase().contains("head")) {buf.append("\n* Request: " + request);}
-        for (Map.Entry<String, List<String>> e : headers.entrySet()) {
-            String name = e.getKey();
-            String lcName = name.toLowerCase().trim();
-            String value = e.getValue().iterator().next().trim();
-            boolean hasUA = name.toLowerCase().contains("user-agent") && !value.isEmpty();
-            if (request.toLowerCase().contains("head")) {continue;}
-            if (lcName.contains("desthash") || lcName.contains("destb64") || lcName.contains("dnt") ||
-                lcName.contains("connection") || lcName.contains("accept") || lcName.contains("cookie") ||
-                lcName.contains("pragma") || lcName.contains("cache-control") || lcName.contains("referer") ||
-                lcName.contains("upgrade-insecure-requests") || (lcName.equals("content-length") && value.equals("0")) ||
-                (lcName.contains("user-agent") && hasUA && value.contains("MYOB"))) {
-                continue;
-            }
-            for (String val: e.getValue()) {
-                buf.append("\n* ").append(name.trim()).append(": ").append(val.trim());
-            }
-        }
-        return buf.toString();
+        return HttpHeaderFormatter.formatHeadersCompact(headers, command);
     }
 
     /**
      * Add an entry to the multimap.
      */
-    private static void addEntry(Map<String, List<String>> headers, String key, String value) {
+    static void addEntry(Map<String, List<String>> headers, String key, String value) {
         List<String> entry = headers.get(key);
         if (entry == null) {headers.put(key, entry = new ArrayList<String>(1));}
         entry.add(value);
@@ -1508,7 +1333,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     /**
      * Remove the other matching entries and set this entry as the only one.
      */
-    private static void setEntry(Map<String, List<String>> headers, String key, String value) {
+    static void setEntry(Map<String, List<String>> headers, String key, String value) {
       List<String> entry = headers.get(key);
       if (entry == null) {headers.put(key, entry = new ArrayList<String>(1));}
       else {entry.clear();}
@@ -1543,9 +1368,22 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      *  @throws BadRequestException on bad headers
      *  @throws IOException on other errors in the underlying stream
      *  @since public since 0.9.57 for SOCKS
-     */
+      */
+    public static Map<String, List<String>> readHeaders(I2PSocket socket, InputStream in, StringBuilder command,
+                                                        Set<String> skipHeaders, I2PAppContext ctx, long initialTimeout) throws IOException {
+        return readHeadersInternal(socket, in, command, skipHeaders, ctx, initialTimeout);
+    }
+
+    /**
+     *  @since public since 0.9.57 for SOCKS
+      */
     public static Map<String, List<String>> readHeaders(I2PSocket socket, InputStream in, StringBuilder command,
                                                         String[] skipHeaders, I2PAppContext ctx, long initialTimeout) throws IOException {
+        return readHeadersInternal(socket, in, command, new HashSet<>(Arrays.asList(skipHeaders)), ctx, initialTimeout);
+    }
+
+    private static Map<String, List<String>> readHeadersInternal(I2PSocket socket, InputStream in, StringBuilder command,
+                                                        Set<String> skipHeaders, I2PAppContext ctx, long initialTimeout) throws IOException {
         HashMap<String, List<String>> headers = new HashMap<String, List<String>>();
         StringBuilder buf = new StringBuilder(128);
 
@@ -1620,13 +1458,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 }
                 // For incoming, we remove certain headers to prevent spoofing.
                 // For outgoing, we remove certain headers to improve anonymity.
-                boolean skip = false;
-                for (String skipHeader: skipHeaders) {
-                    if (skipHeader.equals(lcName)) {
-                        skip = true;
-                        break;
-                    }
-                }
+                boolean skip = skipHeaders.contains(lcName);
                 if (skip) {continue;}
 
                 addEntry(headers, name, value);
@@ -1680,136 +1512,23 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /** @since 0.9.62+ */
-
-    String HTTP_BLOCKLIST = "http_blocklist.txt";
-    String HTTP_BLOCKLIST_CLIENTS = "http_blocklist_clients.txt";
-    private int HTTP_BLOCKLIST_CLIENT_LIMIT = 512;
-    private Pattern regexPattern = null;
-    private long blocklistLastModified;
-    private List<String> clientBlockList = new ArrayList<>();
-    private static long blocklistClientsLastModified;
-    private static int cachedClientBlockListSize = -1;
-    File blocklistFile = new File(I2PAppContext.getGlobalContext().getConfigDir(), HTTP_BLOCKLIST);
-    File blocklistClients = new File(I2PAppContext.getGlobalContext().getConfigDir(), HTTP_BLOCKLIST_CLIENTS);
+    private static final int HTTP_BLOCKLIST_CLIENT_LIMIT = 512;
+    private BlocklistManager _blocklistManager;
 
     private void processBlocklist(I2PSocket socket, StringBuilder command) throws BadRequestException, IOException {
-        if (!blocklistFile.exists()) {
-            regexPattern = null;
-            return;
-        }
-        long currentLastModified = blocklistFile.lastModified();
-        if (currentLastModified != blocklistLastModified || regexPattern == null) {
-            regexPattern = compileRegexPattern(blocklistFile);
-            blocklistLastModified = currentLastModified;
-        }
-        // Check if the URL request matches any blocklist string
-        String lcCommand = command.toString().toLowerCase(Locale.US);
-        Matcher matcher = regexPattern.matcher(lcCommand);
-        if (matcher.find()) {
-            String matchedString = matcher.group(); // retrieve the matched string
+        if (_blocklistManager == null) {return;}
+        if (_blocklistManager.shouldBlockRequest(command)) {
+            String matchedString = _blocklistManager.getMatchedBlocklistString(command);
             String peerB32 = socket.getPeerDestination().toBase32();
-            logBlockedDestination(peerB32);
+            _blocklistManager.logBlockedDestination(peerB32);
             try {
                 if (socket != null) {
-                    // we probably just want the client to hang, so don't send a reset packet
-                    //try {socket.reset();} catch (IOException ioe) {}
                     try {socket.close();}
                     catch (IOException ioe) {_log.error("[HTTPServer] Error closing socket (" + ioe.getMessage() + ")");}
                     throw new BadRequestException(command.toString() + "-> Matches blocklist entry \"" + matchedString + "\"");
                 }
             } catch (BadRequestException bre) {throw bre;}
         }
-    }
-
-    private Pattern compileRegexPattern(File blocklistFile) throws IOException {
-        StringBuilder regexBuilder = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(blocklistFile), StandardCharsets.UTF_8))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                line = line.trim();
-/**
-                // basic support for regex characters ^, $ and *
-                if (line.startsWith("^")) {
-                    regex.append("^."); // Match from the start of the URL
-                    url = line.substring(1); // Skip the ^
-                } else if (line.endsWith("$")) {
-                    regex.append("."); // Match until the end of the URL
-                    url = line.substring(0, line.length() - 1); // Skip the $
-                } else if (line.contains("*")) {
-                    regex.append(".*"); // Match any characters (0 or more)
-                    url = line.replaceFirst("[*]", ".*"); // Replace * with .* regex
-                }
-**/
-                // Skip empty lines or lines that start with a '#'
-                if (line.isEmpty() || line.startsWith("#")) {continue;}
-                // Extract the URL from the request string
-                String url = line;
-                // Create regex pattern for URL
-                StringBuilder regex = new StringBuilder();
-                regex.append("(?i)"); // Case-insensitive match
-                regex.append(Pattern.quote(url));
-                // Append regex pattern to builder
-                if (regexBuilder.length() > 0) {regexBuilder.append("|");}
-                regexBuilder.append(regex);
-            }
-        }
-        // Compile regex pattern once all entries have been processed
-        return Pattern.compile(regexBuilder.toString());
-    }
-
-    private synchronized void logBlockedDestination(String destination) throws IOException {
-        if (!blocklistClients.exists()) {
-            try {
-                blocklistClients.createNewFile();
-                blocklistClientsLastModified = blocklistClients.lastModified();
-            } catch (IOException e) {
-                _log.error("[HTTPServer] Error creating file for blocked destination (" + e.getMessage() + ")");
-                return;
-            }
-        }
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(blocklistClients), StandardCharsets.UTF_8))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                line = line.trim();
-                if (!line.isEmpty() && !clientBlockList.contains(line)) {
-                    clientBlockList.add(line);
-                }
-            }
-        } catch (IOException ioe) {
-            _log.error("[HTTPServer] Error logging blocked destination (" + ioe.getMessage() + ")");
-        }
-        if (!clientBlockList.contains(destination)) {
-            if (clientBlockList.size() >= HTTP_BLOCKLIST_CLIENT_LIMIT) {
-                clientBlockList.remove(0);
-            }
-            try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(blocklistClients, true), StandardCharsets.UTF_8))) {
-                writer.write(destination);
-                writer.newLine();
-            } catch (IOException ioe) {
-                _log.error("[HTTPServer] Error logging blocked destination (" + ioe.getMessage() + ")");
-            }
-            blocklistClientsLastModified = blocklistClients.lastModified();
-        }
-    }
-
-    private synchronized boolean existsInClientBlocklist(String destination) throws IOException {
-        long currentLastModified = blocklistClients.lastModified();
-        if (currentLastModified != blocklistClientsLastModified) {
-try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(blocklistClients), StandardCharsets.UTF_8))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    line = line.trim();
-                    if (!line.isEmpty()) {
-                        clientBlockList.add(line);
-                    }
-                }
-            } catch (IOException ioe) {
-                _log.error("[HTTPServer] Error reading client blocklist file (" + ioe.getMessage() + ")");
-                throw ioe;
-            }
-            blocklistClientsLastModified = currentLastModified;
-        }
-        return clientBlockList.contains(destination);
     }
 
     /**
