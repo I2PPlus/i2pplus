@@ -69,16 +69,27 @@ public class UDPSink implements Sink {
 
     /**
      *  @return the local port of the DatagramSocket we are sending from
+     *  @since 0.9.53
      */
     public int getPort() {
         return this.sock.getLocalPort();
     }
 
-    /** to pass to UDPSource constructor */
+    /**
+     *  Returns the underlying DatagramSocket for use by UDPSource constructor.
+     *
+     *  @return the DatagramSocket
+     *  @since 0.9.53
+     */
     public DatagramSocket getSocket() {
         return this.sock;
     }
 
+    /**
+     *  Closes the underlying DatagramSocket.
+     *
+     * @since 0.9.53
+     */
     public void stop() {
         this.sock.close();
     }

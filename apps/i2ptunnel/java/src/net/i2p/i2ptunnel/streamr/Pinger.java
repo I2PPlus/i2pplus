@@ -28,15 +28,28 @@ public class Pinger implements Source, Runnable {
         this.fromPort = fromPort;
     }
 
+    /**
+     *  Sets the destination sink for ping messages.
+     *  @param sink the sink to receive ping messages
+     *  @since 0.9.53
+     */
     public void setSink(Sink sink) {
         this.sink = sink;
     }
 
+    /**
+     *  Starts the pinger thread to send periodic subscribe messages.
+     *  @since 0.9.53
+     */
     public void start() {
         this.running = true;
         this.thread.start();
     }
 
+    /**
+     *  Stops the pinger thread and sends an unsubscribe message.
+     *  @since 0.9.53
+     */
     public void stop() {
         this.running = false;
         synchronized(this.waitlock) {
@@ -52,6 +65,11 @@ public class Pinger implements Source, Runnable {
         } catch (RuntimeException re) {}
     }
 
+    /**
+     *  Main run loop that periodically sends subscribe messages.
+     *  Runs until stop() is called.
+     *  @since 0.9.53
+     */
     public void run() {
         // send subscribe-message
         byte[] data = new byte[1];

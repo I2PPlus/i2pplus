@@ -337,7 +337,10 @@ public class NamingServiceBean extends AddressbookBean {
         return entries;
     }
 
-    /** Perform actions, returning messages about this. */
+    /**
+     * Perform actions, returning messages about this.
+     * @return messages about the performed actions
+     */
     @Override
     public String getMessages() {
         if (isDirect()) {return super.getMessages();}
@@ -504,9 +507,10 @@ public class NamingServiceBean extends AddressbookBean {
     }
 
     /**
-     *  @since 0.9.35
+     * Save notes for a destination.
+     * @since 0.9.35
      */
-        public void saveNotes() {
+    public void saveNotes() {
         if (action == null || !action.equals(_t("Save Notes")) ||
             destination == null || detail == null || isDirect() ||
             serial == null || !serial.equals(lastSerial)) {
@@ -549,13 +553,23 @@ public class NamingServiceBean extends AddressbookBean {
         }
     }
 
+    /**
+     * Sets the hostname for lookup.
+     * @param h the hostname to set
+     */
     public void setH(String h) {this.detail = DataHelper.stripHTML(h);}
 
     /**
-     *  @since 0.9.35
+     * Sets the notes for the destination.
+     * @param n the notes to set
+     * @since 0.9.35
      */
     public void setNofilter_notes(String n) {notes = n;}
 
+    /**
+     * Lookup a single destination by hostname.
+     * @return the AddressBean for the destination, or null if not found
+     */
     public AddressBean getLookup() {
         if (this.detail == null) {return null;}
         if (isDirect()) {
@@ -580,7 +594,9 @@ public class NamingServiceBean extends AddressbookBean {
     }
 
     /**
-     *  @since 0.9.26
+     * Lookup all destinations for a hostname.
+     * @return list of AddressBeans for all destinations, or null if not found
+     * @since 0.9.26
      */
     public List<AddressBean> getLookupAll() {
         if (this.detail == null) {return null;}
@@ -618,7 +634,10 @@ public class NamingServiceBean extends AddressbookBean {
     }
 
     /**
-     *  @since 0.9.20
+     * Export address book entries to a writer.
+     * @param out the writer to export to
+     * @throws IOException if an I/O error occurs
+     * @since 0.9.20
      */
     public void export(Writer out) throws IOException {
         Properties searchProps = new Properties();
@@ -655,8 +674,11 @@ public class NamingServiceBean extends AddressbookBean {
     }
 
     /**
-     *  @return messages about this action
-     *  @since 0.9.40
+     * Import entries from a file upload.
+     * @param wrequest the request wrapper containing the file
+     * @return messages about the import operation
+     * @throws IOException if an I/O error occurs
+     * @since 0.9.40
      */
     public String importFile(RequestWrapper wrequest) throws IOException {
         String message = "";
@@ -743,7 +765,9 @@ public class NamingServiceBean extends AddressbookBean {
     }
 
     /**
-     *  @since 0.9.34
+     * Check if the imagegen service is available.
+     * @return true if imagegen is registered
+     * @since 0.9.34
      */
     public boolean haveImagegen() {
         return _context.portMapper().isRegistered("imagegen");

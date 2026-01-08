@@ -7,6 +7,9 @@ package net.i2p.i2ptunnel.irc;
  */
 public interface DCCHelper {
 
+    /**
+     *  Is the DCC helper enabled?
+     */
     public boolean isEnabled();
 
     /**

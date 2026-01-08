@@ -26,6 +26,11 @@ public class Subscriber implements Sink {
     private static final int MAX_SUBSCRIPTIONS = 10;
     private static final long EXPIRATION = 60*1000;
 
+    /**
+     *  Creates a new subscriber for managing data source connections.
+     *  @param multi the multi-source to register subscriptions with
+     *  @since 0.9.53
+     */
     public Subscriber(MultiSource multi) {
         this.multi = multi;
         // subscriptions

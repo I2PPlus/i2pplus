@@ -112,6 +112,9 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
         task.run();
     }
 
+    /**
+     *  Starts the CONNECT proxy and registers with port mapper.
+     */
     @Override
     public void startRunning() {
         super.startRunning();
@@ -119,6 +122,9 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
             _context.portMapper().register(PortMapper.SVC_HTTPS_PROXY, getTunnel().listenHost, getLocalPort());
     }
 
+    /**
+     *  Closes the CONNECT proxy and unregisters from port mapper.
+     */
     @Override
     public boolean close(boolean forced) {
         int reg = _context.portMapper().getPort(PortMapper.SVC_HTTPS_PROXY);

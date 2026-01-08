@@ -105,11 +105,10 @@ public class I2PTunnelUDPServerBase extends I2PTunnelTask implements Source, Sin
     }
 
     /**
-     * Classes should override to start UDP side as well.
+     *  Starts the tunnel and begins processing datagrams.
+     *  Classes should override to start UDP side as well.
      *
-     * Not specified in I2PTunnelTask but used in both
-     * I2PTunnelClientBase and I2PTunnelServer so let's
-     * implement it here too.
+     *  @since 0.9.53
      */
     public void startRunning() {
         //synchronized (startLock) {
@@ -145,9 +144,11 @@ public class I2PTunnelUDPServerBase extends I2PTunnelTask implements Source, Sin
     }
 
     /**
-     * I2PTunnelTask Methods
+     *  Closes the tunnel and destroys the session.
      *
-     * Classes should override to close UDP side as well
+     *  @param forced if true, force immediate close without graceful shutdown
+     *  @return true if closed successfully
+     *  @since 0.9.53
      */
     public boolean close(boolean forced) {
         if (!open) return true;
@@ -167,17 +168,21 @@ public class I2PTunnelUDPServerBase extends I2PTunnelTask implements Source, Sin
     }
 
     /**
-     *  Source Methods
+     *  Sets the receiver of the UDP datagrams from I2P.
+     *  Subclass must call this after constructor and before start().
      *
-     *  Sets the receiver of the UDP datagrams from I2P
-     *  Subclass must call this after constructor
-     *  and before start()
+     *  @param s the sink to receive incoming datagrams
+     *  @since 0.9.53
      */
     public void setSink(Sink s) {
         _i2pSource.setSink(s);
     }
 
-    /** start the source */
+    /**
+     *  Starts the I2P source to begin receiving datagrams.
+     *
+     *  @since 0.9.53
+     */
     public void start() {
         _i2pSource.start();
     }

@@ -35,6 +35,10 @@ public class SubscriptionsBean extends BaseBean {
                                               "http://skank.i2p/hosts.txt" + "\n" +
                                               "http://notbob.i2p/hosts.txt";
 
+    /**
+     * Get the subscriptions file path.
+     * @return the absolute path to the subscriptions file
+     */
     public String getFileName() {
         loadConfig();
         fileName = subsFile().toString();
@@ -124,10 +128,18 @@ public class SubscriptionsBean extends BaseBean {
         return message;
     }
 
+    /**
+     * Set the subscriptions content.
+     * @param content the new subscriptions content
+     */
     public void setContent(String content) {
         this.content = DataHelper.stripHTML(content); // will come from form with \r\n line endings
     }
 
+    /**
+     * Get the current subscriptions content.
+     * @return the subscriptions content, or default subscriptions if file doesn't exist
+     */
     public String getContent() {
         if (content != null) {return content;}
         reloadSubs();

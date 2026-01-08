@@ -85,6 +85,9 @@ public class I2PTunnelDCCServer extends I2PTunnelServer {
     /**
      *  An incoming DCC connection, only accept for a known port.
      *  Passed through without filtering.
+     *
+     * @param socket the incoming I2P socket connection
+     * @since 0.8.9
      */
     @Override
     protected void blockingHandle(I2PSocket socket) {
@@ -130,6 +133,13 @@ public class I2PTunnelDCCServer extends I2PTunnelServer {
         }
     }
 
+    /**
+     *  Closes all connections and clears all pending/outgoing/active maps.
+     *
+     * @param forced unused, for interface compatibility
+     * @return true if closed successfully
+     * @since 0.8.9
+     */
     @Override
     public boolean close(boolean forced) {
         _outgoing.clear();

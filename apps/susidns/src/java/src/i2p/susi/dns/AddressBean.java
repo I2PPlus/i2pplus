@@ -211,6 +211,7 @@ public class AddressBean {
     /**
      * Gets the source URL with hostname as display text for this address entry.
      * @return the source URL with hostname as display text
+     * @since 0.9.66
      */
     public String getSourceHostname() {
         String rv = getProp("s");

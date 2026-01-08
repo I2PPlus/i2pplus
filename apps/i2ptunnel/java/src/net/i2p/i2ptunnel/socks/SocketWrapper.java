@@ -61,10 +61,22 @@ class SocketWrapper implements I2PSocket {
         return DUMMY_DEST;
     }
 
+    /**
+     *  Gets the input stream from the underlying socket.
+     *
+     * @return the socket's input stream
+     * @throws IOException if the socket is closed
+     */
     public InputStream getInputStream() throws IOException {
         return socket.getInputStream();
     }
 
+    /**
+     *  Gets the output stream from the underlying socket.
+     *
+     * @return the socket's output stream
+     * @throws IOException if the socket is closed
+     */
     public OutputStream getOutputStream() throws IOException {
         return socket.getOutputStream();
     }

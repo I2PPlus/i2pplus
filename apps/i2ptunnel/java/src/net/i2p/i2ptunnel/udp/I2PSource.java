@@ -58,10 +58,32 @@ public class I2PSource implements Source {
         log = I2PAppContext.getGlobalContext().logManager().getLog(getClass());
     }
 
+    /**
+     *  Sets the sink for received I2P datagrams.
+     *
+     *  @param sink the sink to receive datagrams
+     *  @since 0.9.53
+     */
+    /**
+     *  Sets the sink for received I2P datagrams.
+     *
+     *  @param sink the sink to receive datagrams
+     *  @since 0.9.53
+     */
     public void setSink(Sink sink) {
         this.sink = sink;
     }
 
+    /**
+     *  Starts the source to begin receiving datagrams.
+     *
+     *  @since 0.9.53
+     */
+    /**
+     *  Starts the source to begin receiving datagrams.
+     *
+     *  @since 0.9.53
+     */
     public void start() {
         // create listener
         Listener l = new Listener();

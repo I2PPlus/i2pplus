@@ -1,21 +1,11 @@
 /**
- *                    WTFPL
- *                    Version 2, December 2004
+ * WTFPL
+ * Version 2, December 2004
  *
  * Copyright (C) sponge
- *   Planet Earth
- *
- * See...
- *
- *	http://sam.zoy.org/wtfpl/
- *	and
- *	http://en.wikipedia.org/wiki/WTFPL
- *
- * ...for any additional details and license questions.
+ * Planet Earth
  */
 package net.i2p.i2ptunnel;
-
-// import java.util.ArrayList;
 
 import net.i2p.client.streaming.I2PSocketManager;
 import net.i2p.util.EventDispatcher;

@@ -52,7 +52,8 @@ import net.i2p.util.Log;
  * thread-safe state transitions.
  * </p>
  *
- * @see StreamForwarder
+ * @see #toI2P
+ * @see #fromI2P
  * @see I2PTunnelServer
  */
 public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErrorListener, DoneCallback {

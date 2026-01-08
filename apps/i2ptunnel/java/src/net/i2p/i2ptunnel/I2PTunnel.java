@@ -2031,11 +2031,24 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
         }
     }
 
+    /**
+     *  Registers a listener for connection events.
+     * <p>
+     * The listener will be notified of router disconnection events.
+     * </p>
+     *
+     * @param lsnr the listener to add; ignored if null
+     */
     public void addConnectionEventListener(ConnectionEventListener lsnr) {
         if (lsnr == null) return;
         listeners.add(lsnr);
     }
 
+    /**
+     *  Unregisters a connection event listener.
+     *
+     * @param lsnr the listener to remove; ignored if null
+     */
     public void removeConnectionEventListener(ConnectionEventListener lsnr) {
         if (lsnr == null) return;
         listeners.remove(lsnr);
@@ -2043,12 +2056,19 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
 
     private String getPrefix() { return "[" + _tunnelId + "]: "; }
 
+    /**
+     *  Gets the application context.
+     *
+     * @return the I2P application context
+     */
     public I2PAppContext getContext() { return _context; }
 
     /**
-     * Call this whenever we lose touch with the router involuntarily (aka the router
-     * is off / crashed / etc)
-     *
+     *  Called when the router disconnects unexpectedly.
+     * <p>
+     * This method notifies all registered ConnectionEventListeners
+     * that the router connection has been lost.
+     * </p>
      */
     void routerDisconnected() {
         _log.error(getPrefix() + "Router disconnected - firing notification events");

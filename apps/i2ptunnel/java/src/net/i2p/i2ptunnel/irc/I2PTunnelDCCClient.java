@@ -95,14 +95,32 @@ public class I2PTunnelDCCClient extends I2PTunnelClientBase {
         stop();
     }
 
+    /**
+     *  Returns the expiration time for this DCC connection.
+     *
+     * @return the expiration time in milliseconds since epoch
+     * @since 0.8.9
+     */
     public long getExpires() {
         return _expires;
     }
 
+    /**
+     *  Returns the destination base32 address for this DCC connection.
+     *
+     * @return the destination Base32 address
+     * @since 0.8.9
+     */
     public String getDest() {
         return _dest;
     }
 
+    /**
+     *  Returns the remote port for this DCC connection.
+     *
+     * @return the remote port number
+     * @since 0.8.9
+     */
     public int getRemotePort() {
         return _remotePort;
     }
@@ -120,11 +138,17 @@ public class I2PTunnelDCCClient extends I2PTunnelClientBase {
 
     /**
      *  Just so we can do the callbacks
+     *
+     * @since 0.8.9
      */
     private class Runner extends I2PTunnelRunner {
 
         /**
-         *  Does NOT start itself. Caller must call start().
+         *  Does NOT start itself. Caller must call run() directly.
+         *
+         * @param s the local socket
+         * @param i2ps the I2P socket
+         * @since 0.8.9
          */
         public Runner(Socket s, I2PSocket i2ps) {
             super(s, i2ps, sockLock, null, null, mySockets, (FailCallback) null);

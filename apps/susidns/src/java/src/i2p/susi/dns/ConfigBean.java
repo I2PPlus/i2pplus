@@ -24,9 +24,22 @@ public class ConfigBean extends BaseBean implements Serializable {
 
     private String config;
     private boolean saved;
+    /**
+     * Get the config file path.
+     * @return the absolute path to the config file
+     */
     public String getfileName() {return configFile().toString();}
+
+    /**
+     * Check if the config has been saved.
+     * @return true if the config was saved
+     */
     public boolean isSaved() {return saved;}
 
+    /**
+     * Get the current configuration content.
+     * @return the configuration content
+     */
     public String getConfig() {
         if (config != null) {return config;}
         reload();
@@ -54,12 +67,20 @@ public class ConfigBean extends BaseBean implements Serializable {
         } catch (IOException e) {e.printStackTrace();} // TODO Auto-generated catch block
     }
 
+    /**
+     * Set the configuration content.
+     * @param config the new configuration content
+     */
     public void setConfig(String config) {
         // will come from form with \r\n line endings
         this.config = config;
         this.saved = false;
     }
 
+    /**
+     * Get status messages for the UI.
+     * @return HTML formatted status message
+     */
     public String getMessages() {
         String message = "";
         if (action != null) {

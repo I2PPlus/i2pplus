@@ -57,7 +57,14 @@ public class SOCKSUDPTunnel extends I2PTunnelUDPClientBase {
     }
 
 
-    /** @return the UDP port number */
+    /**
+     *  Adds a new UDP port to the tunnel for bidirectional SOCKS UDP communication.
+     *
+     *  @param host the local address to bind to
+     *  @param port the local port to bind to, or 0 for any available port
+     *  @return the actual port number the socket was bound to
+     *  @since 0.9.53
+     */
     public int add(InetAddress host, int port) {
         SOCKSUDPPort sup = new SOCKSUDPPort(host, port, ports);
         this.ports.put(Integer.valueOf(sup.getPort()), sup);
@@ -66,12 +73,24 @@ public class SOCKSUDPTunnel extends I2PTunnelUDPClientBase {
         return sup.getPort();
     }
 
+    /**
+     *  Removes a UDP port from the tunnel and stops its associated resources.
+     *
+     *  @param port the UDP port number to remove
+     *  @since 0.9.53
+     */
     public void remove(Integer port) {
         SOCKSUDPPort sup = this.ports.remove(port);
         if (sup != null)
             sup.stop();
     }
 
+    /**
+     *  Starts the tunnel and begins processing datagrams.
+     *  Ports must be added after this call.
+     *
+     *  @since 0.9.53
+     */
     @Override
     public final void startRunning() {
         super.startRunning();
@@ -79,6 +98,13 @@ public class SOCKSUDPTunnel extends I2PTunnelUDPClientBase {
         startall();
     }
 
+    /**
+     *  Closes the tunnel and all associated ports.
+     *
+     *  @param forced if true, force immediate close without graceful shutdown
+     *  @return true if closed successfully
+     *  @since 0.9.53
+     */
     @Override
     public boolean close(boolean forced) {
         stopall();

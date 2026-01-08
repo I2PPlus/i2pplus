@@ -17,16 +17,33 @@ public class MultiSource implements Source, Sink {
     private final List<MSink> sinks;
     private final Log log = I2PAppContext.getGlobalContext().logManager().getLog(getClass());
 
+    /**
+     *  Creates a new multi-source distributor.
+     *  @since 0.9.53
+     */
     public MultiSource() {
         this.sinks = new CopyOnWriteArrayList<MSink>();
     }
 
+    /**
+     *  Sets the destination sink for all outgoing data.
+     *  @param sink the sink to receive distributed data
+     *  @since 0.9.53
+     */
     public void setSink(Sink sink) {
         this.sink = sink;
     }
 
+    /**
+     *  Initializes the multi-source. No-op for this implementation.
+     *  @since 0.9.53
+     */
     public void start() {}
 
+    /**
+     *  Stops the multi-source and clears all registered sinks.
+     *  @since 0.9.53
+     */
     public void stop() {
         this.sinks.clear();
     }

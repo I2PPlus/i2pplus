@@ -24,10 +24,21 @@ public class SOCKSUDPUnwrapper implements Source, Sink {
         this.cache = cache;
     }
 
+    /**
+     *  Sets the sink for outgoing unwrapped UDP datagrams.
+     *
+     *  @param sink the sink to receive unwrapped datagrams
+     *  @since 0.9.53
+     */
     public void setSink(Sink sink) {
         this.sink = sink;
     }
 
+    /**
+     *  Starts the unwrapper. No-op for this implementation.
+     *
+     *  @since 0.9.53
+     */
     public void start() {}
 
     /**

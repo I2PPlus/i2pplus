@@ -32,6 +32,10 @@ public class LogBean extends BaseBean
     private String logName, logged;
     private static final String LOG_FILE = "log.txt";
 
+    /**
+     * Get the log file path.
+     * @return the absolute path to the log file
+     */
     public String getLogName() {
         loadConfig();
         logName = logFile().toString();
@@ -99,14 +103,26 @@ public class LogBean extends BaseBean
         return message;
     }
 
+    /**
+     * Set the log content.
+     * @param logged the new log content
+     */
     public void setLogged(String logged) {this.logged = DataHelper.stripHTML(logged);} // will come from form with \r\n line endings
 
+    /**
+     * Get the current log content.
+     * @return the log content, or default if file doesn't exist
+     */
     public String getLogged() {
         if (logged != null) {return logged;}
         reloadLog();
         return logged;
     }
 
+    /**
+     * Get the count of log entries from today.
+     * @return the number of entries logged today
+     */
     public int getTodayEntryCount() {
         reloadLog();
         return countTodayEntries();

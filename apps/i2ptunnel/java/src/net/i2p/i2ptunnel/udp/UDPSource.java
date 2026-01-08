@@ -41,10 +41,21 @@ public class UDPSource implements Source, Runnable {
         this.thread = new I2PAppThread(this);
     }
 
+    /**
+     *  Sets the sink for received UDP datagrams.
+     *
+     *  @param sink the sink to receive processed datagrams
+     *  @since 0.9.53
+     */
     public void setSink(Sink sink) {
         this.sink = sink;
     }
 
+    /**
+     *  Starts the source thread to begin receiving UDP datagrams.
+     *
+     *  @since 0.9.53
+     */
     public void start() {
         this.thread.start();
     }
@@ -84,6 +95,11 @@ public class UDPSource implements Source, Runnable {
         return port;
     }
 
+    /**
+     *  Stops the source thread and closes the socket.
+     *
+     *  @since 0.9.53
+     */
     public void stop() {
         this.sock.close();
     }

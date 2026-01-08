@@ -47,6 +47,15 @@ public class DCCClientManager extends EventReceiver {
 
     private static final int MAX_INCOMING_PENDING = 10;
     private static final int MAX_INCOMING_ACTIVE = 10;
+    /**
+     * Create a new manager for DCC client tunnels.
+     *
+     * @param sktMgr the socket manager for creating connections
+     * @param logging the logging facility
+     * @param dispatch the event dispatcher for tunnel events
+     * @param tunnel the parent I2PTunnel instance
+     * @since 0.8.9
+     */
     public DCCClientManager(I2PSocketManager sktMgr, Logging logging,
                             EventDispatcher dispatch, I2PTunnel tunnel) {
         sockMgr = sktMgr;
@@ -59,6 +68,14 @@ public class DCCClientManager extends EventReceiver {
         _complete = new ConcurrentHashMap<Integer, I2PTunnelDCCClient>(8);
     }
 
+    /**
+     * Close all DCC client tunnels managed by this manager.
+     * Stops all incoming, active, and complete client tunnels and clears the internal maps.
+     *
+     * @param forced unused parameter, retained for compatibility
+     * @return true always, indicating all tunnels were closed
+     * @since 0.8.9
+     */
     public boolean close(boolean forced) {
         for (I2PTunnelDCCClient c : _incoming.values()) {
             c.stop();
@@ -73,12 +90,14 @@ public class DCCClientManager extends EventReceiver {
     }
 
     /**
-     *  An incoming DCC request
+     * Handle an incoming DCC request from a remote peer.
+     * Validates the base32 address and creates a new DCC client tunnel.
      *
-     *  @param b32 remote dcc server b32 address
-     *  @param port remote dcc server I2P port
-     *  @param type ignored
-     *  @return local DCC client tunnel port or -1 on error
+     * @param b32 the remote DCC server's base32 destination (60 chars, ending in .b32.i2p)
+     * @param port the remote DCC server's I2P port
+     * @param type the DCC type (currently ignored)
+     * @return the local DCC client tunnel port, or -1 on error (invalid address or too many connections)
+     * @since 0.8.9
      */
     public int newIncoming(String b32, int port, String type) {
         return newIncoming(b32, port, type, 0);
@@ -123,10 +142,12 @@ public class DCCClientManager extends EventReceiver {
     }
 
     /**
-     *  An outgoing RESUME request
+     * Handle an outgoing DCC RESUME request.
+     * Stops the existing client tunnel for the given local port.
      *
-     *  @param port local DCC client tunnel port
-     *  @return remote DCC server i2p port or -1 on error
+     * @param port the local DCC client tunnel port to resume
+     * @return the local port of the stopped tunnel, or -1 if no matching tunnel was found
+     * @since 0.8.9
      */
     public int resumeOutgoing(int port) {
         Integer lport = Integer.valueOf(port);
@@ -145,10 +166,13 @@ public class DCCClientManager extends EventReceiver {
     }
 
     /**
-     *  An incoming ACCEPT response
+     * Handle an incoming DCC ACCEPT response from the remote peer.
+     * Searches for a matching tunnel in complete, active, or incoming states
+     * and creates a new incoming connection with the original parameters.
      *
-     *  @param port remote dcc server I2P port
-     *  @return local DCC client tunnel port or -1 on error
+     * @param port the remote DCC server's I2P port from the ACCEPT message
+     * @return the local DCC client tunnel port for the new connection, or -1 if no match found
+     * @since 0.8.9
      */
     public int acceptIncoming(int port) {
         // do a reverse lookup
@@ -171,7 +195,12 @@ public class DCCClientManager extends EventReceiver {
     }
 
     /**
-     *  The EventReceiver callback
+     * EventReceiver callback for DCC client connection events.
+     * Handles connection start and stop events to update tunnel state.
+     *
+     * @param eventName the event name (CONNECT_START_EVENT or CONNECT_STOP_EVENT)
+     * @param args the event arguments (I2PTunnelDCCClient for start, Integer port for stop)
+     * @since 0.8.9
      */
     public void notifyEvent(String eventName, Object args) {
         if (eventName.equals(I2PTunnelDCCClient.CONNECT_START_EVENT)) {
@@ -187,6 +216,13 @@ public class DCCClientManager extends EventReceiver {
         }
     }
 
+    /**
+     * Called when a DCC client connection has started successfully.
+     * Moves the tunnel from incoming to active state.
+     *
+     * @param client the DCC client tunnel that has started
+     * @since 0.8.9
+     */
     private void connStarted(I2PTunnelDCCClient client) {
         Integer lport = Integer.valueOf(client.getLocalPort());
         I2PTunnelDCCClient c = _incoming.remove(lport);
@@ -200,6 +236,13 @@ public class DCCClientManager extends EventReceiver {
         }
     }
 
+    /**
+     * Called when a DCC client connection has stopped.
+     * Moves the tunnel from incoming or active to complete state.
+     *
+     * @param lport the local port of the tunnel that stopped
+     * @since 0.8.9
+     */
     private void connStopped(Integer lport) {
         I2PTunnelDCCClient tun = _incoming.remove(lport);
         if (tun != null)
@@ -214,6 +257,12 @@ public class DCCClientManager extends EventReceiver {
                       " complete count now: " + _complete.size());
     }
 
+    /**
+     * Expires timed-out inbound and complete DCC client tunnels.
+     * Removes and stops any tunnels whose expiration time has passed.
+     *
+     * @since 0.8.9
+     */
     private void expireInbound() {
         for (Iterator<I2PTunnelDCCClient> iter = _incoming.values().iterator(); iter.hasNext(); ) {
             I2PTunnelDCCClient c = iter.next();

@@ -16,6 +16,17 @@ import net.i2p.util.EventDispatcher;
  */
 public class StreamrProducer extends I2PTunnelUDPServerBase {
 
+    /**
+     * Creates a Streamr producer that receives UDP data and forwards it through I2P.
+     *
+     * @param port local UDP port to listen on
+     * @param privkey I2P private key file for the destination
+     * @param privkeyname name of the private key
+     * @param l logging facility
+     * @param notifyThis event dispatcher for notifications
+     * @param tunnel the tunnel context
+     * @since 0.9.53
+     */
     public StreamrProducer(int port,
                            File privkey, String privkeyname, Logging l,
                            EventDispatcher notifyThis, I2PTunnel tunnel) {
@@ -34,6 +45,10 @@ public class StreamrProducer extends I2PTunnelUDPServerBase {
         this.server.setSink(this.multi);
     }
 
+    /**
+     *  Starts the UDP server and begins forwarding data.
+     *  @since 0.9.53
+     */
     @Override
     public final void startRunning() {
         super.startRunning();
@@ -41,6 +56,12 @@ public class StreamrProducer extends I2PTunnelUDPServerBase {
         l.log("Streamr server ready");
     }
 
+    /**
+     *  Stops the server and releases resources.
+     *  @param forced if true, forces immediate close
+     *  @return true if closed successfully
+     *  @since 0.9.53
+     */
     @Override
     public boolean close(boolean forced) {
         this.server.stop();

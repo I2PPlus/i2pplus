@@ -152,8 +152,22 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
         }
     }
 
+    /**
+     *  Gets the proxy map for all configured ports.
+     *
+     * @return a map of port strings to proxy lists
+     */
     public HashMap<String, List<String>> getProxyMap() {return proxies;}
 
+    /**
+     *  Gets the proxy list for a specific port.
+     * <p>
+     * If no proxies are configured for the port, returns the default proxies.
+     * </p>
+     *
+     * @param port the local port to get proxies for
+     * @return the list of proxy destinations for the port, or default proxies
+     */
     public List<String> getProxies(int port) {
         List<String> rv = proxies.get(Integer.toString(port));
         if (rv == null) {rv = getDefaultProxies();}

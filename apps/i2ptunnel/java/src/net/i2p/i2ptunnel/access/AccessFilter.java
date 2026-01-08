@@ -76,6 +76,14 @@ class AccessFilter implements StatefulConnectionFilter {
         reload();
     }
 
+    /**
+     * Starts the filter's background tasks.
+     * <p>
+     * Initializes the purger and syncer timers to begin tracking connection
+     * attempts and periodically saving state to disk.
+     *
+     * @since 0.9.40
+     */
     @Override
     public void start() {
         if (timersRunning.compareAndSet(false, true)) {
@@ -84,12 +92,31 @@ class AccessFilter implements StatefulConnectionFilter {
         }
     }
 
+    /**
+     * Stops the filter's background tasks.
+     * <p>
+     * Halts the purger and syncer timers. Existing connection data is
+     * retained until the next purge cycle.
+     *
+     * @since 0.9.40
+     */
     @Override
     public void stop() {
         timersRunning.set(false);
         syncer = null;
     }
 
+    /**
+     * Determines if a connection to the given destination should be allowed.
+     * <p>
+     * Checks the destination against known and unknown destination trackers.
+     * If the destination has exceeded its threshold for the current time window,
+     * the connection is denied. Unknown destinations start with the default threshold.
+     *
+     * @param d the destination to check
+     * @return true if the connection should be allowed, false if denied
+     * @since 0.9.40
+     */
     @Override
     public boolean allowDestination(Destination d) {
         Hash hash = d.getHash();
@@ -200,6 +227,13 @@ class AccessFilter implements StatefulConnectionFilter {
         Purger() {
             super(context.simpleTimer2(), PURGE_INTERVAL);
         }
+
+        /**
+         * Called by the timer when the purge interval has elapsed.
+         * Removes old connection records and clears all data if stopped.
+         *
+         * @since 0.9.40
+         */
         public void timeReached() {
             if (!timersRunning.get()) {
                 synchronized(knownDests) {
@@ -219,6 +253,13 @@ class AccessFilter implements StatefulConnectionFilter {
         Syncer() {
             super(context.simpleTimer2(), SYNC_INTERVAL);
         }
+
+        /**
+         * Called by the timer when the sync interval has elapsed.
+         * Saves recorder data and reloads access lists from disk.
+         *
+         * @since 0.9.40
+         */
         public void timeReached() {
             if (!timersRunning.get())
                 return;

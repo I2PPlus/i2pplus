@@ -35,10 +35,21 @@ public class SOCKSUDPWrapper implements Source, Sink {
         this.cache = cache;
     }
 
+    /**
+     *  Sets the sink for outgoing wrapped UDP datagrams.
+     *
+     *  @param sink the sink to receive SOCKS-wrapped datagrams
+     *  @since 0.9.53
+     */
     public void setSink(Sink sink) {
         this.sink = sink;
     }
 
+    /**
+     *  Starts the wrapper. No-op for this implementation.
+     *
+     *  @since 0.9.53
+     */
     public void start() {}
 
     /**

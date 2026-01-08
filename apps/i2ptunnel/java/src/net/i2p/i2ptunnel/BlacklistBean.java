@@ -102,7 +102,11 @@ public class BlacklistBean {
     }
 
     /**
-     * Check if an address is blacklisted
+     * Check if an address is blacklisted.
+     *
+     * @param address the I2P address to check, may be a hostname or base32/Base64 address
+     * @return true if the address is in the blacklist, false otherwise
+     * @since 1.0
      */
     public boolean isBlacklisted(String address) {
         if (address == null) {
