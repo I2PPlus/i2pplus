@@ -112,7 +112,12 @@ class MessageHandler implements I2PSessionMuxedListener {
      * @param session that has been terminated
      */
     public void disconnected(I2PSession session) {
-        if (_log.shouldInfo()) {_log.info("I2PSession disconnected");}
+        if (_log.shouldInfo()) {
+            String destInfo = session.getMyDestination() != null ?
+                              session.getMyDestination().calculateHash().toBase32().substring(0,8) :
+                              "unknown";
+            _log.info("I2PSession disconnected for destination [" + destInfo + "]");
+        }
         _manager.disconnectAllHard();
         // kill anybody waiting in accept()
         if (_restartPending.compareAndSet(true, false)) {
@@ -135,8 +140,7 @@ class MessageHandler implements I2PSessionMuxedListener {
      */
     public void errorOccurred(I2PSession session, String message, Throwable error) {
         _restartPending.set(message.contains("restart"));
-        if (_log.shouldWarn())
-            _log.warn("Error occurred: " + message, error);
+        if (_log.shouldWarn()) {_log.warn("Error occurred: " + message, error);}
         //_manager.disconnectAllHard();
     }
 
