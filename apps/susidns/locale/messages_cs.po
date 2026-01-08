@@ -32,7 +32,7 @@ msgid "Source"
 msgstr "Zdrojový kód"
 
 msgid "Imported from"
-msgstr ""
+msgstr "Importováno z"
 
 msgid "Imported from file"
 msgstr "Importováno ze souboru"
@@ -41,16 +41,16 @@ msgid "Manually added via SusiDNS"
 msgstr "Ručně přidáno přes SusiDNS"
 
 msgid "Manually added"
-msgstr ""
+msgstr "Ručně přidáno"
 
 msgid "Added via address helper"
-msgstr ""
+msgstr "Přidáno pomocí adresního pomocníka"
 
 msgid "Via helper"
-msgstr ""
+msgstr "Přes pomocníka"
 
 msgid "Via helper from"
-msgstr ""
+msgstr "Přes pomocníka z"
 
 msgid "None"
 msgstr "Žádný"
@@ -97,9 +97,9 @@ msgstr[2] "{0} výsledků pro: <span class=active>"
 #, java-format
 msgid "Book contains 1 entry"
 msgid_plural "Book contains {0} entries"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Kniha obsahuje 1 záznam."
+msgstr[1] "Kniha obsahuje {0} záznamy."
+msgstr[2] "Kniha obsahuje {0} záznamů."
 
 msgid "Add"
 msgstr "Přídat"
@@ -160,7 +160,7 @@ msgstr[1] "Počet smazaných cílů: {0}."
 msgstr[2] "Počet smazaných cílů: {0}."
 
 msgid "No valid entries selected to delete."
-msgstr ""
+msgstr "Nejsou vybrány žádné platné záznamy ke smazání."
 
 msgid "Add Alternate"
 msgstr "Přidat náhradníka"
@@ -181,13 +181,13 @@ msgid "Save"
 msgstr "Uložit"
 
 msgid "Blacklist saved."
-msgstr ""
+msgstr "Černá lista uložena."
 
 msgid "Reload"
 msgstr "Načíst znovu"
 
 msgid "Blacklist reloaded from file."
-msgstr ""
+msgstr "Černá lista znovu načtena ze souboru."
 
 msgid "Configuration saved."
 msgstr "Nastavení uloženo."
@@ -218,17 +218,17 @@ msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "Nepodařilo se odstranit cíl pro {0} ze služby pojmenování {1}"
 
 msgid "Blacklist Selected"
-msgstr ""
+msgstr "Vybráno pro černou listu"
 
 #, java-format
 msgid "1 destination blacklisted."
 msgid_plural "{0} destinations blacklisted."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "1 cíl přidán na černou listu."
+msgstr[1] "{0} cíle přidány na černou listu."
+msgstr[2] "{0} cílů přidáno na černou listu."
 
 msgid "No valid entries selected to blacklist."
-msgstr ""
+msgstr "Nejsou vybrány žádné platné záznamy pro přidání na černou listu."
 
 msgid "Save Notes"
 msgstr "Uložit poznámky"
@@ -297,7 +297,7 @@ msgid "Subscriptions"
 msgstr "Předplatné"
 
 msgid "Blacklist"
-msgstr ""
+msgstr "Černá lista"
 
 msgid "Configuration"
 msgstr "Konfigurace"
@@ -333,13 +333,13 @@ msgid "Search"
 msgstr "Hledat"
 
 msgid "latest"
-msgstr ""
+msgstr "nejnovější"
 
 msgid "Alive"
-msgstr ""
+msgstr "Aktivní"
 
 msgid "Dead"
-msgstr ""
+msgstr "Neaktivní"
 
 msgid "all"
 msgstr "průhledný filtr"
@@ -348,13 +348,13 @@ msgid "Info"
 msgstr "Informace"
 
 msgid "Type"
-msgstr ""
+msgstr "Typ"
 
 msgid "Hostname"
 msgstr "Hostitelské jméno"
 
 msgid "Encryption"
-msgstr ""
+msgstr "Šifrování"
 
 msgid "Link (b32)"
 msgstr "Link (B32)"
@@ -363,10 +363,10 @@ msgid "Destination"
 msgstr "Cíl"
 
 msgid "Added"
-msgstr ""
+msgstr "Přidáno"
 
 msgid "Status"
-msgstr ""
+msgstr "Stav"
 
 msgid "Select hosts for deletion from addressbook"
 msgstr "Vyberte hostitele pro smazání z adresáře"
@@ -375,7 +375,7 @@ msgid "More information on this entry"
 msgstr "Více informací o tomto záznamu"
 
 msgid "unknown"
-msgstr ""
+msgstr "neznámý"
 
 msgid "Base 32 address"
 msgstr "Adresa základny 32"
@@ -390,7 +390,7 @@ msgid "Cancel"
 msgstr "Zrušit"
 
 msgid "This book currently contains no entries."
-msgstr ""
+msgstr "Tato kniha momentálně neobsahuje žádné záznamy."
 
 msgid "e.g. newdomain.i2p"
 msgstr "např. newdomain.i2p"
@@ -405,19 +405,19 @@ msgid "Select file"
 msgstr "Vyberte soubor"
 
 msgid "blacklist"
-msgstr ""
+msgstr "černá lista"
 
 msgid "Blacklist Management"
-msgstr ""
+msgstr "Správa černé listy"
 
 msgid "File location"
 msgstr "Umístění souboru"
 
 msgid "Enter I2P addresses to blacklist (one per line)"
-msgstr ""
+msgstr "Zadejte I2P adresy k přidání na černou listu (jednu na řádek)"
 
 msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
-msgstr ""
+msgstr "Soubor černé listy obsahuje seznam I2P názvů hostitelů, které by měly být zablokovány pro přístup přes HTTP proxy a vyloučeny ze zobrazení v adresáři."
 
 msgid "configuration"
 msgstr "konfigurace"
@@ -483,13 +483,13 @@ msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "Název přepsaného motivu, který se má použít (výchozí pro motiv vybraný v konzole)"
 
 msgid "Interval (in hours) for running host checker (default is 8 hours)"
-msgstr ""
+msgstr "Interval (v hodinách) pro spouštění kontroloru hostitelů (výchozí je 8 hodin)"
 
 msgid "Maximum concurrent pings when running host checker (Default is 12, max is 100)"
-msgstr ""
+msgstr "Maximální počet souběžných pingů při spouštění kontroloru hostitelů (výchozí je 12, maximum je 100)"
 
 msgid "delete hosts"
-msgstr ""
+msgstr "smazat hostitele"
 
 msgid "addressbook"
 msgstr "adresář"
@@ -552,7 +552,7 @@ msgid "Launch Image Generator"
 msgstr "Spusťte generátor obrázků"
 
 msgid "Export"
-msgstr ""
+msgstr "Export"
 
 msgid "Introduction"
 msgstr "Úvod"

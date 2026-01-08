@@ -32,7 +32,7 @@ msgid "Source"
 msgstr "Allikas"
 
 msgid "Imported from"
-msgstr ""
+msgstr "Imporditud"
 
 msgid "Imported from file"
 msgstr "Imporditud failist"
@@ -41,16 +41,16 @@ msgid "Manually added via SusiDNS"
 msgstr "Manuaalselt lisatud läbi SusiDNS"
 
 msgid "Manually added"
-msgstr ""
+msgstr "Manuaalselt lisatud"
 
 msgid "Added via address helper"
-msgstr ""
+msgstr "Lisatud aadressiabi abil"
 
 msgid "Via helper"
-msgstr ""
+msgstr "Abi kaudu"
 
 msgid "Via helper from"
-msgstr ""
+msgstr "Abi kaudu asukohast"
 
 msgid "None"
 msgstr "Puudub"
@@ -94,8 +94,8 @@ msgstr[1] "{0} tulemust: <span class=active>"
 #, java-format
 msgid "Book contains 1 entry"
 msgid_plural "Book contains {0} entries"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Raamat sisaldab 1 kirjet"
+msgstr[1] "Raamat sisaldab {0} kirjet"
 
 msgid "Add"
 msgstr "Lisa"
@@ -155,7 +155,7 @@ msgstr[0] "1 sihtkoha kustutati."
 msgstr[1] "{0} sihtkohta kustutati."
 
 msgid "No valid entries selected to delete."
-msgstr ""
+msgstr "Kustutamiseks pole valitud ühtki kehtivat kirjet."
 
 msgid "Add Alternate"
 msgstr "Lisa alternatiiv"
@@ -176,13 +176,13 @@ msgid "Save"
 msgstr "Salvesta"
 
 msgid "Blacklist saved."
-msgstr ""
+msgstr "Must nimekiri salvestatud."
 
 msgid "Reload"
 msgstr "Laadi uuesti"
 
 msgid "Blacklist reloaded from file."
-msgstr ""
+msgstr "Must nimekiri laaditi failist uuesti."
 
 msgid "Configuration saved."
 msgstr "Seaded salvestatud."
@@ -213,16 +213,16 @@ msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "Sihtkoha kustutamine ebaõnnestus {0} jaoks nimeandmeteenusest {1}"
 
 msgid "Blacklist Selected"
-msgstr ""
+msgstr "Vali musta nimekirja"
 
 #, java-format
 msgid "1 destination blacklisted."
 msgid_plural "{0} destinations blacklisted."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 sihtkoht musta nimekirja lisatud."
+msgstr[1] "{0} sihtkohta musta nimekirja lisatud."
 
 msgid "No valid entries selected to blacklist."
-msgstr ""
+msgstr "Musta nimekirja lisamiseks pole valitud ühtki kehtivat kirjet."
 
 msgid "Save Notes"
 msgstr "Salvesta märkused"
@@ -289,7 +289,7 @@ msgid "Subscriptions"
 msgstr "Tellimused"
 
 msgid "Blacklist"
-msgstr ""
+msgstr "Must nimekiri"
 
 msgid "Configuration"
 msgstr "Seaded"
@@ -325,13 +325,13 @@ msgid "Search"
 msgstr "Otsi"
 
 msgid "latest"
-msgstr ""
+msgstr "uusim"
 
 msgid "Alive"
-msgstr ""
+msgstr "Elus"
 
 msgid "Dead"
-msgstr ""
+msgstr "Surnud"
 
 msgid "all"
 msgstr "puhasta filtr"
@@ -340,13 +340,13 @@ msgid "Info"
 msgstr "Info"
 
 msgid "Type"
-msgstr ""
+msgstr "Tüüp"
 
 msgid "Hostname"
 msgstr "Määri nimi"
 
 msgid "Encryption"
-msgstr ""
+msgstr "Krüpteering"
 
 msgid "Link (b32)"
 msgstr "Link (b32)"
@@ -355,10 +355,10 @@ msgid "Destination"
 msgstr "Sihtkoht"
 
 msgid "Added"
-msgstr ""
+msgstr "Lisatud"
 
 msgid "Status"
-msgstr ""
+msgstr "Olek"
 
 msgid "Select hosts for deletion from addressbook"
 msgstr "Vali määrid aadressiraamatust kustutamiseks"
@@ -367,7 +367,7 @@ msgid "More information on this entry"
 msgstr "Lisateave selle kirje kohta"
 
 msgid "unknown"
-msgstr ""
+msgstr "tundmatu"
 
 msgid "Base 32 address"
 msgstr "Baas 32 aadress"
@@ -382,7 +382,7 @@ msgid "Cancel"
 msgstr "Katkesta"
 
 msgid "This book currently contains no entries."
-msgstr ""
+msgstr "See raamat ei sisalda hetkel ühtki kirjet."
 
 msgid "e.g. newdomain.i2p"
 msgstr "nt. newdomain.i2p"
@@ -397,19 +397,19 @@ msgid "Select file"
 msgstr "Vali fail"
 
 msgid "blacklist"
-msgstr ""
+msgstr "must nimekiri"
 
 msgid "Blacklist Management"
-msgstr ""
+msgstr "Musta nimekirja haldus"
 
 msgid "File location"
 msgstr "Faili asukoht"
 
 msgid "Enter I2P addresses to blacklist (one per line)"
-msgstr ""
+msgstr "Sisesta musta nimekirja lisatavad I2P aadressid (üks reale)"
 
 msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
-msgstr ""
+msgstr "Musta nimekirja fail sisaldab I2P hostinimede nimekirja, millele tuleks blokeerida juurdepääs HTTP vahendusserveri kaudu ja jätta aadressiraamatust välja."
 
 msgid "configuration"
 msgstr "seaded"
@@ -475,13 +475,13 @@ msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "Ülevalvava teema nimi, mida kasutada (vaikeväärtus on konsooli valitud teema)"
 
 msgid "Interval (in hours) for running host checker (default is 8 hours)"
-msgstr ""
+msgstr "Hosti kontrollija käivitamise intervall tundides (vaikimisi on 8 tundi)"
 
 msgid "Maximum concurrent pings when running host checker (Default is 12, max is 100)"
-msgstr ""
+msgstr "Maksimaalne samaaegsete pingu arv hosti kontrollija käivitamisel (vaikimisi 12, max 100)"
 
 msgid "delete hosts"
-msgstr ""
+msgstr "kustuta hostid"
 
 msgid "addressbook"
 msgstr "aadressiraamat"
@@ -544,7 +544,7 @@ msgid "Launch Image Generator"
 msgstr "Käivita pildi genereerija"
 
 msgid "Export"
-msgstr ""
+msgstr "Ekspordi"
 
 msgid "Introduction"
 msgstr "Esitus"

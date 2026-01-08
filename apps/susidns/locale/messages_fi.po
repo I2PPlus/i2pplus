@@ -32,7 +32,7 @@ msgid "Source"
 msgstr "Lähde"
 
 msgid "Imported from"
-msgstr ""
+msgstr "Tuotu lähteestä"
 
 msgid "Imported from file"
 msgstr "Tuotu tiedostosta"
@@ -41,16 +41,16 @@ msgid "Manually added via SusiDNS"
 msgstr "Lisätty manuaalisesti SusiDNS:n kautta"
 
 msgid "Manually added"
-msgstr ""
+msgstr "Lisätty manuaalisesti"
 
 msgid "Added via address helper"
-msgstr ""
+msgstr "Lisätty osoiteavustajan kautta"
 
 msgid "Via helper"
-msgstr ""
+msgstr "Avustajan kautta"
 
 msgid "Via helper from"
-msgstr ""
+msgstr "Avustajan kautta lähteestä"
 
 msgid "None"
 msgstr "Ei mitään"
@@ -94,8 +94,8 @@ msgstr[1] "{0} tulosta haulle: <span class=active>"
 #, java-format
 msgid "Book contains 1 entry"
 msgid_plural "Book contains {0} entries"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Kirja sisältää 1 merkinnän"
+msgstr[1] "Kirja sisältää {0} merkintää"
 
 msgid "Add"
 msgstr "Lisää"
@@ -155,7 +155,7 @@ msgstr[0] "1 kohde poistettu."
 msgstr[1] "{0} kohdetta poistettu."
 
 msgid "No valid entries selected to delete."
-msgstr ""
+msgstr "Ei valittuja kelvollisia merkintöjä poistettavaksi."
 
 msgid "Add Alternate"
 msgstr "Lisää vaihtoehtoinen"
@@ -176,13 +176,13 @@ msgid "Save"
 msgstr "Tallenna"
 
 msgid "Blacklist saved."
-msgstr ""
+msgstr "Estolista tallennettu."
 
 msgid "Reload"
 msgstr "Lataa uudelleen"
 
 msgid "Blacklist reloaded from file."
-msgstr ""
+msgstr "Estolista ladattu uudelleen tiedostosta."
 
 msgid "Configuration saved."
 msgstr "Asetukset tallennettu."
@@ -213,16 +213,16 @@ msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "Kohteen {0} poistaminen nimeämispalvelusta {1} epäonnistui"
 
 msgid "Blacklist Selected"
-msgstr ""
+msgstr "Estolista valittu"
 
 #, java-format
 msgid "1 destination blacklisted."
 msgid_plural "{0} destinations blacklisted."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 kohde estolistalle."
+msgstr[1] "{0} kohdetta estolistalle."
 
 msgid "No valid entries selected to blacklist."
-msgstr ""
+msgstr "Ei valittuja kelvollisia merkintöjä estolistalle."
 
 msgid "Save Notes"
 msgstr "Tallenna muistiinpanot"
@@ -289,7 +289,7 @@ msgid "Subscriptions"
 msgstr "Tilaukset"
 
 msgid "Blacklist"
-msgstr ""
+msgstr "Estolista"
 
 msgid "Configuration"
 msgstr "Asetukset"
@@ -325,13 +325,13 @@ msgid "Search"
 msgstr "Haku"
 
 msgid "latest"
-msgstr ""
+msgstr "viimeisin"
 
 msgid "Alive"
-msgstr ""
+msgstr "Elossa"
 
 msgid "Dead"
-msgstr ""
+msgstr "Kuollut"
 
 msgid "all"
 msgstr "kirkas suodatin"
@@ -340,13 +340,13 @@ msgid "Info"
 msgstr "Info"
 
 msgid "Type"
-msgstr ""
+msgstr "Tyyppi"
 
 msgid "Hostname"
 msgstr "Tietokoneen nimi"
 
 msgid "Encryption"
-msgstr ""
+msgstr "Salaus"
 
 msgid "Link (b32)"
 msgstr "Linkki (b32)"
@@ -355,10 +355,10 @@ msgid "Destination"
 msgstr "Kohde"
 
 msgid "Added"
-msgstr ""
+msgstr "Lisätty"
 
 msgid "Status"
-msgstr ""
+msgstr "Tila"
 
 msgid "Select hosts for deletion from addressbook"
 msgstr "Valitse osoitekirjasta poistettavat isännät"
@@ -367,7 +367,7 @@ msgid "More information on this entry"
 msgstr "Lisätietoja tästä merkinnästä"
 
 msgid "unknown"
-msgstr ""
+msgstr "tuntematon"
 
 msgid "Base 32 address"
 msgstr "Base 32 -osoite"
@@ -382,7 +382,7 @@ msgid "Cancel"
 msgstr "Peru"
 
 msgid "This book currently contains no entries."
-msgstr ""
+msgstr "Tämä kirja ei sisällä tällä hetkellä merkintöjä."
 
 msgid "e.g. newdomain.i2p"
 msgstr "esim. newdomain.i2p"
@@ -397,19 +397,19 @@ msgid "Select file"
 msgstr "Valitse tiedosto"
 
 msgid "blacklist"
-msgstr ""
+msgstr "estolista"
 
 msgid "Blacklist Management"
-msgstr ""
+msgstr "Estolistan hallinta"
 
 msgid "File location"
 msgstr "Tiedoston sijainti"
 
 msgid "Enter I2P addresses to blacklist (one per line)"
-msgstr ""
+msgstr "Anna estolistalle lisättävät I2P-osoitteet (yksi riviä kohti)"
 
 msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
-msgstr ""
+msgstr "Estolista tiedosto sisältää luettelon I2P-isäntänimistä, jotka tulisi estää pääsystä HTTP-välityspalvelimen kautta ja jotka on suljettu osoitekirjan näytön ulkopuolelle."
 
 msgid "configuration"
 msgstr "kokoonpano"
@@ -475,13 +475,13 @@ msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "Käytettävän ohitusteeman nimi (oletusarvo konsolissa valittu teema)"
 
 msgid "Interval (in hours) for running host checker (default is 8 hours)"
-msgstr ""
+msgstr "Väli (tunteina) isäntätarkistimen suorittamiseen (oletus on 8 tuntia)"
 
 msgid "Maximum concurrent pings when running host checker (Default is 12, max is 100)"
-msgstr ""
+msgstr "Yhtäaikaisten ping-kyselyjen enimmäismäärä isäntätarkistimen aikana (oletus on 12, enintään 100)"
 
 msgid "delete hosts"
-msgstr ""
+msgstr "poista isännät"
 
 msgid "addressbook"
 msgstr "osoitekirja"
@@ -544,7 +544,7 @@ msgid "Launch Image Generator"
 msgstr "Käynnistä Image Generator"
 
 msgid "Export"
-msgstr ""
+msgstr "Vie"
 
 msgid "Introduction"
 msgstr "Johdanto"

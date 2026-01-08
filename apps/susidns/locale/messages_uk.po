@@ -32,7 +32,7 @@ msgid "Source"
 msgstr "Джерело"
 
 msgid "Imported from"
-msgstr ""
+msgstr "Імпортовано з"
 
 msgid "Imported from file"
 msgstr "Імпортовано з файлу"
@@ -41,16 +41,16 @@ msgid "Manually added via SusiDNS"
 msgstr "Додано вручну через SusiDNS"
 
 msgid "Manually added"
-msgstr ""
+msgstr "Додано вручну"
 
 msgid "Added via address helper"
-msgstr ""
+msgstr "Додано через помічника адрес"
 
 msgid "Via helper"
-msgstr ""
+msgstr "Через помічника"
 
 msgid "Via helper from"
-msgstr ""
+msgstr "Через помічника з"
 
 msgid "None"
 msgstr "Немає"
@@ -97,9 +97,9 @@ msgstr[2] "{0} Результати для: <span class=active>"
 #, java-format
 msgid "Book contains 1 entry"
 msgid_plural "Book contains {0} entries"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Книга містить {0} запис"
+msgstr[1] "Книга містить {0} записи"
+msgstr[2] "Книга містить {0} записів"
 
 msgid "Add"
 msgstr "Додати"
@@ -160,7 +160,7 @@ msgstr[1] "{0}  призначення видалено."
 msgstr[2] "{0} призначень видалено."
 
 msgid "No valid entries selected to delete."
-msgstr ""
+msgstr "Не вибрано жодного дійсного запису для видалення."
 
 msgid "Add Alternate"
 msgstr "Додати альтернативу"
@@ -181,13 +181,13 @@ msgid "Save"
 msgstr "Зберегти"
 
 msgid "Blacklist saved."
-msgstr ""
+msgstr "Чорний список збережено."
 
 msgid "Reload"
 msgstr "Перезавантажити"
 
 msgid "Blacklist reloaded from file."
-msgstr ""
+msgstr "Чорний список перезавантажено з файлу."
 
 msgid "Configuration saved."
 msgstr "Налаштування збережені."
@@ -218,17 +218,17 @@ msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "Не вдалося видалити адресу призначення для {0} із служби імен {1}"
 
 msgid "Blacklist Selected"
-msgstr ""
+msgstr "Чорний список Вибрано"
 
 #, java-format
 msgid "1 destination blacklisted."
 msgid_plural "{0} destinations blacklisted."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "{0} призначення додано до чорного списку."
+msgstr[1] "{0} призначення додано до чорного списку."
+msgstr[2] "{0} призначень додано до чорного списку."
 
 msgid "No valid entries selected to blacklist."
-msgstr ""
+msgstr "Не вибрано жодного дійсного запису для додавання до чорного списку."
 
 msgid "Save Notes"
 msgstr "Зберегти нотатки"
@@ -297,7 +297,7 @@ msgid "Subscriptions"
 msgstr "Підписки"
 
 msgid "Blacklist"
-msgstr ""
+msgstr "Чорний список"
 
 msgid "Configuration"
 msgstr "Налаштування"
@@ -333,13 +333,13 @@ msgid "Search"
 msgstr "Шукати"
 
 msgid "latest"
-msgstr ""
+msgstr "останній"
 
 msgid "Alive"
-msgstr ""
+msgstr "Живий"
 
 msgid "Dead"
-msgstr ""
+msgstr "Мертвий"
 
 msgid "all"
 msgstr "очистити фільтр"
@@ -348,13 +348,13 @@ msgid "Info"
 msgstr "Інформація"
 
 msgid "Type"
-msgstr ""
+msgstr "Тип"
 
 msgid "Hostname"
 msgstr "Ім'я хосту"
 
 msgid "Encryption"
-msgstr ""
+msgstr "Шифрування"
 
 msgid "Link (b32)"
 msgstr "Посилання (b32)"
@@ -363,10 +363,10 @@ msgid "Destination"
 msgstr "Адрес призначення"
 
 msgid "Added"
-msgstr ""
+msgstr "Додано"
 
 msgid "Status"
-msgstr ""
+msgstr "Статус"
 
 msgid "Select hosts for deletion from addressbook"
 msgstr "Виберіть хости для видалення з адресної книги"
@@ -375,7 +375,7 @@ msgid "More information on this entry"
 msgstr "Більше інформації про цей запис"
 
 msgid "unknown"
-msgstr ""
+msgstr "невідомо"
 
 msgid "Base 32 address"
 msgstr "Base 32 адреса"
@@ -390,7 +390,7 @@ msgid "Cancel"
 msgstr "Відмінити"
 
 msgid "This book currently contains no entries."
-msgstr ""
+msgstr "Ця книга наразі не містить записів."
 
 msgid "e.g. newdomain.i2p"
 msgstr "наприклад newdomain.i2p"
@@ -405,19 +405,19 @@ msgid "Select file"
 msgstr "Виберіть файл"
 
 msgid "blacklist"
-msgstr ""
+msgstr "чорний список"
 
 msgid "Blacklist Management"
-msgstr ""
+msgstr "Управління чорним списком"
 
 msgid "File location"
 msgstr "Місцезнаходження файлу"
 
 msgid "Enter I2P addresses to blacklist (one per line)"
-msgstr ""
+msgstr "Введіть I2P адреси для додавання до чорного списку (по одній на рядок)"
 
 msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
-msgstr ""
+msgstr "Файл чорного списку містить список I2P імен хостів, які мають бути заблоковані від доступу через HTTP-проксі та виключені з відображення в адресній книзі."
 
 msgid "configuration"
 msgstr "налаштування"
@@ -483,13 +483,13 @@ msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "Назва перевизначеної теми для використання (за замовчуванням тема, вибрана на консолі)"
 
 msgid "Interval (in hours) for running host checker (default is 8 hours)"
-msgstr ""
+msgstr "Інтервал (у годинах) для запуску перевірки хостів (за замовчуванням 8 годин)"
 
 msgid "Maximum concurrent pings when running host checker (Default is 12, max is 100)"
-msgstr ""
+msgstr "Максимальна кількість одночасних пінгів під час запуску перевірки хостів (за замовчуванням 12, максимум 100)"
 
 msgid "delete hosts"
-msgstr ""
+msgstr "видалити хости"
 
 msgid "addressbook"
 msgstr "адресна книга"
@@ -552,7 +552,7 @@ msgid "Launch Image Generator"
 msgstr "Запустіть генератор зображень"
 
 msgid "Export"
-msgstr ""
+msgstr "Експорт"
 
 msgid "Introduction"
 msgstr "Введення"

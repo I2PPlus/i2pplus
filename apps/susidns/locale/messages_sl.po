@@ -32,7 +32,7 @@ msgid "Source"
 msgstr "Vir"
 
 msgid "Imported from"
-msgstr ""
+msgstr "Uvoženo iz"
 
 msgid "Imported from file"
 msgstr "Uvoženo iz datoteke"
@@ -41,16 +41,16 @@ msgid "Manually added via SusiDNS"
 msgstr "Ročno dodano preko SusiDNS"
 
 msgid "Manually added"
-msgstr ""
+msgstr "Ročno dodano"
 
 msgid "Added via address helper"
-msgstr ""
+msgstr "Dodano preko pomočnika za naslove"
 
 msgid "Via helper"
-msgstr ""
+msgstr "Preko pomočnika"
 
 msgid "Via helper from"
-msgstr ""
+msgstr "Preko pomočnika od"
 
 msgid "None"
 msgstr "Brez"
@@ -100,10 +100,10 @@ msgstr[3] "{0} rezultatov za: <span class=active>"
 #, java-format
 msgid "Book contains 1 entry"
 msgid_plural "Book contains {0} entries"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "Knjiga vsebuje {0} vnos"
+msgstr[1] "Knjiga vsebuje {0} vnosa"
+msgstr[2] "Knjiga vsebuje {0} vnose"
+msgstr[3] "Knjiga vsebuje {0} vnosov"
 
 msgid "Add"
 msgstr "Dodaj"
@@ -165,7 +165,7 @@ msgstr[2] "{0} destinacij izbrisanih."
 msgstr[3] "{0} destinacij izbrisanih."
 
 msgid "No valid entries selected to delete."
-msgstr ""
+msgstr "Noben veljaven vnos ni izbran za brisanje."
 
 msgid "Add Alternate"
 msgstr "Dodaj alternativo"
@@ -186,13 +186,13 @@ msgid "Save"
 msgstr "Shrani"
 
 msgid "Blacklist saved."
-msgstr ""
+msgstr "Črni seznam shranjen."
 
 msgid "Reload"
 msgstr "Osveži"
 
 msgid "Blacklist reloaded from file."
-msgstr ""
+msgstr "Črni seznam ponovno naložen iz datoteke."
 
 msgid "Configuration saved."
 msgstr "Konfiguracija shranjena."
@@ -223,18 +223,18 @@ msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "Brisanje destinacije za {0} iz storitve imenovanja {1} je spodletelo"
 
 msgid "Blacklist Selected"
-msgstr ""
+msgstr "Dodaj v črni seznam"
 
 #, java-format
 msgid "1 destination blacklisted."
 msgid_plural "{0} destinations blacklisted."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "{0} destinacija dodana na črni seznam."
+msgstr[1] "{0} destinaciji dodani na črni seznam."
+msgstr[2] "{0} destinacije dodane na črni seznam."
+msgstr[3] "{0} destinacij dodanih na črni seznam."
 
 msgid "No valid entries selected to blacklist."
-msgstr ""
+msgstr "Noben veljaven vnos ni izbran za dodajanje na črni seznam."
 
 msgid "Save Notes"
 msgstr "Shrani bilance"
@@ -305,7 +305,7 @@ msgid "Subscriptions"
 msgstr "Prijave"
 
 msgid "Blacklist"
-msgstr ""
+msgstr "Črni seznam"
 
 msgid "Configuration"
 msgstr "Konfiguracija"
@@ -341,13 +341,13 @@ msgid "Search"
 msgstr "Iskanje"
 
 msgid "latest"
-msgstr ""
+msgstr "najnovejše"
 
 msgid "Alive"
-msgstr ""
+msgstr "Živo"
 
 msgid "Dead"
-msgstr ""
+msgstr "Neodzivno"
 
 msgid "all"
 msgstr "počisti filtr"
@@ -356,13 +356,13 @@ msgid "Info"
 msgstr "Informacije"
 
 msgid "Type"
-msgstr ""
+msgstr "Vrsta"
 
 msgid "Hostname"
 msgstr "Ime gostitelja"
 
 msgid "Encryption"
-msgstr ""
+msgstr "Šifriranje"
 
 msgid "Link (b32)"
 msgstr "Povezava (b32)"
@@ -371,10 +371,10 @@ msgid "Destination"
 msgstr "Destinacija"
 
 msgid "Added"
-msgstr ""
+msgstr "Dodano"
 
 msgid "Status"
-msgstr ""
+msgstr "Stanje"
 
 msgid "Select hosts for deletion from addressbook"
 msgstr "Izberite gostitelje za izbris iz imenika naslovov"
@@ -383,7 +383,7 @@ msgid "More information on this entry"
 msgstr "Več informacij o tem vnosu"
 
 msgid "unknown"
-msgstr ""
+msgstr "neznano"
 
 msgid "Base 32 address"
 msgstr "Naslov Base 32"
@@ -398,7 +398,7 @@ msgid "Cancel"
 msgstr "Prekliči"
 
 msgid "This book currently contains no entries."
-msgstr ""
+msgstr "Ta knjiga trenutno ne vsebuje nobenih vnosov."
 
 msgid "e.g. newdomain.i2p"
 msgstr "npr. newdomain.i2p"
@@ -413,19 +413,19 @@ msgid "Select file"
 msgstr "Izberi datoteko"
 
 msgid "blacklist"
-msgstr ""
+msgstr "črni seznam"
 
 msgid "Blacklist Management"
-msgstr ""
+msgstr "Upravljanje črnega seznama"
 
 msgid "File location"
 msgstr "Lokacija datoteke"
 
 msgid "Enter I2P addresses to blacklist (one per line)"
-msgstr ""
+msgstr "Vnesite I2P naslove za dodajanje na črni seznam (en na vrstico)"
 
 msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
-msgstr ""
+msgstr "Datoteka črnega seznama vsebuje seznam I2P gostiteljskih imen, ki naj bodo blokirana za dostop preko HTTP posredniškega strežnika in izključena iz prikaza imenika naslovov."
 
 msgid "configuration"
 msgstr "konfiguracija"
@@ -491,13 +491,13 @@ msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "Ime nadomestnega teme za uporabo (privzeto je teme izbrano v konzoli)"
 
 msgid "Interval (in hours) for running host checker (default is 8 hours)"
-msgstr ""
+msgstr "Interval (v urah) za izvajanje preverjanja gostiteljev (privzeto je 8 ur)"
 
 msgid "Maximum concurrent pings when running host checker (Default is 12, max is 100)"
-msgstr ""
+msgstr "Največje število sočasnih pingov pri izvajanju preverjanja gostiteljev (privzeto je 12, največ je 100)"
 
 msgid "delete hosts"
-msgstr ""
+msgstr "izbriši gostitelje"
 
 msgid "addressbook"
 msgstr "imenik naslovov"
@@ -560,7 +560,7 @@ msgid "Launch Image Generator"
 msgstr "Zaženi generator slik"
 
 msgid "Export"
-msgstr ""
+msgstr "Izvozi"
 
 msgid "Introduction"
 msgstr "Vstopno besedilo"

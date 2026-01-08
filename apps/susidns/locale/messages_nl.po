@@ -32,7 +32,7 @@ msgid "Source"
 msgstr "Bron"
 
 msgid "Imported from"
-msgstr ""
+msgstr "Geïmporteerd uit"
 
 msgid "Imported from file"
 msgstr "Geïmporteerd uit bestand"
@@ -41,16 +41,16 @@ msgid "Manually added via SusiDNS"
 msgstr "Handmatig toegevoegd via SusiDNS"
 
 msgid "Manually added"
-msgstr ""
+msgstr "Handmatig toegevoegd"
 
 msgid "Added via address helper"
-msgstr ""
+msgstr "Toegevoegd via adreshelper"
 
 msgid "Via helper"
-msgstr ""
+msgstr "Via helper"
 
 msgid "Via helper from"
-msgstr ""
+msgstr "Via helper van"
 
 msgid "None"
 msgstr "Geen"
@@ -94,8 +94,8 @@ msgstr[1] "{0} resultaten voor: <span class=active>"
 #, java-format
 msgid "Book contains 1 entry"
 msgid_plural "Book contains {0} entries"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Boek bevat 1 item"
+msgstr[1] "Boek bevat {0} items"
 
 msgid "Add"
 msgstr "Toevoegen"
@@ -155,7 +155,7 @@ msgstr[0] "1 bestemming verwijderd."
 msgstr[1] "{0} bestemmingen verwijderd."
 
 msgid "No valid entries selected to delete."
-msgstr ""
+msgstr "Geen geldige items geselecteerd om te verwijderen."
 
 msgid "Add Alternate"
 msgstr "Voeg alternatief toe"
@@ -176,13 +176,13 @@ msgid "Save"
 msgstr "Opgeslagen"
 
 msgid "Blacklist saved."
-msgstr ""
+msgstr "Blacklist opgeslagen."
 
 msgid "Reload"
 msgstr "Herladen"
 
 msgid "Blacklist reloaded from file."
-msgstr ""
+msgstr "Blacklist herladen uit bestand."
 
 msgid "Configuration saved."
 msgstr "Configuratie opgeslagen."
@@ -213,16 +213,16 @@ msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "Verwijderen van Bestemming voor {0} van naamdienst {1} mislukt"
 
 msgid "Blacklist Selected"
-msgstr ""
+msgstr "Blacklist Geselecteerd"
 
 #, java-format
 msgid "1 destination blacklisted."
 msgid_plural "{0} destinations blacklisted."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 bestemming op blacklist gezet."
+msgstr[1] "{0} bestemmingen op blacklist gezet."
 
 msgid "No valid entries selected to blacklist."
-msgstr ""
+msgstr "Geen geldige items geselecteerd om op blacklist te zetten."
 
 msgid "Save Notes"
 msgstr "Notities opslaan"
@@ -289,7 +289,7 @@ msgid "Subscriptions"
 msgstr "Abonnementen"
 
 msgid "Blacklist"
-msgstr ""
+msgstr "Blacklist"
 
 msgid "Configuration"
 msgstr "Configuratie"
@@ -325,13 +325,13 @@ msgid "Search"
 msgstr "Zoek"
 
 msgid "latest"
-msgstr ""
+msgstr "nieuwste"
 
 msgid "Alive"
-msgstr ""
+msgstr "Actief"
 
 msgid "Dead"
-msgstr ""
+msgstr "Niet actief"
 
 msgid "all"
 msgstr "wis filter"
@@ -340,13 +340,13 @@ msgid "Info"
 msgstr "Informatie"
 
 msgid "Type"
-msgstr ""
+msgstr "Type"
 
 msgid "Hostname"
 msgstr "Host naam"
 
 msgid "Encryption"
-msgstr ""
+msgstr "Versleuteling"
 
 msgid "Link (b32)"
 msgstr "Link (b32)"
@@ -355,10 +355,10 @@ msgid "Destination"
 msgstr "Destination"
 
 msgid "Added"
-msgstr ""
+msgstr "Toegevoegd"
 
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 msgid "Select hosts for deletion from addressbook"
 msgstr "Selecteer hosts om uit adresboek te verwijderen"
@@ -367,7 +367,7 @@ msgid "More information on this entry"
 msgstr "Meer informatie over dit item"
 
 msgid "unknown"
-msgstr ""
+msgstr "onbekend"
 
 msgid "Base 32 address"
 msgstr "Base-32 adres"
@@ -382,7 +382,7 @@ msgid "Cancel"
 msgstr "Annuleer"
 
 msgid "This book currently contains no entries."
-msgstr ""
+msgstr "Dit boek bevat momenteel geen items."
 
 msgid "e.g. newdomain.i2p"
 msgstr "bijv. newdomain.i2p"
@@ -397,19 +397,19 @@ msgid "Select file"
 msgstr "Selecteer bestand"
 
 msgid "blacklist"
-msgstr ""
+msgstr "blacklist"
 
 msgid "Blacklist Management"
-msgstr ""
+msgstr "Blacklist Beheer"
 
 msgid "File location"
 msgstr "Bestands lokatie"
 
 msgid "Enter I2P addresses to blacklist (one per line)"
-msgstr ""
+msgstr "Voer I2P-adressen in om te blacklisten (één per regel)"
 
 msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
-msgstr ""
+msgstr "Het blacklist-bestand bevat een lijst met I2P-hostnamen die geblokkeerd moeten worden voor toegang via de HTTP-proxy en uitgesloten van de adresboekweergaves."
 
 msgid "configuration"
 msgstr "configuratie"
@@ -475,13 +475,13 @@ msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "Naam van het te gebruiken overschrijvingsthema (standaard ingesteld op het door de console geselecteerde thema)"
 
 msgid "Interval (in hours) for running host checker (default is 8 hours)"
-msgstr ""
+msgstr "Interval (in uren) voor het uitvoeren van hostcontrole (standaard is 8 uur)"
 
 msgid "Maximum concurrent pings when running host checker (Default is 12, max is 100)"
-msgstr ""
+msgstr "Maximaal gelijktijdige pings bij het uitvoeren van hostcontrole (standaard is 12, max is 100)"
 
 msgid "delete hosts"
-msgstr ""
+msgstr "hosts verwijderen"
 
 msgid "addressbook"
 msgstr "adresboek"
@@ -544,7 +544,7 @@ msgid "Launch Image Generator"
 msgstr "Start de plaatjes generator"
 
 msgid "Export"
-msgstr ""
+msgstr "Exporteren"
 
 msgid "Introduction"
 msgstr "Introductie"

@@ -32,7 +32,7 @@ msgid "Source"
 msgstr "Sumber"
 
 msgid "Imported from"
-msgstr ""
+msgstr "Diimpor dari"
 
 msgid "Imported from file"
 msgstr "Diimpor dari file"
@@ -41,16 +41,16 @@ msgid "Manually added via SusiDNS"
 msgstr "Ditambahkan secara manual dengan SusiDNS"
 
 msgid "Manually added"
-msgstr ""
+msgstr "Ditambahkan secara manual"
 
 msgid "Added via address helper"
-msgstr ""
+msgstr "Ditambahkan via address helper"
 
 msgid "Via helper"
-msgstr ""
+msgstr "Via helper"
 
 msgid "Via helper from"
-msgstr ""
+msgstr "Via helper dari"
 
 msgid "None"
 msgstr "Tidak ada"
@@ -91,7 +91,7 @@ msgstr[0] "{0} Hasil untuk: <span class=active>"
 #, java-format
 msgid "Book contains 1 entry"
 msgid_plural "Book contains {0} entries"
-msgstr[0] ""
+msgstr[0] "Buku berisi {0} entri"
 
 msgid "Add"
 msgstr "Tambahkan"
@@ -150,7 +150,7 @@ msgid_plural "{0} destinations deleted."
 msgstr[0] "{0} destinasi dihapus"
 
 msgid "No valid entries selected to delete."
-msgstr ""
+msgstr "Tidak ada entri valid yang dipilih untuk dihapus."
 
 msgid "Add Alternate"
 msgstr "Tambahkan Alternate"
@@ -171,13 +171,13 @@ msgid "Save"
 msgstr "Simpan"
 
 msgid "Blacklist saved."
-msgstr ""
+msgstr "Blacklist disimpan."
 
 msgid "Reload"
 msgstr "Muat ulang"
 
 msgid "Blacklist reloaded from file."
-msgstr ""
+msgstr "Blacklist dimuat ulang dari file."
 
 msgid "Configuration saved."
 msgstr "Konfigurasi disimpan"
@@ -208,15 +208,15 @@ msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "Gagal menghapus Destinasi untuk {0} ke naming service {1}"
 
 msgid "Blacklist Selected"
-msgstr ""
+msgstr "Pilih Blacklist"
 
 #, java-format
 msgid "1 destination blacklisted."
 msgid_plural "{0} destinations blacklisted."
-msgstr[0] ""
+msgstr[0] "{0} destinasi di-blacklist"
 
 msgid "No valid entries selected to blacklist."
-msgstr ""
+msgstr "Tidak ada entri valid yang dipilih untuk di-blacklist."
 
 msgid "Save Notes"
 msgstr "Catatan Penyimpanan"
@@ -281,7 +281,7 @@ msgid "Subscriptions"
 msgstr "Subskripsi"
 
 msgid "Blacklist"
-msgstr ""
+msgstr "Blacklist"
 
 msgid "Configuration"
 msgstr "Konfigurasi"
@@ -317,13 +317,13 @@ msgid "Search"
 msgstr "Cari"
 
 msgid "latest"
-msgstr ""
+msgstr "terbaru"
 
 msgid "Alive"
-msgstr ""
+msgstr "Aktif"
 
 msgid "Dead"
-msgstr ""
+msgstr "Mati"
 
 msgid "all"
 msgstr "Hapus filter"
@@ -332,13 +332,13 @@ msgid "Info"
 msgstr "Informasi"
 
 msgid "Type"
-msgstr ""
+msgstr "Jenis"
 
 msgid "Hostname"
 msgstr "Nama host"
 
 msgid "Encryption"
-msgstr ""
+msgstr "Enkripsi"
 
 msgid "Link (b32)"
 msgstr "Link (b32) "
@@ -347,10 +347,10 @@ msgid "Destination"
 msgstr "Destinasi"
 
 msgid "Added"
-msgstr ""
+msgstr "Ditambahkan"
 
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 msgid "Select hosts for deletion from addressbook"
 msgstr "Pilih host untuk dihapus dari address book"
@@ -359,7 +359,7 @@ msgid "More information on this entry"
 msgstr "Informasi lebih lanjut tentang entri ini"
 
 msgid "unknown"
-msgstr ""
+msgstr "tidak diketahui"
 
 msgid "Base 32 address"
 msgstr "Alamat base 32"
@@ -374,7 +374,7 @@ msgid "Cancel"
 msgstr "Batalkan"
 
 msgid "This book currently contains no entries."
-msgstr ""
+msgstr "Buku ini saat ini tidak berisi entri."
 
 msgid "e.g. newdomain.i2p"
 msgstr "mis. newdomain.i2p"
@@ -389,19 +389,19 @@ msgid "Select file"
 msgstr "Pilih berkas"
 
 msgid "blacklist"
-msgstr ""
+msgstr "blacklist"
 
 msgid "Blacklist Management"
-msgstr ""
+msgstr "Manajemen Blacklist"
 
 msgid "File location"
 msgstr "Lokasi file"
 
 msgid "Enter I2P addresses to blacklist (one per line)"
-msgstr ""
+msgstr "Masukkan alamat I2P untuk di-blacklist (satu per baris)"
 
 msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
-msgstr ""
+msgstr "File blacklist berisi daftar hostname I2P yang harus diblokir dari akses melalui proxy HTTP, dan dikecualikan dari tampilan buku alamat."
 
 msgid "configuration"
 msgstr "Konfigurasi"
@@ -467,13 +467,13 @@ msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "Nama tema pengganti yang akan digunakan (default pada tema yang dipilih konsol)"
 
 msgid "Interval (in hours) for running host checker (default is 8 hours)"
-msgstr ""
+msgstr "Interval (dalam jam) untuk menjalankan host checker (default adalah 8 jam)"
 
 msgid "Maximum concurrent pings when running host checker (Default is 12, max is 100)"
-msgstr ""
+msgstr "Maximum pings bersamaan saat menjalankan host checker (Default adalah 12, maksimal 100)"
 
 msgid "delete hosts"
-msgstr ""
+msgstr "hapus hosts"
 
 msgid "addressbook"
 msgstr "address book"
@@ -536,7 +536,7 @@ msgid "Launch Image Generator"
 msgstr "Luncurkan Generator Gambar"
 
 msgid "Export"
-msgstr ""
+msgstr "Ekspor"
 
 msgid "Introduction"
 msgstr "Pendahuluan"

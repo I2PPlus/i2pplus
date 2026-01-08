@@ -32,7 +32,7 @@ msgid "Source"
 msgstr "Sursă"
 
 msgid "Imported from"
-msgstr ""
+msgstr "Importat din"
 
 msgid "Imported from file"
 msgstr "Importat din fișier"
@@ -41,16 +41,16 @@ msgid "Manually added via SusiDNS"
 msgstr "Adăugate manual prin SusiDNS"
 
 msgid "Manually added"
-msgstr ""
+msgstr "Adăugat manual"
 
 msgid "Added via address helper"
-msgstr ""
+msgstr "Adăugat prin helper de adresă"
 
 msgid "Via helper"
-msgstr ""
+msgstr "Prin helper"
 
 msgid "Via helper from"
-msgstr ""
+msgstr "Prin helper de la"
 
 msgid "None"
 msgstr "Nici unul"
@@ -97,9 +97,9 @@ msgstr[2] "{0} rezultate pentru: <span class=active>"
 #, java-format
 msgid "Book contains 1 entry"
 msgid_plural "Book contains {0} entries"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Agenda conține 1 intrare"
+msgstr[1] "Agenda conține {0} intrări"
+msgstr[2] "Agenda conține {0} de intrări"
 
 msgid "Add"
 msgstr "Adăuga"
@@ -160,7 +160,7 @@ msgstr[1] "{0} destinații șterse."
 msgstr[2] "{0} de destinații șterse."
 
 msgid "No valid entries selected to delete."
-msgstr ""
+msgstr "Nu există intrări valide selectate pentru ștergere."
 
 msgid "Add Alternate"
 msgstr "Adăugați o alternativă"
@@ -181,13 +181,13 @@ msgid "Save"
 msgstr "Salvează"
 
 msgid "Blacklist saved."
-msgstr ""
+msgstr "Listă neagră salvată."
 
 msgid "Reload"
 msgstr "Reîncarcă"
 
 msgid "Blacklist reloaded from file."
-msgstr ""
+msgstr "Listă neagră reîncărcată din fișier."
 
 msgid "Configuration saved."
 msgstr "Configurare salvată."
@@ -218,17 +218,17 @@ msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "Ștergerea destinației pentru {0} la serviciul-nume {1} a eșuat"
 
 msgid "Blacklist Selected"
-msgstr ""
+msgstr "Selectare listă neagră"
 
 #, java-format
 msgid "1 destination blacklisted."
 msgid_plural "{0} destinations blacklisted."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "1 destinație adăugată pe lista neagră."
+msgstr[1] "{0} destinații adăugate pe lista neagră."
+msgstr[2] "{0} de destinații adăugate pe lista neagră."
 
 msgid "No valid entries selected to blacklist."
-msgstr ""
+msgstr "Nu există intrări valide selectate pentru adăugare pe lista neagră."
 
 msgid "Save Notes"
 msgstr "Salvați note"
@@ -297,7 +297,7 @@ msgid "Subscriptions"
 msgstr "Abonamente"
 
 msgid "Blacklist"
-msgstr ""
+msgstr "Listă neagră"
 
 msgid "Configuration"
 msgstr "Configurație"
@@ -333,13 +333,13 @@ msgid "Search"
 msgstr "Caută"
 
 msgid "latest"
-msgstr ""
+msgstr "cel mai recent"
 
 msgid "Alive"
-msgstr ""
+msgstr "Viu"
 
 msgid "Dead"
-msgstr ""
+msgstr "Mort"
 
 msgid "all"
 msgstr "ștergeți filtrul"
@@ -348,13 +348,13 @@ msgid "Info"
 msgstr "Informații"
 
 msgid "Type"
-msgstr ""
+msgstr "Tip"
 
 msgid "Hostname"
 msgstr "Nume host "
 
 msgid "Encryption"
-msgstr ""
+msgstr "Criptare"
 
 msgid "Link (b32)"
 msgstr "Link (b32)"
@@ -363,10 +363,10 @@ msgid "Destination"
 msgstr "Destinație"
 
 msgid "Added"
-msgstr ""
+msgstr "Adăugat"
 
 msgid "Status"
-msgstr ""
+msgstr "Stare"
 
 msgid "Select hosts for deletion from addressbook"
 msgstr "Selectați gazdele pentru ștergere din agenda de adrese"
@@ -375,7 +375,7 @@ msgid "More information on this entry"
 msgstr "Mai multe informații despre această intrare"
 
 msgid "unknown"
-msgstr ""
+msgstr "necunoscut"
 
 msgid "Base 32 address"
 msgstr "Adresa Base32"
@@ -390,7 +390,7 @@ msgid "Cancel"
 msgstr "Anulează"
 
 msgid "This book currently contains no entries."
-msgstr ""
+msgstr "Această agendă nu conține nicio intrare în prezent."
 
 msgid "e.g. newdomain.i2p"
 msgstr "de ex. newdomain.i2p"
@@ -405,19 +405,19 @@ msgid "Select file"
 msgstr "Selectați fișierul"
 
 msgid "blacklist"
-msgstr ""
+msgstr "listă neagră"
 
 msgid "Blacklist Management"
-msgstr ""
+msgstr "Gestionare listă neagră"
 
 msgid "File location"
 msgstr "Locația fișierului"
 
 msgid "Enter I2P addresses to blacklist (one per line)"
-msgstr ""
+msgstr "Introduceți adresele I2P pentru lista neagră (una pe linie)"
 
 msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
-msgstr ""
+msgstr "Fișierul listă neagră conține o listă de nume de gazdă I2P care ar trebui să fie blocate de la acces prin proxy-ul HTTP și excluse din afișarea agendei de adrese."
 
 msgid "configuration"
 msgstr "configurație"
@@ -483,13 +483,13 @@ msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "Numele temei de înlocuire de utilizat (implicit pentru tema selectată de consolă)"
 
 msgid "Interval (in hours) for running host checker (default is 8 hours)"
-msgstr ""
+msgstr "Interval (în ore) pentru rularea verificatorului de gazde (implicit este 8 ore)"
 
 msgid "Maximum concurrent pings when running host checker (Default is 12, max is 100)"
-msgstr ""
+msgstr "Numărul maxim de ping-uri concurente la rularea verificatorului de gazde (Implicit este 12, maxim este 100)"
 
 msgid "delete hosts"
-msgstr ""
+msgstr "ștergeți gazdele"
 
 msgid "addressbook"
 msgstr "agenda"
@@ -552,7 +552,7 @@ msgid "Launch Image Generator"
 msgstr "Lansați generatorul de imagini"
 
 msgid "Export"
-msgstr ""
+msgstr "Exportă"
 
 msgid "Introduction"
 msgstr "Introducere"

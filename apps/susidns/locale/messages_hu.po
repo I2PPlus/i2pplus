@@ -32,7 +32,7 @@ msgid "Source"
 msgstr "Forrás"
 
 msgid "Imported from"
-msgstr ""
+msgstr "Importálva innen"
 
 msgid "Imported from file"
 msgstr "Fájlból importálva"
@@ -41,16 +41,16 @@ msgid "Manually added via SusiDNS"
 msgstr "A SusiDNS-en keresztül manuálisan hozzáadva"
 
 msgid "Manually added"
-msgstr ""
+msgstr "Manuálisan hozzáadva"
 
 msgid "Added via address helper"
-msgstr ""
+msgstr "Hozzáadva cím segítségével"
 
 msgid "Via helper"
-msgstr ""
+msgstr "Segítségen keresztül"
 
 msgid "Via helper from"
-msgstr ""
+msgstr "Segítségen keresztül innen"
 
 msgid "None"
 msgstr "Semmi"
@@ -94,8 +94,8 @@ msgstr[1] "{0} találat a következőre: <span class=active>"
 #, java-format
 msgid "Book contains 1 entry"
 msgid_plural "Book contains {0} entries"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "A könyv 1 bejegyzést tartalmaz"
+msgstr[1] "A könyv {0} bejegyzést tartalmaz"
 
 msgid "Add"
 msgstr "Hozzáad"
@@ -155,7 +155,7 @@ msgstr[0] "1 célállomás törölve."
 msgstr[1] "{0} célállomás törölve."
 
 msgid "No valid entries selected to delete."
-msgstr ""
+msgstr "Nincs érvényes bejegyzés kiválasztva törlésre."
 
 msgid "Add Alternate"
 msgstr "Alternatív hozzáadása"
@@ -176,13 +176,13 @@ msgid "Save"
 msgstr "Mentés"
 
 msgid "Blacklist saved."
-msgstr ""
+msgstr "Blacklist elmentve."
 
 msgid "Reload"
 msgstr "Újratöltés"
 
 msgid "Blacklist reloaded from file."
-msgstr ""
+msgstr "Blacklist újratöltve a fájlból."
 
 msgid "Configuration saved."
 msgstr "Beállítás elmentve."
@@ -213,16 +213,16 @@ msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "{0} Célállomás törlése sikertelen a {1} névszolgáltatóból"
 
 msgid "Blacklist Selected"
-msgstr ""
+msgstr "Blacklist Kiválasztva"
 
 #, java-format
 msgid "1 destination blacklisted."
 msgid_plural "{0} destinations blacklisted."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 célállomás a blacklistre került."
+msgstr[1] "{0} célállomás a blacklistre került."
 
 msgid "No valid entries selected to blacklist."
-msgstr ""
+msgstr "Nincs érvényes bejegyzés kiválasztva a blacklistre helyezéshez."
 
 msgid "Save Notes"
 msgstr "Jegyzetek mentése"
@@ -289,7 +289,7 @@ msgid "Subscriptions"
 msgstr "Feliratkozások"
 
 msgid "Blacklist"
-msgstr ""
+msgstr "Blacklist"
 
 msgid "Configuration"
 msgstr "Beállítás"
@@ -325,13 +325,13 @@ msgid "Search"
 msgstr "Keresés"
 
 msgid "latest"
-msgstr ""
+msgstr "legújabb"
 
 msgid "Alive"
-msgstr ""
+msgstr "Elérhető"
 
 msgid "Dead"
-msgstr ""
+msgstr "Nem elérhető"
 
 msgid "all"
 msgstr "szűrő törlése"
@@ -340,13 +340,13 @@ msgid "Info"
 msgstr "Infó"
 
 msgid "Type"
-msgstr ""
+msgstr "Típus"
 
 msgid "Hostname"
 msgstr "Gépnév"
 
 msgid "Encryption"
-msgstr ""
+msgstr "Titkosítás"
 
 msgid "Link (b32)"
 msgstr "Link (b32)"
@@ -355,10 +355,10 @@ msgid "Destination"
 msgstr "Célállomás"
 
 msgid "Added"
-msgstr ""
+msgstr "Hozzáadva"
 
 msgid "Status"
-msgstr ""
+msgstr "Állapot"
 
 msgid "Select hosts for deletion from addressbook"
 msgstr "Válassza ki a címjegyzékből törölni kívánt gazdagépeket"
@@ -367,7 +367,7 @@ msgid "More information on this entry"
 msgstr "Bővebb információ a bejegyzésről"
 
 msgid "unknown"
-msgstr ""
+msgstr "ismeretlen"
 
 msgid "Base 32 address"
 msgstr "Bázis 32 cím"
@@ -382,7 +382,7 @@ msgid "Cancel"
 msgstr "Mégse"
 
 msgid "This book currently contains no entries."
-msgstr ""
+msgstr "Ez a könyv jelenleg nem tartalmaz bejegyzéseket."
 
 msgid "e.g. newdomain.i2p"
 msgstr "pl. newdomain.i2p"
@@ -397,19 +397,19 @@ msgid "Select file"
 msgstr "Válassza ki a fájlt"
 
 msgid "blacklist"
-msgstr ""
+msgstr "blacklist"
 
 msgid "Blacklist Management"
-msgstr ""
+msgstr "Blacklist Kezelés"
 
 msgid "File location"
 msgstr "Fájl helye"
 
 msgid "Enter I2P addresses to blacklist (one per line)"
-msgstr ""
+msgstr "Adja meg az I2P címeket a blacklistre helyezéshez (egy per sor)"
 
 msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
-msgstr ""
+msgstr "A blacklist fájl I2P hosztnevek listáját tartalmazza, amelyeket blokkolni kell a HTTP proxy-n keresztüli hozzáféréskor, és ki kell zárni a címjegyzék megjelenítéséből."
 
 msgid "configuration"
 msgstr "beállítás"
@@ -475,13 +475,13 @@ msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "A használandó felülbíráló téma neve (alapértelmezett a konzol által kiválasztott téma)"
 
 msgid "Interval (in hours) for running host checker (default is 8 hours)"
-msgstr ""
+msgstr "Időköz (órákban) a host ellenőrző futtatásához (alapértelmezett 8 óra)"
 
 msgid "Maximum concurrent pings when running host checker (Default is 12, max is 100)"
-msgstr ""
+msgstr "Maximum egyidejű ping a host ellenőrző futtatásakor (Alapértelmezett 12, max 100)"
 
 msgid "delete hosts"
-msgstr ""
+msgstr "hosztok törlése"
 
 msgid "addressbook"
 msgstr "címjegyzék"
@@ -544,7 +544,7 @@ msgid "Launch Image Generator"
 msgstr "Indítsa el a Képgenerátort"
 
 msgid "Export"
-msgstr ""
+msgstr "Exportálás"
 
 msgid "Introduction"
 msgstr "Bevezetés"

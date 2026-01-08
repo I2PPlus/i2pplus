@@ -32,7 +32,7 @@ msgid "Source"
 msgstr "المصدر"
 
 msgid "Imported from"
-msgstr ""
+msgstr "مستورد من"
 
 msgid "Imported from file"
 msgstr "مستورد من الملف"
@@ -41,16 +41,16 @@ msgid "Manually added via SusiDNS"
 msgstr "محذوف يدويا عن طريق SusiDNS"
 
 msgid "Manually added"
-msgstr ""
+msgstr "أضيف يدويًا"
 
 msgid "Added via address helper"
-msgstr ""
+msgstr "أضيف عبر مساعد العنوان"
 
 msgid "Via helper"
-msgstr ""
+msgstr "عبر المساعد"
 
 msgid "Via helper from"
-msgstr ""
+msgstr "عبر المساعد من"
 
 msgid "None"
 msgstr "لاشيئ"
@@ -106,12 +106,12 @@ msgstr[5] "{0} نتائج: <span class=active>"
 #, java-format
 msgid "Book contains 1 entry"
 msgid_plural "Book contains {0} entries"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "دفتر العناوين فارغ."
+msgstr[1] "دفتر العناوين يحتوي على إدخال واحد."
+msgstr[2] "دفتر العناوين يحتوي على 2 إدخالات."
+msgstr[3] "دفتر العناوين يحتوي على {0} إدخالات."
+msgstr[4] "دفتر العناوين يحتوي على {0} إدخالات."
+msgstr[5] "دفتر العناوين يحتوي على {0} إدخالات."
 
 msgid "Add"
 msgstr "أضف"
@@ -175,7 +175,7 @@ msgstr[4] "{0} تم حذف الوجهات."
 msgstr[5] "{0} تم حذف الوجهات."
 
 msgid "No valid entries selected to delete."
-msgstr ""
+msgstr "لم يتم تحديد إدخالات صالحة للحذف."
 
 msgid "Add Alternate"
 msgstr "إضافة بديل"
@@ -196,13 +196,13 @@ msgid "Save"
 msgstr "حفظ"
 
 msgid "Blacklist saved."
-msgstr ""
+msgstr "تم حفظ القائمة السوداء."
 
 msgid "Reload"
 msgstr "أعد تشغيل"
 
 msgid "Blacklist reloaded from file."
-msgstr ""
+msgstr "تم إعادة تحميل القائمة السوداء من الملف."
 
 msgid "Configuration saved."
 msgstr "حفظ الخيارات"
@@ -233,20 +233,20 @@ msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "فشل في حذف الوجهة لـ {0} من خدمة التسمية {1}"
 
 msgid "Blacklist Selected"
-msgstr ""
+msgstr "إضافة إلى القائمة السوداء"
 
 #, java-format
 msgid "1 destination blacklisted."
 msgid_plural "{0} destinations blacklisted."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "لا توجد وجهات مضافة إلى القائمة السوداء."
+msgstr[1] "1 وجهة أضيفت إلى القائمة السوداء."
+msgstr[2] "2 وجهات أضيفتا إلى القائمة السوداء."
+msgstr[3] "{0} وجهات أضيفت إلى القائمة السوداء."
+msgstr[4] "{0} وجهات أضيفت إلى القائمة السوداء."
+msgstr[5] "{0} وجهات أضيفت إلى القائمة السوداء."
 
 msgid "No valid entries selected to blacklist."
-msgstr ""
+msgstr "لم يتم تحديد إدخالات صالحة للإضافة إلى القائمة السوداء."
 
 msgid "Save Notes"
 msgstr "حفظ الملاحظات"
@@ -321,7 +321,7 @@ msgid "Subscriptions"
 msgstr "اشتراك"
 
 msgid "Blacklist"
-msgstr ""
+msgstr "القائمة السوداء"
 
 msgid "Configuration"
 msgstr "خيارات"
@@ -357,13 +357,13 @@ msgid "Search"
 msgstr "بحث"
 
 msgid "latest"
-msgstr ""
+msgstr "الأحدث"
 
 msgid "Alive"
-msgstr ""
+msgstr "نشط"
 
 msgid "Dead"
-msgstr ""
+msgstr "ميت"
 
 msgid "all"
 msgstr "الغاء الترشيح"
@@ -372,13 +372,13 @@ msgid "Info"
 msgstr "معلومات"
 
 msgid "Type"
-msgstr ""
+msgstr "النوع"
 
 msgid "Hostname"
 msgstr "اسم الخادوم"
 
 msgid "Encryption"
-msgstr ""
+msgstr "التشفير"
 
 msgid "Link (b32)"
 msgstr "الرابط (b32)"
@@ -387,10 +387,10 @@ msgid "Destination"
 msgstr "الوجهة"
 
 msgid "Added"
-msgstr ""
+msgstr "أضيف"
 
 msgid "Status"
-msgstr ""
+msgstr "الحالة"
 
 msgid "Select hosts for deletion from addressbook"
 msgstr "حدد المضيفين للحذف من دفتر العناوين"
@@ -399,7 +399,7 @@ msgid "More information on this entry"
 msgstr "المزيد من المعلومات حول هذا العنصر"
 
 msgid "unknown"
-msgstr ""
+msgstr "غير معروف"
 
 msgid "Base 32 address"
 msgstr "عنوان الأساس 32"
@@ -414,7 +414,7 @@ msgid "Cancel"
 msgstr "الغاء"
 
 msgid "This book currently contains no entries."
-msgstr ""
+msgstr "دفتر العناوين فارغ حاليًا."
 
 msgid "e.g. newdomain.i2p"
 msgstr "على سبيل المثال. newdomain.i2"
@@ -429,19 +429,19 @@ msgid "Select file"
 msgstr "اختر الملف"
 
 msgid "blacklist"
-msgstr ""
+msgstr "القائمة السوداء"
 
 msgid "Blacklist Management"
-msgstr ""
+msgstr "إدارة القائمة السوداء"
 
 msgid "File location"
 msgstr "عنوان الملف"
 
 msgid "Enter I2P addresses to blacklist (one per line)"
-msgstr ""
+msgstr "أدخل عناوين I2P لإضافتها إلى القائمة السوداء (واحد لكل سطر)"
 
 msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
-msgstr ""
+msgstr "ملف القائمة السوداء يحتوي على قائمة من أسماء المضيفين في I2P التي يجب حجبها من الوصول عبر بروكسي HTTP، واستبعادها من عرض دفتر العناوين."
 
 msgid "configuration"
 msgstr "خيارات"
@@ -507,13 +507,13 @@ msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "اسم سمة التجاوز المطلوب استخدامها (الإعداد الافتراضي للسمات المحددة بواسطة وحدة التحكم)"
 
 msgid "Interval (in hours) for running host checker (default is 8 hours)"
-msgstr ""
+msgstr "المدة (بالساعات) لتشغيل فحص المضيفين (الافتراضي هو 8 ساعات)"
 
 msgid "Maximum concurrent pings when running host checker (Default is 12, max is 100)"
-msgstr ""
+msgstr "الحد الأقصى لعمليات Ping المتزامنة عند تشغيل فحص المضيفين (الافتراضي هو 12، والحد الأقصى هو 100)"
 
 msgid "delete hosts"
-msgstr ""
+msgstr "حذف المضيفين"
 
 msgid "addressbook"
 msgstr "دفتر العناوين"
@@ -576,7 +576,7 @@ msgid "Launch Image Generator"
 msgstr "إطلاق مولد الصور"
 
 msgid "Export"
-msgstr ""
+msgstr "تصدير"
 
 msgid "Introduction"
 msgstr "تقديم"

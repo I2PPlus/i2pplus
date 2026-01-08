@@ -32,7 +32,7 @@ msgid "Source"
 msgstr "منبع"
 
 msgid "Imported from"
-msgstr ""
+msgstr "از وارد شده"
 
 msgid "Imported from file"
 msgstr "از فایل وارد شده است"
@@ -41,16 +41,16 @@ msgid "Manually added via SusiDNS"
 msgstr "به صورت دستی از طریق SusiDNS اضافه شده است"
 
 msgid "Manually added"
-msgstr ""
+msgstr "به صورت دستی اضافه شده"
 
 msgid "Added via address helper"
-msgstr ""
+msgstr "از طریق کمک یار آدرس اضافه شده"
 
 msgid "Via helper"
-msgstr ""
+msgstr "از طریق کمک یار"
 
 msgid "Via helper from"
-msgstr ""
+msgstr "از طریق کمک یار از"
 
 msgid "None"
 msgstr "هیچ"
@@ -94,8 +94,8 @@ msgstr[1] "{0} نتایج برای: <span class=active>"
 #, java-format
 msgid "Book contains 1 entry"
 msgid_plural "Book contains {0} entries"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "کتاب شامل 1 ورودی است"
+msgstr[1] "کتاب شامل {0} ورودی است"
 
 msgid "Add"
 msgstr "اضافه کردن"
@@ -155,7 +155,7 @@ msgstr[0] "1 مقصد حذف شد."
 msgstr[1] "{0} مقصد حذف شده است."
 
 msgid "No valid entries selected to delete."
-msgstr ""
+msgstr "هیچ ورودی معتبری برای حذف انتخاب نشده است."
 
 msgid "Add Alternate"
 msgstr "جایگزین اضافه کنید"
@@ -176,13 +176,13 @@ msgid "Save"
 msgstr "ذخيره"
 
 msgid "Blacklist saved."
-msgstr ""
+msgstr "لیست سیاه ذخیره شد."
 
 msgid "Reload"
 msgstr "بارگذاری مجدد"
 
 msgid "Blacklist reloaded from file."
-msgstr ""
+msgstr "لیست سیاه از فایل بارگیری مجدد شد."
 
 msgid "Configuration saved."
 msgstr "پیکربندی ذخیره شد."
@@ -213,16 +213,16 @@ msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "حذف مقصد برای {0} از سرویس نامگذاری {1} انجام نشد"
 
 msgid "Blacklist Selected"
-msgstr ""
+msgstr "لیست سیاه انتخاب شده"
 
 #, java-format
 msgid "1 destination blacklisted."
 msgid_plural "{0} destinations blacklisted."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 مقصد به لیست سیاه اضافه شد."
+msgstr[1] "{0} مقصد به لیست سیاه اضافه شدند."
 
 msgid "No valid entries selected to blacklist."
-msgstr ""
+msgstr "هیچ ورودی معتبری برای افزودن به لیست سیاه انتخاب نشده است."
 
 msgid "Save Notes"
 msgstr "ذخیره یادداشت ها"
@@ -289,7 +289,7 @@ msgid "Subscriptions"
 msgstr "اشتراک ها"
 
 msgid "Blacklist"
-msgstr ""
+msgstr "لیست سیاه"
 
 msgid "Configuration"
 msgstr "پیکربندی"
@@ -325,13 +325,13 @@ msgid "Search"
 msgstr "جستجو"
 
 msgid "latest"
-msgstr ""
+msgstr "جدیدترین"
 
 msgid "Alive"
-msgstr ""
+msgstr "فعال"
 
 msgid "Dead"
-msgstr ""
+msgstr "از کار افتاده"
 
 msgid "all"
 msgstr "پاکسازی فیلتر"
@@ -340,13 +340,13 @@ msgid "Info"
 msgstr "اطلاعات"
 
 msgid "Type"
-msgstr ""
+msgstr "نوع"
 
 msgid "Hostname"
 msgstr "نام سرور"
 
 msgid "Encryption"
-msgstr ""
+msgstr "رمزنگاری"
 
 msgid "Link (b32)"
 msgstr "پیوند (b32)"
@@ -355,10 +355,10 @@ msgid "Destination"
 msgstr "مقصد"
 
 msgid "Added"
-msgstr ""
+msgstr "اضافه شده"
 
 msgid "Status"
-msgstr ""
+msgstr "وضعیت"
 
 msgid "Select hosts for deletion from addressbook"
 msgstr "میزبان ها را برای حذف از دفترچه آدرس انتخاب کنید"
@@ -367,7 +367,7 @@ msgid "More information on this entry"
 msgstr "اطلاعات بیشتر در مورد این ورودی"
 
 msgid "unknown"
-msgstr ""
+msgstr "ناشناخته"
 
 msgid "Base 32 address"
 msgstr "آدرس پایگاه 32"
@@ -382,7 +382,7 @@ msgid "Cancel"
 msgstr "لغو کردن"
 
 msgid "This book currently contains no entries."
-msgstr ""
+msgstr "این کتاب در حال حاضر شامل هیچ ورودی نیست."
 
 msgid "e.g. newdomain.i2p"
 msgstr "به عنوان مثال "
@@ -397,19 +397,19 @@ msgid "Select file"
 msgstr "فایل را انتخاب کنید"
 
 msgid "blacklist"
-msgstr ""
+msgstr "لیست سیاه"
 
 msgid "Blacklist Management"
-msgstr ""
+msgstr "مدیریت لیست سیاه"
 
 msgid "File location"
 msgstr "موقعیت فایل"
 
 msgid "Enter I2P addresses to blacklist (one per line)"
-msgstr ""
+msgstr "آدرس‌های I2P را برای افزودن به لیست سیاه وارد کنید (یکی در هر خط)"
 
 msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
-msgstr ""
+msgstr "فایل لیست سیاه حاوی لیستی از نام‌های میزبان I2P است که باید از دسترسی از طریق پروکسی HTTP مسدود شوند و از نمایش دفترچه آدرس حذف شوند."
 
 msgid "configuration"
 msgstr "پیکربندی"
@@ -475,13 +475,13 @@ msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "نام طرح زمینه نادیده گرفته شده برای استفاده (پیش‌فرض به طرح زمینه انتخاب‌شده توسط کنسول)"
 
 msgid "Interval (in hours) for running host checker (default is 8 hours)"
-msgstr ""
+msgstr "فاصله زمانی (به ساعت) برای اجرای بررسی‌کننده میزبان (پیش‌فرض 8 ساعت است)"
 
 msgid "Maximum concurrent pings when running host checker (Default is 12, max is 100)"
-msgstr ""
+msgstr "حداکثر پینگ‌های همزمان هنگام اجرای بررسی‌کننده میزبان (پیش‌فرض 12، حداکثر 100)"
 
 msgid "delete hosts"
-msgstr ""
+msgstr "حذف میزبان‌ها"
 
 msgid "addressbook"
 msgstr "دفترچه آدرس"
@@ -544,7 +544,7 @@ msgid "Launch Image Generator"
 msgstr "مولد تصویر را راه اندازی کنید"
 
 msgid "Export"
-msgstr ""
+msgstr "برون‌برد"
 
 msgid "Introduction"
 msgstr "معرفی"

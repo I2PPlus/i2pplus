@@ -32,7 +32,7 @@ msgid "Source"
 msgstr "Source"
 
 msgid "Imported from"
-msgstr ""
+msgstr "Importé depuis"
 
 msgid "Imported from file"
 msgstr "Importer d’un fichier"
@@ -41,16 +41,16 @@ msgid "Manually added via SusiDNS"
 msgstr "Ajouté manuellement par SusiDNS"
 
 msgid "Manually added"
-msgstr ""
+msgstr "Ajouté manuellement"
 
 msgid "Added via address helper"
-msgstr ""
+msgstr "Ajouté via l'assistant d'adresses"
 
 msgid "Via helper"
-msgstr ""
+msgstr "Via l'assistant"
 
 msgid "Via helper from"
-msgstr ""
+msgstr "Via l'assistant depuis"
 
 msgid "None"
 msgstr "Aucun"
@@ -94,8 +94,8 @@ msgstr[1] "{0} résultats pour: <span class=active>"
 #, java-format
 msgid "Book contains 1 entry"
 msgid_plural "Book contains {0} entries"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Le livre contient 1 entrée"
+msgstr[1] "Le livre contient {0} entrées"
 
 msgid "Add"
 msgstr "Ajouter"
@@ -155,7 +155,7 @@ msgstr[0] "1 destination a été supprimée."
 msgstr[1] "{0} destinations ont été supprimées."
 
 msgid "No valid entries selected to delete."
-msgstr ""
+msgstr "Aucune entrée valide n'a été sélectionnée pour suppression."
 
 msgid "Add Alternate"
 msgstr "Ajouter un substitut"
@@ -176,13 +176,13 @@ msgid "Save"
 msgstr "Enregistrer"
 
 msgid "Blacklist saved."
-msgstr ""
+msgstr "La liste noire a été enregistrée."
 
 msgid "Reload"
 msgstr "Recharger"
 
 msgid "Blacklist reloaded from file."
-msgstr ""
+msgstr "La liste noire a été rechargée depuis le fichier."
 
 msgid "Configuration saved."
 msgstr "La configuration a été enregistrée."
@@ -213,16 +213,16 @@ msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "Échec de suppression de destination pour {0} du service de noms {1}"
 
 msgid "Blacklist Selected"
-msgstr ""
+msgstr "Liste noire sélectionnée"
 
 #, java-format
 msgid "1 destination blacklisted."
 msgid_plural "{0} destinations blacklisted."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 destination mise sur liste noire."
+msgstr[1] "{0} destinations mises sur liste noire."
 
 msgid "No valid entries selected to blacklist."
-msgstr ""
+msgstr "Aucune entrée valide n'a été sélectionnée pour la mise en liste noire."
 
 msgid "Save Notes"
 msgstr "Enregistrer les notes"
@@ -289,7 +289,7 @@ msgid "Subscriptions"
 msgstr "Abonnements"
 
 msgid "Blacklist"
-msgstr ""
+msgstr "Liste noire"
 
 msgid "Configuration"
 msgstr "Configuration"
@@ -325,13 +325,13 @@ msgid "Search"
 msgstr "Chercher"
 
 msgid "latest"
-msgstr ""
+msgstr "dernier"
 
 msgid "Alive"
-msgstr ""
+msgstr "Actif"
 
 msgid "Dead"
-msgstr ""
+msgstr "Inactif"
 
 msgid "all"
 msgstr "effacer le filtre"
@@ -340,13 +340,13 @@ msgid "Info"
 msgstr "Infos"
 
 msgid "Type"
-msgstr ""
+msgstr "Type"
 
 msgid "Hostname"
 msgstr "Nom d’hôte"
 
 msgid "Encryption"
-msgstr ""
+msgstr "Chiffrement"
 
 msgid "Link (b32)"
 msgstr "Lien (b32)"
@@ -355,10 +355,10 @@ msgid "Destination"
 msgstr "Destination"
 
 msgid "Added"
-msgstr ""
+msgstr "Ajouté"
 
 msgid "Status"
-msgstr ""
+msgstr "Statut"
 
 msgid "Select hosts for deletion from addressbook"
 msgstr "Sélectionner les hôtes à supprimer du carnet d’adresses"
@@ -367,7 +367,7 @@ msgid "More information on this entry"
 msgstr "Plus d’informations sur cette entrée"
 
 msgid "unknown"
-msgstr ""
+msgstr "inconnu"
 
 msgid "Base 32 address"
 msgstr "Adresse Base32"
@@ -382,7 +382,7 @@ msgid "Cancel"
 msgstr "Annuler"
 
 msgid "This book currently contains no entries."
-msgstr ""
+msgstr "Ce livre ne contient actuellement aucune entrée."
 
 msgid "e.g. newdomain.i2p"
 msgstr "par ex. newdomain.i2p"
@@ -397,19 +397,19 @@ msgid "Select file"
 msgstr "Sélectionner un fichier"
 
 msgid "blacklist"
-msgstr ""
+msgstr "liste noire"
 
 msgid "Blacklist Management"
-msgstr ""
+msgstr "Gestion de la liste noire"
 
 msgid "File location"
 msgstr "Emplacement du fichier"
 
 msgid "Enter I2P addresses to blacklist (one per line)"
-msgstr ""
+msgstr "Entrez les adresses I2P à mettre sur liste noire (une par ligne)"
 
 msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
-msgstr ""
+msgstr "Le fichier de liste noire contient une liste de noms d'hôtes I2P qui doivent être bloqués via le proxy HTTP et exclus de l'affichage du carnet d'adresses."
 
 msgid "configuration"
 msgstr "configuration"
@@ -475,13 +475,13 @@ msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "Nom du thème de remplacement à utiliser (par défaut, thème sélectionné par la console)"
 
 msgid "Interval (in hours) for running host checker (default is 8 hours)"
-msgstr ""
+msgstr "Intervalle (en heures) pour l'exécution du vérificateur d'hôtes (par défaut 8 heures)"
 
 msgid "Maximum concurrent pings when running host checker (Default is 12, max is 100)"
-msgstr ""
+msgstr "Nombre maximum de pings concurrents lors de l'exécution du vérificateur d'hôtes (par défaut 12, maximum 100)"
 
 msgid "delete hosts"
-msgstr ""
+msgstr "supprimer les hôtes"
 
 msgid "addressbook"
 msgstr "carnet d’adresses"
@@ -544,7 +544,7 @@ msgid "Launch Image Generator"
 msgstr "Lancer le générateur d’images"
 
 msgid "Export"
-msgstr ""
+msgstr "Exporter"
 
 msgid "Introduction"
 msgstr "Présentation"

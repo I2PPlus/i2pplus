@@ -32,7 +32,7 @@ msgid "Source"
 msgstr "Kilde"
 
 msgid "Imported from"
-msgstr ""
+msgstr "Importeret fra"
 
 msgid "Imported from file"
 msgstr "Importeret fra fil"
@@ -41,16 +41,16 @@ msgid "Manually added via SusiDNS"
 msgstr "Manuel tilføjet via SusiDNS"
 
 msgid "Manually added"
-msgstr ""
+msgstr "Manuelt tilføjet"
 
 msgid "Added via address helper"
-msgstr ""
+msgstr "Tilføjet via adressehjælper"
 
 msgid "Via helper"
-msgstr ""
+msgstr "Via hjælper"
 
 msgid "Via helper from"
-msgstr ""
+msgstr "Via hjælper fra"
 
 msgid "None"
 msgstr "Ingen"
@@ -94,8 +94,8 @@ msgstr[1] "{0} resultater for: <span class=active>"
 #, java-format
 msgid "Book contains 1 entry"
 msgid_plural "Book contains {0} entries"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Bogen indeholder 1 post"
+msgstr[1] "Bogen indeholder {0} poster"
 
 msgid "Add"
 msgstr "Tilføj"
@@ -155,7 +155,7 @@ msgstr[0] "1 destination slettet."
 msgstr[1] "{0} destinationer slettet."
 
 msgid "No valid entries selected to delete."
-msgstr ""
+msgstr "Ingen gyldige poster valgt til sletning."
 
 msgid "Add Alternate"
 msgstr "Tilføj suppleant"
@@ -176,13 +176,13 @@ msgid "Save"
 msgstr "Gem"
 
 msgid "Blacklist saved."
-msgstr ""
+msgstr "Sortliste gemt."
 
 msgid "Reload"
 msgstr "Genindlæs"
 
 msgid "Blacklist reloaded from file."
-msgstr ""
+msgstr "Sortliste genindlæst fra fil."
 
 msgid "Configuration saved."
 msgstr "Konfiguration gemt."
@@ -213,16 +213,16 @@ msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "Destination for {0} kunne ikke slettes fra navnetjenesten {1}"
 
 msgid "Blacklist Selected"
-msgstr ""
+msgstr "Sortlist valgt"
 
 #, java-format
 msgid "1 destination blacklisted."
 msgid_plural "{0} destinations blacklisted."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 destination sortlistet."
+msgstr[1] "{0} destinationer sortlistet."
 
 msgid "No valid entries selected to blacklist."
-msgstr ""
+msgstr "Ingen gyldige poster valgt til sortlistning."
 
 msgid "Save Notes"
 msgstr "Gem noter"
@@ -289,7 +289,7 @@ msgid "Subscriptions"
 msgstr "Abonnementer"
 
 msgid "Blacklist"
-msgstr ""
+msgstr "Sortliste"
 
 msgid "Configuration"
 msgstr "Konfiguration"
@@ -325,13 +325,13 @@ msgid "Search"
 msgstr "Søg"
 
 msgid "latest"
-msgstr ""
+msgstr "seneste"
 
 msgid "Alive"
-msgstr ""
+msgstr "Levende"
 
 msgid "Dead"
-msgstr ""
+msgstr "Død"
 
 msgid "all"
 msgstr "ryd filter"
@@ -340,13 +340,13 @@ msgid "Info"
 msgstr "Information"
 
 msgid "Type"
-msgstr ""
+msgstr "Type"
 
 msgid "Hostname"
 msgstr "Hostnavn"
 
 msgid "Encryption"
-msgstr ""
+msgstr "Kryptering"
 
 msgid "Link (b32)"
 msgstr "Link (b32)"
@@ -355,10 +355,10 @@ msgid "Destination"
 msgstr "Destination"
 
 msgid "Added"
-msgstr ""
+msgstr "Tilføjet"
 
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 msgid "Select hosts for deletion from addressbook"
 msgstr "Vælg værter til sletning fra adressebogen"
@@ -367,7 +367,7 @@ msgid "More information on this entry"
 msgstr "Mere information om dette indlæg"
 
 msgid "unknown"
-msgstr ""
+msgstr "ukendt"
 
 msgid "Base 32 address"
 msgstr "Base 32 adresse"
@@ -382,7 +382,7 @@ msgid "Cancel"
 msgstr "Annuller"
 
 msgid "This book currently contains no entries."
-msgstr ""
+msgstr "Denne bog indeholder i øjeblikket ingen poster."
 
 msgid "e.g. newdomain.i2p"
 msgstr "f.eks. newdomain.i2p"
@@ -397,19 +397,19 @@ msgid "Select file"
 msgstr "Vælg fil"
 
 msgid "blacklist"
-msgstr ""
+msgstr "sortliste"
 
 msgid "Blacklist Management"
-msgstr ""
+msgstr "Sortlistehåndtering"
 
 msgid "File location"
 msgstr "Filplacering"
 
 msgid "Enter I2P addresses to blacklist (one per line)"
-msgstr ""
+msgstr "Indtast I2P-adresser til sortlistning (én per linje)"
 
 msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
-msgstr ""
+msgstr "Sortlistefilen indeholder en liste over I2P-værtsnavne, der skal blokeres fra adgang via HTTP-proxyen og udelukkes fra adressebogsvisningen."
 
 msgid "configuration"
 msgstr "konfiguration"
@@ -475,13 +475,13 @@ msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "Navn på tilsidesættelsestema, der skal bruges (standard til konsolvalgt tema)"
 
 msgid "Interval (in hours) for running host checker (default is 8 hours)"
-msgstr ""
+msgstr "Interval (i timer) for at køre værtstjekker (standard er 8 timer)"
 
 msgid "Maximum concurrent pings when running host checker (Default is 12, max is 100)"
-msgstr ""
+msgstr "Maksimum samtidige pings, når du kører værtstjekker (Standard er 12, max er 100)"
 
 msgid "delete hosts"
-msgstr ""
+msgstr "slet værter"
 
 msgid "addressbook"
 msgstr "adressebog"
@@ -544,7 +544,7 @@ msgid "Launch Image Generator"
 msgstr "Start Image Generator"
 
 msgid "Export"
-msgstr ""
+msgstr "Eksportér"
 
 msgid "Introduction"
 msgstr "Introduktion"

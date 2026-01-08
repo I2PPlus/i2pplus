@@ -32,7 +32,7 @@ msgid "Source"
 msgstr "来源"
 
 msgid "Imported from"
-msgstr ""
+msgstr "导入自"
 
 msgid "Imported from file"
 msgstr "从文件导入"
@@ -41,16 +41,16 @@ msgid "Manually added via SusiDNS"
 msgstr "通过 SusiDNS 手工添加。"
 
 msgid "Manually added"
-msgstr ""
+msgstr "手工添加"
 
 msgid "Added via address helper"
-msgstr ""
+msgstr "通过地址助手添加"
 
 msgid "Via helper"
-msgstr ""
+msgstr "通过助手"
 
 msgid "Via helper from"
-msgstr ""
+msgstr "通过助手来自"
 
 msgid "None"
 msgstr "无"
@@ -91,7 +91,7 @@ msgstr[0] "{0}结果：<span class=active>"
 #, java-format
 msgid "Book contains 1 entry"
 msgid_plural "Book contains {0} entries"
-msgstr[0] ""
+msgstr[0] "地址簿中包含 {0} 条记录"
 
 msgid "Add"
 msgstr "添加"
@@ -150,7 +150,7 @@ msgid_plural "{0} destinations deleted."
 msgstr[0] "{0} 个目标已删除。"
 
 msgid "No valid entries selected to delete."
-msgstr ""
+msgstr "未选择任何有效的条目进行删除。"
 
 msgid "Add Alternate"
 msgstr "添加备用"
@@ -171,13 +171,13 @@ msgid "Save"
 msgstr "保存"
 
 msgid "Blacklist saved."
-msgstr ""
+msgstr "黑名单已保存。"
 
 msgid "Reload"
 msgstr "刷新"
 
 msgid "Blacklist reloaded from file."
-msgstr ""
+msgstr "黑名单已从文件重新加载。"
 
 msgid "Configuration saved."
 msgstr "配置已保存"
@@ -208,15 +208,15 @@ msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "域名服务{1}中的目标{0}删除失败。"
 
 msgid "Blacklist Selected"
-msgstr ""
+msgstr "黑名单选中项"
 
 #, java-format
 msgid "1 destination blacklisted."
 msgid_plural "{0} destinations blacklisted."
-msgstr[0] ""
+msgstr[0] "{0} 个目标已加入黑名单。"
 
 msgid "No valid entries selected to blacklist."
-msgstr ""
+msgstr "未选择任何有效的条目加入黑名单。"
 
 msgid "Save Notes"
 msgstr "保存备注"
@@ -281,7 +281,7 @@ msgid "Subscriptions"
 msgstr "订阅"
 
 msgid "Blacklist"
-msgstr ""
+msgstr "黑名单"
 
 msgid "Configuration"
 msgstr "配置"
@@ -317,13 +317,13 @@ msgid "Search"
 msgstr "搜索"
 
 msgid "latest"
-msgstr ""
+msgstr "最新"
 
 msgid "Alive"
-msgstr ""
+msgstr "存活"
 
 msgid "Dead"
-msgstr ""
+msgstr "失效"
 
 msgid "all"
 msgstr "清除过滤器"
@@ -332,13 +332,13 @@ msgid "Info"
 msgstr "信息"
 
 msgid "Type"
-msgstr ""
+msgstr "类型"
 
 msgid "Hostname"
 msgstr "主机名"
 
 msgid "Encryption"
-msgstr ""
+msgstr "加密方式"
 
 msgid "Link (b32)"
 msgstr "链接 (b32)"
@@ -347,10 +347,10 @@ msgid "Destination"
 msgstr "目标"
 
 msgid "Added"
-msgstr ""
+msgstr "添加时间"
 
 msgid "Status"
-msgstr ""
+msgstr "状态"
 
 msgid "Select hosts for deletion from addressbook"
 msgstr "从地址簿中选择要删除的主机"
@@ -359,7 +359,7 @@ msgid "More information on this entry"
 msgstr "此记录的更多信息"
 
 msgid "unknown"
-msgstr ""
+msgstr "未知"
 
 msgid "Base 32 address"
 msgstr "Base 32 地址"
@@ -374,7 +374,7 @@ msgid "Cancel"
 msgstr "取消"
 
 msgid "This book currently contains no entries."
-msgstr ""
+msgstr "此地址簿当前不包含任何条目。"
 
 msgid "e.g. newdomain.i2p"
 msgstr "例如"
@@ -389,19 +389,19 @@ msgid "Select file"
 msgstr "选择文件"
 
 msgid "blacklist"
-msgstr ""
+msgstr "黑名单"
 
 msgid "Blacklist Management"
-msgstr ""
+msgstr "黑名单管理"
 
 msgid "File location"
 msgstr "文件位置"
 
 msgid "Enter I2P addresses to blacklist (one per line)"
-msgstr ""
+msgstr "输入要加入黑名单的 I2P 地址（每行一个）"
 
 msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
-msgstr ""
+msgstr "黑名单文件包含一个 I2P 主机名列表，这些主机名应通过 HTTP 代理阻止访问，并在地址簿显示中排除。"
 
 msgid "configuration"
 msgstr "配置"
@@ -467,13 +467,13 @@ msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "要使用的覆盖主题的名称（默认为控制台选择的主题）"
 
 msgid "Interval (in hours) for running host checker (default is 8 hours)"
-msgstr ""
+msgstr "运行主机检查器的时间间隔（小时，默认值为 8 小时）"
 
 msgid "Maximum concurrent pings when running host checker (Default is 12, max is 100)"
-msgstr ""
+msgstr "运行主机检查器时的最大并发 ping 数（默认值为 12，最大值为 100）"
 
 msgid "delete hosts"
-msgstr ""
+msgstr "删除主机"
 
 msgid "addressbook"
 msgstr "地址簿"
@@ -536,7 +536,7 @@ msgid "Launch Image Generator"
 msgstr "查看图像生成器"
 
 msgid "Export"
-msgstr ""
+msgstr "导出"
 
 msgid "Introduction"
 msgstr "介绍"

@@ -32,7 +32,7 @@ msgid "Source"
 msgstr "Nguồn"
 
 msgid "Imported from"
-msgstr ""
+msgstr "Đã nhập từ"
 
 msgid "Imported from file"
 msgstr "Đã nhập từ tệp"
@@ -41,16 +41,16 @@ msgid "Manually added via SusiDNS"
 msgstr "Được thêm thủ công qua SusiDNS"
 
 msgid "Manually added"
-msgstr ""
+msgstr "Đã thêm thủ công"
 
 msgid "Added via address helper"
-msgstr ""
+msgstr "Đã thêm qua trợ lý địa chỉ"
 
 msgid "Via helper"
-msgstr ""
+msgstr "Qua trợ lý"
 
 msgid "Via helper from"
-msgstr ""
+msgstr "Qua trợ lý từ"
 
 msgid "None"
 msgstr "Không có"
@@ -91,7 +91,7 @@ msgstr[0] "{0} Kết quả cho: <span class=active>"
 #, java-format
 msgid "Book contains 1 entry"
 msgid_plural "Book contains {0} entries"
-msgstr[0] ""
+msgstr[0] "Sách chứa {0} mục"
 
 msgid "Add"
 msgstr "Thêm"
@@ -150,7 +150,7 @@ msgid_plural "{0} destinations deleted."
 msgstr[0] "{0} điểm đến đã xóa."
 
 msgid "No valid entries selected to delete."
-msgstr ""
+msgstr "Không có mục hợp lệ nào được chọn để xóa."
 
 msgid "Add Alternate"
 msgstr "Thêm thay thế"
@@ -171,13 +171,13 @@ msgid "Save"
 msgstr "Lưu trữ"
 
 msgid "Blacklist saved."
-msgstr ""
+msgstr "Đã lưu danh sách đen."
 
 msgid "Reload"
 msgstr "Nạp lại"
 
 msgid "Blacklist reloaded from file."
-msgstr ""
+msgstr "Đã tải lại danh sách đen từ tệp."
 
 msgid "Configuration saved."
 msgstr "Cấu hình được lưu trữ."
@@ -208,15 +208,15 @@ msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "Không thể xóa Đích cho {0} khỏi dịch vụ đặt tên {1}"
 
 msgid "Blacklist Selected"
-msgstr ""
+msgstr "Chọn danh sách đen"
 
 #, java-format
 msgid "1 destination blacklisted."
 msgid_plural "{0} destinations blacklisted."
-msgstr[0] ""
+msgstr[0] "{0} điểm đến đã bị chặn trong danh sách đen."
 
 msgid "No valid entries selected to blacklist."
-msgstr ""
+msgstr "Không có mục hợp lệ nào được chọn để đưa vào danh sách đen."
 
 msgid "Save Notes"
 msgstr "Lưu ghi chú"
@@ -281,7 +281,7 @@ msgid "Subscriptions"
 msgstr "Đăng ký"
 
 msgid "Blacklist"
-msgstr ""
+msgstr "Danh sách đen"
 
 msgid "Configuration"
 msgstr "Cấu hình"
@@ -317,13 +317,13 @@ msgid "Search"
 msgstr "Tìm"
 
 msgid "latest"
-msgstr ""
+msgstr "mới nhất"
 
 msgid "Alive"
-msgstr ""
+msgstr "Đang hoạt động"
 
 msgid "Dead"
-msgstr ""
+msgstr "Đã chết"
 
 msgid "all"
 msgstr "bộ lọc rõ ràng"
@@ -332,13 +332,13 @@ msgid "Info"
 msgstr "Thông tin"
 
 msgid "Type"
-msgstr ""
+msgstr "Loại"
 
 msgid "Hostname"
 msgstr "Tên máy chủ"
 
 msgid "Encryption"
-msgstr ""
+msgstr "Mã hóa"
 
 msgid "Link (b32)"
 msgstr "Liên kết (b32)"
@@ -347,10 +347,10 @@ msgid "Destination"
 msgstr "Đích đến"
 
 msgid "Added"
-msgstr ""
+msgstr "Đã thêm"
 
 msgid "Status"
-msgstr ""
+msgstr "Trạng thái"
 
 msgid "Select hosts for deletion from addressbook"
 msgstr "Chọn máy chủ để xóa khỏi sổ địa chỉ"
@@ -359,7 +359,7 @@ msgid "More information on this entry"
 msgstr "Thông tin thêm về mục này"
 
 msgid "unknown"
-msgstr ""
+msgstr "không xác định"
 
 msgid "Base 32 address"
 msgstr "Địa chỉ cơ sở 32"
@@ -374,7 +374,7 @@ msgid "Cancel"
 msgstr "Hủy"
 
 msgid "This book currently contains no entries."
-msgstr ""
+msgstr "Sách này hiện không chứa mục nào."
 
 msgid "e.g. newdomain.i2p"
 msgstr "ví dụ. newdomain.i2p"
@@ -389,19 +389,19 @@ msgid "Select file"
 msgstr "Chọn tập tin"
 
 msgid "blacklist"
-msgstr ""
+msgstr "danh sách đen"
 
 msgid "Blacklist Management"
-msgstr ""
+msgstr "Quản lý danh sách đen"
 
 msgid "File location"
 msgstr "Vị trí tệp"
 
 msgid "Enter I2P addresses to blacklist (one per line)"
-msgstr ""
+msgstr "Nhập địa chỉ I2P để đưa vào danh sách đen (mỗi dòng một địa chỉ)"
 
 msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
-msgstr ""
+msgstr "Tệp danh sách đen chứa danh sách các tên máy chủ I2P nên bị chặn truy cập qua proxy HTTP và bị loại trừ khỏi hiển thị sổ địa chỉ."
 
 msgid "configuration"
 msgstr "cấu hình"
@@ -467,13 +467,13 @@ msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "Tên của chủ đề ghi đè sẽ sử dụng (mặc định là chủ đề do bảng điều khiển chọn)"
 
 msgid "Interval (in hours) for running host checker (default is 8 hours)"
-msgstr ""
+msgstr "Khoảng thời gian (tính bằng giờ) để chạy trình kiểm tra máy chủ (mặc định là 8 giờ)"
 
 msgid "Maximum concurrent pings when running host checker (Default is 12, max is 100)"
-msgstr ""
+msgstr "Số lượng ping đồng thời tối đa khi chạy trình kiểm tra máy chủ (Mặc định là 12, tối đa là 100)"
 
 msgid "delete hosts"
-msgstr ""
+msgstr "xóa máy chủ"
 
 msgid "addressbook"
 msgstr "Sổ địa chỉ"
@@ -536,7 +536,7 @@ msgid "Launch Image Generator"
 msgstr "Khởi chạy Trình tạo hình ảnh"
 
 msgid "Export"
-msgstr ""
+msgstr "Xuất"
 
 msgid "Introduction"
 msgstr "Giới thiệu"

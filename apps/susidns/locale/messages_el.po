@@ -32,7 +32,7 @@ msgid "Source"
 msgstr "Πηγή"
 
 msgid "Imported from"
-msgstr ""
+msgstr "Εισήχθη από"
 
 msgid "Imported from file"
 msgstr "Εισήχθη από αρχείο"
@@ -41,16 +41,16 @@ msgid "Manually added via SusiDNS"
 msgstr "Προστέθηκε μη αυτόματα μέσω SusiDNS"
 
 msgid "Manually added"
-msgstr ""
+msgstr "Προστέθηκε χειροκίνητα"
 
 msgid "Added via address helper"
-msgstr ""
+msgstr "Προστέθηκε μέσω βοηθού διεύθυνσης"
 
 msgid "Via helper"
-msgstr ""
+msgstr "Μέσω βοηθού"
 
 msgid "Via helper from"
-msgstr ""
+msgstr "Μέσω βοηθού από"
 
 msgid "None"
 msgstr "Κανένα"
@@ -94,8 +94,8 @@ msgstr[1] "{0} Αποτελέσματα για: <span class=active>"
 #, java-format
 msgid "Book contains 1 entry"
 msgid_plural "Book contains {0} entries"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Το βιβλίο περιέχει 1 καταχώρηση"
+msgstr[1] "Το βιβλίο περιέχει {0} καταχωρήσεις"
 
 msgid "Add"
 msgstr "Πρόσθεση"
@@ -155,7 +155,7 @@ msgstr[0] "1 προορισμός διαγράφηκε."
 msgstr[1] "{0} Οι προορισμοί διαγράφηκαν."
 
 msgid "No valid entries selected to delete."
-msgstr ""
+msgstr "Δεν επιλέχθηκαν έγκυρες καταχωρήσεις προς διαγραφή."
 
 msgid "Add Alternate"
 msgstr "Προσθήκη εναλλακτικού"
@@ -176,13 +176,13 @@ msgid "Save"
 msgstr "Αποθήκευση"
 
 msgid "Blacklist saved."
-msgstr ""
+msgstr "Η μαύρη λίστα αποθηκεύτηκε."
 
 msgid "Reload"
 msgstr "Επαναφόρτωση"
 
 msgid "Blacklist reloaded from file."
-msgstr ""
+msgstr "Η μαύρη λίστα επαναφορτώθηκε από αρχείο."
 
 msgid "Configuration saved."
 msgstr "Παράμετροι αποθηκεύθηκαν."
@@ -213,16 +213,16 @@ msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "Αποτυχία διαγραφής προορισμού για {0} από την υπηρεσία ονοματοδοσίας {1}"
 
 msgid "Blacklist Selected"
-msgstr ""
+msgstr "Μαύρη Λίστα Επιλεγμένων"
 
 #, java-format
 msgid "1 destination blacklisted."
 msgid_plural "{0} destinations blacklisted."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 προορισμός στη μαύρη λίστα."
+msgstr[1] "{0} προορισμοί στη μαύρη λίστα."
 
 msgid "No valid entries selected to blacklist."
-msgstr ""
+msgstr "Δεν επιλέχθηκαν έγκυρες καταχωρήσεις για μαύρη λίστα."
 
 msgid "Save Notes"
 msgstr "Αποθήκευση σημειώσεων"
@@ -289,7 +289,7 @@ msgid "Subscriptions"
 msgstr "Συνδρομές"
 
 msgid "Blacklist"
-msgstr ""
+msgstr "Μαύρη Λίστα"
 
 msgid "Configuration"
 msgstr "Ρυθμίσεις"
@@ -325,13 +325,13 @@ msgid "Search"
 msgstr "Αναζήτηση"
 
 msgid "latest"
-msgstr ""
+msgstr "τελευταίο"
 
 msgid "Alive"
-msgstr ""
+msgstr "Ενεργό"
 
 msgid "Dead"
-msgstr ""
+msgstr "Νεκρό"
 
 msgid "all"
 msgstr "εκκαθάριση φίλτρου"
@@ -340,13 +340,13 @@ msgid "Info"
 msgstr "Πληροφορίες"
 
 msgid "Type"
-msgstr ""
+msgstr "Τύπος"
 
 msgid "Hostname"
 msgstr "Όνομα κεντρικού υπολογιστή"
 
 msgid "Encryption"
-msgstr ""
+msgstr "Κρυπτογράφηση"
 
 msgid "Link (b32)"
 msgstr "Σύνδεσμος (b32)"
@@ -355,10 +355,10 @@ msgid "Destination"
 msgstr "Προορισμός"
 
 msgid "Added"
-msgstr ""
+msgstr "Προστέθηκε"
 
 msgid "Status"
-msgstr ""
+msgstr "Κατάσταση"
 
 msgid "Select hosts for deletion from addressbook"
 msgstr "Επιλέξτε κεντρικούς υπολογιστές για διαγραφή από το βιβλίο διευθύνσεων"
@@ -367,7 +367,7 @@ msgid "More information on this entry"
 msgstr "Περισσότερες πληροφορίες για αυτήν την καταχώρηση"
 
 msgid "unknown"
-msgstr ""
+msgstr "άγνωστο"
 
 msgid "Base 32 address"
 msgstr "Διεύθυνση βάσης 32"
@@ -382,7 +382,7 @@ msgid "Cancel"
 msgstr "Ακύρωση"
 
 msgid "This book currently contains no entries."
-msgstr ""
+msgstr "Αυτό το βιβλίο δεν περιέχει καμία καταχώρηση."
 
 msgid "e.g. newdomain.i2p"
 msgstr "π.χ. newdomain.i2p"
@@ -397,19 +397,19 @@ msgid "Select file"
 msgstr "Επιλέξτε αρχείο"
 
 msgid "blacklist"
-msgstr ""
+msgstr "μαύρη λίστα"
 
 msgid "Blacklist Management"
-msgstr ""
+msgstr "Διαχείριση Μαύρης Λίστας"
 
 msgid "File location"
 msgstr "Τοποθεσία αρχείου"
 
 msgid "Enter I2P addresses to blacklist (one per line)"
-msgstr ""
+msgstr "Εισάγετε διευθύνσεις I2P για μαύρη λίστα (μία ανά γραμμή)"
 
 msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
-msgstr ""
+msgstr "Το αρχείο μαύρης λίστας περιέχει μια λίστα με ονόματα κεντρικών υπολογιστών I2P που πρέπει να αποκλειστούν από την πρόσβαση μέσω του διακομιστή μεσολάβησης HTTP και να εξαιρεθούν από την εμφάνιση του βιβλίου διευθύνσεων."
 
 msgid "configuration"
 msgstr "παράμετροι"
@@ -475,13 +475,13 @@ msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "Όνομα του θέματος παράκαμψης προς χρήση (προεπιλογή σε θέμα που έχει επιλεγεί από την κονσόλα)"
 
 msgid "Interval (in hours) for running host checker (default is 8 hours)"
-msgstr ""
+msgstr "Διάστημα (σε ώρες) για την εκτέλεση του ελέγχου κεντρικών υπολογιστών (προεπιλογή είναι 8 ώρες)"
 
 msgid "Maximum concurrent pings when running host checker (Default is 12, max is 100)"
-msgstr ""
+msgstr "Μέγιστος αριθμός ταυτόχρονων ping κατά την εκτέλεση του ελέγχου κεντρικών υπολογιστών (Προεπιλογή είναι 12, μέγιστο είναι 100)"
 
 msgid "delete hosts"
-msgstr ""
+msgstr "διαγραφή κεντρικών υπολογιστών"
 
 msgid "addressbook"
 msgstr "διευθυνσιογράφος"
@@ -544,7 +544,7 @@ msgid "Launch Image Generator"
 msgstr "Εκκινήστε το Image Generator"
 
 msgid "Export"
-msgstr ""
+msgstr "Εξαγωγή"
 
 msgid "Introduction"
 msgstr "Εισαγωγή"

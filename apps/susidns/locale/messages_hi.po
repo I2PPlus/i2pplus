@@ -32,7 +32,7 @@ msgid "Source"
 msgstr "स्रोत"
 
 msgid "Imported from"
-msgstr ""
+msgstr "से आयात किया गया"
 
 msgid "Imported from file"
 msgstr "फ़ाइल से आयात किया"
@@ -41,16 +41,16 @@ msgid "Manually added via SusiDNS"
 msgstr "SusiDNS के माध्यम से हस्ताक्षरित जोड़ा गया"
 
 msgid "Manually added"
-msgstr ""
+msgstr "हस्तक्षेप से जोड़ा गया"
 
 msgid "Added via address helper"
-msgstr ""
+msgstr "पता सहायक के माध्यम से जोड़ा गया"
 
 msgid "Via helper"
-msgstr ""
+msgstr "सहायक के माध्यम से"
 
 msgid "Via helper from"
-msgstr ""
+msgstr "सहायक से"
 
 msgid "None"
 msgstr "कोई"
@@ -94,8 +94,8 @@ msgstr[1] "{0} परिणाम हैं: <span class=active>"
 #, java-format
 msgid "Book contains 1 entry"
 msgid_plural "Book contains {0} entries"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "पुस्तक में {0} प्रविष्टि है"
+msgstr[1] "पुस्तक में {0} प्रविष्टियाँ हैं"
 
 msgid "Add"
 msgstr "जोड़ें"
@@ -155,7 +155,7 @@ msgstr[0] "{0} गंतव्य हटा दिया गया।"
 msgstr[1] "{0} गंतव्य हटे गए।"
 
 msgid "No valid entries selected to delete."
-msgstr ""
+msgstr "हटाने के लिए कोई वैध प्रविष्टियाँ चुनी नहीं गईं।"
 
 msgid "Add Alternate"
 msgstr "विकल्प जोड़ें"
@@ -176,13 +176,13 @@ msgid "Save"
 msgstr "सहेजें"
 
 msgid "Blacklist saved."
-msgstr ""
+msgstr "ब्लैकलिस्ट सहेजा गया।"
 
 msgid "Reload"
 msgstr "पुनः लोड करें"
 
 msgid "Blacklist reloaded from file."
-msgstr ""
+msgstr "ब्लैकलिस्ट फ़ाइल से पुनः लोड किया गया।"
 
 msgid "Configuration saved."
 msgstr "निर्माण सहेजा गया।"
@@ -213,16 +213,16 @@ msgid "Failed to delete Destination for {0} from naming service {1}"
 msgstr "{0} के लिए गंतव्य को नामिंग सेवा {1} से हटाने में विफलता"
 
 msgid "Blacklist Selected"
-msgstr ""
+msgstr "ब्लैकलिस्ट चयनित"
 
 #, java-format
 msgid "1 destination blacklisted."
 msgid_plural "{0} destinations blacklisted."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} गंतव्य ब्लैकलिस्ट में डाला गया।"
+msgstr[1] "{0} गंतव्य ब्लैकलिस्ट में डाले गए।"
 
 msgid "No valid entries selected to blacklist."
-msgstr ""
+msgstr "ब्लैकलिस्ट में डालने के लिए कोई वैध प्रविष्टियाँ चुनी नहीं गईं।"
 
 msgid "Save Notes"
 msgstr "नोट्स सहेजें"
@@ -289,7 +289,7 @@ msgid "Subscriptions"
 msgstr "सब्सक्रिप्शन"
 
 msgid "Blacklist"
-msgstr ""
+msgstr "ब्लैकलिस्ट"
 
 msgid "Configuration"
 msgstr "निर्माण"
@@ -325,13 +325,13 @@ msgid "Search"
 msgstr "खोज"
 
 msgid "latest"
-msgstr ""
+msgstr "नवीनतम"
 
 msgid "Alive"
-msgstr ""
+msgstr "सक्रिय"
 
 msgid "Dead"
-msgstr ""
+msgstr "निष्क्रिय"
 
 msgid "all"
 msgstr "फ़िल्टर साफ़ करें"
@@ -340,13 +340,13 @@ msgid "Info"
 msgstr "जानकारी"
 
 msgid "Type"
-msgstr ""
+msgstr "प्रकार"
 
 msgid "Hostname"
 msgstr "होस्टनाम"
 
 msgid "Encryption"
-msgstr ""
+msgstr "एन्क्रिप्शन"
 
 msgid "Link (b32)"
 msgstr "लिंक (b32)"
@@ -355,10 +355,10 @@ msgid "Destination"
 msgstr "गंतव्य"
 
 msgid "Added"
-msgstr ""
+msgstr "जोड़ा गया"
 
 msgid "Status"
-msgstr ""
+msgstr "स्थिति"
 
 msgid "Select hosts for deletion from addressbook"
 msgstr "पत्रिका से हटाने के लिए होस्ट चुनें"
@@ -367,7 +367,7 @@ msgid "More information on this entry"
 msgstr "इस प्रविष्टि के बारे में अधिक जानकारी"
 
 msgid "unknown"
-msgstr ""
+msgstr "अज्ञात"
 
 msgid "Base 32 address"
 msgstr "बेस 32 पता"
@@ -382,7 +382,7 @@ msgid "Cancel"
 msgstr "रद्द करें"
 
 msgid "This book currently contains no entries."
-msgstr ""
+msgstr "इस पुस्तक में वर्तमान में कोई प्रविष्टियाँ नहीं हैं।"
 
 msgid "e.g. newdomain.i2p"
 msgstr "उदाहरण के लिए newdomain.i2p"
@@ -397,19 +397,19 @@ msgid "Select file"
 msgstr "फ़ाइल चुनें"
 
 msgid "blacklist"
-msgstr ""
+msgstr "ब्लैकलिस्ट"
 
 msgid "Blacklist Management"
-msgstr ""
+msgstr "ब्लैकलिस्ट प्रबंधन"
 
 msgid "File location"
 msgstr "फ़ाइल स्थान"
 
 msgid "Enter I2P addresses to blacklist (one per line)"
-msgstr ""
+msgstr "ब्लैकलिस्ट में डालने के लिए I2P पते दर्ज करें (प्रति पंक्ति एक)"
 
 msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
-msgstr ""
+msgstr "ब्लैकलिस्ट फ़ाइल में I2P होस्टनामों की सूची होती है जिन्हें HTTP प्रॉक्सी के माध्यम से पहुँच से ब्लॉक किया जाना चाहिए, और पता पुस्तक प्रदर्शन से बाहर रखा जाना चाहिए।"
 
 msgid "configuration"
 msgstr "निर्माण"
@@ -475,13 +475,13 @@ msgid "Name of override theme to use (defaults to console-selected theme)"
 msgstr "उपयोग करने के लिए ओवरराइड थीम का नाम (डिफ़ॉल्ट के रूप में कंसोल-चुने गए थीम का होता है)"
 
 msgid "Interval (in hours) for running host checker (default is 8 hours)"
-msgstr ""
+msgstr "होस्ट चेकर चलाने के लिए अंतराल (घंटों में) (डिफ़ॉल्ट 8 घंटे है)"
 
 msgid "Maximum concurrent pings when running host checker (Default is 12, max is 100)"
-msgstr ""
+msgstr "होस्ट चेकर चलाते समय अधिकतम समवर्ती पिंग (डिफ़ॉल्ट 12, अधिकतम 100)"
 
 msgid "delete hosts"
-msgstr ""
+msgstr "होस्ट हटाएं"
 
 msgid "addressbook"
 msgstr "पत्रिका"
@@ -544,7 +544,7 @@ msgid "Launch Image Generator"
 msgstr "इमेज जनरेटर लॉन्च करें"
 
 msgid "Export"
-msgstr ""
+msgstr "निर्यात"
 
 msgid "Introduction"
 msgstr "परिचय"
