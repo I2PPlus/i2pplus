@@ -55,8 +55,16 @@ class ConnThrottler {
         _cleaner = new Cleaner();
     }
 
-    /*
-     * If already started, has no effect.
+    /**
+     *  Starts the throttler by scheduling the cleanup timer.
+     * <p>
+     * This method must be called to begin rate limiting. The cleanup timer
+     * will run periodically to check for expired throttles and clean up
+     * stale peer records.
+     * </p>
+     * <p>
+     * If already started, this method has no effect.
+     * </p>
      *
      * @since 0.9.40
      */
@@ -67,8 +75,13 @@ class ConnThrottler {
         _cleaner.schedule(_checkPeriod);
     }
 
-    /*
-     * May be restarted.
+    /**
+     *  Stops the throttler and resets all state.
+     * <p>
+     * This method cancels the cleanup timer, clears all peer records,
+     * and resets the total connection counter. The throttler may be
+     * restarted by calling start() again.
+     * </p>
      *
      * @since 0.9.40
      */
@@ -78,10 +91,17 @@ class ConnThrottler {
         clear();
     }
 
-    /*
-     * All periods in ms
-     * @param max per-peer, 0 for unlimited
-     * @param totalMax for all peers, 0 for unlimited
+    /**
+     *  Updates the rate limiting configuration.
+     * <p>
+     * All period values are enforced with a minimum of 10 seconds.
+     * </p>
+     *
+     * @param max the maximum number of connections per peer (0 for unlimited)
+     * @param totalMax the maximum total connections from all peers (0 for unlimited)
+     * @param checkPeriod the time window for counting connections, in milliseconds
+     * @param throttlePeriod how long to throttle individual peers, in milliseconds
+     * @param totalThrottlePeriod how long to throttle all peers, in milliseconds
      * @since 0.9.3
      */
     public synchronized void updateLimits(int max, int totalMax, long checkPeriod, long throttlePeriod, long totalThrottlePeriod) {
@@ -220,6 +240,9 @@ class ConnThrottler {
             super(SimpleTimer2.getInstance());
         }
 
+        /**
+         *  Called by the timer to clean up expired throttles.
+         */
         public void timeReached() {
             synchronized(ConnThrottler.this) {
                 if (_totalMax > 0)

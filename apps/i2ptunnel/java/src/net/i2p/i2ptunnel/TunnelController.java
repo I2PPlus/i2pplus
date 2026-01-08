@@ -401,6 +401,17 @@ public class TunnelController implements Logging {
         }
     }
 
+    /**
+     *  Starts the tunnel in a background thread.
+     * <p>
+     * This method spawns a new thread to start the tunnel, allowing
+     * the calling thread to return immediately. The tunnel state
+     * transitions to STARTING, and the actual startup is performed
+     * in the background thread.
+     * </p>
+     *
+     * @see #startTunnel()
+     */
     public void startTunnelBackground() {
         synchronized (this) {
             if (_state != TunnelState.STOPPED && _state != TunnelState.START_ON_LOAD)
@@ -814,6 +825,17 @@ public class TunnelController implements Logging {
         changeState(TunnelState.DESTROYED);
     }
 
+    /**
+     *  Stops and restarts the tunnel.
+     * <p>
+     * This method stops the tunnel if running, waits briefly,
+     * then starts the tunnel again. The restart is performed
+     * synchronously, blocking until complete.
+     * </p>
+     *
+     * @see #startTunnel()
+     * @see #stopTunnel()
+     */
     public void restartTunnel() {
         TunnelState oldState;
         synchronized (this) {
@@ -1219,10 +1241,28 @@ public class TunnelController implements Logging {
     }
 
     // TODO synch
+    /**
+     *  Checks if the tunnel is currently running.
+     *
+     * @return true if the tunnel state is RUNNING
+     */
     public boolean getIsRunning() { return _state == TunnelState.RUNNING; }
+
+    /**
+     *  Checks if the tunnel is starting or starting on load.
+     *
+     * @return true if the tunnel is in the process of starting
+     */
     public boolean getIsStarting() { return _state == TunnelState.START_ON_LOAD || _state == TunnelState.STARTING; }
 
-    /** if running but no open sessions, we are in standby */
+    /**
+     *  Checks if the tunnel is in standby mode.
+     * <p>
+     * A tunnel is in standby when it is running but has no open sessions.
+     * </p>
+     *
+     * @return true if the tunnel is running but has no active sessions
+     */
     public boolean getIsStandby() {
         synchronized (this) {
             if (_state != TunnelState.RUNNING)
@@ -1419,6 +1459,9 @@ public class TunnelController implements Logging {
             }
         }
 
+        /**
+         *  Checks for offline key expiration and stops tunnel if expired.
+         */
         public void timeReached() {
             if (!getIsRunning() && !getIsStarting())
                 return;
