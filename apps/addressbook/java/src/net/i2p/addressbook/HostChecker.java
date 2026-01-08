@@ -22,6 +22,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import net.i2p.I2PAppContext;
@@ -278,7 +279,16 @@ public class HostChecker {
         loadConfiguration(addressbookDir);
 
         // Initialize scheduler and semaphore AFTER loading config to use configured values
-        _scheduler = Executors.newScheduledThreadPool(_maxConcurrent + 2);
+        ThreadFactory threadFactory = new ThreadFactory() {
+            @Override
+            public Thread newThread(Runnable r) {
+                Thread thread = new Thread(r);
+                thread.setName("HostChecker");
+                thread.setDaemon(true);
+                return thread;
+            }
+        };
+        _scheduler = Executors.newScheduledThreadPool(_maxConcurrent + 2, threadFactory);
         _pingSemaphore = new Semaphore(_maxConcurrent);
 
         // Load existing categories file first (non-blocking)
