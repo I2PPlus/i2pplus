@@ -1976,7 +1976,7 @@ msgid "FAQ"
 msgstr "GYIK"
 
 msgid "JSON-RPC API"
-msgstr ""
+msgstr "JSON-RPC API"
 
 msgid "Manage your I2P hosts file here (I2P domain name resolution)"
 msgstr "I2P hosts fájl kezelése itt (I2P domain név feloldás)"
@@ -2698,7 +2698,7 @@ msgid "Lookup"
 msgstr "Lookup"
 
 msgid "Select the field to search on"
-msgstr ""
+msgstr "Válassza ki a keresési mezőt"
 
 msgid "e.g. cn hk"
 msgstr "pl. cn hk"
@@ -2951,7 +2951,7 @@ msgid "Maximum Transmission Unit"
 msgstr "Maximális átviteli egység"
 
 msgid "Show all routers with this MTU in the NetDb"
-msgstr ""
+msgstr "Az összes ilyen MTU-val rendelkező útválasztó megjelenítése a NetDb-ben"
 
 msgid "Addresses"
 msgstr "Címek"
@@ -5684,7 +5684,7 @@ msgid "Tunnel Filtering"
 msgstr "Alagútszűrés"
 
 msgid "Console API"
-msgstr ""
+msgstr "Konzol API"
 
 msgid "JSONRPC"
 msgstr ""

@@ -89,9 +89,9 @@ msgid_plural "{0} results for: <span class=active>"
 msgstr[0] "{0} 결과 : <span class=active>"
 
 #, java-format
-msgid "1 entry"
-msgid_plural "{0} entries"
-msgstr[0] "{0} 항목"
+msgid "Book contains 1 entry"
+msgid_plural "Book contains {0} entries"
+msgstr[0] ""
 
 msgid "Add"
 msgstr "추가"
@@ -666,3 +666,5 @@ msgstr "마스터 주소록에 수동으로 추가된 주소는 라우터 주소
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "구독을 통해 받은 호스트는 라우터 주소록과 병합됩니다."
+
+#, java-format

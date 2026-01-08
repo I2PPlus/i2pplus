@@ -92,10 +92,10 @@ msgstr[0] "Ein Ergebnis für: <span class=active>"
 msgstr[1] "{0} Ergebnisse für: <span class=active>"
 
 #, java-format
-msgid "1 entry"
-msgid_plural "{0} entries"
-msgstr[0] "1 eintrag"
-msgstr[1] "{0} einträge"
+msgid "Book contains 1 entry"
+msgid_plural "Book contains {0} entries"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Add"
 msgstr "Hinzufügen"
@@ -674,3 +674,5 @@ msgstr "Manuell ins Master Adressbuch hinzugefügte Einträge werden mit ins Rou
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Einträge aus den Subskriptionen werden mit ins Router Adressbuch eingetragen."
+
+#, java-format

@@ -426,4 +426,3 @@ msgstr "Avtomatik olaraq yönləndirilməyəsəniz, buraya klikləyin."
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
 msgstr "{0} üçün təsdiqləməni saxladık, indi yönləndiririk."
-

@@ -426,4 +426,3 @@ msgstr "자동으로 리다이렉트 되지않으면 여기를 클릭하세요."
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
 msgstr "{0}에 대한 인증을 저장했습니다. 지금 리디렉션 중입니다."
-

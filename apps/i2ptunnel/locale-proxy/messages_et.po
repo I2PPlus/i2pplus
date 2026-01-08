@@ -426,4 +426,3 @@ msgstr "Klõpsa siia, kui sa ei suunata automaatselt ümber."
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
 msgstr "Salvestas autentimise {0} ja suuname praegu ümber."
-

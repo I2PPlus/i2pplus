@@ -146,7 +146,7 @@ msgid "Unreachable on any transport"
 msgstr "Hər hansı bir nəqliyyatda əlçatmazdır"
 
 msgid "Cannot enumerate UPnP devices on Android."
-msgstr "Cannot enumerate UPnP devices on Android."
+msgstr "Android-da UPnP cihazlarını siyahılaşdırmaq mümkün deyil."
 
 msgid "UPnP is not enabled"
 msgstr "UPnP aktiv deyil"
@@ -198,7 +198,7 @@ msgstr "Alt cihaz"
 
 #, java-format
 msgid "To disable this device, add {0} to advanced configuration and restart."
-msgstr "To disable this device, add {0} to advanced configuration and restart."
+msgstr "Bu cihazı deaktiv etmək üçün {0} əlavə konfiqurasiyasına əlavə edin və yenidən başladın."
 
 msgid "UPnP Status"
 msgstr "UPnP Vəziyyəti"
@@ -820,7 +820,7 @@ msgid "To enable SSL access for the Router Console, see the commented <code>clie
 msgstr "Router Konsolu üçün SSL-ə girişi aktivləşdirmək üçün ətraflı məlumat üçün <code></code> I2P tətbiq kataloqunuzda yerləşən şərh edilmiş clients.config faylına baxın. Kataloqda yerləşən RouterConsoleRunner konfiqurasiya faylını redaktə etməlisiniz: "
 
 msgid "Save disabled, edit the router.config file to make changes"
-msgstr ""
+msgstr "Qeyd etmək deaktiv edilib, dəyişiklik etmək üçün router.config faylını redaktə edin"
 
 msgid "Error updating the configuration - please see the error logs"
 msgstr "Konfiqurasiyanı yeniləməkdə xəta - xəta jurnallarına baxın"
@@ -1060,7 +1060,7 @@ msgstr "Ailədə pis simvollar var: "
 
 #, java-format
 msgid "Keystore {0} already exists for family {1}! Delete or rename it first."
-msgstr "Keystore {0} already exists for family {1}! Delete or rename it first."
+msgstr "{0} keystore artıq {1} ailəsi üçün mövcuddur! Əvvəlcə silin və ya yenidən adlandırın."
 
 msgid "Family key configured for router family: "
 msgstr "Marşrutlaşdırıcı ailəsi üçün ailə açarı konfiqurasiya edilib: "
@@ -1114,7 +1114,7 @@ msgid "Invalid destination"
 msgstr "Yanlış hədəf"
 
 msgid "Cannot add key for local destination. Enable encryption in the Tunnel Manager."
-msgstr ""
+msgstr "Yerli təyinat üçün açar əlavə etmək mümkün deyil. Tunnel Manager-də şifrələməni aktivləşdirin."
 
 #, java-format
 msgid "Key for {0} added to keyring"
@@ -1127,7 +1127,7 @@ msgid "Requires hostname, destination, or blinded Base32"
 msgstr "Host adı, təyinat yeri və ya korlanmış Base32 tələb olunur"
 
 msgid "Cannot add key for local destination. Enable encryption in the Hidden Services Manager."
-msgstr ""
+msgstr "Yerli təyinat üçün açar əlavə etmək mümkün deyil. Gizli Xidmətlər Manager-də şifrələməni aktivləşdirin."
 
 msgid "Destination requires lookup password"
 msgstr "Təyinat üçün axtarış parolu tələb olunur"
@@ -1148,7 +1148,7 @@ msgid "Delete key"
 msgstr "Düyməni sil"
 
 msgid "Cannot remove key for local destination. Disable encryption in the Tunnel Manager."
-msgstr ""
+msgstr "Yerli təyinat üçün açarı silmək mümkün deyil. Tunnel Manager-də şifrələməni deaktiv edin."
 
 #, java-format
 msgid "Key for {0} removed from keyring"
@@ -1215,14 +1215,14 @@ msgstr "Tarix formatı yeniləndi"
 
 #, java-format
 msgid "Specified date format is not valid ({0}) - not updated"
-msgstr ""
+msgstr "Göstərilən tarix formatı etibarlı deyil ({0}) - yenilənmədi"
 
 msgid "File size updated"
 msgstr "Fayl ölçüsü yeniləndi"
 
 #, java-format
 msgid "Specified file size limit is not valid ({0}) - not updated"
-msgstr ""
+msgstr "Göstərilən fayl ölçüsü limiti etibarlı deyil ({0}) - yenilənmədi"
 
 msgid "Compression setting updated"
 msgstr "Sıxılma tənzimi yeniləndi"

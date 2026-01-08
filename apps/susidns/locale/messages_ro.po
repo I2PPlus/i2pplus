@@ -95,11 +95,11 @@ msgstr[1] "{0} rezultate pentru: <span class=active>"
 msgstr[2] "{0} rezultate pentru: <span class=active>"
 
 #, java-format
-msgid "1 entry"
-msgid_plural "{0} entries"
-msgstr[0] "1 intrare"
-msgstr[1] "{0} intrări"
-msgstr[2] "{0} intrări"
+msgid "Book contains 1 entry"
+msgid_plural "Book contains {0} entries"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 msgid "Add"
 msgstr "Adăuga"
@@ -682,3 +682,5 @@ msgstr "Adresele adăugate manual în agenda dvs. de adrese Master se vor contop
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Gazdele pe care le primiți de la abonamentele dvs. se vor contopi cu agenda de adrese a routerului."
+
+#, java-format

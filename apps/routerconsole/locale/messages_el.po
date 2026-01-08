@@ -1975,6 +1975,9 @@ msgstr "Ρυθμίσεις"
 msgid "FAQ"
 msgstr "Συχνές Ερωτήσεις"
 
+msgid "JSON-RPC API"
+msgstr ""
+
 msgid "Manage your I2P hosts file here (I2P domain name resolution)"
 msgstr "Διαχειριστείτε το αρχείο κεντρικών υπολογιστών I2P εδώ (ανάλυση ονόματος τομέα I2P)"
 
@@ -5680,6 +5683,12 @@ msgstr "Διεπαφή χρήστη"
 msgid "Tunnel Filtering"
 msgstr "Φιλτράρισμα σήραγγας"
 
+msgid "Console API"
+msgstr ""
+
+msgid "JSONRPC"
+msgstr ""
+
 msgid "New User Guide"
 msgstr "Νέος οδηγός χρήστη"
 
@@ -5735,7 +5744,7 @@ msgid "This setting, when set to true, will display the <i>Sites of Interest</i>
 msgstr "Αυτή η ρύθμιση, όταν είναι ενεργοποιημένη, θα εμφανίσει τους συνδέσμους <i>Τοποθεσίες ενδιαφέροντος</i> στην <a href=/sitemap>σελίδα χάρτης του δικτύου</a>. [Η προεπιλογή είναι ψευδής]"
 
 msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
-msgstr ""
+msgstr "Αυτή η ρύθμιση, όταν είναι ενεργοποιημένη, θα εμφανίσει την τυπική πλαϊνή γραμμή στην αρχική σελίδα, επιτρέποντας τη διαμόρφωση μέσω <a href=/configsidebar>. [Η προεπιλογή είναι ψευδής]"
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "Αυτή η ρύθμιση καθορίζει εάν ο δρομολογητής πρέπει ή όχι να χρησιμοποιεί το παρεχόμενο αρχείο <i>blocklist.txt</i> και οποιεσδήποτε ρυθμίσεις από τον χρήστη για απαγόρευση ομόκεντρων με βάση το κατακερματισμό ή τη διεύθυνση IP. Τα εύρη και τα δίκτυα μάσκας υποστηρίζονται για το IPv4 αλλά όχι για το IPv6. Δείτε το <i>blocklist.txt</i> στον κατάλογο της εφαρμογής I2P+ για περισσότερες πληροφορίες. [Ενεργοποιείται από προεπιλογή, απαιτείται επανεκκίνηση]"
@@ -5906,7 +5915,7 @@ msgid "This setting, when set to true, will block direct communication from all 
 msgstr "Αυτή η ρύθμιση, όταν οριστεί σε true, θα αποκλείσει την άμεση επικοινωνία από όλους τους δρομολογητές στη δική σας χώρα και θα τους προσθέσει στη λίστα αποκλεισμού σας μέχρι να επανεκκινήσει ο δρομολογητής. [Η προεπιλογή είναι false]"
 
 msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
-msgstr ""
+msgstr "Αυτή η ρύθμιση, όταν ορίζεται σε true, θα αποκλείσει την άμεση επικοινωνία από όλους τους δρομολογητές βαθμίδας X που δημοσιεύουν ένα όριο συμφόρησης G και δεν είναι ούτε προσβάσιμοι ούτε μη προσβάσιμοι, προσθέτοντάς τους στη λίστα αποκλεισμού συνεδρίας. Σημειώστε ότι η προηγμένη λειτουργία πρέπει να είναι ενεργοποιημένη για να τεθεί σε ισχύ αυτή η ρύθμιση. [Η προεπιλογή είναι ψευδής]"
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "Αυτή η ρύθμιση επιτρέπει την απενεργοποίηση των δοκιμών SSU για να προσδιορίσετε εάν ο δρομολογητής σας έχει τείχος προστασίας και μπορεί να ενεργοποιηθεί για δρομολογητές που σίγουρα δεν έχουν τείχος προστασίας, αλλά αντιμετωπίζουν προβλήματα τείχους προστασίας μεταβλητής συνδεσιμότητας. Στην περίπτωση που απενεργοποιηθούν οι δοκιμές, τόσο η SSU όσο και η NTCP θα αναφέρουν την τρέχουσα διεύθυνση IP του δικτύου σας στην <a href=/info>σελίδα πληροφοριών του δρομολογητή</a>. [Απαιτείται επανεκκίνηση]"
@@ -6158,7 +6167,7 @@ msgid "How can I configure the console and web services to be accessible on my l
 msgstr "Πώς μπορώ να διαμορφώ την κονσόλα και τις υπηρεσίες web για να είναι προσβάσιμες στο τοπικό μου δίκτυο;"
 
 msgid "To make your console accessible on your local network, edit the configuration file 00-net.i2p.router.web.RouterConsoleRunner-clients.config in the clients.config.d folder of your I2P settings directory. Update or add the necessary IP addresses to the existing localhost (127.0.0.1) mapping. Use the -s switch for HTTPS access."
-msgstr ""
+msgstr "Για να κάνετε την κονσόλα σας προσβάσιμη στο τοπικό σας δίκτυο, επεξεργαστείτε το αρχείο διαμόρφωσης 00-net.i2p.router.web.RouterConsoleRunner-clients.config στον φάκελο clients.config.d του καταλόγου ρυθμίσεων I2P. Ενημερώστε ή προσθέστε τις απαραίτητες διευθύνσεις IP στην υπάρχουσα αντιστοίχιση localhost (127.0.0.1). Χρησιμοποιήστε την επιλογή -s για πρόσβαση HTTPS."
 
 msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
 msgstr "Παράδειγμα: Για να επιτρέψετε την πρόσβαση και από το localhost και από το 192.168.1.10 μέσω HTTP και HTTPS:"
@@ -6551,7 +6560,7 @@ msgid "If you are in a hurry and can't wait a few hours, you can tell people to 
 msgstr "Εάν έχετε βιαστεί και δεν μπορείτε να περιμένετε μερικές ώρες, μπορείτε να πείτε στους ανθρώπους να χρησιμοποιήσουν έναν υπηρεσία ανακατεύθυνσης βοηθού \"άλματος\". Αυτό συνήθως θα λειτουργήσει εντός μερικών λεπτών από την καταχώρηση του ονόματος του κεντρικού υπολογιστή σας στον ίδιο ιστότοπο. Δοκιμάστε το πρώτα εισάγοντας <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code> στο πρόγραμμα περιήγησής σας. Μόλις λειτουργήσει, μπορείτε να πείτε σε άλλους να το χρησιμοποιήσουν."
 
 msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skank.i2p</a>, and paste the link where it's required to share it with others."
-msgstr ""
+msgstr "Εναλλακτικά, μπορείτε να αντιγράψετε τον <i>σύνδεσμο βοηθού διεύθυνσης</i> για τον τομέα σας, που εμφανίζεται είτε στη σελίδα λίστας του βιβλίου διευθύνσεων, είτε στη σελίδα λεπτομερειών για τον τομέα σας, π.χ. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>λεπτομέρειες για το skank.i2p</a>, και να επικολλήσετε τον σύνδεσμο όπου απαιτείται για να τον μοιραστείτε με άλλους."
 
 msgid "Backup your private key!"
 msgstr "Δημιουργήστε αντίγραφα ασφαλείας του ιδιωτικού κλειδιού σας!"
@@ -6598,11 +6607,442 @@ msgstr "Τι πρέπει να κάνετε σε περίπτωση που το 
 msgid "An introduction to tunnel access lists"
 msgstr "Μια εισαγωγή στις λίστες πρόσβασης σε σήραγγα"
 
+msgid "I2PControl API"
+msgstr ""
+
+msgid "JSON-RPC API for remote router control and monitoring"
+msgstr ""
+
 msgid "Information about the sidebar, network status messages, and theme overrides"
 msgstr "Πληροφορίες σχετικά με την πλαϊνή γραμμή, τα μηνύματα κατάστασης δικτύου και τις παρακάμψεις θεμάτων"
 
 msgid "Webhosting on I2P"
 msgstr "Φιλοξενία Ιστού σε I2P"
+
+msgid "I2PControl JSON-RPC API"
+msgstr ""
+
+msgid "I2PControl provides a JSON-RPC 2.0 interface for remote control and monitoring of your I2P router. This allows external applications to programmatically manage I2P settings, retrieve status information, and control router operations through standardized HTTP requests."
+msgstr ""
+
+#, java-format
+msgid "I2PControl is a JSON-RPC 2.0 interface for remote control and monitoring of your I2P router. It listens on {0} by default when enabled for security reasons and must be enabled through the {1}."
+msgstr ""
+
+msgid "Web Apps configuration page"
+msgstr ""
+
+msgid "Authentication"
+msgstr ""
+
+msgid "All API operations (except for authentication itself) require a valid authentication token. To obtain a token, you must first authenticate with your configured password:"
+msgstr ""
+
+msgid "The returned token must be included in either the 'Token' parameter or as an 'X-Auth-Token' HTTP header in all subsequent API calls."
+msgstr ""
+
+msgid "API Version: 1. Clients must specify API version 1 in authentication requests for compatibility."
+msgstr ""
+
+msgid "API Methods"
+msgstr ""
+
+msgid "Authenticates with the I2PControl service and returns an authentication token for subsequent API calls."
+msgstr ""
+
+msgid "Parameters:"
+msgstr ""
+
+msgid "Password (string), API (integer, must be 1)"
+msgstr ""
+
+msgid "Returns:"
+msgstr ""
+
+msgid "Token (string), API (integer)"
+msgstr ""
+
+msgid "Authentication:"
+msgstr ""
+
+msgid "None (this is the unauthenticated method)"
+msgstr ""
+
+msgid "A simple test method that returns the provided string. Useful for testing API connectivity and authentication."
+msgstr ""
+
+msgid "Echo (string)"
+msgstr ""
+
+msgid "Result (string - echoed input)"
+msgstr ""
+
+msgid "Required"
+msgstr ""
+
+msgid "Retrieves read-only status information about the I2P router. Each parameter is optional - include only the metrics you need."
+msgstr ""
+
+msgid "Any combination of:"
+msgstr ""
+
+msgid "Router version"
+msgstr ""
+
+msgid "Router uptime in milliseconds"
+msgstr ""
+
+msgid "Current router status"
+msgstr ""
+
+msgid "Network status (0-14)"
+msgstr ""
+
+msgid "1-second average inbound bandwidth (Bps)"
+msgstr ""
+
+msgid "1-second average outbound bandwidth (Bps)"
+msgstr ""
+
+msgid "15-second average inbound bandwidth (Bps)"
+msgstr ""
+
+msgid "15-second average outbound bandwidth (Bps)"
+msgstr ""
+
+msgid "Number of participating tunnels"
+msgstr ""
+
+msgid "Number of known peers"
+msgstr ""
+
+msgid "Number of active peers"
+msgstr ""
+
+msgid "Number of fast peers"
+msgstr ""
+
+msgid "Number of high-capacity peers"
+msgstr ""
+
+msgid "Whether reseed is in progress"
+msgstr ""
+
+msgid "Requested metrics with their current values"
+msgstr ""
+
+msgid "Controls router lifecycle and management operations. Each operation is optional and executes asynchronously."
+msgstr ""
+
+msgid "Graceful restart/shutdown"
+msgstr ""
+
+msgid "Immediate hard shutdown"
+msgstr ""
+
+msgid "Immediate hard restart"
+msgstr ""
+
+msgid "Graceful shutdown (waits for tunnels)"
+msgstr ""
+
+msgid "Graceful restart (waits for tunnels)"
+msgstr ""
+
+msgid "Trigger router reseeding"
+msgstr ""
+
+msgid "Check for available updates"
+msgstr ""
+
+msgid "Install available updates"
+msgstr ""
+
+msgid "Confirmation of operation (null for most operations, result status for FindUpdates/Update)"
+msgstr ""
+
+msgid "Manages router network configuration. Parameters can be used to either set values (if provided) or retrieve current values (if null/omitted)."
+msgstr ""
+
+msgid "NTCP Transport Settings:"
+msgstr ""
+
+msgid "NTCP port (1-65535)"
+msgstr ""
+
+msgid "NTCP hostname"
+msgstr ""
+
+msgid "Auto IP setting"
+msgstr ""
+
+msgid "SSU Transport Settings:"
+msgstr ""
+
+msgid "SSU port (1-65535)"
+msgstr ""
+
+msgid "SSU hostname"
+msgstr ""
+
+msgid "IP source detection"
+msgstr ""
+
+msgid "Read-only detected IP address"
+msgstr ""
+
+msgid "Network Settings:"
+msgstr ""
+
+msgid "UPnP enabled/disabled"
+msgstr ""
+
+msgid "Laptop mode setting"
+msgstr ""
+
+msgid "Bandwidth Settings:"
+msgstr ""
+
+msgid "Bandwidth share percentage (0-100)"
+msgstr ""
+
+msgid "Inbound bandwidth limit (Bps)"
+msgstr ""
+
+msgid "Outbound bandwidth limit (Bps)"
+msgstr ""
+
+msgid "SettingsSaved (boolean), RestartNeeded (boolean), plus current values for queried settings"
+msgstr ""
+
+msgid "Manages I2PControl service settings including password, port, and restart configuration."
+msgstr ""
+
+msgid "Listen address (string, e.g., 127.0.0.1)"
+msgstr ""
+
+msgid "New password (string)"
+msgstr ""
+
+msgid "Listen port (integer, 1-65535)"
+msgstr ""
+
+msgid "SettingsSaved (boolean), RestartNeeded (boolean), current values for requested settings"
+msgstr ""
+
+msgid "Access and modify advanced I2P router configuration settings."
+msgstr ""
+
+msgid "Key-value pairs of advanced settings"
+msgstr ""
+
+msgid "Updated settings values"
+msgstr ""
+
+msgid "Retrieves statistical rate data from router for monitoring and analysis. Useful for creating custom graphs or monitoring applications."
+msgstr ""
+
+msgid "Statistical metric name (string)"
+msgstr ""
+
+msgid "Time period in milliseconds (integer)"
+msgstr ""
+
+msgid "Result (number - average value for specified period)"
+msgstr ""
+
+msgid "Network Status Codes"
+msgstr ""
+
+#, java-format
+msgid "The {0} field returns an integer value representing the current network connectivity status:"
+msgstr ""
+
+msgid "OK - Full connectivity"
+msgstr ""
+
+msgid "TESTING - Still establishing connectivity"
+msgstr ""
+
+msgid "FIREWALLED - Behind restrictive firewall"
+msgstr ""
+
+msgid "HIDDEN - Router in hidden mode"
+msgstr ""
+
+msgid "WARN_FIREWALLED_AND_FAST - Firewalled but fast peer"
+msgstr ""
+
+msgid "WARN_FIREWALLED_AND_FLOODFILL - Firewalled but floodfill"
+msgstr ""
+
+msgid "WARN_FIREWALLED_WITH_INBOUND_TCP - Firewalled with inbound TCP"
+msgstr ""
+
+msgid "WARN_FIREWALLED_WITH_UDP_DISABLED - Firewalled with UDP disabled"
+msgstr ""
+
+msgid "ERROR_I2CP - I2CP error"
+msgstr ""
+
+msgid "ERROR_CLOCK_SKEW - System clock skew detected"
+msgstr ""
+
+msgid "ERROR_PRIVATE_TCP_ADDRESS - Private TCP address configured"
+msgstr ""
+
+msgid "ERROR_SYMMETRIC_NAT - Symmetric NAT detected"
+msgstr ""
+
+msgid "ERROR_UDP_PORT_IN_USE - UDP port already in use"
+msgstr ""
+
+msgid "ERROR_NO_ACTIVE_PEERS_CHECK_CONNECTION_AND_FIREWALL - No active peers"
+msgstr ""
+
+msgid "ERROR_UDP_DISABLED_AND_TCP_UNSET - UDP disabled, TCP not configured"
+msgstr ""
+
+msgid "Error Codes"
+msgstr ""
+
+msgid "In addition to standard JSON-RPC 2.0 error codes, I2PControl provides specific error codes:"
+msgstr ""
+
+msgid "JSON parse error"
+msgstr ""
+
+msgid "Invalid request"
+msgstr ""
+
+msgid "Method not found"
+msgstr ""
+
+msgid "Invalid parameters"
+msgstr ""
+
+msgid "Internal error"
+msgstr ""
+
+msgid "Invalid password provided"
+msgstr ""
+
+msgid "No authentication token presented"
+msgstr ""
+
+msgid "Authentication token doesn't exist"
+msgstr ""
+
+msgid "The provided authentication token was expired and will be removed"
+msgstr ""
+
+msgid "The version of the I2PControl API used wasn't specified, but is required to be specified"
+msgstr ""
+
+msgid "The version of the I2PControl API specified is not supported by I2PControl"
+msgstr ""
+
+msgid "Rate Statistics"
+msgstr ""
+
+#, java-format
+msgid "For a complete list of available rate statistics, see the {0} documentation in the router console or refer to the {1} online documentation. Common rate statistics include:"
+msgstr ""
+
+msgid "Bandwidth receive rate"
+msgstr ""
+
+msgid "Bandwidth send rate"
+msgstr ""
+
+msgid "Active peer count"
+msgstr ""
+
+msgid "Known peer count"
+msgstr ""
+
+msgid "Tunnel test success time"
+msgstr ""
+
+msgid "Rate Statistics Documentation"
+msgstr ""
+
+#, java-format
+msgid "See the {0} documentation in the router console or refer to the {1} online documentation."
+msgstr ""
+
+msgid "Example Usage"
+msgstr ""
+
+msgid "Get Router Version and Uptime:"
+msgstr ""
+
+msgid "Get Current Bandwidth Usage:"
+msgstr ""
+
+msgid "Change Bandwidth Limits:"
+msgstr ""
+
+msgid "Graceful Restart:"
+msgstr ""
+
+msgid "Security Considerations"
+msgstr ""
+
+#, java-format
+msgid "Always change the default API password from {0} to a strong, unique password"
+msgstr ""
+
+msgid "Consider binding I2PControl to localhost only if not accessed remotely"
+msgstr ""
+
+msgid "Use HTTPS when accessing I2PControl over untrusted networks"
+msgstr ""
+
+msgid "Tokens may expire - implement re-authentication logic in your applications"
+msgstr ""
+
+msgid "Monitor I2PControl access logs for unauthorized usage"
+msgstr ""
+
+msgid "Be cautious with router management operations - they can affect network connectivity"
+msgstr ""
+
+msgid "Integration Examples"
+msgstr ""
+
+msgid "The I2PControl API can be integrated with:"
+msgstr ""
+
+msgid "Monitoring systems:"
+msgstr ""
+
+msgid "Create custom dashboards for router performance"
+msgstr ""
+
+msgid "Automation scripts:"
+msgstr ""
+
+msgid "Schedule restarts or configuration changes"
+msgstr ""
+
+msgid "Mobile applications:"
+msgstr ""
+
+msgid "Monitor and manage your router remotely"
+msgstr ""
+
+msgid "Network management tools:"
+msgstr ""
+
+msgid "Integrate I2P status into broader network monitoring"
+msgstr ""
+
+msgid "Alerting systems:"
+msgstr ""
+
+msgid "Send notifications based on router status changes"
+msgstr ""
 
 msgid "Licensing Information"
 msgstr "Πληροφορίες αδειοδότησης"
@@ -6788,7 +7228,7 @@ msgid "Getting Support Online"
 msgstr "Λήψη υποστήριξης στο διαδίκτυο"
 
 msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> on I2P's internal IRC network."
-msgstr ""
+msgstr "Μπορεί επίσης να θέλετε να ελέγξετε τις πληροφορίες στην <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>ιστοσελίδα I2P</a>, να δημοσιεύσετε μηνύματα στο <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>φόρουμ συζήτησης I2P</a> ή να επισκεφθείτε τα <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> ή <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> στο εσωτερικό δίκτυο IRC του I2P."
 
 msgid "Reporting Bugs"
 msgstr "Αναφορά σφαλμάτων"
@@ -7376,13 +7816,13 @@ msgid "Signature types"
 msgstr "Τύποι υπογραφής"
 
 msgid "Locally hosted private service"
-msgstr ""
+msgstr "Τοπικά φιλοξενούμενη ιδιωτική υπηρεσία"
 
 msgid "Locally hosted public service"
-msgstr ""
+msgstr "Τοπικά φιλοξενούμενη δημόσια υπηρεσία"
 
 msgid "Requested client leaseset"
-msgstr ""
+msgstr "Αιτούμενο leaseset πελάτη"
 
 msgid "Remote"
 msgstr "Απομακρυσμένος"
@@ -7506,7 +7946,7 @@ msgid "Peer Profile"
 msgstr "Προφίλ Ομότιμου"
 
 msgid "Profile View"
-msgstr ""
+msgstr "Προβολή προφίλ"
 
 msgid "Profile for peer"
 msgstr "Προφίλ για συνομήλικο"
@@ -7536,7 +7976,7 @@ msgid "Skip Setup"
 msgstr "Παράλειψη εγκατάστασης"
 
 msgid "Select the language to be used for the router console and web applications ("
-msgstr ""
+msgstr "Επιλέξτε τη γλώσσα που θα χρησιμοποιείται για την κονσόλα του δρομολογητή και τις διαδικτυακές εφαρμογές ("
 
 msgid "Router Console &amp; WebApps Display Language"
 msgstr "Γλώσσα εμφάνισης δρομολογητή και δικτυακών εφαρμογών"

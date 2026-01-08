@@ -426,4 +426,3 @@ msgstr "Napsauta tästä, jos sinua ei ohjata automaattisesti."
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
 msgstr "Tallennettu todennus verkkotunnukselle {0}, uudelleenohjaus nyt."
-

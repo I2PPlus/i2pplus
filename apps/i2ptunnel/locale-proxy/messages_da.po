@@ -426,4 +426,3 @@ msgstr "Klik her hvis du ikke automatisk omdiriges."
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
 msgstr "Gemt godkendelse for {0}, omdirigerer nu."
-

@@ -426,4 +426,3 @@ msgstr "Nhấp vào đây nếu bạn không được chuyển hướng tự đ�
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
 msgstr "Đã lưu xác thực cho {0}, đang chuyển hướng."
-

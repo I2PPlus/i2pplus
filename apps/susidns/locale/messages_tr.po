@@ -92,10 +92,10 @@ msgstr[0] "Bir sonuç: <span class=aktive>"
 msgstr[1] "{0} sonuçları: <span class=aktive>"
 
 #, java-format
-msgid "1 entry"
-msgid_plural "{0} entries"
-msgstr[0] "1 giriş"
-msgstr[1] "{0} girişler"
+msgid "Book contains 1 entry"
+msgid_plural "Book contains {0} entries"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Add"
 msgstr "Ekleyin"
@@ -674,3 +674,5 @@ msgstr "Ana adres defterinize manuel olarak eklenen adresler, Yönlendirici adre
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Aboneliklerinizden aldığınız ana bilgisayarlar Yönlendiricinizin adres defteriyle birleşecek.Aboneliklerden gelen sunucular Yöneltici adres defteriniz ile birleştirilir."
+
+#, java-format

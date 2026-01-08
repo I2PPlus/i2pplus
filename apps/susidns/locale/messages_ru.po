@@ -95,11 +95,11 @@ msgstr[1] "{0} Результаты для: <span class=active>"
 msgstr[2] "{0} Результаты для: <span class=active>"
 
 #, java-format
-msgid "1 entry"
-msgid_plural "{0} entries"
-msgstr[0] "1 записи"
-msgstr[1] "{0} записи"
-msgstr[2] "{0} записи"
+msgid "Book contains 1 entry"
+msgid_plural "Book contains {0} entries"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 msgid "Add"
 msgstr "Добавить"
@@ -682,3 +682,5 @@ msgstr "Адреса, добавленные в основную адресну�
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Узлы из подписок будут объединены с адресной книгой маршрутизатора."
+
+#, java-format

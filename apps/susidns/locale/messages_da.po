@@ -92,10 +92,10 @@ msgstr[0] "Ét resultat for: <span class=active>"
 msgstr[1] "{0} resultater for: <span class=active>"
 
 #, java-format
-msgid "1 entry"
-msgid_plural "{0} entries"
-msgstr[0] "1 indgang"
-msgstr[1] "{0} indtastninger"
+msgid "Book contains 1 entry"
+msgid_plural "Book contains {0} entries"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Add"
 msgstr "Tilføj"
@@ -674,3 +674,5 @@ msgstr "Adresser, der manuelt tilføjes til din masteradressebog, vil fusionere 
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Værter, du modtager fra dine abonnementer, fusionerer med din routeradressebog."
+
+#, java-format

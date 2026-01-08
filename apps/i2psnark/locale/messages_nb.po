@@ -1504,20 +1504,3 @@ msgstr "Lagre endringer"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent må stoppes"
-
-#, java-format
-
-
-
-
-
-
-
-#, java-format
-
-#, java-format
-
-#, java-format
-
-
-

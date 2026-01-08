@@ -1496,20 +1496,3 @@ msgstr "Simpan Perubahan"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent harus dihentikan"
-
-#, java-format
-
-
-
-
-
-
-
-#, java-format
-
-#, java-format
-
-#, java-format
-
-
-

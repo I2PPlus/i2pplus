@@ -95,11 +95,11 @@ msgstr[1] "{0} Wyniki dla: <span class=active>"
 msgstr[2] "{0} Wyniki dla: <span class=active>"
 
 #, java-format
-msgid "1 entry"
-msgid_plural "{0} entries"
-msgstr[0] "1 wpis"
-msgstr[1] "{0} wpisy"
-msgstr[2] "{0} wpisy"
+msgid "Book contains 1 entry"
+msgid_plural "Book contains {0} entries"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 msgid "Add"
 msgstr "Dodaj"
@@ -682,3 +682,5 @@ msgstr "Adresy ręcznie dodane do Twojej głównej książki adresowej zostaną 
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Adresy pobrane z subskrypcji zostaną scalone do Twojej książki adresowej węzła."
+
+#, java-format

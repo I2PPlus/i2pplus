@@ -1967,6 +1967,9 @@ msgstr "རྒྱུན་སྒྲིག་སྟེན།"
 msgid "FAQ"
 msgstr "གནད་དོན་གསལ་བརྟག"
 
+msgid "JSON-RPC API"
+msgstr ""
+
 msgid "Manage your I2P hosts file here (I2P domain name resolution)"
 msgstr "ཁྱེད་ཀྱི་I2P མངའ་ཁུལ་ཡིག་ཆ་འདིར་དོ་དམ་བྱེད་པ། (I2P ཆ་མཚམས་མིང་གི་ངོས་འཛིན།)"
 
@@ -5662,6 +5665,12 @@ msgstr "ཞབས་འདེགས་ཀྱི་ངོས་ཕྲེང་ར
 msgid "Tunnel Filtering"
 msgstr "གསང་ལམ་ཚགས་བཀག་པ།"
 
+msgid "Console API"
+msgstr ""
+
+msgid "JSONRPC"
+msgstr ""
+
 msgid "New User Guide"
 msgstr "ཞབས་འདེགས་ཀྱི་སྟེན་པའི་ལམ་བརྒྱུད།"
 
@@ -6580,11 +6589,442 @@ msgstr "I2P+ སྤྱོད་ཐབས་མེད་པའི་ཚོད་�
 msgid "An introduction to tunnel access lists"
 msgstr "གཞུང་བརྒྱུད་ལ་ཕེབས་པའི་ཡིག་ཆ་ཚོགས་ཀྱི་འགོ་བརྩམས།"
 
+msgid "I2PControl API"
+msgstr ""
+
+msgid "JSON-RPC API for remote router control and monitoring"
+msgstr ""
+
 msgid "Information about the sidebar, network status messages, and theme overrides"
 msgstr "སྟབས་བཟོའི་ཡིག་ཆ་དང་། གློག་དྲོང་གི་ཐོབ་ཐུང་། དེ་དང་ཐོབ་ཐུང་གི་བརྗེ་བའི་གོ་དོན་བརྗེ་བ་བཅས་ཀྱི་གོ་སྐབས།"
 
 msgid "Webhosting on I2P"
 msgstr "I2P ནང་གི་དྲོང་བཟོ་བ།"
+
+msgid "I2PControl JSON-RPC API"
+msgstr ""
+
+msgid "I2PControl provides a JSON-RPC 2.0 interface for remote control and monitoring of your I2P router. This allows external applications to programmatically manage I2P settings, retrieve status information, and control router operations through standardized HTTP requests."
+msgstr ""
+
+#, java-format
+msgid "I2PControl is a JSON-RPC 2.0 interface for remote control and monitoring of your I2P router. It listens on {0} by default when enabled for security reasons and must be enabled through the {1}."
+msgstr ""
+
+msgid "Web Apps configuration page"
+msgstr ""
+
+msgid "Authentication"
+msgstr ""
+
+msgid "All API operations (except for authentication itself) require a valid authentication token. To obtain a token, you must first authenticate with your configured password:"
+msgstr ""
+
+msgid "The returned token must be included in either the 'Token' parameter or as an 'X-Auth-Token' HTTP header in all subsequent API calls."
+msgstr ""
+
+msgid "API Version: 1. Clients must specify API version 1 in authentication requests for compatibility."
+msgstr ""
+
+msgid "API Methods"
+msgstr ""
+
+msgid "Authenticates with the I2PControl service and returns an authentication token for subsequent API calls."
+msgstr ""
+
+msgid "Parameters:"
+msgstr ""
+
+msgid "Password (string), API (integer, must be 1)"
+msgstr ""
+
+msgid "Returns:"
+msgstr ""
+
+msgid "Token (string), API (integer)"
+msgstr ""
+
+msgid "Authentication:"
+msgstr ""
+
+msgid "None (this is the unauthenticated method)"
+msgstr ""
+
+msgid "A simple test method that returns the provided string. Useful for testing API connectivity and authentication."
+msgstr ""
+
+msgid "Echo (string)"
+msgstr ""
+
+msgid "Result (string - echoed input)"
+msgstr ""
+
+msgid "Required"
+msgstr ""
+
+msgid "Retrieves read-only status information about the I2P router. Each parameter is optional - include only the metrics you need."
+msgstr ""
+
+msgid "Any combination of:"
+msgstr ""
+
+msgid "Router version"
+msgstr ""
+
+msgid "Router uptime in milliseconds"
+msgstr ""
+
+msgid "Current router status"
+msgstr ""
+
+msgid "Network status (0-14)"
+msgstr ""
+
+msgid "1-second average inbound bandwidth (Bps)"
+msgstr ""
+
+msgid "1-second average outbound bandwidth (Bps)"
+msgstr ""
+
+msgid "15-second average inbound bandwidth (Bps)"
+msgstr ""
+
+msgid "15-second average outbound bandwidth (Bps)"
+msgstr ""
+
+msgid "Number of participating tunnels"
+msgstr ""
+
+msgid "Number of known peers"
+msgstr ""
+
+msgid "Number of active peers"
+msgstr ""
+
+msgid "Number of fast peers"
+msgstr ""
+
+msgid "Number of high-capacity peers"
+msgstr ""
+
+msgid "Whether reseed is in progress"
+msgstr ""
+
+msgid "Requested metrics with their current values"
+msgstr ""
+
+msgid "Controls router lifecycle and management operations. Each operation is optional and executes asynchronously."
+msgstr ""
+
+msgid "Graceful restart/shutdown"
+msgstr ""
+
+msgid "Immediate hard shutdown"
+msgstr ""
+
+msgid "Immediate hard restart"
+msgstr ""
+
+msgid "Graceful shutdown (waits for tunnels)"
+msgstr ""
+
+msgid "Graceful restart (waits for tunnels)"
+msgstr ""
+
+msgid "Trigger router reseeding"
+msgstr ""
+
+msgid "Check for available updates"
+msgstr ""
+
+msgid "Install available updates"
+msgstr ""
+
+msgid "Confirmation of operation (null for most operations, result status for FindUpdates/Update)"
+msgstr ""
+
+msgid "Manages router network configuration. Parameters can be used to either set values (if provided) or retrieve current values (if null/omitted)."
+msgstr ""
+
+msgid "NTCP Transport Settings:"
+msgstr ""
+
+msgid "NTCP port (1-65535)"
+msgstr ""
+
+msgid "NTCP hostname"
+msgstr ""
+
+msgid "Auto IP setting"
+msgstr ""
+
+msgid "SSU Transport Settings:"
+msgstr ""
+
+msgid "SSU port (1-65535)"
+msgstr ""
+
+msgid "SSU hostname"
+msgstr ""
+
+msgid "IP source detection"
+msgstr ""
+
+msgid "Read-only detected IP address"
+msgstr ""
+
+msgid "Network Settings:"
+msgstr ""
+
+msgid "UPnP enabled/disabled"
+msgstr ""
+
+msgid "Laptop mode setting"
+msgstr ""
+
+msgid "Bandwidth Settings:"
+msgstr ""
+
+msgid "Bandwidth share percentage (0-100)"
+msgstr ""
+
+msgid "Inbound bandwidth limit (Bps)"
+msgstr ""
+
+msgid "Outbound bandwidth limit (Bps)"
+msgstr ""
+
+msgid "SettingsSaved (boolean), RestartNeeded (boolean), plus current values for queried settings"
+msgstr ""
+
+msgid "Manages I2PControl service settings including password, port, and restart configuration."
+msgstr ""
+
+msgid "Listen address (string, e.g., 127.0.0.1)"
+msgstr ""
+
+msgid "New password (string)"
+msgstr ""
+
+msgid "Listen port (integer, 1-65535)"
+msgstr ""
+
+msgid "SettingsSaved (boolean), RestartNeeded (boolean), current values for requested settings"
+msgstr ""
+
+msgid "Access and modify advanced I2P router configuration settings."
+msgstr ""
+
+msgid "Key-value pairs of advanced settings"
+msgstr ""
+
+msgid "Updated settings values"
+msgstr ""
+
+msgid "Retrieves statistical rate data from router for monitoring and analysis. Useful for creating custom graphs or monitoring applications."
+msgstr ""
+
+msgid "Statistical metric name (string)"
+msgstr ""
+
+msgid "Time period in milliseconds (integer)"
+msgstr ""
+
+msgid "Result (number - average value for specified period)"
+msgstr ""
+
+msgid "Network Status Codes"
+msgstr ""
+
+#, java-format
+msgid "The {0} field returns an integer value representing the current network connectivity status:"
+msgstr ""
+
+msgid "OK - Full connectivity"
+msgstr ""
+
+msgid "TESTING - Still establishing connectivity"
+msgstr ""
+
+msgid "FIREWALLED - Behind restrictive firewall"
+msgstr ""
+
+msgid "HIDDEN - Router in hidden mode"
+msgstr ""
+
+msgid "WARN_FIREWALLED_AND_FAST - Firewalled but fast peer"
+msgstr ""
+
+msgid "WARN_FIREWALLED_AND_FLOODFILL - Firewalled but floodfill"
+msgstr ""
+
+msgid "WARN_FIREWALLED_WITH_INBOUND_TCP - Firewalled with inbound TCP"
+msgstr ""
+
+msgid "WARN_FIREWALLED_WITH_UDP_DISABLED - Firewalled with UDP disabled"
+msgstr ""
+
+msgid "ERROR_I2CP - I2CP error"
+msgstr ""
+
+msgid "ERROR_CLOCK_SKEW - System clock skew detected"
+msgstr ""
+
+msgid "ERROR_PRIVATE_TCP_ADDRESS - Private TCP address configured"
+msgstr ""
+
+msgid "ERROR_SYMMETRIC_NAT - Symmetric NAT detected"
+msgstr ""
+
+msgid "ERROR_UDP_PORT_IN_USE - UDP port already in use"
+msgstr ""
+
+msgid "ERROR_NO_ACTIVE_PEERS_CHECK_CONNECTION_AND_FIREWALL - No active peers"
+msgstr ""
+
+msgid "ERROR_UDP_DISABLED_AND_TCP_UNSET - UDP disabled, TCP not configured"
+msgstr ""
+
+msgid "Error Codes"
+msgstr ""
+
+msgid "In addition to standard JSON-RPC 2.0 error codes, I2PControl provides specific error codes:"
+msgstr ""
+
+msgid "JSON parse error"
+msgstr ""
+
+msgid "Invalid request"
+msgstr ""
+
+msgid "Method not found"
+msgstr ""
+
+msgid "Invalid parameters"
+msgstr ""
+
+msgid "Internal error"
+msgstr ""
+
+msgid "Invalid password provided"
+msgstr ""
+
+msgid "No authentication token presented"
+msgstr ""
+
+msgid "Authentication token doesn't exist"
+msgstr ""
+
+msgid "The provided authentication token was expired and will be removed"
+msgstr ""
+
+msgid "The version of the I2PControl API used wasn't specified, but is required to be specified"
+msgstr ""
+
+msgid "The version of the I2PControl API specified is not supported by I2PControl"
+msgstr ""
+
+msgid "Rate Statistics"
+msgstr ""
+
+#, java-format
+msgid "For a complete list of available rate statistics, see the {0} documentation in the router console or refer to the {1} online documentation. Common rate statistics include:"
+msgstr ""
+
+msgid "Bandwidth receive rate"
+msgstr ""
+
+msgid "Bandwidth send rate"
+msgstr ""
+
+msgid "Active peer count"
+msgstr ""
+
+msgid "Known peer count"
+msgstr ""
+
+msgid "Tunnel test success time"
+msgstr ""
+
+msgid "Rate Statistics Documentation"
+msgstr ""
+
+#, java-format
+msgid "See the {0} documentation in the router console or refer to the {1} online documentation."
+msgstr ""
+
+msgid "Example Usage"
+msgstr ""
+
+msgid "Get Router Version and Uptime:"
+msgstr ""
+
+msgid "Get Current Bandwidth Usage:"
+msgstr ""
+
+msgid "Change Bandwidth Limits:"
+msgstr ""
+
+msgid "Graceful Restart:"
+msgstr ""
+
+msgid "Security Considerations"
+msgstr ""
+
+#, java-format
+msgid "Always change the default API password from {0} to a strong, unique password"
+msgstr ""
+
+msgid "Consider binding I2PControl to localhost only if not accessed remotely"
+msgstr ""
+
+msgid "Use HTTPS when accessing I2PControl over untrusted networks"
+msgstr ""
+
+msgid "Tokens may expire - implement re-authentication logic in your applications"
+msgstr ""
+
+msgid "Monitor I2PControl access logs for unauthorized usage"
+msgstr ""
+
+msgid "Be cautious with router management operations - they can affect network connectivity"
+msgstr ""
+
+msgid "Integration Examples"
+msgstr ""
+
+msgid "The I2PControl API can be integrated with:"
+msgstr ""
+
+msgid "Monitoring systems:"
+msgstr ""
+
+msgid "Create custom dashboards for router performance"
+msgstr ""
+
+msgid "Automation scripts:"
+msgstr ""
+
+msgid "Schedule restarts or configuration changes"
+msgstr ""
+
+msgid "Mobile applications:"
+msgstr ""
+
+msgid "Monitor and manage your router remotely"
+msgstr ""
+
+msgid "Network management tools:"
+msgstr ""
+
+msgid "Integrate I2P status into broader network monitoring"
+msgstr ""
+
+msgid "Alerting systems:"
+msgstr ""
+
+msgid "Send notifications based on router status changes"
+msgstr ""
 
 msgid "Licensing Information"
 msgstr "རེ་ཁུའི་གོ་སྐབས"
@@ -6722,7 +7162,7 @@ msgid "Check your Configuration &amp; Bandwidth Allocation"
 msgstr "ཁྱེད་རྒྱུར་བ་ Configuration &amp; Bandwidth Allocation བལྟོགས་པར་བཞིན་བརྒྱུར་བ།"
 
 msgid "I2P+ functions best when you can accurately reflect the speed of your network connection in the <a href=/config>bandwidth configuration section</a>. By default I2P+ is configured with some fairly conservative values that will not suit many use cases, so please take time to review these settings and correct where necessary. The more bandwidth you allocate, <i>specifically</i> upstream bandwidth, the more you will benefit from the network."
-msgstr ""
+msgstr "ཁྱོད་རང་གི་དྲ་ཐོག་གི་འབྲེལ་མཐུད་ཀྱི་མགྱོགས་ཚད་གནད་དོན་དུ་<a href=/config>བརྒྱུད་སྤེལ་རོགས་སྒྲིག་ཁུལ་</a>ནང་འཇོག་ཐུབ་པར་བྱས་ཚེ། I2P+ དགེ་རྩ་ཆེ་བའི་སྒོ་ནས་ལས་འགོ་ཚུགས་ཐུབ། སྔོན་སྒྲིག་གི་སྒོ་ནས། I2P+ ནི་མཚོན་གཞི་བཟང་པོ་ཞིག་གི་ཐོབ་ཐང་གིས་སྒྲིག་འཇུག་བྱས་ཡོད་པ་ཞིབ་བཤེར་གྱིས་མ་ཚད་དགོས་པ་མང་བའི་སྤྱོད་སྒོའི་གནས་སྐབས་དང་མཐུན་པ་མིན་པས། ཚོད་ལྟ་དང་དགོས་པའི་གནས་སྐབས་ནས་ཡོ་བསྲང་བྱེད་པར་དུས་ཚོད་འདེད་གནང་དགོས། ཁྱོད་རང་གིས་བརྒྱུད་སྤེལ་མཐོ་བ་གཏན་འབེབས་བྱེད་དགོས། དེ་ཐོག་ནས་ཁྱོད་རང་དྲ་ཐོག་ནས་ཕན་ཐོབས་ཆེ་བའི་ཐོབ་ཐང་ལྡན་ཐུབ།"
 
 msgid "Firewalls, Modems &amp; Routers"
 msgstr "མེ་འགག་སྒོ་དང་མོ་ཌེམ། རུ་ཊར།"
@@ -6985,8 +7425,8 @@ msgstr "ཁྱོད་ཀྱི་བྲོགཟར་གྱིས་སྐུ
 msgid "Participating"
 msgstr "སྤྱོད་པའི་བརྒྱུད་རིམ།"
 
-msgid "Tunnels built by other routers through your router. This may vary widely depending on network demand, your shared bandwidth, and amount of locally-generated traffic. The recommended method for limiting participating tunnels is to change your share percentage on the <a  href='/config'>Bandwidth Configuration page</a>. You may also limit the total number by setting <code>router.maxParticipatingTunnels=nnn</code> on the <a  href='/configadvanced'>Advanced configuration page</a>. <a  href='/configstats#tunnel.participatingTunnels'>[Enable graphing]</a>."
-msgstr "གཞི་གྲང་གིས་པ་བཞིན་པ་རྒྱུད་པ་ལ་བཞིན་པ་ཚང་བཏོ་གནས་པའི་ཁུ་བ་གནས་པ་གང་སྟར་མེད། དྲ་བའི་གནས་པའི་དུས་པའི་མང་འཕྲུལ་པ་ལ་གནས་དུས་པ་རྒྱུད་པའི་ལྡན་པ་རྟགས་མེད། དེ་རྟག་པ་ <a  href='/config'>Bandwidth Configuration page</a> ལ་ <code>router.maxParticipatingTunnels=nnn</code> <a  href='/configadvanced'>Advanced configuration page</a> ལ་ <a  href='/configstats#tunnel.participatingTunnels'>[Enable graphing]</a>"
+msgid "Tunnels built by other routers through your router. This may vary widely depending on network demand, your shared bandwidth, and amount of locally-generated traffic. The recommended method for limiting participating tunnels is to change your share percentage on the <a  href='/config'>Bandwidth Configuration page</a>. You may also limit the total number by setting <code>router.maxParticipatingTunnels=nnn</code> on the <a href='/configadvanced'>Advanced configuration page</a>. <a href='/configstats#tunnel.participatingTunnels'>[Enable graphing]</a>."
+msgstr ""
 
 msgid "Share Ratio"
 msgstr "གསང་རྟགས་གི་གནས་ཁག"
@@ -7632,3 +8072,4 @@ msgstr "རྗེས་མ།"
 
 msgid "Finished"
 msgstr "མཇུག་རྫོགས།"
+

@@ -92,10 +92,10 @@ msgstr[0] "یک نتیجه برای: <span class=active>"
 msgstr[1] "{0} نتایج برای: <span class=active>"
 
 #, java-format
-msgid "1 entry"
-msgid_plural "{0} entries"
-msgstr[0] "1 ورودی"
-msgstr[1] "{0} ورودی ها"
+msgid "Book contains 1 entry"
+msgid_plural "Book contains {0} entries"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Add"
 msgstr "اضافه کردن"
@@ -674,3 +674,5 @@ msgstr "آدرس هایی که به صورت دستی به دفترچه آدرس
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "میزبان هایی که از اشتراک های خود دریافت می کنید با دفترچه آدرس روتر شما ادغام می شوند."
+
+#, java-format

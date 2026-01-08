@@ -426,4 +426,3 @@ msgstr "Klik disini jika Anda tidak dialihkan secara otomatis."
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
 msgstr "Menyimpan autentikasi untuk {0}, mengalihkannya sekarang."
-

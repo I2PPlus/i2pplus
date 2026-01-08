@@ -1976,7 +1976,7 @@ msgid "FAQ"
 msgstr "VGV"
 
 msgid "JSON-RPC API"
-msgstr ""
+msgstr "JSON-RPC API"
 
 msgid "Manage your I2P hosts file here (I2P domain name resolution)"
 msgstr "Beheer je I2P hosts bestand hier (I2P domeinnaam bepaling)"
@@ -2698,7 +2698,7 @@ msgid "Lookup"
 msgstr "Opzoeken"
 
 msgid "Select the field to search on"
-msgstr ""
+msgstr "Selecteer het veld om op te zoeken"
 
 msgid "e.g. cn hk"
 msgstr "bijv. cn hk"
@@ -2951,7 +2951,7 @@ msgid "Maximum Transmission Unit"
 msgstr "Maximum Transmission Unit"
 
 msgid "Show all routers with this MTU in the NetDb"
-msgstr ""
+msgstr "Toon alle routers met deze MTU in de NetDb"
 
 msgid "Addresses"
 msgstr "Adressen"
@@ -5684,10 +5684,10 @@ msgid "Tunnel Filtering"
 msgstr "Tunnel Filteren"
 
 msgid "Console API"
-msgstr ""
+msgstr "Console API"
 
 msgid "JSONRPC"
-msgstr ""
+msgstr "JSONRPC"
 
 msgid "New User Guide"
 msgstr "Nieuwe Gebruikershandleiding"
@@ -6173,7 +6173,7 @@ msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP a
 msgstr "Voorbeeld: Om toegang toe te staan vanaf zowel localhost als 192.168.1.10 via HTTP en HTTPS:"
 
 msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager's configuration section using the <i>reachable by</i> dropdown."
-msgstr ""
+msgstr "Voor de meeste client-services kunt u het luisteradres voor de relevante service wijzigen in de configuratiesectie van Tunnel Manager met behulp van het <i>bereikbaar door</i> dropdown-menu."
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "Hoe verbind ik met IRC binnen I2P?"
@@ -6608,10 +6608,10 @@ msgid "An introduction to tunnel access lists"
 msgstr "Een inleiding tot tunneltoegangslijsten"
 
 msgid "I2PControl API"
-msgstr ""
+msgstr "I2PControl API"
 
 msgid "JSON-RPC API for remote router control and monitoring"
-msgstr ""
+msgstr "JSON-RPC API voor externe routercontrole en -bewaking"
 
 msgid "Information about the sidebar, network status messages, and theme overrides"
 msgstr "Informatie over de zijbalk, netwerkstatusberichten en thema-overschrijvingen"

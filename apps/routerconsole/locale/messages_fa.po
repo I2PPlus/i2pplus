@@ -1976,7 +1976,7 @@ msgid "FAQ"
 msgstr "سوال‌های متداول"
 
 msgid "JSON-RPC API"
-msgstr ""
+msgstr "API JSON-RPC"
 
 msgid "Manage your I2P hosts file here (I2P domain name resolution)"
 msgstr "فایل میزبان I2P خود را در اینجا مدیریت کنید (رزولوشن نام دامنه I2P)"
@@ -2698,7 +2698,7 @@ msgid "Lookup"
 msgstr "جستجو"
 
 msgid "Select the field to search on"
-msgstr ""
+msgstr "فیلد مورد نظر برای جستجو را انتخاب کنید"
 
 msgid "e.g. cn hk"
 msgstr "مثال cn hk"
@@ -2951,7 +2951,7 @@ msgid "Maximum Transmission Unit"
 msgstr "حداکثر واحد انتقال"
 
 msgid "Show all routers with this MTU in the NetDb"
-msgstr ""
+msgstr "نمایش تمام روترها با این MTU در NetDb"
 
 msgid "Addresses"
 msgstr "آدرسها"
@@ -4745,7 +4745,7 @@ msgid "Advanced Network Configuration"
 msgstr "پیکربندی شبکه پیشرفته"
 
 msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
-msgstr ""
+msgstr "I2P بهترین عملکرد را خواهد داشت اگر نرخ‌های خود را متناسب با سرعت اتصال اینترنت خود تنظیم کنید."
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
 msgstr "توجه: سهم شما در شبکه (سهم شبکه) با تخصیص پهنای باند بالادست (سرعت بارگذاری) تعیین می شود."
@@ -5684,10 +5684,10 @@ msgid "Tunnel Filtering"
 msgstr "فیلتر تونل"
 
 msgid "Console API"
-msgstr ""
+msgstr "API کنسول"
 
 msgid "JSONRPC"
-msgstr ""
+msgstr "JSONRPC"
 
 msgid "New User Guide"
 msgstr "راهنمای کاربر جدید"
@@ -5897,7 +5897,7 @@ msgid "This setting determines whether routers classified as uninteresting (K or
 msgstr "این تنظیم تعیین می‌کند که آیا روترهای طبقه‌بندی‌شده به‌عنوان غیرجالب (سطح K یا L، غیرقابل دسترس یا قدیمی‌تر از 0.9.50) در طول فرآیند تازه‌سازی روتر پس از 1 ساعت کارکرد بررسی می‌شوند. "
 
 msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
-msgstr ""
+msgstr "وقتی روی true تنظیم شود، این تنظیم شرایط مورد نیاز برای انتشار محدودیت‌های تراکم روتر شما را کاهش می‌دهد، به طور خاص زمانی که مشخص شود استفاده از پهنای باند شما بالا است. سایر شرایط، مانند تأخیر بالای کار یا روتر به عنوان کند طبقه‌بندی شده، همچنان باعث انتشار محدودیت‌ها می‌شوند. [پیش‌فرض false است]"
 
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
 msgstr "هنگامی که پیکربندی می شود، محدودیت سختی برای تعداد تونل هایی که روتر مجاز به ساخت همزمان است تعیین می کند. "
@@ -6173,7 +6173,7 @@ msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP a
 msgstr "مثال: برای اجازه دسترسی از هر دو localhost و 192.168.1.10 از طریق HTTP و HTTPS:"
 
 msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager's configuration section using the <i>reachable by</i> dropdown."
-msgstr ""
+msgstr "برای اکثر سرویس‌های کلاینت، آدرس گوش دادن را برای سرویس مربوطه در بخش پیکربندی Tunnel Manager با استفاده از کشویی <i>قابل دسترسی توسط</i> تغییر دهید."
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "چطور از طریق I2P به IRC متصل شوم؟"
@@ -6608,10 +6608,10 @@ msgid "An introduction to tunnel access lists"
 msgstr "مقدمه ای بر لیست های دسترسی تونل"
 
 msgid "I2PControl API"
-msgstr ""
+msgstr "API I2PControl"
 
 msgid "JSON-RPC API for remote router control and monitoring"
-msgstr ""
+msgstr "API JSON-RPC برای کنترل و نظارت از راه دور روتر"
 
 msgid "Information about the sidebar, network status messages, and theme overrides"
 msgstr "اطلاعات مربوط به نوار کناری، پیام‌های وضعیت شبکه و لغو طرح زمینه"
@@ -6620,429 +6620,429 @@ msgid "Webhosting on I2P"
 msgstr "میزبانی وب در I2P"
 
 msgid "I2PControl JSON-RPC API"
-msgstr ""
+msgstr "API JSON-RPC I2PControl"
 
 msgid "I2PControl provides a JSON-RPC 2.0 interface for remote control and monitoring of your I2P router. This allows external applications to programmatically manage I2P settings, retrieve status information, and control router operations through standardized HTTP requests."
-msgstr ""
+msgstr "I2PControl یک رابط JSON-RPC 2.0 برای کنترل و نظارت از راه دور روتر I2P شما فراهم می‌کند. این به برنامه‌های خارجی اجازه می‌دهد تا به صورت برنامه‌ای تنظیمات I2P را مدیریت کنند، اطلاعات وضعیت را دریافت کنند و عملیات روتر را از طریق درخواست‌های HTTP استاندارد کنترل کنند."
 
 #, java-format
 msgid "I2PControl is a JSON-RPC 2.0 interface for remote control and monitoring of your I2P router. It listens on {0} by default when enabled for security reasons and must be enabled through the {1}."
-msgstr ""
+msgstr "I2PControl یک رابط JSON-RPC 2.0 برای کنترل و نظارت از راه دور روتر I2P شما است. به طور پیش‌فرض روی {0} گوش می‌دهد (هنگامی که به دلایل امنیتی فعال شده است) و باید از طریق {1} فعال شود."
 
 msgid "Web Apps configuration page"
-msgstr ""
+msgstr "صفحه پیکربندی برنامه‌های وب"
 
 msgid "Authentication"
-msgstr ""
+msgstr "احراز هویت"
 
 msgid "All API operations (except for authentication itself) require a valid authentication token. To obtain a token, you must first authenticate with your configured password:"
-msgstr ""
+msgstr "همه عملیات API (به جز خود احراز هویت) به یک توکن احراز هویت معتبر نیاز دارند. برای دریافت توکن، ابتدا باید با رمز عبور پیکربندی شده خود احراز هویت کنید:"
 
 msgid "The returned token must be included in either the 'Token' parameter or as an 'X-Auth-Token' HTTP header in all subsequent API calls."
-msgstr ""
+msgstr "توکن برگشتی باید در پارامتر 'Token' یا به عنوان هدر HTTP 'X-Auth-Token' در تمام تماس‌های بعدی API گنجانده شود."
 
 msgid "API Version: 1. Clients must specify API version 1 in authentication requests for compatibility."
-msgstr ""
+msgstr "نسخه API: 1. کلاینت‌ها باید نسخه API 1 را در درخواست‌های احراز هویت برای سازگاری مشخص کنند."
 
 msgid "API Methods"
-msgstr ""
+msgstr "روش‌های API"
 
 msgid "Authenticates with the I2PControl service and returns an authentication token for subsequent API calls."
-msgstr ""
+msgstr "با سرویس I2PControl احراز هویت می‌کند و یک توکن احراز هویت برای تماس‌های بعدی API برمی‌گرداند."
 
 msgid "Parameters:"
-msgstr ""
+msgstr "پارامترها:"
 
 msgid "Password (string), API (integer, must be 1)"
-msgstr ""
+msgstr "رمز عبور (رشته)، API (عدد صحیح، باید 1 باشد)"
 
 msgid "Returns:"
-msgstr ""
+msgstr "برمی‌گرداند:"
 
 msgid "Token (string), API (integer)"
-msgstr ""
+msgstr "توکن (رشته)، API (عدد صحیح)"
 
 msgid "Authentication:"
-msgstr ""
+msgstr "احراز هویت:"
 
 msgid "None (this is the unauthenticated method)"
-msgstr ""
+msgstr "هیچ (این روش احراز هویت نشده است)"
 
 msgid "A simple test method that returns the provided string. Useful for testing API connectivity and authentication."
-msgstr ""
+msgstr "یک روش تست ساده که رشته ارائه شده را برمی‌گرداند. برای تست اتصال API و احراز هویت مفید است."
 
 msgid "Echo (string)"
-msgstr ""
+msgstr "Echo (رشته)"
 
 msgid "Result (string - echoed input)"
-msgstr ""
+msgstr "نتیجه (رشته - ورودی بازگشتی)"
 
 msgid "Required"
-msgstr ""
+msgstr "الزامی"
 
 msgid "Retrieves read-only status information about the I2P router. Each parameter is optional - include only the metrics you need."
-msgstr ""
+msgstr "اطلاعات وضعیت فقط خواندنی درباره روتر I2P را بازیابی می‌کند. هر پارامتر اختیاری است - فقط معیارهای مورد نیاز خود را شامل شوید."
 
 msgid "Any combination of:"
-msgstr ""
+msgstr "هر ترکیبی از:"
 
 msgid "Router version"
-msgstr ""
+msgstr "نسخه روتر"
 
 msgid "Router uptime in milliseconds"
-msgstr ""
+msgstr "زمان روشن بودن روتر به میلی‌ثانیه"
 
 msgid "Current router status"
-msgstr ""
+msgstr "وضعیت فعلی روتر"
 
 msgid "Network status (0-14)"
-msgstr ""
+msgstr "وضعیت شبکه (0-14)"
 
 msgid "1-second average inbound bandwidth (Bps)"
-msgstr ""
+msgstr "میانگین پهنای باند ورودی 1 ثانیه (Bps)"
 
 msgid "1-second average outbound bandwidth (Bps)"
-msgstr ""
+msgstr "میانگین پهنای باند خروجی 1 ثانیه (Bps)"
 
 msgid "15-second average inbound bandwidth (Bps)"
-msgstr ""
+msgstr "میانگین پهنای باند ورودی 15 ثانیه (Bps)"
 
 msgid "15-second average outbound bandwidth (Bps)"
-msgstr ""
+msgstr "میانگین پهنای باند خروجی 15 ثانیه (Bps)"
 
 msgid "Number of participating tunnels"
-msgstr ""
+msgstr "تعداد تونل‌های شرکت‌کننده"
 
 msgid "Number of known peers"
-msgstr ""
+msgstr "تعداد همتایان شناخته شده"
 
 msgid "Number of active peers"
-msgstr ""
+msgstr "تعداد همتایان فعال"
 
 msgid "Number of fast peers"
-msgstr ""
+msgstr "تعداد همتایان سریع"
 
 msgid "Number of high-capacity peers"
-msgstr ""
+msgstr "تعداد همتایان با ظرفیت بالا"
 
 msgid "Whether reseed is in progress"
-msgstr ""
+msgstr "آیا بذرپاشی مجدد در حال انجام است"
 
 msgid "Requested metrics with their current values"
-msgstr ""
+msgstr "معیارهای درخواستی با مقادیر فعلی آنها"
 
 msgid "Controls router lifecycle and management operations. Each operation is optional and executes asynchronously."
-msgstr ""
+msgstr "چرخه حیات روتر و عملیات مدیریت را کنترل می‌کند. هر عملیات اختیاری است و به صورت ناهمزمان اجرا می‌شود."
 
 msgid "Graceful restart/shutdown"
-msgstr ""
+msgstr "راه‌اندازی مجدد/خاموش شدن ملایم"
 
 msgid "Immediate hard shutdown"
-msgstr ""
+msgstr "خاموش شدن سخت فوری"
 
 msgid "Immediate hard restart"
-msgstr ""
+msgstr "راه‌اندازی مجدد سخت فوری"
 
 msgid "Graceful shutdown (waits for tunnels)"
-msgstr ""
+msgstr "خاموش شدن ملایم (منتظر تونل‌ها می‌ماند)"
 
 msgid "Graceful restart (waits for tunnels)"
-msgstr ""
+msgstr "راه‌اندازی مجدد ملایم (منتظر تونل‌ها می‌ماند)"
 
 msgid "Trigger router reseeding"
-msgstr ""
+msgstr "راه‌اندازی بذرپاشی مجدد روتر"
 
 msgid "Check for available updates"
-msgstr ""
+msgstr "بررسی برای به‌روزرسانی‌های موجود"
 
 msgid "Install available updates"
-msgstr ""
+msgstr "نصب به‌روزرسانی‌های موجود"
 
 msgid "Confirmation of operation (null for most operations, result status for FindUpdates/Update)"
-msgstr ""
+msgstr "تأیید عملیات (null برای اکثر عملیات، وضعیت نتیجه برای FindUpdates/Update)"
 
 msgid "Manages router network configuration. Parameters can be used to either set values (if provided) or retrieve current values (if null/omitted)."
-msgstr ""
+msgstr "پیکربندی شبکه روتر را مدیریت می‌کند. پارامترها می‌توانند برای تنظیم مقادیر (اگر ارائه شده‌اند) یا بازیابی مقادیر فعلی (اگر null/ حذف شده) استفاده شوند."
 
 msgid "NTCP Transport Settings:"
-msgstr ""
+msgstr "تنظیمات حمل و نقل NTCP:"
 
 msgid "NTCP port (1-65535)"
-msgstr ""
+msgstr "پورت NTCP (1-65535)"
 
 msgid "NTCP hostname"
-msgstr ""
+msgstr "نام میزبان NTCP"
 
 msgid "Auto IP setting"
-msgstr ""
+msgstr "تنظیم IP خودکار"
 
 msgid "SSU Transport Settings:"
-msgstr ""
+msgstr "تنظیمات حمل و نقل SSU:"
 
 msgid "SSU port (1-65535)"
-msgstr ""
+msgstr "پورت SSU (1-65535)"
 
 msgid "SSU hostname"
-msgstr ""
+msgstr "نام میزبان SSU"
 
 msgid "IP source detection"
-msgstr ""
+msgstr "تشخیص منبع IP"
 
 msgid "Read-only detected IP address"
-msgstr ""
+msgstr "آدرس IP شناسایی شده فقط خواندنی"
 
 msgid "Network Settings:"
-msgstr ""
+msgstr "تنظیمات شبکه:"
 
 msgid "UPnP enabled/disabled"
-msgstr ""
+msgstr "UPnP فعال/غیرفعال"
 
 msgid "Laptop mode setting"
-msgstr ""
+msgstr "تنظیم حالت لپ‌تاپ"
 
 msgid "Bandwidth Settings:"
-msgstr ""
+msgstr "تنظیمات پهنای باند:"
 
 msgid "Bandwidth share percentage (0-100)"
-msgstr ""
+msgstr "درصد اشتراک پهنای باند (0-100)"
 
 msgid "Inbound bandwidth limit (Bps)"
-msgstr ""
+msgstr "محدودیت پهنای باند ورودی (Bps)"
 
 msgid "Outbound bandwidth limit (Bps)"
-msgstr ""
+msgstr "محدودیت پهنای باند خروجی (Bps)"
 
 msgid "SettingsSaved (boolean), RestartNeeded (boolean), plus current values for queried settings"
-msgstr ""
+msgstr "SettingsSaved (boolean), RestartNeeded (boolean)، به علاوه مقادیر فعلی برای تنظیمات جستجو شده"
 
 msgid "Manages I2PControl service settings including password, port, and restart configuration."
-msgstr ""
+msgstr "تنظیمات سرویس I2PControl شامل رمز عبور، پورت و پیکربندی راه‌اندازی مجدد را مدیریت می‌کند."
 
 msgid "Listen address (string, e.g., 127.0.0.1)"
-msgstr ""
+msgstr "آدرس گوش دادن (رشته، مثلاً 127.0.0.1)"
 
 msgid "New password (string)"
-msgstr ""
+msgstr "رمز عبور جدید (رشته)"
 
 msgid "Listen port (integer, 1-65535)"
-msgstr ""
+msgstr "پورت گوش دادن (عدد صحیح، 1-65535)"
 
 msgid "SettingsSaved (boolean), RestartNeeded (boolean), current values for requested settings"
-msgstr ""
+msgstr "SettingsSaved (boolean)، RestartNeeded (boolean)، مقادیر فعلی برای تنظیمات درخواستی"
 
 msgid "Access and modify advanced I2P router configuration settings."
-msgstr ""
+msgstr "دسترسی و تغییر تنظیمات پیکربندی پیشرفته روتر I2P."
 
 msgid "Key-value pairs of advanced settings"
-msgstr ""
+msgstr "جفت‌های کلید-مقدار تنظیمات پیشرفته"
 
 msgid "Updated settings values"
-msgstr ""
+msgstr "مقادیر تنظیمات به‌روز شده"
 
 msgid "Retrieves statistical rate data from router for monitoring and analysis. Useful for creating custom graphs or monitoring applications."
-msgstr ""
+msgstr "داده‌های نرخ آماری را از روتر برای نظارت و تحلیل بازیابی می‌کند. برای ایجاد نمودارهای سفارشی یا برنامه‌های نظارتی مفید است."
 
 msgid "Statistical metric name (string)"
-msgstr ""
+msgstr "نام معیار آماری (رشته)"
 
 msgid "Time period in milliseconds (integer)"
-msgstr ""
+msgstr "بازه زمانی به میلی‌ثانیه (عدد صحیح)"
 
 msgid "Result (number - average value for specified period)"
-msgstr ""
+msgstr "نتیجه (عدد - میانگین برای بازه مشخص)"
 
 msgid "Network Status Codes"
-msgstr ""
+msgstr "کدهای وضعیت شبکه"
 
 #, java-format
 msgid "The {0} field returns an integer value representing the current network connectivity status:"
-msgstr ""
+msgstr "فیلد {0} یک عدد صحیح برمی‌گرداند که نشان‌دهنده وضعیت اتصال شبکه فعلی است:"
 
 msgid "OK - Full connectivity"
-msgstr ""
+msgstr "OK - اتصال کامل"
 
 msgid "TESTING - Still establishing connectivity"
-msgstr ""
+msgstr "TESTING - هنوز در حال برقراری اتصال"
 
 msgid "FIREWALLED - Behind restrictive firewall"
-msgstr ""
+msgstr "FIREWALLED - پشت دیوار آتش محدودکننده"
 
 msgid "HIDDEN - Router in hidden mode"
-msgstr ""
+msgstr "HIDDEN - روتر در حالت مخفی"
 
 msgid "WARN_FIREWALLED_AND_FAST - Firewalled but fast peer"
-msgstr ""
+msgstr "WARN_FIREWALLED_AND_FAST - دارای دیوار آتش اما همتای سریع"
 
 msgid "WARN_FIREWALLED_AND_FLOODFILL - Firewalled but floodfill"
-msgstr ""
+msgstr "WARN_FIREWALLED_AND_FLOODFILL - دارای دیوار آتش اما floodfill"
 
 msgid "WARN_FIREWALLED_WITH_INBOUND_TCP - Firewalled with inbound TCP"
-msgstr ""
+msgstr "WARN_FIREWALLED_WITH_INBOUND_TCP - دارای دیوار آتش با TCP ورودی"
 
 msgid "WARN_FIREWALLED_WITH_UDP_DISABLED - Firewalled with UDP disabled"
-msgstr ""
+msgstr "WARN_FIREWALLED_WITH_UDP_DISABLED - دارای دیوار آتش با UDP غیرفعال"
 
 msgid "ERROR_I2CP - I2CP error"
-msgstr ""
+msgstr "ERROR_I2CP - خطای I2CP"
 
 msgid "ERROR_CLOCK_SKEW - System clock skew detected"
-msgstr ""
+msgstr "ERROR_CLOCK_SKEW - انحراف ساعت سیستم شناسایی شد"
 
 msgid "ERROR_PRIVATE_TCP_ADDRESS - Private TCP address configured"
-msgstr ""
+msgstr "ERROR_PRIVATE_TCP_ADDRESS - آدرس TCP خصوصی پیکربندی شده"
 
 msgid "ERROR_SYMMETRIC_NAT - Symmetric NAT detected"
-msgstr ""
+msgstr "ERROR_SYMMETRIC_NAT - NAT متقارن شناسایی شد"
 
 msgid "ERROR_UDP_PORT_IN_USE - UDP port already in use"
-msgstr ""
+msgstr "ERROR_UDP_PORT_IN_USE - پورت UDP قبلاً در حال استفاده است"
 
 msgid "ERROR_NO_ACTIVE_PEERS_CHECK_CONNECTION_AND_FIREWALL - No active peers"
-msgstr ""
+msgstr "ERROR_NO_ACTIVE_PEERS_CHECK_CONNECTION_AND_FIREWALL - هیچ همتای فعالی"
 
 msgid "ERROR_UDP_DISABLED_AND_TCP_UNSET - UDP disabled, TCP not configured"
-msgstr ""
+msgstr "ERROR_UDP_DISABLED_AND_TCP_UNSET - UDP غیرفعال، TCP پیکربندی نشده"
 
 msgid "Error Codes"
-msgstr ""
+msgstr "کدهای خطا"
 
 msgid "In addition to standard JSON-RPC 2.0 error codes, I2PControl provides specific error codes:"
-msgstr ""
+msgstr "علاوه بر کدهای خطای استاندارد JSON-RPC 2.0، I2PControl کدهای خطای خاصی ارائه می‌دهد:"
 
 msgid "JSON parse error"
-msgstr ""
+msgstr "خطای تجزیه JSON"
 
 msgid "Invalid request"
-msgstr ""
+msgstr "درخواست نامعتبر"
 
 msgid "Method not found"
-msgstr ""
+msgstr "روش یافت نشد"
 
 msgid "Invalid parameters"
-msgstr ""
+msgstr "پارامترهای نامعتبر"
 
 msgid "Internal error"
-msgstr ""
+msgstr "خطای داخلی"
 
 msgid "Invalid password provided"
-msgstr ""
+msgstr "رمز عبور نامعتبر ارائه شد"
 
 msgid "No authentication token presented"
-msgstr ""
+msgstr "هیچ توکن احراز هویت ارائه نشد"
 
 msgid "Authentication token doesn't exist"
-msgstr ""
+msgstr "توکن احراز هویت وجود ندارد"
 
 msgid "The provided authentication token was expired and will be removed"
-msgstr ""
+msgstr "توکن احراز هویت ارائه شده منقضی شده است و حذف خواهد شد"
 
 msgid "The version of the I2PControl API used wasn't specified, but is required to be specified"
-msgstr ""
+msgstr "نسخه API I2PControl استفاده شده مشخص نشده است، اما باید مشخص شود"
 
 msgid "The version of the I2PControl API specified is not supported by I2PControl"
-msgstr ""
+msgstr "نسخه API I2PControl مشخص شده توسط I2PControl پشتیبانی نمی‌شود"
 
 msgid "Rate Statistics"
-msgstr ""
+msgstr "آمار نرخ"
 
 #, java-format
 msgid "For a complete list of available rate statistics, see the {0} documentation in the router console or refer to the {1} online documentation. Common rate statistics include:"
-msgstr ""
+msgstr "برای لیست کامل آمار نرخ موجود، به مستندات {0} در کنسول روتر مراجعه کنید یا به مستندات آنلاین {1} رجوع کنید. آمار نرخ رایج شامل:"
 
 msgid "Bandwidth receive rate"
-msgstr ""
+msgstr "نرخ دریافت پهنای باند"
 
 msgid "Bandwidth send rate"
-msgstr ""
+msgstr "نرخ ارسال پهنای باند"
 
 msgid "Active peer count"
-msgstr ""
+msgstr "تعداد همتایان فعال"
 
 msgid "Known peer count"
-msgstr ""
+msgstr "تعداد همتایان شناخته شده"
 
 msgid "Tunnel test success time"
-msgstr ""
+msgstr "زمان موفقیت تست تونل"
 
 msgid "Rate Statistics Documentation"
-msgstr ""
+msgstr "مستندات آمار نرخ"
 
 #, java-format
 msgid "See the {0} documentation in the router console or refer to the {1} online documentation."
-msgstr ""
+msgstr "به مستندات {0} در کنسول روتر مراجعه کنید یا به مستندات آنلاین {1} رجوع کنید."
 
 msgid "Example Usage"
-msgstr ""
+msgstr "نمونه استفاده"
 
 msgid "Get Router Version and Uptime:"
-msgstr ""
+msgstr "دریافت نسخه و زمان روشن بودن روتر:"
 
 msgid "Get Current Bandwidth Usage:"
-msgstr ""
+msgstr "دریافت استفاده فعلی پهنای باند:"
 
 msgid "Change Bandwidth Limits:"
-msgstr ""
+msgstr "تغییر محدودیت‌های پهنای باند:"
 
 msgid "Graceful Restart:"
-msgstr ""
+msgstr "راه‌اندازی مجدد ملایم:"
 
 msgid "Security Considerations"
-msgstr ""
+msgstr "ملاحظات امنیتی"
 
 #, java-format
 msgid "Always change the default API password from {0} to a strong, unique password"
-msgstr ""
+msgstr "همیشه رمز عبور پیش‌فرض API را از {0} به یک رمز عبور قوی و منحصربه‌فرد تغییر دهید"
 
 msgid "Consider binding I2PControl to localhost only if not accessed remotely"
-msgstr ""
+msgstr "در نظر داشته باشید که I2PControl را فقط به localhost محدود کنید اگر از راه دور به آن دسترسی ندارید"
 
 msgid "Use HTTPS when accessing I2PControl over untrusted networks"
-msgstr ""
+msgstr "از HTTPS هنگام دسترسی به I2PControl از طریق شبکه‌های غیرقابل اعتماد استفاده کنید"
 
 msgid "Tokens may expire - implement re-authentication logic in your applications"
-msgstr ""
+msgstr "توکن‌ها ممکن است منقضی شوند - منطق احراز هویت مجدد را در برنامه‌های خود پیاده‌سازی کنید"
 
 msgid "Monitor I2PControl access logs for unauthorized usage"
-msgstr ""
+msgstr "گزارش‌های دسترسی I2PControl را برای استفاده غیرمجاز نظارت کنید"
 
 msgid "Be cautious with router management operations - they can affect network connectivity"
-msgstr ""
+msgstr "با عملیات مدیریت روتر محتاط باشید - می‌توانند بر اتصال شبکه تأثیر بگذارند"
 
 msgid "Integration Examples"
-msgstr ""
+msgstr "نمونه‌های یکپارچه‌سازی"
 
 msgid "The I2PControl API can be integrated with:"
-msgstr ""
+msgstr "API I2PControl می‌تواند با موارد زیر یکپارچه شود:"
 
 msgid "Monitoring systems:"
-msgstr ""
+msgstr "سیستم‌های نظارتی:"
 
 msgid "Create custom dashboards for router performance"
-msgstr ""
+msgstr "ایجاد داشبوردهای سفارشی برای عملکرد روتر"
 
 msgid "Automation scripts:"
-msgstr ""
+msgstr "اسکریپت‌های اتوماسیون:"
 
 msgid "Schedule restarts or configuration changes"
-msgstr ""
+msgstr "برنامه‌ریزی راه‌اندازی مجدد یا تغییرات پیکربندی"
 
 msgid "Mobile applications:"
-msgstr ""
+msgstr "برنامه‌های موبایل:"
 
 msgid "Monitor and manage your router remotely"
-msgstr ""
+msgstr "نظارت و مدیریت روتر خود از راه دور"
 
 msgid "Network management tools:"
-msgstr ""
+msgstr "ابزارهای مدیریت شبکه:"
 
 msgid "Integrate I2P status into broader network monitoring"
-msgstr ""
+msgstr "یکپارچه‌سازی وضعیت I2P در نظارت گسترده‌تر شبکه"
 
 msgid "Alerting systems:"
-msgstr ""
+msgstr "سیستم‌های هشدار:"
 
 msgid "Send notifications based on router status changes"
-msgstr ""
+msgstr "ارسال اعلان‌ها بر اساس تغییرات وضعیت روتر"
 
 msgid "Licensing Information"
 msgstr "اطلاعات مجوز"
@@ -7976,7 +7976,7 @@ msgid "Skip Setup"
 msgstr "نصب را نادیده بگیرید"
 
 msgid "Select the language to be used for the router console and web applications ("
-msgstr ""
+msgstr "زبان مورد استفاده برای کنسول روتر و برنامه‌های وب را انتخاب کنید ("
 
 msgid "Router Console &amp; WebApps Display Language"
 msgstr "زبان نمایش کنسول مسیریاب و برنامه‌های وب"

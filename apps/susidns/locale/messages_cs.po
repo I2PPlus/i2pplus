@@ -95,11 +95,11 @@ msgstr[1] "{0} výsledků pro: <span class=active>"
 msgstr[2] "{0} výsledků pro: <span class=active>"
 
 #, java-format
-msgid "1 entry"
-msgid_plural "{0} entries"
-msgstr[0] "1 záznam"
-msgstr[1] "Počet záznamů: {0}"
-msgstr[2] "Počet záznamů: {0}"
+msgid "Book contains 1 entry"
+msgid_plural "Book contains {0} entries"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 msgid "Add"
 msgstr "Přídat"
@@ -682,3 +682,5 @@ msgstr "Adresy ručně přidané do hlavního adresáře se sloučí s adresář
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Hostitelé, které obdržíte z vašich předplatných, se sloučí s vaším adresářem routeru."
+
+#, java-format

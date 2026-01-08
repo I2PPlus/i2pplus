@@ -426,4 +426,3 @@ msgstr "Kattints ide, amennyiben nem történt meg az automatikus átirányítá
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
 msgstr "Mentettük a(z) {0} hitelesítését, átirányítás most."
-

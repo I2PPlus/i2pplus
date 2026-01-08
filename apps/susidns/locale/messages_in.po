@@ -89,9 +89,9 @@ msgid_plural "{0} results for: <span class=active>"
 msgstr[0] "{0} Hasil untuk: <span class=active>"
 
 #, java-format
-msgid "1 entry"
-msgid_plural "{0} entries"
-msgstr[0] "{0} entri"
+msgid "Book contains 1 entry"
+msgid_plural "Book contains {0} entries"
+msgstr[0] ""
 
 msgid "Add"
 msgstr "Tambahkan"
@@ -666,3 +666,5 @@ msgstr "Addressbook yang ditambahkan secara manual ke addressbook master akan be
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Host yang Anda dapatkan dari langganan akan bergabung dengan addressbook router."
+
+#, java-format

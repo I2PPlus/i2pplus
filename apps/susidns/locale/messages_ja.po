@@ -89,9 +89,9 @@ msgid_plural "{0} results for: <span class=active>"
 msgstr[0] "{0}結果：<span class=active>"
 
 #, java-format
-msgid "1 entry"
-msgid_plural "{0} entries"
-msgstr[0] "{0}エントリ"
+msgid "Book contains 1 entry"
+msgid_plural "Book contains {0} entries"
+msgstr[0] ""
 
 msgid "Add"
 msgstr "追加"
@@ -666,3 +666,5 @@ msgstr "マスター アドレス帳に手動で追加されたアドレスは�
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "サブスクリプションから受け取ったホストは、ルーターのアドレス帳と統合されます。"
+
+#, java-format

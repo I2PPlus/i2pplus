@@ -426,4 +426,3 @@ msgstr "اگر به طور خودکار هدایت نشدید، اینجا را 
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
 msgstr "احراز هویت برای {0} ذخیره شد، اکنون هدایت می شود."
-

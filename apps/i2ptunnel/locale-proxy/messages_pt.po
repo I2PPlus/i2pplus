@@ -426,4 +426,3 @@ msgstr "Clique aqui se você não for redirecionado automaticamente."
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
 msgstr "Salva a autenticação para {0}, redirecionando agora."
-

@@ -92,10 +92,10 @@ msgstr[0] "{0} एक परिणाम है: <span class=active>"
 msgstr[1] "{0} परिणाम हैं: <span class=active>"
 
 #, java-format
-msgid "1 entry"
-msgid_plural "{0} entries"
-msgstr[0] "{0} प्रविष्टि"
-msgstr[1] "{0} प्रविष्टियाँ"
+msgid "Book contains 1 entry"
+msgid_plural "Book contains {0} entries"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Add"
 msgstr "जोड़ें"
@@ -674,3 +674,5 @@ msgstr "मास्टर पत्रिका में मानवीय �
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "सब्सक्रिप्शन से आपको मिले मेजबान आपकी राउटर पत्रिका में मिलेंगे।"
+
+#, java-format

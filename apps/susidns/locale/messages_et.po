@@ -92,10 +92,10 @@ msgstr[0] "1 tulemus: <span class=active>"
 msgstr[1] "{0} tulemust: <span class=active>"
 
 #, java-format
-msgid "1 entry"
-msgid_plural "{0} entries"
-msgstr[0] "1 kirje"
-msgstr[1] "{0} kirjet"
+msgid "Book contains 1 entry"
+msgid_plural "Book contains {0} entries"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Add"
 msgstr "Lisa"
@@ -674,3 +674,5 @@ msgstr "Käsitselt põhi aadressiraamatusse lisatud aadressid ühendatakse sinu 
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Tellimuste kaudu saadud hostid ühendatakse sinu Rooteri aadressiraamatusse."
+
+#, java-format

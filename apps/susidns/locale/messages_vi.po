@@ -89,9 +89,9 @@ msgid_plural "{0} results for: <span class=active>"
 msgstr[0] "{0} Kết quả cho: <span class=active>"
 
 #, java-format
-msgid "1 entry"
-msgid_plural "{0} entries"
-msgstr[0] "{0} mục"
+msgid "Book contains 1 entry"
+msgid_plural "Book contains {0} entries"
+msgstr[0] ""
 
 msgid "Add"
 msgstr "Thêm"
@@ -666,3 +666,5 @@ msgstr "Các địa chỉ được thêm thủ công vào sổ địa chỉ Chí
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Máy chủ bạn nhận được từ đăng ký của mình sẽ hợp nhất với sổ địa chỉ Bộ định tuyến của bạn."
+
+#, java-format

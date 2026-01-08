@@ -426,4 +426,3 @@ msgstr "Kliknite tukaj, če si ne preusmerjeno avtomatsko."
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
 msgstr "Shranjeni so podatki za vstop v {0} in trenutno preusmerjam."
-

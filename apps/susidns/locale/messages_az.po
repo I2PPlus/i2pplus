@@ -92,10 +92,10 @@ msgstr[0] "<span class=active> üçün bir nəticə"
 msgstr[1] "<span class=active> üçün {0} nəticə"
 
 #, java-format
-msgid "1 entry"
-msgid_plural "{0} entries"
-msgstr[0] "1 məlumat"
-msgstr[1] "{0} məlumat"
+msgid "Book contains 1 entry"
+msgid_plural "Book contains {0} entries"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Add"
 msgstr "Əlavə et"
@@ -674,3 +674,5 @@ msgstr "Sizin Üst adres kitabınıza manuel olaraq əlavə etdiyiniz ünvandıl
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Abunələrinizdən ala biləcəyiniz mənzillər Ruternin adres kitabınıza birləşdiriləcəkdir."
+
+#, java-format

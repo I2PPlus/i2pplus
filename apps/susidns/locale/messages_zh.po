@@ -89,9 +89,9 @@ msgid_plural "{0} results for: <span class=active>"
 msgstr[0] "{0}结果：<span class=active>"
 
 #, java-format
-msgid "1 entry"
-msgid_plural "{0} entries"
-msgstr[0] "{0}条目"
+msgid "Book contains 1 entry"
+msgid_plural "Book contains {0} entries"
+msgstr[0] ""
 
 msgid "Add"
 msgstr "添加"
@@ -666,3 +666,5 @@ msgstr "手动添加到您的主地址簿中的地址将与您的路由器地址
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "您从订阅中取得的主机将与路由器地址簿合并。"
+
+#, java-format

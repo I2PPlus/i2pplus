@@ -1520,20 +1520,3 @@ msgstr "Shrani spremembe"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent mora biti ustavljen"
-
-#, java-format
-
-
-
-
-
-
-
-#, java-format
-
-#, java-format
-
-#, java-format
-
-
-

@@ -104,14 +104,14 @@ msgstr[4] "{0} نتائج: <span class = active>"
 msgstr[5] "{0} نتائج: <span class=active>"
 
 #, java-format
-msgid "1 entry"
-msgid_plural "{0} entries"
-msgstr[0] "0 إدخالات"
-msgstr[1] "1 دخول"
-msgstr[2] "2 إدخالات"
-msgstr[3] "{0} إدخالات"
-msgstr[4] "{0} إدخالات"
-msgstr[5] "{0} إدخالات"
+msgid "Book contains 1 entry"
+msgid_plural "Book contains {0} entries"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
 
 msgid "Add"
 msgstr "أضف"
@@ -706,3 +706,5 @@ msgstr "العناوين التي تمت إضافتها يدويًا إلى دف
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "سيتم دمج المضيفين الذين تستقبلهم من اشتراكاتك مع دفتر عناوين جهاز التوجيه الخاص بك."
+
+#, java-format

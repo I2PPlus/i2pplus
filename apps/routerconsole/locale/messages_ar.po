@@ -2008,7 +2008,7 @@ msgid "FAQ"
 msgstr "أسئلة متكررة"
 
 msgid "JSON-RPC API"
-msgstr ""
+msgstr "واجهة برمجة تطبيقات JSON-RPC"
 
 msgid "Manage your I2P hosts file here (I2P domain name resolution)"
 msgstr "إدارة ملف مضيفات I2P الخاص بك هنا (تحليل اسم مجال I2P)"
@@ -2983,7 +2983,7 @@ msgid "Maximum Transmission Unit"
 msgstr "وحدة النقل الأقصى"
 
 msgid "Show all routers with this MTU in the NetDb"
-msgstr ""
+msgstr "إظهار جميع أجهزة التوجيه ذات هذه القيمة القصوى للنقل في قاعدة بيانات الشبكة"
 
 msgid "Addresses"
 msgstr "عناوين"
@@ -5756,10 +5756,10 @@ msgid "Tunnel Filtering"
 msgstr "تصفية النفق"
 
 msgid "Console API"
-msgstr ""
+msgstr "واجهة برمجة تطبيقات وحدة التحكم"
 
 msgid "JSONRPC"
-msgstr ""
+msgstr "JSONRPC"
 
 msgid "New User Guide"
 msgstr "دليل المستخدم الجديد"
@@ -6680,10 +6680,10 @@ msgid "An introduction to tunnel access lists"
 msgstr "مقدمة لقوائم الوصول إلى الأنفاق"
 
 msgid "I2PControl API"
-msgstr ""
+msgstr "واجهة برمجة تطبيقات I2PControl"
 
 msgid "JSON-RPC API for remote router control and monitoring"
-msgstr ""
+msgstr "واجهة برمجة تطبيقات JSON-RPC للتحكم والمراقبة عن بُعد للموجه"
 
 msgid "Information about the sidebar, network status messages, and theme overrides"
 msgstr "معلومات حول الشريط الجانبي ورسائل حالة الشبكة وتخصيص السمة"
@@ -6692,429 +6692,429 @@ msgid "Webhosting on I2P"
 msgstr "استضافة المواقع على I2P"
 
 msgid "I2PControl JSON-RPC API"
-msgstr ""
+msgstr "واجهة برمجة تطبيقات I2PControl JSON-RPC"
 
 msgid "I2PControl provides a JSON-RPC 2.0 interface for remote control and monitoring of your I2P router. This allows external applications to programmatically manage I2P settings, retrieve status information, and control router operations through standardized HTTP requests."
-msgstr ""
+msgstr "توفر واجهة I2PControl واجهة JSON-RPC 2.0 للتحكم والمراقبة عن بُعد لموجه I2P الخاص بك. يتيح هذا للتطبيقات الخارجية إدارة إعدادات I2P برمجيًا، واسترداد معلومات الحالة، والتحكم في عمليات الموجه عبر طلبات HTTP المعيارية."
 
 #, java-format
 msgid "I2PControl is a JSON-RPC 2.0 interface for remote control and monitoring of your I2P router. It listens on {0} by default when enabled for security reasons and must be enabled through the {1}."
-msgstr ""
+msgstr "I2PControl هي واجهة JSON-RPC 2.0 للتحكم والمراقبة عن بُعد لموجه I2P الخاص بك. تستمع على المنفذ {0} افتراضيًا عند التمكين لأسباب الأمان ويجب تفعيلها من خلال {1}."
 
 msgid "Web Apps configuration page"
-msgstr ""
+msgstr "صفحة تكوين تطبيقات الويب"
 
 msgid "Authentication"
-msgstr ""
+msgstr "المصادقة"
 
 msgid "All API operations (except for authentication itself) require a valid authentication token. To obtain a token, you must first authenticate with your configured password:"
-msgstr ""
+msgstr "جميع عمليات API (باستثناء المصادقة نفسها) تتطلب رمز مصادقة صالح. للحصول على رمز، يجب عليك أولاً المصادقة بكلمة المرور المكوّنة لديك:"
 
 msgid "The returned token must be included in either the 'Token' parameter or as an 'X-Auth-Token' HTTP header in all subsequent API calls."
-msgstr ""
+msgstr "يجب تضمين الرمز المُرجع إما في معلمة 'Token' أو كعنوان HTTP 'X-Auth-Token' في جميع استدعاءات API اللاحقة."
 
 msgid "API Version: 1. Clients must specify API version 1 in authentication requests for compatibility."
-msgstr ""
+msgstr "إصدار API: 1. يجب على العملاء تحديد إصدار API 1 في طلبات المصادقة للتوافق."
 
 msgid "API Methods"
-msgstr ""
+msgstr "طرق API"
 
 msgid "Authenticates with the I2PControl service and returns an authentication token for subsequent API calls."
-msgstr ""
+msgstr "المصادقة مع خدمة I2PControl وإرجاع رمز مصادقة لاستدعاءات API اللاحقة."
 
 msgid "Parameters:"
-msgstr ""
+msgstr "المعاملات:"
 
 msgid "Password (string), API (integer, must be 1)"
-msgstr ""
+msgstr "كلمة المرور (نص)، API (عدد صحيح، يجب أن يكون 1)"
 
 msgid "Returns:"
-msgstr ""
+msgstr "تُرجع:"
 
 msgid "Token (string), API (integer)"
-msgstr ""
+msgstr "Token (نص)، API (عدد صحيح)"
 
 msgid "Authentication:"
-msgstr ""
+msgstr "المصادقة:"
 
 msgid "None (this is the unauthenticated method)"
-msgstr ""
+msgstr "لا شيء (هذه هي الطريقة غير المصادقة)"
 
 msgid "A simple test method that returns the provided string. Useful for testing API connectivity and authentication."
-msgstr ""
+msgstr "طريقة اختبار بسيطة تُرجع النص المقدم. مفيدة لاختبار اتصال API والمصادقة."
 
 msgid "Echo (string)"
-msgstr ""
+msgstr "Echo (نص)"
 
 msgid "Result (string - echoed input)"
-msgstr ""
+msgstr "النتيجة (نص - المدخلات المرتدة)"
 
 msgid "Required"
-msgstr ""
+msgstr "مطلوب"
 
 msgid "Retrieves read-only status information about the I2P router. Each parameter is optional - include only the metrics you need."
-msgstr ""
+msgstr "استرداد معلومات الحالة للقراءة فقط حول موجه I2P. كل معلمة اختيارية - ضمّن فقط المقاييس التي تحتاجها."
 
 msgid "Any combination of:"
-msgstr ""
+msgstr "أي مجموعة من:"
 
 msgid "Router version"
-msgstr ""
+msgstr "إصدار الموجه"
 
 msgid "Router uptime in milliseconds"
-msgstr ""
+msgstr "وقت تشغيل الموجه بالمللي ثانية"
 
 msgid "Current router status"
-msgstr ""
+msgstr "حالة الموجه الحالية"
 
 msgid "Network status (0-14)"
-msgstr ""
+msgstr "حالة الشبكة (0-14)"
 
 msgid "1-second average inbound bandwidth (Bps)"
-msgstr ""
+msgstr "متوسط عرض نطاق الدخول لمدة ثانية واحدة (بايت/ثانية)"
 
 msgid "1-second average outbound bandwidth (Bps)"
-msgstr ""
+msgstr "متوسط عرض نطاق الخروج لمدة ثانية واحدة (بايت/ثانية)"
 
 msgid "15-second average inbound bandwidth (Bps)"
-msgstr ""
+msgstr "متوسط عرض نطاق الدخول لمدة 15 ثانية (بايت/ثانية)"
 
 msgid "15-second average outbound bandwidth (Bps)"
-msgstr ""
+msgstr "متوسط عرض نطاق الخروج لمدة 15 ثانية (بايت/ثانية)"
 
 msgid "Number of participating tunnels"
-msgstr ""
+msgstr "عدد الأنفاق المشاركة"
 
 msgid "Number of known peers"
-msgstr ""
+msgstr "عدد الأقران المعروفين"
 
 msgid "Number of active peers"
-msgstr ""
+msgstr "عدد الأقران النشطين"
 
 msgid "Number of fast peers"
-msgstr ""
+msgstr "عدد الأقران السريعين"
 
 msgid "Number of high-capacity peers"
-msgstr ""
+msgstr "عدد الأقران ذوي السعة العالية"
 
 msgid "Whether reseed is in progress"
-msgstr ""
+msgstr "ما إذا كانت إعادة البذر جارية"
 
 msgid "Requested metrics with their current values"
-msgstr ""
+msgstr "المقاييس المطلوبة مع قيمها الحالية"
 
 msgid "Controls router lifecycle and management operations. Each operation is optional and executes asynchronously."
-msgstr ""
+msgstr "التحكم في دورة حياة الموجه وعمليات الإدارة. كل عملية اختيارية وتنفذ بشكل غير متزامن."
 
 msgid "Graceful restart/shutdown"
-msgstr ""
+msgstr "إعادة التشغيل/الإيقاف السلس"
 
 msgid "Immediate hard shutdown"
-msgstr ""
+msgstr "الإيقاف الفوري القاسي"
 
 msgid "Immediate hard restart"
-msgstr ""
+msgstr "إعادة التشغيل الفورية القاسية"
 
 msgid "Graceful shutdown (waits for tunnels)"
-msgstr ""
+msgstr "الإيقاف السلس (يunggu الأنفاق)"
 
 msgid "Graceful restart (waits for tunnels)"
-msgstr ""
+msgstr "إعادة التشغيل السلسة (يunggu الأنفاق)"
 
 msgid "Trigger router reseeding"
-msgstr ""
+msgstr "تشغيل إعادة بذر الموجه"
 
 msgid "Check for available updates"
-msgstr ""
+msgstr "البحث عن التحديثات المتاحة"
 
 msgid "Install available updates"
-msgstr ""
+msgstr "تثبيت التحديثات المتاحة"
 
 msgid "Confirmation of operation (null for most operations, result status for FindUpdates/Update)"
-msgstr ""
+msgstr "تأكيد العملية (فارغ لمعظم العمليات، حالة النتيجة لـ FindUpdates/Update)"
 
 msgid "Manages router network configuration. Parameters can be used to either set values (if provided) or retrieve current values (if null/omitted)."
-msgstr ""
+msgstr "إدارة تكوين شبكة الموجه. يمكن استخدام المعاملات لتعيين القيم (إذا تم توفيرها) أو لاسترداد القيم الحالية (إذا كانت فارغة/محذوفة)."
 
 msgid "NTCP Transport Settings:"
-msgstr ""
+msgstr "إعدادات نقل NTCP:"
 
 msgid "NTCP port (1-65535)"
-msgstr ""
+msgstr "منفذ NTCP (1-65535)"
 
 msgid "NTCP hostname"
-msgstr ""
+msgstr "اسم المضيف NTCP"
 
 msgid "Auto IP setting"
-msgstr ""
+msgstr "إعداد IP التلقائي"
 
 msgid "SSU Transport Settings:"
-msgstr ""
+msgstr "إعدادات نقل SSU:"
 
 msgid "SSU port (1-65535)"
-msgstr ""
+msgstr "منفذ SSU (1-65535)"
 
 msgid "SSU hostname"
-msgstr ""
+msgstr "اسم المضيف SSU"
 
 msgid "IP source detection"
-msgstr ""
+msgstr "اكتشاف مصدر IP"
 
 msgid "Read-only detected IP address"
-msgstr ""
+msgstr "عنوان IP المكتشف للقراءة فقط"
 
 msgid "Network Settings:"
-msgstr ""
+msgstr "إعدادات الشبكة:"
 
 msgid "UPnP enabled/disabled"
-msgstr ""
+msgstr "UPnP مُمكّن/معطّل"
 
 msgid "Laptop mode setting"
-msgstr ""
+msgstr "إعداد وضع الحاسوب المحمول"
 
 msgid "Bandwidth Settings:"
-msgstr ""
+msgstr "إعدادات النطاق الترددي:"
 
 msgid "Bandwidth share percentage (0-100)"
-msgstr ""
+msgstr "نسبة مشاركة النطاق الترددي (0-100)"
 
 msgid "Inbound bandwidth limit (Bps)"
-msgstr ""
+msgstr "حد النطاق الترددي للداخل (بايت/ثانية)"
 
 msgid "Outbound bandwidth limit (Bps)"
-msgstr ""
+msgstr "حد النطاق الترددي للخارج (بايت/ثانية)"
 
 msgid "SettingsSaved (boolean), RestartNeeded (boolean), plus current values for queried settings"
-msgstr ""
+msgstr "SettingsSaved (منطقي)، RestartNeeded (منطقي)، بالإضافة إلى القيم الحالية للإعدادات المطلوبة"
 
 msgid "Manages I2PControl service settings including password, port, and restart configuration."
-msgstr ""
+msgstr "إدارة إعدادات خدمة I2PControl بما في ذلك كلمة المرور والمنفذ وإعادة التشغيل."
 
 msgid "Listen address (string, e.g., 127.0.0.1)"
-msgstr ""
+msgstr "عنوان الاستماع (نص، مثلاً 127.0.0.1)"
 
 msgid "New password (string)"
-msgstr ""
+msgstr "كلمة مرور جديدة (نص)"
 
 msgid "Listen port (integer, 1-65535)"
-msgstr ""
+msgstr "منفذ الاستماع (عدد صحيح، 1-65535)"
 
 msgid "SettingsSaved (boolean), RestartNeeded (boolean), current values for requested settings"
-msgstr ""
+msgstr "SettingsSaved (منطقي)، RestartNeeded (منطقي)، القيم الحالية للإعدادات المطلوبة"
 
 msgid "Access and modify advanced I2P router configuration settings."
-msgstr ""
+msgstr "الوصول إلى إعدادات تكوين الموجه المتقدمة وتعديلها."
 
 msgid "Key-value pairs of advanced settings"
-msgstr ""
+msgstr "أزواج المفتاح والقيمة للإعدادات المتقدمة"
 
 msgid "Updated settings values"
-msgstr ""
+msgstr "قيم الإعدادات المُحدّثة"
 
 msgid "Retrieves statistical rate data from router for monitoring and analysis. Useful for creating custom graphs or monitoring applications."
-msgstr ""
+msgstr "استرداد بيانات معدل الإحصائيات من الموجه للمراقبة والتحليل. مفيد لإنشاء رسوم بيانية مخصصة أو تطبيقات مراقبة."
 
 msgid "Statistical metric name (string)"
-msgstr ""
+msgstr "اسم المقياس الإحصائي (نص)"
 
 msgid "Time period in milliseconds (integer)"
-msgstr ""
+msgstr "الفترة الزمنية بالمللي ثانية (عدد صحيح)"
 
 msgid "Result (number - average value for specified period)"
-msgstr ""
+msgstr "النتيجة (رقم - متوسط الفترة المحددة)"
 
 msgid "Network Status Codes"
-msgstr ""
+msgstr "رموز حالة الشبكة"
 
 #, java-format
 msgid "The {0} field returns an integer value representing the current network connectivity status:"
-msgstr ""
+msgstr "حقل {0} يُرجع قيمة عددية تمثل حالة الاتصال الحالية للشبكة:"
 
 msgid "OK - Full connectivity"
-msgstr ""
+msgstr "موافق - اتصال كامل"
 
 msgid "TESTING - Still establishing connectivity"
-msgstr ""
+msgstr "اختبار - لا يزال يؤسس الاتصال"
 
 msgid "FIREWALLED - Behind restrictive firewall"
-msgstr ""
+msgstr "خلف جدار حماية تقييدي"
 
 msgid "HIDDEN - Router in hidden mode"
-msgstr ""
+msgstr "مخفي - الموجه في الوضع المخفي"
 
 msgid "WARN_FIREWALLED_AND_FAST - Firewalled but fast peer"
-msgstr ""
+msgstr "تحذير_خلف_جدار_الحماية_وسريع - خلف جدار حماية ولكنه سريع"
 
 msgid "WARN_FIREWALLED_AND_FLOODFILL - Firewalled but floodfill"
-msgstr ""
+msgstr "تحذير_خلف_جدار_الحماية_وملء_الفيض - خلف جدار حماية ولكنه ملء فيض"
 
 msgid "WARN_FIREWALLED_WITH_INBOUND_TCP - Firewalled with inbound TCP"
-msgstr ""
+msgstr "تحذير_خلف_جدار_الحماية_مع_TCP_وارد - خلف جدار حماية مع TCP وارد"
 
 msgid "WARN_FIREWALLED_WITH_UDP_DISABLED - Firewalled with UDP disabled"
-msgstr ""
+msgstr "تحذير_خلف_جدار_الحماية_مع_UDP_معطّل - خلف جدار حماية مع UDP معطّل"
 
 msgid "ERROR_I2CP - I2CP error"
-msgstr ""
+msgstr "خطأ_I2CP - خطأ I2CP"
 
 msgid "ERROR_CLOCK_SKEW - System clock skew detected"
-msgstr ""
+msgstr "خطأ_انحراف_الساعة - تم اكتشاف انحراف في ساعة النظام"
 
 msgid "ERROR_PRIVATE_TCP_ADDRESS - Private TCP address configured"
-msgstr ""
+msgstr "خطأ_عنوان_TCP_خاص - تم تكوين عنوان TCP خاص"
 
 msgid "ERROR_SYMMETRIC_NAT - Symmetric NAT detected"
-msgstr ""
+msgstr "خطأ_NAT_متماثل - تم اكتشاف NAT متماثل"
 
 msgid "ERROR_UDP_PORT_IN_USE - UDP port already in use"
-msgstr ""
+msgstr "خطأ_منفذ_UDP_المستخدم - منفذ UDP قيد الاستخدام بالفعل"
 
 msgid "ERROR_NO_ACTIVE_PEERS_CHECK_CONNECTION_AND_FIREWALL - No active peers"
-msgstr ""
+msgstr "خطأ_لا_أقران_نشطين_تحقق_الاتصال_والجدار_الناري - لا أقران نشطين"
 
 msgid "ERROR_UDP_DISABLED_AND_TCP_UNSET - UDP disabled, TCP not configured"
-msgstr ""
+msgstr "خطأ_UDP_معطّل_وTCP_غير_مكوّن - UDP معطّل، TCP غير مكوّن"
 
 msgid "Error Codes"
-msgstr ""
+msgstr "رموز الأخطاء"
 
 msgid "In addition to standard JSON-RPC 2.0 error codes, I2PControl provides specific error codes:"
-msgstr ""
+msgstr "بالإضافة إلى رموز الخطأ القياسية لـ JSON-RPC 2.0، توفر I2PControl رموز خطأ محددة:"
 
 msgid "JSON parse error"
-msgstr ""
+msgstr "خطأ في تحليل JSON"
 
 msgid "Invalid request"
-msgstr ""
+msgstr "طلب غير صالح"
 
 msgid "Method not found"
-msgstr ""
+msgstr "الطريقة غير موجودة"
 
 msgid "Invalid parameters"
-msgstr ""
+msgstr "معاملات غير صالحة"
 
 msgid "Internal error"
-msgstr ""
+msgstr "خطأ داخلي"
 
 msgid "Invalid password provided"
-msgstr ""
+msgstr "تم تقديم كلمة مرور غير صالحة"
 
 msgid "No authentication token presented"
-msgstr ""
+msgstr "لم يتم تقديم رمز مصادقة"
 
 msgid "Authentication token doesn't exist"
-msgstr ""
+msgstr "رمز المصادقة غير موجود"
 
 msgid "The provided authentication token was expired and will be removed"
-msgstr ""
+msgstr "رمز المصادقة المقدم انتهت صلاحيته وسيتم إزالته"
 
 msgid "The version of the I2PControl API used wasn't specified, but is required to be specified"
-msgstr ""
+msgstr "لم يتم تحديد إصدار I2PControl API المستخدم، ولكن يجب تحديده"
 
 msgid "The version of the I2PControl API specified is not supported by I2PControl"
-msgstr ""
+msgstr "إصدار I2PControl API المحدد غير مدعوم من I2PControl"
 
 msgid "Rate Statistics"
-msgstr ""
+msgstr "إحصائيات المعدل"
 
 #, java-format
 msgid "For a complete list of available rate statistics, see the {0} documentation in the router console or refer to the {1} online documentation. Common rate statistics include:"
-msgstr ""
+msgstr "للحصول على قائمة كاملة من إحصائيات المعدل المتاحة، راجع وثائق {0} في وحدة تحكم الموجه أو راجع الوثائق عبر الإنترنت {1}. تشمل إحصائيات المعدل الشائعة:"
 
 msgid "Bandwidth receive rate"
-msgstr ""
+msgstr "معدل استقبال النطاق الترددي"
 
 msgid "Bandwidth send rate"
-msgstr ""
+msgstr "معدل إرسال النطاق الترددي"
 
 msgid "Active peer count"
-msgstr ""
+msgstr "عدد الأقران النشطين"
 
 msgid "Known peer count"
-msgstr ""
+msgstr "عدد الأقران المعروفين"
 
 msgid "Tunnel test success time"
-msgstr ""
+msgstr "وقت نجاح اختبار النفق"
 
 msgid "Rate Statistics Documentation"
-msgstr ""
+msgstr "توثيق إحصائيات المعدل"
 
 #, java-format
 msgid "See the {0} documentation in the router console or refer to the {1} online documentation."
-msgstr ""
+msgstr "راجع وثائق {0} في وحدة تحكم الموجه أو راجع الوثائق عبر الإنترنت {1}."
 
 msgid "Example Usage"
-msgstr ""
+msgstr "مثال على الاستخدام"
 
 msgid "Get Router Version and Uptime:"
-msgstr ""
+msgstr "الحصول على إصدار الموجه ووقت التشغيل:"
 
 msgid "Get Current Bandwidth Usage:"
-msgstr ""
+msgstr "الحصول على استخدام النطاق الترددي الحالي:"
 
 msgid "Change Bandwidth Limits:"
-msgstr ""
+msgstr "تغيير حدود النطاق الترددي:"
 
 msgid "Graceful Restart:"
-msgstr ""
+msgstr "إعادة التشغيل السلسة:"
 
 msgid "Security Considerations"
-msgstr ""
+msgstr "اعتبارات الأمان"
 
 #, java-format
 msgid "Always change the default API password from {0} to a strong, unique password"
-msgstr ""
+msgstr "قم دائمًا بتغيير كلمة مرور API الافتراضية من {0} إلى كلمة مرور قوية وفريدة"
 
 msgid "Consider binding I2PControl to localhost only if not accessed remotely"
-msgstr ""
+msgstr "فكّر في ربط I2PControl بـ localhost فقط إذا لم يتم الوصول إليه عن بُعد"
 
 msgid "Use HTTPS when accessing I2PControl over untrusted networks"
-msgstr ""
+msgstr "استخدم HTTPS عند الوصول إلى I2PControl عبر شبكات غير موثوقة"
 
 msgid "Tokens may expire - implement re-authentication logic in your applications"
-msgstr ""
+msgstr "قد تنتهي صلاحية الرموز - نفّذ منطق إعادة المصادقة في تطبيقاتك"
 
 msgid "Monitor I2PControl access logs for unauthorized usage"
-msgstr ""
+msgstr "مراقبة سجلات الوصول إلى I2PControl للاستخدام غير المصرح به"
 
 msgid "Be cautious with router management operations - they can affect network connectivity"
-msgstr ""
+msgstr "كن حذرًا مع عمليات إدارة الموجه - يمكن أن تؤثر على اتصال الشبكة"
 
 msgid "Integration Examples"
-msgstr ""
+msgstr "أمثلة التكامل"
 
 msgid "The I2PControl API can be integrated with:"
-msgstr ""
+msgstr "يمكن دمج واجهة I2PControl API مع:"
 
 msgid "Monitoring systems:"
-msgstr ""
+msgstr "أنظمة المراقبة:"
 
 msgid "Create custom dashboards for router performance"
-msgstr ""
+msgstr "إنشاء لوحات معلومات مخصصة لأداء الموجه"
 
 msgid "Automation scripts:"
-msgstr ""
+msgstr "سكربتات الأتمتة:"
 
 msgid "Schedule restarts or configuration changes"
-msgstr ""
+msgstr "جدولة إعادة التشغيل أو تغييرات التكوين"
 
 msgid "Mobile applications:"
-msgstr ""
+msgstr "تطبيقات الجوال:"
 
 msgid "Monitor and manage your router remotely"
-msgstr ""
+msgstr "مراقبة وإدارة الموجه عن بُعد"
 
 msgid "Network management tools:"
-msgstr ""
+msgstr "أدوات إدارة الشبكة:"
 
 msgid "Integrate I2P status into broader network monitoring"
-msgstr ""
+msgstr "دمج حالة I2P في مراقبة الشبكة الأوسع"
 
 msgid "Alerting systems:"
-msgstr ""
+msgstr "أنظمة التنبيه:"
 
 msgid "Send notifications based on router status changes"
-msgstr ""
+msgstr "إرسال إشعارات بناءً على تغييرات حالة الموجه"
 
 msgid "Licensing Information"
 msgstr "معلومات الترخيص"

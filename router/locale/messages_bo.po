@@ -142,8 +142,3 @@ msgstr "ཀློང་གི་འཚལ་བོར་བཏོན་བཞི
 
 msgid "Dropping Tunnel Requests: Queue time"
 msgstr "ཀློང་གི་འཚལ་བོར་བཏོན་བཞིན་པ: གླེང་གེ་ཚོར་བ"
-
-
-
-
-

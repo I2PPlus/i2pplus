@@ -426,4 +426,3 @@ msgstr "Klik hier als je niet automatisch wordt doorgestuurd."
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
 msgstr "Authenticatie voor {0} opgeslagen, nu omleiden."
-

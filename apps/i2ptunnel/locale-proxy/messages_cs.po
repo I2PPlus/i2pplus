@@ -426,4 +426,3 @@ msgstr "Pokud nebudete automaticky přesměrováni, klikněte sem."
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
 msgstr "Uloženo ověření pro {0}, nyní probíhá přesměrování."
-

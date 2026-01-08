@@ -92,10 +92,10 @@ msgstr[0] "Egy eredmény a következőre: <span class=active>"
 msgstr[1] "{0} találat a következőre: <span class=active>"
 
 #, java-format
-msgid "1 entry"
-msgid_plural "{0} entries"
-msgstr[0] "1 bejegyzés"
-msgstr[1] "{0} bejegyzés"
+msgid "Book contains 1 entry"
+msgid_plural "Book contains {0} entries"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Add"
 msgstr "Hozzáad"
@@ -674,3 +674,5 @@ msgstr "A fő címjegyzékbe kézzel hozzáadott címek egyesülnek az útválas
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Az előfizetésekből kapott gazdagépek egyesülnek az útválasztó címjegyzékével."
+
+#, java-format

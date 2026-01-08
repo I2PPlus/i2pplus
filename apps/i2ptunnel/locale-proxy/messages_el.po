@@ -426,4 +426,3 @@ msgstr "Κάντε κλικ εδώ εάν δεν ανακατευθυνθείτ�
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
 msgstr "Αποθηκεύτηκε ο έλεγχος ταυτότητας για το {0}, ανακατεύθυνση τώρα."
-

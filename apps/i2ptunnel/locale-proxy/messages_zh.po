@@ -426,4 +426,3 @@ msgstr "如果未能自动转到，请点击这里。"
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
 msgstr "已保存 {0} 的凭据，正在重定向。"
-

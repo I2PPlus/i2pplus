@@ -1984,7 +1984,7 @@ msgid "FAQ"
 msgstr "FAQ"
 
 msgid "JSON-RPC API"
-msgstr ""
+msgstr "JSON-RPC API"
 
 msgid "Manage your I2P hosts file here (I2P domain name resolution)"
 msgstr "Zarządzaj swoim plikiem hosta I2P tutaj (nazwa domeny I2P)"
@@ -2706,7 +2706,7 @@ msgid "Lookup"
 msgstr "Szukaj"
 
 msgid "Select the field to search on"
-msgstr ""
+msgstr "Wybierz pole do przeszukiwania"
 
 msgid "e.g. cn hk"
 msgstr "np. cn hk"
@@ -6191,7 +6191,7 @@ msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP a
 msgstr "Przykład: Aby zezwolić dostęp z localhost i 192.168.1.10 przez HTTP i HTTPS:"
 
 msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager's configuration section using the <i>reachable by</i> dropdown."
-msgstr ""
+msgstr "W przypadku większości usług klienckich zmień adres nasłuchu dla odpowiedniej usługi w sekcji konfiguracji Menedżera Tuneli, używając listy rozwijanej <i>dostępne dla</i>."
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "Jak mam się połączyć do IRC na I2P?"
@@ -6629,7 +6629,7 @@ msgid "I2PControl API"
 msgstr ""
 
 msgid "JSON-RPC API for remote router control and monitoring"
-msgstr ""
+msgstr "JSON-RPC API do zdalnego sterowania i monitorowania routera"
 
 msgid "Information about the sidebar, network status messages, and theme overrides"
 msgstr "Informacje o pasku bocznym, wiadomościach o stanie sieci i nadpisywaniu motywów"
@@ -6641,74 +6641,74 @@ msgid "I2PControl JSON-RPC API"
 msgstr ""
 
 msgid "I2PControl provides a JSON-RPC 2.0 interface for remote control and monitoring of your I2P router. This allows external applications to programmatically manage I2P settings, retrieve status information, and control router operations through standardized HTTP requests."
-msgstr ""
+msgstr "I2PControl zapewnia interfejs JSON-RPC 2.0 do zdalnego sterowania i monitorowania routera I2P. Umożliwia to zewnętrznym aplikacjom programowe zarządzanie ustawieniami I2P, pobieranie informacji o stanie i kontrolowanie operacji routera poprzez ustandaryzowane żądania HTTP."
 
 #, java-format
 msgid "I2PControl is a JSON-RPC 2.0 interface for remote control and monitoring of your I2P router. It listens on {0} by default when enabled for security reasons and must be enabled through the {1}."
 msgstr ""
 
 msgid "Web Apps configuration page"
-msgstr ""
+msgstr "Strona konfiguracji aplikacji webowych"
 
 msgid "Authentication"
 msgstr ""
 
 msgid "All API operations (except for authentication itself) require a valid authentication token. To obtain a token, you must first authenticate with your configured password:"
-msgstr ""
+msgstr "Wszystkie operacje API (z wyjątkiem samego uwierzytelniania) wymagają prawidłowego tokena uwierzytelnienia. Aby uzyskać token, musisz najpierw uwierzytelnić się za pomocą skonfigurowanego hasła:"
 
 msgid "The returned token must be included in either the 'Token' parameter or as an 'X-Auth-Token' HTTP header in all subsequent API calls."
 msgstr ""
 
 msgid "API Version: 1. Clients must specify API version 1 in authentication requests for compatibility."
-msgstr ""
+msgstr "Wersja API: 1. Klienci muszą określić wersję API 1 w żądaniach uwierzytelnienia dla zachowania kompatybilności."
 
 msgid "API Methods"
 msgstr ""
 
 msgid "Authenticates with the I2PControl service and returns an authentication token for subsequent API calls."
-msgstr ""
+msgstr "Uwierzytelnia się z usługą I2PControl i zwraca token uwierzytelnienia dla kolejnych wywołań API."
 
 msgid "Parameters:"
 msgstr ""
 
 msgid "Password (string), API (integer, must be 1)"
-msgstr ""
+msgstr "Hasło (tekst), API (liczba całkowita, musi być 1)"
 
 msgid "Returns:"
 msgstr ""
 
 msgid "Token (string), API (integer)"
-msgstr ""
+msgstr "Token (tekst), API (liczba całkowita)"
 
 msgid "Authentication:"
 msgstr ""
 
 msgid "None (this is the unauthenticated method)"
-msgstr ""
+msgstr "Brak (to jest metoda bez uwierzytelnienia)"
 
 msgid "A simple test method that returns the provided string. Useful for testing API connectivity and authentication."
 msgstr ""
 
 msgid "Echo (string)"
-msgstr ""
+msgstr "Echo (tekst)"
 
 msgid "Result (string - echoed input)"
 msgstr ""
 
 msgid "Required"
-msgstr ""
+msgstr "Wymagane"
 
 msgid "Retrieves read-only status information about the I2P router. Each parameter is optional - include only the metrics you need."
 msgstr ""
 
 msgid "Any combination of:"
-msgstr ""
+msgstr "Dowolna kombinacja:"
 
 msgid "Router version"
 msgstr ""
 
 msgid "Router uptime in milliseconds"
-msgstr ""
+msgstr "Czas pracy routera w milisekundach"
 
 msgid "Current router status"
 msgstr ""

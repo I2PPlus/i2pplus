@@ -1976,7 +1976,7 @@ msgid "FAQ"
 msgstr "सामान्य प्रश्न और उत्तर"
 
 msgid "JSON-RPC API"
-msgstr ""
+msgstr "JSON-RPC एपीआई"
 
 msgid "Manage your I2P hosts file here (I2P domain name resolution)"
 msgstr "I2P डोमेन नाम संचालन के लिए अपना I2P होस्ट्स फ़ाइल यहाँ प्रबंधित करें"
@@ -2698,7 +2698,7 @@ msgid "Lookup"
 msgstr "खोज"
 
 msgid "Select the field to search on"
-msgstr ""
+msgstr "खोज करने के लिए फ़ील्ड चुनें"
 
 msgid "e.g. cn hk"
 msgstr "उदा. cn hk"
@@ -2951,7 +2951,7 @@ msgid "Maximum Transmission Unit"
 msgstr "अधिकतम संचारण इकाई"
 
 msgid "Show all routers with this MTU in the NetDb"
-msgstr ""
+msgstr "NetDb में इस MTU वाले सभी राउटर दिखाएं"
 
 msgid "Addresses"
 msgstr "पते"
@@ -5684,10 +5684,10 @@ msgid "Tunnel Filtering"
 msgstr "टनल फ़िल्टरिंग"
 
 msgid "Console API"
-msgstr ""
+msgstr "कंसोल एपीआई"
 
 msgid "JSONRPC"
-msgstr ""
+msgstr "JSONRPC"
 
 msgid "New User Guide"
 msgstr "नए उपयोगकर्ता के गाइड"
@@ -6173,7 +6173,7 @@ msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP a
 msgstr "उदाहरण: HTTP और HTTPS दोनों पर localhost और 192.168.1.10 से एक्सेस की अनुमति देने के लिए:"
 
 msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager's configuration section using the <i>reachable by</i> dropdown."
-msgstr ""
+msgstr "अधिकांश क्लाइंट सेवाओं के लिए, Tunnel Manager की कॉन्फ़िगरेशन सेक्शन में संबंधित सेवा के लिए listening address बदलें, जिसके लिए <i>reachable by</i> dropdown का उपयोग करें।"
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "I2P के भीतर IRC कैसे जोड़ें?"
@@ -6608,10 +6608,10 @@ msgid "An introduction to tunnel access lists"
 msgstr "टंनल एक्सेस लिस्ट के बारे में परिचय"
 
 msgid "I2PControl API"
-msgstr ""
+msgstr "I2PControl एपीआई"
 
 msgid "JSON-RPC API for remote router control and monitoring"
-msgstr ""
+msgstr "दूरस्थ राउटर नियंत्रण और निगरानी के लिए JSON-RPC एपीआई"
 
 msgid "Information about the sidebar, network status messages, and theme overrides"
 msgstr "साइडबार, नेटवर्क स्थिति संदेश और थीम ओवरराइड के बारे में जानकारी"
@@ -6620,10 +6620,10 @@ msgid "Webhosting on I2P"
 msgstr "I2P पर वेबहोस्टिंग"
 
 msgid "I2PControl JSON-RPC API"
-msgstr ""
+msgstr "I2PControl JSON-RPC एपीआई"
 
 msgid "I2PControl provides a JSON-RPC 2.0 interface for remote control and monitoring of your I2P router. This allows external applications to programmatically manage I2P settings, retrieve status information, and control router operations through standardized HTTP requests."
-msgstr ""
+msgstr "I2PControl दूरस्थ राउटर नियंत्रण और निगरानी के लिए JSON-RPC 2.0 इंटरफ़ेस प्रदान करता है। यह बाहरी एप्लिकेशन को प्रोग्रामेटिक रूप से I2P सेटिंग्स प्रबंधित करने, स्थिति जानकारी प्राप्त करने और मानकीकृत HTTP अनुरोधों के माध्यम से राउटर संचालन को नियंत्रित करने की अनुमति देता है।"
 
 #, java-format
 msgid "I2PControl is a JSON-RPC 2.0 interface for remote control and monitoring of your I2P router. It listens on {0} by default when enabled for security reasons and must be enabled through the {1}."

@@ -98,12 +98,12 @@ msgstr[2] "{0} rezultatov za: <span class=active>"
 msgstr[3] "{0} rezultatov za: <span class=active>"
 
 #, java-format
-msgid "1 entry"
-msgid_plural "{0} entries"
-msgstr[0] "{0} vnos"
-msgstr[1] "{0} vnosa"
-msgstr[2] "{0} vnosa"
-msgstr[3] "{0} vnosa"
+msgid "Book contains 1 entry"
+msgid_plural "Book contains {0} entries"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
 
 msgid "Add"
 msgstr "Dodaj"
@@ -690,3 +690,5 @@ msgstr "Naslovi, ki jih ročno dodate v svoj glavni imenik naslovov, se bodo zdr
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Gostitelji, ki jih prejmete iz svojih prijav, se bodo združili z vašim imenikom naslovov maršrutnika."
+
+#, java-format

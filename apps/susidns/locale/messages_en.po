@@ -92,8 +92,8 @@ msgstr[0] ""
 msgstr[1] ""
 
 #, java-format
-msgid "1 entry"
-msgid_plural "{0} entries"
+msgid "Book contains 1 entry"
+msgid_plural "Book contains {0} entries"
 msgstr[0] ""
 msgstr[1] ""
 

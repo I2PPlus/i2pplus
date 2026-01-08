@@ -426,4 +426,3 @@ msgstr "Clic aici dacă nu sunteți redirecționat automat."
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
 msgstr "Am salvat autentificarea pentru {0}, redirecționând acum."
-

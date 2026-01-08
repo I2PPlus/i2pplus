@@ -92,10 +92,10 @@ msgstr[0] "Yksi tulos haulle: <span class=active>"
 msgstr[1] "{0} tulosta haulle: <span class=active>"
 
 #, java-format
-msgid "1 entry"
-msgid_plural "{0} entries"
-msgstr[0] "1 merkintä"
-msgstr[1] "{0} merkintää"
+msgid "Book contains 1 entry"
+msgid_plural "Book contains {0} entries"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Add"
 msgstr "Lisää"
@@ -674,3 +674,5 @@ msgstr "Pääosoitekirjaasi manuaalisesti lisätyt osoitteet yhdistetään reiti
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Tilauksistasi saamasi isännät yhdistetään reitittimen osoitekirjaasi."
+
+#, java-format

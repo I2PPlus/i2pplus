@@ -1968,7 +1968,7 @@ msgid "FAQ"
 msgstr "FAQ"
 
 msgid "JSON-RPC API"
-msgstr ""
+msgstr "JSON-RPC API"
 
 msgid "Manage your I2P hosts file here (I2P domain name resolution)"
 msgstr "I2P 호스트 파일을 여기서 관리합니다 (I2P 도메인 이름 관리)"
@@ -2690,7 +2690,7 @@ msgid "Lookup"
 msgstr "조회"
 
 msgid "Select the field to search on"
-msgstr ""
+msgstr "검색할 필드 선택"
 
 msgid "e.g. cn hk"
 msgstr "예: cn hk"
@@ -2943,7 +2943,7 @@ msgid "Maximum Transmission Unit"
 msgstr "최대 전송 단위"
 
 msgid "Show all routers with this MTU in the NetDb"
-msgstr ""
+msgstr "NetDb에서 이 MTU를 사용하는 모든 라우터 표시"
 
 msgid "Addresses"
 msgstr "주소록"
@@ -5666,10 +5666,10 @@ msgid "Tunnel Filtering"
 msgstr "터널 필터링"
 
 msgid "Console API"
-msgstr ""
+msgstr "콘솔 API"
 
 msgid "JSONRPC"
-msgstr ""
+msgstr "JSONRPC"
 
 msgid "New User Guide"
 msgstr "신규 사용자 가이드"
@@ -6155,7 +6155,7 @@ msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP a
 msgstr "예: localhost와 192.168.1.10에서 HTTP와 HTTPS를 통한 접근을 허용하려면:"
 
 msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager's configuration section using the <i>reachable by</i> dropdown."
-msgstr ""
+msgstr "대부분의 클라이언트 서비스의 경우, 터널 관리자 구성 섹션에서 <i>도달 가능</i> 드롭다운을 사용하여 관련 서비스의 수신 주소를 변경합니다."
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "I2P 내부에서 IRC 접속은 어떻게 하나요?"
@@ -6590,10 +6590,10 @@ msgid "An introduction to tunnel access lists"
 msgstr "터널 액세스 목록 소개"
 
 msgid "I2PControl API"
-msgstr ""
+msgstr "I2PControl API"
 
 msgid "JSON-RPC API for remote router control and monitoring"
-msgstr ""
+msgstr "원격 라우터 제어 및 모니터링을 위한 JSON-RPC API"
 
 msgid "Information about the sidebar, network status messages, and theme overrides"
 msgstr "사이드바, 네트워크 상태 메시지 및 테마 재정의에 대한 정보"
@@ -6602,429 +6602,429 @@ msgid "Webhosting on I2P"
 msgstr "I2P에서의 웹호스팅"
 
 msgid "I2PControl JSON-RPC API"
-msgstr ""
+msgstr "I2PControl JSON-RPC API"
 
 msgid "I2PControl provides a JSON-RPC 2.0 interface for remote control and monitoring of your I2P router. This allows external applications to programmatically manage I2P settings, retrieve status information, and control router operations through standardized HTTP requests."
-msgstr ""
+msgstr "I2PControl는 I2P 라우터의 원격 제어 및 모니터링을 위한 JSON-RPC 2.0 인터페이스를 제공합니다. 이를 통해 외부 애플리케이션이 프로그래밍 방식으로 I2P 설정을 관리하고, 상태 정보를 검색하며, 표준화된 HTTP 요청을 통해 라우터 작업을 제어할 수 있습니다."
 
 #, java-format
 msgid "I2PControl is a JSON-RPC 2.0 interface for remote control and monitoring of your I2P router. It listens on {0} by default when enabled for security reasons and must be enabled through the {1}."
-msgstr ""
+msgstr "I2PControl는 I2P 라우터의 원격 제어 및 모니터링을 위한 JSON-RPC 2.0 인터페이스입니다. 보안상의 이유로 활성화되면 기본적으로 {0}에서 수신하며, {1}을 통해 활성화해야 합니다."
 
 msgid "Web Apps configuration page"
-msgstr ""
+msgstr "웹 앱 구성 페이지"
 
 msgid "Authentication"
-msgstr ""
+msgstr "인증"
 
 msgid "All API operations (except for authentication itself) require a valid authentication token. To obtain a token, you must first authenticate with your configured password:"
-msgstr ""
+msgstr "모든 API 작업(인증 자체 제외)에는 유효한 인증 토큰이 필요합니다. 토큰을 얻으려면 먼저 구성된 비밀번호로 인증해야 합니다:"
 
 msgid "The returned token must be included in either the 'Token' parameter or as an 'X-Auth-Token' HTTP header in all subsequent API calls."
-msgstr ""
+msgstr "반환된 토큰은 모든 후속 API 호출에서 'Token' 매개변수 또는 'X-Auth-Token' HTTP 헤더에 포함되어야 합니다."
 
 msgid "API Version: 1. Clients must specify API version 1 in authentication requests for compatibility."
-msgstr ""
+msgstr "API 버전: 1. 클라이언트는 호환성을 위해 인증 요청에서 API 버전 1을 지정해야 합니다."
 
 msgid "API Methods"
-msgstr ""
+msgstr "API 메서드"
 
 msgid "Authenticates with the I2PControl service and returns an authentication token for subsequent API calls."
-msgstr ""
+msgstr "I2PControl 서비스로 인증하고 후속 API 호출을 위한 인증 토큰을 반환합니다."
 
 msgid "Parameters:"
-msgstr ""
+msgstr "매개변수:"
 
 msgid "Password (string), API (integer, must be 1)"
-msgstr ""
+msgstr "비밀번호 (문자열), API (정수, 1이어야 함)"
 
 msgid "Returns:"
-msgstr ""
+msgstr "반환값:"
 
 msgid "Token (string), API (integer)"
-msgstr ""
+msgstr "토큰 (문자열), API (정수)"
 
 msgid "Authentication:"
-msgstr ""
+msgstr "인증:"
 
 msgid "None (this is the unauthenticated method)"
-msgstr ""
+msgstr "없음 (이것은 미인증 메서드입니다)"
 
 msgid "A simple test method that returns the provided string. Useful for testing API connectivity and authentication."
-msgstr ""
+msgstr "제공된 문자열을 반환하는 간단한 테스트 메서드입니다. API 연결 및 인증 테스트에 유용합니다."
 
 msgid "Echo (string)"
-msgstr ""
+msgstr "エコー (문자열)"
 
 msgid "Result (string - echoed input)"
-msgstr ""
+msgstr "결과 (문자열 - 에코 입력)"
 
 msgid "Required"
-msgstr ""
+msgstr "필수"
 
 msgid "Retrieves read-only status information about the I2P router. Each parameter is optional - include only the metrics you need."
-msgstr ""
+msgstr "I2P 라우터에 대한 읽기 전용 상태 정보를 검색합니다. 각 매개변수는 선택적이며, 필요한 측정 항목만 포함하세요."
 
 msgid "Any combination of:"
-msgstr ""
+msgstr "다음 중 원하는 조합:"
 
 msgid "Router version"
-msgstr ""
+msgstr "라우터 버전"
 
 msgid "Router uptime in milliseconds"
-msgstr ""
+msgstr "라우터 가동 시간(밀리초)"
 
 msgid "Current router status"
-msgstr ""
+msgstr "현재 라우터 상태"
 
 msgid "Network status (0-14)"
-msgstr ""
+msgstr "네트워크 상태 (0-14)"
 
 msgid "1-second average inbound bandwidth (Bps)"
-msgstr ""
+msgstr "1초 평균 인바운드 대역폭 (Bps)"
 
 msgid "1-second average outbound bandwidth (Bps)"
-msgstr ""
+msgstr "1초 평균 아웃바운드 대역폭 (Bps)"
 
 msgid "15-second average inbound bandwidth (Bps)"
-msgstr ""
+msgstr "15초 평균 인바운드 대역폭 (Bps)"
 
 msgid "15-second average outbound bandwidth (Bps)"
-msgstr ""
+msgstr "15초 평균 아웃바운드 대역폭 (Bps)"
 
 msgid "Number of participating tunnels"
-msgstr ""
+msgstr "참여 터널 수"
 
 msgid "Number of known peers"
-msgstr ""
+msgstr "알려진 피어 수"
 
 msgid "Number of active peers"
-msgstr ""
+msgstr "활성 피어 수"
 
 msgid "Number of fast peers"
-msgstr ""
+msgstr "빠른 피어 수"
 
 msgid "Number of high-capacity peers"
-msgstr ""
+msgstr "고용량 피어 수"
 
 msgid "Whether reseed is in progress"
-msgstr ""
+msgstr "재시드 진행 여부"
 
 msgid "Requested metrics with their current values"
-msgstr ""
+msgstr "현재 값이 포함된 요청된 측정 항목"
 
 msgid "Controls router lifecycle and management operations. Each operation is optional and executes asynchronously."
-msgstr ""
+msgstr "라우터 수명 주기 및 관리 작업을 제어합니다. 각 작업은 선택적이며 비동기적으로 실행됩니다."
 
 msgid "Graceful restart/shutdown"
-msgstr ""
+msgstr "우아한 재시작/종료"
 
 msgid "Immediate hard shutdown"
-msgstr ""
+msgstr "즉시 하드 종료"
 
 msgid "Immediate hard restart"
-msgstr ""
+msgstr "즉시 하드 재시작"
 
 msgid "Graceful shutdown (waits for tunnels)"
-msgstr ""
+msgstr "우아한 종료 (터널 대기)"
 
 msgid "Graceful restart (waits for tunnels)"
-msgstr ""
+msgstr "우아한 재시작 (터널 대기)"
 
 msgid "Trigger router reseeding"
-msgstr ""
+msgstr "라우터 재시드 트리거"
 
 msgid "Check for available updates"
-msgstr ""
+msgstr "사용 가능한 업데이트 확인"
 
 msgid "Install available updates"
-msgstr ""
+msgstr "사용 가능한 업데이트 설치"
 
 msgid "Confirmation of operation (null for most operations, result status for FindUpdates/Update)"
-msgstr ""
+msgstr "작업 확인 (대부분의 작업은 null, FindUpdates/Update의 경우 결과 상태)"
 
 msgid "Manages router network configuration. Parameters can be used to either set values (if provided) or retrieve current values (if null/omitted)."
-msgstr ""
+msgstr "라우터 네트워크 구성을 관리합니다. 매개변수는 값을 설정(제공된 경우)하거나 현재 값을 검색(null/생략된 경우)하는 데 사용할 수 있습니다."
 
 msgid "NTCP Transport Settings:"
-msgstr ""
+msgstr "NTCP 전송 설정:"
 
 msgid "NTCP port (1-65535)"
-msgstr ""
+msgstr "NTCP 포트 (1-65535)"
 
 msgid "NTCP hostname"
-msgstr ""
+msgstr "NTCP 호스트명"
 
 msgid "Auto IP setting"
-msgstr ""
+msgstr "자동 IP 설정"
 
 msgid "SSU Transport Settings:"
-msgstr ""
+msgstr "SSU 전송 설정:"
 
 msgid "SSU port (1-65535)"
-msgstr ""
+msgstr "SSU 포트 (1-65535)"
 
 msgid "SSU hostname"
-msgstr ""
+msgstr "SSU 호스트명"
 
 msgid "IP source detection"
-msgstr ""
+msgstr "IP 소스 감지"
 
 msgid "Read-only detected IP address"
-msgstr ""
+msgstr "읽기 전용 감지된 IP 주소"
 
 msgid "Network Settings:"
-msgstr ""
+msgstr "네트워크 설정:"
 
 msgid "UPnP enabled/disabled"
-msgstr ""
+msgstr "UPnP 활성화/비활성화"
 
 msgid "Laptop mode setting"
-msgstr ""
+msgstr "노트북 모드 설정"
 
 msgid "Bandwidth Settings:"
-msgstr ""
+msgstr "대역폭 설정:"
 
 msgid "Bandwidth share percentage (0-100)"
-msgstr ""
+msgstr "대역폭 공유 비율 (0-100)"
 
 msgid "Inbound bandwidth limit (Bps)"
-msgstr ""
+msgstr "인바운드 대역폭 제한 (Bps)"
 
 msgid "Outbound bandwidth limit (Bps)"
-msgstr ""
+msgstr "아웃바운드 대역폭 제한 (Bps)"
 
 msgid "SettingsSaved (boolean), RestartNeeded (boolean), plus current values for queried settings"
-msgstr ""
+msgstr "SettingsSaved (불리언), RestartNeeded (불리언), 쿼리된 설정의 현재 값 포함"
 
 msgid "Manages I2PControl service settings including password, port, and restart configuration."
-msgstr ""
+msgstr "비밀번호, 포트 및 재시작 구성을 포함한 I2PControl 서비스 설정을 관리합니다."
 
 msgid "Listen address (string, e.g., 127.0.0.1)"
-msgstr ""
+msgstr "수신 주소 (문자열, 예: 127.0.0.1)"
 
 msgid "New password (string)"
-msgstr ""
+msgstr "새 비밀번호 (문자열)"
 
 msgid "Listen port (integer, 1-65535)"
-msgstr ""
+msgstr "수신 포트 (정수, 1-65535)"
 
 msgid "SettingsSaved (boolean), RestartNeeded (boolean), current values for requested settings"
-msgstr ""
+msgstr "SettingsSaved (불리언), RestartNeeded (불리언), 요청된 설정의 현재 값"
 
 msgid "Access and modify advanced I2P router configuration settings."
-msgstr ""
+msgstr "고급 I2P 라우터 구성 설정에 접근하고 수정합니다."
 
 msgid "Key-value pairs of advanced settings"
-msgstr ""
+msgstr "고급 설정의 키-값 쌍"
 
 msgid "Updated settings values"
-msgstr ""
+msgstr "업데이트된 설정 값"
 
 msgid "Retrieves statistical rate data from router for monitoring and analysis. Useful for creating custom graphs or monitoring applications."
-msgstr ""
+msgstr "모니터링 및 분석을 위해 라우터에서 통계 비율 데이터를 검색합니다. 사용자 정의 그래프 또는 모니터링 애플리케이션 생성에 유용합니다."
 
 msgid "Statistical metric name (string)"
-msgstr ""
+msgstr "통계 측정 항목 이름 (문자열)"
 
 msgid "Time period in milliseconds (integer)"
-msgstr ""
+msgstr "밀리초 단위 시간 간격 (정수)"
 
 msgid "Result (number - average value for specified period)"
-msgstr ""
+msgstr "결과 (숫자 - 지정된 기간의 평균 값)"
 
 msgid "Network Status Codes"
-msgstr ""
+msgstr "네트워크 상태 코드"
 
 #, java-format
 msgid "The {0} field returns an integer value representing the current network connectivity status:"
-msgstr ""
+msgstr "{0} 필드는 현재 네트워크 연결 상태를 나타내는 정수 값을 반환합니다:"
 
 msgid "OK - Full connectivity"
-msgstr ""
+msgstr "OK - 완전한 연결"
 
 msgid "TESTING - Still establishing connectivity"
-msgstr ""
+msgstr "TESTING - 연결 설정 중"
 
 msgid "FIREWALLED - Behind restrictive firewall"
-msgstr ""
+msgstr "FIREWALLED - 제한적 방화벽 뒤"
 
 msgid "HIDDEN - Router in hidden mode"
-msgstr ""
+msgstr "HIDDEN - 숨김 모드의 라우터"
 
 msgid "WARN_FIREWALLED_AND_FAST - Firewalled but fast peer"
-msgstr ""
+msgstr "WARN_FIREWALLED_AND_FAST - 방화벽 뒤이지만 빠른 피어"
 
 msgid "WARN_FIREWALLED_AND_FLOODFILL - Firewalled but floodfill"
-msgstr ""
+msgstr "WARN_FIREWALLED_AND_FLOODFILL - 방화벽 뒤이지만 플러드필"
 
 msgid "WARN_FIREWALLED_WITH_INBOUND_TCP - Firewalled with inbound TCP"
-msgstr ""
+msgstr "WARN_FIREWALLED_WITH_INBOUND_TCP - 인바운드 TCP를 사용하는 방화벽"
 
 msgid "WARN_FIREWALLED_WITH_UDP_DISABLED - Firewalled with UDP disabled"
-msgstr ""
+msgstr "WARN_FIREWALLED_WITH_UDP_DISABLED - UDP가 비활성화된 방화벽"
 
 msgid "ERROR_I2CP - I2CP error"
-msgstr ""
+msgstr "ERROR_I2CP - I2CP 오류"
 
 msgid "ERROR_CLOCK_SKEW - System clock skew detected"
-msgstr ""
+msgstr "ERROR_CLOCK_SKEW - 시스템 클록 편차 감지"
 
 msgid "ERROR_PRIVATE_TCP_ADDRESS - Private TCP address configured"
-msgstr ""
+msgstr "ERROR_PRIVATE_TCP_ADDRESS - 개인 TCP 주소 구성됨"
 
 msgid "ERROR_SYMMETRIC_NAT - Symmetric NAT detected"
-msgstr ""
+msgstr "ERROR_SYMMETRIC_NAT - 대칭 NAT 감지"
 
 msgid "ERROR_UDP_PORT_IN_USE - UDP port already in use"
-msgstr ""
+msgstr "ERROR_UDP_PORT_IN_USE - UDP 포트가 이미 사용 중"
 
 msgid "ERROR_NO_ACTIVE_PEERS_CHECK_CONNECTION_AND_FIREWALL - No active peers"
-msgstr ""
+msgstr "ERROR_NO_ACTIVE_PEERS_CHECK_CONNECTION_AND_FIREWALL - 활성 피어 없음"
 
 msgid "ERROR_UDP_DISABLED_AND_TCP_UNSET - UDP disabled, TCP not configured"
-msgstr ""
+msgstr "ERROR_UDP_DISABLED_AND_TCP_UNSET - UDP 비활성화, TCP 미구성"
 
 msgid "Error Codes"
-msgstr ""
+msgstr "오류 코드"
 
 msgid "In addition to standard JSON-RPC 2.0 error codes, I2PControl provides specific error codes:"
-msgstr ""
+msgstr "표준 JSON-RPC 2.0 오류 코드 외에도 I2PControl은 특정 오류 코드를 제공합니다:"
 
 msgid "JSON parse error"
-msgstr ""
+msgstr "JSON 구문 분석 오류"
 
 msgid "Invalid request"
-msgstr ""
+msgstr "잘못된 요청"
 
 msgid "Method not found"
-msgstr ""
+msgstr "메서드를 찾을 수 없음"
 
 msgid "Invalid parameters"
-msgstr ""
+msgstr "잘못된 매개변수"
 
 msgid "Internal error"
-msgstr ""
+msgstr "내부 오류"
 
 msgid "Invalid password provided"
-msgstr ""
+msgstr "제공된 비밀번호가 잘못됨"
 
 msgid "No authentication token presented"
-msgstr ""
+msgstr "인증 토큰이 제공되지 않음"
 
 msgid "Authentication token doesn't exist"
-msgstr ""
+msgstr "인증 토큰이 존재하지 않음"
 
 msgid "The provided authentication token was expired and will be removed"
-msgstr ""
+msgstr "제공된 인증 토큰이 만료되어 제거됩니다"
 
 msgid "The version of the I2PControl API used wasn't specified, but is required to be specified"
-msgstr ""
+msgstr "사용된 I2PControl API 버전이 지정되지 않았지만 지정해야 합니다"
 
 msgid "The version of the I2PControl API specified is not supported by I2PControl"
-msgstr ""
+msgstr "지정된 I2PControl API 버전은 I2PControl에서 지원되지 않습니다"
 
 msgid "Rate Statistics"
-msgstr ""
+msgstr "비율 통계"
 
 #, java-format
 msgid "For a complete list of available rate statistics, see the {0} documentation in the router console or refer to the {1} online documentation. Common rate statistics include:"
-msgstr ""
+msgstr "사용 가능한 비율 통계의 전체 목록은 라우터 콘솔의 {0} 문서 또는 {1} 온라인 문서를 참조하세요. 일반적인 비율 통계에는 다음이 포함됩니다:"
 
 msgid "Bandwidth receive rate"
-msgstr ""
+msgstr "대역폭 수신 비율"
 
 msgid "Bandwidth send rate"
-msgstr ""
+msgstr "대역폭 전송 비율"
 
 msgid "Active peer count"
-msgstr ""
+msgstr "활성 피어 수"
 
 msgid "Known peer count"
-msgstr ""
+msgstr "알려진 피어 수"
 
 msgid "Tunnel test success time"
-msgstr ""
+msgstr "터널 테스트 성공 시간"
 
 msgid "Rate Statistics Documentation"
-msgstr ""
+msgstr "비율 통계 문서"
 
 #, java-format
 msgid "See the {0} documentation in the router console or refer to the {1} online documentation."
-msgstr ""
+msgstr "라우터 콘솔의 {0} 문서 또는 {1} 온라인 문서를 참조하세요."
 
 msgid "Example Usage"
-msgstr ""
+msgstr "사용 예시"
 
 msgid "Get Router Version and Uptime:"
-msgstr ""
+msgstr "라우터 버전 및 가동 시간 가져오기:"
 
 msgid "Get Current Bandwidth Usage:"
-msgstr ""
+msgstr "현재 대역폭 사용량 가져오기:"
 
 msgid "Change Bandwidth Limits:"
-msgstr ""
+msgstr "대역폭 제한 변경:"
 
 msgid "Graceful Restart:"
-msgstr ""
+msgstr "우아한 재시작:"
 
 msgid "Security Considerations"
-msgstr ""
+msgstr "보안 고려사항"
 
 #, java-format
 msgid "Always change the default API password from {0} to a strong, unique password"
-msgstr ""
+msgstr "항상 기본 API 비밀번호 {0}을(를) 강력하고 고유한 비밀번호로 변경하세요"
 
 msgid "Consider binding I2PControl to localhost only if not accessed remotely"
-msgstr ""
+msgstr "원격으로 접근하지 않는 경우 I2PControl을 로컬호스트에만 바인딩하는 것을 고려하세요"
 
 msgid "Use HTTPS when accessing I2PControl over untrusted networks"
-msgstr ""
+msgstr "신뢰할 수 없는 네트워크를 통해 I2PControl에 접근할 때 HTTPS를 사용하세요"
 
 msgid "Tokens may expire - implement re-authentication logic in your applications"
-msgstr ""
+msgstr "토큰이 만료될 수 있습니다 - 애플리케이션에서 재인증 로직을 구현하세요"
 
 msgid "Monitor I2PControl access logs for unauthorized usage"
-msgstr ""
+msgstr "권한 없는 사용을 위해 I2PControl 접근 로그를 모니터링하세요"
 
 msgid "Be cautious with router management operations - they can affect network connectivity"
-msgstr ""
+msgstr "라우터 관리 작업에 주의하세요 - 네트워크 연결에 영향을 줄 수 있습니다"
 
 msgid "Integration Examples"
-msgstr ""
+msgstr "통합 예시"
 
 msgid "The I2PControl API can be integrated with:"
-msgstr ""
+msgstr "I2PControl API는 다음과 통합할 수 있습니다:"
 
 msgid "Monitoring systems:"
-msgstr ""
+msgstr "모니터링 시스템:"
 
 msgid "Create custom dashboards for router performance"
-msgstr ""
+msgstr "라우터 성능을 위한 사용자 정의 대시보드 생성"
 
 msgid "Automation scripts:"
-msgstr ""
+msgstr "자동화 스크립트:"
 
 msgid "Schedule restarts or configuration changes"
-msgstr ""
+msgstr "재시작 또는 구성 변경 예약"
 
 msgid "Mobile applications:"
-msgstr ""
+msgstr "모바일 애플리케이션:"
 
 msgid "Monitor and manage your router remotely"
-msgstr ""
+msgstr "라우터를 원격으로 모니터링 및 관리"
 
 msgid "Network management tools:"
-msgstr ""
+msgstr "네트워크 관리 도구:"
 
 msgid "Integrate I2P status into broader network monitoring"
-msgstr ""
+msgstr "I2P 상태를 더 넓은 네트워크 모니터링에 통합"
 
 msgid "Alerting systems:"
-msgstr ""
+msgstr "경고 시스템:"
 
 msgid "Send notifications based on router status changes"
-msgstr ""
+msgstr "라우터 상태 변경에 따른 알림 전송"
 
 msgid "Licensing Information"
 msgstr "라이센스 정보"
@@ -7210,7 +7210,7 @@ msgid "Getting Support Online"
 msgstr "온라인 지원"
 
 msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> on I2P's internal IRC network."
-msgstr ""
+msgstr "<a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P 웹사이트</a>의 정보를 검토하거나, <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P 토론 포럼</a>에 메시지를 게시하거나, I2P의 내부 IRC 네트워크에서 <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> 또는 <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a>를 방문하실 수도 있습니다."
 
 msgid "Reporting Bugs"
 msgstr "버그 보고"

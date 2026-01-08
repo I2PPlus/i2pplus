@@ -92,10 +92,10 @@ msgstr[0] "Ένα αποτέλεσμα για: <span class=active>"
 msgstr[1] "{0} Αποτελέσματα για: <span class=active>"
 
 #, java-format
-msgid "1 entry"
-msgid_plural "{0} entries"
-msgstr[0] "1 είσοδος"
-msgstr[1] "{0} καταχωρήσεις"
+msgid "Book contains 1 entry"
+msgid_plural "Book contains {0} entries"
+msgstr[0] ""
+msgstr[1] ""
 
 msgid "Add"
 msgstr "Πρόσθεση"
@@ -674,3 +674,5 @@ msgstr "Οι διευθύνσεις που προστέθηκαν χειροκί
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Οι κεντρικοί υπολογιστές που λαμβάνετε από τις συνδρομές σας θα συγχωνευθούν με το βιβλίο διευθύνσεων του δρομολογητή σας."
+
+#, java-format

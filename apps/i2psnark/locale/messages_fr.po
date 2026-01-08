@@ -1503,21 +1503,3 @@ msgstr "Enregistrer les modifications"
 
 msgid "Torrent must be stopped"
 msgstr "Le torrent doit être arrêté"
-
-#, java-format
-
-
-
-
-
-
-
-
-#, java-format
-
-#, java-format
-
-#, java-format
-
-
-

@@ -1512,21 +1512,3 @@ msgstr "Zapisz zmiany"
 
 msgid "Torrent must be stopped"
 msgstr "Trzeba zatrzymać torrent"
-
-#, java-format
-
-
-
-
-
-
-
-
-#, java-format
-
-#, java-format
-
-#, java-format
-
-
-

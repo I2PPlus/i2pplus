@@ -426,4 +426,3 @@ msgstr "Нажмите сюда если автоматическое перен
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
 msgstr "Для {0} аутентификация сохранена, перенаправляем дальше."
-
