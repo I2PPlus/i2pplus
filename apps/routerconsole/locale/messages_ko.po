@@ -117,7 +117,7 @@ msgid "Total number of threads in use"
 msgstr "사용 중인 스레드의 총 수"
 
 msgid "Peers without a published IP address"
-msgstr "Peers without a published IP address"
+msgstr "게시된 IP 주소가 없는 피어"
 
 msgid "Average tunnel build success %"
 msgstr "평균 터널 빌드 성공 %"
@@ -7958,7 +7958,7 @@ msgid "Skip Setup"
 msgstr "설정을 건너 뜁니다"
 
 msgid "Select the language to be used for the router console and web applications ("
-msgstr ""
+msgstr "라우터 콘솔 및 웹 애플리케이션에 사용할 언어 선택 ("
 
 msgid "Router Console &amp; WebApps Display Language"
 msgstr "라우터 콘솔 및 WebApps 표시 언어"

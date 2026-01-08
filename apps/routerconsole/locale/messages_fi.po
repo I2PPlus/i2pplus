@@ -1976,7 +1976,7 @@ msgid "FAQ"
 msgstr "UKK"
 
 msgid "JSON-RPC API"
-msgstr ""
+msgstr "JSON-RPC-ohjelmointirajapinta"
 
 msgid "Manage your I2P hosts file here (I2P domain name resolution)"
 msgstr "Hallinnoi I2P-isäntätiedostoasi täällä (I2P-verkkotunnuksen resoluutio)"
@@ -2698,7 +2698,7 @@ msgid "Lookup"
 msgstr "Haku"
 
 msgid "Select the field to search on"
-msgstr ""
+msgstr "Valitse kenttä, josta haetaan"
 
 msgid "e.g. cn hk"
 msgstr "esim. cn hk"
@@ -2951,7 +2951,7 @@ msgid "Maximum Transmission Unit"
 msgstr "Maksimi siirtoyksikkö"
 
 msgid "Show all routers with this MTU in the NetDb"
-msgstr ""
+msgstr "Näytä kaikki tällä MTU:lla varustetut reitittimet NetDb:ssä"
 
 msgid "Addresses"
 msgstr "Osoitteet"
@@ -5684,10 +5684,10 @@ msgid "Tunnel Filtering"
 msgstr "Tunnelisuodatus"
 
 msgid "Console API"
-msgstr ""
+msgstr "Konsolin ohjelmointirajapinta"
 
 msgid "JSONRPC"
-msgstr ""
+msgstr "JSONRPC"
 
 msgid "New User Guide"
 msgstr "Uusi käyttöopas"
@@ -6173,7 +6173,7 @@ msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP a
 msgstr "Esimerkki: Salli pääsy localhostista ja 192.168.1.10 HTTP:n ja HTTPS:n kautta:"
 
 msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager's configuration section using the <i>reachable by</i> dropdown."
-msgstr ""
+msgstr "Useimmille asiakaspalveluille voit muuttaa kuuntelun osoitetta Tunnel Managerin määritysosiossa käyttämällä <i>saavutettavissa oleva</i>-pudotusvalikkoa."
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "Kuinka yhdistän IRC:hen I2P:n sisällä?"
@@ -6608,10 +6608,10 @@ msgid "An introduction to tunnel access lists"
 msgstr "Johdanto tunnelien pääsylistoihin"
 
 msgid "I2PControl API"
-msgstr ""
+msgstr "I2PControl-ohjelmointirajapinta"
 
 msgid "JSON-RPC API for remote router control and monitoring"
-msgstr ""
+msgstr "JSON-RPC-ohjelmointirajapinta etäohjaukseen ja seurantaan"
 
 msgid "Information about the sidebar, network status messages, and theme overrides"
 msgstr "Tietoa sivupalkista, verkoston tilaviesteistä ja teeman ohituksista"
@@ -6620,429 +6620,429 @@ msgid "Webhosting on I2P"
 msgstr "Webhotellipalvelu I2P:ssä"
 
 msgid "I2PControl JSON-RPC API"
-msgstr ""
+msgstr "I2PControl JSON-RPC-ohjelmointirajapinta"
 
 msgid "I2PControl provides a JSON-RPC 2.0 interface for remote control and monitoring of your I2P router. This allows external applications to programmatically manage I2P settings, retrieve status information, and control router operations through standardized HTTP requests."
-msgstr ""
+msgstr "I2PControl tarjoaa JSON-RPC 2.0 -ohjelmointirajapinnan I2P-reitittimesi etäohjaukseen ja seurantaan. Tämä mahdollistaa ulkoisten sovellusten ohjelmallisesti hallita I2P-asetuksia, hakea tilatietoja ja ohjata reititintoimintoja standardoitujen HTTP-pyyntöjen kautta."
 
 #, java-format
 msgid "I2PControl is a JSON-RPC 2.0 interface for remote control and monitoring of your I2P router. It listens on {0} by default when enabled for security reasons and must be enabled through the {1}."
-msgstr ""
+msgstr "I2PControl on JSON-RPC 2.0 -ohjelmointirajapinta I2P-reitittimesi etäohjaukseen ja seurantaan. Se kuuntelee oletuksena osoitteessa {0} turvallisuussyistä, kun se on käytössä, ja se on otettava käyttöön {1}:n kautta."
 
 msgid "Web Apps configuration page"
-msgstr ""
+msgstr "Verkkosovellusten määrityssivu"
 
 msgid "Authentication"
-msgstr ""
+msgstr "Todennus"
 
 msgid "All API operations (except for authentication itself) require a valid authentication token. To obtain a token, you must first authenticate with your configured password:"
-msgstr ""
+msgstr "Kaikki ohjelmointirajapintatoiminnot (paitsi itse todennus) vaativat kelvollisen todennustunnuksen. Tunnuksen saamiseksi sinun on ensin todennettava määritetyllä salasanallasi:"
 
 msgid "The returned token must be included in either the 'Token' parameter or as an 'X-Auth-Token' HTTP header in all subsequent API calls."
-msgstr ""
+msgstr "Palautettu tunnus on sisällytettävä joko 'Token'-parametriin tai 'X-Auth-Token'-HTTP-otsikkoon kaikissa seuraavissa ohjelmointirajapintakutsuissa."
 
 msgid "API Version: 1. Clients must specify API version 1 in authentication requests for compatibility."
-msgstr ""
+msgstr "Ohjelmointirajapinnan versio: 1. Asiakkaiden on määritettävä ohjelmointirajapinnan versio 1 todennuspyynnöissä yhteensopivuuden varmistamiseksi."
 
 msgid "API Methods"
-msgstr ""
+msgstr "Ohjelmointirajapintatoiminnot"
 
 msgid "Authenticates with the I2PControl service and returns an authentication token for subsequent API calls."
-msgstr ""
+msgstr "Todentaa I2PControl-palvelun kanssa ja palauttaa todennustunnuksen seuraavia ohjelmointirajapintakutsuja varten."
 
 msgid "Parameters:"
-msgstr ""
+msgstr "Parametrit:"
 
 msgid "Password (string), API (integer, must be 1)"
-msgstr ""
+msgstr "Salasana (merkkijono), ohjelmointirajapinta (kokonaisluku, oltava 1)"
 
 msgid "Returns:"
-msgstr ""
+msgstr "Palauttaa:"
 
 msgid "Token (string), API (integer)"
-msgstr ""
+msgstr "Tunnus (merkkijono), ohjelmointirajapinta (kokonaisluku)"
 
 msgid "Authentication:"
-msgstr ""
+msgstr "Todennus:"
 
 msgid "None (this is the unauthenticated method)"
-msgstr ""
+msgstr "Ei mitään (tämä on todentamaton menetelmä)"
 
 msgid "A simple test method that returns the provided string. Useful for testing API connectivity and authentication."
-msgstr ""
+msgstr "Yksinkertainen testimenetelmä, joka palauttaa annetun merkkijonon. Hyödyllinen ohjelmointirajapinnan yhteyksien ja todennuksen testaamiseen."
 
 msgid "Echo (string)"
-msgstr ""
+msgstr "Kaiutus (merkkijono)"
 
 msgid "Result (string - echoed input)"
-msgstr ""
+msgstr "Tulos (merkkijono - kaiutettu syöte)"
 
 msgid "Required"
-msgstr ""
+msgstr "Vaaditaan"
 
 msgid "Retrieves read-only status information about the I2P router. Each parameter is optional - include only the metrics you need."
-msgstr ""
+msgstr "Hakee vain luku -tilatietoja I2P-reitittimestä. Jokainen parametri on valinnainen - sisällytä vain tarvitsemasi mittarit."
 
 msgid "Any combination of:"
-msgstr ""
+msgstr "Mikä tahansa yhdistelmä:"
 
 msgid "Router version"
-msgstr ""
+msgstr "Reitittimen versio"
 
 msgid "Router uptime in milliseconds"
-msgstr ""
+msgstr "Reitittimen käyttöaika millisekunteina"
 
 msgid "Current router status"
-msgstr ""
+msgstr "Nykyinen reitittimen tila"
 
 msgid "Network status (0-14)"
-msgstr ""
+msgstr "Verkon tila (0-14)"
 
 msgid "1-second average inbound bandwidth (Bps)"
-msgstr ""
+msgstr "1 sekunnin keskimääräinen saapuva kaistanleveys (B/s)"
 
 msgid "1-second average outbound bandwidth (Bps)"
-msgstr ""
+msgstr "1 sekunnin keskimääräinen lähtevä kaistanleveys (B/s)"
 
 msgid "15-second average inbound bandwidth (Bps)"
-msgstr ""
+msgstr "15 sekunnin keskimääräinen saapuva kaistanleveys (B/s)"
 
 msgid "15-second average outbound bandwidth (Bps)"
-msgstr ""
+msgstr "15 sekunnin keskimääräinen lähtevä kaistanleveys (B/s)"
 
 msgid "Number of participating tunnels"
-msgstr ""
+msgstr "Osallistuvien tunnelien määrä"
 
 msgid "Number of known peers"
-msgstr ""
+msgstr "Tunnettujen vertaisten määrä"
 
 msgid "Number of active peers"
-msgstr ""
+msgstr "Aktiivisten vertaisten määrä"
 
 msgid "Number of fast peers"
-msgstr ""
+msgstr "Nopeiden vertaisten määrä"
 
 msgid "Number of high-capacity peers"
-msgstr ""
+msgstr "Suuren kapasiteetin vertaisten määrä"
 
 msgid "Whether reseed is in progress"
-msgstr ""
+msgstr "Onko reseed käynnissä"
 
 msgid "Requested metrics with their current values"
-msgstr ""
+msgstr "Pyydetyt mittarit niiden nykyisillä arvoilla"
 
 msgid "Controls router lifecycle and management operations. Each operation is optional and executes asynchronously."
-msgstr ""
+msgstr "Ohjaa reitittimen elinkaarta ja hallintatoimintoja. Jokainen toiminto on valinnainen ja suoritetaan asynkronisesti."
 
 msgid "Graceful restart/shutdown"
-msgstr ""
+msgstr "Sulava uudelleenkäynnistys/sammutus"
 
 msgid "Immediate hard shutdown"
-msgstr ""
+msgstr "Välittömästi kova sammutus"
 
 msgid "Immediate hard restart"
-msgstr ""
+msgstr "Välittömästi kova uudelleenkäynnistys"
 
 msgid "Graceful shutdown (waits for tunnels)"
-msgstr ""
+msgstr "Sulava sammutus (odottaa tunneleita)"
 
 msgid "Graceful restart (waits for tunnels)"
-msgstr ""
+msgstr "Sulava uudelleenkäynnistys (odottaa tunneleita)"
 
 msgid "Trigger router reseeding"
-msgstr ""
+msgstr "Käynnistä reitittimen reseed"
 
 msgid "Check for available updates"
-msgstr ""
+msgstr "Tarkista saatavilla olevat päivitykset"
 
 msgid "Install available updates"
-msgstr ""
+msgstr "Asenna saatavilla olevat päivitykset"
 
 msgid "Confirmation of operation (null for most operations, result status for FindUpdates/Update)"
-msgstr ""
+msgstr "Toiminnon vahvistus (nolla useimmille toimintoille, tulostila FindUpdates/Update-toiminnoille)"
 
 msgid "Manages router network configuration. Parameters can be used to either set values (if provided) or retrieve current values (if null/omitted)."
-msgstr ""
+msgstr "Hallitsee reitittimen verkkomäärityksiä. Parametreja voidaan käyttää joko arvojen asettamiseen (jos annettu) tai nykyisten arvojen hakemiseen (jos nolla/pois jätetty)."
 
 msgid "NTCP Transport Settings:"
-msgstr ""
+msgstr "NTCP-kuljetusasetukset:"
 
 msgid "NTCP port (1-65535)"
-msgstr ""
+msgstr "NTCP-portti (1-65535)"
 
 msgid "NTCP hostname"
-msgstr ""
+msgstr "NTCP-isäntänimi"
 
 msgid "Auto IP setting"
-msgstr ""
+msgstr "Automaattinen IP-asetus"
 
 msgid "SSU Transport Settings:"
-msgstr ""
+msgstr "SSU-kuljetusasetukset:"
 
 msgid "SSU port (1-65535)"
-msgstr ""
+msgstr "SSU-portti (1-65535)"
 
 msgid "SSU hostname"
-msgstr ""
+msgstr "SSU-isäntänimi"
 
 msgid "IP source detection"
-msgstr ""
+msgstr "IP-lähteen tunnistus"
 
 msgid "Read-only detected IP address"
-msgstr ""
+msgstr "Vain luku - tunnistettu IP-osoite"
 
 msgid "Network Settings:"
-msgstr ""
+msgstr "Verkkoasetukset:"
 
 msgid "UPnP enabled/disabled"
-msgstr ""
+msgstr "UPnP käytössä/pois käytöstä"
 
 msgid "Laptop mode setting"
-msgstr ""
+msgstr "Kannettavan tietokoneen tila -asetus"
 
 msgid "Bandwidth Settings:"
-msgstr ""
+msgstr "Kaistanleveyden asetukset:"
 
 msgid "Bandwidth share percentage (0-100)"
-msgstr ""
+msgstr "Kaistanleveyden jakoprosentti (0-100)"
 
 msgid "Inbound bandwidth limit (Bps)"
-msgstr ""
+msgstr "Saapuvan kaistanleveyden raja (B/s)"
 
 msgid "Outbound bandwidth limit (Bps)"
-msgstr ""
+msgstr "Lähtevän kaistanleveyden raja (B/s)"
 
 msgid "SettingsSaved (boolean), RestartNeeded (boolean), plus current values for queried settings"
-msgstr ""
+msgstr "AsetuksetTallennettu (totuusarvo), UudelleenkäynnistysTarvitaan (totuusarvo), plus nykyiset arvot kyselyille asetuksille"
 
 msgid "Manages I2PControl service settings including password, port, and restart configuration."
-msgstr ""
+msgstr "Hallitsee I2PControl-palvelun asetuksia, mukaan lukien salasana, portti ja uudelleenkäynnistysmääritykset."
 
 msgid "Listen address (string, e.g., 127.0.0.1)"
-msgstr ""
+msgstr "Kuuntele osoite (merkkijono, esim. 127.0.0.1)"
 
 msgid "New password (string)"
-msgstr ""
+msgstr "Uusi salasana (merkkijono)"
 
 msgid "Listen port (integer, 1-65535)"
-msgstr ""
+msgstr "Kuunteluportti (kokonaisluku, 1-65535)"
 
 msgid "SettingsSaved (boolean), RestartNeeded (boolean), current values for requested settings"
-msgstr ""
+msgstr "AsetuksetTallennettu (totuusarvo), UudelleenkäynnistysTarvitaan (totuusarvo), nykyiset arvot pyydetyille asetuksille"
 
 msgid "Access and modify advanced I2P router configuration settings."
-msgstr ""
+msgstr "Käytä ja muokkaa edistyneitä I2P-reitittimen määritysasetuksia."
 
 msgid "Key-value pairs of advanced settings"
-msgstr ""
+msgstr "Avain-arvoparit edistyneille asetuksille"
 
 msgid "Updated settings values"
-msgstr ""
+msgstr "Päivitetyt asetusten arvot"
 
 msgid "Retrieves statistical rate data from router for monitoring and analysis. Useful for creating custom graphs or monitoring applications."
-msgstr ""
+msgstr "Hakee tilastollisia nopeustietoja reitittimestä seurantaan ja analysointiin. Hyödyllinen mukautettujen kaavioiden tai seurantasovellusten luomiseen."
 
 msgid "Statistical metric name (string)"
-msgstr ""
+msgstr "Tilastollisen mittarin nimi (merkkijono)"
 
 msgid "Time period in milliseconds (integer)"
-msgstr ""
+msgstr "Aikajakso millisekunteina (kokonaisluku)"
 
 msgid "Result (number - average value for specified period)"
-msgstr ""
+msgstr "Tulos (numero - keskiarvo määritetylle jaksolle)"
 
 msgid "Network Status Codes"
-msgstr ""
+msgstr "Verkon tilakoodit"
 
 #, java-format
 msgid "The {0} field returns an integer value representing the current network connectivity status:"
-msgstr ""
+msgstr "{0}-kenttä palauttaa kokonaislukuarvon, joka kuvaa nykyistä verkkovyhteyden tilaa:"
 
 msgid "OK - Full connectivity"
-msgstr ""
+msgstr "OK - Täysi yhteys"
 
 msgid "TESTING - Still establishing connectivity"
-msgstr ""
+msgstr "TESTAUS - Yhteyden muodostaminen edelleen käynnissä"
 
 msgid "FIREWALLED - Behind restrictive firewall"
-msgstr ""
+msgstr "PALOMUURI - Rajoittavan palomuurin takana"
 
 msgid "HIDDEN - Router in hidden mode"
-msgstr ""
+msgstr "PIILOSSA - Reititin piilotilassa"
 
 msgid "WARN_FIREWALLED_AND_FAST - Firewalled but fast peer"
-msgstr ""
+msgstr "VAROITUS_PALOMUURI_JA_NOPEUS - Palomuurin takana mutta nopea vertainen"
 
 msgid "WARN_FIREWALLED_AND_FLOODFILL - Firewalled but floodfill"
-msgstr ""
+msgstr "VAROITUS_PALOMUURI_JA_FLOODFILL - Palomuurin takana mutta floodfill"
 
 msgid "WARN_FIREWALLED_WITH_INBOUND_TCP - Firewalled with inbound TCP"
-msgstr ""
+msgstr "VAROITUS_PALOMUURI_SAAPUVALLA_TCP:LLÄ - Palomuurin takana saapuvalla TCP:llä"
 
 msgid "WARN_FIREWALLED_WITH_UDP_DISABLED - Firewalled with UDP disabled"
-msgstr ""
+msgstr "VAROITUS_PALOMUURI_UDP_POIS_KÄYTÖSTÄ - Palomuurin takana UDP poissa käytöstä"
 
 msgid "ERROR_I2CP - I2CP error"
-msgstr ""
+msgstr "VIRHE_I2CP - I2CP-virhe"
 
 msgid "ERROR_CLOCK_SKEW - System clock skew detected"
-msgstr ""
+msgstr "VIRHE_KELLON_POIKKEAMA - Järjestelmän kellon poikkeama havaittu"
 
 msgid "ERROR_PRIVATE_TCP_ADDRESS - Private TCP address configured"
-msgstr ""
+msgstr "VIRHE_YKSITYINEN_TCP_OSOITE - Yksityinen TCP-osoite määritetty"
 
 msgid "ERROR_SYMMETRIC_NAT - Symmetric NAT detected"
-msgstr ""
+msgstr "VIRHE_SYMMETRINEN_NAT - Symmetrinen NAT havaittu"
 
 msgid "ERROR_UDP_PORT_IN_USE - UDP port already in use"
-msgstr ""
+msgstr "VIRHE_UDP_PORTTI_KÄYTÖSSÄ - UDP-portti jo käytössä"
 
 msgid "ERROR_NO_ACTIVE_PEERS_CHECK_CONNECTION_AND_FIREWALL - No active peers"
-msgstr ""
+msgstr "VIRHE_EI_AKTIIVISIA_VERTAISIA_TARKISTA_YHTEYS_JA_PALOMUURI - Ei aktiivisia vertaisia"
 
 msgid "ERROR_UDP_DISABLED_AND_TCP_UNSET - UDP disabled, TCP not configured"
-msgstr ""
+msgstr "VIRHE_UDP_POIS_KÄYTÖSTÄ_JA_TCP_EI_MÄÄRITETTY - UDP poissa käytöstä, TCP ei määritetty"
 
 msgid "Error Codes"
-msgstr ""
+msgstr "Virhekoodit"
 
 msgid "In addition to standard JSON-RPC 2.0 error codes, I2PControl provides specific error codes:"
-msgstr ""
+msgstr "Standardien JSON-RPC 2.0 -virhekoodien lisäksi I2PControl tarjoaa tietyt virhekoodit:"
 
 msgid "JSON parse error"
-msgstr ""
+msgstr "JSON-jäsennysvirhe"
 
 msgid "Invalid request"
-msgstr ""
+msgstr "Virheellinen pyyntö"
 
 msgid "Method not found"
-msgstr ""
+msgstr "Menetelmää ei löydy"
 
 msgid "Invalid parameters"
-msgstr ""
+msgstr "Virheelliset parametrit"
 
 msgid "Internal error"
-msgstr ""
+msgstr "Sisäinen virhe"
 
 msgid "Invalid password provided"
-msgstr ""
+msgstr "Annettu virheellinen salasana"
 
 msgid "No authentication token presented"
-msgstr ""
+msgstr "Ei todennustunnusta esitetty"
 
 msgid "Authentication token doesn't exist"
-msgstr ""
+msgstr "Todennustunnusta ei ole olemassa"
 
 msgid "The provided authentication token was expired and will be removed"
-msgstr ""
+msgstr "Annettu todennustunnus on vanhentunut ja poistetaan"
 
 msgid "The version of the I2PControl API used wasn't specified, but is required to be specified"
-msgstr ""
+msgstr "Käytettyä I2PControl-ohjelmointirajapinnan versiota ei ole määritetty, vaikka se vaaditaan määritettäväksi"
 
 msgid "The version of the I2PControl API specified is not supported by I2PControl"
-msgstr ""
+msgstr "Määritettyä I2PControl-ohjelmointirajapinnan versiota ei tueta I2PControl:ssa"
 
 msgid "Rate Statistics"
-msgstr ""
+msgstr "Nopeustilastot"
 
 #, java-format
 msgid "For a complete list of available rate statistics, see the {0} documentation in the router console or refer to the {1} online documentation. Common rate statistics include:"
-msgstr ""
+msgstr "Täydellinen luettelo saatavilla olevista nopeustilastoista löytyy {0}-dokumentaatiosta reititinkonsolista tai {1}-verkko-dokumentaatiosta. Yleisiä nopeustilastoja ovat:"
 
 msgid "Bandwidth receive rate"
-msgstr ""
+msgstr "Kaistanleveyden vastaanottonopeus"
 
 msgid "Bandwidth send rate"
-msgstr ""
+msgstr "Kaistanleveyden lähetysnopeus"
 
 msgid "Active peer count"
-msgstr ""
+msgstr "Aktiivisten vertaisten määrä"
 
 msgid "Known peer count"
-msgstr ""
+msgstr "Tunnettujen vertaisten määrä"
 
 msgid "Tunnel test success time"
-msgstr ""
+msgstr "Tunnelin testin onnistumisaika"
 
 msgid "Rate Statistics Documentation"
-msgstr ""
+msgstr "Nopeustilastojen dokumentaatio"
 
 #, java-format
 msgid "See the {0} documentation in the router console or refer to the {1} online documentation."
-msgstr ""
+msgstr "Katso {0}-dokumentaatio reititinkonsolista tai {1}-verkko-dokumentaatiosta."
 
 msgid "Example Usage"
-msgstr ""
+msgstr "Esimerkkikäyttö"
 
 msgid "Get Router Version and Uptime:"
-msgstr ""
+msgstr "Hae reitittimen versio ja käyttöaika:"
 
 msgid "Get Current Bandwidth Usage:"
-msgstr ""
+msgstr "Hae nykyinen kaistanleveyden käyttö:"
 
 msgid "Change Bandwidth Limits:"
-msgstr ""
+msgstr "Muuta kaistanleveyden rajoja:"
 
 msgid "Graceful Restart:"
-msgstr ""
+msgstr "Sulava uudelleenkäynnistys:"
 
 msgid "Security Considerations"
-msgstr ""
+msgstr "Turvallisuusnäkökohdat"
 
 #, java-format
 msgid "Always change the default API password from {0} to a strong, unique password"
-msgstr ""
+msgstr "Vaihda aina oletusohjelmointirajapinnan salasana {0}:sta vahvaan, ainutlaatuiseen salasanaan"
 
 msgid "Consider binding I2PControl to localhost only if not accessed remotely"
-msgstr ""
+msgstr "Harkitse I2PControlin sitomista vain localhostiin, jos sitä ei käytetä etäyhteyden kautta"
 
 msgid "Use HTTPS when accessing I2PControl over untrusted networks"
-msgstr ""
+msgstr "Käytä HTTPS:ää, kun käytät I2PControlia epäluotettavien verkkojen kautta"
 
 msgid "Tokens may expire - implement re-authentication logic in your applications"
-msgstr ""
+msgstr "Tunnisteet voivat vanhentua - toteuta uudelleentodennuslogiikka sovelluksissasi"
 
 msgid "Monitor I2PControl access logs for unauthorized usage"
-msgstr ""
+msgstr "Seuraa I2PControlin käyttölokeja luvattoman käytön varalta"
 
 msgid "Be cautious with router management operations - they can affect network connectivity"
-msgstr ""
+msgstr "Ole varovainen reitittimen hallintatoimintojen kanssa - ne voivat vaikuttaa verkkoyhteyteen"
 
 msgid "Integration Examples"
-msgstr ""
+msgstr "Integraatioesimerkit"
 
 msgid "The I2PControl API can be integrated with:"
-msgstr ""
+msgstr "I2PControl-ohjelmointirajapinnan voi integroida:"
 
 msgid "Monitoring systems:"
-msgstr ""
+msgstr "Seurantajärjestelmät:"
 
 msgid "Create custom dashboards for router performance"
-msgstr ""
+msgstr "Luo mukautettuja koontinäyttöjä reitittimen suorituskykyä varten"
 
 msgid "Automation scripts:"
-msgstr ""
+msgstr "Automaatioskriptit:"
 
 msgid "Schedule restarts or configuration changes"
-msgstr ""
+msgstr "Ajoita uudelleenkäynnistyksiä tai määritysmuutoksia"
 
 msgid "Mobile applications:"
-msgstr ""
+msgstr "Mobiilisovellukset:"
 
 msgid "Monitor and manage your router remotely"
-msgstr ""
+msgstr "Seuraa ja hallitse reititintäsi etäyhteyden kautta"
 
 msgid "Network management tools:"
-msgstr ""
+msgstr "Verkonhallintatyökalut:"
 
 msgid "Integrate I2P status into broader network monitoring"
-msgstr ""
+msgstr "Integroi I2P:n tila laajempaan verkon seurantaan"
 
 msgid "Alerting systems:"
-msgstr ""
+msgstr "Hälytysjärjestelmät:"
 
 msgid "Send notifications based on router status changes"
-msgstr ""
+msgstr "Lähetä ilmoituksia reitittimen tilan muutosten perusteella"
 
 msgid "Licensing Information"
 msgstr "Lisenssitiedot"
@@ -7228,7 +7228,7 @@ msgid "Getting Support Online"
 msgstr "Tuen hakeminen verkosta"
 
 msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> on I2P's internal IRC network."
-msgstr ""
+msgstr "Haluat ehkä myös tarkistaa tiedot <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P-verkkosivustolta</a>, lähettää viestejä <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P-keskustelufoorumille</a> tai piipahtaa <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> tai <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> I2P:n sisäisessä IRC-verkossa."
 
 msgid "Reporting Bugs"
 msgstr "Bugiraportointi"
@@ -7976,7 +7976,7 @@ msgid "Skip Setup"
 msgstr "Ohita asennus"
 
 msgid "Select the language to be used for the router console and web applications ("
-msgstr ""
+msgstr "Valitse reititinkonsolille ja verkkosovelluksille käytettävä kieli ("
 
 msgid "Router Console &amp; WebApps Display Language"
 msgstr "Reititinkonsoli ja WebApps -näyttökieli"

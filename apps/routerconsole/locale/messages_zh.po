@@ -1968,7 +1968,7 @@ msgid "FAQ"
 msgstr "常见问题"
 
 msgid "JSON-RPC API"
-msgstr ""
+msgstr "JSON-RPC API"
 
 msgid "Manage your I2P hosts file here (I2P domain name resolution)"
 msgstr "管理您的 I2P hosts 文件（I2P 域名解析表）"
@@ -2690,7 +2690,7 @@ msgid "Lookup"
 msgstr "查找"
 
 msgid "Select the field to search on"
-msgstr ""
+msgstr "选择搜索字段"
 
 msgid "e.g. cn hk"
 msgstr "例如 cn hk"
@@ -2943,7 +2943,7 @@ msgid "Maximum Transmission Unit"
 msgstr "最大传输单元"
 
 msgid "Show all routers with this MTU in the NetDb"
-msgstr ""
+msgstr "在 NetDb 中显示具有此 MTU 的所有路由器"
 
 msgid "Addresses"
 msgstr "地址"
@@ -5666,10 +5666,10 @@ msgid "Tunnel Filtering"
 msgstr "隧道过滤"
 
 msgid "Console API"
-msgstr ""
+msgstr "控制台 API"
 
 msgid "JSONRPC"
-msgstr ""
+msgstr "JSONRPC"
 
 msgid "New User Guide"
 msgstr "新手指南"
@@ -6155,7 +6155,7 @@ msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP a
 msgstr "示例：允许从localhost和192.168.1.10通过HTTP和HTTPS访问："
 
 msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager's configuration section using the <i>reachable by</i> dropdown."
-msgstr ""
+msgstr "对于大多数客户端服务，请在隧道管理器的配置部分使用<i>可达性</i>下拉菜单更改相关服务的监听地址。"
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "如何使用 I2P 连接至 IRC?"
@@ -6590,10 +6590,10 @@ msgid "An introduction to tunnel access lists"
 msgstr "隧道过滤器简介"
 
 msgid "I2PControl API"
-msgstr ""
+msgstr "I2PControl API"
 
 msgid "JSON-RPC API for remote router control and monitoring"
-msgstr ""
+msgstr "用于远程路由器控制与监控的 JSON-RPC API"
 
 msgid "Information about the sidebar, network status messages, and theme overrides"
 msgstr "关于侧边栏、网络状态信息和主题覆写的帮助"
@@ -6602,429 +6602,429 @@ msgid "Webhosting on I2P"
 msgstr "在I2P上托管网站"
 
 msgid "I2PControl JSON-RPC API"
-msgstr ""
+msgstr "I2PControl JSON-RPC API"
 
 msgid "I2PControl provides a JSON-RPC 2.0 interface for remote control and monitoring of your I2P router. This allows external applications to programmatically manage I2P settings, retrieve status information, and control router operations through standardized HTTP requests."
-msgstr ""
+msgstr "I2PControl 提供了一个 JSON-RPC 2.0 接口，用于远程控制与监控您的 I2P 路由器。这允许外部应用程序通过标准化的 HTTP 请求以编程方式管理 I2P 设置、检索状态信息和控制路由器操作。"
 
 #, java-format
 msgid "I2PControl is a JSON-RPC 2.0 interface for remote control and monitoring of your I2P router. It listens on {0} by default when enabled for security reasons and must be enabled through the {1}."
-msgstr ""
+msgstr "I2PControl 是一个用于远程控制与监控 I2P 路由器的 JSON-RPC 2.0 接口。出于安全原因，默认情况下在 {0} 上监听，启用时必须通过 {1} 进行配置。"
 
 msgid "Web Apps configuration page"
-msgstr ""
+msgstr "Web 应用配置页面"
 
 msgid "Authentication"
-msgstr ""
+msgstr "身份验证"
 
 msgid "All API operations (except for authentication itself) require a valid authentication token. To obtain a token, you must first authenticate with your configured password:"
-msgstr ""
+msgstr "所有 API 操作（身份验证本身除外）都需要有效的身份验证令牌。要获取令牌，您必须首先使用配置的密码进行身份验证："
 
 msgid "The returned token must be included in either the 'Token' parameter or as an 'X-Auth-Token' HTTP header in all subsequent API calls."
-msgstr ""
+msgstr "返回的令牌必须包含在所有后续 API 调用的 'Token' 参数中或作为 'X-Auth-Token' HTTP 标头。"
 
 msgid "API Version: 1. Clients must specify API version 1 in authentication requests for compatibility."
-msgstr ""
+msgstr "API 版本：1。客户端必须在身份验证请求中指定 API 版本 1 以确保兼容性。"
 
 msgid "API Methods"
-msgstr ""
+msgstr "API 方法"
 
 msgid "Authenticates with the I2PControl service and returns an authentication token for subsequent API calls."
-msgstr ""
+msgstr "使用 I2PControl 服务进行身份验证，并返回用于后续 API 调用的身份验证令牌。"
 
 msgid "Parameters:"
-msgstr ""
+msgstr "参数："
 
 msgid "Password (string), API (integer, must be 1)"
-msgstr ""
+msgstr "密码（字符串），API（整数，必须为 1）"
 
 msgid "Returns:"
-msgstr ""
+msgstr "返回："
 
 msgid "Token (string), API (integer)"
-msgstr ""
+msgstr "令牌（字符串），API（整数）"
 
 msgid "Authentication:"
-msgstr ""
+msgstr "身份验证："
 
 msgid "None (this is the unauthenticated method)"
-msgstr ""
+msgstr "无（这是未经身份验证的方法）"
 
 msgid "A simple test method that returns the provided string. Useful for testing API connectivity and authentication."
-msgstr ""
+msgstr "一个简单的测试方法，返回提供的字符串。可用于测试 API 连接和身份验证。"
 
 msgid "Echo (string)"
-msgstr ""
+msgstr "回显（字符串）"
 
 msgid "Result (string - echoed input)"
-msgstr ""
+msgstr "结果（字符串 - 回显输入）"
 
 msgid "Required"
-msgstr ""
+msgstr "必填"
 
 msgid "Retrieves read-only status information about the I2P router. Each parameter is optional - include only the metrics you need."
-msgstr ""
+msgstr "检索有关 I2P 路由器的只读状态信息。每个参数都是可选的 - 仅包含您需要的指标。"
 
 msgid "Any combination of:"
-msgstr ""
+msgstr "任意组合："
 
 msgid "Router version"
-msgstr ""
+msgstr "路由器版本"
 
 msgid "Router uptime in milliseconds"
-msgstr ""
+msgstr "路由器运行时间（毫秒）"
 
 msgid "Current router status"
-msgstr ""
+msgstr "当前路由器状态"
 
 msgid "Network status (0-14)"
-msgstr ""
+msgstr "网络状态 (0-14)"
 
 msgid "1-second average inbound bandwidth (Bps)"
-msgstr ""
+msgstr "1秒平均入站带宽（Bps）"
 
 msgid "1-second average outbound bandwidth (Bps)"
-msgstr ""
+msgstr "1秒平均出站带宽（Bps）"
 
 msgid "15-second average inbound bandwidth (Bps)"
-msgstr ""
+msgstr "15秒平均入站带宽（Bps）"
 
 msgid "15-second average outbound bandwidth (Bps)"
-msgstr ""
+msgstr "15秒平均出站带宽（Bps）"
 
 msgid "Number of participating tunnels"
-msgstr ""
+msgstr "参与的隧道数量"
 
 msgid "Number of known peers"
-msgstr ""
+msgstr "已知对等节点数量"
 
 msgid "Number of active peers"
-msgstr ""
+msgstr "活跃对等节点数量"
 
 msgid "Number of fast peers"
-msgstr ""
+msgstr "快速对等节点数量"
 
 msgid "Number of high-capacity peers"
-msgstr ""
+msgstr "高容量对等节点数量"
 
 msgid "Whether reseed is in progress"
-msgstr ""
+msgstr "补种是否正在进行"
 
 msgid "Requested metrics with their current values"
-msgstr ""
+msgstr "请求的指标及其当前值"
 
 msgid "Controls router lifecycle and management operations. Each operation is optional and executes asynchronously."
-msgstr ""
+msgstr "控制路由器生命周期和管理操作。每个操作都是可选的，并异步执行。"
 
 msgid "Graceful restart/shutdown"
-msgstr ""
+msgstr "平滑重启/关闭"
 
 msgid "Immediate hard shutdown"
-msgstr ""
+msgstr "立即硬关闭"
 
 msgid "Immediate hard restart"
-msgstr ""
+msgstr "立即硬重启"
 
 msgid "Graceful shutdown (waits for tunnels)"
-msgstr ""
+msgstr "平滑关闭（等待隧道）"
 
 msgid "Graceful restart (waits for tunnels)"
-msgstr ""
+msgstr "平滑重启（等待隧道）"
 
 msgid "Trigger router reseeding"
-msgstr ""
+msgstr "触发路由器补种"
 
 msgid "Check for available updates"
-msgstr ""
+msgstr "检查可用更新"
 
 msgid "Install available updates"
-msgstr ""
+msgstr "安装可用更新"
 
 msgid "Confirmation of operation (null for most operations, result status for FindUpdates/Update)"
-msgstr ""
+msgstr "操作确认（大多数操作为 null，FindUpdates/Update 为结果状态）"
 
 msgid "Manages router network configuration. Parameters can be used to either set values (if provided) or retrieve current values (if null/omitted)."
-msgstr ""
+msgstr "管理路由器网络配置。参数可用于设置值（如果提供）或检索当前值（如果为 null/省略）。"
 
 msgid "NTCP Transport Settings:"
-msgstr ""
+msgstr "NTCP 传输设置："
 
 msgid "NTCP port (1-65535)"
-msgstr ""
+msgstr "NTCP 端口 (1-65535)"
 
 msgid "NTCP hostname"
-msgstr ""
+msgstr "NTCP 主机名"
 
 msgid "Auto IP setting"
-msgstr ""
+msgstr "自动 IP 设置"
 
 msgid "SSU Transport Settings:"
-msgstr ""
+msgstr "SSU 传输设置："
 
 msgid "SSU port (1-65535)"
-msgstr ""
+msgstr "SSU 端口 (1-65535)"
 
 msgid "SSU hostname"
-msgstr ""
+msgstr "SSU 主机名"
 
 msgid "IP source detection"
-msgstr ""
+msgstr "IP 来源检测"
 
 msgid "Read-only detected IP address"
-msgstr ""
+msgstr "只读检测到的 IP 地址"
 
 msgid "Network Settings:"
-msgstr ""
+msgstr "网络设置："
 
 msgid "UPnP enabled/disabled"
-msgstr ""
+msgstr "UPnP 启用/禁用"
 
 msgid "Laptop mode setting"
-msgstr ""
+msgstr "笔记本模式设置"
 
 msgid "Bandwidth Settings:"
-msgstr ""
+msgstr "带宽设置："
 
 msgid "Bandwidth share percentage (0-100)"
-msgstr ""
+msgstr "带宽共享百分比 (0-100)"
 
 msgid "Inbound bandwidth limit (Bps)"
-msgstr ""
+msgstr "入站带宽限制 (Bps)"
 
 msgid "Outbound bandwidth limit (Bps)"
-msgstr ""
+msgstr "出站带宽限制 (Bps)"
 
 msgid "SettingsSaved (boolean), RestartNeeded (boolean), plus current values for queried settings"
-msgstr ""
+msgstr "SettingsSaved（布尔值），RestartNeeded（布尔值），以及查询设置的当前值"
 
 msgid "Manages I2PControl service settings including password, port, and restart configuration."
-msgstr ""
+msgstr "管理 I2PControl 服务设置，包括密码、端口和重启配置。"
 
 msgid "Listen address (string, e.g., 127.0.0.1)"
-msgstr ""
+msgstr "监听地址（字符串，例如 127.0.0.1）"
 
 msgid "New password (string)"
-msgstr ""
+msgstr "新密码（字符串）"
 
 msgid "Listen port (integer, 1-65535)"
-msgstr ""
+msgstr "监听端口（整数，1-65535）"
 
 msgid "SettingsSaved (boolean), RestartNeeded (boolean), current values for requested settings"
-msgstr ""
+msgstr "SettingsSaved（布尔值），RestartNeeded（布尔值），请求设置的当前值"
 
 msgid "Access and modify advanced I2P router configuration settings."
-msgstr ""
+msgstr "访问和修改高级 I2P 路由器配置设置。"
 
 msgid "Key-value pairs of advanced settings"
-msgstr ""
+msgstr "高级设置的键值对"
 
 msgid "Updated settings values"
-msgstr ""
+msgstr "更新的设置值"
 
 msgid "Retrieves statistical rate data from router for monitoring and analysis. Useful for creating custom graphs or monitoring applications."
-msgstr ""
+msgstr "从路由器检索统计速率数据，用于监控和分析。可用于创建自定义图表或监控应用程序。"
 
 msgid "Statistical metric name (string)"
-msgstr ""
+msgstr "统计指标名称（字符串）"
 
 msgid "Time period in milliseconds (integer)"
-msgstr ""
+msgstr "时间周期（毫秒，整数）"
 
 msgid "Result (number - average value for specified period)"
-msgstr ""
+msgstr "结果（数字 - 指定周期的平均值）"
 
 msgid "Network Status Codes"
-msgstr ""
+msgstr "网络状态代码"
 
 #, java-format
 msgid "The {0} field returns an integer value representing the current network connectivity status:"
-msgstr ""
+msgstr "{0} 字段返回一个整数，表示当前网络连接状态："
 
 msgid "OK - Full connectivity"
-msgstr ""
+msgstr "正常 - 完全连接"
 
 msgid "TESTING - Still establishing connectivity"
-msgstr ""
+msgstr "测试中 - 仍在建立连接"
 
 msgid "FIREWALLED - Behind restrictive firewall"
-msgstr ""
+msgstr "被防火墙限制 - 处于严格防火墙之后"
 
 msgid "HIDDEN - Router in hidden mode"
-msgstr ""
+msgstr "隐藏 - 路由器处于隐藏模式"
 
 msgid "WARN_FIREWALLED_AND_FAST - Firewalled but fast peer"
-msgstr ""
+msgstr "警告_被防火墙限制_快速 - 被防火墙限制但速度快"
 
 msgid "WARN_FIREWALLED_AND_FLOODFILL - Firewalled but floodfill"
-msgstr ""
+msgstr "警告_被防火墙限制_洪水填充 - 被防火墙限制但作为洪水填充节点"
 
 msgid "WARN_FIREWALLED_WITH_INBOUND_TCP - Firewalled with inbound TCP"
-msgstr ""
+msgstr "警告_被防火墙限制_入站TCP - 被防火墙限制且有入站TCP"
 
 msgid "WARN_FIREWALLED_WITH_UDP_DISABLED - Firewalled with UDP disabled"
-msgstr ""
+msgstr "警告_被防火墙限制_UDP禁用 - 被防火墙限制且UDP已禁用"
 
 msgid "ERROR_I2CP - I2CP error"
-msgstr ""
+msgstr "错误_I2CP - I2CP 错误"
 
 msgid "ERROR_CLOCK_SKEW - System clock skew detected"
-msgstr ""
+msgstr "错误_时钟偏移 - 检测到系统时钟偏移"
 
 msgid "ERROR_PRIVATE_TCP_ADDRESS - Private TCP address configured"
-msgstr ""
+msgstr "错误_私有TCP地址 - 配置了私有 TCP 地址"
 
 msgid "ERROR_SYMMETRIC_NAT - Symmetric NAT detected"
-msgstr ""
+msgstr "错误_对称NAT - 检测到对称 NAT"
 
 msgid "ERROR_UDP_PORT_IN_USE - UDP port already in use"
-msgstr ""
+msgstr "错误_UDP端口占用 - UDP 端口已被使用"
 
 msgid "ERROR_NO_ACTIVE_PEERS_CHECK_CONNECTION_AND_FIREWALL - No active peers"
-msgstr ""
+msgstr "错误_无活跃对等节点_检查连接和防火墙 - 无活跃对等节点"
 
 msgid "ERROR_UDP_DISABLED_AND_TCP_UNSET - UDP disabled, TCP not configured"
-msgstr ""
+msgstr "错误_UDP禁用且TCP未设置 - UDP 已禁用，TCP 未配置"
 
 msgid "Error Codes"
-msgstr ""
+msgstr "错误代码"
 
 msgid "In addition to standard JSON-RPC 2.0 error codes, I2PControl provides specific error codes:"
-msgstr ""
+msgstr "除了标准的 JSON-RPC 2.0 错误代码外，I2PControl 还提供特定的错误代码："
 
 msgid "JSON parse error"
-msgstr ""
+msgstr "JSON 解析错误"
 
 msgid "Invalid request"
-msgstr ""
+msgstr "无效请求"
 
 msgid "Method not found"
-msgstr ""
+msgstr "方法未找到"
 
 msgid "Invalid parameters"
-msgstr ""
+msgstr "无效参数"
 
 msgid "Internal error"
-msgstr ""
+msgstr "内部错误"
 
 msgid "Invalid password provided"
-msgstr ""
+msgstr "提供了无效密码"
 
 msgid "No authentication token presented"
-msgstr ""
+msgstr "未提供身份验证令牌"
 
 msgid "Authentication token doesn't exist"
-msgstr ""
+msgstr "身份验证令牌不存在"
 
 msgid "The provided authentication token was expired and will be removed"
-msgstr ""
+msgstr "提供的身份验证令牌已过期，将被移除"
 
 msgid "The version of the I2PControl API used wasn't specified, but is required to be specified"
-msgstr ""
+msgstr "未指定所使用的 I2PControl API 版本，但需要指定"
 
 msgid "The version of the I2PControl API specified is not supported by I2PControl"
-msgstr ""
+msgstr "I2PControl 不支持指定的 I2PControl API 版本"
 
 msgid "Rate Statistics"
-msgstr ""
+msgstr "速率统计"
 
 #, java-format
 msgid "For a complete list of available rate statistics, see the {0} documentation in the router console or refer to the {1} online documentation. Common rate statistics include:"
-msgstr ""
+msgstr "有关可用速率统计的完整列表，请参阅路由器控制台中的 {0} 文档或参考 {1} 在线文档。常见的速率统计包括："
 
 msgid "Bandwidth receive rate"
-msgstr ""
+msgstr "带宽接收速率"
 
 msgid "Bandwidth send rate"
-msgstr ""
+msgstr "带宽发送速率"
 
 msgid "Active peer count"
-msgstr ""
+msgstr "活跃对等节点计数"
 
 msgid "Known peer count"
-msgstr ""
+msgstr "已知对等节点计数"
 
 msgid "Tunnel test success time"
-msgstr ""
+msgstr "隧道测试成功时间"
 
 msgid "Rate Statistics Documentation"
-msgstr ""
+msgstr "速率统计文档"
 
 #, java-format
 msgid "See the {0} documentation in the router console or refer to the {1} online documentation."
-msgstr ""
+msgstr "请参阅路由器控制台中的 {0} 文档或参考 {1} 在线文档。"
 
 msgid "Example Usage"
-msgstr ""
+msgstr "使用示例"
 
 msgid "Get Router Version and Uptime:"
-msgstr ""
+msgstr "获取路由器版本和运行时间："
 
 msgid "Get Current Bandwidth Usage:"
-msgstr ""
+msgstr "获取当前带宽使用情况："
 
 msgid "Change Bandwidth Limits:"
-msgstr ""
+msgstr "更改带宽限制："
 
 msgid "Graceful Restart:"
-msgstr ""
+msgstr "平滑重启："
 
 msgid "Security Considerations"
-msgstr ""
+msgstr "安全注意事项"
 
 #, java-format
 msgid "Always change the default API password from {0} to a strong, unique password"
-msgstr ""
+msgstr "请务必将默认 API 密码从 {0} 更改为强密码"
 
 msgid "Consider binding I2PControl to localhost only if not accessed remotely"
-msgstr ""
+msgstr "如果不远程访问，请考虑将 I2PControl 绑定到 localhost"
 
 msgid "Use HTTPS when accessing I2PControl over untrusted networks"
-msgstr ""
+msgstr "通过不受信任的网络访问 I2PControl 时使用 HTTPS"
 
 msgid "Tokens may expire - implement re-authentication logic in your applications"
-msgstr ""
+msgstr "令牌可能会过期 - 在您的应用程序中实现重新身份验证逻辑"
 
 msgid "Monitor I2PControl access logs for unauthorized usage"
-msgstr ""
+msgstr "监控 I2PControl 访问日志以发现未授权使用"
 
 msgid "Be cautious with router management operations - they can affect network connectivity"
-msgstr ""
+msgstr "谨慎进行路由器管理操作 - 它们可能会影响网络连接"
 
 msgid "Integration Examples"
-msgstr ""
+msgstr "集成示例"
 
 msgid "The I2PControl API can be integrated with:"
-msgstr ""
+msgstr "I2PControl API 可以与以下内容集成："
 
 msgid "Monitoring systems:"
-msgstr ""
+msgstr "监控系统："
 
 msgid "Create custom dashboards for router performance"
-msgstr ""
+msgstr "为路由器性能创建自定义仪表板"
 
 msgid "Automation scripts:"
-msgstr ""
+msgstr "自动化脚本："
 
 msgid "Schedule restarts or configuration changes"
-msgstr ""
+msgstr "计划重启或配置更改"
 
 msgid "Mobile applications:"
-msgstr ""
+msgstr "移动应用程序："
 
 msgid "Monitor and manage your router remotely"
-msgstr ""
+msgstr "远程监控和管理您的路由器"
 
 msgid "Network management tools:"
-msgstr ""
+msgstr "网络管理工具："
 
 msgid "Integrate I2P status into broader network monitoring"
-msgstr ""
+msgstr "将 I2P 状态集成到更广泛的网络监控中"
 
 msgid "Alerting systems:"
-msgstr ""
+msgstr "告警系统："
 
 msgid "Send notifications based on router status changes"
-msgstr ""
+msgstr "根据路由器状态变化发送通知"
 
 msgid "Licensing Information"
 msgstr "许可和版权声明"
@@ -7958,7 +7958,7 @@ msgid "Skip Setup"
 msgstr "跳过设置"
 
 msgid "Select the language to be used for the router console and web applications ("
-msgstr ""
+msgstr "选择路由器控制台和 Web 应用程序使用的语言（"
 
 msgid "Router Console &amp; WebApps Display Language"
 msgstr "路由器控制台和 WebApps显示语言"

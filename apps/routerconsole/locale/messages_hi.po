@@ -6627,422 +6627,422 @@ msgstr "I2PControl दूरस्थ राउटर नियंत्रण �
 
 #, java-format
 msgid "I2PControl is a JSON-RPC 2.0 interface for remote control and monitoring of your I2P router. It listens on {0} by default when enabled for security reasons and must be enabled through the {1}."
-msgstr ""
+msgstr "I2PControl दूरस्थ राउटर नियंत्रण और निगरानी के लिए JSON-RPC 2.0 इंटरफ़ेस है। सुरक्षा कारणों से सक्षम होने पर यह डिफ़ॉल्ट रूप से {0} पर सुनता है और इसे {1} के माध्यम से सक्षम करना होगा।"
 
 msgid "Web Apps configuration page"
-msgstr ""
+msgstr "वेब ऐप्स कॉन्फ़िगरेशन पृष्ठ"
 
 msgid "Authentication"
-msgstr ""
+msgstr "प्रमाणीकरण"
 
 msgid "All API operations (except for authentication itself) require a valid authentication token. To obtain a token, you must first authenticate with your configured password:"
-msgstr ""
+msgstr "सभी एपीआई ऑपरेशन (प्रमाणीकरण स्वयं को छोड़कर) के लिए एक वैध प्रमाणीकरण टोकन आवश्यक है। टोकन प्राप्त करने के लिए, आपको पहले अपने कॉन्फ़िगर किए गए पासवर्ड से प्रमाणित करना होगा:"
 
 msgid "The returned token must be included in either the 'Token' parameter or as an 'X-Auth-Token' HTTP header in all subsequent API calls."
-msgstr ""
+msgstr "लौटाया गया टोकन या तो 'Token' पैरामीटर में या सभी बाद के एपीआई कॉल में 'X-Auth-Token' HTTP हेडर के रूप में शामिल किया जाना चाहिए।"
 
 msgid "API Version: 1. Clients must specify API version 1 in authentication requests for compatibility."
-msgstr ""
+msgstr "एपीआई संस्करण: 1. क्लाइंट को संगतता के लिए प्रमाणीकरण अनुरोधों में एपीआई संस्करण 1 निर्दिष्ट करना होगा।"
 
 msgid "API Methods"
-msgstr ""
+msgstr "एपीआई विधियाँ"
 
 msgid "Authenticates with the I2PControl service and returns an authentication token for subsequent API calls."
-msgstr ""
+msgstr "I2PControl सेवा के साथ प्रमाणित करता है और बाद के एपीआई कॉल के लिए एक प्रमाणीकरण टोकन लौटाता है।"
 
 msgid "Parameters:"
-msgstr ""
+msgstr "पैरामीटर:"
 
 msgid "Password (string), API (integer, must be 1)"
-msgstr ""
+msgstr "पासवर्ड (स्ट्रिंग), एपीआई (इंटीजर, 1 होना चाहिए)"
 
 msgid "Returns:"
-msgstr ""
+msgstr "लौटाता है:"
 
 msgid "Token (string), API (integer)"
-msgstr ""
+msgstr "टोकन (स्ट्रिंग), एपीआई (इंटीजर)"
 
 msgid "Authentication:"
-msgstr ""
+msgstr "प्रमाणीकरण:"
 
 msgid "None (this is the unauthenticated method)"
-msgstr ""
+msgstr "कोई नहीं (यह अप्रमाणित विधि है)"
 
 msgid "A simple test method that returns the provided string. Useful for testing API connectivity and authentication."
-msgstr ""
+msgstr "एक सरल परीक्षण विधि जो प्रदान की गई स्ट्रिंग लौटाती है। एपीआई कनेक्टिविटी और प्रमाणीकरण के परीक्षण के लिए उपयोगी।"
 
 msgid "Echo (string)"
-msgstr ""
+msgstr "इको (स्ट्रिंग)"
 
 msgid "Result (string - echoed input)"
-msgstr ""
+msgstr "परिणाम (स्ट्रिंग - इको इनपुट)"
 
 msgid "Required"
-msgstr ""
+msgstr "आवश्यक"
 
 msgid "Retrieves read-only status information about the I2P router. Each parameter is optional - include only the metrics you need."
-msgstr ""
+msgstr "I2P राउटर के बारे में केवल-पढ़ने योग्य स्थिति जानकारी प्राप्त करता है। प्रत्येक पैरामीटर वैकल्पिक है - केवल उन मेट्रिक्स को शामिल करें जिनकी आपको आवश्यकता है।"
 
 msgid "Any combination of:"
-msgstr ""
+msgstr "कोई भी संयोजन:"
 
 msgid "Router version"
-msgstr ""
+msgstr "राउटर संस्करण"
 
 msgid "Router uptime in milliseconds"
-msgstr ""
+msgstr "मिलीसेकंड में राउटर अपटाइम"
 
 msgid "Current router status"
-msgstr ""
+msgstr "वर्तमान राउटर स्थिति"
 
 msgid "Network status (0-14)"
-msgstr ""
+msgstr "नेटवर्क स्थिति (0-14)"
 
 msgid "1-second average inbound bandwidth (Bps)"
-msgstr ""
+msgstr "1-सेकंड औसत इनबाउंड बैंडविड्थ (बाइट/सेकंड)"
 
 msgid "1-second average outbound bandwidth (Bps)"
-msgstr ""
+msgstr "1-सेकंड औसत आउटबाउंड बैंडविड्थ (बाइट/सेकंड)"
 
 msgid "15-second average inbound bandwidth (Bps)"
-msgstr ""
+msgstr "15-सेकंड औसत इनबाउंड बैंडविड्थ (बाइट/सेकंड)"
 
 msgid "15-second average outbound bandwidth (Bps)"
-msgstr ""
+msgstr "15-सेकंड औसत आउटबाउंड बैंडविड्थ (बाइट/सेकंड)"
 
 msgid "Number of participating tunnels"
-msgstr ""
+msgstr "भाग लेने वाले टनलों की संख्या"
 
 msgid "Number of known peers"
-msgstr ""
+msgstr "ज्ञात पीयरों की संख्या"
 
 msgid "Number of active peers"
-msgstr ""
+msgstr "सक्रिय पीयरों की संख्या"
 
 msgid "Number of fast peers"
-msgstr ""
+msgstr "तेज़ पीयरों की संख्या"
 
 msgid "Number of high-capacity peers"
-msgstr ""
+msgstr "उच्च-क्षमता पीयरों की संख्या"
 
 msgid "Whether reseed is in progress"
-msgstr ""
+msgstr "क्या रीसीड प्रगति पर है"
 
 msgid "Requested metrics with their current values"
-msgstr ""
+msgstr "अनुरोधित मेट्रिक्स उनके वर्तमान मानों के साथ"
 
 msgid "Controls router lifecycle and management operations. Each operation is optional and executes asynchronously."
-msgstr ""
+msgstr "राउटर जीवनचक्र और प्रबंधन संचालन को नियंत्रित करता है। प्रत्येक संचालन वैकल्पिक है और अतुल्यकालिक रूप से निष्पादित होता है।"
 
 msgid "Graceful restart/shutdown"
-msgstr ""
+msgstr "सुंदर पुनः आरंभ/शटडाउन"
 
 msgid "Immediate hard shutdown"
-msgstr ""
+msgstr "तुरंत कठोर शटडाउन"
 
 msgid "Immediate hard restart"
-msgstr ""
+msgstr "तुरंत कठोर पुनः आरंभ"
 
 msgid "Graceful shutdown (waits for tunnels)"
-msgstr ""
+msgstr "सुंदर शटडाउन (टनलों की प्रतीक्षा करता है)"
 
 msgid "Graceful restart (waits for tunnels)"
-msgstr ""
+msgstr "सुंदर पुनः आरंभ (टनलों की प्रतीक्षा करता है)"
 
 msgid "Trigger router reseeding"
-msgstr ""
+msgstr "राउटर रीसीडिंग ट्रिगर करें"
 
 msgid "Check for available updates"
-msgstr ""
+msgstr "उपलब्ध अपडेट के लिए जाँचें"
 
 msgid "Install available updates"
-msgstr ""
+msgstr "उपलब्ध अपडेट इंस्टॉल करें"
 
 msgid "Confirmation of operation (null for most operations, result status for FindUpdates/Update)"
-msgstr ""
+msgstr "संचालन की पुष्टि (अधिकांश संचालनों के लिए null, FindUpdates/Update के लिए परिणाम स्थिति)"
 
 msgid "Manages router network configuration. Parameters can be used to either set values (if provided) or retrieve current values (if null/omitted)."
-msgstr ""
+msgstr "राउटर नेटवर्क कॉन्फ़िगरेशन प्रबंधित करता है। पैरामीटर का उपयोग या तो मान सेट करने (यदि प्रदान किया गया) या वर्तमान मान प्राप्त करने (यदि null/छोड़ा गया) के लिए किया जा सकता है।"
 
 msgid "NTCP Transport Settings:"
-msgstr ""
+msgstr "NTCP ट्रांसपोर्ट सेटिंग्स:"
 
 msgid "NTCP port (1-65535)"
-msgstr ""
+msgstr "NTCP पोर्ट (1-65535)"
 
 msgid "NTCP hostname"
-msgstr ""
+msgstr "NTCP होस्टनाम"
 
 msgid "Auto IP setting"
-msgstr ""
+msgstr "स्वचालित आईपी सेटिंग"
 
 msgid "SSU Transport Settings:"
-msgstr ""
+msgstr "SSU ट्रांसपोर्ट सेटिंग्स:"
 
 msgid "SSU port (1-65535)"
-msgstr ""
+msgstr "SSU पोर्ट (1-65535)"
 
 msgid "SSU hostname"
-msgstr ""
+msgstr "SSU होस्टनाम"
 
 msgid "IP source detection"
-msgstr ""
+msgstr "आईपी स्रोत पहचान"
 
 msgid "Read-only detected IP address"
-msgstr ""
+msgstr "केवल-पढ़ने योग्य पहचाना गया आईपी पता"
 
 msgid "Network Settings:"
-msgstr ""
+msgstr "नेटवर्क सेटिंग्स:"
 
 msgid "UPnP enabled/disabled"
-msgstr ""
+msgstr "UPnP सक्षम/अक्षम"
 
 msgid "Laptop mode setting"
-msgstr ""
+msgstr "लैपटॉप मोड सेटिंग"
 
 msgid "Bandwidth Settings:"
-msgstr ""
+msgstr "बैंडविड्थ सेटिंग्स:"
 
 msgid "Bandwidth share percentage (0-100)"
-msgstr ""
+msgstr "बैंडविड्थ साझाकरण प्रतिशत (0-100)"
 
 msgid "Inbound bandwidth limit (Bps)"
-msgstr ""
+msgstr "इनबाउंड बैंडविड्थ सीमा (बाइट/सेकंड)"
 
 msgid "Outbound bandwidth limit (Bps)"
-msgstr ""
+msgstr "आउटबाउंड बैंडविड्थ सीमा (बाइट/सेकंड)"
 
 msgid "SettingsSaved (boolean), RestartNeeded (boolean), plus current values for queried settings"
-msgstr ""
+msgstr "SettingsSaved (बूलियन), RestartNeeded (बूलियन), इसके अलावा क्वेरी की गई सेटिंग्स के वर्तमान मान"
 
 msgid "Manages I2PControl service settings including password, port, and restart configuration."
-msgstr ""
+msgstr "I2PControl सेवा सेटिंग्स का प्रबंधन करता है जिसमें पासवर्ड, पोर्ट और पुनः आरंभ कॉन्फ़िगरेशन शामिल है।"
 
 msgid "Listen address (string, e.g., 127.0.0.1)"
-msgstr ""
+msgstr "सुनने का पता (स्ट्रिंग, उदा., 127.0.0.1)"
 
 msgid "New password (string)"
-msgstr ""
+msgstr "नया पासवर्ड (स्ट्रिंग)"
 
 msgid "Listen port (integer, 1-65535)"
-msgstr ""
+msgstr "सुनने का पोर्ट (इंटीजर, 1-65535)"
 
 msgid "SettingsSaved (boolean), RestartNeeded (boolean), current values for requested settings"
-msgstr ""
+msgstr "SettingsSaved (बूलियन), RestartNeeded (बूलियन), अनुरोध की गई सेटिंग्स के वर्तमान मान"
 
 msgid "Access and modify advanced I2P router configuration settings."
-msgstr ""
+msgstr "उन्नत I2P राउटर कॉन्फ़िगरेशन सेटिंग्स तक पहुँचें और संशोधित करें।"
 
 msgid "Key-value pairs of advanced settings"
-msgstr ""
+msgstr "उन्नत सेटिंग्स के की-मान जोड़े"
 
 msgid "Updated settings values"
-msgstr ""
+msgstr "अपडेट की गई सेटिंग्स मान"
 
 msgid "Retrieves statistical rate data from router for monitoring and analysis. Useful for creating custom graphs or monitoring applications."
-msgstr ""
+msgstr "निगरानी और विश्लेषण के लिए राउटर से सांख्यिकीय दर डेटा प्राप्त करता है। कस्टम ग्राफ़ या निगरानी एप्लिकेशन बनाने के लिए उपयोगी।"
 
 msgid "Statistical metric name (string)"
-msgstr ""
+msgstr "सांख्यिकीय मेट्रिक नाम (स्ट्रिंग)"
 
 msgid "Time period in milliseconds (integer)"
-msgstr ""
+msgstr "मिलीसेकंड में समय अवधि (इंटीजर)"
 
 msgid "Result (number - average value for specified period)"
-msgstr ""
+msgstr "परिणाम (संख्या - निर्दिष्ट अवधि का औसत मान)"
 
 msgid "Network Status Codes"
-msgstr ""
+msgstr "नेटवर्क स्थिति कोड"
 
 #, java-format
 msgid "The {0} field returns an integer value representing the current network connectivity status:"
-msgstr ""
+msgstr "{0} फ़ील्ड एक पूर्णांक मान लौटाता है जो वर्तमान नेटवर्क कनेक्टिविटी स्थिति का प्रतिनिधित्व करता है:"
 
 msgid "OK - Full connectivity"
-msgstr ""
+msgstr "ठीक - पूर्ण कनेक्टिविटी"
 
 msgid "TESTING - Still establishing connectivity"
-msgstr ""
+msgstr "परीक्षण - अभी भी कनेक्टिविटी स्थापित कर रहा है"
 
 msgid "FIREWALLED - Behind restrictive firewall"
-msgstr ""
+msgstr "फ़ायरवॉल्ड - प्रतिबंधात्मक फ़ायरवॉल के पीछे"
 
 msgid "HIDDEN - Router in hidden mode"
-msgstr ""
+msgstr "छिपा हुआ - छिपी मोड में राउटर"
 
 msgid "WARN_FIREWALLED_AND_FAST - Firewalled but fast peer"
-msgstr ""
+msgstr "चेतावनी_फ़ायरवॉल्ड_और_तेज़ - फ़ायरवॉल्ड लेकिन तेज़ पीयर"
 
 msgid "WARN_FIREWALLED_AND_FLOODFILL - Firewalled but floodfill"
-msgstr ""
+msgstr "चेतावनी_फ़ायरवॉल्ड_और_फ्लूडफिल - फ़ायरवॉल्ड लेकिन फ्लूडफिल"
 
 msgid "WARN_FIREWALLED_WITH_INBOUND_TCP - Firewalled with inbound TCP"
-msgstr ""
+msgstr "चेतावनी_फ़ायरवॉल्ड_इनबाउंड_TCP_sath - इनबाउंड TCP के साथ फ़ायरवॉल्ड"
 
 msgid "WARN_FIREWALLED_WITH_UDP_DISABLED - Firewalled with UDP disabled"
-msgstr ""
+msgstr "चेतावनी_फ़ायरवॉल्ड_UDP_अक्षम_sath - UDP अक्षम के साथ फ़ायरवॉल्ड"
 
 msgid "ERROR_I2CP - I2CP error"
-msgstr ""
+msgstr "त्रुटि_I2CP - I2CP त्रुटि"
 
 msgid "ERROR_CLOCK_SKEW - System clock skew detected"
-msgstr ""
+msgstr "त्रुटि_घड़ी_विकृति - सिस्टम घड़ी विकृति पाई गई"
 
 msgid "ERROR_PRIVATE_TCP_ADDRESS - Private TCP address configured"
-msgstr ""
+msgstr "त्रुटि_निजी_TCP_पता - निजी TCP पता कॉन्फ़िगर किया गया"
 
 msgid "ERROR_SYMMETRIC_NAT - Symmetric NAT detected"
-msgstr ""
+msgstr "त्रुटि_सममित_NAT - सममित NAT पाया गया"
 
 msgid "ERROR_UDP_PORT_IN_USE - UDP port already in use"
-msgstr ""
+msgstr "त्रुटि_UDP_पोर्ट_उपयोग_में - UDP पोर्ट पहले से उपयोग में है"
 
 msgid "ERROR_NO_ACTIVE_PEERS_CHECK_CONNECTION_AND_FIREWALL - No active peers"
-msgstr ""
+msgstr "त्रुटि_कोई_सक्रिय_पीयर_नहीं_कनेक्शन_और_फ़ायरवॉल_जाँचें - कोई सक्रिय पीयर नहीं"
 
 msgid "ERROR_UDP_DISABLED_AND_TCP_UNSET - UDP disabled, TCP not configured"
-msgstr ""
+msgstr "त्रुटि_UDP_अक्षम_और_TCP_नहीं_सेट - UDP अक्षम है, TCP कॉन्फ़िगर नहीं किया गया"
 
 msgid "Error Codes"
-msgstr ""
+msgstr "त्रुटि कोड"
 
 msgid "In addition to standard JSON-RPC 2.0 error codes, I2PControl provides specific error codes:"
-msgstr ""
+msgstr "मानक JSON-RPC 2.0 त्रुटि कोड के अतिरिक्त, I2PControl विशिष्ट त्रुटि कोड प्रदान करता है:"
 
 msgid "JSON parse error"
-msgstr ""
+msgstr "JSON पार्स त्रुटि"
 
 msgid "Invalid request"
-msgstr ""
+msgstr "अमान्य अनुरोध"
 
 msgid "Method not found"
-msgstr ""
+msgstr "विधि नहीं मिली"
 
 msgid "Invalid parameters"
-msgstr ""
+msgstr "अमान्य पैरामीटर"
 
 msgid "Internal error"
-msgstr ""
+msgstr "आंतरिक त्रुटि"
 
 msgid "Invalid password provided"
-msgstr ""
+msgstr "अमान्य पासवर्ड प्रदान किया गया"
 
 msgid "No authentication token presented"
-msgstr ""
+msgstr "कोई प्रमाणीकरण टोकन प्रस्तुत नहीं किया गया"
 
 msgid "Authentication token doesn't exist"
-msgstr ""
+msgstr "प्रमाणीकरण टोकन मौजूद नहीं है"
 
 msgid "The provided authentication token was expired and will be removed"
-msgstr ""
+msgstr "प्रदान किया गया प्रमाणीकरण टोकन समाप्त हो गया है और इसे हटा दिया जाएगा"
 
 msgid "The version of the I2PControl API used wasn't specified, but is required to be specified"
-msgstr ""
+msgstr "उपयोग किए गए I2PControl API का संस्करण निर्दिष्ट नहीं था, लेकिन इसे निर्दिष्ट करना आवश्यक है"
 
 msgid "The version of the I2PControl API specified is not supported by I2PControl"
-msgstr ""
+msgstr "निर्दिष्ट I2PControl API का संस्करण I2PControl द्वारा समर्थित नहीं है"
 
 msgid "Rate Statistics"
-msgstr ""
+msgstr "दर आँकड़े"
 
 #, java-format
 msgid "For a complete list of available rate statistics, see the {0} documentation in the router console or refer to the {1} online documentation. Common rate statistics include:"
-msgstr ""
+msgstr "उपलब्ध दर आँकड़ों की पूरी सूची के लिए, राउटर कंसोल में {0} दस्तावेज़ीकरण देखें या {1} ऑनलाइन दस्तावेज़ीकरण देखें। सामान्य दर आँकड़े शामिल हैं:"
 
 msgid "Bandwidth receive rate"
-msgstr ""
+msgstr "बैंडविड्थ प्राप्ति दर"
 
 msgid "Bandwidth send rate"
-msgstr ""
+msgstr "बैंडविड्थ भेजने की दर"
 
 msgid "Active peer count"
-msgstr ""
+msgstr "सक्रिय पीयर संख्या"
 
 msgid "Known peer count"
-msgstr ""
+msgstr "ज्ञात पीयर संख्या"
 
 msgid "Tunnel test success time"
-msgstr ""
+msgstr "सुरंग परीक्षण सफलता समय"
 
 msgid "Rate Statistics Documentation"
-msgstr ""
+msgstr "दर आँकड़े दस्तावेज़ीकरण"
 
 #, java-format
 msgid "See the {0} documentation in the router console or refer to the {1} online documentation."
-msgstr ""
+msgstr "राउटर कंसोल में {0} दस्तावेज़ीकरण देखें या {1} ऑनलाइन दस्तावेज़ीकरण देखें।"
 
 msgid "Example Usage"
-msgstr ""
+msgstr "उदाहरण उपयोग"
 
 msgid "Get Router Version and Uptime:"
-msgstr ""
+msgstr "राउटर संस्करण और अपटाइम प्राप्त करें:"
 
 msgid "Get Current Bandwidth Usage:"
-msgstr ""
+msgstr "वर्तमान बैंडविड्थ उपयोग प्राप्त करें:"
 
 msgid "Change Bandwidth Limits:"
-msgstr ""
+msgstr "बैंडविड्थ सीमा बदलें:"
 
 msgid "Graceful Restart:"
-msgstr ""
+msgstr "सौम्य पुनरारंभ:"
 
 msgid "Security Considerations"
-msgstr ""
+msgstr "सुरक्षा विचार"
 
 #, java-format
 msgid "Always change the default API password from {0} to a strong, unique password"
-msgstr ""
+msgstr "हमेशा डिफ़ॉल्ट API पासवर्ड {0} को एक मजबूत, अद्वितीय पासवर्ड से बदलें"
 
 msgid "Consider binding I2PControl to localhost only if not accessed remotely"
-msgstr ""
+msgstr "यदि दूरस्थ रूप से एक्सेस नहीं किया जा रहा है तो I2PControl को केवल localhost से बाँधने पर विचार करें"
 
 msgid "Use HTTPS when accessing I2PControl over untrusted networks"
-msgstr ""
+msgstr "अविश्वसनीय नेटवर्क पर I2PControl तक पहुँचते समय HTTPS का उपयोग करें"
 
 msgid "Tokens may expire - implement re-authentication logic in your applications"
-msgstr ""
+msgstr "टोकन समाप्त हो सकते हैं - अपने अनुप्रयोगों में पुनः-प्रमाणीकरण तर्क लागू करें"
 
 msgid "Monitor I2PControl access logs for unauthorized usage"
-msgstr ""
+msgstr "अनधिकृत उपयोग के लिए I2PControl एक्सेस लॉग की निगरानी करें"
 
 msgid "Be cautious with router management operations - they can affect network connectivity"
-msgstr ""
+msgstr "राउटर प्रबंधन संचालन के साथ सावधान रहें - वे नेटवर्क कनेक्टिविटी को प्रभावित कर सकते हैं"
 
 msgid "Integration Examples"
-msgstr ""
+msgstr "एकीकरण उदाहरण"
 
 msgid "The I2PControl API can be integrated with:"
-msgstr ""
+msgstr "I2PControl API को इसके साथ एकीकृत किया जा सकता है:"
 
 msgid "Monitoring systems:"
-msgstr ""
+msgstr "निगरानी प्रणालियाँ:"
 
 msgid "Create custom dashboards for router performance"
-msgstr ""
+msgstr "राउटर प्रदर्शन के लिए कस्टम डैशबोर्ड बनाएं"
 
 msgid "Automation scripts:"
-msgstr ""
+msgstr "स्वचालन स्क्रिप्ट:"
 
 msgid "Schedule restarts or configuration changes"
-msgstr ""
+msgstr "पुनरारंभ या कॉन्फ़िगरेशन परिवर्तन शेड्यूल करें"
 
 msgid "Mobile applications:"
-msgstr ""
+msgstr "मोबाइल अनुप्रयोग:"
 
 msgid "Monitor and manage your router remotely"
-msgstr ""
+msgstr "अपने राउटर की दूरस्थ निगरानी और प्रबंधन करें"
 
 msgid "Network management tools:"
-msgstr ""
+msgstr "नेटवर्क प्रबंधन उपकरण:"
 
 msgid "Integrate I2P status into broader network monitoring"
-msgstr ""
+msgstr "I2P स्थिति को व्यापक नेटवर्क निगरानी में एकीकृत करें"
 
 msgid "Alerting systems:"
-msgstr ""
+msgstr "अलर्टिंग प्रणालियाँ:"
 
 msgid "Send notifications based on router status changes"
-msgstr ""
+msgstr "राउटर स्थिति परिवर्तनों के आधार पर सूचनाएं भेजें"
 
 msgid "Licensing Information"
 msgstr "लाइसेंसिंग जानकारी"
@@ -7976,7 +7976,7 @@ msgid "Skip Setup"
 msgstr "सेटअप को स्किप करें"
 
 msgid "Select the language to be used for the router console and web applications ("
-msgstr ""
+msgstr "राउटर कंसोल और वेब अनुप्रयोगों के लिए उपयोग की जाने वाली भाषा चुनें ("
 
 msgid "Router Console &amp; WebApps Display Language"
 msgstr "राउटर कंसोल &amp; वेबएप्लिकेशन डिस्प्ले भाषा"

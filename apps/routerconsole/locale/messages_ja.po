@@ -6609,422 +6609,422 @@ msgstr "I2PControlは、I2Pルーターのリモート制御と監視のため�
 
 #, java-format
 msgid "I2PControl is a JSON-RPC 2.0 interface for remote control and monitoring of your I2P router. It listens on {0} by default when enabled for security reasons and must be enabled through the {1}."
-msgstr ""
+msgstr "I2PControlは、I2Pルーターのリモート制御と監視のためのJSON-RPC 2.0インターフェースです。セキュリティ上の理由で有効にするとデフォルトで{0}でリッスンし、{1}を通じて有効にする必要があります。"
 
 msgid "Web Apps configuration page"
-msgstr ""
+msgstr "Web Apps設定ページ"
 
 msgid "Authentication"
-msgstr ""
+msgstr "認証"
 
 msgid "All API operations (except for authentication itself) require a valid authentication token. To obtain a token, you must first authenticate with your configured password:"
-msgstr ""
+msgstr "すべてのAPI操作（認証自体を除く）には有効な認証トークンが必要です。トークンを取得するには、まず設定されたパスワードで認証する必要があります："
 
 msgid "The returned token must be included in either the 'Token' parameter or as an 'X-Auth-Token' HTTP header in all subsequent API calls."
-msgstr ""
+msgstr "返されたトークンは、すべての後続のAPI呼び出しで、'Token'パラメータまたは'X-Auth-Token'HTTPヘッダーのいずれかに含める必要があります。"
 
 msgid "API Version: 1. Clients must specify API version 1 in authentication requests for compatibility."
-msgstr ""
+msgstr "APIバージョン: 1。互換性のため、クライアントは認証リクエストでAPIバージョン1を指定する必要があります。"
 
 msgid "API Methods"
-msgstr ""
+msgstr "APIメソッド"
 
 msgid "Authenticates with the I2PControl service and returns an authentication token for subsequent API calls."
-msgstr ""
+msgstr "I2PControlサービスで認証し、後続のAPI呼び出し用の認証トークンを返します。"
 
 msgid "Parameters:"
-msgstr ""
+msgstr "パラメータ："
 
 msgid "Password (string), API (integer, must be 1)"
-msgstr ""
+msgstr "パスワード (文字列)、API (整数、1である必要があります)"
 
 msgid "Returns:"
-msgstr ""
+msgstr "戻り値："
 
 msgid "Token (string), API (integer)"
-msgstr ""
+msgstr "トークン (文字列)、API (整数)"
 
 msgid "Authentication:"
-msgstr ""
+msgstr "認証："
 
 msgid "None (this is the unauthenticated method)"
-msgstr ""
+msgstr "なし（これは未認証メソッドです）"
 
 msgid "A simple test method that returns the provided string. Useful for testing API connectivity and authentication."
-msgstr ""
+msgstr "指定された文字列を返すシンプルなテストメソッドです。API接続性と認証のテストに便利です。"
 
 msgid "Echo (string)"
-msgstr ""
+msgstr "エコー (文字列)"
 
 msgid "Result (string - echoed input)"
-msgstr ""
+msgstr "結果 (文字列 - エコーされた入力)"
 
 msgid "Required"
-msgstr ""
+msgstr "必須"
 
 msgid "Retrieves read-only status information about the I2P router. Each parameter is optional - include only the metrics you need."
-msgstr ""
+msgstr "I2Pルーターに関する読み取り専用のステータス情報を取得します。各パラメータはオプションです - 必要な指標のみを含めます。"
 
 msgid "Any combination of:"
-msgstr ""
+msgstr "任意の組み合わせ："
 
 msgid "Router version"
-msgstr ""
+msgstr "Routerバージョン"
 
 msgid "Router uptime in milliseconds"
-msgstr ""
+msgstr "Router稼働時間（ミリ秒）"
 
 msgid "Current router status"
-msgstr ""
+msgstr "現在のRouterステータス"
 
 msgid "Network status (0-14)"
-msgstr ""
+msgstr "ネットワークステータス (0-14)"
 
 msgid "1-second average inbound bandwidth (Bps)"
-msgstr ""
+msgstr "1秒平均受信帯域幅 (Bps)"
 
 msgid "1-second average outbound bandwidth (Bps)"
-msgstr ""
+msgstr "1秒平均送信帯域幅 (Bps)"
 
 msgid "15-second average inbound bandwidth (Bps)"
-msgstr ""
+msgstr "15秒平均受信帯域幅 (Bps)"
 
 msgid "15-second average outbound bandwidth (Bps)"
-msgstr ""
+msgstr "15秒平均送信帯域幅 (Bps)"
 
 msgid "Number of participating tunnels"
-msgstr ""
+msgstr "参加トンネルの数"
 
 msgid "Number of known peers"
-msgstr ""
+msgstr "既知のピアの数"
 
 msgid "Number of active peers"
-msgstr ""
+msgstr "アクティブなピアの数"
 
 msgid "Number of fast peers"
-msgstr ""
+msgstr "高速ピアの数"
 
 msgid "Number of high-capacity peers"
-msgstr ""
+msgstr "大容量ピアの数"
 
 msgid "Whether reseed is in progress"
-msgstr ""
+msgstr "リシードが進行中かどうか"
 
 msgid "Requested metrics with their current values"
-msgstr ""
+msgstr "要求された指標とその現在値"
 
 msgid "Controls router lifecycle and management operations. Each operation is optional and executes asynchronously."
-msgstr ""
+msgstr "Routerのライフサイクルと管理操作を制御します。各操作はオプションであり、非同期に実行されます。"
 
 msgid "Graceful restart/shutdown"
-msgstr ""
+msgstr "正常な再起動/シャットダウン"
 
 msgid "Immediate hard shutdown"
-msgstr ""
+msgstr "即座のハードシャットダウン"
 
 msgid "Immediate hard restart"
-msgstr ""
+msgstr "即座のハード再起動"
 
 msgid "Graceful shutdown (waits for tunnels)"
-msgstr ""
+msgstr "正常なシャットダウン（トンネルを待つ）"
 
 msgid "Graceful restart (waits for tunnels)"
-msgstr ""
+msgstr "正常な再起動（トンネルを待つ）"
 
 msgid "Trigger router reseeding"
-msgstr ""
+msgstr "Routerリシードをトリガー"
 
 msgid "Check for available updates"
-msgstr ""
+msgstr "利用可能な更新を確認"
 
 msgid "Install available updates"
-msgstr ""
+msgstr "利用可能な更新をインストール"
 
 msgid "Confirmation of operation (null for most operations, result status for FindUpdates/Update)"
-msgstr ""
+msgstr "操作の確認（ほとんどの操作ではnull、FindUpdates/Updateの結果ステータス）"
 
 msgid "Manages router network configuration. Parameters can be used to either set values (if provided) or retrieve current values (if null/omitted)."
-msgstr ""
+msgstr "Routerネットワーク設定を管理します。パラメータは値の設定（提供された場合）または現在の値の取得（null/省略された場合）に使用できます。"
 
 msgid "NTCP Transport Settings:"
-msgstr ""
+msgstr "NTCPトランスポート設定："
 
 msgid "NTCP port (1-65535)"
-msgstr ""
+msgstr "NTCPポート (1-65535)"
 
 msgid "NTCP hostname"
-msgstr ""
+msgstr "NTCPホスト名"
 
 msgid "Auto IP setting"
-msgstr ""
+msgstr "自動IP設定"
 
 msgid "SSU Transport Settings:"
-msgstr ""
+msgstr "SSUトランスポート設定："
 
 msgid "SSU port (1-65535)"
-msgstr ""
+msgstr "SSUポート (1-65535)"
 
 msgid "SSU hostname"
-msgstr ""
+msgstr "SSUホスト名"
 
 msgid "IP source detection"
-msgstr ""
+msgstr "IPソース検出"
 
 msgid "Read-only detected IP address"
-msgstr ""
+msgstr "読み取り専用の検出IPアドレス"
 
 msgid "Network Settings:"
-msgstr ""
+msgstr "ネットワーク設定："
 
 msgid "UPnP enabled/disabled"
-msgstr ""
+msgstr "UPnP 有効/無効"
 
 msgid "Laptop mode setting"
-msgstr ""
+msgstr "ラップトップモード設定"
 
 msgid "Bandwidth Settings:"
-msgstr ""
+msgstr "帯域幅設定："
 
 msgid "Bandwidth share percentage (0-100)"
-msgstr ""
+msgstr "帯域幅共有割合 (0-100)"
 
 msgid "Inbound bandwidth limit (Bps)"
-msgstr ""
+msgstr "受信帯域幅制限 (Bps)"
 
 msgid "Outbound bandwidth limit (Bps)"
-msgstr ""
+msgstr "送信帯域幅制限 (Bps)"
 
 msgid "SettingsSaved (boolean), RestartNeeded (boolean), plus current values for queried settings"
-msgstr ""
+msgstr "SettingsSaved (ブール値)、RestartNeeded (ブール値)、加えてクエリされた設定の現在の値"
 
 msgid "Manages I2PControl service settings including password, port, and restart configuration."
-msgstr ""
+msgstr "パスワード、ポート、再起動設定を含むI2PControlサービス設定を管理します。"
 
 msgid "Listen address (string, e.g., 127.0.0.1)"
-msgstr ""
+msgstr "リスンアドレス (文字列、例: 127.0.0.1)"
 
 msgid "New password (string)"
-msgstr ""
+msgstr "新しいパスワード (文字列)"
 
 msgid "Listen port (integer, 1-65535)"
-msgstr ""
+msgstr "リスンポート (整数、1-65535)"
 
 msgid "SettingsSaved (boolean), RestartNeeded (boolean), current values for requested settings"
-msgstr ""
+msgstr "SettingsSaved (ブール値)、RestartNeeded (ブール値)、要求された設定の現在の値"
 
 msgid "Access and modify advanced I2P router configuration settings."
-msgstr ""
+msgstr "高度なI2P Router設定にアクセスして変更します。"
 
 msgid "Key-value pairs of advanced settings"
-msgstr ""
+msgstr "高度な設定のキーと値のペア"
 
 msgid "Updated settings values"
-msgstr ""
+msgstr "更新された設定値"
 
 msgid "Retrieves statistical rate data from router for monitoring and analysis. Useful for creating custom graphs or monitoring applications."
-msgstr ""
+msgstr "監視と分析のためにRouterから統計レートデータを取得します。カスタムグラフや監視アプリケーションの作成に便利です。"
 
 msgid "Statistical metric name (string)"
-msgstr ""
+msgstr "統計指標名 (文字列)"
 
 msgid "Time period in milliseconds (integer)"
-msgstr ""
+msgstr "時間（ミリ秒）(整数)"
 
 msgid "Result (number - average value for specified period)"
-msgstr ""
+msgstr "結果 (数値 - 指定期間の平均値)"
 
 msgid "Network Status Codes"
-msgstr ""
+msgstr "ネットワークステータスコード"
 
 #, java-format
 msgid "The {0} field returns an integer value representing the current network connectivity status:"
-msgstr ""
+msgstr "{0}フィールドは、現在のネットワーク接続ステータスを表す整数値を返します："
 
 msgid "OK - Full connectivity"
-msgstr ""
+msgstr "OK - 完全な接続"
 
 msgid "TESTING - Still establishing connectivity"
-msgstr ""
+msgstr "テスト中 - 接続を確立中"
 
 msgid "FIREWALLED - Behind restrictive firewall"
-msgstr ""
+msgstr "ファイアウォール内 - 制限的ファイアウォールの背後"
 
 msgid "HIDDEN - Router in hidden mode"
-msgstr ""
+msgstr "非表示 - 隠しモードのRouter"
 
 msgid "WARN_FIREWALLED_AND_FAST - Firewalled but fast peer"
-msgstr ""
+msgstr "警告_ファイアウォール内かつ高速 - ファイアウォール内だが高速ピア"
 
 msgid "WARN_FIREWALLED_AND_FLOODFILL - Firewalled but floodfill"
-msgstr ""
+msgstr "警告_ファイアウォール内かつフラッドフィル - ファイアウォール内だがフラッドフィル"
 
 msgid "WARN_FIREWALLED_WITH_INBOUND_TCP - Firewalled with inbound TCP"
-msgstr ""
+msgstr "警告_ファイアウォール内かつ受信TCP - ファイアウォール内、受信TCPあり"
 
 msgid "WARN_FIREWALLED_WITH_UDP_DISABLED - Firewalled with UDP disabled"
-msgstr ""
+msgstr "警告_ファイアウォール内かつUDP無効 - ファイアウォール内、UDP無効"
 
 msgid "ERROR_I2CP - I2CP error"
-msgstr ""
+msgstr "エラー_I2CP - I2CPエラー"
 
 msgid "ERROR_CLOCK_SKEW - System clock skew detected"
-msgstr ""
+msgstr "エラー_クロックスキュー - システムクロックのずれが検出されました"
 
 msgid "ERROR_PRIVATE_TCP_ADDRESS - Private TCP address configured"
-msgstr ""
+msgstr "エラー_プライベートTCPアドレス - プライベートTCPアドレスが設定されています"
 
 msgid "ERROR_SYMMETRIC_NAT - Symmetric NAT detected"
-msgstr ""
+msgstr "エラー_対称NAT - 対称NATが検出されました"
 
 msgid "ERROR_UDP_PORT_IN_USE - UDP port already in use"
-msgstr ""
+msgstr "エラー_UDPポート使用中 - UDPポートは既に使用されています"
 
 msgid "ERROR_NO_ACTIVE_PEERS_CHECK_CONNECTION_AND_FIREWALL - No active peers"
-msgstr ""
+msgstr "エラー_NO_ACTIVE_PEERS_CHECK_CONNECTION_AND_FIREWALL - アクティブなピアがありません"
 
 msgid "ERROR_UDP_DISABLED_AND_TCP_UNSET - UDP disabled, TCP not configured"
-msgstr ""
+msgstr "エラー_UDP_DISABLED_AND_TCP_UNSET - UDPが無効、TCPが未設定"
 
 msgid "Error Codes"
-msgstr ""
+msgstr "エラーコード"
 
 msgid "In addition to standard JSON-RPC 2.0 error codes, I2PControl provides specific error codes:"
-msgstr ""
+msgstr "標準のJSON-RPC 2.0エラーコードに加えて、I2PControlは固有のエラーコードを提供します："
 
 msgid "JSON parse error"
-msgstr ""
+msgstr "JSON解析エラー"
 
 msgid "Invalid request"
-msgstr ""
+msgstr "無効なリクエスト"
 
 msgid "Method not found"
-msgstr ""
+msgstr "メソッドが見つかりません"
 
 msgid "Invalid parameters"
-msgstr ""
+msgstr "無効なパラメータ"
 
 msgid "Internal error"
-msgstr ""
+msgstr "内部エラー"
 
 msgid "Invalid password provided"
-msgstr ""
+msgstr "無効なパスワードが提供されました"
 
 msgid "No authentication token presented"
-msgstr ""
+msgstr "認証トークンが提示されていません"
 
 msgid "Authentication token doesn't exist"
-msgstr ""
+msgstr "認証トークンが存在しません"
 
 msgid "The provided authentication token was expired and will be removed"
-msgstr ""
+msgstr "提供された認証トークンは期限切れで、削除されます"
 
 msgid "The version of the I2PControl API used wasn't specified, but is required to be specified"
-msgstr ""
+msgstr "使用されるI2PControl APIのバージョンが指定されていませんが、指定する必要があります"
 
 msgid "The version of the I2PControl API specified is not supported by I2PControl"
-msgstr ""
+msgstr "指定されたI2PControl APIのバージョンはI2PControlでサポートされていません"
 
 msgid "Rate Statistics"
-msgstr ""
+msgstr "レート統計"
 
 #, java-format
 msgid "For a complete list of available rate statistics, see the {0} documentation in the router console or refer to the {1} online documentation. Common rate statistics include:"
-msgstr ""
+msgstr "利用可能なレート統計の完全なリストについては、ルーターコンソールの{0}ドキュメントを参照するか、{1}オンラインドキュメントをご覧ください。一般的なレート統計には以下が含まれます："
 
 msgid "Bandwidth receive rate"
-msgstr ""
+msgstr "帯域幅受信レート"
 
 msgid "Bandwidth send rate"
-msgstr ""
+msgstr "帯域幅送信レート"
 
 msgid "Active peer count"
-msgstr ""
+msgstr "アクティブピア数"
 
 msgid "Known peer count"
-msgstr ""
+msgstr "既知ピア数"
 
 msgid "Tunnel test success time"
-msgstr ""
+msgstr "トンネルテスト成功時間"
 
 msgid "Rate Statistics Documentation"
-msgstr ""
+msgstr "レート統計ドキュメント"
 
 #, java-format
 msgid "See the {0} documentation in the router console or refer to the {1} online documentation."
-msgstr ""
+msgstr "ルーターコンソールの{0}ドキュメントを参照するか、{1}オンラインドキュメントをご覧ください。"
 
 msgid "Example Usage"
-msgstr ""
+msgstr "使用例"
 
 msgid "Get Router Version and Uptime:"
-msgstr ""
+msgstr "ルーターのバージョンと稼働時間を取得："
 
 msgid "Get Current Bandwidth Usage:"
-msgstr ""
+msgstr "現在の帯域幅使用量を取得："
 
 msgid "Change Bandwidth Limits:"
-msgstr ""
+msgstr "帯域幅制限を変更："
 
 msgid "Graceful Restart:"
-msgstr ""
+msgstr "正常な再起動："
 
 msgid "Security Considerations"
-msgstr ""
+msgstr "セキュリティ上の考慮事項"
 
 #, java-format
 msgid "Always change the default API password from {0} to a strong, unique password"
-msgstr ""
+msgstr "デフォルトのAPIパスワード{0}は常に強力で独自のパスワードに変更してください"
 
 msgid "Consider binding I2PControl to localhost only if not accessed remotely"
-msgstr ""
+msgstr "リモートアクセスされない場合は、I2PControlをlocalhostのみにバインドすることを検討してください"
 
 msgid "Use HTTPS when accessing I2PControl over untrusted networks"
-msgstr ""
+msgstr "信頼できないネットワークを介してI2PControlにアクセスする場合はHTTPSを使用してください"
 
 msgid "Tokens may expire - implement re-authentication logic in your applications"
-msgstr ""
+msgstr "トークンは期限切れになる可能性があります - アプリケーションで再認証ロジックを実装してください"
 
 msgid "Monitor I2PControl access logs for unauthorized usage"
-msgstr ""
+msgstr "不正使用のためにI2PControlアクセスログを監視してください"
 
 msgid "Be cautious with router management operations - they can affect network connectivity"
-msgstr ""
+msgstr "ルーター管理操作には注意，它们はネットワーク接続に影響を与える可能性があります"
 
 msgid "Integration Examples"
-msgstr ""
+msgstr "統合例"
 
 msgid "The I2PControl API can be integrated with:"
-msgstr ""
+msgstr "I2PControl APIは以下と統合できます："
 
 msgid "Monitoring systems:"
-msgstr ""
+msgstr "監視システム："
 
 msgid "Create custom dashboards for router performance"
-msgstr ""
+msgstr "ルーターのパフォーマンス用にカスタムダッシュボードを作成する"
 
 msgid "Automation scripts:"
-msgstr ""
+msgstr "自動化スクリプト："
 
 msgid "Schedule restarts or configuration changes"
-msgstr ""
+msgstr "再起動や設定変更をスケジュール"
 
 msgid "Mobile applications:"
-msgstr ""
+msgstr "モバイルアプリケーション："
 
 msgid "Monitor and manage your router remotely"
-msgstr ""
+msgstr "ルーターをリモートで監視・管理"
 
 msgid "Network management tools:"
-msgstr ""
+msgstr "ネットワーク管理ツール："
 
 msgid "Integrate I2P status into broader network monitoring"
-msgstr ""
+msgstr "より広範なネットワーク監視にI2Pステータスを統合"
 
 msgid "Alerting systems:"
-msgstr ""
+msgstr "アラートシステム："
 
 msgid "Send notifications based on router status changes"
-msgstr ""
+msgstr "ルーターの状態変更に基づいて通知を送信"
 
 msgid "Licensing Information"
 msgstr "ライセンス情報"
@@ -7210,7 +7210,7 @@ msgid "Getting Support Online"
 msgstr "オンラインでのサポートを受ける"
 
 msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> on I2P's internal IRC network."
-msgstr ""
+msgstr "<a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2Pウェブサイト</a>の情報を確認したり、<a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2Pディスカッションフォーラム</a>にメッセージを投稿したり、I2Pの内部IRCネットワークで<a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a>または<a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a>を訪れたりすることもできます。"
 
 msgid "Reporting Bugs"
 msgstr "バグ報告"
@@ -7958,7 +7958,7 @@ msgid "Skip Setup"
 msgstr "セットアップをスキップ"
 
 msgid "Select the language to be used for the router console and web applications ("
-msgstr ""
+msgstr "ルーターコンソールとWebアプリケーションに使用する言語を選択（"
 
 msgid "Router Console &amp; WebApps Display Language"
 msgstr "ルーターコンソールおよびWebアプリケーションの表示言語"

@@ -1984,7 +1984,7 @@ msgid "FAQ"
 msgstr "FAQ"
 
 msgid "JSON-RPC API"
-msgstr ""
+msgstr "JSON-RPC API"
 
 msgid "Manage your I2P hosts file here (I2P domain name resolution)"
 msgstr "Zde spravujte svůj soubor hostitelů I2P (překlad názvu domény I2P)"
@@ -2706,7 +2706,7 @@ msgid "Lookup"
 msgstr "Vyhledání"
 
 msgid "Select the field to search on"
-msgstr ""
+msgstr "Vyberte pole pro vyhledávání"
 
 msgid "e.g. cn hk"
 msgstr "např. cn hk"
@@ -2959,7 +2959,7 @@ msgid "Maximum Transmission Unit"
 msgstr "Maximální přenosová jednotka"
 
 msgid "Show all routers with this MTU in the NetDb"
-msgstr ""
+msgstr "Zobrazit všechny routery s touto MTU v NetDb"
 
 msgid "Addresses"
 msgstr "Adresy"
@@ -5702,10 +5702,10 @@ msgid "Tunnel Filtering"
 msgstr "Filtrování tunelů"
 
 msgid "Console API"
-msgstr ""
+msgstr "Console API"
 
 msgid "JSONRPC"
-msgstr ""
+msgstr "JSONRPC"
 
 msgid "New User Guide"
 msgstr "Nová uživatelská příručka"
@@ -6191,7 +6191,7 @@ msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP a
 msgstr "Příklad: Chcete-li povolit přístup z localhost a 192.168.1.10 přes HTTP a HTTPS:"
 
 msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager's configuration section using the <i>reachable by</i> dropdown."
-msgstr ""
+msgstr "U většiny klientských služeb změňte adresu naslouchání příslušné služby v sekci konfigurace Správce tunelů pomocí rozbalovacího menu <i>dosažitelný od</i>."
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "Jak se připojit na IRC v I2P?"
@@ -6632,10 +6632,10 @@ msgid "An introduction to tunnel access lists"
 msgstr "Úvod do přístupových seznamů tunelů"
 
 msgid "I2PControl API"
-msgstr ""
+msgstr "I2PControl API"
 
 msgid "JSON-RPC API for remote router control and monitoring"
-msgstr ""
+msgstr "JSON-RPC API pro vzdálené ovládání a monitorování routeru"
 
 msgid "Information about the sidebar, network status messages, and theme overrides"
 msgstr "Informace o postranním panelu, zprávách o stavu sítě a přepisech motivů"
@@ -6644,429 +6644,429 @@ msgid "Webhosting on I2P"
 msgstr "Webhosting na I2P"
 
 msgid "I2PControl JSON-RPC API"
-msgstr ""
+msgstr "I2PControl JSON-RPC API"
 
 msgid "I2PControl provides a JSON-RPC 2.0 interface for remote control and monitoring of your I2P router. This allows external applications to programmatically manage I2P settings, retrieve status information, and control router operations through standardized HTTP requests."
-msgstr ""
+msgstr "I2PControl poskytuje JSON-RPC 2.0 rozhraní pro vzdálené ovládání a monitorování vašeho I2P routeru. To umožňuje externím aplikacím programově spravovat nastavení I2P, získávat informace o stavu a ovládat operace routeru pomocí standardizovaných HTTP požadavků."
 
 #, java-format
 msgid "I2PControl is a JSON-RPC 2.0 interface for remote control and monitoring of your I2P router. It listens on {0} by default when enabled for security reasons and must be enabled through the {1}."
-msgstr ""
+msgstr "I2PControl je JSON-RPC 2.0 rozhraní pro vzdálené ovládání a monitorování vašeho I2P routeru. Z bezpečnostních důvodů standardně naslouchá na {0} a musí být povoleno prostřednictvím {1}."
 
 msgid "Web Apps configuration page"
-msgstr ""
+msgstr "Stránka konfigurace webových aplikací"
 
 msgid "Authentication"
-msgstr ""
+msgstr "Ověřování"
 
 msgid "All API operations (except for authentication itself) require a valid authentication token. To obtain a token, you must first authenticate with your configured password:"
-msgstr ""
+msgstr "Všechny operace API (kromě samotného ověřování) vyžadují platný ověřovací token. Chcete-li získat token, musíte se nejprve ověřit pomocí nakonfigurovaného hesla:"
 
 msgid "The returned token must be included in either the 'Token' parameter or as an 'X-Auth-Token' HTTP header in all subsequent API calls."
-msgstr ""
+msgstr "Vrácený token musí být zahrnut buď v parametru 'Token' nebo jako HTTP hlavička 'X-Auth-Token' ve všech následných voláních API."
 
 msgid "API Version: 1. Clients must specify API version 1 in authentication requests for compatibility."
-msgstr ""
+msgstr "Verze API: 1. Klienti musí pro kompatibilitu specifikovat verzi API 1 v žádostech o ověření."
 
 msgid "API Methods"
-msgstr ""
+msgstr "Metody API"
 
 msgid "Authenticates with the I2PControl service and returns an authentication token for subsequent API calls."
-msgstr ""
+msgstr "Ověřuje se službou I2PControl a vrací ověřovací token pro následná volání API."
 
 msgid "Parameters:"
-msgstr ""
+msgstr "Parametry:"
 
 msgid "Password (string), API (integer, must be 1)"
-msgstr ""
+msgstr "Heslo (řetězec), API (celé číslo, musí být 1)"
 
 msgid "Returns:"
-msgstr ""
+msgstr "Vrací:"
 
 msgid "Token (string), API (integer)"
-msgstr ""
+msgstr "Token (řetězec), API (celé číslo)"
 
 msgid "Authentication:"
-msgstr ""
+msgstr "Ověřování:"
 
 msgid "None (this is the unauthenticated method)"
-msgstr ""
+msgstr "Žádné (toto je neověřená metoda)"
 
 msgid "A simple test method that returns the provided string. Useful for testing API connectivity and authentication."
-msgstr ""
+msgstr "Jednoduchá testovací metoda, která vrací zadaný řetězec. Užitečné pro testování konektivity API a ověřování."
 
 msgid "Echo (string)"
-msgstr ""
+msgstr "Odezva (řetězec)"
 
 msgid "Result (string - echoed input)"
-msgstr ""
+msgstr "Výsledek (řetězec - zrcadlený vstup)"
 
 msgid "Required"
-msgstr ""
+msgstr "Vyžadováno"
 
 msgid "Retrieves read-only status information about the I2P router. Each parameter is optional - include only the metrics you need."
-msgstr ""
+msgstr "Získává informace o stavu I2P routeru pouze pro čtení. Každý parametr je volitelný - zahrňte pouze metriky, které potřebujete."
 
 msgid "Any combination of:"
-msgstr ""
+msgstr "Jakákoli kombinace:"
 
 msgid "Router version"
-msgstr ""
+msgstr "Verze routeru"
 
 msgid "Router uptime in milliseconds"
-msgstr ""
+msgstr "Doba provozu routeru v milisekundách"
 
 msgid "Current router status"
-msgstr ""
+msgstr "Aktuální stav routeru"
 
 msgid "Network status (0-14)"
-msgstr ""
+msgstr "Stav sítě (0-14)"
 
 msgid "1-second average inbound bandwidth (Bps)"
-msgstr ""
+msgstr "Průměrná příchozí šířka pásma za 1 sekundu (Bps)"
 
 msgid "1-second average outbound bandwidth (Bps)"
-msgstr ""
+msgstr "Průměrná odchozí šířka pásma za 1 sekundu (Bps)"
 
 msgid "15-second average inbound bandwidth (Bps)"
-msgstr ""
+msgstr "Průměrná příchozí šířka pásma za 15 sekund (Bps)"
 
 msgid "15-second average outbound bandwidth (Bps)"
-msgstr ""
+msgstr "Průměrná odchozí šířka pásma za 15 sekund (Bps)"
 
 msgid "Number of participating tunnels"
-msgstr ""
+msgstr "Počet účastnících se tunelů"
 
 msgid "Number of known peers"
-msgstr ""
+msgstr "Počet známých peerů"
 
 msgid "Number of active peers"
-msgstr ""
+msgstr "Počet aktivních peerů"
 
 msgid "Number of fast peers"
-msgstr ""
+msgstr "Počet rychlých peerů"
 
 msgid "Number of high-capacity peers"
-msgstr ""
+msgstr "Počet vysoce kapacitních peerů"
 
 msgid "Whether reseed is in progress"
-msgstr ""
+msgstr "Zda probíhá reseed"
 
 msgid "Requested metrics with their current values"
-msgstr ""
+msgstr "Požadované metriky s jejich aktuálními hodnotami"
 
 msgid "Controls router lifecycle and management operations. Each operation is optional and executes asynchronously."
-msgstr ""
+msgstr "Řídí životní cyklus routeru a operace správy. Každá operace je volitelná a provádí se asynchronně."
 
 msgid "Graceful restart/shutdown"
-msgstr ""
+msgstr "Elegantní restart/vypnutí"
 
 msgid "Immediate hard shutdown"
-msgstr ""
+msgstr "Okamžité tvrdé vypnutí"
 
 msgid "Immediate hard restart"
-msgstr ""
+msgstr "Okamžitý tvrdý restart"
 
 msgid "Graceful shutdown (waits for tunnels)"
-msgstr ""
+msgstr "Elegantní vypnutí (čeká na tunely)"
 
 msgid "Graceful restart (waits for tunnels)"
-msgstr ""
+msgstr "Elegantní restart (čeká na tunely)"
 
 msgid "Trigger router reseeding"
-msgstr ""
+msgstr "Spustit reseed routeru"
 
 msgid "Check for available updates"
-msgstr ""
+msgstr "Zkontrolovat dostupné aktualizace"
 
 msgid "Install available updates"
-msgstr ""
+msgstr "Nainstalovat dostupné aktualizace"
 
 msgid "Confirmation of operation (null for most operations, result status for FindUpdates/Update)"
-msgstr ""
+msgstr "Potvrzení operace (null pro většinu operací, stav výsledku pro FindUpdates/Update)"
 
 msgid "Manages router network configuration. Parameters can be used to either set values (if provided) or retrieve current values (if null/omitted)."
-msgstr ""
+msgstr "Spravuje síťovou konfiguraci routeru. Parametry lze použít buď k nastavení hodnot (pokud jsou poskytnuty) nebo k získání aktuálních hodnot (pokud jsou null/vynechány)."
 
 msgid "NTCP Transport Settings:"
-msgstr ""
+msgstr "Nastavení NTCP transportu:"
 
 msgid "NTCP port (1-65535)"
-msgstr ""
+msgstr "NTCP port (1-65535)"
 
 msgid "NTCP hostname"
-msgstr ""
+msgstr "NTCP hostname"
 
 msgid "Auto IP setting"
-msgstr ""
+msgstr "Automatické nastavení IP"
 
 msgid "SSU Transport Settings:"
-msgstr ""
+msgstr "Nastavení SSU transportu:"
 
 msgid "SSU port (1-65535)"
-msgstr ""
+msgstr "SSU port (1-65535)"
 
 msgid "SSU hostname"
-msgstr ""
+msgstr "SSU hostname"
 
 msgid "IP source detection"
-msgstr ""
+msgstr "Detekce zdroje IP"
 
 msgid "Read-only detected IP address"
-msgstr ""
+msgstr "Zjištěná IP adresa pouze pro čtení"
 
 msgid "Network Settings:"
-msgstr ""
+msgstr "Nastavení sítě:"
 
 msgid "UPnP enabled/disabled"
-msgstr ""
+msgstr "UPnP povoleno/zakázáno"
 
 msgid "Laptop mode setting"
-msgstr ""
+msgstr "Nastavení režimu notebooku"
 
 msgid "Bandwidth Settings:"
-msgstr ""
+msgstr "Nastavení šířky pásma:"
 
 msgid "Bandwidth share percentage (0-100)"
-msgstr ""
+msgstr "Procento sdílení šířky pásma (0-100)"
 
 msgid "Inbound bandwidth limit (Bps)"
-msgstr ""
+msgstr "Limit příchozí šířky pásma (Bps)"
 
 msgid "Outbound bandwidth limit (Bps)"
-msgstr ""
+msgstr "Limit odchozí šířky pásma (Bps)"
 
 msgid "SettingsSaved (boolean), RestartNeeded (boolean), plus current values for queried settings"
-msgstr ""
+msgstr "SettingsSaved (boolean), RestartNeeded (boolean), plus aktuální hodnoty pro dotazovaná nastavení"
 
 msgid "Manages I2PControl service settings including password, port, and restart configuration."
-msgstr ""
+msgstr "Spravuje nastavení služby I2PControl včetně hesla, portu a konfigurace restartu."
 
 msgid "Listen address (string, e.g., 127.0.0.1)"
-msgstr ""
+msgstr "Adresa naslouchání (řetězec, např. 127.0.0.1)"
 
 msgid "New password (string)"
-msgstr ""
+msgstr "Nové heslo (řetězec)"
 
 msgid "Listen port (integer, 1-65535)"
-msgstr ""
+msgstr "Port naslouchání (celé číslo, 1-65535)"
 
 msgid "SettingsSaved (boolean), RestartNeeded (boolean), current values for requested settings"
-msgstr ""
+msgstr "SettingsSaved (boolean), RestartNeeded (boolean), aktuální hodnoty pro požadovaná nastavení"
 
 msgid "Access and modify advanced I2P router configuration settings."
-msgstr ""
+msgstr "Přístup a úprava pokročilých nastavení konfigurace I2P routeru."
 
 msgid "Key-value pairs of advanced settings"
-msgstr ""
+msgstr "Páry klíč-hodnota pokročilých nastavení"
 
 msgid "Updated settings values"
-msgstr ""
+msgstr "Aktualizované hodnoty nastavení"
 
 msgid "Retrieves statistical rate data from router for monitoring and analysis. Useful for creating custom graphs or monitoring applications."
-msgstr ""
+msgstr "Získává statistická data rate z routeru pro monitorování a analýzu. Užitečné pro vytváření vlastních grafů nebo monitorovacích aplikací."
 
 msgid "Statistical metric name (string)"
-msgstr ""
+msgstr "Název statistické metriky (řetězec)"
 
 msgid "Time period in milliseconds (integer)"
-msgstr ""
+msgstr "Časové období v milisekundách (celé číslo)"
 
 msgid "Result (number - average value for specified period)"
-msgstr ""
+msgstr "Výsledek (číslo - průměrná hodnota pro specified období)"
 
 msgid "Network Status Codes"
-msgstr ""
+msgstr "Kódy stavu sítě"
 
 #, java-format
 msgid "The {0} field returns an integer value representing the current network connectivity status:"
-msgstr ""
+msgstr "Pole {0} vrací celočíselnou hodnotu reprezentující aktuální stav síťového připojení:"
 
 msgid "OK - Full connectivity"
-msgstr ""
+msgstr "OK - Plná konektivita"
 
 msgid "TESTING - Still establishing connectivity"
-msgstr ""
+msgstr "TESTING - Stále se navazuje konektivita"
 
 msgid "FIREWALLED - Behind restrictive firewall"
-msgstr ""
+msgstr "FIREWALLED - Za restriktivním firewallem"
 
 msgid "HIDDEN - Router in hidden mode"
-msgstr ""
+msgstr "HIDDEN - Router v skrytém režimu"
 
 msgid "WARN_FIREWALLED_AND_FAST - Firewalled but fast peer"
-msgstr ""
+msgstr "WARN_FIREWALLED_AND_FAST - Za firewallem, ale rychlý peer"
 
 msgid "WARN_FIREWALLED_AND_FLOODFILL - Firewalled but floodfill"
-msgstr ""
+msgstr "WARN_FIREWALLED_AND_FLOODFILL - Za firewallem, ale floodfill"
 
 msgid "WARN_FIREWALLED_WITH_INBOUND_TCP - Firewalled with inbound TCP"
-msgstr ""
+msgstr "WARN_FIREWALLED_WITH_INBOUND_TCP - Za firewallem s příchozím TCP"
 
 msgid "WARN_FIREWALLED_WITH_UDP_DISABLED - Firewalled with UDP disabled"
-msgstr ""
+msgstr "WARN_FIREWALLED_WITH_UDP_DISABLED - Za firewallem s deaktivovaným UDP"
 
 msgid "ERROR_I2CP - I2CP error"
-msgstr ""
+msgstr "ERROR_I2CP - Chyba I2CP"
 
 msgid "ERROR_CLOCK_SKEW - System clock skew detected"
-msgstr ""
+msgstr "ERROR_CLOCK_SKEW - Zjištěn časový posun systémových hodin"
 
 msgid "ERROR_PRIVATE_TCP_ADDRESS - Private TCP address configured"
-msgstr ""
+msgstr "ERROR_PRIVATE_TCP_ADDRESS - Nakonfigurována soukromá TCP adresa"
 
 msgid "ERROR_SYMMETRIC_NAT - Symmetric NAT detected"
-msgstr ""
+msgstr "ERROR_SYMMETRIC_NAT - Zjištěn symetrický NAT"
 
 msgid "ERROR_UDP_PORT_IN_USE - UDP port already in use"
-msgstr ""
+msgstr "ERROR_UDP_PORT_IN_USE - UDP port je již používán"
 
 msgid "ERROR_NO_ACTIVE_PEERS_CHECK_CONNECTION_AND_FIREWALL - No active peers"
-msgstr ""
+msgstr "ERROR_NO_ACTIVE_PEERS_CHECK_CONNECTION_AND_FIREWALL - Žádní aktivní peery"
 
 msgid "ERROR_UDP_DISABLED_AND_TCP_UNSET - UDP disabled, TCP not configured"
-msgstr ""
+msgstr "ERROR_UDP_DISABLED_AND_TCP_UNSET - UDP zakázáno, TCP nenakonfigurováno"
 
 msgid "Error Codes"
-msgstr ""
+msgstr "Chybové kódy"
 
 msgid "In addition to standard JSON-RPC 2.0 error codes, I2PControl provides specific error codes:"
-msgstr ""
+msgstr "Kromě standardních chybových kódů JSON-RPC 2.0 poskytuje I2PControl specifické chybové kódy:"
 
 msgid "JSON parse error"
-msgstr ""
+msgstr "Chyba parsování JSON"
 
 msgid "Invalid request"
-msgstr ""
+msgstr "Neplatný požadavek"
 
 msgid "Method not found"
-msgstr ""
+msgstr "Metoda nenalezena"
 
 msgid "Invalid parameters"
-msgstr ""
+msgstr "Neplatné parametry"
 
 msgid "Internal error"
-msgstr ""
+msgstr "Interní chyba"
 
 msgid "Invalid password provided"
-msgstr ""
+msgstr "Zadáno neplatné heslo"
 
 msgid "No authentication token presented"
-msgstr ""
+msgstr "Není předložen žádný ověřovací token"
 
 msgid "Authentication token doesn't exist"
-msgstr ""
+msgstr "Ověřovací token neexistuje"
 
 msgid "The provided authentication token was expired and will be removed"
-msgstr ""
+msgstr "Poskytnutý ověřovací token vypršel a bude odstraněn"
 
 msgid "The version of the I2PControl API used wasn't specified, but is required to be specified"
-msgstr ""
+msgstr "Verze použitého I2PControl API nebyla specifikována, ale je vyžadováno ji specifikovat"
 
 msgid "The version of the I2PControl API specified is not supported by I2PControl"
-msgstr ""
+msgstr "Verze I2PControl API, která byla specifikována, není I2PControl podporována"
 
 msgid "Rate Statistics"
-msgstr ""
+msgstr "Statistiky rate"
 
 #, java-format
 msgid "For a complete list of available rate statistics, see the {0} documentation in the router console or refer to the {1} online documentation. Common rate statistics include:"
-msgstr ""
+msgstr "Úplný seznam dostupných rate statistik naleznete v dokumentaci {0} v konzoli routeru nebo se podívejte do online dokumentace {1}. Běžné rate statistiky zahrnují:"
 
 msgid "Bandwidth receive rate"
-msgstr ""
+msgstr "Příchozí šířka pásma rate"
 
 msgid "Bandwidth send rate"
-msgstr ""
+msgstr "Odchozí šířka pásma rate"
 
 msgid "Active peer count"
-msgstr ""
+msgstr "Počet aktivních peerů"
 
 msgid "Known peer count"
-msgstr ""
+msgstr "Počet známých peerů"
 
 msgid "Tunnel test success time"
-msgstr ""
+msgstr "Čas úspěšného testu tunelu"
 
 msgid "Rate Statistics Documentation"
-msgstr ""
+msgstr "Dokumentace statistik rate"
 
 #, java-format
 msgid "See the {0} documentation in the router console or refer to the {1} online documentation."
-msgstr ""
+msgstr "Podívejte se do dokumentace {0} v konzoli routeru nebo do online dokumentace {1}."
 
 msgid "Example Usage"
-msgstr ""
+msgstr "Příklad použití"
 
 msgid "Get Router Version and Uptime:"
-msgstr ""
+msgstr "Získat verzi routeru a dobu provozu:"
 
 msgid "Get Current Bandwidth Usage:"
-msgstr ""
+msgstr "Získat aktuální využití šířky pásma:"
 
 msgid "Change Bandwidth Limits:"
-msgstr ""
+msgstr "Změnit limity šířky pásma:"
 
 msgid "Graceful Restart:"
-msgstr ""
+msgstr "Elegantní restart:"
 
 msgid "Security Considerations"
-msgstr ""
+msgstr "Bezpečnostní úvahy"
 
 #, java-format
 msgid "Always change the default API password from {0} to a strong, unique password"
-msgstr ""
+msgstr "Vždy změňte výchozí API heslo z {0} na silné, unikátní heslo"
 
 msgid "Consider binding I2PControl to localhost only if not accessed remotely"
-msgstr ""
+msgstr "Zvažte navázání I2PControl pouze na localhost, pokud k němu není přistupováno vzdáleně"
 
 msgid "Use HTTPS when accessing I2PControl over untrusted networks"
-msgstr ""
+msgstr "Používejte HTTPS při přístupu k I2PControl přes nedůvěryhodné sítě"
 
 msgid "Tokens may expire - implement re-authentication logic in your applications"
-msgstr ""
+msgstr "Tokeny mohou vypršet - implementujte logiku opětovného ověřování ve svých aplikacích"
 
 msgid "Monitor I2PControl access logs for unauthorized usage"
-msgstr ""
+msgstr "Monitorujte protokoly přístupu I2PControl pro neoprávněné použití"
 
 msgid "Be cautious with router management operations - they can affect network connectivity"
-msgstr ""
+msgstr "Buďte opatrní s operacemi správy routeru - mohou ovlivnit síťovou konektivitu"
 
 msgid "Integration Examples"
-msgstr ""
+msgstr "Příklady integrace"
 
 msgid "The I2PControl API can be integrated with:"
-msgstr ""
+msgstr "I2PControl API lze integrovat s:"
 
 msgid "Monitoring systems:"
-msgstr ""
+msgstr "Monitorovacími systémy:"
 
 msgid "Create custom dashboards for router performance"
-msgstr ""
+msgstr "Vytvářet vlastní dashboardy pro výkon routeru"
 
 msgid "Automation scripts:"
-msgstr ""
+msgstr "Automatizačními skripty:"
 
 msgid "Schedule restarts or configuration changes"
-msgstr ""
+msgstr "Plánovat restarty nebo změny konfigurace"
 
 msgid "Mobile applications:"
-msgstr ""
+msgstr "Mobilními aplikacemi:"
 
 msgid "Monitor and manage your router remotely"
-msgstr ""
+msgstr "Monitorovat a spravovat router vzdáleně"
 
 msgid "Network management tools:"
-msgstr ""
+msgstr "Nástroji pro správu sítě:"
 
 msgid "Integrate I2P status into broader network monitoring"
-msgstr ""
+msgstr "Integrovat stav I2P do širšího monitorování sítě"
 
 msgid "Alerting systems:"
-msgstr ""
+msgstr "Systémy upozornění:"
 
 msgid "Send notifications based on router status changes"
-msgstr ""
+msgstr "Odesílat upozornění na základě změn stavu routeru"
 
 msgid "Licensing Information"
 msgstr "Licenční informace"
@@ -7252,7 +7252,7 @@ msgid "Getting Support Online"
 msgstr "Získat online podporu"
 
 msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> on I2P's internal IRC network."
-msgstr ""
+msgstr "Můžete si také prohlédnout informace na <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>webu I2P</a>, přidat příspěvky na <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>diskuzním fóru I2P</a> nebo se zastavit na <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> nebo <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> na interní IRC síti I2P."
 
 msgid "Reporting Bugs"
 msgstr "Hlášení chyb"
@@ -8000,7 +8000,7 @@ msgid "Skip Setup"
 msgstr "Přeskočit nastavení"
 
 msgid "Select the language to be used for the router console and web applications ("
-msgstr ""
+msgstr "Vyberte jazyk, který se má používat pro konzoli routeru a webové aplikace ("
 
 msgid "Router Console &amp; WebApps Display Language"
 msgstr "Jazyk zobrazení ovládacího pultu směrovače a webových aplikací"

@@ -1501,7 +1501,7 @@ msgstr "ཡིག་ཆ་ནས་རྒྱུན་དུ་བཙོན་པ
 #, java-format
 msgid "Reseed successful, loaded {0} router info from file."
 msgid_plural "Reseed successful, loaded {0} router infos from file."
-msgstr[0] ""
+msgstr[0] "སྐྱེད་བསྲིང་འོང་ཙམ་ཡིན་པ། ཡིག་ཆ་ནས་རྒྱུད་པའི་ཆ་འཕྲིན་{0} ཐོབ་སོང་།"
 
 msgid "Reset URL list"
 msgstr "URL ཐོ་བཀོད་སླར་སྒྲིག"
@@ -1968,7 +1968,7 @@ msgid "FAQ"
 msgstr "གནད་དོན་གསལ་བརྟག"
 
 msgid "JSON-RPC API"
-msgstr ""
+msgstr "JSON-RPC API མཐུད་སྣེ།"
 
 msgid "Manage your I2P hosts file here (I2P domain name resolution)"
 msgstr "ཁྱེད་ཀྱི་I2P མངའ་ཁུལ་ཡིག་ཆ་འདིར་དོ་དམ་བྱེད་པ། (I2P ཆ་མཚམས་མིང་གི་ངོས་འཛིན།)"
@@ -5666,10 +5666,10 @@ msgid "Tunnel Filtering"
 msgstr "གསང་ལམ་ཚགས་བཀག་པ།"
 
 msgid "Console API"
-msgstr ""
+msgstr "རོགས་དྲན་ API"
 
 msgid "JSONRPC"
-msgstr ""
+msgstr "JSONRPC"
 
 msgid "New User Guide"
 msgstr "ཞབས་འདེགས་ཀྱི་སྟེན་པའི་ལམ་བརྒྱུད།"
@@ -6590,10 +6590,10 @@ msgid "An introduction to tunnel access lists"
 msgstr "གཞུང་བརྒྱུད་ལ་ཕེབས་པའི་ཡིག་ཆ་ཚོགས་ཀྱི་འགོ་བརྩམས།"
 
 msgid "I2PControl API"
-msgstr ""
+msgstr "I2PControl API མཐུད་སྣེ།"
 
 msgid "JSON-RPC API for remote router control and monitoring"
-msgstr ""
+msgstr "རོ་ཌེར་དོ་དམ་དང་ལྟ་ཞིབ་ཀྱི་གཞུང་བརྒྱུད་དང་ལྟ་ཞིབ་ཀྱི་ JSON-RPC API"
 
 msgid "Information about the sidebar, network status messages, and theme overrides"
 msgstr "སྟབས་བཟོའི་ཡིག་ཆ་དང་། གློག་དྲོང་གི་ཐོབ་ཐུང་། དེ་དང་ཐོབ་ཐུང་གི་བརྗེ་བའི་གོ་དོན་བརྗེ་བ་བཅས་ཀྱི་གོ་སྐབས།"
@@ -6602,429 +6602,429 @@ msgid "Webhosting on I2P"
 msgstr "I2P ནང་གི་དྲོང་བཟོ་བ།"
 
 msgid "I2PControl JSON-RPC API"
-msgstr ""
+msgstr "I2PControl JSON-RPC API མཐུད་སྣེ།"
 
 msgid "I2PControl provides a JSON-RPC 2.0 interface for remote control and monitoring of your I2P router. This allows external applications to programmatically manage I2P settings, retrieve status information, and control router operations through standardized HTTP requests."
-msgstr ""
+msgstr "I2PControl ཀྱིས་ཁྱེད་ཀྱི་ I2P རོ་ཌེར་དོ་དམ་དང་ལྟ་ཞིབ་ཀྱི་ཆེད་དུ་ JSON-RPC 2.0 མཐུད་སྣེ་འདོན་སྤེལ་བྱེད་ཡོད། འདིས་ཕྱི་ཕྱེད་གཞུང་ཐུབ་ཀྱིས་ I2P བཀོད་སྒྲིག་དོ་དམ་དང་། གནས་ཚུལ་ཐོབ་པ། ཚད་ལྡན་གྱི་ HTTP བློ་འདྲིས་བརྒྱུད་ནས་རོ་ཌེར་བཀོལ་སྤྱོད་དོ་དམ་བྱེད་ཆོག"
 
 #, java-format
 msgid "I2PControl is a JSON-RPC 2.0 interface for remote control and monitoring of your I2P router. It listens on {0} by default when enabled for security reasons and must be enabled through the {1}."
-msgstr ""
+msgstr "I2PControl ནི་ཁྱེད་ཀྱི་ I2P རོ་ཌེར་དོ་དམ་དང་ལྟ་ཞིབ་ཀྱི་ཆེད་དུ་རིམ་པ་ 2.0 མཐུད་སྣེ་ཡིན། བདེ་འཇགས་ཀྱི་རྒྱུ་མཚན་གྱིས་གཞན་སྒྲིག་བྱས་པའི་སྐབས་{0} ཐོག་ཁུངས་བཟུང་གི་ཡོད། {1} བརྒྱུད་ནས་ཁ་སྣོན་བྱེད་དགོས།"
 
 msgid "Web Apps configuration page"
-msgstr ""
+msgstr "Web Apps རོགས་སྒྲིག་ཤོག་ངོས།"
 
 msgid "Authentication"
-msgstr ""
+msgstr "ངེས་གཏན་འབེབས།"
 
 msgid "All API operations (except for authentication itself) require a valid authentication token. To obtain a token, you must first authenticate with your configured password:"
-msgstr ""
+msgstr "API བཀོལ་སྤྱོད་ཚུལ་ཐམས་ཅད་ཀྱིས་ (ངེས་གཏན་འབེབས་རང་ཉིད་མིན་པ་) ནུས་པ་ལྡན་པའི་ངེས་གཏན་ཐབས་ཤེལ་དགོས། ཐབས་ཤེལ་ཐོབ་པའི་ཆེད་དུ་ཁྱེད་ཀྱིས་སྔོན་ནས་ཁ་སྣོན་བྱས་པའི་གནས་ཚུལ་ཐོག་ཏུ་ངེས་གཏན་འབེབས་བྱེད་དགོས།"
 
 msgid "The returned token must be included in either the 'Token' parameter or as an 'X-Auth-Token' HTTP header in all subsequent API calls."
-msgstr ""
+msgstr "ཐོབ་པའི་ཐབས་ཤེལ་དགོས་གཏུབ་ API འབོད་སྒྲིག་ཚུལ་ཐམས་ཅད་ཀྱི་ 'Token' ཁ་སྣོན་ཡང་ན་ 'X-Auth-Token' HTTP ཁ་སྣོན་ནང་བཅུག་དགོས།"
 
 msgid "API Version: 1. Clients must specify API version 1 in authentication requests for compatibility."
-msgstr ""
+msgstr "API པེ་ཨང་: ༡ ཞིབ་འཇུག་པ་ཚོས་ནུས་མཐུན་གྱི་ཆེད་དུ་ངེས་གཏན་འབེབས་རེ་སྒྲུབ་ཁ་ན་ API པེ་ཨང་༡ གསལ་ཁ་བྱེད་དགོས།"
 
 msgid "API Methods"
-msgstr ""
+msgstr "API བཀོལ་སྤྱོད་ཚུལ།"
 
 msgid "Authenticates with the I2PControl service and returns an authentication token for subsequent API calls."
-msgstr ""
+msgstr "I2PControl ཞབས་ཞུའི་ཐོག་ངེས་གཏན་འབེབས་བྱས་ཏེ་རྗེས་མཐུད་ API འབོད་སྒྲིག་ཆེད་དུ་ངེས་གཏན་ཐབས་ཤེལ་ཕྱིར་ལོག་བྱེད།"
 
 msgid "Parameters:"
-msgstr ""
+msgstr "ཁ་སྣོན་ཚུལ།"
 
 msgid "Password (string), API (integer, must be 1)"
-msgstr ""
+msgstr "གི་མིང་གི་ཚིག་དུམ་ (string), API (integer, ༡ ཡིན་དགོས།)"
 
 msgid "Returns:"
-msgstr ""
+msgstr "ཕྱིར་ལོག།"
 
 msgid "Token (string), API (integer)"
-msgstr ""
+msgstr "ཐབས་ཤེལ་ (string), API (integer)"
 
 msgid "Authentication:"
-msgstr ""
+msgstr "ངེས་གཏན་འབེབས།"
 
 msgid "None (this is the unauthenticated method)"
-msgstr ""
+msgstr "མེད་པ (འདི་ནི་ངེས་གཏན་མ་བྱས་པའི་བཀོལ་སྤྱོད་ཚུལ་ཡིན།)"
 
 msgid "A simple test method that returns the provided string. Useful for testing API connectivity and authentication."
-msgstr ""
+msgstr "མཁོ་འདབ་པའི་ཚིག་དུམ་ཕྱིར་ལོག་བྱེད་པའི་གདེང་ཚོད་བཀོལ་སྤྱོད་ཚུལ་སྟབས་བདེ་ཞིག་ཡིན། API མཐུད་སྣེ་དང་ངེས་གཏན་འབེབས་གདེང་ཚོད་བྱེད་ཆེད་ཕན་ཐོགས་ཡིན།"
 
 msgid "Echo (string)"
-msgstr ""
+msgstr "མཆན་འཇོག (string)"
 
 msgid "Result (string - echoed input)"
-msgstr ""
+msgstr "མཇུག་འབྲས (string - མཆན་འཇོག་བྱས་པའི་ནང་འཇུག)"
 
 msgid "Required"
-msgstr ""
+msgstr "དགོས་གཏན།"
 
 msgid "Retrieves read-only status information about the I2P router. Each parameter is optional - include only the metrics you need."
-msgstr ""
+msgstr "I2P རོ་ཌེར་གྱི་ཆ་འཕྲིན་གནས་ཚུལ་འབྱོར་སྤུངས་འཛིན་ལེན་བྱེད། ཁ་སྣོན་ཚུལ་སུམ་ཐེག་ཡིན་པས་ཁྱེད་ཀྱིར་དགོས་མཁོ་ཡོད་པའི་ཚད་གཞི་ཙམ་བཙུག་དགོས།"
 
 msgid "Any combination of:"
-msgstr ""
+msgstr "གང་འདོད་ཀྱི་སྒྲིག་འཛུགས།"
 
 msgid "Router version"
-msgstr ""
+msgstr "རོ་ཌེར་པེ་ཨང་།"
 
 msgid "Router uptime in milliseconds"
-msgstr ""
+msgstr "སྐར་མ་གནས་ཚུལ་གྱི་རོ་ཌེར་སྐབས་ཡུན།"
 
 msgid "Current router status"
-msgstr ""
+msgstr "ད་ལྟའི་རོ་ཌེར་གནས་ཚུལ།"
 
 msgid "Network status (0-14)"
-msgstr ""
+msgstr "ཨེམ་གླིང་གནས་ཚུལ། (༠-༡༤)"
 
 msgid "1-second average inbound bandwidth (Bps)"
-msgstr ""
+msgstr "སྐར་མ་གཅིག་གི་ཆ་སྙོམས་ནང་འཛུལ་གླེང་ཐུང་གྲངས། (Bps)"
 
 msgid "1-second average outbound bandwidth (Bps)"
-msgstr ""
+msgstr "སྐར་མ་གཅིག་གི་ཆ་སྙོམས་ཕྱིར་འཐེན་གླེང་ཐུང་གྲངས། (Bps)"
 
 msgid "15-second average inbound bandwidth (Bps)"
-msgstr ""
+msgstr "སྐར་མ་༡༥ གི་ཆ་སྙོམས་ནང་འཛུལ་གླེང་ཐུང་གྲངས། (Bps)"
 
 msgid "15-second average outbound bandwidth (Bps)"
-msgstr ""
+msgstr "སྐར་མ་༡༥ གི་ཆ་སྙོམས་ཕྱིར་འཐེན་གླེང་ཐུང་གྲངས། (Bps)"
 
 msgid "Number of participating tunnels"
-msgstr ""
+msgstr "ཞུགས་མཁན་མཚན་ཁུང་གི་གྲངས།"
 
 msgid "Number of known peers"
-msgstr ""
+msgstr "ཤེས་ཟིན་པའི་གྲོགས་པོའི་གྲངས།"
 
 msgid "Number of active peers"
-msgstr ""
+msgstr "འགུལ་སྐྱོད་ཀྱི་གྲོགས་པོའི་གྲངས།"
 
 msgid "Number of fast peers"
-msgstr ""
+msgstr "མགྱོགས་པའི་གྲོགས་པོའི་གྲངས།"
 
 msgid "Number of high-capacity peers"
-msgstr ""
+msgstr "མཐོ་གྲངས་ཀྱི་གྲོགས་པོའི་གྲངས།"
 
 msgid "Whether reseed is in progress"
-msgstr ""
+msgstr "reseed འབད་མི་བྱེད་མིན།"
 
 msgid "Requested metrics with their current values"
-msgstr ""
+msgstr "རེ་ཞིབ་བྱས་པའི་ཚད་གཞི་དང་ད་ལྟའི་རིམ་໖།"
 
 msgid "Controls router lifecycle and management operations. Each operation is optional and executes asynchronously."
-msgstr ""
+msgstr "རོ་ཌེར་ཚེས་གནས་དང་དོ་དམ་བཀོལ་སྤྱོད་ཚུལ་ཚོད་འཛིན། བཀོལ་སྤྱོད་ཚུལ་སུམ་ཐེག་ཡིན་པས་མཉམ་སྟོན་གྱིས་ལག་བསྟར་བྱེད།"
 
 msgid "Graceful restart/shutdown"
-msgstr ""
+msgstr "གཟབ་གཟབ་གིས་བསྐྱར་འགོད་/ཁ་གཡུག་།"
 
 msgid "Immediate hard shutdown"
-msgstr ""
+msgstr "འཕྲལ་མཁོ་དག་པའི་ཁ་གཡུག་།"
 
 msgid "Immediate hard restart"
-msgstr ""
+msgstr "འཕྲལ་མཁོ་དག་པའི་བསྐྱར་འགོད།"
 
 msgid "Graceful shutdown (waits for tunnels)"
-msgstr ""
+msgstr "གཟབ་གཟབ་གིས་ཁ་གཡུག་ (མཚན་ཁུང་ལ་སྒུག་ཆོད།)"
 
 msgid "Graceful restart (waits for tunnels)"
-msgstr ""
+msgstr "གཟབ་གཟབ་གིས་བསྐྱར་འགོད་ (མཚན་ཁུང་ལ་སྒུག་ཆོད།)"
 
 msgid "Trigger router reseeding"
-msgstr ""
+msgstr "རོ་ཌེར་ reseed སློང་བ།"
 
 msgid "Check for available updates"
-msgstr ""
+msgstr "ཡོད་པའི་གསར་སྒྱུར་ལ་ཞིབ་དཔྱད།"
 
 msgid "Install available updates"
-msgstr ""
+msgstr "ཡོད་པའི་གསར་སྒྱུར་སྒྲིག་འཛུགས།"
 
 msgid "Confirmation of operation (null for most operations, result status for FindUpdates/Update)"
-msgstr ""
+msgstr "བཀོལ་སྤྱོད་ཚུལ་གནས་སྟངས། (བཀོལ་སྤྱོད་ཚུལ་མང་པོ་ལ་ null, FindUpdates/Update ལ་མཇུག་འབྲས་གནས་སྟངས།)"
 
 msgid "Manages router network configuration. Parameters can be used to either set values (if provided) or retrieve current values (if null/omitted)."
-msgstr ""
+msgstr "རོ་ཌེར་ཨེམ་གླིང་རོགས་སྒྲིག་དོ་དམ། ཁ་སྣོན་ཚུལ་བེད་སྤྱད་ནས་རིམ་໖་གཞག (མཁོ་འདབ་བྱས་ན་) ཡང་ན་ད་ལྟའི་རིམ་໖་འཛིན་ལེན་ (null/སྣང་མེད་བྱས་ན་) བྱེད་ཆོད།"
 
 msgid "NTCP Transport Settings:"
-msgstr ""
+msgstr "NTCP སྤོ་སྒྱུར་རོགས་སྒྲིག།"
 
 msgid "NTCP port (1-65535)"
-msgstr ""
+msgstr "NTCP སྒོ་གྲམ། (༡-༦༥༥༣༥)"
 
 msgid "NTCP hostname"
-msgstr ""
+msgstr "NTCP མིང་གཞན།"
 
 msgid "Auto IP setting"
-msgstr ""
+msgstr "རང་བཞིན་ IP རོགས་སྒྲིག།"
 
 msgid "SSU Transport Settings:"
-msgstr ""
+msgstr "SSU སྤོ་སྒྱུར་རོགས་སྒྲིག།"
 
 msgid "SSU port (1-65535)"
-msgstr ""
+msgstr "SSU སྒོ་གྲམ། (༡-༦༥༥༣༥)"
 
 msgid "SSU hostname"
-msgstr ""
+msgstr "SSU མིང་གཞན།"
 
 msgid "IP source detection"
-msgstr ""
+msgstr "IP ཁུངས་གཏན་འཁེལ།"
 
 msgid "Read-only detected IP address"
-msgstr ""
+msgstr "འཛིན་སྟངས་འབྱོར་སྤུངས་ IP ཁོགས་གྲམ།"
 
 msgid "Network Settings:"
-msgstr ""
+msgstr "ཨེམ་གླིང་རོགས་སྒྲིག།"
 
 msgid "UPnP enabled/disabled"
-msgstr ""
+msgstr "UPnP ལྡན་པ/མེད་པ།"
 
 msgid "Laptop mode setting"
-msgstr ""
+msgstr "ལེབ་ཁྲབ་ཐབས་སྟེགས་རོགས་སྒྲིག།"
 
 msgid "Bandwidth Settings:"
-msgstr ""
+msgstr "གླེང་ཐུང་གྲངས་རོགས་སྒྲིག།"
 
 msgid "Bandwidth share percentage (0-100)"
-msgstr ""
+msgstr "གླེང་ཐུང་གྲངས་མཉམ་སྤེལ་གྲངས་ཚད། (༠-༡༠༠)"
 
 msgid "Inbound bandwidth limit (Bps)"
-msgstr ""
+msgstr "ནང་འཛུལ་གླེང་ཐུང་གྲངས་ཚད། (Bps)"
 
 msgid "Outbound bandwidth limit (Bps)"
-msgstr ""
+msgstr "ཕྱིར་འཐེན་གླེང་ཐུང་གྲངས་ཚད། (Bps)"
 
 msgid "SettingsSaved (boolean), RestartNeeded (boolean), plus current values for queried settings"
-msgstr ""
+msgstr "རོགས་སྒྲིག་ཉར་ཚགས་ (boolean), བསྐྱར་འགོད་དགོས་ (boolean), འདྲི་གཞི་བྱས་པའི་རོགས་སྒྲིག་ཀྱི་ད་ལྟའི་རིམ་໖།"
 
 msgid "Manages I2PControl service settings including password, port, and restart configuration."
-msgstr ""
+msgstr "གི་མིང་དང་སྒོ་གྲམ། བསྐྱར་འགོད་རོགས་སྒྲིག་ཚུད་པའི་I2PControl ཞབས་ཞུའི་རོགས་སྒྲིག་དོ་དམ།"
 
 msgid "Listen address (string, e.g., 127.0.0.1)"
-msgstr ""
+msgstr "ཉན་ས་གཞན། (string, དཔེ་ན་ 127.0.0.1)"
 
 msgid "New password (string)"
-msgstr ""
+msgstr "གི་མིང་གསར་པ། (string)"
 
 msgid "Listen port (integer, 1-65535)"
-msgstr ""
+msgstr "ཉན་ས་སྒོ་གྲམ། (integer, ༡-༦༥༥༣༥)"
 
 msgid "SettingsSaved (boolean), RestartNeeded (boolean), current values for requested settings"
-msgstr ""
+msgstr "རོགས་སྒྲིག་ཉར་ཚགས་ (boolean), བསྐྱར་འགོད་དགོས་ (boolean), རེ་ཞིབ་བྱས་པའི་རོགས་སྒྲིག་ཀྱི་ད་ལྟའི་རིམ་໖།"
 
 msgid "Access and modify advanced I2P router configuration settings."
-msgstr ""
+msgstr "མཐོ་རིམ་ I2P རོ་ཌེར་རོགས་སྒྲིག་རིམ་໖་འཛིན་ལེན་དང་བཅོས་སྒྲིག།"
 
 msgid "Key-value pairs of advanced settings"
-msgstr ""
+msgstr "མཐོ་རིམ་རོགས་སྒྲིག་གི་གཙོ་གཞུང་-རིམ་໖་མངགས།"
 
 msgid "Updated settings values"
-msgstr ""
+msgstr "གསར་སྒྱུར་བྱས་པའི་རོགས་སྒྲིག་རིམ་໖།"
 
 msgid "Retrieves statistical rate data from router for monitoring and analysis. Useful for creating custom graphs or monitoring applications."
-msgstr ""
+msgstr "ལྟ་ཞིབ་དང་དབེན་འཇོག་གི་ཆེད་དུ་རོ་ཌེར་ནས་ཚད་གཞིའི་གྲངས་གཞི་འཛིན་ལེན། རང་བཞིན་གྱི་གདེང་ཚོད་དམིགས་གསལ་ལ་མཁོ་འདབ་ཡིན།"
 
 msgid "Statistical metric name (string)"
-msgstr ""
+msgstr "ཚད་གཞིའི་མིང་གཞན། (string)"
 
 msgid "Time period in milliseconds (integer)"
-msgstr ""
+msgstr "དུས་ཚོད་དུས་ཡུན་སྐར་མ་གནས་ཚུལ། (integer)"
 
 msgid "Result (number - average value for specified period)"
-msgstr ""
+msgstr "མཇུག་འབྲས། (གྲངས་ - གསལ་ཁ་བྱས་པའི་དུས་ཡུན་གྱི་ཆ་སྙོམས་རིམ་໖།)"
 
 msgid "Network Status Codes"
-msgstr ""
+msgstr "ཨེམ་གླིང་གནས་སྟངས་ཨང་གྲངས།"
 
 #, java-format
 msgid "The {0} field returns an integer value representing the current network connectivity status:"
-msgstr ""
+msgstr "{0} སྟེང་ནས་ད་ལྟའི་ཨེམ་གླིང་མཐུད་སྣེ་གནས་སྟངས་སྟེར་བའི་ integer རིམ་໖་ཕྱིར་ལོག།"
 
 msgid "OK - Full connectivity"
-msgstr ""
+msgstr "གནས་སྟངས་ལེགས་པ། - མཐུད་སྣེ་ཡོངས་སུ་འབྱིན་པ།"
 
 msgid "TESTING - Still establishing connectivity"
-msgstr ""
+msgstr "གདེང་ཚོད་བཞིན་པ། - མཐུད་སྣེ་སྒྲིག་བཞིན་པ།"
 
 msgid "FIREWALLED - Behind restrictive firewall"
-msgstr ""
+msgstr "མེ་འགོག་གི་རྒྱབ། - ཚོད་འཛིན་མེ་འགོག་གི་རྒྱབ་ཏུ།"
 
 msgid "HIDDEN - Router in hidden mode"
-msgstr ""
+msgstr "སྦས་པའི་། - རོ་ཌེར་སྦས་པའི་ཐབས་སྟེགས་ནང་།"
 
 msgid "WARN_FIREWALLED_AND_FAST - Firewalled but fast peer"
-msgstr ""
+msgstr "ཉེན་བརྡ།_མེ་འགོག་དང་མགྱོགས་པའི། - མེ་འགོག་ཡོད་ཀྱང་མགྱོགས་པའི་གྲོགས་པོ།"
 
 msgid "WARN_FIREWALLED_AND_FLOODFILL - Firewalled but floodfill"
-msgstr ""
+msgstr "ཉེན་བརྡ།_མེ་འགོག་དང་floodfill ། - མེ་འགོག་ཡོད་ཀྱང་floodfill །"
 
 msgid "WARN_FIREWALLED_WITH_INBOUND_TCP - Firewalled with inbound TCP"
-msgstr ""
+msgstr "ཉེན་བརྡ།_ནང་འཛུལ་TCPདང་མེ་འགོག། - ནང་འཛུལ་ TCP ཡོད་པ་དང་མེ་འགོག་ཡོད།"
 
 msgid "WARN_FIREWALLED_WITH_UDP_DISABLED - Firewalled with UDP disabled"
-msgstr ""
+msgstr "ཉེན་བརྡ།_མེ་འགོག་དང་UDPམེད་པ། - མེ་འགོག་ཡོད་ཀྱང་ UDP མེད་པ།"
 
 msgid "ERROR_I2CP - I2CP error"
-msgstr ""
+msgstr "ནོར་འཁོར།_I2CP - I2CP ནོར་འཁོར།"
 
 msgid "ERROR_CLOCK_SKEW - System clock skew detected"
-msgstr ""
+msgstr "ནོར་འཁོར།_ཆུ་ཚོད་འཁོར་སྒྲིག - མ་ལག་ཆུ་ཚོད་འཁོར་སྒྲིག་གདེང་ཚོད་བྱས།"
 
 msgid "ERROR_PRIVATE_TCP_ADDRESS - Private TCP address configured"
-msgstr ""
+msgstr "ནོར་འཁོར།_TCPཁོགས་གྲམ་སྒེར་གྱི། - སྒེར་གྱི་ TCP ཁོགས་གྲམ་རོགས་སྒྲིག་བྱས།"
 
 msgid "ERROR_SYMMETRIC_NAT - Symmetric NAT detected"
-msgstr ""
+msgstr "ནོར་འཁོར།_ཁ་སྣོན་གཅིག་གི་NAT - ཁ་སྣོན་གཅིག་གི་ NAT གདེང་ཚོད་བྱས།"
 
 msgid "ERROR_UDP_PORT_IN_USE - UDP port already in use"
-msgstr ""
+msgstr "ནོར་འཁོར།_UDPསྒོ་གྲམ་བེད་སྤྱོད་ནང་། - UDP སྒོ་གྲམ་ད་གཟོད་བེད་སྤྱོད་ནང་།"
 
 msgid "ERROR_NO_ACTIVE_PEERS_CHECK_CONNECTION_AND_FIREWALL - No active peers"
-msgstr ""
+msgstr "ནོར་འཁོར།_གྲོགས་པོ་འགུལ་སྐྱོད་མེད་པ་དང་མཐུད་སྣེ་དང་མེ་འགོག - གྲོགས་པོ་འགུལ་སྐྱོད་མེད།"
 
 msgid "ERROR_UDP_DISABLED_AND_TCP_UNSET - UDP disabled, TCP not configured"
-msgstr ""
+msgstr "ནོར་འཁོར།_UDPམེད་པ་དང་TCPམ་གཞི་བ། - UDP མེད་པ།, TCP རོགས་སྒྲིག་བྱས་མེད།"
 
 msgid "Error Codes"
-msgstr ""
+msgstr "ནོར་འཁོར་ཨང་གྲངས།"
 
 msgid "In addition to standard JSON-RPC 2.0 error codes, I2PControl provides specific error codes:"
-msgstr ""
+msgstr "ཚད་གཞི་ JSON-RPC 2.0 ནོར་འཁོར་ཨང་གྲངས་ལས་གཞན་དུ་ I2PControl གིས་དམིགས་བསལ་ནོར་འཁོར་ཨང་གྲངས་མཁོ་འདབ་བྱེད།"
 
 msgid "JSON parse error"
-msgstr ""
+msgstr "JSON དབྱིབས་འགོད་ནོར་འཁོར།"
 
 msgid "Invalid request"
-msgstr ""
+msgstr "གོ་མིན་རེ་ཞིབ།"
 
 msgid "Method not found"
-msgstr ""
+msgstr "བཀོལ་སྤྱོད་ཚུལ་མ་ཐོབ།"
 
 msgid "Invalid parameters"
-msgstr ""
+msgstr "གོ་མིན་ཁ་སྣོན་ཚུལ།"
 
 msgid "Internal error"
-msgstr ""
+msgstr "ནང་གི་ནོར་འཁོར།"
 
 msgid "Invalid password provided"
-msgstr ""
+msgstr "གོ་མིན་གི་མིང་གི་མཁོ་འདབ་བྱས།"
 
 msgid "No authentication token presented"
-msgstr ""
+msgstr "ངེས་གཏན་ཐབས་ཤེལ་མཁོ་འདབ་བྱས་མེད།"
 
 msgid "Authentication token doesn't exist"
-msgstr ""
+msgstr "ངེས་གཏན་ཐབས་ཤེལ་མེད།"
 
 msgid "The provided authentication token was expired and will be removed"
-msgstr ""
+msgstr "མཁོ་འདབ་བྱས་པའི་ངེས་གཏན་ཐབས་ཤེལ་དུས་བཟུང་སོང་བ་དང་ཕྱིར་འདོན་བྱེད།"
 
 msgid "The version of the I2PControl API used wasn't specified, but is required to be specified"
-msgstr ""
+msgstr "བཀོལ་སྤྱོད་པའི་I2PControl API ཕབ་ཨང་གསལ་ཁ་བྱས་མེད་ཀྱང་གསལ་ཁ་བྱེད་དགོས།"
 
 msgid "The version of the I2PControl API specified is not supported by I2PControl"
-msgstr ""
+msgstr "གསལ་ཁ་བྱས་པའི་I2PControl API ཕབ་ཨང་དེ་ I2PControl གིས་རྒྱབ་སྐྱོར་མ་བྱས།"
 
 msgid "Rate Statistics"
-msgstr ""
+msgstr "གྲངས་གཞི་ཚད་གཞི།"
 
 #, java-format
 msgid "For a complete list of available rate statistics, see the {0} documentation in the router console or refer to the {1} online documentation. Common rate statistics include:"
-msgstr ""
+msgstr "ཡོད་པའི་གྲངས་གཞི་ཚད་གཞིའི་ཐོབ་ཐང་ཚང་མ་ལ་མཁོ་འདབ་བྱེད་ཆེད། {0} ཡི་ཡིག་ཆ་རོ་ཌེར་གདམ་གའི་ནང་གི་ཡིག་ཆ་གཟིགས་པའམ་ {1} གི་དྲ་ཐོག་ཡིག་ཆར་གཞིགས་གསལ། སྤྱིར་བཏང་གྲངས་གཞི་ཚད་གཞིའི་ནང་དུ་འདུས།"
 
 msgid "Bandwidth receive rate"
-msgstr ""
+msgstr "གླེང་ཐུང་གྲངས་འཛིན་ལེན་གྲངས་གཞི།"
 
 msgid "Bandwidth send rate"
-msgstr ""
+msgstr "གླེང་ཐུང་གྲངས་སྤོར་གྲངས་གཞི།"
 
 msgid "Active peer count"
-msgstr ""
+msgstr "འགུལ་སྐྱོད་གྲོགས་པོའི་གྲངས།"
 
 msgid "Known peer count"
-msgstr ""
+msgstr "ཤེས་ཟིན་པའི་གྲོགས་པོའི་གྲངས།"
 
 msgid "Tunnel test success time"
-msgstr ""
+msgstr "མཚན་ཁུང་གདེང་ཚོད་ལེགས་གྲངས་དུས་ཚོད།"
 
 msgid "Rate Statistics Documentation"
-msgstr ""
+msgstr "གྲངས་གཞི་ཚད་གཞིའི་ཡིག་ཆ།"
 
 #, java-format
 msgid "See the {0} documentation in the router console or refer to the {1} online documentation."
-msgstr ""
+msgstr "{0} ཡི་ཡིག་ཆ་རོ་ཌེར་གདམ་གའི་ནང་གི་ཡིག་ཆ་གཟིགས་པའམ་ {1} གི་དྲ་ཐོག་ཡིག་ཆར་གཞིགས་གསལ།"
 
 msgid "Example Usage"
-msgstr ""
+msgstr "བཀོལ་སྤྱོད་དམིགས་གསལ།"
 
 msgid "Get Router Version and Uptime:"
-msgstr ""
+msgstr "རོ་ཌེར་ཕབ་ཨང་དང་སྐབས་ཡུན་ལོན་པ།"
 
 msgid "Get Current Bandwidth Usage:"
-msgstr ""
+msgstr "ད་ལྟའི་གླེང་ཐུང་གྲངས་བེད་སྤྱོད་ལོན་པ།"
 
 msgid "Change Bandwidth Limits:"
-msgstr ""
+msgstr "གླེང་ཐུང་གྲངས་ཚད་བཅོས་སྒྲིག།"
 
 msgid "Graceful Restart:"
-msgstr ""
+msgstr "གཟབ་གཟབ་གིས་བསྐྱར་འགོད།"
 
 msgid "Security Considerations"
-msgstr ""
+msgstr "བདེ་འཇགས་གཙོ་གཞུང་།"
 
 #, java-format
 msgid "Always change the default API password from {0} to a strong, unique password"
-msgstr ""
+msgstr "ཚད་གཞི་ API གི་མིང་དེ་ {0} ནས་ཤུགས་ལྡན་དང་ཁ་སྣོན་པའི་གི་མིང་དུ་བཅོས་སྒྲིག་བྱེད་དགོས།"
 
 msgid "Consider binding I2PControl to localhost only if not accessed remotely"
-msgstr ""
+msgstr "རབ་དབུག་ནས་མི་ཐོབ་ན་ I2PControl དེ་ localhost ལ་མཉམ་སྦྲགས་བྱེད་དགོས་གཞིས་གསལ།"
 
 msgid "Use HTTPS when accessing I2PControl over untrusted networks"
-msgstr ""
+msgstr "ཡིད་ཆེས་མི་ཆོད་པའི་ཨེམ་གླིང་ཐོག་ནས་I2PControl ཐོབ་ཐང་བྱེད་སྐབས་ HTTPS བཀོལ་དགོས།"
 
 msgid "Tokens may expire - implement re-authentication logic in your applications"
-msgstr ""
+msgstr "ཐབས་ཤེལ་དུས་བཟུང་སོང་སྲིད་པས་ ཁྱེད་ཀྱི་མཆན་འཇོག་ནང་ངེས་གཏན་འབེབས་རིམ་໖་ལག་བསྟར་བྱེད་དགོས།"
 
 msgid "Monitor I2PControl access logs for unauthorized usage"
-msgstr ""
+msgstr "མཁོ་འདབ་མེད་པའི་བཀོལ་སྤྱོད་ཆེད་ I2PControl ཐོབ་ཐང་ཟིན་བྱེད་ལྟ་ཞིབ་བྱེད།"
 
 msgid "Be cautious with router management operations - they can affect network connectivity"
-msgstr ""
+msgstr "རོ་ཌེར་དོ་དམ་བཀོལ་སྤྱོད་ཚུལ་ལ་དོ་སྣང་བྱེད་དགོས། - དེ་ཚོས་ཨེམ་གླིང་མཐུད་སྣེར་ཤུགས་རེད་འཇོག་ཐུབ།"
 
 msgid "Integration Examples"
-msgstr ""
+msgstr "མཉམ་སྒྲིལ་དམིགས་གསལ།"
 
 msgid "The I2PControl API can be integrated with:"
-msgstr ""
+msgstr "I2PControl API དེ་འདི་དག་དང་མཉམ་སྒྲིལ་བྱེད་ཆོད།"
 
 msgid "Monitoring systems:"
-msgstr ""
+msgstr "ལྟ་ཞིབ་མ་ལག་།"
 
 msgid "Create custom dashboards for router performance"
-msgstr ""
+msgstr "རོ་ཌེར་ནུས་པ་ཆེད་དམིགས་གསལ་གྱི་གདམ་གའི་མཐོང་གྲལ་བཟོ་བ།"
 
 msgid "Automation scripts:"
-msgstr ""
+msgstr "རང་བཞིན་གྱི་ཡིག་ཆ་།"
 
 msgid "Schedule restarts or configuration changes"
-msgstr ""
+msgstr "བསྐྱར་འགོད་དང་རོགས་སྒྲིག་བཅོས་སྒྲིག་གི་དུས་ཐོག་འཆར་འགོད།"
 
 msgid "Mobile applications:"
-msgstr ""
+msgstr "ཁ་པར་མཆན་འཇོག་།"
 
 msgid "Monitor and manage your router remotely"
-msgstr ""
+msgstr "ཁ་སྣོན་ནས་ཁྱེད་ཀྱི་རོ་ཌེར་ལྟ་ཞིབ་དང་དོ་དམ་བྱེད།"
 
 msgid "Network management tools:"
-msgstr ""
+msgstr "ཨེམ་གླིང་དོ་དམ་ཡི་གེ།"
 
 msgid "Integrate I2P status into broader network monitoring"
-msgstr ""
+msgstr "ཨེམ་གླིང་ལྟ་ཞིབ་ཁྲོད་ I2P གནས་སྟངས་མཉམ་སྒྲིལ།"
 
 msgid "Alerting systems:"
-msgstr ""
+msgstr "ཉེན་བརྡ་མ་ལག་།"
 
 msgid "Send notifications based on router status changes"
-msgstr ""
+msgstr "རོ་ཌེར་གནས་སྟངས་འགོག་སྒྱུར་གྱི་གཞིར་བརྡ་སྤེལ་བྱེད།"
 
 msgid "Licensing Information"
 msgstr "རེ་ཁུའི་གོ་སྐབས"
@@ -7426,7 +7426,7 @@ msgid "Participating"
 msgstr "སྤྱོད་པའི་བརྒྱུད་རིམ།"
 
 msgid "Tunnels built by other routers through your router. This may vary widely depending on network demand, your shared bandwidth, and amount of locally-generated traffic. The recommended method for limiting participating tunnels is to change your share percentage on the <a  href='/config'>Bandwidth Configuration page</a>. You may also limit the total number by setting <code>router.maxParticipatingTunnels=nnn</code> on the <a href='/configadvanced'>Advanced configuration page</a>. <a href='/configstats#tunnel.participatingTunnels'>[Enable graphing]</a>."
-msgstr ""
+msgstr "རོ་ཌེར་གཞན་གྱིས་ཁྱེད་ཀྱི་རོ་ཌེར་བརྒྱུད་ནས་བཟོས་པའི་མཚན་ཁུང་། དེ་ནི་ཨེམ་གླིང་དགོས་མཁོ་དང་། ཁྱེད་ཀྱི་མཉམ་སྤེལ་གླེང་ཐུང་གྲངས། དང་ས་གནས་ནས་ཐོན་པའི་འཕྲིན་བརྒྱུད་ཚད་ལ་གཞིགས་ནས་མི་འདྲ་བར་འགྱུར་སྲིད། ཞུགས་མཁན་མཚན་ཁུང་ཚོད་འཛིན་བྱེད་པའི་བཟང་ཤོས་ཀྱི་ཐབས་ལམ་ནི་ <a href='/config'>གླེང་ཐུང་རོགས་སྒྲིག་ཤོག་ངོས་</a> སྟེང་གི་མཉམ་སྤེལ་གྲངས་ཚད་བཅོས་སྒྲིག་བྱེད་པ་ཡིན། ཁྱེད་ཀྱིས་ <a href='/configadvanced'>མཐོ་རིམ་རོགས་སྒྲིག་ཤོག་ངོས་</a> སྟེང་ <code>router.maxParticipatingTunnels=nnn</code> གཞི་འཛིན་སྟངས་བཅོག་ནས་གཙོ་བོའི་གྲངས་ཀ་ཚོད་འཛིན་བྱེད་ཆོག <a href='/configstats#tunnel.participatingTunnels'>[རི་མོ་བཟོ་བར་བྱེད་པ་བྱེད་ཆོག]</a>"
 
 msgid "Share Ratio"
 msgstr "གསང་རྟགས་གི་གནས་ཁག"

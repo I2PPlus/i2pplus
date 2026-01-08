@@ -1992,7 +1992,7 @@ msgid "FAQ"
 msgstr "ČPP"
 
 msgid "JSON-RPC API"
-msgstr ""
+msgstr "JSON-RPC API"
 
 msgid "Manage your I2P hosts file here (I2P domain name resolution)"
 msgstr "Tukaj upravljajte datoteko gostiteljev I2P (razreševanje domenskih imen I2P)"
@@ -2714,7 +2714,7 @@ msgid "Lookup"
 msgstr "Iskanje"
 
 msgid "Select the field to search on"
-msgstr ""
+msgstr "Izberite polje za iskanje"
 
 msgid "e.g. cn hk"
 msgstr "npr. cn hk"
@@ -2967,7 +2967,7 @@ msgid "Maximum Transmission Unit"
 msgstr "Največja prenosna enota"
 
 msgid "Show all routers with this MTU in the NetDb"
-msgstr ""
+msgstr "Prikaži vse usmerjevalnike s tem MTU v NetDb"
 
 msgid "Addresses"
 msgstr "Naslovi"
@@ -5720,10 +5720,10 @@ msgid "Tunnel Filtering"
 msgstr "Filtriranje tuneljev"
 
 msgid "Console API"
-msgstr ""
+msgstr "Konzolni API"
 
 msgid "JSONRPC"
-msgstr ""
+msgstr "JSONRPC"
 
 msgid "New User Guide"
 msgstr "Vodnik za nove uporabnike"
@@ -6209,7 +6209,7 @@ msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP a
 msgstr "Primer: Za dovoljenje dostopa iz localhost in 192.168.1.10 preko HTTP in HTTPS:"
 
 msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager's configuration section using the <i>reachable by</i> dropdown."
-msgstr ""
+msgstr "Za večino odjemalskih storitev spremenite naslov poslušanja za ustrezno storitev v razdelku konfiguracije Upravitelja tunelov z uporabo spustnega seznama <i>dosegljivo z</i>."
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "Kako se povežem na IRC znotraj I2P?"
@@ -6644,10 +6644,10 @@ msgid "An introduction to tunnel access lists"
 msgstr "Uvod v seznami dostopa do tunela"
 
 msgid "I2PControl API"
-msgstr ""
+msgstr "I2PControl API"
 
 msgid "JSON-RPC API for remote router control and monitoring"
-msgstr ""
+msgstr "JSON-RPC API za daljinsko upravljanje in spremljanje usmerjevalnika"
 
 msgid "Information about the sidebar, network status messages, and theme overrides"
 msgstr "Informacije o vrstnici, sporočilih o stanju omrežja in prepičnih temah"
@@ -6656,429 +6656,429 @@ msgid "Webhosting on I2P"
 msgstr "Spletno gostovanje na I2P"
 
 msgid "I2PControl JSON-RPC API"
-msgstr ""
+msgstr "I2PControl JSON-RPC API"
 
 msgid "I2PControl provides a JSON-RPC 2.0 interface for remote control and monitoring of your I2P router. This allows external applications to programmatically manage I2P settings, retrieve status information, and control router operations through standardized HTTP requests."
-msgstr ""
+msgstr "I2PControl zagotavlja JSON-RPC 2.0 vmesnik za daljinsko upravljanje in spremljanje vašega usmerjevalnika I2P. To omogoča zunanjim aplikacijam programsko upravljanje nastavitev I2P, pridobivanje informacij o stanju in nadzor nad operacijami usmerjevalnika prek standardiziranih zahtev HTTP."
 
 #, java-format
 msgid "I2PControl is a JSON-RPC 2.0 interface for remote control and monitoring of your I2P router. It listens on {0} by default when enabled for security reasons and must be enabled through the {1}."
-msgstr ""
+msgstr "I2PControl je JSON-RPC 2.0 vmesnik za daljinsko upravljanje in spremljanje vašega usmerjevalnika I2P. Privzeto posluša na {0}, ko je omogočen iz varnostnih razlogov, in ga je treba omogočiti prek {1}."
 
 msgid "Web Apps configuration page"
-msgstr ""
+msgstr "Stran za konfiguracijo spletnih aplikacij"
 
 msgid "Authentication"
-msgstr ""
+msgstr "Avtentikacija"
 
 msgid "All API operations (except for authentication itself) require a valid authentication token. To obtain a token, you must first authenticate with your configured password:"
-msgstr ""
+msgstr "Vse operacije API (razen same avtentikacije) zahtevajo veljaven avtentikacijski žeton. Da pridobite žeton, se morate najprej avtentificirati s svojim nastavljenim geslom:"
 
 msgid "The returned token must be included in either the 'Token' parameter or as an 'X-Auth-Token' HTTP header in all subsequent API calls."
-msgstr ""
+msgstr "Vrnjeni žeton mora biti vključen bodisi v parameter 'Token' ali kot glava HTTP 'X-Auth-Token' v vseh nadaljnjih klicih API."
 
 msgid "API Version: 1. Clients must specify API version 1 in authentication requests for compatibility."
-msgstr ""
+msgstr "Različica API: 1. Odjemalci morajo v zahtevah za avtentikacijo navesti različico API 1 za združljivost."
 
 msgid "API Methods"
-msgstr ""
+msgstr "Metode API"
 
 msgid "Authenticates with the I2PControl service and returns an authentication token for subsequent API calls."
-msgstr ""
+msgstr "Avtentificira se z storitvijo I2PControl in vrne avtentikacijski žeton za nadaljnje klice API."
 
 msgid "Parameters:"
-msgstr ""
+msgstr "Parametri:"
 
 msgid "Password (string), API (integer, must be 1)"
-msgstr ""
+msgstr "Geslo (niz), API (celo število, mora biti 1)"
 
 msgid "Returns:"
-msgstr ""
+msgstr "Vrne:"
 
 msgid "Token (string), API (integer)"
-msgstr ""
+msgstr "Žeton (niz), API (celo število)"
 
 msgid "Authentication:"
-msgstr ""
+msgstr "Avtentikacija:"
 
 msgid "None (this is the unauthenticated method)"
-msgstr ""
+msgstr "Brez (to je neavtenticirana metoda)"
 
 msgid "A simple test method that returns the provided string. Useful for testing API connectivity and authentication."
-msgstr ""
+msgstr "Enostavna testna metoda, ki vrne podan niz. Uporabno za testiranje povezljivosti API in avtentikacije."
 
 msgid "Echo (string)"
-msgstr ""
+msgstr "Odmev (niz)"
 
 msgid "Result (string - echoed input)"
-msgstr ""
+msgstr "Rezultat (niz - odmev vhoda)"
 
 msgid "Required"
-msgstr ""
+msgstr "Obvezno"
 
 msgid "Retrieves read-only status information about the I2P router. Each parameter is optional - include only the metrics you need."
-msgstr ""
+msgstr "Pridobi informacije o stanju usmerjevalnika I2P samo za branje. Vsak parameter je izbiren - vključite le meritve, ki jih potrebujete."
 
 msgid "Any combination of:"
-msgstr ""
+msgstr "Katerakoli kombinacija:"
 
 msgid "Router version"
-msgstr ""
+msgstr "Različica usmerjevalnika"
 
 msgid "Router uptime in milliseconds"
-msgstr ""
+msgstr "Čas delovanja usmerjevalnika v milisekundah"
 
 msgid "Current router status"
-msgstr ""
+msgstr "Trenutno stanje usmerjevalnika"
 
 msgid "Network status (0-14)"
-msgstr ""
+msgstr "Stanje omrežja (0-14)"
 
 msgid "1-second average inbound bandwidth (Bps)"
-msgstr ""
+msgstr "Povprečna dohodna pasovna širina 1 sekunde (Bps)"
 
 msgid "1-second average outbound bandwidth (Bps)"
-msgstr ""
+msgstr "Povprečna odhodna pasovna širina 1 sekunde (Bps)"
 
 msgid "15-second average inbound bandwidth (Bps)"
-msgstr ""
+msgstr "Povprečna dohodna pasovna širina 15 sekund (Bps)"
 
 msgid "15-second average outbound bandwidth (Bps)"
-msgstr ""
+msgstr "Povprečna odhodna pasovna širina 15 sekund (Bps)"
 
 msgid "Number of participating tunnels"
-msgstr ""
+msgstr "Število sodelujočih tunelov"
 
 msgid "Number of known peers"
-msgstr ""
+msgstr "Število znanih vrstnikov"
 
 msgid "Number of active peers"
-msgstr ""
+msgstr "Število aktivnih vrstnikov"
 
 msgid "Number of fast peers"
-msgstr ""
+msgstr "Število hitrih vrstnikov"
 
 msgid "Number of high-capacity peers"
-msgstr ""
+msgstr "Število vrstnikov z visoko zmogljivostjo"
 
 msgid "Whether reseed is in progress"
-msgstr ""
+msgstr "Ali poteka ponovno semenjenje"
 
 msgid "Requested metrics with their current values"
-msgstr ""
+msgstr "Zahtevane meritve z njihovimi trenutnimi vrednostmi"
 
 msgid "Controls router lifecycle and management operations. Each operation is optional and executes asynchronously."
-msgstr ""
+msgstr "Nadzoruje življenjski cikel usmerjevalnika in upravljalne operacije. Vsaka operacija je izbirna in se izvaja asinhrono."
 
 msgid "Graceful restart/shutdown"
-msgstr ""
+msgstr "Vilen ponovni zagon/zapiranje"
 
 msgid "Immediate hard shutdown"
-msgstr ""
+msgstr "Takojšen trd izklop"
 
 msgid "Immediate hard restart"
-msgstr ""
+msgstr "Takojšen trd ponovni zagon"
 
 msgid "Graceful shutdown (waits for tunnels)"
-msgstr ""
+msgstr "Vileno zapiranje (čaka na tunele)"
 
 msgid "Graceful restart (waits for tunnels)"
-msgstr ""
+msgstr "Vilen ponovni zagon (čaka na tunele)"
 
 msgid "Trigger router reseeding"
-msgstr ""
+msgstr "Sproži ponovno semenjenje usmerjevalnika"
 
 msgid "Check for available updates"
-msgstr ""
+msgstr "Preveri za razpoložljive posodobitve"
 
 msgid "Install available updates"
-msgstr ""
+msgstr "Namesti razpoložljive posodobitve"
 
 msgid "Confirmation of operation (null for most operations, result status for FindUpdates/Update)"
-msgstr ""
+msgstr "Potrditev operacije (nič za večino operacij, status rezultata za FindUpdates/Update)"
 
 msgid "Manages router network configuration. Parameters can be used to either set values (if provided) or retrieve current values (if null/omitted)."
-msgstr ""
+msgstr "Upravlja omrežno konfiguracijo usmerjevalnika. Parametri se lahko uporabijo za nastavitev vrednosti (če so podane) ali pridobitev trenutnih vrednosti (če so ničelne/izpuščene)."
 
 msgid "NTCP Transport Settings:"
-msgstr ""
+msgstr "Nastavitve transporta NTCP:"
 
 msgid "NTCP port (1-65535)"
-msgstr ""
+msgstr "Vrata NTCP (1-65535)"
 
 msgid "NTCP hostname"
-msgstr ""
+msgstr "Ime gostitelja NTCP"
 
 msgid "Auto IP setting"
-msgstr ""
+msgstr "Samodejna nastavitev IP"
 
 msgid "SSU Transport Settings:"
-msgstr ""
+msgstr "Nastavitve transporta SSU:"
 
 msgid "SSU port (1-65535)"
-msgstr ""
+msgstr "Vrata SSU (1-65535)"
 
 msgid "SSU hostname"
-msgstr ""
+msgstr "Ime gostitelja SSU"
 
 msgid "IP source detection"
-msgstr ""
+msgstr "Zaznava vira IP"
 
 msgid "Read-only detected IP address"
-msgstr ""
+msgstr "Zaznan naslov IP samo za branje"
 
 msgid "Network Settings:"
-msgstr ""
+msgstr "Omrežne nastavitve:"
 
 msgid "UPnP enabled/disabled"
-msgstr ""
+msgstr "UPnP omogočeno/onemogočeno"
 
 msgid "Laptop mode setting"
-msgstr ""
+msgstr "Nastavitev načina za prenosni računalnik"
 
 msgid "Bandwidth Settings:"
-msgstr ""
+msgstr "Nastavitve pasovne širine:"
 
 msgid "Bandwidth share percentage (0-100)"
-msgstr ""
+msgstr "Odstotek deleža pasovne širine (0-100)"
 
 msgid "Inbound bandwidth limit (Bps)"
-msgstr ""
+msgstr "Omejitev dohodne pasovne širine (Bps)"
 
 msgid "Outbound bandwidth limit (Bps)"
-msgstr ""
+msgstr "Omejitev odhodne pasovne širine (Bps)"
 
 msgid "SettingsSaved (boolean), RestartNeeded (boolean), plus current values for queried settings"
-msgstr ""
+msgstr "SettingsSaved (boolean), RestartNeeded (boolean), plus trenutne vrednosti za nastavitve poizvedbe"
 
 msgid "Manages I2PControl service settings including password, port, and restart configuration."
-msgstr ""
+msgstr "Upravlja nastavitve storitve I2PControl, vključno z geslom, vrati in konfiguracijo ponovnega zagona."
 
 msgid "Listen address (string, e.g., 127.0.0.1)"
-msgstr ""
+msgstr "Naslov poslušanja (niz, npr. 127.0.0.1)"
 
 msgid "New password (string)"
-msgstr ""
+msgstr "Novo geslo (niz)"
 
 msgid "Listen port (integer, 1-65535)"
-msgstr ""
+msgstr "Vrata poslušanja (celo število, 1-65535)"
 
 msgid "SettingsSaved (boolean), RestartNeeded (boolean), current values for requested settings"
-msgstr ""
+msgstr "SettingsSaved (boolean), RestartNeeded (boolean), trenutne vrednosti za zahtevane nastavitve"
 
 msgid "Access and modify advanced I2P router configuration settings."
-msgstr ""
+msgstr "Dostop in spreminjanje naprednih nastavitev konfiguracije usmerjevalnika I2P."
 
 msgid "Key-value pairs of advanced settings"
-msgstr ""
+msgstr "Pari ključ-vrednost naprednih nastavitev"
 
 msgid "Updated settings values"
-msgstr ""
+msgstr "Posodobljene vrednosti nastavitev"
 
 msgid "Retrieves statistical rate data from router for monitoring and analysis. Useful for creating custom graphs or monitoring applications."
-msgstr ""
+msgstr "Pridobi statistične podatke o stopnji iz usmerjevalnika za spremljanje in analizo. Uporabno za ustvarjanje grafikonov po meri ali aplikacij za spremljanje."
 
 msgid "Statistical metric name (string)"
-msgstr ""
+msgstr "Ime statistične meritve (niz)"
 
 msgid "Time period in milliseconds (integer)"
-msgstr ""
+msgstr "Časovno obdobje v milisekundah (celo število)"
 
 msgid "Result (number - average value for specified period)"
-msgstr ""
+msgstr "Rezultat (število - povprečna vrednost za navedeno obdobje)"
 
 msgid "Network Status Codes"
-msgstr ""
+msgstr "Kode stanja omrežja"
 
 #, java-format
 msgid "The {0} field returns an integer value representing the current network connectivity status:"
-msgstr ""
+msgstr "Polje {0} vrne celoštevilčno vrednost, ki predstavlja trenutno stanje povezljivosti omrežja:"
 
 msgid "OK - Full connectivity"
-msgstr ""
+msgstr "OK - Polna povezljivost"
 
 msgid "TESTING - Still establishing connectivity"
-msgstr ""
+msgstr "TESTING - Še vedno vzpostavljanje povezljivosti"
 
 msgid "FIREWALLED - Behind restrictive firewall"
-msgstr ""
+msgstr "FIREWALLED - Za restriktivnim požarnim zidom"
 
 msgid "HIDDEN - Router in hidden mode"
-msgstr ""
+msgstr "HIDDEN - Usmerjevalnik v skritem načinu"
 
 msgid "WARN_FIREWALLED_AND_FAST - Firewalled but fast peer"
-msgstr ""
+msgstr "WARN_FIREWALLED_AND_FAST - Požarni zid, a hiter vrstnik"
 
 msgid "WARN_FIREWALLED_AND_FLOODFILL - Firewalled but floodfill"
-msgstr ""
+msgstr "WARN_FIREWALLED_AND_FLOODFILL - Požarni zid, a floodfill"
 
 msgid "WARN_FIREWALLED_WITH_INBOUND_TCP - Firewalled with inbound TCP"
-msgstr ""
+msgstr "WARN_FIREWALLED_WITH_INBOUND_TCP - Požarni zid z dohodnim TCP"
 
 msgid "WARN_FIREWALLED_WITH_UDP_DISABLED - Firewalled with UDP disabled"
-msgstr ""
+msgstr "WARN_FIREWALLED_WITH_UDP_DISABLED - Požarni zid z onemogočenim UDP"
 
 msgid "ERROR_I2CP - I2CP error"
-msgstr ""
+msgstr "ERROR_I2CP - Napaka I2CP"
 
 msgid "ERROR_CLOCK_SKEW - System clock skew detected"
-msgstr ""
+msgstr "ERROR_CLOCK_SKEW - Zaznana časovna razlika sistema"
 
 msgid "ERROR_PRIVATE_TCP_ADDRESS - Private TCP address configured"
-msgstr ""
+msgstr "ERROR_PRIVATE_TCP_ADDRESS - Konfiguriran zaseben naslov TCP"
 
 msgid "ERROR_SYMMETRIC_NAT - Symmetric NAT detected"
-msgstr ""
+msgstr "ERROR_SYMMETRIC_NAT - Zaznan simetrični NAT"
 
 msgid "ERROR_UDP_PORT_IN_USE - UDP port already in use"
-msgstr ""
+msgstr "ERROR_UDP_PORT_IN_USE - Vrata UDP so že v uporabi"
 
 msgid "ERROR_NO_ACTIVE_PEERS_CHECK_CONNECTION_AND_FIREWALL - No active peers"
-msgstr ""
+msgstr "ERROR_NO_ACTIVE_PEERS_CHECK_CONNECTION_AND_FIREWALL - Ni aktivnih vrstnikov"
 
 msgid "ERROR_UDP_DISABLED_AND_TCP_UNSET - UDP disabled, TCP not configured"
-msgstr ""
+msgstr "ERROR_UDP_DISABLED_AND_TCP_UNSET - UDP onemogočen, TCP ni konfiguriran"
 
 msgid "Error Codes"
-msgstr ""
+msgstr "Kode napak"
 
 msgid "In addition to standard JSON-RPC 2.0 error codes, I2PControl provides specific error codes:"
-msgstr ""
+msgstr "Poleg standardnih kod napak JSON-RPC 2.0, I2PControl zagotavlja specifične kode napak:"
 
 msgid "JSON parse error"
-msgstr ""
+msgstr "Napaka razčlenjevanja JSON"
 
 msgid "Invalid request"
-msgstr ""
+msgstr "Neveljavna zahteva"
 
 msgid "Method not found"
-msgstr ""
+msgstr "Metoda ni najdena"
 
 msgid "Invalid parameters"
-msgstr ""
+msgstr "Neveljavni parametri"
 
 msgid "Internal error"
-msgstr ""
+msgstr "Interna napaka"
 
 msgid "Invalid password provided"
-msgstr ""
+msgstr "Podano neveljavno geslo"
 
 msgid "No authentication token presented"
-msgstr ""
+msgstr "Predstavljen ni bil noben avtentikacijski žeton"
 
 msgid "Authentication token doesn't exist"
-msgstr ""
+msgstr "Avtentikacijski žeton ne obstaja"
 
 msgid "The provided authentication token was expired and will be removed"
-msgstr ""
+msgstr "Podani avtentikacijski žeton je potekel in bo odstranjen"
 
 msgid "The version of the I2PControl API used wasn't specified, but is required to be specified"
-msgstr ""
+msgstr "Različica uporabljenega API-ja I2PControl ni bila navedena, čeprav je zahtevana"
 
 msgid "The version of the I2PControl API specified is not supported by I2PControl"
-msgstr ""
+msgstr "Navedena različica API-ja I2PControl ni podprta s strani I2PControl"
 
 msgid "Rate Statistics"
-msgstr ""
+msgstr "Statistika stopenj"
 
 #, java-format
 msgid "For a complete list of available rate statistics, see the {0} documentation in the router console or refer to the {1} online documentation. Common rate statistics include:"
-msgstr ""
+msgstr "Za celoten seznam razpoložljivih statistik stopenj glejte {0} dokumentacijo v konzoli usmerjevalnika ali glejte {1} spletno dokumentacijo. Pogoste statistike stopenj vključujejo:"
 
 msgid "Bandwidth receive rate"
-msgstr ""
+msgstr "Stopnja prejemanja pasovne širine"
 
 msgid "Bandwidth send rate"
-msgstr ""
+msgstr "Stopnja pošiljanja pasovne širine"
 
 msgid "Active peer count"
-msgstr ""
+msgstr "Število aktivnih vrstnikov"
 
 msgid "Known peer count"
-msgstr ""
+msgstr "Število znanih vrstnikov"
 
 msgid "Tunnel test success time"
-msgstr ""
+msgstr "Čas uspešnosti testa tunela"
 
 msgid "Rate Statistics Documentation"
-msgstr ""
+msgstr "Dokumentacija statistike stopenj"
 
 #, java-format
 msgid "See the {0} documentation in the router console or refer to the {1} online documentation."
-msgstr ""
+msgstr "Glejte {0} dokumentacijo v konzoli usmerjevalnika ali glejte {1} spletno dokumentacijo."
 
 msgid "Example Usage"
-msgstr ""
+msgstr "Primer uporabe"
 
 msgid "Get Router Version and Uptime:"
-msgstr ""
+msgstr "Pridobi različico usmerjevalnika in čas delovanja:"
 
 msgid "Get Current Bandwidth Usage:"
-msgstr ""
+msgstr "Pridobi trenutno uporabo pasovne širine:"
 
 msgid "Change Bandwidth Limits:"
-msgstr ""
+msgstr "Spremeni omejitve pasovne širine:"
 
 msgid "Graceful Restart:"
-msgstr ""
+msgstr "Vilen ponovni zagon:"
 
 msgid "Security Considerations"
-msgstr ""
+msgstr "Varnostni vidiki"
 
 #, java-format
 msgid "Always change the default API password from {0} to a strong, unique password"
-msgstr ""
+msgstr "Vedno spremenite privzeto geslo API iz {0} v močno, edinstveno geslo"
 
 msgid "Consider binding I2PControl to localhost only if not accessed remotely"
-msgstr ""
+msgstr "Razmislite o vezavi I2PControl samo na localhost, če do njega ne dostopate oddaljeno"
 
 msgid "Use HTTPS when accessing I2PControl over untrusted networks"
-msgstr ""
+msgstr "Uporabite HTTPS pri dostopanju do I2PControl prek nezaupljivih omrežij"
 
 msgid "Tokens may expire - implement re-authentication logic in your applications"
-msgstr ""
+msgstr "Žetoni lahko potečejo - implementirajte logiko ponovne avtentikacije v svojih aplikacijah"
 
 msgid "Monitor I2PControl access logs for unauthorized usage"
-msgstr ""
+msgstr "Spremljajte dnevnike dostopa I2PControl za nepooblaščeno uporabo"
 
 msgid "Be cautious with router management operations - they can affect network connectivity"
-msgstr ""
+msgstr "Bodite previdni z upravljalnimi operacijami usmerjevalnika - lahko vplivajo na povezljivost omrežja"
 
 msgid "Integration Examples"
-msgstr ""
+msgstr "Primeri integracije"
 
 msgid "The I2PControl API can be integrated with:"
-msgstr ""
+msgstr "API I2PControl je mogoče integrirati z:"
 
 msgid "Monitoring systems:"
-msgstr ""
+msgstr "Sistemi za spremljanje:"
 
 msgid "Create custom dashboards for router performance"
-msgstr ""
+msgstr "Ustvarite nadzorne plošče po meri za zmogljivost usmerjevalnika"
 
 msgid "Automation scripts:"
-msgstr ""
+msgstr "Skripte za avtomatizacijo:"
 
 msgid "Schedule restarts or configuration changes"
-msgstr ""
+msgstr "Načrtujte ponovne zagone ali spremembe konfiguracije"
 
 msgid "Mobile applications:"
-msgstr ""
+msgstr "Mobilne aplikacije:"
 
 msgid "Monitor and manage your router remotely"
-msgstr ""
+msgstr "Spremljajte in upravljajte svoj usmerjevalnik oddaljeno"
 
 msgid "Network management tools:"
-msgstr ""
+msgstr "Orodja za upravljanje omrežja:"
 
 msgid "Integrate I2P status into broader network monitoring"
-msgstr ""
+msgstr "Integrirajte stanje I2P v širše spremljanje omrežja"
 
 msgid "Alerting systems:"
-msgstr ""
+msgstr "Sistemi za opozarjanje:"
 
 msgid "Send notifications based on router status changes"
-msgstr ""
+msgstr "Pošljite obvestila na podlagi sprememb stanja usmerjevalnika"
 
 msgid "Licensing Information"
 msgstr "Informacije o licenci"
@@ -7264,7 +7264,7 @@ msgid "Getting Support Online"
 msgstr "Pridobivanje podpore online"
 
 msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> on I2P's internal IRC network."
-msgstr ""
+msgstr "Morda boste želeli pregledati informacije na <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>spletni strani I2P</a>, objaviti sporočila na <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>forum za razprave I2P</a> ali se ustaviti na <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> ali <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> na internem IRC omrežju I2P."
 
 msgid "Reporting Bugs"
 msgstr "Porocanje o napakah"
@@ -8012,7 +8012,7 @@ msgid "Skip Setup"
 msgstr "Preskoči nastavitev"
 
 msgid "Select the language to be used for the router console and web applications ("
-msgstr ""
+msgstr "Izberite jezik, ki bo uporabljen za konzolo usmerjevalnika in spletne aplikacije ("
 
 msgid "Router Console &amp; WebApps Display Language"
 msgstr "Jezik prikaza konzole strežnika &amp; WebApps"

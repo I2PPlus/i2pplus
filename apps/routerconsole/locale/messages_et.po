@@ -1977,7 +1977,7 @@ msgid "FAQ"
 msgstr "KKK"
 
 msgid "JSON-RPC API"
-msgstr ""
+msgstr "JSON-RPC API"
 
 msgid "Manage your I2P hosts file here (I2P domain name resolution)"
 msgstr "Halda siit oma I2P nimefaili (I2P domeenide lahendamist)"
@@ -5685,10 +5685,10 @@ msgid "Tunnel Filtering"
 msgstr "Tunneli filtreerimine"
 
 msgid "Console API"
-msgstr ""
+msgstr "Konsooli API"
 
 msgid "JSONRPC"
-msgstr ""
+msgstr "JSONRPC"
 
 msgid "New User Guide"
 msgstr "Uus kasutusjuhend"
@@ -6609,10 +6609,10 @@ msgid "An introduction to tunnel access lists"
 msgstr "Sissejuhatus tunneli ligipääsu loenditesse"
 
 msgid "I2PControl API"
-msgstr ""
+msgstr "I2PControl API"
 
 msgid "JSON-RPC API for remote router control and monitoring"
-msgstr ""
+msgstr "JSON-RPC API kaugruuteri juhtimiseks ja jälgimiseks"
 
 msgid "Information about the sidebar, network status messages, and theme overrides"
 msgstr "Teave küljereal, võrgu oleku sõnumitest ja ülekirjutatud teemadest"
@@ -6621,429 +6621,429 @@ msgid "Webhosting on I2P"
 msgstr "Veebi majutus I2P-s"
 
 msgid "I2PControl JSON-RPC API"
-msgstr ""
+msgstr "I2PControl JSON-RPC API"
 
 msgid "I2PControl provides a JSON-RPC 2.0 interface for remote control and monitoring of your I2P router. This allows external applications to programmatically manage I2P settings, retrieve status information, and control router operations through standardized HTTP requests."
-msgstr ""
+msgstr "I2PControl pakub JSON-RPC 2.0 liidest kaugjuhtimiseks ja jälgimiseks teie I2P ruuterit. See võimaldab välistel rakendustel programmiliselt hallata I2P seadeid, hankida olekuteavet ja juhtida ruuteri toiminguid standardiseeritud HTTP päringute kaudu."
 
 #, java-format
 msgid "I2PControl is a JSON-RPC 2.0 interface for remote control and monitoring of your I2P router. It listens on {0} by default when enabled for security reasons and must be enabled through the {1}."
-msgstr ""
+msgstr "I2PControl on JSON-RPC 2.0 liides kaugjuhtimiseks ja jälgimiseks teie I2P ruuterit. Turvakaalutlustel kuulab see vaikimisi {0} ja tuleb lubada läbi {1}."
 
 msgid "Web Apps configuration page"
-msgstr ""
+msgstr "Veebirakenduste seadistusleht"
 
 msgid "Authentication"
-msgstr ""
+msgstr "Autentimine"
 
 msgid "All API operations (except for authentication itself) require a valid authentication token. To obtain a token, you must first authenticate with your configured password:"
-msgstr ""
+msgstr "Kõik API toimingud (v.a autentimine ise) nõuavad kehtivat autentimismärki. Märgi saamiseks peate esmalt autentima oma seadistatud parooliga:"
 
 msgid "The returned token must be included in either the 'Token' parameter or as an 'X-Auth-Token' HTTP header in all subsequent API calls."
-msgstr ""
+msgstr "Tagastatud märk tuleb lisada kas 'Token' parameetrina või 'X-Auth-Token' HTTP päisesse kõikides järgnevates API päringutes."
 
 msgid "API Version: 1. Clients must specify API version 1 in authentication requests for compatibility."
-msgstr ""
+msgstr "API versioon: 1. Kliendid peavad ühilduvuse jaoks autentimispäringutes määrama API versiooni 1."
 
 msgid "API Methods"
-msgstr ""
+msgstr "API meetodid"
 
 msgid "Authenticates with the I2PControl service and returns an authentication token for subsequent API calls."
-msgstr ""
+msgstr "Autentib I2PControl teenusega ja tagastab autentimismärgi järgnevateks API päringuteks."
 
 msgid "Parameters:"
-msgstr ""
+msgstr "Parameetrid:"
 
 msgid "Password (string), API (integer, must be 1)"
-msgstr ""
+msgstr "Parool (string), API (täisarv, peab olema 1)"
 
 msgid "Returns:"
-msgstr ""
+msgstr "Tagastab:"
 
 msgid "Token (string), API (integer)"
-msgstr ""
+msgstr "Märk (string), API (täisarv)"
 
 msgid "Authentication:"
-msgstr ""
+msgstr "Autentimine:"
 
 msgid "None (this is the unauthenticated method)"
-msgstr ""
+msgstr "Puudub (see on autendita meetod)"
 
 msgid "A simple test method that returns the provided string. Useful for testing API connectivity and authentication."
-msgstr ""
+msgstr "Lihtne testmeetod, mis tagastab esitatud stringi. Kasulik API ühenduvuse ja autentimise testimiseks."
 
 msgid "Echo (string)"
-msgstr ""
+msgstr "Kaja (string)"
 
 msgid "Result (string - echoed input)"
-msgstr ""
+msgstr "Tulemus (string - sisestatud kaja)"
 
 msgid "Required"
-msgstr ""
+msgstr "Nõutud"
 
 msgid "Retrieves read-only status information about the I2P router. Each parameter is optional - include only the metrics you need."
-msgstr ""
+msgstr "Hangib kirjutuskaitstud olekuteabe I2P ruuteri kohta. Iga parameeter on valikuline - lisage ainult teile vajalikud mõõdikud."
 
 msgid "Any combination of:"
-msgstr ""
+msgstr "Suvaline kombinatsioon:"
 
 msgid "Router version"
-msgstr ""
+msgstr "Ruuteri versioon"
 
 msgid "Router uptime in milliseconds"
-msgstr ""
+msgstr "Ruuteri tööaeg millisekundites"
 
 msgid "Current router status"
-msgstr ""
+msgstr "Hetke ruuteri olek"
 
 msgid "Network status (0-14)"
-msgstr ""
+msgstr "Võrgu olek (0-14)"
 
 msgid "1-second average inbound bandwidth (Bps)"
-msgstr ""
+msgstr "1-sekundi keskmine sissetulev ribalaius (Bps)"
 
 msgid "1-second average outbound bandwidth (Bps)"
-msgstr ""
+msgstr "1-sekundi keskmine väljaminev ribalaius (Bps)"
 
 msgid "15-second average inbound bandwidth (Bps)"
-msgstr ""
+msgstr "15-sekundi keskmine sissetulev ribalaius (Bps)"
 
 msgid "15-second average outbound bandwidth (Bps)"
-msgstr ""
+msgstr "15-sekundi keskmine väljaminev ribalaius (Bps)"
 
 msgid "Number of participating tunnels"
-msgstr ""
+msgstr "Osalevate tunnelide arv"
 
 msgid "Number of known peers"
-msgstr ""
+msgstr "Tuntud ruuterite arv"
 
 msgid "Number of active peers"
-msgstr ""
+msgstr "Aktiivsete ruuterite arv"
 
 msgid "Number of fast peers"
-msgstr ""
+msgstr "Kiirete ruuterite arv"
 
 msgid "Number of high-capacity peers"
-msgstr ""
+msgstr "Suure mahuga ruuterite arv"
 
 msgid "Whether reseed is in progress"
-msgstr ""
+msgstr "Kas reseed on pooleli"
 
 msgid "Requested metrics with their current values"
-msgstr ""
+msgstr "Soovitud mõõdikud koos nende hetkeväärtustega"
 
 msgid "Controls router lifecycle and management operations. Each operation is optional and executes asynchronously."
-msgstr ""
+msgstr "Juhib ruuteri elutsükli ja haldustoiminguid. Iga toiming on valikuline ja täidetakse asünkroonselt."
 
 msgid "Graceful restart/shutdown"
-msgstr ""
+msgstr "Viisakas taaskäivitus/väljalülitumine"
 
 msgid "Immediate hard shutdown"
-msgstr ""
+msgstr "Kohene kõva väljalülitumine"
 
 msgid "Immediate hard restart"
-msgstr ""
+msgstr "Kohene kõva taaskäivitus"
 
 msgid "Graceful shutdown (waits for tunnels)"
-msgstr ""
+msgstr "Viisakas väljalülitumine (ootab tunnelitele)"
 
 msgid "Graceful restart (waits for tunnels)"
-msgstr ""
+msgstr "Viisakas taaskäivitus (ootab tunnelitele)"
 
 msgid "Trigger router reseeding"
-msgstr ""
+msgstr "Käivita ruuteri reseed"
 
 msgid "Check for available updates"
-msgstr ""
+msgstr "Kontrolli saadavalolevaid värskendusi"
 
 msgid "Install available updates"
-msgstr ""
+msgstr "Installi saadavalolevad värskendused"
 
 msgid "Confirmation of operation (null for most operations, result status for FindUpdates/Update)"
-msgstr ""
+msgstr "Toimingukinnitus (tühi enamiku toimingute jaoks, tulemuse staatus FindUpdates/Update jaoks)"
 
 msgid "Manages router network configuration. Parameters can be used to either set values (if provided) or retrieve current values (if null/omitted)."
-msgstr ""
+msgstr "Haldaab ruuteri võrguseadeid. Parameetreid saab kasutada kas väärtuste seadmiseks (kui esitatud) või hetkeväärtuste hankimiseks (kui tühi/vaikimisi)."
 
 msgid "NTCP Transport Settings:"
-msgstr ""
+msgstr "NTCP transpordiseaded:"
 
 msgid "NTCP port (1-65535)"
-msgstr ""
+msgstr "NTCP port (1-65535)"
 
 msgid "NTCP hostname"
-msgstr ""
+msgstr "NTCP hostinimi"
 
 msgid "Auto IP setting"
-msgstr ""
+msgstr "Automaatne IP seade"
 
 msgid "SSU Transport Settings:"
-msgstr ""
+msgstr "SSU transpordiseaded:"
 
 msgid "SSU port (1-65535)"
-msgstr ""
+msgstr "SSU port (1-65535)"
 
 msgid "SSU hostname"
-msgstr ""
+msgstr "SSU hostinimi"
 
 msgid "IP source detection"
-msgstr ""
+msgstr "IP allika tuvastamine"
 
 msgid "Read-only detected IP address"
-msgstr ""
+msgstr "Kirjutuskaitstud tuvastatud IP aadress"
 
 msgid "Network Settings:"
-msgstr ""
+msgstr "Võrguseaded:"
 
 msgid "UPnP enabled/disabled"
-msgstr ""
+msgstr "UPnP lubatud/keelatud"
 
 msgid "Laptop mode setting"
-msgstr ""
+msgstr "Sülearvuti režiimi seade"
 
 msgid "Bandwidth Settings:"
-msgstr ""
+msgstr "Ribalaiuse seaded:"
 
 msgid "Bandwidth share percentage (0-100)"
-msgstr ""
+msgstr "Jagatava ribalaiuse protsent (0-100)"
 
 msgid "Inbound bandwidth limit (Bps)"
-msgstr ""
+msgstr "Sissetuleva ribalaiuse piirang (Bps)"
 
 msgid "Outbound bandwidth limit (Bps)"
-msgstr ""
+msgstr "Väljamineva ribalaiuse piirang (Bps)"
 
 msgid "SettingsSaved (boolean), RestartNeeded (boolean), plus current values for queried settings"
-msgstr ""
+msgstr "SeadedSalvestatud (tõeväärtus), TaaskäivitusVajalik (tõeväärtus), lisaks praegused väärtused küsitud seadete jaoks"
 
 msgid "Manages I2PControl service settings including password, port, and restart configuration."
-msgstr ""
+msgstr "Haldaab I2PControl teenuse seadeid, sealhulgas parool, port ja taaskäivituse seadistus."
 
 msgid "Listen address (string, e.g., 127.0.0.1)"
-msgstr ""
+msgstr "Kuulamise aadress (string, nt 127.0.0.1)"
 
 msgid "New password (string)"
-msgstr ""
+msgstr "Uus parool (string)"
 
 msgid "Listen port (integer, 1-65535)"
-msgstr ""
+msgstr "Kuulamise port (täisarv, 1-65535)"
 
 msgid "SettingsSaved (boolean), RestartNeeded (boolean), current values for requested settings"
-msgstr ""
+msgstr "SeadedSalvestatud (tõeväärtus), TaaskäivitusVajalik (tõeväärtus), praegused väärtused küsitud seadete jaoks"
 
 msgid "Access and modify advanced I2P router configuration settings."
-msgstr ""
+msgstr "Juurdepääs ja muuda täpsemaid I2P ruuteri seadistusseadeid."
 
 msgid "Key-value pairs of advanced settings"
-msgstr ""
+msgstr "Täpsemate seadete võti-väärtus paarid"
 
 msgid "Updated settings values"
-msgstr ""
+msgstr "Uuendatud seadete väärtused"
 
 msgid "Retrieves statistical rate data from router for monitoring and analysis. Useful for creating custom graphs or monitoring applications."
-msgstr ""
+msgstr "Hangib statistilisi andmeid ruuterist jälgimiseks ja analüüsimiseks. Kasulik kohandatud graafikute või jälgimisrakenduste loomiseks."
 
 msgid "Statistical metric name (string)"
-msgstr ""
+msgstr "Statistilise mõõdiku nimi (string)"
 
 msgid "Time period in milliseconds (integer)"
-msgstr ""
+msgstr "Ajaperiood millisekundites (täisarv)"
 
 msgid "Result (number - average value for specified period)"
-msgstr ""
+msgstr "Tulemus (number - keskmine väärtus määratud perioodil)"
 
 msgid "Network Status Codes"
-msgstr ""
+msgstr "Võrgu oleku koodid"
 
 #, java-format
 msgid "The {0} field returns an integer value representing the current network connectivity status:"
-msgstr ""
+msgstr "Väli {0} tagastab täisarvu, mis esindab hetke võrguühenduse olekut:"
 
 msgid "OK - Full connectivity"
-msgstr ""
+msgstr "OK - Täielik ühendus"
 
 msgid "TESTING - Still establishing connectivity"
-msgstr ""
+msgstr "TESTIMINE - Ühenduse loomine"
 
 msgid "FIREWALLED - Behind restrictive firewall"
-msgstr ""
+msgstr "TULEMÜÜRI TAGA - Piirava tulemüüri taga"
 
 msgid "HIDDEN - Router in hidden mode"
-msgstr ""
+msgstr "PEIDETUD - Ruuter peidetud režiimis"
 
 msgid "WARN_FIREWALLED_AND_FAST - Firewalled but fast peer"
-msgstr ""
+msgstr "HOIATUS_TULEMÜÜR_JA_KIIRE - Tulemüüri taga, kuid kiire ruuter"
 
 msgid "WARN_FIREWALLED_AND_FLOODFILL - Firewalled but floodfill"
-msgstr ""
+msgstr "HOIATUS_TULEMÜÜR_JA_FLOODFILL - Tulemüüri taga, kuid floodfill"
 
 msgid "WARN_FIREWALLED_WITH_INBOUND_TCP - Firewalled with inbound TCP"
-msgstr ""
+msgstr "HOIATUS_TULEMÜÜR_SISSETULEVA_TCP_GA - Tulemüür sissetuleva TCP-ga"
 
 msgid "WARN_FIREWALLED_WITH_UDP_DISABLED - Firewalled with UDP disabled"
-msgstr ""
+msgstr "HOIATUS_TULEMÜÜR_UDP_KEELDUD - Tulemüür UDP keelamisega"
 
 msgid "ERROR_I2CP - I2CP error"
-msgstr ""
+msgstr "VIGA_I2CP - I2CP viga"
 
 msgid "ERROR_CLOCK_SKEW - System clock skew detected"
-msgstr ""
+msgstr "VIGA_KELLA_KALLA - Süsteemi kella kõrvalekalle tuvastatud"
 
 msgid "ERROR_PRIVATE_TCP_ADDRESS - Private TCP address configured"
-msgstr ""
+msgstr "VIGA_PRIVAATNE_TCP_AADRESS - Privaatne TCP aadress seadistatud"
 
 msgid "ERROR_SYMMETRIC_NAT - Symmetric NAT detected"
-msgstr ""
+msgstr "VIGA_SÜMMETRILINE_NAT - Sümmeetriline NAT tuvastatud"
 
 msgid "ERROR_UDP_PORT_IN_USE - UDP port already in use"
-msgstr ""
+msgstr "VIGA_UDP_PORDI_KASUTUSEL - UDP port juba kasutusel"
 
 msgid "ERROR_NO_ACTIVE_PEERS_CHECK_CONNECTION_AND_FIREWALL - No active peers"
-msgstr ""
+msgstr "VIGA_AKTIIVSEID_RUUTEREID_POLE - Kontrollige ühendust ja tulemüüri"
 
 msgid "ERROR_UDP_DISABLED_AND_TCP_UNSET - UDP disabled, TCP not configured"
-msgstr ""
+msgstr "VIGA_UDP_KEELDUD_TCP_SEADMATA - UDP keelatud, TCP pole seadistatud"
 
 msgid "Error Codes"
-msgstr ""
+msgstr "Veakoodid"
 
 msgid "In addition to standard JSON-RPC 2.0 error codes, I2PControl provides specific error codes:"
-msgstr ""
+msgstr "Lisaks standardsetele JSON-RPC 2.0 veakoodidele, pakub I2PControl spetsiifilisi veakoode:"
 
 msgid "JSON parse error"
-msgstr ""
+msgstr "JSON parsimise viga"
 
 msgid "Invalid request"
-msgstr ""
+msgstr "Kehtetu päring"
 
 msgid "Method not found"
-msgstr ""
+msgstr "Meetodit ei leitud"
 
 msgid "Invalid parameters"
-msgstr ""
+msgstr "Kehtetud parameetrid"
 
 msgid "Internal error"
-msgstr ""
+msgstr "Sisemine viga"
 
 msgid "Invalid password provided"
-msgstr ""
+msgstr "Esitatud kehtetu parool"
 
 msgid "No authentication token presented"
-msgstr ""
+msgstr "Autentimismärki ei esitatud"
 
 msgid "Authentication token doesn't exist"
-msgstr ""
+msgstr "Autentimismärki ei eksisteeri"
 
 msgid "The provided authentication token was expired and will be removed"
-msgstr ""
+msgstr "Esitatud autentimismärk aegus ja eemaldatakse"
 
 msgid "The version of the I2PControl API used wasn't specified, but is required to be specified"
-msgstr ""
+msgstr "Kasutatud I2PControl API versiooni ei määratud, kuid seda nõutakse"
 
 msgid "The version of the I2PControl API specified is not supported by I2PControl"
-msgstr ""
+msgstr "Määratud I2PControl API versiooni ei toetata"
 
 msgid "Rate Statistics"
-msgstr ""
+msgstr "Määrastatistika"
 
 #, java-format
 msgid "For a complete list of available rate statistics, see the {0} documentation in the router console or refer to the {1} online documentation. Common rate statistics include:"
-msgstr ""
+msgstr "Täieliku nimekirja saadavaloleva määrastatistika kohta vaadake {0} dokumentatsiooni ruuteri konsoolis või tutvuge {1} veebidokumentatsiooniga. Levinud määrastatistika hulka kuuluvad:"
 
 msgid "Bandwidth receive rate"
-msgstr ""
+msgstr "Ribalaiuse vastuvõtu määr"
 
 msgid "Bandwidth send rate"
-msgstr ""
+msgstr "Ribalaiuse saatmise määr"
 
 msgid "Active peer count"
-msgstr ""
+msgstr "Aktiivsete ruuterite arv"
 
 msgid "Known peer count"
-msgstr ""
+msgstr "Tuntud ruuterite arv"
 
 msgid "Tunnel test success time"
-msgstr ""
+msgstr "Tunneli testi õnnestumise aeg"
 
 msgid "Rate Statistics Documentation"
-msgstr ""
+msgstr "Määrastatistika dokumentatsioon"
 
 #, java-format
 msgid "See the {0} documentation in the router console or refer to the {1} online documentation."
-msgstr ""
+msgstr "Vaadake {0} dokumentatsiooni ruuteri konsoolis või tutvuge {1} veebidokumentatsiooniga."
 
 msgid "Example Usage"
-msgstr ""
+msgstr "Näidiskasutus"
 
 msgid "Get Router Version and Uptime:"
-msgstr ""
+msgstr "Hangi ruuteri versioon ja tööaeg:"
 
 msgid "Get Current Bandwidth Usage:"
-msgstr ""
+msgstr "Hangi hetke ribalaiuse kasutus:"
 
 msgid "Change Bandwidth Limits:"
-msgstr ""
+msgstr "Muuda ribalaiuse piiranguid:"
 
 msgid "Graceful Restart:"
-msgstr ""
+msgstr "Viisakas taaskäivitus:"
 
 msgid "Security Considerations"
-msgstr ""
+msgstr "Turvakaalutlused"
 
 #, java-format
 msgid "Always change the default API password from {0} to a strong, unique password"
-msgstr ""
+msgstr "Muutke alati vaikimisi API parool {0} tugevaks, unikaalseks parooliks"
 
 msgid "Consider binding I2PControl to localhost only if not accessed remotely"
-msgstr ""
+msgstr "Kaaluge I2PControl sidumist localhostiga, kui seda ei kasutata kaugühenduse kaudu"
 
 msgid "Use HTTPS when accessing I2PControl over untrusted networks"
-msgstr ""
+msgstr "Kasutage HTTPS-i, kui pääsete I2PControlile ligi usaldusväärsete võrkude kaudu"
 
 msgid "Tokens may expire - implement re-authentication logic in your applications"
-msgstr ""
+msgstr "Märgid võivad aeguda - rakendage uuesti autentimise loogika oma rakendustes"
 
 msgid "Monitor I2PControl access logs for unauthorized usage"
-msgstr ""
+msgstr "Jälgige I2PControl ligipääsuloge volitamata kasutamise suhtes"
 
 msgid "Be cautious with router management operations - they can affect network connectivity"
-msgstr ""
+msgstr "Olge ettevaatlik ruuteri haldustoimingutega - need võivad mõjutada võrguühendust"
 
 msgid "Integration Examples"
-msgstr ""
+msgstr "Integreerimise näited"
 
 msgid "The I2PControl API can be integrated with:"
-msgstr ""
+msgstr "I2PControl API saab integreerida järgmisega:"
 
 msgid "Monitoring systems:"
-msgstr ""
+msgstr "Jälgimissüsteemid:"
 
 msgid "Create custom dashboards for router performance"
-msgstr ""
+msgstr "Looge kohandatud dashboardid ruuteri jõudluse jaoks"
 
 msgid "Automation scripts:"
-msgstr ""
+msgstr "Automatiseerimise skriptid:"
 
 msgid "Schedule restarts or configuration changes"
-msgstr ""
+msgstr "Planeerige taaskäivitusi või seadete muutusi"
 
 msgid "Mobile applications:"
-msgstr ""
+msgstr "Mobiilirakendused:"
 
 msgid "Monitor and manage your router remotely"
-msgstr ""
+msgstr "Jälgige ja hallake ruuterit kaugühenduse kaudu"
 
 msgid "Network management tools:"
-msgstr ""
+msgstr "Võrguhalduse tööriistad:"
 
 msgid "Integrate I2P status into broader network monitoring"
-msgstr ""
+msgstr "Integreerige I2P olek laiemasse võrgu jälgimisse"
 
 msgid "Alerting systems:"
-msgstr ""
+msgstr "Hoiatussüsteemid:"
 
 msgid "Send notifications based on router status changes"
-msgstr ""
+msgstr "Saada teavitusi ruuteri oleku muutuste põhjal"
 
 msgid "Licensing Information"
 msgstr "Litsentsiteave"

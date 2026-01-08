@@ -781,7 +781,7 @@ msgid "Expiry"
 msgstr "Expiration"
 
 msgid "Total session-only bans"
-msgstr ""
+msgstr "Total des interdictions de session uniquement"
 
 msgid "Certificates are used to authenticate encrypted services running on the network, provision optional SSL for hosted services and the router console, or provide proof of ownership of a router family."
 msgstr "Les certificats sont utilisés pour authentifier les services cryptés exécutés sur le réseau, la fourniture de SSL facultative pour les services hébergés et la console de routeur, ou fournir une preuve de propriété d'une famille de routeurs."
@@ -1976,7 +1976,7 @@ msgid "FAQ"
 msgstr "FAQ"
 
 msgid "JSON-RPC API"
-msgstr ""
+msgstr "API JSON-RPC"
 
 msgid "Manage your I2P hosts file here (I2P domain name resolution)"
 msgstr "Gérer ici votre fichier d'hôtes d'I2P (résolution de nom d'I2P)"
@@ -2698,7 +2698,7 @@ msgid "Lookup"
 msgstr "Chercher"
 
 msgid "Select the field to search on"
-msgstr ""
+msgstr "Sélectionnez le champ sur lequel effectuer la recherche"
 
 msgid "e.g. cn hk"
 msgstr "ex. cn hk"
@@ -2951,7 +2951,7 @@ msgid "Maximum Transmission Unit"
 msgstr "Unité de transmission maximale"
 
 msgid "Show all routers with this MTU in the NetDb"
-msgstr ""
+msgstr "Afficher tous les routeurs avec cette MTU dans la NetDb"
 
 msgid "Addresses"
 msgstr "Adresses"
@@ -5684,10 +5684,10 @@ msgid "Tunnel Filtering"
 msgstr "Filtrage des Tunnels"
 
 msgid "Console API"
-msgstr ""
+msgstr "API de la console"
 
 msgid "JSONRPC"
-msgstr ""
+msgstr "JSONRPC"
 
 msgid "New User Guide"
 msgstr "Nouveaux utilisateurs"
@@ -6173,7 +6173,7 @@ msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP a
 msgstr "Exemple : Pour autoriser l'accès depuis localhost et 192.168.1.10 via HTTP et HTTPS :"
 
 msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager's configuration section using the <i>reachable by</i> dropdown."
-msgstr ""
+msgstr "Pour la plupart des services clients, modifiez l'adresse d'écoute pour le service concerné dans la section de configuration du Gestionnaire de tunnels à l'aide du menu déroulant <i>accessible par</i>."
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "Comment puis-je me connecter à IRC dans I2P ?"
@@ -6608,10 +6608,10 @@ msgid "An introduction to tunnel access lists"
 msgstr "Une introduction aux listes d'accès aux tunnels"
 
 msgid "I2PControl API"
-msgstr ""
+msgstr "API I2PControl"
 
 msgid "JSON-RPC API for remote router control and monitoring"
-msgstr ""
+msgstr "API JSON-RPC pour le contrôle et la surveillance à distance du routeur"
 
 msgid "Information about the sidebar, network status messages, and theme overrides"
 msgstr "Barre latérale, messages d'état du réseau et remplacements de thème"
@@ -6620,429 +6620,429 @@ msgid "Webhosting on I2P"
 msgstr "Hébergement Web sur I2P"
 
 msgid "I2PControl JSON-RPC API"
-msgstr ""
+msgstr "API JSON-RPC I2PControl"
 
 msgid "I2PControl provides a JSON-RPC 2.0 interface for remote control and monitoring of your I2P router. This allows external applications to programmatically manage I2P settings, retrieve status information, and control router operations through standardized HTTP requests."
-msgstr ""
+msgstr "I2PControl fournit une interface JSON-RPC 2.0 pour le contrôle et la surveillance à distance de votre routeur I2P. Cela permet aux applications externes de gérer programmatiquement les paramètres I2P, récupérer des informations d'état et contrôler les opérations du routeur via des requêtes HTTP standardisées."
 
 #, java-format
 msgid "I2PControl is a JSON-RPC 2.0 interface for remote control and monitoring of your I2P router. It listens on {0} by default when enabled for security reasons and must be enabled through the {1}."
-msgstr ""
+msgstr "I2PControl est une interface JSON-RPC 2.0 pour le contrôle et la surveillance à distance de votre routeur I2P. Il écoute sur {0} par défaut lorsqu'il est activé pour des raisons de sécurité et doit être activé via le {1}."
 
 msgid "Web Apps configuration page"
-msgstr ""
+msgstr "Page de configuration des applications Web"
 
 msgid "Authentication"
-msgstr ""
+msgstr "Authentification"
 
 msgid "All API operations (except for authentication itself) require a valid authentication token. To obtain a token, you must first authenticate with your configured password:"
-msgstr ""
+msgstr "Toutes les opérations API (sauf l'authentification elle-même) nécessitent un jeton d'authentification valide. Pour obtenir un jeton, vous devez d'abord vous authentifier avec votre mot de passe configuré :"
 
 msgid "The returned token must be included in either the 'Token' parameter or as an 'X-Auth-Token' HTTP header in all subsequent API calls."
-msgstr ""
+msgstr "Le jeton retourné doit être inclus soit dans le paramètre 'Token', soit comme en-tête HTTP 'X-Auth-Token' dans tous les appels API ultérieurs."
 
 msgid "API Version: 1. Clients must specify API version 1 in authentication requests for compatibility."
-msgstr ""
+msgstr "Version API : 1. Les clients doivent spécifier la version API 1 dans les requêtes d'authentification pour la compatibilité."
 
 msgid "API Methods"
-msgstr ""
+msgstr "Méthodes API"
 
 msgid "Authenticates with the I2PControl service and returns an authentication token for subsequent API calls."
-msgstr ""
+msgstr "Authentifie avec le service I2PControl et retourne un jeton d'authentification pour les appels API ultérieurs."
 
 msgid "Parameters:"
-msgstr ""
+msgstr "Paramètres :"
 
 msgid "Password (string), API (integer, must be 1)"
-msgstr ""
+msgstr "Mot de passe (chaîne), API (entier, doit être 1)"
 
 msgid "Returns:"
-msgstr ""
+msgstr "Retours :"
 
 msgid "Token (string), API (integer)"
-msgstr ""
+msgstr "Jeton (chaîne), API (entier)"
 
 msgid "Authentication:"
-msgstr ""
+msgstr "Authentification :"
 
 msgid "None (this is the unauthenticated method)"
-msgstr ""
+msgstr "Aucun (c'est la méthode non authentifiée)"
 
 msgid "A simple test method that returns the provided string. Useful for testing API connectivity and authentication."
-msgstr ""
+msgstr "Une méthode de test simple qui retourne la chaîne fournie. Utile pour tester la connectivité API et l'authentification."
 
 msgid "Echo (string)"
-msgstr ""
+msgstr "Echo (chaîne)"
 
 msgid "Result (string - echoed input)"
-msgstr ""
+msgstr "Résultat (chaîne - entrée echo)"
 
 msgid "Required"
-msgstr ""
+msgstr "Requis"
 
 msgid "Retrieves read-only status information about the I2P router. Each parameter is optional - include only the metrics you need."
-msgstr ""
+msgstr "Récupère les informations d'état en lecture seule sur le routeur I2P. Chaque paramètre est facultatif - incluez uniquement les métriques dont vous avez besoin."
 
 msgid "Any combination of:"
-msgstr ""
+msgstr "Toute combinaison de :"
 
 msgid "Router version"
-msgstr ""
+msgstr "Version du routeur"
 
 msgid "Router uptime in milliseconds"
-msgstr ""
+msgstr "Temps de fonctionnement du routeur en millisecondes"
 
 msgid "Current router status"
-msgstr ""
+msgstr "État actuel du routeur"
 
 msgid "Network status (0-14)"
-msgstr ""
+msgstr "État du réseau (0-14)"
 
 msgid "1-second average inbound bandwidth (Bps)"
-msgstr ""
+msgstr "Bande passante entrante moyenne sur 1 seconde (B/s)"
 
 msgid "1-second average outbound bandwidth (Bps)"
-msgstr ""
+msgstr "Bande passante sortante moyenne sur 1 seconde (B/s)"
 
 msgid "15-second average inbound bandwidth (Bps)"
-msgstr ""
+msgstr "Bande passante entrante moyenne sur 15 secondes (B/s)"
 
 msgid "15-second average outbound bandwidth (Bps)"
-msgstr ""
+msgstr "Bande passante sortante moyenne sur 15 secondes (B/s)"
 
 msgid "Number of participating tunnels"
-msgstr ""
+msgstr "Nombre de tunnels participants"
 
 msgid "Number of known peers"
-msgstr ""
+msgstr "Nombre de pairs connus"
 
 msgid "Number of active peers"
-msgstr ""
+msgstr "Nombre de pairs actifs"
 
 msgid "Number of fast peers"
-msgstr ""
+msgstr "Nombre de pairs rapides"
 
 msgid "Number of high-capacity peers"
-msgstr ""
+msgstr "Nombre de pairs à haute capacité"
 
 msgid "Whether reseed is in progress"
-msgstr ""
+msgstr "Si le réensemencement est en cours"
 
 msgid "Requested metrics with their current values"
-msgstr ""
+msgstr "Métriques demandées avec leurs valeurs actuelles"
 
 msgid "Controls router lifecycle and management operations. Each operation is optional and executes asynchronously."
-msgstr ""
+msgstr "Contrôle le cycle de vie du routeur et les opérations de gestion. Chaque opération est facultative et s'exécute de manière asynchrone."
 
 msgid "Graceful restart/shutdown"
-msgstr ""
+msgstr "Redémarrage/arrêt progressif"
 
 msgid "Immediate hard shutdown"
-msgstr ""
+msgstr "Arrêt dur immédiat"
 
 msgid "Immediate hard restart"
-msgstr ""
+msgstr "Redémarrage dur immédiat"
 
 msgid "Graceful shutdown (waits for tunnels)"
-msgstr ""
+msgstr "Arrêt progressif (attend les tunnels)"
 
 msgid "Graceful restart (waits for tunnels)"
-msgstr ""
+msgstr "Redémarrage progressif (attend les tunnels)"
 
 msgid "Trigger router reseeding"
-msgstr ""
+msgstr "Déclencher le réensemencement du routeur"
 
 msgid "Check for available updates"
-msgstr ""
+msgstr "Vérifier les mises à jour disponibles"
 
 msgid "Install available updates"
-msgstr ""
+msgstr "Installer les mises à jour disponibles"
 
 msgid "Confirmation of operation (null for most operations, result status for FindUpdates/Update)"
-msgstr ""
+msgstr "Confirmation de l'opération (nulle pour la plupart des opérations, statut du résultat pour FindUpdates/Update)"
 
 msgid "Manages router network configuration. Parameters can be used to either set values (if provided) or retrieve current values (if null/omitted)."
-msgstr ""
+msgstr "Gère la configuration réseau du routeur. Les paramètres peuvent être utilisés pour définir des valeurs (si fournies) ou récupérer les valeurs actuelles (si nulles/omises)."
 
 msgid "NTCP Transport Settings:"
-msgstr ""
+msgstr "Paramètres de transport NTCP :"
 
 msgid "NTCP port (1-65535)"
-msgstr ""
+msgstr "Port NTCP (1-65535)"
 
 msgid "NTCP hostname"
-msgstr ""
+msgstr "Nom d'hôte NTCP"
 
 msgid "Auto IP setting"
-msgstr ""
+msgstr "Paramètre IP automatique"
 
 msgid "SSU Transport Settings:"
-msgstr ""
+msgstr "Paramètres de transport SSU :"
 
 msgid "SSU port (1-65535)"
-msgstr ""
+msgstr "Port SSU (1-65535)"
 
 msgid "SSU hostname"
-msgstr ""
+msgstr "Nom d'hôte SSU"
 
 msgid "IP source detection"
-msgstr ""
+msgstr "Détection de la source IP"
 
 msgid "Read-only detected IP address"
-msgstr ""
+msgstr "Adresse IP détectée en lecture seule"
 
 msgid "Network Settings:"
-msgstr ""
+msgstr "Paramètres réseau :"
 
 msgid "UPnP enabled/disabled"
-msgstr ""
+msgstr "UPnP activé/désactivé"
 
 msgid "Laptop mode setting"
-msgstr ""
+msgstr "Paramètre du mode ordinateur portable"
 
 msgid "Bandwidth Settings:"
-msgstr ""
+msgstr "Paramètres de bande passante :"
 
 msgid "Bandwidth share percentage (0-100)"
-msgstr ""
+msgstr "Pourcentage de partage de bande passante (0-100)"
 
 msgid "Inbound bandwidth limit (Bps)"
-msgstr ""
+msgstr "Limite de bande passante entrante (B/s)"
 
 msgid "Outbound bandwidth limit (Bps)"
-msgstr ""
+msgstr "Limite de bande passante sortante (B/s)"
 
 msgid "SettingsSaved (boolean), RestartNeeded (boolean), plus current values for queried settings"
-msgstr ""
+msgstr "SettingsSaved (booléen), RestartNeeded (booléen), plus les valeurs actuelles pour les paramètres interrogés"
 
 msgid "Manages I2PControl service settings including password, port, and restart configuration."
-msgstr ""
+msgstr "Gère les paramètres du service I2PControl, y compris le mot de passe, le port et la configuration du redémarrage."
 
 msgid "Listen address (string, e.g., 127.0.0.1)"
-msgstr ""
+msgstr "Adresse d'écoute (chaîne, ex. : 127.0.0.1)"
 
 msgid "New password (string)"
-msgstr ""
+msgstr "Nouveau mot de passe (chaîne)"
 
 msgid "Listen port (integer, 1-65535)"
-msgstr ""
+msgstr "Port d'écoute (entier, 1-65535)"
 
 msgid "SettingsSaved (boolean), RestartNeeded (boolean), current values for requested settings"
-msgstr ""
+msgstr "SettingsSaved (booléen), RestartNeeded (booléen), valeurs actuelles pour les paramètres demandés"
 
 msgid "Access and modify advanced I2P router configuration settings."
-msgstr ""
+msgstr "Accéder et modifier les paramètres de configuration avancée du routeur I2P."
 
 msgid "Key-value pairs of advanced settings"
-msgstr ""
+msgstr "Paires clé-valeur des paramètres avancés"
 
 msgid "Updated settings values"
-msgstr ""
+msgstr "Valeurs des paramètres mises à jour"
 
 msgid "Retrieves statistical rate data from router for monitoring and analysis. Useful for creating custom graphs or monitoring applications."
-msgstr ""
+msgstr "Récupère les données statistiques de taux du routeur pour la surveillance et l'analyse. Utile pour créer des graphiques personnalisés ou des applications de surveillance."
 
 msgid "Statistical metric name (string)"
-msgstr ""
+msgstr "Nom de la métrique statistique (chaîne)"
 
 msgid "Time period in milliseconds (integer)"
-msgstr ""
+msgstr "Période en millisecondes (entier)"
 
 msgid "Result (number - average value for specified period)"
-msgstr ""
+msgstr "Résultat (nombre - valeur moyenne pour la période spécifiée)"
 
 msgid "Network Status Codes"
-msgstr ""
+msgstr "Codes d'état du réseau"
 
 #, java-format
 msgid "The {0} field returns an integer value representing the current network connectivity status:"
-msgstr ""
+msgstr "Le champ {0} retourne une valeur entière représentant l'état de connectivité réseau actuel :"
 
 msgid "OK - Full connectivity"
-msgstr ""
+msgstr "OK - Connectivité complète"
 
 msgid "TESTING - Still establishing connectivity"
-msgstr ""
+msgstr "TESTING - Établissement de la connectivité en cours"
 
 msgid "FIREWALLED - Behind restrictive firewall"
-msgstr ""
+msgstr "FIREWALLED - Derrière un pare-feu restrictif"
 
 msgid "HIDDEN - Router in hidden mode"
-msgstr ""
+msgstr "HIDDEN - Routeur en mode caché"
 
 msgid "WARN_FIREWALLED_AND_FAST - Firewalled but fast peer"
-msgstr ""
+msgstr "WARN_FIREWALLED_AND_FAST - Pare-feu mais pair rapide"
 
 msgid "WARN_FIREWALLED_AND_FLOODFILL - Firewalled but floodfill"
-msgstr ""
+msgstr "WARN_FIREWALLED_AND_FLOODFILL - Pare-feu mais floodfill"
 
 msgid "WARN_FIREWALLED_WITH_INBOUND_TCP - Firewalled with inbound TCP"
-msgstr ""
+msgstr "WARN_FIREWALLED_WITH_INBOUND_TCP - Pare-feu avec TCP entrant"
 
 msgid "WARN_FIREWALLED_WITH_UDP_DISABLED - Firewalled with UDP disabled"
-msgstr ""
+msgstr "WARN_FIREWALLED_WITH_UDP_DISABLED - Pare-feu avec UDP désactivé"
 
 msgid "ERROR_I2CP - I2CP error"
-msgstr ""
+msgstr "ERROR_I2CP - Erreur I2CP"
 
 msgid "ERROR_CLOCK_SKEW - System clock skew detected"
-msgstr ""
+msgstr "ERROR_CLOCK_SKEW - Désynchronisation de l'horloge système détectée"
 
 msgid "ERROR_PRIVATE_TCP_ADDRESS - Private TCP address configured"
-msgstr ""
+msgstr "ERROR_PRIVATE_TCP_ADDRESS - Adresse TCP privée configurée"
 
 msgid "ERROR_SYMMETRIC_NAT - Symmetric NAT detected"
-msgstr ""
+msgstr "ERROR_SYMMETRIC_NAT - NAT symétrique détecté"
 
 msgid "ERROR_UDP_PORT_IN_USE - UDP port already in use"
-msgstr ""
+msgstr "ERROR_UDP_PORT_IN_USE - Port UDP déjà utilisé"
 
 msgid "ERROR_NO_ACTIVE_PEERS_CHECK_CONNECTION_AND_FIREWALL - No active peers"
-msgstr ""
+msgstr "ERROR_NO_ACTIVE_PEERS_CHECK_CONNECTION_AND_FIREWALL - Aucun pair actif"
 
 msgid "ERROR_UDP_DISABLED_AND_TCP_UNSET - UDP disabled, TCP not configured"
-msgstr ""
+msgstr "ERROR_UDP_DISABLED_AND_TCP_UNSET - UDP désactivé, TCP non configuré"
 
 msgid "Error Codes"
-msgstr ""
+msgstr "Codes d'erreur"
 
 msgid "In addition to standard JSON-RPC 2.0 error codes, I2PControl provides specific error codes:"
-msgstr ""
+msgstr "En plus des codes d'erreur standard JSON-RPC 2.0, I2PControl fournit des codes d'erreur spécifiques :"
 
 msgid "JSON parse error"
-msgstr ""
+msgstr "Erreur d'analyse JSON"
 
 msgid "Invalid request"
-msgstr ""
+msgstr "Requête invalide"
 
 msgid "Method not found"
-msgstr ""
+msgstr "Méthode non trouvée"
 
 msgid "Invalid parameters"
-msgstr ""
+msgstr "Paramètres invalides"
 
 msgid "Internal error"
-msgstr ""
+msgstr "Erreur interne"
 
 msgid "Invalid password provided"
-msgstr ""
+msgstr "Mot de passe fourni invalide"
 
 msgid "No authentication token presented"
-msgstr ""
+msgstr "Aucun jeton d'authentification présenté"
 
 msgid "Authentication token doesn't exist"
-msgstr ""
+msgstr "Le jeton d'authentification n'existe pas"
 
 msgid "The provided authentication token was expired and will be removed"
-msgstr ""
+msgstr "Le jeton d'authentification fourni a expiré et sera supprimé"
 
 msgid "The version of the I2PControl API used wasn't specified, but is required to be specified"
-msgstr ""
+msgstr "La version de l'API I2PControl utilisée n'a pas été spécifiée, mais doit être spécifiée"
 
 msgid "The version of the I2PControl API specified is not supported by I2PControl"
-msgstr ""
+msgstr "La version de l'API I2PControl spécifiée n'est pas prise en charge par I2PControl"
 
 msgid "Rate Statistics"
-msgstr ""
+msgstr "Statistiques de taux"
 
 #, java-format
 msgid "For a complete list of available rate statistics, see the {0} documentation in the router console or refer to the {1} online documentation. Common rate statistics include:"
-msgstr ""
+msgstr "Pour une liste complète des statistiques de taux disponibles, consultez la documentation {0} dans la console du routeur ou reportez-vous à la documentation en ligne {1}. Les statistiques de taux courantes incluent :"
 
 msgid "Bandwidth receive rate"
-msgstr ""
+msgstr "Taux de réception de la bande passante"
 
 msgid "Bandwidth send rate"
-msgstr ""
+msgstr "Taux d'envoi de la bande passante"
 
 msgid "Active peer count"
-msgstr ""
+msgstr "Nombre de pairs actifs"
 
 msgid "Known peer count"
-msgstr ""
+msgstr "Nombre de pairs connus"
 
 msgid "Tunnel test success time"
-msgstr ""
+msgstr "Temps de réussite du test de tunnel"
 
 msgid "Rate Statistics Documentation"
-msgstr ""
+msgstr "Documentation des statistiques de taux"
 
 #, java-format
 msgid "See the {0} documentation in the router console or refer to the {1} online documentation."
-msgstr ""
+msgstr "Voir la documentation {0} dans la console du routeur ou consulter la documentation en ligne {1}."
 
 msgid "Example Usage"
-msgstr ""
+msgstr "Exemple d'utilisation"
 
 msgid "Get Router Version and Uptime:"
-msgstr ""
+msgstr "Obtenir la version et le temps de fonctionnement du routeur :"
 
 msgid "Get Current Bandwidth Usage:"
-msgstr ""
+msgstr "Obtenir l'utilisation actuelle de la bande passante :"
 
 msgid "Change Bandwidth Limits:"
-msgstr ""
+msgstr "Modifier les limites de bande passante :"
 
 msgid "Graceful Restart:"
-msgstr ""
+msgstr "Redémarrage progressif :"
 
 msgid "Security Considerations"
-msgstr ""
+msgstr "Considérations de sécurité"
 
 #, java-format
 msgid "Always change the default API password from {0} to a strong, unique password"
-msgstr ""
+msgstr "Changez toujours le mot de passe API par défaut de {0} en un mot de passe fort et unique"
 
 msgid "Consider binding I2PControl to localhost only if not accessed remotely"
-msgstr ""
+msgstr "Considérez la liaison d'I2PControl à localhost uniquement s'il n'est pas accessible à distance"
 
 msgid "Use HTTPS when accessing I2PControl over untrusted networks"
-msgstr ""
+msgstr "Utilisez HTTPS lorsque vous accédez à I2PControl via des réseaux non fiables"
 
 msgid "Tokens may expire - implement re-authentication logic in your applications"
-msgstr ""
+msgstr "Les jetons peuvent expirer - implémentez une logique de ré-authentification dans vos applications"
 
 msgid "Monitor I2PControl access logs for unauthorized usage"
-msgstr ""
+msgstr "Surveillez les journaux d'accès I2PControl pour détecter les utilisations non autorisées"
 
 msgid "Be cautious with router management operations - they can affect network connectivity"
-msgstr ""
+msgstr "Soyez prudent avec les opérations de gestion du routeur - elles peuvent affecter la connectivité réseau"
 
 msgid "Integration Examples"
-msgstr ""
+msgstr "Exemples d'intégration"
 
 msgid "The I2PControl API can be integrated with:"
-msgstr ""
+msgstr "L'API I2PControl peut être intégrée avec :"
 
 msgid "Monitoring systems:"
-msgstr ""
+msgstr "Systèmes de surveillance :"
 
 msgid "Create custom dashboards for router performance"
-msgstr ""
+msgstr "Créer des tableaux de bord personnalisés pour les performances du routeur"
 
 msgid "Automation scripts:"
-msgstr ""
+msgstr "Scripts d'automatisation :"
 
 msgid "Schedule restarts or configuration changes"
-msgstr ""
+msgstr "Planifier les redémarrages ou les modifications de configuration"
 
 msgid "Mobile applications:"
-msgstr ""
+msgstr "Applications mobiles :"
 
 msgid "Monitor and manage your router remotely"
-msgstr ""
+msgstr "Surveillez et gérez votre routeur à distance"
 
 msgid "Network management tools:"
-msgstr ""
+msgstr "Outils de gestion réseau :"
 
 msgid "Integrate I2P status into broader network monitoring"
-msgstr ""
+msgstr "Intégrer l'état I2P dans une surveillance réseau plus large"
 
 msgid "Alerting systems:"
-msgstr ""
+msgstr "Systèmes d'alerte :"
 
 msgid "Send notifications based on router status changes"
-msgstr ""
+msgstr "Envoyer des notifications basées sur les changements d'état du routeur"
 
 msgid "Licensing Information"
 msgstr "Informations sur la licence"
@@ -7976,7 +7976,7 @@ msgid "Skip Setup"
 msgstr "Ignorer la configuration"
 
 msgid "Select the language to be used for the router console and web applications ("
-msgstr ""
+msgstr "Sélectionnez la langue à utiliser pour la console du routeur et les applications Web ("
 
 msgid "Router Console &amp; WebApps Display Language"
 msgstr "Console et amplificateur de routeur Langue d'affichage des applications Web"

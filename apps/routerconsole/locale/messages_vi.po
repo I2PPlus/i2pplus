@@ -1968,7 +1968,7 @@ msgid "FAQ"
 msgstr "Câu Hỏi Thường Gặp"
 
 msgid "JSON-RPC API"
-msgstr ""
+msgstr "API JSON-RPC"
 
 msgid "Manage your I2P hosts file here (I2P domain name resolution)"
 msgstr "Quản lý tệp máy chủ I2P của bạn tại đây (độ phân giải tên miền I2P)"
@@ -2690,7 +2690,7 @@ msgid "Lookup"
 msgstr "Tra cứu"
 
 msgid "Select the field to search on"
-msgstr ""
+msgstr "Chọn trường để tìm kiếm"
 
 msgid "e.g. cn hk"
 msgstr "ví dụ. cn hk"
@@ -2943,7 +2943,7 @@ msgid "Maximum Transmission Unit"
 msgstr "Đơn vị truyền tải tối đa"
 
 msgid "Show all routers with this MTU in the NetDb"
-msgstr ""
+msgstr "Hiển thị tất cả các bộ định tuyến với MTU này trong NetDb"
 
 msgid "Addresses"
 msgstr "Địa chỉ"
@@ -5666,10 +5666,10 @@ msgid "Tunnel Filtering"
 msgstr "Lọc đường hầm"
 
 msgid "Console API"
-msgstr ""
+msgstr "API Bảng điều khiển"
 
 msgid "JSONRPC"
-msgstr ""
+msgstr "JSONRPC"
 
 msgid "New User Guide"
 msgstr "Hướng dẫn sử dụng mới"
@@ -6155,7 +6155,7 @@ msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP a
 msgstr "Ví dụ: Để cho phép truy cập từ cả localhost và 192.168.1.10 qua HTTP và HTTPS:"
 
 msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager's configuration section using the <i>reachable by</i> dropdown."
-msgstr ""
+msgstr "Đối với hầu hết các dịch vụ máy khách, hãy thay đổi địa chỉ lắng nghe cho dịch vụ liên quan trong phần cấu hình của Trình quản lý Đường hầm bằng cách sử dụng menu thả xuống <i>có thể truy cập bởi</i>."
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "Tôi có thể kết nối đến IRC trong I2P như thế nào?"
@@ -6590,10 +6590,10 @@ msgid "An introduction to tunnel access lists"
 msgstr "Giới thiệu về danh sách truy cập đường hầm"
 
 msgid "I2PControl API"
-msgstr ""
+msgstr "API I2PControl"
 
 msgid "JSON-RPC API for remote router control and monitoring"
-msgstr ""
+msgstr "API JSON-RPC để điều khiển và giám sát bộ định tuyến từ xa"
 
 msgid "Information about the sidebar, network status messages, and theme overrides"
 msgstr "Thông tin về thanh bên, tin nhắn trạng thái mạng và ghi đè giao diện"
@@ -6602,429 +6602,429 @@ msgid "Webhosting on I2P"
 msgstr "Web Hosting trên I2P+"
 
 msgid "I2PControl JSON-RPC API"
-msgstr ""
+msgstr "API JSON-RPC I2PControl"
 
 msgid "I2PControl provides a JSON-RPC 2.0 interface for remote control and monitoring of your I2P router. This allows external applications to programmatically manage I2P settings, retrieve status information, and control router operations through standardized HTTP requests."
-msgstr ""
+msgstr "I2PControl cung cấp giao diện JSON-RPC 2.0 để điều khiển và giám sát bộ định tuyến I2P của bạn từ xa. Điều này cho phép các ứng dụng bên ngoài quản lý cài đặt I2P theo chương trình, truy xuất thông tin trạng thái và điều khiển các hoạt động của bộ định tuyến thông qua các yêu cầu HTTP tiêu chuẩn."
 
 #, java-format
 msgid "I2PControl is a JSON-RPC 2.0 interface for remote control and monitoring of your I2P router. It listens on {0} by default when enabled for security reasons and must be enabled through the {1}."
-msgstr ""
+msgstr "I2PControl là giao diện JSON-RPC 2.0 để điều khiển và giám sát bộ định tuyến I2P của bạn từ xa. Nó lắng nghe trên {0} theo mặc định khi được bật vì lý do bảo mật và phải được bật thông qua {1}."
 
 msgid "Web Apps configuration page"
-msgstr ""
+msgstr "Trang cấu hình Ứng dụng Web"
 
 msgid "Authentication"
-msgstr ""
+msgstr "Xác thực"
 
 msgid "All API operations (except for authentication itself) require a valid authentication token. To obtain a token, you must first authenticate with your configured password:"
-msgstr ""
+msgstr "Tất cả các hoạt động API (ngoại trừ chính việc xác thực) đều yêu cầu mã thông báo xác thực hợp lệ. Để có được mã thông báo, trước tiên bạn phải xác thực với mật khẩu đã cấu hình của mình:"
 
 msgid "The returned token must be included in either the 'Token' parameter or as an 'X-Auth-Token' HTTP header in all subsequent API calls."
-msgstr ""
+msgstr "Mã thông báo được trả về phải được bao gồm trong tham số 'Token' hoặc như tiêu đề HTTP 'X-Auth-Token' trong tất cả các lệnh gọi API tiếp theo."
 
 msgid "API Version: 1. Clients must specify API version 1 in authentication requests for compatibility."
-msgstr ""
+msgstr "Phiên bản API: 1. Máy khách phải chỉ định phiên bản API 1 trong các yêu cầu xác thực để tương thích."
 
 msgid "API Methods"
-msgstr ""
+msgstr "Phương thức API"
 
 msgid "Authenticates with the I2PControl service and returns an authentication token for subsequent API calls."
-msgstr ""
+msgstr "Xác thực với dịch vụ I2PControl và trả về mã thông báo xác thực cho các lệnh gọi API tiếp theo."
 
 msgid "Parameters:"
-msgstr ""
+msgstr "Tham số:"
 
 msgid "Password (string), API (integer, must be 1)"
-msgstr ""
+msgstr "Mật khẩu (chuỗi), API (số nguyên, phải là 1)"
 
 msgid "Returns:"
-msgstr ""
+msgstr "Trả về:"
 
 msgid "Token (string), API (integer)"
-msgstr ""
+msgstr "Mã thông báo (chuỗi), API (số nguyên)"
 
 msgid "Authentication:"
-msgstr ""
+msgstr "Xác thực:"
 
 msgid "None (this is the unauthenticated method)"
-msgstr ""
+msgstr "Không có (đây là phương thức chưa xác thực)"
 
 msgid "A simple test method that returns the provided string. Useful for testing API connectivity and authentication."
-msgstr ""
+msgstr "Một phương thức kiểm tra đơn giản trả về chuỗi được cung cấp. Hữu ích để kiểm tra kết nối API và xác thực."
 
 msgid "Echo (string)"
-msgstr ""
+msgstr "Echo (chuỗi)"
 
 msgid "Result (string - echoed input)"
-msgstr ""
+msgstr "Kết quả (chuỗi - đầu vào được phản hồi)"
 
 msgid "Required"
-msgstr ""
+msgstr "Bắt buộc"
 
 msgid "Retrieves read-only status information about the I2P router. Each parameter is optional - include only the metrics you need."
-msgstr ""
+msgstr "Truy xuất thông tin trạng thái chỉ đọc về bộ định tuyến I2P. Mỗi tham số là tùy chọn - chỉ bao gồm các chỉ số bạn cần."
 
 msgid "Any combination of:"
-msgstr ""
+msgstr "Bất kỳ kết hợp nào của:"
 
 msgid "Router version"
-msgstr ""
+msgstr "Phiên bản bộ định tuyến"
 
 msgid "Router uptime in milliseconds"
-msgstr ""
+msgstr "Thời gian hoạt động của bộ định tuyến tính bằng mili giây"
 
 msgid "Current router status"
-msgstr ""
+msgstr "Trạng thái hiện tại của bộ định tuyến"
 
 msgid "Network status (0-14)"
-msgstr ""
+msgstr "Trạng thái mạng (0-14)"
 
 msgid "1-second average inbound bandwidth (Bps)"
-msgstr ""
+msgstr "Băng thông vào trung bình 1 giây (Bps)"
 
 msgid "1-second average outbound bandwidth (Bps)"
-msgstr ""
+msgstr "Băng thông ra trung bình 1 giây (Bps)"
 
 msgid "15-second average inbound bandwidth (Bps)"
-msgstr ""
+msgstr "Băng thông vào trung bình 15 giây (Bps)"
 
 msgid "15-second average outbound bandwidth (Bps)"
-msgstr ""
+msgstr "Băng thông ra trung bình 15 giây (Bps)"
 
 msgid "Number of participating tunnels"
-msgstr ""
+msgstr "Số lượng đường hầm tham gia"
 
 msgid "Number of known peers"
-msgstr ""
+msgstr "Số lượng ngang hàng đã biết"
 
 msgid "Number of active peers"
-msgstr ""
+msgstr "Số lượng ngang hàng hoạt động"
 
 msgid "Number of fast peers"
-msgstr ""
+msgstr "Số lượng ngang hàng nhanh"
 
 msgid "Number of high-capacity peers"
-msgstr ""
+msgstr "Số lượng ngang hàng có dung lượng cao"
 
 msgid "Whether reseed is in progress"
-msgstr ""
+msgstr "Liệu reseed có đang được thực hiện không"
 
 msgid "Requested metrics with their current values"
-msgstr ""
+msgstr "Các chỉ số được yêu cầu với giá trị hiện tại của chúng"
 
 msgid "Controls router lifecycle and management operations. Each operation is optional and executes asynchronously."
-msgstr ""
+msgstr "Điều khiển vòng đời bộ định tuyến và các hoạt động quản lý. Mỗi hoạt động là tùy chọn và thực hiện không đồng bộ."
 
 msgid "Graceful restart/shutdown"
-msgstr ""
+msgstr "Khởi động lại/tắt máy duyên dáng"
 
 msgid "Immediate hard shutdown"
-msgstr ""
+msgstr "Tắt máy cứng ngay lập tức"
 
 msgid "Immediate hard restart"
-msgstr ""
+msgstr "Khởi động lại cứng ngay lập tức"
 
 msgid "Graceful shutdown (waits for tunnels)"
-msgstr ""
+msgstr "Tắt máy duyên dáng (đợi đường hầm)"
 
 msgid "Graceful restart (waits for tunnels)"
-msgstr ""
+msgstr "Khởi động lại duyên dáng (đợi đường hầm)"
 
 msgid "Trigger router reseeding"
-msgstr ""
+msgstr "Kích hoạt reseed bộ định tuyến"
 
 msgid "Check for available updates"
-msgstr ""
+msgstr "Kiểm tra các bản cập nhật có sẵn"
 
 msgid "Install available updates"
-msgstr ""
+msgstr "Cài đặt các bản cập nhật có sẵn"
 
 msgid "Confirmation of operation (null for most operations, result status for FindUpdates/Update)"
-msgstr ""
+msgstr "Xác nhận hoạt động (null cho hầu hết các hoạt động, trạng thái kết quả cho FindUpdates/Update)"
 
 msgid "Manages router network configuration. Parameters can be used to either set values (if provided) or retrieve current values (if null/omitted)."
-msgstr ""
+msgstr "Quản lý cấu hình mạng bộ định tuyến. Các tham số có thể được sử dụng để đặt giá trị (nếu được cung cấp) hoặc truy xuất giá trị hiện tại (nếu null/bỏ qua)."
 
 msgid "NTCP Transport Settings:"
-msgstr ""
+msgstr "Cài đặt Transport NTCP:"
 
 msgid "NTCP port (1-65535)"
-msgstr ""
+msgstr "Cổng NTCP (1-65535)"
 
 msgid "NTCP hostname"
-msgstr ""
+msgstr "Tên máy chủ NTCP"
 
 msgid "Auto IP setting"
-msgstr ""
+msgstr "Cài đặt IP tự động"
 
 msgid "SSU Transport Settings:"
-msgstr ""
+msgstr "Cài đặt Transport SSU:"
 
 msgid "SSU port (1-65535)"
-msgstr ""
+msgstr "Cổng SSU (1-65535)"
 
 msgid "SSU hostname"
-msgstr ""
+msgstr "Tên máy chủ SSU"
 
 msgid "IP source detection"
-msgstr ""
+msgstr "Phát hiện nguồn IP"
 
 msgid "Read-only detected IP address"
-msgstr ""
+msgstr "Địa chỉ IP được phát hiện chỉ đọc"
 
 msgid "Network Settings:"
-msgstr ""
+msgstr "Cài đặt Mạng:"
 
 msgid "UPnP enabled/disabled"
-msgstr ""
+msgstr "UPnP được bật/tắt"
 
 msgid "Laptop mode setting"
-msgstr ""
+msgstr "Cài đặt chế độ laptop"
 
 msgid "Bandwidth Settings:"
-msgstr ""
+msgstr "Cài đặt Băng thông:"
 
 msgid "Bandwidth share percentage (0-100)"
-msgstr ""
+msgstr "Phần trăm chia sẻ băng thông (0-100)"
 
 msgid "Inbound bandwidth limit (Bps)"
-msgstr ""
+msgstr "Giới hạn băng thông vào (Bps)"
 
 msgid "Outbound bandwidth limit (Bps)"
-msgstr ""
+msgstr "Giới hạn băng thông ra (Bps)"
 
 msgid "SettingsSaved (boolean), RestartNeeded (boolean), plus current values for queried settings"
-msgstr ""
+msgstr "SettingsSaved (boolean), RestartNeeded (boolean), cộng với giá trị hiện tại cho các cài đặt được truy vấn"
 
 msgid "Manages I2PControl service settings including password, port, and restart configuration."
-msgstr ""
+msgstr "Quản lý cài đặt dịch vụ I2PControl bao gồm mật khẩu, cổng và cấu hình khởi động lại."
 
 msgid "Listen address (string, e.g., 127.0.0.1)"
-msgstr ""
+msgstr "Địa chỉ lắng nghe (chuỗi, ví dụ: 127.0.0.1)"
 
 msgid "New password (string)"
-msgstr ""
+msgstr "Mật khẩu mới (chuỗi)"
 
 msgid "Listen port (integer, 1-65535)"
-msgstr ""
+msgstr "Cổng lắng nghe (số nguyên, 1-65535)"
 
 msgid "SettingsSaved (boolean), RestartNeeded (boolean), current values for requested settings"
-msgstr ""
+msgstr "SettingsSaved (boolean), RestartNeeded (boolean), giá trị hiện tại cho các cài đặt được yêu cầu"
 
 msgid "Access and modify advanced I2P router configuration settings."
-msgstr ""
+msgstr "Truy cập và sửa đổi các cài đặt cấu hình nâng cao của bộ định tuyến I2P."
 
 msgid "Key-value pairs of advanced settings"
-msgstr ""
+msgstr "Cặp khóa-giá trị của các cài đặt nâng cao"
 
 msgid "Updated settings values"
-msgstr ""
+msgstr "Giá trị cài đặt đã cập nhật"
 
 msgid "Retrieves statistical rate data from router for monitoring and analysis. Useful for creating custom graphs or monitoring applications."
-msgstr ""
+msgstr "Truy xuất dữ liệu tỷ lệ thống kê từ bộ định tuyến để giám sát và phân tích. Hữu ích để tạo biểu đồ tùy chỉnh hoặc ứng dụng giám sát."
 
 msgid "Statistical metric name (string)"
-msgstr ""
+msgstr "Tên chỉ số thống kê (chuỗi)"
 
 msgid "Time period in milliseconds (integer)"
-msgstr ""
+msgstr "Khoảng thời gian tính bằng mili giây (số nguyên)"
 
 msgid "Result (number - average value for specified period)"
-msgstr ""
+msgstr "Kết quả (số - giá trị trung bình cho khoảng thời gian được chỉ định)"
 
 msgid "Network Status Codes"
-msgstr ""
+msgstr "Mã Trạng thái Mạng"
 
 #, java-format
 msgid "The {0} field returns an integer value representing the current network connectivity status:"
-msgstr ""
+msgstr "Trường {0} trả về một giá trị số nguyên đại diện cho trạng thái kết nối mạng hiện tại:"
 
 msgid "OK - Full connectivity"
-msgstr ""
+msgstr "OK - Kết nối đầy đủ"
 
 msgid "TESTING - Still establishing connectivity"
-msgstr ""
+msgstr "TESTING - Đang thiết lập kết nối"
 
 msgid "FIREWALLED - Behind restrictive firewall"
-msgstr ""
+msgstr "FIREWALLED - Đằng sau tường lửa hạn chế"
 
 msgid "HIDDEN - Router in hidden mode"
-msgstr ""
+msgstr "HIDDEN - Bộ định tuyến ở chế độ ẩn"
 
 msgid "WARN_FIREWALLED_AND_FAST - Firewalled but fast peer"
-msgstr ""
+msgstr "WARN_FIREWALLED_AND_FAST - Bị tường lửa nhưng là ngang hàng nhanh"
 
 msgid "WARN_FIREWALLED_AND_FLOODFILL - Firewalled but floodfill"
-msgstr ""
+msgstr "WARN_FIREWALLED_AND_FLOODFILL - Bị tường lửa nhưng là floodfill"
 
 msgid "WARN_FIREWALLED_WITH_INBOUND_TCP - Firewalled with inbound TCP"
-msgstr ""
+msgstr "WARN_FIREWALLED_WITH_INBOUND_TCP - Bị tường lửa với TCP vào"
 
 msgid "WARN_FIREWALLED_WITH_UDP_DISABLED - Firewalled with UDP disabled"
-msgstr ""
+msgstr "WARN_FIREWALLED_WITH_UDP_DISABLED - Bị tường lửa với UDP bị vô hiệu hóa"
 
 msgid "ERROR_I2CP - I2CP error"
-msgstr ""
+msgstr "ERROR_I2CP - Lỗi I2CP"
 
 msgid "ERROR_CLOCK_SKEW - System clock skew detected"
-msgstr ""
+msgstr "ERROR_CLOCK_SKEW - Phát hiện sai lệch đồng hồ hệ thống"
 
 msgid "ERROR_PRIVATE_TCP_ADDRESS - Private TCP address configured"
-msgstr ""
+msgstr "ERROR_PRIVATE_TCP_ADDRESS - Địa chỉ TCP riêng được cấu hình"
 
 msgid "ERROR_SYMMETRIC_NAT - Symmetric NAT detected"
-msgstr ""
+msgstr "ERROR_SYMMETRIC_NAT - Phát hiện NAT đối xứng"
 
 msgid "ERROR_UDP_PORT_IN_USE - UDP port already in use"
-msgstr ""
+msgstr "ERROR_UDP_PORT_IN_USE - Cổng UDP đã được sử dụng"
 
 msgid "ERROR_NO_ACTIVE_PEERS_CHECK_CONNECTION_AND_FIREWALL - No active peers"
-msgstr ""
+msgstr "ERROR_NO_ACTIVE_PEERS_CHECK_CONNECTION_AND_FIREWALL - Không có ngang hàng hoạt động"
 
 msgid "ERROR_UDP_DISABLED_AND_TCP_UNSET - UDP disabled, TCP not configured"
-msgstr ""
+msgstr "ERROR_UDP_DISABLED_AND_TCP_UNSET - UDP bị vô hiệu hóa, TCP chưa được cấu hình"
 
 msgid "Error Codes"
-msgstr ""
+msgstr "Mã Lỗi"
 
 msgid "In addition to standard JSON-RPC 2.0 error codes, I2PControl provides specific error codes:"
-msgstr ""
+msgstr "Ngoài các mã lỗi JSON-RPC 2.0 tiêu chuẩn, I2PControl cung cấp các mã lỗi cụ thể:"
 
 msgid "JSON parse error"
-msgstr ""
+msgstr "Lỗi phân tích cú pháp JSON"
 
 msgid "Invalid request"
-msgstr ""
+msgstr "Yêu cầu không hợp lệ"
 
 msgid "Method not found"
-msgstr ""
+msgstr "Phương thức không tìm thấy"
 
 msgid "Invalid parameters"
-msgstr ""
+msgstr "Tham số không hợp lệ"
 
 msgid "Internal error"
-msgstr ""
+msgstr "Lỗi nội bộ"
 
 msgid "Invalid password provided"
-msgstr ""
+msgstr "Mật khẩu được cung cấp không hợp lệ"
 
 msgid "No authentication token presented"
-msgstr ""
+msgstr "Không có mã thông báo xác thực được trình bày"
 
 msgid "Authentication token doesn't exist"
-msgstr ""
+msgstr "Mã thông báo xác thực không tồn tại"
 
 msgid "The provided authentication token was expired and will be removed"
-msgstr ""
+msgstr "Mã thông báo xác thực được cung cấp đã hết hạn và sẽ bị xóa"
 
 msgid "The version of the I2PControl API used wasn't specified, but is required to be specified"
-msgstr ""
+msgstr "Phiên bản API I2PControl được sử dụng không được chỉ định, nhưng bắt buộc phải chỉ định"
 
 msgid "The version of the I2PControl API specified is not supported by I2PControl"
-msgstr ""
+msgstr "Phiên bản API I2PControl được chỉ định không được I2PControl hỗ trợ"
 
 msgid "Rate Statistics"
-msgstr ""
+msgstr "Thống kê Tỷ lệ"
 
 #, java-format
 msgid "For a complete list of available rate statistics, see the {0} documentation in the router console or refer to the {1} online documentation. Common rate statistics include:"
-msgstr ""
+msgstr "Để có danh sách đầy đủ các thống kê tỷ lệ có sẵn, hãy xem tài liệu {0} trong bảng điều khiển bộ định tuyến hoặc tham khảo tài liệu trực tuyến {1}. Các thống kê tỷ lệ phổ biến bao gồm:"
 
 msgid "Bandwidth receive rate"
-msgstr ""
+msgstr "Tỷ lệ nhận băng thông"
 
 msgid "Bandwidth send rate"
-msgstr ""
+msgstr "Tỷ lệ gửi băng thông"
 
 msgid "Active peer count"
-msgstr ""
+msgstr "Số lượng ngang hàng hoạt động"
 
 msgid "Known peer count"
-msgstr ""
+msgstr "Số lượng ngang hàng đã biết"
 
 msgid "Tunnel test success time"
-msgstr ""
+msgstr "Thời gian thành công kiểm tra đường hầm"
 
 msgid "Rate Statistics Documentation"
-msgstr ""
+msgstr "Tài liệu Thống kê Tỷ lệ"
 
 #, java-format
 msgid "See the {0} documentation in the router console or refer to the {1} online documentation."
-msgstr ""
+msgstr "Xem tài liệu {0} trong bảng điều khiển bộ định tuyến hoặc tham khảo tài liệu trực tuyến {1}."
 
 msgid "Example Usage"
-msgstr ""
+msgstr "Ví dụ Sử dụng"
 
 msgid "Get Router Version and Uptime:"
-msgstr ""
+msgstr "Lấy Phiên bản Bộ định tuyến và Thời gian hoạt động:"
 
 msgid "Get Current Bandwidth Usage:"
-msgstr ""
+msgstr "Lấy Mức sử dụng Băng thông Hiện tại:"
 
 msgid "Change Bandwidth Limits:"
-msgstr ""
+msgstr "Thay đổi Giới hạn Băng thông:"
 
 msgid "Graceful Restart:"
-msgstr ""
+msgstr "Khởi động lại Duyên dáng:"
 
 msgid "Security Considerations"
-msgstr ""
+msgstr "Cân nhắc về Bảo mật"
 
 #, java-format
 msgid "Always change the default API password from {0} to a strong, unique password"
-msgstr ""
+msgstr "Luôn thay đổi mật khẩu API mặc định từ {0} thành mật khẩu mạnh, duy nhất"
 
 msgid "Consider binding I2PControl to localhost only if not accessed remotely"
-msgstr ""
+msgstr "Cân nhắc ràng buộc I2PControl với localhost chỉ khi không truy cập từ xa"
 
 msgid "Use HTTPS when accessing I2PControl over untrusted networks"
-msgstr ""
+msgstr "Sử dụng HTTPS khi truy cập I2PControl qua các mạng không đáng tin cậy"
 
 msgid "Tokens may expire - implement re-authentication logic in your applications"
-msgstr ""
+msgstr "Mã thông báo có thể hết hạn - triển khai logic xác thực lại trong các ứng dụng của bạn"
 
 msgid "Monitor I2PControl access logs for unauthorized usage"
-msgstr ""
+msgstr "Giám sát nhật ký truy cập I2PControl để phát hiện sử dụng trái phép"
 
 msgid "Be cautious with router management operations - they can affect network connectivity"
-msgstr ""
+msgstr "Thận trọng với các hoạt động quản lý bộ định tuyến - chúng có thể ảnh hưởng đến kết nối mạng"
 
 msgid "Integration Examples"
-msgstr ""
+msgstr "Ví dụ Tích hợp"
 
 msgid "The I2PControl API can be integrated with:"
-msgstr ""
+msgstr "API I2PControl có thể được tích hợp với:"
 
 msgid "Monitoring systems:"
-msgstr ""
+msgstr "Hệ thống giám sát:"
 
 msgid "Create custom dashboards for router performance"
-msgstr ""
+msgstr "Tạo bảng điều khiển tùy chỉnh cho hiệu suất bộ định tuyến"
 
 msgid "Automation scripts:"
-msgstr ""
+msgstr "Tập lệnh tự động hóa:"
 
 msgid "Schedule restarts or configuration changes"
-msgstr ""
+msgstr "Lên lịch khởi động lại hoặc thay đổi cấu hình"
 
 msgid "Mobile applications:"
-msgstr ""
+msgstr "Ứng dụng di động:"
 
 msgid "Monitor and manage your router remotely"
-msgstr ""
+msgstr "Giám sát và quản lý bộ định tuyến của bạn từ xa"
 
 msgid "Network management tools:"
-msgstr ""
+msgstr "Công cụ quản lý mạng:"
 
 msgid "Integrate I2P status into broader network monitoring"
-msgstr ""
+msgstr "Tích hợp trạng thái I2P vào giám sát mạng rộng hơn"
 
 msgid "Alerting systems:"
-msgstr ""
+msgstr "Hệ thống cảnh báo:"
 
 msgid "Send notifications based on router status changes"
-msgstr ""
+msgstr "Gửi thông báo dựa trên thay đổi trạng thái bộ định tuyến"
 
 msgid "Licensing Information"
 msgstr "Thông tin về Giấy phép"
@@ -7958,7 +7958,7 @@ msgid "Skip Setup"
 msgstr "Bỏ qua thiết lập"
 
 msgid "Select the language to be used for the router console and web applications ("
-msgstr ""
+msgstr "Chọn ngôn ngữ được sử dụng cho bảng điều khiển bộ định tuyến và ứng dụng web ("
 
 msgid "Router Console &amp; WebApps Display Language"
 msgstr "Bảng điều khiển bộ định tuyến"

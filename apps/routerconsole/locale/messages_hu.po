@@ -5687,7 +5687,7 @@ msgid "Console API"
 msgstr "Konzol API"
 
 msgid "JSONRPC"
-msgstr ""
+msgstr "JSONRPC"
 
 msgid "New User Guide"
 msgstr "Új Felhasználói Kézikönyv"
@@ -6173,7 +6173,7 @@ msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP a
 msgstr "Példa: Hozzáférés engedélyezése localhost-ról és 192.168.1.10-ről HTTP-n és HTTPS-en keresztül:"
 
 msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager's configuration section using the <i>reachable by</i> dropdown."
-msgstr ""
+msgstr "A legtöbb kliens szolgáltatásnál a figyelési cím megváltoztatásához használja az Alagútkezelő konfigurációs részében a <i>elhelyezkedés szerint</i> legördülő menüt."
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "Hogyan csatlakozhatok IRC-hez I2P-n belül?"
@@ -6608,10 +6608,10 @@ msgid "An introduction to tunnel access lists"
 msgstr "Bevezetés a tunnel-hozzáférési listákba"
 
 msgid "I2PControl API"
-msgstr ""
+msgstr "I2PControl API"
 
 msgid "JSON-RPC API for remote router control and monitoring"
-msgstr ""
+msgstr "JSON-RPC API távoli útválasztó vezérléshez és figyeléshez"
 
 msgid "Information about the sidebar, network status messages, and theme overrides"
 msgstr "Információ a szalagról, a hálózati állapotüzenetekről és a téma felülbíráltról"
@@ -6620,429 +6620,429 @@ msgid "Webhosting on I2P"
 msgstr "Webtárhelyszolgáltatás az I2P-n"
 
 msgid "I2PControl JSON-RPC API"
-msgstr ""
+msgstr "I2PControl JSON-RPC API"
 
 msgid "I2PControl provides a JSON-RPC 2.0 interface for remote control and monitoring of your I2P router. This allows external applications to programmatically manage I2P settings, retrieve status information, and control router operations through standardized HTTP requests."
-msgstr ""
+msgstr "Az I2PControl egy JSON-RPC 2.0 interfészt biztosít az I2P útválasztó távoli vezérléséhez és figyeléséhez. Ez lehetővé teszi a külső alkalmazások számára, hogy programozottan kezeljék az I2P beállításokat, lekérjék az állapotinformációkat, és vezéreljék az útválasztó műveleteit szabványosított HTTP kérések útján."
 
 #, java-format
 msgid "I2PControl is a JSON-RPC 2.0 interface for remote control and monitoring of your I2P router. It listens on {0} by default when enabled for security reasons and must be enabled through the {1}."
-msgstr ""
+msgstr "Az I2PControl egy JSON-RPC 2.0 interfész az I2P útválasztó távoli vezérléséhez és figyeléséhez. A(z) {0} címen figyel alapértelmezés szerint, ha biztonsági okokból engedélyezve van, és a {1} révén kell engedélyezni."
 
 msgid "Web Apps configuration page"
-msgstr ""
+msgstr "Webalkalmazások konfigurációs oldal"
 
 msgid "Authentication"
-msgstr ""
+msgstr "Hitelesítés"
 
 msgid "All API operations (except for authentication itself) require a valid authentication token. To obtain a token, you must first authenticate with your configured password:"
-msgstr ""
+msgstr "Minden API művelethez (kivéve magát a hitelesítést) érvényes hitelesítési token szükséges. Token beszerzéséhez először hitelesítenie kell a beállított jelszavával:"
 
 msgid "The returned token must be included in either the 'Token' parameter or as an 'X-Auth-Token' HTTP header in all subsequent API calls."
-msgstr ""
+msgstr "A visszaadott tokent vagy a 'Token' paraméterként, vagy 'X-Auth-Token' HTTP fejlécként kell szerepeltetni az összes további API hívásban."
 
 msgid "API Version: 1. Clients must specify API version 1 in authentication requests for compatibility."
-msgstr ""
+msgstr "API verzió: 1. A klienseknek az 1-es API verziót kell megadniuk a hitelesítési kérésekben a kompatibilitás érdekében."
 
 msgid "API Methods"
-msgstr ""
+msgstr "API metódusok"
 
 msgid "Authenticates with the I2PControl service and returns an authentication token for subsequent API calls."
-msgstr ""
+msgstr "Hitelesíti magát az I2PControl szolgáltatásnál, és visszaad egy hitelesítési tokent a további API hívásokhoz."
 
 msgid "Parameters:"
-msgstr ""
+msgstr "Paraméterek:"
 
 msgid "Password (string), API (integer, must be 1)"
-msgstr ""
+msgstr "Jelszó (karakterlánc), API (egész szám, 1 kell legyen)"
 
 msgid "Returns:"
-msgstr ""
+msgstr "Visszatérési értékek:"
 
 msgid "Token (string), API (integer)"
-msgstr ""
+msgstr "Token (karakterlánc), API (egész szám)"
 
 msgid "Authentication:"
-msgstr ""
+msgstr "Hitelesítés:"
 
 msgid "None (this is the unauthenticated method)"
-msgstr ""
+msgstr "Nincs (ez egy nem hitelesített metódus)"
 
 msgid "A simple test method that returns the provided string. Useful for testing API connectivity and authentication."
-msgstr ""
+msgstr "Egyszerű teszt metódus, amely visszaadja a megadott karakterláncot. Hasznos az API kapcsolat és a hitelesítés teszteléséhez."
 
 msgid "Echo (string)"
-msgstr ""
+msgstr "Visszhang (karakterlánc)"
 
 msgid "Result (string - echoed input)"
-msgstr ""
+msgstr "Eredmény (karakterlánc - visszhangzott bemenet)"
 
 msgid "Required"
-msgstr ""
+msgstr "Kötelező"
 
 msgid "Retrieves read-only status information about the I2P router. Each parameter is optional - include only the metrics you need."
-msgstr ""
+msgstr "Lekéri az I2P útválasztó csak olvasható állapotinformációit. Minden paraméter opcionális - csak a szükséges metrikákat adja meg."
 
 msgid "Any combination of:"
-msgstr ""
+msgstr "Bármilyen kombinációja:"
 
 msgid "Router version"
-msgstr ""
+msgstr "Útválasztó verzió"
 
 msgid "Router uptime in milliseconds"
-msgstr ""
+msgstr "Útválasztó működési ideje ezredmásodpercben"
 
 msgid "Current router status"
-msgstr ""
+msgstr "Jelenlegi útválasztó állapot"
 
 msgid "Network status (0-14)"
-msgstr ""
+msgstr "Hálózati állapot (0-14)"
 
 msgid "1-second average inbound bandwidth (Bps)"
-msgstr ""
+msgstr "1 másodperces átlagos bejövő sávszélesség (Bps)"
 
 msgid "1-second average outbound bandwidth (Bps)"
-msgstr ""
+msgstr "1 másodperces átlagos kimenő sávszélesség (Bps)"
 
 msgid "15-second average inbound bandwidth (Bps)"
-msgstr ""
+msgstr "15 másodperces átlagos bejövő sávszélesség (Bps)"
 
 msgid "15-second average outbound bandwidth (Bps)"
-msgstr ""
+msgstr "15 másodperces átlagos kimenő sávszélesség (Bps)"
 
 msgid "Number of participating tunnels"
-msgstr ""
+msgstr "Részt vevő alagutak száma"
 
 msgid "Number of known peers"
-msgstr ""
+msgstr "Ismert társak száma"
 
 msgid "Number of active peers"
-msgstr ""
+msgstr "Aktív társak száma"
 
 msgid "Number of fast peers"
-msgstr ""
+msgstr "Gyors társak száma"
 
 msgid "Number of high-capacity peers"
-msgstr ""
+msgstr "Nagy kapacitású társak száma"
 
 msgid "Whether reseed is in progress"
-msgstr ""
+msgstr "Folyamatban van-e az újratáplálás"
 
 msgid "Requested metrics with their current values"
-msgstr ""
+msgstr "A kért metrikák a jelenlegi értékeikkel"
 
 msgid "Controls router lifecycle and management operations. Each operation is optional and executes asynchronously."
-msgstr ""
+msgstr "Vezérli az útválasztó életciklus és kezelési műveleteit. Minden művelet opcionális és aszinkron módon hajtódik végre."
 
 msgid "Graceful restart/shutdown"
-msgstr ""
+msgstr "Türelmes újraindítás/kikapcsolás"
 
 msgid "Immediate hard shutdown"
-msgstr ""
+msgstr "Azonnali kemény kikapcsolás"
 
 msgid "Immediate hard restart"
-msgstr ""
+msgstr "Azonnali kemény újraindítás"
 
 msgid "Graceful shutdown (waits for tunnels)"
-msgstr ""
+msgstr "Türelmes kikapcsolás (vár az alagutakra)"
 
 msgid "Graceful restart (waits for tunnels)"
-msgstr ""
+msgstr "Türelmes újraindítás (vár az alagutakra)"
 
 msgid "Trigger router reseeding"
-msgstr ""
+msgstr "Útválasztó újratáplálás kiváltása"
 
 msgid "Check for available updates"
-msgstr ""
+msgstr "Elérhető frissítések keresése"
 
 msgid "Install available updates"
-msgstr ""
+msgstr "Elérhető frissítések telepítése"
 
 msgid "Confirmation of operation (null for most operations, result status for FindUpdates/Update)"
-msgstr ""
+msgstr "Művelet megerősítése (null a legtöbb művelethez, eredmény állapot a FindUpdates/Update-hez)"
 
 msgid "Manages router network configuration. Parameters can be used to either set values (if provided) or retrieve current values (if null/omitted)."
-msgstr ""
+msgstr "Kezeli az útválasztó hálózati konfigurációját. A paraméterek használhatók értékek beállítására (ha megadottak) vagy jelenlegi értékek lekérésére (ha null/hiányzó)."
 
 msgid "NTCP Transport Settings:"
-msgstr ""
+msgstr "NTCP Transport Beállítások:"
 
 msgid "NTCP port (1-65535)"
-msgstr ""
+msgstr "NTCP port (1-65535)"
 
 msgid "NTCP hostname"
-msgstr ""
+msgstr "NTCP hostname"
 
 msgid "Auto IP setting"
-msgstr ""
+msgstr "Automatikus IP beállítás"
 
 msgid "SSU Transport Settings:"
-msgstr ""
+msgstr "SSU Transport Beállítások:"
 
 msgid "SSU port (1-65535)"
-msgstr ""
+msgstr "SSU port (1-65535)"
 
 msgid "SSU hostname"
-msgstr ""
+msgstr "SSU hostname"
 
 msgid "IP source detection"
-msgstr ""
+msgstr "IP forrás észlelés"
 
 msgid "Read-only detected IP address"
-msgstr ""
+msgstr "Csak olvasható észlelt IP cím"
 
 msgid "Network Settings:"
-msgstr ""
+msgstr "Hálózati Beállítások:"
 
 msgid "UPnP enabled/disabled"
-msgstr ""
+msgstr "UPnP engedélyezve/letiltva"
 
 msgid "Laptop mode setting"
-msgstr ""
+msgstr "Laptop mód beállítás"
 
 msgid "Bandwidth Settings:"
-msgstr ""
+msgstr "Sávszélesség Beállítások:"
 
 msgid "Bandwidth share percentage (0-100)"
-msgstr ""
+msgstr "Sávszélesség megosztási százalék (0-100)"
 
 msgid "Inbound bandwidth limit (Bps)"
-msgstr ""
+msgstr "Bejövő sávszélesség korlát (Bps)"
 
 msgid "Outbound bandwidth limit (Bps)"
-msgstr ""
+msgstr "Kimenő sávszélesség korlát (Bps)"
 
 msgid "SettingsSaved (boolean), RestartNeeded (boolean), plus current values for queried settings"
-msgstr ""
+msgstr "SettingsSaved (boolean), RestartNeeded (boolean), plus current values for queried settings"
 
 msgid "Manages I2PControl service settings including password, port, and restart configuration."
-msgstr ""
+msgstr "Kezeli az I2PControl szolgáltatás beállításait, beleértve a jelszót, a portot és az újraindítási konfigurációt."
 
 msgid "Listen address (string, e.g., 127.0.0.1)"
-msgstr ""
+msgstr "Figyelési cím (karakterlánc, pl. 127.0.0.1)"
 
 msgid "New password (string)"
-msgstr ""
+msgstr "Új jelszó (karakterlánc)"
 
 msgid "Listen port (integer, 1-65535)"
-msgstr ""
+msgstr "Figyelési port (egész szám, 1-65535)"
 
 msgid "SettingsSaved (boolean), RestartNeeded (boolean), current values for requested settings"
-msgstr ""
+msgstr "SettingsSaved (boolean), RestartNeeded (boolean), current values for requested settings"
 
 msgid "Access and modify advanced I2P router configuration settings."
-msgstr ""
+msgstr "Hozzáférés és módosítás az I2P útválasztó speciális konfigurációs beállításaihoz."
 
 msgid "Key-value pairs of advanced settings"
-msgstr ""
+msgstr "Kulcs-érték párok a speciális beállításokhoz"
 
 msgid "Updated settings values"
-msgstr ""
+msgstr "Frissített beállítási értékek"
 
 msgid "Retrieves statistical rate data from router for monitoring and analysis. Useful for creating custom graphs or monitoring applications."
-msgstr ""
+msgstr "Lekéri a statisztikai arányadatokat az útválasztótól a monitorozás és elemzés céljából. Hasznos egyedi grafikonok vagy monitorozó alkalmazások létrehozásához."
 
 msgid "Statistical metric name (string)"
-msgstr ""
+msgstr "Statisztikai metrika neve (karakterlánc)"
 
 msgid "Time period in milliseconds (integer)"
-msgstr ""
+msgstr "Időszak ezredmásodpercben (egész szám)"
 
 msgid "Result (number - average value for specified period)"
-msgstr ""
+msgstr "Eredmény (szám - átlagos érték a megadott időszakra)"
 
 msgid "Network Status Codes"
-msgstr ""
+msgstr "Hálózati Állapot Kódok"
 
 #, java-format
 msgid "The {0} field returns an integer value representing the current network connectivity status:"
-msgstr ""
+msgstr "A(z) {0} mező egy egész számot ad vissza, amely a jelenlegi hálózati kapcsolódási állapotot jelenti:"
 
 msgid "OK - Full connectivity"
-msgstr ""
+msgstr "OK - Teljes kapcsolat"
 
 msgid "TESTING - Still establishing connectivity"
-msgstr ""
+msgstr "TESZTELÉS - Még mindig kapcsolatot létesít"
 
 msgid "FIREWALLED - Behind restrictive firewall"
-msgstr ""
+msgstr "TŰZFAL - Korlátozó tűzfal mögött"
 
 msgid "HIDDEN - Router in hidden mode"
-msgstr ""
+msgstr "REJTETT - Útválasztó rejtett módban"
 
 msgid "WARN_FIREWALLED_AND_FAST - Firewalled but fast peer"
-msgstr ""
+msgstr "FIGYELMEZTETÉS_TŰZFAL ÉS_GYORS - Tűzfal mögött, de gyors társ"
 
 msgid "WARN_FIREWALLED_AND_FLOODFILL - Firewalled but floodfill"
-msgstr ""
+msgstr "FIGYELMEZTETÉS_TŰZFAL ÉS_FLOODFILL - Tűzfal mögött, de floodfill"
 
 msgid "WARN_FIREWALLED_WITH_INBOUND_TCP - Firewalled with inbound TCP"
-msgstr ""
+msgstr "FIGYELMEZTETÉS_TŰZFAL_BEJÖVŐ_TCP-VEL - Tűzfal mögött bejövő TCP-vel"
 
 msgid "WARN_FIREWALLED_WITH_UDP_DISABLED - Firewalled with UDP disabled"
-msgstr ""
+msgstr "FIGYELMEZTETÉS_TŰZFAL_UDP_LETILTVAL - Tűzfal mögött UDP letiltva"
 
 msgid "ERROR_I2CP - I2CP error"
-msgstr ""
+msgstr "HIBA_I2CP - I2CP hiba"
 
 msgid "ERROR_CLOCK_SKEW - System clock skew detected"
-msgstr ""
+msgstr "HIBA_IDŐELTOLÓDÁS - Rendszeróra-eltolódás észlelve"
 
 msgid "ERROR_PRIVATE_TCP_ADDRESS - Private TCP address configured"
-msgstr ""
+msgstr "HIBA_PRIVÁT_TCP_CÍM - Privát TCP cím konfigurálva"
 
 msgid "ERROR_SYMMETRIC_NAT - Symmetric NAT detected"
-msgstr ""
+msgstr "HIBA_SZIMMETRIKUS_NAT - Szimmetrikus NAT észlelve"
 
 msgid "ERROR_UDP_PORT_IN_USE - UDP port already in use"
-msgstr ""
+msgstr "HIBA_UDP_PORT_HASZNÁLATBAN - UDP port már használatban van"
 
 msgid "ERROR_NO_ACTIVE_PEERS_CHECK_CONNECTION_AND_FIREWALL - No active peers"
-msgstr ""
+msgstr "HIBA_NINCS_AKTÍV_TÁRS_KAPCSOLAT_ÉS_TŰZFAL_ELLENŐRZÉSE - Nincsenek aktív társak"
 
 msgid "ERROR_UDP_DISABLED_AND_TCP_UNSET - UDP disabled, TCP not configured"
-msgstr ""
+msgstr "HIBA_UDP_LETILTVA_ÉS_TCP_NINCS_BEÁLLÍTVA - UDP letiltva, TCP nincs konfigurálva"
 
 msgid "Error Codes"
-msgstr ""
+msgstr "Hibakódok"
 
 msgid "In addition to standard JSON-RPC 2.0 error codes, I2PControl provides specific error codes:"
-msgstr ""
+msgstr "A szabványos JSON-RPC 2.0 hibakódok mellett az I2PControl specifikus hibakódokat is biztosít:"
 
 msgid "JSON parse error"
-msgstr ""
+msgstr "JSON elemzési hiba"
 
 msgid "Invalid request"
-msgstr ""
+msgstr "Érvénytelen kérés"
 
 msgid "Method not found"
-msgstr ""
+msgstr "Metódus nem található"
 
 msgid "Invalid parameters"
-msgstr ""
+msgstr "Érvénytelen paraméterek"
 
 msgid "Internal error"
-msgstr ""
+msgstr "Belső hiba"
 
 msgid "Invalid password provided"
-msgstr ""
+msgstr "Érvénytelen jelszó megadva"
 
 msgid "No authentication token presented"
-msgstr ""
+msgstr "Nincs hitelesítési token bemutatva"
 
 msgid "Authentication token doesn't exist"
-msgstr ""
+msgstr "A hitelesítési token nem létezik"
 
 msgid "The provided authentication token was expired and will be removed"
-msgstr ""
+msgstr "A megadott hitelesítési token lejárt és eltávolításra kerül"
 
 msgid "The version of the I2PControl API used wasn't specified, but is required to be specified"
-msgstr ""
+msgstr "A használt I2PControl API verziója nem volt megadva, de megadása kötelező"
 
 msgid "The version of the I2PControl API specified is not supported by I2PControl"
-msgstr ""
+msgstr "A megadott I2PControl API verziót az I2PControl nem támogatja"
 
 msgid "Rate Statistics"
-msgstr ""
+msgstr "Sebesség Statisztikák"
 
 #, java-format
 msgid "For a complete list of available rate statistics, see the {0} documentation in the router console or refer to the {1} online documentation. Common rate statistics include:"
-msgstr ""
+msgstr "A rendelkezésre álló sebességstatisztikák teljes listájáért lásd a {0} dokumentációt az útválasztó konzolban, vagy tekintse meg az {1} online dokumentációt. A gyakori sebességstatisztikák a következők:"
 
 msgid "Bandwidth receive rate"
-msgstr ""
+msgstr "Sávszélesség fogadási sebesség"
 
 msgid "Bandwidth send rate"
-msgstr ""
+msgstr "Sávszélesség küldési sebesség"
 
 msgid "Active peer count"
-msgstr ""
+msgstr "Aktív társak száma"
 
 msgid "Known peer count"
-msgstr ""
+msgstr "Ismert társak száma"
 
 msgid "Tunnel test success time"
-msgstr ""
+msgstr "Alagút teszt sikeres ideje"
 
 msgid "Rate Statistics Documentation"
-msgstr ""
+msgstr "Sebesség Statisztikák Dokumentáció"
 
 #, java-format
 msgid "See the {0} documentation in the router console or refer to the {1} online documentation."
-msgstr ""
+msgstr "Lásd a {0} dokumentációt az útválasztó konzolban, vagy tekintse meg az {1} online dokumentációt."
 
 msgid "Example Usage"
-msgstr ""
+msgstr "Példa Használat"
 
 msgid "Get Router Version and Uptime:"
-msgstr ""
+msgstr "Útválasztó verzió és működési idő lekérése:"
 
 msgid "Get Current Bandwidth Usage:"
-msgstr ""
+msgstr "Jelenlegi sávszélesség-használat lekérése:"
 
 msgid "Change Bandwidth Limits:"
-msgstr ""
+msgstr "Sávszélesség korlátainak módosítása:"
 
 msgid "Graceful Restart:"
-msgstr ""
+msgstr "Türelmes újraindítás:"
 
 msgid "Security Considerations"
-msgstr ""
+msgstr "Biztonsági megfontolások"
 
 #, java-format
 msgid "Always change the default API password from {0} to a strong, unique password"
-msgstr ""
+msgstr "Mindig változtassa meg az alapértelmezett API jelszót {0}-ról egy erős, egyedi jelszóra"
 
 msgid "Consider binding I2PControl to localhost only if not accessed remotely"
-msgstr ""
+msgstr "Fontolja meg az I2PControl localhost-hoz kötését, ha nem távolról éri el"
 
 msgid "Use HTTPS when accessing I2PControl over untrusted networks"
-msgstr ""
+msgstr "Használjon HTTPS-t az I2PControl eléréséhez nem megbízható hálózatokon"
 
 msgid "Tokens may expire - implement re-authentication logic in your applications"
-msgstr ""
+msgstr "A tokenek lejárhatnak - implementáljon újrahitelesítési logikát az alkalmazásaiban"
 
 msgid "Monitor I2PControl access logs for unauthorized usage"
-msgstr ""
+msgstr "Figyelje az I2PControl hozzáférési naplókat jogosulatlan használat esetén"
 
 msgid "Be cautious with router management operations - they can affect network connectivity"
-msgstr ""
+msgstr "Legyen óvatos az útválasztó-kezelési műveletekkel - befolyásolhatják a hálózati kapcsolatot"
 
 msgid "Integration Examples"
-msgstr ""
+msgstr "Integrációs példák"
 
 msgid "The I2PControl API can be integrated with:"
-msgstr ""
+msgstr "Az I2PControl API integrálható a következőkkel:"
 
 msgid "Monitoring systems:"
-msgstr ""
+msgstr "Monitorozási rendszerek:"
 
 msgid "Create custom dashboards for router performance"
-msgstr ""
+msgstr "Egyéni irányítópultok létrehozása az útválasztó teljesítményéhez"
 
 msgid "Automation scripts:"
-msgstr ""
+msgstr "Automatizálási szkriptek:"
 
 msgid "Schedule restarts or configuration changes"
-msgstr ""
+msgstr "Ütemezze az újraindításokat vagy konfigurációs módosításokat"
 
 msgid "Mobile applications:"
-msgstr ""
+msgstr "Mobil alkalmazások:"
 
 msgid "Monitor and manage your router remotely"
-msgstr ""
+msgstr "Figyelje és kezelje az útválasztóját távolról"
 
 msgid "Network management tools:"
-msgstr ""
+msgstr "Hálózatkezelő eszközök:"
 
 msgid "Integrate I2P status into broader network monitoring"
-msgstr ""
+msgstr "Integrálja az I2P állapotot a szélesebb hálózati monitorozásba"
 
 msgid "Alerting systems:"
-msgstr ""
+msgstr "Riasztási rendszerek:"
 
 msgid "Send notifications based on router status changes"
-msgstr ""
+msgstr "Küldjön értesítéseket az útválasztó állapotváltozásai alapján"
 
 msgid "Licensing Information"
 msgstr "Licenciaszerződési információk"
@@ -7228,7 +7228,7 @@ msgid "Getting Support Online"
 msgstr "Online támogatás igénylése"
 
 msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> on I2P's internal IRC network."
-msgstr ""
+msgstr "Érdemes lehet áttekinteni az információkat az <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P weboldalon</a>, üzeneteket közzétenni az <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P vitafórumon</a>, vagy ellátogatni az I2P belső IRC hálózatának <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> vagy <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> csatornáira."
 
 msgid "Reporting Bugs"
 msgstr "Hibák bejelentése"
@@ -7976,7 +7976,7 @@ msgid "Skip Setup"
 msgstr "Beállítás kihagyása"
 
 msgid "Select the language to be used for the router console and web applications ("
-msgstr ""
+msgstr "Válassza ki az útválasztó konzol és a webalkalmazások számára használni kívánt nyelvet ("
 
 msgid "Router Console &amp; WebApps Display Language"
 msgstr "Az útválasztó konzol és a WebApps megjelenítési nyelve"

@@ -1976,7 +1976,7 @@ msgid "FAQ"
 msgstr "SSS"
 
 msgid "JSON-RPC API"
-msgstr ""
+msgstr "JSON-RPC API"
 
 msgid "Manage your I2P hosts file here (I2P domain name resolution)"
 msgstr "I2P hosts dosyasını buradan yönetin (I2P etki alanı çözümlemesi)"
@@ -2698,7 +2698,7 @@ msgid "Lookup"
 msgstr "Arama"
 
 msgid "Select the field to search on"
-msgstr ""
+msgstr "Arama yapılacak alanı seçin"
 
 msgid "e.g. cn hk"
 msgstr "örn. cn hk"
@@ -2951,7 +2951,7 @@ msgid "Maximum Transmission Unit"
 msgstr "Maksimum Aktarım Birimi"
 
 msgid "Show all routers with this MTU in the NetDb"
-msgstr ""
+msgstr "Bu MTU'ya sahip tüm yönlendiricileri NetDb'de göster"
 
 msgid "Addresses"
 msgstr "Adresler"
@@ -5684,10 +5684,10 @@ msgid "Tunnel Filtering"
 msgstr "Tünel Filtrelemesi"
 
 msgid "Console API"
-msgstr ""
+msgstr "Konsol API"
 
 msgid "JSONRPC"
-msgstr ""
+msgstr "JSONRPC"
 
 msgid "New User Guide"
 msgstr "Yeni Kullanıcı Kılavuzu"
@@ -6173,7 +6173,7 @@ msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP a
 msgstr "Örnek: Hem localhost hem de 192.168.1.10'dan HTTP ve HTTPS üzerinden erişime izin vermek için:"
 
 msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager's configuration section using the <i>reachable by</i> dropdown."
-msgstr ""
+msgstr "Çoğu istemci hizmeti için, Tünel Yöneticisi'nin yapılandırma bölümünde ilgili hizmetin dinleme adresini <i>ulaşılabilir olan</i> açılır menüsünü kullanarak değiştirin."
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "I2P içinde IRC'ye nasıl bağlanırım?"
@@ -6608,10 +6608,10 @@ msgid "An introduction to tunnel access lists"
 msgstr "Tünel erişim listelerine giriş"
 
 msgid "I2PControl API"
-msgstr ""
+msgstr "I2PControl API"
 
 msgid "JSON-RPC API for remote router control and monitoring"
-msgstr ""
+msgstr "Uzak yönlendirici denetimi ve izleme için JSON-RPC API"
 
 msgid "Information about the sidebar, network status messages, and theme overrides"
 msgstr "Kenar çubuğu, ağ durumu mesajları ve tema geçersiz kılma hakkında bilgi"
@@ -6620,429 +6620,429 @@ msgid "Webhosting on I2P"
 msgstr "I2P'de Web barındırma"
 
 msgid "I2PControl JSON-RPC API"
-msgstr ""
+msgstr "I2PControl JSON-RPC API"
 
 msgid "I2PControl provides a JSON-RPC 2.0 interface for remote control and monitoring of your I2P router. This allows external applications to programmatically manage I2P settings, retrieve status information, and control router operations through standardized HTTP requests."
-msgstr ""
+msgstr "I2PControl, I2P yönlendiricinizin uzaktan kontrolü ve izlenmesi için bir JSON-RPC 2.0 arayüzü sağlar. Bu, dış uygulamaların I2P ayarlarını programatik olarak yönetmesine, durum bilgilerini almasına ve standartlaştırılmış HTTP istekleri aracılığıyla yönlendirici işlemlerini kontrol etmesine olanak tanır."
 
 #, java-format
 msgid "I2PControl is a JSON-RPC 2.0 interface for remote control and monitoring of your I2P router. It listens on {0} by default when enabled for security reasons and must be enabled through the {1}."
-msgstr ""
+msgstr "I2PControl, I2P yönlendiricinizin uzaktan kontrolü ve izlenmesi için bir JSON-RPC 2.0 arayüzüdür. Güvenlik nedeniyle etkinleştirildiğinde varsayılan olarak {0} üzerinde dinler ve {1} üzerinden etkinleştirilmelidir."
 
 msgid "Web Apps configuration page"
-msgstr ""
+msgstr "Web Uygulamaları yapılandırma sayfası"
 
 msgid "Authentication"
-msgstr ""
+msgstr "Kimlik doğrulama"
 
 msgid "All API operations (except for authentication itself) require a valid authentication token. To obtain a token, you must first authenticate with your configured password:"
-msgstr ""
+msgstr "Tüm API işlemleri (kendisi olan kimlik doğrulama hariç) geçerli bir kimlik doğrulama belirteci gerektirir. Bir belirteç almak için önce yapılandırılmış parolanızla kimlik doğrulaması yapmalısınız:"
 
 msgid "The returned token must be included in either the 'Token' parameter or as an 'X-Auth-Token' HTTP header in all subsequent API calls."
-msgstr ""
+msgstr "Döndürülen belirteç, sonraki tüm API çağrılarında ya 'Token' parametresinde ya da 'X-Auth-Token' HTTP başlığında yer almalıdır."
 
 msgid "API Version: 1. Clients must specify API version 1 in authentication requests for compatibility."
-msgstr ""
+msgstr "API Sürümü: 1. İstemciler uyumluluk için kimlik doğrulama isteklerinde API sürümü 1'i belirtmelidir."
 
 msgid "API Methods"
-msgstr ""
+msgstr "API Yöntemleri"
 
 msgid "Authenticates with the I2PControl service and returns an authentication token for subsequent API calls."
-msgstr ""
+msgstr "I2PControl hizmetiyle kimlik doğrulaması yapar ve sonraki API çağrıları için bir kimlik doğrulama belirteci döndürür."
 
 msgid "Parameters:"
-msgstr ""
+msgstr "Parametreler:"
 
 msgid "Password (string), API (integer, must be 1)"
-msgstr ""
+msgstr "Parola (dizgi), API (tamsayı, 1 olmalı)"
 
 msgid "Returns:"
-msgstr ""
+msgstr "Döndürülenler:"
 
 msgid "Token (string), API (integer)"
-msgstr ""
+msgstr "Belirteç (dizgi), API (tamsayı)"
 
 msgid "Authentication:"
-msgstr ""
+msgstr "Kimlik doğrulama:"
 
 msgid "None (this is the unauthenticated method)"
-msgstr ""
+msgstr "Hiçbiri (bu kimlik doğrulamasız yöntemdir)"
 
 msgid "A simple test method that returns the provided string. Useful for testing API connectivity and authentication."
-msgstr ""
+msgstr "Sağlanan dizgiyi döndüren basit bir test yöntemi. API bağlantısı ve kimlik doğrulamasını test etmek için kullanışlıdır."
 
 msgid "Echo (string)"
-msgstr ""
+msgstr "Yankı (dizgi)"
 
 msgid "Result (string - echoed input)"
-msgstr ""
+msgstr "Sonuç (dizgi - yankılanan girdi)"
 
 msgid "Required"
-msgstr ""
+msgstr "Gerekli"
 
 msgid "Retrieves read-only status information about the I2P router. Each parameter is optional - include only the metrics you need."
-msgstr ""
+msgstr "I2P yönlendiricisi hakkında salt okunur durum bilgilerini alır. Her parametre isteğe bağlıdır - yalnızca ihtiyacınız olan ölçümleri ekleyin."
 
 msgid "Any combination of:"
-msgstr ""
+msgstr "Herhangi bir birleşim:"
 
 msgid "Router version"
-msgstr ""
+msgstr "Yönlendirici sürümü"
 
 msgid "Router uptime in milliseconds"
-msgstr ""
+msgstr "Yönlendirici çalışma süresi (milisaniye)"
 
 msgid "Current router status"
-msgstr ""
+msgstr "Mevcut yönlendirici durumu"
 
 msgid "Network status (0-14)"
-msgstr ""
+msgstr "Ağ durumu (0-14)"
 
 msgid "1-second average inbound bandwidth (Bps)"
-msgstr ""
+msgstr "1 saniyelik ortalama gelen bant genişliği (B/s)"
 
 msgid "1-second average outbound bandwidth (Bps)"
-msgstr ""
+msgstr "1 saniyelik ortalama giden bant genişliği (B/s)"
 
 msgid "15-second average inbound bandwidth (Bps)"
-msgstr ""
+msgstr "15 saniyelik ortalama gelen bant genişliği (B/s)"
 
 msgid "15-second average outbound bandwidth (Bps)"
-msgstr ""
+msgstr "15 saniyelik ortalama giden bant genişliği (B/s)"
 
 msgid "Number of participating tunnels"
-msgstr ""
+msgstr "Katılımcı tünel sayısı"
 
 msgid "Number of known peers"
-msgstr ""
+msgstr "Bilinen eş sayısı"
 
 msgid "Number of active peers"
-msgstr ""
+msgstr "Aktif eş sayısı"
 
 msgid "Number of fast peers"
-msgstr ""
+msgstr "Hızlı eş sayısı"
 
 msgid "Number of high-capacity peers"
-msgstr ""
+msgstr "Yüksek kapasiteli eş sayısı"
 
 msgid "Whether reseed is in progress"
-msgstr ""
+msgstr "Yeniden tohumlama devam ediyor mu"
 
 msgid "Requested metrics with their current values"
-msgstr ""
+msgstr "İstenen ölçümler ve güncel değerleri"
 
 msgid "Controls router lifecycle and management operations. Each operation is optional and executes asynchronously."
-msgstr ""
+msgstr "Yönlendirici yaşam döngüsü ve yönetim işlemlerini kontrol eder. Her işlem isteğe bağlıdır ve eşzamansız olarak yürütülür."
 
 msgid "Graceful restart/shutdown"
-msgstr ""
+msgstr "Uygun yeniden başlatma/kapatma"
 
 msgid "Immediate hard shutdown"
-msgstr ""
+msgstr "Anında sert kapatma"
 
 msgid "Immediate hard restart"
-msgstr ""
+msgstr "Anında sert yeniden başlatma"
 
 msgid "Graceful shutdown (waits for tunnels)"
-msgstr ""
+msgstr "Uygun kapatma (tünelleri bekler)"
 
 msgid "Graceful restart (waits for tunnels)"
-msgstr ""
+msgstr "Uygun yeniden başlatma (tünelleri bekler)"
 
 msgid "Trigger router reseeding"
-msgstr ""
+msgstr "Yönlendirici yeniden tohumlamasını tetikle"
 
 msgid "Check for available updates"
-msgstr ""
+msgstr "Mevcut güncellemeleri denetle"
 
 msgid "Install available updates"
-msgstr ""
+msgstr "Mevcut güncellemeleri yükle"
 
 msgid "Confirmation of operation (null for most operations, result status for FindUpdates/Update)"
-msgstr ""
+msgstr "İşlem onayı (çoğu işlem için null, FindUpdates/Güncelleme için sonuç durumu)"
 
 msgid "Manages router network configuration. Parameters can be used to either set values (if provided) or retrieve current values (if null/omitted)."
-msgstr ""
+msgstr "Yönlendirici ağ yapılandırmasını yönetir. Parametreler, değerleri ayarlamak (sağlanırsa) veya güncel değerleri almak (null/çalınırsa) için kullanılabilir."
 
 msgid "NTCP Transport Settings:"
-msgstr ""
+msgstr "NTCP Aktarım Ayarları:"
 
 msgid "NTCP port (1-65535)"
-msgstr ""
+msgstr "NTCP port (1-65535)"
 
 msgid "NTCP hostname"
-msgstr ""
+msgstr "NTCP ana bilgisayar adı"
 
 msgid "Auto IP setting"
-msgstr ""
+msgstr "Otomatik IP ayarı"
 
 msgid "SSU Transport Settings:"
-msgstr ""
+msgstr "SSU Aktarım Ayarları:"
 
 msgid "SSU port (1-65535)"
-msgstr ""
+msgstr "SSU port (1-65535)"
 
 msgid "SSU hostname"
-msgstr ""
+msgstr "SSU ana bilgisayar adı"
 
 msgid "IP source detection"
-msgstr ""
+msgstr "IP kaynak algılama"
 
 msgid "Read-only detected IP address"
-msgstr ""
+msgstr "Salt okunur algılanan IP adresi"
 
 msgid "Network Settings:"
-msgstr ""
+msgstr "Ağ Ayarları:"
 
 msgid "UPnP enabled/disabled"
-msgstr ""
+msgstr "UPnP etkin/devre dışı"
 
 msgid "Laptop mode setting"
-msgstr ""
+msgstr "Dizüstü kipi ayarı"
 
 msgid "Bandwidth Settings:"
-msgstr ""
+msgstr "Bant Genişliği Ayarları:"
 
 msgid "Bandwidth share percentage (0-100)"
-msgstr ""
+msgstr "Bant genişliği paylaşım yüzdesi (0-100)"
 
 msgid "Inbound bandwidth limit (Bps)"
-msgstr ""
+msgstr "Gelen bant genişliği sınırı (B/s)"
 
 msgid "Outbound bandwidth limit (Bps)"
-msgstr ""
+msgstr "Giden bant genişliği sınırı (B/s)"
 
 msgid "SettingsSaved (boolean), RestartNeeded (boolean), plus current values for queried settings"
-msgstr ""
+msgstr "AyarlarKaydedildi (mantıksal), YenidenBaşlatmaGerekli (mantıksal), artı sorgulanan ayarlar için güncel değerler"
 
 msgid "Manages I2PControl service settings including password, port, and restart configuration."
-msgstr ""
+msgstr "Parola, port ve yeniden başlatma yapılandırması dahil I2PControl hizmeti ayarlarını yönetir."
 
 msgid "Listen address (string, e.g., 127.0.0.1)"
-msgstr ""
+msgstr "Dinleme adresi (dizgi, örn. 127.0.0.1)"
 
 msgid "New password (string)"
-msgstr ""
+msgstr "Yeni parola (dizgi)"
 
 msgid "Listen port (integer, 1-65535)"
-msgstr ""
+msgstr "Dinleme portu (tamsayı, 1-65535)"
 
 msgid "SettingsSaved (boolean), RestartNeeded (boolean), current values for requested settings"
-msgstr ""
+msgstr "AyarlarKaydedildi (mantıksal), YenidenBaşlatmaGerekli (mantıksal), istenen ayarlar için güncel değerler"
 
 msgid "Access and modify advanced I2P router configuration settings."
-msgstr ""
+msgstr "Gelişmiş I2P yönlendirici yapılandırma ayarlarına erişin ve değiştirin."
 
 msgid "Key-value pairs of advanced settings"
-msgstr ""
+msgstr "Gelişmiş ayarların anahtar-değer çiftleri"
 
 msgid "Updated settings values"
-msgstr ""
+msgstr "Güncellenmiş ayar değerleri"
 
 msgid "Retrieves statistical rate data from router for monitoring and analysis. Useful for creating custom graphs or monitoring applications."
-msgstr ""
+msgstr "İzleme ve analiz için yönlendiriciden istatistiksel oran verilerini alır. Özel grafikler veya izleme uygulamaları oluşturmak için kullanışlıdır."
 
 msgid "Statistical metric name (string)"
-msgstr ""
+msgstr "İstatistiksel ölçüm adı (dizgi)"
 
 msgid "Time period in milliseconds (integer)"
-msgstr ""
+msgstr "Milisaniye cinsinden zaman aralığı (tamsayı)"
 
 msgid "Result (number - average value for specified period)"
-msgstr ""
+msgstr "Sonuç (sayı - belirtilen dönem için ortalama değer)"
 
 msgid "Network Status Codes"
-msgstr ""
+msgstr "Ağ Durum Kodları"
 
 #, java-format
 msgid "The {0} field returns an integer value representing the current network connectivity status:"
-msgstr ""
+msgstr "{0} alanı, mevcut ağ bağlantı durumunu temsil eden bir tamsayı değeri döndürür:"
 
 msgid "OK - Full connectivity"
-msgstr ""
+msgstr "TAMAM - Tam bağlantı"
 
 msgid "TESTING - Still establishing connectivity"
-msgstr ""
+msgstr "TEST EDİLİYOR - Hâlâ bağlantı kuruluyor"
 
 msgid "FIREWALLED - Behind restrictive firewall"
-msgstr ""
+msgstr "GÜVENLİK DUVARINDA - Kısıtlayıcı güvenlik duvarının arkasında"
 
 msgid "HIDDEN - Router in hidden mode"
-msgstr ""
+msgstr "GİZLİ - Yönlendirici gizli kipte"
 
 msgid "WARN_FIREWALLED_AND_FAST - Firewalled but fast peer"
-msgstr ""
+msgstr "UYARI_GÜVENLİK DUVARI_VE_HIZLI - Güvenlik duvarında ama hızlı eş"
 
 msgid "WARN_FIREWALLED_AND_FLOODFILL - Firewalled but floodfill"
-msgstr ""
+msgstr "UYARI_GÜVENLİK DUVARI_VE_TAŞKIN - Güvenlik duvarında ama taşkın"
 
 msgid "WARN_FIREWALLED_WITH_INBOUND_TCP - Firewalled with inbound TCP"
-msgstr ""
+msgstr "UYARI_GÜVENLİK DUVARI_GELEN TCP İLE - Güvenlik duvarında gelen TCP ile"
 
 msgid "WARN_FIREWALLED_WITH_UDP_DISABLED - Firewalled with UDP disabled"
-msgstr ""
+msgstr "UYARI_GÜVENLİK DUVARI_UDP DEVRE DIŞI İLE - Güvenlik duvarında UDP devre dışı ile"
 
 msgid "ERROR_I2CP - I2CP error"
-msgstr ""
+msgstr "HATA_I2CP - I2CP hatası"
 
 msgid "ERROR_CLOCK_SKEW - System clock skew detected"
-msgstr ""
+msgstr "HATA_SAAT KAYMASI - Sistem saati kayması algılandı"
 
 msgid "ERROR_PRIVATE_TCP_ADDRESS - Private TCP address configured"
-msgstr ""
+msgstr "HATA_ÖZEL TCP ADRESİ - Özel TCP adresi yapılandırıldı"
 
 msgid "ERROR_SYMMETRIC_NAT - Symmetric NAT detected"
-msgstr ""
+msgstr "HATA_SİMETRİK NAT - Simetrik NAT algılandı"
 
 msgid "ERROR_UDP_PORT_IN_USE - UDP port already in use"
-msgstr ""
+msgstr "HATA_UDP PORT KULLANIMDA - UDP portu zaten kullanımda"
 
 msgid "ERROR_NO_ACTIVE_PEERS_CHECK_CONNECTION_AND_FIREWALL - No active peers"
-msgstr ""
+msgstr "HATA_AKTİF EŞ YOK_BAĞLANTI VE GÜVENLİK DUVARINI KONTROL ET - Aktif eş yok"
 
 msgid "ERROR_UDP_DISABLED_AND_TCP_UNSET - UDP disabled, TCP not configured"
-msgstr ""
+msgstr "HATA_UDP DEVRE DIŞI VE TCP AYARLANMAMIŞ - UDP devre dışı, TCP yapılandırılmamış"
 
 msgid "Error Codes"
-msgstr ""
+msgstr "Hata Kodları"
 
 msgid "In addition to standard JSON-RPC 2.0 error codes, I2PControl provides specific error codes:"
-msgstr ""
+msgstr "Standart JSON-RPC 2.0 hata kodlarına ek olarak, I2PControl belirli hata kodları sağlar:"
 
 msgid "JSON parse error"
-msgstr ""
+msgstr "JSON ayrıştırma hatası"
 
 msgid "Invalid request"
-msgstr ""
+msgstr "Geçersiz istek"
 
 msgid "Method not found"
-msgstr ""
+msgstr "Yöntem bulunamadı"
 
 msgid "Invalid parameters"
-msgstr ""
+msgstr "Geçersiz parametreler"
 
 msgid "Internal error"
-msgstr ""
+msgstr "İç hata"
 
 msgid "Invalid password provided"
-msgstr ""
+msgstr "Geçersiz parola sağlandı"
 
 msgid "No authentication token presented"
-msgstr ""
+msgstr "Kimlik doğrulama belirteci sunulmadı"
 
 msgid "Authentication token doesn't exist"
-msgstr ""
+msgstr "Kimlik doğrulama belirteci mevcut değil"
 
 msgid "The provided authentication token was expired and will be removed"
-msgstr ""
+msgstr "Sağlanan kimlik doğrulama belirtecinin süresi doldu ve kaldırılacak"
 
 msgid "The version of the I2PControl API used wasn't specified, but is required to be specified"
-msgstr ""
+msgstr "Kullanılan I2PControl API sürümü belirtilmedi, ancak belirtilmesi gerekiyor"
 
 msgid "The version of the I2PControl API specified is not supported by I2PControl"
-msgstr ""
+msgstr "Belirtilen I2PControl API sürümü I2PControl tarafından desteklenmiyor"
 
 msgid "Rate Statistics"
-msgstr ""
+msgstr "Oran İstatistikleri"
 
 #, java-format
 msgid "For a complete list of available rate statistics, see the {0} documentation in the router console or refer to the {1} online documentation. Common rate statistics include:"
-msgstr ""
+msgstr "Mevcut oran istatistiklerinin tam listesi için yönlendirici konsolundaki {0} belgelerine bakın veya {1} çevrimiçi belgelerine başvurun. Yaygın oran istatistikleri şunlardır:"
 
 msgid "Bandwidth receive rate"
-msgstr ""
+msgstr "Bant genişliği alma oranı"
 
 msgid "Bandwidth send rate"
-msgstr ""
+msgstr "Bant genişliği gönderme oranı"
 
 msgid "Active peer count"
-msgstr ""
+msgstr "Aktif eş sayısı"
 
 msgid "Known peer count"
-msgstr ""
+msgstr "Bilinen eş sayısı"
 
 msgid "Tunnel test success time"
-msgstr ""
+msgstr "Tünel test başarı süresi"
 
 msgid "Rate Statistics Documentation"
-msgstr ""
+msgstr "Oran İstatistikleri Belgeleri"
 
 #, java-format
 msgid "See the {0} documentation in the router console or refer to the {1} online documentation."
-msgstr ""
+msgstr "Yönlendirici konsolundaki {0} belgelerine bakın veya {1} çevrimiçi belgelerine başvurun."
 
 msgid "Example Usage"
-msgstr ""
+msgstr "Örnek Kullanım"
 
 msgid "Get Router Version and Uptime:"
-msgstr ""
+msgstr "Yönlendirici Sürümü ve Çalışma Süresini Al:"
 
 msgid "Get Current Bandwidth Usage:"
-msgstr ""
+msgstr "Mevcut Bant Genişliği Kullanımını Al:"
 
 msgid "Change Bandwidth Limits:"
-msgstr ""
+msgstr "Bant Genişliği Sınırlarını Değiştir:"
 
 msgid "Graceful Restart:"
-msgstr ""
+msgstr "Uygun Yeniden Başlatma:"
 
 msgid "Security Considerations"
-msgstr ""
+msgstr "Güvenlik Değerlendirmeleri"
 
 #, java-format
 msgid "Always change the default API password from {0} to a strong, unique password"
-msgstr ""
+msgstr "Her zaman varsayılan API parolasını {0} güçlü, benzersiz bir parolaya değiştirin"
 
 msgid "Consider binding I2PControl to localhost only if not accessed remotely"
-msgstr ""
+msgstr "Uzaktan erişilmiyorsa I2PControl'i yalnızca localhost'a bağlamayı düşünün"
 
 msgid "Use HTTPS when accessing I2PControl over untrusted networks"
-msgstr ""
+msgstr "Güvenilmeyen ağlardan I2PControl'e erişirken HTTPS kullanın"
 
 msgid "Tokens may expire - implement re-authentication logic in your applications"
-msgstr ""
+msgstr "Belirteçlerin süresi dolabilir - uygulamalarınızda yeniden kimlik doğrulama mantığı uygulayın"
 
 msgid "Monitor I2PControl access logs for unauthorized usage"
-msgstr ""
+msgstr "Yetkisiz kullanım için I2PControl erişim günlüklerini izleyin"
 
 msgid "Be cautious with router management operations - they can affect network connectivity"
-msgstr ""
+msgstr "Yönlendirici yönetim işlemlerinde dikkatli olun - ağ bağlantısını etkileyebilirler"
 
 msgid "Integration Examples"
-msgstr ""
+msgstr "Entegrasyon Örnekleri"
 
 msgid "The I2PControl API can be integrated with:"
-msgstr ""
+msgstr "I2PControl API şunlarla entegre edilebilir:"
 
 msgid "Monitoring systems:"
-msgstr ""
+msgstr "İzleme sistemleri:"
 
 msgid "Create custom dashboards for router performance"
-msgstr ""
+msgstr "Yönlendirici performansı için özel kontrol panelleri oluşturun"
 
 msgid "Automation scripts:"
-msgstr ""
+msgstr "Otomasyon betikleri:"
 
 msgid "Schedule restarts or configuration changes"
-msgstr ""
+msgstr "Yeniden başlatmaları veya yapılandırma değişikliklerini planlayın"
 
 msgid "Mobile applications:"
-msgstr ""
+msgstr "Mobil uygulamalar:"
 
 msgid "Monitor and manage your router remotely"
-msgstr ""
+msgstr "Yönlendiricinizi uzaktan izleyin ve yönetin"
 
 msgid "Network management tools:"
-msgstr ""
+msgstr "Ağ yönetim araçları:"
 
 msgid "Integrate I2P status into broader network monitoring"
-msgstr ""
+msgstr "I2P durumunu daha geniş ağ izlemeye entegre edin"
 
 msgid "Alerting systems:"
-msgstr ""
+msgstr "Uyarı sistemleri:"
 
 msgid "Send notifications based on router status changes"
-msgstr ""
+msgstr "Yönlendirici durum değişikliklerine göre bildirimler gönderin"
 
 msgid "Licensing Information"
 msgstr "Lisans Bilgisi"
@@ -7976,7 +7976,7 @@ msgid "Skip Setup"
 msgstr "Kurulumu Atla"
 
 msgid "Select the language to be used for the router console and web applications ("
-msgstr ""
+msgstr "Yönlendirici konsolu ve web uygulamaları için kullanılacak dili seçin ("
 
 msgid "Router Console &amp; WebApps Display Language"
 msgstr "Yönlendirici Konsolu ve WebApps Görüntü Dili"

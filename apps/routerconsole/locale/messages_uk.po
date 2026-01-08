@@ -1984,7 +1984,7 @@ msgid "FAQ"
 msgstr "FAQ"
 
 msgid "JSON-RPC API"
-msgstr ""
+msgstr "JSON-RPC API"
 
 msgid "Manage your I2P hosts file here (I2P domain name resolution)"
 msgstr "Керуйте файлом хостів I2P тут (розділення імені домену I2P)"
@@ -2706,7 +2706,7 @@ msgid "Lookup"
 msgstr "Пошук"
 
 msgid "Select the field to search on"
-msgstr ""
+msgstr "Виберіть поле для пошуку"
 
 msgid "e.g. cn hk"
 msgstr "наприклад cn hk"
@@ -2959,7 +2959,7 @@ msgid "Maximum Transmission Unit"
 msgstr "Максимальна одиниця передачі"
 
 msgid "Show all routers with this MTU in the NetDb"
-msgstr ""
+msgstr "Показати всі маршрутизатори з цим MTU в NetDb"
 
 msgid "Addresses"
 msgstr "Адреси"
@@ -5702,10 +5702,10 @@ msgid "Tunnel Filtering"
 msgstr "Тунельна фільтрація"
 
 msgid "Console API"
-msgstr ""
+msgstr "API консолі"
 
 msgid "JSONRPC"
-msgstr ""
+msgstr "JSONRPC"
 
 msgid "New User Guide"
 msgstr "Новий посібник користувача"
@@ -6191,7 +6191,7 @@ msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP a
 msgstr "Приклад: Щоб дозволити доступ з localhost та 192.168.1.10 через HTTP та HTTPS:"
 
 msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager's configuration section using the <i>reachable by</i> dropdown."
-msgstr ""
+msgstr "Для більшості клієнтських сервісів змініть адресу прослуховування для відповідного сервісу в розділі конфігурації Менеджера тунелів, використовуючи випадаючий список <i>доступний для</i>."
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "Як підключитися до IRC всередині I2P?"
@@ -6626,10 +6626,10 @@ msgid "An introduction to tunnel access lists"
 msgstr "Вступ до списків доступу до тунелів"
 
 msgid "I2PControl API"
-msgstr ""
+msgstr "I2PControl API"
 
 msgid "JSON-RPC API for remote router control and monitoring"
-msgstr ""
+msgstr "JSON-RPC API для віддаленого керування та моніторингу маршрутизатора"
 
 msgid "Information about the sidebar, network status messages, and theme overrides"
 msgstr "Інформація про бічну панель, повідомлення про стан мережі та переосмислення теми"
@@ -6638,429 +6638,429 @@ msgid "Webhosting on I2P"
 msgstr "Веб -хостинг на i2p"
 
 msgid "I2PControl JSON-RPC API"
-msgstr ""
+msgstr "I2PControl JSON-RPC API"
 
 msgid "I2PControl provides a JSON-RPC 2.0 interface for remote control and monitoring of your I2P router. This allows external applications to programmatically manage I2P settings, retrieve status information, and control router operations through standardized HTTP requests."
-msgstr ""
+msgstr "I2PControl надає інтерфейс JSON-RPC 2.0 для віддаленого керування та моніторингу вашого маршрутизатора I2P. Це дозволяє зовнішнім програмам програмно керувати налаштуваннями I2P, отримувати інформацію про стан та контролювати операції маршрутизатора через стандартизовані HTTP-запити."
 
 #, java-format
 msgid "I2PControl is a JSON-RPC 2.0 interface for remote control and monitoring of your I2P router. It listens on {0} by default when enabled for security reasons and must be enabled through the {1}."
-msgstr ""
+msgstr "I2PControl - це інтерфейс JSON-RPC 2.0 для віддаленого керування та моніторингу вашого маршрутизатора I2P. Він прослуховує {0} за замовчуванням з міркувань безпеки та має бути увімкнений через {1}."
 
 msgid "Web Apps configuration page"
-msgstr ""
+msgstr "Сторінка конфігурації веб-додатків"
 
 msgid "Authentication"
-msgstr ""
+msgstr "Автентифікація"
 
 msgid "All API operations (except for authentication itself) require a valid authentication token. To obtain a token, you must first authenticate with your configured password:"
-msgstr ""
+msgstr "Всі операції API (крім самої автентифікації) вимагають дійсного токена автентифікації. Щоб отримати токен, спочатку потрібно пройти автентифікацію за допомогою налаштованого пароля:"
 
 msgid "The returned token must be included in either the 'Token' parameter or as an 'X-Auth-Token' HTTP header in all subsequent API calls."
-msgstr ""
+msgstr "Отриманий токен повинен бути включений або в параметр 'Token', або як HTTP-заголовок 'X-Auth-Token' у всіх наступних викликах API."
 
 msgid "API Version: 1. Clients must specify API version 1 in authentication requests for compatibility."
-msgstr ""
+msgstr "Версія API: 1. Клієнти повинні вказувати версію API 1 в запитах автентифікації для сумісності."
 
 msgid "API Methods"
-msgstr ""
+msgstr "Методи API"
 
 msgid "Authenticates with the I2PControl service and returns an authentication token for subsequent API calls."
-msgstr ""
+msgstr "Автентифікується з сервісом I2PControl та повертає токен автентифікації для наступних викликів API."
 
 msgid "Parameters:"
-msgstr ""
+msgstr "Параметри:"
 
 msgid "Password (string), API (integer, must be 1)"
-msgstr ""
+msgstr "Пароль (рядок), API (ціле число, має бути 1)"
 
 msgid "Returns:"
-msgstr ""
+msgstr "Повертає:"
 
 msgid "Token (string), API (integer)"
-msgstr ""
+msgstr "Токен (рядок), API (ціле число)"
 
 msgid "Authentication:"
-msgstr ""
+msgstr "Автентифікація:"
 
 msgid "None (this is the unauthenticated method)"
-msgstr ""
+msgstr "Немає (це неавтентифікований метод)"
 
 msgid "A simple test method that returns the provided string. Useful for testing API connectivity and authentication."
-msgstr ""
+msgstr "Простий тестовий метод, який повертає наданий рядок. Корисно для тестування підключення API та автентифікації."
 
 msgid "Echo (string)"
-msgstr ""
+msgstr "Ехо (рядок)"
 
 msgid "Result (string - echoed input)"
-msgstr ""
+msgstr "Результат (рядок - вхідне ехо)"
 
 msgid "Required"
-msgstr ""
+msgstr "Обов'язково"
 
 msgid "Retrieves read-only status information about the I2P router. Each parameter is optional - include only the metrics you need."
-msgstr ""
+msgstr "Отримує інформацію про стан маршрутизатора I2P лише для читання. Кожен параметр є необов'язковим - включайте лише потрібні вам метрики."
 
 msgid "Any combination of:"
-msgstr ""
+msgstr "Будь-яка комбінація з:"
 
 msgid "Router version"
-msgstr ""
+msgstr "Версія маршрутизатора"
 
 msgid "Router uptime in milliseconds"
-msgstr ""
+msgstr "Час роботи маршрутизатора в мілісекундах"
 
 msgid "Current router status"
-msgstr ""
+msgstr "Поточний стан маршрутизатора"
 
 msgid "Network status (0-14)"
-msgstr ""
+msgstr "Стан мережі (0-14)"
 
 msgid "1-second average inbound bandwidth (Bps)"
-msgstr ""
+msgstr "Середня вхідна пропускна здатність за 1 секунду (Б/с)"
 
 msgid "1-second average outbound bandwidth (Bps)"
-msgstr ""
+msgstr "Середня вихідна пропускна здатність за 1 секунду (Б/с)"
 
 msgid "15-second average inbound bandwidth (Bps)"
-msgstr ""
+msgstr "Середня вхідна пропускна здатність за 15 секунд (Б/с)"
 
 msgid "15-second average outbound bandwidth (Bps)"
-msgstr ""
+msgstr "Середня вихідна пропускна здатність за 15 секунд (Б/с)"
 
 msgid "Number of participating tunnels"
-msgstr ""
+msgstr "Кількість тунелів, що беруть участь"
 
 msgid "Number of known peers"
-msgstr ""
+msgstr "Кількість відомих пірів"
 
 msgid "Number of active peers"
-msgstr ""
+msgstr "Кількість активних пірів"
 
 msgid "Number of fast peers"
-msgstr ""
+msgstr "Кількість швидких пірів"
 
 msgid "Number of high-capacity peers"
-msgstr ""
+msgstr "Кількість високопродуктивних пірів"
 
 msgid "Whether reseed is in progress"
-msgstr ""
+msgstr "Чи триває перенасіння"
 
 msgid "Requested metrics with their current values"
-msgstr ""
+msgstr "Запитані метрики з їх поточними значеннями"
 
 msgid "Controls router lifecycle and management operations. Each operation is optional and executes asynchronously."
-msgstr ""
+msgstr "Керує життєвим циклом маршрутизатора та операціями керування. Кожна операція є необов'язковою та виконується асинхронно."
 
 msgid "Graceful restart/shutdown"
-msgstr ""
+msgstr "Коректний перезапуск/вимкнення"
 
 msgid "Immediate hard shutdown"
-msgstr ""
+msgstr "Негайне жорстке вимкнення"
 
 msgid "Immediate hard restart"
-msgstr ""
+msgstr "Негайний жорсткий перезапуск"
 
 msgid "Graceful shutdown (waits for tunnels)"
-msgstr ""
+msgstr "Коректне вимкнення (чекає на тунелі)"
 
 msgid "Graceful restart (waits for tunnels)"
-msgstr ""
+msgstr "Коректний перезапуск (чекає на тунелі)"
 
 msgid "Trigger router reseeding"
-msgstr ""
+msgstr "Запустити перенасіння маршрутизатора"
 
 msgid "Check for available updates"
-msgstr ""
+msgstr "Перевірити наявність оновлень"
 
 msgid "Install available updates"
-msgstr ""
+msgstr "Встановити доступні оновлення"
 
 msgid "Confirmation of operation (null for most operations, result status for FindUpdates/Update)"
-msgstr ""
+msgstr "Підтвердження операції (null для більшості операцій, статус результату для FindUpdates/Update)"
 
 msgid "Manages router network configuration. Parameters can be used to either set values (if provided) or retrieve current values (if null/omitted)."
-msgstr ""
+msgstr "Керує конфігурацією мережі маршрутизатора. Параметри можуть використовуватися для встановлення значень (якщо надано) або отримання поточних значень (якщо null/опущено)."
 
 msgid "NTCP Transport Settings:"
-msgstr ""
+msgstr "Налаштування транспорту NTCP:"
 
 msgid "NTCP port (1-65535)"
-msgstr ""
+msgstr "Порт NTCP (1-65535)"
 
 msgid "NTCP hostname"
-msgstr ""
+msgstr "Ім'я хоста NTCP"
 
 msgid "Auto IP setting"
-msgstr ""
+msgstr "Автоматичне налаштування IP"
 
 msgid "SSU Transport Settings:"
-msgstr ""
+msgstr "Налаштування транспорту SSU:"
 
 msgid "SSU port (1-65535)"
-msgstr ""
+msgstr "Порт SSU (1-65535)"
 
 msgid "SSU hostname"
-msgstr ""
+msgstr "Ім'я хоста SSU"
 
 msgid "IP source detection"
-msgstr ""
+msgstr "Визначення джерела IP"
 
 msgid "Read-only detected IP address"
-msgstr ""
+msgstr "Виявлена IP-адреса лише для читання"
 
 msgid "Network Settings:"
-msgstr ""
+msgstr "Налаштування мережі:"
 
 msgid "UPnP enabled/disabled"
-msgstr ""
+msgstr "UPnP увімкнено/вимкнено"
 
 msgid "Laptop mode setting"
-msgstr ""
+msgstr "Налаштування режиму ноутбука"
 
 msgid "Bandwidth Settings:"
-msgstr ""
+msgstr "Налаштування пропускної здатності:"
 
 msgid "Bandwidth share percentage (0-100)"
-msgstr ""
+msgstr "Відсоток частки пропускної здатності (0-100)"
 
 msgid "Inbound bandwidth limit (Bps)"
-msgstr ""
+msgstr "Ліміт вхідної пропускної здатності (Б/с)"
 
 msgid "Outbound bandwidth limit (Bps)"
-msgstr ""
+msgstr "Ліміт вихідної пропускної здатності (Б/с)"
 
 msgid "SettingsSaved (boolean), RestartNeeded (boolean), plus current values for queried settings"
-msgstr ""
+msgstr "SettingsSaved (логічне), RestartNeeded (логічне), плюс поточні значення для запитаних налаштувань"
 
 msgid "Manages I2PControl service settings including password, port, and restart configuration."
-msgstr ""
+msgstr "Керує налаштуваннями сервісу I2PControl, включаючи пароль, порт та конфігурацію перезапуску."
 
 msgid "Listen address (string, e.g., 127.0.0.1)"
-msgstr ""
+msgstr "Адреса прослуховування (рядок, напр. 127.0.0.1)"
 
 msgid "New password (string)"
-msgstr ""
+msgstr "Новий пароль (рядок)"
 
 msgid "Listen port (integer, 1-65535)"
-msgstr ""
+msgstr "Порт прослуховування (ціле число, 1-65535)"
 
 msgid "SettingsSaved (boolean), RestartNeeded (boolean), current values for requested settings"
-msgstr ""
+msgstr "SettingsSaved (логічне), RestartNeeded (логічне), поточні значення для запитаних налаштувань"
 
 msgid "Access and modify advanced I2P router configuration settings."
-msgstr ""
+msgstr "Доступ та зміна розширених налаштувань конфігурації маршрутизатора I2P."
 
 msgid "Key-value pairs of advanced settings"
-msgstr ""
+msgstr "Пари ключ-значення розширених налаштувань"
 
 msgid "Updated settings values"
-msgstr ""
+msgstr "Оновлені значення налаштувань"
 
 msgid "Retrieves statistical rate data from router for monitoring and analysis. Useful for creating custom graphs or monitoring applications."
-msgstr ""
+msgstr "Отримує статистичні дані про швидкість від маршрутизатора для моніторингу та аналізу. Корисно для створення власних графіків або додатків моніторингу."
 
 msgid "Statistical metric name (string)"
-msgstr ""
+msgstr "Ім'я статистичної метрики (рядок)"
 
 msgid "Time period in milliseconds (integer)"
-msgstr ""
+msgstr "Період часу в мілісекундах (ціле число)"
 
 msgid "Result (number - average value for specified period)"
-msgstr ""
+msgstr "Результат (число - середнє значення за вказаний період)"
 
 msgid "Network Status Codes"
-msgstr ""
+msgstr "Коди стану мережі"
 
 #, java-format
 msgid "The {0} field returns an integer value representing the current network connectivity status:"
-msgstr ""
+msgstr "Поле {0} повертає ціле значення, що представляє поточний стан підключення до мережі:"
 
 msgid "OK - Full connectivity"
-msgstr ""
+msgstr "ОК - Повне підключення"
 
 msgid "TESTING - Still establishing connectivity"
-msgstr ""
+msgstr "ТЕСТУВАННЯ - Все ще встановлюється підключення"
 
 msgid "FIREWALLED - Behind restrictive firewall"
-msgstr ""
+msgstr "ЗА ФАЙРВОЛОМ - За обмежувальним файрволом"
 
 msgid "HIDDEN - Router in hidden mode"
-msgstr ""
+msgstr "ПРИХОВАНИЙ - Маршрутизатор у прихованому режимі"
 
 msgid "WARN_FIREWALLED_AND_FAST - Firewalled but fast peer"
-msgstr ""
+msgstr "ПОПЕРЕДЖЕННЯ_ФАЙРВОЛ_ШВИДКИЙ - За файрволом, але швидкий пір"
 
 msgid "WARN_FIREWALLED_AND_FLOODFILL - Firewalled but floodfill"
-msgstr ""
+msgstr "ПОПЕРЕДЖЕННЯ_ФАЙРВОЛ_ФЛУДФІЛ - За файрволом, але флудфіл"
 
 msgid "WARN_FIREWALLED_WITH_INBOUND_TCP - Firewalled with inbound TCP"
-msgstr ""
+msgstr "ПОПЕРЕДЖЕННЯ_ФАЙРВОЛ_ВХІДНИЙ_TCP - За файрволом з вхідним TCP"
 
 msgid "WARN_FIREWALLED_WITH_UDP_DISABLED - Firewalled with UDP disabled"
-msgstr ""
+msgstr "ПОПЕРЕДЖЕННЯ_ФАЙРВОЛ_UDP_ВИМКНЕНО - За файрволом з вимкненим UDP"
 
 msgid "ERROR_I2CP - I2CP error"
-msgstr ""
+msgstr "ПОМИЛКА_I2CP - Помилка I2CP"
 
 msgid "ERROR_CLOCK_SKEW - System clock skew detected"
-msgstr ""
+msgstr "ПОМИЛКА_ЧАСОВИЙ_ЗСУВ - Виявлено розбіжність системного часу"
 
 msgid "ERROR_PRIVATE_TCP_ADDRESS - Private TCP address configured"
-msgstr ""
+msgstr "ПОМИЛКА_ПРИВАТНА_TCP_АДРЕСА - Налаштована приватна TCP-адреса"
 
 msgid "ERROR_SYMMETRIC_NAT - Symmetric NAT detected"
-msgstr ""
+msgstr "ПОМИЛКА_СИМЕТРИЧНИЙ_NAT - Виявлено симетричний NAT"
 
 msgid "ERROR_UDP_PORT_IN_USE - UDP port already in use"
-msgstr ""
+msgstr "ПОМИЛКА_UDP_ПОРТ_ЗАНЯТО - UDP-порт вже використовується"
 
 msgid "ERROR_NO_ACTIVE_PEERS_CHECK_CONNECTION_AND_FIREWALL - No active peers"
-msgstr ""
+msgstr "ПОМИЛКА_НЕМАЄ_АКТИВНИХ_ПІРІВ_ПЕРЕВІРТЕ_ПІДКЛЮЧЕННЯ_І_ФАЙРВОЛ - Немає активних пірів"
 
 msgid "ERROR_UDP_DISABLED_AND_TCP_UNSET - UDP disabled, TCP not configured"
-msgstr ""
+msgstr "ПОМИЛКА_UDP_ВИМКНЕНО_І_TCP_НЕНАЛАШТОВАНО - UDP вимкнено, TCP не налаштовано"
 
 msgid "Error Codes"
-msgstr ""
+msgstr "Коди помилок"
 
 msgid "In addition to standard JSON-RPC 2.0 error codes, I2PControl provides specific error codes:"
-msgstr ""
+msgstr "На додаток до стандартних кодів помилок JSON-RPC 2.0, I2PControl надає специфічні коди помилок:"
 
 msgid "JSON parse error"
-msgstr ""
+msgstr "Помилка розбору JSON"
 
 msgid "Invalid request"
-msgstr ""
+msgstr "Недійсний запит"
 
 msgid "Method not found"
-msgstr ""
+msgstr "Метод не знайдено"
 
 msgid "Invalid parameters"
-msgstr ""
+msgstr "Недійсні параметри"
 
 msgid "Internal error"
-msgstr ""
+msgstr "Внутрішня помилка"
 
 msgid "Invalid password provided"
-msgstr ""
+msgstr "Надано недійсний пароль"
 
 msgid "No authentication token presented"
-msgstr ""
+msgstr "Токен автентифікації не представлено"
 
 msgid "Authentication token doesn't exist"
-msgstr ""
+msgstr "Токен автентифікації не існує"
 
 msgid "The provided authentication token was expired and will be removed"
-msgstr ""
+msgstr "Наданий токен автентифікації прострочений і буде видалений"
 
 msgid "The version of the I2PControl API used wasn't specified, but is required to be specified"
-msgstr ""
+msgstr "Версія API I2PControl, що використовується, не була вказана, але її потрібно вказати"
 
 msgid "The version of the I2PControl API specified is not supported by I2PControl"
-msgstr ""
+msgstr "Вказана версія API I2PControl не підтримується I2PControl"
 
 msgid "Rate Statistics"
-msgstr ""
+msgstr "Статистика швидкості"
 
 #, java-format
 msgid "For a complete list of available rate statistics, see the {0} documentation in the router console or refer to the {1} online documentation. Common rate statistics include:"
-msgstr ""
+msgstr "Для повного списку доступних статистичних показників швидкості див. документацію {0} в консолі маршрутизатора або зверніться до {1} онлайн-документації. Загальні статистичні показники швидкості включають:"
 
 msgid "Bandwidth receive rate"
-msgstr ""
+msgstr "Швидкість отримання пропускної здатності"
 
 msgid "Bandwidth send rate"
-msgstr ""
+msgstr "Швидкість відправки пропускної здатності"
 
 msgid "Active peer count"
-msgstr ""
+msgstr "Кількість активних пірів"
 
 msgid "Known peer count"
-msgstr ""
+msgstr "Кількість відомих пірів"
 
 msgid "Tunnel test success time"
-msgstr ""
+msgstr "Час успішного тесту тунелю"
 
 msgid "Rate Statistics Documentation"
-msgstr ""
+msgstr "Документація статистики швидкості"
 
 #, java-format
 msgid "See the {0} documentation in the router console or refer to the {1} online documentation."
-msgstr ""
+msgstr "Див. документацію {0} в консолі маршрутизатора або зверніться до {1} онлайн-документації."
 
 msgid "Example Usage"
-msgstr ""
+msgstr "Приклад використання"
 
 msgid "Get Router Version and Uptime:"
-msgstr ""
+msgstr "Отримати версію маршрутизатора та час роботи:"
 
 msgid "Get Current Bandwidth Usage:"
-msgstr ""
+msgstr "Отримати поточне використання пропускної здатності:"
 
 msgid "Change Bandwidth Limits:"
-msgstr ""
+msgstr "Змінити ліміти пропускної здатності:"
 
 msgid "Graceful Restart:"
-msgstr ""
+msgstr "Коректний перезапуск:"
 
 msgid "Security Considerations"
-msgstr ""
+msgstr "Міркування безпеки"
 
 #, java-format
 msgid "Always change the default API password from {0} to a strong, unique password"
-msgstr ""
+msgstr "Завжди змінюйте пароль API за замовчуванням з {0} на надійний унікальний пароль"
 
 msgid "Consider binding I2PControl to localhost only if not accessed remotely"
-msgstr ""
+msgstr "Розгляньте прив'язку I2PControl лише до localhost, якщо до нього не здійснюється віддалений доступ"
 
 msgid "Use HTTPS when accessing I2PControl over untrusted networks"
-msgstr ""
+msgstr "Використовуйте HTTPS при доступі до I2PControl через ненадійні мережі"
 
 msgid "Tokens may expire - implement re-authentication logic in your applications"
-msgstr ""
+msgstr "Токени можуть прострочуватися - реалізуйте логіку повторної автентифікації у ваших додатках"
 
 msgid "Monitor I2PControl access logs for unauthorized usage"
-msgstr ""
+msgstr "Слідкуйте за журналами доступу I2PControl на предмет несанкціонованого використання"
 
 msgid "Be cautious with router management operations - they can affect network connectivity"
-msgstr ""
+msgstr "Будьте обережні з операціями керування маршрутизатором - вони можуть вплинути на підключення до мережі"
 
 msgid "Integration Examples"
-msgstr ""
+msgstr "Приклади інтеграції"
 
 msgid "The I2PControl API can be integrated with:"
-msgstr ""
+msgstr "API I2PControl може бути інтегровано з:"
 
 msgid "Monitoring systems:"
-msgstr ""
+msgstr "Системи моніторингу:"
 
 msgid "Create custom dashboards for router performance"
-msgstr ""
+msgstr "Створюйте власні інформаційні панелі для продуктивності маршрутизатора"
 
 msgid "Automation scripts:"
-msgstr ""
+msgstr "Скрипти автоматизації:"
 
 msgid "Schedule restarts or configuration changes"
-msgstr ""
+msgstr "Плануйте перезапуски або зміни конфігурації"
 
 msgid "Mobile applications:"
-msgstr ""
+msgstr "Мобільні додатки:"
 
 msgid "Monitor and manage your router remotely"
-msgstr ""
+msgstr "Віддалено контролюйте та керуйте своїм маршрутизатором"
 
 msgid "Network management tools:"
-msgstr ""
+msgstr "Інструменти керування мережею:"
 
 msgid "Integrate I2P status into broader network monitoring"
-msgstr ""
+msgstr "Інтегруйте статус I2P у ширший моніторинг мережі"
 
 msgid "Alerting systems:"
-msgstr ""
+msgstr "Системи сповіщення:"
 
 msgid "Send notifications based on router status changes"
-msgstr ""
+msgstr "Надсилайте сповіщення на основі змін стану маршрутизатора"
 
 msgid "Licensing Information"
 msgstr "Інформація про ліцензування"
@@ -7994,7 +7994,7 @@ msgid "Skip Setup"
 msgstr "Пропустити налаштування"
 
 msgid "Select the language to be used for the router console and web applications ("
-msgstr ""
+msgstr "Виберіть мову для консолі маршрутизатора та веб-додатків ("
 
 msgid "Router Console &amp; WebApps Display Language"
 msgstr "Консоль маршрутизатора та мова відображення WebApps"

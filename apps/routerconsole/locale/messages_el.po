@@ -1976,7 +1976,7 @@ msgid "FAQ"
 msgstr "Συχνές Ερωτήσεις"
 
 msgid "JSON-RPC API"
-msgstr ""
+msgstr "JSON-RPC API"
 
 msgid "Manage your I2P hosts file here (I2P domain name resolution)"
 msgstr "Διαχειριστείτε το αρχείο κεντρικών υπολογιστών I2P εδώ (ανάλυση ονόματος τομέα I2P)"
@@ -5684,10 +5684,10 @@ msgid "Tunnel Filtering"
 msgstr "Φιλτράρισμα σήραγγας"
 
 msgid "Console API"
-msgstr ""
+msgstr "API Κονσόλας"
 
 msgid "JSONRPC"
-msgstr ""
+msgstr "JSONRPC"
 
 msgid "New User Guide"
 msgstr "Νέος οδηγός χρήστη"
@@ -6608,10 +6608,10 @@ msgid "An introduction to tunnel access lists"
 msgstr "Μια εισαγωγή στις λίστες πρόσβασης σε σήραγγα"
 
 msgid "I2PControl API"
-msgstr ""
+msgstr "I2PControl API"
 
 msgid "JSON-RPC API for remote router control and monitoring"
-msgstr ""
+msgstr "JSON-RPC API για απομακρυσμένο έλεγχο και παρακολούθηση του δρομολογητή"
 
 msgid "Information about the sidebar, network status messages, and theme overrides"
 msgstr "Πληροφορίες σχετικά με την πλαϊνή γραμμή, τα μηνύματα κατάστασης δικτύου και τις παρακάμψεις θεμάτων"
@@ -6620,429 +6620,429 @@ msgid "Webhosting on I2P"
 msgstr "Φιλοξενία Ιστού σε I2P"
 
 msgid "I2PControl JSON-RPC API"
-msgstr ""
+msgstr "I2PControl JSON-RPC API"
 
 msgid "I2PControl provides a JSON-RPC 2.0 interface for remote control and monitoring of your I2P router. This allows external applications to programmatically manage I2P settings, retrieve status information, and control router operations through standardized HTTP requests."
-msgstr ""
+msgstr "Το I2PControl παρέχει μια διεπαφή JSON-RPC 2.0 για απομακρυσμένο έλεγχο και παρακολούθηση του δρομολογητή I2P σας. Αυτό επιτρέπει σε εξωτερικές εφαρμογές να διαχειρίζονται μέσω προγραμματισμού τις ρυθμίσεις I2P, να ανακτούν πληροφορίες κατάστασης και να ελέγχουν τις λειτουργίες του δρομολογητή μέσω τυποποιημένων αιτημάτων HTTP."
 
 #, java-format
 msgid "I2PControl is a JSON-RPC 2.0 interface for remote control and monitoring of your I2P router. It listens on {0} by default when enabled for security reasons and must be enabled through the {1}."
-msgstr ""
+msgstr "Το I2PControl είναι μια διεπαφή JSON-RPC 2.0 για απομακρυσμένο έλεγχο και παρακολούθηση του δρομολογητή I2P σας. Ακούει στη διεύθυνση {0} από προεπιλογή όταν είναι ενεργοποιημένη για λόγους ασφαλείας και πρέπει να ενεργοποιηθεί μέσω του/της {1}."
 
 msgid "Web Apps configuration page"
-msgstr ""
+msgstr "Σελίδα διαμόρφωσης Web Apps"
 
 msgid "Authentication"
-msgstr ""
+msgstr "Έλεγχος ταυτότητας"
 
 msgid "All API operations (except for authentication itself) require a valid authentication token. To obtain a token, you must first authenticate with your configured password:"
-msgstr ""
+msgstr "Όλες οι λειτουργίες API (εκτός από τον έλεγχο ταυτότητας από μόνη της) απαιτούν ένα έγκυρο διακριτικό ελέγχου ταυτότητας. Για να αποκτήσετε ένα διακριτικό, πρέπει πρώτα να πραγματοποιήσετε έλεγχο ταυτότητας με τον διαμορφωμένο κωδικό πρόσβασής σας:"
 
 msgid "The returned token must be included in either the 'Token' parameter or as an 'X-Auth-Token' HTTP header in all subsequent API calls."
-msgstr ""
+msgstr "Το επιστρεφόμενο διακριτικό πρέπει να περιλαμβάνεται είτε στην παράμετρο 'Token' είτε ως κεφαλίδα HTTP 'X-Auth-Token' σε όλες τις επόμενες κλήσεις API."
 
 msgid "API Version: 1. Clients must specify API version 1 in authentication requests for compatibility."
-msgstr ""
+msgstr "Έκδοση API: 1. Οι πελάτες πρέπει να καθορίζουν την έκδοση API 1 σε αιτήματα ελέγχου ταυτότητας για συμβατότητα."
 
 msgid "API Methods"
-msgstr ""
+msgstr "Μέθοδοι API"
 
 msgid "Authenticates with the I2PControl service and returns an authentication token for subsequent API calls."
-msgstr ""
+msgstr "Πραγματοποιεί έλεγχο ταυτότητας με την υπηρεσία I2PControl και επιστρέφει ένα διακριτικό ελέγχου ταυτότητας για επόμενες κλήσεις API."
 
 msgid "Parameters:"
-msgstr ""
+msgstr "Παράμετροι:"
 
 msgid "Password (string), API (integer, must be 1)"
-msgstr ""
+msgstr "Κωδικός πρόσβασης (string), API (integer, πρέπει να είναι 1)"
 
 msgid "Returns:"
-msgstr ""
+msgstr "Επιστρέφει:"
 
 msgid "Token (string), API (integer)"
-msgstr ""
+msgstr "Διακριτικό (string), API (integer)"
 
 msgid "Authentication:"
-msgstr ""
+msgstr "Έλεγχος ταυτότητας:"
 
 msgid "None (this is the unauthenticated method)"
-msgstr ""
+msgstr "Κανένα (αυτή είναι η μη επαληθευμένη μέθοδος)"
 
 msgid "A simple test method that returns the provided string. Useful for testing API connectivity and authentication."
-msgstr ""
+msgstr "Μια απλή μέθοδος δοκιμής που επιστρέφει την παρεχόμενη συμβολοσειρά. Χρήσιμη για δοκιμή συνδεσιμότητας API και ελέγχου ταυτότητας."
 
 msgid "Echo (string)"
-msgstr ""
+msgstr "Echo (string)"
 
 msgid "Result (string - echoed input)"
-msgstr ""
+msgstr "Αποτέλεσμα (string - ηχώ εισόδου)"
 
 msgid "Required"
-msgstr ""
+msgstr "Απαιτείται"
 
 msgid "Retrieves read-only status information about the I2P router. Each parameter is optional - include only the metrics you need."
-msgstr ""
+msgstr "Ανακτά πληροφορίες κατάστασης μόνο για ανάγνωση σχετικά με τον δρομολογητή I2P. Κάθε παράμετρος είναι προαιρετική - συμπεριλάβετε μόνο τις μετρικές που χρειάζεστε."
 
 msgid "Any combination of:"
-msgstr ""
+msgstr "Οποιονδήποτε συνδυασμός από:"
 
 msgid "Router version"
-msgstr ""
+msgstr "Έκδοση δρομολογητή"
 
 msgid "Router uptime in milliseconds"
-msgstr ""
+msgstr "Χρόνος λειτουργίας δρομολογητή σε χιλιοστά του δευτερολέπτου"
 
 msgid "Current router status"
-msgstr ""
+msgstr "Τρέχουσα κατάσταση δρομολογητή"
 
 msgid "Network status (0-14)"
-msgstr ""
+msgstr "Κατάσταση δικτύου (0-14)"
 
 msgid "1-second average inbound bandwidth (Bps)"
-msgstr ""
+msgstr "Μέσος όρος εισερχόμενου εύρους ζώνης 1 δευτερολέπτου (Bps)"
 
 msgid "1-second average outbound bandwidth (Bps)"
-msgstr ""
+msgstr "Μέσος όρος εξερχόμενου εύρους ζώνης 1 δευτερολέπτου (Bps)"
 
 msgid "15-second average inbound bandwidth (Bps)"
-msgstr ""
+msgstr "Μέσος όρος εισερχόμενου εύρους ζώνης 15 δευτερολέπτων (Bps)"
 
 msgid "15-second average outbound bandwidth (Bps)"
-msgstr ""
+msgstr "Μέσος όρος εξερχόμενου εύρους ζώνης 15 δευτερολέπτων (Bps)"
 
 msgid "Number of participating tunnels"
-msgstr ""
+msgstr "Αριθμός συμμετεχόντων σηράγγων"
 
 msgid "Number of known peers"
-msgstr ""
+msgstr "Αριθμός γνωστών ομοτίμων"
 
 msgid "Number of active peers"
-msgstr ""
+msgstr "Αριθμός ενεργών ομοτίμων"
 
 msgid "Number of fast peers"
-msgstr ""
+msgstr "Αριθμός γρήγορων ομοτίμων"
 
 msgid "Number of high-capacity peers"
-msgstr ""
+msgstr "Αριθμός ομοτίμων υψηλής χωρητικότητας"
 
 msgid "Whether reseed is in progress"
-msgstr ""
+msgstr "Αν η επανασπορά βρίσκεται σε εξέλιξη"
 
 msgid "Requested metrics with their current values"
-msgstr ""
+msgstr "Ζητούμενες μετρικές με τις τρέχουσες τιμές τους"
 
 msgid "Controls router lifecycle and management operations. Each operation is optional and executes asynchronously."
-msgstr ""
+msgstr "Ελέγχει τον κύκλο ζωής του δρομολογητή και τις λειτουργίες διαχείρισης. Κάθε λειτουργία είναι προαιρετική και εκτελείται ασύγχρονα."
 
 msgid "Graceful restart/shutdown"
-msgstr ""
+msgstr "Ομαλή επανεκκίνηση/τερματισμός"
 
 msgid "Immediate hard shutdown"
-msgstr ""
+msgstr "Άμεσος σκληρός τερματισμός"
 
 msgid "Immediate hard restart"
-msgstr ""
+msgstr "Άμεση σκληρή επανεκκίνηση"
 
 msgid "Graceful shutdown (waits for tunnels)"
-msgstr ""
+msgstr "Ομαλός τερματισμός (περιμένει τις σήραγγες)"
 
 msgid "Graceful restart (waits for tunnels)"
-msgstr ""
+msgstr "Ομαλή επανεκκίνηση (περιμένει τις σήραγγες)"
 
 msgid "Trigger router reseeding"
-msgstr ""
+msgstr "Ενεργοποίηση επανασποράς δρομολογητή"
 
 msgid "Check for available updates"
-msgstr ""
+msgstr "Έλεγχος για διαθέσιμες ενημερώσεις"
 
 msgid "Install available updates"
-msgstr ""
+msgstr "Εγκατάσταση διαθέσιμων ενημερώσεων"
 
 msgid "Confirmation of operation (null for most operations, result status for FindUpdates/Update)"
-msgstr ""
+msgstr "Επιβεβαίωση λειτουργίας (null για τις περισσότερες λειτουργίες, κατάσταση αποτελέσματος για FindUpdates/Update)"
 
 msgid "Manages router network configuration. Parameters can be used to either set values (if provided) or retrieve current values (if null/omitted)."
-msgstr ""
+msgstr "Διαχειρίζεται τη διαμόρφωση δικτύου του δρομολογητή. Οι παράμετροι μπορούν να χρησιμοποιηθούν είτε για να ορίσουν τιμές (αν παρέχονται) είτε για να ανακτήσουν τρέχουσες τιμές (αν είναι null/παραλείπονται)."
 
 msgid "NTCP Transport Settings:"
-msgstr ""
+msgstr "Ρυθμίσεις μεταφοράς NTCP:"
 
 msgid "NTCP port (1-65535)"
-msgstr ""
+msgstr "Θύρα NTCP (1-65535)"
 
 msgid "NTCP hostname"
-msgstr ""
+msgstr "Όνομα κεντρικού υπολογιστή NTCP"
 
 msgid "Auto IP setting"
-msgstr ""
+msgstr "Αυτόματη ρύθμιση IP"
 
 msgid "SSU Transport Settings:"
-msgstr ""
+msgstr "Ρυθμίσεις μεταφοράς SSU:"
 
 msgid "SSU port (1-65535)"
-msgstr ""
+msgstr "Θύρα SSU (1-65535)"
 
 msgid "SSU hostname"
-msgstr ""
+msgstr "Όνομα κεντρικού υπολογιστή SSU"
 
 msgid "IP source detection"
-msgstr ""
+msgstr "Ανίχνευση πηγής IP"
 
 msgid "Read-only detected IP address"
-msgstr ""
+msgstr "Διεύθυνση IP που ανιχνεύτηκε (μόνο για ανάγνωση)"
 
 msgid "Network Settings:"
-msgstr ""
+msgstr "Ρυθμίσεις δικτύου:"
 
 msgid "UPnP enabled/disabled"
-msgstr ""
+msgstr "UPnP ενεργοποιημένο/απενεργοποιημένο"
 
 msgid "Laptop mode setting"
-msgstr ""
+msgstr "Ρύθμιση λειτουργίας laptop"
 
 msgid "Bandwidth Settings:"
-msgstr ""
+msgstr "Ρυθμίσεις εύρους ζώνης:"
 
 msgid "Bandwidth share percentage (0-100)"
-msgstr ""
+msgstr "Ποσοστό κοινής χρήσης εύρους ζώνης (0-100)"
 
 msgid "Inbound bandwidth limit (Bps)"
-msgstr ""
+msgstr "Όριο εισερχόμενου εύρους ζώνης (Bps)"
 
 msgid "Outbound bandwidth limit (Bps)"
-msgstr ""
+msgstr "Όριο εξερχόμενου εύρους ζώνης (Bps)"
 
 msgid "SettingsSaved (boolean), RestartNeeded (boolean), plus current values for queried settings"
-msgstr ""
+msgstr "SettingsSaved (boolean), RestartNeeded (boolean), συν τρέχουσες τιμές για τις ρυθμίσεις που ερωτήθηκαν"
 
 msgid "Manages I2PControl service settings including password, port, and restart configuration."
-msgstr ""
+msgstr "Διαχειρίζεται τις ρυθμίσεις υπηρεσίας I2PControl συμπεριλαμβανομένου του κωδικού πρόσβασης, της θύρας και της διαμόρφωσης επανεκκίνησης."
 
 msgid "Listen address (string, e.g., 127.0.0.1)"
-msgstr ""
+msgstr "Διεύθυνση ακρόασης (string, π.χ., 127.0.0.1)"
 
 msgid "New password (string)"
-msgstr ""
+msgstr "Νέος κωδικός πρόσβασης (string)"
 
 msgid "Listen port (integer, 1-65535)"
-msgstr ""
+msgstr "Θύρα ακρόασης (integer, 1-65535)"
 
 msgid "SettingsSaved (boolean), RestartNeeded (boolean), current values for requested settings"
-msgstr ""
+msgstr "SettingsSaved (boolean), RestartNeeded (boolean), τρέχουσες τιμές για τις ζητούμενες ρυθμίσεις"
 
 msgid "Access and modify advanced I2P router configuration settings."
-msgstr ""
+msgstr "Πρόσβαση και τροποποίηση προηγμένων ρυθμίσεων διαμόρφωσης δρομολογητή I2P."
 
 msgid "Key-value pairs of advanced settings"
-msgstr ""
+msgstr "Ζεύγη κλειδιού-τιμής προηγμένων ρυθμίσεων"
 
 msgid "Updated settings values"
-msgstr ""
+msgstr "Ενημερωμένες τιμές ρυθμίσεων"
 
 msgid "Retrieves statistical rate data from router for monitoring and analysis. Useful for creating custom graphs or monitoring applications."
-msgstr ""
+msgstr "Ανακτά δεδομένα στατιστικού ρυθμού από τον δρομολογητή για παρακολούθηση και ανάλυση. Χρήσιμο για τη δημιουργία προσαρμοσμένων γραφημάτων ή εφαρμογών παρακολούθησης."
 
 msgid "Statistical metric name (string)"
-msgstr ""
+msgstr "Όνομα στατιστικής μετρικής (string)"
 
 msgid "Time period in milliseconds (integer)"
-msgstr ""
+msgstr "Χρονικό περίοδος σε χιλιοστά του δευτερολέπτου (integer)"
 
 msgid "Result (number - average value for specified period)"
-msgstr ""
+msgstr "Αποτέλεσμα (αριθμός - μέση τιμή για καθορισμένη περίοδο)"
 
 msgid "Network Status Codes"
-msgstr ""
+msgstr "Κωδικοί κατάστασης δικτύου"
 
 #, java-format
 msgid "The {0} field returns an integer value representing the current network connectivity status:"
-msgstr ""
+msgstr "Το πεδίο {0} επιστρέφει μια ακέραια τιμή που αντιπροσωπεύει την τρέχουσα κατάσταση συνδεσιμότητας δικτύου:"
 
 msgid "OK - Full connectivity"
-msgstr ""
+msgstr "ΕΝΤΑΞΕΙ - Πλήρης συνδεσιμότητα"
 
 msgid "TESTING - Still establishing connectivity"
-msgstr ""
+msgstr "ΔΟΚΙΜΗ - Ακόμη δημιουργία συνδεσιμότητας"
 
 msgid "FIREWALLED - Behind restrictive firewall"
-msgstr ""
+msgstr "ΤΕΙΧΟΣ ΠΡΟΣΤΑΣΙΑΣ - Πίσω από περιοριστικό τείχος προστασίας"
 
 msgid "HIDDEN - Router in hidden mode"
-msgstr ""
+msgstr "ΚΡΥΦΟΣ - Δρομολογητής σε κρυφή λειτουργία"
 
 msgid "WARN_FIREWALLED_AND_FAST - Firewalled but fast peer"
-msgstr ""
+msgstr "WARN_FIREWALLED_AND_FAST - Τείχος προστασίας αλλά γρήγορος ομότιμος"
 
 msgid "WARN_FIREWALLED_AND_FLOODFILL - Firewalled but floodfill"
-msgstr ""
+msgstr "WARN_FIREWALLED_AND_FLOODFILL - Τείχος προστασίας αλλά floodfill"
 
 msgid "WARN_FIREWALLED_WITH_INBOUND_TCP - Firewalled with inbound TCP"
-msgstr ""
+msgstr "WARN_FIREWALLED_WITH_INBOUND_TCP - Τείχος προστασίας με εισερχόμενο TCP"
 
 msgid "WARN_FIREWALLED_WITH_UDP_DISABLED - Firewalled with UDP disabled"
-msgstr ""
+msgstr "WARN_FIREWALLED_WITH_UDP_DISABLED - Τείχος προστασίας με UDP απενεργοποιημένο"
 
 msgid "ERROR_I2CP - I2CP error"
-msgstr ""
+msgstr "ERROR_I2CP - Σφάλμα I2CP"
 
 msgid "ERROR_CLOCK_SKEW - System clock skew detected"
-msgstr ""
+msgstr "ERROR_CLOCK_SKEW - Ανιχνεύθηκε απόκλιση ρολογιού συστήματος"
 
 msgid "ERROR_PRIVATE_TCP_ADDRESS - Private TCP address configured"
-msgstr ""
+msgstr "ERROR_PRIVATE_TCP_ADDRESS - Διαμορφωμένη ιδιωτική διεύθυνση TCP"
 
 msgid "ERROR_SYMMETRIC_NAT - Symmetric NAT detected"
-msgstr ""
+msgstr "ERROR_SYMMETRIC_NAT - Ανιχνεύθηκε συμμετρικό NAT"
 
 msgid "ERROR_UDP_PORT_IN_USE - UDP port already in use"
-msgstr ""
+msgstr "ERROR_UDP_PORT_IN_USE - Η θύρα UDP χρησιμοποιείται ήδη"
 
 msgid "ERROR_NO_ACTIVE_PEERS_CHECK_CONNECTION_AND_FIREWALL - No active peers"
-msgstr ""
+msgstr "ERROR_NO_ACTIVE_PEERS_CHECK_CONNECTION_AND_FIREWALL - Κανένας ενεργός ομότιμος"
 
 msgid "ERROR_UDP_DISABLED_AND_TCP_UNSET - UDP disabled, TCP not configured"
-msgstr ""
+msgstr "ERROR_UDP_DISABLED_AND_TCP_UNSET - UDP απενεργοποιημένο, TCP μη διαμορφωμένο"
 
 msgid "Error Codes"
-msgstr ""
+msgstr "Κωδικοί σφαλμάτων"
 
 msgid "In addition to standard JSON-RPC 2.0 error codes, I2PControl provides specific error codes:"
-msgstr ""
+msgstr "Εκτός από τους τυπικούς κωδικούς σφαλμάτων JSON-RPC 2.0, το I2PControl παρέχει συγκεκριμένους κωδικούς σφαλμάτων:"
 
 msgid "JSON parse error"
-msgstr ""
+msgstr "Σφάλμα ανάλυσης JSON"
 
 msgid "Invalid request"
-msgstr ""
+msgstr "Μη έγκυρο αίτημα"
 
 msgid "Method not found"
-msgstr ""
+msgstr "Η μέθοδος δεν βρέθηκε"
 
 msgid "Invalid parameters"
-msgstr ""
+msgstr "Μη έγκυρες παράμετροι"
 
 msgid "Internal error"
-msgstr ""
+msgstr "Εσωτερικό σφάλμα"
 
 msgid "Invalid password provided"
-msgstr ""
+msgstr "Παρασχέθηκε μη έγκυρος κωδικός πρόσβασης"
 
 msgid "No authentication token presented"
-msgstr ""
+msgstr "Δεν παρουσιάστηκε διακριτικό ελέγχου ταυτότητας"
 
 msgid "Authentication token doesn't exist"
-msgstr ""
+msgstr "Το διακριτικό ελέγχου ταυτότητας δεν υπάρχει"
 
 msgid "The provided authentication token was expired and will be removed"
-msgstr ""
+msgstr "Το παρεχόμενο διακριτικό ελέγχου ταυτότητας έχει λήξει και θα αφαιρεθεί"
 
 msgid "The version of the I2PControl API used wasn't specified, but is required to be specified"
-msgstr ""
+msgstr "Η έκδοση του I2PControl API που χρησιμοποιήθηκε δεν καθορίστηκε, αλλά απαιτείται να καθοριστεί"
 
 msgid "The version of the I2PControl API specified is not supported by I2PControl"
-msgstr ""
+msgstr "Η καθορισμένη έκδοση του I2PControl API δεν υποστηρίζεται από το I2PControl"
 
 msgid "Rate Statistics"
-msgstr ""
+msgstr "Στατιστικά ρυθμού"
 
 #, java-format
 msgid "For a complete list of available rate statistics, see the {0} documentation in the router console or refer to the {1} online documentation. Common rate statistics include:"
-msgstr ""
+msgstr "Για μια πλήρη λίστα διαθέσιμων στατιστικών ρυθμού, ανατρέξτε στην τεκμηρίωση {0} στην κονσόλα του δρομολογητή ή στην ηλεκτρονική τεκμηρίωση {1}. Τα κοινά στατιστικά ρυθμού περιλαμβάνουν:"
 
 msgid "Bandwidth receive rate"
-msgstr ""
+msgstr "Ρυθμός λήψης εύρους ζώνης"
 
 msgid "Bandwidth send rate"
-msgstr ""
+msgstr "Ρυθμός αποστολής εύρους ζώνης"
 
 msgid "Active peer count"
-msgstr ""
+msgstr "Αριθμός ενεργών ομοτίμων"
 
 msgid "Known peer count"
-msgstr ""
+msgstr "Αριθμός γνωστών ομοτίμων"
 
 msgid "Tunnel test success time"
-msgstr ""
+msgstr "Χρόνος επιτυχίας δοκιμής σήραγγας"
 
 msgid "Rate Statistics Documentation"
-msgstr ""
+msgstr "Τεκμηρίωση στατιστικών ρυθμού"
 
 #, java-format
 msgid "See the {0} documentation in the router console or refer to the {1} online documentation."
-msgstr ""
+msgstr "Ανατρέξτε στην τεκμηρίωση {0} στην κονσόλα του δρομολογητή ή στην ηλεκτρονική τεκμηρίωση {1}."
 
 msgid "Example Usage"
-msgstr ""
+msgstr "Παράδειγμα χρήσης"
 
 msgid "Get Router Version and Uptime:"
-msgstr ""
+msgstr "Λήψη έκδοσης και χρόνου λειτουργίας δρομολογητή:"
 
 msgid "Get Current Bandwidth Usage:"
-msgstr ""
+msgstr "Λήψη τρέχουσας χρήσης εύρους ζώνης:"
 
 msgid "Change Bandwidth Limits:"
-msgstr ""
+msgstr "Αλλαγή ορίων εύρους ζώνης:"
 
 msgid "Graceful Restart:"
-msgstr ""
+msgstr "Ομαλή επανεκκίνηση:"
 
 msgid "Security Considerations"
-msgstr ""
+msgstr "Ζητήματα ασφάλειας"
 
 #, java-format
 msgid "Always change the default API password from {0} to a strong, unique password"
-msgstr ""
+msgstr "Πάντα αλλάξτε τον προεπιλεγμένο κωδικό πρόσβασης API από {0} σε έναν ισχυρό, μοναδικό κωδικό πρόσβασης"
 
 msgid "Consider binding I2PControl to localhost only if not accessed remotely"
-msgstr ""
+msgstr "Εξετάστε το ενδεχόμενο να δεσμεύσετε το I2PControl μόνο στο localhost αν δεν έχει πρόσβαση απομακρυσμένα"
 
 msgid "Use HTTPS when accessing I2PControl over untrusted networks"
-msgstr ""
+msgstr "Χρησιμοποιήστε HTTPS όταν έχετε πρόσβαση στο I2PControl μέσω μη αξιόπιστων δικτύων"
 
 msgid "Tokens may expire - implement re-authentication logic in your applications"
-msgstr ""
+msgstr "Τα διακριτικά μπορεί να λήξουν - εφαρμόστε λογική επανάληψης ελέγχου ταυτότητας στις εφαρμογές σας"
 
 msgid "Monitor I2PControl access logs for unauthorized usage"
-msgstr ""
+msgstr "Παρακολουθήστε τα αρχεία καταγραφής πρόσβασης I2PControl για μη εξουσιοδοτημένη χρήση"
 
 msgid "Be cautious with router management operations - they can affect network connectivity"
-msgstr ""
+msgstr "Να είστε προσεκτικοί με τις λειτουργίες διαχείρισης δρομολογητή - μπορεί να επηρεάσουν τη συνδεσιμότητα δικτύου"
 
 msgid "Integration Examples"
-msgstr ""
+msgstr "Παραδείγματα ενσωμάτωσης"
 
 msgid "The I2PControl API can be integrated with:"
-msgstr ""
+msgstr "Το I2PControl API μπορεί να ενσωματωθεί με:"
 
 msgid "Monitoring systems:"
-msgstr ""
+msgstr "Συστήματα παρακολούθησης:"
 
 msgid "Create custom dashboards for router performance"
-msgstr ""
+msgstr "Δημιουργία προσαρμοσμένων πινάκων ελέγχου για απόδοση δρομολογητή"
 
 msgid "Automation scripts:"
-msgstr ""
+msgstr "Σενάρια αυτοματοποίησης:"
 
 msgid "Schedule restarts or configuration changes"
-msgstr ""
+msgstr "Προγραμματισμός επανεκκινήσεων ή αλλαγών διαμόρφωσης"
 
 msgid "Mobile applications:"
-msgstr ""
+msgstr "Κινητές εφαρμογές:"
 
 msgid "Monitor and manage your router remotely"
-msgstr ""
+msgstr "Παρακολούθηση και διαχείριση του δρομολογητή σας απομακρυσμένα"
 
 msgid "Network management tools:"
-msgstr ""
+msgstr "Εργαλεία διαχείρισης δικτύου:"
 
 msgid "Integrate I2P status into broader network monitoring"
-msgstr ""
+msgstr "Ενσωμάτωση κατάστασης I2P σε ευρύτερη παρακολούθηση δικτύου"
 
 msgid "Alerting systems:"
-msgstr ""
+msgstr "Συστήματα ειδοποίησης:"
 
 msgid "Send notifications based on router status changes"
-msgstr ""
+msgstr "Αποστολή ειδοποιήσεων βάσει αλλαγών κατάστασης δρομολογητή"
 
 msgid "Licensing Information"
 msgstr "Πληροφορίες αδειοδότησης"

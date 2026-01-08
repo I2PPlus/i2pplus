@@ -144,7 +144,7 @@ msgid "Unreachable on any transport"
 msgstr "Tidak terjangkau transport apa pun"
 
 msgid "Cannot enumerate UPnP devices on Android."
-msgstr ""
+msgstr "Tidak dapat menghitung perangkat UPnP di Android."
 
 msgid "UPnP is not enabled"
 msgstr "UPnP tidak diaktifkan"
@@ -684,7 +684,7 @@ msgid "After reporting, please restart your router"
 msgstr "Setelah melaporkan, silakan restart router Anda"
 
 msgid "Invalid form submission, requires POST"
-msgstr ""
+msgstr "Pengiriman formulir tidak valid, memerlukan POST"
 
 msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
 msgstr "Form submission tidak valid , mungkin karena anda menggunakan tombol 'back' atau 'reload' pada browser anda. Mohon kirimkan kembali."
@@ -817,13 +817,13 @@ msgid "To enable SSL access for the Router Console, see the commented <code>clie
 msgstr "Untuk mengaktifkan akses SSL untuk Router Console, lihat file <code>clients.config</code> yang dikomentari yang terletak di direktori aplikasi I2P Anda untuk informasi lebih lanjut. Anda perlu mengedit file konfigurasi RouterConsoleRunner yang terletak di direktori: "
 
 msgid "Save disabled, edit the router.config file to make changes"
-msgstr ""
+msgstr "Simpan dinonaktifkan, edit file router.config untuk membuat perubahan"
 
 msgid "Error updating the configuration - please see the error logs"
 msgstr "Error dalam memperbarui konfigurasi - silakan lihat error log"
 
 msgid "No changes made to the configuration"
-msgstr ""
+msgstr "Tidak ada perubahan yang dibuat pada konfigurasi"
 
 msgid "Note"
 msgstr "CATATAN"
@@ -844,7 +844,7 @@ msgid "Save Plugin Configuration"
 msgstr "Simpan konfigurasi PlugiK"
 
 msgid "Plugins disabled"
-msgstr ""
+msgstr "Plugin dinonaktifkan"
 
 msgid "Install Plugin"
 msgstr "Menginstal Plugin"
@@ -856,7 +856,7 @@ msgid "Update All Installed Plugins"
 msgstr "Update semua plugin yang telah terinstall"
 
 msgid "Delete client disabled"
-msgstr ""
+msgstr "Hapus klien dinonaktifkan"
 
 #, java-format
 msgid "Error stopping plugin {0}"
@@ -940,17 +940,17 @@ msgid "Updating all plugins"
 msgstr "Mengupdate semua plugin"
 
 msgid "Update manager not registered, cannot install"
-msgstr ""
+msgstr "Manajer pembaruan tidak terdaftar, tidak dapat menginstal"
 
 #, java-format
 msgid "Installing plugin from {0}"
 msgstr "Menginstal plugin dari {0}"
 
 msgid "Cannot install, check logs"
-msgstr ""
+msgstr "Tidak dapat menginstal, periksa log"
 
 msgid "Update manager not registered, cannot check"
-msgstr ""
+msgstr "Manajer pembaruan tidak terdaftar, tidak dapat memeriksa"
 
 #, java-format
 msgid "Checking plugin {0} for updates"
@@ -1050,17 +1050,17 @@ msgid "Join Family"
 msgstr "Bergabung dengan Router Family"
 
 msgid "Bad certificate - No Subject CN"
-msgstr ""
+msgstr "Sertifikat buruk - Tidak ada Subjek CN"
 
 msgid "Bad characters in Family: "
-msgstr ""
+msgstr "Karakter buruk dalam Keluarga: "
 
 #, java-format
 msgid "Keystore {0} already exists for family {1}! Delete or rename it first."
-msgstr ""
+msgstr "Keystore {0} sudah ada untuk keluarga {1}! Hapus atau ganti nama terlebih dahulu."
 
 msgid "Family key configured for router family: "
-msgstr ""
+msgstr "Kunci keluarga dikonfigurasi untuk keluarga router: "
 
 msgid "Load from file failed"
 msgstr "Gagal loading dari file"
@@ -1078,7 +1078,7 @@ msgid "Restore defaults"
 msgstr "Kembalikan ke default"
 
 msgid "Bad group detected, please retry"
-msgstr ""
+msgstr "Grup buruk terdeteksi, silakan coba lagi"
 
 msgid "Restored default settings"
 msgstr "Restore pengaturan default"
@@ -1111,7 +1111,7 @@ msgid "Invalid destination"
 msgstr "Tujuan tidak valid"
 
 msgid "Cannot add key for local destination. Enable encryption in the Tunnel Manager."
-msgstr ""
+msgstr "Tidak dapat menambahkan kunci untuk tujuan lokal. Aktifkan enkripsi di Manajer Tunnel."
 
 #, java-format
 msgid "Key for {0} added to keyring"
@@ -1124,7 +1124,7 @@ msgid "Requires hostname, destination, or blinded Base32"
 msgstr "Memerlukan nama host, tujuan, atau Base32 yang dibutakan"
 
 msgid "Cannot add key for local destination. Enable encryption in the Hidden Services Manager."
-msgstr ""
+msgstr "Tidak dapat menambahkan kunci untuk tujuan lokal. Aktifkan enkripsi di Manajer Layanan Tersembunyi."
 
 msgid "Destination requires lookup password"
 msgstr "Tujuan memerlukan kata sandi pencarian"
@@ -1145,7 +1145,7 @@ msgid "Delete key"
 msgstr "Hapus key"
 
 msgid "Cannot remove key for local destination. Disable encryption in the Tunnel Manager."
-msgstr ""
+msgstr "Tidak dapat menghapus kunci untuk tujuan lokal. Nonaktifkan enkripsi di Manajer Tunnel."
 
 #, java-format
 msgid "Key for {0} removed from keyring"
@@ -1198,34 +1198,34 @@ msgid "Log overrides updated"
 msgstr "Log override diperbarui"
 
 msgid "Error updating the log limits - levels not valid"
-msgstr ""
+msgstr "Kesalahan memperbarui batas log - level tidak valid"
 
 msgid "Log limits cleared"
-msgstr ""
+msgstr "Batas log dihapus"
 
 #, java-format
 msgid "Default log level updated from {0} to {1}"
-msgstr ""
+msgstr "Level log default diperbarui dari {0} ke {1}"
 
 msgid "Date format updated"
-msgstr ""
+msgstr "Format tanggal diperbarui"
 
 #, java-format
 msgid "Specified date format is not valid ({0}) - not updated"
-msgstr ""
+msgstr "Format tanggal yang ditentukan tidak valid ({0}) - tidak diperbarui"
 
 msgid "File size updated"
-msgstr ""
+msgstr "Ukuran file diperbarui"
 
 #, java-format
 msgid "Specified file size limit is not valid ({0}) - not updated"
-msgstr ""
+msgstr "Batas ukuran file yang ditentukan tidak valid ({0}) - tidak diperbarui"
 
 msgid "Compression setting updated"
-msgstr ""
+msgstr "Pengaturan kompresi diperbarui"
 
 msgid "Log record format updated"
-msgstr ""
+msgstr "Format catatan log diperbarui"
 
 msgid "Log configuration saved"
 msgstr "Konfigurasi log disimpan"
@@ -1435,10 +1435,10 @@ msgid "Bad capacity value"
 msgstr "Nilai kapasitas buruk"
 
 msgid "Bonuses adjusted for: "
-msgstr ""
+msgstr "Bonus disesuaikan untuk: "
 
 msgid "No profile exists for: "
-msgstr ""
+msgstr "Tidak ada profil untuk: "
 
 msgid "Unsupported"
 msgstr "Tidak didukung"
@@ -1454,7 +1454,7 @@ msgstr "Ke"
 
 #, java-format
 msgid "First {0} displayed, see the {1} file for the full list"
-msgstr ""
+msgstr "Pertama {0} ditampilkan, lihat file {1} untuk daftar lengkap"
 
 msgid "IPs Banned Until Restart"
 msgstr "IP diblokir sampai restart"
@@ -1558,13 +1558,13 @@ msgid "Restore minimal default"
 msgstr "Mengembalikan pengaturan default minimal"
 
 msgid "Sidebar preferences updated"
-msgstr ""
+msgstr "Preferensi sidebar diperbarui"
 
 msgid "Refresh interval must be a number"
 msgstr "Refresh interval harus berbentuk angka"
 
 msgid "Full sidebar defaults restored."
-msgstr ""
+msgstr "Default sidebar penuh dipulihkan."
 
 msgid "Order must be an integer"
 msgstr "Order harus berupa integer"
@@ -1573,7 +1573,7 @@ msgid "Saved order of sections."
 msgstr "Urutan dari bagian telah tersimpan."
 
 msgid "Sidebar will refresh shortly."
-msgstr ""
+msgstr "Sidebar akan disegarkan sebentar lagi."
 
 msgid "No section selected"
 msgstr "Tidak ada bagian dipilih"
@@ -1596,11 +1596,11 @@ msgstr "Grafik daftar diperbarui, mungkin diperlukan waktu hingga 60 detik hingg
 
 #, java-format
 msgid "Internal error: could not resolve pool name {0}."
-msgstr ""
+msgstr "Kesalahan internal: tidak dapat menyelesaikan nama pool {0}."
 
 #, java-format
 msgid "Internal error: could not find pool settings for {0}."
-msgstr ""
+msgstr "Kesalahan internal: tidak dapat menemukan pengaturan pool untuk {0}."
 
 msgid "Updated settings for all pools."
 msgstr "Pengaturan telah diperbarui untuk semua pool."
@@ -1673,7 +1673,7 @@ msgid "Add user"
 msgstr "Tambah user"
 
 msgid "Cannot save theme choice, theme name has illegal characters"
-msgstr ""
+msgstr "Tidak dapat menyimpan pilihan tema, nama tema memiliki karakter ilegal"
 
 msgid "Theme change saved."
 msgstr "Perubahan theme disimpan."
@@ -1685,7 +1685,7 @@ msgid "No user name entered"
 msgstr "Tidak ada nama user yang dimasukkan"
 
 msgid "User name may not contain '='"
-msgstr ""
+msgstr "Nama pengguna tidak boleh mengandung '='"
 
 msgid "Warning: User names outside the ISO-8859-1 character set are not recommended. Support is not standardized and varies by browser."
 msgstr "Peringatan: Nama pengguna berada di luar set karakter ISO-8859-1 tidak dianjurkan. Dukungan tidak terstandar dan bervariasi pada setiap browser."
@@ -1968,7 +1968,7 @@ msgid "FAQ"
 msgstr "FAQ "
 
 msgid "JSON-RPC API"
-msgstr ""
+msgstr "API JSON-RPC"
 
 msgid "Manage your I2P hosts file here (I2P domain name resolution)"
 msgstr "Kelola I2P host file di sini (I2P domain name resolusi)"
@@ -2010,7 +2010,7 @@ msgid "Show list of all known I2P routers"
 msgstr "Tampilkan daftar semua router I2P yang diketahui"
 
 msgid "List of recently connected peers with profiling info"
-msgstr ""
+msgstr "Daftar peer yang baru terhubung dengan info profil"
 
 msgid "Peer Profiles"
 msgstr "Profil Rekan"
@@ -2178,7 +2178,7 @@ msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Front-end alternatif yang berfokus pada privasi untuk Reddit"
 
 msgid "AI Image generation & Chat hub"
-msgstr ""
+msgstr "Generasi Gambar AI & Hub Obrolan"
 
 msgid "IRC Logs for multiple networks"
 msgstr "Log IRC untuk beberapa jaringan"
@@ -2319,10 +2319,10 @@ msgid "OpenDemocracy"
 msgstr "Demokrasi Terbuka"
 
 msgid "Online privacy &amp; tech blog"
-msgstr ""
+msgstr "Privasi online &amp; blog teknologi"
 
 msgid "RightToPrivacy"
-msgstr ""
+msgstr "HakUntukPrivasi"
 
 msgid "Lifestyle magazine"
 msgstr "Majalah gaya hidup"
@@ -2343,7 +2343,7 @@ msgid "Community-driven tech news"
 msgstr "Berita teknologi berbasis komunitas"
 
 msgid "Various services"
-msgstr ""
+msgstr "Layanan Beragam"
 
 msgid "News for nerds"
 msgstr "Berita untuk para kutu buku"
@@ -2422,7 +2422,7 @@ msgid "Add"
 msgstr "Tambahkan"
 
 msgid "Error displaying the info page."
-msgstr ""
+msgstr "Kesalahan menampilkan halaman info."
 
 msgid "Identity"
 msgstr "Identitas"
@@ -2470,7 +2470,7 @@ msgid "Performance"
 msgstr "Kinerja"
 
 msgid "Maximum available RAM"
-msgstr ""
+msgstr "RAM maksimum tersedia"
 
 msgid "Classified as slow"
 msgstr "Tergolong lambat"
@@ -2482,7 +2482,7 @@ msgid "No"
 msgstr "Tidak"
 
 msgid "GeoIP Db"
-msgstr ""
+msgstr "Db GeoIP"
 
 msgid "Target"
 msgstr "Sasaran"
@@ -2621,19 +2621,19 @@ msgid "Sybil Analysis"
 msgstr "Analisis Sybil"
 
 msgid "Bad value supplied, please check and try again."
-msgstr ""
+msgstr "Nilai yang diberikan buruk, silakan periksa dan coba lagi."
 
 msgid "Router Map"
 msgstr "Peta Router"
 
 msgid "Network Database Search"
-msgstr ""
+msgstr "Pencarian Basis Data Jaringan"
 
 msgid "Capabilities"
 msgstr "Kemampuan"
 
 msgid "e.g. f or XOfR"
-msgstr ""
+msgstr "mis. f atau XOfR"
 
 msgid "Cost"
 msgstr "Biaya"
@@ -2642,55 +2642,55 @@ msgid "Country"
 msgstr "Negara"
 
 msgid "Country Codes"
-msgstr ""
+msgstr "Kode Negara"
 
 msgid "Hash Prefix"
-msgstr ""
+msgstr "Awalan Hash"
 
 msgid "IPv4 or IPv6, /24,/16,/8 suffixes optional for IPv4, prefix ok for IPv6"
-msgstr ""
+msgstr "IPv4 atau IPv6, akhiran /24,/16,/8 opsional untuk IPv4, prefix ok untuk IPv6"
 
 msgid "Hostname or b32"
-msgstr ""
+msgstr "Hostname atau b32"
 
 msgid "IPv6 Prefix"
-msgstr ""
+msgstr "Awalan IPv6"
 
 msgid "Single port or range"
-msgstr ""
+msgstr "Port tunggal atau rentang"
 
 msgid "Signature Type"
-msgstr ""
+msgstr "Jenis Tanda Tangan"
 
 msgid "SSU Capabilities"
-msgstr ""
+msgstr "Kemampuan SSU"
 
 msgid "Encryption Type"
-msgstr ""
+msgstr "Jenis Enkripsi"
 
 msgid "Router Version"
-msgstr ""
+msgstr "Versi Router"
 
 msgid "Transport"
 msgstr "Transport "
 
 msgid "Add Sybil analysis (must pick at least one above)"
-msgstr ""
+msgstr "Tambahkan analisis Sybil (harus memilih setidaknya satu di atas)"
 
 msgid "Sybil close to"
-msgstr ""
+msgstr "Sybil dekat dengan"
 
 msgid "Router hash, destination hash, b32, or from address book"
-msgstr ""
+msgstr "Hash router, hash tujuan, b32, atau dari buku alamat"
 
 msgid "or Sybil close to this router"
-msgstr ""
+msgstr "atau Sybil dekat dengan router ini"
 
 msgid "Lookup"
 msgstr "Pencarian"
 
 msgid "Select the field to search on"
-msgstr ""
+msgstr "Pilih bidang untuk dicari"
 
 msgid "e.g. cn hk"
 msgstr "cth. cn hk"
@@ -2705,13 +2705,13 @@ msgid "Router not found"
 msgstr "Router tidak ditemukan"
 
 msgid "No routers with"
-msgstr ""
+msgstr "Tidak ada router dengan"
 
 msgid "found in the network database"
-msgstr ""
+msgstr "ditemukan di basis data jaringan"
 
 msgid "results"
-msgstr ""
+msgstr "hasil"
 
 msgid "Previous Page"
 msgstr "Halaman Sebelumnya"
@@ -2720,43 +2720,43 @@ msgid "Next Page"
 msgstr "Halaman Berikutnya"
 
 msgid "Results per page"
-msgstr ""
+msgstr "Hasil per halaman"
 
 msgid "Not initialized"
 msgstr "Tidak diaktifkan"
 
 msgid "Total Remote Leasesets"
-msgstr ""
+msgstr "Total Leaseset Jarak Jauh"
 
 msgid "Compact mode"
-msgstr ""
+msgstr "Mode compact"
 
 msgid "Local Leasesets"
-msgstr ""
+msgstr "Leaseset Lokal"
 
 msgid "Debug Mode"
-msgstr ""
+msgstr "Mode Debug"
 
 msgid "Published (RAP) Leasesets"
-msgstr ""
+msgstr "Leaseset yang Diterbitkan (RAP)"
 
 msgid "Sorted by hash distance, closest first."
-msgstr ""
+msgstr "Diurutkan berdasarkan jarak hash, yang terdekat lebih dulu."
 
 msgid "Mod Data"
-msgstr ""
+msgstr "Data Mod"
 
 msgid "Last Changed"
-msgstr ""
+msgstr "Terakhir Diubah"
 
 msgid "Next Mod Data"
-msgstr ""
+msgstr "Data Mod Berikutnya"
 
 msgid "Change in"
-msgstr ""
+msgstr "Ubah dalam"
 
 msgid "Floodfill mode enabled"
-msgstr ""
+msgstr "Mode floodfill diaktifkan"
 
 msgid "Routing Key"
 msgstr "Kunci Perutean"
@@ -2771,10 +2771,10 @@ msgid "Estimated total leasesets"
 msgstr "Perkiraan total sewa"
 
 msgid "Total Local Leasesets"
-msgstr ""
+msgstr "Total Leaseset Lokal"
 
 msgid "Remote Leasesets"
-msgstr ""
+msgstr "Leaseset Jarak Jauh"
 
 #, java-format
 msgid "Hostname {0} not found in network database"
@@ -2785,7 +2785,7 @@ msgid "LeaseSet for {0} not found in network database"
 msgstr "LeaseSet untuk {0} tidak ditemukan dalam database jaringan"
 
 msgid "Meta"
-msgstr ""
+msgstr "Meta"
 
 msgid "LeaseSet"
 msgstr "LeaseSet "
@@ -2817,7 +2817,7 @@ msgid "Signature type"
 msgstr "Jenis tanda tangan"
 
 msgid "Public Key"
-msgstr ""
+msgstr "Kunci Publik"
 
 msgid "Unsupported type"
 msgstr "Tipe tidak didukung"
@@ -2861,7 +2861,7 @@ msgid "Transports"
 msgstr "Transport"
 
 msgid "X Tier"
-msgstr ""
+msgstr "X Tier"
 
 msgid "Floodfills"
 msgstr "Timbunan Banjir"
@@ -2879,10 +2879,10 @@ msgid "Router is banlisted"
 msgstr "Router dilarang"
 
 msgid "Java I2P variant"
-msgstr ""
+msgstr "Varian Java I2P"
 
 msgid "I2Pd variant"
-msgstr ""
+msgstr "Varian I2Pd"
 
 msgid "RouterInfo is compressible"
 msgstr "RouterInfo dapat dikompres"
@@ -2919,7 +2919,7 @@ msgid "Whois"
 msgstr "Whois"
 
 msgid "direct"
-msgstr ""
+msgstr "langsung"
 
 msgid "Verified family (signing certificate is installed and valid)"
 msgstr "Keluarga terverifikasi (sertifikat penandatanganan terpasang dan valid)"
@@ -2943,7 +2943,7 @@ msgid "Maximum Transmission Unit"
 msgstr "Unit transmisi maksimum"
 
 msgid "Show all routers with this MTU in the NetDb"
-msgstr ""
+msgstr "Tampilkan semua router dengan MTU ini di NetDb"
 
 msgid "Addresses"
 msgstr "Alamat"
@@ -2952,7 +2952,7 @@ msgid "Introducers"
 msgstr "Perkenal"
 
 msgid "Network Id"
-msgstr ""
+msgstr "ID Jaringan"
 
 msgid "First heard about"
 msgstr "Pertama kali mendengarnya"
@@ -3047,10 +3047,10 @@ msgid "IPv6"
 msgstr "IPv6 "
 
 msgid "Active connections / Max permitted"
-msgstr ""
+msgstr "Koneksi aktif / Maksimum yang diizinkan"
 
 msgid "Connections / Limit"
-msgstr ""
+msgstr "Koneksi / Batas"
 
 msgid "Current / maximum permitted"
 msgstr "Saat ini / maksimum yang diizinkan"
@@ -3339,7 +3339,7 @@ msgid "Rejected"
 msgstr "Ditolak"
 
 msgid "First Heard About"
-msgstr ""
+msgstr "Pertama Kali Mendengar Tentang"
 
 msgid "Last Heard From"
 msgstr "Terakhir mendengar dari"
@@ -3455,7 +3455,7 @@ msgstr "{0} shared bandwidth "
 
 #, java-format
 msgid "Over {0} KB/s shared bandwidth"
-msgstr ""
+msgstr "Lewat {0} KB/s bandwidth bersama"
 
 msgid "status"
 msgstr "status "
@@ -3518,7 +3518,7 @@ msgid "Total number of banned peers"
 msgstr "Jumlah total rekan yang diblokir"
 
 msgid "Note: 'LU' class routers have been excluded from the list."
-msgstr ""
+msgstr "Catatan: Router kelas 'LU' telah dikecualikan dari daftar."
 
 #, java-format
 msgid "To view, see {0}Session Bans{1}."
@@ -3897,7 +3897,7 @@ msgid "Floodfill enabled"
 msgstr "Floodfill diaktifkan"
 
 msgid "Total number of remote LeaseSets stored in our NetDb"
-msgstr ""
+msgstr "Total jumlah LeaseSet jarak jauh yang disimpan di NetDb kami"
 
 msgid "Declining transit tunnel requests during startup phase"
 msgstr "Tidak ada permintaan terowongan yang berpartisipasi yang diterima selama 10 menit pertama saat router stabil"
@@ -3940,7 +3940,7 @@ msgid "Peers we've been talking to in the last minute / last hour"
 msgstr "Peer yang kami sudah bicara dalam beberapa menit/jam terakhir"
 
 msgid "Peers we've been talking to in the last minute"
-msgstr ""
+msgstr "Peer yang telah kami ajak bicara di menit terakhir"
 
 msgid "The number of peers available for building client tunnels"
 msgstr "Jumlah peer yang tersedia untuk membangun client tunnels"
@@ -4479,7 +4479,7 @@ msgstr "Saat ini tidak ada terowongan transit yang aktif."
 
 #, java-format
 msgid "Transit Tunnels by Peer (Top {0})"
-msgstr ""
+msgstr "Tunnel Transit berdasarkan Peer (Teratas {0})"
 
 msgid "Address"
 msgstr "Alamat"
@@ -4561,7 +4561,7 @@ msgid "Bandwidth test did not complete"
 msgstr "Tes bandwidth tidak selesai"
 
 msgid "Bad state for test"
-msgstr ""
+msgstr "Keadaan buruk untuk tes"
 
 msgid "Bandwidth test started"
 msgstr "Tes bandwidth dimulai"
@@ -4576,16 +4576,16 @@ msgid "Bandwidth test was not running"
 msgstr "Tes bandwidth tidak berjalan"
 
 msgid "ready"
-msgstr ""
+msgstr "siap"
 
 msgid "inbound test"
-msgstr ""
+msgstr "tes masuk"
 
 msgid "outbound test"
-msgstr ""
+msgstr "tes keluar"
 
 msgid "done"
-msgstr ""
+msgstr "selesai"
 
 msgid "bits per second"
 msgstr "bit per detik"
@@ -4754,7 +4754,7 @@ msgid "Share"
 msgstr "Share "
 
 msgid "NOTE"
-msgstr ""
+msgstr "CATATAN"
 
 #, java-format
 msgid "You have configured I2P to share only {0} KBps."
@@ -4781,7 +4781,7 @@ msgstr "konfigurasi lebih lanjut"
 
 #, java-format
 msgid "Key <b>{0}</b> selected for removal. To commit the change, save the configuration, or cancel to restore the key."
-msgstr ""
+msgstr "Kunci <b>{0}</b> dipilih untuk dihapus. Untuk menerapkan perubahan, simpan konfigurasi, atau batal untuk mengembalikan kunci."
 
 msgid "Floodfill Configuration"
 msgstr "Konfigurasi Floodfill"
@@ -4811,7 +4811,7 @@ msgid "Advanced I2P+ Configuration"
 msgstr "Advanced I2P+ Configuration "
 
 msgid "Help with additional configuration settings"
-msgstr ""
+msgstr "Bantuan dengan pengaturan konfigurasi tambahan"
 
 #, java-format
 msgid "To make changes, edit the file: {0}"
@@ -5205,7 +5205,7 @@ msgid "Banning will prevent the participation of this peer in tunnels you create
 msgstr "Pemblokiran akan mencegah keikutsertaan peer ini dalam tunnel yang anda buat."
 
 msgid "A list of bans by IP address is presented below."
-msgstr ""
+msgstr "Daftar larangan berdasarkan alamat IP disajikan di bawah ini."
 
 #, java-format
 msgid "To view all active bans by router hash, see {0}Banned Peers{1}."
@@ -5213,7 +5213,7 @@ msgstr "Untuk melihat semua bans aktif berdasarkan hash router, lihat {0}Peer Di
 
 #, java-format
 msgid "A list of {0}session-only bans{1} by hash is also available."
-msgstr ""
+msgstr "Daftar {0}larihan hanya sesi{1} berdasarkan hash juga tersedia."
 
 msgid "Adjust Profile Bonuses"
 msgstr "Sesuaikan Bonus Profil"
@@ -5404,7 +5404,7 @@ msgid "config sidebar"
 msgstr "bilah sisi konfigurasi"
 
 msgid "Sidebar Options"
-msgstr ""
+msgstr "Opsi Sidebar"
 
 msgid "Refresh interval"
 msgstr "Refresh Interval "
@@ -5416,10 +5416,10 @@ msgid "0 to disable"
 msgstr "0 untuk menonaktifkan"
 
 msgid "Unified sidebar"
-msgstr ""
+msgstr "Sidebar terpadu"
 
 msgid "Use the same sidebar on all pages"
-msgstr ""
+msgstr "Gunakan sidebar yang sama di semua halaman"
 
 msgid "Sticky sidebar"
 msgstr "Sidebar tetap"
@@ -5627,7 +5627,7 @@ msgid "not found"
 msgstr "tidak ditemukan"
 
 msgid "router logs"
-msgstr ""
+msgstr "log router"
 
 msgid "Critical / Error Level Logs"
 msgstr "Log Tingkat Kritis / Kesalahan"
@@ -5666,10 +5666,10 @@ msgid "Tunnel Filtering"
 msgstr "Penyaringan Terowongan"
 
 msgid "Console API"
-msgstr ""
+msgstr "API Konsol"
 
 msgid "JSONRPC"
-msgstr ""
+msgstr "JSONRPC"
 
 msgid "New User Guide"
 msgstr "Panduan Pengguna Baru"
@@ -5726,7 +5726,7 @@ msgid "This setting, when set to true, will display the <i>Sites of Interest</i>
 msgstr "Pengaturan ini, ketika diatur menjadi true, akan menampilkan tautan <i>Situs Penting</i> pada <a href=/sitemap>peta situs</a>. [Default adalah false]"
 
 msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
-msgstr ""
+msgstr "Pengaturan ini, jika disetel ke true, akan menampilkan sidebar standar di halaman beranda, memungkinkan konfigurasi melalui <a href=/configsidebar>. [Default adalah false]"
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "Pengaturan ini menentukan apakah router harus menggunakan file <i>blocklist.txt</i> yang disediakan dan daftar blokir apa pun yang dikonfigurasi pengguna untuk mengaktifkan pemblokiran router berdasarkan hash atau alamat IP. Rentang dan netmask didukung untuk IPv4 tetapi tidak untuk IPv6. Lihat file <i>blocklist.txt</i> di direktori aplikasi I2P Anda untuk informasi lebih lanjut. [Diaktifkan secara default, restart diperlukan]"
@@ -5741,7 +5741,7 @@ msgid "This setting determines whether or not the router should use the provided
 msgstr "Pengaturan ini menentukan apakah router harus menggunakan file <i>blocklist_tor.txt</i> yang disediakan di direktori aplikasi I2P+ Anda untuk mengaktifkan pemblokiran router yang beroperasi dari alamat IP node keluar Tor. [Diaktifkan secara default, restart diperlukan]"
 
 msgid "This setting enables requests from routers in the specified countries to be blocked and banned as soon as a direct tunnel request is made. Countries must be specified as two letter country codes, separated with commas. e.g. router.blockCountries=cn,ru"
-msgstr ""
+msgstr "Pengaturan ini memungkinkan permintaan dari router di negara tertentu untuk diblokir dan dilarang segera setelah permintaan tunnel langsung dibuat. Negara harus ditentukan sebagai kode negara dua huruf, dipisahkan dengan koma. contoh. router.blockCountries=cn,ru"
 
 msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
 msgstr "Ketika diatur menjadi salah, router tidak akan menghentikan permintaan pembuatan terowongan dari router yang lebih lambat atau tidak dapat dijangkau yang menjalankan versi lama. [Default adalah benar, perlu restrukturisasi]"
@@ -5879,7 +5879,7 @@ msgid "This setting determines whether routers classified as uninteresting (K or
 msgstr "Pengaturan ini menentukan apakah router yang diklasifikasikan sebagai tidak menarik (tingkat K atau L, tidak dapat dijangkau atau lebih lama dari 0.9.50) diperiksa selama proses penyegaran router setelah waktu aktif 1 jam. [Defaultnya salah]"
 
 msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
-msgstr ""
+msgstr "Ketika disetel ke true, pengaturan ini akan melonggarkan kondisi yang diperlukan untuk router Anda mempublikasikan batas kemacetan, khususnya ketika ditentukan bahwa penggunaan bandwidth Anda tinggi. Kondisi lain, seperti job lag tinggi atau router yang diklasifikasikan sebagai lambat, masih akan menyebabkan batas dipublikasikan. [Default adalah false]"
 
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
 msgstr "Ketika dikonfigurasi, ini menetapkan batasan ketat untuk jumlah terowongan yang diizinkan router untuk membangun secara bersamaan. Sebagai default router menggunakan waktu rata-rata pembangunan dan jalur keluar saat ini untuk menentukan laju pembangunan optimum. [Restart diperlukan]"
@@ -5894,10 +5894,10 @@ msgid "This setting (in minutes) allows you to manually configure how long to wa
 msgstr "Pengaturan ini (dalam menit) memungkinkan Anda mengkonfigurasi secara manual berapa lama menunggu setelah startup sebelum RouterInfos di NetDb diperiksa validitasnya, setelah itu hanya router valid yang akan diterima untuk dimasukkan. Ketika validasi terjadi, RouterInfos yang kedaluwarsa dan rekan-rekan yang tidak responsif yang hanya dapat diakses melalui SSU akan dihapus dari NetDb. [Default adalah 60 menit] Catatan: Pengaturan ini tidak ada hubungannya dengan router lama (lebih tua dari 0.9.29 secara default) yang dihapus dari NetDb dan dilarang untuk sesi router segera setelah penyimpanan NetDb dicoba."
 
 msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
-msgstr ""
+msgstr "Pengaturan ini, jika disetel ke true, akan memblokir komunikasi langsung dari semua router di negara Anda sendiri dan menambahkannya ke daftar larangan Anda hingga router Anda dimulai ulang. [Default adalah false]"
 
 msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
-msgstr ""
+msgstr "Pengaturan ini, jika disetel ke true, akan memblokir komunikasi langsung dari semua router X tier yang mempublikasikan batas kemacetan G dan tidak dapat dijangkau atau tidak dapat dijangkau, menambahkannya ke daftar larangan sesi. Catatan bahwa mode lanjutan harus diaktifkan agar pengaturan ini berlaku. [Default adalah false]"
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "Pengaturan ini memungkinkan pematikan pengujian SSU untuk menentukan apakah router Anda dibatasi firewall dan dapat diaktifkan untuk router yang pasti tidak dibatasi firewall namun mengalami masalah pembatasan firewall yang tidak beraturan. Dalam hal pengujian dinonaktifkan, baik SSU maupun NTCP seharusnya melaporkan alamat IP publik saat ini Anda di <a href=/info>halaman informasi router</a>. [Restart diperlukan]"
@@ -5906,7 +5906,7 @@ msgid "This setting determines which transport takes priority when communicating
 msgstr "Pengaturan ini menentukan transportasi mana yang diprioritaskan saat berkomunikasi dengan rekan-rekan. Secara default, NTCP lebih disukai daripada UDP (SSU). Dengan menetapkan nilai ke true, UDP akan diutamakan kecuali ada koneksi NTCP yang sudah ada sebelumnya; bila diatur ke selalu, UDP akan selalu digunakan terlepas dari koneksi NTCP yang sudah ada sebelumnya. [Defaultnya salah]"
 
 msgid "miscellaneous"
-msgstr ""
+msgstr "bermacam-macam"
 
 msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
 msgstr "Jika diatur menjadi true, opsi ini akan menempatkan ikon di tray sistem/daerah notifikasi, dengan pilihan kontrol layanan dasar. [Default dinonaktifkan]"
@@ -6146,16 +6146,16 @@ msgid "For SSL only"
 msgstr "Hanya untuk SSL"
 
 msgid "How can I configure the console and web services to be accessible on my local network?"
-msgstr ""
+msgstr "Bagaimana saya dapat mengonfigurasi konsol dan layanan web agar dapat diakses di jaringan lokal saya?"
 
 msgid "To make your console accessible on your local network, edit the configuration file 00-net.i2p.router.web.RouterConsoleRunner-clients.config in the clients.config.d folder of your I2P settings directory. Update or add the necessary IP addresses to the existing localhost (127.0.0.1) mapping. Use the -s switch for HTTPS access."
-msgstr ""
+msgstr "Untuk membuat konsol Anda dapat diakses di jaringan lokal Anda, edit file konfigurasi 00-net.i2p.router.web.RouterConsoleRunner-clients.config di folder clients.config.d direktori pengaturan I2P Anda. Perbarui atau tambahkan alamat IP yang diperlukan ke pemetaan localhost (127.0.0.1) yang ada. Gunakan switch -s untuk akses HTTPS."
 
 msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
-msgstr ""
+msgstr "Contoh: Untuk mengizinkan akses dari localhost dan 192.168.1.10 melalui HTTP dan HTTPS:"
 
 msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager's configuration section using the <i>reachable by</i> dropdown."
-msgstr ""
+msgstr "Untuk sebagian besar layanan klien, ubah alamat mendengarkan untuk layanan yang relevan di bagian konfigurasi Manajer Tunnel menggunakan dropdown <i>dapat dijangkau oleh</i>."
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "Bagaimana cara terhubung ke IRC dalam I2P?"
@@ -6542,7 +6542,7 @@ msgid "If you are in a hurry and can't wait a few hours, you can tell people to 
 msgstr "Jika Anda dalam keadaan terburu-buru dan tidak bisa menunggu beberapa jam, Anda dapat memberitahu orang lain untuk menggunakan layanan bantuan alamat \"lompat\" atau redireksi. Biasanya ini akan berfungsi dalam beberapa menit sejak Anda mendaftarkan hostname di situs yang sama. Cobalah terlebih dahulu dengan memasukkan <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code> ke browser Anda. Sekali ini berfungsi, Anda dapat memberitahu orang lain untuk menggunakannya."
 
 msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skank.i2p</a>, and paste the link where it's required to share it with others."
-msgstr ""
+msgstr "Alternatifnya, Anda dapat menyalin <i>tautan bantuan alamat</i> untuk domain Anda, yang ditunjukkan di halaman daftar buku alamat, atau di halaman detail untuk domain Anda contoh. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>detail untuk skank.i2p</a>, dan tempel tautan di mana diperlukan untuk membagikannya dengan orang lain."
 
 msgid "Backup your private key!"
 msgstr "Cadangkan kunci pribadi Anda!"
@@ -6590,10 +6590,10 @@ msgid "An introduction to tunnel access lists"
 msgstr "Pengantar daftar akses terowongan"
 
 msgid "I2PControl API"
-msgstr ""
+msgstr "API I2PControl"
 
 msgid "JSON-RPC API for remote router control and monitoring"
-msgstr ""
+msgstr "API JSON-RPC untuk kontrol dan pemantauan router jarak jauh"
 
 msgid "Information about the sidebar, network status messages, and theme overrides"
 msgstr "Informasi tentang sidebar, pesan status jaringan, dan penimpaan tema"
@@ -6602,429 +6602,429 @@ msgid "Webhosting on I2P"
 msgstr "Penyedia hosting web di I2P"
 
 msgid "I2PControl JSON-RPC API"
-msgstr ""
+msgstr "API JSON-RPC I2PControl"
 
 msgid "I2PControl provides a JSON-RPC 2.0 interface for remote control and monitoring of your I2P router. This allows external applications to programmatically manage I2P settings, retrieve status information, and control router operations through standardized HTTP requests."
-msgstr ""
+msgstr "I2PControl menyediakan antarmuka JSON-RPC 2.0 untuk kontrol dan pemantauan router I2P Anda. Ini memungkinkan aplikasi eksternal mengelola pengaturan I2P secara terprogram, mengambil informasi status, dan mengontrol operasi router melalui permintaan HTTP terstandarisasi."
 
 #, java-format
 msgid "I2PControl is a JSON-RPC 2.0 interface for remote control and monitoring of your I2P router. It listens on {0} by default when enabled for security reasons and must be enabled through the {1}."
-msgstr ""
+msgstr "I2PControl adalah antarmuka JSON-RPC 2.0 untuk kontrol dan pemantauan router I2P Anda. Ini mendengarkan pada {0} secara default ketika diaktifkan karena alasan keamanan dan harus diaktifkan melalui {1}."
 
 msgid "Web Apps configuration page"
-msgstr ""
+msgstr "Halaman konfigurasi Web Apps"
 
 msgid "Authentication"
-msgstr ""
+msgstr "Autentikasi"
 
 msgid "All API operations (except for authentication itself) require a valid authentication token. To obtain a token, you must first authenticate with your configured password:"
-msgstr ""
+msgstr "Semua operasi API (kecuali autentikasi itu sendiri) memerlukan token autentikasi yang valid. Untuk mendapatkan token, Anda harus terlebih dahulu mengautentikasi dengan kata sandi yang dikonfigurasi:"
 
 msgid "The returned token must be included in either the 'Token' parameter or as an 'X-Auth-Token' HTTP header in all subsequent API calls."
-msgstr ""
+msgstr "Token yang dikembalikan harus dimasukkan dalam parameter 'Token' atau sebagai header HTTP 'X-Auth-Token' dalam semua panggilan API selanjutnya."
 
 msgid "API Version: 1. Clients must specify API version 1 in authentication requests for compatibility."
-msgstr ""
+msgstr "Versi API: 1. Klien harus menentukan versi API 1 dalam permintaan autentikasi untuk kompatibilitas."
 
 msgid "API Methods"
-msgstr ""
+msgstr "Metode API"
 
 msgid "Authenticates with the I2PControl service and returns an authentication token for subsequent API calls."
-msgstr ""
+msgstr "Mengautentikasi dengan layanan I2PControl dan mengembalikan token autentikasi untuk panggilan API selanjutnya."
 
 msgid "Parameters:"
-msgstr ""
+msgstr "Parameter:"
 
 msgid "Password (string), API (integer, must be 1)"
-msgstr ""
+msgstr "Kata sandi (string), API (integer, harus 1)"
 
 msgid "Returns:"
-msgstr ""
+msgstr "Mengembalikan:"
 
 msgid "Token (string), API (integer)"
-msgstr ""
+msgstr "Token (string), API (integer)"
 
 msgid "Authentication:"
-msgstr ""
+msgstr "Autentikasi:"
 
 msgid "None (this is the unauthenticated method)"
-msgstr ""
+msgstr "Tidak ada (ini adalah metode yang tidak diautentikasi)"
 
 msgid "A simple test method that returns the provided string. Useful for testing API connectivity and authentication."
-msgstr ""
+msgstr "Metode tes sederhana yang mengembalikan string yang diberikan. Berguna untuk menguji konektivitas API dan autentikasi."
 
 msgid "Echo (string)"
-msgstr ""
+msgstr "Gema (string)"
 
 msgid "Result (string - echoed input)"
-msgstr ""
+msgstr "Hasil (string - input yang dipantulkan)"
 
 msgid "Required"
-msgstr ""
+msgstr "Diperlukan"
 
 msgid "Retrieves read-only status information about the I2P router. Each parameter is optional - include only the metrics you need."
-msgstr ""
+msgstr "Mengambil informasi status hanya-baca tentang router I2P. Setiap parameter bersifat opsional - sertakan hanya metrik yang Anda butuhkan."
 
 msgid "Any combination of:"
-msgstr ""
+msgstr "Kombinasi apa pun dari:"
 
 msgid "Router version"
-msgstr ""
+msgstr "Versi router"
 
 msgid "Router uptime in milliseconds"
-msgstr ""
+msgstr "Waktu aktif router dalam milidetik"
 
 msgid "Current router status"
-msgstr ""
+msgstr "Status router saat ini"
 
 msgid "Network status (0-14)"
-msgstr ""
+msgstr "Status jaringan (0-14)"
 
 msgid "1-second average inbound bandwidth (Bps)"
-msgstr ""
+msgstr "Bandwidth masuk rata-rata 1 detik (Bps)"
 
 msgid "1-second average outbound bandwidth (Bps)"
-msgstr ""
+msgstr "Bandwidth keluar rata-rata 1 detik (Bps)"
 
 msgid "15-second average inbound bandwidth (Bps)"
-msgstr ""
+msgstr "Bandwidth masuk rata-rata 15 detik (Bps)"
 
 msgid "15-second average outbound bandwidth (Bps)"
-msgstr ""
+msgstr "Bandwidth keluar rata-rata 15 detik (Bps)"
 
 msgid "Number of participating tunnels"
-msgstr ""
+msgstr "Jumlah tunnel yang berpartisipasi"
 
 msgid "Number of known peers"
-msgstr ""
+msgstr "Jumlah peer yang diketahui"
 
 msgid "Number of active peers"
-msgstr ""
+msgstr "Jumlah peer aktif"
 
 msgid "Number of fast peers"
-msgstr ""
+msgstr "Jumlah peer cepat"
 
 msgid "Number of high-capacity peers"
-msgstr ""
+msgstr "Jumlah peer kapasitas tinggi"
 
 msgid "Whether reseed is in progress"
-msgstr ""
+msgstr "Apakah reseed sedang berlangsung"
 
 msgid "Requested metrics with their current values"
-msgstr ""
+msgstr "Metrik yang diminta dengan nilai saat ini"
 
 msgid "Controls router lifecycle and management operations. Each operation is optional and executes asynchronously."
-msgstr ""
+msgstr "Mengontrol siklus hidup router dan operasi manajemen. Setiap operasi bersifat opsional dan dieksekusi secara asinkron."
 
 msgid "Graceful restart/shutdown"
-msgstr ""
+msgstr "Restart/shutdown yang elegan"
 
 msgid "Immediate hard shutdown"
-msgstr ""
+msgstr "Shutdown keras segera"
 
 msgid "Immediate hard restart"
-msgstr ""
+msgstr "Restart keras segera"
 
 msgid "Graceful shutdown (waits for tunnels)"
-msgstr ""
+msgstr "Shutdown elegan (menunggu tunnel)"
 
 msgid "Graceful restart (waits for tunnels)"
-msgstr ""
+msgstr "Restart elegan (menunggu tunnel)"
 
 msgid "Trigger router reseeding"
-msgstr ""
+msgstr "Pemicu reseed router"
 
 msgid "Check for available updates"
-msgstr ""
+msgstr "Periksa pembaruan yang tersedia"
 
 msgid "Install available updates"
-msgstr ""
+msgstr "Instal pembaruan yang tersedia"
 
 msgid "Confirmation of operation (null for most operations, result status for FindUpdates/Update)"
-msgstr ""
+msgstr "Konfirmasi operasi (null untuk sebagian besar operasi, status hasil untuk FindUpdates/Update)"
 
 msgid "Manages router network configuration. Parameters can be used to either set values (if provided) or retrieve current values (if null/omitted)."
-msgstr ""
+msgstr "Mengelola konfigurasi jaringan router. Parameter dapat digunakan untuk menetapkan nilai (jika disediakan) atau mengambil nilai saat ini (jika null/dihilangkan)."
 
 msgid "NTCP Transport Settings:"
-msgstr ""
+msgstr "Pengaturan Transport NTCP:"
 
 msgid "NTCP port (1-65535)"
-msgstr ""
+msgstr "Port NTCP (1-65535)"
 
 msgid "NTCP hostname"
-msgstr ""
+msgstr "Hostname NTCP"
 
 msgid "Auto IP setting"
-msgstr ""
+msgstr "Pengaturan IP Otomatis"
 
 msgid "SSU Transport Settings:"
-msgstr ""
+msgstr "Pengaturan Transport SSU:"
 
 msgid "SSU port (1-65535)"
-msgstr ""
+msgstr "Port SSU (1-65535)"
 
 msgid "SSU hostname"
-msgstr ""
+msgstr "Hostname SSU"
 
 msgid "IP source detection"
-msgstr ""
+msgstr "Deteksi sumber IP"
 
 msgid "Read-only detected IP address"
-msgstr ""
+msgstr "Alamat IP yang terdeteksi hanya-baca"
 
 msgid "Network Settings:"
-msgstr ""
+msgstr "Pengaturan Jaringan:"
 
 msgid "UPnP enabled/disabled"
-msgstr ""
+msgstr "UPnP diaktifkan/nonaktifkan"
 
 msgid "Laptop mode setting"
-msgstr ""
+msgstr "Pengaturan mode laptop"
 
 msgid "Bandwidth Settings:"
-msgstr ""
+msgstr "Pengaturan Bandwidth:"
 
 msgid "Bandwidth share percentage (0-100)"
-msgstr ""
+msgstr "Persentase berbagi bandwidth (0-100)"
 
 msgid "Inbound bandwidth limit (Bps)"
-msgstr ""
+msgstr "Batas bandwidth masuk (Bps)"
 
 msgid "Outbound bandwidth limit (Bps)"
-msgstr ""
+msgstr "Batas bandwidth keluar (Bps)"
 
 msgid "SettingsSaved (boolean), RestartNeeded (boolean), plus current values for queried settings"
-msgstr ""
+msgstr "SettingsSaved (boolean), RestartNeeded (boolean), ditambah nilai saat ini untuk pengaturan yang dikueri"
 
 msgid "Manages I2PControl service settings including password, port, and restart configuration."
-msgstr ""
+msgstr "Mengelola pengaturan layanan I2PControl termasuk kata sandi, port, dan konfigurasi ulang."
 
 msgid "Listen address (string, e.g., 127.0.0.1)"
-msgstr ""
+msgstr "Alamat dengar (string, contoh., 127.0.0.1)"
 
 msgid "New password (string)"
-msgstr ""
+msgstr "Kata sandi baru (string)"
 
 msgid "Listen port (integer, 1-65535)"
-msgstr ""
+msgstr "Port dengar (integer, 1-65535)"
 
 msgid "SettingsSaved (boolean), RestartNeeded (boolean), current values for requested settings"
-msgstr ""
+msgstr "SettingsSaved (boolean), RestartNeeded (boolean), nilai saat ini untuk pengaturan yang diminta"
 
 msgid "Access and modify advanced I2P router configuration settings."
-msgstr ""
+msgstr "Akses dan modifikasi pengaturan konfigurasi router I2P lanjutan."
 
 msgid "Key-value pairs of advanced settings"
-msgstr ""
+msgstr "Pasangan kunci-nilai pengaturan lanjutan"
 
 msgid "Updated settings values"
-msgstr ""
+msgstr "Nilai pengaturan yang diperbarui"
 
 msgid "Retrieves statistical rate data from router for monitoring and analysis. Useful for creating custom graphs or monitoring applications."
-msgstr ""
+msgstr "Mengambil data tingkat statistik dari router untuk pemantauan dan analisis. Berguna untuk membuat grafik kustom atau aplikasi pemantauan."
 
 msgid "Statistical metric name (string)"
-msgstr ""
+msgstr "Nama metrik statistik (string)"
 
 msgid "Time period in milliseconds (integer)"
-msgstr ""
+msgstr "Periode waktu dalam milidetik (integer)"
 
 msgid "Result (number - average value for specified period)"
-msgstr ""
+msgstr "Hasil (angka - nilai rata-rata untuk periode yang ditentukan)"
 
 msgid "Network Status Codes"
-msgstr ""
+msgstr "Kode Status Jaringan"
 
 #, java-format
 msgid "The {0} field returns an integer value representing the current network connectivity status:"
-msgstr ""
+msgstr "Bidang {0} mengembalikan nilai integer yang mewakili status konektivitas jaringan saat ini:"
 
 msgid "OK - Full connectivity"
-msgstr ""
+msgstr "OK - Konektivitas penuh"
 
 msgid "TESTING - Still establishing connectivity"
-msgstr ""
+msgstr "TESTING - Still establishing connectivity"
 
 msgid "FIREWALLED - Behind restrictive firewall"
-msgstr ""
+msgstr "FIREWALLED - Behind firewall restriktif"
 
 msgid "HIDDEN - Router in hidden mode"
-msgstr ""
+msgstr "HIDDEN - Router dalam mode tersembunyi"
 
 msgid "WARN_FIREWALLED_AND_FAST - Firewalled but fast peer"
-msgstr ""
+msgstr "WARN_FIREWALLED_AND_FAST - Firewalled tapi peer cepat"
 
 msgid "WARN_FIREWALLED_AND_FLOODFILL - Firewalled but floodfill"
-msgstr ""
+msgstr "WARN_FIREWALLED_AND_FLOODFILL - Firewalled tapi floodfill"
 
 msgid "WARN_FIREWALLED_WITH_INBOUND_TCP - Firewalled with inbound TCP"
-msgstr ""
+msgstr "WARN_FIREWALLED_WITH_INBOUND_TCP - Firewalled dengan TCP masuk"
 
 msgid "WARN_FIREWALLED_WITH_UDP_DISABLED - Firewalled with UDP disabled"
-msgstr ""
+msgstr "WARN_FIREWALLED_WITH_UDP_DISABLED - Firewalled dengan UDP dinonaktifkan"
 
 msgid "ERROR_I2CP - I2CP error"
-msgstr ""
+msgstr "ERROR_I2CP - Kesalahan I2CP"
 
 msgid "ERROR_CLOCK_SKEW - System clock skew detected"
-msgstr ""
+msgstr "ERROR_CLOCK_SKEW - Kemiringan clock sistem terdeteksi"
 
 msgid "ERROR_PRIVATE_TCP_ADDRESS - Private TCP address configured"
-msgstr ""
+msgstr "ERROR_PRIVATE_TCP_ADDRESS - Alamat TCP pribadi dikonfigurasi"
 
 msgid "ERROR_SYMMETRIC_NAT - Symmetric NAT detected"
-msgstr ""
+msgstr "ERROR_SYMMETRIC_NAT - NAT Simetris terdeteksi"
 
 msgid "ERROR_UDP_PORT_IN_USE - UDP port already in use"
-msgstr ""
+msgstr "ERROR_UDP_PORT_IN_USE - Port UDP sudah digunakan"
 
 msgid "ERROR_NO_ACTIVE_PEERS_CHECK_CONNECTION_AND_FIREWALL - No active peers"
-msgstr ""
+msgstr "ERROR_NO_ACTIVE_PEERS_CHECK_CONNECTION_AND_FIREWALL - Tidak ada peer aktif"
 
 msgid "ERROR_UDP_DISABLED_AND_TCP_UNSET - UDP disabled, TCP not configured"
-msgstr ""
+msgstr "ERROR_UDP_DISABLED_AND_TCP_UNSET - UDP dinonaktifkan, TCP tidak dikonfigurasi"
 
 msgid "Error Codes"
-msgstr ""
+msgstr "Kode Kesalahan"
 
 msgid "In addition to standard JSON-RPC 2.0 error codes, I2PControl provides specific error codes:"
-msgstr ""
+msgstr "Selain kode kesalahan JSON-RPC 2.0 standar, I2PControl menyediakan kode kesalahan spesifik:"
 
 msgid "JSON parse error"
-msgstr ""
+msgstr "Kesalahan parse JSON"
 
 msgid "Invalid request"
-msgstr ""
+msgstr "Permintaan tidak valid"
 
 msgid "Method not found"
-msgstr ""
+msgstr "Metode tidak ditemukan"
 
 msgid "Invalid parameters"
-msgstr ""
+msgstr "Parameter tidak valid"
 
 msgid "Internal error"
-msgstr ""
+msgstr "Kesalahan internal"
 
 msgid "Invalid password provided"
-msgstr ""
+msgstr "Kata sandi yang diberikan tidak valid"
 
 msgid "No authentication token presented"
-msgstr ""
+msgstr "Tidak ada token autentikasi yang disajikan"
 
 msgid "Authentication token doesn't exist"
-msgstr ""
+msgstr "Token autentikasi tidak ada"
 
 msgid "The provided authentication token was expired and will be removed"
-msgstr ""
+msgstr "Token autentikasi yang diberikan telah kedaluwarsa dan akan dihapus"
 
 msgid "The version of the I2PControl API used wasn't specified, but is required to be specified"
-msgstr ""
+msgstr "Versi API I2PControl yang digunakan tidak ditentukan, tetapi diperlukan untuk ditentukan"
 
 msgid "The version of the I2PControl API specified is not supported by I2PControl"
-msgstr ""
+msgstr "Versi API I2PControl yang ditentukan tidak didukung oleh I2PControl"
 
 msgid "Rate Statistics"
-msgstr ""
+msgstr "Statistik Tingkat"
 
 #, java-format
 msgid "For a complete list of available rate statistics, see the {0} documentation in the router console or refer to the {1} online documentation. Common rate statistics include:"
-msgstr ""
+msgstr "Untuk daftar lengkap statistik tingkat yang tersedia, lihat dokumentasi {0} di konsol router atau lihat dokumentasi online {1}. Statistik tingkat umum meliputi:"
 
 msgid "Bandwidth receive rate"
-msgstr ""
+msgstr "Tingkat penerimaan bandwidth"
 
 msgid "Bandwidth send rate"
-msgstr ""
+msgstr "Tingkat pengiriman bandwidth"
 
 msgid "Active peer count"
-msgstr ""
+msgstr "Jumlah peer aktif"
 
 msgid "Known peer count"
-msgstr ""
+msgstr "Jumlah peer yang diketahui"
 
 msgid "Tunnel test success time"
-msgstr ""
+msgstr "Waktu keberhasilan tes tunnel"
 
 msgid "Rate Statistics Documentation"
-msgstr ""
+msgstr "Dokumentasi Statistik Tingkat"
 
 #, java-format
 msgid "See the {0} documentation in the router console or refer to the {1} online documentation."
-msgstr ""
+msgstr "Lihat dokumentasi {0} di konsol router atau lihat dokumentasi online {1}."
 
 msgid "Example Usage"
-msgstr ""
+msgstr "Contoh Penggunaan"
 
 msgid "Get Router Version and Uptime:"
-msgstr ""
+msgstr "Dapatkan Versi Router dan Waktu Aktif:"
 
 msgid "Get Current Bandwidth Usage:"
-msgstr ""
+msgstr "Dapatkan Penggunaan Bandwidth Saat Ini:"
 
 msgid "Change Bandwidth Limits:"
-msgstr ""
+msgstr "Ubah Batas Bandwidth:"
 
 msgid "Graceful Restart:"
-msgstr ""
+msgstr "Restart Elegan:"
 
 msgid "Security Considerations"
-msgstr ""
+msgstr "Pertimbangan Keamanan"
 
 #, java-format
 msgid "Always change the default API password from {0} to a strong, unique password"
-msgstr ""
+msgstr "Selalu ubah kata sandi API default dari {0} menjadi kata sandi yang kuat dan unik"
 
 msgid "Consider binding I2PControl to localhost only if not accessed remotely"
-msgstr ""
+msgstr "Pertimbangkan untuk mengikat I2PControl ke localhost saja jika tidak diakses dari jarak jauh"
 
 msgid "Use HTTPS when accessing I2PControl over untrusted networks"
-msgstr ""
+msgstr "Gunakan HTTPS saat mengakses I2PControl melalui jaringan yang tidak tepercaya"
 
 msgid "Tokens may expire - implement re-authentication logic in your applications"
-msgstr ""
+msgstr "Token dapat kedaluwarsa - implementasikan logika re-autentikasi di aplikasi Anda"
 
 msgid "Monitor I2PControl access logs for unauthorized usage"
-msgstr ""
+msgstr "Pantau log akses I2PControl untuk penggunaan yang tidak sah"
 
 msgid "Be cautious with router management operations - they can affect network connectivity"
-msgstr ""
+msgstr "Hati-hati dengan operasi manajemen router - dapat memengaruhi konektivitas jaringan"
 
 msgid "Integration Examples"
-msgstr ""
+msgstr "Contoh Integrasi"
 
 msgid "The I2PControl API can be integrated with:"
-msgstr ""
+msgstr "API I2PControl dapat diintegrasikan dengan:"
 
 msgid "Monitoring systems:"
-msgstr ""
+msgstr "Sistem pemantauan:"
 
 msgid "Create custom dashboards for router performance"
-msgstr ""
+msgstr "Buat dasbor kustom untuk kinerja router"
 
 msgid "Automation scripts:"
-msgstr ""
+msgstr "Skrip otomatisasi:"
 
 msgid "Schedule restarts or configuration changes"
-msgstr ""
+msgstr "Jadwalkan restart atau perubahan konfigurasi"
 
 msgid "Mobile applications:"
-msgstr ""
+msgstr "Aplikasi seluler:"
 
 msgid "Monitor and manage your router remotely"
-msgstr ""
+msgstr "Pantau dan kelola router Anda dari jarak jauh"
 
 msgid "Network management tools:"
-msgstr ""
+msgstr "Alat manajemen jaringan:"
 
 msgid "Integrate I2P status into broader network monitoring"
-msgstr ""
+msgstr "Integrasikan status I2P ke pemantauan jaringan yang lebih luas"
 
 msgid "Alerting systems:"
-msgstr ""
+msgstr "Sistem peringatan:"
 
 msgid "Send notifications based on router status changes"
-msgstr ""
+msgstr "Kirim notifikasi berdasarkan perubahan status router"
 
 msgid "Licensing Information"
 msgstr "Informasi Lisensi"
@@ -7210,7 +7210,7 @@ msgid "Getting Support Online"
 msgstr "Mendapatkan Dukungan Secara Online"
 
 msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> on I2P's internal IRC network."
-msgstr ""
+msgstr "Anda mungkin juga ingin meninjau informasi di <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>situs web I2P</a>, memposting pesan ke <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>forum diskusi I2P</a> atau mampir ke <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> atau <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> di jaringan IRC internal I2P."
 
 msgid "Reporting Bugs"
 msgstr "Memporting Bug"
@@ -7750,7 +7750,7 @@ msgid "Configure display language, theme and optional console password"
 msgstr "Konfigurasikan bahasa tampilan, tema, dan kata sandi konsol opsional"
 
 msgid "Language"
-msgstr ""
+msgstr "Bahasa"
 
 msgid "Configure router bandwidth"
 msgstr "Konfigurasikan bandwidth router"
@@ -7789,22 +7789,22 @@ msgid "network database"
 msgstr "database jaringan"
 
 msgid "Encryption type"
-msgstr ""
+msgstr "Jenis enkripsi"
 
 msgid "Encryption types"
-msgstr ""
+msgstr "Jenis-jenis enkripsi"
 
 msgid "Signature types"
-msgstr ""
+msgstr "Jenis-jenis tanda tangan"
 
 msgid "Locally hosted private service"
-msgstr ""
+msgstr "Layanan pribadi yang dihosting secara lokal"
 
 msgid "Locally hosted public service"
-msgstr ""
+msgstr "Layanan publik yang dihosting secara lokal"
 
 msgid "Requested client leaseset"
-msgstr ""
+msgstr "Leaseset klien yang diminta"
 
 msgid "Remote"
 msgstr "Jarak jauh"
@@ -7862,7 +7862,7 @@ msgid "Filter Router log output"
 msgstr "Filtrasi keluaran log router"
 
 msgid "service logs"
-msgstr ""
+msgstr "log layanan"
 
 msgid "Service (Wrapper) Logs"
 msgstr "Service (Wrapper) Logs "
@@ -7928,7 +7928,7 @@ msgid "Peer Profile"
 msgstr "Peer Profile "
 
 msgid "Profile View"
-msgstr ""
+msgstr "Tampilan Profil"
 
 msgid "Profile for peer"
 msgstr "Profil untuk rekan"
@@ -7958,7 +7958,7 @@ msgid "Skip Setup"
 msgstr "Lewati Pengaturan"
 
 msgid "Select the language to be used for the router console and web applications ("
-msgstr ""
+msgstr "Pilih bahasa yang akan digunakan untuk konsol router dan aplikasi web ("
 
 msgid "Router Console &amp; WebApps Display Language"
 msgstr "Bahasa Tampilan Konsol Router & Aplikasi Web"
