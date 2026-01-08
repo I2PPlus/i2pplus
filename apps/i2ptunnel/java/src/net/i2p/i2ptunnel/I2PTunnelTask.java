@@ -78,6 +78,15 @@ public abstract class I2PTunnelTask extends EventDispatcherImpl {
      */
     public void connected(I2PSession session) {getTunnel().addSession(session);}
 
+    /**
+     *  Called when a session is disconnected.
+     * <p>
+     * This method removes the session from the tunnel and notifies
+     * the router that disconnection occurred.
+     * </p>
+     *
+     * @param session the session that was disconnected
+     */
     public void disconnected(I2PSession session) {
         routerDisconnected();
         getTunnel().removeSession(session);
