@@ -52,8 +52,8 @@ public class RepublishLeaseSetJob extends JobImpl {
                 _facade.stopPublishing(_dest);
                 return;
             }
-            if (uptime < 30 * 1000) {
-                long delay = Math.max(1000, 30 * 1000 - uptime);
+            if (uptime < 20 * 1000) {
+                long delay = Math.max(1000, 20 * 1000 - uptime);
                 scheduleRepublish(delay);
                 return;
             }
