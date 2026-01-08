@@ -405,6 +405,29 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
         return vals;
     }
 
+    /**
+     *  Parses and executes a tunnel management command.
+     * <p>
+     * This method is the command dispatcher for tunnel management operations.
+     * It parses the command string into command name and arguments, then
+     * dispatches to the appropriate handler method.
+     * </p>
+     * <p>
+     * <b>Supported Commands:</b>
+     * <ul>
+     *   <li>help - Display available commands</li>
+     *   <li>client/server - Create tunnel instances</li>
+     *   <li>list - List active tunnels</li>
+     *   <li>close - Close tunnels</li>
+     *   <li>config - Configure I2CP connection</li>
+     *   <li>genkeys - Generate destination keys</li>
+     * </ul>
+     * </p>
+     *
+     * @param cmd the command string to execute, format: "commandName arg1 arg2 ..."
+     * @param l the Logging instance for command output
+     * @see #runHelp(Logging)
+     */
     public void runCommand(String cmd, Logging l) {
         if (cmd.indexOf(' ') == -1) cmd += ' ';
         int iii = cmd.indexOf(' ');

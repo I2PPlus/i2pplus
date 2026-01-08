@@ -421,7 +421,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     s.setSoTimeout(BROWSER_KEEPALIVE_TIMEOUT);
                 } catch (IOException ioe) {
                     if (_log.shouldInfo())
-                        _log.info("Socket closed (timeout) before request #" + requestCount);
+                        _log.info("Socket closed (timeout) before connection #" + requestCount + " completed");
                     return;
                 }
                 if (_log.shouldDebug())

@@ -159,6 +159,17 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         _haveIDN = h;
     }
 
+    /**
+     *  Generates a unique log prefix for request tracking.
+     * <p>
+     * This method creates a consistent prefix string that includes the request ID
+     * for correlating log entries across multiple threads and connections.
+     * </p>
+     *
+     * @param requestId the unique identifier for this request
+     * @return a formatted string suitable for logging
+     * @since 0.9.14
+     */
     protected String getPrefix(long requestId) {
         return "[HTTPClient] [Request: " + _clientId + '/' + requestId + "] ";
     }
@@ -169,11 +180,17 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
     // TODO should track more than one failed proxy
 
     /**
-     *  Simple random selection, with caching by hostname,
-     *  and avoidance of the last one to fail.
+     *  Selects an appropriate outproxy for the given host from the proxy pool.
+     * <p>
+     * This method implements load balancing across multiple configured outproxies.
+     * It uses a simple round-robin or hash-based selection to distribute requests
+     * evenly across the available proxies. Failed proxies are remembered and
+     * temporarily skipped.
+     * </p>
      *
-     *  @param host the clearnet hostname we're targeting
-     *  @return null if none configured
+     * @param host the target hostname to route through the outproxy (may be used for stickiness)
+     * @return the selected proxy destination string (Base32 address), or null if no proxies configured
+     * @see #_proxyList
      */
     protected String selectProxy(String host) {
         String rv;
@@ -202,13 +219,20 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
     }
 
     /**
-     *  Only for SSL via HTTPClient. ConnectClient should use selectProxy()
+     *  Selects an SSL-capable outproxy for HTTPS connections.
+     * <p>
+     * This method is similar to selectProxy() but only considers outproxies
+     * configured for SSL support (via i2ptunnel.httpclient.SSLOutproxies).
+     * </p>
+     * <p>
+     * Unlike selectProxy(), we parse the option on the fly so it
+     * can be changed without restart. ConnectClient should use selectProxy().
+     * </p>
      *
-     *  Unlike selectProxy(), we parse the option on the fly so it
-     *  can be changed. selectProxy() requires restart...
-     *
-     *  @return null if none configured
-     *  @since 0.9.11, moved from I2PTunnelHTTPClient in 0.9.39
+     * @param host the target hostname (may be used for proxy stickiness)
+     * @return the selected SSL proxy destination, or null if none configured
+     * @see #selectProxy(String)
+     * @since 0.9.11, moved from I2PTunnelHTTPClient in 0.9.39
      */
     protected String selectSSLProxy(String host) {
         String s = getTunnel().getClientOptions().getProperty(PROP_SSL_OUTPROXIES);
@@ -407,6 +431,16 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
 
     /**
      *  @since 0.9.4
+     */
+    /**
+     *  Checks if HTTP Digest authentication is required by the outproxy.
+     * <p>
+     * This method checks the configured authentication requirements and
+     * determines whether the current request requires digest authentication.
+     * </p>
+     *
+     * @return true if digest authentication is required, false otherwise
+     * @since 0.9.4
      */
     protected boolean isDigestAuthRequired() {
         String authRequired = getTunnel().getClientOptions().getProperty(PROP_AUTH);
@@ -1022,6 +1056,18 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      *  Returns original string on any error.
      *
      *  @since 0.9.50
+     */
+    /**
+     *  Decodes Internationalized Domain Names in a URI for display.
+     * <p>
+     * This method converts punycode-encoded hostnames (xn--) in a URI
+     * back to their Unicode representation for human-readable display.
+     * If IDN support is unavailable or the URI contains no punycode,
+     * the original URI is returned unchanged.
+     * </p>
+     *
+     * @param uri the URI string that may contain encoded hostnames
+     * @return the URI with decoded hostname, or the original URI on error
      */
     private static String decodeIDNURI(String uri) {
         if (!_haveIDN) {return uri;}

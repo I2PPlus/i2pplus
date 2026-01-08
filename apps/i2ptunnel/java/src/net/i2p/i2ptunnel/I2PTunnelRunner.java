@@ -25,12 +25,35 @@ import net.i2p.util.InternalSocket;
 import net.i2p.util.Log;
 
 /**
- * Thread that forwards traffic between I2PSocket and TCP Socket.
+ * Thread that forwards traffic between an I2PSocket and a TCP Socket.
  * <p>
- * When keepAliveSocket is true, no additional data expected and
- * no forwarding thread needed from socket to I2P.
+ * I2PTunnelRunner implements the core bidirectional data forwarding between
+ * I2P and TCP network connections. It spawns two StreamForwarder threads:
+ * one for each direction of communication (I2P to TCP and TCP to I2P).
+ * </p>
  * <p>
- * Warning: Not maintained as stable API for external use.
+ * <b>Connection Flow:</b>
+ * <ol>
+ *   <li>Runner is created with connected I2PSocket and TCP Socket</li>
+ *   <li>Initial data may be sent immediately via initialI2PData/initialSocketData</li>
+ *   <li>Two StreamForwarder threads are spawned for bidirectional streaming</li>
+ *   <li>Runner monitors both connections for errors or disconnection</li>
+ *   <li>On completion or failure, callbacks may be invoked and sockets are closed</li>
+ * </ol>
+ * </p>
+ * <p>
+ * <b>Keep-Alive Support:</b> When keep-alive is enabled for either connection,
+ * the runner may skip spawning one direction of forwarding if no data is expected.
+ * This optimization is used for simple GET requests that don't require responses.
+ * </p>
+ * <p>
+ * <b>Thread Safety:</b> This class uses locks (slock) to coordinate socket access
+ * and prevent concurrent writes from multiple threads. The finishLock ensures
+ * thread-safe state transitions.
+ * </p>
+ *
+ * @see StreamForwarder
+ * @see I2PTunnelServer
  */
 public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErrorListener, DoneCallback {
     protected final Log _log;
@@ -251,56 +274,85 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
     }
 
     /**
-     * have we closed at least one (if not both) of the streams
-     * [aka we're done running the streams]?
+     *  Checks if the runner has completed its operation.
+     * <p>
+     * This method returns true when at least one of the streams (I2P or TCP)
+     * has been closed, indicating the connection is in the process of shutting down.
+     * </p>
      *
-     * @deprecated unused
+     * @return true if the runner has finished or is finishing
+     * @deprecated This method is no longer actively used for control flow
      */
     @Deprecated
     public boolean isFinished() {return finished;}
 
     /**
-     * When was the last data for this runner sent or received?
-     * As of 0.9.20, returns -1 always!
+     *  Returns the timestamp when this runner started.
+     * <p>
+     * This value is set at construction time and represents when the runner
+     * was created, not when it started executing.
+     * </p>
      *
-     * @return date (ms since the epoch), or -1 if no data has been transferred yet
-     * @deprecated unused
-     */
-    @Deprecated
-    public long getLastActivityOn() {return -1L;}
-
-    /**
-     * When this runner started up transferring data
-     *
+     * @return the timestamp in milliseconds since epoch when this runner was created
      */
     public long getStartedOn() {return startedOn;}
 
     /**
-     * Will be called if we get any data back.
-     * This is called after the first byte of data is received, not on completion.
-     * Only one of SuccessCallback, onTimeout, or onFail will be called.
+     *  Sets a callback to be invoked on successful data transfer.
+     * <p>
+     * The callback is invoked after the first byte of data is received from
+     * the destination, not when the entire transfer completes. Only one of
+     * SuccessCallback, onTimeout, or onFail will be called.
+     * </p>
      *
+     * @param sc the callback to invoke on success, may be null
      * @since 0.9.39
      */
     public void setSuccessCallback(SuccessCallback sc) {
         _onSuccess = sc;
     }
 
+    /**
+     *  Gets the TCP socket input stream.
+     * <p>
+     * This method is protected to allow subclasses to override socket access
+     * for testing or special handling (e.g., SSL unwrapping).
+     * </p>
+     *
+     * @return the TCP socket's input stream
+     * @throws IOException if the socket is closed
+     */
     protected InputStream getSocketIn() throws IOException { return s.getInputStream(); }
+
+    /**
+     *  Gets the TCP socket output stream.
+     *
+     * @return the TCP socket's output stream
+     * @throws IOException if the socket is closed
+     */
     protected OutputStream getSocketOut() throws IOException { return s.getOutputStream(); }
 
     /**
-     * Should we keep the I2P socket open when done?
-     * On the client side, only true if the browser and the server side support it.
-     * On the server side, only true if the client supports it.
+     *  Checks if the I2P socket should be kept open after data transfer.
+     * <p>
+     * On the client side, this is true only if the browser and server both
+     * support HTTP keep-alive. On the server side, it's true only if the
+     * client supports keep-alive.
+     * </p>
+     *
+     * @return true if the I2P socket should remain open for reuse
      * @since 0.9.62
      */
     boolean getKeepAliveI2P() {return _keepAliveI2P;}
 
     /**
-     * Should we keep the local browser/server socket open when done?
-     * Usually true for client side.
-     * Always false for server side.
+     *  Checks if the local socket should be kept open after data transfer.
+     * <p>
+     * Usually true for client-side connections (browser to proxy).
+     * Always false for server-side connections (I2P to local service).
+     * </p>
+     *
+     * @return true if the local socket should remain open for reuse
      * @since 0.9.62
      */
     boolean getKeepAliveSocket() {return _keepAliveSocket;}

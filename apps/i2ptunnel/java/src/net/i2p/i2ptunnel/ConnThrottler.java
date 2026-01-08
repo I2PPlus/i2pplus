@@ -93,7 +93,23 @@ class ConnThrottler {
     }
 
     /**
-     *  Checks both individual and total. Increments before checking.
+     *  Checks if a peer or the total connection rate exceeds configured limits.
+     * <p>
+     * This method increments the connection counter for the given peer and
+     * checks if either the per-peer limit or the total connection limit has
+     * been exceeded. If a limit is exceeded, the peer (or all peers) is
+     * throttled for the configured throttle period.
+     * </p>
+     * <p>
+     * <b>Throttle Logic:</b>
+     * <ul>
+     *   <li>Individual: If max connections exceeded in checkPeriod, throttle for throttlePeriod</li>
+     *   <li>Total: If total connections exceeded, throttle all for totalThrottlePeriod</li>
+     * </ul>
+     * </p>
+     *
+     * @param h the peer's destination hash to check
+     * @return true if the peer should be throttled (request denied), false otherwise
      */
     public synchronized boolean shouldThrottle(Hash h) {
         // all throttled already?
@@ -141,7 +157,12 @@ class ConnThrottler {
     }
 
     /**
-     *  start over
+     *  Resets all throttling state.
+     * <p>
+     * This method clears all peer records, resets the total connection counter,
+     * and clears the total throttle timer. After calling this method, all
+     * connections will be allowed until limits are exceeded again.
+     * </p>
      */
     public synchronized void clear() {
         _currentTotal = 0;

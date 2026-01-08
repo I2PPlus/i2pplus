@@ -66,7 +66,43 @@ import net.i2p.util.I2PSSLSocketFactory;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
-/** Base I2P tunnel server for handling incoming connections */
+/** Base I2P tunnel server for handling incoming connections.
+ * <p>
+ * I2PTunnelServer is the foundation for all I2P server tunnels that accept
+ * incoming I2P connections and forward them to local TCP services. It manages
+ * the lifecycle of I2PSocketManager, handles connection acceptance, and
+ * provides connection forwarding to configured local destinations.
+ * </p>
+ * <p>
+ * <b>Key Features:</b>
+ * <ul>
+ *   <li>Accepts incoming I2P connections via I2PServerSocket</li>
+ *   <li>Forwards connections to configurable local TCP destinations</li>
+ *   <li>Supports SSL/TLS connections via I2PSSLSocketFactory</li>
+ *   <li>Provides port-based destination mapping (targetForPort.xx)</li>
+ *   <li>Implements connection filtering via StatefulConnectionFilter</li>
+ *   <li>Uses thread pool for concurrent connection handling</li>
+ * </ul>
+ * </p>
+ * <p>
+ * <b>Connection Flow:</b>
+ * <ol>
+ *   <li>Client connects to I2P destination via I2PServerSocket</li>
+ *   <li>blockingHandle() is called with the I2PSocket</li>
+ *   <li>Local TCP socket is created via getSocket()</li>
+ *   <li>I2PTunnelRunner handles bidirectional data streaming</li>
+ * </ol>
+ * </p>
+ * <p>
+ * <b>Subclasses:</b> I2PTunnelHTTPServer, I2PTunnelIRCServer, and others
+ * extend this class to provide protocol-specific handling while reusing
+ * the core connection management infrastructure.
+ * </p>
+ *
+ * @see I2PTunnelHTTPServer
+ * @see I2PTunnelIRCServer
+ * @see I2PSocketManager
+ */
 public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
 
     protected final Log _log;
@@ -446,13 +482,15 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      */
     public long getReadTimeout() {return readTimeout;}
 
-    /**
-     *  Note that the tunnel can be reopened after this by calling startRunning().
-     *  This does not release all resources. In particular, the I2PSocketManager remains
-     *  and it may have timer threads that continue running.
-     *
-     *  To release all resources permanently, call destroy().
-     */
+     /**
+      *  Note that the tunnel can be reopened after this by calling startRunning().
+      *  This does not release all resources. In particular, the I2PSocketManager remains
+      *  and it may have timer threads that continue running.
+      *
+      *  To release all resources permanently, call destroy().
+      *
+      *  @return true if the tunnel was closed successfully, false if connections exist and forced is false
+      */
     public synchronized boolean close(boolean forced) {
         if (!open) return true;
         synchronized (lock) {
@@ -748,11 +786,31 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      *  except for a standard server (this class, no extension, as determined in getUsePool()),
      *  it is run directly in the acceptor thread (see run()).
      *
-     *  In either case, this method and any overrides must spawn a thread and return quickly.
-     *  If blocking while reading the headers (as in HTTP and IRC), the thread pool
-     *  may be exhausted.
+     *  Handles an incoming I2P connection by forwarding it to the local TCP destination.
+     * <p>
+     * This method is called by the server socket's acceptance thread when a new
+     * I2P connection arrives. It creates a local TCP socket connection and spawns
+     * an I2PTunnelRunner to handle bidirectional data streaming between the
+     * I2P and TCP connections.
+     * </p>
+     * <p>
+     * <b>Implementation Notes:</b>
+     * <ul>
+     *   <li>Subclasses that override this must call super.blockingHandle() or implement</li>
+     *       full connection handling themselves</li>
+     *   <li>For protocol-specific handling (HTTP, IRC), spawn a handler thread and return</li>
+     *   <li>For simple forwarding, this base implementation handles all cases</li>
+     *   <li>Performance: local connections are fast enough to handle synchronously</li>
+     * </ul>
+     * </p>
+     * <p>
+     * <b>Error Handling:</b> SocketException and IOException are caught and logged,
+     * with the socket being reset to notify the peer of the failure.
+     * </p>
      *
-     *  See PROP_USE_POOL, DEFAULT_USE_POOL, PROP_HANDLER_COUNT, DEFAULT_HANDLER_COUNT
+     * @param socket the incoming I2P connection from a remote peer; never null
+     * @see #getSocket(Hash, int)
+     * @see I2PTunnelRunner
      */
     protected void blockingHandle(I2PSocket socket) {
         if (_log.shouldInfo()) {
@@ -785,12 +843,31 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     }
 
     /**
-     *  Get a regular or SSL socket depending on config and the incoming port.
-     *  To configure a specific host:port as the server for incoming port xx,
-     *  set option targetForPort.xx=host:port
+     *  Creates a TCP socket connection to the configured destination.
+     * <p>
+     * This method resolves the target host and port for the incoming connection,
+     * supporting port-based destination mapping via the client options. If a port
+     * has a specific mapping (targetForPort.xx=host:port), that destination is used;
+     * otherwise, the default remoteHost and remotePort are used.
+     * </p>
+     * <p>
+     * <b>Port Mapping Configuration:</b>
+     * <pre>
+     * targetForPort.80=localhost:8080
+     * targetForPort.443=localhost:8443
+     * </pre>
+     * </p>
+     * <p>
+     * <b>Special Ports:</b> Ports 443 and 22 are automatically flagged for non-SSL
+     * handling to prevent SSL-over-SSL issues.
+     * </p>
      *
-     *  @param from may be used to construct local address since 0.9.13
-     *  @since 0.9.9
+     * @param from the hash of the peer's destination; used for local address binding
+     * @param incomingPort the port on which the I2P connection was received
+     * @return a connected TCP Socket to the appropriate local destination
+     * @throws IOException if the socket cannot be created or connected
+     * @see #getSocket(Hash, InetAddress, int)
+     * @since 0.9.9
      */
     protected Socket getSocket(Hash from, int incomingPort) throws IOException {
         if (from == null) {
@@ -812,10 +889,20 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     }
 
     /**
-     *  Only for logging, to correctly show where we were trying to get to
-     *  after getSocket() throws a SocketException
+     *  Gets a human-readable string representation of the target socket.
+     * <p>
+     * This method is used for logging and error messages when socket creation
+     * fails. It returns the configured destination address, taking into account
+     * any port-specific mappings that may have been configured.
+     * </p>
+     * <p>
+     * The returned string is formatted as "host:port" without any protocol prefix.
+     * </p>
      *
-     *  @since 0.9.62
+     * @param incomingPort the incoming I2P connection port for lookup
+     * @return the target host and port as a string, or default if not configured
+     * @see #getSocket(Hash, int)
+     * @since 0.9.62
      */
     protected String getSocketString(int incomingPort) {
         if (incomingPort != 0 && !_socketMap.isEmpty()) {
@@ -826,11 +913,19 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     }
 
     /**
-     *  Get a regular or SSL socket depending on config.
-     *  The SSL config applies to all hosts/ports.
+     *  Creates a TCP socket connection to the specified destination.
+     * <p>
+     * This convenience method delegates to getSocket() with forceNonSSL=false,
+     * allowing SSL configuration to be controlled by client options.
+     * </p>
      *
-     *  @param from may be used to construct local address since 0.9.13
-     *  @since 0.9.9
+     * @param from the hash of the peer's destination
+     * @param remoteHost the target InetAddress to connect to
+     * @param remotePort the target port to connect to
+     * @return a connected TCP Socket
+     * @throws IOException if the socket cannot be created or connected
+     * @see #getSocket(Hash, int)
+     * @since 0.9.9
      */
     protected Socket getSocket(Hash from, InetAddress remoteHost, int remotePort) throws IOException {
         return getSocket(from, remoteHost, remotePort, false);
