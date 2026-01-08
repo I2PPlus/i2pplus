@@ -286,6 +286,7 @@ document.addEventListener("DOMContentLoaded", () => {
       ["gb", "United Kingdom"],
       ["us", "United States"],
       ["um", "United States Minor Outlying Islands"],
+      ["xx", "Unknown"],
       ["zz", "Unknown"],
       ["uy", "Uruguay"],
       ["uz", "Uzbekistan"],
