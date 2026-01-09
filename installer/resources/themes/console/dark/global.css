@@ -107,7 +107,7 @@ input[disabled]{pointer-events:none}
 input::placeholder{font-family:var(--bodyfont);font-weight:700;font-style:italic;color:var(--ink);opacity:.3}
 input:focus::placeholder{opacity:0}
 input[type=search]:focus::placeholder,input[type=text]:focus::placeholder{opacity:0}
-input[type=password],input[type=text],textarea{box-sizing:border-box}
+input[type=password],input[type=text],input[type=number],textarea{box-sizing:border-box}
 input[type=submit],input[type=reset],button,.control,select,.fakebutton{line-height:1.2;vertical-align:middle}
 input[type=submit],input[type=reset],button,.control,.fakebutton,.fakebutton:visited{margin:5px 2px;padding:8px 12px;min-width:110px;display:inline-block;vertical-align:middle;text-align:center;text-decoration:none;font-weight:700;color:var(--a);text-shadow:var(--txt_shadow);border:1px solid #000;border-radius:2px;box-shadow:var(--btn_shadow);background:#000}
 input[type=submit]:hover,input[type=reset]:hover,input[type=submit]:focus,input[type=reset]:focus,button:hover,button:focus,.control:hover,.control:focus,.fakebutton:hover,.fakebutton:focus{color:var(--hover);border:1px solid var(--hover);box-shadow:var(--btn_shadow_hover);background:var(--btn_hover_radial);cursor:pointer}
@@ -120,7 +120,7 @@ input[type=file]:hover::file-selector-button,input[type=file]:focus::file-select
 input[type=file]:active::file-selector-button{color:var(--ink);text-shadow:var(--textshadow);border:1px solid var(--hover);box-shadow:var(--btn_shadow_active);background:var(--hover)}
 input[type=text],input[type=number],input[type=password],textarea,.fakeTextInput{color:#bb7;border:var(--border_hard);background:#000;cursor:text}
 input[type=text],input[type=number],input[type=password],.fakeTextInput{margin:5px 10px;padding:6px 8px;text-decoration:none;font-weight:700;border:var(--border_hard);border-radius:1px;box-shadow:var(--outline);filter:none}
-input[type=number]{appearance:textfield}
+input[type=number]{font-family:var(--bodyfont);appearance:textfield}
 input[type=text]:disabled,input[type=text]:disabled:active,input[readonly="readonly"],input[readonly="readonly"]:focus{color:#161;border:1px solid #141;background:#000;box-shadow:var(--highlight)}
 input[type=text]:focus,input[type=number]:focus,input[type=password]:focus,textarea:focus,.fakeTextInput:focus{color:var(--ink);border:1px solid #373;box-shadow:var(--btn_shadow_active),0 0 2px 1px var(--hover);background:var(--input_txt);outline:none;filter:drop-shadow(0 0 1px var(--hover));transition:filter ease .3s,filter box-shadow .3s}
 input[readonly]:focus{font-weight:400;color:#161;filter:none}

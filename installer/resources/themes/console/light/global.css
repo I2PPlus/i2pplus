@@ -98,6 +98,7 @@ input[type=radio]:not(:checked)::before{border-radius:50%}
 input[type=password],input[type=text],select,textarea,.fakeTextInput{box-sizing:border-box;line-height:1.3}
 input[type=password],input[type=text],.fakeTextInput{padding:6px 8px;color:var(--ink);box-shadow:var(--input_shadow);border:var(--border_input);background:var(--txtinput);transition:ease all .1s}
 input[type=text],select{min-width:120px}
+input[type=number]{font-family:var(--bodyfont);appearance:textfield}
 input[type=password]:focus,input[type=text]:focus,.displayText:focus,.fakeTextInput:focus,.freetext:focus{color:var(--ink_darker);box-shadow:var(--txtinput_shadow_focus);border:var(--border_inner);background:#fff;transition:ease border .15s}
 input[type=text][disabled],label[disabled]{color:var(--ink_lighter)}
 label:not([disabled]):hover{color:var(--ink_dark)}

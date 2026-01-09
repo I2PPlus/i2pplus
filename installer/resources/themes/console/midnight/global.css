@@ -82,7 +82,7 @@ label{cursor:pointer}
 input[type=text],input[type=number],input[type=password],textarea,.fakeTextInput{padding:6px 8px;box-sizing:border-box;color:var(--ink_darker);border:1px solid #27235c;box-shadow:var(--highlight),0 0 0 1px #000;background:#000;cursor:text}
 input[type=text],input[type=number],input[type=password],.fakeTextInput{margin:5px 10px;padding:6px 8px;text-decoration:none;font:700 9pt var(--bodyfont);border:var(--border_input)}
 textarea{margin:10px;padding:3px 8px;width:calc(100% - 15px);min-height:100px;text-align:left;font:9pt var(--monospaced);box-shadow:inset 1px 1px 1px 0 #000;resize:none;scrollbar-color:rgba(24,24,80,.8) #0000;scrollbar-width:thin;will-change:transform}
-input[type=number]{appearance:textfield}
+input[type=number]{font-family:var(--bodyfont);appearance:textfield}
 input[type=text]:focus,input[type=number]:focus,input[type=password]:focus,textarea:focus,.fakeTextInput:focus{color:var(--ink);border:1px solid #6466a5;box-shadow:var(--outline),0 0 0 2px var(--a_hover),var(--btn_shadow_active);background:var(--text_focus);transition:ease all .3s}
 textarea:focus{box-shadow:inset 0 0 0 1px var(--a_hover),var(--btn_shadow_active);scrollbar-width:auto}
 input[type=text]:disabled,input[readonly],input[readonly]:focus{color:#26235c;border:var(--border_inner);box-shadow:none;background:linear-gradient(180deg,#000,#000019);filter:none;cursor:not-allowed}
