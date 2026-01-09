@@ -75,6 +75,10 @@ public class TunnelConfig {
     private String _profile;
     private boolean _startOnLoad;
     private boolean _sharedClient;
+    /** Minimum startup delay in seconds for server tunnels @since 0.9.68+ */
+    private int _startupDelayMin;
+    /** Maximum startup delay in seconds for server tunnels @since 0.9.68+ */
+    private int _startupDelayMax;
     private final Set<String> _booleanOptions;
     private final Map<String, String> _otherOptions;
     private String _newProxyUser;
@@ -240,9 +244,49 @@ public class TunnelConfig {
     public void setStartOnLoad(boolean val) {
         _startOnLoad = val;
     }
+
+    /**
+     *  @param val true to share the private key with other client tunnels
+     */
     public void setShared(boolean val) {
         _sharedClient = val;
     }
+
+    /**
+     *  @param val the minimum startup delay in seconds for server tunnels
+     *  @since 0.9.68+
+     */
+    public void setStartupDelayMin(int val) {
+        _startupDelayMin = Math.max(0, val);
+    }
+
+    /**
+     *  @return the minimum startup delay in seconds
+     *  @since 0.9.68+
+     */
+    public int getStartupDelayMin() {
+        return _startupDelayMin;
+    }
+
+    /**
+     *  @param val the maximum startup delay in seconds for server tunnels
+     *  @since 0.9.68+
+     */
+    public void setStartupDelayMax(int val) {
+        _startupDelayMax = Math.max(0, val);
+    }
+
+    /**
+     *  @return the maximum startup delay in seconds
+     *  @since 0.9.68+
+     */
+    public int getStartupDelayMax() {
+        return _startupDelayMax;
+    }
+
+    /**
+     *  @param val true to delay the connection to the target until the first client connects
+     */
     public void setConnectDelay(boolean val) {
         _connectDelay = val;
     }
@@ -1240,6 +1284,11 @@ public class TunnelConfig {
         }
 
         config.setProperty(TunnelController.PROP_START, _startOnLoad + "");
+
+        if (_startupDelayMin > 0 || _startupDelayMax > 0) {
+            config.setProperty(TunnelController.PROP_STARTUP_DELAY_MIN, Integer.toString(_startupDelayMin));
+            config.setProperty(TunnelController.PROP_STARTUP_DELAY_MAX, Integer.toString(_startupDelayMax));
+        }
 
         updateTunnelQuantities(config);
         if (_connectDelay)

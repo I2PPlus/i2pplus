@@ -96,6 +96,26 @@ public class TunnelController implements Logging {
     public static final String PROP_TUN_GZIP = "i2ptunnel.gzip";
 
     /**
+     *  Configuration property for the minimum startup delay in seconds.
+     *  Only applies to server tunnels.
+     *  @since 0.9.68+
+     */
+    public static final String PROP_STARTUP_DELAY_MIN = "startupDelayMin";
+
+    /**
+     *  Configuration property for the maximum startup delay in seconds.
+     *  Only applies to server tunnels.
+     *  @since 0.9.68+
+     */
+    public static final String PROP_STARTUP_DELAY_MAX = "startupDelayMax";
+
+    /** Default minimum startup delay in seconds */
+    public static final int DEFAULT_STARTUP_DELAY_MIN = 0;
+
+    /** Default maximum startup delay in seconds */
+    public static final int DEFAULT_STARTUP_DELAY_MAX = 0;
+
+    /**
      * all of these are @since 0.9.33 (moved from TunnelConfig)
      */
     public static final String PROP_MAX_CONNS_MIN = "i2p.streaming.maxConnsPerMinute";
@@ -446,17 +466,17 @@ public class TunnelController implements Logging {
         }
     }
 
-/**
- * Configures and controls a single tunnel.
- * <p>
- * Contains persistent configuration (loaded/saved from config file) and runtime state.
- * Used to start, stop, and monitor individual tunnels. Generally one
- * TunnelController per user-configured tunnel, though some (e.g. shared clients)
- * may have multiple.
- * <p>
- * Bundled under TunnelControllerGroup for storage/loading from single config file.
- * Used by plugins to create tunnels - maintain public methods as stable API.
- */
+    /**
+     * Configures and controls a single tunnel.
+     * <p>
+     * Contains persistent configuration (loaded/saved from config file) and runtime state.
+     * Used to start, stop, and monitor individual tunnels. Generally one
+     * TunnelController per user-configured tunnel, though some (e.g. shared clients)
+     * may have multiple.
+     * <p>
+     * Bundled under TunnelControllerGroup for storage/loading from single config file.
+     * Used by plugins to create tunnels - maintain public methods as stable API.
+     */
     private void doStartTunnel() {
         synchronized (this) {
             if (_state != TunnelState.STARTING) {return;}
@@ -802,6 +822,40 @@ public class TunnelController implements Logging {
     }
 
     /**
+     *  When combined with a greater startupDelayMax, the tunnel will start
+     *  with a random delay between min and max seconds.
+     *  @return the minimum startup delay in seconds for server tunnels.
+     *  @since 0.9.68+
+     */
+    public int getStartupDelayMin() {
+        String val = _config.getProperty(PROP_STARTUP_DELAY_MIN);
+        if (val == null) return DEFAULT_STARTUP_DELAY_MIN;
+        try {
+            int i = Integer.parseInt(val.trim());
+            return Math.max(0, i);
+        } catch (NumberFormatException e) {
+            return DEFAULT_STARTUP_DELAY_MIN;
+        }
+    }
+
+    /**
+     *  When combined with a positive startupDelayMin less than this value,
+     *  the tunnel will start with a random delay between min and max seconds.
+     *  @return the maximum startup delay in seconds for server tunnels.
+     *  @since 0.9.68+
+     */
+    public int getStartupDelayMax() {
+        String val = _config.getProperty(PROP_STARTUP_DELAY_MAX);
+        if (val == null) return DEFAULT_STARTUP_DELAY_MAX;
+        try {
+            int i = Integer.parseInt(val.trim());
+            return Math.max(0, i);
+        } catch (NumberFormatException e) {
+            return DEFAULT_STARTUP_DELAY_MAX;
+        }
+    }
+
+    /**
      *  May NOT be restarted with restartTunnel() or startTunnel() later.
      *  This should release all resources.
      *
@@ -1132,8 +1186,12 @@ public class TunnelController implements Logging {
          return _config.getProperty(PROP_SHARED, "true");
     }
 
-    /** default true */
+    /**
+     *  @return true if this tunnel is configured to start when the router starts
+     *  Default is true for clients, false for servers.
+     */
     public boolean getStartOnLoad() { return Boolean.parseBoolean(_config.getProperty(PROP_START, "true")); }
+
     public boolean getPersistentClientKey() { return Boolean.parseBoolean(_config.getProperty(OPT_PERSISTENT)); }
 
     /**

@@ -92,22 +92,60 @@ public class EditBean extends IndexBean {
         return null;
     }
 
-    /** @return true if the tunnel should start automatically @since 0.8.3 */
+    /**
+     *  @param tunnel the tunnel index
+     *  @return true if the tunnel is configured to start when the router starts
+     *  @since 0.8.3
+     */
     public boolean startAutomatically(int tunnel) {
         return _helper.shouldStartAutomatically(tunnel);
     }
 
-    /** @return true if the tunnel connection should be delayed @since 0.8.3 */
+    /**
+     *  @param tunnel the tunnel index
+     *  @return the minimum startup delay in seconds for server tunnels
+     *  @since 0.9.68+
+     */
+    public int getStartupDelayMin(int tunnel) {
+        TunnelController tc = _helper.getController(tunnel);
+        if (tc == null) return 0;
+        return tc.getStartupDelayMin();
+    }
+
+    /**
+     *  @param tunnel the tunnel index
+     *  @return the maximum startup delay in seconds for server tunnels
+     *  @since 0.9.68+
+     */
+    public int getStartupDelayMax(int tunnel) {
+        TunnelController tc = _helper.getController(tunnel);
+        if (tc == null) return 0;
+        return tc.getStartupDelayMax();
+    }
+
+    /**
+     *  @param tunnel the tunnel index
+     *  @return true if the tunnel connection should be delayed until the first client connects
+     *  @since 0.8.3
+     */
     public boolean shouldDelay(int tunnel) {
         return _helper.shouldDelayConnect(tunnel);
     }
 
-    /** @return true if the tunnel is interactive @since 0.8.3 */
+    /**
+     *  @param tunnel the tunnel index
+     *  @return true if the tunnel is interactive (requires immediate response)
+     *  @since 0.8.3
+     */
     public boolean isInteractive(int tunnel) {
         return _helper.isInteractive(tunnel);
     }
 
-    /** in or both in/out */
+    /**
+     *  @param tunnel the tunnel index
+     *  @param defaultLength the default depth if not configured
+     *  @return the tunnel depth (number of hops) for inbound tunnels, or -1 for default
+     */
     public int getTunnelDepth(int tunnel, int defaultLength) {
         return _helper.getTunnelDepth(tunnel, defaultLength);
     }

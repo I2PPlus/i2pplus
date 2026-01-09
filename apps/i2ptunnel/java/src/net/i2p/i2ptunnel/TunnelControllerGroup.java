@@ -30,6 +30,7 @@ import net.i2p.util.FileUtil;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
 import net.i2p.util.OrderedProperties;
+import net.i2p.util.RandomSource;
 import net.i2p.util.SecureDirectory;
 import net.i2p.util.SystemVersion;
 
@@ -394,8 +395,7 @@ public class TunnelControllerGroup implements ClientApp {
                     if (!ok) {
                         shouldMigrate = false;
                     } else {
-                        _log.logAlways(Log.WARN, "Migrated tunnel configurations to " + dir +
-                                                 " from " + cfgFile);
+                        _log.logAlways(Log.WARN, "Migrated tunnel configurations to " + dir + " from " + cfgFile);
                     }
                 } else {
                     _log.logAlways(Log.WARN, "Not migrating tunnel configurations");
@@ -518,8 +518,46 @@ public class TunnelControllerGroup implements ClientApp {
                         return;
                     }
                     for (TunnelController controller : _controllers) {
-                        if (controller.getStartOnLoad())
-                            controller.startTunnelBackground();
+                        if (!controller.getStartOnLoad())
+                            continue;
+                        if (!controller.isClient()) {
+                            int delayMin = controller.getStartupDelayMin();
+                            int delayMax = controller.getStartupDelayMax();
+                            if (delayMax > delayMin && delayMin >= 0) {
+                                int delay = delayMin + RandomSource.getInstance().nextInt(Math.max(1, delayMax - delayMin));
+                                String name = controller.getName();
+                                String type = controller.getType();
+                                String host = controller.getTargetHost();
+                                String port = controller.getTargetPort();
+                                String typeDesc;
+                                if ("httpserver".equals(type)) {
+                                    typeDesc = "Web Server";
+                                } else if ("ircserver".equals(type)) {
+                                    typeDesc = "IRC Server";
+                                } else if ("httpbidirserver".equals(type)) {
+                                    typeDesc = "Bidirectional HTTP Server";
+                                } else if ("streamrserver".equals(type)) {
+                                    typeDesc = "Streamr Server";
+                                } else {
+                                    typeDesc = "Server";
+                                }
+                                final String msg = "‣ Delaying startup of " + name + " [" + typeDesc + " on " + host + ":" + port + "] for " + delay + "s...";
+                                final TunnelController tc = controller;
+                                new I2PAppThread(new Runnable() {
+                                    public void run() {
+                                        tc.log(msg);
+                                        try {
+                                            Thread.sleep(delay * 1000);
+                                        } catch (InterruptedException e) {
+                                            Thread.currentThread().interrupt();
+                                        }
+                                        tc.startTunnelBackground();
+                                    }
+                                }, "Tunnel startup delay for " + name).start();
+                                continue;
+                            }
+                        }
+                        controller.startTunnelBackground();
                     }
                 } finally {
                     _controllersLock.readLock().unlock();

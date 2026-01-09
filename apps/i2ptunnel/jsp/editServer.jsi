@@ -69,6 +69,21 @@
 </td>
 </tr>
 <tr>
+<th colspan=2 title="<%=intl._t("Random delay before starting tunnel to defend against correlation attacks")%>"><%=intl._t("Startup Delay")%></th>
+</tr>
+<tr>
+<td>
+<b><%=intl._t("Minimum")%>:</b>
+<input type=number min="0" max="3600" size=6 name="startupDelayMin" value="<%=editBean.getStartupDelayMin(curTunnel)%>" class="freetext" title="<%=intl._t("Minimum startup delay")%>">
+<%=intl._t("seconds")%>
+</td>
+<td>
+<b><%=intl._t("Maximum")%>:</b>
+<input type=number min="0" max="3600" size=6 name="startupDelayMax" value="<%=editBean.getStartupDelayMax(curTunnel)%>" class="freetext" title="<%=intl._t("Maximum startup delay")%>">
+<%=intl._t("seconds")%>
+</td>
+</tr>
+<tr>
 <th><%=intl._t("Description")%></th>
 <th>
 <%  if (("httpserver".equals(tunnelType)) || ("httpbidirserver".equals(tunnelType))) { %>

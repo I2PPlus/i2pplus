@@ -1019,19 +1019,50 @@ public class IndexBean {
         _removeConfirmed = true;
     }
     /**
-     * If called with any value, we want this tunnel to start whenever it is
-     * loaded (aka right now and whenever the router is started up)
+     *  If called with any value, we want this tunnel to start whenever it is
+     *  loaded (aka right now and whenever the router is started up)
+     *  @param moo any value triggers startup on load
      */
     public void setStartOnLoad(String moo) {
         _config.setStartOnLoad(true);
     }
 
+    /**
+     *  @param moo any value triggers shared private key mode
+     */
     public void setShared(String moo) {
         _config.setShared(true);
     }
 
+    /**
+     *  @param val true to share the private key with other client tunnels
+     */
     public void setShared(boolean val) {
         _config.setShared(val);
+    }
+
+    /**
+     *  @param val the minimum startup delay in seconds for server tunnels
+     *  @since 0.9.68+
+     */
+    public void setStartupDelayMin(String val) {
+        if (val != null) {
+            try {
+                _config.setStartupDelayMin(Integer.parseInt(val.trim()));
+            } catch (NumberFormatException nfe) {}
+        }
+    }
+
+    /**
+     *  @param val the maximum startup delay in seconds for server tunnels
+     *  @since 0.9.68+
+     */
+    public void setStartupDelayMax(String val) {
+        if (val != null) {
+            try {
+                _config.setStartupDelayMax(Integer.parseInt(val.trim()));
+            } catch (NumberFormatException nfe) {}
+        }
     }
 
     public void setConnectDelay(String moo) {
