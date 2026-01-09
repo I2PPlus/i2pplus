@@ -641,9 +641,12 @@ public class NamingServiceBean extends AddressbookBean {
      */
     public void export(Writer out) throws IOException {
         Properties searchProps = new Properties();
-        // only blockfile needs this
+        // BlockfileNamingService requires the list property; others ignore it
         searchProps.setProperty("list", getFileName());
-        if (filter != null) {
+        // Phase 1: Server-side filtering via NamingService API
+        // Only letter filters and search are applied here; status/category are client-side
+        boolean sortByDate = "latest".equals(filter);
+        if (filter != null && !sortByDate && !filter.equals("alive") && !filter.equals("dead") && category == null) {
             String startsAt = filter.equals("0-9") ? "[0-9]" : filter;
             searchProps.setProperty("startsWith", startsAt);
         }
@@ -651,10 +654,11 @@ public class NamingServiceBean extends AddressbookBean {
             searchProps.setProperty("search", search.toLowerCase(Locale.US));
         }
 
-        // Get all results to apply blacklist filtering
+        // Query the naming service with server-side filters applied
         Map<String, Destination> allEntries = getNamingService().getEntries(searchProps);
         if (allEntries != null) {
             BlacklistBean blacklist = new BlacklistBean();
+            // Phase 2: Client-side filtering (status, category, blacklist)
             for (Map.Entry<String, Destination> entry : allEntries.entrySet()) {
                 String name = entry.getKey();
                 Destination dest = entry.getValue();
@@ -664,7 +668,67 @@ public class NamingServiceBean extends AddressbookBean {
                     continue;
                 }
 
-                // Write to output
+                // Apply status filters (alive/dead) using cached ping results
+                if (filter != null && filter.length() > 0 && !sortByDate) {
+                    if (filter.equals("0-9")) {
+                        char first = name.charAt(0);
+                        if (first < '0' || first > '9') {continue;}
+                    } else if (filter.equals("alive")) {
+                        boolean isAlive = false;
+                        boolean haveResult = false;
+                        try {
+                            java.util.Map<String, net.i2p.addressbook.HostChecker.PingResult> allResults =
+                                net.i2p.addressbook.HostCheckerBridge.getAllPingResults();
+                            if (allResults != null && !allResults.isEmpty()) {
+                                haveResult = true;
+                                net.i2p.addressbook.HostChecker.PingResult pingResult = allResults.get(name);
+                                if (pingResult != null && pingResult.reachable) {
+                                    isAlive = true;
+                                }
+                            }
+                        } catch (Exception e) {
+                            continue;
+                        }
+                        if (haveResult && !isAlive) {continue;}
+                    } else if (filter.equals("dead")) {
+                        boolean isDead = false;
+                        boolean haveResult = false;
+                        try {
+                            java.util.Map<String, net.i2p.addressbook.HostChecker.PingResult> allResults =
+                                net.i2p.addressbook.HostCheckerBridge.getAllPingResults();
+                            if (allResults != null && !allResults.isEmpty()) {
+                                haveResult = true;
+                                net.i2p.addressbook.HostChecker.PingResult pingResult = allResults.get(name);
+                                if (pingResult != null && !pingResult.reachable) {
+                                    isDead = true;
+                                }
+                            }
+                        } catch (Exception e) {
+                            continue;
+                        }
+                        if (!haveResult || !isDead) {continue;}
+                    } else if (category == null && !name.toLowerCase(Locale.US).startsWith(filter.toLowerCase(Locale.US))) {
+                        continue;
+                    }
+                }
+
+                // Apply category filter
+                if (category != null) {
+                    String hostCategory = null;
+                    try {
+                        net.i2p.addressbook.HostChecker hostChecker = net.i2p.addressbook.HostCheckerBridge.getInstance();
+                        if (hostChecker != null) {
+                            hostCategory = hostChecker.getCategory(name);
+                        }
+                    } catch (Exception e) {
+                        continue;
+                    }
+                    if (hostCategory == null || !category.equalsIgnoreCase(hostCategory)) {
+                        continue;
+                    }
+                }
+
+                // Entry passed all filters - write to output
                 out.write(name);
                 out.write('=');
                 out.write(dest.toBase64());
