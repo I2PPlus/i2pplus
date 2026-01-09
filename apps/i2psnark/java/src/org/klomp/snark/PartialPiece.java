@@ -71,15 +71,9 @@ class PartialPiece implements Comparable<PartialPiece> {
                     tempBs = new byte[len];
                 } catch (OutOfMemoryError oom) {
                     if (_max_in_mem > PeerState.PARTSIZE) _max_in_mem /= 2;
-                    Log log =
-                            I2PAppContext.getGlobalContext()
-                                    .logManager()
-                                    .getLog(PartialPiece.class);
-                    log.logAlways(
-                            Log.WARN,
-                            "OOM creating new partial piece -> RAM cache reduced to "
-                                    + _max_in_mem / 1024
-                                    + "KB");
+                    Log log = I2PAppContext.getGlobalContext().logManager().getLog(PartialPiece.class);
+                    log.logAlways(Log.WARN, "OOM creating new partial piece -> RAM cache reduced to " +
+                                             _max_in_mem / 1024 + "KB");
                     // fall through to use temp file
                 }
             }
