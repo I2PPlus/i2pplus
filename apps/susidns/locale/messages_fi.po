@@ -543,9 +543,6 @@ msgstr "Luo omat tunnistuskuvasi"
 msgid "Launch Image Generator"
 msgstr "Käynnistä Image Generator"
 
-msgid "Export"
-msgstr "Vie"
-
 msgid "Introduction"
 msgstr "Johdanto"
 
@@ -674,5 +671,3 @@ msgstr "Pääosoitekirjaasi manuaalisesti lisätyt osoitteet yhdistetään reiti
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Tilauksistasi saamasi isännät yhdistetään reitittimen osoitekirjaasi."
-
-#, java-format

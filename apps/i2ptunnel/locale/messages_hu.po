@@ -39,10 +39,10 @@ msgid "higher bandwidth and reliability"
 msgstr "nagyobb sávszélesség és megbízhatóság"
 
 msgid "Error - tunnels are not initialized yet"
-msgstr ""
+msgstr "Hiba - az alagutak még nem lettek inicializálva"
 
 msgid "No services configured, cannot restart!"
-msgstr ""
+msgstr "Nincs szolgáltatás konfigurálva, nem lehet újraindítani!"
 
 msgid "Stopping tunnel"
 msgstr "Alagút leállítása"
@@ -51,34 +51,34 @@ msgid "Starting tunnel"
 msgstr "Alagút indítása"
 
 msgid "Error restarting tunnel"
-msgstr ""
+msgstr "Hiba az alagút újraindításakor"
 
 msgid "Restarted all running tunnels"
-msgstr ""
+msgstr "Minden futó alagút újraindítva"
 
 msgid "No clients configured, cannot restart!"
-msgstr ""
+msgstr "Nincs kliens konfigurálva, nem lehet újraindítani!"
 
 msgid "Restarted all running client tunnels"
-msgstr ""
+msgstr "Minden futó kliens alagút újraindítva"
 
 msgid "Configuration reloaded for all tunnels"
 msgstr "Az összes alagútra vonatkozó beállítás újratöltve"
 
 msgid "Error: Invalid tunnel"
-msgstr ""
+msgstr "Hiba: Érvénytelen alagút"
 
 msgid "Started tunnel"
-msgstr ""
+msgstr "Alagút elindítva"
 
 msgid "Stopped tunnel"
-msgstr ""
+msgstr "Alagút leállítva"
 
 msgid "Restarting tunnel"
-msgstr ""
+msgstr "Alagút újraindítása"
 
 msgid "Please confirm removal"
-msgstr ""
+msgstr "Kérem erősítse meg a törlést"
 
 msgid "New Tunnel"
 msgstr "Új Alagút"
@@ -357,10 +357,10 @@ msgid "Encryption types"
 msgstr "Titkosítási típusok"
 
 msgid "Legacy options"
-msgstr ""
+msgstr "Régi opciók"
 
 msgid "Post Quantum"
-msgstr ""
+msgstr "Post Quantum"
 
 msgid "Both encryption types"
 msgstr "Mindkét titkosítási típus"
@@ -399,7 +399,7 @@ msgid "Number of Tunnels in Group"
 msgstr "Alagutak száma a csoportban"
 
 msgid "Disabled for 0 hop tunnels"
-msgstr ""
+msgstr "0 hop alagutakhoz letiltva"
 
 msgid "Variance"
 msgstr "Szórás"
@@ -1030,34 +1030,34 @@ msgid "Start All"
 msgstr "Mindet Indít"
 
 msgid "Restart all running tunnels"
-msgstr ""
+msgstr "Minden futó alagút újraindítása"
 
 msgid "Restart All"
-msgstr "Mindet Újraindít"
+msgstr "Összes újraindítása"
 
 msgid "Restart all running server tunnels"
-msgstr ""
+msgstr "Minden futó szerver alagút újraindítása"
 
 msgid "Restart All Servers"
-msgstr ""
+msgstr "Összes szerver újraindítása"
 
 msgid "Restart all running client tunnels"
-msgstr ""
+msgstr "Minden futó kliens alagút újraindítása"
 
 msgid "Restart All Clients"
-msgstr ""
+msgstr "Összes kliens újraindítása"
 
 msgid "I2P Server Tunnels"
-msgstr "I2P szerveralagutak"
+msgstr "I2P Szerver Alagutak"
 
 msgid "Helper"
-msgstr "Segítő"
+msgstr "Segéd"
 
 msgid "Type"
 msgstr "Típus"
 
 msgid "Points at"
-msgstr "Mutat erre"
+msgstr "Rámutat"
 
 msgid "Preview"
 msgstr "Előnézet"
@@ -1069,10 +1069,10 @@ msgid "Control"
 msgstr "Vezérlés"
 
 msgid "Edit Server Tunnel Settings for"
-msgstr "Szerveralagút-beállítások szerkesztése ehhez"
+msgstr "Szerver Alagút Beállítások Szerkesztése"
 
 msgid "Test IRC server, bypassing I2P"
-msgstr ""
+msgstr "IRC szerver tesztelése, I2P megkerülése"
 
 msgid "Test HTTPS server, bypassing I2P"
 msgstr "HTTPS-kiszolgáló tesztelése az I2P megkerülésével"
@@ -1087,7 +1087,7 @@ msgid "Base32 Address"
 msgstr "Base32 Cím"
 
 msgid "Offline"
-msgstr ""
+msgstr "Offline"
 
 msgid "No Preview"
 msgstr "Nincs Előnézet"
@@ -1096,28 +1096,28 @@ msgid "Starting..."
 msgstr "Indítás..."
 
 msgid "Stop this Tunnel"
-msgstr "Állítsd meg ezt az alagutat"
+msgstr "Alagút Leállítása"
 
 msgid "Running"
 msgstr "Fut"
 
 msgid "Hops"
-msgstr "Komló"
+msgstr "Ugrások"
 
 msgid "in"
-msgstr "ban"
+msgstr "be"
 
 msgid "out"
 msgstr "ki"
 
 msgid "Restart this Tunnel"
-msgstr ""
+msgstr "Alagút újraindítása"
 
 msgid "Restart"
-msgstr ""
+msgstr "Újraindítás"
 
 msgid "Stopped"
-msgstr "Leállt"
+msgstr "Leállítva"
 
 msgid "Destination"
 msgstr "Célállomás"
@@ -1129,13 +1129,13 @@ msgid "Alternate"
 msgstr "Alternatív"
 
 msgid "Alt Destination"
-msgstr "Alt rendeltetési hely"
+msgstr "Alt Célállomás"
 
 msgid "Encryption"
 msgstr "Titkosítás"
 
 msgid "Supported encryption"
-msgstr ""
+msgstr "Támogatott titkosítás"
 
 msgid "New server tunnel"
 msgstr "Új szerveralagút"

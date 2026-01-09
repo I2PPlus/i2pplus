@@ -39,10 +39,10 @@ msgid "higher bandwidth and reliability"
 msgstr "अधिक बैंडविड्थ और विश्वसनीयता"
 
 msgid "Error - tunnels are not initialized yet"
-msgstr ""
+msgstr "त्रुटि - अभी तक टनल प्रारंभ नहीं हुए हैं"
 
 msgid "No services configured, cannot restart!"
-msgstr ""
+msgstr "कोई सेवा कॉन्फ़िगर नहीं है, पुनः आरंभ नहीं हो सकती!"
 
 msgid "Stopping tunnel"
 msgstr "टनल स्थगित कर रहा है"
@@ -51,34 +51,34 @@ msgid "Starting tunnel"
 msgstr "टनल शुरू कर रहा है"
 
 msgid "Error restarting tunnel"
-msgstr ""
+msgstr "टनल पुनः आरंभ करने में त्रुटि"
 
 msgid "Restarted all running tunnels"
-msgstr ""
+msgstr "सभी चालू टनल पुनः आरंभ किए गए"
 
 msgid "No clients configured, cannot restart!"
-msgstr ""
+msgstr "कोई क्लाइंट कॉन्फ़िगर नहीं है, पुनः आरंभ नहीं हो सकता!"
 
 msgid "Restarted all running client tunnels"
-msgstr ""
+msgstr "सभी चालू क्लाइंट टनल पुनः आरंभ किए गए"
 
 msgid "Configuration reloaded for all tunnels"
 msgstr "सभी टनल के लिए पुनः लोड की गई सेटिंग"
 
 msgid "Error: Invalid tunnel"
-msgstr ""
+msgstr "त्रुटि: अमान्य टनल"
 
 msgid "Started tunnel"
-msgstr ""
+msgstr "टनल आरंभ किया गया"
 
 msgid "Stopped tunnel"
-msgstr ""
+msgstr "टनल रोका गया"
 
 msgid "Restarting tunnel"
-msgstr ""
+msgstr "टनल पुनः आरंभ हो रहा है"
 
 msgid "Please confirm removal"
-msgstr ""
+msgstr "कृपया हटाने की पुष्टि करें"
 
 msgid "New Tunnel"
 msgstr "नया टनल"
@@ -357,10 +357,10 @@ msgid "Encryption types"
 msgstr "एन्क्रिप्शन प्रकार"
 
 msgid "Legacy options"
-msgstr ""
+msgstr "पुराने विकल्प"
 
 msgid "Post Quantum"
-msgstr ""
+msgstr "पोस्ट क्वांटम"
 
 msgid "Both encryption types"
 msgstr "दोनों एन्क्रिप्शन प्रकार"
@@ -399,7 +399,7 @@ msgid "Number of Tunnels in Group"
 msgstr "टनल की संख्या ग्रुप में"
 
 msgid "Disabled for 0 hop tunnels"
-msgstr ""
+msgstr "0 हॉप टनल के लिए अक्षम"
 
 msgid "Variance"
 msgstr "वेरियंस"
@@ -1030,22 +1030,22 @@ msgid "Start All"
 msgstr "सभी शुरू करें"
 
 msgid "Restart all running tunnels"
-msgstr ""
+msgstr "सभी चालू टनल पुनः आरंभ करें"
 
 msgid "Restart All"
-msgstr "सभी पुनः शुरू करें"
+msgstr "सभी पुनः आरंभ करें"
 
 msgid "Restart all running server tunnels"
-msgstr ""
+msgstr "सभी चालू सर्वर टनल पुनः आरंभ करें"
 
 msgid "Restart All Servers"
-msgstr ""
+msgstr "सभी सर्वर पुनः आरंभ करें"
 
 msgid "Restart all running client tunnels"
-msgstr ""
+msgstr "सभी चालू क्लाइंट टनल पुनः आरंभ करें"
 
 msgid "Restart All Clients"
-msgstr ""
+msgstr "सभी क्लाइंट पुनः आरंभ करें"
 
 msgid "I2P Server Tunnels"
 msgstr "I2P सर्वर टनल"
@@ -1057,7 +1057,7 @@ msgid "Type"
 msgstr "प्रकार"
 
 msgid "Points at"
-msgstr "दिशा देता है"
+msgstr "इंगित करता है"
 
 msgid "Preview"
 msgstr "पूर्वावलोकन"
@@ -1069,10 +1069,10 @@ msgid "Control"
 msgstr "नियंत्रण"
 
 msgid "Edit Server Tunnel Settings for"
-msgstr "सर्वर टनल सेटिंग को संपादित करें"
+msgstr "सर्वर टनल सेटिंग संपादित करें"
 
 msgid "Test IRC server, bypassing I2P"
-msgstr ""
+msgstr "IRC सर्वर का परीक्षण करें, I2P को छोड़कर"
 
 msgid "Test HTTPS server, bypassing I2P"
 msgstr "HTTPS सर्वर का परीक्षण करें, I2P को छोड़कर"
@@ -1087,7 +1087,7 @@ msgid "Base32 Address"
 msgstr "बेस32 पता"
 
 msgid "Offline"
-msgstr ""
+msgstr "ऑफ़लाइन"
 
 msgid "No Preview"
 msgstr "कोई पूर्वावलोकन नहीं"
@@ -1099,43 +1099,43 @@ msgid "Stop this Tunnel"
 msgstr "इस टनल को रोकें"
 
 msgid "Running"
-msgstr "चल रहा है"
+msgstr "चालू"
 
 msgid "Hops"
 msgstr "हॉप्स"
 
 msgid "in"
-msgstr "अंदर"
+msgstr "में"
 
 msgid "out"
 msgstr "बाहर"
 
 msgid "Restart this Tunnel"
-msgstr ""
+msgstr "इस टनल को पुनः आरंभ करें"
 
 msgid "Restart"
-msgstr ""
+msgstr "पुनः आरंभ करें"
 
 msgid "Stopped"
-msgstr "रोका"
+msgstr "रोका गया"
 
 msgid "Destination"
 msgstr "गंतव्य"
 
 msgid "Signature"
-msgstr "साइनेचर"
+msgstr "हस्ताक्षर"
 
 msgid "Alternate"
-msgstr "विकल्प"
+msgstr "वैकल्पिक"
 
 msgid "Alt Destination"
-msgstr "विकल्प गंतव्य"
+msgstr "वैकल्पिक गंतव्य"
 
 msgid "Encryption"
 msgstr "एन्क्रिप्शन"
 
 msgid "Supported encryption"
-msgstr ""
+msgstr "समर्थित एन्क्रिप्शन"
 
 msgid "New server tunnel"
 msgstr "नई सर्वर टनल"

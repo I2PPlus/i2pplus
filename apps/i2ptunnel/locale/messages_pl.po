@@ -42,10 +42,10 @@ msgid "higher bandwidth and reliability"
 msgstr "wyższa przepustowość i niezawodność"
 
 msgid "Error - tunnels are not initialized yet"
-msgstr ""
+msgstr "Błąd - tunele nie zostały jeszcze zainicjowane"
 
 msgid "No services configured, cannot restart!"
-msgstr ""
+msgstr "Brak skonfigurowanych usług, nie można ponownie uruchomić!"
 
 msgid "Stopping tunnel"
 msgstr "Zatrzymywanie tunelu"
@@ -54,34 +54,34 @@ msgid "Starting tunnel"
 msgstr "Uruchamianie tunelu"
 
 msgid "Error restarting tunnel"
-msgstr ""
+msgstr "Błąd podczas ponownego uruchamiania tunelu"
 
 msgid "Restarted all running tunnels"
-msgstr ""
+msgstr "Uruchomiono ponownie wszystkie działające tunele"
 
 msgid "No clients configured, cannot restart!"
-msgstr ""
+msgstr "Brak skonfigurowanych klientów, nie można ponownie uruchomić!"
 
 msgid "Restarted all running client tunnels"
-msgstr ""
+msgstr "Uruchomiono ponownie wszystkie działające tunele klientów"
 
 msgid "Configuration reloaded for all tunnels"
 msgstr "Konfiguracja przeładowana dla wszystkich tunelii"
 
 msgid "Error: Invalid tunnel"
-msgstr ""
+msgstr "Błąd: Nieprawidłowy tunel"
 
 msgid "Started tunnel"
-msgstr ""
+msgstr "Uruchomiono tunel"
 
 msgid "Stopped tunnel"
-msgstr ""
+msgstr "Zatrzymano tunel"
 
 msgid "Restarting tunnel"
-msgstr ""
+msgstr "Ponowne uruchamianie tunelu"
 
 msgid "Please confirm removal"
-msgstr ""
+msgstr "Proszę potwierdzić usunięcie"
 
 msgid "New Tunnel"
 msgstr "Nowy tunel"
@@ -360,10 +360,10 @@ msgid "Encryption types"
 msgstr "Typy szyfrowania"
 
 msgid "Legacy options"
-msgstr ""
+msgstr "Opcje starsze"
 
 msgid "Post Quantum"
-msgstr ""
+msgstr "Postkwantowa"
 
 msgid "Both encryption types"
 msgstr "Obydwa typy szyfrowania"
@@ -403,7 +403,7 @@ msgid "Number of Tunnels in Group"
 msgstr "Liczba tuneli w grupie"
 
 msgid "Disabled for 0 hop tunnels"
-msgstr ""
+msgstr "Wyłączone dla tuneli 0-przeskokowych"
 
 msgid "Variance"
 msgstr "Zmienność"
@@ -1035,22 +1035,22 @@ msgid "Start All"
 msgstr "Uruchom wszystkie"
 
 msgid "Restart all running tunnels"
-msgstr ""
+msgstr "Uruchom ponownie wszystkie działające tunele"
 
 msgid "Restart All"
 msgstr "Restartuj wszystkie"
 
 msgid "Restart all running server tunnels"
-msgstr ""
+msgstr "Uruchom ponownie wszystkie działające tunele serwerowe"
 
 msgid "Restart All Servers"
-msgstr ""
+msgstr "Uruchom ponownie wszystkie serwery"
 
 msgid "Restart all running client tunnels"
-msgstr ""
+msgstr "Uruchom ponownie wszystkie działające tunele klientów"
 
 msgid "Restart All Clients"
-msgstr ""
+msgstr "Uruchom ponownie wszystkich klientów"
 
 msgid "I2P Server Tunnels"
 msgstr "Tunele serwerów I2P"
@@ -1077,7 +1077,7 @@ msgid "Edit Server Tunnel Settings for"
 msgstr "Edytuj ustawienia tunelu serwera dla"
 
 msgid "Test IRC server, bypassing I2P"
-msgstr ""
+msgstr "Testowy serwer IRC, z pominięciem I2P"
 
 msgid "Test HTTPS server, bypassing I2P"
 msgstr "Sprawdź serwer HTTPS pomijając I2P"
@@ -1092,7 +1092,7 @@ msgid "Base32 Address"
 msgstr "Adres Base32"
 
 msgid "Offline"
-msgstr ""
+msgstr "Offline"
 
 msgid "No Preview"
 msgstr "Brak podglądu"
@@ -1116,10 +1116,10 @@ msgid "out"
 msgstr "wyjście"
 
 msgid "Restart this Tunnel"
-msgstr ""
+msgstr "Uruchom ponownie ten tunel"
 
 msgid "Restart"
-msgstr ""
+msgstr "Uruchom ponownie"
 
 msgid "Stopped"
 msgstr "Zatrzymany"
@@ -1140,7 +1140,7 @@ msgid "Encryption"
 msgstr "Szyfrowanie"
 
 msgid "Supported encryption"
-msgstr ""
+msgstr "Obsługiwane szyfrowanie"
 
 msgid "New server tunnel"
 msgstr "Nowy tunel serwerowy"

@@ -39,10 +39,10 @@ msgid "higher bandwidth and reliability"
 msgstr "kõrgem bändlaius ja usaldusväärsus"
 
 msgid "Error - tunnels are not initialized yet"
-msgstr ""
+msgstr "Viga - tunnelid pole veel lähtestatud"
 
 msgid "No services configured, cannot restart!"
-msgstr ""
+msgstr "Ühtegi teenust pole seadistatud, ei saa taaskäivitada!"
 
 msgid "Stopping tunnel"
 msgstr "Tunnel peatatakse"
@@ -51,34 +51,34 @@ msgid "Starting tunnel"
 msgstr "Tunnel käivitatakse"
 
 msgid "Error restarting tunnel"
-msgstr ""
+msgstr "Viga tunneli taaskäivitamisel"
 
 msgid "Restarted all running tunnels"
-msgstr ""
+msgstr "Taaskäivitatud kõik töötavad tunnelid"
 
 msgid "No clients configured, cannot restart!"
-msgstr ""
+msgstr "Ühtegi klienti pole seadistatud, ei saa taaskäivitada!"
 
 msgid "Restarted all running client tunnels"
-msgstr ""
+msgstr "Taaskäivitatud kõik töötavad kliendi tunnelid"
 
 msgid "Configuration reloaded for all tunnels"
 msgstr "Kõigile tunnelitele uuesti laetud seaded"
 
 msgid "Error: Invalid tunnel"
-msgstr ""
+msgstr "Viga: Vigane tunnel"
 
 msgid "Started tunnel"
-msgstr ""
+msgstr "Tunnel käivitatud"
 
 msgid "Stopped tunnel"
-msgstr ""
+msgstr "Tunnel peatatud"
 
 msgid "Restarting tunnel"
-msgstr ""
+msgstr "Taaskäivitatakse tunnelit"
 
 msgid "Please confirm removal"
-msgstr ""
+msgstr "Palun kinnitage eemaldamine"
 
 msgid "New Tunnel"
 msgstr "Uus Tunnel"
@@ -357,10 +357,10 @@ msgid "Encryption types"
 msgstr "Krüpteerimistüübid"
 
 msgid "Legacy options"
-msgstr ""
+msgstr "Pärandvalikud"
 
 msgid "Post Quantum"
-msgstr ""
+msgstr "Post Quantum"
 
 msgid "Both encryption types"
 msgstr "Mõlemad krüpteerimistüübid"
@@ -399,7 +399,7 @@ msgid "Number of Tunnels in Group"
 msgstr "Grupis olevate tünnelede arv"
 
 msgid "Disabled for 0 hop tunnels"
-msgstr ""
+msgstr "Keelatud 0 hüppe tunnelite jaoks"
 
 msgid "Variance"
 msgstr "Variants"
@@ -1030,34 +1030,34 @@ msgid "Start All"
 msgstr "Alusta Kõik"
 
 msgid "Restart all running tunnels"
-msgstr ""
+msgstr "Taaskäivita kõik töötavad tunnelid"
 
 msgid "Restart All"
 msgstr "Taaskäivita Kõik"
 
 msgid "Restart all running server tunnels"
-msgstr ""
+msgstr "Taaskäivita kõik töötavad serveri tunnelid"
 
 msgid "Restart All Servers"
-msgstr ""
+msgstr "Taaskäivita kõik serverid"
 
 msgid "Restart all running client tunnels"
-msgstr ""
+msgstr "Taaskäivita kõik töötavad kliendi tunnelid"
 
 msgid "Restart All Clients"
-msgstr ""
+msgstr "Taaskäivita kõik kliendid"
 
 msgid "I2P Server Tunnels"
-msgstr "I2P Serveri Tunneld"
+msgstr "I2P Serveri Tunnelid"
 
 msgid "Helper"
-msgstr "Abi"
+msgstr "Abiline"
 
 msgid "Type"
 msgstr "Tüüp"
 
 msgid "Points at"
-msgstr "Näitab"
+msgstr "Osutab"
 
 msgid "Preview"
 msgstr "Eelvaade"
@@ -1066,13 +1066,13 @@ msgid "Status"
 msgstr "Olek"
 
 msgid "Control"
-msgstr "Kontrol"
+msgstr "Kontroll"
 
 msgid "Edit Server Tunnel Settings for"
 msgstr "Muuda Serveri Tunneli Seadeid"
 
 msgid "Test IRC server, bypassing I2P"
-msgstr ""
+msgstr "Testi IRC serverit, I2P mööda minnes"
 
 msgid "Test HTTPS server, bypassing I2P"
 msgstr "Test HTTPS server, ületades I2P"
@@ -1087,34 +1087,34 @@ msgid "Base32 Address"
 msgstr "Base32 Aadress"
 
 msgid "Offline"
-msgstr ""
+msgstr "Võrgust väljas"
 
 msgid "No Preview"
-msgstr "Eelvaade Puudub"
+msgstr "Eelvaade puudub"
 
 msgid "Starting..."
-msgstr "Algates..."
+msgstr "Käivitamine..."
 
 msgid "Stop this Tunnel"
-msgstr "Peata See Tunnel"
+msgstr "Peata see tunnel"
 
 msgid "Running"
-msgstr "Töökorras"
+msgstr "Töötab"
 
 msgid "Hops"
 msgstr "Hüpped"
 
 msgid "in"
-msgstr "sisenev"
+msgstr "sisse"
 
 msgid "out"
-msgstr "väljaminev"
+msgstr "välja"
 
 msgid "Restart this Tunnel"
-msgstr ""
+msgstr "Taaskäivita see tunnel"
 
 msgid "Restart"
-msgstr ""
+msgstr "Taaskäivita"
 
 msgid "Stopped"
 msgstr "Peatatud"
@@ -1135,7 +1135,7 @@ msgid "Encryption"
 msgstr "Krüpteerimine"
 
 msgid "Supported encryption"
-msgstr ""
+msgstr "Toetatud krüpteerimine"
 
 msgid "New server tunnel"
 msgstr "Uus serveri tunnel"

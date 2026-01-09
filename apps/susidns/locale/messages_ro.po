@@ -551,9 +551,6 @@ msgstr "Creați propriile imagini de identificare"
 msgid "Launch Image Generator"
 msgstr "Lansați generatorul de imagini"
 
-msgid "Export"
-msgstr "Exportă"
-
 msgid "Introduction"
 msgstr "Introducere"
 
@@ -682,5 +679,3 @@ msgstr "Adresele adăugate manual în agenda dvs. de adrese Master se vor contop
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Gazdele pe care le primiți de la abonamentele dvs. se vor contopi cu agenda de adrese a routerului."
-
-#, java-format

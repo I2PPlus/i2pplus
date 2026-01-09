@@ -543,9 +543,6 @@ msgstr "تصاویر شناسایی خود را ایجاد کنید"
 msgid "Launch Image Generator"
 msgstr "مولد تصویر را راه اندازی کنید"
 
-msgid "Export"
-msgstr "برون‌برد"
-
 msgid "Introduction"
 msgstr "معرفی"
 
@@ -674,5 +671,3 @@ msgstr "آدرس هایی که به صورت دستی به دفترچه آدرس
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "میزبان هایی که از اشتراک های خود دریافت می کنید با دفترچه آدرس روتر شما ادغام می شوند."
-
-#, java-format

@@ -543,9 +543,6 @@ msgstr "Crea le tue immagini identificative"
 msgid "Launch Image Generator"
 msgstr "Lancia Image Generator"
 
-msgid "Export"
-msgstr "Esporta"
-
 msgid "Introduction"
 msgstr "Introduzione"
 
@@ -674,5 +671,3 @@ msgstr "Gli indirizzi aggiunti manualmente alla rubrica principale verranno unit
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Gli host che ricevi dai tuoi abbonamenti verranno uniti alla rubrica del tuo router."
-
-#, java-format

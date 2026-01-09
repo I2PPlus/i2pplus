@@ -543,9 +543,6 @@ msgstr "Skapa dina egna identifieringsbilder"
 msgid "Launch Image Generator"
 msgstr "Starta Image Generator"
 
-msgid "Export"
-msgstr "Exportera"
-
 msgid "Introduction"
 msgstr "Introduktion"
 
@@ -674,5 +671,3 @@ msgstr "Adresser som läggs till manuellt i din masteradressbok kommer att slås
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Värdar du får från dina prenumerationer kommer att slås samman med din routeradressbok."
-
-#, java-format

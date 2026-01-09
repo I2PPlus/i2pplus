@@ -39,10 +39,10 @@ msgid "higher bandwidth and reliability"
 msgstr "högre bandbredd och pålitlighet"
 
 msgid "Error - tunnels are not initialized yet"
-msgstr ""
+msgstr "Fel - tunnlar är inte initialiserade ännu"
 
 msgid "No services configured, cannot restart!"
-msgstr ""
+msgstr "Inga tjänster konfigurerade, kan inte starta om!"
 
 msgid "Stopping tunnel"
 msgstr "Stoppar tunnel"
@@ -51,34 +51,34 @@ msgid "Starting tunnel"
 msgstr "Startar tunnel"
 
 msgid "Error restarting tunnel"
-msgstr ""
+msgstr "Fel vid omstart av tunnel"
 
 msgid "Restarted all running tunnels"
-msgstr ""
+msgstr "Starte om alla körande tunnlar"
 
 msgid "No clients configured, cannot restart!"
-msgstr ""
+msgstr "Inga klienter konfigurerade, kan inte starta om!"
 
 msgid "Restarted all running client tunnels"
-msgstr ""
+msgstr "Starte om alla körande klienttunnlar"
 
 msgid "Configuration reloaded for all tunnels"
 msgstr "Konfigurationen uppdaterad för alla tunnlar"
 
 msgid "Error: Invalid tunnel"
-msgstr ""
+msgstr "Fel: Ogiltig tunnel"
 
 msgid "Started tunnel"
-msgstr ""
+msgstr "Starte tunnel"
 
 msgid "Stopped tunnel"
-msgstr ""
+msgstr "Stoppade tunnel"
 
 msgid "Restarting tunnel"
-msgstr ""
+msgstr "Startar om tunnel"
 
 msgid "Please confirm removal"
-msgstr ""
+msgstr "Vänligen bekräfta borttagning"
 
 msgid "New Tunnel"
 msgstr "Ny tunnel"
@@ -357,10 +357,10 @@ msgid "Encryption types"
 msgstr "Krypteringstyper"
 
 msgid "Legacy options"
-msgstr ""
+msgstr "Äldre alternativ"
 
 msgid "Post Quantum"
-msgstr ""
+msgstr "Postkvantum"
 
 msgid "Both encryption types"
 msgstr "Båda krypteringstyperna"
@@ -399,7 +399,7 @@ msgid "Number of Tunnels in Group"
 msgstr "Antal tunnlar i grupp"
 
 msgid "Disabled for 0 hop tunnels"
-msgstr ""
+msgstr "Inaktiverad för 0-hoppstunnlar"
 
 msgid "Variance"
 msgstr "Variation"
@@ -1030,22 +1030,22 @@ msgid "Start All"
 msgstr "Starta alla"
 
 msgid "Restart all running tunnels"
-msgstr ""
+msgstr "Starta om alla körande tunnlar"
 
 msgid "Restart All"
 msgstr "Starta om alla"
 
 msgid "Restart all running server tunnels"
-msgstr ""
+msgstr "Starta om alla körande servertunnlar"
 
 msgid "Restart All Servers"
-msgstr ""
+msgstr "Starta om alla servrar"
 
 msgid "Restart all running client tunnels"
-msgstr ""
+msgstr "Starta om alla körande klienttunnlar"
 
 msgid "Restart All Clients"
-msgstr ""
+msgstr "Starta om alla klienter"
 
 msgid "I2P Server Tunnels"
 msgstr "I2P-servertunnlar"
@@ -1072,7 +1072,7 @@ msgid "Edit Server Tunnel Settings for"
 msgstr "Redigera servertunnelinställningar för"
 
 msgid "Test IRC server, bypassing I2P"
-msgstr ""
+msgstr "Testa IRC-server, kringgå I2P"
 
 msgid "Test HTTPS server, bypassing I2P"
 msgstr "Testa HTTPS-server, förbi I2P"
@@ -1087,7 +1087,7 @@ msgid "Base32 Address"
 msgstr "Base32-adress"
 
 msgid "Offline"
-msgstr ""
+msgstr "Frånkopplad"
 
 msgid "No Preview"
 msgstr "Ingen förhandsvisning"
@@ -1111,10 +1111,10 @@ msgid "out"
 msgstr "ut"
 
 msgid "Restart this Tunnel"
-msgstr ""
+msgstr "Starta om denna tunnel"
 
 msgid "Restart"
-msgstr ""
+msgstr "Starta om"
 
 msgid "Stopped"
 msgstr "Stoppad"
@@ -1135,7 +1135,7 @@ msgid "Encryption"
 msgstr "Kryptering"
 
 msgid "Supported encryption"
-msgstr ""
+msgstr "Stödd kryptering"
 
 msgid "New server tunnel"
 msgstr "Ny servertunnel"

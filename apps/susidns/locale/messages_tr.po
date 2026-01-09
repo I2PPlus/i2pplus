@@ -543,9 +543,6 @@ msgstr "Kendi tanıtım görsellerinizi oluşturun"
 msgid "Launch Image Generator"
 msgstr "Görsel Üretecini Başlat"
 
-msgid "Export"
-msgstr "Dışa Aktar"
-
 msgid "Introduction"
 msgstr "Giriş"
 
@@ -674,5 +671,3 @@ msgstr "Ana adres defterinize manuel olarak eklenen adresler, Yönlendirici adre
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Aboneliklerinizden aldığınız ana bilgisayarlar Yönlendiricinizin adres defteriyle birleşecek.Aboneliklerden gelen sunucular Yöneltici adres defteriniz ile birleştirilir."
-
-#, java-format

@@ -535,9 +535,6 @@ msgstr "独自の識別画像を作成する"
 msgid "Launch Image Generator"
 msgstr "画像ジェネレーターの起動"
 
-msgid "Export"
-msgstr "エクスポート"
-
 msgid "Introduction"
 msgstr "紹介"
 
@@ -666,5 +663,3 @@ msgstr "マスター アドレス帳に手動で追加されたアドレスは�
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "サブスクリプションから受け取ったホストは、ルーターのアドレス帳と統合されます。"
-
-#, java-format

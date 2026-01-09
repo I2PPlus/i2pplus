@@ -535,9 +535,6 @@ msgstr "创建自己的身份图像"
 msgid "Launch Image Generator"
 msgstr "查看图像生成器"
 
-msgid "Export"
-msgstr "导出"
-
 msgid "Introduction"
 msgstr "介绍"
 
@@ -666,5 +663,3 @@ msgstr "手动添加到您的主地址簿中的地址将与您的路由器地址
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "您从订阅中取得的主机将与路由器地址簿合并。"
-
-#, java-format

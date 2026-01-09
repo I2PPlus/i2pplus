@@ -543,9 +543,6 @@ msgstr "Loo oma identifitseerimispuudutised pildid"
 msgid "Launch Image Generator"
 msgstr "Käivita pildi genereerija"
 
-msgid "Export"
-msgstr "Ekspordi"
-
 msgid "Introduction"
 msgstr "Esitus"
 
@@ -674,5 +671,3 @@ msgstr "Käsitselt põhi aadressiraamatusse lisatud aadressid ühendatakse sinu 
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Tellimuste kaudu saadud hostid ühendatakse sinu Rooteri aadressiraamatusse."
-
-#, java-format

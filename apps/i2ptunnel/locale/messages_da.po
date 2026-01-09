@@ -39,10 +39,10 @@ msgid "higher bandwidth and reliability"
 msgstr "højere båndbredde og pålidelighed"
 
 msgid "Error - tunnels are not initialized yet"
-msgstr ""
+msgstr "Fejl - tunneler er ikke initialiseret endnu"
 
 msgid "No services configured, cannot restart!"
-msgstr ""
+msgstr "Ingen tjenester konfigureret, kan ikke genstarte!"
 
 msgid "Stopping tunnel"
 msgstr "Stopper tunnel"
@@ -51,34 +51,34 @@ msgid "Starting tunnel"
 msgstr "Starter tunnel"
 
 msgid "Error restarting tunnel"
-msgstr ""
+msgstr "Fejl ved genstart af tunnel"
 
 msgid "Restarted all running tunnels"
-msgstr ""
+msgstr "Alle kørende tunneler genstartet"
 
 msgid "No clients configured, cannot restart!"
-msgstr ""
+msgstr "Ingen klienter konfigureret, kan ikke genstarte!"
 
 msgid "Restarted all running client tunnels"
-msgstr ""
+msgstr "Alle kørende klienttunneler genstartet"
 
 msgid "Configuration reloaded for all tunnels"
 msgstr "Konfiguration er genindlæst for alle tunneler"
 
 msgid "Error: Invalid tunnel"
-msgstr ""
+msgstr "Fejl: Ugyldig tunnel"
 
 msgid "Started tunnel"
-msgstr ""
+msgstr "Tunnel startet"
 
 msgid "Stopped tunnel"
-msgstr ""
+msgstr "Tunnel stoppet"
 
 msgid "Restarting tunnel"
-msgstr ""
+msgstr "Genstarter tunnel"
 
 msgid "Please confirm removal"
-msgstr ""
+msgstr "Bekræft venligst fjernelse"
 
 msgid "New Tunnel"
 msgstr "Ny Tunnel"
@@ -357,10 +357,10 @@ msgid "Encryption types"
 msgstr "Krypteringstyper"
 
 msgid "Legacy options"
-msgstr ""
+msgstr "Ældre indstillinger"
 
 msgid "Post Quantum"
-msgstr ""
+msgstr "Post Quantum"
 
 msgid "Both encryption types"
 msgstr "Begge krypteringstyper"
@@ -399,7 +399,7 @@ msgid "Number of Tunnels in Group"
 msgstr "Antal tunneler i gruppe"
 
 msgid "Disabled for 0 hop tunnels"
-msgstr ""
+msgstr "Deaktiveret for 0 hop tunneler"
 
 msgid "Variance"
 msgstr "Varians"
@@ -1030,25 +1030,25 @@ msgid "Start All"
 msgstr "Start alt"
 
 msgid "Restart all running tunnels"
-msgstr ""
+msgstr "Genstart alle kørende tunneler"
 
 msgid "Restart All"
-msgstr "Genstart alle"
+msgstr "Genstart Alle"
 
 msgid "Restart all running server tunnels"
-msgstr ""
+msgstr "Genstart alle kørende servertunneler"
 
 msgid "Restart All Servers"
-msgstr ""
+msgstr "Genstart alle servere"
 
 msgid "Restart all running client tunnels"
-msgstr ""
+msgstr "Genstart alle kørende klienttunneler"
 
 msgid "Restart All Clients"
-msgstr ""
+msgstr "Genstart alle klienter"
 
 msgid "I2P Server Tunnels"
-msgstr "I2P-servertunneler"
+msgstr "I2P Servertunneler"
 
 msgid "Helper"
 msgstr "Hjælper"
@@ -1057,10 +1057,10 @@ msgid "Type"
 msgstr "Type"
 
 msgid "Points at"
-msgstr "Peger kl"
+msgstr "Peg på"
 
 msgid "Preview"
-msgstr "Forhåndsvisning"
+msgstr "Preview"
 
 msgid "Status"
 msgstr "Status"
@@ -1069,10 +1069,10 @@ msgid "Control"
 msgstr "Kontrol"
 
 msgid "Edit Server Tunnel Settings for"
-msgstr "Rediger servertunnelindstillinger for"
+msgstr "Rediger Server Tunnelindstillinger for"
 
 msgid "Test IRC server, bypassing I2P"
-msgstr ""
+msgstr "Test IRC-server, omgå I2P"
 
 msgid "Test HTTPS server, bypassing I2P"
 msgstr "Test HTTPS-server, omgå I2P"
@@ -1087,13 +1087,13 @@ msgid "Base32 Address"
 msgstr "Base32 Adresse"
 
 msgid "Offline"
-msgstr ""
+msgstr "Offline"
 
 msgid "No Preview"
-msgstr "Ingen forhåndsvisning"
+msgstr "Ingen Preview"
 
 msgid "Starting..."
-msgstr "Begynder..."
+msgstr "Starter..."
 
 msgid "Stop this Tunnel"
 msgstr "Stop denne tunnel"
@@ -1102,19 +1102,19 @@ msgid "Running"
 msgstr "Kører"
 
 msgid "Hops"
-msgstr "Humle"
+msgstr "Hop"
 
 msgid "in"
-msgstr "i"
+msgstr "ind"
 
 msgid "out"
 msgstr "ud"
 
 msgid "Restart this Tunnel"
-msgstr ""
+msgstr "Genstart denne tunnel"
 
 msgid "Restart"
-msgstr ""
+msgstr "Genstart"
 
 msgid "Stopped"
 msgstr "Stoppet"
@@ -1123,19 +1123,19 @@ msgid "Destination"
 msgstr "Destination"
 
 msgid "Signature"
-msgstr "Underskrift"
+msgstr "Signatur"
 
 msgid "Alternate"
-msgstr "Suppleant"
+msgstr "Alternativ"
 
 msgid "Alt Destination"
-msgstr "Alt Destination"
+msgstr "Alternativ Destination"
 
 msgid "Encryption"
 msgstr "Kryptering"
 
 msgid "Supported encryption"
-msgstr ""
+msgstr "Understøttet kryptering"
 
 msgid "New server tunnel"
 msgstr "Ny servertunnel"

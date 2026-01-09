@@ -559,9 +559,6 @@ msgstr "Ustvarite svoje slike za identifikacijo"
 msgid "Launch Image Generator"
 msgstr "Zaženi generator slik"
 
-msgid "Export"
-msgstr "Izvozi"
-
 msgid "Introduction"
 msgstr "Vstopno besedilo"
 
@@ -690,5 +687,3 @@ msgstr "Naslovi, ki jih ročno dodate v svoj glavni imenik naslovov, se bodo zdr
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Gostitelji, ki jih prejmete iz svojih prijav, se bodo združili z vašim imenikom naslovov maršrutnika."
-
-#, java-format

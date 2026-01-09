@@ -543,9 +543,6 @@ msgstr "Hozzon létre saját azonosító képeket"
 msgid "Launch Image Generator"
 msgstr "Indítsa el a Képgenerátort"
 
-msgid "Export"
-msgstr "Exportálás"
-
 msgid "Introduction"
 msgstr "Bevezetés"
 
@@ -674,5 +671,3 @@ msgstr "A fő címjegyzékbe kézzel hozzáadott címek egyesülnek az útválas
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Az előfizetésekből kapott gazdagépek egyesülnek az útválasztó címjegyzékével."
-
-#, java-format

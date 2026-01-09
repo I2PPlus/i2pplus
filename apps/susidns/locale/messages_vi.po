@@ -535,9 +535,6 @@ msgstr "Tạo hình ảnh nhận dạng của riêng bạn"
 msgid "Launch Image Generator"
 msgstr "Khởi chạy Trình tạo hình ảnh"
 
-msgid "Export"
-msgstr "Xuất"
-
 msgid "Introduction"
 msgstr "Giới thiệu"
 
@@ -666,5 +663,3 @@ msgstr "Các địa chỉ được thêm thủ công vào sổ địa chỉ Chí
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Máy chủ bạn nhận được từ đăng ký của mình sẽ hợp nhất với sổ địa chỉ Bộ định tuyến của bạn."
-
-#, java-format

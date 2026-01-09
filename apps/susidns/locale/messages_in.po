@@ -535,9 +535,6 @@ msgstr "Buat gambar identifikasi anda"
 msgid "Launch Image Generator"
 msgstr "Luncurkan Generator Gambar"
 
-msgid "Export"
-msgstr "Ekspor"
-
 msgid "Introduction"
 msgstr "Pendahuluan"
 
@@ -666,5 +663,3 @@ msgstr "Addressbook yang ditambahkan secara manual ke addressbook master akan be
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Host yang Anda dapatkan dari langganan akan bergabung dengan addressbook router."
-
-#, java-format

@@ -543,9 +543,6 @@ msgstr "Opret dine egne identifikationsbilleder"
 msgid "Launch Image Generator"
 msgstr "Start Image Generator"
 
-msgid "Export"
-msgstr "Eksportér"
-
 msgid "Introduction"
 msgstr "Introduktion"
 
@@ -674,5 +671,3 @@ msgstr "Adresser, der manuelt tilføjes til din masteradressebog, vil fusionere 
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Værter, du modtager fra dine abonnementer, fusionerer med din routeradressebog."
-
-#, java-format

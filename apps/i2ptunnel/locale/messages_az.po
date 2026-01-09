@@ -39,10 +39,10 @@ msgid "higher bandwidth and reliability"
 msgstr "yüksək səbət və mənbə"
 
 msgid "Error - tunnels are not initialized yet"
-msgstr ""
+msgstr "Xəta - tunellər hələ başladılmayıb"
 
 msgid "No services configured, cannot restart!"
-msgstr ""
+msgstr "Xidmət konfiqurasiya edilməyib, yenidən başladıla bilmir!"
 
 msgid "Stopping tunnel"
 msgstr "Tünəlin dayandırılması"
@@ -51,34 +51,34 @@ msgid "Starting tunnel"
 msgstr "Tünəl başlamaqdadır"
 
 msgid "Error restarting tunnel"
-msgstr ""
+msgstr "Tunneli yenidən başlatma xətası"
 
 msgid "Restarted all running tunnels"
-msgstr ""
+msgstr "Bütün işləyən tunellər yenidən başladıldı"
 
 msgid "No clients configured, cannot restart!"
-msgstr ""
+msgstr "Klient konfiqurasiya edilməyib, yenidən başladıla bilmir!"
 
 msgid "Restarted all running client tunnels"
-msgstr ""
+msgstr "Bütün işləyən klient tunelləri yenidən başladıldı"
 
 msgid "Configuration reloaded for all tunnels"
 msgstr "Bütün tünəllər üçün konfigurasiya yenidən yükləndi"
 
 msgid "Error: Invalid tunnel"
-msgstr ""
+msgstr "Xəta: Yanlış tunnel"
 
 msgid "Started tunnel"
-msgstr ""
+msgstr "Tunnel başladıldı"
 
 msgid "Stopped tunnel"
-msgstr ""
+msgstr "Tunnel dayandırıldı"
 
 msgid "Restarting tunnel"
-msgstr ""
+msgstr "Tunnel yenidən başladılır"
 
 msgid "Please confirm removal"
-msgstr ""
+msgstr "Silinməni təsdiqləyin"
 
 msgid "New Tunnel"
 msgstr "Yeni Tünəl"
@@ -357,10 +357,10 @@ msgid "Encryption types"
 msgstr "Şifrələmə növləri"
 
 msgid "Legacy options"
-msgstr ""
+msgstr "Köhnə seçimlər"
 
 msgid "Post Quantum"
-msgstr ""
+msgstr "Post-Kvant"
 
 msgid "Both encryption types"
 msgstr "Hər iki şifrələmə növü"
@@ -399,7 +399,7 @@ msgid "Number of Tunnels in Group"
 msgstr "Qrupdakı tünəllərin sayı"
 
 msgid "Disabled for 0 hop tunnels"
-msgstr ""
+msgstr "0 hoplu tunellər üçün deaktivdir"
 
 msgid "Variance"
 msgstr "Fərq"
@@ -1030,22 +1030,22 @@ msgid "Start All"
 msgstr "Hamısını Başlat"
 
 msgid "Restart all running tunnels"
-msgstr ""
+msgstr "Bütün işləyən tunelləri yenidən başlat"
 
 msgid "Restart All"
 msgstr "Hamısını Yenidən Başlat"
 
 msgid "Restart all running server tunnels"
-msgstr ""
+msgstr "Bütün işləyən server tunellərini yenidən başlat"
 
 msgid "Restart All Servers"
-msgstr ""
+msgstr "Bütün serverləri yenidən başlat"
 
 msgid "Restart all running client tunnels"
-msgstr ""
+msgstr "Bütün işləyən klient tunellərini yenidən başlat"
 
 msgid "Restart All Clients"
-msgstr ""
+msgstr "Bütün klientləri yenidən başlat"
 
 msgid "I2P Server Tunnels"
 msgstr "I2P Servis Tünəlləri"
@@ -1072,7 +1072,7 @@ msgid "Edit Server Tunnel Settings for"
 msgstr "Servis Tünəl Ayarlarını Düzəltmək Üçün"
 
 msgid "Test IRC server, bypassing I2P"
-msgstr ""
+msgstr "Test IRC server, I2P-ni keçərək"
 
 msgid "Test HTTPS server, bypassing I2P"
 msgstr "I2P-ni əməl olmaz qıymalı HTTPS test servisi"
@@ -1087,7 +1087,7 @@ msgid "Base32 Address"
 msgstr "Base32 Ünvanı"
 
 msgid "Offline"
-msgstr ""
+msgstr "Oflayn"
 
 msgid "No Preview"
 msgstr "Ön izləmə yoxdur"
@@ -1111,10 +1111,10 @@ msgid "out"
 msgstr "çıxış"
 
 msgid "Restart this Tunnel"
-msgstr ""
+msgstr "Bu tunneli yenidən başlat"
 
 msgid "Restart"
-msgstr ""
+msgstr "Yenidən başlat"
 
 msgid "Stopped"
 msgstr "Dayandırıldı"
@@ -1135,7 +1135,7 @@ msgid "Encryption"
 msgstr "Şifrələmə"
 
 msgid "Supported encryption"
-msgstr ""
+msgstr "Dəstəklənən şifrələmə"
 
 msgid "New server tunnel"
 msgstr "Yeni servis tünəli"

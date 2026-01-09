@@ -816,10 +816,10 @@ msgid "Encrypted with lookup password"
 msgstr "གཙང་གི་བཟོ་བ་བརྟེན་པའི་གསང་བཤིལ་བཟོ་བ"
 
 msgid "Send individual key to each user."
-msgstr ""
+msgstr "མཐུད་རྒྱུགས་བྱེད་པ་རེ་རེར་གདམ་ག་གཞིར་བཟོ་བ་བཏང་བ"
 
 msgid "Encrypted with per-user key"
-msgstr ""
+msgstr "མཐུད་རྒྱུགས་བྱེད་པ་རེ་རེའི་གདམ་ག་གཞིར་བཟོ་བའི་གསང་བཤིལ་བཟོ་བ"
 
 msgid "Encrypted with lookup password and per-user key"
 msgstr "གཙང་གི་བཟོ་བ་དང་མཐུད་རྒྱུགས་བྱེད་པའི་གསང་ཐོ་བརྟེན་པའི་གསང་བཤིལ་བཟོ་བ"

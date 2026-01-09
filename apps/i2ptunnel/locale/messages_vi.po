@@ -36,10 +36,10 @@ msgid "higher bandwidth and reliability"
 msgstr "băng thông và độ tin cậy cao hơn"
 
 msgid "Error - tunnels are not initialized yet"
-msgstr ""
+msgstr "Lỗi - các đường hầm chưa được khởi tạo"
 
 msgid "No services configured, cannot restart!"
-msgstr ""
+msgstr "Không có dịch vụ nào được cấu hình, không thể khởi động lại!"
 
 msgid "Stopping tunnel"
 msgstr "Ngưng đường hầm"
@@ -48,34 +48,34 @@ msgid "Starting tunnel"
 msgstr "Bắt đầu đường hầm"
 
 msgid "Error restarting tunnel"
-msgstr ""
+msgstr "Lỗi khi khởi động lại đường hầm"
 
 msgid "Restarted all running tunnels"
-msgstr ""
+msgstr "Đã khởi động lại tất cả các đường hầm đang chạy"
 
 msgid "No clients configured, cannot restart!"
-msgstr ""
+msgstr "Không có máy khách nào được cấu hình, không thể khởi động lại!"
 
 msgid "Restarted all running client tunnels"
-msgstr ""
+msgstr "Đã khởi động lại tất cả các đường hầm máy khách đang chạy"
 
 msgid "Configuration reloaded for all tunnels"
 msgstr "Nạp lại cấu hình cho mọi đường hầm"
 
 msgid "Error: Invalid tunnel"
-msgstr ""
+msgstr "Lỗi: Đường hầm không hợp lệ"
 
 msgid "Started tunnel"
-msgstr ""
+msgstr "Đường hầm đã bắt đầu"
 
 msgid "Stopped tunnel"
-msgstr ""
+msgstr "Đường hầm đã dừng"
 
 msgid "Restarting tunnel"
-msgstr ""
+msgstr "Đang khởi động lại đường hầm"
 
 msgid "Please confirm removal"
-msgstr ""
+msgstr "Vui lòng xác nhận xóa"
 
 msgid "New Tunnel"
 msgstr "Đường Hầm Mới"
@@ -354,10 +354,10 @@ msgid "Encryption types"
 msgstr "Các loại mã hóa"
 
 msgid "Legacy options"
-msgstr ""
+msgstr "Tùy chọn cũ"
 
 msgid "Post Quantum"
-msgstr ""
+msgstr "Post Quantum"
 
 msgid "Both encryption types"
 msgstr "Cả hai loại mã hóa"
@@ -395,7 +395,7 @@ msgid "Number of Tunnels in Group"
 msgstr "Số đường hầm trong nhóm"
 
 msgid "Disabled for 0 hop tunnels"
-msgstr ""
+msgstr "Tắt cho đường hầm 0 hop"
 
 msgid "Variance"
 msgstr "Độ khác biệt"
@@ -1025,22 +1025,22 @@ msgid "Start All"
 msgstr "Bắt đầu tất cả"
 
 msgid "Restart all running tunnels"
-msgstr ""
+msgstr "Khởi động lại tất cả đường hầm đang chạy"
 
 msgid "Restart All"
 msgstr "Khởi động lại tất cả"
 
 msgid "Restart all running server tunnels"
-msgstr ""
+msgstr "Khởi động lại tất cả đường hầm máy chủ đang chạy"
 
 msgid "Restart All Servers"
-msgstr ""
+msgstr "Khởi động lại tất cả máy chủ"
 
 msgid "Restart all running client tunnels"
-msgstr ""
+msgstr "Khởi động lại tất cả đường hầm khách đang chạy"
 
 msgid "Restart All Clients"
-msgstr ""
+msgstr "Khởi động lại tất cả khách"
 
 msgid "I2P Server Tunnels"
 msgstr "Đường hầm máy chủ I2P"
@@ -1067,7 +1067,7 @@ msgid "Edit Server Tunnel Settings for"
 msgstr "Chỉnh sửa cài đặt đường hầm máy chủ cho"
 
 msgid "Test IRC server, bypassing I2P"
-msgstr ""
+msgstr "Kiểm tra máy chủ IRC, bỏ qua I2P"
 
 msgid "Test HTTPS server, bypassing I2P"
 msgstr "Kiểm tra máy chủ HTTPS, bỏ qua I2P"
@@ -1082,7 +1082,7 @@ msgid "Base32 Address"
 msgstr "Địa chỉ Base32"
 
 msgid "Offline"
-msgstr ""
+msgstr "Ngoại tuyến"
 
 msgid "No Preview"
 msgstr "Không xem trước"
@@ -1106,10 +1106,10 @@ msgid "out"
 msgstr "ra ngoài"
 
 msgid "Restart this Tunnel"
-msgstr ""
+msgstr "Khởi động lại đường hầm này"
 
 msgid "Restart"
-msgstr ""
+msgstr "Khởi động lại"
 
 msgid "Stopped"
 msgstr "Đã ngưng"
@@ -1130,7 +1130,7 @@ msgid "Encryption"
 msgstr "Mã hóa"
 
 msgid "Supported encryption"
-msgstr ""
+msgstr "Mã hóa được hỗ trợ"
 
 msgid "New server tunnel"
 msgstr "Đường hầm máy chủ mới"

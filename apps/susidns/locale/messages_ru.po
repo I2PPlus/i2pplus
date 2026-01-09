@@ -551,9 +551,6 @@ msgstr "Создать своё идентификационное изобра�
 msgid "Launch Image Generator"
 msgstr "Запустить генератор изображений"
 
-msgid "Export"
-msgstr "Экспорт"
-
 msgid "Introduction"
 msgstr "Введение - SusiDNS"
 
@@ -682,5 +679,3 @@ msgstr "Адреса, добавленные в основную адресну�
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Узлы из подписок будут объединены с адресной книгой маршрутизатора."
-
-#, java-format

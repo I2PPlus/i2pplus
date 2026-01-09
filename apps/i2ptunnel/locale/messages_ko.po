@@ -36,10 +36,10 @@ msgid "higher bandwidth and reliability"
 msgstr "높은 대역폭과 신뢰도"
 
 msgid "Error - tunnels are not initialized yet"
-msgstr ""
+msgstr "오류 - 터널이 아직 초기화되지 않았습니다"
 
 msgid "No services configured, cannot restart!"
-msgstr ""
+msgstr " 구성된 서비스가 없어 재시작할 수 없습니다!"
 
 msgid "Stopping tunnel"
 msgstr "터널 중지중"
@@ -48,34 +48,34 @@ msgid "Starting tunnel"
 msgstr "터널 시작중"
 
 msgid "Error restarting tunnel"
-msgstr ""
+msgstr "터널 재시작 오류"
 
 msgid "Restarted all running tunnels"
-msgstr ""
+msgstr "실행 중인 모든 터널 재시작됨"
 
 msgid "No clients configured, cannot restart!"
-msgstr ""
+msgstr " 구성된 클라이언트가 없어 재시작할 수 없습니다!"
 
 msgid "Restarted all running client tunnels"
-msgstr ""
+msgstr "실행 중인 모든 클라이언트 터널 재시작됨"
 
 msgid "Configuration reloaded for all tunnels"
 msgstr "모든 터널에 설정 다시 로드함"
 
 msgid "Error: Invalid tunnel"
-msgstr ""
+msgstr "오류: 잘못된 터널"
 
 msgid "Started tunnel"
-msgstr ""
+msgstr "터널 시작됨"
 
 msgid "Stopped tunnel"
-msgstr ""
+msgstr "터널 중지됨"
 
 msgid "Restarting tunnel"
-msgstr ""
+msgstr "터널 재시작 중"
 
 msgid "Please confirm removal"
-msgstr ""
+msgstr "제거를 확인해주세요"
 
 msgid "New Tunnel"
 msgstr "새 터널"
@@ -354,10 +354,10 @@ msgid "Encryption types"
 msgstr "암호화 유형"
 
 msgid "Legacy options"
-msgstr ""
+msgstr "레거시 옵션"
 
 msgid "Post Quantum"
-msgstr ""
+msgstr "포스트 퀀텀"
 
 msgid "Both encryption types"
 msgstr "양쪽 암호화 유형"
@@ -395,7 +395,7 @@ msgid "Number of Tunnels in Group"
 msgstr "그룹의 터널 개수"
 
 msgid "Disabled for 0 hop tunnels"
-msgstr ""
+msgstr "0 홉 터널에 대해 비활성화됨"
 
 msgid "Variance"
 msgstr "변동"
@@ -1025,22 +1025,22 @@ msgid "Start All"
 msgstr "모두 시작"
 
 msgid "Restart all running tunnels"
-msgstr ""
+msgstr "실행 중인 모든 터널 재시작"
 
 msgid "Restart All"
 msgstr "모두 재시작"
 
 msgid "Restart all running server tunnels"
-msgstr ""
+msgstr "실행 중인 모든 서버 터널 재시작"
 
 msgid "Restart All Servers"
-msgstr ""
+msgstr "모든 서버 재시작"
 
 msgid "Restart all running client tunnels"
-msgstr ""
+msgstr "실행 중인 모든 클라이언트 터널 재시작"
 
 msgid "Restart All Clients"
-msgstr ""
+msgstr "모든 클라이언트 재시작"
 
 msgid "I2P Server Tunnels"
 msgstr "I2P 서버 터널"
@@ -1067,7 +1067,7 @@ msgid "Edit Server Tunnel Settings for"
 msgstr "서버 터널 설정 편집"
 
 msgid "Test IRC server, bypassing I2P"
-msgstr ""
+msgstr "I2P 우회 테스트 IRC 서버"
 
 msgid "Test HTTPS server, bypassing I2P"
 msgstr "I2P를 우회하는 HTTPS 서버 테스트"
@@ -1082,7 +1082,7 @@ msgid "Base32 Address"
 msgstr "Base32 주소"
 
 msgid "Offline"
-msgstr ""
+msgstr "오프라인"
 
 msgid "No Preview"
 msgstr "미리보기 없음"
@@ -1106,10 +1106,10 @@ msgid "out"
 msgstr "외부"
 
 msgid "Restart this Tunnel"
-msgstr ""
+msgstr "이 터널 재시작"
 
 msgid "Restart"
-msgstr ""
+msgstr "재시작"
 
 msgid "Stopped"
 msgstr "중지됨"
@@ -1130,7 +1130,7 @@ msgid "Encryption"
 msgstr "암호화"
 
 msgid "Supported encryption"
-msgstr ""
+msgstr "지원되는 암호화"
 
 msgid "New server tunnel"
 msgstr "새로운 서버 터널"

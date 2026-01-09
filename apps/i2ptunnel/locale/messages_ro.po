@@ -42,10 +42,10 @@ msgid "higher bandwidth and reliability"
 msgstr "lățime de bandă și fiabilitate inalta"
 
 msgid "Error - tunnels are not initialized yet"
-msgstr ""
+msgstr "Eroare - tunelurile nu sunt încă inițializate"
 
 msgid "No services configured, cannot restart!"
-msgstr ""
+msgstr "Nu există servicii configurate, nu se poate reporni!"
 
 msgid "Stopping tunnel"
 msgstr "Oprirea tunelului"
@@ -54,34 +54,34 @@ msgid "Starting tunnel"
 msgstr "Pornirea tunelului"
 
 msgid "Error restarting tunnel"
-msgstr ""
+msgstr "Eroare la repornirea tunelului"
 
 msgid "Restarted all running tunnels"
-msgstr ""
+msgstr "S-au repornit toate tunelurile în execuție"
 
 msgid "No clients configured, cannot restart!"
-msgstr ""
+msgstr "Nu există clienți configurați, nu se poate reporni!"
 
 msgid "Restarted all running client tunnels"
-msgstr ""
+msgstr "S-au repornit toate tunelurile client în execuție"
 
 msgid "Configuration reloaded for all tunnels"
 msgstr "Configurare reîncărcata pentru toate tunelurile"
 
 msgid "Error: Invalid tunnel"
-msgstr ""
+msgstr "Eroare: Tunel invalid"
 
 msgid "Started tunnel"
-msgstr ""
+msgstr "Tunel pornit"
 
 msgid "Stopped tunnel"
-msgstr ""
+msgstr "Tunel oprit"
 
 msgid "Restarting tunnel"
-msgstr ""
+msgstr "Se repornește tunelul"
 
 msgid "Please confirm removal"
-msgstr ""
+msgstr "Vă rugăm să confirmați eliminarea"
 
 msgid "New Tunnel"
 msgstr "Tunel nou"
@@ -360,10 +360,10 @@ msgid "Encryption types"
 msgstr "Tipuri de criptare"
 
 msgid "Legacy options"
-msgstr ""
+msgstr "Opțiuni moștenite"
 
 msgid "Post Quantum"
-msgstr ""
+msgstr "Post-Quantum"
 
 msgid "Both encryption types"
 msgstr "Ambele tipuri de criptare"
@@ -403,7 +403,7 @@ msgid "Number of Tunnels in Group"
 msgstr "Numărul de tuneluri în grup"
 
 msgid "Disabled for 0 hop tunnels"
-msgstr ""
+msgstr "Dezactivat pentru tuneluri cu 0 salturi"
 
 msgid "Variance"
 msgstr "Varianță"
@@ -1035,22 +1035,22 @@ msgid "Start All"
 msgstr "Pornește toate"
 
 msgid "Restart all running tunnels"
-msgstr ""
+msgstr "Repornește toate tunelurile în execuție"
 
 msgid "Restart All"
 msgstr "Repornește toate"
 
 msgid "Restart all running server tunnels"
-msgstr ""
+msgstr "Repornește toate tunelurile server în execuție"
 
 msgid "Restart All Servers"
-msgstr ""
+msgstr "Repornește toate serverele"
 
 msgid "Restart all running client tunnels"
-msgstr ""
+msgstr "Repornește toate tunelurile client în execuție"
 
 msgid "Restart All Clients"
-msgstr ""
+msgstr "Repornește toți clienții"
 
 msgid "I2P Server Tunnels"
 msgstr "Tunele de server I2P"
@@ -1077,7 +1077,7 @@ msgid "Edit Server Tunnel Settings for"
 msgstr "Editați Setările tunelului serverului pentru"
 
 msgid "Test IRC server, bypassing I2P"
-msgstr ""
+msgstr "Server IRC de test, ocolind I2P"
 
 msgid "Test HTTPS server, bypassing I2P"
 msgstr "Testați serverul HTTPS, ocolind I2P"
@@ -1092,7 +1092,7 @@ msgid "Base32 Address"
 msgstr "Adresa Base32"
 
 msgid "Offline"
-msgstr ""
+msgstr "Deconectat"
 
 msgid "No Preview"
 msgstr "Nici o previzualizare"
@@ -1116,10 +1116,10 @@ msgid "out"
 msgstr "afară"
 
 msgid "Restart this Tunnel"
-msgstr ""
+msgstr "Repornire tunel"
 
 msgid "Restart"
-msgstr ""
+msgstr "Repornire"
 
 msgid "Stopped"
 msgstr "Oprit"
@@ -1140,7 +1140,7 @@ msgid "Encryption"
 msgstr "Criptare"
 
 msgid "Supported encryption"
-msgstr ""
+msgstr "Criptare suportată"
 
 msgid "New server tunnel"
 msgstr "Noul tunel de server"

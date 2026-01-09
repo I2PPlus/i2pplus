@@ -6967,6 +6967,7 @@ msgstr "Tiempo de éxito de prueba de túnel"
 msgid "Rate Statistics Documentation"
 msgstr "Documentación de estadísticas de tasa"
 
+#, java-format
 msgid "See the {0} documentation in the router console or refer to the {1} online documentation."
 msgstr "Consulte la documentación {0} en la consola del enrutador o consulte la documentación en línea {1}."
 
@@ -6988,6 +6989,7 @@ msgstr "Reinicio controlado:"
 msgid "Security Considerations"
 msgstr "Consideraciones de seguridad"
 
+#, java-format
 msgid "Always change the default API password from {0} to a strong, unique password"
 msgstr "Siempre cambie la contraseña predeterminada de la API de {0} a una contraseña fuerte y única"
 

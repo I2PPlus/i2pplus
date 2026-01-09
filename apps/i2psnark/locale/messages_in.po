@@ -771,7 +771,7 @@ msgstr "Tidak dapat membuat torrent untuk data yang tidak ada: {0}"
 
 #, java-format
 msgid "Cannot add a torrent ending in \".torrent\": {0}"
- msgstr "Tidak dapat menambahkan torrent yang diakhiri dengan \".torrent\": {0}"
+msgstr "Tidak dapat menambahkan torrent yang diakhiri dengan \".torrent\": {0}"
 
 #, java-format
 msgid "Torrent with this name is already running: {0}"

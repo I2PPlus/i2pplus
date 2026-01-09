@@ -662,10 +662,262 @@ msgid "Normal Mode"
 msgstr "Normaali tila"
 
 #, java-format
-msgid "1 star"
-msgid_plural "{0} stars"
-msgstr[0] "1 tähti"
-msgstr[1] "{0} tähteä"
+msgid "1 torrent"
+msgid_plural "{0} torrents"
+msgstr[0] "1 torrentti"
+msgstr[1] "{0} torrenttia"
+
+msgid "Search"
+msgstr "Hae"
+
+msgid "Show All"
+msgstr "Näytä kaikki"
+
+msgid "Active"
+msgstr "Aktiivinen"
+
+msgid "Inactive"
+msgstr "Ei aktiivinen"
+
+msgid "Connected"
+msgstr "Yhdistetty"
+
+msgid "Seeding"
+msgstr "Siemenenä"
+
+msgid "Complete"
+msgstr "Valmis"
+
+msgid "Incomplete"
+msgstr "Keskeneräinen"
+
+msgid "Stopped"
+msgstr "Pysäytetty"
+
+msgid "First"
+msgstr "Ensimmäinen"
+
+msgid "First page"
+msgstr "Ensimmäinen sivu"
+
+msgid "Prev"
+msgstr "Edellinen"
+
+msgid "Previous page"
+msgstr "Edellinen sivu"
+
+msgid "Next"
+msgstr "Seuraava"
+
+msgid "Next page"
+msgstr "Seuraava sivu"
+
+msgid "Last"
+msgstr "Viimeinen"
+
+msgid "Last page"
+msgstr "Viimeinen sivu"
+
+msgid "Enter URL or select torrent file"
+msgstr "Anna URL tai valitse torrent-tiedosto"
+
+#, java-format
+msgid "Error uploading the torrent file: {0}"
+msgstr "Virhe ladattaessa torrent-tiedostoa: {0}"
+
+#, java-format
+msgid "Cannot add torrent {0} inside another torrent: {1}"
+msgstr "Torrenttia {0} ei voi lisätä toisen torrentin sisälle: {1}"
+
+#, java-format
+msgid "Download from non-I2P location {0} is not supported"
+msgstr "Lataus ei-I2P sijainnista {0} ei ole tuettu"
+
+msgid "Error: Version 2 info hashes are not supported"
+msgstr "Virhe: Versio 2 tietotiivisteet eivät ole tuettuja"
+
+#, java-format
+msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
+msgstr "Virheellinen URL: Aloitettava merkeillä \"{0}\" tai \"{1}\""
+
+#, java-format
+msgid "Magnet deleted: {0}"
+msgstr "Magneetti poistettu: {0}"
+
+#, java-format
+msgid "Torrent file could not be deleted: {0}"
+msgstr "Torrent-tiedostoa ei voitu poistaa: {0}"
+
+#, java-format
+msgid "Data file deleted: {0}"
+msgstr "Datatiedosto poistettu: {0}"
+
+#, java-format
+msgid "Data file could not be deleted: {0}"
+msgstr "Datatiedostoa ei voitu poistaa: {0}"
+
+#, java-format
+msgid "Directory could not be deleted: {0}"
+msgstr "Hakemistoa ei voitu poistaa: {0}"
+
+#, java-format
+msgid "Directory deleted: {0}"
+msgstr "Hakemisto poistettu: {0}"
+
+msgid "Error creating torrent - you must specify a file or directory"
+msgstr "Virhe luotaessa torrenttia - sinun on määritettävä tiedosto tai hakemisto"
+
+#, java-format
+msgid "Cannot create a torrent for the nonexistent data: {0}"
+msgstr "Torrenttia ei voi luoda olemattomille tiedoille: {0}"
+
+#, java-format
+msgid "Cannot add a torrent ending in \".torrent\": {0}"
+msgstr "Torrenttia, joka päättyy \".torrent\":iin, ei voi lisätä: {0}"
+
+#, java-format
+msgid "Torrent with this name is already running: {0}"
+msgstr "Torrent tällä nimellä on jo käynnissä: {0}"
+
+#, java-format
+msgid "Cannot add a torrent including an I2P directory: {0}"
+msgstr "Torrenttia, joka sisältää I2P-hakemiston, ei voi lisätä: {0}"
+
+#, java-format
+msgid "Cannot add torrent {0} including another torrent: {1}"
+msgstr "Torrenttia {0} ei voi lisätä, koska se sisältää toisen torrentin: {1}"
+
+msgid "Error - Cannot include alternate trackers without a primary tracker"
+msgstr "Virhe - Vaihtoehtoisia seurantalaitteita ei voi sisällyttää ilman ensisijaista seurantalaitetta"
+
+msgid "Error - Cannot mix private and public trackers in a torrent"
+msgstr "Virhe - Yksityisiä ja julkisia seurantalaitteita ei voi sekoittaa samassa torrentissa"
+
+#, java-format
+msgid " files or folders were excluded from \"{0}\" due to filter rules."
+msgstr " tiedostoa tai kansiota suljettiin pois kohteesta \"{0}\" suodatussääntöjen vuoksi."
+
+#, java-format
+msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
+msgstr "Seuraavat tiedostot tai kansiot suljettiin pois kohteesta \"{0}\" suodatussääntöjen vuoksi: "
+
+#, java-format
+msgid "Torrent created for \"{0}\""
+msgstr "Torrent luotu kohteelle \"{0}\""
+
+#, java-format
+msgid "Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\""
+msgstr "Monet I2P-seurantalaitteet vaativat uusien torrenttien rekisteröintiä ennen siementämistä - ole hyvä ja tee se ennen \"{0}\" käynnistämistä"
+
+#, java-format
+msgid "Error creating a torrent for \"{0}\""
+msgstr "Virhe luotaessa torrenttia kohteelle \"{0}\""
+
+msgid "Delete selected"
+msgstr "Poista valitut"
+
+msgid "Save tracker configuration"
+msgstr "Tallenna seurantalaitteiden asetukset"
+
+msgid "Removed"
+msgstr "Poistettu"
+
+msgid "Add tracker"
+msgstr "Lisää seurantalaitteet"
+
+msgid "Enter valid tracker name and URLs"
+msgstr "Anna kelvollinen seurantalaitteen nimi ja URL-osoitteet"
+
+msgid "Restore defaults"
+msgstr "Palauta oletukset"
+
+msgid "Restored default trackers"
+msgstr "Oletusseurantalaitteet palautettu"
+
+msgid "Save Filter Configuration"
+msgstr "Tallenna suodatinasetukset"
+
+msgid "Add File Filter"
+msgstr "Lisää tiedostosuodatin"
+
+msgid "Enter valid name and filter pattern"
+msgstr "Anna kelvollinen nimi ja suodatusmalli"
+
+msgid "Restored default torrent create filters"
+msgstr "Oletustorrentin luontisuodattimet palautettu"
+
+msgid "Torrent details"
+msgstr "Torrentin tiedot"
+
+msgid "Torrent has comments"
+msgstr "Torrentilla on kommentteja"
+
+msgid "Open file"
+msgstr "Avaa tiedosto"
+
+msgid "View files"
+msgstr "Näytä tiedostot"
+
+msgid "Completed"
+msgstr "Valmistunut"
+
+msgid "Share ratio"
+msgstr "Jakamisuhde"
+
+msgid "Last activity"
+msgstr "Viimeisin toiminta"
+
+msgid "Stop"
+msgstr "Pysäytä"
+
+msgid "Stop torrent"
+msgstr "Pysäytä torrent"
+
+msgid "Start"
+msgstr "Käynnistä"
+
+msgid "Start torrent"
+msgstr "Käynnistä torrent"
+
+msgid "Remove"
+msgstr "Poista"
+
+msgid "Remove and delete torrent, retaining downloaded files"
+msgstr "Poista torrent ja poista se, säilyttäen ladatut tiedostot"
+
+msgid "Delete"
+msgstr "Poista"
+
+msgid "Delete .torrent file and associated data files"
+msgstr "Poista .torrent-tiedosto ja siihen liittyvät datatiedostot"
+
+msgid "Checking"
+msgstr "Tarkistetaan"
+
+msgid "Allocating"
+msgstr "Varataan"
+
+msgid "Starting"
+msgstr "Käynnistetään"
+
+#, java-format
+msgid "Seeding to {0} peer"
+msgid_plural "Seeding to {0} peers"
+msgstr[0] "Siemenenä {0} vertaiselle"
+msgstr[1] "Siemenenä {0} vertaiselle"
+
+#, java-format
+msgid "Connected to {0} of {1} peers in swarm"
+msgstr "Yhdistetty {0}/{1} vertaisiin parvessa"
+
+msgid "Stalled"
+msgstr "Pysähtynyt"
+
+#, java-format
+msgid "Seeding to {0} peer in swarm"
+msgid_plural "Seeding to {0} peers in swarm"
+msgstr[0] "Siemenenä {0} vertaiselle parvessa"
+msgstr[1] "Siemenenä {0} vertaisille parvessa"
 
 #, java-format
 msgid "Downloading from {0} peer"
@@ -1192,6 +1444,12 @@ msgstr "Arvostelua tai kommentointia varten tarvitaan tekijän nimi"
 
 msgid "Your author name for published comments and ratings"
 msgstr "Tekijän nimi julkaistuja kommentteja ja arvioita varten"
+
+#, java-format
+msgid "1 star"
+msgid_plural "{0} stars"
+msgstr[0] "1 tähti"
+msgstr[1] "{0} tähteä"
 
 msgid "No rating"
 msgstr "Ei arvosanaa"

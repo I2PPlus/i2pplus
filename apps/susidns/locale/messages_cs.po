@@ -551,9 +551,6 @@ msgstr "Vytvořte si vlastní identifikační obrázky"
 msgid "Launch Image Generator"
 msgstr "Spusťte generátor obrázků"
 
-msgid "Export"
-msgstr "Export"
-
 msgid "Introduction"
 msgstr "Úvod"
 
@@ -682,5 +679,3 @@ msgstr "Adresy ručně přidané do hlavního adresáře se sloučí s adresář
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Hostitelé, které obdržíte z vašich předplatných, se sloučí s vaším adresářem routeru."
-
-#, java-format

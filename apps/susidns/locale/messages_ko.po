@@ -535,9 +535,6 @@ msgstr "나만의 식별 이미지 만들기"
 msgid "Launch Image Generator"
 msgstr "이미지 생성기 실행"
 
-msgid "Export"
-msgstr "내보내기"
-
 msgid "Introduction"
 msgstr "소개"
 
@@ -666,5 +663,3 @@ msgstr "마스터 주소록에 수동으로 추가된 주소는 라우터 주소
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "구독을 통해 받은 호스트는 라우터 주소록과 병합됩니다."
-
-#, java-format

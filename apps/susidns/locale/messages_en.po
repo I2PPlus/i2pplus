@@ -543,9 +543,6 @@ msgstr ""
 msgid "Launch Image Generator"
 msgstr ""
 
-msgid "Export"
-msgstr ""
-
 msgid "Introduction"
 msgstr ""
 

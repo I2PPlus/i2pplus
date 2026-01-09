@@ -575,9 +575,6 @@ msgstr "قم بإنشاء صور التعريف الخاصة بك"
 msgid "Launch Image Generator"
 msgstr "إطلاق مولد الصور"
 
-msgid "Export"
-msgstr "تصدير"
-
 msgid "Introduction"
 msgstr "تقديم"
 
@@ -706,5 +703,3 @@ msgstr "العناوين التي تمت إضافتها يدويًا إلى دف
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "سيتم دمج المضيفين الذين تستقبلهم من اشتراكاتك مع دفتر عناوين جهاز التوجيه الخاص بك."
-
-#, java-format

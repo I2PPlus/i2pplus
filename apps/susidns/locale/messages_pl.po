@@ -551,9 +551,6 @@ msgstr "Utwórz swoje własne obrazki identyfikacyjne"
 msgid "Launch Image Generator"
 msgstr "Uruchom generator obrazów"
 
-msgid "Export"
-msgstr "Eksportuj"
-
 msgid "Introduction"
 msgstr "Wprowadzenie"
 
@@ -682,5 +679,3 @@ msgstr "Adresy ręcznie dodane do Twojej głównej książki adresowej zostaną 
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Adresy pobrane z subskrypcji zostaną scalone do Twojej książki adresowej węzła."
-
-#, java-format

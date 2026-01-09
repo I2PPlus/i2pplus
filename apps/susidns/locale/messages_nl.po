@@ -543,9 +543,6 @@ msgstr "Maak je eigen identificatie plaatjes"
 msgid "Launch Image Generator"
 msgstr "Start de plaatjes generator"
 
-msgid "Export"
-msgstr "Exporteren"
-
 msgid "Introduction"
 msgstr "Introductie"
 
@@ -674,5 +671,3 @@ msgstr "Adressen die handmatig aan uw masteradresboek zijn toegevoegd, worden sa
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Hosts die u via uw abonnementen ontvangt, worden samengevoegd met het adresboek van uw router."
-
-#, java-format

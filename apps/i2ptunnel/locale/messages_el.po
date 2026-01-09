@@ -39,10 +39,10 @@ msgid "higher bandwidth and reliability"
 msgstr "μεγαλύτερη ρυθμικότητα και αξιοπιστία"
 
 msgid "Error - tunnels are not initialized yet"
-msgstr ""
+msgstr "Σφάλμα - οι διάδρομοι δεν έχουν αρχικοποιηθεί ακόμα"
 
 msgid "No services configured, cannot restart!"
-msgstr ""
+msgstr "Δεν έχουν ρυθμιστεί υπηρεσίες, δεν είναι δυνατή η επανεκκίνηση!"
 
 msgid "Stopping tunnel"
 msgstr "Σταμάτημα διαδρόμου"
@@ -51,34 +51,34 @@ msgid "Starting tunnel"
 msgstr "Έναρξη διαδρόμου"
 
 msgid "Error restarting tunnel"
-msgstr ""
+msgstr "Σφάλμα κατά την επανεκκίνηση διαδρόμου"
 
 msgid "Restarted all running tunnels"
-msgstr ""
+msgstr "Επανεκκινήθηκαν όλοι οι ενεργοί διάδρομοι"
 
 msgid "No clients configured, cannot restart!"
-msgstr ""
+msgstr "Δεν έχουν ρυθμιστεί πελάτες, δεν είναι δυνατή η επανεκκίνηση!"
 
 msgid "Restarted all running client tunnels"
-msgstr ""
+msgstr "Επανεκκινήθηκαν όλοι οι ενεργοί διάδρομοι πελάτη"
 
 msgid "Configuration reloaded for all tunnels"
 msgstr "Η διαμόρφωση μεταφόρτωση για όλους τους διαδρόμους"
 
 msgid "Error: Invalid tunnel"
-msgstr ""
+msgstr "Σφάλμα: Μη έγκυρος διάδρομος"
 
 msgid "Started tunnel"
-msgstr ""
+msgstr "Ξεκίνησε ο διάδρομος"
 
 msgid "Stopped tunnel"
-msgstr ""
+msgstr "Σταμάτησε ο διάδρομος"
 
 msgid "Restarting tunnel"
-msgstr ""
+msgstr "Επανεκκίνηση διαδρόμου"
 
 msgid "Please confirm removal"
-msgstr ""
+msgstr "Παρακαλώ επιβεβαιώστε την αφαίρεση"
 
 msgid "New Tunnel"
 msgstr "Νέος Διάδρομος"
@@ -357,10 +357,10 @@ msgid "Encryption types"
 msgstr "Τύποι κρυπτογράφησης"
 
 msgid "Legacy options"
-msgstr ""
+msgstr "Παλιές επιλογές"
 
 msgid "Post Quantum"
-msgstr ""
+msgstr "Post Quantum"
 
 msgid "Both encryption types"
 msgstr "Και οι δύο τύποι κρυπτογράφησης"
@@ -399,7 +399,7 @@ msgid "Number of Tunnels in Group"
 msgstr "Αριθμός Διαδρόμων στη Γραμμή"
 
 msgid "Disabled for 0 hop tunnels"
-msgstr ""
+msgstr "Απενεργοποιημένο για διαδρόμους 0 hop"
 
 msgid "Variance"
 msgstr "Διακύμανση"
@@ -1030,22 +1030,22 @@ msgid "Start All"
 msgstr "Έναρξη Όλων"
 
 msgid "Restart all running tunnels"
-msgstr ""
+msgstr "Επανεκκίνηση όλων των ενεργών διαδρόμων"
 
 msgid "Restart All"
 msgstr "Επανεκκίνηση Όλων"
 
 msgid "Restart all running server tunnels"
-msgstr ""
+msgstr "Επανεκκίνηση όλων των ενεργών διαδρόμων διακομιστή"
 
 msgid "Restart All Servers"
-msgstr ""
+msgstr "Επανεκκίνηση όλων των διακομιστών"
 
 msgid "Restart all running client tunnels"
-msgstr ""
+msgstr "Επανεκκίνηση όλων των ενεργών διαδρόμων πελάτη"
 
 msgid "Restart All Clients"
-msgstr ""
+msgstr "Επανεκκίνηση όλων των πελατών"
 
 msgid "I2P Server Tunnels"
 msgstr "Διαδρόμοι Διακομιστή I2P"
@@ -1057,7 +1057,7 @@ msgid "Type"
 msgstr "Τύπος"
 
 msgid "Points at"
-msgstr "Δείχνει προς"
+msgstr "Δείχνει σε"
 
 msgid "Preview"
 msgstr "Προεπισκόπηση"
@@ -1072,7 +1072,7 @@ msgid "Edit Server Tunnel Settings for"
 msgstr "Επεξεργασία Ρυθμίσεων Διαδρόμου Διακομιστή για"
 
 msgid "Test IRC server, bypassing I2P"
-msgstr ""
+msgstr "Δοκιμή διακομιστή IRC, παράκαμψη I2P"
 
 msgid "Test HTTPS server, bypassing I2P"
 msgstr "Δοκιμή HTTPS διακομιστή, παρακάμνοντας το I2P"
@@ -1087,34 +1087,34 @@ msgid "Base32 Address"
 msgstr "Διεύθυνση Base32"
 
 msgid "Offline"
-msgstr ""
+msgstr "Εκτός σύνδεσης"
 
 msgid "No Preview"
-msgstr "Δεν υπάρχει Προεπισκόπηση"
+msgstr "Χωρίς Προεπισκόπηση"
 
 msgid "Starting..."
-msgstr "Έναρξη..."
+msgstr "Εκκίνηση..."
 
 msgid "Stop this Tunnel"
-msgstr "Σταμάτηση αυτού του Διαδρόμου"
+msgstr "Σταμάτημα Αυτού του Διαδρόμου"
 
 msgid "Running"
-msgstr "Τρέχει"
+msgstr "Εκτελείται"
 
 msgid "Hops"
 msgstr "Κλίσματα"
 
 msgid "in"
-msgstr "εντός"
+msgstr "εισ."
 
 msgid "out"
-msgstr "εκτός"
+msgstr "εξ."
 
 msgid "Restart this Tunnel"
-msgstr ""
+msgstr "Επανεκκίνηση αυτού του διαδρόμου"
 
 msgid "Restart"
-msgstr ""
+msgstr "Επανεκκίνηση"
 
 msgid "Stopped"
 msgstr "Σταματημένος"
@@ -1135,7 +1135,7 @@ msgid "Encryption"
 msgstr "Κρυπτογράφηση"
 
 msgid "Supported encryption"
-msgstr ""
+msgstr "Υποστηριζόμενη κρυπτογράφηση"
 
 msgid "New server tunnel"
 msgstr "Νέος διάδρομος διακομιστή"

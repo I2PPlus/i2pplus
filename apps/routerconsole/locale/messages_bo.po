@@ -8072,4 +8072,3 @@ msgstr "རྗེས་མ།"
 
 msgid "Finished"
 msgstr "མཇུག་རྫོགས།"
-

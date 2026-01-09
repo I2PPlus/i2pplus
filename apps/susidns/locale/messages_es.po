@@ -543,9 +543,6 @@ msgstr "Cree sus propias imágenes de identificación"
 msgid "Launch Image Generator"
 msgstr "Iniciar el generador de imágenes"
 
-msgid "Export"
-msgstr "Exportar"
-
 msgid "Introduction"
 msgstr "Introducción"
 
@@ -674,5 +671,3 @@ msgstr "Las direcciones añadidas manualmente a su libreta de direcciones Master
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Los equipos que recibe desde sus suscripciones se combinarán con su libreta de direcciones Router."
-
-#, java-format

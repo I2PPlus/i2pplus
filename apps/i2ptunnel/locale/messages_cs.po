@@ -42,10 +42,10 @@ msgid "higher bandwidth and reliability"
 msgstr "vyšší šířka pásma a spolehlivost"
 
 msgid "Error - tunnels are not initialized yet"
-msgstr ""
+msgstr "Chyba - tunely ještě nejsou inicializovány"
 
 msgid "No services configured, cannot restart!"
-msgstr ""
+msgstr "Žádné služby nejsou nakonfigurovány, nelze restartovat!"
 
 msgid "Stopping tunnel"
 msgstr "Zastavuji tunel"
@@ -54,34 +54,34 @@ msgid "Starting tunnel"
 msgstr "Startuji tunel"
 
 msgid "Error restarting tunnel"
-msgstr ""
+msgstr "Chyba při restartu tunelu"
 
 msgid "Restarted all running tunnels"
-msgstr ""
+msgstr "Restartovány všechny běžící tunely"
 
 msgid "No clients configured, cannot restart!"
-msgstr ""
+msgstr "Žádní klienti nejsou nakonfigurování, nelze restartovat!"
 
 msgid "Restarted all running client tunnels"
-msgstr ""
+msgstr "Restartovány všechny běžící klientské tunely"
 
 msgid "Configuration reloaded for all tunnels"
 msgstr "Nastavení pro všechny tunely bylo opětovně nahráno"
 
 msgid "Error: Invalid tunnel"
-msgstr ""
+msgstr "Chyba: Neplatný tunel"
 
 msgid "Started tunnel"
-msgstr ""
+msgstr "Tunel spuštěn"
 
 msgid "Stopped tunnel"
-msgstr ""
+msgstr "Tunel zastaven"
 
 msgid "Restarting tunnel"
-msgstr ""
+msgstr "Restartování tunelu"
 
 msgid "Please confirm removal"
-msgstr ""
+msgstr "Prosím potvrďte odstranění"
 
 msgid "New Tunnel"
 msgstr "Nový tunel"
@@ -360,10 +360,10 @@ msgid "Encryption types"
 msgstr "Typy šifrování"
 
 msgid "Legacy options"
-msgstr ""
+msgstr "Starší možnosti"
 
 msgid "Post Quantum"
-msgstr ""
+msgstr "Post Quantum"
 
 msgid "Both encryption types"
 msgstr "Oba typy šifrování"
@@ -403,7 +403,7 @@ msgid "Number of Tunnels in Group"
 msgstr "Počet tunelů ve skupině"
 
 msgid "Disabled for 0 hop tunnels"
-msgstr ""
+msgstr "Zakázáno pro 0 hop tunely"
 
 msgid "Variance"
 msgstr "Rozptyl"
@@ -1035,28 +1035,28 @@ msgid "Start All"
 msgstr "Spustit vše"
 
 msgid "Restart all running tunnels"
-msgstr ""
+msgstr "Restartovat všechny běžící tunely"
 
 msgid "Restart All"
-msgstr "Spustit vše znovu (restartovat)"
+msgstr "Restartovat vše"
 
 msgid "Restart all running server tunnels"
-msgstr ""
+msgstr "Restartovat všechny běžící serverové tunely"
 
 msgid "Restart All Servers"
-msgstr ""
+msgstr "Restartovat všechny servery"
 
 msgid "Restart all running client tunnels"
-msgstr ""
+msgstr "Restartovat všechny běžící klientské tunely"
 
 msgid "Restart All Clients"
-msgstr ""
+msgstr "Restartovat všechny klienty"
 
 msgid "I2P Server Tunnels"
-msgstr "I2P serverové tunely"
+msgstr "Serverové tunely I2P"
 
 msgid "Helper"
-msgstr "Asistent"
+msgstr "Pomocník"
 
 msgid "Type"
 msgstr "Typ"
@@ -1071,13 +1071,13 @@ msgid "Status"
 msgstr "Stav"
 
 msgid "Control"
-msgstr "Control"
+msgstr "Ovládání"
 
 msgid "Edit Server Tunnel Settings for"
-msgstr "Upravit nastavení tunelu serveru pro"
+msgstr "Upravit nastavení serverového tunelu pro"
 
 msgid "Test IRC server, bypassing I2P"
-msgstr ""
+msgstr "Test IRC serveru, obejití I2P"
 
 msgid "Test HTTPS server, bypassing I2P"
 msgstr "Test HTTPS server, obcházení I2P"
@@ -1092,34 +1092,34 @@ msgid "Base32 Address"
 msgstr "Base32 adresa"
 
 msgid "Offline"
-msgstr ""
+msgstr "Offline"
 
 msgid "No Preview"
 msgstr "Bez náhledu"
 
 msgid "Starting..."
-msgstr "Spouštím..."
+msgstr "Spouštění..."
 
 msgid "Stop this Tunnel"
-msgstr "Zastavte tento tunel"
+msgstr "Zastavit tento tunel"
 
 msgid "Running"
 msgstr "Běží"
 
 msgid "Hops"
-msgstr "Chmel"
+msgstr "Skoky"
 
 msgid "in"
-msgstr "v"
+msgstr "příchozí"
 
 msgid "out"
-msgstr "ven"
+msgstr "odchozí"
 
 msgid "Restart this Tunnel"
-msgstr ""
+msgstr "Restartovat tento tunel"
 
 msgid "Restart"
-msgstr ""
+msgstr "Restartovat"
 
 msgid "Stopped"
 msgstr "Zastaveno"
@@ -1131,16 +1131,16 @@ msgid "Signature"
 msgstr "Podpis"
 
 msgid "Alternate"
-msgstr "Náhradník"
+msgstr "Alternativní"
 
 msgid "Alt Destination"
-msgstr "Alternativní Cíl"
+msgstr "Alternativní cíl"
 
 msgid "Encryption"
 msgstr "Šifrování"
 
 msgid "Supported encryption"
-msgstr ""
+msgstr "Podporované šifrování"
 
 msgid "New server tunnel"
 msgstr "Nový tunel serveru"
