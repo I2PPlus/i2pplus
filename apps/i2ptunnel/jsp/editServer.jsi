@@ -84,7 +84,7 @@
 </td>
 </tr>
 <tr>
-<th colspan=2 title="<%=intl._t("Add random delay before tunnel shutdown, then initiate graceful router restart")%>"><%=intl._t("Shutdown Delay")%></th>
+<th colspan=2 title="<%=intl._t("Add random delay before tunnel shutdown, then start graceful router shutdown / restart process")%>"><%=intl._t("Shutdown Delay")%></th>
 </tr>
 <tr>
 <td>

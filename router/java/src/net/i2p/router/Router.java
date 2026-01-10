@@ -1691,6 +1691,10 @@ public class Router implements RouterClock.ClockShiftListener {
             _gracefulExitCode = -1;
         }
         _context.throttle().cancelShutdownStatus();
+        net.i2p.i2ptunnel.TunnelControllerGroup tcg = net.i2p.i2ptunnel.TunnelControllerGroup.getInstance();
+        if (tcg != null) {
+            tcg.cancelDelayedShutdown();
+        }
         synchronized (_gracefulShutdownDetector) {_gracefulShutdownDetector.notifyAll();}
     }
 

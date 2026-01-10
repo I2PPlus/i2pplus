@@ -75,6 +75,19 @@ public class TunnelControllerGroup implements ClientApp {
     private static volatile long _delayedShutdownStartTime = 0;
 
     /**
+     *  Flag to signal that delayed shutdown should be cancelled.
+     *  Set by cancelDelayedShutdown() and checked by shutdown tasks.
+     *  @since 0.9.68+
+     */
+    private static volatile boolean _cancelDelayedShutdown = false;
+
+    /**
+     *  Executor service for delayed shutdown tasks, used for cancellation.
+     *  @since 0.9.68+
+     */
+    private ExecutorService _delayedShutdownExecutor;
+
+    /**
      * Map of I2PSession to a Set of TunnelController objects
      * using the session (to prevent closing the session until
      * no more tunnels are using it)
@@ -427,6 +440,21 @@ public class TunnelControllerGroup implements ClientApp {
     }
 
     /**
+     *  Cancel a delayed server tunnel shutdown and restart any servers that were stopped.
+     *  This should be called when the user cancels a graceful router shutdown/restart.
+     *  @since 0.9.68+
+     */
+    public void cancelDelayedShutdown() {
+        if (!_delayedShutdownInProgress) {
+            return;
+        }
+        _cancelDelayedShutdown = true;
+        if (_delayedShutdownExecutor != null) {
+            _delayedShutdownExecutor.shutdownNow();
+        }
+    }
+
+    /**
      *  Stop server tunnels with shutdown delays in stages.
      *  Each server with a delay gets a random stop time within the configured window.
      *  @since 0.9.68+
@@ -463,8 +491,10 @@ public class TunnelControllerGroup implements ClientApp {
 
         _delayedShutdownInProgress = true;
         _delayedShutdownStartTime = System.currentTimeMillis();
+        _cancelDelayedShutdown = false;
+        List<TunnelController> stoppedServers = new ArrayList<TunnelController>();
         CountDownLatch latch = new CountDownLatch(delayedServers.size());
-        ExecutorService executor = Executors.newCachedThreadPool();
+        _delayedShutdownExecutor = Executors.newCachedThreadPool();
         long startTime = System.currentTimeMillis();
 
         for (TunnelController controller : delayedServers) {
@@ -474,17 +504,29 @@ public class TunnelControllerGroup implements ClientApp {
             final TunnelController tc = controller;
             final String name = controller.getName();
             final int actualDelay = delay;
-            executor.submit(new Runnable() {
+            final List<TunnelController> stoppedList = stoppedServers;
+            _delayedShutdownExecutor.submit(new Runnable() {
                 public void run() {
                     if (actualDelay > 0) {
                         try {
-                            tc.log("◦ Stopping " + name + " in " + actualDelay + "s...");
-                            Thread.sleep(actualDelay * 1000);
+                            for (int i = 0; i < actualDelay; i++) {
+                                if (_cancelDelayedShutdown) {
+                                    return;
+                                }
+                                Thread.sleep(1000);
+                            }
                         } catch (InterruptedException e) {
                             Thread.currentThread().interrupt();
+                            return;
                         }
                     }
+                    if (_cancelDelayedShutdown) {
+                        return;
+                    }
                     tc.stopTunnel();
+                    synchronized(stoppedList) {
+                        stoppedList.add(tc);
+                    }
                     latch.countDown();
                 }
             });
@@ -504,9 +546,20 @@ public class TunnelControllerGroup implements ClientApp {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         } finally {
-            executor.shutdownNow();
+            _delayedShutdownExecutor.shutdownNow();
+            if (_cancelDelayedShutdown) {
+                synchronized(stoppedServers) {
+                    for (TunnelController tc : stoppedServers) {
+                        tc.startTunnelBackground();
+                        if (_log.shouldInfo())
+                            _log.info("Restarted " + tc.getName() + " after shutdown cancelled");
+                    }
+                }
+            }
             _delayedShutdownInProgress = false;
             _delayedShutdownStartTime = 0;
+            _cancelDelayedShutdown = false;
+            _delayedShutdownExecutor = null;
         }
     }
 
