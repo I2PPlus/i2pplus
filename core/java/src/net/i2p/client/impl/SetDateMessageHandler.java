@@ -37,7 +37,7 @@ class SetDateMessageHandler extends HandlerImpl {
         session.dateUpdated(msg.getVersion());
         if (session.isOffline() && !session.supportsLS2()) {
             // TODO check other options also? see RLSMH.requiresLS2()
-            session.propogateError("Router does not support offline keys", new Exception());
+            session.propagateError("Router does not support offline keys", new Exception());
             session.destroySession(false);
         }
     }

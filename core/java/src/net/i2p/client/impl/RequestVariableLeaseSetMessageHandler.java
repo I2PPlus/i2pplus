@@ -48,7 +48,7 @@ class RequestVariableLeaseSetMessageHandler extends RequestLeaseSetMessageHandle
             else if (_ls2Type == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {ls2 = new EncryptedLeaseSet();}
             else if (_ls2Type == DatabaseEntry.KEY_TYPE_META_LS2) {ls2 = new MetaLeaseSet();}
             else {
-              session.propogateError("Unsupported LS2 type", new Exception());
+              session.propagateError("Unsupported LS2 type", new Exception());
               session.destroySession();
               return;
             }

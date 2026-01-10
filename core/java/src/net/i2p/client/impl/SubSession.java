@@ -178,8 +178,8 @@ class SubSession extends I2PSessionMuxedImpl {
      * @param error non-null
      */
     @Override
-    void propogateError(String msg, Throwable error) {
-        _primary.propogateError(msg, error);
+    void propagateError(String msg, Throwable error) {
+        _primary.propagateError(msg, error);
         if (_sessionListener != null) {_sessionListener.errorOccurred(this, msg, error);}
     }
 

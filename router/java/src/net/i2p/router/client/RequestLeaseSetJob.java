@@ -34,7 +34,7 @@ class RequestLeaseSetJob extends JobImpl {
     private final ClientConnectionRunner _runner;
     private final LeaseRequestState _requestState;
 
-    private static final long DEFAULT_MAX_FUDGE = 2*1000;
+    private static final long DEFAULT_MAX_FUDGE = 5*1000;
     private static final String PROP_MAX_FUDGE = "router.requestLeaseSetMaxFudge";
 
     public RequestLeaseSetJob(RouterContext ctx, ClientConnectionRunner runner, LeaseRequestState state) {

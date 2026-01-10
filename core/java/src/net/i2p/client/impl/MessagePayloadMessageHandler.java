@@ -53,9 +53,9 @@ class MessagePayloadMessageHandler extends HandlerImpl {
                 session.sendMessage(m);
             }
         } catch (DataFormatException dfe) {
-            session.propogateError("Error handling a new payload message", dfe);
+            session.propagateError("Error handling a new payload message", dfe);
         } catch (I2PSessionException ise) {
-            session.propogateError("Error handling a new payload message", ise);
+            session.propagateError("Error handling a new payload message", ise);
         }
     }
 

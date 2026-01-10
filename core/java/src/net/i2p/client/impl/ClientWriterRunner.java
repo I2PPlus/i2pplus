@@ -82,11 +82,11 @@ class ClientWriterRunner implements Runnable {
                 msg.writeMessage(_out);
                 if (_messagesToWrite.isEmpty()) {_out.flush();}
             } catch (I2CPMessageException ime) {
-                _session.propogateError("Error writing out the message", ime);
+                _session.propagateError("Error writing out the message", ime);
                 _session.disconnect();
                 break;
             } catch (IOException ioe) {
-                _session.propogateError("Error writing out the message", ioe);
+                _session.propagateError("Error writing out the message", ioe);
                 _session.disconnect();
                 break;
             }

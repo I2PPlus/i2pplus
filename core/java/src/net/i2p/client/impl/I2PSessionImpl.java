@@ -158,7 +158,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     /** monitor for waiting until a lease set has been granted */
     protected final Object _leaseSetWait = new Object();
 
-    /** set in propogateError(), sync with _stateLock */
+    /** set in propagateError(), sync with _stateLock */
     private String _errorMessage;
     private Throwable _errorCause;
 
@@ -1022,7 +1022,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      * @param error non-null
      */
     public void readError(I2CPMessageReader reader, Exception error) {
-        propogateError("There was an error reading data", error);
+        propagateError("There was an error reading data", error);
     }
 
     /**
@@ -1177,7 +1177,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      *
      * @param error non-null
      */
-    void propogateError(String msg, Throwable error) {
+    void propagateError(String msg, Throwable error) {
         // Only log as WARN if the router went away
         int level;
         String msgpfx;
@@ -1273,8 +1273,8 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         if (_writer != null) {_writer.stopWriting(); _writer = null;}
         if (_socket != null) {
             try {_socket.close();}
-            catch (IOException ioe) {propogateError("Caught an IO error closing the socket; ignored:", ioe);}
-            finally {_socket = null;} // so when propogateError calls closeSocket, it doesnt loop
+            catch (IOException ioe) {propagateError("Caught an IO error closing the socket; ignored:", ioe);}
+            finally {_socket = null;} // so when propagateError calls closeSocket, it doesnt loop
         }
         setSessionId(null);
         setLeaseSet(null);

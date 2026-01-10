@@ -38,11 +38,11 @@ class SessionStatusMessageHandler extends HandlerImpl {
             // Spec says router should send this message in response to DestroySessionMessage.
             // However, Java router side does not, other implementations may.
             // As this should be only in response to DestroySession, should be safe to ignore it here.
-            //session.propogateError("Destroyed", new I2PSessionException("Session Status Message received"));
+            //session.propagateError("Destroyed", new I2PSessionException("Session Status Message received"));
             break;
         case SessionStatusMessage.STATUS_INVALID:
             _log.warn("Session invalid");
-            session.propogateError("Invalid", new I2PSessionException("Session Status Message received"));
+            session.propagateError("Invalid", new I2PSessionException("Session Status Message received"));
             session.destroySession(); // ok, honor this destroy message, because we're b0rked
             break;
         case SessionStatusMessage.STATUS_UPDATED:

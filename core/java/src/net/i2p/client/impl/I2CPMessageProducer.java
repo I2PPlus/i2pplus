@@ -421,7 +421,7 @@ class I2CPMessageProducer {
         SessionId sid = session.getSessionId();
         if (sid == null) {
             _log.error(session.toString() + " cannot create LeaseSet, session closed", new Exception());
-            return;
+            throw new I2PSessionException("Session closed");
         }
         msg.setSessionId(sid);
         session.sendMessage_unchecked(msg);

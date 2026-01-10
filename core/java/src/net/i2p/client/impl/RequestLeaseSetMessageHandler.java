@@ -105,7 +105,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                 _ls2Type = type;
                 if (type != DatabaseEntry.KEY_TYPE_LEASESET) {return true;}
             } catch (NumberFormatException nfe) {
-              session.propogateError("BAD LeaseSet2 type", nfe);
+              session.propagateError("BAD LeaseSet2 type", nfe);
               session.destroySession();
               return true;
             }
@@ -127,7 +127,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
             else if (_ls2Type == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {ls2 = new EncryptedLeaseSet();}
             else if (_ls2Type == DatabaseEntry.KEY_TYPE_META_LS2) {ls2 = new MetaLeaseSet();}
             else {
-              session.propogateError("Unsupported LS2 type", new Exception());
+              session.propagateError("Unsupported LS2 type", new Exception());
               session.destroySession();
               return;
             }
@@ -325,7 +325,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                 String s;
                 if (exp <= _context.clock().now()) {s = "Offline Signature for tunnel expired " + DataHelper.formatTime(exp);}
                 else {s = "BAD Offline Signature";}
-                session.propogateError(s, new Exception());
+                session.propagateError(s, new Exception());
                 session.destroySession();
             }
         }
@@ -399,22 +399,36 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                 spk = new SigningPrivateKey(dummy);
                 if (_log.shouldDebug()) {_log.debug("Generated random dummy SPK " + spk);}
             }
-            session.getProducer().createLeaseSet(session, leaseSet, spk, li.getPrivateKeys());
-            session.setLeaseSet(leaseSet);
-            if (_log.shouldInfo()) {_log.info("Created and signed" + leaseSet);}
-        } catch (DataFormatException dfe) {
-            session.propogateError("Error signing the LeaseSet", dfe);
-            session.destroySession();
-        } catch (I2PSessionException ise) {
             if (session.isClosed()) {
-                /**
-                 * race, closed while signing leaseset - EOFExceptions are logged at WARN level
-                 * (see I2PSessionImpl.propogateError()) so the user won't see this
-                 */
-                EOFException eof = new EOFException("Session closed while signing LeaseSet");
-                eof.initCause(ise);
-                session.propogateError("Session closed while signing LeaseSet", eof);
-            } else {session.propogateError("Error sending the signed LeaseSet", ise);}
+                if (_log.shouldWarn()) {
+                    _log.warn("Session closed before LeaseSet creation, cannot create LeaseSet");
+                }
+                return;
+            }
+            try {
+                session.getProducer().createLeaseSet(session, leaseSet, spk, li.getPrivateKeys());
+                if (session.isClosed()) {
+                    if (_log.shouldWarn()) {
+                        _log.warn("Session closed during LeaseSet creation");
+                    }
+                    return;
+                }
+                session.setLeaseSet(leaseSet);
+                if (_log.shouldInfo()) {_log.info("Created and signed " + leaseSet);}
+            } catch (I2PSessionException ise) {
+                if (session.isClosed()) {
+                    /**
+                     * race, closed while signing leaseset - EOFExceptions are logged at WARN level
+                     * (see I2PSessionImpl.propagateError()) so the user won't see this
+                     */
+                    EOFException eof = new EOFException("Session closed while signing LeaseSet");
+                    eof.initCause(ise);
+                    session.propagateError("Session closed while signing LeaseSet", eof);
+                } else {session.propagateError("Error sending the signed LeaseSet", ise);}
+            }
+        } catch (DataFormatException dfe) {
+            session.propagateError("Error signing the LeaseSet", dfe);
+            session.destroySession();
         }
     }
 

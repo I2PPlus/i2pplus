@@ -667,7 +667,8 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
             }
         } catch (IllegalArgumentException iae) {
             if (_log.shouldError()) {_log.error("Invalid LeaseSet from client", iae);}
-            _runner.disconnectClient("Invalid LeaseSet: " + iae);
+            String destDesc = dest != null ? dest.toBase32().substring(0, Math.min(8, dest.toBase32().length())) + "..." : "unknown";
+            _runner.disconnectClient("Invalid LeaseSet: " + iae.getMessage() + " [dest: " + destDesc + "]");
             return;
         }
         if (_log.shouldInfo()) {_log.info("New LeaseSet created \n* " + dest);}

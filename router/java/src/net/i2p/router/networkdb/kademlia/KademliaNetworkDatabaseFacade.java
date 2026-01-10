@@ -951,15 +951,17 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * Validates that the LeaseSet has not expired before current publication time.
      * Throws IllegalArgumentException if LeaseSet is already expired.
      */
+    private static final long EXPIRY_GRACE_PERIOD = 30*1000;
+
     private void validateLeaseSetExpiry(LeaseSet leaseSet) {
         long now = _context.clock().now();
         long earliest = leaseSet.getEarliestLeaseDate();
         long latest = leaseSet.getLatestLeaseDate();
 
-        // If either expiry date is in the past relative to current time, reject
-        if (earliest <= now || latest <= now) {
+        if (earliest < now - EXPIRY_GRACE_PERIOD || latest < now - EXPIRY_GRACE_PERIOD) {
             throw new IllegalArgumentException("Cannot publish LeaseSet with expiry date in the past. "
-                    + "Earliest: " + new Date(earliest) + ", Latest: " + new Date(latest));
+                    + "Earliest: " + new Date(earliest) + ", Latest: " + new Date(latest)
+                    + ", Now: " + new Date(now));
         }
     }
 
