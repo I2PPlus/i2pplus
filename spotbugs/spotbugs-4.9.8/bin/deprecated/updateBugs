@@ -1,0 +1,5 @@
+#! /bin/sh
+
+# Deprecated (replaced by computeBugHistory)
+
+exec "$(dirname $0)/../computeBugHistory" "$@"

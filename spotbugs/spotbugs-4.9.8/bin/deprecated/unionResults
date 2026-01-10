@@ -1,0 +1,5 @@
+#! /bin/sh
+
+# Deprecated (replaced by unionBugs)
+
+exec "$(dirname $0)/../unionBugs" "$@"
