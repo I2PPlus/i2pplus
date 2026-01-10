@@ -69,7 +69,7 @@
 </td>
 </tr>
 <tr>
-<th colspan=2 title="<%=intl._t("Random delay before starting tunnel to defend against correlation attacks")%>"><%=intl._t("Startup Delay")%></th>
+<th colspan=2 title="<%=intl._t("Random startup delay (when auto-start is enabled) to defend against correlation attacks")%>"><%=intl._t("Startup Delay")%></th>
 </tr>
 <tr>
 <td>
@@ -80,6 +80,21 @@
 <td>
 <b><%=intl._t("Maximum")%>:</b>
 <input type=number min="0" max="3600" size=6 name="startupDelayMax" value="<%=editBean.getStartupDelayMax(curTunnel)%>" class="freetext" title="<%=intl._t("Maximum startup delay")%>">
+<%=intl._t("seconds")%>
+</td>
+</tr>
+<tr>
+<th colspan=2 title="<%=intl._t("Add random delay before tunnel shutdown, then initiate graceful router restart")%>"><%=intl._t("Shutdown Delay")%></th>
+</tr>
+<tr>
+<td>
+<b><%=intl._t("Minimum")%>:</b>
+<input type=number min="0" max="3600" size=6 name="shutdownDelayMin" value="<%=editBean.getShutdownDelayMin(curTunnel)%>" class="freetext" title="<%=intl._t("Minimum shutdown delay")%>">
+<%=intl._t("seconds")%>
+</td>
+<td>
+<b><%=intl._t("Maximum")%>:</b>
+<input type=number min="0" max="3600" size=6 name="shutdownDelayMax" value="<%=editBean.getShutdownDelayMax(curTunnel)%>" class="freetext" title="<%=intl._t("Maximum shutdown delay")%>">
 <%=intl._t("seconds")%>
 </td>
 </tr>

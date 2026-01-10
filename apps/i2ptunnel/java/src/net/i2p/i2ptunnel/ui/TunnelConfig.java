@@ -79,6 +79,10 @@ public class TunnelConfig {
     private int _startupDelayMin;
     /** Maximum startup delay in seconds for server tunnels @since 0.9.68+ */
     private int _startupDelayMax;
+    /** Minimum shutdown delay in seconds for server tunnels @since 0.9.68+ */
+    private int _shutdownDelayMin;
+    /** Maximum shutdown delay in seconds for server tunnels @since 0.9.68+ */
+    private int _shutdownDelayMax;
     private final Set<String> _booleanOptions;
     private final Map<String, String> _otherOptions;
     private String _newProxyUser;
@@ -282,6 +286,38 @@ public class TunnelConfig {
      */
     public int getStartupDelayMax() {
         return _startupDelayMax;
+    }
+
+    /**
+     *  @param val the minimum shutdown delay in seconds for server tunnels
+     *  @since 0.9.68+
+     */
+    public void setShutdownDelayMin(int val) {
+        _shutdownDelayMin = Math.max(0, val);
+    }
+
+    /**
+     *  @return the minimum shutdown delay in seconds
+     *  @since 0.9.68+
+     */
+    public int getShutdownDelayMin() {
+        return _shutdownDelayMin;
+    }
+
+    /**
+     *  @param val the maximum shutdown delay in seconds for server tunnels
+     *  @since 0.9.68+
+     */
+    public void setShutdownDelayMax(int val) {
+        _shutdownDelayMax = Math.max(0, val);
+    }
+
+    /**
+     *  @return the maximum shutdown delay in seconds
+     *  @since 0.9.68+
+     */
+    public int getShutdownDelayMax() {
+        return _shutdownDelayMax;
     }
 
     /**
@@ -1288,6 +1324,11 @@ public class TunnelConfig {
         if (_startupDelayMin > 0 || _startupDelayMax > 0) {
             config.setProperty(TunnelController.PROP_STARTUP_DELAY_MIN, Integer.toString(_startupDelayMin));
             config.setProperty(TunnelController.PROP_STARTUP_DELAY_MAX, Integer.toString(_startupDelayMax));
+        }
+
+        if (_shutdownDelayMin > 0 || _shutdownDelayMax > 0) {
+            config.setProperty(TunnelController.PROP_SHUTDOWN_DELAY_MIN, Integer.toString(_shutdownDelayMin));
+            config.setProperty(TunnelController.PROP_SHUTDOWN_DELAY_MAX, Integer.toString(_shutdownDelayMax));
         }
 
         updateTunnelQuantities(config);

@@ -25,6 +25,7 @@ dependencies {
     api project(':apps:systray')
     api project(':apps:jetty')
     api project(':apps:jrobin')
+    api project(':apps:i2ptunnel')
     api files('../../installer/lib/wrapper/all/wrapper.jar')
     api fileTree("../jetty/jetty-distribution-${jettyVersion}")
 

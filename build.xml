@@ -468,7 +468,7 @@
     <copy quiet="true" file="apps/desktopgui/dist/desktopgui.jar" todir="build/"/>
   </target>
 
-  <target name="buildRouterConsole" depends="buildrouter, buildSystray, buildDesktopGui, buildJetty, buildJrobin">
+  <target name="buildRouterConsole" depends="buildrouter, buildSystray, buildDesktopGui, buildJetty, buildJrobin, buildI2PTunnel">
     <ant dir="apps/routerconsole/java/" target="jar"/>
   </target>
 
@@ -500,7 +500,7 @@
   </target>
 
   <target name="buildRouter" depends="buildrouter"/>
-  <target name="buildrouter" depends="buildCore">
+  <target name="buildrouter" depends="buildCore, buildI2PTunnel">
     <ant dir="router/java/" target="jar"/>
     <copy quiet="true" file="router/java/build/router.jar" todir="build/"/>
   </target>
@@ -559,7 +559,7 @@
     <property name="manifest.classpath.name" value="Disabled-Class-Path"/>
   </target>
 
-  <target name="buildWEB" depends="buildRouterConsole">
+  <target name="buildWEB" depends="buildRouterConsole, buildI2PTunnel">
     <copy quiet="true" file="apps/routerconsole/java/build/routerconsole.jar" todir="build/"/>
     <copy quiet="true" file="apps/routerconsole/java/build/routerconsole.war" todir="build/"/>
   </target>

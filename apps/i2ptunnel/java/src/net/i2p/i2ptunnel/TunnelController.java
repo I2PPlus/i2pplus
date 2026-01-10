@@ -116,6 +116,26 @@ public class TunnelController implements Logging {
     public static final int DEFAULT_STARTUP_DELAY_MAX = 0;
 
     /**
+     *  Configuration property for the minimum shutdown delay in seconds.
+     *  Only applies to server tunnels.
+     *  @since 0.9.68+
+     */
+    public static final String PROP_SHUTDOWN_DELAY_MIN = "shutdownDelayMin";
+
+    /**
+     *  Configuration property for the maximum shutdown delay in seconds.
+     *  Only applies to server tunnels.
+     *  @since 0.9.68+
+     */
+    public static final String PROP_SHUTDOWN_DELAY_MAX = "shutdownDelayMax";
+
+    /** Default minimum shutdown delay in seconds */
+    public static final int DEFAULT_SHUTDOWN_DELAY_MIN = 0;
+
+    /** Default maximum shutdown delay in seconds */
+    public static final int DEFAULT_SHUTDOWN_DELAY_MAX = 0;
+
+    /**
      * all of these are @since 0.9.33 (moved from TunnelConfig)
      */
     public static final String PROP_MAX_CONNS_MIN = "i2p.streaming.maxConnsPerMinute";
@@ -852,6 +872,40 @@ public class TunnelController implements Logging {
             return Math.max(0, i);
         } catch (NumberFormatException e) {
             return DEFAULT_STARTUP_DELAY_MAX;
+        }
+    }
+
+    /**
+     *  When combined with a greater shutdownDelayMax, the tunnel will stop
+     *  with a random delay between min and max seconds during router shutdown.
+     *  @return the minimum shutdown delay in seconds for server tunnels.
+     *  @since 0.9.68+
+     */
+    public int getShutdownDelayMin() {
+        String val = _config.getProperty(PROP_SHUTDOWN_DELAY_MIN);
+        if (val == null) return DEFAULT_SHUTDOWN_DELAY_MIN;
+        try {
+            int i = Integer.parseInt(val.trim());
+            return Math.max(0, i);
+        } catch (NumberFormatException e) {
+            return DEFAULT_SHUTDOWN_DELAY_MIN;
+        }
+    }
+
+    /**
+     *  When combined with a positive shutdownDelayMin less than this value,
+     *  the tunnel will stop with a random delay between min and max seconds during router shutdown.
+     *  @return the maximum shutdown delay in seconds for server tunnels.
+     *  @since 0.9.68+
+     */
+    public int getShutdownDelayMax() {
+        String val = _config.getProperty(PROP_SHUTDOWN_DELAY_MAX);
+        if (val == null) return DEFAULT_SHUTDOWN_DELAY_MAX;
+        try {
+            int i = Integer.parseInt(val.trim());
+            return Math.max(0, i);
+        } catch (NumberFormatException e) {
+            return DEFAULT_SHUTDOWN_DELAY_MAX;
         }
     }
 

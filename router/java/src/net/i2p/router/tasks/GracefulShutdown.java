@@ -38,7 +38,8 @@ public class GracefulShutdown implements Runnable {
                 int exitCode = _context.router().scheduledGracefulExitCode();
 
                 if (exitCode == Router.EXIT_HARD || exitCode == Router.EXIT_HARD_RESTART ||
-                    _context.tunnelManager().getParticipatingCount() <= 0) {
+                    (_context.tunnelManager().getParticipatingCount() <= 0 &&
+                     !net.i2p.i2ptunnel.TunnelControllerGroup.isDelayedShutdownInProgress())) {
 
                     if (log.shouldWarn()) {
                         if (exitCode == Router.EXIT_HARD)

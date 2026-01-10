@@ -125,6 +125,28 @@ public class EditBean extends IndexBean {
 
     /**
      *  @param tunnel the tunnel index
+     *  @return the minimum shutdown delay in seconds for server tunnels
+     *  @since 0.9.68+
+     */
+    public int getShutdownDelayMin(int tunnel) {
+        TunnelController tc = _helper.getController(tunnel);
+        if (tc == null) return 0;
+        return tc.getShutdownDelayMin();
+    }
+
+    /**
+     *  @param tunnel the tunnel index
+     *  @return the maximum shutdown delay in seconds for server tunnels
+     *  @since 0.9.68+
+     */
+    public int getShutdownDelayMax(int tunnel) {
+        TunnelController tc = _helper.getController(tunnel);
+        if (tc == null) return 0;
+        return tc.getShutdownDelayMax();
+    }
+
+    /**
+     *  @param tunnel the tunnel index
      *  @return true if the tunnel connection should be delayed until the first client connects
      *  @since 0.8.3
      */

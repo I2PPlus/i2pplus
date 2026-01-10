@@ -48,7 +48,7 @@
       debuglevel="lines,vars,source"
       includeAntRuntime="false"
       encoding="UTF-8"
-      destdir="./build/obj" classpath="../../core/java/build/obj:../../core/java/build/i2p.jar:../../core/java/build/gnu-getopt.jar:../../core/java/build/httpclient.jar:../../core/java/build/httpcore.jar">
+      destdir="./build/obj" classpath="../../core/java/build/obj:../../core/java/build/i2p.jar:../../core/java/build/gnu-getopt.jar:../../core/java/build/httpclient.jar:../../core/java/build/httpcore.jar:../../apps/i2ptunnel/java/build/i2ptunnel.jar">
       <compilerarg line="${javac.compilerargs}"/>
     </javac>
   </target>

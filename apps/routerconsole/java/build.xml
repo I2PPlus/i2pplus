@@ -34,6 +34,7 @@
         <pathelement location="../../jetty/jettylib/org.mortbay.jetty.jar"/>
         <pathelement location="../../jrobin/java/build/jrobin.jar"/>
         <pathelement location="../../../router/java/build/obj"/>
+        <pathelement location="../../i2ptunnel/java/build/i2ptunnel.jar"/>
         <pathelement location="../../systray/java/build/obj"/>
       </classpath>
     </depend>
@@ -86,6 +87,7 @@
         <pathelement location="../../jetty/jettylib/org.mortbay.jetty.jar"/>
         <pathelement location="../../jrobin/java/build/jrobin.jar"/>
         <pathelement location="../../../router/java/build/router.jar"/>
+        <pathelement location="../../i2ptunnel/java/build/i2ptunnel.jar"/>
         <pathelement location="../../systray/java/build/systray.jar"/>
 
         <!-- following jars only present for debian builds -->

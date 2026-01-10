@@ -1,6 +1,7 @@
 package net.i2p.router.web.helpers;
 
 import net.i2p.data.DataHelper;
+import net.i2p.i2ptunnel.TunnelControllerGroup;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.web.ConfigServiceHandler;
@@ -59,7 +60,13 @@ public class ConfigRestartBean {
         boolean restarting = isRestarting(ctx);
         long timeRemaining = ctx.router().getShutdownTimeRemaining();
         StringBuilder buf = new StringBuilder(128);
-        if ((shuttingDown || restarting) && timeRemaining <= 45*1000) {
+        int transit = ctx.tunnelManager().getParticipatingCount();
+        boolean serverTunnelDelay = TunnelControllerGroup.isDelayedShutdownInProgress();
+        if (serverTunnelDelay) {
+            int remaining = TunnelControllerGroup.getRemainingShutdownDelay();
+            String delayStr = formatDelay(remaining);
+            buf.append("&hellip;<br>").append(_t("Deferring final shutdown for {0} until all servers have stopped", delayStr, ctx));
+        } else if ((shuttingDown || restarting) && timeRemaining <= 45*1000) {
             buf.append("<h4 id=sb_shutdownStatus class=volatile><span id=imminent><b>");
             if (restarting) {buf.append(_t("Restart imminent", ctx));}
             else {buf.append(_t("Shutdown imminent", ctx));}
@@ -67,14 +74,13 @@ public class ConfigRestartBean {
         } else if (shuttingDown) {
             buf.append("<h4 id=sb_shutdownStatus class=volatile><span>")
                .append(_t("Shutdown in {0}", DataHelper.formatDuration2(timeRemaining), ctx));
-            int tuns = ctx.tunnelManager().getParticipatingCount();
-            if (tuns > 0) {
+            if (transit > 0) {
                 if (isAdvanced()) {
                     buf.append("&hellip;<br>").append(ngettext("{0} transit tunnel still active",
-                                                     "{0} transit tunnels still active", tuns, ctx));
+                                                     "{0} transit tunnels still active", transit, ctx));
                 } else {
                     buf.append("&hellip;<br>").append(ngettext("Please wait for routing commitment to expire for {0} tunnel",
-                                                     "Please wait for routing commitments to expire for {0} tunnels", tuns, ctx));
+                                                     "Please wait for routing commitments to expire for {0} tunnels", transit, ctx));
                 }
             }
             buf.append("</span></h4><hr>");
@@ -82,15 +88,14 @@ public class ConfigRestartBean {
         } else if (restarting) {
             buf.append("<h4 id=sb_shutdownStatus class=volatile><span>")
                .append(_t("Restart in {0}", DataHelper.formatDuration2(timeRemaining), ctx));
-            int tuns = ctx.tunnelManager().getParticipatingCount();
-            if (tuns > 0) {
+            if (transit > 0) {
                 if (isAdvanced()) {
                     buf.append("&hellip;<br>").append(ngettext("{0} transit tunnel still active",
-                                                               "{0} transit tunnels still active", tuns, ctx));
+                                                               "{0} transit tunnels still active", transit, ctx));
                 } else {
                     buf.append("&hellip;<br>").append(ngettext("Please wait for routing commitment to expire for {0} tunnel",
                                                       "Please wait for routing commitments to expire for {0} tunnels",
-                                                tuns, ctx));
+                                                transit, ctx));
                 }
             }
             buf.append("</span></h4><hr>");
@@ -100,6 +105,42 @@ public class ConfigRestartBean {
             else {buttons(ctx, buf, urlBase, systemNonce, SET4);}
         }
         return buf.toString();
+    }
+
+    /**
+     * Check if any i2ptunnel servers have shutdown delays configured.
+     * @param ctx the router context
+     * @return true if any server tunnel has shutdownDelayMin < shutdownDelayMax
+     * @since 0.9.68+
+     */
+    private static boolean hasServerTunnelDelays(RouterContext ctx) {
+        net.i2p.app.ClientAppManager mgr = ctx.clientAppManager();
+        if (mgr == null) {
+            return false;
+        }
+        net.i2p.app.ClientApp i2pt = mgr.getRegisteredApp("i2ptunnel");
+        if (i2pt == null) {
+            return false;
+        }
+        try {
+            java.lang.reflect.Field f = i2pt.getClass().getDeclaredField("_instance");
+            if (f != null && f.getType() == java.lang.reflect.Field.class) {
+                f.setAccessible(true);
+                Object instance = f.get(null);
+                if (instance != null && instance.getClass().getName().equals("net.i2p.i2ptunnel.TunnelControllerGroup")) {
+                    java.lang.reflect.Method m = instance.getClass().getMethod("hasServerTunnelDelays");
+                    if (m != null) {
+                        Object result = m.invoke(instance);
+                        if (result instanceof Boolean) {
+                            return (Boolean) result;
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            return false;
+        }
+        return false;
     }
 
     /** @param s value,class,label,... triplets */
@@ -147,6 +188,25 @@ public class ConfigRestartBean {
     /** translate (ngettext) @since 0.9.10 */
     private static String ngettext(String s, String p, int n, RouterContext ctx) {
         return Messages.getString(n, s, p, ctx);
+    }
+
+    /**
+     *  Format seconds as "1m 30s" or just "45s".
+     *  @since 0.9.68+
+     */
+    private static String formatDelay(int seconds) {
+        if (seconds <= 0) {
+            return "0s";
+        }
+        int mins = seconds / 60;
+        int secs = seconds % 60;
+        if (mins > 0 && secs > 0) {
+            return mins + "m " + secs + "s";
+        } else if (mins > 0) {
+            return mins + "m";
+        } else {
+            return secs + "s";
+        }
     }
 }
 

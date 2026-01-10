@@ -1065,6 +1065,30 @@ public class IndexBean {
         }
     }
 
+    /**
+     *  @param val the minimum shutdown delay in seconds for server tunnels
+     *  @since 0.9.68+
+     */
+    public void setShutdownDelayMin(String val) {
+        if (val != null) {
+            try {
+                _config.setShutdownDelayMin(Integer.parseInt(val.trim()));
+            } catch (NumberFormatException nfe) {}
+        }
+    }
+
+    /**
+     *  @param val the maximum shutdown delay in seconds for server tunnels
+     *  @since 0.9.68+
+     */
+    public void setShutdownDelayMax(String val) {
+        if (val != null) {
+            try {
+                _config.setShutdownDelayMax(Integer.parseInt(val.trim()));
+            } catch (NumberFormatException nfe) {}
+        }
+    }
+
     public void setConnectDelay(String moo) {
         _config.setConnectDelay(true);
     }

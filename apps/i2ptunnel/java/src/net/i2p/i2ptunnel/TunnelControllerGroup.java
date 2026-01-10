@@ -13,10 +13,12 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -58,6 +60,19 @@ public class TunnelControllerGroup implements ClientApp {
     private final String _configDirectory;
 
     private static final String REGISTERED_NAME = "i2ptunnel";
+
+    /**
+     *  Flag to indicate if delayed server tunnel shutdown is in progress.
+     *  Set by shutdownDelayedServers() and checked by GracefulShutdown.
+     *  @since 0.9.68+
+     */
+    private static volatile boolean _delayedShutdownInProgress = false;
+
+    /**
+     *  Timestamp when delayed shutdown started, used to calculate remaining wait time.
+     *  @since 0.9.68+
+     */
+    private static volatile long _delayedShutdownStartTime = 0;
 
     /**
      * Map of I2PSession to a Set of TunnelController objects
@@ -313,7 +328,7 @@ public class TunnelControllerGroup implements ClientApp {
      *  @since 0.9.4
      */
     public void shutdown(String[] args) {
-        shutdown();
+        shutdown(true);
     }
 
     /**
@@ -322,14 +337,20 @@ public class TunnelControllerGroup implements ClientApp {
      *  Agressively kill and null everything to reduce memory usage in the JVM
      *  after stopping, and to recognize what must be reinitialized on restart (Android)
      *
+     *  @param waitForDelayed true to wait for shutdown-delayed tunnels, false for immediate
      *  @since 0.8.8
      */
-    public synchronized void shutdown() {
+    public synchronized void shutdown(boolean waitForDelayed) {
         if (_state != STARTING && _state != RUNNING)
             return;
         changeState(STOPPING);
         if (_mgr != null)
             _mgr.unregister(this);
+
+        if (waitForDelayed) {
+            shutdownDelayedServers();
+        }
+
         unloadControllers();
         synchronized (TunnelControllerGroup.class) {
             if (_instance == this)
@@ -340,12 +361,162 @@ public class TunnelControllerGroup implements ClientApp {
     }
 
     /**
-     * Detects whether a migration to split configuration files should/will/has
-     * happened based on the platform and installation type. Does not tell
-     * whether a migration has actually occurred.
+     *  Convenience method - calls shutdown(true) to wait for.
+     *  @since 0 delayed tunnels.9.68+
+     */
+    public synchronized void shutdown() {
+        shutdown(true);
+    }
+
+    /**
+     *  Prepare for graceful shutdown by stopping delayed server tunnels.
+     *  This should be called during graceful shutdown period, before
+     *  final shutdown is triggered. It stops server tunnels with delays
+     *  but does not unload controllers or release resources.
+     *  @since 0.9.68+
+     */
+    public void prepareGracefulShutdown() {
+        shutdownDelayedServers();
+    }
+
+    /**
+     *  Check if delayed server tunnel shutdown is currently in progress.
+     *  @return true if shutdownDelayedServers() is currently executing
+     *  @since 0.9.68+
+     */
+    public static boolean isDelayedShutdownInProgress() {
+        return _delayedShutdownInProgress;
+    }
+
+    /**
+     *  Get the maximum configured shutdown delay among all server tunnels.
+     *  @return maximum delay in seconds, or 0 if no servers have delays configured
+     *  @since 0.9.68+
+     */
+    public int getMaxShutdownDelay() {
+        _controllersLock.readLock().lock();
+        try {
+            int maxDelay = 0;
+            for (TunnelController controller : _controllers) {
+                if (!controller.isClient()) {
+                    int delayMax = controller.getShutdownDelayMax();
+                    if (delayMax > maxDelay) {
+                        maxDelay = delayMax;
+                    }
+                }
+            }
+            return maxDelay;
+        } finally {
+            _controllersLock.readLock().unlock();
+        }
+    }
+
+    /**
+     *  Get the remaining time until the longest-delayed server tunnel will stop.
+     *  @return remaining delay in seconds, or 0 if shutdown not in progress or delay has passed
+     *  @since 0.9.68+
+     */
+    public static int getRemainingShutdownDelay() {
+        if (!_delayedShutdownInProgress || _delayedShutdownStartTime <= 0) {
+            return 0;
+        }
+        long elapsed = (System.currentTimeMillis() - _delayedShutdownStartTime) / 1000;
+        int maxDelay = getInstance().getMaxShutdownDelay();
+        int remaining = (int) (maxDelay - elapsed);
+        return Math.max(0, remaining);
+    }
+
+    /**
+     *  Stop server tunnels with shutdown delays in stages.
+     *  Each server with a delay gets a random stop time within the configured window.
+     *  @since 0.9.68+
+     */
+    private void shutdownDelayedServers() {
+        _controllersLock.readLock().lock();
+        List<TunnelController> delayedServers;
+        try {
+            delayedServers = new ArrayList<TunnelController>();
+            for (TunnelController controller : _controllers) {
+                if (!controller.isClient()) {
+                    int delayMin = controller.getShutdownDelayMin();
+                    int delayMax = controller.getShutdownDelayMax();
+                    if (delayMax > delayMin && delayMin >= 0) {
+                        delayedServers.add(controller);
+                    }
+                }
+            }
+        } finally {
+            _controllersLock.readLock().unlock();
+        }
+
+        if (delayedServers.isEmpty()) {
+            return;
+        }
+
+        int maxDelay = 0;
+        for (TunnelController controller : delayedServers) {
+            int delayMax = controller.getShutdownDelayMax();
+            if (delayMax > maxDelay) {
+                maxDelay = delayMax;
+            }
+        }
+
+        _delayedShutdownInProgress = true;
+        _delayedShutdownStartTime = System.currentTimeMillis();
+        CountDownLatch latch = new CountDownLatch(delayedServers.size());
+        ExecutorService executor = Executors.newCachedThreadPool();
+        long startTime = System.currentTimeMillis();
+
+        for (TunnelController controller : delayedServers) {
+            int delayMin = controller.getShutdownDelayMin();
+            int delayMax = controller.getShutdownDelayMax();
+            int delay = delayMin + RandomSource.getInstance().nextInt(Math.max(1, delayMax - delayMin));
+            final TunnelController tc = controller;
+            final String name = controller.getName();
+            final int actualDelay = delay;
+            executor.submit(new Runnable() {
+                public void run() {
+                    if (actualDelay > 0) {
+                        try {
+                            tc.log("◦ Stopping " + name + " in " + actualDelay + "s...");
+                            Thread.sleep(actualDelay * 1000);
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                        }
+                    }
+                    tc.stopTunnel();
+                    latch.countDown();
+                }
+            });
+        }
+
+        try {
+            long maxWait = Math.min(maxDelay + 30, 300) * 1000L;
+            boolean completed = latch.await(maxWait, TimeUnit.MILLISECONDS);
+            long elapsed = (System.currentTimeMillis() - startTime) / 1000;
+            if (completed) {
+                if (_log.shouldInfo())
+                    _log.info("All delayed servers stopped in " + elapsed + "s");
+            } else {
+                if (_log.shouldWarn())
+                    _log.warn("Timeout waiting for servers to stop after " + elapsed + "s");
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        } finally {
+            executor.shutdownNow();
+            _delayedShutdownInProgress = false;
+            _delayedShutdownStartTime = 0;
+        }
+    }
+
+    /**
+     *  Detects whether a migration to split configuration files should/will/has
+     *  happened based on the platform and installation type. Does not tell
+     *  whether a migration has actually occurred.
      *
-     * @returns true if a migration is relevant to the platform, false if not
-     * @since 0.9.42
+     *  @returns true if a migration is relevant to the platform, false if not
+     *  @since 0.9.42
      */
     private boolean shouldMigrate() {
         try {
@@ -551,6 +722,7 @@ public class TunnelControllerGroup implements ClientApp {
                                         } catch (InterruptedException e) {
                                             Thread.currentThread().interrupt();
                                         }
+                                        tc.log("✓ Starting " + name);
                                         tc.startTunnelBackground();
                                     }
                                 }, "Tunnel startup delay for " + name).start();
