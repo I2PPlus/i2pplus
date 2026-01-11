@@ -367,14 +367,18 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
         if (_keepAliveSocket && fromI2P != null) {
             // we are client-side
             // tell the from-I2P runner
-            if (_log.shouldInfo()) {_log.info("Stream done from I2P", new Exception("I did it"));}
+            if (_log.shouldInfo()) {
+                _log.info("I2P client stream closed by peer -> Total received: " + totalReceived + " bytes");
+            }
             fromI2P.done = true;
         } else if (_keepAliveI2P && toI2P != null) {
             // we are server-side - tell the to-I2P runner
-            if (_log.shouldInfo()) {_log.info("Stream done from Server", new Exception("I did it"));}
+            if (_log.shouldInfo()) {
+                _log.info("I2P server stream closed by peer -> Total sent: " + totalSent + " bytes");
+            }
             toI2P.done = true;
         } else {
-            if (_log.shouldWarn()) {_log.info("Unexpected stream done", new Exception("I did it"));}
+            if (_log.shouldWarn()) {_log.warn("I2P stream closed prematurely");}
         }
     }
 
@@ -392,7 +396,8 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
         try {
             out = getSocketOut();
             i2pin = i2ps.getInputStream();
-            i2pout = i2ps.getOutputStream(); //new BufferedOutputStream(i2ps.getOutputStream(), MAX_PACKET_SIZE);
+            i2pout = i2ps.getOutputStream();
+            //new BufferedOutputStream(i2ps.getOutputStream(), MAX_PACKET_SIZE);
             if (initialI2PData != null) {
                 i2pout.write(initialI2PData);
                 /*

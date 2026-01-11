@@ -81,7 +81,7 @@ public class ConfigRestartBean {
             if (transit > 0) {
                 if (isAdvanced()) {
                     buf.append("&hellip;<br>").append(ngettext("{0} transit tunnel still active",
-                                                     "{0} transit tunnels still active", transit, ctx));
+                                                               "{0} transit tunnels still active", transit, ctx));
                 } else {
                     buf.append("&hellip;<br>").append(ngettext("Please wait for routing commitment to expire for {0} tunnel",
                                                      "Please wait for routing commitments to expire for {0} tunnels", transit, ctx));
@@ -98,8 +98,8 @@ public class ConfigRestartBean {
                                                                "{0} transit tunnels still active", transit, ctx));
                 } else {
                     buf.append("&hellip;<br>").append(ngettext("Please wait for routing commitment to expire for {0} tunnel",
-                                                      "Please wait for routing commitments to expire for {0} tunnels",
-                                                transit, ctx));
+                                                               "Please wait for routing commitments to expire for {0} tunnels",
+                                                               transit, ctx));
                 }
             }
             buf.append("</span></h4><hr>");

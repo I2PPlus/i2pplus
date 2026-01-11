@@ -755,7 +755,7 @@ public class TunnelControllerGroup implements ClientApp {
                                 String port = controller.getTargetPort();
                                 String typeDesc;
                                 if ("httpserver".equals(type)) {
-                                    typeDesc = "Web Server";
+                                    typeDesc = "HTTP Server";
                                 } else if ("ircserver".equals(type)) {
                                     typeDesc = "IRC Server";
                                 } else if ("httpbidirserver".equals(type)) {
