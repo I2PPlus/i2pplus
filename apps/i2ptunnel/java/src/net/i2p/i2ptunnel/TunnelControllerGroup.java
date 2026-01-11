@@ -411,7 +411,7 @@ public class TunnelControllerGroup implements ClientApp {
         try {
             int maxDelay = 0;
             for (TunnelController controller : _controllers) {
-                if (!controller.isClient()) {
+                if (!controller.isClient() && controller.getIsRunning()) {
                     int delayMax = controller.getShutdownDelayMax();
                     if (delayMax > maxDelay) {
                         maxDelay = delayMax;
@@ -465,7 +465,7 @@ public class TunnelControllerGroup implements ClientApp {
         try {
             delayedServers = new ArrayList<TunnelController>();
             for (TunnelController controller : _controllers) {
-                if (!controller.isClient()) {
+                if (!controller.isClient() && controller.getIsRunning()) {
                     int delayMin = controller.getShutdownDelayMin();
                     int delayMax = controller.getShutdownDelayMax();
                     if (delayMax > delayMin && delayMin >= 0) {
