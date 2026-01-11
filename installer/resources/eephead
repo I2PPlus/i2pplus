@@ -16,7 +16,7 @@ fi
 
 # Show help with exit status
 send_help() {
-    java -jar "$I2P/lib/i2p.jar" eephead
+    java --enable-native-access=ALL-UNNAMED -jar "$I2P/lib/i2p.jar" eephead
     if [ "$1" ]; then
         exit $1
     else
@@ -101,7 +101,7 @@ fi
 
 echo " ➤ Initiating eephead probe of $url…"
 
-cmd='java -jar '"$I2P"'/lib/i2p.jar eephead '"${args}"
+cmd='java --enable-native-access=ALL-UNNAMED -jar '"$I2P"'/lib/i2p.jar eephead '"${args}"
 eval ${cmd}
 
 exit $?

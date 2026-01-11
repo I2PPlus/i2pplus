@@ -15,7 +15,7 @@ fi
 
  # Send help
 send_help() {
-    java -cp "$I2P/lib/i2p.jar" net.i2p.util.EepGet
+    java --enable-native-access=ALL-UNNAMED -cp "$I2P/lib/i2p.jar" net.i2p.util.EepGet
     if [ "$1" ]; then exit $1; else exit 0; fi
 }
 
@@ -134,6 +134,6 @@ fi
 
 echo " ➤ Attempting eepget retrieval of $eep_url…"
 
-cmd="java -cp "$I2P/lib/i2p.jar" net.i2p.util.EepGet "$args""
+cmd="java --enable-native-access=ALL-UNNAMED -cp "$I2P/lib/i2p.jar" net.i2p.util.EepGet "$args""
 eval ${cmd}
 exit $?

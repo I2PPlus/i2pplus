@@ -15,7 +15,7 @@ fi
 
     # Show i2ping help with option for exit number
 send_help() {
-    java -jar "$I2P/lib/i2ptunnel.jar" -die -e "ownDest yes" -e "ping"
+    java --enable-native-access=ALL-UNNAMED -jar "$I2P/lib/i2ptunnel.jar" -die -e "ownDest yes" -e "ping"
     if [ "$1" ]; then exit $1; else exit 0; fi
 }
 
@@ -119,7 +119,7 @@ elif [ $host_file ] && [ -f $host_file ]; then
     echo " • Found $host_file, initiating ping..."
     debug "$(cat $host_file | wc -l) hosts to ping"
     echo " • Trying to open tunnel(s)"
-    cmd='java -jar '"$I2P"'/lib/i2ptunnel.jar -die -e "ownDest yes" -e "ping '"${args}"'"'
+    cmd='java --enable-native-access=ALL-UNNAMED -jar '"$I2P"'/lib/i2ptunnel.jar -die -e "ownDest yes" -e "ping '"${args}"'"'
     eval ${cmd}
     exit $?
 elif [ $list_file ] && [ -f $list_file ]; then
@@ -156,7 +156,7 @@ elif [ "$address" ]; then # Do we really have an address?
 
     # Start single ping command
     echo " • Opening tunnel..."
-    cmd='java -jar '"$I2P"'/lib/i2ptunnel.jar -die -e "ownDest yes" -e "ping '"${args}"' '"${address}"'"'
+    cmd='java --enable-native-access=ALL-UNNAMED -jar '"$I2P"'/lib/i2ptunnel.jar -die -e "ownDest yes" -e "ping '"${args}"' '"${address}"'"'
     eval ${cmd} | while read line; do # Parse output
         filter="$(echo $line | grep ""$address"")" # Filter 1
         filter="$(echo $line | grep -iEo '[0-9]{1,99}\:|result')" # Filter 2
