@@ -688,23 +688,33 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                 _log.warn("Reconnecting to router after restart");
                 i2pss = sockMgr.getServerSocket();
             } catch (I2PException ipe) {
-                String s = "Error accepting server socket connection - KILLING THE TUNNEL SERVER!";
-                _log.log(Log.CRIT, s, ipe);
-                l.log("✖ " + s + ": " + ipe.getMessage());
-                TunnelController tc = getTunnel().getController();
-                if (tc != null) {
-                    tc.stopTunnel();
-                } else {
-                    close(true);
-                }
+                _log.warn("Error accepting server socket connection, attempting to recover...", ipe);
                 if (i2ps != null) {
                     try {
                         i2ps.close();
                     } catch (IOException ioe) {
-                        // ignore
                     }
                 }
-                break;
+                try {
+                    Thread.sleep(10 * 1000);
+                    i2pss = sockMgr.getServerSocket();
+                    if (i2pss == null) {
+                        throw new I2PException("Failed to recreate server socket");
+                    }
+                    _log.info("Successfully recovered server socket");
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                    break;
+                } catch (I2PException re) {
+                    _log.error("Failed to recover server socket, destroying tunnel", re);
+                    TunnelController tc = getTunnel().getController();
+                    if (tc != null) {
+                        tc.stopTunnel();
+                    } else {
+                        close(true);
+                    }
+                    break;
+                }
             } catch (ConnectException ce) {
                 if (i2ps != null) try { i2ps.close(); } catch (IOException ioe) {}
                 if (!open) {

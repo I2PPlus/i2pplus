@@ -951,7 +951,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * Validates that the LeaseSet has not expired before current publication time.
      * Throws IllegalArgumentException if LeaseSet is already expired.
      */
-    private static final long EXPIRY_GRACE_PERIOD = 30*1000;
+    private static final long EXPIRY_GRACE_PERIOD = 90*1000;
 
     private void validateLeaseSetExpiry(LeaseSet leaseSet) {
         long now = _context.clock().now();
