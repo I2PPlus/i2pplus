@@ -970,10 +970,17 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * Proactively starts republishing 3 minutes before lease expiration to ensure
      * network propagation has ample time before the lease expires.
      *
-     * <p>This method drops any existing queued jobs for the same destination before
-     * adding the new job, preventing job accumulation.</p>
+     * <p>Skips queuing if a republish job is already active for this destination.</p>
      */
     private void scheduleRepublish(Hash hash) {
+        if (hasActiveRepublishJob(hash)) {
+            if (_log.shouldDebug()) {
+                _log.debug("Skipping republish scheduling for [" + hash.toBase32().substring(0, 8) +
+                           "] - job already active");
+            }
+            return;
+        }
+
         RepublishLeaseSetJob job = new RepublishLeaseSetJob(_context, this, hash);
 
         long now = _context.clock().now();
@@ -1024,21 +1031,31 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
-     * Register a new job for tracking. Drops any existing jobs for the same destination.
+     * Check if an active republish job exists for the given destination.
      */
-    void registerPublishingJob(RepublishLeaseSetJob job) {
+    boolean hasActiveRepublishJob(Hash hash) {
+        Set<RepublishLeaseSetJob> jobs = _publishingLeaseSets.get(hash);
+        return jobs != null && !jobs.isEmpty();
+    }
+
+    /**
+     * Register a new job for tracking. Skips registration if a job is already active.
+     * @return true if job was registered, false if one was already active
+     */
+    boolean registerPublishingJob(RepublishLeaseSetJob job) {
         Hash hash = job.getDestHash();
         Set<RepublishLeaseSetJob> jobs = _publishingLeaseSets.computeIfAbsent(hash,
             key -> Collections.newSetFromMap(new ConcurrentHashMap<>()));
 
         synchronized (jobs) {
-            Iterator<RepublishLeaseSetJob> iter = jobs.iterator();
-            while (iter.hasNext()) {
-                RepublishLeaseSetJob oldJob = iter.next();
-                _context.jobQueue().removeJob(oldJob);
-                iter.remove();
+            if (!jobs.isEmpty()) {
+                if (_log.shouldDebug()) {
+                    _log.debug("Skipping duplicate republish job for [" + hash.toBase32().substring(0, 8) + "]");
+                }
+                return false;
             }
             jobs.add(job);
+            return true;
         }
     }
 

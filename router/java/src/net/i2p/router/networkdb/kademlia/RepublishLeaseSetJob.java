@@ -115,6 +115,13 @@ public class RepublishLeaseSetJob extends JobImpl {
     public String getName() {return "Republish Local LeaseSet" + (highPriority ? " [High priority]" : "");}
 
     private void scheduleRepublish(long delayMs) {
+        if (_facade.hasActiveRepublishJob(_dest)) {
+            if (_log.shouldDebug()) {
+                _log.debug("Skipping republish for [" + _dest.toBase32().substring(0, 8) +
+                           "] - job already active");
+            }
+            return;
+        }
         RepublishLeaseSetJob nextJob = new RepublishLeaseSetJob(getContext(), _facade, _dest);
         nextJob.getTiming().setStartAfter(getContext().clock().now() + delayMs);
         getContext().jobQueue().addJob(nextJob);
@@ -125,6 +132,13 @@ public class RepublishLeaseSetJob extends JobImpl {
             if (_log.shouldDebug()) {
                 _log.debug("Retry already in progress for " + _dest.toBase32().substring(0,8) + "] -> Skipping...");
             }
+            return;
+        }
+        if (_facade.hasActiveRepublishJob(_dest)) {
+            if (_log.shouldDebug()) {
+                _log.debug("Skipping retry for [" + _dest.toBase32().substring(0, 8) + "] -> Job already active");
+            }
+            clearRetryInProgress();
             return;
         }
         int count = failCount.incrementAndGet();
