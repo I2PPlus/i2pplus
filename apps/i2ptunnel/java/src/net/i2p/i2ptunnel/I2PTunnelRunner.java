@@ -378,7 +378,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
             }
             toI2P.done = true;
         } else {
-            if (_log.shouldWarn()) {_log.warn("I2P stream closed prematurely");}
+            if (_log.shouldInfo()) {_log.info("I2P stream closed prematurely");}
         }
     }
 

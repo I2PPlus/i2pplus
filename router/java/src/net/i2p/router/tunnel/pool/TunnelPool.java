@@ -252,7 +252,9 @@ public class TunnelPool {
             } else {
                 warning = toString() + " -> No tunnels available";
             }
-            _log.warn(warning);
+            if (!warning.contains("Ping")) {
+                _log.warn(warning);
+            }
         }
 
         if (_alive && !avoidZeroHop) {buildFallback();}
@@ -306,7 +308,9 @@ public class TunnelPool {
             } else {
                 warning = toString() + " -> No tunnels available";
             }
-            _log.warn(warning);
+            if (!warning.contains("Ping")) {
+                _log.warn(warning);
+            }
         }
         return rv;
     }
