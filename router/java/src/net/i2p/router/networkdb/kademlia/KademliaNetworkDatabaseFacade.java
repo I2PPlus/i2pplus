@@ -99,11 +99,11 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private final AtomicInteger knownLeaseSetsCount = new AtomicInteger(0);
 
     /**
-     * Map of Hash to RepublishLeaseSetJob for leases we're already managing.
-     * This is added to when we create a new RepublishLeaseSetJob, and the values are
-     * removed when the job decides to stop running.
+     * Map of Hash to Set of RepublishLeaseSetJob for leases we're already managing.
+     * Multiple jobs may be queued per destination; new jobs replace old ones.
      */
-    private final ConcurrentMap<Hash, RepublishLeaseSetJob> _publishingLeaseSets = new ConcurrentHashMap<>(8);
+    private final ConcurrentMap<Hash, Set<RepublishLeaseSetJob>> _publishingLeaseSets =
+        new ConcurrentHashMap<>(8);
 
     /**
      * Hash of the key currently being searched for, pointing the SearchJob that
@@ -969,10 +969,12 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * Queues the LeaseSet for future republishing, delaying to avoid flooding floodfills.
      * Proactively starts republishing 3 minutes before lease expiration to ensure
      * network propagation has ample time before the lease expires.
+     *
+     * <p>This method drops any existing queued jobs for the same destination before
+     * adding the new job, preventing job accumulation.</p>
      */
     private void scheduleRepublish(Hash hash) {
-        RepublishLeaseSetJob job = _publishingLeaseSets.computeIfAbsent(hash,
-            key -> new RepublishLeaseSetJob(_context, this, key));
+        RepublishLeaseSetJob job = new RepublishLeaseSetJob(_context, this, hash);
 
         long now = _context.clock().now();
         long nextTime;
@@ -1006,7 +1008,50 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         _context.jobQueue().addJobToTop(job);
     }
 
-    void stopPublishing(Hash target) {_publishingLeaseSets.remove(target);}
+    /**
+     * Remove a specific job from the tracking set.
+     */
+    void removePublishingJob(Hash hash, RepublishLeaseSetJob job) {
+        Set<RepublishLeaseSetJob> jobs = _publishingLeaseSets.get(hash);
+        if (jobs != null) {
+            synchronized (jobs) {
+                jobs.remove(job);
+                if (jobs.isEmpty()) {
+                    _publishingLeaseSets.remove(hash);
+                }
+            }
+        }
+    }
+
+    /**
+     * Register a new job for tracking. Drops any existing jobs for the same destination.
+     */
+    void registerPublishingJob(RepublishLeaseSetJob job) {
+        Hash hash = job.getDestHash();
+        Set<RepublishLeaseSetJob> jobs = _publishingLeaseSets.computeIfAbsent(hash,
+            key -> Collections.newSetFromMap(new ConcurrentHashMap<>()));
+
+        synchronized (jobs) {
+            Iterator<RepublishLeaseSetJob> iter = jobs.iterator();
+            while (iter.hasNext()) {
+                RepublishLeaseSetJob oldJob = iter.next();
+                _context.jobQueue().removeJob(oldJob);
+                iter.remove();
+            }
+            jobs.add(job);
+        }
+    }
+
+    void stopPublishing(Hash target) {
+        Set<RepublishLeaseSetJob> jobs = _publishingLeaseSets.remove(target);
+        if (jobs != null) {
+            synchronized (jobs) {
+                for (RepublishLeaseSetJob job : jobs) {
+                    _context.jobQueue().removeJob(job);
+                }
+            }
+        }
+    }
 
     /**
      * Stores to local db only.

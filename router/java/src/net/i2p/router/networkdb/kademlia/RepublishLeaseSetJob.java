@@ -34,10 +34,14 @@ public class RepublishLeaseSetJob extends JobImpl {
         _log = ctx.logManager().getLog(RepublishLeaseSetJob.class);
         _facade = facade;
         _dest = destHash;
+        registerSelf();
     }
 
-    public String getName() {return "Republish Local LeaseSet" + (highPriority ? " [High priority]" : "");}
+    private void registerSelf() {
+        _facade.registerPublishingJob(this);
+    }
 
+    @Override
     public void runJob() {
         long uptime = getContext().router().getUptime();
         try {
@@ -103,8 +107,12 @@ public class RepublishLeaseSetJob extends JobImpl {
             if (_log.shouldError()) {_log.error("Uncaught error republishing the LeaseSet", re);}
             _facade.stopPublishing(_dest);
             throw re;
+        } finally {
+            _facade.removePublishingJob(_dest, this);
         }
     }
+
+    public String getName() {return "Republish Local LeaseSet" + (highPriority ? " [High priority]" : "");}
 
     private void scheduleRepublish(long delayMs) {
         RepublishLeaseSetJob nextJob = new RepublishLeaseSetJob(getContext(), _facade, _dest);
@@ -151,6 +159,8 @@ public class RepublishLeaseSetJob extends JobImpl {
     }
 
     public long lastPublished() {return _lastPublished;}
+
+    Hash getDestHash() {return _dest;}
 
     private class OnRepublishFailure extends JobImpl {
         private final LeaseSet _ls;
