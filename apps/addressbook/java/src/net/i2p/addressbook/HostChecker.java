@@ -1181,6 +1181,8 @@ public class HostChecker {
             if (downloadSuccess) {
                 // Add header after successful download
                 addCategoriesHeader();
+                // Reload categories into memory from the newly downloaded file
+                loadCategories();
                 if (_log.shouldInfo()) {
                     _log.info("Successfully downloaded categories to " + _categoriesFile.getAbsolutePath());
                 }
@@ -1502,6 +1504,48 @@ public class HostChecker {
     }
 
     /**
+     * Refresh categories at the start of each HostChecker cycle
+     * Attempts to download fresh categories from notbob.i2p, falls back to existing file
+     */
+    private void refreshCategories() {
+        boolean downloadSuccess = false;
+        boolean hadExistingFile = _categoriesFile.exists();
+
+        try {
+            String categoryUrl = "http://notbob.i2p/graphs/cats.txt";
+
+            if (_log.shouldInfo()) {
+                _log.info("Refreshing categories from " + categoryUrl + "...");
+            }
+
+            EepGet get = new EepGet(_context, "127.0.0.1", 4444, 1, _categoriesFile.getAbsolutePath(), categoryUrl);
+            get.addHeader("User-Agent", "I2P+ HostChecker");
+            downloadSuccess = get.fetch(CATEGORY_CONNECT_TIMEOUT, CATEGORY_TOTAL_TIMEOUT, CATEGORY_INACTIVITY_TIMEOUT);
+
+            if (downloadSuccess) {
+                addCategoriesHeader();
+                if (_log.shouldInfo()) {
+                    _log.info("Successfully refreshed categories from notbob.i2p");
+                }
+            } else {
+                if (_log.shouldInfo()) {
+                    _log.info("Failed to refresh categories from notbob.i2p, using existing categories.txt");
+                }
+            }
+        } catch (Exception e) {
+            if (_log.shouldWarn()) {
+                _log.warn("Exception refreshing categories", e);
+            }
+        }
+
+        // Always reload categories into memory (either from new download or existing file)
+        if (downloadSuccess || hadExistingFile) {
+            loadCategories();
+            updateHostsWithCategories();
+        }
+    }
+
+    /**
      * Update hosts_check.txt with category information after successful category download
      */
     private void updateHostsWithCategories() {
@@ -1569,6 +1613,9 @@ public class HostChecker {
                 }
                 return;
             }
+
+            // Refresh categories from notbob.i2p at the start of each cycle
+            refreshCategories();
 
             // Get all hostnames and randomize order
             Set<String> allHostnamesSet = getAllHostnames();
