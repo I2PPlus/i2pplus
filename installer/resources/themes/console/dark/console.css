@@ -1431,6 +1431,7 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 .leaseset .rxAsRep{padding:0 7px 0 17px;background:var(--rar) no-repeat left calc(50% + 1px)/16px;display:none}
 .leaseset .rxAsPub+.bullet,.leaseset .rxAsRep+.bullet{display:none}
 .leaseset .rkey{padding-left:15px;background:var(--routekey) no-repeat left center/15px}
+.leaseset .ekey{margin:0 -1px 0 -2px;padding:3px 6px 3px 21px;display:inline-block;vertical-align:middle;line-height:1.3;font-size:95%;font-weight:500;box-shadow:var(--bevel);background:var(--crypto) no-repeat 6px center/12px,var(--badge)}
 .leaseset .stype{margin-right:-1px;padding:3px 6px 3px 21px;display:inline-block;vertical-align:middle;line-height:1.3;font-size:95%;font-weight:500;box-shadow:var(--bevel);background:var(--lock) no-repeat 6px center/12px,var(--badge)}
 .leaseset .ekey b,.leaseset .rkey b,.leaseset .rxAsPub b,.leaseset .rxAsRep b,.leaseset .stype b,.leaseset .expiry b, .leaseset .ekey .bullet,.leaseset .expiry .bullet,.leaseset .rkey .bullet,.leaseset .rxAsPub .bullet,.leaseset .rxAsRep .bullet,.leaseset .stype .bullet{display:none}
 .leaseset .ekeys td:empty,.leaseset .netdb_leases:empty{display:none}

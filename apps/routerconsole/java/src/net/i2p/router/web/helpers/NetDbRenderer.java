@@ -1234,7 +1234,7 @@ class NetDbRenderer {
            .append(_t("Signature type"))
            .append(":</b> <span>")
            .append(sigtype)
-           .append("</span></span></span></td></tr>\n<tr class=ekeys><td colspan=2>");
+           .append("</span></span></span>");
         if (type == DatabaseEntry.KEY_TYPE_LEASESET) {
             buf.append("<span class=\"nowrap ekey\" title=\"")
                .append(_t("Encryption Key"))
