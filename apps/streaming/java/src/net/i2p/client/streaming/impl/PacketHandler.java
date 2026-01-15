@@ -150,7 +150,12 @@ class PacketHandler {
 
             if (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
                 if (oldId <= 0) {
+                    // first SYN packet on this connection - set stream ID and remote peer
+                    // this fixes the race condition where verifyPacket() would also try to setRemotePeer()
                     con.setSendStreamId(packet.getReceiveStreamId());
+                    Destination dest = packet.getOptionalFrom();
+                    if (dest != null && con.getRemotePeer() == null)
+                        con.setRemotePeer(dest);
                     SigningPublicKey spk = packet.getTransientSPK();
                     if (spk != null)
                         con.setRemoteTransientSPK(spk);

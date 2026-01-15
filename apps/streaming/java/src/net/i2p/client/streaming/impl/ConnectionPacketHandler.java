@@ -532,7 +532,11 @@ class ConnectionPacketHandler {
                         packet.releasePayload();
                         return false;
                     }
-                    con.setRemotePeer(dest);
+                    // check for duplicate setRemotePeer() calls from handleMisroutedPacket
+                    // which may have already set the remote peer
+                    if (con.getRemotePeer() == null) {
+                        con.setRemotePeer(dest);
+                    }
                     SigningPublicKey spk = packet.getTransientSPK();
                     if (spk != null) {con.setRemoteTransientSPK(spk);}
                     packet.releasePayload();
