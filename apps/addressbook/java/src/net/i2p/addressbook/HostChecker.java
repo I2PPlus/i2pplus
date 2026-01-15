@@ -1551,14 +1551,13 @@ public class HostChecker {
     private void updateHostsWithCategories() {
         try {
             int updatedCount = 0;
+            int addedCount = 0;
 
-            // Iterate through existing ping results and update them with category information
             for (Map.Entry<String, PingResult> entry : _pingResults.entrySet()) {
                 String hostname = entry.getKey();
                 PingResult existingResult = entry.getValue();
                 String category = _hostCategories.get(hostname);
 
-                // Create new PingResult with category information
                 if (category != null && !category.equals(existingResult.category)) {
                     PingResult updatedResult = new PingResult(existingResult.reachable,
                                                            existingResult.timestamp,
@@ -1573,12 +1572,30 @@ public class HostChecker {
                 }
             }
 
-            if (updatedCount > 0) {
-                // Save the updated results to hosts_check.txt
+            for (Map.Entry<String, String> entry : _hostCategories.entrySet()) {
+                String hostname = entry.getKey();
+                if (!_pingResults.containsKey(hostname)) {
+                    String category = entry.getValue();
+                    long timestamp = System.currentTimeMillis();
+                    PingResult newResult = new PingResult(false, timestamp, -1, category);
+                    _pingResults.put(hostname, newResult);
+                    addedCount++;
+
+                    if (_log.shouldDebug()) {
+                        _log.debug("Added new host with category: " + hostname + " -> " + category);
+                    }
+                }
+            }
+
+            if (updatedCount > 0 || addedCount > 0) {
                 savePingResults();
 
                 if (_log.shouldInfo()) {
-                    _log.info("Updated " + updatedCount + " hosts with category information in hosts_check.txt");
+                    String msg = "Updated categories for " + updatedCount + " hosts";
+                    if (addedCount > 0) {
+                        msg += ", added " + addedCount + " new hosts from categories.txt";
+                    }
+                    _log.info(msg);
                 }
             } else {
                 if (_log.shouldInfo()) {
