@@ -118,6 +118,7 @@ public class Reseeder {
         "https://reseed.onion.im/"                  + ',' +   // lazygravy_at_mail.i2p             CA                                Java 8+
         "https://reseed-pl.i2pd.xyz/"               + ',' +   // r4sas-reseed_at_mail.i2p.crt      CA
         "https://reseed.stormycloud.org/"           + ',' +   // admin_at_stormycloud.org.crt      CA
+        "https://reseed.sahil.world/"               + ',' +   // sahil_at_mail.i2p.crt             CA
         "https://www2.mk16.de/";                              // i2p-reseed_at_mk16.de.crt         CA
 
         //"https://cubicchaos.net:8443/"              + ',' +   // unixeno_at_cubicchaos.net.crt     cubicchaos.net.crt
