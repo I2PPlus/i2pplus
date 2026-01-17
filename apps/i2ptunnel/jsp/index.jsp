@@ -178,30 +178,47 @@ SSL
 
 <td class="tunnelStatus volatile">
 <%          switch (indexBean.getTunnelStatus(curServer)) {
-                case IndexBean.STARTING:
+                case IndexBean.STARTING: {
+                    String delayText = intl._t("Starting...");
+                    int remainingDelay = indexBean.getRemainingStartupDelay(curServer);
+                    if (remainingDelay > 0) {
+                        if (remainingDelay < 60) {
+                            delayText = intl._t("Starting in") + " " + remainingDelay + "s...";
+                        } else {
+                            int mins = remainingDelay / 60;
+                            int secs = remainingDelay % 60;
+                            if (secs > 0) {
+                                delayText = intl._t("Starting in") + " " + mins + "m " + secs + "s...";
+                            } else {
+                                delayText = intl._t("Starting in") + " " + mins + "m...";
+                            }
+                        }
 %>
-<div class="statusStarting svr"><span class=tooltip hidden><b><%=intl._t("Starting...")%></b></span><%=intl._t("Starting...")%></div>
-</td>
-
-<td class="tunnelControl volatile">
-<a class="control stop iconize" title="<%=intl._t("Stop this Tunnel")%>" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=stop&amp;tunnel=<%=curServer%>"><%=intl._t("Stop")%></a>
-<%              break;
+<div class="statusStarting svr"><span class=tooltip hidden><b><%=delayText%></b></span><%=intl._t("Starting...")%></div><% } else { %><div class="statusStarting svr"><span class=tooltip hidden><b><%=intl._t("Starting...")%></b></span><%=intl._t("Starting...")%></div><% }
+                    break;
+                }
                 case IndexBean.RUNNING:
 %>
 <div class="statusRunning svr"><span class=tooltip hidden><b><%=intl._t("Running")%></b><hr><%=intl._t("Hops")%>: <%=editBean.getTunnelDepth(curServer, 3)%>&nbsp;<%=intl._t("in")%>, <%=editBean.getTunnelDepthOut(curServer, 3)%>&nbsp;<%=intl._t("out")%><br><%=intl._t("Count")%>: <%=editBean.getTunnelQuantity(curServer,2)%>&nbsp;<%=intl._t("in")%>, <%=editBean.getTunnelQuantityOut(curServer,2)%>&nbsp;<%=intl._t("out")%><br><%=intl._t("Variance")%>: <%=editBean.getTunnelVariance(curServer,0)%>&nbsp;<%=intl._t("in")%>,&nbsp;<%=editBean.getTunnelVarianceOut(curServer,0)%>&nbsp;<%=intl._t("out")%></span><%=intl._t("Running")%></div>
+<%              break;
+                case IndexBean.NOT_RUNNING:
+%><div class="statusNotRunning svr"><span class=tooltip hidden><b><%=intl._t("Stopped")%></b></span><%=intl._t("Stopped")%></div>
+<%              break;
+            }
+%>
 </td>
 
 <td class="tunnelControl volatile">
-<a class="control stop iconize" title="<%=intl._t("Stop this Tunnel")%>" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=stop&amp;tunnel=<%=curServer%>"><%=intl._t("Stop")%></a>
+<%          switch (indexBean.getTunnelStatus(curServer)) {
+                case IndexBean.STARTING:
+%><a class="control stop iconize" title="<%=intl._t("Stop this Tunnel")%>" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=stop&amp;tunnel=<%=curServer%>"><%=intl._t("Stop")%></a>
+<%              break;
+                case IndexBean.RUNNING:
+%><a class="control stop iconize" title="<%=intl._t("Stop this Tunnel")%>" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=stop&amp;tunnel=<%=curServer%>"><%=intl._t("Stop")%></a>
 <a class="control restart iconize" title="<%=intl._t("Restart this Tunnel")%>" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=restart&amp;tunnel=<%=curServer%>"><%=intl._t("Restart")%></a>
 <%              break;
                 case IndexBean.NOT_RUNNING:
-%>
-<div class="statusNotRunning svr"><span class=tooltip hidden><b><%=intl._t("Stopped")%></b></span><%=intl._t("Stopped")%></div>
-</td>
-
-<td class="tunnelControl volatile">
-<a class="control start iconize" title="<%=intl._t("Start this Tunnel")%>" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=start&amp;tunnel=<%=curServer%>"><%=intl._t("Start")%></a>
+%><a class="control start iconize" title="<%=intl._t("Start this Tunnel")%>" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=start&amp;tunnel=<%=curServer%>"><%=intl._t("Start")%></a>
 <%              break;
             }
 %>

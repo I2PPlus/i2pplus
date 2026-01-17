@@ -59,9 +59,11 @@ public class TunnelController implements Logging {
     private List<I2PSession> _sessions;
     private volatile TunnelState _state;
     private volatile SimpleTimer2.TimedEvent _pkfc;
+    private volatile Thread _pendingStartupThread;
+    private volatile long _startupDelayEndTime;
 
     /** @since 0.9.19 */
-    private enum TunnelState {
+    public enum TunnelState {
         START_ON_LOAD,
         STARTING,
         RUNNING,
@@ -69,6 +71,7 @@ public class TunnelController implements Logging {
         STOPPED,
         DESTROYING,
         DESTROYED,
+        DELAYED_START_PENDING,
     }
 
     public static final String KEY_BACKUP_DIR = "i2ptunnel-keyBackup";
@@ -454,10 +457,13 @@ public class TunnelController implements Logging {
      */
     public void startTunnelBackground() {
         synchronized (this) {
-            if (_state != TunnelState.STOPPED && _state != TunnelState.START_ON_LOAD)
+            if (_state != TunnelState.STOPPED && _state != TunnelState.START_ON_LOAD && _state != TunnelState.DELAYED_START_PENDING)
                 return;
+            changeState(TunnelState.STARTING);
         }
-        new I2PAppThread(new Runnable() { public void run() { startTunnel(); } }, "Tunnel Starter " + getName()).start();
+        Thread starter = new I2PAppThread(new Runnable() { public void run() { startTunnel(); } }, "Tunnel Starter " + getName());
+        _pendingStartupThread = starter;
+        starter.start();
     }
 
     /**
@@ -474,6 +480,7 @@ public class TunnelController implements Logging {
                 return;
             }
             changeState(TunnelState.STARTING);
+            _pendingStartupThread = null;
         }
         try {
             doStartTunnel();
@@ -826,6 +833,14 @@ public class TunnelController implements Logging {
      */
     public void stopTunnel() {
         synchronized (this) {
+            if (_state == TunnelState.DELAYED_START_PENDING) {
+                if (_pendingStartupThread != null) {
+                    _pendingStartupThread.interrupt();
+                    _pendingStartupThread = null;
+                }
+                changeState(TunnelState.STOPPED);
+                return;
+            }
             if (_state != TunnelState.STARTING && _state != TunnelState.RUNNING) {return;}
             changeState(TunnelState.STOPPING);
         }
@@ -892,30 +907,52 @@ public class TunnelController implements Logging {
         }
     }
 
-    /**
-     *  When combined with a positive shutdownDelayMin less than this value,
-     *  the tunnel will stop with a random delay between min and max seconds during router shutdown.
-     *  @return the maximum shutdown delay in seconds for server tunnels.
-     *  @since 0.9.68+
-     */
-    public int getShutdownDelayMax() {
-        String val = _config.getProperty(PROP_SHUTDOWN_DELAY_MAX);
-        if (val == null) return DEFAULT_SHUTDOWN_DELAY_MAX;
-        try {
-            int i = Integer.parseInt(val.trim());
-            return Math.max(0, i);
-        } catch (NumberFormatException e) {
-            return DEFAULT_SHUTDOWN_DELAY_MAX;
-        }
-    }
+     /**
+      *  When combined with a positive shutdownDelayMin less than this value,
+      *  the tunnel will stop with a random delay between min and max seconds during router shutdown.
+      *  @return the maximum shutdown delay in seconds for server tunnels.
+      *  @since 0.9.68+
+      */
+     public int getShutdownDelayMax() {
+         String val = _config.getProperty(PROP_SHUTDOWN_DELAY_MAX);
+         if (val == null) return DEFAULT_SHUTDOWN_DELAY_MAX;
+         try {
+             int i = Integer.parseInt(val.trim());
+             return Math.max(0, i);
+         } catch (NumberFormatException e) {
+             return DEFAULT_SHUTDOWN_DELAY_MAX;
+         }
+     }
 
-    /**
-     *  May NOT be restarted with restartTunnel() or startTunnel() later.
-     *  This should release all resources.
-     *
-     *  @since 0.9.17
-     */
-    public void destroyTunnel() {
+     /**
+      *  Get the remaining startup delay time for tunnels with delayed startup.
+      *  @return remaining delay in seconds, or 0 if not in delayed startup state or delay has passed
+      *  @since 0.9.68+
+      */
+     public int getRemainingStartupDelay() {
+         if (_state != TunnelState.DELAYED_START_PENDING) {
+             return 0;
+         }
+         long remaining = (_startupDelayEndTime - System.currentTimeMillis()) / 1000;
+         return (int) Math.max(0, remaining);
+     }
+
+     /**
+      *  Set the startup delay end time. Called by TunnelControllerGroup when setting up delayed startup.
+      *  @param delayMs the delay in milliseconds
+      *  @since 0.9.68+
+      */
+     void setStartupDelayEndTime(long delayMs) {
+         _startupDelayEndTime = System.currentTimeMillis() + delayMs;
+     }
+
+     /**
+      *  May NOT be restarted with restartTunnel() or startTunnel() later.
+      *  This should release all resources.
+      *
+      *  @since 0.9.17
+      */
+     public void destroyTunnel() {
         synchronized (this) {
             if (_state != TunnelState.RUNNING)
                 return;
@@ -1365,7 +1402,15 @@ public class TunnelController implements Logging {
      *
      * @return true if the tunnel is in the process of starting
      */
-    public boolean getIsStarting() { return _state == TunnelState.START_ON_LOAD || _state == TunnelState.STARTING; }
+    public boolean getIsStarting() { return _state == TunnelState.START_ON_LOAD || _state == TunnelState.STARTING || _state == TunnelState.DELAYED_START_PENDING; }
+
+    /**
+     *  Gets the current tunnel state.
+     *
+     * @return the current TunnelState
+     * @since 0.9.68+
+     */
+    public TunnelState getState() { return _state; }
 
     /**
      *  Checks if the tunnel is in standby mode.
@@ -1389,7 +1434,7 @@ public class TunnelController implements Logging {
     }
 
     /** @since 0.9.19 */
-    private synchronized void changeState(TunnelState state) {
+    public synchronized void changeState(TunnelState state) {
         _state = state;
     }
 

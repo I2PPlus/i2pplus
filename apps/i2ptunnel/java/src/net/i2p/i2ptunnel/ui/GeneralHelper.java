@@ -457,6 +457,18 @@ public class GeneralHelper {
         else {return NOT_RUNNING;}
     }
 
+    /**
+     *  Get the remaining startup delay time for tunnels with delayed startup.
+     *  @param tunnel the tunnel index
+     *  @return remaining delay in seconds, or 0 if not applicable
+     *  @since 0.9.68+
+     */
+    public int getRemainingStartupDelay(int tunnel) {
+        TunnelController tun = getController(tunnel);
+        if (tun == null) return 0;
+        return tun.getRemainingStartupDelay();
+    }
+
     public String getClientDestination(int tunnel) {
         TunnelController tun = getController(tunnel);
         if (tun == null) return "";

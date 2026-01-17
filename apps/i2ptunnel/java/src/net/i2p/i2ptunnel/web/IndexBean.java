@@ -676,6 +676,7 @@ public class IndexBean {
     public String getInternalType(int tunnel) {return _helper.getTunnelType(tunnel);}
     public String getClientInterface(int tunnel) {return _helper.getClientInterface(tunnel);}
     public int getTunnelStatus(int tunnel) {return _helper.getTunnelStatus(tunnel);}
+    public int getRemainingStartupDelay(int tunnel) {return _helper.getRemainingStartupDelay(tunnel);}
     public String getTunnelDescription(int tunnel) {return DataHelper.escapeHTML(_helper.getTunnelDescription(tunnel));}
 
     public String getSharedClient(int tunnel) {

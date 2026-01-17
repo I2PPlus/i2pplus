@@ -65,11 +65,13 @@ public class ConfigRestartBean {
         if (serverTunnelDelay) {
             int remaining = TunnelControllerGroup.getRemainingShutdownDelay();
             String delayStr = formatDelay(remaining);
+            buf.append("<h4 id=sb_shutdownStatus class=volatile><span class=deferring><b>");
             if (restarting) {
                 buf.append(_t("Deferring restart for {0} until all servers have stopped", delayStr, ctx));
             } else {
                 buf.append(_t("Deferring shutdown for {0} until all servers have stopped", delayStr, ctx));
             }
+            buf.append("</b></span></h4><hr>");
         } else if ((shuttingDown || restarting) && timeRemaining <= 45*1000) {
             buf.append("<h4 id=sb_shutdownStatus class=volatile><span id=imminent><b>");
             if (restarting) {buf.append(_t("Restart imminent", ctx));}

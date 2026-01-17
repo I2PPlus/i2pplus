@@ -765,6 +765,8 @@ public class TunnelControllerGroup implements ClientApp {
                                 } else {
                                     typeDesc = "Server";
                                 }
+                                controller.changeState(TunnelController.TunnelState.DELAYED_START_PENDING);
+                                controller.setStartupDelayEndTime(delay * 1000L);
                                 final String msg = "‣ Delaying startup of " + name + " [" + typeDesc + " on " + host + ":" + port + "] for " + delay + "s...";
                                 final TunnelController tc = controller;
                                 new I2PAppThread(new Runnable() {
@@ -774,6 +776,13 @@ public class TunnelControllerGroup implements ClientApp {
                                             Thread.sleep(delay * 1000);
                                         } catch (InterruptedException e) {
                                             Thread.currentThread().interrupt();
+                                            tc.log("✓ Startup cancelled for " + name);
+                                            return;
+                                        }
+                                        synchronized(tc) {
+                                            if (tc.getState() != TunnelController.TunnelState.DELAYED_START_PENDING) {
+                                                return;
+                                            }
                                         }
                                         tc.log("✓ Starting " + name);
                                         tc.startTunnelBackground();
