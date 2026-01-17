@@ -776,7 +776,7 @@ public class TunnelControllerGroup implements ClientApp {
                                             Thread.sleep(delay * 1000);
                                         } catch (InterruptedException e) {
                                             Thread.currentThread().interrupt();
-                                            tc.log("✓ Startup cancelled for " + name);
+                                            tc.log("‣ Startup cancelled for " + name);
                                             return;
                                         }
                                         synchronized(tc) {
@@ -784,7 +784,7 @@ public class TunnelControllerGroup implements ClientApp {
                                                 return;
                                             }
                                         }
-                                        tc.log("✓ Starting " + name);
+                                        tc.log("‣ Starting " + name);
                                         tc.startTunnelBackground();
                                     }
                                 }, "Tunnel startup delay for " + name).start();
