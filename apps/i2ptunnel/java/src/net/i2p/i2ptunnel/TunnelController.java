@@ -480,7 +480,6 @@ public class TunnelController implements Logging {
                 return;
             }
             changeState(TunnelState.STARTING);
-            _pendingStartupThread = null;
         }
         try {
             doStartTunnel();
