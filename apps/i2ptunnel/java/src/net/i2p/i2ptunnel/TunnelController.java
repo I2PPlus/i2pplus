@@ -472,7 +472,7 @@ public class TunnelController implements Logging {
      */
     public void startTunnel() {
         synchronized (this) {
-            if (_state != TunnelState.STOPPED && _state != TunnelState.START_ON_LOAD) {
+            if (_state != TunnelState.STOPPED && _state != TunnelState.START_ON_LOAD && _state != TunnelState.STARTING) {
                 if (_state == TunnelState.RUNNING) {
                     if (_log.shouldInfo()) {_log.info("Already running");}
                     log("✖ Tunnel " + getName() + " is already running");
