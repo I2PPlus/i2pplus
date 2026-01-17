@@ -1562,7 +1562,8 @@ public class HostChecker {
                     PingResult updatedResult = new PingResult(existingResult.reachable,
                                                            existingResult.timestamp,
                                                            existingResult.responseTime,
-                                                           category);
+                                                           category,
+                                                           existingResult.leaseSetTypes);
                     _pingResults.put(hostname, updatedResult);
                     updatedCount++;
 
