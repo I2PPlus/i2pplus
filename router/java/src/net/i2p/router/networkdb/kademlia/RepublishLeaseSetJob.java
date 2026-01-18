@@ -1,5 +1,7 @@
 package net.i2p.router.networkdb.kademlia;
 
+import java.util.Iterator;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.data.Destination;
@@ -18,6 +20,7 @@ public class RepublishLeaseSetJob extends JobImpl {
     private final static int RETRY_DELAY = 2000;
     private final static long REPUBLISH_INTERVAL = 7 * 60 * 1000;
     private final static long EXPIRY_WINDOW = 3 * 60 * 1000;
+    private static final long CACHE_CLEANUP_THRESHOLD = 15 * 60 * 1000;
     private static final ConcurrentHashMap<Hash, Boolean> _retryInProgress = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<Hash, Long> _lastPublishLogTime = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<Hash, Long> _lastVerifyLogTime = new ConcurrentHashMap<>();
@@ -79,6 +82,7 @@ public class RepublishLeaseSetJob extends JobImpl {
                             _log.info("Attempting to publish LeaseSet" + name + " [" + _dest.toBase32().substring(0,8) +
                                        "] (expires in " + (timeUntilExpiry / 1000) + "s)...");
                             _lastPublishLogTime.put(_dest, now);
+                            cleanupStaleEntries();
                         }
                         getContext().statManager().addRateData("netDb.republishLeaseSetCount", 1);
                         failCount.set(0);
@@ -109,6 +113,7 @@ public class RepublishLeaseSetJob extends JobImpl {
             throw re;
         } finally {
             _facade.removePublishingJob(_dest, this);
+            clearRetryInProgress();
         }
     }
 
@@ -134,6 +139,7 @@ public class RepublishLeaseSetJob extends JobImpl {
             }
             return;
         }
+        cleanupStaleEntries();
         if (_facade.hasActiveRepublishJob(_dest)) {
             if (_log.shouldDebug()) {
                 _log.debug("Skipping retry for [" + _dest.toBase32().substring(0, 8) + "] -> Job already active");
@@ -172,6 +178,23 @@ public class RepublishLeaseSetJob extends JobImpl {
         _retryInProgress.remove(_dest);
     }
 
+    private static void cleanupStaleEntries() {
+        long now = System.currentTimeMillis();
+        cleanupMap(_lastPublishLogTime, now);
+        cleanupMap(_lastVerifyLogTime, now);
+        cleanupMap(_lastNotRequeueLogTime, now);
+    }
+
+    private static void cleanupMap(ConcurrentHashMap<Hash, Long> map, long now) {
+        Iterator<Map.Entry<Hash, Long>> iter = map.entrySet().iterator();
+        while (iter.hasNext()) {
+            Map.Entry<Hash, Long> entry = iter.next();
+            if (now - entry.getValue() > CACHE_CLEANUP_THRESHOLD) {
+                iter.remove();
+            }
+        }
+    }
+
     public long lastPublished() {return _lastPublished;}
 
     Hash getDestHash() {return _dest;}
@@ -201,6 +224,7 @@ public class RepublishLeaseSetJob extends JobImpl {
                               _ls.getDestination().calculateHash().toBase32().substring(0,8) +
                               "] -> Newer LeaseSet exists locally");
                     _lastNotRequeueLogTime.put(_ls.getHash(), now);
+                    cleanupStaleEntries();
                 }
                 return;
             }
@@ -213,6 +237,7 @@ public class RepublishLeaseSetJob extends JobImpl {
                     _log.info("Verifying LeaseSet publication" + name + " [" +
                               _ls.getDestination().calculateHash().toBase32().substring(0,8) + "] via floodfill...");
                     _lastVerifyLogTime.put(_ls.getHash(), now);
+                    cleanupStaleEntries();
                 }
                 verifyAndRetry(ls);
             } else {
