@@ -1160,6 +1160,10 @@ public class HostChecker {
     private void downloadCategories() {
         boolean downloadSuccess = false;
         boolean hadExistingFile = _categoriesFile.exists();
+        long existingSize = hadExistingFile ? _categoriesFile.length() : 0;
+
+        // Download to a temporary file first for better control
+        File tempFile = new File(_categoriesFile.getAbsolutePath() + ".tmp");
 
         try {
             String categoryUrl = "http://notbob.i2p/graphs/cats.txt";
@@ -1171,20 +1175,81 @@ public class HostChecker {
             Thread.sleep(CATEGORY_DOWNLOAD_DELAY_MS);
 
             if (_log.shouldInfo()) {
-                _log.info("Downloading categories from " + categoryUrl);
+                _log.info("Downloading categories from " + categoryUrl + " to temp file");
             }
 
-            EepGet get = new EepGet(_context, "127.0.0.1", 4444, 3, _categoriesFile.getAbsolutePath(), categoryUrl);
-            get.addHeader("User-Agent", "I2P+ HostChecker");
-            downloadSuccess = get.fetch(CATEGORY_CONNECT_TIMEOUT, CATEGORY_TOTAL_TIMEOUT, CATEGORY_INACTIVITY_TIMEOUT);
+            // Delete any existing temp file
+            if (tempFile.exists()) {
+                tempFile.delete();
+            }
 
-            if (downloadSuccess) {
-                // Add header after successful download
-                addCategoriesHeader();
-                // Reload categories into memory from the newly downloaded file
-                loadCategories();
+            EepGet get = new EepGet(_context, "127.0.0.1", 4444, 3, tempFile.getAbsolutePath(), categoryUrl);
+            get.addHeader("User-Agent", "I2P+ HostChecker");
+            boolean fetchSuccess = get.fetch(CATEGORY_CONNECT_TIMEOUT, CATEGORY_TOTAL_TIMEOUT, CATEGORY_INACTIVITY_TIMEOUT);
+
+            if (fetchSuccess && tempFile.exists() && tempFile.length() > 0) {
                 if (_log.shouldInfo()) {
-                    _log.info("Successfully downloaded categories to " + _categoriesFile.getAbsolutePath());
+                    _log.info("Downloaded categories to temp file: " + tempFile.length() + " bytes");
+                }
+
+                // Read the downloaded content to verify it's valid
+                List<String> downloadedLines = new ArrayList<>();
+                int dataLineCount = 0;
+                try (BufferedReader reader = new BufferedReader(new FileReader(tempFile))) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        downloadedLines.add(line);
+                        if (!line.trim().isEmpty() && !line.startsWith("#")) {
+                            dataLineCount++;
+                        }
+                    }
+                }
+
+                if (dataLineCount > 0) {
+                    if (_log.shouldInfo()) {
+                        _log.info("Downloaded " + dataLineCount + " entries from notbob.i2p");
+                    }
+
+                    // Now write to the final file with header
+                    try (BufferedWriter writer = new BufferedWriter(new FileWriter(_categoriesFile))) {
+                        writer.write("# I2P+ Address Book Host Categories");
+                        writer.newLine();
+                        writer.write("# Format: hostname,category");
+                        writer.newLine();
+                        writer.write("# Source: http://notbob.i2p/graphs/cats.txt");
+                        writer.newLine();
+                        writer.write("# Generated: " + new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US).format(new Date()));
+                        writer.newLine();
+                        writer.newLine();
+
+                        // Write all downloaded data lines (skipping any existing headers in the download)
+                        for (String line : downloadedLines) {
+                            if (!line.trim().isEmpty() && !line.startsWith("#")) {
+                                writer.write(line);
+                                writer.newLine();
+                            }
+                        }
+                    }
+
+                    // Delete temp file
+                    tempFile.delete();
+
+                    // Reload categories into memory
+                    loadCategories();
+                    
+                    // Update hosts_check.txt with new categories and add new hosts
+                    updateHostsWithCategories();
+                    
+                    downloadSuccess = true;
+
+                    if (_log.shouldInfo()) {
+                        _log.info("Successfully downloaded categories to " + _categoriesFile.getAbsolutePath() +
+                                 " (" + _categoriesFile.length() + " bytes, was " + existingSize + " bytes)");
+                    }
+                } else {
+                    if (_log.shouldWarn()) {
+                        _log.warn("Downloaded categories file has no valid entries");
+                    }
                 }
             } else {
                 if (_log.shouldWarn()) {
@@ -1195,6 +1260,11 @@ public class HostChecker {
             if (_log.shouldWarn()) {
                 _log.warn("Exception downloading categories", e);
             }
+        } finally {
+            // Clean up temp file
+            if (tempFile.exists()) {
+                tempFile.delete();
+            }
         }
 
         // If download failed but we have an existing stale file, continue with that
@@ -1202,6 +1272,8 @@ public class HostChecker {
             if (_log.shouldInfo()) {
                 _log.info("Using stale categories.txt file at " + _categoriesFile.getAbsolutePath());
             }
+            // Still update hosts_check.txt with existing categories
+            updateHostsWithCategories();
         }
 
         // Mark category download as complete and track success
@@ -1219,10 +1291,26 @@ public class HostChecker {
             if (_categoriesFile.exists()) {
                 try (BufferedReader reader = new BufferedReader(new FileReader(_categoriesFile))) {
                     String line;
+                    int lineCount = 0;
                     while ((line = reader.readLine()) != null) {
                         lines.add(line);
+                        lineCount++;
+                    }
+                    if (_log.shouldInfo()) {
+                        _log.info("addCategoriesHeader: Read " + lineCount + " lines from categories.txt");
                     }
                 }
+            }
+
+            // Count non-comment, non-empty lines that will be written
+            int dataLineCount = 0;
+            for (String line : lines) {
+                if (!line.startsWith("#") && !line.trim().isEmpty()) {
+                    dataLineCount++;
+                }
+            }
+            if (_log.shouldInfo()) {
+                _log.info("addCategoriesHeader: Found " + dataLineCount + " data entries to preserve");
             }
 
             // Write file with header
@@ -1238,11 +1326,16 @@ public class HostChecker {
                 writer.newLine();
 
                 // Write original content, skipping any existing header lines and empty lines
+                int writtenCount = 0;
                 for (String line : lines) {
                     if (!line.startsWith("#") && !line.trim().isEmpty()) {
                         writer.write(line);
                         writer.newLine();
+                        writtenCount++;
                     }
+                }
+                if (_log.shouldInfo()) {
+                    _log.info("addCategoriesHeader: Wrote " + writtenCount + " data entries to categories.txt");
                 }
             }
         } catch (Exception e) {
@@ -1284,6 +1377,8 @@ public class HostChecker {
 
         try (BufferedReader reader = new BufferedReader(new FileReader(_categoriesFile))) {
             String line;
+            int lineCount = 0;
+            int entryCount = 0;
             while ((line = reader.readLine()) != null) {
                 String trimmedLine = line.trim();
                 if (trimmedLine.isEmpty()) {
@@ -1302,15 +1397,20 @@ public class HostChecker {
                     String category = parts[1].trim().toLowerCase(Locale.US);
                     _hostCategories.put(hostname, category);
                     validLines.add(line);
+                    entryCount++;
                 }
+                lineCount++;
             }
 
             if (_log.shouldInfo()) {
-                _log.info("Loaded " + _hostCategories.size() + " host categories from " + _categoriesFile.getName());
+                _log.info("Loaded " + entryCount + " host categories from " + _categoriesFile.getName() + " (total lines: " + lineCount + ")");
             }
 
             // Clean up the file if we found empty lines
             if (hasEmptyLines) {
+                if (_log.shouldInfo()) {
+                    _log.info("Cleaning up " + validLines.size() + " lines from categories.txt (removing empty lines)");
+                }
                 try {
                     writeCleanCategoriesFile(validLines);
                     if (_log.shouldInfo()) {
@@ -1476,22 +1576,74 @@ public class HostChecker {
      * Returns true if successful, false otherwise
      */
     private boolean attemptCategoryDownload() {
+        // Download to a temporary file first for better control
+        File tempFile = new File(_categoriesFile.getAbsolutePath() + ".tmp");
+
         try {
             String categoryUrl = "http://notbob.i2p/graphs/cats.txt";
 
-            EepGet get = new EepGet(_context, "127.0.0.1", 4444, 3, _categoriesFile.getAbsolutePath(), categoryUrl);
-            get.addHeader("User-Agent", "I2P+ HostChecker");
-            boolean downloadSuccess = get.fetch(CATEGORY_CONNECT_TIMEOUT, CATEGORY_TOTAL_TIMEOUT, CATEGORY_INACTIVITY_TIMEOUT);
+            // Delete any existing temp file
+            if (tempFile.exists()) {
+                tempFile.delete();
+            }
 
-            if (downloadSuccess) {
-                addCategoriesHeader();
-                if (_log.shouldInfo()) {
-                    _log.info("Successfully downloaded categories on retry to " + _categoriesFile.getAbsolutePath());
+            EepGet get = new EepGet(_context, "127.0.0.1", 4444, 3, tempFile.getAbsolutePath(), categoryUrl);
+            get.addHeader("User-Agent", "I2P+ HostChecker");
+            boolean fetchSuccess = get.fetch(CATEGORY_CONNECT_TIMEOUT, CATEGORY_TOTAL_TIMEOUT, CATEGORY_INACTIVITY_TIMEOUT);
+
+            if (fetchSuccess && tempFile.exists() && tempFile.length() > 0) {
+                // Read the downloaded content to verify it's valid
+                List<String> downloadedLines = new ArrayList<>();
+                int dataLineCount = 0;
+                try (BufferedReader reader = new BufferedReader(new FileReader(tempFile))) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        downloadedLines.add(line);
+                        if (!line.trim().isEmpty() && !line.startsWith("#")) {
+                            dataLineCount++;
+                        }
+                    }
                 }
-                return true;
+
+                if (dataLineCount > 0) {
+                    // Now write to the final file with header
+                    try (BufferedWriter writer = new BufferedWriter(new FileWriter(_categoriesFile))) {
+                        writer.write("# I2P+ Address Book Host Categories");
+                        writer.newLine();
+                        writer.write("# Format: hostname,category");
+                        writer.newLine();
+                        writer.write("# Source: http://notbob.i2p/graphs/cats.txt");
+                        writer.newLine();
+                        writer.write("# Generated: " + new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US).format(new Date()));
+                        writer.newLine();
+                        writer.newLine();
+
+                        // Write all downloaded data lines (skipping any existing headers in the download)
+                        for (String line : downloadedLines) {
+                            if (!line.trim().isEmpty() && !line.startsWith("#")) {
+                                writer.write(line);
+                                writer.newLine();
+                            }
+                        }
+                    }
+
+                    // Delete temp file
+                    tempFile.delete();
+
+                    if (_log.shouldInfo()) {
+                        _log.info("Successfully downloaded categories on retry to " + _categoriesFile.getAbsolutePath() +
+                                 " (" + dataLineCount + " entries)");
+                    }
+                    return true;
+                } else {
+                    if (_log.shouldWarn()) {
+                        _log.warn("Downloaded categories file on retry has no valid entries");
+                    }
+                    return false;
+                }
             } else {
                 if (_log.shouldWarn()) {
-                    _log.warn("Failed to download categories on retry, result: " + downloadSuccess);
+                    _log.warn("Failed to download categories on retry, result: " + fetchSuccess);
                 }
                 return false;
             }
@@ -1500,6 +1652,11 @@ public class HostChecker {
                 _log.warn("Exception during category download retry", e);
             }
             return false;
+        } finally {
+            // Clean up temp file
+            if (tempFile.exists()) {
+                tempFile.delete();
+            }
         }
     }
 
@@ -1511,6 +1668,9 @@ public class HostChecker {
         boolean downloadSuccess = false;
         boolean hadExistingFile = _categoriesFile.exists();
 
+        // Download to a temporary file first for better control
+        File tempFile = new File(_categoriesFile.getAbsolutePath() + ".tmp");
+
         try {
             String categoryUrl = "http://notbob.i2p/graphs/cats.txt";
 
@@ -1518,14 +1678,62 @@ public class HostChecker {
                 _log.info("Refreshing categories from " + categoryUrl + "...");
             }
 
-            EepGet get = new EepGet(_context, "127.0.0.1", 4444, 1, _categoriesFile.getAbsolutePath(), categoryUrl);
-            get.addHeader("User-Agent", "I2P+ HostChecker");
-            downloadSuccess = get.fetch(CATEGORY_CONNECT_TIMEOUT, CATEGORY_TOTAL_TIMEOUT, CATEGORY_INACTIVITY_TIMEOUT);
+            // Delete any existing temp file
+            if (tempFile.exists()) {
+                tempFile.delete();
+            }
 
-            if (downloadSuccess) {
-                addCategoriesHeader();
-                if (_log.shouldInfo()) {
-                    _log.info("Successfully refreshed categories from notbob.i2p");
+            EepGet get = new EepGet(_context, "127.0.0.1", 4444, 1, tempFile.getAbsolutePath(), categoryUrl);
+            get.addHeader("User-Agent", "I2P+ HostChecker");
+            boolean fetchSuccess = get.fetch(CATEGORY_CONNECT_TIMEOUT, CATEGORY_TOTAL_TIMEOUT, CATEGORY_INACTIVITY_TIMEOUT);
+
+            if (fetchSuccess && tempFile.exists() && tempFile.length() > 0) {
+                // Read the downloaded content to verify it's valid
+                List<String> downloadedLines = new ArrayList<>();
+                int dataLineCount = 0;
+                try (BufferedReader reader = new BufferedReader(new FileReader(tempFile))) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        downloadedLines.add(line);
+                        if (!line.trim().isEmpty() && !line.startsWith("#")) {
+                            dataLineCount++;
+                        }
+                    }
+                }
+
+                if (dataLineCount > 0) {
+                    // Now write to the final file with header
+                    try (BufferedWriter writer = new BufferedWriter(new FileWriter(_categoriesFile))) {
+                        writer.write("# I2P+ Address Book Host Categories");
+                        writer.newLine();
+                        writer.write("# Format: hostname,category");
+                        writer.newLine();
+                        writer.write("# Source: http://notbob.i2p/graphs/cats.txt");
+                        writer.newLine();
+                        writer.write("# Generated: " + new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US).format(new Date()));
+                        writer.newLine();
+                        writer.newLine();
+
+                        // Write all downloaded data lines (skipping any existing headers in the download)
+                        for (String line : downloadedLines) {
+                            if (!line.trim().isEmpty() && !line.startsWith("#")) {
+                                writer.write(line);
+                                writer.newLine();
+                            }
+                        }
+                    }
+
+                    // Delete temp file
+                    tempFile.delete();
+
+                    downloadSuccess = true;
+                    if (_log.shouldInfo()) {
+                        _log.info("Successfully refreshed categories from notbob.i2p (" + dataLineCount + " entries)");
+                    }
+                } else {
+                    if (_log.shouldInfo()) {
+                        _log.info("Downloaded categories file has no valid entries, using existing");
+                    }
                 }
             } else {
                 if (_log.shouldInfo()) {
@@ -1535,6 +1743,11 @@ public class HostChecker {
         } catch (Exception e) {
             if (_log.shouldWarn()) {
                 _log.warn("Exception refreshing categories", e);
+            }
+        } finally {
+            // Clean up temp file
+            if (tempFile.exists()) {
+                tempFile.delete();
             }
         }
 
