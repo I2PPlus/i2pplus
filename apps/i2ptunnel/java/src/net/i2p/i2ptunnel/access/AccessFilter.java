@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import net.i2p.I2PAppContext;
 import net.i2p.client.streaming.StatefulConnectionFilter;
@@ -38,6 +39,7 @@ class AccessFilter implements StatefulConnectionFilter {
 
     private static final long PURGE_INTERVAL = 1000;
     private static final long SYNC_INTERVAL = 5 * 1000;
+    private static final int MAX_STORED_DESTS = 1024;
 
     /**
      * All disk i/o from all instances of this filter
@@ -45,9 +47,29 @@ class AccessFilter implements StatefulConnectionFilter {
      */
     private static final ExecutorService DISK_WRITER = Executors.newSingleThreadExecutor();
 
+    static {
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+                shutdownDiskWriter();
+            }
+        });
+    }
+
+    private static void shutdownDiskWriter() {
+        DISK_WRITER.shutdown();
+        try {
+            if (!DISK_WRITER.awaitTermination(5, TimeUnit.SECONDS)) {
+                DISK_WRITER.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            DISK_WRITER.shutdownNow();
+            Thread.currentThread().interrupt();
+        }
+    }
+
     private final FilterDefinition definition;
     private final I2PAppContext context;
-
     private final AtomicBoolean timersRunning = new AtomicBoolean();
 
     /**
@@ -63,16 +85,14 @@ class AccessFilter implements StatefulConnectionFilter {
 
     /**
      * Create a new access filter.
-     * 
+     *
      * @param context the context, used for scheduling and timer purposes
      * @param definition definition of this filter
      * @throws IOException if an I/O error occurs
      */
-    AccessFilter(I2PAppContext context, FilterDefinition definition)
-            throws IOException {
+    AccessFilter(I2PAppContext context, FilterDefinition definition) throws IOException {
         this.context = context;
         this.definition = definition;
-
         reload();
     }
 
@@ -130,6 +150,13 @@ class AccessFilter implements StatefulConnectionFilter {
                 tracker = unknownDests.get(hash);
                 if (tracker == null) {
                     tracker = new DestTracker(hash, definition.getDefaultThreshold());
+                    if (unknownDests.size() >= MAX_STORED_DESTS) {
+                        Iterator<Map.Entry<Hash, DestTracker>> iter = unknownDests.entrySet().iterator();
+                        if (iter.hasNext()) {
+                            iter.next();
+                            iter.remove();
+                        }
+                    }
                     unknownDests.put(hash, tracker);
                 }
             }
