@@ -213,8 +213,10 @@ public class RouterThrottleImpl implements RouterThrottle {
                 // if the current tunnel count is higher than 1.3 * the average...
                 if ((avg > 0) && (avg*tunnelGrowthFactor < numTunnels)) {
                     // we're accelerating, let's try not to take on too much too fast
+                    // Use linear probability instead of squared to reduce throttling aggressiveness
+                    // and prevent self-reinforcing decline cycles
                     double probAccept = (avg*tunnelGrowthFactor) / numTunnels;
-                    probAccept *= probAccept; // square the decelerator for tunnel counts
+                    probAccept = Math.max(0.1, probAccept); // ensure minimum 10% acceptance
                     int v = _context.random().nextInt(100);
                     if (v < probAccept*100) { // ok
                         if (_log.shouldInfo()) {
@@ -368,7 +370,7 @@ public class RouterThrottleImpl implements RouterThrottle {
             // limit at 90% - 4KBps (see above)
             float maxBps = (maxKBps * 1024f * 0.9f) - MIN_AVAILABLE_BPS;
             float pctFull = (maxBps - availBps) / (maxBps);
-            if (pctFull < 0.83f) {
+            if (pctFull < 0.90f) {
                 probReject = 0; // probReject < ~5%
                 reject = false;
                 if (_log.shouldDebug()) {
@@ -413,9 +415,9 @@ public class RouterThrottleImpl implements RouterThrottle {
     private double getTunnelGrowthFactor() {
         try {
             String p = _context.getProperty("router.tunnelGrowthFactor");
-            if (p == null) {return 1.5d;}
+            if (p == null) {return 2.0d;}
             return Double.parseDouble(p);
-        } catch (NumberFormatException nfe) {return 1.5d;}
+        } catch (NumberFormatException nfe) {return 2.0d;}
     }
 
     private double getTunnelTestTimeGrowthFactor() {

@@ -35,14 +35,14 @@ class ParticipatingThrottler {
     private static final String PROP_BLOCK_OLD_ROUTERS = "router.blockOldRouters";
     private static final String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
     private static final String PROP_SHOULD_THROTTLE = "router.enableTransitThrottle";
-    // Increased from 3 to 8 for more stable throttling (cleanup every ~10 min vs ~3.3 min)
+    // Increased from 3 to 5 for more stable throttling (cleanup every ~6 min vs ~3.3 min)
     // Prevents peers from temporarily exceeding limits between cleanups
-    private static final int LIFETIME_PORTION = 8; // portion of tunnel lifetime
+    private static final int LIFETIME_PORTION = 5; // portion of tunnel lifetime
     private static final int MIN_LIMIT = (isSlow ? 100 : 150) / LIFETIME_PORTION;
     private static final int MAX_LIMIT = (isSlow ? 1200 : 1800) / LIFETIME_PORTION;
-    // Increased from 15 to 21.4 to increase per-peer limits from ~2.5% to ~7%
+    // Increased from 21 to 35 to increase per-peer limits from ~7% to ~11%
     // This allows high-bandwidth routers to participate in more transit tunnels
-    private static final int PERCENT_LIMIT = 21 / LIFETIME_PORTION;
+    private static final int PERCENT_LIMIT = 35 / LIFETIME_PORTION;
     private static final long CLEAN_TIME = 11 * 60 * 1000 / LIFETIME_PORTION;
     private static final String MIN_VERSION = "0.9.64";
 
@@ -126,9 +126,9 @@ class ParticipatingThrottler {
      * @return the maximum allowed tunnel participation limit for the router
      */
     private int calculateLimit(int numTunnels, boolean isUnreachable, boolean isLowShare, boolean isFast) {
-        if (isUnreachable || isLowShare) {return Math.min(MIN_LIMIT, Math.max(MAX_LIMIT / 20, numTunnels * (PERCENT_LIMIT / 10) / 100));}
-        else if (isSlow) {return Math.min(MIN_LIMIT, Math.max(MAX_LIMIT / 10, numTunnels * (PERCENT_LIMIT / 5) / 100));}
-        return Math.min((MIN_LIMIT * 3), Math.max(MAX_LIMIT / 2, numTunnels * (PERCENT_LIMIT / 2) / 100));
+        if (isUnreachable || isLowShare) {return Math.min(MIN_LIMIT, Math.max(MAX_LIMIT / 20, numTunnels * (PERCENT_LIMIT / 5) / 100));}
+        else if (isSlow) {return Math.min(MIN_LIMIT, Math.max(MAX_LIMIT / 10, numTunnels * (PERCENT_LIMIT / 3) / 100));}
+        return Math.min((MIN_LIMIT * 3), Math.max(MAX_LIMIT / 2, numTunnels * PERCENT_LIMIT / 100));
     }
 
     /**
