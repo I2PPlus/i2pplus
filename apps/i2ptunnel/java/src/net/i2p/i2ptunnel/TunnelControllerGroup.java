@@ -455,8 +455,8 @@ public class TunnelControllerGroup implements ClientApp {
     }
 
     /**
-     *  Stop server tunnels with shutdown delays in stages.
-     *  Each server with a delay gets a random stop time within the configured window.
+     *  Stop server tunnels with shutdown delays independently.
+     *  Each server with a delay gets its own timer and stops independently.
      *  @since 0.9.68+
      */
     private void shutdownDelayedServers() {
@@ -492,10 +492,8 @@ public class TunnelControllerGroup implements ClientApp {
         _delayedShutdownInProgress = true;
         _delayedShutdownStartTime = System.currentTimeMillis();
         _cancelDelayedShutdown = false;
-        List<TunnelController> stoppedServers = new ArrayList<TunnelController>();
-        CountDownLatch latch = new CountDownLatch(delayedServers.size());
+        List<TunnelController> stoppedServers = Collections.synchronizedList(new ArrayList<TunnelController>());
         _delayedShutdownExecutor = Executors.newCachedThreadPool();
-        long startTime = System.currentTimeMillis();
 
         for (TunnelController controller : delayedServers) {
             int delayMin = controller.getShutdownDelayMin();
@@ -505,37 +503,35 @@ public class TunnelControllerGroup implements ClientApp {
             final String name = controller.getName();
             final int actualDelay = delay;
             final List<TunnelController> stoppedList = stoppedServers;
-            _delayedShutdownExecutor.submit(new Runnable() {
+            _delayedShutdownExecutor.submit(new I2PAppThread(new Runnable() {
                 public void run() {
                     if (actualDelay > 0) {
-                        try {
-                            for (int i = 0; i < actualDelay; i++) {
-                                if (_cancelDelayedShutdown) {
-                                    return;
-                                }
-                                Thread.sleep(1000);
+                        for (int i = 0; i < actualDelay; i++) {
+                            if (_cancelDelayedShutdown) {
+                                return;
                             }
-                        } catch (InterruptedException e) {
-                            Thread.currentThread().interrupt();
-                            return;
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                Thread.currentThread().interrupt();
+                                return;
+                            }
                         }
                     }
                     if (_cancelDelayedShutdown) {
                         return;
                     }
                     tc.stopTunnel();
-                    synchronized(stoppedList) {
-                        stoppedList.add(tc);
-                    }
-                    latch.countDown();
+                    stoppedList.add(tc);
                 }
-            });
+            }, "Shutdown timer for " + name));
         }
 
+        _delayedShutdownExecutor.shutdown();
         try {
             long maxWait = Math.min(maxDelay + 30, 300) * 1000L;
-            boolean completed = latch.await(maxWait, TimeUnit.MILLISECONDS);
-            long elapsed = (System.currentTimeMillis() - startTime) / 1000;
+            boolean completed = _delayedShutdownExecutor.awaitTermination(maxWait, TimeUnit.MILLISECONDS);
+            long elapsed = (System.currentTimeMillis() - _delayedShutdownStartTime) / 1000;
             if (completed) {
                 if (_log.shouldInfo())
                     _log.info("All delayed servers stopped in " + elapsed + "s");
