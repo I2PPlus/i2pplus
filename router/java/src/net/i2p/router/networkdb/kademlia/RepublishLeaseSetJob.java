@@ -14,6 +14,29 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelPoolSettings;
 import net.i2p.util.Log;
 
+/**
+ * A job that periodically republishes a local LeaseSet to the network database.
+ * 
+ * This job handles the lifecycle of lease set publication including:
+ * <ul>
+ *   <li>Initial publication when the router has been running for sufficient uptime</li>
+ *   <li>Periodic republishing before lease expiration (every 7 minutes)</li>
+ *   <li>Retry logic with exponential backoff on publication failure</li>
+ *   <li>Floodfill verification of published lease sets</li>
+ *   <li>Cleanup of expired/stale lease sets when service stops</li>
+ * </ul>
+ * 
+ * The job manages a retry mechanism that:
+ * <ul>
+ *   <li>Retries every 2 seconds on failure</li>
+ *   <li>Elevates to high priority every 4th attempt</li>
+ *   <li>Verifies publication via floodfill peers after 3 failures</li>
+ *   <li>Stops publishing when the client is no longer local</li>
+ * </ul>
+ * 
+ * This class is thread-safe and uses concurrent maps for tracking retry state
+ * and logging throttling across multiple instances.
+ */
 public class RepublishLeaseSetJob extends JobImpl {
     private final Log _log;
     public final static long REPUBLISH_LEASESET_TIMEOUT = 30 * 1000;

@@ -155,9 +155,18 @@ public interface ProfileManager {
 
     /**
      * Note that the local router received a reference to the given peer, either
-     * through an explicit dbStore or in a dbLookupReply
+     * through an explicit dbStore or in a dbLookupReply.
+     *
+     * @param peer the hash of the peer we learned about
      */
     void heardAbout(Hash peer);
+
+    /**
+     * Note that the local router received a reference to the given peer at a specific time.
+     *
+     * @param peer the hash of the peer we learned about
+     * @param when the timestamp when we learned about the peer
+     */
     void heardAbout(Hash peer, long when);
 
     /**

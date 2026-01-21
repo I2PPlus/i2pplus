@@ -74,12 +74,12 @@ public class MessageValidator {
     private static final long TIME_MASK = 0xFFFFFC00;
 
     /**
-     * Note that we've received the message (which has the expiration given).
-     * This functionality will need to be reworked for I2P 3.0 when we take into
-     * consideration messages with significant user specified delays (since we don't
-     * want to keep an infinite number of messages in RAM, etc)
+     * Mark the message as having been received to detect duplicates.
+     * Uses a decaying bloom filter to track recently received messages.
      *
-     * @return true if we HAVE already seen this message, false if not
+     * @param messageId the unique message identifier
+     * @param messageExpiration the expiration time of the message
+     * @return true if we have already seen this message (duplicate), false if new
      */
     private boolean noteReception(long messageId, long messageExpiration) {
         long val = messageId;
@@ -97,10 +97,16 @@ public class MessageValidator {
         return dup;
     }
 
+    /**
+     * Start the message validator, initializing the duplicate detection filter.
+     */
     public synchronized void startup() {
         _filter = new DecayingHashSet(_context, (int)Router.CLOCK_FUDGE_FACTOR * 2, 8, "RouterMV");
     }
 
+    /**
+     * Stop the message validator and clean up resources.
+     */
     synchronized void shutdown() {
         _filter.stopDecaying();
     }

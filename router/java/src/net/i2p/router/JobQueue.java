@@ -220,6 +220,11 @@ public class JobQueue {
         }
     }
 
+    /**
+     * Remove a job from the job queue.
+     *
+     * @param job the job to remove from the queue
+     */
     public void removeJob(Job job) {
         synchronized (_jobLock) {
             boolean removed = _timedJobs.remove(job);
@@ -227,10 +232,22 @@ public class JobQueue {
         }
     }
 
+    /**
+     * Get the number of jobs ready to be executed.
+     *
+     * @return count of ready jobs in both normal and high priority queues
+     */
     public int getReadyCount() {
         return _readyJobs.size() + _highPriorityJobs.size();
     }
 
+    /**
+     * Get the maximum lag time for jobs waiting in the queue.
+     * This is the delay between when the earliest job was supposed to start
+     * and the current time.
+     *
+     * @return maximum lag in milliseconds, or 0 if queue is empty
+     */
     public long getMaxLag() {
         Job j = _readyJobs.peek();
         if (j == null) j = _highPriorityJobs.peek();
@@ -266,11 +283,19 @@ public class JobQueue {
         return false;
     }
 
+    /**
+     * Enable parallel job execution and start additional queue runner threads.
+     * After calling this, multiple jobs may execute concurrently.
+     */
     public void allowParallelOperation() {
         _allowParallelOperation = true;
         runQueue(_context.getProperty(PROP_MAX_RUNNERS, RUNNERS));
     }
 
+    /**
+     * Initialize and start the job queue pumper thread.
+     * Does not start the job runner threads.
+     */
     public void startup() {
         _alive = true;
         I2PThread pumperThread = new I2PThread(_pumper, "JobQueuePumper", true);
@@ -278,6 +303,9 @@ public class JobQueue {
         pumperThread.start();
     }
 
+    /**
+     * Shutdown the job queue, stopping all runners and clearing all jobs.
+     */
     void shutdown() {
         _alive = false;
         synchronized (_jobLock) {
@@ -296,8 +324,18 @@ public class JobQueue {
         _runnerId.set(0);
     }
 
+    /**
+     * Check if the job queue is currently alive and processing jobs.
+     *
+     * @return true if the queue is alive and running
+     */
     boolean isAlive() {return _alive;}
 
+    /**
+     * Get the timestamp of when the last job began execution.
+     *
+     * @return timestamp in milliseconds when the last job started, or -1 if no jobs have run
+     */
     public long getLastJobBegin() {
         long when = -1;
         for (JobQueueRunner runner : _queueRunners.values()) {
@@ -307,6 +345,11 @@ public class JobQueue {
         return when;
     }
 
+    /**
+     * Get the timestamp of when the last job finished execution.
+     *
+     * @return timestamp in milliseconds when the last job ended, or -1 if no jobs have run
+     */
     public long getLastJobEnd() {
         long when = -1;
         for (JobQueueRunner runner : _queueRunners.values()) {
@@ -316,6 +359,11 @@ public class JobQueue {
         return when;
     }
 
+    /**
+     * Get the last job that was executed.
+     *
+     * @return the last Job that was executed, or null if no jobs have run
+     */
     public Job getLastJob() {
         Job j = null;
         long when = -1;
@@ -382,6 +430,12 @@ public class JobQueue {
         return null;
     }
 
+    /**
+     * Start the job queue with the specified number of runner threads.
+     * Does nothing if parallel operation is not enabled and runners already exist.
+     *
+     * @param numThreads the number of runner threads to start
+     */
     public synchronized void runQueue(int numThreads) {
         if ((!_queueRunners.isEmpty()) && (!_allowParallelOperation)) return;
 
@@ -401,6 +455,12 @@ public class JobQueue {
         }
     }
 
+    /**
+     * Remove a queue runner from the registry.
+     * Package-private for use by JobQueueRunner.
+     *
+     * @param id the runner ID to remove
+     */
     void removeRunner(int id) {_queueRunners.remove(Integer.valueOf(id));}
 
     private final class QueuePumper implements Runnable, Clock.ClockUpdateListener, RouterClock.ClockShiftListener {
@@ -566,6 +626,16 @@ public class JobQueue {
         }
     }
 
+    /**
+     * Collect statistics about jobs currently in the queue.
+     * This includes jobs that are ready, timed, active, and just finished.
+     *
+     * @param readyJobs collection to populate with ready jobs
+     * @param timedJobs collection to populate with timed/scheduled jobs
+     * @param activeJobs collection to populate with currently running jobs
+     * @param justFinishedJobs collection to populate with recently finished jobs
+     * @return the number of queue runners currently active
+     */
     public int getJobs(Collection<Job> readyJobs, Collection<Job> timedJobs,
                        Collection<Job> activeJobs, Collection<Job> justFinishedJobs) {
         for (JobQueueRunner runner :_queueRunners.values()) {
@@ -584,6 +654,11 @@ public class JobQueue {
         return _queueRunners.size();
     }
 
+    /**
+     * Get all job statistics collected by the queue.
+     *
+     * @return unmodifiable collection of JobStats for all job types
+     */
     public Collection<JobStats> getJobStats() {
         return Collections.unmodifiableCollection(_jobStats.values());
     }

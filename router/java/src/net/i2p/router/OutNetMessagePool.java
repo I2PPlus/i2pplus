@@ -24,8 +24,10 @@ public class OutNetMessagePool {
     }
 
     /**
-     * Add a new message to the pool
+     * Add a new outbound network message to the pool for delivery.
+     * The message will be validated before being queued.
      *
+     * @param msg the OutNetMessage to add
      */
     public void add(OutNetMessage msg) {
         if (msg == null) return;
@@ -48,7 +50,10 @@ public class OutNetMessagePool {
     }
 
     /**
-     * @param msg non-null
+     * Validate an outbound message before adding it to the pool.
+     *
+     * @param msg the message to validate
+     * @return true if the message is valid and should be processed
      */
     private boolean validate(OutNetMessage msg) {
         if (msg.getMessage() == null) {

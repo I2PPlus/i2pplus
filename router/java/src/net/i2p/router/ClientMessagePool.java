@@ -18,7 +18,6 @@ import net.i2p.util.Log;
  * messages and adds in remotely deliverable messages.  Remotely deliverable messages
  * are picked up by interested jobs and processed and transformed into an OutNetMessage
  * to be eventually placed in the OutNetMessagePool.
- *
  */
 public class ClientMessagePool {
     private final Log _log;
@@ -32,39 +31,49 @@ public class ClientMessagePool {
         OutboundClientMessageOneShotJob.init(_context);
     }
 
+    /**
+     * Get the outbound cache for this message pool.
+     *
+     * @return the OutboundCache instance
+     */
     public OutboundCache getCache() {
         return _cache;
     }
-  
+
     /**
-     *  @since 0.8.8
+     * Shutdown the client message pool and clear all caches.
+     * @since 0.8.8
      */
     public void shutdown() {
         _cache.clearAllCaches();
     }
 
     /**
-     *  @since 0.8.8
+     * Restart the client message pool.
+     * @since 0.8.8
      */
     public void restart() {
         shutdown();
     }
 
     /**
-     * Add a new message to the pool.  The message can either be locally or
-     * remotely destined.
+     * Add a new client message to the pool.
+     * The message is either locally or remotely destined.
      *
+     * @param msg the ClientMessage to add
      */
     public void add(ClientMessage msg) {
         add(msg, false);
     }
     /**
+     * Add a new client message with knowledge of whether it's remote.
+     *
      * If we're coming from the client subsystem itself, we already know whether
      * the target is definitely remote and as such don't need to recheck
      * ourselves, but if we aren't certain, we want it to check for us.
      *
+     * @param msg the ClientMessage to add
      * @param isDefinitelyRemote true if we know for sure that the target is not local
-     *
      */
     public void add(ClientMessage msg, boolean isDefinitelyRemote) {
         if (!isDefinitelyRemote &&
@@ -83,18 +92,4 @@ public class ClientMessagePool {
                 _context.jobQueue().addJob(j);
         }
     }
-
-/******
-    private boolean isGuaranteed(ClientMessage msg) {
-        Properties opts = null;
-        if (msg.getSenderConfig() != null)
-            opts = msg.getSenderConfig().getOptions();
-        if (opts != null) {
-            String val = opts.getProperty(I2PClient.PROP_RELIABILITY, I2PClient.PROP_RELIABILITY_BEST_EFFORT);
-            return val.equals(I2PClient.PROP_RELIABILITY_GUARANTEED);
-        } else {
-            return false;
-        }
-    }
-******/
 }

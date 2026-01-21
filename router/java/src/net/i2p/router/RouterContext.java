@@ -188,6 +188,11 @@ public class RouterContext extends I2PAppContext {
         _overrideProps.remove(propName);
     }
 
+    /**
+     * Add a callback for property changes.
+     *
+     * @param callback the callback to be notified of property changes
+     */
     public void addPropertyCallback(I2PPropertyCallback callback) {
         _overrideProps.addCallBack(callback);
     }
@@ -347,11 +352,18 @@ public class RouterContext extends I2PAppContext {
     //public MessageStateMonitor messageStateMonitor() { return _messageStateMonitor; }
 
     /**
-     * Our db cache
+     * Get the network database segmentor for advanced database access.
+     *
+     * @return the SegmentedNetworkDatabaseFacade instance
      * @since 0.9.61
      */
     public SegmentedNetworkDatabaseFacade netDbSegmentor() { return _netDb; }
 
+    /**
+     * Get the main network database facade for standard database operations.
+     *
+     * @return the NetworkDatabaseFacade for the main network
+     */
     public NetworkDatabaseFacade netDb() { return _netDb.mainNetDB(); }
 
     /**
@@ -424,9 +436,17 @@ public class RouterContext extends I2PAppContext {
     public StatisticsManager statPublisher() { return _statPublisher; }
 
     /**
-     * who does this peer hate?
+     * Get thebanlist for managing banned peers.
+     *
+     * @return the Banlist instance
      */
     public Banlist banlist() { return _banlist; }
+
+    /**
+     * Get the blocklist for managing blocked peers.
+     *
+     * @return the Blocklist instance
+     */
     public Blocklist blocklist() { return _blocklist; }
 
     /**
@@ -436,8 +456,9 @@ public class RouterContext extends I2PAppContext {
     public MessageValidator messageValidator() { return _messageValidator; }
 
     /**
-     * Component to coordinate our accepting/rejecting of requests under load
+     * Get the router throttle controller for managing load.
      *
+     * @return the RouterThrottle instance
      */
     public RouterThrottle throttle() { return _throttle; }
 
@@ -573,26 +594,32 @@ public class RouterContext extends I2PAppContext {
     }
 
     /**
-     *  @since 0.8.8
+     * Remove all shutdown tasks from the context.
+     * Used during router shutdown to clear pending tasks.
+     *
+     * @since 0.8.8
      */
     void removeShutdownTasks() {
         _shutdownTasks.clear();
     }
 
     /**
-     *  The last thing to be called before router shutdown.
-     *  No context resources, including logging, will be available.
-     *  Only for external threads in the same JVM needing to know when
-     *  the shutdown is complete, like Android.
-     *  @since 0.8.8
+     * Add a task to be run during final shutdown.
+     * This is called after all context resources have been cleaned up.
+     * No logging or context resources will be available during task execution.
+     *
+     * @param task the Runnable to execute during final shutdown
+     * @since 0.8.8
      */
     public void addFinalShutdownTask(Runnable task) {
         _finalShutdownTasks.add(task);
     }
 
     /**
-     *  @return the Set
-     *  @since 0.8.8
+     * Get the set of final shutdown tasks.
+     *
+     * @return the Set of Runnable tasks to execute during final shutdown
+     * @since 0.8.8
      */
     Set<Runnable> getFinalShutdownTasks() {
         return _finalShutdownTasks;
@@ -680,14 +707,9 @@ public class RouterContext extends I2PAppContext {
     }
 
     /**
-     * Determine how much do we want to mess with the keys to turn them
-     * into something we can route.  This is context specific because we
-     * may want to test out how things react when peers don't agree on
-     * how to skew.
+     * Get the routing key generator for this context.
      *
-     * Returns same thing as routingKeyGenerator()
-     *
-     * @return non-null
+     * @return the RouterKeyGenerator instance
      * @since 0.9.16
      */
     public RouterKeyGenerator routerKeyGenerator() {
@@ -695,9 +717,10 @@ public class RouterContext extends I2PAppContext {
     }
 
     /**
-     * Since we only need one.
+     * Get the garlic message parser for this context.
+     * Since we only need one parser instance, this is lazily initialized.
      *
-     * @return non-null after initAll()
+     * @return the GarlicMessageParser instance
      * @since 0.9.20
      */
     public GarlicMessageParser garlicMessageParser() {

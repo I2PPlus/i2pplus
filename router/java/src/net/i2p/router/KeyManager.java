@@ -59,9 +59,8 @@ public class KeyManager {
     }
 
     /**
-     *  Read keys in from disk, blocking
-     *
-     *  @deprecated we never read keys in anymore
+     * Initialize the key manager and load keys from disk.
+     * @deprecated Keys are no longer read from disk at startup
      */
     @Deprecated
     public void startup() {
@@ -133,20 +132,32 @@ public class KeyManager {
     }
 
     /**
-     *  Read/Write the router keys from/to disk
+     * Queue a background job to synchronize keys to disk.
+     * This method is called internally after key modifications.
      */
     private void queueWrite() {
         _context.jobQueue().addJob(new SynchronizeKeysJob());
     }
 
-    /** client */
+    /**
+     * Unregister keys for a destination, removing them from memory.
+     * Does not delete backup files from disk.
+     *
+     * @param dest the destination whose keys should be unregistered
+     * @return the LeaseSetKeys that were removed, or null if not found
+     */
     public LeaseSetKeys unregisterKeys(Destination dest) {
         if (_log.shouldInfo())
             _log.info("Unregistering keys for destination " + dest.calculateHash().toBase64());
         return _leaseSetKeys.remove(dest.calculateHash());
     }
 
-    /** client */
+    /**
+     * Get the keys registered for a destination.
+     *
+     * @param dest the destination to look up
+     * @return the LeaseSetKeys for the destination, or null if not found
+     */
     public LeaseSetKeys getKeys(Destination dest) {
         return getKeys(dest.calculateHash());
     }

@@ -29,9 +29,25 @@ public abstract class JobImpl implements Job {
         _id = _idSrc.incrementAndGet();
     }
 
+    /**
+     * Get the unique job ID for this job.
+     *
+     * @return the unique job identifier
+     */
     public long getJobId() { return _id; }
+
+    /**
+     * Get the timing object for this job.
+     *
+     * @return the JobTiming object controlling when this job runs
+     */
     public JobTiming getTiming() { return _timing; }
 
+    /**
+     * Get the router context that this job belongs to.
+     *
+     * @return the RouterContext for this job
+     */
     public final RouterContext getContext() { return _context; }
 
     @Override
@@ -42,6 +58,11 @@ public abstract class JobImpl implements Job {
         return buf.toString();
     }
 
+    /**
+     * Get the timestamp when this job was last made ready for execution.
+     *
+     * @return timestamp in milliseconds when job was made ready, or 0 if not yet ready
+     */
     public long getMadeReadyOn() { return _madeReadyOn; }
 
     /**
@@ -59,12 +80,19 @@ public abstract class JobImpl implements Job {
     public void madeReady(long now) { _madeReadyOn = now; }
 
 
+    /**
+     * Default implementation does nothing.
+     * Called when the job is dropped due to router overload.
+     * Subclasses can override to perform cleanup or requeueing of other tasks.
+     */
     public void dropped() {}
 
     /**
-     *  Warning - only call this from runJob() or if Job is not already queued,
-     *  or else it gets the job queue out of order.
-     *  @param delayMs the delay in milliseconds before the job should run again
+     * Requeue this job to run after the specified delay.
+     * Warning - only call this from runJob() or if the Job is not already queued,
+     * otherwise it may get the job queue out of order.
+     *
+     * @param delayMs the delay in milliseconds before the job should run again
      */
     protected void requeue(long delayMs) {
         getTiming().setStartAfter(_context.clock().now() + delayMs);

@@ -29,30 +29,67 @@ public class JobTiming implements Clock.ClockUpdateListener {
         _actualEnd = new AtomicLong(0);
     }
 
-    /** Number of milliseconds after the epoch to start the job */
+    /**
+     * Get the scheduled start time for the job.
+     *
+     * @return milliseconds after the epoch when the job should start
+     */
     public long getStartAfter() {return _start.get();}
 
     /**
-     * WARNING - this does not force a resort of the job queue any more...
-     * ALWAYS call JobImpl.requeue() instead if job is already queued.
+     * Set the scheduled start time for the job.
+     * WARNING: This does not force a resort of the job queue.
+     * Always call JobImpl.requeue() instead if the job is already queued.
+     *
+     * @param startTime milliseconds after the epoch when the job should start
      */
     public void setStartAfter(long startTime) {_start.set(startTime);}
 
-    /** Number of milliseconds after the epoch the job actually started */
+    /**
+     * Get the actual start time when the job began execution.
+     *
+     * @return milliseconds after the epoch when the job actually started, or 0 if not yet started
+     */
     public long getActualStart() {return _actualStart.get();}
 
+    /**
+     * Set the actual start time when the job began execution.
+     *
+     * @param actualStartTime milliseconds after the epoch when the job actually started
+     */
     public void setActualStart(long actualStartTime) {_actualStart.set(actualStartTime);}
-    /** Notify the timing that the job began */
+    /**
+     * Mark the job as started, recording the current time as the actual start time.
+     * Uses the router context clock for consistency.
+     */
     public void start() {_actualStart.set(_context.clock().now());}
 
-    /** Number of milliseconds after the epoch the job actually ended */
+    /**
+     * Get the actual end time when the job finished execution.
+     *
+     * @return milliseconds after the epoch when the job actually ended, or 0 if not yet ended
+     */
     public long getActualEnd() {return _actualEnd.get();}
 
+    /**
+     * Set the actual end time when the job finished execution.
+     *
+     * @param actualEndTime milliseconds after the epoch when the job actually ended
+     */
     public void setActualEnd(long actualEndTime) {_actualEnd.set(actualEndTime);}
 
-    /** Notify the timing that the job finished */
+    /**
+     * Mark the job as finished, recording the current time as the actual end time.
+     * Uses the router context clock for consistency.
+     */
     public void end() {_actualEnd.set(_context.clock().now());}
 
+    /**
+     * Adjust all timing values by the specified delta.
+     * Used when the router clock is adjusted (e.g., NTP sync).
+     *
+     * @param delta milliseconds to add to all timing values (positive or negative)
+     */
     public void offsetChanged(long delta) {
         if (_start.get() != 0) {_start.addAndGet(delta);}
         if (_actualStart.get() != 0) {_actualStart.addAndGet(delta);}

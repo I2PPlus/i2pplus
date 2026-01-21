@@ -380,13 +380,20 @@ public class InNetMessagePool implements Service {
         _context.tunnelDispatcher().dispatch((TunnelDataMessage) messageBody, from);
     }
 
+    /**
+     * Render the status of this message pool as HTML.
+     * Package-private for use by the router console.
+     *
+     * @param out the Writer to output HTML to
+     */
     @Override
     public void renderStatusHTML(Writer out) {
         // No status rendering in this version
     }
 
     /**
-     * Restart the message pool. Shuts down and re-starts processing.
+     * Restart the message pool by shutting down and then starting up again.
+     * Clears all queued messages and reinitializes the dispatcher.
      */
     public void restart() {
         synchronized (this) {
@@ -402,7 +409,7 @@ public class InNetMessagePool implements Service {
     }
 
     /**
-     * Shutdown the message pool, clear queued messages.
+     * Shutdown the message pool, stopping all dispatchers and clearing queued messages.
      */
     public synchronized void shutdown() {
         _alive.set(false);
@@ -414,7 +421,7 @@ public class InNetMessagePool implements Service {
     }
 
     /**
-     * Start up the message pool and, if threaded, start dispatcher threads.
+     * Startup the message pool and, if configured, start dispatcher threads.
      */
     public synchronized void startup() {
         _alive.set(true);

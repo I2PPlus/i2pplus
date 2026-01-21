@@ -469,13 +469,37 @@ public class Router implements RouterClock.ClockShiftListener {
      *
      * Defaults to true. Set to false for embedded before calling runRouter()
      */
+    /**
+     * Configure the router to kill the JVM when the router shuts down, as well
+     * as whether to explicitly halt the JVM during the hard fail process.
+     *
+     * Defaults to true. Set to false for embedded before calling runRouter()
+     *
+     * @param shouldDie true to kill VM on shutdown, false for embedded use
+     */
     public void setKillVMOnEnd(boolean shouldDie) {_killVMOnEnd = shouldDie;}
 
+    /**
+     * Check whether the router is configured to kill the JVM on shutdown.
+     *
+     * @return true if VM will be killed on router shutdown
+     */
     public boolean getKillVMOnEnd() {return _killVMOnEnd;}
 
     /** @return absolute path */
+    /**
+     * Get the absolute path to the router configuration file.
+     *
+     * @return absolute path to the configuration file
+     */
     public String getConfigFilename() {return _configFilename;}
 
+    /**
+     * Retrieve a configuration setting by name.
+     *
+     * @param name the configuration property name
+     * @return the configuration value, or null if not set
+     */
     public String getConfigSetting(String name) {return _config.get(name);}
 
     /**
@@ -504,10 +528,20 @@ public class Router implements RouterClock.ClockShiftListener {
     /**
      *  @return unmodifiable Set, unsorted
      */
+    /**
+     * Get an unmodifiable set of all configuration property names.
+     *
+     * @return unmodifiable Set of configuration property names (unsorted)
+     */
     public Set<String> getConfigSettings() {return Collections.unmodifiableSet(_config.keySet());}
 
     /**
      *  @return unmodifiable Map, unsorted
+     */
+    /**
+     * Get an unmodifiable map of all configuration settings.
+     *
+     * @return unmodifiable Map of configuration property names to values (unsorted)
      */
     public Map<String, String> getConfigMap() {return Collections.unmodifiableMap(_config);}
 
@@ -824,7 +858,10 @@ public class Router implements RouterClock.ClockShiftListener {
     }
 
     /**
-     *  True during the initial start, but false during a soft restart.
+     * Check if the router is alive (in startup or running state).
+     * True during initial startup, false during soft restart.
+     *
+     * @return true if router is in an alive state
      */
     public boolean isAlive() {
         synchronized(_stateLock) {return STATES_ALIVE.contains(_state);}

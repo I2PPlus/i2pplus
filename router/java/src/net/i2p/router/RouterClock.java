@@ -72,15 +72,19 @@ public class RouterClock extends Clock {
     }
 
     /**
-     *  Cannot be stopped, but RouterTimestamper registers a shutdown task.
-     *  @since 0.9.20
+     * Start the router clock and its associated timestamper.
+     * The timestamper will begin synchronizing with NTP or peer time sources.
+     *
+     * @since 0.9.20
      */
     public void start() {
         _timeStamper.startTimestamper();
     }
 
     /**
-     *  The RouterTimestamper
+     * Get the timestamper used for time synchronization.
+     *
+     * @return the RouterTimestamper instance
      */
     @Override
     public Timestamper getTimestamper() { return _timeStamper; }
@@ -244,8 +248,10 @@ public class RouterClock extends Clock {
     }
 
     /**
-     *  @param stratum used to determine whether we should ignore
-     *  @since 0.7.12
+     * Set the current time, used by the timestamper when synchronizing.
+     *
+     * @param realTime the current time from the time source
+     * @param stratum the stratum level of the time source (lower is better)
      */
     @Override
     public void setNow(long realTime, int stratum) {
@@ -333,21 +339,22 @@ public class RouterClock extends Clock {
         }
     }
 
-    /*
-     *  Get notified of massive System clock shifts, positive or negative -
-     *  generally a minute or more.
-     *  The adjusted (offset) clock changes by the same amount.
-     *  The offset itself did not change.
-     *  Warning - duplicate notifications may occur.
+    /**
+     * Add a listener to be notified of massive system clock shifts.
+     * These are shifts of one minute or more.
      *
-     *  @since 0.8.8
+     * @param lsnr the listener to add
+     * @since 0.8.8
      */
     public void addShiftListener(ClockShiftListener lsnr) {
             _shiftListeners.add(lsnr);
     }
 
-    /*
-     *  @since 0.8.8
+    /**
+     * Remove a clock shift listener.
+     *
+     * @param lsnr the listener to remove
+     * @since 0.8.8
      */
     public void removeShiftListener(ClockShiftListener lsnr) {
             _shiftListeners.remove(lsnr);

@@ -61,19 +61,35 @@ public interface TunnelInfo {
     /** if this is a client tunnel, what destination is it for? */
     public Hash getDestination();
 
-    public long getExpiration();
     /**
-     * take note that the tunnel was able to measurably Do Good
-     * in the given time
+     * Get the tunnel's expiration time.
+     *
+     * @return expiration time in milliseconds since epoch
+     */
+    public long getExpiration();
+
+    /**
+     * Record that the tunnel successfully processed a test with the given response time.
+     *
+     * @param responseTime the response time in milliseconds
      */
     public void testSuccessful(int responseTime);
 
+    /**
+     * Get the count of messages that have been processed through this tunnel.
+     *
+     * @return the number of processed messages
+     */
     public int getProcessedMessagesCount();
 
     /** we know for sure that this many bytes travelled through the tunnel in its lifetime */
     public long getVerifiedBytesTransferred();
 
-    /** we know for sure that the given number of bytes were sent down the tunnel fully */
+    /**
+     * Increment the verified byte count for data successfully sent through the tunnel.
+     *
+     * @param numBytes the number of bytes to add to the verified total
+     */
     public void incrementVerifiedBytesTransferred(int numBytes);
 
     /**
