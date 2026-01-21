@@ -160,8 +160,8 @@ public class Router implements RouterClock.ClockShiftListener {
         if (System.getProperty("I2P_DISABLE_DNS_CACHE_OVERRIDE") == null) {
             // grumble about sun's java caching DNS entries *forever* by default
             // so let's just keep 'em for a short time
-            String DNS_CACHE_TIME = Integer.toString(60*60*60);
-            String DNS_NEG_CACHE_TIME = Integer.toString(15*60*60);
+            String DNS_CACHE_TIME = Integer.toString(15*60*1000);
+            String DNS_NEG_CACHE_TIME = Integer.toString(5*60*1000);
             System.setProperty("sun.net.inetaddr.ttl", DNS_CACHE_TIME);
             System.setProperty("sun.net.inetaddr.negative.ttl", DNS_NEG_CACHE_TIME);
             System.setProperty("networkaddress.cache.ttl", DNS_CACHE_TIME);
