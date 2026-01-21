@@ -1,0 +1,38 @@
+# I2P+ Debian package
+# This file is distributed under the same license as the i2p package.
+msgid ""
+msgstr ""
+"Language: bo\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Should the I2P router be started at boot?"
+msgstr "མགོ་མནོན་སྐབས་ I2P ལམ་སྟོན་པ་འགོ་སློག་གཏོང་དགོས་སམ།"
+
+msgid "The I2P router can be run as a daemon that starts automatically when your computer boots up. This is the recommended configuration."
+msgstr "I2P ལམ་སྟོན་པ་ནི་མཆོག་སྤྲད་པ་ཞིག་གི་ཐོག་ནས་ཁ་གཏད་གཞི་སྒྲིག་བྱེད་སྐབས་རང་བཞིན་གྱིས་འགོ་སློག་པའི་མཆོག་སྤྲད་པ་ཞིག་ཏུ་འཁོད་ཆོག་པ་དང་། འདི་ནི་མཁོ་འདོན་གྱི་མཐུན་སྒྲིག་ཡིན།"
+
+msgid "I2P daemon user:"
+msgstr "I2P མཆོག་སྤྲད་པའི་མིང་།"
+
+msgid "By default I2P is configured to run under the account i2psvc when running as a daemon. To use an existing I2P profile you may enter a different account name here. For example, if your previous I2P installation is at /home/user/i2p, you may enter 'user' here."
+msgstr "སྔོན་ཐུབ་གཞི་སྒྲིག་གི་གནས་སྟངས་སུ། I2P ནི་མཆོག་སྤྲད་པ་ཞིག་ཏུ་འཁོད་སྐབས་ i2psvc ཐོ་གཞུང་འོག་ནས་འགོ་སློག་གཏོང་བ་ཡིན། གནཏ་འཁེལ་གྱི་ I2P གཟུགས་གཞི་སྤྱོད་མཁན་ཡིན་ན། ཁྱེད་ཀྱིས་འདིར་མིང་གཞན་ཞིག་ནང་འཇུག་ཆོག་པ་དང་། དཔེར་ན། ཁྱེད་ཀྱི་སྔོན་མ་གཞི་སྒྲིག་ནི་ /home/user/i2p ཡིན་ན། ཁྱེད་ཀྱིས་འདིར་ 'user' ནང་འཇུག་ཆོག"
+
+msgid "Very important: If a user other than the default of 'i2psvc' is entered here, the chosen username MUST already exist."
+msgstr "ཧ་གོ་ཐོས་གཅིག། གལ་ཏེ་ 'i2psvc' མ་གཏོགས་ཀྱི་མིང་གཞན་ཞིག་འདིར་ནང་འཇུག་བྱས་ན། གདམ་ཁ་ཐོབ་པའི་མིང་ནི་གཏན་འཁེལ་ངེས་པར་དུ་གཞུང་དུ་ཡོད་དགོས།"
+
+msgid "Memory that can be allocated to I2P:"
+msgstr "I2P ལ་སྤྲོད་ཆོག་པའི་ངལ་གསོ་མ་གཞི།"
+
+msgid "By default, I2P will only be allowed to use up to 128MB of RAM."
+msgstr "སྔོན་ཐུབ་གཞི་སྒྲིག་གི་གནས་སྟངས་སུ། I2P ལ་ RAM དབུ་ཁྲིད་ 128MB ཙམ་སྤྱོད་ཆོག་པའི་དབང་བ་ཡིན།"
+
+msgid "High bandwidth routers, as well as routers with a lot of active torrents / plugins, may need to have this value increased."
+msgstr "སྔར་གནོན་ཆེ་བའི་ལམ་སྟོན་པ་དང་། སྟོང་ཐོབ་ཚད་མང་བའི་མཉམ་འབྱེད།/སྒྲིག་ཆས་ལྡན་པའི་ལམ་སྟོན་པ་དག་ལ་ཚད་འབེབས་འདི་མཐོ་རུ་གཏོང་དགོས་སྲིད།"
+
+msgid "Should the I2P daemon be confined with AppArmor?"
+msgstr "AppArmor གིས་ I2P མཆོག་སྤྲད་པ་ཚོད་འཛིན་གཏོང་དགོས་སམ།"
+
+msgid "With this option enabled I2P will be sandboxed with AppArmor, restricting which files and directories may be accessed by I2P."
+msgstr "གཟུགས་གཞི་འདི་ལྟར་བཟོས་ན། I2P ནི་ AppArmor གི་བཙོན་ཁང་ནང་འཁོད་རོགས་ཞིང་། གཏོགས་གཤིས་དང་སྣོན་ཐིགས་གང་དག་ I2P གིས་ཟིན་ཐོ་བྱེད་ཆོག་པ་དེ་ཚོད་འཛིན་བྱེད་དགོས།"
