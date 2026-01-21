@@ -7,7 +7,21 @@
 
 package org.klomp.snark;
 
-/** Callback used when some peer changes state. */
+/**
+ * Callback interface for monitoring PeerCoordinator state changes.
+ *
+ * <p>This interface is used to notify listeners of:
+ *
+ * <ul>
+ *   <li>Peer state changes (connection, disconnection, choking, etc.)</li>
+ *   <li>MetaInfo reception in magnet link mode</li>
+ *   <li>Upload slot limit violations</li>
+ *   <li>Status messages for user display</li>
+ * </ul>
+ *
+ * @see PeerCoordinator
+ * @since 0.1.0
+ */
 interface CoordinatorListener {
     /** Called when the PeerCoordinator notices a change in the state of a peer. */
     void peerChange(PeerCoordinator coordinator, Peer peer);

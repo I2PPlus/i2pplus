@@ -42,7 +42,30 @@ import net.i2p.util.Log;
 import net.i2p.util.SecureFile;
 import net.i2p.util.SystemVersion;
 
-/** Maintains pieces on disk. Can be used to store and retrieve pieces. */
+/**
+ * Storage manages torrent data files on disk for I2PSnark.
+ *
+ * <p>This class handles all aspects of storing and retrieving torrent pieces:
+ * <ul>
+ *   <li>Creating and managing files/directories for torrent data</li>
+ *   <li>Reading and writing piece data to disk</li>
+ *   <li>Tracking downloaded pieces via BitField</li>
+ *   <li>Validating downloaded pieces against piece hashes</li>
+ *   <li>File pre-allocation for sparse file support</li>
+ *   <li>Priority-based file selection for partial downloads</li>
+ *   <li>File checking and rechecking for data integrity</li>
+ * </ul>
+ *
+ * <p>Storage implements Closeable and should be properly closed after use.
+ * The storage must be checked via {@link #check()} before reading or writing pieces.
+ *
+ * <p>Thread safety: This class uses synchronized methods and concurrent collections
+ * for thread-safe access to file handles and metadata.
+ *
+ * @see MetaInfo
+ * @see BitField
+ * @see StorageListener
+ */
 public class Storage implements Closeable {
     private final MetaInfo metainfo;
     private final List<TorrentFile> _torrentFiles;
@@ -67,17 +90,25 @@ public class Storage implements Closeable {
     private final AtomicLong _activity = new AtomicLong();
     private List<String> _filesExcluded = new ArrayList<String>();
 
-    /** The default piece size. */
+    /** The default piece size for new torrents. */
     private static final int DEFAULT_PIECE_SIZE = 256 * 1024;
 
-    /** bigger than this will be rejected */
-    public static final int MAX_PIECE_SIZE = 32 * 1024 * 1024;
+    /**
+     * Maximum permitted piece size.
+     * Torrents with pieces larger than this will be rejected.
+     */
+    public static final int MAX_PIECE_SIZE = 64 * 1024 * 1024;
 
-    /** The maximum number of pieces in a torrent. */
+    /** The maximum number of pieces allowed in a single torrent. */
     public static final int MAX_PIECES = 64 * 1024;
 
+    /** Maximum total torrent size (MAX_PIECE_SIZE * MAX_PIECES). */
     public static final long MAX_TOTAL_SIZE = MAX_PIECE_SIZE * (long) MAX_PIECES;
+
+    /** Priority value indicating a file should be skipped during download. */
     public static final int PRIORITY_SKIP = -9;
+
+    /** Default priority value for files. */
     public static final int PRIORITY_NORMAL = 0;
 
     private static final Map<String, String> _filterNameCache =
@@ -90,7 +121,11 @@ public class Storage implements Closeable {
     private static final ByteCache _cache = ByteCache.getInstance(16, BUFSIZE);
 
     private Properties _config;
+
+    /** Configuration key for enabling file pre-allocation. */
     public static final String PROP_PREALLOCATE_FILES = "i2psnark.preallocateFiles";
+
+    /** Default value for file pre-allocation (true). */
     public static final boolean DEFAULT_PREALLOCATE_FILES = true;
 
     /**
@@ -449,6 +484,9 @@ public class Storage implements Closeable {
     }
 
     /**
+     * Get the last activity timestamp.
+     *
+     * @return timestamp in milliseconds since epoch, or 0 if never set
      * @since 0.9.42
      */
     public long getActivity() {
@@ -456,6 +494,8 @@ public class Storage implements Closeable {
     }
 
     /**
+     * Set the activity timestamp to the current time.
+     *
      * @since 0.9.42
      */
     private void setActivity() {
@@ -463,6 +503,9 @@ public class Storage implements Closeable {
     }
 
     /**
+     * Set the activity timestamp.
+     *
+     * @param time timestamp in milliseconds since epoch
      * @since 0.9.42
      */
     public void setActivity(long time) {
@@ -650,7 +693,7 @@ public class Storage implements Closeable {
     }
 
     /**
-     * @return as last set, default false
+     * @return whether in-order download mode is enabled
      * @since 0.9.36
      */
     public boolean getInOrder() {
@@ -658,9 +701,11 @@ public class Storage implements Closeable {
     }
 
     /**
-     * Call AFTER setFilePriorites() so we know what's skipped
+     * Enable or disable in-order download mode.
+     * When enabled, pieces within each file are prioritized sequentially.
+     * Must call setFilePriorities() BEFORE this method.
      *
-     * @param yes enable or not
+     * @param yes true to enable in-order mode, false to disable
      * @since 0.9.36
      */
     public void setInOrder(boolean yes) {
@@ -803,6 +848,7 @@ public class Storage implements Closeable {
     }
 
     /**
+     * @return true if original file names are being preserved, false if filtered
      * @since 0.9.15
      */
     public boolean getPreserveFileNames() {

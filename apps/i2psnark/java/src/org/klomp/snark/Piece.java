@@ -101,8 +101,13 @@ class Piece implements Comparable<Piece> {
     }
 
     /**
-     * Since 0.8.3, keep track of who is requesting here, to avoid deadlocks from querying each
-     * peer. Caller must synchronize
+     * Marks a peer as requesting or no longer requesting this piece.
+     * Used to avoid deadlocks when querying each peer.
+     * Caller must synchronize.
+     *
+     * @param peer the peer requesting
+     * @param requested true to mark as requested, false to unmark
+     * @since 0.8.3
      */
     public void setRequested(Peer peer, boolean requested) {
         if (requested) {
@@ -114,8 +119,11 @@ class Piece implements Comparable<Piece> {
     }
 
     /**
-     * Is peer requesting this piece? Caller must synchronize
+     * Checks if the given peer is currently requesting this piece.
+     * Caller must synchronize.
      *
+     * @param peer the peer to check
+     * @return true if peer is requesting, false otherwise
      * @since 0.8.3
      */
     public boolean isRequestedBy(Peer peer) {
@@ -142,13 +150,19 @@ class Piece implements Comparable<Piece> {
     }
 
     /**
-     * @return default 0 @since 0.8.1
+     * Gets the current priority level for this piece.
+     *
+     * @return priority value (negative values indicate disabled/skipped pieces)
+     * @since 0.8.1
      */
     public int getPriority() {
         return this.priority;
     }
 
     /**
+     * Sets the priority level for this piece.
+     *
+     * @param p priority value (negative to disable, 0 or positive for normal priority)
      * @since 0.8.1
      */
     public void setPriority(int p) {
@@ -156,6 +170,9 @@ class Piece implements Comparable<Piece> {
     }
 
     /**
+     * Checks if this piece is disabled (should not be downloaded).
+     *
+     * @return true if disabled (priority < 0), false otherwise
      * @since 0.8.1
      */
     public boolean isDisabled() {
@@ -163,6 +180,9 @@ class Piece implements Comparable<Piece> {
     }
 
     /**
+     * Disables this piece so it will not be downloaded.
+     * Sets priority to -1.
+     *
      * @since 0.8.1
      */
     public void setDisabled() {

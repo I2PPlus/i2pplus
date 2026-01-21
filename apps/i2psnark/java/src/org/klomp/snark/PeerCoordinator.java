@@ -36,7 +36,31 @@ import org.klomp.snark.comments.Comment;
 import org.klomp.snark.comments.CommentSet;
 import org.klomp.snark.dht.DHT;
 
-/** Coordinates what peer does what. */
+/**
+ * Coordinates peer activities for a single torrent including upload/download management,
+ * peer selection, piece distribution, and bandwidth allocation.
+ *
+ * <p>This class manages the core BitTorrent coordination logic:
+ *
+ * <ul>
+ *   <li>Managing connected peers and their states</li>
+ *   <li>Choking/unchoking logic for upload slots</li>
+ *   <li>Piece selection and rarest-first distribution</li>
+ *   <li>Request queue management and pipeline control</li>
+ *   <li>Bandwidth distribution among peers</li>
+ *   <li>Peer Exchange (PEX) for peer discovery</li>
+ *   <li>DHT integration for trackerless operation</li>
+ *   <li>Tracker announcements and response processing</li>
+ * </ul>
+ *
+ * <p>Thread safety: This class uses extensive synchronization for thread-safe peer management.
+ * External access to some fields is documented where permitted.
+ *
+ * @see Peer
+ * @see PeerState
+ * @see Storage
+ * @since 0.1.0
+ */
 class PeerCoordinator implements PeerListener, BandwidthListener {
     private final Log _log;
 

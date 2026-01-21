@@ -6,7 +6,21 @@
 
 package org.klomp.snark;
 
-/** Callback used when Storage changes. */
+/**
+ * Callback interface for monitoring Storage state changes and progress.
+ *
+ * <p>This interface is used by Storage to report:
+ *
+ * <ul>
+ *   <li>File creation and allocation events</li>
+ *   <li>Piece verification progress and results</li>
+ *   <li>Storage completion status</li>
+ *   <li>Status messages for user display</li>
+ * </ul>
+ *
+ * @see Storage
+ * @since 0.1.0
+ */
 interface StorageListener {
     /** Called when the storage creates a new file of a given length. */
     void storageCreateFile(Storage storage, String name, long length);

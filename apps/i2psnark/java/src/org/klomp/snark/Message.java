@@ -12,7 +12,32 @@ import net.i2p.data.ByteArray;
 import net.i2p.util.ByteCache;
 
 /**
- * Used to queue outgoing connections sendMessage() should be used to translate them to wire format.
+ * Represents a BitTorrent protocol message for peer communication.
+ *
+ * <p>This class encapsulates all BitTorrent protocol message types including:
+ *
+ * <ul>
+ *   <li>Control messages: keep-alive, choke, unchoke, interested, uninterested</li>
+ *   <li>Piece messages: have, bitfield, request, piece, cancel</li>
+ *   <li>Extension messages for protocol extensions</li>
+ *   <li>Fast peer extension messages (BEP 6)</li>
+ *   <li>DHT messages (BEP 5, BEP 52)</li>
+ * </ul>
+ *
+ * <p>Messages are created and queued for sending through a DataOutputStream.
+ * The sendMessage() method translates messages to wire format.
+ *
+ * <p>Message structure includes:
+ * <ul>
+ *   <li>type - The message type byte</li>
+ *   <li>piece - The piece index (for have, request, piece, cancel)</li>
+ *   <li>begin - The offset within the piece</li>
+ *   <li>length - The data length</li>
+ *   <li>data - Optional payload data</li>
+ * </ul>
+ *
+ * @see PeerState
+ * @since 0.1.0
  */
 class Message {
     static final byte KEEP_ALIVE = -1;
