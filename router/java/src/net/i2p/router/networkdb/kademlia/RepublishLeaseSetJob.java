@@ -123,7 +123,7 @@ public class RepublishLeaseSetJob extends JobImpl {
         if (_facade.hasActiveRepublishJob(_dest)) {
             if (_log.shouldDebug()) {
                 _log.debug("Skipping republish for [" + _dest.toBase32().substring(0, 8) +
-                           "] - job already active");
+                           "] -> Job already active");
             }
             return;
         }

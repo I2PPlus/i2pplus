@@ -976,7 +976,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (hasActiveRepublishJob(hash)) {
             if (_log.shouldDebug()) {
                 _log.debug("Skipping republish scheduling for [" + hash.toBase32().substring(0, 8) +
-                           "] - job already active");
+                           "] -> Job already active");
             }
             return;
         }
