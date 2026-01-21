@@ -231,7 +231,8 @@ public class TranslationStatus {
             String lang = loc.getDisplayLanguage();
             String country = loc.getCountry();
             String cc = getCountryCode(loc);
-            String flag = "<span class=langflag><img class=tx_flag src=\"/flags.jsp?c=" + cc + "\" width=24></span>";
+            boolean isTibet = cc.equals("bo");
+            String flag = "<span class=langflag><img class=tx_flag src=\"/flags.jsp?c=" + (isTibet ? "xt" : cc) + "\" width=24></span>";
             if (country.length() > 0) {
                 s += '_' + country;
                 country = '(' + loc.getDisplayCountry() + ')';
@@ -323,31 +324,14 @@ public class TranslationStatus {
         }
         Set<String> missing = new TreeSet<String>(langs);
         for (ResourceBundle bun : buns) {
-            //int not = 0;
-            //int same = 0;
-            //int tx = 0;
             Set<String> keys = bun.keySet();
             int tot = keys.size() - 1; // subtract empty header string
-         /*
-            for (String k : keys) {
-                try {
-                    String v = bun.getString(k);
-                    if (v.length() == 0)
-                        not++;
-                    else if (v.equals(k))
-                        same++;
-                    else
-                        tx++;
-                } catch (MissingResourceException e) {
-                    not++;
-                }
-            }
-         */
             Locale loc = bun.getLocale();
             String lang = loc.getLanguage();
             String country = loc.getCountry();
             String cc = getCountryCode(loc);
-            String flag = "<span class=langflag><img class=tx_flag src=\"/flags.jsp?c=" + cc + "\" width=24></span>";
+            boolean isTibet = cc.equals("bo");
+            String flag = "<span class=langflag><img class=tx_flag src=\"/flags.jsp?c=" + (isTibet ? "xt" : cc) + "\" width=24></span>";
             String dlang = loc.getDisplayLanguage();
             if (country.length() > 0) {
                 lang += '_' + country;

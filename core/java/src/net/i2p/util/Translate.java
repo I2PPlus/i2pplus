@@ -63,7 +63,7 @@ public abstract class Translate {
     }
 
     /**
-     *  translate a string with a parameter
+     *  Translate a string with a parameter
      *  This is a lot more expensive than getString(s, ctx), so use sparingly.
      *
      *  @param s string to be translated containing {0}
@@ -133,8 +133,8 @@ public abstract class Translate {
             return fmt.format(oArray, new StringBuffer(), null).toString();
         } catch (IllegalArgumentException iae) {
             System.err.println("Bad format: sing: \"" + s +
-                           "\" plural: \"" + p +
-                           "\" lang: " + lang);
+                               "\" plural: \"" + p +
+                               "\" lang: " + lang);
             return "FIXME: " + s + ' ' + p + ',' + n;
         }
     }
