@@ -111,7 +111,7 @@ msgid "Shutting down"
 msgstr "बंद कर रहा है"
 
 msgid "Restarting"
-msgstr ""
+msgstr "पुनः आरंभ हो रहा है"
 
 msgid "Declining Tunnel Requests"
 msgstr "टंनल अनुरोध अस्वीकार कर रहा है"

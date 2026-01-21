@@ -111,7 +111,7 @@ msgid "Shutting down"
 msgstr "关闭"
 
 msgid "Restarting"
-msgstr ""
+msgstr "正在重启"
 
 msgid "Declining Tunnel Requests"
 msgstr "拒绝隧道请求"

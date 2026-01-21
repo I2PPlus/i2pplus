@@ -111,7 +111,7 @@ msgid "Shutting down"
 msgstr "Mematikan"
 
 msgid "Restarting"
-msgstr ""
+msgstr "Mulai ulang"
 
 msgid "Declining Tunnel Requests"
 msgstr "Menolak permintaan terowongan"

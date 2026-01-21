@@ -111,7 +111,7 @@ msgid "Shutting down"
 msgstr "Kapatılıyor"
 
 msgid "Restarting"
-msgstr ""
+msgstr "Yeniden başlatılıyor"
 
 msgid "Declining Tunnel Requests"
 msgstr "Tünel isteklerinin reddedilmesi"

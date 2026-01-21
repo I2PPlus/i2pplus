@@ -111,7 +111,7 @@ msgid "Shutting down"
 msgstr "Vypínání"
 
 msgid "Restarting"
-msgstr ""
+msgstr "Restartování"
 
 msgid "Declining Tunnel Requests"
 msgstr "Odmítání požadavků na tunel"

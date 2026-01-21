@@ -111,7 +111,7 @@ msgid "Shutting down"
 msgstr "종료 중"
 
 msgid "Restarting"
-msgstr ""
+msgstr "재시작 중"
 
 msgid "Declining Tunnel Requests"
 msgstr "터널 요청 거부"

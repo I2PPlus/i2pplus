@@ -111,7 +111,7 @@ msgid "Shutting down"
 msgstr "Tắt máy"
 
 msgid "Restarting"
-msgstr ""
+msgstr "Đang khởi động lại"
 
 msgid "Declining Tunnel Requests"
 msgstr "Yêu cầu đường hầm giảm"

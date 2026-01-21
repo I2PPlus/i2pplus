@@ -111,7 +111,7 @@ msgid "Shutting down"
 msgstr "Lukker ned"
 
 msgid "Restarting"
-msgstr ""
+msgstr "Genstarter"
 
 msgid "Declining Tunnel Requests"
 msgstr "Faldende tunnelanmodninger"

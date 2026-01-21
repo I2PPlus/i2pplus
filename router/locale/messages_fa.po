@@ -111,7 +111,7 @@ msgid "Shutting down"
 msgstr "خاموش شدن"
 
 msgid "Restarting"
-msgstr ""
+msgstr "در حال راه‌اندازی مجدد"
 
 msgid "Declining Tunnel Requests"
 msgstr "رد درخواست های تونل"

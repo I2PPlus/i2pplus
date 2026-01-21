@@ -111,7 +111,7 @@ msgid "Shutting down"
 msgstr "Выключение"
 
 msgid "Restarting"
-msgstr ""
+msgstr "Перезагрузка"
 
 msgid "Declining Tunnel Requests"
 msgstr "Отклонение запросов на туннель"

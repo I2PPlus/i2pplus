@@ -63,13 +63,13 @@ msgid "Starting up"
 msgstr "འགོ་བཙུགས་བཞིན་པ"
 
 msgid "Declining all tunnel requests:<br>"
-msgstr ""
+msgstr "ཀློང་གི་འཚལ་བོར་ཚང་མ་འཚལ་བོར་བཏོན་བཞིན་པ:<br>"
 
 msgid "Hidden Mode"
 msgstr "གུང་གི་མཚན་ཉིད"
 
 msgid "Declining Tunnel Requests:<br>"
-msgstr ""
+msgstr "ཀློང་གི་འཚལ་བོར་བཏོན་བཞིན་པ:<br>"
 
 msgid "High message delay"
 msgstr "བརྗོད་འགྲེལ་དྲན་པོ་ཆེ་བ"
@@ -87,13 +87,13 @@ msgid "High system load"
 msgstr "རྒྱུད་ཁོངས་ཀྱི་བཟོ་བཟོགས་ཆེ་བ"
 
 msgid "Rejecting all tunnel requests:<br>"
-msgstr ""
+msgstr "ཀློང་གི་འཚལ་བོར་ཚང་མ་ཕབ་པ:<br>"
 
 msgid "High number of requests"
 msgstr "འཚལ་བོར་གྱི་ཤོ་ཚད་ཆེ་བ"
 
 msgid "Rejecting most tunnel requests:<br>"
-msgstr ""
+msgstr "ཀློང་གི་འཚལ་བོར་གང་ཤས་ཕབ་པ:<br>"
 
 msgid "Accepting most tunnel requests"
 msgstr "ཀློང་གི་འཚལ་བོར་གང་ཤས་བཞེས་བཞིན་པ"
@@ -123,7 +123,7 @@ msgid "Dropping Tunnel Requests: High job lag"
 msgstr "ཀློང་གི་འཚལ་བོར་བཏོན་བཞིན་པ: འགོ་བཙུགས་ཀྱི་དྲན་པོ་ཆེ་བ"
 
 msgid "Dropping Tunnel Requests:<br>High CPU load"
-msgstr ""
+msgstr "ཀློང་གི་འཚལ་བོར་ཕབ་པ:<br>སྒོ་བརྒྱབ་པའི་བཟོ་བཟོགས་ཆེ་བ"
 
 msgid "Dropping Tunnel Requests: Overloaded"
 msgstr "ཀློང་གི་འཚལ་བོར་བཏོན་བཞིན་པ: བཟོ་བཟོགས་གཞན་གྱིས་བརྩིགས་པ"

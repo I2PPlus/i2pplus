@@ -111,7 +111,7 @@ msgid "Shutting down"
 msgstr "Leállítás"
 
 msgid "Restarting"
-msgstr ""
+msgstr "Újraindítás"
 
 msgid "Declining Tunnel Requests"
 msgstr "Csökkenő alagútkérések"
