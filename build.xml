@@ -972,8 +972,9 @@
       doctitle="I2P+ Javadocs [${release.number}-${i2p.build.number}${build.extra}]"
       windowtitle="Javadocs [I2P+ ${release.number}+] - API Version ${api.version}+"
       excludepackagenames="com.mpatric.mp3agic">
-      <group title="Core SDK (i2p.jar)" packages="net.i2p:net.i2p.*:net.i2p.client:net.i2p.client.*:net.i2p.internal:net.i2p.internal.*"/>
-      <group title="Core SDK Dependencies" packages="freenet.support.CPUInformation:gnu.crypto.*:gnu.getopt:gnu.gettext:com.nettgryppa.security:net.i2p.apache.http.conn.ssl:net.i2p.apache.http.conn.util:net.i2p.apache.http.util:org.json.simple:com.southernstorm.noise.crypto.x25519:com.southernstorm.noise.crypto.chacha20:org.minidns:org.minidns.*"/>
+      <group title="Core (i2p.jar)" packages="net.i2p:net.i2p.*:net.i2p.client:net.i2p.client.*:net.i2p.internal:net.i2p.internal.*"/>
+      <group title="Core Crypto" packages="net.i2p.crypto:net.i2p.crypto.*:com.southernstorm.noise.crypto.x25519:com.southernstorm.noise.crypto.chacha20"/>
+      <group title="Core Dependencies" packages="freenet.support.CPUInformation:gnu.crypto.*:gnu.getopt:gnu.gettext:com.nettgryppa.security:net.i2p.apache.http.conn.ssl:net.i2p.apache.http.conn.util:net.i2p.apache.http.util:org.json.simple:org.minidns:org.minidns.*"/>
       <group title="Streaming Library" packages="net.i2p.client.streaming:net.i2p.client.streaming.impl"/>
       <group title="Router" packages="net.i2p.router:net.i2p.router.*:net.i2p.data.i2np:net.i2p.data.router" />
       <group title="Router Dependencies" packages="org.cybergarage:org.cybergarage.*:org.freenetproject:org.xlattice.crypto.filters:com.maxmind.*:com.southernstorm.noise.*:org.bouncycastle:org.bouncycastle.*:org.apache.commons.net:org.apache.commons.net.*" />
@@ -1073,24 +1074,28 @@
     <javadoc access="package"
       source="${javac.version}"
       destdir="./build/javadoc"
-      packagenames="*"
-      excludepackagenames="com.mpatric.mp3agic"
       use="true"
-      splitindex="true"
       failonerror="false"
       charset="utf-8"
-      additionalparam="-notimestamp -quiet -Xmaxwarns 1000 -nodeprecated -nosince"
+      author="no"
+      additionalparam="-notimestamp -stylesheetFile ./javadoc.css -quiet -Xmaxwarns 1000 -nodeprecated -nosince"
       doctitle="I2P+ Javadocs [${release.number}-${i2p.build.number}${build.extra}]"
-      windowtitle="Javadocs [I2P+ ${release.number}+] - API Version ${api.version}+">
-      <group title="Core SDK (i2p.jar)" packages="net.i2p:net.i2p.*:net.i2p.client:net.i2p.client.*:net.i2p.internal:net.i2p.internal.*:freenet.support.CPUInformation:gnu.crypto.*:gnu.getopt:gnu.gettext:com.nettgryppa.security:net.i2p.apache.http.conn.ssl:net.i2p.apache.http.conn.util:net.i2p.apache.http.util:org.json.simple:com.southernstorm.noise.crypto.x25519:com.southernstorm.noise.crypto.chacha20:org.minidns:org.minidns.*"/>
-      <group title="Router Console" packages="net.i2p.router.web:net.i2p.router.web.*:net.i2p.router.update:edu.internet2.ndt:net.i2p.router.news:com.vuze.*"/>
-      <group title="Router" packages="net.i2p.router:net.i2p.router.*:net.i2p.data.i2np:net.i2p.data.router:org.cybergarage:org.cybergarage.*:org.freenetproject:org.xlattice.crypto.filters:com.maxmind.*:com.southernstorm.noise.*:org.apache.commons.net:org.apache.commons.net.*"/>
+      windowtitle="Javadocs [I2P+ ${release.number}+] - API Version ${api.version}+"
+      excludepackagenames="com.mpatric.mp3agic">
+      <group title="Core (i2p.jar)" packages="net.i2p:net.i2p.*:net.i2p.client:net.i2p.client.*:net.i2p.internal:net.i2p.internal.*"/>
+      <group title="Core Crypto" packages="net.i2p.crypto:net.i2p.crypto.*:com.southernstorm.noise.crypto.x25519:com.southernstorm.noise.crypto.chacha20"/>
+      <group title="Core Dependencies" packages="freenet.support.CPUInformation:gnu.crypto.*:gnu.getopt:gnu.gettext:com.nettgryppa.security:net.i2p.apache.http.conn.ssl:net.i2p.apache.http.conn.util:net.i2p.apache.http.util:org.json.simple:org.minidns:org.minidns.*"/>
       <group title="Streaming Library" packages="net.i2p.client.streaming:net.i2p.client.streaming.impl"/>
+      <group title="Router" packages="net.i2p.router:net.i2p.router.*:net.i2p.data.i2np:net.i2p.data.router" />
+      <group title="Router Dependencies" packages="org.cybergarage:org.cybergarage.*:org.freenetproject:org.xlattice.crypto.filters:com.maxmind.*:com.southernstorm.noise.*:org.bouncycastle:org.bouncycastle.*:org.apache.commons.net:org.apache.commons.net.*" />
+      <group title="Router Console" packages="net.i2p.router.web:net.i2p.router.web.*:net.i2p.router.update:net.i2p.router.news"/>
+      <group title="Router Console Dependencies" packages="edu.internet2.ndt:com.vuze.*"/>
       <!-- apps and bridges starting here, alphabetical please -->
       <group title="Addressbook Application" packages="net.i2p.addressbook:net.i2p.router.naming:net.metanotion:net.metanotion.*"/>
       <group title="Desktopgui Application" packages="net.i2p.desktopgui:net.i2p.desktopgui.*"/>
       <group title="I2PControl Application" packages="net.i2p.i2pcontrol:net.i2p.i2pcontrol.*:org.mindrot.jbcrypt:com.thetransactioncompany.jsonrpc2:com.thetransactioncompany.jsonrpc2.*"/>
       <group title="I2PSnark Application" packages="org.klomp.snark:org.klomp.snark.*"/>
+      <group title="I2PSnark Dependencies" packages="com.mpatric:com.mpatric.*"/>
       <group title="I2PTunnel Application" packages="net.i2p.i2ptunnel:net.i2p.i2ptunnel.*"/>
       <group title="Imagegen Application" packages="com.docuverse.identicon:com.google.zxing:com.google.zxing.*:net.i2p.imagegen"/>
       <group title="Installer Utilities" packages="net.i2p.installer"/>
@@ -1187,7 +1192,7 @@
       splitindex="true"
       doctitle="I2P Unit Test Javadocs for Release ${release.number} Build ${i2p.build.number}${build.extra}"
       windowtitle="I2P Anonymous Network - Java Documentation - Version ${release.number}">
-      <group title="Core SDK" packages="net.i2p:net.i2p.*:net.i2p.client:net.i2p.client.*:net.i2p.internal:net.i2p.internal.*:freenet.support.CPUInformation:gnu.crypto.*:gnu.gettext:org:com.nettgryppa.security:net.metanotion:net.metanotion.*"/>
+      <group title="Core" packages="net.i2p:net.i2p.*:net.i2p.client:net.i2p.client.*:net.i2p.internal:net.i2p.internal.*:freenet.support.CPUInformation:gnu.crypto.*:gnu.gettext:org:com.nettgryppa.security:net.metanotion:net.metanotion.*"/>
       <group title="Router" packages="net.i2p.router:net.i2p.router.*:net.i2p.data.i2np:org.cybergarage.*:org.freenetproject:org.xlattice.crypto.filters:org.apache.commons.net:org.apache.commons.net.*"/>
       <sourcepath>
         <pathelement location="core/java/test/junit"/>
