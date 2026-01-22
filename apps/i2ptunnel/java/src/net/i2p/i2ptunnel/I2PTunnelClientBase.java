@@ -3,18 +3,6 @@
  */
 package net.i2p.i2ptunnel;
 
-/**
- * Abstract base class for I2P client tunnels with common functionality.
- * <p>
- * Manages I2PSocketManager creation, local server socket setup,
- * connection threading, and framework for shared and non-shared client tunnels.
- * Handles SSL configuration, connection timeouts, and provides abstract methods
- * for connection-specific implementations.
- * <p>
- * Extended by specific tunnel types like HTTP clients, SOCKS proxies,
- * and standard TCP tunnels.
- */
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -50,7 +38,17 @@ import net.i2p.util.I2PAppThread;
 import net.i2p.util.I2PSSLSocketFactory;
 import net.i2p.util.Log;
 
-/** Base class for I2P tunnel clients providing common functionality */
+/**
+ * Abstract base class for I2P client tunnels with common functionality.
+ * <p>
+ * Manages I2PSocketManager creation, local server socket setup,
+ * connection threading, and framework for shared and non-shared client tunnels.
+ * Handles SSL configuration, connection timeouts, and provides abstract methods
+ * for connection-specific implementations.
+ * <p>
+ * Extended by specific tunnel types like HTTP clients, SOCKS proxies,
+ * and standard TCP tunnels.
+ */
 public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runnable {
 
     protected final Log _log;
@@ -446,10 +444,9 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                     String exmsg = ise.getMessage();
                     boolean fail = !_buildingTunnels || (exmsg != null && exmsg.toLowerCase().contains("session limit exceeded"));
                     if (!fail && ++retries < MAX_RETRIES) {
-                        String retryMsg = msg + " -> Retrying in " + (RETRY_DELAY / 1000) + "s [" +
-                                          retries + " / " + MAX_RETRIES + "]";
+                        String retryMsg = msg + " -> Retrying in " + (RETRY_DELAY / 1000) + "s [" + retries + " / " + MAX_RETRIES + "]";
                         if (log != null) {log.log(retryMsg);}
-                        if (_log.shouldError()) {_log.error(retryMsg);}
+                        if (_log.shouldWarn()) {_log.warn(retryMsg);}
                     } else {
                         String failMsg = msg + " -> All attempts failed";
                         if (log != null) {log.log(failMsg);}
@@ -468,9 +465,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
         }
     }
 
-    public final int getLocalPort() {
-        return localPort;
-    }
+    public final int getLocalPort() {return localPort;}
 
     protected final InetAddress getListenHost(Logging l) {
         I2PTunnel t = getTunnel();
@@ -755,7 +750,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
             if (open) {
                 String address = addr.toString().replace("/", "");
                 String msg = ex.getMessage().toString().replace("java.net.BindException: ", "");
-                msg = msg.replace("Address already used", "Address in use - ensure you only have one instance of I2P running");
+                msg = msg.replace("Address already used", "Address in use -> Ensure you only have one instance of I2P running");
                 _log.error("Error listening for connections on " + address + ":" + localPort + " -> " + ex.getMessage());
                 l.log("✖ Error listening for connections on " + address + ":" + localPort + " -> " + msg);
                 notifyEvent("openBaseClientResult", "error");
