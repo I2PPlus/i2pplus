@@ -291,7 +291,7 @@ class OutboundEstablishState {
     public synchronized long getReceivedSignedOnTime() { return _receivedSignedOnTime; }
     public synchronized byte[] getReceivedIP() { return _aliceIP; }
     public synchronized int getReceivedPort() { return _alicePort; }
-    
+
     /** note that we just sent the SessionConfirmed packet */
     public synchronized void confirmedPacketsSent() {
         _lastSend = _context.clock().now();

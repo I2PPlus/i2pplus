@@ -67,7 +67,7 @@ public class IndexBean {
     private int _msgID = -1;
     private final TunnelConfig _config;
     private boolean _removeConfirmed;
-    
+
     private int _certType;
     private String _certSigner;
 
@@ -1435,7 +1435,7 @@ public class IndexBean {
         }
     }
 
-    
+
 
     public void setCert(String val) {
         if (val != null) {

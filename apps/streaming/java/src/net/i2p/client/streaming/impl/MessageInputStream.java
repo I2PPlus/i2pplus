@@ -58,7 +58,7 @@ class MessageInputStream extends InputStream {
      * Helps prevent unnecessary buffering limits on slow systems.
      */
     private static final int MIN_READY_BUFFERS = SystemVersion.isSlow() ? 128 : 1024;
-    
+
     /**
      * Maximum number of packets to buffer regardless of byte size.
      * Prevents excessive memory usage with small packets while allowing
@@ -104,7 +104,7 @@ class MessageInputStream extends InputStream {
     public MessageInputStream(I2PAppContext ctx, int maxMessageSize, int maxWindowSize, int maxBufferSize) {
         this(ctx, maxMessageSize, maxWindowSize, maxBufferSize, MAX_PACKET_COUNT);
     }
-    
+
     /**
      * Constructs a new MessageInputStream with the specified buffer limits.
      *

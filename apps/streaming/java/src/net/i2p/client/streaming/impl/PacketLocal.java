@@ -393,7 +393,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
     }
 
     private synchronized boolean isCancelled() { return _cancelledOn > 0; }
-    
+
     public synchronized boolean writeAccepted() { return _acceptedOn > 0 && _cancelledOn <= 0; }
     public synchronized boolean writeFailed() { return _cancelledOn > 0; }
     public synchronized boolean writeSuccessful() { return _ackOn > 0 && _cancelledOn <= 0; }

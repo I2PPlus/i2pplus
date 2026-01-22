@@ -653,7 +653,7 @@ public class TunnelConfig {
         if (s != null)
             _otherOptions.put(I2PSOCKSTunnel.PROP_OUTPROXY_TYPE, s.trim());
     }
-    
+
     /**
      * all of these are @since 0.8.3 (moved from IndexBean)
      */

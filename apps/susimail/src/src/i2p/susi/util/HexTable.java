@@ -33,7 +33,7 @@ public class HexTable {
      *  WARNING: This array is public for backward compatibility but should be treated as immutable
      */
     public static final String[] table = new String[256];
-    
+
     static {
         for(int i = 0; i < 256; i++) {
             String str = intToHex(i);

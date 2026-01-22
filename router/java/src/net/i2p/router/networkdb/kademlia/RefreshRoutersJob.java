@@ -36,7 +36,7 @@ class RefreshRoutersJob extends JobImpl {
 
     private static final String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
     private static final boolean DEFAULT_SHOULD_DISCONNECT = false;
-    
+
     // Shared Random instance for efficient random number generation
     private static final Random _random = new Random();
 

@@ -63,9 +63,9 @@ public class VerifiedDestination extends Destination {
         return verifyUnknownCert();
     }
 
-    
 
-    
+
+
 
     /** Defaults for Signed Certs */
     public final static int CERTIFICATE_LENGTH_SIGNED = Signature.SIGNATURE_BYTES;

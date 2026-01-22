@@ -56,7 +56,7 @@ public class NullPrintStream extends PrintStream {
         // Use UTF-8 charset for consistency, though we are not actually writing.
         super(createPrintStream());
     }
-    
+
     private static PrintStream createPrintStream() {
         try {
             return new PrintStream(NullOutputStream.INSTANCE, false, StandardCharsets.UTF_8.name());

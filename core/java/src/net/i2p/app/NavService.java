@@ -7,7 +7,7 @@ package net.i2p.app;
  *  @since 0.9.56 adapted from console NavHelper
  */
 public interface NavService {
-    
+
     /**
      * To register a new client application so that it shows up on the router
      * console's nav bar, it should be registered with this singleton. 
