@@ -47,7 +47,7 @@ import net.i2p.util.Translate;
 
 /**
  * Sybil attack analysis implementation.
- *  @since 0.9.38 split out from SybilRenderer
+ * @since 0.9.38 split out from SybilRenderer
  */
 public class Analysis extends JobImpl implements RouterApp, Runnable {
 
@@ -61,7 +61,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     private final List<String> _familyExemptPoints24 = new ArrayList<String>(2);
 
     /**
-     *  The name we register with the ClientAppManager
+     *  The name we register with the ClientAppManager.
      */
     public static final String APP_NAME = "Sybil Scan";
     public static final String PROP_FREQUENCY = "router.sybilFrequency";
@@ -95,32 +95,24 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     private static final double POINTS_FAMILY = -20.0;
     private static final double POINTS_FAMILY_VERIFIED = POINTS_FAMILY * 10;
     private static final double POINTS_NONFF = -5.0;
-//    private static final double POINTS_BAD_FAMILY = 20.0;
     private static final double POINTS_BAD_FAMILY = 75.0;
     private static final double POINTS_BAD_OUR_FAMILY = 100.0;
     private static final double POINTS_OUR_FAMILY = -100.0;
-//    private static final double POINTS_BAD_VERSION = 20.0;
     private static final double POINTS_BAD_VERSION = 30.0;
-//    private static final double POINTS_UNREACHABLE = 4.0;
     private static final double POINTS_UNREACHABLE = 10.0;
     private static final double POINTS_NEW = 4.0;
     // since we're blocking by default now, don't make this too high,
     // so we don't always turn a temporary block into a permanent one.
-//    private static final double POINTS_BANLIST = 10.0;
     private static final double POINTS_BANLIST = 5.0;
 
     public static final double MIN_CLOSE = 242.0;
     private static final double PAIR_DISTANCE_FACTOR = 2.0;
     private static final double OUR_KEY_FACTOR = 4.0;
-//    private static final double VERSION_FACTOR = 1.0;
     private static final double VERSION_FACTOR = 2.0;
 
     public static final boolean DEFAULT_BLOCK = true;
     public static final double DEFAULT_BLOCK_THRESHOLD = 35.0;
-//    public static final long DEFAULT_BLOCK_TIME = 7*24*60*60*1000L;
     public static final long DEFAULT_BLOCK_TIME = 24*60*60*1000L;
-//    public static final long DEFAULT_REMOVE_TIME = 10*24*60*60*1000L;
-//    public static final long SHORT_REMOVE_TIME = 2*24*60*60*1000L;
     public static final long DEFAULT_REMOVE_TIME = 24*60*60*1000L;
     public static final long SHORT_REMOVE_TIME = 12*60*60*1000L;
     public static final float MIN_BLOCK_POINTS = 12.01f;
@@ -159,6 +151,11 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
         return rv;
     }
 
+    /**
+     *  Gets the persistence handler for storing and retrieving Sybil analysis data.
+     *
+     *  @return the PersistSybil instance used by this analysis
+     */
     public PersistSybil getPersister() { return _persister; }
 
     /**
@@ -207,6 +204,8 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     }
 
     /**
+     *  Executes the background Sybil analysis, stores results, and removes old data.
+     *
      *  @since 0.9.58
      */
     public void run() {
@@ -229,7 +228,9 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     /////// begin ClientApp methods
 
     /**
-     *  ClientApp interface
+     *  Initializes and starts the Sybil analysis service.
+     *  Registers with the ClientAppManager, loads persisted blocklist data,
+     *  and schedules the first analysis run.
      */
     public synchronized void startup() {
         changeState(STARTING);
@@ -244,8 +245,9 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     }
 
     /**
-     *  ClientApp interface
-     *  @param args ignored
+     *  Stops the Sybil analysis service and changes state to STOPPED.
+     *
+     *  @param args ignored (required by interface)
      */
     public synchronized void shutdown(String[] args) {
         if (_state == STOPPED)
@@ -254,14 +256,29 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
         changeState(STOPPED);
     }
 
+    /**
+     *  Gets the current state of this application.
+     *
+     *  @return the current ClientAppState
+     */
     public ClientAppState getState() {
         return _state;
     }
 
+    /**
+     *  Gets the application name.
+     *
+     *  @return the constant APP_NAME
+     */
     public String getName() {
         return APP_NAME;
     }
 
+    /**
+     *  Gets the display name for this application.
+     *
+     *  @return "Sybil Analyzer"
+     */
     public String getDisplayName() {
         return "Sybil Analyzer";
     }
@@ -274,6 +291,10 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
             _cmgr.notify(this, state, null, null);
     }
 
+    /**
+     *  Schedules the next Sybil analysis run based on configured frequency,
+     *  router uptime, and previous run time.
+     */
     public synchronized void schedule() {
         long freq = _context.getProperty(PROP_FREQUENCY, DEFAULT_FREQUENCY);
         if (freq > 0) {
@@ -309,27 +330,6 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
         }
     }
 
-    /**
-     *  Merge points1 into points2.
-     *  points1 is unmodified.
-     */
-/****
-    private void mergePoints(Map<Hash, Points> points1, Map<Hash, Points> points2) {
-        for (Map.Entry<Hash, Points> e : points1.entrySet()) {
-             Hash h = e.getKey();
-             Points p1 = e.getValue();
-             Points p2 = points2.get(h);
-             if (p2 != null) {
-                 p2.points += p1.points;
-                 p2.reasons.addAll(p1.reasons);
-             } else {
-                 points2.put(h, p1);
-             }
-        }
-    }
-****/
-
-    /** */
     private void addPoints(Map<Hash, Points> points, Hash h, double d, String reason) {
         Points dd = points.get(h);
         if (dd != null) {
@@ -376,6 +376,13 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
         return ris;
     }
 
+    /**
+     *  Calculates the average minimum distance from 200 random routing keys
+     *  to the closest router in the provided list.
+     *
+     *  @param ris the list of router infos to analyze
+     *  @return the average minimum distance in logarithmic scale (base 2)
+     */
     public double getAvgMinDist(List<RouterInfo> ris) {
         double tot = 0;
         int count = 200;
@@ -417,14 +424,6 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
         // unused here, just for the console, so use the same for all of them
         List<RouterInfo> dummy = new DummyList();
         calculateIPGroupsUs(ris, points, dummy, dummy, dummy, dummy, dummy);
-        //calculateIPGroups32(ris, points);
-        //calculateIPGroups24(ris, points);
-        //calculateIPGroups16(ris, points);
-        //calculateIPGroups64(ris, points);
-        //calculateIPGroups48(ris, points);
-
-        // Pairwise distance analysis
-        // O(n**2)
         long sz = ris.size();
         if (sz * sz < SystemVersion.getMaxMemory() / 10) {
             List<Pair> pairs = new ArrayList<Pair>(PAIRMAX);
@@ -506,13 +505,10 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
                     }
                 }
                 String reason = " <b>➜</b> " + day + ": Sybil Scan (" + fmt.format(p).replace(".00", "") + " points)";
-                if (_log.shouldWarn()) {
-                    if (ri != null)
-                        _log.warn("Banning " + reason.replace("<b>➜</b>", "->") + " Blocked IP Address(es) \n* " + ri);
-                    else
-                        _log.warn("Banning " + h.toBase64() + ' ' + reason.replace("<b>➜</b>", "->"));
-                }
                 _context.banlist().banlistRouter(h, reason, null, null, blockUntil);
+                if (_log.shouldWarn()) {
+                    _log.warn("Banning " + h.toBase64() + "-> Sybil Scan (" + fmt.format(p).replace(".00", "") + " points)");
+                }
             }
         }
         if (!blocks.isEmpty())
@@ -830,6 +826,11 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     }
 
     /**
+     *  Categorize routers by their /16 subnet to identify routers in the same /16 network.
+     *
+     *  @param ris the list of router infos to analyze
+     *  @param points map to accumulate sybil points
+     *  @return map of /16 network (as Integer) to list of routers in that network
      *  @since 0.9.38 split out from renderIPGroups16()
      */
     public Map<Integer, List<RouterInfo>> calculateIPGroups16(List<RouterInfo> ris, Map<Hash, Points> points) {
@@ -873,6 +874,11 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     }
 
     /**
+     *  Categorize routers by their IPv6 /64 subnet to identify routers in the same /64 network.
+     *
+     *  @param ris the list of router infos to analyze
+     *  @param points map to accumulate sybil points
+     *  @return map of IPv6 /64 network (as Long) to list of routers in that network
      *  @since 0.9.57
      */
     public Map<Long, List<RouterInfo>> calculateIPGroups64(List<RouterInfo> ris, Map<Hash, Points> points) {
@@ -938,6 +944,11 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     }
 
     /**
+     *  Categorize routers by their IPv6 /48 subnet to identify routers in the same /48 network.
+     *
+     *  @param ris the list of router infos to analyze
+     *  @param points map to accumulate sybil points
+     *  @return map of IPv6 /48 network (as Long) to list of routers in that network
      *  @since 0.9.57
      */
     public Map<Long, List<RouterInfo>> calculateIPGroups48(List<RouterInfo> ris, Map<Hash, Points> points) {
@@ -996,6 +1007,11 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     }
 
     /**
+     *  Categorize routers by their router family to identify routers in the same family.
+     *  Routers in verified families receive fewer points.
+     *
+     *  @param ris the list of router infos to analyze
+     *  @param points map to accumulate sybil points
      *  @return map of family name to list of routers in that family
      *  @since 0.9.38 split out from renderIPGroupsFamily()
      */
@@ -1026,10 +1042,12 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
                     if (s.equals(ourFamily)) {
                         if (fkc.verifyOurFamily(info)) {
                             point = POINTS_OUR_FAMILY;
-                            reason = "Our family \"" + ss + "\" with <a href=\"/netdb?fam=" + ss + "&amp;sybil\">" + (count - 1) + " other" + (( count > 2) ? "s" : "") + "</a>";
+                            reason = "Our family \"" + ss + "\" with <a href=\"/netdb?fam=" + ss + "&amp;sybil\">" + (count - 1) +
+                                     " other" + (( count > 2) ? "s" : "") + "</a>";
                         } else {
                             point = POINTS_BAD_OUR_FAMILY;
-                            reason = "Spoofed our family \"" + ss + "\" with <a href=\"/netdb?fam=" + ss + "&amp;sybil\">" + (count - 1) + " other" + (( count > 2) ? "s" : "") + "</a>";
+                            reason = "Spoofed our family \"" + ss + "\" with <a href=\"/netdb?fam=" + ss + "&amp;sybil\">" + (count - 1) +
+                                     " other" + (( count > 2) ? "s" : "") + "</a>";
                         }
                     } else {
                         FamilyKeyCrypto.Result r = fkc.verify(info);
@@ -1045,7 +1063,8 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
                             case STORED_KEY:
                                 point = POINTS_FAMILY_VERIFIED;
                                 if (count > 1)
-                                    reason = "In verified family \"" + ss + "\" with <a href=\"/netdb?fam=" + ss + "&amp;sybil\">" + (count - 1) + " other" + (( count > 2) ? "s" : "") + "</a>";
+                                    reason = "In verified family \"" + ss + "\" with <a href=\"/netdb?fam=" + ss + "&amp;sybil\">" + (count - 1) +
+                                             " other" + (( count > 2) ? "s" : "") + "</a>";
                                 else
                                     reason = "In verified family \"" + ss + '"';
                                 break;
@@ -1059,7 +1078,8 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
                             default:
                                 point = POINTS_FAMILY;
                                 if (count > 1)
-                                    reason = "In unverified family \"" + ss + "\" with <a href=\"/netdb?fam=" + ss + "&amp;sybil\">" + (count - 1) + " other" + (( count > 2) ? "s" : "") + "</a>";
+                                    reason = "In unverified family \"" + ss + "\" with <a href=\"/netdb?fam=" + ss + "&amp;sybil\">" + (count - 1) +
+                                             " other" + (( count > 2) ? "s" : "") + "</a>";
                                 else
                                     reason = "In unverified family \"" + ss + '"';
                                 break;
@@ -1067,7 +1087,8 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
                     }
                 } else if (count > 1) {
                     point = POINTS_FAMILY;
-                    reason = "In unverified family \"" + ss + "\" with <a href=\"/netdb?fam=" + ss + "&amp;sybil\">" + (count - 1) + " other" + (( count > 2) ? "s" : "") + "</a>";
+                    reason = "In unverified family \"" + ss + "\" with <a href=\"/netdb?fam=" + ss + "&amp;sybil\">" + (count - 1) +
+                             " other" + (( count > 2) ? "s" : "") + "</a>";
                 } else {
                     point = POINTS_FAMILY;
                     reason = "In unverified family \"" + ss + '"';
@@ -1080,6 +1101,13 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
 
     private static final long DAY = 24*60*60*1000L;
 
+    /**
+     *  Analyzes router profiles and adds Sybil points for banlisted, newly observed,
+     *  or poorly performing routers.
+     *
+     *  @param ris the list of router infos to analyze
+     *  @param points map to accumulate sybil points
+     */
     public void addProfilePoints(List<RouterInfo> ris, Map<Hash, Points> points) {
         Map<Hash, Banlist.Entry> banEntries = _context.banlist().getEntries();
         long now = _context.clock().now();
@@ -1091,7 +1119,6 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
                 Banlist.Entry entry = banEntries.get(h);
                 if (entry != null) {
                     if (entry.cause != null) {
-//                        buf.append(": ");
                         if (entry.causeCode != null)
                             buf.append(_t(entry.cause, entry.causeCode));
                         else
@@ -1134,6 +1161,13 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
         }
     }
 
+    /**
+     *  Analyzes router versions and adds Sybil points for old, unreachable,
+     *  or non-floodfill routers.
+     *
+     *  @param ris the list of router infos to analyze
+     *  @param points map to accumulate sybil points
+     */
     public void addVersionPoints(List<RouterInfo> ris, Map<Hash, Points> points) {
         RouterInfo us = _context.router().getRouterInfo();
         if (us == null) return;
@@ -1217,7 +1251,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     }
 
     /**
-     *  translate a string with a parameter
+     *  Translate a string with a parameter
      *  This is a lot more expensive than _t(s), so use sparingly.
      *
      *  @param s string to be translated containing {0}
