@@ -475,7 +475,6 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 } else {prepareOutbound2();} // Write msg 2
                 return;
             }
-            return;
         }
 
         // Delayed fail for probing resistance
