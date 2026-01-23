@@ -35,15 +35,15 @@ class ParticipatingThrottler {
     private static final String PROP_BLOCK_OLD_ROUTERS = "router.blockOldRouters";
     private static final String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
     private static final String PROP_SHOULD_THROTTLE = "router.enableTransitThrottle";
-    // Increased from 3 to 5 for more stable throttling (cleanup every ~6 min vs ~3.3 min)
-    // Prevents peers from temporarily exceeding limits between cleanups
-    private static final int LIFETIME_PORTION = 5; // portion of tunnel lifetime
-    private static final int MIN_LIMIT = (isSlow ? 100 : 150) / LIFETIME_PORTION;
-    private static final int MAX_LIMIT = (isSlow ? 1200 : 1800) / LIFETIME_PORTION;
-    // Increased from 21 to 35 to increase per-peer limits from ~7% to ~11%
-    // This allows high-bandwidth routers to participate in more transit tunnels
-    private static final int PERCENT_LIMIT = 35 / LIFETIME_PORTION;
-    private static final long CLEAN_TIME = 11 * 60 * 1000 / LIFETIME_PORTION;
+
+    // Minimum tunnels per peer - prevents decay floor from being too aggressive at low counts
+    private static final int MIN_LIMIT = isSlow ? 40 : 80;
+    // Maximum tunnels per peer - caps individual peer participation
+    private static final int MAX_LIMIT = isSlow ? 150 : 300;
+    // Percentage-based limit for fast peers - ~10% of total tunnels
+    private static final int PERCENT_LIMIT = 10;
+    // Cleanup interval in ms - 90 seconds
+    private static final long CLEAN_TIME = 90 * 1000;
     private static final String MIN_VERSION = "0.9.64";
 
     /**
@@ -280,7 +280,7 @@ class ParticipatingThrottler {
         if (_log.shouldWarn()) {
             _log.warn("Banning Router [" + h.toBase64().substring(0,6) + "] for " + (bantime / 60000) +
                       "m -> Excessive tunnel requests -> Count / Limit: " +
-                      count + " / " + limit + " in " + 11 * 60 / LIFETIME_PORTION + "s");
+                      count + " / " + limit + " in 90s");
         }
     }
 
@@ -289,7 +289,7 @@ class ParticipatingThrottler {
         if (_log.shouldWarn()) {
             _log.warn("Rejecting Tunnel Requests from " + (caps != null ? caps : "") +
                       " Router [" + h.toBase64().substring(0,6) + "] -> Count / Limit: " +
-                      count + " / " + limit + " in " + 11 * 60 / LIFETIME_PORTION + "s");
+                      count + " / " + limit + " in 90s");
         }
     }
 
@@ -297,7 +297,7 @@ class ParticipatingThrottler {
     private void _logAcceptRequest(String caps, int count) {
         if (_log.shouldDebug()) {
             _log.debug("Accepting Tunnel Request from " + (caps != "" ? caps : "") +
-                       " Router -> Count: " + count + " in " + 11 * 60 / LIFETIME_PORTION + "s");
+                       " Router -> Count: " + count + " in 90s");
         }
     }
 

@@ -779,12 +779,12 @@ public class TunnelDispatcher implements Service {
             // Scale expiration more gradually with tunnel count to reduce churn
             // High tunnel counts expire faster to maintain pool health
             int count = getParticipatingCount();
-            if (count > 4000) {nextTime = now + 60 * 1000;}      // 4000+: 1 min
-            else if (count > 2500) {nextTime = now + 90 * 1000;}    // 2500-4000: 1.5 min
-            else if (count > 1500) {nextTime = now + 120 * 1000;}   // 1500-2500: 2 min
-            else if (count > 1000) {nextTime = now + 180 * 1000;}   // 1000-1500: 3 min
-            else if (count > 750) {nextTime = now + 240 * 1000;}    // 750-1000: 4 min
-            else if (count > 500) {nextTime = now + 300 * 1000;}    // 500-750: 5 min
+            if (count > 4000) {nextTime = now + 60 * 1000;}          // 4000+: 1 min
+            else if (count > 2500) {nextTime = now + 90 * 1000;}     // 2500-4000: 1.5 min
+            else if (count > 1500) {nextTime = now + 120 * 1000;}    // 1500-2500: 2 min
+            else if (count > 1000) {nextTime = now + 180 * 1000;}    // 1000-1500: 3 min
+            else if (count > 750) {nextTime = now + 240 * 1000;}     // 750-1000: 4 min
+            else if (count > 500) {nextTime = now + 300 * 1000;}     // 500-750: 5 min
             else {nextTime = now + 600 * 1000;}                      // 0-500: 10 min
 
             while (true) {
