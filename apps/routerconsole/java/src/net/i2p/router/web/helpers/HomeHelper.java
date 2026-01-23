@@ -137,7 +137,6 @@ public class HomeHelper extends HelperBase {
         //"teddit" + S + _x("Alternative privacy-focused front-end for Reddit") + S + "http://teddit.ls.i2p/" + S + I + "eepsites/teddit.svg" + S +
 
 // hosting + other services
-        "ArduLLM" + S + _x("AI Image generation & Chat hub") + S + "http://ardullm.i2p/" + S + I + "eepsites/ardullm.webp" + S +
         "major.i2p" + S + _x("IRC Logs for multiple networks") + S + "http://major.i2p/" + S + I + "eepsites/major.svg" + S +
         _x("Pastebin") + S + _x("Encrypted I2P Pastebin") + S + "http://paste.r4sas.i2p/" + S + I + "paste.svg" + S +
         "qwik.i2p" + S + _x("Landing page for various services") + S + "http://qwik.i2p/" + S + I + "eepsites/qwik.svg" + S +
@@ -145,6 +144,7 @@ public class HomeHelper extends HelperBase {
         "stormycloud.i2p" + S + _x("Privacy-focused not-for-profit organization") + S + "http://stormycloud.i2p/" + S + I + "eepsites/stormycloud.svg" + S +
         _x("translate") + S + _x("Text translation engine") + S + "http://translate.i2p/" + S + I + "eepsites/translate.svg" + S +
         "incognet.i2p" + S + _x("Provider of privacy respecting web hosting and VPN services") + S + "http://incognet.i2p/" + S + I + "eepsites/incog.svg" + S +
+        //"ArduLLM" + S + _x("AI Image generation & Chat hub") + S + "http://ardullm.i2p/" + S + I + "eepsites/ardullm.webp" + S +
         //"base64-image.i2p" + S + _x("Base64 Image Encoder") + S + "http://base64-image.i2p/" + S + I + "eepsites/base64-image.svg" + S +
         //"imageproxy.i2p" + S + _x("An image cache and resize service") + S + "http://imageproxy.i2p/" + S + I + "eepsites/imageproxy.svg" + S +
         //"rimgo" + S + _x("Alternative frontend for Imgur") + S + "http://rimgo.ls.i2p/" + S + I + "eepsites/imageproxy.svg" + S +
