@@ -1174,11 +1174,11 @@
   </target>
 
   <target name="javadoc-zip" depends="javadoc">
-    <zip destfile="dist/javadoc.zip" basedir="." level="9" includes="dist/javadoc\**"/>
+    <zip destfile="dist/javadoc.zip" basedir="dist" level="9" includes="javadoc\**"/>
   </target>
 
   <target name="javadoc-zip-nostylesheet" depends="javadoc-nostylesheet">
-    <zip destfile="dist/javadoc.zip" basedir="." level="9" includes="dist/javadoc\**"/>
+    <zip destfile="dist/javadoc.zip" basedir="dist" level="9" includes="javadoc\**"/>
   </target>
 
   <target name="javadoc-test" depends="buildRouter, javadoc">
