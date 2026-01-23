@@ -88,8 +88,12 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
     private int _msg3p2FailReason = -1;
     /** Temporary buffer for receiving message 3 */
     private ByteArray _msg3tmp;
+    /** Cached payload buffer for message 3 processing to reduce pool overhead */
+    private ByteArray _payloadTmp;
     /** Alice's negotiated options from message 3 */
     private NTCP2Options _hisPadding;
+    /** Reusable options array for message 1 processing to eliminate per-call allocation */
+    private final byte[] _options1 = new byte[OPTIONS1_SIZE];
 
     /** Buffer size for reading data phase packets (16 KB), same as I2PTunnelRunner */
     private static final int BUFFER_SIZE = 16*1024;
@@ -123,6 +127,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         _sz_aliceIdent_tsA_padding_aliceSig = new ByteArrayOutputStream(512);
         _prevEncrypted = SimpleByteCache.acquire(AES_SIZE);
         _curEncrypted = SimpleByteCache.acquire(AES_SIZE);
+        _payloadTmp = null; // Will be acquired when needed
     }
 
     /**
@@ -343,8 +348,9 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      * @param src the ByteBuffer containing received data
      * @since 0.9.36
      */
-    private synchronized void receiveInboundNTCP2(ByteBuffer src) {
-        if (_state == State.IB_NTCP2_INIT && src.hasRemaining()) {
+    private void receiveInboundNTCP2(ByteBuffer src) {
+        if (_state == State.IB_NTCP2_INIT) {
+            if (!src.hasRemaining()) {return;}
             // use _X for the buffer
             int toGet = Math.min(src.remaining(), MSG1_SIZE - _received);
             src.get(_X, _received, toGet);
@@ -389,11 +395,10 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             catch (GeneralSecurityException gse) {throw new IllegalStateException("Bad protocol", gse);}
             _handshakeState.getLocalKeyPair().setKeys(_transport.getNTCP2StaticPrivkey(), 0,
                                                       _transport.getNTCP2StaticPubkey(), 0);
-            byte options[] = new byte[OPTIONS1_SIZE];
             try {
                 _handshakeState.start();
                 if (_log.shouldDebug()) {_log.debug("After start: " + _handshakeState.toString());}
-                _handshakeState.readMessage(_X, 0, MSG1_SIZE, options, 0);
+                _handshakeState.readMessage(_X, 0, MSG1_SIZE, _options1, 0);
             } catch (GeneralSecurityException gse) {
                 boolean gseNotNull = gse.getMessage() != null && gse.getMessage() != "null";
                 // Read a random number of bytes, store wanted in _padlen1
@@ -423,13 +428,13 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             if (_log.shouldDebug()) {
                 _log.debug("After Establishment handshake message #1: " + _handshakeState.toString());
             }
-            int v = options[1] & 0xff;
+            int v = _options1[1] & 0xff;
             if (v != NTCPTransport.NTCP2_INT_VERSION) {
                 fail("BAD version: " + v);
                 return;
             }
             // network ID cross-check, proposal 147, as of 0.9.42
-            v = options[0] & 0xff;
+            v = _options1[0] & 0xff;
             if (v != 0 && v != _context.router().getNetworkID()) {
                 byte[] ip = _con.getRemoteIP();
                 if (ip != null) {
@@ -442,9 +447,9 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 fail("BAD NetworkId: " + v);
                 return;
             }
-            _padlen1 = (int) DataHelper.fromLong(options, 2, 2);
-            _msg3p2len = (int) DataHelper.fromLong(options, 4, 2);
-            long tsA = DataHelper.fromLong(options, 8, 4);
+            _padlen1 = (int) DataHelper.fromLong(_options1, 2, 2);
+            _msg3p2len = (int) DataHelper.fromLong(_options1, 4, 2);
+            long tsA = DataHelper.fromLong(_options1, 8, 4);
             long now = _context.clock().now();
             // Will be adjusted for RTT in verifyInbound()
             _peerSkew = (now - (tsA * 1000) + 500) / 1000;
@@ -478,7 +483,8 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         }
 
         // Delayed fail for probing resistance
-        if (_state == State.IB_NTCP2_READ_RANDOM && src.hasRemaining()) {
+        if (_state == State.IB_NTCP2_READ_RANDOM) {
+            if (!src.hasRemaining()) {return;}
             _received += src.remaining(); // Read more bytes before failing
             if (_received < _padlen1) {
                 if (_log.shouldWarn()) {
@@ -491,7 +497,8 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             return;
         }
 
-        if (_state == State.IB_NTCP2_GOT_X && src.hasRemaining()) {
+        if (_state == State.IB_NTCP2_GOT_X) {
+            if (!src.hasRemaining()) {return;}
             // Skip this if _padlen1 == 0; use _X for the buffer
             int toGet = Math.min(src.remaining(), _padlen1 - _received);
             src.get(_X, _received, toGet);
@@ -510,7 +517,8 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             return;
         }
 
-        if (_state == State.IB_NTCP2_SENT_Y && src.hasRemaining()) {
+        if (_state == State.IB_NTCP2_SENT_Y) {
+            if (!src.hasRemaining()) {return;}
             int msg3tot = MSG3P1_SIZE + _msg3p2len;
             if (_msg3tmp == null) {_msg3tmp = _dataReadBufs.acquire();}
             // use _X for the buffer FIXME too small
@@ -521,16 +529,14 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             if (_received < msg3tot) {return;}
             changeState(State.IB_NTCP2_GOT_RI);
             _received = 0;
-            ByteArray ptmp = _dataReadBufs.acquire();
-            byte[] payload = ptmp.getData();
+            if (_payloadTmp == null) {_payloadTmp = _dataReadBufs.acquire();}
+            byte[] payload = _payloadTmp.getData();
             try {_handshakeState.readMessage(tmp, 0, msg3tot, payload, 0);}
             catch (GeneralSecurityException gse) {
                 // TODO delayed failure per spec, as in NTCPConnection.delayedClose()
-                _dataReadBufs.release(ptmp, false);
                 fail("BAD Establishment handshake message #3, part 1 is:\n" + net.i2p.util.HexDump.dump(tmp, 0, MSG3P1_SIZE), gse);
                 return;
             } catch (RuntimeException re) {
-                _dataReadBufs.release(ptmp, false);
                 fail("BAD Establishment handshake message #3", re);
                 return;
             }
@@ -567,7 +573,9 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 }
                 // setDataPhase() will send termination
                 if (_msg3p2FailReason < 0) {_msg3p2FailReason = 0;}
-            } finally {_dataReadBufs.release(ptmp, false);}
+            } finally {
+                // Keep _payloadTmp for reuse - it will be released in releaseBufs()
+            }
 
             // pass buffer for processing of "extra" data
             setDataPhase(src);
@@ -999,6 +1007,10 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         if (_msg3tmp != null) {
             _dataReadBufs.release(_msg3tmp, false);
             _msg3tmp = null;
+        }
+        if (_payloadTmp != null) {
+            _dataReadBufs.release(_payloadTmp, false);
+            _payloadTmp = null;
         }
     }
 
