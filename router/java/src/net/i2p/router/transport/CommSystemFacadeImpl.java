@@ -1694,7 +1694,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 tldBuilder.append(parts[j]);
             }
             if (MULTI_PART_TLDS.contains(tldBuilder.toString())) {
-                int domainIndex = len - tldBuilder.toString().split("\\.").length;
+                int domainIndex = len - tldBuilder.toString().split("\\.").length - 1;
                 StringBuilder domain = new StringBuilder();
                 for (int k = domainIndex; k < len; k++) {
                     if (k > domainIndex) domain.append(".");
