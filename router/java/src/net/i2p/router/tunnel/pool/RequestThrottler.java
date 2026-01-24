@@ -205,7 +205,7 @@ class RequestThrottler {
      * Uses caching to avoid repeated string operations.
      *
      * @return set of country codes (in lower case) to block; empty if none configured
-     * @since 0.9.68+
+     * @since 0.9.65+
      */
     private Set<String> getBlockedCountries() {
         String blockCountries = context.getProperty(PROP_BLOCK_COUNTRIES, DEFAULT_BLOCK_COUNTRIES);
