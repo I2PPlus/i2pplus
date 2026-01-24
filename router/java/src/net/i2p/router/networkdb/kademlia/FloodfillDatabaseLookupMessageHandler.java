@@ -111,7 +111,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
         if (shouldBan) {
             if (dlm.getFrom() != null) {
                 _context.banlist().banlistRouter(dlm.getFrom(), " <b>➜</b> Excessive lookup requests" + (isFF ? " (Floodfill)" : ""),
-                                                 null, null, _context.clock().now() + 60 * 60 * 1000);
+                                                 null, null, _context.clock().now() + 10 * 60 * 1000);
                 _context.commSystem().mayDisconnect(dlm.getFrom());
             }
             _context.statManager().addRateData("netDb.lookupsDropped", 1);
@@ -122,7 +122,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
                        .append(isFF ? "floodfill ": "").append("[").append(fromBase64.substring(0,6)).append("]");
 
                 if (!isDirect && _log.shouldInfo()) {message.append(" via [TunnelId ").append(dlm.getReplyTunnel()).append("]");}
-                message.append(" and banning for 1h -> Max 60 requests in 30s or 10/s exceeded");
+                message.append(" and banning for 10m -> Max 60 requests in 30s or 10/s exceeded");
                 _log.warn(message.toString());
             }
             return null;
