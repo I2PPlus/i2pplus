@@ -210,7 +210,7 @@ td{border-top:var(--border);vertical-align:middle;padding:5px;font-size:9pt}
 td>b{margin-right:5px;display:inline-block;min-width:30px}
 td>input{margin-left:0}
 .base32{max-width:120px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:text-bottom;user-select:all}
-.buttons,.newTunnel,#filter{padding:9px 8px;text-align:right;background:var(--buttons);box-shadow:var(--highlight),inset 0 0 2px 1px #030;background-size:100%,4px 100%,100%}
+.buttons,.newTunnel{padding:9px 8px;text-align:right;background:var(--buttons);box-shadow:var(--highlight),inset 0 0 2px 1px #030;background-size:100%,4px 100%,100%}
 .infohelp,.tunnelConfig .infohelp{background:var(--infohelp) no-repeat 10px center;background-size:20px;padding:15px 10px 15px 38px}
 .newTunnel{padding:5px;text-align:right;border-top:var(--border)}
 .nowrap,.nowrap>*{vertical-align:middle}
