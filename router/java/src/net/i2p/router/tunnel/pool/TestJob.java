@@ -52,11 +52,17 @@ public class TestJob extends JobImpl {
      */
     private static final int MAX_CONCURRENT_TESTS = SystemVersion.isSlow() ? 4 : 8;
 
+    // Adaptive testing frequency constants
+    private static final int BASE_TEST_DELAY = 90 * 1000; // 90s base
+    private static final int MIN_TEST_DELAY = 30 * 1000; // 30s minimum
+    private static final int MAX_TEST_DELAY = 180 * 1000; // 180s maximum
+    private static final int SUCCESS_HISTORY_SIZE = 3; // Track last 3 results
+
     /**
      * Maximum number of TestJob instances that should be queued before deferring new ones.
      * Prevents job queue saturation from too many waiting tunnel tests.
      */
-    private static final int MAX_QUEUED_TESTS = SystemVersion.isSlow() ? 20 : 32;
+    private static final int MAX_QUEUED_TESTS = SystemVersion.isSlow() ? 16 : 32;
 
     /**
      * Hard limit for total TestJob instances (queued + active).
@@ -182,7 +188,7 @@ public class TestJob extends JobImpl {
         _found = false;
         boolean isExploratory = _pool.getSettings().isExploratory();
         long now = ctx.clock().now();
-        
+
         // Skip tunnel testing for ping tunnels - they're short-lived and don't need testing
         String tunnelNickname = _cfg.getTunnelPool().getSettings().getDestinationNickname();
         if (tunnelNickname != null && tunnelNickname.startsWith("Ping [")) {
@@ -326,6 +332,9 @@ public class TestJob extends JobImpl {
         final RouterContext ctx = getContext();
         if (_pool == null || !_pool.isAlive()) return;
 
+        // Update success history for adaptive testing frequency
+        updateSuccessHistory(true);
+
         ctx.statManager().addRateData("tunnel.testSuccessLength", _cfg.getLength());
         ctx.statManager().addRateData("tunnel.testSuccessTime", ms);
 
@@ -336,13 +345,46 @@ public class TestJob extends JobImpl {
         _cfg.testJobSuccessful(ms);
 
         if (_log.shouldDebug()) {
-            _log.debug("Tunnel Test [#" + _id + "] succeeded in " + ms + "ms → " + _cfg + " (Concurrent tests: " +
-                       CONCURRENT_TESTS.get() + ")");
+            _log.debug("Tunnel Test [#" + _id + "] succeeded in " + ms + "ms → " + _cfg + " (Success rate: " +
+                       String.format("%.1f%%", getSuccessRate() * 100) + ")");
         }
 
         // Clean up session tags
         clearTestTags();
         scheduleRetest();
+    }
+
+    private int getDelay() {
+        // Simple exponential backoff with a cap and jitter
+        int baseDelay = TEST_DELAY;
+        int failCount = _cfg.getTunnelFailures();
+        int scaled = baseDelay;
+        if (failCount > 0) {
+            int multiplier = Math.min(1 << failCount, 6); // max 6x (6 min)
+            scaled = baseDelay/2 * multiplier;
+        }
+        // Add a small jitter to avoid thundering herd
+        int jitter = getContext().random().nextInt(Math.max(1, scaled / 3));
+        return Math.max(scaled + jitter, 60*1000 + jitter);
+    }
+
+    private float getSuccessRate() {
+        if (_successCount == 0) return 0.5f; // Assume 50% for new tunnels
+        return (float) _successCount / SUCCESS_HISTORY_SIZE;
+    }
+
+    private void updateSuccessHistory(boolean success) {
+        // Remove old success from count if it exists
+        if (_successHistory[_successHistoryIndex]) {
+            _successCount--;
+        }
+        // Add new success to count
+        if (success) {
+            _successCount++;
+        }
+        // Update history
+        _successHistory[_successHistoryIndex] = success;
+        _successHistoryIndex = (_successHistoryIndex + 1) % SUCCESS_HISTORY_SIZE;
     }
 
     /**
@@ -375,6 +417,9 @@ public class TestJob extends JobImpl {
     }
 
     private int _failureCount = 0;
+    private boolean _successHistory[] = new boolean[SUCCESS_HISTORY_SIZE];
+    private int _successHistoryIndex = 0;
+    private int _successCount = 0;
 
     /**
      * Called when the tunnel test fails.
@@ -405,20 +450,6 @@ public class TestJob extends JobImpl {
                _failureCount = 0;
         }
 
-    }
-
-    private int getDelay() {
-        // Exponential backoff with a cap and jitter
-        int baseDelay = TEST_DELAY;
-        int failCount = _cfg.getTunnelFailures();
-        int scaled = baseDelay;
-        if (failCount > 0) {
-            int multiplier = Math.min(1 << failCount, 6); // max 6x (6 min)
-            scaled = baseDelay/2 * multiplier;
-        }
-        // Add a small jitter to avoid thundering herd
-        int jitter = getContext().random().nextInt(Math.max(1, scaled / 3));
-        return Math.max(scaled + jitter, 60*1000 + jitter);
     }
 
     private int getTestPeriod() {
