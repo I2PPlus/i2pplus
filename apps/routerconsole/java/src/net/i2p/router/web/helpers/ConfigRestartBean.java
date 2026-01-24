@@ -44,6 +44,11 @@ public class ConfigRestartBean {
                 ctx.router().shutdownGracefully(Router.EXIT_HARD); // give the UI time to respond
             } else if ("cancelShutdown".equals(action) || _t("Cancel shutdown", ctx).equals(action) || _t("Cancel restart", ctx).equals(action)) {
                 ctx.router().cancelGracefulShutdown();
+                // Also cancel delayed tunnel shutdown if in progress
+                TunnelControllerGroup tcg = TunnelControllerGroup.getInstance();
+                if (tcg != null) {
+                    tcg.cancelDelayedShutdown();
+                }
             } else if ("restartImmediate".equals(action) || _t("Restart immediately", ctx).equals(action)) {
                 if (ctx.hasWrapper()) {ConfigServiceHandler.registerWrapperNotifier(ctx, Router.EXIT_HARD_RESTART, false);}
                 ctx.router().shutdownGracefully(Router.EXIT_HARD_RESTART); // give the UI time to respond
@@ -73,6 +78,12 @@ public class ConfigRestartBean {
                     buf.append(_t("Deferring shutdown for {0} until all servers have stopped", delayStr, ctx));
                 }
                 buf.append("</b></span></h4><hr>");
+                // Show cancel buttons for deferred shutdown
+                if (restarting) {
+                    buttons(ctx, buf, urlBase, systemNonce, SET2);
+                } else {
+                    buttons(ctx, buf, urlBase, systemNonce, SET1);
+                }
             }
         } else if ((shuttingDown || restarting) && timeRemaining <= 45*1000) {
             buf.append("<h4 id=sb_shutdownStatus class=volatile><span id=imminent><b>");

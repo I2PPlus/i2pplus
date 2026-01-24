@@ -217,6 +217,11 @@ public class ConfigServiceHandler extends FormHandler {
             addFormNotice(_t("Shutdown immediately"), true);
         } else if (_t("Cancel graceful shutdown").equals(_action)) {
             _context.router().cancelGracefulShutdown();
+            // Also cancel delayed tunnel shutdown if in progress
+            net.i2p.i2ptunnel.TunnelControllerGroup tcg = net.i2p.i2ptunnel.TunnelControllerGroup.getInstance();
+            if (tcg != null) {
+                tcg.cancelDelayedShutdown();
+            }
             addFormNotice(_t("Graceful shutdown cancelled"), true);
         } else if (_t("Graceful restart").equals(_action)) { // should have wrapper if restart button is visible
             if (_context.hasWrapper()) {
