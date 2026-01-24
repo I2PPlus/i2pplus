@@ -23,13 +23,33 @@ import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
 /**
- * Grab some peers that we want to test and probe them briefly to get some
- * more accurate and up to date performance data.  This delegates the peer
- * selection to the peer manager and tests the peer by sending it a useless
- * database store message
+ * Periodically tests selected peers to gather real-time performance data and update peer profiles.
  *
- * TODO - What's the point? Disable this? See also notes in PeerManager.selectPeers().
- * TODO - Use something besides sending the peer's RI to itself?
+ * <p>This job runs continuously when enabled, selecting peers based on bandwidth tier, reachability,
+ * and version compatibility. Tests are performed by sending a DatabaseStoreMessage containing the
+ * peer's own RouterInfo back to itself through the tunnel system, measuring response times and
+ * connectivity.</p>
+ *
+ * <p><b>Peer Selection Criteria:</b></p>
+ * <ul>
+ *   <li>High-bandwidth tiers (O, P, X) with reachability capability</li>
+ *   <li>Version 0.9.57+ for compatibility</li>
+ *   <li>Configurable concurrency based on system resources</li>
+ * </ul>
+ *
+ * <p><b>Performance Impact:</b></p>
+ * <ul>
+ *   <li>Adaptive delays based on system load and uptime</li>
+ *   <li>CPU throttling when load exceeds 80%</li>
+ *   <li>Automatic timeout adjustment based on historical test times</li>
+ * </ul>
+ *
+ * <p><b>Future Considerations:</b></p>
+ * <ul>
+ *   <li>Evaluate necessity of peer testing in current network conditions</li>
+ *   <li>Consider alternative test methods beyond RI self-messaging</li>
+ *   <li>Integration with PeerManager.selectPeers() optimization</li>
+ * </ul>
  */
 public class PeerTestJob extends JobImpl {
     private final Log _log;
@@ -44,7 +64,11 @@ public class PeerTestJob extends JobImpl {
     private static final int DEFAULT_PEER_TEST_TIMEOUT = 750;
     public static final String PROP_PEER_TEST_TIMEOUT = "router.peerTestTimeout";
 
-    /** Creates a new instance of PeerTestJob */
+    /**
+     * Creates a new PeerTestJob instance and initializes required statistics.
+     *
+     * @param context the router context for accessing services like logging and statistics
+     */
     public PeerTestJob(RouterContext context) {
         super(context);
         _log = context.logManager().getLog(PeerTestJob.class);
@@ -54,6 +78,11 @@ public class PeerTestJob extends JobImpl {
         getContext().statManager().createRateStat("peer.testTimeout", "Frequency of test timeouts (no reply)", "Peers", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES });
     }
 
+    /**
+     * Gets the average successful peer test time over the last minute.
+     *
+     * @return average test time in milliseconds, or 0 if no context available
+     */
     public int getAvgPeerTestTime() {
         if (getContext() == null)
             return 0;
@@ -63,7 +92,12 @@ public class PeerTestJob extends JobImpl {
         return avgTestTime;
     }
 
-    /** @since 0.9.49+ */
+    /**
+     * Gets the total average peer test time including both successful and slow tests over the last hour.
+     *
+     * @return total average test time in milliseconds, or 0 if no context available
+     * @since 0.9.49+
+     */
     public int getTotalAvgPeerTestTime() {
         if (getContext() == null)
             return 0;
@@ -75,7 +109,19 @@ public class PeerTestJob extends JobImpl {
         return totalAvgTestTime;
     }
 
-    /** how long should we wait before firing off new tests?  */
+    /**
+     * Calculates the delay before starting the next round of peer tests.
+     *
+     * <p>Delay adapts based on router uptime and system load:
+     * <ul>
+     *   <li>+1000ms if uptime > 3 hours or CPU load > 80%</li>
+     *   <li>Base delay if uptime >= 3 minutes</li>
+     *   <li>Inverse ramp-up based on remaining time to 3 minutes</li>
+     * </ul>
+     * </p>
+     *
+     * @return delay in milliseconds before next test round
+     */
     private long getPeerTestDelay() {
         long uptime = getContext().router().getUptime();
         int testDelay = getContext().getProperty(PROP_PEER_TEST_DELAY, DEFAULT_PEER_TEST_DELAY);
@@ -86,7 +132,15 @@ public class PeerTestJob extends JobImpl {
         else
             return testDelay + (3*60*1000 - uptime);
     }
-    /** how long to give each peer before marking them as unresponsive? */
+
+    /**
+     * Determines the timeout for individual peer tests with automatic adjustment.
+     *
+     * <p>Ensures timeout is never set below the average successful test time
+     * to avoid false timeouts during normal operation.</p>
+     *
+     * @return timeout in milliseconds, adjusted if necessary
+     */
     private int getTestTimeout() {
         int testTimeout = getContext().getProperty(PROP_PEER_TEST_TIMEOUT, DEFAULT_PEER_TEST_TIMEOUT);
         if (testTimeout < getAvgPeerTestTime()) {
@@ -97,7 +151,15 @@ public class PeerTestJob extends JobImpl {
             return testTimeout;
         }
     }
-    /** number of peers to test each round */
+
+    /**
+     * Determines the number of peers to test concurrently based on system capabilities.
+     *
+     * <p>Concurrency is limited to 1 when CPU load exceeds 80% to prevent system overload.
+     * Default value adapts based on system resources (1-4 peers).</p>
+     *
+     * @return number of peers to test in parallel
+     */
     private int getTestConcurrency() {
         int cores = SystemVersion.getCores();
         long memory = SystemVersion.getMaxMemory();
@@ -106,9 +168,22 @@ public class PeerTestJob extends JobImpl {
         return testConcurrent;
     }
 
+    /**
+     * Starts the peer testing process with adaptive initial delay.
+     * 
+     * <p>Schedules the first test run based on router uptime:
+     * <ul>
+     *   <li>If uptime < 3 minutes: wait 3 minutes before starting</li>
+     *   <li>Otherwise: start immediately with configured delay</li>
+     * </ul>
+     * </p>
+     * 
+     * @param manager the peer manager to use for peer selection
+     */
     public synchronized void startTesting(PeerManager manager) {
         _manager = manager;
         _keepTesting = true;
+        // Schedule initial test with adaptive delay
         this.getTiming().setStartAfter(getContext().clock().now() + getPeerTestDelay());
         getContext().jobQueue().addJob(this);
         long uptime = getContext().router().getUptime();
@@ -119,6 +194,11 @@ public class PeerTestJob extends JobImpl {
         }
     }
 
+    /**
+     * Stops the peer testing process gracefully.
+     * 
+     * <p>The current test round will complete, but no new rounds will be scheduled.</p>
+     */
     public synchronized void stopTesting() {
         _keepTesting = false;
         if (_log.shouldInfo()) {_log.info("Ending peer tests...");}
@@ -126,6 +206,25 @@ public class PeerTestJob extends JobImpl {
 
     public String getName() { return "Test Peers"; }
 
+    /**
+     * Main job execution loop that performs peer testing with adaptive scheduling.
+     * 
+     * <p>Process flow:
+     * <ol>
+     *   <li>Check if testing should continue</li>
+     *   <li>Select peers for testing based on criteria</li>
+     *   <li>Test each selected peer</li>
+     *   <li>Adapt next run delay based on system conditions</li>
+     * </ol>
+     * </p>
+     * 
+     * <p><b>Adaptive Behavior:</b></p>
+     * <ul>
+     *   <li>Double delay if job lag > 300ms (system overload)</li>
+     *   <li>Double delay if CPU load > 80% (resource conservation)</li>
+     *   <li>Normal delay otherwise</li>
+     * </ul>
+     */
     public void runJob() {
         long lag = getContext().jobQueue().getMaxLag();
         boolean keepTesting;
@@ -135,10 +234,14 @@ public class PeerTestJob extends JobImpl {
             manager = _manager;
         }
         if (!keepTesting) return;
+        
+        // Select and test peers for this round
         Set<RouterInfo> peers = selectPeersToTest();
         for (RouterInfo peer : peers) {
             testPeer(peer);
         }
+        
+        // Adapt next run delay based on system performance
         if (lag > 300 || SystemVersion.getCPULoadAvg() > 80) {
             requeue(getPeerTestDelay() * 2);
             if (_log.shouldWarn())
@@ -155,10 +258,23 @@ public class PeerTestJob extends JobImpl {
     }
 
     /**
-     * Retrieve a group of 0 or more peers that we want to test.
-     * Returned list will not include ourselves.
-     *
-     * @return set of RouterInfo structures
+     * Selects peers for testing based on performance and capability criteria.
+     * 
+     * <p><b>Selection Criteria:</b></p>
+     * <ul>
+     *   <li><b>Primary candidates:</b> Version 0.9.57+, reachable, high bandwidth (O/P/X)</li>
+     *   <li><b>Penalized:</b> Low bandwidth tiers (K/L/M/N) or unreachable - set capacity bonus to -30</li>
+     *   <li><b>Excluded:</b> Missing local RouterInfo or profile</li>
+     * </ul>
+     * 
+     * <p><b>Performance Impact:</b></p>
+     * <ul>
+     *   <li>Uses cached lookups to minimize database queries</li>
+     *   <li>Pre-parses capabilities to avoid repeated string operations</li>
+     *   <li>Logs skipped peers with specific reasons for debugging</li>
+     * </ul>
+     * 
+     * @return set of RouterInfo structures for testing (excluding self)
      */
     private Set<RouterInfo> selectPeersToTest() {
         PeerManager manager;
@@ -172,6 +288,7 @@ public class PeerTestJob extends JobImpl {
         List<Hash> peerHashes = manager.selectPeers(criteria);
         Set<RouterInfo> peers = new HashSet<RouterInfo>(peerHashes.size());
         for (Hash peer : peerHashes) {
+            // Look up peer information and profile
             RouterInfo peerInfo = getContext().netDb().lookupRouterInfoLocally(peer);
             PeerProfile prof = getContext().profileOrganizer().getProfile(peer);
             String cap = null;
@@ -184,14 +301,18 @@ public class PeerTestJob extends JobImpl {
               version = peerInfo.getVersion();
               reachable = cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
             }
+            
+            // Primary candidates: high-bandwidth, reachable, compatible version
             if (peerInfo != null && prof != null && cap != null && reachable && VersionComparator.comp(version, "0.9.57") >= 0 &&
                 (bw.equals("O") || bw.equals("P") || bw.equals("X"))) {
                 peers.add(peerInfo);
+            // Low-bandwidth or unreachable peers: penalize but don't test
             } else if (peerInfo != null && prof != null && cap != null &&
                 (!reachable || bw.equals("K") || bw.equals("L") || bw.equals("M") || bw.equals("N"))) {
                 prof.setCapacityBonus(-30);
                 if (_log.shouldInfo())
                     _log.info("Setting capacity bonus to -30 and skipping test for [" + peer.toBase64().substring(0,6) + "] -> K, L, M, N or unreachable");
+            // Missing RouterInfo: cannot test
             } else if (peerInfo == null) {
                 if (_log.shouldInfo())
                     _log.info("Test of [" + peer.toBase64().substring(0,6) + "] failed: No local RouterInfo");
