@@ -104,11 +104,12 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
         final boolean shouldAccept = shouldAcceptLookup(isSenderUs, shouldThrottle, shouldBan, ourRI, floodfillMode, isFF, type);
         final boolean isSelfLookup = ourRouter.equals(dlm.getSearchKey()) || dlm.getFrom().equals(ourRouter);
         final int maxLookups = isFF ? 60 : 30;
+        final long uptime = _context.router().getUptime();
 
         DatabaseLookupMessage processedDLM = preProcessDatabaseLookup(dlm, fromHash);
         if (processedDLM == null) {return null;}
 
-        if (shouldBan) {
+        if (shouldBan && uptime > 10*60*1000) {
             if (dlm.getFrom() != null) {
                 _context.banlist().banlistRouter(dlm.getFrom(), " <b>➜</b> Excessive lookup requests" + (isFF ? " (Floodfill)" : ""),
                                                  null, null, _context.clock().now() + 10 * 60 * 1000);
@@ -125,6 +126,8 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
                 message.append(" and banning for 10m -> Max 60 requests in 30s or 10/s exceeded");
                 _log.warn(message.toString());
             }
+            return null;
+        } else if (shouldBan) {
             return null;
         }
 
