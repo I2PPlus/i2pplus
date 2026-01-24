@@ -28,14 +28,23 @@ class RequestThrottler {
     private final RouterContext context;
     private final ObjectCounter<Hash> counter;
     private final Log _log;
+    private volatile String lastBlockCountriesProp;
+    private volatile Set<String> cachedBlockedCountries;
+    private volatile long lastFirewallCheckTime;
+    private volatile boolean cachedFirewalledStatus;
+    private static final long FIREWALL_CHECK_INTERVAL = 10*60*1000; // Check every 10 minutes
 
-    /** portion of the tunnel lifetime */
-    private static final int LIFETIME_PORTION = 4;
-    private static boolean isSlow = SystemVersion.isSlow();
-    private static final int MIN_LIMIT = (isSlow ? 512 : 1024) / LIFETIME_PORTION;
-    private static final int MAX_LIMIT = (isSlow ? 1204 : 4096) / LIFETIME_PORTION;
-    private static final int PERCENT_LIMIT = 25 / LIFETIME_PORTION;
-    private static final long CLEAN_TIME = 11*60*1000 / LIFETIME_PORTION;
+    // Cached properties
+    private volatile long lastPropertyCheckTime;
+    private volatile Boolean cachedShouldThrottle;
+    private volatile Boolean cachedShouldDisconnect;
+    private volatile Boolean cachedShouldBlockOldRouters;
+    private static final long PROPERTY_CHECK_INTERVAL = 30*1000; // Check every 30 seconds
+
+    private static final int MIN_LIMIT = 200;
+    private static final int MAX_LIMIT = 400;
+    private static final int PERCENT_LIMIT = 20;
+    private static final long CLEAN_TIME = 90 * 1000; // Reset limits every 90 seconds
     private final static boolean DEFAULT_SHOULD_THROTTLE = true;
     private final static String PROP_SHOULD_THROTTLE = "router.enableTransitThrottle";
     private final static boolean DEFAULT_SHOULD_DISCONNECT = false;
@@ -49,6 +58,14 @@ class RequestThrottler {
         this.context = ctx;
         this.counter = new ObjectCounter<Hash>();
         _log = ctx.logManager().getLog(RequestThrottler.class);
+        this.lastBlockCountriesProp = null;
+        this.cachedBlockedCountries = Collections.emptySet();
+        this.lastFirewallCheckTime = 0;
+        this.cachedFirewalledStatus = false;
+        this.lastPropertyCheckTime = 0;
+        this.cachedShouldThrottle = null;
+        this.cachedShouldDisconnect = null;
+        this.cachedShouldBlockOldRouters = null;
         ctx.simpleTimer2().addPeriodicEvent(new Cleaner(), CLEAN_TIME);
     }
 
@@ -61,32 +78,42 @@ class RequestThrottler {
      * @return true if the request should be throttled (denied), false otherwise
      */
     boolean shouldThrottle(Hash h) {
+        String routerId = h.toBase64().substring(0, 6);
         RouterInfo ri = context.netDb().lookupRouterInfoLocally(h);
-        boolean isUnreachable = ri != null && ri.getCapabilities().indexOf(Router.CAPABILITY_REACHABLE) < 0;
-        boolean isLowShare = ri != null && (ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
-                             ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
-                             ri.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0);
-        boolean isFast = ri != null && (ri.getCapabilities().indexOf(Router.CAPABILITY_BW256) >= 0 ||
-                         ri.getCapabilities().indexOf(Router.CAPABILITY_BW512) >= 0 ||
-                         ri.getCapabilities().indexOf(Router.CAPABILITY_BW_UNLIMITED) >= 0);
-        boolean isLTier = ri != null && (ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
-                          ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0);
-        boolean weAreFirewalled = context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.REJECT_UNSOLICITED ||
-                                  context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_OK ||
-                                  context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_UNKNOWN ||
-                                  context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_OK_IPV6_FIREWALLED ||
-                                  context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_UNKNOWN_IPV6_FIREWALLED ||
-                                  context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_DISABLED_IPV6_FIREWALLED;
-        boolean shouldBlockOldRouters = context.getProperty(PROP_BLOCK_OLD_ROUTERS, DEFAULT_BLOCK_OLD_ROUTERS);
-        if (weAreFirewalled) {shouldBlockOldRouters = false;}
+
+        // Extract router capabilities once for efficiency
+        boolean isUnreachable = isUnreachable(ri);
+        boolean isLowShare = isLowShare(ri);
+        boolean isFast = isFast(ri);
+        boolean isLTier = isLTier(ri);
+        boolean weAreFirewalled = isFirewalled();
+        updateCachedProperties();
+        boolean shouldBlockOldRouters = weAreFirewalled ? false : cachedShouldBlockOldRouters;
         int numTunnels = this.context.tunnelManager().getParticipatingCount();
-        int portion = isSlow ? 6 : 4;
-        //int limit = (isUnreachable || isLowShare) ? MIN_LIMIT : Math.max(MIN_LIMIT, Math.min(MAX_LIMIT / 8, numTunnels * (isFast ? 3 / 2 : PERCENT_LIMIT / 2) / 100));
-        int limit = Math.max(MIN_LIMIT, Math.min(MAX_LIMIT, numTunnels * PERCENT_LIMIT / 100));
+
+        /*
+         * Calculate limit based on router capabilities for fair resource allocation
+         * Uses percentage-based scaling with multipliers:
+         *  - Slow/Unreachable: 4% (conservative)
+         *  - Regular: 8% (balanced)
+         *  - Fast: 15% (rewards capability)
+         * All bounds are clamped by MIN_LIMIT (200) and MAX_LIMIT (400)
+         */
+        int limit;
+        if (isUnreachable || isLowShare) {
+            // 4% for unreachable/low-share routers - conservative limit to protect network
+            limit = Math.min(MAX_LIMIT, Math.max(MIN_LIMIT, numTunnels * 4 / 100));
+        } else if (isFast) {
+            // 15% for high-bandwidth routers - rewards capable routers with higher limits
+            limit = Math.min(MAX_LIMIT, Math.max(MIN_LIMIT, numTunnels * 15 / 100));
+        } else {
+            // 8% for regular routers - balanced approach for average capability
+            limit = Math.min(MAX_LIMIT, Math.max(MIN_LIMIT, numTunnels * 8 / 100));
+        }
         int count = counter.increment(h);
         boolean rv = count > limit;
-        boolean enableThrottle = context.getProperty(PROP_SHOULD_THROTTLE, DEFAULT_SHOULD_THROTTLE);
-        boolean shouldDisconnect = context.getProperty(PROP_SHOULD_DISCONNECT, DEFAULT_SHOULD_DISCONNECT);
+        boolean enableThrottle = cachedShouldThrottle;
+        boolean shouldDisconnect = cachedShouldDisconnect;
         boolean isFF = false;
         String v = "unknown";
         String country = "unknown";
@@ -101,33 +128,46 @@ class RequestThrottler {
             isOld = VersionComparator.comp(v, "0.9.62") < 0;
         }
 
+        // Early return: Blocked countries
         Set<String> blockedCountries = getBlockedCountries();
         if (blockedCountries.contains(country)) {
             if (_log.shouldWarn()) {
-                _log.warn("Banning and disconnecting from [" + h.toBase64().substring(0,6) + "] -> Blocked country: " + country);
+                _log.warn("Banning and disconnecting from [" + routerId + "] -> Blocked country: " + country);
             }
             context.banlist().banlistRouter(h, " <b>➜</b> Blocked country: " + country, null, null, context.clock().now() + 8*60*60*1000);
             context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
             return true;
         }
 
+        // Early return: High system load
         if (highload) {
             if (_log.shouldWarn())
-                _log.warn("Rejecting Tunnel Request from Router [" + h.toBase64().substring(0,6) + "] -> " +
+                _log.warn("Rejecting Tunnel Request from Router [" + routerId + "] -> " +
                           "CPU is under sustained high load");
+            return rv;
         }
-        else if (isLTier && isUnreachable && isOld) {
+
+        // Early return: Old, low-tier, unreachable routers
+        if (isLTier && isUnreachable && isOld) {
             if (_log.shouldInfo() && !context.banlist().isBanlisted(h)) {
-                _log.info("Banning for 1h and disconnecting from [" + h.toBase64().substring(0,6) + "] -> LU / " + v);
+                _log.info("Banning for 1h and disconnecting from [" + routerId + "] -> LU / " + v);
             }
             context.banlist().banlistRouter(h, " <b>➜</b> Old and slow (" + v + " / LU)", null, null, context.clock().now() + 60*60*1000);
             context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
-        } else if (isOld && (isUnreachable || isLowShare) && shouldBlockOldRouters) {
+            return true;
+        }
+
+        // Early return: Old, unreachable or low-share routers when blocking is enabled
+        if (isOld && (isUnreachable || isLowShare) && shouldBlockOldRouters) {
             if (_log.shouldInfo()) {
-                _log.info("Dropping all connections from [" + h.toBase64().substring(0,6) + "] -> Unreachable / Slow / " + v);
+                _log.info("Dropping all connections from [" + routerId + "] -> Unreachable / Slow / " + v);
             }
             context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
-        } else if (rv && enableThrottle) {
+            return true;
+        }
+
+        // Handle excessive tunnel requests
+        if (rv && enableThrottle) {
             int bantime = (isLowShare || isUnreachable) ? 60*60*1000 : 30*60*1000;
             int period = bantime / 60 / 1000;
             if (count == limit + 1) {
@@ -135,39 +175,55 @@ class RequestThrottler {
                 context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
                 if (_log.shouldWarn()) {
                     _log.warn("Banning " + (isLowShare || isUnreachable ? "slow or unreachable" : "") +
-                              " Router [" + h.toBase64().substring(0,6) + "] for " + period + "m" +
+                              " Router [" + routerId + "] for " + period + "m" +
                               "\n* Excessive tunnel requests (Requested: " + count + " / Hard limit " + limit +
-                              " in " + (11*60 / portion) + "s)");
+                              " in 165s)");
                 }
             } else {
                 if (_log.shouldInfo())
-                    _log.info("Rejecting Tunnel Requests from temp banned Router [" + h.toBase64().substring(0,6) + "] -> " +
-                              "(Requested: " + count + " / Hard limit: " + limit + " in " + (11*60 / portion) + "s)");
+                    _log.info("Rejecting Tunnel Requests from temp banned Router [" + routerId + "] -> " +
+                              "(Requested: " + count + " / Hard limit: " + limit + " in 165s)");
                 context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
             }
         }
 
+        // Final check for extremely excessive requests
         if (rv && count >= 3 * limit && enableThrottle) {
             context.banlist().banlistRouter(h, "Excessive tunnel requests", null, null, context.clock().now() + 30*60*1000);
             // drop after any accepted tunnels have expired
             context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
             if (_log.shouldWarn())
-                _log.warn("Banning Router [" + h.toBase64().substring(0,6) + "] for 30m -> " +
+                _log.warn("Banning Router [" + routerId + "] for 30m -> " +
                           "Excessive tunnel requests (Requested: " + count + " / Hard limit: " + limit + ")");
         }
+
         return rv;
     }
 
     /**
      * Returns the set of country codes configured to be blocked from participation.
+     * Uses caching to avoid repeated string operations.
      *
      * @return set of country codes (in lower case) to block; empty if none configured
-     * @since 0.9.65+
+     * @since 0.9.68+
      */
     private Set<String> getBlockedCountries() {
         String blockCountries = context.getProperty(PROP_BLOCK_COUNTRIES, DEFAULT_BLOCK_COUNTRIES);
-        if (blockCountries.isEmpty()) {return Collections.emptySet();}
-        return new HashSet<>(Arrays.asList(blockCountries.toLowerCase().split(",")));
+
+        // Check if cache is still valid
+        if (blockCountries.equals(lastBlockCountriesProp)) {
+            return cachedBlockedCountries;
+        }
+
+        // Update cache
+        lastBlockCountriesProp = blockCountries;
+        if (blockCountries.isEmpty()) {
+            cachedBlockedCountries = Collections.emptySet();
+        } else {
+            cachedBlockedCountries = new HashSet<>(Arrays.asList(blockCountries.toLowerCase().split(",")));
+        }
+
+        return cachedBlockedCountries;
     }
 
     /**
@@ -186,6 +242,81 @@ class RequestThrottler {
         private final Hash h;
         public Disconnector(Hash h) {this.h = h;}
         public void timeReached() {context.commSystem().forceDisconnect(h);}
+    }
+
+    /**
+     * Checks if router is unreachable based on capabilities.
+     */
+    private boolean isUnreachable(RouterInfo ri) {
+        if (ri == null) return false;
+        String caps = ri.getCapabilities();
+        return caps.indexOf(Router.CAPABILITY_REACHABLE) < 0;
+    }
+
+    /**
+     * Checks if router has low bandwidth sharing capabilities.
+     */
+    private boolean isLowShare(RouterInfo ri) {
+        if (ri == null) return false;
+        String caps = ri.getCapabilities();
+        return caps.indexOf(Router.CAPABILITY_BW12) >= 0 ||
+               caps.indexOf(Router.CAPABILITY_BW32) >= 0 ||
+               caps.indexOf(Router.CAPABILITY_BW64) >= 0;
+    }
+
+    /**
+     * Checks if router has high bandwidth capabilities.
+     */
+    private boolean isFast(RouterInfo ri) {
+        if (ri == null) return false;
+        String caps = ri.getCapabilities();
+        return caps.indexOf(Router.CAPABILITY_BW256) >= 0 ||
+               caps.indexOf(Router.CAPABILITY_BW512) >= 0 ||
+               caps.indexOf(Router.CAPABILITY_BW_UNLIMITED) >= 0;
+    }
+
+    /**
+     * Checks if router is low tier (lowest bandwidth tiers).
+     */
+    private boolean isLTier(RouterInfo ri) {
+        if (ri == null) return false;
+        String caps = ri.getCapabilities();
+        return caps.indexOf(Router.CAPABILITY_BW12) >= 0 ||
+               caps.indexOf(Router.CAPABILITY_BW32) >= 0;
+    }
+
+    /**
+     * Updates cached property values to avoid repeated property lookups.
+     */
+    private void updateCachedProperties() {
+        long now = context.clock().now();
+        if (now - lastPropertyCheckTime > PROPERTY_CHECK_INTERVAL) {
+            cachedShouldThrottle = context.getProperty(PROP_SHOULD_THROTTLE, DEFAULT_SHOULD_THROTTLE);
+            cachedShouldDisconnect = context.getProperty(PROP_SHOULD_DISCONNECT, DEFAULT_SHOULD_DISCONNECT);
+            cachedShouldBlockOldRouters = context.getProperty(PROP_BLOCK_OLD_ROUTERS, DEFAULT_BLOCK_OLD_ROUTERS);
+            lastPropertyCheckTime = now;
+        }
+    }
+
+    /**
+     * Checks if we are firewalled, with caching to avoid repeated commSystem status checks.
+     *
+     * @return true if firewalled, false otherwise
+     * @since 0.9.68+
+     */
+    private boolean isFirewalled() {
+        long now = context.clock().now();
+        if (now - lastFirewallCheckTime > FIREWALL_CHECK_INTERVAL) {
+            net.i2p.router.CommSystemFacade.Status status = context.commSystem().getStatus();
+            cachedFirewalledStatus = status == net.i2p.router.CommSystemFacade.Status.REJECT_UNSOLICITED ||
+                                     status == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_OK ||
+                                     status == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_UNKNOWN ||
+                                     status == net.i2p.router.CommSystemFacade.Status.IPV4_OK_IPV6_FIREWALLED ||
+                                     status == net.i2p.router.CommSystemFacade.Status.IPV4_UNKNOWN_IPV6_FIREWALLED ||
+                                     status == net.i2p.router.CommSystemFacade.Status.IPV4_DISABLED_IPV6_FIREWALLED;
+            lastFirewallCheckTime = now;
+        }
+        return cachedFirewalledStatus;
     }
 
 }
