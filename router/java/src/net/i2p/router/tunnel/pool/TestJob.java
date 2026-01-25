@@ -545,7 +545,21 @@ public class TestJob extends JobImpl {
             getContext().statManager().addRateData(
                 isExploratory ? "tunnel.testExploratoryFailedCompletelyTime" : "tunnel.testFailedCompletelyTime",
                 timeToFail);
-               _failureCount = 0;
+            
+            // Immediately remove tunnel from pool after 3 consecutive failures
+            // This ensures failed tunnels don't remain in the pool consuming resources
+            if (_log.shouldWarn()) {
+                _log.warn((isExploratory ? "Exploratory tunnel" : "Tunnel") + " failed 3 consecutive tests → Removing from pool: " + _cfg);
+            }
+            
+            // Force immediate tunnel removal by marking it as completely failed
+            // This bypasses the incremental failure counting for immediate removal
+            _cfg.tunnelFailedCompletely();
+            
+            // Also remove from pool to ensure immediate effect
+            _pool.tunnelFailed(_cfg);
+            
+            _failureCount = 0;
         }
 
     }
