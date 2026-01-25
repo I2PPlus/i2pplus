@@ -62,7 +62,7 @@ public class TestJob extends JobImpl {
      * Maximum number of TestJob instances that should be queued before deferring new ones.
      * Prevents job queue saturation from too many waiting tunnel tests.
      */
-    private static final int MAX_QUEUED_TESTS = SystemVersion.isSlow() ? 16 : 32;
+    private static final int MAX_QUEUED_TESTS = SystemVersion.isSlow() ? 32 : 64;
 
     /**
      * Hard limit for total TestJob instances (queued + active).
@@ -78,17 +78,45 @@ public class TestJob extends JobImpl {
     private static final AtomicInteger CONCURRENT_TESTS = new AtomicInteger(0);
 
     /**
-     * Get the number of TestJob instances currently queued in the job queue.
-     * This provides visibility into how many tunnel tests are waiting to be executed.
+     * Atomic counter for total TestJob instances (active + queued).
+     * Provides more reliable limiting than relying on job queue counting.
+     */
+    private static final AtomicInteger TOTAL_TEST_JOBS = new AtomicInteger(0);
+
+    /**
+     * Get the total number of TestJob instances (active + queued) using atomic counter.
+     * This provides more reliable limiting than job queue counting alone.
+     *
+     * @return the total number of TestJob instances
+     */
+    private static int getTotalTestJobCount() {
+        return TOTAL_TEST_JOBS.get();
+    }
+
+    /**
+     * Atomically increment total job counter and check limits.
+     * This prevents race conditions in job scheduling.
      *
      * @param ctx the router context
-     * @return the total number of TestJob instances in all queue states
+     * @return true if job can proceed, false if limit exceeded
      */
-    private static int getQueuedTestJobCount(RouterContext ctx) {
-        if (ctx != null && ctx.jobQueue() != null) {
-            return ctx.jobQueue().getTestJobCount();
-        }
-        return 0;
+    private static boolean tryIncrementTotalJobs(RouterContext ctx) {
+        int current;
+        do {
+            current = TOTAL_TEST_JOBS.get();
+            if (current >= HARD_TEST_JOB_LIMIT) {
+                return false;
+            }
+        } while (!TOTAL_TEST_JOBS.compareAndSet(current, current + 1));
+        return true;
+    }
+
+    /**
+     * Atomically decrement total job counter.
+     * Must be called when a test job completes or is cancelled.
+     */
+    private static void decrementTotalJobs() {
+        TOTAL_TEST_JOBS.decrementAndGet();
     }
 
     public TestJob(RouterContext ctx, PooledTunnelCreatorConfig cfg, TunnelPool pool) {
@@ -98,6 +126,14 @@ public class TestJob extends JobImpl {
         _pool = (pool != null) ? pool : cfg.getTunnelPool();
         if (_pool == null && _log.shouldError()) {
             _log.error("Invalid Tunnel Test configuration → No pool for " + cfg, new Exception("origin"));
+        }
+        // Increment total job counter atomically
+        if (!tryIncrementTotalJobs(ctx)) {
+            if (_log.shouldInfo()) {
+                _log.info("TestJob hard limit reached -> Not scheduling test for " + cfg);
+            }
+            // Don't schedule this job at all if limit exceeded
+            return;
         }
         // Start after delay; guard against negative start
         long startDelay = Math.max(0, getDelay() + ctx.clock().now());
@@ -115,10 +151,26 @@ public class TestJob extends JobImpl {
         if (_pool == null || !_pool.isAlive()) return;
 
         // Check for graceful shutdown
-        if (ctx.router().gracefulShutdownInProgress()) return;
+        if (ctx.router().gracefulShutdownInProgress()) {
+            decrementTotalJobs();
+            return;
+        }
+
+        // Determine if this is an exploratory tunnel early for deprioritization logic
+        boolean isExploratory = _pool.getSettings().isExploratory();
 
         long lag = ctx.jobQueue().getMaxLag();
         if (lag > 600) {
+            // Skip exploratory tunnels first under extreme pressure
+            if (isExploratory) {
+                if (_log.shouldInfo()) {
+                    _log.info("Skipping exploratory tunnel test due to severe job lag (" + lag + "ms) -> " + _cfg);
+                }
+                ctx.statManager().addRateData("tunnel.testExploratorySkipped", _cfg.getLength());
+                scheduleRetest();
+                return;
+            }
+            // Still test client tunnels unless lag is extreme
             if (_log.shouldWarn()) {
                 _log.warn("Aborted test due to severe max job lag (" + lag + "ms) → " + _cfg);
             }
@@ -126,6 +178,16 @@ public class TestJob extends JobImpl {
             scheduleRetest();
             return;
         } else if (lag > 500) {
+            // Moderate pressure - skip exploratory but allow critical client tests
+            if (isExploratory) {
+                if (_log.shouldInfo()) {
+                    _log.info("Deprioritizing exploratory tunnel test due to job lag (" + lag + "ms) -> " + _cfg);
+                }
+                ctx.statManager().addRateData("tunnel.testExploratorySkipped", _cfg.getLength());
+                scheduleRetest();
+                return;
+            }
+            // Continue with client tunnel testing
             if (_log.shouldWarn()) {
                 _log.warn("Max permitted job lag exceeded (" + lag + "ms) -> Suspending test of " + _cfg);
             }
@@ -133,39 +195,66 @@ public class TestJob extends JobImpl {
             return; // Exit without rescheduling
         }
 
+        // Calculate adaptive max queued tests based on system load
+        int maxQueuedTests;
+        if (lag < 50) {
+            // Very low lag - increase queue capacity for more thorough testing
+            maxQueuedTests = MAX_QUEUED_TESTS * 2; // 32 / 64
+        } else if (lag < 100) {
+            // Low lag - moderate increase in queue capacity
+            maxQueuedTests = MAX_QUEUED_TESTS * 3 / 2;
+        } else {
+            // Normal or high lag - use standard limits
+            maxQueuedTests = MAX_QUEUED_TESTS;
+        }
+
         // Check for queue saturation and hard limits before proceeding
-        int queuedCount = getQueuedTestJobCount(ctx);
-        int totalCount = CONCURRENT_TESTS.get() + queuedCount;
+        int totalCount = getTotalTestJobCount();
 
         if (totalCount >= HARD_TEST_JOB_LIMIT) {
-            if (_log.shouldWarn()) {
-                _log.warn("TestJob hard limit reached (" + totalCount + " >= " + HARD_TEST_JOB_LIMIT +
+            if (_log.shouldInfo()) {
+                _log.info("TestJob hard limit reached (" + totalCount + " >= " + HARD_TEST_JOB_LIMIT +
                           ") -> Cancelling test of " + _cfg);
             }
             ctx.statManager().addRateData("tunnel.testThrottled", _cfg.getLength());
             ctx.statManager().addRateData("jobQueue.testJobHardLimit", 1);
+            decrementTotalJobs(); // Clean up counter since we won't proceed
             return; // Exit without rescheduling
         }
 
-        if (queuedCount >= MAX_QUEUED_TESTS) {
-            if (_log.shouldInfo()) {
-                _log.info("TestJob queue saturated (" + queuedCount + " >= " + MAX_QUEUED_TESTS +
-                          ") -> Rescheduling test of " + _cfg);
+        // Check for queue saturation using atomic counter instead of job queue count
+        // This prevents race conditions and ensures consistent limiting
+        if (totalCount >= maxQueuedTests) {
+            // Under queue pressure, prioritize client tunnels
+            if (isExploratory) {
+                if (_log.shouldInfo()) {
+                    _log.info("TestJob queue saturated -> Deprioritizing Exploratory tunnel test (" + totalCount + " >= " + maxQueuedTests + ")");
+                }
+                ctx.statManager().addRateData("tunnel.testExploratorySkipped", _cfg.getLength());
+                scheduleRetest();
+                return;
             }
+
+            // Client tunnels get priority in saturated queue
+            if (_log.shouldInfo()) {
+                _log.info("TestJob queue saturated (" + totalCount + " >= " + maxQueuedTests + ") -> Rescheduling client tunnel test for " + _cfg);
+            }
+
             ctx.statManager().addRateData("tunnel.testThrottled", _cfg.getLength());
-            scheduleRetest();
-            return;
+            decrementTotalJobs(); // Clean up counter since we won't proceed
+            return; // Exit without rescheduling
         }
 
         // Concurrency control: Check and increment counter
         // Adaptive limits based on lag to balance testing and performance
+        // Exploratory tunnels are deprioritized under high load
         int maxTests;
         if (lag > 300) {
-            maxTests = 1; // High lag - minimal testing
-        } else if (lag > 200) {
-            maxTests = 3; // Moderate lag - minimal testing
+            maxTests = isExploratory ? 0 : 1; // No exploratory tests under high lag
         } else if (lag > 100) {
-            maxTests = 4; // Low lag - reduced testing
+            maxTests = isExploratory ? 1 : 2; // Prioritize client tests
+        } else if (lag > 50) {
+            maxTests = isExploratory ? 2 : 3; // Slightly favor client tests
         } else {
             maxTests = MAX_CONCURRENT_TESTS; // Normal operation
         }
@@ -176,7 +265,7 @@ public class TestJob extends JobImpl {
             if (current >= maxTests) {
                 if (_log.shouldInfo()) {
                     _log.info("Max " + maxTests + " concurrent tunnel tests reached -> Rescheduling test for " + _cfg +
-                              " (Queued: " + queuedCount + ")");
+                              " (Queued: " + totalCount + ")");
                 }
                 ctx.statManager().addRateData("tunnel.testThrottled", _cfg.getLength());
                 scheduleRetest();
@@ -186,7 +275,6 @@ public class TestJob extends JobImpl {
 
         // Begin tunnel test logic
         _found = false;
-        boolean isExploratory = _pool.getSettings().isExploratory();
         long now = ctx.clock().now();
 
         // Skip tunnel testing for ping tunnels - they're short-lived and don't need testing
@@ -196,6 +284,7 @@ public class TestJob extends JobImpl {
                 _log.debug("Skipping tunnel test for ping tunnel: " + tunnelNickname);
             }
             CONCURRENT_TESTS.decrementAndGet();
+            decrementTotalJobs(); // Clean up total counter
             return; // Skip testing for ping tunnels
         }
 
@@ -223,6 +312,7 @@ public class TestJob extends JobImpl {
                 _log.warn("Insufficient tunnels to test " + _cfg + " with: " + _replyTunnel + " / " + _outTunnel);
             ctx.statManager().addRateData("tunnel.testAborted", _cfg.getLength());
             CONCURRENT_TESTS.decrementAndGet();
+            decrementTotalJobs(); // Clean up total counter
             return;
         }
 
@@ -243,7 +333,10 @@ public class TestJob extends JobImpl {
         boolean sendSuccess = sendTest(m, testPeriod);
         if (!sendSuccess) {
             CONCURRENT_TESTS.decrementAndGet();
-            scheduleRetest();
+            // Try to reschedule - if it fails, clean up total counter
+            if (!tryReschedule()) {
+                decrementTotalJobs();
+            }
             return;
         }
 
@@ -294,7 +387,7 @@ public class TestJob extends JobImpl {
         }
 
         if (_log.shouldDebug()) {
-            _log.debug("Sending " + (useEncryption ? "" : "unencrypted ") + "garlic test [#" + _id + "] of "+
+            _log.debug("Sending " + (useEncryption ? "" : "unencrypted ") + "garlic test [#" + _id + "] \n* " +
                        _outTunnel + " / " + _replyTunnel);
         }
 
@@ -319,6 +412,7 @@ public class TestJob extends JobImpl {
             if (_log.shouldWarn()) {
                 _log.warn("Tunnel test job skipped -> No tunnels available for " + _cfg);
             }
+            // Don't decrement here - calling code will handle it
             return false;
         }
     }
@@ -351,7 +445,9 @@ public class TestJob extends JobImpl {
 
         // Clean up session tags
         clearTestTags();
-        scheduleRetest();
+        if (!tryReschedule()) {
+            decrementTotalJobs(); // Clean up if couldn't reschedule
+        }
     }
 
     private int getDelay() {
@@ -442,7 +538,9 @@ public class TestJob extends JobImpl {
         }
 
         if (keepGoing) {
-            scheduleRetest(true);
+            if (!tryReschedule()) {
+                decrementTotalJobs(); // Clean up if couldn't reschedule
+            }
         } else {
             getContext().statManager().addRateData(
                 isExploratory ? "tunnel.testExploratoryFailedCompletelyTime" : "tunnel.testFailedCompletelyTime",
@@ -471,24 +569,33 @@ public class TestJob extends JobImpl {
         return Math.min(clamped, MAX_TEST_PERIOD);
     }
 
-    private void scheduleRetest() {
-        scheduleRetest(false);
+    private boolean scheduleRetest() {
+        return scheduleRetest(false);
     }
 
-    private void scheduleRetest(boolean asap) {
-        if (_pool == null || !_pool.isAlive()) return;
+    /**
+     * Attempt to reschedule this test job.
+     * @return true if successfully rescheduled, false if limit exceeded
+     */
+    private boolean tryReschedule() {
+        // Don't decrement here - current job is still active
+        // Counter will be decremented when job actually ends
+        return scheduleRetest(false);
+    }
+
+    private boolean scheduleRetest(boolean asap) {
+        if (_pool == null || !_pool.isAlive()) return false;
 
         final RouterContext ctx = getContext();
 
         // Check hard limit before scheduling
-        int queuedCount = getQueuedTestJobCount(ctx);
-        int totalCount = CONCURRENT_TESTS.get() + queuedCount;
+        int totalCount = getTotalTestJobCount();
         if (totalCount >= HARD_TEST_JOB_LIMIT) {
             if (_log.shouldInfo()) {
                 _log.info("TestJob hard limit reached during reschedule (" + totalCount + " >= " + HARD_TEST_JOB_LIMIT +
                           ") -> Skipping reschedule for " + _cfg);
             }
-            return; // Skip rescheduling to prevent backlog growth
+            return false; // Indicate failure to reschedule
         }
 
         int delay = getDelay();
@@ -498,6 +605,7 @@ public class TestJob extends JobImpl {
 
         getTiming().setStartAfter(ctx.clock().now() + delay);
         ctx.jobQueue().addJob(this);
+        return true; // Indicate successful reschedule
     }
 
     private class ReplySelector implements MessageSelector {
@@ -541,8 +649,9 @@ public class TestJob extends JobImpl {
             }
             _found = true;
             CONCURRENT_TESTS.decrementAndGet(); // Decrement counter
+            decrementTotalJobs(); // Clean up total counter
             if (_log.shouldDebug()) {
-                _log.debug("Tunnel test reply received for " + _cfg + " (concurrent tests: " + CONCURRENT_TESTS.get() + ")");
+                _log.debug("Tunnel test reply received for " + _cfg + " (Active concurrent tests: " + CONCURRENT_TESTS.get() + ")");
             }
         }
 
@@ -570,8 +679,9 @@ public class TestJob extends JobImpl {
                 testFailed(getContext().clock().now() - _started);
             }
             CONCURRENT_TESTS.decrementAndGet(); // Decrement counter
+            decrementTotalJobs(); // Clean up total counter
             if (_log.shouldDebug()) {
-                _log.debug("Tunnel test timeout for " + _cfg + " (concurrent tests: " + CONCURRENT_TESTS.get() + ")");
+                _log.debug("Tunnel test timeout for " + _cfg + " (Active concurrent tests: " + CONCURRENT_TESTS.get() + ")");
             }
         }
     }
