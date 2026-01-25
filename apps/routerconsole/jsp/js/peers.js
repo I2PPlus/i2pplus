@@ -98,6 +98,11 @@ import { refreshElements } from '/js/refreshElements.js';
     refreshElements(selector, fetchUrl, REFRESH_INTERVAL);
   }
 
+  function setupSummaryRefresh() {
+    if (!summary) {return;}
+    refreshElements("#transportSummary", "/peers", REFRESH_INTERVAL);
+  }
+
   progressx.hide();
 
   document.addEventListener("DOMContentLoaded", () => {
@@ -106,10 +111,10 @@ import { refreshElements } from '/js/refreshElements.js';
 
     if (peersNTCP) {
       setupRefresh("#peersNTCP, #ntcpcon, #ntcpconnections tfoot");
-    }
-
-    if (peersSSU) {
+    } else if (peersSSU) {
       setupRefresh("#peersSSU, #udpcon, #udpconnections tfoot");
+    } else {
+      setupSummaryRefresh();
     }
 
     document.addEventListener("refreshComplete", () => {
