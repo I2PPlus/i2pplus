@@ -83,6 +83,9 @@ public class TestJob extends JobImpl {
      */
     private static final AtomicInteger TOTAL_TEST_JOBS = new AtomicInteger(0);
 
+    /** Flag to indicate if this job is valid and should be queued */
+    private boolean _valid = true;
+
     /**
      * Get the total number of TestJob instances (active + queued) using atomic counter.
      * This provides more reliable limiting than job queue counting alone.
@@ -91,6 +94,34 @@ public class TestJob extends JobImpl {
      */
     private static int getTotalTestJobCount() {
         return TOTAL_TEST_JOBS.get();
+    }
+
+    /**
+     * Static method to check if a TestJob should be created and scheduled.
+     * This prevents creating invalid job objects that would have timing issues.
+     * @param ctx the router context
+     * @param cfg the tunnel config
+     * @return true if the job should be created and scheduled, false otherwise
+     */
+    public static boolean shouldSchedule(RouterContext ctx, PooledTunnelCreatorConfig cfg) {
+        // Try to increment total jobs counter to check limit
+        int current = TOTAL_TEST_JOBS.get();
+        if (current >= HARD_TEST_JOB_LIMIT) {
+            Log log = ctx.logManager().getLog(TestJob.class);
+            if (log.shouldInfo()) {
+                log.info("TestJob hard limit reached -> Not scheduling test for " + cfg);
+            }
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Check if this TestJob instance is valid and should be queued.
+     * @return true if valid, false if it should not be queued
+     */
+    public boolean isValid() {
+        return _valid;
     }
 
     /**
@@ -125,13 +156,15 @@ public class TestJob extends JobImpl {
         _pool = (pool != null) ? pool : cfg.getTunnelPool();
         if (_pool == null && _log.shouldError()) {
             _log.error("Invalid Tunnel Test configuration → No pool for " + cfg, new Exception("origin"));
+            _valid = false;
+            return;
         }
         // Increment total job counter atomically
         if (!tryIncrementTotalJobs(ctx)) {
             if (_log.shouldInfo()) {
                 _log.info("TestJob hard limit reached -> Not scheduling test for " + cfg);
             }
-            // Don't schedule this job at all if limit exceeded
+            _valid = false;
             return;
         }
         // Start after delay; guard against negative start
@@ -544,20 +577,20 @@ public class TestJob extends JobImpl {
             getContext().statManager().addRateData(
                 isExploratory ? "tunnel.testExploratoryFailedCompletelyTime" : "tunnel.testFailedCompletelyTime",
                 timeToFail);
-            
+
             // Immediately remove tunnel from pool after 3 consecutive failures
             // This ensures failed tunnels don't remain in the pool consuming resources
             if (_log.shouldWarn()) {
                 _log.warn((isExploratory ? "Exploratory tunnel" : "Tunnel") + " failed 3 consecutive tests → Removing from pool: " + _cfg);
             }
-            
+
             // Force immediate tunnel removal by marking it as completely failed
             // This bypasses the incremental failure counting for immediate removal
             _cfg.tunnelFailedCompletely();
-            
+
             // Also remove from pool to ensure immediate effect
             _pool.tunnelFailed(_cfg);
-            
+
             _failureCount = 0;
         }
 
@@ -721,5 +754,14 @@ public class TestJob extends JobImpl {
         if (skm instanceof MuxedSKM) return ((MuxedSKM) skm).getECSKM();
         if (skm instanceof MuxedPQSKM) return ((MuxedPQSKM) skm).getECSKM();
         return null;
+    }
+
+    /**
+     * Called when the job is dropped due to router overload.
+     * Ensure we clean up the total job counter when dropped.
+     */
+    @Override
+    public void dropped() {
+        decrementTotalJobs();
     }
 }

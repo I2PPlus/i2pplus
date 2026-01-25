@@ -510,7 +510,13 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             (!disableTunnelTesting() || _context.router().isHidden() ||
              _context.router().getRouterInfo().getAddressCount() <= 0)) {
             TunnelPool pool = cfg.getTunnelPool();
-            _context.jobQueue().addJob(new TestJob(_context, cfg, pool));
+            // Check if we should schedule a TestJob before creating it
+            if (TestJob.shouldSchedule(_context, cfg)) {
+                TestJob job = new TestJob(_context, cfg, pool);
+                if (job.isValid()) {
+                    _context.jobQueue().addJob(job);
+                }
+            }
         }
     }
 
