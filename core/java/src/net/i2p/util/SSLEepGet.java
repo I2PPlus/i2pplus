@@ -611,8 +611,12 @@ public class SSLEepGet extends EepGet {
             if (!_redirectLocation.startsWith("https://"))
                 throw new IOException("Server redirect to " + _redirectLocation + " not allowed");
             _redirects++;
-            if (_redirects > 5)
-                throw new IOException("Too many redirects: to " + _redirectLocation);
+            if (_redirects > 5) {
+                String redirectURL = _redirectLocation;
+                if (redirectURL.startsWith("http://")) {redirectURL = redirectURL.substring(7, redirectURL.length());}
+                if (redirectURL.contains("b32.i2p")) {redirectURL = redirectURL.substring(0,32) + "...";}
+                throw new IOException("Too many redirects to " + redirectURL);
+            }
             if (_log.shouldInfo())
                 _log.info("Redirecting to " + _redirectLocation);
             _actualURL = _redirectLocation;

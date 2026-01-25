@@ -274,6 +274,7 @@ public class EepHead extends EepGet {
                 ioe.initCause(use);
                 throw ioe;
             }
+
             AuthState as = _authState;
             if (_responseCode == 407) {
                 if (!_shouldProxy)
@@ -286,8 +287,12 @@ public class EepHead extends EepGet {
                 // actually happens in getRequest()
             } else {
                 _redirects++;
-                if (_redirects > 5)
-                    throw new IOException("Too many redirects: to " + _redirectLocation);
+                if (_redirects > 5) {
+                    String redirectURL = _redirectLocation;
+                    if (redirectURL.startsWith("http://")) {redirectURL = redirectURL.substring(7, redirectURL.length());}
+                    if (redirectURL.contains("b32.i2p")) {redirectURL = redirectURL.substring(0,32) + "...";}
+                    throw new IOException("Too many redirects to " + redirectURL);
+                }
                 if (_log.shouldInfo()) _log.info("Redirecting to " + _redirectLocation);
                 if (as != null)
                     as.authSent = false;
