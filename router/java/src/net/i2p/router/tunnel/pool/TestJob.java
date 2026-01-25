@@ -101,13 +101,12 @@ public class TestJob extends JobImpl {
      * @return true if job can proceed, false if limit exceeded
      */
     private static boolean tryIncrementTotalJobs(RouterContext ctx) {
-        int current;
-        do {
-            current = TOTAL_TEST_JOBS.get();
-            if (current >= HARD_TEST_JOB_LIMIT) {
-                return false;
-            }
-        } while (!TOTAL_TEST_JOBS.compareAndSet(current, current + 1));
+        int current = TOTAL_TEST_JOBS.get();
+        if (current >= HARD_TEST_JOB_LIMIT) {
+            return false;
+        }
+        // Simple increment - avoid contention from do-while loop
+        TOTAL_TEST_JOBS.incrementAndGet();
         return true;
     }
 
