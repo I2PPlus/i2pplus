@@ -2770,6 +2770,7 @@ body.hasExpandedElement #configinfo tr.config:not(.expanded) th{color:#770;trans
 #faq h2{padding-left:38px;background:var(--faq) no-repeat 10px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
 #filterlist h2{padding-left:38px;background:var(--filter) no-repeat 10px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
 #glossary h2{padding-left:38px;background:var(--ask) no-repeat 10px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
+h2#jsonrpc{padding-left:38px;background:url(../images/i2cp.svg) no-repeat 10px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
 #legal h2{padding-left:38px;background:var(--legal) no-repeat 10px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
 #newuserguide h2{padding-left:38px;background:url(images/favicon.svg) no-repeat 10px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
 #reseedhelp h2{padding-left:38px;background:var(--reseed) no-repeat 10px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
