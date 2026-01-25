@@ -578,8 +578,11 @@ public class TestJob extends JobImpl {
      * @return true if successfully rescheduled, false if limit exceeded
      */
     private boolean tryReschedule() {
-        // Don't decrement here - current job is still active
-        // Counter will be decremented when job actually ends
+        // Increment counter for new execution cycle
+        // Current job will decrement when it exits
+        if (!tryIncrementTotalJobs(getContext())) {
+            return false;
+        }
         return scheduleRetest(false);
     }
 
