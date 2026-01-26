@@ -41,7 +41,7 @@ public class TestJob extends JobImpl {
     private static final AtomicInteger __id = new AtomicInteger();
     private int _id;
     private static final int MIN_TEST_PERIOD = 8*1000;
-    private static final int MAX_TEST_PERIOD = 20*1000;
+    private static final int MAX_TEST_PERIOD = 15*1000;
 
     /**
      * Maximum number of tunnel tests that can run concurrently.
@@ -228,13 +228,13 @@ public class TestJob extends JobImpl {
 
         // Calculate adaptive max queued tests based on system load
         int maxQueuedTests;
-        if (maxLag < 500 && avgLag < 2) {
+        if (maxLag < 300 && avgLag < 1) {
             // Super low lag
             maxQueuedTests = MAX_QUEUED_TESTS * 6; // 192 / 384
-        } else if (maxLag < 1000 && avgLag < 5) {
+        } else if (maxLag < 400 && avgLag < 2) {
             // Very low lag - increase queue capacity for more thorough testing
             maxQueuedTests = MAX_QUEUED_TESTS * 4; // 128 / 256
-        } else if (maxLag < 2000 && avgLag < 10) {
+        } else if (maxLag < 500 && avgLag < 3) {
             // Low lag - moderate increase in queue capacity
             maxQueuedTests = MAX_QUEUED_TESTS * 3 / 2;
         } else {
