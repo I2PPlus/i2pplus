@@ -118,7 +118,8 @@ class BanlistRenderer {
                     buf.append(" banFF");
                 }
                 buf.append("\"><td>")
-                   .append(_t(entry.cause,entry.causeCode).replace("<b>➜</b> ",""))
+                   .append(_t(entry.cause,entry.causeCode)
+                   .replace("<b>➜</b> ","").replace("<b>-></b> ","").replace("<b>-&gt;</b> ",""))
                    .append("</td><td>:</td><td><span class=b64>")
                    .append(key.toBase64())
                    .append("</span></td><td data-sort=").append(expires).append(">")
