@@ -306,7 +306,7 @@ public class JobQueue {
         if (numReady > _context.getProperty(PROP_MAX_WAITING_JOBS, DEFAULT_MAX_WAITING_JOBS)) {
             Class<? extends Job> cls = job.getClass();
             boolean disableTunnelTests = _context.getBooleanProperty("router.disableTunnelTesting");
-            boolean shouldDrop = getMaxLag() >= MIN_LAG_TO_DROP;
+            boolean shouldDrop = getMaxLag() >= MIN_LAG_TO_DROP && getAvgLag() > 10;
             if (shouldDrop) {
                 if (cls == RepublishLeaseSetJob.class) {return false;}
                 if ((!disableTunnelTests && cls == TestJob.class) || cls == PeerTestJob.class) {

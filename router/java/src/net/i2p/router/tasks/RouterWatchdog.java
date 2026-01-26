@@ -14,12 +14,12 @@ import net.i2p.util.SystemVersion;
 
 /**
  * Router health monitor and automatic recovery system.
- * 
+ *
  * This watchdog runs continuously to monitor router health and detect
  * potentially hung or unresponsive states. It checks various system
  * components including job queue processing, client responsiveness,
  * and network connectivity.
- * 
+ *
  * <strong>Monitoring Checks:</strong>
  * <ul>
  *   <li>Job queue liveliness - detects stuck jobs</li>
@@ -27,7 +27,7 @@ import net.i2p.util.SystemVersion;
  *   <li>Network error rates - detects connectivity issues</li>
  *   <li>Communication system status - checks network health</li>
  * </ul>
- * 
+ *
  * <strong>Recovery Actions:</strong>
  * <ul>
  *   <li>Logs detailed system status when problems detected</li>
@@ -35,7 +35,7 @@ import net.i2p.util.SystemVersion;
  *   <li>May force JVM restart after consecutive failures</li>
  *   <li>Configurable via watchdog.haltOnHang property</li>
  * </ul>
- * 
+ *
  * The watchdog runs every minute and will attempt recovery
  * if problems persist across multiple consecutive checks.
  * This helps prevent router from becoming completely unresponsive
@@ -55,7 +55,7 @@ public class RouterWatchdog implements Runnable {
      * Create a new router watchdog.
      * The watchdog monitors router health and can force a restart if the router
      * appears to be hung or unresponsive.
-     * 
+     *
      * @param ctx the router context for accessing router services and logging
      */
     public RouterWatchdog(RouterContext ctx) {
@@ -75,7 +75,7 @@ public class RouterWatchdog implements Runnable {
      * Verify that the job queue is processing jobs normally.
      * Checks if any job has been running for too long, which could indicate
      * a hung job queue.
-     * 
+     *
      * @return true if job queue appears healthy, false if a job has been
      *         running longer than the maximum allowed time
      */
@@ -98,7 +98,7 @@ public class RouterWatchdog implements Runnable {
      * Verify that client applications are responsive.
      * Delegates to the client manager to check if all client applications
      * are still responding properly.
-     * 
+     *
      * @return true if all clients appear healthy, false otherwise
      */
     public boolean verifyClientLiveliness() {
@@ -130,18 +130,18 @@ public class RouterWatchdog implements Runnable {
                        "\n* Comm system: " + _context.commSystem().getStatus() +
                        "\n* Peers: " + _context.commSystem().countActivePeers() +
                        "\n* Ready and waiting jobs: " + _context.jobQueue().getReadyCount() +
-                       "\n* Lag: " + DataHelper.formatDuration(_context.jobQueue().getMaxLag()) +
-                       "\n* Part. tunnels: " + _context.tunnelManager().getParticipatingCount() +
+                       "\n* Lag (Avg / Max): " + DataHelper.formatDuration(_context.jobQueue().getAvgLag()) +
+                                                 DataHelper.formatDuration(_context.jobQueue().getMaxLag()) +
+                       "\n* Transit tunnels: " + _context.tunnelManager().getParticipatingCount() +
                        "\n* Send processing time: " + DataHelper.formatDuration((long)processTime) +
                        "\n* Send rate: " + DataHelper.formatSize((long)bps) + "Bps" +
-                       "\n* Memory: " + DataHelper.formatSize(used) + "B / " + DataHelper.formatSize(max) + 'B');
+                       "\n* Memory Usage: " + DataHelper.formatSize(used) + "B / " + DataHelper.formatSize(max) + 'B');
 
             if (_consecutiveErrors == 1) {
                 _log.log(Log.CRIT, "Router appears hung, or there is severe network congestion. Watchdog starts barking!");
                  _context.router().eventLog().addEvent(EventLog.WATCHDOG);
-                // This works on linux...
-                // It won't on windows, and we can't call i2prouter.bat either, it does something
-                // completely different...
+                // This works on Linux...
+                // It won't on Windows, and we can't call i2prouter.bat either, it does something completely different...
                 long now = _context.clock().now();
                 if (now - _lastDump > MIN_DUMP_INTERVAL) {
                     _lastDump = now;

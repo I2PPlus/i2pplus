@@ -1200,8 +1200,8 @@ public class Router implements RouterClock.ClockShiftListener {
                     Rate lagRate = jobLag.getRate(RateConstants.ONE_MINUTE);
                     avgLag = (long) lagRate.getAverageValue();
                 }
-                if (maxLag > 1000 && avgLag > 200 && getUptime() > 10*60*1000) {
-                    if (maxLag > 1500 && avgLag > 300) {cong = CAPABILITY_CONGESTION_SEVERE;}
+                if (maxLag > 1000 && avgLag > 10 && getUptime() > 10*60*1000) {
+                    if (maxLag > 1500 && avgLag > 50) {cong = CAPABILITY_CONGESTION_SEVERE;}
                     else {cong = CAPABILITY_CONGESTION_MODERATE;}
                 } else {
                     double bwLim = getSharePercentage() * 1024 *

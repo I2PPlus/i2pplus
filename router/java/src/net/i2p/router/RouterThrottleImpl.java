@@ -24,8 +24,8 @@ public class RouterThrottleImpl implements RouterThrottle {
     private final long _rejectStartupTime;
 
     /** Arbitrary hard limit - if it's taking this long to get to a job, we're congested. */
-    private static final long JOB_LAG_LIMIT_NETWORK = 3*1000;
-    private static final long JOB_LAG_LIMIT_NETDB = 3*1000;
+    private static final long JOB_LAG_LIMIT_NETWORK = 3000;
+    private static final long JOB_LAG_LIMIT_NETDB = 3000;
     private static final long JOB_LAG_LIMIT_TUNNEL = SystemVersion.isSlow() ? 3000 : 2000;
     public static final String PROP_MAX_TUNNELS = "router.maxParticipatingTunnels";
     public static final int DEFAULT_MAX_TUNNELS = SystemVersion.isSlow() ? 3*1000 :
@@ -87,19 +87,26 @@ public class RouterThrottleImpl implements RouterThrottle {
      */
     public boolean acceptNetworkMessage() {
         long lag = _context.jobQueue().getMaxLag();
-        if ((lag > JOB_LAG_LIMIT_NETWORK) && (_context.router().getUptime() > 60*1000)) {
-            if (_log.shouldWarn()) {_log.warn("Throttling Network Reader -> Job lag is " + lag + "ms");}
+        long avgLag = _context.jobQueue().getAvgLag();
+        if ((lag > JOB_LAG_LIMIT_NETWORK && avgLag > 10) && (_context.router().getUptime() > 60*1000)) {
+            if (_log.shouldWarn()) {_log.warn("Throttling Network Reader -> Max / Avg job lag is " + lag + " / " + avgLag + "ms");}
             _context.statManager().addRateData("router.throttleNetworkCause", lag);
             return false;
         } else {return true;}
     }
 
-    /** @deprecated unused, function moved to netdb */
-    @Deprecated
+    /**
+     * Determine if we should accept a NetDb lookup request based on current system load.
+     * Refuses requests when job queue lag exceeds the limit to prevent system overload.
+     *
+     * @param key the hash key being looked up (not used in the throttling decision)
+     * @return true if the request should be accepted, false if it should be refused due to high load
+     */
     public boolean acceptNetDbLookupRequest(Hash key) {
         long lag = _context.jobQueue().getMaxLag();
-        if (lag > JOB_LAG_LIMIT_NETDB) {
-            if (_log.shouldDebug()) {_log.debug("Refusing NetDb Lookup request -> Job lag is " + lag + "ms");}
+        long avgLag = _context.jobQueue().getAvgLag();
+        if (lag > JOB_LAG_LIMIT_NETDB && avgLag > 10) {
+            if (_log.shouldDebug()) {_log.debug("Refusing NetDb Lookup request -> Max / Avg job lag is " + lag + " / " + avgLag + "ms");}
             _context.statManager().addRateData("router.throttleNetDbCause", lag);
             return false;
         } else {return true;}
@@ -193,7 +200,8 @@ public class RouterThrottleImpl implements RouterThrottle {
          * Reduce tunnel growth if we are growing faster than the lag based metrics can detect reliably.
          */
         long lag = _context.jobQueue().getMaxLag();
-        boolean highload = lag > 1000 && SystemVersion.getCPULoadAvg() > 95;
+        long avgLag = _context.jobQueue().getAvgLag();
+        boolean highload = lag > 1000 && avgLag > 10 && SystemVersion.getCPULoadAvg() > 95;
         int minToThrottle = getMinThrottleTunnels();
         double tgf = getTunnelGrowthFactor();
         if (highload) {

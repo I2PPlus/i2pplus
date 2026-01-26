@@ -120,7 +120,8 @@ class RequestThrottler {
         boolean isOld = false;
         long uptime = context.router().getUptime();
         long lag = context.jobQueue().getMaxLag();
-        boolean highload = lag > 1000 && SystemVersion.getCPULoadAvg() > 95;
+        long avgLag = context.jobQueue().getAvgLag();
+        boolean highload = lag > 1000 && avgLag > 10 && SystemVersion.getCPULoadAvg() > 95;
         if (ri != null) {
             isFF = ri.getCapabilities().contains("f");
             v = ri.getVersion();
