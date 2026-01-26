@@ -258,6 +258,45 @@ public class JobQueue {
         return _context.clock().now() - startAfter;
     }
 
+    /**
+     * Get the average lag time for jobs waiting in the queue.
+     * This is the average delay between when jobs were supposed to start
+     * and the current time across all ready jobs.
+     *
+     * @return average lag in milliseconds, or 0 if queue is empty
+     * @since 0.9.68+
+     */
+    public long getAvgLag() {
+        long now = _context.clock().now();
+        long totalLag = 0;
+        int jobCount =
+        // Check ready jobs
+        for (Job job : _readyJobs) {
+            JobTiming jt = job.getTiming();
+            if (jt != null) {
+                long startAfter = jt.getStartAfter();
+                long lag = now - startAfter;
+                if (lag > 0) {
+                    totalLag += lag;
+                    jobCount++;
+                }
+            }
+
+        // Check high priority jobs
+        for (Job job : _highPriorityJobs) {
+            JobTiming jt = job.getTiming();
+            if (jt != null) {
+                long startAfter = jt.getStartAfter();
+                long lag = now - startAfter;
+                if (lag > 0) {
+                    totalLag += lag;
+                    jobCount++;
+                }
+            }
+
+        return jobCount > 0 ? totalLag / jobCount : 0;
+    }
+
     private boolean shouldDrop(Job job, int numReady) {
         if (_maxWaitingJobs <= 0) return false;
         if (!_allowParallelOperation) return false;
@@ -692,7 +731,5 @@ public class JobQueue {
         }
         return count;
     }
-
-
 
 }
