@@ -488,5 +488,6 @@
   <target name="cleandep" depends="clean">
   </target>
   <target name="distclean" depends="clean">
+    <delete dir="../bin"/>
   </target>
 </project>

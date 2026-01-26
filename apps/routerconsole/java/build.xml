@@ -735,7 +735,9 @@
   </target>
 
   <target name="cleandep" depends="clean"/>
-  <target name="distclean" depends="clean"/>
+  <target name="distclean" depends="clean">
+    <delete dir="../bin"/>
+  </target>
 
   <target name="compressJavascript">
     <exec executable="uglifyjs">
