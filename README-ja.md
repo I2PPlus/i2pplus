@@ -6,7 +6,7 @@
 
 # I2P+
 
-[English](README.md) | [Ридми-русский](README-ru.md) | [中文](README-zh.md) | [हिन्दी](README-hi.md) | [བོད་ཡིག](README-bo.md)
+[English](README.md) | [Русский](README-ru.md) | [中文](README-zh.md) | [हिन्दी](README-hi.md) | [བོད་ཡིག](README-bo.md) | [فارسی](README-fa.md)
 
 これはI2PのJava実装のソフトフォークのソースコードです。
 

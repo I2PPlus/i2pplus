@@ -6,7 +6,7 @@
 
 # I2P+
 
-[Русский](README-ru.md) | [日本語](README-ja.md) | [中文](README-zh.md) | [हिन्दी](README-hi.md) | [བོད་ཡིག](README-bo.md)
+[Русский](README-ru.md) | [日本語](README-ja.md) | [中文](README-zh.md) | [हिन्दी](README-hi.md) | [བོད་ཡིག](README-bo.md) | [فارسی](README-fa.md)
 
 འདི་ནི་Javaགྱི་I2Pལག་བསྟར་གྱི་soft-forkགྱི་འབྱུང་ཁུངས་ཀོད་ལས་རེད།
 

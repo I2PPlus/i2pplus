@@ -1,6 +1,6 @@
 # I2P+
 
-[English](README.md) | [中文](README-zh.md) | [བོད་ཡིག](README-bo.md)
+[English](README.md) | [Русский](README-ru.md) | [中文](README-zh.md) | [བོད་ཡིག](README-bo.md) | [فارسی](README-fa.md)
 
 这是JAVA版本的i2p软fork源代码。
 

@@ -6,7 +6,7 @@
 
 # I2P+
 
-[English](README.md) | [Ридми-русский](README-ru.md) | [読んでください](README-ja.md) | [中文](README-zh.md) | [བོད་ཡིག](README-bo.md)
+[English](README.md) | [Русский](README-ru.md) | [日本語](README-ja.md) | [中文](README-zh.md) | [བོད་ཡིག](README-bo.md) | [فارسی](README-fa.md)
 
 यह Java कार्यान्वयन के I2P के सॉफ्ट-फर्क का स्रोत कोड है।
 
