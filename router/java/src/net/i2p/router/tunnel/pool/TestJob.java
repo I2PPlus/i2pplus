@@ -228,9 +228,12 @@ public class TestJob extends JobImpl {
 
         // Calculate adaptive max queued tests based on system load
         int maxQueuedTests;
-        if (maxLag < 1000 && avgLag < 5) {
+        if (maxLag < 500 && avgLag < 2) {
+            // Super low lag
+            maxQueuedTests = MAX_QUEUED_TESTS * 6; // 192 / 384
+        } else if (maxLag < 1000 && avgLag < 5) {
             // Very low lag - increase queue capacity for more thorough testing
-            maxQueuedTests = MAX_QUEUED_TESTS * 2; // 32 / 64
+            maxQueuedTests = MAX_QUEUED_TESTS * 4; // 128 / 256
         } else if (maxLag < 2000 && avgLag < 10) {
             // Low lag - moderate increase in queue capacity
             maxQueuedTests = MAX_QUEUED_TESTS * 3 / 2;
@@ -295,7 +298,7 @@ public class TestJob extends JobImpl {
             current = CONCURRENT_TESTS.get();
             if (current >= maxTests) {
                 if (_log.shouldInfo()) {
-                    _log.info("Max " + maxTests + " concurrent tunnel tests reached -> Rescheduling test for " + _cfg +
+                    _log.info("Max " + maxTests + " concurrent tunnel tests reached \n* Rescheduling test for " + _cfg +
                               " (Queued: " + totalCount + ")");
                 }
                 ctx.statManager().addRateData("tunnel.testThrottled", _cfg.getLength());
@@ -564,10 +567,10 @@ public class TestJob extends JobImpl {
             timeToFail);
 
         // Only fail the tunnel under test — do NOT blame _otherTunnel
-        _failureCount++; // Track the failure
-        boolean keepGoing = _failureCount < 2; // Keep going only if < 2 fails
+        // Increment the tunnel's global failure count and check if we should continue
+        boolean keepGoing = _cfg.tunnelFailed(); // This increments the counter and returns true if < MAX_CONSECUTIVE_TEST_FAILURES
 
-        if (_log.shouldWarn() && _failureCount >= 2) {
+        if (_log.shouldWarn()) {
             _log.warn((isExploratory ? "Exploratory tunnel" : "Tunnel") + " Test failed in " + timeToFail + "ms → " + _cfg);
         }
 
