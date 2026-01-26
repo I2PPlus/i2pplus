@@ -993,9 +993,9 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
              _transport.messageReceived(msg, null, _remotePeer, state.getLifetime(), sz);
         } catch (I2NPMessageException ime) {
             if (shouldLogDebug) {
-                _log.warn("[SSU] Message invalid: " + state + "\n* PeerState: " + this + ime);
+                _log.warn("[SSU] Received invalid message... " + state + "\n* PeerState: " + this + ime);
             } else if (_log.shouldWarn()) {
-                _log.warn("[SSU] Message invalid: " + state + "\n* PeerState: " + this + "\n* Error: " + ime.getMessage());
+                _log.warn("[SSU] Received invalid message... " + state + "\n* PeerState: " + this + "\n* Error: " + ime.getMessage());
             }
         } catch (RuntimeException e) {
             // e.g. AIOOBE

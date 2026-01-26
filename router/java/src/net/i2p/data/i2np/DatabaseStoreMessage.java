@@ -167,7 +167,7 @@ public class DatabaseStoreMessage extends FastI2NPMessageImpl {
                     throw new I2NPMessageException("RouterInfo too big: " + decompressed.length);
                 }
                 _dbEntry.readBytes(new ByteArrayInputStream(decompressed));
-            } catch (DataFormatException dfe) {throw new I2NPMessageException("Error reading the RouterInfo -> Decompression failed", dfe);}
+            } catch (DataFormatException dfe) {throw new I2NPMessageException("Could not read RouterInfo -> Decompression failed", dfe);}
             catch (IOException ioe) {throw new I2NPMessageException("Corrupt compressed RouterInfo size = " + compressedSize, ioe);}
         } else {throw new I2NPMessageException("Unknown type " + dbType);}
     }
