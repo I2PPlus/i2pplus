@@ -12,6 +12,7 @@ import java.util.List;
 import net.i2p.data.DataHelper;
 import net.i2p.router.Job;
 import net.i2p.router.JobStats;
+import net.i2p.router.tunnel.pool.TestJob;
 import net.i2p.router.web.HelperBase;
 import net.i2p.util.ObjectCounterUnsafe;
 import net.i2p.util.SystemVersion;
@@ -179,16 +180,16 @@ public class JobQueueHelper extends HelperBase {
 
         buf.append("<table id=schedjobs>\n");
         buf.append("<thead><tr><th>").append(_t("Queue Totals")).append("</th></tr></thead>\n");
-            Collections.sort(names, new JobCountComparator(counter));
-            buf.append("<tr><td>\n<ul>\n");
-            for (String name : names) {
-                     buf.append("<li><span class=jobcount><b>").append(name).append(":</b> ")
-                        .append(counter.count(name)).append("</span></li>\n");
-                 }
-            // TODO: Add aggregate total for single jobs and total for all jobs
-            // buf.append("<span class=\"jobcount\"><b>").append(_t("Otherjobs")).append(":</b> ")
-            // .append(otherjobs).append("</span>").append(_t("Total jobs scheduled")).append(": ").append(totaljobs);
-            buf.append("</ul></td></tr></table>\n");
+        Collections.sort(names, new JobCountComparator(counter));
+        buf.append("<tr><td>\n<ul>\n");
+        int maxTestJobs = TestJob.HARD_TEST_JOB_LIMIT;
+
+        for (String name : names) {
+            buf.append("<li><span class=jobcount><b>").append(name).append(":</b> ")
+               .append(name.equals(_t("Test Local Tunnel")) ? counter.count(name) + " / " + maxTestJobs : counter.count(name))
+               .append("</span></li>\n");
+        }
+        buf.append("</ul></td></tr></table>\n");
     }
 
 

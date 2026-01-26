@@ -67,7 +67,7 @@ public class TestJob extends JobImpl {
      * Above this threshold, no new tests are scheduled until count decreases.
      * Prevents ever-increasing backlogs that could cause job lag.
      */
-    private static final int HARD_TEST_JOB_LIMIT = SystemVersion.isSlow() ? 128 : 256;
+    public static final int HARD_TEST_JOB_LIMIT = SystemVersion.isSlow() ? 128 : 256;
 
     /**
      * Static counter tracking the number of currently active tunnel tests.
