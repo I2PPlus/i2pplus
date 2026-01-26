@@ -178,7 +178,10 @@ public class TestJob extends JobImpl {
     @Override
     public void runJob() {
         final RouterContext ctx = getContext();
-        if (_pool == null || !_pool.isAlive()) return;
+        if (_pool == null || !_pool.isAlive()) {
+            decrementTotalJobs();
+            return;
+        }
 
         // Check for graceful shutdown
         if (ctx.router().gracefulShutdownInProgress()) {
