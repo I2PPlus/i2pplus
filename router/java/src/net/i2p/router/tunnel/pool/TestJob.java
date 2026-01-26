@@ -419,6 +419,7 @@ public class TestJob extends JobImpl {
                     _log.info("Outbound gateway for tunnel " + _outTunnel.getSendTunnelId(0) +
                               " not yet registered -> Deferring test for " + _cfg);
                 }
+                decrementTotalJobs();
                 scheduleRetest();
                 return false;
             }
@@ -445,7 +446,10 @@ public class TestJob extends JobImpl {
      */
     public void testSuccessful(int ms) {
         final RouterContext ctx = getContext();
-        if (_pool == null || !_pool.isAlive()) return;
+        if (_pool == null || !_pool.isAlive()) {
+            decrementTotalJobs();
+            return;
+        }
 
         // Update success history for adaptive testing frequency
         updateSuccessHistory(true);
@@ -545,7 +549,10 @@ public class TestJob extends JobImpl {
      * @param timeToFail time in milliseconds before the test failed
      */
     private void testFailed(long timeToFail) {
-        if (_pool == null || !_pool.isAlive()) return;
+        if (_pool == null || !_pool.isAlive()) {
+            decrementTotalJobs();
+            return;
+        }
 
         boolean isExploratory = _pool.getSettings().isExploratory();
         getContext().statManager().addRateData(
