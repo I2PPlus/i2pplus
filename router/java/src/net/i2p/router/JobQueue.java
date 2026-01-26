@@ -269,7 +269,8 @@ public class JobQueue {
     public long getAvgLag() {
         long now = _context.clock().now();
         long totalLag = 0;
-        int jobCount =
+        int jobCount = 0;
+
         // Check ready jobs
         for (Job job : _readyJobs) {
             JobTiming jt = job.getTiming();
@@ -281,6 +282,7 @@ public class JobQueue {
                     jobCount++;
                 }
             }
+        }
 
         // Check high priority jobs
         for (Job job : _highPriorityJobs) {
@@ -293,6 +295,7 @@ public class JobQueue {
                     jobCount++;
                 }
             }
+        }
 
         return jobCount > 0 ? totalLag / jobCount : 0;
     }
