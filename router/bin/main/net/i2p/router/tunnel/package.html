@@ -4,7 +4,52 @@
 </head>
 <body>
 <p>
-    All the work of managing locally created and participating tunnels, creating and handling tunnel messages, and their encryption. Deals with the five different types of tunnel hops: outbound gateway, outbound endpoint, inbound gateway, inbound endpoint, and middle hop. Distributes messages received for each type. Validation, queueing and throttling for each type. Tunnel build message handling is in the pool package.
+    Core tunnel management, message processing, and encryption for I2P's anonymous routing system.
 </p>
+
+<p>
+    This package provides the complete implementation of I2P's tunnel system, which forms the backbone of anonymous communication in the I2P network. Tunnels provide bidirectional, encrypted paths through multiple routers, ensuring both anonymity and message delivery reliability.
+</p>
+
+<p><b>Key Components:</b></p>
+<ul>
+<li>TunnelDispatcher - Central coordinator for tunnel message routing</li>
+<li>TunnelGateway - Manages tunnel entry and exit points</li>
+<li>TunnelParticipant - Handles participation in tunnels</li>
+<li>TunnelCreator - Manages tunnel creation and setup</li>
+<li>TunnelPool - Manages collections of tunnels</li>
+<li>TunnelInfo - Contains tunnel metadata and configuration</li>
+<li>HopProcessor - Processes messages at each tunnel hop</li>
+<li>TunnelValidator - Validates tunnel integrity and authenticity</li>
+</ul>
+
+<p><b>Main Functionality:</b></p>
+<ul>
+<li>Tunnel creation and management</li>
+<li>Message encryption and decryption at each hop</li>
+<li>Five tunnel hop types: IBGW, IBEP, OBEP, OBGW, Middle</li>
+<li>Message validation and authentication</li>
+<li>Queueing and throttling for performance management</li>
+<li>Tunnel failure detection and recovery</li>
+<li>Message routing and forwarding</li>
+<li>Tunnel statistics and monitoring</li>
+</ul>
+
+<p><b>Tunnel Hop Types:</b></p>
+<ul>
+<li>Inbound Gateway (IBGW) - Entry point for inbound tunnels</li>
+<li>Inbound Endpoint (IBEP) - Exit point for inbound tunnels</li>
+<li>Outbound Endpoint (OBEP) - Entry point for outbound tunnels</li>
+<li>Outbound Gateway (OBGW) - Exit point for outbound tunnels</li>
+<li>Middle Hop - Intermediate router in tunnel path</li>
+</ul>
+
+<p><b>Usage Notes:</b></p>
+<ul>
+<li>Tunnel building operations are handled in the pool package</li>
+<li>Essential for I2P's anonymity and routing capabilities</li>
+<li>Integrates with transport layer for message delivery</li>
+<li>Provides the foundation for client communication</li>
+</ul>
 </body>
 </html>

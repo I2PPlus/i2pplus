@@ -24,151 +24,16 @@
 </p>
 
 <div style="overflow-x: auto; width: 100%;">
-  <svg width="900" height="600" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-        <polygon points="0 0, 10 3.5, 0 7" fill="#333" />
-      </marker>
-    </defs>
+<div class="flow">
+NTCP2 ────────────────────────────── SSU ──────────────────────────────────────
+kernel→NIO→Reader → <span class="ntcp2">NTCP2 PerConn PriQ→Frag</span> → Writer→NIO→Kernel
+                    ↑
+kernel→Reader→CodelQ → <span class="ssu">SSU Reasm→RED→Codel/PriQ→Frag→Win/ReTX→OMF→CodelQ</span> → Writer→Kernel
+                    ↓
+<span class="tunnel">Tunnels / Bandwidth Limiter</span> ↔──────────────┘
 
-    <!-- Title -->
-    <text x="450" y="20" style="font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; text-anchor: middle;">I2P Router Message Flow</text>
-
-    <!-- NTCP2 Left Side -->
-    <text x="50" y="50" style="font-family: Arial, sans-serif; font-size: 11px; font-weight: bold; text-anchor: middle;">NTCP2</text>
-    <rect x="20" y="60" width="80" height="25" style="fill: #f0f0f0; stroke: #333; stroke-width: 1.5;"/>
-    <text x="60" y="77" style="font-family: Arial, sans-serif; font-size: 9px; text-anchor: middle;">Kernel</text>
-    
-    <rect x="120" y="60" width="40" height="25" style="fill: #f0f0f0; stroke: #333; stroke-width: 1.5;"/>
-    <text x="140" y="77" style="font-family: Arial, sans-serif; font-size: 9px; text-anchor: middle;">NIO</text>
-    
-    <rect x="180" y="60" width="50" height="25" style="fill: #f0f0f0; stroke: #333; stroke-width: 1.5;"/>
-    <text x="205" y="77" style="font-family: Arial, sans-serif; font-size: 9px; text-anchor: middle;">Reader</text>
-
-    <!-- Per-Conn Queue -->
-    <rect x="260" y="55" width="70" height="35" style="fill: #e6f3ff; stroke: #0066cc; stroke-width: 1.5;"/>
-    <text x="295" y="70" style="font-family: Arial, sans-serif; font-size: 9px; text-anchor: middle;">Per-Conn</text>
-    <text x="295" y="82" style="font-family: Arial, sans-serif; font-size: 9px; text-anchor: middle;">Pri Queue</text>
-
-    <!-- Tunnels Section -->
-    <rect x="380" y="120" width="60" height="30" style="fill: #ffe6e6; stroke: #cc0000; stroke-width: 1.5;"/>
-    <text x="410" y="140" style="font-family: Arial, sans-serif; font-size: 9px; text-anchor: middle;">IBGW</text>
-
-    <rect x="380" y="200" width="80" height="30" style="fill: #ffe6e6; stroke: #cc0000; stroke-width: 1.5;"/>
-    <text x="420" y="220" style="font-family: Arial, sans-serif; font-size: 9px; text-anchor: middle;">Middle hop</text>
-
-    <rect x="380" y="280" width="60" height="30" style="fill: #ffe6e6; stroke: #cc0000; stroke-width: 1.5;"/>
-    <text x="410" y="300" style="font-family: Arial, sans-serif; font-size: 9px; text-anchor: middle;">OBEP</text>
-
-    <!-- RED and Codel Queues -->
-    <rect x="500" y="110" width="120" height="25" style="fill: #e6f3ff; stroke: #0066cc; stroke-width: 1.5;"/>
-    <text x="560" y="127" style="font-family: Arial, sans-serif; font-size: 9px; text-anchor: middle;">RED - Codel/Pri - Frag</text>
-
-    <rect x="500" y="190" width="60" height="25" style="fill: #e6f3ff; stroke: #0066cc; stroke-width: 1.5;"/>
-    <text x="530" y="207" style="font-family: Arial, sans-serif; font-size: 9px; text-anchor: middle;">RED</text>
-
-    <rect x="500" y="270" width="60" height="25" style="fill: #e6f3ff; stroke: #0066cc; stroke-width: 1.5;"/>
-    <text x="530" y="287" style="font-family: Arial, sans-serif; font-size: 9px; text-anchor: middle;">RED</text>
-
-    <!-- Message Pools -->
-    <rect x="620" y="150" width="70" height="80" style="fill: #f0f0f0; stroke: #333; stroke-width: 1.5;"/>
-    <text x="655" y="185" style="font-family: Arial, sans-serif; font-size: 9px; text-anchor: middle;">In Net</text>
-    <text x="655" y="197" style="font-family: Arial, sans-serif; font-size: 9px; text-anchor: middle;">Msg Pool</text>
-
-    <rect x="620" y="250" width="70" height="80" style="fill: #f0f0f0; stroke: #333; stroke-width: 1.5;"/>
-    <text x="655" y="285" style="font-family: Arial, sans-serif; font-size: 9px; text-anchor: middle;">Out Net</text>
-    <text x="655" y="297" style="font-family: Arial, sans-serif; font-size: 9px; text-anchor: middle;">Msg Pool</text>
-
-    <!-- Bandwidth Limiter -->
-    <rect x="720" y="200" width="100" height="30" style="fill: #ffe6e6; stroke: #cc0000; stroke-width: 1.5;"/>
-    <text x="770" y="220" style="font-family: Arial, sans-serif; font-size: 9px; text-anchor: middle;">Bandwidth Limiter</text>
-
-    <!-- SSU Section -->
-    <text x="50" y="380" style="font-family: Arial, sans-serif; font-size: 11px; font-weight: bold; text-anchor: middle;">SSU</text>
-    <rect x="20" y="390" width="80" height="25" style="fill: #f0f0f0; stroke: #333; stroke-width: 1.5;"/>
-    <text x="60" y="407" style="font-family: Arial, sans-serif; font-size: 9px; text-anchor: middle;">Kernel</text>
-    
-    <rect x="120" y="390" width="50" height="25" style="fill: #f0f0f0; stroke: #333; stroke-width: 1.5;"/>
-    <text x="145" y="407" style="font-family: Arial, sans-serif; font-size: 9px; text-anchor: middle;">Reader</text>
-
-    <rect x="190" y="390" width="50" height="25" style="fill: #e6f3ff; stroke: #0066cc; stroke-width: 1.5;"/>
-    <text x="215" y="407" style="font-family: Arial, sans-serif; font-size: 9px; text-anchor: middle;">Codel</text>
-    <text x="215" y="417" style="font-family: Arial, sans-serif; font-size: 9px; text-anchor: middle;">Queue</text>
-
-    <!-- SSU Reassembly -->
-    <rect x="270" y="380" width="80" height="45" style="fill: #f0f0f0; stroke: #333; stroke-width: 1.5;"/>
-    <text x="310" y="398" style="font-family: Arial, sans-serif; font-size: 9px; text-anchor: middle;">Reassembly</text>
-    <text x="310" y="410" style="font-family: Arial, sans-serif; font-size: 9px; text-anchor: middle;">Reassembly</text>
-
-    <!-- SSU Per-Conn Queue -->
-    <rect x="380" y="385" width="70" height="35" style="fill: #e6f3ff; stroke: #0066cc; stroke-width: 1.5;"/>
-    <text x="415" y="400" style="font-family: Arial, sans-serif; font-size: 9px; text-anchor: middle;">Per-Conn</text>
-    <text x="415" y="412" style="font-family: Arial, sans-serif; font-size: 9px; text-anchor: middle;">Pri Queue</text>
-
-    <!-- SSU Processing -->
-    <rect x="480" y="380" width="40" height="25" style="fill: #f0f0f0; stroke: #333; stroke-width: 1.5;"/>
-    <text x="500" y="397" style="font-family: Arial, sans-serif; font-size: 9px; text-anchor: middle;">Frag</text>
-
-    <rect x="540" y="380" width="60" height="25" style="fill: #f0f0f0; stroke: #333; stroke-width: 1.5;"/>
-    <text x="570" y="397" style="font-family: Arial, sans-serif; font-size: 9px; text-anchor: middle;">Window/</text>
-    <text x="570" y="407" style="font-family: Arial, sans-serif; font-size: 9px; text-anchor: middle;">ReTX</text>
-
-    <rect x="620" y="380" width="40" height="25" style="fill: #f0f0f0; stroke: #333; stroke-width: 1.5;"/>
-    <text x="640" y="397" style="font-family: Arial, sans-serif; font-size: 9px; text-anchor: middle;">OMF</text>
-
-    <rect x="680" y="380" width="50" height="25" style="fill: #e6f3ff; stroke: #0066cc; stroke-width: 1.5;"/>
-    <text x="705" y="397" style="font-family: Arial, sans-serif; font-size: 9px; text-anchor: middle;">Codel</text>
-    <text x="705" y="417" style="font-family: Arial, sans-serif; font-size: 9px; text-anchor: middle;">Queue</text>
-
-    <rect x="750" y="390" width="50" height="25" style="fill: #f0f0f0; stroke: #333; stroke-width: 1.5;"/>
-    <text x="775" y="407" style="font-family: Arial, sans-serif; font-size: 9px; text-anchor: middle;">Writer</text>
-
-    <rect x="820" y="390" width="60" height="25" style="fill: #f0f0f0; stroke: #333; stroke-width: 1.5;"/>
-    <text x="850" y="407" style="font-family: Arial, sans-serif; font-size: 9px; text-anchor: middle;">Kernel</text>
-
-    <!-- NTCP2 Right Side -->
-    <rect x="680" y="60" width="60" height="25" style="fill: #f0f0f0; stroke: #333; stroke-width: 1.5;"/>
-    <text x="710" y="77" style="font-family: Arial, sans-serif; font-size: 9px; text-anchor: middle;">Writer</text>
-
-    <rect x="760" y="60" width="40" height="25" style="fill: #f0f0f0; stroke: #333; stroke-width: 1.5;"/>
-    <text x="780" y="77" style="font-family: Arial, sans-serif; font-size: 9px; text-anchor: middle;">NIO</text>
-
-    <rect x="820" y="60" width="60" height="25" style="fill: #f0f0f0; stroke: #333; stroke-width: 1.5;"/>
-    <text x="850" y="77" style="font-family: Arial, sans-serif; font-size: 9px; text-anchor: middle;">Kernel</text>
-
-    <!-- Arrows - NTCP2 Path -->
-    <path d="M 100 72 L 120 72" style="stroke: #333; stroke-width: 1.5; fill: none; marker-end: url(#arrowhead);"/>
-    <path d="M 160 72 L 180 72" style="stroke: #333; stroke-width: 1.5; fill: none; marker-end: url(#arrowhead);"/>
-    <path d="M 230 72 L 260 72" style="stroke: #333; stroke-width: 1.5; fill: none; marker-end: url(#arrowhead);"/>
-    <path d="M 330 72 L 380 135" style="stroke: #333; stroke-width: 1.5; fill: none; marker-end: url(#arrowhead);"/>
-    <path d="M 440 135 L 500 122" style="stroke: #333; stroke-width: 1.5; fill: none; marker-end: url(#arrowhead);"/>
-    <path d="M 620 122 L 620 170" style="stroke: #333; stroke-width: 1.5; fill: none; marker-end: url(#arrowhead);"/>
-    <path d="M 690 190 L 720 215" style="stroke: #333; stroke-width: 1.5; fill: none; marker-end: url(#arrowhead);"/>
-    <path d="M 460 135 L 380 215" style="stroke: #333; stroke-width: 1.5; fill: none; marker-end: url(#arrowhead);"/>
-    <path d="M 420 230 L 500 202" style="stroke: #333; stroke-width: 1.5; fill: none; marker-end: url(#arrowhead);"/>
-    <path d="M 560 202 L 620 270" style="stroke: #333; stroke-width: 1.5; fill: none; marker-end: url(#arrowhead);"/>
-    <path d="M 690 270 L 720 245" style="stroke: #333; stroke-width: 1.5; fill: none; marker-end: url(#arrowhead);"/>
-    <path d="M 460 295 L 500 282" style="stroke: #333; stroke-width: 1.5; fill: none; marker-end: url(#arrowhead);"/>
-    <path d="M 560 282 L 620 290" style="stroke: #333; stroke-width: 1.5; fill: none; marker-end: url(#arrowhead);"/>
-    <path d="M 680 72 L 760 72" style="stroke: #333; stroke-width: 1.5; fill: none; marker-end: url(#arrowhead);"/>
-    <path d="M 800 72 L 820 72" style="stroke: #333; stroke-width: 1.5; fill: none; marker-end: url(#arrowhead);"/>
-
-    <!-- Arrows - SSU Path -->
-    <path d="M 100 402 L 120 402" style="stroke: #333; stroke-width: 1.5; fill: none; marker-end: url(#arrowhead);"/>
-    <path d="M 170 402 L 190 402" style="stroke: #333; stroke-width: 1.5; fill: none; marker-end: url(#arrowhead);"/>
-    <path d="M 240 402 L 270 402" style="stroke: #333; stroke-width: 1.5; fill: none; marker-end: url(#arrowhead);"/>
-    <path d="M 350 402 L 380 402" style="stroke: #333; stroke-width: 1.5; fill: none; marker-end: url(#arrowhead);"/>
-    <path d="M 450 402 L 480 402" style="stroke: #333; stroke-width: 1.5; fill: none; marker-end: url(#arrowhead);"/>
-    <path d="M 520 402 L 540 402" style="stroke: #333; stroke-width: 1.5; fill: none; marker-end: url(#arrowhead);"/>
-    <path d="M 600 402 L 620 402" style="stroke: #333; stroke-width: 1.5; fill: none; marker-end: url(#arrowhead);"/>
-    <path d="M 660 402 L 680 402" style="stroke: #333; stroke-width: 1.5; fill: none; marker-end: url(#arrowhead);"/>
-    <path d="M 730 402 L 750 402" style="stroke: #333; stroke-width: 1.5; fill: none; marker-end: url(#arrowhead);"/>
-    <path d="M 800 402 L 820 402" style="stroke: #333; stroke-width: 1.5; fill: none; marker-end: url(#arrowhead);"/>
-
-    <!-- Connection lines -->
-    <path d="M 310 425 L 310 460 L 560 460 L 560 330" style="stroke: #666; stroke-width: 1; fill: none; stroke-dasharray: 2,2;"/>
-    <path d="M 295 90 L 295 120 L 410 120" style="stroke: #666; stroke-width: 1; fill: none; stroke-dasharray: 2,2;"/>
-  </svg>
+Middle Hop: <span class="middle">InNet MsgPool → IBGW RED-Codel/Pri-FragQ → OBEP → OutNet MsgPool</span>
+</div>
 </div>
 </body>
 </html>

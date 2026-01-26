@@ -114,3 +114,7 @@ apps/routerconsole/jsp/favicon.ico
 
 # Gradle wrapper output
 gradle/wrapper/.gradle/
+
+# Gradle build artifacts in bin directories
+**/bin/
+!**/bin/README.md
