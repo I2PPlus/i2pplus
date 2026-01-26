@@ -552,26 +552,25 @@ public class Rate {
     @Override
     public synchronized String toString() {
         StringBuilder buf = new StringBuilder(2048);
-        if (_stat != null) buf.append("\n\t stat: ").append(_stat.getName());
-        buf.append("\n\t period: ").append(_period);
-        buf.append("\n\t total value: ").append(getLastTotalValue());
-        buf.append("\n\t highest total value: ").append(getExtremeTotalValue());
-        buf.append("\n\t lifetime total value: ").append(getLifetimeTotalValue());
-        buf.append("\n\t # periods: ").append(getLifetimePeriods());
-        buf.append("\n\t average value: ").append(getAverageValue());
-        buf.append("\n\t highest average value: ").append(getExtremeAverageValue());
-        buf.append("\n\t lifetime average value: ").append(getLifetimeAverageValue());
-        buf.append("\n\t % of lifetime rate: ").append(100.0d * getPercentageOfLifetimeValue());
-        buf.append("\n\t % of highest rate: ").append(100.0d * getPercentageOfExtremeValue());
-        buf.append("\n\t # events: ").append(getLastEventCount());
-        buf.append("\n\t lifetime events: ").append(getLifetimeEventCount());
+        if (_stat != null) {buf.append("\n\t stat: ").append(_stat.getName());}
+        buf.append("\n\t period: ").append(_period)
+           .append("\n\t total value: ").append(getLastTotalValue())
+           .append("\n\t highest total value: ").append(getExtremeTotalValue())
+           .append("\n\t lifetime total value: ").append(getLifetimeTotalValue())
+           .append("\n\t # periods: ").append(getLifetimePeriods())
+           .append("\n\t average value: ").append(getAverageValue())
+           .append("\n\t highest average value: ").append(getExtremeAverageValue())
+           .append("\n\t lifetime average value: ").append(getLifetimeAverageValue())
+           .append("\n\t % of lifetime rate: ").append(100.0d * getPercentageOfLifetimeValue())
+           .append("\n\t % of highest rate: ").append(100.0d * getPercentageOfExtremeValue())
+           .append("\n\t # events: ").append(getLastEventCount())
+           .append("\n\t lifetime events: ").append(getLifetimeEventCount());
         if (getLifetimeTotalEventTime() > 0) {
             // we have some actual event durations
-            buf.append("\n\t % of time spent processing events: ").append(100.0d * getLastEventSaturation());
-            buf.append("\n\t total value if we were always processing events: ").append(getLastSaturationLimit());
-            buf.append("\n\t max % of time spent processing events: ").append(100.0d * getExtremeEventSaturation());
-            buf.append("\n\t max total value if we were always processing events: ")
-               .append(getExtremeSaturationLimit());
+            buf.append("\n\t % of time spent processing events: ").append(100.0d * getLastEventSaturation())
+               .append("\n\t total value if we were always processing events: ").append(getLastSaturationLimit())
+               .append("\n\t max % of time spent processing events: ").append(100.0d * getExtremeEventSaturation())
+               .append("\n\t max total value if we were always processing events: ").append(getExtremeSaturationLimit());
         }
         return buf.toString();
     }
