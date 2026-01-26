@@ -40,8 +40,6 @@ public class TestJob extends JobImpl {
     private RatchetSessionTag _ratchetEncryptTag;
     private static final AtomicInteger __id = new AtomicInteger();
     private int _id;
-
-    private static final int TEST_DELAY = 90 * 1000; // 90s base
     private static final int MIN_TEST_PERIOD = 8*1000;
     private static final int MAX_TEST_PERIOD = 20*1000;
 
@@ -69,7 +67,7 @@ public class TestJob extends JobImpl {
      * Above this threshold, no new tests are scheduled until count decreases.
      * Prevents ever-increasing backlogs that could cause job lag.
      */
-    private static final int HARD_TEST_JOB_LIMIT = SystemVersion.isSlow() ? 64 : 128;
+    private static final int HARD_TEST_JOB_LIMIT = SystemVersion.isSlow() ? 128 : 256;
 
     /**
      * Static counter tracking the number of currently active tunnel tests.
@@ -109,7 +107,7 @@ public class TestJob extends JobImpl {
         if (current >= HARD_TEST_JOB_LIMIT) {
             Log log = ctx.logManager().getLog(TestJob.class);
             if (log.shouldInfo()) {
-                log.info("TestJob hard limit reached -> Not scheduling test for " + cfg);
+                log.info("Hard limit (" + HARD_TEST_JOB_LIMIT + ") reached -> Not scheduling test for " + cfg);
             }
             return false;
         }
@@ -162,7 +160,7 @@ public class TestJob extends JobImpl {
         // Increment total job counter atomically
         if (!tryIncrementTotalJobs(ctx)) {
             if (_log.shouldInfo()) {
-                _log.info("TestJob hard limit reached -> Not scheduling test for " + cfg);
+                _log.info("Hard limit (" + HARD_TEST_JOB_LIMIT + ") reached -> Not scheduling test for " + cfg);
             }
             _valid = false;
             return;
@@ -191,12 +189,13 @@ public class TestJob extends JobImpl {
         // Determine if this is an exploratory tunnel early for deprioritization logic
         boolean isExploratory = _pool.getSettings().isExploratory();
 
-        long lag = ctx.jobQueue().getMaxLag();
-        if (lag > 600) {
+        long maxLag = ctx.jobQueue().getMaxLag();
+        long avgLag = ctx.jobQueue().getAvgLag();
+        if (maxLag > 2000 || avgLag > 10) {
             // Skip exploratory tunnels first under extreme pressure
             if (isExploratory) {
                 if (_log.shouldInfo()) {
-                    _log.info("Skipping exploratory tunnel test due to severe job lag (" + lag + "ms) -> " + _cfg);
+                    _log.info("Skipping exploratory tunnel test due to severe job lag (Max: " + maxLag + " / Avg: " + avgLag + "ms) -> " + _cfg);
                 }
                 ctx.statManager().addRateData("tunnel.testExploratorySkipped", _cfg.getLength());
                 scheduleRetest();
@@ -204,16 +203,16 @@ public class TestJob extends JobImpl {
             }
             // Still test client tunnels unless lag is extreme
             if (_log.shouldWarn()) {
-                _log.warn("Aborted test due to severe max job lag (" + lag + "ms) → " + _cfg);
+                _log.warn("Aborted test due to severe max job lag (Max: " + maxLag + " / Avg: " + avgLag + "ms) → " + _cfg);
             }
             ctx.statManager().addRateData("tunnel.testAborted", _cfg.getLength());
             scheduleRetest();
             return;
-        } else if (lag > 500) {
+        } else if (maxLag > 1000 || avgLag > 5) {
             // Moderate pressure - skip exploratory but allow critical client tests
             if (isExploratory) {
                 if (_log.shouldInfo()) {
-                    _log.info("Deprioritizing exploratory tunnel test due to job lag (" + lag + "ms) -> " + _cfg);
+                    _log.info("Deprioritizing exploratory tunnel test due to job lag (Max: " + maxLag + " / Avg: " + avgLag + "ms) -> " + _cfg);
                 }
                 ctx.statManager().addRateData("tunnel.testExploratorySkipped", _cfg.getLength());
                 scheduleRetest();
@@ -221,7 +220,7 @@ public class TestJob extends JobImpl {
             }
             // Continue with client tunnel testing
             if (_log.shouldWarn()) {
-                _log.warn("Max permitted job lag exceeded (" + lag + "ms) -> Suspending test of " + _cfg);
+                _log.warn("Max permitted job lag exceeded (Max: " + maxLag + " / Avg: " + avgLag + "ms) -> Suspending test of " + _cfg);
             }
             ctx.statManager().addRateData("tunnel.testAborted", _cfg.getLength());
             return; // Exit without rescheduling
@@ -229,10 +228,10 @@ public class TestJob extends JobImpl {
 
         // Calculate adaptive max queued tests based on system load
         int maxQueuedTests;
-        if (lag < 50) {
+        if (maxLag < 1000 && avgLag < 5) {
             // Very low lag - increase queue capacity for more thorough testing
             maxQueuedTests = MAX_QUEUED_TESTS * 2; // 32 / 64
-        } else if (lag < 100) {
+        } else if (maxLag < 2000 && avgLag < 10) {
             // Low lag - moderate increase in queue capacity
             maxQueuedTests = MAX_QUEUED_TESTS * 3 / 2;
         } else {
@@ -245,7 +244,7 @@ public class TestJob extends JobImpl {
 
         if (totalCount >= HARD_TEST_JOB_LIMIT) {
             if (_log.shouldInfo()) {
-                _log.info("TestJob hard limit reached (" + totalCount + " >= " + HARD_TEST_JOB_LIMIT +
+                _log.info("Hard limit reached (" + totalCount + " >= " + HARD_TEST_JOB_LIMIT +
                           ") -> Cancelling test of " + _cfg);
             }
             ctx.statManager().addRateData("tunnel.testThrottled", _cfg.getLength());
@@ -281,11 +280,11 @@ public class TestJob extends JobImpl {
         // Adaptive limits based on lag to balance testing and performance
         // Exploratory tunnels are deprioritized under high load
         int maxTests;
-        if (lag > 300) {
+        if (maxLag > 1000 || avgLag > 20) {
             maxTests = isExploratory ? 0 : 1; // No exploratory tests under high lag
-        } else if (lag > 100) {
+        } else if (maxLag > 500 || avgLag > 10) {
             maxTests = isExploratory ? 1 : 2; // Prioritize client tests
-        } else if (lag > 50) {
+        } else if (maxLag > 200 | avgLag > 5) {
             maxTests = isExploratory ? 2 : 3; // Slightly favor client tests
         } else {
             maxTests = MAX_CONCURRENT_TESTS; // Normal operation
@@ -388,8 +387,9 @@ public class TestJob extends JobImpl {
         boolean useEncryption = ctx.random().nextInt(4) != 0;
 
         // During high job lag, prefer unencrypted tests to reduce crypto overhead
-        long lag = ctx.jobQueue().getMaxLag();
-        if (lag > 200) {
+        long maxLag = ctx.jobQueue().getMaxLag();
+        long avgLag = ctx.jobQueue().getAvgLag();
+        if (maxLag > 1000 || avgLag > 10) {
             useEncryption = ctx.random().nextInt(2) != 0; // 50% chance unencrypted
         }
 
@@ -484,11 +484,13 @@ public class TestJob extends JobImpl {
 
     private int getDelay() {
         // Simple exponential backoff with a cap and jitter
-        int baseDelay = TEST_DELAY;
+        int baseDelay = BASE_TEST_DELAY;
         int failCount = _cfg.getTunnelFailures();
         int scaled = baseDelay;
         if (failCount > 0) {
-            int multiplier = Math.min(1 << failCount, 6); // max 6x (6 min)
+            // Reduced backoff to identify failing tunnels sooner
+            // Tunnel will be removed after 2 consecutive failures anyway
+            int multiplier = Math.min(1 << failCount, 1); // max 1x (1.5 min)
             scaled = baseDelay/2 * multiplier;
         }
         // Add a small jitter to avoid thundering herd
@@ -563,9 +565,9 @@ public class TestJob extends JobImpl {
 
         // Only fail the tunnel under test — do NOT blame _otherTunnel
         _failureCount++; // Track the failure
-        boolean keepGoing = _failureCount < 3; // Keep going only if < 3 fails
+        boolean keepGoing = _failureCount < 2; // Keep going only if < 2 fails
 
-        if (_log.shouldWarn() && _failureCount >= 3) {
+        if (_log.shouldWarn() && _failureCount >= 2) {
             _log.warn((isExploratory ? "Exploratory tunnel" : "Tunnel") + " Test failed in " + timeToFail + "ms → " + _cfg);
         }
 
@@ -578,10 +580,10 @@ public class TestJob extends JobImpl {
                 isExploratory ? "tunnel.testExploratoryFailedCompletelyTime" : "tunnel.testFailedCompletelyTime",
                 timeToFail);
 
-            // Immediately remove tunnel from pool after 3 consecutive failures
+            // Immediately remove tunnel from pool after 2 consecutive failures
             // This ensures failed tunnels don't remain in the pool consuming resources
             if (_log.shouldWarn()) {
-                _log.warn((isExploratory ? "Exploratory tunnel" : "Tunnel") + " failed 3 consecutive tests → Removing from pool: " + _cfg);
+                _log.warn((isExploratory ? "Exploratory tunnel" : "Tunnel") + " failed 2 consecutive tests → Removing from pool: " + _cfg);
             }
 
             // Force immediate tunnel removal by marking it as completely failed
@@ -624,12 +626,12 @@ public class TestJob extends JobImpl {
      * @return true if successfully rescheduled, false if limit exceeded
      */
     private boolean tryReschedule() {
-        // Current job execution ending, decrement it
-        decrementTotalJobs();
-        // New execution starting, increment for it
+        // Try to increment first before decrementing to avoid negative counter race condition
         if (!tryIncrementTotalJobs(getContext())) {
             return false;
         }
+        // Current job execution ending, decrement it
+        decrementTotalJobs();
         return scheduleRetest(false);
     }
 
@@ -642,15 +644,15 @@ public class TestJob extends JobImpl {
         int totalCount = getTotalTestJobCount();
         if (totalCount >= HARD_TEST_JOB_LIMIT) {
             if (_log.shouldInfo()) {
-                _log.info("TestJob hard limit reached during reschedule (" + totalCount + " >= " + HARD_TEST_JOB_LIMIT +
-                          ") -> Skipping reschedule for " + _cfg);
+                _log.info("Hard limit reached during reschedule (" + totalCount + " >= " + HARD_TEST_JOB_LIMIT +
+                          ") \n* Skipping reschedule for " + _cfg);
             }
             return false; // Indicate failure to reschedule
         }
 
         int delay = getDelay();
         if (asap) {
-            delay = Math.min(delay, TEST_DELAY / 2);
+            delay = Math.min(delay, BASE_TEST_DELAY / 2);
         }
 
         getTiming().setStartAfter(ctx.clock().now() + delay);
