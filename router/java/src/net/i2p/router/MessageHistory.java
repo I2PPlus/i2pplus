@@ -640,7 +640,7 @@ public class MessageHistory {
         }
     }
 
-    /** write out the message history once per minute, if not sooner */
+    /** Write out the message history once per minute, if not sooner */
     private final static long WRITE_DELAY = 60*1000;
     private class WriteJob extends JobImpl {
         public WriteJob() {
@@ -654,18 +654,4 @@ public class MessageHistory {
         }
     }
 
-/****
-    public static void main(String args[]) {
-        RouterContext ctx = new RouterContext(null);
-        MessageHistory hist = new MessageHistory(ctx);
-        //, new Hash(new byte[32]), "messageHistory.txt");
-        hist.setDoLog(false);
-        hist.addEntry("you smell before");
-        hist.setDoLog(true);
-        hist.addEntry("you smell after");
-        hist.setDoLog(false);
-        hist.addEntry("you smell finished");
-        hist.flushEntries();
-    }
-****/
 }
