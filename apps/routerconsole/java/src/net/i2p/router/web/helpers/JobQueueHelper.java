@@ -128,12 +128,16 @@ public class JobQueueHelper extends HelperBase {
            .append("</h3>\n<ol class=jobqueue>\n");
 
         ObjectCounterUnsafe<String> counter = new ObjectCounterUnsafe<String>();
-        getJobCounts(buf, counter);
-        out.append(buf);
-        buf.setLength(0);
+        // Count all scheduled jobs for queue totals (excluding disabled jobs)
+        ObjectCounterUnsafe<String> queueCounter = new ObjectCounterUnsafe<String>();
+        for (int i = 0; i < timedJobs.size(); i++) {
+            Job j = timedJobs.get(i);
+            if (!j.getName().toLowerCase().contains("disabled")) {
+                queueCounter.increment(j.getName());
+            }
+        }
 
         long prev = Long.MIN_VALUE;
-        counter.clear();
         for (int i = 0; i < timedJobs.size(); i++) {
             Job j = timedJobs.get(i);
             if (i >= MAX_JOBS_DISPLAYED) {continue;}
@@ -153,7 +157,7 @@ public class JobQueueHelper extends HelperBase {
             buf.append("</li>\n");
         }
         buf.append("</ol>\n</div>\n");
-        getJobCounts(buf, counter);
+        getJobCounts(buf, queueCounter);
         out.append(buf);
         buf.setLength(0);
     }
