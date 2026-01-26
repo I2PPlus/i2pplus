@@ -123,8 +123,11 @@ public class JobQueueHelper extends HelperBase {
             buf.setLength(0);
         }
 
+        int totalScheduled = timedJobs.size();
         buf.append("<h3 id=scheduledjobs>")
-           .append(_t("Scheduled jobs")).append(": ").append(timedJobs.size())
+           .append(_t("Scheduled jobs")).append(": ")
+           .append(totalScheduled > MAX_JOBS_DISPLAYED ? MAX_JOBS_DISPLAYED + " / " : "")
+           .append(totalScheduled)
            .append("</h3>\n<ol class=jobqueue>\n");
 
         ObjectCounterUnsafe<String> counter = new ObjectCounterUnsafe<String>();
