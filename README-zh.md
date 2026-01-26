@@ -1,6 +1,6 @@
 # I2P+
 
-English version is [here](README.md).
+English version is [here](README.md). | [བོད་ཡིག](README-bo.md)
 
 这是JAVA版本的i2p软fork源代码。
 
