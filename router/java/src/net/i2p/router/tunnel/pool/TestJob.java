@@ -288,6 +288,9 @@ public class TestJob extends JobImpl {
                               " (Queued: " + totalCount + ")");
                 }
                 ctx.statManager().addRateData("tunnel.testThrottled", _cfg.getLength());
+
+                // This job is aborting early — clean up its count before rescheduling
+                decrementTotalJobs();
                 scheduleRetest();
                 return;
             }
