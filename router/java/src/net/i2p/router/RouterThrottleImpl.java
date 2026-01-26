@@ -23,29 +23,22 @@ public class RouterThrottleImpl implements RouterThrottle {
     private volatile String _tunnelStatus;
     private final long _rejectStartupTime;
 
-    /**
-     * arbitrary hard limit - if it's taking this long to get
-     * to a job, we're congested.
-     *
-     */
-    private static final long JOB_LAG_LIMIT_NETWORK = 2*1000;
-    private static final long JOB_LAG_LIMIT_NETDB = 2*1000;
-    private static final long JOB_LAG_LIMIT_TUNNEL = SystemVersion.isSlow() ? 1500 : 1000;
+    /** Arbitrary hard limit - if it's taking this long to get to a job, we're congested. */
+    private static final long JOB_LAG_LIMIT_NETWORK = 3*1000;
+    private static final long JOB_LAG_LIMIT_NETDB = 3*1000;
+    private static final long JOB_LAG_LIMIT_TUNNEL = SystemVersion.isSlow() ? 3000 : 2000;
     public static final String PROP_MAX_TUNNELS = "router.maxParticipatingTunnels";
-    public static final int DEFAULT_MAX_TUNNELS = SystemVersion.isSlow() ? 2*1000 :
+    public static final int DEFAULT_MAX_TUNNELS = SystemVersion.isSlow() ? 3*1000 :
                                                   SystemVersion.getMaxMemory() < 512*1024*1024 ? 5*1000 :
-                                                  SystemVersion.getCores() >= 8 ? 12*1000 :
-                                                  8*1000;
+                                                  SystemVersion.getCores() >= 8 ? 12*1000 : 8*1000;
     private static final String PROP_MAX_PROCESSINGTIME = "router.defaultProcessingTimeThrottle";
     private static final long DEFAULT_REJECT_STARTUP_TIME = 3*60*1000;
     private static final long MIN_REJECT_STARTUP_TIME = 90*1000;
     private static final String PROP_REJECT_STARTUP_TIME = "router.rejectStartupTime";
-    private static final int DEFAULT_MIN_THROTTLE_TUNNELS = SystemVersion.isSlow() ? 1500 : 3000;
+    private static final int DEFAULT_MIN_THROTTLE_TUNNELS = SystemVersion.isSlow() ? 2000 : 6000;
     private static final String PROP_MIN_THROTTLE_TUNNELS = "router.minThrottleTunnels";
 
-    /**
-     *  TO BE FIXED - SEE COMMENTS BELOW
-     */
+    /* TO BE FIXED - SEE COMMENTS BELOW */
     private static final int DEFAULT_MAX_PROCESSINGTIME = SystemVersion.isSlow() ? 3000 : 2000;
 
     /** tunnel acceptance */
@@ -201,15 +194,16 @@ public class RouterThrottleImpl implements RouterThrottle {
          */
         long lag = _context.jobQueue().getMaxLag();
         boolean highload = lag > 1000 && SystemVersion.getCPULoadAvg() > 95;
+        int minToThrottle = getMinThrottleTunnels();
+        double tgf = getTunnelGrowthFactor();
         if (highload) {
             setTunnelStatus("[rejecting/overload]" + _x("Rejecting all tunnel requests" + ":<br>" + _x("High system load")));
-        } else if (numTunnels > getMinThrottleTunnels() && DEFAULT_MAX_TUNNELS >= maxTunnels) {
+        } else if (numTunnels > minToThrottle && DEFAULT_MAX_TUNNELS >= maxTunnels) {
             Rate avgTunnels = _context.statManager().getRate("tunnel.participatingTunnels").getRate(RateConstants.TEN_MINUTES);
             if (avgTunnels != null) {
                 double avg = avgTunnels.getAvgOrLifetimeAvg();
-                double tunnelGrowthFactor = SystemVersion.isSlow() || highload ? getTunnelGrowthFactor() : getTunnelGrowthFactor() * 3 / 2;
-                int min = getMinThrottleTunnels();
-                if (avg < min) {avg = min;}
+                double tunnelGrowthFactor = SystemVersion.isSlow() || highload ? tgf : tgf * 3 / 2;
+                if (avg < minToThrottle) {avg = minToThrottle;}
                 // if the current tunnel count is higher than 1.3 * the average...
                 if ((avg > 0) && (avg*tunnelGrowthFactor < numTunnels)) {
                     // we're accelerating, let's try not to take on too much too fast
@@ -407,9 +401,15 @@ public class RouterThrottleImpl implements RouterThrottle {
         return !reject;
     }
 
-    /** don't ever probabalistically throttle tunnels if we have less than this many */
+    /** Don't ever probabalistically throttle tunnels if we have less than this many */
     private int getMinThrottleTunnels() {
-        return _context.getProperty(PROP_MIN_THROTTLE_TUNNELS, DEFAULT_MIN_THROTTLE_TUNNELS);
+        int configured = _context.getProperty(PROP_MIN_THROTTLE_TUNNELS, -1);
+        if (configured > 0) {
+            return configured;
+        }
+        // Calculate default on first access
+        int maxTunnels = _context.getProperty(PROP_MAX_TUNNELS, DEFAULT_MAX_TUNNELS);
+        return (maxTunnels / 3) * 2;
     }
 
     private double getTunnelGrowthFactor() {
