@@ -793,9 +793,9 @@ class EstablishmentManager {
                 boolean gseNotNull = gse.getMessage() != null && gse.getMessage() != "null";
                 if (state != null && !isPeerBanned(state)) {
                     if (_log.shouldDebug())
-                        _log.warn("[SSU] Received CORRUPT Session or Token Request after Retry -> Router: " + state, gse);
+                        _log.warn("[SSU] Received CORRUPT Session or Token Request after retry -> Router: " + state, gse);
                     else if (_log.shouldWarn())
-                        _log.warn("[SSU] Received CORRUPT Session or Token Request after Retry -> Router: " + state +
+                        _log.warn("[SSU] Received CORRUPT Session or Token Request after retry -> Router: " + state +
                         (gseNotNull ? "\n* General Security Exception: " + gse.getMessage() : ""));
                 }
                 // state called fail()

@@ -314,7 +314,7 @@ class PacketHandler {
                         header.getVersion() == 2 && header.getNetID() == _networkID &&
                         packet.getPacket().getLength() == 87) {
                         if (!ipBlocklisted && _log.shouldWarn()) {
-                            _log.warn("Received short Session Request (87 bytes) after Retry on " + state);
+                            _log.warn("Received short Session Request (87 bytes) after retry on " + state);
                         }
                         shouldBan = true;
                         banReason = "Short Session Requests";
@@ -324,7 +324,7 @@ class PacketHandler {
                         header.getVersion() != 2 ||
                         header.getNetID() != _networkID) {
                         if (!ipBlocklisted && _log.shouldWarn()) {
-                            _log.warn("Failed to decrypt Session or Token Request after Retry \n* " + header +
+                            _log.warn("Failed to decrypt Session or Token Request after retry \n* " + header +
                                       " (" + packet.getPacket().getLength() + " bytes) on " + state);
                         }
                         shouldBan = true;
