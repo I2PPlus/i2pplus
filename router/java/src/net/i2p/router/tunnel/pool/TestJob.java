@@ -194,35 +194,20 @@ public class TestJob extends JobImpl {
         if (maxLag > 2000 || avgLag > 10) {
             // Skip exploratory tunnels first under extreme pressure
             if (isExploratory) {
-                if (_log.shouldInfo()) {
-                    _log.info("Skipping exploratory tunnel test due to severe job lag (Max: " + maxLag + " / Avg: " + avgLag + "ms) -> " + _cfg);
-                }
-                ctx.statManager().addRateData("tunnel.testExploratorySkipped", _cfg.getLength());
-                scheduleRetest();
-                return;
+            if (_log.shouldInfo()) {
+                _log.info("Skipping exploratory tunnel test due to severe job lag (Max: " + maxLag + " / Avg: " + avgLag + "ms) -> " + _cfg);
+            }
+            ctx.statManager().addRateData("tunnel.testExploratorySkipped", _cfg.getLength());
+            decrementTotalJobs();
+            scheduleRetest();
+            return;
             }
             // Still test client tunnels unless lag is extreme
             if (_log.shouldWarn()) {
                 _log.warn("Aborted test due to severe max job lag (Max: " + maxLag + " / Avg: " + avgLag + "ms) → " + _cfg);
             }
             ctx.statManager().addRateData("tunnel.testAborted", _cfg.getLength());
-            scheduleRetest();
-            return;
-        } else if (maxLag > 1000 || avgLag > 5) {
-            // Moderate pressure - skip exploratory but allow critical client tests
-            if (isExploratory) {
-                if (_log.shouldInfo()) {
-                    _log.info("Deprioritizing exploratory tunnel test due to job lag (Max: " + maxLag + " / Avg: " + avgLag + "ms) -> " + _cfg);
-                }
-                ctx.statManager().addRateData("tunnel.testExploratorySkipped", _cfg.getLength());
-                scheduleRetest();
-                return;
-            }
-            // Continue with client tunnel testing
-            if (_log.shouldWarn()) {
-                _log.warn("Max permitted job lag exceeded (Max: " + maxLag + " / Avg: " + avgLag + "ms) -> Suspending test of " + _cfg);
-            }
-            ctx.statManager().addRateData("tunnel.testAborted", _cfg.getLength());
+            decrementTotalJobs();
             return; // Exit without rescheduling
         }
 
@@ -265,6 +250,7 @@ public class TestJob extends JobImpl {
                     _log.info("TestJob queue saturated -> Deprioritizing Exploratory tunnel test (" + totalCount + " >= " + maxQueuedTests + ")");
                 }
                 ctx.statManager().addRateData("tunnel.testExploratorySkipped", _cfg.getLength());
+                decrementTotalJobs();
                 scheduleRetest();
                 return;
             }
