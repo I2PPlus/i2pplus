@@ -1415,25 +1415,26 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     try {i2ps.close();}
                     catch (IOException ioe) {}
                 }
-            Properties opts = new Properties();
-            //opts.setProperty("i2p.streaming.inactivityTimeout", ""+120*1000);
-            // 1 == disconnect.  see ConnectionOptions in the new streaming lib, which i
-            // Don't want to hard link to here
-            //opts.setProperty("i2p.streaming.inactivityTimeoutAction", ""+1);
-            I2PSocketOptions sktOpts;
-            try {sktOpts = getDefaultOptions(opts);}
-            catch (RuntimeException re) {
-                // tunnel build failure
-                StringBuilder buf = new StringBuilder(128);
-                buf.append("HTTP/1.1 503 Service Unavailable");
-                if (re.getMessage() != null) {buf.append(" - ").append(re.getMessage());}
-                buf.append("\r\n\r\n");
-                try {out.write(buf.toString().getBytes("UTF-8"));}
-                catch (IOException ioe) {}
-                throw re;
-            }
-            if (remotePort > 0) {sktOpts.setPort(remotePort);}
-            i2ps = createI2PSocket(clientDest, sktOpts);
+
+                Properties opts = new Properties();
+                //opts.setProperty("i2p.streaming.inactivityTimeout", ""+120*1000);
+                // 1 == disconnect.  see ConnectionOptions in the new streaming lib, which i
+                // Don't want to hard link to here
+                //opts.setProperty("i2p.streaming.inactivityTimeoutAction", ""+1);
+                I2PSocketOptions sktOpts;
+                try {sktOpts = getDefaultOptions(opts);}
+                catch (RuntimeException re) {
+                    // tunnel build failure
+                    StringBuilder buf = new StringBuilder(128);
+                    buf.append("HTTP/1.1 503 Service Unavailable");
+                    if (re.getMessage() != null) {buf.append(" - ").append(re.getMessage());}
+                    buf.append("\r\n\r\n");
+                    try {out.write(buf.toString().getBytes("UTF-8"));}
+                    catch (IOException ioe) {}
+                    throw re;
+                }
+                if (remotePort > 0) {sktOpts.setPort(remotePort);}
+                i2ps = createI2PSocket(clientDest, sktOpts);
             }
 
             I2PTunnelRunner t;
