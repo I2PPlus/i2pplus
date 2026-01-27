@@ -73,25 +73,59 @@ public class RouterWatchdog implements Runnable {
 
     /**
      * Verify that the job queue is processing jobs normally.
-     * Checks if any job has been running for too long, which could indicate
-     * a hung job queue.
+     * Checks both if any job has been running for too long AND if jobs
+     * are building up in the ready queue without being processed.
      *
      * @return true if job queue appears healthy, false if a job has been
-     *         running longer than the maximum allowed time
+     *         running longer than the maximum allowed time OR if ready jobs
+     *         are accumulating without being processed
      */
     public boolean verifyJobQueueLiveliness() {
+        // Check 1: Current running job timeout
         long when = _context.jobQueue().getLastJobBegin();
-        if (when < 0) {return true;}
-        long howLongAgo = _context.clock().now() - when;
-        if (howLongAgo > MAX_JOB_RUN_LAG) {
-            Job cur = _context.jobQueue().getLastJob();
-            if (cur != null) {
+        long uptime = _context.router().getUptime();
+        if (when >= 0) {
+            long howLongAgo = _context.clock().now() - when;
+            if (howLongAgo > MAX_JOB_RUN_LAG) {
+                Job cur = _context.jobQueue().getLastJob();
+                if (cur != null) {
+                    if (_log.shouldError()) {
+                        _log.error("Last job was queued up " + DataHelper.formatDuration(howLongAgo) + " ago: " + cur);
+                    }
+                    return false;
+                }
+            }
+        }
+
+        // Check 2: Jobs accumulating in ready queue
+        int readyCount = _context.jobQueue().getReadyCount();
+        long maxLag = _context.jobQueue().getMaxLag();
+
+        // If we have jobs waiting and they're getting old, the queue is stuck
+        if (readyCount > 0 && maxLag > MAX_JOB_RUN_LAG && uptime > 5*60*1000) {
+            if (_log.shouldError()) {
+                _log.error("Job queue appears stuck - " + readyCount + " ready jobs with max lag " +
+                          DataHelper.formatDuration(maxLag));
+            }
+            return false;
+        }
+
+        // Check 3: Excessive job buildup (even if not timed out yet)
+        if (readyCount > 128) { // Configurable threshold for job buildup
+            if (_log.shouldWarn()) {
+                _log.warn("High job queue backlog detected - " + readyCount + " ready jobs waiting");
+            }
+            // Only fail if this persists and lag is significant
+            if (maxLag > MAX_JOB_RUN_LAG / 2) {
                 if (_log.shouldError()) {
-                    _log.error("Last job was queued up " + DataHelper.formatDuration(howLongAgo) + " ago: " + cur);
+                    _log.error("Excessive job buildup with lag " + DataHelper.formatDuration(maxLag) +
+                              " - queue may be hung");
                 }
                 return false;
-            } else {return true;} // no prob, just normal lag
-        } else {return true;}
+            }
+        }
+
+        return true;
     }
 
     /**
