@@ -182,7 +182,7 @@ public class JobQueueHelper extends HelperBase {
         buf.append("<thead><tr><th>").append(_t("Queue Totals")).append("</th></tr></thead>\n");
         Collections.sort(names, new JobCountComparator(counter));
         buf.append("<tr><td>\n<ul>\n");
-        int maxTestJobs = TestJob.HARD_TEST_JOB_LIMIT;
+        int maxTestJobs = TestJob.maxQueuedTests;
 
         for (String name : names) {
             buf.append("<li><span class=jobcount><b>").append(name).append(":</b> ")

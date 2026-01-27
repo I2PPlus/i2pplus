@@ -63,6 +63,7 @@ public class TestJob extends JobImpl {
      * Prevents job queue saturation from too many waiting tunnel tests.
      */
     private static final int MAX_QUEUED_TESTS = SystemVersion.isSlow() ? 32 : 64;
+    public static int maxQueuedTests = MAX_QUEUED_TESTS;
 
     /**
      * Hard limit for total TestJob instances (queued + active).
@@ -389,20 +390,25 @@ public class TestJob extends JobImpl {
         }
 
         // Calculate adaptive max queued tests based on system load
-        int maxQueuedTests;
-        if (maxLag < 300 && avgLag < 1) {
+        if (maxLag < 1000 && avgLag < 3) {
             // Super low lag
-            maxQueuedTests = MAX_QUEUED_TESTS * 6; // 192 / 384
-        } else if (maxLag < 400 && avgLag < 2) {
+            maxQueuedTests = HARD_TEST_JOB_LIMIT; // 128 / 384
+        } else if (maxLag < 1200 && avgLag < 5) {
             // Very low lag - increase queue capacity for more thorough testing
             maxQueuedTests = MAX_QUEUED_TESTS * 4; // 128 / 256
-        } else if (maxLag < 500 && avgLag < 3) {
+        } else if (maxLag < 1500 && avgLag < 10) {
             // Low lag - moderate increase in queue capacity
             maxQueuedTests = MAX_QUEUED_TESTS * 3 / 2;
         } else {
             // Normal or high lag - use standard limits
-            maxQueuedTests = MAX_QUEUED_TESTS;
+            maxQueuedTests = MAX_QUEUED_TESTS * 2;
         }
+
+        // Cap adaptive queue limit at hard limit to prevent exceeding configured maximum
+        maxQueuedTests = Math.min(maxQueuedTests, HARD_TEST_JOB_LIMIT);
+
+        // Update public static field for JobQueueHelper display
+        TestJob.maxQueuedTests = maxQueuedTests;
 
         // Check for queue saturation and hard limits before proceeding
         int totalCount = getTotalTestJobCount();
@@ -457,7 +463,7 @@ public class TestJob extends JobImpl {
         } else if (maxLag > 200 || avgLag > 5) {
             maxTests = isExploratory ? 2 : 3; // Slightly favor client tests
         } else {
-            maxTests = MAX_CONCURRENT_TESTS; // Normal operation
+            maxTests = SystemVersion.isSlow() ? MAX_CONCURRENT_TESTS : MAX_CONCURRENT_TESTS * 3 / 2; // Normal operation
         }
 
         int current;
