@@ -149,7 +149,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      *                                  badly that we cant create a socketManager
      */
     public I2PTunnelServer(InetAddress host, int port, String privData, Logging l, EventDispatcher notifyThis, I2PTunnel tunnel) {
-        super("server at " + host + ':' + port, notifyThis, tunnel);
+        super("Server at " + host.toString().replace("/","") + ':' + port, notifyThis, tunnel);
         _log = tunnel.getContext().logManager().getLog(getClass());
         ByteArrayInputStream bais = new ByteArrayInputStream(Base64.decode(privData));
         this.l = l;
@@ -170,7 +170,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      */
     public I2PTunnelServer(InetAddress host, int port, File privkey, String privkeyname, Logging l,
                            EventDispatcher notifyThis, I2PTunnel tunnel) {
-        super("server at " + host + ':' + port, notifyThis, tunnel);
+        super("Server at " + host.toString().replace("/","") + ':' + port, notifyThis, tunnel);
         _log = tunnel.getContext().logManager().getLog(getClass());
         this.l = l;
         this.remoteHost = host;
@@ -202,7 +202,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      *                                  badly that we cant create a socketManager
      */
     public I2PTunnelServer(InetAddress host, int port, InputStream privData, String privkeyname, Logging l,  EventDispatcher notifyThis, I2PTunnel tunnel) {
-        super("server at " + host + ':' + port, notifyThis, tunnel);
+        super("Server at " + host.toString().replace("/","") + ':' + port, notifyThis, tunnel);
         _log = tunnel.getContext().logManager().getLog(getClass());
         this.l = l;
         this.remoteHost = host;
@@ -219,7 +219,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      */
     public I2PTunnelServer(InetAddress host, int port, I2PSocketManager sktMgr,
                            Logging l, EventDispatcher notifyThis, I2PTunnel tunnel) {
-        super("server at " + host + ':' + port, notifyThis, tunnel);
+        super("Server at " + host.toString().replace("/","") + ':' + port, notifyThis, tunnel);
         this.l = l;
         this.remoteHost = host;
         this.remotePort = port;
@@ -452,7 +452,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
         StatefulConnectionFilter filter = _filter;
         if (filter != null) {filter.start();}
         boolean isDaemon = getTunnel().getContext().isRouterContext(); // prevent JVM exit when running outside the router
-        Thread t = new I2PAppThread(this, "Server " + remoteHost + ':' + remotePort, isDaemon);
+        Thread t = new I2PAppThread(this, "Server " + remoteHost.toString().replace("/","") + ':' + remotePort, isDaemon);
         t.start();
     }
 
@@ -614,7 +614,8 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     public void run() {
         i2pss = sockMgr.getServerSocket();
         if (_log.shouldInfo()) {
-            _log.info("Starting async executor with cached thread pool for server " + remoteHost + ':' + remotePort);
+            _log.info("Starting async executor with cached thread pool for server " +
+                       remoteHost.toString().replace("/", "") + ':' + remotePort);
         }
 
         ThreadPoolExecutor connectionExecutor = new ThreadPoolExecutor(
@@ -656,7 +657,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                         try {
                             new Handler(socketToHandle).run();
                         } catch (Exception e) {
-                            _log.warn("Exception in async handler for " + remoteHost + ':' + remotePort, e);
+                            _log.warn("Exception in async handler for " + remoteHost.toString().replace("/","") + ':' + remotePort, e);
                             try {
                                 socketToHandle.close();
                             } catch (IOException ioe) {
@@ -664,7 +665,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                             }
                         }
                     }, connectionExecutor).exceptionally(ex -> {
-                        _log.warn("Async handler task failed for " + remoteHost + ':' + remotePort, ex);
+                        _log.warn("Async handler task failed for " + remoteHost.toString().replace("/","") + ':' + remotePort, ex);
                         return null;
                     });
                 } catch (RejectedExecutionException ree) {
@@ -841,7 +842,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
             long afterHandle = getTunnel().getContext().clock().now();
             long timeToHandle = afterHandle - afterAccept;
             if ((timeToHandle > 1500) && (_log.shouldInfo())) {
-                _log.info("Took a while (" + timeToHandle + "ms) to handle the request for " + remoteHost + ':' + remotePort +
+                _log.info("Took a while (" + timeToHandle + "ms) to handle the request for " + remoteHost.toString().replace("/","") + ':' + remotePort +
                           "\n* Socket create: " + (afterSocket-afterAccept) + "ms");
             }
         } catch (SocketException ex) {
