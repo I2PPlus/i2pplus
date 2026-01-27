@@ -109,17 +109,17 @@ public class JobQueueHelper extends HelperBase {
             buf.append("<h3 id=readyjobs>")
                .append(_t("Ready/waiting jobs")).append(": ").append(readyJobs.size())
                .append("</h3>\n<ol class=jobqueue>\n");
-            ObjectCounterUnsafe<String> counter = new ObjectCounterUnsafe<String>();
+            ObjectCounterUnsafe<String> readyJobsCounter = new ObjectCounterUnsafe<String>();
             for (int i = 0; i < readyJobs.size(); i++) {
                 Job j = readyJobs.get(i);
-                counter.increment(j.getName());
+                readyJobsCounter.increment(j.getName());
                 if (i >= MAX_JOBS_DISPLAYED) {continue;}
                 buf.append("<li><b title=\"").append(j.toString()).append("\">").append(j.getName()).append("</b> &#10140; ")
                    .append(_t("waiting")).append(' ').append(DataHelper.formatDuration2(now-j.getTiming().getStartAfter()))
                    .append("</li>\n");
             }
             buf.append("</ol>\n");
-            getJobCounts(buf, counter);
+            getJobCounts(buf, readyJobsCounter);
             out.append(buf);
             buf.setLength(0);
         }
@@ -131,37 +131,35 @@ public class JobQueueHelper extends HelperBase {
            .append(totalScheduled)
            .append("</h3>\n<ol class=jobqueue>\n");
 
-        ObjectCounterUnsafe<String> counter = new ObjectCounterUnsafe<String>();
-        // Count all scheduled jobs for queue totals (excluding disabled jobs)
-        ObjectCounterUnsafe<String> queueCounter = new ObjectCounterUnsafe<String>();
-        for (int i = 0; i < timedJobs.size(); i++) {
-            Job j = timedJobs.get(i);
-            if (!j.getName().toLowerCase().contains("disabled")) {
-                queueCounter.increment(j.getName());
-            }
-        }
+        ObjectCounterUnsafe<String> displayedJobsCounter = new ObjectCounterUnsafe<String>();
+        ObjectCounterUnsafe<String> totalQueueCounter = new ObjectCounterUnsafe<String>();
 
-        long prev = Long.MIN_VALUE;
+        // Single loop through timed jobs
         for (int i = 0; i < timedJobs.size(); i++) {
             Job j = timedJobs.get(i);
-            if (i >= MAX_JOBS_DISPLAYED) {continue;}
-            if (j.getName().toLowerCase().contains("disabled")) {continue;}
-            counter.increment(j.getName());
+            String jobName = j.getName().toLowerCase();
             long time = j.getTiming().getStartAfter() - now;
-            // translators: {0} is a job name, {1} is a time, e.g. 6 min
-            buf.append("<li>").append(_t("{0} starts in {1}", "<b title=\"" + j.toString() + "\">" +
-                       j.getName() + "</b> &#10140; ", "<i>" + DataHelper.formatDuration2(time) + "</i>"));
-            if (time < 0) {
-                buf.append(" <span class=delayed>[").append(_t("DELAYED")).append("]</span>");
+
+            // Count all scheduled jobs for queue totals (excluding disabled jobs)
+            if (!jobName.contains("disabled")) {
+                totalQueueCounter.increment(j.getName());
             }
-            if (time < prev) {
-                buf.append(" <span class=outOfOrder>[").append(_t("OUT OF ORDER")).append("]</span>");
+
+            // Skip jobs with non-positive start times and disabled jobs
+            if (time <= 0 || jobName.contains("disabled")) {
+                continue;
             }
-            prev = time;
-            buf.append("</li>\n");
+
+            if (i >= MAX_JOBS_DISPLAYED) {continue;}
+            displayedJobsCounter.increment(j.getName());
+
+            String timeStr = "<i>" + DataHelper.formatDuration2(time) + "</i>";
+            buf.append("<li>") // translators: {0} is a job name, {1} is a time, e.g. 6 min
+               .append(_t("{0} starts in {1}", "<b title=\"" + j.toString() + "\">" +
+                       j.getName() + "</b> &#10140; ", timeStr)).append("</li>\n");
         }
         buf.append("</ol>\n</div>\n");
-        getJobCounts(buf, queueCounter);
+        getJobCounts(buf, totalQueueCounter);
         out.append(buf);
         buf.setLength(0);
     }

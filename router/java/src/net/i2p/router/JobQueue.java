@@ -147,6 +147,14 @@ public class JobQueue {
         if (start > now + 3*24*60*60*1000L && _log.shouldWarn()) {
             _log.warn(job + " scheduled far in the future: " + (new Date(start)));
         }
+        // Validate start time to prevent negative delays
+        if (start < 0) {
+            if (_log.shouldWarn()) {
+                _log.warn(job + " has negative start time " + start + ", correcting to current time");
+            }
+            job.getTiming().setStartAfter(now);
+            start = now;
+        }
         synchronized (_jobLock) {
             alreadyExists = _readyJobs.contains(job) || _highPriorityJobs.contains(job);
             numReady = _readyJobs.size();
@@ -306,7 +314,7 @@ public class JobQueue {
         if (numReady > _context.getProperty(PROP_MAX_WAITING_JOBS, DEFAULT_MAX_WAITING_JOBS)) {
             Class<? extends Job> cls = job.getClass();
             boolean disableTunnelTests = _context.getBooleanProperty("router.disableTunnelTesting");
-            boolean shouldDrop = getMaxLag() >= MIN_LAG_TO_DROP && getAvgLag() > 10;
+            boolean shouldDrop = getMaxLag() >= MIN_LAG_TO_DROP || getAvgLag() > 50;
             if (shouldDrop) {
                 if (cls == RepublishLeaseSetJob.class) {return false;}
                 if ((!disableTunnelTests && cls == TestJob.class) || cls == PeerTestJob.class) {
@@ -439,22 +447,7 @@ public class JobQueue {
                             if (job instanceof JobImpl) {((JobImpl) job).madeReady(now);}
                             return job;
                         } else {
-                            // Don't remove and re-add jobs - this breaks TreeSet ordering
-                            if (timeLeft > 10*1000 && iter.hasNext()) {
-                                if (_log.shouldInfo()) {
-                                    _log.info(job + " deferred for " + DataHelper.formatDuration(timeLeft));
-                                }
-                                Job nextJob = iter.next();
-                                _timedJobs.add(job);
-                                long nextTimeLeft = nextJob.getTiming().getStartAfter() - now;
-                                if (timeLeft > nextTimeLeft) {
-                                    if (_log.shouldInfo()) {
-                                        _log.info(job + " out of order with " + nextJob + "\n* Difference: " +
-                                                  DataHelper.formatDuration(timeLeft - nextTimeLeft));
-                                    }
-                                    // timeToWait = Math.max(10, nextTimeLeft); // Removed - timeToWait not in scope
-                                }
-                            }
+                            // Job is not ready yet - stop checking and wait
                             break;
                         }
                     }
@@ -522,13 +515,25 @@ public class JobQueue {
                             long lastTime = Long.MIN_VALUE;
                             for (Iterator<Job> iter = _timedJobs.iterator(); iter.hasNext(); ) {
                                 Job j = iter.next();
-                                long timeLeft = j.getTiming().getStartAfter() - now;
-                                if (lastJob != null && lastTime > j.getTiming().getStartAfter() && _log.shouldInfo()) {
+                                long startTime = j.getTiming().getStartAfter();
+                                long timeLeft = startTime - now;
+
+                                // Process jobs that should have run already or have negative times
+                                if (startTime < 0 || timeLeft <= 0) {
+                                    if (_log.shouldInfo() && timeLeft < 0) {
+                                        _log.info("Job " + j + " overdue by " + DataHelper.formatDuration(-timeLeft) + " -> Processing immediately...");
+                                    }
+                                    if (j instanceof JobImpl) ((JobImpl)j).madeReady(now);
+                                    _readyJobs.offer(j);
+                                    iter.remove();
+                                    continue;
+                                }
+                                if (lastJob != null && lastTime > startTime && _log.shouldInfo()) {
                                     _log.info(lastJob + " out of order with " + j + "\n* Difference: " +
-                                              DataHelper.formatDuration(lastTime - j.getTiming().getStartAfter()));
+                                              DataHelper.formatDuration(lastTime - startTime));
                                 }
                                 lastJob = j;
-                                lastTime = lastJob.getTiming().getStartAfter();
+                                lastTime = startTime;
                                 if (timeLeft <= 0) {
                                     if (j instanceof JobImpl) ((JobImpl)j).madeReady(now);
                                     _readyJobs.offer(j);
@@ -542,7 +547,7 @@ public class JobQueue {
                                             _log.info(j + " deferred for " + DataHelper.formatDuration(timeToWait));
                                         }
                                         Job nextJob = iter.next();
-                                        _timedJobs.add(j);
+                                        // Don't re-add the job, just check the next one for timing
                                         long nextTimeLeft = nextJob.getTiming().getStartAfter() - now;
                                         if (timeToWait > nextTimeLeft) {
                                             if (_log.shouldInfo()) {
@@ -604,9 +609,8 @@ public class JobQueue {
     void updateStats(Job job, long doStart, long origStartAfter, long duration) {
         if (_context.router() == null) return;
         String key = job.getName();
-        // Fix lag calculation: use actual job start time, not current time
-        long actualStart = job.getTiming().getStartAfter();
-        long lag = doStart - actualStart;
+        // Fix lag calculation: use original scheduled start time, not potentially modified timing
+        long lag = doStart - origStartAfter;
         MessageHistory hist = _context.messageHistory();
         long uptime = _context.router().getUptime();
 
@@ -661,9 +665,9 @@ public class JobQueue {
              long ld = l.getTiming().getStartAfter() - r.getTiming().getStartAfter();
              if (ld < 0) return -1;
              if (ld > 0) return 1;
-             ld = l.getJobId() - r.getJobId();
-             if (ld < 0) return -1;
-             if (ld > 0) return 1;
+             // Use Long.compare for safer job ID comparison to avoid overflow
+             int jobCompare = Long.compare(l.getJobId(), r.getJobId());
+             if (jobCompare != 0) return jobCompare;
              return l.hashCode() - r.hashCode();
         }
     }
