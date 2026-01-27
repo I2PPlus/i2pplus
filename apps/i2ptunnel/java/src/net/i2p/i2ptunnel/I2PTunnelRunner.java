@@ -58,7 +58,6 @@ import net.i2p.util.Log;
  */
 public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErrorListener, DoneCallback {
     protected final Log _log;
-
     private static final AtomicLong __runnerId = new AtomicLong();
     private final long _runnerId;
     /**
@@ -74,7 +73,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
     private volatile boolean finished;
     private final byte[] initialI2PData;
     private final byte[] initialSocketData;
-    /** when the runner started up */
+    /** when runner started up */
     private final long startedOn;
     private final List<I2PSocket> sockList;
     /** if we die before receiving any data, run this job */
@@ -87,6 +86,8 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
     private long totalReceived;
     // not final, may be changed by extending classes
     protected volatile boolean _keepAliveI2P, _keepAliveSocket;
+    // Track socket streams for cleanup
+    private InputStream _socketIn;
     private StreamForwarder toI2P;
     private StreamForwarder fromI2P;
 
@@ -275,19 +276,6 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
     }
 
     /**
-     *  Checks if the runner has completed its operation.
-     * <p>
-     * This method returns true when at least one of the streams (I2P or TCP)
-     * has been closed, indicating the connection is in the process of shutting down.
-     * </p>
-     *
-     * @return true if the runner has finished or is finishing
-     * @deprecated This method is no longer actively used for control flow
-     */
-    @Deprecated
-    public boolean isFinished() {return finished;}
-
-    /**
      *  Returns the timestamp when this runner started.
      * <p>
      * This value is set at construction time and represents when the runner
@@ -397,6 +385,8 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
             out = getSocketOut();
             i2pin = i2ps.getInputStream();
             i2pout = i2ps.getOutputStream();
+            String direction = (toI2P != null ? "[To I2P]" : "[From I2P]");
+
             //new BufferedOutputStream(i2ps.getOutputStream(), MAX_PACKET_SIZE);
             if (initialI2PData != null) {
                 i2pout.write(initialI2PData);
@@ -433,6 +423,8 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                 in = getSocketIn();
                 // InternalSocket already has buffering
                 if (!(s instanceof InternalSocket)) {in = new BufferedInputStream(in, 2*NETWORK_BUFFER_SIZE);}
+                // Store reference for cleanup
+                _socketIn = in;
                 toI2P = new StreamForwarder(in, i2pout, true, null);
                 toI2P.start();
             }
@@ -441,8 +433,28 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
             //fromI2P.start();
             fromI2P.run();
             synchronized (finishLock) {
-                while (!finished) {finishLock.wait();}
+                long endTime = System.currentTimeMillis() + 2*60*1000; // 120 second timeout
+                while (!finished) {
+                    long remaining = endTime - System.currentTimeMillis();
+                    if (remaining <= 0) {
+                        // Timeout reached
+                        if (_log.shouldLog(Log.WARN)) {
+                            _log.warn(direction + " Timeout waiting for completion - forcing cleanup");
+                        }
+                        finished = true;
+                        finishLock.notifyAll();
+                        break;
+                    }
+                    try {
+                        // Wait for the remaining time or up to 5 seconds, whichever is smaller
+                        finishLock.wait(Math.min(remaining, 5000));
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                        break;
+                    }
+                }
             }
+
             if (_log.shouldLog(Log.DEBUG)) {
                 _log.debug("Both forwarders completed -> " + totalSent + " bytes sent, " +  totalReceived + " bytes received");
             }
@@ -484,10 +496,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                 }
             }
 
-        } catch (InterruptedException ex) {
-            if (_log.shouldLog(Log.ERROR)) {_log.error("Interrupted (" + ex.getMessage() + ")");}
-            _keepAliveI2P = false;
-            _keepAliveSocket = false;
+
         } catch (SSLException she) {
             _log.error("SSL error", she);
             _keepAliveI2P = false;
@@ -570,18 +579,6 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
         if (t1 != null) {t1.join(30*1000);}
     }
 
-    /**
-     * Deprecated, unimplemented in streaming, never called.
-     * @deprecated unused
-     */
-    @Deprecated
-    public void errorOccurred() {
-        synchronized (finishLock) {
-            finished = true;
-            finishLock.notifyAll();
-        }
-    }
-
     private void removeRef() {
         if (sockList != null) {
             synchronized (slock) {sockList.remove(i2ps);}
@@ -636,10 +633,14 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                             totalReceived += len;
                         }
                     }
-                    if (in.available() == 0) {out.flush();}
+                    try {
+                        if (in.available() == 0) {out.flush();}
+                    } catch (IOException ioex) {
+                        // Ignore flush errors
+                    }
                 }
             } catch (SocketException ex) {
-                // This *will* occur when the other threads closes the socket
+                // This *will* occur when other threads closes the socket
                 if (_log.shouldDebug()) {
                     boolean fnshd;
                     synchronized (finishLock) {fnshd = finished;}
@@ -647,14 +648,13 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                     else {_log.debug(direction + " IO Error caused by other direction -> " + ex.getMessage());}
                 }
                 _failure = ex;
-            } catch (IOException ex) {
-                if (_log.shouldWarn()) {
-                    boolean fnshd;
-                    synchronized (finishLock) {fnshd = finished;}
-                    if (!fnshd) {_log.warn(direction + " IO Error: Error forwarding (" + ex.getMessage() + ")");}
-                    else if (_log.shouldDebug()) {_log.debug(direction + " IO Error caused by other direction (" + ex.getMessage() + ")");}
+                // Force cleanup to prevent stuck threads
+                synchronized (finishLock) {
+                    finished = true;
+                    finishLock.notifyAll();
                 }
-                _failure = ex;
+            } catch (IOException ex) {
+                // Handle other IO errors
             } finally {
                 _cache.release(ba);
                 boolean keepAliveFrom, keepAliveTo;
@@ -675,6 +675,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                         if (_log.shouldWarn()) {_log.warn(direction + " Error closing input stream (" + ex.getMessage() + ")");}
                     }
                 }
+
                 try {
                     /*
                      * Thread must close() before exiting for a PipedOutputStream, or else input end gives up
@@ -707,4 +708,17 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
          */
         public Exception getFailure() {return _failure;}
     }
+
+    /**
+     * Deprecated, unimplemented in streaming, never called.
+     * @deprecated unused
+     */
+    @Deprecated
+    public void errorOccurred() {
+        synchronized (finishLock) {
+            finished = true;
+            finishLock.notifyAll();
+        }
+    }
+
 }
