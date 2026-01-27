@@ -276,8 +276,16 @@ public class TrackerClient implements Runnable {
             }
             loop();
         } finally {
-            // don't hold ref
+            // Proper cleanup - close tracker connections and interrupt thread
+            stop = true;
             _thread = null;
+            if (_util.connected()) {
+                _util.disconnect();
+            }
+            // Wake up any waiting thread to exit
+            synchronized (this) {
+                notifyAll();
+            }
             if (_log.shouldDebug())
                 _log.debug(
                         "Finish "
