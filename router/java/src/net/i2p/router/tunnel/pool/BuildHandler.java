@@ -1179,7 +1179,8 @@ class BuildHandler implements Runnable {
                         if (fh == null && from != null) {fh = from.calculateHash();}
                         if (fh != null && _requestThrottler.shouldThrottle(fh)) {
                             if (_log.shouldWarn()) {
-                                _log.warn("Dropping Tunnel Request [ID: " + reqId + "] -> Previous hop [" + fh.toBase64().substring(0,6) + "] is being throttled");
+                                _log.warn("Dropping Tunnel Request [ID: " + reqId + "] -> Previous hop [" +
+                                           fh.toBase64().substring(0,6) + "] is being throttled");
                             }
                             _context.statManager().addRateData("tunnel.dropReqThrottle", 1);
                             // fake failed so we won't use him for our tunnels
