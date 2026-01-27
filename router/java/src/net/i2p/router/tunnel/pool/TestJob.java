@@ -50,7 +50,7 @@ public class TestJob extends JobImpl {
      * Prevents overwhelming the router with too many simultaneous tunnel tests.
      * This value can be adjusted based on system capacity.
      */
-    private static final int MAX_CONCURRENT_TESTS = SystemVersion.isSlow() ? 4 : 8;
+    private static final int MAX_CONCURRENT_TESTS = SystemVersion.isSlow() ? 8 : 16;
 
     // Adaptive testing frequency constants
     private static final int BASE_TEST_DELAY = 90 * 1000; // 90s base
@@ -162,7 +162,8 @@ public class TestJob extends JobImpl {
         TunnelPool pool = cfg.getTunnelPool();
         if (pool != null) {
             String tunnelNickname = pool.getSettings().getDestinationNickname();
-            if (tunnelNickname != null && tunnelNickname.startsWith("Ping [")) {
+            if (tunnelNickname != null && (tunnelNickname.equals("I2Ping") || 
+                (tunnelNickname.startsWith("Ping") && tunnelNickname.contains("[")))) {
                 Log log = ctx.logManager().getLog(TestJob.class);
                 if (log.shouldDebug()) {
                     log.debug("Skipping test scheduling for ping tunnel: " + tunnelNickname);
@@ -173,10 +174,10 @@ public class TestJob extends JobImpl {
 
         // Try to increment total jobs counter to check limit
         int current = TOTAL_TEST_JOBS.get();
-        if (current >= HARD_TEST_JOB_LIMIT) {
+        if (current >= maxQueuedTests) {
             Log log = ctx.logManager().getLog(TestJob.class);
             if (log.shouldInfo()) {
-                log.info("Hard limit (" + HARD_TEST_JOB_LIMIT + ") reached -> Not scheduling test for " + cfg);
+                log.info("Limit (" + maxQueuedTests + ") reached -> Not scheduling test for " + cfg);
             }
             return false;
         }
@@ -197,7 +198,7 @@ public class TestJob extends JobImpl {
             AtomicInteger poolCount = POOL_TEST_COUNTS.get(poolId);
             if (poolCount != null && poolCount.get() > 0) {
                 // For exploratory pools, be more restrictive to allow better coverage
-                if (pool.getSettings().isExploratory() && poolCount.get() >= 2) {
+                if (pool.getSettings().isExploratory() && poolCount.get() >= 4 && current > (maxQueuedTests / 10) * 9) {
                     Log log = ctx.logManager().getLog(TestJob.class);
                     if (log.shouldDebug()) {
                         log.debug("Pool " + poolId + " already has " + poolCount.get() + " tests running -> Deferring for better coverage");
@@ -205,7 +206,7 @@ public class TestJob extends JobImpl {
                     return false;
                 }
                 // For client pools, allow some concurrency but limit it
-                else if (!pool.getSettings().isExploratory() && poolCount.get() >= 3) {
+                else if (!pool.getSettings().isExploratory() && poolCount.get() >= 8 && current > (maxQueuedTests / 10) * 9) {
                     Log log = ctx.logManager().getLog(TestJob.class);
                     if (log.shouldDebug()) {
                         log.debug("Pool " + poolId + " already has " + poolCount.get() + " tests running -> Deferring for better coverage");
@@ -349,8 +350,10 @@ public class TestJob extends JobImpl {
             return;
         }
         // Start after delay; guard against negative start
-        long startDelay = Math.max(0, getDelay() + ctx.clock().now());
-        getTiming().setStartAfter(startDelay);
+        int delay = getDelay();
+        delay = Math.max(0, delay);
+        long startTime = ctx.clock().now() + delay;
+        getTiming().setStartAfter(startTime);
     }
 
     @Override
@@ -468,12 +471,12 @@ public class TestJob extends JobImpl {
         // Adaptive limits based on lag to balance testing and performance
         // Exploratory tunnels are deprioritized under high load
         int maxTests;
-        if (maxLag > 1000 || avgLag > 20) {
-            maxTests = isExploratory ? 0 : 1; // No exploratory tests under high lag
-        } else if (maxLag > 500 || avgLag > 10) {
-            maxTests = isExploratory ? 1 : 2; // Prioritize client tests
-        } else if (maxLag > 200 || avgLag > 5) {
-            maxTests = isExploratory ? 2 : 3; // Slightly favor client tests
+        if (maxLag > 3000 || avgLag > 100) {
+            maxTests = isExploratory ? 2 : 4; // Reduce exploratory tests under severe load
+        } else if (maxLag > 2000 || avgLag > 50) {
+            maxTests = isExploratory ? 3 : 6; // Prioritize client tests under high load
+        } else if (maxLag > 1000 || avgLag > 20) {
+            maxTests = isExploratory ? 4 : 8; // Slightly favor client tests under moderate load
         } else {
             maxTests = SystemVersion.isSlow() ? MAX_CONCURRENT_TESTS : MAX_CONCURRENT_TESTS * 3 / 2; // Normal operation
         }
@@ -609,7 +612,7 @@ public class TestJob extends JobImpl {
             if (!ctx.tunnelDispatcher().hasOutboundGateway(_outTunnel.getSendTunnelId(0))) {
                 if (_log.shouldInfo()) {
                     _log.info("Outbound gateway for tunnel " + _outTunnel.getSendTunnelId(0) +
-                              " not yet registered -> Deferring test for " + _cfg);
+                              " not yet registered \n* Deferring test for " + _cfg);
                 }
                 return false; // Let caller handle cleanup & rescheduling
             }
@@ -673,12 +676,14 @@ public class TestJob extends JobImpl {
         if (failCount > 0) {
             // Reduced backoff to identify failing tunnels sooner
             // Tunnel will be removed after 2 consecutive failures anyway
-            int multiplier = Math.min(1 << failCount, 1); // max 1x (1.5 min)
-            scaled = baseDelay/2 * multiplier;
+            int multiplier = Math.min(1 << (failCount - 1), 2); // max 2x (3 min)
+            scaled = baseDelay * multiplier;
         }
-        // Add a small jitter to avoid thundering herd
+        // Ensure minimum delay and avoid negative values
+        scaled = Math.max(scaled, MIN_TEST_DELAY);
+        // Add a small jitter to avoid thundering herd (ensure positive jitter)
         int jitter = getContext().random().nextInt(Math.max(1, scaled / 3));
-        return Math.max(scaled + jitter, 60*1000 + jitter);
+        return scaled + jitter;
     }
 
     private float getSuccessRate() {
@@ -827,7 +832,10 @@ public class TestJob extends JobImpl {
             delay = Math.min(delay, BASE_TEST_DELAY / 2);
         }
 
-        getTiming().setStartAfter(ctx.clock().now() + delay);
+        // Ensure delay is not negative and set start time properly
+        delay = Math.max(0, delay);
+        long startTime = ctx.clock().now() + delay;
+        getTiming().setStartAfter(startTime);
         ctx.jobQueue().addJob(this);
         return true;
     }

@@ -44,8 +44,19 @@ class ExpireJob extends JobImpl {
     public String getName() {return "Expire Local Tunnel";}
 
     public void runJob() {
+        // Skip formal expiration for ping tunnels - they're short-lived cleanup operations
+        TunnelPool pool = _cfg.getTunnelPool();
+        if (pool != null) {
+            String tunnelNickname = pool.getSettings().getDestinationNickname();
+            if (tunnelNickname != null && (tunnelNickname.equals("I2Ping") || 
+                (tunnelNickname.startsWith("Ping") && tunnelNickname.contains("[")))) {
+                // Immediate cleanup for ping tunnels without queue overhead
+                getContext().tunnelDispatcher().remove(_cfg);
+                return;
+            }
+        }
+        
         if (_leaseUpdated.compareAndSet(false,true)) {
-            TunnelPool pool = _cfg.getTunnelPool();
             // First run
             pool.removeTunnel(_cfg);
             // noop for outbound
