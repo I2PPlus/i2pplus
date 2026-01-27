@@ -431,7 +431,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
             fromI2P = new StreamForwarder(i2pin, out, false, _onSuccess);
             // We are already a thread, so run the second one inline
             //fromI2P.start();
-            //fromI2P.run();
+            fromI2P.run();
             synchronized (finishLock) {
                 long endTime = System.currentTimeMillis() + 60000; // 60 second timeout
                 while (!finished) {
