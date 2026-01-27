@@ -433,7 +433,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
             //fromI2P.start();
             fromI2P.run();
             synchronized (finishLock) {
-                long endTime = System.currentTimeMillis() + 60000; // 60 second timeout
+                long endTime = System.currentTimeMillis() + 2*60*1000; // 120 second timeout
                 while (!finished) {
                     long remaining = endTime - System.currentTimeMillis();
                     if (remaining <= 0) {
@@ -649,8 +649,10 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                 }
                 _failure = ex;
                 // Force cleanup to prevent stuck threads
-                finished = true;
-                finishLock.notifyAll();
+                synchronized (finishLock) {
+                    finished = true;
+                    finishLock.notifyAll();
+                }
             } catch (IOException ex) {
                 // Handle other IO errors
             } finally {
