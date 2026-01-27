@@ -66,13 +66,14 @@ import net.i2p.i2ptunnel.BlacklistBean;
 public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runnable {
 
     /**
-     *  Map of host name to base64 destination for destinations collected
-     *  via address helper links
+     * Map of host name to base64 destination for destinations collected
+     * via address helper links.
+     * Thread-safe concurrent hash map for address helper storage.
      */
-    private final ConcurrentHashMap<String, String> addressHelpers = new ConcurrentHashMap<String, String>(8);
+    private final ConcurrentHashMap<String, String> addressHelpers = new ConcurrentHashMap<>(8);
 
     /**
-     *  Used to protect actions via http://proxy.i2p/
+     * Security nonce used to protect administrative actions via http://proxy.i2p/
      */
     private final String _proxyNonce;
 
@@ -86,14 +87,16 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     public static final String OPT_KEEPALIVE_BROWSER = "keepalive.browser";
     public static final String OPT_KEEPALIVE_I2P = "keepalive.i2p";
 
-    // how long to wait for another request on the same socket
-    // Firefox timeout appears to be about 114 seconds, so it will close before we do.
+    /**
+     * How long to wait for another request on the same socket (2 minutes).
+     * Firefox timeout appears to be about 114 seconds, so it will close before we do.
+     */
     static final int BROWSER_KEEPALIVE_TIMEOUT = 2*60*1000;
     private static final boolean DEFAULT_KEEPALIVE_BROWSER = true;
     private static final boolean DEFAULT_KEEPALIVE_I2P = true;
 
     /**
-     *  These are backups if the xxx.ht error page is missing.
+     * Backup error pages used when custom xxx.ht error page files are missing.
      */
     private final static String ERR_REQUEST_DENIED =
         "HTTP/1.1 403 Access Denied\r\n" +
@@ -246,14 +249,12 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     }
 
     /**
-     * Execute a runnable task, running inline when called from an unlimited thread pool
-     * to avoid creating unnecessary threads, otherwise start a new thread.
+     * Execute a task inline using current thread.
+     * This maintains the original behavior for consistency.
      *
-     * @param task Thread task to execute
+     * @param task Thread task to execute inline
      */
     private void executeTask(Thread task) {
-        // For now, maintain original behavior of running inline
-        // TODO: Consider using a thread pool executor for better resource management
         task.run();
     }
 
@@ -269,8 +270,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         if (!defaultOpts.contains(I2PSocketOptions.PROP_READ_TIMEOUT)) {
             defaultOpts.setProperty(I2PSocketOptions.PROP_READ_TIMEOUT, "" + DEFAULT_READ_TIMEOUT);
         }
-        //if (!defaultOpts.contains("i2p.streaming.inactivityTimeout"))
-        //    defaultOpts.setProperty("i2p.streaming.inactivityTimeout", ""+DEFAULT_READ_TIMEOUT);
+
         // delayed start
         verifySocketManager();
         I2PSocketOptions opts = sockMgr.buildOptions(defaultOpts);
@@ -307,16 +307,11 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     private InternalSocketRunner isr;
 
     /**
-     * Actually start working on incoming connections.
-     * Overridden to start an internal socket too.
-     *
+     * Start the HTTP client proxy and begin handling incoming connections.
+     * Overrides parent to also start an internal socket for local requests.
      */
     @Override
     public void startRunning() {
-        // following are for HTTPResponseOutputStream
-        //_context.statManager().createRateStat("i2ptunnel.httpCompressionRatio", "ratio of compressed size to decompressed size after transfer", "I2PTunnel", new long[] { 60*1000, 60*60*1000 });
-        //_context.statManager().createRateStat("i2ptunnel.httpCompressed", "compressed size transferred", "I2PTunnel", new long[] { 60*1000, 60*60*1000 });
-        //_context.statManager().createRateStat("i2ptunnel.httpExpanded", "size transferred after expansion", "I2PTunnel", new long[] { 60*1000, 60*60*1000 });
         super.startRunning();
         if (open) {
             this.isr = new InternalSocketRunner(this);
@@ -370,7 +365,6 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     public static final String PROP_SSL_SET = "sslManuallySet";
 
     /**
-     *
      *  Note: This does not handle RFC 2616 header line splitting,
      *  which is obsoleted in RFC 7230.
      */
@@ -402,19 +396,20 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             out = s.getOutputStream();
             InputReader reader = new InputReader(s.getInputStream());
             int requestCount = 0;
-            // HTTP Persistent Connections (RFC 2616)
-            // for the local browser-to-client-proxy socket.
-            // Keep it very simple.
-            // Will be set to false for non-GET/HEAD, non-HTTP/1.1,
-            // Connection: close, InternalSocket,
-            // or after analysis of the response headers in HTTPResponseOutputStream,
-            // or on errors in I2PTunnelRunner.
+
+            /*
+             * HTTP Persistent Connections (RFC 2616)
+             * for the local browser-to-client-proxy socket.
+             * Keep it very simple.
+             * Will be set to false for non-GET/HEAD, non-HTTP/1.1,
+             * Connection: close, InternalSocket,
+             * or after analysis of the response headers in HTTPResponseOutputStream,
+             * or on errors in I2PTunnelRunner.
+             */
             boolean keepalive = getBooleanOption(OPT_KEEPALIVE_BROWSER, DEFAULT_KEEPALIVE_BROWSER) &&
                                 !(s instanceof InternalSocket);
 
-          // indent
-          do {   // while (keepalive)
-          // indent
+            do { // while (keepalive)
 
             if (requestCount > 0) {
                 try {
@@ -440,7 +435,6 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             String referer = null;
             URI origRequestURI = null;
             boolean preserveConnectionHeader = false;
-//            boolean allowGzip = false;
             boolean allowGzip = true;
 
             while((line = reader.readLine(method)) != null) {
@@ -463,22 +457,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     if (params.length != 3) {
                         break;
                     }
+
                     String request = params[1];
-
-                    // various obscure fixups
-                    if (request.startsWith("/") && getTunnel().getClientOptions().getProperty("i2ptunnel.noproxy") != null) {
-                        // what is this for ???
-                        request = "http://i2p" + request;
-                    } else if (request.startsWith("/eepproxy/")) {
-                        // Deprecated
-                        // /eepproxy/foo.i2p/bar/baz.html
-                        String subRequest = request.substring("/eepproxy/".length());
-                        if (subRequest.indexOf('/') == -1) {
-                            subRequest += '/';
-                        }
-                        request = "http://" + subRequest;
-                    }
-
                     method = params[0].toUpperCase(Locale.US);
                     if (method.equals("HEAD")) {
                         isHead = true;
@@ -586,14 +566,13 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
 
                     int port = requestURI.getPort();
 
-                    // Go through the various types of host names, set
-                    // the host and destination variables accordingly,
-                    // and transform the first line.
-                    // For all i2p network hosts, ensure that the host is a
-                    // Base 32 hostname so that we do not reveal our name for it
-                    // in our addressbook (all naming is local),
-                    // and it is removed from the request line.
-
+                    /*
+                     * Go through the various types of host names, set the host and destination
+                     * variables accordingly, and transform the first line.
+                     * For all i2p network hosts, ensure that the host is a Base32 hostname so that
+                     * we do not reveal our name for it in our addressbook (all naming is local),
+                     * and it is removed from the request line.
+                     */
                     hostLowerCase = host.toLowerCase(Locale.US);
                     if (hostLowerCase.equals(LOCAL_SERVER)) {
                         // so we don't do any naming service lookups
@@ -826,7 +805,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                             out.write(getErrorPage("localhost", ERR_LOCALHOST).getBytes("UTF-8"));
                             writeFooter(out);
                             reader.drain();
-                        } catch (IOException ioe) {} // ignore
+                        } catch (IOException ioe) {
+                            // Ignore - client already disconnected
+                        }
                         return;
                     } else if (host.contains(".") || host.startsWith("[")) {
                         if (Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_USE_OUTPROXY_PLUGIN, "true"))) {
@@ -882,7 +863,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                     out.write(getErrorPage("noproxy", ERR_NO_OUTPROXY).getBytes("UTF-8"));
                                     writeFooter(out);
                                     reader.drain();
-                                } catch (IOException ioe) {} // ignore
+                                } catch (IOException ioe) {
+                                    // Ignore - client already disconnected
+                                }
                                 return;
                             }
                             destination = currentProxy;
@@ -908,9 +891,11 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                             out.write(getErrorPage("denied", ERR_REQUEST_DENIED).getBytes("UTF-8"));
                             writeFooter(out);
                             reader.drain();
-                        } catch (IOException ioe) {} // ignore
+                        } catch (IOException ioe) {
+                            // Ignore - client already disconnected
+                        }
                         return;
-                    }   // end host name processing
+                    } // end host name processing
 
                     boolean isValid = usingInternalOutproxy || usingWWWProxy ||
                                       usingInternalServer || isSupportedAddress(host, protocol);
@@ -1157,7 +1142,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         out.write(getErrorPage("protocol", ERR_BAD_PROTOCOL).getBytes("UTF-8"));
                     }
                     writeFooter(out);
-                } catch (IOException ioe) {} // ignore
+                } catch (IOException ioe) {
+                    // Ignore - client already disconnected
+                }
                 return;
             }
 
@@ -1179,7 +1166,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 try {
                     out.write(getAuthError(result == AuthResult.AUTH_STALE).getBytes("UTF-8"));
                     writeFooter(out);
-                } catch (IOException ioe) {} // ignore
+                } catch (IOException ioe) {
+                    // Ignore - client already disconnected
+                }
                 return;
             }
 
@@ -1194,7 +1183,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     } else {
                         LocalHTTPServer.serveLocalFile(_context, sockMgr, out, method, internalPath, internalRawQuery, _proxyNonce, allowGzip);
                     }
-                } catch (IOException ioe) {} // ignore
+                } catch (IOException ioe) {
+                    // Ignore - client already disconnected
+                }
                 return;
             }
 
@@ -1234,7 +1225,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     String header = getErrorPage("ahelper-notfound", ERR_AHELPER_NOTFOUND);
                     try {
                         writeErrorMessage(header, out, targetRequest, false, destination);
-                    } catch (IOException ioe) {} // ignore
+                    } catch (IOException ioe) {
+                        // Ignore - client already disconnected
+                    }
                     return;
                 }
             } else if ("i2p".equals(host)) {clientDest = null;}
@@ -1253,8 +1246,6 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         BlindData bd = Blinding.decode(_context, destination);
                         if (_log.shouldWarn())
                             _log.warn("[HTTPClient] Resolved b33: " + bd);
-                        // TESTING
-                        //sess.sendBlindingInfo(bd, 24*60*60*1000);
                     } catch (IllegalArgumentException iae) {
                         if (_log.shouldWarn())
                             _log.warn("[HTTPClient] Unable to resolve b33: " + destination, iae);
@@ -1266,7 +1257,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         return;
                     }
                 }
-                // use existing session to look up for efficiency
+                // Use existing session to look up for efficiency
                 verifySocketManager();
                 I2PSession sess = sockMgr.getSession();
                 if (!sess.isClosed()) {
@@ -1324,7 +1315,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         writeFooter(out);
                         reader.drain();
                         out.close();
-                    } catch (IOException ioe) {} // ignore
+                    } catch (IOException ioe) {
+                        // Ignore - client already disconnected
+                    }
                     return;
                 }
             }
@@ -1393,20 +1386,19 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         "Location: " + uri + "\r\n" +
                         "Connection: close\r\n"+
                         "\r\n").getBytes("UTF-8"));
-                } catch (IOException ioe) {} // ignore
+                } catch (IOException ioe) {
+                    // Ignore - client already disconnected
+                }
                 return;
             }
 
-            // Close persistent I2PSocket if destination or port changes
-            // and open a new one.
-            // We do not maintain a pool of open I2PSockets or look for
-            // an available one. Keep it very simple.
-            // As long as the traffic keeps going to the same place
-            // we will keep reusing it.
-            // While we should be able to reuse it if only the port changes,
-            // that should be extremely rare, so don't bother.
-            // For common use patterns including outproxy use,
-            // this should still be quite effective.
+            /*
+             * Close persistent I2PSocket if destination or port changes and open a new one.
+             * We do not maintain a pool of open I2PSockets or look for an available one. Keep it very simple.
+             * As long as the traffic keeps going to the same place we will keep reusing it.
+             * While we should be able to reuse it if only the port changes, that should be extremely rare, so don't bother.
+             * For common use patterns including outproxy use, this should still be quite effective.
+             */
             if (i2ps == null || i2ps.isClosed() ||
                 remotePort != i2ps.getPort() ||
                 !clientDest.equals(i2ps.getPeerDestination())) {
@@ -1417,10 +1409,6 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 }
 
                 Properties opts = new Properties();
-                //opts.setProperty("i2p.streaming.inactivityTimeout", ""+120*1000);
-                // 1 == disconnect.  see ConnectionOptions in the new streaming lib, which i
-                // Don't want to hard link to here
-                //opts.setProperty("i2p.streaming.inactivityTimeoutAction", ""+1);
                 I2PSocketOptions sktOpts;
                 try {sktOpts = getDefaultOptions(opts);}
                 catch (RuntimeException re) {
@@ -1481,9 +1469,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             // go around again
             requestCount++;
 
-          // indent
-          } while (keepalive);
-          // indent
+            } while (keepalive);
 
         } catch(IOException ex) {
             // This is normal for keepalive when the browser closed the socket,
@@ -1531,7 +1517,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         out.write("<tr><td class=right>" + _t("Destination") + "</td><td><span id=b64 style=user-select:all>" + ahelperKey +
                   "</span></td></tr>\n</table>\n" + "<hr>\n" +
 
-                  // FIXME if there is a query remaining it is lost
+                  // TODO: Query parameters from original URL are lost in this form action
                   "<form method=GET action=\"" + targetRequest + "\">\n<hr>\n<div class=option>" +
                   "<h4>" + _t("Continue to {0} without saving", idn) + "</h4>\n<p>" +
                   _t("You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router.") +
@@ -1696,28 +1682,6 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         if ((host == null) || (protocol == null)) {
             return false;
         }
-
-        /****
-         *  Let's not look up the name _again_
-         *  and now that host is a b32, this was failing
-         *
-        boolean found = false;
-        String lcHost = host.toLowerCase();
-        for (int i = 0; i < SUPPORTED_HOSTS.length; i++) {
-        if (SUPPORTED_HOSTS[i].equals(lcHost)) {
-        found = true;
-        break;
-        }
-        }
-
-        if (!found) {
-        try {
-        Destination d = _context.namingService().lookup(host);
-        if (d == null) return false;
-        } catch (DataFormatException dfe) {
-        }
-        }
-         ****/
         String lc = protocol.toLowerCase(Locale.US);
         return lc.equals("http") || lc.equals("https");
     }
@@ -1825,35 +1789,4 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         return null;
     }
 
-/****
-    private static String[] tests = {
-        "", "foo", "foo=bar", "&", "&=&", "===", "&&",
-        "i2paddresshelper=foo",
-        "i2paddresshelpe=foo",
-        "2paddresshelper=foo",
-        "i2paddresshelper=%66oo",
-        "%692paddresshelper=foo",
-        "i2paddresshelper=foo&a=b",
-        "a=b&i2paddresshelper=foo",
-        "a=b&i2paddresshelper&c=d",
-        "a=b&i2paddresshelper=foo&c=d",
-        "a=b;i2paddresshelper=foo;c=d",
-        "a=b&i2paddresshelper=foo&c",
-        "a=b&i2paddresshelper=foo==&c",
-        "a=b&i2paddresshelper=foo%3d%3d&c",
-        "a=b&i2paddresshelper=f%6f%6F==&c",
-        "a=b&i2paddresshelper=foo&i2paddresshelper=bar&c",
-        "a=b&i2paddresshelper=foo&c%3F%3f%26%3b%3B%3d%3Dc=x%3F%3f%26%3b%3B%3d%3Dx"
-    };
-
-    public static void main(String[] args) {
-        for (int i = 0; i < tests.length; i++) {
-            String[] s = removeHelper(tests[i]);
-            if (s != null)
-                System.out.println("Test \"" + tests[i] + "\" q=\"" + s[0] + "\" h=\"" + s[1] + "\"");
-            else
-                System.out.println("Test \"" + tests[i] + "\" no match");
-        }
-    }
-****/
 }
