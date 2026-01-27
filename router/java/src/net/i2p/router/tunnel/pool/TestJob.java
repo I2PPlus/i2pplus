@@ -158,6 +158,19 @@ public class TestJob extends JobImpl {
      * @return true if the job should be created and scheduled, false otherwise
      */
     public static boolean shouldSchedule(RouterContext ctx, PooledTunnelCreatorConfig cfg) {
+        // Skip tunnel testing for ping tunnels - they're short-lived and don't need testing
+        TunnelPool pool = cfg.getTunnelPool();
+        if (pool != null) {
+            String tunnelNickname = pool.getSettings().getDestinationNickname();
+            if (tunnelNickname != null && tunnelNickname.startsWith("Ping [")) {
+                Log log = ctx.logManager().getLog(TestJob.class);
+                if (log.shouldDebug()) {
+                    log.debug("Skipping test scheduling for ping tunnel: " + tunnelNickname);
+                }
+                return false;
+            }
+        }
+
         // Try to increment total jobs counter to check limit
         int current = TOTAL_TEST_JOBS.get();
         if (current >= HARD_TEST_JOB_LIMIT) {
@@ -179,7 +192,6 @@ public class TestJob extends JobImpl {
         }
 
         // Check pool coverage - avoid over-testing pools that already have running tests
-        TunnelPool pool = cfg.getTunnelPool();
         if (pool != null) {
             String poolId = getPoolId(pool);
             AtomicInteger poolCount = POOL_TEST_COUNTS.get(poolId);
@@ -486,17 +498,6 @@ public class TestJob extends JobImpl {
         // Begin tunnel test logic
         _found = false;
         long now = ctx.clock().now();
-
-        // Skip tunnel testing for ping tunnels - they're short-lived and don't need testing
-        String tunnelNickname = _cfg.getTunnelPool().getSettings().getDestinationNickname();
-        if (tunnelNickname != null && tunnelNickname.startsWith("Ping [")) {
-            if (_log.shouldDebug()) {
-                _log.debug("Skipping tunnel test for ping tunnel: " + tunnelNickname);
-            }
-            cleanupTunnelTracking();
-            decrementTotalJobs(); // Clean up total counter
-            return; // Skip testing for ping tunnels
-        }
 
         if (_cfg.isInbound()) {
             _replyTunnel = _cfg;
