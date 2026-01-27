@@ -673,14 +673,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                         if (_log.shouldWarn()) {_log.warn(direction + " Error closing input stream (" + ex.getMessage() + ")");}
                     }
                 }
-                // Close socket input stream if created (prevents resource leaks)
-                if (_socketIn != null) {
-                    try {
-                        _socketIn.close();
-                    } catch (IOException e) {
-                        if (_log.shouldDebug()) {_log.debug("Error closing socket input stream");}
-                    }
-                }
+
                 try {
                     /*
                      * Thread must close() before exiting for a PipedOutputStream, or else input end gives up
