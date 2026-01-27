@@ -36,6 +36,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadFactory;
@@ -124,6 +125,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     public static final String PROP_UNIQUE_LOCAL = "enableUniqueLocal";
     /** @since 0.9.30 */
     public static final String PROP_ALT_PKF = "altPrivKeyFile";
+    public static final String PROP_QUEUE_CAPACITY = "queueCapacity";
     private ExecutorService _executor;
     protected volatile ThreadPoolExecutor _clientExecutor;
     private static int CORES = SystemVersion.getCores();
@@ -618,12 +620,31 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                        remoteHost.toString().replace("/", "") + ':' + remotePort);
         }
 
+        // Configurable queue capacity - defaults to MAX_THREADS but can be overridden
+        int queueCapacity = MAX_THREADS / 4; // 1024
+        String queueCapacityProp = getTunnel().getClientOptions().getProperty(PROP_QUEUE_CAPACITY);
+        if (queueCapacityProp != null) {
+            try {
+                queueCapacity = Integer.parseInt(queueCapacityProp);
+                if (queueCapacity <= 0) {
+                    queueCapacity = MAX_THREADS;
+                    if (_log.shouldWarn()) {
+                        _log.warn("Invalid queue capacity '" + queueCapacityProp + "', using default " + MAX_THREADS);
+                    }
+                }
+            } catch (NumberFormatException nfe) {
+                if (_log.shouldWarn()) {
+                    _log.warn("Invalid queue capacity format '" + queueCapacityProp + "', using default " + MAX_THREADS);
+                }
+            }
+        }
+
         ThreadPoolExecutor connectionExecutor = new ThreadPoolExecutor(
             MIN_THREADS,
             MAX_THREADS,
             KEEP_ALIVE,
             TimeUnit.SECONDS,
-            new SynchronousQueue<>(),
+            new LinkedBlockingQueue<>(queueCapacity),
             runnable -> {
                 Thread t = new Thread(runnable);
                 t.setName("Server:" + remotePort);
