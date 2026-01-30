@@ -18,6 +18,7 @@ const home = document.querySelector("#navbar .nav_main");
 const isIframed = document.documentElement.classList.contains("iframed") || window.parent;
 const isStandalone = document.documentElement.classList.contains("standalone");
 const mainsection = document.getElementById("mainsection");
+const noTorrents = document.getElementById("noTorrents");
 const parentDoc = window.parent.document;
 const query = window.location.search;
 const screenlog = document.getElementById("screenlog");
@@ -194,6 +195,7 @@ async function refreshTorrents(callback) {
             updateElement(torrentsBody, newTorrentsBody);
             refreshHeaderAndFooter();
             refreshScreenLog(undefined);
+            if (noTorrents) {noTorrents.remove();}
             if (debugging) {console.log("refreshAll()");}
           });
         } else {
@@ -215,6 +217,7 @@ async function refreshTorrents(callback) {
         const updatingResponse = [...responseDoc.querySelectorAll("#snarkTbody tr, #dhtDebug .dht")];
 
         if (torrents) {
+          if (noTorrents) {noTorrents.remove();}
           if (filterbar) {
             const activeBadge = filterbar.querySelector("#filterBar .filter#all .badge"),
                   activeBadgeResponse = responseDoc.querySelector("#filterBar .filter#all.enabled .badge");
