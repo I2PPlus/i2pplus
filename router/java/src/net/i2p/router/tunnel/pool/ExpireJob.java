@@ -46,10 +46,7 @@ class ExpireJob extends JobImpl {
     public void runJob() {
         if (_leaseUpdated.compareAndSet(false,true)) {
             TunnelPool pool = _cfg.getTunnelPool();
-            // First run
             pool.removeTunnel(_cfg);
-            // noop for outbound
-            pool.refreshLeaseSet();
             long timeToDrop = _dropAfter - getContext().clock().now();
             requeue(timeToDrop);
         } else {
