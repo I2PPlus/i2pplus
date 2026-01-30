@@ -145,7 +145,10 @@ class RequestLeaseSetJob extends JobImpl {
         public CheckLeaseRequestStatus() {
             super(RequestLeaseSetJob.this.getContext());
             _start = System.currentTimeMillis();
-            getTiming().setStartAfter(_requestState.getExpiration());
+            // Add stagger delay to spread out CheckLeaseRequestStatus jobs and prevent job queue spikes
+            // This helps prevent lag when multiple lease requests timeout simultaneously
+            int staggerDelay = RequestLeaseSetJob.this.getContext().random().nextInt(2000); // 0-2 seconds
+            getTiming().setStartAfter(_requestState.getExpiration() + staggerDelay);
         }
 
         public void runJob() {
