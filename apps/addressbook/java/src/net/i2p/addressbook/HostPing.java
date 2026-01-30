@@ -152,7 +152,6 @@ public class HostPing {
             long tunnelBuildStart = System.currentTimeMillis();
             Properties options = new Properties();
             options.setProperty("i2cp.host", "127.0.0.1");
-            options.setProperty("i2cp.port", "7611");  // Different from default 7654
             options.setProperty("inbound.nickname", "Ping [" + hostname.replace(".i2p", "") + "]");
             options.setProperty("outbound.nickname", "Ping [" + hostname.replace(".i2p", "") + "]");
             options.setProperty("inbound.quantity", "1");
