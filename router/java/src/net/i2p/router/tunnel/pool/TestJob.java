@@ -198,16 +198,16 @@ public class TestJob extends JobImpl {
             String poolId = getPoolId(pool);
             AtomicInteger poolCount = POOL_TEST_COUNTS.get(poolId);
             if (poolCount != null && poolCount.get() > 0) {
-                // For exploratory pools, be more restrictive to allow better coverage
-                if (pool.getSettings().isExploratory() && poolCount.get() >= 4 && current > (maxQueuedTests / 10) * 9) {
+                // For exploratory pools, limit but allow better coverage
+                if (pool.getSettings().isExploratory() && poolCount.get() >= 8) {
                     Log log = ctx.logManager().getLog(TestJob.class);
                     if (log.shouldDebug()) {
                         log.debug("Pool " + poolId + " already has " + poolCount.get() + " tests running -> Deferring for better coverage");
                     }
                     return false;
                 }
-                // For client pools, allow some concurrency but limit it
-                else if (!pool.getSettings().isExploratory() && poolCount.get() >= 8 && current > (maxQueuedTests / 10) * 9) {
+                // For client pools, allow more concurrency
+                else if (!pool.getSettings().isExploratory() && poolCount.get() >= 16) {
                     Log log = ctx.logManager().getLog(TestJob.class);
                     if (log.shouldDebug()) {
                         log.debug("Pool " + poolId + " already has " + poolCount.get() + " tests running -> Deferring for better coverage");
@@ -382,7 +382,7 @@ public class TestJob extends JobImpl {
 
         long maxLag = ctx.jobQueue().getMaxLag();
         long avgLag = ctx.jobQueue().getAvgLag();
-        if (maxLag > 2000 || avgLag > 10) {
+        if (maxLag > 5000 || avgLag > 100) {
             // Skip exploratory tunnels first under extreme pressure
             if (isExploratory) {
                 if (_log.shouldInfo()) {
@@ -429,7 +429,9 @@ public class TestJob extends JobImpl {
         // Check for queue saturation and hard limits before proceeding
         int totalCount = getTotalTestJobCount();
 
-        if (totalCount >= HARD_TEST_JOB_LIMIT) {
+        // Don't count ourselves in the total - we are already in the counter
+        // and will be removed on cleanup
+        if (totalCount >= HARD_TEST_JOB_LIMIT && totalCount > 1) {
             if (_log.shouldInfo()) {
                 _log.info("Hard limit reached (" + totalCount + " >= " + HARD_TEST_JOB_LIMIT +
                           ") -> Cancelling test of " + _cfg);
@@ -469,17 +471,14 @@ public class TestJob extends JobImpl {
         }
 
         // Concurrency control: Check and increment counter
-        // Adaptive limits based on lag to balance testing and performance
-        // Exploratory tunnels are deprioritized under high load
-        int maxTests;
-        if (maxLag > 3000 || avgLag > 100) {
-            maxTests = isExploratory ? 2 : 4; // Reduce exploratory tests under severe load
-        } else if (maxLag > 2000 || avgLag > 50) {
-            maxTests = isExploratory ? 3 : 6; // Prioritize client tests under high load
-        } else if (maxLag > 1000 || avgLag > 20) {
-            maxTests = isExploratory ? 4 : 8; // Slightly favor client tests under moderate load
-        } else {
-            maxTests = SystemVersion.isSlow() ? MAX_CONCURRENT_TESTS : MAX_CONCURRENT_TESTS * 3 / 2; // Normal operation
+        // Ensure minimum concurrent tests for adequate coverage
+        int maxTests = SystemVersion.isSlow() ? 12 : 20;
+
+        // Only reduce concurrency under severe load
+        if (maxLag > 5000 || avgLag > 100) {
+            maxTests = isExploratory ? 4 : 8;
+        } else if (maxLag > 3000 || avgLag > 50) {
+            maxTests = isExploratory ? 6 : 12;
         }
 
         int current;
@@ -574,7 +573,7 @@ public class TestJob extends JobImpl {
         // During high job lag, prefer unencrypted tests to reduce crypto overhead
         long maxLag = ctx.jobQueue().getMaxLag();
         long avgLag = ctx.jobQueue().getAvgLag();
-        if (maxLag > 1000 || avgLag > 10) {
+        if (maxLag > 3000 || avgLag > 10) {
             useEncryption = ctx.random().nextInt(2) != 0; // 50% chance unencrypted
         }
 
