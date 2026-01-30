@@ -213,8 +213,20 @@ async function refreshTorrents(callback) {
         const url = await getURL();
         const responseDoc = await fetchHTMLDocument(url);
 
-        const updating = torrents.querySelectorAll("#snarkTbody tr, #dhtDebug .dht");
-        const updatingResponse = [...responseDoc.querySelectorAll("#snarkTbody tr, #dhtDebug .dht")];
+        // Update torrent rows
+        const updating = torrents.querySelectorAll("#snarkTbody tr");
+        const updatingResponse = [...responseDoc.querySelectorAll("#snarkTbody tr")];
+
+        // Update debug panel if visible
+        const dhtDebug = document.getElementById("dhtDebug");
+        const dhtDebugResponse = responseDoc.getElementById("dhtDebug");
+        if (dhtDebug && dhtDebugResponse && !dhtDebug.hidden) {
+          const volatileDiv = dhtDebug.querySelector(".volatile");
+          const volatileDivResponse = dhtDebugResponse.querySelector(".volatile");
+          if (volatileDiv && volatileDivResponse) {
+            await updateElement(volatileDiv, volatileDivResponse);
+          }
+        }
 
         if (torrents) {
           if (noTorrents) {noTorrents.remove();}
@@ -563,6 +575,10 @@ document.addEventListener("visibilitychange", () => {
   isDocumentVisible = !document.hidden;
   if (isDocumentVisible) {initSnarkRefresh();}
   else {stopSnarkRefresh();}
+});
+
+document.addEventListener("debugToggled", () => {
+  doRefresh();
 });
 
 document.addEventListener("DOMContentLoaded", () => {
