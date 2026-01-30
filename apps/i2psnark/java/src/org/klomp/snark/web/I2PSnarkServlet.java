@@ -864,7 +864,7 @@ public class I2PSnarkServlet extends BasicServlet {
         appendSnarkFooter(out, buf, stats, total, isConnected, noSnarks, hasPeers, isUploading, dht, isStandalone(), debug, peerParam);
 
         if (showDebug) out.write("<tr id=dhtDebug>");
-        else out.write("<tr id=dhtDebug hidden>");
+        else out.write("<tfoot><tr id=dhtDebug hidden>");
         out.write("<th colspan=12><div class=volatile>");
         if (dht != null) out.write(_manager.getBandwidthListener().toString() + dht.renderStatusHTML());
         else out.write("<b id=noDHTpeers>" + _t("No DHT Peers") + "</b>");
