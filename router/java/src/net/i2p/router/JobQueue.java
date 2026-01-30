@@ -303,23 +303,34 @@ public class JobQueue {
     private boolean shouldDrop(Job job, int numReady) {
         if (_maxWaitingJobs <= 0) return false;
         if (!_allowParallelOperation) return false;
+
+        Class<? extends Job> cls = job.getClass();
+        boolean disableTunnelTests = _context.getBooleanProperty("router.disableTunnelTesting");
+
+        // Drop based on lag alone - prevents lag from building up
+        boolean highLag = getMaxLag() >= MIN_LAG_TO_DROP;
+        if (highLag) {
+            if (cls == RepublishLeaseSetJob.class) {return false;}
+            if ((!disableTunnelTests && cls == TestJob.class) ||
+                cls == PeerTestJob.class ||
+                cls == ExploreJob.class ||
+                cls == HandleFloodfillDatabaseLookupMessageJob.class ||
+                cls == HandleGarlicMessageJob.class ||
+                cls == IterativeSearchJob.class) {
+                return true;
+            }
+        }
+
+        // Also drop based on queue size to prevent memory bloat
         if (numReady > _context.getProperty(PROP_MAX_WAITING_JOBS, DEFAULT_MAX_WAITING_JOBS)) {
-            Class<? extends Job> cls = job.getClass();
-            boolean disableTunnelTests = _context.getBooleanProperty("router.disableTunnelTesting");
-            boolean shouldDrop = getMaxLag() >= MIN_LAG_TO_DROP;
-            if (shouldDrop) {
-                if (cls == RepublishLeaseSetJob.class) {return false;}
-                if ((!disableTunnelTests && cls == TestJob.class) || cls == PeerTestJob.class) {
-                    return true;
-                }
-                if ((!disableTunnelTests && cls == TestJob.class) ||
-                    cls == PeerTestJob.class ||
-                    cls == ExploreJob.class ||
-                    cls == HandleFloodfillDatabaseLookupMessageJob.class ||
-                    cls == HandleGarlicMessageJob.class ||
-                    cls == IterativeSearchJob.class) {
-                    return true;
-                }
+            if (cls == RepublishLeaseSetJob.class) {return false;}
+            if ((!disableTunnelTests && cls == TestJob.class) ||
+                cls == PeerTestJob.class ||
+                cls == ExploreJob.class ||
+                cls == HandleFloodfillDatabaseLookupMessageJob.class ||
+                cls == HandleGarlicMessageJob.class ||
+                cls == IterativeSearchJob.class) {
+                return true;
             }
         }
         return false;
