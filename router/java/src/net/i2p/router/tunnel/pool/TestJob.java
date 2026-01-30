@@ -1,8 +1,11 @@
 package net.i2p.router.tunnel.pool;
 
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.crypto.SessionKeyManager;
 import net.i2p.data.SessionTag;
+import net.i2p.data.TunnelId;
 import net.i2p.data.i2np.DeliveryStatusMessage;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.router.JobImpl;
@@ -48,7 +51,7 @@ public class TestJob extends JobImpl {
      * Prevents overwhelming the router with too many simultaneous tunnel tests.
      * This value can be adjusted based on system capacity.
      */
-    private static final int MAX_CONCURRENT_TESTS = SystemVersion.isSlow() ? 4 : 8;
+    private static final int MAX_CONCURRENT_TESTS = SystemVersion.isSlow() ? 8 : 16;
 
     // Adaptive testing frequency constants
     private static final int BASE_TEST_DELAY = 90 * 1000; // 90s base
@@ -61,13 +64,14 @@ public class TestJob extends JobImpl {
      * Prevents job queue saturation from too many waiting tunnel tests.
      */
     private static final int MAX_QUEUED_TESTS = SystemVersion.isSlow() ? 32 : 64;
+    public static int maxQueuedTests = MAX_QUEUED_TESTS;
 
     /**
      * Hard limit for total TestJob instances (queued + active).
      * Above this threshold, no new tests are scheduled until count decreases.
      * Prevents ever-increasing backlogs that could cause job lag.
      */
-    private static final int HARD_TEST_JOB_LIMIT = SystemVersion.isSlow() ? 128 : 256;
+    public static final int HARD_TEST_JOB_LIMIT = SystemVersion.isSlow() ? 128 : 256;
 
     /**
      * Static counter tracking the number of currently active tunnel tests.
@@ -80,6 +84,56 @@ public class TestJob extends JobImpl {
      * Provides more reliable limiting than relying on job queue counting.
      */
     private static final AtomicInteger TOTAL_TEST_JOBS = new AtomicInteger(0);
+
+    /**
+     * Track which tunnels currently have tests running to prevent multiple concurrent tests per tunnel.
+     * Key: tunnel key (Long), Value: TestJob instance
+     */
+    private static final ConcurrentHashMap<Long, TestJob> RUNNING_TESTS = new ConcurrentHashMap<>();
+
+    /**
+     * Track which tunnel pools currently have tests running to ensure better coverage across pools.
+     * Key: pool identifier, Value: number of running tests in that pool
+     */
+    private static final ConcurrentHashMap<String, AtomicInteger> POOL_TEST_COUNTS = new ConcurrentHashMap<>();
+
+    /**
+     * Generate a unique key for a tunnel to track running tests.
+     * Uses combination of receive and send tunnel IDs.
+     * @param cfg the tunnel configuration
+     * @return unique key for the tunnel, or null if unavailable
+     */
+    private static Long getTunnelKey(PooledTunnelCreatorConfig cfg) {
+        if (cfg == null) return null;
+        try {
+            long recvId = cfg.getReceiveTunnelId(0).getTunnelId();
+            long sendId = cfg.getSendTunnelId(0).getTunnelId();
+            // Combine both IDs to create a unique key
+            return Long.valueOf((recvId << 32) | (sendId & 0xFFFFFFFFL));
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
+     * Generate a unique identifier for a tunnel pool to track test coverage.
+     * @param pool the tunnel pool
+     * @return unique identifier for the pool
+     */
+    private static String getPoolId(TunnelPool pool) {
+        if (pool == null) return "unknown";
+        if (pool.getSettings().isExploratory()) {
+            return pool.getSettings().isInbound() ? "exploratory-inbound" : "exploratory-outbound";
+        } else {
+            String nickname = pool.getSettings().getDestinationNickname();
+            if (nickname != null) {
+                return "client-" + nickname + "-" + (pool.getSettings().isInbound() ? "inbound" : "outbound");
+            } else {
+                return "client-" + pool.getSettings().getDestination().toBase32().substring(0,8) +
+                       "-" + (pool.getSettings().isInbound() ? "inbound" : "outbound");
+            }
+        }
+    }
 
     /** Flag to indicate if this job is valid and should be queued */
     private boolean _valid = true;
@@ -94,6 +148,9 @@ public class TestJob extends JobImpl {
         return TOTAL_TEST_JOBS.get();
     }
 
+    /** Ensures total job counter is decremented at most once */
+    private final AtomicBoolean _counted = new AtomicBoolean(true);
+
     /**
      * Static method to check if a TestJob should be created and scheduled.
      * This prevents creating invalid job objects that would have timing issues.
@@ -102,15 +159,64 @@ public class TestJob extends JobImpl {
      * @return true if the job should be created and scheduled, false otherwise
      */
     public static boolean shouldSchedule(RouterContext ctx, PooledTunnelCreatorConfig cfg) {
+        // Skip tunnel testing for ping tunnels - they're short-lived and don't need testing
+        TunnelPool pool = cfg.getTunnelPool();
+        if (pool != null) {
+            String tunnelNickname = pool.getSettings().getDestinationNickname();
+            if (tunnelNickname != null && (tunnelNickname.equals("I2Ping") ||
+                (tunnelNickname.startsWith("Ping") && tunnelNickname.contains("[")))) {
+                Log log = ctx.logManager().getLog(TestJob.class);
+                if (log.shouldDebug()) {
+                    log.debug("Skipping test scheduling for ping tunnel: " + tunnelNickname);
+                }
+                return false;
+            }
+        }
+
         // Try to increment total jobs counter to check limit
         int current = TOTAL_TEST_JOBS.get();
-        if (current >= HARD_TEST_JOB_LIMIT) {
+        if (current >= maxQueuedTests) {
             Log log = ctx.logManager().getLog(TestJob.class);
             if (log.shouldInfo()) {
-                log.info("Hard limit (" + HARD_TEST_JOB_LIMIT + ") reached -> Not scheduling test for " + cfg);
+                log.info("Limit (" + maxQueuedTests + ") reached -> Not scheduling test for " + cfg);
             }
             return false;
         }
+
+        // Check if this tunnel already has a test running
+        Long tunnelKey = getTunnelKey(cfg);
+        if (tunnelKey != null && RUNNING_TESTS.containsKey(tunnelKey)) {
+            Log log = ctx.logManager().getLog(TestJob.class);
+            if (log.shouldDebug()) {
+                log.debug("Test already running for tunnel key " + tunnelKey + " -> Skipping duplicate test for " + cfg);
+            }
+            return false;
+        }
+
+        // Check pool coverage - avoid over-testing pools that already have running tests
+        if (pool != null) {
+            String poolId = getPoolId(pool);
+            AtomicInteger poolCount = POOL_TEST_COUNTS.get(poolId);
+            if (poolCount != null && poolCount.get() > 0) {
+                // For exploratory pools, be more restrictive to allow better coverage
+                if (pool.getSettings().isExploratory() && poolCount.get() >= 4 && current > (maxQueuedTests / 10) * 9) {
+                    Log log = ctx.logManager().getLog(TestJob.class);
+                    if (log.shouldDebug()) {
+                        log.debug("Pool " + poolId + " already has " + poolCount.get() + " tests running -> Deferring for better coverage");
+                    }
+                    return false;
+                }
+                // For client pools, allow some concurrency but limit it
+                else if (!pool.getSettings().isExploratory() && poolCount.get() >= 8 && current > (maxQueuedTests / 10) * 9) {
+                    Log log = ctx.logManager().getLog(TestJob.class);
+                    if (log.shouldDebug()) {
+                        log.debug("Pool " + poolId + " already has " + poolCount.get() + " tests running -> Deferring for better coverage");
+                    }
+                    return false;
+                }
+            }
+        }
+
         return true;
     }
 
@@ -144,7 +250,39 @@ public class TestJob extends JobImpl {
      * Must be called when a test job completes or is cancelled.
      */
     private static void decrementTotalJobs() {
-        TOTAL_TEST_JOBS.decrementAndGet();
+        int current;
+        do {
+            current = TOTAL_TEST_JOBS.get();
+            if (current <= 0) {
+                return;
+            }
+        } while (!TOTAL_TEST_JOBS.compareAndSet(current, current - 1));
+    }
+
+    /**
+     * Clean up this test job from tunnel tracking.
+     * Must be called when a test job completes or is cancelled.
+     * Note: This does NOT affect the TOTAL_TEST_JOBS counter.
+     */
+    private void cleanupTunnelTracking() {
+        Long tunnelKey = getTunnelKey(_cfg);
+        if (tunnelKey != null) {
+            RUNNING_TESTS.remove(tunnelKey, this);
+        }
+
+        // Clean up pool test count tracking
+        TunnelPool pool = _pool;
+        if (pool != null) {
+            String poolId = getPoolId(pool);
+            AtomicInteger poolCount = POOL_TEST_COUNTS.get(poolId);
+            if (poolCount != null) {
+                poolCount.decrementAndGet();
+                // Remove from map if count reaches zero to prevent memory leak
+                if (poolCount.get() <= 0) {
+                    POOL_TEST_COUNTS.remove(poolId);
+                }
+            }
+        }
     }
 
     public TestJob(RouterContext ctx, PooledTunnelCreatorConfig cfg, TunnelPool pool) {
@@ -152,22 +290,71 @@ public class TestJob extends JobImpl {
         _log = ctx.logManager().getLog(TestJob.class);
         _cfg = cfg;
         _pool = (pool != null) ? pool : cfg.getTunnelPool();
-        if (_pool == null && _log.shouldError()) {
-            _log.error("Invalid Tunnel Test configuration → No pool for " + cfg, new Exception("origin"));
+        if (_pool == null) {
+            if (_log.shouldError()) {
+                _log.error("Invalid Tunnel Test configuration → No pool for " + cfg, new Exception("origin"));
+            }
             _valid = false;
             return;
         }
+        // Track pool test count for coverage management
+        if (_pool != null) {
+            String poolId = getPoolId(_pool);
+            POOL_TEST_COUNTS.computeIfAbsent(poolId, k -> new AtomicInteger(0)).incrementAndGet();
+        }
+
+        // Register this test as running for the tunnel
+        Long tunnelKey = getTunnelKey(cfg);
+        if (tunnelKey != null) {
+            TestJob existing = RUNNING_TESTS.putIfAbsent(tunnelKey, this);
+            if (existing != null) {
+                if (_log.shouldDebug()) {
+                    _log.debug("Test already registered for tunnel key " + tunnelKey + " -> Invalidating duplicate test for " + cfg);
+                }
+                // Clean up pool registration since we're not proceeding
+                if (_pool != null) {
+                    String poolId = getPoolId(_pool);
+                    AtomicInteger poolCount = POOL_TEST_COUNTS.get(poolId);
+                    if (poolCount != null) {
+                        poolCount.decrementAndGet();
+                        if (poolCount.get() <= 0) {
+                            POOL_TEST_COUNTS.remove(poolId);
+                        }
+                    }
+                }
+                _valid = false;
+                return;
+            }
+        }
+
         // Increment total job counter atomically
         if (!tryIncrementTotalJobs(ctx)) {
             if (_log.shouldInfo()) {
                 _log.info("Hard limit (" + HARD_TEST_JOB_LIMIT + ") reached -> Not scheduling test for " + cfg);
             }
+            // Clean up tunnel registration
+            if (tunnelKey != null) {
+                RUNNING_TESTS.remove(tunnelKey, this);
+            }
+            // Clean up pool registration
+            if (_pool != null) {
+                String poolId = getPoolId(_pool);
+                AtomicInteger poolCount = POOL_TEST_COUNTS.get(poolId);
+                if (poolCount != null) {
+                    poolCount.decrementAndGet();
+                    if (poolCount.get() <= 0) {
+                        POOL_TEST_COUNTS.remove(poolId);
+                    }
+                }
+            }
             _valid = false;
             return;
         }
         // Start after delay; guard against negative start
-        long startDelay = Math.max(0, getDelay() + ctx.clock().now());
-        getTiming().setStartAfter(startDelay);
+        int delay = getDelay();
+        delay = Math.max(0, delay);
+        long startTime = ctx.clock().now() + delay;
+        getTiming().setStartAfter(startTime);
     }
 
     @Override
@@ -178,10 +365,14 @@ public class TestJob extends JobImpl {
     @Override
     public void runJob() {
         final RouterContext ctx = getContext();
-        if (_pool == null || !_pool.isAlive()) return;
+        if (_pool == null || !_pool.isAlive()) {
+            decrementTotalJobs();
+            return;
+        }
 
         // Check for graceful shutdown
         if (ctx.router().gracefulShutdownInProgress()) {
+            cleanupTunnelTracking();
             decrementTotalJobs();
             return;
         }
@@ -198,49 +389,42 @@ public class TestJob extends JobImpl {
                     _log.info("Skipping exploratory tunnel test due to severe job lag (Max: " + maxLag + " / Avg: " + avgLag + "ms) -> " + _cfg);
                 }
                 ctx.statManager().addRateData("tunnel.testExploratorySkipped", _cfg.getLength());
-                scheduleRetest();
+                if (!scheduleRetest(false)) {
+                    cleanupTunnelTracking();
+                    decrementTotalJobs();
+                }
                 return;
             }
+
             // Still test client tunnels unless lag is extreme
             if (_log.shouldWarn()) {
                 _log.warn("Aborted test due to severe max job lag (Max: " + maxLag + " / Avg: " + avgLag + "ms) → " + _cfg);
             }
             ctx.statManager().addRateData("tunnel.testAborted", _cfg.getLength());
-            scheduleRetest();
-            return;
-        } else if (maxLag > 1000 || avgLag > 5) {
-            // Moderate pressure - skip exploratory but allow critical client tests
-            if (isExploratory) {
-                if (_log.shouldInfo()) {
-                    _log.info("Deprioritizing exploratory tunnel test due to job lag (Max: " + maxLag + " / Avg: " + avgLag + "ms) -> " + _cfg);
-                }
-                ctx.statManager().addRateData("tunnel.testExploratorySkipped", _cfg.getLength());
-                scheduleRetest();
-                return;
-            }
-            // Continue with client tunnel testing
-            if (_log.shouldWarn()) {
-                _log.warn("Max permitted job lag exceeded (Max: " + maxLag + " / Avg: " + avgLag + "ms) -> Suspending test of " + _cfg);
-            }
-            ctx.statManager().addRateData("tunnel.testAborted", _cfg.getLength());
+            decrementTotalJobs();
             return; // Exit without rescheduling
         }
 
         // Calculate adaptive max queued tests based on system load
-        int maxQueuedTests;
-        if (maxLag < 300 && avgLag < 1) {
+        if (maxLag < 1000 && avgLag < 3) {
             // Super low lag
-            maxQueuedTests = MAX_QUEUED_TESTS * 6; // 192 / 384
-        } else if (maxLag < 400 && avgLag < 2) {
+            maxQueuedTests = HARD_TEST_JOB_LIMIT; // 128 / 384
+        } else if (maxLag < 1200 && avgLag < 5) {
             // Very low lag - increase queue capacity for more thorough testing
             maxQueuedTests = MAX_QUEUED_TESTS * 4; // 128 / 256
-        } else if (maxLag < 500 && avgLag < 3) {
+        } else if (maxLag < 1500 && avgLag < 10) {
             // Low lag - moderate increase in queue capacity
             maxQueuedTests = MAX_QUEUED_TESTS * 3 / 2;
         } else {
             // Normal or high lag - use standard limits
-            maxQueuedTests = MAX_QUEUED_TESTS;
+            maxQueuedTests = MAX_QUEUED_TESTS * 2;
         }
+
+        // Cap adaptive queue limit at hard limit to prevent exceeding configured maximum
+        maxQueuedTests = Math.min(maxQueuedTests, HARD_TEST_JOB_LIMIT);
+
+        // Update public static field for JobQueueHelper display
+        TestJob.maxQueuedTests = maxQueuedTests;
 
         // Check for queue saturation and hard limits before proceeding
         int totalCount = getTotalTestJobCount();
@@ -252,6 +436,7 @@ public class TestJob extends JobImpl {
             }
             ctx.statManager().addRateData("tunnel.testThrottled", _cfg.getLength());
             ctx.statManager().addRateData("jobQueue.testJobHardLimit", 1);
+            cleanupTunnelTracking();
             decrementTotalJobs(); // Clean up counter since we won't proceed
             return; // Exit without rescheduling
         }
@@ -265,7 +450,10 @@ public class TestJob extends JobImpl {
                     _log.info("TestJob queue saturated -> Deprioritizing Exploratory tunnel test (" + totalCount + " >= " + maxQueuedTests + ")");
                 }
                 ctx.statManager().addRateData("tunnel.testExploratorySkipped", _cfg.getLength());
-                scheduleRetest();
+                if (!scheduleRetest(false)) {
+                    cleanupTunnelTracking();
+                    decrementTotalJobs();
+                }
                 return;
             }
 
@@ -275,6 +463,7 @@ public class TestJob extends JobImpl {
             }
 
             ctx.statManager().addRateData("tunnel.testThrottled", _cfg.getLength());
+            cleanupTunnelTracking();
             decrementTotalJobs(); // Clean up counter since we won't proceed
             return; // Exit without rescheduling
         }
@@ -283,14 +472,14 @@ public class TestJob extends JobImpl {
         // Adaptive limits based on lag to balance testing and performance
         // Exploratory tunnels are deprioritized under high load
         int maxTests;
-        if (maxLag > 1000 || avgLag > 20) {
-            maxTests = isExploratory ? 0 : 1; // No exploratory tests under high lag
-        } else if (maxLag > 500 || avgLag > 10) {
-            maxTests = isExploratory ? 1 : 2; // Prioritize client tests
-        } else if (maxLag > 200 | avgLag > 5) {
-            maxTests = isExploratory ? 2 : 3; // Slightly favor client tests
+        if (maxLag > 3000 || avgLag > 100) {
+            maxTests = isExploratory ? 2 : 4; // Reduce exploratory tests under severe load
+        } else if (maxLag > 2000 || avgLag > 50) {
+            maxTests = isExploratory ? 3 : 6; // Prioritize client tests under high load
+        } else if (maxLag > 1000 || avgLag > 20) {
+            maxTests = isExploratory ? 4 : 8; // Slightly favor client tests under moderate load
         } else {
-            maxTests = MAX_CONCURRENT_TESTS; // Normal operation
+            maxTests = SystemVersion.isSlow() ? MAX_CONCURRENT_TESTS : MAX_CONCURRENT_TESTS * 3 / 2; // Normal operation
         }
 
         int current;
@@ -302,7 +491,10 @@ public class TestJob extends JobImpl {
                               " (Queued: " + totalCount + ")");
                 }
                 ctx.statManager().addRateData("tunnel.testThrottled", _cfg.getLength());
-                scheduleRetest();
+                if (!scheduleRetest(false)) {
+                    cleanupTunnelTracking();
+                    decrementTotalJobs();
+                }
                 return;
             }
         } while (!CONCURRENT_TESTS.compareAndSet(current, current + 1));
@@ -310,17 +502,6 @@ public class TestJob extends JobImpl {
         // Begin tunnel test logic
         _found = false;
         long now = ctx.clock().now();
-
-        // Skip tunnel testing for ping tunnels - they're short-lived and don't need testing
-        String tunnelNickname = _cfg.getTunnelPool().getSettings().getDestinationNickname();
-        if (tunnelNickname != null && tunnelNickname.startsWith("Ping [")) {
-            if (_log.shouldDebug()) {
-                _log.debug("Skipping tunnel test for ping tunnel: " + tunnelNickname);
-            }
-            CONCURRENT_TESTS.decrementAndGet();
-            decrementTotalJobs(); // Clean up total counter
-            return; // Skip testing for ping tunnels
-        }
 
         if (_cfg.isInbound()) {
             _replyTunnel = _cfg;
@@ -346,6 +527,7 @@ public class TestJob extends JobImpl {
                 _log.warn("Insufficient tunnels to test " + _cfg + " with: " + _replyTunnel + " / " + _outTunnel);
             ctx.statManager().addRateData("tunnel.testAborted", _cfg.getLength());
             CONCURRENT_TESTS.decrementAndGet();
+            cleanupTunnelTracking();
             decrementTotalJobs(); // Clean up total counter
             return;
         }
@@ -367,13 +549,13 @@ public class TestJob extends JobImpl {
         boolean sendSuccess = sendTest(m, testPeriod);
         if (!sendSuccess) {
             CONCURRENT_TESTS.decrementAndGet();
+            cleanupTunnelTracking();
             // Try to reschedule - if it fails, clean up total counter
-            if (!tryReschedule()) {
+            if (!scheduleRetest(false)) {
                 decrementTotalJobs();
             }
             return;
         }
-
     }
 
     /**
@@ -431,10 +613,9 @@ public class TestJob extends JobImpl {
             if (!ctx.tunnelDispatcher().hasOutboundGateway(_outTunnel.getSendTunnelId(0))) {
                 if (_log.shouldInfo()) {
                     _log.info("Outbound gateway for tunnel " + _outTunnel.getSendTunnelId(0) +
-                              " not yet registered -> Deferring test for " + _cfg);
+                              " not yet registered \n* Deferring test for " + _cfg);
                 }
-                scheduleRetest();
-                return false;
+                return false; // Let caller handle cleanup & rescheduling
             }
             ctx.tunnelDispatcher().dispatchOutbound(
                 m,
@@ -459,7 +640,10 @@ public class TestJob extends JobImpl {
      */
     public void testSuccessful(int ms) {
         final RouterContext ctx = getContext();
-        if (_pool == null || !_pool.isAlive()) return;
+        if (_pool == null || !_pool.isAlive()) {
+            decrementTotalJobs();
+            return;
+        }
 
         // Update success history for adaptive testing frequency
         updateSuccessHistory(true);
@@ -480,7 +664,7 @@ public class TestJob extends JobImpl {
 
         // Clean up session tags
         clearTestTags();
-        if (!tryReschedule()) {
+        if (!scheduleRetest(false)) {
             decrementTotalJobs(); // Clean up if couldn't reschedule
         }
     }
@@ -493,12 +677,14 @@ public class TestJob extends JobImpl {
         if (failCount > 0) {
             // Reduced backoff to identify failing tunnels sooner
             // Tunnel will be removed after 2 consecutive failures anyway
-            int multiplier = Math.min(1 << failCount, 1); // max 1x (1.5 min)
-            scaled = baseDelay/2 * multiplier;
+            int multiplier = Math.min(1 << (failCount - 1), 2); // max 2x (3 min)
+            scaled = baseDelay * multiplier;
         }
-        // Add a small jitter to avoid thundering herd
+        // Ensure minimum delay and avoid negative values
+        scaled = Math.max(scaled, MIN_TEST_DELAY);
+        // Add a small jitter to avoid thundering herd (ensure positive jitter)
         int jitter = getContext().random().nextInt(Math.max(1, scaled / 3));
-        return Math.max(scaled + jitter, 60*1000 + jitter);
+        return scaled + jitter;
     }
 
     private float getSuccessRate() {
@@ -559,7 +745,10 @@ public class TestJob extends JobImpl {
      * @param timeToFail time in milliseconds before the test failed
      */
     private void testFailed(long timeToFail) {
-        if (_pool == null || !_pool.isAlive()) return;
+        if (_pool == null || !_pool.isAlive()) {
+            decrementTotalJobs();
+            return;
+        }
 
         boolean isExploratory = _pool.getSettings().isExploratory();
         getContext().statManager().addRateData(
@@ -575,7 +764,7 @@ public class TestJob extends JobImpl {
         }
 
         if (keepGoing) {
-            if (!tryReschedule()) {
+            if (!scheduleRetest(false)) {
                 decrementTotalJobs(); // Clean up if couldn't reschedule
             }
         } else {
@@ -597,8 +786,9 @@ public class TestJob extends JobImpl {
             _pool.tunnelFailed(_cfg);
 
             _failureCount = 0;
-        }
 
+            decrementTotalJobs();
+        }
     }
 
     private int getTestPeriod() {
@@ -624,33 +814,18 @@ public class TestJob extends JobImpl {
         return scheduleRetest(false);
     }
 
-    /**
-     * Attempt to reschedule this test job.
-     * @return true if successfully rescheduled, false if limit exceeded
-     */
-    private boolean tryReschedule() {
-        // Try to increment first before decrementing to avoid negative counter race condition
-        if (!tryIncrementTotalJobs(getContext())) {
-            return false;
-        }
-        // Current job execution ending, decrement it
-        decrementTotalJobs();
-        return scheduleRetest(false);
-    }
-
     private boolean scheduleRetest(boolean asap) {
         if (_pool == null || !_pool.isAlive()) return false;
 
         final RouterContext ctx = getContext();
 
-        // Check hard limit before scheduling
         int totalCount = getTotalTestJobCount();
         if (totalCount >= HARD_TEST_JOB_LIMIT) {
             if (_log.shouldInfo()) {
                 _log.info("Hard limit reached during reschedule (" + totalCount + " >= " + HARD_TEST_JOB_LIMIT +
                           ") \n* Skipping reschedule for " + _cfg);
             }
-            return false; // Indicate failure to reschedule
+            return false;
         }
 
         int delay = getDelay();
@@ -658,9 +833,12 @@ public class TestJob extends JobImpl {
             delay = Math.min(delay, BASE_TEST_DELAY / 2);
         }
 
-        getTiming().setStartAfter(ctx.clock().now() + delay);
+        // Ensure delay is not negative and set start time properly
+        delay = Math.max(0, delay);
+        long startTime = ctx.clock().now() + delay;
+        getTiming().setStartAfter(startTime);
         ctx.jobQueue().addJob(this);
-        return true; // Indicate successful reschedule
+        return true;
     }
 
     private class ReplySelector implements MessageSelector {
@@ -704,7 +882,6 @@ public class TestJob extends JobImpl {
             }
             _found = true;
             CONCURRENT_TESTS.decrementAndGet(); // Decrement counter
-            decrementTotalJobs(); // Clean up total counter
             if (_log.shouldDebug()) {
                 _log.debug("Tunnel test reply received for " + _cfg + " (Active concurrent tests: " + CONCURRENT_TESTS.get() + ")");
             }
@@ -734,7 +911,6 @@ public class TestJob extends JobImpl {
                 testFailed(getContext().clock().now() - _started);
             }
             CONCURRENT_TESTS.decrementAndGet(); // Decrement counter
-            decrementTotalJobs(); // Clean up total counter
             if (_log.shouldDebug()) {
                 _log.debug("Tunnel test timeout for " + _cfg + " (Active concurrent tests: " + CONCURRENT_TESTS.get() + ")");
             }
@@ -767,6 +943,9 @@ public class TestJob extends JobImpl {
      */
     @Override
     public void dropped() {
-        decrementTotalJobs();
+        if (_counted.compareAndSet(true, false)) {
+            decrementTotalJobs();
+        }
     }
+
 }
