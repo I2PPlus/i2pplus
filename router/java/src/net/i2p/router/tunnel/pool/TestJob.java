@@ -54,9 +54,9 @@ public class TestJob extends JobImpl {
     private static final int MAX_CONCURRENT_TESTS = SystemVersion.isSlow() ? 16 : 32;
 
     // Adaptive testing frequency constants
-    private static final int BASE_TEST_DELAY = 90 * 1000; // 90s base
+    private static final int BASE_TEST_DELAY = 75 * 1000; // 75s base
     private static final int MIN_TEST_DELAY = 30 * 1000; // 30s minimum
-    private static final int MAX_TEST_DELAY = 180 * 1000; // 180s maximum
+    private static final int MAX_TEST_DELAY = 120 * 1000; // 120s maximum
     private static final int SUCCESS_HISTORY_SIZE = 3; // Track last 3 results
 
     /**
@@ -600,11 +600,20 @@ public class TestJob extends JobImpl {
         // Prefer secure paths but still allow unencrypted as cover
         boolean useEncryption = ctx.random().nextInt(4) != 0;
 
-        // During high job lag, prefer unencrypted tests to reduce crypto overhead
+        // During any job lag, prefer unencrypted tests to reduce crypto overhead
         long maxLag = ctx.jobQueue().getMaxLag();
         long avgLag = ctx.jobQueue().getAvgLag();
-        if (maxLag > 3000 || avgLag > 10) {
-            useEncryption = ctx.random().nextInt(2) != 0; // 50% chance unencrypted
+        if (maxLag > 500 || avgLag > 3) {
+            // Moderate lag: 75% unencrypted (25% encrypted)
+            useEncryption = ctx.random().nextInt(4) == 0;
+        }
+        if (maxLag > 1500 || avgLag > 8) {
+            // Higher lag: 90% unencrypted (10% encrypted)
+            useEncryption = ctx.random().nextInt(10) == 0;
+        }
+        if (maxLag > 3000 || avgLag > 20) {
+            // Severe lag: always unencrypted
+            useEncryption = false;
         }
 
         if (useEncryption) {
@@ -699,15 +708,15 @@ public class TestJob extends JobImpl {
     }
 
     private int getDelay() {
-        // Simple exponential backoff with a cap and jitter
+        // Scale DOWN repeat time with failures to evict failing tunnels sooner
         int baseDelay = BASE_TEST_DELAY;
         int failCount = _cfg.getTunnelFailures();
         int scaled = baseDelay;
         if (failCount > 0) {
-            // Reduced backoff to identify failing tunnels sooner
-            // Tunnel will be removed after 2 consecutive failures anyway
-            int multiplier = Math.min(1 << (failCount - 1), 2); // max 2x (3 min)
-            scaled = baseDelay * multiplier;
+            // Test failing tunnels more frequently to confirm and evict them faster
+            // Tunnel will be removed after 2 consecutive failures
+            int divisor = Math.min(1 << (failCount - 1), 4); // max 4x faster (22.5s)
+            scaled = baseDelay / divisor;
         }
         // Ensure minimum delay and avoid negative values
         scaled = Math.max(scaled, MIN_TEST_DELAY);
@@ -861,6 +870,10 @@ public class TestJob extends JobImpl {
         if (asap) {
             delay = Math.min(delay, BASE_TEST_DELAY / 2);
         }
+
+        // Add stagger delay to spread out test jobs and prevent job queue spikes
+        int staggerDelay = ctx.random().nextInt(5000); // 0-5 seconds
+        delay += staggerDelay;
 
         // Ensure delay is not negative and set start time properly
         delay = Math.max(0, delay);
