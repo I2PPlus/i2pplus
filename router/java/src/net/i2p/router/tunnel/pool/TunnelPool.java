@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
@@ -16,6 +19,7 @@ import net.i2p.data.Lease;
 import net.i2p.stat.RateConstants;
 import net.i2p.data.LeaseSet;
 import net.i2p.data.TunnelId;
+import net.i2p.router.JobImpl;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
 import net.i2p.router.TunnelPoolSettings;
@@ -51,6 +55,8 @@ public class TunnelPool {
     private final AtomicInteger _consecutiveBuildTimeouts = new AtomicInteger();
     private long _lastTimeoutWarningTime;
     private long _lastNoTunnelsWarningTime;
+    private final BlockingQueue<TunnelInfo> _removalQueue = new LinkedBlockingQueue<TunnelInfo>();
+    private volatile boolean _removalJobScheduled = false;
 
     private static final int TUNNEL_LIFETIME = 10*60*1000;
     /** if less than one success in this many, reduce quantity (exploratory only) */
@@ -550,45 +556,16 @@ public class TunnelPool {
 
     /**
      *  Remove a tunnel from the pool.
-     *  @param info the tunnel to remove
+     *  @param info tunnel to remove
      */
     void removeTunnel(TunnelInfo info) {
-        if (_log.shouldDebug()) {_log.debug(toString() + " -> Removing tunnel " + info);}
-        int remaining = 0;
-        LeaseSet ls = null;
-        synchronized (_tunnels) {
-            boolean removed = _tunnels.remove(info);
-            if (!removed) {return;}
-            if (_settings.isInbound() && !_settings.isExploratory()) {
-                ls = locked_buildNewLeaseSet();
-            }
-            remaining = _tunnels.size();
-        }
+        if (_log.shouldDebug()) {_log.debug(toString() + " -> Queuing tunnel removal " + info);}
 
-        _manager.tunnelFailed();
-        _lifetimeProcessed += info.getProcessedMessagesCount();
-        updateRate();
-        long lifetimeConfirmed = info.getVerifiedBytesTransferred();
-        long lifetime = 10*60*1000;
+        _removalQueue.offer(info);
 
-        for (int i = 0; i < info.getLength(); i++) {
-            _context.profileManager().tunnelLifetimePushed(info.getPeer(i), lifetime, lifetimeConfirmed);
-        }
-        if (_alive && _settings.isInbound() && !_settings.isExploratory()) {
-            if (ls != null) {requestLeaseSet(ls);}
-            else {
-                if (_log.shouldWarn()) {
-                    _log.warn(toString() + "\n* Unable to build a new LeaseSet on removal (" + remaining
-                              + " remaining) -> Requesting a new tunnel...");
-                }
-                if (_settings.getAllowZeroHop()) {buildFallback();}
-            }
-        }
-
-        if (getTunnelCount() <= 0 && !isAlive()) {
-            // this calls both our shutdown() and the other one (inbound/outbound)
-            // This is racy - see TunnelPoolManager
-            _manager.removeTunnels(_settings.getDestination());
+        if (!_removalJobScheduled) {
+            _removalJobScheduled = true;
+            _context.jobQueue().addJob(new TunnelRemovalJob());
         }
     }
 
@@ -621,28 +598,16 @@ public class TunnelPool {
     }
 
     /**
-     *  Remove the tunnel from the pool.
+     *  Remove tunnel from the pool.
      *  @param cfg the tunnel to remove
      */
     private void fail(TunnelInfo cfg) {
-        LeaseSet ls = null;
-        synchronized (_tunnels) {
-            boolean removed = _tunnels.remove(cfg);
-            if (!removed) {return;}
-            if (_settings.isInbound() && !_settings.isExploratory()) {
-                ls = locked_buildNewLeaseSet();
-            }
-        }
-
         if (_log.shouldWarn()) {_log.warn("Tunnel build failed -> " + cfg);}
 
+        removeTunnel(cfg);
         _manager.tunnelFailed();
         _lifetimeProcessed += cfg.getProcessedMessagesCount();
         updateRate();
-
-        if (_settings.isInbound() && !_settings.isExploratory() && ls != null) {
-            requestLeaseSet(ls);
-        }
     }
 
     /**
@@ -752,9 +717,161 @@ public class TunnelPool {
     }
 
     /**
+     * Build a leaseSet from a copy of tunnel list (outside synchronization).
+     * Similar to locked_buildNewLeaseSet() but works on copied list.
+     * @param tunnelsCopy copy of tunnels to work with
+     * @return null on failure
+     */
+    private LeaseSet buildNewLeaseSetFromCopy(List<TunnelInfo> tunnelsCopy) {
+        if (!_alive) {return null;}
+
+        int wanted = Math.min(_settings.getQuantity(), LeaseSet.MAX_LEASES);
+        if (tunnelsCopy.size() < wanted) {
+            if (_log.shouldInfo()) {
+                _log.info(toString() + "\n* Not enough tunnels to build full LeaseSet (" + tunnelsCopy.size() + "/" + wanted + " available)");
+            }
+            if (tunnelsCopy.isEmpty()) {return null;}
+        }
+
+        long expireAfter = _context.clock().now() + 10*1000;
+
+        TunnelInfo zeroHopTunnel = null;
+        Lease zeroHopLease = null;
+        TreeSet<Lease> leases = new TreeSet<Lease>(new LeaseComparator());
+        for (TunnelInfo tunnel : tunnelsCopy) {
+            if (tunnel.getExpiration() <= expireAfter) {continue;}
+
+            if (tunnel.getLength() <= 1) {
+                if (zeroHopTunnel != null) {
+                    if (zeroHopTunnel.getExpiration() > tunnel.getExpiration()) {continue;}
+                    if (zeroHopLease != null) {leases.remove(zeroHopLease);}
+                }
+                zeroHopTunnel = tunnel;
+            }
+
+            TunnelId inId = tunnel.getReceiveTunnelId(0);
+            Hash gw = tunnel.getPeer(0);
+            if ((inId == null) || (gw == null)) {
+                _log.error(toString() + "-> Broken? Tunnel has no InboundGateway / TunnelID? " + tunnel);
+                continue;
+            }
+            Lease lease = new Lease();
+            lease.setEndDate(((TunnelCreatorConfig)tunnel).getConfig(0).getExpiration());
+            lease.setTunnelId(inId);
+            lease.setGateway(gw);
+            leases.add(lease);
+            if (tunnel.getLength() <= 1) {zeroHopLease = lease;}
+        }
+
+        if (leases.size() < wanted) {
+            if (_log.shouldInfo()) {
+                _log.info(toString() + "\n* Not enough leases to build full LeaseSet (" + leases.size() + "/" + wanted + " available)");
+            }
+            if (leases.isEmpty()) {return null;}
+        }
+
+        LeaseSet ls = new LeaseSet();
+        Iterator<Lease> iter = leases.iterator();
+        int count = Math.min(leases.size(), wanted);
+        for (int i = 0; i < count; i++) {ls.addLease(iter.next());}
+        if (_log.shouldInfo()) {_log.info(toString() + " -> New LeaseSet built" + ls);}
+        return ls;
+    }
+
+    /**
+     * Helper method to process tunnel removal statistics outside synchronized block.
+     * @param removed list of tunnels that were removed
+     */
+    private void processRemovalStats(List<TunnelInfo> removed) {
+        for (TunnelInfo info : removed) {
+            _lifetimeProcessed += info.getProcessedMessagesCount();
+            updateRate();
+
+            long lifetimeConfirmed = info.getVerifiedBytesTransferred();
+            long lifetime = 10*60*1000;
+
+            for (int i = 0; i < info.getLength(); i++) {
+                _context.profileManager().tunnelLifetimePushed(info.getPeer(i), lifetime, lifetimeConfirmed);
+            }
+        }
+    }
+
+    /**
+     * Inner class to process tunnel removals in batch.
+     * Processes all queued removals in a single synchronized operation.
+     */
+    private class TunnelRemovalJob extends JobImpl {
+        public TunnelRemovalJob() {
+            super(_context);
+        }
+
+        public String getName() {
+            return "Process Tunnel Removals";
+        }
+
+        public void runJob() {
+            _removalJobScheduled = false;
+
+            List<TunnelInfo> toRemove = new ArrayList<TunnelInfo>();
+            _removalQueue.drainTo(toRemove);
+
+            if (toRemove.isEmpty()) {return;}
+
+            if (_log.shouldInfo()) {
+                _log.info(toString() + " -> Processing " + toRemove.size() + " tunnel removals in batch");
+            }
+
+            LeaseSet ls = null;
+            int remaining = 0;
+            int actuallyRemoved = 0;
+
+            synchronized (_tunnels) {
+                for (TunnelInfo info : toRemove) {
+                    if (_tunnels.remove(info)) {
+                        actuallyRemoved++;
+                    }
+                }
+
+                remaining = _tunnels.size();
+
+                if (_settings.isInbound() && !_settings.isExploratory()) {
+                    List<TunnelInfo> tunnelsCopy = new ArrayList<TunnelInfo>(_tunnels);
+                    ls = buildNewLeaseSetFromCopy(tunnelsCopy);
+                }
+            }
+
+            if (actuallyRemoved == 0) {return;}
+
+            for (int i = 0; i < actuallyRemoved; i++) {
+                _manager.tunnelFailed();
+            }
+
+            processRemovalStats(toRemove);
+
+            if (_alive && _settings.isInbound() && !_settings.isExploratory()) {
+                if (ls != null) {
+                    requestLeaseSet(ls);
+                } else {
+                    if (_log.shouldWarn()) {
+                        _log.warn(toString() + "\n* Unable to build a new LeaseSet on removal (" + remaining
+                                  + " remaining) -> Requesting a new tunnel...");
+                    }
+                    if (_settings.getAllowZeroHop()) {
+                        buildFallback();
+                    }
+                }
+            }
+
+            if (getTunnelCount() <= 0 && !isAlive()) {
+                _manager.removeTunnels(_settings.getDestination());
+            }
+        }
+    }
+
+    /**
      * Always build a LeaseSet with Leases in sorted order,
      * so that LeaseSet.equals() and lease-by-lease equals() always work.
-     * The sort method is arbitrary, as far as the equals() tests are concerned,
+     * The sort method is arbitrary, as far as equals() tests are concerned,
      * but we use latest expiration first, since we need to sort them by that anyway.
      *
      */
