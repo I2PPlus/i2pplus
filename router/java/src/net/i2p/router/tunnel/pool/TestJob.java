@@ -501,14 +501,14 @@ public class TestJob extends JobImpl {
         }
 
         // Concurrency control: Check and increment counter
-        // Ensure minimum concurrent tests for adequate coverage
-        int maxTests = SystemVersion.isSlow() ? 12 : 20;
+        // Scale with global capacity to allow near 512 concurrent tests for high-capacity routers
+        int maxTests = SystemVersion.isSlow() ? 128 : 256;
 
         // Only reduce concurrency under severe load
         if (maxLag > 5000 || avgLag > 100) {
-            maxTests = isExploratory ? 4 : 8;
+            maxTests = isExploratory ? 16 : 32;
         } else if (maxLag > 3000 || avgLag > 50) {
-            maxTests = isExploratory ? 6 : 12;
+            maxTests = isExploratory ? 32 : 64;
         }
 
         int current;
