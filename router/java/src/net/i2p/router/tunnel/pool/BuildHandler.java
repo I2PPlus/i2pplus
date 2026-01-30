@@ -299,8 +299,8 @@ class BuildHandler implements Runnable {
             _replyMessageId = replyMessageId;
             _msg = msg;
             _recvTime = recvTime;
-            // Add stagger delay to spread out these jobs and prevent job queue spikes
-            long delay = _context.random().nextInt(2000); // 0-2 seconds
+            // Minimal stagger delay for tunnel build replies - they're time-critical
+            long delay = _context.random().nextInt(100); // 0-100ms max
             getTiming().setStartAfter(_context.clock().now() + delay);
         }
 
