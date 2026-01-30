@@ -34,19 +34,16 @@ class DHTNodes {
     private volatile boolean _isRunning;
 
     /** stagger with other cleaners */
-    private static final long CLEAN_TIME = 187 * 1000;
+    private static final long CLEAN_TIME = 117 * 1000;
 
     /** how long since last heard from do we delete - BEP 5 says 15 minutes */
-    private static final long MAX_EXPIRE_TIME = 30 * 60 * 1000;
-
-    private static final long MIN_EXPIRE_TIME = 10 * 60 * 1000;
+    private static final long MAX_EXPIRE_TIME = 10 * 60 * 1000;
+    private static final long MIN_EXPIRE_TIME = 8 * 60 * 1000;
     private static final long DELTA_EXPIRE_TIME = 3 * 60 * 1000;
-    //    private static final int MAX_PEERS = 799;
-    private static final int MAX_PEERS = 2000;
+    private static final int MAX_PEERS = 500;
 
     /** Buckets older than this are refreshed - BEP 5 says 15 minutes */
     private static final long MAX_BUCKET_AGE = 15 * 60 * 1000;
-
     private static final int KAD_K = 8;
     private static final int KAD_B = 1;
 

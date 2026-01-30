@@ -41,7 +41,7 @@ public interface DHT {
      * @param maxWait the maximum time to wait (ms) must be &gt; 0
      * @param annMax the number of peers to announce to
      * @param annMaxWait the maximum total time to wait for announces, may be 0 to return
-     *     immediately without waiting for acks
+     *                   immediately without waiting for acks
      * @param isSeed true if seed, false if leech
      * @param noSeeds true if we do not want seeds in the result
      * @return possibly empty (never null)
@@ -85,7 +85,7 @@ public interface DHT {
      *
      * @param ih the Info Hash (torrent)
      * @param maxWait the maximum total time to wait (ms) or 0 to do all in parallel and return
-     *     immediately.
+     *                immediately.
      * @param isSeed true if seed, false if leech
      * @return the number of successful announces, not counting ourselves.
      */

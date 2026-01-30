@@ -6,6 +6,7 @@ package org.klomp.snark.dht;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import net.i2p.I2PAppContext;
@@ -38,12 +39,11 @@ class DHTTracker {
     private static final long CLEAN_TIME = 199 * 1000;
 
     /** no guidance in BEP 5; Vuze is 8h */
-    private static final long MAX_EXPIRE_TIME = 3 * 60 * 60 * 1000L;
-
-    private static final long MIN_EXPIRE_TIME = 15 * 60 * 1000;
+    private static final long MAX_EXPIRE_TIME = 10*60*1000;
+    private static final long MIN_EXPIRE_TIME = 5*60*1000;
     private static final long DELTA_EXPIRE_TIME = 3 * 60 * 1000;
     private static final int MAX_PEERS = 400;
-    private static final int MAX_PEERS_PER_TORRENT = 150;
+    private static final int MAX_PEERS_PER_TORRENT = 60;
     private static final int ABSOLUTE_MAX_PER_TORRENT = MAX_PEERS_PER_TORRENT * 2;
     private static final int MAX_TORRENTS = 2000;
 
@@ -109,23 +109,36 @@ class DHTTracker {
         Peers peers = _torrents.get(ih);
         if (peers == null || max <= 0) return Collections.emptyList();
 
-        List<Peer> rv = new ArrayList<Peer>(peers.values());
-        int size = rv.size();
-        if (max < size) Collections.shuffle(rv, _context.random());
+        int totalPeers = peers.size();
+        if (totalPeers == 0) return Collections.emptyList();
+
+        // Pre-size result list to avoid resizing
+        List<Hash> result = new ArrayList<Hash>(Math.min(max, totalPeers));
+
         if (noSeeds) {
-            int i = 0;
-            for (Iterator<Peer> iter = rv.iterator(); iter.hasNext(); ) {
-                if (iter.next().isSeed()) iter.remove();
-                else if (++i >= max) break;
+            // Filter out seeds while collecting up to max peers
+            int collected = 0;
+            for (Peer peer : peers.values()) {
+                if (!peer.isSeed()) {
+                    result.add(peer);
+                    if (++collected >= max) break;
+                }
             }
-            if (max < rv.size()) rv = rv.subList(0, max);
         } else {
-            if (max < size) rv = rv.subList(0, max);
+            // Collect up to max peers, then shuffle if needed
+            int collected = 0;
+            for (Peer peer : peers.values()) {
+                result.add(peer);
+                if (++collected >= max) break;
+            }
+
+            // Shuffle only if we have more peers than requested and collected all available
+            if (totalPeers > max && collected == max) {
+                Collections.shuffle(result, _context.random());
+            }
         }
-        // a Peer is a Hash
-        List rv1 = rv;
-        List<Hash> rv2 = rv1;
-        return rv2;
+
+        return result;
     }
 
     /** Debug info, HTML formatted */
@@ -170,13 +183,18 @@ class DHTTracker {
                     }
                 }
                 if (recent > MAX_PEERS_PER_TORRENT) {
-                    // too many, delete at random
-                    // TODO sort and remove oldest?
+                    // Too many, remove oldest peers (LRU eviction)
                     // TODO per-torrent adjustable expiration?
-                    for (Iterator<Peer> iterp = p.values().iterator();
-                            iterp.hasNext() && p.size() > MAX_PEERS_PER_TORRENT; ) {
-                        iterp.next();
-                        iterp.remove();
+                    List<Peer> sortedPeers = new ArrayList<Peer>(p.values());
+                    Collections.sort(sortedPeers, new Comparator<Peer>() {
+                        public int compare(Peer p1, Peer p2) {
+                            return Long.compare(p1.lastSeen(), p2.lastSeen());
+                        }
+                    });
+
+                    for (int i = 0; i < sortedPeers.size() && p.size() > MAX_PEERS_PER_TORRENT; i++) {
+                        Peer oldest = sortedPeers.get(i);
+                        p.remove(oldest);
                         peerCount--;
                     }
                     torrentCount++;
