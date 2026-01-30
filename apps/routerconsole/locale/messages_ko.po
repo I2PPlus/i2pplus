@@ -2554,7 +2554,7 @@ msgid "Scheduled jobs"
 msgstr "예약된 일감"
 
 #, java-format
-msgid "{0} starts in {1}"
+msgid "{0} starting in {1}"
 msgstr "{0}은(는) {1}에 시작됩니다."
 
 msgid "DELAYED"

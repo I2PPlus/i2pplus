@@ -3,6 +3,7 @@
 
 .expanded #ffstatus,#ffconf:hover #ffstatus{opacity:0}
 .hasExpandedElement #floodfillconfig{margin-bottom:-1px;display:table!important}
+.jobsCounter {margin:0 0 0 1px;padding:3px 8px;display:inline-block;vertical-align:baseline;line-height:1;font-weight:700;border-radius:3px;box-shadow:var(--bevel);background:var(--badge)}
 .log_level{font-weight:900!important}
 .tIn{background:url(/themes/console/images/inbound.svg) no-repeat 6px center/16px,var(--badge)}
 .tOut{background:url(/themes/console/images/outbound.svg) no-repeat 6px center/16px,var(--badge)}

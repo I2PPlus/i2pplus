@@ -22,14 +22,14 @@
 html{background:var(--bodybg),#000800}
 body{margin:5px 0 0 0;padding:0;text-align:center;font:8.5pt/1.3 var(--bodyfont);background:none}
 code{text-align:left;font:500 9pt var(--monospaced);color:#dd0}
-h1,#applinks,#sitelinks,#news h3,.main h3,label.tabletitle,#displayevents{position:relative;z-index:10;text-shadow:var(--textshadow);box-shadow:var(--highlight);background:var(--h1);background-size:2px,100% 4px,100%,256px;background-repeat:repeat,repeat,no-repeat,repeat}
-h1,.main h2,.main h3,label.tabletitle,#applinks,#sitelinks{box-shadow:var(--bevel)}
+h1,#applinks,#sitelinks,#news h3,.main h3,label.tabletitle,#displayevents,#schedjobs th{position:relative;z-index:10;text-shadow:var(--textshadow);box-shadow:var(--highlight);background:var(--h1);background-size:2px,100% 4px,100%,256px;background-repeat:repeat,repeat,no-repeat,repeat}
+h1,.main h2,.main h3,label.tabletitle,#applinks,#sitelinks,#schedjobs th{box-shadow:var(--bevel)}
 h1,.sb,#sb_wrap{contain:layout}
 h2 a:hover{color:var(--hover)}
 h2 a:visited{color:#191}
 h2,h3,h4{contain:paint}
 h2{margin:15px 0 12px 0;padding:10px;vertical-align:middle;letter-spacing:.08em;word-spacing:.1em;word-wrap:break-word;text-transform:uppercase;font-size:12pt;text-shadow:0 0 2px #010;border:var(--border);border-radius:2px;background:var(--h2)}
-h3,label.tabletitle{margin:12px 0 10px 0;padding:7px 10px;position:relative;overflow:hidden;letter-spacing:.08em;text-transform:uppercase;text-shadow:0 0 2px #010;border:var(--border)}
+h3,label.tabletitle,#schedjobs th{margin:12px 0 10px 0;padding:7px 10px;position:relative;overflow:hidden;letter-spacing:.08em;text-transform:uppercase;text-shadow:0 0 2px #010;border:var(--border)}
 h3+table{position:relative;z-index:0}
 h4{margin:5px 0 10px 0;padding:0 0 10px 0;font-size:11pt;border-bottom:1px;border-bottom:var(--border_hard)}
 hr{margin:20px 0 10px;height:1px;border:0;background:#242}
@@ -609,6 +609,7 @@ h3.toggle:active,#graphdisplay:active,#i2pupdates~.tabletitle:active,#miscConfig
 #graphFilter input[type=text]::placeholder{opacity:0}
 
 /* jobs */
+.jobcount{font-weight:400;font-size:85%}
 .joblog{margin-top:15px;text-align:justify;border-radius:4px 4px 0 0}
 .joblog h3{margin-top:10px}
 .joblog br{margin-bottom:5px}
@@ -628,7 +629,7 @@ h3.toggle:active,#graphdisplay:active,#i2pupdates~.tabletitle:active,#miscConfig
 #jobs .jobqueue:first-of-type{padding-bottom:4px}
 #jobs .tab,#jobs .tab2{min-width:120px}
 
-h3[id*="job"]{margin:12px 0 10px 0;padding:8px 10px;letter-spacing:.08em;text-transform:uppercase;border:var(--border);border-radius:0}
+h3[id*="job"],@schedjobs th{margin:12px 0 10px 0;padding:8px 10px;letter-spacing:.08em;text-transform:uppercase;border:var(--border);border-radius:0}
 h3[id*="jobs"]{clear:both;margin-top:25px}
 #activejobs+ol li::before,#scheduledjobs+ol li::before,#readyjobs+ol li::before,#finishedjobs+ol li::before,#schedjobs li::before{margin:0 6px 0 2px;width:16px;height:16px;display:inline-block;vertical-align:text-top;background:var(--clock) var(--center)/16px;content:""}
 #activejobs+ol li::before{background:var(--start) var(--center)}
@@ -643,18 +644,19 @@ h3[id*="jobs"]{clear:both;margin-top:25px}
 #jobs #jobrunners{display:none}
 #jobs li,#jobs li:first-child{margin:0 4px;padding:8px 6px;width:calc(100% - 8px);list-style:none;box-shadow:var(--bevel),inset 0 0 0 3px #000;background:linear-gradient(180deg,#000b00,#000600)}
 #readyjobs+ol li::before{color:#dd3}
-.jobcount{font-weight:400;font-size:85%}
 
 /* queue totals */
 #schedjobs{width:100%;margin:10px 0}
 #schedjobs ul{columns:250px auto;margin:0 8px 0 0;column-gap:0}
 #schedjobs li{width:calc(100% - 12px);margin:0 4px}
 #schedjobs td:first-child{padding:3px 0}
-#schedjobs th:first-child,#jobstats th:first-child,#jobstats td:first-child{padding-left:10px;text-align:left;font-weight:700}
+#schedjobs th,#jobstats th:first-child,#jobstats td:first-child{padding-left:10px;text-align:left;font-weight:700}
+#schedjobs th{padding:10px}
 #schedjobs tr:hover td{background:#000800}
 #scheduledjobs+ol li::before,#scheduledjobs+ol li::before{color:#773;opacity:.8}
 #jobs #scheduledjobs+ol,#jobs ol{padding-bottom:5px}
 #totaljobstats{margin-bottom:-2px;margin-top:10px}
+#routerjobqueue li{line-height:1.6}
 
 /* job queue stats */
 #jobstats+hr{display:none}
@@ -2385,7 +2387,7 @@ a[href^="/netdb"]:hover span{color:var(--hover)}
 .infohelp.vmcomm{margin-bottom:0}
 .tunneldisplay td,#enviro td,#floodfills td:not(.rid td),#profilelist td:not([colspan]),#routerinformation td{box-shadow:var(--highlight),inset 0 0 2px 0 #040}
 #jobs h3,#logs .tabletitle,#tunnels h3[id]{position:relative;overflow:hidden}
-#jobs h3::after,#logs #enviro~.tabletitle::after,#tunnels h3[id]::after{width:0;height:1px;display:inline-block;position:absolute;bottom:0;left:0;background:linear-gradient(90deg,#d30,var(--hover));content:"";animation:ease-out reloader 1s forwards;opacity:.4}
+#jobs h3::after,#logs #enviro~.tabletitle::after,#tunnels h3[id]::after,#schedjobs th::after{width:0;height:1px;display:inline-block;position:absolute;bottom:0;left:0;background:linear-gradient(90deg,#d30,var(--hover));content:"";animation:ease-out reloader 1s forwards;opacity:.4}
 #netdboverview tr:hover,#logs #enviro:hover td,#profilelist tr:hover td,#graphs .formaction,#events tr:hover,#config_peers #bannedips td{box-shadow:none}
 #routerinformation td:first-child{border-right:var(--border_soft)}
 
@@ -2625,7 +2627,7 @@ table[id$="logs"] ul{margin:-6px 12px -5px -18px}
 #routerlogs td p,#wrapperlogs td p{margin:0;width:fit-content}
 #routerlogs ul,#criticallogs ul{margin:-4px 0;border:0}
 #servicelogs{color:var(--ink)}
-#service_logs{margin:0;padding:4px 6px;width:calc(100% - 12px);max-height:600px;white-space:pre-wrap;resize:none;font-weight:500;color:#8f935c;text-shadow:var(--textshadow)}
+#service_logs{margin:0;padding:4px 6px;width:calc(100% - 12px);height: calc(100vh - 221px);white-space:pre-wrap;resize:none;font-weight:500;color:#8f935c;text-shadow:var(--textshadow)}
 #wrapperlogs{margin-bottom:10px;width:100%;table-layout:fixed;contain:content}
 #wrapperlogs tr:nth-child(2){background:rgba(0,16,0,.3)}
 #wrapperlogs tr:last-child td{padding:0;position:relative}
@@ -2973,6 +2975,7 @@ h3[id*="jobs"]:first-of-type{margin-top:21px}
 #sb_peers_condensed,#sb_tunnels_condensed{margin:-7px -1px -9px -3px;width:calc(100% + 8px)}
 #sb_tunnelstatus .tunnelBuildStatus::before{background-size:12px}
 #searchbar div{margin:3px 3px 0}
+#service_logs{height:calc(100vh - 208px)}
 #sidebar button.cancel{margin-top:10px}
 #sidebar .reload:hover,#sidebar .reload:focus{background-size:12px,12px,100%}
 #sidebar .reload[value="restartImmediate"],#sidebar .reload[value="restartImmediate"]:hover,#sidebar .reload[value="restartImmediate"]:focus{margin-bottom:-6px}
@@ -3147,7 +3150,7 @@ th{font-size:8pt}
 }
 
 @media (min-width:1500px){
-body,code,input[type=file]::file-selector-button,select,textarea,th,th code,tt,.confignav,.main,.main button,.main input,.main td,.main textarea,.statlist a[name],.statlist a[name]:hover,.statlist b,.statlist li b,#changelog pre,#configinfo th,#news,#news p,#sidebar button,#warning2 p{font-size:10pt}
+body,code,input[type=file]::file-selector-button,select,textarea,th,th code,tt,.confignav,.main,.main button,.main input,.main td,.main textarea,.statlist a[name],.statlist a[name]:hover,.statlist b,.statlist li b,#changelog pre,#configinfo th,#news,#news p,#schedjobs th#sidebar button,#warning2 p{font-size:10pt}
 button.control{font-size:0}
 .leaseset th,#newsDisplay a,#updateAvailable{font-size:9.5pt}
 h1[class],h1,h1.conf.adv{padding:14px 15px 14px 65px;font-size:20pt;background-size:40px,2px,100% 4px,100%,164px;background-position:15px center}

@@ -2570,7 +2570,7 @@ msgid "Scheduled jobs"
 msgstr "Zaplanowane zadania"
 
 #, java-format
-msgid "{0} starts in {1}"
+msgid "{0} starting in {1}"
 msgstr "{0} zaczyna się za {1}"
 
 msgid "DELAYED"

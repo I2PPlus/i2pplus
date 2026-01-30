@@ -2554,7 +2554,7 @@ msgid "Scheduled jobs"
 msgstr "预定的任务"
 
 #, java-format
-msgid "{0} starts in {1}"
+msgid "{0} starting in {1}"
 msgstr "{0}开始于{1}"
 
 msgid "DELAYED"

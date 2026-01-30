@@ -2578,7 +2578,7 @@ msgid "Scheduled jobs"
 msgstr "Razporejene posluge"
 
 #, java-format
-msgid "{0} starts in {1}"
+msgid "{0} starting in {1}"
 msgstr "{0} začne v {1}"
 
 msgid "DELAYED"
