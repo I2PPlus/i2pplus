@@ -42,6 +42,7 @@ class BuildExecutor implements Runnable {
     private final Object _currentlyBuilding; // Notify lock
     private final ConcurrentHashMap<Long, PooledTunnelCreatorConfig> _currentlyBuildingMap; // indexed by ptcc.getReplyMessageId()
     private final ConcurrentHashMap<Long, PooledTunnelCreatorConfig> _recentlyBuildingMap; // indexed by ptcc.getReplyMessageId()
+    private final ExpireJobManager _expireJobManager;
     private volatile boolean _isRunning;
     private boolean _repoll;
     // Increased from cores*2 to cores*4 for faster tunnel churn handling
@@ -86,6 +87,7 @@ class BuildExecutor implements Runnable {
         int maxConcurrentBuilds = getMaxConcurrentBuilds();
         _currentlyBuildingMap = new ConcurrentHashMap<Long, PooledTunnelCreatorConfig>(maxConcurrentBuilds);
         _recentlyBuildingMap = new ConcurrentHashMap<Long, PooledTunnelCreatorConfig>(4 * maxConcurrentBuilds);
+        _expireJobManager = new ExpireJobManager(ctx);
         _context.statManager().createRateStat("tunnel.buildFailFirstHop", "OB tunnel build failure frequency (can't contact 1st hop)", "Tunnels", RATES);
         _context.statManager().createRateStat("tunnel.buildReplySlow", "Build reply late, but not too late", "Tunnels", RATES);
         _context.statManager().createRateStat("tunnel.concurrentBuildsLagged", "Concurrent build count before rejecting (job lag)", "Tunnels", RATES); // (period is lag)
@@ -606,8 +608,7 @@ class BuildExecutor implements Runnable {
         }
         if (result == Result.SUCCESS) {
             _manager.buildComplete(cfg);
-            ExpireJob expireJob = new ExpireJob(_context, cfg);
-            _context.jobQueue().addJob(expireJob);
+            _expireJobManager.scheduleExpiration(cfg);
         }
     }
 
