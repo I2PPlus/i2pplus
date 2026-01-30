@@ -1,3 +1,8 @@
+2026-01-30 dr|z3d
+ * I2PSnark: Optimize DHT for more efficient memory management
+ * Console: Enhance and declutter presentation of jobs on /jobqueue
+ * Router: TestJob optimizations
+
 2026-01-09 dr|z3d
  * I2PTunnel: Implement optional random startup delay for automatically
    started server tunnels
