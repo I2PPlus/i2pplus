@@ -824,6 +824,7 @@ public class TunnelPool {
             LeaseSet ls = null;
             int remaining = 0;
             int actuallyRemoved = 0;
+            List<TunnelInfo> tunnelsCopy = null;
 
             synchronized (_tunnels) {
                 for (TunnelInfo info : toRemove) {
@@ -835,9 +836,12 @@ public class TunnelPool {
                 remaining = _tunnels.size();
 
                 if (_settings.isInbound() && !_settings.isExploratory()) {
-                    List<TunnelInfo> tunnelsCopy = new ArrayList<TunnelInfo>(_tunnels);
-                    ls = buildNewLeaseSetFromCopy(tunnelsCopy);
+                    tunnelsCopy = new ArrayList<TunnelInfo>(_tunnels);
                 }
+            }
+
+            if (tunnelsCopy != null) {
+                ls = buildNewLeaseSetFromCopy(tunnelsCopy);
             }
 
             if (actuallyRemoved == 0) {return;}
