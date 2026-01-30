@@ -890,6 +890,9 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         public DropLookupFailedJob(RouterContext ctx, Hash peer, RouterInfo info) {
             super(ctx);
             _peer = peer;
+            // Add stagger delay to spread out these jobs and prevent job queue spikes
+            long delay = ctx.random().nextInt(3000); // 0-3 seconds
+            getTiming().setStartAfter(ctx.clock().now() + delay);
         }
         public String getName() { return "Timeout NetDb Lookup for Failing Peer"; }
         public void runJob() {
@@ -907,6 +910,9 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             super(ctx);
             _peer = peer;
             _info = info;
+            // Add stagger delay to spread out these jobs and prevent job queue spikes
+            long delay = ctx.random().nextInt(3000); // 0-3 seconds
+            getTiming().setStartAfter(ctx.clock().now() + delay);
         }
         public String getName() { return "Verify NetDb Lookup for Failing Peer"; }
         public void runJob() {
