@@ -277,24 +277,54 @@ class BuildHandler implements Runnable {
     }
 
     /**
-     * Blocking call to handle a single inbound reply
+     * Async handler for a single inbound reply - queues work to prevent InNetMessagePool lag
      */
     private void handleReply(BuildReplyMessageState state) {
-        // search through the tunnels for a reply
+        // Queue async job to handle the heavy lifting (decrypt, profile updates)
+        // This prevents InNetMessagePool thread from being blocked by crypto operations
         long replyMessageId = state.msg.getUniqueId();
-        PooledTunnelCreatorConfig cfg = _exec.removeFromBuilding(replyMessageId);
-        if (cfg == null) { // cannot handle - not pending... took too long?
-            if (_log.shouldWarn()) {
-                _log.warn("Reply [MsgID " + replyMessageId + "] did not match any pending tunnels");
-            }
-            _context.statManager().addRateData("tunnel.buildReplyTooSlow", 1);
-        } else {handleReply(state.msg, cfg, System.currentTimeMillis() - state.recvTime);}
+        _context.jobQueue().addJob(new HandleBuildReplyJob(replyMessageId, state.msg, state.recvTime));
     }
 
     /**
-     * Blocking call to handle a single inbound reply
+     * Async job to handle tunnel build reply processing off the InNetMessagePool thread
      */
-    private void handleReply(TunnelBuildReplyMessage msg, PooledTunnelCreatorConfig cfg, long delay) {
+    private class HandleBuildReplyJob extends JobImpl {
+        private final long _replyMessageId;
+        private final TunnelBuildReplyMessage _msg;
+        private final long _recvTime;
+
+        HandleBuildReplyJob(long replyMessageId, TunnelBuildReplyMessage msg, long recvTime) {
+            super(BuildHandler.this._context);
+            _replyMessageId = replyMessageId;
+            _msg = msg;
+            _recvTime = recvTime;
+            // Add stagger delay to spread out these jobs and prevent job queue spikes
+            long delay = _context.random().nextInt(2000); // 0-2 seconds
+            getTiming().setStartAfter(_context.clock().now() + delay);
+        }
+
+        public String getName() {return "Async Handle Build Reply";}
+
+        @Override
+        public void runJob() {
+            // Remove from building map - if null, tunnel already timed out
+            PooledTunnelCreatorConfig cfg = _exec.removeFromBuilding(_replyMessageId);
+            if (cfg == null) {
+                if (_log.shouldWarn()) {
+                    _log.warn("Reply [MsgID " + _replyMessageId + "] did not match any pending tunnels (timed out?)");
+                }
+                _context.statManager().addRateData("tunnel.buildReplyTooSlow", 1);
+                return;
+            }
+            handleReplyAsync(_msg, cfg, System.currentTimeMillis() - _recvTime);
+        }
+    }
+
+    /**
+     * Blocking call to handle a single inbound reply (called from async job)
+     */
+    private void handleReplyAsync(TunnelBuildReplyMessage msg, PooledTunnelCreatorConfig cfg, long delay) {
         long requestedOn = cfg.getExpiration() - 10*60*1000;
         long rtt = System.currentTimeMillis() - requestedOn;
         if (_log.shouldInfo()) {
@@ -607,7 +637,7 @@ class BuildHandler implements Runnable {
         else {msg = new VariableTunnelBuildReplyMessage(_context, records);}
         for (int i = 0; i < records; i++) {msg.setRecord(i, state.msg.getRecord(i));}
         msg.setUniqueId(state.msg.getUniqueId());
-        handleReply(msg, state.cfg, System.currentTimeMillis() - state.recvTime);
+            handleReplyAsync(msg, state.cfg, System.currentTimeMillis() - state.recvTime);
     }
 
     private class HandleReq extends JobImpl {
