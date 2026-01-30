@@ -51,7 +51,7 @@ public class TestJob extends JobImpl {
      * Prevents overwhelming the router with too many simultaneous tunnel tests.
      * This value can be adjusted based on system capacity.
      */
-    private static final int MAX_CONCURRENT_TESTS = SystemVersion.isSlow() ? 8 : 16;
+    private static final int MAX_CONCURRENT_TESTS = SystemVersion.isSlow() ? 16 : 32;
 
     // Adaptive testing frequency constants
     private static final int BASE_TEST_DELAY = 90 * 1000; // 90s base
@@ -63,15 +63,43 @@ public class TestJob extends JobImpl {
      * Maximum number of TestJob instances that should be queued before deferring new ones.
      * Prevents job queue saturation from too many waiting tunnel tests.
      */
-    private static final int MAX_QUEUED_TESTS = SystemVersion.isSlow() ? 32 : 64;
+    private static final int MAX_QUEUED_TESTS = SystemVersion.isSlow() ? 64 : 128;
     public static int maxQueuedTests = MAX_QUEUED_TESTS;
 
     /**
-     * Hard limit for total TestJob instances (queued + active).
+     * Maximum hard limit for total TestJob instances (queued + active).
      * Above this threshold, no new tests are scheduled until count decreases.
      * Prevents ever-increasing backlogs that could cause job lag.
+     * Dynamic limit varies between this and BASE_TEST_JOB_LIMIT based on job lag.
      */
-    public static final int HARD_TEST_JOB_LIMIT = SystemVersion.isSlow() ? 128 : 256;
+    public static final int MAX_TEST_JOB_LIMIT = SystemVersion.isSlow() ? 256 : 512;
+    private static final int BASE_TEST_JOB_LIMIT = SystemVersion.isSlow() ? 128 : 256;
+
+    /**
+     * Calculate dynamic job limit based on router performance (job lag).
+     * Scales from BASE_TEST_JOB_LIMIT to MAX_TEST_JOB_LIMIT based on observed lag.
+     *
+     * @param ctx the router context
+     * @return dynamic limit between BASE_TEST_JOB_LIMIT and MAX_TEST_JOB_LIMIT
+     */
+    private static int getDynamicJobLimit(RouterContext ctx) {
+        long avgLag = ctx.jobQueue().getAvgLag();
+        long maxLag = ctx.jobQueue().getMaxLag();
+
+        // Scale based on lag - lower lag allows higher limits
+        if (avgLag < 10 && maxLag < 100) {
+            return MAX_TEST_JOB_LIMIT;  // Excellent performance
+        } else if (avgLag < 50 && maxLag < 500) {
+            // Linear interpolation between base and max
+            int range = MAX_TEST_JOB_LIMIT - BASE_TEST_JOB_LIMIT;
+            int reduction = (int) (range * avgLag / 50);
+            return MAX_TEST_JOB_LIMIT - reduction;
+        } else if (avgLag < 100 && maxLag < 1000) {
+            return BASE_TEST_JOB_LIMIT + (MAX_TEST_JOB_LIMIT - BASE_TEST_JOB_LIMIT) / 2;
+        } else {
+            return BASE_TEST_JOB_LIMIT;  // Conservative when lag is high
+        }
+    }
 
     /**
      * Static counter tracking the number of currently active tunnel tests.
@@ -194,12 +222,14 @@ public class TestJob extends JobImpl {
         }
 
         // Check pool coverage - avoid over-testing pools that already have running tests
+        // Increased limits to better utilize global capacity (up to 512 with low lag)
+        // Raised from 8/16 to 64/96 to allow large pools to test more tunnels concurrently
         if (pool != null) {
             String poolId = getPoolId(pool);
             AtomicInteger poolCount = POOL_TEST_COUNTS.get(poolId);
             if (poolCount != null && poolCount.get() > 0) {
                 // For exploratory pools, limit but allow better coverage
-                if (pool.getSettings().isExploratory() && poolCount.get() >= 8) {
+                if (pool.getSettings().isExploratory() && poolCount.get() >= 64) {
                     Log log = ctx.logManager().getLog(TestJob.class);
                     if (log.shouldDebug()) {
                         log.debug("Pool " + poolId + " already has " + poolCount.get() + " tests running -> Deferring for better coverage");
@@ -207,7 +237,7 @@ public class TestJob extends JobImpl {
                     return false;
                 }
                 // For client pools, allow more concurrency
-                else if (!pool.getSettings().isExploratory() && poolCount.get() >= 16) {
+                else if (!pool.getSettings().isExploratory() && poolCount.get() >= 96) {
                     Log log = ctx.logManager().getLog(TestJob.class);
                     if (log.shouldDebug()) {
                         log.debug("Pool " + poolId + " already has " + poolCount.get() + " tests running -> Deferring for better coverage");
@@ -237,7 +267,7 @@ public class TestJob extends JobImpl {
      */
     private static boolean tryIncrementTotalJobs(RouterContext ctx) {
         int current = TOTAL_TEST_JOBS.get();
-        if (current >= HARD_TEST_JOB_LIMIT) {
+        if (current >= MAX_TEST_JOB_LIMIT) {
             return false;
         }
         // Simple increment - avoid contention from do-while loop
@@ -330,7 +360,7 @@ public class TestJob extends JobImpl {
         // Increment total job counter atomically
         if (!tryIncrementTotalJobs(ctx)) {
             if (_log.shouldInfo()) {
-                _log.info("Hard limit (" + HARD_TEST_JOB_LIMIT + ") reached -> Not scheduling test for " + cfg);
+                _log.info("Hard limit (" + MAX_TEST_JOB_LIMIT + ") reached -> Not scheduling test for " + cfg);
             }
             // Clean up tunnel registration
             if (tunnelKey != null) {
@@ -408,7 +438,7 @@ public class TestJob extends JobImpl {
         // Calculate adaptive max queued tests based on system load
         if (maxLag < 1000 && avgLag < 3) {
             // Super low lag
-            maxQueuedTests = HARD_TEST_JOB_LIMIT; // 128 / 384
+            maxQueuedTests = MAX_TEST_JOB_LIMIT; // 128 / 384
         } else if (maxLag < 1200 && avgLag < 5) {
             // Very low lag - increase queue capacity for more thorough testing
             maxQueuedTests = MAX_QUEUED_TESTS * 4; // 128 / 256
@@ -421,7 +451,7 @@ public class TestJob extends JobImpl {
         }
 
         // Cap adaptive queue limit at hard limit to prevent exceeding configured maximum
-        maxQueuedTests = Math.min(maxQueuedTests, HARD_TEST_JOB_LIMIT);
+        maxQueuedTests = Math.min(maxQueuedTests, MAX_TEST_JOB_LIMIT);
 
         // Update public static field for JobQueueHelper display
         TestJob.maxQueuedTests = maxQueuedTests;
@@ -431,9 +461,9 @@ public class TestJob extends JobImpl {
 
         // Don't count ourselves in the total - we are already in the counter
         // and will be removed on cleanup
-        if (totalCount >= HARD_TEST_JOB_LIMIT && totalCount > 1) {
+        if (totalCount >= MAX_TEST_JOB_LIMIT && totalCount > 1) {
             if (_log.shouldInfo()) {
-                _log.info("Hard limit reached (" + totalCount + " >= " + HARD_TEST_JOB_LIMIT +
+                _log.info("Hard limit reached (" + totalCount + " >= " + MAX_TEST_JOB_LIMIT +
                           ") -> Cancelling test of " + _cfg);
             }
             ctx.statManager().addRateData("tunnel.testThrottled", _cfg.getLength());
@@ -819,9 +849,9 @@ public class TestJob extends JobImpl {
         final RouterContext ctx = getContext();
 
         int totalCount = getTotalTestJobCount();
-        if (totalCount >= HARD_TEST_JOB_LIMIT) {
+        if (totalCount >= MAX_TEST_JOB_LIMIT) {
             if (_log.shouldInfo()) {
-                _log.info("Hard limit reached during reschedule (" + totalCount + " >= " + HARD_TEST_JOB_LIMIT +
+                _log.info("Hard limit reached during reschedule (" + totalCount + " >= " + MAX_TEST_JOB_LIMIT +
                           ") \n* Skipping reschedule for " + _cfg);
             }
             return false;
