@@ -19,6 +19,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -104,6 +105,17 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      */
     private final ConcurrentMap<Hash, Set<RepublishLeaseSetJob>> _publishingLeaseSets =
         new ConcurrentHashMap<>(8);
+
+    /**
+     * Queue for batching LeaseSet republishes within a 15-second window.
+     * This reduces job queue pressure by consolidating multiple republish jobs into one.
+     */
+    private final ConcurrentLinkedQueue<Hash> _batchRepublishQueue = new ConcurrentLinkedQueue<>();
+
+    /**
+     * Track last batch processing time to ensure 15-second window.
+     */
+    private volatile long _lastBatchProcessTime = 0;
 
     /**
      * Hash of the key currently being searched for, pointing the SearchJob that
@@ -966,11 +978,17 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
-     * Queues the LeaseSet for future republishing, delaying to avoid flooding floodfills.
+     * Batched LeaseSet republishing constants.
+     */
+    private static final long BATCH_WINDOW_MS = 15 * 1000; // 15 second batching window
+    private static final long BATCH_PROCESS_DELAY = 5 * 1000; // Process batch 5s after first item
+
+    /**
+     * Queues the LeaseSet for future republishing using batching to reduce job queue pressure.
      * Proactively starts republishing 3 minutes before lease expiration to ensure
      * network propagation has ample time before the lease expires.
      *
-     * <p>Skips queuing if a republish job is already active for this destination.</p>
+     * <p>Uses 15-second batching window to consolidate multiple republish jobs into fewer jobs.</p>
      */
     private void scheduleRepublish(Hash hash) {
         if (hasActiveRepublishJob(hash)) {
@@ -981,38 +999,69 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             return;
         }
 
-        RepublishLeaseSetJob job = new RepublishLeaseSetJob(_context, this, hash);
-
-        long now = _context.clock().now();
-        long nextTime;
-
+        // Check if lease is expiring soon - if so, process immediately
         LeaseSet ls = lookupLeaseSetLocally(hash);
+        long now = _context.clock().now();
         if (ls != null) {
             long expiration = ls.getLatestLeaseDate();
-            long proactiveTime = expiration - PROACTIVE_REPUBLISH_THRESHOLD;
-
-            if (proactiveTime > now && job.lastPublished() < proactiveTime) {
-                nextTime = Math.max(proactiveTime, now + PUBLISH_DELAY);
-                if (_log.shouldInfo()) {
-                    _log.info("Scheduling proactive republish for LOCAL LeaseSet [" + hash.toBase32().substring(0, 8) + "]..." +
-                              "\n* Expires: " + new Date(expiration) +
-                              "\n* Republish at: " + new Date(nextTime));
+            if (expiration - now < PROACTIVE_REPUBLISH_THRESHOLD) {
+                // Expiring soon - process immediately, don't batch
+                RepublishLeaseSetJob job = new RepublishLeaseSetJob(_context, this, hash);
+                job.getTiming().setStartAfter(now + PUBLISH_DELAY);
+                if (job instanceof JobImpl) {
+                    ((JobImpl) job).madeReady(now);
                 }
-            } else {
-                nextTime = Math.max(job.lastPublished() + RepublishLeaseSetJob.REPUBLISH_LEASESET_TIMEOUT,
-                                    now + PUBLISH_DELAY);
+                _context.jobQueue().addJobToTop(job);
+                return;
             }
-        } else {
-            nextTime = Math.max(job.lastPublished() + RepublishLeaseSetJob.REPUBLISH_LEASESET_TIMEOUT,
-                                now + PUBLISH_DELAY);
         }
 
-        job.getTiming().setStartAfter(Math.max(now, nextTime));
+        // Add to batch queue for non-urgent republishes
+        _batchRepublishQueue.offer(hash);
 
-        if (job instanceof JobImpl) {
-            ((JobImpl) job).madeReady(now);
+        // Check if we need to schedule batch processor
+        long timeSinceLastBatch = now - _lastBatchProcessTime;
+        if (timeSinceLastBatch >= BATCH_WINDOW_MS) {
+            // Schedule batch processor to run in 5 seconds
+            _lastBatchProcessTime = now;
+            BatchRepublishJob batchJob = new BatchRepublishJob(_context);
+            batchJob.getTiming().setStartAfter(now + BATCH_PROCESS_DELAY);
+            _context.jobQueue().addJob(batchJob);
+            if (_log.shouldDebug()) {
+                _log.debug("Scheduled batch republish job for " + _batchRepublishQueue.size() + " LeaseSets");
+            }
         }
-        _context.jobQueue().addJobToTop(job);
+    }
+
+    /**
+     * Job to process batched LeaseSet republishes.
+     * Drains the batch queue and creates individual republish jobs for each LeaseSet.
+     */
+    private class BatchRepublishJob extends JobImpl {
+        public BatchRepublishJob(RouterContext ctx) {
+            super(ctx);
+        }
+
+        public String getName() { return "Republish LeaseSets (batch)"; }
+
+        @Override
+        public void runJob() {
+            int count = 0;
+            Hash hash;
+            while ((hash = _batchRepublishQueue.poll()) != null) {
+                if (!hasActiveRepublishJob(hash)) {
+                    RepublishLeaseSetJob job = new RepublishLeaseSetJob(getContext(),
+                            KademliaNetworkDatabaseFacade.this, hash);
+                    long now = getContext().clock().now();
+                    job.getTiming().setStartAfter(now + (count * 100)); // 100ms stagger per item
+                    getContext().jobQueue().addJob(job);
+                    count++;
+                }
+            }
+            if (_log.shouldInfo() && count > 0) {
+                _log.info("Batch processed " + count + " LeaseSet republishes");
+            }
+        }
     }
 
     /**
