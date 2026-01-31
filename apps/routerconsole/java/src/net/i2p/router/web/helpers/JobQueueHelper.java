@@ -498,7 +498,7 @@ public class JobQueueHelper extends HelperBase {
            .append(_t("Job Statistics"))
            .append(recentMode ? " (" + _t("last minute") + ")" : "")
            .append("<span id=lag style=float:right>").append(_t("Job Lag"))
-           .append(": ").append(_t("AVG:)).append(:<span style=text-transform:lowercase;letter-spacing:0> ")
+           .append(": ").append(_t("AVG")).append(":<span style=text-transform:lowercase;letter-spacing:0> ")
            .append(DataHelper.formatDuration2(avgLag))
            .append("</span> / ").append(_t("MAX")).append(":<span style=text-transform:lowercase;letter-spacing:0> ")
            .append(DataHelper.formatDuration2(maxExecTime))
