@@ -263,7 +263,15 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
 
     @Override
     void sendStore(Hash key, DatabaseEntry ds, Job onSuccess, Job onFailure, long sendTimeout, Set<Hash> toIgnore) {
-        concurrent = 2;
+        // Reduce concurrency during high job lag to prevent queue overload
+        long maxLag = _context.jobQueue().getMaxLag();
+        if (maxLag > 2000) {
+            concurrent = 1; // High lag: minimal concurrency
+        } else if (maxLag > 1000) {
+            concurrent = 2; // Moderate lag: normal concurrency
+        } else {
+            concurrent = 2; // Normal: default concurrency
+        }
         failCount = 0;
         successCount = 0;
         // If we are a part of the floodfill netDb, don't send out our own leaseSets as part
@@ -276,15 +284,20 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             Collections.shuffle(participantList);
             floodfillParticipants = new HashSet<>(participantList);
 
+            int peerIdx = 0;
             for (Hash peer : floodfillParticipants) {
                 if (onSuccess != null) {
                     _context.jobQueue().addJob(onSuccess);
                     successCount++;
                 }
                 else if (successCount == 0) {
-                    try {Thread.sleep(1000);}
-                    catch (InterruptedException ie) {}
-                    _context.jobQueue().addJob(new FloodfillStoreJob(_context, this, key, ds, onSuccess, onFailure, sendTimeout, toIgnore));
+                    // Queue all store jobs with staggered delays instead of blocking sleep
+                    // This batches the work and prevents job runner blocking
+                    FloodfillStoreJob storeJob = new FloodfillStoreJob(_context, this, key, ds, onSuccess, onFailure, sendTimeout, toIgnore);
+                    // Stagger jobs: 0ms, 200ms, 400ms... per peer (reduced from 1000ms)
+                    long delay = peerIdx * 200L;
+                    storeJob.getTiming().setStartAfter(_context.clock().now() + delay);
+                    _context.jobQueue().addJob(storeJob);
                     failCount++;
                     if (failCount > 9) {concurrent = 3;}
                     else if (failCount > 4) {concurrent = 2;}
@@ -300,6 +313,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                                   "Resending to " + (concurrent > 1 ? concurrent + " new floodfills" : "a different floodfill") + "...");
                     }
                 }
+                peerIdx++;
             }
         }
     }
