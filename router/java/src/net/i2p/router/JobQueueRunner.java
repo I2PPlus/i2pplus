@@ -67,24 +67,28 @@ class JobQueueRunner extends I2PThread {
                 job.getTiming().start();
                 runCurrentJob();
                 job.getTiming().end();
-                long duration = job.getTiming().getActualEnd() - job.getTiming().getActualStart();
+
+                // Use nanosecond-precision duration calculation for sub-millisecond accuracy
+                double duration = job.getTiming().getDurationMillis();
                 long beforeUpdate = _context.clock().now();
                 _context.jobQueue().updateStats(job, doStart, origStartAfter, duration);
                 long diff = _context.clock().now() - beforeUpdate;
 
-                long lag = doStart - origStartAfter;
+                // Calculate lag with sub-millisecond precision
+                double lag = job.getTiming().getPendingMillis();
                 if (lag < 0) {lag = 0;}
 
-                _context.statManager().addRateData("jobQueue.jobRun", duration, duration);
-                _context.statManager().addRateData("jobQueue.jobLag", lag);
+                // Cast to long for rate statistics (they don't need sub-millisecond precision)
+                _context.statManager().addRateData("jobQueue.jobRun", (long) duration, (long) duration);
+                _context.statManager().addRateData("jobQueue.jobLag", (long) lag);
                 _context.statManager().addRateData("jobQueue.jobWait", enqueuedTime, enqueuedTime);
 
                 if (duration > 1500) {
-                    _context.statManager().addRateData("jobQueue.jobRunSlow", duration, duration);
-                    if (_log.shouldWarn() && doStart-origStartAfter > 100) {
-                        _log.warn(_currentJob + " completed in " + duration + "ms -> Lag: " + (doStart-origStartAfter) + "ms");
+                    _context.statManager().addRateData("jobQueue.jobRunSlow", (long) duration, (long) duration);
+                    if (_log.shouldWarn() && lag > 100) {
+                        _log.warn(_currentJob + " completed in " + String.format("%.3f", duration) + "ms -> Lag: " + String.format("%.3f", lag) + "ms");
                     } else if (_log.shouldInfo()) {
-                        _log.warn(_currentJob + " completed in " + duration + "ms");
+                        _log.warn(_currentJob + " completed in " + String.format("%.3f", duration) + "ms");
                     }
                 }
 
