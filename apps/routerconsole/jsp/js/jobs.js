@@ -10,27 +10,9 @@
   const sorter = new Tablesort(jobs, { descending: true });
   const progressx = window.progressx;
   const theme = window.theme;
-  const header = document.getElementById("totaljobstats");
-  const headerText = header ? header.innerHTML.trim() : "";
 
   let refreshIntervalId = null;
   let oldRowsMap = new Map();
-
-  function updateheader() {
-    if (!header) return;
-    const footer = jobs.querySelector(".tablefooter");
-    if (!footer) return;
-    const cells = footer.cells;
-    if (cells.length < 6) return;
-    const avg = cells[4]?.textContent?.trim();
-    const max = cells[5]?.textContent?.trim();
-    if (avg && max) {
-      header.innerHTML = headerText +
-                         "<span id=lag style=float:right>AVG: " + avg +
-                         " / MAX:<span style=text-transform:lowercase;letter-spacing:0> " +
-                         max + "</span></span>";
-    }
-  }
 
   async function fetchJobs() {
     try {
@@ -99,7 +81,6 @@
           const footer = jobs.querySelector(".tablefooter");
           const footerResponse = doc.querySelector(".tablefooter");
           footer.innerHTML = footerResponse.innerHTML;
-          updateheader();
         });
 
         if (fragment.hasChildNodes()) {
@@ -150,6 +131,5 @@
 
   requestAnimationFrame(() => {
     sorter.refresh();
-    updateheader();
   });
 })();
