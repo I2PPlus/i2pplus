@@ -22,11 +22,21 @@ public class JobTiming implements Clock.ClockUpdateListener {
     private AtomicLong _actualEnd;
     private final RouterContext _context;
 
+    /**
+     * Nanosecond precision timing for execution duration tracking.
+     * System.nanoTime() provides high-resolution timing independent of system clock changes.
+     * @since sub-millisecond precision update
+     */
+    private AtomicLong _actualStartNanos;
+    private AtomicLong _actualEndNanos;
+
     public JobTiming(RouterContext context) {
         _context = context;
         _start = new AtomicLong(context.clock().now());
         _actualStart = new AtomicLong(0);
         _actualEnd = new AtomicLong(0);
+        _actualStartNanos = new AtomicLong(0);
+        _actualEndNanos = new AtomicLong(0);
     }
 
     /**
@@ -58,11 +68,24 @@ public class JobTiming implements Clock.ClockUpdateListener {
      * @param actualStartTime milliseconds after the epoch when the job actually started
      */
     public void setActualStart(long actualStartTime) {_actualStart.set(actualStartTime);}
+
+    /**
+     * Get the nanosecond-precision start time when the job began execution.
+     *
+     * @return nanoseconds from System.nanoTime() when the job actually started, or 0 if not yet started
+     * @since sub-millisecond precision update
+     */
+    public long getActualStartNanos() {return _actualStartNanos.get();}
+
     /**
      * Mark the job as started, recording the current time as the actual start time.
      * Uses the router context clock for consistency.
+     * Also records high-precision nanosecond timestamp for accurate duration calculation.
      */
-    public void start() {_actualStart.set(_context.clock().now());}
+    public void start() {
+        _actualStart.set(_context.clock().now());
+        _actualStartNanos.set(System.nanoTime());
+    }
 
     /**
      * Get the actual end time when the job finished execution.
@@ -79,10 +102,61 @@ public class JobTiming implements Clock.ClockUpdateListener {
     public void setActualEnd(long actualEndTime) {_actualEnd.set(actualEndTime);}
 
     /**
+     * Get the nanosecond-precision end time when the job finished execution.
+     *
+     * @return nanoseconds from System.nanoTime() when the job actually ended, or 0 if not yet ended
+     * @since sub-millisecond precision update
+     */
+    public long getActualEndNanos() {return _actualEndNanos.get();}
+
+    /**
      * Mark the job as finished, recording the current time as the actual end time.
      * Uses the router context clock for consistency.
+     * Also records high-precision nanosecond timestamp for accurate duration calculation.
      */
-    public void end() {_actualEnd.set(_context.clock().now());}
+    public void end() {
+        _actualEnd.set(_context.clock().now());
+        _actualEndNanos.set(System.nanoTime());
+    }
+
+    /**
+     * Get the execution duration in milliseconds with sub-millisecond precision.
+     * Uses nanosecond timing for accurate measurement of short-running jobs.
+     *
+     * @return duration in milliseconds as a double (e.g., 0.5 for 500 microseconds),
+     *         or 0.0 if job hasn't started or finished
+     * @since sub-millisecond precision update
+     */
+    public double getDurationMillis() {
+        long startNanos = _actualStartNanos.get();
+        long endNanos = _actualEndNanos.get();
+        if (startNanos == 0 || endNanos == 0) {
+            return 0.0;
+        }
+        return (endNanos - startNanos) / 1_000_000.0;
+    }
+
+    /**
+     * Get the pending/wait time in milliseconds with sub-millisecond precision.
+     * This is the time between when the job was scheduled to start and when it actually started.
+     *
+     * @return pending time in milliseconds as a double, or 0.0 if not yet started
+     * @since sub-millisecond precision update
+     */
+    public double getPendingMillis() {
+        long startNanos = _actualStartNanos.get();
+        if (startNanos == 0) {
+            return 0.0;
+        }
+        long scheduledStart = _start.get();
+        // Convert scheduled time (ms) to a comparable nanosecond value
+        // We use the relationship between System.currentTimeMillis() and System.nanoTime()
+        long currentMillis = System.currentTimeMillis();
+        long currentNanos = System.nanoTime();
+        long scheduledNanos = currentNanos - ((currentMillis - scheduledStart) * 1_000_000L);
+        double pendingNanos = startNanos - scheduledNanos;
+        return pendingNanos / 1_000_000.0;
+    }
 
     /**
      * Adjust all timing values by the specified delta.
