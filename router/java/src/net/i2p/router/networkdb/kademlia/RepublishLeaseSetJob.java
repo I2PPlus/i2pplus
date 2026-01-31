@@ -16,7 +16,7 @@ import net.i2p.util.Log;
 
 /**
  * A job that periodically republishes a local LeaseSet to the network database.
- * 
+ *
  * This job handles the lifecycle of lease set publication including:
  * <ul>
  *   <li>Initial publication when the router has been running for sufficient uptime</li>
@@ -25,7 +25,7 @@ import net.i2p.util.Log;
  *   <li>Floodfill verification of published lease sets</li>
  *   <li>Cleanup of expired/stale lease sets when service stops</li>
  * </ul>
- * 
+ *
  * The job manages a retry mechanism that:
  * <ul>
  *   <li>Retries every 2 seconds on failure</li>
@@ -33,7 +33,7 @@ import net.i2p.util.Log;
  *   <li>Verifies publication via floodfill peers after 3 failures</li>
  *   <li>Stops publishing when the client is no longer local</li>
  * </ul>
- * 
+ *
  * This class is thread-safe and uses concurrent maps for tracking retry state
  * and logging throttling across multiple instances.
  */
@@ -41,8 +41,7 @@ public class RepublishLeaseSetJob extends JobImpl {
     private final Log _log;
     public final static long REPUBLISH_LEASESET_TIMEOUT = 30 * 1000;
     private final static int RETRY_DELAY = 2000;
-    private final static long REPUBLISH_INTERVAL = 7 * 60 * 1000;
-    private final static long EXPIRY_WINDOW = 3 * 60 * 1000;
+    private final static long REPUBLISH_INTERVAL = 8 * 60 * 1000; // 8 minutes
     private static final long CACHE_CLEANUP_THRESHOLD = 15 * 60 * 1000;
     private static final ConcurrentHashMap<Hash, Boolean> _retryInProgress = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<Hash, Long> _lastPublishLogTime = new ConcurrentHashMap<>();
@@ -70,6 +69,7 @@ public class RepublishLeaseSetJob extends JobImpl {
     @Override
     public void runJob() {
         long uptime = getContext().router().getUptime();
+
         try {
             if (!getContext().clientManager().shouldPublishLeaseSet(_dest)) {
                 LeaseSet ls = _facade.lookupLeaseSetLocally(_dest);
