@@ -300,6 +300,80 @@ public class JobQueue {
         return jobCount > 0 ? totalLag / jobCount : 0;
     }
 
+    /**
+     * Get the maximum lag time with sub-millisecond precision.
+     * This is the delay between when the earliest job was supposed to start
+     * and the current time.
+     *
+     * @return maximum lag in milliseconds as a double, or 0.0 if queue is empty
+     * @since sub-millisecond precision update
+     */
+    public double getMaxLagDouble() {
+        Job j = _readyJobs.peek();
+        if (j == null) j = _highPriorityJobs.peek();
+        if (j == null) return 0.0;
+        JobTiming jt = j.getTiming();
+        if (jt == null) return 0.0;
+        long startAfter = jt.getStartAfter();
+        // Calculate sub-millisecond lag using the pending time calculation from JobTiming
+        double lagMs = _context.clock().now() - startAfter;
+        if (jt.getActualStartNanos() > 0) {
+            // If job has started, use its pending time for more accuracy
+            lagMs = jt.getPendingMillis();
+        }
+        return lagMs > 0 ? lagMs : 0.0;
+    }
+
+    /**
+     * Get the average lag time with sub-millisecond precision.
+     * This is the average delay between when jobs were supposed to start
+     * and the current time across all ready jobs.
+     *
+     * @return average lag in milliseconds as a double, or 0.0 if queue is empty
+     * @since sub-millisecond precision update
+     */
+    public double getAvgLagDouble() {
+        long now = _context.clock().now();
+        double totalLag = 0.0;
+        int jobCount = 0;
+
+        // Check ready jobs
+        for (Job job : _readyJobs) {
+            JobTiming jt = job.getTiming();
+            if (jt != null) {
+                long startAfter = jt.getStartAfter();
+                double lag = now - startAfter;
+                if (jt.getActualStartNanos() > 0) {
+                    // Use pending time calculation for sub-ms precision
+                    lag = jt.getPendingMillis();
+                }
+                if (lag > 0) {
+                    totalLag += lag;
+                    jobCount++;
+                }
+            }
+        }
+
+        // Check high priority jobs
+        for (Job job : _highPriorityJobs) {
+            JobTiming jt = job.getTiming();
+            if (jt != null) {
+                long startAfter = jt.getStartAfter();
+                double lag = now - startAfter;
+                if (jt.getActualStartNanos() > 0) {
+                    // Use pending time calculation for sub-ms precision
+                    lag = jt.getPendingMillis();
+                }
+                if (lag > 0) {
+                    totalLag += lag;
+                    jobCount++;
+                }
+            }
+        }
+
+        return jobCount > 0 ? totalLag / jobCount : 0.0;
+    }
+
     private boolean shouldDrop(Job job, int numReady) {
         if (_maxWaitingJobs <= 0) return false;
         if (!_allowParallelOperation) return false;
@@ -612,12 +686,11 @@ public class JobQueue {
         }
     }
 
-    void updateStats(Job job, long doStart, long origStartAfter, long duration) {
+    void updateStats(Job job, long doStart, long origStartAfter, double duration) {
         if (_context.router() == null) return;
         String key = job.getName();
-        // Fix lag calculation: use actual job start time, not current time
-        long actualStart = job.getTiming().getStartAfter();
-        long lag = doStart - actualStart;
+        // Use high-precision pending time calculation from JobTiming
+        double lag = job.getTiming().getPendingMillis();
         MessageHistory hist = _context.messageHistory();
         long uptime = _context.router().getUptime();
 
@@ -633,10 +706,13 @@ public class JobQueue {
         stats.jobRan(duration, lag);
 
         String dieMsg = null;
-        if (lag > _lagWarning) {
-            dieMsg = "Too much lag for " + job.getName() + " Job: " + lag + "ms with run time of " + duration + "ms";
-        } else if (duration > _runWarning) {
-            dieMsg = "Run too long for " + job.getName() + " Job: " + lag + "ms lag with run time of " + duration + "ms";
+        // Convert to long for warning comparison (warnings still based on ms thresholds)
+        long lagMs = (long) lag;
+        long durationMs = (long) duration;
+        if (lagMs > _lagWarning) {
+            dieMsg = "Too much lag for " + job.getName() + " Job: " + String.format("%.3f", lag) + "ms with run time of " + String.format("%.3f", duration) + "ms";
+        } else if (durationMs > _runWarning) {
+            dieMsg = "Run too long for " + job.getName() + " Job: " + String.format("%.3f", lag) + "ms lag with run time of " + String.format("%.3f", duration) + "ms";
         }
         if (dieMsg != null) {
             if (_log.shouldWarn()) {_log.warn(dieMsg);}
