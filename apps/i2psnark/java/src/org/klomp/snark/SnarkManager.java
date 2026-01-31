@@ -265,7 +265,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     public static final int MIN_DOWN_BW = 2 * MIN_UP_BW;
     public static final int DEFAULT_MAX_UP_BW = 1024;
     private static final int DEFAULT_MAX_DOWN_BW = 1024;
-    public static final int DEFAULT_STARTUP_DELAY = 3;
+    public static final int DEFAULT_STARTUP_DELAY = 2;
     public static final int DEFAULT_REFRESH_DELAY_SECS = 5;
     private static final int DEFAULT_PAGE_SIZE = 50;
     public static final int DEFAULT_TUNNEL_QUANTITY = 16;
