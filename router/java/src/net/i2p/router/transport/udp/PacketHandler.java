@@ -28,7 +28,7 @@ class PacketHandler {
     private final PeerTestManager _testManager;
     private volatile boolean _keepReading;
     private final Handler[] _handlers;
-    private final BlockingQueue<UDPPacket> _inboundQueue;
+    private final CoDelBlockingQueue<UDPPacket> _inboundQueue;
     private final int _networkID;
 
     private static final int TYPE_POISON = -99999;
@@ -81,6 +81,17 @@ class PacketHandler {
             rv.append(" handler ").append(i);
         }
         return rv.toString();
+    }
+
+    /**
+     * Check if the inbound queue is backlogged (near capacity or high delay).
+     * Used by UDPReceiver to drop packets early before queueing.
+     *
+     * @return true if queue is backlogged
+     * @since 0.9.68+
+     */
+    boolean isBacklogged() {
+        return _inboundQueue.isBacklogged();
     }
 
     /**

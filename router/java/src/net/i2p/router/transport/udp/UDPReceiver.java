@@ -90,6 +90,17 @@ class UDPReceiver {
             return 0;
         }
 
+        // Early drop if PacketHandler queue is backlogged (0.9.68+)
+        // This prevents memory buildup when handlers can't keep up with receive rate
+        if (_handler.isBacklogged()) {
+            if (_log.shouldWarn()) {
+                _log.warn("Dropping packet from " + from + " - handler queue backlogged");
+            }
+            _context.statManager().addRateData("udp.receiveBacklogDrop", 1);
+            packet.release();
+            return 0;
+        }
+
         try {_handler.queueReceived(packet);}
         catch (InterruptedException ie) {
             packet.release();

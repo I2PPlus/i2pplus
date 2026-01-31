@@ -137,9 +137,35 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
         return super.offer(o, timeout, unit);
     }
 
+    /**
+     * Queue fullness threshold for early drop (90% of capacity).
+     * When queue reaches this level, new packets are dropped to prevent blocking.
+     */
+    private static final double QUEUE_FULL_THRESHOLD = 0.90;
+
+    /**
+     * Check if the queue is nearly full (above threshold).
+     * Used for early drop decisions before blocking.
+     *
+     * @return true if queue is above 90% capacity
+     */
+    public boolean isNearlyFull() {
+        return size() >= _capacity * QUEUE_FULL_THRESHOLD;
+    }
+
     @Override
     public void put(E o) throws InterruptedException {
         o.setEnqueueTime(_context.clock().now());
+        // Hard limit: if queue is nearly full, drop immediately rather than blocking
+        // This prevents memory buildup and keeps latency under control
+        if (isNearlyFull()) {
+            if (_log.shouldWarn()) {
+                _log.warn("Dropping packet due to queue near capacity: " + size() + "/" + _capacity);
+            }
+            _context.statManager().addRateData("codel." + _name + ".earlyDrop", 1);
+            o.drop();
+            return;
+        }
         super.put(o);
     }
 
