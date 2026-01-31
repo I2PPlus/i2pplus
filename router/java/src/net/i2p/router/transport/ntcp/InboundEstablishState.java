@@ -97,8 +97,8 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
 
     /** Buffer size for reading data phase packets (16 KB), same as I2PTunnelRunner */
     private static final int BUFFER_SIZE = 16*1024;
-    /** Maximum number of read buffers to cache (32 on slow devices, 64 otherwise) */
-    private static final int MAX_DATA_READ_BUFS = SystemVersion.isSlow() ? 32 : 64;
+    /** Maximum number of read buffers to cache (8 on slow devices, 16 otherwise) */
+    private static final int MAX_DATA_READ_BUFS = SystemVersion.isSlow() ? 8 : 16;
     /** Cache for read buffers */
     private static final ByteCache _dataReadBufs = ByteCache.getInstance(MAX_DATA_READ_BUFS, BUFFER_SIZE);
 

@@ -131,11 +131,11 @@ class EventPumper implements Runnable {
      */
     private static final String PROP_NODELAY = "i2np.ntcp.nodelay";
     private static final int MIN_MINB = SystemVersion.isSlow() ? 4 : 8;
-    private static final int MAX_MINB = SystemVersion.isSlow() ? 12 : Math.max(16, SystemVersion.getCores());
+    private static final int MAX_MINB = SystemVersion.isSlow() ? 12 : 16;
     private static final int MIN_BUFS;
     static {
         long maxMemory = SystemVersion.getMaxMemory();
-        MIN_BUFS = (int) Math.max(MIN_MINB, Math.min(MAX_MINB, 1 + (maxMemory / (16 * 1024 * 1024))));
+        MIN_BUFS = (int) Math.max(MIN_MINB, Math.min(MAX_MINB, 1 + (maxMemory / (32 * 1024 * 1024))));
     }
 
     private static final TryCache<ByteBuffer> _bufferCache = new TryCache<>(new BufferFactory(), MIN_BUFS);
