@@ -304,7 +304,7 @@ class BuildHandler implements Runnable {
             getTiming().setStartAfter(_context.clock().now() + delay);
         }
 
-        public String getName() {return "Async Handle Build Reply";}
+        public String getName() {return "Handle Build Reply";}
 
         @Override
         public void runJob() {
