@@ -16,6 +16,9 @@ import net.i2p.router.Job;
 import net.i2p.router.JobStats;
 import net.i2p.router.tunnel.pool.TestJob;
 import net.i2p.router.web.HelperBase;
+import net.i2p.stat.Rate;
+import net.i2p.stat.RateConstants;
+import net.i2p.stat.RateStat;
 import net.i2p.util.ObjectCounterUnsafe;
 import net.i2p.util.SystemVersion;
 
@@ -373,10 +376,132 @@ public class JobQueueHelper extends HelperBase {
         long cutoff = now - RECENT_WINDOW_MS;
 
         buf.append("<div class=widescroll>\n");
+
+        // First pass: collect job stats and calculate max execution time
+        long totRuns = 0;
+        long totDropped = 0;
+        double totExecTime = 0.0;
+        double totPendingTime = 0.0;
+        double maxExecTime = 0.0;
+        double minExecTime = Double.MAX_VALUE;
+        double maxPendingTime = 0.0;
+        double minPendingTime = Double.MAX_VALUE;
+        StringBuilder rowsBuf = new StringBuilder(32*1024);
+
+        List<JobStats> tstats = new ArrayList<JobStats>(_context.jobQueue().getJobStats());
+        Collections.sort(tstats, new JobStatsComparator());
+
+        for (JobStats stats : tstats) {
+            // Get recent stats for this job
+            JobStats.RecentStats recent = stats.getRecentStats();
+
+            // In recent mode, skip jobs with no recent executions
+            if (recentMode && recent.runs == 0) continue;
+
+            // Skip single-run jobs and disabled jobs BEFORE accumulating totals
+            if (stats.getRuns() < 2) continue;
+            if (stats.getName().contains("(disabled)")) continue;
+
+            // Use recent stats for display and totals when in recent mode
+            long displayRuns = recentMode ? recent.runs : stats.getRuns();
+            long displayDropped = recentMode ? 0 : stats.getDropped(); // No recent dropped count available
+
+            // Get double-precision timing values (in milliseconds)
+            double displayTotalTime = recentMode ? recent.getTotalTime() : stats.getTotalTimeDouble();
+            double displayTotalPending = recentMode ? recent.getTotalPendingTime() : stats.getTotalPendingTimeDouble();
+            double displayMaxTime = recentMode ? recent.getMaxTime() : stats.getMaxTimeDouble();
+            double displayMinTime = recentMode ? recent.getMinTime() : stats.getMinTimeDouble();
+            double displayMaxPending = recentMode ? recent.getMaxPendingTime() : stats.getMaxPendingTimeDouble();
+            double displayMinPending = recentMode ? recent.getMinPendingTime() : stats.getMinPendingTimeDouble();
+            double displayAvgTime = recentMode ? recent.getAvgTime() : stats.getAvgTime();
+            double displayAvgPending = recentMode ? recent.getAvgPendingTime() : stats.getAvgPendingTime();
+
+            totRuns += displayRuns;
+            totDropped += displayDropped;
+            totExecTime += displayTotalTime;
+            totPendingTime += displayTotalPending;
+
+            boolean isRunningSlow = displayRuns > 3 && displayAvgTime > 1000.0;
+
+            // Use microsecond/millisecond formatting for sub-millisecond precision display
+            rowsBuf.append("<tr")
+               .append(isRunningSlow ? " class=slowAvg" : "")
+               .append("><td class=jobname><b>")
+               .append(stats.getName())
+               .append("</b></td><td class=totalRuns><span>")
+               .append(displayRuns)
+               .append("</span></td><td class=totalDropped><span>")
+               .append(displayDropped)
+               .append("</span></td><td class=totalRunTime data-sort=")
+               .append((long) (displayTotalTime * 1000.0)) // sort by microseconds
+               .append("><span>")
+               .append(DataHelper.formatDuration2(displayTotalTime))
+               .append("</span></td><td class=avgRunTime data-sort=")
+               .append((long) (displayAvgTime * 1000.0))
+               .append("><span>")
+               .append(DataHelper.formatDuration2(displayAvgTime))
+               .append("</span></td><td class=maxRunTime data-sort=")
+               .append((long) (displayMaxTime * 1000.0))
+               .append("><span>")
+               .append(DataHelper.formatDuration2(displayMaxTime))
+               .append("</span></td><td class=minRunTime data-sort=")
+               .append((long) (displayMinTime * 1000.0))
+               .append("><span>")
+               .append(DataHelper.formatDuration2(displayMinTime))
+               .append("</span></td>");
+            if (isAdvanced()) {
+                rowsBuf.append("<td class=totalPendingTime data-sort=")
+                   .append((long) (displayTotalPending * 1000.0))
+                   .append("><span>")
+                   .append(DataHelper.formatDuration2(displayTotalPending))
+                   .append("</span></td><td class=avgPendingTime data-sort=")
+                   .append((long) (displayAvgPending * 1000.0))
+                   .append("><span>")
+                   .append(DataHelper.formatDuration2(displayAvgPending))
+                   .append("</span></td><td class=maxPendingTime data-sort=")
+                   .append((long) (displayMaxPending * 1000.0))
+                   .append("><span>")
+                   .append(DataHelper.formatDuration2(displayMaxPending))
+                   .append("</span></td><td class=minPendingTime data-sort=")
+                   .append((long) (displayMinPending * 1000.0))
+                   .append("><span>")
+                   .append(DataHelper.formatDuration2(displayMinPending))
+                   .append("</span></td>");
+            }
+            rowsBuf.append("</tr>\n");
+
+            // Update min/max AFTER filtering
+            if (displayMaxTime > maxExecTime) maxExecTime = displayMaxTime;
+            if (displayMinTime >= 0 && displayMinTime < minExecTime) minExecTime = displayMinTime;
+            if (displayMaxPending > maxPendingTime) maxPendingTime = displayMaxPending;
+            if (displayMinPending >= 0 && displayMinPending < minPendingTime) minPendingTime = displayMinPending;
+        }
+
+        // Handle edge case: no valid jobs displayed
+        double avgExecTime = totRuns > 0 ? totExecTime / totRuns : 0.0;
+        double avgPendingTime = totRuns > 0 ? totPendingTime / totRuns : 0.0;
+        if (minExecTime == Double.MAX_VALUE) minExecTime = 0.0;
+        if (minPendingTime == Double.MAX_VALUE) minPendingTime = 0.0;
+
+        // Get AVG lag from RateStat (same as sidebar) - historical average
+        double avgLag = 0.0;
+        RateStat rs = _context.statManager().getRate("jobQueue.jobLag");
+        if (rs != null) {
+            Rate lagRate = rs.getRate(RateConstants.ONE_MINUTE);
+            if (lagRate != null) {
+                avgLag = lagRate.getAverageValue();
+            }
+        }
+
+        // Render header with calculated values
         buf.append("<h3 id=totaljobstats>")
            .append(_t("Job Statistics"))
            .append(recentMode ? " (" + _t("last minute") + ")" : "")
-           .append("<span id=toggleJobstats>");
+           .append("<span id=lag style=float:right>Job Lag: AVG: ")
+           .append(DataHelper.formatDuration2(avgLag))
+           .append(" / Max:<span style=text-transform:lowercase;letter-spacing:0> ")
+           .append(DataHelper.formatDuration2(maxExecTime))
+           .append("</span></span><span id=toggleJobstats>");
 
         // Add toggle link
         if (recentMode) {
@@ -407,110 +532,9 @@ public class JobQueueHelper extends HelperBase {
                .append("<th class=maxPendingTime data-sort-method=number>").append(_t("Max")).append("</th>")
                .append("<th class=minPendingTime data-sort-method=number>").append(_t("Min")).append("</th>");
         }
-        buf.append("</tr></thead>\n<tbody id=statCount>\n");
-
-        long totRuns = 0;
-        long totDropped = 0;
-        long totExecTime = 0;
-        long totPendingTime = 0;
-        long maxExecTime = 0;
-        long minExecTime = Long.MAX_VALUE;
-        long maxPendingTime = 0;
-        long minPendingTime = Long.MAX_VALUE;
-
-        List<JobStats> tstats = new ArrayList<JobStats>(_context.jobQueue().getJobStats());
-        Collections.sort(tstats, new JobStatsComparator());
-
-        for (JobStats stats : tstats) {
-            // Get recent stats for this job
-            JobStats.RecentStats recent = stats.getRecentStats();
-
-            // In recent mode, skip jobs with no recent executions
-            if (recentMode && recent.runs == 0) continue;
-
-            // Skip single-run jobs and disabled jobs BEFORE accumulating totals
-            if (stats.getRuns() < 2) continue;
-            if (stats.getName().contains("(disabled)")) continue;
-
-            // Use recent stats for display and totals when in recent mode
-            long displayRuns = recentMode ? recent.runs : stats.getRuns();
-            long displayDropped = recentMode ? 0 : stats.getDropped(); // No recent dropped count available
-            long displayTotalTime = recentMode ? recent.totalTime : stats.getTotalTime();
-            long displayTotalPending = recentMode ? recent.totalPendingTime : stats.getTotalPendingTime();
-            long displayMaxTime = recentMode ? recent.maxTime : stats.getMaxTime();
-            long displayMinTime = recentMode ? recent.minTime : stats.getMinTime();
-            long displayMaxPending = recentMode ? recent.maxPendingTime : stats.getMaxPendingTime();
-            long displayMinPending = recentMode ? recent.minPendingTime : stats.getMinPendingTime();
-            double displayAvgTime = recentMode ? recent.getAvgTime() : stats.getAvgTime();
-            double displayAvgPending = recentMode ? recent.getAvgPendingTime() : stats.getAvgPendingTime();
-
-            totRuns += displayRuns;
-            totDropped += displayDropped;
-            totExecTime += displayTotalTime;
-            totPendingTime += displayTotalPending;
-
-            boolean isRunningSlow = displayRuns > 3 && displayAvgTime > 1000;
-
-            buf.append("<tr")
-               .append(isRunningSlow ? " class=slowAvg" : "")
-               .append("><td class=jobname><b>")
-               .append(stats.getName())
-               .append("</b></td><td class=totalRuns><span>")
-               .append(displayRuns)
-               .append("</span></td><td class=totalDropped><span>")
-               .append(displayDropped)
-               .append("</span></td><td class=totalRunTime data-sort=")
-               .append(displayTotalTime)
-               .append("><span>")
-               .append(DataHelper.formatDuration2(displayTotalTime))
-               .append("</span></td><td class=avgRunTime data-sort=")
-               .append((long) displayAvgTime)
-               .append("><span>")
-               .append(DataHelper.formatDuration2((long) displayAvgTime))
-               .append("</span></td><td class=maxRunTime data-sort=")
-               .append(displayMaxTime)
-               .append("><span>")
-               .append(DataHelper.formatDuration2(displayMaxTime))
-               .append("</span></td><td class=minRunTime data-sort=")
-               .append(displayMinTime)
-               .append("><span>")
-               .append(DataHelper.formatDuration2(displayMinTime))
-               .append("</span></td>");
-            if (isAdvanced()) {
-                buf.append("<td class=totalPendingTime data-sort=")
-                   .append(displayTotalPending)
-                   .append("><span>")
-                   .append(DataHelper.formatDuration2(displayTotalPending))
-                   .append("</span></td><td class=avgPendingTime data-sort=")
-                   .append((long) displayAvgPending)
-                   .append("><span>")
-                   .append(DataHelper.formatDuration2((long) displayAvgPending))
-                   .append("</span></td><td class=maxPendingTime data-sort=")
-                   .append(displayMaxPending)
-                   .append("><span>")
-                   .append(DataHelper.formatDuration2(displayMaxPending))
-                   .append("</span></td><td class=minPendingTime data-sort=")
-                   .append(displayMinPending)
-                   .append("><span>")
-                   .append(DataHelper.formatDuration2(displayMinPending))
-                   .append("</span></td>");
-            }
-            buf.append("</tr>\n");
-
-            // Update min/max AFTER filtering
-            if (displayMaxTime > maxExecTime) maxExecTime = displayMaxTime;
-            if (displayMinTime >= 0 && displayMinTime < minExecTime) minExecTime = displayMinTime;
-            if (displayMaxPending > maxPendingTime) maxPendingTime = displayMaxPending;
-            if (displayMinPending >= 0 && displayMinPending < minPendingTime) minPendingTime = displayMinPending;
-        }
-
-        // Handle edge case: no valid jobs displayed
-        long avgExecTime = totRuns > 0 ? totExecTime / totRuns : 0;
-        long avgPendingTime = totRuns > 0 ? totPendingTime / totRuns : 0;
-        if (minExecTime == Long.MAX_VALUE) minExecTime = 0;
-        if (minPendingTime == Long.MAX_VALUE) minPendingTime = 0;
-
-        buf.append("</tbody>\n<tfoot id=statTotals><tr class=tablefooter data-sort-method=none><td><b>")
+        buf.append("</tr></thead>\n<tbody id=statCount>\n")
+           .append(rowsBuf)
+           .append("</tbody>\n<tfoot id=statTotals><tr class=tablefooter data-sort-method=none><td><b>")
            .append(_t("Summary"))
            .append("</b></td><td>")
            .append(totRuns)
