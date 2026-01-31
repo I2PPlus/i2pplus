@@ -877,22 +877,17 @@ public class SidebarHelper extends HelperBase {
         RateStat rs = _context.statManager().getRate("jobQueue.jobLag");
         if (rs == null) {return "0";}
         Rate lagRate = rs.getRate(RateConstants.ONE_MINUTE);
-        long maxLag = _context.jobQueue().getMaxLag();
-        if (!isAdvanced() || maxLag < (double)30) {
-            if (lagRate.getAverageValue() < 1) {
-                return DataHelper.formatDuration2((double)lagRate.getAverageValue());
-            } else {
-                return DataHelper.formatDuration2((long)lagRate.getAverageValue());
-            }
-        } else {
-            if (lagRate.getAverageValue() < 1 && (double)maxLag < 1) {
-                return DataHelper.formatDuration2((double)lagRate.getAverageValue()) + THINSP + (double)maxLag + "&nbsp;µs";
-            } else if (lagRate.getAverageValue() < 1) {
-                return DataHelper.formatDuration2((double)lagRate.getAverageValue()) + THINSP + maxLag + "&nbsp;ms";
-            } else {
-                return (long)lagRate.getAverageValue() + THINSP + maxLag + "&nbsp;ms";
-            }
+        // Use sub-millisecond precision for accurate display
+        double avgLag = lagRate.getAverageValue();
+        double maxLag = _context.jobQueue().getMaxLagDouble();
+
+        if (!isAdvanced() || maxLag < 30.0) {
+            // Single value display
+            return DataHelper.formatDuration2(avgLag);
         }
+
+        // Advanced mode: show both avg and max - let formatter handle units
+        return DataHelper.formatDuration2(avgLag) + THINSP + DataHelper.formatDuration2(maxLag);
     }
 
     /**
