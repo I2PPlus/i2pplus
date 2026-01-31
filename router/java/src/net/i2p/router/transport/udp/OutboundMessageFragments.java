@@ -1,6 +1,7 @@
 package net.i2p.router.transport.udp;
 
 import java.io.IOException;
+import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -42,6 +43,37 @@ class OutboundMessageFragments {
     private final PacketBuilder2 _builder2;
     static final int MAX_VOLLEYS = 10; // don't send a packet more than 10 times
     private static final int MAX_WAIT = SystemVersion.isSlow() ? 1000 : 500;
+
+    /**
+     * Thread-local pool for fragment lists to reduce GC churn.
+     * Uses SoftReference to allow GC under memory pressure.
+     * Each thread gets its own pool to avoid contention.
+     */
+    private static final ThreadLocal<SoftReference<ArrayList<Fragment>>> _fragmentListPool = 
+        new ThreadLocal<SoftReference<ArrayList<Fragment>>>() {
+            @Override
+            protected SoftReference<ArrayList<Fragment>> initialValue() {
+                return new SoftReference<>(new ArrayList<>(16));
+            }
+        };
+
+    /**
+     * Acquire a fragment list from the thread-local pool.
+     * The list is cleared before return.
+     *
+     * @return a ready-to-use ArrayList for fragments
+     */
+    private static ArrayList<Fragment> acquireFragmentList() {
+        SoftReference<ArrayList<Fragment>> ref = _fragmentListPool.get();
+        ArrayList<Fragment> list = ref.get();
+        if (list == null) {
+            list = new ArrayList<>(16);
+            _fragmentListPool.set(new SoftReference<>(list));
+        } else {
+            list.clear();
+        }
+        return list;
+    }
 
     public OutboundMessageFragments(RouterContext ctx, UDPTransport transport) {
         _context = ctx;
@@ -269,8 +301,8 @@ class OutboundMessageFragments {
             return null;
         }
 
-        // build the list of fragments to send
-        List<Fragment> toSend = new ArrayList<>(8);
+        // build the list of fragments to send using pooled list
+        List<Fragment> toSend = acquireFragmentList();
         for (OutboundMessageState state : states) {
             int queued = state.push(toSend);
             // per-state stats
@@ -298,12 +330,14 @@ class OutboundMessageFragments {
         int fragmentsToSend = toSend.size();
         List<UDPPacket> rv = new ArrayList<>(toSend.size());
 
-        // Greedy fragment grouping logic
-        List<Fragment> remaining = new ArrayList<>(toSend);
+        // Greedy fragment grouping logic - use pooled list for remaining
+        List<Fragment> remaining = acquireFragmentList();
+        remaining.addAll(toSend);
         int maxPacketSize = PacketBuilder2.getMaxDataSize(peer);
 
         while (!remaining.isEmpty()) {
-            List<Fragment> sendNext = new ArrayList<>();
+            // Use pooled list for sendNext - cleared on each iteration
+            List<Fragment> sendNext = acquireFragmentList();
             int curTotalDataSize = 0;
 
             for (Iterator<Fragment> it = remaining.iterator(); it.hasNext();) {

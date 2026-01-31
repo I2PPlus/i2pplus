@@ -461,6 +461,8 @@ public class Router implements RouterClock.ClockShiftListener {
         I2PSessionImpl.clearCache();
         ReusableGZIPInputStream.clearCache();
         ReusableGZIPOutputStream.clearCache();
+        // Reduce UDP packet cache under memory pressure (0.9.68+)
+        UDPTransport.reduceCacheSize();
     }
 
     /**

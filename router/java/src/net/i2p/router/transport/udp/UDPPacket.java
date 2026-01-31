@@ -160,16 +160,25 @@ class UDPPacket implements CDPQEntry {
     }
 
     /**
+     * Header size to clear on init - covers all SSU2 headers without clearing full buffer.
+     * SSU2 headers are typically 40-80 bytes, 256 covers all cases plus margin.
+     */
+    private static final int HEADER_CLEAR_SIZE = 256;
+
+    /**
      * Initializes or resets the packet state for reuse.
-     * Clears data buffer, resets metadata and timestamps.
+     * Clears header portion of data buffer, resets metadata and timestamps.
+     * Only clears first 256 bytes instead of full buffer for performance.
      *
      * @param ctx RouterContext used for timing and logging
      */
     private void init(RouterContext ctx) {
         _context = ctx;
-        int len = _packet.getLength() > 0 ? _packet.getLength() : MAX_PACKET_SIZE;
-        Arrays.fill(_data, 0, len, (byte) 0);
+        // Only clear header portion (256 bytes) rather than full packet size (1572 bytes)
+        // This covers all SSU2 protocol headers while avoiding expensive full-array zeroing
+        Arrays.fill(_data, 0, Math.min(_data.length, HEADER_CLEAR_SIZE), (byte) 0);
         _packet.setData(_data);
+        _packet.setLength(_data.length);
         _initializeTime = _context.clock().now();
         _markedType = -1;
         _validateCount = 0;

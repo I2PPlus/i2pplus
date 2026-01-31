@@ -4029,4 +4029,15 @@ public class UDPTransport extends TransportImpl {
         }
     }
 
+    /**
+     * Reduce the UDPPacket cache size in response to memory pressure.
+     * This reduces the cache to its minimum size rather than clearing completely,
+     * maintaining some performance while freeing memory.
+     *
+     * @since 0.9.68+
+     */
+    public static void reduceCacheSize() {
+        UDPPacket.reduceCacheSize();
+    }
+
 }
