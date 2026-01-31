@@ -13,6 +13,7 @@
 </div>
 <jsp:useBean class="net.i2p.router.web.helpers.JobQueueHelper" id="jobQueueHelper" scope="request"/>
 <jsp:setProperty name="jobQueueHelper" property="contextId" value="<%=i2pcontextId%>"/>
+<jsp:setProperty name="jobQueueHelper" property="requestURI" value='<%=request.getRequestURI() + (request.getQueryString() != null ? "?" + request.getQueryString() : "")%>'/>
 <% jobQueueHelper.storeWriter(out);%>
 <jsp:getProperty name="jobQueueHelper" property="jobQueueStats"/>
 </div>

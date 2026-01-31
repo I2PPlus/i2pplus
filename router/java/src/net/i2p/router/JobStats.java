@@ -17,6 +17,27 @@ public class JobStats {
     private final AtomicLong _totalPendingTime = new AtomicLong();
     private volatile long _maxPendingTime;
     private volatile long _minPendingTime;
+    private volatile long _lastRunTime;
+
+    /** Sliding window for recent job executions (last 60 seconds) @since 0.9.68+ */
+    private static final int MAX_RECENT_ENTRIES = 1000;
+    private static final long RECENT_WINDOW_MS = 60 * 1000; // 60 seconds
+    private final RecentExecution[] _recentExecutions = new RecentExecution[MAX_RECENT_ENTRIES];
+    private volatile int _recentIndex = 0;
+    private volatile int _recentCount = 0;
+
+    /** Data holder for recent execution statistics @since 0.9.68+ */
+    private static class RecentExecution {
+        final long timestamp;
+        final long runTime;
+        final long lag;
+
+        RecentExecution(long timestamp, long runTime, long lag) {
+            this.timestamp = timestamp;
+            this.runTime = runTime;
+            this.lag = lag;
+        }
+    }
 
     /**
      * Create statistics tracker for a named job type.
@@ -45,7 +66,24 @@ public class JobStats {
         _totalPendingTime.addAndGet(lag);
         if ((_maxPendingTime < 0) || (lag > _maxPendingTime)) {_maxPendingTime = lag;}
         if ((_minPendingTime < 0) || (lag < _minPendingTime)) {_minPendingTime = lag;}
+
+        // Store in recent executions buffer
+        long now = System.currentTimeMillis();
+        _lastRunTime = now;
+        int idx = _recentIndex;
+        _recentExecutions[idx] = new RecentExecution(now, runTime, lag);
+        _recentIndex = (idx + 1) % MAX_RECENT_ENTRIES;
+        if (_recentCount < MAX_RECENT_ENTRIES) {
+            _recentCount++;
+        }
     }
+
+    /**
+     * Get the timestamp of the most recent job execution.
+     * @return timestamp in milliseconds, or 0 if never run
+     * @since 0.9.68+
+     */
+    public long getLastRunTime() {return _lastRunTime;}
 
     /**
      * Record that a job of this type was dropped due to overload.
@@ -135,6 +173,75 @@ public class JobStats {
         long numRuns = _numRuns.get();
         if (numRuns > 0) {return _totalPendingTime.get() / (double) numRuns;}
         else {return 0;}
+    }
+
+    /** @return RecentStats containing aggregated stats for the last 60 seconds @since 0.9.68+ */
+    public RecentStats getRecentStats() {
+        long now = System.currentTimeMillis();
+        long cutoff = now - RECENT_WINDOW_MS;
+
+        long recentRuns = 0;
+        long recentTotalTime = 0;
+        long recentMaxTime = -1;
+        long recentMinTime = -1;
+        long recentTotalPending = 0;
+        long recentMaxPending = -1;
+        long recentMinPending = -1;
+
+        int count = _recentCount;
+        int idx = _recentIndex;
+
+        // Iterate through recent executions (circular buffer)
+        for (int i = 0; i < count; i++) {
+            int actualIdx = (idx - count + i + MAX_RECENT_ENTRIES) % MAX_RECENT_ENTRIES;
+            RecentExecution re = _recentExecutions[actualIdx];
+            if (re == null) continue;
+
+            // Only include if within the last 60 seconds
+            if (re.timestamp >= cutoff) {
+                recentRuns++;
+                recentTotalTime += re.runTime;
+                recentTotalPending += re.lag;
+
+                if (recentMaxTime < 0 || re.runTime > recentMaxTime) recentMaxTime = re.runTime;
+                if (recentMinTime < 0 || re.runTime < recentMinTime) recentMinTime = re.runTime;
+                if (recentMaxPending < 0 || re.lag > recentMaxPending) recentMaxPending = re.lag;
+                if (recentMinPending < 0 || re.lag < recentMinPending) recentMinPending = re.lag;
+            }
+        }
+
+        return new RecentStats(recentRuns, recentTotalTime, recentMaxTime, recentMinTime,
+                              recentTotalPending, recentMaxPending, recentMinPending);
+    }
+
+    /** Container for recent statistics within the sliding window @since 0.9.68+ */
+    public static class RecentStats {
+        public final long runs;
+        public final long totalTime;
+        public final long maxTime;
+        public final long minTime;
+        public final long totalPendingTime;
+        public final long maxPendingTime;
+        public final long minPendingTime;
+
+        RecentStats(long runs, long totalTime, long maxTime, long minTime,
+                   long totalPendingTime, long maxPendingTime, long minPendingTime) {
+            this.runs = runs;
+            this.totalTime = totalTime;
+            this.maxTime = maxTime;
+            this.minTime = minTime;
+            this.totalPendingTime = totalPendingTime;
+            this.maxPendingTime = maxPendingTime;
+            this.minPendingTime = minPendingTime;
+        }
+
+        public double getAvgTime() {
+            return runs > 0 ? totalTime / (double) runs : 0;
+        }
+
+        public double getAvgPendingTime() {
+            return runs > 0 ? totalPendingTime / (double) runs : 0;
+        }
     }
 
 }

@@ -54,5 +54,8 @@
 #pconfig:hover #pluginTotals{color:var(--ink)}#.tIn{background:url(/themes/console/images/inbound.svg) no-repeat 6px center/16px,var(--badge)}
 #sidebar h3:hover .badge{margin:0;width:0;font-size:0;opacity:0}
 #ssuadv a{display:inline-block;vertical-align:text-top;text-transform:none;letter-spacing:0;font-size:85%}
+#toggleJobstats,#totaljobstats #lag{float:right}
+#toggleJobstats{pointer-events:auto}
+#totaljobstats:hover #lag,#totaljobstats:not(:hover) #toggleJobstats{display:none}
 #tunnelconfig .tunnelName{margin-right:6px;min-width:240px;display:inline-block}
 #tunnelconfig .tunnelName::before{margin:-4px 6px -4px 0;width:20px;height:20px;display:inline-block;vertical-align:middle;background:url(/themes/console/images/hardhat.svg) no-repeat center center/20px;content:""}
