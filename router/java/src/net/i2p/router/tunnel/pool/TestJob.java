@@ -54,7 +54,7 @@ public class TestJob extends JobImpl {
     private static final int MAX_CONCURRENT_TESTS = SystemVersion.isSlow() ? 16 : 32;
 
     // Adaptive testing frequency constants
-    private static final int BASE_TEST_DELAY = 75 * 1000; // 75s base
+    private static final int BASE_TEST_DELAY = 60 * 1000; // 60s base - increased frequency
     private static final int MIN_TEST_DELAY = 30 * 1000; // 30s minimum
     private static final int MAX_TEST_DELAY = 120 * 1000; // 120s maximum
     private static final int SUCCESS_HISTORY_SIZE = 3; // Track last 3 results
@@ -412,11 +412,23 @@ public class TestJob extends JobImpl {
 
         long maxLag = ctx.jobQueue().getMaxLag();
         long avgLag = ctx.jobQueue().getAvgLag();
-        if (maxLag > 5000 || avgLag > 100) {
-            // Skip exploratory tunnels first under extreme pressure
+        
+        // Aggressive job lag gating - skip all tests when lag is high
+        if (maxLag > 3000) {
+            // Skip all tunnel tests when lag exceeds 3 seconds
+            if (_log.shouldWarn()) {
+                _log.warn("Aborted ALL tunnel tests due to high job lag (Max: " + maxLag + "ms) → " + _cfg);
+            }
+            ctx.statManager().addRateData("tunnel.testAbortedHighLag", _cfg.getLength());
+            decrementTotalJobs();
+            return; // Exit without rescheduling - test will be rescheduled normally later
+        }
+        
+        if (maxLag > 1500 || avgLag > 50) {
+            // Skip exploratory tunnels under moderate pressure
             if (isExploratory) {
                 if (_log.shouldInfo()) {
-                    _log.info("Skipping exploratory tunnel test due to severe job lag (Max: " + maxLag + " / Avg: " + avgLag + "ms) -> " + _cfg);
+                    _log.info("Skipping exploratory tunnel test due to job lag (Max: " + maxLag + " / Avg: " + avgLag + "ms) -> " + _cfg);
                 }
                 ctx.statManager().addRateData("tunnel.testExploratorySkipped", _cfg.getLength());
                 if (!scheduleRetest(false)) {
@@ -425,7 +437,9 @@ public class TestJob extends JobImpl {
                 }
                 return;
             }
+        }
 
+        if (maxLag > 5000 || avgLag > 100) {
             // Still test client tunnels unless lag is extreme
             if (_log.shouldWarn()) {
                 _log.warn("Aborted test due to severe max job lag (Max: " + maxLag + " / Avg: " + avgLag + "ms) → " + _cfg);
