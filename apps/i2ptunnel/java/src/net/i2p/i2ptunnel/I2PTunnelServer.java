@@ -664,7 +664,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                             }
                         }
                     }, connectionExecutor).exceptionally(ex -> {
-                        _log.warn("Async handler task failed for " + remoteHost + ':' + remotePort, ex);
+                        _log.warn("Async build handler task failed for " + remoteHost + ':' + remotePort, ex);
                         return null;
                     });
                 } catch (RejectedExecutionException ree) {
