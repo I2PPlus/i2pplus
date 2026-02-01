@@ -686,6 +686,8 @@ public class HostChecker {
             options.setProperty("i2cp.leaseSetType", "3");
             options.setProperty("i2cp.leaseSetEncType", "6,4");
             options.setProperty("i2cp.dontPublishLeaseSet", "true");
+            // Short tunnel build timeout for HostChecker - fail fast and move on to eephead
+            options.setProperty("i2cp.tunnelBuildTimeout", "60");
 
             pingSocketManager = I2PSocketManagerFactory.createManager(options);
 

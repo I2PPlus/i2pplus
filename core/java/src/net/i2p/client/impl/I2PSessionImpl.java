@@ -715,9 +715,13 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
 
             // wait until we have created a lease set
             int waitcount = 0;
+            // Allow custom timeout via property (in seconds), default 20 minutes
+            int maxWaitSeconds = _options != null ? 
+                Integer.parseInt(_options.getProperty("i2cp.tunnelBuildTimeout", "1200")) : 1200;
             while (_leaseSet == null) {
-                if (waitcount++ > 20*60) {
-                    throw new IOException("No tunnels built after waiting 20 minutes. Your network connection may be down, or there is severe network congestion.");
+                if (waitcount++ > maxWaitSeconds) {
+                    throw new IOException("No tunnels built after waiting " + (maxWaitSeconds/60) + 
+                        " minutes. Your network connection may be down, or there is severe network congestion.");
                 }
                 synchronized (_leaseSetWait) {_leaseSetWait.wait(1000);} // InterruptedException caught below
                 // if we got a disconnect message while waiting

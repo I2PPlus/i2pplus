@@ -299,7 +299,10 @@ public class I2PSocketManagerFactory {
                 }
             }
             if (isHostChecker) {
-                getLog().log(Log.WARN, msg);
+                // Silent for HostChecker - tunnel failures are expected and handled
+                if (getLog().shouldDebug()) {
+                    getLog().debug(msg);
+                }
             } else {
                 getLog().log(Log.ERROR, msg);
             }
