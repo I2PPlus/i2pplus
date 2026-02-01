@@ -76,6 +76,15 @@ class RequestLeaseSetJob extends JobImpl {
              */
             long earliest = maxFudge + _requestState.getCurrentEarliestLeaseDate();
             if (endTime < earliest) {endTime = earliest;}
+            /**
+             * Ensure endTime is in the future relative to current time to prevent
+             * "LeaseSet expired" errors during signing. This can happen when tunnel
+             * building takes longer than expected and lease end dates are already
+             * in the past by the time they reach the client.
+             */
+            long now = getContext().clock().now();
+            long minFutureTime = now + 30*1000; // 30 second minimum buffer
+            if (endTime < minFutureTime) {endTime = minFutureTime;}
         } else {
             long diff = endTime - getContext().clock().now();
             long fudge = maxFudge - (diff / (10*60*1000 / maxFudge));

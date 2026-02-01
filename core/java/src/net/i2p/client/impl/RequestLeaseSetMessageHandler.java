@@ -149,10 +149,6 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
             }
             if (props != null) {ls2.setOptions(props);}
 
-            // ensure 1-second resolution timestamp is higher than last one
-            long now = Math.max(_context.clock().now(), session.getLastLS2SignTime() + 1000);
-            ls2.setPublished(now);
-            session.setLastLS2SignTime(now);
             leaseSet = ls2;
         } else {leaseSet = new LeaseSet();}
         // Full Meta support TODO
@@ -170,6 +166,30 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
             lease.setEndDate(msg.getEndDate().getTime());
             //lease.setStartDate(msg.getStartDate());
             leaseSet.addLease(lease);
+        }
+        // For LS2, set published time AFTER leases are added to ensure published
+        // time is not later than lease expiration. This prevents "LeaseSet expired"
+        // errors when tunnel building delays cause lease end dates to be in the past.
+        if (isLS2) {
+            LeaseSet2 ls2 = (LeaseSet2) leaseSet;
+            long earliestLeaseEnd = ls2.getEarliestLeaseDate();
+            long now = _context.clock().now();
+            // ensure 1-second resolution timestamp is higher than last one
+            // but not later than the earliest lease end date
+            long publishedTime = Math.max(now, session.getLastLS2SignTime() + 1000);
+            if (earliestLeaseEnd > 0 && publishedTime >= earliestLeaseEnd) {
+                // Set published time slightly before earliest lease end to avoid expiration
+                publishedTime = earliestLeaseEnd - 1000;
+                if (publishedTime <= session.getLastLS2SignTime()) {
+                    publishedTime = session.getLastLS2SignTime() + 1000;
+                }
+                if (_log.shouldWarn()) {
+                    _log.warn("Adjusted LS2 published time to avoid expiration published=" + publishedTime +
+                              " earliestLease=" + earliestLeaseEnd);
+                }
+            }
+            ls2.setPublished(publishedTime);
+            session.setLastLS2SignTime(publishedTime);
         }
         signLeaseSet(leaseSet, isLS2, session);
     }
