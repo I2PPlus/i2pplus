@@ -1026,7 +1026,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             _lastBatchProcessTime = now;
             BatchRepublishJob batchJob = new BatchRepublishJob(_context);
             batchJob.getTiming().setStartAfter(now + BATCH_PROCESS_DELAY);
-            _context.jobQueue().addJob(batchJob);
+            // High priority - LeaseSet republishing is critical for network connectivity
+            _context.jobQueue().addJobToTop(batchJob);
             if (_log.shouldDebug()) {
                 _log.debug("Scheduled batch republish job for " + _batchRepublishQueue.size() + " LeaseSets");
             }

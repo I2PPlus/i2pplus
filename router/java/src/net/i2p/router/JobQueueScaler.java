@@ -53,6 +53,7 @@ class JobQueueScaler implements Runnable {
     private int _consecutiveFailedScaleUps;
     private boolean _isInExtendedCooldown;
     private boolean _scalingUpDisabled; // Circuit breaker after repeated failures
+    private long _circuitBreakerOpenTime; // When the circuit breaker was opened
 
     // Feedback configuration
     private static final int FEEDBACK_CHECKS_AFTER_SCALE = 3; // Check 3 times after scaling
@@ -60,6 +61,8 @@ class JobQueueScaler implements Runnable {
     private static final long EXTENDED_COOLDOWN_MULTIPLIER = 3; // 3x normal cooldown after failed scale
     private static final double LAG_INCREASE_THRESHOLD = 1.2; // If lag increased by 20%, consider it failed (tight for sub-ms targets)
     private static final double READY_JOBS_INCREASE_THRESHOLD = 1.1; // If ready jobs increased by 10%, consider it failed
+    private static final long CIRCUIT_BREAKER_RESET_TIME = 5*60*1000; // Reset circuit breaker after 5 minutes
+    private static final long LAG_EMERGENCY_THRESHOLD = 100; // 100ms - emergency scaling threshold
 
     // RAM-based limits
     private static final long MB = 1024 * 1024;
@@ -393,6 +396,9 @@ class JobQueueScaler implements Runnable {
         // Get active job duration for monitoring
         long activeJobMaxDuration = _jobQueue.getMaxActiveJobDuration();
 
+        // Calculate emergency mode early - we need this for feedback check decision
+        boolean emergencyMode = maxLag > LAG_EMERGENCY_THRESHOLD || activeJobMaxDuration > LAG_EMERGENCY_THRESHOLD;
+
         // Debug logging every 10 seconds to trace scaler decisions
         if (_log.shouldDebug() && (_checksSinceLastScale % 10 == 0)) {
             _log.debug("JobQueueScaler check: runners=" + activeRunners + "/" + maxRunners +
@@ -404,25 +410,63 @@ class JobQueueScaler implements Runnable {
         }
 
         // Check if we need to evaluate feedback from last scale-up
-        if (_preScaleSnapshot != null && isFeedbackEnabled()) {
+        // Skip feedback checks during emergency conditions - we need immediate scaling action
+        if (_preScaleSnapshot != null && isFeedbackEnabled() && !emergencyMode) {
             _checksSinceLastScale++;
 
             if (_checksSinceLastScale >= FEEDBACK_CHECKS_AFTER_SCALE) {
                 evaluateScalingFeedback(activeRunners, readyJobs, maxLag, avgLag);
                 return; // Skip this cycle's scaling decisions
             }
-            // Still in feedback period - skip scaling decisions
+            // Still in feedback period - skip scaling decisions (unless emergency)
             return;
         }
+        // Clear feedback state in emergency mode to allow immediate re-scaling
+        if (emergencyMode && _preScaleSnapshot != null) {
+            _preScaleSnapshot = null;
+            _checksSinceLastScale = 0;
+        }
 
-        // Don't scale up if circuit breaker is open
+        // Check if circuit breaker should be reset
         if (_scalingUpDisabled) {
-            if (_log.shouldWarn()) {
-                _log.warn("Scaling up is disabled due to repeated failed attempts");
+            long timeSinceBreakerOpen = now - _circuitBreakerOpenTime;
+            if (timeSinceBreakerOpen > CIRCUIT_BREAKER_RESET_TIME) {
+                _scalingUpDisabled = false;
+                _consecutiveFailedScaleUps = 0;
+                _isInExtendedCooldown = false;
+                if (_log.shouldWarn()) {
+                    _log.warn("CIRCUIT BREAKER RESET: Scaling up re-enabled after " +
+                              (timeSinceBreakerOpen/1000) + " seconds");
+                }
+            } else {
+                // Still in circuit breaker period - only allow scale down
+                if (_log.shouldDebug()) {
+                    _log.debug("Scaling up disabled - circuit breaker open for " +
+                              (timeSinceBreakerOpen/1000) + "/" + (CIRCUIT_BREAKER_RESET_TIME/1000) + " seconds");
+                }
+                checkScaleDown(activeRunners, readyJobs, maxLag, avgLag, minRunners, inCooldown);
+                return;
             }
-            // Only allow scale down
-            checkScaleDown(activeRunners, readyJobs, maxLag, avgLag, minRunners, inCooldown);
-            return;
+        }
+
+        if (emergencyMode && !inCooldown && activeRunners < maxRunners) {
+            int emergencyRunnersNeeded = (int) (maxLag / LAG_EMERGENCY_THRESHOLD);
+            int emergencyStep = Math.min(emergencyRunnersNeeded, 8); // Add up to 8 runners in emergency
+            int targetRunners = Math.min(activeRunners + emergencyStep, maxRunners);
+            int runnersToAdd = targetRunners - activeRunners;
+
+            if (runnersToAdd > 0) {
+                if (_log.shouldWarn()) {
+                    _log.warn("EMERGENCY SCALING: Adding " + runnersToAdd + " runners immediately! " +
+                              "Max lag=" + maxLag + "ms, Active duration=" + activeJobMaxDuration + "ms. " +
+                              "Runners: " + activeRunners + "/" + maxRunners);
+                }
+                // Skip feedback in emergency mode - we need immediate action
+                _preScaleSnapshot = null;
+                _checksSinceLastScale = 0;
+                scaleUp(runnersToAdd, readyJobs, maxLag, avgLag);
+                return;
+            }
         }
 
         // Determine if we should scale up
@@ -553,10 +597,11 @@ class JobQueueScaler implements Runnable {
             // Circuit breaker: if we've failed too many times, disable scaling up
             if (_consecutiveFailedScaleUps >= MAX_CONSECUTIVE_FAILED_SCALES) {
                 _scalingUpDisabled = true;
+                _circuitBreakerOpenTime = _context.clock().now();
                 if (_log.shouldError()) {
                     _log.error("CIRCUIT BREAKER OPEN: Scaling up is now disabled due to " +
                               _consecutiveFailedScaleUps + " consecutive failed attempts. " +
-                              "Jobs may be CPU-bound. Will only scale down when load is low.");
+                              "Will reset after " + (CIRCUIT_BREAKER_RESET_TIME/1000) + " seconds.");
                 }
             }
         } else {

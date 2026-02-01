@@ -114,7 +114,7 @@ public class JobQueue {
         _context = context;
         _log = context.logManager().getLog(JobQueue.class);
 
-        _context.statManager().createRateStat("jobQueue.droppedJobs", "Scheduled jobs dropped due to insane overload", "JobQueue", RATES);
+        _context.statManager().createRateStat("jobQueue.droppedJobs", "Scheduled jobs dropped due to overload", "JobQueue", RATES);
         _context.statManager().createRateStat("jobQueue.queuedJobs", "Scheduled jobs in queue", "JobQueue", RATES);
         _context.statManager().createRateStat("jobQueue.readyJobs", "Ready and waiting scheduled jobs", "JobQueue", RATES);
         _context.statManager().createRateStat("jobQueue.testJobCount", "Number of TestJob instances in queue", "JobQueue", RATES);
@@ -273,7 +273,7 @@ public class JobQueue {
     public long getMaxActiveJobDuration() {
         long now = _context.clock().now();
         long maxDuration = 0;
-        
+
         for (JobQueueRunner runner : _queueRunners.values()) {
             if (runner.getCurrentJob() != null) {
                 long beginTime = runner.getLastBegin();
@@ -285,7 +285,7 @@ public class JobQueue {
                 }
             }
         }
-        
+
         return maxDuration;
     }
 
@@ -417,7 +417,10 @@ public class JobQueue {
         // Also drop based on queue size to prevent memory bloat
         boolean highLag = getMaxLag() >= MIN_LAG_TO_DROP;
         if (highLag || numReady > maxWaitingJobs) {
+            // NEVER drop RepublishLeaseSetJob or BatchRepublishJob - critical for network connectivity
             if (cls == RepublishLeaseSetJob.class) {return false;}
+            String jobName = job.getName();
+            if (jobName != null && jobName.contains("Republish LeaseSets")) {return false;}
             if ((!disableTunnelTests && cls == TestJob.class) ||
                 cls == PeerTestJob.class ||
                 cls == ExploreJob.class ||
@@ -650,17 +653,17 @@ public class JobQueue {
      */
     synchronized void addRunners(int count) {
         if (!_allowParallelOperation || !_alive) return;
-        
+
         int currentSize = _queueRunners.size();
         int targetSize = currentSize + count;
-        
+
         for (int i = currentSize; i < targetSize; i++) {
             JobQueueRunner runner = new JobQueueRunner(_context, i);
             _queueRunners.put(Integer.valueOf(i), runner);
             runner.setName("JobQueue " + _runnerId.incrementAndGet() + '/' + targetSize + " (scaled)");
             runner.start();
         }
-        
+
         if (_log.shouldInfo()) {
             _log.info("Added " + count + " runners. Total: " + _queueRunners.size());
         }
@@ -677,14 +680,14 @@ public class JobQueue {
      */
     synchronized int removeIdleRunners(int maxToRemove) {
         if (!_alive) return 0;
-        
+
         int removed = 0;
         Iterator<Map.Entry<Integer, JobQueueRunner>> iter = _queueRunners.entrySet().iterator();
-        
+
         while (iter.hasNext() && removed < maxToRemove) {
             Map.Entry<Integer, JobQueueRunner> entry = iter.next();
             JobQueueRunner runner = entry.getValue();
-            
+
             // Only remove if runner is idle (not processing a job)
             if (runner.getCurrentJob() == null) {
                 runner.stopRunning();
@@ -692,11 +695,11 @@ public class JobQueue {
                 removed++;
             }
         }
-        
+
         if (removed > 0 && _log.shouldInfo()) {
             _log.info("Removed " + removed + " idle runners. Total: " + _queueRunners.size());
         }
-        
+
         return removed;
     }
 
