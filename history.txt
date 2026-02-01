@@ -1,3 +1,7 @@
+2026-02-01 dr|z3d
+ * Addressbook: Dynamically throttle hostchecker concurrency based
+   on router job lag
+
 2026-01-30 dr|z3d
  * I2PSnark: Optimize DHT for more efficient memory management
  * Console: Enhance and declutter presentation of jobs on /jobqueue

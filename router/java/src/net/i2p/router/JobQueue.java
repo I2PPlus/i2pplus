@@ -87,9 +87,9 @@ public class JobQueue {
     private final static long DEFAULT_WARMUP_TIME = 15*60*1000;
     private long _warmupTime = DEFAULT_WARMUP_TIME;
     /** Max ready and waiting jobs before we start dropping 'em */
-    private final static int DEFAULT_MAX_WAITING_JOBS = SystemVersion.isSlow() ? 100 : 200;
+    private final static int DEFAULT_MAX_WAITING_JOBS = RUNNERS * 4;
     private int _maxWaitingJobs = DEFAULT_MAX_WAITING_JOBS;
-    private final static long MIN_LAG_TO_DROP = SystemVersion.isSlow() ? 500 : 200;
+    private final static long MIN_LAG_TO_DROP = 1000; // 1 second
 
     /**
      *  @since 0.9.52+
@@ -380,23 +380,12 @@ public class JobQueue {
 
         Class<? extends Job> cls = job.getClass();
         boolean disableTunnelTests = _context.getBooleanProperty("router.disableTunnelTesting");
+        int maxWaitingJobs = _context.getProperty(PROP_MAX_WAITING_JOBS, DEFAULT_MAX_WAITING_JOBS);
 
         // Drop based on lag alone - prevents lag from building up
-        boolean highLag = getMaxLag() >= MIN_LAG_TO_DROP;
-        if (highLag) {
-            if (cls == RepublishLeaseSetJob.class) {return false;}
-            if ((!disableTunnelTests && cls == TestJob.class) ||
-                cls == PeerTestJob.class ||
-                cls == ExploreJob.class ||
-                cls == HandleFloodfillDatabaseLookupMessageJob.class ||
-                cls == HandleGarlicMessageJob.class ||
-                cls == IterativeSearchJob.class) {
-                return true;
-            }
-        }
-
         // Also drop based on queue size to prevent memory bloat
-        if (numReady > _context.getProperty(PROP_MAX_WAITING_JOBS, DEFAULT_MAX_WAITING_JOBS)) {
+        boolean highLag = getMaxLag() >= MIN_LAG_TO_DROP;
+        if (highLag || numReady > maxWaitingJobs) {
             if (cls == RepublishLeaseSetJob.class) {return false;}
             if ((!disableTunnelTests && cls == TestJob.class) ||
                 cls == PeerTestJob.class ||
