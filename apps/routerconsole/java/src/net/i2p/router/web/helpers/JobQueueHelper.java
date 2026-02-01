@@ -100,11 +100,6 @@ public class JobQueueHelper extends HelperBase {
 
         StringBuilder buf = new StringBuilder(32*1024);
         buf.append("<div class=joblog>");
-        if (isAdvanced()) {
-            buf.append("<h2 id=jobrunners>").append(_t("Job runners"))
-               .append(": ").append(numRunners).append("</h2>\n");
-        }
-
         long now = _context.clock().now();
 
         if ((activeJobs.size() != 0) && (isAdvanced())) {
@@ -122,8 +117,13 @@ public class JobQueueHelper extends HelperBase {
         }
 
         if ((justFinishedJobs.size() != 0) && (isAdvanced())) {
+            int maxRunners = _context.jobQueue().getMaxRunnerCount();
             buf.append("<h3 id=finishedjobs>")
                .append(_t("Completed jobs")).append(": ").append(justFinishedJobs.size())
+               .append(" <span id=jobRunners>").append(_t("Runners")).append(": ")
+               .append(_t("Active")).append(": ").append(numRunners)
+               .append(" / ").append(_t("Max")).append(": ").append(maxRunners)
+               .append("</span>")
                .append("</h3>\n<ol class=jobqueue>\n");
 
             // Group finished jobs by name and completion time
