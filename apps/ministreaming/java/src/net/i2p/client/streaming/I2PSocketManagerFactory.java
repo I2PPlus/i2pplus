@@ -289,7 +289,20 @@ public class I2PSocketManagerFactory {
         try {
             return createManager(myPrivateKeyStream, i2cpHost, i2cpPort, opts, true, filter);
         } catch (I2PSessionException ise) {
-            getLog().error("Error creating session for Socket Manager: " + ise.getMessage());
+            // Downgrade to warning if called from HostChecker, as tunnel build failures are expected during high load
+            String msg = "Error creating session for Socket Manager: " + ise.getMessage();
+            boolean isHostChecker = false;
+            for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {
+                if (ste.getClassName().contains("HostChecker")) {
+                    isHostChecker = true;
+                    break;
+                }
+            }
+            if (isHostChecker) {
+                getLog().log(Log.WARN, msg);
+            } else {
+                getLog().log(Log.ERROR, msg);
+            }
             return null;
         }
     }
