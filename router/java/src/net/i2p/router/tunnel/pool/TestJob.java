@@ -724,6 +724,14 @@ public class TestJob extends JobImpl {
 
         _cfg.testJobSuccessful(ms);
 
+        // If tunnel was last resort and now passed, clear the flag
+        if (_cfg.isLastResort()) {
+            _cfg.clearLastResort();
+            if (_log.shouldInfo()) {
+                _log.info("Last resort tunnel recovered and cleared: " + _cfg);
+            }
+        }
+
         if (_log.shouldDebug()) {
             _log.debug("Tunnel Test [#" + _id + "] succeeded in " + ms + "ms → " + _cfg + " (Success rate: " +
                        String.format("%.1f%%", getSuccessRate() * 100) + ")");
@@ -822,6 +830,10 @@ public class TestJob extends JobImpl {
             isExploratory ? "tunnel.testExploratoryFailedTime" : "tunnel.testFailedTime",
             timeToFail);
 
+        // Check if this is the last tunnel in the pool for non-exploratory pools
+        int tunnelCount = _pool.getTunnelCount();
+        boolean isLastTunnel = !isExploratory && tunnelCount <= 1;
+        
         // Only fail the tunnel under test — do NOT blame _otherTunnel
         // Increment the tunnel's global failure count and check if we should continue
         boolean keepGoing = _cfg.tunnelFailed(); // This increments the counter and returns true if < MAX_CONSECUTIVE_TEST_FAILURES
@@ -830,7 +842,23 @@ public class TestJob extends JobImpl {
         _cfg.setTestFailed();
 
         if (_log.shouldWarn()) {
-            _log.warn((isExploratory ? "Exploratory tunnel" : "Tunnel") + " Test failed in " + timeToFail + "ms → " + _cfg);
+            _log.warn((isExploratory ? "Exploratory tunnel" : "Tunnel") + " Test failed in " + timeToFail + "ms → " + _cfg +
+                      (isLastTunnel ? " [LAST TUNNEL - keeping as last resort]" : ""));
+        }
+
+        // If this is the last tunnel, mark it as last resort instead of removing
+        if (isLastTunnel && !keepGoing) {
+            _cfg.setLastResort();
+            if (_log.shouldWarn()) {
+                _log.warn("Tunnel marked as last resort (only tunnel in pool): " + _cfg);
+            }
+            // Trigger immediate replacement build
+            _pool.triggerReplacementBuild();
+            // Still schedule retest to see if it recovers
+            if (!scheduleRetest(false)) {
+                decrementTotalJobs();
+            }
+            return;
         }
 
         if (keepGoing) {

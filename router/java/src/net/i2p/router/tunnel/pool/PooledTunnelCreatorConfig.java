@@ -13,6 +13,12 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
     private final TunnelPool _pool;
     // we don't store the config, that leads to OOM
     private TunnelId _pairedGW;
+    /** 
+     * When true, this tunnel is the last one in the pool and should not be removed
+     * until a replacement is built. It remains available but is only selected if
+     * no other tunnels are available.
+     */
+    private boolean _lastResort;
 
     /**
      *  Creates a new instance of PooledTunnelCreatorConfig
@@ -86,5 +92,25 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
      *  @since 0.9.53
      */
     public TunnelId getPairedGW() {return _pairedGW;}
+
+    /**
+     * Mark this tunnel as the last resort - the only tunnel remaining in the pool.
+     * It should not be removed until a replacement is built.
+     * @since 0.9.68+
+     */
+    public void setLastResort() {_lastResort = true;}
+
+    /**
+     * Clear the last resort status - tunnel has recovered or been replaced.
+     * @since 0.9.68+
+     */
+    public void clearLastResort() {_lastResort = false;}
+
+    /**
+     * Check if this tunnel is the last resort (only tunnel in pool).
+     * @return true if this is the last remaining tunnel
+     * @since 0.9.68+
+     */
+    public boolean isLastResort() {return _lastResort;}
 
 }

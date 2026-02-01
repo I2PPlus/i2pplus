@@ -197,6 +197,7 @@ public class TunnelPool {
         long now = _context.clock().now();
         long uptime = _context.router().getUptime();
         boolean shouldWarn = false;
+        TunnelInfo lastResortTunnel = null;
         synchronized (_tunnels) {
             if (_tunnels.isEmpty()) {
                shouldWarn = _log.shouldWarn() && uptime > STARTUP_TIME && shouldLogNoTunnelsWarning();
@@ -209,6 +210,12 @@ public class TunnelPool {
                         _lastSelectedIdx++;
                         if (_lastSelectedIdx >= _tunnels.size()) {_lastSelectedIdx = 0;}
                         TunnelInfo info = _tunnels.get(_lastSelectedIdx);
+                        // Skip last resort tunnels on first pass - only use if no other option
+                        if (info instanceof PooledTunnelCreatorConfig && 
+                            ((PooledTunnelCreatorConfig)info).isLastResort()) {
+                            lastResortTunnel = info;
+                            continue;
+                        }
                         if (info.getLength() > 1 && info.getExpiration() > now) {
                             // avoid outbound tunnels where the 1st hop is backlogged
                             if (_settings.isInbound() || !_context.commSystem().isBacklogged(info.getPeer(1))) {
@@ -227,6 +234,12 @@ public class TunnelPool {
                 // ok, either we are ok using zero hop tunnels, or only fallback tunnels remain.  pick 'em randomly
                 for (int i = 0; i < _tunnels.size(); i++) {
                     TunnelInfo info = _tunnels.get(i);
+                    // Skip last resort tunnels on first pass - only use if no other option
+                    if (info instanceof PooledTunnelCreatorConfig && 
+                        ((PooledTunnelCreatorConfig)info).isLastResort()) {
+                        lastResortTunnel = info;
+                        continue;
+                    }
                     if (info.getExpiration() > now) {
                         // avoid outbound tunnels where the 1st hop is backlogged
                         if (_settings.isInbound() || info.getLength() <= 1 ||
@@ -244,6 +257,15 @@ public class TunnelPool {
                 //    _log.warn(toString() + ": after " + _tunnels.size() + " tries -> No unexpired tunnels were found: " + _tunnels);
                 //}
             }
+        }
+        
+        // If we found a last resort tunnel and no other options, use it
+        if (lastResortTunnel != null) {
+            if (_log.shouldInfo()) {
+                _log.info("Using last resort tunnel for " + this + ": " + lastResortTunnel);
+            }
+            resetConsecutiveTimeoutsOnSuccess();
+            return lastResortTunnel;
         }
 
         if (shouldWarn) {
@@ -552,6 +574,98 @@ public class TunnelPool {
             }
         }
         if (info.getExpiration() > now + 60*1000 && ls != null) {requestLeaseSet(ls);}
+        
+        // Check if we can now remove any last resort tunnels since we have a replacement
+        if (info.getExpiration() > now + 60*1000) {
+            cleanupLastResortTunnels();
+            // If we added a multi-hop tunnel, remove zero-hop fallbacks immediately
+            if (info.getLength() > 1 && _settings.isExploratory()) {
+                cleanupZeroHopTunnels();
+            }
+        }
+    }
+    
+    /**
+     *  Remove last resort tunnels if we have at least one healthy replacement.
+     *  Called when a new tunnel is added to the pool.
+     *  @since 0.9.68+
+     */
+    private void cleanupLastResortTunnels() {
+        List<TunnelInfo> toRemove = new ArrayList<>();
+        int healthyCount = 0;
+        
+        synchronized (_tunnels) {
+            // Count healthy (non-last-resort) tunnels
+            for (TunnelInfo t : _tunnels) {
+                if (t instanceof PooledTunnelCreatorConfig && 
+                    ((PooledTunnelCreatorConfig)t).isLastResort()) {
+                    // This is a last resort tunnel - mark for removal if we have healthy ones
+                    toRemove.add(t);
+                } else {
+                    healthyCount++;
+                }
+            }
+            
+            // Only remove last resort tunnels if we have at least 1 healthy tunnel
+            if (healthyCount >= 1 && !toRemove.isEmpty()) {
+                for (TunnelInfo t : toRemove) {
+                    _tunnels.remove(t);
+                }
+            } else {
+                // Don't remove if no healthy tunnels yet
+                toRemove.clear();
+            }
+        }
+        
+        // Actually perform the removals outside the synchronized block
+        for (TunnelInfo t : toRemove) {
+            if (_log.shouldInfo()) {
+                _log.info("Removing last resort tunnel after replacement built: " + t);
+            }
+            _manager.tunnelFailed(); // Signal that we need to update counts
+        }
+    }
+    
+    /**
+     *  Remove zero-hop fallback tunnels once we have multi-hop tunnels.
+     *  Called when a multi-hop tunnel is added to an exploratory pool.
+     *  This prevents keeping 0-hop tunnels around after bootstrap is complete.
+     *  @since 0.9.68+
+     */
+    private void cleanupZeroHopTunnels() {
+        List<TunnelInfo> zeroHopTunnels = new ArrayList<>();
+        int multiHopCount = 0;
+        
+        synchronized (_tunnels) {
+            // Find all zero-hop tunnels and count multi-hop tunnels
+            for (TunnelInfo t : _tunnels) {
+                if (t.getLength() <= 1) {
+                    // This is a zero-hop tunnel
+                    zeroHopTunnels.add(t);
+                } else {
+                    multiHopCount++;
+                }
+            }
+            
+            // Only remove zero-hop tunnels if we have at least 1 multi-hop tunnel
+            if (multiHopCount >= 1 && !zeroHopTunnels.isEmpty()) {
+                for (TunnelInfo t : zeroHopTunnels) {
+                    _tunnels.remove(t);
+                }
+            } else {
+                // Don't remove if no multi-hop tunnels yet
+                zeroHopTunnels.clear();
+            }
+        }
+        
+        // Actually perform the removals outside the synchronized block
+        for (TunnelInfo t : zeroHopTunnels) {
+            if (_log.shouldInfo()) {
+                _log.info("Removing zero-hop fallback tunnel after multi-hop tunnel added: " + t);
+            }
+            // Mark the tunnel as no longer needed
+            _manager.tunnelFailed();
+        }
     }
 
     /**
@@ -595,6 +709,25 @@ public class TunnelPool {
     void tunnelFailed(TunnelInfo cfg, Hash blamePeer) {
         fail(cfg);
         _context.profileManager().tunnelFailed(blamePeer, 100);
+    }
+
+    /**
+     *  Trigger an immediate replacement build for this pool.
+     *  Called when a tunnel is marked as last resort (only tunnel remaining).
+     *  Wakes up the BuildExecutor to prioritize building a replacement.
+     *
+     *  @since 0.9.68+
+     */
+    void triggerReplacementBuild() {
+        if (!isAlive()) return;
+        
+        if (_log.shouldInfo()) {
+            _log.info("Triggering replacement build for " + this + 
+                      " (current tunnels: " + getTunnelCount() + ")");
+        }
+        
+        // Wake up the BuildExecutor immediately
+        _manager.tunnelFailed();
     }
 
     /**
