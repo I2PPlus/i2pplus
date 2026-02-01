@@ -92,6 +92,14 @@
           if (jobName) oldRowsMap.set(jobName, row);
         });
 
+        const newJobNames = new Set(newRows.map(row => row.cells[0]?.textContent.trim()).filter(Boolean));
+        oldRowsMap.forEach((row, jobName) => {
+          if (!newJobNames.has(jobName)) {
+            row.remove();
+            oldRowsMap.delete(jobName);
+          }
+        });
+
         sorter.refresh();
         setTimeout(() => progressx.hide(), 500);
       });
