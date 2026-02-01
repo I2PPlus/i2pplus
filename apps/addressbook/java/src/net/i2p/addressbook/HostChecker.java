@@ -36,6 +36,7 @@ import net.i2p.data.Destination;
 import net.i2p.data.Hash;
 import net.i2p.data.LeaseSet;
 import net.i2p.router.Job;
+import net.i2p.router.JobQueue;
 import net.i2p.router.JobTiming;
 import net.i2p.router.NetworkDatabaseFacade;
 import net.i2p.router.Router;
@@ -76,6 +77,7 @@ public class HostChecker {
     private static final long DEFAULT_PING_INTERVAL = 4 * 60 * 60 * 1000L; // 4 hours
     private static final long DEFAULT_PING_TIMEOUT = 60 * 1000L; // 60 seconds
     private static final int DEFAULT_MAX_CONCURRENT = 16;
+    private static final long MAX_JOB_LAG_MS = 2 * 1000L; // Skip cycle if job queue lag exceeds 2 seconds
 
     // Configuration property names
     private static final String PROP_PING_INTERVAL = "pingInterval";
@@ -1845,8 +1847,34 @@ public class HostChecker {
                 return;
             }
 
+            // Check router load and calculate dynamic concurrency limit
+            final int dynamicMaxConcurrent;
+            if (_context instanceof RouterContext) {
+                RouterContext routerContext = (RouterContext) _context;
+                JobQueue jobQueue = routerContext.jobQueue();
+                long maxLag = jobQueue.getMaxLag();
+                // Scale concurrency from 1 (high lag) to _maxConcurrent (low lag)
+                if (maxLag > MAX_JOB_LAG_MS) {
+                    // At 2s lag: 1 concurrent, at higher lag: remain at 1
+                    dynamicMaxConcurrent = 1;
+                    if (_log.shouldWarn()) {
+                        _log.warn("Router under load (job queue lag: " + maxLag + "ms) - throttling HostChecker to 1 concurrent check");
+                    }
+                } else if (maxLag > 1000) {
+                    // At 1-2s lag: scale linearly from 2 to _maxConcurrent
+                    dynamicMaxConcurrent = Math.max(2, (int) (_maxConcurrent * (1.0 - (maxLag - 1000.0) / 1000.0)));
+                } else {
+                    dynamicMaxConcurrent = _maxConcurrent;
+                }
+            } else {
+                dynamicMaxConcurrent = _maxConcurrent;
+            }
+
             // Refresh categories from notbob.i2p at the start of each cycle
             refreshCategories();
+
+            // Create dynamic semaphore based on current router load
+            final Semaphore dynamicSemaphore = new Semaphore(dynamicMaxConcurrent);
 
             // Get all hostnames and randomize order
             Set<String> allHostnamesSet = getAllHostnames();
@@ -1912,7 +1940,7 @@ public class HostChecker {
                             public Void call() throws Exception {
                                 try {
                                     // Acquire semaphore permit to limit concurrent pings
-                                    _pingSemaphore.acquire();
+                                    dynamicSemaphore.acquire();
 
                                     // Then add random delay (up to 5s)
                                     int randomDelay = 2000 + _context.random().nextInt(3000);
@@ -1926,7 +1954,7 @@ public class HostChecker {
                                     return null;
                                 } finally {
                                     // Always release semaphore permit
-                                    _pingSemaphore.release();
+                                    dynamicSemaphore.release();
                                 }
                             }
                         });
