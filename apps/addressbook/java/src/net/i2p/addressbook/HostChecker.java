@@ -163,7 +163,7 @@ public class HostChecker {
     }
 
     // Startup delay to allow router and socket manager to fully initialize
-    private static final long STARTUP_DELAY_MS = 60 * 1000L; // 1 minute
+    private static final long STARTUP_DELAY_MS = 10 * 60 * 1000L; // 10 minutes
 
     // Additional delay for category download to allow HTTP proxy to be ready
     private static final long CATEGORY_DOWNLOAD_DELAY_MS = 90 * 1000L; // 90 seconds
@@ -692,85 +692,101 @@ public class HostChecker {
             options.setProperty("i2cp.tunnelBuildTimeout", "60");
 
             pingSocketManager = I2PSocketManagerFactory.createManager(options);
-
-            if (pingSocketManager == null) {
+            boolean tunnelBuildFailed = (pingSocketManager == null);
+            
+            if (tunnelBuildFailed) {
                 if (_log.shouldWarn()) {
-                    _log.warn("Failed to create SocketManager for HostChecker ping -> " + displayHostname + " [6,4]");
+                    _log.warn("Failed to create SocketManager for HostChecker ping -> " + displayHostname + " [6,4], will try eephead");
                 }
-                return createPingResult(false, startTime, System.currentTimeMillis() - startTime, hostname, leaseSetTypes);
-            }
-
-            long tunnelBuildTime = System.currentTimeMillis() - tunnelBuildStart;
-            if (_log.shouldDebug()) {
-                _log.debug("SocketManager ready for HostChecker ping in " + tunnelBuildTime + "ms -> " + displayHostname + " [6,4]");
-            }
-
-            long tunnelReadyTimeout = System.currentTimeMillis() + 30000;
-            while (System.currentTimeMillis() < tunnelReadyTimeout) {
-                if (pingSocketManager != null && !pingSocketManager.isDestroyed()) {
-                    try {
-                        net.i2p.client.I2PSession session = pingSocketManager.getSession();
-                        if (session != null && !session.isClosed()) {
-                            if (_useLeaseSetCheck && _context instanceof RouterContext) {
-                                RouterContext routerContext = (RouterContext) _context;
-                                net.i2p.data.Hash destHash = destination.calculateHash();
-                                net.i2p.data.LeaseSet ls = routerContext.clientNetDb(destHash).lookupLeaseSetLocally(destHash);
-                                if (ls != null && routerContext.tunnelManager().getOutboundClientTunnelCount(destHash) > 0) {
-                                    long timeToExpire = ls.getEarliestLeaseDate() - _context.clock().now();
-                                    if ((timeToExpire >= 0) && ls.isCurrent(0)) {
-                                        break;
-                                    }
-                                }
-                            } else {
-                                break;
-                            }
-                        }
-                    } catch (Exception e) {
-                    }
-                }
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException ie) {
-                    Thread.currentThread().interrupt();
-                    break;
-                }
-            }
-
-            long pingStart = System.currentTimeMillis();
-            boolean reachable = pingSocketManager.ping(destination, 0, 0, _pingTimeout);
-            long pingTime = System.currentTimeMillis() - pingStart;
-
-            if (reachable) {
-                PingResult result = createPingResult(true, startTime, pingTime, hostname, leaseSetTypes);
-                if (saveResult) {
-                    synchronized (_pingResults) {
-                        _pingResults.put(hostname, result);
-                    }
-                    if (_log.shouldInfo()) {
-                        _log.info("HostChecker ping [SUCCESS] -> Received response from " + displayHostname + " " + leaseSetTypes + " in " + pingTime + "ms");
-                    }
-                    savePingResults();
-                } else {
-                    synchronized (_pingResults) {
-                        _pingResults.put(hostname, result);
-                    }
-                    savePingResults();
-                }
-                return result;
+                // Don't return - try eephead even when tunnel build fails
             } else {
-                PingResult result = createPingResult(false, startTime, -1, hostname, leaseSetTypes);
-                if (saveResult) {
-                    synchronized (_pingResults) {
-                        _pingResults.put(hostname, result);
+                long tunnelBuildTime = System.currentTimeMillis() - tunnelBuildStart;
+                if (_log.shouldDebug()) {
+                    _log.debug("SocketManager ready for HostChecker ping in " + tunnelBuildTime + "ms -> " + displayHostname + " [6,4]");
+                }
+
+                long tunnelReadyTimeout = System.currentTimeMillis() + 30000;
+                while (System.currentTimeMillis() < tunnelReadyTimeout) {
+                    if (pingSocketManager != null && !pingSocketManager.isDestroyed()) {
+                        try {
+                            net.i2p.client.I2PSession session = pingSocketManager.getSession();
+                            if (session != null && !session.isClosed()) {
+                                if (_useLeaseSetCheck && _context instanceof RouterContext) {
+                                    RouterContext routerContext = (RouterContext) _context;
+                                    net.i2p.data.Hash destHash = destination.calculateHash();
+                                    net.i2p.data.LeaseSet ls = routerContext.clientNetDb(destHash).lookupLeaseSetLocally(destHash);
+                                    if (ls != null && routerContext.tunnelManager().getOutboundClientTunnelCount(destHash) > 0) {
+                                        long timeToExpire = ls.getEarliestLeaseDate() - _context.clock().now();
+                                        if ((timeToExpire >= 0) && ls.isCurrent(0)) {
+                                            break;
+                                        }
+                                    }
+                                } else {
+                                    break;
+                                }
+                            }
+                        } catch (Exception e) {
+                        }
                     }
-                    savePingResults();
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                        break;
+                    }
+                }
+
+                long pingStart = System.currentTimeMillis();
+                boolean reachable = pingSocketManager.ping(destination, 0, 0, _pingTimeout);
+                long pingTime = System.currentTimeMillis() - pingStart;
+
+                if (reachable) {
+                    PingResult result = createPingResult(true, startTime, pingTime, hostname, leaseSetTypes);
+                    if (saveResult) {
+                        synchronized (_pingResults) {
+                            _pingResults.put(hostname, result);
+                        }
+                        if (_log.shouldInfo()) {
+                            _log.info("HostChecker ping [SUCCESS] -> Received response from " + displayHostname + " " + leaseSetTypes + " in " + pingTime + "ms");
+                        }
+                        savePingResults();
+                    } else {
+                        synchronized (_pingResults) {
+                            _pingResults.put(hostname, result);
+                        }
+                        savePingResults();
+                    }
+                    return result;
+                } else {
                     if (_log.shouldInfo()) {
                         _log.info("HostChecker ping [FAILURE] -> No response from " + displayHostname + " " + leaseSetTypes + ", trying eephead...");
                     }
-                    return fallbackToEepHead(hostname, startTime, leaseSetTypes, saveResult);
+                    // Continue to eephead fallback below
                 }
-                return result;
             }
+            
+            // Try eephead fallback (reaches here if tunnel build failed or ping failed)
+            PingResult eepheadResult = fallbackToEepHead(hostname, startTime, leaseSetTypes, saveResult, tunnelBuildFailed);
+            
+            // If eephead succeeded, destination is up
+            if (eepheadResult.reachable) {
+                return eepheadResult;
+            }
+            
+            // If tunnel build failed AND eephead failed, don't mark destination as down
+            // This is a local tunnel issue, not the destination's fault
+            if (tunnelBuildFailed) {
+                if (_log.shouldInfo()) {
+                    _log.info("HostChecker check INCONCLUSIVE for " + displayHostname + 
+                              " - both tunnel build and eephead failed (likely local issue, not marking as down)");
+                }
+                // Return the result but DON'T save it to pingResults
+                // This preserves the previous status until we can test again
+                return eepheadResult;
+            }
+            
+            // Tunnel built successfully but both ping and eephead failed - destination is down
+            return eepheadResult;
 
         } catch (Exception e) {
             PingResult result = createPingResult(false, startTime, -1, hostname, leaseSetTypes);
@@ -805,7 +821,7 @@ public class HostChecker {
      * Marks site as up if any response is received
      */
     private PingResult fallbackToEepHead(String hostname, long startTime) {
-        return fallbackToEepHead(hostname, startTime, null);
+        return fallbackToEepHead(hostname, startTime, null, true, false);
     }
 
     /**
@@ -813,15 +829,25 @@ public class HostChecker {
      * Marks site as up if any response is received
      */
     private PingResult fallbackToEepHead(String hostname, long startTime, String leaseSetTypes) {
-        return fallbackToEepHead(hostname, startTime, leaseSetTypes, true);
+        return fallbackToEepHead(hostname, startTime, leaseSetTypes, true, false);
+    }
+
+    /**
+     * Fallback method to use EepHead for HTTP HEAD request testing
+     * Marks site as up if any response is received
+     * @param saveResult whether to save the result to _pingResults
+     */
+    private PingResult fallbackToEepHead(String hostname, long startTime, String leaseSetTypes, boolean saveResult) {
+        return fallbackToEepHead(hostname, startTime, leaseSetTypes, saveResult, false);
     }
 
     /**
      * Fallback method to use EepHead for HTTP HEAD request testing
      * Marks site as up if any response is received
      * @param saveResult whether to save the result to _pingResults (false when LeaseSet lookup already succeeded)
+     * @param tunnelBuildFailed true if tunnel build failed, to avoid marking destination as down for local issues
      */
-    private PingResult fallbackToEepHead(String hostname, long startTime, String leaseSetTypes, boolean saveResult) {
+    private PingResult fallbackToEepHead(String hostname, long startTime, String leaseSetTypes, boolean saveResult, boolean tunnelBuildFailed) {
         try {
             String url = "http://" + hostname;
             EepHead eepHead = new EepHead(_context, "127.0.0.1", 4444, 1, url);
@@ -875,7 +901,20 @@ public class HostChecker {
             long responseTime = success ? System.currentTimeMillis() - eepHeadStart : -1;
 
             PingResult result = createPingResult(success, startTime, responseTime, hostname, leaseSetTypes);
-            if (saveResult || success) {
+            
+            // Determine if we should save this result
+            // Don't save failure if tunnel build failed - it's a local issue, not the destination's fault
+            boolean shouldSaveResult = saveResult || success;
+            if (!success && tunnelBuildFailed) {
+                // Both tunnel build and eephead failed - don't mark destination as down
+                shouldSaveResult = false;
+                if (_log.shouldInfo()) {
+                    _log.info("HostChecker head [FAILURE] -> No response from " + hostname + " " + leaseSetTypes + 
+                              " (tunnel build also failed - not marking as down)");
+                }
+            }
+            
+            if (shouldSaveResult) {
                 synchronized (_pingResults) {
                     _pingResults.put(hostname, result);
                 }
@@ -898,7 +937,8 @@ public class HostChecker {
             }
 
             PingResult result = createPingResult(false, startTime, -1, hostname, leaseSetTypes != null ? leaseSetTypes : "[]");
-            if (saveResult) {
+            // Don't save exception result if tunnel build failed - it's likely a local issue
+            if (saveResult && !tunnelBuildFailed) {
                 synchronized (_pingResults) {
                     _pingResults.put(hostname, result);
                 }
