@@ -16,6 +16,7 @@
 <jsp:getProperty name="jobQueueHelper" property="jobQueueSummary"/>
 </div>
 <script src=/js/refreshElements.js type=module></script>
+<script src=/js/jobs.js></script>
 <script nonce=<%=cspNonce%> type=module>
   import {refreshElements} from "/js/refreshElements.js";
   refreshElements("#jobs", "/jobqueue", 5000);

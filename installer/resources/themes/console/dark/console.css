@@ -674,6 +674,14 @@ h3[id*="jobs"]{clear:both;margin-top:25px}
 #statCount tr{border-top:var(--border_softer)}
 #statTotals td{border-top:var(--border)}
 #totaljobstats{margin-top:0}
+#jobRunners{margin-right:26px}#jobs .toggle:not(.expanded):hover .dropdown::after{background:var(--dropdown_hover);content:"";transform:rotate(-90deg)}
+#jobs .toggle{cursor:pointer}
+#jobs .toggle th{position:relative}
+#jobs .toggle .dropdown::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:""}
+#jobs .toggle:hover .dropdown::after{background:var(--dropdown_hover);content:""}
+#jobs .toggle:hover .tunnelName{color:var(--hover);cursor:pointer}
+#jobs .toggle:not(.expanded){margin-bottom:-1px}
+#jobs .toggle:not(.expanded) .dropdown::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:"";transform:rotate(-90deg)}
 
 /* stats */
 form#statnav{padding:10px 10px 10px 15px;border:var(--border)}

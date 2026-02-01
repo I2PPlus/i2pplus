@@ -1099,6 +1099,15 @@ h3#scheduledjobs+ol li::before{background:var(--timer) no-repeat 6px center/12px
 #jobstats th:nth-child(n+2){text-align:right}
 #jobstats tr:last-child{font-weight:700}
 #jobstats tr:last-child td{padding:5px;color:var(--ink_light)}
+#jobRunners{margin-right:26px}#jobs .toggle:not(.expanded):hover .dropdown::after{background:var(--dropdown_hover);content:"";transform:rotate(-90deg)}
+#jobs .toggle{position:relative;cursor:pointer}
+#jobs .toggle::after{position:absolute;top:auto;bottom:0;transform:none}
+#jobs .toggle th{position:relative}
+#jobs .toggle .dropdown::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:""}
+#jobs .toggle:hover .dropdown::after{background:var(--dropdown_hover);content:""}
+#jobs .toggle:hover .tunnelName{color:var(--hover);cursor:pointer}
+#jobs .toggle:not(.expanded){margin-bottom:-1px}
+#jobs .toggle:not(.expanded) .dropdown::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:"";transform:rotate(-90deg)}
 
 /* /stats */
 .joblog{border:0;margin-top:5px}
