@@ -1,4 +1,6 @@
 2026-02-01 dr|z3d
+ * Console: Display tunnel test status on /tunnels; don't display
+   transient HostChecker ping tables
  * Addressbook: Dynamically throttle hostchecker concurrency based
    on router job lag
 
