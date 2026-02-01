@@ -2546,7 +2546,7 @@ msgstr "Aktiivsed tööd"
 msgid "started {0} ago"
 msgstr "algas {0} tagasi"
 
-msgid "Just finished jobs"
+msgid "Completed jobs"
 msgstr "just lõpetatud tööd"
 
 #, java-format

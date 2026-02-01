@@ -2545,7 +2545,7 @@ msgstr "सक्रिय कार्य"
 msgid "started {0} ago"
 msgstr "{0} पहले शुरू हुआ"
 
-msgid "Just finished jobs"
+msgid "Completed jobs"
 msgstr "हाल ही में पूरा हुए कार्य"
 
 #, java-format

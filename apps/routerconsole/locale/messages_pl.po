@@ -2553,7 +2553,7 @@ msgstr "Aktywne zadania"
 msgid "started {0} ago"
 msgstr "rozpoczęto {0} temu"
 
-msgid "Just finished jobs"
+msgid "Completed jobs"
 msgstr "Niedawno zakończone zadania"
 
 #, java-format

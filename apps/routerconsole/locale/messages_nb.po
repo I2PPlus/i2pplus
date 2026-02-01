@@ -2545,7 +2545,7 @@ msgstr "Aktive jobber"
 msgid "started {0} ago"
 msgstr "startet {0} siden"
 
-msgid "Just finished jobs"
+msgid "Completed jobs"
 msgstr "Akkurat fullførte jobber"
 
 #, java-format

@@ -2537,7 +2537,7 @@ msgstr "ཤུགས་ལྡན་ལས་ཀ།"
 msgid "started {0} ago"
 msgstr "{0} ནས་འགོ་ཚུགས།"
 
-msgid "Just finished jobs"
+msgid "Completed jobs"
 msgstr "ད་གཟོད་མཇུག་རྫོགས་ལས་ཀ།"
 
 #, java-format

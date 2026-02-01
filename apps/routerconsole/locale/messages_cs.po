@@ -2553,7 +2553,7 @@ msgstr "Aktivní zaměstnání"
 msgid "started {0} ago"
 msgstr "začalo před {0}"
 
-msgid "Just finished jobs"
+msgid "Completed jobs"
 msgstr "Právě dokončené úlohy"
 
 #, java-format

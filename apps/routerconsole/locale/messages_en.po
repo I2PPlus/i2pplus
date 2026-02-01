@@ -2545,7 +2545,7 @@ msgstr ""
 msgid "started {0} ago"
 msgstr ""
 
-msgid "Just finished jobs"
+msgid "Completed jobs"
 msgstr ""
 
 #, java-format

@@ -2561,7 +2561,7 @@ msgstr "Aktivni posluge"
 msgid "started {0} ago"
 msgstr "začel {0} pred tem"
 
-msgid "Just finished jobs"
+msgid "Completed jobs"
 msgstr "Tako pred kratkim končane posluge"
 
 #, java-format

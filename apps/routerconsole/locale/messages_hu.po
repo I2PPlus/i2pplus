@@ -2545,7 +2545,7 @@ msgstr "Aktív Munkák"
 msgid "started {0} ago"
 msgstr "{0} ezelőtt kezdődött"
 
-msgid "Just finished jobs"
+msgid "Completed jobs"
 msgstr "A Közelmúltban Befejezett Munkahelyek"
 
 #, java-format

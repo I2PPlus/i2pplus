@@ -2553,7 +2553,7 @@ msgstr "Активні робочі місця"
 msgid "started {0} ago"
 msgstr "розпочато {0} тому"
 
-msgid "Just finished jobs"
+msgid "Completed jobs"
 msgstr "Щойно закінчені роботи"
 
 #, java-format

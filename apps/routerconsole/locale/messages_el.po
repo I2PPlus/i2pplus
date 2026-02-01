@@ -2545,7 +2545,7 @@ msgstr "Ενεργές θέσεις εργασίας"
 msgid "started {0} ago"
 msgstr "ξεκίνησε πριν από {0}"
 
-msgid "Just finished jobs"
+msgid "Completed jobs"
 msgstr "Μόλις τελείωσαν οι εργασίες"
 
 #, java-format

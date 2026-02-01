@@ -2545,7 +2545,7 @@ msgstr "Aktieve taken"
 msgid "started {0} ago"
 msgstr "{0} geleden gestart"
 
-msgid "Just finished jobs"
+msgid "Completed jobs"
 msgstr "Net voltooide taken"
 
 #, java-format

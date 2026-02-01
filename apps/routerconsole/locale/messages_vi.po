@@ -2537,7 +2537,7 @@ msgstr "Công việc tích cực"
 msgid "started {0} ago"
 msgstr "đã bắt đầu {0} trước"
 
-msgid "Just finished jobs"
+msgid "Completed jobs"
 msgstr "Vừa hoàn thành công việc"
 
 #, java-format

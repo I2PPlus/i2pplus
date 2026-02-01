@@ -2553,7 +2553,7 @@ msgstr "Sarcini active"
 msgid "started {0} ago"
 msgstr "Început {0} în urmă"
 
-msgid "Just finished jobs"
+msgid "Completed jobs"
 msgstr "Sarcină tocmai terminată"
 
 #, java-format

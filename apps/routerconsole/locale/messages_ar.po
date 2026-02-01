@@ -2577,7 +2577,7 @@ msgstr "وظائف نشطة"
 msgid "started {0} ago"
 msgstr "بدأت منذ {0}"
 
-msgid "Just finished jobs"
+msgid "Completed jobs"
 msgstr "انتهيت للتو من المهام"
 
 #, java-format

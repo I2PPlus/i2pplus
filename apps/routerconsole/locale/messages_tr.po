@@ -2545,7 +2545,7 @@ msgstr "Etkin görevler"
 msgid "started {0} ago"
 msgstr "{0} önce başlamış"
 
-msgid "Just finished jobs"
+msgid "Completed jobs"
 msgstr "Az önce biten görevler"
 
 #, java-format

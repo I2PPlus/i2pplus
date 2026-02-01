@@ -2537,7 +2537,7 @@ msgstr "Job yang aktif"
 msgid "started {0} ago"
 msgstr "Dimulai {0} yang lalu"
 
-msgid "Just finished jobs"
+msgid "Completed jobs"
 msgstr "Jobs yang baru selesai"
 
 #, java-format

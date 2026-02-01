@@ -2545,7 +2545,7 @@ msgstr "Tarefas activas"
 msgid "started {0} ago"
 msgstr "iniciado à {0}"
 
-msgid "Just finished jobs"
+msgid "Completed jobs"
 msgstr "Tarefas completadas recentemente"
 
 #, java-format

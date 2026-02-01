@@ -123,7 +123,7 @@ public class JobQueueHelper extends HelperBase {
 
         if ((justFinishedJobs.size() != 0) && (isAdvanced())) {
             buf.append("<h3 id=finishedjobs>")
-               .append(_t("Just finished jobs")).append(": ").append(justFinishedJobs.size())
+               .append(_t("Completed jobs")).append(": ").append(justFinishedJobs.size())
                .append("</h3>\n<ol class=jobqueue>\n");
 
             // Group finished jobs by name and completion time

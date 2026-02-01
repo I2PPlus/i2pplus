@@ -2545,7 +2545,7 @@ msgstr "مشاغل فعال"
 msgid "started {0} ago"
 msgstr "{0} پیش شروع شد"
 
-msgid "Just finished jobs"
+msgid "Completed jobs"
 msgstr "کارها را به تازگی تمام کردم"
 
 #, java-format

@@ -2537,7 +2537,7 @@ msgstr "活跃任务"
 msgid "started {0} ago"
 msgstr "{0}前开始"
 
-msgid "Just finished jobs"
+msgid "Completed jobs"
 msgstr "刚刚完成的任务"
 
 #, java-format

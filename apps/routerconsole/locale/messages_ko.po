@@ -2537,7 +2537,7 @@ msgstr "활성화된 일감"
 msgid "started {0} ago"
 msgstr "{0} 전 시작됨"
 
-msgid "Just finished jobs"
+msgid "Completed jobs"
 msgstr "방금 끝난 일감"
 
 #, java-format
