@@ -59,7 +59,7 @@ public class JobQueue {
     private volatile long _nextPumperRun;
 
     /** How many when we go parallel */
-    private static int RUNNERS;
+    static int RUNNERS;
     static {
         int cores = SystemVersion.getCores();
         int maxRunners = 32;
@@ -70,7 +70,7 @@ public class JobQueue {
     /** Default max # job queue runners operating */
     private static int DEFAULT_MAX_RUNNERS = RUNNERS;
     /** router.config parameter to override the max runners */
-    private final static String PROP_MAX_RUNNERS = "router.maxJobRunners";
+    final static String PROP_MAX_RUNNERS = "router.maxJobRunners";
     /** If a job is this lagged, spit out a warning, but keep going */
     private final static long DEFAULT_LAG_WARNING = 5*1000;
     private long _lagWarning = DEFAULT_LAG_WARNING;
@@ -102,6 +102,9 @@ public class JobQueue {
      */
     private final Object _runnerLock = new Object();
 
+    /** Dynamic scaling controller for adjusting runner count based on load */
+    private final JobQueueScaler _scaler;
+
     private static final long[] RATES = RateConstants.SHORT_TERM_RATES;
 
     /**
@@ -129,6 +132,7 @@ public class JobQueue {
         _queueRunners = new ConcurrentHashMap<>(RUNNERS);
         _jobStats = new ConcurrentHashMap<>();
         _pumper = new QueuePumper();
+        _scaler = new JobQueueScaler(context, this);
     }
 
     /**
@@ -256,6 +260,33 @@ public class JobQueue {
         if (jt == null) return 0;
         long startAfter = jt.getStartAfter();
         return _context.clock().now() - startAfter;
+    }
+
+    /**
+     * Get the maximum duration of currently running jobs.
+     * This measures how long active jobs have been executing,
+     * which is important when all runners are busy but queue is empty.
+     *
+     * @return max duration in milliseconds of any currently running job, or 0 if no jobs running
+     * @since 0.9.68+
+     */
+    public long getMaxActiveJobDuration() {
+        long now = _context.clock().now();
+        long maxDuration = 0;
+        
+        for (JobQueueRunner runner : _queueRunners.values()) {
+            if (runner.getCurrentJob() != null) {
+                long beginTime = runner.getLastBegin();
+                if (beginTime > 0) {
+                    long duration = now - beginTime;
+                    if (duration > maxDuration) {
+                        maxDuration = duration;
+                    }
+                }
+            }
+        }
+        
+        return maxDuration;
     }
 
     /**
@@ -417,6 +448,7 @@ public class JobQueue {
         I2PThread pumperThread = new I2PThread(_pumper, "JobQueuePumper", true);
         pumperThread.setPriority(I2PThread.MAX_PRIORITY - 1);
         pumperThread.start();
+        _scaler.startup();
     }
 
     /**
@@ -424,6 +456,7 @@ public class JobQueue {
      */
     void shutdown() {
         _alive = false;
+        _scaler.shutdown();
         synchronized (_jobLock) {
             _timedJobs.clear();
             _readyJobs.clear();
@@ -578,6 +611,94 @@ public class JobQueue {
      * @param id the runner ID to remove
      */
     void removeRunner(int id) {_queueRunners.remove(Integer.valueOf(id));}
+
+    /**
+     * Get the current number of active job runners.
+     * Package-private for use by JobQueueScaler.
+     *
+     * @return the number of active runners
+     * @since 0.9.68+
+     */
+    int getActiveRunnerCount() {
+        return _queueRunners.size();
+    }
+
+    /**
+     * Get the current maximum number of job runners allowed.
+     * Returns the RAM-adjusted limit if scaler is active and RAM is constrained,
+     * otherwise returns the hard limit (2× configured).
+     *
+     * @return the current effective maximum runner limit
+     * @since 0.9.68+
+     */
+    public int getMaxRunnerCount() {
+        int hardLimit = _context.getProperty(PROP_MAX_RUNNERS, RUNNERS) * 2;
+        if (_scaler != null && _scaler.isAlive()) {
+            int ramLimit = _scaler.getCurrentMaxRunners();
+            // Return the lower of the two - if RAM is constrained, show that
+            return Math.min(hardLimit, ramLimit);
+        }
+        return hardLimit;
+    }
+
+    /**
+     * Add additional job runners to the pool.
+     * Package-private for use by JobQueueScaler.
+     *
+     * @param count the number of runners to add
+     * @since 0.9.68+
+     */
+    synchronized void addRunners(int count) {
+        if (!_allowParallelOperation || !_alive) return;
+        
+        int currentSize = _queueRunners.size();
+        int targetSize = currentSize + count;
+        
+        for (int i = currentSize; i < targetSize; i++) {
+            JobQueueRunner runner = new JobQueueRunner(_context, i);
+            _queueRunners.put(Integer.valueOf(i), runner);
+            runner.setName("JobQueue " + _runnerId.incrementAndGet() + '/' + targetSize + " (scaled)");
+            runner.start();
+        }
+        
+        if (_log.shouldInfo()) {
+            _log.info("Added " + count + " runners. Total: " + _queueRunners.size());
+        }
+    }
+
+    /**
+     * Remove idle job runners from the pool.
+     * Package-private for use by JobQueueScaler.
+     * Only removes runners that are not currently processing a job.
+     *
+     * @param maxToRemove the maximum number of runners to remove
+     * @return the number of runners actually removed
+     * @since 0.9.68+
+     */
+    synchronized int removeIdleRunners(int maxToRemove) {
+        if (!_alive) return 0;
+        
+        int removed = 0;
+        Iterator<Map.Entry<Integer, JobQueueRunner>> iter = _queueRunners.entrySet().iterator();
+        
+        while (iter.hasNext() && removed < maxToRemove) {
+            Map.Entry<Integer, JobQueueRunner> entry = iter.next();
+            JobQueueRunner runner = entry.getValue();
+            
+            // Only remove if runner is idle (not processing a job)
+            if (runner.getCurrentJob() == null) {
+                runner.stopRunning();
+                iter.remove();
+                removed++;
+            }
+        }
+        
+        if (removed > 0 && _log.shouldInfo()) {
+            _log.info("Removed " + removed + " idle runners. Total: " + _queueRunners.size());
+        }
+        
+        return removed;
+    }
 
     private final class QueuePumper implements Runnable, Clock.ClockUpdateListener, RouterClock.ClockShiftListener {
         public QueuePumper() {
