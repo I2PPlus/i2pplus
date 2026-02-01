@@ -10,6 +10,7 @@ import net.i2p.data.SessionKey;
 import net.i2p.data.TunnelId;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
+import net.i2p.router.TunnelTestStatus;
 import net.i2p.router.networkdb.kademlia.MessageWrapper.OneTimeSession;
 import net.i2p.util.Log;
 
@@ -49,6 +50,11 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     // short record OBEP only
     private OneTimeSession _garlicReplyKeys;
     private Log _log;
+
+    // Test status tracking for UI display
+    private volatile TunnelTestStatus _testStatus = TunnelTestStatus.UNTESTED;
+    private volatile long _lastTestStartTime;
+    private volatile long _lastTestSuccessTime;
 
     /**
      *  IV length for {@link #getAESReplyIV}
@@ -217,7 +223,54 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
 
     public int getTunnelFailures() {return _failures.get();}
 
-    public void testSuccessful(int ms) {_failures.set(0);}
+    public void testSuccessful(int ms) {
+        _failures.set(0);
+        _testStatus = TunnelTestStatus.GOOD;
+        _lastTestSuccessTime = System.currentTimeMillis();
+    }
+
+    /**
+     * Get the current test status for UI display.
+     * @return the current test status
+     * @since 0.9.68+
+     */
+    public TunnelTestStatus getTestStatus() {
+        return _testStatus;
+    }
+
+    /**
+     * Called when a test is started.
+     * @since 0.9.68+
+     */
+    public void setTestStarted() {
+        _testStatus = TunnelTestStatus.TESTING;
+        _lastTestStartTime = System.currentTimeMillis();
+    }
+
+    /**
+     * Called when a test fails.
+     * Updates the test status based on consecutive failure count.
+     * @since 0.9.68+
+     */
+    public void setTestFailed() {
+        int failures = _failures.get();
+        if (failures >= 2) {
+            _testStatus = TunnelTestStatus.FAILED;
+        } else if (failures >= 1) {
+            _testStatus = TunnelTestStatus.FAILING;
+        } else {
+            _testStatus = TunnelTestStatus.FAILED;
+        }
+    }
+
+    /**
+     * Get the number of consecutive test failures.
+     * @return the count of consecutive failures
+     * @since 0.9.68+
+     */
+    public int getConsecutiveFailures() {
+        return _failures.get();
+    }
 
     /**
      *  Did we reuse this tunnel?

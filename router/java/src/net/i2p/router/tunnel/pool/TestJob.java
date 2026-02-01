@@ -14,6 +14,7 @@ import net.i2p.router.OutNetMessage;
 import net.i2p.router.ReplyJob;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
+import net.i2p.router.TunnelPoolSettings;
 import net.i2p.router.crypto.ratchet.MuxedPQSKM;
 import net.i2p.router.crypto.ratchet.MuxedSKM;
 import net.i2p.router.crypto.ratchet.RatchetSKM;
@@ -189,22 +190,36 @@ public class TestJob extends JobImpl {
     public static boolean shouldSchedule(RouterContext ctx, PooledTunnelCreatorConfig cfg) {
         // Skip tunnel testing for ping tunnels - they're short-lived and don't need testing
         TunnelPool pool = cfg.getTunnelPool();
+        Log log = ctx.logManager().getLog(TestJob.class);
         if (pool != null) {
-            String tunnelNickname = pool.getSettings().getDestinationNickname();
-            if (tunnelNickname != null && (tunnelNickname.equals("I2Ping") ||
-                (tunnelNickname.startsWith("Ping") && tunnelNickname.contains("[")))) {
-                Log log = ctx.logManager().getLog(TestJob.class);
-                if (log.shouldDebug()) {
-                    log.debug("Skipping test scheduling for ping tunnel: " + tunnelNickname);
+            TunnelPoolSettings settings = pool.getSettings();
+            // Check shouldTest flag first (more robust than nickname matching)
+            if (!settings.shouldTest()) {
+                if (log.shouldInfo()) {
+                    log.info("Skipping test scheduling for tunnel with shouldTest=false");
                 }
                 return false;
             }
+            // Fallback to nickname matching for backwards compatibility
+            String tunnelNickname = settings.getDestinationNickname();
+            if (log.shouldDebug()) {
+                log.debug("Checking tunnel for test scheduling, nickname: " + tunnelNickname +
+                          " (settings: " + settings + ", pool: " + pool + ")");
+            }
+            if (tunnelNickname != null && (tunnelNickname.equals("I2Ping") ||
+                (tunnelNickname.startsWith("Ping") && tunnelNickname.contains("[")))) {
+                if (log.shouldInfo()) {
+                    log.info("Skipping test scheduling for ping tunnel: " + tunnelNickname);
+                }
+                return false;
+            }
+        } else if (log.shouldWarn()) {
+            log.warn("Tunnel pool is null for config: " + cfg);
         }
 
         // Try to increment total jobs counter to check limit
         int current = TOTAL_TEST_JOBS.get();
         if (current >= maxQueuedTests) {
-            Log log = ctx.logManager().getLog(TestJob.class);
             if (log.shouldInfo()) {
                 log.info("Limit (" + maxQueuedTests + ") reached -> Not scheduling test for " + cfg);
             }
@@ -214,7 +229,6 @@ public class TestJob extends JobImpl {
         // Check if this tunnel already has a test running
         Long tunnelKey = getTunnelKey(cfg);
         if (tunnelKey != null && RUNNING_TESTS.containsKey(tunnelKey)) {
-            Log log = ctx.logManager().getLog(TestJob.class);
             if (log.shouldDebug()) {
                 log.debug("Test already running for tunnel key " + tunnelKey + " -> Skipping duplicate test for " + cfg);
             }
@@ -230,7 +244,6 @@ public class TestJob extends JobImpl {
             if (poolCount != null && poolCount.get() > 0) {
                 // For exploratory pools, limit but allow better coverage
                 if (pool.getSettings().isExploratory() && poolCount.get() >= 64) {
-                    Log log = ctx.logManager().getLog(TestJob.class);
                     if (log.shouldDebug()) {
                         log.debug("Pool " + poolId + " already has " + poolCount.get() + " tests running -> Deferring for better coverage");
                     }
@@ -238,7 +251,6 @@ public class TestJob extends JobImpl {
                 }
                 // For client pools, allow more concurrency
                 else if (!pool.getSettings().isExploratory() && poolCount.get() >= 96) {
-                    Log log = ctx.logManager().getLog(TestJob.class);
                     if (log.shouldDebug()) {
                         log.debug("Pool " + poolId + " already has " + poolCount.get() + " tests running -> Deferring for better coverage");
                     }
@@ -412,7 +424,7 @@ public class TestJob extends JobImpl {
 
         long maxLag = ctx.jobQueue().getMaxLag();
         long avgLag = ctx.jobQueue().getAvgLag();
-        
+
         // Aggressive job lag gating - skip all tests when lag is high
         if (maxLag > 3000) {
             // Skip all tunnel tests when lag exceeds 3 seconds
@@ -423,7 +435,7 @@ public class TestJob extends JobImpl {
             decrementTotalJobs();
             return; // Exit without rescheduling - test will be rescheduled normally later
         }
-        
+
         if (maxLag > 1500 || avgLag > 50) {
             // Skip exploratory tunnels under moderate pressure
             if (isExploratory) {
@@ -545,6 +557,9 @@ public class TestJob extends JobImpl {
         // Begin tunnel test logic
         _found = false;
         long now = ctx.clock().now();
+
+        // Set test status to TESTING
+        _cfg.setTestStarted();
 
         if (_cfg.isInbound()) {
             _replyTunnel = _cfg;
@@ -810,6 +825,9 @@ public class TestJob extends JobImpl {
         // Only fail the tunnel under test — do NOT blame _otherTunnel
         // Increment the tunnel's global failure count and check if we should continue
         boolean keepGoing = _cfg.tunnelFailed(); // This increments the counter and returns true if < MAX_CONSECUTIVE_TEST_FAILURES
+
+        // Update test status for UI display
+        _cfg.setTestFailed();
 
         if (_log.shouldWarn()) {
             _log.warn((isExploratory ? "Exploratory tunnel" : "Tunnel") + " Test failed in " + timeToFail + "ms → " + _cfg);

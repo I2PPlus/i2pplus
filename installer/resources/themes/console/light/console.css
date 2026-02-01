@@ -1225,6 +1225,7 @@ h3+.statusnotes{margin-top:2px}
 .tunnel_peer{margin:0;padding:3px 2px;width:auto;min-width:70px}
 .tunnel_local{margin-right:2px;width:99px;box-sizing:border-box;text-transform:lowercase;font-size:8pt}
 .tunnels_participating td.cells:first-child{font-size:0}
+tr.failed td{box-shadow:none!important}
 #country,#router,th#version,#tier,#edit,.tcount{width:2%;white-space:nowrap}
 #refreshPage{cursor:pointer}
 #transitbypeer #tunnels th{position:relative}

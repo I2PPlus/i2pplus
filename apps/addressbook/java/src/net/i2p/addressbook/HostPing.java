@@ -154,6 +154,8 @@ public class HostPing {
             options.setProperty("i2cp.host", "127.0.0.1");
             options.setProperty("inbound.nickname", "Ping [" + hostname.replace(".i2p", "") + "]");
             options.setProperty("outbound.nickname", "Ping [" + hostname.replace(".i2p", "") + "]");
+            options.setProperty("inbound.shouldTest", "false");
+            options.setProperty("outbound.shouldTest", "false");
             options.setProperty("inbound.quantity", "1");
             options.setProperty("outbound.quantity", "1");
             options.setProperty("inbound.backupQuantity", "0");

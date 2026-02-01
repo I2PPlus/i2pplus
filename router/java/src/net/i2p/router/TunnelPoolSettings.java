@@ -33,6 +33,8 @@ public class TunnelPoolSettings {
     private final Properties _unknownOptions;
     private SessionKey _randomKey;
     private int _priority;
+    /** @since 0.9.68+ default true, set to false for ping tunnels */
+    private boolean _shouldTest = true;
     private final Set<Hash> _aliases;
     private Hash _aliasOf;
     /** prefix used to configure the inbound exploratory pool */
@@ -51,6 +53,8 @@ public class TunnelPoolSettings {
     public static final String      PROP_PRIORITY = "priority";
     /** @since 0.9.17 */
     public static final String      PROP_RANDOM_KEY = "randomKey";
+    /** @since 0.9.68+ */
+    public static final String      PROP_SHOULD_TEST = "shouldTest";
     public static final int         DEFAULT_QUANTITY = 3;
     public static final int         DEFAULT_BACKUP_QUANTITY = 0;
     public static final int         DEFAULT_DURATION = 10*60*1000;
@@ -271,6 +275,13 @@ public class TunnelPoolSettings {
     public int getPriority() { return _priority; }
 
     /**
+     *  Whether this tunnel should be tested.
+     *  @return true (default) for most tunnels, false for ping tunnels and other short-lived tunnels
+     *  @since 0.9.68+
+     */
+    public boolean shouldTest() { return _shouldTest; }
+
+    /**
      *  @return non-null
      */
     public Properties getUnknownOptions() { return _unknownOptions; }
@@ -326,6 +337,8 @@ public class TunnelPoolSettings {
                     byte[] rk = Base64.decode(value);
                     if (rk != null && rk.length == SessionKey.KEYSIZE_BYTES)
                         _randomKey = new SessionKey(rk);
+                } else if (name.equalsIgnoreCase(prefix + PROP_SHOULD_TEST)) {
+                    _shouldTest = getBoolean(value, true);
                 } else
                     _unknownOptions.setProperty(name.substring(prefix.length()), value);
             }

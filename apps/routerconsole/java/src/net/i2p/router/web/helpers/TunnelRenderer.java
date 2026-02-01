@@ -124,6 +124,11 @@ class TunnelRenderer {
                 // skip aliases, we will print a header under the main tunnel pool below
                 continue;
             }
+            // Skip Hostchecker/ping tunnels - they have shouldTest=false
+            if (!in.getSettings().shouldTest() ||
+                (outPool != null && !outPool.getSettings().shouldTest())) {
+                continue;
+            }
             String b64 = client.toBase64().substring(0,4);
             if (isLocal) {
                 out.write("<h3 class=\"");
@@ -941,6 +946,10 @@ class TunnelRenderer {
                .append(_t("Inbound or outbound?"))
                .append("\">")
                .append(_t("In/Out"))
+               .append("</th><th title=\"")
+               .append(_t("Tunnel test status"))
+               .append("\">")
+               .append(_t("Status"))
                .append("</th><th>")
                .append(_t("Expiry"))
                .append("</th><th title=\"")
@@ -951,11 +960,7 @@ class TunnelRenderer {
                .append(_t("Gateway"))
                .append("</th>");
             if (maxLength > 3) {
-                buf.append("<th colspan=\"")
-                   .append(maxLength - 2)
-                   .append("\">")
-                   .append(_t("Participants"))
-                   .append("</th>");
+                buf.append("<th colspan=\"").append(maxLength - 2).append("\">").append(_t("Participants")).append("</th>");
             } else if (maxLength == 3) {buf.append("<th>").append(_t("Participant")).append("</th>");}
             if (maxLength > 1) {buf.append("<th>").append(_t("Endpoint")).append("</th>");}
             buf.append("</tr>\n");
@@ -968,20 +973,53 @@ class TunnelRenderer {
             if (timeLeft <= 0) {continue;} // don't display tunnels in their grace period
             live++;
             boolean isInbound = info.isInbound();
+
+            // Get test status and determine if tunnel has failed
+            net.i2p.router.TunnelTestStatus testStatus = info.getTestStatus();
+            boolean isFailed = (testStatus == net.i2p.router.TunnelTestStatus.FAILED);
+            boolean isFailing = (testStatus == net.i2p.router.TunnelTestStatus.FAILING);
+            boolean isGood = (testStatus == net.i2p.router.TunnelTestStatus.GOOD);
+            boolean isTesting = (testStatus == net.i2p.router.TunnelTestStatus.TESTING);
+
+            // Set row class according to tunnel test status
+            String rowClass = isFailed ? " class=failed" : isFailing ? " class=failing" :
+                              isGood ? " class=good" : isTesting ? " class=testing" : " class=untested";
+
             if (isInbound) {
-                buf.append("<tr><td data-sort=in><span class=inbound title=\"")
+                buf.append("<tr").append(rowClass).append("><td data-sort=in><span class=inbound title=\"")
                    .append(tib)
                    .append("\"><img src=/themes/console/images/inbound.svg alt=\"")
                    .append(tib)
                    .append("\"></span></td>");
             } else {
-                buf.append("<tr><td data-sort=out><span class=outbound title=\"")
+                buf.append("<tr").append(rowClass).append("><td data-sort=out><span class=outbound title=\"")
                    .append(tob)
                    .append("\"><img src=/themes/console/images/outbound.svg alt=\"")
                    .append(tob)
                    .append("\"></span></td>");
             }
-            buf.append("<td>").append(DataHelper.formatDuration2(timeLeft)).append("</td>");
+
+            buf.append("<td class=tunnelTest>");
+            switch (testStatus) {
+                case GOOD:
+                    buf.append("<span title=\"").append(_t("Test successful")).append("\"></span>");
+                    break;
+                case TESTING:
+                    buf.append("<span title=\"").append(_t("Test in progress")).append("\"></span>");
+                    break;
+                case FAILING:
+                    buf.append("<span title=\"").append(_t("Test failing (1 failure)")).append("\"></span>");
+                    break;
+                case FAILED:
+                    buf.append("<span title=\"").append(_t("Test failed (2 consecutive failures)")).append("\"></span>");
+                    break;
+                default:
+                    buf.append("<span title=\"").append(_t("Not yet tested")).append("\"></span>");
+                    break;
+            }
+            buf.append("</td>");
+
+            buf.append("<td><span>").append(DataHelper.formatDuration2(timeLeft)).append("</span></td>");
 
             int count = info.getProcessedMessagesCount() * 1024 / 1000;
             double sizeInKB = count * 1024.0 / 1000.0;
@@ -995,8 +1033,10 @@ class TunnelRenderer {
                    .append("</span>");
             }
             buf.append("</td>");
+
             int length = info.getLength();
             boolean isAdvanced = _context.getBooleanProperty(HelperBase.PROP_ADVANCED);
+
             for (int j = 0; j < length; j++) {
                 Hash peer = info.getPeer(j);
                 TunnelId id = (info.isInbound() ? info.getReceiveTunnelId(j) : info.getSendTunnelId(j));
@@ -1008,8 +1048,7 @@ class TunnelRenderer {
                         }
                     }
                     // Add empty content placeholders to force alignment
-                    buf.append(" <td><span class=\"tunnel_peer tunnel_local\" title=\"")
-                       .append(_t("Locally hosted tunnel")).append("\">").append(_t("Local")).append("</span>");
+                    buf.append(" <td><span class=\"tunnel_peer tunnel_local\" title=\"").append(_t("Locally hosted tunnel")).append("\">").append(_t("Local")).append("</span>");
                     if (isAdvanced) {
                         buf.append("<span class=tunnel_id title=\"").append(_t("Tunnel identity")).append("\">")
                            .append((id == null ? "" : "" + id)).append("</span>");
@@ -1028,6 +1067,7 @@ class TunnelRenderer {
                     for (int k = length; k < maxLength; k++) {buf.append("<td></td>");}
                 }
             }
+
             buf.append("</tr>\n");
 
             if (info.isInbound()) {processedIn += count;}

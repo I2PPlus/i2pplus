@@ -110,4 +110,36 @@ public interface TunnelInfo {
      * @since 0.9.53 copied from TunnelCreatorConfig
      */
     public boolean getTunnelFailed();
+
+    /**
+     * Get the current test status of this tunnel for UI display.
+     *
+     * @return the current test status (UNTESTED, TESTING, GOOD, FAILING, or FAILED)
+     * @since 0.9.68+
+     */
+    public TunnelTestStatus getTestStatus();
+
+    /**
+     * Set the test status when a test is started.
+     * Called by TestJob when beginning a tunnel test.
+     *
+     * @since 0.9.68+
+     */
+    public void setTestStarted();
+
+    /**
+     * Set the test status when a test fails.
+     * Called by TestJob when a tunnel test fails.
+     *
+     * @since 0.9.68+
+     */
+    public void setTestFailed();
+
+    /**
+     * Get the number of consecutive test failures.
+     *
+     * @return the count of consecutive failures
+     * @since 0.9.68+
+     */
+    public int getConsecutiveFailures();
 }
