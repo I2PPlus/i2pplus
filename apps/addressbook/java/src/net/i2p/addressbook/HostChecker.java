@@ -659,6 +659,19 @@ public class HostChecker {
             leaseSetTypes = "[]";
         }
 
+        // Check router load before attempting to build tunnels
+        if (_context instanceof RouterContext) {
+            RouterContext routerContext = (RouterContext) _context;
+            long maxLag = routerContext.jobQueue().getMaxLag();
+            if (maxLag > MAX_JOB_LAG_MS) {
+                // Router under load - skip this ping check to avoid tunnel build failures
+                if (_log.shouldInfo()) {
+                    _log.info("HostChecker ping SKIPPED for " + displayHostname + " - router under load (job lag: " + maxLag + "ms)");
+                }
+                return createPingResult(false, startTime, System.currentTimeMillis() - startTime, hostname, leaseSetTypes);
+            }
+        }
+
         try {
             long tunnelBuildStart = System.currentTimeMillis();
             Properties options = new Properties();
@@ -1238,10 +1251,10 @@ public class HostChecker {
 
                     // Reload categories into memory
                     loadCategories();
-                    
+
                     // Update hosts_check.txt with new categories and add new hosts
                     updateHostsWithCategories();
-                    
+
                     downloadSuccess = true;
 
                     if (_log.shouldInfo()) {
@@ -1847,21 +1860,29 @@ public class HostChecker {
                 return;
             }
 
-            // Check router load and calculate dynamic concurrency limit
+            // Check router load - skip entire cycle if severely overloaded
             final int dynamicMaxConcurrent;
             if (_context instanceof RouterContext) {
                 RouterContext routerContext = (RouterContext) _context;
                 JobQueue jobQueue = routerContext.jobQueue();
                 long maxLag = jobQueue.getMaxLag();
-                // Scale concurrency from 1 (high lag) to _maxConcurrent (low lag)
+                // Skip entire cycle if router is severely overloaded (>2s lag)
                 if (maxLag > MAX_JOB_LAG_MS) {
-                    // At 2s lag: 1 concurrent, at higher lag: remain at 1
+                    if (_log.shouldWarn()) {
+                        _log.warn("HostChecker cycle SKIPPED -> Router overloaded (Job queue lag: " + maxLag + "ms)");
+                    }
+                    _cycleInProgress.set(false);
+                    return;
+                }
+                // Scale concurrency from 1 (high lag) to _maxConcurrent (low lag)
+                if (maxLag > MAX_JOB_LAG_MS/2) {
+                    // At 1s lag: throttle to 1 concurrent
                     dynamicMaxConcurrent = 1;
                     if (_log.shouldWarn()) {
-                        _log.warn("Router under load (job queue lag: " + maxLag + "ms) - throttling HostChecker to 1 concurrent check");
+                        _log.warn("Router under load (Job queue lag: " + maxLag + "ms) -> Throttling HostChecker to 1 concurrent check...");
                     }
-                } else if (maxLag > 1000) {
-                    // At 1-2s lag: scale linearly from 2 to _maxConcurrent
+                } else if (maxLag < 1000) {
+                    // At <1s lag: scale linearly from 2 to _maxConcurrent
                     dynamicMaxConcurrent = Math.max(2, (int) (_maxConcurrent * (1.0 - (maxLag - 1000.0) / 1000.0)));
                 } else {
                     dynamicMaxConcurrent = _maxConcurrent;
