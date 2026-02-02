@@ -56,12 +56,12 @@ class JobQueueScaler implements Runnable {
     private long _circuitBreakerOpenTime; // When the circuit breaker was opened
 
     // Feedback configuration
-    private static final int FEEDBACK_CHECKS_AFTER_SCALE = 5; // Check 5 times after scaling - give time for queue to drain before evaluating
-    private static final int MAX_CONSECUTIVE_FAILED_SCALES = 10; // After 5 failed scales, stop trying (increased from 2)
-    private static final long EXTENDED_COOLDOWN_MULTIPLIER = 3; // 3x normal cooldown after failed scale
-    private static final double LAG_INCREASE_THRESHOLD = 1.5; // If lag increased by 50%, consider it failed
-    private static final double READY_JOBS_INCREASE_THRESHOLD = 1.25; // If ready jobs increased by 25%
-    private static final long CIRCUIT_BREAKER_RESET_TIME = 5*60*1000; // Reset circuit breaker after 5 minutes
+    private static final int FEEDBACK_CHECKS_AFTER_SCALE = 3; // Check 3 times after scaling - faster response
+    private static final int MAX_CONSECUTIVE_FAILED_SCALES = 20; // Allow more failures before disabling
+    private static final double LAG_INCREASE_THRESHOLD = 2.0; // Only rollback if lag doubles
+    private static final double READY_JOBS_INCREASE_THRESHOLD = 1.1; // If ready jobs increased by 10%
+    private static final double EXTENDED_COOLDOWN_MULTIPLIER = 3; // 3x normal cooldown after failed scale
+    private static final long CIRCUIT_BREAKER_RESET_TIME = 3*60*1000; // Reset circuit breaker after 3 minutes
     private static final long LAG_EMERGENCY_THRESHOLD = 5; // 10ms - emergency scaling threshold - trigger immediately when lag starts
 
     // RAM-based limits
@@ -284,7 +284,7 @@ class JobQueueScaler implements Runnable {
     private long getCooldownPeriod() {
         long baseCooldown = _context.getProperty(PROP_SCALE_COOLDOWN, (int) DEFAULT_SCALE_COOLDOWN);
         if (_isInExtendedCooldown) {
-            return baseCooldown * EXTENDED_COOLDOWN_MULTIPLIER;
+            return (long) (baseCooldown * EXTENDED_COOLDOWN_MULTIPLIER);
         }
         return baseCooldown;
     }
@@ -418,6 +418,23 @@ class JobQueueScaler implements Runnable {
             _checksSinceLastScale = 0;
         }
 
+        // EMERGENCY MODE: Always handle high lag first, even if circuit breaker is open
+        if (emergencyMode && activeRunners < maxRunners) {
+            int runnersAvailable = maxRunners - activeRunners;
+            int runnersToAdd = Math.min(Math.max(4, runnersAvailable / 2), runnersAvailable);
+
+            if (runnersToAdd > 0) {
+                if (_log.shouldWarn()) {
+                    _log.warn("EMERGENCY SCALING: Adding " + runnersToAdd + " runners immediately! " +
+                              "Max lag=" + maxLag + "ms, Active duration=" + activeJobMaxDuration + "ms. " +
+                              "Runners: " + activeRunners + "/" + maxRunners);
+                }
+                // Emergency mode bypasses circuit breaker and feedback
+                scaleUp(runnersToAdd, readyJobs, maxLag, avgLag);
+                return;
+            }
+        }
+
         // Check if circuit breaker should be reset
         if (_scalingUpDisabled) {
             long timeSinceBreakerOpen = now - _circuitBreakerOpenTime;
@@ -436,25 +453,6 @@ class JobQueueScaler implements Runnable {
                               (timeSinceBreakerOpen/1000) + "/" + (CIRCUIT_BREAKER_RESET_TIME/1000) + " seconds");
                 }
                 checkScaleDown(activeRunners, readyJobs, maxLag, avgLag, minRunners, inCooldown);
-                return;
-            }
-        }
-
-        if (emergencyMode && activeRunners < maxRunners) {
-            int runnersAvailable = maxRunners - activeRunners;
-            int emergencyRunnersNeeded = Math.max(4, runnersAvailable / 2); // Take half of available headroom, minimum 4
-            int runnersToAdd = Math.min(emergencyRunnersNeeded, runnersAvailable);
-
-            if (runnersToAdd > 0) {
-                if (_log.shouldWarn()) {
-                    _log.warn("EMERGENCY SCALING: Adding " + runnersToAdd + " runners immediately! " +
-                              "Max lag=" + maxLag + "ms, Active duration=" + activeJobMaxDuration + "ms. " +
-                              "Runners: " + activeRunners + "/" + maxRunners);
-                }
-                // Skip feedback in emergency mode - we need immediate action
-                _preScaleSnapshot = null;
-                _checksSinceLastScale = 0;
-                scaleUp(runnersToAdd, readyJobs, maxLag, avgLag);
                 return;
             }
         }
