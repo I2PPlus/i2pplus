@@ -20,7 +20,7 @@ import net.i2p.router.RouterContext;
  *
  * @since 0.9.68+
  */
-class ExpireJobManager extends JobImpl {
+public class ExpireJobManager extends JobImpl {
     private final PriorityBlockingQueue<TunnelExpiration> _expirationQueue;
     private volatile boolean _isScheduled = false;
 
@@ -71,18 +71,22 @@ class ExpireJobManager extends JobImpl {
         _expirationQueue.offer(new TunnelExpiration(cfg, earlyExpire, dropAfter));
 
         // Schedule this job if not already scheduled
-        if (!_isScheduled) {
-            _isScheduled = true;
-            long now = getContext().clock().now();
-            long nextRun = Math.min(earlyExpire, now + CHECK_INTERVAL);
-            getTiming().setStartAfter(nextRun);
-            getContext().jobQueue().addJob(this);
+        synchronized (this) {
+            if (!_isScheduled) {
+                _isScheduled = true;
+                long now = getContext().clock().now();
+                long nextRun = Math.min(earlyExpire, now + CHECK_INTERVAL);
+                getTiming().setStartAfter(nextRun);
+                getContext().jobQueue().addJob(this);
+            }
         }
     }
 
     @Override
     public void runJob() {
-        _isScheduled = false;
+        synchronized (this) {
+            _isScheduled = false;
+        }
         long now = getContext().clock().now();
 
         List<TunnelExpiration> readyToExpire = new ArrayList<>();
@@ -118,19 +122,24 @@ class ExpireJobManager extends JobImpl {
 
         // Requeue if there are more pending expirations
         if (!_expirationQueue.isEmpty()) {
-            // Find the next expiration time
-            long nextExpiration = Long.MAX_VALUE;
-            for (TunnelExpiration te : _expirationQueue) {
-                long targetTime = te.phase1Complete ? te.dropTime : te.expirationTime;
-                if (targetTime < nextExpiration) {
-                    nextExpiration = targetTime;
+            synchronized (this) {
+                if (_isScheduled) {
+                    return;
                 }
-            }
+                // Find the next expiration time
+                long nextExpiration = Long.MAX_VALUE;
+                for (TunnelExpiration te : _expirationQueue) {
+                    long targetTime = te.phase1Complete ? te.dropTime : te.expirationTime;
+                    if (targetTime < nextExpiration) {
+                        nextExpiration = targetTime;
+                    }
+                }
 
-            long nextRun = Math.min(nextExpiration, now + CHECK_INTERVAL);
-            getTiming().setStartAfter(nextRun);
-            _isScheduled = true;
-            getContext().jobQueue().addJob(this);
+                long nextRun = Math.min(nextExpiration, now + CHECK_INTERVAL);
+                getTiming().setStartAfter(nextRun);
+                _isScheduled = true;
+                getContext().jobQueue().addJob(this);
+            }
         }
     }
 

@@ -423,6 +423,8 @@ public class JobQueue {
                 if (jobName.contains("Republish LeaseSets")) {return false;}
                 // NEVER drop Check LeaseSet Request Status Job - critical for client tunnel lease management
                 if (jobName.contains("Check LeaseSet Request Status")) {return false;}
+                // NEVER drop Handle Build Reply - critical for participating in tunnel builds
+                if (jobName.contains("Handle Build Reply")) {return false;}
             }
             if ((!disableTunnelTests && cls == TestJob.class) ||
                 cls == PeerTestJob.class ||
@@ -430,6 +432,10 @@ public class JobQueue {
                 cls == HandleFloodfillDatabaseLookupMessageJob.class ||
                 cls == HandleGarlicMessageJob.class ||
                 cls == IterativeSearchJob.class) {
+                return true;
+            }
+            // Drop ExpireJobManager duplicates when queue is overloaded
+            if (jobName != null && jobName.equals("Expire Local Tunnels")) {
                 return true;
             }
         }
