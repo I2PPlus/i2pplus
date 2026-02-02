@@ -14,7 +14,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-import net.i2p.data.DataHelper;
 import net.i2p.router.message.HandleGarlicMessageJob;
 import net.i2p.router.networkdb.kademlia.ExploreJob;
 import net.i2p.router.networkdb.kademlia.HandleFloodfillDatabaseLookupMessageJob;
@@ -553,22 +552,8 @@ public class JobQueue {
                             if (job instanceof JobImpl) {((JobImpl) job).madeReady(now);}
                             return job;
                         } else {
-                            // Don't remove and re-add jobs - this breaks TreeSet ordering
-                            if (timeLeft > 10*1000 && iter.hasNext()) {
-                                if (_log.shouldInfo()) {
-                                    _log.info(job + " deferred for " + DataHelper.formatDuration(timeLeft));
-                                }
-                                Job nextJob = iter.next();
-                                _timedJobs.add(job);
-                                long nextTimeLeft = nextJob.getTiming().getStartAfter() - now;
-                                if (timeLeft > nextTimeLeft) {
-                                    if (_log.shouldInfo()) {
-                                        _log.info(job + " out of order with " + nextJob + "\n* Difference: " +
-                                                  DataHelper.formatDuration(timeLeft - nextTimeLeft));
-                                    }
-                                    // timeToWait = Math.max(10, nextTimeLeft); // Removed - timeToWait not in scope
-                                }
-                            }
+                            // Job not ready yet, wait for it
+                            // No deferral logic here - that's QueuePumper's job
                             break;
                         }
                     }
@@ -720,40 +705,17 @@ public class JobQueue {
                     long timeToWait = -1;
                     try {
                         synchronized (_jobLock) {
-                            Job lastJob = null;
-                            long lastTime = Long.MIN_VALUE;
                             for (Iterator<Job> iter = _timedJobs.iterator(); iter.hasNext(); ) {
                                 Job j = iter.next();
                                 long timeLeft = j.getTiming().getStartAfter() - now;
-                                if (lastJob != null && lastTime > j.getTiming().getStartAfter() && _log.shouldInfo()) {
-                                    _log.info(lastJob + " out of order with " + j + "\n* Difference: " +
-                                              DataHelper.formatDuration(lastTime - j.getTiming().getStartAfter()));
-                                }
-                                lastJob = j;
-                                lastTime = lastJob.getTiming().getStartAfter();
                                 if (timeLeft <= 0) {
+                                    // Job is ready to run now
                                     if (j instanceof JobImpl) ((JobImpl)j).madeReady(now);
                                     _readyJobs.offer(j);
                                     iter.remove();
                                 } else {
+                                    // Found first future job, wait until it's ready
                                     timeToWait = timeLeft;
-                                    // Don't remove and re-add jobs - this breaks TreeSet ordering
-                                    // Just check the next job to adjust wait time if needed
-                                    if (timeToWait > 10*1000 && iter.hasNext()) {
-                                        if (_log.shouldInfo()) {
-                                            _log.info(j + " deferred for " + DataHelper.formatDuration(timeToWait));
-                                        }
-                                        Job nextJob = iter.next();
-                                        _timedJobs.add(j);
-                                        long nextTimeLeft = nextJob.getTiming().getStartAfter() - now;
-                                        if (timeToWait > nextTimeLeft) {
-                                            if (_log.shouldInfo()) {
-                                                _log.info(j + " out of order with " + nextJob + "\n* Difference: " +
-                                                          DataHelper.formatDuration(timeToWait - nextTimeLeft));
-                                            }
-                                            timeToWait = Math.max(10, nextTimeLeft);
-                                        }
-                                    }
                                     break;
                                 }
                             }
