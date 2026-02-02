@@ -161,9 +161,19 @@ public class JobQueue {
 
             if (!alreadyExists) {
                 boolean removed = _timedJobs.remove(job);
-                if (removed && _log.shouldWarn()) {_log.warn(job + " removed from queue and rescheduled -> Duplicate instance");}
+                if (removed) {
+                    // Job was already scheduled in timed jobs - check if it's non-critical
+                    // Non-critical duplicate jobs should be dropped, not rescheduled
+                    if (isNonCriticalJob(job)) {
+                        if (_log.shouldWarn()) {_log.warn(job + " removed from queue and dropped -> Duplicate non-critical job");}
+                        job.dropped();
+                        dropped = true;
+                    } else if (_log.shouldWarn()) {
+                        _log.warn(job + " removed from queue and rescheduled -> Duplicate instance");
+                    }
+                }
 
-                if (shouldDrop(job, numReady)) {
+                if (!dropped && shouldDrop(job, numReady)) {
                     job.dropped();
                     dropped = true;
                 }
