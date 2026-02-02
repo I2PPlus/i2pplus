@@ -24,8 +24,8 @@ public class ExpireJobManager extends JobImpl {
     private final PriorityBlockingQueue<TunnelExpiration> _expirationQueue;
     private volatile boolean _isScheduled = false;
 
-    // Check every 5 seconds for tunnels to expire
-    private static final long CHECK_INTERVAL = 5 * 1000;
+    // Only run when tunnels are within this window of expiring (avoids unnecessary runs)
+    private static final long BATCH_WINDOW = 90 * 1000;
     // Early expiration offsets to match original ExpireJob behavior
     private static final long OB_EARLY_EXPIRE = 30 * 1000;
     private static final long IB_EARLY_EXPIRE = OB_EARLY_EXPIRE + 7500;
@@ -33,7 +33,7 @@ public class ExpireJobManager extends JobImpl {
     public ExpireJobManager(RouterContext ctx) {
         super(ctx);
         _expirationQueue = new PriorityBlockingQueue<>();
-        getTiming().setStartAfter(ctx.clock().now() + CHECK_INTERVAL);
+        getTiming().setStartAfter(ctx.clock().now() + BATCH_WINDOW);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class ExpireJobManager extends JobImpl {
             if (!_isScheduled) {
                 _isScheduled = true;
                 long now = getContext().clock().now();
-                long nextRun = Math.min(earlyExpire, now + CHECK_INTERVAL);
+                long nextRun = Math.min(earlyExpire, now + BATCH_WINDOW);
                 getTiming().setStartAfter(nextRun);
                 getContext().jobQueue().addJob(this);
             }
@@ -135,10 +135,14 @@ public class ExpireJobManager extends JobImpl {
                     }
                 }
 
-                long nextRun = Math.min(nextExpiration, now + CHECK_INTERVAL);
-                getTiming().setStartAfter(nextRun);
-                _isScheduled = true;
-                getContext().jobQueue().addJob(this);
+                // Only schedule if next expiration is within batch window
+                // This avoids unnecessary job queue entries when tunnels are far from expiring
+                if (nextExpiration <= now + BATCH_WINDOW) {
+                    long nextRun = Math.min(nextExpiration, now + CHECK_INTERVAL);
+                    getTiming().setStartAfter(nextRun);
+                    _isScheduled = true;
+                    getContext().jobQueue().addJob(this);
+                }
             }
         }
     }

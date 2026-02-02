@@ -56,11 +56,11 @@ class JobQueueScaler implements Runnable {
     private long _circuitBreakerOpenTime; // When the circuit breaker was opened
 
     // Feedback configuration
-    private static final int FEEDBACK_CHECKS_AFTER_SCALE = 5; // Check 5 times after scaling (was 3 - give more time for queue to drain before evaluating)
-    private static final int MAX_CONSECUTIVE_FAILED_SCALES = 2; // After 2 failed scales, stop trying
+    private static final int FEEDBACK_CHECKS_AFTER_SCALE = 5; // Check 5 times after scaling - give time for queue to drain before evaluating
+    private static final int MAX_CONSECUTIVE_FAILED_SCALES = 10; // After 5 failed scales, stop trying (increased from 2)
     private static final long EXTENDED_COOLDOWN_MULTIPLIER = 3; // 3x normal cooldown after failed scale
-    private static final double LAG_INCREASE_THRESHOLD = 1.5; // If lag increased by 50%, consider it failed (was 20% - allow more time for queue to drain)
-    private static final double READY_JOBS_INCREASE_THRESHOLD = 1.25; // If ready jobs increased by 25%, consider it failed (was 10%)
+    private static final double LAG_INCREASE_THRESHOLD = 1.5; // If lag increased by 50%, consider it failed
+    private static final double READY_JOBS_INCREASE_THRESHOLD = 1.25; // If ready jobs increased by 25%
     private static final long CIRCUIT_BREAKER_RESET_TIME = 5*60*1000; // Reset circuit breaker after 5 minutes
     private static final long LAG_EMERGENCY_THRESHOLD = 5; // 10ms - emergency scaling threshold - trigger immediately when lag starts
 
@@ -170,12 +170,7 @@ class JobQueueScaler implements Runnable {
         long maxRunnerMemory = (long) (maxMemory * MAX_MEMORY_PERCENTAGE);
         int ramBasedMax = (int) (maxRunnerMemory / RUNNER_MEMORY_ESTIMATE);
 
-        // Also consider current memory pressure
-        long usedMemory = getUsedMemory();
-        long freeMemory = maxMemory - usedMemory;
-        int freeMemoryBasedMax = (int) ((freeMemory * 0.5) / RUNNER_MEMORY_ESTIMATE); // Only use 50% of free mem
-
-        int effectiveMax = Math.min(ramBasedMax, freeMemoryBasedMax);
+        int effectiveMax = ramBasedMax;
         int targetMax = configuredMax * 2;
         int finalMax = Math.min(targetMax, effectiveMax);
 
@@ -445,8 +440,8 @@ class JobQueueScaler implements Runnable {
             }
         }
 
-        if (emergencyMode && !inCooldown && activeRunners < maxRunners) {
-            int emergencyRunnersNeeded = (int) (maxLag / LAG_EMERGENCY_THRESHOLD);
+        if (emergencyMode && activeRunners < maxRunners) {
+            int emergencyRunnersNeeded = Math.max(1, (int) (maxLag / LAG_EMERGENCY_THRESHOLD));
             int emergencyStep = Math.min(emergencyRunnersNeeded, 16); // Add up to 16 runners in emergency
             int targetRunners = Math.min(activeRunners + emergencyStep, maxRunners);
             int runnersToAdd = targetRunners - activeRunners;
@@ -499,6 +494,15 @@ class JobQueueScaler implements Runnable {
         }
 
         // Execute scaling
+        if (_log.shouldDebug()) {
+            _log.debug("Scaling decision: shouldScaleUp=" + shouldScaleUp +
+                      " readyJobs=" + readyJobs + " activeRunners=" + activeRunners +
+                      " maxLag=" + maxLag + " avgLag=" + avgLag +
+                      " emergencyMode=" + emergencyMode + " inCooldown=" + inCooldown +
+                      " minRunners=" + minRunners + " maxRunners=" + maxRunners +
+                      " scalingUpDisabled=" + _scalingUpDisabled +
+                      " consecutiveScaleUpChecks=" + _consecutiveScaleUpChecks);
+        }
         if (shouldScaleUp) {
             // Calculate how many runners to add based on lag severity
             int scaleUpStep = DEFAULT_SCALE_UP_STEP;
