@@ -468,14 +468,20 @@ public class JobQueue {
             String jobName = job.getName();
             if (jobName != null) {
                 if (jobName.contains("Lease") || jobName.contains("Timeout")) {return false;}
-                // NEVER drop Handle Build Reply - critical for participating in tunnel builds
-                if (jobName.contains("Handle Build Reply")) {return false;}
+                // NEVER drop Build related jobs - critical for transit
+                if (jobName.contains("Build")) {return false;}
+                // NEVER drop Handle Message related jobs
+                if (jobName.contains("Handle")) {return false;}
+                // NEVER drop garlic messages - critical for all I2P communication
+                if (jobName.contains("Garlic")) {return false;}
+                // NEVER drop database store/lookup - critical for floodfill and peer discovery
+                if (jobName.contains("Database Store") || jobName.contains("Database Lookup") || jobName.contains("Db")) {return false;}
+                // NEVER drop tunnel build messages
+                if (jobName.contains("Tunnel Build")) {return false;}
             }
             if ((!disableTunnelTests && cls == TestJob.class) ||
                 cls == PeerTestJob.class ||
-                cls == ExploreJob.class ||
-                cls == HandleFloodfillDatabaseLookupMessageJob.class ||
-                cls == HandleGarlicMessageJob.class) {
+                cls == ExploreJob.class) {
                 return true;
             }
         }
