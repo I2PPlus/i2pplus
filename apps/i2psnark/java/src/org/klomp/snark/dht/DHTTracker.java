@@ -39,11 +39,11 @@ class DHTTracker {
     private static final long CLEAN_TIME = 199 * 1000;
 
     /** no guidance in BEP 5; Vuze is 8h */
-    private static final long MAX_EXPIRE_TIME = 10*60*1000;
-    private static final long MIN_EXPIRE_TIME = 5*60*1000;
+    private static final long MAX_EXPIRE_TIME = 60*60*1000;
+    private static final long MIN_EXPIRE_TIME = 10*60*1000;
     private static final long DELTA_EXPIRE_TIME = 3 * 60 * 1000;
     private static final int MAX_PEERS = 400;
-    private static final int MAX_PEERS_PER_TORRENT = 60;
+    private static final int MAX_PEERS_PER_TORRENT = 100;
     private static final int ABSOLUTE_MAX_PER_TORRENT = MAX_PEERS_PER_TORRENT * 2;
     private static final int MAX_TORRENTS = 2000;
 
@@ -145,18 +145,18 @@ class DHTTracker {
     public void renderStatusHTML(StringBuilder buf) {
         String separator = " <span class=bullet>&nbsp;&bullet;&nbsp;</span> ";
         buf.append("<div class=debugStats>")
-                .append("<span class=stat><b>DHT Torrents:</b> <span class=dbug>")
-                .append(_torrentCount)
-                .append("</span></span>")
-                .append(separator)
-                .append("<span class=stat><b>DHT Tracker Peers:</b> <span class=dbug>")
-                .append(_peerCount)
-                .append("</span></span>")
-                .append(separator)
-                .append("<span class=stat><b>Peer Expiration:</b> <span class=dbug>")
-                .append(DataHelper.formatDuration(_expireTime))
-                .append("</span></span>")
-                .append(separator); // append blacklisted peers info here
+           .append("<span class=stat><b>DHT Torrents:</b> <span class=dbug>")
+           .append(_torrentCount)
+           .append("</span></span>")
+           .append(separator)
+           .append("<span class=stat><b>DHT Tracker Peers:</b> <span class=dbug>")
+           .append(_peerCount)
+           .append("</span></span>")
+           .append(separator)
+           .append("<span class=stat><b>Peer Expiration:</b> <span class=dbug>")
+           .append(DataHelper.formatDuration(_expireTime))
+           .append("</span></span>")
+           .append(separator); // append blacklisted peers info here
     }
 
     private class Cleaner extends SimpleTimer2.TimedEvent {
@@ -211,14 +211,8 @@ class DHTTracker {
             else _expireTime = Math.min(_expireTime + DELTA_EXPIRE_TIME, MAX_EXPIRE_TIME);
 
             if (_log.shouldDebug())
-                _log.debug(
-                        "DHT tracker cleaner done, now with "
-                                + torrentCount
-                                + " torrents, "
-                                + peerCount
-                                + " peers, "
-                                + DataHelper.formatDuration(_expireTime)
-                                + " expiration");
+                _log.debug("DHTracker cleaner complete -> Status: " + torrentCount + " torrents, " +
+                            peerCount + " peers, " + DataHelper.formatDuration(_expireTime) + " expiration");
             _peerCount = peerCount;
             _torrentCount = torrentCount;
             schedule(tooMany ? CLEAN_TIME / 3 : CLEAN_TIME);
