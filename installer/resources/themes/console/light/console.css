@@ -1230,8 +1230,10 @@ h3+div.statusnotes{margin-top:2px}
 .tunnel_peer{margin:0;padding:3px 2px;width:auto;min-width:70px}
 .tunnel_local{margin-right:2px;width:99px;box-sizing:border-box;text-transform:lowercase;font-size:8pt}
 .tunnels_participating td.cells:first-child{font-size:0}
-.tunneldisplay .failed td{box-shadow:none!important}
-.tunneldisplay .failed td{border-left:0!important;border-right:0!important;background:#3008!important}
+.tunneldisplay .failed,.tunneldisplay .failed:hover,.tunneldisplay .failed:hover td{background:#eee!important;pointer-events:none}
+.tunneldisplay .failed td:not(.rif):first-child{background:linear-gradient(90deg,#f00 2px, #0000 2px)}
+.tunneldisplay .failed td{border-left:0!important;border-right:0!important;box-shadow:none!important}
+.tunneldisplay .failed td,.tunneldisplay .failed td>*{color:#f00!important}
 #country,#router,th#version,#tier,#edit,.tcount{width:2%;white-space:nowrap}
 #refreshPage{cursor:pointer}
 #transitbypeer #tunnels th{position:relative}

@@ -13,14 +13,14 @@ body.js #tunnelsContainer{display:block!important}
 .tunnels_client th:nth-child(3),.tunnels_client td:nth-child(3){width:7%;white-space:nowrap}
 .tunnelTest{text-align:center}
 .tunnelTest span{display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:middle}
-.good .tunnelTest span{background:#0c0}
-.failed .tunnelTest span{background:#900;animation:none}
-.failing .tunnelTest span{background:#f60}
-.testing .tunnelTest span{background:#fc0;animation:pulse 1.5s infinite}
-.untested .tunnelTest span{background:#999}
+.failed .tunnelTest span{background:var(--tunn_reject)}
+.failing .tunnelTest span{background:var(--tunn_failing)}
+.good .tunnelTest span{background:var(--tunn_active)}
+.testing .tunnelTest span{background:var(--tunn_starting);animation:pulse 1.5s infinite}
+.untested .tunnelTest span{background:var(--tunn_hidden)}
 tr.failed{background:#f002}
 tr.failed td>*:not(.failed .tunnelTest span){opacity:.5}
 tr.failed .testFailed{animation:none}
 #statusnotes td{padding:10px;font-style:italic;font-size:105%;text-align:center;border-top-width:2px}
 
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1.1)}50%{opacity:.7;transform:scale(.9)}}
