@@ -467,7 +467,7 @@ public class JobQueue {
             if (cls == RepublishLeaseSetJob.class) {return false;}
             String jobName = job.getName();
             if (jobName != null) {
-                if (jobName.contains("Lease") || jobName.contains("Timeout") {return false;}
+                if (jobName.contains("Lease") || jobName.contains("Timeout")) {return false;}
                 // NEVER drop Handle Build Reply - critical for participating in tunnel builds
                 if (jobName.contains("Handle Build Reply")) {return false;}
             }
