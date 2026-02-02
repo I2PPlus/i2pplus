@@ -877,18 +877,29 @@ public class SidebarHelper extends HelperBase {
         RateStat rs = _context.statManager().getRate("jobQueue.jobLag");
         if (rs == null) {return "0";}
         Rate lagRate = rs.getRate(RateConstants.ONE_MINUTE);
-        // Use sub-millisecond precision for accurate display
         double avgLag = lagRate.getAverageValue();
         double maxLag = _context.jobQueue().getMaxLagDouble();
         long peakLag = _context.jobQueue().getPeakLag();
 
-        if (!isAdvanced() || (maxLag < 30.0 && peakLag < 1000)) {
-            // Single value display for basic mode or low lag
+        if (!isAdvanced()) {
             return DataHelper.formatDuration2(avgLag);
         }
 
-        // Advanced mode: show avg / current max / peak - let formatter handle units
-        return DataHelper.formatDuration2(avgLag) + THINSP + DataHelper.formatDuration2(maxLag) + " (" + DataHelper.formatDuration2(peakLag) + ")";
+        // Advanced mode: show meaningful values
+        // If current max is very low, don't show it - queue has drained
+        if (maxLag < 100 && peakLag > 0) {
+            // Queue drained but had significant lag recently
+            return DataHelper.formatDuration2(avgLag) + THINSP + "(" + _t("peak") + ": " + DataHelper.formatDuration2(peakLag) + ")";
+        } else if (maxLag >= 100 && peakLag > maxLag) {
+            // Queue has backlog and peak was worse than current
+            return DataHelper.formatDuration2(avgLag) + THINSP + DataHelper.formatDuration2(maxLag) + " (" + _t("peak") + ": " + DataHelper.formatDuration2(peakLag) + ")";
+        } else if (maxLag >= 100) {
+            // Queue has backlog, peak not significantly higher
+            return DataHelper.formatDuration2(avgLag) + THINSP + DataHelper.formatDuration2(maxLag);
+        } else {
+            // Everything is good
+            return DataHelper.formatDuration2(avgLag);
+        }
     }
 
     /**

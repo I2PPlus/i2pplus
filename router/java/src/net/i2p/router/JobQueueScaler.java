@@ -391,6 +391,14 @@ class JobQueueScaler implements Runnable {
         // Calculate emergency mode early - we need this for feedback check decision
         boolean emergencyMode = maxLag > LAG_EMERGENCY_THRESHOLD || activeJobMaxDuration > LAG_EMERGENCY_THRESHOLD;
 
+        // Log scaler state every check for debugging
+        if (_log.shouldInfo() && timeSinceLastScale > 10000) {
+            _log.info("JobQueueScaler state: runners=" + activeRunners + "/" + maxRunners +
+                      " readyJobs=" + readyJobs + " maxLag=" + maxLag + "ms activeDuration=" + activeJobMaxDuration + "ms" +
+                      " emergencyMode=" + emergencyMode + " cooldown=" + inCooldown +
+                      (_scalingUpDisabled ? " CB_DISABLED" : ""));
+        }
+
         // Debug logging every 10 seconds to trace scaler decisions
         if (_log.shouldDebug() && (_checksSinceLastScale % 10 == 0)) {
             _log.debug("JobQueueScaler check: Active / Max runners: " + activeRunners + "/" + maxRunners +
@@ -398,6 +406,12 @@ class JobQueueScaler implements Runnable {
                       "\n* In cooldown: " + (inCooldown ? "yes" : "no") + " Last scale: " + timeSinceLastScale / 1000 + "s " +
                       (_scalingUpDisabled ? "(disabled)" : "") + " Extended cooldown active: " + (_isInExtendedCooldown ? "yes" : "no") +
                       " Pre-scale snapshot: " + (_preScaleSnapshot != null ? "yes" : "no"));
+        }
+
+        // Log when emergency mode detected but no action taken
+        if (emergencyMode && activeRunners >= maxRunners && _log.shouldWarn()) {
+            _log.warn("JobQueueScaler: Emergency lag detected but at max runners (" + activeRunners + "/" + maxRunners + ")" +
+                      " Ready jobs: " + readyJobs + " Max lag: " + maxLag + "ms, Active duration: " + activeJobMaxDuration + "ms");
         }
 
         // Check if we need to evaluate feedback from last scale-up
@@ -471,6 +485,12 @@ class JobQueueScaler implements Runnable {
             boolean criticalLag = maxLag > lagThreshold * 10; // 10x threshold = critical
             boolean slowActiveJobs = activeJobMaxDuration > lagThreshold * 50; // Jobs running >50ms (very slow)
             boolean criticalSlowJobs = activeJobMaxDuration > lagThreshold * 100; // Jobs running >100ms (critical)
+
+            if (_log.shouldInfo() && readyJobs > 50) {
+                _log.info("JobQueueScaler backlog check: readyJobs=" + readyJobs + " activeRunners=" + activeRunners +
+                          " jobsRatio=" + String.format("%.2f", jobsRatio) + " ratioThreshold=" + ratioThreshold +
+                          " highBacklog=" + highBacklog + " highLag=" + highLag + " slowActiveJobs=" + slowActiveJobs);
+            }
 
             if (highBacklog || highLag || slowActiveJobs) {
                 _consecutiveScaleUpChecks++;
