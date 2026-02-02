@@ -183,10 +183,10 @@ class JobQueueScaler implements Runnable {
         finalMax = Math.max(getMinRunners(), finalMax);
 
         if (_log.shouldInfo()) {
-            _log.info("Max runners calculation: configured=" + configuredMax +
-                     ", target=" + targetMax + ", ramBased=" + ramBasedMax +
-                     ", freeMemBased=" + freeMemoryBasedMax + ", final=" + finalMax +
-                     " (maxMemory=" + (maxMemory/MB) + "MB, used=" + (usedMemory/MB) + "MB)");
+            _log.info("Max Job Runners: Configured max: " + configuredMax +
+                     " Target max: " + targetMax + " Available RAM max: " + ramBasedMax +
+                     " Free RAM max: " + freeMemoryBasedMax + " Adjusted max: " + finalMax +
+                     " Used / Max memory: " +  (usedMemory/MB) + "MB / " + (maxMemory/MB) + "MB");
         }
 
         return finalMax;
