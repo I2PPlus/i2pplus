@@ -441,10 +441,9 @@ class JobQueueScaler implements Runnable {
         }
 
         if (emergencyMode && activeRunners < maxRunners) {
-            int emergencyRunnersNeeded = Math.max(1, (int) (maxLag / LAG_EMERGENCY_THRESHOLD));
-            int emergencyStep = Math.min(emergencyRunnersNeeded, 16); // Add up to 16 runners in emergency
-            int targetRunners = Math.min(activeRunners + emergencyStep, maxRunners);
-            int runnersToAdd = targetRunners - activeRunners;
+            int runnersAvailable = maxRunners - activeRunners;
+            int emergencyRunnersNeeded = Math.max(4, runnersAvailable / 2); // Take half of available headroom, minimum 4
+            int runnersToAdd = Math.min(emergencyRunnersNeeded, runnersAvailable);
 
             if (runnersToAdd > 0) {
                 if (_log.shouldWarn()) {
