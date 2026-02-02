@@ -56,6 +56,11 @@ public class JobQueue {
     private volatile boolean _alive;
     private final Object _jobLock;
     private volatile long _nextPumperRun;
+    /** Peak lag observed from completed jobs (reset on readout) */
+    private volatile long _peakLag;
+    /** Timestamp of last peak lag reset */
+    private long _peakLagResetTime;
+    private static final long PEAK_LAG_RESET_INTERVAL = 60*1000; // Reset every 60 seconds
 
     /** How many when we go parallel */
     static int RUNNERS;
@@ -404,6 +409,48 @@ public class JobQueue {
         return jobCount > 0 ? totalLag / jobCount : 0.0;
     }
 
+    /**
+     * Check if a job is non-critical and can tolerate high lag without impacting router functionality.
+     * These are exploratory, testing, or informational jobs that don't affect core routing.
+     *
+     * @param job the job to check
+     * @return true if the job is non-critical and shouldn't trigger lag warnings
+     */
+    private static boolean isNonCriticalJob(Job job) {
+        Class<? extends Job> cls = job.getClass();
+        // Always critical
+        if (cls == RepublishLeaseSetJob.class) {return false;}
+        // Non-critical: testing, exploration, profiling
+        if (cls == TestJob.class || cls == PeerTestJob.class) {return true;}
+        String jobName = job.getName();
+        if (jobName != null) {
+            // Non-critical job types by name pattern
+            if (jobName.contains("Test Local Tunnel") ||
+                jobName.contains("Test") ||
+                jobName.contains("Explore") ||
+                jobName.contains("Peer Test") ||
+                jobName.contains("Profile") ||
+                jobName.contains("Bandwidth") ||
+                jobName.contains("Stats") ||
+                jobName.contains("Timeout Iterative Search")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Get the peak lag observed from completed jobs in the last interval.
+     * This shows the maximum delay experienced by any job that finished,
+     * unlike getAvgLag() which only shows current queue state.
+     *
+     * @return peak lag in milliseconds from recently completed jobs
+     * @since 0.9.68+
+     */
+    public long getPeakLag() {
+        return _peakLag;
+    }
+
     private boolean shouldDrop(Job job, int numReady) {
         if (_maxWaitingJobs <= 0) return false;
         if (!_allowParallelOperation) return false;
@@ -420,7 +467,7 @@ public class JobQueue {
             if (cls == RepublishLeaseSetJob.class) {return false;}
             String jobName = job.getName();
             if (jobName != null) {
-                if (jobName.contains("LeaseSet")) {return false;}
+                if (jobName.contains("Lease") || jobName.contains("Timeout") {return false;}
                 // NEVER drop Handle Build Reply - critical for participating in tunnel builds
                 if (jobName.contains("Handle Build Reply")) {return false;}
             }
@@ -784,11 +831,29 @@ public class JobQueue {
         }
         stats.jobRan(duration, lag);
 
+        // Check if this is a non-critical job that can tolerate lag
+        // These jobs are exploratory/testing and don't impact core router functionality
+        boolean isNonCritical = isNonCriticalJob(job);
+
+        // Track peak lag from completed jobs for sidebar display
+        // Only track peak for critical jobs that actually matter
+        if (!isNonCritical) {
+            long now = _context.clock().now();
+            if (now - _peakLagResetTime > PEAK_LAG_RESET_INTERVAL) {
+                _peakLag = 0;
+                _peakLagResetTime = now;
+            }
+            if (lag > _peakLag) {
+                _peakLag = (long) lag;
+            }
+        }
+
         String dieMsg = null;
         // Convert to long for warning comparison (warnings still based on ms thresholds)
         long lagMs = (long) lag;
         long durationMs = (long) duration;
-        if (lagMs > _lagWarning) {
+        // Skip lag warnings for non-critical jobs - they can tolerate delay
+        if (lagMs > _lagWarning && !isNonCritical) {
             dieMsg = "Too much lag for " + job.getName() + " Job: " + String.format("%.3f", lag) + "ms with run time of " + String.format("%.3f", duration) + "ms";
         } else if (durationMs > _runWarning) {
             dieMsg = "Run too long for " + job.getName() + " Job: " + String.format("%.3f", lag) + "ms lag with run time of " + String.format("%.3f", duration) + "ms";
