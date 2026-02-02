@@ -39,6 +39,7 @@ class ExpireLeasesJob extends JobImpl {
     private final static long RERUN_DELAY_MS = 45*1000;
     private static final int LIMIT_LEASES_FF = 1250;
     private static final int LIMIT_LEASES_CLIENT = SystemVersion.isSlow() ? 300 : 750;
+    private volatile boolean _isShutdown;
 
     public ExpireLeasesJob(RouterContext ctx, KademliaNetworkDatabaseFacade facade) {
         super(ctx);
@@ -49,13 +50,24 @@ class ExpireLeasesJob extends JobImpl {
     public String getName() { return "Expire Leases"; }
 
     public void runJob() {
+        if (_isShutdown) {return;}
         long uptime = getContext().router().getUptime();
         List<Hash> toExpire = selectKeysToExpire();
         if (!toExpire.isEmpty() && uptime >= 90*1000) {
             for (Hash key : toExpire) {_facade.fail(key);}
             if (_log.shouldInfo()) {_log.info("Leases expired: " + toExpire.size());}
         }
-        requeue(RERUN_DELAY_MS);
+        if (!_isShutdown) {
+            requeue(RERUN_DELAY_MS);
+        }
+    }
+
+    /**
+     *  Mark this job as shutdown to prevent requeueing
+     *  @since 0.9.68+
+     */
+    void shutdown() {
+        _isShutdown = true;
     }
 
     /**

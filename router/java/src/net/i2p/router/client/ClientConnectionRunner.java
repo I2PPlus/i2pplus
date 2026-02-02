@@ -643,6 +643,12 @@ class ClientConnectionRunner {
         if (isPrimary && _floodfillNetworkDatabaseFacade == null) {
             if (_log.shouldDebug()) {_log.debug("Initializing subDb for client" + destHash);}
             _floodfillNetworkDatabaseFacade = new FloodfillNetworkDatabaseFacade(_context, destHash);
+            // Check for transient client indicators (e.g., HostChecker ping tunnels)
+            // to skip starting ExpireLeasesJob and reduce job queue pressure
+            if (isTransientClient(opts)) {
+                _floodfillNetworkDatabaseFacade.setTransient();
+                if (_log.shouldDebug()) {_log.debug("Marked client DB as transient: " + destHash);}
+            }
             _floodfillNetworkDatabaseFacade.startup();
         }
         return _manager.destinationEstablished(this, dest);
@@ -1210,5 +1216,25 @@ class ClientConnectionRunner {
                     _log.warn("Error updating the status for message ID " + _messageId + " -> " + ime.getMessage());
             }
         }
+    }
+
+    /**
+     *  Check if this client session is transient (short-lived, unpublished LeaseSets).
+     *  Transient clients (e.g., HostChecker ping tunnels) don't need ExpireLeasesJob.
+     *  @param opts session options
+     *  @return true if transient
+     *  @since 0.9.68+
+     */
+    private static boolean isTransientClient(Properties opts) {
+        if (opts == null) {return false;}
+        // Check for indicators of short-lived ping/checker clients:
+        // 1. LeaseSets are not published to the network
+        boolean dontPublish = Boolean.parseBoolean(opts.getProperty("i2cp.dontPublishLeaseSet"));
+        // 2. Tunnels are not tested (short-lived, no need for reliability)
+        boolean inboundNoTest = "false".equalsIgnoreCase(opts.getProperty("inbound.shouldTest"));
+        boolean outboundNoTest = "false".equalsIgnoreCase(opts.getProperty("outbound.shouldTest"));
+        // Mark as transient if LeaseSets aren't published AND at least one direction has testing disabled
+        // This catches HostChecker ping tunnels which set both flags
+        return dontPublish && (inboundNoTest || outboundNoTest);
     }
 }

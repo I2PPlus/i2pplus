@@ -87,6 +87,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private final BlindCache _blindCache;
     private final Hash _dbid;
     private final Job _elj, _erj;
+    private volatile boolean _isTransient;
     static final String PROP_MIN_ROUTER_VERSION = "router.minVersionAllowed";
     public static final String PROP_BLOCK_MY_COUNTRY = "i2np.blockMyCountry";
     public static final String PROP_IP_COUNTRY = "i2np.lastCountry";
@@ -355,6 +356,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             Job erj = new ExpireRoutersJob(_context, this); // expire inline before saving RIs in _ds.stop()
             erj.runJob();
         }
+        if (_elj instanceof ExpireLeasesJob) {
+            ((ExpireLeasesJob) _elj).shutdown();
+        }
         _context.jobQueue().removeJob(_elj);
         if (_erj != null) {_context.jobQueue().removeJob(_erj);}
         if (_kb != null && !isClientDb()) {_kb.clear();}
@@ -405,6 +409,15 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         return true;
     }
 
+    /**
+     *  Mark this client database as transient (short-lived, unpublished LeaseSets).
+     *  This will skip starting the ExpireLeasesJob to reduce job queue pressure.
+     *  @since 0.9.68+
+     */
+    public void setTransient() {
+        _isTransient = true;
+    }
+
     public void startup() {
         RouterInfo ri = _context.router().getRouterInfo();
         String dbDir = _context.getProperty(PROP_DB_DIR, DEFAULT_DB_DIR);
@@ -439,8 +452,14 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         _initialized = true;
         _started = System.currentTimeMillis();
         long now = _context.clock().now();
-        _elj.getTiming().setStartAfter(now + 30*1000);
-        _context.jobQueue().addJob(_elj); // expire old leases
+        // Don't start ExpireLeasesJob for transient client DBs (e.g., HostChecker ping tunnels)
+        // to reduce job queue pressure from short-lived tunnels
+        if (!_isTransient) {
+            _elj.getTiming().setStartAfter(now + 30*1000);
+            _context.jobQueue().addJob(_elj); // expire old leases
+        } else if (_log.shouldDebug()) {
+            _log.debug("Skipping ExpireLeasesJob for transient client DB: " + _dbid);
+        }
 
         // expire some routers
         // Don't run until after RefreshRoutersJob has run, and after validate() will return invalid for old routers.
