@@ -79,7 +79,7 @@ public class JobQueue {
     private final static long DEFAULT_LAG_WARNING = 15*1000;
     private long _lagWarning = DEFAULT_LAG_WARNING;
     /** If a job is this lagged, the router is hosed, so spit out a warning (don't shut it down) */
-    private final static long DEFAULT_LAG_FATAL = 30*1000;
+    private final static long DEFAULT_LAG_FATAL = 60*1000;
     private long _lagFatal = DEFAULT_LAG_FATAL;
     /** If a job takes this long to run, spit out a warning, but keep going */
     private final static long DEFAULT_RUN_WARNING = 10*1000;
@@ -88,7 +88,7 @@ public class JobQueue {
     private final static long DEFAULT_RUN_FATAL = 30*1000;
     private long _runFatal = DEFAULT_RUN_FATAL;
     /** Don't enforce fatal limits until the router has been up for this long */
-    private final static long DEFAULT_WARMUP_TIME = 15*60*1000;
+    private final static long DEFAULT_WARMUP_TIME = 5*60*1000;
     private long _warmupTime = DEFAULT_WARMUP_TIME;
     /** Max ready and waiting jobs before we start dropping 'em */
     private final static int DEFAULT_MAX_WAITING_JOBS = SystemVersion.isSlow() ? 128 : 192;

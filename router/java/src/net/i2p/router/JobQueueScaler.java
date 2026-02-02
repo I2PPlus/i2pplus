@@ -62,7 +62,7 @@ class JobQueueScaler implements Runnable {
     private static final double READY_JOBS_INCREASE_THRESHOLD = 1.1; // If ready jobs increased by 10%
     private static final double EXTENDED_COOLDOWN_MULTIPLIER = 3; // 3x normal cooldown after failed scale
     private static final long CIRCUIT_BREAKER_RESET_TIME = 3*60*1000; // Reset circuit breaker after 3 minutes
-    private static final long LAG_EMERGENCY_THRESHOLD = 5; // 10ms - emergency scaling threshold - trigger immediately when lag starts
+    private static final long LAG_EMERGENCY_THRESHOLD = 5; // 5ms - emergency scaling threshold - trigger immediately when lag starts
 
     // RAM-based limits
     private static final long MB = 1024 * 1024;
@@ -438,9 +438,9 @@ class JobQueueScaler implements Runnable {
             int runnersToAdd = Math.min(Math.max(4, runnersAvailable / 2), runnersAvailable);
 
             if (runnersToAdd > 0) {
-                if (_log.shouldWarn()) {
-                    _log.warn("EMERGENCY SCALING: Adding " + runnersToAdd + " runners immediately! " +
-                              "Max lag=" + maxLag + "ms, Active duration=" + activeJobMaxDuration + "ms. " +
+                if (_log.shouldInfo()) {
+                    _log.info("Adding " + runnersToAdd + " runners now -> " +
+                              "Max lag: " + maxLag + "ms, Active duration=" + activeJobMaxDuration + "ms " +
                               "Runners: " + activeRunners + "/" + maxRunners);
                 }
                 // Emergency mode bypasses circuit breaker and feedback
@@ -456,14 +456,14 @@ class JobQueueScaler implements Runnable {
                 _scalingUpDisabled = false;
                 _consecutiveFailedScaleUps = 0;
                 _isInExtendedCooldown = false;
-                if (_log.shouldWarn()) {
-                    _log.warn("CIRCUIT BREAKER RESET: Scaling up re-enabled after " +
-                              (timeSinceBreakerOpen/1000) + " seconds");
+                if (_log.shouldInfo()) {
+                    _log.info("Resetting JobQueue circuit breaker after " +
+                              (timeSinceBreakerOpen/1000) + " seconds cooloff");
                 }
             } else {
                 // Still in circuit breaker period - only allow scale down
                 if (_log.shouldDebug()) {
-                    _log.debug("Scaling up disabled - circuit breaker open for " +
+                    _log.debug("Scaling up disabled -> Circuit breaker open for " +
                               (timeSinceBreakerOpen/1000) + "/" + (CIRCUIT_BREAKER_RESET_TIME/1000) + " seconds");
                 }
                 checkScaleDown(activeRunners, readyJobs, maxLag, avgLag, minRunners, inCooldown);

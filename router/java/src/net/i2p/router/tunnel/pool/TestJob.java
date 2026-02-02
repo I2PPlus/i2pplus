@@ -64,7 +64,7 @@ public class TestJob extends JobImpl {
      * Maximum number of TestJob instances that should be queued before deferring new ones.
      * Prevents job queue saturation from too many waiting tunnel tests.
      */
-    private static final int MAX_QUEUED_TESTS = SystemVersion.isSlow() ? 64 : 128;
+    private static final int MAX_QUEUED_TESTS = SystemVersion.isSlow() ? 32 : 64;
     public static int maxQueuedTests = MAX_QUEUED_TESTS;
 
     /**
@@ -73,8 +73,8 @@ public class TestJob extends JobImpl {
      * Prevents ever-increasing backlogs that could cause job lag.
      * Dynamic limit varies between this and BASE_TEST_JOB_LIMIT based on job lag.
      */
-    public static final int MAX_TEST_JOB_LIMIT = SystemVersion.isSlow() ? 256 : 512;
-    private static final int BASE_TEST_JOB_LIMIT = SystemVersion.isSlow() ? 128 : 256;
+    public static final int MAX_TEST_JOB_LIMIT = SystemVersion.isSlow() ? 128 : 256;
+    private static final int BASE_TEST_JOB_LIMIT = SystemVersion.isSlow() ? 64 : 128;
 
     /**
      * Calculate dynamic job limit based on router performance (job lag).
@@ -88,14 +88,14 @@ public class TestJob extends JobImpl {
         long maxLag = ctx.jobQueue().getMaxLag();
 
         // Scale based on lag - lower lag allows higher limits
-        if (avgLag < 10 && maxLag < 100) {
+        if (avgLag < 5 && maxLag < 100) {
             return MAX_TEST_JOB_LIMIT;  // Excellent performance
-        } else if (avgLag < 50 && maxLag < 500) {
+        } else if (avgLag < 10 && maxLag < 200) {
             // Linear interpolation between base and max
             int range = MAX_TEST_JOB_LIMIT - BASE_TEST_JOB_LIMIT;
             int reduction = (int) (range * avgLag / 50);
             return MAX_TEST_JOB_LIMIT - reduction;
-        } else if (avgLag < 100 && maxLag < 1000) {
+        } else if (avgLag < 10 && maxLag < 500) {
             return BASE_TEST_JOB_LIMIT + (MAX_TEST_JOB_LIMIT - BASE_TEST_JOB_LIMIT) / 2;
         } else {
             return BASE_TEST_JOB_LIMIT;  // Conservative when lag is high
@@ -833,7 +833,7 @@ public class TestJob extends JobImpl {
         // Check if this is the last tunnel in the pool for non-exploratory pools
         int tunnelCount = _pool.getTunnelCount();
         boolean isLastTunnel = !isExploratory && tunnelCount <= 1;
-        
+
         // Only fail the tunnel under test — do NOT blame _otherTunnel
         // Increment the tunnel's global failure count and check if we should continue
         boolean keepGoing = _cfg.tunnelFailed(); // This increments the counter and returns true if < MAX_CONSECUTIVE_TEST_FAILURES
