@@ -401,12 +401,11 @@ class JobQueueScaler implements Runnable {
 
         // Debug logging every 10 seconds to trace scaler decisions
         if (_log.shouldDebug() && (_checksSinceLastScale % 10 == 0)) {
-            _log.debug("JobQueueScaler check: runners=" + activeRunners + "/" + maxRunners +
-                      ", readyJobs=" + readyJobs + ", maxLag=" + maxLag + "ms, avgLag=" + avgLag + "ms, " +
-                      "activeJobMaxDuration=" + activeJobMaxDuration + "ms, " +
-                      "inCooldown=" + inCooldown + ", timeSinceLastScale=" + timeSinceLastScale + "ms, " +
-                      "scalingDisabled=" + _scalingUpDisabled + ", extendedCooldown=" + _isInExtendedCooldown +
-                      ", preScaleSnapshot=" + (_preScaleSnapshot != null));
+            _log.debug("JobQueueScaler check: Active / Max runners: " + activeRunners + "/" + maxRunners +
+                      " Ready jobs: " + readyJobs + " Max / Avg / Max job run: " + maxLag + " / " + avgLag + " / " + activeJobMaxDuration + "ms " +
+                      "\n* In cooldown: " + (inCooldown ? "yes" : "no") + " Last scale: " + timeSinceLastScale / 1000 + "s " +
+                      (_scalingUpDisabled ? "(disabled)" : "") + " Extended cooldown active: " + (_isInExtendedCooldown ? "yes" : "no") +
+                      " Pre-scale snapshot: " + (_preScaleSnapshot != null ? "yes" : "no"));
         }
 
         // Check if we need to evaluate feedback from last scale-up
