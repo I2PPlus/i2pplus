@@ -138,7 +138,7 @@ public class ExpireJobManager extends JobImpl {
                 // Only schedule if next expiration is within batch window
                 // This avoids unnecessary job queue entries when tunnels are far from expiring
                 if (nextExpiration <= now + BATCH_WINDOW) {
-                    long nextRun = Math.min(nextExpiration, now + CHECK_INTERVAL);
+                    long nextRun = Math.min(nextExpiration, now + BATCH_WINDOW);
                     getTiming().setStartAfter(nextRun);
                     _isScheduled = true;
                     getContext().jobQueue().addJob(this);
