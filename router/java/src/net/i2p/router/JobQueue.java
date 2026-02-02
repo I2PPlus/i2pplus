@@ -86,7 +86,7 @@ public class JobQueue {
     private final static long DEFAULT_WARMUP_TIME = 15*60*1000;
     private long _warmupTime = DEFAULT_WARMUP_TIME;
     /** Max ready and waiting jobs before we start dropping 'em */
-    private final static int DEFAULT_MAX_WAITING_JOBS = RUNNERS * 4;
+    private final static int DEFAULT_MAX_WAITING_JOBS = Math.max(512, RUNNERS * 32);
     private int _maxWaitingJobs = DEFAULT_MAX_WAITING_JOBS;
     private final static long MIN_LAG_TO_DROP = 1000; // 1 second
 
