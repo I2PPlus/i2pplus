@@ -71,13 +71,13 @@ public class JobQueue {
     /** router.config parameter to override the max runners */
     final static String PROP_MAX_RUNNERS = "router.maxJobRunners";
     /** If a job is this lagged, spit out a warning, but keep going */
-    private final static long DEFAULT_LAG_WARNING = 5*1000;
+    private final static long DEFAULT_LAG_WARNING = 15*1000;
     private long _lagWarning = DEFAULT_LAG_WARNING;
     /** If a job is this lagged, the router is hosed, so spit out a warning (don't shut it down) */
     private final static long DEFAULT_LAG_FATAL = 30*1000;
     private long _lagFatal = DEFAULT_LAG_FATAL;
     /** If a job takes this long to run, spit out a warning, but keep going */
-    private final static long DEFAULT_RUN_WARNING = 5*1000;
+    private final static long DEFAULT_RUN_WARNING = 10*1000;
     private long _runWarning = DEFAULT_RUN_WARNING;
     /** If a job takes this long to run, the router is hosed, so spit out a warning (don't shut it down) */
     private final static long DEFAULT_RUN_FATAL = 30*1000;
@@ -86,9 +86,9 @@ public class JobQueue {
     private final static long DEFAULT_WARMUP_TIME = 15*60*1000;
     private long _warmupTime = DEFAULT_WARMUP_TIME;
     /** Max ready and waiting jobs before we start dropping 'em */
-    private final static int DEFAULT_MAX_WAITING_JOBS = Math.max(512, RUNNERS * 32);
+    private final static int DEFAULT_MAX_WAITING_JOBS = SystemVersion.isSlow() ? 128 : 192;
     private int _maxWaitingJobs = DEFAULT_MAX_WAITING_JOBS;
-    private final static long MIN_LAG_TO_DROP = 1000; // 1 second
+    private final static long MIN_LAG_TO_DROP = 2000; // 2 seconds
 
     /**
      *  @since 0.9.52+
@@ -420,9 +420,7 @@ public class JobQueue {
             if (cls == RepublishLeaseSetJob.class) {return false;}
             String jobName = job.getName();
             if (jobName != null) {
-                if (jobName.contains("Republish LeaseSets")) {return false;}
-                // NEVER drop Check LeaseSet Request Status Job - critical for client tunnel lease management
-                if (jobName.contains("Check LeaseSet Request Status")) {return false;}
+                if (jobName.contains("LeaseSet")) {return false;}
                 // NEVER drop Handle Build Reply - critical for participating in tunnel builds
                 if (jobName.contains("Handle Build Reply")) {return false;}
             }
@@ -430,12 +428,7 @@ public class JobQueue {
                 cls == PeerTestJob.class ||
                 cls == ExploreJob.class ||
                 cls == HandleFloodfillDatabaseLookupMessageJob.class ||
-                cls == HandleGarlicMessageJob.class ||
-                cls == IterativeSearchJob.class) {
-                return true;
-            }
-            // Drop ExpireJobManager duplicates when queue is overloaded
-            if (jobName != null && jobName.equals("Expire Local Tunnels")) {
+                cls == HandleGarlicMessageJob.class) {
                 return true;
             }
         }
@@ -771,11 +764,12 @@ public class JobQueue {
         }
     }
 
-    void updateStats(Job job, long doStart, long origStartAfter, double duration) {
+    void updateStats(Job job, double duration) {
         if (_context.router() == null) return;
         String key = job.getName();
-        // Use high-precision pending time calculation from JobTiming
-        double lag = job.getTiming().getPendingMillis();
+        long actualStart = job.getTiming().getActualStart();
+        long scheduledStart = job.getTiming().getStartAfter();
+        double lag = actualStart - scheduledStart;
         MessageHistory hist = _context.messageHistory();
         long uptime = _context.router().getUptime();
 
@@ -800,7 +794,7 @@ public class JobQueue {
             dieMsg = "Run too long for " + job.getName() + " Job: " + String.format("%.3f", lag) + "ms lag with run time of " + String.format("%.3f", duration) + "ms";
         }
         if (dieMsg != null) {
-            if (_log.shouldWarn() && uptime > _warmupTime) {_log.warn(dieMsg);}
+            if (_log.shouldInfo() && uptime > _warmupTime) {_log.info(dieMsg);}
             if (hist != null) hist.messageProcessingError(-1, JobQueue.class.getName(), dieMsg);
         }
 

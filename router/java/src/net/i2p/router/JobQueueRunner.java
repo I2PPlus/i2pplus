@@ -62,8 +62,6 @@ class JobQueueRunner extends I2PThread {
                 if (_log.shouldDebug()) {
                     _log.debug("[Job " + job.getJobId() + "] " + job.getName() + " -> [Runner " + _id + "] running");
                 }
-                long origStartAfter = job.getTiming().getStartAfter();
-                long doStart = _context.clock().now();
                 job.getTiming().start();
                 runCurrentJob();
                 job.getTiming().end();
@@ -71,11 +69,12 @@ class JobQueueRunner extends I2PThread {
                 // Use nanosecond-precision duration calculation for sub-millisecond accuracy
                 double duration = job.getTiming().getDurationMillis();
                 long beforeUpdate = _context.clock().now();
-                _context.jobQueue().updateStats(job, doStart, origStartAfter, duration);
+                _context.jobQueue().updateStats(job, duration);
                 long diff = _context.clock().now() - beforeUpdate;
 
-                // Calculate lag with sub-millisecond precision
-                double lag = job.getTiming().getPendingMillis();
+                long actualStart = job.getTiming().getActualStart();
+                long scheduledStart = job.getTiming().getStartAfter();
+                double lag = actualStart - scheduledStart;
                 if (lag < 0) {lag = 0;}
 
                 // Cast to long for rate statistics (they don't need sub-millisecond precision)
