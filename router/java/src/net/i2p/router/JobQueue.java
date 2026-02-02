@@ -800,7 +800,7 @@ public class JobQueue {
             dieMsg = "Run too long for " + job.getName() + " Job: " + String.format("%.3f", lag) + "ms lag with run time of " + String.format("%.3f", duration) + "ms";
         }
         if (dieMsg != null) {
-            if (_log.shouldWarn()) {_log.warn(dieMsg);}
+            if (_log.shouldWarn() && uptime > _warmupTime) {_log.warn(dieMsg);}
             if (hist != null) hist.messageProcessingError(-1, JobQueue.class.getName(), dieMsg);
         }
 
