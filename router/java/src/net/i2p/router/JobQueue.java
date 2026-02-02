@@ -420,7 +420,11 @@ public class JobQueue {
             // NEVER drop RepublishLeaseSetJob or BatchRepublishJob - critical for network connectivity
             if (cls == RepublishLeaseSetJob.class) {return false;}
             String jobName = job.getName();
-            if (jobName != null && jobName.contains("Republish LeaseSets")) {return false;}
+            if (jobName != null) {
+                if (jobName.contains("Republish LeaseSets")) {return false;}
+                // NEVER drop Check LeaseSet Request Status Job - critical for client tunnel lease management
+                if (jobName.contains("Check LeaseSet Request Status")) {return false;}
+            }
             if ((!disableTunnelTests && cls == TestJob.class) ||
                 cls == PeerTestJob.class ||
                 cls == ExploreJob.class ||

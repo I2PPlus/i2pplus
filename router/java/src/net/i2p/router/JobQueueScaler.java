@@ -56,13 +56,13 @@ class JobQueueScaler implements Runnable {
     private long _circuitBreakerOpenTime; // When the circuit breaker was opened
 
     // Feedback configuration
-    private static final int FEEDBACK_CHECKS_AFTER_SCALE = 3; // Check 3 times after scaling
+    private static final int FEEDBACK_CHECKS_AFTER_SCALE = 5; // Check 5 times after scaling (was 3 - give more time for queue to drain before evaluating)
     private static final int MAX_CONSECUTIVE_FAILED_SCALES = 2; // After 2 failed scales, stop trying
     private static final long EXTENDED_COOLDOWN_MULTIPLIER = 3; // 3x normal cooldown after failed scale
-    private static final double LAG_INCREASE_THRESHOLD = 1.2; // If lag increased by 20%, consider it failed (tight for sub-ms targets)
-    private static final double READY_JOBS_INCREASE_THRESHOLD = 1.1; // If ready jobs increased by 10%, consider it failed
+    private static final double LAG_INCREASE_THRESHOLD = 1.5; // If lag increased by 50%, consider it failed (was 20% - allow more time for queue to drain)
+    private static final double READY_JOBS_INCREASE_THRESHOLD = 1.25; // If ready jobs increased by 25%, consider it failed (was 10%)
     private static final long CIRCUIT_BREAKER_RESET_TIME = 5*60*1000; // Reset circuit breaker after 5 minutes
-    private static final long LAG_EMERGENCY_THRESHOLD = 100; // 100ms - emergency scaling threshold
+    private static final long LAG_EMERGENCY_THRESHOLD = 5; // 10ms - emergency scaling threshold - trigger immediately when lag starts
 
     // RAM-based limits
     private static final long MB = 1024 * 1024;
@@ -78,7 +78,7 @@ class JobQueueScaler implements Runnable {
     private static final double DEFAULT_SCALE_UP_JOBS_RATIO = 1.2; // 1.2x (very aggressive - any backlog triggers scale)
     private static final int DEFAULT_SCALE_UP_STEP = 1; // Add 1 at a time (very conservative to avoid disruption)
     private static final int DEFAULT_SCALE_DOWN_STEP = 1;
-    private static final int SUSTAINED_CHECKS_REQUIRED = 3; // 3 checks (need sustained evidence for sub-μs targets)
+    private static final int SUSTAINED_CHECKS_REQUIRED = 2; // 2 checks (was 3 - faster response to load spikes)
 
     // Property names
     private static final String PROP_DYNAMIC_SCALING = "router.dynamicJobScaling";
@@ -182,11 +182,8 @@ class JobQueueScaler implements Runnable {
         // Ensure at least minimum
         finalMax = Math.max(getMinRunners(), finalMax);
 
-        if (_log.shouldInfo()) {
-            _log.info("Max Job Runners: Configured max: " + configuredMax +
-                     " Target max: " + targetMax + " Available RAM max: " + ramBasedMax +
-                     " Free RAM max: " + freeMemoryBasedMax + " Adjusted max: " + finalMax +
-                     " Used / Max memory: " +  (usedMemory/MB) + "MB / " + (maxMemory/MB) + "MB");
+        if (_log.shouldDebug()) {
+            _log.debug("Job Runners -> Configured / Maximum available: " + configuredMax + " / " + targetMax);
         }
 
         return finalMax;
@@ -199,8 +196,8 @@ class JobQueueScaler implements Runnable {
     private void recalculateMaxRunners() {
         int newMax = calculateMaxRunnersBasedOnRAM(_configuredMaxRunners);
         if (newMax != _currentMaxRunners) {
-            if (_log.shouldInfo()) {
-                _log.info("Adjusting max runners from " + _currentMaxRunners + " to " + newMax +
+            if (_log.shouldDebug()) {
+                _log.debug("Adjusting max job runners from " + _currentMaxRunners + " to " + newMax +
                          " based on current memory conditions");
             }
             _currentMaxRunners = newMax;
@@ -229,8 +226,8 @@ class JobQueueScaler implements Runnable {
      */
     public void startup() {
         if (!isDynamicScalingEnabled()) {
-            if (_log.shouldInfo()) {
-                _log.info("Dynamic job scaling is disabled via configuration");
+            if (_log.shouldDebug()) {
+                _log.debug("Dynamic job scaling is disabled via configuration");
             }
             return;
         }
@@ -243,8 +240,8 @@ class JobQueueScaler implements Runnable {
 
         if (_log.shouldInfo()) {
             _log.info("JobQueueScaler started. Min runners: " + getMinRunners() +
-                     ", Max runners: " + _currentMaxRunners +
-                     ", Feedback enabled: " + isFeedbackEnabled());
+                     " Max runners: " + _currentMaxRunners +
+                     " Feedback enabled: " + (isFeedbackEnabled() ? "yes" : "no"));
         }
     }
 
@@ -450,7 +447,7 @@ class JobQueueScaler implements Runnable {
 
         if (emergencyMode && !inCooldown && activeRunners < maxRunners) {
             int emergencyRunnersNeeded = (int) (maxLag / LAG_EMERGENCY_THRESHOLD);
-            int emergencyStep = Math.min(emergencyRunnersNeeded, 8); // Add up to 8 runners in emergency
+            int emergencyStep = Math.min(emergencyRunnersNeeded, 16); // Add up to 16 runners in emergency
             int targetRunners = Math.min(activeRunners + emergencyStep, maxRunners);
             int runnersToAdd = targetRunners - activeRunners;
 
@@ -507,8 +504,8 @@ class JobQueueScaler implements Runnable {
             int scaleUpStep = DEFAULT_SCALE_UP_STEP;
             int lagThreshold = getScaleUpLagThreshold();
             if (maxLag > lagThreshold * 5) {
-                // High lag: add more runners at once (up to 4)
-                scaleUpStep = Math.min(4, (int) (maxLag / lagThreshold));
+                // High lag: add more runners at once (up to 8)
+                scaleUpStep = Math.min(8, (int) (maxLag / lagThreshold));
             }
 
             int targetRunners = Math.min(activeRunners + scaleUpStep, maxRunners);
