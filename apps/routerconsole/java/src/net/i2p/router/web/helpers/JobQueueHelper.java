@@ -492,6 +492,8 @@ public class JobQueueHelper extends HelperBase {
                 avgLag = lagRate.getAverageValue();
             }
         }
+        // Get peak lag from completed jobs (worst delay experienced)
+        long peakLag = _context.jobQueue().getPeakLag();
 
         // Render header with calculated values
         buf.append("<h3 id=totaljobstats>")
@@ -500,8 +502,8 @@ public class JobQueueHelper extends HelperBase {
            .append("<span id=lag style=float:right>").append(_t("Job Lag"))
            .append(": ").append(_t("AVG")).append(":<span style=text-transform:lowercase;letter-spacing:0> ")
            .append(DataHelper.formatDuration2(avgLag))
-           .append("</span> / ").append(_t("MAX")).append(":<span style=text-transform:lowercase;letter-spacing:0> ")
-           .append(DataHelper.formatDuration2(maxExecTime))
+           .append("</span> / ").append(_t("PEAK")).append(":<span style=text-transform:lowercase;letter-spacing:0> ")
+           .append(DataHelper.formatDuration2(peakLag))
            .append("</span></span><span id=toggleJobstats>");
 
         // Add toggle link
