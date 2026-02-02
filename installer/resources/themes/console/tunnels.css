@@ -21,5 +21,6 @@ body.js #tunnelsContainer{display:block!important}
 tr.failed{background:#f002}
 tr.failed td>*:not(.failed .tunnelTest span){opacity:.5}
 tr.failed .testFailed{animation:none}
+#statusnotes td{padding:10px;font-style:italic;font-size:105%;text-align:center;border-top-width:2px}
 
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}

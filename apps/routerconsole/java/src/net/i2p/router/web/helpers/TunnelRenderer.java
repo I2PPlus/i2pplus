@@ -98,7 +98,7 @@ class TunnelRenderer {
         TunnelManagerFacade tm = _context.tunnelManager();
         TunnelPool ei = tm.getInboundExploratoryPool();
         TunnelPool eo = tm.getOutboundExploratoryPool();
-        out.write("<h3 class=tabletitle id=exploratory>" + _t("Exploratory"));
+        out.write("<div class=tablewrap>\n<h3 class=tabletitle id=exploratory>" + _t("Exploratory"));
         // links are set to float:right in CSS so they will be displayed in reverse order
         out.write(" <a href=\"/configtunnels#exploratory\" title=\"" +
                _t("Configure tunnels") + "\">[" + _t("configure") + "]</a>");
@@ -131,7 +131,7 @@ class TunnelRenderer {
             }
             String b64 = client.toBase64().substring(0,4);
             if (isLocal) {
-                out.write("<h3 class=\"");
+                out.write("<div class=tablewrap><h3 class=\"");
                 if (_context.clientManager().shouldPublishLeaseSet(client)) {
                     out.write("server ");
                     if (getTunnelName(in).equals(_t("I2PSnark"))) {out.write("snark ");}
@@ -141,7 +141,7 @@ class TunnelRenderer {
                     }
                 }
                 else if ((getTunnelName(in).startsWith("Ping") && getTunnelName(in).contains("[")) || getTunnelName(in).equals("I2Ping")) {
-                    out.write("ping ");
+                    continue;
                 } else {out.write("client ");}
                 out.write("tabletitle\" ");
                 out.write("id=\"" + client.toBase64().substring(0,4) + "\">");
@@ -804,7 +804,7 @@ class TunnelRenderer {
      */
     public void renderGuide(Writer out) throws IOException {
         StringBuilder buf = new StringBuilder(1024);
-        buf.append("<h3 class=tabletitle>")
+        buf.append("<div class=tablewrap id=tiers>\n<h3 class=tabletitle>")
            .append(_t("Bandwidth Tiers"))
            .append("</h3>\n<table id=tunnel_defs>\n<tbody><tr><td>&nbsp;</td><td><span class=tunnel_cap><b>L</b></span></td><td>")
            .append(_t("{0} shared bandwidth", range(Router.MIN_BW_L, Router.MIN_BW_M)))
@@ -818,7 +818,7 @@ class TunnelRenderer {
            .append(_t("{0} shared bandwidth", range(Router.MIN_BW_P, Router.MIN_BW_X)))
            .append("</td><td><span class=tunnel_cap><b>X</b></span></td><td>")
            .append(_t("Over {0} shared bandwidth", Math.round(Router.MIN_BW_X * 1.024f) + "KB/s"))
-           .append("</td><td></td></tr></tbody>\n</table>");
+           .append("</td><td></td></tr></tbody>\n</table></div>\n");
         out.append(buf);
         out.flush();
         buf.setLength(0);
@@ -942,7 +942,7 @@ class TunnelRenderer {
         }
         StringBuilder buf = new StringBuilder(32*1024);
         if (tunnels.size() != 0) {
-            buf.append("<table class=\"tunneldisplay tunnels_client\">\n<tr><th title=\"")
+            buf.append("<table class=\"tunneldisplay tunnels_client\">\n<thead><tr><th title=\"")
                .append(_t("Inbound or outbound?"))
                .append("\">")
                .append(_t("In/Out"))
@@ -960,10 +960,10 @@ class TunnelRenderer {
                .append(_t("Gateway"))
                .append("</th>");
             if (maxLength > 3) {
-                buf.append("<th colspan=\"").append(maxLength - 2).append("\">").append(_t("Participants")).append("</th>");
+                buf.append("<th colspan=").append(maxLength - 2).append(">").append(_t("Participants")).append("</th>");
             } else if (maxLength == 3) {buf.append("<th>").append(_t("Participant")).append("</th>");}
             if (maxLength > 1) {buf.append("<th>").append(_t("Endpoint")).append("</th>");}
-            buf.append("</tr>\n");
+            buf.append("</tr></thead>\n<tbody>");
         }
         final String tib = _t("Inbound");
         final String tob = _t("Outbound");
@@ -1048,17 +1048,18 @@ class TunnelRenderer {
                         }
                     }
                     // Add empty content placeholders to force alignment
-                    buf.append(" <td><span class=\"tunnel_peer tunnel_local\" title=\"").append(_t("Locally hosted tunnel")).append("\">").append(_t("Local")).append("</span>");
+                    buf.append(" <td><span class=\"tunnel_peer tunnel_local\" title=\"")
+                       .append(_t("Locally hosted tunnel")).append("\">").append(_t("Local")).append("</span>");
                     if (isAdvanced) {
                         buf.append("<span class=tunnel_id title=\"").append(_t("Tunnel identity")).append("\">")
-                           .append((id == null ? "" : "" + id)).append("</span>");
+                           .append(id == null ? "" : "" + id).append("</span>");
                     }
                     buf.append("</td>");
                 } else {
                     buf.append(" <td><div class=tunnel_peer>").append(netDbLink(peer)).append("</div>");
                     if (isAdvanced) {
                         buf.append("<span class=tunnel_id title=\"").append(_t("Tunnel identity")).append("\">")
-                           .append((id == null ? "" : " " + id)).append("</span>");
+                           .append(id == null ? "" : " " + id).append("</span>");
                     }
                     buf.append("</td>");
                 }
@@ -1073,40 +1074,38 @@ class TunnelRenderer {
             if (info.isInbound()) {processedIn += count;}
             else {processedOut += count;}
         }
-        buf.append("</table>\n");
-        if (live > 0 && ((in != null || (outPool != null)))) {
-            List<?> pendingIn = in.listPending();
-            List<?> pendingOut = outPool.listPending();
-            if ((!pendingIn.isEmpty()) || (!pendingOut.isEmpty())) {
-                buf.append("<div class=\"statusnotes building center\"><b>").append(_t("Build in progress")).append(":&nbsp;");
-                if (in != null) {
-                    // PooledTunnelCreatorConfig
-                    if (!pendingIn.isEmpty()) {
-                        buf.append("&nbsp;<span class=pending>").append(pendingIn.size()).append(" ")
-                           .append(tib).append("</span>&nbsp;");
-                        live += pendingIn.size();
-                    }
+
+        buf.append("</tbody>\n<tfoot id=statusnotes>");
+        int colCount = 5 + maxLength;
+
+        if (live > 0 && (in != null || outPool != null)) {
+            List<?> pendingIn = (in != null) ? in.listPending() : Collections.emptyList();
+            List<?> pendingOut = (outPool != null) ? outPool.listPending() : Collections.emptyList();
+            if (!pendingIn.isEmpty() || !pendingOut.isEmpty()) {
+                buf.append("<tr><td colspan=")
+                   .append(colCount).append(" class=center><b>")
+                   .append(_t("Build in progress")).append(":&nbsp;");
+                if (!pendingIn.isEmpty()) {
+                    buf.append("&nbsp;<span class=pending>").append(pendingIn.size())
+                       .append(" ").append(tib).append("</span>&nbsp;");
                 }
-                if (outPool != null) {
-                    // PooledTunnelCreatorConfig
-                    if (!pendingOut.isEmpty()) {
-                        buf.append("&nbsp;<span class=pending>").append(pendingOut.size())
-                           .append(" ").append(tob).append("</span>&nbsp;");
-                        live += pendingOut.size();
-                    }
+                if (!pendingOut.isEmpty()) {
+                    buf.append("&nbsp;<span class=pending>").append(pendingOut.size())
+                       .append(" ").append(tob).append("</span>&nbsp;");
                 }
-                buf.append("</b></div>\n");
+                buf.append("</b></td></tr>\n");
             }
         }
-        if (live <= 0) {
-            buf.append("<div class=\"statusnotes center\"><b>").append(_t("none")).append("</b></div>\n");
-        } else {
-        buf.append("<div class=\"statusnotes center\"><b>").append(_t("Lifetime bandwidth usage")).append(":&nbsp;&nbsp;")
-           .append(DataHelper.formatSize2(processedIn*1024, true).replace("i", ""))
-           .append("B ").append(_t("in")).append(", ")
-           .append(DataHelper.formatSize2(processedOut*1024, true).replace("i", ""))
-           .append("B ").append(_t("out")).append("</b></div>\n");
+
+        if (live > 0) {
+            buf.append("<tr><td colspan=").append(colCount)
+               .append(" class=center><b>").append(_t("Lifetime bandwidth usage")).append(":&nbsp;&nbsp;")
+               .append(DataHelper.formatSize2(processedIn*1024, true).replace("i", ""))
+               .append("B ").append(_t("in")).append(", ")
+               .append(DataHelper.formatSize2(processedOut*1024, true).replace("i", ""))
+               .append("B ").append(_t("out")).append("</b></td></tr>\n");
         }
+        buf.append("</tfoot>\n</table></div>\n");
         out.append(buf);
         out.flush();
         buf.setLength(0);

@@ -70,6 +70,7 @@ h3 .b32{margin:0 4px 0 0;display:inline-block;vertical-align:middle;border:var(-
 .smallhead a img:hover{filter:drop-shadow(0 0 1px var(--hover))}
 .tablefooter{border-top:var(--border);border-bottom:var(--border);line-height:1.4;background:var(--th)}
 .tablefooter td{padding:7px 10px;box-shadow:none}
+.tablewrap{box-shadow:var(--border_table)}
 .unbold{font-weight:400}
 .underline{margin:0 0 10px 0;padding:5px 0;border-bottom:1px solid var(--ink)}
 .wideload h2{border-radius:0}
@@ -1044,6 +1045,7 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 .statusnotes{margin:-2px 0 5px 0;padding:10px 7px;font-style:italic;font-size:105%;text-align:center;border:var(--border);background:#000800}
 .statusnotes:last-child{margin-bottom:10px}
 .statusnotes+.statusnotes{margin-top:-6px}
+#statusnotes td{border:var(--border);border-top-width:2px;box-shadow:var(--bevel);background:var(--title)}
 .tier,#capabilities_key b{background:var(--tier)}
 .tier.isD{background:var(--isD),var(--tier)}
 .tier.isE{background:var(--isE),var(--tier)}
@@ -1133,7 +1135,7 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 #tunnels h3.server{padding-left:35px;background:var(--server) no-repeat 9px center/18px,var(--title)}
 #tunnels h3.server.i2pchat{background:url(/themes/console/images/i2pchat.svg) no-repeat 9px center/19px,var(--title)}
 #tunnels h3.server.snark{background:url(/themes/console/images/snark.svg) no-repeat 9px center/20px,var(--title)}
-#tunnels h3:last-of-type{padding-left:35px;padding-bottom:7px;background:var(--speed) no-repeat no-repeat 9px center/18px,var(--title)}
+#tunnels #tiers h3{padding-left:35px;padding-bottom:7px;background:var(--speed) no-repeat no-repeat 9px center/18px,var(--title)}
 #tunnels h3+h3{margin-top:-1px;display:none}
 #tunnels h3+h3 a{display:none}
 #tunnels h3 img:first-of-type{margin-left:-1px;border-right:var(--border)}
@@ -1163,6 +1165,7 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 #tunnels td:not(.rif):not(.rih):not(.rbw)>*{vertical-align:middle}
 #tunnels td{text-align:center}
 #tunnels th{font-size:85%;position:relative;user-select:none}
+#tunnels th:last-child{border-right:var(--border)}
 #tunnels th#tier[role="columnheader"]:not([data-sort-method="none"])::after,#tunnels th#router[role="columnheader"]:not([data-sort-method="none"])::after,#tunnels th#version[role="columnheader"]:not([data-sort-method="none"])::after{right:-2px;z-index:999}
 #tunnels tr:last-child td{border-bottom:var(--border)}
 #tunnels .tunnel_cap{padding:3px 2px;border-radius:0}

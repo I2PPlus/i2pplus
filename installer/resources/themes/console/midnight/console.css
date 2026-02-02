@@ -1746,7 +1746,7 @@ span.b32{margin:-2px 6px -2px 0;padding:3px 8px;min-width:auto;line-height:1}
 #tunnel_defs .tunnel_cap{margin:2px 8px}
 #tunnels h3.client{padding-left:34px;background:var(--client) no-repeat 8px center/19px,var(--title)}
 #tunnels h3{padding-top:8px;padding-bottom:8px}
-#tunnels h3:last-of-type{padding-left:34px;background:var(--speed) no-repeat 8px center/19px,var(--title)}
+#tunnels #tiers h3{padding-left:34px;background:var(--speed) no-repeat 8px center/19px,var(--title)}
 #tunnels h3 img{margin:0 4px 0 0}
 #tunnels h3.ping{padding-left:34px;background:var(--ping) no-repeat 8px center/19px,var(--title)}
 #tunnels h3.server{padding-left:34px;background:var(--server) no-repeat 8px center/19px,var(--title)}
@@ -1762,6 +1762,7 @@ span.b32{margin:-2px 6px -2px 0;padding:3px 8px;min-width:auto;line-height:1}
 h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 .statusnotes+.statusnotes{margin-top:-6px}
 .statusnotes:last-of-type{margin-bottom:10px}
+#statusnotes td{padding:9px!important;box-shadow:var(--bevel_badge)}
 
 /* peers */
 .cells .mtu{white-space:nowrap}
