@@ -1266,12 +1266,12 @@ class SidebarRenderer {
               .append(_t("Message delay"))
               .append("\">--- / ---</span>");
         }
-        buf.append("</a>")
-           .append(getToggle())
-           .append("</h3>\n<hr class=b>\n<table id=sb_queue>\n<tr title=\"");
-        if (isAdvanced() && maxLag >= 30) {buf.append(_t("Average job delay / maximum delay"));}
-        else {buf.append(_t("Average delay before scheduled jobs are run"));}
-        buf.append("\"><td><b>")
+         buf.append("</a>")
+            .append(getToggle())
+            .append("</h3>\n<hr class=b>\n<table id=sb_queue>\n<tr title=\"");
+         if (isAdvanced() && maxLag >= 30) {buf.append(_t("Average / current max / peak job delay (last minute)"));}
+         else {buf.append(_t("Average delay before scheduled jobs are run"));}
+         buf.append("\"><td><b>")
            .append(_t("Job lag"))
            .append("</b></td><td class=digits>");
         int maxLagBeforeDrop = SystemVersion.isSlow() ? 400 : 300;

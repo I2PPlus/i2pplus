@@ -880,14 +880,15 @@ public class SidebarHelper extends HelperBase {
         // Use sub-millisecond precision for accurate display
         double avgLag = lagRate.getAverageValue();
         double maxLag = _context.jobQueue().getMaxLagDouble();
+        long peakLag = _context.jobQueue().getPeakLag();
 
-        if (!isAdvanced() || maxLag < 30.0) {
-            // Single value display
+        if (!isAdvanced() || (maxLag < 30.0 && peakLag < 1000)) {
+            // Single value display for basic mode or low lag
             return DataHelper.formatDuration2(avgLag);
         }
 
-        // Advanced mode: show both avg and max - let formatter handle units
-        return DataHelper.formatDuration2(avgLag) + THINSP + DataHelper.formatDuration2(maxLag);
+        // Advanced mode: show avg / current max / peak - let formatter handle units
+        return DataHelper.formatDuration2(avgLag) + THINSP + DataHelper.formatDuration2(maxLag) + " (" + DataHelper.formatDuration2(peakLag) + ")";
     }
 
     /**
