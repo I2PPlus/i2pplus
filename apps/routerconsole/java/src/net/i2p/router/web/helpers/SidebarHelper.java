@@ -889,10 +889,7 @@ public class SidebarHelper extends HelperBase {
         // If current max is very low, don't show it - queue has drained
         if (maxLag < 100 && peakLag > 0) {
             // Queue drained but had significant lag recently
-            return DataHelper.formatDuration2(avgLag) + THINSP + "(" + _t("peak") + ": " + DataHelper.formatDuration2(peakLag) + ")";
-        } else if (maxLag >= 100 && peakLag > maxLag) {
-            // Queue has backlog and peak was worse than current
-            return DataHelper.formatDuration2(avgLag) + THINSP + DataHelper.formatDuration2(maxLag) + " (" + _t("peak") + ": " + DataHelper.formatDuration2(peakLag) + ")";
+            return DataHelper.formatDuration2(avgLag) + THINSP + DataHelper.formatDuration2(peakLag);
         } else if (maxLag >= 100) {
             // Queue has backlog, peak not significantly higher
             return DataHelper.formatDuration2(avgLag) + THINSP + DataHelper.formatDuration2(maxLag);
@@ -900,6 +897,15 @@ public class SidebarHelper extends HelperBase {
             // Everything is good
             return DataHelper.formatDuration2(avgLag);
         }
+    }
+
+    public String getAvgJobLag() {
+        if (_context == null) {return "0";}
+        RateStat rs = _context.statManager().getRate("jobQueue.jobLag");
+        if (rs == null) {return "0";}
+        Rate lagRate = rs.getRate(RateConstants.ONE_MINUTE);
+        double avgLag = lagRate.getAverageValue();
+        return DataHelper.formatDuration2(avgLag);
     }
 
     /**

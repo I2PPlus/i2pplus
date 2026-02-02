@@ -1255,7 +1255,7 @@ class SidebarRenderer {
               .append(" / ")
               .append(_t("Message delay"))
               .append("\">")
-              .append(_helper.getJobLag())
+              .append(_helper.getAvgJobLag())
               .append(" / ")
               .append(_helper.getMessageDelay())
               .append("</span>");
@@ -1269,12 +1269,12 @@ class SidebarRenderer {
         buf.append("</a>")
            .append(getToggle())
            .append("</h3>\n<hr class=b>\n<table id=sb_queue>\n<tr title=\"");
-        if (isAdvanced() && maxLag >= 30) {buf.append(_t("Average / current max / peak job delay (last minute)"));}
-        else {buf.append(_t("Average delay before scheduled jobs are run"));}
+        if (isAdvanced() && maxLag >= 30) {buf.append(_t("Average / peak job delay (last minute)"));}
+        else {buf.append(_t("Average / max delay before scheduled jobs are run"));}
         buf.append("\"><td><b>")
            .append(_t("Job lag"))
            .append("</b></td><td class=digits>");
-        int maxLagBeforeDrop = SystemVersion.isSlow() ? 400 : 300;
+        int maxLagBeforeDrop = 2000;
         if (maxLag > maxLagBeforeDrop) {buf.append("<span class=\"warntext volatile\">");}
         else {buf.append("<span class=volatile>");}
         buf.append(_helper.getJobLag())
