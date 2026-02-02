@@ -9,8 +9,9 @@ body.js #tunnelsContainer{display:block!important}
 #toggleTunnels:active{transform:scale(.9)}
 #toggleTunnelIds.off{background:url(/themes/console/images/hardhat.svg) no-repeat center center/20px}
 
-/* Tunnel test status indicators */
-.tunnelTest{width:24px;text-align:center}
+.tunnels_client th:first-child,.tunnels_client td:first-child,.tunnelTest{width:4%}
+.tunnels_client th:nth-child(3),.tunnels_client td:nth-child(3){width:7%;white-space:nowrap}
+.tunnelTest{text-align:center}
 .tunnelTest span{display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:middle}
 .good .tunnelTest span{background:#0c0}
 .failed .tunnelTest span{background:#900;animation:none}
