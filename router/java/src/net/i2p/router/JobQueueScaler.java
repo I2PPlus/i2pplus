@@ -521,12 +521,20 @@ class JobQueueScaler implements Runnable {
                       " consecutiveScaleUpChecks=" + _consecutiveScaleUpChecks);
         }
         if (shouldScaleUp) {
-            // Calculate how many runners to add based on lag severity
+            // Calculate how many runners to add based on backlog severity
             int scaleUpStep = DEFAULT_SCALE_UP_STEP;
             int lagThreshold = getScaleUpLagThreshold();
-            if (maxLag > lagThreshold * 5) {
-                // High lag: add more runners at once (up to 8)
-                scaleUpStep = Math.min(8, (int) (maxLag / lagThreshold));
+
+            // Scale based on backlog size - more jobs = add more runners
+            if (readyJobs > activeRunners * 2) {
+                // Severe backlog: double runners
+                scaleUpStep = Math.max(scaleUpStep, activeRunners);
+            } else if (readyJobs > activeRunners) {
+                // Significant backlog: add half current runners
+                scaleUpStep = Math.max(scaleUpStep, activeRunners / 2);
+            } else if (maxLag > lagThreshold * 5) {
+                // High lag: add more runners (up to 8)
+                scaleUpStep = Math.max(scaleUpStep, Math.min(8, (int) (maxLag / lagThreshold)));
             }
 
             int targetRunners = Math.min(activeRunners + scaleUpStep, maxRunners);
