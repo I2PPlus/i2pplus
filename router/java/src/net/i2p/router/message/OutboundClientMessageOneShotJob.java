@@ -41,6 +41,7 @@ import net.i2p.router.TunnelInfo;
 import net.i2p.router.crypto.ratchet.ReplyCallback;
 import net.i2p.router.networkdb.kademlia.KademliaNetworkDatabaseFacade;
 import net.i2p.util.Log;
+import net.i2p.util.SimpleTimer2;
 
 /**
  * Send a client message out an outbound tunnel and into an inbound
@@ -765,23 +766,23 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                                   " before message, using selector only");
                     }
                 } else {
-                    // We put our own timeout on the job queue before the selector expires,
+                    // We schedule our own timeout before the selector expires,
                     // so we can keep waiting for the reply and restore the tags (success-after-failure)
-                    // We cancel the timeout job in the success job
+                    // We cancel the timeout in the success job
                     getContext().messageRegistry().registerPending(_selector, _replyFound, null);
-                    _replyTimeout.getTiming().setStartAfter(_overallExpiration);
-                    getContext().jobQueue().addJob(_replyTimeout);
+                    // Schedule using SimpleTimer2 with jitter to prevent synchronized timeout bursts
+                    _replyTimeout.scheduleWithJitter(_overallExpiration - getContext().clock().now());
                     if (_log.shouldInfo()) {
                         _log.info("[Job " + OutboundClientMessageOneShotJob.this.getJobId() + "] Reply selector expires " +
                                   DataHelper.formatDuration(_selector.getExpiration() - _overallExpiration) +
-                                  " after message, queueing separate timeout job");
+                                  " after message, scheduling SimpleTimer2 timeout with jitter");
                     }
                 }
             } else if (_replyTimeout != null) {
                 // ECIES
                 long expiration = Math.max(_overallExpiration, _start + REPLY_TIMEOUT_MS_MIN);
-                _replyTimeout.getTiming().setStartAfter(expiration);
-                getContext().jobQueue().addJob(_replyTimeout);
+                // Schedule using SimpleTimer2 with jitter to prevent synchronized timeout bursts
+                _replyTimeout.scheduleWithJitter(expiration - getContext().clock().now());
             }
             if (_log.shouldInfo()) {
                 _log.info("[Job " + OutboundClientMessageOneShotJob.this.getJobId() + "] Dispatching message to " + _toString + _msg);
@@ -1098,7 +1099,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                     if (skm != null) {skm.tagsAcked(_encryptionKey, _key, _tags);}
                 }
             }
-            if (_replyTimeout != null) {getContext().jobQueue().removeJob(_replyTimeout);}
+            if (_replyTimeout != null) {_replyTimeout.cancelTimeout();}
 
             long sendTime = getContext().clock().now() - _start;
             if (old == Result.FAIL) {
@@ -1166,10 +1167,31 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
      * Fired after the basic timeout for sending through the given tunnel has been reached.
      * We'll accept successes later, but won't expect them
      *
+     * Uses SimpleTimer2 instead of JobQueue to avoid competing with regular jobs,
+     * with jitter to prevent synchronized timeout bursts.
+     *
+     * @since modified to use SimpleTimer2 with jitter for lag spike prevention
      */
     private class SendTimeoutJob extends JobImpl {
         private final SessionKey _key;
         private final TagSetHandle _tags;
+        private final TimeoutEvent _timeoutEvent;
+
+        /**
+         * SimpleTimer2 event for scheduling the timeout separately from the JobQueue.
+         * This prevents timeout jobs from competing with regular router jobs.
+         */
+        private class TimeoutEvent extends SimpleTimer2.TimedEvent {
+            public TimeoutEvent() {
+                super(OutboundClientMessageOneShotJob.this.getContext().simpleTimer2());
+            }
+
+            @Override
+            public void timeReached() {
+                // Delegate to the parent job's execution logic
+                SendTimeoutJob.this.runJob();
+            }
+        }
 
         /**
          * Create a new timeout job that will be fired when the reply is not received.
@@ -1182,9 +1204,30 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             super(OutboundClientMessageOneShotJob.this.getContext());
             _key = key;
             _tags = tags;
+            _timeoutEvent = new TimeoutEvent();
         }
 
         public String getName() {return "Timeout OB Client Message Send";}
+
+        /**
+         * Schedule this timeout using SimpleTimer2 with the specified delay plus jitter.
+         * This avoids adding the job to the JobQueue, reducing competition with regular jobs.
+         *
+         * @param delayMs delay in milliseconds before timeout should fire
+         */
+        public void scheduleWithJitter(long delayMs) {
+            // Add jitter (0-500ms) to prevent synchronized timeout bursts causing lag spikes
+            long jitter = getContext().random().nextInt(500);
+            _timeoutEvent.schedule(delayMs + jitter);
+        }
+
+        /**
+         * Cancel the scheduled SimpleTimer2 timeout.
+         * Called by SendSuccessJob when the message succeeds.
+         */
+        public void cancelTimeout() {
+            _timeoutEvent.cancel();
+        }
 
         /**
          * May be run after SendSuccessJob, will have no effect.
@@ -1197,6 +1240,13 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 if (old == Result.SUCCESS) {
                     if (_log.shouldInfo()) {
                         _log.info("[Job " + OutboundClientMessageOneShotJob.this.getJobId() + "] TIMEOUT-AFTER-SUCCESS");
+                    }
+                    return;
+                }
+                // Early cancellation check: verify we're still in NONE state before expensive operations
+                if (old != Result.NONE) {
+                    if (_log.shouldDebug()) {
+                        _log.debug("[Job " + OutboundClientMessageOneShotJob.this.getJobId() + "] TIMEOUT-AFTER-FAIL (already failed)");
                     }
                     return;
                 }
