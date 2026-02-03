@@ -15,6 +15,7 @@ import net.i2p.data.Hash;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.RouterContext;
+import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.router.tunnel.HopConfig;
 import net.i2p.router.tunnel.TunnelDispatcher;
 import net.i2p.util.Log;
@@ -177,7 +178,7 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
 
                 if (_log.shouldDebug()) {
                     _log.debug("Detected idle tunnel from peer [" + peer.toBase64().substring(0, 6) +
-                              "]: age=" + (age/1000) + "s, messages=" + messages + ", bytes=" + bytes);
+                              "] -> Age: " + (age/1000) + "s [" + messages + (messages > 1 ? "messages" : "message") + " / " + bytes + "B]");
                 }
             } else {
                 // Record as clean
@@ -241,16 +242,16 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
             }
 
             if (_log.shouldDebug()) {
-                _log.debug("Dropped idle tunnel: " + tunnel.getReceiveTunnelId() +
-                          " (messages: " + tunnel.getProcessedMessagesCount() +
-                          ", bytes: " + tunnel.getProcessedBytesCount() + ")");
+                _log.debug("Dropped idle tunnel [" + tunnel.getReceiveTunnelId() +
+                          "] -> Messages / Bytes: " + tunnel.getProcessedMessagesCount() +
+                          " / " + tunnel.getProcessedBytesCount());
             }
 
             // Update stats
             _context.statManager().addRateData("tunnel.idleTunnelDropped", 1);
         } catch (Exception e) {
             if (_log.shouldWarn()) {
-                _log.warn("Failed to drop tunnel: " + tunnel, e);
+                _log.warn("Failed to idle drop tunnel [" + tunnel + "] -> " + e.getMessage());
             }
         }
     }
@@ -276,8 +277,8 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
         } else if (offenses == 2) {
             banPeer(peer, "Excessive Idle Tunnels (" + offenses + ")", ban2nd);
         } else if (_log.shouldInfo()) {
-            _log.info("First idle offense for peer [" + peer.toBase64().substring(0, 6) +
-                      "]: " + tunnelCount + " idle tunnels dropped");
+            _log.info("First idle tunnels offense for peer [" + peer.toBase64().substring(0, 6) +
+                      "] -> " + tunnelCount + " idle "+ (tunnelCount > 1 ? "tunnels" : "tunnel") + " dropped");
         }
     }
 
@@ -337,7 +338,7 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
                     }
 
                     if (_log.shouldWarn()) {
-                        _log.warn("Banning IP cluster for IP address [" + ip + "] -> Excessividle tunnels (" + 
+                        _log.warn("Banning IP cluster for IP address [" + ip + "] -> Excessividle tunnels (" +
                                    peers.size() + " ids / " + totalIdleTunnels + " idle tunnels");
                     }
                 }
@@ -386,11 +387,20 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
     }
 
     /**
-     * Ban a peer
+     * Ban a peer - checks responsiveness first to avoid false positives
      */
     private void banPeer(Hash peer, String reason, long duration) {
         if (_context.banlist().isBanlisted(peer)) {
             return; // Already banned
+        }
+
+        // Check if peer has been responsive recently - skip ban if so
+        if (isPeerResponsive(peer)) {
+            if (_log.shouldInfo()) {
+                _log.info("Skipping ban for responsive peer [" + peer.toBase64().substring(0, 6) +
+                          "] - recent activity detected");
+            }
+            return;
         }
 
         long now = _context.clock().now();
@@ -406,6 +416,34 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
 
         // Update stats
         _context.statManager().addRateData("tunnel.banIdlePeer", 1);
+    }
+
+    /**
+     * Check if a peer has been recently responsive based on profile data.
+     * Returns true if the peer has recent send/receive activity.
+     */
+    private boolean isPeerResponsive(Hash peer) {
+        try {
+            PeerProfile profile = _context.profileOrganizer().getProfile(peer);
+            if (profile == null) {
+                return false;
+            }
+
+            long now = System.currentTimeMillis();
+            long recentWindow = 5 * 60 * 1000; // 5 minutes
+
+            long lastHeardFrom = profile.getLastHeardFrom();
+            long lastSendSuccessful = profile.getLastSendSuccessful();
+
+            // Peer is responsive if we heard from them or successfully sent to them recently
+            return (lastHeardFrom > 0 && now - lastHeardFrom < recentWindow) ||
+                   (lastSendSuccessful > 0 && now - lastSendSuccessful < recentWindow);
+        } catch (Exception e) {
+            if (_log.shouldDebug()) {
+                _log.debug("Error checking peer responsiveness for [" + peer.toBase64().substring(0, 6) + "]", e);
+            }
+            return false;
+        }
     }
 
     /**
