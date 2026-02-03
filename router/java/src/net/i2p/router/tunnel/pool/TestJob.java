@@ -582,7 +582,7 @@ public class TestJob extends JobImpl {
         // Early viability guard
         if (_replyTunnel == null || _outTunnel == null) {
             if (_log.shouldWarn())
-                _log.warn("Insufficient tunnels to test " + _cfg + " with: " + _replyTunnel + " / " + _outTunnel);
+                _log.warn("Insufficient tunnels to test " + _cfg + " with \n* " + _replyTunnel + " / " + _outTunnel);
             ctx.statManager().addRateData("tunnel.testAborted", _cfg.getLength());
             CONCURRENT_TESTS.decrementAndGet();
             cleanupTunnelTracking();

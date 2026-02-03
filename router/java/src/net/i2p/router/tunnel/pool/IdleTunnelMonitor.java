@@ -177,7 +177,8 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
 
                 if (_log.shouldDebug()) {
                     _log.debug("Detected idle tunnel from peer [" + peer.toBase64().substring(0, 6) +
-                              "] -> Age: " + (age/1000) + "s [" + messages + (messages > 1 ? "messages" : "message") + " / " + bytes + "B]");
+                              "] -> Age: " + (age/1000) + "s [" + messages + (messages > 1 ? " messages" : " message") +
+                              " / " + bytes + "B]");
                 }
             } else {
                 // Record as clean
