@@ -67,7 +67,7 @@ public class ProfileOrganizer {
     /**
      * Calculate default max profiles based on available heap memory.
      * Each profile roughly takes 256KB of heap (profile data + overhead).
-     * Scale from 400 (256MB heap) to 2000 (2GB+ heap).
+     * Scale from 400 (128MB heap) to 3000 (4GB+ heap).
      *
      * @return the default max profiles based on available memory
      * @since 0.9.68+
@@ -75,14 +75,21 @@ public class ProfileOrganizer {
     public static int getDefaultMaxProfiles() {
         long maxMemory = SystemVersion.getMaxMemory();
         long maxMB = maxMemory / (1024 * 1024);
-        // Profile takes ~256KB, calculate based on available memory
-        // Min: 400 profiles (100MB for profiles + overhead)
-        // Max: 2000 profiles (500MB for profiles + overhead)
-        int calculated = (int) Math.max(400, Math.min(2000, maxMB / 2));
-        // Add some headroom for slow systems
-        return SystemVersion.isSlow() ? Math.min(calculated, 800) : calculated;
+        // Scale: 128MB -> 400, 512MB -> 1200, 4GB -> 3000
+        int calculated;
+        if (maxMB < 2048) {
+            // Low memory: aggressive scaling (profile ~= maxMB * 2.34)
+            calculated = (int) (maxMB * 2.34);
+        } else {
+            // High memory: conservative scaling (profile ~= maxMB * 0.73)
+            calculated = (int) (maxMB * 0.73);
+        }
+        // Clamp to reasonable bounds
+        calculated = Math.max(400, Math.min(3000, calculated));
+        // Slow systems get a lower ceiling
+        return SystemVersion.isSlow() ? Math.min(calculated, 1200) : calculated;
     }
-    public static final int ABSOLUTE_MAX_PROFILES = 2000;
+    public static final int ABSOLUTE_MAX_PROFILES = 3500;
 
     private static final long[] RATES = {
         RateConstants.ONE_MINUTE,
