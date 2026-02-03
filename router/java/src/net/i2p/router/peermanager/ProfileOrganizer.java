@@ -258,11 +258,15 @@ public class ProfileOrganizer {
         Hash peer = profile.getPeer();
         if (peer.equals(_us)) return null;
 
+        PeerProfile old = getProfile(peer);
+        if (old != null) {
+            return old; // Profile already exists, no need to log or recreate
+        }
+
         if (_log.shouldInfo()) {
             _log.info("New profile created for [" + peer.toBase64().substring(0,6) + "]");
         }
 
-        PeerProfile old = getProfile(peer);
         profile.coalesceStats();
         if (!getWriteLock()) return old;
 
@@ -854,7 +858,8 @@ public class ProfileOrganizer {
             return; // within limits
         }
 
-        if (_log.shouldInfo()) {
+        // Only log if significantly over limit (reduces log spam during minor spikes)
+        if (_notFailingPeers.size() > maxProfiles + 50 && _log.shouldInfo()) {
             _log.info("Profiles stored in RAM (" + _notFailingPeers.size() +
                       ") exceeds hard limit of " + maxProfiles + " -> Evicting lowest quality profiles...");
         }
