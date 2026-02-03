@@ -30,7 +30,7 @@ import net.i2p.util.SystemVersion;
  * 3. Bans peers for repeated idle tunnel offenses or Sybil behavior
  *
  * Configurable properties:
- * - router.idleTunnelDetectionPeriod: Time before checking for idle (default: 60000ms)
+ * - router.idleTunnelDetectionPeriod: Time before checking for idle (default: 30000ms)
  * - router.idleTunnelMinMessages: Minimum messages to not be considered idle (default: 2)
  * - router.idleTunnelMinBytes: Minimum bytes to not be considered idle (default: 2048)
  * - router.idleTunnelScanInterval: How often to scan (default: 30000ms)
@@ -57,7 +57,7 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
 
     // Configuration
     private static final boolean isSlow = SystemVersion.isSlow();
-    private static final long DEFAULT_DETECTION_PERIOD = 60 * 1000; // 60 seconds
+    private static final long DEFAULT_DETECTION_PERIOD = 30 * 1000; // 30 seconds
     private static final int DEFAULT_MIN_MESSAGES = 2; // At least 2 messages
     private static final long DEFAULT_MIN_BYTES = 2 * 1024; // At least 2KB of data
     private static final long DEFAULT_SCAN_INTERVAL = 30 * 1000; // 30 seconds
