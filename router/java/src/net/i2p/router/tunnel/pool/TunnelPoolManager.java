@@ -41,6 +41,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     private final BuildExecutor _executor;
     private final BuildHandler _handler;
     private final TunnelPeerSelector _clientPeerSelector;
+    private final GhostPeerManager _ghostPeerManager;
     private volatile boolean _isShutdown;
     private final int _numHandlerThreads;
     private final int DEFAULT_MAX_PCT_TUNNELS;
@@ -56,6 +57,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         _clientInboundPools = new ConcurrentHashMap<Hash, TunnelPool>(32);
         _clientOutboundPools = new ConcurrentHashMap<Hash, TunnelPool>(32);
         _clientPeerSelector = new ClientPeerSelector(ctx);
+        _ghostPeerManager = new GhostPeerManager(ctx);
         ExploratoryPeerSelector selector = new ExploratoryPeerSelector(_context);
         TunnelPoolSettings inboundSettings = new TunnelPoolSettings(true);
         _inboundExploratory = new TunnelPool(_context, this, inboundSettings, selector);
@@ -63,7 +65,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         _outboundExploratory = new TunnelPool(_context, this, outboundSettings, selector);
 
         // threads will be started in startup()
-        _executor = new BuildExecutor(ctx, this);
+        _executor = new BuildExecutor(ctx, this, _ghostPeerManager);
         _handler = new BuildHandler(ctx, this, _executor);
         int numHandlerThreads;
         long maxMemory = SystemVersion.getMaxMemory();
@@ -587,6 +589,9 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     void tunnelFailed() { _executor.repoll(); }
 
     BuildExecutor getExecutor() { return _executor; }
+
+    /** @return the ghost peer manager for tracking unresponsive peers @since 0.9.68+ */
+    public GhostPeerManager getGhostPeerManager() { return _ghostPeerManager; }
 
     boolean isShutdown() { return _isShutdown; }
 

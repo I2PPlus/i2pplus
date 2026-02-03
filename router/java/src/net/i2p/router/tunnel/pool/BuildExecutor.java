@@ -39,6 +39,7 @@ class BuildExecutor implements Runnable {
     private final RouterContext _context;
     private final Log _log;
     private final TunnelPoolManager _manager;
+    private final GhostPeerManager _ghostManager;
     private final Object _currentlyBuilding; // Notify lock
     private final ConcurrentHashMap<Long, PooledTunnelCreatorConfig> _currentlyBuildingMap; // indexed by ptcc.getReplyMessageId()
     private final ConcurrentHashMap<Long, PooledTunnelCreatorConfig> _recentlyBuildingMap; // indexed by ptcc.getReplyMessageId()
@@ -78,11 +79,13 @@ class BuildExecutor implements Runnable {
      *
      * @param ctx the router context
      * @param mgr the tunnel pool manager
+     * @param ghostManager the ghost peer manager for tracking unresponsive peers @since 0.9.68+
      */
-    public BuildExecutor(RouterContext ctx, TunnelPoolManager mgr) {
+    public BuildExecutor(RouterContext ctx, TunnelPoolManager mgr, GhostPeerManager ghostManager) {
         _context = ctx;
         _log = ctx.logManager().getLog(getClass());
         _manager = mgr;
+        _ghostManager = ghostManager;
         _currentlyBuilding = new Object();
         int maxConcurrentBuilds = getMaxConcurrentBuilds();
         _currentlyBuildingMap = new ConcurrentHashMap<Long, PooledTunnelCreatorConfig>(maxConcurrentBuilds);
@@ -283,27 +286,31 @@ class BuildExecutor implements Runnable {
         int concurrent = _currentlyBuildingMap.size();
         allowed -= concurrent;
 
-        if (expired != null) {
-            for (PooledTunnelCreatorConfig cfg : expired) {
-                if (_log.shouldInfo()) {
-                    _log.info("Timeout (" + (BuildRequestor.REQUEST_TIMEOUT / 1000) + "s) waiting for tunnel build reply -> " + cfg);
-                }
+                if (expired != null) {
+                    for (PooledTunnelCreatorConfig cfg : expired) {
+                        if (_log.shouldInfo()) {
+                            _log.info("Timeout (" + (BuildRequestor.REQUEST_TIMEOUT / 1000) + "s) waiting for tunnel build reply -> " + cfg);
+                        }
 
-                final int length = cfg.getLength();
-                for (int iPeer = 0; iPeer < length; iPeer++) {
-                    Hash peer = cfg.getPeer(iPeer);
-                    if (peer.equals(selfHash)) {
-                        continue; // Skip self
-                    }
-                    RouterInfo ri = _context.netDb().lookupRouterInfoLocally(peer);
-                    String bwTier = "Unknown";
-                    if (ri != null) {
-                        bwTier = ri.getBandwidthTier();
-                    }
-                    _context.statManager().addRateData("tunnel.tierExpire" + bwTier, 1);
-                    didNotReply(cfg.getReplyMessageId(), peer);
-                    _context.profileManager().tunnelTimedOut(peer);
-                }
+                        final int length = cfg.getLength();
+                        for (int iPeer = 0; iPeer < length; iPeer++) {
+                            Hash peer = cfg.getPeer(iPeer);
+                            if (peer.equals(selfHash)) {
+                                continue; // Skip self
+                            }
+                            RouterInfo ri = _context.netDb().lookupRouterInfoLocally(peer);
+                            String bwTier = "Unknown";
+                            if (ri != null) {
+                                bwTier = ri.getBandwidthTier();
+                            }
+                            _context.statManager().addRateData("tunnel.tierExpire" + bwTier, 1);
+                            didNotReply(cfg.getReplyMessageId(), peer);
+                            _context.profileManager().tunnelTimedOut(peer);
+                            // Record ghost peer for consistent timeouts @since 0.9.68+
+                            if (_ghostManager != null) {
+                                _ghostManager.recordTimeout(peer);
+                            }
+                        }
 
                 TunnelPool pool = cfg.getTunnelPool();
                 if (pool != null) {

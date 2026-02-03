@@ -19,6 +19,7 @@ import net.i2p.router.ClientTunnelSettings;
 import net.i2p.router.TunnelInfo;
 import net.i2p.router.TunnelManagerFacade;
 import net.i2p.router.TunnelPoolSettings;
+import net.i2p.router.tunnel.pool.GhostPeerManager;
 import net.i2p.router.tunnel.pool.TunnelPool;
 
 /**
@@ -72,6 +73,9 @@ public class DummyTunnelManagerFacade implements TunnelManagerFacade {
     public TunnelPool getInboundExploratoryPool() { return null; }
     public TunnelPool getOutboundExploratoryPool() { return null; }
     public void fail(Hash peer) {}
+
+    /** @since 0.9.68+ */
+    public GhostPeerManager getGhostPeerManager() { return null; }
 
     public TunnelPool getInboundPool(Hash client) {
         return null;

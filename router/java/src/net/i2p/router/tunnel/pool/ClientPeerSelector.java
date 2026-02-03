@@ -267,11 +267,52 @@ class ClientPeerSelector extends TunnelPeerSelector {
 
         if (isInbound) {rv.add(0, ctx.routerHash());}
         else {rv.add(ctx.routerHash());}
+
+        // Filter out ghost peers before returning @since 0.9.68+
+        rv = filterGhostPeers(rv, settings);
+
         if (rv.size() > 1) {
             if (!checkTunnel(isInbound, false, rv)) {rv = null;}
         }
         if (isInbound && rv != null && rv.size() > 1) {ctx.commSystem().exemptIncoming(rv.get(1));}
         return rv;
+    }
+
+    /**
+     * Filter out ghost peers from the selected peer list.
+     * Ghost peers are those with consistent tunnel build timeouts.
+     *
+     * @param peers the list of selected peers (excluding self)
+     * @param settings tunnel settings
+     * @return filtered list without ghost peers
+     * @since 0.9.68+
+     */
+    private List<Hash> filterGhostPeers(List<Hash> peers, TunnelPoolSettings settings) {
+        if (peers == null || peers.isEmpty()) {return peers;}
+
+        TunnelManagerFacade tmf = ctx.tunnelManager();
+        GhostPeerManager ghostManager = tmf.getGhostPeerManager();
+        if (ghostManager == null) {return peers;}
+
+        List<Hash> filtered = new ArrayList<Hash>(peers.size());
+        for (Hash peer : peers) {
+            if (ghostManager.isGhost(peer)) {
+                if (log.shouldDebug()) {
+                    log.debug("Skipping ghost peer: " + peer.toBase32().substring(0, 6));
+                }
+            } else {
+                filtered.add(peer);
+            }
+        }
+
+        if (filtered.isEmpty() && !peers.isEmpty()) {
+            if (log.shouldWarn()) {
+                log.warn("All selected peers were ghosts! Allowing fallback selection.");
+            }
+            return peers; // Return original list to allow fallback handling
+        }
+
+        return filtered;
     }
 
     /**
