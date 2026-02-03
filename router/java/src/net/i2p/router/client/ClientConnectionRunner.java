@@ -120,6 +120,12 @@ class ClientConnectionRunner {
     private static final int BUF_SIZE = 32*1024;
     private static final int MAX_SESSIONS = 4;
 
+    // Dynamic delay thresholds @since 0.9.68+
+    private static final double BUILD_SUCCESS_THRESHOLD = 0.40;
+    private static final long STARTUP_PERIOD_MS = 15*60*1000; // 15 minutes
+    private static final int BASE_REREQUEST_DELAY = 3000; // 3 seconds
+    private static final int STARTUP_REREQUEST_DELAY = 1000; // 1 second
+
     /** @since 0.9.2 */
     private static final String PROP_TAGS = "crypto.tagsToSend";
     private static final String PROP_THRESH = "crypto.lowTagThreshold";
@@ -502,10 +508,25 @@ class ClientConnectionRunner {
         // During network attacks with low build success (<40%), or during startup, allow more fails
         double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
         long uptime = _context.router().getUptime();
-        if ((buildSuccess > 0 && buildSuccess < 0.40) || uptime < 15*60*1000) {
-            maxFails *= 10; // Allow 10x more fails (100 instead of 10)
+        if ((buildSuccess > 0 && buildSuccess < BUILD_SUCCESS_THRESHOLD) || uptime < STARTUP_PERIOD_MS) {
+            maxFails *= 20; // Allow 20x more fails (200 instead of 10)
         }
         return maxFails;
+    }
+
+    /**
+     *  Calculate dynamic rerequest delay - longer during network stress
+     *  @param baseDelayMs the base delay in milliseconds
+     *  @return adjusted delay based on network conditions @since 0.9.68+
+     */
+    private long getRerequestDelay(long baseDelayMs) {
+        double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
+        long uptime = _context.router().getUptime();
+        if ((buildSuccess > 0 && buildSuccess < BUILD_SUCCESS_THRESHOLD) || uptime < STARTUP_PERIOD_MS) {
+            // Double the delay during stress
+            return baseDelayMs * 2;
+        }
+        return baseDelayMs;
     }
 
     /** @param req non-null */
@@ -997,9 +1018,10 @@ class ClientConnectionRunner {
                     set.setDestination(dest);
                     Rerequest timer = new Rerequest(set, expirationTime, onCreateJob, onFailedJob);
                     sp.rerequestTimer = timer;
-                    timer.schedule(3*1000);
+                    long delay = getRerequestDelay(BASE_REREQUEST_DELAY);
+                    timer.schedule(delay);
                     if (_log.shouldDebug())
-                        _log.debug("Already requesting, ours is newer -> Waiting for 3 sec... " + state);
+                        _log.debug("Already requesting, ours is newer -> Waiting for " + (delay/1000) + " sec... " + state);
                 }
                 // fire onCreated?
                 return; // already requesting
@@ -1011,9 +1033,10 @@ class ClientConnectionRunner {
                     // before we are ready
                     Rerequest timer = new Rerequest(set, expirationTime, onCreateJob, onFailedJob);
                     sp.rerequestTimer = timer;
-                    timer.schedule(1000);
+                    long delay = getRerequestDelay(STARTUP_REREQUEST_DELAY);
+                    timer.schedule(delay);
                     if (_log.shouldDebug())
-                        _log.debug("No current LeaseSet and no Outbound tunnels -> Waiting 1 sec to request [" + h.toBase32().substring(0,8) + "]...");
+                        _log.debug("No current LeaseSet and no Outbound tunnels -> Waiting " + delay + "ms to request [" + h.toBase32().substring(0,8) + "]...");
                     return;
                 } else {
                     // so the timer won't fire off with an older LS request
