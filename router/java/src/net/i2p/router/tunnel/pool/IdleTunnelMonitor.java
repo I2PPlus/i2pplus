@@ -158,7 +158,7 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
         // Collect all participating tunnels
         List<HopConfig> allTunnels = dispatcher.listParticipatingTunnels();
 
-        // Track idle tunnels per peer
+        // First pass: identify idle tunnels and organize by peer
         Map<Hash, List<HopConfig>> idleTunnelsByPeer = new HashMap<>();
         int totalDropped = 0;
 
@@ -179,17 +179,27 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
                     _log.debug("Detected idle tunnel from peer [" + peer.toBase64().substring(0, 6) +
                               "]: age=" + (age/1000) + "s, messages=" + messages + ", bytes=" + bytes);
                 }
-
-                // Drop the idle tunnel
-                dropTunnel(tunnel);
-                totalDropped++;
-
-                // Track offense
-                recordIdleOffense(peer, ban2nd, ban3rd, resetTime);
             } else {
                 // Record as clean
                 recordClean(peer);
             }
+        }
+
+        // Second pass: drop tunnels and record offenses (counting each tunnel as a separate offense)
+        for (Map.Entry<Hash, List<HopConfig>> entry : idleTunnelsByPeer.entrySet()) {
+            Hash peer = entry.getKey();
+            List<HopConfig> tunnels = entry.getValue();
+            int tunnelCount = tunnels.size();
+
+            // Drop all idle tunnels for this peer
+            for (HopConfig tunnel : tunnels) {
+                dropTunnel(tunnel);
+                totalDropped++;
+            }
+
+            // Record offense - each tunnel counts as a separate offense
+            // This means a peer with 10 idle tunnels gets 10 offenses immediately
+            recordIdleOffense(peer, tunnelCount, ban2nd, ban3rd, resetTime);
         }
 
         // Sybil detection
@@ -247,34 +257,35 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
 
     /**
      * Record an idle offense for a peer
+     * @param tunnelCount Number of idle tunnels dropped - each counts as a separate offense
      */
-    private void recordIdleOffense(Hash peer, long ban2nd, long ban3rd, long resetTime) {
+    private void recordIdleOffense(Hash peer, int tunnelCount, long ban2nd, long ban3rd, long resetTime) {
         OffenseRecord record = _offenseHistory.computeIfAbsent(peer, k -> new OffenseRecord());
 
         // Reset if enough time has passed
         if (record.shouldReset(resetTime)) {
-            record.consecutiveOffenses.set(1);
+            record.consecutiveOffenses.set(tunnelCount);
         } else {
-            record.recordOffense();
+            record.consecutiveOffenses.addAndGet(tunnelCount);
         }
 
         int offenses = record.consecutiveOffenses.get();
 
         if (offenses >= 3) {
             if (_log.shouldWarn()) {
-                _log.warn("3rd idle offense - banning peer [" + peer.toBase64().substring(0, 6) +
-                          "] for 8 hours: " + offenses + " offenses");
+                _log.warn("Banned peer [" + peer.toBase64().substring(0, 6) +
+                          "] for 8 hours: " + offenses + " total excessive idle tunnels");
             }
-            banPeer(peer, "Repeated idle tunnel abuse (" + offenses + " offenses)", ban3rd);
+            banPeer(peer, "Excessive Idle Tunnels (" + offenses + ")", ban3rd);
         } else if (offenses == 2) {
             if (_log.shouldWarn()) {
-                _log.warn("2nd idle offense - banning peer [" + peer.toBase64().substring(0, 6) +
-                          "] for 2 hours: " + offenses + " offenses");
+                _log.warn("Banned peer [" + peer.toBase64().substring(0, 6) +
+                          "] for 2 hours: " + offenses + " total excessive idle tunnels");
             }
-            banPeer(peer, "Multiple idle tunnel violations", ban2nd);
+            banPeer(peer, "Excessive Idle Tunnels (" + offenses + ")", ban2nd);
         } else if (_log.shouldInfo()) {
             _log.info("First idle offense for peer [" + peer.toBase64().substring(0, 6) +
-                      "] - warning only");
+                      "]: " + tunnelCount + " idle tunnels dropped");
         }
     }
 
@@ -330,13 +341,11 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
                 if (totalIdleTunnels >= minIdleTunnels) {
                     // Ban all identities on this IP
                     for (Hash peer : peers) {
-                        banPeer(peer, "Sybil attack: " + peers.size() +
-                                " identities on IP " + ip + " with " + totalIdleTunnels +
-                                " idle tunnels", banTime);
+                        banPeer(peer, "Excessive Idle Tunnels (" + totalIdleTunnels + ")", banTime);
                     }
 
                     if (_log.shouldWarn()) {
-                        _log.warn("Banned Sybil cluster: IP=" + ip +
+                        _log.warn("Banned IP cluster: IP=" + ip +
                                   ", identities=" + peers.size() +
                                   ", idleTunnels=" + totalIdleTunnels);
                     }
