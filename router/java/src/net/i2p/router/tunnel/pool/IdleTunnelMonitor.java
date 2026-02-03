@@ -30,7 +30,7 @@ import net.i2p.util.SystemVersion;
  * 3. Bans peers for repeated idle tunnel offenses or Sybil behavior
  *
  * Configurable properties:
- * - router.idleTunnelDetectionPeriod: Time before checking for idle (default: 120000ms)
+ * - router.idleTunnelDetectionPeriod: Time before checking for idle (default: 60000ms)
  * - router.idleTunnelMinMessages: Minimum messages to not be considered idle (default: 2)
  * - router.idleTunnelMinBytes: Minimum bytes to not be considered idle (default: 2048)
  * - router.idleTunnelScanInterval: How often to scan (default: 30000ms)
@@ -46,7 +46,7 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
 
     // Configuration
     private static final boolean isSlow = SystemVersion.isSlow();
-    private static final long DEFAULT_DETECTION_PERIOD = 2 * 60 * 1000; // 2 minutes
+    private static final long DEFAULT_DETECTION_PERIOD = 60 * 1000; // 60 seconds
     private static final int DEFAULT_MIN_MESSAGES = 2; // At least 2 messages
     private static final long DEFAULT_MIN_BYTES = 2 * 1024; // At least 2KB of data
     private static final long DEFAULT_SCAN_INTERVAL = 30 * 1000; // 30 seconds
@@ -164,6 +164,11 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
             if (age >= detectionPeriod && messages < minMessages && bytes < minBytes) {
                 idleTunnelsByPeer.computeIfAbsent(peer, k -> new ArrayList<>()).add(tunnel);
 
+                if (_log.shouldDebug()) {
+                    _log.debug("Detected idle tunnel from peer [" + peer.toBase64().substring(0, 6) +
+                              "]: age=" + (age/1000) + "s, messages=" + messages + ", bytes=" + bytes);
+                }
+
                 // Drop the idle tunnel
                 dropTunnel(tunnel);
                 totalDropped++;
@@ -242,8 +247,16 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
         int offenses = record.consecutiveOffenses.get();
 
         if (offenses >= 3) {
+            if (_log.shouldWarn()) {
+                _log.warn("3rd idle offense - banning peer [" + peer.toBase64().substring(0, 6) +
+                          "] for 8 hours: " + offenses + " offenses");
+            }
             banPeer(peer, "Repeated idle tunnel abuse (" + offenses + " offenses)", ban3rd);
         } else if (offenses == 2) {
+            if (_log.shouldWarn()) {
+                _log.warn("2nd idle offense - banning peer [" + peer.toBase64().substring(0, 6) +
+                          "] for 2 hours: " + offenses + " offenses");
+            }
             banPeer(peer, "Multiple idle tunnel violations", ban2nd);
         } else if (_log.shouldInfo()) {
             _log.info("First idle offense for peer [" + peer.toBase64().substring(0, 6) +
