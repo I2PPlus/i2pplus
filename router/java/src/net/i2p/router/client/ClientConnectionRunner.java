@@ -499,16 +499,11 @@ class ClientConnectionRunner {
      */
     private int getMaxLeaseFails() {
         int maxFails = MAX_LEASE_FAILS;
-        // During network attacks with low build success (<20%), allow more fails
+        // During network attacks with low build success (<20%), or during startup, allow more fails
         double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
-        if (buildSuccess > 0 && buildSuccess < 0.20) {
-            maxFails *= 3; // Allow 3x more fails (15 instead of 5)
-        } else if (buildSuccess == 0) {
-            // During startup or unknown, allow more fails (first 10 minutes)
-            long uptime = _context.router().getUptime();
-            if (uptime > 0 && uptime < 10*60*1000) {
-                maxFails *= 3; // Allow 3x more fails during first 10 minutes
-            }
+        long uptime = _context.router().getUptime();
+        if ((buildSuccess > 0 && buildSuccess < 0.20) || uptime < 15*60*1000) {
+            maxFails *= 4; // Allow 3x more fails (20 instead of 5)
         }
         return maxFails;
     }
