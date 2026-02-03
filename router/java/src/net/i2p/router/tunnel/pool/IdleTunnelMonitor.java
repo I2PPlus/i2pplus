@@ -61,8 +61,8 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
     private static final int DEFAULT_MIN_MESSAGES = 2; // At least 2 messages
     private static final long DEFAULT_MIN_BYTES = 2 * 1024; // At least 2KB of data
     private static final long DEFAULT_SCAN_INTERVAL = 30 * 1000; // 30 seconds
-    private static final int DEFAULT_SYBIL_MIN_IDENTITIES = 2;
-    private static final int DEFAULT_SYBIL_MIN_IDLE_TUNNELS = 10;
+    private static final int DEFAULT_SYBIL_MIN_IDENTITIES = 3; // Min 3 identities on same IP for Sybil check
+    private static final int DEFAULT_SYBIL_MIN_IDLE_TUNNELS = 5; // Min 5 idle tunnels for Sybil ban
     private static final long DEFAULT_BAN_2ND_OFFENSE = 2 * 60 * 60 * 1000; // 2 hours
     private static final long DEFAULT_BAN_3RD_OFFENSE = 8 * 60 * 60 * 1000; // 8 hours
     private static final long DEFAULT_OFFENSE_RESET_TIME = 60 * 60 * 1000; // 1 hour
@@ -203,8 +203,9 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
             recordIdleOffense(peer, tunnelCount, ban2nd, ban3rd, resetTime);
         }
 
-        // Sybil detection
-        detectAndBanSybils(idleTunnelsByPeer, sybilMinIdentities, sybilMinIdleTunnels, ban3rd);
+        // Sybil detection - pass detection thresholds
+        detectAndBanSybils(idleTunnelsByPeer, sybilMinIdentities, sybilMinIdleTunnels, ban3rd,
+                           detectionPeriod, minMessages, minBytes);
 
         if (totalDropped > 0 && _log.shouldWarn()) {
             _log.warn("Dropped " + totalDropped + " idle tunnels across " + idleTunnelsByPeer.size() + " peers");
@@ -267,9 +268,9 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
     private void recordIdleOffense(Hash peer, int tunnelCount, long ban2nd, long ban3rd, long resetTime) {
         OffenseRecord record = _offenseHistory.computeIfAbsent(peer, k -> new OffenseRecord());
 
-        // Reset if enough time has passed
+        // Reset if enough time has passed - start fresh at 1 offense
         if (record.shouldReset(resetTime)) {
-            record.consecutiveOffenses.set(tunnelCount);
+            record.consecutiveOffenses.set(1);
         } else {
             record.consecutiveOffenses.addAndGet(tunnelCount);
         }
@@ -282,7 +283,7 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
             banPeer(peer, "Excessive Idle Tunnels (" + offenses + ")", ban2nd);
         } else if (_log.shouldInfo()) {
             _log.info("First idle tunnels offense for peer [" + peer.toBase64().substring(0, 6) +
-                      "] -> " + tunnelCount + " idle "+ (tunnelCount > 1 ? "tunnels" : "tunnel") + " dropped");
+                      "] -> " + tunnelCount + " idle "+ (tunnelCount > 1 ? "tunnels" : "tunnel") + " dropped [" + System.currentTimeMillis() + "]");
         }
     }
 
@@ -300,7 +301,8 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
      * Detect Sybil attacks and ban all identities on same IP
      */
     private void detectAndBanSybils(Map<Hash, List<HopConfig>> idleTunnelsByPeer,
-                                    int minIdentities, int minIdleTunnels, long banTime) {
+                                    int minIdentities, int minIdleTunnels, long banTime,
+                                    long detectionPeriod, int minMessages, long minBytes) {
         // Build IP -> peers mapping
         Map<String, Set<Hash>> ipToIdlePeers = new HashMap<>();
 
@@ -320,30 +322,39 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
             }
         }
 
-        // Check for Sybils
+        // Check for Sybils - only ban if ALL identities on IP have only idle tunnels
         for (Map.Entry<String, Set<Hash>> entry : ipToIdlePeers.entrySet()) {
             String ip = entry.getKey();
-            Set<Hash> peers = entry.getValue();
+            Set<Hash> idlePeers = entry.getValue();
 
-            if (peers.size() >= minIdentities) {
-                // Count total idle tunnels from this IP
+            if (idlePeers.size() >= minIdentities) {
+                // Count total idle tunnels from these peers
                 int totalIdleTunnels = 0;
-                for (Hash peer : peers) {
+                boolean allIdle = true;
+
+                for (Hash peer : idlePeers) {
                     List<HopConfig> tunnels = idleTunnelsByPeer.get(peer);
                     if (tunnels != null) {
                         totalIdleTunnels += tunnels.size();
                     }
+                    // Check if this peer has ANY active tunnels
+                    if (hasActiveTunnels(peer, detectionPeriod, minMessages, minBytes)) {
+                        allIdle = false;
+                    }
                 }
 
-                if (totalIdleTunnels >= minIdleTunnels) {
-                    // Ban all identities on this IP
-                    for (Hash peer : peers) {
-                        banPeer(peer, "Excessive Idle Tunnels (" + totalIdleTunnels + ")", banTime);
+                // Only ban if ALL identities have only idle tunnels
+                if (allIdle && totalIdleTunnels >= minIdleTunnels) {
+                    for (Hash peer : idlePeers) {
+                        if (!_context.banlist().isBanlisted(peer)) {
+                            banPeer(peer, "Excessive Idle Tunnels (" + totalIdleTunnels + ")", banTime);
+                        }
                     }
 
                     if (_log.shouldWarn()) {
-                        _log.warn("Banning IP cluster for IP address [" + ip + "] -> Excessividle tunnels (" +
-                                   peers.size() + " ids / " + totalIdleTunnels + " idle tunnels");
+                        _log.warn("Banning IP cluster for IP [" + ip + "] -> All " +
+                                   idlePeers.size() + " ids have only idle tunnels (" +
+                                   totalIdleTunnels + " total) [" + System.currentTimeMillis() + "]");
                     }
                 }
             }
@@ -376,6 +387,32 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
         }
 
         return ips;
+    }
+
+    /**
+     * Check if a peer has any active (non-idle) tunnels
+     */
+    private boolean hasActiveTunnels(Hash peer, long detectionPeriod, int minMessages, long minBytes) {
+        TunnelDispatcher dispatcher = getDispatcher();
+        if (dispatcher == null) return false;
+
+        List<HopConfig> tunnels = dispatcher.listParticipatingTunnels();
+        long now = System.currentTimeMillis();
+
+        for (HopConfig tunnel : tunnels) {
+            Hash tunnelPeer = getPeerHash(tunnel);
+            if (tunnelPeer != null && tunnelPeer.equals(peer)) {
+                long age = now - tunnel.getCreation();
+                int messages = tunnel.getProcessedMessagesCount();
+                long bytes = tunnel.getProcessedBytesCount();
+
+                // If any tunnel has enough activity, peer is not fully idle
+                if (age >= detectionPeriod && (messages >= minMessages || bytes >= minBytes)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -414,13 +451,35 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
     }
 
     /**
-     * Cleanup old offense history entries
+     * Cleanup old offense history entries and IP tracking maps
      */
     private void cleanupOffenseHistory(long resetTime) {
         long now = System.currentTimeMillis();
+        long offenseCutoff = now - resetTime * 3;
+        long cleanCutoff = now - resetTime * 6; // Remove clean entries faster
+
         _offenseHistory.entrySet().removeIf(entry -> {
             OffenseRecord record = entry.getValue();
-            return now - record.lastOffenseTime > resetTime * 3; // 3x reset time
+            // Remove if old offense OR been clean for extended period
+            return record.lastOffenseTime < offenseCutoff || record.lastCleanTime < cleanCutoff;
+        });
+
+        // Also cleanup IP tracking - remove IPs with no recent offenses
+        _ipToPeers.entrySet().removeIf(entry -> {
+            Set<Hash> peers = entry.getValue();
+            // Remove if all peers are no longer in offense history
+            for (Hash peer : peers) {
+                if (_offenseHistory.containsKey(peer)) {
+                    return false; // Keep this IP
+                }
+            }
+            return true;
+        });
+
+        // Cleanup peer to IP mapping
+        _peerToIP.entrySet().removeIf(entry -> {
+            Hash peer = entry.getKey();
+            return !_offenseHistory.containsKey(peer);
         });
     }
 }
