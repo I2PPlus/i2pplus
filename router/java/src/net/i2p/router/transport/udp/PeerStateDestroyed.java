@@ -14,7 +14,9 @@ import net.i2p.data.Hash;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.RouterContext;
+import net.i2p.util.Addresses;
 import net.i2p.util.Log;
+import net.i2p.util.ObjectCounter;
 import net.i2p.util.SimpleTimer2;
 
 /**
@@ -59,6 +61,11 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
     private static final long MAX_LIFETIME = 2*60*1000;
     // retx at 7, 21, 49, 105
     private static final long TERMINATION_RETX_TIME = 7*1000;
+
+    // Track bad packets to destroyed connections for auto-ban
+    private static final ObjectCounter<RemoteHostId> _badPacketsToDestroyed = new ObjectCounter<RemoteHostId>();
+    private static final int BAD_PACKET_THRESHOLD = 5;
+    private static final long BAN_DURATION_MS = 8*60*60*1000; // 8 hours
 
     /**
      *  This must be called after the first termination or termination ack
@@ -215,6 +222,19 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
                 // for direct from IES2, these could be retransmitted session confirmed
                 if (_log.shouldWarn())
                     _log.warn("BAD " + len + " byte data packet (Type: " + header.getType() + ") from " + this);
+                // Track and auto-ban IPs sending packets to destroyed connections
+                int badCount = _badPacketsToDestroyed.increment(_remoteHostId);
+                if (badCount >= BAD_PACKET_THRESHOLD) {
+                    InetAddress addr = InetAddress.getByAddress(_remoteHostId.getIP());
+                    String ip = addr.getHostAddress();
+                    _log.warn("Auto-banning " + ip + " for sending packets to destroyed connection (" + badCount + " bad packets) - 8 hour ban");
+                    _context.blocklist().addTemporary(
+                        _remoteHostId.getIP(),
+                        BAN_DURATION_MS,
+                        "Sending packets to destroyed connection"
+                    );
+                    _badPacketsToDestroyed.clear(_remoteHostId);
+                }
                 return;
             }
             long n = header.getPacketNumber();
