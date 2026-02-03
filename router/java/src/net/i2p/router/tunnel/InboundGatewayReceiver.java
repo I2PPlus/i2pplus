@@ -30,8 +30,10 @@ class InboundGatewayReceiver implements TunnelGateway.Receiver {
     }
 
     public long receiveEncrypted(byte[] encrypted, boolean alreadySearched) {
-        if (!alreadySearched)
+        if (!alreadySearched) {
             _config.incrementProcessedMessages();
+            _config.addProcessedBytes(encrypted.length);
+        }
         if (_target == null) {
             _target = _context.netDb().lookupRouterInfoLocally(_config.getSendTo());
             if (_target == null) {

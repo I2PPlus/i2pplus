@@ -52,8 +52,9 @@ class OutboundTunnelEndpoint {
     }
 
     public void dispatch(TunnelDataMessage msg, Hash recvFrom) {
-        _config.incrementProcessedMessages();
         byte[] data = msg.getData();
+        _config.incrementProcessedMessages();
+        _config.addProcessedBytes(data.length);
         boolean ok = _processor.process(data, 0, data.length, recvFrom);
         if (!ok) {
             // invalid IV

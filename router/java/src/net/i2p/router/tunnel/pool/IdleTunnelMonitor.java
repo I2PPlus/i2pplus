@@ -25,13 +25,14 @@ import net.i2p.util.SystemVersion;
  * Monitors transit tunnels for idle/abusive behavior and detects Sybil attacks.
  *
  * This class periodically scans participating tunnels and:
- * 1. Drops tunnels with no/low traffic after detection period
+ * 1. Drops tunnels with no/low traffic after detection period (both messages AND bytes)
  * 2. Detects multiple router identities on same IP with low traffic (Sybils)
  * 3. Bans peers for repeated idle tunnel offenses or Sybil behavior
  *
  * Configurable properties:
  * - router.idleTunnelDetectionPeriod: Time before checking for idle (default: 120000ms)
  * - router.idleTunnelMinMessages: Minimum messages to not be considered idle (default: 2)
+ * - router.idleTunnelMinBytes: Minimum bytes to not be considered idle (default: 2048)
  * - router.idleTunnelScanInterval: How often to scan (default: 30000ms)
  * - router.sybilMinIdentities: Minimum identities on same IP to trigger Sybil check (default: 2)
  * - router.sybilMinIdleTunnels: Minimum idle tunnels for Sybil ban (default: 10)
@@ -47,6 +48,7 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
     private static final boolean isSlow = SystemVersion.isSlow();
     private static final long DEFAULT_DETECTION_PERIOD = 2 * 60 * 1000; // 2 minutes
     private static final int DEFAULT_MIN_MESSAGES = 2; // At least 2 messages
+    private static final long DEFAULT_MIN_BYTES = 2 * 1024; // At least 2KB of data
     private static final long DEFAULT_SCAN_INTERVAL = 30 * 1000; // 30 seconds
     private static final int DEFAULT_SYBIL_MIN_IDENTITIES = 2;
     private static final int DEFAULT_SYBIL_MIN_IDLE_TUNNELS = 10;
@@ -57,6 +59,7 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
     // Only these properties are configurable
     private static final String PROP_DETECTION_PERIOD = "router.idleTunnelDetectionPeriod";
     private static final String PROP_MIN_MESSAGES = "router.idleTunnelMinMessages";
+    private static final String PROP_MIN_BYTES = "router.idleTunnelMinBytes";
     private static final String PROP_SCAN_INTERVAL = "router.idleTunnelScanInterval";
     private static final String PROP_SYBIL_MIN_IDENTITIES = "router.sybilMinIdentities";
     private static final String PROP_SYBIL_MIN_IDLE_TUNNELS = "router.sybilMinIdleTunnels";
@@ -133,6 +136,7 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
         
         long detectionPeriod = _context.getProperty(PROP_DETECTION_PERIOD, DEFAULT_DETECTION_PERIOD);
         int minMessages = _context.getProperty(PROP_MIN_MESSAGES, DEFAULT_MIN_MESSAGES);
+        long minBytes = _context.getProperty(PROP_MIN_BYTES, DEFAULT_MIN_BYTES);
         int sybilMinIdentities = _context.getProperty(PROP_SYBIL_MIN_IDENTITIES, DEFAULT_SYBIL_MIN_IDENTITIES);
         int sybilMinIdleTunnels = _context.getProperty(PROP_SYBIL_MIN_IDLE_TUNNELS, DEFAULT_SYBIL_MIN_IDLE_TUNNELS);
         // Use hardcoded defaults for ban durations (not configurable)
@@ -153,9 +157,11 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
 
             long age = now - tunnel.getCreation();
             int messages = tunnel.getProcessedMessagesCount();
+            long bytes = tunnel.getProcessedBytesCount();
 
-            // Check if idle
-            if (age >= detectionPeriod && messages < minMessages) {
+            // Check if idle - both message count AND bytes must be below threshold
+            // This catches attackers with high tunnel count but zero/low data transmission
+            if (age >= detectionPeriod && messages < minMessages && bytes < minBytes) {
                 idleTunnelsByPeer.computeIfAbsent(peer, k -> new ArrayList<>()).add(tunnel);
 
                 // Drop the idle tunnel
@@ -207,7 +213,8 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
 
             if (_log.shouldDebug()) {
                 _log.debug("Dropped idle tunnel: " + tunnel.getReceiveTunnelId() +
-                          " (messages: " + tunnel.getProcessedMessagesCount() + ")");
+                          " (messages: " + tunnel.getProcessedMessagesCount() +
+                          ", bytes: " + tunnel.getProcessedBytesCount() + ")");
             }
 
             // Update stats

@@ -156,12 +156,14 @@ class TunnelParticipant {
             logDispatchFailure(msg);
             if (_config != null) {
                 _config.incrementProcessedMessages();
+                _config.addProcessedBytes(data.length);
             }
             return;
         }
 
         if (_config != null && _config.getSendTo() != null) {
             _config.incrementProcessedMessages();
+            _config.addProcessedBytes(data.length);
             RouterInfo ri = _nextHopCache;
             if (ri != null) {
                 send(_config, msg, ri);

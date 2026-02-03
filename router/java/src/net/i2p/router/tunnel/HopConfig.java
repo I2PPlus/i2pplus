@@ -30,6 +30,8 @@ public class HopConfig {
     private int _messagesProcessed;
     private int _oldMessagesProcessed;
     private volatile int _allocatedBW;
+    private long _bytesProcessed;
+    private long _oldBytesProcessed;
 
     public HopConfig() {
         _creation = -1;
@@ -140,6 +142,18 @@ public class HopConfig {
     public synchronized int getProcessedMessagesCount() { return _messagesProcessed; }
 
     /**
+     *  Take note of bytes being pumped through this tunnel.
+     *  @since 0.9.68+
+     */
+    public synchronized void addProcessedBytes(long bytes) { _bytesProcessed += bytes; }
+
+    /**
+     *  Total bytes processed through this tunnel.
+     *  @since 0.9.68+
+     */
+    public synchronized long getProcessedBytesCount() { return _bytesProcessed; }
+
+    /**
      *  This returns the number of processed messages since
      *  the last time getAndResetRecentMessagesCount() was called.
      *  As of 0.9.23, does NOT reset the count, see getAndResetRecentMessagesCount().
@@ -158,6 +172,17 @@ public class HopConfig {
     synchronized int getAndResetRecentMessagesCount() {
         int rv = _messagesProcessed - _oldMessagesProcessed;
         _oldMessagesProcessed = _messagesProcessed;
+        return rv;
+    }
+
+    /**
+     *  This returns the number of processed bytes since the last time this was called,
+     *  and resets the count.
+     *  @since 0.9.68+
+     */
+    synchronized long getAndResetRecentBytesCount() {
+        long rv = _bytesProcessed - _oldBytesProcessed;
+        _oldBytesProcessed = _bytesProcessed;
         return rv;
     }
 
