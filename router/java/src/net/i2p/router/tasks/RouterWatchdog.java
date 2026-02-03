@@ -50,6 +50,8 @@ public class RouterWatchdog implements Runnable {
 
     private static final long MAX_JOB_RUN_LAG = 60*1000;
     private static final long MIN_DUMP_INTERVAL= 6*60*60*1000;
+    /** Only log status at ERROR level after this many consecutive errors */
+    private static final int STATUS_ERROR_THRESHOLD = 3;
 
     /**
      * Create a new router watchdog.
@@ -115,6 +117,11 @@ public class RouterWatchdog implements Runnable {
     }
 
     private void dumpStatus() {
+        // Only log full status dump at ERROR level if we've had multiple consecutive errors
+        // This prevents log spam from transient issues while still alerting on persistent problems
+        if (_consecutiveErrors < STATUS_ERROR_THRESHOLD) {
+            return; // Skip logging for transient errors
+        }
         if (_log.shouldError()) {
             RateStat rs = _context.statManager().getRate("transport.sendProcessingTime");
             Rate r = null;
@@ -136,7 +143,7 @@ public class RouterWatchdog implements Runnable {
                        "\n* Send rate: " + DataHelper.formatSize((long)bps) + "Bps" +
                        "\n* Memory: " + DataHelper.formatSize(used) + "B / " + DataHelper.formatSize(max) + 'B');
 
-            if (_consecutiveErrors == 1) {
+            if (_consecutiveErrors == STATUS_ERROR_THRESHOLD) {
                 _log.log(Log.CRIT, "Router appears hung, or there is severe network congestion. Watchdog starts barking!");
                  _context.router().eventLog().addEvent(EventLog.WATCHDOG);
                 // This works on linux...
