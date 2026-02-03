@@ -37,6 +37,13 @@ public class RouterThrottleImpl implements RouterThrottle {
     private static final String PROP_REJECT_STARTUP_TIME = "router.rejectStartupTime";
     private static final int DEFAULT_MIN_THROTTLE_TUNNELS = SystemVersion.isSlow() ? 2000 : 6000;
     private static final String PROP_MIN_THROTTLE_TUNNELS = "router.minThrottleTunnels";
+    
+    // Percentage-based min throttle tunnels (new in 0.9.68+)
+    // Allows throttling threshold to scale with maxParticipatingTunnels
+    private static final String PROP_MIN_THROTTLE_PERCENT = "router.minThrottleTunnelsPercent";
+    private static final int DEFAULT_MIN_THROTTLE_PERCENT = 10; // Start throttling at 10% of max tunnels
+    private static final int MIN_THROTTLE_PERCENT = 5;  // Minimum 5%
+    private static final int MAX_THROTTLE_PERCENT = 90; // Maximum 90%
 
     /* TO BE FIXED - SEE COMMENTS BELOW */
     private static final int DEFAULT_MAX_PROCESSINGTIME = SystemVersion.isSlow() ? 3000 : 2000;
@@ -401,15 +408,36 @@ public class RouterThrottleImpl implements RouterThrottle {
         return !reject;
     }
 
-    /** Don't ever probabalistically throttle tunnels if we have less than this many */
+    /**
+     * Don't ever probabalistically throttle tunnels if we have less than this many.
+     * 
+     * Priority order for determining the minimum throttle threshold:
+     * 1. router.minThrottleTunnels - absolute value (for backwards compatibility)
+     * 2. router.minThrottleTunnelsPercent - percentage of max tunnels (default: 10%)
+     * 3. Fallback to hardcoded 66.7% of max tunnels
+     *
+     * @since 0.9.68+ supports percentage-based configuration
+     */
     private int getMinThrottleTunnels() {
-        int configured = _context.getProperty(PROP_MIN_THROTTLE_TUNNELS, -1);
-        if (configured > 0) {
-            return configured;
+        // Check for absolute value configuration (backwards compatibility)
+        int configuredAbsolute = _context.getProperty(PROP_MIN_THROTTLE_TUNNELS, -1);
+        if (configuredAbsolute > 0) {
+            return configuredAbsolute;
         }
-        // Calculate default on first access
+        
         int maxTunnels = _context.getProperty(PROP_MAX_TUNNELS, DEFAULT_MAX_TUNNELS);
-        return (maxTunnels / 3) * 2;
+        
+        // Check for percentage-based configuration (new in 0.9.68)
+        int percent = _context.getProperty(PROP_MIN_THROTTLE_PERCENT, DEFAULT_MIN_THROTTLE_PERCENT);
+        
+        // Clamp percentage between 5% and 90% to prevent misconfiguration
+        percent = Math.max(MIN_THROTTLE_PERCENT, Math.min(MAX_THROTTLE_PERCENT, percent));
+        
+        // Calculate threshold as percentage of max tunnels
+        int threshold = (maxTunnels * percent) / 100;
+        
+        // Ensure we don't return 0 or negative
+        return Math.max(1, threshold);
     }
 
     private double getTunnelGrowthFactor() {
