@@ -47,6 +47,10 @@ class RequestThrottler {
     private volatile Boolean cachedShouldBlockOldRouters;
     private static final long PROPERTY_CHECK_INTERVAL = 30*1000; // Check every 30 seconds
 
+    // Burst offense tracking for escalation to 8h ban
+    private final Map<Hash, BurstOffenseRecord> _burstOffenses = new ConcurrentHashMap<>();
+    private static final long BURST_OFFENSE_RESET = 60 * 60 * 1000; // Reset after 1 hour clean
+
     // Traditional limits (per 90s window)
     private static final int MIN_LIMIT = 200;
     private static final int MAX_LIMIT = 400;
@@ -219,16 +223,37 @@ class RequestThrottler {
             int burstLimit = Math.max(BURST_THRESHOLD_MIN, 
                 Math.min(BURST_THRESHOLD_MAX, (int) (limit * BURST_THRESHOLD_PERCENT * 10 / 90)));
             
+            // Track burst offenses for escalation
+            BurstOffenseRecord record = _burstOffenses.computeIfAbsent(h, k -> new BurstOffenseRecord());
+            record.recordOffense();
+            
+            int offenses = record.getConsecutiveOffenses();
+            
+            // Escalate ban based on consecutive offenses
+            long banTime;
+            String reason;
+            if (offenses >= 3) {
+                // 3+ consecutive bursts - 8 hour ban
+                banTime = 8 * 60 * 60 * 1000;
+                reason = "Persistent burst tunnel requests (" + offenses + " offenses)";
+            } else if (offenses == 2) {
+                // 2 consecutive bursts - 2 hour ban
+                banTime = 2 * 60 * 60 * 1000;
+                reason = "Repeated burst tunnel requests (" + offenses + " offenses)";
+            } else {
+                // First burst - 1 hour ban
+                banTime = 60 * 60 * 1000;
+                reason = "Burst tunnel requests detected";
+            }
+            
             if (_log.shouldWarn()) {
                 _log.warn("Burst detected from Router [" + routerId + "] -> " +
                           "Requests: " + burstCount + " in " + (BURST_WINDOW_MS / 1000) + "s " +
-                          "(limit: " + burstLimit + ")");
+                          "(limit: " + burstLimit + ", offenses: " + offenses + ")");
             }
             
-            // Ban for burst behavior - shorter duration than excessive requests but immediate
-            int bantime = 15 * 60 * 1000; // 15 minutes for burst
-            context.banlist().banlistRouter(h, " <b>➜</b> Burst tunnel requests detected", null, null, 
-                context.clock().now() + bantime);
+            context.banlist().banlistRouter(h, " <b>➜</b> " + reason, null, null, 
+                context.clock().now() + banTime);
             
             if (shouldDisconnect) {
                 context.simpleTimer2().addEvent(new Disconnector(h), 3 * 1000);
@@ -270,7 +295,12 @@ class RequestThrottler {
      * Periodic timer event that clears the request counts to reset throttling.
      */
     private class Cleaner implements SimpleTimer.TimedEvent {
-        public void timeReached() {RequestThrottler.this.counter.clear();}
+        public void timeReached() {
+            RequestThrottler.this.counter.clear();
+            // Reset expired burst offenses
+            _burstOffenses.entrySet().removeIf(entry ->
+                System.currentTimeMillis() - entry.getValue().lastOffenseTime > BURST_OFFENSE_RESET);
+        }
     }
 
     /**
@@ -504,6 +534,30 @@ class RequestThrottler {
             int burstLimit = Math.max(BURST_THRESHOLD_MIN, 
                 Math.min(BURST_THRESHOLD_MAX, (int) (normalLimit * BURST_THRESHOLD_PERCENT * 10 / 90)));
             return count > burstLimit;
+        }
+    }
+
+    /**
+     * Tracks burst offense history for a peer.
+     * Used to escalate bans for persistent burst violators.
+     */
+    private static class BurstOffenseRecord {
+        private final AtomicInteger consecutiveOffenses = new AtomicInteger(0);
+        private volatile long lastOffenseTime = 0;
+
+        void recordOffense() {
+            consecutiveOffenses.incrementAndGet();
+            lastOffenseTime = System.currentTimeMillis();
+        }
+
+        int getConsecutiveOffenses() {
+            return consecutiveOffenses.get();
+        }
+
+        void resetIfExpired(long resetTime) {
+            if (System.currentTimeMillis() - lastOffenseTime > resetTime) {
+                consecutiveOffenses.set(0);
+            }
         }
     }
 
