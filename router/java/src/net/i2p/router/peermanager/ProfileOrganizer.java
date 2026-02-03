@@ -95,8 +95,8 @@ public class ProfileOrganizer {
         _context.statManager().createRequiredRateStat("peer.failedLookupRate", "NetDb Lookup failure rate", "Peers", RATES);
         _context.statManager().createRequiredRateStat("peer.profileSortTime", "Time to sort peers (ms)", "Peers", RATES);
 
-        // Lightweight ghost demotion job runs every 3 minutes
-        _context.simpleTimer2().addPeriodicEvent(new GhostDemoter(), 3 * 60 * 1000);
+        // Lightweight ghost demotion job runs every 75 seconds
+        _context.simpleTimer2().addPeriodicEvent(new GhostDemoter(), 75 * 1000);
     }
 
     /**
