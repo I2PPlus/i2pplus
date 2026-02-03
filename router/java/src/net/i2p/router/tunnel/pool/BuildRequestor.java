@@ -189,7 +189,7 @@ abstract class BuildRequestor {
             // No tunnel available — not even exploratory. This is severe.
             long uptime = ctx.router().getUptime();
             if (uptime > 3*60*1000) {
-                log.warn("Tunnel build failed -> No paired or exploratory tunnel available for " + cfg);
+                log.warn("Tunnel build failed -> No paired or Exploratory tunnel available for " + cfg);
             }
             int ms = settings.isExploratory() ? EXPLORATORY_BACKOFF : CLIENT_BACKOFF;
             try {Thread.sleep(ms);} catch (InterruptedException ie) {}
@@ -238,11 +238,11 @@ abstract class BuildRequestor {
             TunnelInfo expl = isInbound
                 ? mgr.selectOutboundExploratoryTunnel(farEnd)
                 : mgr.selectInboundExploratoryTunnel(farEnd);
-            
+
             // If no exploratory tunnels exist yet, allow zero-hop as fallback
             if (expl == null) {
                 if (log.shouldInfo()) {
-                    log.info("No existing exploratory tunnels for " + cfg + " -> allowing zero-hop build");
+                    log.info("No existing Exploratory tunnels for " + cfg + " -> Allowing zero-hop build...");
                 }
                 // Return null to allow zero-hop tunnel build
                 return null;
@@ -266,12 +266,12 @@ abstract class BuildRequestor {
                 }
                 // Client SKM missing but garlic reply expected → fall through to expl
                 if (log.shouldInfo()) {
-                    log.info("Client SKM unavailable for garlic reply -> Falling back to exploratory for " + cfg);
+                    log.info("Client SKM unavailable for garlic reply -> Falling back to Exploratory for " + cfg);
                 }
             }
         } else {
             if (log.shouldWarn() && uptime > 5*60*1000 && fails > 2) {
-                log.warn(fails + " consecutive build timeouts for " + cfg + " → Forcing exploratory tunnel...");
+                log.warn(fails + " consecutive build timeouts for " + cfg + " → Forcing Exploratory tunnel...");
             }
         }
 
@@ -281,7 +281,7 @@ abstract class BuildRequestor {
             : selectFallbackInboundTunnel(ctx, mgr, log);
 
         if (expl != null && log.shouldInfo()) {
-            log.info("Using exploratory tunnel as fallback for: " + cfg);
+            log.info("Using Exploratory tunnel as fallback for: " + cfg);
         }
         return expl;
     }
@@ -296,7 +296,7 @@ abstract class BuildRequestor {
             TunnelInfo anyOutbound = mgr.selectOutboundTunnel();
             if (anyOutbound == null) {
                 if (log.shouldInfo()) {
-                    log.info("Allowing zero-hop outbound tunnel for initial exploratory build");
+                    log.info("Allowing zero-hop outbound tunnel for initial Exploratory build...");
                 }
                 return tunnel;
             }
@@ -316,7 +316,7 @@ abstract class BuildRequestor {
             TunnelInfo anyInbound = mgr.selectInboundTunnel();
             if (anyInbound == null) {
                 if (log.shouldInfo()) {
-                    log.info("Allowing zero-hop inbound tunnel for initial exploratory build");
+                    log.info("Allowing zero-hop inbound tunnel for initial Exploratory build...");
                 }
                 return tunnel;
             }

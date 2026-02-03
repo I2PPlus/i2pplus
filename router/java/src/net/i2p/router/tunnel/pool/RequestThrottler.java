@@ -55,14 +55,14 @@ class RequestThrottler {
     private static final int MIN_LIMIT = 200;
     private static final int MAX_LIMIT = 400;
     private static final int PERCENT_LIMIT = 20;
-    
+
     // Burst detection limits (per 10s sliding window)
     private static final long BURST_WINDOW_MS = 10 * 1000; // 10 second sliding window
     private static final int BURST_BUCKET_COUNT = 10; // 1 second per bucket
     private static final int BURST_THRESHOLD_MIN = 50; // Minimum burst threshold
     private static final int BURST_THRESHOLD_MAX = 150; // Maximum burst threshold
     private static final double BURST_THRESHOLD_PERCENT = 0.5; // 50% of normal limit
-    
+
     private static final long CLEAN_TIME = 90 * 1000; // Reset limits every 90 seconds
     private final static boolean DEFAULT_SHOULD_THROTTLE = true;
     private final static String PROP_SHOULD_THROTTLE = "router.enableTransitThrottle";
@@ -220,15 +220,15 @@ class RequestThrottler {
         // This catches DDoS attempts that try to overwhelm the router before the 90s limit kicks in
         if (enableThrottle && !rv && counter.isBursting(h, limit)) {
             int burstCount = counter.getCount(h);
-            int burstLimit = Math.max(BURST_THRESHOLD_MIN, 
+            int burstLimit = Math.max(BURST_THRESHOLD_MIN,
                 Math.min(BURST_THRESHOLD_MAX, (int) (limit * BURST_THRESHOLD_PERCENT * 10 / 90)));
-            
+
             // Track burst offenses for escalation
             BurstOffenseRecord record = _burstOffenses.computeIfAbsent(h, k -> new BurstOffenseRecord());
             record.recordOffense();
-            
+
             int offenses = record.getConsecutiveOffenses();
-            
+
             // Escalate ban based on consecutive offenses
             long banTime;
             String reason;
@@ -245,20 +245,20 @@ class RequestThrottler {
                 banTime = 60 * 60 * 1000;
                 reason = "Burst tunnel requests detected";
             }
-            
+
             if (_log.shouldWarn()) {
                 _log.warn("Burst detected from Router [" + routerId + "] -> " +
                           "Requests: " + burstCount + " in " + (BURST_WINDOW_MS / 1000) + "s " +
                           "(limit: " + burstLimit + ", offenses: " + offenses + ")");
             }
-            
-            context.banlist().banlistRouter(h, " <b>➜</b> " + reason, null, null, 
+
+            context.banlist().banlistRouter(h, " <b>➜</b> " + reason, null, null,
                 context.clock().now() + banTime);
-            
+
             if (shouldDisconnect) {
                 context.simpleTimer2().addEvent(new Disconnector(h), 3 * 1000);
             }
-            
+
             return true;
         }
 
@@ -430,22 +430,22 @@ class RequestThrottler {
         int increment(Hash h) {
             long now = System.currentTimeMillis();
             int bucketIndex = (int) ((now / bucketSizeMs) % bucketCount);
-            
+
             // Get or create peer bucket array
             AtomicIntegerArray peerArray = peerBuckets.computeIfAbsent(h, k -> new AtomicIntegerArray(bucketCount));
-            
+
             // Increment both peer and global counters
             int peerCount = peerArray.incrementAndGet(bucketIndex);
             globalBuckets.incrementAndGet(bucketIndex);
-            
+
             // Calculate total in sliding window for this peer
             int total = getWindowSum(peerArray, bucketIndex);
-            
+
             // Periodic cleanup of old entries
             if (now - lastCleanupTime > CLEANUP_INTERVAL) {
                 cleanup(now);
             }
-            
+
             return total;
         }
 
@@ -458,7 +458,7 @@ class RequestThrottler {
         int getCount(Hash h) {
             AtomicIntegerArray peerArray = peerBuckets.get(h);
             if (peerArray == null) return 0;
-            
+
             long now = System.currentTimeMillis();
             int bucketIndex = (int) ((now / bucketSizeMs) % bucketCount);
             return getWindowSum(peerArray, bucketIndex);
@@ -512,7 +512,7 @@ class RequestThrottler {
             lastCleanupTime = now;
             int currentBucket = (int) ((now / bucketSizeMs) % bucketCount);
             int prevBucket = (currentBucket - 1 + bucketCount) % bucketCount;
-            
+
             // Remove peers with zero count in last two buckets
             peerBuckets.entrySet().removeIf(entry -> {
                 AtomicIntegerArray arr = entry.getValue();
@@ -531,7 +531,7 @@ class RequestThrottler {
             int count = getCount(h);
             // Burst threshold is 50% of the normal limit scaled to 10s window
             // Normal limit is per 90s, so for 10s: limit * 10/90 * 0.5
-            int burstLimit = Math.max(BURST_THRESHOLD_MIN, 
+            int burstLimit = Math.max(BURST_THRESHOLD_MIN,
                 Math.min(BURST_THRESHOLD_MAX, (int) (normalLimit * BURST_THRESHOLD_PERCENT * 10 / 90)));
             return count > burstLimit;
         }
