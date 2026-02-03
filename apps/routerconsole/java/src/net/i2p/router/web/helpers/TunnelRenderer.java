@@ -358,20 +358,23 @@ class TunnelRenderer {
     public void renderTransitSummary(Writer out) throws IOException {
         List<HopConfig> participating = _context.tunnelDispatcher().listParticipatingTunnels();
         if (!participating.isEmpty() && participating.size() > 1) {
-            // Counters for tunnels and bandwidth by peer
+            // Counters for tunnels, bandwidth, and messages by peer
             ObjectCounterUnsafe<Hash> counts = new ObjectCounterUnsafe<>();
             ObjectCounterUnsafe<Hash> bws = new ObjectCounterUnsafe<>();
+            ObjectCounterUnsafe<Hash> msgs = new ObjectCounterUnsafe<>();
             for (HopConfig cfg : participating) {
                 Hash from = cfg.getReceiveFrom();
                 Hash to = cfg.getSendTo();
-                int msgs = cfg.getProcessedMessagesCount();
+                int msgsCount = cfg.getProcessedMessagesCount();
                 if (from != null) {
                     counts.increment(from);
-                    if (msgs > 0) bws.add(from, msgs);
+                    if (msgsCount > 0) bws.add(from, msgsCount);
+                    msgs.add(from, msgsCount);
                 }
                 if (to != null) {
                     counts.increment(to);
-                    if (msgs > 0) bws.add(to, msgs);
+                    if (msgsCount > 0) bws.add(to, msgsCount);
+                    msgs.add(to, msgsCount);
                 }
             }
 
@@ -396,6 +399,8 @@ class TunnelRenderer {
                 .append(_t("Tunnels"))
                 .append("</th><th id=data data-sort-method=number>")
                 .append(_t("Data"))
+                .append("</th><th id=msgs data-sort-method=number>")
+                .append(_t("Msgs"))
                 .append("</th><th id=edit data-sort-method=none>")
                 .append(_t("Edit"))
                 .append("</th></tr></thead>\n<tbody id=transitPeers>\n");
@@ -491,6 +496,13 @@ class TunnelRenderer {
                 if (bw > 0) {
                     sb.append("<span class=data>").append(fmt.format(bw).replace(".00", "")).append("KB</span>");
                 } else {sb.append("<span class=data hidden>0KB</span>");}
+                sb.append("</td>");
+
+                long msgCount = msgs.count(h);
+                sb.append("<td data-sort=").append(msgCount).append(">");
+                if (msgCount > 0) {
+                    sb.append("<span class=msgs>").append(msgCount).append("</span>");
+                } else {sb.append("<span class=msgs>0</span>");}
                 sb.append("</td>");
 
                 sb.append("<td class=isBanned hidden>");
