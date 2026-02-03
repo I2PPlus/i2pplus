@@ -116,9 +116,11 @@ public class Blocklist {
      */
     private static final int MAX_IPV4_SINGLES = SystemVersion.isSlow() ? 2048 : 8192;
     private static final int MAX_IPV6_SINGLES = SystemVersion.isSlow() ? 1024 : 4096;
+    private static final int MAX_TEMP_BANS = SystemVersion.isSlow() ? 1024 : 4096;
 
     private final Map<Integer, Object> _singleIPBlocklist = new LHMCache<Integer, Object>(MAX_IPV4_SINGLES);
     private final Map<BigInteger, Object> _singleIPv6Blocklist;
+    private final Map<Integer, Long> _tempIPBlocklist = new LHMCache<Integer, Long>(MAX_TEMP_BANS);
 
     private static final Object DUMMY = Integer.valueOf(0);
 
@@ -857,6 +859,56 @@ public class Blocklist {
     private void remove(int ip) {
         Integer iip = Integer.valueOf(ip);
         synchronized(_singleIPBlocklist) {_singleIPBlocklist.remove(iip);}
+        _tempIPBlocklist.remove(iip);
+    }
+
+    /**
+     *  Add a temporary IP block with expiration time.
+     *  For use by transports to block abusive IPs.
+     *
+     *  @param ip IPv4 address
+     *  @param durationMs duration in milliseconds (e.g. 8*60*60*1000 for 8 hours)
+     *  @param source for logging, may be null
+     *  @since 2.10.0
+     */
+    public void addTemporary(byte ip[], long durationMs, String source) {
+        if (ip.length != 4) {return;}
+        int ipInt = toInt(ip);
+        long expireOn = _context.clock().now() + durationMs;
+        Integer iip = Integer.valueOf(ipInt);
+        synchronized(_tempIPBlocklist) {
+            Long existing = _tempIPBlocklist.get(iip);
+            if (existing != null && existing > expireOn) {
+                return; // Already blocked longer
+            }
+            _tempIPBlocklist.put(iip, expireOn);
+        }
+        if (_log.shouldInfo()) {
+            _log.info("Temporarily banning " + Addresses.toString(ip) + " for " + (durationMs / 3600000) +
+                      " hours -> " + (source != null ? source : "Abuse"));
+        }
+    }
+
+    /**
+     *  Check if IP is temporarily blocked.
+     *
+     *  @param ip IPv4 address
+     *  @return true if blocked
+     *  @since 2.10.0
+     */
+    public boolean isTemporaryBlocklisted(byte ip[]) {
+        if (ip.length != 4) {return false;}
+        int ipInt = toInt(ip);
+        Integer iip = Integer.valueOf(ipInt);
+        synchronized(_tempIPBlocklist) {
+            Long expireOn = _tempIPBlocklist.get(iip);
+            if (expireOn == null) {return false;}
+            if (_context.clock().now() > expireOn) {
+                _tempIPBlocklist.remove(iip);
+                return false;
+            }
+            return true;
+        }
     }
 
     private boolean isOnSingleList(int ip) {
@@ -985,7 +1037,10 @@ public class Blocklist {
      *  @return true if the IP is blocklisted
      */
     public boolean isBlocklisted(byte ip[]) {
-        if (ip.length == 4) {return isBlocklisted(toInt(ip));}
+        if (ip.length == 4) {
+            if (isBlocklisted(toInt(ip))) {return true;}
+            return isTemporaryBlocklisted(ip);
+        }
         if (ip.length == 16) {
             if (!_haveIPv6) {return false;}
             return isOnSingleList(new BigInteger(1, ip));
