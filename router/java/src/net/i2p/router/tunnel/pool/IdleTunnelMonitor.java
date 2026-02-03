@@ -16,6 +16,7 @@ import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.RouterContext;
 import net.i2p.router.peermanager.PeerProfile;
+import net.i2p.router.peermanager.TunnelHistory;
 import net.i2p.router.tunnel.HopConfig;
 import net.i2p.router.tunnel.TunnelDispatcher;
 import net.i2p.util.Log;
@@ -420,7 +421,8 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
 
     /**
      * Check if a peer has been recently responsive based on profile data.
-     * Returns true if the peer has recent send/receive activity.
+     * Returns true if the peer has recent send/receive activity (innocent).
+     * Returns false if peer is hostile (recent failures) or completely inactive (suspicious).
      */
     private boolean isPeerResponsive(Hash peer) {
         try {
@@ -434,10 +436,41 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
 
             long lastHeardFrom = profile.getLastHeardFrom();
             long lastSendSuccessful = profile.getLastSendSuccessful();
+            long lastSendFailed = profile.getLastSendFailed();
 
-            // Peer is responsive if we heard from them or successfully sent to them recently
-            return (lastHeardFrom > 0 && now - lastHeardFrom < recentWindow) ||
-                   (lastSendSuccessful > 0 && now - lastSendSuccessful < recentWindow);
+            // Check for recent successful communication
+            boolean recentSuccess = (lastHeardFrom > 0 && now - lastHeardFrom < recentWindow) ||
+                                   (lastSendSuccessful > 0 && now - lastSendSuccessful < recentWindow);
+
+            if (recentSuccess) {
+                return true; // Skip ban - peer is responsive
+            }
+
+            // No recent success - check for recent failures
+            boolean recentFailure = (lastSendFailed > 0 && now - lastSendFailed < recentWindow);
+
+            // Also check tunnel history for failures if available
+            TunnelHistory tunnelHistory = profile.getTunnelHistory();
+            if (tunnelHistory != null) {
+                long lastFailed = tunnelHistory.getLastFailed();
+                if (lastFailed > 0 && now - lastFailed < recentWindow) {
+                    recentFailure = true;
+                }
+            }
+
+            // Peer has recent failures - hostile behavior detected
+            if (recentFailure) {
+                if (_log.shouldInfo()) {
+                    _log.info("Peer [" + peer.toBase64().substring(0, 6) +
+                              "] has recent failures - proceeding with ban");
+                }
+                return false; // Don't skip ban
+            }
+
+            // No success and no failures - complete inactivity
+            // Could be innocent (just idle) or hostile (ghost node)
+            // We'll allow the ban to proceed since we have idle tunnel evidence
+            return false;
         } catch (Exception e) {
             if (_log.shouldDebug()) {
                 _log.debug("Error checking peer responsiveness for [" + peer.toBase64().substring(0, 6) + "]", e);
