@@ -15,8 +15,6 @@ import net.i2p.data.Hash;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.RouterContext;
-import net.i2p.router.peermanager.PeerProfile;
-import net.i2p.router.peermanager.TunnelHistory;
 import net.i2p.router.tunnel.HopConfig;
 import net.i2p.router.tunnel.TunnelDispatcher;
 import net.i2p.util.Log;
@@ -216,9 +214,13 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
     }
 
     /**
-     * Get the peer hash for a tunnel (either previous hop or next hop)
+     * Get the peer hash for a tunnel - this is the "entry point" peer
+     * who first introduced this tunnel to us (IBGW or closest hop to IBGW).
+     * We blame this peer for idle tunnels since they're responsible for the tunnel.
      */
     private Hash getPeerHash(HopConfig tunnel) {
+        // Use ReceiveFrom as the entry point - this is the peer who sent us the tunnel config
+        // This is either the IBGW (if we're the first hop) or the hop before us
         Hash from = tunnel.getReceiveFrom();
         if (from != null) return from;
         return tunnel.getSendTo();
@@ -388,20 +390,11 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
     }
 
     /**
-     * Ban a peer - checks responsiveness first to avoid false positives
+     * Ban a peer - ghost nodes are banned regardless of general network activity
      */
     private void banPeer(Hash peer, String reason, long duration) {
         if (_context.banlist().isBanlisted(peer)) {
             return; // Already banned
-        }
-
-        // Check if peer has been responsive recently - skip ban if so
-        if (isPeerResponsive(peer)) {
-            if (_log.shouldInfo()) {
-                _log.info("Skipping ban for responsive peer [" + peer.toBase64().substring(0, 6) +
-                          "] - recent activity detected");
-            }
-            return;
         }
 
         long now = _context.clock().now();
@@ -417,66 +410,6 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
 
         // Update stats
         _context.statManager().addRateData("tunnel.banIdlePeer", 1);
-    }
-
-    /**
-     * Check if a peer has been recently responsive based on profile data.
-     * Returns true if the peer has recent send/receive activity (innocent).
-     * Returns false if peer is hostile (recent failures) or completely inactive (suspicious).
-     */
-    private boolean isPeerResponsive(Hash peer) {
-        try {
-            PeerProfile profile = _context.profileOrganizer().getProfile(peer);
-            if (profile == null) {
-                return false;
-            }
-
-            long now = System.currentTimeMillis();
-            long recentWindow = 5 * 60 * 1000; // 5 minutes
-
-            long lastHeardFrom = profile.getLastHeardFrom();
-            long lastSendSuccessful = profile.getLastSendSuccessful();
-            long lastSendFailed = profile.getLastSendFailed();
-
-            // Check for recent successful communication
-            boolean recentSuccess = (lastHeardFrom > 0 && now - lastHeardFrom < recentWindow) ||
-                                   (lastSendSuccessful > 0 && now - lastSendSuccessful < recentWindow);
-
-            if (recentSuccess) {
-                return true; // Skip ban - peer is responsive
-            }
-
-            // No recent success - check for recent failures
-            boolean recentFailure = (lastSendFailed > 0 && now - lastSendFailed < recentWindow);
-
-            // Also check tunnel history for failures if available
-            TunnelHistory tunnelHistory = profile.getTunnelHistory();
-            if (tunnelHistory != null) {
-                long lastFailed = tunnelHistory.getLastFailed();
-                if (lastFailed > 0 && now - lastFailed < recentWindow) {
-                    recentFailure = true;
-                }
-            }
-
-            // Peer has recent failures - hostile behavior detected
-            if (recentFailure) {
-                if (_log.shouldInfo()) {
-                    _log.info("Peer [" + peer.toBase64().substring(0, 6) +
-                              "] has recent failures - proceeding with ban");
-                }
-                return false; // Don't skip ban
-            }
-
-            // No success and no failures - complete inactivity
-            // Could be innocent (just idle) or hostile (ghost node)
-            // We'll allow the ban to proceed since we have idle tunnel evidence
-            return false;
-        } catch (Exception e) {
-            if (_log.shouldDebug()) {
-                _log.debug("Error checking peer responsiveness for [" + peer.toBase64().substring(0, 6) + "]", e);
-            }
-            return false;
-        }
     }
 
     /**
