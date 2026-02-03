@@ -194,7 +194,7 @@ class TunnelRenderer {
         StringBuilder sb = new StringBuilder(Math.max(32*1024, displayed*1024));
         boolean hasTransit = !participating.isEmpty();
         if (hasTransit) {
-            sb.append("<h3 class=tabletitle id=participating>");
+            sb.append("<div class=tablewrap><h3 class=tabletitle id=participating>");
             if (bySpeed) {sb.append(_t("Fastest Active Transit Tunnels"));}
             else {sb.append(_t("Most Recent Active Transit Tunnels"));}
             sb.append("&nbsp;&nbsp;<a id=refreshPage class=refreshpage style=float:right href=/transit>")
@@ -313,29 +313,26 @@ class TunnelRenderer {
                     else {sb.append("<td><span hidden>&ndash;</span></td>");}
                     sb.append("</tr>\n");
                 }
-                sb.append("</tbody>\n</table>\n");
+                sb.append("</tbody>\n<tfoot id=statusnotes><tr><td colspan=8>");
                 if (displayed > DISPLAY_LIMIT) {
                     if (bySpeed) {
-                        sb.append("<div class=statusnotes><b>")
-                          .append(_t("Limited display to the {0} tunnels with the highest usage", DISPLAY_LIMIT))
-                          .append("</b></div>\n");
+                        sb.append(_t("Limited display to the {0} tunnels with the highest usage", DISPLAY_LIMIT));
                     } else {
-                        sb.append("<div class=statusnotes><b>")
-                        .append(_t("Limited display to the {0} most recent tunnels", DISPLAY_LIMIT))
-                        .append("</b></div>\n");
+                        sb.append(_t("Limited display to the {0} most recent tunnels", DISPLAY_LIMIT));
                     }
                 } else if (displayed >= 2) {
-                    sb.append("<div class=statusnotes><b>").append(_t("Active") ).append(":</b>&nbsp;").append(displayed);
+                    sb.append("<b>").append(_t("Active") ).append(":</b>&nbsp;").append(displayed);
                     if (inactive > 0) {
                         sb.append("&nbsp;&bullet;&nbsp;<b>").append(_t("Inactive")).append(":</b>&nbsp;").append(inactive)
                           .append("&nbsp;&bullet;&nbsp;<b>").append(_t("Total")).append(":</b>&nbsp;").append((inactive + displayed));
                     }
-                    sb.append("</div>");
                 } else if (inactive > 0) {
-                    sb.append("<div class=statusnotes><b>").append(_t("Inactive")).append(":</b>&nbsp;").append(inactive).append("</div>");
+                    sb.append("<b>").append(_t("Inactive")).append(":</b>&nbsp;").append(inactive);
                 }
-                sb.append("<div class=statusnotes><b>").append(_t("Lifetime bandwidth usage")).append(":</b>&nbsp;")
-                  .append(DataHelper.formatSize2(processed*1024, true).replace("i", "")).append("B</div>\n");
+                sb.append("</td></tr>\n<tr><td colspan=8>")
+                  .append("<b>").append(_t("Lifetime bandwidth usage")).append(":</b>&nbsp;")
+                  .append(DataHelper.formatSize2(processed*1024, true).replace("i", "")).append("B")
+                  .append("</td></tr></tfoot>\n</table></div>\n");
             } else { // bwShare < 12K/s
                 sb.append("<div class=\"statusnotes noparticipate\"><b>")
                   .append(_t("Not enough shared bandwidth to build transit tunnels.")).append("</b> <a href=\"config\">[")
