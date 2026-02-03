@@ -8,6 +8,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicIntegerArray;
 import net.i2p.crypto.EncType;
 import net.i2p.data.DataHelper;
 import net.i2p.data.EmptyProperties;
@@ -86,6 +87,17 @@ class BuildHandler implements Runnable {
     private static final long MAX_REQUEST_AGE_ECIES = 8*60*1000;
     private static final long JOB_LAG_LIMIT_TUNNEL = isSlow ? 800 : 500;
     private static final long[] RATES = RateConstants.SHORT_TERM_RATES;
+    
+    // Global rate limiter for DDoS protection - tracks ALL tunnel build requests regardless of peer
+    private static final String PROP_GLOBAL_RATE_LIMIT = "router.tunnelBuildGlobalRateLimit";
+    private static final int DEFAULT_GLOBAL_RATE_LIMIT = isSlow ? 50 : 200; // per second
+    private static final int GLOBAL_RATE_WINDOW_MS = 1000; // 1 second window
+    private static final int GLOBAL_RATE_BUCKETS = 10; // 100ms per bucket
+    private static final String PROP_GLOBAL_BURST_LIMIT = "router.tunnelBuildGlobalBurstLimit";
+    private static final int DEFAULT_GLOBAL_BURST_LIMIT = isSlow ? 100 : 400; // absolute max in window
+    
+    private final GlobalRateLimiter _globalRateLimiter;
+    
     /**
      * This is baseline minimum for estimating tunnel bandwidth, if accepted.
      * We use an estimate of 200 messages (1 KB each) in 10 minutes.
@@ -152,6 +164,7 @@ class BuildHandler implements Runnable {
         boolean shouldThrottle = _context.getBooleanPropertyDefaultTrue(PROP_SHOULD_THROTTLE);
         _requestThrottler = testMode || !shouldThrottle ? null : new RequestThrottler(ctx);
         _throttler = testMode || !shouldThrottle ? null : new ParticipatingThrottler(ctx); // previous and next hops, successful builds only
+        _globalRateLimiter = shouldThrottle ? new GlobalRateLimiter(ctx) : null;
         _buildReplyHandler = new BuildReplyHandler(ctx);
         _buildMessageHandlerJob = new TunnelBuildMessageHandlerJob(ctx);
         _buildReplyMessageHandlerJob = new TunnelBuildReplyMessageHandlerJob(ctx);
@@ -1217,6 +1230,16 @@ class BuildHandler implements Runnable {
                             accept = false;
                         }
                     }
+                    // Global rate limiter - catch distributed DDoS attacks regardless of peer diversity
+                    if (accept && _globalRateLimiter != null && shouldThrottle) {
+                        if (_globalRateLimiter.shouldDrop()) {
+                            if (_log.shouldWarn()) {
+                                _log.warn("Dropping Tunnel Request [ID: " + reqId + "] -> Global rate limit exceeded");
+                            }
+                            _context.statManager().addRateData("tunnel.dropGlobalRateLimit", 1);
+                            accept = false;
+                        }
+                    }
                     if (accept) {
                         accept = _inboundBuildMessages.offer(new BuildMessageState(_context, receivedMessage, from, fromHash));
                         if (accept) {_exec.repoll();} // wake up the Executor to call handleInboundRequests()
@@ -1350,4 +1373,108 @@ class BuildHandler implements Runnable {
      *  @return s
      */
     private static final String _x(String s) {return s;}
+
+    /**
+     * Global rate limiter for tunnel build requests.
+     * Tracks ALL incoming requests regardless of peer identity to detect and mitigate
+     * distributed DDoS attacks where attackers use many different router IDs.
+     * 
+     * Uses a sliding window with 100ms buckets over 1 second.
+     * Configurable via properties:
+     * - router.tunnelBuildGlobalRateLimit: requests per second (default: 200)
+     * - router.tunnelBuildGlobalBurstLimit: absolute max in window (default: 400)
+     *
+     * @since 0.9.68+
+     */
+    private static class GlobalRateLimiter {
+        private final RouterContext _ctx;
+        private final AtomicIntegerArray _buckets;
+        private final int _bucketCount;
+        private final long _bucketSizeMs;
+        private final int _rateLimit;
+        private final int _burstLimit;
+        private final AtomicInteger _currentCount;
+        private volatile long _lastBucketTime;
+        private volatile int _currentBucket;
+        
+        GlobalRateLimiter(RouterContext ctx) {
+            this._ctx = ctx;
+            this._bucketCount = GLOBAL_RATE_BUCKETS;
+            this._bucketSizeMs = GLOBAL_RATE_WINDOW_MS / _bucketCount; // 100ms per bucket
+            this._buckets = new AtomicIntegerArray(_bucketCount);
+            this._rateLimit = ctx.getProperty(PROP_GLOBAL_RATE_LIMIT, DEFAULT_GLOBAL_RATE_LIMIT);
+            this._burstLimit = ctx.getProperty(PROP_GLOBAL_BURST_LIMIT, DEFAULT_GLOBAL_BURST_LIMIT);
+            this._currentCount = new AtomicInteger(0);
+            this._lastBucketTime = System.currentTimeMillis();
+            this._currentBucket = 0;
+        }
+        
+        /**
+         * Check if we should drop this request due to global rate limiting.
+         * Also increments the counter if not dropping.
+         * 
+         * @return true if request should be dropped, false if allowed
+         */
+        boolean shouldDrop() {
+            long now = System.currentTimeMillis();
+            int newBucket = (int) ((now / _bucketSizeMs) % _bucketCount);
+            
+            // If we've moved to a new bucket, reset old buckets and update count
+            if (newBucket != _currentBucket) {
+                synchronized (this) {
+                    if (newBucket != _currentBucket) {
+                        // Reset all buckets between old and new (handles wraparound)
+                        int bucket = (_currentBucket + 1) % _bucketCount;
+                        while (bucket != newBucket) {
+                            int oldVal = _buckets.getAndSet(bucket, 0);
+                            _currentCount.addAndGet(-oldVal);
+                            bucket = (bucket + 1) % _bucketCount;
+                        }
+                        // Reset the new bucket too
+                        int oldVal = _buckets.getAndSet(newBucket, 0);
+                        _currentCount.addAndGet(-oldVal);
+                        _currentBucket = newBucket;
+                        _lastBucketTime = now;
+                    }
+                }
+            }
+            
+            // Check burst limit first (absolute ceiling)
+            int current = _currentCount.get();
+            if (current >= _burstLimit) {
+                if (_ctx.logManager().getLog(BuildHandler.class).shouldWarn()) {
+                    _ctx.logManager().getLog(BuildHandler.class).warn(
+                        "Global burst limit exceeded: " + current + " / " + _burstLimit);
+                }
+                return true;
+            }
+            
+            // Check rate limit (sustained rate)
+            if (current >= _rateLimit) {
+                // Probabilistic drop based on how far over we are
+                double overage = (double) (current - _rateLimit) / _rateLimit;
+                double dropProb = Math.min(0.95, overage * 2); // Max 95% drop rate
+                if (_ctx.random().nextFloat() < dropProb) {
+                    if (_ctx.logManager().getLog(BuildHandler.class).shouldWarn()) {
+                        _ctx.logManager().getLog(BuildHandler.class).warn(
+                            "Global rate limit exceeded: " + current + " / " + _rateLimit + " (drop prob: " + dropProb + ")");
+                    }
+                    return true;
+                }
+            }
+            
+            // Allow the request
+            _buckets.incrementAndGet(newBucket);
+            _currentCount.incrementAndGet();
+            return false;
+        }
+        
+        /**
+         * Get current global request count in the sliding window.
+         * @return current count
+         */
+        int getCurrentCount() {
+            return _currentCount.get();
+        }
+    }
 }
