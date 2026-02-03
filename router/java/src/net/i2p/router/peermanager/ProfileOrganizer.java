@@ -24,6 +24,7 @@ import net.i2p.data.router.RouterInfo;
 import net.i2p.router.NetworkDatabaseFacade;
 import net.i2p.router.RouterContext;
 import net.i2p.router.tunnel.pool.TunnelPeerSelector;
+import net.i2p.router.peermanager.TunnelHistory;
 import net.i2p.router.util.MaskedIPSet;
 import net.i2p.router.util.RandomIterator;
 import net.i2p.stat.Rate;
@@ -569,6 +570,24 @@ public class ProfileOrganizer {
                     ? peerInfo.getBandwidthTier() : "K";
                 if ("K".equals(bwTier) || "L".equals(bwTier) || "M".equals(bwTier)) {
                     continue;
+                }
+
+                // Demote peers that reject all tunnel requests (ghost peers)
+                // If peer has 0 accepted but >10 rejections, they're not participating
+                TunnelHistory th = profile.getTunnelHistory();
+                if (th != null) {
+                    long agreed = th.getLifetimeAgreedTo();
+                    long rejected = th.getLifetimeRejected();
+                    // Peer is a ghost if they reject far more than they accept
+                    // Or if they have significant rejections (50+) and almost no accepts (<5)
+                    if (rejected > 0 && agreed == 0 && rejected > 10) {
+                        // Peer accepts nothing but rejects requests - demote from fast/high cap
+                        continue;
+                    }
+                    if (rejected > 50 && agreed < 5 && rejected > agreed * 10) {
+                        // Severe ratio: many rejections, few accepts
+                        continue;
+                    }
                 }
 
                 if (!profile.getIsActive(now)) {
