@@ -160,9 +160,6 @@ class BuildExecutor implements Runnable {
         double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
         if (buildSuccess > 0 && buildSuccess < 0.20) { // Under 20% success rate
             baseTimeout *= 2; // Double the timeout during low success periods
-            if (_log.shouldWarn()) {
-                _log.warn("Low build success (" + (buildSuccess * 100) + "%) - extending timeout to " + (baseTimeout / 1000) + "s");
-            }
         }
 
         // Adjust based on system load

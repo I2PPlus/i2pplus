@@ -756,7 +756,7 @@ public class ProfileOrganizer {
             // Adaptive relaxation: if build success is low, relax thresholds significantly
             // This allows more peers into fast/high cap tiers during network stress
             if (isLowBuildSuccess && _log.shouldInfo()) {
-                _log.info("Low tunnel build success (" + (buildSuccess * 100) +
+                _log.info("Low tunnel build success (" + (int)(buildSuccess * 100) +
                           "%) - relaxing tier thresholds to expand peer pool");
             }
 
