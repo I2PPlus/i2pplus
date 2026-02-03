@@ -26,6 +26,7 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.tunnel.pool.TunnelPeerSelector;
 import net.i2p.router.peermanager.TunnelHistory;
 import net.i2p.router.util.MaskedIPSet;
+import net.i2p.util.SimpleTimer;
 import net.i2p.router.util.RandomIterator;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateConstants;
@@ -93,6 +94,77 @@ public class ProfileOrganizer {
         _context.statManager().createRateStat("peer.profileThresholdTime", "Time to determine tier thresholds (ms)", "Peers", RATES);
         _context.statManager().createRequiredRateStat("peer.failedLookupRate", "NetDb Lookup failure rate", "Peers", RATES);
         _context.statManager().createRequiredRateStat("peer.profileSortTime", "Time to sort peers (ms)", "Peers", RATES);
+
+        // Lightweight ghost demotion job runs every 3 minutes
+        _context.simpleTimer2().addPeriodicEvent(new GhostDemoter(), 3 * 60 * 1000);
+    }
+
+    /**
+     * Lightweight ghost demotion job - runs every 3 minutes to quickly remove
+     * ghost peers from fast/high capacity tiers without recalculating all scores.
+     */
+    private class GhostDemoter implements SimpleTimer.TimedEvent {
+        public void timeReached() {
+            long start = System.currentTimeMillis();
+            int demoted = 0;
+
+            // Only run if we have write lock available quickly
+            if (!tryWriteLock()) {
+                return;
+            }
+
+            try {
+                // Check fast peers for ghosts
+                for (Map.Entry<Hash, PeerProfile> entry : _fastPeers.entrySet()) {
+                    PeerProfile profile = entry.getValue();
+                    if (isGhostPeer(profile)) {
+                        _fastPeers.remove(entry.getKey());
+                        demoted++;
+                        if (_log.shouldDebug()) {
+                            _log.debug("Demoted ghost from fast peers: " + entry.getKey().toBase64().substring(0, 6));
+                        }
+                    }
+                }
+
+                // Check high capacity peers for ghosts
+                for (Map.Entry<Hash, PeerProfile> entry : _highCapacityPeers.entrySet()) {
+                    PeerProfile profile = entry.getValue();
+                    if (isGhostPeer(profile)) {
+                        _highCapacityPeers.remove(entry.getKey());
+                        demoted++;
+                        if (_log.shouldDebug()) {
+                            _log.debug("Demoted ghost from high capacity peers: " + entry.getKey().toBase64().substring(0, 6));
+                        }
+                    }
+                }
+
+                if (demoted > 0 && _log.shouldInfo()) {
+                    _log.info("Demoted " + demoted + " ghost peers from tiers in " +
+                              (System.currentTimeMillis() - start) + "ms");
+                }
+            } finally {
+                releaseWriteLock();
+            }
+        }
+    }
+
+    /**
+     * Check if a peer is a ghost (accepts nothing, rejects everything)
+     */
+    private boolean isGhostPeer(PeerProfile profile) {
+        if (profile == null) return false;
+
+        TunnelHistory th = profile.getTunnelHistory();
+        if (th == null) return false;
+
+        long agreed = th.getLifetimeAgreedTo();
+        long rejected = th.getLifetimeRejected();
+
+        // Ghost patterns:
+        // 1. 0 accepts, >10 rejections
+        // 2. <5 accepts, >50 rejections, rejected > 10x accepted
+        return (agreed == 0 && rejected > 10) ||
+               (agreed < 5 && rejected > 50 && rejected > agreed * 10);
     }
 
     /**
