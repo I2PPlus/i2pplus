@@ -848,11 +848,11 @@ public class ProfileOrganizer {
             // Step 7: Log and record stats
             if (_log.shouldInfo()) {
                 _log.info("Profiles reorganized: " + expiredCount + " expired, " +
-                          profileCount + " retained. Thresholds -> " +
-                          "Cap: " + num(_thresholdCapacityValue) +
-                          ", Spd: " + num(_thresholdSpeedValue) +
-                          ", Int: " + num(_thresholdIntegrationValue) +
-                          " -> Fast peers: " + _fastPeers.size() + " (added " + added + " via fallback)");
+                          profileCount + " retained \n* Thresholds: " +
+                          "Capacity: " + num(_thresholdCapacityValue) +
+                          ", Seed: " + num(_thresholdSpeedValue) +
+                          ", Integration: " + num(_thresholdIntegrationValue) +
+                          " \n* Fast peers: " + _fastPeers.size() + " (added " + added + " via fallback)");
             }
 
             long total = System.currentTimeMillis() - start;
