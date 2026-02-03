@@ -503,7 +503,7 @@ class ClientConnectionRunner {
         double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
         long uptime = _context.router().getUptime();
         if ((buildSuccess > 0 && buildSuccess < 0.20) || uptime < 15*60*1000) {
-            maxFails *= 4; // Allow 3x more fails (20 instead of 5)
+            maxFails *= 10; // Allow 8x more fails (50 instead of 5)
         }
         return maxFails;
     }
