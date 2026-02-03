@@ -29,6 +29,7 @@ import net.i2p.router.util.MaskedIPSet;
 import net.i2p.util.SimpleTimer;
 import net.i2p.router.util.RandomIterator;
 import net.i2p.stat.Rate;
+import net.i2p.stat.RateAverages;
 import net.i2p.stat.RateConstants;
 import net.i2p.stat.RateStat;
 import net.i2p.util.Log;
@@ -209,6 +210,37 @@ public class ProfileOrganizer {
     public double getSpeedThreshold() {return _thresholdSpeedValue;}
     public double getCapacityThreshold() {return _thresholdCapacityValue;}
     public double getIntegrationThreshold() {return _thresholdIntegrationValue;}
+
+    /**
+     * Get the current tunnel build success rate.
+     * Returns 0 if no data available.
+     * @return build success rate as a fraction (0.0 to 1.0), or 0 if unknown
+     */
+    public double getTunnelBuildSuccess() {
+        try {
+            RateStat e = _context.statManager().getRate("tunnel.buildExploratoryExpire");
+            RateStat r = _context.statManager().getRate("tunnel.buildExploratoryReject");
+            RateStat s = _context.statManager().getRate("tunnel.buildExploratorySuccess");
+            if (e != null && r != null && s != null) {
+                Rate er = e.getRate(RateConstants.TEN_MINUTES);
+                Rate rr = r.getRate(RateConstants.TEN_MINUTES);
+                Rate sr = s.getRate(RateConstants.TEN_MINUTES);
+                if (er != null && rr != null && sr != null) {
+                    RateAverages ra = RateAverages.getTemp();
+                    long ec = er.computeAverages(ra, false).getTotalEventCount();
+                    long rc = rr.computeAverages(ra, false).getTotalEventCount();
+                    long sc = sr.computeAverages(ra, false).getTotalEventCount();
+                    long tot = ec + rc + sc;
+                    if (tot > 0) {
+                        return (double) sc / tot;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            // Ignore - return 0 on error
+        }
+        return 0;
+    }
 
     public PeerProfile getProfile(Hash peer) {
         if (peer != null && peer.equals(_us)) return null;
@@ -687,11 +719,29 @@ public class ProfileOrganizer {
                 profileCount++;
             }
 
-            // Step 2: Calculate new thresholds
+            // Step 2: Check build success and adjust thresholds adaptively
+            double buildSuccess = getTunnelBuildSuccess();
+            boolean isLowBuildSuccess = buildSuccess > 0 && buildSuccess < 0.20; // Below 20%
+
+            // Calculate new thresholds
             int numNotFailing = newStrictCapacityOrder.size();
             double newIntegrationThreshold = numNotFailing > 0 ? totalIntegration / numNotFailing : 1.0d;
             double newCapacityThreshold = calculateCapacityThresholdFromSet(newStrictCapacityOrder, numNotFailing);
             double newSpeedThreshold = calculateSpeedThreshold(newStrictCapacityOrder);
+
+            // Adaptive relaxation: if build success is low, relax thresholds significantly
+            // This allows more peers into fast/high cap tiers during network stress
+            if (isLowBuildSuccess && _log.shouldInfo()) {
+                _log.info("Low tunnel build success (" + (buildSuccess * 100) +
+                          "%) - relaxing tier thresholds to expand peer pool");
+            }
+
+            if (isLowBuildSuccess) {
+                // Reduce thresholds by 50% to allow more peers into tiers
+                newCapacityThreshold *= 0.5;
+                newSpeedThreshold *= 0.5;
+                newIntegrationThreshold *= 0.5;
+            }
 
             // Step 3: Clear and rebuild all tier maps
             _fastPeers.clear();

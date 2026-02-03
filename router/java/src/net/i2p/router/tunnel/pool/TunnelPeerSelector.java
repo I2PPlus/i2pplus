@@ -363,7 +363,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * @since 0.9.17
      */
     public static boolean shouldExclude(RouterContext ctx, RouterInfo peer) {
-        return shouldExclude(ctx, peer, getExcludeCaps(ctx));
+        return shouldExclude(ctx, peer, getEffectiveExcludeCaps(ctx));
     }
 
     /**
@@ -371,6 +371,46 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      */
     private static String getExcludeCaps(RouterContext ctx) {
         return ctx.getProperty("router.excludePeerCaps", DEFAULT_EXCLUDE_CAPS);
+    }
+
+    /**
+     *  Get effective exclude caps, adapting to build success.
+     *  During low build success (<20%), relax exclusions for M, N, and D caps.
+     *  @return non-null, possibly empty
+     */
+    private static String getEffectiveExcludeCaps(RouterContext ctx) {
+        String configured = getExcludeCaps(ctx);
+        if (configured == null || configured.isEmpty()) {
+            // No configured exclusions - nothing to relax
+            return configured;
+        }
+
+        // Check build success - only adapt if we have access to profile organizer
+        double buildSuccess = 0;
+        try {
+            buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
+        } catch (Exception e) {
+            // Can't determine build success - use defaults
+            return configured;
+        }
+
+        // If build success is healthy (>20%), use configured exclusions
+        if (buildSuccess >= 0.20 || buildSuccess <= 0) {
+            return configured;
+        }
+
+        // Low build success - remove M, N, O, D from exclusions temporarily
+        StringBuilder adjusted = new StringBuilder();
+        for (int i = 0; i < configured.length(); i++) {
+            char c = configured.charAt(i);
+            // Keep K, L, U, E, G - remove M, N, O, D
+            if (c == 'M' || c == 'N' || c == 'O' || c == 'D') {
+                continue;
+            }
+            adjusted.append(c);
+        }
+
+        return adjusted.toString();
     }
 
     /** SSU2 fixes (2.1.0), Congestion fixes (2.2.0) */
