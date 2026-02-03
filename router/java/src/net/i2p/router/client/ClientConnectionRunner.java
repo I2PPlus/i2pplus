@@ -493,6 +493,26 @@ class ClientConnectionRunner {
         return sp.leaseRequest;
     }
 
+    /**
+     *  Allow more lease request fails during network attacks or startup
+     *  @return the max allowed consecutive lease request fails
+     */
+    private int getMaxLeaseFails() {
+        int maxFails = MAX_LEASE_FAILS;
+        // During network attacks with low build success (<20%), allow more fails
+        double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
+        if (buildSuccess > 0 && buildSuccess < 0.20) {
+            maxFails *= 3; // Allow 3x more fails (15 instead of 5)
+        } else if (buildSuccess == 0) {
+            // During startup or unknown, allow more fails (first 10 minutes)
+            long uptime = _context.router().getUptime();
+            if (uptime > 0 && uptime < 10*60*1000) {
+                maxFails *= 3; // Allow 3x more fails during first 10 minutes
+            }
+        }
+        return maxFails;
+    }
+
     /** @param req non-null */
     public void failLeaseRequest(LeaseRequestState req) {
         boolean disconnect = false;
@@ -502,7 +522,7 @@ class ClientConnectionRunner {
         synchronized (this) {
             if (sp.leaseRequest == req) {
                 sp.leaseRequest = null;
-                disconnect = ++_consecutiveLeaseRequestFails > MAX_LEASE_FAILS;
+                disconnect = ++_consecutiveLeaseRequestFails > getMaxLeaseFails();
             }
         }
         if (disconnect)
