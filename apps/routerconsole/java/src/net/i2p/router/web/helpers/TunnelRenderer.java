@@ -400,7 +400,7 @@ class TunnelRenderer {
                 .append("</th><th id=data data-sort-method=number>")
                 .append(_t("Data"))
                 .append("</th><th id=msgs data-sort-method=number>")
-                .append(_t("Msgs"))
+                .append(_t("Messages"))
                 .append("</th><th id=edit data-sort-method=none>")
                 .append(_t("Edit"))
                 .append("</th></tr></thead>\n<tbody id=transitPeers>\n");
