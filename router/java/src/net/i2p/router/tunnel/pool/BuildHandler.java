@@ -165,6 +165,10 @@ class BuildHandler implements Runnable {
         _requestThrottler = testMode || !shouldThrottle ? null : new RequestThrottler(ctx);
         _throttler = testMode || !shouldThrottle ? null : new ParticipatingThrottler(ctx); // previous and next hops, successful builds only
         _globalRateLimiter = shouldThrottle ? new GlobalRateLimiter(ctx) : null;
+        // Start idle tunnel monitor to detect and drop abusive idle tunnels
+        if (shouldThrottle) {
+            new IdleTunnelMonitor(ctx);
+        }
         _buildReplyHandler = new BuildReplyHandler(ctx);
         _buildMessageHandlerJob = new TunnelBuildMessageHandlerJob(ctx);
         _buildReplyMessageHandlerJob = new TunnelBuildReplyMessageHandlerJob(ctx);

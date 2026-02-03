@@ -38,10 +38,13 @@ class ParticipatingThrottler {
 
     // Minimum tunnels per peer - prevents decay floor from being too aggressive at low counts
     private static final int MIN_LIMIT = isSlow ? 40 : 80;
+    private static final String PROP_MIN_LIMIT = "router.participatingThrottlerMinLimit";
     // Maximum tunnels per peer - caps individual peer participation
-    private static final int MAX_LIMIT = isSlow ? 150 : 300;
-    // Percentage-based limit for fast peers - ~10% of total tunnels
-    private static final int PERCENT_LIMIT = 10;
+    private static final int MAX_LIMIT = isSlow ? 60 : 120;
+    private static final String PROP_MAX_LIMIT = "router.participatingThrottlerMaxLimit";
+    // Percentage-based limit for fast peers - ~5% of total tunnels
+    private static final int PERCENT_LIMIT = 5;
+    private static final String PROP_PERCENT_LIMIT = "router.participatingThrottlerPercentLimit";
     // Cleanup interval in ms - 90 seconds
     private static final long CLEAN_TIME = 90 * 1000;
     private static final String MIN_VERSION = "0.9.64";
@@ -119,16 +122,35 @@ class ParticipatingThrottler {
      * Calculates the participation limit for tunnels based on the number of tunnels
      * and router capabilities such as reachability and bandwidth share.
      *
+     * Configurable via properties (0.9.68+):
+     * - router.participatingThrottlerMinLimit: minimum tunnels per peer (default: 80)
+     * - router.participatingThrottlerMaxLimit: maximum tunnels per peer (default: 120)
+     * - router.participatingThrottlerPercentLimit: percentage of total tunnels (default: 5)
+     *
      * @param numTunnels the current count of participating tunnels
      * @param isUnreachable true if the router is unreachable
      * @param isLowShare true if the router has low bandwidth share
      * @param isFast true if the router has high bandwidth share
      * @return the maximum allowed tunnel participation limit for the router
+     * @since 0.9.68+ supports configurable limits
      */
     private int calculateLimit(int numTunnels, boolean isUnreachable, boolean isLowShare, boolean isFast) {
-        if (isUnreachable || isLowShare) {return Math.min(MIN_LIMIT, Math.max(MAX_LIMIT / 20, numTunnels * (PERCENT_LIMIT / 5) / 100));}
-        else if (isSlow) {return Math.min(MIN_LIMIT, Math.max(MAX_LIMIT / 10, numTunnels * (PERCENT_LIMIT / 3) / 100));}
-        return Math.min((MIN_LIMIT * 3), Math.max(MAX_LIMIT / 2, numTunnels * PERCENT_LIMIT / 100));
+        // Load configurable limits with defaults
+        int minLimit = context.getProperty(PROP_MIN_LIMIT, MIN_LIMIT);
+        int maxLimit = context.getProperty(PROP_MAX_LIMIT, MAX_LIMIT);
+        int percentLimit = context.getProperty(PROP_PERCENT_LIMIT, PERCENT_LIMIT);
+
+        // Ensure reasonable bounds to prevent misconfiguration
+        minLimit = Math.max(20, Math.min(200, minLimit));
+        maxLimit = Math.max(40, Math.min(500, maxLimit));
+        percentLimit = Math.max(2, Math.min(20, percentLimit));
+
+        if (isUnreachable || isLowShare) {
+            return Math.min(minLimit, Math.max(maxLimit / 20, numTunnels * (percentLimit / 5) / 100));
+        } else if (isSlow) {
+            return Math.min(minLimit, Math.max(maxLimit / 10, numTunnels * (percentLimit / 3) / 100));
+        }
+        return Math.min((minLimit * 3), Math.max(maxLimit / 2, numTunnels * percentLimit / 100));
     }
 
     /**
