@@ -100,7 +100,7 @@ public class ProfileOrganizer {
     }
 
     /**
-     * Lightweight ghost demotion job - runs every 3 minutes to quickly remove
+     * Lightweight ghost demotion job - runs every 75 seconds to quickly remove
      * ghost peers from fast/high capacity tiers without recalculating all scores.
      */
     private class GhostDemoter implements SimpleTimer.TimedEvent {
@@ -114,27 +114,37 @@ public class ProfileOrganizer {
             }
 
             try {
-                // Check fast peers for ghosts
+                // Collect ghosts to remove (avoid CME during iteration)
+                Set<Hash> ghostsInFast = new HashSet<>();
                 for (Map.Entry<Hash, PeerProfile> entry : _fastPeers.entrySet()) {
                     PeerProfile profile = entry.getValue();
                     if (isGhostPeer(profile)) {
-                        _fastPeers.remove(entry.getKey());
-                        demoted++;
-                        if (_log.shouldDebug()) {
-                            _log.debug("Demoted ghost from fast peers: " + entry.getKey().toBase64().substring(0, 6));
-                        }
+                        ghostsInFast.add(entry.getKey());
                     }
                 }
 
-                // Check high capacity peers for ghosts
+                Set<Hash> ghostsInHighCap = new HashSet<>();
                 for (Map.Entry<Hash, PeerProfile> entry : _highCapacityPeers.entrySet()) {
                     PeerProfile profile = entry.getValue();
                     if (isGhostPeer(profile)) {
-                        _highCapacityPeers.remove(entry.getKey());
-                        demoted++;
-                        if (_log.shouldDebug()) {
-                            _log.debug("Demoted ghost from high capacity peers: " + entry.getKey().toBase64().substring(0, 6));
-                        }
+                        ghostsInHighCap.add(entry.getKey());
+                    }
+                }
+
+                // Remove ghosts
+                for (Hash peer : ghostsInFast) {
+                    _fastPeers.remove(peer);
+                    demoted++;
+                    if (_log.shouldDebug()) {
+                        _log.debug("Demoted ghost from fast peers: " + peer.toBase64().substring(0, 6));
+                    }
+                }
+
+                for (Hash peer : ghostsInHighCap) {
+                    _highCapacityPeers.remove(peer);
+                    demoted++;
+                    if (_log.shouldDebug()) {
+                        _log.debug("Demoted ghost from high capacity peers: " + peer.toBase64().substring(0, 6));
                     }
                 }
 
