@@ -272,16 +272,8 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
         int offenses = record.consecutiveOffenses.get();
 
         if (offenses >= 3) {
-            if (_log.shouldWarn()) {
-                _log.warn("Banned peer [" + peer.toBase64().substring(0, 6) +
-                          "] for 8 hours: " + offenses + " total excessive idle tunnels");
-            }
             banPeer(peer, "Excessive Idle Tunnels (" + offenses + ")", ban3rd);
         } else if (offenses == 2) {
-            if (_log.shouldWarn()) {
-                _log.warn("Banned peer [" + peer.toBase64().substring(0, 6) +
-                          "] for 2 hours: " + offenses + " total excessive idle tunnels");
-            }
             banPeer(peer, "Excessive Idle Tunnels (" + offenses + ")", ban2nd);
         } else if (_log.shouldInfo()) {
             _log.info("First idle offense for peer [" + peer.toBase64().substring(0, 6) +
@@ -345,9 +337,8 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
                     }
 
                     if (_log.shouldWarn()) {
-                        _log.warn("Banned IP cluster: IP=" + ip +
-                                  ", identities=" + peers.size() +
-                                  ", idleTunnels=" + totalIdleTunnels);
+                        _log.warn("Banning IP cluster for IP address [" + ip + "] -> Excessividle tunnels (" + 
+                                   peers.size() + " ids / " + totalIdleTunnels + " idle tunnels");
                     }
                 }
             }
