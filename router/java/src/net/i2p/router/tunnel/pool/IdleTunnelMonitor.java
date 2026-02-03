@@ -42,7 +42,18 @@ import net.i2p.util.SystemVersion;
 class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
     private final RouterContext _context;
     private final Log _log;
-    private final TunnelDispatcher _dispatcher;
+    private TunnelDispatcher _dispatcher;
+
+    /**
+     * Get the dispatcher, fetching from context if not yet initialized.
+     * This handles the case where TunnelDispatcher is created after IdleTunnelMonitor starts.
+     */
+    private TunnelDispatcher getDispatcher() {
+        if (_dispatcher == null) {
+            _dispatcher = _context.tunnelDispatcher();
+        }
+        return _dispatcher;
+    }
 
     // Configuration
     private static final boolean isSlow = SystemVersion.isSlow();
@@ -123,17 +134,17 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
      * Main scan method - checks all participating tunnels
      */
     private void scanAndCleanup() {
-        // Guard against race condition where dispatcher is not yet initialized
-        if (_dispatcher == null) {
+        TunnelDispatcher dispatcher = getDispatcher();
+        if (dispatcher == null) {
             if (_log.shouldDebug()) {
-                _log.debug("TunnelDispatcher not yet initialized, skipping scan");
+                _log.debug("TunnelDispatcher not yet initialized -> Skipping idle tunnel scan...");
             }
             return;
         }
-        
+
         long now = System.currentTimeMillis();
         _lastScanTime = now;
-        
+
         long detectionPeriod = _context.getProperty(PROP_DETECTION_PERIOD, DEFAULT_DETECTION_PERIOD);
         int minMessages = _context.getProperty(PROP_MIN_MESSAGES, DEFAULT_MIN_MESSAGES);
         long minBytes = _context.getProperty(PROP_MIN_BYTES, DEFAULT_MIN_BYTES);
@@ -143,9 +154,9 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
         long ban2nd = DEFAULT_BAN_2ND_OFFENSE;
         long ban3rd = DEFAULT_BAN_3RD_OFFENSE;
         long resetTime = DEFAULT_OFFENSE_RESET_TIME;
-        
+
         // Collect all participating tunnels
-        List<HopConfig> allTunnels = _dispatcher.listParticipatingTunnels();
+        List<HopConfig> allTunnels = dispatcher.listParticipatingTunnels();
 
         // Track idle tunnels per peer
         Map<Hash, List<HopConfig>> idleTunnelsByPeer = new HashMap<>();
@@ -205,10 +216,13 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
      * Drop an idle tunnel by removing it from the dispatcher
      */
     private void dropTunnel(HopConfig tunnel) {
+        TunnelDispatcher dispatcher = getDispatcher();
+        if (dispatcher == null) return;
+
         try {
             // Remove immediately using the dispatcher's remove method
             // This removes from _participatingConfig and other collections
-            _dispatcher.remove(tunnel);
+            dispatcher.remove(tunnel);
 
             // Also mark bandwidth as freed
             int allocated = tunnel.getAllocatedBW();
