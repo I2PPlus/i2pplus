@@ -53,7 +53,7 @@ public class GhostPeerManager {
         if (newCount >= getThreshold() && !_ghostSince.containsKey(peer)) {
             _ghostSince.put(peer, _context.clock().now());
             if (_log.shouldWarn()) {
-                _log.warn("Peer " + peer.toBase32().substring(0, 6) + " marked as ghost (" + newCount + " timeouts)");
+                _log.warn("Peer [" + peer.toBase64().substring(0,6) + "] marked as ghost (" + newCount + " timeouts)");
             }
         }
     }
@@ -72,7 +72,7 @@ public class GhostPeerManager {
             count.set(0);
             _ghostSince.remove(peer);
             if (_log.shouldDebug()) {
-                _log.debug("Peer " + peer.toBase32().substring(0, 6) + " cleared from ghost list after successful participation");
+                _log.debug("Peer [" + peer.toBase64().substring(0,6) + "] cleared from ghost list after successful participation");
             }
         }
     }
