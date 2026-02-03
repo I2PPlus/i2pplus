@@ -130,7 +130,10 @@ class RequestLeaseSetJob extends JobImpl {
 
         try {
             _runner.doSend(msg);
-            getContext().jobQueue().addJob(new CheckLeaseRequestStatus());
+            // Use addJobToTop to ensure CheckLeaseRequestStatus runs promptly even under load.
+            // This prevents cleanup jobs from being delayed when the job queue is backed up,
+            // which would leave clients in a zombie state with expired LeaseSets.
+            getContext().jobQueue().addJobToTop(new CheckLeaseRequestStatus());
         } catch (I2CPMessageException ime) {
             getContext().statManager().addRateData("client.requestLeaseSetDropped", 1);
             _log.error("Error sending I2CP message requesting the LeaseSet", ime);
