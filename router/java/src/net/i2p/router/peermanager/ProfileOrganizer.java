@@ -23,6 +23,7 @@ import net.i2p.data.SessionKey;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.NetworkDatabaseFacade;
 import net.i2p.router.RouterContext;
+import net.i2p.router.tunnel.pool.GhostPeerManager;
 import net.i2p.router.tunnel.pool.TunnelPeerSelector;
 import net.i2p.router.peermanager.TunnelHistory;
 import net.i2p.router.util.MaskedIPSet;
@@ -143,16 +144,18 @@ public class ProfileOrganizer {
                 Set<Hash> ghostsInFast = new HashSet<>();
                 for (Map.Entry<Hash, PeerProfile> entry : _fastPeers.entrySet()) {
                     PeerProfile profile = entry.getValue();
-                    if (isGhostPeer(profile)) {
-                        ghostsInFast.add(entry.getKey());
+                    Hash peer = entry.getKey();
+                    if (isGhostPeer(profile, peer)) {
+                        ghostsInFast.add(peer);
                     }
                 }
 
                 Set<Hash> ghostsInHighCap = new HashSet<>();
                 for (Map.Entry<Hash, PeerProfile> entry : _highCapacityPeers.entrySet()) {
                     PeerProfile profile = entry.getValue();
-                    if (isGhostPeer(profile)) {
-                        ghostsInHighCap.add(entry.getKey());
+                    Hash peer = entry.getKey();
+                    if (isGhostPeer(profile, peer)) {
+                        ghostsInHighCap.add(peer);
                     }
                 }
 
@@ -184,11 +187,27 @@ public class ProfileOrganizer {
     }
 
     /**
-     * Check if a peer is a ghost (accepts nothing, rejects everything)
+     * Check if a peer is a ghost (accepts nothing, rejects everything OR marked by GhostPeerManager)
+     * @param profile the peer profile
+     * @param peer the peer hash for GhostPeerManager lookup
      */
-    private boolean isGhostPeer(PeerProfile profile) {
+    private boolean isGhostPeer(PeerProfile profile, Hash peer) {
         if (profile == null) return false;
 
+        // Check GhostPeerManager first (detects timeout-based ghosts) @since 0.9.68+
+        try {
+            GhostPeerManager ghostManager = _context.tunnelManager().getGhostPeerManager();
+            if (ghostManager != null && ghostManager.isGhost(peer)) {
+                if (_log.shouldDebug()) {
+                    _log.debug("Peer " + peer.toBase32().substring(0, 6) + " is a ghost (timeout-based)");
+                }
+                return true;
+            }
+        } catch (Exception e) {
+            // Ignore - GhostPeerManager may not be available
+        }
+
+        // Fall back to TunnelHistory-based ghost detection
         TunnelHistory th = profile.getTunnelHistory();
         if (th == null) return false;
 
