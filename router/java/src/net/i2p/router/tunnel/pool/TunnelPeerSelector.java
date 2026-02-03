@@ -375,7 +375,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
     /**
      *  Get effective exclude caps, adapting to build success.
-     *  During low build success (<20%), relax exclusions for M, N, and D caps.
+     *  During low build success (<20%), relax exclusions for M, N, O, and D caps.
+     *  Also relax during first 10 minutes of uptime when build success is unknown.
      *  @return non-null, possibly empty
      */
     private static String getEffectiveExcludeCaps(RouterContext ctx) {
@@ -384,6 +385,10 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             // No configured exclusions - nothing to relax
             return configured;
         }
+
+        // Check if we should relax exclusions
+        boolean shouldRelax = false;
+        String reason = "";
 
         // Check build success - only adapt if we have access to profile organizer
         double buildSuccess = 0;
@@ -394,12 +399,29 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             return configured;
         }
 
-        // If build success is healthy (>20%), use configured exclusions
-        if (buildSuccess >= 0.20 || buildSuccess <= 0) {
+        // Relax if build success is low (<20%) and we have data
+        if (buildSuccess > 0 && buildSuccess < 0.20) {
+            shouldRelax = true;
+            reason = "low build success (" + (buildSuccess * 100) + "%)";
+        }
+
+        // Relax during first 10 minutes of uptime (no build success data yet)
+        long uptime = ctx.router().getUptime();
+        if (uptime > 0 && uptime < 10 * 60 * 1000) {
+            shouldRelax = true;
+            if (reason.isEmpty()) {
+                reason = "router startup (first 10 minutes)";
+            } else {
+                reason = reason + " and router startup";
+            }
+        }
+
+        // If no need to relax, use configured exclusions
+        if (!shouldRelax) {
             return configured;
         }
 
-        // Low build success - remove M, N, O, D from exclusions temporarily
+        // Remove M, N, O, D from exclusions
         StringBuilder adjusted = new StringBuilder();
         for (int i = 0; i < configured.length(); i++) {
             char c = configured.charAt(i);
