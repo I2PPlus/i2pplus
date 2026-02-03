@@ -159,9 +159,9 @@ class BuildExecutor implements Runnable {
             }
         }
 
-        // Extend timeout during network attacks when build success is under 20%
+        // Extend timeout during network attacks when build success is under 40%
         double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
-        if (buildSuccess > 0 && buildSuccess < 0.20) { // Under 20% success rate
+        if (buildSuccess > 0 && buildSuccess < 0.40) { // Under 20% success rate
             baseTimeout *= 2; // Double the timeout during low success periods
         }
 
@@ -176,7 +176,7 @@ class BuildExecutor implements Runnable {
         // Cap the timeout to prevent excessive waits
         long maxTimeout = BuildRequestor.REQUEST_TIMEOUT * 3; // Triple the base timeout
         // During attacks with low success, allow higher max timeout
-        if (buildSuccess > 0 && buildSuccess < 0.20) {
+        if (buildSuccess > 0 && buildSuccess < 0.40) {
             maxTimeout = BuildRequestor.REQUEST_TIMEOUT * 5; // Allow up to 5x timeout
         }
         return Math.min(baseTimeout, maxTimeout);

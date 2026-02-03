@@ -112,13 +112,13 @@ public class GhostPeerManager {
 
     /**
      * Get the current timeout threshold.
-     * Lower threshold during attacks (build success < 20%).
+     * Lower threshold during attacks (build success < 40%).
      *
      * @return threshold number of timeouts before exclusion
      */
     public int getThreshold() {
         double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
-        if (buildSuccess > 0 && buildSuccess < 0.20) {
+        if (buildSuccess > 0 && buildSuccess < 0.40) {
             return ATTACK_TIMEOUT_THRESHOLD;
         }
         return DEFAULT_TIMEOUT_THRESHOLD;

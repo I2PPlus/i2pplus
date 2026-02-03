@@ -745,7 +745,7 @@ public class ProfileOrganizer {
 
             // Step 2: Check build success and adjust thresholds adaptively
             double buildSuccess = getTunnelBuildSuccess();
-            boolean isLowBuildSuccess = buildSuccess > 0 && buildSuccess < 0.20; // Below 20%
+            boolean isLowBuildSuccess = buildSuccess > 0 && buildSuccess < 0.40; // Below 40%
 
             // Calculate new thresholds
             int numNotFailing = newStrictCapacityOrder.size();

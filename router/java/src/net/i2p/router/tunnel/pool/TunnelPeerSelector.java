@@ -399,8 +399,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             return configured;
         }
 
-        // Relax if build success is low (<20%) and we have data
-        if (buildSuccess > 0 && buildSuccess < 0.20) {
+        // Relax if build success is low (<40%) and we have data
+        if (buildSuccess > 0 && buildSuccess < 0.40) {
             shouldRelax = true;
             reason = "low build success (" + (int)(buildSuccess * 100) + "%)";
         }
