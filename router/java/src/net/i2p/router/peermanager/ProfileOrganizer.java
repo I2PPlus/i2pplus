@@ -64,7 +64,24 @@ public class ProfileOrganizer {
     private static final int ABSOLUTE_MAX_HIGHCAP_PEERS = 800;
 
     public static final String PROP_MAX_PROFILES = "profileOrganizer.maxProfiles";
-    public static final int DEFAULT_MAX_PROFILES = SystemVersion.isSlow() ? 800 : 1200;
+    /**
+     * Calculate default max profiles based on available heap memory.
+     * Each profile roughly takes 256KB of heap (profile data + overhead).
+     * Scale from 400 (256MB heap) to 2000 (2GB+ heap).
+     *
+     * @return the default max profiles based on available memory
+     * @since 0.9.68+
+     */
+    public static int getDefaultMaxProfiles() {
+        long maxMemory = SystemVersion.getMaxMemory();
+        long maxMB = maxMemory / (1024 * 1024);
+        // Profile takes ~256KB, calculate based on available memory
+        // Min: 400 profiles (100MB for profiles + overhead)
+        // Max: 2000 profiles (500MB for profiles + overhead)
+        int calculated = (int) Math.max(400, Math.min(2000, maxMB / 2));
+        // Add some headroom for slow systems
+        return SystemVersion.isSlow() ? Math.min(calculated, 800) : calculated;
+    }
     public static final int ABSOLUTE_MAX_PROFILES = 2000;
 
     private static final long[] RATES = {
@@ -900,7 +917,7 @@ public class ProfileOrganizer {
      * This method assumes the write lock is held.
      */
     private void enforceProfileCap() {
-        int maxProfiles = _context.getProperty(PROP_MAX_PROFILES, DEFAULT_MAX_PROFILES);
+        int maxProfiles = _context.getProperty(PROP_MAX_PROFILES, getDefaultMaxProfiles());
         if (maxProfiles < 100) maxProfiles = 100;
         if (maxProfiles > ABSOLUTE_MAX_PROFILES) maxProfiles = ABSOLUTE_MAX_PROFILES;
 
