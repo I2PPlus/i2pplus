@@ -3,13 +3,16 @@ package net.i2p.router.tunnel.pool;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicIntegerArray;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
-import net.i2p.util.ObjectCounter;
 import net.i2p.util.SimpleTimer;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
@@ -22,11 +25,14 @@ import net.i2p.util.VersionComparator;
  * ban, or disconnect routers based on request count, version, bandwidth,
  * country, and system load.
  *
+ * Now includes burst detection with sliding window to detect DDoS attacks
+ * that attempt to overwhelm the router with rapid successive requests.
+ *
  * @since 0.9.5
  */
 class RequestThrottler {
     private final RouterContext context;
-    private final ObjectCounter<Hash> counter;
+    private final BurstWindowCounter counter;
     private final Log _log;
     private volatile String lastBlockCountriesProp;
     private volatile Set<String> cachedBlockedCountries;
@@ -41,9 +47,18 @@ class RequestThrottler {
     private volatile Boolean cachedShouldBlockOldRouters;
     private static final long PROPERTY_CHECK_INTERVAL = 30*1000; // Check every 30 seconds
 
+    // Traditional limits (per 90s window)
     private static final int MIN_LIMIT = 200;
     private static final int MAX_LIMIT = 400;
     private static final int PERCENT_LIMIT = 20;
+    
+    // Burst detection limits (per 10s sliding window)
+    private static final long BURST_WINDOW_MS = 10 * 1000; // 10 second sliding window
+    private static final int BURST_BUCKET_COUNT = 10; // 1 second per bucket
+    private static final int BURST_THRESHOLD_MIN = 50; // Minimum burst threshold
+    private static final int BURST_THRESHOLD_MAX = 150; // Maximum burst threshold
+    private static final double BURST_THRESHOLD_PERCENT = 0.5; // 50% of normal limit
+    
     private static final long CLEAN_TIME = 90 * 1000; // Reset limits every 90 seconds
     private final static boolean DEFAULT_SHOULD_THROTTLE = true;
     private final static String PROP_SHOULD_THROTTLE = "router.enableTransitThrottle";
@@ -56,7 +71,7 @@ class RequestThrottler {
 
     RequestThrottler(RouterContext ctx) {
         this.context = ctx;
-        this.counter = new ObjectCounter<Hash>();
+        this.counter = new BurstWindowCounter(BURST_WINDOW_MS, BURST_BUCKET_COUNT);
         _log = ctx.logManager().getLog(RequestThrottler.class);
         this.lastBlockCountriesProp = null;
         this.cachedBlockedCountries = Collections.emptySet();
@@ -197,6 +212,31 @@ class RequestThrottler {
                           "Excessive tunnel requests (Requested: " + count + " / Hard limit: " + limit + ")");
         }
 
+        // Burst detection: Check for rapid successive requests in short time window
+        // This catches DDoS attempts that try to overwhelm the router before the 90s limit kicks in
+        if (enableThrottle && !rv && counter.isBursting(h, limit)) {
+            int burstCount = counter.getCount(h);
+            int burstLimit = Math.max(BURST_THRESHOLD_MIN, 
+                Math.min(BURST_THRESHOLD_MAX, (int) (limit * BURST_THRESHOLD_PERCENT * 10 / 90)));
+            
+            if (_log.shouldWarn()) {
+                _log.warn("Burst detected from Router [" + routerId + "] -> " +
+                          "Requests: " + burstCount + " in " + (BURST_WINDOW_MS / 1000) + "s " +
+                          "(limit: " + burstLimit + ")");
+            }
+            
+            // Ban for burst behavior - shorter duration than excessive requests but immediate
+            int bantime = 15 * 60 * 1000; // 15 minutes for burst
+            context.banlist().banlistRouter(h, " <b>➜</b> Burst tunnel requests detected", null, null, 
+                context.clock().now() + bantime);
+            
+            if (shouldDisconnect) {
+                context.simpleTimer2().addEvent(new Disconnector(h), 3 * 1000);
+            }
+            
+            return true;
+        }
+
         return rv;
     }
 
@@ -317,6 +357,154 @@ class RequestThrottler {
             lastFirewallCheckTime = now;
         }
         return cachedFirewalledStatus;
+    }
+
+    /**
+     * Sliding window counter for burst detection.
+     * Tracks requests in time buckets to detect sudden spikes in tunnel requests.
+     * This helps identify DDoS attacks that attempt to overwhelm the router with
+     * rapid successive requests from the same peer.
+     *
+     * @since 0.9.68+
+     */
+    private static class BurstWindowCounter {
+        private final long windowSizeMs;
+        private final int bucketCount;
+        private final long bucketSizeMs;
+        private final Map<Hash, AtomicIntegerArray> peerBuckets;
+        private final AtomicIntegerArray globalBuckets;
+        private volatile long lastCleanupTime;
+        private static final long CLEANUP_INTERVAL = 60 * 1000; // Cleanup every 60s
+
+        /**
+         * Creates a new sliding window counter.
+         *
+         * @param windowSizeMs total window size in milliseconds (e.g., 10000 for 10s)
+         * @param bucketCount number of buckets in the window (e.g., 10 for 1s buckets)
+         */
+        BurstWindowCounter(long windowSizeMs, int bucketCount) {
+            this.windowSizeMs = windowSizeMs;
+            this.bucketCount = bucketCount;
+            this.bucketSizeMs = windowSizeMs / bucketCount;
+            this.peerBuckets = new ConcurrentHashMap<>();
+            this.globalBuckets = new AtomicIntegerArray(bucketCount);
+            this.lastCleanupTime = System.currentTimeMillis();
+        }
+
+        /**
+         * Increments the counter for a peer and returns the current count in the sliding window.
+         *
+         * @param h the peer hash
+         * @return the total count in the current sliding window
+         */
+        int increment(Hash h) {
+            long now = System.currentTimeMillis();
+            int bucketIndex = (int) ((now / bucketSizeMs) % bucketCount);
+            
+            // Get or create peer bucket array
+            AtomicIntegerArray peerArray = peerBuckets.computeIfAbsent(h, k -> new AtomicIntegerArray(bucketCount));
+            
+            // Increment both peer and global counters
+            int peerCount = peerArray.incrementAndGet(bucketIndex);
+            globalBuckets.incrementAndGet(bucketIndex);
+            
+            // Calculate total in sliding window for this peer
+            int total = getWindowSum(peerArray, bucketIndex);
+            
+            // Periodic cleanup of old entries
+            if (now - lastCleanupTime > CLEANUP_INTERVAL) {
+                cleanup(now);
+            }
+            
+            return total;
+        }
+
+        /**
+         * Gets the current count for a peer in the sliding window without incrementing.
+         *
+         * @param h the peer hash
+         * @return the total count in the current sliding window
+         */
+        int getCount(Hash h) {
+            AtomicIntegerArray peerArray = peerBuckets.get(h);
+            if (peerArray == null) return 0;
+            
+            long now = System.currentTimeMillis();
+            int bucketIndex = (int) ((now / bucketSizeMs) % bucketCount);
+            return getWindowSum(peerArray, bucketIndex);
+        }
+
+        /**
+         * Gets the global request count across all peers in the sliding window.
+         *
+         * @return the total global count
+         */
+        int getGlobalCount() {
+            long now = System.currentTimeMillis();
+            int bucketIndex = (int) ((now / bucketSizeMs) % bucketCount);
+            return getWindowSum(globalBuckets, bucketIndex);
+        }
+
+        /**
+         * Calculates the sum of all buckets except the current one (sliding window).
+         * The current bucket is excluded as it's still being filled.
+         *
+         * @param array the bucket array
+         * @param currentBucket the current bucket index
+         * @return the sum of all other buckets
+         */
+        private int getWindowSum(AtomicIntegerArray array, int currentBucket) {
+            int sum = 0;
+            for (int i = 0; i < bucketCount; i++) {
+                if (i != currentBucket) {
+                    sum += array.get(i);
+                }
+            }
+            return sum;
+        }
+
+        /**
+         * Clears all counters (called periodically by Cleaner).
+         */
+        void clear() {
+            peerBuckets.clear();
+            for (int i = 0; i < bucketCount; i++) {
+                globalBuckets.set(i, 0);
+            }
+        }
+
+        /**
+         * Removes stale peer entries that haven't been seen recently.
+         *
+         * @param now current time
+         */
+        private void cleanup(long now) {
+            lastCleanupTime = now;
+            int currentBucket = (int) ((now / bucketSizeMs) % bucketCount);
+            int prevBucket = (currentBucket - 1 + bucketCount) % bucketCount;
+            
+            // Remove peers with zero count in last two buckets
+            peerBuckets.entrySet().removeIf(entry -> {
+                AtomicIntegerArray arr = entry.getValue();
+                return arr.get(currentBucket) == 0 && arr.get(prevBucket) == 0;
+            });
+        }
+
+        /**
+         * Checks if a peer is exceeding burst thresholds.
+         *
+         * @param h the peer hash
+         * @param normalLimit the normal 90s limit for this peer
+         * @return true if burst threshold exceeded
+         */
+        boolean isBursting(Hash h, int normalLimit) {
+            int count = getCount(h);
+            // Burst threshold is 50% of the normal limit scaled to 10s window
+            // Normal limit is per 90s, so for 10s: limit * 10/90 * 0.5
+            int burstLimit = Math.max(BURST_THRESHOLD_MIN, 
+                Math.min(BURST_THRESHOLD_MAX, (int) (normalLimit * BURST_THRESHOLD_PERCENT * 10 / 90)));
+            return count > burstLimit;
+        }
     }
 
 }
