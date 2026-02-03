@@ -57,7 +57,8 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
 
     // Configuration
     private static final boolean isSlow = SystemVersion.isSlow();
-    private static final long DEFAULT_DETECTION_PERIOD = 30 * 1000; // 30 seconds
+    private static final long DEFAULT_DETECTION_PERIOD = 30 * 1000; // 30 seconds (under attack: <40% success)
+    private static final long HIGH_SUCCESS_DETECTION_PERIOD = 45 * 1000; // 45 seconds (normal: >=40% success)
     private static final int DEFAULT_MIN_MESSAGES = 2; // At least 2 messages
     private static final long DEFAULT_MIN_BYTES = 2 * 1024; // At least 2KB of data
     private static final long DEFAULT_SCAN_INTERVAL = 30 * 1000; // 30 seconds
@@ -66,6 +67,7 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
     private static final long DEFAULT_BAN_2ND_OFFENSE = 2 * 60 * 60 * 1000; // 2 hours
     private static final long DEFAULT_BAN_3RD_OFFENSE = 8 * 60 * 60 * 1000; // 8 hours
     private static final long DEFAULT_OFFENSE_RESET_TIME = 60 * 60 * 1000; // 1 hour
+    private static final double BUILD_SUCCESS_THRESHOLD = 0.40; // 40% success rate
 
     // Only these properties are configurable
     private static final String PROP_DETECTION_PERIOD = "router.idleTunnelDetectionPeriod";
@@ -145,7 +147,18 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
         long now = System.currentTimeMillis();
         _lastScanTime = now;
 
-        long detectionPeriod = _context.getProperty(PROP_DETECTION_PERIOD, DEFAULT_DETECTION_PERIOD);
+        // Dynamic detection period based on build success @since 0.9.68+
+        long basePeriod = _context.getProperty(PROP_DETECTION_PERIOD, DEFAULT_DETECTION_PERIOD);
+        double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
+        long detectionPeriod;
+        if (buildSuccess > 0 && buildSuccess >= BUILD_SUCCESS_THRESHOLD) {
+            // Normal operation - use longer detection period to reduce false positives
+            detectionPeriod = HIGH_SUCCESS_DETECTION_PERIOD;
+        } else {
+            // Under stress (<40% success) - use aggressive shorter period
+            detectionPeriod = basePeriod;
+        }
+
         int minMessages = _context.getProperty(PROP_MIN_MESSAGES, DEFAULT_MIN_MESSAGES);
         long minBytes = _context.getProperty(PROP_MIN_BYTES, DEFAULT_MIN_BYTES);
         int sybilMinIdentities = _context.getProperty(PROP_SYBIL_MIN_IDENTITIES, DEFAULT_SYBIL_MIN_IDENTITIES);

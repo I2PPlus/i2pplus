@@ -116,7 +116,7 @@ class ClientConnectionRunner {
     // e.g. on local access
     private static final int MAX_MESSAGE_ID = 0x4000000;
 
-    private static final int MAX_LEASE_FAILS = 5;
+    private static final int MAX_LEASE_FAILS = 10;
     private static final int BUF_SIZE = 32*1024;
     private static final int MAX_SESSIONS = 4;
 
@@ -503,7 +503,7 @@ class ClientConnectionRunner {
         double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
         long uptime = _context.router().getUptime();
         if ((buildSuccess > 0 && buildSuccess < 0.40) || uptime < 15*60*1000) {
-            maxFails *= 10; // Allow 8x more fails (50 instead of 5)
+            maxFails *= 10; // Allow 10x more fails (100 instead of 10)
         }
         return maxFails;
     }
@@ -520,8 +520,12 @@ class ClientConnectionRunner {
                 disconnect = ++_consecutiveLeaseRequestFails > getMaxLeaseFails();
             }
         }
-        if (disconnect)
-            disconnectClient("Too many leaseset request fails");
+        if (disconnect) {
+            if (_log.shouldWarn()) {
+                _log.warn("Disconnecting client after " + _consecutiveLeaseRequestFails + " consecutive lease request failures");
+            }
+            disconnectClientNoLog("Too many leaseset request fails");
+        }
     }
 
     /** already closed? */
@@ -765,6 +769,22 @@ class ClientConnectionRunner {
      *  @param reason will be truncated to 255 bytes
      */
     void disconnectClient(String reason) {disconnectClient(reason, Log.ERROR);}
+
+    /** @since 0.9.68+ */
+    void disconnectClientNoLog(String reason) {
+        DisconnectMessage msg = new DisconnectMessage();
+        if (reason.length() > 255) {reason = reason.substring(0, 255);}
+        msg.setReason(reason);
+        try {doSend(msg);}
+        catch (I2CPMessageException ime) {
+            if (_log.shouldWarn()) {
+                _log.warn("Error writing out the disconnect message", ime);
+            }
+        }
+        try {Thread.sleep(50);}
+        catch (InterruptedException ie) {}
+        stopRunning();
+    }
 
     /**
      * @param reason will be truncated to 255 bytes
