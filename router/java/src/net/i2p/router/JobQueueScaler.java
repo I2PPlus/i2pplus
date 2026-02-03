@@ -409,8 +409,8 @@ class JobQueueScaler implements Runnable {
         }
 
         // Log when emergency mode detected but no action taken
-        if (emergencyMode && activeRunners >= maxRunners && _log.shouldWarn()) {
-            _log.warn("JobQueueScaler: Emergency lag detected but at max runners (" + activeRunners + "/" + maxRunners + ")" +
+        if (emergencyMode && activeRunners >= maxRunners && _log.shouldInfo()) {
+            _log.info("JobQueueScaler: Emergency lag detected but at max runners (" + activeRunners + "/" + maxRunners + ")" +
                       " Ready jobs: " + readyJobs + " Max lag: " + maxLag + "ms, Active duration: " + activeJobMaxDuration + "ms");
         }
 

@@ -868,19 +868,22 @@ public class JobQueue {
         // Convert to long for warning comparison (warnings still based on ms thresholds)
         long lagMs = (long) lag;
         long durationMs = (long) duration;
+        String jobName = job.getName();
+
         // Skip lag warnings for non-critical jobs - they can tolerate delay
-        if (lagMs > _lagWarning && !isNonCritical) {
-            dieMsg = "Too much lag for " + job.getName() + " Job: " + String.format("%.3f", lag) + "ms with run time of " + String.format("%.3f", duration) + "ms";
-        } else if (durationMs > _runWarning) {
-            dieMsg = "Run too long for " + job.getName() + " Job: " + String.format("%.3f", lag) + "ms lag with run time of " + String.format("%.3f", duration) + "ms";
+        if (lagMs > _lagWarning && !isNonCritical && !jobName.startsWith("Read")) {
+            dieMsg = "Too much lag for " + jobName + " Job: " + String.format("%.3f", lag) + "ms with run time of " + String.format("%.3f", duration) + "ms";
+        } else if (durationMs > _runWarning && !jobName.startsWith("Read")) {
+            dieMsg = "Run too long for " + jobName + " Job: " + String.format("%.3f", lag) + "ms lag with run time of " + String.format("%.3f", duration) + "ms";
         }
+
         if (dieMsg != null) {
             if (_log.shouldInfo() && uptime > _warmupTime) {_log.info(dieMsg);}
             if (hist != null) hist.messageProcessingError(-1, JobQueue.class.getName(), dieMsg);
         }
 
         if ((lag > _lagFatal) && (uptime > _warmupTime)) {
-            if (_log.shouldWarn()) {_log.log(Log.WARN, "Router is incredibly overloaded or there's an error.");}
+            if (_log.shouldWarn()) {_log.log(Log.WARN, "High job lag detected (" + lag + "ms) -> Check router and network conditions");}
             return;
         }
 
