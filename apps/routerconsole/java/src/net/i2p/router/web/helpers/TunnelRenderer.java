@@ -1084,37 +1084,41 @@ class TunnelRenderer {
             else {processedOut += count;}
         }
 
-        buf.append("</tbody>\n<tfoot id=statusnotes>");
-        int colCount = 5 + maxLength;
+        if (tunnels.size() != 0) {
+            buf.append("</tbody>\n<tfoot id=statusnotes>");
+            int colCount = 5 + maxLength;
 
-        if (live > 0 && (in != null || outPool != null)) {
-            List<?> pendingIn = (in != null) ? in.listPending() : Collections.emptyList();
-            List<?> pendingOut = (outPool != null) ? outPool.listPending() : Collections.emptyList();
-            if (!pendingIn.isEmpty() || !pendingOut.isEmpty()) {
-                buf.append("<tr><td colspan=")
-                   .append(colCount).append(" class=center><b>")
-                   .append(_t("Build in progress")).append(":&nbsp;");
-                if (!pendingIn.isEmpty()) {
-                    buf.append("&nbsp;<span class=pending>").append(pendingIn.size())
-                       .append(" ").append(tib).append("</span>&nbsp;");
+            if (live > 0 && (in != null || outPool != null)) {
+                List<?> pendingIn = (in != null) ? in.listPending() : Collections.emptyList();
+                List<?> pendingOut = (outPool != null) ? outPool.listPending() : Collections.emptyList();
+                if (!pendingIn.isEmpty() || !pendingOut.isEmpty()) {
+                    buf.append("<tr><td colspan=")
+                       .append(colCount).append(" class=center><b>")
+                       .append(_t("Build in progress")).append(":&nbsp;");
+                    if (!pendingIn.isEmpty()) {
+                        buf.append("&nbsp;<span class=pending>").append(pendingIn.size())
+                           .append(" ").append(tib).append("</span>&nbsp;");
+                    }
+                    if (!pendingOut.isEmpty()) {
+                        buf.append("&nbsp;<span class=pending>").append(pendingOut.size())
+                           .append(" ").append(tob).append("</span>&nbsp;");
+                    }
+                    buf.append("</b></td></tr>\n");
                 }
-                if (!pendingOut.isEmpty()) {
-                    buf.append("&nbsp;<span class=pending>").append(pendingOut.size())
-                       .append(" ").append(tob).append("</span>&nbsp;");
-                }
-                buf.append("</b></td></tr>\n");
             }
+
+            if (live > 0) {
+                buf.append("<tr><td colspan=").append(colCount)
+                   .append(" class=center><b>").append(_t("Lifetime bandwidth usage")).append(":&nbsp;&nbsp;")
+                   .append(DataHelper.formatSize2(processedIn*1024, true).replace("i", ""))
+                   .append("B ").append(_t("in")).append(", ")
+                   .append(DataHelper.formatSize2(processedOut*1024, true).replace("i", ""))
+                   .append("B ").append(_t("out")).append("</b></td></tr>\n");
+            }
+            buf.append("</tfoot>\n</table>\n");
         }
 
-        if (live > 0) {
-            buf.append("<tr><td colspan=").append(colCount)
-               .append(" class=center><b>").append(_t("Lifetime bandwidth usage")).append(":&nbsp;&nbsp;")
-               .append(DataHelper.formatSize2(processedIn*1024, true).replace("i", ""))
-               .append("B ").append(_t("in")).append(", ")
-               .append(DataHelper.formatSize2(processedOut*1024, true).replace("i", ""))
-               .append("B ").append(_t("out")).append("</b></td></tr>\n");
-        }
-        buf.append("</tfoot>\n</table></div>\n");
+        buf.append("</div>\n");
         out.append(buf);
         out.flush();
         buf.setLength(0);
