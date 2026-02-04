@@ -78,6 +78,7 @@ class EstablishmentManager {
     private final ObjectCounter<RemoteHostId> _terminationCounter;
     private final ObjectCounter<RemoteHostId> _ssu2TerminationInboundCounter;
     private final ObjectCounter<RemoteHostId> _ssu2EstablishFailCounter;
+    private final ObjectCounter<RemoteHostId> _ssu2CorruptCounter;
 
     /** map of RemoteHostId to InboundEstablishState */
     private final ConcurrentHashMap<RemoteHostId, InboundEstablishState> _inboundStates;
@@ -211,6 +212,7 @@ class EstablishmentManager {
         _terminationCounter = new ObjectCounter<RemoteHostId>();
         _ssu2TerminationInboundCounter = new ObjectCounter<RemoteHostId>();
         _ssu2EstablishFailCounter = new ObjectCounter<RemoteHostId>();
+        _ssu2CorruptCounter = new ObjectCounter<RemoteHostId>();
 
         _activityLock = new Object();
         DEFAULT_MAX_CONCURRENT_ESTABLISH = Math.max(DEFAULT_LOW_MAX_CONCURRENT_ESTABLISH,
@@ -907,6 +909,8 @@ class EstablishmentManager {
                     _log.warn("[SSU] Received CORRUPT SessionConfirmed \n* Router: " + state +
                               (gse.getMessage() != null ? "\n* " + gse.getMessage() : ""));
                 }
+                // Track corrupt packets and ban repeat offenders
+                trackSSU2CorruptSessionConfirmed(state.getRemoteHostId());
             }
             _inboundStates.remove(state.getRemoteHostId());
             return;
@@ -1100,6 +1104,25 @@ class EstablishmentManager {
                 }
             }
             _ssu2EstablishFailCounter.clear(hostId);
+        }
+    }
+
+    /**
+     * Track SSU2 corrupt SessionConfirmed and auto-ban repeat offenders.
+     * @since 0.9.68+
+     */
+    void trackSSU2CorruptSessionConfirmed(RemoteHostId hostId) {
+        if (hostId == null || hostId.getIP() == null) {return;}
+        int count = _ssu2CorruptCounter.increment(hostId);
+        if (count >= SSU2_ESTABLISH_FAIL_THRESHOLD) {
+            byte[] ip = hostId.getIP();
+            if (!_context.blocklist().isBlocklisted(ip)) {
+                _context.blocklist().addTemporary(ip, SSU2_ABUSE_BAN_MS, "Repeated SSU2 corrupt SessionConfirmed");
+                if (_log.shouldWarn()) {
+                    _log.warn("Auto-banning " + Addresses.toString(ip) + " after " + count + " corrupt SessionConfirmed");
+                }
+            }
+            _ssu2CorruptCounter.clear(hostId);
         }
     }
 
