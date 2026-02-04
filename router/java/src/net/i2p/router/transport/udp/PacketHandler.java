@@ -43,6 +43,10 @@ class PacketHandler {
     private static final int MAX_QUEUE_SIZE = SystemVersion.isSlow() ? 64 : 256;
     private static final int MIN_NUM_HANDLERS = 1;  // if < 128MB
     private static final int MAX_NUM_HANDLERS = SystemVersion.isSlow() ? 3 : 6;
+    // Minimum sizes for PQ new session packets (MLKEM variants)
+    // Any packet smaller than 919 bytes cannot be a valid PQ new session
+    private static final int MIN_PQ_NS_SIZE = 919;
+    private static final int MAX_PQ_NS_SIZE = 1700;
 
     PacketHandler(RouterContext ctx, UDPTransport transport, EstablishmentManager establisher,
                   InboundMessageFragments inbound, PeerTestManager testManager, IntroductionManager introManager) {
@@ -257,6 +261,26 @@ class PacketHandler {
             } catch (UnknownHostException e) {
                 if (_log.shouldDebug())
                     _log.warn("Failed to create InetAddress for blocklist check from RemoteHostId: " + from + " -> " + e.getMessage());
+            }
+        }
+
+        // Early size validation to reject obviously malformed packets
+        // Packets between 60-900 bytes cannot be valid PQ new session (min 919)
+        // but may be attack attempts - reject early to save CPU
+        if (state == null && ip != null && !ipBlocklisted) {
+            int pktLen = packet.getPacket().getLength();
+            if (pktLen >= 60 && pktLen < MIN_PQ_NS_SIZE) {
+                // Packet is too large for token request (56) but too small for PQ new session
+                // Likely an attack packet - track and potentially ban
+                if (trackAndBanIfNeeded(from, "PQ size attack: " + pktLen + " bytes")) {
+                    return false;
+                }
+                // Not banned yet, but skip expensive trial decryption
+                // These packets cannot be valid PQ, so reject without decryption
+                if (_log.shouldDebug()) {
+                    _log.debug("Rejecting packet too small for PQ new session: " + pktLen + " bytes from " + from);
+                }
+                return false;
             }
         }
 
