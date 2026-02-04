@@ -272,13 +272,13 @@ class PacketHandler {
             if (pktLen >= 60 && pktLen < MIN_PQ_NS_SIZE) {
                 // Packet is too large for token request (56) but too small for PQ new session
                 // Likely an attack packet - track and potentially ban
-                if (trackAndBanIfNeeded(from, "PQ size attack: " + pktLen + " bytes")) {
+                if (trackAndBanIfNeeded(from, "PQ packet size attack: " + pktLen + " bytes")) {
                     return false;
                 }
                 // Not banned yet, but skip expensive trial decryption
                 // These packets cannot be valid PQ, so reject without decryption
                 if (_log.shouldDebug()) {
-                    _log.debug("Rejecting packet too small for PQ new session: " + pktLen + " bytes from " + from);
+                    _log.debug("Rejecting packet too small for PQ new session -> " + pktLen + " bytes from " + from);
                 }
                 return false;
             }
@@ -293,7 +293,7 @@ class PacketHandler {
                 header.getNetID() != _networkID) {
 
                 if (header != null && _log.shouldInfo()) {
-                    _log.info("Packet does not decrypt as Session Request, attempting to decrypt as Token Request / PeerTest / HolePunch \n* " +
+                    _log.info("Packet does not decrypt as Session Request -> Attempting to decrypt as Token Request / PeerTest / HolePunch \n* " +
                               header + " from " + from);
                 }
 
@@ -515,7 +515,7 @@ class PacketHandler {
         if (badCount >= BAD_PACKET_THRESHOLD) {
             byte[] ipBytes = from.getIP();
             if (ipBytes == null) {return false;}
-            String ipStr = ipBytes.length == 4 ? 
+            String ipStr = ipBytes.length == 4 ?
                 (ipBytes[0] & 0xff) + "." + (ipBytes[1] & 0xff) + "." + (ipBytes[2] & 0xff) + "." + (ipBytes[3] & 0xff) :
                 "ipv6";
             if (_context.blocklist().isBlocklisted(ipBytes)) {
@@ -524,7 +524,7 @@ class PacketHandler {
             }
             _context.blocklist().addTemporary(ipBytes, BAN_DURATION_MS, "Repeated bad packets: " + reason);
             if (_log.shouldWarn()) {
-                _log.warn("Auto-banning " + ipStr + " after " + badCount + " bad packets - " + reason);
+                _log.warn("Auto-banning " + ipStr + " after " + badCount + " bad packets -> " + reason);
             }
             _badPackets.clear(from);
             return true;

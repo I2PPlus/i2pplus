@@ -869,7 +869,7 @@ public class Blocklist {
      *  @param ip IPv4 address
      *  @param durationMs duration in milliseconds (e.g. 8*60*60*1000 for 8 hours)
      *  @param source for logging, may be null
-     *  @since 2.10.0
+     *  @since 0.9.68+
      */
     public void addTemporary(byte ip[], long durationMs, String source) {
         if (ip.length != 4) {return;}
