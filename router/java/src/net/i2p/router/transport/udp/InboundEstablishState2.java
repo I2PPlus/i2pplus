@@ -568,11 +568,12 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     /**
      *  Overridden to destroy the handshake state
      *  @since 0.9.56
-     */
+      */
     @Override
     public synchronized void fail() {
         _handshakeState.destroy();
         super.fail();
+        _transport.getEstablisher().trackSSU2EstablishFailure(_remoteHostId);
     }
 
     // SSU 2 things

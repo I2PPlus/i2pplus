@@ -426,6 +426,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         if (_handshakeState != null)
             _handshakeState.destroy();
         super.fail();
+        _transport.getEstablisher().trackSSU2EstablishFailure(_remoteHostId);
     }
 
     @Override

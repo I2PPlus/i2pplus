@@ -76,6 +76,8 @@ class EstablishmentManager {
     private final Map<RemoteHostId, Token> _outboundTokens;
     private final Map<RemoteHostId, Token> _inboundTokens;
     private final ObjectCounter<RemoteHostId> _terminationCounter;
+    private final ObjectCounter<RemoteHostId> _ssu2TerminationInboundCounter;
+    private final ObjectCounter<RemoteHostId> _ssu2EstablishFailCounter;
 
     /** map of RemoteHostId to InboundEstablishState */
     private final ConcurrentHashMap<RemoteHostId, InboundEstablishState> _inboundStates;
@@ -180,6 +182,12 @@ class EstablishmentManager {
     private static final String TOKEN_FILE = "ssu2tokens.txt";
     /** Max immediate terminations to send to a peer every FAILSAFE_INTERVAL */
     private static final int MAX_TERMINATIONS = 2;
+    /** Threshold for auto-banning on inbound TERMINATION spam */
+    private static final int SSU2_TERM_THRESHOLD = 3;
+    /** Threshold for auto-banning on SSU2 establishment failures */
+    private static final int SSU2_ESTABLISH_FAIL_THRESHOLD = 3;
+    /** Ban duration for SSU2 abuse */
+    private static final long SSU2_ABUSE_BAN_MS = 8*60*60*1000;
 
     public EstablishmentManager(RouterContext ctx, UDPTransport transport) {
         _context = ctx;
@@ -201,6 +209,8 @@ class EstablishmentManager {
         _inboundTokens = new InboundTokens(tokenCacheSize);
         _outboundTokens = new LHMCache<RemoteHostId, Token>(tokenCacheSize);
         _terminationCounter = new ObjectCounter<RemoteHostId>();
+        _ssu2TerminationInboundCounter = new ObjectCounter<RemoteHostId>();
+        _ssu2EstablishFailCounter = new ObjectCounter<RemoteHostId>();
 
         _activityLock = new Object();
         DEFAULT_MAX_CONCURRENT_ESTABLISH = Math.max(DEFAULT_LOW_MAX_CONCURRENT_ESTABLISH,
@@ -1016,6 +1026,20 @@ class EstablishmentManager {
     void receiveSessionDestroy(RemoteHostId from) {
         if (_log.shouldWarn())
             _log.warn("Received unauthenticated SessionDestroy from " + from);
+        // Track inbound TERMINATION spam and auto-ban repeat offenders
+        if (from != null && from.getIP() != null) {
+            int count = _ssu2TerminationInboundCounter.increment(from);
+            if (count >= SSU2_TERM_THRESHOLD) {
+                byte[] ip = from.getIP();
+                if (!_context.blocklist().isBlocklisted(ip)) {
+                    _context.blocklist().addTemporary(ip, SSU2_ABUSE_BAN_MS, "Repeated SSU2 TERMINATION packets");
+                    if (_log.shouldWarn()) {
+                        _log.warn("Auto-banning " + Addresses.toString(ip) + " after " + count + " TERMINATION packets");
+                    }
+                }
+                _ssu2TerminationInboundCounter.clear(from);
+            }
+        }
     }
 
     /**
@@ -1061,11 +1085,22 @@ class EstablishmentManager {
     }
 
     /**
-     * Is the peer on the blocklist or banlist?
+     * Track SSU2 establishment failures and auto-ban repeat offenders.
      * @since 0.9.68+
      */
-    private boolean isPeerBanned(InboundEstablishState2 state) {
-        return isPeerBanned(state.getRemoteHostId());
+    void trackSSU2EstablishFailure(RemoteHostId hostId) {
+        if (hostId == null || hostId.getIP() == null) {return;}
+        int count = _ssu2EstablishFailCounter.increment(hostId);
+        if (count >= SSU2_ESTABLISH_FAIL_THRESHOLD) {
+            byte[] ip = hostId.getIP();
+            if (!_context.blocklist().isBlocklisted(ip)) {
+                _context.blocklist().addTemporary(ip, SSU2_ABUSE_BAN_MS, "Repeated SSU2 establishment failures");
+                if (_log.shouldWarn()) {
+                    _log.warn("Auto-banning " + Addresses.toString(ip) + " after " + count + " SSU2 establishment failures");
+                }
+            }
+            _ssu2EstablishFailCounter.clear(hostId);
+        }
     }
 
     /**
