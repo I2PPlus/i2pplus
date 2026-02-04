@@ -13,6 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.router.OutNetMessage;
@@ -30,6 +31,9 @@ import net.i2p.util.SystemVersion;
  *
  */
 public class PeerState {
+    private static final long WARN_THROTTLE_MS = 5_000;
+    private static final AtomicLong _lastOutboundFailWarn = new AtomicLong(0);
+
     protected final RouterContext _context;
     protected final Log _log;
     /**
@@ -1098,11 +1102,11 @@ public class PeerState {
                     msg.timestamp("Expired in the active pool");
                     _transport.failed(state);
                     if (shouldLogInfo) {
-                        _log.info("[SSU] Message expired " + state + " -> " + this);
+                        _log.info("[SSU] Message expired " + state + " \n* " + this);
                     }
                 } else {
                     if (shouldLogInfo) {
-                        _log.warn("[SSU] Unable to send direct message " + state + " -> " + this);
+                        _log.warn("[SSU] Unable to send direct message " + state + " \n* " + this);
                     }
                 }
             }
@@ -1110,7 +1114,10 @@ public class PeerState {
             if (failedSize > 0) {
                 if (totalFail) {
                     if (shouldLogWarn) {
-                        _log.warn("[SSU] First Outbound message failed (Timeout after 60s) -> " + this);
+                        long currentTime = _context.clock().now();
+                        if (_lastOutboundFailWarn.getAndSet(currentTime) < currentTime - WARN_THROTTLE_MS) {
+                            _log.warn("[SSU] First Outbound message failed (Timeout after 60s) \n* " + this + " (throttled)");
+                        }
                     }
                     _transport.sendDestroy(this, SSU2Util.REASON_FRAME_TIMEOUT);
                     _transport.dropPeer(this, true, "OB First Message Fail");
