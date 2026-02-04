@@ -90,6 +90,11 @@ class JobQueueScaler implements Runnable {
     private static final String PROP_MIN_RUNNERS = "router.minJobRunners";
     private static final String PROP_FEEDBACK_ENABLED = "router.scaleFeedbackEnabled";
 
+    // Attack mode: be more aggressive when build success is low
+    private static final double BUILD_SUCCESS_THRESHOLD = 0.40; // 40% - under attack
+    private static final int ATTACK_SCALE_UP_STEP = 2; // Add 2 runners at a time during attacks
+    private static final long ATTACK_CHECK_INTERVAL = 500; // Check every 500ms during attacks
+
     /**
      * Snapshot of metrics taken before scaling up.
      * Used to evaluate if scaling actually helped.
@@ -273,18 +278,36 @@ class JobQueueScaler implements Runnable {
 
     /**
      * Get the check interval in milliseconds.
+     * During attacks, check more frequently to respond faster.
      */
     private long getCheckInterval() {
+        // During attacks, check more frequently
+        if (isUnderAttack()) {
+            return ATTACK_CHECK_INTERVAL;
+        }
         return _context.getProperty(PROP_SCALE_CHECK_INTERVAL, (int) DEFAULT_SCALE_CHECK_INTERVAL);
     }
 
     /**
+     * Check if we're under attack (low tunnel build success).
+     */
+    private boolean isUnderAttack() {
+        double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
+        return buildSuccess > 0 && buildSuccess < BUILD_SUCCESS_THRESHOLD;
+    }
+
+    /**
      * Get the cooldown period between scale events.
+     * Shorter cooldown during attacks for faster response.
      */
     private long getCooldownPeriod() {
         long baseCooldown = _context.getProperty(PROP_SCALE_COOLDOWN, (int) DEFAULT_SCALE_COOLDOWN);
         if (_isInExtendedCooldown) {
             return (long) (baseCooldown * EXTENDED_COOLDOWN_MULTIPLIER);
+        }
+        // Shorter cooldown during attacks
+        if (isUnderAttack()) {
+            return baseCooldown / 2;
         }
         return baseCooldown;
     }
@@ -522,10 +545,10 @@ class JobQueueScaler implements Runnable {
         }
         if (shouldScaleUp) {
             // Calculate how many runners to add based on backlog severity
-            int scaleUpStep = DEFAULT_SCALE_UP_STEP;
+            int scaleUpStep = isUnderAttack() ? ATTACK_SCALE_UP_STEP : DEFAULT_SCALE_UP_STEP;
             int lagThreshold = getScaleUpLagThreshold();
 
-            // Scale based on backlog size - more jobs = add more runners
+            // During attacks, scale more aggressively but still respect feedback
             if (readyJobs > activeRunners * 2) {
                 // Severe backlog: double runners
                 scaleUpStep = Math.max(scaleUpStep, activeRunners);
@@ -533,8 +556,9 @@ class JobQueueScaler implements Runnable {
                 // Significant backlog: add half current runners
                 scaleUpStep = Math.max(scaleUpStep, activeRunners / 2);
             } else if (maxLag > lagThreshold * 5) {
-                // High lag: add more runners (up to 8)
-                scaleUpStep = Math.max(scaleUpStep, Math.min(8, (int) (maxLag / lagThreshold)));
+                // High lag: add more runners (up to 8 during attack, 4 normally)
+                int maxStep = isUnderAttack() ? 8 : 4;
+                scaleUpStep = Math.max(scaleUpStep, Math.min(maxStep, (int) (maxLag / lagThreshold)));
             }
 
             int targetRunners = Math.min(activeRunners + scaleUpStep, maxRunners);

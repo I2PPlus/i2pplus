@@ -95,6 +95,10 @@ public class JobQueue {
     private int _maxWaitingJobs = DEFAULT_MAX_WAITING_JOBS;
     private final static long MIN_LAG_TO_DROP = 2000; // 2 seconds
 
+    /** Attack mode: increase queue capacity to handle more load without dropping */
+    private static final double BUILD_SUCCESS_THRESHOLD = 0.40; // 40% - under attack
+    private static final int ATTACK_QUEUE_MULTIPLIER = 2; // 2x queue capacity during attacks
+
     /**
      *  @since 0.9.52+
      */
@@ -466,15 +470,17 @@ public class JobQueue {
         if (!_allowParallelOperation) return false;
 
         Class<? extends Job> cls = job.getClass();
-        boolean disableTunnelTests = _context.getBooleanProperty("router.disableTunnelTesting");
-        int maxWaitingJobs = _context.getProperty(PROP_MAX_WAITING_JOBS, DEFAULT_MAX_WAITING_JOBS);
+        // NEVER drop RequestLeaseSetJob - critical for client connectivity
+        if (cls.getName().contains("RequestLeaseSetJob")) {return false;}
+        // NEVER drop RepublishLeaseSetJob - critical for network connectivity
+        if (cls == RepublishLeaseSetJob.class) {return false;}
+
+        int maxWaitingJobs = getMaxWaitingJobs();
 
         // Drop based on lag alone - prevents lag from building up
         // Also drop based on queue size to prevent memory bloat
         boolean highLag = getMaxLag() >= MIN_LAG_TO_DROP;
         if (highLag || numReady > maxWaitingJobs) {
-            // NEVER drop RepublishLeaseSetJob or BatchRepublishJob - critical for network connectivity
-            if (cls == RepublishLeaseSetJob.class) {return false;}
             String jobName = job.getName();
             if (jobName != null) {
                 if (jobName.contains("Lease") || jobName.contains("Timeout")) {return false;}
@@ -489,6 +495,7 @@ public class JobQueue {
                 // NEVER drop tunnel build messages
                 if (jobName.contains("Tunnel Build")) {return false;}
             }
+            boolean disableTunnelTests = _context.getBooleanProperty("router.disableTunnelTesting");
             if ((!disableTunnelTests && cls == TestJob.class) ||
                 cls == PeerTestJob.class ||
                 cls == ExploreJob.class) {
@@ -496,6 +503,25 @@ public class JobQueue {
             }
         }
         return false;
+    }
+
+    /**
+     * Get the maximum number of waiting jobs before dropping.
+     * During attacks (low tunnel build success), increases queue capacity to handle more load.
+     * This does NOT increase lag - it just allows more jobs to queue before dropping.
+     *
+     * @return the max waiting jobs limit
+     * @since 0.9.68+
+     */
+    public int getMaxWaitingJobs() {
+        int baseMax = _context.getProperty(PROP_MAX_WAITING_JOBS, DEFAULT_MAX_WAITING_JOBS);
+        // Check if we're under attack (low tunnel build success)
+        double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
+        if (buildSuccess > 0 && buildSuccess < BUILD_SUCCESS_THRESHOLD) {
+            // Under attack - increase queue capacity
+            return baseMax * ATTACK_QUEUE_MULTIPLIER;
+        }
+        return baseMax;
     }
 
     /**
