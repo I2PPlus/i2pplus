@@ -453,7 +453,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                 // Throttle warnings to reduce log spam during attacks
                 long now = _context.clock().now();
                 if (shouldLog && _lastBadConnIDWarn.getAndSet(now) < now - WARN_THROTTLE_MS) {
-                    _log.warn("[SSU] BAD Destination ConnectionID" + fromPeer + " (throttled) -> " + header + " Size: " + len + " bytes");
+                    _log.warn("[SSU] BAD Destination ConnectionID" + fromPeer + " (throttled) \n* " + header + " Size: " + len + " bytes");
                 }
                 if (!_isInbound && _ackedMessages.getOffset() == 0 && !_ackedMessages.get(0)) {
                     // This was probably a retransmitted session created, sent with k_header_1 = bob's intro key,
@@ -467,7 +467,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             if (header.getType() != DATA_FLAG_BYTE) {
                 long now = _context.clock().now();
                 if (shouldLog && _lastBadPacketWarn.getAndSet(now) < now - WARN_THROTTLE_MS) {
-                    _log.warn("[SSU] BAD " + len + " byte data packet" + fromPeer + " [Type " + (header.getType() & 0xff) + 
+                    _log.warn("[SSU] BAD " + len + " byte data packet" + fromPeer + " [Type " + (header.getType() & 0xff) +
                              "] received (throttled)");
                 }
                 // TODO if it's early:
