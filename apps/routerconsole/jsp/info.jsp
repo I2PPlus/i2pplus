@@ -7,6 +7,7 @@
 <%@include file="sidebar.jsi"%>
 <h1 class=nfo><%=intl._t("Router Summary")%></h1>
 <div class=main id=routerinformation>
+<div class=tablewrap>
 <h3 class=tabletitle id=version><%=intl._t("I2P Version and Running Environment")%><span class=h3navlinks style=float:right><a title="View Router Logs" href="/logs">View Logs</a></span></h3>
 <jsp:useBean class="net.i2p.router.web.helpers.LogsHelper" id="logsHelper" scope="request"/>
 <jsp:setProperty name="logsHelper" property="contextId" value="<%=(String)session.getAttribute(\"i2p.contextId\")%>"/>
@@ -34,16 +35,19 @@
 <tr><td><b>JSTL:</b></td><td><jsp:getProperty name="logsHelper" property="jstlVersion"/>&ensp;<span class=nowrap><b>Encoding:</b>&ensp;<%=System.getProperty("file.encoding")%></span>&ensp;<span class=nowrap><b>Charset:</b>&ensp;<%=java.nio.charset.Charset.defaultCharset().name()%></span></td></tr>
 </tbody>
 </table>
+</div>
 <jsp:useBean class="net.i2p.router.web.helpers.InfoHelper" id="infohelper" scope="request"/>
 <jsp:setProperty name="infohelper" property="contextId" value="<%=(String)session.getAttribute(\"i2p.contextId\")%>"/>
 <% infohelper.storeWriter(out);%>
+<div class=tablewrap>
 <h3 class=tabletitle><%=intl._t("Router Information")%></h3>
 <jsp:getProperty name="infohelper" property="console"/>
+</div>
 </div>
 <script src=/js/refreshElements.js type=module></script>
 <script nonce=<%=cspNonce%> type=module>
   import {refreshElements} from "/js/refreshElements.js";
-  refreshElements(".ajax", "/info", 30000);
+  refreshElements(".ajax", "/info", 10000);
 </script>
 </body>
 </html>

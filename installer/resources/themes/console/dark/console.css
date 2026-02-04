@@ -1132,7 +1132,7 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 #tunnels h3 a:not(.refreshpage):first-child{padding:8px 4px 14px 22px;border-left:0}
 #tunnels h3 a:not(.refreshpage) img,#tunnels h3 a:not(.refreshpage):first-child{margin:-8px 0 -8px 0;padding:9px 2px 9px 0;border-left:var(--border)}
 #tunnels h3.client{padding-left:35px;background:var(--client) no-repeat 9px center/18px,var(--title)}
-#tunnels h3{padding-right:5px;padding-bottom:2px;position:relative;z-index:0}
+#tunnels h3{padding-right:5px;position:relative;z-index:0}
 #tunnels h3.server{padding-left:35px;background:var(--server) no-repeat 9px center/18px,var(--title)}
 #tunnels h3.server.i2pchat{background:url(/themes/console/images/i2pchat.svg) no-repeat 9px center/19px,var(--title)}
 #tunnels h3.server.snark{background:url(/themes/console/images/snark.svg) no-repeat 9px center/20px,var(--title)}
@@ -1158,7 +1158,7 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 #tunnels .rid,#tunnels .routerHash,#tunnels .version{margin:0;vertical-align:middle;line-height:1.35}
 #tunnels .routerHash,#tunnels .version{margin-top:1px}
 #tunnels #participating{padding:6px 6px 4px 35px;letter-spacing:.1em;background:var(--share) no-repeat 10px center/18px,var(--title)}
-#tunnels #peercount{background:url(/themes/console/images/peers.svg) no-repeat 9px center/18px,var(--title)}
+#tunnels #peercount{padding:6px 6px 4px 35px;background:url(/themes/console/images/peers.svg) no-repeat 9px center/18px,var(--title)}
 #tunnels tbody td{border:var(--border_softer)}
 #tunnels td:not(.rif):not(.rih):not(.rbw):first-child,#tunnels #tunnelPeerCount td:first-child{border-left:var(--border)}
 #tunnels td:not(.rif):not(.rih):not(.rbw):last-child,#tunnels #tunnelPeerCount td:last-child{border-right:var(--border)}
@@ -2564,6 +2564,7 @@ a[href^="/netdb"]:hover span{color:var(--hover)}
 #routerinformation h3#version::before,#routerinformation #enviro+h3::before,#routerinformation h3#transports::before{margin:0 7px 0 2px;width:16px;height:16px;display:inline-block;vertical-align:middle;background:url(images/favicon.svg) no-repeat center center/16px;content:"";filter:saturate(.5)}
 #routerinformation #enviro+h3::before{background-image:url(/themes/console/images/server.svg)}
 #routerinformation h3#transports::before{background-image:url(/themes/console/images/globe.svg)}
+#upnp{margin-bottom:-2px}
 
 /* logs */
 .log_level{opacity:.8}

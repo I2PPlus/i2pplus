@@ -376,7 +376,7 @@ class TunnelRenderer {
             }
 
             StringBuilder tbuf = new StringBuilder(3 * 512);
-            tbuf.append("<h3 class=tabletitle>")
+            tbuf.append("<div class=tablewrap>\n<h3 class=tabletitle>")
                 .append(_t("Transit Tunnels by Peer (Top {0})", DISPLAY_LIMIT))
                 .append("</h3>\n<table id=transitSummary class=\"tunneldisplay tunnels_participating\">\n<thead><tr><th id=country data-sort-direction=ascending>")
                 .append(_t("Country"))
@@ -521,7 +521,7 @@ class TunnelRenderer {
                 sb.append("</td></tr>\n");
             }
 
-            sb.append("</tbody>\n</table>\n");
+            sb.append("</tbody>\n</table>\n</div>");
             out.write(sb.toString());
             out.flush();
             sb.setLength(0);
@@ -554,7 +554,7 @@ class TunnelRenderer {
 
         if (!peerList.isEmpty() && (tunnelCount > 0 || partCount > 0)) {
             StringBuilder headerSb = new StringBuilder(peerList.size() * 640 + 2048);
-            headerSb.append("<h3 class=tabletitle id=peercount>")
+            headerSb.append("<div class=tablewrap>\n<h3 class=tabletitle id=peercount>")
                   .append(_t("All Tunnels by Peer"))
                   .append("&nbsp;&nbsp;<a id=refreshPage class=refreshpage style=float:right href=/tunnelpeercount>")
                   .append(_t("Refresh"))
@@ -716,7 +716,7 @@ class TunnelRenderer {
             } else {
                 footerSb.append("<td></td>");
             }
-            footerSb.append("<td></td></tr>\n</tfoot>\n</table>\n");
+            footerSb.append("<td></td></tr>\n</tfoot>\n</table>\n</div>\n");
             out.write(footerSb.toString());
             out.flush();
         } else {

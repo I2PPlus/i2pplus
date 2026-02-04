@@ -234,9 +234,10 @@ public class InfoHelper extends HelperBase {
         buf.append("<tr><td><b>").append(_t("Started")).append(":</b></td><td class=ajax>").append(new Date(_context.router().getWhenStarted()))
            .append(" &ensp;<b>").append(_t("Uptime")).append(":</b> ").append(DataHelper.formatDuration(_context.router().getUptime()))
            .append(" &ensp;<b>").append(_t("Clock Skew")).append(":</b> ").append(_context.clock().getOffset()).append("ms</td></tr>\n")
-           .append("</table>\n");
+           .append("</table>\n</div>\n");
 
-        buf.append("<h3 id=transports>").append(_t("Router Transport Addresses")).append("</h3>\n<pre id=activetransports class=ajax>\n");
+        buf.append("<div class=tablewrap><h3 id=transports>").append(_t("Router Transport Addresses"))
+           .append("</h3>\n<pre id=activetransports class=ajax>\n");
         SortedMap<String, Transport> transports = _context.commSystem().getTransports();
         if (!transports.isEmpty()) {
             for (Transport t : transports.values()) {
@@ -247,7 +248,7 @@ public class InfoHelper extends HelperBase {
                 } else {buf.append(_t("{0} is used for outbound connections only", t.getStyle())).append("\n\n");}
             }
         } else {buf.append(_t("none"));}
-        buf.append("</pre>\n");
+        buf.append("</pre>\n</div>");
         out.append(buf);
         // UPnP Status
         _context.commSystem().renderStatusHTML(_out);
