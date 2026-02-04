@@ -10,6 +10,7 @@ package net.i2p.router.client;
 
 import java.util.Date;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.data.Lease;
 import net.i2p.data.LeaseSet;
 import net.i2p.data.i2cp.I2CPMessage;
@@ -24,8 +25,8 @@ import net.i2p.util.Log;
 
 /**
  * Async job to walk the client through generating a lease set.  First sends it to the client
- * and then queues up a CheckLeaseRequestStatus job for processing after the expiration.
- * When that CheckLeaseRequestStatus is run, if the client still hasn't provided the signed
+ * and then queues up a CheckLeaseRequest job for processing after the expiration.
+ * When that CheckLeaseRequest is run, if the client still hasn't provided the signed
  * leaseSet, fire off the onFailed job from the intermediary LeaseRequestState and drop the client.
  *
  */
@@ -36,6 +37,10 @@ class RequestLeaseSetJob extends JobImpl {
 
     private static final long DEFAULT_MAX_FUDGE = 5*1000;
     private static final String PROP_MAX_FUDGE = "router.requestLeaseSetMaxFudge";
+
+    /** Track pending requests by destination hash to deduplicate */
+    private static final ConcurrentHashMap<String, Long> _pendingRequests = new ConcurrentHashMap<>();
+    private static final long DEDUPE_WINDOW_MS = 30*1000; // 30 second dedupe window
 
     public RequestLeaseSetJob(RouterContext ctx, ClientConnectionRunner runner, LeaseRequestState state) {
         super(ctx);
@@ -50,6 +55,20 @@ class RequestLeaseSetJob extends JobImpl {
     public void runJob() {
         if (_runner.isDead()) {return;}
 
+        long now = getContext().clock().now();
+        LeaseSet requested = _requestState.getRequested();
+        String destHash = requested.getDestination().calculateHash().toBase64();
+
+        // Deduplicate: skip if we already have a pending request for this destination
+        Long existingTime = _pendingRequests.get(destHash);
+        if (existingTime != null && now - existingTime < DEDUPE_WINDOW_MS) {
+            if (_log.shouldDebug()) {
+                _log.debug("Skipping duplicate LeaseSet request for " + destHash + " (recent request pending)");
+            }
+            return;
+        }
+        _pendingRequests.put(destHash, now);
+
         boolean isLS2 = false;
         SessionConfig cfg = _runner.getPrimaryConfig();
         if (cfg != null) {
@@ -60,7 +79,6 @@ class RequestLeaseSetJob extends JobImpl {
             }
         }
 
-        LeaseSet requested = _requestState.getRequested();
         long endTime = requested.getEarliestLeaseDate();
         long maxFudge = getContext().getProperty(PROP_MAX_FUDGE, DEFAULT_MAX_FUDGE);
         /**
@@ -82,7 +100,7 @@ class RequestLeaseSetJob extends JobImpl {
              * building takes longer than expected and lease end dates are already
              * in the past by the time they reach the client.
              */
-            long now = getContext().clock().now();
+            now = getContext().clock().now();
             long minFutureTime = now + 30*1000; // 30 second minimum buffer
             if (endTime < minFutureTime) {endTime = minFutureTime;}
         } else {
@@ -133,7 +151,7 @@ class RequestLeaseSetJob extends JobImpl {
             // Use addJobToTop to ensure CheckLeaseRequestStatus runs promptly even under load.
             // This prevents cleanup jobs from being delayed when the job queue is backed up,
             // which would leave clients in a zombie state with expired LeaseSets.
-            getContext().jobQueue().addJobToTop(new CheckLeaseRequestStatus());
+            getContext().jobQueue().addJobToTop(new CheckLeaseRequestStatus(destHash));
         } catch (I2CPMessageException ime) {
             getContext().statManager().addRateData("client.requestLeaseSetDropped", 1);
             _log.error("Error sending I2CP message requesting the LeaseSet", ime);
@@ -153,17 +171,21 @@ class RequestLeaseSetJob extends JobImpl {
      */
     private class CheckLeaseRequestStatus extends JobImpl {
         private final long _start;
+        private final String _destHash;
 
-        public CheckLeaseRequestStatus() {
+        public CheckLeaseRequestStatus(String destHash) {
             super(RequestLeaseSetJob.this.getContext());
             _start = System.currentTimeMillis();
+            _destHash = destHash;
             // Add stagger delay to spread out CheckLeaseRequestStatus jobs and prevent job queue spikes
-            // This helps prevent lag when multiple lease requests timeout simultaneously
             int staggerDelay = RequestLeaseSetJob.this.getContext().random().nextInt(2000); // 0-2 seconds
             getTiming().setStartAfter(_requestState.getExpiration() + staggerDelay);
         }
 
         public void runJob() {
+            // Clear pending request marker
+            _pendingRequests.remove(_destHash);
+
             if (_runner.isDead()) {
                 if (_log.shouldDebug()) {
                     _log.debug("Runner is already dead -> Not trying to expire the LeaseSet lookup...");
