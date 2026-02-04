@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.data.ByteArray;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
@@ -39,6 +40,10 @@ import net.i2p.util.SimpleTimer2;
  * @since 0.9.54
  */
 public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback, SSU2Bitfield.Callback, SSU2Sender {
+    private static final long WARN_THROTTLE_MS = 5_000;
+    private static final AtomicLong _lastBadConnIDWarn = new AtomicLong(0);
+    private static final AtomicLong _lastBadPacketWarn = new AtomicLong(0);
+
     private final long _sendConnID;
     private final long _rcvConnID;
     private final AtomicInteger _packetNumber = new AtomicInteger();
@@ -445,9 +450,10 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                 return;
             }
             if (header.getDestConnID() != _rcvConnID) {
-                if (shouldLog) {
-                    _log.warn("[SSU] BAD Destination ConnectionID" + fromPeer + "\n* " + header + " -> Size: " + len + " bytes " +
-                              (shouldLogDebug ? this : ""));
+                // Throttle warnings to reduce log spam during attacks
+                long now = _context.clock().now();
+                if (shouldLog && _lastBadConnIDWarn.getAndSet(now) < now - WARN_THROTTLE_MS) {
+                    _log.warn("[SSU] BAD Destination ConnectionID" + fromPeer + " (throttled) -> " + header + " Size: " + len + " bytes");
                 }
                 if (!_isInbound && _ackedMessages.getOffset() == 0 && !_ackedMessages.get(0)) {
                     // This was probably a retransmitted session created, sent with k_header_1 = bob's intro key,
@@ -459,9 +465,10 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                 return;
             }
             if (header.getType() != DATA_FLAG_BYTE) {
-                if (shouldLog) {
-                    _log.warn("[SSU] BAD " + len + " byte data packet" + fromPeer + " [Type " + (header.getType() & 0xff) + "] received " +
-                              (shouldLogDebug ? this : ""));
+                long now = _context.clock().now();
+                if (shouldLog && _lastBadPacketWarn.getAndSet(now) < now - WARN_THROTTLE_MS) {
+                    _log.warn("[SSU] BAD " + len + " byte data packet" + fromPeer + " [Type " + (header.getType() & 0xff) + 
+                             "] received (throttled)");
                 }
                 // TODO if it's early:
                 // If inbound, could be a retransmitted Session Confirmed, ack it again.
