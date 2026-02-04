@@ -227,7 +227,7 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
                 if (badCount >= BAD_PACKET_THRESHOLD) {
                     InetAddress addr = InetAddress.getByAddress(_remoteHostId.getIP());
                     String ip = addr.getHostAddress();
-                    _log.warn("Auto-banning " + ip + " for sending packets to destroyed connection (" + badCount + " bad packets) - 8 hour ban");
+                    _log.warn("Banning " + ip + " for 8 hours -> Sending packets to destroyed connection (" + badCount + " bad packets)");
                     _context.blocklist().addTemporary(
                         _remoteHostId.getIP(),
                         BAN_DURATION_MS,

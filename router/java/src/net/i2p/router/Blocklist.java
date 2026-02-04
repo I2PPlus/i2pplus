@@ -894,7 +894,7 @@ public class Blocklist {
      *
      *  @param ip IPv4 address
      *  @return true if blocked
-     *  @since 2.10.0
+     *  @since 0.9.68+
      */
     public boolean isTemporaryBlocklisted(byte ip[]) {
         if (ip.length != 4) {return false;}

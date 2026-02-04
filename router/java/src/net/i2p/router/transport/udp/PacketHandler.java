@@ -492,7 +492,7 @@ class PacketHandler {
             }
         } else {
             if (_log.shouldDebug()) {
-                _log.warn("Cannot ban packet source, missing IP address or ban reason");
+                _log.warn("Cannot ban packet source -> Missing IP address or ban reason");
             }
         }
     }
@@ -523,8 +523,27 @@ class PacketHandler {
                 return false;
             }
             _context.blocklist().addTemporary(ipBytes, BAN_DURATION_MS, "Repeated bad packets: " + reason);
+
+            // Also try to ban by router hash if we recognize this IP
+            // This allows the ban to show on profiles?f=4
+            java.util.List<PeerState> peers = _transport.getPeerStatesByIP(from);
+            for (PeerState ps : peers) {
+                if (ps.getRemotePort() == from.getPort()) {
+                    _context.banlist().banlistRouter(
+                        ps.getRemotePeer(),
+                        " <b>➜</b> Repeated bad packets: " + reason,
+                        null,
+                        "SSU",
+                        _context.clock().now() + BAN_DURATION_MS);
+                    if (_log.shouldWarn()) {
+                        _log.warn("Banning [" + ps.getRemotePeer().toBase64().substring(0,8) + "] -> " + reason);
+                    }
+                    break;
+                }
+            }
+
             if (_log.shouldWarn()) {
-                _log.warn("Auto-banning " + ipStr + " after " + badCount + " bad packets -> " + reason);
+                _log.warn("Banning " + ipStr + " for 8 hours -> " + reason);
             }
             _badPackets.clear(from);
             return true;

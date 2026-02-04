@@ -537,9 +537,8 @@ class EventPumper implements Runnable {
                     if (shouldInfo) {
                         _log.info("Blocking NTCP connection attempt from: " + ba + " (Count: " + count + ")");
                     }
-                    if (count >= 20 && shouldWarn) {
-                        _log.warn("Auto-banning IP Address " + ba +
-                                  " for excessive inbound NTCP connection attempts (" + count + " attempts) - 8 hour ban");
+                    if (count >= 10 && shouldWarn) {
+                        _log.warn("Banning " + ba + " for 8 hours -> Excessive inbound NTCP connection attempts (" + count + ")");
                         byte[] ipBytes = Addresses.getIP(ba);
                         if (ipBytes != null) {
                             _context.blocklist().addTemporary(ipBytes, 8*60*60*1000, "Excessive NTCP connection attempts");
