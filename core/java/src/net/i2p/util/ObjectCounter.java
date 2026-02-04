@@ -30,9 +30,21 @@ public class ObjectCounter<K> implements Serializable {
     private static final long serialVersionUID = 3160378641721937421L;
 
     private final ConcurrentHashMap<K, AtomicInteger> map;
+    private final int maxSize;
+    private volatile boolean full;
 
     public ObjectCounter() {
+        this(1024);
+    }
+
+    /**
+     * @param maxSize Maximum number of entries before oldest are evicted
+     * @since 0.9.68+
+     */
+    public ObjectCounter(int maxSize) {
         this.map = new ConcurrentHashMap<K, AtomicInteger>();
+        this.maxSize = maxSize;
+        this.full = false;
     }
 
     /**
@@ -40,9 +52,18 @@ public class ObjectCounter<K> implements Serializable {
      *  @return count after increment
      */
     public int increment(K h) {
-        AtomicInteger i = this.map.putIfAbsent(h, new AtomicInteger(1));
-        if (i != null)
-            return i.incrementAndGet();
+        AtomicInteger i = map.putIfAbsent(h, new AtomicInteger(1));
+        if (i != null) {
+            int rv = i.incrementAndGet();
+            // Evict oldest entries if we're over max size (simple strategy: clear all)
+            int size = map.size();
+            if (size > maxSize && !full) {
+                full = true;
+                clear();
+                full = false;
+            }
+            return rv;
+        }
         return 1;
     }
 
