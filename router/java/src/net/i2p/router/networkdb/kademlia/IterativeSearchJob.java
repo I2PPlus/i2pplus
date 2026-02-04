@@ -161,8 +161,12 @@ public class IterativeSearchJob extends FloodSearchJob {
         _sentTime = new ConcurrentHashMap<Hash, Long>(_totalSearchLimit);
         _fromLocalDest = fromLocalDest;
         _timeoutMs = Math.min(timeoutMs, MAX_SEARCH_TIME);
-        _maxConcurrent = (ctx.router().getUptime() > 30*60*1000 || known > 1000) ? ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT) :
-                          ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT + 1);
+        double buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
+        int baseConcurrent = (ctx.router().getUptime() > 30*60*1000 || known > 1000) ? MAX_CONCURRENT : MAX_CONCURRENT + 1;
+        if (buildSuccess > 0 && buildSuccess < 0.40) {
+            baseConcurrent *= 2;
+        }
+        _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", baseConcurrent);
         if (fromLocalDest != null && !isLease && _log.shouldWarn()) {
             _log.warn("IterativeSearch for RouterInfo [" + key.toBase64().substring(0,6) + "] down client tunnel " + fromLocalDest, new Exception());
         }
