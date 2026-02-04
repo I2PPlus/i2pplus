@@ -54,7 +54,7 @@ public class ConfigUpdateHandler extends FormHandler {
     public static final String PROP_PROXY_PORT = "router.updateProxyPort";
     public static final int DEFAULT_PROXY_PORT_INT = 4444;
     public static final String DEFAULT_PROXY_PORT = Integer.toString(DEFAULT_PROXY_PORT_INT);
-    /** default false */
+    /** default true */
     public static final boolean DEFAULT_UPDATE_UNSIGNED = true;
     public static final String PROP_UPDATE_UNSIGNED = "router.updateUnsigned";
     /** default false - use for distros */

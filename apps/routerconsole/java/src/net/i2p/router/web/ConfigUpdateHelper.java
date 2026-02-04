@@ -84,7 +84,7 @@ public class ConfigUpdateHelper extends HelperBase {
 
     public String getUpdateUnsigned() {
         return "<input type=checkbox class=\"optbox slider\" value=true name=\"updateUnsigned\" id=updateUnsigned " +
-               getChecked(ConfigUpdateHandler.PROP_UPDATE_UNSIGNED) + '>';
+               getCheckedDefaultTrue(ConfigUpdateHandler.PROP_UPDATE_UNSIGNED) + '>';
     }
 
     /** @since 0.9.20 */

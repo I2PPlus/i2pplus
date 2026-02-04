@@ -73,6 +73,17 @@ public abstract class HelperBase {
     }
 
     /**
+     *  Get the checked attribute for a boolean property that defaults to true.
+     *  @param prop the property name
+     *  @return non-null, either "" or " checked "
+     *  @since 0.9.24 consolidated from various helpers
+     */
+    protected String getCheckedDefaultTrue(String prop) {
+        if (_context.getBooleanPropertyDefaultTrue(prop)) {return CHECKED;}
+        return "";
+    }
+
+    /**
      *  Translate a string.
      *  @param s the string to translate
      *  @return the translated string
