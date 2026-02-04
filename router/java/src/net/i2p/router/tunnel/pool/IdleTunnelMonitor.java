@@ -57,8 +57,8 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
 
     // Configuration
     private static final boolean isSlow = SystemVersion.isSlow();
-    private static final long DEFAULT_DETECTION_PERIOD = 30 * 1000; // 30 seconds (under attack: <40% success)
-    private static final long HIGH_SUCCESS_DETECTION_PERIOD = 45 * 1000; // 45 seconds (normal: >=40% success)
+    private static final long DEFAULT_DETECTION_PERIOD = 90 * 1000; // 90 seconds (under attack: <40% success - more conservative)
+    private static final long HIGH_SUCCESS_DETECTION_PERIOD = 60 * 1000; // 60 seconds (normal: >=40% success)
     private static final int DEFAULT_MIN_MESSAGES = 2; // At least 2 messages
     private static final long DEFAULT_MIN_BYTES = 2 * 1024; // At least 2KB of data
     private static final long DEFAULT_SCAN_INTERVAL = 30 * 1000; // 30 seconds
@@ -76,6 +76,7 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
     private static final String PROP_SCAN_INTERVAL = "router.idleTunnelScanInterval";
     private static final String PROP_SYBIL_MIN_IDENTITIES = "router.sybilMinIdentities";
     private static final String PROP_SYBIL_MIN_IDLE_TUNNELS = "router.sybilMinIdleTunnels";
+    private static final String PROP_ENABLE_BANS = "router.idleTunnelEnableBans"; // Default false to avoid amplifying attacks
 
     // Offense tracking per peer
     private final Map<Hash, OffenseRecord> _offenseHistory = new ConcurrentHashMap<>();
@@ -83,6 +84,9 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
     // IP tracking for Sybil detection
     private final Map<String, Set<Hash>> _ipToPeers = new ConcurrentHashMap<>();
     private final Map<Hash, String> _peerToIP = new ConcurrentHashMap<>();
+
+    // Control whether bans are enabled - off by default to avoid amplifying attacks
+    private final boolean _enableBans;
 
     private volatile long _lastScanTime = 0;
 
@@ -112,12 +116,13 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
         this._context = ctx;
         this._dispatcher = ctx.tunnelDispatcher();
         this._log = ctx.logManager().getLog(IdleTunnelMonitor.class);
+        this._enableBans = ctx.getBooleanProperty(PROP_ENABLE_BANS); // Default false to avoid amplifying attacks
 
         long interval = ctx.getProperty(PROP_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL);
         ctx.simpleTimer2().addPeriodicEvent(this, interval);
 
         if (_log.shouldInfo()) {
-            _log.info("IdleTunnelMonitor started with interval: " + interval + "ms");
+            _log.info("IdleTunnelMonitor started with interval: " + interval + "ms, bans enabled: " + _enableBans);
         }
     }
 
@@ -441,9 +446,12 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
     }
 
     /**
-     * Ban a peer - ghost nodes are banned regardless of general network activity
+     * Ban a peer - only if bans are enabled (off by default to avoid amplifying attacks)
      */
     private void banPeer(Hash peer, String reason, long duration) {
+        if (!_enableBans) {
+            return; // Bans disabled by default to avoid amplifying attacks
+        }
         if (_context.banlist().isBanlisted(peer)) {
             return; // Already banned
         }
