@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.data.Base64;
 import net.i2p.data.ByteArray;
 import net.i2p.data.DataFormatException;
@@ -63,6 +64,8 @@ import net.i2p.util.VersionComparator;
  * @since 0.9.35 pulled out of EstablishState
  */
 class InboundEstablishState extends EstablishBase implements NTCP2Payload.PayloadCallback {
+    private static final long WARN_THROTTLE_MS = 5_000;
+    private static final AtomicLong _lastHandshakeWarn = new AtomicLong(0);
 
     /** Current encrypted block we are reading (IB only) or an IV buf used at the end for OB */
     private byte _curEncrypted[];
@@ -406,13 +409,16 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 if (_padlen1 > 0) {
                     // Delayed fail for probing resistance - need more bytes before failure
                     if (verifyInbound(h)) {
-                        if (_log.shouldDebug()) {
-                            _log.warn("[NTCP] BAD Establishment handshake message #1 \n* X = " + Base64.encode(_X, 0, KEY_SIZE) + " with " + src.remaining() +
-                                      " more bytes, waiting for " + _padlen1 + " more bytes", gse);
-                        } else if (_log.shouldWarn()) {
-                            _log.warn("[NTCP] BAD Establishment handshake message #1 \n* X = " + Base64.encode(_X, 0, KEY_SIZE) + " with " + src.remaining() +
-                                      " more bytes, waiting for " + _padlen1 + " more bytes" +
-                                      (gseNotNull ? "\n* General Security Exception: " + gse.getMessage() : ""));
+                        long now = _context.clock().now();
+                        if (_lastHandshakeWarn.getAndSet(now) < now - WARN_THROTTLE_MS) {
+                            if (_log.shouldDebug()) {
+                                _log.warn("[NTCP] BAD Establishment handshake message #1 (throttled) \n* X = " + Base64.encode(_X, 0, KEY_SIZE) + " with " + src.remaining() +
+                                          " more bytes, waiting for " + _padlen1 + " more bytes", gse);
+                            } else if (_log.shouldWarn()) {
+                                _log.warn("[NTCP] BAD Establishment handshake message #1 (throttled) \n* X = " + Base64.encode(_X, 0, KEY_SIZE) + " with " + src.remaining() +
+                                          " more bytes, waiting for " + _padlen1 + " more bytes" +
+                                          (gseNotNull ? "\n* General Security Exception: " + gse.getMessage() : ""));
+                            }
                         }
                     }
                     changeState(State.IB_NTCP2_READ_RANDOM);
