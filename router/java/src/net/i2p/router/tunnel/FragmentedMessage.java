@@ -238,7 +238,7 @@ class FragmentedMessage {
         }
         buf.append("Highest received: [").append(_highFragmentNum);
         buf.append("]; Last received: ").append(_lastReceived);
-        buf.append("; Lifetime: ").append(DataHelper.formatDuration(_context.clock().now()-_createdOn));
+        buf.append("\n* Lifetime: ").append(DataHelper.formatDuration(_context.clock().now()-_createdOn));
         if (_toRouter != null) {
             buf.append("\n* Target: [").append(_toRouter.toBase64().substring(0,6) + "]");
             if (_toTunnel != null)
