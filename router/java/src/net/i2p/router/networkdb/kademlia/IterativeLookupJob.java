@@ -6,6 +6,7 @@ import net.i2p.data.router.RouterInfo;
 import net.i2p.router.JobImpl;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
+import net.i2p.util.ObjectCounter;
 
 /**
  * Processes DatabaseSearchReplyMessage responses during iterative searches.
@@ -28,6 +29,9 @@ import net.i2p.util.Log;
 
 class IterativeLookupJob extends JobImpl {
     private static final long ONE_HOUR_MS = 60 * 60 * 1000;
+    private static final int UNSOLICITED_DSRM_THRESHOLD = 3;
+    private static final long DSRM_BAN_MS = 8*60*60*1000;
+    private static final ObjectCounter<Hash> _unsolicitedDSRM = new ObjectCounter<Hash>();
     private final Log _log;
     private final DatabaseSearchReplyMessage _dsrm;
     private final IterativeSearchJob _search;
@@ -51,6 +55,14 @@ class IterativeLookupJob extends JobImpl {
                 String msg = "Received unsolicited DbSearchReply message from [" + from.toBase64().substring(0, 6) + "]";
                 if (isBanlisted) {msg += " (Router is banlisted)";}
                 log.warn(msg);
+            }
+            // Track unsolicited DSRM and ban repeat offenders
+            int count = _unsolicitedDSRM.increment(from);
+            if (count >= UNSOLICITED_DSRM_THRESHOLD && !ctx.banlist().isBanlisted(from)) {
+                ctx.banlist().banlistRouter(from, " <b>➜</b> Unsolicited DbSearchReply", null, null, now + DSRM_BAN_MS);
+                if (log.shouldWarn()) {
+                    log.warn("Banning [" + from.toBase64().substring(0, 6) + "] after " + count + " unsolicited DbSearchReply");
+                }
             }
             return;
         }
