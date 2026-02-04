@@ -1120,7 +1120,8 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 .noresults #tunnelPeerCount .tablefooter{margin:10px auto;padding:0 6px;display:block;width:fit-content;position:absolute;bottom:0;left:0;right:0;text-align:center;border:var(--border);box-shadow:var(--border_table),0 0 0 4px #131;background:#000}
 .noresults #tunnelPeerCount .tablefooter td{display:inline-block;padding:8px 12px;vertical-align:text-bottom;font-size:120%;border:0!important}
 .noresults #tunnelPeerCount .tablefooter td:empty{display:none}
-#tunnels #exploratory{padding-left:35px;background:var(--globe) no-repeat 9px center/18px,var(--title)}
+#tunnels .client,#tunnels .server,#tunnels #exploratory{padding:8px 6px 2px 35px}
+#tunnels #exploratory{background:var(--globe) no-repeat 9px center/18px,var(--title)}
 #tunnels #exploratory a,#tunnels h3.server a,#tunnels h3.client a{margin:-8px 0 -8px 0;padding:7px 4px 14px 10px}
 #tunnels h3 a{float:right}
 #tunnels h3 a[href^="/configtunnels#"]:active::after,#tunnels h3 a[href$="/i2ptunnelmgr"]:active::after,#logs a.configure:active::after,#applinks a:active::after,#sitelinks a:active::after{opacity:.7;transform:rotate(90deg);transition:linear transform .2s}
