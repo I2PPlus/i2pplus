@@ -483,8 +483,9 @@ public class IterativeSearchJob extends FloodSearchJob {
             }
             if (peer != null && _facade.lookupLocallyWithoutValidation(peer) == null) {
                 failed(peer, false);
-                if (_log.shouldWarn()) {
-                    _log.warn("Not sending zero-hop lookup of [" + peer.toBase64().substring(0,6) + "] to UNKNOWN");
+                // Log at debug level - this is expected when peers are banned/removed from NetDB
+                if (_log.shouldDebug()) {
+                    _log.debug("Not sending zero-hop lookup of [" + peer.toBase64().substring(0,6) + "] to UNKNOWN");
                 }
                 return;
             }
