@@ -1,5 +1,6 @@
 package net.i2p.router.crypto.ratchet;
 
+import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.crypto.EncAlgo;
 import net.i2p.crypto.EncType;
 import net.i2p.data.DataFormatException;
@@ -14,6 +15,9 @@ import net.i2p.util.Log;
  * @since 0.9.67
  */
 final class MuxedPQEngine {
+    private static final long WARN_THROTTLE_MS = 5_000;
+    private static final AtomicLong _lastPQWarn = new AtomicLong(0);
+
     private final RouterContext _context;
     private final Log _log;
 
@@ -144,7 +148,10 @@ final class MuxedPQEngine {
                 msg += " -> Cryptographic failure";
             }
             if (warn) {
-                _log.warn(msg + " after all tag attempts failed");
+                long now = _context.clock().now();
+                if (_lastPQWarn.getAndSet(now) < now - WARN_THROTTLE_MS) {
+                    _log.warn(msg + " after all tag attempts failed (throttled)");
+                }
             } else if (debug) {
                 _log.debug(msg);
             }
