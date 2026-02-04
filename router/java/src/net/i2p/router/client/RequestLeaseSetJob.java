@@ -192,21 +192,22 @@ class RequestLeaseSetJob extends JobImpl {
                 }
                 return;
             }
-            if (_requestState.getIsSuccessful()) {
-                // we didn't fail
-                CheckLeaseRequestStatus.this.getContext().statManager().addRateData("client.requestLeaseSetSuccess", 1);
-                return;
-            } else {
-                CheckLeaseRequestStatus.this.getContext().statManager().addRateData("client.requestLeaseSetTimeout", 1);
-                if (_log.shouldWarn()) {
-                    long waited = System.currentTimeMillis() - _start;
-                    _log.warn("Timed out requesting LeaseSet in the time allotted (" + waited + "ms) -> " + _requestState);
+                if (_requestState.getIsSuccessful()) {
+                    // we didn't fail
+                    CheckLeaseRequestStatus.this.getContext().statManager().addRateData("client.requestLeaseSetSuccess", 1);
+                    return;
+                } else {
+                    CheckLeaseRequestStatus.this.getContext().statManager().addRateData("client.requestLeaseSetTimeout", 1);
+                    // Log at info level - timeouts are expected during resource exhaustion attacks
+                    if (_log.shouldInfo()) {
+                        long waited = System.currentTimeMillis() - _start;
+                        _log.info("Timed out requesting LeaseSet in the time allotted (" + waited + "ms) -> " + _requestState);
+                    }
+                    if (_requestState.getOnFailed() != null) {
+                        RequestLeaseSetJob.this.getContext().jobQueue().addJob(_requestState.getOnFailed());
+                    }
+                    _runner.failLeaseRequest(_requestState);
                 }
-                if (_requestState.getOnFailed() != null) {
-                    RequestLeaseSetJob.this.getContext().jobQueue().addJob(_requestState.getOnFailed());
-                }
-                _runner.failLeaseRequest(_requestState);
-            }
         }
 
         public String getName() {return "Check LeaseSet Request Status";}
