@@ -117,6 +117,7 @@ class ClientConnectionRunner {
     private static final int MAX_MESSAGE_ID = 0x4000000;
 
     private static final int MAX_LEASE_FAILS = 10;
+    private static final int MAX_ATTACK_LEASE_FAILS = Integer.MAX_VALUE; // Retry indefinitely during attacks
     private static final int BUF_SIZE = 32*1024;
     private static final int MAX_SESSIONS = 4;
 
@@ -125,6 +126,7 @@ class ClientConnectionRunner {
     private static final long STARTUP_PERIOD_MS = 15*60*1000; // 15 minutes
     private static final int BASE_REREQUEST_DELAY = 3000; // 3 seconds
     private static final int STARTUP_REREQUEST_DELAY = 1000; // 1 second
+    private static final int MAX_REREQUEST_DELAY = 10000; // 10 seconds max during attacks
 
     /** @since 0.9.2 */
     private static final String PROP_TAGS = "crypto.tagsToSend";
@@ -500,16 +502,16 @@ class ClientConnectionRunner {
     }
 
     /**
-     *  Allow more lease request fails during network attacks or startup
+     *  Allow indefinite lease request retries during network attacks or startup
      *  @return the max allowed consecutive lease request fails
      */
     private int getMaxLeaseFails() {
         int maxFails = MAX_LEASE_FAILS;
-        // During network attacks with low build success (<40%), or during startup, allow more fails
+        // During network attacks with low build success (<40%), or during startup, allow indefinite retries
         double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
         long uptime = _context.router().getUptime();
         if ((buildSuccess > 0 && buildSuccess < BUILD_SUCCESS_THRESHOLD) || uptime < STARTUP_PERIOD_MS) {
-            maxFails *= 20; // Allow 20x more fails (200 instead of 10)
+            return MAX_ATTACK_LEASE_FAILS; // Retry indefinitely during attacks
         }
         return maxFails;
     }
@@ -523,8 +525,9 @@ class ClientConnectionRunner {
         double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
         long uptime = _context.router().getUptime();
         if ((buildSuccess > 0 && buildSuccess < BUILD_SUCCESS_THRESHOLD) || uptime < STARTUP_PERIOD_MS) {
-            // Double the delay during stress
-            return baseDelayMs * 2;
+            // Scale up to 10s during attacks (instead of just doubling)
+            long delay = baseDelayMs * 2;
+            return Math.min(delay, MAX_REREQUEST_DELAY);
         }
         return baseDelayMs;
     }
