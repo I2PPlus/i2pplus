@@ -7,12 +7,12 @@ import java.util.Map;
 import net.i2p.crypto.SigType;
 
 /**
- * Implementation of MetaLeaseSet as specified in 
+ * Implementation of MetaLeaseSet as specified in
  * <a href="https://geti2p.net/spec/proposals/123-new-netdb-entries">Proposal 123: New NetDb Entries</a>.
- * 
+ *
  * <p>MetaLeaseSet is a specialized LeaseSet2 that contains references to other LeaseSets
  * rather than direct tunnel endpoints. This enables advanced routing and load balancing strategies.</p>
- * 
+ *
  * <p>Key characteristics of MetaLeaseSet:</p>
  * <ul>
  *   <li>Contains {@link MetaLease} objects instead of regular {@link Lease} objects</li>
@@ -21,7 +21,7 @@ import net.i2p.crypto.SigType;
  *   <li>Supports offline signatures for reduced router load</li>
  *   <li>Includes options and statistics support</li>
  * </ul>
- * 
+ *
  * <p><strong>Usage:</strong> MetaLeaseSets are used for:</p>
  * <ul>
  *   <li>Load balancing across multiple LeaseSets</li>
@@ -29,7 +29,7 @@ import net.i2p.crypto.SigType;
  *   <li>Fallback and redundancy strategies</li>
  *   <li>Service discovery and aggregation</li>
  * </ul>
- * 
+ *
  * <p><strong>Implementation Status:</strong> PRELIMINARY - Subject to change as the proposal evolves</p>
  *
  * @since 0.9.38
@@ -159,9 +159,9 @@ public class MetaLeaseSet extends LeaseSet2 {
                 buf.append("\n* ").append(key).append(": ").append(val);
             }
         }
-        buf.append("\n* Published: ").append(!isUnpublished())
+        buf.append("\n* Published: ").append(!isUnpublished() ? "yes" : "no")
+           .append("\n* Published date: ").append(new java.util.Date(_published))
            .append("\n* Signature: ").append(_signature)
-           .append("\n* Published: ").append(new java.util.Date(_published))
            .append("\n* Expires: ").append(new java.util.Date(_expires))
            .append("\n* Leases: ").append(getLeaseCount());
         for (int i = 0; i < getLeaseCount(); i++) {buf.append(getLease(i));}

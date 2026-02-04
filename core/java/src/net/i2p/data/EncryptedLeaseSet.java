@@ -989,7 +989,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     public String toString() {
         StringBuilder buf = new StringBuilder(128);
         boolean decrypted = _decryptedLS2 != null || _destination != null;
-        buf.append("Encrypted LeaseSet: ");
+        buf.append("\nEncrypted LeaseSet: ");
         if (_signingKey != null) {
             Hash h = getHash();
             buf.append("\n* Blinded Key: ").append(_signingKey)
@@ -1003,10 +1003,10 @@ public class EncryptedLeaseSet extends LeaseSet2 {
                    .append("\n* Transient Expires: ").append(new java.util.Date(_transientExpires))
                    .append("\n* Offline Signature: ").append(_offlineSignature);
             }
-            buf.append("\n* Published: ").append(!isUnpublished())
+            buf.append("\n* Published: ").append(!isUnpublished() ? "yes" : "no")
+               .append("\n* Published date: ").append(new java.util.Date(_published))
                .append("\n* Length: ").append(_encryptedData.length)
                .append("\n* Signature: ").append(_signature)
-               .append("\n* Published: ").append(new java.util.Date(_published))
                .append("\n* Expires: ").append(new java.util.Date(_expires))
                .append("\n* Auth Type: ").append(_authType)
                .append("\n* Client Keys: ").append(_numKeys);

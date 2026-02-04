@@ -632,7 +632,7 @@ public class LeaseSet2 extends LeaseSet {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(128);
-        buf.append(" LeaseSet2");
+        buf.append("\nLeaseSet2");
         if (_destination != null) {
             buf.append("\n* Destination: ").append(_destination.toBase32());
         }
@@ -648,9 +648,9 @@ public class LeaseSet2 extends LeaseSet {
             buf.append("\n* Offline Signature: ").append(_offlineSignature);
         }
         buf.append("\n* Published: ").append(!isUnpublished());
+        buf.append("\n* Published date: ").append(new java.util.Date(_published));
         if (isBlindedWhenPublished()) {buf.append("\n* Blinded: ").append(isBlindedWhenPublished());}
         buf.append("\n* Signature: ").append(_signature);
-        buf.append("\n* Published: ").append(new java.util.Date(_published));
         buf.append("\n* Expires: ").append(new java.util.Date(_expires));
         buf.append("\n* Leases: ").append(getLeaseCount());
         for (int i = 0; i < getLeaseCount(); i++) {buf.append(getLease(i));}

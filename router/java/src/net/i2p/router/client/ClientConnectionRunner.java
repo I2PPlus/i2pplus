@@ -731,6 +731,7 @@ class ClientConnectionRunner {
         if (sp == null) {return;}
         LeaseRequestState state;
         synchronized (this) {
+            LeaseSet oldLeaseSet = sp.currentLeaseSet;
             if (ls.getType() == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {
                 EncryptedLeaseSet encls = (EncryptedLeaseSet) ls;
                 sp.currentEncryptedLeaseSet = encls;
@@ -739,10 +740,15 @@ class ClientConnectionRunner {
             sp.currentLeaseSet = ls;
             state = sp.leaseRequest;
             if (state == null) {
-                // We got the LS after the timeout?
-                // ClientMessageEventListener told the router to publish.
-                if (_log.shouldWarn())
-                    _log.warn("LeaseRequest is null and we've received a new Lease? " + ls);
+                if (oldLeaseSet == null || ls.getEarliestLeaseDate() > oldLeaseSet.getEarliestLeaseDate()) {
+                    if (_log.shouldWarn())
+                        _log.warn((oldLeaseSet == null ? "New" : "Newer") + "LeaseSet received after request timeout" +
+                                  (oldLeaseSet != null ? "-> Updating to newer LeaseSet..." : "") + ls);
+                } else {
+                    sp.currentLeaseSet = oldLeaseSet;
+                    if (_log.shouldInfo())
+                        _log.info("Stale LeaseSet received after request timeout -> Local copy is newer, ignoring..." + ls);
+                }
                 return;
             } else {
                 state.setIsSuccessful(true);
