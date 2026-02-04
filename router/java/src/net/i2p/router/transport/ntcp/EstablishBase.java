@@ -3,9 +3,12 @@ package net.i2p.router.transport.ntcp;
 import java.nio.ByteBuffer;
 import java.util.EnumSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
+import net.i2p.util.ObjectCounter;
 import net.i2p.util.SimpleByteCache;
 
 /**
@@ -17,6 +20,10 @@ import net.i2p.util.SimpleByteCache;
  * @since 0.9.35 pulled out of EstablishState
  */
 abstract class EstablishBase implements EstablishState {
+
+    private static final int NTCP_FAIL_THRESHOLD = 3;
+    private static final long NTCP_BAN_MS = 8*60*60*1000; // 8 hours
+    private static final ObjectCounter<byte[]> _ntcpFailures = new ObjectCounter<byte[]>();
 
     public static final VerifiedEstablishState VERIFIED = new VerifiedEstablishState();
     public static final FailedEstablishState FAILED = new FailedEstablishState();
@@ -212,6 +219,21 @@ abstract class EstablishBase implements EstablishState {
         if (_log.shouldWarn()) {_log.warn(prefix() + reason);}
         if (!bySkew)
             _context.statManager().addRateData("ntcp.receiveCorruptEstablishment", 1);
+
+        // Track NTCP establishment failures and auto-ban repeat offenders
+        byte[] ip = _con.getRemoteIP();
+        if (ip != null && !bySkew) {
+            int failCount = _ntcpFailures.increment(ip);
+            if (failCount >= NTCP_FAIL_THRESHOLD) {
+                // Auto-ban after N failures
+                _context.blocklist().addTemporary(ip, NTCP_BAN_MS, "Repeated NTCP establishment failures: " + reason);
+                if (_log.shouldWarn()) {
+                    _log.warn("Auto-banning " + net.i2p.util.Addresses.toString(ip) + " after " + failCount + " NTCP establishment failures");
+                }
+                _ntcpFailures.clear(ip);
+            }
+        }
+
         releaseBufs(false);
         // con.close()?
     }
