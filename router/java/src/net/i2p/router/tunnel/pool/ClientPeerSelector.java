@@ -77,8 +77,8 @@ class ClientPeerSelector extends TunnelPeerSelector {
                 }
                 if (matches.isEmpty()) {
                     // No connected peers found, fall back to all fast peers
-                    if (log.shouldWarn()) {
-                        log.warn("No eligible non-failing peers available for Inbound connection -> Falling back to fast pool...");
+                    if (log.shouldInfo()) {
+                        log.info("No eligible non-failing peers available for Inbound connection -> Falling back to fast pool...");
                     }
                     ctx.profileOrganizer().selectFastPeers(length, exclude, matches);
                     if (matches.isEmpty()) {
