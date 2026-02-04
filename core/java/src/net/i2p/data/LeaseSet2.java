@@ -60,6 +60,7 @@ public class LeaseSet2 extends LeaseSet {
      */
     private static final int FLAG_BLINDED = 0x04;
     private static final int MAX_KEYS = 8;
+    private static final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(LeaseSet2.class);
 
     public LeaseSet2() {
         super();
@@ -632,35 +633,39 @@ public class LeaseSet2 extends LeaseSet {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(128);
-        buf.append("\nLeaseSet2");
-        if (_destination != null) {
-            buf.append("\n* Destination: ").append(_destination.toBase32());
-        }
-        List<PublicKey> keys = getEncryptionKeys();
-        int sz = keys.size();
-        if (sz > 1) {buf.append("\n* Encryption Keys: ").append(sz);}
-        for (int i = 0; i < sz; i++) {
-            buf.append("\n* ").append((sz > 1 ? "Key #" + (i+1) : "Encryption Key")).append(": ").append(keys.get(i));
-        }
-        if (isOffline()) {
-            buf.append("\n* Transient Key: ").append(_transientSigningPublicKey);
-            buf.append("\n* Transient Expiry: ").append(new java.util.Date(_transientExpires));
-            buf.append("\n* Offline Signature: ").append(_offlineSignature);
-        }
-        buf.append("\n* Published: ").append(!isUnpublished());
-        buf.append("\n* Published date: ").append(new java.util.Date(_published));
-        if (isBlindedWhenPublished()) {buf.append("\n* Blinded: ").append(isBlindedWhenPublished());}
-        buf.append("\n* Signature: ").append(_signature);
-        buf.append("\n* Expires: ").append(new java.util.Date(_expires));
-        buf.append("\n* Leases: ").append(getLeaseCount());
-        for (int i = 0; i < getLeaseCount(); i++) {buf.append(getLease(i));}
-        if (_options != null && _options.size() > 0) {
-            buf.append("\nOptions: ").append(_options.size());
-            for (Map.Entry<Object, Object> e : _options.entrySet()) {
-                String key = (String) e.getKey();
-                String val = (String) e.getValue();
-                buf.append("\n* ").append(key).append(": ").append(val);
+        if (_log.shouldInfo()) {
+            buf.append("\nLeaseSet2: ");
+            if (_destination != null) {
+                buf.append("\n* Destination: ").append(_destination.toBase32());
             }
+            List<PublicKey> keys = getEncryptionKeys();
+            int sz = keys.size();
+            if (sz > 1) {buf.append("\n* Encryption Keys: ").append(sz);}
+            for (int i = 0; i < sz; i++) {
+                buf.append("\n* ").append((sz > 1 ? "Key #" + (i+1) : "Encryption Key")).append(": ").append(keys.get(i));
+            }
+            if (isOffline()) {
+                buf.append("\n* Transient Key: ").append(_transientSigningPublicKey);
+                buf.append("\n* Transient Expiry: ").append(new java.util.Date(_transientExpires));
+                buf.append("\n* Offline Signature: ").append(_offlineSignature);
+            }
+            buf.append("\n* Published: ").append(!isUnpublished());
+            buf.append("\n* Published date: ").append(new java.util.Date(_published));
+            if (isBlindedWhenPublished()) {buf.append("\n* Blinded: ").append(isBlindedWhenPublished());}
+            buf.append("\n* Signature: ").append(_signature);
+            buf.append("\n* Expires: ").append(new java.util.Date(_expires));
+            buf.append("\n* Leases: ").append(getLeaseCount());
+            for (int i = 0; i < getLeaseCount(); i++) {buf.append(getLease(i));}
+            if (_options != null && _options.size() > 0) {
+                buf.append("\nOptions: ").append(_options.size());
+                for (Map.Entry<Object, Object> e : _options.entrySet()) {
+                    String key = (String) e.getKey();
+                    String val = (String) e.getValue();
+                    buf.append("\n* ").append(key).append(": ").append(val);
+                }
+            }
+        } else if (_log.shouldWarn() && _destination != null) {
+            buf.append("\n* LeaseSet2: " + _destination.toBase32());
         }
         return buf.toString();
     }
