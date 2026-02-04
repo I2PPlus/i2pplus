@@ -5,6 +5,9 @@ import static net.i2p.router.peermanager.ProfileOrganizer.Slice.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.data.Hash;
 import net.i2p.data.SessionKey;
 import net.i2p.router.RouterContext;
@@ -20,6 +23,9 @@ import net.i2p.util.ArraySet;
  *
  */
 class ClientPeerSelector extends TunnelPeerSelector {
+
+    private static final long WARNING_THROTTLE_MS = 60_000;
+    private static final AtomicLong _lastFallbackWarn = new AtomicLong(0);
 
     public ClientPeerSelector(RouterContext context) {
         super(context);
@@ -77,8 +83,11 @@ class ClientPeerSelector extends TunnelPeerSelector {
                 }
                 if (matches.isEmpty()) {
                     // No connected peers found, fall back to all fast peers
-                    if (log.shouldInfo()) {
-                        log.info("No eligible non-failing peers available for Inbound connection -> Falling back to fast pool...");
+                    // Throttle warnings to reduce log spam during attacks
+                    long now = ctx.clock().now();
+                    if (log.shouldWarn() && _lastFallbackWarn.getAndSet(now) < now - WARNING_THROTTLE_MS) {
+                        log.warn("No eligible non-failing peers available for " + (isInbound ? "Inbound" : "Outbound") + 
+                                 " connection -> Falling back to fast pool (throttled)");
                     }
                     ctx.profileOrganizer().selectFastPeers(length, exclude, matches);
                     if (matches.isEmpty()) {
