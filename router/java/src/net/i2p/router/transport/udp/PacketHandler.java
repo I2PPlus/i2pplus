@@ -3,10 +3,13 @@ package net.i2p.router.transport.udp;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.router.RouterContext;
 import net.i2p.router.util.CoDelBlockingQueue;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
+import net.i2p.util.ObjectCounter;
 import net.i2p.util.SystemVersion;
 
 /**
@@ -21,6 +24,10 @@ import net.i2p.util.SystemVersion;
  *
  */
 class PacketHandler {
+    private static final int BAD_PACKET_THRESHOLD = 3;
+    private static final long BAN_DURATION_MS = 8*60*60*1000;
+    private static final ObjectCounter<RemoteHostId> _badPackets = new ObjectCounter<RemoteHostId>();
+
     private final RouterContext _context;
     private final Log _log;
     private final UDPTransport _transport;
@@ -464,6 +471,41 @@ class PacketHandler {
                 _log.warn("Cannot ban packet source, missing IP address or ban reason");
             }
         }
+    }
+
+    /**
+     * Track bad packets from a remote host and auto-ban if threshold exceeded.
+     * This helps mitigate resource exhaustion attacks by blocking repeat offenders.
+     *
+     * @param from the remote host sending bad packets
+     * @param reason the type of bad packet for logging
+     * @return true if the host was banned
+     */
+    private boolean trackAndBanIfNeeded(RemoteHostId from, String reason) {
+        long uptime = _context.router().getUptime();
+        if (uptime < 15*60*1000) {return false;} // don't ban at startup
+
+        if (from == null) {return false;}
+
+        int badCount = _badPackets.increment(from);
+        if (badCount >= BAD_PACKET_THRESHOLD) {
+            byte[] ipBytes = from.getIP();
+            if (ipBytes == null) {return false;}
+            String ipStr = ipBytes.length == 4 ? 
+                (ipBytes[0] & 0xff) + "." + (ipBytes[1] & 0xff) + "." + (ipBytes[2] & 0xff) + "." + (ipBytes[3] & 0xff) :
+                "ipv6";
+            if (_context.blocklist().isBlocklisted(ipBytes)) {
+                _badPackets.clear(from);
+                return false;
+            }
+            _context.blocklist().addTemporary(ipBytes, BAN_DURATION_MS, "Repeated bad packets: " + reason);
+            if (_log.shouldWarn()) {
+                _log.warn("Auto-banning " + ipStr + " after " + badCount + " bad packets - " + reason);
+            }
+            _badPackets.clear(from);
+            return true;
+        }
+        return false;
     }
 
     /**
