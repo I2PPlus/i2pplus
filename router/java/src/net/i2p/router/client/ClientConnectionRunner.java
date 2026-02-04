@@ -742,7 +742,7 @@ class ClientConnectionRunner {
             if (state == null) {
                 if (oldLeaseSet == null || ls.getEarliestLeaseDate() > oldLeaseSet.getEarliestLeaseDate()) {
                     if (_log.shouldWarn())
-                        _log.warn((oldLeaseSet == null ? "New" : "Newer") + "LeaseSet received after request timeout" +
+                        _log.warn((oldLeaseSet == null ? "New" : "Newer") + " LeaseSet received after request timeout" +
                                   (oldLeaseSet != null ? "-> Updating to newer LeaseSet..." : "") + ls);
                 } else {
                     sp.currentLeaseSet = oldLeaseSet;
