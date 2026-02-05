@@ -195,8 +195,8 @@ public class BanLogger {
         _writer.println("# Ban event log");
         _writer.println("# Format: TIMESTAMP | HASH | IP:PORT | REASON | DURATION");
         _writer.println("# TIMESTAMP: ISO 8601 UTC");
-        _writer.println("# HASH: Router hash (base64) or UNKNOWN");
-        _writer.println("# IP:PORT: IP address and port or UNKNOWN");
+        _writer.println("# HASH: Router hash (base64) or empty");
+        _writer.println("# IP:PORT: IP address and port or empty");
         _writer.println("# REASON: Reason for ban");
         _writer.println("# DURATION: Duration (e.g., 8h, 24h, FOREVER)");
         _writer.println();
@@ -225,7 +225,7 @@ public class BanLogger {
      * @param durationMs Ban duration in milliseconds, or 0 for permanent
      */
     public void logBan(Hash hash, String ip, String reason, long durationMs) {
-        String hashStr = hash != null ? hash.toBase64() : "UNKNOWN";
+        String hashStr = hash != null ? hash.toBase64() : "";
         String durationStr = formatDuration(durationMs);
         writeLog(hashStr, ip, reason, durationStr);
     }
@@ -249,7 +249,7 @@ public class BanLogger {
      * @param reason Reason for the ban
      */
     public void logBanForever(Hash hash, String ip, String reason) {
-        String hashStr = hash != null ? hash.toBase64() : "UNKNOWN";
+        String hashStr = hash != null ? hash.toBase64() : "";
         writeLog(hashStr, ip, reason, "FOREVER");
     }
 
@@ -289,8 +289,8 @@ public class BanLogger {
      * Get IP address from banlist for the given hash.
      */
     private String getIPFromContext(Hash hash, RouterContext context) {
-        if (hash == null) {return "UNKNOWN";}
-        return "UNKNOWN";
+        if (hash == null) {return "";}
+        return "";
     }
 
     /**
@@ -310,10 +310,14 @@ public class BanLogger {
             // Log the predictive ban
             String prefix = _patternDetector.getHashPrefix(hash);
             String reason = "Predictive ban: Algorithmic identity pattern match (" + prefix + ")";
-            writeLog(hash.toBase64(), "UNKNOWN", reason, "24h");
+            writeLog(hash.toBase64(), "", reason, "24h");
         }
         return banned;
     }
+
+    // Column widths for aligned output
+    private static final int COL_WIDTH_HASH = 44;    // Base64 router hash length
+    private static final int COL_WIDTH_IP = 45;      // Max IPv6:PORT length
 
     /**
      * Internal method to write the log entry.
@@ -321,13 +325,18 @@ public class BanLogger {
      */
     private void writeLog(String hashStr, String ip, String reason, String durationStr) {
         // Skip if we've already logged this hash (prevents duplicate ban logging)
-        if (!"UNKNOWN".equals(hashStr) && !_loggedHashes.add(hashStr)) {
+        if (hashStr != null && !hashStr.isEmpty() && !_loggedHashes.add(hashStr)) {
             return; // Already logged this hash
         }
 
         String timestamp = _dateFormat.format(new Date());
-        String entry = String.format("%s | %s | %s | %s | %s",
-                                     timestamp, hashStr, ip, reason, durationStr);
+        // Format with fixed-width columns for alignment
+        String entry = String.format("%s | %-" + COL_WIDTH_HASH + "s | %-" + COL_WIDTH_IP + "s | %s | %s",
+                                     timestamp,
+                                     hashStr != null ? hashStr : "",
+                                     ip != null ? ip : "",
+                                     reason,
+                                     durationStr);
 
         synchronized (_writeLock) {
             if (_writer != null) {
@@ -338,7 +347,7 @@ public class BanLogger {
         }
 
         // Record pattern for predictive analysis
-        if (_patternDetector != null && !"UNKNOWN".equals(hashStr)) {
+        if (_patternDetector != null && hashStr != null && !hashStr.isEmpty()) {
             try {
                 Hash hash = new Hash();
                 hash.fromBase64(hashStr);

@@ -69,7 +69,7 @@ class IterativeLookupJob extends JobImpl {
             int count = _unsolicitedDSRM.increment(from);
             if (count >= UNSOLICITED_DSRM_THRESHOLD && !ctx.banlist().isBanlisted(from)) {
                 ctx.banlist().banlistRouter(from, " <b>➜</b> Unsolicited DbSearchReply", null, null, now + DSRM_BAN_MS);
-                _banLogger.logBan(from, "UNKNOWN", "Unsolicited DbSearchReply", DSRM_BAN_MS);
+                _banLogger.logBan(from, "", "Unsolicited DbSearchReply", DSRM_BAN_MS);
                 if (log.shouldWarn()) {
                     log.warn("Banning [" + from.toBase64().substring(0, 6) + "] after " + count + " unsolicited DbSearchReply");
                 }

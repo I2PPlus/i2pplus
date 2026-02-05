@@ -245,11 +245,11 @@ class RequestThrottler {
             if (offenses >= 3) {
                 // 3+ consecutive bursts - 8 hour ban
                 banTime = 8 * 60 * 60 * 1000;
-                reason = "Persistent burst tunnel requests (" + offenses + " offenses)";
+                reason = "Burst tunnel requests (" + offenses + " offenses)";
             } else if (offenses == 2) {
                 // 2 consecutive bursts - 2 hour ban
                 banTime = 2 * 60 * 60 * 1000;
-                reason = "Repeated burst tunnel requests (" + offenses + " offenses)";
+                reason = "Burst tunnel requests (" + offenses + " offenses)";
             } else {
                 // First burst - 1 hour ban
                 banTime = 60 * 60 * 1000;
