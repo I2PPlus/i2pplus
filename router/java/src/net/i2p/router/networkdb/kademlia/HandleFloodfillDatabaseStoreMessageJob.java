@@ -257,9 +257,10 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                         if (_log.shouldWarn()) {
                             logged = true;
                             _log.warn("Dropping unsolicited NetDbStore of " + cap + (isFF ? " Floodfill" : " Router") +
-                                      " [" + key.toBase64().substring(0,6) + "] and banning for 24h -> Invalid Router version: " + v);
-                            getContext().banlist().banlistRouter(key, " <b>➜</b> Invalid Router version: " + v, null, null, now + 24*60*60*1000);
+                                      " [" + key.toBase64().substring(0,6) + "] -> Invalid Router version: " + v);
                         }
+                        // Do NOT ban for version issues - banning floodfills cuts off NetDB access
+                        // and banning routers for version mismatches causes cascading network isolation
                     } else if (isFast && !isOld && prevNetDb == null) {
                         shouldStore = true;
                         bypassThrottle = true;
