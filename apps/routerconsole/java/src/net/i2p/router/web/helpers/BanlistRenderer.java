@@ -108,13 +108,11 @@ class BanlistRenderer {
             long expires = entry.expireOn-_context.clock().now();
             String expireString = DataHelper.formatDuration2(expires);
             if (expires <= 0 || key.equals(Hash.FAKE_HASH) || entry.cause == null ||
-                (entry.cause.toLowerCase().contains("sybil") ||
-                entry.cause.toLowerCase().contains("blocklist") ||
                 (entry.cause.toLowerCase().contains("hash") &&
-                 !entry.cause.toLowerCase().contains("HashPatternDetector")))) {
+                 !entry.cause.toLowerCase().contains("hashpatterndetector"))) {
                 continue;
-            } else {
-                buf.append("<tr class=\"lazy");
+            }
+            buf.append("<tr class=\"lazy");
                 if (entry.cause.toLowerCase().contains("floodfill")) {
                     buf.append(" banFF");
                 }
@@ -126,7 +124,6 @@ class BanlistRenderer {
                    .append(expireString)
                    .append("</td></tr>\n");
                 tempBanned++;
-            }
         }
         buf.append("</tbody>\n<tfoot id=sessionBanlistFooter><tr><th colspan=4>")
            .append(_t("Total session-only bans"))

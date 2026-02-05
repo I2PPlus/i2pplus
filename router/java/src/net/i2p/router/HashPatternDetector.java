@@ -105,7 +105,7 @@ public class HashPatternDetector implements Serializable {
 
             // Apply predictive ban
             context.banlist().banlistRouter(hash,
-                " <b>➜</b> Predictive ban: Algorithmic identity pattern match (" + prefix + ")",
+                " <b>➜</b> Predictive ban: " + prefix,
                 null, null,
                 context.clock().now() + PREDICTIVE_BAN_DURATION);
 
@@ -534,7 +534,7 @@ public class HashPatternDetector implements Serializable {
     private boolean banRouter(RouterInfo router, Hash identityHash, String routerHash) {
         try {
             long expireOn = _context.clock().now() + BAN_DURATION;
-            String reason = " <b>➜</b> Auto-banned by HashPatternDetector (netDB scan)";
+            String reason = " <b>➜</b> HashPatternDetector netDB";
 
             boolean wasBanned = _context.banlist().banlistRouter(
                 identityHash, reason, null, null, expireOn
@@ -546,7 +546,7 @@ public class HashPatternDetector implements Serializable {
                 // Extract IP from router addresses
                 String ip = getRouterIP(router);
                 // Log to sessionbans.txt via BanLogger
-                String banReason = "Auto-banned by HashPatternDetector (netDB scan)";
+                String banReason = "HashPatternDetector netDB";
                 _banLogger.logBan(identityHash, ip, banReason, BAN_DURATION);
                 return true;
             }
