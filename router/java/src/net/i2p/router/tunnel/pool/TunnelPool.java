@@ -572,17 +572,18 @@ public class TunnelPool {
         if (!duplicates.isEmpty()) {
             // Check if we have at least 1 good (non-duplicate) tunnel
             if (hasGoodTunnel(info)) {
-                // Fail the duplicate tunnel(s) - prefer to keep the newer one (info)
+                // Fail the duplicate tunnel(s) - mark as duplicate
                 if (_log.shouldWarn()) {
                     _log.warn("Failing " + duplicates.size() + " duplicate tunnel(s) - keeping newer: " + info);
                 }
                 for (TunnelInfo dup : duplicates) {
+                    if (dup instanceof PooledTunnelCreatorConfig) {
+                        ((PooledTunnelCreatorConfig) dup).setDuplicate();
+                    }
                     tunnelFailed(dup);  // Fail the older duplicate
                 }
-                // Don't add info since we're keeping it, but we already checked hasGoodTunnel
-                // So we need to add info and fail the duplicates
-                // Actually, let me reconsider - if we have good tunnels, we fail the duplicates
-                // and add this new tunnel as a replacement
+                // Don't add this tunnel since it's a duplicate
+                return;
             }
         }
 

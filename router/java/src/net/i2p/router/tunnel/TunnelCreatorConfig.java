@@ -53,6 +53,8 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
 
     // Test status tracking for UI display
     private volatile TunnelTestStatus _testStatus = TunnelTestStatus.UNTESTED;
+    /** @since 0.9.68+ - Mark tunnel as rejected as duplicate */
+    private volatile boolean _isDuplicate;
     private volatile long _lastTestStartTime;
     private volatile long _lastTestSuccessTime;
 
@@ -271,6 +273,19 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     public int getConsecutiveFailures() {
         return _failures.get();
     }
+
+    /**
+     * Mark this tunnel as a duplicate (rejected to prevent identical tunnel chains).
+     * @since 0.9.68+
+     */
+    public void setDuplicate() {_isDuplicate = true;}
+
+    /**
+     * Check if this tunnel was rejected as a duplicate.
+     * @return true if marked as duplicate
+     * @since 0.9.68+
+     */
+    public boolean isDuplicate() {return _isDuplicate;}
 
     /**
      *  Did we reuse this tunnel?
