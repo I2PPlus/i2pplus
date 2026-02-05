@@ -638,13 +638,16 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      *
      *  @return Set of peers that should not be allowed in another tunnel
      */
-    public Set<Hash> selectPeersInTooManyTunnels() {
+     public Set<Hash> selectPeersInTooManyTunnels() {
         ObjectCounterUnsafe<Hash> lc = new ObjectCounterUnsafe<Hash>();
         int tunnelCount = countTunnelsPerPeer(lc);
         Set<Hash> rv = new HashSet<Hash>();
         long uptime = _context.router().getUptime();
         int max = uptime > 30*60*1000 ? DEFAULT_MAX_PCT_TUNNELS : STARTUP_MAX_PCT_TUNNELS;
-        if (isFirewalled()) {max *=2;}
+
+        // Increase threshold under low tunnel build success @since 0.9.68+
+        double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
+        if (isFirewalled() || buildSuccess > 0 && buildSuccess < 0.40) {max *=2;}
         for (Hash h : lc.objects()) {
             if (lc.count(h) > 0 && (lc.count(h) + 1) * 100 / (tunnelCount + 1) > max) {
                 rv.add(h);
