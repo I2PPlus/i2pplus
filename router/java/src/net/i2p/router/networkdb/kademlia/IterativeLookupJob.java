@@ -7,6 +7,7 @@ import net.i2p.router.JobImpl;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 import net.i2p.util.ObjectCounter;
+import net.i2p.router.BanLogger;
 
 /**
  * Processes DatabaseSearchReplyMessage responses during iterative searches.
@@ -35,18 +36,26 @@ class IterativeLookupJob extends JobImpl {
     private final Log _log;
     private final DatabaseSearchReplyMessage _dsrm;
     private final IterativeSearchJob _search;
+    private BanLogger _banLogger;
 
     public IterativeLookupJob(RouterContext ctx, DatabaseSearchReplyMessage dsrm, IterativeSearchJob search) {
         super(ctx);
         _log = ctx.logManager().getLog(IterativeLookupJob.class);
         _dsrm = dsrm;
         _search = search;
+        _banLogger = new BanLogger(ctx);
     }
 
     @Override
     public void runJob() {
         RouterContext ctx = getContext();
         Hash from = _dsrm.getFromHash();
+        
+        // Check for algorithmic bot patterns before processing
+        if (_banLogger.checkPatternAndPredict(from, ctx)) {
+            return; // Router was predictively banned
+        }
+        
         long now = ctx.clock().now();
         Log log = _log;
         if (!_search.wasQueried(from)) {
@@ -60,6 +69,7 @@ class IterativeLookupJob extends JobImpl {
             int count = _unsolicitedDSRM.increment(from);
             if (count >= UNSOLICITED_DSRM_THRESHOLD && !ctx.banlist().isBanlisted(from)) {
                 ctx.banlist().banlistRouter(from, " <b>➜</b> Unsolicited DbSearchReply", null, null, now + DSRM_BAN_MS);
+                _banLogger.logBan(from, "UNKNOWN", "Unsolicited DbSearchReply", DSRM_BAN_MS);
                 if (log.shouldWarn()) {
                     log.warn("Banning [" + from.toBase64().substring(0, 6) + "] after " + count + " unsolicited DbSearchReply");
                 }

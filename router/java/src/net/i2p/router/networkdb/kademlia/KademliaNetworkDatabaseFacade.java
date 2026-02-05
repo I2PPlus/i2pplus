@@ -43,11 +43,13 @@ import net.i2p.data.router.RouterInfo;
 import net.i2p.kademlia.KBucketSet;
 import net.i2p.kademlia.RejectTrimmer;
 import net.i2p.router.Banlist;
+import net.i2p.router.BanLogger;
 import net.i2p.router.Job;
 import net.i2p.router.JobImpl;
 import net.i2p.router.NetworkDatabaseFacade;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
+import net.i2p.router.BanLogger;
 import net.i2p.router.crypto.FamilyKeyCrypto;
 import net.i2p.router.networkdb.reseed.ReseedChecker;
 import net.i2p.router.peermanager.PeerProfile;
@@ -66,6 +68,7 @@ import net.i2p.util.VersionComparator;
  */
 public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacade {
     protected final Log _log;
+    private static final BanLogger _banLogger = new BanLogger(null);
     private KBucketSet<Hash> _kb; // peer hashes sorted into kbuckets, but within kbuckets, unsorted
     private DataStore _ds; // hash to DataStructure mapping, persisted when necessary
     /** Where the data store is pushing the data */
@@ -232,6 +235,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         }
 
         _elj = new ExpireLeasesJob(_context, this);
+        _banLogger.initialize(context);
         if (_log.shouldLog(Log.DEBUG)) {_log.debug("Created KademliaNetworkDatabaseFacade for DbId: " + _dbid);}
 
         /* stats */
@@ -870,6 +874,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
         _context.banlist().banlistRouter(key, "➜ LU and older than " + MIN_VERSION, null, null,
                                          _context.clock().now() + 4 * 60 * 60 * 1000);
+        _banLogger.logBan(key, _context, "LU and older than " + MIN_VERSION, 4 * 60 * 60 * 1000);
         _ds.remove(key);
         _kb.remove(key);
 
@@ -1440,8 +1445,10 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 // old i2pd bug, possibly at startup, don't ban forever
                 _context.banlist().banlistRouter(key, " <b>➜</b> No Network specified", null, null,
                                                  _context.clock().now() + Banlist.BANLIST_DURATION_NO_NETWORK);
+                _banLogger.logBan(key, _context, "No Network specified", Banlist.BANLIST_DURATION_NO_NETWORK);
             } else {
                 _context.banlist().banlistRouterForever(key, " <b>➜</b> " + "Not in our Network: " + id);
+                _banLogger.logBanForever(key, _context, "Not in our Network: " + id);
             }
             if (_log.shouldWarn()) {
                 _log.warn("BAD Network detected for [" + routerInfo.getIdentity().getHash().toBase64().substring(0,6) + "]");
@@ -1563,6 +1570,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             if (i != null && i.length() != 24) {
                 Hash h = routerInfo.getIdentity().calculateHash();
                 _context.banlist().banlistRouter(h, " <b>➜</b> Invalid NTCP address", null, null, now + 24*60*60*1000L);
+                _banLogger.logBan(h, _context, "Invalid NTCP address", 24*60*60*1000L);
                 if (_log.shouldWarn()) {
                     _log.warn("Banning " + (caps.isEmpty() ? "" : caps + " ") + "Router [" + routerId + "] for 24h -> Invalid NTCP address");
                 }
@@ -1662,6 +1670,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             if (blockMyCountry) {_context.banlist().banlistRouterForever(h, " <b>➜</b> In our country (banned via config)");}
             else if (isHidden) {_context.banlist().banlistRouterForever(h, " <b>➜</b> In our country (we are in Hidden mode)");}
             else if (isStrict) {_context.banlist().banlistRouterForever(h, " <b>➜</b> In our country (we are in a strict country)");}
+            if (blockMyCountry || isHidden || isStrict) {
+                _banLogger.logBanForever(h, _context, "In our country");
+            }
             return true;
         }
         if (blockedCountries.contains(country) && !isBanned) {
@@ -1669,6 +1680,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 _log.warn("Banning [" + routerId + "] -> Blocked country: " + country);
             }
             _context.banlist().banlistRouter(h, " <b>➜</b> Blocked country: " + country, null, null, _context.clock().now() + 8*60*60*1000);
+            _banLogger.logBan(h, _context, "Blocked country: " + country, 8*60*60*1000);
             //_context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
             return true;
         }
@@ -1681,6 +1693,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                     _log.warn("Banning " + (caps.isEmpty() ? "" : caps + " ") + (isFF ? "Floodfill" : "Router") + " [" + routerId + "] for 4h -> XG and older than minVersion (using proxy?)");
                 }
                 _context.banlist().banlistRouter(h, " <b>➜</b> XG Router, neither R nor U (proxied?)", null, null, _context.clock().now() + 4*60*60*1000);
+                _banLogger.logBan(h, _context, "XG Router, neither R nor U (proxied?)", 4*60*60*1000);
             }
             return true;
         }
@@ -1726,6 +1739,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             if (!_context.banlist().isBanlisted(h) && _log.shouldWarn()) {
                 _log.warn("Banning [" + routerId + "] for 4h -> RouterInfo from the future!\n* Published: " + new Date(routerInfo.getPublished()));
                 _context.banlist().banlistRouter(h, " <b>➜</b> RouterInfo from the future (" + new Date(routerInfo.getPublished()) + ")", null, null, 4*60*60*1000);
+                _banLogger.logBan(h, _context, "RouterInfo from the future", 4*60*60*1000);
             }
             return caps + " Router [" + routerId + "] -> Published " + DataHelper.formatDuration(age) + " in the future";
         }
@@ -2016,6 +2030,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                         if (type == null || !type.isAvailable()) {
                             String stype = (type != null) ? type.toString() : Integer.toString(kc.getSigTypeCode());
                             _context.banlist().banlistRouterForever(h, " <b>➜</b> " + "Unsupported Signature type " + stype);
+                            _banLogger.logBanForever(h, _context, "Unsupported Signature type " + stype);
                             if (_log.shouldWarn()) {
                                 _log.warn("Unsupported Signature type " + stype + " for [" +
                                           h.toBase64().substring(0,6) + "] - banned until restart");
