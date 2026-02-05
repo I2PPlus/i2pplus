@@ -108,9 +108,10 @@ class BanlistRenderer {
             long expires = entry.expireOn-_context.clock().now();
             String expireString = DataHelper.formatDuration2(expires);
             if (expires <= 0 || key.equals(Hash.FAKE_HASH) || entry.cause == null ||
-                (entry.cause.toLowerCase().contains("hash") ||
-                entry.cause.toLowerCase().contains("sybil") ||
-                entry.cause.toLowerCase().contains("blocklist"))) {
+                (entry.cause.toLowerCase().contains("sybil") ||
+                entry.cause.toLowerCase().contains("blocklist") ||
+                (entry.cause.toLowerCase().contains("hash") &&
+                 !entry.cause.toLowerCase().contains("HashPatternDetector")))) {
                 continue;
             } else {
                 buf.append("<tr class=\"lazy");

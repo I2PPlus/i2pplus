@@ -45,7 +45,7 @@ public class HashPatternDetector implements Serializable {
     // Configuration
     private static final int PREFIX_LENGTH = 2; // First 2 bytes (4 hex chars)
     private static final double BAN_THRESHOLD = 0.85; // 85% confidence required
-    private static final int MIN_SAMPLES = 5; // Minimum bans before prediction
+    private static final int MIN_SAMPLES = 10; // Minimum bans before prediction
     private static final String PATTERN_FILE = "hash-patterns.dat";
     private static final long PREDICTIVE_BAN_DURATION = 24 * 60 * 60 * 1000L; // 24 hours
 
