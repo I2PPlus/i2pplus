@@ -90,8 +90,9 @@ import { refreshElements } from "./refreshElements.js";
         reason = reason.replace("Compressible RouterInfo & older than 0.9.57", "Invalid RouterInfo")
                        .replace("<b> -&gt; </b>", "")
                        .replace("<b> -> </b>", "")
-                       .replace(/-&gt;\s*/, "")
-                       .replace(/->\s*/, "");
+                       .replace(/>\s*/, "")
+                       .replace(/->\s*/, "")
+                       .replace(/Blocklist:\s*[\d.:a-f]+/i, "Blocklist");
         reason = reason.trim();
         if (reason) { reasonCounts[reason] = (reasonCounts[reason] || 0) + 1; }
       }

@@ -94,7 +94,7 @@ class BanlistRenderer {
             return;
         }
 
-        buf.append("<table id=sessionBanned>\n<thead><tr><th>")
+        buf.append("<table id=sessionBanned>\n<thead><tr><th data-sort-use-group=true>")
            .append(_t("Reason"))
            .append("</th><th></th><th>")
            .append(_t("Router Hash"))
@@ -112,12 +112,23 @@ class BanlistRenderer {
                  !entry.cause.toLowerCase().contains("hashpatterndetector"))) {
                 continue;
             }
-            buf.append("<tr class=\"lazy");
+                buf.append("<tr class=\"lazy");
                 if (entry.cause.toLowerCase().contains("floodfill")) {
                     buf.append(" banFF");
                 }
+                String reason = _t(entry.cause, entry.causeCode).replace("<b>➜</b> ", "");
+                // Strip IP from Blocklist bans for cleaner display
+                String lcReason = reason.toLowerCase();
+                if (lcReason.startsWith("blocklist")) {
+                    int colon = lcReason.indexOf(':');
+                    if (colon > 0) {
+                        reason = reason.substring(0, colon);
+                    } else {
+                        reason = "Blocklist";
+                    }
+                }
                 buf.append("\"><td>")
-                   .append(_t(entry.cause,entry.causeCode).replace("<b>➜</b> ",""))
+                   .append(reason)
                    .append("</td><td>:</td><td><span class=b64>")
                    .append(key.toBase64())
                    .append("</span></td><td data-sort=").append(expires).append(">")
