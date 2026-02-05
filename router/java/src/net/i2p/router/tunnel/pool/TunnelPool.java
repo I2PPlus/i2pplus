@@ -566,6 +566,26 @@ public class TunnelPool {
         if (info == null) {return;}
         long now = _context.clock().now();
         if (_log.shouldDebug()) {_log.debug(toString() + " -> Adding tunnel " + info);}
+
+        // Check for duplicate peer sequence and fail if we have good alternatives @since 0.9.68+
+        List<TunnelInfo> duplicates = findDuplicateTunnels(info);
+        if (!duplicates.isEmpty()) {
+            // Check if we have at least 1 good (non-duplicate) tunnel
+            if (hasGoodTunnel(info)) {
+                // Fail the duplicate tunnel(s) - prefer to keep the newer one (info)
+                if (_log.shouldWarn()) {
+                    _log.warn("Failing " + duplicates.size() + " duplicate tunnel(s) - keeping newer: " + info);
+                }
+                for (TunnelInfo dup : duplicates) {
+                    tunnelFailed(dup);  // Fail the older duplicate
+                }
+                // Don't add info since we're keeping it, but we already checked hasGoodTunnel
+                // So we need to add info and fail the duplicates
+                // Actually, let me reconsider - if we have good tunnels, we fail the duplicates
+                // and add this new tunnel as a replacement
+            }
+        }
+
         LeaseSet ls = null;
         synchronized (_tunnels) {
             if (info.getExpiration() > now + 60*1000) {
@@ -574,7 +594,7 @@ public class TunnelPool {
             }
         }
         if (info.getExpiration() > now + 60*1000 && ls != null) {requestLeaseSet(ls);}
-        
+
         // Check if we can now remove any last resort tunnels since we have a replacement
         if (info.getExpiration() > now + 60*1000) {
             cleanupLastResortTunnels();
@@ -583,6 +603,75 @@ public class TunnelPool {
                 cleanupZeroHopTunnels();
             }
         }
+    }
+
+    /**
+     * Check if we have at least one good (non-duplicate) tunnel in the pool.
+     * A good tunnel is one that isn't a duplicate of the given tunnel.
+     *
+     * @param newTunnel the tunnel to check duplicates against
+     * @return true if we have at least one good tunnel
+     * @since 0.9.68+
+     */
+    private boolean hasGoodTunnel(TunnelInfo newTunnel) {
+        synchronized (_tunnels) {
+            if (_tunnels.size() <= 1) {return false;}
+
+            for (TunnelInfo existing : _tunnels) {
+                if (existing == newTunnel) {continue;}
+                if (existing.getLength() != newTunnel.getLength()) {continue;}
+
+                boolean isDuplicate = true;
+                for (int i = 0; i < existing.getLength(); i++) {
+                    Hash existingPeer = existing.getPeer(i);
+                    Hash newPeer = newTunnel.getPeer(i);
+                    if (existingPeer == null || newPeer == null || !existingPeer.equals(newPeer)) {
+                        isDuplicate = false;
+                        break;
+                    }
+                }
+
+                if (!isDuplicate) {
+                    // This is a good (non-duplicate) tunnel
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Find all tunnels in the pool that have the same peer sequence as the given tunnel.
+     *
+     * @param tunnel the tunnel to check for duplicates
+     * @return list of duplicate tunnels (excluding the given tunnel)
+     * @since 0.9.68+
+     */
+    private List<TunnelInfo> findDuplicateTunnels(TunnelInfo tunnel) {
+        List<TunnelInfo> duplicates = new ArrayList<>();
+        if (tunnel == null || tunnel.getLength() <= 1) {return duplicates;}
+
+        synchronized (_tunnels) {
+            for (TunnelInfo existing : _tunnels) {
+                if (existing == tunnel) {continue;}
+                if (existing.getLength() != tunnel.getLength()) {continue;}
+
+                boolean isDuplicate = true;
+                for (int i = 0; i < existing.getLength(); i++) {
+                    Hash existingPeer = existing.getPeer(i);
+                    Hash tunnelPeer = tunnel.getPeer(i);
+                    if (existingPeer == null || tunnelPeer == null || !existingPeer.equals(tunnelPeer)) {
+                        isDuplicate = false;
+                        break;
+                    }
+                }
+
+                if (isDuplicate) {
+                    duplicates.add(existing);
+                }
+            }
+        }
+        return duplicates;
     }
     
     /**
