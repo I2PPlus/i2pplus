@@ -530,11 +530,18 @@ public class TestJob extends JobImpl {
         // Scale with global capacity to allow near 512 concurrent tests for high-capacity routers
         int maxTests = SystemVersion.isSlow() ? 128 : 256;
 
+        // Increase max tests under low build success when we have capacity @since 0.9.68+
+        double buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
+        boolean lowBuildSuccess = buildSuccess > 0 && buildSuccess < 0.40;
+
         // Only reduce concurrency under severe load
         if (maxLag > 5000 || avgLag > 100) {
             maxTests = isExploratory ? 16 : 32;
         } else if (maxLag > 3000 || avgLag > 50) {
             maxTests = isExploratory ? 32 : 64;
+        } else if (lowBuildSuccess && maxLag < 1500 && avgLag < 10) {
+            // Low build success with low lag: increase capacity to build more tunnels faster
+            maxTests = isExploratory ? 128 : 256;
         }
 
         int current;
