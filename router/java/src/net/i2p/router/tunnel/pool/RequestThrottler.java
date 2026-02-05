@@ -12,6 +12,7 @@ import net.i2p.data.Hash;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
+import net.i2p.router.BanLogger;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer;
 import net.i2p.util.SystemVersion;
@@ -34,6 +35,7 @@ class RequestThrottler {
     private final RouterContext context;
     private final BurstWindowCounter counter;
     private final Log _log;
+    private static final BanLogger _banLogger = new BanLogger(null);
     private volatile String lastBlockCountriesProp;
     private volatile Set<String> cachedBlockedCountries;
     private volatile long lastFirewallCheckTime;
@@ -85,6 +87,7 @@ class RequestThrottler {
         this.cachedShouldThrottle = null;
         this.cachedShouldDisconnect = null;
         this.cachedShouldBlockOldRouters = null;
+        _banLogger.initialize(ctx);
         ctx.simpleTimer2().addPeriodicEvent(new Cleaner(), CLEAN_TIME);
     }
 
@@ -150,10 +153,13 @@ class RequestThrottler {
         // Early return: Blocked countries
         Set<String> blockedCountries = getBlockedCountries();
         if (blockedCountries.contains(country)) {
-            if (_log.shouldWarn()) {
-                _log.warn("Banning and disconnecting from [" + routerId + "] -> Blocked country: " + country);
+            if (!context.banlist().isBanlisted(h)) {
+                if (_log.shouldWarn()) {
+                    _log.warn("Banning and disconnecting from [" + routerId + "] -> Blocked country: " + country);
+                }
+                context.banlist().banlistRouter(h, " <b>➜</b> Blocked country: " + country, null, null, context.clock().now() + 8*60*60*1000);
+                _banLogger.logBan(h, context, "Blocked country: " + country, 8*60*60*1000);
             }
-            context.banlist().banlistRouter(h, " <b>➜</b> Blocked country: " + country, null, null, context.clock().now() + 8*60*60*1000);
             context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
             return true;
         }
@@ -168,10 +174,13 @@ class RequestThrottler {
 
         // Early return: Old, low-tier, unreachable routers
         if (isLTier && isUnreachable && isOld) {
-            if (_log.shouldInfo() && !context.banlist().isBanlisted(h)) {
-                _log.info("Banning for 1h and disconnecting from [" + routerId + "] -> LU / " + v);
+            if (!context.banlist().isBanlisted(h)) {
+                if (_log.shouldInfo()) {
+                    _log.info("Banning for 1h and disconnecting from [" + routerId + "] -> LU / " + v);
+                }
+                context.banlist().banlistRouter(h, " <b>➜</b> Old and slow (" + v + " / LU)", null, null, context.clock().now() + 60*60*1000);
+                _banLogger.logBan(h, context, "Old and slow (" + v + " / LU)", 60*60*1000);
             }
-            context.banlist().banlistRouter(h, " <b>➜</b> Old and slow (" + v + " / LU)", null, null, context.clock().now() + 60*60*1000);
             context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
             return true;
         }
@@ -189,8 +198,9 @@ class RequestThrottler {
         if (rv && enableThrottle) {
             int bantime = (isLowShare || isUnreachable) ? 60*60*1000 : 30*60*1000;
             int period = bantime / 60 / 1000;
-            if (count == limit + 1) {
+            if (count == limit + 1 && !context.banlist().isBanlisted(h)) {
                 context.banlist().banlistRouter(h, " <b>➜</b> Excessive tunnel requests", null, null, context.clock().now() + bantime);
+                _banLogger.logBan(h, context, "Excessive tunnel requests", bantime);
                 context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
                 if (_log.shouldWarn()) {
                     _log.warn("Banning " + (isLowShare || isUnreachable ? "slow or unreachable" : "") +
@@ -243,7 +253,7 @@ class RequestThrottler {
             } else {
                 // First burst - 1 hour ban
                 banTime = 60 * 60 * 1000;
-                reason = "Burst tunnel requests detected";
+                reason = "Burst tunnel requests";
             }
 
             if (_log.shouldWarn()) {

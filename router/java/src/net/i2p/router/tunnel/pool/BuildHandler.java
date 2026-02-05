@@ -35,6 +35,7 @@ import net.i2p.router.JobImpl;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
+import net.i2p.router.BanLogger;
 import net.i2p.router.RouterThrottleImpl;
 import net.i2p.router.networkdb.kademlia.MessageWrapper;
 import net.i2p.router.peermanager.TunnelHistory;
@@ -55,6 +56,7 @@ import net.i2p.util.VersionComparator;
 class BuildHandler implements Runnable {
     private final RouterContext _context;
     private final Log _log;
+    private static final BanLogger _banLogger = new BanLogger(null);
     private final TunnelPoolManager _manager;
     private final BuildExecutor _exec;
     private final Job _buildMessageHandlerJob;
@@ -87,7 +89,7 @@ class BuildHandler implements Runnable {
     private static final long MAX_REQUEST_AGE_ECIES = 8*60*1000;
     private static final long JOB_LAG_LIMIT_TUNNEL = isSlow ? 800 : 500;
     private static final long[] RATES = RateConstants.SHORT_TERM_RATES;
-    
+
     // Global rate limiter for DDoS protection - tracks ALL tunnel build requests regardless of peer
     private static final String PROP_GLOBAL_RATE_LIMIT = "router.tunnelBuildGlobalRateLimit";
     private static final int DEFAULT_GLOBAL_RATE_LIMIT = isSlow ? 50 : 200; // per second
@@ -95,9 +97,9 @@ class BuildHandler implements Runnable {
     private static final int GLOBAL_RATE_BUCKETS = 10; // 100ms per bucket
     private static final String PROP_GLOBAL_BURST_LIMIT = "router.tunnelBuildGlobalBurstLimit";
     private static final int DEFAULT_GLOBAL_BURST_LIMIT = isSlow ? 100 : 400; // absolute max in window
-    
+
     private final GlobalRateLimiter _globalRateLimiter;
-    
+
     /**
      * This is baseline minimum for estimating tunnel bandwidth, if accepted.
      * We use an estimate of 200 messages (1 KB each) in 10 minutes.
@@ -180,6 +182,7 @@ class BuildHandler implements Runnable {
         ctx.inNetMessagePool().registerHandlerJobBuilder(VariableTunnelBuildReplyMessage.MESSAGE_TYPE, tbrmhjb);
         ctx.inNetMessagePool().registerHandlerJobBuilder(ShortTunnelBuildMessage.MESSAGE_TYPE, tbmhjb);
         ctx.inNetMessagePool().registerHandlerJobBuilder(OutboundTunnelBuildReplyMessage.MESSAGE_TYPE, tbrmhjb);
+        _banLogger.initialize(ctx);
     }
 
     /**
@@ -368,13 +371,14 @@ class BuildHandler implements Runnable {
                 String bwTier = "Unknown"; // Default and detect bandwidth tier
                 if (ri != null) {
                     bwTier = ri.getBandwidthTier(); // Returns "Unknown" if none recognized
-                    if (bwTier == "Unknown") {
+                    if (bwTier == "Unknown" && !_context.banlist().isBanlisted(peer)) {
                         if (_log.shouldWarn()) {
                             _log.warn("Banning [" + peer.toBase64().substring(0,6) + "] for 4h -> No Bandwidth Tier in RouterInfo");
                         }
                         String reason = " <b> -> </b> No Bandwidth Tier in RouterInfo";
                         _context.commSystem().mayDisconnect(peer);
                         _context.banlist().banlistRouter(peer, reason, null, null, 4*60*60*1000);
+                        _banLogger.logBan(peer, _context, "No Bandwidth Tier in RouterInfo", 4*60*60*1000);
                     }
                 }
                 if (howBad == 0) {
@@ -766,10 +770,16 @@ class BuildHandler implements Runnable {
         long nextId = req.readNextTunnelId();
         boolean isInGW = req.readIsInboundGateway();
         boolean isOutEnd = req.readIsOutboundEndpoint();
-        int bantime = 10*60*1000;
+        int bantime = 8*60*60*1000;
         int period = bantime / 60 / 1000;
         Hash from = state.fromHash;
         if (from == null && state.from != null) {from = state.from.calculateHash();}
+
+        // Check for algorithmic bot patterns before processing tunnel request
+        if (from != null && _banLogger.checkPatternAndPredict(from, _context)) {
+            return; // Router was predictively banned
+        }
+
         final boolean shouldThrottle = _context.getBooleanPropertyDefaultTrue(PROP_SHOULD_THROTTLE);
         final boolean shouldLog = _log.shouldDebug() || _log.shouldInfo() || _log.shouldWarn();
         String fromPeer = (shouldLog && from != null ? from.toBase64().substring(0,6) : "");
@@ -777,18 +787,20 @@ class BuildHandler implements Runnable {
         // Warning! from could be null, but should only happen if we will be IBGW and it came from us as OBEP
         if (isInGW && isOutEnd) {
             _context.statManager().addRateData("tunnel.rejectHostile", 1);
-            if (from != null) {
+            if (from != null && !_context.banlist().isBanlisted(from)) {
                 _context.commSystem().mayDisconnect(from);
                 _context.banlist().banlistRouter(from, " <b> -> </b> Hostile Tunnel Request (IBGW+OBEP)", null, null, System.currentTimeMillis() + bantime);
+                _banLogger.logBan(from, _context, "Hostile Tunnel Request (IBGW+OBEP)", bantime);
                 if (shouldLog) {_log.warn("Banning [" + fromPeer + "] for " + period + "m -> Hostile Tunnel Request (Inbound Gateway & Outbound Endpoint)");}
             } else if (shouldLog) {_log.warn("Dropping HOSTILE Tunnel Request from UNKNOWN -> IBGW+OBEP");}
             return;
         }
         if (ourId <= 0 || ourId > TunnelId.MAX_ID_VALUE || nextId <= 0 || nextId > TunnelId.MAX_ID_VALUE) {
             _context.statManager().addRateData("tunnel.rejectHostile", 1);
-            if (from != null) {
+            if (from != null && !_context.banlist().isBanlisted(from)) {
                 _context.commSystem().mayDisconnect(from);
                 _context.banlist().banlistRouter(from, " <b> -> </b> Hostile Tunnel Request (BAD Tunnel ID)", null, null, System.currentTimeMillis() + bantime);
+                _banLogger.logBan(from, _context, "Hostile Tunnel Request (BAD Tunnel ID)", bantime);
                 if (shouldLog) {_log.warn("Banning [" + fromPeer + "] for " + period + "m -> Hostile Tunnel Request (BAD TunnelID)");}
             } else if (shouldLog) {_log.warn("Dropping HOSTILE Tunnel Request from UNKNOWN -> BAD Tunnel ID");}
             return;
@@ -799,9 +811,10 @@ class BuildHandler implements Runnable {
             // We are 2 hops in a row? Drop it without a reply.
             // No way to recognize if we are every other hop, but see below
             // old i2pd
-            if (from != null) {
+            if (from != null && !_context.banlist().isBanlisted(from)) {
                 _context.commSystem().mayDisconnect(from);
                 _context.banlist().banlistRouter(from, " <b> -> </b> Hostile Tunnel Request (double hop)", null, null, System.currentTimeMillis() + bantime);
+                _banLogger.logBan(from, _context, "Hostile Tunnel Request (double hop)", bantime);
                 _log.warn("Banning [" + fromPeer + "] for " + period + "m -> Hostile Tunnel Request (We are 2 hops in a row!)");
             } else if (shouldLog) {_log.warn("Dropping HOSTILE Tunnel Request from UNKNOWN -> We are the next hop");}
             return;
@@ -812,9 +825,10 @@ class BuildHandler implements Runnable {
             // but if not, something is seriously wrong here.
             if (from == null || _context.routerHash().equals(from)) {
                 _context.statManager().addRateData("tunnel.rejectHostile", 1);
-                if (from != null) {
+                if (from != null && !_context.banlist().isBanlisted(from)) {
                     _context.commSystem().mayDisconnect(from);
                     _context.banlist().banlistRouter(from, " <b> -> </b> Hostile Tunnel Request (previous hop)", null, null, System.currentTimeMillis() + bantime);
+                    _banLogger.logBan(from, _context, "Hostile Tunnel Request (previous hop)", bantime);
                     if (shouldLog) {_log.warn("Banning [" + fromPeer + "] for " + period + "m -> Hostile Tunnel Request (We are the previous hop!)");}
                 } else if (shouldLog) {_log.warn("Dropping HOSTILE Tunnel Request from UNKNOWN -> We are the previous hop");}
                 return;
@@ -826,9 +840,10 @@ class BuildHandler implements Runnable {
             if (nextPeer.equals(from)) {
                 // i2pd does this
                 _context.statManager().addRateData("tunnel.rejectHostile", 1);
-                if (from != null) {
+                if (from != null && !_context.banlist().isBanlisted(from)) {
                     _context.commSystem().mayDisconnect(from);
                     _context.banlist().banlistRouter(from, " <b> -> </b> Hostile Tunnel Request (duplicate hops in chain)", null, null, System.currentTimeMillis() + bantime);
+                    _banLogger.logBan(from, _context, "Hostile Tunnel Request (duplicate hops in chain)", bantime);
                     if (shouldLog) {_log.warn("Banning [" + fromPeer + "] for " + period + "m -> Hostile Tunnel Request (duplicate hops in chain)");}
                 } else if (shouldLog) {_log.warn("Dropping HOSTILE Tunnel Request from UNKNOWN -> Previous and next hop are the same");}
                 return;
@@ -857,9 +872,10 @@ class BuildHandler implements Runnable {
             if (_log.shouldWarn()) {
                 _log.warn("Dropping HOSTILE Tunnel Request -> Too old... replay attack? " + DataHelper.formatDuration(timeDiff) + " " + req);
             }
-            if (from != null) {
+            if (from != null && !_context.banlist().isBanlisted(from)) {
                 _context.commSystem().mayDisconnect(from);
                 _context.banlist().banlistRouter(from, " <b> -> </b> Hostile Tunnel Request (possible replay attack)", null, null, System.currentTimeMillis() + bantime);
+                _banLogger.logBan(from, _context, "Hostile Tunnel Request (possible replay attack)", bantime);
                 if (shouldLog) {_log.warn("Banning [" + fromPeer + "] for " + period + "m -> Hostile Tunnel Request (too old, replay attack?)");}
             }
             return;
@@ -869,9 +885,10 @@ class BuildHandler implements Runnable {
             if (_log.shouldWarn()) {
                 _log.warn("Dropping HOSTILE Tunnel Request -> Too far in future " + DataHelper.formatDuration(0 - timeDiff) + " " + req);
             }
-            if (from != null) {
+            if (from != null && !_context.banlist().isBanlisted(from)) {
                 _context.commSystem().mayDisconnect(from);
                 _context.banlist().banlistRouter(from, " <b> -> </b> Hostile Tunnel Request (too far in future)", null, null, System.currentTimeMillis() + bantime);
+                _banLogger.logBan(from, _context, "Hostile Tunnel Request (too far in future)", bantime);
                 if (shouldLog) {_log.warn("Banning [" + fromPeer + "] for " + period + "m -> Hostile Tunnel Request (too far in future)");}
             }
             return;
@@ -1382,7 +1399,7 @@ class BuildHandler implements Runnable {
      * Global rate limiter for tunnel build requests.
      * Tracks ALL incoming requests regardless of peer identity to detect and mitigate
      * distributed DDoS attacks where attackers use many different router IDs.
-     * 
+     *
      * Uses a sliding window with 100ms buckets over 1 second.
      * Configurable via properties:
      * - router.tunnelBuildGlobalRateLimit: requests per second (default: 200)
@@ -1400,7 +1417,7 @@ class BuildHandler implements Runnable {
         private final AtomicInteger _currentCount;
         private volatile long _lastBucketTime;
         private volatile int _currentBucket;
-        
+
         GlobalRateLimiter(RouterContext ctx) {
             this._ctx = ctx;
             this._bucketCount = GLOBAL_RATE_BUCKETS;
@@ -1412,17 +1429,17 @@ class BuildHandler implements Runnable {
             this._lastBucketTime = System.currentTimeMillis();
             this._currentBucket = 0;
         }
-        
+
         /**
          * Check if we should drop this request due to global rate limiting.
          * Also increments the counter if not dropping.
-         * 
+         *
          * @return true if request should be dropped, false if allowed
          */
         boolean shouldDrop() {
             long now = System.currentTimeMillis();
             int newBucket = (int) ((now / _bucketSizeMs) % _bucketCount);
-            
+
             // If we've moved to a new bucket, reset old buckets and update count
             if (newBucket != _currentBucket) {
                 synchronized (this) {
@@ -1442,7 +1459,7 @@ class BuildHandler implements Runnable {
                     }
                 }
             }
-            
+
             // Check burst limit first (absolute ceiling)
             int current = _currentCount.get();
             if (current >= _burstLimit) {
@@ -1452,7 +1469,7 @@ class BuildHandler implements Runnable {
                 }
                 return true;
             }
-            
+
             // Check rate limit (sustained rate)
             if (current >= _rateLimit) {
                 // Probabilistic drop based on how far over we are
@@ -1466,13 +1483,13 @@ class BuildHandler implements Runnable {
                     return true;
                 }
             }
-            
+
             // Allow the request
             _buckets.incrementAndGet(newBucket);
             _currentCount.incrementAndGet();
             return false;
         }
-        
+
         /**
          * Get current global request count in the sliding window.
          * @return current count
