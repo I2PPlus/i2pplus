@@ -14,6 +14,7 @@ import net.i2p.data.Hash;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.RouterContext;
+import net.i2p.router.BanLogger;
 import net.i2p.util.Addresses;
 import net.i2p.util.Log;
 import net.i2p.util.ObjectCounter;

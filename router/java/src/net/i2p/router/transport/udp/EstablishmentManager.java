@@ -43,6 +43,7 @@ import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.Banlist;
+import net.i2p.router.BanLogger;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
@@ -79,6 +80,7 @@ class EstablishmentManager {
     private final ObjectCounter<RemoteHostId> _ssu2TerminationInboundCounter;
     private final ObjectCounter<RemoteHostId> _ssu2EstablishFailCounter;
     private final ObjectCounter<RemoteHostId> _ssu2CorruptCounter;
+    private final BanLogger _banLogger;
 
     /** map of RemoteHostId to InboundEstablishState */
     private final ConcurrentHashMap<RemoteHostId, InboundEstablishState> _inboundStates;
@@ -184,11 +186,11 @@ class EstablishmentManager {
     /** Max immediate terminations to send to a peer every FAILSAFE_INTERVAL */
     private static final int MAX_TERMINATIONS = 2;
     /** Threshold for auto-banning on inbound TERMINATION spam */
-    private static final int SSU2_TERM_THRESHOLD = 3;
+    private static final int SSU2_TERM_THRESHOLD = 5;
     /** Threshold for auto-banning on SSU2 establishment failures */
-    private static final int SSU2_ESTABLISH_FAIL_THRESHOLD = 3;
+    private static final int SSU2_ESTABLISH_FAIL_THRESHOLD = 5;
     /** Ban duration for SSU2 abuse */
-    private static final long SSU2_ABUSE_BAN_MS = 8*60*60*1000;
+    private static final long SSU2_ABUSE_BAN_MS = 60*60*1000;
 
     public EstablishmentManager(RouterContext ctx, UDPTransport transport) {
         _context = ctx;
@@ -213,6 +215,7 @@ class EstablishmentManager {
         _ssu2TerminationInboundCounter = new ObjectCounter<RemoteHostId>();
         _ssu2EstablishFailCounter = new ObjectCounter<RemoteHostId>();
         _ssu2CorruptCounter = new ObjectCounter<RemoteHostId>();
+        _banLogger = new BanLogger(ctx);
 
         _activityLock = new Object();
         DEFAULT_MAX_CONCURRENT_ESTABLISH = Math.max(DEFAULT_LOW_MAX_CONCURRENT_ESTABLISH,
@@ -1037,8 +1040,9 @@ class EstablishmentManager {
                 byte[] ip = from.getIP();
                 if (!_context.blocklist().isBlocklisted(ip)) {
                     _context.blocklist().addTemporary(ip, SSU2_ABUSE_BAN_MS, "Repeated SSU2 TERMINATION packets");
+                    _banLogger.logBan(Addresses.toString(ip) + ":" + from.getPort(), "Repeated SSU2 TERMINATION packets", SSU2_ABUSE_BAN_MS);
                     if (_log.shouldWarn()) {
-                        _log.warn("Auto-banning " + Addresses.toString(ip) + " after " + count + " TERMINATION packets");
+                        _log.warn("Banning " + Addresses.toString(ip) + " for 1h -> Repeatedly sending invalid TERMINATION packets (" + count + ")");
                     }
                 }
                 _ssu2TerminationInboundCounter.clear(from);
@@ -1099,8 +1103,9 @@ class EstablishmentManager {
             byte[] ip = hostId.getIP();
             if (!_context.blocklist().isBlocklisted(ip)) {
                 _context.blocklist().addTemporary(ip, SSU2_ABUSE_BAN_MS, "Repeated SSU2 establishment failures");
+                _banLogger.logBan(Addresses.toString(ip) + ":" + hostId.getPort(), "Repeated SSU2 establishment failures", SSU2_ABUSE_BAN_MS);
                 if (_log.shouldWarn()) {
-                    _log.warn("Auto-banning " + Addresses.toString(ip) + " after " + count + " SSU2 establishment failures");
+                    _log.warn("Banning " + Addresses.toString(ip) + " for 1h -> Repeated SSU2 establishment failures (" + count + ")");
                 }
             }
             _ssu2EstablishFailCounter.clear(hostId);
@@ -1118,8 +1123,9 @@ class EstablishmentManager {
             byte[] ip = hostId.getIP();
             if (!_context.blocklist().isBlocklisted(ip)) {
                 _context.blocklist().addTemporary(ip, SSU2_ABUSE_BAN_MS, "Repeated SSU2 corrupt SessionConfirmed");
+                _banLogger.logBan(Addresses.toString(ip) + ":" + hostId.getPort(), "Repeated SSU2 corrupt SessionConfirmed", SSU2_ABUSE_BAN_MS);
                 if (_log.shouldWarn()) {
-                    _log.warn("Auto-banning " + Addresses.toString(ip) + " after " + count + " corrupt SessionConfirmed");
+                    _log.warn("Banning " + Addresses.toString(ip) + " for 1h -> Repeated corrupt SSU2 SessionConfirmed packets (" + count + ")");
                 }
             }
             _ssu2CorruptCounter.clear(hostId);

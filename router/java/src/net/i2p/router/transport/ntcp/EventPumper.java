@@ -29,6 +29,7 @@ import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterIdentity;
 import net.i2p.router.CommSystemFacade.Status;
 import net.i2p.router.RouterContext;
+import net.i2p.router.BanLogger;
 import net.i2p.router.transport.FIFOBandwidthLimiter;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateAverages;
@@ -64,6 +65,7 @@ class EventPumper implements Runnable {
     private final Log _log;
     private volatile boolean _alive;
     private Selector _selector;
+    private static final BanLogger _banLogger = new BanLogger(null);
     private final Set<NTCPConnection> _wantsWrite = new ConcurrentHashSet<>(32);
     /**
      * The following 3 are unbounded and lockless for performance in runDelayedEvents()
@@ -155,6 +157,7 @@ class EventPumper implements Runnable {
         _context.statManager().createRateStat("ntcp.zeroReadDrop", "Number of NTCP zero length read events dropped", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.dropInboundNoMessage", "Number of NTCP Inbound empty message drop events", "Transport [NTCP]", RATES);
         _context.statManager().createRequiredRateStat("ntcp.inboundConn", "Inbound NTCP Connection", "Transport [NTCP]", RATES);
+        _banLogger.initialize(ctx);
     }
 
     public synchronized void startPumping() {
@@ -542,6 +545,7 @@ class EventPumper implements Runnable {
                         byte[] ipBytes = Addresses.getIP(ba);
                         if (ipBytes != null) {
                             _context.blocklist().addTemporary(ipBytes, 8*60*60*1000, "Excessive NTCP connection attempts");
+                            _banLogger.logBan(Addresses.toString(ipBytes), "Excessive NTCP connection attempts (" + count + ")", 8*60*60*1000);
                         }
                     }
                     try {

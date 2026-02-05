@@ -27,6 +27,7 @@ import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
+import net.i2p.router.BanLogger;
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import net.i2p.util.Addresses;
 import net.i2p.util.ByteCache;
@@ -66,6 +67,7 @@ import net.i2p.util.VersionComparator;
 class InboundEstablishState extends EstablishBase implements NTCP2Payload.PayloadCallback {
     private static final long WARN_THROTTLE_MS = 5_000;
     private static final AtomicLong _lastHandshakeWarn = new AtomicLong(0);
+    private static final BanLogger _banLogger = new BanLogger(null);
 
     /** Current encrypted block we are reading (IB only) or an IV buf used at the end for OB */
     private byte _curEncrypted[];
@@ -131,6 +133,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         _prevEncrypted = SimpleByteCache.acquire(AES_SIZE);
         _curEncrypted = SimpleByteCache.acquire(AES_SIZE);
         _payloadTmp = null; // Will be acquired when needed
+        _banLogger.initialize(ctx);
     }
 
     /**
@@ -815,6 +818,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         if (mismatchMessage != null) {
             _context.banlist().banlistRouter(h, " <b>➜</b> Invalid NTCP address",
                                              null, null, _context.clock().now() + 4*60*60*1000);
+            _banLogger.logBan(h, "UNKNOWN", "Invalid NTCP address", 4*60*60*1000);
             _context.commSystem().forceDisconnect(h);
             if (_log.shouldWarn() && !isBanned) {
                 _log.warn("[NTCP] Banning for 4h and disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
@@ -838,6 +842,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             _context.banlist().banlistRouter(h, " <b>➜</b> Invalid Router version (" + version + " / " + bw +
                                              (unreachable ? "U" : reachable ? "R" : "") + ")", null,
                                              null, _context.clock().now() + 24*60*60*1000);
+            _banLogger.logBan(h, "UNKNOWN", "Invalid Router version: " + version, 24*60*60*1000);
             _msg3p2FailReason = NTCPConnection.REASON_BANNED;
             if (_log.shouldWarn() && !isBanned)
                 _log.warn("[NTCP] Banning for 24h and disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +

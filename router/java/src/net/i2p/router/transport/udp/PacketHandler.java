@@ -11,6 +11,7 @@ import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.ObjectCounter;
 import net.i2p.util.SystemVersion;
+import net.i2p.router.BanLogger;
 
 /**
  * Pull inbound packets from the inbound receiver's queue, figure out what
@@ -24,8 +25,8 @@ import net.i2p.util.SystemVersion;
  *
  */
 class PacketHandler {
-    private static final int BAD_PACKET_THRESHOLD = 3;
-    private static final long BAN_DURATION_MS = 8*60*60*1000;
+    private static final int BAD_PACKET_THRESHOLD = 30;
+    private static final long BAN_DURATION_MS = 60*60*1000;
     private static final ObjectCounter<RemoteHostId> _badPackets = new ObjectCounter<RemoteHostId>();
 
     private final RouterContext _context;
@@ -37,6 +38,7 @@ class PacketHandler {
     private final Handler[] _handlers;
     private final CoDelBlockingQueue<UDPPacket> _inboundQueue;
     private final int _networkID;
+    private final BanLogger _banLogger;
 
     private static final int TYPE_POISON = -99999;
     private static final int MIN_QUEUE_SIZE = SystemVersion.isSlow() ? 16 : 32;
@@ -56,6 +58,7 @@ class PacketHandler {
         _establisher = establisher;
         _testManager = testManager;
         _networkID = ctx.router().getNetworkID();
+        _banLogger = new BanLogger(ctx);
 
         long maxMemory = SystemVersion.getMaxMemory();
         int cores = SystemVersion.getCores();
@@ -523,6 +526,7 @@ class PacketHandler {
                 return false;
             }
             _context.blocklist().addTemporary(ipBytes, BAN_DURATION_MS, "Repeated bad packets: " + reason);
+            _banLogger.logBan(ipStr + ":" + from.getPort(), "Repeated bad packets: " + reason, BAN_DURATION_MS);
 
             // Also try to ban by router hash if we recognize this IP
             // This allows the ban to show on profiles?f=4
@@ -535,6 +539,8 @@ class PacketHandler {
                         null,
                         "SSU",
                         _context.clock().now() + BAN_DURATION_MS);
+                    _banLogger.logBan(ps.getRemotePeer(), ipStr + ":" + from.getPort(),
+                                     "Repeated bad packets: " + reason, BAN_DURATION_MS);
                     if (_log.shouldWarn()) {
                         _log.warn("Banning [" + ps.getRemotePeer().toBase64().substring(0,8) + "] -> " + reason);
                     }
@@ -543,7 +549,7 @@ class PacketHandler {
             }
 
             if (_log.shouldWarn()) {
-                _log.warn("Banning " + ipStr + " for 8 hours -> " + reason);
+                _log.warn("Banning " + ipStr + " for 60 minutes -> " + reason);
             }
             _badPackets.clear(from);
             return true;

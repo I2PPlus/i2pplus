@@ -38,6 +38,7 @@ import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.Banlist;
+import net.i2p.router.BanLogger;
 import net.i2p.router.CommSystemFacade.Status;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.Router;
@@ -199,6 +200,7 @@ public class UDPTransport extends TransportImpl {
 
     private static final int DROPLIST_PERIOD = 10*60*1000;
     public static final String STYLE = "SSU";
+    private static final BanLogger _banLogger = new BanLogger(null);
     public static final String PROP_INTERNAL_PORT = "i2np.udp.internalPort";
     /** define this to explicitly set an external IP address */
     public static final String PROP_EXTERNAL_HOST = "i2np.udp.host";
@@ -430,6 +432,7 @@ public class UDPTransport extends TransportImpl {
         _context.statManager().createRateStat("udp.inboundIPv4Conn", "Inbound IPv4 UDP Connection", "Transport [UDP]", RATES);
         _context.statManager().createRateStat("udp.inboundIPv6Conn", "Inbound IPv6 UDP Connection", "Transport [UDP]", RATES);
         _context.statManager().createRateStat("udp.proactiveReestablish", "Time session was idle for when we proactively reestablished it", "Transport [UDP]", RATES);
+        _banLogger.initialize(ctx);
 
         _context.simpleTimer2().addPeriodicEvent(new PingIntroducers(), MIN_EXPIRE_TIMEOUT * 3 / 4);
 
@@ -1393,6 +1396,7 @@ public class UDPTransport extends TransportImpl {
                                          + "\n* Check NAT/firewall configuration, the IANA recommended dynamic outside port range is 49152-65535");
             }
             _context.banlist().banlistRouter(from, "Reported our IP address or port as invalid", STYLE);
+            _banLogger.logBan(from, _context, "Reported our IP/port as invalid", -1);
             return;
         }
 
@@ -1969,6 +1973,10 @@ public class UDPTransport extends TransportImpl {
                             _context.banlist().banlistRouter(peerHash, " <b>➜</b> No network specified", null, null, _context.clock().now() + Banlist.BANLIST_DURATION_NO_NETWORK);
                         else
                             _context.banlist().banlistRouterForever(peerHash, " <b>➜</b> Not in our network: " + id);
+                        if (id == -1)
+                            _banLogger.logBan(peerHash, _context, "No network specified", Banlist.BANLIST_DURATION_NO_NETWORK);
+                        else
+                            _banLogger.logBanForever(peerHash, _context, "Not in our network: " + id);
                         if (peer != null)
                             sendDestroy(peer, SSU2Util.REASON_NETID);
                         dropPeer(peerHash, false, "Not in our network");
@@ -2304,6 +2312,10 @@ public class UDPTransport extends TransportImpl {
                     _context.banlist().banlistRouter(to, " <b>➜</b> No network specified", null, null, _context.clock().now() + Banlist.BANLIST_DURATION_NO_NETWORK);
                 else
                     _context.banlist().banlistRouterForever(to, " <b>➜</b> Not in our network: " + nid);
+                if (nid == -1)
+                    _banLogger.logBan(to, _context, "No network specified", Banlist.BANLIST_DURATION_NO_NETWORK);
+                else
+                    _banLogger.logBanForever(to, _context, "Not in our network: " + nid);
                 markUnreachable(to);
                 return null;
             }
