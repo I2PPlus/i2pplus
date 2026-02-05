@@ -22,6 +22,9 @@ import net.i2p.data.router.RouterInfo;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelPoolSettings;
+import net.i2p.router.TunnelInfo;
+import net.i2p.router.TunnelManagerFacade;
+import net.i2p.router.tunnel.pool.TunnelPool;
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.router.transport.TransportUtil;
@@ -557,6 +560,70 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     /** see HashComparator */
     protected void orderPeers(List<Hash> rv, SessionKey key) {
         if (rv.size() > 1) {Collections.sort(rv, new HashComparator(key));}
+    }
+
+    /**
+     * Check if the selected peer sequence matches an existing tunnel in the pool.
+     * Prevents duplicate peer sequences which could weaken anonymity.
+     *
+     * @param settings the tunnel pool settings
+     * @param newPeers the newly selected peers (excluding self)
+     * @return true if duplicate detected
+     * @since 0.9.68+
+     */
+    protected boolean isDuplicateSequence(TunnelPoolSettings settings, List<Hash> newPeers) {
+        if (newPeers == null || newPeers.isEmpty()) {return false;}
+
+        TunnelManagerFacade tmf = ctx.tunnelManager();
+        TunnelPool pool = settings.isInbound() ? tmf.getInboundPool(settings.getDestination())
+                                              : tmf.getOutboundPool(settings.getDestination());
+        if (pool == null) {return false;}
+
+        List<TunnelInfo> existingTunnels = pool.listTunnels();
+        if (existingTunnels == null || existingTunnels.isEmpty()) {return false;}
+
+        for (TunnelInfo existing : existingTunnels) {
+            if (existing.getLength() != newPeers.size() + 1) {continue;}
+
+            boolean match = true;
+            for (int i = 0; i < newPeers.size(); i++) {
+                Hash existingPeer = existing.getPeer(i);
+                if (existingPeer == null || !existingPeer.equals(newPeers.get(i))) {
+                    match = false;
+                    break;
+                }
+            }
+            if (match) {
+                if (log.shouldDebug()) {
+                    log.debug("Detected duplicate tunnel sequence for " + settings.getDestinationNickname() +
+                              " - regenerating peers");
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Regenerate tunnel peers to avoid duplicate sequence.
+     * Shuffles the peer selection and re-orders.
+     *
+     * @param settings the tunnel pool settings
+     * @param peers the peers to regenerate
+     * @return regenerated peer list (same or different)
+     * @since 0.9.68+
+     */
+    protected List<Hash> regeneratePeers(TunnelPoolSettings settings, List<Hash> peers) {
+        if (peers == null || peers.isEmpty()) {return peers;}
+
+        SessionKey randomKey = settings.getRandomKey();
+        if (randomKey != null && peers.size() > 1) {
+            Collections.shuffle(peers, ctx.random());
+            List<Hash> reordered = new ArrayList<Hash>(peers);
+            orderPeers(reordered, randomKey);
+            return reordered;
+        }
+        return peers;
     }
 
     /**

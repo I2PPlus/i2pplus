@@ -64,8 +64,21 @@ class ClientPeerSelector extends TunnelPeerSelector {
                              !ctx.commSystem().haveInboundCapacity(95);
             boolean hiddenInbound = hidden && isInbound;
             boolean hiddenOutbound = hidden && !isInbound;
-            int ipRestriction =  (ctx.getBooleanProperty("i2np.allowLocal") || length <= 1) ? 0 : settings.getIPRestriction();
-            MaskedIPSet ipSet = ipRestriction > 0 ? new MaskedIPSet(16) : null;
+            int ipRestriction = settings.getIPRestriction();
+            // Reduce IP restriction under low tunnel build success to improve diversity @since 0.9.68+
+            if (ipRestriction > 0 && length > 1) {
+                double buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
+                if (buildSuccess > 0 && buildSuccess < 0.40) {
+                    // Under 40% success: reduce to /16 (mask = 2)
+                    ipRestriction = Math.min(ipRestriction, 2);
+                }
+                if (buildSuccess > 0 && buildSuccess < 0.30) {
+                    // Under 30% success: reduce to /24 (mask = 3) - very permissive
+                    ipRestriction = Math.min(ipRestriction, 3);
+                }
+            }
+            if (ctx.getBooleanProperty("i2np.allowLocal") || length <= 1) {ipRestriction = 0;}
+            MaskedIPSet ipSet = ipRestriction > 0 ? new MaskedIPSet(ipRestriction) : null;
 
             if (shouldSelectExplicit(settings)) {return selectExplicit(settings, length);}
 
@@ -279,6 +292,22 @@ class ClientPeerSelector extends TunnelPeerSelector {
 
         // Filter out ghost peers before returning @since 0.9.68+
         rv = filterGhostPeers(rv, settings);
+
+        // Check for duplicate sequence and regenerate if needed @since 0.9.68+
+        if (rv != null && rv.size() > 1) {
+            int attempts = 0;
+            while (isDuplicateSequence(settings, rv.subList(0, rv.size() - 1)) && attempts < 3) {
+                List<Hash> regenerated = regeneratePeers(settings, new ArrayList<Hash>(rv.subList(0, rv.size() - 1)));
+                if (regenerated == null || regenerated.equals(rv.subList(0, rv.size() - 1))) {
+                    break;
+                }
+                rv.set(0, rv.get(rv.size() - 1)); // preserve self at end
+                for (int i = 0; i < regenerated.size(); i++) {
+                    rv.set(i, regenerated.get(i));
+                }
+                attempts++;
+            }
+        }
 
         if (rv.size() > 1) {
             if (!checkTunnel(isInbound, false, rv)) {rv = null;}

@@ -63,8 +63,19 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
         boolean hiddenInbound = hidden && isInbound;
         boolean hiddenOutbound = hidden && !isInbound;
         boolean lowOutbound = nonzero && !isInbound && !ctx.commSystem().haveHighOutboundCapacity();
-        int ipRestriction =  (ctx.getBooleanProperty("i2np.allowLocal") || length <= 1) ? 0 : settings.getIPRestriction();
-        MaskedIPSet ipSet = ipRestriction > 0 ? new MaskedIPSet(16) : null;
+        int ipRestriction = settings.getIPRestriction();
+        // Reduce IP restriction under low tunnel build success to improve diversity @since 0.9.68+
+        if (ipRestriction > 0 && length > 1) {
+            double buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
+            if (buildSuccess > 0 && buildSuccess < 0.40) {
+                ipRestriction = Math.min(ipRestriction, 2);
+            }
+            if (buildSuccess > 0 && buildSuccess < 0.30) {
+                ipRestriction = Math.min(ipRestriction, 3);
+            }
+        }
+        if (ctx.getBooleanProperty("i2np.allowLocal") || length <= 1) {ipRestriction = 0;}
+        MaskedIPSet ipSet = ipRestriction > 0 ? new MaskedIPSet(ipRestriction) : null;
 
         ArrayList<Hash> rv = new ArrayList<>(length + 3);
 
