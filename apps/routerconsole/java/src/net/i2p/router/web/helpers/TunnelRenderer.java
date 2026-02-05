@@ -989,10 +989,17 @@ class TunnelRenderer {
             boolean isFailing = (testStatus == net.i2p.router.TunnelTestStatus.FAILING);
             boolean isGood = (testStatus == net.i2p.router.TunnelTestStatus.GOOD);
             boolean isTesting = (testStatus == net.i2p.router.TunnelTestStatus.TESTING);
+            // Check if tunnel was rejected as duplicate @since 0.9.68+
+            boolean isDuplicate = (info instanceof net.i2p.router.tunnel.pool.PooledTunnelCreatorConfig) &&
+                                  ((net.i2p.router.tunnel.pool.PooledTunnelCreatorConfig) info).isDuplicate();
 
             // Set row class according to tunnel test status
-            String rowClass = isFailed ? " class=failed" : isFailing ? " class=failing" :
-                              isGood ? " class=good" : isTesting ? " class=testing" : " class=untested";
+            String rowClass = isDuplicate ? " class=failed" :
+                              isFailed ? " class=failed" :
+                              isFailing ? " class=failing" :
+                              isGood ? " class=good" :
+                              isTesting ? " class=testing" :
+                              " class=untested";
 
             if (isInbound) {
                 buf.append("<tr").append(rowClass).append("><td data-sort=in><span class=inbound title=\"")
@@ -1009,24 +1016,28 @@ class TunnelRenderer {
             }
 
             buf.append("<td class=tunnelTest>");
-            switch (testStatus) {
-                case GOOD:
-                    buf.append("<span title=\"").append(_t("Test successful")).append("\"></span>");
-                    break;
-                case TESTING:
-                    buf.append("<span title=\"").append(_t("Test in progress")).append("\"></span>");
-                    break;
-                case FAILING:
-                    buf.append("<span title=\"").append(_t("Test failing (1 failure)")).append("\"></span>");
-                    break;
-                case FAILED:
-                    buf.append("<span title=\"").append(_t("Test failed (2 consecutive failures)")).append("\"></span>");
-                    break;
-                default:
-                    buf.append("<span title=\"").append(_t("Not yet tested")).append("\"></span>");
-                    break;
+            if (isDuplicate) {
+                buf.append("<span title=\"").append(_t("Rejected as duplicate")).append("\">");
+            } else {
+                switch (testStatus) {
+                    case GOOD:
+                        buf.append("<span title=\"").append(_t("Test successful")).append("\"></span>");
+                        break;
+                    case TESTING:
+                        buf.append("<span title=\"").append(_t("Test in progress")).append("\"></span>");
+                        break;
+                    case FAILING:
+                        buf.append("<span title=\"").append(_t("Test failing (1 failure)")).append("\"></span>");
+                        break;
+                    case FAILED:
+                        buf.append("<span title=\"").append(_t("Test failed (2 consecutive failures)")).append("\"></span>");
+                        break;
+                    default:
+                        buf.append("<span title=\"").append(_t("Not yet tested")).append("\"></span>");
+                        break;
+                }
+                buf.append("</td>");
             }
-            buf.append("</td>");
 
             buf.append("<td><span>").append(DataHelper.formatDuration2(timeLeft)).append("</span></td>");
 
