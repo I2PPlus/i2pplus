@@ -842,7 +842,7 @@ class BuildHandler implements Runnable {
                 _context.statManager().addRateData("tunnel.rejectHostile", 1);
                 if (from != null && !_context.banlist().isBanlisted(from)) {
                     _context.commSystem().mayDisconnect(from);
-                    _context.banlist().banlistRouter(from, " <b> -> </b> Hostile Tunnel Request (duplicate hops in chain)", null, null, System.currentTimeMillis() + bantime);
+                    _context.banlist().banlistRouter(from, " <b>➜</b> Hostile Tunnel Request (duplicate hops in chain)", null, null, System.currentTimeMillis() + bantime);
                     _banLogger.logBan(from, _context, "Hostile Tunnel Request (duplicate hops in chain)", bantime);
                     if (shouldLog) {_log.warn("Banning [" + fromPeer + "] for " + period + "m -> Hostile Tunnel Request (duplicate hops in chain)");}
                 } else if (shouldLog) {_log.warn("Dropping HOSTILE Tunnel Request from UNKNOWN -> Previous and next hop are the same");}
