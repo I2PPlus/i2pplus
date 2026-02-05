@@ -9,7 +9,6 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.util.CoDelBlockingQueue;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
-import net.i2p.util.ObjectCounter;
 import net.i2p.util.SystemVersion;
 import net.i2p.router.BanLogger;
 
@@ -27,7 +26,13 @@ import net.i2p.router.BanLogger;
 class PacketHandler {
     private static final int BAD_PACKET_THRESHOLD = 30;
     private static final long BAN_DURATION_MS = 60*60*1000;
-    private static final ObjectCounter<RemoteHostId> _badPackets = new ObjectCounter<RemoteHostId>();
+    private static final long BAD_PACKET_WINDOW_MS = 10*60*1000; // 10 minute sliding window
+    private static final ConcurrentHashMap<RemoteHostId, PacketCount> _badPackets = new ConcurrentHashMap<>();
+
+    private static class PacketCount {
+        final AtomicInteger count = new AtomicInteger(0);
+        volatile long firstPacketTime;
+    }
 
     private final RouterContext _context;
     private final Log _log;
@@ -514,15 +519,32 @@ class PacketHandler {
 
         if (from == null) {return false;}
 
-        int badCount = _badPackets.increment(from);
+        long now = _context.clock().now();
+        PacketCount pc = _badPackets.get(from);
+        if (pc == null || now - pc.firstPacketTime > BAD_PACKET_WINDOW_MS) {
+            // Start new window
+            pc = new PacketCount();
+            pc.firstPacketTime = now;
+            pc.count.set(1);
+            PacketCount existing = _badPackets.putIfAbsent(from, pc);
+            if (existing != null) {
+                pc = existing;
+                pc.firstPacketTime = now; // reset window
+                pc.count.set(1);
+            }
+        } else {
+            pc.count.incrementAndGet();
+        }
+
+        int badCount = pc.count.get();
         if (badCount >= BAD_PACKET_THRESHOLD) {
+            _badPackets.remove(from);
             byte[] ipBytes = from.getIP();
             if (ipBytes == null) {return false;}
             String ipStr = ipBytes.length == 4 ?
                 (ipBytes[0] & 0xff) + "." + (ipBytes[1] & 0xff) + "." + (ipBytes[2] & 0xff) + "." + (ipBytes[3] & 0xff) :
                 "ipv6";
             if (_context.blocklist().isBlocklisted(ipBytes)) {
-                _badPackets.clear(from);
                 return false;
             }
             _context.blocklist().addTemporary(ipBytes, BAN_DURATION_MS, "Repeated bad packets: " + reason);
@@ -551,7 +573,6 @@ class PacketHandler {
             if (_log.shouldWarn()) {
                 _log.warn("Banning " + ipStr + " for 60 minutes -> " + reason);
             }
-            _badPackets.clear(from);
             return true;
         }
         return false;
