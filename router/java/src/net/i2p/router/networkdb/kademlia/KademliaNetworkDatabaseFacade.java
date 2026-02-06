@@ -1626,6 +1626,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         else if (existingRouters < 1000) {calculatedExpiry = ROUTER_INFO_EXPIRATION * 2;}
         else if (existingRouters < 2000) {calculatedExpiry = ROUTER_INFO_EXPIRATION * 3 / 2;}
         else {calculatedExpiry = ROUTER_INFO_EXPIRATION;}
+        double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
+        if (buildSuccess > 0 && buildSuccess < 0.40) {calculatedExpiry *= 2;}
         if (shouldBoost) {calculatedExpiry *= 2;}
         return calculatedExpiry;
     }

@@ -42,17 +42,26 @@ public class HashPatternDetector implements Serializable {
     // Track predictively banned hashes to avoid re-processing
     private final Set<String> _predictivelyBanned = ConcurrentHashMap.newKeySet();
 
+    // Cache for computed prefixes to avoid repeated Base64 decoding
+    private final ConcurrentHashMap<String, String> _prefixCache = new ConcurrentHashMap<>();
+
+    // Recovery tracking
+    private final AtomicBoolean _predictiveBanningActive = new AtomicBoolean(false);
+    private long _predictiveBanEnableTime = 0;
+    private static final long RECOVERY_COOLDOWN = 60 * 60 * 1000L; // 1 hour before allowing disable
+
     // Configuration
     private static final int PREFIX_LENGTH = 2; // First 2 bytes (4 hex chars)
     private static final double BAN_THRESHOLD = 0.85; // 85% confidence required
-    private static final int MIN_SAMPLES = 10; // Minimum bans before prediction
+    private static final int MIN_SAMPLES = 50; // Minimum bans before prediction
+    private static final int MIN_KNOWN_ROUTERS = 1000; // Minimum known routers before enabling
     private static final String PATTERN_FILE = "hash-patterns.dat";
     private static final long PREDICTIVE_BAN_DURATION = 24 * 60 * 60 * 1000L; // 24 hours
 
     // NetDB Scanner Configuration
     private static final String PROP_HASH_SCAN_FREQUENCY = "router.hashScan.frequency";
     private static final long DEFAULT_SCAN_FREQUENCY = 60 * 60 * 1000L; // 1 hour default
-    private static final long SCAN_STARTUP_DELAY = 5 * 60 * 1000L; // 5 minutes - wait for netdb init
+    private static final long SCAN_STARTUP_DELAY = 15 * 60 * 1000L; // 15 minutes - wait for netdb init
     private static final long BAN_DURATION = 24 * 60 * 60 * 1000L; // 24 hours for auto-bans
 
     // Scanner state
@@ -64,16 +73,8 @@ public class HashPatternDetector implements Serializable {
         loadPatterns();
         loadHistoricalBans();
 
-        // Check if bot patterns detected after loading historical data
-        if (hasSequentialPattern()) {
-            Set<String> suspicious = getSuspiciousPrefixes();
-            if (_log.shouldWarn()) {
-                _log.warn("WARNING! Algorithmic router identity generation pattern identified!" +
-                         "\n* Automatic predictive banning is now ENABLED" +
-                         "\n* Suspicious prefixes: " + suspicious +
-                         "\n* Future routers matching these patterns will be banned preventively");
-            }
-        }
+        // Defer pattern check to startScanner() where router is fully initialized
+        // We load historical bans but won't enable predictive banning until later
     }
 
     /**
@@ -167,19 +168,71 @@ public class HashPatternDetector implements Serializable {
 
     /**
      * Get the hex prefix of a base64 hash.
+     * Results are cached to avoid repeated Base64 decoding.
      */
     private String getPrefix(String base64Hash) {
-        try {
-            // Decode first few bytes of base64 to get hex prefix
-            byte[] bytes = net.i2p.data.Base64.decode(base64Hash.substring(0, 8));
-            StringBuilder hex = new StringBuilder();
-            for (int i = 0; i < Math.min(bytes.length, PREFIX_LENGTH); i++) {
-                hex.append(String.format("%02x", bytes[i] & 0xFF));
+        return _prefixCache.computeIfAbsent(base64Hash, hash -> {
+            try {
+                byte[] bytes = net.i2p.data.Base64.decode(hash.substring(0, 8));
+                StringBuilder hex = new StringBuilder();
+                for (int i = 0; i < Math.min(bytes.length, PREFIX_LENGTH); i++) {
+                    hex.append(String.format("%02x", bytes[i] & 0xFF));
+                }
+                return hex.toString();
+            } catch (Exception e) {
+                return "0000";
             }
-            return hex.toString();
-        } catch (Exception e) {
-            return "0000";
+        });
+    }
+
+    /**
+     * Check if predictive banning is currently active and within recovery period.
+     *
+     * @return true if predictive banning should be applied
+     */
+    public boolean isPredictiveBanningActive() {
+        if (!_predictiveBanningActive.get()) {
+            return false;
         }
+
+        // Check if we've passed the recovery cooldown period
+        long timeSinceEnable = _context.clock().now() - _predictiveBanEnableTime;
+        if (timeSinceEnable > RECOVERY_COOLDOWN) {
+            // After cooldown, re-evaluate based on current peer count
+            Set<RouterInfo> routers = _context.netDb().getRouters();
+            if (routers != null && routers.size() < 500) {
+                if (_log.shouldWarn()) {
+                    _log.warn("Disabling predictive banning -> Peer pool too small (" +
+                             routers.size() + " peers, minimum 500 required)");
+                }
+                _predictiveBanningActive.set(false);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Disable predictive banning manually or after recovery period.
+     */
+    public void disablePredictiveBanning() {
+        _predictiveBanningActive.set(false);
+        if (_log.shouldWarn()) {
+            _log.warn("Predictive banning has been disabled");
+        }
+    }
+
+    /**
+     * Get remaining recovery time in milliseconds.
+     *
+     * @return remaining time, or 0 if not in recovery
+     */
+    public long getRemainingRecoveryTime() {
+        if (!_predictiveBanningActive.get()) {
+            return 0;
+        }
+        long elapsed = _context.clock().now() - _predictiveBanEnableTime;
+        return Math.max(0, RECOVERY_COOLDOWN - elapsed);
     }
 
     /**
@@ -307,29 +360,42 @@ public class HashPatternDetector implements Serializable {
             return false;
         }
 
-        // Convert prefixes to integers and sort
-        int[] values = _prefixStats.keySet().stream()
-            .filter(p -> !p.equals("0000"))
-            .mapToInt(p -> Integer.parseInt(p.substring(0, Math.min(4, p.length())), 16))
-            .sorted()
-            .toArray();
-
-        if (values.length < 5) {
+        // Convert prefixes to integers and sort - use simple loop instead of streams
+        int[] values = new int[_prefixStats.size()];
+        int idx = 0;
+        for (String p : _prefixStats.keySet()) {
+            if (!p.equals("0000")) {
+                values[idx++] = Integer.parseInt(p.substring(0, Math.min(4, p.length())), 16);
+            }
+        }
+        if (idx < 5) {
             return false;
+        }
+
+        // Simple insertion sort (more efficient for small arrays < 100 elements)
+        for (int i = 1; i < idx; i++) {
+            int key = values[i];
+            int j = i - 1;
+            while (j >= 0 && values[j] > key) {
+                values[j + 1] = values[j];
+                j--;
+            }
+            values[j + 1] = key;
         }
 
         // Look for sequences where values are close together (within 0x1000 = 4096)
         int sequenceCount = 0;
-        for (int i = 1; i < values.length; i++) {
-            int diff = values[i] - values[i-1];
+        for (int i = 1; i < idx; i++) {
+            int diff = values[i] - values[i - 1];
             if (diff > 0 && diff <= 0x1000) {
                 sequenceCount++;
             }
         }
 
-        // If 70% of consecutive values are within close range, likely sequential
-        double ratio = (double) sequenceCount / (values.length - 1);
-        return ratio >= 0.70;
+        // If 85% of consecutive values are within close range, likely sequential
+        // Now matches BAN_THRESHOLD for consistency
+        double ratio = (double) sequenceCount / (idx - 1);
+        return ratio >= BAN_THRESHOLD;
     }
 
     /**
@@ -360,6 +426,9 @@ public class HashPatternDetector implements Serializable {
      * @since 0.9.68
      */
     public void startScanner() {
+        // Predictive banning check is deferred to the scan task itself
+        // to ensure router is fully initialized
+
         long frequency = getHashScanFrequency();
         if (frequency <= 0) {
             if (_log.shouldWarn())
@@ -375,6 +444,34 @@ public class HashPatternDetector implements Serializable {
 
         if (_log.shouldInfo())
             _log.info("NetDB hash scanner starting in " + (SCAN_STARTUP_DELAY / 60000) + " minutes, interval: " + formatFrequency(frequency));
+    }
+
+    /**
+     * Check if predictive banning should be enabled.
+     * Called after router is fully initialized.
+     *
+     * @return true if predictive banning should be enabled
+     */
+    private boolean shouldEnablePredictiveBanning() {
+        // Check minimum known routers threshold - handle null netDb gracefully
+        try {
+            Set<RouterInfo> routers = _context.netDb().getRouters();
+            if (routers == null || routers.size() < MIN_KNOWN_ROUTERS) {
+                if (_log.shouldWarn()) {
+                    _log.warn("Not enough known routers to enable predictive banning: " +
+                             (routers != null ? routers.size() : 0) + " < " + MIN_KNOWN_ROUTERS);
+                }
+                return false;
+            }
+        } catch (NullPointerException e) {
+            // NetDB not ready yet, defer the check
+            if (_log.shouldWarn()) {
+                _log.warn("NetDB not yet available, deferring predictive banning check");
+            }
+            return false;
+        }
+
+        return hasSequentialPattern();
     }
 
     /**
@@ -577,15 +674,28 @@ public class HashPatternDetector implements Serializable {
     }
 
     /**
-     * Timed event for periodic NetDB scanning.
-     *
-     * @since 0.9.68
-     */
-    private class NetDbScanTask implements SimpleTimer.TimedEvent {
-        public void timeReached() {
-            scanNetDBForPatterns();
-        }
-    }
+      * Timed event for periodic NetDB scanning.
+      *
+      * @since 0.9.68
+      */
+     private class NetDbScanTask implements SimpleTimer.TimedEvent {
+         public void timeReached() {
+             // Check if we should enable predictive banning (deferred from constructor)
+             if (!_predictiveBanningActive.get() && shouldEnablePredictiveBanning()) {
+                 Set<String> suspicious = getSuspiciousPrefixes();
+                 _predictiveBanningActive.set(true);
+                 _predictiveBanEnableTime = _context.clock().now();
+                 if (_log.shouldWarn()) {
+                     _log.warn("WARNING! Algorithmic router identity generation pattern identified!" +
+                              "\n* Automatic predictive banning is now ENABLED" +
+                              "\n* Suspicious prefixes: " + suspicious +
+                              "\n* Future routers matching these patterns will be banned preventively");
+                 }
+             }
+
+             scanNetDBForPatterns();
+         }
+     }
 
     /**
      * Statistics for a particular hash prefix.
