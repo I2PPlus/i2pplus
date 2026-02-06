@@ -223,6 +223,7 @@ abstract class BuildRequestor {
     /**
      * Selects an appropriate tunnel for sending the build reply.
      * Prefers paired client tunnels; falls back to exploratory if needed.
+     * Client tunnels will never use exploratory tunnels with fewer hops than configured.
      */
     private static TunnelInfo selectPairedTunnel(RouterContext ctx, TunnelPool pool,
                                                  PooledTunnelCreatorConfig cfg,
@@ -232,6 +233,9 @@ abstract class BuildRequestor {
         Hash farEnd = cfg.getFarEnd();
         TunnelManagerFacade mgr = ctx.tunnelManager();
         long uptime = ctx.router().getUptime();
+        int clientLength = settings.getLength();
+        int clientLengthVariance = settings.getLengthVariance();
+        boolean clientWantsMultiHop = clientLength > 0 || clientLengthVariance > 0;
 
         // Use exploratory tunnels for exploratory pools or if paired disabled (never)
         if (settings.isExploratory() || !usePairedTunnels()) {
@@ -239,12 +243,27 @@ abstract class BuildRequestor {
                 ? mgr.selectOutboundExploratoryTunnel(farEnd)
                 : mgr.selectInboundExploratoryTunnel(farEnd);
 
-            // If no exploratory tunnels exist yet, allow zero-hop as fallback
-            if (expl == null) {
+            // Client tunnel using exploratory: ensure hop count meets client requirements
+            if (expl != null && clientWantsMultiHop && expl.getLength() <= 1) {
+                if (log.shouldWarn()) {
+                    log.warn("Rejecting " + (expl.getLength() <= 0 ? "zero" : "one") + 
+                             "-hop exploratory tunnel for client (wants " + clientLength + "+" + clientLengthVariance + " hops)");
+                }
+                return null;
+            }
+
+            // If no exploratory tunnels exist yet, allow zero-hop as fallback only for exploratory pools
+            if (expl == null && settings.isExploratory()) {
                 if (log.shouldInfo()) {
                     log.info("No existing Exploratory tunnels for " + cfg + " -> Allowing zero-hop build...");
                 }
-                // Return null to allow zero-hop tunnel build
+                return null;
+            }
+            // Client pools should never build 0-hop tunnels
+            if (expl == null && !settings.isExploratory()) {
+                if (log.shouldWarn()) {
+                    log.warn("No exploratory tunnel available for client pool " + cfg + " -> Build will fail");
+                }
                 return null;
             }
             return expl;
@@ -275,10 +294,19 @@ abstract class BuildRequestor {
             }
         }
 
-        // Fallback to exploratory
+        // Fallback to exploratory, but only if hop count meets client requirements
         TunnelInfo expl = isInbound
             ? selectFallbackOutboundTunnel(ctx, mgr, log)
             : selectFallbackInboundTunnel(ctx, mgr, log);
+
+        // Client tunnel check: ensure exploratory meets hop requirements
+        if (expl != null && clientWantsMultiHop && expl.getLength() <= 1) {
+            if (log.shouldWarn()) {
+                log.warn("Rejecting " + (expl.getLength() <= 0 ? "zero" : "one") + 
+                         "-hop exploratory fallback for client (wants " + clientLength + "+" + clientLengthVariance + " hops)");
+            }
+            return null;
+        }
 
         if (expl != null && log.shouldInfo()) {
             log.info("Using Exploratory tunnel as fallback for: " + cfg);

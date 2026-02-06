@@ -345,6 +345,10 @@ public class ProfileOrganizer {
         return 0;
     }
 
+    public boolean isLowBuildSuccess() {
+        return getTunnelBuildSuccess() > 0 && getTunnelBuildSuccess() < 0.40;
+    }
+
     public PeerProfile getProfile(Hash peer) {
         if (peer != null && peer.equals(_us)) return null;
         getReadLock();
