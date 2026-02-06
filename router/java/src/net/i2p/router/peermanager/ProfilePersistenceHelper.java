@@ -168,7 +168,13 @@ class ProfilePersistenceHelper {
         out.write(buf.toString().getBytes("UTF-8"));
 
         if (profile.getIsExpanded()) { // only write out expanded data if, uh, we've got it
-            profile.getTunnelHistory().store(out, addComments);
+            // Don't persist tunnel history for ghost peers (0 accepted, >10 rejected)
+            // They'll get a fresh start on next boot
+            TunnelHistory th = profile.getTunnelHistory();
+            boolean isGhost = th != null && th.getLifetimeAgreedTo() == 0 && th.getLifetimeRejected() > 10;
+            if (!isGhost) {
+                th.store(out, addComments);
+            }
             profile.getTunnelCreateResponseTime().store(out, "tunnelCreateResponseTime", addComments);
             if (PeerProfile.ENABLE_TUNNEL_TEST_RESPONSE_TIME) {
                 profile.getTunnelTestResponseTime().store(out, "tunnelTestResponseTime", addComments);

@@ -122,8 +122,12 @@ public class ProfileOrganizer {
         _context.statManager().createRequiredRateStat("peer.failedLookupRate", "NetDb Lookup failure rate", "Peers", RATES);
         _context.statManager().createRequiredRateStat("peer.profileSortTime", "Time to sort peers (ms)", "Peers", RATES);
 
-        // Lightweight ghost demotion job runs every 75 seconds
+        // Ghost demotion job - runs frequently to remove ghosts from tiers
         _context.simpleTimer2().addPeriodicEvent(new GhostDemoter(), 75 * 1000);
+        
+        // Ghost reset job - runs every 5-10 minutes to reset tunnel history for ghosts
+        // giving them a chance to recover. Uses shorter interval when under attack.
+        _context.simpleTimer2().addPeriodicEvent(new GhostResetter(), 5 * 60 * 1000);
     }
 
     /**
@@ -188,9 +192,60 @@ public class ProfileOrganizer {
     }
 
     /**
-     * Check if a peer is a ghost (accepts nothing, rejects everything OR marked by GhostPeerManager)
-     * @param profile the peer profile
-     * @param peer the peer hash for GhostPeerManager lookup
+     * Periodic ghost reset job - resets tunnel history for ghost peers so they can recover.
+     * Runs every 5 minutes, or more frequently when under attack.
+     */
+    private class GhostResetter implements SimpleTimer.TimedEvent {
+        public void timeReached() {
+            int resetCount = 0;
+            long now = _context.clock().now();
+            
+            // Check if we're under attack (low tunnel build success)
+            double buildSuccess = getTunnelBuildSuccess();
+            boolean underAttack = buildSuccess > 0 && buildSuccess < 0.35;
+            long resetInterval = underAttack ? 5 * 60 * 1000 : 10 * 60 * 1000;
+            
+            if (!tryWriteLock()) {
+                return;
+            }
+            
+            try {
+                // Reset tunnel history for ghost peers that haven't been heard from recently
+                for (PeerProfile profile : _notFailingPeers.values()) {
+                    Hash peer = profile.getPeer();
+                    
+                    if (isGhostPeer(profile, peer)) {
+                        TunnelHistory th = profile.getTunnelHistory();
+                        if (th != null) {
+                            // Only reset if ghost has been inactive for the reset interval
+                            long lastActivity = Math.max(th.getLastAgreedTo(), th.getLastRejected());
+                            if (now - lastActivity > resetInterval) {
+                                // Reset tunnel history to give peer a fresh start
+                                th.reset();
+                                resetCount++;
+                                if (_log.shouldDebug()) {
+                                    _log.debug("Reset tunnel history for ghost peer: " + peer.toBase64().substring(0, 6));
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                if (resetCount > 0 && _log.shouldInfo()) {
+                    _log.info("Reset tunnel history for " + resetCount + " ghost peers (attack: " + underAttack + ")");
+                }
+            } finally {
+                releaseWriteLock();
+            }
+            
+            // Reschedule with adjusted interval
+            long nextDelay = underAttack ? 5 * 60 * 1000 : 10 * 60 * 1000;
+            _context.simpleTimer2().addEvent(this, nextDelay);
+        }
+    }
+
+    /**
+     * Check if current router is firewalled to adjust peer selection thresholds
      */
     private boolean isGhostPeer(PeerProfile profile, Hash peer) {
         if (profile == null) return false;
@@ -885,14 +940,16 @@ public class ProfileOrganizer {
     }
 
     /**
-     * Bootstrap fast peers from high-bandwidth routers in NetDB when we have no fast peers.
+     * Bootstrap fast and high capacity peers from high-bandwidth routers in NetDB.
      * Prioritizes X tier (unlimited), then P tier (512KBps), then O tier (256KBps).
+     * These are temporary until profile manager initializes with real performance data.
      * @param target the target number of fast peers to bootstrap
      */
     private void bootstrapFastPeersFromNetDb(int target) {
         if (_context.netDb() == null) return;
 
-        int bootstrapped = 0;
+        int fastBootstrapped = 0;
+        int highCapBootstrapped = 0;
         Set<Hash> allRouters = _context.netDb().getAllRouters();
         if (allRouters == null || allRouters.isEmpty()) return;
 
@@ -928,10 +985,10 @@ public class ProfileOrganizer {
         candidates.addAll(pTier);
         candidates.addAll(oTier);
 
-        // Create profiles and add to fast peers
-        for (RouterInfo ri : candidates) {
-            if (_fastPeers.size() >= target) break;
+        int minHighCap = getMinimumHighCapacityPeers();
 
+        // Create profiles and add to tiers
+        for (RouterInfo ri : candidates) {
             Hash peer = ri.getIdentity().getHash();
             PeerProfile profile = locked_getProfile(peer);
 
@@ -945,19 +1002,28 @@ public class ProfileOrganizer {
                 _strictCapacityOrder.add(profile);
             }
 
-            // Add to fast peers (bypass ghost checks during bootstrap)
-            _fastPeers.put(peer, profile);
-            bootstrapped++;
+            // Add to high capacity tier if needed
+            if (_highCapacityPeers.size() < minHighCap && isSelectable(peer)) {
+                _highCapacityPeers.put(peer, profile);
+                highCapBootstrapped++;
+            }
+
+            // Add to fast peers if still needed (bypass ghost checks during bootstrap)
+            if (_fastPeers.size() < target) {
+                _fastPeers.put(peer, profile);
+                fastBootstrapped++;
+            }
 
             if (_log.shouldDebug()) {
-                _log.debug("Bootstrapped fast peer from NetDB: " + peer.toBase64().substring(0, 6) +
+                _log.debug("Bootstrapped peer from NetDB: " + peer.toBase64().substring(0, 6) +
                           " (bandwidth: " + ri.getBandwidthTier() + ")");
             }
         }
 
-        if (bootstrapped > 0 && _log.shouldInfo()) {
-            _log.info("Bootstrapped " + bootstrapped + " fast peers from NetDB high-bandwidth routers " +
-                      "(X: " + xTier.size() + ", P: " + pTier.size() + ", O: " + oTier.size() + ")");
+        if ((fastBootstrapped > 0 || highCapBootstrapped > 0) && _log.shouldInfo()) {
+            _log.info("Bootstrapped " + fastBootstrapped + " fast and " + highCapBootstrapped +
+                      " high capacity peers from NetDB (X: " + xTier.size() + ", P: " + pTier.size() +
+                      ", O: " + oTier.size() + ")");
         }
     }
 

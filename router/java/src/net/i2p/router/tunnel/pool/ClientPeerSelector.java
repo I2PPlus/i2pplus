@@ -266,7 +266,9 @@ class ClientPeerSelector extends TunnelPeerSelector {
             if (rv.size() < length) {
                 // not enough peers to build the requested size
                 // client tunnels do not use overrides
-                if (log.shouldWarn()) {
+                // Suppress warnings during startup (first 15 minutes)
+                long uptime = ctx.router() != null ? ctx.router().getUptime() : 0;
+                if (log.shouldWarn() && uptime > 15*60*1000) {
                     log.warn("Not enough peers to build requested " + length + " hop tunnel (" + rv.size() + " available)");
                 }
                 int min = settings.getLength();

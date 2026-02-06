@@ -109,6 +109,26 @@ public class TunnelHistory {
         _failRate.coalesceStats();
     }
 
+    /**
+     * Reset all tunnel history counters and timestamps.
+     * Used to give ghost peers a fresh start.
+     * @since 0.9.68+
+     */
+    public void reset() {
+        _lifetimeAgreedTo.set(0);
+        _lifetimeRejected.set(0);
+        _lifetimeFailed.set(0);
+        _lastAgreedTo = 0;
+        _lastRejectedCritical = 0;
+        _lastRejectedBandwidth = 0;
+        _lastRejectedTransient = 0;
+        _lastRejectedProbabalistic = 0;
+        _lastFailed = 0;
+        // Reset rate stats
+        _rejectRate.removeAllData();
+        _failRate.removeAllData();
+    }
+
     private final static String NL = System.getProperty("line.separator");
     private final static String HR = "# ----------------------------------------------------------------------------------------";
 
