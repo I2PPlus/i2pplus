@@ -1363,7 +1363,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
         String err = validate(key, leaseSet);
         if (err != null) {
-            throw new IllegalArgumentException("Invalid NetDbStore attempt -> " + err);
+            throw new IllegalArgumentException("Invalid NetDbStore attempt \n* " + err);
         }
 
         if (force) {_ds.forcePut(key, leaseSet);}
