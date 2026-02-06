@@ -22,6 +22,7 @@ import net.i2p.data.Hash;
 import net.i2p.data.SessionKey;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.NetworkDatabaseFacade;
+import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.tunnel.pool.GhostPeerManager;
 import net.i2p.router.tunnel.pool.TunnelPeerSelector;
@@ -733,24 +734,6 @@ public class ProfileOrganizer {
                     continue;
                 }
 
-                // Demote peers that reject all tunnel requests (ghost peers)
-                // If peer has 0 accepted but >10 rejections, they're not participating
-                TunnelHistory th = profile.getTunnelHistory();
-                if (th != null) {
-                    long agreed = th.getLifetimeAgreedTo();
-                    long rejected = th.getLifetimeRejected();
-                    // Peer is a ghost if they reject far more than they accept
-                    // Or if they have significant rejections (50+) and almost no accepts (<5)
-                    if (rejected > 0 && agreed == 0 && rejected > 10) {
-                        // Peer accepts nothing but rejects requests - demote from fast/high cap
-                        continue;
-                    }
-                    if (rejected > 50 && agreed < 5 && rejected > agreed * 10) {
-                        // Severe ratio: many rejections, few accepts
-                        continue;
-                    }
-                }
-
                 if (!profile.getIsActive(now)) {
                     continue;
                 }
@@ -880,19 +863,101 @@ public class ProfileOrganizer {
                           " \n* Fast peers: " + _fastPeers.size() + " (added " + added + " via fallback)");
             }
 
+            // Step 8: Bootstrap fast peers from high-bandwidth tiers if we have none
+            if (_fastPeers.isEmpty()) {
+                bootstrapFastPeersFromNetDb(target);
+            }
+
             long total = System.currentTimeMillis() - start;
             _context.statManager().addRateData("peer.profileReorgTime", total, profileCount);
             _context.statManager().addRateData("peer.activeProfileCount", profileCount, 0);
             _context.statManager().addRateData("peer.expiredProfileCount", expiredCount, 0);
 
-            // Step 8: Enforce memory cap
+            // Step 9: Enforce memory cap
             enforceProfileCap();
 
-            // Step 9: Clean up persisted profiles
+            // Step 10: Clean up persisted profiles
             purgeStaleProfileFiles();
 
         } finally {
             releaseWriteLock();
+        }
+    }
+
+    /**
+     * Bootstrap fast peers from high-bandwidth routers in NetDB when we have no fast peers.
+     * Prioritizes X tier (unlimited), then P tier (512KBps), then O tier (256KBps).
+     * @param target the target number of fast peers to bootstrap
+     */
+    private void bootstrapFastPeersFromNetDb(int target) {
+        if (_context.netDb() == null) return;
+
+        int bootstrapped = 0;
+        Set<Hash> allRouters = _context.netDb().getAllRouters();
+        if (allRouters == null || allRouters.isEmpty()) return;
+
+        // Collect candidates by tier (X > P > O)
+        List<RouterInfo> xTier = new ArrayList<>();
+        List<RouterInfo> pTier = new ArrayList<>();
+        List<RouterInfo> oTier = new ArrayList<>();
+
+        for (Hash peer : allRouters) {
+            if (_us.equals(peer)) continue;
+            if (_fastPeers.containsKey(peer)) continue;
+
+            RouterInfo ri = _context.netDb().lookupRouterInfoLocally(peer);
+            if (ri == null) continue;
+            if (ri.isHidden()) continue;
+
+            String caps = ri.getCapabilities();
+            if (caps == null) continue;
+
+            // Check for high bandwidth tiers in priority order
+            if (caps.indexOf(Router.CAPABILITY_BW_UNLIMITED) >= 0) {
+                xTier.add(ri);
+            } else if (caps.indexOf(Router.CAPABILITY_BW512) >= 0) {
+                pTier.add(ri);
+            } else if (caps.indexOf(Router.CAPABILITY_BW256) >= 0) {
+                oTier.add(ri);
+            }
+        }
+
+        // Add candidates in priority order: X tier first, then P, then O
+        List<RouterInfo> candidates = new ArrayList<>(xTier.size() + pTier.size() + oTier.size());
+        candidates.addAll(xTier);
+        candidates.addAll(pTier);
+        candidates.addAll(oTier);
+
+        // Create profiles and add to fast peers
+        for (RouterInfo ri : candidates) {
+            if (_fastPeers.size() >= target) break;
+
+            Hash peer = ri.getIdentity().getHash();
+            PeerProfile profile = locked_getProfile(peer);
+
+            if (profile == null) {
+                // Create new profile for this peer
+                profile = new PeerProfile(_context, peer);
+                profile.setLastHeardAbout(_context.clock().now());
+                profile.coalesceStats();
+                _notFailingPeers.put(peer, profile);
+                _notFailingPeersList.add(peer);
+                _strictCapacityOrder.add(profile);
+            }
+
+            // Add to fast peers (bypass ghost checks during bootstrap)
+            _fastPeers.put(peer, profile);
+            bootstrapped++;
+
+            if (_log.shouldDebug()) {
+                _log.debug("Bootstrapped fast peer from NetDB: " + peer.toBase64().substring(0, 6) +
+                          " (bandwidth: " + ri.getBandwidthTier() + ")");
+            }
+        }
+
+        if (bootstrapped > 0 && _log.shouldInfo()) {
+            _log.info("Bootstrapped " + bootstrapped + " fast peers from NetDB high-bandwidth routers " +
+                      "(X: " + xTier.size() + ", P: " + pTier.size() + ", O: " + oTier.size() + ")");
         }
     }
 
@@ -1178,15 +1243,18 @@ public class ProfileOrganizer {
         boolean isStrictCountry = _context.commSystem() != null && _context.commSystem().isInStrictCountry(peer);
         boolean isPeerSelectable = isSelectable(peer);
 
+        // Check if peer is a ghost (rejects most tunnel requests)
+        boolean isGhost = isGhostPeer(profile, peer);
+
         // Decide if peer qualifies for high-capacity tier
-        if (profile.getCapacityValue() >= effectiveCapThreshold && isPeerSelectable && !isStrictCountry) {
+        if (!isGhost && profile.getCapacityValue() >= effectiveCapThreshold && isPeerSelectable && !isStrictCountry) {
             _highCapacityPeers.put(peer, profile);
 
             // Also check if peer qualifies for fast tier
             if (profile.getSpeedValue() >= effectiveSpeedThreshold && profile.getIsActive()) {
                 _fastPeers.put(peer, profile);
             }
-        } else if (_highCapacityPeers.size() < minHighCap && isPeerSelectable && !isStrictCountry) {
+        } else if (!isGhost && _highCapacityPeers.size() < minHighCap && isPeerSelectable && !isStrictCountry) {
             _highCapacityPeers.put(peer, profile);
         }
 
