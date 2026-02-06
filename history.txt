@@ -1,13 +1,76 @@
+2026-02-06 dr|z3d
+ * Router:
+   - Adaptive peer testing - double concurrency under attack, limit
+     when job queue backed up
+   - Log flood throttle offenders and auto-ban abusers
+   - Reduce lease renewal interval under attack
+
+2026-02-05 dr|z3d
+ * Router:
+   - Add BanLogger and HashPatternDetector for botnet detection and
+     sessionbans logging
+   - Integrate BanLogger for netDB, transport layer, and tunnel pool
+     ban event logging
+   - Add duplicate tunnel sequence detection; display duplicate status
+     in tunnel list, mark and fail duplicates appropriately
+   - Increase tunnel test capacity and peer tunnel limit under low
+     build success to mitigate attacks
+   - Add 10-minute sliding window to bad packet counter to avoid false
+     positives
+   - Increase floodfill query concurrency under attack
+   - Do not ban floodfills for version mismatches
+
+2026-02-04 dr|z3d
+ * Router:
+   - Track and ban routers for unsolicited DbSearchReply after 3
+     occurrences
+   - Track and ban repeat offenders for corrupt SSU2 SessionConfirmed
+     messages
+   - Add per-IP tracking for SSU2 TERMINATION and establishment failures
+
 2026-02-01 dr|z3d
  * Console: Display tunnel test status on /tunnels; don't display
    transient HostChecker ping tables
- * Addressbook: Dynamically throttle hostchecker concurrency based
-   on router job lag
+ * Addressbook: Throttle hostchecker concurrency based on router job lag
+ * Router:
+   - Implement job lag-based concurrency and batched staggered
+     scheduling for sendStore to eliminate blocking
+   - Add JobQueueScaler for job runner scaling based on system load
+   - Increase LeaseSet republishing interval and implement 15-second
+     batching window for republishing
+
+2026-01-31 dr|z3d
+ * Router:
+   - Implement async delegation for tunnel build reply processing to
+     prevent InNetMessagePool lag
+   - Optimize UDP packet memory usage with buffer pooling/reduced zeroing
+   - Add early packet drop mechanisms for UDP queue backpressure
+   - Reduce NTCP/SSU buffer and queue over-allocation
+   - Add nanosecond precision timing for sub-millisecond job duration
+     tracking
 
 2026-01-30 dr|z3d
  * I2PSnark: Optimize DHT for more efficient memory management
  * Console: Enhance and declutter presentation of jobs on /jobqueue
- * Router: TestJob optimizations
+ * Router:
+   - TestJob optimizations with deduplication and pool coverage tracking
+   - Batch tunnel expirations via ExpireJobManager
+   - Improve job dropping logic to prevent lag buildup and memory bloat
+   - Reduce lock contention in TunnelRemovalJob
+
+2026-01-26 dr|z3d
+ * Router: Improve tunnel test performance with faster failure detection
+   and higher limits
+ * Console/Webapps: Tibetan translation
+
+2026-01-24 dr|z3d
+ * Router:
+   - Implement adaptive tunnel testing frequency with success rate tracking
+   - Grace period of 10m after startup before banning for excessive lookups
+
+2026-01-18 dr|z3d
+ * I2PTunnel: Add graceful shutdown and destination limit to AccessFilter
+ * Router: Add cache cleanup to prevent memory leaks in RepublishLeaseSetJob
 
 2026-01-09 dr|z3d
  * I2PTunnel: Implement optional random startup delay for automatically
@@ -18,14 +81,13 @@
    button on addressbook pages
 
 2025-12-19 dr|z3d
- * SusiDNS: Display site categories in host lists, classfications
+ * SusiDNS: Display site categories in host lists, classifications
    courtesy of notbob.i2p
 
 2025-12-17 dr|z3d
  * SusiDNS: Implement blacklist feature to hide blacklisted hosts from
    addressbook lists
- * I2PTunnel: Use SusiDNS blacklist to block access to hosts via http
-   proxy
+ * I2PTunnel: Use SusiDNS blacklist to block access to hosts via http proxy
 
 2025-12-13 dr|z3d
  * SusiDNS: Implement automated host checker to determine reachability
@@ -35,7 +97,7 @@
  * Router: Reduce memory footprint by optimizing stats collection
 
 2025-12-08 dr|z3d
- * Console/Webapps: Tibetan translation
+ * Console: Add Tibetan translation to console and webapps
 
 2025-12-07 dr|z3d
  * SusiDNS: Add source and date added columns to main hostlist tables
@@ -44,7 +106,7 @@
  * Console:
    - Migrate various auto-refreshing pages to refreshElements.js,
      leverage morphdom.js for improved refresh rendering performance,
-     and use our shared worker for background updates
+     and use shared worker for background updates
    - Fixup and enhance column sorting on eligible tables
    - Add auto-refresh to leasesets and netdb listings pages
 
@@ -60,17 +122,20 @@
 
 2025-09-29 dr|z3d
  * Console: Iconize and add tooltips to peer status on /profiles
- * Transports: Optimize and refactor NTCP EventPumper
-
-2025-09-24 dr|z3d
- * Transports: Fix syntax bug preventing inbound SSU connections
+ * Transports: Optimize and refactor NTCP EventPumper to reduce CPU
+   usage and improve connection management
 
 2025-09-24 dr|z3d
  * Console: Add compact NetDb search form to /netdb pages
+ * Transports: Fix syntax bug preventing inbound SSU connections
 
 2025-09-22 dr|z3d
  * Console: Add optional fallback whois lookups for routers when
    reverse dns lookups are enabled
+
+2025-09-17 dr|z3d
+ * Router: Implement reverse DNS lookup file cache with LRU eviction
+   policy and configurable memory limits
 
 2025-09-12 dr|z3d
  * Console: Add UI option to toggle sticky sidebar on /configsidebar
