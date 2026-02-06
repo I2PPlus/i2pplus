@@ -402,10 +402,15 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             return configured;
         }
 
-        // Relax if build success is low (<40%) and we have data
-        if (buildSuccess > 0 && buildSuccess < 0.40) {
+        // Relax if build success is low - with hysteresis to prevent oscillation
+        // Relax below 35%, restore above 45%
+        if (buildSuccess > 0 && buildSuccess < 0.35) {
             shouldRelax = true;
             reason = "low build success (" + (int)(buildSuccess * 100) + "%)";
+        }
+        // Don't relax if recovering (above 45%)
+        if (buildSuccess >= 0.45) {
+            shouldRelax = false;
         }
 
         // Relax during first 10 minutes of uptime (no build success data yet)

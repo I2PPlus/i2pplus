@@ -763,8 +763,10 @@ public class ProfileOrganizer {
             }
 
             // Step 2: Check build success and adjust thresholds adaptively
+            // With hysteresis: relax below 35%, restore above 45%
             double buildSuccess = getTunnelBuildSuccess();
-            boolean isLowBuildSuccess = buildSuccess > 0 && buildSuccess < 0.40; // Below 40%
+            boolean isLowBuildSuccess = buildSuccess > 0 && buildSuccess < 0.35;
+            boolean isRecovering = buildSuccess >= 0.45;
 
             // Calculate new thresholds
             int numNotFailing = newStrictCapacityOrder.size();
@@ -774,9 +776,13 @@ public class ProfileOrganizer {
 
             // Adaptive relaxation: if build success is low, relax thresholds significantly
             // This allows more peers into fast/high cap tiers during network stress
+            // With hysteresis to prevent oscillation between relaxed/strict modes
             if (isLowBuildSuccess && _log.shouldInfo()) {
                 _log.info("Low tunnel build success (" + (int)(buildSuccess * 100) +
                           "%) - relaxing tier thresholds to expand peer pool");
+            } else if (isRecovering && _log.shouldInfo()) {
+                _log.info("Tunnel build success recovered (" + (int)(buildSuccess * 100) +
+                          "%) - restoring strict tier thresholds");
             }
 
             if (isLowBuildSuccess) {

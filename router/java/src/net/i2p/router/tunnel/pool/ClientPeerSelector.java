@@ -273,17 +273,39 @@ class ClientPeerSelector extends TunnelPeerSelector {
                 int skew = settings.getLengthVariance();
                 if (skew < 0) {min += skew;}
                 // not enough peers to build the minimum size
-                if (rv.size() < min) {
-                    // For firewalled routers with very few peers, allow shorter tunnels as fallback
-                    if (hidden && rv.size() > 0) {
+            if (rv.size() < min) {
+                // For firewalled routers with very few peers, allow shorter tunnels as fallback
+                if (hidden && rv.size() > 0) {
+                    if (log.shouldWarn()) {
+                        log.warn("Firewalled router: allowing shorter tunnel (" + rv.size() + " hops) instead of requested " + length + " hops");
+                    }
+                    // Continue with whatever peers we have
+                } else {
+                    // Under severe attack (< 25% build success), try fallback to any peer before giving up
+                    double buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
+                    if (buildSuccess > 0 && buildSuccess < 0.25) {
                         if (log.shouldWarn()) {
-                            log.warn("Firewalled router: allowing shorter tunnel (" + rv.size() + " hops) instead of requested " + length + " hops");
+                            log.warn("Severe attack detected (" + (int)(buildSuccess * 100) + "% success) -> Trying fallback peer selection...");
                         }
-                        // Continue with whatever peers we have
+                        // Fall back to any peer in notFailing pool
+                        ArraySet<Hash> fallback = new ArraySet<Hash>(min);
+                        ctx.profileOrganizer().selectNotFailingPeers(min, exclude, fallback, false, 0, null);
+                        fallback.remove(ctx.routerHash());
+                        if (!fallback.isEmpty()) {
+                            rv.clear();
+                            rv.addAll(fallback);
+                            if (log.shouldWarn()) {
+                                log.warn("Fallback successful: found " + rv.size() + " peers for tunnel");
+                            }
+                        }
+                        if (rv.size() < min) {
+                            return null;
+                        }
                     } else {
                         return null;
                     }
                 }
+            }
             }
         } else {rv = new ArrayList<Hash>(1);}
 
