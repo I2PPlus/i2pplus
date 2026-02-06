@@ -64,6 +64,16 @@ public class PeerTestJob extends JobImpl {
     private static final int DEFAULT_PEER_TEST_TIMEOUT = 750;
     public static final String PROP_PEER_TEST_TIMEOUT = "router.peerTestTimeout";
 
+    // Adaptive peer testing for attack mitigation @since 0.9.68+
+    private static final boolean ADAPTIVE_PEER_TEST = true;
+    public static final String PROP_ADAPTIVE_PEER_TEST = "router.adaptivePeerTest";
+    private static final double LOW_SUCCESS_THRESHOLD = 0.40; // 40%
+    private static final long ADAPTIVE_CHECK_INTERVAL = 60 * 1000; // Check every minute
+    private long _lastAdaptiveCheck;
+
+    // State tracking for adaptive behavior @since 0.9.68+
+    private volatile boolean _aggressiveMode = false;
+
     /**
      * Creates a new PeerTestJob instance and initializes required statistics.
      *
@@ -153,32 +163,44 @@ public class PeerTestJob extends JobImpl {
     }
 
     /**
-     * Determines the number of peers to test concurrently based on system capabilities.
-     *
-     * <p>Concurrency is limited to 1 when CPU load exceeds 80% to prevent system overload.
-     * Default value adapts based on system resources (1-4 peers).</p>
-     *
-     * @return number of peers to test in parallel
-     */
+      * Determines the number of peers to test concurrently based on system capabilities.
+      *
+      * <p>Concurrency is limited to 1 when CPU load exceeds 80% or job queue is backed up.
+      * Default value adapts based on system resources (1-4 peers).
+      * Aggressive mode doubles concurrency under attack if system can handle it.</p>
+      *
+       * @return number of peers to test in parallel
+      */
     private int getTestConcurrency() {
         int cores = SystemVersion.getCores();
         long memory = SystemVersion.getMaxMemory();
         int testConcurrent = getContext().getProperty(PROP_PEER_TEST_CONCURRENCY, DEFAULT_PEER_TEST_CONCURRENCY);
-        if (SystemVersion.getCPULoadAvg() > 80) {testConcurrent = 1;}
+
+        // Always reduce under high CPU load
+        if (SystemVersion.getCPULoadAvg() > 80) {
+            return 1;
+        }
+
+        // Don't increase concurrency if job queue is backed up @since 0.9.68+
+        long maxLag = getContext().jobQueue().getMaxLag();
+        if (maxLag > 300) {
+            // Queue is backed up, use minimum concurrency
+            return Math.min(testConcurrent, 2);
+        }
+
+        if (_aggressiveMode) {
+            // Double concurrency under attack to identify failures faster,
+            // but only if system is healthy enough @since 0.9.68+
+            return Math.min(testConcurrent * 2, 8);
+        }
         return testConcurrent;
     }
 
     /**
-     * Starts the peer testing process with adaptive initial delay.
-     * 
-     * <p>Schedules the first test run based on router uptime:
-     * <ul>
-     *   <li>If uptime < 3 minutes: wait 3 minutes before starting</li>
-     *   <li>Otherwise: start immediately with configured delay</li>
-     * </ul>
-     * </p>
-     * 
-     * @param manager the peer manager to use for peer selection
+     * Override concurrency to use aggressive mode under attack.
+     * Aggressive mode tests more peers concurrently to identify failures faster.
+     * @return number of peers to test in parallel
+     * @since 0.9.68+
      */
     public synchronized void startTesting(PeerManager manager) {
         _manager = manager;
@@ -222,7 +244,8 @@ public class PeerTestJob extends JobImpl {
      * <ul>
      *   <li>Double delay if job lag > 300ms (system overload)</li>
      *   <li>Double delay if CPU load > 80% (resource conservation)</li>
-     *   <li>Normal delay otherwise</li>
+     *   <li>Enable aggressive testing when build success < 40% (attack mitigation)</li>
+     *   <li>Increase test concurrency under attack to identify failing peers faster</li>
      * </ul>
      */
     public void runJob() {
@@ -234,13 +257,19 @@ public class PeerTestJob extends JobImpl {
             manager = _manager;
         }
         if (!keepTesting) return;
-        
+
+        // Adaptive peer testing: enable aggressive mode under attack @since 0.9.68+
+        boolean adaptiveEnabled = getContext().getProperty(PROP_ADAPTIVE_PEER_TEST, ADAPTIVE_PEER_TEST);
+        if (adaptiveEnabled) {
+            adaptToNetworkConditions();
+        }
+
         // Select and test peers for this round
         Set<RouterInfo> peers = selectPeersToTest();
         for (RouterInfo peer : peers) {
             testPeer(peer);
         }
-        
+
         // Adapt next run delay based on system performance
         if (lag > 300 || SystemVersion.getCPULoadAvg() > 80) {
             requeue(getPeerTestDelay() * 2);
@@ -255,6 +284,36 @@ public class PeerTestJob extends JobImpl {
         }
         if (_log.shouldInfo())
             _log.info("Next Peer Test run in " + getPeerTestDelay() + "ms");
+    }
+
+    /**
+     * Adaptive peer testing based on tunnel build success.
+     * Under attack (low build success), run more aggressive testing to identify
+     * failing peers faster and exclude them from tunnel builds.
+     * @since 0.9.68+
+     */
+    private void adaptToNetworkConditions() {
+        long now = System.currentTimeMillis();
+        if (now - _lastAdaptiveCheck < ADAPTIVE_CHECK_INTERVAL) {
+            return; // Only check once per minute
+        }
+        _lastAdaptiveCheck = now;
+
+        double buildSuccess = getContext().profileOrganizer().getTunnelBuildSuccess();
+        boolean wasAggressive = _aggressiveMode;
+        _aggressiveMode = buildSuccess < LOW_SUCCESS_THRESHOLD;
+
+        if (_aggressiveMode && !wasAggressive) {
+            // Transitioned to aggressive mode
+            if (_log.shouldWarn()) {
+                _log.warn("Low tunnel build success (" + (int)(buildSuccess * 100) + "%) -> Enabling aggressive peer testing");
+            }
+        } else if (!_aggressiveMode && wasAggressive) {
+            // Transitioned back to normal
+            if (_log.shouldInfo()) {
+                _log.info("Tunnel build success recovered (" + (int)(buildSuccess * 100) + "%) -> Returning to normal peer testing");
+            }
+        }
     }
 
     /**
