@@ -87,11 +87,12 @@ import { refreshElements } from "./refreshElements.js";
       if (reasonCell) {
         let reason = reasonCell.textContent;
         reason = reason.split("(")[0].trim();
-        reason = reason.replace("Compressible RouterInfo & older than 0.9.57", "Invalid RouterInfo")
-                       .replace("<b> -&gt; </b>", "")
+        reason = reason.replace("<b> -&gt; </b>", "")
                        .replace("<b> -> </b>", "")
                        .replace(/>\s*/, "")
                        .replace(/->\s*/, "")
+                       .replace(/^-\s*/, "")  // Remove leading dash
+                       .replace(/^ \-> /, "") // Remove leading " -> "
                        .replace(/Blocklist:\s*[\d.:a-f]+/i, "Blocklist");
         reason = reason.trim();
         if (reason) { reasonCounts[reason] = (reasonCounts[reason] || 0) + 1; }

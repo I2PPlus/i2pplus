@@ -116,7 +116,11 @@ class BanlistRenderer {
                 if (entry.cause.toLowerCase().contains("floodfill")) {
                     buf.append(" banFF");
                 }
-                String reason = _t(entry.cause, entry.causeCode).replace("<b>➜</b> ", "");
+                String reason = _t(entry.cause, entry.causeCode)
+                    .replace("<b>➜</b> ", "")
+                    .replace("<b> -> </b>", "")
+                    .replace(" -> ", "")
+                    .replaceAll("^\\s*[<-]\\s*", ""); // Remove leading arrows or dashes
                 // Strip IP from Blocklist bans for cleaner display
                 String lcReason = reason.toLowerCase();
                 if (lcReason.startsWith("blocklist")) {
