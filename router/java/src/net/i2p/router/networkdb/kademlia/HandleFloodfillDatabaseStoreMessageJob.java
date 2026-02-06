@@ -9,6 +9,8 @@ package net.i2p.router.networkdb.kademlia;
  */
 
 import java.util.Collection;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.data.DataHelper;
 import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Hash;
@@ -31,6 +33,9 @@ import net.i2p.router.BanLogger;
 import net.i2p.router.TunnelInfo;
 import net.i2p.router.message.SendMessageDirectJob;
 import net.i2p.util.Log;
+import net.i2p.util.ObjectCounter;
+import net.i2p.util.SimpleTimer;
+import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
@@ -61,6 +66,26 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
     private static final int LIMIT_ROUTERS = SystemVersion.isSlow() ? 1000 : 4000;
     private final long _msgIDBloomXor;
     private static final int RESEND_DELAY = 500;
+
+    // Abuse tracking for flood throttle offenders @since 0.9.68+
+    private static final int FLOOD_ABUSE_THRESHOLD = 5; // Violations before ban
+    private static final long FLOOD_ABUSE_WINDOW = 5*60*1000; // 5 minutes
+    private static final long FLOOD_ABUSE_BAN_TIME = 4*60*60*1000; // 4 hours
+    private static final ConcurrentHashMap<Hash, AtomicInteger> _floodAbuseCounters = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<Hash, Long> _floodAbuseBannedUntil = new ConcurrentHashMap<>();
+
+    // Periodic cleanup for abuse tracking @since 0.9.68+
+    private static final SimpleTimer.TimedEvent _abuseCleanupEvent = new SimpleTimer.TimedEvent() {
+        public void timeReached() {
+            long now = System.currentTimeMillis();
+            _floodAbuseBannedUntil.entrySet().removeIf(entry -> entry.getValue() <= now);
+        }
+    };
+
+    static {
+        // Start cleanup timer for abuse tracking @since 0.9.68+
+        SimpleTimer2.getInstance().addPeriodicEvent(_abuseCleanupEvent, 5*60*1000);
+    }
 
     /**
      * @param receivedMessage must never have reply token set if it came down a tunnel
@@ -510,8 +535,39 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                 // DOS prevention
                 // Note this does not throttle the ack above
                 if (_facade.shouldThrottleFlood(key)) {
-                    if (_log.shouldWarn()) {_log.warn("Too many recent stores, not flooding key: " + key);}
+                    // Log the sender's hash for abuse tracking @since 0.9.68+
+                    String senderHash = _fromHash != null ? _fromHash.toBase64().substring(0, 6) : "unknown";
+                    if (_log.shouldWarn()) {
+                        _log.warn("Too many recent stores from [" + senderHash + "] for key: " + key);
+                    }
                     getContext().statManager().addRateData("netDb.floodThrottled", 1);
+
+                    // Track abuse and ban persistent offenders @since 0.9.68+
+                    if (_fromHash != null) {
+                        long banTime = System.currentTimeMillis();
+                        Long bannedUntil = _floodAbuseBannedUntil.get(_fromHash);
+                        if (bannedUntil != null && bannedUntil > banTime) {
+                            // Already banned, skip
+                            return;
+                        }
+
+                        AtomicInteger abuseCount = _floodAbuseCounters.computeIfAbsent(_fromHash,
+                            k -> new AtomicInteger(0));
+                        int count = abuseCount.incrementAndGet();
+
+                        if (count >= FLOOD_ABUSE_THRESHOLD) {
+                            // Ban for 4 hours @since 0.9.68+
+                            long banExpiry = banTime + FLOOD_ABUSE_BAN_TIME;
+                            _floodAbuseBannedUntil.put(_fromHash, banExpiry);
+                            abuseCount.set(0); // Reset counter after ban
+                            if (_log.shouldWarn()) {
+                                _log.warn("Banning router [" + senderHash + "] for 4h - excessive flood abuse (" +
+                                          count + " violations)");
+                            }
+                            getContext().banlist().banlistRouter(_fromHash,
+                                "Flood abuse - excessive NetDb stores", null, null, banExpiry);
+                        }
+                    }
                     return;
                 }
                 // Flood in separate thread to avoid blocking main thread
