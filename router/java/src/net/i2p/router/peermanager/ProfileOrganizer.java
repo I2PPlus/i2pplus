@@ -1089,6 +1089,13 @@ public class ProfileOrganizer {
         if (maxProfiles < 100) maxProfiles = 100;
         if (maxProfiles > ABSOLUTE_MAX_PROFILES) maxProfiles = ABSOLUTE_MAX_PROFILES;
 
+        // Be more protective during attacks - increase effective cap
+        boolean underAttack = isLowBuildSuccess();
+        if (underAttack) {
+            maxProfiles = (int)(maxProfiles * 1.5);
+            if (maxProfiles > ABSOLUTE_MAX_PROFILES) maxProfiles = ABSOLUTE_MAX_PROFILES;
+        }
+
         if (_notFailingPeers.size() <= maxProfiles) {
             return; // within limits
         }

@@ -61,22 +61,21 @@ class ProfileOrganizerRenderer {
         int ff = 0;
         for (Hash peer : peers) {
             PeerProfile prof = _organizer.getProfileNonblocking(peer);
-            if (prof == null) {break;}
+            if (prof == null) {continue;}
             int agreed = Math.round(prof.getTunnelHistory().getLifetimeAgreedTo());
             int rejected = Math.round(prof.getTunnelHistory().getLifetimeRejected());
             RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
             boolean isFF = info != null && info.getCapabilities().indexOf('f') >= 0;
-            if (_organizer.getUs().equals(peer) || prof.getLastHeardFrom() <= 0 || (agreed <= 0 && rejected <= 0)) {continue;}
-            if (mode == 2) {
-                if (isFF) {
-                    order.add(prof);
-                    ff++;
-                    continue;
+            if (_organizer.getUs().equals(peer) || prof.getLastHeardFrom() <= 0 || (agreed <= 0 && rejected <= 0 && prof.getFirstHeardAbout() <= 0)) {continue;}
+            if (mode != 2) {
+                boolean isActive = prof.getIsActive() || prof.getLastSendSuccessful() > hideBefore || prof.getLastHeardFrom() > hideBefore;
+                boolean underAttack = _organizer.isLowBuildSuccess();
+                if (!isActive && prof.getLastHeardFrom() <= hideBefore && prof.getFirstHeardAbout() < now - 60*60*1000) {
+                    if (!underAttack || !_organizer.isFast(peer)) {
+                        older++;
+                        continue;
+                    }
                 }
-            }
-            if (mode != 2 && (prof.getLastHeardFrom() <= hideBefore || prof.getLastSendSuccessful() <= hideBefore) && !prof.getIsActive()) {
-                older++;
-                continue;
             }
             if (!full && !_organizer.isHighCapacity(peer)) {
                 standard++;
