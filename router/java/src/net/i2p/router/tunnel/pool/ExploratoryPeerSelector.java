@@ -184,8 +184,17 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
                 // As of 0.9.23, we include a max of 2 not failing peers,
                 // to improve build success on 3-hop tunnels.
                 // Peer org credits existing items in matches
-                if (length > 2)
-                    ctx.profileOrganizer().selectHighCapacityPeers(length - 2, exclude, matches);
+
+                // Reduce high cap allocation under attack to include more L/U caps @since 0.9.68+
+                int highCapCount = length - 2;
+                if (highCapCount > 0) {
+                    double buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
+                    if (buildSuccess > 0 && buildSuccess < 0.40) {
+                        // Under attack: reduce high cap allocation by half
+                        highCapCount = Math.max(highCapCount / 2, 1);
+                    }
+                    ctx.profileOrganizer().selectHighCapacityPeers(highCapCount, exclude, matches);
+                }
                 // select will check both matches and exclude, no need to add matches to exclude here
                 if (log.shouldInfo())
                     log.info("EPS SNFP " + length + (isInbound ? " IB " : " OB ") + exclude);
