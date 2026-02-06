@@ -850,7 +850,7 @@ public class TestJob extends JobImpl {
 
         if (_log.shouldWarn()) {
             _log.warn((isExploratory ? "Exploratory tunnel" : "Tunnel") + " Test failed in " + timeToFail + "ms → " + _cfg +
-                      (isLastTunnel ? " [LAST TUNNEL - keeping as last resort]" : ""));
+                      (isLastTunnel ? " \n* Warning: LAST TUNNEL -> Keeping as last resort until tunnels rebuilt..." : ""));
         }
 
         // If this is the last tunnel, mark it as last resort instead of removing
