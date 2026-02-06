@@ -565,7 +565,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                           count + " violations)");
                             }
                             getContext().banlist().banlistRouter(_fromHash,
-                                "Flood abuse - excessive NetDb stores", null, null, banExpiry);
+                                "Flood abuse (excessive NetDb store attempts)", null, null, banExpiry);
                         }
                     }
                     return;
