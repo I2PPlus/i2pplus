@@ -2593,7 +2593,7 @@ class EstablishmentManager {
             }
             if (_log.shouldDebug()) {_log.debug("[SSU] Loaded " + count + " tokens");}
         } catch (IOException ioe) {
-            if (_log.shouldWarn()) {_log.warn("[SSU] Failed to load tokens", ioe);}
+            if (_log.shouldInfo()) {_log.info("[SSU] Failed to load tokens -> " + ioe.getMessage());}
         } finally {
             if (in != null) {
                 try {in.close();}
