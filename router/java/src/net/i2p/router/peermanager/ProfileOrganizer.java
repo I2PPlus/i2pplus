@@ -124,7 +124,7 @@ public class ProfileOrganizer {
 
         // Ghost demotion job - runs frequently to remove ghosts from tiers
         _context.simpleTimer2().addPeriodicEvent(new GhostDemoter(), 75 * 1000);
-        
+
         // Ghost reset job - runs every 5-10 minutes to reset tunnel history for ghosts
         // giving them a chance to recover. Uses shorter interval when under attack.
         _context.simpleTimer2().addPeriodicEvent(new GhostResetter(), 5 * 60 * 1000);
@@ -199,21 +199,21 @@ public class ProfileOrganizer {
         public void timeReached() {
             int resetCount = 0;
             long now = _context.clock().now();
-            
+
             // Check if we're under attack (low tunnel build success)
             double buildSuccess = getTunnelBuildSuccess();
             boolean underAttack = buildSuccess > 0 && buildSuccess < 0.35;
             long resetInterval = underAttack ? 5 * 60 * 1000 : 10 * 60 * 1000;
-            
+
             if (!tryWriteLock()) {
                 return;
             }
-            
+
             try {
                 // Reset tunnel history for ghost peers that haven't been heard from recently
                 for (PeerProfile profile : _notFailingPeers.values()) {
                     Hash peer = profile.getPeer();
-                    
+
                     if (isGhostPeer(profile, peer)) {
                         TunnelHistory th = profile.getTunnelHistory();
                         if (th != null) {
@@ -234,14 +234,14 @@ public class ProfileOrganizer {
                         }
                     }
                 }
-                
+
                 if (resetCount > 0 && _log.shouldInfo()) {
                     _log.info("Reset tunnel history for " + resetCount + " ghost peers (attack: " + underAttack + ")");
                 }
             } finally {
                 releaseWriteLock();
             }
-            
+
             // Reschedule with adjusted interval
             long nextDelay = underAttack ? 5 * 60 * 1000 : 10 * 60 * 1000;
             _context.simpleTimer2().addEvent(this, nextDelay);
@@ -727,10 +727,16 @@ public class ProfileOrganizer {
         int profileCount = 0;
         int expiredCount = 0;
 
-        // Determine expiration window based on current profile volume
-        final long expireOlderThan = countNotFailingPeers() > ENOUGH_PROFILES
+        // Determine expiration window based on current profile volume and attack status
+        double buildSuccess = getTunnelBuildSuccess();
+        boolean isLowBuildSuccess = buildSuccess > 0 && buildSuccess < 0.35;
+        boolean underAttack = buildSuccess > 0 && buildSuccess < 0.35;
+        boolean isRecovering = buildSuccess >= 0.45;
+        long baseExpireTime = countNotFailingPeers() > ENOUGH_PROFILES
             ? 8 * 60 * 60 * 1000L   // 8 hours
             : 24 * 60 * 60 * 1000L; // 24 hours
+        // Keep profiles 2x longer when under attack
+        final long expireOlderThan = underAttack ? baseExpireTime * 2 : baseExpireTime;
 
         // Optional coalescing (read-only, safe to skip if lock fails)
         if (shouldCoalesce && _context.router() != null &&
@@ -803,12 +809,6 @@ public class ProfileOrganizer {
                 totalIntegration += profile.getIntegrationValue();
                 profileCount++;
             }
-
-            // Step 2: Check build success and adjust thresholds adaptively
-            // With hysteresis: relax below 35%, restore above 45%
-            double buildSuccess = getTunnelBuildSuccess();
-            boolean isLowBuildSuccess = buildSuccess > 0 && buildSuccess < 0.35;
-            boolean isRecovering = buildSuccess >= 0.45;
 
             // Calculate new thresholds
             int numNotFailing = newStrictCapacityOrder.size();
