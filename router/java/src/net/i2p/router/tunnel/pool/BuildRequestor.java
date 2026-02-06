@@ -224,6 +224,7 @@ abstract class BuildRequestor {
      * Selects an appropriate tunnel for sending the build reply.
      * Prefers paired client tunnels; falls back to exploratory if needed.
      * Client tunnels will never use exploratory tunnels with fewer hops than configured.
+     * Exploratory pools may use 0-hop tunnels at startup for bootstrapping.
      */
     private static TunnelInfo selectPairedTunnel(RouterContext ctx, TunnelPool pool,
                                                  PooledTunnelCreatorConfig cfg,
@@ -244,7 +245,7 @@ abstract class BuildRequestor {
                 : mgr.selectInboundExploratoryTunnel(farEnd);
 
             // Client tunnel using exploratory: ensure hop count meets client requirements
-            if (expl != null && clientWantsMultiHop && expl.getLength() <= 1) {
+            if (expl != null && !settings.isExploratory() && clientWantsMultiHop && expl.getLength() <= 1) {
                 if (log.shouldWarn()) {
                     log.warn("Rejecting " + (expl.getLength() <= 0 ? "zero" : "one") + 
                              "-hop exploratory tunnel for client (wants " + clientLength + "+" + clientLengthVariance + " hops)");
@@ -252,7 +253,7 @@ abstract class BuildRequestor {
                 return null;
             }
 
-            // If no exploratory tunnels exist yet, allow zero-hop as fallback only for exploratory pools
+            // If no exploratory tunnels exist yet, allow zero-hop as fallback for exploratory pools
             if (expl == null && settings.isExploratory()) {
                 if (log.shouldInfo()) {
                     log.info("No existing Exploratory tunnels for " + cfg + " -> Allowing zero-hop build...");
