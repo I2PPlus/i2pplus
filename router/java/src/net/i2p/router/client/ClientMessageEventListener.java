@@ -666,8 +666,13 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
                 _runner.getFloodfillNetworkDatabaseFacade().store(dest.getHash(), encls.getDecryptedLeaseSet());
             }
         } catch (IllegalArgumentException iae) {
-            if (_log.shouldError()) {_log.error("Invalid LeaseSet from client", iae);}
-            String destDesc = dest != null ? dest.toBase32().substring(0, Math.min(8, dest.toBase32().length())) + "..." : "unknown";
+            if (_log.shouldWarn()) {_log.warn("Invalid LeaseSet from client", iae);}
+            String destDesc = dest != null ?  dest.toBase32().substring(0,8) : "unknown";
+            if (iae.getMessage() != null && iae.getMessage().contains("Future LeaseSet")) {
+                if (_log.shouldWarn()) {_log.warn("Future LeaseSet detected for [" + destDesc +
+                                                  "] -> Allowing retry without disconnect...");}
+                return;
+            }
             _runner.disconnectClient("Invalid LeaseSet: " + iae.getMessage() + " [dest: " + destDesc + "]");
             return;
         }

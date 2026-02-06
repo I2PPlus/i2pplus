@@ -1188,6 +1188,10 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         if (error instanceof EOFException) {
             level = Log.WARN;
             msgpfx = "Router closed connection: ";
+        } else if (error instanceof IllegalArgumentException) {
+            // LeaseSet validation errors are expected edge cases, not critical failures
+            level = Log.WARN;
+            msgpfx = "Error occurred communicating with router \n* ";
         } else {
             level = Log.ERROR;
             msgpfx = "Error occurred communicating with router \n* ";
