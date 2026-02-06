@@ -11,6 +11,7 @@ package net.i2p.router.client;
 import java.util.Date;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.data.Lease;
 import net.i2p.data.LeaseSet;
 import net.i2p.data.i2cp.I2CPMessage;
@@ -22,6 +23,7 @@ import net.i2p.data.i2cp.SessionId;
 import net.i2p.router.JobImpl;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
+import net.i2p.util.SystemVersion;
 
 /**
  * Async job to walk the client through generating a lease set.  First sends it to the client
@@ -38,6 +40,14 @@ class RequestLeaseSetJob extends JobImpl {
     private static final long DEFAULT_MAX_FUDGE = 5*1000;
     private static final String PROP_MAX_FUDGE = "router.requestLeaseSetMaxFudge";
 
+    private static final long[] RETRY_DELAYS_NORMAL = {
+        5000L, 10000L, 15000L, 20000L, 30000L, 45000L, 60000L, 90000L, 120000L, 180000L
+    };
+
+    private static final long[] RETRY_DELAYS_UNDER_ATTACK = {
+        10000L, 20000L, 30000L, 45000L, 60000L, 90000L, 120000L, 180000L, 240000L, 300000L
+    };
+
     /** Track pending requests by destination hash to deduplicate */
     private static final ConcurrentHashMap<String, Long> _pendingRequests = new ConcurrentHashMap<>();
     private static final long DEDUPE_WINDOW_MS = 30*1000; // 30 second dedupe window
@@ -47,7 +57,6 @@ class RequestLeaseSetJob extends JobImpl {
         _log = ctx.logManager().getLog(RequestLeaseSetJob.class);
         _runner = runner;
         _requestState = state;
-        // all createRateStat in ClientManager
     }
 
     public String getName() {return "Request LeaseSet from Client";}
@@ -81,27 +90,11 @@ class RequestLeaseSetJob extends JobImpl {
 
         long endTime = requested.getEarliestLeaseDate();
         long maxFudge = getContext().getProperty(PROP_MAX_FUDGE, DEFAULT_MAX_FUDGE);
-        /**
-         * Add a small number of ms (0 to MAX_FUDGE) that increases as we approach the expire time.
-         * Since the earliest date functions as a version number,
-         * this will force the floodfill to flood each new version;
-         * otherwise it won't if the earliest time hasn't changed.
-         */
         if (isLS2) {
-            /**
-             * Fix for 0.9.38 floodfills, adding some ms doesn't work since
-             * the dates are truncated, and 0.9.38 did not use LeaseSet2.getPublished()
-             */
             long earliest = maxFudge + _requestState.getCurrentEarliestLeaseDate();
             if (endTime < earliest) {endTime = earliest;}
-            /**
-             * Ensure endTime is in the future relative to current time to prevent
-             * "LeaseSet expired" errors during signing. This can happen when tunnel
-             * building takes longer than expected and lease end dates are already
-             * in the past by the time they reach the client.
-             */
             now = getContext().clock().now();
-            long minFutureTime = now + 30*1000; // 30 second minimum buffer
+            long minFutureTime = now + 30*1000;
             if (endTime < minFutureTime) {endTime = minFutureTime;}
         } else {
             long diff = endTime - getContext().clock().now();
@@ -117,13 +110,11 @@ class RequestLeaseSetJob extends JobImpl {
         I2CPMessage msg;
         if (_runner instanceof QueuedClientConnectionRunner ||
              RequestVariableLeaseSetMessage.isSupported(_runner.getClientVersion())) {
-            // new style - leases will have individual expirations
             RequestVariableLeaseSetMessage rmsg = new RequestVariableLeaseSetMessage();
             rmsg.setSessionId(id);
             for (int i = 0; i < requested.getLeaseCount(); i++) {
                 Lease lease = requested.getLease(i);
                 if (lease.getEndTime() < endTime) {
-                    // don't modify old object, we don't know where it came from
                     Lease nl = new Lease();
                     nl.setGateway(lease.getGateway());
                     nl.setTunnelId(lease.getTunnelId());
@@ -134,7 +125,6 @@ class RequestLeaseSetJob extends JobImpl {
             }
             msg = rmsg;
         } else {
-            // old style - all leases will have same expiration
             RequestLeaseSetMessage rmsg = new RequestLeaseSetMessage();
             Date end = new Date(endTime);
             rmsg.setEndDate(end);
@@ -148,9 +138,6 @@ class RequestLeaseSetJob extends JobImpl {
 
         try {
             _runner.doSend(msg);
-            // Use addJobToTop to ensure CheckLeaseRequestStatus runs promptly even under load.
-            // This prevents cleanup jobs from being delayed when the job queue is backed up,
-            // which would leave clients in a zombie state with expired LeaseSets.
             getContext().jobQueue().addJobToTop(new CheckLeaseRequestStatus(destHash));
         } catch (I2CPMessageException ime) {
             getContext().statManager().addRateData("client.requestLeaseSetDropped", 1);
@@ -163,54 +150,85 @@ class RequestLeaseSetJob extends JobImpl {
         }
     }
 
-    /**
-     * Schedule this job to be run after the request's expiration, so that if
-     * it wasn't yet successful, we fire off the failure job and disconnect the
-     * client (but if it was, noop)
-     *
-     */
     private class CheckLeaseRequestStatus extends JobImpl {
         private final long _start;
         private final String _destHash;
+        private final int _retryCount;
 
         public CheckLeaseRequestStatus(String destHash) {
+            this(destHash, 0);
+        }
+
+        public CheckLeaseRequestStatus(String destHash, int retryCount) {
             super(RequestLeaseSetJob.this.getContext());
             _start = System.currentTimeMillis();
             _destHash = destHash;
-            // Add stagger delay to spread out CheckLeaseRequestStatus jobs and prevent job queue spikes
-            int staggerDelay = RequestLeaseSetJob.this.getContext().random().nextInt(2000); // 0-2 seconds
+            _retryCount = retryCount;
+            int staggerDelay = RequestLeaseSetJob.this.getContext().random().nextInt(2000);
             getTiming().setStartAfter(_requestState.getExpiration() + staggerDelay);
         }
 
         public void runJob() {
-            // Clear pending request marker
             _pendingRequests.remove(_destHash);
 
             if (_runner.isDead()) {
                 if (_log.shouldDebug()) {
-                    _log.debug("Runner is already dead -> Not trying to expire the LeaseSet lookup...");
+                    _log.debug("Runner is dead, not expiring LeaseSet lookup");
                 }
                 return;
             }
-                if (_requestState.getIsSuccessful()) {
-                    // we didn't fail
-                    CheckLeaseRequestStatus.this.getContext().statManager().addRateData("client.requestLeaseSetSuccess", 1);
-                    return;
-                } else {
-                    CheckLeaseRequestStatus.this.getContext().statManager().addRateData("client.requestLeaseSetTimeout", 1);
-                    // Log at info level - timeouts are expected during resource exhaustion attacks
-                    if (_log.shouldInfo()) {
-                        long waited = System.currentTimeMillis() - _start;
-                        _log.info("Timed out requesting LeaseSet in the time allotted (" + waited + "ms) -> " + _requestState);
-                    }
-                    if (_requestState.getOnFailed() != null) {
-                        RequestLeaseSetJob.this.getContext().jobQueue().addJob(_requestState.getOnFailed());
-                    }
-                    _runner.failLeaseRequest(_requestState);
+
+            if (_requestState.getIsSuccessful()) {
+                getContext().statManager().addRateData("client.requestLeaseSetSuccess", 1);
+                return;
+            }
+
+            getContext().statManager().addRateData("client.requestLeaseSetTimeout", 1);
+
+            int buildSuccess = SystemVersion.getTunnelBuildSuccess();
+            boolean isUnderAttack = buildSuccess > 0 && buildSuccess < 40;
+            int maxRetries = isUnderAttack ? Integer.MAX_VALUE : 10;
+            int maxWindowMs = isUnderAttack ? 4 * 60 * 1000 : 2 * 60 * 1000;
+
+            long now = getContext().clock().now();
+            long earliestLease = _requestState.getRequested().getEarliestLeaseDate();
+            long windowMs = earliestLease > 0 ? earliestLease - now : Long.MAX_VALUE;
+
+            if (_retryCount < maxRetries && windowMs < maxWindowMs) {
+                if (_log.shouldWarn()) {
+                    _log.warn("LeaseSet request timed out (attempt " + (_retryCount + 1) + ") for " + _destHash +
+                              " - buildSuccess: " + buildSuccess + "%" +
+                              (isUnderAttack ? " (under attack, will retry indefinitely)" : "") +
+                              " - scheduling retry");
                 }
+
+                long delay = getRetryDelay(_retryCount, isUnderAttack);
+                RequestLeaseSetJob retryJob = new RequestLeaseSetJob(getContext(), _runner, _requestState);
+                retryJob.getTiming().setStartAfter(now + delay);
+                getContext().jobQueue().addJob(retryJob);
+                return;
+            }
+
+            if (_log.shouldInfo()) {
+                _log.info("LeaseSet request failed after " + (_retryCount + 1) + " attempts for " + _destHash +
+                          " - buildSuccess: " + buildSuccess + "%" +
+                          " - failing permanently");
+            }
+
+            if (_requestState.getOnFailed() != null) {
+                RequestLeaseSetJob.this.getContext().jobQueue().addJob(_requestState.getOnFailed());
+            }
+            _runner.failLeaseRequest(_requestState);
+        }
+
+        private long getRetryDelay(int retryCount, boolean isUnderAttack) {
+            long[] delays = isUnderAttack ? RETRY_DELAYS_UNDER_ATTACK : RETRY_DELAYS_NORMAL;
+            if (retryCount < delays.length) {
+                return delays[retryCount];
+            }
+            return delays[delays.length - 1];
         }
 
         public String getName() {return "Check LeaseSet Request Status";}
     }
-
 }

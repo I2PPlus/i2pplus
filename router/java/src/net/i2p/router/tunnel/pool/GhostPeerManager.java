@@ -24,7 +24,7 @@ public class GhostPeerManager {
 
     private static final int DEFAULT_TIMEOUT_THRESHOLD = 10;
     private static final int ATTACK_TIMEOUT_THRESHOLD = 5;
-    private static final long COOLDOWN_MS = 10*1000; // 10 minutes (normal)
+    private static final long COOLDOWN_MS = 10*60*1000; // 10 minutes (normal)
     private static final long ATTACK_COOLDOWN_MS = 5*60*1000; // 5 minutes (faster recovery during attacks)
     private static final int MAX_TRACKED_PEERS = 8192;
 
