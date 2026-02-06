@@ -43,6 +43,17 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
     public static final String PROP_DCC = "i2ptunnel.ircclient.enableDCC";
 
     /**
+     *  Automatically reconnect on tunnel failure.
+     *  When enabled, closes local socket on I2P disconnect to force IRC app reconnection.
+     *  @since 0.9.68+
+     */
+    public static final String PROP_AUTO_RECONNECT = "i2ptunnel.ircclient.autoReconnect";
+    private static final long DEFAULT_AUTO_RECONNECT_DELAY = 5000; // 5 seconds
+    private volatile boolean _autoReconnect;
+    private volatile boolean _reconnecting;
+    private final Object reconnectLock = new Object();
+
+    /**
      *  As of 0.9.20 this is fast, and does NOT connect the manager to the router,
      *  or open the local socket. You MUST call startRunning() for that.
      *
@@ -92,6 +103,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
         setName("IRC Client on " + tunnel.listenHost + ':' + localPort);
 
         _dccEnabled = Boolean.parseBoolean(tunnel.getClientOptions().getProperty(PROP_DCC));
+        _autoReconnect = Boolean.parseBoolean(tunnel.getClientOptions().getProperty(PROP_AUTO_RECONNECT, "false"));
         // TODO add some prudent tunnel options (or is it too late?)
 
         notifyEvent("openIRCClientResult", "ok");
@@ -145,11 +157,28 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
             i2ps.setReadTimeout(readTimeout);
             StringBuffer expectedPong = new StringBuffer();
             DCCHelper dcc = _dccEnabled ? new DCC(s.getLocalAddress().getAddress()) : null;
-            Thread in = new I2PAppThread(new IrcInboundFilter(s,i2ps, expectedPong, _log, dcc), "IRC Client " + _clientId + " in", true);
+
+            // Create reconnect callback for auto-reconnect mode @since 0.9.68+
+            Runnable reconnectCallback = null;
+            if (_autoReconnect) {
+                final Socket localSocket = s;
+                reconnectCallback = () -> {
+                    if (_log.shouldWarn())
+                        _log.warn("[IRC Client] I2P connection lost, closing local socket for reconnect");
+                    try { localSocket.close(); } catch (IOException e) {}
+                };
+            }
+
+            IrcInboundFilter inboundFilter = new IrcInboundFilter(s, i2ps, expectedPong, _log, dcc);
+            Thread in = new I2PAppThread(inboundFilter, "IRC Client " + _clientId + " in", true);
             in.start();
-            Runnable out = new IrcOutboundFilter(s,i2ps, expectedPong, _log, dcc);
+            IrcOutboundFilter outboundFilter = new IrcOutboundFilter(s, i2ps, expectedPong, _log, dcc);
+            if (reconnectCallback != null) {
+                inboundFilter.setOnDisconnect(reconnectCallback);
+                outboundFilter.setOnDisconnect(reconnectCallback);
+            }
             // we are called from an unlimited thread pool, so run inline
-            out.run();
+            outboundFilter.run();
         } catch (IOException ex) {
             // generally NoRouteToHostException
             if (_log.shouldWarn())

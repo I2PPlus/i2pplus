@@ -21,6 +21,7 @@ public class IrcOutboundFilter implements Runnable {
     private final StringBuffer expectedPong;
     private final Log _log;
     private final DCCHelper _dccHelper;
+    private volatile Runnable onDisconnect;
 
     public IrcOutboundFilter(Socket lcl, I2PSocket rem, StringBuffer pong, Log log) {
         this(lcl, rem, pong, log, null);
@@ -36,6 +37,15 @@ public class IrcOutboundFilter implements Runnable {
         expectedPong = pong;
         _log = log;
         _dccHelper = helper;
+    }
+
+    /**
+     *  Set a callback to run when the filter disconnects.
+     *  @param callback the callback to run on disconnect
+     *  @since 0.9.68+
+     */
+    public void setOnDisconnect(Runnable callback) {
+        onDisconnect = callback;
     }
 
     public void run() {
@@ -89,6 +99,10 @@ public class IrcOutboundFilter implements Runnable {
                 } catch (IOException e1) {
                     if (_log.shouldWarn())
                         _log.warn("[IRC Client] Outbound Filter: disconnected \n* Reason: " + e1.getMessage());
+                    Runnable callback = onDisconnect;
+                    if (callback != null) {
+                        callback.run();
+                    }
                     break;
                 }
             }
