@@ -317,19 +317,21 @@ abstract class BuildRequestor {
 
     private static TunnelInfo selectFallbackOutboundTunnel(RouterContext ctx, TunnelManagerFacade mgr, Log log) {
         TunnelInfo tunnel = mgr.selectOutboundTunnel();
-        if (tunnel != null &&
-            tunnel.getLength() <= 1 &&
-            mgr.getOutboundSettings().getLength() > 0 &&
-            mgr.getOutboundSettings().getLength() + mgr.getOutboundSettings().getLengthVariance() > 0) {
-            // Allow zero/1-hop for initial exploratory tunnels, but avoid for normal operation
-            TunnelInfo anyOutbound = mgr.selectOutboundTunnel();
-            if (anyOutbound == null) {
-                if (log.shouldInfo()) {
-                    log.info("Allowing zero-hop outbound tunnel for initial Exploratory build...");
-                }
-                return tunnel;
+        if (tunnel == null) {
+            return null;
+        }
+        // For exploratory pools, allow 0/1-hop tunnels at startup
+        // For client pools using exploratory as fallback, reject short tunnels
+        TunnelPoolSettings explSettings = mgr.getOutboundSettings();
+        if (explSettings.isExploratory()) {
+            return tunnel;
+        }
+        // Client pool fallback: reject 0/1-hop exploratory tunnels
+        if (tunnel.getLength() <= 1) {
+            if (log.shouldWarn()) {
+                log.warn("Rejecting " + (tunnel.getLength() <= 0 ? "zero" : "one") + 
+                         "-hop exploratory tunnel for client tunnel build reply");
             }
-            // Avoid zero/1-hop expl tunnels for anonymity and resource fairness
             return null;
         }
         return tunnel;
@@ -337,17 +339,20 @@ abstract class BuildRequestor {
 
     private static TunnelInfo selectFallbackInboundTunnel(RouterContext ctx, TunnelManagerFacade mgr, Log log) {
         TunnelInfo tunnel = mgr.selectInboundTunnel();
-        if (tunnel != null &&
-            tunnel.getLength() <= 1 &&
-            mgr.getInboundSettings().getLength() > 0 &&
-            mgr.getInboundSettings().getLength() + mgr.getInboundSettings().getLengthVariance() > 0) {
-            // Allow zero/1-hop for initial exploratory tunnels, but avoid for normal operation
-            TunnelInfo anyInbound = mgr.selectInboundTunnel();
-            if (anyInbound == null) {
-                if (log.shouldInfo()) {
-                    log.info("Allowing zero-hop inbound tunnel for initial Exploratory build...");
-                }
-                return tunnel;
+        if (tunnel == null) {
+            return null;
+        }
+        // For exploratory pools, allow 0/1-hop tunnels at startup
+        // For client pools using exploratory as fallback, reject short tunnels
+        TunnelPoolSettings explSettings = mgr.getInboundSettings();
+        if (explSettings.isExploratory()) {
+            return tunnel;
+        }
+        // Client pool fallback: reject 0/1-hop exploratory tunnels
+        if (tunnel.getLength() <= 1) {
+            if (log.shouldWarn()) {
+                log.warn("Rejecting " + (tunnel.getLength() <= 0 ? "zero" : "one") + 
+                         "-hop exploratory tunnel for client tunnel build reply");
             }
             return null;
         }
