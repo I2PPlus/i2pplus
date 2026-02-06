@@ -124,9 +124,7 @@ public class TunnelHistory {
         _lastRejectedTransient = 0;
         _lastRejectedProbabalistic = 0;
         _lastFailed = 0;
-        // Reset rate stats
-        _rejectRate.removeAllData();
-        _failRate.removeAllData();
+        // RateStats will naturally decay over time
     }
 
     private final static String NL = System.getProperty("line.separator");

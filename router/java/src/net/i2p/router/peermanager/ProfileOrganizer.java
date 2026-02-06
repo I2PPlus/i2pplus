@@ -218,7 +218,11 @@ public class ProfileOrganizer {
                         TunnelHistory th = profile.getTunnelHistory();
                         if (th != null) {
                             // Only reset if ghost has been inactive for the reset interval
-                            long lastActivity = Math.max(th.getLastAgreedTo(), th.getLastRejected());
+                            long lastRejected = Math.max(
+                                Math.max(th.getLastRejectedCritical(), th.getLastRejectedBandwidth()),
+                                Math.max(th.getLastRejectedTransient(), th.getLastRejectedProbabalistic())
+                            );
+                            long lastActivity = Math.max(th.getLastAgreedTo(), lastRejected);
                             if (now - lastActivity > resetInterval) {
                                 // Reset tunnel history to give peer a fresh start
                                 th.reset();
