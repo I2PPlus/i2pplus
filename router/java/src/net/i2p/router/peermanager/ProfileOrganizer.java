@@ -922,8 +922,9 @@ public class ProfileOrganizer {
                           " \n* Fast peers: " + _fastPeers.size() + " (added " + added + " via fallback)");
             }
 
-            // Step 8: Bootstrap fast peers from high-bandwidth tiers if we have none
-            if (_fastPeers.isEmpty()) {
+            // Step 8: Bootstrap fast/highcap peers from high-bandwidth tiers if insufficient
+            int minHighCap = getMinimumHighCapacityPeers();
+            if (_fastPeers.isEmpty() || _highCapacityPeers.size() < minHighCap) {
                 bootstrapFastPeersFromNetDb(target);
             }
 
