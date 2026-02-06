@@ -423,26 +423,42 @@ public class SidebarHelper extends HelperBase {
     }
 
     /**
-     * Retrieve Tunnel build success as a percentage.
-     * @since 0.9.58+
-     */
-    public int getTunnelBuildSuccess() {
-        if (_context == null) {return 0;}
-        Rate explSuccess = _context.statManager().getRate("tunnel.buildExploratorySuccess").getRate(RateConstants.TEN_MINUTES);
-        Rate explReject = _context.statManager().getRate("tunnel.buildExploratoryReject").getRate(RateConstants.TEN_MINUTES);
-        Rate explExpire = _context.statManager().getRate("tunnel.buildExploratoryExpire").getRate(RateConstants.TEN_MINUTES);
-        Rate clientSuccess = _context.statManager().getRate("tunnel.buildClientSuccess").getRate(RateConstants.TEN_MINUTES);
-        Rate clientReject = _context.statManager().getRate("tunnel.buildClientReject").getRate(RateConstants.TEN_MINUTES);
-        Rate clientExpire = _context.statManager().getRate("tunnel.buildClientExpire").getRate(RateConstants.TEN_MINUTES);
-        int success = (int)explSuccess.getLastEventCount() + (int)clientSuccess.getLastEventCount();
-        int reject = (int)explReject.getLastEventCount() + (int)clientReject.getLastEventCount();
-        int expire = (int)explExpire.getLastEventCount() + (int)clientExpire.getLastEventCount();
-        int percentage;
-        if (success < 1) {success = 1;}
-        percentage = (100 * success) / (success + reject + expire);
-        if (percentage == 100 || percentage == 0) {return 0;}
-        else {return percentage;}
-    }
+      * Retrieve Tunnel build success as a percentage.
+      * Uses 1-minute rate for fast feedback, falls back to 10-minute if insufficient data.
+      * @since 0.9.58+
+      */
+     public int getTunnelBuildSuccess() {
+         if (_context == null) {return 0;}
+         Rate explSuccess = _context.statManager().getRate("tunnel.buildExploratorySuccess").getRate(RateConstants.ONE_MINUTE);
+         Rate explReject = _context.statManager().getRate("tunnel.buildExploratoryReject").getRate(RateConstants.ONE_MINUTE);
+         Rate explExpire = _context.statManager().getRate("tunnel.buildExploratoryExpire").getRate(RateConstants.ONE_MINUTE);
+         Rate clientSuccess = _context.statManager().getRate("tunnel.buildClientSuccess").getRate(RateConstants.ONE_MINUTE);
+         Rate clientReject = _context.statManager().getRate("tunnel.buildClientReject").getRate(RateConstants.ONE_MINUTE);
+         Rate clientExpire = _context.statManager().getRate("tunnel.buildClientExpire").getRate(RateConstants.ONE_MINUTE);
+         long success = explSuccess.getLastEventCount() + clientSuccess.getLastEventCount();
+         long reject = explReject.getLastEventCount() + clientReject.getLastEventCount();
+         long expire = explExpire.getLastEventCount() + clientExpire.getLastEventCount();
+         long total = success + reject + expire;
+
+         if (total < 5) {
+             explSuccess = _context.statManager().getRate("tunnel.buildExploratorySuccess").getRate(RateConstants.TEN_MINUTES);
+             explReject = _context.statManager().getRate("tunnel.buildExploratoryReject").getRate(RateConstants.TEN_MINUTES);
+             explExpire = _context.statManager().getRate("tunnel.buildExploratoryExpire").getRate(RateConstants.TEN_MINUTES);
+             clientSuccess = _context.statManager().getRate("tunnel.buildClientSuccess").getRate(RateConstants.TEN_MINUTES);
+             clientReject = _context.statManager().getRate("tunnel.buildClientReject").getRate(RateConstants.TEN_MINUTES);
+             clientExpire = _context.statManager().getRate("tunnel.buildClientExpire").getRate(RateConstants.TEN_MINUTES);
+             success = explSuccess.getLastEventCount() + clientSuccess.getLastEventCount();
+             reject = explReject.getLastEventCount() + clientReject.getLastEventCount();
+             expire = explExpire.getLastEventCount() + clientExpire.getLastEventCount();
+             total = success + reject + expire;
+         }
+
+         int percentage;
+         if (total < 1) {total = 1;}
+         percentage = (int) ((100 * success) / total);
+         if (percentage == 100 || percentage == 0) {return 0;}
+         else {return percentage;}
+     }
 
     /**
      * How many peers we are talking to now

@@ -4039,7 +4039,7 @@ msgstr ""
 msgid "Concurrency"
 msgstr ""
 
-msgid "Combined utility and service tunnel build success (averaged over 10 minute intervals)"
+msgid "Combined utility and service tunnel build success (averaged over 1 minute, falls back to 10 minute intervals)"
 msgstr ""
 
 msgid "Build Success"
