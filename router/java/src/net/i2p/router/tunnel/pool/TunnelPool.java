@@ -567,6 +567,17 @@ public class TunnelPool {
         long now = _context.clock().now();
         if (_log.shouldDebug()) {_log.debug(toString() + " -> Adding tunnel " + info);}
 
+        // Reject 0-hop tunnels for client pools unless explicitly allowed
+        if (info.getLength() <= 1 && !_settings.isExploratory() && !_settings.getAllowZeroHop()) {
+            if (_log.shouldWarn()) {
+                _log.warn("Rejecting 0-hop tunnel for client pool (not allowed): " + info);
+            }
+            if (info instanceof PooledTunnelCreatorConfig) {
+                ((PooledTunnelCreatorConfig) info).setDuplicate();
+            }
+            return;
+        }
+
         // Check for duplicate peer sequence and reject new tunnel if we have good alternatives @since 0.9.68+
         List<TunnelInfo> duplicates = findDuplicateTunnels(info);
         if (!duplicates.isEmpty()) {
@@ -1269,6 +1280,11 @@ public class TunnelPool {
      */
     int countHowManyToBuild() {
         if (!isAlive()) {return 0;}
+
+        // Periodic cleanup: remove 0-hop tunnels if we have multi-hop alternatives
+        // This handles existing 0-hop tunnels that were in the pool before cleanup logic was added
+        cleanupZeroHopTunnels();
+
         int wanted = getAdjustedTotalQuantity();
         boolean allowZeroHop = _settings.getAllowZeroHop();
 
