@@ -256,9 +256,18 @@ class BuildExecutor implements Runnable {
         final long expireBefore = now + TEN_MINUTES_MS - BuildRequestor.REQUEST_TIMEOUT;
 
         // Expire really old build requests from recentlyBuilding map
-        for (Iterator<PooledTunnelCreatorConfig> iter = _recentlyBuildingMap.values().iterator(); iter.hasNext(); ) {
-            PooledTunnelCreatorConfig cfg = iter.next();
-            if (cfg.getExpiration() <= expireRecentlyBefore) {
+        // Using computeIfPresent to avoid ConcurrentModificationException during iteration
+        _recentlyBuildingMap.computeIfPresent(Long.MIN_VALUE, (key, cfg) -> {
+            if (cfg != null && cfg.getExpiration() <= expireRecentlyBefore) {
+                return null;
+            }
+            return cfg;
+        });
+        // Actually iterate and remove expired entries safely
+        for (Iterator<Long> iter = _recentlyBuildingMap.keySet().iterator(); iter.hasNext(); ) {
+            Long key = iter.next();
+            PooledTunnelCreatorConfig cfg = _recentlyBuildingMap.get(key);
+            if (cfg != null && cfg.getExpiration() <= expireRecentlyBefore) {
                 iter.remove();
             }
         }
@@ -267,13 +276,15 @@ class BuildExecutor implements Runnable {
 
         // Expire old build requests from currentlyBuilding map, move them to recentlyBuilding
         // Enhanced with adaptive timeout handling
-        for (Iterator<PooledTunnelCreatorConfig> iter = _currentlyBuildingMap.values().iterator(); iter.hasNext(); ) {
-            PooledTunnelCreatorConfig cfg = iter.next();
+        for (Iterator<Long> iter = _currentlyBuildingMap.keySet().iterator(); iter.hasNext(); ) {
+            Long key = iter.next();
+            PooledTunnelCreatorConfig cfg = _currentlyBuildingMap.get(key);
+            if (cfg == null) continue;
             long adaptiveTimeout = calculateAdaptiveTimeout(cfg);
             long adjustedExpireBefore = now + TEN_MINUTES_MS - adaptiveTimeout;
 
             if (cfg.getExpiration() <= adjustedExpireBefore) {
-                PooledTunnelCreatorConfig existingCfg = _recentlyBuildingMap.putIfAbsent(Long.valueOf(cfg.getReplyMessageId()), cfg);
+                PooledTunnelCreatorConfig existingCfg = _recentlyBuildingMap.putIfAbsent(key, cfg);
                 if (existingCfg == null) {
                     iter.remove();
                     if (expired == null) {
