@@ -580,20 +580,45 @@ public class TunnelPool {
             return;
         }
 
-        // Check for duplicate peer sequence and reject new tunnel if we have good alternatives @since 0.9.68+
+        // Check for duplicate peer sequence and handle appropriately @since 0.9.68+
         List<TunnelInfo> duplicates = findDuplicateTunnels(info);
         if (!duplicates.isEmpty()) {
             // Check if we have at least 1 good (non-duplicate) tunnel
             if (hasGoodTunnel(info)) {
-                // We have good alternatives - reject this new duplicate tunnel
-                if (_log.shouldWarn()) {
-                    _log.warn("Rejecting new tunnel with duplicate peer sequence - keeping existing: " + info);
+                // Check if existing duplicates are expiring soon
+                // If so, replace them with the new tunnel instead of rejecting
+                boolean hasExpiringDuplicate = false;
+                for (TunnelInfo dup : duplicates) {
+                    if (dup.getExpiration() <= now + 5*60*1000) {
+                        hasExpiringDuplicate = true;
+                        break;
+                    }
                 }
-                if (info instanceof PooledTunnelCreatorConfig) {
-                    ((PooledTunnelCreatorConfig) info).setDuplicate();
+                
+                if (!hasExpiringDuplicate) {
+                    // We have good alternatives and no expiring duplicates - reject this new duplicate tunnel
+                    if (_log.shouldWarn()) {
+                        _log.warn("Rejecting new tunnel with duplicate peer sequence - keeping existing: " + info);
+                    }
+                    if (info instanceof PooledTunnelCreatorConfig) {
+                        ((PooledTunnelCreatorConfig) info).setDuplicate();
+                    }
+                    // Don't add this tunnel since it's a duplicate
+                    return;
+                } else {
+                    // Replace expiring duplicates with the new tunnel
+                    if (_log.shouldInfo()) {
+                        _log.info("Replacing expiring duplicate tunnel(s) with new tunnel: " + info);
+                    }
+                    for (TunnelInfo dup : duplicates) {
+                        if (dup.getExpiration() <= now + 5*60*1000) {
+                            if (dup instanceof PooledTunnelCreatorConfig) {
+                                ((PooledTunnelCreatorConfig) dup).setDuplicate();
+                            }
+                            tunnelFailed(dup);
+                        }
+                    }
                 }
-                // Don't add this tunnel since it's a duplicate
-                return;
             }
         }
 
@@ -775,7 +800,9 @@ public class TunnelPool {
      *  @since 0.9.68+
      */
     void cleanupDuplicatePeerTunnels() {
-        if (_tunnels.size() <= 1) {return;}
+        // Only cleanup if we have more than minimum required tunnels
+        int wanted = getAdjustedTotalQuantity();
+        if (_tunnels.size() <= wanted) {return;}
 
         List<TunnelInfo> toRemove = new ArrayList<>();
         synchronized (_tunnels) {
@@ -811,11 +838,12 @@ public class TunnelPool {
                 }
             }
 
-            // Ensure we keep at least one tunnel
+            // Ensure we keep at least the minimum required tunnels
             int remainingAfterRemoval = _tunnels.size() - toRemove.size();
-            if (remainingAfterRemoval < 1 && !toRemove.isEmpty()) {
-                // Keep the newest tunnel
+            while (remainingAfterRemoval < wanted && !toRemove.isEmpty()) {
+                // Keep tunnels by removing from toRemove list (keep newest ones)
                 toRemove.remove(toRemove.size() - 1);
+                remainingAfterRemoval++;
             }
 
             // Remove from pool
