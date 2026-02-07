@@ -520,6 +520,24 @@ public class TunnelPool {
      */
     public List<PooledTunnelCreatorConfig> listPending() {synchronized (_inProgress) {return new ArrayList<PooledTunnelCreatorConfig>(_inProgress);}}
 
+    /**
+     * Get the count of tunnels currently being built for this pool.
+     * @return number of tunnels in progress
+     * @since 0.9.68+
+     */
+    public int getInProgressCount() {
+        synchronized (_inProgress) {return _inProgress.size();}
+    }
+
+    /**
+     * Get the adjusted total quantity of tunnels we want for this pool.
+     * @return the wanted number of tunnels
+     * @since 0.9.68+
+     */
+    public int getTotalQuantity() {
+        return getAdjustedTotalQuantity();
+    }
+
     /** duplicate of size(), let's pick one
      *  @return the number of tunnels in the pool
      */
@@ -631,7 +649,7 @@ public class TunnelPool {
                 } else {
                     // We need this tunnel to maintain minimum pool size
                     if (_log.shouldInfo()) {
-                        _log.info("Accepting duplicate tunnel to maintain minimum pool size (" + 
+                        _log.info("Accepting duplicate tunnel to maintain minimum pool size (" +
                                   usableCount + " <= " + minimumRequired + "): " + info);
                     }
                 }
@@ -756,7 +774,7 @@ public class TunnelPool {
             int remainingAfterRemoval = totalUsable - toRemove.size();
             if (remainingAfterRemoval < minimumRequired) {
                 if (_log.shouldInfo()) {
-                    _log.info("Preserving last resort tunnels to maintain minimum pool size (" + 
+                    _log.info("Preserving last resort tunnels to maintain minimum pool size (" +
                               remainingAfterRemoval + " < " + minimumRequired + ")");
                 }
                 toRemove.clear();
@@ -785,17 +803,15 @@ public class TunnelPool {
      *  Called when a multi-hop tunnel is added to any pool (exploratory or client).
      *  This prevents keeping 0-hop tunnels around after bootstrap is complete
      *  or when multi-hop tunnels become available.
-     *  Never removes tunnels if it would leave the pool with less than minimum required.
+     *  Removes 0-hop tunnels when we have at least 2 viable multi-hop tunnels.
      *  @since 0.9.68+
      */
     private void cleanupZeroHopTunnels() {
-        // Skip cleanup if under attack - preserve all tunnels during attacks
-        if (_context.profileOrganizer().isLowBuildSuccess()) {return;}
-
         List<TunnelInfo> zeroHopTunnels = new ArrayList<>();
         int multiHopCount = 0;
         int totalUsable = 0;
-        int minimumRequired = Math.max(1, getAdjustedTotalQuantity() / 2);
+        // Require at least 2 multi-hop tunnels before removing 0-hop ones
+        int minimumMultiHop = 2;
 
         synchronized (_tunnels) {
             long now = _context.clock().now();
@@ -812,21 +828,17 @@ public class TunnelPool {
                 }
             }
 
-            // Never remove if we would drop below minimum required
-            int remainingAfterRemoval = totalUsable - zeroHopTunnels.size();
-            if (remainingAfterRemoval < minimumRequired) {
+            // Remove 0-hop tunnels if we have at least 2 multi-hop tunnels
+            if (multiHopCount >= minimumMultiHop && !zeroHopTunnels.isEmpty()) {
                 if (_log.shouldInfo()) {
-                    _log.info("Preserving zero-hop tunnels to maintain minimum pool size (" + 
-                              remainingAfterRemoval + " < " + minimumRequired + ")");
+                    _log.info("Removing " + zeroHopTunnels.size() + " zero-hop tunnels (have " +
+                              multiHopCount + " multi-hop tunnels)");
                 }
-                zeroHopTunnels.clear();
-            } else if (multiHopCount >= 1 && !zeroHopTunnels.isEmpty()) {
-                // Safe to remove zero-hop tunnels
                 for (TunnelInfo t : zeroHopTunnels) {
                     _tunnels.remove(t);
                 }
             } else {
-                // Don't remove if no multi-hop tunnels yet
+                // Don't remove if not enough multi-hop tunnels yet
                 zeroHopTunnels.clear();
             }
         }

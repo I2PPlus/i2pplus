@@ -307,8 +307,8 @@ class BuildExecutor implements Runnable {
                         final int length = cfg.getLength();
                         for (int iPeer = 0; iPeer < length; iPeer++) {
                             Hash peer = cfg.getPeer(iPeer);
-                            if (peer.equals(selfHash)) {
-                                continue; // Skip self
+                            if (peer == null || peer.equals(selfHash)) {
+                                continue; // Skip null or self
                             }
                             RouterInfo ri = _context.netDb().lookupRouterInfoLocally(peer);
                             String bwTier = "Unknown";
@@ -491,7 +491,7 @@ class BuildExecutor implements Runnable {
                     }
                 }
             } catch (RuntimeException e) {
-                _log.log(Log.CRIT, "Catastrophic Tunnel Manager failure! -> " + e.getMessage());
+                _log.log(Log.CRIT, "Catastrophic Tunnel Manager failure!", e);
                 try {
                     Thread.sleep(LOOP_TIME);
                 } catch (InterruptedException ie) {

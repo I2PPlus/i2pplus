@@ -869,6 +869,7 @@ public class TestJob extends JobImpl {
         }
 
         if (keepGoing) {
+            // Keep testing - tunnel may recover
             if (!scheduleRetest(false)) {
                 decrementTotalJobs(); // Clean up if couldn't reschedule
             }
@@ -877,21 +878,25 @@ public class TestJob extends JobImpl {
                 isExploratory ? "tunnel.testExploratoryFailedCompletelyTime" : "tunnel.testFailedCompletelyTime",
                 timeToFail);
 
-            // Immediately remove tunnel from pool after 2 consecutive failures
-            // This ensures failed tunnels don't remain in the pool consuming resources
+            // Tunnel has failed MAX consecutive tests - mark as completely failed
+            // But don't remove immediately - keep it for recovery testing
+            // It will be removed when replacements are available
             if (_log.shouldWarn()) {
-                _log.warn((isExploratory ? "Exploratory tunnel" : "Tunnel") + " failed 2 consecutive tests → Removing from pool: " + _cfg);
+                _log.warn((isExploratory ? "Exploratory tunnel" : "Tunnel") + " failed " + 
+                          net.i2p.router.tunnel.TunnelCreatorConfig.MAX_CONSECUTIVE_TEST_FAILURES + 
+                          " consecutive tests -> Marked as failed but keeping for recovery: " + _cfg);
             }
 
-            // Force immediate tunnel removal by marking it as completely failed
-            // This bypasses the incremental failure counting for immediate removal
             _cfg.tunnelFailedCompletely();
+            // Do NOT call _pool.tunnelFailed() - keep tunnel for potential recovery
 
-            // Also remove from pool to ensure immediate effect
-            _pool.tunnelFailed(_cfg);
-
+            // Schedule recovery test to see if tunnel comes back
+            if (scheduleRetest(false)) {
+                if (_log.shouldInfo()) {
+                    _log.info("Scheduling recovery test for failed tunnel: " + _cfg);
+                }
+            }
             _failureCount = 0;
-
             decrementTotalJobs();
         }
     }
