@@ -617,8 +617,6 @@ public class TunnelPool {
      */
     private boolean hasGoodTunnel(TunnelInfo newTunnel) {
         synchronized (_tunnels) {
-            if (_tunnels.size() <= 1) {return false;}
-
             for (TunnelInfo existing : _tunnels) {
                 if (existing == newTunnel) {continue;}
                 if (existing.getLength() != newTunnel.getLength()) {continue;}
@@ -634,7 +632,6 @@ public class TunnelPool {
                 }
 
                 if (!isDuplicate) {
-                    // This is a good (non-duplicate) tunnel
                     return true;
                 }
             }

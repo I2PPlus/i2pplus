@@ -624,14 +624,48 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
+     * Count tunnels and peers separately for exploratory or client pools.
+     *
+     * @param lc object counter to store peer counts
+     * @param exploratory if true, count exploratory tunnels; if false, count client tunnels
+     * @return total number of tunnels counted
+     * @since 0.9.68+
+     */
+    private int countTunnelsPerPeer(ObjectCounterUnsafe<Hash> lc, boolean exploratory) {
+        List<TunnelPool> pools = new ArrayList<TunnelPool>();
+        if (exploratory) {
+            pools.add(_inboundExploratory);
+            pools.add(_outboundExploratory);
+        } else {
+            pools.addAll(_clientInboundPools.values());
+            pools.addAll(_clientOutboundPools.values());
+        }
+        int tunnelCount = 0;
+        for (TunnelPool tp : pools) {
+            for (TunnelInfo info : tp.listTunnels()) {
+                if (info.getLength() > 1) {
+                    tunnelCount++;
+                    for (int j = 0; j < info.getLength(); j++) {
+                        Hash peer = info.getPeer(j);
+                        if (!_context.routerHash().equals(peer)) {
+                            lc.increment(peer);
+                        }
+                    }
+                }
+            }
+        }
+        return tunnelCount;
+    }
+
+    /**
      *  For reliability reasons, don't allow a peer in more than x% of
      *  client and exploratory tunnels.
      *
      *  This also will prevent a single huge-capacity (or malicious) peer from
      *  taking all the tunnels in the network (although it would be nice to limit
-     *  the % of total network tunnels to 10% or so, but that appears to be
+     *  % of total network tunnels to 10% or so, but that appears to be
      *  too low to set as a default here... much lower than 33% will push client
-     *  tunnels out of the fast tier into high cap or beyond...)
+     *  tunnels out of fast tier into high cap or beyond...)
      *
      *  Possible improvement - restrict based on count per IP, or IP block,
      *  to slightly increase costs of collusion
@@ -639,8 +673,6 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      *  @return Set of peers that should not be allowed in another tunnel
      */
      public Set<Hash> selectPeersInTooManyTunnels() {
-        ObjectCounterUnsafe<Hash> lc = new ObjectCounterUnsafe<Hash>();
-        int tunnelCount = countTunnelsPerPeer(lc);
         Set<Hash> rv = new HashSet<Hash>();
         long uptime = _context.router().getUptime();
         int max = uptime > 30*60*1000 ? DEFAULT_MAX_PCT_TUNNELS : STARTUP_MAX_PCT_TUNNELS;
@@ -648,11 +680,29 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         // Increase threshold under low tunnel build success @since 0.9.68+
         double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
         if (isFirewalled() || buildSuccess > 0 && buildSuccess < 0.40) {max *=2;}
-        for (Hash h : lc.objects()) {
-            if (lc.count(h) > 0 && (lc.count(h) + 1) * 100 / (tunnelCount + 1) > max) {
+
+        // Count exploratory and client tunnels separately @since 0.9.68+
+        ObjectCounterUnsafe<Hash> lcExp = new ObjectCounterUnsafe<Hash>();
+        int exploratoryCount = countTunnelsPerPeer(lcExp, true);
+
+        ObjectCounterUnsafe<Hash> lcClient = new ObjectCounterUnsafe<Hash>();
+        int clientCount = countTunnelsPerPeer(lcClient, false);
+
+        // Check percentage limits separately for each tunnel type
+        for (Hash h : lcExp.objects()) {
+            if (lcExp.count(h) > 0 && exploratoryCount > 0 && 
+                (lcExp.count(h) + 1) * 100 / (exploratoryCount + 1) > max) {
                 rv.add(h);
             }
         }
+
+        for (Hash h : lcClient.objects()) {
+            if (lcClient.count(h) > 0 && clientCount > 0 && 
+                (lcClient.count(h) + 1) * 100 / (clientCount + 1) > max) {
+                rv.add(h);
+            }
+        }
+
         return rv;
     }
 
