@@ -137,11 +137,14 @@ public class HashPatternDetector implements Serializable {
      * @param reason Ban reason
      */
     public void recordBan(Hash hash, String reason) {
-        if (hash == null) {
+        if (hash == null || reason == null) {
             return;
         }
 
         String hashStr = hash.toBase64();
+        if (hashStr == null || hashStr.isEmpty()) {
+            return;
+        }
         String prefix = getPrefix(hashStr);
 
         PrefixStats stats = _prefixStats.computeIfAbsent(prefix, k -> new PrefixStats(prefix));
@@ -177,6 +180,9 @@ public class HashPatternDetector implements Serializable {
      * Results are cached to avoid repeated Base64 decoding.
      */
     private String getPrefix(String base64Hash) {
+        if (base64Hash == null || base64Hash.isEmpty()) {
+            return "0000";
+        }
         return _prefixCache.computeIfAbsent(base64Hash, hash -> {
             try {
                 byte[] bytes = net.i2p.data.Base64.decode(hash.substring(0, 8));
