@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.SessionKeyManager;
 import net.i2p.data.EmptyProperties;
@@ -114,6 +116,10 @@ abstract class BuildRequestor {
     static final String PROP_MAX_BW = "l";
     static final String PROP_AVAIL_BW = "b";
 
+    // Rate limiter for "No paired or Exploratory tunnel available" logs: destination -> last log time (ms)
+    private static final ConcurrentHashMap<Hash, AtomicLong> _noTunnelLogLimiter = new ConcurrentHashMap<>();
+    private static final long NO_TUNNEL_LOG_INTERVAL_MS = 60_000; // 1 minute
+
     /**
      * Paired tunnels are always used for client tunnels to prevent correlation
      * between different clients or tunnel pools.
@@ -188,8 +194,21 @@ abstract class BuildRequestor {
         if (pairedTunnel == null) {
             // No tunnel available — not even exploratory. This is severe.
             long uptime = ctx.router().getUptime();
-            if (uptime > 3*60*1000) {
-                log.warn("Tunnel build failed -> No paired or Exploratory tunnel available for " + cfg);
+            // Only log after 10 minutes of uptime and rate-limit to 1 per minute per destination
+            if (uptime > 10*60*1000) {
+                Hash dest = settings.getDestination();
+                long now = ctx.clock().now();
+                AtomicLong lastLog = _noTunnelLogLimiter.get(dest);
+                if (lastLog == null) {
+                    AtomicLong newLastLog = new AtomicLong(now);
+                    lastLog = _noTunnelLogLimiter.putIfAbsent(dest, newLastLog);
+                    if (lastLog == null) {lastLog = newLastLog;}
+                }
+                if (now - lastLog.get() >= NO_TUNNEL_LOG_INTERVAL_MS) {
+                    if (lastLog.getAndSet(now) >= now) { // atomic update succeeded
+                        log.warn("Tunnel build failed -> No paired or Exploratory tunnel available for " + cfg);
+                    }
+                }
             }
             int ms = settings.isExploratory() ? EXPLORATORY_BACKOFF : CLIENT_BACKOFF;
             try {Thread.sleep(ms);} catch (InterruptedException ie) {}
