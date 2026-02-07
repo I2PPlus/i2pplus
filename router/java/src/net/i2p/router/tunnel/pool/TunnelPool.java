@@ -600,7 +600,8 @@ public class TunnelPool {
         if (info.getExpiration() > now + 60*1000) {
             cleanupLastResortTunnels();
             // If we added a multi-hop tunnel, remove zero-hop fallbacks immediately
-            if (info.getLength() > 1 && _settings.isExploratory()) {
+            // This applies to both exploratory and client pools
+            if (info.getLength() > 1) {
                 cleanupZeroHopTunnels();
             }
         }
@@ -718,8 +719,9 @@ public class TunnelPool {
 
     /**
      *  Remove zero-hop fallback tunnels once we have multi-hop tunnels.
-     *  Called when a multi-hop tunnel is added to an exploratory pool.
-     *  This prevents keeping 0-hop tunnels around after bootstrap is complete.
+     *  Called when a multi-hop tunnel is added to any pool (exploratory or client).
+     *  This prevents keeping 0-hop tunnels around after bootstrap is complete
+     *  or when multi-hop tunnels become available.
      *  @since 0.9.68+
      */
     private void cleanupZeroHopTunnels() {
@@ -751,7 +753,7 @@ public class TunnelPool {
         // Actually perform the removals outside the synchronized block
         for (TunnelInfo t : zeroHopTunnels) {
             if (_log.shouldInfo()) {
-                _log.info("Removing zero-hop fallback tunnel after multi-hop tunnel added: " + t);
+                _log.info("Removing zero-hop fallback tunnel after multi-hop tunnel added to " + toString() + ": " + t);
             }
             // Mark the tunnel as no longer needed
             _manager.tunnelFailed();
@@ -931,6 +933,13 @@ public class TunnelPool {
 
         // Allow zero-hop fallback for exploratory pools, or if user explicitly configured 0-hop
         if (_settings.isExploratory() || _settings.getAllowZeroHop()) {
+            if (!_settings.isExploratory() && _settings.getAllowZeroHop()) {
+                // Warn that we're building a zero-hop tunnel for a client pool due to configuration
+                if (_log.shouldWarn()) {
+                    _log.warn("Warning! Building zero-hop fallback tunnel for client pool " + toString() +
+                              " because allowZeroHop is enabled in configuration");
+                }
+            }
             if (_log.shouldInfo()) {
                 _log.info(toString() + "\n* Building a fallback tunnel (Usable: " + usable + "; Needed: " + quantity + ")");
             }

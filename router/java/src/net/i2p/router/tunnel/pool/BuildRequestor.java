@@ -246,9 +246,9 @@ abstract class BuildRequestor {
 
             // Client tunnel using exploratory: ensure hop count meets client requirements
             if (expl != null && !settings.isExploratory() && clientWantsMultiHop && expl.getLength() <= 1) {
-                if (log.shouldWarn()) {
-                    log.warn("Rejecting " + (expl.getLength() <= 0 ? "zero" : "one") + 
-                             "-hop exploratory tunnel for client (wants " + clientLength + "+" + clientLengthVariance + " hops)");
+                if (log.shouldInfo()) {
+                    log.info("Rejecting " + (expl.getLength() <= 0 ? "zero" : "one") +
+                             "-hop exploratory tunnel for " + cfg + " (wants " + clientLength + "+" + clientLengthVariance + " hops)");
                 }
                 return null;
             }
@@ -297,14 +297,14 @@ abstract class BuildRequestor {
 
         // Fallback to exploratory, but only if hop count meets client requirements
         TunnelInfo expl = isInbound
-            ? selectFallbackOutboundTunnel(ctx, mgr, log)
-            : selectFallbackInboundTunnel(ctx, mgr, log);
+            ? selectFallbackOutboundTunnel(ctx, mgr, cfg, log)
+            : selectFallbackInboundTunnel(ctx, mgr, cfg, log);
 
         // Client tunnel check: ensure exploratory meets hop requirements
         if (expl != null && clientWantsMultiHop && expl.getLength() <= 1) {
-            if (log.shouldWarn()) {
-                log.warn("Rejecting " + (expl.getLength() <= 0 ? "zero" : "one") + 
-                         "-hop exploratory fallback for client (wants " + clientLength + "+" + clientLengthVariance + " hops)");
+            if (log.shouldInfo()) {
+                log.info("Rejecting " + (expl.getLength() <= 0 ? "zero" : "one") +
+                         "-hop exploratory fallback for " + cfg + " (wants " + clientLength + "+" + clientLengthVariance + " hops)");
             }
             return null;
         }
@@ -315,7 +315,8 @@ abstract class BuildRequestor {
         return expl;
     }
 
-    private static TunnelInfo selectFallbackOutboundTunnel(RouterContext ctx, TunnelManagerFacade mgr, Log log) {
+    private static TunnelInfo selectFallbackOutboundTunnel(RouterContext ctx, TunnelManagerFacade mgr,
+                                                            PooledTunnelCreatorConfig cfg, Log log) {
         TunnelInfo tunnel = mgr.selectOutboundTunnel();
         if (tunnel == null) {
             return null;
@@ -328,16 +329,17 @@ abstract class BuildRequestor {
         }
         // Client pool fallback: reject 0/1-hop exploratory tunnels
         if (tunnel.getLength() <= 1) {
-            if (log.shouldWarn()) {
-                log.warn("Rejecting " + (tunnel.getLength() <= 0 ? "zero" : "one") + 
-                         "-hop exploratory tunnel for client tunnel build reply");
+            if (log.shouldInfo()) {
+                log.info("Rejecting " + (tunnel.getLength() <= 0 ? "zero" : "one") +
+                         "-hop exploratory tunnel for " + cfg + " build reply");
             }
             return null;
         }
         return tunnel;
     }
 
-    private static TunnelInfo selectFallbackInboundTunnel(RouterContext ctx, TunnelManagerFacade mgr, Log log) {
+    private static TunnelInfo selectFallbackInboundTunnel(RouterContext ctx, TunnelManagerFacade mgr,
+                                                           PooledTunnelCreatorConfig cfg, Log log) {
         TunnelInfo tunnel = mgr.selectInboundTunnel();
         if (tunnel == null) {
             return null;
@@ -350,9 +352,9 @@ abstract class BuildRequestor {
         }
         // Client pool fallback: reject 0/1-hop exploratory tunnels
         if (tunnel.getLength() <= 1) {
-            if (log.shouldWarn()) {
-                log.warn("Rejecting " + (tunnel.getLength() <= 0 ? "zero" : "one") + 
-                         "-hop exploratory tunnel for client tunnel build reply");
+            if (log.shouldInfo()) {
+                log.info("Rejecting " + (tunnel.getLength() <= 0 ? "zero" : "one") +
+                         "-hop exploratory tunnel for " + cfg + " build reply");
             }
             return null;
         }
