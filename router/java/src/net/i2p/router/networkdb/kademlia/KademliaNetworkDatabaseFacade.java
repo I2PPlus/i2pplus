@@ -963,7 +963,13 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         try {
             store(hash, localLeaseSet, true); // force overwrite
         } catch (IllegalArgumentException iae) {
-            _log.error("Locally published LeaseSet is not valid", iae);
+            if (iae.getMessage() != null && iae.getMessage().contains("Future LeaseSet")) {
+                if (_log.shouldWarn()) {
+                    _log.warn("Locally published LeaseSet is in the future - will retry later: " + iae.getMessage());
+                }
+                return;
+            }
+            if (_log.shouldWarn()) {_log.warn("Locally published LeaseSet is not valid", iae);}
             throw iae;
         }
 
@@ -1238,36 +1244,57 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         long now = _context.clock().now();
         final long TEN_MINUTES_MS = 10 * 60 * 1000L;  // 10 minutes in milliseconds
 
-        // Determine if LeaseSet timestamps are outdated (stale)
-        boolean isEarliestStale = earliest <= now - TEN_MINUTES_MS;
-        boolean isLatestStale = latest <= now - Router.CLOCK_FUDGE_FACTOR;
+        // During attacks (low build success), relax expiry checks to accommodate tunnel delays
+        double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
+        boolean isUnderAttack = buildSuccess > 0 && buildSuccess < 0.35;
+        long attackGracePeriod = isUnderAttack ? 30 * 1000L : 0;  // 30 seconds grace during attacks
 
         // Retrieve destination ID string, fallback to LeaseSet hash base32 if null
         Destination dest = leaseSet.getDestination();
         String id = (dest != null ? dest.toBase32() : leaseBase32);
         String idShort = id.substring(0, 6);  // Shortened ID for logs and messages
 
-        // Reject old (expired) LeaseSets
+        // Determine if LeaseSet timestamps are outdated (stale)
+        // During attacks, apply grace period to isLatestStale check
+        boolean isEarliestStale = earliest <= now - TEN_MINUTES_MS;
+        boolean isLatestStale = latest <= now - Router.CLOCK_FUDGE_FACTOR - attackGracePeriod;
+
         if (isEarliestStale || isLatestStale) {
             long age = now - earliest;
-            if (_log.shouldWarn()) {
-                _log.warn("Old LeaseSet [" + idShort + "] -> rejecting store..." +
-                          "\n* First expired: " + new Date(earliest) +
-                          "\n* Last expired: " + new Date(latest) +
-                          "\n* " + leaseSet);
-            }
-            // If there are no leases, aggressively mark lookups as failed to reduce retries
-            if (leaseSet.getLeaseCount() == 0) {
-                for (int i = 0; i < NegativeLookupCache.MAX_FAILS; i++) {
-                    lookupFailed(key);
+            if (isUnderAttack && latest > now - Router.CLOCK_FUDGE_FACTOR - 60 * 1000L) {
+                if (_log.shouldWarn()) {
+                    _log.warn("Old LeaseSet during attack - accepting with grace: [" + idShort + "]" +
+                              "\n* Expired: " + DataHelper.formatDuration(age) + " ago");
                 }
+            } else {
+                if (_log.shouldWarn()) {
+                    _log.warn("Old LeaseSet [" + idShort + "] -> rejecting store..." +
+                              "\n* First expired: " + new Date(earliest) +
+                              "\n* Last expired: " + new Date(latest) +
+                              "\n* " + leaseSet);
+                }
+                // If there are no leases, aggressively mark lookups as failed to reduce retries
+                if (leaseSet.getLeaseCount() == 0) {
+                    for (int i = 0; i < NegativeLookupCache.MAX_FAILS; i++) {
+                        lookupFailed(key);
+                    }
+                }
+                return "LeaseSet for [" + idShort + "] expired " + DataHelper.formatDuration(age) + " ago";
             }
-            return "LeaseSet for [" + idShort + "] expired " + DataHelper.formatDuration(age) + " ago";
         }
 
         // Determine limits for future expiration timestamps
         long futureLimit = Router.CLOCK_FUDGE_FACTOR + MAX_LEASE_FUTURE;
         long metaFutureLimit = Router.CLOCK_FUDGE_FACTOR + MAX_META_LEASE_FUTURE;
+
+        // During attacks (low build success), relax future limits to allow more LeaseSets
+        if (isUnderAttack) {
+            futureLimit += 10 * 60 * 1000L;  // Add 10 minutes buffer during attacks
+            metaFutureLimit += 15 * 60 * 1000L;  // Add 15 minutes for meta LeaseSets
+            if (_log.shouldWarn()) {
+                _log.warn("Under attack (" + (int)(buildSuccess * 100) + "% build success) - relaxed LeaseSet limits");
+            }
+        }
 
         // If LeaseSet expires too far into the future, reject it (to handle clock skew issues)
         boolean isFutureTooFar =
@@ -1275,6 +1302,14 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             (type != DatabaseEntry.KEY_TYPE_META_LS2 || latest > now + metaFutureLimit);
 
         if (isFutureTooFar) {
+            // During attacks, just warn instead of rejecting for slightly future LeaseSets
+            if (isUnderAttack && latest <= now + futureLimit + (5 * 60 * 1000L)) {
+                if (_log.shouldWarn()) {
+                    _log.warn("LeaseSet slightly in future during attack - accepting: [" + idShort + "]" +
+                              "\n* Expires: " + DataHelper.formatDuration(latest - now) + " from now");
+                }
+                return null;  // Accept it
+            }
             long age = latest - now;
             if (_log.shouldWarn()) {
                 _log.warn("LeaseSet expires too far in the future: [" + idShort + "]" +
