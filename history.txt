@@ -1,5 +1,7 @@
 2026-02-07 dr|z3d
  * Router:
+   - Add periodic cleanup to remove tunnels with duplicate peer sequences,
+     ensuring at least one tunnel remains per pool
    - Prevent 0-hop tunnels from being added to client pools unless
      explicitly configured to allow them
    - Fix duplicate tunnel rejection logic to keep existing tunnels and
