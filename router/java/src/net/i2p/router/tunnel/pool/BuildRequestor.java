@@ -215,6 +215,13 @@ abstract class BuildRequestor {
                     log.warn("Tunnel build failed -> No paired or Exploratory tunnel available for " + cfg);
                 }
             }
+            // Client tunnel cannot fallback to exploratory - return false to retry naturally
+            // The BuildExecutor will retry this tunnel in its next loop iteration
+            if (!settings.isExploratory()) {
+                int ms = CLIENT_BACKOFF;
+                try {Thread.sleep(ms);} catch (InterruptedException ie) {}
+                return false;
+            }
             int ms = settings.isExploratory() ? EXPLORATORY_BACKOFF : CLIENT_BACKOFF;
             try {Thread.sleep(ms);} catch (InterruptedException ie) {}
             exec.buildComplete(cfg, OTHER_FAILURE);
@@ -334,7 +341,20 @@ abstract class BuildRequestor {
             return expl;
         }
 
-        // Client tunnels: never use exploratory as fallback
+        // Client tunnels: use exploratory as fallback if > 0 hop
+        // These exploratory tunnels will be replaced by client tunnels as they build
+        // 0/1-hop exploratory tunnels are rejected by selectFallback methods
+        if (!settings.isExploratory()) {
+            TunnelInfo expl = isInbound
+                ? selectFallbackOutboundTunnel(ctx, mgr, cfg, log)
+                : selectFallbackInboundTunnel(ctx, mgr, cfg, log);
+            if (expl != null) {
+                if (log.shouldInfo()) {
+                    log.info("Using exploratory tunnel as fallback for client: " + cfg);
+                }
+                return expl;
+            }
+        }
         return null;
     }
 
