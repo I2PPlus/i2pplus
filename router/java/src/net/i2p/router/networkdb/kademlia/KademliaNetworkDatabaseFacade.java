@@ -1292,7 +1292,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             futureLimit += 10 * 60 * 1000L;  // Add 10 minutes buffer during attacks
             metaFutureLimit += 15 * 60 * 1000L;  // Add 15 minutes for meta LeaseSets
             if (_log.shouldWarn()) {
-                _log.warn("Under attack (" + (int)(buildSuccess * 100) + "% build success) - relaxed LeaseSet limits");
+                _log.warn("Under attack (" + (int)(buildSuccess * 100) + "% build success) -> Relaxing future publication limits for LeaseSets...");
             }
         }
 
