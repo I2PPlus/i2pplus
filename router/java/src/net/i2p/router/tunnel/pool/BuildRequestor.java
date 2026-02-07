@@ -197,17 +197,22 @@ abstract class BuildRequestor {
             // Only log after 10 minutes of uptime and rate-limit to 1 per minute per destination
             if (uptime > 10*60*1000) {
                 Hash dest = settings.getDestination();
-                long now = ctx.clock().now();
-                AtomicLong lastLog = _noTunnelLogLimiter.get(dest);
-                if (lastLog == null) {
-                    AtomicLong newLastLog = new AtomicLong(now);
-                    lastLog = _noTunnelLogLimiter.putIfAbsent(dest, newLastLog);
-                    if (lastLog == null) {lastLog = newLastLog;}
-                }
-                if (now - lastLog.get() >= NO_TUNNEL_LOG_INTERVAL_MS) {
-                    if (lastLog.getAndSet(now) >= now) { // atomic update succeeded
-                        log.warn("Tunnel build failed -> No paired or Exploratory tunnel available for " + cfg);
+                if (dest != null) {
+                    long now = ctx.clock().now();
+                    AtomicLong lastLog = _noTunnelLogLimiter.get(dest);
+                    if (lastLog == null) {
+                        AtomicLong newLastLog = new AtomicLong(now);
+                        lastLog = _noTunnelLogLimiter.putIfAbsent(dest, newLastLog);
+                        if (lastLog == null) {lastLog = newLastLog;}
                     }
+                    if (now - lastLog.get() >= NO_TUNNEL_LOG_INTERVAL_MS) {
+                        if (lastLog.getAndSet(now) >= now) { // atomic update succeeded
+                            log.warn("Tunnel build failed -> No paired or Exploratory tunnel available for " + cfg);
+                        }
+                    }
+                } else {
+                    // Exploratory tunnel with no fallback available
+                    log.warn("Tunnel build failed -> No paired or Exploratory tunnel available for " + cfg);
                 }
             }
             int ms = settings.isExploratory() ? EXPLORATORY_BACKOFF : CLIENT_BACKOFF;
@@ -309,29 +314,28 @@ abstract class BuildRequestor {
                 }
             }
         } else {
+            // Don't force exploratory - keep trying to build the client tunnel
+            // Just log the failure count
             if (log.shouldWarn() && uptime > 5*60*1000 && fails > 2) {
-                log.warn(fails + " consecutive build timeouts for " + cfg + " → Forcing Exploratory tunnel...");
+                log.warn(fails + " consecutive build timeouts for " + cfg + " -> Keeping client tunnel priority");
             }
-        }
-
-        // Fallback to exploratory, but only if hop count meets client requirements
-        TunnelInfo expl = isInbound
-            ? selectFallbackOutboundTunnel(ctx, mgr, cfg, log)
-            : selectFallbackInboundTunnel(ctx, mgr, cfg, log);
-
-        // Client tunnel check: ensure exploratory meets hop requirements
-        if (expl != null && clientWantsMultiHop && expl.getLength() <= 1) {
-            if (log.shouldInfo()) {
-                log.info("Rejecting " + (expl.getLength() <= 0 ? "zero" : "one") +
-                         "-hop exploratory fallback for " + cfg + " (wants " + clientLength + "+" + clientLengthVariance + " hops)");
-            }
+            // Return null to trigger new build attempt instead of falling back to exploratory
             return null;
         }
 
-        if (expl != null && log.shouldInfo()) {
-            log.info("Using Exploratory tunnel as fallback for: " + cfg);
+        // For exploratory tunnels, allow fallback to other exploratory tunnels
+        if (settings.isExploratory()) {
+            TunnelInfo expl = isInbound
+                ? selectFallbackOutboundTunnel(ctx, mgr, cfg, log)
+                : selectFallbackInboundTunnel(ctx, mgr, cfg, log);
+            if (expl != null && log.shouldInfo()) {
+                log.info("Using Exploratory tunnel as fallback for: " + cfg);
+            }
+            return expl;
         }
-        return expl;
+
+        // Client tunnels: never use exploratory as fallback
+        return null;
     }
 
     private static TunnelInfo selectFallbackOutboundTunnel(RouterContext ctx, TunnelManagerFacade mgr,
