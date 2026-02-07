@@ -52,17 +52,23 @@ public class HashPatternDetector implements Serializable {
 
     // Configuration
     private static final int PREFIX_LENGTH = 2; // First 2 bytes (4 hex chars)
-    private static final double BAN_THRESHOLD = 0.85; // 85% confidence required
-    private static final int MIN_SAMPLES = 50; // Minimum bans before prediction
-    private static final int MIN_KNOWN_ROUTERS = 1000; // Minimum known routers before enabling
+    private static final double BAN_THRESHOLD = 0.60; // 60% confidence for pre-emptive banning
+    private static final int MIN_SAMPLES = 5; // Minimum samples before prediction (aggressive)
+    private static final int MIN_KNOWN_ROUTERS = 500; // Minimum known routers before enabling (lowered)
     private static final String PATTERN_FILE = "hash-patterns.dat";
-    private static final long PREDICTIVE_BAN_DURATION = 24 * 60 * 60 * 1000L; // 24 hours
+    private static final long PREDICTIVE_BAN_DURATION = 48 * 60 * 60 * 1000L; // 48 hours for pre-emptive bans
+
+    // Gap-based detection configuration
+    private static final int GAP_CLUSTERING_THRESHOLD = 60; // 60% of gaps within narrow range
+    private static final int GAP_RANGE = 256; // Gaps within this are considered "clustered"
+    private static final int MIN_RUN_LENGTH = 3; // 3+ consecutive increments = scripted
+    private static final int CROSS_PREFIX_GAP = 0x100; // Gap indicating prefix boundary crossing
 
     // NetDB Scanner Configuration
     private static final String PROP_HASH_SCAN_FREQUENCY = "router.hashScan.frequency";
-    private static final long DEFAULT_SCAN_FREQUENCY = 60 * 60 * 1000L; // 1 hour default
-    private static final long SCAN_STARTUP_DELAY = 15 * 60 * 1000L; // 15 minutes - wait for netdb init
-    private static final long BAN_DURATION = 24 * 60 * 60 * 1000L; // 24 hours for auto-bans
+    private static final long DEFAULT_SCAN_FREQUENCY = 15 * 60 * 1000L; // 15 minutes - aggressive scanning
+    private static final long SCAN_STARTUP_DELAY = 5 * 60 * 1000L; // 5 minutes
+    private static final long BAN_DURATION = 48 * 60 * 60 * 1000L; // 48 hours for auto-bans
 
     // Scanner state
     private final AtomicBoolean _scanInProgress = new AtomicBoolean(false);
@@ -392,10 +398,159 @@ public class HashPatternDetector implements Serializable {
             }
         }
 
-        // If 85% of consecutive values are within close range, likely sequential
-        // Now matches BAN_THRESHOLD for consistency
+        // If 60% of consecutive values are within close range, likely sequential
         double ratio = (double) sequenceCount / (idx - 1);
-        return ratio >= BAN_THRESHOLD;
+        return ratio >= GAP_CLUSTERING_THRESHOLD / 100.0;
+    }
+
+    /**
+     * Compute the gap between two hash values.
+     * Returns the absolute difference as an integer.
+     *
+     * @param hash1 First hash string
+     * @param hash2 Second hash string
+     * @return Gap between hashes, or -1 on error
+     */
+    private long computeGap(String hash1, String hash2) {
+        if (hash1 == null || hash2 == null) {
+            return -1;
+        }
+        try {
+            byte[] b1 = net.i2p.data.Base64.decode(hash1.substring(0, 8));
+            byte[] b2 = net.i2p.data.Base64.decode(hash2.substring(0, 8));
+            long v1 = 0, v2 = 0;
+            for (int i = 0; i < Math.min(b1.length, 4); i++) {
+                v1 = (v1 << 8) | (b1[i] & 0xFF);
+            }
+            for (int i = 0; i < Math.min(b2.length, 4); i++) {
+                v2 = (v2 << 8) | (b2[i] & 0xFF);
+            }
+            return Math.abs(v1 - v2);
+        } catch (Exception e) {
+            return -1;
+        }
+    }
+
+    /**
+     * Detect sequential patterns by analyzing gaps between sorted hashes.
+     * Returns true if gap clustering suggests algorithmic generation.
+     *
+     * @param hashes List of router hashes to analyze
+     * @return true if sequential pattern detected
+     */
+    public boolean detectSequentialPatterns(java.util.List<String> hashes) {
+        if (hashes == null || hashes.size() < MIN_SAMPLES) {
+            return false;
+        }
+
+        // Parse and sort hashes by first 4 bytes
+        java.util.List<Long> values = new java.util.ArrayList<>();
+        for (String hash : hashes) {
+            try {
+                byte[] bytes = net.i2p.data.Base64.decode(hash.substring(0, 8));
+                long v = 0;
+                for (int i = 0; i < Math.min(bytes.length, 4); i++) {
+                    v = (v << 8) | (bytes[i] & 0xFF);
+                }
+                values.add(v);
+            } catch (Exception e) {
+                // Skip invalid hashes
+            }
+        }
+
+        if (values.size() < MIN_SAMPLES) {
+            return false;
+        }
+
+        // Sort values
+        values.sort(Long::compareTo);
+
+        // Count gaps within clustering range
+        int clusteredGaps = 0;
+        int totalGaps = values.size() - 1;
+        int runLength = 1;
+        int maxRunLength = 1;
+
+        for (int i = 1; i < values.size(); i++) {
+            long gap = values.get(i) - values.get(i - 1);
+            if (gap > 0 && gap <= GAP_RANGE) {
+                clusteredGaps++;
+                runLength++;
+            } else {
+                maxRunLength = Math.max(maxRunLength, runLength);
+                runLength = 1;
+            }
+        }
+        maxRunLength = Math.max(maxRunLength, runLength);
+
+        // Check thresholds
+        double clusteringRatio = (double) clusteredGaps / totalGaps;
+        boolean hasClustering = clusteringRatio >= (GAP_CLUSTERING_THRESHOLD / 100.0);
+        boolean hasLongRuns = maxRunLength >= MIN_RUN_LENGTH;
+
+        return hasClustering || hasLongRuns;
+    }
+
+    /**
+     * Check for cross-prefix sequential patterns (e.g., 0xAA01FF -> 0xAA0200).
+     * Indicates scripted IDs crossing byte boundaries.
+     *
+     * @param hashes List of router hashes to analyze
+     * @return true if cross-prefix patterns detected
+     */
+    public boolean detectCrossPrefixPatterns(java.util.List<String> hashes) {
+        if (hashes == null || hashes.size() < MIN_SAMPLES) {
+            return false;
+        }
+
+        // Group by 2-byte prefix and check transitions
+        java.util.Map<String, java.util.List<Long>> prefixGroups = new java.util.HashMap<>();
+        for (String hash : hashes) {
+            try {
+                String prefix = hash.substring(0, 4);
+                byte[] bytes = net.i2p.data.Base64.decode(hash.substring(0, 8));
+                long v = 0;
+                for (int i = 0; i < Math.min(bytes.length, 4); i++) {
+                    v = (v << 8) | (bytes[i] & 0xFF);
+                }
+                prefixGroups.computeIfAbsent(prefix, k -> new java.util.ArrayList<>()).add(v);
+            } catch (Exception e) {
+                // Skip invalid hashes
+            }
+        }
+
+        // Check for sequential transitions between prefixes
+        int crossPrefixSequential = 0;
+        int totalTransitions = 0;
+
+        for (java.util.List<Long> group : prefixGroups.values()) {
+            if (group.size() < 2) continue;
+            group.sort(Long::compareTo);
+            for (int i = 1; i < group.size(); i++) {
+                long gap = group.get(i) - group.get(i - 1);
+                // Check for gaps near prefix boundary (e.g., 0x01FF -> 0x0200)
+                if ((group.get(i - 1) & 0xFF) >= 0xF0 && gap >= 0x100 - 16 && gap <= 0x100 + 16) {
+                    crossPrefixSequential++;
+                }
+                totalTransitions++;
+            }
+        }
+
+        if (totalTransitions < MIN_SAMPLES) {
+            return false;
+        }
+
+        return (double) crossPrefixSequential / totalTransitions >= 0.8;
+    }
+
+    /**
+     * Quick check for scripted patterns - returns true if any pattern detected.
+     *
+     * @param hashes List of router hashes to check
+     * @return true if scripted pattern detected
+     */
+    public boolean hasScriptedPattern(java.util.List<String> hashes) {
+        return detectSequentialPatterns(hashes) || detectCrossPrefixPatterns(hashes);
     }
 
     /**
@@ -522,6 +677,7 @@ public class HashPatternDetector implements Serializable {
 
     /**
      * Scan netDB for routers matching suspicious patterns and auto-ban them.
+     * Uses gap-based detection for pre-emptive banning.
      *
      * @since 0.9.68
      */
@@ -536,6 +692,7 @@ public class HashPatternDetector implements Serializable {
         int bannedCount = 0;
         int errorCount = 0;
         int skippedCount = 0;
+        int gapDetectionCount = 0;
 
         try {
             Set<RouterInfo> routers = _context.netDb().getRouters();
@@ -548,6 +705,23 @@ public class HashPatternDetector implements Serializable {
             int totalRouters = routers.size();
             if (_log.shouldInfo())
                 _log.info("Starting NetDB hash pattern scan of " + totalRouters + " routers");
+
+            // Collect all router hashes for gap analysis
+            java.util.List<String> allHashes = new java.util.ArrayList<>(totalRouters);
+            for (RouterInfo router : routers) {
+                if (router != null && router.getIdentity() != null) {
+                    Hash identityHash = router.getIdentity().getHash();
+                    if (identityHash != null) {
+                        allHashes.add(identityHash.toBase64());
+                    }
+                }
+            }
+
+            // Run gap-based pattern detection
+            boolean hasScriptedPattern = hasScriptedPattern(allHashes);
+            if (hasScriptedPattern && _log.shouldWarn()) {
+                _log.warn("Gap-based detection: Scripted router pattern detected in NetDB");
+            }
 
             int processed = 0;
             for (RouterInfo router : routers) {
@@ -572,9 +746,16 @@ public class HashPatternDetector implements Serializable {
                         continue;
                     }
 
-                    // Analyze for suspicious patterns
-                    if (isPatternSuspicious(routerHash)) {
-                        if (banRouter(router, identityHash, routerHash)) {
+                    // Check for gap-based suspicious patterns (pre-emptive)
+                    if (isGapSuspicious(routerHash, allHashes)) {
+                        if (banRouter(router, identityHash, routerHash, true)) {
+                            bannedCount++;
+                            gapDetectionCount++;
+                        }
+                    }
+                    // Fallback to traditional pattern detection
+                    else if (isPatternSuspicious(routerHash)) {
+                        if (banRouter(router, identityHash, routerHash, false)) {
                             bannedCount++;
                         }
                     }
@@ -592,14 +773,45 @@ public class HashPatternDetector implements Serializable {
             }
 
             long duration = _context.clock().now() - startTime;
-            if (_log.shouldInfo() || bannedCount > 0 || errorCount > 0) {
+            if (_log.shouldInfo() || bannedCount > 0 || errorCount > 0 || gapDetectionCount > 0) {
                 _log.info("HashPatternDetector: NetDB scan complete in " + (duration / 1000) + "s - " +
-                          "banned: " + bannedCount + ", errors: " + errorCount + ", skipped: " + skippedCount);
+                          "banned: " + bannedCount + " (gap-based: " + gapDetectionCount + "), " +
+                          "errors: " + errorCount + ", skipped: " + skippedCount);
             }
 
         } finally {
             _scanInProgress.set(false);
         }
+    }
+
+    /**
+     * Check if a router hash is suspicious based on gap analysis.
+     *
+     * @param routerHash Base64 router hash
+     * @param allHashes List of all hashes in NetDB for context
+     * @return true if gap pattern suggests scripting
+     */
+    private boolean isGapSuspicious(String routerHash, java.util.List<String> allHashes) {
+        if (allHashes == null || allHashes.size() < MIN_SAMPLES) {
+            return false;
+        }
+
+        // Group hashes by 2-byte prefix
+        String prefix = routerHash.substring(0, 4);
+        java.util.List<String> prefixHashes = new java.util.ArrayList<>();
+        for (String hash : allHashes) {
+            if (hash.startsWith(prefix)) {
+                prefixHashes.add(hash);
+            }
+        }
+
+        // Need minimum samples in this prefix for analysis
+        if (prefixHashes.size() < MIN_SAMPLES) {
+            return false;
+        }
+
+        // Check for sequential patterns within this prefix group
+        return detectSequentialPatterns(prefixHashes) || detectCrossPrefixPatterns(prefixHashes);
     }
 
     /**
@@ -621,17 +833,20 @@ public class HashPatternDetector implements Serializable {
     }
 
     /**
-     * Ban a router for 24 hours.
+     * Ban a router for pre-emptive detection.
      *
      * @param router RouterInfo to ban
      * @param identityHash Router identity hash
      * @param routerHash Base64 router hash string
+     * @param isGapBased True if detected via gap analysis (pre-emptive)
      * @return true if ban was applied
      */
-    private boolean banRouter(RouterInfo router, Hash identityHash, String routerHash) {
+    private boolean banRouter(RouterInfo router, Hash identityHash, String routerHash, boolean isGapBased) {
         try {
             long expireOn = _context.clock().now() + BAN_DURATION;
-            String reason = " <b>➜</b> HashPatternDetector (NetDb Scan)";
+            String reason = isGapBased
+                ? " <b>➜</b> HashPatternDetector (Gap Analysis - Pre-emptive)"
+                : " <b>➜</b> HashPatternDetector (NetDb Scan)";
 
             boolean wasBanned = _context.banlist().banlistRouter(
                 identityHash, reason, null, null, expireOn
@@ -639,11 +854,14 @@ public class HashPatternDetector implements Serializable {
 
             if (wasBanned || _context.banlist().isBanlisted(identityHash)) {
                 if (_log.shouldWarn())
-                    _log.warn("Auto-banned router: " + routerHash.substring(0, 12) + "...");
+                    _log.warn("Pre-emptively banned router: " + routerHash.substring(0, 12) + "..." +
+                             (isGapBased ? " (gap-based detection)" : ""));
                 // Extract IP from router addresses
                 String ip = getRouterIP(router);
                 // Log to sessionbans.txt via BanLogger
-                String banReason = "HashPatternDetector (NetDb Scan)";
+                String banReason = isGapBased
+                    ? "HashPatternDetector (Gap Analysis - Pre-emptive)"
+                    : "HashPatternDetector (NetDb Scan)";
                 _banLogger.logBan(identityHash, ip, banReason, BAN_DURATION);
                 return true;
             }
@@ -674,22 +892,19 @@ public class HashPatternDetector implements Serializable {
     }
 
     /**
-      * Timed event for periodic NetDB scanning.
+      * Timed event for periodic NetDB scanning with gap-based pre-emptive detection.
       *
       * @since 0.9.68
       */
      private class NetDbScanTask implements SimpleTimer.TimedEvent {
          public void timeReached() {
-             // Check if we should enable predictive banning (deferred from constructor)
-             if (!_predictiveBanningActive.get() && shouldEnablePredictiveBanning()) {
-                 Set<String> suspicious = getSuspiciousPrefixes();
+             // Enable predictive banning on first scan (gap-based detection doesn't need warmup)
+             if (!_predictiveBanningActive.get()) {
                  _predictiveBanningActive.set(true);
                  _predictiveBanEnableTime = _context.clock().now();
                  if (_log.shouldWarn()) {
-                     _log.warn("WARNING! Algorithmic router identity generation pattern identified!" +
-                              "\n* Automatic predictive banning is now ENABLED" +
-                              "\n* Suspicious prefixes: " + suspicious +
-                              "\n* Future routers matching these patterns will be banned preventively");
+                     _log.warn("Pre-emptive gap-based router detection ENABLED" +
+                              "\n* Algorithmic router patterns will be banned before causing harm");
                  }
              }
 
