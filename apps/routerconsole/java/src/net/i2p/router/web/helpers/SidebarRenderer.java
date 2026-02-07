@@ -1193,7 +1193,7 @@ class SidebarRenderer {
                .append("</span></td></tr>\n");
             if (_helper.getTunnelBuildSuccess() > 0) {
                 buf.append("<tr title=\"")
-                   .append(_t("Combined utility and service tunnel build success (averaged over 1 minute, falls back to 10 minute intervals)"))
+                   .append(_t("Combined utility and service tunnel build success (averaged over 10 minute intervals)"))
                    .append("\"><td><a href=\"/graph?stat=tunnel.tunnelBuildSuccessAvg.60000&c=1440&w=1000&h=280\"><b>")
                    .append(_t("Build Success"))
                    .append("</b></a></td><td class=digits><span class=volatile>")
