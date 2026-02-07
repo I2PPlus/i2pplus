@@ -567,20 +567,17 @@ public class TunnelPool {
         long now = _context.clock().now();
         if (_log.shouldDebug()) {_log.debug(toString() + " -> Adding tunnel " + info);}
 
-        // Check for duplicate peer sequence and fail if we have good alternatives @since 0.9.68+
+        // Check for duplicate peer sequence and reject new tunnel if we have good alternatives @since 0.9.68+
         List<TunnelInfo> duplicates = findDuplicateTunnels(info);
         if (!duplicates.isEmpty()) {
             // Check if we have at least 1 good (non-duplicate) tunnel
             if (hasGoodTunnel(info)) {
-                // Fail the duplicate tunnel(s) - mark as duplicate
+                // We have good alternatives - reject this new duplicate tunnel
                 if (_log.shouldWarn()) {
-                    _log.warn("Failing " + duplicates.size() + " duplicate tunnel(s) - keeping newer: " + info);
+                    _log.warn("Rejecting new tunnel with duplicate peer sequence - keeping existing: " + info);
                 }
-                for (TunnelInfo dup : duplicates) {
-                    if (dup instanceof PooledTunnelCreatorConfig) {
-                        ((PooledTunnelCreatorConfig) dup).setDuplicate();
-                    }
-                    tunnelFailed(dup);  // Fail the older duplicate
+                if (info instanceof PooledTunnelCreatorConfig) {
+                    ((PooledTunnelCreatorConfig) info).setDuplicate();
                 }
                 // Don't add this tunnel since it's a duplicate
                 return;
@@ -752,8 +749,8 @@ public class TunnelPool {
             if (_log.shouldInfo()) {
                 _log.info("Removing zero-hop fallback tunnel after multi-hop tunnel added to " + toString() + ": " + t);
             }
-            // Mark the tunnel as no longer needed
-            _manager.tunnelFailed();
+            // Properly fail the removed tunnel to ensure cleanup
+            tunnelFailed(t);
         }
     }
 
