@@ -424,40 +424,48 @@ public class SidebarHelper extends HelperBase {
 
     /**
       * Retrieve Tunnel build success as a percentage.
-      * Uses 1-minute rate for fast feedback, falls back to 10-minute if insufficient data.
+      * Uses the maximum of 1-minute and 10-minute averages to show the better view.
       * @since 0.9.58+
       */
      public int getTunnelBuildSuccess() {
          if (_context == null) {return 0;}
-         Rate explSuccess = _context.statManager().getRate("tunnel.buildExploratorySuccess").getRate(RateConstants.ONE_MINUTE);
-         Rate explReject = _context.statManager().getRate("tunnel.buildExploratoryReject").getRate(RateConstants.ONE_MINUTE);
-         Rate explExpire = _context.statManager().getRate("tunnel.buildExploratoryExpire").getRate(RateConstants.ONE_MINUTE);
-         Rate clientSuccess = _context.statManager().getRate("tunnel.buildClientSuccess").getRate(RateConstants.ONE_MINUTE);
-         Rate clientReject = _context.statManager().getRate("tunnel.buildClientReject").getRate(RateConstants.ONE_MINUTE);
-         Rate clientExpire = _context.statManager().getRate("tunnel.buildClientExpire").getRate(RateConstants.ONE_MINUTE);
-         long success = explSuccess.getLastEventCount() + clientSuccess.getLastEventCount();
-         long reject = explReject.getLastEventCount() + clientReject.getLastEventCount();
-         long expire = explExpire.getLastEventCount() + clientExpire.getLastEventCount();
-         long total = success + reject + expire;
 
-         if (total < 5) {
-             explSuccess = _context.statManager().getRate("tunnel.buildExploratorySuccess").getRate(RateConstants.TEN_MINUTES);
-             explReject = _context.statManager().getRate("tunnel.buildExploratoryReject").getRate(RateConstants.TEN_MINUTES);
-             explExpire = _context.statManager().getRate("tunnel.buildExploratoryExpire").getRate(RateConstants.TEN_MINUTES);
-             clientSuccess = _context.statManager().getRate("tunnel.buildClientSuccess").getRate(RateConstants.TEN_MINUTES);
-             clientReject = _context.statManager().getRate("tunnel.buildClientReject").getRate(RateConstants.TEN_MINUTES);
-             clientExpire = _context.statManager().getRate("tunnel.buildClientExpire").getRate(RateConstants.TEN_MINUTES);
-             success = explSuccess.getLastEventCount() + clientSuccess.getLastEventCount();
-             reject = explReject.getLastEventCount() + clientReject.getLastEventCount();
-             expire = explExpire.getLastEventCount() + clientExpire.getLastEventCount();
-             total = success + reject + expire;
+         // Calculate 1-minute rate
+         Rate explSuccess1m = _context.statManager().getRate("tunnel.buildExploratorySuccess").getRate(RateConstants.ONE_MINUTE);
+         Rate explReject1m = _context.statManager().getRate("tunnel.buildExploratoryReject").getRate(RateConstants.ONE_MINUTE);
+         Rate explExpire1m = _context.statManager().getRate("tunnel.buildExploratoryExpire").getRate(RateConstants.ONE_MINUTE);
+         Rate clientSuccess1m = _context.statManager().getRate("tunnel.buildClientSuccess").getRate(RateConstants.ONE_MINUTE);
+         Rate clientReject1m = _context.statManager().getRate("tunnel.buildClientReject").getRate(RateConstants.ONE_MINUTE);
+         Rate clientExpire1m = _context.statManager().getRate("tunnel.buildClientExpire").getRate(RateConstants.ONE_MINUTE);
+         long success1m = explSuccess1m.getLastEventCount() + clientSuccess1m.getLastEventCount();
+         long reject1m = explReject1m.getLastEventCount() + clientReject1m.getLastEventCount();
+         long expire1m = explExpire1m.getLastEventCount() + clientExpire1m.getLastEventCount();
+         long total1m = success1m + reject1m + expire1m;
+         int percentage1m = 0;
+         if (total1m >= 5) {
+             percentage1m = (int) ((100 * success1m) / total1m);
+             if (percentage1m == 100 || percentage1m == 0) {percentage1m = 0;}
          }
 
-         int percentage;
-         if (total < 1) {total = 1;}
-         percentage = (int) ((100 * success) / total);
-         if (percentage == 100 || percentage == 0) {return 0;}
-         else {return percentage;}
+         // Calculate 10-minute rate
+         Rate explSuccess10m = _context.statManager().getRate("tunnel.buildExploratorySuccess").getRate(RateConstants.TEN_MINUTES);
+         Rate explReject10m = _context.statManager().getRate("tunnel.buildExploratoryReject").getRate(RateConstants.TEN_MINUTES);
+         Rate explExpire10m = _context.statManager().getRate("tunnel.buildExploratoryExpire").getRate(RateConstants.TEN_MINUTES);
+         Rate clientSuccess10m = _context.statManager().getRate("tunnel.buildClientSuccess").getRate(RateConstants.TEN_MINUTES);
+         Rate clientReject10m = _context.statManager().getRate("tunnel.buildClientReject").getRate(RateConstants.TEN_MINUTES);
+         Rate clientExpire10m = _context.statManager().getRate("tunnel.buildClientExpire").getRate(RateConstants.TEN_MINUTES);
+         long success10m = explSuccess10m.getLastEventCount() + clientSuccess10m.getLastEventCount();
+         long reject10m = explReject10m.getLastEventCount() + clientReject10m.getLastEventCount();
+         long expire10m = explExpire10m.getLastEventCount() + clientExpire10m.getLastEventCount();
+         long total10m = success10m + reject10m + expire10m;
+         int percentage10m = 0;
+         if (total10m >= 5) {
+             percentage10m = (int) ((100 * success10m) / total10m);
+             if (percentage10m == 100 || percentage10m == 0) {percentage10m = 0;}
+         }
+
+         // Return the maximum of the two percentages
+         return Math.max(percentage1m, percentage10m);
      }
 
     /**
