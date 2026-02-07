@@ -37,6 +37,8 @@ public class TunnelPoolSettings {
     private boolean _shouldTest = true;
     private final Set<Hash> _aliases;
     private Hash _aliasOf;
+    /** @since 0.9.68+ transient first peer exclusions for diversity */
+    private transient Set<Hash> _firstPeerExclusions;
     /** prefix used to configure the inbound exploratory pool */
     public static final String      PREFIX_INBOUND_EXPLORATORY = "router.inboundPool.";
     /** prefix used to configure the outbound exploratory pool */
@@ -242,6 +244,29 @@ public class TunnelPoolSettings {
      */
     public void setAliasOf(Hash h) {
         _aliasOf = h;
+    }
+
+    /**
+     *  Get the set of first peer exclusions for diversity.
+     *  These are peers that should not be used as the first hop in new tunnels
+     *  because they are already used as the first hop in existing tunnels.
+     *  @return Set of peer hashes to exclude, or null if none set
+     *  @since 0.9.68+
+     */
+    public Set<Hash> getFirstPeerExclusions() {
+        return _firstPeerExclusions;
+    }
+
+    /**
+     *  Set the first peer exclusions for diversity.
+     *  These are peers that should not be used as the first hop in new tunnels
+     *  because they are already used as the first hop in existing tunnels.
+     *  This is a transient setting used during tunnel building.
+     *  @param exclusions Set of peer hashes to exclude, or null to clear
+     *  @since 0.9.68+
+     */
+    public void setFirstPeerExclusions(Set<Hash> exclusions) {
+        _firstPeerExclusions = exclusions;
     }
 
     /**

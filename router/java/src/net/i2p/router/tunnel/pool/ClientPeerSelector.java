@@ -83,6 +83,13 @@ class ClientPeerSelector extends TunnelPeerSelector {
             if (shouldSelectExplicit(settings)) {return selectExplicit(settings, length);}
 
             Set<Hash> exclude = getExclude(isInbound, false);
+            
+            // Add first peer exclusions for diversity @since 0.9.68+
+            Set<Hash> firstPeerExclusions = settings.getFirstPeerExclusions();
+            if (firstPeerExclusions != null && !firstPeerExclusions.isEmpty()) {
+                exclude.addAll(firstPeerExclusions);
+            }
+            
             ArraySet<Hash> matches = new ArraySet<Hash>(length);
             if (length == 1) {
                 // closest-hop restrictions

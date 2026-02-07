@@ -594,8 +594,18 @@ public class TunnelPool {
                         break;
                     }
                 }
-                
-                if (!hasExpiringDuplicate) {
+
+                // Count current usable tunnels to ensure we don't drop to 0
+                int usableCount = 0;
+                synchronized (_tunnels) {
+                    for (TunnelInfo t : _tunnels) {
+                        if (t.getExpiration() > now) usableCount++;
+                    }
+                }
+                // Never reject if we'd have 0 usable tunnels left
+                int minimumRequired = Math.max(1, getAdjustedTotalQuantity() / 2);
+
+                if (!hasExpiringDuplicate && usableCount > minimumRequired) {
                     // We have good alternatives and no expiring duplicates - reject this new duplicate tunnel
                     if (_log.shouldWarn()) {
                         _log.warn("Rejecting new tunnel with duplicate peer sequence - keeping existing: " + info);
@@ -605,7 +615,7 @@ public class TunnelPool {
                     }
                     // Don't add this tunnel since it's a duplicate
                     return;
-                } else {
+                } else if (hasExpiringDuplicate) {
                     // Replace expiring duplicates with the new tunnel
                     if (_log.shouldInfo()) {
                         _log.info("Replacing expiring duplicate tunnel(s) with new tunnel: " + info);
@@ -617,6 +627,12 @@ public class TunnelPool {
                             }
                             tunnelFailed(dup);
                         }
+                    }
+                } else {
+                    // We need this tunnel to maintain minimum pool size
+                    if (_log.shouldInfo()) {
+                        _log.info("Accepting duplicate tunnel to maintain minimum pool size (" + 
+                                  usableCount + " <= " + minimumRequired + "): " + info);
                     }
                 }
             }
@@ -711,26 +727,41 @@ public class TunnelPool {
     /**
      *  Remove last resort tunnels if we have at least one healthy replacement.
      *  Called when a new tunnel is added to the pool.
+     *  Never removes tunnels if it would leave the pool with less than minimum required.
      *  @since 0.9.68+
      */
     private void cleanupLastResortTunnels() {
         List<TunnelInfo> toRemove = new ArrayList<>();
         int healthyCount = 0;
+        int totalUsable = 0;
+        int minimumRequired = Math.max(1, getAdjustedTotalQuantity() / 2);
 
         synchronized (_tunnels) {
-            // Count healthy (non-last-resort) tunnels
+            long now = _context.clock().now();
+            // Count healthy (non-last-resort) and total usable tunnels
             for (TunnelInfo t : _tunnels) {
-                if (t instanceof PooledTunnelCreatorConfig &&
-                    ((PooledTunnelCreatorConfig)t).isLastResort()) {
-                    // This is a last resort tunnel - mark for removal if we have healthy ones
-                    toRemove.add(t);
-                } else {
-                    healthyCount++;
+                if (t.getExpiration() > now) {
+                    totalUsable++;
+                    if (t instanceof PooledTunnelCreatorConfig &&
+                        ((PooledTunnelCreatorConfig)t).isLastResort()) {
+                        // This is a last resort tunnel - mark for removal if we have healthy ones
+                        toRemove.add(t);
+                    } else {
+                        healthyCount++;
+                    }
                 }
             }
 
-            // Only remove last resort tunnels if we have at least 1 healthy tunnel
-            if (healthyCount >= 1 && !toRemove.isEmpty()) {
+            // Never remove if we would drop below minimum required
+            int remainingAfterRemoval = totalUsable - toRemove.size();
+            if (remainingAfterRemoval < minimumRequired) {
+                if (_log.shouldInfo()) {
+                    _log.info("Preserving last resort tunnels to maintain minimum pool size (" + 
+                              remainingAfterRemoval + " < " + minimumRequired + ")");
+                }
+                toRemove.clear();
+            } else if (healthyCount >= 1 && !toRemove.isEmpty()) {
+                // Safe to remove last resort tunnels
                 for (TunnelInfo t : toRemove) {
                     _tunnels.remove(t);
                 }
@@ -754,25 +785,43 @@ public class TunnelPool {
      *  Called when a multi-hop tunnel is added to any pool (exploratory or client).
      *  This prevents keeping 0-hop tunnels around after bootstrap is complete
      *  or when multi-hop tunnels become available.
+     *  Never removes tunnels if it would leave the pool with less than minimum required.
      *  @since 0.9.68+
      */
     private void cleanupZeroHopTunnels() {
+        // Skip cleanup if under attack - preserve all tunnels during attacks
+        if (_context.profileOrganizer().isLowBuildSuccess()) {return;}
+
         List<TunnelInfo> zeroHopTunnels = new ArrayList<>();
         int multiHopCount = 0;
+        int totalUsable = 0;
+        int minimumRequired = Math.max(1, getAdjustedTotalQuantity() / 2);
 
         synchronized (_tunnels) {
+            long now = _context.clock().now();
             // Find all zero-hop tunnels and count multi-hop tunnels
             for (TunnelInfo t : _tunnels) {
-                if (t.getLength() <= 1) {
-                    // This is a zero-hop tunnel
-                    zeroHopTunnels.add(t);
-                } else {
-                    multiHopCount++;
+                if (t.getExpiration() > now) {
+                    totalUsable++;
+                    if (t.getLength() <= 1) {
+                        // This is a zero-hop tunnel
+                        zeroHopTunnels.add(t);
+                    } else {
+                        multiHopCount++;
+                    }
                 }
             }
 
-            // Only remove zero-hop tunnels if we have at least 1 multi-hop tunnel
-            if (multiHopCount >= 1 && !zeroHopTunnels.isEmpty()) {
+            // Never remove if we would drop below minimum required
+            int remainingAfterRemoval = totalUsable - zeroHopTunnels.size();
+            if (remainingAfterRemoval < minimumRequired) {
+                if (_log.shouldInfo()) {
+                    _log.info("Preserving zero-hop tunnels to maintain minimum pool size (" + 
+                              remainingAfterRemoval + " < " + minimumRequired + ")");
+                }
+                zeroHopTunnels.clear();
+            } else if (multiHopCount >= 1 && !zeroHopTunnels.isEmpty()) {
+                // Safe to remove zero-hop tunnels
                 for (TunnelInfo t : zeroHopTunnels) {
                     _tunnels.remove(t);
                 }
@@ -790,6 +839,80 @@ public class TunnelPool {
             // Properly fail the removed tunnel to ensure cleanup
             tunnelFailed(t);
         }
+    }
+
+    /**
+     *  Check if we need defensive (emergency) tunnel building.
+     *  This triggers aggressive building when:
+     *  1. Pool has critically low tunnels (0-1 usable)
+     *  2. Under attack (low build success rate < 30%)
+     *  3. Many consecutive build failures
+     *
+     *  @param wanted the desired number of tunnels
+     *  @return number of defensive builds needed, or 0 if no emergency
+     *  @since 0.9.68+
+     */
+    private int checkDefensiveBuilding(int wanted) {
+        long now = _context.clock().now();
+        int usableTunnels = 0;
+        int usableMultiHop = 0;
+        int inProgressCount = 0;
+
+        synchronized (_tunnels) {
+            for (TunnelInfo t : _tunnels) {
+                if (t.getExpiration() > now) {
+                    usableTunnels++;
+                    if (t.getLength() > 1) {
+                        usableMultiHop++;
+                    }
+                }
+            }
+        }
+
+        synchronized (_inProgress) {
+            inProgressCount = _inProgress.size();
+        }
+
+        // Calculate total tunnels we'll have (existing + in-progress)
+        int totalExpected = usableTunnels + inProgressCount;
+
+        // Check for critical conditions
+        boolean isCriticallyLow = usableTunnels <= 1 || usableMultiHop == 0;
+        boolean isUnderAttack = _context.profileOrganizer().isLowBuildSuccess();
+        int consecutiveFailures = _consecutiveBuildTimeouts.get();
+        boolean hasHighFailures = consecutiveFailures > 5;
+
+        // If we're critically low and have no builds in progress, trigger emergency
+        if (isCriticallyLow && inProgressCount == 0) {
+            // Cap emergency builds to reasonable limits per pool
+            // Never build more than wanted + 2 or 8 at a time for a single pool
+            int maxEmergencyBuilds = Math.min(wanted + 2, 8);
+            int emergencyBuilds = Math.min(Math.max(wanted, 3), maxEmergencyBuilds);
+            // Log at info level only - this is handled automatically
+            // Suppress during first 15 minutes of uptime - normal during startup
+            long uptime = _context.router().getUptime();
+            if (_log.shouldInfo() && uptime > 15*60*1000) {
+                _log.info("Low tunnel count (" + usableTunnels +
+                          "), building " + emergencyBuilds +
+                          " tunnels for " + toString());
+            }
+            return emergencyBuilds;
+        }
+
+        // If under attack with high failures, build more aggressively
+        if (isUnderAttack && hasHighFailures && totalExpected < wanted) {
+            // Cap defensive builds - never more than wanted or 5 at a time per pool
+            int maxDefensiveBuilds = Math.min(wanted, 5);
+            int needed = wanted - totalExpected;
+            int defensiveBuilds = Math.min(needed + 1, maxDefensiveBuilds);
+            if (_log.shouldDebug()) {
+                _log.debug("Building " + defensiveBuilds + " additional tunnels for " + toString() +
+                           " (current: " + totalExpected + ", failures: " + consecutiveFailures + ")");
+            }
+            return defensiveBuilds;
+        }
+
+        return 0;
     }
 
     /**
@@ -1391,6 +1514,13 @@ public class TunnelPool {
         int wanted = getAdjustedTotalQuantity();
         boolean allowZeroHop = _settings.getAllowZeroHop();
 
+        // Defensive building: Check if we need emergency tunnel building @since 0.9.68+
+        // This triggers aggressive building when under attack or critically low on tunnels
+        int defensiveBuilds = checkDefensiveBuilding(wanted);
+        if (defensiveBuilds > 0) {
+            return defensiveBuilds;
+        }
+
         /**
          * This algorithm builds based on the previous average length of time it takes
          * to build a tunnel. This average is kept in the _buildRateName stat.
@@ -1685,7 +1815,29 @@ public class TunnelPool {
             }
             if (peers == null) {
                 setLengthOverride();
+
+                // Collect first peers from existing tunnels for diversity @since 0.9.68+
+                Set<Hash> firstPeers = new java.util.HashSet<>();
+                synchronized (_tunnels) {
+                    for (TunnelInfo t : _tunnels) {
+                        if (t.getLength() > 1) {
+                            // For inbound: first peer is the gateway (hop 0)
+                            // For outbound: first peer is also the gateway (hop 0)
+                            Hash firstPeer = t.getPeer(0);
+                            if (firstPeer != null) {
+                                firstPeers.add(firstPeer);
+                            }
+                        }
+                    }
+                }
+                // Temporarily set exclusions in settings
+                Set<Hash> oldExclusions = settings.getFirstPeerExclusions();
+                settings.setFirstPeerExclusions(firstPeers);
+
                 peers = _peerSelector.selectPeers(settings);
+
+                // Restore old exclusions
+                settings.setFirstPeerExclusions(oldExclusions);
             }
 
             if ((peers == null) || (peers.isEmpty())) {
