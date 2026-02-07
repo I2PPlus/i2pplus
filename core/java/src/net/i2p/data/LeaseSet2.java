@@ -17,6 +17,7 @@ import net.i2p.util.ByteArrayStream;
 import net.i2p.util.Clock;
 import net.i2p.util.Log;
 import net.i2p.util.OrderedProperties;
+import net.i2p.util.SystemVersion;
 
 /**
  * Implementation of LeaseSet2 as specified in
@@ -51,7 +52,6 @@ public class LeaseSet2 extends LeaseSet {
     protected Properties _options; // may be null
     private List<PublicKey> _encryptionKeys; // only used if more than one key, otherwise null
     private Hash _blindedHash; // If this leaseset was formerly blinded, the blinded hash, so we can find it again
-    private static final boolean IGNORE_SERVER_KEY_PREFERENCE = false; // true for testing
     private static final int FLAG_OFFLINE_KEYS = 0x01;
     private static final int FLAG_UNPUBLISHED = 0x02;
     /**
@@ -184,18 +184,8 @@ public class LeaseSet2 extends LeaseSet {
     public PublicKey getEncryptionKey(Set<EncType> supported) {
         List<PublicKey> keys = getEncryptionKeys();
         if (keys == null) {return null;}
-        if (!IGNORE_SERVER_KEY_PREFERENCE || supported.size() <= 1 || keys.size() <= 1) {
-            for (PublicKey pk : keys) { // Honor order in LS
-                if (supported.contains(pk.getType())) {return pk;}
-            }
-        } else {
-            List<EncType> types = new ArrayList<EncType>(supported); // Our preference, newest enc type first
-            Collections.sort(types, Collections.reverseOrder());
-            for (EncType type : types) {
-                for (PublicKey pk : keys) {
-                    if (type == pk.getType()) {return pk;}
-                }
-            }
+        for (PublicKey pk : keys) { // Honor order in LS
+            if (supported.contains(pk.getType())) {return pk;}
         }
         return null;
     }
@@ -492,7 +482,16 @@ public class LeaseSet2 extends LeaseSet {
         long exp = (_expires / 1000) - pub1k; // Divide separately to prevent rounding errors
         // writeLong() will throw if we try to write a negative, so preempt it with a better message
         // This will only happen on the client side for leasesets we create.
-        if (exp < 0) {throw new DataFormatException("LeaseSet expired " + (0 - exp) + " seconds ago");}
+        if (exp < 0) {
+            // During attacks (low build success), allow slight expiry to accommodate tunnel delays
+            int buildSuccess = SystemVersion.getTunnelBuildSuccess();
+            if (buildSuccess > 0 && buildSuccess < 35 && exp >= -10) {
+                // Clamp to 0 during attacks if within 10 seconds expired
+                exp = 0;
+            } else {
+                throw new DataFormatException("LeaseSet expired " + (0 - exp) + " seconds ago");
+            }
+        }
         DataHelper.writeLong(out, 2, exp);
         DataHelper.writeLong(out, 2, _flags);
         if (isOffline()) {writeOfflineBytes(out);}
