@@ -1,3 +1,36 @@
+2026-02-07 dr|z3d
+ * Router:
+   - Prevent 0-hop tunnels from being added to client pools unless
+     explicitly configured to allow them
+   - Fix duplicate tunnel rejection logic to keep existing tunnels and
+     reject new duplicates instead of clearing pools
+   - Fix zero-hop cleanup to properly fail removed tunnels
+   - Add gap-based pre-emptive botnet detection
+   - Separate exploratory and client tunnel peer percentage limits
+   - Lower burst thresholds and add 1s immediate ban for severe bursts
+   - Rate-limit tunnel unavailable logs to 1 per minute after 10min uptime
+   - Display max of 1m and 10m tunnel build success averages in sidebar
+   - Relax LeaseSet validation during attacks to accommodate tunnel delays
+   - Increase stored profile limits and use lastHeardFrom for eviction
+   - Add warn logging for client 0-hop tunnels and extend cleanup to
+     client pools
+   - Fix fallback tunnel selection to properly enforce hop count for
+     client tunnels
+   - Adaptive tier classification; protect client tunnel hop count
+   - Extend profile expiration to 2x when under attack
+   - Don't persist ghost tunnel history, add periodic ghost reset,
+     bootstrap from fastest tiers
+   - Fix profile manager to bootstrap fast peers from NetDB and improve
+     ghost peer handling during attacks
+   - Reduce ClientPeerSelector log spam during attacks
+   - Improve predictive banning with recovery, caching and higher
+     thresholds
+ * Console:
+   - Fix fast peer count discrepancy on profiles page
+   - Show tunnel build success faster using 1-minute average
+ * Core: Allow slight LeaseSet expiry during attacks for tunnel delay
+   tolerance
+
 2026-02-06 dr|z3d
  * Router:
    - Adaptive peer testing - double concurrency under attack, limit
