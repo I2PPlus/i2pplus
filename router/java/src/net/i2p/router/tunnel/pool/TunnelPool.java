@@ -589,8 +589,8 @@ public class TunnelPool {
 
         // Reject 0-hop tunnels for client pools unless explicitly allowed
         if (info.getLength() <= 1 && !_settings.isExploratory() && !_settings.getAllowZeroHop()) {
-            if (_log.shouldWarn()) {
-                _log.warn("Rejecting 0-hop tunnel for client pool (not allowed): " + info);
+            if (_log.shouldInfo()) {
+                _log.info("Rejecting 0-hop tunnel for client pool -> " + info);
             }
             if (info instanceof PooledTunnelCreatorConfig) {
                 ((PooledTunnelCreatorConfig) info).setDuplicate();
