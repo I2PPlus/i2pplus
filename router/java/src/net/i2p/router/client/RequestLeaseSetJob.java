@@ -197,9 +197,8 @@ class RequestLeaseSetJob extends JobImpl {
             if (_retryCount < maxRetries && windowMs < maxWindowMs) {
                 if (_log.shouldWarn()) {
                     _log.warn("LeaseSet request timed out (attempt " + (_retryCount + 1) + ") for " + _destHash +
-                              " - buildSuccess: " + buildSuccess + "%" +
-                              (isUnderAttack ? " (under attack, will retry indefinitely)" : "") +
-                              " - scheduling retry");
+                              "\n* Tunnel build success: " + buildSuccess + "% -> " +
+                              (isUnderAttack ? "Under attack, will retry indefinitely" : "Scheduling retry..."));
                 }
 
                 long delay = getRetryDelay(_retryCount, isUnderAttack);
@@ -211,8 +210,7 @@ class RequestLeaseSetJob extends JobImpl {
 
             if (_log.shouldInfo()) {
                 _log.info("LeaseSet request failed after " + (_retryCount + 1) + " attempts for " + _destHash +
-                          " - buildSuccess: " + buildSuccess + "%" +
-                          " - failing permanently");
+                          " -> Failing permanently...");
             }
 
             if (_requestState.getOnFailed() != null) {
