@@ -4,8 +4,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
@@ -766,6 +768,75 @@ public class TunnelPool {
     }
 
     /**
+     *  Scan pool for tunnels with duplicate peer sequences and remove duplicates.
+     *  Ensures at least one tunnel remains per pool (inbound/outbound separately).
+     *  This handles existing duplicate tunnels that were in the pool before detection.
+     *  Called periodically from countHowManyToBuild().
+     *  @since 0.9.68+
+     */
+    void cleanupDuplicatePeerTunnels() {
+        if (_tunnels.size() <= 1) {return;}
+
+        List<TunnelInfo> toRemove = new ArrayList<>();
+        synchronized (_tunnels) {
+            // Build map of peer sequences to tunnels
+            Map<String, List<TunnelInfo>> peerSequenceMap = new HashMap<>();
+
+            for (TunnelInfo t : _tunnels) {
+                if (t.getLength() <= 1) {continue;} // Skip 0/1-hop tunnels
+
+                // Build peer sequence key
+                StringBuilder key = new StringBuilder();
+                for (int i = 0; i < t.getLength(); i++) {
+                    Hash peer = t.getPeer(i);
+                    if (peer != null) {
+                        key.append(peer.toBase64());
+                    }
+                    key.append("|");
+                }
+
+                String sequenceKey = key.toString();
+                peerSequenceMap.computeIfAbsent(sequenceKey, k -> new ArrayList<>()).add(t);
+            }
+
+            // Find duplicates - keep newest, remove older ones
+            for (List<TunnelInfo> duplicates : peerSequenceMap.values()) {
+                if (duplicates.size() > 1) {
+                    // Sort by expiration (newest first)
+                    duplicates.sort((a, b) -> Long.compare(b.getExpiration(), a.getExpiration()));
+                    // Keep the first (newest), remove the rest
+                    for (int i = 1; i < duplicates.size(); i++) {
+                        toRemove.add(duplicates.get(i));
+                    }
+                }
+            }
+
+            // Ensure we keep at least one tunnel
+            int remainingAfterRemoval = _tunnels.size() - toRemove.size();
+            if (remainingAfterRemoval < 1 && !toRemove.isEmpty()) {
+                // Keep the newest tunnel
+                toRemove.remove(toRemove.size() - 1);
+            }
+
+            // Remove from pool
+            for (TunnelInfo t : toRemove) {
+                _tunnels.remove(t);
+            }
+        }
+
+        // Actually fail the removed tunnels outside the synchronized block
+        for (TunnelInfo t : toRemove) {
+            if (_log.shouldWarn()) {
+                _log.warn("Removing duplicate peer sequence tunnel from " + toString() + ": " + t);
+            }
+            if (t instanceof PooledTunnelCreatorConfig) {
+                ((PooledTunnelCreatorConfig) t).setDuplicate();
+            }
+            tunnelFailed(t);
+        }
+    }
+
+    /**
      *  Remove a tunnel from the pool.
      *  @param info tunnel to remove
      */
@@ -1284,6 +1355,10 @@ public class TunnelPool {
         // Periodic cleanup: remove 0-hop tunnels if we have multi-hop alternatives
         // This handles existing 0-hop tunnels that were in the pool before cleanup logic was added
         cleanupZeroHopTunnels();
+
+        // Periodic cleanup: remove tunnels with duplicate peer sequences
+        // This handles existing duplicates that were in the pool before detection
+        cleanupDuplicatePeerTunnels();
 
         int wanted = getAdjustedTotalQuantity();
         boolean allowZeroHop = _settings.getAllowZeroHop();
