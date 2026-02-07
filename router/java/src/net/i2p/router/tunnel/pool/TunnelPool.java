@@ -1818,6 +1818,8 @@ public class TunnelPool {
 
                 // Collect first peers from existing tunnels for diversity @since 0.9.68+
                 Set<Hash> firstPeers = new java.util.HashSet<>();
+                // Collect last peers from existing tunnels for diversity
+                Set<Hash> lastPeers = new java.util.HashSet<>();
                 synchronized (_tunnels) {
                     for (TunnelInfo t : _tunnels) {
                         if (t.getLength() > 1) {
@@ -1827,17 +1829,25 @@ public class TunnelPool {
                             if (firstPeer != null) {
                                 firstPeers.add(firstPeer);
                             }
+                            // Last peer is the endpoint (last hop before us)
+                            Hash lastPeer = t.getPeer(t.getLength() - 1);
+                            if (lastPeer != null) {
+                                lastPeers.add(lastPeer);
+                            }
                         }
                     }
                 }
                 // Temporarily set exclusions in settings
-                Set<Hash> oldExclusions = settings.getFirstPeerExclusions();
+                Set<Hash> oldFirstExclusions = settings.getFirstPeerExclusions();
+                Set<Hash> oldLastExclusions = settings.getLastPeerExclusions();
                 settings.setFirstPeerExclusions(firstPeers);
+                settings.setLastPeerExclusions(lastPeers);
 
                 peers = _peerSelector.selectPeers(settings);
 
                 // Restore old exclusions
-                settings.setFirstPeerExclusions(oldExclusions);
+                settings.setFirstPeerExclusions(oldFirstExclusions);
+                settings.setLastPeerExclusions(oldLastExclusions);
             }
 
             if ((peers == null) || (peers.isEmpty())) {

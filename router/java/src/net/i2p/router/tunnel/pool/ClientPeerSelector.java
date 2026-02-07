@@ -89,6 +89,11 @@ class ClientPeerSelector extends TunnelPeerSelector {
             if (firstPeerExclusions != null && !firstPeerExclusions.isEmpty()) {
                 exclude.addAll(firstPeerExclusions);
             }
+            // Add last peer exclusions for diversity - prevent same peer as first and last hop
+            Set<Hash> lastPeerExclusions = settings.getLastPeerExclusions();
+            if (lastPeerExclusions != null && !lastPeerExclusions.isEmpty()) {
+                exclude.addAll(lastPeerExclusions);
+            }
             
             ArraySet<Hash> matches = new ArraySet<Hash>(length);
             if (length == 1) {
@@ -316,6 +321,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                 }
             }
             }
+            if (rv.isEmpty()) {return null;}
         } else {rv = new ArrayList<Hash>(1);}
 
         if (isInbound) {rv.add(0, ctx.routerHash());}
