@@ -61,9 +61,12 @@ class RequestThrottler {
     // Burst detection limits (per 10s sliding window)
     private static final long BURST_WINDOW_MS = 10 * 1000; // 10 second sliding window
     private static final int BURST_BUCKET_COUNT = 10; // 1 second per bucket
-    private static final int BURST_THRESHOLD_MIN = 50; // Minimum burst threshold
+    private static final int BURST_THRESHOLD_MIN = 30; // Minimum burst threshold (30 in 10s)
     private static final int BURST_THRESHOLD_MAX = 150; // Maximum burst threshold
     private static final double BURST_THRESHOLD_PERCENT = 0.5; // 50% of normal limit
+
+    // Additional burst thresholds for faster detection
+    private static final int BURST_1S_THRESHOLD = 10; // 10 requests in 1 second = immediate ban
 
     private static final long CLEAN_TIME = 90 * 1000; // Reset limits every 90 seconds
     private final static boolean DEFAULT_SHOULD_THROTTLE = true;
@@ -228,48 +231,67 @@ class RequestThrottler {
 
         // Burst detection: Check for rapid successive requests in short time window
         // This catches DDoS attempts that try to overwhelm the router before the 90s limit kicks in
-        if (enableThrottle && !rv && counter.isBursting(h, limit)) {
-            int burstCount = counter.getCount(h);
-            int burstLimit = Math.max(BURST_THRESHOLD_MIN,
-                Math.min(BURST_THRESHOLD_MAX, (int) (limit * BURST_THRESHOLD_PERCENT * 10 / 90)));
-
-            // Track burst offenses for escalation
-            BurstOffenseRecord record = _burstOffenses.computeIfAbsent(h, k -> new BurstOffenseRecord());
-            record.recordOffense();
-
-            int offenses = record.getConsecutiveOffenses();
-
-            // Escalate ban based on consecutive offenses
-            long banTime;
-            String reason;
-            if (offenses >= 3) {
-                // 3+ consecutive bursts - 8 hour ban
-                banTime = 8 * 60 * 60 * 1000;
-                reason = "Burst tunnel requests (" + offenses + " offenses)";
-            } else if (offenses == 2) {
-                // 2 consecutive bursts - 2 hour ban
-                banTime = 2 * 60 * 60 * 1000;
-                reason = "Burst tunnel requests (" + offenses + " offenses)";
-            } else {
-                // First burst - 1 hour ban
-                banTime = 60 * 60 * 1000;
-                reason = "Burst tunnel requests";
+        if (enableThrottle && !rv) {
+            // Check 1-second threshold first (severe burst = immediate ban)
+            int currentBucketCount = counter.getCurrentBucketCount(h);
+            if (currentBucketCount >= BURST_1S_THRESHOLD) {
+                // 10+ requests in 1 second = immediate 4-hour ban
+                if (_log.shouldWarn()) {
+                    _log.warn("Severe burst detected from Router [" + routerId + "] -> " +
+                              "Requests: " + currentBucketCount + " in 1s (threshold: " + BURST_1S_THRESHOLD + ")");
+                }
+                context.banlist().banlistRouter(h, " <b>➜</b> Severe burst (1s)", null, null,
+                    context.clock().now() + 4*60*60*1000);
+                if (shouldDisconnect) {
+                    context.simpleTimer2().addEvent(new Disconnector(h), 3 * 1000);
+                }
+                return true;
             }
 
-            if (_log.shouldWarn()) {
-                _log.warn("Burst detected from Router [" + routerId + "] -> " +
-                          "Requests: " + burstCount + " in " + (BURST_WINDOW_MS / 1000) + "s " +
-                          "(limit: " + burstLimit + ", offenses: " + offenses + ")");
+            // Check 10-second threshold (escalating bans)
+            if (counter.isBursting(h, limit)) {
+                int burstCount = counter.getCount(h);
+                int burstLimit = Math.max(BURST_THRESHOLD_MIN,
+                    Math.min(BURST_THRESHOLD_MAX, (int) (limit * BURST_THRESHOLD_PERCENT * 10 / 90)));
+
+                // Track burst offenses for escalation
+                BurstOffenseRecord record = _burstOffenses.computeIfAbsent(h, k -> new BurstOffenseRecord());
+                record.recordOffense();
+
+                int offenses = record.getConsecutiveOffenses();
+
+                // Escalate ban based on consecutive offenses
+                long banTime;
+                String reason;
+                if (offenses >= 3) {
+                    // 3+ consecutive bursts - 4 hour ban
+                    banTime = 4 * 60 * 60 * 1000;
+                    reason = "Burst tunnel requests (" + offenses + " offenses)";
+                } else if (offenses == 2) {
+                    // 2 consecutive bursts - 2 hour ban
+                    banTime = 2 * 60 * 60 * 1000;
+                    reason = "Burst tunnel requests (" + offenses + " offenses)";
+                } else {
+                    // First burst - 1 hour ban
+                    banTime = 60 * 60 * 1000;
+                    reason = "Burst tunnel requests";
+                }
+
+                if (_log.shouldWarn()) {
+                    _log.warn("Burst detected from Router [" + routerId + "] -> " +
+                              "Requests: " + burstCount + " in " + (BURST_WINDOW_MS / 1000) + "s " +
+                              "(limit: " + burstLimit + ", offenses: " + offenses + ")");
+                }
+
+                context.banlist().banlistRouter(h, " <b>➜</b> " + reason, null, null,
+                    context.clock().now() + banTime);
+
+                if (shouldDisconnect) {
+                    context.simpleTimer2().addEvent(new Disconnector(h), 3 * 1000);
+                }
+
+                return true;
             }
-
-            context.banlist().banlistRouter(h, " <b>➜</b> " + reason, null, null,
-                context.clock().now() + banTime);
-
-            if (shouldDisconnect) {
-                context.simpleTimer2().addEvent(new Disconnector(h), 3 * 1000);
-            }
-
-            return true;
         }
 
         return rv;
@@ -528,6 +550,21 @@ class RequestThrottler {
                 AtomicIntegerArray arr = entry.getValue();
                 return arr.get(currentBucket) == 0 && arr.get(prevBucket) == 0;
             });
+        }
+
+        /**
+         * Gets the count in the current 1-second bucket only.
+         * Used for detecting severe bursts (e.g., 10+ requests in 1s).
+         *
+         * @param h the peer hash
+         * @return the count in the current bucket
+         */
+        int getCurrentBucketCount(Hash h) {
+            AtomicIntegerArray peerArray = peerBuckets.get(h);
+            if (peerArray == null) return 0;
+            long now = System.currentTimeMillis();
+            int bucketIndex = (int) ((now / bucketSizeMs) % bucketCount);
+            return peerArray.get(bucketIndex);
         }
 
         /**
