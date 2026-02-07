@@ -87,11 +87,11 @@ public class ProfileOrganizer {
             calculated = (int) (maxMB * 0.73);
         }
         // Clamp to reasonable bounds
-        calculated = Math.max(400, Math.min(3000, calculated));
+        calculated = Math.max(600, Math.min(5000, calculated));
         // Slow systems get a lower ceiling
         return SystemVersion.isSlow() ? Math.min(calculated, 1200) : calculated;
     }
-    public static final int ABSOLUTE_MAX_PROFILES = 3500;
+    public static final int ABSOLUTE_MAX_PROFILES = 6000;
 
     private static final long[] RATES = {
         RateConstants.ONE_MINUTE,
@@ -1113,7 +1113,7 @@ public class ProfileOrganizer {
         // Build list of profiles eligible for eviction (not in critical tiers)
         List<PeerProfile> candidates = new ArrayList<>();
         long now = _context.clock().now();
-        long activeThreshold = now - (8 * 60 * 60 * 1000L); // 8 hours
+        long activeThreshold = now - (4 * 60 * 60 * 1000L); // 4 hours
 
         for (PeerProfile profile : _notFailingPeers.values()) {
             Hash peer = profile.getPeer();
@@ -1128,9 +1128,9 @@ public class ProfileOrganizer {
                 continue; // protected
             }
 
-            // Keep peers active in last 2 hours
-            if (profile.getLastSendSuccessful() >= activeThreshold ||
-                profile.getLastHeardFrom() >= activeThreshold) {
+            // Keep peers active in last 4 hours - use lastHeardFrom as primary criteria
+            if (profile.getLastHeardFrom() >= activeThreshold ||
+                profile.getLastSendSuccessful() >= activeThreshold) {
                 continue;
             }
             candidates.add(profile);

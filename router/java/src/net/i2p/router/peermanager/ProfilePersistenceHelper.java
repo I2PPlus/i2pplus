@@ -51,7 +51,7 @@ class ProfilePersistenceHelper {
     private static final String DIR_PREFIX = "p";
     private static final String B64 = Base64.ALPHABET_I2P;
     // Max to read in at startup
-    private static final int LIMIT_PROFILES = SystemVersion.isSlow() ? 1000 : 6000;
+    private static final int LIMIT_PROFILES = SystemVersion.isSlow() ? 2000 : 6000;
 
     private final File _profileDir;
     private Hash _us;
@@ -534,7 +534,7 @@ class ProfilePersistenceHelper {
 
     /**
      * Delete profile files not in 'keepPeers', if total file count > maxProfiles.
-     * Deletes oldest or least relevant first (based on file mtime if no RouterInfo).
+     * Prioritizes keeping profiles with recent lastHeardFrom activity.
      */
     public void purgeExcessProfiles(Set<Hash> keepPeers, int maxProfiles) {
         List<File> files = selectFiles();
@@ -542,10 +542,11 @@ class ProfilePersistenceHelper {
             return; // within limit
         }
 
-        // Build list of (file, peerHash, lastModified) for files NOT in keepPeers
-        List<FileMetadata> candidates = new ArrayList<>();
+        // Build list of (file, lastHeardFrom) for files NOT in keepPeers
+        // Sort by lastHeardFrom descending - keep most recently heard from peers
+        List<PeerFileMetadata> candidates = new ArrayList<>();
         long now = System.currentTimeMillis();
-        long activeThreshold = now - (8 * 60 * 60 * 1000L); // 8 hours
+        long staleThreshold = now - (12 * 60 * 60 * 1000L); // 12 hours
 
         for (File f : files) {
             Hash peer = getHash(f.getName());
@@ -563,31 +564,31 @@ class ProfilePersistenceHelper {
                 }
             }
 
-            // Keep recently active ones (if we can infer)
-            boolean recentlyActive = false;
+            // Get lastHeardFrom for prioritization - primary eviction criteria
+            long lastHeardFrom = 0;
             try {
                 Properties props = new Properties();
                 loadProps(props, f);
-                long lastSent = getLong(props, "lastSentToSuccessfully");
-                long lastHeard = getLong(props, "lastHeardFrom");
-                if (lastSent >= activeThreshold || lastHeard >= activeThreshold) {
-                    recentlyActive = true;
-                }
+                lastHeardFrom = getLong(props, "lastHeardFrom");
             } catch (IOException e) {
                 if (_log.shouldDebug()) _log.debug("Failed to read profile " + f, e);
             }
 
-            if (!recentlyActive) {
-                candidates.add(new FileMetadata(f, f.lastModified()));
-            }
+            candidates.add(new PeerFileMetadata(f, lastHeardFrom, f.lastModified()));
         }
 
-        // Now delete oldest first until within limit
+        // Now delete oldest/least active first until within limit
         int overage = files.size() - maxProfiles;
         if (overage <= 0) return;
 
-        // Sort by lastModified (oldest first)
-        candidates.sort(Comparator.comparingLong(m -> m.lastModified));
+        // Sort by lastHeardFrom ascending (oldest/least active first), then by file mtime
+        candidates.sort((a, b) -> {
+            if (a.lastHeardFrom != b.lastHeardFrom) {
+                return Long.compare(a.lastHeardFrom, b.lastHeardFrom);
+            }
+            return Long.compare(a.lastModified, b.lastModified);
+        });
+
         int toDelete = Math.min(overage, candidates.size());
 
         for (int i = 0; i < toDelete; i++) {
@@ -595,15 +596,16 @@ class ProfilePersistenceHelper {
         }
 
         if (_log.shouldInfo()) {
-            _log.info("Purged " + toDelete + " stale profile files from disk");
+            _log.info("Purged " + toDelete + " stale profile files (based on lastHeardFrom)");
         }
     }
 
     // Helper class
-    private static class FileMetadata {
+    private static class PeerFileMetadata {
         final File file;
+        final long lastHeardFrom;
         final long lastModified;
-        FileMetadata(File f, long lm) { file = f; lastModified = lm; }
+        PeerFileMetadata(File f, long lh, long lm) { file = f; lastHeardFrom = lh; lastModified = lm; }
     }
 
 }
