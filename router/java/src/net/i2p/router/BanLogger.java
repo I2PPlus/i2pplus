@@ -1,6 +1,8 @@
 package net.i2p.router;
 
 import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -39,6 +41,7 @@ public class BanLogger {
     private static final String PROP_MAX_ARCHIVES = "router.banlogger.maxArchives";
     private static final int DEFAULT_MAX_ARCHIVES = 10;
     private static volatile PrintWriter _writer;
+    private static volatile FileDescriptor _fd;
     private static volatile boolean _initialized = false;
     private static volatile boolean _globalArchiveDone = false;
     private static volatile boolean _headerWritten = false;
@@ -73,6 +76,7 @@ public class BanLogger {
             _startTime = System.currentTimeMillis();
             if (!_globalArchiveDone) {
                 archiveExisting();
+                deleteLegacySessionBansFile(dataDir);
                 _globalArchiveDone = true;
             }
             openWriter();
@@ -83,6 +87,23 @@ public class BanLogger {
             _patternDetector = new HashPatternDetector(context);
             _patternDetector.startScanner();
             _initialized = true;
+        }
+    }
+
+    /**
+     * Delete legacy sessionbans.txt file from data directory root.
+     * Consolidates all session bans to sessionbans/sessionbans.txt.
+     */
+    private void deleteLegacySessionBansFile(File dataDir) {
+        File legacyFile = new File(dataDir, "sessionbans.txt");
+        if (legacyFile.exists()) {
+            if (legacyFile.delete()) {
+                if (_log != null && _log.shouldLog(Log.INFO))
+                    _log.info("Deleted legacy sessionbans.txt file");
+            } else {
+                if (_log != null && _log.shouldLog(Log.WARN))
+                    _log.warn("Failed to delete legacy sessionbans.txt file");
+            }
         }
     }
 
@@ -208,10 +229,29 @@ public class BanLogger {
     private void openWriter() {
         synchronized (_writeLock) {
             try {
-                _writer = new PrintWriter(new FileWriter(_logFile, true), true);
+                FileOutputStream fos = new FileOutputStream(_logFile, true);
+                _fd = fos.getFD();
+                _writer = new PrintWriter(fos, true);
             } catch (IOException e) {
                 if (_log != null && _log.shouldLog(Log.WARN))
                     _log.warn("Failed to open ban log file: " + _logFile, e);
+            }
+        }
+    }
+
+    /**
+     * Force sync to disk for data durability.
+     */
+    private void syncToDisk() {
+        if (_writer != null) {
+            _writer.flush();
+            try {
+                if (_fd != null) {
+                    _fd.sync();
+                }
+            } catch (IOException e) {
+                if (_log != null && _log.shouldLog(Log.WARN))
+                    _log.warn("Failed to sync ban log to disk", e);
             }
         }
     }
@@ -341,10 +381,10 @@ public class BanLogger {
         synchronized (_writeLock) {
             if (_writer != null) {
                 _writer.println(entry);
-                _writer.flush();
                 _banCount++;
             }
         }
+        syncToDisk();
 
         // Record pattern for predictive analysis
         if (_patternDetector != null && hashStr != null && !hashStr.isEmpty()) {
@@ -395,6 +435,7 @@ public class BanLogger {
                 _writer.flush();
             }
         }
+        syncToDisk();
     }
 
     /**
@@ -403,6 +444,7 @@ public class BanLogger {
     public void close() {
         synchronized (_writeLock) {
             if (_writer != null) {
+                syncToDisk();
                 _writer.close();
                 _writer = null;
             }
