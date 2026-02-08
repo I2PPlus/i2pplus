@@ -3274,6 +3274,7 @@ span#newtab{margin-top:4px}
 #sb_status{margin:-9px 0 -7px}
 #schedjobs ul{columns:270px auto}
 #searchbar input[type=text]:focus{padding-top:7px;padding-bottom:7px}
+#sessionBanlist td:nth-last-child(2){white-space:nowrap}
 #sidebar{width:240px}
 #sidebar .reload[value="restartImmediate"]{width:auto;min-width:164px}
 #sidebar button.cancel{min-width:164px}
