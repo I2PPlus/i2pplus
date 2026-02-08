@@ -1962,9 +1962,23 @@ public class TunnelPool {
                     List<Hash> emergencyPeers = _peerSelector.selectPeers(emergencySettings);
 
                     if (emergencyPeers != null && !emergencyPeers.isEmpty()) {
-                        peers = emergencyPeers;
-                        if (_log.shouldWarn()) {
-                            _log.warn("Emergency peer selection successful: found " + peers.size() + " peers");
+                        // Filter for transport compatibility during attacks
+                        // Peers with incompatible transports (mask 4 vs our mask 17) will never work
+                        List<Hash> compatiblePeers = new java.util.ArrayList<>();
+                        for (Hash peer : emergencyPeers) {
+                            // Check if we can actually connect to this peer
+                            // canConnect returns true if there's ANY common transport protocol
+                            // Use peerSelector's canConnect method (from=our router, to=peer)
+                            if (_peerSelector.canConnect(_context.routerHash(), peer)) {
+                                compatiblePeers.add(peer);
+                            }
+                        }
+
+                        if (!compatiblePeers.isEmpty()) {
+                            peers = compatiblePeers;
+                            if (_log.shouldWarn()) {
+                                _log.warn("Emergency peer selection successful: found " + peers.size() + " compatible peers out of " + emergencyPeers.size());
+                            }
                         }
                     }
                 }
