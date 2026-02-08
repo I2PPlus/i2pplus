@@ -250,8 +250,11 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         }
 
         if (filterUnreachable(isInbound, isExploratory)) {
+            // During attacks, allow U-cap peers if they have M, N, O, P, or X capability
             if (routerInfo.getCapabilities().contains(Character.toString(Router.CAPABILITY_UNREACHABLE))) {
-                return true;
+                if (!allowFirewalledUnderAttack(routerInfo)) {
+                    return true;
+                }
             }
         }
 
@@ -378,7 +381,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
     /**
      *  Get effective exclude caps, adapting to build success.
-     *  During low build success (<20%), relax exclusions for M, N, O, and D caps.
+     *  During low build success (<40%), relax exclusions for M, N, O, D, and P caps.
      *  Also relax during first 10 minutes of uptime when build success is unknown.
      *  @return non-null, possibly empty
      */
@@ -403,8 +406,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         }
 
         // Relax if build success is low - with hysteresis to prevent oscillation
-        // Relax below 35%, restore above 45%
-        if (buildSuccess > 0 && buildSuccess < 0.35) {
+        // Relax below 40%, restore above 45%
+        if (buildSuccess > 0 && buildSuccess < 0.40) {
             shouldRelax = true;
             reason = "low build success (" + (int)(buildSuccess * 100) + "%)";
         }
@@ -429,12 +432,12 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             return configured;
         }
 
-        // Remove M, N, O, D from exclusions
+        // Remove M, N, O, D, P from exclusions
         StringBuilder adjusted = new StringBuilder();
         for (int i = 0; i < configured.length(); i++) {
             char c = configured.charAt(i);
-            // Keep K, L, U, E, G - remove M, N, O, D
-            if (c == 'M' || c == 'N' || c == 'O' || c == 'D') {
+            // Keep K, L, U, E, G - remove M, N, O, D, P
+            if (c == 'M' || c == 'N' || c == 'O' || c == 'D' || c == 'P') {
                 continue;
             }
             adjusted.append(c);
@@ -476,7 +479,22 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         }
 
         // Avoid degraded peers
+        // Allow E cap with 1/6 probability during attacks (build success < 40%)
         if (cap.contains("E") || cap.contains("G")) {
+            double buildSuccess = 0;
+            try {
+                buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
+            } catch (Exception e) {
+                // Can't determine build success - exclude E/G caps
+                return true;
+            }
+            // During attacks, allow E cap with 1/6 chance
+            if (cap.contains("E") && buildSuccess > 0 && buildSuccess < 0.40) {
+                if (ctx.random().nextInt(6) != 0) {
+                    return true;  // Exclude (5/6 chance)
+                }
+                return false;  // Allow (1/6 chance)
+            }
             return true;
         }
 
@@ -541,6 +559,33 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
                 return ctx.getProperty(PROP_OUTBOUND_CLIENT_EXCLUDE_UNREACHABLE, DEFAULT_OUTBOUND_CLIENT_EXCLUDE_UNREACHABLE);
             }
         }
+    }
+
+    /**
+     * Should we allow firewalled (U-cap) peers?
+     * During attacks (build success < 40%), allow U-cap peers if they have M, N, O, P, or X capability.
+     * @param routerInfo the peer to check
+     * @return true if U-cap peer should be allowed (not filtered)
+     */
+    private boolean allowFirewalledUnderAttack(RouterInfo routerInfo) {
+        if (routerInfo == null) return false;
+        String cap = routerInfo.getCapabilities();
+        if (!cap.contains(Character.toString(Router.CAPABILITY_UNREACHABLE))) {
+            return true;  // Not U-cap, no issue
+        }
+        // Check if peer has M, N, O, P, or X capability
+        if (cap.contains("M") || cap.contains("N") || cap.contains("O") ||
+            cap.contains("P") || cap.contains("X")) {
+            double buildSuccess = 0;
+            try {
+                buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
+            } catch (Exception e) {
+                return false;  // Can't determine - exclude U-cap
+            }
+            // Allow U-cap peers with M/N/O/P/X during attacks
+            return buildSuccess > 0 && buildSuccess < 0.40;
+        }
+        return false;
     }
 
     private static final String PROP_OUTBOUND_EXPLORATORY_EXCLUDE_SLOW = "router.outboundExploratoryExcludeSlow";
