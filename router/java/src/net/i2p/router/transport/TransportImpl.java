@@ -237,7 +237,14 @@ public abstract class TransportImpl implements Transport {
             if (def > 4000) {def = 4000;}
         }
 
-        return _context.getProperty(maxProp, def);
+        int configured = _context.getProperty(maxProp, def);
+        boolean isUnderAttack = _context.profileOrganizer().isLowBuildSuccess();
+        if (isUnderAttack && style.equals("NTCP")) {
+            int reduced = configured > 0 ? configured / 2 : def / 2;
+            return Math.min(400, reduced);
+        }
+
+        return configured;
     }
 
     public static int getTransportMaxConnections(RouterContext ctx, String style) {
@@ -286,7 +293,17 @@ public abstract class TransportImpl implements Transport {
             if (def > 4000) {def = 4000;}
         }
 
-        return ctx.getProperty(maxProp, def);
+        int configured = ctx.getProperty(maxProp, def);
+        if (style.equals("NTCP")) {
+            double buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
+            boolean isUnderAttack = buildSuccess > 0 && buildSuccess < 0.40;
+            if (isUnderAttack) {
+                int reduced = configured > 0 ? configured / 2 : def / 2;
+                return Math.min(400, reduced);
+            }
+        }
+
+        return configured;
     }
 
     private static final int DEFAULT_CAPACITY_PCT = 90;
