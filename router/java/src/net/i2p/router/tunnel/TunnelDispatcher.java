@@ -565,25 +565,30 @@ public class TunnelDispatcher implements Service {
         long age = now - msg.getMessageExpiration();
         TunnelGateway gw = _outboundGateways.get(outboundTunnel);
 
+        // Increase expiration cutoff during attacks to handle increased latency
+        double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
+        boolean isUnderAttack = buildSuccess > 0 && buildSuccess < 0.40;
+        long expirationCutoff = isUnderAttack ? 90 * 1000L : Router.CLOCK_FUDGE_FACTOR;
+
         if (gw != null) {
             if (_log.shouldDebug()) {
                 _log.debug("Dispatch Outbound through " + outboundTunnel.getTunnelId() + " -> " + msg);
             }
 
-            if (msg.getMessageExpiration() < now - Router.CLOCK_FUDGE_FACTOR) {
+            if (msg.getMessageExpiration() < now - expirationCutoff) {
                 if (_log.shouldWarn()) {
                     _log.warn("Dropping tunnel message that expired " +
-                               (now - msg.getMessageExpiration()) + "ms ago -> " + msg);
+                                (now - msg.getMessageExpiration()) + "ms ago (Cutoff: " + (expirationCutoff/1000) + "s) -> " + msg);
                 }
                 return;
             } else if (msg.getMessageExpiration() < now) {
                 if (_log.shouldWarn()) {
-                    _log.warn("Dropping stale tunnel message  -> Expired " + age + "ms ago (Cutoff: 60s)\n* " + msg);
+                    _log.warn("Dropping stale tunnel message  -> Expired " + age + "ms ago (Cutoff: " + (expirationCutoff/1000) + "s)\n* " + msg);
                 }
             } else if (msg.getMessageExpiration() > now + MAX_FUTURE_EXPIRATION) {
                 if (_log.shouldWarn()) {
                     _log.warn("Dropping tunnel message that expires " + age + "ms in the future [!] (Cutoff: " +
-                               MAX_FUTURE_EXPIRATION / 1000 + "s) \n* " + msg);
+                                MAX_FUTURE_EXPIRATION / 1000 + "s) \n* " + msg);
                 }
                 return;
             }
