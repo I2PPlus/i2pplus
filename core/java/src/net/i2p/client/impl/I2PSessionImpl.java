@@ -718,6 +718,11 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
             // Allow custom timeout via property (in seconds), default 20 minutes
             int maxWaitSeconds = _options != null ?
                 Integer.parseInt(_options.getProperty("i2cp.tunnelBuildTimeout", "1200")) : 1200;
+            // If under attack (tunnel build success < 40%), raise timeout to 1 hour
+            if (_context.isRouterContext() && SystemVersion.getTunnelBuildSuccess() > 0 &&
+                SystemVersion.getTunnelBuildSuccess() < 40) {
+                maxWaitSeconds = 3600;
+            }
             while (_leaseSet == null) {
                 if (waitcount++ > maxWaitSeconds) {
                     throw new IOException("No tunnels built after waiting " + (maxWaitSeconds/60) +
