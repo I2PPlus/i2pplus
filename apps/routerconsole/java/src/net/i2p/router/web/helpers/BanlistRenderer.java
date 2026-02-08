@@ -258,7 +258,8 @@ class BanlistRenderer {
                 .replace("<b>➜</b> ", "")
                 .replace("<b> -> </b>", "")
                 .replace(" -> ", "")
-                .replaceAll("^\\s*[<-]\\s*", "");
+                .replaceAll("^\\s*[<-]?\\s*", "")
+                .trim();
             // Remove trailing colon and any trailing whitespace
             if (reason.endsWith(":")) {
                 reason = reason.substring(0, reason.length() - 1).trim();
