@@ -295,16 +295,21 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     }
                     // Continue with whatever peers we have
                 } else {
-                    // Under severe attack (< 25% build success), try fallback to any peer before giving up
+                    // Progressive fallback under attack conditions based on build success rate
                     double buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
-                    if (buildSuccess > 0 && buildSuccess < 0.25) {
+                    boolean isUnderAttack = buildSuccess > 0 && buildSuccess < 0.40;
+                    
+                    if (isUnderAttack && rv.size() > 0) {
+                        // Attack detected (25-40% success): try fallback with relaxed restrictions
                         if (log.shouldInfo()) {
-                            log.info("Severe attack detected (" + (int)(buildSuccess * 100) + "% success) -> Trying fallback peer selection...");
+                            log.info("Attack detected (" + (int)(buildSuccess * 100) + "% success) -> Trying relaxed fallback peer selection...");
                         }
-                        // Fall back to any peer in notFailing pool
+                        
+                        // Fall back to any peer in notFailing pool with minimal exclusions
                         ArraySet<Hash> fallback = new ArraySet<Hash>(min);
                         ctx.profileOrganizer().selectNotFailingPeers(min, exclude, fallback, false, 0, null);
                         fallback.remove(ctx.routerHash());
+                        
                         if (!fallback.isEmpty()) {
                             rv.clear();
                             rv.addAll(fallback);
@@ -312,11 +317,37 @@ class ClientPeerSelector extends TunnelPeerSelector {
                                 log.debug("Fallback successful: found " + rv.size() + " peers for tunnel");
                             }
                         }
-                        if (rv.size() < min) {
+                        
+                        // If still not enough, try with even more relaxed criteria (allow failing peers)
+                        if (rv.size() < min && buildSuccess < 0.30) {
+                            if (log.shouldWarn()) {
+                                log.warn("Severe attack (" + (int)(buildSuccess * 100) + "% success) -> Trying any peer fallback...");
+                            }
+                            ArraySet<Hash> relaxedFallback = new ArraySet<Hash>(min);
+                            ctx.profileOrganizer().selectAllNotFailingPeers(min, exclude, relaxedFallback, false);
+                            relaxedFallback.remove(ctx.routerHash());
+                            
+                            if (!relaxedFallback.isEmpty()) {
+                                rv.clear();
+                                rv.addAll(relaxedFallback);
+                                if (log.shouldDebug()) {
+                                    log.debug("Relaxed fallback successful: found " + rv.size() + " peers");
+                                }
+                            }
+                        }
+                    }
+                    
+                    // Final check - if still not enough peers and we have some, allow shorter tunnel
+                    if (rv.size() < min) {
+                        if (isUnderAttack && rv.size() > 0) {
+                            // Under attack but have some peers - allow shorter tunnel instead of null
+                            if (log.shouldWarn()) {
+                                log.warn("Under attack: allowing shorter tunnel (" + rv.size() + " hops) instead of " + min + " minimum");
+                            }
+                            // Continue with shorter tunnel
+                        } else {
                             return null;
                         }
-                    } else {
-                        return null;
                     }
                 }
             }

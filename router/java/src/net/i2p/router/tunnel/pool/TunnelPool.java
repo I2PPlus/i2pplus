@@ -1865,16 +1865,48 @@ public class TunnelPool {
             if ((peers == null) || (peers.isEmpty())) {
                 // No peers to build the tunnel with, and the pool is refusing 0 hop tunnels
                 long uptime = _context.router().getUptime();
+                
+                // Progressive fallback under attack conditions @since 0.9.68+
+                double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
+                boolean isUnderAttack = buildSuccess > 0 && buildSuccess < 0.40;
+                
+                if (isUnderAttack && uptime > 3*60*1000) {
+                    if (_log.shouldWarn()) {
+                        _log.warn("Under attack (" + (int)(buildSuccess * 100) + "% success) - attempting emergency peer selection...");
+                    }
+                    
+                    // Try emergency selection with relaxed constraints
+                    TunnelPoolSettings emergencySettings = new TunnelPoolSettings(settings.isInbound());
+                    emergencySettings.setLength(settings.getLength());
+                    emergencySettings.setLengthVariance(settings.getLengthVariance());
+                    
+                    // Try again with relaxed IP restriction (override the setting)
+                    // Note: we can't directly set IP restriction on the settings object
+                    // but the peer selectors already handle the < 40% case internally
+                    
+                    List<Hash> emergencyPeers = _peerSelector.selectPeers(emergencySettings);
+                    
+                    if (emergencyPeers != null && !emergencyPeers.isEmpty()) {
+                        peers = emergencyPeers;
+                        if (_log.shouldWarn()) {
+                            _log.warn("Emergency peer selection successful: found " + peers.size() + " peers");
+                        }
+                    }
+                }
+                
                 if (peers == null) {
                     if (_log.shouldWarn() && uptime > 3*60*1000) {
                         _log.warn("No peers to put in the new tunnel! selectPeers returned null.. boo! hiss!");
                     }
-                } else {
+                } else if (peers.isEmpty()) {
                     if (_log.shouldWarn() && uptime > 3*60*1000) {
                         _log.warn("No peers to put in the new tunnel! selectPeers returned an empty list?!");
                     }
                 }
-                return null;
+                
+                if (peers == null || peers.isEmpty()) {
+                    return null;
+                }
             }
         } else {peers = Collections.singletonList(_context.routerHash());}
 

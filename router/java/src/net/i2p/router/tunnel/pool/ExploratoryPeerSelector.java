@@ -232,6 +232,40 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
         else
             rv.add(ctx.routerHash());
 
+        // Progressive fallback under attack conditions @since 0.9.68+
+        if (rv.size() <= 1) {
+            double buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
+            boolean isUnderAttack = buildSuccess > 0 && buildSuccess < 0.40;
+            
+            if (isUnderAttack && rv.size() == 1) {
+                // Attack detected (25-40% success) but only have self - try to get more peers
+                if (log.shouldWarn()) {
+                    log.warn("Attack detected (" + (int)(buildSuccess * 100) + "% success) -> Trying exploratory fallback peer selection...");
+                }
+                
+                // Remove self temporarily to check for available peers
+                rv.clear();
+                
+                // Try with relaxed IP restrictions
+                ArraySet<Hash> fallback = new ArraySet<Hash>(length + 1);
+                ctx.profileOrganizer().selectNotFailingPeers(length + 1, exclude, fallback, false, 0, null);
+                fallback.remove(ctx.routerHash());
+                
+                if (!fallback.isEmpty()) {
+                    rv.addAll(fallback);
+                    if (log.shouldDebug()) {
+                        log.debug("Exploratory fallback successful: found " + rv.size() + " peers");
+                    }
+                }
+                
+                // Re-add self at the end
+                if (isInbound)
+                    rv.add(0, ctx.routerHash());
+                else
+                    rv.add(ctx.routerHash());
+            }
+        }
+        
         if (rv.size() > 1) {
             if (!checkTunnel(isInbound, true, rv))
                 rv = null;
