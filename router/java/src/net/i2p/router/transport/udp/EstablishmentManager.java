@@ -1039,8 +1039,8 @@ class EstablishmentManager {
             if (count >= SSU2_TERM_THRESHOLD) {
                 byte[] ip = from.getIP();
                 if (!_context.blocklist().isBlocklisted(ip)) {
-                    _context.blocklist().addTemporary(ip, SSU2_ABUSE_BAN_MS, "Repeated SSU2 TERMINATION packets");
-                    _banLogger.logBan(Addresses.toString(ip) + ":" + from.getPort(), "Repeated SSU2 TERMINATION packets", SSU2_ABUSE_BAN_MS);
+                    _context.blocklist().addTemporary(ip, SSU2_ABUSE_BAN_MS, "SSU2 invalid packets");
+                    _banLogger.logBan(Addresses.toString(ip) + ":" + from.getPort(), "SSU2 invalid packets", SSU2_ABUSE_BAN_MS);
                     if (_log.shouldWarn()) {
                         _log.warn("Banning " + Addresses.toString(ip) + " for 1h -> Repeatedly sending invalid TERMINATION packets (" + count + ")");
                     }
@@ -1102,8 +1102,8 @@ class EstablishmentManager {
         if (count >= SSU2_ESTABLISH_FAIL_THRESHOLD) {
             byte[] ip = hostId.getIP();
             if (!_context.blocklist().isBlocklisted(ip)) {
-                _context.blocklist().addTemporary(ip, SSU2_ABUSE_BAN_MS, "Repeated SSU2 establishment failures");
-                _banLogger.logBan(Addresses.toString(ip) + ":" + hostId.getPort(), "Repeated SSU2 establishment failures", SSU2_ABUSE_BAN_MS);
+                _context.blocklist().addTemporary(ip, SSU2_ABUSE_BAN_MS, "Excessive SSU2 failures");
+                _banLogger.logBan(Addresses.toString(ip) + ":" + hostId.getPort(), "Excessive SSU2 failures", SSU2_ABUSE_BAN_MS);
                 if (_log.shouldWarn()) {
                     _log.warn("Banning " + Addresses.toString(ip) + " for 1h -> Repeated SSU2 establishment failures (" + count + ")");
                 }
@@ -1122,8 +1122,8 @@ class EstablishmentManager {
         if (count >= SSU2_ESTABLISH_FAIL_THRESHOLD) {
             byte[] ip = hostId.getIP();
             if (!_context.blocklist().isBlocklisted(ip)) {
-                _context.blocklist().addTemporary(ip, SSU2_ABUSE_BAN_MS, "Repeated SSU2 corrupt SessionConfirmed");
-                _banLogger.logBan(Addresses.toString(ip) + ":" + hostId.getPort(), "Repeated SSU2 corrupt SessionConfirmed", SSU2_ABUSE_BAN_MS);
+                _context.blocklist().addTemporary(ip, SSU2_ABUSE_BAN_MS, "SSU2 corrupt packets");
+                _banLogger.logBan(Addresses.toString(ip) + ":" + hostId.getPort(), "SSU2 corrupt packets", SSU2_ABUSE_BAN_MS);
                 if (_log.shouldWarn()) {
                     _log.warn("Banning " + Addresses.toString(ip) + " for 1h -> Repeated corrupt SSU2 SessionConfirmed packets (" + count + ")");
                 }
