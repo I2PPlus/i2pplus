@@ -231,7 +231,7 @@
 <tr><td><%=intl._t("This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]")%></td></tr>
 
 <tr class=config><th>i2np.blockXG={true|false} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]")%></td></tr>
+<tr><td><%=intl._t("This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap (no transit tunnels), adding them to the session banlist. [Default is true]")%></td></tr>
 
 <tr class=config><th>i2np.udp.disablePeerTest={true|false} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]")%></td></tr>

@@ -1,5 +1,6 @@
 2026-02-08 dr|z3d
  * Router:
+   - Ban XG (fast, no transit) routers by default
    - Improve tunnel build success calculation to use combined client and
      exploratory stats for consistency
    - Don't penalize peers for duplicate tunnel builds - remove without
@@ -22,8 +23,14 @@
    - Fix NPE in BuildExecutor ConcurrentHashMap iteration
    - Prevent tunnel pools from dropping to 0 and implement defensive
      building under attack
- * Console:
-   - Add IP, hostname columns and sessionbans IP-only bans to banlist
+  * Console:
+    - Add IP, hostname columns and sessionbans IP-only bans to banlist
+    - Move Blocklist IP to IP column on session bans page
+  * Router:
+    - Reduce NTCP connections under attack
+    - Scale NTCP connections under attack (20 per 1%, min 100, max 800);
+      enforce max 3 hops
+    - Add router.throttleNTCPunderAttack config property (default false)
 
 2026-02-07 dr|z3d
  * Router:
