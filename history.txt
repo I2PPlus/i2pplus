@@ -1,3 +1,30 @@
+2026-02-08 dr|z3d
+ * Router:
+   - Improve tunnel build success calculation to use combined client and
+     exploratory stats for consistency
+   - Don't penalize peers for duplicate tunnel builds - remove without
+     blaming peers
+   - Retain duplicate tunnels during attacks since replacements are hard
+     to build
+   - Ban peers sending 3+ corrupt fragments in 10min for 8h
+   - Relaxed peer selection under attack (<40% tunnel build success)
+   - Fix NPE in isDuplicateSequence when destination is null
+   - Consolidate session bans to sessionbans/sessionbans.txt with disk sync
+   - Ban corrupt NTCP handshake attackers for 8 hours
+   - Raise tunnel build timeout to 1 hour under attack
+   - Relax peer exclusions during attacks - allow P cap, 1/6 E cap,
+     U-cap for M/N/O/P/X tiers
+   - Increase MAX_TIME_TO_REBUILD to 30min for LeaseSets resilience
+   - Allow client tunnels to retry and fallback to >0-hop exploratory
+   - Fix NPE in log limiter and remove exploratory fallback for clients
+   - Fix NPE in peer lookup and improve tunnel failure handling
+   - Fix 0-hop tunnel bug and add last-hop exclusion for diversity
+   - Fix NPE in BuildExecutor ConcurrentHashMap iteration
+   - Prevent tunnel pools from dropping to 0 and implement defensive
+     building under attack
+ * Console:
+   - Add IP, hostname columns and sessionbans IP-only bans to banlist
+
 2026-02-07 dr|z3d
  * Router:
    - Add periodic cleanup to remove tunnels with duplicate peer sequences,
