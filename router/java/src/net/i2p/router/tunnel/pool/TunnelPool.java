@@ -622,9 +622,15 @@ public class TunnelPool {
                 }
                 // Never reject if we'd have 0 usable tunnels left
                 int minimumRequired = Math.max(1, getAdjustedTotalQuantity() / 2);
+                // During attacks (low build success), be more conservative about rejecting duplicates
+                // since replacements are hard to build - keep duplicates to maintain pool
+                boolean isUnderAttack = _context.profileOrganizer().isLowBuildSuccess();
+                if (isUnderAttack) {
+                    minimumRequired = Math.max(minimumRequired, getAdjustedTotalQuantity() - 1);
+                }
 
-                if (!hasExpiringDuplicate && usableCount > minimumRequired) {
-                    // We have good alternatives and no expiring duplicates - reject this new duplicate tunnel
+                if (!isUnderAttack && !hasExpiringDuplicate && usableCount > minimumRequired) {
+                    // Normal operation: reject duplicate if we have enough alternatives
                     if (_log.shouldWarn()) {
                         _log.warn("Rejecting new tunnel with duplicate peer sequence - keeping existing: " + info);
                     }
@@ -633,8 +639,8 @@ public class TunnelPool {
                     }
                     // Don't add this tunnel since it's a duplicate
                     return;
-                } else if (hasExpiringDuplicate) {
-                    // Replace expiring duplicates with the new tunnel
+                } else if (hasExpiringDuplicate && !isUnderAttack) {
+                    // Normal operation: replace expiring duplicates with the new tunnel
                     if (_log.shouldInfo()) {
                         _log.info("Replacing expiring duplicate tunnel(s) with new tunnel: " + info);
                     }
@@ -643,14 +649,15 @@ public class TunnelPool {
                             if (dup instanceof PooledTunnelCreatorConfig) {
                                 ((PooledTunnelCreatorConfig) dup).setDuplicate();
                             }
-                            tunnelFailed(dup);
+                            removeTunnel(dup);
                         }
                     }
                 } else {
-                    // We need this tunnel to maintain minimum pool size
+                    // Under attack OR need this tunnel to maintain minimum pool size
                     if (_log.shouldInfo()) {
-                        _log.info("Accepting duplicate tunnel to maintain minimum pool size (" +
-                                  usableCount + " <= " + minimumRequired + "): " + info);
+                        _log.info("Accepting duplicate tunnel -> " +
+                                  (isUnderAttack ? "Under attack" : "Maintaining pool size") + " (" +
+                                  usableCount + " usable / " + minimumRequired + " required): " + info);
                     }
                 }
             }
@@ -932,9 +939,16 @@ public class TunnelPool {
      *  Ensures at least one tunnel remains per pool (inbound/outbound separately).
      *  This handles existing duplicate tunnels that were in the pool before detection.
      *  Called periodically from countHowManyToBuild().
+     *  Skips cleanup during attacks since replacements are hard to build.
      *  @since 0.9.68+
      */
     void cleanupDuplicatePeerTunnels() {
+        // Skip cleanup during attacks since replacements are hard to build
+        // Keep duplicates to maintain pool functionality
+        if (_context.profileOrganizer().isLowBuildSuccess()) {
+            return;
+        }
+
         // Only cleanup if we have more than minimum required tunnels
         int wanted = getAdjustedTotalQuantity();
         if (_tunnels.size() <= wanted) {return;}
@@ -987,7 +1001,7 @@ public class TunnelPool {
             }
         }
 
-        // Actually fail the removed tunnels outside the synchronized block
+        // Remove duplicates from pool without counting as failures (duplicates are valid tunnels)
         for (TunnelInfo t : toRemove) {
             if (_log.shouldWarn()) {
                 _log.warn("Removing duplicate peer sequence tunnel from " + toString() + ": " + t);
@@ -995,7 +1009,7 @@ public class TunnelPool {
             if (t instanceof PooledTunnelCreatorConfig) {
                 ((PooledTunnelCreatorConfig) t).setDuplicate();
             }
-            tunnelFailed(t);
+            removeTunnel(t);
         }
     }
 
@@ -1865,27 +1879,27 @@ public class TunnelPool {
             if ((peers == null) || (peers.isEmpty())) {
                 // No peers to build the tunnel with, and the pool is refusing 0 hop tunnels
                 long uptime = _context.router().getUptime();
-                
+
                 // Progressive fallback under attack conditions @since 0.9.68+
                 double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
                 boolean isUnderAttack = buildSuccess > 0 && buildSuccess < 0.40;
-                
+
                 if (isUnderAttack && uptime > 3*60*1000) {
                     if (_log.shouldWarn()) {
                         _log.warn("Under attack (" + (int)(buildSuccess * 100) + "% success) - attempting emergency peer selection...");
                     }
-                    
+
                     // Try emergency selection with relaxed constraints
                     TunnelPoolSettings emergencySettings = new TunnelPoolSettings(settings.isInbound());
                     emergencySettings.setLength(settings.getLength());
                     emergencySettings.setLengthVariance(settings.getLengthVariance());
-                    
+
                     // Try again with relaxed IP restriction (override the setting)
                     // Note: we can't directly set IP restriction on the settings object
                     // but the peer selectors already handle the < 40% case internally
-                    
+
                     List<Hash> emergencyPeers = _peerSelector.selectPeers(emergencySettings);
-                    
+
                     if (emergencyPeers != null && !emergencyPeers.isEmpty()) {
                         peers = emergencyPeers;
                         if (_log.shouldWarn()) {
@@ -1893,7 +1907,7 @@ public class TunnelPool {
                         }
                     }
                 }
-                
+
                 if (peers == null) {
                     if (_log.shouldWarn() && uptime > 3*60*1000) {
                         _log.warn("No peers to put in the new tunnel! selectPeers returned null.. boo! hiss!");
@@ -1903,7 +1917,7 @@ public class TunnelPool {
                         _log.warn("No peers to put in the new tunnel! selectPeers returned an empty list?!");
                     }
                 }
-                
+
                 if (peers == null || peers.isEmpty()) {
                     return null;
                 }
@@ -1957,9 +1971,13 @@ public class TunnelPool {
 
             case REJECT:
             case BAD_RESPONSE:
-            case DUP_ID:
                 _consecutiveBuildTimeouts.set(0);
                 updatePairedProfile(cfg, true);
+                break;
+
+            case DUP_ID:
+                _consecutiveBuildTimeouts.set(0);
+                cfg.setDuplicate();
                 break;
 
             case TIMEOUT:

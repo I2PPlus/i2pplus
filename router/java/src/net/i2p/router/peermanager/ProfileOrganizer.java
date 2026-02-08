@@ -316,26 +316,42 @@ public class ProfileOrganizer {
 
     /**
      * Get the current tunnel build success rate.
+     * Uses both exploratory and client tunnel stats.
      * Returns 0 if no data available.
      * @return build success rate as a fraction (0.0 to 1.0), or 0 if unknown
      */
     public double getTunnelBuildSuccess() {
         try {
-            RateStat e = _context.statManager().getRate("tunnel.buildExploratoryExpire");
-            RateStat r = _context.statManager().getRate("tunnel.buildExploratoryReject");
-            RateStat s = _context.statManager().getRate("tunnel.buildExploratorySuccess");
-            if (e != null && r != null && s != null) {
-                Rate er = e.getRate(RateConstants.TEN_MINUTES);
-                Rate rr = r.getRate(RateConstants.TEN_MINUTES);
-                Rate sr = s.getRate(RateConstants.TEN_MINUTES);
-                if (er != null && rr != null && sr != null) {
+            RateStat eExpl = _context.statManager().getRate("tunnel.buildExploratoryExpire");
+            RateStat rExpl = _context.statManager().getRate("tunnel.buildExploratoryReject");
+            RateStat sExpl = _context.statManager().getRate("tunnel.buildExploratorySuccess");
+            RateStat eClient = _context.statManager().getRate("tunnel.buildClientExpire");
+            RateStat rClient = _context.statManager().getRate("tunnel.buildClientReject");
+            RateStat sClient = _context.statManager().getRate("tunnel.buildClientSuccess");
+            RateStat dup = _context.statManager().getRate("tunnel.buildDuplicate");
+            if (eExpl != null && rExpl != null && sExpl != null &&
+                eClient != null && rClient != null && sClient != null && dup != null) {
+                Rate er = eExpl.getRate(RateConstants.TEN_MINUTES);
+                Rate rr = rExpl.getRate(RateConstants.TEN_MINUTES);
+                Rate sr = sExpl.getRate(RateConstants.TEN_MINUTES);
+                Rate erClient = eClient.getRate(RateConstants.TEN_MINUTES);
+                Rate rrClient = rClient.getRate(RateConstants.TEN_MINUTES);
+                Rate srClient = sClient.getRate(RateConstants.TEN_MINUTES);
+                Rate dr = dup.getRate(RateConstants.TEN_MINUTES);
+                if (er != null && rr != null && sr != null &&
+                    erClient != null && rrClient != null && srClient != null && dr != null) {
                     RateAverages ra = RateAverages.getTemp();
                     long ec = er.computeAverages(ra, false).getTotalEventCount();
                     long rc = rr.computeAverages(ra, false).getTotalEventCount();
                     long sc = sr.computeAverages(ra, false).getTotalEventCount();
-                    long tot = ec + rc + sc;
+                    long ecClient = erClient.computeAverages(ra, false).getTotalEventCount();
+                    long rcClient = rrClient.computeAverages(ra, false).getTotalEventCount();
+                    long scClient = srClient.computeAverages(ra, false).getTotalEventCount();
+                    long dc = dr.computeAverages(ra, false).getTotalEventCount();
+                    long tot = ec + rc + sc + ecClient + rcClient + scClient;
+                    long totalSuccess = sc + scClient;
                     if (tot > 0) {
-                        return (double) sc / tot;
+                        return (double) totalSuccess / tot;
                     }
                 }
             }
