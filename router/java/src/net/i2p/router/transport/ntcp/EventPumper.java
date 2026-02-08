@@ -545,7 +545,7 @@ class EventPumper implements Runnable {
                         byte[] ipBytes = Addresses.getIP(ba);
                         if (ipBytes != null) {
                             _context.blocklist().addTemporary(ipBytes, 8*60*60*1000, "Excessive NTCP connection attempts");
-                            _banLogger.logBan(Addresses.toString(ipBytes), "Excessive NTCP connection attempts (" + count + ")", 8*60*60*1000);
+                            _banLogger.logBan(Addresses.toString(ipBytes), "Excessive NTCP connects (" + count + ")", 8*60*60*1000);
                         }
                     }
                     try {

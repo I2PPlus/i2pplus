@@ -882,9 +882,9 @@ public class TestJob extends JobImpl {
             // But don't remove immediately - keep it for recovery testing
             // It will be removed when replacements are available
             if (_log.shouldWarn()) {
-                _log.warn((isExploratory ? "Exploratory tunnel" : "Tunnel") + " failed " + 
-                          net.i2p.router.tunnel.TunnelCreatorConfig.MAX_CONSECUTIVE_TEST_FAILURES + 
-                          " consecutive tests -> Marked as failed but keeping for recovery: " + _cfg);
+                _log.warn((isExploratory ? "Exploratory tunnel" : "Tunnel") + " failed " +
+                          net.i2p.router.tunnel.TunnelCreatorConfig.MAX_CONSECUTIVE_TEST_FAILURES +
+                          " consecutive tests -> Marked as failed but keeping for recovery \n* " + _cfg);
             }
 
             _cfg.tunnelFailedCompletely();
