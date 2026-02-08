@@ -320,12 +320,22 @@ public class PersistentDataStore extends TransientDataStore {
                          stored < 1000 ? "K".equals(bw) || isLTier || "M".equals(bw) :
                          stored < 2000 ? "K".equals(bw) || isLTier || "M".equals(bw) || "N".equals(bw) :
                          "K".equals(bw) || isLTier || "M".equals(bw) || "N".equals(bw) || "O".equals(bw);
-        boolean isDegraded = caps.indexOf(Router.CAPABILITY_CONGESTION_MODERATE) >= 0 ||
-                             caps.indexOf(Router.CAPABILITY_CONGESTION_SEVERE) >= 0 ||
+        // D-cap (congestion moderate) is allowed during attacks - they're likely under strain from the attack
+        // E-cap (congestion severe) and G-cap (no tunnels) are still considered degraded
+        boolean isDegraded = caps.indexOf(Router.CAPABILITY_CONGESTION_SEVERE) >= 0 ||
                              caps.indexOf(Router.CAPABILITY_NO_TUNNELS) >= 0;
+        // D-cap is "congestion moderate" - allow during attacks
+        boolean isCongested = caps.indexOf(Router.CAPABILITY_CONGESTION_MODERATE) >= 0;
         boolean isBanned = _context.banlist().isBanlistedForever(key) ||
                            _context.banlist().isBanlisted(key) ||
                            _context.banlist().isBanlistedHostile(key);
+
+        // Check if we're under attack
+        double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
+        boolean isUnderAttack = buildSuccess > 0 && buildSuccess < 0.40;
+
+        // During attacks, allow D-cap peers if under quota (give them lower priority)
+        boolean allowCongested = isCongested && (stored < MAX_ROUTERS_INIT);
 
         // Our own IP for spoof detection
         String ourIP = net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(_context.router().getRouterInfo()));
@@ -345,7 +355,9 @@ public class PersistentDataStore extends TransientDataStore {
             long dataPublishDate = getPublishDate(data);
 
             // Final decision: should we store this RI to disk?
-            boolean shouldStore = !isBanned && !isSlow && !isInvalidVersion && !isOld && hasIP && !unreachable && !isDegraded;
+            // During attacks, allow D-cap (congestion moderate) peers if under quota
+            boolean shouldStore = !isBanned && !isSlow && !isInvalidVersion && !isOld && hasIP && !unreachable &&
+                                  (!isDegraded || allowCongested) && !(isCongested && !allowCongested);
 
             if (dbFile.lastModified() < dataPublishDate && (shouldStore || isUs)) {
                 // Our filesystem is out of date, let's replace it
@@ -862,13 +874,21 @@ public class PersistentDataStore extends TransientDataStore {
                 boolean isSlow = totalStored < 1000 ? "K".equals(bw) || "L".equals(bw) || "M".equals(bw) :
                                  totalStored < 2000 ? "K".equals(bw) || "L".equals(bw) || "M".equals(bw) || "N".equals(bw) :
                                  "K".equals(bw) || "L".equals(bw) || "M".equals(bw) || "N".equals(bw) || "O".equals(bw);
-                boolean isDegraded = caps.indexOf(Router.CAPABILITY_CONGESTION_MODERATE) >= 0 ||
-                                     caps.indexOf(Router.CAPABILITY_CONGESTION_SEVERE) >= 0 ||
+                // D-cap is "congestion moderate" - delete first during cleanup (lower priority) but allow storing
+                boolean isCongested = caps.indexOf(Router.CAPABILITY_CONGESTION_MODERATE) >= 0;
+                boolean isDegraded = caps.indexOf(Router.CAPABILITY_CONGESTION_SEVERE) >= 0 ||
                                      caps.indexOf(Router.CAPABILITY_NO_TUNNELS) >= 0;
 
                 if (isSlow) {
                     if (_log.shouldInfo()) {
                         _log.info("Deleting slow (" + bw + ") RouterInfo: " + key.toBase64().substring(0, 6) + "...");
+                    }
+                    file.delete();
+                    deletedCount++;
+                } else if (isCongested) {
+                    // D-cap peers get lower priority - delete them first during cleanup
+                    if (_log.shouldInfo()) {
+                        _log.info("Deleting congested D-cap (" + bw + ") RouterInfo (lower priority): " + key.toBase64().substring(0, 6) + "...");
                     }
                     file.delete();
                     deletedCount++;
