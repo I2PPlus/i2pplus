@@ -114,6 +114,9 @@ public abstract class TransportImpl implements Transport {
     /** @since 0.9.64+ */
     protected static final String PROP_BOOST_CONNECTION_LIMITS = "i2np.boostConnectionLimits";
 
+    /** @since 0.9.68+ */
+    protected static final String PROP_THROTTLE_NTCP_ATTACK = "router.throttleNTCPunderAttack";
+
     private static final long[] RATES = RateConstants.SHORT_TERM_RATES;
 
     static {
@@ -238,8 +241,7 @@ public abstract class TransportImpl implements Transport {
         }
 
         int configured = _context.getProperty(maxProp, def);
-        boolean isUnderAttack = _context.profileOrganizer().isLowBuildSuccess();
-        if (isUnderAttack && style.equals("NTCP")) {
+        if (style.equals("NTCP") && _context.getBooleanProperty(PROP_THROTTLE_NTCP_ATTACK)) {
             double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
             if (buildSuccess > 0 && buildSuccess < 0.40) {
                 int scaled = (int) (buildSuccess * 100 * 20);
@@ -297,7 +299,7 @@ public abstract class TransportImpl implements Transport {
         }
 
         int configured = ctx.getProperty(maxProp, def);
-        if (style.equals("NTCP")) {
+        if (style.equals("NTCP") && ctx.getBooleanProperty(PROP_THROTTLE_NTCP_ATTACK)) {
             double buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
             if (buildSuccess > 0 && buildSuccess < 0.40) {
                 int scaled = (int) (buildSuccess * 100 * 20);
