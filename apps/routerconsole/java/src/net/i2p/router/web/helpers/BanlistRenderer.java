@@ -309,7 +309,7 @@ class BanlistRenderer {
             buf.append("<tr class=\"lazy ipOnly\">")
                .append("<td>")
                .append(ipBan.reason.isEmpty() ? "IP Ban" : ipBan.reason)
-               .append("</td><td>:</td><td><span class=b64>-</span></td><td>")
+               .append("</td><td>:</td><td></td><td>")
                .append(ipBan.ip)
                .append("</td>");
             if (enableReverseLookups()) {
