@@ -1,5 +1,9 @@
 package net.i2p.router.tunnel;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Hash;
 import net.i2p.data.TunnelId;
@@ -26,6 +30,11 @@ class OutboundTunnelEndpoint {
     private final OutboundMessageDistributor _outDistributor;
     private final SyntheticREDQueue _partBWE;
     private int _lsdsm, _ridsm, _i2npmsg, _totalmsg;
+
+    private static final int CORRUPT_THRESHOLD = 3;
+    private static final long CORRUPT_WINDOW_MS = 10 * 60 * 1000;
+    private static final long BAN_DURATION_MS = 8 * 60 * 60 * 1000;
+    private final Map<Hash, Deque<Long>> _corruptTimestamps = new ConcurrentHashMap<Hash, Deque<Long>>();
 
     public OutboundTunnelEndpoint(RouterContext ctx, HopConfig config, HopProcessor processor) {
         _context = ctx;
@@ -66,12 +75,12 @@ class OutboundTunnelEndpoint {
         }
         ok = _handler.receiveTunnelMessage(data, 0, data.length);
         if (!ok) {
-            // blame previous hop
             Hash h = _config.getReceiveFrom();
             if (h != null) {
                 if (_log.shouldWarn())
                     _log.warn("Tunnel from " + toString() + " failed -> Blaming [" + h.toBase64().substring(0,6) + "] -> 50%");
                 _context.profileManager().tunnelFailed(h, 50);
+                trackCorruptAndBan(h);
             }
         }
     }
@@ -173,6 +182,25 @@ class OutboundTunnelEndpoint {
             //for (int i = 0; i < kb; i++)
             //    _config.incrementSentMessages();
             _outDistributor.distribute(msg, toRouter, toTunnel);
+        }
+    }
+
+    private void trackCorruptAndBan(Hash peer) {
+        long now = _context.clock().now();
+        Deque<Long> timestamps = _corruptTimestamps.get(peer);
+        if (timestamps == null) {
+            timestamps = new ArrayDeque<Long>();
+            _corruptTimestamps.put(peer, timestamps);
+        }
+        while (!timestamps.isEmpty() && timestamps.peekFirst() < now - CORRUPT_WINDOW_MS) {
+            timestamps.pollFirst();
+        }
+        timestamps.addLast(now);
+        if (timestamps.size() >= CORRUPT_THRESHOLD) {
+            if (_log.shouldWarn())
+                _log.warn("Banning [" + peer.toBase64().substring(0,6) + "] for corrupt fragments (" + timestamps.size() + " in " + (CORRUPT_WINDOW_MS/60000) + " min)");
+            _context.banlist().banlistRouter(peer, "Corrupt tunnel fragments", null, null, now + BAN_DURATION_MS);
+            timestamps.clear();
         }
     }
 
