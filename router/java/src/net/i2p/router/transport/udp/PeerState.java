@@ -245,11 +245,22 @@ public class PeerState {
 
     /** Amount to adjust up or down in adjustMTU() - should be multiple of 16, at least for SSU 1 */
     private static final int MTU_STEP = 64;
-
+    private static final int INIT_RTT = 8000;
     private static final int MIN_RTO = 1000;
     private static final int INIT_RTO = 1000;
-    private static final int INIT_RTT = 0;
     private static final int MAX_RTO = 60*1000;
+    private static final int MAX_RTO_ATTACK = 90*1000; // 1.5x under attack
+
+    /**
+     * Gets the maximum RTO, increased under attack to allow slower peers time to respond.
+     * @return MAX_RTO or MAX_RTO_ATTACK if tunnel build success is low
+     */
+    private int getMaxRTO() {
+        if (_context.profileOrganizer().isLowBuildSuccess()) {
+            return MAX_RTO_ATTACK;
+        }
+        return MAX_RTO;
+    }
     /** How frequently do we want to send ACKs to a peer? */
     protected static final int ACK_FREQUENCY = 300;
     protected static final int CLOCK_SKEW_FUDGE = (ACK_FREQUENCY * 2) / 3;
@@ -691,7 +702,7 @@ public class PeerState {
 
         int oldRto = _rto;
         long oldTimer = _retransmitTimer - now;
-        _rto = Math.min(MAX_RTO, Math.max(MIN_RTO, _rto << 1 ));
+        _rto = Math.min(getMaxRTO(), Math.max(MIN_RTO, _rto << 1 ));
         _retransmitTimer = now + _rto;
         if (_log.shouldInfo()) {
             _log.info("[" + _remotePeer.toBase64().substring(0,6) + "] Estimated bandwidth: " +
@@ -790,7 +801,7 @@ public class PeerState {
             _rtt = (int)((_rtt * (1.0f - RTT_DAMPENING)) + (RTT_DAMPENING * lifetime));
         }
         // K = 4
-        _rto = Math.min(MAX_RTO, Math.max(MIN_RTO, _rtt + (_rttDeviation<<2)));
+        _rto = Math.min(getMaxRTO(), Math.max(MIN_RTO, _rtt + (_rttDeviation<<2)));
     }
 
     /**
