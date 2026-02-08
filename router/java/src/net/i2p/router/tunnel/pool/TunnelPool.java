@@ -1947,7 +1947,8 @@ public class TunnelPool {
 
                 if (isUnderAttack && uptime > 3*60*1000) {
                     if (_log.shouldWarn()) {
-                        _log.warn("Under attack (" + (int)(buildSuccess * 100) + "% success) - attempting emergency peer selection...");
+                        _log.warn("Under probable attack (" + (int)(buildSuccess * 100) +
+                                  "% build success) -> Attempting emergency peer selection...");
                     }
 
                     // Try emergency selection with relaxed constraints
@@ -1977,7 +1978,8 @@ public class TunnelPool {
                         if (!compatiblePeers.isEmpty()) {
                             peers = compatiblePeers;
                             if (_log.shouldWarn()) {
-                                _log.warn("Emergency peer selection successful: found " + peers.size() + " compatible peers out of " + emergencyPeers.size());
+                                _log.warn("Emergency peer selection successful -> Found " + peers.size() +
+                                          " compatible peers out of " + emergencyPeers.size());
                             }
                         }
                     }
@@ -1985,11 +1987,11 @@ public class TunnelPool {
 
                 if (peers == null) {
                     if (_log.shouldWarn() && uptime > 3*60*1000) {
-                        _log.warn("No peers to put in the new tunnel! selectPeers returned null.. boo! hiss!");
+                        _log.warn("No compatible peers found for new tunnel");
                     }
                 } else if (peers.isEmpty()) {
                     if (_log.shouldWarn() && uptime > 3*60*1000) {
-                        _log.warn("No peers to put in the new tunnel! selectPeers returned an empty list?!");
+                        _log.warn("No compatible peers found for new tunnel -> Apparently we have no peers to choose from!");
                     }
                 }
 
