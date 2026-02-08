@@ -62,8 +62,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     public abstract List<Hash> selectPeers(TunnelPoolSettings settings);
 
     /**
-     *  @return randomized number of hops 0-7, not including ourselves
-     */
+      *  @return randomized number of hops 0-7, not including ourselves
+      */
     protected int getLength(TunnelPoolSettings settings) {
         int length = settings.getLength();
         int override = settings.getLengthOverride();
@@ -86,6 +86,15 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             length = 0;
         else if (length > 7) // as documented in tunnel.html
             length = 7;
+
+        // Enforce max 3 hops under attack (< 40% build success)
+        if (length > 3) {
+            double buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
+            if (buildSuccess > 0 && buildSuccess < 0.40) {
+                length = 3;
+            }
+        }
+
         return length;
     }
 
