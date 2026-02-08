@@ -896,13 +896,18 @@ public class TunnelPool {
         int totalExpected = usableTunnels + inProgressCount;
 
         // Check for critical conditions
+        // Lower threshold during attacks to trigger defensive building earlier
+        // Normal: critically low = 0-1 tunnels. During attack: also consider < wanted/2 as concerning
         boolean isCriticallyLow = usableTunnels <= 1 || usableMultiHop == 0;
         boolean isUnderAttack = _context.profileOrganizer().isLowBuildSuccess();
+        // During attacks, trigger earlier when we have less than half our desired tunnels
+        // Use Math.min to cap at minimum 2 to avoid over-triggering with small pool sizes
+        boolean isGettingLowDuringAttack = isUnderAttack && usableTunnels < Math.min(2, wanted / 2);
         int consecutiveFailures = _consecutiveBuildTimeouts.get();
         boolean hasHighFailures = consecutiveFailures > 5;
 
         // If we're critically low and have no builds in progress, trigger emergency
-        if (isCriticallyLow && inProgressCount == 0) {
+        if ((isCriticallyLow || isGettingLowDuringAttack) && inProgressCount == 0) {
             // Cap emergency builds to reasonable limits per pool
             // Never build more than wanted + 2 or 8 at a time for a single pool
             int maxEmergencyBuilds = Math.min(wanted + 2, 8);
@@ -929,6 +934,34 @@ public class TunnelPool {
                            " (current: " + totalExpected + ", failures: " + consecutiveFailures + ")");
             }
             return defensiveBuilds;
+        }
+
+        // Proactive attack-time building: build extra tunnels when under attack
+        // even if we're not critically low, to maintain a buffer for expected failures
+        if (isUnderAttack) {
+            // Count tunnels expiring soon (within 5 minutes)
+            int expiringSoon = 0;
+            synchronized (_tunnels) {
+                for (TunnelInfo t : _tunnels) {
+                    long timeToExpire = t.getExpiration() - now;
+                    if (timeToExpire > 0 && timeToExpire < 5 * 60 * 1000) {
+                        expiringSoon++;
+                    }
+                }
+            }
+
+            // If we have tunnels expiring soon and total is below wanted + buffer, build extra
+            // This provides a buffer to compensate for expected build failures during attacks
+            int buffer = Math.max(2, wanted / 3); // 33% buffer, minimum 2
+            if (expiringSoon > 0 && totalExpected < wanted + buffer && inProgressCount < wanted) {
+                int proactiveBuilds = Math.min(expiringSoon, buffer);
+                if (_log.shouldDebug()) {
+                    _log.debug("Proactive attack building: " + proactiveBuilds +
+                               " extra tunnels (expiring soon: " + expiringSoon +
+                               ", current: " + totalExpected + ", buffer: " + buffer + ")");
+                }
+                return proactiveBuilds;
+            }
         }
 
         return 0;
@@ -1598,7 +1631,9 @@ public class TunnelPool {
         }
 
         if (avg > 0 && avg < TUNNEL_LIFETIME / 3) { // if we're taking less than 200s per tunnel to build
-            final int PANIC_FACTOR = 4;  // how many builds to kick off when time gets short
+            // Increase PANIC_FACTOR during attacks to build more aggressively
+            boolean isUnderAttack = _context.profileOrganizer().isLowBuildSuccess();
+            final int PANIC_FACTOR = isUnderAttack ? 8 : 4;  // how many builds to kick off when time gets short
             avg += 60*1000; // one minute safety factor
             if (_settings.isExploratory())
                 avg += 60*1000; // two minute safety factor
@@ -1659,12 +1694,15 @@ public class TunnelPool {
 
         // Fixed, conservative algorithm - starts building 3 1/2 - 6m before expiration
         // (210 or 270s) + (0..90s random)
+        // During attacks: start building earlier (6m instead of 4.5m) and build more aggressively
+        boolean isUnderAttack = _context.profileOrganizer().isLowBuildSuccess();
         long expireAfter = _context.clock().now() + _expireSkew; // + _settings.getRebuildPeriod() + _expireSkew;
         int expire30s = 0;
         int expire90s = 0;
         int expire150s = 0;
         int expire210s = 0;
         int expire270s = 0;
+        int expire360s = 0; // Early warning bucket during attacks
         int expireLater = 0;
 
         int fallback = 0;
@@ -1679,6 +1717,7 @@ public class TunnelPool {
                     else if (timeToExpire <= 150*1000) {expire150s++;}
                     else if (timeToExpire <= 210*1000) {expire210s++;}
                     else if (timeToExpire <= 270*1000) {expire270s++;}
+                    else if (isUnderAttack && timeToExpire <= 360*1000) {expire360s++;} // Start building earlier during attacks
                     else {expireLater++;}
                 } else if (info.getExpiration() > expireAfter) {fallback++;}
             }
@@ -1693,7 +1732,7 @@ public class TunnelPool {
             }
         }
 
-        int rv = countHowManyToBuild(allowZeroHop, expire30s, expire90s, expire150s, expire210s, expire270s,
+        int rv = countHowManyToBuild(isUnderAttack, allowZeroHop, expire30s, expire90s, expire150s, expire210s, expire270s, expire360s,
                                      expireLater, wanted, inProgress, fallback);
         _context.statManager().addRateData(rateName, (rv > 0 || inProgress > 0) ? 1 : 0);
         return rv;
@@ -1704,6 +1743,7 @@ public class TunnelPool {
      * This is the big scary function determining how many new tunnels we want to try to build at this
      * point in time, as used by the BuildExecutor
      *
+     * @param isUnderAttack whether we're currently under attack (build success < 40%)
      * @param allowZeroHop do we normally allow zero hop tunnels?  If true, treat fallback tunnels like normal ones
      * @param earliestExpire how soon do some of our usable tunnels expire, or, if we are missing tunnels, -1
      * @param usable how many tunnels will be around for a while (may include fallback tunnels)
@@ -1712,14 +1752,29 @@ public class TunnelPool {
      * @param inProgress how many tunnels are being built for this pool right now (may include fallback tunnels)
      * @param fallback how many zero hop tunnels do we have, or are being built
      */
-    private int countHowManyToBuild(boolean allowZeroHop, int expire30s, int expire90s, int expire150s, int expire210s,
-                                    int expire270s, int expireLater, int standardAmount, int inProgress, int fallback) {
+    private int countHowManyToBuild(boolean isUnderAttack, boolean allowZeroHop, int expire30s, int expire90s, int expire150s, int expire210s,
+                                     int expire270s, int expire360s, int expireLater, int standardAmount, int inProgress, int fallback) {
+        // Increase multipliers during attacks for more aggressive building
+        int multiplier360 = isUnderAttack ? 2 : 1;  // 6min: normally 0, during attack 1x (early warning)
+        int multiplier270 = isUnderAttack ? 2 : 1;  // 4.5min: 1x normal, 2x attack
+        int multiplier210 = isUnderAttack ? 2 : 1; // 3.5min: 1x normal, 2x attack
+        int multiplier150 = isUnderAttack ? 3 : 2; // 2.5min: 2x normal, 3x attack
+        int multiplier90  = isUnderAttack ? 5 : 4; // 1.5min: 4x normal, 5x attack
+        int multiplier30  = isUnderAttack ? 8 : 6; // 30sec: 6x normal, 8x attack
+
         int rv = 0;
         int remainingWanted = standardAmount - expireLater;
         if (allowZeroHop) {remainingWanted -= fallback;}
 
-        for (int i = 0; i < expire270s && remainingWanted > 0; i++)
-            remainingWanted--;
+        // Handle the new 360s bucket during attacks
+        if (isUnderAttack) {
+            for (int i = 0; i < expire360s && remainingWanted > 0; i++)
+                remainingWanted--;
+        } else {
+            // Add 360s to expireLater for non-attack mode
+            remainingWanted -= expire360s;
+        }
+
         if (remainingWanted > 0) {
             // 1x the tunnels expiring between 3.5 and 2.5 minutes from now
             for (int i = 0; i < expire210s && remainingWanted > 0; i++) {remainingWanted--;}
@@ -1732,45 +1787,51 @@ public class TunnelPool {
                         for (int i = 0; i < expire30s && remainingWanted > 0; i++) {remainingWanted--;}
                         if (remainingWanted > 0) {
                             rv = (((expire270s > 0) && _context.random().nextBoolean()) ? 1 : 0);
-                            rv += expire210s;
-                            rv += 2*expire150s;
-                            rv += 4*expire90s;
-                            rv += 6*expire30s;
-                            rv += 6*remainingWanted;
+                            rv += multiplier270 * expire270s;
+                            rv += multiplier210 * expire210s;
+                            rv += multiplier150 * expire150s;
+                            rv += multiplier90 * expire90s;
+                            rv += multiplier30 * expire30s;
+                            rv += multiplier30 * remainingWanted;
                             rv -= inProgress;
                             rv -= expireLater;
                         } else {
                             rv = (((expire270s > 0) && _context.random().nextBoolean()) ? 1 : 0);
-                            rv += expire210s;
-                            rv += 2*expire150s;
-                            rv += 4*expire90s;
-                            rv += 6*expire30s;
+                            rv += multiplier270 * expire270s;
+                            rv += multiplier210 * expire210s;
+                            rv += multiplier150 * expire150s;
+                            rv += multiplier90 * expire90s;
+                            rv += multiplier30 * expire30s;
                             rv -= inProgress;
                             rv -= expireLater;
                         }
                     } else {
                         rv = (((expire270s > 0) && _context.random().nextBoolean()) ? 1 : 0);
-                        rv += expire210s;
-                        rv += 2*expire150s;
-                        rv += 4*expire90s;
+                        rv += multiplier270 * expire270s;
+                        rv += multiplier210 * expire210s;
+                        rv += multiplier150 * expire150s;
+                        rv += multiplier90 * expire90s;
                         rv -= inProgress;
                         rv -= expireLater;
                     }
                 } else {
                     rv = (((expire270s > 0) && _context.random().nextBoolean()) ? 1 : 0);
-                    rv += expire210s;
-                    rv += 2*expire150s;
+                    rv += multiplier270 * expire270s;
+                    rv += multiplier210 * expire210s;
+                    rv += multiplier150 * expire150s;
                     rv -= inProgress;
                     rv -= expireLater;
                 }
             } else {
                 rv = (((expire270s > 0) && _context.random().nextBoolean()) ? 1 : 0);
-                rv += expire210s;
+                rv += multiplier270 * expire270s;
+                rv += multiplier210 * expire210s;
                 rv -= inProgress;
                 rv -= expireLater;
             }
         } else {
             rv = (((expire270s > 0) && _context.random().nextBoolean()) ? 1 : 0);
+            rv += multiplier270 * expire270s;
             rv -= inProgress;
             rv -= expireLater;
         }
