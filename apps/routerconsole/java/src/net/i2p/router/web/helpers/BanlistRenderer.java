@@ -13,7 +13,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -31,9 +33,30 @@ import net.i2p.router.web.Messages;
  */
 class BanlistRenderer {
     private final RouterContext _context;
+    private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
 
     public BanlistRenderer(RouterContext context) {
         _context = context;
+    }
+
+    private boolean enableReverseLookups() {
+        return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);
+    }
+
+    private String reverseLookup(String ip) {
+        if (ip == null || ip.isEmpty()) return null;
+        String hostname = _context.commSystem().getCanonicalHostName(ip);
+        // If result is null, "unknown", or still looks like an IP, return null
+        if (hostname == null || hostname.isEmpty() || "unknown".equals(hostname)) {
+            return null;
+        }
+        // Check if the hostname is just the IP in different form
+        String normalizedIp = ip.toLowerCase().replaceAll("[.:]", "");
+        String normalizedHostname = hostname.toLowerCase().replaceAll("[.:]", "");
+        if (normalizedHostname.equals(normalizedIp) || normalizedHostname.contains(normalizedIp)) {
+            return null;
+        }
+        return hostname;
     }
 
     /**
@@ -62,6 +85,79 @@ class BanlistRenderer {
         } catch (IOException e) {
         }
         return ipMap;
+    }
+
+    /**
+     * Read sessionbans.txt and build a list of IP-only bans.
+     */
+    private List<IPBanEntry> readSessionBansIPOnly() {
+        List<IPBanEntry> ipBans = new ArrayList<>();
+        File logDir = new File(_context.getRouterDir(), "sessionbans");
+        File logFile = new File(logDir, "sessionbans.txt");
+        if (!logFile.exists()) {
+            return ipBans;
+        }
+        long now = _context.clock().now();
+        try (BufferedReader reader = new BufferedReader(new FileReader(logFile))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith("#")) continue;
+                String[] parts = line.split("\\s*\\|\\s*");
+                if (parts.length >= 4) {
+                    String hash = parts[1].trim();
+                    String ip = parts[2].trim();
+                    String reason = parts[3].trim();
+                    String durationStr = parts.length >= 5 ? parts[4].trim() : "";
+                    if (hash.isEmpty() && !ip.isEmpty()) {
+                        long expires = parseDuration(durationStr, now);
+                        if (expires > now) {
+                            ipBans.add(new IPBanEntry(ip, reason, expires, durationStr));
+                        }
+                    }
+                }
+            }
+        } catch (IOException e) {
+        }
+        return ipBans;
+    }
+
+    /**
+     * Parse duration string to expiration timestamp.
+     */
+    private long parseDuration(String durationStr, long now) {
+        if (durationStr.equals("FOREVER")) {
+            return now + 180L * 24 * 60 * 60 * 1000;
+        }
+        try {
+            if (durationStr.endsWith("d")) {
+                return now + Long.parseLong(durationStr.substring(0, durationStr.length() - 1)) * 24 * 60 * 60 * 1000;
+            } else if (durationStr.endsWith("h")) {
+                return now + Long.parseLong(durationStr.substring(0, durationStr.length() - 1)) * 60 * 60 * 1000;
+            } else if (durationStr.endsWith("m")) {
+                return now + Long.parseLong(durationStr.substring(0, durationStr.length() - 1)) * 60 * 1000;
+            } else if (durationStr.endsWith("ms")) {
+                return now + Long.parseLong(durationStr.substring(0, durationStr.length() - 2));
+            }
+        } catch (NumberFormatException e) {
+        }
+        return now;
+    }
+
+    /**
+     * Entry for IP-only bans from sessionbans.txt.
+     */
+    private static class IPBanEntry {
+        final String ip;
+        final String reason;
+        final long expires;
+        final String durationStr;
+
+        IPBanEntry(String ip, String reason, long expires, String durationStr) {
+            this.ip = ip;
+            this.reason = reason;
+            this.expires = expires;
+            this.durationStr = durationStr;
+        }
     }
 
     public void renderStatusHTML(Writer out) throws IOException {
@@ -119,9 +215,10 @@ class BanlistRenderer {
         StringBuilder buf = new StringBuilder(1024);
         Map<Hash, Banlist.Entry> entries = new TreeMap<Hash, Banlist.Entry>(new HashComparator());
         Map<String, String> ipMap = readSessionBansIPMap();
+        List<IPBanEntry> ipOnlyBans = readSessionBansIPOnly();
 
         entries.putAll(_context.banlist().getEntries());
-        if (entries.isEmpty()) {
+        if (entries.isEmpty() && ipOnlyBans.isEmpty()) {
             buf.append("<i>").append(_t("No bans currently active")).append("</i>");
             out.append(buf);
             return;
@@ -133,52 +230,102 @@ class BanlistRenderer {
            .append(_t("Router Hash"))
            .append("</th><th>")
            .append(_t("IP Address"))
-           .append("</th><th data-sort-method=number data-sort-direction=ascending>")
+           .append("</th>");
+        if (enableReverseLookups()) {
+            buf.append("<th>").append(_t("Hostname")).append("</th>");
+        }
+        buf.append("<th data-sort-method=number data-sort-direction=ascending>")
            .append(_t("Expiry"))
            .append("</th></tr></thead>\n<tbody id=sessionBanlist>\n");
         int tempBanned = 0;
+
+        // Render hash-based bans
         for (Map.Entry<Hash, Banlist.Entry> e : entries.entrySet()) {
             Hash key = e.getKey();
             Banlist.Entry entry = e.getValue();
-            long expires = entry.expireOn-_context.clock().now();
+            long expires = entry.expireOn - _context.clock().now();
             String expireString = DataHelper.formatDuration2(expires);
             if (expires <= 0 || key.equals(Hash.FAKE_HASH) || entry.cause == null ||
                 (entry.cause.toLowerCase().contains("hash") &&
                  !entry.cause.toLowerCase().contains("hashpatterndetector"))) {
                 continue;
             }
-                buf.append("<tr class=\"lazy");
-                if (entry.cause.toLowerCase().contains("floodfill")) {
-                    buf.append(" banFF");
+            buf.append("<tr class=\"lazy");
+            if (entry.cause.toLowerCase().contains("floodfill")) {
+                buf.append(" banFF");
+            }
+            String reason = _t(entry.cause, entry.causeCode)
+                .replace("<b>➜</b> ", "")
+                .replace("<b> -> </b>", "")
+                .replace(" -> ", "")
+                .replaceAll("^\\s*[<-]\\s*", "");
+            // Remove trailing colon and any trailing whitespace
+            if (reason.endsWith(":")) {
+                reason = reason.substring(0, reason.length() - 1).trim();
+            }
+            String lcReason = reason.toLowerCase();
+            String extractedIP = null;
+            if (lcReason.startsWith("blocklist")) {
+                int parenOpen = reason.indexOf('(');
+                int parenClose = reason.indexOf(')');
+                if (parenOpen > 0 && parenClose > parenOpen) {
+                    extractedIP = reason.substring(parenOpen + 1, parenClose);
                 }
-                String reason = _t(entry.cause, entry.causeCode)
-                    .replace("<b>➜</b> ", "")
-                    .replace("<b> -> </b>", "")
-                    .replace(" -> ", "")
-                    .replaceAll("^\\s*[<-]\\s*", ""); // Remove leading arrows or dashes
-                // Strip IP from Blocklist bans for cleaner display
-                String lcReason = reason.toLowerCase();
-                if (lcReason.startsWith("blocklist")) {
-                    int colon = lcReason.indexOf(':');
-                    if (colon > 0) {
-                        reason = reason.substring(0, colon);
-                    } else {
-                        reason = "Blocklist";
-                    }
-                }
-                String ip = ipMap.get(key.toBase64());
-                buf.append("\"><td>")
-                   .append(reason)
-                   .append("</td><td>:</td><td><span class=b64>")
-                   .append(key.toBase64())
-                   .append("</span></td><td>")
-                   .append(ip != null ? ip : "")
-                   .append("</td><td data-sort=").append(expires).append(">")
-                   .append(expireString)
-                   .append("</td></tr>\n");
-                tempBanned++;
+                reason = "Blocklist";
+            }
+            String ip = ipMap.get(key.toBase64());
+            if (extractedIP != null && !extractedIP.isEmpty()) {
+                ip = extractedIP;
+            }
+            String hostname = null;
+            if (ip != null && !ip.isEmpty() && enableReverseLookups()) {
+                hostname = reverseLookup(ip);
+            }
+            buf.append("\"><td>")
+               .append(reason)
+               .append("</td><td>:</td><td>")
+               .append(key != null ? "<span class=b64>" + key.toBase64() + "</span>" : "")
+               .append("</td><td>")
+               .append(ip != null ? ip : "")
+               .append("</td>");
+            if (enableReverseLookups()) {
+                buf.append("<td>")
+                   .append(hostname != null && !hostname.isEmpty() && !"unknown".equals(hostname) ? hostname : "")
+                   .append("</td>");
+            }
+            buf.append("<td data-sort=").append(expires).append(">")
+               .append(expireString)
+               .append("</td></tr>\n");
+            tempBanned++;
         }
-        buf.append("</tbody>\n<tfoot id=sessionBanlistFooter><tr><th colspan=5>")
+
+        // Render IP-only bans
+        for (IPBanEntry ipBan : ipOnlyBans) {
+            String expireString = DataHelper.formatDuration2(ipBan.expires - _context.clock().now());
+            String hostname = null;
+            if (enableReverseLookups()) {
+                hostname = reverseLookup(ipBan.ip);
+            }
+            buf.append("<tr class=\"lazy ipOnly\">")
+               .append("<td>")
+               .append(ipBan.reason.isEmpty() ? "IP Ban" : ipBan.reason)
+               .append("</td><td>:</td><td><span class=b64>-</span></td><td>")
+               .append(ipBan.ip)
+               .append("</td>");
+            if (enableReverseLookups()) {
+                buf.append("<td>")
+                   .append(hostname != null && !hostname.isEmpty() && !"unknown".equals(hostname) ? hostname : "")
+                   .append("</td>");
+            }
+            buf.append("<td data-sort=").append(ipBan.expires).append(">")
+               .append(expireString)
+               .append("</td></tr>\n");
+            tempBanned++;
+        }
+
+        buf.append("</tbody>\n<tfoot id=sessionBanlistFooter><tr><th colspan=")
+           .append(enableReverseLookups() ? "6" : "5")
+           .append(">")
            .append(_t("Total session-only bans"))
            .append(": ").append(tempBanned)
            .append("</th></tr></tfoot>\n</table>\n");
