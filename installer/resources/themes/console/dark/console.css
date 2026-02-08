@@ -1605,8 +1605,9 @@ h3.sybils+div,h3.sybils+a[name]+table{margin-top:-1px}
 #sessionBanned td:first-child::before{width:26px;height:20px;display:inline-block;vertical-align:middle;background:var(--client) no-repeat left center/18px;content:""}
 #sessionBanned .banFF td:first-child::before{background:var(--floodfill) no-repeat left center/18px}
 #sessionBanned .b64{padding:5px 8px;display:inline-block;vertical-align:middle;line-height:1;font-family:var(--monospaced);font-size:90%;font-weight:500;box-shadow:var(--bevel);background:var(--badge);user-select:all}
-#sessionBanned th:last-child,#sessionBanned td:last-child{text-align:right;user-select:none}
 #sessionBanned th{user-select:none}
+#sessionBanned th:nth-child(4),#sessionBanned th:nth-child(4),#sessionBanned th:nth-child(4),#sessionBanned th:nth-child(4){width:20%}
+#sessionBanned th:last-child,#sessionBanned td:last-child{width:1%;white-space:nowrap;text-align:right;user-select:none}
 
 .applink,.applabel,.statusnotes,.main,#news,.search tr,.logo,.themechoice,.themelabel,.langselect,.ui_lang{box-shadow:var(--bevel)}
 .appicon,.sitemapLink img{animation:zoom .15s linear .3s both;backface-visibility:hidden;will-change:transform}
