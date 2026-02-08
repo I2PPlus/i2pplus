@@ -624,9 +624,12 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     protected boolean isDuplicateSequence(TunnelPoolSettings settings, List<Hash> newPeers) {
         if (newPeers == null || newPeers.isEmpty()) {return false;}
 
+        Hash dest = settings.getDestination();
+        if (dest == null) {return false;}
+
         TunnelManagerFacade tmf = ctx.tunnelManager();
-        TunnelPool pool = settings.isInbound() ? tmf.getInboundPool(settings.getDestination())
-                                              : tmf.getOutboundPool(settings.getDestination());
+        TunnelPool pool = settings.isInbound() ? tmf.getInboundPool(dest)
+                                                : tmf.getOutboundPool(dest);
         if (pool == null) {return false;}
 
         List<TunnelInfo> existingTunnels = pool.listTunnels();

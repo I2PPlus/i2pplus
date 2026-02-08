@@ -8,8 +8,12 @@ package net.i2p.router.web.helpers;
  *
  */
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -30,6 +34,34 @@ class BanlistRenderer {
 
     public BanlistRenderer(RouterContext context) {
         _context = context;
+    }
+
+    /**
+     * Read sessionbans.txt and build a map of router hash to IP address.
+     */
+    private Map<String, String> readSessionBansIPMap() {
+        Map<String, String> ipMap = new HashMap<>();
+        File logDir = new File(_context.getRouterDir(), "sessionbans");
+        File logFile = new File(logDir, "sessionbans.txt");
+        if (!logFile.exists()) {
+            return ipMap;
+        }
+        try (BufferedReader reader = new BufferedReader(new FileReader(logFile))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith("#")) continue;
+                String[] parts = line.split("\\s*\\|\\s*");
+                if (parts.length >= 3) {
+                    String hash = parts[1].trim();
+                    String ip = parts[2].trim();
+                    if (!hash.isEmpty() && !ip.isEmpty() && ipMap.get(hash) == null) {
+                        ipMap.put(hash, ip);
+                    }
+                }
+            }
+        } catch (IOException e) {
+        }
+        return ipMap;
     }
 
     public void renderStatusHTML(Writer out) throws IOException {
@@ -86,6 +118,7 @@ class BanlistRenderer {
     public void renderBanlistCompact(Writer out) throws IOException {
         StringBuilder buf = new StringBuilder(1024);
         Map<Hash, Banlist.Entry> entries = new TreeMap<Hash, Banlist.Entry>(new HashComparator());
+        Map<String, String> ipMap = readSessionBansIPMap();
 
         entries.putAll(_context.banlist().getEntries());
         if (entries.isEmpty()) {
@@ -98,6 +131,8 @@ class BanlistRenderer {
            .append(_t("Reason"))
            .append("</th><th></th><th>")
            .append(_t("Router Hash"))
+           .append("</th><th>")
+           .append(_t("IP Address"))
            .append("</th><th data-sort-method=number data-sort-direction=ascending>")
            .append(_t("Expiry"))
            .append("</th></tr></thead>\n<tbody id=sessionBanlist>\n");
@@ -131,16 +166,19 @@ class BanlistRenderer {
                         reason = "Blocklist";
                     }
                 }
+                String ip = ipMap.get(key.toBase64());
                 buf.append("\"><td>")
                    .append(reason)
                    .append("</td><td>:</td><td><span class=b64>")
                    .append(key.toBase64())
-                   .append("</span></td><td data-sort=").append(expires).append(">")
+                   .append("</span></td><td>")
+                   .append(ip != null ? ip : "")
+                   .append("</td><td data-sort=").append(expires).append(">")
                    .append(expireString)
                    .append("</td></tr>\n");
                 tempBanned++;
         }
-        buf.append("</tbody>\n<tfoot id=sessionBanlistFooter><tr><th colspan=4>")
+        buf.append("</tbody>\n<tfoot id=sessionBanlistFooter><tr><th colspan=5>")
            .append(_t("Total session-only bans"))
            .append(": ").append(tempBanned)
            .append("</th></tr></tfoot>\n</table>\n");
