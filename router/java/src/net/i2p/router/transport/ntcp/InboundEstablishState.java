@@ -432,6 +432,11 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 return;
             } catch (RuntimeException re) {
                 fail("\n* BAD Establishment handshake message #1: X = " + Base64.encode(_X, 0, KEY_SIZE), re);
+                byte[] ip = _con.getRemoteIP();
+                if (ip != null) {
+                    _context.blocklist().addTemporary(ip, 8*60*60*1000, "Corrupt NTCP handshake");
+                    _transport.getPumper().blockIP(ip);
+                }
                 return;
             }
             if (_log.shouldDebug()) {
