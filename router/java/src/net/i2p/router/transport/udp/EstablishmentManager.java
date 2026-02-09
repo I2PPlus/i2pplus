@@ -47,6 +47,7 @@ import net.i2p.router.BanLogger;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
+import net.i2p.router.peermanager.ProfileOrganizer;
 import net.i2p.router.transport.TransportUtil;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateAverages;
@@ -154,43 +155,48 @@ class EstablishmentManager {
     private static final long MAX_NONCE = 0xFFFFFFFFl;
 
     /**
-     * Kill any outbound that takes more than this.
-     * Two round trips (Req-Created-Confirmed-Data) for direct;
-     * 3 1/2 round trips (RReq-RResp+Intro-HolePunch-Req-Created-Confirmed-Data) for indirect.
-     * Note: could be shorter for fast routers with better connectivity.
-     * But it's important to not fail an establishment too soon and waste it.
-     */
-    private static final int MAX_OB_ESTABLISH_TIME = SystemVersion.isSlow() ? 60*1000 : 45*1000;
+      * Kill any outbound that takes more than this.
+      * Two round trips (Req-Created-Confirmed-Data) for direct;
+      * 3 1/2 round trips (RReq-RResp+Intro-HolePunch-Req-Created-Confirmed-Data) for indirect.
+      * Note: could be shorter for fast routers with better connectivity.
+      * But it's important to not fail an establishment too soon and waste it.
+      */
+     private static final int MAX_OB_ESTABLISH_TIME = SystemVersion.isSlow() ? 60*1000 : 45*1000;
+     private static final int MAX_OB_ESTABLISH_TIME_ATTACK = SystemVersion.isSlow() ? 90*1000 : 68*1000;
 
-    /**
-     * Kill any inbound that takes more than this
-     * One round trip (Created-Confirmed)
-     * Note: could be two round trips for SSU2 with retry
-     */
-    public static final int MAX_IB_ESTABLISH_TIME = SystemVersion.isSlow() ? 60*1000 : 45*1000;
+     /**
+      * Kill any inbound that takes more than this
+      * One round trip (Created-Confirmed)
+      * Note: could be two round trips for SSU2 with retry
+      */
+     public static final int MAX_IB_ESTABLISH_TIME = SystemVersion.isSlow() ? 60*1000 : 45*1000;
+     public static final int MAX_IB_ESTABLISH_TIME_ATTACK = SystemVersion.isSlow() ? 90*1000 : 68*1000;
 
-    /** Max wait before receiving a response to a single message during outbound establishment */
-    public static final int OB_MESSAGE_TIMEOUT = 30*1000;
+     /** Max wait before receiving a response to a single message during outbound establishment */
+     public static final int OB_MESSAGE_TIMEOUT = 30*1000;
 
-    /** for the DSM and or netdb store */
-    private static final int DATA_MESSAGE_TIMEOUT = 15*1000;
+     /** for the DSM and or netdb store */
+     private static final int DATA_MESSAGE_TIMEOUT = 15*1000;
+     private static final int DATA_MESSAGE_TIMEOUT_ATTACK = 20*1000;
 
-    private static final int IB_BAN_TIME = 30*60*1000;
+     private static final int IB_BAN_TIME = 30*60*1000;
 
-    // SSU 2
-    private static final int MIN_TOKENS = SystemVersion.isSlow() ? 64 : 128;
-    private static final int MAX_TOKENS = SystemVersion.isSlow() ? 1024 : 2048;
+     // SSU 2
+     private static final int MIN_TOKENS = SystemVersion.isSlow() ? 64 : 128;
+     private static final int MIN_TOKENS_ATTACK = SystemVersion.isSlow() ? 128 : 256;
+     private static final int MAX_TOKENS = SystemVersion.isSlow() ? 1024 : 2048;
+     private static final int MAX_TOKENS_ATTACK = SystemVersion.isSlow() ? 2048 : 4096;
     public static final long IB_TOKEN_EXPIRATION = 60*60*1000L;
     private static final long MAX_SKEW = 2*60*1000;
     private static final String TOKEN_FILE = "ssu2tokens.txt";
     /** Max immediate terminations to send to a peer every FAILSAFE_INTERVAL */
     private static final int MAX_TERMINATIONS = 2;
     /** Threshold for auto-banning on inbound TERMINATION spam */
-    private static final int SSU2_TERM_THRESHOLD = 5;
+    private static final int SSU2_TERM_THRESHOLD = 10;
     /** Threshold for auto-banning on SSU2 establishment failures */
-    private static final int SSU2_ESTABLISH_FAIL_THRESHOLD = 5;
+    private static final int SSU2_ESTABLISH_FAIL_THRESHOLD = 10;
     /** Ban duration for SSU2 abuse */
-    private static final long SSU2_ABUSE_BAN_MS = 60*60*1000;
+    private static final long SSU2_ABUSE_BAN_MS = 15*60*1000;
 
     public EstablishmentManager(RouterContext ctx, UDPTransport transport) {
         _context = ctx;
@@ -238,6 +244,66 @@ class EstablishmentManager {
         _context.statManager().createRateStat("udp.rejectConcurrentSequence", "Consecutive concurrency rejections when we stop rejecting", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRequiredRateStat("udp.inboundTokenLifetime", "SSU2 Token lifetime (ms)", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRequiredRateStat("udp.inboundConn", "Inbound UDP Connection", "Transport [UDP]", UDPTransport.RATES);
+    }
+
+    private static final double TUNNEL_BUILD_SUCCESS_THRESHOLD = 0.40;
+
+    private volatile boolean _defensiveMode = false;
+    private volatile long _lastDefensiveModeChange = 0;
+    private static final long DEFENSIVE_MODE_COOLDOWN = 5 * 60 * 1000L; // 5 minutes
+
+    private boolean isUnderAttack() {
+        try {
+            ProfileOrganizer profileOrganizer = _context.profileOrganizer();
+            if (profileOrganizer == null) {
+                return false;
+            }
+            double buildSuccess = profileOrganizer.getTunnelBuildSuccess();
+            return buildSuccess > 0 && buildSuccess < TUNNEL_BUILD_SUCCESS_THRESHOLD;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private void updateDefensiveMode() {
+        long now = System.currentTimeMillis();
+        if (now - _lastDefensiveModeChange < DEFENSIVE_MODE_COOLDOWN) {
+            return;
+        }
+        boolean nowDefensive = isUnderAttack();
+        if (_defensiveMode != nowDefensive) {
+            _defensiveMode = nowDefensive;
+            _lastDefensiveModeChange = now;
+            if (_log.shouldWarn()) {
+                _log.warn("EstablishmentManager " + (nowDefensive ? "ENTERING" : "EXITING") +
+                         " defensive mode (tunnel build success < 40%)");
+            }
+        }
+    }
+
+    private int getMaxOBEstablishTime() {
+        updateDefensiveMode();
+        return _defensiveMode ? MAX_OB_ESTABLISH_TIME_ATTACK : MAX_OB_ESTABLISH_TIME;
+    }
+
+    private int getMaxIBEstablishTime() {
+        updateDefensiveMode();
+        return _defensiveMode ? MAX_IB_ESTABLISH_TIME_ATTACK : MAX_IB_ESTABLISH_TIME;
+    }
+
+    private int getDataMessageTimeout() {
+        updateDefensiveMode();
+        return _defensiveMode ? DATA_MESSAGE_TIMEOUT_ATTACK : DATA_MESSAGE_TIMEOUT;
+    }
+
+    private int getMinTokens() {
+        updateDefensiveMode();
+        return _defensiveMode ? MIN_TOKENS_ATTACK : MIN_TOKENS;
+    }
+
+    private int getMaxTokens() {
+        updateDefensiveMode();
+        return _defensiveMode ? MAX_TOKENS_ATTACK : MAX_TOKENS;
     }
 
     public synchronized void startup() {
@@ -1334,7 +1400,7 @@ class EstablishmentManager {
     public DatabaseStoreMessage getOurInfo() {
         DatabaseStoreMessage m = new DatabaseStoreMessage(_context);
         m.setEntry(_context.router().getRouterInfo());
-        m.setMessageExpiration(_context.clock().now() + DATA_MESSAGE_TIMEOUT);
+        m.setMessageExpiration(_context.clock().now() + getDataMessageTimeout());
         return m;
     }
 
@@ -2092,7 +2158,7 @@ class EstablishmentManager {
                 iter.remove();
                 inboundState = cur;
                 break;
-            } else if (cur.getLifetime(now) > MAX_IB_ESTABLISH_TIME ||
+            } else if (cur.getLifetime(now) > getMaxIBEstablishTime() ||
                        (istate == IB_STATE_RETRY_SENT && // limit time to get sess. req after retry
                         cur.getLifetime(now) >= 5 * InboundEstablishState.RETRANSMIT_DELAY)) {
                 iter.remove(); // took too long
@@ -2196,7 +2262,7 @@ class EstablishmentManager {
                 iter.remove();
                 outboundState = cur;
                 break;
-            } else if (cur.getLifetime(now) >= MAX_OB_ESTABLISH_TIME) {
+            } else if (cur.getLifetime(now) >= getMaxOBEstablishTime()) {
                 // took too long
                 iter.remove();
                 outboundState = cur;
@@ -2218,7 +2284,7 @@ class EstablishmentManager {
 
         if (outboundState != null) {
             synchronized (outboundState) {
-                boolean expired = outboundState.getLifetime(now) >= MAX_OB_ESTABLISH_TIME;
+                boolean expired = outboundState.getLifetime(now) >= getMaxOBEstablishTime();
                 switch (outboundState.getState()) {
                     case OB_STATE_UNKNOWN:  // fall thru
                     case OB_STATE_INTRODUCED:
@@ -2875,23 +2941,24 @@ class EstablishmentManager {
 
         /** @since 0.9.2 */
         private void doFailsafe(long now) {
+            long maxOBTime = 3L * getMaxOBEstablishTime();
             for (Iterator<OutboundEstablishState> iter = _liveIntroductions.values().iterator(); iter.hasNext(); ) {
                 OutboundEstablishState state = iter.next();
-                if (state.getLifetime(now) > 3*MAX_OB_ESTABLISH_TIME) {
+                if (state.getLifetime(now) > maxOBTime) {
                     iter.remove();
                     if (_log.shouldWarn()) {_log.warn("Failsafe removal of LiveIntroduction: " + state);}
                 }
             }
             for (Iterator<OutboundEstablishState> iter = _outboundByClaimedAddress.values().iterator(); iter.hasNext(); ) {
                 OutboundEstablishState state = iter.next();
-                if (state.getLifetime(now) > 3*MAX_OB_ESTABLISH_TIME) {
+                if (state.getLifetime(now) > maxOBTime) {
                     iter.remove();
                     if (_log.shouldWarn()) {_log.warn("Failsafe removal of OutboundByClaimedAddress: " + state);}
                 }
             }
             for (Iterator<OutboundEstablishState> iter = _outboundByHash.values().iterator(); iter.hasNext(); ) {
                 OutboundEstablishState state = iter.next();
-                if (state.getLifetime(now) > 3*MAX_OB_ESTABLISH_TIME) {
+                if (state.getLifetime(now) > maxOBTime) {
                     iter.remove();
                     if (_log.shouldWarn()) {_log.warn("Failsafe removal of OutboundByHash: " + state);}
                 }

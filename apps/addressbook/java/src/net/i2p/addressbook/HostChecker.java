@@ -41,6 +41,7 @@ import net.i2p.router.JobTiming;
 import net.i2p.router.NetworkDatabaseFacade;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
+import net.i2p.router.peermanager.ProfileOrganizer;
 import net.i2p.util.EepGet;
 import net.i2p.util.EepHead;
 import net.i2p.util.I2PAppThread;
@@ -182,6 +183,13 @@ public class HostChecker {
     private int _maxConcurrent = DEFAULT_MAX_CONCURRENT;
     private boolean _useLeaseSetCheck = true;
 
+    // Defensive mode constants - activated when tunnel build success < 40%
+    private static final double TUNNEL_BUILD_SUCCESS_THRESHOLD = 0.40;
+    private static final int DEFENSIVE_MAX_CONCURRENT = 1;
+    private static final long DEFENSIVE_PING_INTERVAL = 24 * 60 * 60 * 1000L; // 24 hours
+    private volatile boolean _defensiveMode = false;
+    private volatile long _lastDefensiveModeChange = 0;
+
     /**
      * Ping result data structure containing the outcome of a host reachability test.
      * Immutable - all fields are final.
@@ -302,7 +310,69 @@ public class HostChecker {
     }
 
     /**
-     * Start periodic ping testing
+     * Check if router is under attack based on tunnel build success rate.
+     * Uses 10-minute average to avoid fluctuations.
+     * @return true if tunnel build success < 40%
+     */
+    private boolean isUnderAttack() {
+        if (!(_context instanceof RouterContext)) {
+            return false;
+        }
+        try {
+            RouterContext routerContext = (RouterContext) _context;
+            ProfileOrganizer profileOrganizer = routerContext.profileOrganizer();
+            if (profileOrganizer == null) {
+                return false;
+            }
+            double buildSuccess = profileOrganizer.getTunnelBuildSuccess();
+            boolean underAttack = buildSuccess > 0 && buildSuccess < TUNNEL_BUILD_SUCCESS_THRESHOLD;
+            if (_log.shouldDebug()) {
+                _log.debug("Tunnel build success: " + (int)(buildSuccess * 100) + "% -> Under attack: " + underAttack);
+            }
+            return underAttack;
+        } catch (Exception e) {
+            if (_log.shouldWarn()) {
+                _log.warn("Error checking tunnel build success", e);
+            }
+            return false;
+        }
+    }
+
+    /**
+     * Update defensive mode based on tunnel build success.
+     * Uses 10-minute average with 24-hour cycle for restoration check.
+     */
+    private void updateDefensiveMode() {
+        long now = System.currentTimeMillis();
+        boolean wasDefensive = _defensiveMode;
+        boolean nowDefensive = isUnderAttack();
+
+        if (wasDefensive != nowDefensive) {
+            _defensiveMode = nowDefensive;
+            _lastDefensiveModeChange = now;
+
+            if (nowDefensive) {
+                if (_log.shouldWarn()) {
+                    _log.warn("HostChecker entering DEFENSIVE MODE -> Concurrency 1, 24h cycle, LeaseSet-only checks");
+                }
+            } else {
+                if (_log.shouldInfo()) {
+                    _log.info("HostChecker exiting DEFENSIVE MODE -> Tunnel build success >= 40%, resuming normal operation");
+                }
+            }
+        }
+    }
+
+    /**
+     * Get defensive mode status
+     * @return true if defensive mode is active
+     */
+    public boolean isDefensiveMode() {
+        return _defensiveMode;
+    }
+
+    /**
+      * Start periodic ping testing
      */
     public synchronized void start() {
         if (_running.get()) {
@@ -817,7 +887,62 @@ public class HostChecker {
     }
 
     /**
-     * Fallback method to use EepHead for HTTP HEAD request testing
+     * Defensive mode: Check only LeaseSet availability without ping/eephead tests.
+     * Marks host as UP if LeaseSet found, DOWN otherwise.
+     * Does NOT update ping times - preserves existing timestamps.
+     */
+    private void checkLeaseSetOnly(String hostname) {
+        if (!(_context instanceof RouterContext)) {
+            return;
+        }
+
+        try {
+            Destination dest = getDestination(hostname);
+            if (dest == null) {
+                return;
+            }
+
+            RouterContext routerContext = (RouterContext) _context;
+            Hash destHash = dest.calculateHash();
+
+            // Look up LeaseSet locally
+            net.i2p.data.LeaseSet ls = routerContext.netDb().lookupLeaseSetLocally(destHash);
+
+            long now = System.currentTimeMillis();
+            PingResult existingResult = _pingResults.get(hostname);
+            long existingTimestamp = (existingResult != null) ? existingResult.timestamp : 0;
+            long existingResponseTime = (existingResult != null) ? existingResult.responseTime : -1;
+            String existingCategory = (existingResult != null) ? existingResult.category : null;
+            String existingLeaseSetTypes = (existingResult != null) ? existingResult.leaseSetTypes : null;
+
+            if (ls != null && ls.isCurrent(0)) {
+                // LeaseSet found - mark as UP, preserve existing response time
+                String leaseSetTypes = formatLeaseSetTypes(ls);
+                PingResult result = new PingResult(true, existingTimestamp, existingResponseTime, existingCategory, leaseSetTypes);
+                _pingResults.put(hostname, result);
+                if (_log.shouldDebug()) {
+                    _log.debug("HostChecker LeaseSet UP [DEFENSIVE]: " + hostname + " " + leaseSetTypes);
+                }
+            } else {
+                // No LeaseSet - mark as DOWN
+                String leaseSetTypes = (existingResult != null) ? existingResult.leaseSetTypes : "[]";
+                PingResult result = new PingResult(false, existingTimestamp, -1, existingCategory, leaseSetTypes);
+                _pingResults.put(hostname, result);
+                if (_log.shouldDebug()) {
+                    _log.debug("HostChecker LeaseSet DOWN [DEFENSIVE]: " + hostname);
+                }
+            }
+
+            savePingResults();
+        } catch (Exception e) {
+            if (_log.shouldWarn()) {
+                _log.warn("Error in checkLeaseSetOnly for " + hostname + ": " + e.getMessage());
+            }
+        }
+    }
+
+    /**
+      * Fallback method to use EepHead for HTTP HEAD request testing
      * Marks site as up if any response is received
      */
     private PingResult fallbackToEepHead(String hostname, long startTime) {
@@ -1904,8 +2029,11 @@ public class HostChecker {
                 return;
             }
 
+            // Update defensive mode based on tunnel build success
+            updateDefensiveMode();
+
             // Check router load - skip entire cycle if severely overloaded
-            final int dynamicMaxConcurrent;
+            int dynamicMaxConcurrent;
             if (_context instanceof RouterContext) {
                 RouterContext routerContext = (RouterContext) _context;
                 JobQueue jobQueue = routerContext.jobQueue();
@@ -1933,6 +2061,14 @@ public class HostChecker {
                 }
             } else {
                 dynamicMaxConcurrent = _maxConcurrent;
+            }
+
+            // Apply defensive mode restrictions: reduce concurrency to 1 when under attack
+            if (_defensiveMode) {
+                dynamicMaxConcurrent = DEFENSIVE_MAX_CONCURRENT;
+                if (_log.shouldWarn()) {
+                    _log.warn("HostChecker in DEFENSIVE MODE -> Reducing concurrency to 1");
+                }
             }
 
             // Refresh categories from notbob.i2p at the start of each cycle
@@ -2007,6 +2143,15 @@ public class HostChecker {
                                     // Acquire semaphore permit to limit concurrent pings
                                     dynamicSemaphore.acquire();
 
+                                    // In defensive mode, skip ping/eephead, just check LeaseSet availability
+                                    if (_defensiveMode) {
+                                        if (_log.shouldDebug()) {
+                                            _log.debug("Defensive mode: checking LeaseSet for " + hostname);
+                                        }
+                                        checkLeaseSetOnly(hostname);
+                                        return null;
+                                    }
+
                                     // Then add random delay (up to 5s)
                                     int randomDelay = 2000 + _context.random().nextInt(3000);
                                     Thread.sleep(randomDelay);
@@ -2079,6 +2224,25 @@ public class HostChecker {
                                       configuredIntervalMinutes + " minutes -> Adjusting interval to " + (newInterval / 60000) + " minutes");
                         }
                         _pingInterval = newInterval;
+                    }
+                }
+
+                // Apply defensive mode interval: 24 hours when under attack
+                if (_defensiveMode) {
+                    if (_pingInterval != DEFENSIVE_PING_INTERVAL) {
+                        if (_log.shouldWarn()) {
+                            _log.warn("HostChecker entering DEFENSIVE MODE interval: 24 hours");
+                        }
+                        _pingInterval = DEFENSIVE_PING_INTERVAL;
+                    }
+                } else {
+                    // Restore normal interval if we were in defensive mode
+                    long normalInterval = DEFAULT_PING_INTERVAL;
+                    if (_pingInterval == DEFENSIVE_PING_INTERVAL) {
+                        if (_log.shouldInfo()) {
+                            _log.info("HostChecker restoring normal interval: " + (normalInterval / 60000) + " minutes");
+                        }
+                        _pingInterval = normalInterval;
                     }
                 }
 
