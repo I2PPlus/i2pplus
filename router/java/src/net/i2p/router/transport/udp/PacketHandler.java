@@ -280,7 +280,7 @@ class PacketHandler {
             if (pktLen >= 60 && pktLen < MIN_PQ_NS_SIZE) {
                 // Packet is too large for token request (56) but too small for PQ new session
                 // Likely an attack packet - track and potentially ban
-                if (trackAndBanIfNeeded(from, "PQ packet size attack: " + pktLen + " bytes")) {
+                if (trackAndBanIfNeeded(from, "PQ Packet Attack (" + pktLen + " bytes)")) {
                     return false;
                 }
                 // Not banned yet, but skip expensive trial decryption
@@ -547,7 +547,7 @@ class PacketHandler {
             if (_context.blocklist().isBlocklisted(ipBytes)) {
                 return false;
             }
-            _context.blocklist().addTemporary(ipBytes, BAN_DURATION_MS, "Repeated bad packets: " + reason);
+            _context.blocklist().addTemporary(ipBytes, BAN_DURATION_MS, reason);
             _banLogger.logBan(ipStr + ":" + from.getPort(), "Repeated bad packets: " + reason, BAN_DURATION_MS);
 
             // Also try to ban by router hash if we recognize this IP
@@ -555,12 +555,8 @@ class PacketHandler {
             java.util.List<PeerState> peers = _transport.getPeerStatesByIP(from);
             for (PeerState ps : peers) {
                 if (ps.getRemotePort() == from.getPort()) {
-                    _context.banlist().banlistRouter(
-                        ps.getRemotePeer(),
-                        " <b>➜</b> Repeated bad packets: " + reason,
-                        null,
-                        "SSU",
-                        _context.clock().now() + BAN_DURATION_MS);
+                    _context.banlist().banlistRouter(ps.getRemotePeer(),
+                        " <b>➜</b> " + reason, null, "SSU", _context.clock().now() + BAN_DURATION_MS);
                     _banLogger.logBan(ps.getRemotePeer(), ipStr + ":" + from.getPort(),
                                      "Repeated bad packets: " + reason, BAN_DURATION_MS);
                     if (_log.shouldWarn()) {
