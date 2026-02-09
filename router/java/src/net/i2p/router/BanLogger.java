@@ -366,7 +366,7 @@ public class BanLogger {
         if (banned) {
             // Log the predictive ban
             String prefix = _patternDetector.getHashPrefix(hash);
-            String reason = "Predictive ban: " + prefix;
+            String reason = "HashPatternDetector (Predictive ban: " + prefix + ")";
             writeLog(hash.toBase64(), "", reason, "24h");
         }
         return banned;
