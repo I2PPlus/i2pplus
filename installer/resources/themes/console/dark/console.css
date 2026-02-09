@@ -1060,8 +1060,6 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 .tunnel_peer{min-width:56px;display:inline-block;text-align:right}
 .tunnel_peer.tunnel_local{margin-right:2px;padding:2px 0 2px;line-height:1.5;font-size:8pt;text-transform:lowercase;text-align:center;box-shadow:var(--outline);background:var(--badge)}
 .tunnels_client th:first-child::after{vertical-align:middle;line-height:0;letter-spacing:-0.25em;font-size:11pt;content:"\21E9\21E7"}
-.tunnels_client th:first-child,.tunnels_client td:first-child,.tunnelTest{width:4%}
-.tunnels_client th:nth-child(3),.tunnels_client td:nth-child(3){width:7%;white-space:nowrap}
 .tunnelsHidden .statusnotes,.tunnelsHidden .statusnotes+.statusnotes{margin:-1px 0 9px}
 .tunnelsHidden #tunnels{padding-bottom:2px}
 .tunnelsHidden #tunnels h3[id]:nth-child(n+2){margin-top:-10px}

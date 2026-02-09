@@ -951,17 +951,21 @@ class TunnelRenderer {
         }
         StringBuilder buf = new StringBuilder(32*1024);
         if (tunnels.size() != 0) {
-            buf.append("<table class=\"tunneldisplay tunnels_client\">\n<thead><tr><th title=\"")
+            buf.append("<table class=\"tunneldisplay tunnels_client\">\n<thead><tr><th class=direction title=\"")
                .append(_t("Inbound or outbound?"))
                .append("\">")
                .append(_t("In/Out"))
-               .append("</th><th title=\"")
+               .append("</th><th class=status title=\"")
                .append(_t("Tunnel test status"))
                .append("\">")
-               .append(_t("Status"))
-               .append("</th><th>")
-               .append(_t("Expiry"))
-               .append("</th><th title=\"")
+                .append(_t("Status"))
+                .append("</th><th class=latency title=\"")
+                .append(_t("Round trip time for last test"))
+                .append("\">")
+                .append(_t("Latency"))
+                .append("</th><th class=expiry>")
+                .append(_t("Expiry"))
+               .append("</th><th class=transferred title=\"")
                .append(_t("Data transferred"))
                .append("\">")
                .append(_t("Data"))
@@ -1002,20 +1006,20 @@ class TunnelRenderer {
                               " class=untested";
 
             if (isInbound) {
-                buf.append("<tr").append(rowClass).append("><td data-sort=in><span class=inbound title=\"")
+                buf.append("<tr").append(rowClass).append("><td class=direction data-sort=in><span class=inbound title=\"")
                    .append(tib)
                    .append("\"><img src=/themes/console/images/inbound.svg alt=\"")
                    .append(tib)
                    .append("\"></span></td>");
             } else {
-                buf.append("<tr").append(rowClass).append("><td data-sort=out><span class=outbound title=\"")
+                buf.append("<tr").append(rowClass).append("><td class=direction data-sort=out><span class=outbound title=\"")
                    .append(tob)
                    .append("\"><img src=/themes/console/images/outbound.svg alt=\"")
                    .append(tob)
                    .append("\"></span></td>");
             }
 
-            buf.append("<td class=tunnelTest>");
+            buf.append("<td class=status>");
             if (isDuplicate) {
                 buf.append("<span title=\"").append(_t("Rejected as duplicate")).append("\">");
             } else {
@@ -1039,12 +1043,19 @@ class TunnelRenderer {
                 buf.append("</td>");
             }
 
-            buf.append("<td><span>").append(DataHelper.formatDuration2(timeLeft)).append("</span></td>");
+            int latency = info.getLastLatency();
+            buf.append("<td class=latency data-sort=").append(latency).append(">");
+            if (latency > 0) {
+                buf.append("<span>").append(latency).append("</span><span class=left>&#8239;ms</span>");
+            }
+            buf.append("</td>");
+
+            buf.append("<td class=expiry><span>").append(DataHelper.formatDuration2(timeLeft)).append("</span></td>");
 
             int count = info.getProcessedMessagesCount() * 1024 / 1000;
             double sizeInKB = count * 1024.0 / 1000.0;
             double sizeInMB = sizeInKB / 1024.0;
-            buf.append("<td class=\"cells datatransfer\" data-sort=").append(count).append(">");
+            buf.append("<td class=\"cells transferred\" data-sort=").append(count).append(">");
             if (count > 0) {
                 buf.append("<span class=right>")
                    .append(sizeInKB >= 1024 ? String.format("%.2f", sizeInMB) : String.format("%.0f", sizeInKB))
