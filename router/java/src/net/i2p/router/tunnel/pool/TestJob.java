@@ -46,6 +46,7 @@ public class TestJob extends JobImpl {
     private int _id;
     private static final int MIN_TEST_PERIOD = 8*1000;
     private static final int MAX_TEST_PERIOD = 15*1000;
+    private static final int MAX_TEST_PERIOD_ATTACK = 25*1000; // 25s during attacks
 
     /**
      * Maximum number of tunnel tests that can run concurrently.
@@ -903,7 +904,7 @@ public class TestJob extends JobImpl {
 
     private int getTestPeriod() {
         final RouterContext ctx = getContext();
-        if (_outTunnel == null || _replyTunnel == null) return MAX_TEST_PERIOD;
+        if (_outTunnel == null || _replyTunnel == null) return getMaxTestPeriod();
 
         RateStat tspt = ctx.statManager().getRate("transport.sendProcessingTime");
         int base = 0;
@@ -917,7 +918,16 @@ public class TestJob extends JobImpl {
         int totalHops = _outTunnel.getLength() + _replyTunnel.getLength();
         int calculated = base + (1000 * totalHops);
         int clamped = Math.max(MIN_TEST_PERIOD, calculated);
-        return Math.min(clamped, MAX_TEST_PERIOD);
+        return Math.min(clamped, getMaxTestPeriod());
+    }
+
+    /**
+     * Get the maximum test period, extended during attacks.
+     * @return MAX_TEST_PERIOD or MAX_TEST_PERIOD_ATTACK if under attack
+     */
+    private int getMaxTestPeriod() {
+        boolean isUnderAttack = getContext().profileOrganizer().isLowBuildSuccess();
+        return isUnderAttack ? MAX_TEST_PERIOD_ATTACK : MAX_TEST_PERIOD;
     }
 
     private boolean scheduleRetest() {
