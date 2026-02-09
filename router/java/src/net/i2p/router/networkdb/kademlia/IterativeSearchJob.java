@@ -88,10 +88,15 @@ public class IterativeSearchJob extends FloodSearchJob {
     private static final int TOTAL_SEARCH_LIMIT = 14;
     /** Max number of peers to query if we are ff */
     private static final int TOTAL_SEARCH_LIMIT_WHEN_FF = 10;
+    /** Quadruple limits when under attack (netDb attack mode) */
+    private static final int TOTAL_SEARCH_LIMIT_ATTACK = 40;
+    private static final int TOTAL_SEARCH_LIMIT_WHEN_FF_ATTACK = 40;
     /** Extra peers to get from peer selector, as we may discard some before querying */
     private static final int EXTRA_PEERS = 2;
     private static final int IP_CLOSE_BYTES = 3;
+    /** Per-peer timeout in ms - doubled when under attack */
     private static final int MAX_SEARCH_TIME = 15*1000;
+    private static final int MAX_SEARCH_TIME_ATTACK = 30*1000;
     /**
      *  The time before we give up and start a new search - much shorter than the message's expire time
      *  Longer than the typ. response time of 1.0 - 1.5 sec, but short enough that we move
@@ -143,12 +148,17 @@ public class IterativeSearchJob extends FloodSearchJob {
                               Job onFind, Job onFailed, int timeoutMs, boolean isLease, Hash fromLocalDest) {
         super(ctx, facade, key, onFind, onFailed, timeoutMs, isLease);
         int known = ctx.netDb().getKnownRouters();
+        double buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
+        boolean isUnderAttack = buildSuccess > 0 && buildSuccess < 0.40;
         int totalSearchLimit = (facade.floodfillEnabled() && ctx.router().getUptime() > 30*60*1000) ?
                                 TOTAL_SEARCH_LIMIT_WHEN_FF : TOTAL_SEARCH_LIMIT;
+        if (isUnderAttack) {
+            totalSearchLimit = TOTAL_SEARCH_LIMIT_ATTACK;
+        }
         boolean isHidden = ctx.router().isHidden();
         boolean isSlow = SystemVersion.isSlow();
         long lag = ctx.jobQueue().getMaxLag();
-        _timeoutMs = Math.min(timeoutMs * 3, MAX_SEARCH_TIME);
+        _timeoutMs = isUnderAttack ? Math.min(timeoutMs * 3, MAX_SEARCH_TIME_ATTACK) : Math.min(timeoutMs * 3, MAX_SEARCH_TIME);
         _expiration = _timeoutMs + ctx.clock().now();
         _rkey = ctx.routingKeyGenerator().getRoutingKey(key);
         _toTry = new TreeSet<Hash>(new XORComparator<Hash>(_rkey));
@@ -160,10 +170,8 @@ public class IterativeSearchJob extends FloodSearchJob {
         _skippedPeers = new HashSet<Hash>(4);
         _sentTime = new ConcurrentHashMap<Hash, Long>(_totalSearchLimit);
         _fromLocalDest = fromLocalDest;
-        _timeoutMs = Math.min(timeoutMs, MAX_SEARCH_TIME);
-        double buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
         int baseConcurrent = (ctx.router().getUptime() > 30*60*1000 || known > 1000) ? MAX_CONCURRENT : MAX_CONCURRENT + 1;
-        if (buildSuccess > 0 && buildSuccess < 0.40) {
+        if (isUnderAttack) {
             baseConcurrent *= 2;
         }
         _maxConcurrent = ctx.getProperty("netdb.maxConcurrent", baseConcurrent);
