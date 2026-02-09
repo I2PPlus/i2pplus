@@ -806,19 +806,19 @@ public class TunnelPool {
     }
 
     /**
-     *  Remove zero-hop fallback tunnels once we have multi-hop tunnels.
-     *  Called when a multi-hop tunnel is added to any pool (exploratory or client).
-     *  This prevents keeping 0-hop tunnels around after bootstrap is complete
-     *  or when multi-hop tunnels become available.
-     *  Removes 0-hop tunnels when we have at least 2 viable multi-hop tunnels.
-     *  @since 0.9.68+
-     */
+      *  Remove zero-hop fallback tunnels once we have multi-hop tunnels.
+      *  Called when a multi-hop tunnel is added to any pool (exploratory or client).
+      *  This prevents keeping 0-hop tunnels around after bootstrap is complete
+      *  or when multi-hop tunnels become available.
+      *  Removes 0-hop tunnels when we have more than 2 total tunnels (3+).
+      * @since 0.9.68+
+      */
     private void cleanupZeroHopTunnels() {
         List<TunnelInfo> zeroHopTunnels = new ArrayList<>();
         int multiHopCount = 0;
         int totalUsable = 0;
-        // Require at least 2 multi-hop tunnels before removing 0-hop ones
-        int minimumMultiHop = 2;
+        // Remove 0-hop tunnels if we have more than 2 total tunnels (3+)
+        int minimumTotal = 3;
 
         synchronized (_tunnels) {
             long now = _context.clock().now();
@@ -835,17 +835,17 @@ public class TunnelPool {
                 }
             }
 
-            // Remove 0-hop tunnels if we have at least 2 multi-hop tunnels
-            if (multiHopCount >= minimumMultiHop && !zeroHopTunnels.isEmpty()) {
+            // Remove 0-hop tunnels if we have more than 2 total tunnels (3+)
+            if (totalUsable >= minimumTotal && !zeroHopTunnels.isEmpty()) {
                 if (_log.shouldInfo()) {
                     _log.info("Removing " + zeroHopTunnels.size() + " zero-hop tunnels (have " +
-                              multiHopCount + " multi-hop tunnels)");
+                              multiHopCount + " multi-hop of " + totalUsable + " total tunnels)");
                 }
                 for (TunnelInfo t : zeroHopTunnels) {
                     _tunnels.remove(t);
                 }
             } else {
-                // Don't remove if not enough multi-hop tunnels yet
+                // Don't remove if not enough tunnels yet
                 zeroHopTunnels.clear();
             }
         }
@@ -1205,9 +1205,11 @@ public class TunnelPool {
     }
 
     /**
-     *  This will build a fallback (zero-hop) tunnel ONLY if
-     *  this pool is exploratory, or if the user has intentionally
-     *  configured 0-hop tunnels for this pool.
+     *  This will build a fallback tunnel only if:
+     *  - Exploratory pool: 0-hop fallback allowed
+     *  - Client pool configured for 1 hop: 1-hop fallback allowed
+     *  - Client pool with allowZeroHop=true: 0-hop fallback allowed
+     *  - Otherwise: build multi-hop tunnel (enforce 2-hop minimum)
      *
      *  @return true if a fallback tunnel is built, false otherwise
      */
@@ -1217,24 +1219,34 @@ public class TunnelPool {
         synchronized (_tunnels) {usable = _tunnels.size();}
         if (usable > 0) {return false;}
 
-        // Allow zero-hop fallback for exploratory pools, or if user explicitly configured 0-hop
-        if (_settings.isExploratory() || _settings.getAllowZeroHop()) {
-            if (!_settings.isExploratory() && _settings.getAllowZeroHop()) {
-                // Warn that we're building a zero-hop tunnel for a client pool due to configuration
-                if (_log.shouldWarn()) {
-                    _log.warn("Warning! Building zero-hop fallback tunnel for client pool " + toString() +
-                              " because allowZeroHop is enabled in configuration");
-                }
-            }
+        // Exploratory pools: allow 0-hop fallback
+        if (_settings.isExploratory()) {
             if (_log.shouldInfo()) {
-                _log.info(toString() + "\n* Building a fallback tunnel (Usable: " + usable + "; Needed: " + quantity + ")");
+                _log.info(toString() + "\n* Building 0-hop fallback tunnel (Usable: " + usable + "; Needed: " + quantity + ")");
             }
-            // runs inline, since its 0hop
             _manager.getExecutor().buildTunnel(configureNewTunnel(true));
             return true;
-        } else if (_log.shouldWarn()) {
-            // Log a warning when client pool would have built a zero-hop tunnel as fallback
-            _log.warn("Warning! Denied zero-hop fallback tunnel for client pool " + toString());
+        }
+
+        // Client pools: check configured hop count
+        int configuredLength = _settings.getLength();
+        boolean allowShortHop = _settings.getAllowZeroHop();
+
+        if (configuredLength <= 1 || allowShortHop) {
+            // Client configured for 1 hop or allowZeroHop: allow short fallback
+            if (_log.shouldWarn()) {
+                _log.warn("Warning! Building " + (configuredLength <= 1 ? "1-hop" : "0-hop") + " fallback tunnel for client pool " + toString() +
+                          " (configured length: " + configuredLength + ", allowZeroHop: " + allowShortHop + ")");
+            }
+            boolean forceZeroHop = allowShortHop && !_settings.isExploratory();
+            _manager.getExecutor().buildTunnel(configureNewTunnel(forceZeroHop));
+            return true;
+        }
+
+        // Client pools configured for 2+ hops: build multi-hop fallback, don't give up
+        if (_log.shouldWarn()) {
+            _log.warn("Warning! Denied short fallback for client pool " + toString() +
+                      " - configured for " + configuredLength + " hops, will continue building multi-hop tunnel");
         }
         return false;
     }
@@ -1880,9 +1892,18 @@ public class TunnelPool {
         long now = _context.clock().now();
         long expiration = now + TunnelPoolSettings.DEFAULT_DURATION;
 
+        // Enforce minimum 2 hops for client pools unless explicitly configured shorter
+        // @since 0.9.70
+        int minLength = 2;
+        if (settings.isExploratory() || settings.getLength() <= 1 || settings.getAllowZeroHop()) {
+            minLength = 1; // Allow 1-hop for exploratory or explicitly short-configured
+        }
+
         if (!forceZeroHop) {
             int len = settings.getLengthOverride();
             if (len < 0) {len = settings.getLength();}
+            // Enforce minimum length for client pools
+            if (len < minLength) {len = minLength;}
             if (len > 0 && (!settings.isExploratory()) && _context.random().nextInt(4) < 3) { // 75%
                 // Look for a tunnel to reuse, if the right length and expiring soon.
                 // Ignore variance for now.
@@ -2141,7 +2162,7 @@ public class TunnelPool {
      * This is called after a successful test to proactively remove slow tunnels
      * without marking them as failed, keeping only efficient tunnels in the pool.
      * Only removes a tunnel if we have adequate backup (>=2 good tunnels, or >=1 if under attack).
-     * @since 0.9.70
+     * @since 0.9.68+
      */
     private void removeSlowTunnels() {
         List<TunnelInfo> tunnels = listTunnels();
