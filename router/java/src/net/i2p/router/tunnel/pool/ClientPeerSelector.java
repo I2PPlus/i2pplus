@@ -166,7 +166,8 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     // if so, we need the OBEP to be connected to us, so we get the build reply back
                     // This should be rare except at startup
                     TunnelManagerFacade tmf = ctx.tunnelManager();
-                    TunnelPool tp = tmf.getInboundPool(settings.getDestination());
+                    Hash dest = settings.getDestination();
+                    TunnelPool tp = dest != null ? tmf.getInboundPool(dest) : null;
                     boolean pickFurthest;
                     if (tp != null) {
                         pickFurthest = true;
