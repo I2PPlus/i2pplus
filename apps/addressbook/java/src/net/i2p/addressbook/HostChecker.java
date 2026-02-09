@@ -639,11 +639,13 @@ public class HostChecker {
                 }
             };
 
-            netDb.lookupLeaseSet(destHash, onSuccess, onFailure, 15000);
+            // Double timeout when under attack (defensive mode) to give floodfills more time
+            long lookupTimeout = _defensiveMode ? 30000 : 15000;
+            netDb.lookupLeaseSet(destHash, onSuccess, onFailure, lookupTimeout);
 
             synchronized (lookupComplete) {
                 if (!lookupComplete[0]) {
-                    lookupComplete.wait(15000);
+                    lookupComplete.wait(lookupTimeout);
                 }
             }
 
