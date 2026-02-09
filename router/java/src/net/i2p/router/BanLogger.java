@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collections;
@@ -15,6 +16,7 @@ import java.util.Set;
 import java.util.TimeZone;
 
 import net.i2p.data.Hash;
+import net.i2p.router.transport.CommSystemFacade;
 import net.i2p.util.Log;
 
 /**
@@ -326,11 +328,28 @@ public class BanLogger {
     }
 
     /**
-     * Get IP address from banlist for the given hash.
+     * Get IP address from commSystem for the given hash.
+     * Includes reverse DNS hostname if available and enabled.
      */
     private String getIPFromContext(Hash hash, RouterContext context) {
-        if (hash == null) {return "";}
-        return "";
+        if (hash == null || context == null) {return "";}
+        try {
+            CommSystemFacade comm = context.commSystem();
+            if (comm == null) {return "";}
+            byte[] ipBytes = comm.getIP(hash);
+            if (ipBytes == null || ipBytes.length == 0) {return "";}
+            String ip = InetAddress.getByAddress(ipBytes).getHostAddress();
+            // Add reverse DNS if enabled and available
+            if (context.getBooleanProperty("routerconsole.enableReverseLookups")) {
+                String rdns = comm.getCanonicalHostName(ipBytes);
+                if (rdns != null && !rdns.equals(ip) && !rdns.isEmpty()) {
+                    return ip + " (" + rdns + ")";
+                }
+            }
+            return ip;
+        } catch (Exception e) {
+            return "";
+        }
     }
 
     /**
