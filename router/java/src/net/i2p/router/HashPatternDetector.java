@@ -51,17 +51,17 @@ public class HashPatternDetector implements Serializable {
     private static final long RECOVERY_COOLDOWN = 60 * 60 * 1000L; // 1 hour before allowing disable
 
     // Configuration
-    private static final int PREFIX_LENGTH = 2; // First 2 bytes (4 hex chars)
-    private static final double BAN_THRESHOLD = 0.60; // 60% confidence for pre-emptive banning
-    private static final int MIN_SAMPLES = 5; // Minimum samples before prediction (aggressive)
-    private static final int MIN_KNOWN_ROUTERS = 500; // Minimum known routers before enabling (lowered)
+    private static final int PREFIX_LENGTH = 3; // First 3 bytes (6 hex chars) - collision risk
+    private static final double BAN_THRESHOLD = 0.80; // 80% confidence for pre-emptive banning
+    private static final int MIN_SAMPLES = 15; // Minimum samples before prediction (conservative)
+    private static final int MIN_KNOWN_ROUTERS = 1000; // Minimum known routers before enabling (conservative)
     private static final String PATTERN_FILE = "hash-patterns.dat";
     private static final long PREDICTIVE_BAN_DURATION = 48 * 60 * 60 * 1000L; // 48 hours for pre-emptive bans
 
     // Gap-based detection configuration
-    private static final int GAP_CLUSTERING_THRESHOLD = 60; // 60% of gaps within narrow range
+    private static final int GAP_CLUSTERING_THRESHOLD = 75; // 75% of gaps within narrow range (conservative)
     private static final int GAP_RANGE = 256; // Gaps within this are considered "clustered"
-    private static final int MIN_RUN_LENGTH = 3; // 3+ consecutive increments = scripted
+    private static final int MIN_RUN_LENGTH = 5; // 5+ consecutive increments = scripted (conservative)
     private static final int CROSS_PREFIX_GAP = 0x100; // Gap indicating prefix boundary crossing
 
     // NetDB Scanner Configuration
@@ -112,7 +112,7 @@ public class HashPatternDetector implements Serializable {
 
             // Apply predictive ban
             context.banlist().banlistRouter(hash,
-                " <b>➜</b> Predictive ban: " + prefix,
+                " <b>➜</b> HashPatternDetector (predictive)" + prefix,
                 null, null,
                 context.clock().now() + PREDICTIVE_BAN_DURATION);
 
@@ -120,7 +120,7 @@ public class HashPatternDetector implements Serializable {
 
             if (_log.shouldWarn()) {
                 _log.warn("Predictively banning router [" + hash.toBase64().substring(0, 6) +
-                         "] with prefix " + prefix + " (confidence: " +
+                         "] with prefix " + prefix + " (Confidence: " +
                          String.format("%.1f%%", stats.getConfidence() * 100) + ")");
             }
 
