@@ -61,6 +61,7 @@ class BanlistRenderer {
 
     /**
      * Read sessionbans.txt and build a map of router hash to IP address.
+     * Handles format: "IP (hostname)" or just "IP"
      */
     private Map<String, String> readSessionBansIPMap() {
         Map<String, String> ipMap = new HashMap<>();
@@ -76,7 +77,12 @@ class BanlistRenderer {
                 String[] parts = line.split("\\s*\\|\\s*");
                 if (parts.length >= 3) {
                     String hash = parts[1].trim();
-                    String ip = parts[2].trim();
+                    String ipField = parts[2].trim();
+                    // Extract just the IP if format is "IP (hostname)"
+                    String ip = ipField;
+                    if (!ip.isEmpty() && ip.contains(" (")) {
+                        ip = ip.substring(0, ip.indexOf(" ("));
+                    }
                     if (!hash.isEmpty() && !ip.isEmpty() && ipMap.get(hash) == null) {
                         ipMap.put(hash, ip);
                     }
@@ -88,7 +94,42 @@ class BanlistRenderer {
     }
 
     /**
+     * Read sessionbans.txt and build a map of router hash to hostname.
+     * Returns hostname if present in "IP (hostname)" format, null otherwise.
+     */
+    private Map<String, String> readSessionBansHostnameMap() {
+        Map<String, String> hostnameMap = new HashMap<>();
+        File logDir = new File(_context.getRouterDir(), "sessionbans");
+        File logFile = new File(logDir, "sessionbans.txt");
+        if (!logFile.exists()) {
+            return hostnameMap;
+        }
+        try (BufferedReader reader = new BufferedReader(new FileReader(logFile))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith("#")) continue;
+                String[] parts = line.split("\\s*\\|\\s*");
+                if (parts.length >= 3) {
+                    String hash = parts[1].trim();
+                    String ipField = parts[2].trim();
+                    // Extract hostname from "IP (hostname)" format
+                    String hostname = null;
+                    if (!ipField.isEmpty() && ipField.contains(" (") && ipField.endsWith(")")) {
+                        hostname = ipField.substring(ipField.indexOf(" (") + 2, ipField.length() - 1);
+                    }
+                    if (!hash.isEmpty() && hostname != null && !hostname.isEmpty() && hostnameMap.get(hash) == null) {
+                        hostnameMap.put(hash, hostname);
+                    }
+                }
+            }
+        } catch (IOException e) {
+        }
+        return hostnameMap;
+    }
+
+    /**
      * Read sessionbans.txt and build a list of IP-only bans.
+     * Handles format: "IP (hostname)" or just "IP"
      */
     private List<IPBanEntry> readSessionBansIPOnly() {
         List<IPBanEntry> ipBans = new ArrayList<>();
@@ -105,13 +146,20 @@ class BanlistRenderer {
                 String[] parts = line.split("\\s*\\|\\s*");
                 if (parts.length >= 4) {
                     String hash = parts[1].trim();
-                    String ip = parts[2].trim();
+                    String ipField = parts[2].trim();
                     String reason = parts[3].trim();
                     String durationStr = parts.length >= 5 ? parts[4].trim() : "";
+                    // Extract IP and hostname from "IP (hostname)" format
+                    String ip = ipField;
+                    String hostname = null;
+                    if (!ip.isEmpty() && ipField.contains(" (") && ipField.endsWith(")")) {
+                        ip = ipField.substring(0, ipField.indexOf(" ("));
+                        hostname = ipField.substring(ipField.indexOf(" (") + 2, ipField.length() - 1);
+                    }
                     if (hash.isEmpty() && !ip.isEmpty()) {
                         long expires = parseDuration(durationStr, now);
                         if (expires > now) {
-                            ipBans.add(new IPBanEntry(ip, reason, expires, durationStr));
+                            ipBans.add(new IPBanEntry(ip, hostname, reason, expires, durationStr));
                         }
                     }
                 }
@@ -148,12 +196,14 @@ class BanlistRenderer {
      */
     private static class IPBanEntry {
         final String ip;
+        final String hostname;
         final String reason;
         final long expires;
         final String durationStr;
 
-        IPBanEntry(String ip, String reason, long expires, String durationStr) {
+        IPBanEntry(String ip, String hostname, String reason, long expires, String durationStr) {
             this.ip = ip;
+            this.hostname = hostname;
             this.reason = reason;
             this.expires = expires;
             this.durationStr = durationStr;
@@ -215,6 +265,7 @@ class BanlistRenderer {
         StringBuilder buf = new StringBuilder(1024);
         Map<Hash, Banlist.Entry> entries = new TreeMap<Hash, Banlist.Entry>(new HashComparator());
         Map<String, String> ipMap = readSessionBansIPMap();
+        Map<String, String> hostnameMap = readSessionBansHostnameMap();
         List<IPBanEntry> ipOnlyBans = readSessionBansIPOnly();
 
         entries.putAll(_context.banlist().getEntries());
@@ -278,8 +329,9 @@ class BanlistRenderer {
             if (extractedIP != null && !extractedIP.isEmpty()) {
                 ip = extractedIP;
             }
-            String hostname = null;
-            if (ip != null && !ip.isEmpty() && enableReverseLookups()) {
+            // First try to get hostname from log (already includes IP and rdns), fallback to reverse lookup
+            String hostname = hostnameMap.get(key.toBase64());
+            if (hostname == null && ip != null && !ip.isEmpty() && enableReverseLookups()) {
                 hostname = reverseLookup(ip);
             }
             buf.append("\"><td>")
@@ -303,8 +355,9 @@ class BanlistRenderer {
         // Render IP-only bans
         for (IPBanEntry ipBan : ipOnlyBans) {
             String expireString = DataHelper.formatDuration2(ipBan.expires - _context.clock().now());
-            String hostname = null;
-            if (enableReverseLookups()) {
+            // Use hostname from log if available, fallback to reverse lookup
+            String hostname = ipBan.hostname;
+            if (hostname == null && enableReverseLookups()) {
                 hostname = reverseLookup(ipBan.ip);
             }
             buf.append("<tr class=\"lazy ipOnly\">")
