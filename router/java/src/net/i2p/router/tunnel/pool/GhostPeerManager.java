@@ -54,7 +54,8 @@ public class GhostPeerManager {
         if (newCount >= getThreshold() && !_ghostSince.containsKey(peer)) {
             _ghostSince.put(peer, _context.clock().now());
             if (_log.shouldWarn()) {
-                _log.warn("Peer [" + peer.toBase64().substring(0,6) + "] marked as ghost (" + newCount + " timeouts)");
+                _log.warn("Peer [" + peer.toBase64().substring(0,6) + "] marked as ghost -> " +
+                           newCount + " consecutive tunnel build timeouts");
             }
         }
     }
