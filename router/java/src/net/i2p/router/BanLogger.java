@@ -16,7 +16,7 @@ import java.util.Set;
 import java.util.TimeZone;
 
 import net.i2p.data.Hash;
-import net.i2p.router.transport.CommSystemFacade;
+import net.i2p.router.transport.TransportManager;
 import net.i2p.util.Log;
 
 /**
@@ -334,14 +334,12 @@ public class BanLogger {
     private String getIPFromContext(Hash hash, RouterContext context) {
         if (hash == null || context == null) {return "";}
         try {
-            CommSystemFacade comm = context.commSystem();
-            if (comm == null) {return "";}
-            byte[] ipBytes = comm.getIP(hash);
+            byte[] ipBytes = context.commSystem().getIP(hash);
             if (ipBytes == null || ipBytes.length == 0) {return "";}
             String ip = InetAddress.getByAddress(ipBytes).getHostAddress();
             // Add reverse DNS if enabled and available
             if (context.getBooleanProperty("routerconsole.enableReverseLookups")) {
-                String rdns = comm.getCanonicalHostName(ipBytes);
+                String rdns = context.commSystem().getCanonicalHostName(ip);
                 if (rdns != null && !rdns.equals(ip) && !rdns.isEmpty()) {
                     return ip + " (" + rdns + ")";
                 }

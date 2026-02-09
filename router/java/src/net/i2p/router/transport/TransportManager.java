@@ -788,7 +788,7 @@ public class TransportManager implements TransportEventListener {
      *
      * @return IPv4 or IPv6 or null
      */
-    byte[] getIP(Hash peer) {
+    public byte[] getIP(Hash peer) {
         return TransportImpl.getIP(peer);
     }
 
