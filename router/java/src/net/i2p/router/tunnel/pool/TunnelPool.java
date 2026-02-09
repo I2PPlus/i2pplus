@@ -2126,12 +2126,78 @@ public class TunnelPool {
            paired = (PooledTunnelCreatorConfig) pool.getTunnel(pairedGW);
        }
        if (paired != null && paired.getLength() > 1) {
-           if (success) {
-               long requestedOn = cfg.getExpiration() - 10*60*1000;
-               int rtt = (int) (_context.clock().now() - requestedOn);
-               paired.testSuccessful(rtt);
-           } else {paired.tunnelFailed();}
-       }
+            if (success) {
+                long requestedOn = cfg.getExpiration() - 10*60*1000;
+                int rtt = (int) (_context.clock().now() - requestedOn);
+                paired.testSuccessful(rtt);
+                // Remove slow tunnels after successful test to maintain efficient pool
+                removeSlowTunnels();
+            } else {paired.tunnelFailed();}
+        }
+     }
+
+    /**
+     * Remove tunnels that are significantly slower than the pool average.
+     * This is called after a successful test to proactively remove slow tunnels
+     * without marking them as failed, keeping only efficient tunnels in the pool.
+     * Only removes a tunnel if we have adequate backup (>=2 good tunnels, or >=1 if under attack).
+     * @since 0.9.70
+     */
+    private void removeSlowTunnels() {
+        List<TunnelInfo> tunnels = listTunnels();
+        if (tunnels.size() <= 1) return;
+
+        // Calculate average latency per hop for tunnels with valid latency data
+        long totalLatency = 0;
+        int countWithLatency = 0;
+        for (TunnelInfo ti : tunnels) {
+            int latency = ti.getLastLatency();
+            if (latency > 0) {
+                int latencyPerHop = latency / ti.getLength();
+                totalLatency += latencyPerHop;
+                countWithLatency++;
+            }
+        }
+
+        if (countWithLatency < 2) return;  // Need at least 2 tunnels with data to compare
+
+        long avgLatencyPerHop = totalLatency / countWithLatency;
+        if (avgLatencyPerHop <= 0) return;
+
+        // Threshold: remove if > 2x average latency per hop
+        long threshold = avgLatencyPerHop * 2;
+
+        // Count good tunnels (below threshold or no latency data yet)
+        int goodCount = 0;
+        TunnelInfo slowest = null;
+        long slowestLatency = -1;
+        for (TunnelInfo ti : tunnels) {
+            int latency = ti.getLastLatency();
+            if (latency <= 0) {
+                goodCount++;  // Assume untested tunnels are okay
+            } else {
+                int latencyPerHop = latency / ti.getLength();
+                if (latencyPerHop <= threshold) {
+                    goodCount++;
+                } else if (latencyPerHop > slowestLatency) {
+                    slowestLatency = latencyPerHop;
+                    slowest = ti;
+                }
+            }
+        }
+
+        if (slowest == null) return;
+
+        // Determine minimum required based on attack status
+        boolean isUnderAttack = _context.profileOrganizer().isLowBuildSuccess();
+        int minRequired = isUnderAttack ? 2 : 2;
+
+        if (goodCount >= minRequired && slowest != null) {
+            if (_log.shouldInfo()) {
+                _log.info("Removing slow tunnel " + slowest + " (latency/hop: " + slowestLatency + "ms, pool avg: " + avgLatencyPerHop + "ms/hop)");
+            }
+            removeTunnel(slowest);
+        }
     }
 
     /**
