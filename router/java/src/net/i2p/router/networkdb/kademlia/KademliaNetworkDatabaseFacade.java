@@ -1686,7 +1686,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private boolean checkCountryBlocking(RouterInfo routerInfo, String caps, String routerId, Hash h) {
         String country = _context.commSystem().getCountry(h);
         if (country == null) country = "unknown";
-        boolean isFF = caps.contains("F");
+        boolean isFF = caps.toLowerCase().contains("f");
         boolean isStrict = _context.commSystem().isInStrictCountry();
         boolean isHidden = _context.router().isHidden();
         boolean blockMyCountry = _context.getBooleanProperty(PROP_BLOCK_MY_COUNTRY);
@@ -1723,14 +1723,13 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         }
         if (blockXG && isRouterBlockXG(routerInfo, h.equals(_context.routerHash()))) {
             if (!_context.banlist().isBanlisted(h)) {
-                if (_log.shouldInfo()) {
-                    _log.info("Dropping RouterInfo [" + routerId + "] -> XG Router");
-                }
                 if (_log.shouldWarn()) {
-                    _log.warn("Banning " + (caps.isEmpty() ? "" : caps + " ") + (isFF ? "Floodfill" : "Router") + " [" + routerId + "] for 4h -> XG Router (no transit tunnels)");
+                    _log.warn("Banning " + (caps.isEmpty() ? "" : caps + " ") + (isFF ? "Floodfill" : "Router") +
+                              " [" + routerId + "] for 4h -> XG Router (no transit tunnels)");
                 }
-                _context.banlist().banlistRouter(h, " <b>➜</b> XG Router (no transit tunnels)", null, null, _context.clock().now() + 4*60*60*1000);
-                _banLogger.logBan(h, _context, "XG Router (no transit tunnels)", 4*60*60*1000);
+                _context.banlist().banlistRouter(h, " <b>➜</b> XG Router (" + (isFF ? "floodfill / " : "") + "no transit)",
+                                                 null, null, _context.clock().now() + 4*60*60*1000);
+                _banLogger.logBan(h, _context, "XG Router (" + (isFF ? "floodfill / " : "") + "no transit)", 4*60*60*1000);
             }
             return true;
         }
@@ -2016,13 +2015,17 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         }
 
         boolean isUs = _context.routerHash().equals(key);
+        String caps = routerInfo.getCapabilities() != null ? routerInfo.getCapabilities() : "";
+        boolean isFF = caps.toLowerCase().contains("f");
         if (blockXG && isRouterBlockXG(routerInfo, isUs)) {
             if (_log.shouldInfo()) {
-                _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] on store -> XG Router");
+                _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] on store -> XG Router" +
+                          (isFF ? " (floodfill)" : ""));
             }
             if (!_context.banlist().isBanlisted(key)) {
-                _context.banlist().banlistRouter(key, " <b>➜</b> XG Router (no transit tunnels)", null, null, _context.clock().now() + 4*60*60*1000);
-                _banLogger.logBan(key, _context, "XG Router (no transit tunnels)", 4*60*60*1000);
+                _context.banlist().banlistRouter(key, " <b>➜</b> XG Router (" + (isFF ? "floodfill / " : "") + "no transit)",
+                                                 null, null, _context.clock().now() + 4*60*60*1000);
+                _banLogger.logBan(key, _context, "XG Router (" + (isFF ? "floodfill / " : "") + "no transit)", 4*60*60*1000);
             }
             return rv;
         }
