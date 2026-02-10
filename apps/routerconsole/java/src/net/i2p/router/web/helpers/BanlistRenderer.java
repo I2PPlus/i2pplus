@@ -192,7 +192,7 @@ class BanlistRenderer {
     }
 
     /**
-     * Entry for IP-only bans from sessionbans.txt.
+     * Entry for IP-only bans from sessionbans.txt
      */
     private static class IPBanEntry {
         final String ip;
@@ -275,17 +275,20 @@ class BanlistRenderer {
             return;
         }
 
-        buf.append("<table id=sessionBanned>\n<thead><tr><th data-sort-use-group=true>")
+        // Column order: Country Flag, Router Hash, Reason, IP Address, Hostname, Expiry
+        buf.append("<table id=sessionBanned>\n<thead><tr><th class=hash data-sort-use-group=true>")
+           .append(_t("Router"))
+           .append("</th><th class=country>")
+           .append(_t("Country"))
+           .append("</th><th class=reason>")
            .append(_t("Reason"))
-           .append("</th><th></th><th>")
-           .append(_t("Router Hash"))
-           .append("</th><th>")
+           .append("</th><th class=ip>")
            .append(_t("IP Address"))
            .append("</th>");
         if (enableReverseLookups()) {
-            buf.append("<th>").append(_t("Hostname")).append("</th>");
+            buf.append("<th class=hostname>").append(_t("Hostname")).append("</th>");
         }
-        buf.append("<th data-sort-method=number data-sort-direction=ascending>")
+        buf.append("<th class=expires data-sort-method=number data-sort-direction=ascending>")
            .append(_t("Expiry"))
            .append("</th></tr></thead>\n<tbody id=sessionBanlist>\n");
         int tempBanned = 0;
@@ -301,20 +304,17 @@ class BanlistRenderer {
                  !entry.cause.toLowerCase().contains("hashpatterndetector"))) {
                 continue;
             }
-            buf.append("<tr class=\"lazy");
+            buf.append("<tr");
             if (entry.cause.toLowerCase().contains("floodfill")) {
-                buf.append(" banFF");
+                buf.append(" class=\"banFF\"");
             }
+            buf.append(">");
             String reason = _t(entry.cause, entry.causeCode)
                 .replace("<b>➜</b> ", "")
                 .replace("<b> -> </b>", "")
                 .replace(" -> ", "")
                 .replaceAll("^\\s*[<-]?\\s*", "")
                 .trim();
-            // Remove trailing colon and any trailing whitespace
-            if (reason.endsWith(":")) {
-                reason = reason.substring(0, reason.length() - 1).trim();
-            }
             String lcReason = reason.toLowerCase();
             String extractedIP = null;
             if (lcReason.startsWith("blocklist")) {
@@ -334,19 +334,39 @@ class BanlistRenderer {
             if (hostname == null && ip != null && !ip.isEmpty() && enableReverseLookups()) {
                 hostname = reverseLookup(ip);
             }
-            buf.append("\"><td>")
-               .append(reason)
-               .append("</td><td>:</td><td>")
+            // GeoIP lookup for country flag - try hash first, then IP
+            String countryCode = "xx";
+            if (key != null) {
+                String geoCountry = _context.commSystem().getCountry(key);
+                if (geoCountry != null && !geoCountry.isEmpty()) {
+                    countryCode = geoCountry.toLowerCase();
+                }
+            }
+            // Fallback to IP lookup if hash lookup failed or returned "xx"
+            if (("xx".equals(countryCode) || countryCode.isEmpty()) && ip != null && !ip.isEmpty()) {
+                String geoCountry = _context.commSystem().getCountry(ip);
+                if (geoCountry != null && !geoCountry.isEmpty()) {
+                    countryCode = geoCountry.toLowerCase();
+                }
+            }
+
+            String countryName =  _context.commSystem().getCountryName(countryCode);
+            buf.append("<td class=hash>")
                .append(key != null ? "<span class=b64>" + key.toBase64() + "</span>" : "")
-               .append("</td><td>")
+               .append("</td><td class=country data-sort=\"").append(countryCode).append("\">")
+               .append("<img width=28 height=21 title=\"").append(countryName)
+               .append("\" src=\"/flags.jsp?c=").append(countryCode).append("\">")
+               .append("</td><td class=reason>")
+               .append(reason)
+               .append("</td><td class=ip>")
                .append(ip != null ? ip : "")
                .append("</td>");
             if (enableReverseLookups()) {
-                buf.append("<td>")
+                buf.append("<td class=hostname>")
                    .append(hostname != null && !hostname.isEmpty() && !"unknown".equals(hostname) ? hostname : "")
                    .append("</td>");
             }
-            buf.append("<td data-sort=").append(expires).append(">")
+            buf.append("<td class=expires data-sort=").append(expires).append(">")
                .append(expireString)
                .append("</td></tr>\n");
             tempBanned++;
@@ -360,10 +380,20 @@ class BanlistRenderer {
             if (hostname == null && enableReverseLookups()) {
                 hostname = reverseLookup(ipBan.ip);
             }
-            buf.append("<tr class=\"lazy ipOnly\">")
-               .append("<td>")
+            // GeoIP lookup for country flag - IP only (no hash available for IP-only bans)
+            String countryCode = "xx";
+            if (ipBan.ip != null && !ipBan.ip.isEmpty()) {
+                String geoCountry = _context.commSystem().getCountry(ipBan.ip);
+                if (geoCountry != null && !geoCountry.isEmpty()) {
+                    countryCode = geoCountry.toLowerCase();
+                }
+            }
+            buf.append("<tr class=\"ipOnly\">")
+               .append("<td data-sort=\"").append(countryCode).append("\">")
+               .append("<img width=20 height=15 alt=\"").append(countryCode.toUpperCase()).append("\" src=\"/flags.jsp?c=").append(countryCode).append("\">")
+               .append("</td><td></td><td>")
                .append(ipBan.reason.isEmpty() ? "IP Ban" : ipBan.reason)
-               .append("</td><td>:</td><td></td><td>")
+               .append("</td><td>")
                .append(ipBan.ip)
                .append("</td>");
             if (enableReverseLookups()) {

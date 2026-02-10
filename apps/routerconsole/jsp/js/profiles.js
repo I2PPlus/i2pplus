@@ -83,7 +83,7 @@ import { refreshElements } from "./refreshElements.js";
     const total = rows.length;
 
     rows.forEach((row) => {
-      const reasonCell = row.querySelector("td:first-child");
+      const reasonCell = row.querySelector("td.reason");
       if (reasonCell) {
         let reason = reasonCell.textContent;
         reason = reason.split("(")[0].trim();

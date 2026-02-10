@@ -134,6 +134,14 @@ public abstract class CommSystemFacade implements Service {
     /** @since 0.9.16 */
     public boolean isInStrictCountry(RouterInfo ri) { return false; }
 
+    /**
+     *  Get country code for an IP address
+     *  @param ip IP address string (IPv4 or IPv6)
+     *  @return two-letter lower-case country code or null if not found
+     *  @since 0.9.68+
+     */
+    public String getCountry(String ip) { return null; }
+
     public String getCountry(Hash peer) { return null; }
     public String getCountryName(String code) { return code; }
 

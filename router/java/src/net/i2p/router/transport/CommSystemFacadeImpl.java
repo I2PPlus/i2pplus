@@ -1961,6 +1961,18 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
+     * Get country code for an IP address.
+     * @param ip IP address string (IPv4 or IPv6)
+     * @return two-letter lower-case country code or null if not found
+     * @since 0.9.68+
+     */
+    @Override
+    public String getCountry(String ip) {
+        if (_geoIP == null || ip == null || ip.isEmpty()) {return null;}
+        return _geoIP.get(ip);
+    }
+
+    /**
      * Renders HTML for a peer with optional extended info.
      * Uses cached RouterInfo, country info, and reverse lookup cache.
      *
