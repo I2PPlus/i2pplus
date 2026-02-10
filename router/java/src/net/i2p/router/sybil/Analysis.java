@@ -178,19 +178,54 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
             String source = file.toString();
             String when = DataHelper.formatTime(file.lastModified());
             for (Map.Entry<String, Long> e : map.entrySet()) {
-                String s = e.getKey();
-                if (s.contains(".") || s.contains(":")) {
-                    bl.add(s, source);
+                String entry = e.getKey();
+                String ip = extractIP(entry);
+                String hashStr = extractHash(entry);
+                if (hashStr.contains(".") || hashStr.contains(":")) {
+                    // Pure IP address
+                    bl.add(hashStr, source);
                 } else {
-                    byte[] b = Base64.decode(s);
+                    // Hash or hash|ip
+                    byte[] b = Base64.decode(hashStr);
                     if (b != null && b.length == Hash.HASH_LENGTH) {
                         Hash h = Hash.create(b);
                         long until = e.getValue().longValue();
-                        String reason = " <b>➜</b> Sybil Analysis ({0})";
+                        String reason;
+                        if (ip != null) {
+                            reason = " <b>➜</b> Sybil Analysis (" + ip + ")";
+                        } else {
+                            reason = " <b>➜</b> Sybil Analysis";
+                        }
                         ban.banlistRouter(h, reason, when, null, until);
                     }
                 }
             }
+        }
+
+        /**
+         * Extract the IP address from a blocklist entry.
+         * @param entry the blocklist entry (could be ip, hash, or hash|ip)
+         * @return the IP address if present, null otherwise
+         */
+        private String extractIP(String entry) {
+            int pipeIndex = entry.indexOf('|');
+            if (pipeIndex > 0) {
+                return entry.substring(pipeIndex + 1);
+            }
+            return null;
+        }
+
+        /**
+         * Extract the hash from a blocklist entry.
+         * @param entry the blocklist entry (could be ip, hash, or hash|ip)
+         * @return the hash string (base64) or null if it's an IP
+         */
+        private String extractHash(String entry) {
+            int pipeIndex = entry.indexOf('|');
+            if (pipeIndex > 0) {
+                return entry.substring(0, pipeIndex);
+            }
+            return entry;
         }
     }
 
@@ -485,24 +520,31 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
         long now = _context.clock().now();
         long blockUntil = _context.getProperty(Analysis.PROP_BLOCKTIME, DEFAULT_BLOCK_TIME) + now;
         try {
-            threshold = Double.parseDouble(_context.getProperty(PROP_THRESHOLD, Double.toString(DEFAULT_BLOCK_THRESHOLD)));
+            threshold = Double.parseDouble(_context.getProperty(Analysis.PROP_THRESHOLD, Double.toString(DEFAULT_BLOCK_THRESHOLD)));
             if (threshold < MIN_BLOCK_POINTS) {threshold = MIN_BLOCK_POINTS;}
         } catch (NumberFormatException nfe) {}
-        String day = DataHelper.formatTime(now);
         Set<String> blocks = new HashSet<String>();
         for (Map.Entry<Hash, Points> e : points.entrySet()) {
             double p = e.getValue().getPoints();
             if (p >= threshold) {
                 Hash h = e.getKey();
-                blocks.add(h.toBase64());
+                String ip = null;
                 RouterInfo ri = _context.netDb().lookupRouterInfoLocally(h);
                 if (ri != null) {
                     for (RouterAddress ra : ri.getAddresses()) {
-                        byte[] ip = ra.getIP();
-                        if (ip != null) {_context.blocklist().add(ip, "Sybil " + h.toBase64());}
+                        byte[] ipBytes = ra.getIP();
+                        if (ipBytes != null) {
+                            ip = Addresses.toString(ipBytes);
+                            _context.blocklist().add(ipBytes, "Sybil " + h.toBase64());
+                        }
                         String host = ra.getHost();
                         if (host != null) {blocks.add(host);}
                     }
+                }
+                if (ip != null) {
+                    blocks.add(h.toBase64() + "|" + ip);
+                } else {
+                    blocks.add(h.toBase64());
                 }
                 String reason = " <b>➜</b> Sybil Scan (" + fmt.format(p).replace(".00", "") + " points)";
                 _context.banlist().banlistRouter(h, reason, null, null, blockUntil);

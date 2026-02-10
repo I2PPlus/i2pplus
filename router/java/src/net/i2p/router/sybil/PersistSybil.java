@@ -320,7 +320,7 @@ public class PersistSybil {
     /**
      *  Write the blocklist.
      *  The format is different than other blocklists because we include an expiration.
-     *  Format: One per line: ip or hash,expiration time (ms)
+     *  Format: One per line: ip or hash or hash|ip,expiration time (ms)
      *
      *  @param blocks non-empty, will be merged with existing entries
      *  @since 0.9.50
@@ -345,7 +345,7 @@ public class PersistSybil {
         try {
             out = new OutputStreamWriter(new SecureFileOutputStream(blFile), "UTF-8");
             out.write("# Format (one per line)\n");
-            out.write("# IP or Base64 router hash,expiration (ms)\n");
+            out.write("# IP or Base64 router hash or Base64 router hash|IP,expiration (ms)\n");
             for (Map.Entry<String, Long> e : map.entrySet()) {
                 out.write(e.getKey());
                 out.write(',');
