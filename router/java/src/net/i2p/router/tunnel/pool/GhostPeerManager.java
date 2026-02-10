@@ -22,10 +22,10 @@ public class GhostPeerManager {
     private final ConcurrentHashMap<Hash, AtomicInteger> _timeoutCounts;
     private final ConcurrentHashMap<Hash, Long> _ghostSince;
 
-    private static final int DEFAULT_TIMEOUT_THRESHOLD = 10;
-    private static final int ATTACK_TIMEOUT_THRESHOLD = 5;
-    private static final long COOLDOWN_MS = 10*60*1000; // 10 minutes (normal)
-    private static final long ATTACK_COOLDOWN_MS = 5*60*1000; // 5 minutes (faster recovery during attacks)
+    private static final int DEFAULT_TIMEOUT_THRESHOLD = 5;
+    private static final int ATTACK_TIMEOUT_THRESHOLD = 3;
+    private static final long COOLDOWN_MS = 90*1000; // 90s (normal)
+    private static final long ATTACK_COOLDOWN_MS = 60*1000; // 60s (faster recovery during attacks)
     private static final int MAX_TRACKED_PEERS = 8192;
 
     public GhostPeerManager(RouterContext context) {
@@ -110,7 +110,7 @@ public class GhostPeerManager {
 
          long elapsed = _context.clock().now() - since;
          double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
-         long cooldown = (buildSuccess > 0 && buildSuccess < 0.40)
+         long cooldown = (buildSuccess >= 0 && buildSuccess < 0.40)
                          ? ATTACK_COOLDOWN_MS
                          : COOLDOWN_MS;
          return elapsed < cooldown;
