@@ -59,3 +59,20 @@
 #totaljobstats:hover #lag,#totaljobstats:not(:hover) #toggleJobstats{display:none}
 #tunnelconfig .tunnelName{margin-right:6px;min-width:240px;display:inline-block}
 #tunnelconfig .tunnelName::before{margin:-4px 6px -4px 0;width:20px;height:20px;display:inline-block;vertical-align:middle;background:url(/themes/console/images/hardhat.svg) no-repeat center center/20px;content:""}
+
+/* session bans */
+#sessionBanned{margin:11px auto 9px}
+#sessionBanned th,#sessionBanned td{padding:6px 12px}
+#sessionBanned td:nth-child(n+2){border-left:var(--border_softer)}
+#profiles #sessionBanned tfoot th{padding:8px 12px;text-align:center}
+#sessionBanned td.hash::before{width:26px;height:20px;display:inline-block;vertical-align:middle;background:var(--client) no-repeat left center/18px;content:""}
+#sessionBanned .banFF td.hash::before{background:var(--floodfill) no-repeat left center/18px}
+#sessionBanned .b64{padding:5px 8px;display:inline-block;vertical-align:middle;line-height:1;font-family:var(--monospaced);font-size:90%;font-weight:500;box-shadow:var(--bevel);background:var(--badge);user-select:all}
+#sessionBanned thead th{font-size:85%}
+#sessionBanned th{text-align:center;user-select:none}
+#sessionBanned .country,#sessionBanned .hash{width:1%;white-space:nowrap;text-align:center}
+#sessionBanned .expires{width:1%;white-space:nowrap;text-align:right}
+#sessionBanned th.expires{text-align:center}
+#sessionBanned th.hash{text-align:left}
+#sessionBanned .hostname,#sessionBanned .ip,#sessionBanned .reason{width:19%;text-align:center}
+#sessionBanned td.country img{width:28px!important;height:21px!important;border-radius:2px}

@@ -72,7 +72,7 @@ ul{margin:20px 0;padding:0}
 .links ul{margin-top:-5px}
 .main li{text-align:left;list-style:square;margin:2px 20px 0 40px;padding:1px 10px;line-height:1.5;word-wrap:break-word}
 .separator hr,.separator hr:last-child{margin:3px 0 -10px;height:1px;display:block;color:#0000;border-bottom:1px dashed #adadeb;background:#0000}
-.tunneldisplay tr:hover td:not(.rif):not(.rih):not(.rbw),#clientconfig tr:hover td,#debug tr:hover td,#eventlog tr:hover td,#floodfills tr:hover td:not(.rif):not(.rih):not(.rbw),#jardump tr:hover td,#jobstats tr:nth-last-child(n+2):hover td,#netdboverview table tr:hover td,#ntcpconnections tr:nth-last-child(n+2):hover td:not(.rif):not(.rih):not(.rbw),#portfaq tr:hover td,#profilelist tr:not(.lazyhide):hover td:not(.rif):not(.rih):not(.rbw),#schedjobs tr:hover td,#sidebarconf tr:nth-last-child(n+2):hover td,#udpconnections tr:nth-last-child(n+2):hover td:not(.rif):not(.rih):not(.rbw),#webappconfig tr:hover td,.tx tr:hover td{background-color:#ffd;color:var(--ink_darker);transition:ease background .2s .01s}
+.tunneldisplay tr:hover td:not(.rif):not(.rih):not(.rbw),#clientconfig tr:hover td,#debug tr:hover td,#eventlog tr:hover td,#floodfills tr:hover td:not(.rif):not(.rih):not(.rbw),#jardump tr:hover td,#jobstats tr:nth-last-child(n+2):hover td,#netdboverview table tr:hover td,#ntcpconnections tr:nth-last-child(n+2):hover td:not(.rif):not(.rih):not(.rbw),#portfaq tr:hover td,#profilelist tr:not(.lazyhide):hover td:not(.rif):not(.rih):not(.rbw),#schedjobs tr:hover td,#sidebarconf tr:nth-last-child(n+2):hover td,#udpconnections tr:nth-last-child(n+2):hover td:not(.rif):not(.rih):not(.rbw),#webappconfig tr:hover td,.tx tr:hover td,#sessionBanlist tr:hover{background-color:#ffd;color:var(--ink_darker);transition:ease background .2s .01s}
 .widescroll{overflow:auto}
 #config_clients #i2pclientconfig a{margin-top:-8px}
 #news a+tt{margin-left:4px}
@@ -905,17 +905,7 @@ h1::first-letter{font-size:112%}
 #permabanned td:first-child{padding-right:10px;width:49%;text-align:right}
 #permabanned td:last-child{padding-left:10px;width:49%;text-align:left}
 #permabanned td:nth-child(2){width:2%}
-#profiles #sessionBanned th,#profiles #sessionBanned td{padding:6px 12px;text-align:left}
-#profiles #sessionBanned th:nth-child(4),#profiles #sessionBanned td:nth-child(4){text-align:right}
-#sessionBanned .b64{padding:5px 8px;display:inline-block;vertical-align:middle;line-height:1;font-family:var(--monospaced);font-size:90%;font-weight:500;box-shadow:var(--bevel);background:var(--badge);user-select:all}
-#sessionBanned .banFF td:first-child::before{background:var(--floodfill) no-repeat left center/18px}
 #sessionBanned{margin:11px auto 9px}
-#sessionBanned td:first-child::before{width:26px;height:20px;display:inline-block;vertical-align:middle;background:var(--client) no-repeat left center/18px;content:""}
-#sessionBanned tfoot th{padding:8px 12px}
-#sessionBanned thead th{font-size:90%;text-align:left}
-#sessionBanned th:last-child,#sessionBanned td:last-child{user-select:none}
-#sessionBanned th:nth-child(2),#sessionBanned td:nth-child(2){font-size:0}
-#sessionBanned th{user-select:none}
 
 /* certs */
 #certs h3{margin-top:15px;margin-bottom:-6px;border-width:1px;border-radius:0;filter:none}
