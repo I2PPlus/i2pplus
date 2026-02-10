@@ -217,7 +217,7 @@ public class NtpClient {
                 msg.transmitTimestamp <= 0 || Math.abs(msg.rootDelay) > 1.0d ||
                 Math.abs(msg.rootDispersion) > 1.0d) {
                 if (log != null && log.shouldWarn()) {
-                    log.warn("Sanity check failed for NTP response from " + serverName + " (" + ipAddress + "):\n" + msg);
+                    log.warn("Sanity check failed for NTP response from " + serverName + " (" + ipAddress + ") \n* " + msg);
                 }
                 return null;
             }
@@ -226,7 +226,7 @@ public class NtpClient {
                 String koDDetails = msg.referenceIdentifierToString();
                 kisses.put(ipAddress, koDDetails);
                 if (log != null) {
-                    log.logAlways(Log.WARN, "Received Kiss of Death (KoD) from NTP server " + serverName + " (" + ipAddress + "). Reason: " + koDDetails);
+                    log.logAlways(Log.WARN, "Received Kiss of Death (KoD) from NTP server " + serverName + " (" + ipAddress + ") \n* Reason: " + koDDetails);
                 }
                 return null;
             }
@@ -245,7 +245,7 @@ public class NtpClient {
             return result;
         } catch (IOException ioe) {
             if (log != null && log.shouldWarn()) {
-                log.warn("IOException during NTP query to server " + serverName + ": " + ioe);
+                log.warn("Failed connection to NTP server " + serverName + "\n* Reason: " + ioe);
             }
             return null;
         } finally {

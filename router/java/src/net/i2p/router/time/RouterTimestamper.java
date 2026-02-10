@@ -228,7 +228,7 @@ public class RouterTimestamper extends Timestamper {
                         }
                         all.addAll(_servers);
                         String msg = "Unable to reach any of the NTP servers " + all +
-                                     " - network disconnected? Or set time.sntpServerList=myserver1.com,myserver2.com in advanced configuration.";
+                                     " -> Network disconnected? \n* Note: time.sntpServerList=myserver1.com,myserver2.com to configure alternative time servers";
                         _log.logAlways(Log.WARN, msg);
                         System.out.println("Warning: " + msg);
                     } else if (_log.shouldDebug()) {
