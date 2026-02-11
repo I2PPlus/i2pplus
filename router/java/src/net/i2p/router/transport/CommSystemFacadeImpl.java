@@ -2063,7 +2063,11 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     @Override
     public String getCountry(String ip) {
         if (_geoIP == null || ip == null || ip.isEmpty()) {return null;}
-        return _geoIP.get(ip);
+        String country = _geoIP.get(ip);
+        if (country == null) {
+            _geoIP.add(ip);
+        }
+        return country;
     }
 
     /**
