@@ -94,10 +94,10 @@ public class ConnectChecker {
         }
 
         boolean rv = (ct & cf) != 0;
-        if (!rv && log.shouldWarn()) {
-            log.warn("Cannot connect [" +
-                     (usf ? "Our Router" : from.toString().substring(0,6)) + "] with mask " + cf + " -> [" +
-                     (ust ? "Our Router" : to.toString().substring(0,6)) + "] with mask " + ct);
+        if (!rv && log.shouldDebug()) {
+            log.debug("Cannot connect [" +
+                      (usf ? "Our Router" : from.toString().substring(0,6)) + "] with mask " + cf + " -> [" +
+                      (ust ? "Our Router" : to.toString().substring(0,6)) + "] with mask " + ct);
         }
         return rv;
     }
