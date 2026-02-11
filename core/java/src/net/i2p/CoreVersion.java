@@ -29,7 +29,7 @@ public class CoreVersion {
      *
      *  RouterVersion.FULL_VERSION is suggested for display to the user.
      */
-    public final static String VERSION = "2.10.0";
+    public final static String VERSION = "2.11.0";
 
     /**
      *  The version published in the netdb via StatisticsManager. This is the API version.
@@ -44,7 +44,7 @@ public class CoreVersion {
      *
      *  @since 0.9.46
      */
-    public final static String PUBLISHED_VERSION = "0.9.67";
+    public final static String PUBLISHED_VERSION = "0.9.68";
 
     /**
      *  For Vuze.
