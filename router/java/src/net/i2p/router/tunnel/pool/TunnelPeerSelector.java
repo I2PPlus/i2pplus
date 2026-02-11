@@ -956,8 +956,9 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             RouterInfo prevRI = (RouterInfo) ctx.netDb().lookupLocallyWithoutValidation(prevHop);
             RouterInfo candRI = (RouterInfo) ctx.netDb().lookupLocallyWithoutValidation(candidate);
             if (prevRI == null || candRI == null) {
-                s.add(candidate);
-                return true;
+                // Cannot validate hop-to-hop connectivity without complete RouterInfo
+                // Allow the peer - tunnel build will fail naturally if unreachable
+                return false;
             }
             int prevOutbound = getPeerConnectMask(prevRI);
             int candInbound = getConnectMask(candRI.getAddresses());
