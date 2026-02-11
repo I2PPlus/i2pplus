@@ -968,31 +968,23 @@ public class TunnelPool {
             return defensiveBuilds;
         }
 
-        // Proactive attack-time building: build extra tunnels when under attack
-        // even if we're not critically low, to maintain a buffer for expected failures
+        // Proactive attack-time building: maintain 1.5-2x tunnel buffer when under attack
+        // to compensate for expected build failures
         if (isUnderAttack) {
-            // Count tunnels expiring soon (within 5 minutes)
-            int expiringSoon = 0;
-            synchronized (_tunnels) {
-                for (TunnelInfo t : _tunnels) {
-                    long timeToExpire = t.getExpiration() - now;
-                    if (timeToExpire > 0 && timeToExpire < 5 * 60 * 1000) {
-                        expiringSoon++;
-                    }
-                }
-            }
+            // Target 1.5x wanted during attacks for redundancy
+            int targetBuffer = (int)(wanted * 1.5);
+            int attackTarget = Math.max(wanted + 1, targetBuffer);
 
-            // If we have tunnels expiring soon and total is below wanted + buffer, build extra
-            // This provides a buffer to compensate for expected build failures during attacks
-            int buffer = Math.max(2, wanted / 3); // 33% buffer, minimum 2
-            if (expiringSoon > 0 && totalExpected < wanted + buffer && inProgressCount < wanted) {
-                int proactiveBuilds = Math.min(expiringSoon, buffer);
+            if (totalExpected < attackTarget) {
+                int needed = attackTarget - totalExpected;
+                // Build up to wanted + buffer, capped at 2x wanted or 10
+                int maxAttackBuilds = Math.min(wanted * 2, 10);
+                int attackBuilds = Math.min(needed, maxAttackBuilds);
                 if (_log.shouldDebug()) {
-                    _log.debug("Proactive attack building: " + proactiveBuilds +
-                               " extra tunnels (expiring soon: " + expiringSoon +
-                               ", current: " + totalExpected + ", buffer: " + buffer + ")");
+                    _log.debug("Under attack: building " + attackBuilds + " for buffer (target: " + attackTarget +
+                               ", current: " + totalExpected + ", wanted: " + wanted + ")");
                 }
-                return proactiveBuilds;
+                return attackBuilds;
             }
         }
 
@@ -1800,6 +1792,14 @@ public class TunnelPool {
      */
     private int countHowManyToBuild(boolean isUnderAttack, boolean allowZeroHop, int expire30s, int expire90s, int expire150s, int expire210s,
                                      int expire270s, int expire360s, int expireLater, int standardAmount, int inProgress, int fallback) {
+        // Emergency: if pool is empty, always build minimum tunnels
+        // This handles the case where all expiration buckets are 0 and the algorithm
+        // would otherwise request 0 builds
+        int usableTunnels = expire30s + expire90s + expire150s + expire210s + expire270s + expire360s + expireLater;
+        if (usableTunnels <= 0 && standardAmount > 0) {
+            return Math.max(2, standardAmount);
+        }
+
         // Increase multipliers during attacks for more aggressive building
         int multiplier360 = isUnderAttack ? 2 : 1;  // 6min: normally 0, during attack 1x (early warning)
         int multiplier270 = isUnderAttack ? 2 : 1;  // 4.5min: 1x normal, 2x attack
