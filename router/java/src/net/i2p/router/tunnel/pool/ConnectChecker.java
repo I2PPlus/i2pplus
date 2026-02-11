@@ -273,7 +273,7 @@ public class ConnectChecker {
      *  @return bitmask of v4/v6 NTCP/SSU
      *  @since 0.9.34
      */
-    private static int getConnectMask(Collection<RouterAddress> addrs) {
+    protected static int getConnectMask(Collection<RouterAddress> addrs) {
         int rv = 0;
         for (RouterAddress ra : addrs) {
             String style = ra.getTransportStyle();

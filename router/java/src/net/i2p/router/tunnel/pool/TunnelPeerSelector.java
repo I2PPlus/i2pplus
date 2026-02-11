@@ -342,6 +342,17 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     }
 
     /**
+     *  Get the connect mask for a peer's addresses.
+     *  Wrapper around parent's private static method.
+     *
+     *  @since 0.9.69
+     */
+    protected int getPeerConnectMask(RouterInfo ri) {
+        if (ri == null) {return 0;}
+        return getConnectMask(ri.getAddresses());
+    }
+
+    /**
      *  Pick peers that we want to avoid for the first OB hop or last IB hop.
      *  There's several cases of importance:
      *  <ol><li>Inbound and we are hidden -
@@ -901,10 +912,60 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             boolean canConnect;
             RouterInfo peer = (RouterInfo) ctx.netDb().lookupLocallyWithoutValidation(h);
             if (peer == null) {canConnect = false;}
-            else if (isIn) {canConnect = canConnect(peer, ourMask);}
-            else {canConnect = canConnect(ourMask, peer);}
+            else if (isIn) {
+                // For inbound (peer connects to us): check if peer's outbound mask overlaps with our inbound mask
+                canConnect = canConnect(peer, ourMask);
+            } else {
+                // For outbound (we connect to peer): check if peer's inbound mask overlaps with our outbound mask
+                int peerInbound = getInboundMask(peer);
+                canConnect = (peerInbound & ourMask) != 0;
+            }
             if (!canConnect) {s.add(h);}
             return !canConnect;
+        }
+    }
+
+    /**
+     * Validates peer-to-peer connectivity in a tunnel hop chain.
+     * Excludes peers that cannot connect to the previous hop in the chain.
+     * Reduces tunnel build failures due to incompatible peers (e.g., IPv4-only ↔ IPv6-only).
+     *
+     * @since 0.9.69
+     */
+    protected class HopChainValidator extends ExcluderBase {
+        private final List<Hash> _selectedHops;
+
+        public HopChainValidator(List<Hash> selectedHops) {
+            super(new HashSet<Hash>());
+            _selectedHops = selectedHops;
+        }
+
+        @Override
+        public boolean contains(Object o) {
+            if (s.contains(o)) {return true;}
+            Hash candidate = (Hash) o;
+            if (_selectedHops.isEmpty()) {return false;}
+            Hash prevHop = _selectedHops.get(_selectedHops.size() - 1);
+            if (candidate.equals(prevHop)) {return true;}
+            if (prevHop.equals(ctx.routerHash()) || candidate.equals(ctx.routerHash())) {
+                return false;
+            }
+            if (ctx.commSystem().isEstablished(prevHop) && ctx.commSystem().isEstablished(candidate)) {
+                return false;
+            }
+            RouterInfo prevRI = (RouterInfo) ctx.netDb().lookupLocallyWithoutValidation(prevHop);
+            RouterInfo candRI = (RouterInfo) ctx.netDb().lookupLocallyWithoutValidation(candidate);
+            if (prevRI == null || candRI == null) {
+                s.add(candidate);
+                return true;
+            }
+            int prevOutbound = getPeerConnectMask(prevRI);
+            int candInbound = getInboundMask(candRI);
+            if ((prevOutbound & candInbound) == 0) {
+                s.add(candidate);
+                return true;
+            }
+            return false;
         }
     }
 
