@@ -45,7 +45,7 @@ public class ReseedBundler {
     private final static String ROUTERINFO_PREFIX = "routerInfo-";
     private final static String ROUTERINFO_SUFFIX = ".dat";
     private static final int MINIMUM = 200;
-    private static final String MIN_VERSION = "0.9.64";
+    private static final String MIN_VERSION = "0.9.65";
 
     public ReseedBundler(RouterContext ctx) {
         _context = ctx;

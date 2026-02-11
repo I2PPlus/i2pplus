@@ -49,7 +49,7 @@ class ParticipatingThrottler {
     private static final String PROP_PERCENT_LIMIT = "router.participatingThrottlerPercentLimit";
     // Cleanup interval in ms - 90 seconds
     private static final long CLEAN_TIME = 90 * 1000;
-    private static final String MIN_VERSION = "0.9.64";
+    private static final String MIN_VERSION = "0.9.65";
 
     /**
      * Result of throttling decision for tunnel participation requests.

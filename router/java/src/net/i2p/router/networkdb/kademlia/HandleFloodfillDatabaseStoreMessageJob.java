@@ -258,7 +258,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                     boolean isUnreachable = cap.indexOf(Router.CAPABILITY_REACHABLE) < 0;
                     boolean isSlow = cap.contains("K") || cap.contains("L") || cap.contains("M") || cap.contains("N");
                     boolean isFast = cap.contains("P") || cap.contains("Q") || cap.contains("X");
-                    String MIN_VERSION = "0.9.64";
+                    String MIN_VERSION = "0.9.65";
                     String v = ri.getVersion();
                     boolean isOld = VersionComparator.comp(v, MIN_VERSION) < 0;
                     boolean isInvalidVersion = VersionComparator.comp(v, "2.5.0") >= 0;

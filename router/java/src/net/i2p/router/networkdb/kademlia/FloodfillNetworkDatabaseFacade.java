@@ -750,7 +750,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         boolean forceExplore = _context.getBooleanProperty("router.exploreWhenFloodfill");
         Hash us = _context.routerHash();
         boolean isUs = info != null && us.equals(info.getIdentity().getHash());
-        String MIN_VERSION = "0.9.64";
+        String MIN_VERSION = "0.9.65";
         String v = info.getVersion();
         boolean isHidden = _context.router().isHidden();
         boolean slow = info != null && !isUs && (info.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
@@ -768,14 +768,6 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         if (info != null) {
             caps = info.getCapabilities();
             if (caps.contains("f")) {isFF = true;}
-/**
-            for (RouterAddress ra : info.getAddresses()) {
-                if (ra.getTransportStyle().contains("SSU")) {
-                    noSSU = false;
-                    break;
-                }
-            }
-**/
         }
         //boolean isBadFF = isFF && noSSU;
         boolean floodfillEnabled;
@@ -804,13 +796,6 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                 } else if (_context.jobQueue().getMaxLag() > MAX_LAG_BEFORE_SKIP_SEARCH) {
                     _log.info("Skipping lookup of RouterInfo [" + peer.toBase64().substring(0,6) + "] -> High Job Lag");
                 }
-/**
-                } else if (isBadFF) {
-                    _log.info("Skipping lookup of RouterInfo [" + peer.toBase64().substring(0,6) + "] -> Floodfill with SSU disabled");
-                    new DropLookupFailedJob(_context, peer, info);
-                } else if (getKBucketSetSize() > MAX_DB_BEFORE_SKIPPING_SEARCH) {
-                    _log.info("Skipping lookup of [" + peer.toBase64().substring(0,6) + "] -> KBucket is full");
-**/
                 super.lookupBeforeDropping(peer, info);
                 return;
             }

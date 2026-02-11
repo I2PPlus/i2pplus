@@ -72,7 +72,7 @@ public class Reseeder {
     private static final int MIN_RESEED_SERVERS = 12;
     // network ID cross-check, proposal 147, as of 0.9.42
     private static final String NETID_PARAM = "?netid=";
-    private static final String MIN_VERSION = "0.9.64";
+    private static final String MIN_VERSION = "0.9.65";
 
     /**
      *  NOTE - URLs that are in both the standard and SSL groups must use the same hostname,

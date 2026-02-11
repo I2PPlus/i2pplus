@@ -310,7 +310,7 @@ public class PersistentDataStore extends TransientDataStore {
         int stored = countStoredRIs();
 
         // Constant for minimum version check
-        final String MIN_VERSION = "0.9.64";
+        final String MIN_VERSION = "0.9.65";
 
         // Derived boolean flags — all based on actual RI data
         boolean isOld = VersionComparator.comp(version, MIN_VERSION) < 0;
@@ -719,7 +719,7 @@ public class PersistentDataStore extends TransientDataStore {
                     ri.readBytes(fis, true);  // true = verify sig on read
                     Hash h = ri.getIdentity().calculateHash();
                     String v = ri.getVersion();
-                    String MIN_VERSION = "0.9.64";
+                    String MIN_VERSION = "0.9.65";
                     String ip = null;
                     String truncHash = "";
                     Hash us = _context.routerHash();
