@@ -1725,7 +1725,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             if (!_context.banlist().isBanlisted(h)) {
                 if (_log.shouldWarn()) {
                     _log.warn("Banning " + (caps.isEmpty() ? "" : caps + " ") + (isFF ? "Floodfill" : "Router") +
-                              " [" + routerId + "] for 4h -> XG Router (no transit tunnels)");
+                              " [" + routerId + "] for 4h -> XG Router (no transit / botnet)");
                 }
                 _context.banlist().banlistRouter(h, " <b>➜</b> XG Router (" + (isFF ? "floodfill / " : "") + "no transit)",
                                                  null, null, _context.clock().now() + 4*60*60*1000);
