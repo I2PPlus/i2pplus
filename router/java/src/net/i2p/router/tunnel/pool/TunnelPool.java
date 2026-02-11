@@ -59,8 +59,11 @@ public class TunnelPool {
     private long _lastNoTunnelsWarningTime;
     private final BlockingQueue<TunnelInfo> _removalQueue = new LinkedBlockingQueue<TunnelInfo>();
     private volatile boolean _removalJobScheduled = false;
+    private final AtomicInteger _concurrentInboundBuilds = new AtomicInteger();
+    private final AtomicInteger _concurrentOutboundBuilds = new AtomicInteger();
 
     private static final int TUNNEL_LIFETIME = 10*60*1000;
+    private static final int MAX_CONCURRENT_BUILDS_PER_DIRECTION = 3;
     /** if less than one success in this many, reduce quantity (exploratory only) */
     private static final int BUILD_TRIES_QUANTITY_OVERRIDE = 12;
     /** if less than one success in this many, reduce length (exploratory only) */
@@ -103,6 +106,8 @@ public class TunnelPool {
      */
     synchronized void startup() {
         synchronized (_inProgress) {_inProgress.clear();}
+        _concurrentInboundBuilds.set(0);
+        _concurrentOutboundBuilds.set(0);
         if (_log.shouldDebug()) {
             _log.debug(toString() + ": Startup() called, was already alive? " + _alive, new Exception());
         }
@@ -146,6 +151,8 @@ public class TunnelPool {
         _context.statManager().removeRateStat(_rateName);
         synchronized (_inProgress) {_inProgress.clear();}
         _consecutiveBuildTimeouts.set(0);
+        _concurrentInboundBuilds.set(0);
+        _concurrentOutboundBuilds.set(0);
     }
 
     /**
@@ -521,13 +528,65 @@ public class TunnelPool {
     public List<PooledTunnelCreatorConfig> listPending() {synchronized (_inProgress) {return new ArrayList<PooledTunnelCreatorConfig>(_inProgress);}}
 
     /**
-     * Get the count of tunnels currently being built for this pool.
-     * @return number of tunnels in progress
-     * @since 0.9.68+
-     */
-    public int getInProgressCount() {
-        synchronized (_inProgress) {return _inProgress.size();}
-    }
+      * Get the count of tunnels currently being built for this pool.
+      * @return number of tunnels in progress
+      * @since 0.9.68+
+      */
+     public int getInProgressCount() {
+         synchronized (_inProgress) {return _inProgress.size();}
+     }
+
+     /**
+      * Check if we can start a new tunnel build for the given direction.
+      * Limits concurrent builds per pool per direction to prevent overcompensation
+      * when builds are failing.
+      *
+      * @param isInbound true for inbound pool, false for outbound
+      * @return true if a new build can be started
+      * @since 0.9.70+
+      */
+     boolean canStartBuild(boolean isInbound) {
+         AtomicInteger counter = isInbound ? _concurrentInboundBuilds : _concurrentOutboundBuilds;
+         return counter.get() < MAX_CONCURRENT_BUILDS_PER_DIRECTION;
+     }
+
+     /**
+      * Record that a tunnel build has started for this pool.
+      * Should be called when the build is actually sent to the network.
+      *
+      * @param isInbound true for inbound pool, false for outbound
+      * @since 0.9.70+
+      */
+     void buildStarted(boolean isInbound) {
+         AtomicInteger counter = isInbound ? _concurrentInboundBuilds : _concurrentOutboundBuilds;
+         counter.incrementAndGet();
+     }
+
+     /**
+      * Record that a tunnel build has completed for this pool.
+      * Should be called when the build finishes (success or failure).
+      *
+      * @param isInbound true for inbound pool, false for outbound
+      * @since 0.9.70+
+      */
+     void buildFinished(boolean isInbound) {
+         AtomicInteger counter = isInbound ? _concurrentInboundBuilds : _concurrentOutboundBuilds;
+         counter.decrementAndGet();
+     }
+
+     /**
+      * Get the current count of concurrent builds for inbound direction.
+      * @return number of concurrent inbound builds
+      * @since 0.9.70+
+      */
+     int getConcurrentInboundBuilds() { return _concurrentInboundBuilds.get(); }
+
+     /**
+      * Get the current count of concurrent builds for outbound direction.
+      * @return number of concurrent outbound builds
+      * @since 0.9.70+
+      */
+     int getConcurrentOutboundBuilds() { return _concurrentOutboundBuilds.get(); }
 
     /**
      * Get the adjusted total quantity of tunnels we want for this pool.
@@ -1867,6 +1926,22 @@ public class TunnelPool {
                        + "; [std] " + standardAmount + "; [inProgress] " + inProgress + "; [fallback] " + fallback);
         }
         if (rv < 0) {return 0;}
+
+        // Cap builds per direction to prevent overcompensation during failures
+        // This limits concurrent build requests for each tunnel pool/direction
+        int maxAllowed = MAX_CONCURRENT_BUILDS_PER_DIRECTION;
+        int currentConcurrent = _settings.isInbound() ? _concurrentInboundBuilds.get() : _concurrentOutboundBuilds.get();
+        int availableSlots = maxAllowed - currentConcurrent;
+        if (availableSlots < 0) {availableSlots = 0;}
+        if (rv > availableSlots) {
+            if (_log.shouldDebug()) {
+                _log.debug(toString() + " limiting builds from " + rv + " to " + availableSlots +
+                           " (current concurrent: " + currentConcurrent + " for " +
+                           (_settings.isInbound() ? "inbound" : "outbound") + ")");
+            }
+            rv = availableSlots;
+        }
+
         return rv;
     }
 
@@ -2041,6 +2116,7 @@ public class TunnelPool {
 
         if (_log.shouldDebug()) {_log.debug("Tunnel Pool created \n* Peers: " + peers + cfg);}
         synchronized (_inProgress) {_inProgress.add(cfg);}
+        buildStarted(_settings.isInbound());
         return cfg;
     }
 
@@ -2059,6 +2135,7 @@ public class TunnelPool {
         }
 
         synchronized (_inProgress) {_inProgress.remove(cfg);}
+        buildFinished(_settings.isInbound());
 
         switch (result) {
             case SUCCESS:
