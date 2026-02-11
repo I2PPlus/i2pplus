@@ -275,8 +275,8 @@ class BanlistRenderer {
             return;
         }
 
-        // Column order: Country Flag, Router Hash, Reason, IP Address, Hostname, Expiry
-        buf.append("<table id=sessionBanned>\n<thead><tr><th class=hash data-sort-use-group=true>")
+        // Column order: Router Hash, Country Flag, Reason, IP Address, Hostname, Expiry
+        buf.append("<div class=tablewrap>\n<table id=sessionBanned>\n<thead><tr><th class=hash data-sort-use-group=true>")
            .append(_t("Router"))
            .append("</th><th class=country>")
            .append(_t("Country"))
@@ -388,20 +388,22 @@ class BanlistRenderer {
                     countryCode = geoCountry.toLowerCase();
                 }
             }
+            String countryName =  _context.commSystem().getCountryName(countryCode);
             buf.append("<tr class=\"ipOnly\">")
-               .append("<td data-sort=\"").append(countryCode).append("\">")
-               .append("<img width=20 height=15 alt=\"").append(countryCode.toUpperCase()).append("\" src=\"/flags.jsp?c=").append(countryCode).append("\">")
-               .append("</td><td></td><td>")
+               .append("<td class=hash>")  // No hash available for IP-only bans
+               .append("</td>")
+               .append("<td class=country data-sort=\"").append(countryCode).append("\">")
+               .append("<img width=28 height=21 title=\"").append(countryName)
+               .append("\" src=\"/flags.jsp?c=").append(countryCode).append("\">")
+               .append("</td><td class=reason>")
                .append(ipBan.reason.isEmpty() ? "IP Ban" : ipBan.reason)
-               .append("</td><td>")
-               .append(ipBan.ip)
-               .append("</td>");
+               .append("</td><td class=ip>")
+               .append(ipBan.ip);
             if (enableReverseLookups()) {
-                buf.append("<td>")
-                   .append(hostname != null && !hostname.isEmpty() && !"unknown".equals(hostname) ? hostname : "")
-                   .append("</td>");
+                buf.append("</td><td class=hostname>")
+                   .append(hostname != null && !hostname.isEmpty() && !"unknown".equals(hostname) ? hostname : "");
             }
-            buf.append("<td data-sort=").append(ipBan.expires).append(">")
+            buf.append("</td><td class=expires data-sort=").append(ipBan.expires).append(">")
                .append(expireString)
                .append("</td></tr>\n");
             tempBanned++;
@@ -412,7 +414,7 @@ class BanlistRenderer {
            .append(">")
            .append(_t("Total session-only bans"))
            .append(": ").append(tempBanned)
-           .append("</th></tr></tfoot>\n</table>\n");
+           .append("</th></tr></tfoot>\n</table>\n</div>\n");
         out.append(buf);
         out.flush();
     }
