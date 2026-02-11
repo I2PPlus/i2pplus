@@ -960,7 +960,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
                 return true;
             }
             int prevOutbound = getPeerConnectMask(prevRI);
-            int candInbound = getInboundMask(candRI);
+            int candInbound = getConnectMask(candRI.getAddresses());
             if ((prevOutbound & candInbound) == 0) {
                 s.add(candidate);
                 return true;
