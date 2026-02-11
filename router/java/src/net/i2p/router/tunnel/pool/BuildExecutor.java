@@ -571,6 +571,9 @@ class BuildExecutor implements Runnable {
                         _log.debug("Configuring short tunnel for " + pool + " -> " + cfg);
                     }
                     buildTunnel(cfg);
+                    // 0-hop tunnels build inline and don't count toward concurrent build cap
+                    // configureNewTunnel() called buildStarted(), so balance it here
+                    pool.buildFinished(pool.getSettings().isInbound());
                     if (cfg.getLength() > 1) {allowed--;} // oops... shouldn't have done that, but hey, it's not that bad...
                     iter.remove();
                 } else {
