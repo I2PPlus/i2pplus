@@ -203,12 +203,11 @@ public class TestJob extends JobImpl {
             }
             // Fallback to nickname matching for backwards compatibility
             String tunnelNickname = settings.getDestinationNickname();
-            if (log.shouldDebug()) {
-                log.debug("Checking tunnel for test scheduling, nickname: " + tunnelNickname +
-                          " (settings: " + settings + ", pool: " + pool + ")");
-            }
-            if (tunnelNickname != null && (tunnelNickname.equals("I2Ping") ||
-                (tunnelNickname.startsWith("Ping") && tunnelNickname.contains("[")))) {
+            boolean isPing = tunnelNickname != null && (tunnelNickname.equals("I2Ping") ||
+                             (tunnelNickname.startsWith("Ping") && tunnelNickname.contains("[")));
+            if (log.shouldDebug() && !isPing) {
+                log.debug("Checking " + (tunnelNickname != null ? tunnelNickname : "") + " tunnel for test scheduling -> " + pool);
+            } else if (isPing) {
                 if (log.shouldInfo()) {
                     log.info("Skipping test scheduling for ping tunnel: " + tunnelNickname);
                 }

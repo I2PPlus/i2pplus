@@ -427,10 +427,10 @@ public class TunnelPoolSettings {
         for (Map.Entry<Object, Object> e : p.entrySet()) {
             String name = (String) e.getKey();
             String val = (String) e.getValue();
-            buf.append("\t").append(name).append(" = [").append(val).append("]\n");
+            buf.append("\n* ").append(name).append(" = ").append(val);
         }
-        buf.append("\tInbound? ").append(_isInbound).append("\n");
-        buf.append("\tExploratory? ").append(_isExploratory);
+        buf.append("\n* Inbound? ").append(_isInbound ? "Inbound" : "Outbound")
+           .append(_isExploratory ? " / Exploratory" : "");
         return buf.toString();
     }
 
