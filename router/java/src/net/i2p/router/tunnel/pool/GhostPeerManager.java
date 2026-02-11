@@ -51,10 +51,13 @@ public class GhostPeerManager {
 
         // Track when peer became a ghost
         int newCount = count != null ? count.get() : 1;
+        double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
+        boolean underAttack = buildSuccess >= 0 || buildSuccess < 0.4;
         if (newCount >= getThreshold() && !_ghostSince.containsKey(peer)) {
             _ghostSince.put(peer, _context.clock().now());
             if (_log.shouldWarn()) {
-                _log.warn("Peer [" + peer.toBase64().substring(0,6) + "] marked as ghost -> " +
+                _log.warn("Peer [" + peer.toBase64().substring(0,6) + "] marked as ghost for " +
+                          (underAttack ? ATTACK_COOLDOWN_MS/1000 : COOLDOWN_MS/1000) + "s -> " +
                            newCount + " consecutive tunnel build timeouts");
             }
         }
