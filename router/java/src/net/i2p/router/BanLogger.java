@@ -14,10 +14,13 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TimeZone;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import net.i2p.data.Hash;
 import net.i2p.router.transport.TransportManager;
 import net.i2p.util.Log;
+import net.i2p.util.SimpleTimer;
 
 /**
  * Dedicated logger for all ban events.
@@ -48,6 +51,13 @@ public class BanLogger {
     private static volatile boolean _globalArchiveDone = false;
     private static volatile boolean _headerWritten = false;
     private static final Set<String> _loggedHashes = Collections.synchronizedSet(new HashSet<String>());
+
+    // Buffered writing for reduced disk I/O
+    private static final int FLUSH_INTERVAL_MS = 30_000; // Flush every 30 seconds
+    private static final int MAX_BUFFER_SIZE = 1000; // Max entries in buffer
+    private static final ConcurrentLinkedQueue<String> _writeBuffer = new ConcurrentLinkedQueue<>();
+    private static final AtomicInteger _bufferedCount = new AtomicInteger(0);
+    private BanLoggerFlushTask _flushTask;
 
     public BanLogger(RouterContext context) {
         _dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
@@ -88,7 +98,18 @@ public class BanLogger {
             }
             _patternDetector = new HashPatternDetector(context);
             _patternDetector.startScanner();
+            startFlushTask();
             _initialized = true;
+        }
+    }
+
+    /**
+     * Start the periodic flush task.
+     */
+    private void startFlushTask() {
+        if (_context != null && _flushTask == null) {
+            _flushTask = new BanLoggerFlushTask();
+            _context.simpleTimer2().addPeriodicEvent(_flushTask, FLUSH_INTERVAL_MS, FLUSH_INTERVAL_MS);
         }
     }
 
@@ -377,46 +398,88 @@ public class BanLogger {
     private static final int COL_WIDTH_IP = 45;      // Max IPv6:PORT length
 
     /**
-     * Internal method to write the log entry.
-     * Skips logging if this hash has already been logged in this session.
-     */
-    private void writeLog(String hashStr, String ip, String reason, String durationStr) {
-        // Skip if we've already logged this hash (prevents duplicate ban logging)
-        if (hashStr != null && !hashStr.isEmpty() && !_loggedHashes.add(hashStr)) {
-            return; // Already logged this hash
-        }
+      * Internal method to write the log entry.
+      * Buffers entries for periodic flush to reduce disk I/O.
+      * Skips logging if this hash has already been logged in this session.
+      */
+     private void writeLog(String hashStr, String ip, String reason, String durationStr) {
+         // Skip if we've already logged this hash (prevents duplicate ban logging)
+         if (hashStr != null && !hashStr.isEmpty() && !_loggedHashes.add(hashStr)) {
+             return; // Already logged this hash
+         }
 
-        String timestamp = _dateFormat.format(new Date());
-        // Format with fixed-width columns for alignment
-        String entry = String.format("%s | %-" + COL_WIDTH_HASH + "s | %-" + COL_WIDTH_IP + "s | %s | %s",
-                                     timestamp,
-                                     hashStr != null ? hashStr : "",
-                                     ip != null ? ip : "",
-                                     reason,
-                                     durationStr);
+         String timestamp = _dateFormat.format(new Date());
+         // Format with fixed-width columns for alignment
+         String entry = String.format("%s | %-" + COL_WIDTH_HASH + "s | %-" + COL_WIDTH_IP + "s | %s | %s",
+                                      timestamp,
+                                      hashStr != null ? hashStr : "",
+                                      ip != null ? ip : "",
+                                      reason,
+                                      durationStr);
 
-        synchronized (_writeLock) {
-            if (_writer != null) {
-                _writer.println(entry);
-                _banCount++;
-            }
-        }
-        syncToDisk();
+         // Add to buffer (bounded to prevent memory issues)
+         if (_bufferedCount.get() < MAX_BUFFER_SIZE) {
+             _writeBuffer.offer(entry);
+             _bufferedCount.incrementAndGet();
+         } else {
+             // Buffer full, flush now
+             flushBuffer();
+             synchronized (_writeLock) {
+                 if (_writer != null) {
+                     _writer.println(entry);
+                     _banCount++;
+                 }
+             }
+         }
 
-        // Record pattern for predictive analysis
-        if (_patternDetector != null && hashStr != null && !hashStr.isEmpty()) {
-            try {
-                Hash hash = new Hash();
-                hash.fromBase64(hashStr);
-                _patternDetector.recordBan(hash, reason);
-            } catch (Exception e) {
-                // Ignore pattern recording errors
-            }
-        }
+         // Record pattern for predictive analysis (async)
+         if (_patternDetector != null && hashStr != null && !hashStr.isEmpty()) {
+             try {
+                 Hash hash = new Hash();
+                 hash.fromBase64(hashStr);
+                 _patternDetector.recordBan(hash, reason);
+             } catch (Exception e) {
+                 // Ignore pattern recording errors
+             }
+         }
 
-        if (_log != null && _log.shouldLog(Log.DEBUG))
-            _log.debug("Ban logged: " + entry);
-    }
+         if (_log != null && _log.shouldLog(Log.DEBUG))
+             _log.debug("Ban logged: " + entry);
+     }
+
+     /**
+      * Flush buffered entries to disk.
+      */
+     private void flushBuffer() {
+         String entry;
+         int flushed = 0;
+         synchronized (_writeLock) {
+             if (_writer == null) {
+                 _writeBuffer.clear();
+                 _bufferedCount.set(0);
+                 return;
+             }
+             while ((entry = _writeBuffer.poll()) != null) {
+                 _writer.println(entry);
+                 flushed++;
+                 _banCount++;
+                 _bufferedCount.decrementAndGet();
+             }
+             if (flushed > 0) {
+                 _writer.flush();
+                 try {
+                     if (_fd != null) {
+                         _fd.sync();
+                     }
+                 } catch (IOException e) {
+                     if (_log != null && _log.shouldLog(Log.WARN))
+                         _log.warn("Failed to sync ban log to disk", e);
+                 }
+             }
+         }
+         if (_log != null && _log.shouldLog(Log.DEBUG) && flushed > 0)
+             _log.debug("Flushed " + flushed + " ban entries to disk");
+     }
 
     /**
      * Format duration in milliseconds to human-readable string.
@@ -456,16 +519,28 @@ public class BanLogger {
     }
 
     /**
-     * Close the log writer and archive if there are entries.
-     */
-    public void close() {
-        synchronized (_writeLock) {
-            if (_writer != null) {
-                syncToDisk();
-                _writer.close();
-                _writer = null;
-            }
-        }
-        archiveIfNeeded();
-    }
+      * Close the log writer and archive if there are entries.
+      */
+     public void close() {
+         synchronized (_writeLock) {
+             if (_writer != null) {
+                 syncToDisk();
+                 _writer.close();
+                 _writer = null;
+             }
+         }
+         archiveIfNeeded();
+     }
+
+     /**
+      * Periodic flush task for buffered ban log entries.
+      * Runs every 30 seconds to flush accumulated entries to disk.
+      *
+      * @since 0.9.68
+      */
+     private class BanLoggerFlushTask implements SimpleTimer.TimedEvent {
+         public void timeReached() {
+             flushBuffer();
+         }
+     }
 }
