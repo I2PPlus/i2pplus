@@ -454,6 +454,12 @@ class BuildExecutor implements Runnable {
 
                         for (int i = 0; i < allowed && !wanted.isEmpty(); i++) {
                             TunnelPool pool = wanted.remove(0);
+                            if (!pool.canStartBuild(pool.getSettings().isInbound())) {
+                                if (_log.shouldDebug()) {
+                                    _log.debug("Skipping " + pool + " -> Max concurrent builds reached for direction");
+                                }
+                                continue;
+                            }
                             long bef = System.currentTimeMillis();
                             PooledTunnelCreatorConfig cfg = pool.configureNewTunnel();
                             if (cfg != null) {

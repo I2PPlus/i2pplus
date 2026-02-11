@@ -274,6 +274,10 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             }
         }
 
+        if (!canConnect(ctx.routerHash(), peerHash)) {
+            return true;
+        }
+
         return false;
     }
 
