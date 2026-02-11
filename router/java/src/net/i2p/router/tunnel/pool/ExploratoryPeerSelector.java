@@ -189,8 +189,12 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
                 int highCapCount = length - 2;
                 if (highCapCount > 0) {
                     double buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
-                    if (buildSuccess > 0 && buildSuccess < 0.40) {
-                        // Under attack: reduce high cap allocation by half
+                    if (buildSuccess > 0 && buildSuccess < 0.50) {
+                        // Under low success: reduce high cap allocation to minimum 1
+                        highCapCount = Math.max(highCapCount / 2, 1);
+                    }
+                    if (buildSuccess > 0 && buildSuccess < 0.30) {
+                        // Under severe failure: use almost all non-high-cap peers
                         highCapCount = Math.max(highCapCount / 2, 1);
                     }
                     ctx.profileOrganizer().selectHighCapacityPeers(highCapCount, exclude, matches);
@@ -234,38 +238,84 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
 
         // Progressive fallback under attack conditions @since 0.9.68+
         if (rv.size() <= 1) {
-            double buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
-            boolean isUnderAttack = buildSuccess > 0 && buildSuccess < 0.40;
-            
-            if (isUnderAttack && rv.size() == 1) {
-                // Attack detected (25-40% success) but only have self - try to get more peers
-                if (log.shouldWarn()) {
-                    log.warn("Attack detected (" + (int)(buildSuccess * 100) + "% success) -> Trying exploratory fallback peer selection...");
-                }
-                
-                // Remove self temporarily to check for available peers
-                rv.clear();
-                
-                // Try with relaxed IP restrictions
-                ArraySet<Hash> fallback = new ArraySet<Hash>(length + 1);
-                ctx.profileOrganizer().selectNotFailingPeers(length + 1, exclude, fallback, false, 0, null);
-                fallback.remove(ctx.routerHash());
-                
-                if (!fallback.isEmpty()) {
-                    rv.addAll(fallback);
-                    if (log.shouldDebug()) {
-                        log.debug("Exploratory fallback successful: found " + rv.size() + " peers");
+                double buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
+                boolean isUnderAttack = buildSuccess > 0 && buildSuccess < 0.40;
+
+                if (isUnderAttack && rv.size() == 1) {
+                    // Attack detected (25-40% success) but only have self - try to get more peers
+                    if (log.shouldWarn()) {
+                        log.warn("Attack detected (" + (int)(buildSuccess * 100) + "% success) -> Trying exploratory fallback peer selection...");
                     }
+
+                    // Remove self temporarily to check for available peers
+                    rv.clear();
+
+                    // Try with relaxed IP restrictions
+                    ArraySet<Hash> fallback = new ArraySet<Hash>(length + 1);
+                    ctx.profileOrganizer().selectNotFailingPeers(length + 1, exclude, fallback, false, 0, null);
+                    fallback.remove(ctx.routerHash());
+
+                    if (!fallback.isEmpty()) {
+                        rv.addAll(fallback);
+                        if (log.shouldDebug()) {
+                            log.debug("Exploratory fallback successful: found " + rv.size() + " peers");
+                        }
+                    }
+
+                    // Re-add self at the end
+                    if (isInbound)
+                        rv.add(0, ctx.routerHash());
+                    else
+                        rv.add(ctx.routerHash());
                 }
-                
-                // Re-add self at the end
-                if (isInbound)
-                    rv.add(0, ctx.routerHash());
-                else
-                    rv.add(ctx.routerHash());
+
+                // Catastrophic tunnel collapse - be even less selective @since 0.9.68+
+                if (rv.size() <= 1 && buildSuccess > 0 && buildSuccess < 0.25) {
+                    if (log.shouldWarn()) {
+                        log.warn("Catastrophic tunnel collapse detected (" + (int)(buildSuccess * 100) + "% success) -> Using emergency peer selection...");
+                    }
+
+                    rv.clear();
+
+                    // Emergency: include peers from all tiers without IP restrictions
+                    ArraySet<Hash> emergency = new ArraySet<Hash>(length + 2);
+                    // Get all available peers and filter
+                    java.util.Set<Hash> allPeers = ctx.profileOrganizer().selectAllPeers();
+                    for (Hash peer : allPeers) {
+                        if (emergency.size() >= length + 2) break;
+                        if (peer.equals(ctx.routerHash())) continue;
+                        if (exclude.contains(peer)) continue;
+                        emergency.add(peer);
+                    }
+
+                    if (!emergency.isEmpty()) {
+                        rv.addAll(emergency);
+                        if (log.shouldWarn()) {
+                            log.warn("Emergency peer selection found " + rv.size() + " peers");
+                        }
+                    } else {
+                        // No peers available - allow 0-hop exploratory tunnel (just self)
+                        // Exploratory tunnels can use 0-hops; client tunnels should fail instead
+                        if (log.shouldWarn()) {
+                            log.warn("No peers available for emergency tunnel build -> Allowing 0-hop exploratory tunnel");
+                        }
+                        // Return just self (0-hop tunnel) for exploratory pools
+                        rv.clear();
+                        if (isInbound)
+                            rv.add(0, ctx.routerHash());
+                        else
+                            rv.add(ctx.routerHash());
+                        return rv;
+                    }
+
+                    // Re-add self at the end
+                    if (isInbound)
+                        rv.add(0, ctx.routerHash());
+                    else
+                        rv.add(ctx.routerHash());
+                }
             }
-        }
-        
+
         if (rv.size() > 1) {
             if (!checkTunnel(isInbound, true, rv))
                 rv = null;
