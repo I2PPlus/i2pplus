@@ -119,6 +119,8 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     if (matches.isEmpty()) {
                         ctx.profileOrganizer().selectHighCapacityPeers(length, exclude, matches);
                     }
+                    // Filter out incompatible peers that bypassed exclude in fallback pools
+                    matches.retainAll(exclude);
                 }
                 matches.remove(ctx.routerHash());
                 rv = new ArrayList<Hash>(matches);
@@ -228,7 +230,17 @@ class ClientPeerSelector extends TunnelPeerSelector {
                             }
                             ctx.profileOrganizer().selectFastPeers(1, lastHopExclude, matches, randomKey, length == 2 ? SLICE_0_1 : SLICE_0, ipRestriction, ipSet);
                         }
-                        ctx.commSystem().exemptIncoming(matches.get(0));
+                        // Filter out incompatible peers that bypassed lastHopExclude in fallback pools
+                        Set<Hash> toRemove = new HashSet<Hash>();
+                        for (Hash h : matches) {
+                            if (lastHopExclude.contains(h)) {
+                                toRemove.add(h);
+                            }
+                        }
+                        matches.removeAll(toRemove);
+                        if (!matches.isEmpty()) {
+                            ctx.commSystem().exemptIncoming(matches.get(0));
+                        }
                     } else {
                         ctx.profileOrganizer().selectFastPeers(1, lastHopExclude, matches, randomKey, length == 2 ? SLICE_0_1 : SLICE_0, ipRestriction, ipSet);
                     }

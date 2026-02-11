@@ -218,7 +218,7 @@ public class PeerTestJob extends JobImpl {
 
     /**
      * Stops the peer testing process gracefully.
-     * 
+     *
      * <p>The current test round will complete, but no new rounds will be scheduled.</p>
      */
     public synchronized void stopTesting() {
@@ -230,7 +230,7 @@ public class PeerTestJob extends JobImpl {
 
     /**
      * Main job execution loop that performs peer testing with adaptive scheduling.
-     * 
+     *
      * <p>Process flow:
      * <ol>
      *   <li>Check if testing should continue</li>
@@ -239,7 +239,7 @@ public class PeerTestJob extends JobImpl {
      *   <li>Adapt next run delay based on system conditions</li>
      * </ol>
      * </p>
-     * 
+     *
      * <p><b>Adaptive Behavior:</b></p>
      * <ul>
      *   <li>Double delay if job lag > 300ms (system overload)</li>
@@ -306,33 +306,33 @@ public class PeerTestJob extends JobImpl {
         if (_aggressiveMode && !wasAggressive) {
             // Transitioned to aggressive mode
             if (_log.shouldWarn()) {
-                _log.warn("Low tunnel build success (" + (int)(buildSuccess * 100) + "%) -> Enabling aggressive peer testing");
+                _log.warn("Low tunnel build success (" + (int)(buildSuccess * 100) + "%) -> Enabling aggressive peer testing...");
             }
         } else if (!_aggressiveMode && wasAggressive) {
             // Transitioned back to normal
             if (_log.shouldInfo()) {
-                _log.info("Tunnel build success recovered (" + (int)(buildSuccess * 100) + "%) -> Returning to normal peer testing");
+                _log.info("Tunnel build success recovered (" + (int)(buildSuccess * 100) + "%) -> Returning to normal peer testing...");
             }
         }
     }
 
     /**
      * Selects peers for testing based on performance and capability criteria.
-     * 
+     *
      * <p><b>Selection Criteria:</b></p>
      * <ul>
      *   <li><b>Primary candidates:</b> Version 0.9.57+, reachable, high bandwidth (O/P/X)</li>
      *   <li><b>Penalized:</b> Low bandwidth tiers (K/L/M/N) or unreachable - set capacity bonus to -30</li>
      *   <li><b>Excluded:</b> Missing local RouterInfo or profile</li>
      * </ul>
-     * 
+     *
      * <p><b>Performance Impact:</b></p>
      * <ul>
      *   <li>Uses cached lookups to minimize database queries</li>
      *   <li>Pre-parses capabilities to avoid repeated string operations</li>
      *   <li>Logs skipped peers with specific reasons for debugging</li>
      * </ul>
-     * 
+     *
      * @return set of RouterInfo structures for testing (excluding self)
      */
     private Set<RouterInfo> selectPeersToTest() {
@@ -348,15 +348,15 @@ public class PeerTestJob extends JobImpl {
         Set<RouterInfo> peers = new HashSet<RouterInfo>(peerHashes.size());
         for (Hash peer : peerHashes) {
             PeerData data = new PeerData(getContext(), peer);
-            
+
             // Primary candidates: high-bandwidth, reachable, compatible version
-            if (data.routerInfo != null && data.profile != null && data.capabilities != null && data.isReachable && 
+            if (data.routerInfo != null && data.profile != null && data.capabilities != null && data.isReachable &&
                 VersionComparator.comp(data.routerInfo.getVersion(), "0.9.57") >= 0 &&
                 (data.bandwidthTier.equals("O") || data.bandwidthTier.equals("P") || data.bandwidthTier.equals("X"))) {
                 peers.add(data.routerInfo);
             // Low-bandwidth or unreachable peers: penalize but don't test
             } else if (data.routerInfo != null && data.profile != null && data.capabilities != null &&
-                (!data.isReachable || data.bandwidthTier.equals("K") || data.bandwidthTier.equals("L") || 
+                (!data.isReachable || data.bandwidthTier.equals("K") || data.bandwidthTier.equals("L") ||
                  data.bandwidthTier.equals("M") || data.bandwidthTier.equals("N"))) {
                 data.profile.setCapacityBonus(-30);
                 if (_log.shouldInfo())
@@ -458,11 +458,11 @@ public class PeerTestJob extends JobImpl {
 
     /**
      * Cached peer data to eliminate repeated lookups and string parsing.
-     * 
+     *
      * <p>This class consolidates all frequently accessed peer information into a single
      * object, reducing database queries and improving performance during peer testing.
      * All data is immutable once created, making it thread-safe for concurrent testing.</p>
-     * 
+     *
      * <p><b>Performance Benefits:</b></p>
      * <ul>
      *   <li>Single netDb lookup instead of multiple calls</li>
@@ -483,26 +483,26 @@ public class PeerTestJob extends JobImpl {
         final String bandwidthTier;
         /** Raw capabilities string from RouterInfo (may be null) */
         final String capabilities;
-        
+
         /**
          * Creates a new PeerData instance by looking up all necessary information.
-         * 
+         *
          * @param ctx the router context for accessing network database and profiles
          * @param peerHash the hash of the peer to gather data for
          */
         PeerData(RouterContext ctx, Hash peerHash) {
             // Generate short hash once for all logging operations
             this.shortHash = peerHash.toBase64().substring(0, 6);
-            
+
             // Single database lookup to avoid repeated calls
             this.routerInfo = ctx.netDb().lookupRouterInfoLocally(peerHash);
             this.profile = ctx.profileOrganizer().getProfile(peerHash);
-            
+
             if (routerInfo != null) {
                 this.bandwidthTier = routerInfo.getBandwidthTier();
                 this.capabilities = routerInfo.getCapabilities();
                 // Pre-parse reachability to avoid repeated string operations
-                this.isReachable = capabilities != null && 
+                this.isReachable = capabilities != null &&
                                  capabilities.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
             } else {
                 // Safe defaults for missing RouterInfo
@@ -537,22 +537,22 @@ public class PeerTestJob extends JobImpl {
             if (message.getType() != DeliveryStatusMessage.MESSAGE_TYPE) {
                 return false;
             }
-            
+
             DeliveryStatusMessage msg = (DeliveryStatusMessage)message;
             if (_nonce != msg.getMessageId()) {
                 return false;
             }
-            
+
             PeerData data = new PeerData(getContext(), _peer);
             if (data.routerInfo == null || data.profile == null) {
                 return false;
             }
-            
+
             long timeLeft = _expiration - getContext().clock().now();
             int speedBonus = data.profile.getSpeedBonus();
             int timeout = getTestTimeout();
             float testAvg = data.profile.getPeerTestTimeAverage();
-            
+
             if (isSlowTier(data)) {
                 handleSlowTier(data.profile);
             } else if (timeLeft < 0) {
@@ -560,15 +560,15 @@ public class PeerTestJob extends JobImpl {
             } else {
                 return handleSuccessfulTest(data, speedBonus, timeout, testAvg, timeLeft);
             }
-            
+
             return false;
         }
-        
+
         private boolean isSlowTier(PeerData data) {
-            return data.bandwidthTier.equals("L") || data.bandwidthTier.equals("M") || 
+            return data.bandwidthTier.equals("L") || data.bandwidthTier.equals("M") ||
                    data.bandwidthTier.equals("N") || !data.isReachable;
         }
-        
+
         private void handleSlowTier(PeerProfile prof) {
             try {
                 prof.setCapacityBonus(-30);
@@ -576,13 +576,13 @@ public class PeerTestJob extends JobImpl {
                     _log.info("Setting capacity bonus to -30 for [" + _shortHash + "] -> L, M, N or unreachable");
             } catch (NumberFormatException nfe) {}
         }
-        
+
         private void handleTimeout(PeerData data, int speedBonus, long timeLeft) {
             if (_log.shouldInfo())
                 _log.info("[" + _shortHash + "] Test reply took too long: " + (0-timeLeft) + "ms too slow");
-            
+
             getContext().statManager().addRateData("peer.testTooSlow", 0 - timeLeft);
-            
+
             if (isHighBandwidthTier(data)) {
                 try {
                     data.profile.setCapacityBonus(-30);
@@ -593,15 +593,15 @@ public class PeerTestJob extends JobImpl {
                 } catch (NumberFormatException nfe) {}
             }
         }
-        
+
         private boolean isHighBandwidthTier(PeerData data) {
-            return data.bandwidthTier.equals("N") || data.bandwidthTier.equals("O") || 
+            return data.bandwidthTier.equals("N") || data.bandwidthTier.equals("O") ||
                    data.bandwidthTier.equals("P") || data.bandwidthTier.equals("X");
         }
-        
+
         private boolean handleSuccessfulTest(PeerData data, int speedBonus, int timeout, float testAvg, long timeLeft) {
             getContext().statManager().addRateData("peer.testOK", getTestTimeout() - timeLeft);
-            
+
             if (testAvg > (timeout * 2) && isHighBandwidthTier(data)) {
                 try {
                     data.profile.setCapacityBonus(-30);
@@ -613,9 +613,9 @@ public class PeerTestJob extends JobImpl {
                 } catch (NumberFormatException nfe) {}
                 return false;
             }
-            
-            if ((data.profile.getCapacityBonus() == -30 || data.profile.getSpeedBonus() < 9999999) && 
-                data.capabilities != null && data.isReachable && testAvg < (timeout * 2) && 
+
+            if ((data.profile.getCapacityBonus() == -30 || data.profile.getSpeedBonus() < 9999999) &&
+                data.capabilities != null && data.isReachable && testAvg < (timeout * 2) &&
                 isHighOrMidBandwidthTier(data)) {
                 try {
                     if (data.profile.getCapacityBonus() == -30) {
@@ -623,7 +623,7 @@ public class PeerTestJob extends JobImpl {
                         if (_log.shouldInfo())
                             _log.info("Resetting capacity bonus to 0 for [" + _shortHash + "]");
                     }
-                    if (data.profile.getSpeedBonus() < 9999999 && data.capabilities != null && 
+                    if (data.profile.getSpeedBonus() < 9999999 && data.capabilities != null &&
                         data.isReachable && isHighBandwidthTier(data)) {
                         data.profile.setSpeedBonus(speedBonus + 9999999);
                         if (_log.shouldInfo())
@@ -633,12 +633,12 @@ public class PeerTestJob extends JobImpl {
                 _matchFound = true;
                 return true;
             }
-            
+
             return false;
         }
-        
+
         private boolean isHighOrMidBandwidthTier(PeerData data) {
-            return data.bandwidthTier.equals("O") || data.bandwidthTier.equals("P") || 
+            return data.bandwidthTier.equals("O") || data.bandwidthTier.equals("P") ||
                    data.bandwidthTier.equals("X") || data.bandwidthTier.equals("N");
         }
         public boolean matchFound() { return _matchFound; }
@@ -765,7 +765,7 @@ public class PeerTestJob extends JobImpl {
             getContext().statManager().addRateData("peer.testTimeout", 1);
 
             PeerData data = new PeerData(getContext(), _peer.getIdentity().getHash());
-            if (data.routerInfo != null && data.profile != null && data.capabilities != null && 
+            if (data.routerInfo != null && data.profile != null && data.capabilities != null &&
                 (!data.isReachable || data.bandwidthTier.equals("L") || data.bandwidthTier.equals("M") || data.bandwidthTier.equals("N"))) {
                 try {
                     data.profile.setCapacityBonus(-30);
