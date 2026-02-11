@@ -424,34 +424,6 @@ public class TunnelPool {
 
         if (!_settings.isExploratory()) {
             if (rv <= 1) {return rv;}
-            // throttle client tunnel builds in times of congestion with exponential backoff
-            int fails = _consecutiveBuildTimeouts.get();
-            if (fails > 12) {
-                // Linear backoff: reduce by 50% after 12 failures
-                int reductionFactor = 2; // Max 2x reduction
-
-                // Check if router is firewalled using status check
-                boolean isFirewalled = _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.REJECT_UNSOLICITED ||
-                                   _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_OK ||
-                                   _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_UNKNOWN ||
-                                   _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_OK_IPV6_FIREWALLED ||
-                                   _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_UNKNOWN_IPV6_FIREWALLED ||
-                                   _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_DISABLED_IPV6_FIREWALLED;
-
-                int minTunnels = isFirewalled ? 3 : 1; // Keep 6 tunnels for firewalled routers
-
-                rv = Math.max(minTunnels, _settings.getTotalQuantity() / reductionFactor);
-
-                // Additional safety: never reduce below 1 for non-firewalled, 3 for firewalled
-                if (isFirewalled && rv < 3) {rv = 3;}
-                else if (rv < 1) {rv = 1;}
-
-                if (fails >= 10 && _log.shouldWarn() && !shouldSuppressTimeoutWarning() && uptime > STARTUP_TIME) {
-                    _log.warn("Limiting to " + rv + " tunnels after " + fails +
-                              " consecutive build timeouts on " + this);
-                }
-            }
-            return rv;
         }
         // TODO high-bw non-ff also
         if ((_context.netDb().floodfillEnabled() && uptime > STARTUP_TIME ||SystemVersion.getMaxMemory() >= 1024*1024*1024) && rv < 3) {

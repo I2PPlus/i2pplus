@@ -249,9 +249,9 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             return true;
         }
 
-        RouterInfo routerInfo = (RouterInfo) ctx.netDb().lookupLocally(peerHash);
+        RouterInfo routerInfo = (RouterInfo) ctx.netDb().lookupLocallyWithoutValidation(peerHash);
         if (routerInfo == null) {
-            return true;
+            return false;  // Allow peers with incomplete RouterInfo - build will fail naturally if unreachable
         }
 
         if (shouldExcludeFloodfillPeer(isExploratory, routerInfo)) {
