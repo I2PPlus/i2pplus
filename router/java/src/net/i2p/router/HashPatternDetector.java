@@ -1,11 +1,7 @@
 package net.i2p.router;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -168,11 +164,6 @@ public class HashPatternDetector implements Serializable {
             _log.debug("Recorded ban for prefix " + prefix + " - confidence now: " +
                       String.format("%.1f%%", stats.getConfidence() * 100));
         }
-
-        // Periodically save patterns
-        if (stats.getTotalBans() % 10 == 0) {
-            savePatterns();
-        }
     }
 
     /**
@@ -261,20 +252,9 @@ public class HashPatternDetector implements Serializable {
     /**
      * Save pattern statistics to disk.
      */
-    private void savePatterns() {
-        File file = new File(_context.getRouterDir(), PATTERN_FILE);
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
-            oos.writeObject(new HashMap<>(_prefixStats));
-        } catch (IOException e) {
-            if (_log.shouldWarn()) {
-                _log.warn("Failed to save hash patterns", e);
-            }
-        }
-    }
-
     /**
-     * Load historical ban data from sessionbans.txt and archives.
-     */
+      * Load historical ban data from sessionbans.txt and archives.
+      */
     private void loadHistoricalBans() {
         File logDir = new File(_context.getRouterDir(), "sessionbans");
         if (!logDir.exists() || !logDir.isDirectory()) {
@@ -339,27 +319,21 @@ public class HashPatternDetector implements Serializable {
     }
 
     /**
-     * Load pattern statistics from disk.
-     */
-    @SuppressWarnings("unchecked")
-    private void loadPatterns() {
-        File file = new File(_context.getRouterDir(), PATTERN_FILE);
-        if (!file.exists()) {
-            return;
-        }
+      * Load pattern statistics from disk.
+      * Legacy file is deleted on startup if found.
+      */
+     @SuppressWarnings("unchecked")
+     private void loadPatterns() {
+         File file = new File(_context.getRouterDir(), PATTERN_FILE);
+         if (!file.exists()) {
+             return;
+         }
 
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
-            Map<String, PrefixStats> loaded = (Map<String, PrefixStats>) ois.readObject();
-            _prefixStats.putAll(loaded);
-            if (_log.shouldInfo()) {
-                _log.info("Loaded " + loaded.size() + " hash patterns from disk");
-            }
-        } catch (Exception e) {
-            if (_log.shouldWarn()) {
-                _log.warn("Failed to load hash patterns", e);
-            }
-        }
-    }
+         if (_log.shouldWarn()) {
+             _log.warn("Deleting legacy hash-patterns.dat file");
+         }
+         file.delete();
+     }
 
     /**
      * Check if recorded prefixes show sequential/counter patterns indicating algorithmic generation.
