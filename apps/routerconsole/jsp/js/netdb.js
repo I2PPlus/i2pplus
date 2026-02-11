@@ -3,6 +3,8 @@
 /* License: AGPL3 or later */
 
 import { refreshElements } from "/js/refreshElements.js";
+import Tablesort from "/js/tablesort/tablesort.js";
+import "/js/tablesort/tablesort.number.js";
 
 (() => {
   document.addEventListener("DOMContentLoaded", () => {

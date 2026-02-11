@@ -3,6 +3,10 @@
 /* License: AGPL3 or later */
 
 import {refreshElements} from "/js/refreshElements.js";
+import Tablesort from "/js/tablesort/tablesort.js";
+import "/js/tablesort/tablesort.number.js";
+import "/js/tablesort/tablesort.natural.js";
+import "/js/tablesort/tablesort.dotsep.js";
 
 (function () {
   const REFRESH_INTERVAL = 10 * 1000;

@@ -4,6 +4,8 @@
 
 import {convertKBtoMB} from "/js/convertKBtoMB.js";
 import {refreshElements} from "/themes/js/refreshElements.js";
+import Tablesort from "/js/tablesort/tablesort.js";
+import "/js/tablesort/tablesort.number.js";
 
 const main = document.getElementById("tunnels");
 const peers = document.getElementById("transitPeers");
