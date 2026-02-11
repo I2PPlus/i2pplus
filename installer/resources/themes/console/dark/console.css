@@ -1179,6 +1179,7 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 #transitRecent #allTransit td:first-child{width:4%}
 #transitRecent #allTransit td:nth-child(2){width:13%}
 #transitRecent #allTransit td:nth-child(n+6){width:14%}
+#transitRecent .tablewrap{margin-bottom:10px}
 
 /* netdb */
 #netdboverview{margin:11px auto 13px;width:calc(100% - 8px);box-shadow:var(--border_table)}
@@ -3359,13 +3360,15 @@ body.isDown::after{width:80px;height:80px;top:calc(50% - 40px);left:calc(50% - 4
 #searchLS {margin-bottom:10px auto -1px;display:block;column-span:all;text-align:center;box-shadow:var(--border_table),var(--highlight);background:var(--th)}
 
 /* session bans */
-#banSummary h2 {margin:2px -10px 0}
+#profiles .tablewrap{margin:11px auto 9px}
+#banSummary{margin:0 auto 15px;padding:0!important}
+#banSummary h2 {margin:0 auto 0}
 #banSummary li{margin:2px 0;padding:0;min-width:300px;display:inline-block}
-#banSummary ul{margin:-1px -10px -16px;padding:5px 8px 4px;columns:300px 5;list-style-type:none;border:var(--border);background:var(--th)}
+#banSummary ul{margin:-1px auto -16px;padding:5px 8px 4px;columns:300px 5;list-style-type:none;border:var(--border);background:var(--th)}
 #banSummary .badge{margin:0 4px 0 0;padding:2px 4px;min-width:48px;display:inline-block;text-align:center;letter-spacing:0.05em;font-weight:600;box-shadow:var(--bevel);background:var(--badge)}
+
 @media (max-width:1499px) {
-#banSummary h2{margin:-8px -10px -1px}
-#banSummary ul{margin:-1px -10px -19px}
+#profiles .tablewrap{margin:11px 8px 9px}
 }
 
 /* compact netdb search */

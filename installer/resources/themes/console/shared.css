@@ -76,3 +76,8 @@
 #sessionBanned th.hash{text-align:left}
 #sessionBanned .hostname,#sessionBanned .ip,#sessionBanned .reason{width:19%;text-align:center}
 #sessionBanned td.country img{width:28px!important;height:21px!important;border-radius:2px}
+
+@media (max-width:1499px) {
+#sessionBanned .b64{width:64px;overflow:hidden;text-overflow:ellipsis}
+#sessionBanned .hostname{word-break:break-all}
+}
