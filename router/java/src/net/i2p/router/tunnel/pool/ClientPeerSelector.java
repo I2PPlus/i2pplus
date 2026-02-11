@@ -257,45 +257,15 @@ class ClientPeerSelector extends TunnelPeerSelector {
                 if (length > 2) {
                     // middle hop(s)
                     // group 2 or 3
-                    HopChainValidator chainValidator = new HopChainValidator(rv);
-                    Set<Hash> middleExclude = new HashSet<Hash>(exclude);
-                    middleExclude.addAll(chainValidator.s);
-                    if (log.shouldInfo()) {log.info("SelectFastPeers Middle with chain validation " + middleExclude);}
-                    ctx.profileOrganizer().selectFastPeers(length - 2, middleExclude, matches, randomKey, SLICE_2_3, ipRestriction, ipSet);
+                    if (log.shouldInfo()) {log.info("SelectFastPeers Middle " + exclude);}
+                    ctx.profileOrganizer().selectFastPeers(length - 2, exclude, matches, randomKey, SLICE_2_3, ipRestriction, ipSet);
                     matches.remove(ctx.routerHash());
-                    int added = 0;
-                    for (Hash h : matches) {
-                        if (!chainValidator.contains(h)) {
-                            rv.add(h);
-                            added++;
-                        }
-                    }
-                    if (log.shouldDebug() && added < matches.size()) {
-                        log.debug("Excluded " + (matches.size() - added) + " incompatible middle hops");
-                    }
-                    if (rv.size() < length - 1 && added < matches.size()) {
-                        // Retry with more relaxed exclusions
-                        if (log.shouldInfo()) {log.info("Retrying middle hop selection with additional exclusions...");}
-                        middleExclude.addAll(chainValidator.s);
-                        matches.clear();
-                        ctx.profileOrganizer().selectFastPeers(length - 2 - (rv.size() - 1), middleExclude, matches, randomKey, SLICE_2_3, ipRestriction, ipSet);
-                        matches.remove(ctx.routerHash());
-                        for (Hash h : matches) {
-                            if (!chainValidator.contains(h) && rv.size() < length) {
-                                rv.add(h);
-                            }
-                        }
-                    }
-                    if (matches.size() > 1 && rv.size() <= length - 1) {
+                    if (matches.size() > 1) {
+                        // order the middle peers for tunnels >= 4 hops
                         List<Hash> ordered = new ArrayList<Hash>(matches);
                         orderPeers(ordered, randomKey);
-                        for (Hash h : ordered) {
-                            if (rv.size() >= length) break;
-                            if (!chainValidator.contains(h)) {
-                                rv.add(h);
-                            }
-                        }
-                    }
+                        rv.addAll(ordered);
+                    } else {rv.addAll(matches);}
                     exclude.addAll(matches);
                     matches.clear();
                 }
