@@ -63,7 +63,7 @@ public class TunnelPool {
     private final AtomicInteger _concurrentOutboundBuilds = new AtomicInteger();
 
     private static final int TUNNEL_LIFETIME = 10*60*1000;
-    private static final int MAX_CONCURRENT_BUILDS_PER_DIRECTION = 3;
+    private static final int MAX_CONCURRENT_BUILDS_PER_DIRECTION = 6;
     /** if less than one success in this many, reduce quantity (exploratory only) */
     private static final int BUILD_TRIES_QUANTITY_OVERRIDE = 12;
     /** if less than one success in this many, reduce length (exploratory only) */
@@ -937,8 +937,9 @@ public class TunnelPool {
         int consecutiveFailures = _consecutiveBuildTimeouts.get();
         boolean hasHighFailures = consecutiveFailures > 5;
 
-        // If we're critically low and have no builds in progress, trigger emergency
-        if ((isCriticallyLow || isGettingLowDuringAttack) && inProgressCount == 0) {
+        // If we're critically low, trigger emergency builds regardless of in-progress count
+        // During attacks or critical tunnel shortage, we need aggressive rebuilding
+        if (isCriticallyLow || isGettingLowDuringAttack) {
             // Cap emergency builds to reasonable limits per pool
             // Never build more than wanted + 2 or 8 at a time for a single pool
             int maxEmergencyBuilds = Math.min(wanted + 2, 8);
