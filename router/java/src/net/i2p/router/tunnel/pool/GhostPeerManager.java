@@ -52,7 +52,7 @@ public class GhostPeerManager {
         // Track when peer became a ghost
         int newCount = count != null ? count.get() : 1;
         double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
-        boolean underAttack = buildSuccess >= 0 || buildSuccess < 0.4;
+        boolean underAttack = buildSuccess >= 0 && buildSuccess < 0.4;
         if (newCount >= getThreshold() && !_ghostSince.containsKey(peer)) {
             _ghostSince.put(peer, _context.clock().now());
             if (_log.shouldWarn()) {
