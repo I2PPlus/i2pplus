@@ -1264,51 +1264,53 @@ public class TunnelPool {
     }
 
     /**
-     *  This will build a fallback tunnel only if:
-     *  - Exploratory pool: 0-hop fallback allowed
-     *  - Client pool configured for 1 hop: 1-hop fallback allowed
-     *  - Client pool with allowZeroHop=true: 0-hop fallback allowed
-     *  - Otherwise: build multi-hop tunnel (enforce 2-hop minimum)
-     *
-     *  @return true if a fallback tunnel is built, false otherwise
-     */
-    boolean buildFallback() {
-        int quantity = getAdjustedTotalQuantity();
-        int usable = 0;
-        synchronized (_tunnels) {usable = _tunnels.size();}
-        if (usable > 0) {return false;}
+      *  This will build a fallback tunnel only if:
+      *  - Exploratory pool: 0-hop fallback allowed
+      *  - Client pool with allowZeroHop=true AND configured for 0 hops: 0-hop fallback allowed
+      *  - Client pool configured for 1 hop: 1-hop fallback allowed
+      *  - Otherwise: build multi-hop tunnel (enforce 2-hop minimum)
+      *
+      *  @return true if a fallback tunnel is built, false otherwise
+      */
+     boolean buildFallback() {
+         int quantity = getAdjustedTotalQuantity();
+         int usable = 0;
+         synchronized (_tunnels) {usable = _tunnels.size();}
+         if (usable > 0) {return false;}
 
-        // Exploratory pools: allow 0-hop fallback
-        if (_settings.isExploratory()) {
-            if (_log.shouldInfo()) {
-                _log.info(toString() + "\n* Building 0-hop fallback tunnel (Usable: " + usable + "; Needed: " + quantity + ")");
-            }
-            _manager.getExecutor().buildTunnel(configureNewTunnel(true));
-            return true;
-        }
+         // Exploratory pools: allow 0-hop fallback
+         if (_settings.isExploratory()) {
+             if (_log.shouldInfo()) {
+                 _log.info(toString() + "\n* Building 0-hop fallback tunnel (Usable: " + usable + "; Needed: " + quantity + ")");
+             }
+             _manager.getExecutor().buildTunnel(configureNewTunnel(true));
+             return true;
+         }
 
-        // Client pools: check configured hop count
-        int configuredLength = _settings.getLength();
-        boolean allowShortHop = _settings.getAllowZeroHop();
+         // Client pools: check configured hop count
+         int configuredLength = _settings.getLength();
+         boolean allowZeroHop = _settings.getAllowZeroHop();
 
-        if (configuredLength <= 1 || allowShortHop) {
-            // Client configured for 1 hop or allowZeroHop: allow short fallback
-            if (_log.shouldWarn()) {
-                _log.warn("Warning! Building " + (configuredLength <= 1 ? "1-hop" : "0-hop") + " fallback tunnel for client pool " + toString() +
-                          " (configured length: " + configuredLength + ", allowZeroHop: " + allowShortHop + ")");
-            }
-            boolean forceZeroHop = allowShortHop && !_settings.isExploratory();
-            _manager.getExecutor().buildTunnel(configureNewTunnel(forceZeroHop));
-            return true;
-        }
+         // Allow short fallback only if explicitly configured for 0 or 1 hop
+         // Do NOT allow zero-hop fallback just because allowZeroHop=true with 2+ hop config
+         if (configuredLength <= 1 || (allowZeroHop && configuredLength == 0)) {
+             // Client configured for 1 hop or explicit 0-hop: allow short fallback
+             if (_log.shouldWarn()) {
+                 _log.warn("Warning! Building " + (configuredLength <= 1 ? "1-hop" : "0-hop") + " fallback tunnel for client pool " + toString() +
+                           " (configured length: " + configuredLength + ", allowZeroHop: " + allowZeroHop + ")");
+             }
+             boolean forceZeroHop = (configuredLength == 0) && allowZeroHop;
+             _manager.getExecutor().buildTunnel(configureNewTunnel(forceZeroHop));
+             return true;
+         }
 
-        // Client pools configured for 2+ hops: build multi-hop fallback, don't give up
-        if (_log.shouldWarn()) {
-            _log.warn("Warning! Denied short fallback for client pool " + toString() +
-                      " - configured for " + configuredLength + " hops, will continue building multi-hop tunnel");
-        }
-        return false;
-    }
+         // Client pools configured for 2+ hops: build multi-hop fallback, don't give up
+         if (_log.shouldWarn()) {
+             _log.warn("Warning! Denied short fallback for client pool " + toString() +
+                       " - configured for " + configuredLength + " hops, will continue building multi-hop tunnel");
+         }
+         return false;
+     }
 
     /**
      * Build a leaseSet from a copy of tunnel list (outside synchronization).
