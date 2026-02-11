@@ -410,79 +410,44 @@ class BuildExecutor implements Runnable {
                     }
                 }
 
-                // Determine how many tunnels are allowed to build concurrently
-                int allowed = allowed(); // also expires timed out requests
-                allowed = buildZeroHopTunnels(wanted, allowed); // zero-hop tunnels build inline
-
-                TunnelManagerFacade mgr = _context.tunnelManager();
-                boolean noInboundOrOutbound = (mgr == null) || (mgr.getFreeTunnelCount() <= 0) || (mgr.getOutboundTunnelCount() <= 0);
-
-                if (noInboundOrOutbound) {
-                    // Kickstart inbound/outbound tunnels if missing to avoid stall
-                    if (mgr != null) {
-                        if (mgr.getFreeTunnelCount() <= 0) {
-                            mgr.selectInboundTunnel();
-                        }
-                        if (mgr.getOutboundTunnelCount() <= 0) {
-                            mgr.selectOutboundTunnel();
-                        }
+                // Build tunnels based on per-pool limits from countHowManyToBuild()
+                // Each pool's canStartBuild() enforces per-pool concurrent limits
+                if (!wanted.isEmpty()) {
+                    if (wanted.size() > 1) {
+                        Collections.shuffle(wanted, _context.random());
+                        boolean preferEmpty = _context.random().nextInt(3) != 0;
+                        DataHelper.sort(wanted, new TunnelPoolComparator(preferEmpty));
                     }
-                    synchronized (_currentlyBuilding) {
-                        if (!_repoll) {
+
+                    // Process all pools that want tunnels - canStartBuild() enforces per-pool limits
+                    for (int i = 0; i < wanted.size(); i++) {
+                        TunnelPool pool = wanted.get(i);
+                        if (!pool.canStartBuild(pool.getSettings().isInbound())) {
                             if (_log.shouldDebug()) {
-                                _log.debug("No tunnel to build with (Allowed / Requested: " + allowed + " / " + wanted.size() + ") -> Waiting for a moment...");
+                                _log.debug("Skipping " + pool + " -> Max concurrent builds reached for direction");
                             }
-                            try {
-                                _currentlyBuilding.wait(500 + _context.random().nextInt(500));
-                            } catch (InterruptedException ie) {
-                                // interrupted wait, proceed
+                            continue;
+                        }
+                        long bef = System.currentTimeMillis();
+                        PooledTunnelCreatorConfig cfg = pool.configureNewTunnel();
+                        if (cfg != null) {
+                            if (cfg.getLength() <= 1 && !pool.needFallback()) {
+                                if (_log.shouldDebug()) {
+                                    _log.debug("We don't need more fallbacks for " + pool);
+                                }
+                                pool.buildComplete(cfg, Result.OTHER_FAILURE);
+                                continue;
                             }
+                            long pTime = System.currentTimeMillis() - bef;
+                            _context.statManager().addRateData("tunnel.buildConfigTime", pTime);
+                            if (_log.shouldDebug()) {
+                                _log.debug("Configuring new tunnel for " + pool + " -> " + cfg);
+                            }
+                            buildTunnel(cfg);
                         }
                     }
                 } else {
-                    if (allowed > 0 && !wanted.isEmpty()) {
-                        if (wanted.size() > 1) {
-                            Collections.shuffle(wanted, _context.random());
-                            boolean preferEmpty = _context.random().nextInt(3) != 0;
-                            DataHelper.sort(wanted, new TunnelPoolComparator(preferEmpty));
-                        }
-
-                        // Cap consecutive builds; more on slow systems
-                        if (allowed > 3) {
-                            allowed = SystemVersion.isSlow() ? 3 : 8;
-                        }
-
-                        for (int i = 0; i < allowed && !wanted.isEmpty(); i++) {
-                            TunnelPool pool = wanted.remove(0);
-                            if (!pool.canStartBuild(pool.getSettings().isInbound())) {
-                                if (_log.shouldDebug()) {
-                                    _log.debug("Skipping " + pool + " -> Max concurrent builds reached for direction");
-                                }
-                                continue;
-                            }
-                            long bef = System.currentTimeMillis();
-                            PooledTunnelCreatorConfig cfg = pool.configureNewTunnel();
-                            if (cfg != null) {
-                                if (cfg.getLength() <= 1 && !pool.needFallback()) {
-                                    if (_log.shouldDebug()) {
-                                        _log.debug("We don't need more fallbacks for " + pool);
-                                    }
-                                    i--; // 0-hop, free up slot to continue building others
-                                    pool.buildComplete(cfg, Result.OTHER_FAILURE);
-                                    continue;
-                                }
-                                long pTime = System.currentTimeMillis() - bef;
-                                _context.statManager().addRateData("tunnel.buildConfigTime", pTime);
-                                if (_log.shouldDebug()) {
-                                    _log.debug("Configuring new tunnel [" + i + "] for " + pool + " -> " + cfg);
-                                }
-                                buildTunnel(cfg);
-                            } else {
-                                i--; // didn't get config, retry another pool
-                            }
-                        }
-                    }
-
+                    // No pools want builds, wait a bit before next iteration
                     long lag = _context.jobQueue().getMaxLag();
                     int cpuloadavg = SystemVersion.getCPULoadAvg();
                     boolean highload = lag > 1000 && cpuloadavg > 98;
