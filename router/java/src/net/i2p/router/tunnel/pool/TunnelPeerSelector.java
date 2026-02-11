@@ -947,25 +947,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             if (_selectedHops.isEmpty()) {return false;}
             Hash prevHop = _selectedHops.get(_selectedHops.size() - 1);
             if (candidate.equals(prevHop)) {return true;}
-            if (prevHop.equals(ctx.routerHash()) || candidate.equals(ctx.routerHash())) {
-                return false;
-            }
-            if (ctx.commSystem().isEstablished(prevHop) && ctx.commSystem().isEstablished(candidate)) {
-                return false;
-            }
-            RouterInfo prevRI = (RouterInfo) ctx.netDb().lookupLocallyWithoutValidation(prevHop);
-            RouterInfo candRI = (RouterInfo) ctx.netDb().lookupLocallyWithoutValidation(candidate);
-            if (prevRI == null || candRI == null) {
-                // Cannot validate hop-to-hop connectivity without complete RouterInfo
-                // Allow the peer - tunnel build will fail naturally if unreachable
-                return false;
-            }
-            int prevOutbound = getPeerConnectMask(prevRI);
-            int candInbound = getConnectMask(candRI.getAddresses());
-            if ((prevOutbound & candInbound) == 0) {
-                s.add(candidate);
-                return true;
-            }
+            // Always allow - hop-to-hop connectivity validation should not exclude peers
+            // Tunnel build will fail naturally if peers cannot connect
             return false;
         }
     }
