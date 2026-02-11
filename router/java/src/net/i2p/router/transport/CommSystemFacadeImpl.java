@@ -1839,7 +1839,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         }
 
         String country = _geoIP.get(ip);
-        if (ri != null && country == null || country == "xx") {
+        if ((ri != null && country == null) || country == "xx") {
             if (_log.shouldDebug()) {
                 try {
                     InetAddress address = InetAddress.getByAddress(ip);
@@ -1849,8 +1849,14 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                     _log.debug("Unknown host while attempting to resolve address: " + e.getMessage());
                 }
             }
+            // Queue the IP for GeoIP lookup so it will be resolved asynchronously
+            if (ip != null) {
+                _geoIP.add(ip);
+            }
             return "xx";
-        } else if (country == null && ri == null) {return "xx";}
+        } else if (country == null && ri == null) {
+            return "xx";
+        }
 
         if (countryCache.size() >= MAX_COUNTRY_CACHE_SIZE) {
             // Fetch keys, synchronize to avoid ConcurrentModificationException
