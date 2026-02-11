@@ -12,11 +12,11 @@
     final int PAGE_BROWSER_SETUP = 5;
     final int PAGE_WELCOME = 6;
     final int LAST_PAGE = PAGE_WELCOME;
-    
+
     // Other constants
     final int AJAX_POLL_INTERVAL = 75000; // 75 seconds
     final int MIN_SHARE_BANDWIDTH = 12; // KBps
-    
+
     String pg = request.getParameter("page");
     int ipg;
     if (pg == null) {ipg = PAGE_LANGUAGE;}
@@ -304,7 +304,7 @@ A negative rate sets the default.</i><br>
 <%
     int share = Math.round(nethelper.getShareBandwidth() * 1.024f);
     StringBuilder shareMessage = new StringBuilder();
-    
+
     if (share < MIN_SHARE_BANDWIDTH) {
         shareMessage.append("<b>")
                    .append(intl._t("NOTE"))

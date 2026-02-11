@@ -37,7 +37,7 @@ public class RouterThrottleImpl implements RouterThrottle {
     private static final String PROP_REJECT_STARTUP_TIME = "router.rejectStartupTime";
     private static final int DEFAULT_MIN_THROTTLE_TUNNELS = SystemVersion.isSlow() ? 2000 : 6000;
     private static final String PROP_MIN_THROTTLE_TUNNELS = "router.minThrottleTunnels";
-    
+
     // Percentage-based min throttle tunnels (new in 0.9.68+)
     // Allows throttling threshold to scale with maxParticipatingTunnels
     private static final String PROP_MIN_THROTTLE_PERCENT = "router.minThrottleTunnelsPercent";
