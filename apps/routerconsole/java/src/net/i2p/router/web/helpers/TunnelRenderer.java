@@ -314,13 +314,7 @@ class TunnelRenderer {
                     sb.append("</tr>\n");
                 }
                 sb.append("</tbody>\n<tfoot id=statusnotes><tr><td colspan=8>");
-                if (displayed > DISPLAY_LIMIT) {
-                    if (bySpeed) {
-                        sb.append(_t("Limited display to the {0} tunnels with the highest usage", DISPLAY_LIMIT));
-                    } else {
-                        sb.append(_t("Limited display to the {0} most recent tunnels", DISPLAY_LIMIT));
-                    }
-                } else if (displayed >= 2) {
+                if (displayed >= 2) {
                     sb.append("<b>").append(_t("Active") ).append(":</b>&nbsp;").append(displayed);
                     if (inactive > 0) {
                         sb.append("&nbsp;&bullet;&nbsp;<b>").append(_t("Inactive")).append(":</b>&nbsp;").append(inactive)
@@ -329,7 +323,7 @@ class TunnelRenderer {
                 } else if (inactive > 0) {
                     sb.append("<b>").append(_t("Inactive")).append(":</b>&nbsp;").append(inactive);
                 }
-                sb.append("</td></tr>\n<tr><td colspan=8>")
+                sb.append("</td></tr>\n<tr class=bwUsage><td colspan=8>")
                   .append("<b>").append(_t("Lifetime bandwidth usage")).append(":</b>&nbsp;")
                   .append(DataHelper.formatSize2(processed*1024, true).replace("i", "")).append("B")
                   .append("</td></tr></tfoot>\n</table></div>\n");
@@ -1114,7 +1108,7 @@ class TunnelRenderer {
                 List<?> pendingIn = (in != null) ? in.listPending() : Collections.emptyList();
                 List<?> pendingOut = (outPool != null) ? outPool.listPending() : Collections.emptyList();
                 if (!pendingIn.isEmpty() || !pendingOut.isEmpty()) {
-                    buf.append("<tr><td colspan=")
+                    buf.append("<tr class=building><td colspan=")
                        .append(colCount).append(" class=center><b>")
                        .append(_t("Build in progress")).append(":&nbsp;");
                     if (!pendingIn.isEmpty()) {
@@ -1130,7 +1124,7 @@ class TunnelRenderer {
             }
 
             if (live > 0) {
-                buf.append("<tr><td colspan=").append(colCount)
+                buf.append("<tr class=bwUsage><td colspan=").append(colCount)
                    .append(" class=center><b>").append(_t("Lifetime bandwidth usage")).append(":&nbsp;&nbsp;")
                    .append(DataHelper.formatSize2(processedIn*1024, true).replace("i", ""))
                    .append("B ").append(_t("in")).append(", ")
