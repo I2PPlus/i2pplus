@@ -101,8 +101,9 @@ class TunnelRenderer {
         out.write("<div class=tablewrap>\n<h3 class=tabletitle id=exploratory>" + _t("Exploratory"));
         // links are set to float:right in CSS so they will be displayed in reverse order
         out.write(" <a href=\"/configtunnels#exploratory\" title=\"" +
-               _t("Configure tunnels") + "\">[" + _t("configure") + "]</a>");
+                  _t("Configure tunnels") + "\">[" + _t("configure") + "]</a>");
         writeGraphLinks(out, ei, eo);
+        out.write(" <a class=lsview style=pointer-events:none><span class=b32>EXPL</span></a>");
         out.write("</h3>\n");
         renderPool(out, ei, eo);
         // add empty span so we can link to client tunnels in the sidebar
@@ -155,8 +156,8 @@ class TunnelRenderer {
                               _t("Configure tunnels") + "\">[" + _t("configure") + "]</a>");
                 }
                 writeGraphLinks(out, in, outPool);
-                out.write(" <a class=\"lsview\" href=\"/netdb?l=3#ls_" + client.toBase32().substring(0,4) + "\">" +
-                          "<span class=\"b32\" title=\"" + _t("View LeaseSet") + "\">" +
+                out.write(" <a class=lsview href=\"/netdb?l=3#ls_" + client.toBase32().substring(0,4) + "\">" +
+                          "<span class=b32 title=\"" + _t("View LeaseSet") + "\">" +
                           client.toBase32().substring(0,4) + "</span></a>");
                 out.write("</h3>\n");
 

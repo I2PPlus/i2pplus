@@ -9,6 +9,7 @@ const bodyTag = document.querySelector("body");
 const container = document.querySelector("#tunnelsContainer");
 const nav = document.querySelector(".confignav");
 const tables = document.querySelectorAll("#tunnels table");
+const tiers = document.getElementById("tiers");
 const toggleIds = document.getElementById("toggleTunnelIds");
 const toggleTunnels = document.getElementById("toggleTunnels");
 const tunnelIdsHidden = document.querySelector(".idsHidden");
@@ -17,6 +18,35 @@ const isAdvancedMode = document.documentElement.classList.contains("advmode");
 let tunnelTableVisibility = localStorage.getItem("tunnelTableVisibility");
 let tunnelIdVisibility = localStorage.getItem("tunnelIdVisibility");
 
+function moveStatusNotesToHeader(show) {
+  const tablewraps = document.querySelectorAll("#tunnelsContainer .tablewrap");
+  tablewraps.forEach(tablewrap => {
+    const h3 = tablewrap.querySelector(":scope > h3.tabletitle");
+    const table = tablewrap.querySelector(":scope > table");
+    const statusnotes = table ? table.querySelector("tfoot#statusnotes") : null;
+    const bandwidthRow = statusnotes ? statusnotes.querySelector("tr.bwUsage") : null;
+
+    if (!bandwidthRow) return;
+
+    let headerSpan = h3.querySelector(".statusnotes");
+
+    if (!show && !headerSpan) {
+      const rawHTML = bandwidthRow.innerHTML;
+      const inMatch = rawHTML.match(/([0-9.,]+\s*[KMGT]?B)\s*(?:in)?/i);
+      const outMatch = rawHTML.match(/([0-9.,]+\s*[KMGT]?B)\s*out/i);
+
+      if (inMatch && outMatch) {
+        headerSpan = document.createElement("span");
+        headerSpan.className = "statusnotes";
+        headerSpan.innerHTML = `<span class="dataIn">${inMatch[1]}</span> <span class="dataOut">${outMatch[1]}</span>`;
+        h3.appendChild(headerSpan);
+      }
+    } else if (show && headerSpan) {
+      headerSpan.remove();
+    }
+  });
+}
+
 nav.addEventListener("click", function(event) {
   if (event.target.id === "toggleTunnels") {
     const isHidden = document.querySelector("body").classList.contains("tunnelsHidden");
@@ -24,10 +54,14 @@ nav.addEventListener("click", function(event) {
       bodyTag.classList.remove("tunnelsHidden");
       if (toggleTunnels.classList.contains("off")) {toggleTunnels.classList.remove("off");}
       localStorage.removeItem("tunnelTableVisibility");
+      moveStatusNotesToHeader(true);
+      tiers.style.display = "";
     } else {
       bodyTag.classList.add("tunnelsHidden");
       if (!toggleTunnels.classList.contains("off")) {toggleTunnels.classList.add("off");}
       localStorage.setItem("tunnelTableVisibility", "hidden");
+      moveStatusNotesToHeader(false);
+      tiers.style.display = "none";
     }
   }
   if (!isAdvancedMode) {
@@ -58,6 +92,9 @@ function persistTunnelTableVisibility() {
     if (toggleTunnels.classList.contains("off")) {toggleTunnels.classList.remove("off");}
     localStorage.removeItem("tunnelTableVisibility");
   }
+  setTimeout(() => {
+    moveStatusNotesToHeader(!bodyTag.classList.contains("tunnelsHidden"));
+  }, 0);
 }
 
 function persistTunnelIdVisibility() {
@@ -96,7 +133,12 @@ document.addEventListener("DOMContentLoaded", function() {
             }
           }
         })
-        .catch(error => {});
+        .catch(error => {})
+        .finally(() => {
+          if (bodyTag.classList.contains("tunnelsHidden")) {
+            moveStatusNotesToHeader(false);
+          }
+        });
     }
   });
 

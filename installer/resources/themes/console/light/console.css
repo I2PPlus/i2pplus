@@ -1204,7 +1204,7 @@ h3+div.statusnotes{margin-top:2px}
 .rlookup{padding:0 2px;display:inline-block;vertical-align:middle;line-height:1.3;font-style:italic}
 .tunnel_cap{min-width:24px;padding:1px 4px;display:inline-block;margin:1px 2px;text-align:center;vertical-align:middle}
 .tunnel_cap:empty::after{content:"?"}
-.tunneldisplay,.statusnotes,#config_service .infohelp,#config_service .formaction{position:relative;z-index:100}
+.tunneldisplay,div.statusnotes,#config_service .infohelp,#config_service .formaction{position:relative;z-index:100}
 .tunneldisplay td{text-align:center}
 .tunneldisplay:not(#transitSummary):not(#allTransit) td:not(.rif):not(.rih):not(.rbw)::before{display:inline-block;vertical-align:middle;min-height:30px;content:""}
 .tunneldisplay tbody tr:last-child td{border-bottom:var(--border-inner)!important}
@@ -1256,7 +1256,7 @@ h3+div.statusnotes{margin-top:2px}
 #tunnels h3 a:nth-child(n+2):hover img{filter:none}
 #tunnels h3+h3 a:not(.lsview){display:none}
 #tunnels img[src$="bound.png"],#peers img[src$="bound.png"]{opacity:0}
-#tunnels th:nth-child(n+2),.statusnotes,#tunnels tfoot td{font-size:90%}
+#tunnels th:nth-child(n+2),div.statusnotes,#tunnels tfoot td{font-size:90%}
 #tunnels td{text-align:center}
 #tunnels tbody td{border:var(--border_soft)}
 #tunnels tbody td:last-child{border-right:var(--border)}
@@ -1271,7 +1271,6 @@ h3+div.statusnotes{margin-top:2px}
 #tunnels .tab,#tunnels .tab2{min-width:140px}
 .tunnelsHidden #tunnels{padding-bottom:11px}
 .tunnelsHidden #tunnels h3[id]:nth-child(n+2){margin-top:-6px}
-.tunnelsHidden table+.statusnotes{margin-top:2px;border-top:1px solid var(--border_inner)}
 
 /* transit summary */
 #tunnels .cc{display:none}
