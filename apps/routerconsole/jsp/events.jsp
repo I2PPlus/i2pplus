@@ -32,9 +32,9 @@
 </div>
 </div>
 </div>
-<script src=/js/tablesort/tablesort.js></script>
-<script src=/js/tablesort/tablesort.number.js></script>
-<script src=/js/tablesort/tablesort.date.js></script>
+<script src=/js/tablesort/tablesort.js type=module></script>
+<script src=/js/tablesort/tablesort.number.js type=module></script>
+<script src=/js/tablesort/tablesort.date.js type=module></script>
 <script nonce=<%=cspNonce%>>new Tablesort(document.getElementById("eventlog"));</script>
 <script src=/js/lazyload.js></script>
 

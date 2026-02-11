@@ -28,8 +28,8 @@
 %>
 <jsp:getProperty name="peerHelper" property="peerSummary"/>
 </div>
-<script src=/js/tablesort/tablesort.js></script>
-<script src=/js/tablesort/tablesort.number.js></script>
+<script src=/js/tablesort/tablesort.js type=module></script>
+<script src=/js/tablesort/tablesort.number.js type=module></script>
 <script src=/js/lazyload.js></script>
 <script src=/js/peers.js type=module></script>
 </body>
