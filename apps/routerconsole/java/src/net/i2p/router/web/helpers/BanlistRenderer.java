@@ -324,6 +324,13 @@ class BanlistRenderer {
                     extractedIP = reason.substring(parenOpen + 1, parenClose);
                 }
                 reason = "Blocklist";
+            } else if (lcReason.startsWith("sybil analysis")) {
+                int parenOpen = reason.indexOf('(');
+                int parenClose = reason.indexOf(')');
+                if (parenOpen > 0 && parenClose > parenOpen) {
+                    extractedIP = reason.substring(parenOpen + 1, parenClose);
+                }
+                reason = "Sybil Analysis";
             }
             String ip = ipMap.get(key.toBase64());
             if (extractedIP != null && !extractedIP.isEmpty()) {
