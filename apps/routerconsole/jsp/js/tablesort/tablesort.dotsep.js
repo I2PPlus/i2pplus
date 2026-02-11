@@ -1,4 +1,5 @@
-// Dot separated values. E.g. IP addresses or version numbers.
+import Tablesort from './tablesort.js';
+
 Tablesort.extend(
   'dotsep',
   item => /^(\d+\.)+\d+$/.test(item),
@@ -12,3 +13,5 @@ Tablesort.extend(
     return 0;
   }
 );
+
+export default Tablesort;

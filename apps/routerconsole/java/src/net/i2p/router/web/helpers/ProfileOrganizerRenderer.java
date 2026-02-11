@@ -161,7 +161,7 @@ class ProfileOrganizerRenderer {
                 } else {buf.append("<span>&ensp;</span>");}
                 buf.append("</td><td class=host>");
                 long uptime = _context.router().getUptime();
-                String ip = (info != null) ? Addresses.toString(CommSystemFacadeImpl.getValidIP(info)) : null;
+                String ip = (info != null) ? Addresses.toString(CommSystemFacadeImpl.getCompatibleIP(info)) : null;
                 String rl = null;
                 if (ip != null && enableReverseLookups() && uptime > 30*1000) {
                     if (reverseLookupCache.containsKey(ip)) {

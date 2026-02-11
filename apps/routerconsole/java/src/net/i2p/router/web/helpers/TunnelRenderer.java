@@ -421,7 +421,7 @@ class TunnelRenderer {
                 if (ip == null) {
                     byte[] direct = TransportImpl.getIP(h);
                     String directIP = (direct != null) ? Addresses.toString(direct) : "";
-                    ip = !directIP.isEmpty() ? directIP : (info != null ? Addresses.toString(CommSystemFacadeImpl.getValidIP(info)) : null);
+                    ip = !directIP.isEmpty() ? directIP : (info != null ? Addresses.toString(CommSystemFacadeImpl.getCompatibleIP(info)) : null);
                     if (ip != null) {
                         peerToIP.put(h, ip);
                     }
@@ -586,7 +586,7 @@ class TunnelRenderer {
                 validPeerList.add(h);
                 byte[] direct = TransportImpl.getIP(h);
                 String directIP = (direct != null) ? Addresses.toString(direct) : "";
-                String ip = !directIP.isEmpty() ? directIP : Addresses.toString(CommSystemFacadeImpl.getValidIP(info));
+                String ip = !directIP.isEmpty() ? directIP : Addresses.toString(CommSystemFacadeImpl.getCompatibleIP(info));
                 peerToIP.put(h, ip);
 
                 if (doReverseLookups) {
@@ -751,7 +751,7 @@ class TunnelRenderer {
 
         byte[] direct = TransportImpl.getIP(h);
         String directIP = (direct != null) ? Addresses.toString(direct) : "";
-        String ip = !directIP.isEmpty() ? directIP : (info != null ? Addresses.toString(CommSystemFacadeImpl.getValidIP(info)) : null);
+        String ip = !directIP.isEmpty() ? directIP : (info != null ? Addresses.toString(CommSystemFacadeImpl.getCompatibleIP(info)) : null);
         result.ip = ip;
 
         if (ip != null && enableReverseLookups() && uptime > 30 * 1000) {

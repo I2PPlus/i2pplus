@@ -22,6 +22,7 @@ import net.i2p.data.Hash;
 import net.i2p.data.SessionKey;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.NetworkDatabaseFacade;
+import net.i2p.router.CommSystemFacade;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.tunnel.pool.GhostPeerManager;
@@ -1318,9 +1319,126 @@ public class ProfileOrganizer {
             String tier = DataHelper.stripHTML(info.getBandwidthTier());
             if (info.isHidden()) return false;
             if (tier.equals("L") || tier.equals("M") || tier.equals("N")) return false;
+            // Check transport compatibility - peers we can't connect to should never be selectable
+            if (!canConnectToPeer(info)) return false;
             return !TunnelPeerSelector.shouldExclude(_context, info);
         }
         return false;
+    }
+
+    /**
+     * Check if we can connect to a peer based on transport compatibility.
+     * Peers with incompatible transports (e.g., IPv6-only when we're IPv4-only)
+     * should never be selected into fast/high-cap tiers.
+     *
+     * @param peerInfo the peer's RouterInfo
+     * @return true if there's at least one compatible transport
+     */
+    private boolean canConnectToPeer(RouterInfo peerInfo) {
+        int ourOutboundMask = getOurOutboundMask();
+        int peerMask = getPeerConnectMask(peerInfo);
+        return (ourOutboundMask & peerMask) != 0;
+    }
+
+    /**
+     * Get our outbound transport mask based on comm system status.
+     */
+    private int getOurOutboundMask() {
+        int mask = 0;
+        boolean ntcpDisabled = !_context.getBooleanPropertyDefaultTrue("i2np.ntcp.enable");
+        boolean ssuDisabled = !_context.getBooleanPropertyDefaultTrue("i2np.udp.enable");
+
+        CommSystemFacade.Status status = _context.commSystem().getStatus();
+        switch (status) {
+            case OK:
+            case IPV4_OK_IPV6_FIREWALLED:
+            case IPV4_UNKNOWN_IPV6_OK:
+            case IPV4_FIREWALLED_IPV6_OK:
+            case IPV4_SNAT_IPV6_OK:
+            case IPV4_UNKNOWN_IPV6_FIREWALLED:
+                if (!ntcpDisabled) mask |= 0x01; // NTCP_V4
+                if (!ssuDisabled) {
+                    mask |= 0x02; // SSU_V4
+                    mask |= 0x10; // SSU2_V4
+                }
+                break;
+            case IPV4_DISABLED_IPV6_OK:
+            case IPV4_DISABLED_IPV6_UNKNOWN:
+            case IPV4_DISABLED_IPV6_FIREWALLED:
+                if (!ntcpDisabled) mask |= 0x04; // NTCP_V6
+                if (!ssuDisabled) {
+                    mask |= 0x08; // SSU_V6
+                    mask |= 0x20; // SSU2_V6
+                }
+                break;
+            default:
+                if (!ntcpDisabled) mask |= 0x01; // NTCP_V4
+                if (!ssuDisabled) {
+                    mask |= 0x02; // SSU_V4
+                    mask |= 0x10; // SSU2_V4
+                }
+                break;
+        }
+        return mask;
+    }
+
+    /**
+     * Extract the transport connect mask from a peer's RouterInfo.
+     */
+    private int getPeerConnectMask(RouterInfo ri) {
+        int mask = 0;
+        for (net.i2p.data.router.RouterAddress ra : ri.getAddresses()) {
+            String style = ra.getTransportStyle();
+            String host = ra.getHost();
+            if ("NTCP2".equals(style)) {
+                if (host != null) {
+                    if (host.contains(":")) mask |= 0x04; // NTCP_V6
+                    else mask |= 0x01; // NTCP_V4
+                } else {
+                    String caps = ra.getOption("caps");
+                    if (caps != null) {
+                        if (caps.contains("4")) mask |= 0x01;
+                        if (caps.contains("6")) mask |= 0x04;
+                    }
+                }
+            } else if ("SSU".equals(style)) {
+                boolean v2 = ra.getOption("v") != null;
+                if (host == null) {
+                    String caps = ra.getOption("caps");
+                    if (caps != null) {
+                        if (caps.contains("4")) {
+                            mask |= 0x02;
+                            if (v2) mask |= 0x10;
+                        }
+                        if (caps.contains("6")) {
+                            mask |= 0x08;
+                            if (v2) mask |= 0x20;
+                        }
+                    }
+                } else if (host.contains(":")) {
+                    mask |= 0x08;
+                    if (v2) mask |= 0x20;
+                } else {
+                    mask |= 0x02;
+                    if (v2) mask |= 0x10;
+                }
+            } else if ("SSU2".equals(style)) {
+                if (host == null) {
+                    String caps = ra.getOption("caps");
+                    if (caps != null) {
+                        if (caps.contains("4")) mask |= 0x10;
+                        if (caps.contains("6")) mask |= 0x20;
+                    }
+                } else if (host.contains(":")) {
+                    mask |= 0x20;
+                } else {
+                    mask |= 0x10;
+                }
+            }
+        }
+        // If no addresses, assume IPv4 only (conservative default)
+        if (mask == 0) mask = 0x01 | 0x02 | 0x10;
+        return mask;
     }
 
     private void locked_placeProfile(PeerProfile profile) {
