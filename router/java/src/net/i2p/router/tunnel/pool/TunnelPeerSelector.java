@@ -87,10 +87,10 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         else if (length > 7) // as documented in tunnel.html
             length = 7;
 
-        // Enforce max 3 hops under attack (< 40% build success)
+        // Enforce max 3 hops under attack (< 40% build success) OR 0% success after 3min
         if (length > 3) {
             double buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
-            if (buildSuccess > 0 && buildSuccess < 0.40) {
+            if (buildSuccess < 0.40) {
                 length = 3;
             }
         }
@@ -429,9 +429,11 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             return configured;
         }
 
-        // Relax if build success is low - with hysteresis to prevent oscillation
+        // Relax if build success is low OR 0% success after 3min (botnet attack)
+        // with hysteresis to prevent oscillation
         // Relax below 40%, restore above 45%
-        if (buildSuccess > 0 && buildSuccess < 0.40) {
+        boolean isZeroSuccess = buildSuccess <= 0;
+        if (buildSuccess < 0.40) {
             shouldRelax = true;
             reason = "low build success (" + (int)(buildSuccess * 100) + "%)";
         }
@@ -513,7 +515,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
                 return true;
             }
             // During attacks, allow E cap with 1/6 chance
-            if (cap.contains("E") && buildSuccess > 0 && buildSuccess < 0.40) {
+            if (cap.contains("E") && buildSuccess < 0.40) {
                 if (ctx.random().nextInt(6) != 0) {
                     return true;  // Exclude (5/6 chance)
                 }
@@ -607,7 +609,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
                 return false;  // Can't determine - exclude U-cap
             }
             // Allow U-cap peers with M/N/O/P/X during attacks
-            return buildSuccess > 0 && buildSuccess < 0.40;
+            return buildSuccess < 0.40;
         }
         return false;
     }
@@ -645,7 +647,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * @return true if duplicate detected
      * @since 0.9.68+
      */
-    protected boolean isDuplicateSequence(TunnelPoolSettings settings, List<Hash> newPeers) {
+     protected boolean isDuplicateSequence(TunnelPoolSettings settings, List<Hash> newPeers) {
         if (newPeers == null || newPeers.isEmpty()) {return false;}
 
         Hash dest = settings.getDestination();
@@ -664,7 +666,9 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
             boolean match = true;
             for (int i = 0; i < newPeers.size(); i++) {
-                Hash existingPeer = existing.getPeer(i);
+                // getPeer() returns gateway-first order (0=IBGW for inbound, 0=OBEP for outbound)
+                // newPeers is endpoint-first order, so reverse the index for comparison
+                Hash existingPeer = existing.getPeer(newPeers.size() - i);
                 if (existingPeer == null || !existingPeer.equals(newPeers.get(i))) {
                     match = false;
                     break;

@@ -6,9 +6,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+
 import net.i2p.data.Hash;
 import net.i2p.data.SessionKey;
 import net.i2p.router.RouterContext;
@@ -69,13 +68,8 @@ class ClientPeerSelector extends TunnelPeerSelector {
             // Reduce IP restriction under low tunnel build success to improve diversity @since 0.9.68+
             if (ipRestriction > 0 && length > 1) {
                 double buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
-                if (buildSuccess > 0 && buildSuccess < 0.40) {
-                    // Under 40% success: reduce to /16 (mask = 2)
-                    ipRestriction = Math.min(ipRestriction, 2);
-                }
-                if (buildSuccess > 0 && buildSuccess < 0.30) {
-                    // Under 30% success: reduce to /24 (mask = 3) - very permissive
-                    ipRestriction = Math.min(ipRestriction, 3);
+                if (buildSuccess < 0.40) {
+                    ipRestriction = Math.min(ipRestriction + 1, 16);
                 }
             }
             if (ctx.getBooleanProperty("i2np.allowLocal") || length <= 1) {ipRestriction = 0;}
@@ -119,8 +113,8 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     if (matches.isEmpty()) {
                         ctx.profileOrganizer().selectHighCapacityPeers(length, exclude, matches);
                     }
-                    // Filter out incompatible peers that bypassed exclude in fallback pools
-                    matches.retainAll(exclude);
+                    // Filter: remove peers that are in the exclude set
+                    matches.removeAll(exclude);
                 }
                 matches.remove(ctx.routerHash());
                 rv = new ArrayList<Hash>(matches);
@@ -311,7 +305,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                 } else {
                     // Progressive fallback under attack conditions based on build success rate
                     double buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
-                    boolean isUnderAttack = buildSuccess > 0 && buildSuccess < 0.40;
+                    boolean isUnderAttack = buildSuccess < 0.40;
                     
                     if (isUnderAttack && rv.size() > 0) {
                         // Attack detected (25-40% success): try fallback with relaxed restrictions

@@ -64,14 +64,12 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
         boolean hiddenOutbound = hidden && !isInbound;
         boolean lowOutbound = nonzero && !isInbound && !ctx.commSystem().haveHighOutboundCapacity();
         int ipRestriction = settings.getIPRestriction();
-        // Reduce IP restriction under low tunnel build success to improve diversity @since 0.9.68+
+        // Increase IP restriction under low tunnel build success to improve diversity @since 0.9.68+
         if (ipRestriction > 0 && length > 1) {
             double buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
-            if (buildSuccess > 0 && buildSuccess < 0.40) {
-                ipRestriction = Math.min(ipRestriction, 2);
-            }
-            if (buildSuccess > 0 && buildSuccess < 0.30) {
-                ipRestriction = Math.min(ipRestriction, 3);
+            if (buildSuccess < 0.40) {
+                // Increase the limit to allow more peers per IP during attacks
+                ipRestriction = Math.min(ipRestriction + 1, 16);
             }
         }
         if (ctx.getBooleanProperty("i2np.allowLocal") || length <= 1) {ipRestriction = 0;}
@@ -189,11 +187,11 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
                 int highCapCount = length - 2;
                 if (highCapCount > 0) {
                     double buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
-                    if (buildSuccess > 0 && buildSuccess < 0.50) {
+                    if (buildSuccess < 0.50) {
                         // Under low success: reduce high cap allocation to minimum 1
                         highCapCount = Math.max(highCapCount / 2, 1);
                     }
-                    if (buildSuccess > 0 && buildSuccess < 0.30) {
+                    if (buildSuccess < 0.30) {
                         // Under severe failure: use almost all non-high-cap peers
                         highCapCount = Math.max(highCapCount / 2, 1);
                     }
@@ -236,10 +234,11 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
         else
             rv.add(ctx.routerHash());
 
-        // Progressive fallback under attack conditions @since 0.9.68+
+                // Progressive fallback under attack conditions @since 0.9.68+
+        boolean firstFallbackNeeded = false;
         if (rv.size() <= 1) {
                 double buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
-                boolean isUnderAttack = buildSuccess > 0 && buildSuccess < 0.40;
+                boolean isUnderAttack = buildSuccess < 0.40;
 
                 if (isUnderAttack && rv.size() == 1) {
                     // Attack detected (25-40% success) but only have self - try to get more peers
@@ -267,15 +266,21 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
                         rv.add(0, ctx.routerHash());
                     else
                         rv.add(ctx.routerHash());
+
+                    // Mark that we need the catastrophic fallback if this didn't work
+                    firstFallbackNeeded = true;
                 }
 
                 // Catastrophic tunnel collapse - be even less selective @since 0.9.68+
-                if (rv.size() <= 1 && buildSuccess > 0 && buildSuccess < 0.25) {
+                if (rv.size() <= 1 && buildSuccess < 0.25) {
                     if (log.shouldWarn()) {
                         log.warn("Catastrophic tunnel collapse detected (" + (int)(buildSuccess * 100) + "% success) -> Using emergency peer selection...");
                     }
 
-                    rv.clear();
+                    // Only clear if we haven't already populated from first fallback
+                    if (!firstFallbackNeeded) {
+                        rv.clear();
+                    }
 
                     // Emergency: include peers from all tiers without IP restrictions
                     ArraySet<Hash> emergency = new ArraySet<Hash>(length + 2);
@@ -289,11 +294,12 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
                     }
 
                     if (!emergency.isEmpty()) {
+                        // Don't clear existing peers, add to them
                         rv.addAll(emergency);
                         if (log.shouldWarn()) {
-                            log.warn("Emergency peer selection found " + rv.size() + " peers");
+                            log.warn("Emergency peer selection found " + emergency.size() + " peers, total: " + rv.size());
                         }
-                    } else {
+                    } else if (!firstFallbackNeeded) {
                         // No peers available - allow 0-hop exploratory tunnel (just self)
                         // Exploratory tunnels can use 0-hops; client tunnels should fail instead
                         if (log.shouldWarn()) {
@@ -308,11 +314,13 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
                         return rv;
                     }
 
-                    // Re-add self at the end
-                    if (isInbound)
-                        rv.add(0, ctx.routerHash());
-                    else
-                        rv.add(ctx.routerHash());
+                    // Re-add self at the end if not already present
+                    if (!rv.contains(ctx.routerHash())) {
+                        if (isInbound)
+                            rv.add(0, ctx.routerHash());
+                        else
+                            rv.add(ctx.routerHash());
+                    }
                 }
             }
 
@@ -352,7 +360,7 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
         // no need to explore too wildly at first (if we have enough connected peers)
         long uptime = ctx.router().getUptime();
         if (uptime <= (SystemVersion.isAndroid() ? 15*60*1000 : 5*60*1000))
-            return true;
+            return false;
         // wait for first expiration of old RIs, if we had a long downtime
         if (uptime <= 61*60*1000 && ctx.router().getEstimatedDowntime() > 3*24*60*60*1000L)
             return true;
