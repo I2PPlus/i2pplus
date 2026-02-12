@@ -485,7 +485,7 @@ public class LeaseSet2 extends LeaseSet {
         if (exp < 0) {
             // During attacks (low build success), allow slight expiry to accommodate tunnel delays
             int buildSuccess = SystemVersion.getTunnelBuildSuccess();
-            if (buildSuccess > 0 && buildSuccess < 35 && exp >= -10) {
+            if (buildSuccess < 35 && exp >= -10) {
                 // Clamp to 0 during attacks if within 10 seconds expired
                 exp = 0;
             } else {
