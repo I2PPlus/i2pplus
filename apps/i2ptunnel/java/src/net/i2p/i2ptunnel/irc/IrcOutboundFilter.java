@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.Timer;
+import java.util.TimerTask;
 import net.i2p.client.streaming.I2PSocket;
 import net.i2p.util.Log;
 
@@ -22,6 +24,8 @@ public class IrcOutboundFilter implements Runnable {
     private final Log _log;
     private final DCCHelper _dccHelper;
     private volatile Runnable onDisconnect;
+    private volatile Timer pingTimer;
+    private static final long PING_INTERVAL_MS = 30 * 1000; // 30 seconds
 
     public IrcOutboundFilter(Socket lcl, I2PSocket rem, StringBuffer pong, Log log) {
         this(lcl, rem, pong, log, null);
@@ -62,6 +66,26 @@ public class IrcOutboundFilter implements Runnable {
         }
         if (_log.shouldDebug())
             _log.debug("[IRC Client] Outbound Filter: Running");
+        
+        // Start automatic ping timer to keep tunnels active
+        pingTimer = new Timer("IRC Ping Timer", true);
+        pingTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    String ping = "PING :i2p-tunnel-keepalive\r\n";
+                    output.write(ping.getBytes("ISO-8859-1"));
+                    output.flush();
+                    if (_log.shouldDebug()) {
+                        _log.debug("[IRC Client] Sent automatic keepalive PING");
+                    }
+                } catch (IOException ioe) {
+                    // Socket closed or error, cancel timer
+                    pingTimer.cancel();
+                }
+            }
+        }, PING_INTERVAL_MS, PING_INTERVAL_MS);
+        
         try {
             while(true)
             {
@@ -109,6 +133,9 @@ public class IrcOutboundFilter implements Runnable {
         } catch (RuntimeException re) {
             _log.error("[IRC Client] Error filtering outbound data", re);
         } finally {
+            if (pingTimer != null) {
+                pingTimer.cancel();
+            }
             try { remote.close(); } catch (IOException e) {}
         }
         if (_log.shouldDebug())
