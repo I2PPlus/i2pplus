@@ -80,6 +80,8 @@ class OutboundReceiver implements TunnelGateway.Receiver {
         m.setOnFailedSendJob(_sendFailJob);
         _context.outNetMessagePool().add(m);
         _config.incrementProcessedMessages();
+        // Record activity to prevent removing active tunnels
+        _config.recordActivity();
     }
 
     private class SendJob extends JobImpl {
