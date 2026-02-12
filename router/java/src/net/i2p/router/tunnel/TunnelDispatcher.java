@@ -567,7 +567,7 @@ public class TunnelDispatcher implements Service {
 
         // Increase expiration cutoff during attacks to handle increased latency
         double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
-        boolean isUnderAttack = buildSuccess > 0 && buildSuccess < 0.40;
+        boolean isUnderAttack = buildSuccess < 0.40;
         long expirationCutoff = isUnderAttack ? 90 * 1000L : Router.CLOCK_FUDGE_FACTOR;
 
         if (gw != null) {
