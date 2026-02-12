@@ -243,7 +243,7 @@ public abstract class TransportImpl implements Transport {
         int configured = _context.getProperty(maxProp, def);
         if (style.equals("NTCP") && _context.getBooleanProperty(PROP_THROTTLE_NTCP_ATTACK)) {
             double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
-            if (buildSuccess > 0 && buildSuccess < 0.40) {
+            if (buildSuccess < 0.40) {
                 int scaled = (int) (buildSuccess * 100 * 20);
                 return Math.min(800, Math.max(100, scaled));
             }
@@ -301,7 +301,7 @@ public abstract class TransportImpl implements Transport {
         int configured = ctx.getProperty(maxProp, def);
         if (style.equals("NTCP") && ctx.getBooleanProperty(PROP_THROTTLE_NTCP_ATTACK)) {
             double buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
-            if (buildSuccess > 0 && buildSuccess < 0.40) {
+            if (buildSuccess < 0.40) {
                 int scaled = (int) (buildSuccess * 100 * 20);
                 return Math.min(800, Math.max(100, scaled));
             }

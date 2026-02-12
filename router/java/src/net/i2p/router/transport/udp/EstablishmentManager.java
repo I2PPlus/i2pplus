@@ -259,7 +259,7 @@ class EstablishmentManager {
                 return false;
             }
             double buildSuccess = profileOrganizer.getTunnelBuildSuccess();
-            return buildSuccess > 0 && buildSuccess < TUNNEL_BUILD_SUCCESS_THRESHOLD;
+            return buildSuccess < TUNNEL_BUILD_SUCCESS_THRESHOLD;
         } catch (Exception e) {
             return false;
         }
