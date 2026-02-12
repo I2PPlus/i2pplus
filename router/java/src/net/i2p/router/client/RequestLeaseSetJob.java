@@ -186,7 +186,7 @@ class RequestLeaseSetJob extends JobImpl {
             getContext().statManager().addRateData("client.requestLeaseSetTimeout", 1);
 
             int buildSuccess = SystemVersion.getTunnelBuildSuccess();
-            boolean isUnderAttack = buildSuccess > 0 && buildSuccess < 40;
+            boolean isUnderAttack = buildSuccess < 40;
             int maxRetries = isUnderAttack ? Integer.MAX_VALUE : 10;
             int maxWindowMs = isUnderAttack ? 4 * 60 * 1000 : 2 * 60 * 1000;
 

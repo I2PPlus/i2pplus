@@ -510,7 +510,7 @@ class ClientConnectionRunner {
         // During network attacks with low build success (<40%), or during startup, allow indefinite retries
         double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
         long uptime = _context.router().getUptime();
-        if ((buildSuccess > 0 && buildSuccess < BUILD_SUCCESS_THRESHOLD) || uptime < STARTUP_PERIOD_MS) {
+        if (buildSuccess < BUILD_SUCCESS_THRESHOLD || uptime < STARTUP_PERIOD_MS) {
             return MAX_ATTACK_LEASE_FAILS; // Retry indefinitely during attacks
         }
         return maxFails;
@@ -524,7 +524,7 @@ class ClientConnectionRunner {
     private long getRerequestDelay(long baseDelayMs) {
         double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
         long uptime = _context.router().getUptime();
-        if ((buildSuccess > 0 && buildSuccess < BUILD_SUCCESS_THRESHOLD) || uptime < STARTUP_PERIOD_MS) {
+        if (buildSuccess < BUILD_SUCCESS_THRESHOLD || uptime < STARTUP_PERIOD_MS) {
             // Scale up to 10s during attacks (instead of just doubling)
             long delay = baseDelayMs * 2;
             return Math.min(delay, MAX_REREQUEST_DELAY);
