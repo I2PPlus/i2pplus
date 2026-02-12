@@ -199,7 +199,6 @@ public class PeerTestJob extends JobImpl {
     /**
      * Override concurrency to use aggressive mode under attack.
      * Aggressive mode tests more peers concurrently to identify failures faster.
-     * @return number of peers to test in parallel
      * @since 0.9.68+
      */
     public synchronized void startTesting(PeerManager manager) {

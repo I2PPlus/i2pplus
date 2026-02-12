@@ -2248,7 +2248,7 @@
 
   <target name="copyJavadoc" depends="javadoc">
     <copy quiet="true" todir="pkg-temp/docs/javadoc">
-      <fileset dir="build/javadoc/"/>
+      <fileset dir="dist/javadoc/"/>
     </copy>
   </target>
 
