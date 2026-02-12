@@ -325,7 +325,7 @@ public class HostChecker {
                 return false;
             }
             double buildSuccess = profileOrganizer.getTunnelBuildSuccess();
-            boolean underAttack = buildSuccess > 0 && buildSuccess < TUNNEL_BUILD_SUCCESS_THRESHOLD;
+            boolean underAttack = buildSuccess < TUNNEL_BUILD_SUCCESS_THRESHOLD;
             if (_log.shouldDebug()) {
                 _log.debug("Tunnel build success: " + (int)(buildSuccess * 100) + "% -> Under attack: " + underAttack);
             }
@@ -765,7 +765,7 @@ public class HostChecker {
 
             pingSocketManager = I2PSocketManagerFactory.createManager(options);
             boolean tunnelBuildFailed = (pingSocketManager == null);
-            
+
             if (tunnelBuildFailed) {
                 if (_log.shouldWarn()) {
                     _log.warn("Failed to create SocketManager for HostChecker ping -> " + displayHostname + " [6,4], will try eephead");
@@ -836,27 +836,27 @@ public class HostChecker {
                     // Continue to eephead fallback below
                 }
             }
-            
+
             // Try eephead fallback (reaches here if tunnel build failed or ping failed)
             PingResult eepheadResult = fallbackToEepHead(hostname, startTime, leaseSetTypes, saveResult, tunnelBuildFailed);
-            
+
             // If eephead succeeded, destination is up
             if (eepheadResult.reachable) {
                 return eepheadResult;
             }
-            
+
             // If tunnel build failed AND eephead failed, don't mark destination as down
             // This is a local tunnel issue, not the destination's fault
             if (tunnelBuildFailed) {
                 if (_log.shouldInfo()) {
-                    _log.info("HostChecker check INCONCLUSIVE for " + displayHostname + 
+                    _log.info("HostChecker check INCONCLUSIVE for " + displayHostname +
                               " - both tunnel build and eephead failed (likely local issue, not marking as down)");
                 }
                 // Return the result but DON'T save it to pingResults
                 // This preserves the previous status until we can test again
                 return eepheadResult;
             }
-            
+
             // Tunnel built successfully but both ping and eephead failed - destination is down
             return eepheadResult;
 
@@ -1028,7 +1028,7 @@ public class HostChecker {
             long responseTime = success ? System.currentTimeMillis() - eepHeadStart : -1;
 
             PingResult result = createPingResult(success, startTime, responseTime, hostname, leaseSetTypes);
-            
+
             // Determine if we should save this result
             // Don't save failure if tunnel build failed - it's a local issue, not the destination's fault
             boolean shouldSaveResult = saveResult || success;
@@ -1036,11 +1036,11 @@ public class HostChecker {
                 // Both tunnel build and eephead failed - don't mark destination as down
                 shouldSaveResult = false;
                 if (_log.shouldInfo()) {
-                    _log.info("HostChecker head [FAILURE] -> No response from " + hostname + " " + leaseSetTypes + 
+                    _log.info("HostChecker head [FAILURE] -> No response from " + hostname + " " + leaseSetTypes +
                               " (tunnel build also failed - not marking as down)");
                 }
             }
-            
+
             if (shouldSaveResult) {
                 synchronized (_pingResults) {
                     _pingResults.put(hostname, result);
