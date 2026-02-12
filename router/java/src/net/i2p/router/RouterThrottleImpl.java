@@ -28,9 +28,8 @@ public class RouterThrottleImpl implements RouterThrottle {
     private static final long JOB_LAG_LIMIT_NETDB = 3*1000;
     private static final long JOB_LAG_LIMIT_TUNNEL = SystemVersion.isSlow() ? 3000 : 2000;
     public static final String PROP_MAX_TUNNELS = "router.maxParticipatingTunnels";
-    public static final int DEFAULT_MAX_TUNNELS = SystemVersion.isSlow() ? 3*1000 :
-                                                  SystemVersion.getMaxMemory() < 512*1024*1024 ? 5*1000 :
-                                                  SystemVersion.getCores() >= 8 ? 12*1000 : 8*1000;
+    public static final int DEFAULT_MAX_TUNNELS = SystemVersion.isSlow() || SystemVersion.getMaxMemory() < 512*1024*1024 ? 4000 :
+                                                  SystemVersion.getCores() >= 8 ? 12000 : 8000;
     private static final String PROP_MAX_PROCESSINGTIME = "router.defaultProcessingTimeThrottle";
     private static final long DEFAULT_REJECT_STARTUP_TIME = 3*60*1000;
     private static final long MIN_REJECT_STARTUP_TIME = 90*1000;
@@ -410,7 +409,7 @@ public class RouterThrottleImpl implements RouterThrottle {
 
     /**
      * Don't ever probabalistically throttle tunnels if we have less than this many.
-     * 
+     *
      * Priority order for determining the minimum throttle threshold:
      * 1. router.minThrottleTunnels - absolute value (for backwards compatibility)
      * 2. router.minThrottleTunnelsPercent - percentage of max tunnels (default: 10%)
@@ -424,18 +423,18 @@ public class RouterThrottleImpl implements RouterThrottle {
         if (configuredAbsolute > 0) {
             return configuredAbsolute;
         }
-        
+
         int maxTunnels = _context.getProperty(PROP_MAX_TUNNELS, DEFAULT_MAX_TUNNELS);
-        
+
         // Check for percentage-based configuration (new in 0.9.68)
         int percent = _context.getProperty(PROP_MIN_THROTTLE_PERCENT, DEFAULT_MIN_THROTTLE_PERCENT);
-        
+
         // Clamp percentage between 5% and 90% to prevent misconfiguration
         percent = Math.max(MIN_THROTTLE_PERCENT, Math.min(MAX_THROTTLE_PERCENT, percent));
-        
+
         // Calculate threshold as percentage of max tunnels
         int threshold = (maxTunnels * percent) / 100;
-        
+
         // Ensure we don't return 0 or negative
         return Math.max(1, threshold);
     }
