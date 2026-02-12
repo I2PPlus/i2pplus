@@ -46,9 +46,7 @@ class BuildExecutor implements Runnable {
     private final ExpireJobManager _expireJobManager;
     private volatile boolean _isRunning;
     private boolean _repoll;
-    // Increased from cores*2 to cores*4 for faster tunnel churn handling
-    // Makes build concurrency configurable via router.buildConcurrencyMultiplier property (default: 4)
-    /**
+    /*
      * Get the maximum number of concurrent tunnel builds allowed.
      * Calculated based on CPU cores and configurable multiplier.
      *
@@ -145,7 +143,7 @@ class BuildExecutor implements Runnable {
         // Adjust timeout based on tunnel length
         int length = cfg.getLength();
         if (length > 3) {
-            baseTimeout += (length - 3) * 5*1000; // Add 5s per additional hop
+            baseTimeout += (length - 3) * 2*1000; // Add 2s per additional hop (reduced from 5s)
         }
 
         // Adjust based on recent network performance
@@ -155,31 +153,32 @@ class BuildExecutor implements Runnable {
             if (r != null) {
                 double avgBuildTime = r.getAverageValue();
                 if (avgBuildTime > 100) { // If builds are taking longer than 100ms
-                    baseTimeout += (long)(avgBuildTime * 2); // Double the average build time
+                    baseTimeout += (long)(avgBuildTime * 1.5); // 1.5x the average build time (reduced from 2x)
                 }
             }
         }
 
         // Extend timeout during network attacks when build success is under 40%
+        // Only trigger if we have build data (buildSuccess > 0), not at startup
         double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
         boolean isUnderAttack = buildSuccess > 0 && buildSuccess < 0.40;
         if (isUnderAttack) { // Under 40% success rate
-            baseTimeout *= 2; // Double the timeout during low success periods
+            baseTimeout *= 1.5; // 1.5x the timeout during low success periods (reduced from 2x)
         }
 
         // Adjust based on system load
         int cpuLoad = SystemVersion.getCPULoadAvg();
         if (cpuLoad > 90) {
-            baseTimeout += 30*1000; // Add 30s under high CPU load
+            baseTimeout += 15*1000; // Add 15s under high CPU load (reduced from 30s)
         } else if (cpuLoad > 80) {
-            baseTimeout += 15*1000; // Add 15s under moderate CPU load
+            baseTimeout += 10*1000; // Add 10s under moderate CPU load (reduced from 15s)
         }
 
         // Cap the timeout to prevent excessive waits
-        long maxTimeout = BuildRequestor.REQUEST_TIMEOUT * 3; // Triple the base timeout
+        long maxTimeout = BuildRequestor.REQUEST_TIMEOUT * 2; // Double the base timeout (reduced from 3x)
         // During attacks with low success, allow higher max timeout
         if (isUnderAttack) {
-            maxTimeout = BuildRequestor.REQUEST_TIMEOUT * 5; // Allow up to 5x timeout
+            maxTimeout = BuildRequestor.REQUEST_TIMEOUT * 3; // Allow up to 3x timeout (reduced from 5x)
         }
         return Math.min(baseTimeout, maxTimeout);
     }
@@ -284,7 +283,7 @@ class BuildExecutor implements Runnable {
             long adaptiveTimeout = calculateAdaptiveTimeout(cfg);
             long adjustedExpireBefore = now + TEN_MINUTES_MS - adaptiveTimeout;
 
-            if (cfg.getExpiration() <= adjustedExpireBefore) {
+            if (cfg.getExpiration() <= now || cfg.getExpiration() <= adjustedExpireBefore) {
                 PooledTunnelCreatorConfig existingCfg = _recentlyBuildingMap.putIfAbsent(key, cfg);
                 if (existingCfg == null) {
                     iter.remove();
@@ -350,7 +349,7 @@ class BuildExecutor implements Runnable {
             return isSlow ? 1 : 3;
         }
 
-        // Adjust allowed tunnels on overload conditions
+        // Adjust allowed tunnels on overload conditions - increase builds under high load to handle attacks
         if (allowed < 3) {
             allowed += 3;
             allowed *= 4;
@@ -410,24 +409,30 @@ class BuildExecutor implements Runnable {
                     }
                 }
 
+                // Get global limit and expire old requests
+                int allowed = allowed();
+                
                 // Build tunnels based on per-pool limits from countHowManyToBuild()
                 // Each pool's canStartBuild() enforces per-pool concurrent limits
-                if (!wanted.isEmpty()) {
+                // Global 'allowed' enforces total concurrent limit
+                if (!wanted.isEmpty() && allowed > 0) {
                     if (wanted.size() > 1) {
                         Collections.shuffle(wanted, _context.random());
                         boolean preferEmpty = _context.random().nextInt(3) != 0;
                         DataHelper.sort(wanted, new TunnelPoolComparator(preferEmpty));
                     }
 
-                    // Process all pools that want tunnels - canStartBuild() enforces per-pool limits
-                    for (int i = 0; i < wanted.size(); i++) {
-                        TunnelPool pool = wanted.get(i);
+                    // Process up to 'allowed' pools - removes from wanted as we go
+                    for (int i = 0; i < allowed && !wanted.isEmpty(); i++) {
+                        TunnelPool pool = wanted.remove(0);
                         if (!pool.canStartBuild(pool.getSettings().isInbound())) {
                             if (_log.shouldDebug()) {
                                 _log.debug("Skipping " + pool + " -> Max concurrent builds reached for direction");
                             }
+                            i--; // Don't count against allowed since we skipped
                             continue;
                         }
+                        
                         long bef = System.currentTimeMillis();
                         PooledTunnelCreatorConfig cfg = pool.configureNewTunnel();
                         if (cfg != null) {
@@ -435,6 +440,7 @@ class BuildExecutor implements Runnable {
                                 if (_log.shouldDebug()) {
                                     _log.debug("We don't need more fallbacks for " + pool);
                                 }
+                                i--; // 0-hop doesn't count against allowed
                                 pool.buildComplete(cfg, Result.OTHER_FAILURE);
                                 continue;
                             }
@@ -444,6 +450,8 @@ class BuildExecutor implements Runnable {
                                 _log.debug("Configuring new tunnel for " + pool + " -> " + cfg);
                             }
                             buildTunnel(cfg);
+                        } else {
+                            i--; // Failed to configure, don't count against allowed
                         }
                     }
                 } else {

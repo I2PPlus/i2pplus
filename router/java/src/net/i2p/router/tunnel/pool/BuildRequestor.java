@@ -333,8 +333,8 @@ abstract class BuildRequestor {
         // For exploratory tunnels, allow fallback to other exploratory tunnels
         if (settings.isExploratory()) {
             TunnelInfo expl = isInbound
-                ? selectFallbackOutboundTunnel(ctx, mgr, cfg, log)
-                : selectFallbackInboundTunnel(ctx, mgr, cfg, log);
+                ? selectFallbackOutboundTunnel(ctx, mgr, cfg, false, log)
+                : selectFallbackInboundTunnel(ctx, mgr, cfg, false, log);
             if (expl != null && log.shouldInfo()) {
                 log.info("Using Exploratory tunnel as fallback for: " + cfg);
             }
@@ -346,8 +346,8 @@ abstract class BuildRequestor {
         // 0/1-hop exploratory tunnels are rejected by selectFallback methods
         if (!settings.isExploratory()) {
             TunnelInfo expl = isInbound
-                ? selectFallbackOutboundTunnel(ctx, mgr, cfg, log)
-                : selectFallbackInboundTunnel(ctx, mgr, cfg, log);
+                ? selectFallbackOutboundTunnel(ctx, mgr, cfg, clientWantsMultiHop, log)
+                : selectFallbackInboundTunnel(ctx, mgr, cfg, clientWantsMultiHop, log);
             if (expl != null) {
                 if (log.shouldInfo()) {
                     log.info("Using exploratory tunnel as fallback for client: " + cfg);
@@ -359,22 +359,18 @@ abstract class BuildRequestor {
     }
 
     private static TunnelInfo selectFallbackOutboundTunnel(RouterContext ctx, TunnelManagerFacade mgr,
-                                                            PooledTunnelCreatorConfig cfg, Log log) {
+                                                            PooledTunnelCreatorConfig cfg, 
+                                                            boolean clientWantsMultiHop, Log log) {
         TunnelInfo tunnel = mgr.selectOutboundTunnel();
         if (tunnel == null) {
             return null;
         }
         // For exploratory pools, allow 0/1-hop tunnels at startup
         // For client pools using exploratory as fallback, reject short tunnels
-        TunnelPoolSettings explSettings = mgr.getOutboundSettings();
-        if (explSettings.isExploratory()) {
-            return tunnel;
-        }
-        // Client pool fallback: reject 0/1-hop exploratory tunnels
-        if (tunnel.getLength() <= 1) {
+        if (clientWantsMultiHop && tunnel.getLength() <= 1) {
             if (log.shouldInfo()) {
                 log.info("Rejecting " + (tunnel.getLength() <= 0 ? "zero" : "one") +
-                         "-hop exploratory tunnel for " + cfg + " build reply");
+                         "-hop exploratory tunnel for client " + cfg + " build reply");
             }
             return null;
         }
@@ -382,22 +378,18 @@ abstract class BuildRequestor {
     }
 
     private static TunnelInfo selectFallbackInboundTunnel(RouterContext ctx, TunnelManagerFacade mgr,
-                                                           PooledTunnelCreatorConfig cfg, Log log) {
+                                                            PooledTunnelCreatorConfig cfg,
+                                                            boolean clientWantsMultiHop, Log log) {
         TunnelInfo tunnel = mgr.selectInboundTunnel();
         if (tunnel == null) {
             return null;
         }
         // For exploratory pools, allow 0/1-hop tunnels at startup
         // For client pools using exploratory as fallback, reject short tunnels
-        TunnelPoolSettings explSettings = mgr.getInboundSettings();
-        if (explSettings.isExploratory()) {
-            return tunnel;
-        }
-        // Client pool fallback: reject 0/1-hop exploratory tunnels
-        if (tunnel.getLength() <= 1) {
+        if (clientWantsMultiHop && tunnel.getLength() <= 1) {
             if (log.shouldInfo()) {
                 log.info("Rejecting " + (tunnel.getLength() <= 0 ? "zero" : "one") +
-                         "-hop exploratory tunnel for " + cfg + " build reply");
+                         "-hop exploratory tunnel for client " + cfg + " build reply");
             }
             return null;
         }
