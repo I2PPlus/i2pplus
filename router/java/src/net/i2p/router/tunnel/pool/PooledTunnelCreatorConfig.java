@@ -106,4 +106,35 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
      */
     public boolean isLastResort() {return _lastResort;}
 
+    /**
+     * Track recent activity to determine if tunnel is actively being used.
+     * Used to prevent removing tunnels that have active connections.
+     */
+    private volatile long _lastActivityTime;
+    private volatile int _lastMessageCount;
+
+    /**
+     * Record that this tunnel was selected/used.
+     * Called by TunnelPool when tunnel is selected.
+     * @since 0.9.68+
+     */
+    public void recordActivity() {
+        _lastActivityTime = _context.clock().now();
+        _lastMessageCount = getProcessedMessagesCount();
+    }
+
+    /**
+     * Check if this tunnel has been recently active (used within the last minute
+     * or has processed messages since last check).
+     * @param maxIdleMs maximum idle time in milliseconds
+     * @return true if tunnel is actively being used
+     * @since 0.9.68+
+     */
+    public boolean isRecentlyActive(long maxIdleMs) {
+        long now = _context.clock().now();
+        int currentMessages = getProcessedMessagesCount();
+        // Active if: used recently OR messages increased since last check
+        return (now - _lastActivityTime < maxIdleMs) || (currentMessages > _lastMessageCount);
+    }
+
 }

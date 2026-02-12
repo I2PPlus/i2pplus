@@ -230,6 +230,10 @@ public class TunnelPool {
                             if (_settings.isInbound() || !_context.commSystem().isBacklogged(info.getPeer(1))) {
                                 // Reset counter on successful tunnel selection - indicates working tunnels
                                 resetConsecutiveTimeoutsOnSuccess();
+                                // Record activity for recentlyActive tracking
+                                if (info instanceof PooledTunnelCreatorConfig) {
+                                    ((PooledTunnelCreatorConfig) info).recordActivity();
+                                }
                                 return info;
                             } else {backloggedTunnel = info;}
                         }
@@ -2276,6 +2280,18 @@ public class TunnelPool {
         int minRequired = isUnderAttack ? 2 : 2;
 
         if (goodCount >= minRequired && slowest != null) {
+            // Don't remove tunnels that are actively being used - check recent activity
+            // This prevents disconnects for active connections (e.g., IRC)
+            if (slowest instanceof PooledTunnelCreatorConfig) {
+                PooledTunnelCreatorConfig ptcc = (PooledTunnelCreatorConfig) slowest;
+                // Consider active if used in last 60 seconds or has recent messages
+                if (ptcc.isRecentlyActive(60*1000)) {
+                    if (_log.shouldInfo()) {
+                        _log.info("Not removing slow tunnel " + slowest + " - actively used within last 60s");
+                    }
+                    return;
+                }
+            }
             if (_log.shouldInfo()) {
                 _log.info("Removing slow tunnel " + slowest + " (latency/hop: " + slowestLatency + "ms, pool avg: " + avgLatencyPerHop + "ms/hop)");
             }
