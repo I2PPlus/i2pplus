@@ -426,6 +426,17 @@ public class TunnelPool {
         long uptime = _context.router().getUptime();
         int rv = _settings.getTotalQuantity();
 
+        // Hard cap on tunnel counts to prevent runaway growth
+        int max = _settings.isExploratory() ?
+            TunnelPoolSettings.MAX_EXPLORATORY_QUANTITY :
+            TunnelPoolSettings.MAX_CLIENT_QUANTITY;
+        if (rv > max) {
+            if (_log.shouldWarn()) {
+                _log.warn("Tunnel quantity " + rv + " exceeds max " + max + " for " + _settings);
+            }
+            rv = max;
+        }
+
         if (!_settings.isExploratory()) {
             if (rv <= 1) {return rv;}
         }

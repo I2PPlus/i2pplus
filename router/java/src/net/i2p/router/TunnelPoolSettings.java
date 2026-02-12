@@ -62,6 +62,10 @@ public class TunnelPoolSettings {
     public static final int         DEFAULT_QUANTITY = 3;
     public static final int         DEFAULT_BACKUP_QUANTITY = 0;
     public static final int         DEFAULT_DURATION = 10*60*1000;
+    /** Maximum tunnel quantity limit for exploratory pools */
+    public static final int         MAX_EXPLORATORY_QUANTITY = 16;
+    /** Maximum tunnel quantity limit for client pools */
+    public static final int         MAX_CLIENT_QUANTITY = 16;
     private static final boolean    isSlow = SystemVersion.isSlow();
     /** client only */
     private static final int        DEFAULT_IB_LENGTH = 3;
@@ -123,19 +127,26 @@ public class TunnelPoolSettings {
 
     /** how many tunnels should be available at all times */
     public int getQuantity() { return _quantity; }
-    public void setQuantity(int quantity) { _quantity = quantity; }
+    public void setQuantity(int quantity) {
+        int max = _isExploratory ? MAX_EXPLORATORY_QUANTITY : MAX_CLIENT_QUANTITY;
+        _quantity = Math.min(Math.max(quantity, 0), max);
+    }
 
     /** how many backup tunnels should be kept waiting in the wings */
     public int getBackupQuantity() { return _backupQuantity; }
-    public void setBackupQuantity(int quantity) { _backupQuantity = quantity; }
+    public void setBackupQuantity(int quantity) {
+        int max = _isExploratory ? MAX_EXPLORATORY_QUANTITY : MAX_CLIENT_QUANTITY;
+        _backupQuantity = Math.min(Math.max(quantity, 0), max);
+    }
 
     /**
-     *  Convenience
-     *  @return getQuantity() + getBackupQuantity()
+     *  Convenience - enforces maximum limits
+     *  @return getQuantity() + getBackupQuantity(), capped at max allowed
      *  @since 0.8.11
      */
     public int getTotalQuantity() {
-        return _quantity + _backupQuantity;
+        int max = _isExploratory ? MAX_EXPLORATORY_QUANTITY : MAX_CLIENT_QUANTITY;
+        return Math.min(_quantity + _backupQuantity, max);
     }
 
     /** how long before tunnel expiration should new tunnels be built */
