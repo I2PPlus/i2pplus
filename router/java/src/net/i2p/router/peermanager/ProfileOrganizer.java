@@ -200,10 +200,12 @@ public class ProfileOrganizer {
         public void timeReached() {
             int resetCount = 0;
             long now = _context.clock().now();
+            long uptime = _context.router().getUptime();
 
             // Check if we're under attack (low tunnel build success)
             double buildSuccess = getTunnelBuildSuccess();
-            boolean underAttack = buildSuccess > 0 && buildSuccess < 0.35;
+            // Also true if 0% success (botnet attack from startup)
+            boolean underAttack = (buildSuccess >= 0 && buildSuccess < 0.4);
             long resetInterval = underAttack ? 5 * 60 * 1000 : 10 * 60 * 1000;
 
             if (!tryWriteLock()) {
@@ -363,7 +365,8 @@ public class ProfileOrganizer {
     }
 
     public boolean isLowBuildSuccess() {
-        return getTunnelBuildSuccess() > 0 && getTunnelBuildSuccess() < 0.40;
+        double buildSuccess = getTunnelBuildSuccess();
+        return buildSuccess < 0.40;
     }
 
     public PeerProfile getProfile(Hash peer) {
@@ -629,9 +632,7 @@ public class ProfileOrganizer {
 
     public void selectNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, boolean onlyNotFailing,
                                      int mask, MaskedIPSet ipSet) {
-        if (matches.size() < howMany) {
-            selectAllNotFailingPeers(howMany, exclude, matches, onlyNotFailing, mask);
-        }
+        selectAllNotFailingPeers(howMany, exclude, matches, onlyNotFailing, mask);
     }
 
     public void selectActiveNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches) {
@@ -745,14 +746,10 @@ public class ProfileOrganizer {
     void reorganize(boolean shouldCoalesce, boolean shouldDecay) {
         final long now = _context.clock().now();
         final long start = System.currentTimeMillis();
+        long uptime = _context.router().getUptime();
         int profileCount = 0;
         int expiredCount = 0;
-
-        // Determine expiration window based on current profile volume and attack status
-        double buildSuccess = getTunnelBuildSuccess();
-        boolean isLowBuildSuccess = buildSuccess > 0 && buildSuccess < 0.35;
-        boolean underAttack = buildSuccess > 0 && buildSuccess < 0.35;
-        boolean isRecovering = buildSuccess >= 0.45;
+        boolean underAttack = isLowBuildSuccess();
         long baseExpireTime = countNotFailingPeers() > ENOUGH_PROFILES
             ? 8 * 60 * 60 * 1000L   // 8 hours
             : 24 * 60 * 60 * 1000L; // 24 hours
@@ -760,8 +757,7 @@ public class ProfileOrganizer {
         final long expireOlderThan = underAttack ? baseExpireTime * 2 : baseExpireTime;
 
         // Optional coalescing (read-only, safe to skip if lock fails)
-        if (shouldCoalesce && _context.router() != null &&
-            _context.router().getUptime() > 30 * 60 * 1000 &&
+        if (shouldCoalesce && _context.router() != null && uptime > 30 * 60 * 1000 &&
             countNotFailingPeers() > (ENOUGH_PROFILES / 2)) {
             getReadLock();
             try {
@@ -840,15 +836,15 @@ public class ProfileOrganizer {
             // Adaptive relaxation: if build success is low, relax thresholds significantly
             // This allows more peers into fast/high cap tiers during network stress
             // With hysteresis to prevent oscillation between relaxed/strict modes
-            if (isLowBuildSuccess && _log.shouldInfo()) {
-                _log.info("Low tunnel build success (" + (int)(buildSuccess * 100) +
+            if (isLowBuildSuccess() && _log.shouldInfo()) {
+                _log.info("Low tunnel build success (" + ((int) (getTunnelBuildSuccess() * 100)) +
                           "%) - relaxing tier thresholds to expand peer pool");
-            } else if (isRecovering && _log.shouldInfo()) {
-                _log.info("Tunnel build success recovered (" + (int)(buildSuccess * 100) +
+            } else if (_log.shouldInfo()) {
+                _log.info("Tunnel build success recovered (" + ((int) (getTunnelBuildSuccess() * 100)) +
                           "%) - restoring strict tier thresholds");
             }
 
-            if (isLowBuildSuccess) {
+            if (isLowBuildSuccess()) {
                 // Reduce thresholds by 50% to allow more peers into tiers
                 newCapacityThreshold *= 0.5;
                 newSpeedThreshold *= 0.5;
