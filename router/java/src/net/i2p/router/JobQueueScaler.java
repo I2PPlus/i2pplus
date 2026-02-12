@@ -296,7 +296,7 @@ class JobQueueScaler implements Runnable {
             return false;
         }
         double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
-        return buildSuccess > 0 && buildSuccess < BUILD_SUCCESS_THRESHOLD;
+        return buildSuccess < BUILD_SUCCESS_THRESHOLD;
     }
 
     /**

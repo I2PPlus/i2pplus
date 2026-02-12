@@ -517,7 +517,7 @@ public class JobQueue {
         int baseMax = _context.getProperty(PROP_MAX_WAITING_JOBS, DEFAULT_MAX_WAITING_JOBS);
         // Check if we're under attack (low tunnel build success)
         double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
-        if (buildSuccess > 0 && buildSuccess < BUILD_SUCCESS_THRESHOLD) {
+        if (buildSuccess < BUILD_SUCCESS_THRESHOLD) {
             // Under attack - increase queue capacity
             return baseMax * ATTACK_QUEUE_MULTIPLIER;
         }
