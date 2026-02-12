@@ -1246,7 +1246,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
         // During attacks (low build success), relax expiry checks to accommodate tunnel delays
         double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
-        boolean isUnderAttack = buildSuccess > 0 && buildSuccess < 0.35;
+        boolean isUnderAttack = buildSuccess < 0.4;
         long attackGracePeriod = isUnderAttack ? 30 * 1000L : 0;  // 30 seconds grace during attacks
 
         // Retrieve destination ID string, fallback to LeaseSet hash base32 if null
@@ -1662,7 +1662,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         else if (existingRouters < 2000) {calculatedExpiry = ROUTER_INFO_EXPIRATION * 3 / 2;}
         else {calculatedExpiry = ROUTER_INFO_EXPIRATION;}
         double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
-        if (buildSuccess > 0 && buildSuccess < 0.40) {calculatedExpiry *= 2;}
+        if (buildSuccess < 0.40) {calculatedExpiry *= 2;}
         if (shouldBoost) {calculatedExpiry *= 2;}
         return calculatedExpiry;
     }

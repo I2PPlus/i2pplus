@@ -149,7 +149,7 @@ public class IterativeSearchJob extends FloodSearchJob {
         super(ctx, facade, key, onFind, onFailed, timeoutMs, isLease);
         int known = ctx.netDb().getKnownRouters();
         double buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
-        boolean isUnderAttack = buildSuccess > 0 && buildSuccess < 0.40;
+        boolean isUnderAttack = buildSuccess < 0.40;
         int totalSearchLimit = (facade.floodfillEnabled() && ctx.router().getUptime() > 30*60*1000) ?
                                 TOTAL_SEARCH_LIMIT_WHEN_FF : TOTAL_SEARCH_LIMIT;
         if (isUnderAttack) {

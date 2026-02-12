@@ -332,7 +332,7 @@ public class PersistentDataStore extends TransientDataStore {
 
         // Check if we're under attack
         double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
-        boolean isUnderAttack = buildSuccess > 0 && buildSuccess < 0.40;
+        boolean isUnderAttack = buildSuccess < 0.40;
 
         // During attacks, allow D-cap peers if under quota (give them lower priority)
         boolean allowCongested = isCongested && (stored < MAX_ROUTERS_INIT);
