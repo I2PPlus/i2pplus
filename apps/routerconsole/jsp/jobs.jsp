@@ -19,6 +19,6 @@
 </div>
 <script src=/js/tablesort/tablesort.js type=module></script>
 <script src=/js/tablesort/tablesort.number.js type=module></script>
-<script src=/js/jobs.js></script>
+<script src=/js/jobs.js type=module></script>
 </body>
 </html>
