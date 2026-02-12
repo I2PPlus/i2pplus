@@ -124,9 +124,9 @@ public class ExpireJobManager extends JobImpl {
                           " pending tunnel expirations -> Waiting for tunnels to reach expiration time...");
             }
         } else {
-            if (isBackedUp && _log.shouldWarn()) {
-                _log.warn("Expire Tunnels Job recovering -> Removing " + readyToExpire.size() +
-                          " expired tunnels from pool, cleaning up " + readyToDrop.size() +
+            if (isBackedUp && _log.shouldInfo()) {
+                _log.info("Removing " + readyToExpire.size() +
+                          " expired tunnels, cleaning up " + readyToDrop.size() +
                           " old tunnels from dispatcher (Queue: " + queueSize + " jobs)");
             }
 
