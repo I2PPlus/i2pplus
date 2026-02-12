@@ -156,7 +156,7 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
         long basePeriod = _context.getProperty(PROP_DETECTION_PERIOD, DEFAULT_DETECTION_PERIOD);
         double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
         long detectionPeriod;
-        if (buildSuccess > 0 && buildSuccess >= BUILD_SUCCESS_THRESHOLD) {
+        if (buildSuccess >= BUILD_SUCCESS_THRESHOLD) {
             // Normal operation - use longer detection period to reduce false positives
             detectionPeriod = HIGH_SUCCESS_DETECTION_PERIOD;
         } else {

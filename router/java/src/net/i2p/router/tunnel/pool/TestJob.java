@@ -532,7 +532,7 @@ public class TestJob extends JobImpl {
 
         // Increase max tests under low build success when we have capacity @since 0.9.68+
         double buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
-        boolean lowBuildSuccess = buildSuccess > 0 && buildSuccess < 0.40;
+        boolean lowBuildSuccess = buildSuccess < 0.40;
 
         // Only reduce concurrency under severe load
         if (maxLag > 5000 || avgLag > 100) {

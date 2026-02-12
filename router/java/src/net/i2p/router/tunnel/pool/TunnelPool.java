@@ -63,7 +63,7 @@ public class TunnelPool {
     private final AtomicInteger _concurrentOutboundBuilds = new AtomicInteger();
 
     private static final int TUNNEL_LIFETIME = 10*60*1000;
-    private static final int MAX_CONCURRENT_BUILDS_PER_DIRECTION = 6;
+    private static final int MAX_CONCURRENT_BUILDS_PER_DIRECTION = 3;
     /** if less than one success in this many, reduce quantity (exploratory only) */
     private static final int BUILD_TRIES_QUANTITY_OVERRIDE = 12;
     /** if less than one success in this many, reduce length (exploratory only) */
@@ -517,10 +517,16 @@ public class TunnelPool {
       * @return true if a new build can be started
       * @since 0.9.70+
       */
-     boolean canStartBuild(boolean isInbound) {
-         AtomicInteger counter = isInbound ? _concurrentInboundBuilds : _concurrentOutboundBuilds;
-         return counter.get() < MAX_CONCURRENT_BUILDS_PER_DIRECTION;
-     }
+      boolean canStartBuild(boolean isInbound) {
+          AtomicInteger counter = isInbound ? _concurrentInboundBuilds : _concurrentOutboundBuilds;
+          int maxAllowed = MAX_CONCURRENT_BUILDS_PER_DIRECTION;
+          // Increase limit during attacks when build success is low or zero
+          double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
+          if (buildSuccess < 0.40) {
+              maxAllowed *= 2; // Double concurrent builds under attack
+          }
+          return counter.get() < maxAllowed;
+      }
 
      /**
       * Record that a tunnel build has started for this pool.
@@ -2011,10 +2017,10 @@ public class TunnelPool {
             if ((peers == null) || (peers.isEmpty())) {
                 // No peers to build the tunnel with, and the pool is refusing 0 hop tunnels
                 long uptime = _context.router().getUptime();
-
                 // Progressive fallback under attack conditions @since 0.9.68+
                 double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
-                boolean isUnderAttack = buildSuccess > 0 && buildSuccess < 0.40;
+                // Under attack if: low success rate OR 0% success after 3min uptime (botnet attack from startup)
+                boolean isUnderAttack = buildSuccess < 0.40;
 
                 if (isUnderAttack && uptime > 3*60*1000) {
                     if (_log.shouldWarn()) {
@@ -2026,6 +2032,7 @@ public class TunnelPool {
                     TunnelPoolSettings emergencySettings = new TunnelPoolSettings(settings.isInbound());
                     emergencySettings.setLength(settings.getLength());
                     emergencySettings.setLengthVariance(settings.getLengthVariance());
+                    emergencySettings.setAllowZeroHop(settings.getAllowZeroHop());
 
                     // Try again with relaxed IP restriction (override the setting)
                     // Note: we can't directly set IP restriction on the settings object
@@ -2218,7 +2225,10 @@ public class TunnelPool {
      */
     private void removeSlowTunnels() {
         List<TunnelInfo> tunnels = listTunnels();
-        if (tunnels.size() <= 1) return;
+        // Get the configured quantity for this pool
+        int configuredQuantity = _settings.getQuantity();
+        // Only remove slow tunnels if we have more than the configured minimum
+        if (tunnels.size() <= configuredQuantity) return;
 
         // Calculate average latency per hop for tunnels with valid latency data
         long totalLatency = 0;

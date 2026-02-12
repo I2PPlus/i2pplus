@@ -23,7 +23,7 @@ public class GhostPeerManager {
     private final ConcurrentHashMap<Hash, Long> _ghostSince;
 
     private static final int DEFAULT_TIMEOUT_THRESHOLD = 5;
-    private static final int ATTACK_TIMEOUT_THRESHOLD = 3;
+    private static final int ATTACK_TIMEOUT_THRESHOLD = 2;
     private static final long COOLDOWN_MS = 90*1000; // 90s (normal)
     private static final long ATTACK_COOLDOWN_MS = 60*1000; // 60s (faster recovery during attacks)
     private static final int MAX_TRACKED_PEERS = 8192;
@@ -52,10 +52,10 @@ public class GhostPeerManager {
         // Track when peer became a ghost
         int newCount = count != null ? count.get() : 1;
         double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
-        boolean underAttack = buildSuccess >= 0 && buildSuccess < 0.4;
-        if (newCount >= getThreshold() && !_ghostSince.containsKey(peer)) {
-            _ghostSince.put(peer, _context.clock().now());
-            if (_log.shouldWarn()) {
+        boolean underAttack = buildSuccess < 0.4;
+        if (newCount >= getThreshold()) {
+            Long existingTime = _ghostSince.putIfAbsent(peer, _context.clock().now());
+            if (existingTime == null && _log.shouldWarn()) {
                 _log.warn("Peer [" + peer.toBase64().substring(0,6) + "] marked as ghost for " +
                           (underAttack ? ATTACK_COOLDOWN_MS/1000 : COOLDOWN_MS/1000) + "s -> " +
                            newCount + " consecutive tunnel build timeouts");
@@ -127,7 +127,7 @@ public class GhostPeerManager {
      */
     public int getThreshold() {
         double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
-        if (buildSuccess > 0 && buildSuccess < 0.40) {
+        if (buildSuccess < 0.40) {
             return ATTACK_TIMEOUT_THRESHOLD;
         }
         return DEFAULT_TIMEOUT_THRESHOLD;
@@ -164,7 +164,7 @@ public class GhostPeerManager {
     public void cleanup() {
         long now = _context.clock().now();
         double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
-        long cleanupThreshold = (buildSuccess > 0 && buildSuccess < 0.40)
+        long cleanupThreshold = buildSuccess < 0.40
                                 ? ATTACK_COOLDOWN_MS * 2
                                 : COOLDOWN_MS * 2;
         for (Hash peer : _ghostSince.keySet()) {

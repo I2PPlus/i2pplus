@@ -679,7 +679,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
         // Increase threshold under low tunnel build success @since 0.9.68+
         double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
-        if (isFirewalled() || buildSuccess > 0 && buildSuccess < 0.40) {max *=2;}
+        if (isFirewalled() || buildSuccess < 0.40) {max *=2;}
 
         // Count exploratory and client tunnels separately @since 0.9.68+
         ObjectCounterUnsafe<Hash> lcExp = new ObjectCounterUnsafe<Hash>();
@@ -690,14 +690,14 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
         // Check percentage limits separately for each tunnel type
         for (Hash h : lcExp.objects()) {
-            if (lcExp.count(h) > 0 && exploratoryCount > 0 && 
+            if (lcExp.count(h) > 0 && exploratoryCount > 0 &&
                 (lcExp.count(h) + 1) * 100 / (exploratoryCount + 1) > max) {
                 rv.add(h);
             }
         }
 
         for (Hash h : lcClient.objects()) {
-            if (lcClient.count(h) > 0 && clientCount > 0 && 
+            if (lcClient.count(h) > 0 && clientCount > 0 &&
                 (lcClient.count(h) + 1) * 100 / (clientCount + 1) > max) {
                 rv.add(h);
             }

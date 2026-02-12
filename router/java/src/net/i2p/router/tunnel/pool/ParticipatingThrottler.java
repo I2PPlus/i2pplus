@@ -149,9 +149,9 @@ class ParticipatingThrottler {
         percentLimit = Math.max(2, Math.min(20, percentLimit));
 
         if (isUnreachable || isLowShare) {
-            return Math.min(minLimit, Math.max(maxLimit / 20, numTunnels * (percentLimit / 5) / 100));
+            return Math.min(minLimit, Math.max(maxLimit / 20, numTunnels * percentLimit / 500));
         } else if (isSlow) {
-            return Math.min(minLimit, Math.max(maxLimit / 10, numTunnels * (percentLimit / 3) / 100));
+            return Math.min(minLimit, Math.max(maxLimit / 10, numTunnels * percentLimit / 200));
         }
         return Math.min((minLimit * 3), Math.max(maxLimit / 2, numTunnels * percentLimit / 100));
     }
