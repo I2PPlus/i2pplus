@@ -1,7 +1,6 @@
 package net.i2p.router.tunnel.pool;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.PriorityBlockingQueue;
 
@@ -33,10 +32,8 @@ public class ExpireJobManager extends JobImpl {
     private static final long FORCED_REQUEUE_TIMEOUT = 2 * BATCH_WINDOW;
     // Maximum allowed lag before forcing immediate requeue
     private static final long MAX_ACCEPTABLE_LAG = 5 * 60 * 1000;
-    // Queue size threshold to trigger aggressive batch processing
+    // Queue size threshold to trigger aggressive recovery
     private static final int BACKED_UP_THRESHOLD = 50;
-    // Maximum items to process per batch when backed up
-    private static final int MAX_BATCH_SIZE = 100;
     // Early expiration offsets to match original ExpireJob behavior
     private static final long OB_EARLY_EXPIRE = 30 * 1000;
     private static final long IB_EARLY_EXPIRE = OB_EARLY_EXPIRE + 7500;
@@ -105,38 +102,31 @@ public class ExpireJobManager extends JobImpl {
         boolean isBackedUp = queueSize > BACKED_UP_THRESHOLD;
 
         if (isBackedUp && _log.shouldWarn()) {
-            _log.warn("ExpireJobManager backed up with " + queueSize + " pending expirations - entering recovery mode");
+            _log.warn("ExpireJobManager backed up with " + queueSize + " pending expirations - recovering");
         }
 
-        int processedInThisRun = 0;
-        int maxPerRun = isBackedUp ? MAX_BATCH_SIZE : Integer.MAX_VALUE;
+        List<TunnelExpiration> readyToExpire = new ArrayList<>();
+        List<TunnelExpiration> readyToDrop = new ArrayList<>();
 
-        while (processedInThisRun < maxPerRun) {
-            List<TunnelExpiration> readyToExpire = new ArrayList<>();
-            List<TunnelExpiration> readyToDrop = new ArrayList<>();
-
-            // Collect all tunnels ready for phase 1 (pool removal)
-            Iterator<TunnelExpiration> iter = _expirationQueue.iterator();
-            boolean foundWork = false;
-            while (iter.hasNext()) {
-                TunnelExpiration te = iter.next();
-                if (te.expirationTime <= now && !te.phase1Complete) {
-                    readyToExpire.add(te);
-                    foundWork = true;
-                } else if (te.dropTime <= now && te.phase1Complete) {
-                    readyToDrop.add(te);
-                    foundWork = true;
-                }
-                if (readyToExpire.size() + readyToDrop.size() >= maxPerRun - processedInThisRun) {
-                    break;
-                }
+        // Collect all tunnels ready for phase 1 (pool removal)
+        for (TunnelExpiration te : _expirationQueue) {
+            if (te.expirationTime <= now && !te.phase1Complete) {
+                readyToExpire.add(te);
+            } else if (te.dropTime <= now && te.phase1Complete) {
+                readyToDrop.add(te);
             }
+        }
 
-            if (readyToExpire.isEmpty() && readyToDrop.isEmpty()) {
-                break;
+        if (readyToExpire.isEmpty() && readyToDrop.isEmpty()) {
+            // Nothing ready to process yet
+            if (isBackedUp && _log.shouldWarn()) {
+                _log.warn("ExpireJobManager backed up but no expirations ready - queue: " + queueSize);
             }
-
-            processedInThisRun += readyToExpire.size() + readyToDrop.size();
+        } else {
+            if (isBackedUp && _log.shouldWarn()) {
+                _log.warn("ExpireJobManager processing " + readyToExpire.size() + " phase1, " +
+                          readyToDrop.size() + " phase2 from queue of " + queueSize);
+            }
 
             // Phase 1: Remove from tunnel pools
             for (TunnelExpiration te : readyToExpire) {
@@ -148,17 +138,12 @@ public class ExpireJobManager extends JobImpl {
                 te.phase1Complete = true;
             }
 
-            // Phase 2: Remove from dispatcher
+            // Phase 2: Remove from dispatcher and fully remove from queue
             for (TunnelExpiration te : readyToDrop) {
                 PooledTunnelCreatorConfig cfg = te.config;
                 getContext().tunnelDispatcher().remove(cfg);
                 _expirationQueue.remove(te);
             }
-        }
-
-        if (isBackedUp && processedInThisRun > 0 && _log.shouldWarn()) {
-            _log.warn("ExpireJobManager processed " + processedInThisRun + " expirations, " +
-                      _expirationQueue.size() + " remaining");
         }
 
         // Requeue if there are more pending expirations
@@ -184,14 +169,14 @@ public class ExpireJobManager extends JobImpl {
                 if (isStarved || stillBackedUp || nextExpiration <= now + BATCH_WINDOW) {
                     long nextRun;
                     if (isStarved) {
-                        // If starved, use a shorter timeout to recover quickly
-                        nextRun = now + BATCH_WINDOW / 4;
+                        // If starved, run immediately
+                        nextRun = now;
                         if (_log.shouldWarn()) {
-                            _log.warn("ExpireJobManager starved for " + (lag / 1000) + "s - forcing recovery requeue");
+                            _log.warn("ExpireJobManager starved for " + (lag / 1000) + "s - immediate requeue");
                         }
                     } else if (stillBackedUp) {
-                        // If still backed up, run again quickly to clear the queue
-                        nextRun = now + BATCH_WINDOW / 2;
+                        // If still backed up, run again soon
+                        nextRun = now + BATCH_WINDOW / 4;
                     } else {
                         nextRun = Math.min(nextExpiration, now + BATCH_WINDOW);
                     }
@@ -201,8 +186,7 @@ public class ExpireJobManager extends JobImpl {
                 }
             }
         } else if (_lastRunTime > 0 && (now - _lastRunTime) > MAX_ACCEPTABLE_LAG) {
-            // Even with empty queue, check periodically to ensure we're still alive
-            // This prevents total starvation when queue was full during normal scheduling
+            // Health check
             synchronized (this) {
                 if (!_isScheduled) {
                     long nextRun = now + BATCH_WINDOW;
