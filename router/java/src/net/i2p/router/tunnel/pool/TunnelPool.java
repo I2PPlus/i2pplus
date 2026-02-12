@@ -1379,6 +1379,59 @@ public class TunnelPool {
     }
 
     /**
+     * Synchronous tunnel removal for use during ExpireJobManager recovery.
+     * This removes the tunnel and ensures a new LeaseSet is published BEFORE returning,
+     * preventing client connection failures during recovery.
+     *
+     * @param info tunnel to remove
+     * @return true if removed and LeaseSet republished, false otherwise
+     * @since 0.9.68+
+     */
+    boolean removeTunnelSynchronous(TunnelInfo info) {
+        if (_log.shouldDebug()) {_log.debug(toString() + " -> Synchronous tunnel removal " + info);}
+
+        LeaseSet ls = null;
+        int remaining = 0;
+        boolean removed = false;
+
+        synchronized (_tunnels) {
+            if (_tunnels.remove(info)) {
+                removed = true;
+            }
+            remaining = _tunnels.size();
+
+            if (_settings.isInbound() && !_settings.isExploratory()) {
+                List<TunnelInfo> tunnelsCopy = new ArrayList<TunnelInfo>(_tunnels);
+                ls = buildNewLeaseSetFromCopy(tunnelsCopy);
+            }
+        }
+
+        if (removed) {
+            _manager.tunnelFailed();
+            processRemovalStats(java.util.Collections.singletonList(info));
+        }
+
+        if (_alive && _settings.isInbound() && !_settings.isExploratory()) {
+            if (ls != null) {
+                requestLeaseSet(ls);
+            } else {
+                if (_log.shouldWarn()) {
+                    _log.warn(toString() + " -> Unable to build LeaseSet on sync removal (" + remaining + " remaining)");
+                }
+                if (_settings.getAllowZeroHop()) {
+                    buildFallback();
+                }
+            }
+        }
+
+        if (removed && _log.shouldDebug()) {
+            _log.debug(toString() + " -> Synchronous tunnel removal complete, LeaseSet republished");
+        }
+
+        return removed;
+    }
+
+    /**
      * Inner class to process tunnel removals in batch.
      * Processes all queued removals in a single synchronized operation.
      */
@@ -1400,7 +1453,7 @@ public class TunnelPool {
             if (toRemove.isEmpty()) {return;}
 
             if (_log.shouldInfo()) {
-                _log.info(toString() + " -> Processing " + toRemove.size() + " tunnel removals in batch");
+                _log.info(toString() + " -> Processing " + toRemove.size() + " tunnel removals in batch...");
             }
 
             LeaseSet ls = null;

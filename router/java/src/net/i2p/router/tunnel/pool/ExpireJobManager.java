@@ -130,14 +130,16 @@ public class ExpireJobManager extends JobImpl {
                           " old tunnels from dispatcher (Queue: " + queueSize + " jobs)");
             }
 
-            // Phase 1: Remove from tunnel pools and queue (during recovery, don't wait for dropTime)
+            // Phase 1: Remove from tunnel pools synchronously during recovery
+            // This ensures LeaseSets are republished BEFORE removing from queue,
+            // preventing client connection failures
             for (TunnelExpiration te : readyToExpire) {
                 PooledTunnelCreatorConfig cfg = te.config;
                 TunnelPool pool = cfg.getTunnelPool();
                 if (pool != null) {
-                    pool.removeTunnel(cfg);
+                    pool.removeTunnelSynchronous(cfg);
                 }
-                // During recovery, remove from queue immediately to prevent backlog growth
+                // Remove from queue only after synchronous removal + LeaseSet republish is complete
                 _expirationQueue.remove(te);
             }
 
