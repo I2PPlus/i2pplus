@@ -5,12 +5,14 @@ import net.i2p.data.Hash;
 import net.i2p.data.TunnelId;
 import net.i2p.router.RouterContext;
 import net.i2p.router.tunnel.TunnelCreatorConfig;
+import net.i2p.util.Log;
 
 /**
  *  Data about a tunnel we created
  */
 public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
     private final TunnelPool _pool;
+    private final Log _log;
     // we don't store the config, that leads to OOM
     private TunnelId _pairedGW;
     /** 
@@ -29,6 +31,7 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
     public PooledTunnelCreatorConfig(RouterContext ctx, int length, boolean isInbound, Hash destination, TunnelPool pool) {
         super(ctx, length, isInbound, destination);
         _pool = pool;
+        _log = ctx.logManager().getLog(PooledTunnelCreatorConfig.class);
     }
 
     /** called from TestJob */
@@ -36,9 +39,18 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
 
     /**
      * The tunnel failed a test, so (maybe) stop using it
+     * If the tunnel is recently active (traffic in last 60s), don't increment failure count -
+     * it may recover from transient issues and we don't want to penalize active tunnels.
      */
     @Override
     public boolean tunnelFailed() {
+        // Check if tunnel is recently active - if so, don't penalize for transient failures
+        if (isRecentlyActive(60 * 1000)) {
+            if (_log.shouldInfo()) {
+                _log.info("Tunnel test failed but tunnel is recently active - not incrementing failure count, keeping for recovery: " + this);
+            }
+            return true; // Keep testing - tunnel may recover
+        }
         boolean rv = super.tunnelFailed();
         // Under high load or attack, keep testing failing tunnels - they may recover
         // Only actually remove from pool when replacements are available
