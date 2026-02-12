@@ -101,8 +101,8 @@ public class ExpireJobManager extends JobImpl {
         int queueSize = _expirationQueue.size();
         boolean isBackedUp = queueSize > BACKED_UP_THRESHOLD;
 
-        if (isBackedUp && _log.shouldWarn()) {
-            _log.warn("ExpireJobManager backed up with " + queueSize + " pending tunnel expirations -> Recovering...");
+        if (isBackedUp && _log.shouldInfo()) {
+            _log.info("Expire Tunnels Job backed up with " + queueSize + " pending tunnel expirations -> Recovering...");
         }
 
         List<TunnelExpiration> readyToExpire = new ArrayList<>();
@@ -119,25 +119,26 @@ public class ExpireJobManager extends JobImpl {
 
         if (readyToExpire.isEmpty() && readyToDrop.isEmpty()) {
             // Nothing ready to process yet
-            if (isBackedUp && _log.shouldWarn()) {
-                _log.warn("ExpireJobManager backed up with " + queueSize +
+            if (isBackedUp && _log.shouldInfo()) {
+                _log.info("Expire Tunnels Job backed up with " + queueSize +
                           " pending tunnel expirations -> Waiting for tunnels to reach expiration time...");
             }
         } else {
             if (isBackedUp && _log.shouldWarn()) {
-                _log.warn("ExpireJobManager recovering -> Removing " + readyToExpire.size() +
+                _log.warn("Expire Tunnels Job recovering -> Removing " + readyToExpire.size() +
                           " expired tunnels from pool, cleaning up " + readyToDrop.size() +
                           " old tunnels from dispatcher (Queue: " + queueSize + " jobs)");
             }
 
-            // Phase 1: Remove from tunnel pools
+            // Phase 1: Remove from tunnel pools and queue (during recovery, don't wait for dropTime)
             for (TunnelExpiration te : readyToExpire) {
                 PooledTunnelCreatorConfig cfg = te.config;
                 TunnelPool pool = cfg.getTunnelPool();
                 if (pool != null) {
                     pool.removeTunnel(cfg);
                 }
-                te.phase1Complete = true;
+                // During recovery, remove from queue immediately to prevent backlog growth
+                _expirationQueue.remove(te);
             }
 
             // Phase 2: Remove from dispatcher and fully remove from queue
@@ -173,8 +174,8 @@ public class ExpireJobManager extends JobImpl {
                     if (isStarved) {
                         // If starved, run immediately
                         nextRun = now;
-                        if (_log.shouldWarn()) {
-                            _log.warn("ExpireJobManager starved for " + (lag / 1000) + "s -> Immediately requeueing...");
+                        if (_log.shouldInfo()) {
+                            _log.info("Expire Tunnels Job starved for " + (lag / 1000) + "s -> Immediately requeueing...");
                         }
                     } else if (stillBackedUp) {
                         // If still backed up, run again soon
@@ -195,8 +196,8 @@ public class ExpireJobManager extends JobImpl {
                     getTiming().setStartAfter(nextRun);
                     _isScheduled = true;
                     getContext().jobQueue().addJob(this);
-                    if (_log.shouldWarn()) {
-                        _log.warn("ExpireJobManager health check -> Requeueing after " + ((now - _lastRunTime) / 1000) + "s idle...");
+                    if (_log.shouldInfo()) {
+                        _log.info("Expire Tunnels Job health check -> Requeueing after " + ((now - _lastRunTime) / 1000) + "s idle...");
                     }
                 }
             }
