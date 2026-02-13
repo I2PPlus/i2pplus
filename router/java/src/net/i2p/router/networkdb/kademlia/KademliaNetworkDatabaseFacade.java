@@ -919,7 +919,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         }
 
         if (_log.shouldWarn()) {
-            _log.warn("Banning \'O\' tier floodfill [" + routerId + "] (" + (ip != null ? "(ip)" : "") + ") -> 0.9.57 (probable botnet participant)");
+            _log.warn("Banning \'O\' tier floodfill [" + routerId + "] for 4h -> 0.9.57 (probable botnet participant)");
         }
 
         String reason = "O tier floodfill / 0.9.57";
@@ -1789,7 +1789,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             if (!_context.banlist().isBanlisted(h)) {
                 String ip = getRouterIP(routerInfo);
                 if (_log.shouldWarn()) {
-                    _log.warn("Banning \'O\' tier floodfill [" + routerId + "] (" + ip + ") -> 0.9.57 (probable botnet participant)");
+                    _log.warn("Banning \'O\' tier floodfill [" + routerId + "] for 4h -> 0.9.57 (probable botnet participant)");
                 }
                 String reason = "O tier floodfill / 0.9.57";
                 _context.banlist().banlistRouter(h, " <b>➜</b> " + reason, null, null, _context.clock().now() + 4*60*60*1000);
