@@ -22,7 +22,7 @@ body.js #tunnelsContainer{display:block!important}
 .good .status span{background:var(--tunn_active)}
 .testing .status span{background:var(--tunn_starting);animation:pulse 1.5s infinite}
 .untested .status span{background:var(--tunn_hidden)}
-tr.failed{background:#f002}
+tr.failed{background:#f002;display:none}
 tr.failed td>*:not(.failed .status span){opacity:.5}
 tr.failed .testFailed{animation:none}
 #statusnotes td{padding:10px;font-style:italic;font-size:105%;text-align:center;border-top-width:2px}
