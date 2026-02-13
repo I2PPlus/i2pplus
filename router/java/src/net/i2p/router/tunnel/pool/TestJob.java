@@ -179,7 +179,7 @@ public class TestJob extends JobImpl {
     }
 
     /** Ensures total job counter is decremented at most once */
-    private final AtomicBoolean _counted = new AtomicBoolean(true);
+    private final AtomicBoolean _counted = new AtomicBoolean(false);
 
     /**
      * Static method to check if a TestJob should be created and scheduled.
@@ -217,7 +217,7 @@ public class TestJob extends JobImpl {
             log.warn("Tunnel pool is null for config: " + cfg);
         }
 
-        // Try to increment total jobs counter to check limit
+        // Check total job count limit (constructor will increment after validation)
         int current = TOTAL_TEST_JOBS.get();
         if (current >= maxQueuedTests) {
             if (log.shouldInfo()) {
@@ -225,6 +225,9 @@ public class TestJob extends JobImpl {
             }
             return false;
         }
+        // Reserve a slot by incrementing - prevents race condition
+        // If we return false later, we'll decrement
+        TOTAL_TEST_JOBS.incrementAndGet();
 
         // Check if this tunnel already has a test running
         Long tunnelKey = getTunnelKey(cfg);
@@ -232,6 +235,7 @@ public class TestJob extends JobImpl {
             if (log.shouldDebug()) {
                 log.debug("Test already running for tunnel key " + tunnelKey + " -> Skipping duplicate test for " + cfg);
             }
+            TOTAL_TEST_JOBS.decrementAndGet();
             return false;
         }
 
@@ -247,6 +251,7 @@ public class TestJob extends JobImpl {
                     if (log.shouldDebug()) {
                         log.debug("Pool " + poolId + " already has " + poolCount.get() + " tests running -> Deferring for better coverage");
                     }
+                    TOTAL_TEST_JOBS.decrementAndGet();
                     return false;
                 }
                 // For client pools, allow more concurrency
@@ -254,6 +259,7 @@ public class TestJob extends JobImpl {
                     if (log.shouldDebug()) {
                         log.debug("Pool " + poolId + " already has " + poolCount.get() + " tests running -> Deferring for better coverage");
                     }
+                    TOTAL_TEST_JOBS.decrementAndGet();
                     return false;
                 }
             }
@@ -364,34 +370,15 @@ public class TestJob extends JobImpl {
                         }
                     }
                 }
+                // Decrement counter reserved in shouldSchedule()
+                TOTAL_TEST_JOBS.decrementAndGet();
                 _valid = false;
                 return;
             }
         }
 
-        // Increment total job counter atomically
-        if (!tryIncrementTotalJobs(ctx)) {
-            if (_log.shouldInfo()) {
-                _log.info("Hard limit (" + MAX_TEST_JOB_LIMIT + ") reached -> Not scheduling test for " + cfg);
-            }
-            // Clean up tunnel registration
-            if (tunnelKey != null) {
-                RUNNING_TESTS.remove(tunnelKey, this);
-            }
-            // Clean up pool registration
-            if (_pool != null) {
-                String poolId = getPoolId(_pool);
-                AtomicInteger poolCount = POOL_TEST_COUNTS.get(poolId);
-                if (poolCount != null) {
-                    poolCount.decrementAndGet();
-                    if (poolCount.get() <= 0) {
-                        POOL_TEST_COUNTS.remove(poolId);
-                    }
-                }
-            }
-            _valid = false;
-            return;
-        }
+        // Slot was already reserved by shouldSchedule() - just mark as counted
+        _counted.set(true);
         // Start after delay; guard against negative start
         int delay = getDelay();
         delay = Math.max(0, delay);
@@ -962,6 +949,16 @@ public class TestJob extends JobImpl {
             }
             return false;
         }
+
+        // Increment total job counter before rescheduling
+        if (!tryIncrementTotalJobs(ctx)) {
+            if (_log.shouldInfo()) {
+                _log.info("Hard limit reached during reschedule (counter) -> Skipping reschedule for " + _cfg);
+            }
+            return false;
+        }
+        // Mark as counted so dropped() doesn't double-decrement
+        _counted.set(true);
 
         int delay = getDelay();
         if (asap) {
