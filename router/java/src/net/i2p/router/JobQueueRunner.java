@@ -21,7 +21,7 @@ class JobQueueRunner extends I2PThread {
     private volatile long _lastBegin;
     private volatile long _lastEnd;
 
-    /** Maximum time a job can run before being interrupted (30 seconds) */
+    /** Maximum time a job can run before being interrupted (60 seconds) */
     private static final long MAX_JOB_RUNTIME_MS = 60 * 1000;
     /** Thread pool for executing jobs with timeout */
     private final ExecutorService _timeoutExecutor;
@@ -129,6 +129,7 @@ class JobQueueRunner extends I2PThread {
     private void runCurrentJob() {
         _lastBegin = _context.clock().now();
         if (_currentJob == null) return;
+        if (_timeoutExecutor.isShutdown()) return;
 
         final String jobName = _currentJob.getName();
         Future<?> future = null;
