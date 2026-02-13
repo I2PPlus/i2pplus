@@ -97,6 +97,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private final static String PROP_BLOCK_COUNTRIES = "router.blockCountries";
     private final static String DEFAULT_BLOCK_COUNTRIES = "";
     public static final String PROP_BLOCK_XG = "i2np.blockXG";
+    public static final String PROP_BLOCK_OF57 = "router.blockOf57";
     public static final String minRouterVersion = "0.9.20";
     public static final String MIN_VERSION = "0.9.65";
     public static String CURRENT_VERSION = "0.9.68";
@@ -786,6 +787,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (shouldBanlistBasedOnCountry(ri, key)) {handleBanlistAndRemove(ri, key, onFailedLookupJob);}
         else if (shouldBanlistXGUnreachable(ri, key)) {handleBanlistAndRemove(ri, key, onFailedLookupJob);}
         else if (shouldBanlistLUM(ri, key)) {handleBanlistAndRemove(ri, key, onFailedLookupJob);}
+        else if (shouldBanlistOf57(ri, key)) {handleBanlistOf57(ri, key, onFailedLookupJob);}
         else if (isPermanentlyBlocklisted(key)) {handlePermanentBlocklist(ri, key, onFailedLookupJob);}
         else if (isHostileBlocklisted(key)) {handleHostileBlocklist(ri, key, onFailedLookupJob);}
         else if (isNegativeCached(key)) {handleNegativeCache(ri, key, onFailedLookupJob);}
@@ -854,6 +856,31 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         return !isUs && isLTier && isOld;
     }
 
+    /**
+     * Determine whether the given router should be banlisted due to being:
+     * - an Of-cap router (CAPABILITY_BW256 + floodfill),
+     * - running version 0.9.57.
+     *
+     * This blocks a specific problematic version with floodfill capability.
+     *
+     * @param ri the router info to evaluate
+     * @param key the hash of the router (unused in this method, but kept for consistency)
+     * @return true if the router matches the Of 0.9.57 banlist criteria
+     *
+     * @since 0.9.68+
+     */
+    private boolean shouldBanlistOf57(RouterInfo ri, Hash key) {
+        boolean blockOf57 = _context.getBooleanPropertyDefaultTrue(PROP_BLOCK_OF57);
+        if (!blockOf57) return false;
+
+        boolean isOTier = containsCapability(ri, Router.CAPABILITY_BW256);
+        boolean isFloodfill = containsCapability(ri, FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL);
+        boolean isVersion57 = "0.9.57".equals(ri.getVersion());
+        boolean isUs = _context.routerHash().equals(ri.getIdentity().getHash());
+
+        return !isUs && isOTier && isFloodfill && isVersion57;
+    }
+
     private boolean isPermanentlyBlocklisted(Hash key) {
         return _context.banlist().isBanlistedForever(key);
     }
@@ -875,6 +902,30 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         _context.banlist().banlistRouter(key, "➜ LU and older than " + MIN_VERSION, null, null,
                                          _context.clock().now() + 4 * 60 * 60 * 1000);
         _banLogger.logBan(key, _context, "LU and older than " + MIN_VERSION, 4 * 60 * 60 * 1000);
+        _ds.remove(key);
+        _kb.remove(key);
+
+        if (onFailedLookupJob != null) {_context.jobQueue().addJob(onFailedLookupJob);}
+    }
+
+    private void handleBanlistOf57(RouterInfo ri, Hash key, Job onFailedLookupJob) {
+        String caps = ri.getCapabilities();
+        String routerId = key.toBase64().substring(0,6);
+
+        String ip = null;
+        for (RouterAddress ra : ri.getAddresses()) {
+            ip = ra.getHost();
+            if (ip != null) break;
+        }
+
+        if (_log.shouldWarn()) {
+            _log.warn("Banning \'O\' tier floodfill [" + routerId + "] (" + (ip != null ? "(ip)" : "") + ") -> 0.9.57 (probable botnet participant)");
+        }
+
+        String reason = "O tier floodfill / 0.9.57";
+        _context.banlist().banlistRouter(key, " <b>➜</b> " + reason, null, null,
+                                         _context.clock().now() + 4 * 60 * 60 * 1000);
+        _banLogger.logBan(key, _context, reason  + (ip != null ? " (" + ip + ")" : ""), 4 * 60 * 60 * 1000);
         _ds.remove(key);
         _kb.remove(key);
 
@@ -1691,6 +1742,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         boolean isHidden = _context.router().isHidden();
         boolean blockMyCountry = _context.getBooleanProperty(PROP_BLOCK_MY_COUNTRY);
         boolean blockXG = _context.getBooleanPropertyDefaultTrue(PROP_BLOCK_XG);
+        boolean blockOf57 = _context.getBooleanPropertyDefaultTrue(PROP_BLOCK_OF57);
         Set<String> blockedCountries = getBlockedCountries();
         String myCountry = _context.getProperty(PROP_IP_COUNTRY);
         boolean isBanned = _context.banlist().isBanlisted(h);
@@ -1733,6 +1785,18 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             }
             return true;
         }
+        if (blockOf57 && isRouterBlockOf57(routerInfo, h.equals(_context.routerHash()))) {
+            if (!_context.banlist().isBanlisted(h)) {
+                String ip = getRouterIP(routerInfo);
+                if (_log.shouldWarn()) {
+                    _log.warn("Banning \'O\' tier floodfill [" + routerId + "] (" + ip + ") -> 0.9.57 (probable botnet participant)");
+                }
+                String reason = "O tier floodfill / 0.9.57";
+                _context.banlist().banlistRouter(h, " <b>➜</b> " + reason, null, null, _context.clock().now() + 4*60*60*1000);
+                _banLogger.logBan(h, _context, reason + (ip != null ? " (" + ip + ")" : ""), 4*60*60*1000);
+            }
+            return true;
+        }
         return false;
     }
 
@@ -1752,6 +1816,41 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         String caps = routerInfo.getCapabilities();
         return !isUs && caps.indexOf(Router.CAPABILITY_NO_TUNNELS) >= 0 &&
                caps.indexOf(Router.CAPABILITY_BW_UNLIMITED) >= 0;
+    }
+
+    /**
+     * Determines whether the given router qualifies as an Of57 router that should be blocked.
+     *
+     * An Of57 router is defined as:
+     * - Has the O capability (bandwidth tier 256)
+     * - Has the f (floodfill) capability
+     * - Running version 0.9.57
+     *
+     * @param routerInfo the RouterInfo to evaluate
+     * @param isUs true if the router is the local router
+     * @return true if the router is an Of57 router and should be blocked
+     * @since 0.9.68
+     */
+    private boolean isRouterBlockOf57(RouterInfo routerInfo, boolean isUs) {
+        String caps = routerInfo.getCapabilities();
+        return !isUs && caps.indexOf(Router.CAPABILITY_BW256) >= 0 &&
+               caps.indexOf(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL) >= 0 &&
+               "0.9.57".equals(routerInfo.getVersion());
+    }
+
+    /**
+     * Gets the IP address from a router's addresses.
+     *
+     * @param routerInfo the RouterInfo to get IP from
+     * @return the IP address string, or null if not found
+     * @since 0.9.68
+     */
+    private String getRouterIP(RouterInfo routerInfo) {
+        for (RouterAddress ra : routerInfo.getAddresses()) {
+            String ip = ra.getHost();
+            if (ip != null) return ip;
+        }
+        return null;
     }
 
     /**
