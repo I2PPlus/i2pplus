@@ -119,15 +119,16 @@ public class ExpireJobManager extends JobImpl {
 
         if (readyToExpire.isEmpty() && readyToDrop.isEmpty()) {
             // Nothing ready to process yet
-            if (isBackedUp && _log.shouldInfo()) {
-                _log.info("Expire Tunnels Job backed up with " + queueSize +
-                          " pending tunnel expirations -> Waiting for tunnels to reach expiration time...");
-            }
+            //if (isBackedUp && _log.shouldInfo()) {
+            //    _log.info("Expire Tunnels Job backed up with " + queueSize +
+            //              " pending tunnel expirations -> Waiting for tunnels to reach expiration time...");
+            //}
         } else {
-            if (isBackedUp && _log.shouldInfo()) {
+            if (isBackedUp && _log.shouldInfo() && (readyToExpire.size() > 0 || readyToDrop.size() > 0)) {
                 _log.info("Removing " + readyToExpire.size() +
-                          " expired tunnels, cleaning up " + readyToDrop.size() +
-                          " old tunnels from dispatcher (Queue: " + queueSize + " jobs)");
+                          " expired " + (readyToExpire.size() > 1 ? "tunnels" : "tunnel") +
+                          (readyToDrop.size() > 0 ? ", cleaning up " + readyToDrop.size() +
+                          " old tunnels from dispatcher" : "") + " (Queue: " + queueSize + " jobs)");
             }
 
             // Phase 1: Remove from tunnel pools synchronously during recovery
