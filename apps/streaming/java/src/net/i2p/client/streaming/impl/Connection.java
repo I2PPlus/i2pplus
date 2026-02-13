@@ -129,6 +129,13 @@ class Connection {
     private static final int MAX_RTX = 32;
 
     /**
+     * Maximum unacked packets to buffer per connection.
+     * Prevents memory exhaustion on stuck/stalled connections.
+     * Default is 2x the max window size to allow for bursts.
+     */
+    private static final int MAX_UNACKED_PACKETS = SystemVersion.isSlow() ? 512 : 768;
+
+    /**
      *  @param opts may be null
      */
     public Connection(I2PAppContext ctx, ConnectionManager manager,
@@ -409,6 +416,15 @@ class Connection {
             int windowSize;
             int remaining;
             synchronized (_outboundPackets) {
+                // Defensive: prevent unbounded packet accumulation under memory pressure
+                if (_outboundPackets.size() >= MAX_UNACKED_PACKETS) {
+                    if (_log.shouldWarn()) {
+                        _log.warn("Outbound packet buffer full (" + _outboundPackets.size() +
+                                  "), dropping packet " + packet.getSequenceNum());
+                    }
+                    packet.cancelled();
+                    return;
+                }
                 _outboundPackets.put(Long.valueOf(packet.getSequenceNum()), packet);
                 windowSize = _options.getWindowSize();
                 remaining = windowSize - _outboundPackets.size() ;
