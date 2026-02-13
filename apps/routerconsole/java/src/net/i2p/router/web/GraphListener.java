@@ -116,8 +116,9 @@ public class GraphListener implements RateSummaryListener {
         _name = createName(_context, baseName);
         _eventName = createName(_context, baseName + ".events");
         File rrdFile = null;
+        RrdBackendFactory factory = null;
         try {
-            RrdBackendFactory factory = getBackendFactory();
+            factory = getBackendFactory();
             String rrdDefName;
             if (_isPersistent) {
                 // generate full path for persistent RRD files
@@ -127,7 +128,11 @@ public class GraphListener implements RateSummaryListener {
                 if (rrdFile.exists()) {
                     _db = RrdDb.getBuilder().setPath(rrdDefName).setBackendFactory(factory).build();
                     Archive arch = _db.getArchive(CF, STEPS);
-                    if (arch == null) {throw new IOException("No average CF in " + rrdDefName);}
+                    if (arch == null) {
+                        _db.close();
+                        _db = null;
+                        throw new IOException("No average CF in " + rrdDefName);
+                    }
                     _rows = arch.getRows();
                     if (_log.shouldInfo()) {
                         _log.info("Existing RRD " + baseName + " (" + rrdDefName + ") with " + _rows +
@@ -157,17 +162,25 @@ public class GraphListener implements RateSummaryListener {
             _renderer = new GraphRenderer(_context, this);
             _rate.setSummaryListener(this);
             return true;
-        } catch (OutOfMemoryError oom) {_log.error("Error starting RRD for stat " + baseName, oom);}
+        } catch (OutOfMemoryError oom) {
+            _log.error("Error starting RRD for stat " + baseName, oom);
+            cleanupOnError();
+        }
         catch (RrdException re) {
             _log.error("Error starting RRD for stat " + baseName, re);
             // corrupt file?
             if (_isPersistent && rrdFile != null) {rrdFile.delete();}
-        } catch (IOException ioe) {_log.error("Error starting RRD for stat " + baseName, ioe);}
+            cleanupOnError();
+        } catch (IOException ioe) {
+            _log.error("Error starting RRD for stat " + baseName, ioe);
+            cleanupOnError();
+        }
         catch (IllegalArgumentException iae) {
             // No backend from RrdBackendFactory
             _log.error("Error starting RRD for stat " + baseName, iae);
             _log.log(Log.CRIT, "RRD4J backend error, graphs disabled");
             System.out.println("RRD4J backend error, graphs disabled");
+            cleanupOnError();
             GraphGenerator.setDisabled(_context);
         } catch (NoSuchMethodError nsme) {
             // Covariant fail Java 8/9/10
@@ -180,9 +193,38 @@ public class GraphListener implements RateSummaryListener {
                        "\nContact packager.";
             _log.log(Log.CRIT, s);
             System.out.println(s);
+            cleanupOnError();
             GraphGenerator.setDisabled(_context);
-        } catch (Throwable t) {_log.error("Error starting RRD for stat " + baseName, t);}
+        } catch (Throwable t) {
+            _log.error("Error starting RRD for stat " + baseName, t);
+            cleanupOnError();
+        }
         return false;
+    }
+
+    /**
+     *  Clean up resources when startListening() fails
+     *  @since 0.9.65
+     */
+    private void cleanupOnError() {
+        if (_db != null) {
+            try {
+                _db.close();
+            } catch (IOException ioe) {
+                _log.error("Error closing RRD during cleanup", ioe);
+            }
+            if (!_isPersistent) {
+                // Also clean up memory backend if it was created
+                try {
+                    ((RrdMemoryBackendFactory)getBackendFactory(false)).delete(_db.getPath());
+                } catch (Exception e) {
+                    // Ignore cleanup errors
+                }
+            }
+            _db = null;
+        }
+        _sample = null;
+        _renderer = null;
     }
 
     public void stopListening() {

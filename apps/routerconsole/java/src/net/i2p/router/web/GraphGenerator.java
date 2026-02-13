@@ -48,9 +48,34 @@ public class GraphGenerator implements Runnable, ClientApp {
     private final List<GraphListener> _listeners;
     private static int cores = SystemVersion.getCores();
     private static long maxMem = SystemVersion.getMaxMemory();
-    private static final int MAX_CONCURRENT_PNG = SystemVersion.isARM() ? Math.max(2, cores / 2) :
-                                                  maxMem < 256*1024*1024 ? Math.max(8, cores / 2) :
-                                                  Math.max(12, cores);
+    /**
+     *  Scale concurrent graph rendering based on available memory.
+     *  Large graphs with high period counts consume significant memory,
+     *  so we limit concurrency on systems with less RAM to prevent OOM.
+     *
+     *  Memory thresholds:
+     *  - < 512MB: 4 concurrent (low memory systems)
+     *  - 512MB - 1GB: 6 concurrent
+     *  - 1GB - 2GB: 8 concurrent
+     *  - 2GB - 4GB: 10 concurrent
+     *  - 4GB+: 12 concurrent (default)
+     */
+    private static final int MAX_CONCURRENT_PNG;
+    static {
+        if (SystemVersion.isARM()) {
+            MAX_CONCURRENT_PNG = Math.max(2, cores / 2);
+        } else if (maxMem < 512*1024*1024L) {
+            MAX_CONCURRENT_PNG = 4;
+        } else if (maxMem < 1024*1024*1024L) {
+            MAX_CONCURRENT_PNG = 6;
+        } else if (maxMem < 2048*1024*1024L) {
+            MAX_CONCURRENT_PNG = 8;
+        } else if (maxMem < 4096*1024*1024L) {
+            MAX_CONCURRENT_PNG = 10;
+        } else {
+            MAX_CONCURRENT_PNG = Math.max(12, cores);
+        }
+    }
     private final Semaphore _sem;
     private volatile boolean _isRunning;
     private ScheduledExecutorService _scheduler;
@@ -136,7 +161,18 @@ public class GraphGenerator implements Runnable, ClientApp {
                 }
             }, 0, 90, TimeUnit.SECONDS);
         } catch (Exception e) {
-            _log.error("Failed to sync RRD4J stats to disk", e);
+            _log.error("Failed to schedule RRD4J sync task", e);
+            // Clean up the scheduler to prevent thread leak
+            _scheduler.shutdown();
+            try {
+                if (!_scheduler.awaitTermination(5, TimeUnit.SECONDS)) {
+                    _scheduler.shutdownNow();
+                }
+            } catch (InterruptedException ie) {
+                _scheduler.shutdownNow();
+                Thread.currentThread().interrupt();
+            }
+            _scheduler = null;
         }
     }
 

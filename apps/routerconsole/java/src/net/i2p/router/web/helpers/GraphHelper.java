@@ -16,6 +16,7 @@ import net.i2p.router.web.GraphGenerator;
 import net.i2p.router.web.GraphListener;
 import net.i2p.router.web.HelperBase;
 import net.i2p.stat.Rate;
+import net.i2p.util.SystemVersion;
 
 /**
  *  /graphs.jsp, including form, and /graph.jsp
@@ -43,7 +44,27 @@ public class GraphHelper extends FormHandler {
     private static final int MIN_Y = 40;
     //private static final int MIN_C = 20;
     private static final int MIN_C = 5; // minimum period (minutes)
-    private static final int MAX_C = GraphListener.MAX_ROWS;
+    /**
+     *  Maximum period count is dynamically limited based on available memory.
+     *  Large period counts consume significant memory during graph rendering,
+     *  which can cause OOM on systems with limited RAM.
+     *
+     *  Memory thresholds for effective maximum:
+     *  - < 2GB: 2,880 periods (2 days)
+     *  - 2GB - 4GB: 10,080 periods (1 week)
+     *  - 4GB+: 131,040 periods (91 days, full MAX_ROWS)
+     */
+    private static final int MAX_C;
+    static {
+        long maxMem = SystemVersion.getMaxMemory();
+        if (maxMem < 2048*1024*1024L) {
+            MAX_C = 2 * 24 * 60; // 2,880 periods = 2 days
+        } else if (maxMem < 4096*1024*1024L) {
+            MAX_C = 7 * 24 * 60; // 10,080 periods = 1 week
+        } else {
+            MAX_C = GraphListener.MAX_ROWS; // 131,040 periods = 91 days
+        }
+    }
     private static final int MIN_REFRESH = 5;
 
     // Cached common constant substrings for URL building (optimization)

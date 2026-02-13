@@ -16,7 +16,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import javax.imageio.stream.ImageOutputStream;
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.router.RouterContext;
@@ -28,7 +27,6 @@ import org.rrd4j.data.Variable;
 import org.rrd4j.graph.ElementsNames;
 import org.rrd4j.graph.RrdGraph;
 import org.rrd4j.graph.RrdGraphDef;
-import org.rrd4j.graph.RrdGraphInfo;
 import org.rrd4j.graph.SVGImageWorker;
 
 /**
@@ -91,9 +89,18 @@ class GraphRenderer {
     private static final long[] RATES = RateConstants.BASIC_RATES;
     private static final Stroke GRID_STROKE = new BasicStroke(1, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 1, new float[] {1, 1}, 0);
 
-    GraphicsEnvironment e = GraphicsEnvironment.getLocalGraphicsEnvironment();
-    String[] sysfonts = e.getAvailableFontFamilyNames();
-    List<String> fontlist = Arrays.asList(sysfonts);
+    // Static initialization for font data - these don't change per instance
+    private static final GraphicsEnvironment GRAPHICS_ENV = GraphicsEnvironment.getLocalGraphicsEnvironment();
+    private static final String[] SYS_FONTS = GRAPHICS_ENV.getAvailableFontFamilyNames();
+    private static final List<String> FONT_LIST = Arrays.asList(SYS_FONTS);
+    
+    // ThreadLocal SimpleDateFormat cache - SimpleDateFormat is expensive to create and not thread-safe
+    private static final ThreadLocal<SimpleDateFormat> DATE_FORMAT_CACHE = new ThreadLocal<SimpleDateFormat>() {
+        @Override
+        protected SimpleDateFormat initialValue() {
+            return new SimpleDateFormat("dd MMM HH:mm");
+        }
+    };
 
     public GraphRenderer(I2PAppContext ctx, GraphListener lsnr) {
         _log = ctx.logManager().getLog(GraphRenderer.class);
@@ -144,9 +151,11 @@ class GraphRenderer {
         long end = Math.min(_listener.now(), begin - 75*1000);
         long period = _listener.getRate().getPeriod();
         if (endp > 0) {end -= period * endp;}
+        // Memory-aware period limiting to prevent OOM
+        int maxPeriods = getMaxPeriodsForMemory();
+        if (periodCount > maxPeriods) {periodCount = maxPeriods;}
         if (periodCount <= 0 || periodCount > _listener.getRows()) {periodCount = _listener.getRows();}
         long start = end - (period * periodCount);
-        ImageOutputStream ios = null;
         String theme = _context.getProperty(PROP_THEME_NAME, DEFAULT_THEME);
 
         try {
@@ -222,14 +231,14 @@ class GraphRenderer {
 
             /* CJK support */
             if ("zh".equals(Messages.getLanguage(_context))) {
-                if (fontlist.contains("Noto Sans SC")) {DEFAULT_TITLE_FONT_NAME = "Noto Sans SC";}
-                else if (fontlist.contains("Noto Sans CJK SC")) {DEFAULT_TITLE_FONT_NAME = "Noto Sans CJK SC";}
-                else if (fontlist.contains("Source Han Sans SC")) {DEFAULT_TITLE_FONT_NAME = "Source Han Sans SC";}
+                if (FONT_LIST.contains("Noto Sans SC")) {DEFAULT_TITLE_FONT_NAME = "Noto Sans SC";}
+                else if (FONT_LIST.contains("Noto Sans CJK SC")) {DEFAULT_TITLE_FONT_NAME = "Noto Sans CJK SC";}
+                else if (FONT_LIST.contains("Source Han Sans SC")) {DEFAULT_TITLE_FONT_NAME = "Source Han Sans SC";}
                 else {DEFAULT_TITLE_FONT_NAME = "Dialog";}
-                if (fontlist.contains("Noto Sans Mono SC")) {
+                if (FONT_LIST.contains("Noto Sans Mono SC")) {
                     DEFAULT_FONT_NAME = "Noto Sans Mono SC";
                     DEFAULT_LEGEND_FONT_NAME = "Noto Sans Mono SC";
-                } else if (fontlist.contains("Noto Sans Mono CJK SC")) {
+                } else if (FONT_LIST.contains("Noto Sans Mono CJK SC")) {
                     DEFAULT_FONT_NAME = "Noto Sans Mono CJK SC";
                     DEFAULT_LEGEND_FONT_NAME = "Noto Sans Mono CJK SC";
                 } else {
@@ -237,14 +246,14 @@ class GraphRenderer {
                     DEFAULT_LEGEND_FONT_NAME = "Monospaced";
                 }
             } else if ("jp".equals(Messages.getLanguage(_context))) {
-                if (fontlist.contains("Noto Sans JP")) {DEFAULT_TITLE_FONT_NAME = "Noto Sans JP";}
-                else if (fontlist.contains("Noto Sans CJK JP")) {DEFAULT_TITLE_FONT_NAME = "Noto Sans CJK JP";}
-                else if (fontlist.contains("Source Han Sans JP")) {DEFAULT_TITLE_FONT_NAME = "Source Han Sans JP";}
+                if (FONT_LIST.contains("Noto Sans JP")) {DEFAULT_TITLE_FONT_NAME = "Noto Sans JP";}
+                else if (FONT_LIST.contains("Noto Sans CJK JP")) {DEFAULT_TITLE_FONT_NAME = "Noto Sans CJK JP";}
+                else if (FONT_LIST.contains("Source Han Sans JP")) {DEFAULT_TITLE_FONT_NAME = "Source Han Sans JP";}
                 else {DEFAULT_TITLE_FONT_NAME = "Dialog";}
-                if (fontlist.contains("Noto Sans Mono JP")) {
+                if (FONT_LIST.contains("Noto Sans Mono JP")) {
                     DEFAULT_FONT_NAME = "Noto Sans Mono JP";
                     DEFAULT_LEGEND_FONT_NAME = "Noto Sans Mono JP";
-                } else if (fontlist.contains("Noto Sans Mono CJK JP")) {
+                } else if (FONT_LIST.contains("Noto Sans Mono CJK JP")) {
                     DEFAULT_FONT_NAME = "Noto Sans Mono CJK JP";
                     DEFAULT_LEGEND_FONT_NAME = "Noto Sans Mono CJK JP";
                 } else {
@@ -252,14 +261,14 @@ class GraphRenderer {
                     DEFAULT_LEGEND_FONT_NAME = "Monospaced";
                 }
             } else if ("ko".equals(Messages.getLanguage(_context))) {
-                if (fontlist.contains("Noto Sans KO")) {DEFAULT_TITLE_FONT_NAME = "Noto Sans KO";}
-                else if (fontlist.contains("Noto Sans CJK KO")) {DEFAULT_TITLE_FONT_NAME = "Noto Sans CJK KO";}
-                else if (fontlist.contains("Source Han Sans KO")) {DEFAULT_TITLE_FONT_NAME = "Source Han Sans KO";}
+                if (FONT_LIST.contains("Noto Sans KO")) {DEFAULT_TITLE_FONT_NAME = "Noto Sans KO";}
+                else if (FONT_LIST.contains("Noto Sans CJK KO")) {DEFAULT_TITLE_FONT_NAME = "Noto Sans CJK KO";}
+                else if (FONT_LIST.contains("Source Han Sans KO")) {DEFAULT_TITLE_FONT_NAME = "Source Han Sans KO";}
                 else {DEFAULT_TITLE_FONT_NAME = "Dialog";}
-                if (fontlist.contains("Noto Sans Mono KO")) {
+                if (FONT_LIST.contains("Noto Sans Mono KO")) {
                     DEFAULT_FONT_NAME = "Noto Sans Mono KO";
                     DEFAULT_LEGEND_FONT_NAME = "Noto Sans Mono KO";
-                } else if (fontlist.contains("Noto Sans Mono CJK KO")) {
+                } else if (FONT_LIST.contains("Noto Sans Mono CJK KO")) {
                     DEFAULT_FONT_NAME = "Noto Sans Mono CJK KO";
                     DEFAULT_LEGEND_FONT_NAME = "Noto Sans Mono CJK KO";
                 } else {
@@ -435,7 +444,8 @@ class GraphRenderer {
                 }
             }
 
-            SimpleDateFormat sdf = new SimpleDateFormat("dd MMM HH:mm");
+            // Use cached SimpleDateFormat to avoid expensive object creation
+            SimpleDateFormat sdf = DATE_FORMAT_CACHE.get();
             int count = 0;
             Color RESTART_COLOR = theme.equals("midnight") || theme.equals("dark") ? RESTART_BAR_COLOR_DARK : RESTART_BAR_COLOR;
 
@@ -487,12 +497,11 @@ class GraphRenderer {
                 def.setColor(RrdGraphDef.COLOR_CANVAS, TRANSPARENT);
                 def.setColor(RrdGraphDef.COLOR_BACK, TRANSPARENT);
             }
-            RrdGraph graph = new RrdGraph(def);
-            RrdGraphInfo info = graph.getRrdGraphInfo();
-            int totalWidth = info.getWidth();
-            int totalHeight = info.getHeight();
-            try {graph = new RrdGraph(def, new SVGImageWorker(totalWidth + 8, totalHeight));} // svg
-            catch (NullPointerException npe) {
+            // Create graph - only instantiate once to avoid wasting memory
+            final RrdGraph graph;
+            try {
+                graph = new RrdGraph(def, new SVGImageWorker(width + 8, height));
+            } catch (NullPointerException npe) {
                 _log.error("Error rendering graph", npe);
                 GraphGenerator.setDisabled(_context);
                 throw new IOException("Error rendering - disabling graph generation.");
@@ -514,12 +523,6 @@ class GraphRenderer {
         } catch (OutOfMemoryError oom) {
             _log.error("Error rendering", oom);
             throw new IOException("Error plotting: " + oom.getLocalizedMessage());
-        } finally {
-            // this does not close the underlying stream
-            if (ios != null) {
-                try {ios.close();}
-                catch (IOException ioe) {}
-            }
         }
     }
 
@@ -539,6 +542,24 @@ class GraphRenderer {
         // Works on 1.5.9 except on windows
         if (IS_WIN && "zh".equals(Messages.getLanguage(_context))) {return s.replace("{0}", o);}
         return Messages.getString(s, o, _context);
+    }
+
+    /**
+     *  Get the maximum number of periods to graph based on available memory.
+     *  This prevents OOM errors when rendering large graphs on memory-constrained systems.
+     *
+     *  @return max periods: 2 days for <2GB, 1 week for 2-4GB, unlimited for 4GB+
+     *  @since 0.9.65
+     */
+    private static int getMaxPeriodsForMemory() {
+        long maxMem = SystemVersion.getMaxMemory();
+        if (maxMem < 2048*1024*1024L) {
+            return 2 * 24 * 60; // 2 days
+        } else if (maxMem < 4096*1024*1024L) {
+            return 7 * 24 * 60; // 1 week
+        } else {
+            return Integer.MAX_VALUE; // No limit for systems with 4GB+
+        }
     }
 
 }
