@@ -1515,6 +1515,8 @@ public class NTCPTransport extends TransportImpl {
         // ignore UPnP for now, get everything from SSU if it's enabled
         boolean ssuEnabled = _context.getBooleanPropertyDefaultTrue(TransportManager.PROP_ENABLE_UDP);
         if (source != SOURCE_SSU && ssuEnabled) {return;}
+        RouterAddress oldAddr = getCurrentAddress(ipv6);
+        if (oldAddr == null) {return;}
         Status old = ssuEnabled ? null : getReachabilityStatus();
         boolean changed = externalAddressReceived(null, ipv6, 0);
         if (changed && !ssuEnabled) {addressChanged(old);}
