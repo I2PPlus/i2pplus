@@ -64,10 +64,11 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
      */
     public ArraySet(Set<? extends E> c, int capacity) {
         this(Math.max(capacity, c.size()));
-        // we avoid the O(n**2) behavior of addAll()
-        for (E e : c) {
-            _entries[_size++] = e;
+        Object[] arr = c.toArray();
+        for (int i = 0; i < arr.length; i++) {
+            _entries[i] = arr[i];
         }
+        _size = arr.length;
     }
 
     /**
@@ -96,7 +97,11 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
      */
     public ArraySet(Collection<? extends E> c, int capacity) {
         this(Math.max(capacity, c.size()));
-        addAll(c);
+        Object[] arr = c.toArray();
+        for (int i = 0; i < arr.length; i++) {
+            _entries[i] = arr[i];
+        }
+        _size = arr.length;
     }
 
 
