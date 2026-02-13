@@ -771,10 +771,16 @@ msgstr ""
 msgid "No bans currently active"
 msgstr ""
 
+msgid "Country"
+msgstr ""
+
 msgid "Reason"
 msgstr ""
 
-msgid "Router Hash"
+msgid "IP Address"
+msgstr ""
+
+msgid "Hostname"
 msgstr ""
 
 msgid "Expiry"
@@ -1528,6 +1534,14 @@ msgstr ""
 msgid "Shutdown"
 msgstr ""
 
+#, java-format
+msgid "Deferring restart for {0} until all servers have stopped"
+msgstr ""
+
+#, java-format
+msgid "Deferring shutdown for {0} until all servers have stopped"
+msgstr ""
+
 msgid "Restart imminent"
 msgstr ""
 
@@ -2185,9 +2199,6 @@ msgstr ""
 msgid "Alternative privacy-focused front-end for Reddit"
 msgstr ""
 
-msgid "AI Image generation & Chat hub"
-msgstr ""
-
 msgid "IRC Logs for multiple networks"
 msgstr ""
 
@@ -2438,9 +2449,6 @@ msgstr ""
 msgid "Network Database entry"
 msgstr ""
 
-msgid "IP Address"
-msgstr ""
-
 msgid "UDP Port"
 msgstr ""
 
@@ -2535,9 +2543,6 @@ msgstr ""
 msgid "{0} is used for outbound connections only"
 msgstr ""
 
-msgid "Job runners"
-msgstr ""
-
 msgid "Active jobs"
 msgstr ""
 
@@ -2546,6 +2551,12 @@ msgid "started {0} ago"
 msgstr ""
 
 msgid "Completed jobs"
+msgstr ""
+
+msgid "Runners"
+msgstr ""
+
+msgid "finished just now"
 msgstr ""
 
 #, java-format
@@ -2565,16 +2576,28 @@ msgstr ""
 msgid "{0} starting in {1}"
 msgstr ""
 
-msgid "DELAYED"
-msgstr ""
-
-msgid "OUT OF ORDER"
-msgstr ""
-
 msgid "Queue Totals"
 msgstr ""
 
-msgid "Job Statistics (excluding single-shot jobs)"
+msgid "Job Statistics"
+msgstr ""
+
+msgid "last minute"
+msgstr ""
+
+msgid "Job Lag"
+msgstr ""
+
+msgid "AVG"
+msgstr ""
+
+msgid "PEAK"
+msgstr ""
+
+msgid "All Stats"
+msgstr ""
+
+msgid "Last 60s"
 msgstr ""
 
 msgid "Job"
@@ -2644,9 +2667,6 @@ msgid "e.g. f or XOfR"
 msgstr ""
 
 msgid "Cost"
-msgstr ""
-
-msgid "Country"
 msgstr ""
 
 msgid "Country Codes"
@@ -2918,9 +2938,6 @@ msgid "Hidden"
 msgstr ""
 
 msgid "Published"
-msgstr ""
-
-msgid "Hostname"
 msgstr ""
 
 msgid "Whois"
@@ -4039,7 +4056,7 @@ msgstr ""
 msgid "Concurrency"
 msgstr ""
 
-msgid "Combined utility and service tunnel build success (averaged over 1 minute, falls back to 10 minute intervals)"
+msgid "Combined utility and service tunnel build success (averaged over 10 minute intervals)"
 msgstr ""
 
 msgid "Build Success"
@@ -4066,10 +4083,10 @@ msgstr ""
 msgid "Message delay"
 msgstr ""
 
-msgid "Average job delay / maximum delay"
+msgid "Average / peak job delay (last minute)"
 msgstr ""
 
-msgid "Average delay before scheduled jobs are run"
+msgid "Average / max delay before scheduled jobs are run"
 msgstr ""
 
 msgid "Indicates how quickly outbound messages to other I2P routers are sent"
@@ -4382,9 +4399,6 @@ msgstr ""
 msgid "MIN"
 msgstr ""
 
-msgid "AVG"
-msgstr ""
-
 msgid "MEDIAN"
 msgstr ""
 
@@ -4475,14 +4489,6 @@ msgstr ""
 msgid "Tunnel identity"
 msgstr ""
 
-#, java-format
-msgid "Limited display to the {0} tunnels with the highest usage"
-msgstr ""
-
-#, java-format
-msgid "Limited display to the {0} most recent tunnels"
-msgstr ""
-
 msgid "Lifetime bandwidth usage"
 msgstr ""
 
@@ -4500,6 +4506,9 @@ msgid "Transit Tunnels by Peer (Top {0})"
 msgstr ""
 
 msgid "Address"
+msgstr ""
+
+msgid "Messages"
 msgstr ""
 
 msgid "All Tunnels by Peer"
@@ -4536,6 +4545,15 @@ msgstr ""
 msgid "In/Out"
 msgstr ""
 
+msgid "Tunnel test status"
+msgstr ""
+
+msgid "Round trip time for last test"
+msgstr ""
+
+msgid "Latency"
+msgstr ""
+
 msgid "Gateway"
 msgstr ""
 
@@ -4543,6 +4561,24 @@ msgid "Participants"
 msgstr ""
 
 msgid "Endpoint"
+msgstr ""
+
+msgid "Rejected as duplicate"
+msgstr ""
+
+msgid "Test successful"
+msgstr ""
+
+msgid "Test in progress"
+msgstr ""
+
+msgid "Test failing (1 failure)"
+msgstr ""
+
+msgid "Test failed (2 consecutive failures)"
+msgstr ""
+
+msgid "Not yet tested"
 msgstr ""
 
 msgid "Locally hosted tunnel"
@@ -5214,6 +5250,9 @@ msgid "Peer Manager"
 msgstr ""
 
 msgid "Manual Peer Controls"
+msgstr ""
+
+msgid "Router Hash"
 msgstr ""
 
 msgid "Manually Ban / Unban a Peer"
@@ -5914,7 +5953,7 @@ msgstr ""
 msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
 msgstr ""
 
-msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
+msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap (no transit tunnels), adding them to the session banlist. [Default is true]"
 msgstr ""
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
@@ -7453,9 +7492,6 @@ msgid "The number of participating tunnels you route for others, divided by the 
 msgstr ""
 
 msgid "Some basic indications of router overload:"
-msgstr ""
-
-msgid "Job Lag"
 msgstr ""
 
 msgid "How long jobs are waiting before execution. The job queue is listed on the <a href='/jobs'>Jobs page</a>. Unfortunately, there are several other job queues in the router that may be congested, and their status is not available in the router console. The job lag should generally be zero. If it is consistently higher than 500ms, your computer is very slow, your network is experiencing connectivity issues, or the router has serious problems. <a href='/configstats#jobQueue.jobLag'>[Enable graphing]</a>."

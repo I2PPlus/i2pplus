@@ -614,6 +614,39 @@ msgstr "नई सर्वर सेटिंग"
 msgid "Hostname"
 msgstr "होस्टनेम"
 
+msgid "Random startup delay (when auto-start is enabled) to defend against correlation attacks"
+msgstr ""
+
+msgid "Startup Delay"
+msgstr ""
+
+msgid "Minimum"
+msgstr ""
+
+msgid "Minimum startup delay"
+msgstr ""
+
+msgid "seconds"
+msgstr ""
+
+msgid "Maximum"
+msgstr ""
+
+msgid "Maximum startup delay"
+msgstr ""
+
+msgid "Add random delay before tunnel shutdown, then start graceful router shutdown / restart process"
+msgstr ""
+
+msgid "Shutdown Delay"
+msgstr ""
+
+msgid "Minimum shutdown delay"
+msgstr ""
+
+msgid "Maximum shutdown delay"
+msgstr ""
+
 msgid "Website Hostname"
 msgstr "वेबसाइट होस्टनेम"
 
@@ -1095,8 +1128,8 @@ msgstr "कोई पूर्वावलोकन नहीं"
 msgid "Starting..."
 msgstr "शुरू हो रहा है..."
 
-msgid "Stop this Tunnel"
-msgstr "इस टनल को रोकें"
+msgid "Starting in"
+msgstr ""
 
 msgid "Running"
 msgstr "चालू"
@@ -1110,14 +1143,17 @@ msgstr "में"
 msgid "out"
 msgstr "बाहर"
 
+msgid "Stopped"
+msgstr "रोका गया"
+
+msgid "Stop this Tunnel"
+msgstr "इस टनल को रोकें"
+
 msgid "Restart this Tunnel"
 msgstr "इस टनल को पुनः आरंभ करें"
 
 msgid "Restart"
 msgstr "पुनः आरंभ करें"
-
-msgid "Stopped"
-msgstr "रोका गया"
 
 msgid "Destination"
 msgstr "गंतव्य"

@@ -619,6 +619,39 @@ msgstr "Nowa konfiguracja serwera"
 msgid "Hostname"
 msgstr "Nazwa hosta"
 
+msgid "Random startup delay (when auto-start is enabled) to defend against correlation attacks"
+msgstr ""
+
+msgid "Startup Delay"
+msgstr ""
+
+msgid "Minimum"
+msgstr ""
+
+msgid "Minimum startup delay"
+msgstr ""
+
+msgid "seconds"
+msgstr ""
+
+msgid "Maximum"
+msgstr ""
+
+msgid "Maximum startup delay"
+msgstr ""
+
+msgid "Add random delay before tunnel shutdown, then start graceful router shutdown / restart process"
+msgstr ""
+
+msgid "Shutdown Delay"
+msgstr ""
+
+msgid "Minimum shutdown delay"
+msgstr ""
+
+msgid "Maximum shutdown delay"
+msgstr ""
+
 msgid "Website Hostname"
 msgstr "Nazwa hosta strony"
 
@@ -1100,8 +1133,8 @@ msgstr "Brak podglądu"
 msgid "Starting..."
 msgstr "Rozpoczynam..."
 
-msgid "Stop this Tunnel"
-msgstr "Zatrzymaj ten tunel"
+msgid "Starting in"
+msgstr ""
 
 msgid "Running"
 msgstr "Uruchomiony"
@@ -1115,14 +1148,17 @@ msgstr "w"
 msgid "out"
 msgstr "wyjście"
 
+msgid "Stopped"
+msgstr "Zatrzymany"
+
+msgid "Stop this Tunnel"
+msgstr "Zatrzymaj ten tunel"
+
 msgid "Restart this Tunnel"
 msgstr "Uruchom ponownie ten tunel"
 
 msgid "Restart"
 msgstr "Uruchom ponownie"
-
-msgid "Stopped"
-msgstr "Zatrzymany"
 
 msgid "Destination"
 msgstr "Cel"

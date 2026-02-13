@@ -768,11 +768,17 @@ msgstr "bỏ cấm ngay bây giờ"
 msgid "No bans currently active"
 msgstr "Hiện tại không có lệnh cấm nào"
 
+msgid "Country"
+msgstr "Quốc gia"
+
 msgid "Reason"
 msgstr "Lý do"
 
-msgid "Router Hash"
-msgstr "Băm bộ định tuyến"
+msgid "IP Address"
+msgstr "Địa chỉ IP"
+
+msgid "Hostname"
+msgstr "Tên máy chủ"
 
 msgid "Expiry"
 msgstr "Hết hạn"
@@ -1524,6 +1530,14 @@ msgstr "Khởi động lại"
 msgid "Shutdown"
 msgstr "Tắt trình duyệt"
 
+#, java-format
+msgid "Deferring restart for {0} until all servers have stopped"
+msgstr ""
+
+#, java-format
+msgid "Deferring shutdown for {0} until all servers have stopped"
+msgstr ""
+
 msgid "Restart imminent"
 msgstr "Sắp khởi động lại"
 
@@ -2177,9 +2191,6 @@ msgstr "Vi blog xuyên mạng"
 msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Giao diện người dùng thay thế tập trung vào quyền riêng tư dành cho Reddit"
 
-msgid "AI Image generation & Chat hub"
-msgstr "Trung tâm tạo hình ảnh AI & Trò chuyện"
-
 msgid "IRC Logs for multiple networks"
 msgstr "Nhật ký IRC cho nhiều mạng"
 
@@ -2430,9 +2441,6 @@ msgstr "Danh tính"
 msgid "Network Database entry"
 msgstr "Bản ghi Cơ sở dữ liệu mạng"
 
-msgid "IP Address"
-msgstr "Địa chỉ IP"
-
 msgid "UDP Port"
 msgstr "Cổng UDP"
 
@@ -2527,9 +2535,6 @@ msgstr "Địa chỉ truyền tải định tuyến"
 msgid "{0} is used for outbound connections only"
 msgstr "{0} đã được dùng cho các kết nối với bên ngoài"
 
-msgid "Job runners"
-msgstr "Người chạy việc"
-
 msgid "Active jobs"
 msgstr "Công việc tích cực"
 
@@ -2539,6 +2544,12 @@ msgstr "đã bắt đầu {0} trước"
 
 msgid "Completed jobs"
 msgstr "Vừa hoàn thành công việc"
+
+msgid "Runners"
+msgstr ""
+
+msgid "finished just now"
+msgstr ""
 
 #, java-format
 msgid "finished {0} ago"
@@ -2557,17 +2568,29 @@ msgstr "Những công việc đã được lên lịch"
 msgid "{0} starting in {1}"
 msgstr "{0} bắt đầu sau {1}"
 
-msgid "DELAYED"
-msgstr "BỊ TRÌ HOÃN"
-
-msgid "OUT OF ORDER"
-msgstr "KHÔNG ĐẶT HÀNG"
-
 msgid "Queue Totals"
 msgstr "Tổng số hàng đợi"
 
-msgid "Job Statistics (excluding single-shot jobs)"
-msgstr "Thống kê công việc (không bao gồm các công việc một lần)"
+msgid "Job Statistics"
+msgstr ""
+
+msgid "last minute"
+msgstr ""
+
+msgid "Job Lag"
+msgstr "Lớp công việc"
+
+msgid "AVG"
+msgstr "AVG"
+
+msgid "PEAK"
+msgstr ""
+
+msgid "All Stats"
+msgstr ""
+
+msgid "Last 60s"
+msgstr ""
 
 msgid "Job"
 msgstr "Công việc"
@@ -2637,9 +2660,6 @@ msgstr "ví dụ: f hoặc XOfR"
 
 msgid "Cost"
 msgstr "Chi phí"
-
-msgid "Country"
-msgstr "Quốc gia"
 
 msgid "Country Codes"
 msgstr "Mã quốc gia"
@@ -2911,9 +2931,6 @@ msgstr "Dấu"
 
 msgid "Published"
 msgstr "Đã xuất bản"
-
-msgid "Hostname"
-msgstr "Tên máy chủ"
 
 msgid "Whois"
 msgstr "Whois"
@@ -4050,11 +4067,11 @@ msgstr "Độ trễ công việc"
 msgid "Message delay"
 msgstr "Độ trễ tin nhắn"
 
-msgid "Average job delay / maximum delay"
-msgstr "Độ trễ công việc trung bình/độ trễ tối đa"
+msgid "Average / peak job delay (last minute)"
+msgstr ""
 
-msgid "Average delay before scheduled jobs are run"
-msgstr "Độ trễ trung bình trước khi chạy các tác vụ theo lịch trình"
+msgid "Average / max delay before scheduled jobs are run"
+msgstr ""
 
 msgid "Indicates how quickly outbound messages to other I2P routers are sent"
 msgstr "Cho biết tốc độ gửi tin nhắn đi đến các bộ định tuyến I2P khác"
@@ -4364,9 +4381,6 @@ msgstr "lũ lụt"
 msgid "MIN"
 msgstr "PHÚT"
 
-msgid "AVG"
-msgstr "AVG"
-
 msgid "MEDIAN"
 msgstr "TRUNG BÌNH"
 
@@ -4457,14 +4471,6 @@ msgstr "thời gian ân hạn"
 msgid "Tunnel identity"
 msgstr "Nhận dạng đường hầm"
 
-#, java-format
-msgid "Limited display to the {0} tunnels with the highest usage"
-msgstr "Hiển thị giới hạn ở các đường hầm {0} có mức sử dụng cao nhất"
-
-#, java-format
-msgid "Limited display to the {0} most recent tunnels"
-msgstr "Hiển thị giới hạn ở {0} đường hầm gần đây nhất"
-
 msgid "Lifetime bandwidth usage"
 msgstr "Sử dụng băng thông trọn đời"
 
@@ -4483,6 +4489,9 @@ msgstr "Đường hầm chuyển tiếp theo đồng đẳng (Top {0})"
 
 msgid "Address"
 msgstr "Địa chỉ"
+
+msgid "Messages"
+msgstr ""
 
 msgid "All Tunnels by Peer"
 msgstr "Tất cả các đường hầm ngang hàng"
@@ -4518,6 +4527,15 @@ msgstr "Vào hay ra?"
 msgid "In/Out"
 msgstr "Vào/Ra"
 
+msgid "Tunnel test status"
+msgstr ""
+
+msgid "Round trip time for last test"
+msgstr ""
+
+msgid "Latency"
+msgstr ""
+
 msgid "Gateway"
 msgstr "Cổng"
 
@@ -4526,6 +4544,24 @@ msgstr "Người tham gia"
 
 msgid "Endpoint"
 msgstr "Điểm cuối"
+
+msgid "Rejected as duplicate"
+msgstr ""
+
+msgid "Test successful"
+msgstr ""
+
+msgid "Test in progress"
+msgstr ""
+
+msgid "Test failing (1 failure)"
+msgstr ""
+
+msgid "Test failed (2 consecutive failures)"
+msgstr ""
+
+msgid "Not yet tested"
+msgstr ""
 
 msgid "Locally hosted tunnel"
 msgstr "Đường hầm được lưu trữ cục bộ"
@@ -5197,6 +5233,9 @@ msgstr "Người quản lý ngang hàng"
 
 msgid "Manual Peer Controls"
 msgstr "Kiểm soát ngang hàng thủ công"
+
+msgid "Router Hash"
+msgstr "Băm bộ định tuyến"
 
 msgid "Manually Ban / Unban a Peer"
 msgstr "Cấm / Bỏ cấm một người ngang hàng theo cách thủ công"
@@ -5896,8 +5935,8 @@ msgstr "Cài đặt này (tính bằng vài phút) cho phép bạn định cấu
 msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
 msgstr "Cài đặt này, khi được đặt thành true, sẽ chặn giao tiếp trực tiếp từ tất cả các bộ định tuyến trong quốc gia của bạn và thêm chúng vào danh sách cấm của bạn cho đến khi bộ định tuyến của bạn khởi động lại. [Mặc định là false]"
 
-msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
-msgstr "Cài đặt này, khi được đặt thành true, sẽ chặn giao tiếp trực tiếp từ tất cả các bộ định tuyến cấp X xuất bản giới hạn tắc nghẽn G và không thể tiếp cận hoặc không thể tiếp cận được, thêm chúng vào danh sách cấm phiên. Lưu ý rằng chế độ nâng cao phải được bật để cài đặt này có hiệu lực. [Mặc định là false]"
+msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap (no transit tunnels), adding them to the session banlist. [Default is true]"
+msgstr ""
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "Cài đặt này cho phép vô hiệu hóa các bài kiểm tra SSU để xác định xem bộ định tuyến của bạn có bị tường lửa hay không, và có thể được kích hoạt cho các bộ định tuyến rõ ràng không bị tường lửa nhưng đang gặp vấn đề tường lửa không ổn định. Trong trường hợp kiểm tra bị vô hiệu hóa, cả SSU và NTCP nên báo cáo địa chỉ công khai hiện tại của bạn trên trang thông tin về <a href=/info>bộ định tuyến</a>. [Yêu cầu khởi động lại]"
@@ -7437,9 +7476,6 @@ msgstr "Số lượng các đường hầm tham gia bạn định tuyến cho ng
 msgid "Some basic indications of router overload:"
 msgstr "Một số chỉ dẫn cơ bản của quá tải bộ định tuyến:"
 
-msgid "Job Lag"
-msgstr "Lớp công việc"
-
 msgid "How long jobs are waiting before execution. The job queue is listed on the <a href='/jobs'>Jobs page</a>. Unfortunately, there are several other job queues in the router that may be congested, and their status is not available in the router console. The job lag should generally be zero. If it is consistently higher than 500ms, your computer is very slow, your network is experiencing connectivity issues, or the router has serious problems. <a href='/configstats#jobQueue.jobLag'>[Enable graphing]</a>."
 msgstr "Thời gian trung bình mà các công việc phải chờ để được thực thi. Hàng đợi công việc được liệt kê trên trang <a href='/jobs'>Trang Công việc</a>. Đáng tiếc là có một vài hàng đợi công việc khác trong bộ định tuyến mà có thể bị tắc nghẽn, và tình trạng của chúng không hiển thị trên bảng điều khiển bộ định tuyến. Thời gian chờ thông thường nên gần bằng không. Nếu luôn cao hơn 500ms, máy tính của bạn quá chậm, mạng đang gặp vấn đề kết nối, hoặc bộ định tuyến gặp vấn đề nghiêm trọng. <a href='/configstats#jobQueue.jobLag'>[Kích hoạt biểu đồ]</a>."
 
@@ -8072,3 +8108,15 @@ msgstr "Kế tiếp"
 
 msgid "Finished"
 msgstr "Đã kết thúc"
+
+
+
+
+
+
+
+
+#, java-format
+
+#, java-format
+

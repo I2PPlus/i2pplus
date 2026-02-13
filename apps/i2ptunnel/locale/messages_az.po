@@ -614,6 +614,39 @@ msgstr "Yeni server təyinatı"
 msgid "Hostname"
 msgstr "Ünvan adı"
 
+msgid "Random startup delay (when auto-start is enabled) to defend against correlation attacks"
+msgstr ""
+
+msgid "Startup Delay"
+msgstr ""
+
+msgid "Minimum"
+msgstr ""
+
+msgid "Minimum startup delay"
+msgstr ""
+
+msgid "seconds"
+msgstr ""
+
+msgid "Maximum"
+msgstr ""
+
+msgid "Maximum startup delay"
+msgstr ""
+
+msgid "Add random delay before tunnel shutdown, then start graceful router shutdown / restart process"
+msgstr ""
+
+msgid "Shutdown Delay"
+msgstr ""
+
+msgid "Minimum shutdown delay"
+msgstr ""
+
+msgid "Maximum shutdown delay"
+msgstr ""
+
 msgid "Website Hostname"
 msgstr "Veb saytın ünvan adı"
 
@@ -1095,8 +1128,8 @@ msgstr "Ön izləmə yoxdur"
 msgid "Starting..."
 msgstr "Başlamaqdadır..."
 
-msgid "Stop this Tunnel"
-msgstr "Bu tünəli dayandırın"
+msgid "Starting in"
+msgstr ""
 
 msgid "Running"
 msgstr "İşləyir"
@@ -1110,14 +1143,17 @@ msgstr "daxil"
 msgid "out"
 msgstr "çıxış"
 
+msgid "Stopped"
+msgstr "Dayandırıldı"
+
+msgid "Stop this Tunnel"
+msgstr "Bu tünəli dayandırın"
+
 msgid "Restart this Tunnel"
 msgstr "Bu tunneli yenidən başlat"
 
 msgid "Restart"
 msgstr "Yenidən başlat"
-
-msgid "Stopped"
-msgstr "Dayandırıldı"
 
 msgid "Destination"
 msgstr "Mərhələ"

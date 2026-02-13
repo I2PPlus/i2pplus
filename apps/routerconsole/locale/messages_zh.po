@@ -768,11 +768,17 @@ msgstr "立即解封"
 msgid "No bans currently active"
 msgstr "目前没有禁令"
 
+msgid "Country"
+msgstr "国家"
+
 msgid "Reason"
 msgstr "原因"
 
-msgid "Router Hash"
-msgstr "路由散列值"
+msgid "IP Address"
+msgstr "IP地址"
+
+msgid "Hostname"
+msgstr "域名"
 
 msgid "Expiry"
 msgstr "有效期至"
@@ -1524,6 +1530,14 @@ msgstr "重启"
 msgid "Shutdown"
 msgstr "关闭"
 
+#, java-format
+msgid "Deferring restart for {0} until all servers have stopped"
+msgstr ""
+
+#, java-format
+msgid "Deferring shutdown for {0} until all servers have stopped"
+msgstr ""
+
 msgid "Restart imminent"
 msgstr "立刻重启"
 
@@ -2177,9 +2191,6 @@ msgstr "跨网络微博和论坛和维基"
 msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Reddit的另类隐私前端"
 
-msgid "AI Image generation & Chat hub"
-msgstr "AI图像生成和聊天中心"
-
 msgid "IRC Logs for multiple networks"
 msgstr "多个网络的 IRC 日志"
 
@@ -2430,9 +2441,6 @@ msgstr "路由身份"
 msgid "Network Database entry"
 msgstr "网络数据库条目"
 
-msgid "IP Address"
-msgstr "IP地址"
-
 msgid "UDP Port"
 msgstr "UDP 端口"
 
@@ -2527,9 +2535,6 @@ msgstr "路由传输地址"
 msgid "{0} is used for outbound connections only"
 msgstr "{0} 仅被用作出站连接"
 
-msgid "Job runners"
-msgstr "作业任务"
-
 msgid "Active jobs"
 msgstr "活跃任务"
 
@@ -2539,6 +2544,12 @@ msgstr "{0}前开始"
 
 msgid "Completed jobs"
 msgstr "刚刚完成的任务"
+
+msgid "Runners"
+msgstr ""
+
+msgid "finished just now"
+msgstr ""
 
 #, java-format
 msgid "finished {0} ago"
@@ -2557,17 +2568,29 @@ msgstr "预定的任务"
 msgid "{0} starting in {1}"
 msgstr "{0}开始于{1}"
 
-msgid "DELAYED"
-msgstr "延迟"
-
-msgid "OUT OF ORDER"
-msgstr "失败"
-
 msgid "Queue Totals"
 msgstr "排队总数"
 
-msgid "Job Statistics (excluding single-shot jobs)"
-msgstr "工作统计（不包括单枪工作）"
+msgid "Job Statistics"
+msgstr ""
+
+msgid "last minute"
+msgstr ""
+
+msgid "Job Lag"
+msgstr "作业延迟"
+
+msgid "AVG"
+msgstr "AVG"
+
+msgid "PEAK"
+msgstr ""
+
+msgid "All Stats"
+msgstr ""
+
+msgid "Last 60s"
+msgstr ""
 
 msgid "Job"
 msgstr "任务"
@@ -2637,9 +2660,6 @@ msgstr "例如：f 或 XOfR"
 
 msgid "Cost"
 msgstr "成本"
-
-msgid "Country"
-msgstr "国家"
 
 msgid "Country Codes"
 msgstr "国家代码"
@@ -2911,9 +2931,6 @@ msgstr "隐身"
 
 msgid "Published"
 msgstr "发布"
-
-msgid "Hostname"
-msgstr "域名"
 
 msgid "Whois"
 msgstr "Whois"
@@ -4050,11 +4067,11 @@ msgstr "作业延迟"
 msgid "Message delay"
 msgstr "消息延迟"
 
-msgid "Average job delay / maximum delay"
-msgstr "平均工作延迟 / 最大延迟"
+msgid "Average / peak job delay (last minute)"
+msgstr ""
 
-msgid "Average delay before scheduled jobs are run"
-msgstr "运行预定工作前的平均延迟"
+msgid "Average / max delay before scheduled jobs are run"
+msgstr ""
 
 msgid "Indicates how quickly outbound messages to other I2P routers are sent"
 msgstr "表示出站消息发往其他I2P路由的速度"
@@ -4364,9 +4381,6 @@ msgstr "洪泛"
 msgid "MIN"
 msgstr "最小"
 
-msgid "AVG"
-msgstr "AVG"
-
 msgid "MEDIAN"
 msgstr "中位数"
 
@@ -4457,14 +4471,6 @@ msgstr "过渡期"
 msgid "Tunnel identity"
 msgstr "隧道身份"
 
-#, java-format
-msgid "Limited display to the {0} tunnels with the highest usage"
-msgstr "仅显示使用最高的{0}个隧道"
-
-#, java-format
-msgid "Limited display to the {0} most recent tunnels"
-msgstr "已限制为显示使用最多的 {0} 个隧道"
-
 msgid "Lifetime bandwidth usage"
 msgstr "本次运行带宽使用量"
 
@@ -4483,6 +4489,9 @@ msgstr "按对等节点统计的传输隧道（前{0}名）"
 
 msgid "Address"
 msgstr "地址"
+
+msgid "Messages"
+msgstr ""
 
 msgid "All Tunnels by Peer"
 msgstr "同行的所有隧道"
@@ -4518,6 +4527,15 @@ msgstr "入站或出站？"
 msgid "In/Out"
 msgstr "入/出"
 
+msgid "Tunnel test status"
+msgstr ""
+
+msgid "Round trip time for last test"
+msgstr ""
+
+msgid "Latency"
+msgstr ""
+
 msgid "Gateway"
 msgstr "网关"
 
@@ -4526,6 +4544,24 @@ msgstr "参与节点"
 
 msgid "Endpoint"
 msgstr "出站终端"
+
+msgid "Rejected as duplicate"
+msgstr ""
+
+msgid "Test successful"
+msgstr ""
+
+msgid "Test in progress"
+msgstr ""
+
+msgid "Test failing (1 failure)"
+msgstr ""
+
+msgid "Test failed (2 consecutive failures)"
+msgstr ""
+
+msgid "Not yet tested"
+msgstr ""
 
 msgid "Locally hosted tunnel"
 msgstr "本地托管隧道"
@@ -5197,6 +5233,9 @@ msgstr "对等节点管理器"
 
 msgid "Manual Peer Controls"
 msgstr "手动对等节点控制"
+
+msgid "Router Hash"
+msgstr "路由散列值"
 
 msgid "Manually Ban / Unban a Peer"
 msgstr "手动封禁/解封对等节点"
@@ -5896,8 +5935,8 @@ msgstr "此设置确定在运行 1 小时后刷新路由器过程中是否检查
 msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
 msgstr "此设置为true时，将阻止来自您自己国家所有路由器的直接通信，并将它们添加到您的封禁列表中，直到路由器重启。[默认为false]"
 
-msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
-msgstr "此设置为true时，将阻止所有发布G拥塞限制且既不可达也不不可达的X层路由器的直接通信，将它们添加到会话封禁列表中。注意，必须启用高级模式此设置才能生效。[默认为false]"
+msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap (no transit tunnels), adding them to the session banlist. [Default is true]"
+msgstr ""
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "此设置允许禁用 SSU 测试，以确定您的路由器是否已设置防火墙，是否可以为肯定没有防火墙但遇到间歇性防火墙问题的路由器启用。如果禁用测试，SSU 和 NTCP 都应在路由器信息页面上报告< a href=/info>的当前公共 IP 地址</a>。[需要重新启动]"
@@ -7437,9 +7476,6 @@ msgstr "您为他人路由的参与隧道数量,除以您所有的探索隧道�
 msgid "Some basic indications of router overload:"
 msgstr "路由器过载的一些基本迹象:"
 
-msgid "Job Lag"
-msgstr "作业延迟"
-
 msgid "How long jobs are waiting before execution. The job queue is listed on the <a href='/jobs'>Jobs page</a>. Unfortunately, there are several other job queues in the router that may be congested, and their status is not available in the router console. The job lag should generally be zero. If it is consistently higher than 500ms, your computer is very slow, your network is experiencing connectivity issues, or the router has serious problems. <a href='/configstats#jobQueue.jobLag'>[Enable graphing]</a>."
 msgstr "作业在执行前等待的时间长度。作业队列在<a href='/jobs'>作业页面</a>列出。不幸的是,路由器中可能还有几个其他作业队列堵塞,它们的状态不能在路由器控制台看到。作业延迟通常应为零。如果一直高于500毫秒,您的计算机很慢,网络出现连接问题,或者路由器有严重问题。<a href='/configstats#jobQueue.jobLag'>[启用图表]</a>。"
 
@@ -8072,3 +8108,15 @@ msgstr "下一步"
 
 msgid "Finished"
 msgstr "完成"
+
+
+
+
+
+
+
+
+#, java-format
+
+#, java-format
+

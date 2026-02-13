@@ -771,11 +771,17 @@ msgstr "अब प्रतिबंध समाप्त करें"
 msgid "No bans currently active"
 msgstr "वर्तमान में कोई प्रतिबंध नहीं जारी"
 
+msgid "Country"
+msgstr "देश"
+
 msgid "Reason"
 msgstr "कारण"
 
-msgid "Router Hash"
-msgstr "राउटर हैश"
+msgid "IP Address"
+msgstr "आईपी पता"
+
+msgid "Hostname"
+msgstr "होस्टनाम"
 
 msgid "Expiry"
 msgstr "समाप्ति"
@@ -1528,6 +1534,14 @@ msgstr "पुनः शुरू करें"
 msgid "Shutdown"
 msgstr "बंद करें"
 
+#, java-format
+msgid "Deferring restart for {0} until all servers have stopped"
+msgstr ""
+
+#, java-format
+msgid "Deferring shutdown for {0} until all servers have stopped"
+msgstr ""
+
 msgid "Restart imminent"
 msgstr "तुरंत पुनः शुरू होने वाला"
 
@@ -2185,9 +2199,6 @@ msgstr "क्रॉस-नेटवर्क माइक्रोब्लॉ�
 msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Reddit के लिए गोपनीयता पर ध्यान केंद्रित विकल्पी फ्रंट-एंड"
 
-msgid "AI Image generation & Chat hub"
-msgstr "AI छवि निर्माण और चैट हब"
-
 msgid "IRC Logs for multiple networks"
 msgstr "विभिन्न नेटवर्क के लिए IRC लॉग"
 
@@ -2438,9 +2449,6 @@ msgstr "पहचान"
 msgid "Network Database entry"
 msgstr "नेटवर्क डेटाबेस प्रविष्टि"
 
-msgid "IP Address"
-msgstr "आईपी पता"
-
 msgid "UDP Port"
 msgstr "UDP पोर्ट"
 
@@ -2535,9 +2543,6 @@ msgstr "राउटर ट्रांसपोर्ट पता"
 msgid "{0} is used for outbound connections only"
 msgstr "{0} केवल आउटबाउंड कनेक्शन के लिए उपयोग किया जाता है"
 
-msgid "Job runners"
-msgstr "जॉब रनर्स"
-
 msgid "Active jobs"
 msgstr "सक्रिय कार्य"
 
@@ -2547,6 +2552,12 @@ msgstr "{0} पहले शुरू हुआ"
 
 msgid "Completed jobs"
 msgstr "हाल ही में पूरा हुए कार्य"
+
+msgid "Runners"
+msgstr ""
+
+msgid "finished just now"
+msgstr ""
 
 #, java-format
 msgid "finished {0} ago"
@@ -2565,17 +2576,29 @@ msgstr "निर्धारित कार्य"
 msgid "{0} starting in {1}"
 msgstr "{0} {1} में शुरू होगा"
 
-msgid "DELAYED"
-msgstr "देरी से"
-
-msgid "OUT OF ORDER"
-msgstr "व्यवस्था से बाहर"
-
 msgid "Queue Totals"
 msgstr "क्वे पूर्ण"
 
-msgid "Job Statistics (excluding single-shot jobs)"
-msgstr "कार्य सांख्यिकी (एकल-प्रारंभिक कार्यों को छोड़कर)"
+msgid "Job Statistics"
+msgstr ""
+
+msgid "last minute"
+msgstr ""
+
+msgid "Job Lag"
+msgstr "जॉब लैग"
+
+msgid "AVG"
+msgstr "औसत"
+
+msgid "PEAK"
+msgstr ""
+
+msgid "All Stats"
+msgstr ""
+
+msgid "Last 60s"
+msgstr ""
 
 msgid "Job"
 msgstr "कार्य"
@@ -2645,9 +2668,6 @@ msgstr "उदा. f या XOfR"
 
 msgid "Cost"
 msgstr "मूल्य"
-
-msgid "Country"
-msgstr "देश"
 
 msgid "Country Codes"
 msgstr "देश कोड"
@@ -2919,9 +2939,6 @@ msgstr "छिपा"
 
 msgid "Published"
 msgstr "प्रकाशित"
-
-msgid "Hostname"
-msgstr "होस्टनाम"
 
 msgid "Whois"
 msgstr "Whois"
@@ -4066,11 +4083,11 @@ msgstr "कार्य देरी"
 msgid "Message delay"
 msgstr "संदेश की देरी"
 
-msgid "Average job delay / maximum delay"
-msgstr "औसत कार्य देरी / अधिकतम देरी"
+msgid "Average / peak job delay (last minute)"
+msgstr ""
 
-msgid "Average delay before scheduled jobs are run"
-msgstr "स्कीडuled कार्यों को चलाने से पहले की औसत देरी"
+msgid "Average / max delay before scheduled jobs are run"
+msgstr ""
 
 msgid "Indicates how quickly outbound messages to other I2P routers are sent"
 msgstr "दूसरे I2P रूटरों को आगंतुक संदेश कितनी त्वरित रूप से भेजे जाते हैं, इसका संकेत देता है"
@@ -4382,9 +4399,6 @@ msgstr "floodfills"
 msgid "MIN"
 msgstr "मिन"
 
-msgid "AVG"
-msgstr "औसत"
-
 msgid "MEDIAN"
 msgstr "माध्य"
 
@@ -4475,14 +4489,6 @@ msgstr "ग्रेस पीरियड"
 msgid "Tunnel identity"
 msgstr "टनल पहचान"
 
-#, java-format
-msgid "Limited display to the {0} tunnels with the highest usage"
-msgstr "{0} सबसे अधिक उपयोग किए जाने वाले टनल की सीमित प्रदर्शनी"
-
-#, java-format
-msgid "Limited display to the {0} most recent tunnels"
-msgstr "{0} सबसे हाल के टनल की सीमित प्रदर्शनी"
-
 msgid "Lifetime bandwidth usage"
 msgstr "जीवनकालीन बैंडविड्थ उपयोग"
 
@@ -4501,6 +4507,9 @@ msgstr "पीयर द्वारा ट्रांजिट टनल (श�
 
 msgid "Address"
 msgstr "पता"
+
+msgid "Messages"
+msgstr ""
 
 msgid "All Tunnels by Peer"
 msgstr "पीयर द्वारा सभी टनल"
@@ -4536,6 +4545,15 @@ msgstr "आगंतुकीय या निर्गमनीय?"
 msgid "In/Out"
 msgstr "इनपुट/निर्गत"
 
+msgid "Tunnel test status"
+msgstr ""
+
+msgid "Round trip time for last test"
+msgstr ""
+
+msgid "Latency"
+msgstr ""
+
 msgid "Gateway"
 msgstr "गेटवे"
 
@@ -4544,6 +4562,24 @@ msgstr "भागीदार"
 
 msgid "Endpoint"
 msgstr "समाप्तिस्थान"
+
+msgid "Rejected as duplicate"
+msgstr ""
+
+msgid "Test successful"
+msgstr ""
+
+msgid "Test in progress"
+msgstr ""
+
+msgid "Test failing (1 failure)"
+msgstr ""
+
+msgid "Test failed (2 consecutive failures)"
+msgstr ""
+
+msgid "Not yet tested"
+msgstr ""
 
 msgid "Locally hosted tunnel"
 msgstr "स्थानीय रूप से मेजबानी करने वाला टनल"
@@ -5215,6 +5251,9 @@ msgstr "समकक्ष प्रबंधक"
 
 msgid "Manual Peer Controls"
 msgstr "मैन्युअल समकक्ष नियंत्रण"
+
+msgid "Router Hash"
+msgstr "राउटर हैश"
 
 msgid "Manually Ban / Unban a Peer"
 msgstr "समकक्ष को गैर-मान्य / मान्य करने के लिए मैन्युअल रूप से"
@@ -5914,8 +5953,8 @@ msgstr "यह सेटिंग (मिनट में) आपको ने�
 msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
 msgstr "यह सेटिंग, जब true पर सेट की जाती है, तो आपके अपने देश के सभी राउटर्स से प्रत्यक्ष संचार को अवरुद्ध करेगी और उन्हें आपकी बैनलिस्ट में जोड़ देगी जब तक कि आपका राउटर पुनः आरंभ नहीं हो जाता। [डिफ़ॉल्ट गलत है]"
 
-msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
-msgstr "यह सेटिंग, जब true पर सेट की जाती है, तो सभी X टियर राउटर्स से प्रत्यक्ष संचार को अवरुद्ध करेगी जो G कंजेशन कैप प्रकाशित करते हैं और न तो पहुंचने योग्य हैं और न ही अपहुंचने योग्य हैं, उन्हें सत्र बैनलिस्ट में जोड़ते हुए। ध्यान दें कि इस सेटिंग को प्रभावी होने के लिए उन्नत मोड सक्षम होना चाहिए। [डिफ़ॉल्ट गलत है]"
+msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap (no transit tunnels), adding them to the session banlist. [Default is true]"
+msgstr ""
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "यह सेटिंग आपको यह जांच करने के लिए SSU परीक्षणों को अक्षम करने की अनुमति देती है कि आपका राउटर फ़ायरवॉल के पीछे है या नहीं, और जो राउटर निश्चित रूप से फ़ायरवॉल के पीछे नहीं हैं लेकिन अनियमित फ़ायरवॉलिंग समस्याओं का सामना कर रहे हैं। यदि परीक्षण अक्षम किया जाता है, तो दोनों SSU और NTCP <a href=/info>राउटर जानकारी पृष्ठ</a> पर आपकी वर्तमान सार्वजनिक IP पता रिपोर्ट करने चाहिए। [रीस्टार्ट की आवश्यकता है]"
@@ -7455,9 +7494,6 @@ msgstr "आपके लिए अन्यों के लिए ट्रा�
 msgid "Some basic indications of router overload:"
 msgstr "रूटर के अधिकारण के कुछ मौलिक संकेत:"
 
-msgid "Job Lag"
-msgstr "जॉब लैग"
-
 msgid "How long jobs are waiting before execution. The job queue is listed on the <a href='/jobs'>Jobs page</a>. Unfortunately, there are several other job queues in the router that may be congested, and their status is not available in the router console. The job lag should generally be zero. If it is consistently higher than 500ms, your computer is very slow, your network is experiencing connectivity issues, or the router has serious problems. <a href='/configstats#jobQueue.jobLag'>[Enable graphing]</a>."
 msgstr "जॉब को अंतिमतः अंतर्गत करने से पहले कितनी देर तक इंतजार कर रहे हैं। जॉब क्वे लिस्ट की गई है <a href='/jobs'>Jobs पृष्ठ</a> पर। दुर्भाग्य से, रूटर में कई अन्य जॉब क्वे हो सकती हैं जो भीड़भाड़ से पीड़ित हो सकती हैं, और उनकी स्थिति रूटर कंसोल में उपलब्ध नहीं होती है। जॉब लैग आमतौर पर शून्य होना चाहिए। यदि यह सदृश रूप से 500मिलीसेकंड से अधिक होता है, तो आपका कंप्यूटर बहुत धीमा हो सकता है, या आपकी नेटवर्क कनेक्टिविटी में समस्या हो सकती है, या रूटर में गंभीर समस्याएं हो सकती हैं। <a href='/configstats#jobQueue.jobLag'>[ग्राफ़ चालू करें]</a>."
 
@@ -8090,3 +8126,15 @@ msgstr "अगला"
 
 msgid "Finished"
 msgstr "समाप्त"
+
+
+
+
+
+
+
+
+#, java-format
+
+#, java-format
+

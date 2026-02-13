@@ -619,6 +619,39 @@ msgstr "Новая конфигурация сервера"
 msgid "Hostname"
 msgstr "Имя узла"
 
+msgid "Random startup delay (when auto-start is enabled) to defend against correlation attacks"
+msgstr ""
+
+msgid "Startup Delay"
+msgstr ""
+
+msgid "Minimum"
+msgstr ""
+
+msgid "Minimum startup delay"
+msgstr ""
+
+msgid "seconds"
+msgstr ""
+
+msgid "Maximum"
+msgstr ""
+
+msgid "Maximum startup delay"
+msgstr ""
+
+msgid "Add random delay before tunnel shutdown, then start graceful router shutdown / restart process"
+msgstr ""
+
+msgid "Shutdown Delay"
+msgstr ""
+
+msgid "Minimum shutdown delay"
+msgstr ""
+
+msgid "Maximum shutdown delay"
+msgstr ""
+
 msgid "Website Hostname"
 msgstr "Имя узла веб-сайта"
 
@@ -1100,8 +1133,8 @@ msgstr "Предпросмотр недоступен"
 msgid "Starting..."
 msgstr "Запускается..."
 
-msgid "Stop this Tunnel"
-msgstr "Остановить этот туннель"
+msgid "Starting in"
+msgstr ""
 
 msgid "Running"
 msgstr "Запущен"
@@ -1115,14 +1148,17 @@ msgstr "в"
 msgid "out"
 msgstr "выход"
 
+msgid "Stopped"
+msgstr "Остановлен"
+
+msgid "Stop this Tunnel"
+msgstr "Остановить этот туннель"
+
 msgid "Restart this Tunnel"
 msgstr "Перезапустить этот туннель"
 
 msgid "Restart"
 msgstr "Перезапуск"
-
-msgid "Stopped"
-msgstr "Остановлен"
 
 msgid "Destination"
 msgstr "Адрес назначения"

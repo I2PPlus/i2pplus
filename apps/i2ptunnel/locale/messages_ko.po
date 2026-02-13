@@ -609,6 +609,39 @@ msgstr "새 서버 구성"
 msgid "Hostname"
 msgstr "호스트 이름"
 
+msgid "Random startup delay (when auto-start is enabled) to defend against correlation attacks"
+msgstr ""
+
+msgid "Startup Delay"
+msgstr ""
+
+msgid "Minimum"
+msgstr ""
+
+msgid "Minimum startup delay"
+msgstr ""
+
+msgid "seconds"
+msgstr ""
+
+msgid "Maximum"
+msgstr ""
+
+msgid "Maximum startup delay"
+msgstr ""
+
+msgid "Add random delay before tunnel shutdown, then start graceful router shutdown / restart process"
+msgstr ""
+
+msgid "Shutdown Delay"
+msgstr ""
+
+msgid "Minimum shutdown delay"
+msgstr ""
+
+msgid "Maximum shutdown delay"
+msgstr ""
+
 msgid "Website Hostname"
 msgstr "웹 사이트 호스트 이름"
 
@@ -1090,8 +1123,8 @@ msgstr "미리보기 없음"
 msgid "Starting..."
 msgstr "시작 중..."
 
-msgid "Stop this Tunnel"
-msgstr "이 터널 중지"
+msgid "Starting in"
+msgstr ""
 
 msgid "Running"
 msgstr "실행 중"
@@ -1105,14 +1138,17 @@ msgstr "내부"
 msgid "out"
 msgstr "외부"
 
+msgid "Stopped"
+msgstr "중지됨"
+
+msgid "Stop this Tunnel"
+msgstr "이 터널 중지"
+
 msgid "Restart this Tunnel"
 msgstr "이 터널 재시작"
 
 msgid "Restart"
 msgstr "재시작"
-
-msgid "Stopped"
-msgstr "중지됨"
 
 msgid "Destination"
 msgstr "목적지"

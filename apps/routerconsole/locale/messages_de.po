@@ -771,11 +771,17 @@ msgstr "Bann aufheben"
 msgid "No bans currently active"
 msgstr "Derzeit sind keine Sperren aktiv"
 
+msgid "Country"
+msgstr "Land"
+
 msgid "Reason"
 msgstr "Grund"
 
-msgid "Router Hash"
-msgstr "Router-Prüfsumme"
+msgid "IP Address"
+msgstr "IP-Adresse"
+
+msgid "Hostname"
+msgstr "Hostname"
 
 msgid "Expiry"
 msgstr "Ablauf"
@@ -1528,6 +1534,14 @@ msgstr "Neustart"
 msgid "Shutdown"
 msgstr "Ausschalten"
 
+#, java-format
+msgid "Deferring restart for {0} until all servers have stopped"
+msgstr ""
+
+#, java-format
+msgid "Deferring shutdown for {0} until all servers have stopped"
+msgstr ""
+
 msgid "Restart imminent"
 msgstr "Neustart bevorstehend"
 
@@ -2185,9 +2199,6 @@ msgstr "Netzwerkübergreifendes Mikroblogging"
 msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Alternatives datenschutzorientiertes Frontend für Reddit"
 
-msgid "AI Image generation & Chat hub"
-msgstr "KI-Bilderzeugung & Chat-Zentrum"
-
 msgid "IRC Logs for multiple networks"
 msgstr "IRC-Protokolle für mehrere Netzwerke"
 
@@ -2438,9 +2449,6 @@ msgstr "Identität"
 msgid "Network Database entry"
 msgstr "Eintrag in der Netzwerkdatenbank"
 
-msgid "IP Address"
-msgstr "IP-Adresse"
-
 msgid "UDP Port"
 msgstr "UDP-Port"
 
@@ -2535,9 +2543,6 @@ msgstr "Router-Transport-Adresse"
 msgid "{0} is used for outbound connections only"
 msgstr "{0} wird nur für ausgehende Verbindungen genutzt"
 
-msgid "Job runners"
-msgstr "Job Runners"
-
 msgid "Active jobs"
 msgstr "Aktive Jobs"
 
@@ -2547,6 +2552,12 @@ msgstr "vor {0} gestartet"
 
 msgid "Completed jobs"
 msgstr "Gerade beendete Jobs"
+
+msgid "Runners"
+msgstr ""
+
+msgid "finished just now"
+msgstr ""
 
 #, java-format
 msgid "finished {0} ago"
@@ -2565,17 +2576,29 @@ msgstr "Scheduled Jobs"
 msgid "{0} starting in {1}"
 msgstr "{0} beginnt in {1}"
 
-msgid "DELAYED"
-msgstr "VERZÖGERT"
-
-msgid "OUT OF ORDER"
-msgstr "AUSSER BETRIEB"
-
 msgid "Queue Totals"
 msgstr "Gesamtsummen der Warteschlange"
 
-msgid "Job Statistics (excluding single-shot jobs)"
-msgstr "Jobstatistik (ohne Einzeljobs)"
+msgid "Job Statistics"
+msgstr ""
+
+msgid "last minute"
+msgstr ""
+
+msgid "Job Lag"
+msgstr "Aufgabenverzögerung"
+
+msgid "AVG"
+msgstr "AVG"
+
+msgid "PEAK"
+msgstr ""
+
+msgid "All Stats"
+msgstr ""
+
+msgid "Last 60s"
+msgstr ""
 
 msgid "Job"
 msgstr "Job"
@@ -2645,9 +2668,6 @@ msgstr "z.B. f oder XOfR"
 
 msgid "Cost"
 msgstr "Kosten"
-
-msgid "Country"
-msgstr "Land"
 
 msgid "Country Codes"
 msgstr "Ländercodes"
@@ -2919,9 +2939,6 @@ msgstr "Versteckt"
 
 msgid "Published"
 msgstr "Veröffentlicht"
-
-msgid "Hostname"
-msgstr "Hostname"
 
 msgid "Whois"
 msgstr "Whois"
@@ -4066,11 +4083,11 @@ msgstr "Aufgabenverzug"
 msgid "Message delay"
 msgstr "Nachrichtenverzug"
 
-msgid "Average job delay / maximum delay"
-msgstr "Durchschnittliche Auftragsverzögerung / maximale Verzögerung"
+msgid "Average / peak job delay (last minute)"
+msgstr ""
 
-msgid "Average delay before scheduled jobs are run"
-msgstr "Durchschnittliche Verzögerung, bevor geplante Jobs ausgeführt werden"
+msgid "Average / max delay before scheduled jobs are run"
+msgstr ""
 
 msgid "Indicates how quickly outbound messages to other I2P routers are sent"
 msgstr "zeigt, wie schnell Nachrichten an andere I2P-Router gesendet werden"
@@ -4382,9 +4399,6 @@ msgstr "Überschwemmungen"
 msgid "MIN"
 msgstr "MIN"
 
-msgid "AVG"
-msgstr "AVG"
-
 msgid "MEDIAN"
 msgstr "MEDIAN"
 
@@ -4475,14 +4489,6 @@ msgstr "Gnadenfrist"
 msgid "Tunnel identity"
 msgstr "Tunnelidentität"
 
-#, java-format
-msgid "Limited display to the {0} tunnels with the highest usage"
-msgstr "Eingeschränkte Anzeige auf die {0} Tunnel mit der höchsten Nutzung"
-
-#, java-format
-msgid "Limited display to the {0} most recent tunnels"
-msgstr "Eingeschränkte Anzeige auf die {0} neuesten Tunnel"
-
 msgid "Lifetime bandwidth usage"
 msgstr "Genutzte Bandbreite über die Lebensdauer"
 
@@ -4501,6 +4507,9 @@ msgstr "Transittunnel nach Peer (Top {0})"
 
 msgid "Address"
 msgstr "Adresse"
+
+msgid "Messages"
+msgstr ""
 
 msgid "All Tunnels by Peer"
 msgstr "Alle Tunnel von Peer"
@@ -4536,6 +4545,15 @@ msgstr "Eingehend oder Ausgehend?"
 msgid "In/Out"
 msgstr "Eingang/Ausgang"
 
+msgid "Tunnel test status"
+msgstr ""
+
+msgid "Round trip time for last test"
+msgstr ""
+
+msgid "Latency"
+msgstr ""
+
 msgid "Gateway"
 msgstr "Schnittstelle"
 
@@ -4544,6 +4562,24 @@ msgstr "Teilnehmer"
 
 msgid "Endpoint"
 msgstr "Endpunkt"
+
+msgid "Rejected as duplicate"
+msgstr ""
+
+msgid "Test successful"
+msgstr ""
+
+msgid "Test in progress"
+msgstr ""
+
+msgid "Test failing (1 failure)"
+msgstr ""
+
+msgid "Test failed (2 consecutive failures)"
+msgstr ""
+
+msgid "Not yet tested"
+msgstr ""
 
 msgid "Locally hosted tunnel"
 msgstr "Lokal laufende Tunnel"
@@ -5215,6 +5251,9 @@ msgstr "Peer-Manager"
 
 msgid "Manual Peer Controls"
 msgstr "Manuelles Verwalten der Teilnehmer"
+
+msgid "Router Hash"
+msgstr "Router-Prüfsumme"
 
 msgid "Manually Ban / Unban a Peer"
 msgstr "Einen Teilnehmer manuell sperren/entsperren"
@@ -5914,8 +5953,8 @@ msgstr "Diese Einstellung (in Minuten) ermöglicht das manuelle Konfigurieren de
 msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
 msgstr "Diese Einstellung, wenn auf true gesetzt, blockiert die direkte Kommunikation von allen Routern in Ihrem eigenen Land und fügt sie zu Ihrer Sperrliste hinzu, bis Ihr Router neu startet. [Standard ist false]"
 
-msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
-msgstr "Diese Einstellung, wenn auf true gesetzt, blockiert die direkte Kommunikation von allen X-Ebenen-Routern, die eine G-Überlastungsgrenze veröffentlichen und weder erreichbar noch unerreichbar sind, und fügt sie zur Sitzungssperrliste hinzu. Hinweis: Der erweiterte Modus muss aktiviert sein, damit diese Einstellung wirksam wird. [Standard ist false]"
+msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap (no transit tunnels), adding them to the session banlist. [Default is true]"
+msgstr ""
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "Diese Einstellung ermöglicht das Deaktivieren von SSU-Tests zur Ermittlung, ob Ihr Router hinter einer Firewall steht, und lässt sich für Router aktivieren, die definitiv nicht hinter einer Firewall stehen, aber gelegentlich Firewall-Probleme aufweisen. Falls die Tests deaktiviert sind, sollten sowohl SSU als auch NTCP Ihre derzeitige öffentliche IP-Adresse auf der<a href=/info> Router-Info-Seite</a> anzeigen. [Neustart erforderlich]"
@@ -7455,9 +7494,6 @@ msgstr "Die Anzahl der Tunnel, die Sie für andere Teilnehmer bereitstellen, get
 msgid "Some basic indications of router overload:"
 msgstr "Einige grundlegende Anzeichen für Router-Überlastung:"
 
-msgid "Job Lag"
-msgstr "Aufgabenverzögerung"
-
 msgid "How long jobs are waiting before execution. The job queue is listed on the <a href='/jobs'>Jobs page</a>. Unfortunately, there are several other job queues in the router that may be congested, and their status is not available in the router console. The job lag should generally be zero. If it is consistently higher than 500ms, your computer is very slow, your network is experiencing connectivity issues, or the router has serious problems. <a href='/configstats#jobQueue.jobLag'>[Enable graphing]</a>."
 msgstr "Wie lange Aufgaben warten, bevor sie ausgeführt werden. Die Aufgabenwarteschlange wird auf der <a href='/jobs'>Jobs</a>-Seite aufgelistet. Leider gibt es in dem Router mehrere andere Aufgabenwarteschlangen, die verstopft sein könnten, und ihr Status ist in der Router-Konsole nicht verfügbar. Die Aufgabenverzögerung sollte im Allgemeinen null sein. Wenn sie durchgehend höher als 500 ms ist, ist Ihr Computer sehr langsam, Ihr Netzwerk hat Verbindungsprobleme oder der Router hat ernsthafte Probleme. <a href='/configstats#jobQueue.jobLag'>[Grafik aktivieren]</a>."
 
@@ -8090,3 +8126,15 @@ msgstr "Weiter"
 
 msgid "Finished"
 msgstr "Fertiggestellt"
+
+
+
+
+
+
+
+
+#, java-format
+
+#, java-format
+

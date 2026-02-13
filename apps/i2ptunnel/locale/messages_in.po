@@ -609,6 +609,39 @@ msgstr "Konfigurasi Server Baru"
 msgid "Hostname"
 msgstr "Nama host"
 
+msgid "Random startup delay (when auto-start is enabled) to defend against correlation attacks"
+msgstr ""
+
+msgid "Startup Delay"
+msgstr ""
+
+msgid "Minimum"
+msgstr ""
+
+msgid "Minimum startup delay"
+msgstr ""
+
+msgid "seconds"
+msgstr ""
+
+msgid "Maximum"
+msgstr ""
+
+msgid "Maximum startup delay"
+msgstr ""
+
+msgid "Add random delay before tunnel shutdown, then start graceful router shutdown / restart process"
+msgstr ""
+
+msgid "Shutdown Delay"
+msgstr ""
+
+msgid "Minimum shutdown delay"
+msgstr ""
+
+msgid "Maximum shutdown delay"
+msgstr ""
+
 msgid "Website Hostname"
 msgstr "Hostname Website"
 
@@ -1090,8 +1123,8 @@ msgstr "Tidak Ada Preview "
 msgid "Starting..."
 msgstr "Sedang memulai..."
 
-msgid "Stop this Tunnel"
-msgstr "Hentikan tunnel ini"
+msgid "Starting in"
+msgstr ""
 
 msgid "Running"
 msgstr "Sudah aktif"
@@ -1105,14 +1138,17 @@ msgstr "masuk"
 msgid "out"
 msgstr "keluar"
 
+msgid "Stopped"
+msgstr "dihentikan"
+
+msgid "Stop this Tunnel"
+msgstr "Hentikan tunnel ini"
+
 msgid "Restart this Tunnel"
 msgstr "Mulai Ulang Tunnel Ini"
 
 msgid "Restart"
 msgstr "Mulai Ulang"
-
-msgid "Stopped"
-msgstr "dihentikan"
 
 msgid "Destination"
 msgstr "Destinasi"

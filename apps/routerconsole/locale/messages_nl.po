@@ -771,11 +771,17 @@ msgstr "Hef verbanning nu op"
 msgid "No bans currently active"
 msgstr "Momenteel zijn er geen verboden actief"
 
+msgid "Country"
+msgstr "Land"
+
 msgid "Reason"
 msgstr "Reden"
 
-msgid "Router Hash"
-msgstr "Router Hash"
+msgid "IP Address"
+msgstr "IP-adres"
+
+msgid "Hostname"
+msgstr "Hostnaam"
 
 msgid "Expiry"
 msgstr "Vervaldatum"
@@ -1528,6 +1534,14 @@ msgstr "Herstart"
 msgid "Shutdown"
 msgstr "Stoppen"
 
+#, java-format
+msgid "Deferring restart for {0} until all servers have stopped"
+msgstr ""
+
+#, java-format
+msgid "Deferring shutdown for {0} until all servers have stopped"
+msgstr ""
+
 msgid "Restart imminent"
 msgstr "Herstart op handen"
 
@@ -2185,9 +2199,6 @@ msgstr "Cross-netwerk microblogging en forums"
 msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Alternatieve privacygerichte front-end voor Reddit"
 
-msgid "AI Image generation & Chat hub"
-msgstr "AI Afbeelding generatie & Chat hub"
-
 msgid "IRC Logs for multiple networks"
 msgstr "IRC-logboeken voor meerdere netwerken"
 
@@ -2438,9 +2449,6 @@ msgstr "Identiteit"
 msgid "Network Database entry"
 msgstr "Invoer netwerkdatabase"
 
-msgid "IP Address"
-msgstr "IP-adres"
-
 msgid "UDP Port"
 msgstr "UDP-poort"
 
@@ -2535,9 +2543,6 @@ msgstr "Router Transport Adressen"
 msgid "{0} is used for outbound connections only"
 msgstr "{0} is alleen gebruikt voor uitgaande connecties"
 
-msgid "Job runners"
-msgstr "Taak verwerkers"
-
 msgid "Active jobs"
 msgstr "Aktieve taken"
 
@@ -2547,6 +2552,12 @@ msgstr "{0} geleden gestart"
 
 msgid "Completed jobs"
 msgstr "Net voltooide taken"
+
+msgid "Runners"
+msgstr ""
+
+msgid "finished just now"
+msgstr ""
 
 #, java-format
 msgid "finished {0} ago"
@@ -2565,17 +2576,29 @@ msgstr "Geplande taken"
 msgid "{0} starting in {1}"
 msgstr "{0} begint over {1}"
 
-msgid "DELAYED"
-msgstr "VERTRAAGD"
-
-msgid "OUT OF ORDER"
-msgstr "BUITEN GEBRUIK"
-
 msgid "Queue Totals"
 msgstr "Wachtrijtotalen"
 
-msgid "Job Statistics (excluding single-shot jobs)"
-msgstr "Jobstatistieken (exclusief single-shot jobs)"
+msgid "Job Statistics"
+msgstr ""
+
+msgid "last minute"
+msgstr ""
+
+msgid "Job Lag"
+msgstr "Taakvertraging"
+
+msgid "AVG"
+msgstr "Gemiddeld"
+
+msgid "PEAK"
+msgstr ""
+
+msgid "All Stats"
+msgstr ""
+
+msgid "Last 60s"
+msgstr ""
 
 msgid "Job"
 msgstr "Taak"
@@ -2645,9 +2668,6 @@ msgstr "bijv. f of XOfR"
 
 msgid "Cost"
 msgstr "Kosten"
-
-msgid "Country"
-msgstr "Land"
 
 msgid "Country Codes"
 msgstr "Landcodes"
@@ -2919,9 +2939,6 @@ msgstr "Verborgen"
 
 msgid "Published"
 msgstr "Gepubliceerd"
-
-msgid "Hostname"
-msgstr "Hostnaam"
 
 msgid "Whois"
 msgstr "Whois"
@@ -4066,11 +4083,11 @@ msgstr "Taak vertraging"
 msgid "Message delay"
 msgstr "Bericht vertraging"
 
-msgid "Average job delay / maximum delay"
-msgstr "Gemiddelde taakvertraging / maximale vertraging"
+msgid "Average / peak job delay (last minute)"
+msgstr ""
 
-msgid "Average delay before scheduled jobs are run"
-msgstr "Gemiddelde vertraging voordat geplande taken worden uitgevoerd"
+msgid "Average / max delay before scheduled jobs are run"
+msgstr ""
 
 msgid "Indicates how quickly outbound messages to other I2P routers are sent"
 msgstr "Geeft aan hoe snel uitgaande berichten naar andere I2P routers verstuurd worden"
@@ -4382,9 +4399,6 @@ msgstr "overstromingen"
 msgid "MIN"
 msgstr "MIN"
 
-msgid "AVG"
-msgstr "Gemiddeld"
-
 msgid "MEDIAN"
 msgstr "MEDIAAN"
 
@@ -4475,14 +4489,6 @@ msgstr "overgangs periode"
 msgid "Tunnel identity"
 msgstr "Tunnelidentiteit"
 
-#, java-format
-msgid "Limited display to the {0} tunnels with the highest usage"
-msgstr "Beperkte weergave tot de {0} tunnels met het hoogste gebruik"
-
-#, java-format
-msgid "Limited display to the {0} most recent tunnels"
-msgstr "Beperkte weergave van de {0} meest recente tunnels"
-
 msgid "Lifetime bandwidth usage"
 msgstr "Levenslang bandbreedte gebruik"
 
@@ -4501,6 +4507,9 @@ msgstr "Transittunnels per Peer (Top {0})"
 
 msgid "Address"
 msgstr "Adres"
+
+msgid "Messages"
+msgstr ""
 
 msgid "All Tunnels by Peer"
 msgstr "Alle tunnels van Peer"
@@ -4536,6 +4545,15 @@ msgstr "Inkomend of uitgaand?"
 msgid "In/Out"
 msgstr "In/Uit"
 
+msgid "Tunnel test status"
+msgstr ""
+
+msgid "Round trip time for last test"
+msgstr ""
+
+msgid "Latency"
+msgstr ""
+
 msgid "Gateway"
 msgstr "Gateway"
 
@@ -4544,6 +4562,24 @@ msgstr "Deelnemers"
 
 msgid "Endpoint"
 msgstr "Eindpunt"
+
+msgid "Rejected as duplicate"
+msgstr ""
+
+msgid "Test successful"
+msgstr ""
+
+msgid "Test in progress"
+msgstr ""
+
+msgid "Test failing (1 failure)"
+msgstr ""
+
+msgid "Test failed (2 consecutive failures)"
+msgstr ""
+
+msgid "Not yet tested"
+msgstr ""
 
 msgid "Locally hosted tunnel"
 msgstr "Lokaal gehoste tunnel"
@@ -5215,6 +5251,9 @@ msgstr "Peer-manager"
 
 msgid "Manual Peer Controls"
 msgstr "Handmatige Peer Beheer"
+
+msgid "Router Hash"
+msgstr "Router Hash"
 
 msgid "Manually Ban / Unban a Peer"
 msgstr "Handmatig een Peer Verbannen / Verbanning Opheffen"
@@ -5914,8 +5953,8 @@ msgstr "Deze instelling (in minuten) stelt je in staat om handmatig te configure
 msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
 msgstr "Deze instelling, wanneer ingesteld op true, zal directe communicatie van alle routers in uw eigen land blokkeren en ze toevoegen aan uw banlijst totdat uw router opnieuw start. [Standaard is false]"
 
-msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
-msgstr "Deze instelling, wanneer ingesteld op true, zal directe communicatie van alle X tier routers die een G congestie-cap publiceren en noch bereikbaar noch onbereikbaar zijn, toevoegen aan de sessie-banlijst. Let op dat geavanceerde modus moet zijn ingeschakeld voor deze instelling om effect te hebben. [Standaard is false]"
+msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap (no transit tunnels), adding them to the session banlist. [Default is true]"
+msgstr ""
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "Deze instelling maakt het mogelijk om tests voor SSU-verbindingen uit te schakelen om te bepalen of je router een firewall heeft. Dit kan worden ingeschakeld voor routers die zeker geen firewall hebben, maar die problemen hebben met intermitterende firewall-instellingen. Als tests zijn uitgeschakeld, zouden zowel SSU als NTCP je huidige openbare IP-adres moeten rapporteren op <a href=/info>de router-informatiepagina</a>. [Herstart vereist]"
@@ -7455,9 +7494,6 @@ msgstr "Het aantal deelnemende tunnels dat jij voor anderen routeert, gedeeld do
 msgid "Some basic indications of router overload:"
 msgstr "Enkele basisindicaties van routeroverbelasting:"
 
-msgid "Job Lag"
-msgstr "Taakvertraging"
-
 msgid "How long jobs are waiting before execution. The job queue is listed on the <a href='/jobs'>Jobs page</a>. Unfortunately, there are several other job queues in the router that may be congested, and their status is not available in the router console. The job lag should generally be zero. If it is consistently higher than 500ms, your computer is very slow, your network is experiencing connectivity issues, or the router has serious problems. <a href='/configstats#jobQueue.jobLag'>[Enable graphing]</a>."
 msgstr "Hoelang banen wachten voordat ze worden uitgevoerd. De banenlijst wordt weergegeven op de <a href='/jobs'>Banenpagina</a>. Helaas zijn er verschillende andere banenwachtrijen in de router die mogelijk verstopt zijn, en hun status is niet beschikbaar in de routerconsole. De achterstand in de banen zou in het algemeen nul moeten zijn. Als het consistent hoger is dan 500 ms, is uw computer erg traag, heeft uw netwerk connectiviteitsproblemen of heeft de router ernstige problemen. <a href='/configstats#jobQueue.jobLag'>[Grafieken inschakelen]</a>."
 
@@ -8090,3 +8126,15 @@ msgstr "Volgende"
 
 msgid "Finished"
 msgstr "Klaar"
+
+
+
+
+
+
+
+
+#, java-format
+
+#, java-format
+

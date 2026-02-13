@@ -614,6 +614,39 @@ msgstr "Új kiszolgálókonfiguráció"
 msgid "Hostname"
 msgstr "Gépnév"
 
+msgid "Random startup delay (when auto-start is enabled) to defend against correlation attacks"
+msgstr ""
+
+msgid "Startup Delay"
+msgstr ""
+
+msgid "Minimum"
+msgstr ""
+
+msgid "Minimum startup delay"
+msgstr ""
+
+msgid "seconds"
+msgstr ""
+
+msgid "Maximum"
+msgstr ""
+
+msgid "Maximum startup delay"
+msgstr ""
+
+msgid "Add random delay before tunnel shutdown, then start graceful router shutdown / restart process"
+msgstr ""
+
+msgid "Shutdown Delay"
+msgstr ""
+
+msgid "Minimum shutdown delay"
+msgstr ""
+
+msgid "Maximum shutdown delay"
+msgstr ""
+
 msgid "Website Hostname"
 msgstr "Webhely gazdagépneve"
 
@@ -1095,8 +1128,8 @@ msgstr "Nincs Előnézet"
 msgid "Starting..."
 msgstr "Indítás..."
 
-msgid "Stop this Tunnel"
-msgstr "Alagút Leállítása"
+msgid "Starting in"
+msgstr ""
 
 msgid "Running"
 msgstr "Fut"
@@ -1110,14 +1143,17 @@ msgstr "be"
 msgid "out"
 msgstr "ki"
 
+msgid "Stopped"
+msgstr "Leállítva"
+
+msgid "Stop this Tunnel"
+msgstr "Alagút Leállítása"
+
 msgid "Restart this Tunnel"
 msgstr "Alagút újraindítása"
 
 msgid "Restart"
 msgstr "Újraindítás"
-
-msgid "Stopped"
-msgstr "Leállítva"
 
 msgid "Destination"
 msgstr "Célállomás"

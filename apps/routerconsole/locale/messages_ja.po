@@ -768,11 +768,17 @@ msgstr "今すぐ禁止解除"
 msgid "No bans currently active"
 msgstr "現在有効な禁止はありません"
 
+msgid "Country"
+msgstr "国"
+
 msgid "Reason"
 msgstr "理由"
 
-msgid "Router Hash"
-msgstr "ルーターハッシュ"
+msgid "IP Address"
+msgstr "IPアドレス"
+
+msgid "Hostname"
+msgstr "ホスト名"
 
 msgid "Expiry"
 msgstr "有効期限"
@@ -1524,6 +1530,14 @@ msgstr "再起動"
 msgid "Shutdown"
 msgstr "シャットダウン"
 
+#, java-format
+msgid "Deferring restart for {0} until all servers have stopped"
+msgstr ""
+
+#, java-format
+msgid "Deferring shutdown for {0} until all servers have stopped"
+msgstr ""
+
 msgid "Restart imminent"
 msgstr "即時再起動"
 
@@ -2177,9 +2191,6 @@ msgstr "クロスネットワークのマイクロブログとフォーラムと
 msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Reddit向けのプライバシー重視の代替フロントエンド"
 
-msgid "AI Image generation & Chat hub"
-msgstr "AI画像生成とチャットハブ"
-
 msgid "IRC Logs for multiple networks"
 msgstr "複数のネットワークの IRC ログ"
 
@@ -2430,9 +2441,6 @@ msgstr "アイデンティティ"
 msgid "Network Database entry"
 msgstr "ネットワークデータベースエントリ"
 
-msgid "IP Address"
-msgstr "IPアドレス"
-
 msgid "UDP Port"
 msgstr "UDPポート"
 
@@ -2527,9 +2535,6 @@ msgstr "ルータートランスポートアドレス"
 msgid "{0} is used for outbound connections only"
 msgstr "{0} は送信接続にのみ使用されます"
 
-msgid "Job runners"
-msgstr "有効なジョブ"
-
 msgid "Active jobs"
 msgstr "有効なジョブ"
 
@@ -2539,6 +2544,12 @@ msgstr "{0} 前に開始"
 
 msgid "Completed jobs"
 msgstr "たった今ジョブが終了しました"
+
+msgid "Runners"
+msgstr ""
+
+msgid "finished just now"
+msgstr ""
 
 #, java-format
 msgid "finished {0} ago"
@@ -2557,17 +2568,29 @@ msgstr "スケジュールされたジョブ"
 msgid "{0} starting in {1}"
 msgstr "{0} は {1} に始まります"
 
-msgid "DELAYED"
-msgstr "遅延"
-
-msgid "OUT OF ORDER"
-msgstr "故障中"
-
 msgid "Queue Totals"
 msgstr "キューの合計"
 
-msgid "Job Statistics (excluding single-shot jobs)"
-msgstr "ジョブ統計（単発ジョブを除く）"
+msgid "Job Statistics"
+msgstr ""
+
+msgid "last minute"
+msgstr ""
+
+msgid "Job Lag"
+msgstr "ジョブの遅延"
+
+msgid "AVG"
+msgstr "平均"
+
+msgid "PEAK"
+msgstr ""
+
+msgid "All Stats"
+msgstr ""
+
+msgid "Last 60s"
+msgstr ""
 
 msgid "Job"
 msgstr "ジョブ"
@@ -2637,9 +2660,6 @@ msgstr "例: fまたはXOfR"
 
 msgid "Cost"
 msgstr "コスト"
-
-msgid "Country"
-msgstr "国"
 
 msgid "Country Codes"
 msgstr "国コード"
@@ -2911,9 +2931,6 @@ msgstr "非表示"
 
 msgid "Published"
 msgstr "公開済み"
-
-msgid "Hostname"
-msgstr "ホスト名"
 
 msgid "Whois"
 msgstr "Whois"
@@ -4050,11 +4067,11 @@ msgstr "ジョブラグ"
 msgid "Message delay"
 msgstr "メッセージ遅延"
 
-msgid "Average job delay / maximum delay"
-msgstr "ジョブの平均遅延 / 最大遅延"
+msgid "Average / peak job delay (last minute)"
+msgstr ""
 
-msgid "Average delay before scheduled jobs are run"
-msgstr "スケジュールされたジョブが実行されるまでの平均遅延"
+msgid "Average / max delay before scheduled jobs are run"
+msgstr ""
 
 msgid "Indicates how quickly outbound messages to other I2P routers are sent"
 msgstr "ほかの I2P のルーターへの送信メッセージが送られた際の速さを表示"
@@ -4364,9 +4381,6 @@ msgstr "埋め立て地"
 msgid "MIN"
 msgstr "分"
 
-msgid "AVG"
-msgstr "平均"
-
 msgid "MEDIAN"
 msgstr "中央値"
 
@@ -4457,14 +4471,6 @@ msgstr "猶予期間"
 msgid "Tunnel identity"
 msgstr "トンネルのアイデンティティ"
 
-#, java-format
-msgid "Limited display to the {0} tunnels with the highest usage"
-msgstr "使用率が最も高い {0} トンネルに限定して表示します"
-
-#, java-format
-msgid "Limited display to the {0} most recent tunnels"
-msgstr "表示を最新の {0} トンネルに限定"
-
 msgid "Lifetime bandwidth usage"
 msgstr "生涯帯域幅使用量"
 
@@ -4483,6 +4489,9 @@ msgstr "ピア別のトランジットトンネル（上位{0}件）"
 
 msgid "Address"
 msgstr "住所"
+
+msgid "Messages"
+msgstr ""
 
 msgid "All Tunnels by Peer"
 msgstr "ピアによるすべてのトンネル"
@@ -4518,6 +4527,15 @@ msgstr "インバウンドかアウトバウンドか？"
 msgid "In/Out"
 msgstr "入力/出力"
 
+msgid "Tunnel test status"
+msgstr ""
+
+msgid "Round trip time for last test"
+msgstr ""
+
+msgid "Latency"
+msgstr ""
+
 msgid "Gateway"
 msgstr "ゲートウェイ"
 
@@ -4526,6 +4544,24 @@ msgstr "参加"
 
 msgid "Endpoint"
 msgstr "エンドポイント"
+
+msgid "Rejected as duplicate"
+msgstr ""
+
+msgid "Test successful"
+msgstr ""
+
+msgid "Test in progress"
+msgstr ""
+
+msgid "Test failing (1 failure)"
+msgstr ""
+
+msgid "Test failed (2 consecutive failures)"
+msgstr ""
+
+msgid "Not yet tested"
+msgstr ""
 
 msgid "Locally hosted tunnel"
 msgstr "地元でホストされたトンネル"
@@ -5197,6 +5233,9 @@ msgstr "ピアマネージャー"
 
 msgid "Manual Peer Controls"
 msgstr "手動ピアコントロール"
+
+msgid "Router Hash"
+msgstr "ルーターハッシュ"
 
 msgid "Manually Ban / Unban a Peer"
 msgstr "ピアを手動で禁止/禁止解除する"
@@ -5896,8 +5935,8 @@ msgstr "この設定（分単位）は、起動後にNetDb内のRouterInfoの有
 msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
 msgstr "trueに設定すると、この設定は自国のすべてのルーターからの直接通信をブロックし、ルーターが再起動するまでそれらを禁止リストに追加します。[デフォルトはfalse]"
 
-msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
-msgstr "trueに設定すると、この設定はG輻輻キャップを公開し、到達可能でも到達不可能でもないXティアのすべてのルーターからの直接通信をブロックし、それらをセッション禁止リストに追加します。この設定を有効にするには高度モードを有効にする必要があることに注意してください。[デフォルトはfalse]"
+msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap (no transit tunnels), adding them to the session banlist. [Default is true]"
+msgstr ""
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "この設定により、ルータがファイアウォールであるかどうかを判断するためのSSUテストを無効にすることができます。ファイアウォールでないことが確認されているが、一時的なファイアウォールの問題が発生しているルータに対して有効にすることもできます。テストが無効にされている場合、SSUとNTCPの両方が<a href=/info>ルータ情報ページ</a>で現在の公開IPアドレスを報告するはずです。[再起動が必要です]"
@@ -7437,9 +7476,6 @@ msgstr "他の人のためにルーティングする参加トンネルの数を
 msgid "Some basic indications of router overload:"
 msgstr "ルーターの過負荷のいくつかの基本的な適応症："
 
-msgid "Job Lag"
-msgstr "ジョブの遅延"
-
 msgid "How long jobs are waiting before execution. The job queue is listed on the <a href='/jobs'>Jobs page</a>. Unfortunately, there are several other job queues in the router that may be congested, and their status is not available in the router console. The job lag should generally be zero. If it is consistently higher than 500ms, your computer is very slow, your network is experiencing connectivity issues, or the router has serious problems. <a href='/configstats#jobQueue.jobLag'>[Enable graphing]</a>."
 msgstr "ジョブが実行される前に待機している時間です。ジョブキューは<a href='/jobs'>ジョブページ</a>にリストされています。残念ながら、ルーターには他にもいくつかのジョブキューがあり、混雑している可能性がありますが、そのステータスはルーターコンソールで利用できません。ジョブの遅延は通常ゼロである必要があります。もし常に500msよりも高い値であれば、コンピューターが非常に遅くなっているか、ネットワークに接続の問題が発生しているか、ルーターに深刻な問題がある可能性があります。 <a href='/configstats#jobQueue.jobLag'>[グラフ化を有効にする]</a>。"
 
@@ -8072,3 +8108,15 @@ msgstr "次へ"
 
 msgid "Finished"
 msgstr "完了"
+
+
+
+
+
+
+
+
+#, java-format
+
+#, java-format
+

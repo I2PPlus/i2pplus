@@ -609,6 +609,39 @@ msgstr "Cấu hình máy chủ mới"
 msgid "Hostname"
 msgstr "Tên máy chủ"
 
+msgid "Random startup delay (when auto-start is enabled) to defend against correlation attacks"
+msgstr ""
+
+msgid "Startup Delay"
+msgstr ""
+
+msgid "Minimum"
+msgstr ""
+
+msgid "Minimum startup delay"
+msgstr ""
+
+msgid "seconds"
+msgstr ""
+
+msgid "Maximum"
+msgstr ""
+
+msgid "Maximum startup delay"
+msgstr ""
+
+msgid "Add random delay before tunnel shutdown, then start graceful router shutdown / restart process"
+msgstr ""
+
+msgid "Shutdown Delay"
+msgstr ""
+
+msgid "Minimum shutdown delay"
+msgstr ""
+
+msgid "Maximum shutdown delay"
+msgstr ""
+
 msgid "Website Hostname"
 msgstr "Tên máy chủ trang web"
 
@@ -1090,8 +1123,8 @@ msgstr "Không xem trước"
 msgid "Starting..."
 msgstr "Bắt đầu..."
 
-msgid "Stop this Tunnel"
-msgstr "Dừng đường hầm này"
+msgid "Starting in"
+msgstr ""
 
 msgid "Running"
 msgstr "Đang chạy"
@@ -1105,14 +1138,17 @@ msgstr "trong"
 msgid "out"
 msgstr "ra ngoài"
 
+msgid "Stopped"
+msgstr "Đã ngưng"
+
+msgid "Stop this Tunnel"
+msgstr "Dừng đường hầm này"
+
 msgid "Restart this Tunnel"
 msgstr "Khởi động lại đường hầm này"
 
 msgid "Restart"
 msgstr "Khởi động lại"
-
-msgid "Stopped"
-msgstr "Đã ngưng"
 
 msgid "Destination"
 msgstr "Đích đến"

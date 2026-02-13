@@ -772,11 +772,17 @@ msgstr "tühista bänn"
 msgid "No bans currently active"
 msgstr "Hetkel ei ole aktiivseid keelde"
 
+msgid "Country"
+msgstr "Maa"
+
 msgid "Reason"
 msgstr "Põhjus"
 
-msgid "Router Hash"
-msgstr "Ruuteri ID/hash"
+msgid "IP Address"
+msgstr "IP-aadress"
+
+msgid "Hostname"
+msgstr "Hostinimi"
 
 msgid "Expiry"
 msgstr "Kehtivusaeg"
@@ -1529,6 +1535,14 @@ msgstr "Käivitu uuesti"
 msgid "Shutdown"
 msgstr "Lülitu välja"
 
+#, java-format
+msgid "Deferring restart for {0} until all servers have stopped"
+msgstr ""
+
+#, java-format
+msgid "Deferring shutdown for {0} until all servers have stopped"
+msgstr ""
+
 msgid "Restart imminent"
 msgstr "Käivitun kohe uuesti"
 
@@ -2186,9 +2200,6 @@ msgstr "Võrkudevaheline mikroblogimine"
 msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Redditi alternatiivne privaatsusele keskendunud kasutajaliides"
 
-msgid "AI Image generation & Chat hub"
-msgstr "AI pildi loomise ja vestluse keskus"
-
 msgid "IRC Logs for multiple networks"
 msgstr "IRC logid mitme võrgu jaoks"
 
@@ -2439,9 +2450,6 @@ msgstr "Identiteet"
 msgid "Network Database entry"
 msgstr "Võrguandmebaasi kirje"
 
-msgid "IP Address"
-msgstr "IP-aadress"
-
 msgid "UDP Port"
 msgstr "UDP port"
 
@@ -2536,9 +2544,6 @@ msgstr "Ruuteri transpordiprotokollide aadressid"
 msgid "{0} is used for outbound connections only"
 msgstr "{0} kasutatakse vaid välja ühendumiseks"
 
-msgid "Job runners"
-msgstr "tööjooksjad"
-
 msgid "Active jobs"
 msgstr "Aktiivsed tööd"
 
@@ -2548,6 +2553,12 @@ msgstr "algas {0} tagasi"
 
 msgid "Completed jobs"
 msgstr "just lõpetatud tööd"
+
+msgid "Runners"
+msgstr ""
+
+msgid "finished just now"
+msgstr ""
 
 #, java-format
 msgid "finished {0} ago"
@@ -2566,17 +2577,29 @@ msgstr "Plaanilised tööd"
 msgid "{0} starting in {1}"
 msgstr "{0} algab {1} pärast"
 
-msgid "DELAYED"
-msgstr "HILINEB"
-
-msgid "OUT OF ORDER"
-msgstr "VÄLJAS"
-
 msgid "Queue Totals"
 msgstr "Järjekorra summad"
 
-msgid "Job Statistics (excluding single-shot jobs)"
-msgstr "Tööstatistika (v.a ühekordsed tööd)"
+msgid "Job Statistics"
+msgstr ""
+
+msgid "last minute"
+msgstr ""
+
+msgid "Job Lag"
+msgstr "Töö aeglus"
+
+msgid "AVG"
+msgstr "AVG"
+
+msgid "PEAK"
+msgstr ""
+
+msgid "All Stats"
+msgstr ""
+
+msgid "Last 60s"
+msgstr ""
 
 msgid "Job"
 msgstr "Töö"
@@ -2646,9 +2669,6 @@ msgstr "nt f või XOfR"
 
 msgid "Cost"
 msgstr "Maksumus"
-
-msgid "Country"
-msgstr "Maa"
 
 msgid "Country Codes"
 msgstr "Riigikoodid"
@@ -2920,9 +2940,6 @@ msgstr "Peidetud"
 
 msgid "Published"
 msgstr "Avaldatud"
-
-msgid "Hostname"
-msgstr "Hostinimi"
 
 msgid "Whois"
 msgstr "Whois"
@@ -4067,11 +4084,11 @@ msgstr "Töö viive"
 msgid "Message delay"
 msgstr "Sõnumi viive"
 
-msgid "Average job delay / maximum delay"
-msgstr "töö keskmine viivitus / maksimaalne viivitus"
+msgid "Average / peak job delay (last minute)"
+msgstr ""
 
-msgid "Average delay before scheduled jobs are run"
-msgstr "Keskmine viivitus enne plaanitud tööde käivitamist"
+msgid "Average / max delay before scheduled jobs are run"
+msgstr ""
 
 msgid "Indicates how quickly outbound messages to other I2P routers are sent"
 msgstr "näitab, kui kiiresti teistele I2P-ruuteritele väljaminevaid sõnumeid saadetakse"
@@ -4383,9 +4400,6 @@ msgstr "üleujutused"
 msgid "MIN"
 msgstr "MIN"
 
-msgid "AVG"
-msgstr "AVG"
-
 msgid "MEDIAN"
 msgstr "MEDIAAN"
 
@@ -4476,14 +4490,6 @@ msgstr "lisaajal"
 msgid "Tunnel identity"
 msgstr "Tunneli identiteet"
 
-#, java-format
-msgid "Limited display to the {0} tunnels with the highest usage"
-msgstr "kuvatakse ainult {0} kõige suurema kasutusega tunnelites"
-
-#, java-format
-msgid "Limited display to the {0} most recent tunnels"
-msgstr "kuvatakse ainult {0} viimast tunnelit"
-
 msgid "Lifetime bandwidth usage"
 msgstr "Tööea vältel siirdatud andmemaht"
 
@@ -4502,6 +4508,9 @@ msgstr "Transiit-tunnelid ruuteri kaupa (Top {0})"
 
 msgid "Address"
 msgstr "Aadress"
+
+msgid "Messages"
+msgstr ""
 
 msgid "All Tunnels by Peer"
 msgstr "Peeri kõik tunnelid"
@@ -4537,6 +4546,15 @@ msgstr "sissetulev või väljaminev?"
 msgid "In/Out"
 msgstr "Sisse/Välja"
 
+msgid "Tunnel test status"
+msgstr ""
+
+msgid "Round trip time for last test"
+msgstr ""
+
+msgid "Latency"
+msgstr ""
+
 msgid "Gateway"
 msgstr "Lüüs"
 
@@ -4545,6 +4563,24 @@ msgstr "Osalejad"
 
 msgid "Endpoint"
 msgstr "Otspunkt"
+
+msgid "Rejected as duplicate"
+msgstr ""
+
+msgid "Test successful"
+msgstr ""
+
+msgid "Test in progress"
+msgstr ""
+
+msgid "Test failing (1 failure)"
+msgstr ""
+
+msgid "Test failed (2 consecutive failures)"
+msgstr ""
+
+msgid "Not yet tested"
+msgstr ""
 
 msgid "Locally hosted tunnel"
 msgstr "Kohalikult hostitud tunnel"
@@ -5216,6 +5252,9 @@ msgstr "Eakaaslaste Konfiguratsioon"
 
 msgid "Manual Peer Controls"
 msgstr "Partner-ruuterite käsitsi häälestus"
+
+msgid "Router Hash"
+msgstr "Ruuteri ID/hash"
 
 msgid "Manually Ban / Unban a Peer"
 msgstr "Bänni ruuter käsitsi / tühista bänn"
@@ -5915,8 +5954,8 @@ msgstr "See seadistus (minutites) võimaldab teil seadistada, kui kaua pärast k
 msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
 msgstr "See seade, kui see on seatud tõeseks, blokeerib kõigi oma riigi ruuterite otsesuhtluse ja lisab need oma keeluloendisse kuni ruuteri taaskäivitamiseni. [Vaikimisi on see väär]"
 
-msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
-msgstr "See seade, kui see on seatud tõeseks, blokeerib kõigi X-taseme ruuterite otsesuhtluse, mis avaldavad G ülekoormuspiirangu ja ei ole kättesaadavad ega kättesaamatud, lisates need seansi keeluloendisse. Pange tähele, et täiustatud režiim peab olema lubatud, et see seade jõustuks. [Vaikimisi on see väär]"
+msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap (no transit tunnels), adding them to the session banlist. [Default is true]"
+msgstr ""
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "See seadistus lubab keelata SSU testid, et teha kindlaks, kas teie ruuter on tulemüüri taga ja see saab lubada ruuteritele, mis pole kindlasti tulemüüri taga, kuid kogevad katkendlikke tulemüüri probleeme. Testimise keelamise korral peaksid nii SSU kui ka NTCP teatama teie praeguse avaliku IP-aadressi aadressil <a href=/info>ruuteri teabekülg</a>. [Nõutav taaskäivitamine]"
@@ -7456,9 +7495,6 @@ msgstr "Teile osalevate tunnelite arv teiste jaoks, jagatuna kogu teie poolt uur
 msgid "Some basic indications of router overload:"
 msgstr "Mõned marsruuteri ülekoormuse põhilised näitajad:"
 
-msgid "Job Lag"
-msgstr "Töö aeglus"
-
 msgid "How long jobs are waiting before execution. The job queue is listed on the <a href='/jobs'>Jobs page</a>. Unfortunately, there are several other job queues in the router that may be congested, and their status is not available in the router console. The job lag should generally be zero. If it is consistently higher than 500ms, your computer is very slow, your network is experiencing connectivity issues, or the router has serious problems. <a href='/configstats#jobQueue.jobLag'>[Enable graphing]</a>."
 msgstr "Kui kaua tööd ootavad enne täitmist. Tööjärjekord on loetletud lehel <a href='/jobs'>Tööd</a>. Kahjuks on ruuteris mitu muud tööjärjekorda, mis võivad olla ummistunud, ja nende olek pole ruuteri konsoolis saadaval. Töö viivitus peaks üldiselt olema null. Kui see on pidevalt suurem kui 500 ms, on teie arvuti väga aeglane, teie võrgus esineb ühenduvusprobleeme või ruuteril on tõsiseid probleeme. <a href='/configstats#jobQueue.jobLag'>[Luba graafik]</a>."
 
@@ -8091,3 +8127,15 @@ msgstr "Järgmine"
 
 msgid "Finished"
 msgstr "Lõppenud"
+
+
+
+
+
+
+
+
+#, java-format
+
+#, java-format
+

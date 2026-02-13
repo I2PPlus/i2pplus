@@ -634,6 +634,39 @@ msgstr "تقليل وقت الخمول في النفق"
 msgid "Hostname"
 msgstr "اسم المستضيف"
 
+msgid "Random startup delay (when auto-start is enabled) to defend against correlation attacks"
+msgstr ""
+
+msgid "Startup Delay"
+msgstr ""
+
+msgid "Minimum"
+msgstr ""
+
+msgid "Minimum startup delay"
+msgstr ""
+
+msgid "seconds"
+msgstr ""
+
+msgid "Maximum"
+msgstr ""
+
+msgid "Maximum startup delay"
+msgstr ""
+
+msgid "Add random delay before tunnel shutdown, then start graceful router shutdown / restart process"
+msgstr ""
+
+msgid "Shutdown Delay"
+msgstr ""
+
+msgid "Minimum shutdown delay"
+msgstr ""
+
+msgid "Maximum shutdown delay"
+msgstr ""
+
 msgid "Website Hostname"
 msgstr "اسم مضيف الموقع"
 
@@ -1115,8 +1148,8 @@ msgstr "لا توجد معاينة"
 msgid "Starting..."
 msgstr "يبدأ..."
 
-msgid "Stop this Tunnel"
-msgstr "أوقف هذا النفق"
+msgid "Starting in"
+msgstr ""
 
 msgid "Running"
 msgstr "يشتغل"
@@ -1130,14 +1163,17 @@ msgstr "في"
 msgid "out"
 msgstr "خارج"
 
+msgid "Stopped"
+msgstr "متوقف"
+
+msgid "Stop this Tunnel"
+msgstr "أوقف هذا النفق"
+
 msgid "Restart this Tunnel"
 msgstr "إعادة تشغيل هذا النفق"
 
 msgid "Restart"
 msgstr "إعادة التشغيل"
-
-msgid "Stopped"
-msgstr "متوقف"
 
 msgid "Destination"
 msgstr "اتجاه"

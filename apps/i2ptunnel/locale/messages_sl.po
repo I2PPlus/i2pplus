@@ -624,6 +624,39 @@ msgstr "Nova konfiguracija strežnika"
 msgid "Hostname"
 msgstr "Ime gostitelja"
 
+msgid "Random startup delay (when auto-start is enabled) to defend against correlation attacks"
+msgstr ""
+
+msgid "Startup Delay"
+msgstr ""
+
+msgid "Minimum"
+msgstr ""
+
+msgid "Minimum startup delay"
+msgstr ""
+
+msgid "seconds"
+msgstr ""
+
+msgid "Maximum"
+msgstr ""
+
+msgid "Maximum startup delay"
+msgstr ""
+
+msgid "Add random delay before tunnel shutdown, then start graceful router shutdown / restart process"
+msgstr ""
+
+msgid "Shutdown Delay"
+msgstr ""
+
+msgid "Minimum shutdown delay"
+msgstr ""
+
+msgid "Maximum shutdown delay"
+msgstr ""
+
 msgid "Website Hostname"
 msgstr "Ime spletne strani"
 
@@ -1105,8 +1138,8 @@ msgstr "Brez predogleda"
 msgid "Starting..."
 msgstr "Zagon..."
 
-msgid "Stop this Tunnel"
-msgstr "Ustavi ta tunelj"
+msgid "Starting in"
+msgstr ""
 
 msgid "Running"
 msgstr "Deluje"
@@ -1120,14 +1153,17 @@ msgstr "v"
 msgid "out"
 msgstr "iz"
 
+msgid "Stopped"
+msgstr "Ustavljen"
+
+msgid "Stop this Tunnel"
+msgstr "Ustavi ta tunelj"
+
 msgid "Restart this Tunnel"
 msgstr "Ponovno zaženi ta predor"
 
 msgid "Restart"
 msgstr "Ponovni zagon"
-
-msgid "Stopped"
-msgstr "Ustavljen"
 
 msgid "Destination"
 msgstr "Destinacija"

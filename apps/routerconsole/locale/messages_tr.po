@@ -771,11 +771,17 @@ msgstr "yasağı kaldır"
 msgid "No bans currently active"
 msgstr "Şu anda aktif bir yasak yok"
 
+msgid "Country"
+msgstr "Ülke"
+
 msgid "Reason"
 msgstr "Sebep"
 
-msgid "Router Hash"
-msgstr "Yöneltici Karması"
+msgid "IP Address"
+msgstr "IP Adresi"
+
+msgid "Hostname"
+msgstr "Ana bilgisayar adı"
 
 msgid "Expiry"
 msgstr "Sona Erme"
@@ -1528,6 +1534,14 @@ msgstr "Yeniden Başlat"
 msgid "Shutdown"
 msgstr "Kapat"
 
+#, java-format
+msgid "Deferring restart for {0} until all servers have stopped"
+msgstr ""
+
+#, java-format
+msgid "Deferring shutdown for {0} until all servers have stopped"
+msgstr ""
+
 msgid "Restart imminent"
 msgstr "Yeniden başlatılmak üzere"
 
@@ -2185,9 +2199,6 @@ msgstr "Net işçiliği mikro blog ve forumlar"
 msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Reddit için alternatif gizlilik odaklı ön uç"
 
-msgid "AI Image generation & Chat hub"
-msgstr "Yapay Zeka Görüntü üretimi ve Sohbet merkezi"
-
 msgid "IRC Logs for multiple networks"
 msgstr "Birden fazla ağ için IRC Günlükleri"
 
@@ -2438,9 +2449,6 @@ msgstr "Kimlik"
 msgid "Network Database entry"
 msgstr "Ağ Veritabanı girişi"
 
-msgid "IP Address"
-msgstr "IP Adresi"
-
 msgid "UDP Port"
 msgstr "UDP Bağlantı Noktası"
 
@@ -2535,9 +2543,6 @@ msgstr "Yöneltici Aktarım Adresleri"
 msgid "{0} is used for outbound connections only"
 msgstr "{0} yalnız gidiş bağlantıları için kullanılır"
 
-msgid "Job runners"
-msgstr "Görev çalıştıranlar"
-
 msgid "Active jobs"
 msgstr "Etkin görevler"
 
@@ -2547,6 +2552,12 @@ msgstr "{0} önce başlamış"
 
 msgid "Completed jobs"
 msgstr "Az önce biten görevler"
+
+msgid "Runners"
+msgstr ""
+
+msgid "finished just now"
+msgstr ""
 
 #, java-format
 msgid "finished {0} ago"
@@ -2565,17 +2576,29 @@ msgstr "Zamanlanmış görevler"
 msgid "{0} starting in {1}"
 msgstr "{0}, {1}'de başlıyor"
 
-msgid "DELAYED"
-msgstr "GECİKMELİ"
-
-msgid "OUT OF ORDER"
-msgstr "HİZMET DIŞI"
-
 msgid "Queue Totals"
 msgstr "Sıra Toplamları"
 
-msgid "Job Statistics (excluding single-shot jobs)"
-msgstr "İş İstatistikleri (tek seferlik işler hariç)"
+msgid "Job Statistics"
+msgstr ""
+
+msgid "last minute"
+msgstr ""
+
+msgid "Job Lag"
+msgstr "İş Gecikmesi"
+
+msgid "AVG"
+msgstr "ORTA"
+
+msgid "PEAK"
+msgstr ""
+
+msgid "All Stats"
+msgstr ""
+
+msgid "Last 60s"
+msgstr ""
 
 msgid "Job"
 msgstr "Görev"
@@ -2645,9 +2668,6 @@ msgstr "örn. f veya XOfR"
 
 msgid "Cost"
 msgstr "Maliyet"
-
-msgid "Country"
-msgstr "Ülke"
 
 msgid "Country Codes"
 msgstr "Ülke Kodları"
@@ -2919,9 +2939,6 @@ msgstr "Gizli"
 
 msgid "Published"
 msgstr "Yayınlanmış"
-
-msgid "Hostname"
-msgstr "Ana bilgisayar adı"
 
 msgid "Whois"
 msgstr "Whois"
@@ -4066,11 +4083,11 @@ msgstr "İş gecikmesi"
 msgid "Message delay"
 msgstr "İleti gecikmesi"
 
-msgid "Average job delay / maximum delay"
-msgstr "Ortalama iş gecikmesi / maksimum gecikme"
+msgid "Average / peak job delay (last minute)"
+msgstr ""
 
-msgid "Average delay before scheduled jobs are run"
-msgstr "Planlanmış işler çalıştırılmadan önceki ortalama gecikme"
+msgid "Average / max delay before scheduled jobs are run"
+msgstr ""
 
 msgid "Indicates how quickly outbound messages to other I2P routers are sent"
 msgstr "Gidiş iletilerinin diğer I2P yönelticilerine ne kadar çabuk gönderildiğini gösterir"
@@ -4382,9 +4399,6 @@ msgstr "sel dolguları"
 msgid "MIN"
 msgstr "DAKİKA"
 
-msgid "AVG"
-msgstr "ORTA"
-
 msgid "MEDIAN"
 msgstr "MEDYAN"
 
@@ -4475,14 +4489,6 @@ msgstr "deneme süresi"
 msgid "Tunnel identity"
 msgstr "Tünel kimliği"
 
-#, java-format
-msgid "Limited display to the {0} tunnels with the highest usage"
-msgstr "En yüksek kullanıma sahip {0} tünelle sınırlı gösterim"
-
-#, java-format
-msgid "Limited display to the {0} most recent tunnels"
-msgstr "En yeni {0} tünelle sınırlı gösterim"
-
 msgid "Lifetime bandwidth usage"
 msgstr "Ömür boyu bant genişliği kullanımı"
 
@@ -4501,6 +4507,9 @@ msgstr "Eşe Göre Geçiş Tünelleri (İlk {0})"
 
 msgid "Address"
 msgstr "Adres"
+
+msgid "Messages"
+msgstr ""
 
 msgid "All Tunnels by Peer"
 msgstr "Eşlere Göre Tüm Tüneller"
@@ -4536,6 +4545,15 @@ msgstr "Geliş ya da gidiş?"
 msgid "In/Out"
 msgstr "Giriş/Çıkış"
 
+msgid "Tunnel test status"
+msgstr ""
+
+msgid "Round trip time for last test"
+msgstr ""
+
+msgid "Latency"
+msgstr ""
+
 msgid "Gateway"
 msgstr "Geçit"
 
@@ -4544,6 +4562,24 @@ msgstr "Katılımcılar"
 
 msgid "Endpoint"
 msgstr "Varış noktası"
+
+msgid "Rejected as duplicate"
+msgstr ""
+
+msgid "Test successful"
+msgstr ""
+
+msgid "Test in progress"
+msgstr ""
+
+msgid "Test failing (1 failure)"
+msgstr ""
+
+msgid "Test failed (2 consecutive failures)"
+msgstr ""
+
+msgid "Not yet tested"
+msgstr ""
 
 msgid "Locally hosted tunnel"
 msgstr "Yerel olarak barındırılan tünel"
@@ -5215,6 +5251,9 @@ msgstr "Akran Yöneticisi"
 
 msgid "Manual Peer Controls"
 msgstr "El ile Eş Denetimi"
+
+msgid "Router Hash"
+msgstr "Yöneltici Karması"
 
 msgid "Manually Ban / Unban a Peer"
 msgstr "Bir Eşi El ile Engelleme ya da Engellemeyi Kaldırma"
@@ -5914,8 +5953,8 @@ msgstr "Bu ayar (dakika cinsinden) başlangıçtan sonra RouterInfos'nin geçerl
 msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
 msgstr "Bu ayar true olarak ayarlandığında, kendi ülkenizdeki tüm yönlendiricilerle doğrudan iletişimi engelleyecek ve yönlendiriciniz yeniden başlayana kadar onları yasak listenize ekleyecektir. [Varsayılan false]"
 
-msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
-msgstr "Bu ayar true olarak ayarlandığında, G tıkanıklık limiti yayınlayan ve ne erişilebilir ne de erişilemez olan tüm X katmanı yönlendiricileriyle doğrudan iletişimi engelleyecek ve onları oturum yasak listesine ekleyecektir. Bu ayarın etkili olması için gelişmiş modun etkinleştirilmesi gerektiğini unutmayın. [Varsayılan false]"
+msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap (no transit tunnels), adding them to the session banlist. [Default is true]"
+msgstr ""
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "Bu ayar, yönlendiricinizin güvenlik duvarı ile korunup korunmadığını belirlemek için SSU testlerinin devre dışı bırakılmasına izin verir ve kesinlikle güvenlik duvarı ile korunmayan ancak aralıklı güvenlik duvarı sorunları yaşayan yönlendiriciler için etkinleştirilebilir. Testin devre dışı bırakılması durumunda hem SSU hem de NTCP, mevcut genel IP adresinizi <a href=/info>yönlendirici bilgi sayfasında</a> bildirmelidir. [Yeniden başlatma gerekiyor]"
@@ -7455,9 +7494,6 @@ msgstr "Tüm keşif ve müşteri tünellerinizdeki toplam şerbetçiotu sayısı
 msgid "Some basic indications of router overload:"
 msgstr "Yönlendiricinin aşırı yüklenmesinin bazı temel göstergeleri:"
 
-msgid "Job Lag"
-msgstr "İş Gecikmesi"
-
 msgid "How long jobs are waiting before execution. The job queue is listed on the <a href='/jobs'>Jobs page</a>. Unfortunately, there are several other job queues in the router that may be congested, and their status is not available in the router console. The job lag should generally be zero. If it is consistently higher than 500ms, your computer is very slow, your network is experiencing connectivity issues, or the router has serious problems. <a href='/configstats#jobQueue.jobLag'>[Enable graphing]</a>."
 msgstr "İşlerin yürütümeden önce beklediği süre. İş sırası <a href='/jobs'>İşler sayfasında</a> listelenir. Ne yazık ki, yönlüde başka tıkanmış iş sıraları da bulunur ve durumları yönlü konsolda mevcut değildir. İş gecikmesi genellikle sıfır olmalıdır. Eğer sürekli olarak 500ms'den yüksekse, bilgisayarınız çok yavaş, ağınız bağlantı sorunları yaşıyor veya yönlünüz ciddi sorunlar yaşıyor olabilir. <a href='/configstats#jobQueue.jobLag'>[Grafiklemeyi etkinleştir]</a>"
 
@@ -8090,3 +8126,15 @@ msgstr "Sonraki"
 
 msgid "Finished"
 msgstr "Tamamlandı"
+
+
+
+
+
+
+
+
+#, java-format
+
+#, java-format
+

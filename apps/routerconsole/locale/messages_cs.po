@@ -774,11 +774,17 @@ msgstr "zrušit zákaz nyní"
 msgid "No bans currently active"
 msgstr "Momentálně nejsou aktivní žádné zákazy"
 
+msgid "Country"
+msgstr "Země"
+
 msgid "Reason"
 msgstr "Důvod"
 
-msgid "Router Hash"
-msgstr "Hash Router"
+msgid "IP Address"
+msgstr "IP adresa"
+
+msgid "Hostname"
+msgstr "Název hostitele"
 
 msgid "Expiry"
 msgstr "Vypršení platnosti"
@@ -1532,6 +1538,14 @@ msgstr "Restart"
 msgid "Shutdown"
 msgstr "Vypnout"
 
+#, java-format
+msgid "Deferring restart for {0} until all servers have stopped"
+msgstr ""
+
+#, java-format
+msgid "Deferring shutdown for {0} until all servers have stopped"
+msgstr ""
+
 msgid "Restart imminent"
 msgstr "Blíží se restart"
 
@@ -2193,9 +2207,6 @@ msgstr "Mikroblogování napříč sítěmi"
 msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Alternativní front-end zaměřený na soukromí pro Reddit"
 
-msgid "AI Image generation & Chat hub"
-msgstr "Centrum generování obrázků AI a chatu"
-
 msgid "IRC Logs for multiple networks"
 msgstr "IRC Záznamy pro více sítí"
 
@@ -2446,9 +2457,6 @@ msgstr "Identita"
 msgid "Network Database entry"
 msgstr "Záznam databáze sítě"
 
-msgid "IP Address"
-msgstr "IP adresa"
-
 msgid "UDP Port"
 msgstr "Port UDP"
 
@@ -2543,9 +2551,6 @@ msgstr "Transportní Adresy Routeru"
 msgid "{0} is used for outbound connections only"
 msgstr "{0} je použito pouze pro odchozí spojení"
 
-msgid "Job runners"
-msgstr "Pracovníci"
-
 msgid "Active jobs"
 msgstr "Aktivní zaměstnání"
 
@@ -2555,6 +2560,12 @@ msgstr "začalo před {0}"
 
 msgid "Completed jobs"
 msgstr "Právě dokončené úlohy"
+
+msgid "Runners"
+msgstr ""
+
+msgid "finished just now"
+msgstr ""
 
 #, java-format
 msgid "finished {0} ago"
@@ -2573,17 +2584,29 @@ msgstr "Plánované úlohy"
 msgid "{0} starting in {1}"
 msgstr "{0} začíná za {1}"
 
-msgid "DELAYED"
-msgstr "ZPOŽDĚNO"
-
-msgid "OUT OF ORDER"
-msgstr "MIMO PROVOZ"
-
 msgid "Queue Totals"
 msgstr "Součet fronty"
 
-msgid "Job Statistics (excluding single-shot jobs)"
-msgstr "Statistika práce (kromě jednorázových úloh)"
+msgid "Job Statistics"
+msgstr ""
+
+msgid "last minute"
+msgstr ""
+
+msgid "Job Lag"
+msgstr "Zpoždění úloh"
+
+msgid "AVG"
+msgstr "PRŮMĚR"
+
+msgid "PEAK"
+msgstr ""
+
+msgid "All Stats"
+msgstr ""
+
+msgid "Last 60s"
+msgstr ""
 
 msgid "Job"
 msgstr "Zaměstnání"
@@ -2653,9 +2676,6 @@ msgstr "např. f nebo XOfR"
 
 msgid "Cost"
 msgstr "Cena"
-
-msgid "Country"
-msgstr "Země"
 
 msgid "Country Codes"
 msgstr "Kódy zemí"
@@ -2927,9 +2947,6 @@ msgstr "Skryté"
 
 msgid "Published"
 msgstr "Zveřejněný"
-
-msgid "Hostname"
-msgstr "Název hostitele"
 
 msgid "Whois"
 msgstr "Whois"
@@ -4082,11 +4099,11 @@ msgstr "Prodleva práce"
 msgid "Message delay"
 msgstr "Zpoždění zprávy"
 
-msgid "Average job delay / maximum delay"
-msgstr "Průměrné zpoždění úlohy / maximální zpoždění"
+msgid "Average / peak job delay (last minute)"
+msgstr ""
 
-msgid "Average delay before scheduled jobs are run"
-msgstr "Průměrné zpoždění před spuštěním naplánovaných úloh"
+msgid "Average / max delay before scheduled jobs are run"
+msgstr ""
 
 msgid "Indicates how quickly outbound messages to other I2P routers are sent"
 msgstr "Označuje, jak rychle jsou odesílány odchozí zprávy do jiných I2P směrovačů"
@@ -4400,9 +4417,6 @@ msgstr "zásypy"
 msgid "MIN"
 msgstr "MIN"
 
-msgid "AVG"
-msgstr "PRŮMĚR"
-
 msgid "MEDIAN"
 msgstr "STŘEDNÍ"
 
@@ -4493,14 +4507,6 @@ msgstr "doba odkladu"
 msgid "Tunnel identity"
 msgstr "Identita tunelu"
 
-#, java-format
-msgid "Limited display to the {0} tunnels with the highest usage"
-msgstr "Omezeno zobrazení na {0} tunelů s nejvyšším využitím"
-
-#, java-format
-msgid "Limited display to the {0} most recent tunnels"
-msgstr "Omezené zobrazení na {0} nejnovějších tunelů"
-
 msgid "Lifetime bandwidth usage"
 msgstr "Doživotní využití šířky pásma"
 
@@ -4519,6 +4525,9 @@ msgstr "Tranzitní tunely podle protěje (Top {0})"
 
 msgid "Address"
 msgstr "Adresa"
+
+msgid "Messages"
+msgstr ""
 
 msgid "All Tunnels by Peer"
 msgstr "Všechny tunely od Peer"
@@ -4554,6 +4563,15 @@ msgstr "Příchozí nebo odchozí?"
 msgid "In/Out"
 msgstr "Vstup/Výstup"
 
+msgid "Tunnel test status"
+msgstr ""
+
+msgid "Round trip time for last test"
+msgstr ""
+
+msgid "Latency"
+msgstr ""
+
 msgid "Gateway"
 msgstr "Brána"
 
@@ -4562,6 +4580,24 @@ msgstr "Účastníci"
 
 msgid "Endpoint"
 msgstr "Koncový bod"
+
+msgid "Rejected as duplicate"
+msgstr ""
+
+msgid "Test successful"
+msgstr ""
+
+msgid "Test in progress"
+msgstr ""
+
+msgid "Test failing (1 failure)"
+msgstr ""
+
+msgid "Test failed (2 consecutive failures)"
+msgstr ""
+
+msgid "Not yet tested"
+msgstr ""
 
 msgid "Locally hosted tunnel"
 msgstr "Lokálně hostovaný tunel"
@@ -5233,6 +5269,9 @@ msgstr "Peer Manažer"
 
 msgid "Manual Peer Controls"
 msgstr "Ruční ovládání Peer Controls"
+
+msgid "Router Hash"
+msgstr "Hash Router"
 
 msgid "Manually Ban / Unban a Peer"
 msgstr "Manuálně zakázat / zrušit zákaz peeru"
@@ -5932,8 +5971,8 @@ msgstr "Toto nastavení (v minutách) vám umožňuje manuálně nastavit, jak d
 msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
 msgstr "Toto nastavení, když je nastaveno na true, zablokuje přímou komunikaci se všemi routery ve vaší vlastní zemi a přidá je na váš seznam zakazů, dokud váš router nerestartuje. [Výchozí je false]"
 
-msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
-msgstr "Toto nastavení, když je nastaveno na true, zablokuje přímou komunikaci se všemi routery úrovně X, které publikují omezení přetížení G a nejsou ani dosažitelné ani nedosažitelné, a přidá je na seznam zákazů relace. Upozorňte, že pro účinnost tohoto nastavení musí být povolen pokročilý režim. [Výchozí je false]"
+msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap (no transit tunnels), adding them to the session banlist. [Default is true]"
+msgstr ""
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "Toto nastavení umožňuje deaktivovat testy SSU, aby se zjistilo, zda je váš směrovač chráněn firewallem, a může být povoleno pro směrovače, které jsou určitě bez firewalu, ale mají problémy s přerušovaným blokováním firewallu. Pokud jsou testy zakázány, měly by oba protokoly SSU a NTCP hlásit vaši aktuální veřejnou IP adresu na <a href=/info>stránce s informacemi o směrovači</a>. [Je vyžadován restart]"
@@ -7479,9 +7518,6 @@ msgstr "Počet účastnících se tunelů, které směrujete pro ostatní, děle
 msgid "Some basic indications of router overload:"
 msgstr "Některé základní indikace přetížení routeru:"
 
-msgid "Job Lag"
-msgstr "Zpoždění úloh"
-
 msgid "How long jobs are waiting before execution. The job queue is listed on the <a href='/jobs'>Jobs page</a>. Unfortunately, there are several other job queues in the router that may be congested, and their status is not available in the router console. The job lag should generally be zero. If it is consistently higher than 500ms, your computer is very slow, your network is experiencing connectivity issues, or the router has serious problems. <a href='/configstats#jobQueue.jobLag'>[Enable graphing]</a>."
 msgstr "Jak dlouho úkoly čekají před provedením. Fronta úkolů je uvedena na stránce <a href='/jobs'>Úkoly</a>. Bohužel existuje několik dalších front s úkoly v routeru, které mohou být zahlcovány, a jejich stav není dostupný v routerové konzoli. Zpoždění úloh by obecně mělo být nulové. Pokud je pravidelně vyšší než 500 ms, váš počítač je velmi pomalý, vaše síť má problémy s připojením nebo router má vážné problémy. <a href='/configstats#jobQueue.jobLag'>[Povolit grafy]</a>."
 
@@ -8114,3 +8150,15 @@ msgstr "Další"
 
 msgid "Finished"
 msgstr "Hotové"
+
+
+
+
+
+
+
+
+#, java-format
+
+#, java-format
+

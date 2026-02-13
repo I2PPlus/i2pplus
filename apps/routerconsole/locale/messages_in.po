@@ -768,11 +768,17 @@ msgstr "Cabut pemblokiran sekarang"
 msgid "No bans currently active"
 msgstr "Tidak ada larangan yang aktif saat ini"
 
+msgid "Country"
+msgstr "Negara"
+
 msgid "Reason"
 msgstr "Alasan"
 
-msgid "Router Hash"
-msgstr "Router Hash"
+msgid "IP Address"
+msgstr "Alamat IP"
+
+msgid "Hostname"
+msgstr "Nama host"
 
 msgid "Expiry"
 msgstr "Kedaluwarsa"
@@ -1524,6 +1530,14 @@ msgstr "Mulai ulang I2P"
 msgid "Shutdown"
 msgstr "Matikan I2P"
 
+#, java-format
+msgid "Deferring restart for {0} until all servers have stopped"
+msgstr ""
+
+#, java-format
+msgid "Deferring shutdown for {0} until all servers have stopped"
+msgstr ""
+
 msgid "Restart imminent"
 msgstr "I2P sedang dalam proses restart"
 
@@ -2177,9 +2191,6 @@ msgstr "Mikro-blogging lintas jaringan"
 msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Front-end alternatif yang berfokus pada privasi untuk Reddit"
 
-msgid "AI Image generation & Chat hub"
-msgstr "Generasi Gambar AI & Hub Obrolan"
-
 msgid "IRC Logs for multiple networks"
 msgstr "Log IRC untuk beberapa jaringan"
 
@@ -2430,9 +2441,6 @@ msgstr "Identitas"
 msgid "Network Database entry"
 msgstr "Entri Basis Data Jaringan"
 
-msgid "IP Address"
-msgstr "Alamat IP"
-
 msgid "UDP Port"
 msgstr "Pelabuhan UDP"
 
@@ -2527,9 +2535,6 @@ msgstr "Alamat Transport Router"
 msgid "{0} is used for outbound connections only"
 msgstr "{0} hanya digunakan untuk koneksi outbound"
 
-msgid "Job runners"
-msgstr "Job runners "
-
 msgid "Active jobs"
 msgstr "Job yang aktif"
 
@@ -2539,6 +2544,12 @@ msgstr "Dimulai {0} yang lalu"
 
 msgid "Completed jobs"
 msgstr "Jobs yang baru selesai"
+
+msgid "Runners"
+msgstr ""
+
+msgid "finished just now"
+msgstr ""
 
 #, java-format
 msgid "finished {0} ago"
@@ -2557,17 +2568,29 @@ msgstr "Jobs terjadwal"
 msgid "{0} starting in {1}"
 msgstr "{0} dimulai di {1}"
 
-msgid "DELAYED"
-msgstr "TERLAMBAT"
-
-msgid "OUT OF ORDER"
-msgstr "TIDAK BERURUTAN"
-
 msgid "Queue Totals"
 msgstr "Total Antrian"
 
-msgid "Job Statistics (excluding single-shot jobs)"
-msgstr "Statistik Pekerjaan (tidak termasuk pekerjaan tunggal)"
+msgid "Job Statistics"
+msgstr ""
+
+msgid "last minute"
+msgstr ""
+
+msgid "Job Lag"
+msgstr "Keterlambatan Pekerjaan"
+
+msgid "AVG"
+msgstr "Rata-rata"
+
+msgid "PEAK"
+msgstr ""
+
+msgid "All Stats"
+msgstr ""
+
+msgid "Last 60s"
+msgstr ""
 
 msgid "Job"
 msgstr "Job "
@@ -2637,9 +2660,6 @@ msgstr "mis. f atau XOfR"
 
 msgid "Cost"
 msgstr "Biaya"
-
-msgid "Country"
-msgstr "Negara"
 
 msgid "Country Codes"
 msgstr "Kode Negara"
@@ -2911,9 +2931,6 @@ msgstr "Tersembunyi"
 
 msgid "Published"
 msgstr "Telah dipublikasikan"
-
-msgid "Hostname"
-msgstr "Nama host"
 
 msgid "Whois"
 msgstr "Whois"
@@ -4050,11 +4067,11 @@ msgstr "Keterlambatan pekerjaan"
 msgid "Message delay"
 msgstr "Penundaan pesan"
 
-msgid "Average job delay / maximum delay"
-msgstr "Penundaan pekerjaan rata-rata / penundaan maksimum"
+msgid "Average / peak job delay (last minute)"
+msgstr ""
 
-msgid "Average delay before scheduled jobs are run"
-msgstr "Penundaan rata-rata sebelum pekerjaan terjadwal dijalankan"
+msgid "Average / max delay before scheduled jobs are run"
+msgstr ""
 
 msgid "Indicates how quickly outbound messages to other I2P routers are sent"
 msgstr "Menunjukkan seberapa cepat outbound messages dikirim kepada I2P router lain"
@@ -4364,9 +4381,6 @@ msgstr "tempat pembuangan banjir"
 msgid "MIN"
 msgstr "MENIT"
 
-msgid "AVG"
-msgstr "Rata-rata"
-
 msgid "MEDIAN"
 msgstr "MEDIAN"
 
@@ -4457,14 +4471,6 @@ msgstr "masa tenggang"
 msgid "Tunnel identity"
 msgstr "Identitas Tunnel"
 
-#, java-format
-msgid "Limited display to the {0} tunnels with the highest usage"
-msgstr "Tampilan terbatas pada {0} terowongan dengan pemakaian tertinggi"
-
-#, java-format
-msgid "Limited display to the {0} most recent tunnels"
-msgstr "Tampilan terbatas pada {0} terowongan terbaru"
-
 msgid "Lifetime bandwidth usage"
 msgstr "Penggunaan bandwidth seumur hidup"
 
@@ -4483,6 +4489,9 @@ msgstr "Tunnel Transit berdasarkan Peer (Teratas {0})"
 
 msgid "Address"
 msgstr "Alamat"
+
+msgid "Messages"
+msgstr ""
 
 msgid "All Tunnels by Peer"
 msgstr "Semua Terowongan Berdasarkan Peer"
@@ -4518,6 +4527,15 @@ msgstr "Inbound atau outbound?"
 msgid "In/Out"
 msgstr "Masuk/Keluar"
 
+msgid "Tunnel test status"
+msgstr ""
+
+msgid "Round trip time for last test"
+msgstr ""
+
+msgid "Latency"
+msgstr ""
+
 msgid "Gateway"
 msgstr "Gateway "
 
@@ -4526,6 +4544,24 @@ msgstr "Participant"
 
 msgid "Endpoint"
 msgstr "Endpoint "
+
+msgid "Rejected as duplicate"
+msgstr ""
+
+msgid "Test successful"
+msgstr ""
+
+msgid "Test in progress"
+msgstr ""
+
+msgid "Test failing (1 failure)"
+msgstr ""
+
+msgid "Test failed (2 consecutive failures)"
+msgstr ""
+
+msgid "Not yet tested"
+msgstr ""
 
 msgid "Locally hosted tunnel"
 msgstr "Tunnel yang Berada di Lokal"
@@ -5197,6 +5233,9 @@ msgstr "Manajer Rekan"
 
 msgid "Manual Peer Controls"
 msgstr "Kontrol Rekan Manual"
+
+msgid "Router Hash"
+msgstr "Router Hash"
 
 msgid "Manually Ban / Unban a Peer"
 msgstr "Blokir Peer Secara Manual"
@@ -5896,8 +5935,8 @@ msgstr "Pengaturan ini (dalam menit) memungkinkan Anda mengkonfigurasi secara ma
 msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
 msgstr "Pengaturan ini, jika disetel ke true, akan memblokir komunikasi langsung dari semua router di negara Anda sendiri dan menambahkannya ke daftar larangan Anda hingga router Anda dimulai ulang. [Default adalah false]"
 
-msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
-msgstr "Pengaturan ini, jika disetel ke true, akan memblokir komunikasi langsung dari semua router X tier yang mempublikasikan batas kemacetan G dan tidak dapat dijangkau atau tidak dapat dijangkau, menambahkannya ke daftar larangan sesi. Catatan bahwa mode lanjutan harus diaktifkan agar pengaturan ini berlaku. [Default adalah false]"
+msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap (no transit tunnels), adding them to the session banlist. [Default is true]"
+msgstr ""
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "Pengaturan ini memungkinkan pematikan pengujian SSU untuk menentukan apakah router Anda dibatasi firewall dan dapat diaktifkan untuk router yang pasti tidak dibatasi firewall namun mengalami masalah pembatasan firewall yang tidak beraturan. Dalam hal pengujian dinonaktifkan, baik SSU maupun NTCP seharusnya melaporkan alamat IP publik saat ini Anda di <a href=/info>halaman informasi router</a>. [Restart diperlukan]"
@@ -7437,9 +7476,6 @@ msgstr "Jumlah terowongan yang Anda teruskan untuk orang lain dibagi dengan tota
 msgid "Some basic indications of router overload:"
 msgstr "Beberapa indikasi dasar kelebihan beban router:"
 
-msgid "Job Lag"
-msgstr "Keterlambatan Pekerjaan"
-
 msgid "How long jobs are waiting before execution. The job queue is listed on the <a href='/jobs'>Jobs page</a>. Unfortunately, there are several other job queues in the router that may be congested, and their status is not available in the router console. The job lag should generally be zero. If it is consistently higher than 500ms, your computer is very slow, your network is experiencing connectivity issues, or the router has serious problems. <a href='/configstats#jobQueue.jobLag'>[Enable graphing]</a>."
 msgstr "Berapa lama pekerjaan menunggu sebelum dieksekusi. Antrian pekerjaan terdapat di halaman <a href='/jobs'>Pekerjaan</a>. Sayangnya, ada beberapa antrian pekerjaan lain di router yang mungkin terkongesti, dan status mereka tidak tersedia di konsol router. Keterlambatan pekerjaan secara umum seharusnya nol. Jika konsisten lebih tinggi dari 500ms, komputer Anda sangat lambat, jaringan Anda mengalami masalah konektivitas, atau router mengalami masalah serius. <a href='/configstats#jobQueue.jobLag'>[Aktifkan grafik]</a>."
 
@@ -8072,3 +8108,15 @@ msgstr "Selanjutnya"
 
 msgid "Finished"
 msgstr "Selesai"
+
+
+
+
+
+
+
+
+#, java-format
+
+#, java-format
+

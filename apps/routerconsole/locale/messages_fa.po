@@ -771,11 +771,17 @@ msgstr "اکنون ممنوعیت را لغو کنید"
 msgid "No bans currently active"
 msgstr "هیچ ممنوعیتی در حال حاضر فعال نیست"
 
+msgid "Country"
+msgstr "کشور"
+
 msgid "Reason"
 msgstr "دلیل"
 
-msgid "Router Hash"
-msgstr "هش روتر"
+msgid "IP Address"
+msgstr "آدرس IP"
+
+msgid "Hostname"
+msgstr "نام میزبان"
 
 msgid "Expiry"
 msgstr "انقضا"
@@ -1528,6 +1534,14 @@ msgstr "شروع دوباره"
 msgid "Shutdown"
 msgstr "خاموش کردن"
 
+#, java-format
+msgid "Deferring restart for {0} until all servers have stopped"
+msgstr ""
+
+#, java-format
+msgid "Deferring shutdown for {0} until all servers have stopped"
+msgstr ""
+
 msgid "Restart imminent"
 msgstr "قریب الوقوع را مجدداً راه اندازی کنید"
 
@@ -2185,9 +2199,6 @@ msgstr "میکرو وبلاگ نویسی بین شبکه ای"
 msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "بخش جلویی مبتنی بر حریم خصوصی جایگزین برای Reddit"
 
-msgid "AI Image generation & Chat hub"
-msgstr "مرکز تولید تصویر هوش مصنوعی و چت"
-
 msgid "IRC Logs for multiple networks"
 msgstr "ثبت‌های IRC برای چندین شبکه"
 
@@ -2438,9 +2449,6 @@ msgstr "هویت"
 msgid "Network Database entry"
 msgstr "ورود پایگاه داده شبکه"
 
-msgid "IP Address"
-msgstr "آدرس IP"
-
 msgid "UDP Port"
 msgstr "پورت UDP"
 
@@ -2535,9 +2543,6 @@ msgstr "آدرس های حمل و نقل روتر"
 msgid "{0} is used for outbound connections only"
 msgstr "{0} فقط برای اتصالات خروجی استفاده می شود"
 
-msgid "Job runners"
-msgstr "دونده های شغلی"
-
 msgid "Active jobs"
 msgstr "مشاغل فعال"
 
@@ -2547,6 +2552,12 @@ msgstr "{0} پیش شروع شد"
 
 msgid "Completed jobs"
 msgstr "کارها را به تازگی تمام کردم"
+
+msgid "Runners"
+msgstr ""
+
+msgid "finished just now"
+msgstr ""
 
 #, java-format
 msgid "finished {0} ago"
@@ -2565,17 +2576,29 @@ msgstr "کار های زمان بندی شده"
 msgid "{0} starting in {1}"
 msgstr "{0} در {1} شروع می‌شود"
 
-msgid "DELAYED"
-msgstr "با تاخیر"
-
-msgid "OUT OF ORDER"
-msgstr "خارج از دستور"
-
 msgid "Queue Totals"
 msgstr "مجموع صف"
 
-msgid "Job Statistics (excluding single-shot jobs)"
-msgstr "آمار شغلی (به استثنای مشاغل تک شات)"
+msgid "Job Statistics"
+msgstr ""
+
+msgid "last minute"
+msgstr ""
+
+msgid "Job Lag"
+msgstr "تاخیر شغلی"
+
+msgid "AVG"
+msgstr "میانگین"
+
+msgid "PEAK"
+msgstr ""
+
+msgid "All Stats"
+msgstr ""
+
+msgid "Last 60s"
+msgstr ""
 
 msgid "Job"
 msgstr "شغل"
@@ -2645,9 +2668,6 @@ msgstr "مثلاً f یا XOfR"
 
 msgid "Cost"
 msgstr "هزینه"
-
-msgid "Country"
-msgstr "کشور"
 
 msgid "Country Codes"
 msgstr "کدهای کشور"
@@ -2919,9 +2939,6 @@ msgstr "پنهان"
 
 msgid "Published"
 msgstr "منتشرشده"
-
-msgid "Hostname"
-msgstr "نام میزبان"
 
 msgid "Whois"
 msgstr "Whois"
@@ -4066,11 +4083,11 @@ msgstr "تاخیر شغلی"
 msgid "Message delay"
 msgstr "تاخیر پیام"
 
-msgid "Average job delay / maximum delay"
-msgstr "میانگین تاخیر کار / حداکثر تاخیر"
+msgid "Average / peak job delay (last minute)"
+msgstr ""
 
-msgid "Average delay before scheduled jobs are run"
-msgstr "میانگین تاخیر قبل از اجرای کارهای برنامه ریزی شده"
+msgid "Average / max delay before scheduled jobs are run"
+msgstr ""
 
 msgid "Indicates how quickly outbound messages to other I2P routers are sent"
 msgstr "نشان می دهد که پیام های خروجی با چه سرعتی به مسیریاب های I2P دیگر ارسال می شوند"
@@ -4382,9 +4399,6 @@ msgstr "سیل"
 msgid "MIN"
 msgstr "دقیقه"
 
-msgid "AVG"
-msgstr "میانگین"
-
 msgid "MEDIAN"
 msgstr "میانه"
 
@@ -4475,14 +4489,6 @@ msgstr "دوره مهلت"
 msgid "Tunnel identity"
 msgstr "هویت تونل"
 
-#, java-format
-msgid "Limited display to the {0} tunnels with the highest usage"
-msgstr "نمایش محدود به تونل های {0} با بیشترین استفاده"
-
-#, java-format
-msgid "Limited display to the {0} most recent tunnels"
-msgstr "نمایش محدود به {0} جدیدترین تونل ها"
-
 msgid "Lifetime bandwidth usage"
 msgstr "استفاده از پهنای باند مادام العمر"
 
@@ -4501,6 +4507,9 @@ msgstr "تونل‌های ترانزیت بر اساس همتا (برتر {0})"
 
 msgid "Address"
 msgstr "آدرس"
+
+msgid "Messages"
+msgstr ""
 
 msgid "All Tunnels by Peer"
 msgstr "همه تونل ها توسط Peer"
@@ -4536,6 +4545,15 @@ msgstr "ورودی یا خروجی؟"
 msgid "In/Out"
 msgstr "ورودی/خروجی"
 
+msgid "Tunnel test status"
+msgstr ""
+
+msgid "Round trip time for last test"
+msgstr ""
+
+msgid "Latency"
+msgstr ""
+
 msgid "Gateway"
 msgstr "دروازه"
 
@@ -4544,6 +4562,24 @@ msgstr "شرکت کنندگان"
 
 msgid "Endpoint"
 msgstr "نقطه پایانی"
+
+msgid "Rejected as duplicate"
+msgstr ""
+
+msgid "Test successful"
+msgstr ""
+
+msgid "Test in progress"
+msgstr ""
+
+msgid "Test failing (1 failure)"
+msgstr ""
+
+msgid "Test failed (2 consecutive failures)"
+msgstr ""
+
+msgid "Not yet tested"
+msgstr ""
 
 msgid "Locally hosted tunnel"
 msgstr "تونل میزبانی محلی"
@@ -5215,6 +5251,9 @@ msgstr "مدیر همتا"
 
 msgid "Manual Peer Controls"
 msgstr "کنترل های دستی همتا"
+
+msgid "Router Hash"
+msgstr "هش روتر"
 
 msgid "Manually Ban / Unban a Peer"
 msgstr "دستی ممنوع / لغو ممنوعیت یک همتا"
@@ -5914,8 +5953,8 @@ msgstr "این تنظیم (در چند دقیقه) به شما امکان می �
 msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
 msgstr "این تنظیم، وقتی روی true تنظیم شود، ارتباط مستقیم را از تمام روترهای در کشور خودتان مسدود کرده و آن‌ها را تا زمان راه‌اندازی مجدد روتر به لیست ممنوعیت شما اضافه می‌کند. [پیش‌فرض false است]"
 
-msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
-msgstr "این تنظیم، وقتی روی true تنظیم شود، ارتباط مستقیم را از تمام روترهای لایه X که محدودیت تراکم G را منتشر می‌کنند و نه قابل دسترس و نه غیرقابل دسترس هستند، مسدود کرده و آن‌ها را به لیست ممنوعیت جلسه اضافه می‌کند. توجه داشته باشید که حالت پیشرفته باید فعال باشد تا این تنظیم اثر کند. [پیش‌فرض false است]"
+msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap (no transit tunnels), adding them to the session banlist. [Default is true]"
+msgstr ""
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "این تنظیم اجازه می دهد تا تست های SSU را غیرفعال کنید تا مشخص شود آیا روتر شما دارای فایروال است یا خیر و می توان آن را برای روترهایی که قطعا فایروال ندارند اما مشکلات فایروال متناوب را تجربه می کنند فعال کرد. "
@@ -7455,9 +7494,6 @@ msgstr "تعداد تونل‌های شرکت‌کننده که برای دیگ�
 msgid "Some basic indications of router overload:"
 msgstr "برخی از نشانه های اساسی اضافه بار روتر:"
 
-msgid "Job Lag"
-msgstr "تاخیر شغلی"
-
 msgid "How long jobs are waiting before execution. The job queue is listed on the <a href='/jobs'>Jobs page</a>. Unfortunately, there are several other job queues in the router that may be congested, and their status is not available in the router console. The job lag should generally be zero. If it is consistently higher than 500ms, your computer is very slow, your network is experiencing connectivity issues, or the router has serious problems. <a href='/configstats#jobQueue.jobLag'>[Enable graphing]</a>."
 msgstr "چه مدت کارها قبل از اجرا منتظر می مانند. "
 
@@ -8090,3 +8126,15 @@ msgstr "بعدی"
 
 msgid "Finished"
 msgstr "به پایان رسیده"
+
+
+
+
+
+
+
+
+#, java-format
+
+#, java-format
+

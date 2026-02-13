@@ -783,11 +783,17 @@ msgstr "الغاء المنع الآن"
 msgid "No bans currently active"
 msgstr "لا يوجد حظر نشط حاليا"
 
+msgid "Country"
+msgstr "البلد"
+
 msgid "Reason"
 msgstr "السبب"
 
-msgid "Router Hash"
-msgstr "بصمة الموجه"
+msgid "IP Address"
+msgstr "عنوان IP"
+
+msgid "Hostname"
+msgstr "اسم المضيف"
 
 msgid "Expiry"
 msgstr "انقضاء"
@@ -1544,6 +1550,14 @@ msgstr "أعد التشغيل"
 msgid "Shutdown"
 msgstr "إيقاف"
 
+#, java-format
+msgid "Deferring restart for {0} until all servers have stopped"
+msgstr ""
+
+#, java-format
+msgid "Deferring shutdown for {0} until all servers have stopped"
+msgstr ""
+
 msgid "Restart imminent"
 msgstr "أعد التشغيل الآن"
 
@@ -2217,9 +2231,6 @@ msgstr "عبر الشبكة المدونين الجزئي والمنتدى"
 msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "واجهة أمامية بديلة تركز على الخصوصية لـ Reddit"
 
-msgid "AI Image generation & Chat hub"
-msgstr "مركز توليد الصور بالذكاء الاصطناعي والدردشة"
-
 msgid "IRC Logs for multiple networks"
 msgstr "سجلات IRC لشبكات متعددة"
 
@@ -2470,9 +2481,6 @@ msgstr "الهوية"
 msgid "Network Database entry"
 msgstr "إدخال قاعدة بيانات الشبكة"
 
-msgid "IP Address"
-msgstr "عنوان IP"
-
 msgid "UDP Port"
 msgstr "منفذ UDP"
 
@@ -2567,9 +2575,6 @@ msgstr "عموان الموجه للنقل"
 msgid "{0} is used for outbound connections only"
 msgstr "{0} مستعملة للاتصال الخارجي فقط"
 
-msgid "Job runners"
-msgstr "العدائين الوظيفيين"
-
 msgid "Active jobs"
 msgstr "وظائف نشطة"
 
@@ -2579,6 +2584,12 @@ msgstr "بدأت منذ {0}"
 
 msgid "Completed jobs"
 msgstr "انتهيت للتو من المهام"
+
+msgid "Runners"
+msgstr ""
+
+msgid "finished just now"
+msgstr ""
 
 #, java-format
 msgid "finished {0} ago"
@@ -2597,17 +2608,29 @@ msgstr "العمليات المجدولة"
 msgid "{0} starting in {1}"
 msgstr "{0} يبدأ في {1}"
 
-msgid "DELAYED"
-msgstr "تأخر"
-
-msgid "OUT OF ORDER"
-msgstr "خارج النظام"
-
 msgid "Queue Totals"
 msgstr "إجماليات قائمة الانتظار"
 
-msgid "Job Statistics (excluding single-shot jobs)"
-msgstr "إحصائيات الوظائف (باستثناء الوظائف الفردية)"
+msgid "Job Statistics"
+msgstr ""
+
+msgid "last minute"
+msgstr ""
+
+msgid "Job Lag"
+msgstr "فريق العمل"
+
+msgid "AVG"
+msgstr "متوسط"
+
+msgid "PEAK"
+msgstr ""
+
+msgid "All Stats"
+msgstr ""
+
+msgid "Last 60s"
+msgstr ""
 
 msgid "Job"
 msgstr "الوظيفة"
@@ -2677,9 +2700,6 @@ msgstr "مثال f أو XOfR"
 
 msgid "Cost"
 msgstr "التكلفة"
-
-msgid "Country"
-msgstr "البلد"
 
 msgid "Country Codes"
 msgstr "رموز الدول"
@@ -2951,9 +2971,6 @@ msgstr "مختفي"
 
 msgid "Published"
 msgstr "تم نشره منذ"
-
-msgid "Hostname"
-msgstr "اسم المضيف"
 
 msgid "Whois"
 msgstr "من هو"
@@ -4130,11 +4147,11 @@ msgstr "تأخر"
 msgid "Message delay"
 msgstr "تأخر الرسالة"
 
-msgid "Average job delay / maximum delay"
-msgstr "متوسط ​​تأخير المهمة / الحد الأقصى للتأخير"
+msgid "Average / peak job delay (last minute)"
+msgstr ""
 
-msgid "Average delay before scheduled jobs are run"
-msgstr "متوسط ​​التأخير قبل تشغيل المهام المجدولة"
+msgid "Average / max delay before scheduled jobs are run"
+msgstr ""
 
 msgid "Indicates how quickly outbound messages to other I2P routers are sent"
 msgstr "يشير إلى مدى سرعة إرسال الرسائل الصادرة إلى أجهزة توجيه I2P الأخرى"
@@ -4454,9 +4471,6 @@ msgstr "مدافن الفيضانات"
 msgid "MIN"
 msgstr "دقيقة"
 
-msgid "AVG"
-msgstr "متوسط"
-
 msgid "MEDIAN"
 msgstr "متوسط"
 
@@ -4547,14 +4561,6 @@ msgstr "فترة السماح"
 msgid "Tunnel identity"
 msgstr "هوية النفق"
 
-#, java-format
-msgid "Limited display to the {0} tunnels with the highest usage"
-msgstr "عرض محدود للأنفاق {0} ذات الاستخدام الأعلى"
-
-#, java-format
-msgid "Limited display to the {0} most recent tunnels"
-msgstr "عرض محدود لأحدث الأنفاق {0}."
-
 msgid "Lifetime bandwidth usage"
 msgstr "درجة استعمال الشبكة"
 
@@ -4573,6 +4579,9 @@ msgstr "أنفاق العبور حسب النظير (أعلى {0})"
 
 msgid "Address"
 msgstr "العنوان"
+
+msgid "Messages"
+msgstr ""
 
 msgid "All Tunnels by Peer"
 msgstr "جميع الأنفاق حسب النظير"
@@ -4608,6 +4617,15 @@ msgstr "الواردة أو الصادرة؟"
 msgid "In/Out"
 msgstr "داخل/خارج"
 
+msgid "Tunnel test status"
+msgstr ""
+
+msgid "Round trip time for last test"
+msgstr ""
+
+msgid "Latency"
+msgstr ""
+
 msgid "Gateway"
 msgstr "البوابة"
 
@@ -4616,6 +4634,24 @@ msgstr "المشاركون"
 
 msgid "Endpoint"
 msgstr "نقطة النهاية"
+
+msgid "Rejected as duplicate"
+msgstr ""
+
+msgid "Test successful"
+msgstr ""
+
+msgid "Test in progress"
+msgstr ""
+
+msgid "Test failing (1 failure)"
+msgstr ""
+
+msgid "Test failed (2 consecutive failures)"
+msgstr ""
+
+msgid "Not yet tested"
+msgstr ""
 
 msgid "Locally hosted tunnel"
 msgstr "نفق مستضاف محليًا"
@@ -5287,6 +5323,9 @@ msgstr "مدير الأقران"
 
 msgid "Manual Peer Controls"
 msgstr "تحكم يدوي في النظائر"
+
+msgid "Router Hash"
+msgstr "بصمة الموجه"
 
 msgid "Manually Ban / Unban a Peer"
 msgstr "منع / الغاء منع يدويا لنظير"
@@ -5986,8 +6025,8 @@ msgstr "هذا الإعداد (بالدقائق) يتيح لك تكويف مدة
 msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
 msgstr "هذا الإعداد، عند التعيين على true، سيحظر الاتصال المباشر من جميع أجهزة التوجيه في بلدك ويضيفها إلى قائمة الحظر الخاصة بك حتى يعيد جهاز التوجيه التشغيل. [الافتراضي هو false]"
 
-msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
-msgstr "هذا الإعداد، عند التعيين على true، سيحظر الاتصال المباشر من جميع أجهزة توجيه المستوى X التي تنشر حد ازدحام G ولا تكون قابلة للوصول أو غير قابلة للوصول، وإضافتها إلى قائمة حظر الجلسة. لاحظ أنه يجب تمكين الوضع المتقدم لهذا الإعداد لكي يصبح ساري المفعول. [الافتراضي هو false]"
+msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap (no transit tunnels), adding them to the session banlist. [Default is true]"
+msgstr ""
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "هذا الإعداد يسمح بتعطيل اختبارات SSU لتحديد ما إذا كان الراوتر الخاص بك محمي بجدار ناري ويمكن تمكينه للرواتر التي لا شك أنها غير محمية بجدار ناري ولكنها تعاني من قضايا فرض جدار ناري متقطعة. في حالة تعطيل الاختبار، كلا SSU وـ NTCP يجب أن يبلغ عن عنوان IP العام الحالي الخاص بك على <a href=/info>صفحة معلومات الراوتر</a>. [إعادة تشغيل مطلوبة]"
@@ -7527,9 +7566,6 @@ msgstr "عدد الأنفاق المشاركة التي توجهها للآخر�
 msgid "Some basic indications of router overload:"
 msgstr "بعض المؤشرات الأساسية لحمل التوجيه الزائد:"
 
-msgid "Job Lag"
-msgstr "فريق العمل"
-
 msgid "How long jobs are waiting before execution. The job queue is listed on the <a href='/jobs'>Jobs page</a>. Unfortunately, there are several other job queues in the router that may be congested, and their status is not available in the router console. The job lag should generally be zero. If it is consistently higher than 500ms, your computer is very slow, your network is experiencing connectivity issues, or the router has serious problems. <a href='/configstats#jobQueue.jobLag'>[Enable graphing]</a>."
 msgstr "الوقت الذي تستغرقه المهام في االانتظار قبل التنفيذ. يتم عرض طابور المهام على صفحة <a href='/jobs'>المهام</a>. للأسف، هناك أطابير مهام أخرى داخل الموجه قد تكون مزدحمة، ولا يتوفر حالتها في لوحة التحكم. يفترض أن يكون تأخر المهام صفريًا عادة. إذا استمر في الارتفاع عن 500 ملي ثانية بشكل مستمر، فإما أن جهازك بطئ جدًا أو تواجه الشبكة مشكلات اتصال أو أن الموجه يعاني مشاكل خطيرة. <a href='/configstats#jobQueue.jobLag'>[تمكين الرسم البياني]</a>."
 
@@ -8162,3 +8198,15 @@ msgstr "التالي"
 
 msgid "Finished"
 msgstr "منتهي"
+
+
+
+
+
+
+
+
+#, java-format
+
+#, java-format
+

@@ -609,6 +609,39 @@ msgstr "新服务端隧道设置"
 msgid "Hostname"
 msgstr "主机名"
 
+msgid "Random startup delay (when auto-start is enabled) to defend against correlation attacks"
+msgstr ""
+
+msgid "Startup Delay"
+msgstr ""
+
+msgid "Minimum"
+msgstr ""
+
+msgid "Minimum startup delay"
+msgstr ""
+
+msgid "seconds"
+msgstr ""
+
+msgid "Maximum"
+msgstr ""
+
+msgid "Maximum startup delay"
+msgstr ""
+
+msgid "Add random delay before tunnel shutdown, then start graceful router shutdown / restart process"
+msgstr ""
+
+msgid "Shutdown Delay"
+msgstr ""
+
+msgid "Minimum shutdown delay"
+msgstr ""
+
+msgid "Maximum shutdown delay"
+msgstr ""
+
 msgid "Website Hostname"
 msgstr "网站主机名"
 
@@ -1090,8 +1123,8 @@ msgstr "无预览"
 msgid "Starting..."
 msgstr "正在启动..."
 
-msgid "Stop this Tunnel"
-msgstr "停止这个隧道"
+msgid "Starting in"
+msgstr ""
 
 msgid "Running"
 msgstr "运行中"
@@ -1105,14 +1138,17 @@ msgstr "入口"
 msgid "out"
 msgstr "出口"
 
+msgid "Stopped"
+msgstr "已停止"
+
+msgid "Stop this Tunnel"
+msgstr "停止这个隧道"
+
 msgid "Restart this Tunnel"
 msgstr "重启此隧道"
 
 msgid "Restart"
 msgstr "重启"
-
-msgid "Stopped"
-msgstr "已停止"
 
 msgid "Destination"
 msgstr "目标"

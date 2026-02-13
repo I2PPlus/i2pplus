@@ -609,6 +609,39 @@ msgstr "新しいサーバー構成"
 msgid "Hostname"
 msgstr "ホスト名"
 
+msgid "Random startup delay (when auto-start is enabled) to defend against correlation attacks"
+msgstr ""
+
+msgid "Startup Delay"
+msgstr ""
+
+msgid "Minimum"
+msgstr ""
+
+msgid "Minimum startup delay"
+msgstr ""
+
+msgid "seconds"
+msgstr ""
+
+msgid "Maximum"
+msgstr ""
+
+msgid "Maximum startup delay"
+msgstr ""
+
+msgid "Add random delay before tunnel shutdown, then start graceful router shutdown / restart process"
+msgstr ""
+
+msgid "Shutdown Delay"
+msgstr ""
+
+msgid "Minimum shutdown delay"
+msgstr ""
+
+msgid "Maximum shutdown delay"
+msgstr ""
+
 msgid "Website Hostname"
 msgstr "Webサイトのホスト名"
 
@@ -1090,8 +1123,8 @@ msgstr "プレビューなし"
 msgid "Starting..."
 msgstr "開始しています..."
 
-msgid "Stop this Tunnel"
-msgstr "このトンネルを止めてください"
+msgid "Starting in"
+msgstr ""
 
 msgid "Running"
 msgstr "稼働中"
@@ -1105,14 +1138,17 @@ msgstr "で"
 msgid "out"
 msgstr "アウト"
 
+msgid "Stopped"
+msgstr "停止しました"
+
+msgid "Stop this Tunnel"
+msgstr "このトンネルを止めてください"
+
 msgid "Restart this Tunnel"
 msgstr "このトンネルを再起動"
 
 msgid "Restart"
 msgstr "再起動"
-
-msgid "Stopped"
-msgstr "停止しました"
 
 msgid "Destination"
 msgstr "宛先"

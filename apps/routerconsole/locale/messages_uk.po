@@ -774,11 +774,17 @@ msgstr "розбанити"
 msgid "No bans currently active"
 msgstr "Наразі немає активних заборон"
 
+msgid "Country"
+msgstr "Країна"
+
 msgid "Reason"
 msgstr "Причина"
 
-msgid "Router Hash"
-msgstr "Хеш маршрутизатора"
+msgid "IP Address"
+msgstr "IP-адреса"
+
+msgid "Hostname"
+msgstr "Ім'я хосту"
 
 msgid "Expiry"
 msgstr "Термін дії"
@@ -1532,6 +1538,14 @@ msgstr "Перезапустити"
 msgid "Shutdown"
 msgstr "Зупинити"
 
+#, java-format
+msgid "Deferring restart for {0} until all servers have stopped"
+msgstr ""
+
+#, java-format
+msgid "Deferring shutdown for {0} until all servers have stopped"
+msgstr ""
+
 msgid "Restart imminent"
 msgstr "Перезапуск неминучий"
 
@@ -2193,9 +2207,6 @@ msgstr "Мікромережеве ведення блогів"
 msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Альтернативний зовнішній інтерфейс Reddit, орієнтований на конфіденційність"
 
-msgid "AI Image generation & Chat hub"
-msgstr "Центр генерації зображень ШІ та чату"
-
 msgid "IRC Logs for multiple networks"
 msgstr "Журнали IRC для кількох мереж"
 
@@ -2446,9 +2457,6 @@ msgstr "Ідентифікатор"
 msgid "Network Database entry"
 msgstr "Запис мережевої бази даних"
 
-msgid "IP Address"
-msgstr "IP-адреса"
-
 msgid "UDP Port"
 msgstr "порт UDP"
 
@@ -2543,9 +2551,6 @@ msgstr "Адреса транспортів маршрутизатора"
 msgid "{0} is used for outbound connections only"
 msgstr "{0} використовується тільки для вихідних з'єднань"
 
-msgid "Job runners"
-msgstr "Бігуни"
-
 msgid "Active jobs"
 msgstr "Активні робочі місця"
 
@@ -2555,6 +2560,12 @@ msgstr "розпочато {0} тому"
 
 msgid "Completed jobs"
 msgstr "Щойно закінчені роботи"
+
+msgid "Runners"
+msgstr ""
+
+msgid "finished just now"
+msgstr ""
 
 #, java-format
 msgid "finished {0} ago"
@@ -2573,17 +2584,29 @@ msgstr "Планові роботи"
 msgid "{0} starting in {1}"
 msgstr "{0} починається через {1}"
 
-msgid "DELAYED"
-msgstr "ЗАТРИМКА"
-
-msgid "OUT OF ORDER"
-msgstr "НЕ В ПОРЯДКУ"
-
 msgid "Queue Totals"
 msgstr "Підсумки черги"
 
-msgid "Job Statistics (excluding single-shot jobs)"
-msgstr "Статистика роботи (за винятком одноразових робіт)"
+msgid "Job Statistics"
+msgstr ""
+
+msgid "last minute"
+msgstr ""
+
+msgid "Job Lag"
+msgstr "Затримка завдань"
+
+msgid "AVG"
+msgstr "СЕР"
+
+msgid "PEAK"
+msgstr ""
+
+msgid "All Stats"
+msgstr ""
+
+msgid "Last 60s"
+msgstr ""
 
 msgid "Job"
 msgstr "Робота"
@@ -2653,9 +2676,6 @@ msgstr "напр. f або XOfR"
 
 msgid "Cost"
 msgstr "Вартість"
-
-msgid "Country"
-msgstr "Країна"
 
 msgid "Country Codes"
 msgstr "Коди країн"
@@ -2927,9 +2947,6 @@ msgstr "Приховано"
 
 msgid "Published"
 msgstr "Опубліковано"
-
-msgid "Hostname"
-msgstr "Ім'я хосту"
 
 msgid "Whois"
 msgstr "Whois"
@@ -4082,11 +4099,11 @@ msgstr "Відставання в роботі"
 msgid "Message delay"
 msgstr "Затримка повідомлення"
 
-msgid "Average job delay / maximum delay"
-msgstr "Середня затримка завдання / максимальна затримка"
+msgid "Average / peak job delay (last minute)"
+msgstr ""
 
-msgid "Average delay before scheduled jobs are run"
-msgstr "Середня затримка перед виконанням запланованих завдань"
+msgid "Average / max delay before scheduled jobs are run"
+msgstr ""
 
 msgid "Indicates how quickly outbound messages to other I2P routers are sent"
 msgstr "вказує, як швидко надсилаються вихідні повідомлення на інші маршрутизатори I2P"
@@ -4400,9 +4417,6 @@ msgstr "повені"
 msgid "MIN"
 msgstr "МІН"
 
-msgid "AVG"
-msgstr "СЕР"
-
 msgid "MEDIAN"
 msgstr "МЕДІАН"
 
@@ -4493,14 +4507,6 @@ msgstr "пільговий період"
 msgid "Tunnel identity"
 msgstr "Ідентифікація тунелю"
 
-#, java-format
-msgid "Limited display to the {0} tunnels with the highest usage"
-msgstr "Відображення обмежено {0} тунелями з найбільшим використанням"
-
-#, java-format
-msgid "Limited display to the {0} most recent tunnels"
-msgstr "Відображення обмежено до {0} останніх тунелів"
-
 msgid "Lifetime bandwidth usage"
 msgstr "Використання пропускної здатності за весь час"
 
@@ -4519,6 +4525,9 @@ msgstr "Транзитні тунелі за однорідним вузлом (
 
 msgid "Address"
 msgstr "Адреса"
+
+msgid "Messages"
+msgstr ""
 
 msgid "All Tunnels by Peer"
 msgstr "Усі тунелі за Peer"
@@ -4554,6 +4563,15 @@ msgstr "Вхідний чи вихідний?"
 msgid "In/Out"
 msgstr "Вхід/Вихід"
 
+msgid "Tunnel test status"
+msgstr ""
+
+msgid "Round trip time for last test"
+msgstr ""
+
+msgid "Latency"
+msgstr ""
+
 msgid "Gateway"
 msgstr "Шлюз"
 
@@ -4562,6 +4580,24 @@ msgstr "Учасники"
 
 msgid "Endpoint"
 msgstr "Кінцева точка"
+
+msgid "Rejected as duplicate"
+msgstr ""
+
+msgid "Test successful"
+msgstr ""
+
+msgid "Test in progress"
+msgstr ""
+
+msgid "Test failing (1 failure)"
+msgstr ""
+
+msgid "Test failed (2 consecutive failures)"
+msgstr ""
+
+msgid "Not yet tested"
+msgstr ""
 
 msgid "Locally hosted tunnel"
 msgstr "Локальний тунель"
@@ -5233,6 +5269,9 @@ msgstr "Менеджер рівного"
 
 msgid "Manual Peer Controls"
 msgstr "Ручний одноранговий контроль"
+
+msgid "Router Hash"
+msgstr "Хеш маршрутизатора"
 
 msgid "Manually Ban / Unban a Peer"
 msgstr "Вручну заборонити/розбанити однорангового пристрою"
@@ -5932,8 +5971,8 @@ msgstr "Це налаштування (в хвилинах) дозволяє в�
 msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
 msgstr "Це налаштування, коли встановлено в true, буде блокувати пряме спілкування від усіх маршрутизаторів у вашій власній країні та додавати їх до вашого списку блокування, доки ваш маршрутизатор не перезапуститься. [За замовчуванням false]"
 
-msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
-msgstr "Це налаштування, коли встановлено в true, буде блокувати пряме спілкування від усіх маршрутизаторів рівня X, які публікують обмеження перевантаження G і не є ні доступними, ні недоступними, додаючи їх до списку блокування сесії. Зауважте, що розширений режим повинен бути увімкнений, щоб це налаштування набуло чинності. [За замовчуванням false]"
+msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap (no transit tunnels), adding them to the session banlist. [Default is true]"
+msgstr ""
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "Це налаштування дозволяє відключити тести SSU для визначення того, чи знаходиться ваш роутер за файрволом, і його можна активувати для роутерів, які напевно не піддаються файрволу, але мають проблеми з тимчасовим блокуванням. У разі відключення тестування, як SSU, так і NTCP повинні відображати вашу поточну публічну IP-адресу на <a href=/info>сторінці інформації про роутер</a>. [Потрібний перезапуск]"
@@ -7473,9 +7512,6 @@ msgstr "Кількість тунелів участі, які ви прокла
 msgid "Some basic indications of router overload:"
 msgstr "Деякі базові ознаки перевантаження маршрутизатора:"
 
-msgid "Job Lag"
-msgstr "Затримка завдань"
-
 msgid "How long jobs are waiting before execution. The job queue is listed on the <a href='/jobs'>Jobs page</a>. Unfortunately, there are several other job queues in the router that may be congested, and their status is not available in the router console. The job lag should generally be zero. If it is consistently higher than 500ms, your computer is very slow, your network is experiencing connectivity issues, or the router has serious problems. <a href='/configstats#jobQueue.jobLag'>[Enable graphing]</a>."
 msgstr "На який час завдання чекають виконання. Черга завдань показана на сторінці <a href='/jobs'>Завдань</a>. На жаль, в маршрутизаторі є й інші черги завдань, що можуть бути завантажені, а їхній статус недоступний на консолі маршрутизатора. Зазвичай затримка завдань повинна дорівнювати нулю. Якщо вона постійно перевищує 500 мс, ваш комп'ютер дуже повільний, мережа випадково відключається або в маршрутизаторі є серйозні проблеми. <a href='/configstats#jobQueue.jobLag'>[Увімкнути графіку]</a>."
 
@@ -8108,3 +8144,15 @@ msgstr "Наступна"
 
 msgid "Finished"
 msgstr "Готово"
+
+
+
+
+
+
+
+
+#, java-format
+
+#, java-format
+

@@ -768,11 +768,17 @@ msgstr "지금 차단 해제"
 msgid "No bans currently active"
 msgstr "현재 활성화된 차단 없음"
 
+msgid "Country"
+msgstr "국가"
+
 msgid "Reason"
 msgstr "이유"
 
-msgid "Router Hash"
-msgstr "라우터 해시"
+msgid "IP Address"
+msgstr "IP 주소"
+
+msgid "Hostname"
+msgstr "호스트 이름"
 
 msgid "Expiry"
 msgstr "만기"
@@ -1524,6 +1530,14 @@ msgstr "재시작"
 msgid "Shutdown"
 msgstr "종료"
 
+#, java-format
+msgid "Deferring restart for {0} until all servers have stopped"
+msgstr ""
+
+#, java-format
+msgid "Deferring shutdown for {0} until all servers have stopped"
+msgstr ""
+
 msgid "Restart imminent"
 msgstr "재시작 임박"
 
@@ -2177,9 +2191,6 @@ msgstr "교차 네트워크 마이크로 블로깅"
 msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Reddit의 대체 개인 정보 중심 프론트 엔드"
 
-msgid "AI Image generation & Chat hub"
-msgstr "AI 이미지 생성 및 채팅 허브"
-
 msgid "IRC Logs for multiple networks"
 msgstr "여러 네트워크의 IRC 로그"
 
@@ -2430,9 +2441,6 @@ msgstr "신원"
 msgid "Network Database entry"
 msgstr "네트워크 데이터베이스 항목"
 
-msgid "IP Address"
-msgstr "IP 주소"
-
 msgid "UDP Port"
 msgstr "UDP 포트"
 
@@ -2527,9 +2535,6 @@ msgstr "라우터 트랜스포트 주소"
 msgid "{0} is used for outbound connections only"
 msgstr "{0}이 송신 연결에만 사용됩니다"
 
-msgid "Job runners"
-msgstr "일감 러너들"
-
 msgid "Active jobs"
 msgstr "활성화된 일감"
 
@@ -2539,6 +2544,12 @@ msgstr "{0} 전 시작됨"
 
 msgid "Completed jobs"
 msgstr "방금 끝난 일감"
+
+msgid "Runners"
+msgstr ""
+
+msgid "finished just now"
+msgstr ""
 
 #, java-format
 msgid "finished {0} ago"
@@ -2557,17 +2568,29 @@ msgstr "예약된 일감"
 msgid "{0} starting in {1}"
 msgstr "{0}은(는) {1}에 시작됩니다."
 
-msgid "DELAYED"
-msgstr "지연"
-
-msgid "OUT OF ORDER"
-msgstr "고장"
-
 msgid "Queue Totals"
 msgstr "대기열 총계"
 
-msgid "Job Statistics (excluding single-shot jobs)"
-msgstr "작업 통계(단일 작업 제외)"
+msgid "Job Statistics"
+msgstr ""
+
+msgid "last minute"
+msgstr ""
+
+msgid "Job Lag"
+msgstr "작업 지연"
+
+msgid "AVG"
+msgstr "평균"
+
+msgid "PEAK"
+msgstr ""
+
+msgid "All Stats"
+msgstr ""
+
+msgid "Last 60s"
+msgstr ""
 
 msgid "Job"
 msgstr "일감"
@@ -2637,9 +2660,6 @@ msgstr "예: f 또는 XOfR"
 
 msgid "Cost"
 msgstr "비용"
-
-msgid "Country"
-msgstr "국가"
 
 msgid "Country Codes"
 msgstr "국가 코드"
@@ -2911,9 +2931,6 @@ msgstr "숨겨짐"
 
 msgid "Published"
 msgstr "게시됨"
-
-msgid "Hostname"
-msgstr "호스트 이름"
 
 msgid "Whois"
 msgstr "Whois"
@@ -4050,11 +4067,11 @@ msgstr "일감 랙"
 msgid "Message delay"
 msgstr "메세지 딜레이"
 
-msgid "Average job delay / maximum delay"
-msgstr "평균 작업 지연/최대 지연"
+msgid "Average / peak job delay (last minute)"
+msgstr ""
 
-msgid "Average delay before scheduled jobs are run"
-msgstr "예약된 작업이 실행되기 전 평균 지연"
+msgid "Average / max delay before scheduled jobs are run"
+msgstr ""
 
 msgid "Indicates how quickly outbound messages to other I2P routers are sent"
 msgstr "얼마나 빨리 다른 I2P 라우터에게 메세지가 보내지는지 나타내기"
@@ -4364,9 +4381,6 @@ msgstr "홍수 채우기"
 msgid "MIN"
 msgstr "분"
 
-msgid "AVG"
-msgstr "평균"
-
 msgid "MEDIAN"
 msgstr "중앙값"
 
@@ -4457,14 +4471,6 @@ msgstr "유예 기간"
 msgid "Tunnel identity"
 msgstr "터널 식별"
 
-#, java-format
-msgid "Limited display to the {0} tunnels with the highest usage"
-msgstr "사용량이 가장 많은 터널 {0}개로 제한적으로 표시됩니다."
-
-#, java-format
-msgid "Limited display to the {0} most recent tunnels"
-msgstr "최근 터널 {0}개만 표시됨"
-
 msgid "Lifetime bandwidth usage"
 msgstr "전체 대역폭 사용량"
 
@@ -4483,6 +4489,9 @@ msgstr "피어별 트랜짓 터널 (상위 {0}개)"
 
 msgid "Address"
 msgstr "주소"
+
+msgid "Messages"
+msgstr ""
 
 msgid "All Tunnels by Peer"
 msgstr "피어별 모든 터널"
@@ -4518,6 +4527,15 @@ msgstr "인바운드인가 아웃바운드인가?"
 msgid "In/Out"
 msgstr "입력/출력"
 
+msgid "Tunnel test status"
+msgstr ""
+
+msgid "Round trip time for last test"
+msgstr ""
+
+msgid "Latency"
+msgstr ""
+
 msgid "Gateway"
 msgstr "게이트웨이"
 
@@ -4526,6 +4544,24 @@ msgstr "참가"
 
 msgid "Endpoint"
 msgstr "종점"
+
+msgid "Rejected as duplicate"
+msgstr ""
+
+msgid "Test successful"
+msgstr ""
+
+msgid "Test in progress"
+msgstr ""
+
+msgid "Test failing (1 failure)"
+msgstr ""
+
+msgid "Test failed (2 consecutive failures)"
+msgstr ""
+
+msgid "Not yet tested"
+msgstr ""
 
 msgid "Locally hosted tunnel"
 msgstr "로컬로 호스팅 된 터널"
@@ -5197,6 +5233,9 @@ msgstr "피어 매니저"
 
 msgid "Manual Peer Controls"
 msgstr "수동 피어 컨트롤"
+
+msgid "Router Hash"
+msgstr "라우터 해시"
 
 msgid "Manually Ban / Unban a Peer"
 msgstr "수동 피어 차단 / 해제"
@@ -5896,8 +5935,8 @@ msgstr "이 설정(분 단위)은 시작 후 NetDb의 RouterInfos의 유효성�
 msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
 msgstr "이 설정을 true로 설정하면, 자국의 모든 라우터와의 직접 통신을 차단하고 라우터가 재시작될 때까지 이들을 차단 목록에 추가합니다. [기본값은 false]"
 
-msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
-msgstr "이 설정을 true로 설정하면, G 혼잡 제한을 게시하고 도달 가능하지도 않은 X 계층 라우터와의 직접 통신을 차단하고 이들을 세션 차단 목록에 추가합니다. 이 설정이 적용되려면 고급 모드가 활성화되어야 함에 주의하세요. [기본값은 false]"
+msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap (no transit tunnels), adding them to the session banlist. [Default is true]"
+msgstr ""
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "이 설정은 라우터가 방화벽으로 막히고 있는지 여부를 확인하는 SSU 테스트를 비활성화하는 것을 허용하며, 분명히 방화벽으로 막히지 않았지만 간헐적인 방화벽 문제가 있는 라우터에 대해서만 활성화할 수 있습니다. 테스트가 비활성화된 경우, SSU 및 NTCP 모두 <a href=/info>라우터 정보 페이지</a>에서 현재 공인 IP 주소를 보고해야 합니다. [재부팅이 필요함]"
@@ -7437,9 +7476,6 @@ msgstr "다른 사용자를 위해 라우팅하는 참여 터널 수를 모든 �
 msgid "Some basic indications of router overload:"
 msgstr "라우터 과부하에 대한 몇 가지 기본 표시:"
 
-msgid "Job Lag"
-msgstr "작업 지연"
-
 msgid "How long jobs are waiting before execution. The job queue is listed on the <a href='/jobs'>Jobs page</a>. Unfortunately, there are several other job queues in the router that may be congested, and their status is not available in the router console. The job lag should generally be zero. If it is consistently higher than 500ms, your computer is very slow, your network is experiencing connectivity issues, or the router has serious problems. <a href='/configstats#jobQueue.jobLag'>[Enable graphing]</a>."
 msgstr "실행 전 대기하는 작업의 시간입니다. 작업 큐는 <a href='/jobs'>작업 페이지</a>에 나열됩니다. 불행히도 라우터에는 혼잡할 수 있는 여러 다른 작업 큐가 있으며, 이들의 상태는 라우터 콘솔에서 볼 수 없습니다. 작업 지연 시간은 일반적으로 0이어야 합니다. 500ms보다 높으면 컴퓨터가 매우 느린지, 네트워크에 연결 문제가 있는지 또는 라우터에 심각한 문제가 있는지 확인해야 합니다. <a href='/configstats#jobQueue.jobLag'>[그래프 활성화]</a>"
 
@@ -8072,3 +8108,15 @@ msgstr "다음"
 
 msgid "Finished"
 msgstr "완료됨"
+
+
+
+
+
+
+
+
+#, java-format
+
+#, java-format
+

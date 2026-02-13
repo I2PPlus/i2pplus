@@ -619,6 +619,39 @@ msgstr "Configurare server nouă"
 msgid "Hostname"
 msgstr "Nume host"
 
+msgid "Random startup delay (when auto-start is enabled) to defend against correlation attacks"
+msgstr ""
+
+msgid "Startup Delay"
+msgstr ""
+
+msgid "Minimum"
+msgstr ""
+
+msgid "Minimum startup delay"
+msgstr ""
+
+msgid "seconds"
+msgstr ""
+
+msgid "Maximum"
+msgstr ""
+
+msgid "Maximum startup delay"
+msgstr ""
+
+msgid "Add random delay before tunnel shutdown, then start graceful router shutdown / restart process"
+msgstr ""
+
+msgid "Shutdown Delay"
+msgstr ""
+
+msgid "Minimum shutdown delay"
+msgstr ""
+
+msgid "Maximum shutdown delay"
+msgstr ""
+
 msgid "Website Hostname"
 msgstr "Nume gazdă site"
 
@@ -1100,8 +1133,8 @@ msgstr "Nici o previzualizare"
 msgid "Starting..."
 msgstr "Pornire..."
 
-msgid "Stop this Tunnel"
-msgstr "Opriți acest tunel"
+msgid "Starting in"
+msgstr ""
 
 msgid "Running"
 msgstr "În execuţie"
@@ -1115,14 +1148,17 @@ msgstr "în"
 msgid "out"
 msgstr "afară"
 
+msgid "Stopped"
+msgstr "Oprit"
+
+msgid "Stop this Tunnel"
+msgstr "Opriți acest tunel"
+
 msgid "Restart this Tunnel"
 msgstr "Repornire tunel"
 
 msgid "Restart"
 msgstr "Repornire"
-
-msgid "Stopped"
-msgstr "Oprit"
 
 msgid "Destination"
 msgstr "Destinație"

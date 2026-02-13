@@ -771,11 +771,17 @@ msgstr "Unban nu"
 msgid "No bans currently active"
 msgstr "Ingen forbud er aktive i øjeblikket"
 
+msgid "Country"
+msgstr "Land"
+
 msgid "Reason"
 msgstr "Årsag"
 
-msgid "Router Hash"
-msgstr "Router Hash"
+msgid "IP Address"
+msgstr "IP-adresse"
+
+msgid "Hostname"
+msgstr "Værtsnavn"
 
 msgid "Expiry"
 msgstr "Udløb"
@@ -1528,6 +1534,14 @@ msgstr "Genstart"
 msgid "Shutdown"
 msgstr "Luk ned"
 
+#, java-format
+msgid "Deferring restart for {0} until all servers have stopped"
+msgstr ""
+
+#, java-format
+msgid "Deferring shutdown for {0} until all servers have stopped"
+msgstr ""
+
 msgid "Restart imminent"
 msgstr "Genstarter om et øjeblik"
 
@@ -2185,9 +2199,6 @@ msgstr "Krydsnetværk mikroblogging og fora"
 msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Alternativ privatlivsfokuseret frontend til Reddit"
 
-msgid "AI Image generation & Chat hub"
-msgstr "AI billedgenerering & Chat-hub"
-
 msgid "IRC Logs for multiple networks"
 msgstr "IRC-logfiler til flere netværk"
 
@@ -2438,9 +2449,6 @@ msgstr "Identitet"
 msgid "Network Database entry"
 msgstr "Netværksdatabaseindtastning"
 
-msgid "IP Address"
-msgstr "IP-adresse"
-
 msgid "UDP Port"
 msgstr "UDP-port"
 
@@ -2535,9 +2543,6 @@ msgstr "Router Transport Adresse"
 msgid "{0} is used for outbound connections only"
 msgstr "{0} bruges kun til udadgående forbindelser"
 
-msgid "Job runners"
-msgstr "Job körer"
-
 msgid "Active jobs"
 msgstr "Aktive job"
 
@@ -2547,6 +2552,12 @@ msgstr "begyndte {0} siden"
 
 msgid "Completed jobs"
 msgstr "Lige afslutet jobs"
+
+msgid "Runners"
+msgstr ""
+
+msgid "finished just now"
+msgstr ""
 
 #, java-format
 msgid "finished {0} ago"
@@ -2565,17 +2576,29 @@ msgstr "Planlagte jobs"
 msgid "{0} starting in {1}"
 msgstr "{0} starter om {1}"
 
-msgid "DELAYED"
-msgstr "FORSINKET"
-
-msgid "OUT OF ORDER"
-msgstr "UDEN RETNING"
-
 msgid "Queue Totals"
 msgstr "Køtotaler"
 
-msgid "Job Statistics (excluding single-shot jobs)"
-msgstr "Jobstatistik (ekskl. enkeltstående job)"
+msgid "Job Statistics"
+msgstr ""
+
+msgid "last minute"
+msgstr ""
+
+msgid "Job Lag"
+msgstr "Job forsinkelse"
+
+msgid "AVG"
+msgstr "AVG"
+
+msgid "PEAK"
+msgstr ""
+
+msgid "All Stats"
+msgstr ""
+
+msgid "Last 60s"
+msgstr ""
 
 msgid "Job"
 msgstr "Job"
@@ -2645,9 +2668,6 @@ msgstr "f.eks. f eller XOfR"
 
 msgid "Cost"
 msgstr "Omkostninger"
-
-msgid "Country"
-msgstr "Land"
 
 msgid "Country Codes"
 msgstr "Landekoder"
@@ -2919,9 +2939,6 @@ msgstr "Gemt"
 
 msgid "Published"
 msgstr "Publiceret"
-
-msgid "Hostname"
-msgstr "Værtsnavn"
 
 msgid "Whois"
 msgstr "Whois"
@@ -4066,11 +4083,11 @@ msgstr "Arbejdsforsinkelse"
 msgid "Message delay"
 msgstr "Besked fosinkelse"
 
-msgid "Average job delay / maximum delay"
-msgstr "Gennemsnitlig jobforsinkelse / maksimal forsinkelse"
+msgid "Average / peak job delay (last minute)"
+msgstr ""
 
-msgid "Average delay before scheduled jobs are run"
-msgstr "Gennemsnitlig forsinkelse før planlagte job køres"
+msgid "Average / max delay before scheduled jobs are run"
+msgstr ""
 
 msgid "Indicates how quickly outbound messages to other I2P routers are sent"
 msgstr "Indikerer hvor hurtigt udgående beskeder til andre i2P routere er sendt"
@@ -4382,9 +4399,6 @@ msgstr "fyldninger"
 msgid "MIN"
 msgstr "MIN"
 
-msgid "AVG"
-msgstr "AVG"
-
 msgid "MEDIAN"
 msgstr "MIDLER"
 
@@ -4475,14 +4489,6 @@ msgstr "Udsættelses periode"
 msgid "Tunnel identity"
 msgstr "Tunnelidentitet"
 
-#, java-format
-msgid "Limited display to the {0} tunnels with the highest usage"
-msgstr "Begrænset visning til de {0} tunneler med det højeste forbrug"
-
-#, java-format
-msgid "Limited display to the {0} most recent tunnels"
-msgstr "Begrænset visning til de {0} seneste tunneler"
-
 msgid "Lifetime bandwidth usage"
 msgstr "Livstids båndbredde forbrug"
 
@@ -4501,6 +4507,9 @@ msgstr "Transit-tunnler efter peer (Top {0})"
 
 msgid "Address"
 msgstr "Adresse"
+
+msgid "Messages"
+msgstr ""
 
 msgid "All Tunnels by Peer"
 msgstr "Alle tunneler af Peer"
@@ -4536,6 +4545,15 @@ msgstr "Indgående eller udgående?"
 msgid "In/Out"
 msgstr "Ind/Ud"
 
+msgid "Tunnel test status"
+msgstr ""
+
+msgid "Round trip time for last test"
+msgstr ""
+
+msgid "Latency"
+msgstr ""
+
 msgid "Gateway"
 msgstr "Gateway"
 
@@ -4544,6 +4562,24 @@ msgstr "Deltagernde "
 
 msgid "Endpoint"
 msgstr "Endepunkt"
+
+msgid "Rejected as duplicate"
+msgstr ""
+
+msgid "Test successful"
+msgstr ""
+
+msgid "Test in progress"
+msgstr ""
+
+msgid "Test failing (1 failure)"
+msgstr ""
+
+msgid "Test failed (2 consecutive failures)"
+msgstr ""
+
+msgid "Not yet tested"
+msgstr ""
 
 msgid "Locally hosted tunnel"
 msgstr "Lokalt hostet tunnel"
@@ -5215,6 +5251,9 @@ msgstr "Peer Manager"
 
 msgid "Manual Peer Controls"
 msgstr "Manuelle Peer Styring"
+
+msgid "Router Hash"
+msgstr "Router Hash"
 
 msgid "Manually Ban / Unban a Peer"
 msgstr "Manuelt Banning / Unbanning af Peer"
@@ -5914,8 +5953,8 @@ msgstr "Denne indstilling (i minutter) giver dig mulighed for manuelt at konfigu
 msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
 msgstr "Denne indstilling, når den er sat til sand, vil blokere direkte kommunikation fra alle routere i dit eget land og tilføje dem til din banliste indtil din router genstarter. [Standard er falsk]"
 
-msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
-msgstr "Denne indstilling, når den er sat til sand, vil blokere direkte kommunikation fra alle X-lag routere der publicerer en G trængselsgrænse og hverken er tilgængelige eller utilgængelige, hvilket tilføjer dem til sessions-banlisten. Bemærk at avanceret tilstand skal være aktiveret for at denne indstilling træder i kraft. [Standard er falsk]"
+msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap (no transit tunnels), adding them to the session banlist. [Default is true]"
+msgstr ""
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "Denne indstilling tillader at deaktivere SSU-test for at afgøre om din router er firewall-sikret og kan aktiveres for routere, der helt sikkert ikke er firewall-sikret, men oplever intermittent firewalling-problemer. Hvis testning er deaktiveret, bør både SSU og NTCP rapportere din aktuelle offentlige ip-adresse på <a href=/info>router informationssiden</a>. [Genstart krævet]"
@@ -7455,9 +7494,6 @@ msgstr "Antallet af deltagende tunneler, som du viderebefordrer for andre, divid
 msgid "Some basic indications of router overload:"
 msgstr "Nogle grundlæggende indikationer på overbelastning af routeren:"
 
-msgid "Job Lag"
-msgstr "Job forsinkelse"
-
 msgid "How long jobs are waiting before execution. The job queue is listed on the <a href='/jobs'>Jobs page</a>. Unfortunately, there are several other job queues in the router that may be congested, and their status is not available in the router console. The job lag should generally be zero. If it is consistently higher than 500ms, your computer is very slow, your network is experiencing connectivity issues, or the router has serious problems. <a href='/configstats#jobQueue.jobLag'>[Enable graphing]</a>."
 msgstr "Hvor længe job venter før udførelse. Job-køen er anført på <a href='/jobs'>Jobsiden</a>. Desværre er der flere andre jobkøer i routeren, der kan være overbelastet, og deres status er ikke tilgængelig i routerkonsollen. Jobforsinkelsen bør generelt være nul. Hvis den konsekvent er højere end 500 ms, er din computer meget langsom, dit netværk har forbindelsesproblemer, eller routeren har alvorlige problemer. <a href='/configstats#jobQueue.jobLag'>[Aktivér graf]</a>."
 
@@ -8090,3 +8126,15 @@ msgstr "Næste"
 
 msgid "Finished"
 msgstr "Færdig"
+
+
+
+
+
+
+
+
+#, java-format
+
+#, java-format
+

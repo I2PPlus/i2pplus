@@ -771,11 +771,17 @@ msgstr "indi qadağanı ləğv edin"
 msgid "No bans currently active"
 msgstr "Hazırda aktiv qadağa yoxdur"
 
+msgid "Country"
+msgstr "Ölkə"
+
 msgid "Reason"
 msgstr "Səbəb"
 
-msgid "Router Hash"
-msgstr "Router Hash"
+msgid "IP Address"
+msgstr "IP ünvanı"
+
+msgid "Hostname"
+msgstr "Host adı"
 
 msgid "Expiry"
 msgstr "İstifadə müddəti"
@@ -1528,6 +1534,14 @@ msgstr "Yenidən başla"
 msgid "Shutdown"
 msgstr "Söndür"
 
+#, java-format
+msgid "Deferring restart for {0} until all servers have stopped"
+msgstr ""
+
+#, java-format
+msgid "Deferring shutdown for {0} until all servers have stopped"
+msgstr ""
+
 msgid "Restart imminent"
 msgstr "Qaçılmaz yenidən başladın"
 
@@ -2185,9 +2199,6 @@ msgstr "Şəbəkələr arası mikro-bloq"
 msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Reddit üçün alternativ məxfiliyə yönəlmiş ön hissə"
 
-msgid "AI Image generation & Chat hub"
-msgstr "AI Image generation & Chat hub"
-
 msgid "IRC Logs for multiple networks"
 msgstr "Çoxlu şəbəkələr üçün IRC qeydləri"
 
@@ -2438,9 +2449,6 @@ msgstr "Şəxsiyyət"
 msgid "Network Database entry"
 msgstr "Şəbəkə verilənlər bazasına giriş"
 
-msgid "IP Address"
-msgstr "IP ünvanı"
-
 msgid "UDP Port"
 msgstr "UDP Portu"
 
@@ -2535,9 +2543,6 @@ msgstr "Router Nəqliyyat Ünvanları"
 msgid "{0} is used for outbound connections only"
 msgstr "{0} yalnız gedən bağlantılar üçün istifadə olunur"
 
-msgid "Job runners"
-msgstr "İşçilər"
-
 msgid "Active jobs"
 msgstr "Aktiv işlər"
 
@@ -2547,6 +2552,12 @@ msgstr "{0} əvvəl başladı"
 
 msgid "Completed jobs"
 msgstr "İşi yenicə bitirdim"
+
+msgid "Runners"
+msgstr ""
+
+msgid "finished just now"
+msgstr ""
 
 #, java-format
 msgid "finished {0} ago"
@@ -2565,17 +2576,29 @@ msgstr "Planlaşdırılan işlər"
 msgid "{0} starting in {1}"
 msgstr "{0} {1} ilə başlayır"
 
-msgid "DELAYED"
-msgstr "GECİKTİ"
-
-msgid "OUT OF ORDER"
-msgstr "SİPARİŞDƏN"
-
 msgid "Queue Totals"
 msgstr "Növbə Cəmi"
 
-msgid "Job Statistics (excluding single-shot jobs)"
-msgstr "İş Statistikası (tək çəkiliş işləri istisna olmaqla)"
+msgid "Job Statistics"
+msgstr ""
+
+msgid "last minute"
+msgstr ""
+
+msgid "Job Lag"
+msgstr "İş Gecikmesi"
+
+msgid "AVG"
+msgstr "AVG"
+
+msgid "PEAK"
+msgstr ""
+
+msgid "All Stats"
+msgstr ""
+
+msgid "Last 60s"
+msgstr ""
 
 msgid "Job"
 msgstr "İş"
@@ -2645,9 +2668,6 @@ msgstr "e.g. f or XOfR"
 
 msgid "Cost"
 msgstr "Xərc"
-
-msgid "Country"
-msgstr "Ölkə"
 
 msgid "Country Codes"
 msgstr "Ölkə Kodları"
@@ -2919,9 +2939,6 @@ msgstr "Gizli"
 
 msgid "Published"
 msgstr "Nəşr edilmişdir"
-
-msgid "Hostname"
-msgstr "Host adı"
 
 msgid "Whois"
 msgstr "Whois"
@@ -4066,11 +4083,11 @@ msgstr "İş gecikməsi"
 msgid "Message delay"
 msgstr "Mesaj gecikməsi"
 
-msgid "Average job delay / maximum delay"
-msgstr "Orta iş gecikməsi / maksimum gecikmə"
+msgid "Average / peak job delay (last minute)"
+msgstr ""
 
-msgid "Average delay before scheduled jobs are run"
-msgstr "Planlaşdırılmış işlərin icrasından əvvəl orta gecikmə"
+msgid "Average / max delay before scheduled jobs are run"
+msgstr ""
 
 msgid "Indicates how quickly outbound messages to other I2P routers are sent"
 msgstr "Digər I2P marşrutlaşdırıcılarına gedən mesajların nə qədər tez göndərildiyini göstərir"
@@ -4382,9 +4399,6 @@ msgstr "daşqınlar"
 msgid "MIN"
 msgstr "DƏQ"
 
-msgid "AVG"
-msgstr "AVG"
-
 msgid "MEDIAN"
 msgstr "MEDIAN"
 
@@ -4475,14 +4489,6 @@ msgstr "güzəşt müddəti"
 msgid "Tunnel identity"
 msgstr "Tunel şəxsiyyəti"
 
-#, java-format
-msgid "Limited display to the {0} tunnels with the highest usage"
-msgstr "Ən yüksək istifadəyə malik {0} tunel üçün məhdud ekran"
-
-#, java-format
-msgid "Limited display to the {0} most recent tunnels"
-msgstr "{0} ən son tunel üçün məhdud ekran"
-
 msgid "Lifetime bandwidth usage"
 msgstr "Ömür boyu bant genişliyi istifadəsi"
 
@@ -4501,6 +4507,9 @@ msgstr "Transit Tunnels by Peer (Top {0})"
 
 msgid "Address"
 msgstr "Ünvan"
+
+msgid "Messages"
+msgstr ""
 
 msgid "All Tunnels by Peer"
 msgstr "Peer tərəfindən bütün tunellər"
@@ -4536,6 +4545,15 @@ msgstr "Gələn və ya gedən?"
 msgid "In/Out"
 msgstr "Giriş/Çıxış"
 
+msgid "Tunnel test status"
+msgstr ""
+
+msgid "Round trip time for last test"
+msgstr ""
+
+msgid "Latency"
+msgstr ""
+
 msgid "Gateway"
 msgstr "Darvaza"
 
@@ -4544,6 +4562,24 @@ msgstr "İştirakçılar"
 
 msgid "Endpoint"
 msgstr "Son nöqtə"
+
+msgid "Rejected as duplicate"
+msgstr ""
+
+msgid "Test successful"
+msgstr ""
+
+msgid "Test in progress"
+msgstr ""
+
+msgid "Test failing (1 failure)"
+msgstr ""
+
+msgid "Test failed (2 consecutive failures)"
+msgstr ""
+
+msgid "Not yet tested"
+msgstr ""
 
 msgid "Locally hosted tunnel"
 msgstr "Yerli ev sahibliyi edilən tunel"
@@ -5215,6 +5251,9 @@ msgstr "Həmyaşıd menecer"
 
 msgid "Manual Peer Controls"
 msgstr "Əl ilə həmyaşıd konfiqurasiya"
+
+msgid "Router Hash"
+msgstr "Router Hash"
 
 msgid "Manually Ban / Unban a Peer"
 msgstr "Həmyaşıdları Əllə Qadağa / Qadağadan Çıxar"
@@ -5914,8 +5953,8 @@ msgstr "Bu ayar (dəqiqələrlə) sizin istəyinizə əsasən yönləndirici mə
 msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
 msgstr "Bu parametr doğru olaraq təyin edildikdə, ölkənizdəki bütün marşrutlaşdırıcılardan birbaşa ünsiyyəti bloklayacaq və ruteriniz yenidən başlayana qədər onları qadağan siyahınıza əlavə edəcək. [Standart yanlışdır]"
 
-msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
-msgstr "Bu parametr doğru olaraq təyin edildikdə, G tıxac həddi dərc edən və nə çatıla bilən, nə də çatıla bilməyən X tier marşrutlaşdırıcılarından birbaşa ünsiyyəti bloklayacaq və onları seans qadağan siyahısına əlavə edəcək. Qeyd edək ki, bu parametrin qüvvəyə minməsi üçün inkişaf etmiş rejim aktivləşdirilməlidir. [Standart yanlışdır]"
+msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap (no transit tunnels), adding them to the session banlist. [Default is true]"
+msgstr ""
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "Bu parametr, ruterinizin möhkəm olub-olmadığını müəyyən etmək üçün SSU testlərini deaktiv etməyə icazə verir və mütləq firewalled olmayan, lakin aralıq yanğına qarşı problemlər yaşayan marşrutlaşdırıcılar üçün aktivləşdirilə bilər. Test qeyri-aktiv edildikdə, həm SDU, həm də NTCP <a href=/info>marşrutlaşdırıcı məlumat səhifəsində cari ictimai ip ünvanınızı bildirməlidir</a>. [Yenidən başladın tələb olunur]"
@@ -7455,9 +7494,6 @@ msgstr "Digər insanlar üçün yönəldiyimiz tünellərin sayı, istrahatçı 
 msgid "Some basic indications of router overload:"
 msgstr "Rauterin aşırı yüklü olduğunun bazı temel belirtileri:"
 
-msgid "Job Lag"
-msgstr "İş Gecikmesi"
-
 msgid "How long jobs are waiting before execution. The job queue is listed on the <a href='/jobs'>Jobs page</a>. Unfortunately, there are several other job queues in the router that may be congested, and their status is not available in the router console. The job lag should generally be zero. If it is consistently higher than 500ms, your computer is very slow, your network is experiencing connectivity issues, or the router has serious problems. <a href='/configstats#jobQueue.jobLag'>[Enable graphing]</a>."
 msgstr "İşlerin işletilmeden önce ne kadar süre beklediği. İş kuyruğu <a href='/jobs'>İşler sayfasında</a> listelenir. Ne yazık ki, rauterde sıkışan başka iş kuyrukları bulunmaktadır ve durumları rauter konsolunda mevcut değildir. İş gecikmesi genellikle sıfır olmalıdır. Eğer sürekli olarak 500ms'den daha yüksekse, bilgisayarınız çok yavaş, ağınız bağlantı sorunları yaşıyor ya da rauterde ciddi sorunlar var demektir. <a href='/configstats#jobQueue.jobLag'>[Grafik çizimini etkinleştir]</a>."
 
@@ -8090,3 +8126,15 @@ msgstr "Növbəti"
 
 msgid "Finished"
 msgstr "Bitdi"
+
+
+
+
+
+
+
+
+#, java-format
+
+#, java-format
+

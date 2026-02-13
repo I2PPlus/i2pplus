@@ -614,6 +614,39 @@ msgstr "Uusi palvelinkokoonpano"
 msgid "Hostname"
 msgstr "Tietokoneen nimi"
 
+msgid "Random startup delay (when auto-start is enabled) to defend against correlation attacks"
+msgstr ""
+
+msgid "Startup Delay"
+msgstr ""
+
+msgid "Minimum"
+msgstr ""
+
+msgid "Minimum startup delay"
+msgstr ""
+
+msgid "seconds"
+msgstr ""
+
+msgid "Maximum"
+msgstr ""
+
+msgid "Maximum startup delay"
+msgstr ""
+
+msgid "Add random delay before tunnel shutdown, then start graceful router shutdown / restart process"
+msgstr ""
+
+msgid "Shutdown Delay"
+msgstr ""
+
+msgid "Minimum shutdown delay"
+msgstr ""
+
+msgid "Maximum shutdown delay"
+msgstr ""
+
 msgid "Website Hostname"
 msgstr "Verkkosivuston isäntänimi"
 
@@ -1095,8 +1128,8 @@ msgstr "Ei esikatselua"
 msgid "Starting..."
 msgstr "Käynnistetään..."
 
-msgid "Stop this Tunnel"
-msgstr "Pysäytä tämä tunneli"
+msgid "Starting in"
+msgstr ""
 
 msgid "Running"
 msgstr "Käynnissä"
@@ -1110,14 +1143,17 @@ msgstr "sisään"
 msgid "out"
 msgstr "ulos"
 
+msgid "Stopped"
+msgstr "Pysäytetty"
+
+msgid "Stop this Tunnel"
+msgstr "Pysäytä tämä tunneli"
+
 msgid "Restart this Tunnel"
 msgstr "Käynnistä tämä tunneli uudelleen"
 
 msgid "Restart"
 msgstr "Käynnistä uudelleen"
-
-msgid "Stopped"
-msgstr "Pysäytetty"
 
 msgid "Destination"
 msgstr "Kohde"

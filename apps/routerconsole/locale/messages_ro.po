@@ -774,11 +774,17 @@ msgstr "unban acum"
 msgid "No bans currently active"
 msgstr "Nicio interdicție activă în prezent"
 
+msgid "Country"
+msgstr "Regiune"
+
 msgid "Reason"
 msgstr "Motivul"
 
-msgid "Router Hash"
-msgstr "Router Hash"
+msgid "IP Address"
+msgstr "Adresa IP"
+
+msgid "Hostname"
+msgstr "Nume gazdă"
 
 msgid "Expiry"
 msgstr "Expirare"
@@ -1532,6 +1538,14 @@ msgstr "Reporniți"
 msgid "Shutdown"
 msgstr "Opriți"
 
+#, java-format
+msgid "Deferring restart for {0} until all servers have stopped"
+msgstr ""
+
+#, java-format
+msgid "Deferring shutdown for {0} until all servers have stopped"
+msgstr ""
+
 msgid "Restart imminent"
 msgstr "Repornire iminentă"
 
@@ -2193,9 +2207,6 @@ msgstr "Micro-blogging și forumuri încrucișate"
 msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Front-end alternativ centrat pe confidențialitate pentru Reddit"
 
-msgid "AI Image generation & Chat hub"
-msgstr "Centru de generare imagini AI și chat"
-
 msgid "IRC Logs for multiple networks"
 msgstr "Jurnalele IRC pentru mai multe rețele"
 
@@ -2446,9 +2457,6 @@ msgstr "Identitate"
 msgid "Network Database entry"
 msgstr "Intrare în baza de date în rețea"
 
-msgid "IP Address"
-msgstr "Adresa IP"
-
 msgid "UDP Port"
 msgstr "Port UDP"
 
@@ -2543,9 +2551,6 @@ msgstr "Adrese de transport Router"
 msgid "{0} is used for outbound connections only"
 msgstr "{0} conexiuni de ieșire sunt folosite"
 
-msgid "Job runners"
-msgstr "Activități curente"
-
 msgid "Active jobs"
 msgstr "Sarcini active"
 
@@ -2555,6 +2560,12 @@ msgstr "Început {0} în urmă"
 
 msgid "Completed jobs"
 msgstr "Sarcină tocmai terminată"
+
+msgid "Runners"
+msgstr ""
+
+msgid "finished just now"
+msgstr ""
 
 #, java-format
 msgid "finished {0} ago"
@@ -2573,17 +2584,29 @@ msgstr "Sarcini programate"
 msgid "{0} starting in {1}"
 msgstr "{0} începe în {1}"
 
-msgid "DELAYED"
-msgstr "ÎNTÂRZIAT"
-
-msgid "OUT OF ORDER"
-msgstr "NECOMANDĂ"
-
 msgid "Queue Totals"
 msgstr "Totaluri în coadă"
 
-msgid "Job Statistics (excluding single-shot jobs)"
-msgstr "Statistici de locuri de muncă (excluzând lucrările cu o singură înregistrare)"
+msgid "Job Statistics"
+msgstr ""
+
+msgid "last minute"
+msgstr ""
+
+msgid "Job Lag"
+msgstr "Întârzierea locului de muncă"
+
+msgid "AVG"
+msgstr "AVG"
+
+msgid "PEAK"
+msgstr ""
+
+msgid "All Stats"
+msgstr ""
+
+msgid "Last 60s"
+msgstr ""
 
 msgid "Job"
 msgstr "Sarcină"
@@ -2653,9 +2676,6 @@ msgstr "de ex. f sau XOfR"
 
 msgid "Cost"
 msgstr "Cost"
-
-msgid "Country"
-msgstr "Regiune"
 
 msgid "Country Codes"
 msgstr "Coduri de țară"
@@ -2927,9 +2947,6 @@ msgstr "Ascuns"
 
 msgid "Published"
 msgstr "Publicat"
-
-msgid "Hostname"
-msgstr "Nume gazdă"
 
 msgid "Whois"
 msgstr "Whois"
@@ -4082,11 +4099,11 @@ msgstr "Întârziere comandă."
 msgid "Message delay"
 msgstr "Întârziere mesaj"
 
-msgid "Average job delay / maximum delay"
-msgstr "Întârziere medie a lucrării/întârziere maximă"
+msgid "Average / peak job delay (last minute)"
+msgstr ""
 
-msgid "Average delay before scheduled jobs are run"
-msgstr "Întârziere medie înainte ca lucrările programate să fie executate"
+msgid "Average / max delay before scheduled jobs are run"
+msgstr ""
 
 msgid "Indicates how quickly outbound messages to other I2P routers are sent"
 msgstr "Indică cât de repede se trimit mesaje de ieșire la alte routere I2P"
@@ -4400,9 +4417,6 @@ msgstr "inundații"
 msgid "MIN"
 msgstr "MIN"
 
-msgid "AVG"
-msgstr "AVG"
-
 msgid "MEDIAN"
 msgstr "MEDIAN"
 
@@ -4493,14 +4507,6 @@ msgstr "perioada de grație"
 msgid "Tunnel identity"
 msgstr "Identitatea tunelului"
 
-#, java-format
-msgid "Limited display to the {0} tunnels with the highest usage"
-msgstr "Afișare limitată la {0} tuneluri cu cea mai mare utilizare"
-
-#, java-format
-msgid "Limited display to the {0} most recent tunnels"
-msgstr "Afișare limitată la cele mai recente {0} tuneluri"
-
 msgid "Lifetime bandwidth usage"
 msgstr "Utilizarea totală a lățimii de bandă"
 
@@ -4519,6 +4525,9 @@ msgstr "Tuneluri de tranzit pe Partener (Top {0})"
 
 msgid "Address"
 msgstr "Adresa"
+
+msgid "Messages"
+msgstr ""
 
 msgid "All Tunnels by Peer"
 msgstr "Toate tunelurile de la Peer"
@@ -4554,6 +4563,15 @@ msgstr "De intrare sau de iesire?"
 msgid "In/Out"
 msgstr "Intrare/Ieşire"
 
+msgid "Tunnel test status"
+msgstr ""
+
+msgid "Round trip time for last test"
+msgstr ""
+
+msgid "Latency"
+msgstr ""
+
 msgid "Gateway"
 msgstr "Gateway"
 
@@ -4562,6 +4580,24 @@ msgstr "Participanți"
 
 msgid "Endpoint"
 msgstr "Punct final"
+
+msgid "Rejected as duplicate"
+msgstr ""
+
+msgid "Test successful"
+msgstr ""
+
+msgid "Test in progress"
+msgstr ""
+
+msgid "Test failing (1 failure)"
+msgstr ""
+
+msgid "Test failed (2 consecutive failures)"
+msgstr ""
+
+msgid "Not yet tested"
+msgstr ""
 
 msgid "Locally hosted tunnel"
 msgstr "Tunel găzduit local"
@@ -5233,6 +5269,9 @@ msgstr "Peer Manager"
 
 msgid "Manual Peer Controls"
 msgstr "Controlul Manual al Partenerilor"
+
+msgid "Router Hash"
+msgstr "Router Hash"
 
 msgid "Manually Ban / Unban a Peer"
 msgstr "Blocare / deblocare manuală a partenerilor"
@@ -5932,8 +5971,8 @@ msgstr "Această setare (în minute) vă permite să configurați manual cât ti
 msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
 msgstr "Această setare, când este setată la true, va bloca comunicarea directă de la toate routerele din propria țară și le va adăuga la lista de interdicții până când routerul repornește. [Implicit este false]"
 
-msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
-msgstr "Această setare, când este setată la true, va bloca comunicarea directă de la toate routerele de nivel X care publică un limit de congestie G și nu sunt nici accesibile nici inaccesibile, adăugându-le la lista de interdicții de sesiune. Rețineți că modulul avansat trebuie să fie activat pentru ca această setare să aibă efect. [Implicit este false]"
+msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap (no transit tunnels), adding them to the session banlist. [Default is true]"
+msgstr ""
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "Această setare permite dezactivarea testelor SSU pentru a determina dacă router-ul dvs. are firewall și poate fi activat pentru ruterele care cu siguranță nu sunt firewall, dar întâmpină probleme de firewall intermitente. În cazul în care testarea este dezactivată, atât SSU, cât și NTCP ar trebui să raporteze adresa IP publică curentă pe pagina <a href=/info>informațiilor despre router</a>. [Necesită repornire]"
@@ -7473,9 +7512,6 @@ msgstr "Numărul de tuneluri în care rutezi pentru alții, împărțit la numă
 msgid "Some basic indications of router overload:"
 msgstr "Câteva indicații de bază ale supraîncărcării routerului:"
 
-msgid "Job Lag"
-msgstr "Întârzierea locului de muncă"
-
 msgid "How long jobs are waiting before execution. The job queue is listed on the <a href='/jobs'>Jobs page</a>. Unfortunately, there are several other job queues in the router that may be congested, and their status is not available in the router console. The job lag should generally be zero. If it is consistently higher than 500ms, your computer is very slow, your network is experiencing connectivity issues, or the router has serious problems. <a href='/configstats#jobQueue.jobLag'>[Enable graphing]</a>."
 msgstr "Cât timp așteaptă sarcinile înainte de execuție. Coada de sarcini este listată pe <a href='/jobs'>pagina de sarcini</a>. Din păcate, există și alte cozi de sarcini în router care pot fi aglomerate și starea lor nu este disponibilă în consola routerului. Întârzierea sarcinilor trebuie să fie în general zero. Dacă este în mod constant mai mare de 500 ms, calculatorul tău funcționează foarte încet, rețeaua ta are probleme de conectivitate sau routerul are probleme serioase. <a href='/configstats#jobQueue.jobLag'>[Activează graficul]</a>."
 
@@ -8108,3 +8144,15 @@ msgstr "Următorul"
 
 msgid "Finished"
 msgstr "Finalizat"
+
+
+
+
+
+
+
+
+#, java-format
+
+#, java-format
+

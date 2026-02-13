@@ -614,6 +614,39 @@ msgstr "Νέα Διαμόρφωση Διακομιστή"
 msgid "Hostname"
 msgstr "Όνομα διακομιστή"
 
+msgid "Random startup delay (when auto-start is enabled) to defend against correlation attacks"
+msgstr ""
+
+msgid "Startup Delay"
+msgstr ""
+
+msgid "Minimum"
+msgstr ""
+
+msgid "Minimum startup delay"
+msgstr ""
+
+msgid "seconds"
+msgstr ""
+
+msgid "Maximum"
+msgstr ""
+
+msgid "Maximum startup delay"
+msgstr ""
+
+msgid "Add random delay before tunnel shutdown, then start graceful router shutdown / restart process"
+msgstr ""
+
+msgid "Shutdown Delay"
+msgstr ""
+
+msgid "Minimum shutdown delay"
+msgstr ""
+
+msgid "Maximum shutdown delay"
+msgstr ""
+
 msgid "Website Hostname"
 msgstr "Όνομα διακομιστή ιστοσελίδας"
 
@@ -1095,8 +1128,8 @@ msgstr "Χωρίς Προεπισκόπηση"
 msgid "Starting..."
 msgstr "Εκκίνηση..."
 
-msgid "Stop this Tunnel"
-msgstr "Σταμάτημα Αυτού του Διαδρόμου"
+msgid "Starting in"
+msgstr ""
 
 msgid "Running"
 msgstr "Εκτελείται"
@@ -1110,14 +1143,17 @@ msgstr "εισ."
 msgid "out"
 msgstr "εξ."
 
+msgid "Stopped"
+msgstr "Σταματημένος"
+
+msgid "Stop this Tunnel"
+msgstr "Σταμάτημα Αυτού του Διαδρόμου"
+
 msgid "Restart this Tunnel"
 msgstr "Επανεκκίνηση αυτού του διαδρόμου"
 
 msgid "Restart"
 msgstr "Επανεκκίνηση"
-
-msgid "Stopped"
-msgstr "Σταματημένος"
 
 msgid "Destination"
 msgstr "Προορισμός"

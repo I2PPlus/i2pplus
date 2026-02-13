@@ -614,6 +614,39 @@ msgstr "پیکربندی سرور جدید"
 msgid "Hostname"
 msgstr "نام سرور"
 
+msgid "Random startup delay (when auto-start is enabled) to defend against correlation attacks"
+msgstr ""
+
+msgid "Startup Delay"
+msgstr ""
+
+msgid "Minimum"
+msgstr ""
+
+msgid "Minimum startup delay"
+msgstr ""
+
+msgid "seconds"
+msgstr ""
+
+msgid "Maximum"
+msgstr ""
+
+msgid "Maximum startup delay"
+msgstr ""
+
+msgid "Add random delay before tunnel shutdown, then start graceful router shutdown / restart process"
+msgstr ""
+
+msgid "Shutdown Delay"
+msgstr ""
+
+msgid "Minimum shutdown delay"
+msgstr ""
+
+msgid "Maximum shutdown delay"
+msgstr ""
+
 msgid "Website Hostname"
 msgstr "نام میزبان وبسایت"
 
@@ -1095,8 +1128,8 @@ msgstr "بدون پیش نمایش"
 msgid "Starting..."
 msgstr "در حال شروع..."
 
-msgid "Stop this Tunnel"
-msgstr "توقف سازی این تونل"
+msgid "Starting in"
+msgstr ""
 
 msgid "Running"
 msgstr "در حال اجرا"
@@ -1110,14 +1143,17 @@ msgstr "در"
 msgid "out"
 msgstr "خارج"
 
+msgid "Stopped"
+msgstr "متوقف شد"
+
+msgid "Stop this Tunnel"
+msgstr "توقف سازی این تونل"
+
 msgid "Restart this Tunnel"
 msgstr "راه‌اندازی مجدد این تونل"
 
 msgid "Restart"
 msgstr "راه‌اندازی مجدد"
-
-msgid "Stopped"
-msgstr "متوقف شد"
 
 msgid "Destination"
 msgstr "مقصد"

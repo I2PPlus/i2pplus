@@ -777,11 +777,17 @@ msgstr "odprepovej zdaj"
 msgid "No bans currently active"
 msgstr "Trenutno ni v veljavi nobene prepovedi"
 
+msgid "Country"
+msgstr "Država"
+
 msgid "Reason"
 msgstr "Razlog"
 
-msgid "Router Hash"
-msgstr "Dija usmerjevalnika"
+msgid "IP Address"
+msgstr "IP naslov"
+
+msgid "Hostname"
+msgstr "Ime gostitelja"
 
 msgid "Expiry"
 msgstr "Istek"
@@ -1536,6 +1542,14 @@ msgstr "Ponovni zagon"
 msgid "Shutdown"
 msgstr "Zapiranje"
 
+#, java-format
+msgid "Deferring restart for {0} until all servers have stopped"
+msgstr ""
+
+#, java-format
+msgid "Deferring shutdown for {0} until all servers have stopped"
+msgstr ""
+
 msgid "Restart imminent"
 msgstr "Ponovni zagon je prihajajoč"
 
@@ -2201,9 +2215,6 @@ msgstr "Presežni mikroblogging, forumi in wiki"
 msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Alternativni frontalni del Reddit, usmerjen na zasebnost"
 
-msgid "AI Image generation & Chat hub"
-msgstr "Center za generiranje slikov AI in klepet"
-
 msgid "IRC Logs for multiple networks"
 msgstr "Dnevniki IRC za več omrežij"
 
@@ -2454,9 +2465,6 @@ msgstr "Identiteta"
 msgid "Network Database entry"
 msgstr "Vnos v omrežni bazi"
 
-msgid "IP Address"
-msgstr "IP naslov"
-
 msgid "UDP Port"
 msgstr "UDP vrata"
 
@@ -2551,9 +2559,6 @@ msgstr "Naslovi prevoza usmerjevalnika"
 msgid "{0} is used for outbound connections only"
 msgstr "{0} se uporablja le za izhodne povezave"
 
-msgid "Job runners"
-msgstr "Vodilci posluga"
-
 msgid "Active jobs"
 msgstr "Aktivni posluge"
 
@@ -2563,6 +2568,12 @@ msgstr "začel {0} pred tem"
 
 msgid "Completed jobs"
 msgstr "Tako pred kratkim končane posluge"
+
+msgid "Runners"
+msgstr ""
+
+msgid "finished just now"
+msgstr ""
 
 #, java-format
 msgid "finished {0} ago"
@@ -2581,17 +2592,29 @@ msgstr "Razporejene posluge"
 msgid "{0} starting in {1}"
 msgstr "{0} začne v {1}"
 
-msgid "DELAYED"
-msgstr "Zaokrnjeno"
-
-msgid "OUT OF ORDER"
-msgstr "Narobe"
-
 msgid "Queue Totals"
 msgstr "Skupaj vrste"
 
-msgid "Job Statistics (excluding single-shot jobs)"
-msgstr "Statistika posluga (brez enkratnih poslug)"
+msgid "Job Statistics"
+msgstr ""
+
+msgid "last minute"
+msgstr ""
+
+msgid "Job Lag"
+msgstr "Zamik naloga"
+
+msgid "AVG"
+msgstr "POVP."
+
+msgid "PEAK"
+msgstr ""
+
+msgid "All Stats"
+msgstr ""
+
+msgid "Last 60s"
+msgstr ""
 
 msgid "Job"
 msgstr "Posluga"
@@ -2661,9 +2684,6 @@ msgstr "npr. f ali XOfR"
 
 msgid "Cost"
 msgstr "Stroški"
-
-msgid "Country"
-msgstr "Država"
 
 msgid "Country Codes"
 msgstr "Kode držav"
@@ -2935,9 +2955,6 @@ msgstr "Skrito"
 
 msgid "Published"
 msgstr "Objavljeno"
-
-msgid "Hostname"
-msgstr "Ime gostitelja"
 
 msgid "Whois"
 msgstr "Whois"
@@ -4098,11 +4115,11 @@ msgstr "Zamik posluga"
 msgid "Message delay"
 msgstr "Zamik sporočila"
 
-msgid "Average job delay / maximum delay"
-msgstr "Povprečni zamik posluga / maksimalni zamik"
+msgid "Average / peak job delay (last minute)"
+msgstr ""
 
-msgid "Average delay before scheduled jobs are run"
-msgstr "Povprečni zamik pred začetkom napovedanih poslug"
+msgid "Average / max delay before scheduled jobs are run"
+msgstr ""
 
 msgid "Indicates how quickly outbound messages to other I2P routers are sent"
 msgstr "Prikaže, kako hitro so sporočila za druge usmerjevalnike I2P poslana"
@@ -4418,9 +4435,6 @@ msgstr "zalivne"
 msgid "MIN"
 msgstr "MIN"
 
-msgid "AVG"
-msgstr "POVP."
-
 msgid "MEDIAN"
 msgstr "MEDIAN"
 
@@ -4511,14 +4525,6 @@ msgstr "dobra volja"
 msgid "Tunnel identity"
 msgstr "Identiteta tunela"
 
-#, java-format
-msgid "Limited display to the {0} tunnels with the highest usage"
-msgstr "Omejeno prikazano {0} tuneljev z najvišjim uporabo"
-
-#, java-format
-msgid "Limited display to the {0} most recent tunnels"
-msgstr "Omejeno prikazano {0} najnovejših tuneljev"
-
 msgid "Lifetime bandwidth usage"
 msgstr "Uporaba širine pasma v življenjskem ciklu"
 
@@ -4537,6 +4543,9 @@ msgstr "Tranzitni tuneli po Vrstniku (Top {0})"
 
 msgid "Address"
 msgstr "Naslov"
+
+msgid "Messages"
+msgstr ""
 
 msgid "All Tunnels by Peer"
 msgstr "Vsi tuneli glede na parterje"
@@ -4572,6 +4581,15 @@ msgstr "Vhodno ali izhodno?"
 msgid "In/Out"
 msgstr "Vhod/Izhod"
 
+msgid "Tunnel test status"
+msgstr ""
+
+msgid "Round trip time for last test"
+msgstr ""
+
+msgid "Latency"
+msgstr ""
+
 msgid "Gateway"
 msgstr "Vrata"
 
@@ -4580,6 +4598,24 @@ msgstr "Udeleženci"
 
 msgid "Endpoint"
 msgstr "Končna točka"
+
+msgid "Rejected as duplicate"
+msgstr ""
+
+msgid "Test successful"
+msgstr ""
+
+msgid "Test in progress"
+msgstr ""
+
+msgid "Test failing (1 failure)"
+msgstr ""
+
+msgid "Test failed (2 consecutive failures)"
+msgstr ""
+
+msgid "Not yet tested"
+msgstr ""
 
 msgid "Locally hosted tunnel"
 msgstr "Lokalno gostiteljstvo tunela"
@@ -5251,6 +5287,9 @@ msgstr "Upravitelj parterjev"
 
 msgid "Manual Peer Controls"
 msgstr "Ročni nadzorniki parterjev"
+
+msgid "Router Hash"
+msgstr "Dija usmerjevalnika"
 
 msgid "Manually Ban / Unban a Peer"
 msgstr "Ročno prepovej / odprepoj parterja"
@@ -5950,8 +5989,8 @@ msgstr "Ta nastavitev (v minutah) vam omogoča ročno konfiguriranje, koliko po�
 msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
 msgstr "Ta nastavitev, ko je nastavljen na true, bo blokirala neposredno komunikacijo z vseh routerjev v vaši državi in jih jih dodala na seznam prepovedovih, dok se router ne ponovno zagnene. [Privzeto je false]"
 
-msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
-msgstr "Ta nastavitev, ko je nastavljen na true, bo blokirala neposredno komunikacijo z vseh routerjev razreda X, ki objavljajo omejitve G in niso niti dosegljivi. Opomba: napredni način mora biti omogočen, da bi ta nastavitev imela učinek. [Privzeto je false]"
+msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap (no transit tunnels), adding them to the session banlist. [Default is true]"
+msgstr ""
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "Ta nastavitev dovoljuje onemogočanje SSU preizkusov za določanje, ali je vaš usmerjevalnik omejen, in se lahko omogoči za usmerjevalnike, ki so zanesljivo neomejeni, vendar doživljajo nepredvidljive težave z omejevalcem. Če je testiranje onemogočeno, bi morala SSU in NTCP poročata o vašem trenutnem javnem ip naslovu na <a href=/info>strani za informacije o usmerjevalniku</a>. [Ponovni zagon zahtoven]"
@@ -7491,9 +7530,6 @@ msgstr "Število sodelujocih tunelov, ki jih usmerjate za druge, razdeljeno z sk
 msgid "Some basic indications of router overload:"
 msgstr "Nekatere osnovne ukazila preopterečitve strežnika:"
 
-msgid "Job Lag"
-msgstr "Zamik naloga"
-
 msgid "How long jobs are waiting before execution. The job queue is listed on the <a href='/jobs'>Jobs page</a>. Unfortunately, there are several other job queues in the router that may be congested, and their status is not available in the router console. The job lag should generally be zero. If it is consistently higher than 500ms, your computer is very slow, your network is experiencing connectivity issues, or the router has serious problems. <a href='/configstats#jobQueue.jobLag'>[Enable graphing]</a>."
 msgstr "Kako dolgo čakajo naloge pred izvedbo. Red nalog je naveden na <a href='/jobs'>strani za naloge</a>. Na žalost, obstajajo številni drugi redi nalog v strežniku, ki morda so prenatljeni, in njihov status ni na voljo v konzoli strežnika. Zamik naloga bi moral biti običajno nič. Če je to skladno višje od 500ms, je vaš računalnik zelo počasen, vaše omrežje doživlja težave z povezavo, ali pa ima strežnik ozbiljne težave. <a href='/configstats#jobQueue.jobLag'>[Omogoči grafe]</a>."
 
@@ -8126,3 +8162,15 @@ msgstr "Naslednje"
 
 msgid "Finished"
 msgstr "Končano"
+
+
+
+
+
+
+
+
+#, java-format
+
+#, java-format
+

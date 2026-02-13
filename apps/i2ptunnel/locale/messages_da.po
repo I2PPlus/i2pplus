@@ -614,6 +614,39 @@ msgstr "Ny serverkonfiguration"
 msgid "Hostname"
 msgstr "Hostnavn"
 
+msgid "Random startup delay (when auto-start is enabled) to defend against correlation attacks"
+msgstr ""
+
+msgid "Startup Delay"
+msgstr ""
+
+msgid "Minimum"
+msgstr ""
+
+msgid "Minimum startup delay"
+msgstr ""
+
+msgid "seconds"
+msgstr ""
+
+msgid "Maximum"
+msgstr ""
+
+msgid "Maximum startup delay"
+msgstr ""
+
+msgid "Add random delay before tunnel shutdown, then start graceful router shutdown / restart process"
+msgstr ""
+
+msgid "Shutdown Delay"
+msgstr ""
+
+msgid "Minimum shutdown delay"
+msgstr ""
+
+msgid "Maximum shutdown delay"
+msgstr ""
+
 msgid "Website Hostname"
 msgstr "Webstedets værtsnavn"
 
@@ -1095,8 +1128,8 @@ msgstr "Ingen Preview"
 msgid "Starting..."
 msgstr "Starter..."
 
-msgid "Stop this Tunnel"
-msgstr "Stop denne tunnel"
+msgid "Starting in"
+msgstr ""
 
 msgid "Running"
 msgstr "Kører"
@@ -1110,14 +1143,17 @@ msgstr "ind"
 msgid "out"
 msgstr "ud"
 
+msgid "Stopped"
+msgstr "Stoppet"
+
+msgid "Stop this Tunnel"
+msgstr "Stop denne tunnel"
+
 msgid "Restart this Tunnel"
 msgstr "Genstart denne tunnel"
 
 msgid "Restart"
 msgstr "Genstart"
-
-msgid "Stopped"
-msgstr "Stoppet"
 
 msgid "Destination"
 msgstr "Destination"
