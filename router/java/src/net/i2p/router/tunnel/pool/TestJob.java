@@ -44,9 +44,9 @@ public class TestJob extends JobImpl {
     private RatchetSessionTag _ratchetEncryptTag;
     private static final AtomicInteger __id = new AtomicInteger();
     private int _id;
-    private static final int MIN_TEST_PERIOD = 8*1000;
-    private static final int MAX_TEST_PERIOD = 15*1000;
-    private static final int MAX_TEST_PERIOD_ATTACK = 25*1000; // 25s during attacks
+    private static final int MIN_TEST_PERIOD = 10*1000;
+    private static final int MAX_TEST_PERIOD = 20*1000;
+    private static final int MAX_TEST_PERIOD_ATTACK = 30*1000; // 30s during attacks
 
     /**
      * Maximum number of tunnel tests that can run concurrently.
@@ -59,7 +59,7 @@ public class TestJob extends JobImpl {
     private static final int BASE_TEST_DELAY = 60 * 1000; // 60s base - increased frequency
     private static final int MIN_TEST_DELAY = 30 * 1000; // 30s minimum
     private static final int MAX_TEST_DELAY = 120 * 1000; // 120s maximum
-    private static final int SUCCESS_HISTORY_SIZE = 3; // Track last 3 results
+    private static final int SUCCESS_HISTORY_SIZE = 10; // Track last 10 results
 
     /**
      * Maximum number of TestJob instances that should be queued before deferring new ones.
