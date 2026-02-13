@@ -82,12 +82,24 @@
 #
 ​31173/Mullvad VPN:185.209.196.0/24
 31173/Mullvad VPN:185.213.155.0/24
+Botnet:2.56.109.0/24
+Botnet:45.81.115.0/24
+Botnet:45.132.181.0/24
+Botnet:85.209.120.0/24
+Botnet:103.49.124.0/24
+Botnet:103.91.90.0/24
+Botnet:103.101.59.0/24
+Botnet:103.184.128.0/24
+Botnet:185.124.87.0/24
+Botnet:188.132.130.0/24
+Botnet:188.132.202.0/24
+Botnet:193.164.5.0/24
 Connection Abuse:46.188.0.0-46.188.63.255
 Connection Abuse:92.124.128.0-92.124.143.255
+Excessive lookups:162.218.65.0/24
+Excessive lookups:91.198.115.0/24
 Public Web Proxy:93.157.12.0/24
 Russian Sybil:37.228.88.0-37.228.93.255
-Excessive lookups:91.198.115.0/24
-Excessive lookups:162.218.65.0/24
 Sybil:103.149.170.0/23
 Sybil:104.156.254.54
 Sybil:104.207.153.96
@@ -148,6 +160,7 @@ Tunnel Abuse:162.55.230.167
 Tunnel Abuse:172.6.174.68
 Tunnel Abuse:174.27.149.30
 Tunnel Abuse:176.88.62.2
+#
 # IPv6
 #
 Bogon (IPv6 localhost):;;1
