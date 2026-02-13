@@ -752,11 +752,16 @@ public class ProfileOrganizer {
         boolean underAttack = isLowBuildSuccess();
 
         // Memory pressure: reduce expiration time to free memory faster
-        Runtime rt = Runtime.getRuntime();
-        long maxMemory = rt.maxMemory();
-        long usedMemory = maxMemory - rt.freeMemory();
-        double usageRatio = (double) usedMemory / maxMemory;
-        boolean memoryPressure = usageRatio > 0.80;
+        // Only activate after warmup period to avoid false triggers during startup
+        final long WARMUP_TIME = 15*60*1000;
+        boolean memoryPressure = false;
+        if (uptime > WARMUP_TIME) {
+            Runtime rt = Runtime.getRuntime();
+            long maxMemory = rt.maxMemory();
+            long usedMemory = maxMemory - rt.freeMemory();
+            double usageRatio = (double) usedMemory / maxMemory;
+            memoryPressure = usageRatio > 0.80;
+        }
 
         long baseExpireTime = countNotFailingPeers() > ENOUGH_PROFILES
             ? 8 * 60 * 60 * 1000L   // 8 hours
@@ -1126,17 +1131,22 @@ public class ProfileOrganizer {
         }
 
         // Memory pressure detection - aggressively reduce profiles when heap is near capacity
-        Runtime rt = Runtime.getRuntime();
-        long maxMemory = rt.maxMemory();
-        long usedMemory = maxMemory - rt.freeMemory();
-        double usageRatio = (double) usedMemory / maxMemory;
-        if (usageRatio > 0.85) {
-            int reductionFactor = usageRatio > 0.92 ? 3 : (usageRatio > 0.88 ? 2 : 1);
-            int originalMax = maxProfiles;
-            maxProfiles = Math.max(100, maxProfiles / reductionFactor);
-            if (_log.shouldWarn()) {
-                _log.warn("Memory pressure detected (" + String.format("%.1f%%", usageRatio * 100) +
-                          ") - reducing profile limit from " + originalMax + " to " + maxProfiles);
+        // Only activate after initial warmup period (15 minutes) to avoid false triggers during startup
+        long uptime = _context.router().getUptime();
+        final long WARMUP_TIME = 15*60*1000;
+        if (uptime > WARMUP_TIME) {
+            Runtime rt = Runtime.getRuntime();
+            long maxMemory = rt.maxMemory();
+            long usedMemory = maxMemory - rt.freeMemory();
+            double usageRatio = (double) usedMemory / maxMemory;
+            if (usageRatio > 0.85) {
+                int reductionFactor = usageRatio > 0.92 ? 3 : (usageRatio > 0.88 ? 2 : 1);
+                int originalMax = maxProfiles;
+                maxProfiles = Math.max(100, maxProfiles / reductionFactor);
+                if (_log.shouldWarn()) {
+                    _log.warn("Memory pressure detected (" + String.format("%.1f%%", usageRatio * 100) +
+                              ") -> Reducing profile limit from " + originalMax + " to " + maxProfiles + "...");
+                }
             }
         }
 
