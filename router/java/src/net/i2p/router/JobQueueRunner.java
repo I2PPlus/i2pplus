@@ -21,8 +21,8 @@ class JobQueueRunner extends I2PThread {
     private volatile long _lastBegin;
     private volatile long _lastEnd;
 
-    /** Maximum time a job can run before being interrupted (60 seconds) */
-    private static final long MAX_JOB_RUNTIME_MS = 60 * 1000;
+    /** Maximum time a job can run before being interrupted (90 seconds) */
+    private static final long MAX_JOB_RUNTIME_MS = 90 * 1000;
     /** Thread pool for executing jobs with timeout */
     private final ExecutorService _timeoutExecutor;
 
