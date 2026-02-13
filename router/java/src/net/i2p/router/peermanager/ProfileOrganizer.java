@@ -750,9 +750,21 @@ public class ProfileOrganizer {
         int profileCount = 0;
         int expiredCount = 0;
         boolean underAttack = isLowBuildSuccess();
+
+        // Memory pressure: reduce expiration time to free memory faster
+        Runtime rt = Runtime.getRuntime();
+        long maxMemory = rt.maxMemory();
+        long usedMemory = maxMemory - rt.freeMemory();
+        double usageRatio = (double) usedMemory / maxMemory;
+        boolean memoryPressure = usageRatio > 0.80;
+
         long baseExpireTime = countNotFailingPeers() > ENOUGH_PROFILES
             ? 8 * 60 * 60 * 1000L   // 8 hours
             : 24 * 60 * 60 * 1000L; // 24 hours
+        // Under memory pressure, use much shorter expiration time
+        if (memoryPressure) {
+            baseExpireTime = Math.min(baseExpireTime, 2 * 60 * 60 * 1000L); // Max 2 hours
+        }
         // Keep profiles 2x longer when under attack
         final long expireOlderThan = underAttack ? baseExpireTime * 2 : baseExpireTime;
 
@@ -1111,6 +1123,21 @@ public class ProfileOrganizer {
         if (underAttack) {
             maxProfiles = (int)(maxProfiles * 1.5);
             if (maxProfiles > ABSOLUTE_MAX_PROFILES) maxProfiles = ABSOLUTE_MAX_PROFILES;
+        }
+
+        // Memory pressure detection - aggressively reduce profiles when heap is near capacity
+        Runtime rt = Runtime.getRuntime();
+        long maxMemory = rt.maxMemory();
+        long usedMemory = maxMemory - rt.freeMemory();
+        double usageRatio = (double) usedMemory / maxMemory;
+        if (usageRatio > 0.85) {
+            int reductionFactor = usageRatio > 0.92 ? 3 : (usageRatio > 0.88 ? 2 : 1);
+            int originalMax = maxProfiles;
+            maxProfiles = Math.max(100, maxProfiles / reductionFactor);
+            if (_log.shouldWarn()) {
+                _log.warn("Memory pressure detected (" + String.format("%.1f%%", usageRatio * 100) +
+                          ") - reducing profile limit from " + originalMax + " to " + maxProfiles);
+            }
         }
 
         if (_notFailingPeers.size() <= maxProfiles) {
