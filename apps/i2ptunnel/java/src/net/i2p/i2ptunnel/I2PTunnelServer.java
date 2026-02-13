@@ -919,6 +919,9 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
             InetSocketAddress isa = _socketMap.get(Integer.valueOf(incomingPort));
             if (isa != null) {return isa.toString().replace("/", "");}
         }
+        if (remoteHost == null) {
+            return "unknown:" + remotePort;
+        }
         return remoteHost.toString().replace("/", "") + ':' + remotePort;
     }
 
@@ -967,7 +970,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
         } else {
             // as suggested in https://lists.torproject.org/pipermail/tor-dev/2014-March/00657
             boolean unique = Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_UNIQUE_LOCAL));
-            if (unique && remoteHost.isLoopbackAddress()) {
+            if (unique && remoteHost != null && remoteHost.isLoopbackAddress()) {
                 byte[] addr;
                 if (remoteHost instanceof Inet4Address) {
                     addr = new byte[4];
