@@ -680,7 +680,12 @@ class BuildExecutor implements Runnable {
         //_log.error("Removing ID: " + id + "; size was: " + _currentlyBuildingMap.size());
         Long key = Long.valueOf(id);
         PooledTunnelCreatorConfig rv = _currentlyBuildingMap.remove(key);
-        if (rv != null) {return rv;}
+        if (rv != null) {
+            synchronized (_recentBuildIds) {
+                _recentBuildIds.remove(key);
+            }
+            return rv;
+        }
         rv = _recentlyBuildingMap.remove(key);
         if (rv != null) {
             long requestedOn = rv.getExpiration() - 10*60*1000;
