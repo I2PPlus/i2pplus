@@ -1139,12 +1139,12 @@ public class ProfileOrganizer {
             long maxMemory = rt.maxMemory();
             long usedMemory = maxMemory - rt.freeMemory();
             double usageRatio = (double) usedMemory / maxMemory;
-            if (usageRatio > 0.85) {
-                int reductionFactor = usageRatio > 0.92 ? 3 : (usageRatio > 0.88 ? 2 : 1);
+            if (usageRatio > 0.95) {
+                int reductionFactor = usageRatio >= 0.99 ? 3 : (usageRatio > 0.95 ? 2 : 1);
                 int originalMax = maxProfiles;
-                maxProfiles = Math.max(100, maxProfiles / reductionFactor);
-                if (_log.shouldWarn()) {
-                    _log.warn("Memory pressure detected (" + String.format("%.1f%%", usageRatio * 100) +
+                maxProfiles = Math.max(1000, maxProfiles / reductionFactor);
+                if (_log.shouldInfo()) {
+                    _log.info("Memory pressure detected (" + String.format("%.1f%%", usageRatio * 100) +
                               ") -> Reducing profile limit from " + originalMax + " to " + maxProfiles + "...");
                 }
             }
