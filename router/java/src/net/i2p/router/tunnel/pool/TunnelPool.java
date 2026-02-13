@@ -1417,12 +1417,13 @@ public class TunnelPool {
 
         LeaseSet ls = null;
         int remaining = 0;
-        boolean removed = false;
+        boolean wasInPool = false;
 
         _tunnelsLock.lock();
         try {
-            if (_tunnels.remove(info)) {
-                removed = true;
+            wasInPool = _tunnels.contains(info);
+            if (wasInPool) {
+                _tunnels.remove(info);
             }
             remaining = _tunnels.size();
 
@@ -1432,7 +1433,7 @@ public class TunnelPool {
             }
         } finally {_tunnelsLock.unlock();}
 
-        if (removed) {
+        if (wasInPool) {
             _manager.tunnelFailed();
             processRemovalStats(java.util.Collections.singletonList(info));
         }
@@ -1450,11 +1451,11 @@ public class TunnelPool {
             }
         }
 
-        if (removed && _log.shouldDebug()) {
+        if (wasInPool && _log.shouldDebug()) {
             _log.debug(toString() + " -> Synchronous tunnel removal complete, LeaseSet republished");
         }
 
-        return removed;
+        return true;
     }
 
     /**
