@@ -2554,10 +2554,10 @@ msgid "Completed jobs"
 msgstr "Μόλις τελείωσαν οι εργασίες"
 
 msgid "Runners"
-msgstr ""
+msgstr "Δρομείς"
 
 msgid "finished just now"
-msgstr ""
+msgstr "μόλις τελείωσε"
 
 #, java-format
 msgid "finished {0} ago"
@@ -2580,10 +2580,10 @@ msgid "Queue Totals"
 msgstr "Σύνολα αναμονής"
 
 msgid "Job Statistics"
-msgstr ""
+msgstr "Στατιστικά Εργασιών"
 
 msgid "last minute"
-msgstr ""
+msgstr "τελευταίο λεπτό"
 
 msgid "Job Lag"
 msgstr "Καθυστέρηση εργασίας"
@@ -2592,13 +2592,13 @@ msgid "AVG"
 msgstr "AVG"
 
 msgid "PEAK"
-msgstr ""
+msgstr "ΚΟΡΥΦΗ"
 
 msgid "All Stats"
-msgstr ""
+msgstr "Όλα τα Στατιστικά"
 
 msgid "Last 60s"
-msgstr ""
+msgstr "Τελευταία 60δ"
 
 msgid "Job"
 msgstr "Δουλειά"
@@ -4084,10 +4084,10 @@ msgid "Message delay"
 msgstr "Καθυστέρηση μηνύματος"
 
 msgid "Average / peak job delay (last minute)"
-msgstr ""
+msgstr "Μέσος / μέγιστος χρόνος καθυστέρησης εργασίας (τελευταίο λεπτό)"
 
 msgid "Average / max delay before scheduled jobs are run"
-msgstr ""
+msgstr "Μέσος / μέγιστος χρόνος καθυστέρησης πριν εκτελεστούν οι προγραμματισμένες εργασίες"
 
 msgid "Indicates how quickly outbound messages to other I2P routers are sent"
 msgstr "Υποδεικνύει πόσο γρήγορα αποστέλλονται εξερχόμενα μηνύματα σε άλλους δρομολογητές I2P"
@@ -4509,7 +4509,7 @@ msgid "Address"
 msgstr "Διεύθυνση"
 
 msgid "Messages"
-msgstr ""
+msgstr "Μηνύματα"
 
 msgid "All Tunnels by Peer"
 msgstr "Όλες οι σήραγγες ανά ομότιμο"
@@ -4546,13 +4546,13 @@ msgid "In/Out"
 msgstr "Είσοδος/Έξοδος"
 
 msgid "Tunnel test status"
-msgstr ""
+msgstr "Κατάσταση δοκιμής σήραγγας"
 
 msgid "Round trip time for last test"
-msgstr ""
+msgstr "Χρόνος μετ επιστροφής για την τελευταία δοκιμή"
 
 msgid "Latency"
-msgstr ""
+msgstr "Λατενcy"
 
 msgid "Gateway"
 msgstr "Πύλη"
@@ -4564,22 +4564,22 @@ msgid "Endpoint"
 msgstr "Τελικό σημείο"
 
 msgid "Rejected as duplicate"
-msgstr ""
+msgstr "Απορρίφθηκε ως διπλότυπο"
 
 msgid "Test successful"
-msgstr ""
+msgstr "Επιτυχής δοκιμή"
 
 msgid "Test in progress"
-msgstr ""
+msgstr "Δοκιμή σε εξέλιξη"
 
 msgid "Test failing (1 failure)"
-msgstr ""
+msgstr "Η δοκιμή αποτυγχάνει (1 αποτυχία)"
 
 msgid "Test failed (2 consecutive failures)"
-msgstr ""
+msgstr "Η δοκιμή απέτυχε (2 διαδοχικές αποτυχίες)"
 
 msgid "Not yet tested"
-msgstr ""
+msgstr "Δεν έχει δοκιμαστεί ακόμα"
 
 msgid "Locally hosted tunnel"
 msgstr "Τοπικά φιλοξενούμενη σήραγγα"
@@ -5954,7 +5954,7 @@ msgid "This setting, when set to true, will block direct communication from all 
 msgstr "Αυτή η ρύθμιση, όταν οριστεί σε true, θα αποκλείσει την άμεση επικοινωνία από όλους τους δρομολογητές στη δική σας χώρα και θα τους προσθέσει στη λίστα αποκλεισμού σας μέχρι να επανεκκινήσει ο δρομολογητής. [Η προεπιλογή είναι false]"
 
 msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap (no transit tunnels), adding them to the session banlist. [Default is true]"
-msgstr ""
+msgstr "Αυτή η ρύθμιση, όταν οριστεί σε true, θα αποκλείσει την άμεση επικοινωνία από όλους τους δρομείς X tier που δημοσιεύουν ένα G congestion cap (χωρίς μεταβατικές σήραγγες), προσθέτοντάς τους στη λίστα αποκλεισμού συνεδρίας. [Προεπιλογή είναι true]"
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "Αυτή η ρύθμιση επιτρέπει την απενεργοποίηση των δοκιμών SSU για να προσδιορίσετε εάν ο δρομολογητής σας έχει τείχος προστασίας και μπορεί να ενεργοποιηθεί για δρομολογητές που σίγουρα δεν έχουν τείχος προστασίας, αλλά αντιμετωπίζουν προβλήματα τείχους προστασίας μεταβλητής συνδεσιμότητας. Στην περίπτωση που απενεργοποιηθούν οι δοκιμές, τόσο η SSU όσο και η NTCP θα αναφέρουν την τρέχουσα διεύθυνση IP του δικτύου σας στην <a href=/info>σελίδα πληροφοριών του δρομολογητή</a>. [Απαιτείται επανεκκίνηση]"

@@ -2562,10 +2562,10 @@ msgid "Completed jobs"
 msgstr "Právě dokončené úlohy"
 
 msgid "Runners"
-msgstr ""
+msgstr "Běžci"
 
 msgid "finished just now"
-msgstr ""
+msgstr "právě skončilo"
 
 #, java-format
 msgid "finished {0} ago"
@@ -2588,10 +2588,10 @@ msgid "Queue Totals"
 msgstr "Součet fronty"
 
 msgid "Job Statistics"
-msgstr ""
+msgstr "Statistiky úloh"
 
 msgid "last minute"
-msgstr ""
+msgstr "poslední minuta"
 
 msgid "Job Lag"
 msgstr "Zpoždění úloh"
@@ -2600,13 +2600,13 @@ msgid "AVG"
 msgstr "PRŮMĚR"
 
 msgid "PEAK"
-msgstr ""
+msgstr "VRCHOL"
 
 msgid "All Stats"
-msgstr ""
+msgstr "Všechny statistiky"
 
 msgid "Last 60s"
-msgstr ""
+msgstr "Posledních 60s"
 
 msgid "Job"
 msgstr "Zaměstnání"
@@ -4100,10 +4100,10 @@ msgid "Message delay"
 msgstr "Zpoždění zprávy"
 
 msgid "Average / peak job delay (last minute)"
-msgstr ""
+msgstr "Průměrná / špičková prodleva úlohy (poslední minuta)"
 
 msgid "Average / max delay before scheduled jobs are run"
-msgstr ""
+msgstr "Průměrná / maximální prodleva před spuštěním naplánovaných úloh"
 
 msgid "Indicates how quickly outbound messages to other I2P routers are sent"
 msgstr "Označuje, jak rychle jsou odesílány odchozí zprávy do jiných I2P směrovačů"
@@ -4527,7 +4527,7 @@ msgid "Address"
 msgstr "Adresa"
 
 msgid "Messages"
-msgstr ""
+msgstr "Zprávy"
 
 msgid "All Tunnels by Peer"
 msgstr "Všechny tunely od Peer"
@@ -4564,13 +4564,13 @@ msgid "In/Out"
 msgstr "Vstup/Výstup"
 
 msgid "Tunnel test status"
-msgstr ""
+msgstr "Stav testu tunelu"
 
 msgid "Round trip time for last test"
-msgstr ""
+msgstr "Doba odezvy posledního testu"
 
 msgid "Latency"
-msgstr ""
+msgstr "Latence"
 
 msgid "Gateway"
 msgstr "Brána"
@@ -4582,22 +4582,22 @@ msgid "Endpoint"
 msgstr "Koncový bod"
 
 msgid "Rejected as duplicate"
-msgstr ""
+msgstr "Zamítnuto jako duplikát"
 
 msgid "Test successful"
-msgstr ""
+msgstr "Test úspěšný"
 
 msgid "Test in progress"
-msgstr ""
+msgstr "Test probíhá"
 
 msgid "Test failing (1 failure)"
-msgstr ""
+msgstr "Test selhává (1 selhání)"
 
 msgid "Test failed (2 consecutive failures)"
-msgstr ""
+msgstr "Test selhal (2 po sobě jdoucí selhání)"
 
 msgid "Not yet tested"
-msgstr ""
+msgstr "Ještě netestováno"
 
 msgid "Locally hosted tunnel"
 msgstr "Lokálně hostovaný tunel"
@@ -5972,7 +5972,7 @@ msgid "This setting, when set to true, will block direct communication from all 
 msgstr "Toto nastavení, když je nastaveno na true, zablokuje přímou komunikaci se všemi routery ve vaší vlastní zemi a přidá je na váš seznam zakazů, dokud váš router nerestartuje. [Výchozí je false]"
 
 msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap (no transit tunnels), adding them to the session banlist. [Default is true]"
-msgstr ""
+msgstr "Toto nastavení, pokud je nastaveno na true, zablokuje přímou komunikaci ze všech routerů X tier, které publikují G congestion cap (žádné transitní tunely), a přidá je do seznamu zakázaných relací. [Výchozí je true]"
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "Toto nastavení umožňuje deaktivovat testy SSU, aby se zjistilo, zda je váš směrovač chráněn firewallem, a může být povoleno pro směrovače, které jsou určitě bez firewalu, ale mají problémy s přerušovaným blokováním firewallu. Pokud jsou testy zakázány, měly by oba protokoly SSU a NTCP hlásit vaši aktuální veřejnou IP adresu na <a href=/info>stránce s informacemi o směrovači</a>. [Je vyžadován restart]"

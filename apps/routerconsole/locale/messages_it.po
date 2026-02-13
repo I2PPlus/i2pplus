@@ -2555,10 +2555,10 @@ msgid "Completed jobs"
 msgstr "Job appena terminato"
 
 msgid "Runners"
-msgstr ""
+msgstr "Esecutori"
 
 msgid "finished just now"
-msgstr ""
+msgstr "appena finito"
 
 #, java-format
 msgid "finished {0} ago"
@@ -2581,10 +2581,10 @@ msgid "Queue Totals"
 msgstr "In coda totali"
 
 msgid "Job Statistics"
-msgstr ""
+msgstr "Statistiche dei lavori"
 
 msgid "last minute"
-msgstr ""
+msgstr "ultimo minuto"
 
 msgid "Job Lag"
 msgstr "Ritardo dei job"
@@ -2593,13 +2593,13 @@ msgid "AVG"
 msgstr "AVG"
 
 msgid "PEAK"
-msgstr ""
+msgstr "MASSIMO"
 
 msgid "All Stats"
-msgstr ""
+msgstr "Tutte le statistiche"
 
 msgid "Last 60s"
-msgstr ""
+msgstr "Ultimi 60s"
 
 msgid "Job"
 msgstr "Job"
@@ -4085,10 +4085,10 @@ msgid "Message delay"
 msgstr "Ritardo nel messaggio"
 
 msgid "Average / peak job delay (last minute)"
-msgstr ""
+msgstr "Ritardo medio / picco lavoro (ultimo minuto)"
 
 msgid "Average / max delay before scheduled jobs are run"
-msgstr ""
+msgstr "Ritardo medio / massimo prima dell'esecuzione dei lavori programmati"
 
 msgid "Indicates how quickly outbound messages to other I2P routers are sent"
 msgstr "Indica quanto velocemente sono inviati i messaggi in uscita verso gli altri router I2P"
@@ -4510,7 +4510,7 @@ msgid "Address"
 msgstr "Indirizzo"
 
 msgid "Messages"
-msgstr ""
+msgstr "Messaggi"
 
 msgid "All Tunnels by Peer"
 msgstr "Tutti i tunnel di Peer"
@@ -4547,13 +4547,13 @@ msgid "In/Out"
 msgstr "Ingresso/Uscita"
 
 msgid "Tunnel test status"
-msgstr ""
+msgstr "Stato del test del tunnel"
 
 msgid "Round trip time for last test"
-msgstr ""
+msgstr "Tempo di andata e ritorno per l'ultimo test"
 
 msgid "Latency"
-msgstr ""
+msgstr "Latenza"
 
 msgid "Gateway"
 msgstr "Gateway"
@@ -4565,22 +4565,22 @@ msgid "Endpoint"
 msgstr "Punto finale"
 
 msgid "Rejected as duplicate"
-msgstr ""
+msgstr "Rifiutato come duplicato"
 
 msgid "Test successful"
-msgstr ""
+msgstr "Test riuscito"
 
 msgid "Test in progress"
-msgstr ""
+msgstr "Test in corso"
 
 msgid "Test failing (1 failure)"
-msgstr ""
+msgstr "Test fallente (1 fallimento)"
 
 msgid "Test failed (2 consecutive failures)"
-msgstr ""
+msgstr "Test fallito (2 fallimenti consecutivi)"
 
 msgid "Not yet tested"
-msgstr ""
+msgstr "Non ancora testato"
 
 msgid "Locally hosted tunnel"
 msgstr "Tunnel ospitato localmente"
@@ -5955,7 +5955,7 @@ msgid "This setting, when set to true, will block direct communication from all 
 msgstr "Questa impostazione, se impostata a true, bloccherà la comunicazione diretta da tutti i router nel tuo stesso paese e li aggiungerà alla tua banlist finché il tuo router non si riavvia. [Predefinito è false]"
 
 msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap (no transit tunnels), adding them to the session banlist. [Default is true]"
-msgstr ""
+msgstr "Questa impostazione, se impostata su true, bloccherà la comunicazione diretta da tutti i router X tier che pubblicano un G congestion cap (nessun tunnel di transito), aggiungendoli alla lista di ban della sessione. [Il valore predefinito è true]"
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "Questa impostazione consente di disabilitare i test SSU per determinare se il tuo router è protetto da firewall e può essere abilitata per i router che sicuramente non sono protetti da firewall ma che riscontrano problemi di protezione intermittent. Se i test sono disabilitati, sia SSU che NTCP dovrebbero riportare il tuo indirizzo IP pubblico corrente sulla <a href=/info>pagina delle informazioni del router</a>. [Richiede riavvio]"

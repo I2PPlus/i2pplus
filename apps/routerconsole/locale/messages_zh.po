@@ -2546,10 +2546,10 @@ msgid "Completed jobs"
 msgstr "刚刚完成的任务"
 
 msgid "Runners"
-msgstr ""
+msgstr "运行者"
 
 msgid "finished just now"
-msgstr ""
+msgstr "刚刚完成"
 
 #, java-format
 msgid "finished {0} ago"
@@ -2572,10 +2572,10 @@ msgid "Queue Totals"
 msgstr "排队总数"
 
 msgid "Job Statistics"
-msgstr ""
+msgstr "工作统计"
 
 msgid "last minute"
-msgstr ""
+msgstr "最后一分钟"
 
 msgid "Job Lag"
 msgstr "作业延迟"
@@ -2584,13 +2584,13 @@ msgid "AVG"
 msgstr "AVG"
 
 msgid "PEAK"
-msgstr ""
+msgstr "峰值"
 
 msgid "All Stats"
-msgstr ""
+msgstr "所有统计"
 
 msgid "Last 60s"
-msgstr ""
+msgstr "最后60秒"
 
 msgid "Job"
 msgstr "任务"
@@ -4068,10 +4068,10 @@ msgid "Message delay"
 msgstr "消息延迟"
 
 msgid "Average / peak job delay (last minute)"
-msgstr ""
+msgstr "平均/峰值工作延迟（最后一分钟）"
 
 msgid "Average / max delay before scheduled jobs are run"
-msgstr ""
+msgstr "计划任务运行前的平均/最大延迟"
 
 msgid "Indicates how quickly outbound messages to other I2P routers are sent"
 msgstr "表示出站消息发往其他I2P路由的速度"
@@ -4491,7 +4491,7 @@ msgid "Address"
 msgstr "地址"
 
 msgid "Messages"
-msgstr ""
+msgstr "消息"
 
 msgid "All Tunnels by Peer"
 msgstr "同行的所有隧道"
@@ -4528,13 +4528,13 @@ msgid "In/Out"
 msgstr "入/出"
 
 msgid "Tunnel test status"
-msgstr ""
+msgstr "隧道测试状态"
 
 msgid "Round trip time for last test"
-msgstr ""
+msgstr "上次测试的往返时间"
 
 msgid "Latency"
-msgstr ""
+msgstr "延迟"
 
 msgid "Gateway"
 msgstr "网关"
@@ -4546,22 +4546,22 @@ msgid "Endpoint"
 msgstr "出站终端"
 
 msgid "Rejected as duplicate"
-msgstr ""
+msgstr "因重复被拒绝"
 
 msgid "Test successful"
-msgstr ""
+msgstr "测试成功"
 
 msgid "Test in progress"
-msgstr ""
+msgstr "测试进行中"
 
 msgid "Test failing (1 failure)"
-msgstr ""
+msgstr "测试失败（1次失败）"
 
 msgid "Test failed (2 consecutive failures)"
-msgstr ""
+msgstr "测试失败（2次连续失败）"
 
 msgid "Not yet tested"
-msgstr ""
+msgstr "尚未测试"
 
 msgid "Locally hosted tunnel"
 msgstr "本地托管隧道"
@@ -5936,7 +5936,7 @@ msgid "This setting, when set to true, will block direct communication from all 
 msgstr "此设置为true时，将阻止来自您自己国家所有路由器的直接通信，并将它们添加到您的封禁列表中，直到路由器重启。[默认为false]"
 
 msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap (no transit tunnels), adding them to the session banlist. [Default is true]"
-msgstr ""
+msgstr "此设置设为true时，将阻止所有发布G拥塞限制（无传输隧道）的X层路由器直接通信，并将它们添加到会话禁止列表中。 [默认值为true]"
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "此设置允许禁用 SSU 测试，以确定您的路由器是否已设置防火墙，是否可以为肯定没有防火墙但遇到间歇性防火墙问题的路由器启用。如果禁用测试，SSU 和 NTCP 都应在路由器信息页面上报告< a href=/info>的当前公共 IP 地址</a>。[需要重新启动]"

@@ -2554,10 +2554,10 @@ msgid "Completed jobs"
 msgstr "हाल ही में पूरा हुए कार्य"
 
 msgid "Runners"
-msgstr ""
+msgstr "धावक"
 
 msgid "finished just now"
-msgstr ""
+msgstr "अभी समाप्त हुआ"
 
 #, java-format
 msgid "finished {0} ago"
@@ -2580,10 +2580,10 @@ msgid "Queue Totals"
 msgstr "क्वे पूर्ण"
 
 msgid "Job Statistics"
-msgstr ""
+msgstr "कार्य आँकड़े"
 
 msgid "last minute"
-msgstr ""
+msgstr "पिछला मिनट"
 
 msgid "Job Lag"
 msgstr "जॉब लैग"
@@ -2592,13 +2592,13 @@ msgid "AVG"
 msgstr "औसत"
 
 msgid "PEAK"
-msgstr ""
+msgstr "शीर्ष"
 
 msgid "All Stats"
-msgstr ""
+msgstr "सभी आँकड़े"
 
 msgid "Last 60s"
-msgstr ""
+msgstr "पिछले 60 सेकंड"
 
 msgid "Job"
 msgstr "कार्य"
@@ -4084,10 +4084,10 @@ msgid "Message delay"
 msgstr "संदेश की देरी"
 
 msgid "Average / peak job delay (last minute)"
-msgstr ""
+msgstr "औसत / शीर्ष कार्य विलंब (पिछला मिनट)"
 
 msgid "Average / max delay before scheduled jobs are run"
-msgstr ""
+msgstr "निर्धारित कार्य चलाने से पहले औसत / अधिकतम विलंब"
 
 msgid "Indicates how quickly outbound messages to other I2P routers are sent"
 msgstr "दूसरे I2P रूटरों को आगंतुक संदेश कितनी त्वरित रूप से भेजे जाते हैं, इसका संकेत देता है"
@@ -4509,7 +4509,7 @@ msgid "Address"
 msgstr "पता"
 
 msgid "Messages"
-msgstr ""
+msgstr "संदेश"
 
 msgid "All Tunnels by Peer"
 msgstr "पीयर द्वारा सभी टनल"
@@ -4546,13 +4546,13 @@ msgid "In/Out"
 msgstr "इनपुट/निर्गत"
 
 msgid "Tunnel test status"
-msgstr ""
+msgstr "सुरंग परीक्षण स्थिति"
 
 msgid "Round trip time for last test"
-msgstr ""
+msgstr "अंतिम परीक्षण के लिए दो-तरफा समय"
 
 msgid "Latency"
-msgstr ""
+msgstr "विलंब"
 
 msgid "Gateway"
 msgstr "गेटवे"
@@ -4564,22 +4564,22 @@ msgid "Endpoint"
 msgstr "समाप्तिस्थान"
 
 msgid "Rejected as duplicate"
-msgstr ""
+msgstr "डुप्लिकेट के रूप में अस्वीकृत"
 
 msgid "Test successful"
-msgstr ""
+msgstr "परीक्षण सफल"
 
 msgid "Test in progress"
-msgstr ""
+msgstr "परीक्षण जारी है"
 
 msgid "Test failing (1 failure)"
-msgstr ""
+msgstr "परीक्षण विफल (1 विफलता)"
 
 msgid "Test failed (2 consecutive failures)"
-msgstr ""
+msgstr "परीक्षण विफल (2 लगातार विफलताएं)"
 
 msgid "Not yet tested"
-msgstr ""
+msgstr "अभी तक परीक्षण नहीं हुआ"
 
 msgid "Locally hosted tunnel"
 msgstr "स्थानीय रूप से मेजबानी करने वाला टनल"
@@ -5954,7 +5954,7 @@ msgid "This setting, when set to true, will block direct communication from all 
 msgstr "यह सेटिंग, जब true पर सेट की जाती है, तो आपके अपने देश के सभी राउटर्स से प्रत्यक्ष संचार को अवरुद्ध करेगी और उन्हें आपकी बैनलिस्ट में जोड़ देगी जब तक कि आपका राउटर पुनः आरंभ नहीं हो जाता। [डिफ़ॉल्ट गलत है]"
 
 msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap (no transit tunnels), adding them to the session banlist. [Default is true]"
-msgstr ""
+msgstr "यह सेटिंग, जब true पर सेट होती है, सभी X tier राउटर से सीधे संचार को ब्लॉक करेगी जो G congestion cap (कोई transit tunnel नहीं) प्रकाशित करती हैं, उन्हें सत्र प्रतिबंध सूची में जोड़ते हुए। [डिफ़ॉल्ट true है]"
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "यह सेटिंग आपको यह जांच करने के लिए SSU परीक्षणों को अक्षम करने की अनुमति देती है कि आपका राउटर फ़ायरवॉल के पीछे है या नहीं, और जो राउटर निश्चित रूप से फ़ायरवॉल के पीछे नहीं हैं लेकिन अनियमित फ़ायरवॉलिंग समस्याओं का सामना कर रहे हैं। यदि परीक्षण अक्षम किया जाता है, तो दोनों SSU और NTCP <a href=/info>राउटर जानकारी पृष्ठ</a> पर आपकी वर्तमान सार्वजनिक IP पता रिपोर्ट करने चाहिए। [रीस्टार्ट की आवश्यकता है]"

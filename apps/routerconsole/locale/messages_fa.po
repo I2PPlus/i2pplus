@@ -2554,10 +2554,10 @@ msgid "Completed jobs"
 msgstr "کارها را به تازگی تمام کردم"
 
 msgid "Runners"
-msgstr ""
+msgstr "دوندگان"
 
 msgid "finished just now"
-msgstr ""
+msgstr "فقط تمام شد"
 
 #, java-format
 msgid "finished {0} ago"
@@ -2580,10 +2580,10 @@ msgid "Queue Totals"
 msgstr "مجموع صف"
 
 msgid "Job Statistics"
-msgstr ""
+msgstr "آمار شغل"
 
 msgid "last minute"
-msgstr ""
+msgstr "آخرین دقیقه"
 
 msgid "Job Lag"
 msgstr "تاخیر شغلی"
@@ -2592,13 +2592,13 @@ msgid "AVG"
 msgstr "میانگین"
 
 msgid "PEAK"
-msgstr ""
+msgstr "اوج"
 
 msgid "All Stats"
-msgstr ""
+msgstr "همه آمار"
 
 msgid "Last 60s"
-msgstr ""
+msgstr "60 ثانیه آخر"
 
 msgid "Job"
 msgstr "شغل"
@@ -4084,10 +4084,10 @@ msgid "Message delay"
 msgstr "تاخیر پیام"
 
 msgid "Average / peak job delay (last minute)"
-msgstr ""
+msgstr "تاخیر شغلی متوسط / اوج (دقیقه گذشته)"
 
 msgid "Average / max delay before scheduled jobs are run"
-msgstr ""
+msgstr "تاخیر متوسط / حداکثر قبل از اجرای مشاغل زمان بندی شده"
 
 msgid "Indicates how quickly outbound messages to other I2P routers are sent"
 msgstr "نشان می دهد که پیام های خروجی با چه سرعتی به مسیریاب های I2P دیگر ارسال می شوند"
@@ -4509,7 +4509,7 @@ msgid "Address"
 msgstr "آدرس"
 
 msgid "Messages"
-msgstr ""
+msgstr "پیام ها"
 
 msgid "All Tunnels by Peer"
 msgstr "همه تونل ها توسط Peer"
@@ -4546,13 +4546,13 @@ msgid "In/Out"
 msgstr "ورودی/خروجی"
 
 msgid "Tunnel test status"
-msgstr ""
+msgstr "وضعیت آزمایش تونل"
 
 msgid "Round trip time for last test"
-msgstr ""
+msgstr "زمان رفت و برگشت برای آخرین آزمایش"
 
 msgid "Latency"
-msgstr ""
+msgstr "تاخیر"
 
 msgid "Gateway"
 msgstr "دروازه"
@@ -4564,22 +4564,22 @@ msgid "Endpoint"
 msgstr "نقطه پایانی"
 
 msgid "Rejected as duplicate"
-msgstr ""
+msgstr "به عنوان تکراری رد شد"
 
 msgid "Test successful"
-msgstr ""
+msgstr "آزمایش موفق"
 
 msgid "Test in progress"
-msgstr ""
+msgstr "آزمایش در حال انجام"
 
 msgid "Test failing (1 failure)"
-msgstr ""
+msgstr "آزمایش ناموفق (1 شکست)"
 
 msgid "Test failed (2 consecutive failures)"
-msgstr ""
+msgstr "آزمایش ناموفق (2 شکست متوالی)"
 
 msgid "Not yet tested"
-msgstr ""
+msgstr "هنوز آزمایش نشده"
 
 msgid "Locally hosted tunnel"
 msgstr "تونل میزبانی محلی"
@@ -5954,7 +5954,7 @@ msgid "This setting, when set to true, will block direct communication from all 
 msgstr "این تنظیم، وقتی روی true تنظیم شود، ارتباط مستقیم را از تمام روترهای در کشور خودتان مسدود کرده و آن‌ها را تا زمان راه‌اندازی مجدد روتر به لیست ممنوعیت شما اضافه می‌کند. [پیش‌فرض false است]"
 
 msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap (no transit tunnels), adding them to the session banlist. [Default is true]"
-msgstr ""
+msgstr "این تنظیم، در صورت تنظیم روی true، ارتباط مستقیم از تمام روترهای سطح X را که محدودیت ازدحام G منتشر می کنند (بدون تونل عبوری) مسدود کرده و آنها را به لیست ممنوع جلسه اضافه می کند. [پیش فرض true است]"
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "این تنظیم اجازه می دهد تا تست های SSU را غیرفعال کنید تا مشخص شود آیا روتر شما دارای فایروال است یا خیر و می توان آن را برای روترهایی که قطعا فایروال ندارند اما مشکلات فایروال متناوب را تجربه می کنند فعال کرد. "

@@ -2562,10 +2562,10 @@ msgid "Completed jobs"
 msgstr "Sarcină tocmai terminată"
 
 msgid "Runners"
-msgstr ""
+msgstr "Alergători"
 
 msgid "finished just now"
-msgstr ""
+msgstr "tocmai s-a încheiat"
 
 #, java-format
 msgid "finished {0} ago"
@@ -2588,10 +2588,10 @@ msgid "Queue Totals"
 msgstr "Totaluri în coadă"
 
 msgid "Job Statistics"
-msgstr ""
+msgstr "Statistici despre sarcini"
 
 msgid "last minute"
-msgstr ""
+msgstr "ultimul minut"
 
 msgid "Job Lag"
 msgstr "Întârzierea locului de muncă"
@@ -2600,13 +2600,13 @@ msgid "AVG"
 msgstr "AVG"
 
 msgid "PEAK"
-msgstr ""
+msgstr "VÂRF"
 
 msgid "All Stats"
-msgstr ""
+msgstr "Toate statisticile"
 
 msgid "Last 60s"
-msgstr ""
+msgstr "Ultimele 60s"
 
 msgid "Job"
 msgstr "Sarcină"
@@ -4100,10 +4100,10 @@ msgid "Message delay"
 msgstr "Întârziere mesaj"
 
 msgid "Average / peak job delay (last minute)"
-msgstr ""
+msgstr "Întârziere medie / maximă a sarcinii (ultimul minut)"
 
 msgid "Average / max delay before scheduled jobs are run"
-msgstr ""
+msgstr "Întârziere medie / maximă înainte de executarea sarcinilor programate"
 
 msgid "Indicates how quickly outbound messages to other I2P routers are sent"
 msgstr "Indică cât de repede se trimit mesaje de ieșire la alte routere I2P"
@@ -4527,7 +4527,7 @@ msgid "Address"
 msgstr "Adresa"
 
 msgid "Messages"
-msgstr ""
+msgstr "Mesaje"
 
 msgid "All Tunnels by Peer"
 msgstr "Toate tunelurile de la Peer"
@@ -4564,13 +4564,13 @@ msgid "In/Out"
 msgstr "Intrare/Ieşire"
 
 msgid "Tunnel test status"
-msgstr ""
+msgstr "Starea testului de tunel"
 
 msgid "Round trip time for last test"
-msgstr ""
+msgstr "Timpul de dus-întors pentru ultimul test"
 
 msgid "Latency"
-msgstr ""
+msgstr "Latență"
 
 msgid "Gateway"
 msgstr "Gateway"
@@ -4582,22 +4582,22 @@ msgid "Endpoint"
 msgstr "Punct final"
 
 msgid "Rejected as duplicate"
-msgstr ""
+msgstr "Respins ca duplicat"
 
 msgid "Test successful"
-msgstr ""
+msgstr "Test reușit"
 
 msgid "Test in progress"
-msgstr ""
+msgstr "Test în desfășurare"
 
 msgid "Test failing (1 failure)"
-msgstr ""
+msgstr "Testul eșuează (1 eșec)"
 
 msgid "Test failed (2 consecutive failures)"
-msgstr ""
+msgstr "Testul a eșuat (2 eșecuri consecutive)"
 
 msgid "Not yet tested"
-msgstr ""
+msgstr "Nu a fost încă testat"
 
 msgid "Locally hosted tunnel"
 msgstr "Tunel găzduit local"
@@ -5972,7 +5972,7 @@ msgid "This setting, when set to true, will block direct communication from all 
 msgstr "Această setare, când este setată la true, va bloca comunicarea directă de la toate routerele din propria țară și le va adăuga la lista de interdicții până când routerul repornește. [Implicit este false]"
 
 msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap (no transit tunnels), adding them to the session banlist. [Default is true]"
-msgstr ""
+msgstr "Această setare, când este setată la true, va bloca comunicarea directă de la toate routerele X tier care publică un G congestion cap (fără tuneluri de tranzit), adăugându-le la lista de interzicere a sesiunii. [Valoarea implicită este true]"
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "Această setare permite dezactivarea testelor SSU pentru a determina dacă router-ul dvs. are firewall și poate fi activat pentru ruterele care cu siguranță nu sunt firewall, dar întâmpină probleme de firewall intermitente. În cazul în care testarea este dezactivată, atât SSU, cât și NTCP ar trebui să raporteze adresa IP publică curentă pe pagina <a href=/info>informațiilor despre router</a>. [Necesită repornire]"

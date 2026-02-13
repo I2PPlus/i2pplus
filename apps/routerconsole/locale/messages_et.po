@@ -2555,10 +2555,10 @@ msgid "Completed jobs"
 msgstr "just lõpetatud tööd"
 
 msgid "Runners"
-msgstr ""
+msgstr "Jooksjad"
 
 msgid "finished just now"
-msgstr ""
+msgstr "lõppes just"
 
 #, java-format
 msgid "finished {0} ago"
@@ -2581,10 +2581,10 @@ msgid "Queue Totals"
 msgstr "Järjekorra summad"
 
 msgid "Job Statistics"
-msgstr ""
+msgstr "Töö statistika"
 
 msgid "last minute"
-msgstr ""
+msgstr "viimane minut"
 
 msgid "Job Lag"
 msgstr "Töö aeglus"
@@ -2593,13 +2593,13 @@ msgid "AVG"
 msgstr "AVG"
 
 msgid "PEAK"
-msgstr ""
+msgstr "TIPU"
 
 msgid "All Stats"
-msgstr ""
+msgstr "Kõik statistikad"
 
 msgid "Last 60s"
-msgstr ""
+msgstr "Viimased 60s"
 
 msgid "Job"
 msgstr "Töö"
@@ -4085,10 +4085,10 @@ msgid "Message delay"
 msgstr "Sõnumi viive"
 
 msgid "Average / peak job delay (last minute)"
-msgstr ""
+msgstr "Keskmine / tipp töö viivitus (viimane minut)"
 
 msgid "Average / max delay before scheduled jobs are run"
-msgstr ""
+msgstr "Keskmine / maksimaalne viivitus enne ajastatud tööde käivitamist"
 
 msgid "Indicates how quickly outbound messages to other I2P routers are sent"
 msgstr "näitab, kui kiiresti teistele I2P-ruuteritele väljaminevaid sõnumeid saadetakse"
@@ -4510,7 +4510,7 @@ msgid "Address"
 msgstr "Aadress"
 
 msgid "Messages"
-msgstr ""
+msgstr "Sõnumid"
 
 msgid "All Tunnels by Peer"
 msgstr "Peeri kõik tunnelid"
@@ -4547,13 +4547,13 @@ msgid "In/Out"
 msgstr "Sisse/Välja"
 
 msgid "Tunnel test status"
-msgstr ""
+msgstr "Tunneli testi olek"
 
 msgid "Round trip time for last test"
-msgstr ""
+msgstr "Tagasisaate aeg viimase testi jaoks"
 
 msgid "Latency"
-msgstr ""
+msgstr "Latentsus"
 
 msgid "Gateway"
 msgstr "Lüüs"
@@ -4565,22 +4565,22 @@ msgid "Endpoint"
 msgstr "Otspunkt"
 
 msgid "Rejected as duplicate"
-msgstr ""
+msgstr "Tagasi lükatud duplikaadina"
 
 msgid "Test successful"
-msgstr ""
+msgstr "Test õnnestus"
 
 msgid "Test in progress"
-msgstr ""
+msgstr "Test käib"
 
 msgid "Test failing (1 failure)"
-msgstr ""
+msgstr "Test ebaõnnestub (1 ebaõnnestumine)"
 
 msgid "Test failed (2 consecutive failures)"
-msgstr ""
+msgstr "Test ebaõnnestus (2 järjestikust ebaõnnestumist)"
 
 msgid "Not yet tested"
-msgstr ""
+msgstr "Pole veel testitud"
 
 msgid "Locally hosted tunnel"
 msgstr "Kohalikult hostitud tunnel"
@@ -5955,7 +5955,7 @@ msgid "This setting, when set to true, will block direct communication from all 
 msgstr "See seade, kui see on seatud tõeseks, blokeerib kõigi oma riigi ruuterite otsesuhtluse ja lisab need oma keeluloendisse kuni ruuteri taaskäivitamiseni. [Vaikimisi on see väär]"
 
 msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap (no transit tunnels), adding them to the session banlist. [Default is true]"
-msgstr ""
+msgstr "See säte, kui seatud väärtusele true, blokeerib otsese suhtluse kõigilt X-taseme ruuteritelt, mis avaldavad G-takistuse piiri (transiit tunneliteta), lisades need seansi keelduerandisse. [Vaikimisi on true]"
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "See seadistus lubab keelata SSU testid, et teha kindlaks, kas teie ruuter on tulemüüri taga ja see saab lubada ruuteritele, mis pole kindlasti tulemüüri taga, kuid kogevad katkendlikke tulemüüri probleeme. Testimise keelamise korral peaksid nii SSU kui ka NTCP teatama teie praeguse avaliku IP-aadressi aadressil <a href=/info>ruuteri teabekülg</a>. [Nõutav taaskäivitamine]"

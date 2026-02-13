@@ -2546,10 +2546,10 @@ msgid "Completed jobs"
 msgstr "방금 끝난 일감"
 
 msgid "Runners"
-msgstr ""
+msgstr "러너"
 
 msgid "finished just now"
-msgstr ""
+msgstr "방금 완료됨"
 
 #, java-format
 msgid "finished {0} ago"
@@ -2572,10 +2572,10 @@ msgid "Queue Totals"
 msgstr "대기열 총계"
 
 msgid "Job Statistics"
-msgstr ""
+msgstr "작업 통계"
 
 msgid "last minute"
-msgstr ""
+msgstr "지난 1분"
 
 msgid "Job Lag"
 msgstr "작업 지연"
@@ -2584,13 +2584,13 @@ msgid "AVG"
 msgstr "평균"
 
 msgid "PEAK"
-msgstr ""
+msgstr "피크"
 
 msgid "All Stats"
-msgstr ""
+msgstr "모든 통계"
 
 msgid "Last 60s"
-msgstr ""
+msgstr "지난 60초"
 
 msgid "Job"
 msgstr "일감"
@@ -4068,10 +4068,10 @@ msgid "Message delay"
 msgstr "메세지 딜레이"
 
 msgid "Average / peak job delay (last minute)"
-msgstr ""
+msgstr "평균/피크 작업 지연 (지난 1분)"
 
 msgid "Average / max delay before scheduled jobs are run"
-msgstr ""
+msgstr "예약된 작업 실행 전 평균/최대 지연"
 
 msgid "Indicates how quickly outbound messages to other I2P routers are sent"
 msgstr "얼마나 빨리 다른 I2P 라우터에게 메세지가 보내지는지 나타내기"
@@ -4491,7 +4491,7 @@ msgid "Address"
 msgstr "주소"
 
 msgid "Messages"
-msgstr ""
+msgstr "메시지"
 
 msgid "All Tunnels by Peer"
 msgstr "피어별 모든 터널"
@@ -4528,13 +4528,13 @@ msgid "In/Out"
 msgstr "입력/출력"
 
 msgid "Tunnel test status"
-msgstr ""
+msgstr "터널 테스트 상태"
 
 msgid "Round trip time for last test"
-msgstr ""
+msgstr "마지막 테스트의 왕복 시간"
 
 msgid "Latency"
-msgstr ""
+msgstr "지연 시간"
 
 msgid "Gateway"
 msgstr "게이트웨이"
@@ -4546,22 +4546,22 @@ msgid "Endpoint"
 msgstr "종점"
 
 msgid "Rejected as duplicate"
-msgstr ""
+msgstr "중복으로 거부됨"
 
 msgid "Test successful"
-msgstr ""
+msgstr "테스트 성공"
 
 msgid "Test in progress"
-msgstr ""
+msgstr "테스트 진행 중"
 
 msgid "Test failing (1 failure)"
-msgstr ""
+msgstr "테스트 실패 중 (1회 실패)"
 
 msgid "Test failed (2 consecutive failures)"
-msgstr ""
+msgstr "테스트 실패 (2회 연속 실패)"
 
 msgid "Not yet tested"
-msgstr ""
+msgstr "아직 테스트되지 않음"
 
 msgid "Locally hosted tunnel"
 msgstr "로컬로 호스팅 된 터널"
@@ -5936,7 +5936,7 @@ msgid "This setting, when set to true, will block direct communication from all 
 msgstr "이 설정을 true로 설정하면, 자국의 모든 라우터와의 직접 통신을 차단하고 라우터가 재시작될 때까지 이들을 차단 목록에 추가합니다. [기본값은 false]"
 
 msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap (no transit tunnels), adding them to the session banlist. [Default is true]"
-msgstr ""
+msgstr "이 설정이 true로 설정되면 G 정체 비율(전환 터널 없음)을 게시하는 모든 X 계층 라우터의 직접 통신을 차단하고 세션 금지 목록에 추가합니다. [기본값은 true입니다]"
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "이 설정은 라우터가 방화벽으로 막히고 있는지 여부를 확인하는 SSU 테스트를 비활성화하는 것을 허용하며, 분명히 방화벽으로 막히지 않았지만 간헐적인 방화벽 문제가 있는 라우터에 대해서만 활성화할 수 있습니다. 테스트가 비활성화된 경우, SSU 및 NTCP 모두 <a href=/info>라우터 정보 페이지</a>에서 현재 공인 IP 주소를 보고해야 합니다. [재부팅이 필요함]"

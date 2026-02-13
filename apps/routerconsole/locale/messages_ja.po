@@ -2546,10 +2546,10 @@ msgid "Completed jobs"
 msgstr "たった今ジョブが終了しました"
 
 msgid "Runners"
-msgstr ""
+msgstr "ランナー"
 
 msgid "finished just now"
-msgstr ""
+msgstr "たった今終わった"
 
 #, java-format
 msgid "finished {0} ago"
@@ -2572,10 +2572,10 @@ msgid "Queue Totals"
 msgstr "キューの合計"
 
 msgid "Job Statistics"
-msgstr ""
+msgstr "ジョブ統計"
 
 msgid "last minute"
-msgstr ""
+msgstr "過去1分"
 
 msgid "Job Lag"
 msgstr "ジョブの遅延"
@@ -2584,13 +2584,13 @@ msgid "AVG"
 msgstr "平均"
 
 msgid "PEAK"
-msgstr ""
+msgstr "ピーク"
 
 msgid "All Stats"
-msgstr ""
+msgstr "すべての統計"
 
 msgid "Last 60s"
-msgstr ""
+msgstr "過去60秒"
 
 msgid "Job"
 msgstr "ジョブ"
@@ -4068,10 +4068,10 @@ msgid "Message delay"
 msgstr "メッセージ遅延"
 
 msgid "Average / peak job delay (last minute)"
-msgstr ""
+msgstr "平均/ピークジョブ遅延（過去1分）"
 
 msgid "Average / max delay before scheduled jobs are run"
-msgstr ""
+msgstr "スケジュールされたジョブが実行される前の平均/最大遅延"
 
 msgid "Indicates how quickly outbound messages to other I2P routers are sent"
 msgstr "ほかの I2P のルーターへの送信メッセージが送られた際の速さを表示"
@@ -4491,7 +4491,7 @@ msgid "Address"
 msgstr "住所"
 
 msgid "Messages"
-msgstr ""
+msgstr "メッセージ"
 
 msgid "All Tunnels by Peer"
 msgstr "ピアによるすべてのトンネル"
@@ -4528,13 +4528,13 @@ msgid "In/Out"
 msgstr "入力/出力"
 
 msgid "Tunnel test status"
-msgstr ""
+msgstr "トンネルテストステータス"
 
 msgid "Round trip time for last test"
-msgstr ""
+msgstr "最後のテストの往返時間"
 
 msgid "Latency"
-msgstr ""
+msgstr "レイテンシ"
 
 msgid "Gateway"
 msgstr "ゲートウェイ"
@@ -4546,22 +4546,22 @@ msgid "Endpoint"
 msgstr "エンドポイント"
 
 msgid "Rejected as duplicate"
-msgstr ""
+msgstr "重複として却下"
 
 msgid "Test successful"
-msgstr ""
+msgstr "テスト成功"
 
 msgid "Test in progress"
-msgstr ""
+msgstr "テスト進行中"
 
 msgid "Test failing (1 failure)"
-msgstr ""
+msgstr "テスト失敗中（1つの失敗）"
 
 msgid "Test failed (2 consecutive failures)"
-msgstr ""
+msgstr "テスト失敗（2つの連続した失敗）"
 
 msgid "Not yet tested"
-msgstr ""
+msgstr "まだテストされていません"
 
 msgid "Locally hosted tunnel"
 msgstr "地元でホストされたトンネル"
@@ -5936,7 +5936,7 @@ msgid "This setting, when set to true, will block direct communication from all 
 msgstr "trueに設定すると、この設定は自国のすべてのルーターからの直接通信をブロックし、ルーターが再起動するまでそれらを禁止リストに追加します。[デフォルトはfalse]"
 
 msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap (no transit tunnels), adding them to the session banlist. [Default is true]"
-msgstr ""
+msgstr "これをtrueに設定すると、G輻輳.cap（トランスジット隧道なし）をPUBLISHするすべてのX tierルータからの直接通信がブロックされ、セッション禁止リストに追加されます。 [デフォルトはtrue]"
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "この設定により、ルータがファイアウォールであるかどうかを判断するためのSSUテストを無効にすることができます。ファイアウォールでないことが確認されているが、一時的なファイアウォールの問題が発生しているルータに対して有効にすることもできます。テストが無効にされている場合、SSUとNTCPの両方が<a href=/info>ルータ情報ページ</a>で現在の公開IPアドレスを報告するはずです。[再起動が必要です]"

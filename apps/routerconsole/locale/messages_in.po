@@ -2546,10 +2546,10 @@ msgid "Completed jobs"
 msgstr "Jobs yang baru selesai"
 
 msgid "Runners"
-msgstr ""
+msgstr "Pelari"
 
 msgid "finished just now"
-msgstr ""
+msgstr "baru saja selesai"
 
 #, java-format
 msgid "finished {0} ago"
@@ -2572,10 +2572,10 @@ msgid "Queue Totals"
 msgstr "Total Antrian"
 
 msgid "Job Statistics"
-msgstr ""
+msgstr "Statistik Pekerjaan"
 
 msgid "last minute"
-msgstr ""
+msgstr "menit terakhir"
 
 msgid "Job Lag"
 msgstr "Keterlambatan Pekerjaan"
@@ -2584,13 +2584,13 @@ msgid "AVG"
 msgstr "Rata-rata"
 
 msgid "PEAK"
-msgstr ""
+msgstr "PUNCAK"
 
 msgid "All Stats"
-msgstr ""
+msgstr "Semua Statistik"
 
 msgid "Last 60s"
-msgstr ""
+msgstr "60 detik terakhir"
 
 msgid "Job"
 msgstr "Job "
@@ -4068,10 +4068,10 @@ msgid "Message delay"
 msgstr "Penundaan pesan"
 
 msgid "Average / peak job delay (last minute)"
-msgstr ""
+msgstr "Rata-rata / puncak penundaan pekerjaan (menit terakhir)"
 
 msgid "Average / max delay before scheduled jobs are run"
-msgstr ""
+msgstr "Rata-rata / penundaan maks sebelum pekerjaan terjadwal dijalankan"
 
 msgid "Indicates how quickly outbound messages to other I2P routers are sent"
 msgstr "Menunjukkan seberapa cepat outbound messages dikirim kepada I2P router lain"
@@ -4491,7 +4491,7 @@ msgid "Address"
 msgstr "Alamat"
 
 msgid "Messages"
-msgstr ""
+msgstr "Pesan"
 
 msgid "All Tunnels by Peer"
 msgstr "Semua Terowongan Berdasarkan Peer"
@@ -4528,13 +4528,13 @@ msgid "In/Out"
 msgstr "Masuk/Keluar"
 
 msgid "Tunnel test status"
-msgstr ""
+msgstr "Status tes terowongan"
 
 msgid "Round trip time for last test"
-msgstr ""
+msgstr "Waktu perjalanan pulang-pergi untuk tes terakhir"
 
 msgid "Latency"
-msgstr ""
+msgstr "Latensi"
 
 msgid "Gateway"
 msgstr "Gateway "
@@ -4546,22 +4546,22 @@ msgid "Endpoint"
 msgstr "Endpoint "
 
 msgid "Rejected as duplicate"
-msgstr ""
+msgstr "Ditolak sebagai duplikat"
 
 msgid "Test successful"
-msgstr ""
+msgstr "Tes berhasil"
 
 msgid "Test in progress"
-msgstr ""
+msgstr "Tes sedang berlangsung"
 
 msgid "Test failing (1 failure)"
-msgstr ""
+msgstr "Tes gagal (1 kegagalan)"
 
 msgid "Test failed (2 consecutive failures)"
-msgstr ""
+msgstr "Tes gagal (2 kegagalan berturut-turut)"
 
 msgid "Not yet tested"
-msgstr ""
+msgstr "Belum diuji"
 
 msgid "Locally hosted tunnel"
 msgstr "Tunnel yang Berada di Lokal"
@@ -5936,7 +5936,7 @@ msgid "This setting, when set to true, will block direct communication from all 
 msgstr "Pengaturan ini, jika disetel ke true, akan memblokir komunikasi langsung dari semua router di negara Anda sendiri dan menambahkannya ke daftar larangan Anda hingga router Anda dimulai ulang. [Default adalah false]"
 
 msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap (no transit tunnels), adding them to the session banlist. [Default is true]"
-msgstr ""
+msgstr "Pengaturan ini, bila diatur ke true, akan memblokir komunikasi langsung dari semua router X tier yang menerbitkan G congestion cap (tanpa terowongan transit), menambahkannya ke daftar ban sesi. [Default adalah true]"
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "Pengaturan ini memungkinkan pematikan pengujian SSU untuk menentukan apakah router Anda dibatasi firewall dan dapat diaktifkan untuk router yang pasti tidak dibatasi firewall namun mengalami masalah pembatasan firewall yang tidak beraturan. Dalam hal pengujian dinonaktifkan, baik SSU maupun NTCP seharusnya melaporkan alamat IP publik saat ini Anda di <a href=/info>halaman informasi router</a>. [Restart diperlukan]"

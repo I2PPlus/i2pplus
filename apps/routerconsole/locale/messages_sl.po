@@ -2570,10 +2570,10 @@ msgid "Completed jobs"
 msgstr "Tako pred kratkim končane posluge"
 
 msgid "Runners"
-msgstr ""
+msgstr "Tekmovalci"
 
 msgid "finished just now"
-msgstr ""
+msgstr "ravnokončano"
 
 #, java-format
 msgid "finished {0} ago"
@@ -2596,10 +2596,10 @@ msgid "Queue Totals"
 msgstr "Skupaj vrste"
 
 msgid "Job Statistics"
-msgstr ""
+msgstr "Statistika opravil"
 
 msgid "last minute"
-msgstr ""
+msgstr "zadnja minuta"
 
 msgid "Job Lag"
 msgstr "Zamik naloga"
@@ -2608,13 +2608,13 @@ msgid "AVG"
 msgstr "POVP."
 
 msgid "PEAK"
-msgstr ""
+msgstr "VIŠEK"
 
 msgid "All Stats"
-msgstr ""
+msgstr "Vse statistike"
 
 msgid "Last 60s"
-msgstr ""
+msgstr "Zadnjih 60s"
 
 msgid "Job"
 msgstr "Posluga"
@@ -4116,10 +4116,10 @@ msgid "Message delay"
 msgstr "Zamik sporočila"
 
 msgid "Average / peak job delay (last minute)"
-msgstr ""
+msgstr "Povprečna / največja zamuda opravila (zadnja minuta)"
 
 msgid "Average / max delay before scheduled jobs are run"
-msgstr ""
+msgstr "Povprečna / največja zamuda pred izvedbo načrtovanih opravil"
 
 msgid "Indicates how quickly outbound messages to other I2P routers are sent"
 msgstr "Prikaže, kako hitro so sporočila za druge usmerjevalnike I2P poslana"
@@ -4545,7 +4545,7 @@ msgid "Address"
 msgstr "Naslov"
 
 msgid "Messages"
-msgstr ""
+msgstr "Sporočila"
 
 msgid "All Tunnels by Peer"
 msgstr "Vsi tuneli glede na parterje"
@@ -4582,13 +4582,13 @@ msgid "In/Out"
 msgstr "Vhod/Izhod"
 
 msgid "Tunnel test status"
-msgstr ""
+msgstr "Stanje testa predora"
 
 msgid "Round trip time for last test"
-msgstr ""
+msgstr "Čas potovanja za zadnji test"
 
 msgid "Latency"
-msgstr ""
+msgstr "Latency"
 
 msgid "Gateway"
 msgstr "Vrata"
@@ -4600,22 +4600,22 @@ msgid "Endpoint"
 msgstr "Končna točka"
 
 msgid "Rejected as duplicate"
-msgstr ""
+msgstr "Zavrnjeno kot dvojnik"
 
 msgid "Test successful"
-msgstr ""
+msgstr "Test uspešen"
 
 msgid "Test in progress"
-msgstr ""
+msgstr "Test v poteku"
 
 msgid "Test failing (1 failure)"
-msgstr ""
+msgstr "Test ne uspeva (1 neuspeh)"
 
 msgid "Test failed (2 consecutive failures)"
-msgstr ""
+msgstr "Test ni uspel (2 zaporedna neuspeha)"
 
 msgid "Not yet tested"
-msgstr ""
+msgstr "Še ni testirano"
 
 msgid "Locally hosted tunnel"
 msgstr "Lokalno gostiteljstvo tunela"
@@ -5990,7 +5990,7 @@ msgid "This setting, when set to true, will block direct communication from all 
 msgstr "Ta nastavitev, ko je nastavljen na true, bo blokirala neposredno komunikacijo z vseh routerjev v vaši državi in jih jih dodala na seznam prepovedovih, dok se router ne ponovno zagnene. [Privzeto je false]"
 
 msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap (no transit tunnels), adding them to the session banlist. [Default is true]"
-msgstr ""
+msgstr "Ta nastavitev, ko je nastavljena na true, bo blokirala neposredno komunikacijo od vseh usmerjevalnikov X ravni, ki objavijo G omejitev zmogljivosti (brez tranzitnih predorov), in jih dodala na seznam prepovedi seje. [Privzeto je true]"
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "Ta nastavitev dovoljuje onemogočanje SSU preizkusov za določanje, ali je vaš usmerjevalnik omejen, in se lahko omogoči za usmerjevalnike, ki so zanesljivo neomejeni, vendar doživljajo nepredvidljive težave z omejevalcem. Če je testiranje onemogočeno, bi morala SSU in NTCP poročata o vašem trenutnem javnem ip naslovu na <a href=/info>strani za informacije o usmerjevalniku</a>. [Ponovni zagon zahtoven]"

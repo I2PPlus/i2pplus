@@ -2554,10 +2554,10 @@ msgid "Completed jobs"
 msgstr "Akkurat fullførte jobber"
 
 msgid "Runners"
-msgstr ""
+msgstr "Løpere"
 
 msgid "finished just now"
-msgstr ""
+msgstr "akkurat ferdig"
 
 #, java-format
 msgid "finished {0} ago"
@@ -2580,10 +2580,10 @@ msgid "Queue Totals"
 msgstr "Køtotaler"
 
 msgid "Job Statistics"
-msgstr ""
+msgstr "Jobbstatistikk"
 
 msgid "last minute"
-msgstr ""
+msgstr "siste minutt"
 
 msgid "Job Lag"
 msgstr "Jobb forsinkelse"
@@ -2592,13 +2592,13 @@ msgid "AVG"
 msgstr "AVG"
 
 msgid "PEAK"
-msgstr ""
+msgstr "TOPP"
 
 msgid "All Stats"
-msgstr ""
+msgstr "Alle statistikker"
 
 msgid "Last 60s"
-msgstr ""
+msgstr "Siste 60s"
 
 msgid "Job"
 msgstr "Jobb"
@@ -4084,10 +4084,10 @@ msgid "Message delay"
 msgstr "Meldingsforsinkelse"
 
 msgid "Average / peak job delay (last minute)"
-msgstr ""
+msgstr "Gjennomsnitt / topp jobbforsinkelse (siste minutt)"
 
 msgid "Average / max delay before scheduled jobs are run"
-msgstr ""
+msgstr "Gjennomsnitt / maks forsinkelse før planlagte jobber kjøres"
 
 msgid "Indicates how quickly outbound messages to other I2P routers are sent"
 msgstr "Indikerer hvor raskt utgående meldinger til andre I2P-rutere sendes"
@@ -4509,7 +4509,7 @@ msgid "Address"
 msgstr "Adresse"
 
 msgid "Messages"
-msgstr ""
+msgstr "Meldinger"
 
 msgid "All Tunnels by Peer"
 msgstr "Alle tunneler av Peer"
@@ -4546,13 +4546,13 @@ msgid "In/Out"
 msgstr "Inn/Ut"
 
 msgid "Tunnel test status"
-msgstr ""
+msgstr "Tunnelteststatus"
 
 msgid "Round trip time for last test"
-msgstr ""
+msgstr "Tur-retur tid for siste test"
 
 msgid "Latency"
-msgstr ""
+msgstr "Latens"
 
 msgid "Gateway"
 msgstr "Portner"
@@ -4564,22 +4564,22 @@ msgid "Endpoint"
 msgstr "Sluttpunkt"
 
 msgid "Rejected as duplicate"
-msgstr ""
+msgstr "Avvist som duplikat"
 
 msgid "Test successful"
-msgstr ""
+msgstr "Test vellykket"
 
 msgid "Test in progress"
-msgstr ""
+msgstr "Test pågår"
 
 msgid "Test failing (1 failure)"
-msgstr ""
+msgstr "Test feiler (1 feil)"
 
 msgid "Test failed (2 consecutive failures)"
-msgstr ""
+msgstr "Test feilet (2 påfølgende feil)"
 
 msgid "Not yet tested"
-msgstr ""
+msgstr "Ikke testet ennå"
 
 msgid "Locally hosted tunnel"
 msgstr "Lokalt vertstunnel"
@@ -5954,7 +5954,7 @@ msgid "This setting, when set to true, will block direct communication from all 
 msgstr "Denne innstillingen, når satt til sann, vil blokkere direkte kommunikasjon fra alle rutere i ditt eget land og legge dem til i bannlisten din til ruteren din starter på nytt. [Standard er usann]"
 
 msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap (no transit tunnels), adding them to the session banlist. [Default is true]"
-msgstr ""
+msgstr "Denne innstillingen, når satt til true, vil blokkere direkte kommunikasjon fra alle X-tier rutere som publiserer en G overbelastningsgrense (ingen transitt-tunneler), og legge dem til i sessionens banliste. [Standard er true]"
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "Denne innstillingen tillater å deaktivere SSU-tester for å bestemme om ruteren din har brannmur og kan brukes for rutere som definitivt ikke har brannmur, men som opplever periodiske brannmursproblemer. Hvis testingen er deaktivert, bør både SSU og NTCP rapportere din nåværende offentlige IP-adresse på siden <a href=/info>router informasjon</a>. [Omstart kreves]"

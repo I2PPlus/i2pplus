@@ -2562,10 +2562,10 @@ msgid "Completed jobs"
 msgstr "Только что завершенные задачи"
 
 msgid "Runners"
-msgstr ""
+msgstr "Бегуны"
 
 msgid "finished just now"
-msgstr ""
+msgstr "только что закончилось"
 
 #, java-format
 msgid "finished {0} ago"
@@ -2588,10 +2588,10 @@ msgid "Queue Totals"
 msgstr "Итоги очереди"
 
 msgid "Job Statistics"
-msgstr ""
+msgstr "Статистика задач"
 
 msgid "last minute"
-msgstr ""
+msgstr "последняя минута"
 
 msgid "Job Lag"
 msgstr "Задержка работы"
@@ -2600,13 +2600,13 @@ msgid "AVG"
 msgstr "Среднее"
 
 msgid "PEAK"
-msgstr ""
+msgstr "ПИК"
 
 msgid "All Stats"
-msgstr ""
+msgstr "Все статистики"
 
 msgid "Last 60s"
-msgstr ""
+msgstr "Последние 60с"
 
 msgid "Job"
 msgstr "Задача"
@@ -4100,10 +4100,10 @@ msgid "Message delay"
 msgstr "Задежка сообщений"
 
 msgid "Average / peak job delay (last minute)"
-msgstr ""
+msgstr "Средняя / пиковая задержка задачи (последняя минута)"
 
 msgid "Average / max delay before scheduled jobs are run"
-msgstr ""
+msgstr "Средняя / максимальная задержка перед запуском запланированных задач"
 
 msgid "Indicates how quickly outbound messages to other I2P routers are sent"
 msgstr "Показывает, как быстро исходящие сообщения отправляются другим I2P-маршрутизаторам"
@@ -4527,7 +4527,7 @@ msgid "Address"
 msgstr "Адрес"
 
 msgid "Messages"
-msgstr ""
+msgstr "Сообщения"
 
 msgid "All Tunnels by Peer"
 msgstr "Все туннели по узлам"
@@ -4564,13 +4564,13 @@ msgid "In/Out"
 msgstr "Вход/Выход"
 
 msgid "Tunnel test status"
-msgstr ""
+msgstr "Статус теста туннеля"
 
 msgid "Round trip time for last test"
-msgstr ""
+msgstr "Время оборота для последнего теста"
 
 msgid "Latency"
-msgstr ""
+msgstr "Задержка"
 
 msgid "Gateway"
 msgstr "Шлюз"
@@ -4582,22 +4582,22 @@ msgid "Endpoint"
 msgstr "Конечная точка"
 
 msgid "Rejected as duplicate"
-msgstr ""
+msgstr "Отклонено как дубликат"
 
 msgid "Test successful"
-msgstr ""
+msgstr "Тест успешен"
 
 msgid "Test in progress"
-msgstr ""
+msgstr "Тест выполняется"
 
 msgid "Test failing (1 failure)"
-msgstr ""
+msgstr "Тест не проходит (1 отказ)"
 
 msgid "Test failed (2 consecutive failures)"
-msgstr ""
+msgstr "Тест не прошел (2 последовательных отказа)"
 
 msgid "Not yet tested"
-msgstr ""
+msgstr "Еще не протестировано"
 
 msgid "Locally hosted tunnel"
 msgstr "Туннель локальной доступности"
@@ -5972,7 +5972,7 @@ msgid "This setting, when set to true, will block direct communication from all 
 msgstr "Эта настройка, если установлена в true, будет блокировать прямую связь со всеми маршрутизаторами в вашей собственной стране и добавлять их в ваш список блокировок до перезапуска маршрутизатора. [По умолчанию false]"
 
 msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap (no transit tunnels), adding them to the session banlist. [Default is true]"
-msgstr ""
+msgstr "Этот параметр, при установке значения true, заблокирует прямую связь со всеми маршрутизаторами X уровня, которые публикуют G ограничение перегрузки (без транзитных туннелей), добавив их в список запретов сессии. [По умолчанию true]"
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "Этот параметр позволяет отключить тесты SSU, чтобы определить, защищен ли ваш маршрутизатор брандмауэром, и может быть включен для маршрутизаторов, которые определенно не имеют брандмауэра, но испытывают периодические проблемы с брандмауэром. Если тестирование отключено, SSU и NTCP должны сообщить ваш текущий общедоступный IP-адрес на <a href=/info>странице информации о маршрутизаторе</a>. [Требуется перезагрузка]"

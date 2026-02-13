@@ -2546,10 +2546,10 @@ msgid "Completed jobs"
 msgstr "Vừa hoàn thành công việc"
 
 msgid "Runners"
-msgstr ""
+msgstr "Người chạy"
 
 msgid "finished just now"
-msgstr ""
+msgstr "vừa kết thúc"
 
 #, java-format
 msgid "finished {0} ago"
@@ -2572,10 +2572,10 @@ msgid "Queue Totals"
 msgstr "Tổng số hàng đợi"
 
 msgid "Job Statistics"
-msgstr ""
+msgstr "Thống kê công việc"
 
 msgid "last minute"
-msgstr ""
+msgstr "phút cuối"
 
 msgid "Job Lag"
 msgstr "Lớp công việc"
@@ -2584,13 +2584,13 @@ msgid "AVG"
 msgstr "AVG"
 
 msgid "PEAK"
-msgstr ""
+msgstr "ĐỈNH"
 
 msgid "All Stats"
-msgstr ""
+msgstr "Tất cả thống kê"
 
 msgid "Last 60s"
-msgstr ""
+msgstr "60 giây cuối"
 
 msgid "Job"
 msgstr "Công việc"
@@ -4068,10 +4068,10 @@ msgid "Message delay"
 msgstr "Độ trễ tin nhắn"
 
 msgid "Average / peak job delay (last minute)"
-msgstr ""
+msgstr "Trung bình / đỉnh độ trễ công việc (phút cuối)"
 
 msgid "Average / max delay before scheduled jobs are run"
-msgstr ""
+msgstr "Trung bình / độ trễ tối đa trước khi công việc được lên lịch chạy"
 
 msgid "Indicates how quickly outbound messages to other I2P routers are sent"
 msgstr "Cho biết tốc độ gửi tin nhắn đi đến các bộ định tuyến I2P khác"
@@ -4491,7 +4491,7 @@ msgid "Address"
 msgstr "Địa chỉ"
 
 msgid "Messages"
-msgstr ""
+msgstr "Tin nhắn"
 
 msgid "All Tunnels by Peer"
 msgstr "Tất cả các đường hầm ngang hàng"
@@ -4528,13 +4528,13 @@ msgid "In/Out"
 msgstr "Vào/Ra"
 
 msgid "Tunnel test status"
-msgstr ""
+msgstr "Trạng thái kiểm tra đường hầm"
 
 msgid "Round trip time for last test"
-msgstr ""
+msgstr "Thời gian khứ hồi cho bài kiểm tra cuối cùng"
 
 msgid "Latency"
-msgstr ""
+msgstr "Độ trễ"
 
 msgid "Gateway"
 msgstr "Cổng"
@@ -4546,22 +4546,22 @@ msgid "Endpoint"
 msgstr "Điểm cuối"
 
 msgid "Rejected as duplicate"
-msgstr ""
+msgstr "Bị từ chối như bản sao"
 
 msgid "Test successful"
-msgstr ""
+msgstr "Kiểm tra thành công"
 
 msgid "Test in progress"
-msgstr ""
+msgstr "Kiểm tra đang tiến hành"
 
 msgid "Test failing (1 failure)"
-msgstr ""
+msgstr "Kiểm tra thất bại (1 lỗi)"
 
 msgid "Test failed (2 consecutive failures)"
-msgstr ""
+msgstr "Kiểm tra thất bại (2 lỗi liên tiếp)"
 
 msgid "Not yet tested"
-msgstr ""
+msgstr "Chưa được kiểm tra"
 
 msgid "Locally hosted tunnel"
 msgstr "Đường hầm được lưu trữ cục bộ"
@@ -5936,7 +5936,7 @@ msgid "This setting, when set to true, will block direct communication from all 
 msgstr "Cài đặt này, khi được đặt thành true, sẽ chặn giao tiếp trực tiếp từ tất cả các bộ định tuyến trong quốc gia của bạn và thêm chúng vào danh sách cấm của bạn cho đến khi bộ định tuyến của bạn khởi động lại. [Mặc định là false]"
 
 msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap (no transit tunnels), adding them to the session banlist. [Default is true]"
-msgstr ""
+msgstr "Cài đặt này, khi được đặt thành true, sẽ chặn giao tiếp trực tiếp từ tất cả các bộ định tuyến X tier xuất bản G congestion cap (không có đường hầm quá cảnh), thêm chúng vào danh sách cấm phiên. [Mặc định là true]"
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "Cài đặt này cho phép vô hiệu hóa các bài kiểm tra SSU để xác định xem bộ định tuyến của bạn có bị tường lửa hay không, và có thể được kích hoạt cho các bộ định tuyến rõ ràng không bị tường lửa nhưng đang gặp vấn đề tường lửa không ổn định. Trong trường hợp kiểm tra bị vô hiệu hóa, cả SSU và NTCP nên báo cáo địa chỉ công khai hiện tại của bạn trên trang thông tin về <a href=/info>bộ định tuyến</a>. [Yêu cầu khởi động lại]"

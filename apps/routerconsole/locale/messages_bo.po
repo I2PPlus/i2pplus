@@ -2546,10 +2546,10 @@ msgid "Completed jobs"
 msgstr "ད་གཟོད་མཇུག་རྫོགས་ལས་ཀ།"
 
 msgid "Runners"
-msgstr ""
+msgstr "འགོ་གཉེར་བ་"
 
 msgid "finished just now"
-msgstr ""
+msgstr "ད་ལྟོའི་ནང་མཇུག་སྤྱད་པ་"
 
 #, java-format
 msgid "finished {0} ago"
@@ -2572,10 +2572,10 @@ msgid "Queue Totals"
 msgstr "གྲལ་སྒྲིག་བསྡོམས།"
 
 msgid "Job Statistics"
-msgstr ""
+msgstr "ལས་ཀའི་བསྡོམས་རྩིས་"
 
 msgid "last minute"
-msgstr ""
+msgstr "སྔོན་གྱི་སྐར་མ་"
 
 msgid "Job Lag"
 msgstr "ལས་ཀ་དོན་དུས་རིང་ལུག"
@@ -2584,13 +2584,13 @@ msgid "AVG"
 msgstr "ཆ་སྙོམ།"
 
 msgid "PEAK"
-msgstr ""
+msgstr "མཐོ་ཚད་"
 
 msgid "All Stats"
-msgstr ""
+msgstr "ཚད་གཞི་ཡོད་པ་"
 
 msgid "Last 60s"
-msgstr ""
+msgstr "སྔོན་གྱི་སྐར་མ་60"
 
 msgid "Job"
 msgstr "ལས་ཀ།"
@@ -4068,10 +4068,10 @@ msgid "Message delay"
 msgstr "འཕྲིན་ཐུང་ཕྱིར་འགྱངས།"
 
 msgid "Average / peak job delay (last minute)"
-msgstr ""
+msgstr "འབུར་ཐོན་/མཐོ་ཚད་ལས་ཀའི་འགོག་པ (སྔོན་གྱི་སྐར་མ་)"
 
 msgid "Average / max delay before scheduled jobs are run"
-msgstr ""
+msgstr "འབུར་ཐོན་/ཆེས་ཆེ་བའི་འགོག་པ་སྔོན་དུ་ལས་བཀོད་བྱ་ཡོད་པའི་ལས་ཀ་མཇུག་སྤྱད་པའི་སྔོན་"
 
 msgid "Indicates how quickly outbound messages to other I2P routers are sent"
 msgstr "གཞན་གྱི་ I2P རྩིས་འཁོར་ལ་ཕྱིར་འགྲོ་འཕྲིན་ཐུང་ཚུད་མགྱོགས་པོ་བསྐུར་བ་བསྟན་གྱི་ཡོད།"
@@ -4491,7 +4491,7 @@ msgid "Address"
 msgstr "ཁ་བྱང་།"
 
 msgid "Messages"
-msgstr ""
+msgstr "འཕྲིན་ཡིག་"
 
 msgid "All Tunnels by Peer"
 msgstr "རྒྱུན་དུ་བཙོན་པའི་གྲུང་ནེལ་བཟོ་བར་ལ་ཚང་མ།"
@@ -4528,13 +4528,13 @@ msgid "In/Out"
 msgstr "དི/ཐུང"
 
 msgid "Tunnel test status"
-msgstr ""
+msgstr "འགག་པའི་བརྟག་དཔྱད་གནས་ཡིག"
 
 msgid "Round trip time for last test"
-msgstr ""
+msgstr "མཇུག་གྱི་བརྟག་དཔྱད་ཀྱི་འཁོར་སྒ໲འི་དུས་ཚོད"
 
 msgid "Latency"
-msgstr ""
+msgstr "འགོག་ཚད"
 
 msgid "Gateway"
 msgstr "སྒུད་ཝེ།"
@@ -4546,22 +4546,22 @@ msgid "Endpoint"
 msgstr "མཐོག་ས་གནས།"
 
 msgid "Rejected as duplicate"
-msgstr ""
+msgstr "བསྡུ་སྒ໲ག་གི་ཐོག་ནས་ལེན་པ་མེད"
 
 msgid "Test successful"
-msgstr ""
+msgstr "བརྟག་དཔྱད་འཐོབ་པ་"
 
 msgid "Test in progress"
-msgstr ""
+msgstr "བརྟག་དཔྱད་བྱེད་པའི་ནང་"
 
 msgid "Test failing (1 failure)"
-msgstr ""
+msgstr "བརྟག་དཔྱད་འབྲས་བུ (འབྲས་བུ་1)"
 
 msgid "Test failed (2 consecutive failures)"
-msgstr ""
+msgstr "བརྟག་དཔྱད་འབྲས་བུ (འབྲས་བུ་2 རྒ໱ུད་རིམ)"
 
 msgid "Not yet tested"
-msgstr ""
+msgstr "ད་དུང་བརྟག་དཔྱད་མ་བྱས་པ་"
 
 msgid "Locally hosted tunnel"
 msgstr "ནང་ཁུག་ལ་འཛུགས་པའི་གྲུང་ནེལ་"
@@ -5936,7 +5936,7 @@ msgid "This setting, when set to true, will block direct communication from all 
 msgstr "སྒྲིག་འགོད་འདི་ true ལ་གཏན་འཁེལ་བྱས་ཚེ། ཁྱེད་ཀྱི་རང་གི་རྒྱལ་ཁབ་ནང་གི་རྒྱུད་པ་ཚང་མ་དང་ཐད་ཀྱི་ཐད་འཕྲོད་བཀག་པ་དང་། ཁྱེད་ཀྱི་བཀག་པའི་ཐོ་གཞིར་ཁ་སྣོན་བྱེད། ཁྱེད་ཀྱི་རྒྱུད་པ་བསྐྱར་འགོ་ཚོགས་བར་དུ་བཀག་པ་མཚམས་འཇོག [སྔོན་སྒྲིག་ནི་ false]"
 
 msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap (no transit tunnels), adding them to the session banlist. [Default is true]"
-msgstr ""
+msgstr "གྱི་དོན་དུ་འདི་བཙུགས་པ་དང་ལྷུད་ཡོད་པའི་སྡེ་ཁུལ་G (འགོག་སྒ໲འི་ཚད)དྲིལ་བསྒ໲གས་པའི་X རིམ་པའི་རུ་ཐོག་ཚུ་ནས་ཐད་ཀར་འབྲེལ་གཏུགས་བྱ་རྒ໱ུ་འགོག་ནི་དང་། ཚོགས་པའི་འཇོག་པའི་ཐོ་ཡིག་ནང་དུ་བསྣན་པ་ཡིན། [སྔོན་ལེན་True ཡིན]"
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "སྒྲིག་འགོད་འདིས་ SSU ཚོད་ལྟ་སྒོ་བ་བརྒྱུད་པ་མེ་བརྒྱུད་པ་མེ་བར་དུག་ཡོད་མེད་པ་བརྒྱུད་པ་མེ་བར་དུག་ཡོད་མེད་པ་ཡིན་ཡོད་པའི་རྒྱུད་པ་དག་ལ་བརྒྱུད་བྱེད་པར་གྱི་གནས་ཐབས་བྱེད། ཚོད་ལྟ་སྒོ་བ་བརྒྱུད་བྱེད་པའི་གནས་ཚུལ་དུ། SSU དང་ NTCP གཉིས་ཀ <a href=/info>རྒྱུད་པའི་ཆ་འཕྲིན་ཤོག་ངོས།</a> ཐོག་ཁྱེད་ཀྱི་ད་ལྟའི་སྤྱི་ IP ཁ་བྱང་སྙན་སྒྲོན་བྱེད་དགོས། [བསྐྱར་འགོ་ཚོགས་དགོས།]"

@@ -2554,10 +2554,10 @@ msgid "Completed jobs"
 msgstr "Az önce biten görevler"
 
 msgid "Runners"
-msgstr ""
+msgstr "Koşucular"
 
 msgid "finished just now"
-msgstr ""
+msgstr "az önce bitti"
 
 #, java-format
 msgid "finished {0} ago"
@@ -2580,10 +2580,10 @@ msgid "Queue Totals"
 msgstr "Sıra Toplamları"
 
 msgid "Job Statistics"
-msgstr ""
+msgstr "İş İstatistikleri"
 
 msgid "last minute"
-msgstr ""
+msgstr "son dakika"
 
 msgid "Job Lag"
 msgstr "İş Gecikmesi"
@@ -2592,13 +2592,13 @@ msgid "AVG"
 msgstr "ORTA"
 
 msgid "PEAK"
-msgstr ""
+msgstr "ZİRVE"
 
 msgid "All Stats"
-msgstr ""
+msgstr "Tüm İstatistikler"
 
 msgid "Last 60s"
-msgstr ""
+msgstr "Son 60s"
 
 msgid "Job"
 msgstr "Görev"
@@ -4084,10 +4084,10 @@ msgid "Message delay"
 msgstr "İleti gecikmesi"
 
 msgid "Average / peak job delay (last minute)"
-msgstr ""
+msgstr "Ortalama / пик iş gecikmesi (son dakika)"
 
 msgid "Average / max delay before scheduled jobs are run"
-msgstr ""
+msgstr "Zamanlanmış işler çalıştırılmadan önce ortalama / maksimum gecikme"
 
 msgid "Indicates how quickly outbound messages to other I2P routers are sent"
 msgstr "Gidiş iletilerinin diğer I2P yönelticilerine ne kadar çabuk gönderildiğini gösterir"
@@ -4509,7 +4509,7 @@ msgid "Address"
 msgstr "Adres"
 
 msgid "Messages"
-msgstr ""
+msgstr "Mesajlar"
 
 msgid "All Tunnels by Peer"
 msgstr "Eşlere Göre Tüm Tüneller"
@@ -4546,13 +4546,13 @@ msgid "In/Out"
 msgstr "Giriş/Çıkış"
 
 msgid "Tunnel test status"
-msgstr ""
+msgstr "Tünel test durumu"
 
 msgid "Round trip time for last test"
-msgstr ""
+msgstr "Son test için gidiş-dönüş süresi"
 
 msgid "Latency"
-msgstr ""
+msgstr "Gecikme"
 
 msgid "Gateway"
 msgstr "Geçit"
@@ -4564,22 +4564,22 @@ msgid "Endpoint"
 msgstr "Varış noktası"
 
 msgid "Rejected as duplicate"
-msgstr ""
+msgstr "Yinelenen olarak reddedildi"
 
 msgid "Test successful"
-msgstr ""
+msgstr "Test başarılı"
 
 msgid "Test in progress"
-msgstr ""
+msgstr "Test sürüyor"
 
 msgid "Test failing (1 failure)"
-msgstr ""
+msgstr "Test başarısız (1 hata)"
 
 msgid "Test failed (2 consecutive failures)"
-msgstr ""
+msgstr "Test başarısız (2 ardışık hata)"
 
 msgid "Not yet tested"
-msgstr ""
+msgstr "Henüz test edilmedi"
 
 msgid "Locally hosted tunnel"
 msgstr "Yerel olarak barındırılan tünel"
@@ -5954,7 +5954,7 @@ msgid "This setting, when set to true, will block direct communication from all 
 msgstr "Bu ayar true olarak ayarlandığında, kendi ülkenizdeki tüm yönlendiricilerle doğrudan iletişimi engelleyecek ve yönlendiriciniz yeniden başlayana kadar onları yasak listenize ekleyecektir. [Varsayılan false]"
 
 msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap (no transit tunnels), adding them to the session banlist. [Default is true]"
-msgstr ""
+msgstr "Bu ayar true olarak ayarlandığında, bir G tıkanıklık sınırı (geçiş tüneli yok) yayınlayan tüm X katmanı yönlendiricilerden doğrudan iletişimi engelleyecek ve bunları oturum yasaklama listesine ekleyecektir. [Varsayılan true'dur]"
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "Bu ayar, yönlendiricinizin güvenlik duvarı ile korunup korunmadığını belirlemek için SSU testlerinin devre dışı bırakılmasına izin verir ve kesinlikle güvenlik duvarı ile korunmayan ancak aralıklı güvenlik duvarı sorunları yaşayan yönlendiriciler için etkinleştirilebilir. Testin devre dışı bırakılması durumunda hem SSU hem de NTCP, mevcut genel IP adresinizi <a href=/info>yönlendirici bilgi sayfasında</a> bildirmelidir. [Yeniden başlatma gerekiyor]"

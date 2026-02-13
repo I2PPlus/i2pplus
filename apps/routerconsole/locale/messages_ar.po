@@ -2586,10 +2586,10 @@ msgid "Completed jobs"
 msgstr "انتهيت للتو من المهام"
 
 msgid "Runners"
-msgstr ""
+msgstr "المشغلون"
 
 msgid "finished just now"
-msgstr ""
+msgstr "انتهى للتو"
 
 #, java-format
 msgid "finished {0} ago"
@@ -2612,10 +2612,10 @@ msgid "Queue Totals"
 msgstr "إجماليات قائمة الانتظار"
 
 msgid "Job Statistics"
-msgstr ""
+msgstr "إحصائيات الوظائف"
 
 msgid "last minute"
-msgstr ""
+msgstr "آخر دقيقة"
 
 msgid "Job Lag"
 msgstr "فريق العمل"
@@ -2624,13 +2624,13 @@ msgid "AVG"
 msgstr "متوسط"
 
 msgid "PEAK"
-msgstr ""
+msgstr "ذروة"
 
 msgid "All Stats"
-msgstr ""
+msgstr "جميع الإحصائيات"
 
 msgid "Last 60s"
-msgstr ""
+msgstr "آخر 60 ثانية"
 
 msgid "Job"
 msgstr "الوظيفة"
@@ -4148,10 +4148,10 @@ msgid "Message delay"
 msgstr "تأخر الرسالة"
 
 msgid "Average / peak job delay (last minute)"
-msgstr ""
+msgstr "متوسط / ذروة تأخير الوظيفة (آخر دقيقة)"
 
 msgid "Average / max delay before scheduled jobs are run"
-msgstr ""
+msgstr "متوسط / أقصى تأخير قبل تشغيل الوظائف المجدولة"
 
 msgid "Indicates how quickly outbound messages to other I2P routers are sent"
 msgstr "يشير إلى مدى سرعة إرسال الرسائل الصادرة إلى أجهزة توجيه I2P الأخرى"
@@ -4581,7 +4581,7 @@ msgid "Address"
 msgstr "العنوان"
 
 msgid "Messages"
-msgstr ""
+msgstr "الرسائل"
 
 msgid "All Tunnels by Peer"
 msgstr "جميع الأنفاق حسب النظير"
@@ -4618,13 +4618,13 @@ msgid "In/Out"
 msgstr "داخل/خارج"
 
 msgid "Tunnel test status"
-msgstr ""
+msgstr "حالة اختبار النفق"
 
 msgid "Round trip time for last test"
-msgstr ""
+msgstr "وقت الذهاب والإياب لآخر اختبار"
 
 msgid "Latency"
-msgstr ""
+msgstr "زمن الاستجابة"
 
 msgid "Gateway"
 msgstr "البوابة"
@@ -4636,22 +4636,22 @@ msgid "Endpoint"
 msgstr "نقطة النهاية"
 
 msgid "Rejected as duplicate"
-msgstr ""
+msgstr "مرفوض كمكرر"
 
 msgid "Test successful"
-msgstr ""
+msgstr "نجح الاختبار"
 
 msgid "Test in progress"
-msgstr ""
+msgstr "الاختبار جارٍ"
 
 msgid "Test failing (1 failure)"
-msgstr ""
+msgstr "الاختبار يفشل (فشل واحد)"
 
 msgid "Test failed (2 consecutive failures)"
-msgstr ""
+msgstr "الاختبار فشل (فشلان متتاليان)"
 
 msgid "Not yet tested"
-msgstr ""
+msgstr "لم يُختبر بعد"
 
 msgid "Locally hosted tunnel"
 msgstr "نفق مستضاف محليًا"
@@ -6026,7 +6026,7 @@ msgid "This setting, when set to true, will block direct communication from all 
 msgstr "هذا الإعداد، عند التعيين على true، سيحظر الاتصال المباشر من جميع أجهزة التوجيه في بلدك ويضيفها إلى قائمة الحظر الخاصة بك حتى يعيد جهاز التوجيه التشغيل. [الافتراضي هو false]"
 
 msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap (no transit tunnels), adding them to the session banlist. [Default is true]"
-msgstr ""
+msgstr "عند تعيينه إلى true، سيؤدي هذا الإعداد إلى حظر الاتصال المباشر من جميع أجهزة توجيه X tier التي تنشر حد ازدحام G (لا توجد نفقات مرور)، وإضافتها إلى قائمة الحظر للجلسة. [القيمة الافتراضية هي true]"
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "هذا الإعداد يسمح بتعطيل اختبارات SSU لتحديد ما إذا كان الراوتر الخاص بك محمي بجدار ناري ويمكن تمكينه للرواتر التي لا شك أنها غير محمية بجدار ناري ولكنها تعاني من قضايا فرض جدار ناري متقطعة. في حالة تعطيل الاختبار، كلا SSU وـ NTCP يجب أن يبلغ عن عنوان IP العام الحالي الخاص بك على <a href=/info>صفحة معلومات الراوتر</a>. [إعادة تشغيل مطلوبة]"
