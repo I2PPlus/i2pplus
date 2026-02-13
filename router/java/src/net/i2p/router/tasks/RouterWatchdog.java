@@ -52,6 +52,10 @@ public class RouterWatchdog implements Runnable {
     private static final long MIN_DUMP_INTERVAL= 6*60*60*1000;
     /** Only log status at ERROR level after this many consecutive errors */
     private static final int STATUS_ERROR_THRESHOLD = 3;
+    /** Threshold for attempting runner recovery - after this many consecutive errors */
+    private static final int RECOVERY_THRESHOLD = 3;
+    /** Number of replacement runners to spawn during recovery */
+    private static final int REPLACEMENT_RUNNERS = 4;
 
     /**
      * Create a new router watchdog.
@@ -172,6 +176,37 @@ public class RouterWatchdog implements Runnable {
     }
 
     /**
+     * Attempt to recover from stuck job runners.
+     * Interrupts all runners to break potential deadlocks and spawns
+     * replacement runners to ensure queue processing continues.
+     * 
+     * @return true if recovery actions were taken
+     * @since 0.9.68+
+     */
+    private boolean attemptRecovery() {
+        // Check if we have stuck runners
+        int stuckRunners = _context.jobQueue().getStuckRunnerCount();
+        
+        if (stuckRunners > 0) {
+            _log.log(Log.CRIT, "Watchdog detected " + stuckRunners + " stuck runner(s) -> Attempting recovery");
+            
+            // 1. Interrupt all runners to break deadlocks
+            int interrupted = _context.jobQueue().interruptAllRunners();
+            if (interrupted > 0) {
+                _log.info("Interrupted " + interrupted + " runner(s) to break potential deadlock");
+            }
+            
+            // 2. Spawn replacement runners
+            _context.jobQueue().spawnReplacementRunners(REPLACEMENT_RUNNERS);
+            _log.info("Spawned " + REPLACEMENT_RUNNERS + " replacement runners");
+            
+            return true;
+        }
+        
+        return false;
+    }
+
+    /**
      * Monitor router health and take action if needed.
      * Checks job queue liveliness, client responsiveness, and network status.
      * If problems are detected, logs status and may force a restart after
@@ -196,6 +231,12 @@ public class RouterWatchdog implements Runnable {
         else {
             _consecutiveErrors++;
             dumpStatus();
+            
+            // Attempt recovery before forcing restart
+            if (_consecutiveErrors >= RECOVERY_THRESHOLD && _consecutiveErrors < STATUS_ERROR_THRESHOLD + 5) {
+                attemptRecovery();
+            }
+            
             if (shutdownOnHang()) {
                 _log.log(Log.CRIT, "Router hung! Restart forced by Watchdog!");
                 try { Thread.sleep(30*1000); } catch (InterruptedException ie) {}

@@ -1,5 +1,7 @@
 package net.i2p.router;
 
+import java.util.concurrent.*;
+
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
@@ -18,6 +20,11 @@ class JobQueueRunner extends I2PThread {
     private volatile Job _lastJob;
     private volatile long _lastBegin;
     private volatile long _lastEnd;
+    
+    /** Maximum time a job can run before being interrupted (30 seconds) */
+    private static final long MAX_JOB_RUNTIME_MS = 30 * 1000;
+    /** Thread pool for executing jobs with timeout */
+    private final ExecutorService _timeoutExecutor;
 
     public JobQueueRunner(RouterContext context, int id) {
         _context = context;
@@ -26,12 +33,24 @@ class JobQueueRunner extends I2PThread {
         _log = _context.logManager().getLog(JobQueueRunner.class);
         setPriority(MAX_PRIORITY);
         // all createRateStat in JobQueue
+        // Single-thread executor for job timeout enforcement
+        _timeoutExecutor = Executors.newSingleThreadExecutor(r -> {
+            Thread t = new Thread(r, "JobQueueRunner-Timeout-" + _id);
+            t.setDaemon(true);
+            return t;
+        });
     }
 
     public Job getCurrentJob() {return _currentJob;}
     public Job getLastJob() {return _lastJob;}
     public int getRunnerId() {return _id;}
-    public void stopRunning() {_keepRunning = false;}
+    public void stopRunning() {
+        _keepRunning = false;
+        // Shutdown timeout executor gracefully
+        if (_timeoutExecutor != null && !_timeoutExecutor.isShutdown()) {
+            _timeoutExecutor.shutdownNow();
+        }
+    }
     public void startRunning() {_keepRunning = true;}
     public long getLastBegin() {return _lastBegin;}
     public long getLastEnd() {return _lastEnd;}
@@ -108,16 +127,42 @@ class JobQueueRunner extends I2PThread {
     }
 
     private void runCurrentJob() {
+        _lastBegin = _context.clock().now();
+        if (_currentJob == null) return;
+        
+        final String jobName = _currentJob.getName();
+        Future<?> future = null;
+        
         try {
-            _lastBegin = _context.clock().now();
-            if (_currentJob != null) {_currentJob.runJob();}
-        } catch (OutOfMemoryError oom) {
-            try {
-                if (SystemVersion.isAndroid()) {_context.router().shutdown(Router.EXIT_OOM);}
-                else {fireOOM(oom);}
-            } catch (Throwable t) {}
+            // Execute job with timeout to prevent indefinite blocking
+            future = _timeoutExecutor.submit(() -> {
+                try {
+                    _currentJob.runJob();
+                } catch (OutOfMemoryError oom) {
+                    if (SystemVersion.isAndroid()) {
+                        _context.router().shutdown(Router.EXIT_OOM);
+                    } else {
+                        fireOOM(oom);
+                    }
+                }
+            });
+            
+            // Wait for completion with timeout
+            future.get(MAX_JOB_RUNTIME_MS, TimeUnit.MILLISECONDS);
+            
+        } catch (TimeoutException te) {
+            // Job took too long - interrupt it
+            future.cancel(true);
+            _log.log(Log.CRIT, "Job [" + jobName + "] timed out after " + MAX_JOB_RUNTIME_MS + "ms on thread " + _id + " -> Interrupted");
+            // Mark the runner as potentially stuck for watchdog detection
+            _context.statManager().addRateData("jobQueue.jobTimeout", 1);
+        } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+            _log.log(Log.WARN, "Job [" + jobName + "] interrupted on thread " + _id);
+        } catch (ExecutionException ee) {
+            _log.log(Log.CRIT, "Error processing job [" + jobName + "] on thread " + _id, ee.getCause());
         } catch (Throwable t) {
-            _log.log(Log.CRIT, "Error processing job [" + _currentJob.getName() + "] on thread " + _id, t);
+            _log.log(Log.CRIT, "Unexpected error processing job [" + jobName + "] on thread " + _id, t);
         }
     }
 
