@@ -101,9 +101,9 @@ public class ExpireJobManager extends JobImpl {
         int queueSize = _expirationQueue.size();
         boolean isBackedUp = queueSize > BACKED_UP_THRESHOLD;
 
-        if (isBackedUp && _log.shouldInfo()) {
-            _log.info("Expire Tunnels Job backed up with " + queueSize + " pending tunnel expirations -> Recovering...");
-        }
+        //if (isBackedUp && _log.shouldInfo()) {
+        //    _log.info("Expire Tunnels Job backed up with " + queueSize + " pending tunnel expirations -> Recovering...");
+        //}
 
         List<TunnelExpiration> readyToExpire = new ArrayList<>();
         List<TunnelExpiration> readyToDrop = new ArrayList<>();
@@ -128,7 +128,7 @@ public class ExpireJobManager extends JobImpl {
                 _log.info("Removing " + readyToExpire.size() +
                           " expired " + (readyToExpire.size() > 1 ? "tunnels" : "tunnel") +
                           (readyToDrop.size() > 0 ? ", cleaning up " + readyToDrop.size() +
-                          " old tunnels from dispatcher" : "") + " (Queue: " + queueSize + " jobs)");
+                          " old tunnels from dispatcher" : "") + "... (Queue: " + queueSize + " jobs)");
             }
 
             // Phase 1: Remove from tunnel pools synchronously during recovery
@@ -152,13 +152,13 @@ public class ExpireJobManager extends JobImpl {
                     // This prevents job queue deadlock by not blocking indefinitely
                     failedCount++;
                     if (_log.shouldInfo()) {
-                        _log.info("Failed to remove tunnel from pool " + pool + " -> Will retry on next run...");
+                        _log.info("Failed to remove tunnel (couldn't acquire lock) from pool " + pool + " -> Will retry on next run...");
                     }
                 }
             }
 
             if (failedCount > 0 && _log.shouldInfo()) {
-                _log.info("Tunnel expiration: " + removedCount + " removed, " + failedCount + " failed (will retry)");
+                _log.info("Tunnel expiration: " + removedCount + " removed, " + failedCount + " failed -> Will retry on next run...");
             }
 
             // Phase 2: Remove from dispatcher and fully remove from queue
