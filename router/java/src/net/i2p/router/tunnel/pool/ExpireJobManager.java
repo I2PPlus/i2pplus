@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.PriorityBlockingQueue;
 
+import net.i2p.data.TunnelId;
 import net.i2p.router.JobImpl;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
@@ -38,13 +39,15 @@ public class ExpireJobManager extends JobImpl {
     private static final long MAX_ACCEPTABLE_LAG = 5 * 60 * 1000;
     // Queue size threshold to trigger aggressive recovery
     private static final int BACKED_UP_THRESHOLD = 50;
+    // Massive queue threshold - trigger emergency cleanup
+    private static final int MASSIVE_QUEUE_THRESHOLD = 100;
     // Early expiration offsets to match original ExpireJob behavior
     private static final long OB_EARLY_EXPIRE = 30 * 1000;
     private static final long IB_EARLY_EXPIRE = OB_EARLY_EXPIRE + 7500;
     // Stale entry threshold - remove entries older than this
-    private static final long STALE_THRESHOLD = 10 * 60 * 1000;
+    private static final long STALE_THRESHOLD = 30 * 1000;
     // Maximum entries to clean per run
-    private static final int MAX_CLEANUP_PER_RUN = 5000;
+    private static final int MAX_CLEANUP_PER_RUN = 50000;
 
     public ExpireJobManager(RouterContext ctx) {
         super(ctx);
@@ -61,16 +64,27 @@ public class ExpireJobManager extends JobImpl {
     }
 
     /**
-     * Generate a unique key for a tunnel config
+     * Generate a unique key for a tunnel config.
+     * Falls back to identity hash code if tunnel IDs aren't available yet.
      */
     private static Long getTunnelKey(PooledTunnelCreatorConfig cfg) {
         if (cfg == null) return null;
         try {
-            long recvId = cfg.getReceiveTunnelId(0).getTunnelId();
-            long sendId = cfg.getSendTunnelId(0).getTunnelId();
-            return Long.valueOf((recvId << 32) | (sendId & 0xFFFFFFFFL));
+            int length = cfg.getLength();
+            if (length <= 0) {
+                // Use identity hash as fallback for zero-length tunnels
+                return Long.valueOf(System.identityHashCode(cfg));
+            }
+            TunnelId recvId = cfg.getReceiveTunnelId(0);
+            TunnelId sendId = cfg.getSendTunnelId(0);
+            if (recvId == null || sendId == null || recvId.getTunnelId() == 0 || sendId.getTunnelId() == 0) {
+                // Use identity hash as fallback
+                return Long.valueOf(System.identityHashCode(cfg));
+            }
+            return Long.valueOf((recvId.getTunnelId() << 32) | (sendId.getTunnelId() & 0xFFFFFFFFL));
         } catch (Exception e) {
-            return null;
+            // Use identity hash as fallback
+            return Long.valueOf(System.identityHashCode(cfg));
         }
     }
 
@@ -82,7 +96,9 @@ public class ExpireJobManager extends JobImpl {
      */
     public void scheduleExpiration(PooledTunnelCreatorConfig cfg) {
         Long tunnelKey = getTunnelKey(cfg);
-        if (tunnelKey != null && !_tunnelKeys.add(tunnelKey)) {
+        if (tunnelKey == null) {
+            // Can't generate key - add anyway (will be cleaned up later)
+        } else if (!_tunnelKeys.add(tunnelKey)) {
             // Already in queue - skip duplicate
             return;
         }
@@ -129,10 +145,11 @@ public class ExpireJobManager extends JobImpl {
         long now = getContext().clock().now();
         int queueSize = _expirationQueue.size();
         boolean isBackedUp = queueSize > BACKED_UP_THRESHOLD;
+        boolean isMassive = queueSize > MASSIVE_QUEUE_THRESHOLD;
 
-        // Cleanup stale entries if queue is backed up
-        if (isBackedUp) {
-            cleanupStaleEntries(now);
+        // Cleanup stale entries if queue is backed up or massive
+        if (isBackedUp || isMassive) {
+            cleanupStaleEntries(now, isMassive);
         }
 
         List<TunnelExpiration> readyToExpire = new ArrayList<>();
@@ -258,25 +275,52 @@ public class ExpireJobManager extends JobImpl {
     }
 
     /**
-     * Clean up stale entries from the queue
+     * Remove a tunnel from the expiration queue when it's explicitly removed.
+     * Mark it as expired so cleanup will remove it on next run.
+     * Call this when a tunnel is removed from the pool (failed, replaced, etc.)
      */
-    private void cleanupStaleEntries(long now) {
-        int cleaned = 0;
-        for (TunnelExpiration te : _expirationQueue) {
-            if (cleaned >= MAX_CLEANUP_PER_RUN) break;
-            long age = now - te.expirationTime;
-            if (age > STALE_THRESHOLD) {
-                // Entry is too old - remove it
-                if (_expirationQueue.remove(te)) {
-                    if (te.tunnelKey != null) {
-                        _tunnelKeys.remove(te.tunnelKey);
-                    }
-                    cleaned++;
-                }
-            }
+    public void removeTunnel(PooledTunnelCreatorConfig cfg) {
+        Long tunnelKey = getTunnelKey(cfg);
+        if (tunnelKey != null) {
+            _tunnelKeys.remove(tunnelKey);
+            // Set expiration to now so cleanup will remove it
+            cfg.setExpiration(getContext().clock().now() - 1000);
         }
+    }
+
+    /**
+     * Clean up entries from the queue - remove those already processed or expired
+     * @param now current time
+     * @param aggressive if true, clean more entries
+     */
+    private void cleanupStaleEntries(long now, boolean aggressive) {
+        int maxDrain = aggressive ? 500000 : 500;
+        int cleaned = 0;
+        List<TunnelExpiration> keep = new ArrayList<>();
+
+        // Drain entries and keep those that are still valid (future expiration)
+        TunnelExpiration te;
+        int drained = 0;
+        while (drained < maxDrain && (te = _expirationQueue.poll()) != null) {
+            // Keep entries that haven't expired yet (expirationTime > now)
+            // Remove entries that have expired (ready to process or already processed)
+            if (te.expirationTime > now) {
+                keep.add(te);
+            } else {
+                // Entry has expired - remove from tracking
+                if (te.tunnelKey != null) {
+                    _tunnelKeys.remove(te.tunnelKey);
+                }
+                cleaned++;
+            }
+            drained++;
+        }
+
+        // Re-add entries that are still valid
+        _expirationQueue.addAll(keep);
+
         if (cleaned > 0 && _log.shouldInfo()) {
-            _log.info("Cleaned up " + cleaned + " stale entries from expiration queue");
+            _log.info("Cleaned up " + cleaned + " expired entries from queue -> " + keep.size() + "remaaining...");
         }
     }
 
