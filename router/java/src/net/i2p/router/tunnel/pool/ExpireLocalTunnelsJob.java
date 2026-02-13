@@ -1,9 +1,7 @@
 package net.i2p.router.tunnel.pool;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.PriorityBlockingQueue;
 
@@ -24,19 +22,19 @@ import net.i2p.util.Log;
  *
  * @since 0.9.68+
  */
-public class ExpireJobManager extends JobImpl {
+public class ExpireLocalTunnelsJob extends JobImpl {
     private final PriorityBlockingQueue<TunnelExpiration> _expirationQueue;
-    private final Set<Long> _tunnelKeys;
+    private final ConcurrentHashMap<Long, TunnelExpiration> _tunnelKeys;
     private volatile boolean _isScheduled = false;
     private volatile long _lastRunTime;
     private final Log _log;
 
     // Only run when tunnels are within this window of expiring (avoids unnecessary runs)
-    private static final long BATCH_WINDOW = 15 * 1000;
+    private static final long BATCH_WINDOW = 5 * 1000;
     // Forced requeue timeout when job is starved (2x batch window)
     private static final long FORCED_REQUEUE_TIMEOUT = 2 * BATCH_WINDOW;
     // Maximum allowed lag before forcing immediate requeue
-    private static final long MAX_ACCEPTABLE_LAG = 90 * 1000;
+    private static final long MAX_ACCEPTABLE_LAG = 30 * 1000;
     // Queue size threshold to trigger aggressive recovery
     private static final int BACKED_UP_THRESHOLD = 50;
     // Massive queue threshold - trigger emergency cleanup
@@ -45,15 +43,15 @@ public class ExpireJobManager extends JobImpl {
     private static final long OB_EARLY_EXPIRE = 30 * 1000;
     private static final long IB_EARLY_EXPIRE = OB_EARLY_EXPIRE + 7500;
     // Stale entry threshold - remove entries older than this
-    private static final long STALE_THRESHOLD = 3000;
+    private static final long STALE_THRESHOLD = 500;
     // Maximum entries to clean per run
     private static final int MAX_CLEANUP_PER_RUN = 50000;
 
-    public ExpireJobManager(RouterContext ctx) {
+    public ExpireLocalTunnelsJob(RouterContext ctx) {
         super(ctx);
         _log = ctx.logManager().getLog(getClass());
         _expirationQueue = new PriorityBlockingQueue<>();
-        _tunnelKeys = ConcurrentHashMap.newKeySet();
+        _tunnelKeys = new ConcurrentHashMap<>();
         getTiming().setStartAfter(ctx.clock().now() + BATCH_WINDOW);
         _lastRunTime = ctx.clock().now();
     }
@@ -98,7 +96,7 @@ public class ExpireJobManager extends JobImpl {
         Long tunnelKey = getTunnelKey(cfg);
         if (tunnelKey == null) {
             // Can't generate key - add anyway (will be cleaned up later)
-        } else if (!_tunnelKeys.add(tunnelKey)) {
+        } else if (_tunnelKeys.containsKey(tunnelKey)) {
             // Already in queue - skip duplicate
             return;
         }
@@ -122,8 +120,10 @@ public class ExpireJobManager extends JobImpl {
         // Update the tunnel's expiration to the early time
         cfg.setExpiration(earlyExpire);
 
-        // Add to queue
-        _expirationQueue.offer(new TunnelExpiration(cfg, tunnelKey, earlyExpire, dropAfter));
+        // Add to queue and map
+        TunnelExpiration te = new TunnelExpiration(cfg, tunnelKey, earlyExpire, dropAfter);
+        _expirationQueue.offer(te);
+        _tunnelKeys.put(tunnelKey, te);
 
         // Schedule this job if not already scheduled
         synchronized (this) {
@@ -282,9 +282,10 @@ public class ExpireJobManager extends JobImpl {
     public void removeTunnel(PooledTunnelCreatorConfig cfg) {
         Long tunnelKey = getTunnelKey(cfg);
         if (tunnelKey != null) {
-            _tunnelKeys.remove(tunnelKey);
-            // Set expiration to now so cleanup will remove it
-            cfg.setExpiration(getContext().clock().now() - 1000);
+            TunnelExpiration te = _tunnelKeys.remove(tunnelKey);
+            if (te != null) {
+                _expirationQueue.remove(te);
+            }
         }
     }
 
@@ -320,7 +321,8 @@ public class ExpireJobManager extends JobImpl {
         _expirationQueue.addAll(keep);
 
         if (cleaned > 0 && _log.shouldInfo()) {
-            _log.info("Cleaned up " + cleaned + " expired tunnels -> " + keep.size() + " active tunnels in use...");
+            _log.info("Cleaned up " + cleaned + " expired " + (cleaned > 1 ? "tunnels" : "tunnel") +
+                      " (" + keep.size() + " tunnels active)");
         }
     }
 

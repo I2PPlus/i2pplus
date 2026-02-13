@@ -1404,7 +1404,7 @@ public class TunnelPool {
     }
 
     /**
-     * Synchronous tunnel removal for use during ExpireJobManager recovery.
+     * Synchronous tunnel removal for use during ExpireLocalTunnelsJob recovery.
      * This removes the tunnel and ensures a new LeaseSet is published BEFORE returning,
      * preventing client connection failures during recovery.
      *
