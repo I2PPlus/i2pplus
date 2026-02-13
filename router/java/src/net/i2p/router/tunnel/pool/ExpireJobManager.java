@@ -32,11 +32,11 @@ public class ExpireJobManager extends JobImpl {
     private final Log _log;
 
     // Only run when tunnels are within this window of expiring (avoids unnecessary runs)
-    private static final long BATCH_WINDOW = 90 * 1000;
+    private static final long BATCH_WINDOW = 15 * 1000;
     // Forced requeue timeout when job is starved (2x batch window)
     private static final long FORCED_REQUEUE_TIMEOUT = 2 * BATCH_WINDOW;
     // Maximum allowed lag before forcing immediate requeue
-    private static final long MAX_ACCEPTABLE_LAG = 5 * 60 * 1000;
+    private static final long MAX_ACCEPTABLE_LAG = 90 * 1000;
     // Queue size threshold to trigger aggressive recovery
     private static final int BACKED_UP_THRESHOLD = 50;
     // Massive queue threshold - trigger emergency cleanup
@@ -45,7 +45,7 @@ public class ExpireJobManager extends JobImpl {
     private static final long OB_EARLY_EXPIRE = 30 * 1000;
     private static final long IB_EARLY_EXPIRE = OB_EARLY_EXPIRE + 7500;
     // Stale entry threshold - remove entries older than this
-    private static final long STALE_THRESHOLD = 30 * 1000;
+    private static final long STALE_THRESHOLD = 3000;
     // Maximum entries to clean per run
     private static final int MAX_CLEANUP_PER_RUN = 50000;
 
@@ -294,7 +294,7 @@ public class ExpireJobManager extends JobImpl {
      * @param aggressive if true, clean more entries
      */
     private void cleanupStaleEntries(long now, boolean aggressive) {
-        int maxDrain = aggressive ? 500000 : 500;
+        int maxDrain = aggressive ? 5000 : 2000;
         int cleaned = 0;
         List<TunnelExpiration> keep = new ArrayList<>();
 
@@ -320,7 +320,7 @@ public class ExpireJobManager extends JobImpl {
         _expirationQueue.addAll(keep);
 
         if (cleaned > 0 && _log.shouldInfo()) {
-            _log.info("Cleaned up " + cleaned + " expired entries from queue -> " + keep.size() + "remaaining...");
+            _log.info("Cleaned up " + cleaned + " expired tunnels -> " + keep.size() + " active tunnels in use...");
         }
     }
 
