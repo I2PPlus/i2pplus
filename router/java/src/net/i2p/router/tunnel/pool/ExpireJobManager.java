@@ -133,14 +133,31 @@ public class ExpireJobManager extends JobImpl {
             // Phase 1: Remove from tunnel pools synchronously during recovery
             // This ensures LeaseSets are republished BEFORE removing from queue,
             // preventing client connection failures
+            int removedCount = 0;
+            int failedCount = 0;
             for (TunnelExpiration te : readyToExpire) {
                 PooledTunnelCreatorConfig cfg = te.config;
                 TunnelPool pool = cfg.getTunnelPool();
+                boolean removed = false;
                 if (pool != null) {
-                    pool.removeTunnelSynchronous(cfg);
+                    removed = pool.removeTunnelSynchronous(cfg);
                 }
-                // Remove from queue only after synchronous removal + LeaseSet republish is complete
-                _expirationQueue.remove(te);
+                if (removed) {
+                    // Remove from queue only after synchronous removal + LeaseSet republish is complete
+                    _expirationQueue.remove(te);
+                    removedCount++;
+                } else {
+                    // Lock acquisition failed - tunnel stays in queue for retry
+                    // This prevents job queue deadlock by not blocking indefinitely
+                    failedCount++;
+                    if (_log.shouldInfo()) {
+                        _log.info("Failed to remove tunnel from pool " + pool + " -> Will retry on next run...");
+                    }
+                }
+            }
+
+            if (failedCount > 0 && _log.shouldInfo()) {
+                _log.info("Tunnel expiration: " + removedCount + " removed, " + failedCount + " failed (will retry)");
             }
 
             // Phase 2: Remove from dispatcher and fully remove from queue
