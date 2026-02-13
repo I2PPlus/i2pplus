@@ -780,6 +780,86 @@ public class JobQueue {
         return removed;
     }
 
+    /**
+     * Interrupt all job runners to break potential deadlocks.
+     * Used by RouterWatchdog when stuck runners are detected.
+     * 
+     * @return the number of runners interrupted
+     * @since 0.9.68+
+     */
+    public int interruptAllRunners() {
+        int interrupted = 0;
+        for (JobQueueRunner runner : _queueRunners.values()) {
+            try {
+                runner.interrupt();
+                interrupted++;
+            } catch (SecurityException se) {
+                if (_log.shouldWarn()) {
+                    _log.warn("Failed to interrupt runner " + runner.getRunnerId(), se);
+                }
+            }
+        }
+        if (interrupted > 0 && _log.shouldInfo()) {
+            _log.info("Interrupted " + interrupted + " job runners to break potential deadlock");
+        }
+        return interrupted;
+    }
+
+    /**
+     * Spawn replacement runners when stuck runners are detected.
+     * Adds new runners to ensure queue processing continues.
+     * 
+     * @param count the number of replacement runners to spawn
+     * @since 0.9.68+
+     */
+    public void spawnReplacementRunners(int count) {
+        if (!_alive || !_allowParallelOperation) return;
+
+        // Find the next available ID
+        int maxId = -1;
+        for (Integer id : _queueRunners.keySet()) {
+            if (id > maxId) maxId = id;
+        }
+
+        synchronized (this) {
+            for (int i = 0; i < count; i++) {
+                int newId = maxId + 1 + i;
+                JobQueueRunner runner = new JobQueueRunner(_context, newId);
+                _queueRunners.put(Integer.valueOf(newId), runner);
+                runner.setName("JobQueue " + _runnerId.incrementAndGet() + " (replacement)");
+                runner.start();
+            }
+        }
+
+        if (_log.shouldInfo()) {
+            _log.info("Spawned " + count + " replacement runners. Total: " + _queueRunners.size());
+        }
+    }
+
+    /**
+     * Get the number of runners that appear to be stuck (running a job for too long).
+     * A runner is considered stuck if it's been running the same job for more than 60 seconds.
+     * 
+     * @return the number of potentially stuck runners
+     * @since 0.9.68+
+     */
+    public int getStuckRunnerCount() {
+        long now = _context.clock().now();
+        long stuckThreshold = 60 * 1000; // 60 seconds
+        int stuckCount = 0;
+
+        for (JobQueueRunner runner : _queueRunners.values()) {
+            if (runner.getCurrentJob() != null) {
+                long beginTime = runner.getLastBegin();
+                if (beginTime > 0 && (now - beginTime) > stuckThreshold) {
+                    stuckCount++;
+                }
+            }
+        }
+
+        return stuckCount;
+    }
+
     private final class QueuePumper implements Runnable, Clock.ClockUpdateListener, RouterClock.ClockShiftListener {
         public QueuePumper() {
             _context.clock().addUpdateListener(this);
