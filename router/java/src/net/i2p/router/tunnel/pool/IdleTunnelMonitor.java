@@ -57,8 +57,8 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
 
     // Configuration
     private static final boolean isSlow = SystemVersion.isSlow();
-    private static final long DEFAULT_DETECTION_PERIOD = 90 * 1000; // 90 seconds (under attack: <40% success - more conservative)
-    private static final long HIGH_SUCCESS_DETECTION_PERIOD = 60 * 1000; // 60 seconds (normal: >=40% success)
+    private static final long DEFAULT_DETECTION_PERIOD = 120 * 1000; // 120 seconds (under attack: <40% success - more conservative)
+    private static final long HIGH_SUCCESS_DETECTION_PERIOD = 90 * 1000; // 90 seconds (normal: >=40% success)
     private static final int DEFAULT_MIN_MESSAGES = 2; // At least 2 messages
     private static final long DEFAULT_MIN_BYTES = 2 * 1024; // At least 2KB of data
     private static final long DEFAULT_SCAN_INTERVAL = 30 * 1000; // 30 seconds
@@ -225,7 +225,7 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
         detectAndBanSybils(idleTunnelsByPeer, sybilMinIdentities, sybilMinIdleTunnels, ban3rd,
                            detectionPeriod, minMessages, minBytes);
 
-        if (totalDropped > 0 && _log.shouldWarn()) {
+        if (totalDropped > 100 && _log.shouldWarn()) {
             _log.warn("Dropped " + totalDropped + " idle tunnels across " + idleTunnelsByPeer.size() + " peers");
         }
 
