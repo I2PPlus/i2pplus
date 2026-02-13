@@ -20,9 +20,9 @@ class JobQueueRunner extends I2PThread {
     private volatile Job _lastJob;
     private volatile long _lastBegin;
     private volatile long _lastEnd;
-    
+
     /** Maximum time a job can run before being interrupted (30 seconds) */
-    private static final long MAX_JOB_RUNTIME_MS = 30 * 1000;
+    private static final long MAX_JOB_RUNTIME_MS = 60 * 1000;
     /** Thread pool for executing jobs with timeout */
     private final ExecutorService _timeoutExecutor;
 
@@ -129,10 +129,10 @@ class JobQueueRunner extends I2PThread {
     private void runCurrentJob() {
         _lastBegin = _context.clock().now();
         if (_currentJob == null) return;
-        
+
         final String jobName = _currentJob.getName();
         Future<?> future = null;
-        
+
         try {
             // Execute job with timeout to prevent indefinite blocking
             future = _timeoutExecutor.submit(() -> {
@@ -146,14 +146,14 @@ class JobQueueRunner extends I2PThread {
                     }
                 }
             });
-            
+
             // Wait for completion with timeout
             future.get(MAX_JOB_RUNTIME_MS, TimeUnit.MILLISECONDS);
-            
+
         } catch (TimeoutException te) {
             // Job took too long - interrupt it
             future.cancel(true);
-            _log.log(Log.CRIT, "Job [" + jobName + "] timed out after " + MAX_JOB_RUNTIME_MS + "ms on thread " + _id + " -> Interrupted");
+            _log.log(Log.WARN, "Job [" + jobName + "] timed out after " + MAX_JOB_RUNTIME_MS + "ms on thread " + _id + " -> Interrupted");
             // Mark the runner as potentially stuck for watchdog detection
             _context.statManager().addRateData("jobQueue.jobTimeout", 1);
         } catch (InterruptedException ie) {
