@@ -2132,7 +2132,7 @@ input[type=hidden]+p+p{margin-top:20px;margin-bottom:-21px;padding:10px;border:v
 #advfilter button:hover,#advfilter input:focus+button,#tnlfilter button:hover,#tnlfilter input:focus+button{mix-blend-mode:normal}
 #advfilter input[type=text],#tnlfilter input[type=text]{margin:0;padding:4px 24px 3px;width:160px;font-size:85%;background:#0008 var(--filter) no-repeat 7px center/12px;opacity:.75;filter:none}
 #advfilter input[type=text]:focus,#tnlfilter input[type=text]:focus{width:200px;border-color:var(--hover);color:var(--hover);box-shadow:var(--highlight),5px 5px 3px #0008 inset;background-color:#010;opacity:.85}
-#tnlfilter{top:6px;right:46px}
+#tnlfilter{top:3px;right:46px}
 #advconf #removeKey b{color:#f00}
 #config_advanced #advconfwrapper{overflow:hidden;max-height:calc(100vh - 281px);scrollbar-color:#373 #0000}
 .hasExpandedElement #config_advanced #advconfwrapper{max-height:calc(100vh - 447px)}
@@ -3368,6 +3368,8 @@ body.isDown::after{width:80px;height:80px;top:calc(50% - 40px);left:calc(50% - 4
 
 @media (max-width:1499px) {
 #profiles .tablewrap{margin:11px 8px 9px}
+#tnlfilter{top:1px;right:32px}
+#routertunnels #refreshPage{padding-left:4px}
 }
 
 /* compact netdb search */
