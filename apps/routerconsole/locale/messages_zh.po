@@ -131,7 +131,7 @@ msgstr "参与洪泛"
 msgid "Show all routers with this capability in the NetDb"
 msgstr "在NetDb中显示所有具有此功能的路由器"
 
-msgid "No transports (hidden or starting up?)"
+msgid "No transports"
 msgstr "无数据传输（隐身模式或者正在启动？）"
 
 msgid "Unsupported signature type"

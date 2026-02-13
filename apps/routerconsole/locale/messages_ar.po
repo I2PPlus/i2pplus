@@ -141,7 +141,7 @@ msgstr "ملء الفيضانات"
 msgid "Show all routers with this capability in the NetDb"
 msgstr "إظهار جميع أجهزة التوجيه التي تتمتع بهذه الإمكانية في NetDb"
 
-msgid "No transports (hidden or starting up?)"
+msgid "No transports"
 msgstr "ﻻ وسائل النقل (مخفية أو جاري البدء؟)"
 
 msgid "Unsupported signature type"

@@ -133,7 +133,7 @@ msgstr "Floodfill"
 msgid "Show all routers with this capability in the NetDb"
 msgstr "Alle Router mit dieser Funktion in der NetDb anzeigen"
 
-msgid "No transports (hidden or starting up?)"
+msgid "No transports"
 msgstr "Keine Transporte (Versteckter Modus oder Start?)"
 
 msgid "Unsupported signature type"

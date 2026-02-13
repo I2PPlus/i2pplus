@@ -133,7 +133,7 @@ msgstr "Alagamento"
 msgid "Show all routers with this capability in the NetDb"
 msgstr "Mostrar todos os roteadores com esta capacidade no NetDb"
 
-msgid "No transports (hidden or starting up?)"
+msgid "No transports"
 msgstr "Sem transportes (escondidos ou a iniciar?)"
 
 msgid "Unsupported signature type"

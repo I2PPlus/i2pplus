@@ -131,7 +131,7 @@ msgstr "ཁེངས་གསོག"
 msgid "Show all routers with this capability in the NetDb"
 msgstr "NetDb ནང་གི་ནུས་པ་འདི་ཡོད་པའི་རྒྱུད་པ་ཚང་མ་སྟོན།"
 
-msgid "No transports (hidden or starting up?)"
+msgid "No transports"
 msgstr "འགྲེམ་སྤེལ་མེད། (སྦས་གསང་ཡང་ན་འགོ་བརྩམས་བཞིན་པ།)"
 
 msgid "Unsupported signature type"

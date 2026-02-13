@@ -133,7 +133,7 @@ msgstr "Inundación (floodfill)"
 msgid "Show all routers with this capability in the NetDb"
 msgstr "Mostrar todos los routers con esta característica en la NetDb"
 
-msgid "No transports (hidden or starting up?)"
+msgid "No transports"
 msgstr "No hay transportes (¿ocultos o iniciándose?)"
 
 msgid "Unsupported signature type"

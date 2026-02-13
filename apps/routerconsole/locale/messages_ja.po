@@ -131,7 +131,7 @@ msgstr "フラッドノード"
 msgid "Show all routers with this capability in the NetDb"
 msgstr "NetDBにこの機能を使用して、すべてのルーターを表示します"
 
-msgid "No transports (hidden or starting up?)"
+msgid "No transports"
 msgstr "トランスポートなし (隠されているかスタートアップ中？)"
 
 msgid "Unsupported signature type"

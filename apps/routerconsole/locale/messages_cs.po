@@ -135,7 +135,7 @@ msgstr "Záplava"
 msgid "Show all routers with this capability in the NetDb"
 msgstr "Zobrazit všechny routery s touto schopností v NetDb"
 
-msgid "No transports (hidden or starting up?)"
+msgid "No transports"
 msgstr "Žádné transporty (skryté nebo začínající?)"
 
 msgid "Unsupported signature type"

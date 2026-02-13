@@ -133,7 +133,7 @@ msgstr "Floodfill"
 msgid "Show all routers with this capability in the NetDb"
 msgstr "Näytä kaikki tällä ominaisuudella varustetut reitittimet NetDb:ssä"
 
-msgid "No transports (hidden or starting up?)"
+msgid "No transports"
 msgstr "Ei kuljetuksia (piilotettu vai käynnistymässä?)"
 
 msgid "Unsupported signature type"

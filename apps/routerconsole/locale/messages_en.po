@@ -133,7 +133,7 @@ msgstr ""
 msgid "Show all routers with this capability in the NetDb"
 msgstr ""
 
-msgid "No transports (hidden or starting up?)"
+msgid "No transports"
 msgstr ""
 
 msgid "Unsupported signature type"

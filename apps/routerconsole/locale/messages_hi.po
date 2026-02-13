@@ -133,7 +133,7 @@ msgstr "फ्लूडफिल"
 msgid "Show all routers with this capability in the NetDb"
 msgstr "NetDb में इस क्षमता के साथ सभी राउटर दिखाएं"
 
-msgid "No transports (hidden or starting up?)"
+msgid "No transports"
 msgstr "कोई पारिवहन नहीं (छिपा हुआ या शुरू हो रहा?)"
 
 msgid "Unsupported signature type"

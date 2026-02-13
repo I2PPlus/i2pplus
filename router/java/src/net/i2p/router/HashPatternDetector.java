@@ -825,8 +825,8 @@ public class HashPatternDetector implements Serializable {
         try {
             long expireOn = _context.clock().now() + BAN_DURATION;
             String reason = isGapBased
-                ? " <b>➜</b> HashPatternDetector (Gap Analysis - Pre-emptive)"
-                : " <b>➜</b> HashPatternDetector (NetDb Scan)";
+                ? " <b>➜</b> HashPatternDetector (Heuristic)"
+                : " <b>➜</b> HashPatternDetector (NetDb)";
 
             boolean wasBanned = _context.banlist().banlistRouter(
                 identityHash, reason, null, null, expireOn
@@ -840,8 +840,8 @@ public class HashPatternDetector implements Serializable {
                 String ip = getRouterIP(router);
                 // Log to sessionbans.txt via BanLogger
                 String banReason = isGapBased
-                    ? "HashPatternDetector (Gap Analysis - Pre-emptive)"
-                    : "HashPatternDetector (NetDb Scan)";
+                    ? "HashPatternDetector (Heuristic)"
+                    : "HashPatternDetector (NetDb)";
                 _banLogger.logBan(identityHash, ip, banReason, BAN_DURATION);
                 return true;
             }
