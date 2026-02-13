@@ -116,7 +116,7 @@ class ClientConnectionRunner {
     // e.g. on local access
     private static final int MAX_MESSAGE_ID = 0x4000000;
 
-    private static final int MAX_LEASE_FAILS = 10;
+    private static final int MAX_LEASE_FAILS = 100;
     private static final int MAX_ATTACK_LEASE_FAILS = Integer.MAX_VALUE; // Retry indefinitely during attacks
     private static final int BUF_SIZE = 32*1024;
     private static final int MAX_SESSIONS = 4;
