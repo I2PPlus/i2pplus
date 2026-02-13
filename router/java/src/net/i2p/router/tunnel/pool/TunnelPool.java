@@ -1511,6 +1511,13 @@ public class TunnelPool {
 
             if (actuallyRemoved == 0) {return;}
 
+            // Remove tunnels from expiration queue to prevent memory leak
+            for (TunnelInfo info : toRemove) {
+                if (info instanceof PooledTunnelCreatorConfig) {
+                    _manager.removeFromExpiration((PooledTunnelCreatorConfig) info);
+                }
+            }
+
             for (int i = 0; i < actuallyRemoved; i++) {
                 _manager.tunnelFailed();
             }

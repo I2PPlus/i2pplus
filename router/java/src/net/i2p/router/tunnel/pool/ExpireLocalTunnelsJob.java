@@ -300,15 +300,16 @@ public class ExpireLocalTunnelsJob extends JobImpl {
         List<TunnelExpiration> keep = new ArrayList<>();
 
         // Drain entries and keep those that are still valid (future expiration)
+        // Also clean entries that are significantly overdue (stale)
         TunnelExpiration te;
         int drained = 0;
         while (drained < maxDrain && (te = _expirationQueue.poll()) != null) {
-            // Keep entries that haven't expired yet (expirationTime > now)
-            // Remove entries that have expired (ready to process or already processed)
-            if (te.expirationTime > now) {
+            boolean isOverdue = te.expirationTime < now - STALE_THRESHOLD;
+            boolean isFuture = te.expirationTime > now;
+            if (isFuture && !isOverdue) {
                 keep.add(te);
             } else {
-                // Entry has expired - remove from tracking
+                // Entry has expired or is stale - remove from tracking
                 if (te.tunnelKey != null) {
                     _tunnelKeys.remove(te.tunnelKey);
                 }
