@@ -340,46 +340,62 @@ public class SidebarHelper extends HelperBase {
 
     /**
      * Retrieve amount of used memory.
+     * Uses weighted average of current + last period for smoother display while capturing spikes.
      * @since 0.9.32 uncommented
      */
     public String getMemory() {
         DecimalFormat integerFormatter = new DecimalFormat("###,###,##0");
         long tot = SystemVersion.getMaxMemory();
-        // This reads much higher than the graph, possibly because it's right in
-        // the middle of a console refresh... so get it from the Rate instead.
-        //long free = Runtime.getRuntime().freeMemory();
-        long used = (long) _context.statManager().getRate("router.memoryUsed").getRate(RateConstants.ONE_MINUTE).getAvgOrLifetimeAvg();
-        if (used <= 0) {
-            long free = Runtime.getRuntime().freeMemory();
-            used = tot - free;
-        }
+        long used = getSmoothedMemory(tot);
         used /= 1024*1024;
         long total = tot / (1024*1024);
         if (used > total) {used = total;}
         return integerFormatter.format(used) + " / " + total + " M";
     }
 
+    /**
+     * Get smoothed memory usage using weighted average to capture spikes while avoiding display jitter.
+     * Uses 60% current + 40% historical for responsive display while smoothing minor fluctuations.
+     */
+    private long getSmoothedMemory(long tot) {
+        Rate rate = _context.statManager().getRate("router.memoryUsed").getRate(RateConstants.ONE_MINUTE);
+        double current = rate.getCurrentTotalValue();
+        double last = rate.getLastTotalValue();
+        long currentCount = rate.getCurrentEventCount();
+        long lastCount = rate.getLastEventCount();
+
+        double used;
+        if (currentCount > 0 && lastCount > 0) {
+            // 60% current + 40% historical - responsive but smoothed
+            used = (current * 0.60) + (last * 0.40);
+        } else if (currentCount > 0) {
+            used = current;
+        } else if (lastCount > 0) {
+            used = last;
+        } else {
+            Runtime rt = Runtime.getRuntime();
+            used = rt.totalMemory() - rt.freeMemory();
+        }
+        return (long) used;
+    }
+
     /** @since 0.9.32 */
     public String getMemoryBar() {
         DecimalFormat integerFormatter = new DecimalFormat("###,###,##0");
         long tot = SystemVersion.getMaxMemory();
-        // This reads much higher than the graph, possibly because it's right in
-        // the middle of a console refresh... so get it from the Rate instead.
-        long used = (long) _context.statManager().getRate("router.memoryUsed").getRate(RateConstants.ONE_MINUTE).getAvgOrLifetimeAvg();
+        long used = getSmoothedMemory(tot);
         long usedPc;
-        if (used <= 0) {
-            long free = Runtime.getRuntime().freeMemory();
-            usedPc = 100 - ((free * 100) / tot);
-            used = (tot - free) / (1024*1024);
-        } else {
-            usedPc = used * 100 / tot;
-            used /= 1024*1024;
-        }
+        long usedMB = used / (1024*1024);
         long total = tot / (1024*1024);
-        if (used > total) {used = total;}
+
+        if (usedMB > total) {usedMB = total;}
+        usedPc = used * 100 / tot;
         if (usedPc > 100) {usedPc = 100;}
-        String bar = "<div class=\"percentBarOuter volatile\" id=sb_memoryBar><div class=percentBarText>RAM: " +
-                      integerFormatter.format(used) + " / " + total + " M</div><div class=percentBarInner style=width:" +
+
+        // Add warning class if memory is critically high (>85%)
+        String warnClass = usedPc > 85 ? " highmem" : "";
+        String bar = "<div class=\"percentBarOuter volatile" + warnClass + "\" id=sb_memoryBar><div class=percentBarText>RAM: " +
+                      integerFormatter.format(usedMB) + " / " + total + " M</div><div class=percentBarInner style=width:" +
                       integerFormatter.format(usedPc) + "%></div></div>";
         return bar;
     }
