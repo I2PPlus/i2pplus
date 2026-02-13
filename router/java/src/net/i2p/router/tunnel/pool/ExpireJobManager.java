@@ -1,7 +1,10 @@
 package net.i2p.router.tunnel.pool;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.PriorityBlockingQueue;
 
 import net.i2p.router.JobImpl;
@@ -22,6 +25,7 @@ import net.i2p.util.Log;
  */
 public class ExpireJobManager extends JobImpl {
     private final PriorityBlockingQueue<TunnelExpiration> _expirationQueue;
+    private final Set<Long> _tunnelKeys;
     private volatile boolean _isScheduled = false;
     private volatile long _lastRunTime;
     private final Log _log;
@@ -37,11 +41,16 @@ public class ExpireJobManager extends JobImpl {
     // Early expiration offsets to match original ExpireJob behavior
     private static final long OB_EARLY_EXPIRE = 30 * 1000;
     private static final long IB_EARLY_EXPIRE = OB_EARLY_EXPIRE + 7500;
+    // Stale entry threshold - remove entries older than this
+    private static final long STALE_THRESHOLD = 10 * 60 * 1000;
+    // Maximum entries to clean per run
+    private static final int MAX_CLEANUP_PER_RUN = 5000;
 
     public ExpireJobManager(RouterContext ctx) {
         super(ctx);
         _log = ctx.logManager().getLog(getClass());
         _expirationQueue = new PriorityBlockingQueue<>();
+        _tunnelKeys = ConcurrentHashMap.newKeySet();
         getTiming().setStartAfter(ctx.clock().now() + BATCH_WINDOW);
         _lastRunTime = ctx.clock().now();
     }
@@ -52,12 +61,32 @@ public class ExpireJobManager extends JobImpl {
     }
 
     /**
+     * Generate a unique key for a tunnel config
+     */
+    private static Long getTunnelKey(PooledTunnelCreatorConfig cfg) {
+        if (cfg == null) return null;
+        try {
+            long recvId = cfg.getReceiveTunnelId(0).getTunnelId();
+            long sendId = cfg.getSendTunnelId(0).getTunnelId();
+            return Long.valueOf((recvId << 32) | (sendId & 0xFFFFFFFFL));
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
      * Schedule a tunnel for expiration.
      * Called when a tunnel build succeeds.
      *
      * @param cfg the tunnel configuration to expire
      */
     public void scheduleExpiration(PooledTunnelCreatorConfig cfg) {
+        Long tunnelKey = getTunnelKey(cfg);
+        if (tunnelKey != null && !_tunnelKeys.add(tunnelKey)) {
+            // Already in queue - skip duplicate
+            return;
+        }
+
         long actualExpiration = cfg.getExpiration();
         boolean isInbound = cfg.getTunnelPool().getSettings().isInbound();
 
@@ -78,7 +107,7 @@ public class ExpireJobManager extends JobImpl {
         cfg.setExpiration(earlyExpire);
 
         // Add to queue
-        _expirationQueue.offer(new TunnelExpiration(cfg, earlyExpire, dropAfter));
+        _expirationQueue.offer(new TunnelExpiration(cfg, tunnelKey, earlyExpire, dropAfter));
 
         // Schedule this job if not already scheduled
         synchronized (this) {
@@ -101,9 +130,10 @@ public class ExpireJobManager extends JobImpl {
         int queueSize = _expirationQueue.size();
         boolean isBackedUp = queueSize > BACKED_UP_THRESHOLD;
 
-        //if (isBackedUp && _log.shouldInfo()) {
-        //    _log.info("Expire Tunnels Job backed up with " + queueSize + " pending tunnel expirations -> Recovering...");
-        //}
+        // Cleanup stale entries if queue is backed up
+        if (isBackedUp) {
+            cleanupStaleEntries(now);
+        }
 
         List<TunnelExpiration> readyToExpire = new ArrayList<>();
         List<TunnelExpiration> readyToDrop = new ArrayList<>();
@@ -119,10 +149,6 @@ public class ExpireJobManager extends JobImpl {
 
         if (readyToExpire.isEmpty() && readyToDrop.isEmpty()) {
             // Nothing ready to process yet
-            //if (isBackedUp && _log.shouldInfo()) {
-            //    _log.info("Expire Tunnels Job backed up with " + queueSize +
-            //              " pending tunnel expirations -> Waiting for tunnels to reach expiration time...");
-            //}
         } else {
             if (isBackedUp && _log.shouldInfo() && (readyToExpire.size() > 0 || readyToDrop.size() > 0)) {
                 _log.info("Removing " + readyToExpire.size() +
@@ -146,6 +172,9 @@ public class ExpireJobManager extends JobImpl {
                 if (removed) {
                     // Remove from queue only after synchronous removal + LeaseSet republish is complete
                     _expirationQueue.remove(te);
+                    if (te.tunnelKey != null) {
+                        _tunnelKeys.remove(te.tunnelKey);
+                    }
                     removedCount++;
                 } else {
                     // Lock acquisition failed - tunnel stays in queue for retry
@@ -166,6 +195,9 @@ public class ExpireJobManager extends JobImpl {
                 PooledTunnelCreatorConfig cfg = te.config;
                 getContext().tunnelDispatcher().remove(cfg);
                 _expirationQueue.remove(te);
+                if (te.tunnelKey != null) {
+                    _tunnelKeys.remove(te.tunnelKey);
+                }
             }
         }
 
@@ -226,16 +258,41 @@ public class ExpireJobManager extends JobImpl {
     }
 
     /**
+     * Clean up stale entries from the queue
+     */
+    private void cleanupStaleEntries(long now) {
+        int cleaned = 0;
+        for (TunnelExpiration te : _expirationQueue) {
+            if (cleaned >= MAX_CLEANUP_PER_RUN) break;
+            long age = now - te.expirationTime;
+            if (age > STALE_THRESHOLD) {
+                // Entry is too old - remove it
+                if (_expirationQueue.remove(te)) {
+                    if (te.tunnelKey != null) {
+                        _tunnelKeys.remove(te.tunnelKey);
+                    }
+                    cleaned++;
+                }
+            }
+        }
+        if (cleaned > 0 && _log.shouldInfo()) {
+            _log.info("Cleaned up " + cleaned + " stale entries from expiration queue");
+        }
+    }
+
+    /**
      * Inner class to track tunnel expiration state
      */
     private static class TunnelExpiration implements Comparable<TunnelExpiration> {
         final PooledTunnelCreatorConfig config;
+        final Long tunnelKey;
         final long expirationTime;
         final long dropTime;
         volatile boolean phase1Complete = false;
 
-        TunnelExpiration(PooledTunnelCreatorConfig cfg, long expire, long drop) {
+        TunnelExpiration(PooledTunnelCreatorConfig cfg, Long key, long expire, long drop) {
             this.config = cfg;
+            this.tunnelKey = key;
             this.expirationTime = expire;
             this.dropTime = drop;
         }

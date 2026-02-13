@@ -575,9 +575,9 @@ public abstract class SystemVersion {
             int max = 100;
             Rate stat = _ctx.statManager().getRate("router.cpuLoad").getRate(RateConstants.ONE_MINUTE);
             long loadAvg;
-            long count = (1 + (3 * stat.getCurrentEventCount() + stat.getLastEventCount()));
+            long count = (1 + stat.getCurrentEventCount() + stat.getLastEventCount());
             if (count > 1) {
-                loadAvg = (long) (getCPULoad() + ((3 * stat.getCurrentTotalValue()) + stat.getLastTotalValue()) / count);
+                loadAvg = (long) (getCPULoad() + (stat.getCurrentTotalValue() + stat.getLastTotalValue()) / count);
             } else {loadAvg = getCPULoad();}
             int load = Math.toIntExact(loadAvg);
             if (load > max) {load = max;}
