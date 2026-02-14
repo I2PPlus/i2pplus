@@ -38,9 +38,9 @@ public class ExpireLocalTunnelsJob extends JobImpl {
     // Maximum allowed lag before forcing immediate requeue
     private static final long MAX_ACCEPTABLE_LAG = 30 * 1000;
     // Queue size threshold to trigger aggressive recovery
-    private static final int BACKED_UP_THRESHOLD = 50;
+    private static final int BACKED_UP_THRESHOLD = 5000;
     // Massive queue threshold - trigger emergency cleanup
-    private static final int MASSIVE_QUEUE_THRESHOLD = 100;
+    private static final int MASSIVE_QUEUE_THRESHOLD = 10000;
     // Early expiration offsets to match original ExpireJob behavior
     private static final long OB_EARLY_EXPIRE = 30 * 1000;
     private static final long IB_EARLY_EXPIRE = OB_EARLY_EXPIRE + 7500;
@@ -51,8 +51,10 @@ public class ExpireLocalTunnelsJob extends JobImpl {
     // Maximum retries for phase 1 removal before forcing cleanup
     private static final int MAX_PHASE1_RETRIES = 5;
     // Maximum entries to iterate per run (avoid OOM from queue iteration)
-    private static final int MAX_ITERATE_PER_RUN = 300;
-    private static final int MAX_ITERATE_BACKED_UP = 200;
+    private static final int MAX_ITERATE_PER_RUN = 3000;
+    private static final int MAX_ITERATE_BACKED_UP = 5000;
+    // Emergency drainage rate when massively backed up (100K+ entries)
+    private static final int MAX_ITERATE_EMERGENCY = 5000;
     // Debug logging interval for queue health (every N runs)
     private static final int HEALTH_LOG_INTERVAL = 60;
 
@@ -254,7 +256,18 @@ public class ExpireLocalTunnelsJob extends JobImpl {
         List<TunnelExpiration> toRequeue = new ArrayList<>();
 
         // Bounded drain WITHOUT destroying heap invariant
-        int maxDrain = isBackedUp ? MAX_ITERATE_BACKED_UP : MAX_ITERATE_PER_RUN;
+        // Use emergency drainage rate when massively backed up (>5K entries)
+        int maxDrain;
+        if (queueSize > 5000) {
+            maxDrain = MAX_ITERATE_EMERGENCY;
+            if (_log.shouldWarn()) {
+                _log.warn("Emergency drainage mode: processing " + maxDrain + " entries (queue size: " + queueSize + ")");
+            }
+        } else if (isBackedUp) {
+            maxDrain = MAX_ITERATE_BACKED_UP;
+        } else {
+            maxDrain = MAX_ITERATE_PER_RUN;
+        }
         List<TunnelExpiration> batch = new ArrayList<>(maxDrain);
         _expirationQueue.drainTo(batch, maxDrain);
 
@@ -476,12 +489,15 @@ public class ExpireLocalTunnelsJob extends JobImpl {
             }
         }
 
-        // Re-add entries that are still valid using offer() to preserve heap invariant
+        // CRITICAL FIX: Do NOT re-add entries during cleanup!
+        // Previously this re-added ALL kept entries, causing the queue to never shrink
+        // because the same ~2000 entries kept cycling through cleanup every run.
+        // With 600K queue and 2000 drain, each entry was processed ~300 times before expiring!
+        // The regular runJob() will handle proper re-queuing of non-expired tunnels.
         for (TunnelExpiration te : keep) {
-            if (te.tunnelKey == null || _tunnelKeys.get(te.tunnelKey) == te) {
-                _expirationQueue.offer(te);
-            } else {
-                // Key mismatch - remove stale index entry
+            // Don't re-add - let runJob() handle it properly
+            // Just clean up index if key is stale
+            if (te.tunnelKey != null && _tunnelKeys.get(te.tunnelKey) != te) {
                 removeFromIndex(te);
             }
         }
