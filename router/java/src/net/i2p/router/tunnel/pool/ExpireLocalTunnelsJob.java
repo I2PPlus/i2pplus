@@ -234,12 +234,11 @@ public class ExpireLocalTunnelsJob extends JobImpl {
 
             // Check if phase 1 complete entries are ready for phase 2
             for (TunnelExpiration te : readyToExpire) {
-                if (te.phase1Complete) {
-                    if (te.dropTime <= now) {
-                        readyToDrop.add(te);
-                    } else {
-                        toRequeue.add(te);
-                    }
+                if (te.phase1Complete && te.dropTime <= now) {
+                    readyToDrop.add(te);
+                } else {
+                    // Includes: failed phase1 (retry), completed but dropTime in future
+                    toRequeue.add(te);
                 }
             }
 
@@ -253,12 +252,10 @@ public class ExpireLocalTunnelsJob extends JobImpl {
             }
 
             // Requeue entries that need more time before phase 2
+            // Only requeue if still valid (not removed via removeTunnel())
             for (TunnelExpiration te : toRequeue) {
-                if (te.tunnelKey == null || _tunnelKeys.get(te.tunnelKey) == null) {
+                if (te.tunnelKey == null || _tunnelKeys.get(te.tunnelKey) == te) {
                     _expirationQueue.offer(te);
-                    if (te.tunnelKey != null) {
-                        _tunnelKeys.putIfAbsent(te.tunnelKey, te);
-                    }
                 }
             }
         }
@@ -343,28 +340,25 @@ public class ExpireLocalTunnelsJob extends JobImpl {
         int maxDrain = aggressive ? 5000 : 2000;
         int cleaned = 0;
         int kept = 0;
+
+        List<TunnelExpiration> batch = new ArrayList<>(maxDrain);
+        _expirationQueue.drainTo(batch, maxDrain);
+
         List<TunnelExpiration> keep = new ArrayList<>();
 
-        TunnelExpiration te;
-        int drained = 0;
-        while (drained < maxDrain && (te = _expirationQueue.poll()) != null) {
+        for (TunnelExpiration te : batch) {
             long relevantTime = te.phase1Complete ? te.dropTime : te.expirationTime;
             boolean isOverdue = relevantTime < now - STALE_THRESHOLD;
             boolean isFuture = te.expirationTime > now;
 
             boolean shouldKeep;
             if (!te.phase1Complete) {
-                // Never clean up tunnels that haven't completed phase 1
-                // They need to go through LeaseSet refresh first
                 shouldKeep = true;
             } else if (isFuture) {
-                // Has completed phase1 but hasn't reached dropTime yet - keep
                 shouldKeep = true;
             } else if (!isOverdue) {
-                // Within staleness window - keep for normal phase 2 processing
                 shouldKeep = true;
             } else {
-                // Phase 1 complete, expired, and truly overdue - safe to clean up
                 shouldKeep = false;
             }
 
@@ -372,9 +366,6 @@ public class ExpireLocalTunnelsJob extends JobImpl {
                 keep.add(te);
                 kept++;
             } else {
-                // Entry has expired or is stale - MUST clean up from pool/dispatcher
-                // before removing from tracking, otherwise tunnels remain in memory
-                // and LeaseSets don't get republished
                 if (te.config != null) {
                     TunnelPool pool = te.config.getTunnelPool();
                     if (pool != null && !te.phase1Complete) {
@@ -389,16 +380,12 @@ public class ExpireLocalTunnelsJob extends JobImpl {
                 }
                 cleaned++;
             }
-            drained++;
         }
 
-        // Re-add entries that are still valid
-        _expirationQueue.addAll(keep);
-
-        // Restore map consistency for kept entries (required for duplicate prevention)
-        for (TunnelExpiration keptEntry : keep) {
-            if (keptEntry.tunnelKey != null) {
-                _tunnelKeys.putIfAbsent(keptEntry.tunnelKey, keptEntry);
+        // Re-add entries that are still valid using offer() to preserve heap invariant
+        for (TunnelExpiration te : keep) {
+            if (te.tunnelKey == null || _tunnelKeys.get(te.tunnelKey) == te) {
+                _expirationQueue.offer(te);
             }
         }
 
