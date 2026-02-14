@@ -1,6 +1,7 @@
 package net.i2p.router.tunnel.pool;
 
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.data.Hash;
 import net.i2p.data.TunnelId;
 import net.i2p.router.RouterContext;
@@ -11,6 +12,8 @@ import net.i2p.util.Log;
  *  Data about a tunnel we created
  */
 public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
+    private static final AtomicLong _instanceCounter = new AtomicLong(0);
+
     private final TunnelPool _pool;
     private final Log _log;
     // we don't store the config, that leads to OOM
@@ -23,6 +26,13 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
     private boolean _lastResort;
 
     /**
+     * Unique ID for this tunnel instance, used as fallback key in expiration tracking
+     * when tunnel IDs are not yet available (e.g., zero-hop tunnels).
+     * This replaces System.identityHashCode() which can collide.
+     */
+    private final long _instanceId;
+
+    /**
      *  Creates a new instance of PooledTunnelCreatorConfig
      *
      *  @param destination may be null
@@ -32,7 +42,13 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
         super(ctx, length, isInbound, destination);
         _pool = pool;
         _log = ctx.logManager().getLog(PooledTunnelCreatorConfig.class);
+        _instanceId = _instanceCounter.incrementAndGet();
     }
+
+    /**
+     * @return unique instance ID assigned at construction, used for stable key generation
+     */
+    public long getInstanceId() { return _instanceId; }
 
     /** called from TestJob */
     public void testJobSuccessful(int ms) {testSuccessful(ms);}

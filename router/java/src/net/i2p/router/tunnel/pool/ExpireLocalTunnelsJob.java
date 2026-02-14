@@ -98,9 +98,10 @@ public class ExpireLocalTunnelsJob extends JobImpl {
             if (recvId != null && sendId != null && recvId.getTunnelId() != 0 && sendId.getTunnelId() != 0) {
                 return Long.valueOf((recvId.getTunnelId() << 32) | (sendId.getTunnelId() & 0xFFFFFFFFL));
             }
-            return Long.valueOf(System.identityHashCode(cfg));
+            // Use instance ID (unique per config) instead of identityHashCode (can collide)
+            return cfg.getInstanceId();
         } catch (Exception e) {
-            return Long.valueOf(System.identityHashCode(cfg));
+            return cfg.getInstanceId();
         }
     }
 
