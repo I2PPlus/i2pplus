@@ -413,9 +413,10 @@ public class TunnelDispatcher implements Service {
             if (_log.shouldInfo())
                 _log.info("Removing our own Inbound tunnel...\n* " + cfg);
             TunnelParticipant participant = _participants.remove(recvId);
-            if (participant == null) {
-                _inboundGateways.remove(recvId);
-            } else {
+            // Always remove from inboundGateways - this was a bug causing memory leak
+            // where gateways were only removed when participant was null
+            _inboundGateways.remove(recvId);
+            if (participant != null) {
                 for (int i = 0; i < cfg.getLength() - 1; i++) {
                     Hash peer = cfg.getPeer(i);
                     PeerProfile profile = _context.profileOrganizer().getProfile(peer);

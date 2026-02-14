@@ -1442,6 +1442,7 @@ public class TunnelPool {
                 PooledTunnelCreatorConfig cfg = (PooledTunnelCreatorConfig) info;
                 Long tunnelKey = ExpireLocalTunnelsJob.getTunnelKey(cfg);
                 TestJob.invalidate(tunnelKey);
+                _manager.removeFromExpiration(cfg);
             }
         }
 
