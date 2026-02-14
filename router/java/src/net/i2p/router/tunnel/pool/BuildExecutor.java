@@ -645,6 +645,14 @@ class BuildExecutor implements Runnable {
     }
 
     /**
+     * Remove a tunnel from the expiration queue to prevent memory leak.
+     * @param cfg the tunnel config to remove
+     */
+    public void removeFromExpiration(PooledTunnelCreatorConfig cfg) {
+        _expireLocalTunnels.removeTunnel(cfg);
+    }
+
+    /**
      * Log that a peer did not reply to a tunnel build request.
      *
      * @param tunnel the tunnel ID

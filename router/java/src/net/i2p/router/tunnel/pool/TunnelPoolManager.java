@@ -592,7 +592,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
     /** Remove a tunnel from the expiration queue to prevent memory leak */
     void removeFromExpiration(PooledTunnelCreatorConfig cfg) {
-        _executor._expireLocalTunnels.removeTunnel(cfg);
+        _executor.removeFromExpiration(cfg);
     }
 
     /** @return the ghost peer manager for tracking unresponsive peers @since 0.9.68+ */
