@@ -67,14 +67,23 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
     public void tunnelFailedFirstHop() {
         if (isInbound() || getLength() <= 1) {return;}
         tunnelFailedCompletely();
-        _pool.tunnelFailed(this, getPeer(1));
+        Hash firstHop = getPeer(1);
+        if (firstHop != null) {
+            _pool.tunnelFailed(this, firstHop);
+        } else {
+            _pool.tunnelFailed(this);
+        }
     }
 
     /**
-     *  @return non-null
+     *  @return non-null defensive copy to prevent mutation of shared pool settings
      */
     @Override
-    public Properties getOptions() {return _pool.getSettings().getUnknownOptions();}
+    public Properties getOptions() {
+        Properties opts = _pool.getSettings().getUnknownOptions();
+        if (opts == null) {return new Properties();}
+        return (Properties) opts.clone();
+    }
 
     /**
      *  @return non-null
@@ -121,9 +130,9 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
     /**
      * Track recent activity to determine if tunnel is actively being used.
      * Used to prevent removing tunnels that have active connections.
+     * Encodes time (high 32 bits) and message count (low 32 bits) atomically.
      */
-    private volatile long _lastActivityTime;
-    private volatile int _lastMessageCount;
+    private volatile long _activitySnapshot;
 
     /**
      * Record that this tunnel was selected/used.
@@ -131,8 +140,9 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
      * @since 0.9.68+
      */
     public void recordActivity() {
-        _lastActivityTime = _context.clock().now();
-        _lastMessageCount = getProcessedMessagesCount();
+        long time = _context.clock().now();
+        int count = getProcessedMessagesCount();
+        _activitySnapshot = (time << 32) | (count & 0xFFFFFFFFL);
     }
 
     /**
@@ -143,10 +153,13 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
      * @since 0.9.68+
      */
     public boolean isRecentlyActive(long maxIdleMs) {
+        long snapshot = _activitySnapshot;
         long now = _context.clock().now();
         int currentMessages = getProcessedMessagesCount();
+        long savedTime = snapshot >>> 32;
+        int savedCount = (int) snapshot;
         // Active if: used recently OR messages increased since last check
-        return (now - _lastActivityTime < maxIdleMs) || (currentMessages > _lastMessageCount);
+        return (now - savedTime < maxIdleMs) || (currentMessages > savedCount);
     }
 
 }
