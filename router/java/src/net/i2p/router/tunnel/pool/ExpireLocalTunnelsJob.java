@@ -48,6 +48,9 @@ public class ExpireLocalTunnelsJob extends JobImpl {
     private static final int MAX_CLEANUP_PER_RUN = 50000;
     // Maximum retries for phase 1 removal before forcing cleanup
     private static final int MAX_PHASE1_RETRIES = 5;
+    // Maximum entries to iterate per run (avoid OOM from queue iteration)
+    private static final int MAX_ITERATE_PER_RUN = 500;
+    private static final int MAX_ITERATE_BACKED_UP = 2000;
 
     public ExpireLocalTunnelsJob(RouterContext ctx) {
         super(ctx);
@@ -159,13 +162,29 @@ public class ExpireLocalTunnelsJob extends JobImpl {
 
         List<TunnelExpiration> readyToExpire = new ArrayList<>();
         List<TunnelExpiration> readyToDrop = new ArrayList<>();
+        List<TunnelExpiration> notReady = new ArrayList<>();
 
-        // Collect all tunnels ready for phase 1 (pool removal)
-        for (TunnelExpiration te : _expirationQueue) {
-            if (te.expirationTime <= now && !te.phase1Complete) {
-                readyToExpire.add(te);
-            } else if (te.dropTime <= now && te.phase1Complete) {
-                readyToDrop.add(te);
+        // Drain queue in batches to avoid OOM from toArray() copy
+        // Process up to MAX_ITERATE_PER_RUN entries per run
+        int maxIterate = isBackedUp ? MAX_ITERATE_BACKED_UP : MAX_ITERATE_PER_RUN;
+        int drained = 0;
+        TunnelExpiration entry;
+        while (drained < maxIterate && (entry = _expirationQueue.poll()) != null) {
+            if (entry.expirationTime <= now && !entry.phase1Complete) {
+                readyToExpire.add(entry);
+            } else if (entry.dropTime <= now && entry.phase1Complete) {
+                readyToDrop.add(entry);
+            } else {
+                notReady.add(entry);
+            }
+            drained++;
+        }
+
+        // Re-add entries that aren't ready yet
+        _expirationQueue.addAll(notReady);
+        for (TunnelExpiration requeue : notReady) {
+            if (requeue.tunnelKey != null) {
+                _tunnelKeys.putIfAbsent(requeue.tunnelKey, requeue);
             }
         }
 
