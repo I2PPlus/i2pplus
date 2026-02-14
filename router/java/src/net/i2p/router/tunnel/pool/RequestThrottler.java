@@ -237,10 +237,10 @@ class RequestThrottler {
             if (currentBucketCount >= BURST_1S_THRESHOLD) {
                 // 10+ requests in 1 second = immediate 4-hour ban
                 if (_log.shouldWarn()) {
-                    _log.warn("Severe burst detected from Router [" + routerId + "] -> " +
+                    _log.warn("Severe transit request burst detected from Router [" + routerId + "] -> " +
                               "Requests: " + currentBucketCount + " in 1s (threshold: " + BURST_1S_THRESHOLD + ")");
                 }
-                context.banlist().banlistRouter(h, " <b>➜</b> Severe burst (1s)", null, null,
+                context.banlist().banlistRouter(h, " <b>➜</b> Severe transit burst (1s)", null, null,
                     context.clock().now() + 4*60*60*1000);
                 if (shouldDisconnect) {
                     context.simpleTimer2().addEvent(new Disconnector(h), 3 * 1000);

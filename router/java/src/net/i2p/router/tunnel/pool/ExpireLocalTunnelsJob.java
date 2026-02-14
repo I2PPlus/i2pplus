@@ -162,29 +162,24 @@ public class ExpireLocalTunnelsJob extends JobImpl {
 
         List<TunnelExpiration> readyToExpire = new ArrayList<>();
         List<TunnelExpiration> readyToDrop = new ArrayList<>();
-        List<TunnelExpiration> notReady = new ArrayList<>();
+        List<TunnelExpiration> toRequeue = new ArrayList<>();
 
-        // Drain queue in batches to avoid OOM from toArray() copy
-        // Process up to MAX_ITERATE_PER_RUN entries per run
-        int maxIterate = isBackedUp ? MAX_ITERATE_BACKED_UP : MAX_ITERATE_PER_RUN;
-        int drained = 0;
-        TunnelExpiration entry;
-        while (drained < maxIterate && (entry = _expirationQueue.poll()) != null) {
-            if (entry.expirationTime <= now && !entry.phase1Complete) {
-                readyToExpire.add(entry);
-            } else if (entry.dropTime <= now && entry.phase1Complete) {
-                readyToDrop.add(entry);
+        // Bounded drain WITHOUT destroying heap invariant
+        int maxDrain = isBackedUp ? MAX_ITERATE_BACKED_UP : MAX_ITERATE_PER_RUN;
+        List<TunnelExpiration> batch = new ArrayList<>(maxDrain);
+        _expirationQueue.drainTo(batch, maxDrain);
+
+        // Process batch while preserving phase semantics
+        for (TunnelExpiration te : batch) {
+            if (te.expirationTime <= now && !te.phase1Complete) {
+                // Phase 1 candidate - will be processed below
+                readyToExpire.add(te);
+            } else if (te.dropTime <= now && te.phase1Complete) {
+                // Ready for phase 2
+                readyToDrop.add(te);
             } else {
-                notReady.add(entry);
-            }
-            drained++;
-        }
-
-        // Re-add entries that aren't ready yet
-        _expirationQueue.addAll(notReady);
-        for (TunnelExpiration requeue : notReady) {
-            if (requeue.tunnelKey != null) {
-                _tunnelKeys.putIfAbsent(requeue.tunnelKey, requeue);
+                // Not ready for either phase yet
+                toRequeue.add(te);
             }
         }
 
@@ -237,13 +232,33 @@ public class ExpireLocalTunnelsJob extends JobImpl {
                 }
             }
 
-            // Phase 2: Remove from dispatcher and fully remove from queue
+            // Check if phase 1 complete entries are ready for phase 2
+            for (TunnelExpiration te : readyToExpire) {
+                if (te.phase1Complete) {
+                    if (te.dropTime <= now) {
+                        readyToDrop.add(te);
+                    } else {
+                        toRequeue.add(te);
+                    }
+                }
+            }
+
+            // Phase 2: Remove from dispatcher
             for (TunnelExpiration te : readyToDrop) {
                 PooledTunnelCreatorConfig cfg = te.config;
                 getContext().tunnelDispatcher().remove(cfg);
-                _expirationQueue.remove(te);
                 if (te.tunnelKey != null) {
                     _tunnelKeys.remove(te.tunnelKey);
+                }
+            }
+
+            // Requeue entries that need more time before phase 2
+            for (TunnelExpiration te : toRequeue) {
+                if (te.tunnelKey == null || _tunnelKeys.get(te.tunnelKey) == null) {
+                    _expirationQueue.offer(te);
+                    if (te.tunnelKey != null) {
+                        _tunnelKeys.putIfAbsent(te.tunnelKey, te);
+                    }
                 }
             }
         }
