@@ -58,7 +58,7 @@ public class HostChecker {
     private final I2PAppContext _context;
     private final Log _log;
     private final NamingService _namingService;
-    private final ScheduledExecutorService _scheduler;
+    private ScheduledExecutorService _scheduler;
     private final Map<String, PingResult> _pingResults;
     private final Map<String, Destination> _destinations;
     private Map<String, String> _hostCategories;
@@ -69,7 +69,7 @@ public class HostChecker {
     private final File _hostsCheckFile;
     private final File _categoriesFile;
     private final File _blacklistFile;
-    private final Semaphore _pingSemaphore;
+    private Semaphore _pingSemaphore;
     private Set<String> _blacklistedHosts;
     private volatile long _blacklistLastModified;
     private int _categoryRetryCount = 0;
@@ -282,7 +282,7 @@ public class HostChecker {
         _hostsCheckFile = new File(addressbookDir, "hosts_check.txt");
         _categoriesFile = new File(addressbookDir, "categories.txt");
         _blacklistFile = new File(addressbookDir, "blacklist.txt");
-        _blacklistedHosts = new ConcurrentHashMap<String, String>().keySet();
+        _blacklistedHosts = new HashSet<String>();
         loadBlacklist();
 
         // Load configuration from addressbook/config.txt
@@ -383,6 +383,22 @@ public class HostChecker {
 
         if (_log.shouldInfo()) {
             _log.info("Starting HostChecker with a " + (_pingInterval/1000/60) + " minute interval...");
+        }
+
+        // Create new scheduler if needed (in case start is called after stop)
+        if (_scheduler.isShutdown()) {
+            ThreadFactory threadFactory = new ThreadFactory() {
+                @Override
+                public Thread newThread(Runnable r) {
+                    Thread thread = new Thread(r);
+                    thread.setName("HostChecker");
+                    thread.setDaemon(true);
+                    return thread;
+                }
+            };
+            _scheduler = Executors.newScheduledThreadPool(_maxConcurrent + 2, threadFactory);
+            _pingSemaphore = new Semaphore(_maxConcurrent);
+            scheduleCategoryRetries();
         }
 
         // Start category download in a separate thread with delay
@@ -1004,18 +1020,18 @@ public class HostChecker {
                         }
                     } catch (Exception e) {
                     }
+                    if (!httpProxyReady) {
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException ie) {
+                            Thread.currentThread().interrupt();
+                            break;
+                        }
+                    }
                 } else {
                     try {
                         Thread.sleep(2000);
                         httpProxyReady = true;
-                    } catch (InterruptedException ie) {
-                        Thread.currentThread().interrupt();
-                        break;
-                    }
-                }
-                if (!httpProxyReady) {
-                    try {
-                        Thread.sleep(2000);
                     } catch (InterruptedException ie) {
                         Thread.currentThread().interrupt();
                         break;
@@ -1218,8 +1234,11 @@ public class HostChecker {
 
             // Ensure parent directory exists
             File parentDir = _hostsCheckFile.getParentFile();
-            if (!parentDir.exists()) {
+            if (parentDir != null && !parentDir.exists()) {
                 boolean created = parentDir.mkdirs();
+                if (!created && _log.shouldWarn()) {
+                    _log.warn("Failed to create parent directory: " + parentDir.getAbsolutePath());
+                }
             }
 
             // Write file with explicit error handling
@@ -2076,6 +2095,9 @@ public class HostChecker {
             // Refresh categories from notbob.i2p at the start of each cycle
             refreshCategories();
 
+            // Refresh blacklist at the start of each cycle
+            loadBlacklist();
+
             // Create dynamic semaphore based on current router load
             final Semaphore dynamicSemaphore = new Semaphore(dynamicMaxConcurrent);
 
@@ -2137,6 +2159,8 @@ public class HostChecker {
                     if (dest != null && !isBlacklisted) {
                         total++;
 
+                        final String hostnameToCheck = hostname;
+
                         // Submit ping task for concurrent execution with semaphore limit
                         java.util.concurrent.Future<Void> future = _scheduler.submit(new java.util.concurrent.Callable<Void>() {
                             @Override
@@ -2148,9 +2172,9 @@ public class HostChecker {
                                     // In defensive mode, skip ping/eephead, just check LeaseSet availability
                                     if (_defensiveMode) {
                                         if (_log.shouldDebug()) {
-                                            _log.debug("Defensive mode: checking LeaseSet for " + hostname);
+                                            _log.debug("Defensive mode: checking LeaseSet for " + hostnameToCheck);
                                         }
-                                        checkLeaseSetOnly(hostname);
+                                        checkLeaseSetOnly(hostnameToCheck);
                                         return null;
                                     }
 
@@ -2159,10 +2183,10 @@ public class HostChecker {
                                     Thread.sleep(randomDelay);
 
                                     if (_log.shouldInfo()) {
-                                        _log.info("Starting HostChecker for " + hostname + "...");
+                                        _log.info("Starting HostChecker for " + hostnameToCheck + "...");
                                     }
 
-                                    testDestination(hostname);
+                                    testDestination(hostnameToCheck);
                                     return null;
                                 } finally {
                                     // Always release semaphore permit
@@ -2298,16 +2322,8 @@ public class HostChecker {
     }
 
     private boolean isHostBlacklisted(String hostname) {
-        try {
-            loadBlacklist();
-            synchronized (this) {
-                return _blacklistedHosts.contains(hostname.toLowerCase());
-            }
-        } catch (Exception e) {
-            if (_log.shouldDebug()) {
-                _log.debug("Error checking blacklist for " + hostname + ": " + e.getMessage());
-            }
-            return false;
+        synchronized (this) {
+            return _blacklistedHosts.contains(hostname.toLowerCase());
         }
     }
 
