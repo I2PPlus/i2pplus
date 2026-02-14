@@ -70,7 +70,7 @@ public class ExpireLocalTunnelsJob extends JobImpl {
      * Generate a unique key for a tunnel config.
      * Falls back to identity hash code if tunnel IDs aren't available yet.
      */
-    private static Long getTunnelKey(PooledTunnelCreatorConfig cfg) {
+    public static Long getTunnelKey(PooledTunnelCreatorConfig cfg) {
         if (cfg == null) return null;
         try {
             int length = cfg.getLength();

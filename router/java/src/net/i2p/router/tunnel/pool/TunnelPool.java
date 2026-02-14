@@ -27,6 +27,8 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
 import net.i2p.router.TunnelPoolSettings;
 import net.i2p.router.tunnel.HopConfig;
+import net.i2p.router.tunnel.pool.ExpireLocalTunnelsJob;
+import net.i2p.router.tunnel.pool.TestJob;
 import net.i2p.router.tunnel.TunnelCreatorConfig;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateAverages;
@@ -1436,6 +1438,11 @@ public class TunnelPool {
         if (wasInPool) {
             _manager.tunnelFailed();
             processRemovalStats(java.util.Collections.singletonList(info));
+            if (info instanceof PooledTunnelCreatorConfig) {
+                PooledTunnelCreatorConfig cfg = (PooledTunnelCreatorConfig) info;
+                Long tunnelKey = ExpireLocalTunnelsJob.getTunnelKey(cfg);
+                TestJob.invalidate(tunnelKey);
+            }
         }
 
         if (_alive && _settings.isInbound() && !_settings.isExploratory()) {

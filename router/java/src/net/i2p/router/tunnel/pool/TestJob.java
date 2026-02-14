@@ -308,6 +308,19 @@ public class TestJob extends JobImpl {
     }
 
     /**
+     * Invalidate a TestJob by tunnel key.
+     * Called when a tunnel is removed from the pool to prevent stale tests from running.
+     * @param tunnelKey the tunnel key (from ExpireLocalTunnelsJob.getTunnelKey)
+     */
+    public static void invalidate(Long tunnelKey) {
+        if (tunnelKey == null) return;
+        TestJob job = RUNNING_TESTS.get(tunnelKey);
+        if (job != null) {
+            job._valid = false;
+        }
+    }
+
+    /**
      * Clean up this test job from tunnel tracking.
      * Must be called when a test job completes or is cancelled.
      * Note: This does NOT affect the TOTAL_TEST_JOBS counter.
