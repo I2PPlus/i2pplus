@@ -13,22 +13,22 @@ import net.i2p.data.TunnelId;
  * TunnelCreatorConfig to save space.
  */
 public class HopConfig {
-    private TunnelId _receiveTunnel;
-    private Hash _receiveFrom;
-    private TunnelId _sendTunnel;
-    private Hash _sendTo;
-    private SessionKey _layerKey;
-    private SessionKey _ivKey;
-    private long _creation;
-    private long _expiration;
+    private volatile TunnelId _receiveTunnel;
+    private volatile Hash _receiveFrom;
+    private volatile TunnelId _sendTunnel;
+    private volatile Hash _sendTo;
+    private volatile SessionKey _layerKey;
+    private volatile SessionKey _ivKey;
+    private volatile long _creation;
+    private volatile long _expiration;
 
     /*
      * These 4 were longs, let's save some space
      * 2 billion * 1KB / 10 minutes = 3 GBps in a single tunnel
      * we use synchronization instead of an AtomicInteger here to save space
      */
-    private int _messagesProcessed;
-    private int _oldMessagesProcessed;
+    private long _messagesProcessed;
+    private long _oldMessagesProcessed;
     private volatile int _allocatedBW;
     private long _bytesProcessed;
     private long _oldBytesProcessed;
@@ -139,7 +139,7 @@ public class HopConfig {
      */
     public synchronized void incrementProcessedMessages() { _messagesProcessed++; }
 
-    public synchronized int getProcessedMessagesCount() { return _messagesProcessed; }
+    public synchronized long getProcessedMessagesCount() { return _messagesProcessed; }
 
     /**
      *  Take note of bytes being pumped through this tunnel.
@@ -158,7 +158,7 @@ public class HopConfig {
      *  the last time getAndResetRecentMessagesCount() was called.
      *  As of 0.9.23, does NOT reset the count, see getAndResetRecentMessagesCount().
      */
-    public synchronized int getRecentMessagesCount() {
+    public synchronized long getRecentMessagesCount() {
         return _messagesProcessed - _oldMessagesProcessed;
     }
 
@@ -169,8 +169,8 @@ public class HopConfig {
      *
      *  @since 0.9.23
      */
-    synchronized int getAndResetRecentMessagesCount() {
-        int rv = _messagesProcessed - _oldMessagesProcessed;
+    synchronized long getAndResetRecentMessagesCount() {
+        long rv = _messagesProcessed - _oldMessagesProcessed;
         _oldMessagesProcessed = _messagesProcessed;
         return rv;
     }
@@ -190,7 +190,8 @@ public class HopConfig {
     public String toString() {
         StringBuilder buf = new StringBuilder(256);
         buf.append(_sendTo != null ? " to: [" + _sendTo.toBase64().substring(0,6) + "]" : "");
-        int messagesProcessed = getProcessedMessagesCount();
+        long messagesProcessed;
+        synchronized (this) { messagesProcessed = _messagesProcessed; }
         if (messagesProcessed > 0) {
             if (messagesProcessed > 1) {buf.append(" (").append(messagesProcessed).append(" messages processed)");}
             else {buf.append(" (").append(messagesProcessed).append(" message processed)");}

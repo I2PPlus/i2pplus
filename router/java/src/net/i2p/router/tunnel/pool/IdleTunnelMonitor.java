@@ -185,7 +185,7 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
             if (peer == null) continue;
 
             long age = now - tunnel.getCreation();
-            int messages = tunnel.getProcessedMessagesCount();
+            long messages = tunnel.getProcessedMessagesCount();
             long bytes = tunnel.getProcessedBytesCount();
 
             // Check if idle - both message count AND bytes must be below threshold
@@ -421,7 +421,7 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
             Hash tunnelPeer = getPeerHash(tunnel);
             if (tunnelPeer != null && tunnelPeer.equals(peer)) {
                 long age = now - tunnel.getCreation();
-                int messages = tunnel.getProcessedMessagesCount();
+                long messages = tunnel.getProcessedMessagesCount();
                 long bytes = tunnel.getProcessedBytesCount();
 
                 // If any tunnel has enough activity, peer is not fully idle

@@ -236,7 +236,7 @@ class TunnelRenderer {
                 else {DataHelper.sort(participating, new TunnelComparator());}
                 for (int i = 0; i < participating.size(); i++) {
                     HopConfig cfg = participating.get(i);
-                    int count = cfg.getProcessedMessagesCount();
+                    long count = cfg.getProcessedMessagesCount();
                     if (count <= 0) {
                         inactive++;
                         continue;
@@ -357,16 +357,16 @@ class TunnelRenderer {
             for (HopConfig cfg : participating) {
                 Hash from = cfg.getReceiveFrom();
                 Hash to = cfg.getSendTo();
-                int msgsCount = cfg.getProcessedMessagesCount();
+                long msgsCount = cfg.getProcessedMessagesCount();
                 if (from != null) {
                     counts.increment(from);
-                    if (msgsCount > 0) bws.add(from, msgsCount);
-                    msgs.add(from, msgsCount);
+                    if (msgsCount > 0) bws.add(from, (int) msgsCount);
+                    msgs.add(from, (int) msgsCount);
                 }
                 if (to != null) {
                     counts.increment(to);
-                    if (msgsCount > 0) bws.add(to, msgsCount);
-                    msgs.add(to, msgsCount);
+                    if (msgsCount > 0) bws.add(to, (int) msgsCount);
+                    msgs.add(to, (int) msgsCount);
                 }
             }
 
@@ -848,8 +848,9 @@ class TunnelRenderer {
     /** @since 0.9.35 */
     private static class TunnelComparatorBySpeed implements Comparator<HopConfig>, Serializable {
          public int compare(HopConfig l, HopConfig r) {
-             return (r.getProcessedMessagesCount() - l.getProcessedMessagesCount());
-        }
+             long diff = r.getProcessedMessagesCount() - l.getProcessedMessagesCount();
+             return diff > 0 ? 1 : diff < 0 ? -1 : 0;
+         }
     }
 
     private static class TunnelInfoComparator implements Comparator<TunnelInfo>, Serializable {
@@ -1047,7 +1048,7 @@ class TunnelRenderer {
 
             buf.append("<td class=expiry><span>").append(DataHelper.formatDuration2(timeLeft)).append("</span></td>");
 
-            int count = info.getProcessedMessagesCount() * 1024 / 1000;
+            long count = info.getProcessedMessagesCount() * 1024 / 1000;
             double sizeInKB = count * 1024.0 / 1000.0;
             double sizeInMB = sizeInKB / 1024.0;
             buf.append("<td class=\"cells transferred\" data-sort=").append(count).append(">");
@@ -1170,7 +1171,7 @@ class TunnelRenderer {
         long lifetimeOut = 0;
         for (int i = 0; i < tunnels.size(); i++) {
             TunnelInfo info = tunnels.get(i);
-            int count = info.getProcessedMessagesCount() * 1024;
+            long count = info.getProcessedMessagesCount() * 1024;
             if (info.isInbound()) {lifetimeIn += count;}
             else {lifetimeOut += count;}
             String nickname = getTunnelName(in);

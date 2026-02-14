@@ -80,7 +80,7 @@ public interface TunnelInfo {
      *
      * @return the number of processed messages
      */
-    public int getProcessedMessagesCount();
+    public long getProcessedMessagesCount();
 
     /** we know for sure that this many bytes travelled through the tunnel in its lifetime */
     public long getVerifiedBytesTransferred();

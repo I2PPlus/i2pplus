@@ -32,7 +32,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     private List<Integer> _order;
     private long _replyMessageId;
     private final boolean _isInbound;
-    private int _messagesProcessed;
+    private long _messagesProcessed;
     private long _verifiedBytesTransferred;
     private final AtomicInteger _failures = new AtomicInteger();
     private volatile boolean _reused;
@@ -169,7 +169,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
 
     /** take note of a message being pumped through this tunnel */
     public synchronized void incrementProcessedMessages() {_messagesProcessed++;}
-    public synchronized int getProcessedMessagesCount() {return _messagesProcessed;}
+    public synchronized long getProcessedMessagesCount() {return _messagesProcessed;}
 
     /**
      *  This calls profile manager tunnelDataPushed1m() for each peer

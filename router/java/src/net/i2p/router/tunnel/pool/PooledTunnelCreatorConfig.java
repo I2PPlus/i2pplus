@@ -141,7 +141,7 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
      */
     public void recordActivity() {
         long time = _context.clock().now();
-        int count = getProcessedMessagesCount();
+        long count = getProcessedMessagesCount();
         _activitySnapshot = (time << 32) | (count & 0xFFFFFFFFL);
     }
 
@@ -155,7 +155,7 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
     public boolean isRecentlyActive(long maxIdleMs) {
         long snapshot = _activitySnapshot;
         long now = _context.clock().now();
-        int currentMessages = getProcessedMessagesCount();
+        long currentMessages = getProcessedMessagesCount();
         long savedTime = snapshot >>> 32;
         int savedCount = (int) snapshot;
         // Active if: used recently OR messages increased since last check
