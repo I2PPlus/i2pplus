@@ -43,14 +43,14 @@ public class ExpireLocalTunnelsJob extends JobImpl {
     private static final long OB_EARLY_EXPIRE = 30 * 1000;
     private static final long IB_EARLY_EXPIRE = OB_EARLY_EXPIRE + 7500;
     // Stale entry threshold - remove entries older than this
-    private static final long STALE_THRESHOLD = 500;
+    private static final long STALE_THRESHOLD = 500; // ms
     // Maximum entries to clean per run
-    private static final int MAX_CLEANUP_PER_RUN = 50000;
+    private static final int MAX_CLEANUP_PER_RUN = 500;
     // Maximum retries for phase 1 removal before forcing cleanup
     private static final int MAX_PHASE1_RETRIES = 5;
     // Maximum entries to iterate per run (avoid OOM from queue iteration)
-    private static final int MAX_ITERATE_PER_RUN = 500;
-    private static final int MAX_ITERATE_BACKED_UP = 2000;
+    private static final int MAX_ITERATE_PER_RUN = 300;
+    private static final int MAX_ITERATE_BACKED_UP = 200;
 
     public ExpireLocalTunnelsJob(RouterContext ctx) {
         super(ctx);
@@ -389,8 +389,8 @@ public class ExpireLocalTunnelsJob extends JobImpl {
             }
         }
 
-        if ((cleaned > 0 || kept > 0) && _log.shouldInfo()) {
-            _log.info("Cleanup: " + cleaned + " removed, " + kept + " kept (" + keep.size() + " tunnels active)");
+        if (cleaned > 0 && _log.shouldInfo()) {
+            _log.info("Cleanup: removed " + cleaned + " expired " + (cleaned > 1 ? "tunnels" : "tunnel"));
         }
     }
 

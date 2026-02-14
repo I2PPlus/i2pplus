@@ -1,5 +1,8 @@
 package net.i2p.router;
 
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryMXBean;
+
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
@@ -57,8 +60,8 @@ class JobQueueScaler implements Runnable {
 
     // Feedback configuration
     private static final int FEEDBACK_CHECKS_AFTER_SCALE = 3; // Check 3 times after scaling - faster response
-    private static final int MAX_CONSECUTIVE_FAILED_SCALES = 20; // Allow more failures before disabling
-    private static final double LAG_INCREASE_THRESHOLD = 2.0; // Only rollback if lag doubles
+    private static final int MAX_CONSECUTIVE_FAILED_SCALES = 5; // Fail fast - disable after 5 failures
+    private static final double LAG_INCREASE_THRESHOLD = 1.5; // Rollback if lag increases by 50%
     private static final double READY_JOBS_INCREASE_THRESHOLD = 1.1; // If ready jobs increased by 10%
     private static final double EXTENDED_COOLDOWN_MULTIPLIER = 3; // 3x normal cooldown after failed scale
     private static final long CIRCUIT_BREAKER_RESET_TIME = 3*60*1000; // Reset circuit breaker after 3 minutes
@@ -205,11 +208,23 @@ class JobQueueScaler implements Runnable {
     }
 
     /**
-     * Get current used memory in bytes.
+     * Get current used memory in bytes using MemoryMXBean for accuracy.
      */
+    private static final MemoryMXBean MEMORY_MX_BEAN = ManagementFactory.getMemoryMXBean();
+
     private long getUsedMemory() {
-        Runtime runtime = Runtime.getRuntime();
-        return runtime.totalMemory() - runtime.freeMemory();
+        return MEMORY_MX_BEAN.getHeapMemoryUsage().getUsed();
+    }
+
+    /**
+     * Get free memory headroom (max heap - used).
+     */
+    private long getFreeMemoryHeadroom() {
+        long maxMemory = SystemVersion.getMaxMemory();
+        if (maxMemory == 0) {
+            maxMemory = MEMORY_MX_BEAN.getHeapMemoryUsage().getMax();
+        }
+        return maxMemory - getUsedMemory();
     }
 
     /**
@@ -461,7 +476,13 @@ class JobQueueScaler implements Runnable {
         // EMERGENCY MODE: Always handle high lag first, even if circuit breaker is open
         if (emergencyMode && activeRunners < maxRunners) {
             int runnersAvailable = maxRunners - activeRunners;
-            int runnersToAdd = Math.min(Math.max(4, runnersAvailable / 2), runnersAvailable);
+            // Cap emergency additions to prevent memory spikes - max 4 at once
+            int maxEmergencyAdd = Math.min(4, runnersAvailable);
+            // Also respect memory headroom (require 3x per runner)
+            long headroom = getFreeMemoryHeadroom();
+            int memoryCapped = (int)(headroom / (RUNNER_MEMORY_ESTIMATE * 3));
+            int runnersToAdd = Math.min(maxEmergencyAdd, memoryCapped);
+            runnersToAdd = Math.max(4, runnersToAdd); // At least 4 in emergency
 
             if (runnersToAdd > 0) {
                 if (_log.shouldInfo()) {
@@ -617,7 +638,7 @@ class JobQueueScaler implements Runnable {
 
         boolean lagIncreased = lagRatio > LAG_INCREASE_THRESHOLD;
         boolean readyJobsIncreased = readyJobsRatio > READY_JOBS_INCREASE_THRESHOLD;
-        boolean memoryCritical = getMemoryUsagePercent() > 85; // Roll back if memory is critical
+        boolean memoryCritical = getMemoryUsagePercent() > 75; // Roll back if memory is critical
 
         if (lagIncreased || readyJobsIncreased || memoryCritical) {
             // Scaling made things worse - rollback!
@@ -672,6 +693,32 @@ class JobQueueScaler implements Runnable {
      * Scale up by adding runners.
      */
     private void scaleUp(int count, int readyJobs, long maxLag, long avgLag) {
+        // Check memory percentage before scaling up - prevent OOM
+        double currentMemoryPercent = getMemoryUsagePercent();
+        if (currentMemoryPercent > 70) {
+            if (_log.shouldWarn()) {
+                _log.warn("Skipping scale-up: memory usage too high at " + 
+                          String.format("%.1f", currentMemoryPercent) + "%");
+            }
+            // Enter cooldown to prevent repeated attempts
+            _lastScaleTime = _context.clock().now();
+            _isInExtendedCooldown = true;
+            return;
+        }
+
+        // Check absolute memory headroom - require 3x estimated memory per runner
+        long headroom = getFreeMemoryHeadroom();
+        long requiredMemory = (long) count * RUNNER_MEMORY_ESTIMATE * 3;
+        if (headroom < requiredMemory) {
+            if (_log.shouldWarn()) {
+                _log.warn("Skipping scale-up: insufficient memory headroom (" + 
+                          (headroom / MB) + "MB < " + (requiredMemory / MB) + "MB required)");
+            }
+            _lastScaleTime = _context.clock().now();
+            _isInExtendedCooldown = true;
+            return;
+        }
+
         _lastScaleTime = _context.clock().now();
         _consecutiveScaleUpChecks = 0;
         _consecutiveScaleDownChecks = 0;
