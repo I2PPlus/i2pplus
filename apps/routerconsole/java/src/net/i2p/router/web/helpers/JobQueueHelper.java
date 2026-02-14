@@ -116,12 +116,13 @@ public class JobQueueHelper extends HelperBase {
             buf.append("</ol>\n");
         }
 
-        if ((justFinishedJobs.size() != 0) && (isAdvanced())) {
+        if ((activeJobs.size() + justFinishedJobs.size() > 0) && (isAdvanced())) {
             int maxRunners = _context.jobQueue().getMaxRunnerCount();
+            int activeCount = activeJobs.size() + justFinishedJobs.size();
             buf.append("<h3 id=finishedjobs>")
                .append(_t("Completed jobs")).append(": ").append(justFinishedJobs.size())
                .append(" <span id=jobRunners>").append(_t("Runners")).append(": ")
-               .append(_t("Active")).append(": ").append(numRunners)
+               .append(_t("Active")).append(": ").append(activeCount)
                .append(" / ").append(_t("Max")).append(": ").append(maxRunners)
                .append("</span>")
                .append("</h3>\n<ol class=jobqueue>\n");
