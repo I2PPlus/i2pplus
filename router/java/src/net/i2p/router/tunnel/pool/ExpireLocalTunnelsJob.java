@@ -60,6 +60,15 @@ public class ExpireLocalTunnelsJob extends JobImpl {
         return "Expire Local Tunnels";
     }
 
+    /**
+     * Get the current number of pending expirations.
+     * Used for debugging memory leaks - compare with VisualVM live object count.
+     * @return number of entries in expiration map
+     */
+    public int getPendingExpirations() {
+        return _tunnelExpirations.size();
+    }
+
     public static Long getTunnelKey(PooledTunnelCreatorConfig cfg) {
         if (cfg == null) return null;
         try {
@@ -210,6 +219,12 @@ public class ExpireLocalTunnelsJob extends JobImpl {
                 it.remove();
                 staleRemoved++;
                 continue;
+            }
+
+            // NUCLEAR: Null config reference early to allow GC of PooledTunnelCreatorConfig
+            // This breaks the retention chain even if entry stays in map
+            if (te.config != null) {
+                te.config = null;
             }
 
             if (te.expirationTime <= now && !te.phase1Complete) {
