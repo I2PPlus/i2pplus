@@ -474,6 +474,8 @@ public class JobQueue {
         if (cls.getName().contains("RequestLeaseSetJob")) {return false;}
         // NEVER drop RepublishLeaseSetJob - critical for network connectivity
         if (cls == RepublishLeaseSetJob.class) {return false;}
+        // NEVER drop ExpireLocalTunnelsJob - critical for tunnel cleanup, prevents memory leaks
+        if (cls.getName().contains("ExpireLocalTunnelsJob")) {return false;}
 
         int maxWaitingJobs = getMaxWaitingJobs();
 
@@ -495,12 +497,8 @@ public class JobQueue {
                 // NEVER drop tunnel build messages
                 if (jobName.contains("Tunnel Build")) {return false;}
             }
-            boolean disableTunnelTests = _context.getBooleanProperty("router.disableTunnelTesting");
-            if ((!disableTunnelTests && cls == TestJob.class) ||
-                cls == PeerTestJob.class ||
-                cls == ExploreJob.class) {
-                return true;
-            }
+            // TestJob has its own dropped() cleanup but let's never drop it to be safe
+            // Let it queue up - better to have pending tests than leaked configs
         }
         return false;
     }
