@@ -38,7 +38,7 @@ public class ExpireLocalTunnelsJob extends JobImpl {
     private static final int BACKED_UP_THRESHOLD = 5000;
     private static final long OB_EARLY_EXPIRE = 30 * 1000;
     private static final long IB_EARLY_EXPIRE = OB_EARLY_EXPIRE + 7500;
-    private static final long MAX_ENTRY_LIFETIME = 30 * 1000L; // 30 seconds - aggressive cleanup
+    private static final long MAX_ENTRY_LIFETIME = 15 * 1000L; // 15 seconds - aggressive cleanup
     private static final int MAX_PHASE1_RETRIES = 3;
     private static final int MAX_ITERATE_PER_RUN = 5000;
     private static final int MAX_ITERATE_BACKED_UP = 10000;
@@ -112,8 +112,15 @@ public class ExpireLocalTunnelsJob extends JobImpl {
             return;
         }
 
+        // Check for existing entry and update instead of adding duplicate
+        TunnelExpiration existing = _tunnelExpirations.get(tunnelKey);
+        if (existing != null) {
+            // Entry already exists, skip duplicate scheduling
+            return;
+        }
+
         int size = _tunnelExpirations.size();
-        if (size > 50000) {
+        if (size > 40000) {
             if (_log.shouldInfo()) {
                 _log.info("Dropping tunnel expiration scheduling -> " + size + " entries backlogged...");
             }
@@ -179,14 +186,29 @@ public class ExpireLocalTunnelsJob extends JobImpl {
         }
 
         int iterated = 0;
+        int staleRemoved = 0;
         Iterator<Map.Entry<Long, TunnelExpiration>> it = _tunnelExpirations.entrySet().iterator();
         while (it.hasNext()) {
-            if (iterated++ >= maxIterate) break;
+            if (iterated++ >= maxIterate) {
+                // When backed up, continue cleaning stale entries even after hitting iterate limit
+                if (isBackedUp) {
+                    continue;
+                }
+                break;
+            }
 
             Map.Entry<Long, TunnelExpiration> entry = it.next();
             TunnelExpiration te = entry.getValue();
             if (te == null) {
                 it.remove();
+                staleRemoved++;
+                continue;
+            }
+
+            // Proactive TTL cleanup BEFORE other logic - prevents stale entries from accumulating
+            if (now - te.createdAt > MAX_ENTRY_LIFETIME) {
+                it.remove();
+                staleRemoved++;
                 continue;
             }
 
@@ -194,9 +216,12 @@ public class ExpireLocalTunnelsJob extends JobImpl {
                 readyToExpire.add(te);
             } else if (te.dropTime <= now && te.phase1Complete) {
                 readyToDrop.add(te);
-            } else if (now - te.createdAt > MAX_ENTRY_LIFETIME) {
-                it.remove();
             }
+        }
+
+        // Additional cleanup pass for stale entries when backed up (unlimited iteration)
+        if (isBackedUp && staleRemoved > 0 && _log.shouldInfo()) {
+            _log.info("Removed " + staleRemoved + " stale entries from expiration map");
         }
 
         if (!readyToExpire.isEmpty() || !readyToDrop.isEmpty()) {
@@ -297,6 +322,24 @@ public class ExpireLocalTunnelsJob extends JobImpl {
             if (phase2Removed > 0 && _log.shouldInfo()) {
                 _log.info("Phase 2 complete: removed " + phase2Removed + " tunnels");
             }
+        }
+
+        // *** CRITICAL: Hard TTL sweep at end of every run ***
+        // Guarantees no entries live > MAX_ENTRY_LIFETIME regardless of other logic
+        // This is the LEAK KILLER - entries older than TTL are always removed
+        final long ttlCutoff = now - MAX_ENTRY_LIFETIME;
+        int ttlSwept = 0;
+        Iterator<Map.Entry<Long, TunnelExpiration>> sweepIt = _tunnelExpirations.entrySet().iterator();
+        while (sweepIt.hasNext()) {
+            Map.Entry<Long, TunnelExpiration> entry = sweepIt.next();
+            TunnelExpiration te = entry.getValue();
+            if (te == null || te.createdAt < ttlCutoff || (te.config == null && te.phase1Complete)) {
+                sweepIt.remove();
+                ttlSwept++;
+            }
+        }
+        if (ttlSwept > 0 && _log.shouldDebug()) {
+            _log.debug("TTL sweep removed " + ttlSwept + " stale entries, map now: " + _tunnelExpirations.size());
         }
 
         int remaining = _tunnelExpirations.size();
