@@ -119,6 +119,12 @@ public class ExpireLocalTunnelsJob extends JobImpl {
             return;
         }
 
+        // Skip transit tunnels - they don't have a destination and don't need two-phase expiration
+        // Only track exploratory (isExploratory) and client tunnels (has destination)
+        if (cfg.getDestination() == null && !cfg.getTunnelPool().getSettings().isExploratory()) {
+            return;
+        }
+
         Long tunnelKey = getTunnelKey(cfg);
         if (tunnelKey == null) {
             if (_log.shouldDebug()) {
@@ -186,7 +192,7 @@ public class ExpireLocalTunnelsJob extends JobImpl {
         if (startSize > 5000) {
             maxIterate = MAX_ITERATE_EMERGENCY;
             if (_log.shouldInfo()) {
-                _log.info("Emergency drainage -> Processing " + maxIterate + " entries... (Entries: " + startSize + ")");
+                _log.info("Emergency drainage -> Processing " + startSize + " entries...");
             }
         } else if (isBackedUp) {
             maxIterate = MAX_ITERATE_BACKED_UP;
@@ -211,8 +217,8 @@ public class ExpireLocalTunnelsJob extends JobImpl {
         }
 
         if (!readyToExpire.isEmpty() || !readyToDrop.isEmpty()) {
-            if (isBackedUp && _log.shouldInfo()) {
-                _log.info("Processing " + readyToExpire.size() + " expired, " +
+            if (isBackedUp && _log.shouldDebug()) {
+                _log.debug("Processing " + readyToExpire.size() + " expired, " +
                           readyToDrop.size() + " ready for drop...");
             }
 
