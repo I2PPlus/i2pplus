@@ -212,16 +212,16 @@ public class ExpireLocalTunnelsJob extends JobImpl {
             for (TunnelExpiration te : readyToExpire) {
                 PooledTunnelCreatorConfig cfg = te.config;
                 if (cfg == null) {
+                    removeEntry(te.tunnelKey);
                     te.phase1Complete = true;
                     forceCleanupCount++;
-                    removeEntry(te.tunnelKey);
                     continue;
                 }
                 TunnelPool pool = cfg.getTunnelPool();
                 if (pool == null) {
+                    removeEntry(te.tunnelKey);
                     te.phase1Complete = true;
                     forceCleanupCount++;
-                    removeEntry(te.tunnelKey);
                     continue;
                 }
                 boolean removed = false;
@@ -242,15 +242,17 @@ public class ExpireLocalTunnelsJob extends JobImpl {
                 }
 
                 if (removed) {
-                    te.phase1Complete = true;
                     te.config = null;
+                    te.phase1Complete = true;
                     removedCount++;
+                    // Note: Don't remove entry here - needed for phase 2 dispatcher.remove()
                 } else {
                     te.retryCount++;
                     if (te.retryCount >= MAX_PHASE1_RETRIES || giveUp) {
-                        te.phase1Complete = true;
                         forceCleanupCount++;
                         removeEntry(te.tunnelKey);
+                        te.config = null;
+                        te.phase1Complete = true;
                     } else {
                         failedCount++;
                     }
