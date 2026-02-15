@@ -550,7 +550,7 @@ public class TunnelPool {
           // Increase limit during attacks when build success is low or zero
           double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
           if (buildSuccess < 0.40) {
-              maxAllowed *= 2; // Double concurrent builds under attack
+              maxAllowed += 2; // Add 2 slots during attack instead of doubling
           }
           return counter.get() < maxAllowed;
       }
