@@ -1810,9 +1810,10 @@ public class TunnelPool {
         }
 
         if (avg > 0 && avg < TUNNEL_LIFETIME / 3) { // if we're taking less than 200s per tunnel to build
-            // Increase PANIC_FACTOR during attacks to build more aggressively
+            // During attacks: reduce PANIC_FACTOR to build fewer tunnels
+            // We rely on more frequent testing to detect and replace failing tunnels
             boolean isUnderAttack = _context.profileOrganizer().isLowBuildSuccess();
-            final int PANIC_FACTOR = isUnderAttack ? 8 : 4;  // how many builds to kick off when time gets short
+            final int PANIC_FACTOR = isUnderAttack ? 4 : 4;  // keep at 4 both modes, testing will handle failures
             avg += 60*1000; // one minute safety factor
             if (_settings.isExploratory())
                 avg += 60*1000; // two minute safety factor
@@ -1943,13 +1944,14 @@ public class TunnelPool {
             return Math.max(2, standardAmount);
         }
 
-        // Increase multipliers during attacks for more aggressive building
-        int multiplier360 = isUnderAttack ? 2 : 1;  // 6min: normally 0, during attack 1x (early warning)
-        int multiplier270 = isUnderAttack ? 2 : 1;  // 4.5min: 1x normal, 2x attack
-        int multiplier210 = isUnderAttack ? 2 : 1; // 3.5min: 1x normal, 2x attack
-        int multiplier150 = isUnderAttack ? 3 : 2; // 2.5min: 2x normal, 3x attack
-        int multiplier90  = isUnderAttack ? 5 : 4; // 1.5min: 4x normal, 5x attack
-        int multiplier30  = isUnderAttack ? 8 : 6; // 30sec: 6x normal, 8x attack
+        // During attacks: reduce multipliers to build fewer tunnels (they're likely to fail anyway)
+        // Instead, we rely on more frequent testing to detect and replace failing tunnels
+        int multiplier360 = isUnderAttack ? 1 : 1;  // 6min: 1x both modes
+        int multiplier270 = isUnderAttack ? 1 : 1;  // 4.5min: 1x both modes
+        int multiplier210 = isUnderAttack ? 1 : 1;  // 3.5min: 1x both modes
+        int multiplier150 = isUnderAttack ? 1 : 2; // 2.5min: 1x attack, 2x normal
+        int multiplier90  = isUnderAttack ? 2 : 4; // 1.5min: 2x attack, 4x normal
+        int multiplier30  = isUnderAttack ? 3 : 6; // 30sec: 3x attack, 6x normal
 
         int rv = 0;
         int remainingWanted = standardAmount - expireLater;
