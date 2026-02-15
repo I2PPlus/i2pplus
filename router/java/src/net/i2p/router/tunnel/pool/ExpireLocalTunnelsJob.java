@@ -175,15 +175,15 @@ public class ExpireLocalTunnelsJob extends JobImpl {
         }
         // Alert if keys significantly exceed queue (potential leak indicator)
         if (keysSize > queueSize + 10 && queueSize > 20) {
-            if (_log.shouldWarn()) {
-                _log.warn("Expire keys map (" + keysSize + ") significantly larger than queue (" +
-                          queueSize + ") - possible index leak");
+            if (_log.shouldInfo()) {
+                _log.info("Expire keys map (" + keysSize + ") significantly larger than queue (" +
+                          queueSize + ") -> Possible index leak...");
             }
         }
         // Auto-heal when keys grow much larger than queue (leak detected)
-        if (keysSize > 1000 && keysSize > 10 * Math.max(1, queueSize)) {
-            if (_log.shouldWarn()) {
-                _log.warn("Auto-healing: keys (" + keysSize + ") >> queue (" + queueSize + ")");
+        if (keysSize > 500 && keysSize > 3 * Math.max(1, queueSize)) {
+            if (_log.shouldInfo()) {
+                _log.info("Auto-healing: keys (" + keysSize + ") >> queue (" + queueSize + ")");
             }
             long now = getContext().clock().now();
             cleanupStaleEntries(now, true);
@@ -200,8 +200,8 @@ public class ExpireLocalTunnelsJob extends JobImpl {
     public void scheduleExpiration(PooledTunnelCreatorConfig cfg) {
         // Defensive null checks to prevent NPEs that could leave entries partially added
         if (cfg == null || cfg.getTunnelPool() == null || cfg.getTunnelPool().getSettings() == null) {
-            if (_log.shouldWarn()) {
-                _log.warn("Cannot schedule expiration for null config or pool");
+            if (_log.shouldInfo()) {
+                _log.info("Cannot schedule expiration for null config or pool");
             }
             return;
         }
@@ -288,8 +288,8 @@ public class ExpireLocalTunnelsJob extends JobImpl {
         int maxDrain;
         if (queueSize > 5000) {
             maxDrain = MAX_ITERATE_EMERGENCY;
-            if (_log.shouldWarn()) {
-                _log.warn("Emergency drainage mode: processing " + maxDrain + " entries (queue size: " + queueSize + ")");
+            if (_log.shouldInfo()) {
+                _log.info("Emergency expired tunnel drainage -> Processing " + maxDrain + " entries... (Queue: " + queueSize + ")");
             }
         } else if (isBackedUp) {
             maxDrain = MAX_ITERATE_BACKED_UP;
@@ -338,8 +338,8 @@ public class ExpireLocalTunnelsJob extends JobImpl {
                 // Hard time-based cutoff - entries cannot live forever
                 if (now - te.createdAt > MAX_ENTRY_LIFETIME) {
                     giveUp = true;
-                    if (_log.shouldWarn()) {
-                        _log.warn("Entry exceeded max lifetime (" + (now - te.createdAt) + "ms), giving up: " + cfg);
+                    if (_log.shouldInfo()) {
+                        _log.info("Entry exceeded max lifetime (" + (now - te.createdAt) + "ms) -> Giving up: " + cfg);
                     }
                 }
 
@@ -364,8 +364,8 @@ public class ExpireLocalTunnelsJob extends JobImpl {
                         // CRITICAL: Remove key to prevent key leak when forcing phase1Complete
                         // Without this, keys accumulate in _tunnelKeys forever
                         removeFromIndex(te);
-                        if (_log.shouldWarn()) {
-                            _log.warn("Forcing phase 1 complete after " + te.retryCount +
+                        if (_log.shouldInfo()) {
+                            _log.info("Forcing phase 1 complete after " + te.retryCount +
                                       " retries or timeout (" + (now - te.createdAt) + "ms): " + cfg);
                         }
                     } else {
@@ -380,8 +380,8 @@ public class ExpireLocalTunnelsJob extends JobImpl {
             }
 
             if (failedCount > 0 || forceCleanupCount > 0 || removedCount > 0) {
-                if (_log.shouldWarn()) {
-                    _log.warn("Tunnel expiration: " + removedCount + " removed, " + forceCleanupCount + " force-cleaned, " + failedCount + " failed (will retry)");
+                if (_log.shouldInfo()) {
+                    _log.info("Tunnel expiration: " + removedCount + " removed, " + forceCleanupCount + " force-cleaned, " + failedCount + " failed (will retry)");
                 }
             }
 
@@ -396,8 +396,8 @@ public class ExpireLocalTunnelsJob extends JobImpl {
                     toRequeue.add(te);
                 }
             }
-            if (phase2Ready > 0 && _log.shouldWarn()) {
-                _log.warn("Phase 2 ready: " + phase2Ready + " tunnels ready for dispatcher removal");
+            if (phase2Ready > 0 && _log.shouldInfo()) {
+                _log.info("Phase 2 ready: " + phase2Ready + " tunnels ready for dispatcher removal");
             }
 
             // Phase 2: Remove from dispatcher
@@ -415,8 +415,8 @@ public class ExpireLocalTunnelsJob extends JobImpl {
                 // Use centralized removal to prevent dangling keys
                 removeFromIndex(te);
             }
-            if (phase2Removed > 0 && _log.shouldWarn()) {
-                _log.warn("Phase 2 complete: removed " + phase2Removed + " tunnels from dispatcher");
+            if (phase2Removed > 0 && _log.shouldInfo()) {
+                _log.info("Phase 2 complete: removed " + phase2Removed + " tunnels from dispatcher");
             }
 
             // Requeue entries that need more time before phase 2
@@ -430,28 +430,37 @@ public class ExpireLocalTunnelsJob extends JobImpl {
                     }
                     continue;
                 }
+                // Proactive cleanup: remove keys for entries stuck in phase1 for too long
+                // This prevents key accumulation during requeue storms
+                if (te.phase1Complete && now - te.createdAt > 2 * 60 * 1000L) {
+                    removeFromIndex(te);
+                    if (_log.shouldDebug()) {
+                        _log.debug("Proactive key cleanup for aged phase1 entry: " + (now - te.createdAt) + "ms");
+                    }
+                    _expirationQueue.offer(te);
+                    continue;
+                }
                 // Keep the key in the map - don't remove it
                 _expirationQueue.offer(te);
             }
         }
 
         // Requeue if there are more pending expirations
-        if (!_expirationQueue.isEmpty()) {
+        if (queueSize > 0) {
             synchronized (this) {
                 if (_isScheduled) {
                     return;
                 }
-                // Find the next expiration time using O(1) peek instead of O(n) scan
-                TunnelExpiration head = _expirationQueue.peek();
-                long nextExpiration = (head != null) ?
-                    (head.phase1Complete ? head.dropTime : head.expirationTime) : Long.MAX_VALUE;
+                // Use the queueSize from start of runJob, not current size (which may be 0 during drain)
+                // This ensures requeue happens even during emergency drainage
+                long nextExpiration = now + BATCH_WINDOW;
 
                 // Check if we've been starved - force requeue if lag is too high
                 long lag = now - _lastRunTime;
                 boolean isStarved = _lastRunTime > 0 && lag > FORCED_REQUEUE_TIMEOUT;
-                boolean stillBackedUp = _expirationQueue.size() > BACKED_UP_THRESHOLD;
+                boolean stillBackedUp = queueSize > BACKED_UP_THRESHOLD;
 
-                if (isStarved || stillBackedUp || nextExpiration <= now + BATCH_WINDOW) {
+                if (isStarved || stillBackedUp) {
                     long nextRun;
                     if (isStarved) {
                         // If starved, run immediately
@@ -459,11 +468,9 @@ public class ExpireLocalTunnelsJob extends JobImpl {
                         if (_log.shouldInfo()) {
                             _log.info("Expire Tunnels Job starved for " + (lag / 1000) + "s -> Immediately requeueing...");
                         }
-                    } else if (stillBackedUp) {
+                    } else {
                         // If still backed up, run again soon
                         nextRun = now + BATCH_WINDOW / 4;
-                    } else {
-                        nextRun = Math.min(nextExpiration, now + BATCH_WINDOW);
                     }
                     getTiming().setStartAfter(nextRun);
                     _isScheduled = true;
