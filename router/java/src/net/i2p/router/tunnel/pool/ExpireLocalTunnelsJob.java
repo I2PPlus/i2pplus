@@ -2,6 +2,7 @@ package net.i2p.router.tunnel.pool;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.PriorityBlockingQueue;
 
@@ -46,17 +47,21 @@ public class ExpireLocalTunnelsJob extends JobImpl {
     private static final long IB_EARLY_EXPIRE = OB_EARLY_EXPIRE + 7500;
     // Stale entry threshold - remove entries older than this
     private static final long STALE_THRESHOLD = 500; // ms
-    // Maximum entries to clean per run
-    private static final int MAX_CLEANUP_PER_RUN = 500;
+    // Maximum time we will keep a TunnelExpiration around, even if stuck (10 minutes)
+    private static final long MAX_ENTRY_LIFETIME = 10 * 60 * 1000L;
+    // Maximum entries to clean per run (increased for massive queue handling)
+    private static final int MAX_CLEANUP_PER_RUN = 50000;
     // Maximum retries for phase 1 removal before forcing cleanup
     private static final int MAX_PHASE1_RETRIES = 5;
     // Maximum entries to iterate per run (avoid OOM from queue iteration)
-    private static final int MAX_ITERATE_PER_RUN = 3000;
-    private static final int MAX_ITERATE_BACKED_UP = 5000;
+    private static final int MAX_ITERATE_PER_RUN = 30000;
+    private static final int MAX_ITERATE_BACKED_UP = 50000;
     // Emergency drainage rate when massively backed up (100K+ entries)
-    private static final int MAX_ITERATE_EMERGENCY = 5000;
+    private static final int MAX_ITERATE_EMERGENCY = 100000;
     // Debug logging interval for queue health (every N runs)
     private static final int HEALTH_LOG_INTERVAL = 60;
+    // Index heal interval (every N runs)
+    private static final int INDEX_HEAL_INTERVAL = 300;
 
     public ExpireLocalTunnelsJob(RouterContext ctx) {
         super(ctx);
@@ -124,9 +129,14 @@ public class ExpireLocalTunnelsJob extends JobImpl {
      * - Keep if phase 1 not complete (still waiting for pool removal)
      * - Keep if drop time is in the future (still waiting for dispatcher removal)
      * - Keep if not overdue (still within acceptable grace period)
+     * - Keep if within MAX_ENTRY_LIFETIME (hasn't exceeded max lifetime)
      * - Otherwise, can be cleaned up
      */
     private boolean shouldKeepEntry(TunnelExpiration te, long now) {
+        // Check if entry has exceeded maximum lifetime - can be cleaned up
+        if (now - te.createdAt > MAX_ENTRY_LIFETIME) {
+            return false;
+        }
         if (!te.phase1Complete) {
             return true;  // Still waiting for phase 1 (pool removal)
         }
@@ -247,10 +257,13 @@ public class ExpireLocalTunnelsJob extends JobImpl {
         _runCount++;
         logQueueHealth(_runCount);
 
-        // Cleanup stale entries if queue is backed up or massive
+        // Re-enable cleanupStaleEntries when backed up to prevent memory growth
         if (isBackedUp || isMassive) {
             cleanupStaleEntries(now, isMassive);
         }
+
+        // Periodic index healing to reconcile _tunnelKeys with _expirationQueue
+        healIndexIfNeeded(_runCount);
 
         List<TunnelExpiration> readyToExpire = new ArrayList<>();
         List<TunnelExpiration> readyToDrop = new ArrayList<>();
@@ -281,7 +294,7 @@ public class ExpireLocalTunnelsJob extends JobImpl {
                 // Ready for phase 2
                 readyToDrop.add(te);
             } else {
-                // Not ready for either phase yet
+                // Not ready for either phase yet - requeue if key is still valid
                 toRequeue.add(te);
             }
         }
@@ -304,52 +317,82 @@ public class ExpireLocalTunnelsJob extends JobImpl {
             int forceCleanupCount = 0;
             for (TunnelExpiration te : readyToExpire) {
                 PooledTunnelCreatorConfig cfg = te.config;
-                TunnelPool pool = cfg.getTunnelPool();
+                TunnelPool pool = (cfg != null) ? cfg.getTunnelPool() : null;
                 boolean removed = false;
-                if (pool != null) {
-                    removed = pool.removeTunnelSynchronous(cfg);
+                boolean giveUp = false;
+
+                // Hard time-based cutoff - entries cannot live forever
+                if (now - te.createdAt > MAX_ENTRY_LIFETIME) {
+                    giveUp = true;
+                    if (_log.shouldWarn()) {
+                        _log.warn("Entry exceeded max lifetime (" + (now - te.createdAt) + "ms), giving up: " + cfg);
+                    }
                 }
+
+                if (!giveUp && pool != null && cfg != null) {
+                    try {
+                        removed = pool.removeTunnelSynchronous(cfg);
+                    } catch (Exception e) {
+                        if (_log.shouldWarn()) {
+                            _log.warn("Error in phase 1 removing tunnel from pool: " + e.getMessage(), e);
+                        }
+                    }
+                }
+
                 if (removed) {
                     te.phase1Complete = true;
                     removedCount++;
                 } else {
                     te.retryCount++;
-                    if (te.retryCount >= MAX_PHASE1_RETRIES) {
+                    if (te.retryCount >= MAX_PHASE1_RETRIES || giveUp) {
                         te.phase1Complete = true;
                         forceCleanupCount++;
+                        // CRITICAL: Remove key to prevent key leak when forcing phase1Complete
+                        // Without this, keys accumulate in _tunnelKeys forever
+                        removeFromIndex(te);
                         if (_log.shouldWarn()) {
-                            _log.warn("Forcing phase 1 complete after " + MAX_PHASE1_RETRIES + " retries (possible LeaseSet inconsistency): " + cfg);
+                            _log.warn("Forcing phase 1 complete after " + te.retryCount +
+                                      " retries or timeout (" + (now - te.createdAt) + "ms): " + cfg);
                         }
                     } else {
                         failedCount++;
                         if (_log.shouldInfo()) {
-                            _log.info("Failed to remove tunnel (retry " + te.retryCount + "/" + MAX_PHASE1_RETRIES + ") from pool " + pool + " -> Will retry on next run...");
+                            _log.info("Failed to remove tunnel (retry " + te.retryCount + "/" +
+                                      MAX_PHASE1_RETRIES + ") from pool " + pool +
+                                      " -> Will retry on next run...");
                         }
                     }
                 }
             }
 
-            if (failedCount > 0 || forceCleanupCount > 0) {
-                if (_log.shouldInfo()) {
-                    _log.info("Tunnel expiration: " + removedCount + " removed, " + forceCleanupCount + " force-cleaned, " + failedCount + " failed (will retry)");
+            if (failedCount > 0 || forceCleanupCount > 0 || removedCount > 0) {
+                if (_log.shouldWarn()) {
+                    _log.warn("Tunnel expiration: " + removedCount + " removed, " + forceCleanupCount + " force-cleaned, " + failedCount + " failed (will retry)");
                 }
             }
 
             // Check if phase 1 complete entries are ready for phase 2
+            int phase2Ready = 0;
             for (TunnelExpiration te : readyToExpire) {
                 if (te.phase1Complete && te.dropTime <= now) {
                     readyToDrop.add(te);
+                    phase2Ready++;
                 } else {
                     // Includes: failed phase1 (retry), completed but dropTime in future
                     toRequeue.add(te);
                 }
             }
+            if (phase2Ready > 0 && _log.shouldWarn()) {
+                _log.warn("Phase 2 ready: " + phase2Ready + " tunnels ready for dispatcher removal");
+            }
 
             // Phase 2: Remove from dispatcher
+            int phase2Removed = 0;
             for (TunnelExpiration te : readyToDrop) {
                 PooledTunnelCreatorConfig cfg = te.config;
                 try {
                     getContext().tunnelDispatcher().remove(cfg);
+                    phase2Removed++;
                 } catch (Exception e) {
                     if (_log.shouldWarn()) {
                         _log.warn("Error removing tunnel in phase 2: " + e.getMessage(), e);
@@ -358,16 +401,26 @@ public class ExpireLocalTunnelsJob extends JobImpl {
                 // Use centralized removal to prevent dangling keys
                 removeFromIndex(te);
             }
+            if (phase2Removed > 0 && _log.shouldWarn()) {
+                _log.warn("Phase 2 complete: removed " + phase2Removed + " tunnels from dispatcher");
+            }
 
             // Requeue entries that need more time before phase 2
-            // Only requeue if still valid (not removed via removeTunnel())
+            // CRITICAL: Always remove key when requeueing to prevent key accumulation
+            // The entry stays in queue but key is removed - when processed later,
+            // cleanup will work without the key
             for (TunnelExpiration te : toRequeue) {
-                if (te.tunnelKey == null || _tunnelKeys.get(te.tunnelKey) == te) {
-                    _expirationQueue.offer(te);
-                } else {
-                    // Key was removed externally - clean up the index
+                // Sanity check: skip entries that have exceeded max lifetime (immortal entries)
+                if (now - te.createdAt > MAX_ENTRY_LIFETIME) {
                     removeFromIndex(te);
+                    if (_log.shouldWarn()) {
+                        _log.warn("Skipping immortal entry exceeded max lifetime: " + te.config);
+                    }
+                    continue;
                 }
+                // Remove key to prevent leak - entry will be processed without key
+                removeFromIndex(te);
+                _expirationQueue.offer(te);
             }
         }
 
@@ -454,7 +507,6 @@ public class ExpireLocalTunnelsJob extends JobImpl {
     private void cleanupStaleEntries(long now, boolean aggressive) {
         int maxDrain = aggressive ? MAX_CLEANUP_PER_RUN * 4 : MAX_CLEANUP_PER_RUN * 2;
         int cleaned = 0;
-        int kept = 0;
 
         List<TunnelExpiration> batch = new ArrayList<>(maxDrain);
         _expirationQueue.drainTo(batch, maxDrain);
@@ -466,7 +518,6 @@ public class ExpireLocalTunnelsJob extends JobImpl {
             
             if (shouldKeep) {
                 keep.add(te);
-                kept++;
             } else {
                 // Use centralized removal with defensive null checks
                 if (te.config != null) {
@@ -490,21 +541,65 @@ public class ExpireLocalTunnelsJob extends JobImpl {
             }
         }
 
-        // CRITICAL FIX: Do NOT re-add entries during cleanup!
-        // Previously this re-added ALL kept entries, causing the queue to never shrink
-        // because the same ~2000 entries kept cycling through cleanup every run.
-        // With 600K queue and 2000 drain, each entry was processed ~300 times before expiring!
-        // The regular runJob() will handle proper re-queuing of non-expired tunnels.
+        // Re-add non-expired entries back to the queue so they can be processed properly
+        // Use a simple mechanism to avoid re-adding the same entries repeatedly:
+        // Only re-add entries whose keys are still valid in the map
+        int requeued = 0;
         for (TunnelExpiration te : keep) {
-            // Don't re-add - let runJob() handle it properly
-            // Just clean up index if key is stale
-            if (te.tunnelKey != null && _tunnelKeys.get(te.tunnelKey) != te) {
+            if (te.tunnelKey != null && _tunnelKeys.get(te.tunnelKey) == te) {
+                // Key is still valid - re-add to queue
+                _expirationQueue.offer(te);
+                requeued++;
+            } else {
+                // Key was removed externally - clean up the index
                 removeFromIndex(te);
             }
         }
 
         if (cleaned > 0 && _log.shouldInfo()) {
-            _log.info("Cleanup: removed " + cleaned + " expired " + (cleaned > 1 ? "tunnels" : "tunnel"));
+            _log.info("Cleanup: removed " + cleaned + " expired, requeued " + requeued + " valid entries");
+        }
+    }
+
+    /**
+     * Periodic reconciliation of _tunnelKeys with _expirationQueue.
+     * Removes keys that no longer have corresponding entries in the queue.
+     * Runs every INDEX_HEAL_INTERVAL runs to avoid performance impact.
+     *
+     * NOTE: This healing is approximate. Keys for entries beyond maxScan may be
+     * dropped, which is safe because the queue still owns the lifetime and other
+     * cleanup paths will remove those entries.
+     */
+    private void healIndexIfNeeded(int runCount) {
+        if (runCount % INDEX_HEAL_INTERVAL != 0) {
+            return;
+        }
+
+        int maxScan = 50000;
+        List<TunnelExpiration> snapshot = new ArrayList<>(maxScan);
+        _expirationQueue.drainTo(snapshot, maxScan);
+        for (TunnelExpiration te : snapshot) {
+            _expirationQueue.offer(te);
+        }
+
+        java.util.IdentityHashMap<TunnelExpiration, Boolean> inQueue =
+            new java.util.IdentityHashMap<>(snapshot.size());
+        for (TunnelExpiration te : snapshot) {
+            inQueue.put(te, Boolean.TRUE);
+        }
+
+        int removed = 0;
+        for (java.util.Map.Entry<Long, TunnelExpiration> e : _tunnelKeys.entrySet()) {
+            TunnelExpiration te = e.getValue();
+            if (te == null || !inQueue.containsKey(te)) {
+                _tunnelKeys.remove(e.getKey(), te);
+                removed++;
+            }
+        }
+
+        if (removed > 0 && _log.shouldWarn()) {
+            _log.warn("Index heal removed " + removed +
+                      " keys not present in the expiration queue");
         }
     }
 
@@ -516,6 +611,7 @@ public class ExpireLocalTunnelsJob extends JobImpl {
         final Long tunnelKey;
         final long expirationTime;
         final long dropTime;
+        final long createdAt;
         volatile boolean phase1Complete = false;
         volatile int retryCount = 0;
 
@@ -524,6 +620,7 @@ public class ExpireLocalTunnelsJob extends JobImpl {
             this.tunnelKey = key;
             this.expirationTime = expire;
             this.dropTime = drop;
+            this.createdAt = System.currentTimeMillis();
         }
 
         @Override
