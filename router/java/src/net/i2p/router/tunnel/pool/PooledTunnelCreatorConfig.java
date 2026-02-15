@@ -18,7 +18,7 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
     private final Log _log;
     // we don't store the config, that leads to OOM
     private TunnelId _pairedGW;
-    /** 
+    /**
      * When true, this tunnel is the last one in the pool and should not be removed
      * until a replacement is built. It remains available but is only selected if
      * no other tunnels are available.
@@ -63,7 +63,7 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
         // Check if tunnel is recently active - if so, don't penalize for transient failures
         if (isRecentlyActive(60 * 1000)) {
             if (_log.shouldInfo()) {
-                _log.info("Tunnel test failed but tunnel is recently active - not incrementing failure count, keeping for recovery: " + this);
+                _log.info("Test of " + this + " failed but recently active -> Not marking as failed...");
             }
             return true; // Keep testing - tunnel may recover
         }
