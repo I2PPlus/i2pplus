@@ -550,7 +550,7 @@ public class TunnelPool {
           // Increase limit during attacks when build success is low or zero
           double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
           if (buildSuccess < 0.40) {
-              maxAllowed += 2; // Add 2 slots during attack instead of doubling
+              maxAllowed += 2; // Add 2 slots during attack
           }
           return counter.get() < maxAllowed;
       }
@@ -651,6 +651,29 @@ public class TunnelPool {
         if (info == null) {return;}
         long now = _context.clock().now();
         if (_log.shouldDebug()) {_log.debug(toString() + " -> Adding tunnel " + info);}
+
+        // Hard cap: reject tunnels that exceed configured quantity
+        // Don't cap during attacks - we need all available tunnels
+        boolean isUnderAttack = _context.profileOrganizer().isLowBuildSuccess();
+        if (!isUnderAttack) {
+            int configured = _settings.getQuantity();
+            int currentCount = 0;
+            _tunnelsLock.lock();
+            try {
+                for (TunnelInfo t : _tunnels) {
+                    if (t.getExpiration() > now) currentCount++;
+                }
+            } finally {_tunnelsLock.unlock();}
+            if (currentCount >= configured) {
+                if (_log.shouldInfo()) {
+                    _log.info("Rejecting tunnel - at configured limit " + configured + " for " + toString());
+                }
+                if (info instanceof PooledTunnelCreatorConfig) {
+                    ((PooledTunnelCreatorConfig) info).setDuplicate();
+                }
+                return;
+            }
+        }
 
         // Reject 0-hop tunnels for client pools unless explicitly allowed
         if (info.getLength() <= 1 && !_settings.isExploratory() && !_settings.getAllowZeroHop()) {
