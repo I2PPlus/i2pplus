@@ -653,26 +653,25 @@ public class TunnelPool {
         if (_log.shouldDebug()) {_log.debug(toString() + " -> Adding tunnel " + info);}
 
         // Hard cap: reject tunnels that exceed configured quantity
-        // Don't cap during attacks - we need all available tunnels
+        // During attacks, allow +2 extra for redundancy (capped at 16)
         boolean isUnderAttack = _context.profileOrganizer().isLowBuildSuccess();
-        if (!isUnderAttack) {
-            int configured = _settings.getQuantity();
-            int currentCount = 0;
-            _tunnelsLock.lock();
-            try {
-                for (TunnelInfo t : _tunnels) {
-                    if (t.getExpiration() > now) currentCount++;
-                }
-            } finally {_tunnelsLock.unlock();}
-            if (currentCount >= configured) {
-                if (_log.shouldInfo()) {
-                    _log.info("Rejecting tunnel - at configured limit " + configured + " for " + toString());
-                }
-                if (info instanceof PooledTunnelCreatorConfig) {
-                    ((PooledTunnelCreatorConfig) info).setDuplicate();
-                }
-                return;
+        int configured = _settings.getQuantity();
+        int maxAllowed = isUnderAttack ? Math.min(configured + 2, 16) : configured;
+        int currentCount = 0;
+        _tunnelsLock.lock();
+        try {
+            for (TunnelInfo t : _tunnels) {
+                if (t.getExpiration() > now) currentCount++;
             }
+        } finally {_tunnelsLock.unlock();}
+        if (currentCount >= maxAllowed) {
+            if (_log.shouldInfo()) {
+                _log.info("Rejecting tunnel - at limit " + maxAllowed + " (configured: " + configured + ", attack: " + isUnderAttack + ") for " + toString());
+            }
+            if (info instanceof PooledTunnelCreatorConfig) {
+                ((PooledTunnelCreatorConfig) info).setDuplicate();
+            }
+            return;
         }
 
         // Reject 0-hop tunnels for client pools unless explicitly allowed
