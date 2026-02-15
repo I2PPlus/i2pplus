@@ -110,6 +110,9 @@ public class TunnelDispatcher implements Service {
     /** Time window (in ms) for suppressing warnings on recently expired tunnels */
     private static final long RECENT_EXPIRY_WINDOW_MS = 5_000;
 
+    /** Max pending configs in LeaveTunnel queue to prevent unbounded growth */
+    private static final int MAX_PENDING_CONFIGS = 10000;
+
     /** Location in the tunnel for RED logic */
     public enum Location { OBEP, PARTICIPANT, IBGW }
 
@@ -408,6 +411,12 @@ public class TunnelDispatcher implements Service {
      * Remove a tunnel we created
      */
     public void remove(TunnelCreatorConfig cfg) {
+        if (_log.shouldInfo()) {
+            _log.info("Removing tunnel: isInbound=" + cfg.isInbound() + 
+                      ", length=" + cfg.getLength() + 
+                      ", recvId=" + (cfg.getLength() > 0 ? cfg.getConfig(cfg.getLength() - 1).getReceiveTunnel() : "n/a") +
+                      ", sendId=" + (cfg.getLength() > 0 ? cfg.getConfig(0).getSendTunnel() : "n/a"));
+        }
         if (cfg.isInbound()) {
             TunnelId recvId = cfg.getConfig(cfg.getLength() - 1).getReceiveTunnel();
             if (_log.shouldInfo())
@@ -415,7 +424,10 @@ public class TunnelDispatcher implements Service {
             TunnelParticipant participant = _participants.remove(recvId);
             // Always remove from inboundGateways - this was a bug causing memory leak
             // where gateways were only removed when participant was null
-            _inboundGateways.remove(recvId);
+            TunnelGatewayZeroHop removed = (TunnelGatewayZeroHop) _inboundGateways.remove(recvId);
+            if (removed != null && _log.shouldDebug()) {
+                _log.debug("Removed TunnelGatewayZeroHop from inboundGateways: " + recvId);
+            }
             if (participant != null) {
                 for (int i = 0; i < cfg.getLength() - 1; i++) {
                     Hash peer = cfg.getPeer(i);
@@ -453,19 +465,21 @@ public class TunnelDispatcher implements Service {
      */
     public void remove(HopConfig cfg) {
         TunnelId recvId = cfg.getReceiveTunnel();
-        boolean removed = _participatingConfig.remove(recvId) != null;
-        if (!removed) {
-            removed = _participants.remove(recvId) != null;
-            if (!removed) {
-                removed = _inboundGateways.remove(recvId) != null;
-                if (!removed) {
-                    removed = _outboundEndpoints.remove(recvId) != null;
-                }
-            }
-        }
 
-        if (removed) {
+        // Remove from ALL maps unconditionally (idempotent) to prevent leaks
+        // when tunnels exist in multiple maps
+        boolean removedConfig = _participatingConfig.remove(recvId) != null;
+        boolean removedParticipant = _participants.remove(recvId) != null;
+        boolean removedInboundGateway = _inboundGateways.remove(recvId) != null;
+        boolean removedEndpoint = _outboundEndpoints.remove(recvId) != null;
+
+        if (removedConfig || removedParticipant || removedInboundGateway || removedEndpoint) {
             addRecentlyExpired(recvId);
+            if (_log.shouldDebug()) {
+                _log.debug("Removed from config=" + removedConfig + ", participant=" + removedParticipant +
+                           ", inboundGW=" + removedInboundGateway + ", endpoint=" + removedEndpoint +
+                           ": " + recvId);
+            }
         }
     }
 
@@ -758,7 +772,7 @@ public class TunnelDispatcher implements Service {
      * Job to expire tunnels we are participating in
      */
     private class LeaveTunnel extends JobImpl {
-        private final LinkedBlockingQueue<HopConfig> _configs = new LinkedBlockingQueue<>();
+        private final LinkedBlockingQueue<HopConfig> _configs = new LinkedBlockingQueue<>(MAX_PENDING_CONFIGS);
 
         public LeaveTunnel(RouterContext ctx) {
             super(ctx);
@@ -767,7 +781,11 @@ public class TunnelDispatcher implements Service {
         }
 
         public void add(HopConfig cfg) {
-            _configs.offer(cfg);
+            if (!_configs.offer(cfg)) {
+                if (_log.shouldWarn()) {
+                    _log.warn("Dropping expired tunnel config - queue full: " + cfg.getReceiveTunnel());
+                }
+            }
         }
 
         public void clear() {
