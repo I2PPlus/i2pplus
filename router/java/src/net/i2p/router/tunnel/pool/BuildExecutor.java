@@ -256,19 +256,41 @@ class BuildExecutor implements Runnable {
         final long expireBefore = now + TEN_MINUTES_MS - BuildRequestor.REQUEST_TIMEOUT;
 
         // Expire really old build requests from recentlyBuilding map
-        // Using computeIfPresent to avoid ConcurrentModificationException during iteration
-        _recentlyBuildingMap.computeIfPresent(Long.MIN_VALUE, (key, cfg) -> {
-            if (cfg != null && cfg.getExpiration() <= expireRecentlyBefore) {
-                return null;
-            }
-            return cfg;
-        });
-        // Actually iterate and remove expired entries safely
+        // Aggressive cleanup: iterate and remove all expired entries
+        int recentlyCleaned = 0;
         for (Iterator<Long> iter = _recentlyBuildingMap.keySet().iterator(); iter.hasNext(); ) {
             Long key = iter.next();
             PooledTunnelCreatorConfig cfg = _recentlyBuildingMap.get(key);
             if (cfg != null && cfg.getExpiration() <= expireRecentlyBefore) {
                 iter.remove();
+                recentlyCleaned++;
+            }
+        }
+        // Log if we cleaned a lot (potential memory issue indicator)
+        if (recentlyCleaned > 100 && _log.shouldInfo()) {
+            _log.info("Cleaned " + recentlyCleaned + " expired entries from _recentlyBuildingMap, remaining: " + _recentlyBuildingMap.size());
+        }
+
+        // Aggressive cleanup of currentlyBuilding map if it gets too large
+        int currentlyCleaned = 0;
+        if (_currentlyBuildingMap.size() > getMaxConcurrentBuilds() * 2) {
+            for (Iterator<Long> iter = _currentlyBuildingMap.keySet().iterator(); iter.hasNext(); ) {
+                Long key = iter.next();
+                PooledTunnelCreatorConfig cfg = _currentlyBuildingMap.get(key);
+                if (cfg == null) {
+                    iter.remove();
+                    currentlyCleaned++;
+                    continue;
+                }
+                long adaptiveTimeout = calculateAdaptiveTimeout(cfg);
+                long adjustedExpireBefore = now + TEN_MINUTES_MS - adaptiveTimeout;
+                if (cfg.getExpiration() <= now || cfg.getExpiration() <= adjustedExpireBefore) {
+                    iter.remove();
+                    currentlyCleaned++;
+                }
+            }
+            if (currentlyCleaned > 50 && _log.shouldInfo()) {
+                _log.info("Aggressive cleanup: removed " + currentlyCleaned + " stale entries from _currentlyBuildingMap, remaining: " + _currentlyBuildingMap.size());
             }
         }
 
@@ -604,6 +626,19 @@ class BuildExecutor implements Runnable {
         if (_log.shouldInfo()) {_log.info("Build complete (" + result + ") for " + cfg);}
         cfg.getTunnelPool().buildComplete(cfg, result);
         if (cfg.getLength() > 1) {removeFromBuilding(cfg.getReplyMessageId());}
+        
+        // Immediate cleanup for failed builds to prevent memory leak
+        // Failed builds (TIMEOUT, REJECT, BAD_RESPONSE, OTHER_FAILURE) should not linger in maps
+        if (result != Result.SUCCESS && cfg.getLength() > 1) {
+            // Force immediate removal from both maps
+            Long key = Long.valueOf(cfg.getReplyMessageId());
+            _currentlyBuildingMap.remove(key);
+            _recentlyBuildingMap.remove(key);
+            if (_log.shouldDebug()) {
+                _log.debug("Immediate cleanup for failed build: " + cfg.getReplyMessageId());
+            }
+        }
+        
         // Only wake up the build thread if it took a reasonable amount of time -
         // this prevents high CPU usage when there is no network connection
         // (via BuildRequestor.TunnelBuildFirstHopFailJob)
