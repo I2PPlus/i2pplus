@@ -46,7 +46,7 @@ public class TestJob extends JobImpl {
     private int _id;
     private static final int MIN_TEST_PERIOD = 10*1000;
     private static final int MAX_TEST_PERIOD = 20*1000;
-    private static final int MAX_TEST_PERIOD_ATTACK = 30*1000; // 30s during attacks
+    private static final int MAX_TEST_PERIOD_ATTACK = 40*1000; // 40s during attacks (longer timeout for higher latency)
 
     /**
      * Maximum number of tunnel tests that can run concurrently.
@@ -128,6 +128,24 @@ public class TestJob extends JobImpl {
     private static final ConcurrentHashMap<String, AtomicInteger> POOL_TEST_COUNTS = new ConcurrentHashMap<>();
 
     /**
+     * Get the total number of TestJob instances (active + queued) using atomic counter.
+     * This provides more reliable limiting than job queue counting alone.
+     *
+     * @return the total number of TestJob instances
+     */
+    private static int getTotalTestJobCount() {
+        return TOTAL_TEST_JOBS.get();
+    }
+
+    /**
+     * Get stat for total TestJobs - for monitoring
+     * @return current total TestJob count
+     */
+    public static int getTotalTestJobCountStatic() {
+        return TOTAL_TEST_JOBS.get();
+    }
+
+    /**
      * Generate a unique key for a tunnel to track running tests.
      * Uses combination of receive and send tunnel IDs.
      * @param cfg the tunnel configuration
@@ -138,10 +156,12 @@ public class TestJob extends JobImpl {
         try {
             long recvId = cfg.getReceiveTunnelId(0).getTunnelId();
             long sendId = cfg.getSendTunnelId(0).getTunnelId();
-            // Combine both IDs to create a unique key
-            return Long.valueOf((recvId << 32) | (sendId & 0xFFFFFFFFL));
+            if (recvId != 0 && sendId != 0) {
+                return Long.valueOf((recvId << 32) | (sendId & 0xFFFFFFFFL));
+            }
+            return cfg.getInstanceId();
         } catch (Exception e) {
-            return null;
+            return cfg.getInstanceId();
         }
     }
 
@@ -167,16 +187,6 @@ public class TestJob extends JobImpl {
 
     /** Flag to indicate if this job is valid and should be queued */
     private boolean _valid = true;
-
-    /**
-     * Get the total number of TestJob instances (active + queued) using atomic counter.
-     * This provides more reliable limiting than job queue counting alone.
-     *
-     * @return the total number of TestJob instances
-     */
-    private static int getTotalTestJobCount() {
-        return TOTAL_TEST_JOBS.get();
-    }
 
     /** Ensures total job counter is decremented at most once */
     private final AtomicBoolean _counted = new AtomicBoolean(false);
@@ -766,14 +776,16 @@ public class TestJob extends JobImpl {
     }
 
     private int getDelay() {
-        // Scale DOWN repeat time with failures to evict failing tunnels sooner
-        int baseDelay = BASE_TEST_DELAY;
+        // During attacks: use slightly lower base delay to test more frequently
+        // but not too aggressive to avoid overwhelming the system
+        boolean isUnderAttack = getContext().profileOrganizer().isLowBuildSuccess();
+        int baseDelay = isUnderAttack ? (BASE_TEST_DELAY * 3 / 4) : BASE_TEST_DELAY; // 45s attack, 60s normal
         int failCount = _cfg.getTunnelFailures();
         int scaled = baseDelay;
         if (failCount > 0) {
             // Test failing tunnels more frequently to confirm and evict them faster
             // Tunnel will be removed after 2 consecutive failures
-            int divisor = Math.min(1 << (failCount - 1), 4); // max 4x faster (22.5s)
+            int divisor = Math.min(1 << (failCount - 1), 4); // max 4x faster
             scaled = baseDelay / divisor;
         }
         // Ensure minimum delay and avoid negative values
