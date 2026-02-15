@@ -261,7 +261,8 @@ class BuildExecutor implements Runnable {
         for (Iterator<Long> iter = _recentlyBuildingMap.keySet().iterator(); iter.hasNext(); ) {
             Long key = iter.next();
             PooledTunnelCreatorConfig cfg = _recentlyBuildingMap.get(key);
-            if (cfg != null && cfg.getExpiration() <= expireRecentlyBefore) {
+            // Remove if cfg is null OR if the tunnel has expired
+            if (cfg == null || cfg.getExpiration() <= expireRecentlyBefore) {
                 iter.remove();
                 recentlyCleaned++;
             }
@@ -301,19 +302,23 @@ class BuildExecutor implements Runnable {
         for (Iterator<Long> iter = _currentlyBuildingMap.keySet().iterator(); iter.hasNext(); ) {
             Long key = iter.next();
             PooledTunnelCreatorConfig cfg = _currentlyBuildingMap.get(key);
-            if (cfg == null) continue;
+            if (cfg == null) {
+                iter.remove();
+                continue;
+            }
             long adaptiveTimeout = calculateAdaptiveTimeout(cfg);
             long adjustedExpireBefore = now + TEN_MINUTES_MS - adaptiveTimeout;
 
             if (cfg.getExpiration() <= now || cfg.getExpiration() <= adjustedExpireBefore) {
                 PooledTunnelCreatorConfig existingCfg = _recentlyBuildingMap.putIfAbsent(key, cfg);
+                iter.remove();  // Always remove from currentlyBuilding after attempting to move
                 if (existingCfg == null) {
-                    iter.remove();
                     if (expired == null) {
                         expired = new ArrayList<>();
                     }
                     expired.add(cfg);
                 }
+                // If existingCfg != null, the tunnel was already in recentlyBuilding - we still removed from currentlyBuilding
             }
         }
 
