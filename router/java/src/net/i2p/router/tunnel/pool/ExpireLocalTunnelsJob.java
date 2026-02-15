@@ -1,16 +1,17 @@
 package net.i2p.router.tunnel.pool;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import net.i2p.data.TunnelId;
 import net.i2p.router.JobImpl;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
-import net.i2p.stat.RateConstants;
 import net.i2p.util.Log;
 
 /**
@@ -31,20 +32,18 @@ public class ExpireLocalTunnelsJob extends JobImpl {
     private final Log _log;
     private int _runCount = 0;
 
-    private static final long BATCH_WINDOW = 5 * 1000;
+    private static final long BATCH_WINDOW = 3 * 1000;
     private static final long FORCED_REQUEUE_TIMEOUT = 2 * BATCH_WINDOW;
-    private static final long MAX_ACCEPTABLE_LAG = 30 * 1000;
+    private static final long MAX_ACCEPTABLE_LAG = 10 * 1000;
     private static final int BACKED_UP_THRESHOLD = 5000;
-    private static final int MASSIVE_THRESHOLD = 10000;
     private static final long OB_EARLY_EXPIRE = 30 * 1000;
     private static final long IB_EARLY_EXPIRE = OB_EARLY_EXPIRE + 7500;
-    private static final long STALE_THRESHOLD = 500;
-    private static final long MAX_ENTRY_LIFETIME = 10 * 60 * 1000L;
+    private static final long MAX_ENTRY_LIFETIME = 30 * 1000L; // 30 seconds - aggressive cleanup
     private static final int MAX_PHASE1_RETRIES = 3;
-    private static final int MAX_ITERATE_PER_RUN = 30000;
-    private static final int MAX_ITERATE_BACKED_UP = 50000;
-    private static final int MAX_ITERATE_EMERGENCY = 100000;
-    private static final int HEALTH_LOG_INTERVAL = 60;
+    private static final int MAX_ITERATE_PER_RUN = 5000;
+    private static final int MAX_ITERATE_BACKED_UP = 10000;
+    private static final int MAX_ITERATE_EMERGENCY = 20000;
+    private static final int HEALTH_LOG_INTERVAL = 200;
 
     public ExpireLocalTunnelsJob(RouterContext ctx) {
         super(ctx);
@@ -81,26 +80,6 @@ public class ExpireLocalTunnelsJob extends JobImpl {
         }
     }
 
-    private boolean shouldKeepEntry(TunnelExpiration te, long now) {
-        if (now - te.createdAt > MAX_ENTRY_LIFETIME) {
-            return false;
-        }
-        if (!te.phase1Complete) {
-            return true;
-        }
-        long relevantTime = te.phase1Complete ? te.dropTime : te.expirationTime;
-        boolean isOverdue = relevantTime < now - STALE_THRESHOLD;
-        boolean isFuture = te.expirationTime > now;
-
-        if (isFuture) {
-            return true;
-        }
-        if (!isOverdue) {
-            return true;
-        }
-        return false;
-    }
-
     private void logHealth(int runCount) {
         int size = _tunnelExpirations.size();
         if (runCount % HEALTH_LOG_INTERVAL == 0) {
@@ -135,8 +114,8 @@ public class ExpireLocalTunnelsJob extends JobImpl {
 
         int size = _tunnelExpirations.size();
         if (size > 50000) {
-            if (_log.shouldWarn()) {
-                _log.warn("EMERGENCY THROTTLE: entries=" + size + " Dropping tunnel expiration scheduling");
+            if (_log.shouldInfo()) {
+                _log.info("Dropping tunnel expiration scheduling -> " + size + " entries backlogged...");
             }
             return;
         }
@@ -180,13 +159,12 @@ public class ExpireLocalTunnelsJob extends JobImpl {
         long now = getContext().clock().now();
         int startSize = _tunnelExpirations.size();
         boolean isBackedUp = startSize > BACKED_UP_THRESHOLD;
-        boolean isMassive = startSize > MASSIVE_THRESHOLD;
 
         _runCount++;
         logHealth(_runCount);
 
         List<TunnelExpiration> readyToExpire = new ArrayList<>();
-        List<TunnelExpiration> readyToDrop = new ArrayList<>();
+        Set<TunnelExpiration> readyToDrop = new HashSet<>();
 
         int maxIterate;
         if (startSize > 5000) {
@@ -201,18 +179,23 @@ public class ExpireLocalTunnelsJob extends JobImpl {
         }
 
         int iterated = 0;
-        for (Map.Entry<Long, TunnelExpiration> entry : _tunnelExpirations.entrySet()) {
-            if (iterated++ > maxIterate) break;
+        Iterator<Map.Entry<Long, TunnelExpiration>> it = _tunnelExpirations.entrySet().iterator();
+        while (it.hasNext()) {
+            if (iterated++ >= maxIterate) break;
 
+            Map.Entry<Long, TunnelExpiration> entry = it.next();
             TunnelExpiration te = entry.getValue();
-            if (te == null) continue;
+            if (te == null) {
+                it.remove();
+                continue;
+            }
 
             if (te.expirationTime <= now && !te.phase1Complete) {
                 readyToExpire.add(te);
             } else if (te.dropTime <= now && te.phase1Complete) {
                 readyToDrop.add(te);
             } else if (now - te.createdAt > MAX_ENTRY_LIFETIME) {
-                removeEntry(entry.getKey());
+                it.remove();
             }
         }
 
@@ -228,7 +211,19 @@ public class ExpireLocalTunnelsJob extends JobImpl {
 
             for (TunnelExpiration te : readyToExpire) {
                 PooledTunnelCreatorConfig cfg = te.config;
-                TunnelPool pool = (cfg != null) ? cfg.getTunnelPool() : null;
+                if (cfg == null) {
+                    te.phase1Complete = true;
+                    forceCleanupCount++;
+                    removeEntry(te.tunnelKey);
+                    continue;
+                }
+                TunnelPool pool = cfg.getTunnelPool();
+                if (pool == null) {
+                    te.phase1Complete = true;
+                    forceCleanupCount++;
+                    removeEntry(te.tunnelKey);
+                    continue;
+                }
                 boolean removed = false;
                 boolean giveUp = false;
 
@@ -236,7 +231,7 @@ public class ExpireLocalTunnelsJob extends JobImpl {
                     giveUp = true;
                 }
 
-                if (!giveUp && pool != null && cfg != null) {
+                if (!giveUp) {
                     try {
                         removed = pool.removeTunnelSynchronous(cfg);
                     } catch (Exception e) {
@@ -248,6 +243,7 @@ public class ExpireLocalTunnelsJob extends JobImpl {
 
                 if (removed) {
                     te.phase1Complete = true;
+                    te.config = null;
                     removedCount++;
                 } else {
                     te.retryCount++;
@@ -274,17 +270,26 @@ public class ExpireLocalTunnelsJob extends JobImpl {
             }
 
             int phase2Removed = 0;
+            int phase2Skipped = 0;
             for (TunnelExpiration te : readyToDrop) {
                 PooledTunnelCreatorConfig cfg = te.config;
-                try {
-                    getContext().tunnelDispatcher().remove(cfg);
-                    phase2Removed++;
-                } catch (Exception e) {
-                    if (_log.shouldWarn()) {
-                        _log.warn("Error in phase 2: " + e.getMessage(), e);
+                if (cfg == null) {
+                    phase2Skipped++;
+                } else {
+                    try {
+                        getContext().tunnelDispatcher().remove(cfg);
+                        phase2Removed++;
+                    } catch (Exception e) {
+                        if (_log.shouldWarn()) {
+                            _log.warn("Error in phase 2: " + e.getMessage(), e);
+                        }
                     }
                 }
                 removeEntry(te.tunnelKey);
+            }
+
+            if (phase2Skipped > 0 && _log.shouldDebug()) {
+                _log.debug("Phase 2 skipped " + phase2Skipped + " entries (config already cleared)");
             }
 
             if (phase2Removed > 0 && _log.shouldInfo()) {
@@ -343,7 +348,7 @@ public class ExpireLocalTunnelsJob extends JobImpl {
     }
 
     private static class TunnelExpiration {
-        final PooledTunnelCreatorConfig config;
+        PooledTunnelCreatorConfig config;
         final Long tunnelKey;
         final long expirationTime;
         final long dropTime;
