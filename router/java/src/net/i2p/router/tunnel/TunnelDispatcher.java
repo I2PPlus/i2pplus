@@ -369,6 +369,35 @@ public class TunnelDispatcher implements Service {
     }
 
     /**
+     * Diagnostic method to detect potential memory leaks in tunnel dispatcher maps.
+     * Call periodically from a maintenance job to catch leaks early.
+     *
+     * @return diagnostic string describing the state of all maps
+     */
+    public String diagnoseMemoryLeaks() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("TunnelDispatcher Memory Leak Diagnostic:\n");
+        sb.append("  _outboundGateways: ").append(_outboundGateways.size()).append("\n");
+        sb.append("  _outboundEndpoints: ").append(_outboundEndpoints.size()).append("\n");
+        sb.append("  _participants: ").append(_participants.size()).append("\n");
+        sb.append("  _inboundGateways: ").append(_inboundGateways.size()).append("\n");
+        sb.append("  _participatingConfig: ").append(_participatingConfig.size()).append("\n");
+        sb.append("  _recentlyExpired: ").append(_recentlyExpired.size()).append("\n");
+
+        int totalMaps = _outboundGateways.size() + _outboundEndpoints.size() +
+                        _participants.size() + _inboundGateways.size() +
+                        _participatingConfig.size();
+        int uniqueByConfig = _participatingConfig.size();
+        int discrepancy = totalMaps - uniqueByConfig;
+        if (discrepancy > 10) {
+            sb.append("  WARNING: Large discrepancy between total map entries and config count: ")
+              .append(discrepancy).append("\n");
+        }
+
+        return sb.toString();
+    }
+
+    /**
      * Get a new random send tunnel ID that isn't a duplicate
      */
     public TunnelId getNewOBGWID() {
@@ -412,8 +441,8 @@ public class TunnelDispatcher implements Service {
      */
     public void remove(TunnelCreatorConfig cfg) {
         if (_log.shouldInfo()) {
-            _log.info("Removing tunnel: isInbound=" + cfg.isInbound() + 
-                      ", length=" + cfg.getLength() + 
+            _log.info("Removing tunnel: isInbound=" + cfg.isInbound() +
+                      ", length=" + cfg.getLength() +
                       ", recvId=" + (cfg.getLength() > 0 ? cfg.getConfig(cfg.getLength() - 1).getReceiveTunnel() : "n/a") +
                       ", sendId=" + (cfg.getLength() > 0 ? cfg.getConfig(0).getSendTunnel() : "n/a"));
         }
@@ -428,6 +457,8 @@ public class TunnelDispatcher implements Service {
             if (removed != null && _log.shouldDebug()) {
                 _log.debug("Removed TunnelGatewayZeroHop from inboundGateways: " + recvId);
             }
+            // Note: Inbound zero-hop tunnels use TunnelGatewayZeroHop directly,
+            // not PumpedTunnelGateway, so no pumper removal needed
             if (participant != null) {
                 for (int i = 0; i < cfg.getLength() - 1; i++) {
                     Hash peer = cfg.getPeer(i);
@@ -447,6 +478,10 @@ public class TunnelDispatcher implements Service {
             if (gw != null) {
                 // update stats based on gw.getMessagesSent()
             }
+            // Remove from pumper queues to prevent memory leak
+            if (gw instanceof PumpedTunnelGateway) {
+                _pumper.removeGateway((PumpedTunnelGateway) gw);
+            }
         }
 
         long msgs = cfg.getProcessedMessagesCount();
@@ -465,21 +500,78 @@ public class TunnelDispatcher implements Service {
      */
     public void remove(HopConfig cfg) {
         TunnelId recvId = cfg.getReceiveTunnel();
+        TunnelId sendId = cfg.getSendTunnel();
 
         // Remove from ALL maps unconditionally (idempotent) to prevent leaks
         // when tunnels exist in multiple maps
         boolean removedConfig = _participatingConfig.remove(recvId) != null;
         boolean removedParticipant = _participants.remove(recvId) != null;
-        boolean removedInboundGateway = _inboundGateways.remove(recvId) != null;
+
+        // Remove from inboundGateways and cleanup pumper for ThrottledPumpedTunnelGateway
+        TunnelGateway ibGw = _inboundGateways.remove(recvId);
+        boolean removedInboundGateway = ibGw != null;
+        if (ibGw instanceof PumpedTunnelGateway) {
+            _pumper.removeGateway((PumpedTunnelGateway) ibGw);
+        }
+
         boolean removedEndpoint = _outboundEndpoints.remove(recvId) != null;
 
-        if (removedConfig || removedParticipant || removedInboundGateway || removedEndpoint) {
+        // Also cleanup _outboundGateways by send tunnel ID to prevent leaks
+        // when we're the outbound gateway for a participating tunnel
+        boolean removedOutboundGateway = false;
+        if (sendId != null) {
+            TunnelGateway obGw = _outboundGateways.get(sendId);
+            if (obGw != null) {
+                obGw = _outboundGateways.remove(sendId);
+                removedOutboundGateway = obGw != null;
+                if (obGw instanceof PumpedTunnelGateway) {
+                    _pumper.removeGateway((PumpedTunnelGateway) obGw);
+                }
+            }
+        }
+
+        if (removedConfig || removedParticipant || removedInboundGateway || removedEndpoint || removedOutboundGateway) {
             addRecentlyExpired(recvId);
+            if (sendId != null) {
+                addRecentlyExpired(sendId);
+            }
             if (_log.shouldDebug()) {
                 _log.debug("Removed from config=" + removedConfig + ", participant=" + removedParticipant +
                            ", inboundGW=" + removedInboundGateway + ", endpoint=" + removedEndpoint +
-                           ": " + recvId);
+                           ", outboundGW=" + removedOutboundGateway +
+                           ": recvId=" + recvId + (sendId != null ? ", sendId=" + sendId : ""));
             }
+        }
+    }
+
+    /**
+     * Remove tunnel from all dispatcher maps using tunnel ID.
+     * Used by ExpireLocalTunnelsJob when config is no longer available.
+     * @param tunnelId the tunnel ID to remove
+     */
+    public void removeFromMaps(TunnelId tunnelId) {
+        if (tunnelId == null) {
+            return;
+        }
+        // Remove from all maps - we don't know which type, so try all
+        TunnelGateway obGw = _outboundGateways.remove(tunnelId);
+        if (obGw instanceof PumpedTunnelGateway) {
+            _pumper.removeGateway((PumpedTunnelGateway) obGw);
+        }
+
+        TunnelGateway ibGw = _inboundGateways.remove(tunnelId);
+        if (ibGw instanceof PumpedTunnelGateway) {
+            _pumper.removeGateway((PumpedTunnelGateway) ibGw);
+        }
+
+        _participants.remove(tunnelId);
+        _outboundEndpoints.remove(tunnelId);
+        _participatingConfig.remove(tunnelId);
+
+        addRecentlyExpired(tunnelId);
+
+        if (_log.shouldDebug()) {
+            _log.debug("Removed tunnel from dispatcher maps using ID: " + tunnelId);
         }
     }
 
@@ -782,9 +874,32 @@ public class TunnelDispatcher implements Service {
 
         public void add(HopConfig cfg) {
             if (!_configs.offer(cfg)) {
-                if (_log.shouldWarn()) {
-                    _log.warn("Dropping expired tunnel config - queue full: " + cfg.getReceiveTunnel());
+                drainOverflow();
+                if (!_configs.offer(cfg)) {
+                    if (_log.shouldWarn()) {
+                        _log.warn("Dropping expired tunnel config - queue still full after drain: " + cfg.getReceiveTunnel());
+                    }
                 }
+            }
+        }
+
+        private void drainOverflow() {
+            int drained = 0;
+            int targetDrain = MAX_PENDING_CONFIGS / 4;
+            long now = getContext().clock().now();
+            while (drained < targetDrain) {
+                HopConfig cur = _configs.peek();
+                if (cur == null) break;
+                long exp = cur.getExpiration() + (3 * Router.CLOCK_FUDGE_FACTOR / 2) + 1000;
+                if (exp < now) {
+                    _configs.poll();
+                    drained++;
+                } else {
+                    break;
+                }
+            }
+            if (drained > 0 && _log.shouldWarn()) {
+                _log.warn("Drained " + drained + " expired configs from overflow queue");
             }
         }
 
@@ -797,6 +912,24 @@ public class TunnelDispatcher implements Service {
         }
 
         public void runJob() {
+            long nextTime = 0;
+            boolean jobFailed = false;
+            try {
+                nextTime = runJobInternal();
+            } catch (Throwable t) {
+                jobFailed = true;
+                if (_log.shouldError()) {
+                    _log.error("LeaveTunnel job failed", t);
+                }
+            }
+            if (nextTime <= 0) {
+                nextTime = getContext().clock().now() + 10 * 60 * 1000;
+            }
+            getTiming().setStartAfter(nextTime);
+            getContext().jobQueue().addJob(this);
+        }
+
+        private long runJobInternal() {
             long now = getContext().clock().now() + 1000;
             long nextTime = now + 10 * 60 * 1000;
 
@@ -831,8 +964,7 @@ public class TunnelDispatcher implements Service {
             long expiryCutoff = now - RECENT_EXPIRY_WINDOW_MS;
             _recentlyExpired.entrySet().removeIf(e -> e.getValue() < expiryCutoff);
 
-            getTiming().setStartAfter(nextTime);
-            getContext().jobQueue().addJob(this);
+            return nextTime;
         }
     }
 }

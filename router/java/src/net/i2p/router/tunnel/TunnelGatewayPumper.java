@@ -130,6 +130,22 @@ class TunnelGatewayPumper implements Runnable {
     }
 
     /**
+     * Removes a PumpedTunnelGateway from the pump queue and backlogged set.
+     * Called when a tunnel is expired/removed to prevent memory leak.
+     * @param gw the gateway to remove
+     */
+    public void removeGateway(PumpedTunnelGateway gw) {
+        if (gw == null) {
+            return;
+        }
+        _wantsPumping.remove(gw);
+        _backlogged.remove(gw);
+        if (_log.shouldDebug()) {
+            _log.debug("Removed gateway from pumper queues: " + gw);
+        }
+    }
+
+    /**
      * Adds a PumpedTunnelGateway to be pumped, blocking if queue is full.
      * No new requests are accepted after stopPumping() is called.
      * @param gw the gateway to pump

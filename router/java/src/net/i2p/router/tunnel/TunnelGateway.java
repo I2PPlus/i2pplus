@@ -203,8 +203,16 @@ abstract class TunnelGateway {
     }
 
     protected class DelayedFlush extends SimpleTimer2.TimedEvent {
+        private volatile boolean _cancelled = false;
+
         DelayedFlush() {
             super(_context.simpleTimer2());
+        }
+
+        @Override
+        public boolean cancel() {
+            _cancelled = true;
+            return super.cancel();
         }
 
         public void timeReached() {
@@ -232,7 +240,7 @@ abstract class TunnelGateway {
                 //remaining = _queue.size();
             }
 
-            if (wantRequeue)
+            if (wantRequeue && !_cancelled)
                 schedule(delayAmount);
             else
                 _lastFlush = _context.clock().now();

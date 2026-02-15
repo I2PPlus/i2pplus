@@ -744,7 +744,7 @@ public class TestJob extends JobImpl {
      */
     public void testSuccessful(int ms) {
         final RouterContext ctx = getContext();
-        if (_pool == null || !_pool.isAlive()) {
+        if (_pool == null || !_pool.isAlive() || _outTunnel == null || _replyTunnel == null) {
             decrementTotalJobs();
             return;
         }
@@ -859,7 +859,7 @@ public class TestJob extends JobImpl {
      * @param timeToFail time in milliseconds before the test failed
      */
     private void testFailed(long timeToFail) {
-        if (_pool == null || !_pool.isAlive()) {
+        if (_pool == null || !_pool.isAlive() || _outTunnel == null || _replyTunnel == null) {
             decrementTotalJobs();
             return;
         }

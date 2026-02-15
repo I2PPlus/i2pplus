@@ -35,7 +35,7 @@ public class ExpireLocalTunnelsJob extends JobImpl {
     private static final long BATCH_WINDOW = 3 * 1000;
     private static final long FORCED_REQUEUE_TIMEOUT = 2 * BATCH_WINDOW;
     private static final long MAX_ACCEPTABLE_LAG = 10 * 1000;
-    private static final int BACKED_UP_THRESHOLD = 5000;
+    private static final int BACKED_UP_THRESHOLD = 1000;
     private static final long OB_EARLY_EXPIRE = 30 * 1000;
     private static final long IB_EARLY_EXPIRE = OB_EARLY_EXPIRE + 7500;
     private static final long MAX_ENTRY_LIFETIME = 15 * 1000L; // 15 seconds - aggressive cleanup
@@ -129,9 +129,9 @@ public class ExpireLocalTunnelsJob extends JobImpl {
         }
 
         int size = _tunnelExpirations.size();
-        if (size > 40000) {
-            if (_log.shouldInfo()) {
-                _log.info("Dropping tunnel expiration scheduling -> " + size + " entries backlogged...");
+        if (size >= 500) {
+            if (_log.shouldDebug()) {
+                _log.debug("Dropping tunnel expiration scheduling -> " + size + " entries backlogged...");
             }
             return;
         }
@@ -174,6 +174,27 @@ public class ExpireLocalTunnelsJob extends JobImpl {
         }
         long now = getContext().clock().now();
         int startSize = _tunnelExpirations.size();
+
+        // EMERGENCY NUCLEAR DRAIN: If over 500 entries, randomly remove 90%
+        if (startSize >= 500) {
+            if (_log.shouldInfo()) {
+                _log.info("Emergency expired local tunnel queue drain:  " + startSize + " entries -> Removing 90%...");
+            }
+            Iterator<Map.Entry<Long, TunnelExpiration>> nuclearIt = _tunnelExpirations.entrySet().iterator();
+            int removed = 0;
+            while (nuclearIt.hasNext()) {
+                nuclearIt.next();
+                if (getContext().random().nextInt(10) != 0) { // Remove 90%
+                    nuclearIt.remove();
+                    removed++;
+                }
+            }
+            if (_log.shouldInfo()) {
+                _log.info("Completed emergency tunnel queue drain -> Removed " + removed + " entries (Remaining: " + _tunnelExpirations.size() + ")");
+            }
+            startSize = _tunnelExpirations.size();
+        }
+
         boolean isBackedUp = startSize > BACKED_UP_THRESHOLD;
 
         _runCount++;
@@ -183,7 +204,7 @@ public class ExpireLocalTunnelsJob extends JobImpl {
         Set<TunnelExpiration> readyToDrop = new HashSet<>();
 
         int maxIterate;
-        if (startSize > 5000) {
+        if (startSize >= 300) {
             maxIterate = MAX_ITERATE_EMERGENCY;
             if (_log.shouldInfo()) {
                 _log.info("Emergency drainage -> Processing " + startSize + " entries...");
@@ -221,11 +242,8 @@ public class ExpireLocalTunnelsJob extends JobImpl {
                 continue;
             }
 
-            // NUCLEAR: Null config reference early to allow GC of PooledTunnelCreatorConfig
-            // This breaks the retention chain even if entry stays in map
-            if (te.config != null) {
-                te.config = null;
-            }
+            // DO NOT null config here - it breaks cleanup in phase 1 and 2
+            // Config will be nulled after successful dispatcher removal
 
             if (te.expirationTime <= now && !te.phase1Complete) {
                 readyToExpire.add(te);
@@ -316,7 +334,12 @@ public class ExpireLocalTunnelsJob extends JobImpl {
             for (TunnelExpiration te : readyToDrop) {
                 PooledTunnelCreatorConfig cfg = te.config;
                 if (cfg == null) {
-                    phase2Skipped++;
+                    // Try cleanup using stored tunnel IDs even if config is null
+                    if (cleanupUsingTunnelIds(te)) {
+                        phase2Removed++;
+                    } else {
+                        phase2Skipped++;
+                    }
                 } else {
                     try {
                         getContext().tunnelDispatcher().remove(cfg);
@@ -355,6 +378,17 @@ public class ExpireLocalTunnelsJob extends JobImpl {
         }
         if (ttlSwept > 0 && _log.shouldDebug()) {
             _log.debug("TTL sweep removed " + ttlSwept + " stale entries, map now: " + _tunnelExpirations.size());
+        }
+
+        // NUCLEAR: Cleanup stale in-progress tunnels in all pools
+        int inProgressCleaned = 0;
+        List<TunnelPool> pools = new ArrayList<>();
+        getContext().tunnelManager().listPools(pools);
+        for (TunnelPool pool : pools) {
+            inProgressCleaned += pool.cleanupInProgress();
+        }
+        if (inProgressCleaned > 0 && _log.shouldInfo()) {
+            _log.info("Nuclear cleanup: removed " + inProgressCleaned + " stale in-progress configs from pools");
         }
 
         int remaining = _tunnelExpirations.size();
@@ -407,6 +441,41 @@ public class ExpireLocalTunnelsJob extends JobImpl {
         }
     }
 
+    /**
+     * Attempt to clean up tunnel from dispatcher using stored tunnel IDs.
+     * This is a fallback when the config reference has been nulled.
+     * @param te the tunnel expiration entry with stored IDs
+     * @return true if cleanup was attempted
+     */
+    private boolean cleanupUsingTunnelIds(TunnelExpiration te) {
+        if (te == null) {
+            return false;
+        }
+        try {
+            // Try to remove from dispatcher maps using stored tunnel IDs
+            if (te.isInbound && te.recvTunnelId != null) {
+                // For inbound tunnels, remove from participants and inbound gateways
+                getContext().tunnelDispatcher().removeFromMaps(te.recvTunnelId);
+                if (_log.shouldDebug()) {
+                    _log.debug("Cleaned up inbound tunnel using stored recvId: " + te.recvTunnelId);
+                }
+                return true;
+            } else if (!te.isInbound && te.sendTunnelId != null) {
+                // For outbound tunnels, remove from outbound gateways
+                getContext().tunnelDispatcher().removeFromMaps(te.sendTunnelId);
+                if (_log.shouldDebug()) {
+                    _log.debug("Cleaned up outbound tunnel using stored sendId: " + te.sendTunnelId);
+                }
+                return true;
+            }
+        } catch (Exception e) {
+            if (_log.shouldWarn()) {
+                _log.warn("Error cleaning up using tunnel IDs: " + e.getMessage());
+            }
+        }
+        return false;
+    }
+
     private static class TunnelExpiration {
         PooledTunnelCreatorConfig config;
         final Long tunnelKey;
@@ -415,6 +484,10 @@ public class ExpireLocalTunnelsJob extends JobImpl {
         final long createdAt;
         volatile boolean phase1Complete = false;
         volatile int retryCount = 0;
+        // Store tunnel IDs for cleanup even if config is nulled
+        final TunnelId recvTunnelId;
+        final TunnelId sendTunnelId;
+        final boolean isInbound;
 
         TunnelExpiration(PooledTunnelCreatorConfig cfg, Long key, long expire, long drop, long created) {
             this.config = cfg;
@@ -422,6 +495,30 @@ public class ExpireLocalTunnelsJob extends JobImpl {
             this.expirationTime = expire;
             this.dropTime = drop;
             this.createdAt = created;
+            // Capture tunnel IDs immediately for later cleanup
+            if (cfg != null) {
+                this.isInbound = cfg.isInbound();
+                TunnelId rtid = null;
+                TunnelId stid = null;
+                try {
+                    int len = cfg.getLength();
+                    if (len > 0) {
+                        if (isInbound) {
+                            rtid = cfg.getConfig(len - 1).getReceiveTunnel();
+                        } else {
+                            stid = cfg.getConfig(0).getSendTunnel();
+                        }
+                    }
+                } catch (Exception e) {
+                    // Ignore, IDs will be null
+                }
+                this.recvTunnelId = rtid;
+                this.sendTunnelId = stid;
+            } else {
+                this.isInbound = false;
+                this.recvTunnelId = null;
+                this.sendTunnelId = null;
+            }
         }
     }
 }

@@ -61,7 +61,8 @@ public class TunnelPool {
     private final AtomicInteger _consecutiveBuildTimeouts = new AtomicInteger();
     private long _lastTimeoutWarningTime;
     private long _lastNoTunnelsWarningTime;
-    private final BlockingQueue<TunnelInfo> _removalQueue = new LinkedBlockingQueue<TunnelInfo>();
+    private static final int REMOVAL_QUEUE_CAPACITY = 1000;
+    private final BlockingQueue<TunnelInfo> _removalQueue = new LinkedBlockingQueue<TunnelInfo>(REMOVAL_QUEUE_CAPACITY);
     private volatile boolean _removalJobScheduled = false;
     private final AtomicInteger _concurrentInboundBuilds = new AtomicInteger();
     private final AtomicInteger _concurrentOutboundBuilds = new AtomicInteger();
@@ -155,6 +156,35 @@ public class TunnelPool {
         _alive = false;
         _context.statManager().removeRateStat(_rateName);
         synchronized (_inProgress) {_inProgress.clear();}
+        
+        // Clean up tunnels list to prevent memory leak - configs in this list
+        // hold references to HopConfig, peers, crypto material, etc.
+        _tunnelsLock.lock();
+        try {
+            for (TunnelInfo info : _tunnels) {
+                if (info instanceof PooledTunnelCreatorConfig) {
+                    PooledTunnelCreatorConfig cfg = (PooledTunnelCreatorConfig) info;
+                    _context.tunnelDispatcher().remove(cfg);
+                    _manager.removeFromExpiration(cfg);
+                    Long tunnelKey = ExpireLocalTunnelsJob.getTunnelKey(cfg);
+                    TestJob.invalidate(tunnelKey);
+                }
+            }
+            _tunnels.clear();
+        } finally {_tunnelsLock.unlock();}
+        
+        // Clean up removal queue to prevent memory leak
+        TunnelInfo ti;
+        while ((ti = _removalQueue.poll()) != null) {
+            if (ti instanceof PooledTunnelCreatorConfig) {
+                PooledTunnelCreatorConfig cfg = (PooledTunnelCreatorConfig) ti;
+                _context.tunnelDispatcher().remove(cfg);
+                _manager.removeFromExpiration(cfg);
+                Long tunnelKey = ExpireLocalTunnelsJob.getTunnelKey(cfg);
+                TestJob.invalidate(tunnelKey);
+            }
+        }
+        
         _consecutiveBuildTimeouts.set(0);
         _concurrentInboundBuilds.set(0);
         _concurrentOutboundBuilds.set(0);
@@ -652,122 +682,134 @@ public class TunnelPool {
         long now = _context.clock().now();
         if (_log.shouldDebug()) {_log.debug(toString() + " -> Adding tunnel " + info);}
 
-        // Hard cap: reject tunnels that exceed configured quantity
-        // During attacks, allow +2 extra for redundancy (capped at 16)
-        boolean isUnderAttack = _context.profileOrganizer().isLowBuildSuccess();
-        int configured = _settings.getQuantity();
-        int maxAllowed = isUnderAttack ? Math.min(configured + 2, 16) : configured;
-        int currentCount = 0;
-        _tunnelsLock.lock();
-        try {
-            for (TunnelInfo t : _tunnels) {
-                if (t.getExpiration() > now) currentCount++;
-            }
-        } finally {_tunnelsLock.unlock();}
-        if (currentCount >= maxAllowed) {
-            if (_log.shouldInfo()) {
-                _log.info("Rejecting tunnel - at limit " + maxAllowed + " (configured: " + configured + ", attack: " + isUnderAttack + ") for " + toString());
-            }
-            if (info instanceof PooledTunnelCreatorConfig) {
-                ((PooledTunnelCreatorConfig) info).setDuplicate();
-            }
-            return;
-        }
+        // Skip limit enforcement for Ping tunnels - they manage their own 1-in/1-out configuration
+        String nickname = _settings.getDestinationNickname();
+        if (nickname != null && nickname.startsWith("Ping")) {
+            if (_log.shouldDebug()) {_log.debug("Skipping limit check for Ping tunnel -> " + toString());}
+        } else {
 
-        // Reject 0-hop tunnels for client pools unless explicitly allowed
-        if (info.getLength() <= 1 && !_settings.isExploratory() && !_settings.getAllowZeroHop()) {
-            if (_log.shouldInfo()) {
-                _log.info("Rejecting 0-hop tunnel for client pool -> " + info);
-            }
-            if (info instanceof PooledTunnelCreatorConfig) {
-                ((PooledTunnelCreatorConfig) info).setDuplicate();
-            }
-            return;
-        }
-
-        // Check for duplicate peer sequence and handle appropriately @since 0.9.68+
-        List<TunnelInfo> duplicates = findDuplicateTunnels(info);
-        if (!duplicates.isEmpty()) {
-            // Check if we have at least 1 good (non-duplicate) tunnel
-            if (hasGoodTunnel(info)) {
-                // Check if existing duplicates are expiring soon
-                // If so, replace them with the new tunnel instead of rejecting
-                boolean hasExpiringDuplicate = false;
-                for (TunnelInfo dup : duplicates) {
-                    if (dup.getExpiration() <= now + 5*60*1000) {
-                        hasExpiringDuplicate = true;
-                        break;
-                    }
+            // Hard cap: reject tunnels that exceed configured quantity
+            // During attacks, reduce allocated tunnels to reduce build pressure
+            boolean isUnderAttack = _context.profileOrganizer().isLowBuildSuccess();
+            int configured = _settings.getQuantity();
+            boolean isExploratory = _settings.isExploratory();
+            int maxAllowed = isExploratory ? Math.min(configured + 2, 16) : isUnderAttack ? Math.max(configured - 2, 4) : configured;
+            int currentCount = 0;
+            _tunnelsLock.lock();
+            try {
+                for (TunnelInfo t : _tunnels) {
+                    if (t.getExpiration() > now) currentCount++;
                 }
-
-                // Count current usable tunnels to ensure we don't drop to 0
-                int usableCount = 0;
-                _tunnelsLock.lock();
-                try {
-                    for (TunnelInfo t : _tunnels) {
-                        if (t.getExpiration() > now) usableCount++;
-                    }
-                } finally {_tunnelsLock.unlock();}
-                // Never reject if we'd have 0 usable tunnels left
-                int minimumRequired = Math.max(1, getAdjustedTotalQuantity() / 2);
-                // During attacks (low build success), be more conservative about rejecting duplicates
-                // since replacements are hard to build - keep duplicates to maintain pool
-                isUnderAttack = _context.profileOrganizer().isLowBuildSuccess();
-                if (isUnderAttack) {
-                    minimumRequired = Math.max(minimumRequired, getAdjustedTotalQuantity() - 1);
+            } finally {_tunnelsLock.unlock();}
+            if (currentCount >= maxAllowed) {
+                if (_log.shouldInfo()) {
+                    long uptime = _context.router().getUptime();
+                    _log.info((isUnderAttack ? "Limiting tunnels to " + maxAllowed + " in " :
+                                               "Not adding new tunnel to ") + toString() + " -> " +
+                              (isUnderAttack ? "Low build success" + (uptime > 15*60*1000 ? " (network under attack?)" : "") :
+                                               "Configured limit reached (" + configured + ")"));
                 }
+                if (info instanceof PooledTunnelCreatorConfig) {
+                    ((PooledTunnelCreatorConfig) info).setDuplicate();
+                }
+                return;
+            }
 
-                if (!isUnderAttack && !hasExpiringDuplicate && usableCount > minimumRequired) {
-                    // Normal operation: reject duplicate if we have enough alternatives
-                    if (_log.shouldWarn()) {
-                        _log.warn("Rejecting new tunnel with duplicate peer sequence - keeping existing: " + info);
-                    }
-                    if (info instanceof PooledTunnelCreatorConfig) {
-                        ((PooledTunnelCreatorConfig) info).setDuplicate();
-                    }
-                    // Don't add this tunnel since it's a duplicate
-                    return;
-                } else if (hasExpiringDuplicate && !isUnderAttack) {
-                    // Normal operation: replace expiring duplicates with the new tunnel
-                    if (_log.shouldInfo()) {
-                        _log.info("Replacing expiring duplicate tunnel(s) with new tunnel: " + info);
-                    }
+            // Reject 0-hop tunnels for client pools unless explicitly allowed
+            if (info.getLength() <= 1 && !_settings.isExploratory() && !_settings.getAllowZeroHop()) {
+                if (_log.shouldInfo()) {
+                    _log.info("Rejecting 0-hop tunnel for client pool -> " + info);
+                }
+                if (info instanceof PooledTunnelCreatorConfig) {
+                    ((PooledTunnelCreatorConfig) info).setDuplicate();
+                }
+                return;
+            }
+        }  // end else for Ping tunnel skip
+
+            // Check for duplicate peer sequence and handle appropriately @since 0.9.68+
+            List<TunnelInfo> duplicates = findDuplicateTunnels(info);
+            if (!duplicates.isEmpty()) {
+                // Check if we have at least 1 good (non-duplicate) tunnel
+                if (hasGoodTunnel(info)) {
+                    // Check if existing duplicates are expiring soon
+                    // If so, replace them with the new tunnel instead of rejecting
+                    boolean hasExpiringDuplicate = false;
                     for (TunnelInfo dup : duplicates) {
                         if (dup.getExpiration() <= now + 5*60*1000) {
-                            if (dup instanceof PooledTunnelCreatorConfig) {
-                                ((PooledTunnelCreatorConfig) dup).setDuplicate();
-                            }
-                            removeTunnel(dup);
+                            hasExpiringDuplicate = true;
+                            break;
                         }
                     }
-                } else {
-                    // Under attack OR need this tunnel to maintain minimum pool size
-                    if (_log.shouldInfo()) {
-                        _log.info("Accepting duplicate tunnel -> " +
-                                  (isUnderAttack ? "Under attack" : "Maintaining pool size") + " (" +
-                                  usableCount + " usable / " + minimumRequired + " required): " + info);
+
+                    // Count current usable tunnels to ensure we don't drop to 0
+                    int usableCount = 0;
+                    _tunnelsLock.lock();
+                    try {
+                        for (TunnelInfo t : _tunnels) {
+                            if (t.getExpiration() > now) usableCount++;
+                        }
+                    } finally {_tunnelsLock.unlock();}
+                    // Never reject if we'd have 0 usable tunnels left
+                    int minimumRequired = Math.max(1, getAdjustedTotalQuantity() / 2);
+                    // During attacks (low build success), be more conservative about rejecting duplicates
+                    // since replacements are hard to build - keep duplicates to maintain pool
+                    boolean isUnderAttack = _context.profileOrganizer().isLowBuildSuccess();
+                    if (isUnderAttack) {
+                        minimumRequired = Math.max(minimumRequired, getAdjustedTotalQuantity() - 1);
+                    }
+
+                    if (!isUnderAttack && !hasExpiringDuplicate && usableCount > minimumRequired) {
+                        // Normal operation: reject duplicate if we have enough alternatives
+                        if (_log.shouldWarn()) {
+                            _log.warn("Rejecting new tunnel with duplicate peer sequence -> Keeping existing: " + info);
+                        }
+                        if (info instanceof PooledTunnelCreatorConfig) {
+                            ((PooledTunnelCreatorConfig) info).setDuplicate();
+                        }
+                        // Don't add this tunnel since it's a duplicate
+                        return;
+                    } else if (hasExpiringDuplicate && !isUnderAttack) {
+                        // Normal operation: replace expiring duplicates with the new tunnel
+                        if (_log.shouldInfo()) {
+                            _log.info("Replacing expiring duplicate tunnel(s) with new tunnel: " + info);
+                        }
+                        for (TunnelInfo dup : duplicates) {
+                            if (dup.getExpiration() <= now + 5*60*1000) {
+                                if (dup instanceof PooledTunnelCreatorConfig) {
+                                    ((PooledTunnelCreatorConfig) dup).setDuplicate();
+                                }
+                                removeTunnel(dup);
+                            }
+                        }
+                    } else {
+                        // Under attack OR need this tunnel to maintain minimum pool size
+                        if (_log.shouldInfo()) {
+                            _log.info("Accepting duplicate tunnel -> " +
+                                      (isUnderAttack ? "Under attack" : "Maintaining pool size") + " (" +
+                                      usableCount + " usable / " + minimumRequired + " required): " + info);
+                        }
                     }
                 }
             }
-        }
 
-        LeaseSet ls = null;
-        _tunnelsLock.lock();
-        try {
+            LeaseSet ls = null;
+            _tunnelsLock.lock();
+            try {
+                if (info.getExpiration() > now + 60*1000) {
+                    _tunnels.add(info);
+                    if (_settings.isInbound() && !_settings.isExploratory()) {ls = locked_buildNewLeaseSet();}
+                }
+            } finally {_tunnelsLock.unlock();}
+            if (info.getExpiration() > now + 60*1000 && ls != null) {requestLeaseSet(ls);}
+
+            // Check if we can now remove any last resort tunnels since we have a replacement
             if (info.getExpiration() > now + 60*1000) {
-                _tunnels.add(info);
-                if (_settings.isInbound() && !_settings.isExploratory()) {ls = locked_buildNewLeaseSet();}
-            }
-        } finally {_tunnelsLock.unlock();}
-        if (info.getExpiration() > now + 60*1000 && ls != null) {requestLeaseSet(ls);}
-
-        // Check if we can now remove any last resort tunnels since we have a replacement
-        if (info.getExpiration() > now + 60*1000) {
-            cleanupLastResortTunnels();
-            // If we added a multi-hop tunnel, remove zero-hop fallbacks immediately
-            // This applies to both exploratory and client pools
-            if (info.getLength() > 1) {
-                cleanupZeroHopTunnels();
+                cleanupLastResortTunnels();
+                // If we added a multi-hop tunnel, remove zero-hop fallbacks immediately
+                // This applies to both exploratory and client pools
+                if (info.getLength() > 1) {
+                    cleanupZeroHopTunnels();
             }
         }
     }
@@ -895,6 +937,11 @@ public class TunnelPool {
             if (_log.shouldInfo()) {
                 _log.info("Removing last resort tunnel after replacement built: " + t);
             }
+            if (t instanceof PooledTunnelCreatorConfig) {
+                PooledTunnelCreatorConfig cfg = (PooledTunnelCreatorConfig) t;
+                _context.tunnelDispatcher().remove(cfg);
+                _manager.removeFromExpiration(cfg);
+            }
             _manager.tunnelFailed(); // Signal that we need to update counts
         }
     }
@@ -950,8 +997,12 @@ public class TunnelPool {
             if (_log.shouldInfo()) {
                 _log.info("Removing zero-hop fallback tunnel after multi-hop tunnel added to " + toString() + ": " + t);
             }
-            // Properly fail the removed tunnel to ensure cleanup
-            tunnelFailed(t);
+            if (t instanceof PooledTunnelCreatorConfig) {
+                PooledTunnelCreatorConfig cfg = (PooledTunnelCreatorConfig) t;
+                _context.tunnelDispatcher().remove(cfg);
+                _manager.removeFromExpiration(cfg);
+            }
+            _manager.tunnelFailed();
         }
     }
 
@@ -998,7 +1049,7 @@ public class TunnelPool {
         boolean isUnderAttack = _context.profileOrganizer().isLowBuildSuccess();
         // During attacks, trigger earlier when we have less than half our desired tunnels
         // Use Math.min to cap at minimum 2 to avoid over-triggering with small pool sizes
-        boolean isGettingLowDuringAttack = isUnderAttack && usableTunnels < Math.min(2, wanted / 2);
+        boolean isGettingLowDuringAttack = isUnderAttack && usableTunnels < Math.min(2, wanted / 3 * 2);
         int consecutiveFailures = _consecutiveBuildTimeouts.get();
         boolean hasHighFailures = consecutiveFailures > 5;
 
@@ -1013,9 +1064,8 @@ public class TunnelPool {
             // Suppress during first 15 minutes of uptime - normal during startup
             long uptime = _context.router().getUptime();
             if (_log.shouldInfo() && uptime > 15*60*1000) {
-                _log.info("Low tunnel count (" + usableTunnels +
-                          "), building " + emergencyBuilds +
-                          " tunnels for " + toString());
+                _log.info("Low tunnel count in " + toString() + " (" + usableTunnels + " available) -> Building " +
+                           emergencyBuilds + " tunnels...");
             }
             return emergencyBuilds;
         }
@@ -1145,7 +1195,24 @@ public class TunnelPool {
     void removeTunnel(TunnelInfo info) {
         if (_log.shouldDebug()) {_log.debug(toString() + " -> Queuing tunnel removal " + info);}
 
-        _removalQueue.offer(info);
+        boolean queued = _removalQueue.offer(info);
+        if (!queued) {
+            if (_log.shouldWarn()) {
+                _log.warn("Removal queue full, performing synchronous removal: " + info);
+            }
+            if (info instanceof PooledTunnelCreatorConfig) {
+                PooledTunnelCreatorConfig cfg = (PooledTunnelCreatorConfig) info;
+                _context.tunnelDispatcher().remove(cfg);
+                _manager.removeFromExpiration(cfg);
+                Long tunnelKey = ExpireLocalTunnelsJob.getTunnelKey(cfg);
+                TestJob.invalidate(tunnelKey);
+            }
+            _tunnelsLock.lock();
+            try {
+                _tunnels.remove(info);
+            } finally {_tunnelsLock.unlock();}
+            _manager.tunnelFailed();
+        }
 
         if (!_removalJobScheduled) {
             _removalJobScheduled = true;
@@ -1485,7 +1552,13 @@ public class TunnelPool {
             _log.debug(toString() + " -> Synchronous tunnel removal complete, LeaseSet republished");
         }
 
-        return true;
+        // LEAK DETECTION: Log when tunnel not found in pool during removal
+        if (!wasInPool && _log.shouldInfo()) {
+            _log.info("LEAK WARNING: Tunnel not found in pool during removal: " + info +
+                      " | Pool size: " + remaining + " | Pool: " + toString());
+        }
+
+        return wasInPool;
     }
 
     /**
@@ -1505,7 +1578,12 @@ public class TunnelPool {
             _removalJobScheduled = false;
 
             List<TunnelInfo> toRemove = new ArrayList<TunnelInfo>();
-            _removalQueue.drainTo(toRemove);
+            int maxPerJob = 100;
+            for (int i = 0; i < maxPerJob; i++) {
+                TunnelInfo ti = _removalQueue.poll();
+                if (ti == null) break;
+                toRemove.add(ti);
+            }
 
             if (toRemove.isEmpty()) {return;}
 
@@ -1541,10 +1619,13 @@ public class TunnelPool {
 
             if (actuallyRemoved == 0) {return;}
 
-            // Remove tunnels from expiration queue to prevent memory leak
+            // Remove tunnels from expiration queue and TestJob references to prevent memory leak
             for (TunnelInfo info : toRemove) {
                 if (info instanceof PooledTunnelCreatorConfig) {
-                    _manager.removeFromExpiration((PooledTunnelCreatorConfig) info);
+                    PooledTunnelCreatorConfig cfg = (PooledTunnelCreatorConfig) info;
+                    Long tunnelKey = ExpireLocalTunnelsJob.getTunnelKey(cfg);
+                    TestJob.invalidate(tunnelKey);
+                    _manager.removeFromExpiration(cfg);
                 }
             }
 
@@ -2216,6 +2297,16 @@ public class TunnelPool {
             }
         } else {peers = Collections.singletonList(_context.routerHash());}
 
+        // EMERGENCY HARD CAP: Prevent tunnel build flood
+        synchronized (_inProgress) {
+            if (_inProgress.size() >= 1000) {
+                if (_log.shouldWarn()) {
+                    _log.warn("EMERGENCY: Skipping tunnel build -> " + _inProgress.size() + " already in progress...");
+                }
+                return null;
+            }
+        }
+
         PooledTunnelCreatorConfig cfg = new PooledTunnelCreatorConfig(_context, peers.size(),
                                                 settings.isInbound(), settings.getDestination(),
                                                 this);
@@ -2240,6 +2331,89 @@ public class TunnelPool {
     }
 
     /**
+     * Nuclear cleanup: Remove expired/stale configs from _inProgress.
+     * Called periodically to prevent memory leak when buildComplete isn't reached.
+     * @return number of stale configs removed
+     */
+    int cleanupInProgress() {
+        int removed = 0;
+        long now = _context.clock().now();
+
+        // CRITICAL: Drain removal queue to prevent memory leak
+        // The removal queue can grow unbounded if jobs are starved
+        int drained = drainRemovalQueue();
+        if (drained > 0 && _log.shouldInfo()) {
+            _log.info("Drained " + drained + " tunnels from removal queue");
+        }
+
+        // Collect configs to clean up BEFORE removing from _inProgress
+        List<PooledTunnelCreatorConfig> toCleanup = new ArrayList<>();
+
+        synchronized (_inProgress) {
+            // HARD CAP: Never exceed 5000
+            while (_inProgress.size() > 5000) {
+                if (!_inProgress.isEmpty()) {
+                    PooledTunnelCreatorConfig cfg = _inProgress.remove(0);
+                    toCleanup.add(cfg);
+                    removed++;
+                } else {
+                    break;
+                }
+            }
+
+            // TTL cleanup - remove configs whose tunnels have already expired
+            // This catches builds that got stuck and never completed
+            Iterator<PooledTunnelCreatorConfig> it = _inProgress.iterator();
+            while (it.hasNext()) {
+                PooledTunnelCreatorConfig cfg = it.next();
+                if (cfg.getExpiration() < now) {
+                    it.remove();
+                    toCleanup.add(cfg);
+                    removed++;
+                }
+            }
+        }
+
+        // Clean up resources for removed configs
+        for (PooledTunnelCreatorConfig cfg : toCleanup) {
+            _context.tunnelDispatcher().remove(cfg);
+            _manager.removeFromExpiration(cfg);
+            Long tunnelKey = ExpireLocalTunnelsJob.getTunnelKey(cfg);
+            TestJob.invalidate(tunnelKey);
+        }
+
+        if (removed > 0 && _log.shouldWarn()) {
+            _log.warn("EMERGENCY: Removed " + removed + " in-progress configs -> Remaining: " + _inProgress.size());
+        }
+
+        return removed;
+    }
+
+    /**
+     * Drain the removal queue to prevent unbounded memory growth.
+     * Emergency drain when queue gets too large - processes tunnels directly.
+     * @return number of items drained
+     */
+    private int drainRemovalQueue() {
+        int drained = 0;
+        int maxDrain = 1000;
+        while (drained < maxDrain) {
+            TunnelInfo ti = _removalQueue.poll();
+            if (ti == null) break;
+            if (ti instanceof PooledTunnelCreatorConfig) {
+                PooledTunnelCreatorConfig cfg = (PooledTunnelCreatorConfig) ti;
+                _context.tunnelDispatcher().remove(cfg);
+                _manager.removeFromExpiration(cfg);
+                Long tunnelKey = ExpireLocalTunnelsJob.getTunnelKey(cfg);
+                TestJob.invalidate(tunnelKey);
+            }
+            drained++;
+        }
+        _removalJobScheduled = false;
+        return drained;
+    }
+
+    /**
      *  Remove from the _inprogress list and call addTunnel() if result is SUCCESS.
      *  Updates consecutive build timeout count.
      *
@@ -2248,12 +2422,14 @@ public class TunnelPool {
      *  @since 0.9.53 added result parameter
      */
     void buildComplete(PooledTunnelCreatorConfig cfg, BuildExecutor.Result result) {
+        // Always remove from inProgress to prevent memory leaks
+        synchronized (_inProgress) {_inProgress.remove(cfg);}
+
         if (cfg.getTunnelPool() != this) {
             _log.error("Wrong pool " + cfg + " for " + this, new Exception());
             return;
         }
 
-        synchronized (_inProgress) {_inProgress.remove(cfg);}
         buildFinished(_settings.isInbound());
 
         switch (result) {
@@ -2266,23 +2442,38 @@ public class TunnelPool {
             case REJECT:
             case BAD_RESPONSE:
                 _consecutiveBuildTimeouts.set(0);
+                cleanupFailedBuild(cfg);
                 updatePairedProfile(cfg, true);
                 break;
 
             case DUP_ID:
                 _consecutiveBuildTimeouts.set(0);
                 cfg.setDuplicate();
+                cleanupFailedBuild(cfg);
                 break;
 
             case TIMEOUT:
                 _consecutiveBuildTimeouts.incrementAndGet();
+                cleanupFailedBuild(cfg);
                 updatePairedProfile(cfg, false);
                 break;
 
             case OTHER_FAILURE:
             default:
+                cleanupFailedBuild(cfg);
                 break;
         }
+    }
+
+    /**
+     * Clean up resources for a failed/unadded tunnel build.
+     * @param cfg the failed tunnel config
+     */
+    private void cleanupFailedBuild(PooledTunnelCreatorConfig cfg) {
+        _context.tunnelDispatcher().remove(cfg);
+        _manager.removeFromExpiration(cfg);
+        Long tunnelKey = ExpireLocalTunnelsJob.getTunnelKey(cfg);
+        TestJob.invalidate(tunnelKey);
     }
 
     /**
