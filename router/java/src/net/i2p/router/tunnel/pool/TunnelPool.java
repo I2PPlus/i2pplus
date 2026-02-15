@@ -712,7 +712,7 @@ public class TunnelPool {
                 int minimumRequired = Math.max(1, getAdjustedTotalQuantity() / 2);
                 // During attacks (low build success), be more conservative about rejecting duplicates
                 // since replacements are hard to build - keep duplicates to maintain pool
-                boolean isUnderAttack = _context.profileOrganizer().isLowBuildSuccess();
+                isUnderAttack = _context.profileOrganizer().isLowBuildSuccess();
                 if (isUnderAttack) {
                     minimumRequired = Math.max(minimumRequired, getAdjustedTotalQuantity() - 1);
                 }
