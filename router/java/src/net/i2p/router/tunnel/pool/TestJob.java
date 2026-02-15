@@ -349,6 +349,12 @@ public class TestJob extends JobImpl {
                 }
             }
         }
+
+        // CRITICAL: Null out tunnel references to prevent memory leak
+        // TestJob holds PooledTunnelCreatorConfig references in _outTunnel and _replyTunnel
+        _outTunnel = null;
+        _replyTunnel = null;
+        _otherTunnel = null;
     }
 
     public TestJob(RouterContext ctx, PooledTunnelCreatorConfig cfg, TunnelPool pool) {
