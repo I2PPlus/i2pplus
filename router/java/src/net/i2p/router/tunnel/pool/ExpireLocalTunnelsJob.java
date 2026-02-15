@@ -52,7 +52,7 @@ public class ExpireLocalTunnelsJob extends JobImpl {
     // Maximum entries to clean per run (increased for massive queue handling)
     private static final int MAX_CLEANUP_PER_RUN = 50000;
     // Maximum retries for phase 1 removal before forcing cleanup
-    private static final int MAX_PHASE1_RETRIES = 5;
+    private static final int MAX_PHASE1_RETRIES = 3;
     // Maximum entries to iterate per run (avoid OOM from queue iteration)
     private static final int MAX_ITERATE_PER_RUN = 30000;
     private static final int MAX_ITERATE_BACKED_UP = 50000;
@@ -61,7 +61,7 @@ public class ExpireLocalTunnelsJob extends JobImpl {
     // Debug logging interval for queue health (every N runs)
     private static final int HEALTH_LOG_INTERVAL = 60;
     // Index heal interval (every N runs)
-    private static final int INDEX_HEAL_INTERVAL = 300;
+    private static final int INDEX_HEAL_INTERVAL = 10;
 
     public ExpireLocalTunnelsJob(RouterContext ctx) {
         super(ctx);
@@ -75,6 +75,8 @@ public class ExpireLocalTunnelsJob extends JobImpl {
             new long[] { 60*1000, 10*60*1000 });
         ctx.statManager().createRateStat("tunnel.expireKeysSize", "Expiration keys map size", "Tunnels",
             new long[] { 60*1000, 10*60*1000 });
+        ctx.statManager().createRateStat("tunnel.expireKeyQueueRatio", "Keys to queue size ratio (%)", "Tunnels",
+            new long[] { 60*1000, 10*60*1000 });
     }
 
     @Override
@@ -85,12 +87,12 @@ public class ExpireLocalTunnelsJob extends JobImpl {
     /**
      * Generate a unique key for a tunnel config.
      * Uses tunnel IDs (receive + send) when available for proper deduplication.
-     * 
+     *
      * Falls back to System.identityHashCode(cfg) for:
      * - Zero-length tunnels
      * - Configs without valid tunnel IDs yet
      * - Any exceptions during ID extraction
-     * 
+     *
      * Note: Identity hash fallback does NOT dedupe across multiple instances,
      * meaning tunnels without valid IDs will each get their own queue entry.
      * This is acceptable as such configs are typically short-lived.
@@ -113,18 +115,19 @@ public class ExpireLocalTunnelsJob extends JobImpl {
     /**
      * Remove a tunnel expiration entry from the index map.
      * This centralizes key removal to prevent dangling keys.
+     * Uses remove(key, value) for identity-safe removal.
      *
      * @param te the tunnel expiration to remove from index
      */
     private void removeFromIndex(TunnelExpiration te) {
         if (te != null && te.tunnelKey != null) {
-            _tunnelKeys.remove(te.tunnelKey);
+            _tunnelKeys.remove(te.tunnelKey, te);
         }
     }
 
     /**
      * Determine if a tunnel expiration entry should be kept in the queue.
-     * 
+     *
      * Policy:
      * - Keep if phase 1 not complete (still waiting for pool removal)
      * - Keep if drop time is in the future (still waiting for dispatcher removal)
@@ -143,7 +146,7 @@ public class ExpireLocalTunnelsJob extends JobImpl {
         long relevantTime = te.phase1Complete ? te.dropTime : te.expirationTime;
         boolean isOverdue = relevantTime < now - STALE_THRESHOLD;
         boolean isFuture = te.expirationTime > now;
-        
+
         if (isFuture) {
             return true;  // Drop time hasn't arrived yet
         }
@@ -154,26 +157,37 @@ public class ExpireLocalTunnelsJob extends JobImpl {
     }
 
     /**
-     * Log queue health metrics for debugging.
+     * Log queue health metrics for debugging and auto-heal when needed.
      */
     private void logQueueHealth(int runCount) {
+        int queueSize = _expirationQueue.size();
+        int keysSize = _tunnelKeys.size();
         if (runCount % HEALTH_LOG_INTERVAL == 0) {
-            int queueSize = _expirationQueue.size();
-            int keysSize = _tunnelKeys.size();
             if (_log.shouldDebug()) {
                 _log.debug("Expire queue health: queue=" + queueSize + ", keys=" + keysSize +
                            ", diff=" + (keysSize - queueSize));
             }
-            // Alert if keys significantly exceed queue (potential leak indicator)
-            if (keysSize > queueSize + 10 && queueSize > 20) {
-                if (_log.shouldWarn()) {
-                    _log.warn("Expire keys map (" + keysSize + ") significantly larger than queue (" +
-                              queueSize + ") - possible index leak");
-                }
-            }
             // Record stats
             getContext().statManager().addRateData("tunnel.expireQueueSize", queueSize);
             getContext().statManager().addRateData("tunnel.expireKeysSize", keysSize);
+            int ratio = keysSize > 0 ? (100 * keysSize / Math.max(1, queueSize)) : 0;
+            getContext().statManager().addRateData("tunnel.expireKeyQueueRatio", ratio);
+        }
+        // Alert if keys significantly exceed queue (potential leak indicator)
+        if (keysSize > queueSize + 10 && queueSize > 20) {
+            if (_log.shouldWarn()) {
+                _log.warn("Expire keys map (" + keysSize + ") significantly larger than queue (" +
+                          queueSize + ") - possible index leak");
+            }
+        }
+        // Auto-heal when keys grow much larger than queue (leak detected)
+        if (keysSize > 1000 && keysSize > 10 * Math.max(1, queueSize)) {
+            if (_log.shouldWarn()) {
+                _log.warn("Auto-healing: keys (" + keysSize + ") >> queue (" + queueSize + ")");
+            }
+            long now = getContext().clock().now();
+            cleanupStaleEntries(now, true);
+            healIndexIfNeeded(runCount);
         }
     }
 
@@ -406,9 +420,7 @@ public class ExpireLocalTunnelsJob extends JobImpl {
             }
 
             // Requeue entries that need more time before phase 2
-            // CRITICAL: Always remove key when requeueing to prevent key accumulation
-            // The entry stays in queue but key is removed - when processed later,
-            // cleanup will work without the key
+            // Keep the key in the map - the entry is still valid and tracked
             for (TunnelExpiration te : toRequeue) {
                 // Sanity check: skip entries that have exceeded max lifetime (immortal entries)
                 if (now - te.createdAt > MAX_ENTRY_LIFETIME) {
@@ -418,8 +430,7 @@ public class ExpireLocalTunnelsJob extends JobImpl {
                     }
                     continue;
                 }
-                // Remove key to prevent leak - entry will be processed without key
-                removeFromIndex(te);
+                // Keep the key in the map - don't remove it
                 _expirationQueue.offer(te);
             }
         }
@@ -430,14 +441,10 @@ public class ExpireLocalTunnelsJob extends JobImpl {
                 if (_isScheduled) {
                     return;
                 }
-                // Find the next expiration time
-                long nextExpiration = Long.MAX_VALUE;
-                for (TunnelExpiration te : _expirationQueue) {
-                    long targetTime = te.phase1Complete ? te.dropTime : te.expirationTime;
-                    if (targetTime < nextExpiration) {
-                        nextExpiration = targetTime;
-                    }
-                }
+                // Find the next expiration time using O(1) peek instead of O(n) scan
+                TunnelExpiration head = _expirationQueue.peek();
+                long nextExpiration = (head != null) ?
+                    (head.phase1Complete ? head.dropTime : head.expirationTime) : Long.MAX_VALUE;
 
                 // Check if we've been starved - force requeue if lag is too high
                 long lag = now - _lastRunTime;
@@ -491,10 +498,11 @@ public class ExpireLocalTunnelsJob extends JobImpl {
         }
         Long tunnelKey = getTunnelKey(cfg);
         if (tunnelKey != null) {
-            TunnelExpiration te = _tunnelKeys.remove(tunnelKey);
+            // First get the value to remove from queue, then remove by key+value for safety
+            TunnelExpiration te = _tunnelKeys.get(tunnelKey);
             if (te != null) {
+                _tunnelKeys.remove(tunnelKey, te);
                 _expirationQueue.remove(te);
-                // Note: removeFromIndex not needed since we already removed from _tunnelKeys above
             }
         }
     }
@@ -515,7 +523,7 @@ public class ExpireLocalTunnelsJob extends JobImpl {
 
         for (TunnelExpiration te : batch) {
             boolean shouldKeep = shouldKeepEntry(te, now);
-            
+
             if (shouldKeep) {
                 keep.add(te);
             } else {
@@ -566,40 +574,45 @@ public class ExpireLocalTunnelsJob extends JobImpl {
      * Removes keys that no longer have corresponding entries in the queue.
      * Runs every INDEX_HEAL_INTERVAL runs to avoid performance impact.
      *
-     * NOTE: This healing is approximate. Keys for entries beyond maxScan may be
-     * dropped, which is safe because the queue still owns the lifetime and other
-     * cleanup paths will remove those entries.
+     * Uses bounded poll() sampling instead of full drain to reduce queue churn
+     * and avoid interfering with concurrent offer() calls.
      */
     private void healIndexIfNeeded(int runCount) {
         if (runCount % INDEX_HEAL_INTERVAL != 0) {
             return;
         }
 
-        int maxScan = 50000;
-        List<TunnelExpiration> snapshot = new ArrayList<>(maxScan);
-        _expirationQueue.drainTo(snapshot, maxScan);
-        for (TunnelExpiration te : snapshot) {
-            _expirationQueue.offer(te);
+        int maxSample = Math.min(50000, _expirationQueue.size());
+        java.util.IdentityHashMap<TunnelExpiration, Boolean> inQueue =
+            new java.util.IdentityHashMap<>(maxSample);
+
+        List<TunnelExpiration> temp = new ArrayList<>(maxSample);
+        int sampled = 0;
+        while (sampled < maxSample) {
+            TunnelExpiration te = _expirationQueue.poll();
+            if (te == null) break;
+            temp.add(te);
+            inQueue.put(te, Boolean.TRUE);
+            sampled++;
         }
 
-        java.util.IdentityHashMap<TunnelExpiration, Boolean> inQueue =
-            new java.util.IdentityHashMap<>(snapshot.size());
-        for (TunnelExpiration te : snapshot) {
-            inQueue.put(te, Boolean.TRUE);
+        for (TunnelExpiration te : temp) {
+            _expirationQueue.offer(te);
         }
 
         int removed = 0;
         for (java.util.Map.Entry<Long, TunnelExpiration> e : _tunnelKeys.entrySet()) {
             TunnelExpiration te = e.getValue();
             if (te == null || !inQueue.containsKey(te)) {
-                _tunnelKeys.remove(e.getKey(), te);
-                removed++;
+                if (_tunnelKeys.remove(e.getKey(), te)) {
+                    removed++;
+                }
             }
         }
 
-        if (removed > 0 && _log.shouldWarn()) {
-            _log.warn("Index heal removed " + removed +
-                      " keys not present in the expiration queue");
+        if (removed > 0 && _log.shouldInfo()) {
+            _log.info("Index heal sampled " + sampled + ", removed " + removed +
+                      " orphaned keys (queue=" + _expirationQueue.size() + ")");
         }
     }
 
