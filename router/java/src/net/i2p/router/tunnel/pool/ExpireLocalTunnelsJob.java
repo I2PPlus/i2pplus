@@ -174,16 +174,16 @@ public class ExpireLocalTunnelsJob extends JobImpl {
             getContext().statManager().addRateData("tunnel.expireKeyQueueRatio", ratio);
         }
         // Alert if keys significantly exceed queue (potential leak indicator)
-        if (keysSize > queueSize + 10 && queueSize > 20) {
-            if (_log.shouldInfo()) {
-                _log.info("Expire keys map (" + keysSize + ") significantly larger than queue (" +
+        if (keysSize > queueSize * 5 && queueSize > 20) {
+            if (_log.shouldDebug()) {
+                _log.debug("Expire keys map (" + keysSize + ") significantly larger than queue (" +
                           queueSize + ") -> Possible index leak...");
             }
         }
         // Auto-heal when keys grow much larger than queue (leak detected)
         if (keysSize > 500 && keysSize > 3 * Math.max(1, queueSize)) {
             if (_log.shouldInfo()) {
-                _log.info("Auto-healing: keys (" + keysSize + ") >> queue (" + queueSize + ")");
+                _log.info("Auto-healing: keys (" + keysSize + ") -> Queue: " + queueSize);
             }
             long now = getContext().clock().now();
             cleanupStaleEntries(now, true);
@@ -215,6 +215,18 @@ public class ExpireLocalTunnelsJob extends JobImpl {
             return;
         }
 
+        // Emergency throttle during crisis: if keys >> queue, drop new scheduling
+        // This prevents the leak from accelerating during high tunnel churn
+        int qSize = _expirationQueue.size();
+        int kSize = _tunnelKeys.size();
+        if (kSize > 50000 || (kSize > 5 * qSize && qSize > 1000)) {
+            if (_log.shouldWarn()) {
+                _log.warn("EMERGENCY THROTTLE: keys=" + kSize + " >> queue=" + qSize +
+                          " Dropping tunnel expiration scheduling");
+            }
+            return;
+        }
+
         // Use putIfAbsent to avoid race window between containsKey and put
         long actualExpiration = cfg.getExpiration();
         boolean isInbound = cfg.getTunnelPool().getSettings().isInbound();
@@ -237,11 +249,17 @@ public class ExpireLocalTunnelsJob extends JobImpl {
         // reading cfg.getExpiration() will see the early expiry time
         cfg.setExpiration(earlyExpire);
 
-        // Add to queue and map (use putIfAbsent to dedupe and avoid race window)
-        TunnelExpiration te = new TunnelExpiration(cfg, tunnelKey, earlyExpire, dropAfter);
-        if (tunnelKey != null && _tunnelKeys.putIfAbsent(tunnelKey, te) != null) {
-            // Already existed in keys map - this is a duplicate, skip adding
-            return;
+        // Add to queue and map
+        // CRITICAL: Remove old entry FIRST to prevent orphan keys from accumulating
+        // The old entry may have been processed but its key wasn't cleaned up
+        TunnelExpiration te = new TunnelExpiration(cfg, tunnelKey, earlyExpire, dropAfter, getContext().clock().now());
+        TunnelExpiration oldTe = _tunnelKeys.put(tunnelKey, te);
+        if (oldTe != null) {
+            // Remove old from queue to prevent duplicate processing and orphan keys
+            _expirationQueue.remove(oldTe);
+            if (_log.shouldDebug()) {
+                _log.debug("Replaced old expiration for key " + tunnelKey);
+            }
         }
         _expirationQueue.offer(te);
 
@@ -635,12 +653,12 @@ public class ExpireLocalTunnelsJob extends JobImpl {
         volatile boolean phase1Complete = false;
         volatile int retryCount = 0;
 
-        TunnelExpiration(PooledTunnelCreatorConfig cfg, Long key, long expire, long drop) {
+        TunnelExpiration(PooledTunnelCreatorConfig cfg, Long key, long expire, long drop, long created) {
             this.config = cfg;
             this.tunnelKey = key;
             this.expirationTime = expire;
             this.dropTime = drop;
-            this.createdAt = System.currentTimeMillis();
+            this.createdAt = created;
         }
 
         @Override
