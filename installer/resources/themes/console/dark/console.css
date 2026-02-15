@@ -724,7 +724,7 @@ h3.stats{border:var(--border);border-radius:0}
 #stats label{display:inline-block}
 #stats .confignav{display:flex;position:sticky;top:-1px;z-index:999;flex-wrap:wrap}
 #stats .noevents,.statlist li li:last-child::after{margin-bottom:0}
-#stats .noevents{margin-bottom:5px;padding:5px 0 20px}
+#stats .noevents{margin-bottom:0;padding:5px 0 0}
 #stats .noevents::after,.statlist li li:last-child::after{margin-bottom:0;padding-bottom:0;border-bottom-color:#0000}
 #stats .noevents::after{margin-top:6px;margin-bottom:0;margin-right:20px;padding-bottom:10px}
 #stats .statlist{margin:0 0 50px;padding:0;border:0;background:none}
