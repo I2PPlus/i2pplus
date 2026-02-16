@@ -273,10 +273,10 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
             // This removes from _participatingConfig and other collections
             dispatcher.remove(tunnel);
 
-            // Also mark bandwidth as freed
+            // Free the allocated bandwidth for this tunnel
             int allocated = tunnel.getAllocatedBW();
             if (allocated > 0) {
-                // Bandwidth will be freed via normal accounting
+                dispatcher.freeBandwidth(allocated);
             }
 
             if (_log.shouldDebug()) {
