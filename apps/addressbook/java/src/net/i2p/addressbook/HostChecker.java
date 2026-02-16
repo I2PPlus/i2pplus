@@ -83,6 +83,8 @@ public class HostChecker {
     // Configuration property names
     private static final String PROP_PING_INTERVAL = "pingInterval";
     private static final String PROP_MAX_CONCURRENT = "maxConcurrentPings";
+    private static final String PROP_ENABLE_PING = "enablePing";
+    private static final boolean DEFAULT_ENABLE_PING = false; // Disabled by default to prevent memory leak from SocketManager tunnel creation
 
     /**
      * Load configuration from addressbook/config.txt file
@@ -153,6 +155,11 @@ public class HostChecker {
                                 _log.warn("Invalid max concurrent in config: " + value + ", using default " + DEFAULT_MAX_CONCURRENT);
                             }
                         }
+                    } else if (PROP_ENABLE_PING.equals(key)) {
+                        _enablePing = "true".equalsIgnoreCase(value) || "yes".equalsIgnoreCase(value) || "1".equals(value);
+                        if (_log.shouldInfo()) {
+                            _log.info("Loaded enablePing from config: " + _enablePing);
+                        }
                     }
                 }
             }
@@ -182,6 +189,7 @@ public class HostChecker {
     private long _pingTimeout = DEFAULT_PING_TIMEOUT;
     private int _maxConcurrent = DEFAULT_MAX_CONCURRENT;
     private boolean _useLeaseSetCheck = true;
+    private boolean _enablePing = DEFAULT_ENABLE_PING;
 
     // Defensive mode constants - activated when tunnel build success < 40%
     private static final double TUNNEL_BUILD_SUCCESS_THRESHOLD = 0.40;
@@ -745,6 +753,14 @@ public class HostChecker {
 
         if (leaseSetTypes == null) {
             leaseSetTypes = "[]";
+        }
+
+        // Skip tunnel-based ping if disabled (default disabled to prevent memory leak from SocketManager tunnel creation)
+        if (!_enablePing) {
+            if (_log.shouldInfo()) {
+                _log.info("HostChecker ping SKIPPED for " + displayHostname + " - tunnel-based ping is disabled (set enablePing=true to enable)");
+            }
+            return createPingResult(false, startTime, -1, hostname, leaseSetTypes);
         }
 
         // Check router load before attempting to build tunnels
