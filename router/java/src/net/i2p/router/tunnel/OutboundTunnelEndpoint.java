@@ -46,7 +46,7 @@ class OutboundTunnelEndpoint {
         int allocated = oldAllocated;
         int shareBps = 1000 * TunnelDispatcher.getShareBandwidth(_context);
         int reasonableMax = shareBps / 2;
-        if (oldAllocated <= TunnelParticipant.DEFAULT_BW_PER_TUNNEL_ESTIMATE || 
+        if (oldAllocated <= TunnelParticipant.DEFAULT_BW_PER_TUNNEL_ESTIMATE ||
             oldAllocated < reasonableMax / 10) {
             allocated = _context.tunnelDispatcher().getMaxPerTunnelBandwidth(TunnelDispatcher.Location.OBEP);
             _config.setAllocatedBW(allocated);
@@ -58,6 +58,16 @@ class OutboundTunnelEndpoint {
         _partBWE = new SyntheticREDQueue(_context, effectiveBw, minThreshold, maxThreshold);
         _outDistributor = new OutboundMessageDistributor(ctx, OutNetMessage.PRIORITY_PARTICIPATING, _partBWE);
         _totalmsg = _lsdsm = _ridsm = _i2npmsg = 0;
+    }
+
+    /**
+     * Clean up resources when tunnel expires.
+     * Cancels pending fragment timeouts and clears the fragment map.
+     */
+    public void destroy() {
+        if (_handler != null) {
+            _handler.destroy();
+        }
     }
 
     public void dispatch(TunnelDataMessage msg, Hash recvFrom) {

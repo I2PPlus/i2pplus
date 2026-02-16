@@ -102,6 +102,8 @@ class FragmentHandler {
 
     /** don't wait more than this long to completely receive a fragmented message */
     static long MAX_DEFRAGMENT_TIME = 45*1000;
+    /** maximum number of concurrent fragmented messages to prevent memory exhaustion */
+    private static final int MAX_FRAGMENTS = 100;
     private static final ByteCache _cache = ByteCache.getInstance(512, TrivialPreprocessor.PREPROCESSED_SIZE);
 
     /**
@@ -410,6 +412,10 @@ class FragmentHandler {
         } else if (fragmented) {
             FragmentedMessage msg;
             synchronized (_fragmentedMessages) {
+                if (_fragmentedMessages.size() >= MAX_FRAGMENTS) {
+                    dropOldestIncomplete();
+                    _failed.incrementAndGet();
+                }
                 msg = _fragmentedMessages.get(Long.valueOf(messageId));
                 if (msg == null) {
                     msg = new FragmentedMessage(_context, messageId);
@@ -477,6 +483,10 @@ class FragmentHandler {
 
         FragmentedMessage msg = null;
         synchronized (_fragmentedMessages) {
+            if (_fragmentedMessages.size() >= MAX_FRAGMENTS) {
+                dropOldestIncomplete();
+                _failed.incrementAndGet();
+            }
             msg = _fragmentedMessages.get(Long.valueOf(messageId));
             if (msg == null) {
                 msg = new FragmentedMessage(_context, messageId);
@@ -605,6 +615,38 @@ class FragmentHandler {
          * @param toTunnel where we are told to send the message (null means locally or to the specified router)
          */
         public void receiveComplete(I2NPMessage msg, Hash toRouter, TunnelId toTunnel);
+    }
+
+    /**
+     * Drop the oldest incomplete fragment to make room for new ones.
+     * Must be called within _fragmentedMessages synchronization.
+     */
+    private void dropOldestIncomplete() {
+        if (_fragmentedMessages.isEmpty())
+            return;
+        Long oldestKey = _fragmentedMessages.keySet().iterator().next();
+        FragmentedMessage oldest = _fragmentedMessages.remove(oldestKey);
+        if (oldest != null) {
+            if (oldest.getExpireEvent() != null)
+                oldest.getExpireEvent().cancel();
+            if (_log.shouldWarn())
+                _log.warn("Dropping oldest incomplete fragment [MsgID " + oldest.getMessageId() + "] to prevent memory exhaustion");
+            _context.statManager().addRateData("tunnel.fragmentedDropped", oldest.getFragmentCount(), oldest.getLifetime());
+        }
+    }
+
+    /**
+     * Explicit cleanup when tunnel expires or handler is no longer needed.
+     * Cancels all pending expire events and clears the fragment map.
+     */
+    public void destroy() {
+        synchronized (_fragmentedMessages) {
+            for (FragmentedMessage msg : _fragmentedMessages.values()) {
+                if (msg.getExpireEvent() != null)
+                    msg.getExpireEvent().cancel();
+            }
+            _fragmentedMessages.clear();
+        }
     }
 
     private class RemoveFailed extends SimpleTimer2.TimedEvent {

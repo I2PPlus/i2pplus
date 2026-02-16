@@ -451,6 +451,9 @@ public class TunnelDispatcher implements Service {
             if (_log.shouldInfo())
                 _log.info("Removing our own Inbound tunnel...\n* " + cfg);
             TunnelParticipant participant = _participants.remove(recvId);
+            if (participant != null) {
+                participant.destroy();
+            }
             // Always remove from inboundGateways - this was a bug causing memory leak
             // where gateways were only removed when participant was null
             TunnelGatewayZeroHop removed = (TunnelGatewayZeroHop) _inboundGateways.remove(recvId);
@@ -505,7 +508,11 @@ public class TunnelDispatcher implements Service {
         // Remove from ALL maps unconditionally (idempotent) to prevent leaks
         // when tunnels exist in multiple maps
         boolean removedConfig = _participatingConfig.remove(recvId) != null;
-        boolean removedParticipant = _participants.remove(recvId) != null;
+        TunnelParticipant participant = _participants.remove(recvId);
+        boolean removedParticipant = participant != null;
+        if (participant != null) {
+            participant.destroy();
+        }
 
         // Remove from inboundGateways and cleanup pumper for ThrottledPumpedTunnelGateway
         TunnelGateway ibGw = _inboundGateways.remove(recvId);
@@ -514,7 +521,11 @@ public class TunnelDispatcher implements Service {
             _pumper.removeGateway((PumpedTunnelGateway) ibGw);
         }
 
-        boolean removedEndpoint = _outboundEndpoints.remove(recvId) != null;
+        OutboundTunnelEndpoint endpoint = _outboundEndpoints.remove(recvId);
+        boolean removedEndpoint = endpoint != null;
+        if (endpoint != null) {
+            endpoint.destroy();
+        }
 
         // Also cleanup _outboundGateways by send tunnel ID to prevent leaks
         // when we're the outbound gateway for a participating tunnel
@@ -564,8 +575,14 @@ public class TunnelDispatcher implements Service {
             _pumper.removeGateway((PumpedTunnelGateway) ibGw);
         }
 
-        _participants.remove(tunnelId);
-        _outboundEndpoints.remove(tunnelId);
+        TunnelParticipant participant = _participants.remove(tunnelId);
+        if (participant != null) {
+            participant.destroy();
+        }
+        OutboundTunnelEndpoint endpoint = _outboundEndpoints.remove(tunnelId);
+        if (endpoint != null) {
+            endpoint.destroy();
+        }
         _participatingConfig.remove(tunnelId);
 
         addRecentlyExpired(tunnelId);

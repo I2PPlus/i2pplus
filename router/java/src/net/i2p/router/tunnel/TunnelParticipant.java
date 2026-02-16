@@ -231,6 +231,16 @@ class TunnelParticipant {
     }
 
     /**
+     * Clean up resources when tunnel expires or is no longer needed.
+     * Cancels pending fragment timeouts and clears the fragment map.
+     */
+    public void destroy() {
+        if (_handler != null) {
+            _handler.destroy();
+        }
+    }
+
+    /**
      * Callback for defragmented tunnel messages.
      */
     private class DefragmentedHandler implements FragmentHandler.DefragmentedReceiver {
