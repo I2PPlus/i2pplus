@@ -19,6 +19,7 @@ import net.i2p.router.ClientTunnelSettings;
 import net.i2p.router.TunnelInfo;
 import net.i2p.router.TunnelManagerFacade;
 import net.i2p.router.TunnelPoolSettings;
+import net.i2p.router.tunnel.HopConfig;
 import net.i2p.router.tunnel.pool.GhostPeerManager;
 import net.i2p.router.tunnel.pool.TunnelPool;
 
@@ -76,6 +77,9 @@ public class DummyTunnelManagerFacade implements TunnelManagerFacade {
 
     /** @since 0.9.68+ */
     public GhostPeerManager getGhostPeerManager() { return null; }
+
+    /** @since 0.9.68+ */
+    public void removeFromExpirationHop(HopConfig cfg) {}
 
     public TunnelPool getInboundPool(Hash client) {
         return null;

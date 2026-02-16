@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
+import net.i2p.router.tunnel.HopConfig;
 import net.i2p.router.tunnel.pool.GhostPeerManager;
 import net.i2p.router.tunnel.pool.TunnelPool;
 
@@ -198,4 +199,11 @@ public interface TunnelManagerFacade extends Service {
      *  @since 0.9.68+
      */
     public GhostPeerManager getGhostPeerManager();
+
+    /**
+     *  Remove a participating tunnel from expiration tracking.
+     *  @param cfg the HopConfig to remove
+     *  @since 0.9.68+
+     */
+    public void removeFromExpirationHop(HopConfig cfg);
 }
