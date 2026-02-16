@@ -2432,6 +2432,49 @@ public class TunnelPool {
     }
 
     /**
+     * Cleanup expired tunnels from _tunnels that were never added to expiration tracking.
+     * This handles the case where tunnels expired but weren't tracked due to the old 3000 limit bug.
+     * @return number of expired tunnels removed
+     */
+    int cleanupExpiredTunnels() {
+        int removed = 0;
+        long now = _context.clock().now();
+        List<PooledTunnelCreatorConfig> expiredConfigs = new ArrayList<>();
+
+        _tunnelsLock.lock();
+        try {
+            Iterator<TunnelInfo> it = _tunnels.iterator();
+            while (it.hasNext()) {
+                TunnelInfo info = it.next();
+                if (info instanceof PooledTunnelCreatorConfig) {
+                    PooledTunnelCreatorConfig cfg = (PooledTunnelCreatorConfig) info;
+                    // Remove tunnels that have already expired
+                    if (cfg.getExpiration() < now) {
+                        it.remove();
+                        expiredConfigs.add(cfg);
+                        removed++;
+                        if (_log.shouldDebug()) {
+                            _log.debug("Removing expired tunnel from pool: " + cfg);
+                        }
+                    }
+                }
+            }
+        } finally {_tunnelsLock.unlock();}
+
+        if (removed > 0) {
+            if (_log.shouldInfo()) {
+                _log.info("Cleaned up " + removed + " expired tunnels from pool");
+            }
+            // Cleanup the dispatcher maps for the removed tunnels
+            for (PooledTunnelCreatorConfig cfg : expiredConfigs) {
+                _context.tunnelDispatcher().remove(cfg);
+            }
+        }
+
+        return removed;
+    }
+
+    /**
      * Drain the removal queue to prevent unbounded memory growth.
      * Emergency drain when queue gets too large - processes tunnels directly.
      * @return number of items drained
