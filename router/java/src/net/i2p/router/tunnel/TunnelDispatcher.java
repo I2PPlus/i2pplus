@@ -213,8 +213,14 @@ public class TunnelDispatcher implements Service {
         }
 
         TunnelId outId = cfg.getConfig(0).getSendTunnel();
-        if (_outboundGateways.putIfAbsent(outId, gw) != null)
+        if (_outboundGateways.putIfAbsent(outId, gw) != null) {
+            // Cleanup leaked objects from duplicate tunnel ID
+            if (gw instanceof PumpedTunnelGateway) {
+                _pumper.removeGateway((PumpedTunnelGateway) gw);
+            }
+            gw.destroy();
             return false;
+        }
 
         if (cfg.getLength() > 1) {
             _context.statManager().addRateData("tunnel.joinOutboundGateway", 1);
@@ -239,15 +245,21 @@ public class TunnelDispatcher implements Service {
         if (cfg.getLength() > 1) {
             TunnelParticipant participant = new TunnelParticipant(_context, new InboundEndpointProcessor(_context, cfg, _validator));
             TunnelId recvId = cfg.getConfig(cfg.getLength() - 1).getReceiveTunnel();
-            if (_participants.putIfAbsent(recvId, participant) != null)
+            if (_participants.putIfAbsent(recvId, participant) != null) {
+                // Cleanup leaked objects from duplicate tunnel ID
+                participant.destroy();
                 return false;
+            }
             _context.statManager().addRateData("tunnel.joinInboundEndpoint", 1);
             _context.messageHistory().tunnelJoined("inboundEndpoint", cfg);
         } else {
             TunnelGatewayZeroHop gw = new TunnelGatewayZeroHop(_context, cfg);
             TunnelId recvId = cfg.getConfig(0).getReceiveTunnel();
-            if (_inboundGateways.putIfAbsent(recvId, gw) != null)
+            if (_inboundGateways.putIfAbsent(recvId, gw) != null) {
+                // Cleanup leaked objects from duplicate tunnel ID
+                gw.destroy();
                 return false;
+            }
             _context.statManager().addRateData("tunnel.joinInboundEndpointZeroHop", 1);
             _context.messageHistory().tunnelJoined("inboundEndpointZeroHop", cfg);
         }
@@ -267,10 +279,13 @@ public class TunnelDispatcher implements Service {
         TunnelParticipant participant = new TunnelParticipant(_context, cfg, new HopProcessor(_context, cfg, _validator));
 
         synchronized (_joinParticipantLock) {
-            if (_participatingConfig.putIfAbsent(recvId, cfg) != null)
+            if (_participatingConfig.putIfAbsent(recvId, cfg) != null) {
+                participant.destroy();
                 return false;
+            }
             if (_participants.putIfAbsent(recvId, participant) != null) {
                 _participatingConfig.remove(recvId);
+                participant.destroy();
                 return false;
             }
         }
@@ -359,6 +374,16 @@ public class TunnelDispatcher implements Service {
      */
     public int getAllocatedBW() {
         return _allocatedBW.get();
+    }
+
+    /**
+     * Free bandwidth allocation when a tunnel is removed
+     * @param bw the bandwidth to free (will be subtracted from allocated total)
+     */
+    public void freeBandwidth(int bw) {
+        if (bw > 0) {
+            _allocatedBW.addAndGet(-bw);
+        }
     }
 
     /**
@@ -457,8 +482,11 @@ public class TunnelDispatcher implements Service {
             // Always remove from inboundGateways - this was a bug causing memory leak
             // where gateways were only removed when participant was null
             TunnelGatewayZeroHop removed = (TunnelGatewayZeroHop) _inboundGateways.remove(recvId);
-            if (removed != null && _log.shouldDebug()) {
-                _log.debug("Removed TunnelGatewayZeroHop from inboundGateways: " + recvId);
+            if (removed != null) {
+                removed.destroy();
+                if (_log.shouldDebug()) {
+                    _log.debug("Removed TunnelGatewayZeroHop from inboundGateways: " + recvId);
+                }
             }
             // Note: Inbound zero-hop tunnels use TunnelGatewayZeroHop directly,
             // not PumpedTunnelGateway, so no pumper removal needed
@@ -484,6 +512,10 @@ public class TunnelDispatcher implements Service {
             // Remove from pumper queues to prevent memory leak
             if (gw instanceof PumpedTunnelGateway) {
                 _pumper.removeGateway((PumpedTunnelGateway) gw);
+            }
+            // Destroy all gateway types including zero-hop
+            if (gw != null) {
+                gw.destroy();
             }
         }
 
@@ -519,6 +551,7 @@ public class TunnelDispatcher implements Service {
         boolean removedInboundGateway = ibGw != null;
         if (ibGw instanceof PumpedTunnelGateway) {
             _pumper.removeGateway((PumpedTunnelGateway) ibGw);
+            ((PumpedTunnelGateway) ibGw).destroy();
         }
 
         OutboundTunnelEndpoint endpoint = _outboundEndpoints.remove(recvId);
@@ -537,6 +570,7 @@ public class TunnelDispatcher implements Service {
                 removedOutboundGateway = obGw != null;
                 if (obGw instanceof PumpedTunnelGateway) {
                     _pumper.removeGateway((PumpedTunnelGateway) obGw);
+                    ((PumpedTunnelGateway) obGw).destroy();
                 }
             }
         }
@@ -569,10 +603,16 @@ public class TunnelDispatcher implements Service {
         if (obGw instanceof PumpedTunnelGateway) {
             _pumper.removeGateway((PumpedTunnelGateway) obGw);
         }
+        if (obGw != null) {
+            obGw.destroy();
+        }
 
         TunnelGateway ibGw = _inboundGateways.remove(tunnelId);
         if (ibGw instanceof PumpedTunnelGateway) {
             _pumper.removeGateway((PumpedTunnelGateway) ibGw);
+        }
+        if (ibGw != null) {
+            ibGw.destroy();
         }
 
         TunnelParticipant participant = _participants.remove(tunnelId);

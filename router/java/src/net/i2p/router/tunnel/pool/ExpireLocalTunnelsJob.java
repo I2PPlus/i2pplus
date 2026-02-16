@@ -107,12 +107,6 @@ public class ExpireLocalTunnelsJob extends JobImpl {
             return;
         }
 
-        // Skip transit tunnels - they don't have a destination and don't need two-phase expiration
-        // Only track exploratory (isExploratory) and client tunnels (has destination)
-        if (cfg.getDestination() == null && !cfg.getTunnelPool().getSettings().isExploratory()) {
-            return;
-        }
-
         Long tunnelKey = getTunnelKey(cfg);
         if (tunnelKey == null) {
             if (_log.shouldDebug()) {
@@ -125,14 +119,6 @@ public class ExpireLocalTunnelsJob extends JobImpl {
         TunnelExpiration existing = _tunnelExpirations.get(tunnelKey);
         if (existing != null) {
             // Entry already exists, skip duplicate scheduling
-            return;
-        }
-
-        int size = _tunnelExpirations.size();
-        if (size >= 3000) {
-            if (_log.shouldDebug()) {
-                _log.debug("Dropping tunnel expiration scheduling -> " + size + " entries backlogged...");
-            }
             return;
         }
 
@@ -340,6 +326,7 @@ public class ExpireLocalTunnelsJob extends JobImpl {
                         }
                     }
                 }
+                te.clearConfig();
                 removeEntry(te.tunnelKey);
             }
 
@@ -378,6 +365,15 @@ public class ExpireLocalTunnelsJob extends JobImpl {
         }
         if (inProgressCleaned > 0 && _log.shouldInfo()) {
             _log.info("Nuclear cleanup: removed " + inProgressCleaned + " stale in-progress configs from pools");
+        }
+
+        // Cleanup expired tunnels that weren't tracked due to 3000 limit bug
+        int expiredCleaned = 0;
+        for (TunnelPool pool : pools) {
+            expiredCleaned += pool.cleanupExpiredTunnels();
+        }
+        if (expiredCleaned > 0 && _log.shouldInfo()) {
+            _log.info("Expired tunnel cleanup: removed " + expiredCleaned + " expired tunnels from pools");
         }
 
         int remaining = _tunnelExpirations.size();
@@ -426,7 +422,10 @@ public class ExpireLocalTunnelsJob extends JobImpl {
         }
         Long tunnelKey = getTunnelKey(cfg);
         if (tunnelKey != null) {
-            _tunnelExpirations.remove(tunnelKey);
+            TunnelExpiration te = _tunnelExpirations.remove(tunnelKey);
+            if (te != null) {
+                te.clearConfig();
+            }
         }
     }
 
@@ -508,6 +507,15 @@ public class ExpireLocalTunnelsJob extends JobImpl {
                 this.recvTunnelId = null;
                 this.sendTunnelId = null;
             }
+        }
+
+        /**
+         * Clear the config reference to enable timely garbage collection.
+         * This should be called when the tunnel is removed/dropped.
+         * @since 0.9.68+
+         */
+        void clearConfig() {
+            this.config = null;
         }
     }
 }
