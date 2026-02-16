@@ -16,6 +16,7 @@ import net.i2p.router.CommSystemFacade;
 import net.i2p.router.CommSystemFacade.Status;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelManagerFacade;
+import net.i2p.router.tunnel.HopConfig;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateConstants;
 import net.i2p.stat.RateStat;
@@ -748,6 +749,18 @@ class BuildExecutor implements Runnable {
      */
     public void removeFromExpiration(PooledTunnelCreatorConfig cfg) {
         _expireLocalTunnels.removeTunnel(cfg);
+    }
+
+    /**
+     * Remove a participating tunnel from the expiration queue to prevent memory leak.
+     * This is called when IdleTunnelMonitor drops idle tunnels.
+     * @param cfg the hop config to remove from expiration
+     */
+    public void removeFromExpiration(HopConfig cfg) {
+        Long tunnelKey = ExpireLocalTunnelsJob.getTunnelKeyForHop(cfg);
+        if (tunnelKey != null) {
+            _expireLocalTunnels.removeTunnelKey(tunnelKey);
+        }
     }
 
     /**

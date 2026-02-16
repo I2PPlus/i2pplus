@@ -279,6 +279,13 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
                 dispatcher.freeBandwidth(allocated);
             }
 
+            // Remove from expiration tracking to prevent memory leak
+            // This is critical for participating tunnels that are dropped early
+            _context.tunnelManager().removeFromExpirationHop(tunnel);
+
+            // Remove from LeaveTunnel queue to prevent memory leak
+            dispatcher.removeFromExpirationQueue(tunnel);
+
             if (_log.shouldDebug()) {
                 _log.debug("Dropped idle tunnel [" + tunnel.getReceiveTunnelId() +
                           "] -> Messages / Bytes: " + tunnel.getProcessedMessagesCount() +

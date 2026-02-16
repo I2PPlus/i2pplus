@@ -12,6 +12,8 @@ import net.i2p.data.TunnelId;
 import net.i2p.router.JobImpl;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
+import net.i2p.router.tunnel.HopConfig;
+import net.i2p.router.tunnel.TunnelCreatorConfig;
 import net.i2p.util.Log;
 
 /**
@@ -80,6 +82,25 @@ public class ExpireLocalTunnelsJob extends JobImpl {
             return cfg.getInstanceId();
         } catch (Exception e) {
             return cfg.getInstanceId();
+        }
+    }
+
+    /**
+     * Get tunnel key for a HopConfig (participating tunnel)
+     * @param cfg the hop config
+     * @return tunnel key for expiration tracking
+     */
+    public static Long getTunnelKeyForHop(HopConfig cfg) {
+        if (cfg == null) return null;
+        try {
+            TunnelId recvId = cfg.getReceiveTunnel();
+            TunnelId sendId = cfg.getSendTunnel();
+            if (recvId != null && sendId != null && recvId.getTunnelId() != 0 && sendId.getTunnelId() != 0) {
+                return Long.valueOf((recvId.getTunnelId() << 32) | (sendId.getTunnelId() & 0xFFFFFFFFL));
+            }
+            return null;
+        } catch (Exception e) {
+            return null;
         }
     }
 
@@ -421,11 +442,17 @@ public class ExpireLocalTunnelsJob extends JobImpl {
             return;
         }
         Long tunnelKey = getTunnelKey(cfg);
+        removeTunnelKey(tunnelKey);
+    }
+
+    /**
+     * Remove a tunnel from expiration tracking by key.
+     * This is used for participating tunnels (HopConfig) that are dropped early.
+     * @param tunnelKey the tunnel key to remove
+     */
+    public void removeTunnelKey(Long tunnelKey) {
         if (tunnelKey != null) {
-            TunnelExpiration te = _tunnelExpirations.remove(tunnelKey);
-            if (te != null) {
-                te.clearConfig();
-            }
+            _tunnelExpirations.remove(tunnelKey);
         }
     }
 

@@ -17,6 +17,7 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
 import net.i2p.router.TunnelManagerFacade;
 import net.i2p.router.TunnelPoolSettings;
+import net.i2p.router.tunnel.HopConfig;
 import net.i2p.router.tunnel.TunnelDispatcher;
 import net.i2p.stat.RateConstants;
 import net.i2p.util.I2PThread;
@@ -592,6 +593,15 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
     /** Remove a tunnel from the expiration queue to prevent memory leak */
     void removeFromExpiration(PooledTunnelCreatorConfig cfg) {
+        _executor.removeFromExpiration(cfg);
+    }
+
+    /**
+     * Remove a participating tunnel from the expiration queue to prevent memory leak.
+     * This is called when IdleTunnelMonitor drops idle tunnels.
+     * @param cfg the hop config to remove from expiration
+     */
+    public void removeFromExpirationHop(HopConfig cfg) {
         _executor.removeFromExpiration(cfg);
     }
 
