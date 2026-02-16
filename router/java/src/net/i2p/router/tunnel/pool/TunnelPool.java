@@ -2796,10 +2796,16 @@ public class TunnelPool {
         }
 
         Hash destHash = _settings.getDestination().calculateHash();
-        boolean hasLeaseSet = _context.netDb().lookupLeaseSetLocally(destHash) != null;
+        boolean isLocal = _context.clientManager().isLocal(destHash);
+        boolean hasLeaseSet;
+        if (isLocal) {
+            hasLeaseSet = _context.clientNetDb(destHash).lookupLeaseSetLocally(destHash) != null;
+        } else {
+            hasLeaseSet = _context.netDb().lookupLeaseSetLocally(destHash) != null;
+        }
 
         if (!hasLeaseSet && _log.shouldDebug()) {
-            _log.debug("Destination " + toString() + " has no LeaseSet in local network DB");
+            _log.debug("Destination " + toString() + " has no LeaseSet in local network DB (local: " + isLocal + ")");
         }
 
         return hasLeaseSet;
