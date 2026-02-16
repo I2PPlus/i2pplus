@@ -456,6 +456,14 @@ public class TunnelDispatcher implements Service {
             }
         }
         
+        // Clean up _inboundGateways - DO NOT clean here
+        // These are tunnels WE created, cleaned up by ExpireLocalTunnelsJob via tunnelDispatcher().remove()
+        // Cleaning them here prematurely breaks tunnel building
+        
+        // Clean up _outboundGateways - DO NOT clean here
+        // These are tunnels WE created, cleaned up by ExpireLocalTunnelsJob via tunnelDispatcher().remove()
+        // Cleaning them here prematurely breaks tunnel building
+        
         // Clean up _participants - remove participants with expired tunnels
         Iterator<Map.Entry<TunnelId, TunnelParticipant>> partit = _participants.entrySet().iterator();
         while (partit.hasNext()) {
