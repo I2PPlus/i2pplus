@@ -497,8 +497,6 @@ public class JobQueue {
                 // NEVER drop tunnel build messages
                 if (jobName.contains("Tunnel Build")) {return false;}
             }
-            // TestJob has its own dropped() cleanup but let's never drop it to be safe
-            // Let it queue up - better to have pending tests than leaked configs
         }
         return false;
     }
@@ -781,7 +779,7 @@ public class JobQueue {
     /**
      * Interrupt all job runners to break potential deadlocks.
      * Used by RouterWatchdog when stuck runners are detected.
-     * 
+     *
      * @return the number of runners interrupted
      * @since 0.9.68+
      */
@@ -806,7 +804,7 @@ public class JobQueue {
     /**
      * Spawn replacement runners when stuck runners are detected.
      * Adds new runners to ensure queue processing continues.
-     * 
+     *
      * @param count the number of replacement runners to spawn
      * @since 0.9.68+
      */
@@ -837,7 +835,7 @@ public class JobQueue {
     /**
      * Get the number of runners that appear to be stuck (running a job for too long).
      * A runner is considered stuck if it's been running the same job for more than 60 seconds.
-     * 
+     *
      * @return the number of potentially stuck runners
      * @since 0.9.68+
      */
