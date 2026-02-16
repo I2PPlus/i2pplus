@@ -36,6 +36,7 @@ public class TestJob extends JobImpl {
     private final Log _log;
     private final TunnelPool _pool;
     private PooledTunnelCreatorConfig _cfg;
+    private Long _tunnelKey; // Store key for cleanup even if _cfg is nulled
     private boolean _found;
     private TunnelInfo _outTunnel;
     private TunnelInfo _replyTunnel;
@@ -378,7 +379,7 @@ public class TestJob extends JobImpl {
      * Note: This does NOT affect the TOTAL_TEST_JOBS counter.
      */
     private void cleanupTunnelTracking() {
-        Long tunnelKey = getTunnelKey(_cfg);
+        Long tunnelKey = _tunnelKey;
         if (tunnelKey != null) {
             RUNNING_TESTS.remove(tunnelKey, this);
         }
@@ -407,6 +408,7 @@ public class TestJob extends JobImpl {
         super(ctx);
         _log = ctx.logManager().getLog(TestJob.class);
         _cfg = cfg;
+        _tunnelKey = getTunnelKey(cfg); // Store key for cleanup even if _cfg is nulled
         _pool = (pool != null) ? pool : cfg.getTunnelPool();
         if (_pool == null) {
             if (_log.shouldError()) {
@@ -422,7 +424,7 @@ public class TestJob extends JobImpl {
         }
 
         // Register this test as running for the tunnel
-        Long tunnelKey = getTunnelKey(cfg);
+        Long tunnelKey = _tunnelKey;
         if (tunnelKey != null) {
             TestJob existing = RUNNING_TESTS.putIfAbsent(tunnelKey, this);
             if (existing != null) {
@@ -676,6 +678,7 @@ public class TestJob extends JobImpl {
             OnTestTimeout onTimeout = new OnTestTimeout(now);
             OutNetMessage msg = ctx.messageRegistry().registerPending(sel, onReply, onTimeout);
             onReply.setSentMessage(msg);
+            onTimeout.setSentMessage(msg);
 
             boolean sendSuccess = sendTest(m, testPeriod);
             if (!sendSuccess) {
@@ -1110,6 +1113,7 @@ public class TestJob extends JobImpl {
 
     private class OnTestTimeout extends JobImpl {
         private final long _started;
+        private OutNetMessage _sentMessage;
 
         public OnTestTimeout(long now) {
             super(TestJob.this.getContext());
@@ -1117,10 +1121,14 @@ public class TestJob extends JobImpl {
         }
 
         @Override public String getName() { return "Timeout Tunnel Test"; }
+        public void setSentMessage(OutNetMessage m) { _sentMessage = m; }
 
         @Override
         public void runJob() {
             clearTestTags();
+
+            if (_sentMessage != null)
+                getContext().messageRegistry().unregisterPending(_sentMessage);
 
             if (!_found) {
                 testFailed(getContext().clock().now() - _started);
