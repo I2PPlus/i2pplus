@@ -22,10 +22,10 @@ import net.i2p.util.SyntheticREDQueue;
  */
 class ThrottledPumpedTunnelGateway extends PumpedTunnelGateway {
     /** Configuration and statistics for this hop, used to count dropped messages */
-    private final HopConfig _config;
+    private HopConfig _config;
 
     /** Synthetic Random Early Drop queue to estimate bandwidth usage and perform drops */
-    private final SyntheticREDQueue _partBWE;
+    private SyntheticREDQueue _partBWE;
 
     /**
      * Constructs a ThrottledPumpedTunnelGateway with bandwidth throttling.
@@ -108,5 +108,17 @@ class ThrottledPumpedTunnelGateway extends PumpedTunnelGateway {
     @Override
     public String toString() {
         return "IBGW " + _config.getReceiveTunnelId();
+    }
+
+    /**
+     * Destroy this gateway and release all resources.
+     * Nulls references to enable timely garbage collection.
+     * @since 0.9.68+
+     */
+    @Override
+    public void destroy() {
+        super.destroy();
+        _config = null;
+        _partBWE = null;
     }
 }

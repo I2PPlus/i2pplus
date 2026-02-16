@@ -36,9 +36,9 @@ abstract class TunnelGateway {
     protected final RouterContext _context;
     protected final Log _log;
     protected final List<PendingGatewayMessage> _queue;
-    protected final QueuePreprocessor _preprocessor;
-    protected final Sender _sender;
-    protected final Receiver _receiver;
+    protected QueuePreprocessor _preprocessor;
+    protected Sender _sender;
+    protected Receiver _receiver;
     protected long _lastFlush;
     //protected int _flushFrequency;
     protected final DelayedFlush _delayedFlush;// FIXME Exporting non-public type through public API FIXME
@@ -144,6 +144,18 @@ abstract class TunnelGateway {
     }
 
     public int getMessagesSent() { return _messagesSent; }
+
+    /**
+     * Destroy this gateway and release all resources.
+     * Cancels pending timers and clears queues to enable timely garbage collection.
+     * @since 0.9.68+
+     */
+    public void destroy() {
+        _delayedFlush.cancel();
+        _preprocessor = null;
+        _sender = null;
+        _receiver = null;
+    }
 
     /**
      * Interface for sending preprocessed tunnel data.

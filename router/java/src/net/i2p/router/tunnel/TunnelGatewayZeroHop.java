@@ -14,7 +14,7 @@ import net.i2p.router.RouterContext;
  *
  */
 class TunnelGatewayZeroHop extends TunnelGateway {
-    private final TunnelCreatorConfig _config;
+    private TunnelCreatorConfig _config;
     private OutboundMessageDistributor _outDistributor;
     private InboundMessageDistributor _inDistributor;
 
@@ -81,5 +81,18 @@ class TunnelGatewayZeroHop extends TunnelGateway {
             _outDistributor.distribute(msg, toRouter, toTunnel);
         }
        _config.incrementProcessedMessages();
+    }
+
+    /**
+     * Destroy this gateway and release all resources.
+     * Nulls references to enable timely garbage collection.
+     * @since 0.9.68+
+     */
+    @Override
+    public void destroy() {
+        super.destroy();
+        _config = null;
+        _outDistributor = null;
+        _inDistributor = null;
     }
 }

@@ -38,9 +38,9 @@ import net.i2p.util.SystemVersion;
  */
 class PumpedTunnelGateway extends TunnelGateway {
     private final BlockingQueue<PendingGatewayMessage> _prequeue;
-    private final TunnelGatewayPumper _pumper;
+    private TunnelGatewayPumper _pumper;
     public final boolean _isInbound;
-    private final Hash _nextHop;
+    private Hash _nextHop;
 
     private static final int MAX_OB_MSGS_PER_PUMP = SystemVersion.isSlow() ? 64 : 256;
     private static final int MAX_IB_MSGS_PER_PUMP = SystemVersion.isSlow() ? 32 : 128;
@@ -185,6 +185,23 @@ class PumpedTunnelGateway extends TunnelGateway {
         }
 
         return moreMessagesExist;
+    }
+
+    /**
+     * Destroy this gateway and release all resources.
+     * Cancels pending timers, clears queues, and nulls references to enable timely GC.
+     * @since 0.9.68+
+     */
+    @Override
+    public void destroy() {
+        super.destroy();
+        _prequeue.clear();
+        synchronized (_queue) {
+            _queue.clear();
+        }
+        // Help GC by nulling references
+        _pumper = null;
+        _nextHop = null;
     }
 
     /**
