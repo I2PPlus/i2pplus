@@ -112,6 +112,8 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
         }
     }
 
+    private volatile boolean _isShutdown = false;
+
     IdleTunnelMonitor(RouterContext ctx) {
         this._context = ctx;
         this._dispatcher = ctx.tunnelDispatcher();
@@ -126,8 +128,21 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
         }
     }
 
+    /**
+     * Shut down the monitor and clean up resources.
+     */
+    public void shutdown() {
+        _isShutdown = true;
+        _offenseHistory.clear();
+        _ipToPeers.clear();
+        _peerToIP.clear();
+    }
+
     @Override
     public void timeReached() {
+        if (_isShutdown) {
+            return;
+        }
         try {
             scanAndCleanup();
         } catch (Throwable t) {

@@ -33,6 +33,11 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
     private final long _instanceId;
 
     /**
+     * Creation timestamp in ms, used for age-based cleanup as fallback
+     */
+    private final long _creationTime;
+
+    /**
      *  Creates a new instance of PooledTunnelCreatorConfig
      *
      *  @param destination may be null
@@ -43,12 +48,18 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
         _pool = pool;
         _log = ctx.logManager().getLog(PooledTunnelCreatorConfig.class);
         _instanceId = _instanceCounter.incrementAndGet();
+        _creationTime = ctx.clock().now();
     }
 
     /**
      * @return unique instance ID assigned at construction, used for stable key generation
      */
     public long getInstanceId() { return _instanceId; }
+
+    /**
+     * @return creation timestamp in ms, used for age-based cleanup fallback
+     */
+    public long getCreationTime() { return _creationTime; }
 
     /** called from TestJob */
     public void testJobSuccessful(int ms) {testSuccessful(ms);}

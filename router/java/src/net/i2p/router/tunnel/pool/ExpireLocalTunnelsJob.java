@@ -32,17 +32,17 @@ public class ExpireLocalTunnelsJob extends JobImpl {
     private final Log _log;
     private int _runCount = 0;
 
-    private static final long BATCH_WINDOW = 3 * 1000;
-    private static final long FORCED_REQUEUE_TIMEOUT = 2 * BATCH_WINDOW;
+    private static final long BATCH_WINDOW = 5 * 1000;
+    private static final long FORCED_REQUEUE_TIMEOUT = 6 * BATCH_WINDOW;
     private static final long MAX_ACCEPTABLE_LAG = 10 * 1000;
     private static final int BACKED_UP_THRESHOLD = 1000;
     private static final long OB_EARLY_EXPIRE = 30 * 1000;
     private static final long IB_EARLY_EXPIRE = OB_EARLY_EXPIRE + 7500;
     private static final long MAX_ENTRY_LIFETIME = 15 * 1000L; // 15 seconds - aggressive cleanup
     private static final int MAX_PHASE1_RETRIES = 3;
-    private static final int MAX_ITERATE_PER_RUN = 5000;
-    private static final int MAX_ITERATE_BACKED_UP = 10000;
-    private static final int MAX_ITERATE_EMERGENCY = 20000;
+    private static final int MAX_ITERATE_PER_RUN = 10000;
+    private static final int MAX_ITERATE_BACKED_UP = 20000;
+    private static final int MAX_ITERATE_EMERGENCY = 50000;
     private static final int HEALTH_LOG_INTERVAL = 200;
 
     public ExpireLocalTunnelsJob(RouterContext ctx) {
@@ -93,7 +93,7 @@ public class ExpireLocalTunnelsJob extends JobImpl {
         int size = _tunnelExpirations.size();
         if (runCount % HEALTH_LOG_INTERVAL == 0) {
             if (_log.shouldDebug()) {
-                _log.debug("Expire entries: " + size);
+                _log.debug("Expired " + size + " local tunnel entries");
             }
             getContext().statManager().addRateData("tunnel.expireCount", size);
         }
@@ -129,7 +129,7 @@ public class ExpireLocalTunnelsJob extends JobImpl {
         }
 
         int size = _tunnelExpirations.size();
-        if (size >= 500) {
+        if (size >= 3000) {
             if (_log.shouldDebug()) {
                 _log.debug("Dropping tunnel expiration scheduling -> " + size + " entries backlogged...");
             }
@@ -175,24 +175,12 @@ public class ExpireLocalTunnelsJob extends JobImpl {
         long now = getContext().clock().now();
         int startSize = _tunnelExpirations.size();
 
-        // EMERGENCY NUCLEAR DRAIN: If over 500 entries, randomly remove 90%
-        if (startSize >= 500) {
+        // When queue is very large, limit processing to prevent issues
+        if (startSize >= 2000) {
             if (_log.shouldInfo()) {
-                _log.info("Emergency expired local tunnel queue drain:  " + startSize + " entries -> Removing 90%...");
+                _log.info("Large queue: " + startSize + " entries");
             }
-            Iterator<Map.Entry<Long, TunnelExpiration>> nuclearIt = _tunnelExpirations.entrySet().iterator();
-            int removed = 0;
-            while (nuclearIt.hasNext()) {
-                nuclearIt.next();
-                if (getContext().random().nextInt(10) != 0) { // Remove 90%
-                    nuclearIt.remove();
-                    removed++;
-                }
-            }
-            if (_log.shouldInfo()) {
-                _log.info("Completed emergency tunnel queue drain -> Removed " + removed + " entries (Remaining: " + _tunnelExpirations.size() + ")");
-            }
-            startSize = _tunnelExpirations.size();
+            startSize = Math.min(startSize, MAX_ITERATE_EMERGENCY);
         }
 
         boolean isBackedUp = startSize > BACKED_UP_THRESHOLD;
@@ -204,7 +192,7 @@ public class ExpireLocalTunnelsJob extends JobImpl {
         Set<TunnelExpiration> readyToDrop = new HashSet<>();
 
         int maxIterate;
-        if (startSize >= 300) {
+        if (startSize >= 1000) {
             maxIterate = MAX_ITERATE_EMERGENCY;
             if (_log.shouldInfo()) {
                 _log.info("Emergency drainage -> Processing " + startSize + " entries...");
@@ -265,21 +253,20 @@ public class ExpireLocalTunnelsJob extends JobImpl {
 
             int removedCount = 0;
             int failedCount = 0;
-            int forceCleanupCount = 0;
+            int skippedCount = 0;
 
             for (TunnelExpiration te : readyToExpire) {
                 PooledTunnelCreatorConfig cfg = te.config;
                 if (cfg == null) {
-                    removeEntry(te.tunnelKey);
-                    te.phase1Complete = true;
-                    forceCleanupCount++;
+                    // Config already nulled, will be cleaned up in TTL sweep
+                    skippedCount++;
                     continue;
                 }
                 TunnelPool pool = cfg.getTunnelPool();
                 if (pool == null) {
-                    removeEntry(te.tunnelKey);
+                    te.config = null;
                     te.phase1Complete = true;
-                    forceCleanupCount++;
+                    skippedCount++;
                     continue;
                 }
                 boolean removed = false;
@@ -289,13 +276,18 @@ public class ExpireLocalTunnelsJob extends JobImpl {
                     giveUp = true;
                 }
 
-                if (!giveUp) {
-                    try {
-                        removed = pool.removeTunnelSynchronous(cfg);
-                    } catch (Exception e) {
-                        if (_log.shouldWarn()) {
-                            _log.warn("Error in phase 1: " + e.getMessage(), e);
-                        }
+                if (giveUp) {
+                    te.config = null;
+                    te.phase1Complete = true;
+                    skippedCount++;
+                    continue;
+                }
+
+                try {
+                    removed = pool.removeTunnelSynchronous(cfg);
+                } catch (Exception e) {
+                    if (_log.shouldWarn()) {
+                        _log.warn("Error in phase 1: " + e.getMessage(), e);
                     }
                 }
 
@@ -303,23 +295,21 @@ public class ExpireLocalTunnelsJob extends JobImpl {
                     te.config = null;
                     te.phase1Complete = true;
                     removedCount++;
-                    // Note: Don't remove entry here - needed for phase 2 dispatcher.remove()
                 } else {
                     te.retryCount++;
-                    if (te.retryCount >= MAX_PHASE1_RETRIES || giveUp) {
-                        forceCleanupCount++;
-                        removeEntry(te.tunnelKey);
+                    if (te.retryCount >= MAX_PHASE1_RETRIES) {
                         te.config = null;
                         te.phase1Complete = true;
+                        skippedCount++;
                     } else {
                         failedCount++;
                     }
                 }
             }
 
-            if (removedCount > 0 || forceCleanupCount > 0 || failedCount > 0) {
+            if (removedCount > 0 || failedCount > 0 || skippedCount > 0) {
                 if (_log.shouldInfo()) {
-                    _log.info("Phase 1: " + removedCount + " removed, " + forceCleanupCount + " force-cleaned, " + failedCount + " failed");
+                    _log.info("Phase 1: " + removedCount + " removed, " + failedCount + " failed, " + skippedCount + " skipped");
                 }
             }
 
@@ -362,16 +352,15 @@ public class ExpireLocalTunnelsJob extends JobImpl {
             }
         }
 
-        // *** CRITICAL: Hard TTL sweep at end of every run ***
-        // Guarantees no entries live > MAX_ENTRY_LIFETIME regardless of other logic
-        // This is the LEAK KILLER - entries older than TTL are always removed
+        // TTL sweep to remove stale entries
         final long ttlCutoff = now - MAX_ENTRY_LIFETIME;
         int ttlSwept = 0;
         Iterator<Map.Entry<Long, TunnelExpiration>> sweepIt = _tunnelExpirations.entrySet().iterator();
         while (sweepIt.hasNext()) {
             Map.Entry<Long, TunnelExpiration> entry = sweepIt.next();
             TunnelExpiration te = entry.getValue();
-            if (te == null || te.createdAt < ttlCutoff || (te.config == null && te.phase1Complete)) {
+            // Remove: null entry, too old, or config nullified
+            if (te == null || te.createdAt < ttlCutoff || te.config == null) {
                 sweepIt.remove();
                 ttlSwept++;
             }

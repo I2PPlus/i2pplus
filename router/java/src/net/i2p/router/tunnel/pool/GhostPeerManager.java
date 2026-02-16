@@ -6,6 +6,7 @@ import net.i2p.data.Hash;
 import net.i2p.router.RouterContext;
 import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.util.Log;
+import net.i2p.util.SimpleTimer;
 
 /**
  * Tracks routers that consistently fail to respond to tunnel build requests
@@ -27,12 +28,25 @@ public class GhostPeerManager {
     private static final long COOLDOWN_MS = 90*1000; // 90s (normal)
     private static final long ATTACK_COOLDOWN_MS = 60*1000; // 60s (faster recovery during attacks)
     private static final int MAX_TRACKED_PEERS = 8192;
+    private static final long CLEANUP_INTERVAL_MS = 5*60*1000; // 5 minutes
 
     public GhostPeerManager(RouterContext context) {
         _context = context;
         _log = context.logManager().getLog(GhostPeerManager.class);
         _timeoutCounts = new ConcurrentHashMap<Hash, AtomicInteger>(MAX_TRACKED_PEERS);
         _ghostSince = new ConcurrentHashMap<Hash, Long>(MAX_TRACKED_PEERS);
+        context.simpleTimer2().addPeriodicEvent(new CleanupTimer(), CLEANUP_INTERVAL_MS);
+    }
+
+    /**
+     * Periodic cleanup timer to ensure maps don't grow unbounded.
+     */
+    private class CleanupTimer implements SimpleTimer.TimedEvent {
+        @Override
+        public void timeReached() {
+            cleanup();
+            _context.simpleTimer2().addPeriodicEvent(this, CLEANUP_INTERVAL_MS);
+        }
     }
 
     /**
