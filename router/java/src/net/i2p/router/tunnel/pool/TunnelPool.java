@@ -2468,6 +2468,9 @@ public class TunnelPool {
             // Cleanup the dispatcher maps for the removed tunnels
             for (PooledTunnelCreatorConfig cfg : expiredConfigs) {
                 _context.tunnelDispatcher().remove(cfg);
+                _manager.removeFromExpiration(cfg);
+                Long tunnelKey = ExpireLocalTunnelsJob.getTunnelKey(cfg);
+                TestJob.invalidate(tunnelKey);
             }
         }
 

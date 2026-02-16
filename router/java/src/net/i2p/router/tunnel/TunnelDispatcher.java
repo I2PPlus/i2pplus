@@ -3,7 +3,9 @@ package net.i2p.router.tunnel;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -394,6 +396,130 @@ public class TunnelDispatcher implements Service {
     }
 
     /**
+     * Get the number of outbound gateways
+     */
+    public int getOutboundGatewayCount() {
+        return _outboundGateways.size();
+    }
+
+    /**
+     * Get the number of inbound gateways
+     */
+    public int getInboundGatewayCount() {
+        return _inboundGateways.size();
+    }
+
+    /**
+     * Get the number of outbound endpoints
+     */
+    public int getOutboundEndpointCount() {
+        return _outboundEndpoints.size();
+    }
+
+    /**
+     * Clean up expired tunnels from dispatcher maps.
+     * This is a defensive measure to remove tunnels that may have been orphaned
+     * due to race conditions or queue overflow.
+     * @return number of tunnels cleaned up
+     */
+    public int cleanupExpiredTunnels() {
+        int cleaned = 0;
+        long now = _context.clock().now();
+        long cutoff = now - 60000; // 1 minute ago
+        
+        // Clean up _participatingConfig - remove tunnels that have expired
+        Iterator<Map.Entry<TunnelId, HopConfig>> pcit = _participatingConfig.entrySet().iterator();
+        while (pcit.hasNext()) {
+            Map.Entry<TunnelId, HopConfig> entry = pcit.next();
+            HopConfig cfg = entry.getValue();
+            if (cfg != null && cfg.getExpiration() < cutoff) {
+                // Tunnel expired, remove it completely
+                pcit.remove();
+                // Also remove from other maps
+                _participants.remove(entry.getKey());
+                _allocatedBW.addAndGet(0 - cfg.getAllocatedBW());
+                cleaned++;
+                if (_log.shouldDebug()) {
+                    _log.debug("Cleaned up expired participating tunnel: " + entry.getKey());
+                }
+            }
+        }
+        
+        // Clean up _outboundEndpoints - remove expired endpoints
+        Iterator<Map.Entry<TunnelId, OutboundTunnelEndpoint>> oeit = _outboundEndpoints.entrySet().iterator();
+        while (oeit.hasNext()) {
+            Map.Entry<TunnelId, OutboundTunnelEndpoint> entry = oeit.next();
+            HopConfig cfg = _participatingConfig.get(entry.getKey());
+            if (cfg == null || cfg.getExpiration() < cutoff) {
+                oeit.remove();
+                cleaned++;
+            }
+        }
+        
+        // Clean up _participants - remove participants with expired tunnels
+        Iterator<Map.Entry<TunnelId, TunnelParticipant>> partit = _participants.entrySet().iterator();
+        while (partit.hasNext()) {
+            Map.Entry<TunnelId, TunnelParticipant> entry = partit.next();
+            HopConfig cfg = _participatingConfig.get(entry.getKey());
+            if (cfg == null || cfg.getExpiration() < cutoff) {
+                partit.remove();
+                if (entry.getValue() != null) {
+                    entry.getValue().destroy();
+                }
+                cleaned++;
+            }
+        }
+        
+        // Clean up _recentlyExpired - remove old entries
+        int prevSize = _recentlyExpired.size();
+        _recentlyExpired.entrySet().removeIf(e -> e.getValue() < cutoff);
+        int cleanedRecently = prevSize - _recentlyExpired.size();
+        cleaned += cleanedRecently;
+        
+        if ((cleaned - cleanedRecently) > 0 && _log.shouldInfo()) {
+            _log.info("Cleaned up " + cleaned + " expired tunnels from dispatcher maps (recentlyExpired: " + cleanedRecently + ")");
+        }
+        return cleaned;
+    }
+
+    /**
+     * Aggressive cleanup - removes tunnels regardless of expiration.
+     * This is an emergency measure to prevent memory leaks.
+     * @return number of tunnels removed
+     */
+    public int aggressiveCleanup() {
+        int cleaned = 0;
+        long now = _context.clock().now();
+        
+        // Clean up tunnels that have been around too long (potential orphans)
+        // Use creation time if available, otherwise use expiration
+        Iterator<Map.Entry<TunnelId, HopConfig>> pcit = _participatingConfig.entrySet().iterator();
+        while (pcit.hasNext()) {
+            Map.Entry<TunnelId, HopConfig> entry = pcit.next();
+            HopConfig cfg = entry.getValue();
+            if (cfg != null) {
+                // If tunnel is older than 15 minutes, it's likely orphaned
+                long age = now - cfg.getCreation();
+                if (age > 15 * 60 * 1000 || cfg.getExpiration() < now) {
+                    pcit.remove();
+                    _participants.remove(entry.getKey());
+                    _allocatedBW.addAndGet(0 - cfg.getAllocatedBW());
+                    cleaned++;
+                    if (_log.shouldDebug()) {
+                        _log.debug("Aggressive cleanup removed tunnel: " + entry.getKey() + 
+                                   " age=" + (age/60000) + "min expired=" + (cfg.getExpiration() < now));
+                    }
+                }
+            }
+        }
+        
+        if (cleaned > 0 && _log.shouldInfo()) {
+            _log.info("Aggressive cleanup removed " + cleaned + " orphaned tunnels");
+        }
+        return cleaned;
+    }
+
+    /**
      * Diagnostic method to detect potential memory leaks in tunnel dispatcher maps.
      * Call periodically from a maintenance job to catch leaks early.
      *
@@ -473,31 +599,34 @@ public class TunnelDispatcher implements Service {
         }
         if (cfg.isInbound()) {
             TunnelId recvId = cfg.getConfig(cfg.getLength() - 1).getReceiveTunnel();
-            if (_log.shouldInfo())
-                _log.info("Removing our own Inbound tunnel...\n* " + cfg);
-            TunnelParticipant participant = _participants.remove(recvId);
-            if (participant != null) {
-                participant.destroy();
-            }
-            // Always remove from inboundGateways - this was a bug causing memory leak
-            // where gateways were only removed when participant was null
-            TunnelGatewayZeroHop removed = (TunnelGatewayZeroHop) _inboundGateways.remove(recvId);
-            if (removed != null) {
-                removed.destroy();
-                if (_log.shouldDebug()) {
-                    _log.debug("Removed TunnelGatewayZeroHop from inboundGateways: " + recvId);
+            if (recvId == null) {
+                if (_log.shouldWarn()) {
+                    _log.warn("Cannot remove inbound tunnel - receiveTunnel is null: " + cfg);
                 }
-            }
-            // Note: Inbound zero-hop tunnels use TunnelGatewayZeroHop directly,
-            // not PumpedTunnelGateway, so no pumper removal needed
-            if (participant != null) {
-                for (int i = 0; i < cfg.getLength() - 1; i++) {
-                    Hash peer = cfg.getPeer(i);
-                    PeerProfile profile = _context.profileOrganizer().getProfile(peer);
-                    if (profile != null) {
-                        int ok = participant.getCompleteCount();
-                        int fail = participant.getFailedCount();
-                        profile.getTunnelHistory().incrementProcessed(ok, fail);
+            } else {
+                if (_log.shouldInfo())
+                    _log.info("Removing our own Inbound tunnel...\n* " + cfg);
+                TunnelParticipant participant = _participants.remove(recvId);
+                if (participant != null) {
+                    participant.destroy();
+                    // Update peer profiles
+                    for (int i = 0; i < cfg.getLength() - 1; i++) {
+                        Hash peer = cfg.getPeer(i);
+                        PeerProfile profile = _context.profileOrganizer().getProfile(peer);
+                        if (profile != null) {
+                            int ok = participant.getCompleteCount();
+                            int fail = participant.getFailedCount();
+                            profile.getTunnelHistory().incrementProcessed(ok, fail);
+                        }
+                    }
+                }
+                // Always remove from inboundGateways - this was a bug causing memory leak
+                // where gateways were only removed when participant was null
+                TunnelGatewayZeroHop removed = (TunnelGatewayZeroHop) _inboundGateways.remove(recvId);
+                if (removed != null) {
+                    removed.destroy();
+                    if (_log.shouldDebug()) {
+                        _log.debug("Removed TunnelGatewayZeroHop from inboundGateways: " + recvId);
                     }
                 }
             }
@@ -505,17 +634,23 @@ public class TunnelDispatcher implements Service {
             if (_log.shouldInfo())
                 _log.info("Removing our own Outbound tunnel...\n* " + cfg);
             TunnelId outId = cfg.getConfig(0).getSendTunnel();
-            TunnelGateway gw = _outboundGateways.remove(outId);
-            if (gw != null) {
-                // update stats based on gw.getMessagesSent()
-            }
-            // Remove from pumper queues to prevent memory leak
-            if (gw instanceof PumpedTunnelGateway) {
-                _pumper.removeGateway((PumpedTunnelGateway) gw);
-            }
-            // Destroy all gateway types including zero-hop
-            if (gw != null) {
-                gw.destroy();
+            if (outId == null) {
+                if (_log.shouldWarn()) {
+                    _log.warn("Cannot remove outbound tunnel - sendTunnel is null: " + cfg);
+                }
+            } else {
+                TunnelGateway gw = _outboundGateways.remove(outId);
+                if (gw != null) {
+                    // update stats based on gw.getMessagesSent()
+                }
+                // Remove from pumper queues to prevent memory leak
+                if (gw instanceof PumpedTunnelGateway) {
+                    _pumper.removeGateway((PumpedTunnelGateway) gw);
+                }
+                // Destroy all gateway types including zero-hop
+                if (gw != null) {
+                    gw.destroy();
+                }
             }
         }
 

@@ -14,6 +14,7 @@ import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.tunnel.HopConfig;
 import net.i2p.router.tunnel.TunnelCreatorConfig;
+import net.i2p.router.tunnel.TunnelDispatcher;
 import net.i2p.util.Log;
 
 /**
@@ -363,15 +364,25 @@ public class ExpireLocalTunnelsJob extends JobImpl {
         // TTL sweep to remove stale entries
         final long ttlCutoff = now - MAX_ENTRY_LIFETIME;
         int ttlSwept = 0;
+        int ttlCleaned = 0;
         Iterator<Map.Entry<Long, TunnelExpiration>> sweepIt = _tunnelExpirations.entrySet().iterator();
         while (sweepIt.hasNext()) {
             Map.Entry<Long, TunnelExpiration> entry = sweepIt.next();
             TunnelExpiration te = entry.getValue();
             // Remove: null entry, too old, or config nullified
             if (te == null || te.createdAt < ttlCutoff || te.config == null) {
+                // If config was nulled but tunnel not cleaned up, do cleanup now
+                if (te != null && te.config == null) {
+                    if (cleanupUsingTunnelIds(te)) {
+                        ttlCleaned++;
+                    }
+                }
                 sweepIt.remove();
                 ttlSwept++;
             }
+        }
+        if (ttlCleaned > 0 && _log.shouldInfo()) {
+            _log.info("TTL sweep cleaned up " + ttlCleaned + " tunnels from dispatcher");
         }
         if (ttlSwept > 0 && _log.shouldDebug()) {
             _log.debug("TTL sweep removed " + ttlSwept + " stale entries, map now: " + _tunnelExpirations.size());
@@ -395,6 +406,47 @@ public class ExpireLocalTunnelsJob extends JobImpl {
         }
         if (expiredCleaned > 0 && _log.shouldInfo()) {
             _log.info("Expired tunnel cleanup: removed " + expiredCleaned + " expired tunnels from pools");
+        }
+
+        // Additional defensive cleanup: remove tunnels from dispatcher that have no expiration entry
+        // This catches edge cases where tunnels were removed from pools but not from dispatcher
+        int dispatcherCleaned = 0;
+        try {
+            TunnelDispatcher dispatcher = getContext().tunnelDispatcher();
+            // Get stats for debugging
+            int obGwSize = dispatcher.getOutboundGatewayCount();
+            int ibGwSize = dispatcher.getInboundGatewayCount();
+            if (_log.shouldDebug()) {
+                _log.debug("Dispatcher maps: outboundGateways=" + obGwSize + ", inboundGateways=" + ibGwSize + 
+                           ", expirationMap=" + _tunnelExpirations.size());
+            }
+        } catch (Exception e) {
+            // Ignore - this is just for debugging
+        }
+
+        // Additional defensive cleanup: clean up expired tunnels from dispatcher maps
+        try {
+            TunnelDispatcher dispatcher = getContext().tunnelDispatcher();
+            int cleaned = dispatcher.cleanupExpiredTunnels();
+            if (cleaned > 0 && _log.shouldInfo()) {
+                _log.info("Defensive cleanup removed " + cleaned + " expired tunnels from dispatcher");
+            }
+            // Log current state for debugging
+            if (_log.shouldDebug()) {
+                _log.debug("Dispatcher state: participatingConfig=" + 
+                           dispatcher.getParticipatingCount() + ", outboundEndpoints=" +
+                           dispatcher.getOutboundEndpointCount() + ", participants=" +
+                           dispatcher.getParticipatingCount());
+            }
+            // Run aggressive cleanup periodically to catch orphaned tunnels
+            if (_runCount % 10 == 0) {
+                int aggressiveCleaned = dispatcher.aggressiveCleanup();
+                if (aggressiveCleaned > 0 && _log.shouldInfo()) {
+                    _log.info("Aggressive cleanup removed " + aggressiveCleaned + " orphaned tunnels");
+                }
+            }
+        } catch (Exception e) {
+            // Ignore
         }
 
         int remaining = _tunnelExpirations.size();

@@ -835,6 +835,8 @@ class BuildExecutor implements Runnable {
                 // Remove from in-progress list
                 pool.removeFromInProgress(cfg);
             }
+            // Remove from dispatcher as safety measure (may be no-op if not joined)
+            _context.tunnelDispatcher().remove(cfg);
             // Remove from expiration queue
             _expireLocalTunnels.removeTunnel(cfg);
             // Invalidate any test jobs
