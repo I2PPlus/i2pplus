@@ -156,7 +156,7 @@ public class TunnelPool {
         _alive = false;
         _context.statManager().removeRateStat(_rateName);
         synchronized (_inProgress) {_inProgress.clear();}
-        
+
         // Clean up tunnels list to prevent memory leak - configs in this list
         // hold references to HopConfig, peers, crypto material, etc.
         _tunnelsLock.lock();
@@ -172,7 +172,7 @@ public class TunnelPool {
             }
             _tunnels.clear();
         } finally {_tunnelsLock.unlock();}
-        
+
         // Clean up removal queue to prevent memory leak
         TunnelInfo ti;
         while ((ti = _removalQueue.poll()) != null) {
@@ -184,7 +184,7 @@ public class TunnelPool {
                 TestJob.invalidate(tunnelKey);
             }
         }
-        
+
         _consecutiveBuildTimeouts.set(0);
         _concurrentInboundBuilds.set(0);
         _concurrentOutboundBuilds.set(0);
@@ -560,10 +560,22 @@ public class TunnelPool {
       * Get the count of tunnels currently being built for this pool.
       * @return number of tunnels in progress
       * @since 0.9.68+
-      */
+     */
      public int getInProgressCount() {
          synchronized (_inProgress) {return _inProgress.size();}
      }
+
+    /**
+     * Remove a config from in-progress list.
+     * Called by BuildExecutor to clean up stale configs.
+     * @param cfg the config to remove
+     * @return true if removed
+     */
+    boolean removeFromInProgress(PooledTunnelCreatorConfig cfg) {
+        synchronized (_inProgress) {
+            return _inProgress.remove(cfg);
+        }
+    }
 
      /**
       * Check if we can start a new tunnel build for the given direction.
@@ -762,7 +774,7 @@ public class TunnelPool {
                     if (!isUnderAttack && !hasExpiringDuplicate && usableCount > minimumRequired) {
                         // Normal operation: reject duplicate if we have enough alternatives
                         if (_log.shouldWarn()) {
-                            _log.warn("Rejecting new tunnel with duplicate peer sequence -> Keeping existing: " + info);
+                            _log.warn("Rejecting new tunnel with duplicate peer sequence for " + info);
                         }
                         if (info instanceof PooledTunnelCreatorConfig) {
                             ((PooledTunnelCreatorConfig) info).setDuplicate();
@@ -941,6 +953,8 @@ public class TunnelPool {
                 PooledTunnelCreatorConfig cfg = (PooledTunnelCreatorConfig) t;
                 _context.tunnelDispatcher().remove(cfg);
                 _manager.removeFromExpiration(cfg);
+                Long tunnelKey = ExpireLocalTunnelsJob.getTunnelKey(cfg);
+                TestJob.invalidate(tunnelKey);
             }
             _manager.tunnelFailed(); // Signal that we need to update counts
         }
@@ -1001,6 +1015,8 @@ public class TunnelPool {
                 PooledTunnelCreatorConfig cfg = (PooledTunnelCreatorConfig) t;
                 _context.tunnelDispatcher().remove(cfg);
                 _manager.removeFromExpiration(cfg);
+                Long tunnelKey = ExpireLocalTunnelsJob.getTunnelKey(cfg);
+                TestJob.invalidate(tunnelKey);
             }
             _manager.tunnelFailed();
         }
@@ -1178,8 +1194,8 @@ public class TunnelPool {
 
         // Remove duplicates from pool without counting as failures (duplicates are valid tunnels)
         for (TunnelInfo t : toRemove) {
-            if (_log.shouldWarn()) {
-                _log.warn("Removing duplicate peer sequence tunnel from " + toString() + ": " + t);
+            if (_log.shouldInfo()) {
+                _log.info("Removing duplicate peer sequence tunnel from " + toString());
             }
             if (t instanceof PooledTunnelCreatorConfig) {
                 ((PooledTunnelCreatorConfig) t).setDuplicate();
@@ -1197,8 +1213,8 @@ public class TunnelPool {
 
         boolean queued = _removalQueue.offer(info);
         if (!queued) {
-            if (_log.shouldWarn()) {
-                _log.warn("Removal queue full, performing synchronous removal: " + info);
+            if (_log.shouldInfo()) {
+                _log.info("Removal queue full, performing synchronous removal: " + info);
             }
             if (info instanceof PooledTunnelCreatorConfig) {
                 PooledTunnelCreatorConfig cfg = (PooledTunnelCreatorConfig) info;
@@ -1272,7 +1288,8 @@ public class TunnelPool {
      *  @param cfg the tunnel to remove
      */
     private void fail(TunnelInfo cfg) {
-        if (_log.shouldWarn()) {_log.warn("Tunnel build failed -> " + cfg);}
+        long uptime = _context.router().getUptime();
+        if (_log.shouldWarn() && uptime > 10*60*1000) {_log.warn("Tunnel build failed -> " + cfg);}
 
         removeTunnel(cfg);
         _manager.tunnelFailed();
@@ -1529,6 +1546,10 @@ public class TunnelPool {
             processRemovalStats(java.util.Collections.singletonList(info));
             if (info instanceof PooledTunnelCreatorConfig) {
                 PooledTunnelCreatorConfig cfg = (PooledTunnelCreatorConfig) info;
+                // Remove from dispatcher maps to prevent memory leak
+                // This ensures OutboundSender, OutboundReceiver, OutboundGatewayProcessor,
+                // and PumpedTunnelGateway are properly cleaned up
+                _context.tunnelDispatcher().remove(cfg);
                 Long tunnelKey = ExpireLocalTunnelsJob.getTunnelKey(cfg);
                 TestJob.invalidate(tunnelKey);
                 _manager.removeFromExpiration(cfg);
@@ -1619,10 +1640,14 @@ public class TunnelPool {
 
             if (actuallyRemoved == 0) {return;}
 
-            // Remove tunnels from expiration queue and TestJob references to prevent memory leak
+            // Remove tunnels from expiration queue, TestJob references, and dispatcher maps to prevent memory leak
             for (TunnelInfo info : toRemove) {
                 if (info instanceof PooledTunnelCreatorConfig) {
                     PooledTunnelCreatorConfig cfg = (PooledTunnelCreatorConfig) info;
+                    // Remove from dispatcher maps - this is critical to prevent memory leak!
+                    // Without this, OutboundSender, OutboundReceiver, OutboundGatewayProcessor,
+                    // and PumpedTunnelGateway objects remain in memory
+                    _context.tunnelDispatcher().remove(cfg);
                     Long tunnelKey = ExpireLocalTunnelsJob.getTunnelKey(cfg);
                     TestJob.invalidate(tunnelKey);
                     _manager.removeFromExpiration(cfg);
@@ -2349,9 +2374,13 @@ public class TunnelPool {
         // Collect configs to clean up BEFORE removing from _inProgress
         List<PooledTunnelCreatorConfig> toCleanup = new ArrayList<>();
 
+        // Maximum time a tunnel build can be in progress before being considered stale
+        // Reduced from 5 minutes to 3 minutes for faster cleanup
+        final long STALE_BUILD_TIMEOUT = 3 * 60 * 1000; // 3 minutes
+
         synchronized (_inProgress) {
-            // HARD CAP: Never exceed 5000
-            while (_inProgress.size() > 5000) {
+            // HARD CAP: Never exceed 1000 to prevent memory growth
+            while (_inProgress.size() > 1000) {
                 if (!_inProgress.isEmpty()) {
                     PooledTunnelCreatorConfig cfg = _inProgress.remove(0);
                     toCleanup.add(cfg);
@@ -2366,7 +2395,20 @@ public class TunnelPool {
             Iterator<PooledTunnelCreatorConfig> it = _inProgress.iterator();
             while (it.hasNext()) {
                 PooledTunnelCreatorConfig cfg = it.next();
-                if (cfg.getExpiration() < now) {
+                // Clean up by expiration time OR by staleness (build taking too long)
+                long expiration = cfg.getExpiration();
+                // Get creation time from first hop config
+                long creation = 0;
+                try {
+                    HopConfig hop = cfg.getConfig(0);
+                    if (hop != null) {
+                        creation = hop.getCreation();
+                    }
+                } catch (Exception e) {
+                    // Ignore
+                }
+                long age = (creation > 0) ? (now - creation) : Long.MAX_VALUE;
+                if (expiration < now || age > STALE_BUILD_TIMEOUT) {
                     it.remove();
                     toCleanup.add(cfg);
                     removed++;
