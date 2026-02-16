@@ -438,11 +438,39 @@ public class ExpireLocalTunnelsJob extends JobImpl {
                            dispatcher.getOutboundEndpointCount() + ", participants=" +
                            dispatcher.getParticipatingCount());
             }
-            // Run aggressive cleanup periodically to catch orphaned tunnels
-            if (_runCount % 10 == 0) {
+            // Run aggressive cleanup only when there's clear evidence of a memory leak
+            // Large discrepancy between dispatcher maps and expiration map indicates a problem
+            int obGw = dispatcher.getOutboundGatewayCount();
+            int ibGw = dispatcher.getInboundGatewayCount();
+            int participating = dispatcher.getParticipatingCount();
+            int expirationMap = _tunnelExpirations.size();
+            
+            // Only run aggressive cleanup if there's a significant discrepancy OR very high tunnel counts
+            boolean needsAggressive = (obGw > expirationMap + 500) || (ibGw > expirationMap + 500) || 
+                                      (participating > 2000 && _runCount % 20 == 0);
+            if (needsAggressive) {
                 int aggressiveCleaned = dispatcher.aggressiveCleanup();
                 if (aggressiveCleaned > 0 && _log.shouldInfo()) {
-                    _log.info("Aggressive cleanup removed " + aggressiveCleaned + " orphaned tunnels");
+                    _log.info("Aggressive cleanup removed " + aggressiveCleaned + " orphaned tunnels (OB:" + obGw + " IB:" + ibGw + " part:" + participating + " exp:" + expirationMap + ")");
+                }
+                // After aggressive cleanup, force TTL sweep to clean up the expiration queue
+                // Aggressive cleanup removes from dispatcher but NOT from the queue
+                final long ttlCutoff = now - MAX_ENTRY_LIFETIME;
+                int queueCleaned = 0;
+                Iterator<Map.Entry<Long, TunnelExpiration>> queueIt = _tunnelExpirations.entrySet().iterator();
+                while (queueIt.hasNext()) {
+                    Map.Entry<Long, TunnelExpiration> entry = queueIt.next();
+                    TunnelExpiration te = entry.getValue();
+                    if (te == null || te.createdAt < ttlCutoff || te.config == null) {
+                        if (te != null && te.config == null) {
+                            cleanupUsingTunnelIds(te);
+                            queueCleaned++;
+                        }
+                        queueIt.remove();
+                    }
+                }
+                if (queueCleaned > 0 && _log.shouldInfo()) {
+                    _log.info("Aggressive cleanup queue sweep removed " + queueCleaned + " stale entries");
                 }
             }
         } catch (Exception e) {

@@ -563,64 +563,8 @@ public class TunnelDispatcher implements Service {
             }
         }
 
-        // Clean up ALL expired outbound gateways
-        // Note: Outbound gateways are keyed by send tunnel ID, but participating configs are keyed by receive tunnel ID
-        // So we can't reliably match them - clean up expired entries and those without matching configs
-        Iterator<Map.Entry<TunnelId, TunnelGateway>> obit = _outboundGateways.entrySet().iterator();
-        while (obit.hasNext()) {
-            Map.Entry<TunnelId, TunnelGateway> entry = obit.next();
-            TunnelGateway gw = entry.getValue();
-            // Check for matching participating config (keyed by receive tunnel ID, so unlikely to match)
-            HopConfig cfg = _participatingConfig.get(entry.getKey());
-            // Remove if: has matching config and expired, OR no matching config (likely orphaned client tunnel)
-            if ((cfg != null && cfg.getExpiration() < now) || cfg == null) {
-                if (gw instanceof PumpedTunnelGateway) {
-                    _pumper.removeGateway((PumpedTunnelGateway) gw);
-                }
-                gw.destroy();
-                obit.remove();
-                cleaned++;
-            }
-        }
+        // Outbound/inbound gateway cleanup - handled by cleanupExpiredTunnels() and ExpireLocalTunnelsJob
 
-        // Clean up orphaned inbound gateways
-        // Note: Inbound gateways are keyed by receive tunnel ID, but participating configs are also keyed by receive tunnel ID
-        // However, for multi-hop tunnels the keys may not match due to different hop indexing
-        Iterator<Map.Entry<TunnelId, TunnelGateway>> ibit = _inboundGateways.entrySet().iterator();
-        while (ibit.hasNext()) {
-            Map.Entry<TunnelId, TunnelGateway> entry = ibit.next();
-            TunnelGateway gw = entry.getValue();
-            HopConfig cfg = _participatingConfig.get(entry.getKey());
-            // Remove if: has matching config and expired, OR no matching config (likely orphaned client tunnel)
-            if ((cfg != null && cfg.getExpiration() < now) || cfg == null) {
-                if (gw instanceof PumpedTunnelGateway) {
-                    _pumper.removeGateway((PumpedTunnelGateway) gw);
-                }
-                if (gw != null) {
-                    gw.destroy();
-                }
-                ibit.remove();
-                cleaned++;
-            }
-        }
-
-        // Clean up orphaned outbound endpoints
-        // Note: Outbound endpoints are keyed by receive tunnel ID, but may not match participating config keys
-        Iterator<Map.Entry<TunnelId, OutboundTunnelEndpoint>> oeit = _outboundEndpoints.entrySet().iterator();
-        while (oeit.hasNext()) {
-            Map.Entry<TunnelId, OutboundTunnelEndpoint> entry = oeit.next();
-            OutboundTunnelEndpoint ep = entry.getValue();
-            HopConfig cfg = _participatingConfig.get(entry.getKey());
-            // Remove if: has matching config and expired, OR no matching config (likely orphaned client tunnel)
-            if ((cfg != null && cfg.getExpiration() < now) || cfg == null) {
-                if (ep != null) {
-                    ep.destroy();
-                }
-                oeit.remove();
-                cleaned++;
-            }
-        }
-        
         if (cleaned > 0 && _log.shouldInfo()) {
             _log.info("Aggressive cleanup removed " + cleaned + " orphaned tunnels");
         }
