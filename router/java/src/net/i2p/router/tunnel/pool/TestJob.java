@@ -35,7 +35,7 @@ import net.i2p.util.SystemVersion;
 public class TestJob extends JobImpl {
     private final Log _log;
     private final TunnelPool _pool;
-    private final PooledTunnelCreatorConfig _cfg;
+    private PooledTunnelCreatorConfig _cfg;
     private boolean _found;
     private TunnelInfo _outTunnel;
     private TunnelInfo _replyTunnel;
@@ -126,6 +126,33 @@ public class TestJob extends JobImpl {
      * Key: pool identifier, Value: number of running tests in that pool
      */
     private static final ConcurrentHashMap<String, AtomicInteger> POOL_TEST_COUNTS = new ConcurrentHashMap<>();
+
+    /**
+     * Periodic cleanup of stale entries in static maps.
+     * Called from TunnelPoolManager to prevent memory leaks.
+     * @return number of entries cleaned up
+     */
+    public static int cleanup() {
+        int cleaned = 0;
+        // Clean up POOL_TEST_COUNTS with zero or negative counts
+        for (String poolId : POOL_TEST_COUNTS.keySet()) {
+            AtomicInteger count = POOL_TEST_COUNTS.get(poolId);
+            if (count != null && count.get() <= 0) {
+                POOL_TEST_COUNTS.remove(poolId);
+                cleaned++;
+            }
+        }
+        return cleaned;
+    }
+
+    /**
+     * Get stats for debugging memory issues.
+     */
+    public static String getStats() {
+        return "TestJob stats: RUNNING_TESTS=" + RUNNING_TESTS.size() +
+               ", POOL_TEST_COUNTS=" + POOL_TEST_COUNTS.size() +
+               ", TOTAL_TEST_JOBS=" + TOTAL_TEST_JOBS.get();
+    }
 
     /**
      * Get the total number of TestJob instances (active + queued) using atomic counter.
@@ -319,9 +346,29 @@ public class TestJob extends JobImpl {
      */
     public static void invalidate(Long tunnelKey) {
         if (tunnelKey == null) return;
-        TestJob job = RUNNING_TESTS.get(tunnelKey);
+        TestJob job = RUNNING_TESTS.remove(tunnelKey);
         if (job != null) {
             job._valid = false;
+            job._cfg = null;
+            job._outTunnel = null;
+            job._replyTunnel = null;
+            job._otherTunnel = null;
+            // Clean up pool test count tracking
+            TunnelPool pool = job._pool;
+            if (pool != null) {
+                String poolId = getPoolId(pool);
+                AtomicInteger poolCount = POOL_TEST_COUNTS.get(poolId);
+                if (poolCount != null) {
+                    poolCount.decrementAndGet();
+                    if (poolCount.get() <= 0) {
+                        POOL_TEST_COUNTS.remove(poolId);
+                    }
+                }
+            }
+            // Decrement total jobs counter
+            if (job._counted.compareAndSet(true, false)) {
+                decrementTotalJobs();
+            }
         }
     }
 
@@ -350,8 +397,7 @@ public class TestJob extends JobImpl {
             }
         }
 
-        // CRITICAL: Null out tunnel references to prevent memory leak
-        // TestJob holds PooledTunnelCreatorConfig references in _outTunnel and _replyTunnel
+        _cfg = null;
         _outTunnel = null;
         _replyTunnel = null;
         _otherTunnel = null;
@@ -416,6 +462,8 @@ public class TestJob extends JobImpl {
 
     @Override
     public void runJob() {
+        if (_cfg == null) {return;}
+
         final RouterContext ctx = getContext();
         if (_pool == null || !_pool.isAlive()) {
             cleanupTunnelTracking();
@@ -782,6 +830,7 @@ public class TestJob extends JobImpl {
     }
 
     private int getDelay() {
+        if (_cfg == null) {return 0;}
         // During attacks: use slightly lower base delay to test more frequently
         // but not too aggressive to avoid overwhelming the system
         boolean isUnderAttack = getContext().profileOrganizer().isLowBuildSuccess();
@@ -1086,6 +1135,8 @@ public class TestJob extends JobImpl {
     }
 
     private SessionKeyManager getSessionKeyManager() {
+        if (_cfg == null) {return null;}
+
         final RouterContext ctx = getContext();
         if (_cfg.isInbound() && !_pool.getSettings().isExploratory()) {
             return ctx.clientManager() != null ?

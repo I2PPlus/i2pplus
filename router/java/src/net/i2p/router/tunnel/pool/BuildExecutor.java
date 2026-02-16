@@ -252,28 +252,44 @@ class BuildExecutor implements Runnable {
 
         // Constants for expiration calculations
         final long TEN_MINUTES_MS = 10 * 60 * 1000;
+        final long MAX_CONFIG_AGE = 15 * 60 * 1000; // 15 minutes max age for configs (fallback)
         final long expireRecentlyBefore = now + TEN_MINUTES_MS - BuildRequestor.REQUEST_TIMEOUT + GRACE_PERIOD;
         final long expireBefore = now + TEN_MINUTES_MS - BuildRequestor.REQUEST_TIMEOUT;
 
-        // Expire really old build requests from recentlyBuilding map
-        // Aggressive cleanup: iterate and remove all expired entries
+        // Expire old build requests from recentlyBuilding map
         int recentlyCleaned = 0;
+        int recentlyLeaked = 0;
         for (Iterator<Long> iter = _recentlyBuildingMap.keySet().iterator(); iter.hasNext(); ) {
             Long key = iter.next();
             PooledTunnelCreatorConfig cfg = _recentlyBuildingMap.get(key);
-            // Remove if cfg is null OR if the tunnel has expired
-            if (cfg == null || cfg.getExpiration() <= expireRecentlyBefore) {
+            if (cfg == null) {
                 iter.remove();
                 recentlyCleaned++;
+                continue;
+            }
+            boolean expired = cfg.getExpiration() <= expireRecentlyBefore;
+            boolean tooOld = (now - cfg.getCreationTime()) > MAX_CONFIG_AGE;
+            if (expired || tooOld) {
+                iter.remove();
+                recentlyCleaned++;
+                if (tooOld && !expired) {
+                    recentlyLeaked++;
+                }
+                cleanupConfig(cfg);
             }
         }
-        // Log if we cleaned a lot (potential memory issue indicator)
-        if (recentlyCleaned > 100 && _log.shouldInfo()) {
-            _log.info("Cleaned " + recentlyCleaned + " expired entries from _recentlyBuildingMap, remaining: " + _recentlyBuildingMap.size());
+        if (recentlyCleaned > 0) {
+            if (_log.shouldDebug()) {
+                _log.debug("Cleaned " + recentlyCleaned + " expired entries from _recentlyBuildingMap, remaining: " + _recentlyBuildingMap.size());
+            }
+            if (recentlyLeaked > 0 && _log.shouldWarn()) {
+                _log.warn("Detected " + recentlyLeaked + " potentially leaked configs (age-based) in _recentlyBuildingMap");
+            }
         }
 
-        // Aggressive cleanup of currentlyBuilding map if it gets too large
+        // Cleanup currentlyBuilding map if too large
         int currentlyCleaned = 0;
+        int currentlyLeaked = 0;
         if (_currentlyBuildingMap.size() > getMaxConcurrentBuilds() * 2) {
             for (Iterator<Long> iter = _currentlyBuildingMap.keySet().iterator(); iter.hasNext(); ) {
                 Long key = iter.next();
@@ -285,20 +301,31 @@ class BuildExecutor implements Runnable {
                 }
                 long adaptiveTimeout = calculateAdaptiveTimeout(cfg);
                 long adjustedExpireBefore = now + TEN_MINUTES_MS - adaptiveTimeout;
-                if (cfg.getExpiration() <= now || cfg.getExpiration() <= adjustedExpireBefore) {
+                boolean expired = cfg.getExpiration() <= now || cfg.getExpiration() <= adjustedExpireBefore;
+                boolean tooOld = (now - cfg.getCreationTime()) > MAX_CONFIG_AGE;
+                if (expired || tooOld) {
                     iter.remove();
                     currentlyCleaned++;
+                    if (tooOld && !expired) {
+                        currentlyLeaked++;
+                    }
+                    cleanupConfig(cfg);
                 }
             }
-            if (currentlyCleaned > 50 && _log.shouldInfo()) {
-                _log.info("Aggressive cleanup: removed " + currentlyCleaned + " stale entries from _currentlyBuildingMap, remaining: " + _currentlyBuildingMap.size());
+            if (currentlyCleaned > 0) {
+                if (_log.shouldDebug()) {
+                    _log.debug("Cleaned " + currentlyCleaned + " stale entries from _currentlyBuildingMap, remaining: " + _currentlyBuildingMap.size());
+                }
+                if (currentlyLeaked > 0 && _log.shouldWarn()) {
+                    _log.warn("Detected " + currentlyLeaked + " potentially leaked configs (age-based) in _currentlyBuildingMap");
+                }
             }
         }
 
         List<PooledTunnelCreatorConfig> expired = null;
 
         // Expire old build requests from currentlyBuilding map, move them to recentlyBuilding
-        // Enhanced with adaptive timeout handling
+        // Enhanced with adaptive timeout handling + age-based fallback
         for (Iterator<Long> iter = _currentlyBuildingMap.keySet().iterator(); iter.hasNext(); ) {
             Long key = iter.next();
             PooledTunnelCreatorConfig cfg = _currentlyBuildingMap.get(key);
@@ -308,8 +335,10 @@ class BuildExecutor implements Runnable {
             }
             long adaptiveTimeout = calculateAdaptiveTimeout(cfg);
             long adjustedExpireBefore = now + TEN_MINUTES_MS - adaptiveTimeout;
+            boolean isExpired = cfg.getExpiration() <= now || cfg.getExpiration() <= adjustedExpireBefore;
+            boolean isTooOld = (now - cfg.getCreationTime()) > MAX_CONFIG_AGE;
 
-            if (cfg.getExpiration() <= now || cfg.getExpiration() <= adjustedExpireBefore) {
+            if (isExpired || isTooOld) {
                 PooledTunnelCreatorConfig existingCfg = _recentlyBuildingMap.putIfAbsent(key, cfg);
                 iter.remove();  // Always remove from currentlyBuilding after attempting to move
                 if (existingCfg == null) {
@@ -382,8 +411,36 @@ class BuildExecutor implements Runnable {
             allowed *= 4;
         }
 
+        // Periodic cleanup of in-progress configs to prevent memory leaks
+        long cleanupInterval = 5 * 1000;
+        if (now - _lastInProgressCleanup > cleanupInterval) {
+            _lastInProgressCleanup = now;
+            List<TunnelPool> pools = new ArrayList<>();
+            _manager.listPools(pools);
+            for (TunnelPool pool : pools) {
+                pool.cleanupInProgress();
+            }
+        }
+
+        // Leak detection - warn if maps are growing unexpectedly
+        if (now - _lastLeakCheck > 5 * 60 * 1000) { // Check every 5 minutes
+            _lastLeakCheck = now;
+            int currentlySize = _currentlyBuildingMap.size();
+            int recentlySize = _recentlyBuildingMap.size();
+            int maxExpected = getMaxConcurrentBuilds() * 2;
+            if (currentlySize > maxExpected && _log.shouldWarn()) {
+                _log.warn("LEAK DETECTION: _currentlyBuildingMap size " + currentlySize + " exceeds expected max " + maxExpected);
+            }
+            if (recentlySize > maxExpected * 2 && _log.shouldWarn()) {
+                _log.warn("LEAK DETECTION: _recentlyBuildingMap size " + recentlySize + " exceeds expected max " + (maxExpected * 2));
+            }
+        }
+
         return allowed;
     }
+
+    private volatile long _lastInProgressCleanup = 0;
+    private volatile long _lastLeakCheck = 0;
 
     /**
      * Starts the tunnel building process in a loop and takes care of error handling.
@@ -611,9 +668,10 @@ class BuildExecutor implements Runnable {
         long id = cfg.getReplyMessageId();
         if (id > 0) {
             synchronized (_recentBuildIds) {
-                // every so often, shrink the list semi-efficiently
-                if (_recentBuildIds.size() > 98) {
-                    for (int i = 0; i < 32; i++) {_recentBuildIds.remove(0);}
+                // Aggressive cleanup to prevent unbounded growth
+                // Keep list bounded to max 256 entries
+                while (_recentBuildIds.size() > 256) {
+                    _recentBuildIds.remove(0);
                 }
                 _recentBuildIds.add(Long.valueOf(id));
             }
@@ -736,6 +794,9 @@ class BuildExecutor implements Runnable {
         }
         rv = _recentlyBuildingMap.remove(key);
         if (rv != null) {
+            synchronized (_recentBuildIds) {
+                _recentBuildIds.remove(key);
+            }
             long requestedOn = rv.getExpiration() - 10*60*1000;
             long rtt = _context.clock().now() - requestedOn;
             _context.statManager().addRateData("tunnel.buildReplySlow", rtt);
@@ -744,6 +805,35 @@ class BuildExecutor implements Runnable {
             }
         }
         return rv;
+    }
+
+    /**
+     * Clean up a PooledTunnelCreatorConfig when it's removed from building maps.
+     * This prevents memory leaks by ensuring the config is removed from:
+     * - Tunnel pool in-progress list
+     * - Expiration queue
+     * - TestJob tracking
+     */
+    private void cleanupConfig(PooledTunnelCreatorConfig cfg) {
+        if (cfg == null) return;
+        try {
+            TunnelPool pool = cfg.getTunnelPool();
+            if (pool != null) {
+                // Remove from in-progress list
+                pool.removeFromInProgress(cfg);
+            }
+            // Remove from expiration queue
+            _expireLocalTunnels.removeTunnel(cfg);
+            // Invalidate any test jobs
+            Long tunnelKey = ExpireLocalTunnelsJob.getTunnelKey(cfg);
+            if (tunnelKey != null) {
+                TestJob.invalidate(tunnelKey);
+            }
+        } catch (Exception e) {
+            if (_log.shouldWarn()) {
+                _log.warn("Error cleaning up config: " + e.getMessage());
+            }
+        }
     }
 
 }
