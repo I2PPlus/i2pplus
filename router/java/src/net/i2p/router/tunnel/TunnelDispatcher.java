@@ -590,6 +590,17 @@ public class TunnelDispatcher implements Service {
     }
 
     /**
+     * Remove a HopConfig from the LeaveTunnel queue to prevent memory leak.
+     * This is called when tunnels are dropped early (e.g., by IdleTunnelMonitor).
+     * @param cfg the hop config to remove from the expiration queue
+     */
+    public void removeFromExpirationQueue(HopConfig cfg) {
+        if (cfg != null) {
+            _leaveJob.remove(cfg);
+        }
+    }
+
+    /**
      * Remove tunnel from all dispatcher maps using tunnel ID.
      * Used by ExpireLocalTunnelsJob when config is no longer available.
      * @param tunnelId the tunnel ID to remove
@@ -962,6 +973,17 @@ public class TunnelDispatcher implements Service {
 
         public void clear() {
             _configs.clear();
+        }
+
+        /**
+         * Remove a specific HopConfig from the queue to prevent memory leak.
+         * This is called when tunnels are dropped early (e.g., by IdleTunnelMonitor).
+         * @param cfg the hop config to remove
+         */
+        public void remove(HopConfig cfg) {
+            if (cfg != null) {
+                _configs.remove(cfg);
+            }
         }
 
         public String getName() {
