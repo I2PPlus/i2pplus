@@ -68,6 +68,7 @@ class OutboundTunnelEndpoint {
         if (_handler != null) {
             _handler.destroy();
         }
+        _corruptTimestamps.clear();
     }
 
     public void dispatch(TunnelDataMessage msg, Hash recvFrom) {
