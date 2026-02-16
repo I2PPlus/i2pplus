@@ -113,7 +113,7 @@ public class TunnelDispatcher implements Service {
     private static final long RECENT_EXPIRY_WINDOW_MS = 5_000;
 
     /** Max pending configs in LeaveTunnel queue to prevent unbounded growth */
-    private static final int MAX_PENDING_CONFIGS = 10000;
+    private static final int MAX_PENDING_CONFIGS = 50000;
 
     /** Location in the tunnel for RED logic */
     public enum Location { OBEP, PARTICIPANT, IBGW }
@@ -425,7 +425,7 @@ public class TunnelDispatcher implements Service {
     public int cleanupExpiredTunnels() {
         int cleaned = 0;
         long now = _context.clock().now();
-        long cutoff = now - 60000; // 1 minute ago
+        long cutoff = now - 30000; // 30 seconds ago - more aggressive cleanup
         
         // Clean up _participatingConfig - remove tunnels that have expired
         Iterator<Map.Entry<TunnelId, HopConfig>> pcit = _participatingConfig.entrySet().iterator();
@@ -456,13 +456,55 @@ public class TunnelDispatcher implements Service {
             }
         }
         
-        // Clean up _inboundGateways - DO NOT clean here
-        // These are tunnels WE created, cleaned up by ExpireLocalTunnelsJob via tunnelDispatcher().remove()
-        // Cleaning them here prematurely breaks tunnel building
-        
-        // Clean up _outboundGateways - DO NOT clean here
-        // These are tunnels WE created, cleaned up by ExpireLocalTunnelsJob via tunnelDispatcher().remove()
-        // Cleaning them here prematurely breaks tunnel building
+        // Clean up _inboundGateways - clean up expired zero-hop gateways
+        // These are tunnels WE created (zero-hop client tunnels)
+        Iterator<Map.Entry<TunnelId, TunnelGateway>> ibit = _inboundGateways.entrySet().iterator();
+        while (ibit.hasNext()) {
+            Map.Entry<TunnelId, TunnelGateway> entry = ibit.next();
+            TunnelGateway gw = entry.getValue();
+            if (gw instanceof TunnelGatewayZeroHop) {
+                TunnelGatewayZeroHop zeroHop = (TunnelGatewayZeroHop) gw;
+                TunnelCreatorConfig cfg = zeroHop.getConfig();
+                if (cfg != null && cfg.getExpiration() < cutoff) {
+                    gw.destroy();
+                    ibit.remove();
+                    cleaned++;
+                }
+            } else if (gw instanceof PumpedTunnelGateway) {
+                // Multi-hop inbound gateway - check participating config
+                HopConfig cfg = _participatingConfig.get(entry.getKey());
+                if (cfg != null && cfg.getExpiration() < cutoff) {
+                    _pumper.removeGateway((PumpedTunnelGateway) gw);
+                    gw.destroy();
+                    ibit.remove();
+                    cleaned++;
+                }
+            }
+        }
+
+        // Clean up _outboundGateways - clean up expired zero-hop gateways
+        Iterator<Map.Entry<TunnelId, TunnelGateway>> obit = _outboundGateways.entrySet().iterator();
+        while (obit.hasNext()) {
+            Map.Entry<TunnelId, TunnelGateway> entry = obit.next();
+            TunnelGateway gw = entry.getValue();
+            if (gw instanceof TunnelGatewayZeroHop) {
+                TunnelGatewayZeroHop zeroHop = (TunnelGatewayZeroHop) gw;
+                TunnelCreatorConfig cfg = zeroHop.getConfig();
+                if (cfg != null && cfg.getExpiration() < cutoff) {
+                    gw.destroy();
+                    obit.remove();
+                    cleaned++;
+                }
+            } else if (gw instanceof PumpedTunnelGateway) {
+                HopConfig cfg = _participatingConfig.get(entry.getKey());
+                if (cfg != null && cfg.getExpiration() < cutoff) {
+                    _pumper.removeGateway((PumpedTunnelGateway) gw);
+                    gw.destroy();
+                    obit.remove();
+                    cleaned++;
+                }
+            }
+        }
         
         // Clean up _participants - remove participants with expired tunnels
         Iterator<Map.Entry<TunnelId, TunnelParticipant>> partit = _participants.entrySet().iterator();
@@ -506,9 +548,9 @@ public class TunnelDispatcher implements Service {
             Map.Entry<TunnelId, HopConfig> entry = pcit.next();
             HopConfig cfg = entry.getValue();
             if (cfg != null) {
-                // If tunnel is older than 15 minutes, it's likely orphaned
+                // If tunnel is older than 10 minutes, it's likely orphaned (reduced from 15)
                 long age = now - cfg.getCreation();
-                if (age > 15 * 60 * 1000 || cfg.getExpiration() < now) {
+                if (age > 10 * 60 * 1000 || cfg.getExpiration() < now) {
                     pcit.remove();
                     _participants.remove(entry.getKey());
                     _allocatedBW.addAndGet(0 - cfg.getAllocatedBW());
@@ -518,6 +560,64 @@ public class TunnelDispatcher implements Service {
                                    " age=" + (age/60000) + "min expired=" + (cfg.getExpiration() < now));
                     }
                 }
+            }
+        }
+
+        // Clean up ALL expired outbound gateways
+        // Note: Outbound gateways are keyed by send tunnel ID, but participating configs are keyed by receive tunnel ID
+        // So we can't reliably match them - clean up expired entries and those without matching configs
+        Iterator<Map.Entry<TunnelId, TunnelGateway>> obit = _outboundGateways.entrySet().iterator();
+        while (obit.hasNext()) {
+            Map.Entry<TunnelId, TunnelGateway> entry = obit.next();
+            TunnelGateway gw = entry.getValue();
+            // Check for matching participating config (keyed by receive tunnel ID, so unlikely to match)
+            HopConfig cfg = _participatingConfig.get(entry.getKey());
+            // Remove if: has matching config and expired, OR no matching config (likely orphaned client tunnel)
+            if ((cfg != null && cfg.getExpiration() < now) || cfg == null) {
+                if (gw instanceof PumpedTunnelGateway) {
+                    _pumper.removeGateway((PumpedTunnelGateway) gw);
+                }
+                gw.destroy();
+                obit.remove();
+                cleaned++;
+            }
+        }
+
+        // Clean up orphaned inbound gateways
+        // Note: Inbound gateways are keyed by receive tunnel ID, but participating configs are also keyed by receive tunnel ID
+        // However, for multi-hop tunnels the keys may not match due to different hop indexing
+        Iterator<Map.Entry<TunnelId, TunnelGateway>> ibit = _inboundGateways.entrySet().iterator();
+        while (ibit.hasNext()) {
+            Map.Entry<TunnelId, TunnelGateway> entry = ibit.next();
+            TunnelGateway gw = entry.getValue();
+            HopConfig cfg = _participatingConfig.get(entry.getKey());
+            // Remove if: has matching config and expired, OR no matching config (likely orphaned client tunnel)
+            if ((cfg != null && cfg.getExpiration() < now) || cfg == null) {
+                if (gw instanceof PumpedTunnelGateway) {
+                    _pumper.removeGateway((PumpedTunnelGateway) gw);
+                }
+                if (gw != null) {
+                    gw.destroy();
+                }
+                ibit.remove();
+                cleaned++;
+            }
+        }
+
+        // Clean up orphaned outbound endpoints
+        // Note: Outbound endpoints are keyed by receive tunnel ID, but may not match participating config keys
+        Iterator<Map.Entry<TunnelId, OutboundTunnelEndpoint>> oeit = _outboundEndpoints.entrySet().iterator();
+        while (oeit.hasNext()) {
+            Map.Entry<TunnelId, OutboundTunnelEndpoint> entry = oeit.next();
+            OutboundTunnelEndpoint ep = entry.getValue();
+            HopConfig cfg = _participatingConfig.get(entry.getKey());
+            // Remove if: has matching config and expired, OR no matching config (likely orphaned client tunnel)
+            if ((cfg != null && cfg.getExpiration() < now) || cfg == null) {
+                if (ep != null) {
+                    ep.destroy();
+                }
+                oeit.remove();
+                cleaned++;
             }
         }
         
@@ -1087,8 +1187,21 @@ public class TunnelDispatcher implements Service {
             if (!_configs.offer(cfg)) {
                 drainOverflow();
                 if (!_configs.offer(cfg)) {
-                    if (_log.shouldWarn()) {
-                        _log.warn("Dropping expired tunnel config - queue still full after drain: " + cfg.getReceiveTunnel());
+                    // Queue is full - only remove if tunnel is already expired to prevent memory leak
+                    // Don't remove valid tunnels just because queue is backed up
+                    long now = getContext().clock().now();
+                    long exp = cfg.getExpiration() + (3 * Router.CLOCK_FUDGE_FACTOR / 2);
+                    if (exp < now) {
+                        LeaveTunnel.this.remove(cfg);
+                        _allocatedBW.addAndGet(0 - cfg.getAllocatedBW());
+                        if (_log.shouldWarn()) {
+                            _log.warn("Dropping expired tunnel config - queue full, removed from maps: " + cfg.getReceiveTunnel());
+                        }
+                    } else {
+                        // Tunnel is still valid, just log the queue backup
+                        if (_log.shouldWarn()) {
+                            _log.warn("Queue full for valid tunnel (not removed): " + cfg.getReceiveTunnel() + " expires in " + ((cfg.getExpiration() - now)/1000) + "s");
+                        }
                     }
                 }
             }
