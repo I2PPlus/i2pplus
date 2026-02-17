@@ -31,6 +31,7 @@ import net.i2p.router.transport.CommSystemFacadeImpl;
 import net.i2p.router.transport.FIFOBandwidthLimiter;
 import net.i2p.router.transport.OutboundMessageRegistry;
 import net.i2p.router.tunnel.TunnelDispatcher;
+import net.i2p.router.tunnel.TunnelIdManager;
 import net.i2p.router.tunnel.pool.TunnelPoolManager;
 import net.i2p.util.I2PProperties.I2PPropertyCallback;
 import net.i2p.util.KeyRing;
@@ -59,6 +60,7 @@ public class RouterContext extends I2PAppContext {
     private FIFOBandwidthLimiter _bandwidthLimiter;
     private TunnelManagerFacade _tunnelManager;
     private TunnelDispatcher _tunnelDispatcher;
+    private TunnelIdManager _tunnelIdManager;
     private StatisticsManager _statPublisher;
     private Banlist _banlist;
     private Blocklist _blocklist;
@@ -253,6 +255,7 @@ public class RouterContext extends I2PAppContext {
         else
             _tunnelManager = new DummyTunnelManagerFacade();
         _tunnelDispatcher = new TunnelDispatcher(this);
+        _tunnelIdManager = new TunnelIdManager(this);
         _statPublisher = new StatisticsManager(this);
         _banlist = new Banlist(this);
         _blocklist = new Blocklist(this);
@@ -428,6 +431,12 @@ public class RouterContext extends I2PAppContext {
      * Handle tunnel messages, as well as coordinate the gateways
      */
     public TunnelDispatcher tunnelDispatcher() { return _tunnelDispatcher; }
+
+    /**
+     * Canonical manager for tunnel IDs - prevents duplicates and memory leaks.
+     * @since 0.9.68+
+     */
+    public TunnelIdManager tunnelIdManager() { return _tunnelIdManager; }
 
     /**
      * If the router is configured to, gather up some particularly tasty morsels
