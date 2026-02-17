@@ -119,7 +119,9 @@ public class TunnelGatewayMessage extends FastI2NPMessageImpl {
         if (type != MESSAGE_TYPE) throw new I2NPMessageException("Message type is incorrect for this message");
         int curIndex = offset;
 
-        _tunnelId = new TunnelId(DataHelper.fromLong(data, curIndex, 4));
+        _tunnelId = _context.isRouterContext() ?
+                ((net.i2p.router.RouterContext) _context).tunnelIdManager().getOrCreate(DataHelper.fromLong(data, curIndex, 4)) :
+                new TunnelId(DataHelper.fromLong(data, curIndex, 4));
         curIndex += 4;
 
         if (_tunnelId.getTunnelId() <= 0) {

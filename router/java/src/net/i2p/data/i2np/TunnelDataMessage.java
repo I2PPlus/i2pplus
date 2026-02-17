@@ -71,7 +71,13 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
     }
 
     public TunnelId getTunnelIdObj() {
-        if (_tunnelIdObj == null) {_tunnelIdObj = new TunnelId(_tunnelId);} // not thread safe, but immutable, so who cares
+        if (_tunnelIdObj == null) {
+            if (_context.isRouterContext()) {
+                _tunnelIdObj = ((net.i2p.router.RouterContext) _context).tunnelIdManager().getOrCreate(_tunnelId);
+            } else {
+                _tunnelIdObj = new TunnelId(_tunnelId);
+            }
+        }
         return _tunnelIdObj;
     }
 

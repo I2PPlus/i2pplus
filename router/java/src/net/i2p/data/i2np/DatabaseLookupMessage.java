@@ -377,7 +377,9 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
         curIndex++;
 
         if (tunnelSpecified) {
-            _replyTunnel = new TunnelId(DataHelper.fromLong(data, curIndex, 4));
+            _replyTunnel = _context.isRouterContext() ?
+                ((net.i2p.router.RouterContext) _context).tunnelIdManager().getOrCreate(DataHelper.fromLong(data, curIndex, 4)) :
+                new TunnelId(DataHelper.fromLong(data, curIndex, 4));
             curIndex += 4;
         }
 

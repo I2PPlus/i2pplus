@@ -131,7 +131,11 @@ public class DatabaseStoreMessage extends FastI2NPMessageImpl {
 
         if (_replyToken > 0) {
             long tunnel = DataHelper.fromLong(data, curIndex, 4);
-            if (tunnel > 0) {_replyTunnel = new TunnelId(tunnel);}
+            if (tunnel > 0) {
+                _replyTunnel = _context.isRouterContext() ?
+                    ((net.i2p.router.RouterContext) _context).tunnelIdManager().getOrCreate(tunnel) :
+                    new TunnelId(tunnel);
+            }
             curIndex += 4;
             _replyGateway = Hash.create(data, curIndex);
             curIndex += Hash.HASH_LENGTH;

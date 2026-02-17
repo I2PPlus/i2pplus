@@ -354,8 +354,9 @@ class FragmentHandler {
             // i2pd 2.19 bug? 0 will throw IAE.
             // message checked and discarded below.
             // don't throw so we can process the other fragments if any, if they're from a different message
-            if (id != 0)
-            tunnelId = new TunnelId(id);
+            if (id != 0) {
+                tunnelId = _context.tunnelIdManager().getOrCreate(id);
+            }
             offset += 4;
         }
         if ( (type == TYPE_ROUTER) || (type == TYPE_TUNNEL) ) {
