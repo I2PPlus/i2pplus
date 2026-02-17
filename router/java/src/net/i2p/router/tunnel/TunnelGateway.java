@@ -41,8 +41,9 @@ abstract class TunnelGateway {
     protected Receiver _receiver;
     protected long _lastFlush;
     //protected int _flushFrequency;
-    protected final DelayedFlush _delayedFlush;// FIXME Exporting non-public type through public API FIXME
+    protected DelayedFlush _delayedFlush;
     protected int _messagesSent;
+    private volatile boolean _destroyed;
 
     /**
      * @param preprocessor this pulls Pending messages off a list, builds some
@@ -151,10 +152,27 @@ abstract class TunnelGateway {
      * @since 0.9.68+
      */
     public void destroy() {
-        _delayedFlush.cancel();
+        _destroyed = true;
+        if (_delayedFlush != null) {
+            _delayedFlush.cancel();
+            _delayedFlush = null;
+        }
+        if (_queue != null) {
+            synchronized (_queue) {
+                _queue.clear();
+            }
+        }
         _preprocessor = null;
         _sender = null;
         _receiver = null;
+    }
+
+    /**
+     * Check if this gateway has been destroyed.
+     * @return true if destroy() has been called
+     */
+    public boolean isDestroyed() {
+        return _destroyed;
     }
 
     /**
@@ -228,6 +246,9 @@ abstract class TunnelGateway {
         }
 
         public void timeReached() {
+            if (_cancelled || _destroyed) {
+                return;
+            }
             boolean wantRequeue = false;
             //int remaining = 0;
             //long beforeLock = _context.clock().now();
@@ -252,7 +273,7 @@ abstract class TunnelGateway {
                 //remaining = _queue.size();
             }
 
-            if (wantRequeue && !_cancelled)
+            if (wantRequeue && !_cancelled && !_destroyed)
                 schedule(delayAmount);
             else
                 _lastFlush = _context.clock().now();

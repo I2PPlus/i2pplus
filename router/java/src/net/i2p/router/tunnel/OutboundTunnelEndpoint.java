@@ -24,7 +24,7 @@ import net.i2p.util.SyntheticREDQueue;
 class OutboundTunnelEndpoint {
     private final RouterContext _context;
     private final Log _log;
-    private final HopConfig _config;
+    public final HopConfig _config;
     private final HopProcessor _processor;
     private final FragmentHandler _handler;
     private final OutboundMessageDistributor _outDistributor;

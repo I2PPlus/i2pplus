@@ -41,6 +41,7 @@ class PumpedTunnelGateway extends TunnelGateway {
     private TunnelGatewayPumper _pumper;
     public final boolean _isInbound;
     private Hash _nextHop;
+    private volatile boolean _destroyed;
 
     private static final int MAX_OB_MSGS_PER_PUMP = SystemVersion.isSlow() ? 64 : 256;
     private static final int MAX_IB_MSGS_PER_PUMP = SystemVersion.isSlow() ? 32 : 128;
@@ -194,6 +195,7 @@ class PumpedTunnelGateway extends TunnelGateway {
      */
     @Override
     public void destroy() {
+        _destroyed = true;
         super.destroy();
         _prequeue.clear();
         synchronized (_queue) {
@@ -202,6 +204,14 @@ class PumpedTunnelGateway extends TunnelGateway {
         // Help GC by nulling references
         _pumper = null;
         _nextHop = null;
+    }
+
+    /**
+     * Check if this gateway has been destroyed.
+     * @return true if destroy() has been called
+     */
+    public boolean isDestroyed() {
+        return _destroyed;
     }
 
     /**

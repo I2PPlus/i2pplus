@@ -151,7 +151,7 @@ class TunnelGatewayPumper implements Runnable {
      * @param gw the gateway to pump
      */
     public void wantsPumping(PumpedTunnelGateway gw) {
-        if (_stop) {
+        if (_stop || gw == null || gw.isDestroyed()) {
             return;
         }
         // Retry putting into queue until success or stopped
@@ -236,7 +236,9 @@ class TunnelGatewayPumper implements Runnable {
         @Override
         public void timeReached() {
             _backlogged.remove(_ptg);
-            if (!_stop) {
+            // Don't requeue if gateway has been destroyed - prevents memory leak
+            // where dead gateways are held by pending timer events
+            if (!_stop && _ptg != null && !_ptg.isDestroyed()) {
                 // Use put with retry in wantsPumping ensures requeue returns
                 wantsPumping(_ptg);
             }

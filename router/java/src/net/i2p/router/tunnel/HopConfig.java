@@ -52,13 +52,6 @@ public class HopConfig {
 
     public void setReceiveTunnelId(TunnelId id) { _receiveTunnel = id; }
 
-    /**
-     *  @param id 1 to 0xffffffff
-     *  @throws IllegalArgumentException if less than or equal to zero or greater than max value
-     *  @since 0.9.48
-     */
-    public void setReceiveTunnelId(long id) { _receiveTunnel = new TunnelId(id); }
-
     /** what is the previous peer in the tunnel (null if gateway) */
     public Hash getReceiveFrom() { return _receiveFrom; }
 
@@ -84,14 +77,6 @@ public class HopConfig {
      *  @since 0.9.48
      */
     public void setSendTunnelId(TunnelId id) { _sendTunnel = id; }
-
-    /**
-     *  Do not set for endpoint
-     *  @param id 1 to 0xffffffff
-     *  @throws IllegalArgumentException if less than or equal to zero or greater than max value
-     *  @since 0.9.48
-     */
-    public void setSendTunnelId(long id) { _sendTunnel = new TunnelId(id); }
 
     /** what is the next peer in the tunnel (null if endpoint) */
     public Hash getSendTo() { return _sendTo; }

@@ -17,6 +17,8 @@ class TunnelGatewayZeroHop extends TunnelGateway {
     private TunnelCreatorConfig _config;
     private OutboundMessageDistributor _outDistributor;
     private InboundMessageDistributor _inDistributor;
+    private final long _created;
+    private volatile boolean _destroyed;
 
     /**
      *
@@ -24,10 +26,19 @@ class TunnelGatewayZeroHop extends TunnelGateway {
     public TunnelGatewayZeroHop(RouterContext context, TunnelCreatorConfig config) {
         super(context, null, null, null);
         _config = config;
+        _created = context.clock().now();
         if (config.isInbound())
             _inDistributor = new InboundMessageDistributor(context, config.getDestination());
         else
             _outDistributor = new OutboundMessageDistributor(context, OutNetMessage.PRIORITY_MY_DATA);
+    }
+
+    /**
+     * Get the creation timestamp for cleanup purposes.
+     * @return timestamp when this gateway was created
+     */
+    public long getCreated() {
+        return _created;
     }
 
     /**
@@ -84,15 +95,32 @@ class TunnelGatewayZeroHop extends TunnelGateway {
     }
 
     /**
+     * Get the tunnel config for expiration checking.
+     * @return the tunnel creator config, or null if destroyed
+     */
+    public TunnelCreatorConfig getConfig() {
+        return _config;
+    }
+
+    /**
      * Destroy this gateway and release all resources.
      * Nulls references to enable timely garbage collection.
      * @since 0.9.68+
      */
     @Override
     public void destroy() {
+        _destroyed = true;
         super.destroy();
         _config = null;
         _outDistributor = null;
         _inDistributor = null;
+    }
+
+    /**
+     * Check if this gateway has been destroyed.
+     * @return true if destroy() has been called
+     */
+    public boolean isDestroyed() {
+        return _destroyed;
     }
 }
