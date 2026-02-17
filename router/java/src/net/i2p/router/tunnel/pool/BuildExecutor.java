@@ -724,7 +724,16 @@ class BuildExecutor implements Runnable {
         }
         if (result == Result.SUCCESS) {
             _manager.buildComplete(cfg);
-            _expireLocalTunnels.scheduleExpiration(cfg);
+            // Check if tunnel was rejected as duplicate by addTunnel()
+            // If so, don't schedule expiration - clean up instead
+            if (cfg.isDuplicate()) {
+                _manager.removeFromExpiration(cfg);
+                if (_log.shouldDebug()) {
+                    _log.debug("Tunnel rejected as duplicate, skipping expiration schedule: " + cfg);
+                }
+            } else {
+                _expireLocalTunnels.scheduleExpiration(cfg);
+            }
         }
     }
 
@@ -841,7 +850,7 @@ class BuildExecutor implements Runnable {
                 pool.removeFromInProgress(cfg);
             }
             // Remove from dispatcher as safety measure (may be no-op if not joined)
-            _context.tunnelDispatcher().remove(cfg);
+            _context.tunnelDispatcher().remove(cfg, "build executor cleanup");
             // Remove from expiration queue
             _expireLocalTunnels.removeTunnel(cfg);
             // Invalidate any test jobs
