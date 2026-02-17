@@ -341,7 +341,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     }
 
     private static final int RETRY_DELAY = 15*1000;
-    private static final int MAX_RETRIES = 50;
+    private static final int MAX_RETRIES = 100;
 
     /**
      * As of 0.9.20 this is fast, and does NOT connect the manager to the router.
