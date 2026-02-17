@@ -38,7 +38,7 @@ public class ExpireLocalTunnelsJob extends JobImpl {
     private static final long BATCH_WINDOW = 5 * 1000;
     private static final long FORCED_REQUEUE_TIMEOUT = 6 * BATCH_WINDOW;
     private static final long MAX_ACCEPTABLE_LAG = 10 * 1000;
-    private static final int BACKED_UP_THRESHOLD = 1000;
+    private static final int BACKED_UP_THRESHOLD = 100;
     private static final long OB_EARLY_EXPIRE = 30 * 1000;
     private static final long IB_EARLY_EXPIRE = OB_EARLY_EXPIRE + 7500;
     private static final long MAX_ENTRY_LIFETIME = 15 * 1000L; // 15 seconds - aggressive cleanup
@@ -46,7 +46,7 @@ public class ExpireLocalTunnelsJob extends JobImpl {
     private static final int MAX_ITERATE_PER_RUN = 10000;
     private static final int MAX_ITERATE_BACKED_UP = 20000;
     private static final int MAX_ITERATE_EMERGENCY = 50000;
-    private static final int HEALTH_LOG_INTERVAL = 200;
+    private static final int HEALTH_LOG_INTERVAL = 50;
 
     public ExpireLocalTunnelsJob(RouterContext ctx) {
         super(ctx);
@@ -78,11 +78,14 @@ public class ExpireLocalTunnelsJob extends JobImpl {
             TunnelId recvId = cfg.getReceiveTunnelId(0);
             TunnelId sendId = cfg.getSendTunnelId(0);
             if (recvId != null && sendId != null && recvId.getTunnelId() != 0 && sendId.getTunnelId() != 0) {
-                return Long.valueOf((recvId.getTunnelId() << 32) | (sendId.getTunnelId() & 0xFFFFFFFFL));
+                return Long.valueOf(System.identityHashCode(cfg));
+                //return Long.valueOf((recvId.getTunnelId() << 32) | (sendId.getTunnelId() & 0xFFFFFFFFL));
             }
-            return cfg.getInstanceId();
+            return Long.valueOf(System.identityHashCode(cfg));
+            //return cfg.getInstanceId();
         } catch (Exception e) {
-            return cfg.getInstanceId();
+            return Long.valueOf(System.identityHashCode(cfg));
+            //return cfg.getInstanceId();
         }
     }
 
@@ -417,7 +420,7 @@ public class ExpireLocalTunnelsJob extends JobImpl {
             int obGwSize = dispatcher.getOutboundGatewayCount();
             int ibGwSize = dispatcher.getInboundGatewayCount();
             if (_log.shouldDebug()) {
-                _log.debug("Dispatcher maps: outboundGateways=" + obGwSize + ", inboundGateways=" + ibGwSize + 
+                _log.debug("Dispatcher maps: outboundGateways=" + obGwSize + ", inboundGateways=" + ibGwSize +
                            ", expirationMap=" + _tunnelExpirations.size());
             }
         } catch (Exception e) {
@@ -433,7 +436,7 @@ public class ExpireLocalTunnelsJob extends JobImpl {
             }
             // Log current state for debugging
             if (_log.shouldDebug()) {
-                _log.debug("Dispatcher state: participatingConfig=" + 
+                _log.debug("Dispatcher state: participatingConfig=" +
                            dispatcher.getParticipatingCount() + ", outboundEndpoints=" +
                            dispatcher.getOutboundEndpointCount() + ", participants=" +
                            dispatcher.getParticipatingCount());
@@ -444,10 +447,11 @@ public class ExpireLocalTunnelsJob extends JobImpl {
             int ibGw = dispatcher.getInboundGatewayCount();
             int participating = dispatcher.getParticipatingCount();
             int expirationMap = _tunnelExpirations.size();
-            
-            // Only run aggressive cleanup if there's a significant discrepancy OR very high tunnel counts
-            boolean needsAggressive = (obGw > expirationMap + 500) || (ibGw > expirationMap + 500) || 
-                                      (participating > 2000 && _runCount % 20 == 0);
+
+            // Run aggressive cleanup if there's ANY discrepancy OR periodically to prevent leaks
+            // Lowered thresholds to catch leaks early before they accumulate
+            boolean needsAggressive = (obGw > expirationMap + 10) || (ibGw > expirationMap + 10) ||
+                                      participating > 500 || _runCount % 10 == 0;
             if (needsAggressive) {
                 int aggressiveCleaned = dispatcher.aggressiveCleanup();
                 if (aggressiveCleaned > 0 && _log.shouldInfo()) {
@@ -455,7 +459,6 @@ public class ExpireLocalTunnelsJob extends JobImpl {
                 }
                 // After aggressive cleanup, force TTL sweep to clean up the expiration queue
                 // Aggressive cleanup removes from dispatcher but NOT from the queue
-                final long ttlCutoff = now - MAX_ENTRY_LIFETIME;
                 int queueCleaned = 0;
                 Iterator<Map.Entry<Long, TunnelExpiration>> queueIt = _tunnelExpirations.entrySet().iterator();
                 while (queueIt.hasNext()) {

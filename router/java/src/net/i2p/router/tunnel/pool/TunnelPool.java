@@ -320,12 +320,7 @@ public class TunnelPool {
         if (shouldWarn) {
             String warning;
             if (!_settings.isExploratory()) {
-                boolean destReachable = isDestinationReachable();
-                if (!destReachable) {
-                    warning = toString() + " -> Destination not reachable (no LeaseSet found)";
-                } else {
-                    warning = toString() + " -> No tunnels available";
-                }
+                warning = toString() + " -> No tunnels available";
             } else {
                 warning = toString() + " -> No tunnels available";
             }
@@ -377,12 +372,7 @@ public class TunnelPool {
         } else if (shouldWarn) {
             String warning;
             if (!_settings.isExploratory()) {
-                boolean destReachable = isDestinationReachable();
-                if (!destReachable) {
-                    warning = toString() + " -> Destination not reachable (no LeaseSet found)";
-                } else {
-                    warning = toString() + " -> No tunnels available";
-                }
+                warning = toString() + " -> No tunnels available";
             } else {
                 warning = toString() + " -> No tunnels available";
             }
@@ -577,15 +567,15 @@ public class TunnelPool {
         }
     }
 
-     /**
-      * Check if we can start a new tunnel build for the given direction.
-      * Limits concurrent builds per pool per direction to prevent overcompensation
-      * when builds are failing.
-      *
-      * @param isInbound true for inbound pool, false for outbound
-      * @return true if a new build can be started
-      * @since 0.9.70+
-      */
+      /**
+       * Check if we can start a new tunnel build for the given direction.
+       * Limits concurrent builds per pool per direction to prevent overcompensation
+       * when builds are failing.
+       *
+       * @param isInbound true for inbound pool, false for outbound
+       * @return true if a new build can be started
+       * @since 0.9.70+
+       */
       boolean canStartBuild(boolean isInbound) {
           AtomicInteger counter = isInbound ? _concurrentInboundBuilds : _concurrentOutboundBuilds;
           int maxAllowed = MAX_CONCURRENT_BUILDS_PER_DIRECTION;
@@ -634,15 +624,6 @@ public class TunnelPool {
       * @since 0.9.70+
       */
      int getConcurrentOutboundBuilds() { return _concurrentOutboundBuilds.get(); }
-
-    /**
-     * Get the adjusted total quantity of tunnels we want for this pool.
-     * @return the wanted number of tunnels
-     * @since 0.9.68+
-     */
-    public int getTotalQuantity() {
-        return getAdjustedTotalQuantity();
-    }
 
     /** duplicate of size(), let's pick one
      *  @return the number of tunnels in the pool
@@ -808,15 +789,39 @@ public class TunnelPool {
             LeaseSet ls = null;
             _tunnelsLock.lock();
             try {
-                if (info.getExpiration() > now + 60*1000) {
+                boolean canAdd = info.getExpiration() > now + 60*1000;
+                // Allow recently-built tunnels regardless of expiration (handles slow builds)
+                // If tunnel was created within the last 8 minutes, allow it even if expiration is soon
+                // This prevents rejection of tunnels that took a long time to build
+                if (!canAdd && info instanceof PooledTunnelCreatorConfig) {
+                    long age = now - ((PooledTunnelCreatorConfig) info).getCreationTime();
+                    if (age < 8 * 60 * 1000) {
+                        canAdd = true;
+                    }
+                }
+                if (canAdd) {
                     _tunnels.add(info);
                     if (_settings.isInbound() && !_settings.isExploratory()) {ls = locked_buildNewLeaseSet();}
                 }
             } finally {_tunnelsLock.unlock();}
-            if (info.getExpiration() > now + 60*1000 && ls != null) {requestLeaseSet(ls);}
+            boolean requestLease = info.getExpiration() > now + 60*1000;
+            if (!requestLease && info instanceof PooledTunnelCreatorConfig) {
+                long age = now - ((PooledTunnelCreatorConfig) info).getCreationTime();
+                if (age < 8 * 60 * 1000) {
+                    requestLease = true;
+                }
+            }
+            if (requestLease && ls != null) {requestLeaseSet(ls);}
 
             // Check if we can now remove any last resort tunnels since we have a replacement
-            if (info.getExpiration() > now + 60*1000) {
+            boolean cleanup = info.getExpiration() > now + 60*1000;
+            if (!cleanup && info instanceof PooledTunnelCreatorConfig) {
+                long age = now - ((PooledTunnelCreatorConfig) info).getCreationTime();
+                if (age < 8 * 60 * 1000) {
+                    cleanup = true;
+                }
+            }
+            if (cleanup) {
                 cleanupLastResortTunnels();
                 // If we added a multi-hop tunnel, remove zero-hop fallbacks immediately
                 // This applies to both exploratory and client pools
@@ -1390,12 +1395,20 @@ public class TunnelPool {
       *
       *  @return true if a fallback tunnel is built, false otherwise
       */
-     boolean buildFallback() {
-         int quantity = getAdjustedTotalQuantity();
-         int usable = 0;
-         _tunnelsLock.lock();
-         try {usable = _tunnels.size();} finally {_tunnelsLock.unlock();}
-         if (usable > 0) {return false;}
+      boolean buildFallback() {
+          // Check concurrent build limit before starting fallback tunnel build
+          if (!canStartBuild(_settings.isInbound())) {
+              if (_log.shouldDebug()) {
+                  _log.debug("Skipping fallback build for " + toString() + " - max concurrent builds reached for direction");
+              }
+              return false;
+          }
+
+          int quantity = getAdjustedTotalQuantity();
+          int usable = 0;
+          _tunnelsLock.lock();
+          try {usable = _tunnels.size();} finally {_tunnelsLock.unlock();}
+          if (usable > 0) {return false;}
 
          // Exploratory pools: allow 0-hop fallback
          if (_settings.isExploratory()) {
@@ -2375,12 +2388,13 @@ public class TunnelPool {
         List<PooledTunnelCreatorConfig> toCleanup = new ArrayList<>();
 
         // Maximum time a tunnel build can be in progress before being considered stale
-        // Reduced from 5 minutes to 3 minutes for faster cleanup
-        final long STALE_BUILD_TIMEOUT = 3 * 60 * 1000; // 3 minutes
+        // Reduced from 3 minutes to 90 seconds for faster cleanup under memory pressure
+        final long STALE_BUILD_TIMEOUT = 90 * 1000; // 90 seconds
 
         synchronized (_inProgress) {
-            // HARD CAP: Never exceed 1000 to prevent memory growth
-            while (_inProgress.size() > 1000) {
+            // HARD CAP: Never exceed 500 to prevent memory growth
+            // Reduced from 1000 for more aggressive cleanup under memory pressure
+            while (_inProgress.size() > 500) {
                 if (!_inProgress.isEmpty()) {
                     PooledTunnelCreatorConfig cfg = _inProgress.remove(0);
                     toCleanup.add(cfg);
@@ -2785,30 +2799,6 @@ public class TunnelPool {
 
         _lastTimeoutWarningTime = now;
         return false;
-    }
-
-    /**
-     * Check if the destination is reachable by looking up its LeaseSet
-     */
-    private boolean isDestinationReachable() {
-        if (_settings.isExploratory()) {
-            return true; // Exploratory tunnels don't have a specific destination
-        }
-
-        Hash destHash = _settings.getDestination().calculateHash();
-        boolean isLocal = _context.clientManager().isLocal(destHash);
-        boolean hasLeaseSet;
-        if (isLocal) {
-            hasLeaseSet = _context.clientNetDb(destHash).lookupLeaseSetLocally(destHash) != null;
-        } else {
-            hasLeaseSet = _context.netDb().lookupLeaseSetLocally(destHash) != null;
-        }
-
-        if (!hasLeaseSet && _log.shouldDebug()) {
-            _log.debug("Destination " + toString() + " has no LeaseSet in local network DB (local: " + isLocal + ")");
-        }
-
-        return hasLeaseSet;
     }
 
     /**

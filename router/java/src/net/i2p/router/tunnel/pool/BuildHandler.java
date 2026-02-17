@@ -746,7 +746,7 @@ class BuildHandler implements Runnable {
             if (_nextPeer != null) {_context.commSystem().mayDisconnect(_nextPeer);}
             _context.profileManager().tunnelFailed(_nextPeer, 100); // blame
             _context.profileManager().tunnelTimedOut(_nextPeer);
-            _context.messageHistory().tunnelRejected(_state.fromHash, new TunnelId(_req.readReceiveTunnelId()), _nextPeer, "lookup fail");
+            _context.messageHistory().tunnelRejected(_state.fromHash, _context.tunnelIdManager().getOrCreate(_req.readReceiveTunnelId()), _nextPeer, "lookup fail");
 
             if (!_decremented.getAndSet(true)) {
                 if (_currentLookups.decrementAndGet() < 0) {
@@ -1066,14 +1066,14 @@ class BuildHandler implements Runnable {
                 if (from != null) {cfg.setReceiveFrom(from);}
                 else {return;} // b0rk
             }
-            cfg.setReceiveTunnelId(ourId);
+            cfg.setReceiveTunnelId(_context.tunnelIdManager().getOrCreate(ourId));
             if (isOutEnd) {
                 // default
                 //cfg.setSendTo(null);
                 //cfg.setSendTunnelId(null);
             } else {
                 cfg.setSendTo(nextPeer);
-                cfg.setSendTunnelId(nextId);
+                cfg.setSendTunnelId(_context.tunnelIdManager().getOrCreate(nextId));
             }
             if (avail > 0) {cfg.setAllocatedBW(avail);}
             else {cfg.setAllocatedBW(DEFAULT_BW_PER_TUNNEL_ESTIMATE);}
@@ -1096,7 +1096,7 @@ class BuildHandler implements Runnable {
         // determination of response is now complete
         if (response != 0) {
             _context.statManager().addRateData("tunnel.reject." + response, 1);
-            _context.messageHistory().tunnelRejected(from, new TunnelId(ourId), nextPeer, Integer.toString(response));
+            _context.messageHistory().tunnelRejected(from, _context.tunnelIdManager().getOrCreate(ourId), nextPeer, Integer.toString(response));
             if (from != null) {_context.commSystem().mayDisconnect(from);}
             // Connection congestion control:
             // If we rejected the request, are near our conn limits, and aren't connected to the next hop,
@@ -1179,7 +1179,7 @@ class BuildHandler implements Runnable {
             TunnelGatewayMessage m = new TunnelGatewayMessage(_context);
             m.setMessage(outMessage);
             m.setMessageExpiration(expires);
-            m.setTunnelId(new TunnelId(nextId));
+            m.setTunnelId(_context.tunnelIdManager().getOrCreate(nextId));
             if (replyGwIsUs) {
                 // ok, we are the gateway, so inject it
                 _context.tunnelDispatcher().dispatch(m);

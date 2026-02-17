@@ -181,15 +181,18 @@ public class TestJob extends JobImpl {
      */
     private static Long getTunnelKey(PooledTunnelCreatorConfig cfg) {
         if (cfg == null) return null;
+
+
         try {
             long recvId = cfg.getReceiveTunnelId(0).getTunnelId();
             long sendId = cfg.getSendTunnelId(0).getTunnelId();
             if (recvId != 0 && sendId != 0) {
                 return Long.valueOf((recvId << 32) | (sendId & 0xFFFFFFFFL));
             }
-            return cfg.getInstanceId();
+            return Long.valueOf((recvId << 32) | (sendId & 0xFFFFFFFFL));
+            //return cfg.getInstanceId();
         } catch (Exception e) {
-            return cfg.getInstanceId();
+            return null;
         }
     }
 

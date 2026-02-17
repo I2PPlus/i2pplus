@@ -413,7 +413,8 @@ class BuildExecutor implements Runnable {
         }
 
         // Periodic cleanup of in-progress configs to prevent memory leaks
-        long cleanupInterval = 5 * 1000;
+        // Reduced from 5s to 2s for more aggressive cleanup under memory pressure
+        long cleanupInterval = 2 * 1000;
         if (now - _lastInProgressCleanup > cleanupInterval) {
             _lastInProgressCleanup = now;
             List<TunnelPool> pools = new ArrayList<>();
@@ -661,7 +662,11 @@ class BuildExecutor implements Runnable {
             while (addToBuilding(cfg)); // if a dup, go araound again
         }
         boolean ok = BuildRequestor.request(_context, cfg, this);
-        if (!ok) {return;}
+        if (!ok) {
+            // Build request failed - must call buildComplete to clean up _inProgress
+            buildComplete(cfg, Result.OTHER_FAILURE);
+            return;
+        }
         if (cfg.getLength() > 1) {
             long buildTime = System.currentTimeMillis() - beforeBuild;
             _context.statManager().addRateData("tunnel.buildRequestTime", buildTime);

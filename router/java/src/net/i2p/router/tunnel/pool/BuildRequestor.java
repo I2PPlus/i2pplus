@@ -33,6 +33,7 @@ import net.i2p.router.networkdb.kademlia.MessageWrapper;
 import net.i2p.router.networkdb.kademlia.MessageWrapper.OneTimeSession;
 import net.i2p.router.tunnel.HopConfig;
 import net.i2p.router.tunnel.TunnelCreatorConfig;
+import net.i2p.router.tunnel.TunnelIdManager;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
@@ -143,6 +144,7 @@ abstract class BuildRequestor {
     private static void prepare(RouterContext ctx, PooledTunnelCreatorConfig cfg) {
         int len = cfg.getLength();
         boolean isIB = cfg.isInbound();
+        TunnelIdManager tidMgr = ctx.tunnelIdManager();
         for (int i = 0; i < len; i++) {
             HopConfig hop = cfg.getConfig(i);
             if (!isIB && i == 0) {
@@ -158,12 +160,12 @@ abstract class BuildRequestor {
                 } else if (isIB && i == len - 1) {
                     id = ctx.tunnelDispatcher().getNewIBEPID();
                 } else {
-                    id = new TunnelId(1 + ctx.random().nextLong(TunnelId.MAX_ID_VALUE));
+                    id = tidMgr.generateNewId();
                 }
                 hop.setReceiveTunnelId(id);
             }
             if (i > 0) {
-                cfg.getConfig(i - 1).setSendTunnelId(hop.getReceiveTunnelId());
+                cfg.getConfig(i - 1).setSendTunnelId(hop.getReceiveTunnel());
             }
         }
     }
@@ -244,7 +246,10 @@ abstract class BuildRequestor {
         }
 
         if (isInbound) {
-            handleInboundBuild(ctx, cfg, pairedTunnel, msg, log);
+            boolean sent = handleInboundBuild(ctx, cfg, pairedTunnel, msg, log);
+            if (!sent) {
+                return false;
+            }
         } else {
             handleOutboundBuild(ctx, cfg, pairedTunnel, msg, exec, log);
         }
@@ -396,9 +401,19 @@ abstract class BuildRequestor {
         return tunnel;
     }
 
-    private static void handleInboundBuild(RouterContext ctx, PooledTunnelCreatorConfig cfg,
+    private static boolean handleInboundBuild(RouterContext ctx, PooledTunnelCreatorConfig cfg,
                                            TunnelInfo pairedTunnel, I2NPMessage msg, Log log) {
         Hash ibgw = cfg.getPeer(0);
+
+        TunnelId outId = pairedTunnel.getSendTunnelId(0);
+        if (!ctx.tunnelDispatcher().hasOutboundGateway(outId)) {
+            if (log.shouldInfo()) {
+                log.info("Outbound gateway for tunnel " + outId +
+                          " not yet registered \n* Deferring build request for " + cfg);
+            }
+            return false;
+        }
+
         // Wrap in garlic if IBGW != OBEP (to hide IBGW from OBEP)
         if (msg.getType() == ShortTunnelBuildMessage.MESSAGE_TYPE && !ibgw.equals(pairedTunnel.getEndpoint())) {
             RouterInfo peer = ctx.netDb().lookupRouterInfoLocally(ibgw);
@@ -420,6 +435,7 @@ abstract class BuildRequestor {
                      " -> Awaiting reply [MsgID " + cfg.getReplyMessageId() + "]...");
         }
         ctx.tunnelDispatcher().dispatchOutbound(msg, pairedTunnel.getSendTunnelId(0), ibgw);
+        return true;
     }
 
     private static void handleOutboundBuild(RouterContext ctx, PooledTunnelCreatorConfig cfg,
