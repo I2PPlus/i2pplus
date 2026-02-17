@@ -302,10 +302,10 @@ public class BuildMessageTestStandalone extends TestCase {
                 Arrays.fill(iv, (byte)i); // consistent for repeatability
                 cfg.setAESReplyKeys(i, ctx.keyGenerator().generateSessionKey(), iv);
             }
-            hop.setReceiveTunnelId(new TunnelId(i+1));
+            hop.setReceiveTunnelId(ctx.tunnelIdManager().getOrCreate(i+1));
             if (i != _peers.length - 1) {
                 hop.setSendTo(_peers[i + 1]);
-                hop.setSendTunnelId(new TunnelId(i+2));
+                hop.setSendTunnelId(ctx.tunnelIdManager().getOrCreate(i+2));
             }
         }
         return cfg;

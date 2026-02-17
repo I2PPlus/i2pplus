@@ -34,12 +34,12 @@ public abstract class RouterITBase {
 
     private static TunnelCreatorConfig prepareConfig(int numHops) {
         Hash peers[] = new Hash[numHops];
-        long tunnelIds[] = new long[numHops];
+        TunnelId tunnelIds[] = new TunnelId[numHops];
         for (int i = 0; i < numHops; i++) {
             peers[i] = new Hash();
             peers[i].setData(new byte[Hash.HASH_LENGTH]);
             _context.random().nextBytes(peers[i].getData());
-            tunnelIds[i] = 1 + _context.random().nextLong(TunnelId.MAX_ID_VALUE);
+            tunnelIds[i] = _context.tunnelIdManager().getOrCreate(1 + _context.random().nextLong(TunnelId.MAX_ID_VALUE));
         }
 
         TunnelCreatorConfig config = new TCConfig(_context, numHops, false);

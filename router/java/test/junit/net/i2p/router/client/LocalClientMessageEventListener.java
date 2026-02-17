@@ -47,7 +47,7 @@ class LocalClientMessageEventListener extends ClientMessageEventListener {
         LeaseSet ls = new LeaseSet();
         Lease lease = new Lease();
         lease.setGateway(Hash.FAKE_HASH);
-        TunnelId id = new TunnelId(1);
+        TunnelId id = _context.tunnelIdManager().getOrCreate(1);
         lease.setTunnelId(id);
         lease.setEndDate(exp);
         ls.addLease(lease);

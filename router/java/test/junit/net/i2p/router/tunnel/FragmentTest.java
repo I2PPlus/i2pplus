@@ -159,7 +159,7 @@ List<PendingGatewayMessage> messages = new ArrayList<PendingGatewayMessage>();
             _context.random().nextBytes(toRouter.getData());
         }
         if (includeTunnel) {
-            toTunnel = new TunnelId(1 + _context.random().nextLong(TunnelId.MAX_ID_VALUE));
+            toTunnel = _context.tunnelIdManager().getOrCreate(1 + _context.random().nextLong(TunnelId.MAX_ID_VALUE));
         }
         return new PendingGatewayMessage(m, toRouter, toTunnel);
     }

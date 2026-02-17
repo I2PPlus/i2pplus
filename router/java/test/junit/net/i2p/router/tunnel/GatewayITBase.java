@@ -97,7 +97,7 @@ public abstract class GatewayITBase extends RouterITBase {
             DataMessage m = getTestMessage(64);
             Hash to = new Hash(new byte[Hash.HASH_LENGTH]);
             java.util.Arrays.fill(to.getData(), (byte)0xFF);
-            TunnelId tunnel = new TunnelId(42);
+            TunnelId tunnel = _context.tunnelIdManager().getOrCreate(42);
             byte data[] = m.toByteArray();
             messages.add(m);
             _gw.add(m, to, tunnel);
