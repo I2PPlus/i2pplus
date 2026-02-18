@@ -2051,6 +2051,11 @@ public class TunnelPool {
         try {
             for (int i = 0; i < _tunnels.size(); i++) {
                 TunnelInfo info = _tunnels.get(i);
+                // Skip tunnels that have failed completely - they don't count as usable
+                if (info instanceof PooledTunnelCreatorConfig &&
+                    ((PooledTunnelCreatorConfig)info).getTunnelFailed()) {
+                    continue;
+                }
                 if (allowZeroHop || (info.getLength() > 1)) {
                     long timeToExpire = info.getExpiration() - expireAfter;
                     if (timeToExpire <= 0) {} // consider it unusable

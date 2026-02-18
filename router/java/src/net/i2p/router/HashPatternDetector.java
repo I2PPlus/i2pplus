@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -65,6 +66,12 @@ public class HashPatternDetector implements Serializable {
     private static final long DEFAULT_SCAN_FREQUENCY = 15 * 60 * 1000L; // 15 minutes - aggressive scanning
     private static final long SCAN_STARTUP_DELAY = 5 * 60 * 1000L; // 5 minutes
     private static final long BAN_DURATION = 48 * 60 * 60 * 1000L; // 48 hours for auto-bans
+
+    // Memory management
+    private static final int MAX_PREFIX_STATS = 10000;
+    private static final int MAX_PREDICTIVELY_BANNED = 50000;
+    private static final long PREFIX_STATS_EXPIRY = 24 * 60 * 60 * 1000L; // 24 hours
+    private static final long CLEANUP_INTERVAL = 60 * 60 * 1000L; // 1 hour
 
     // Scanner state
     private final AtomicBoolean _scanInProgress = new AtomicBoolean(false);
@@ -577,8 +584,57 @@ public class HashPatternDetector implements Serializable {
             frequency
         );
 
+        _context.simpleTimer2().addPeriodicEvent(
+            new CleanupTask(),
+            CLEANUP_INTERVAL,
+            CLEANUP_INTERVAL
+        );
+
         if (_log.shouldInfo())
             _log.info("NetDB hash scanner starting in " + (SCAN_STARTUP_DELAY / 60000) + " minutes, interval: " + formatFrequency(frequency));
+    }
+
+    /**
+     * Periodic cleanup task to prevent memory leaks.
+     */
+    private class CleanupTask implements SimpleTimer.TimedEvent {
+        public void timeReached() {
+            cleanup();
+        }
+    }
+
+    /**
+     * Cleanup old entries from maps to prevent memory leaks.
+     */
+    public void cleanup() {
+        long now = _context.clock().now();
+        long cutoff = now - PREFIX_STATS_EXPIRY;
+
+        if (_prefixStats.size() > MAX_PREFIX_STATS) {
+            int removed = 0;
+            Iterator<Map.Entry<String, PrefixStats>> iter = _prefixStats.entrySet().iterator();
+            while (iter.hasNext() && _prefixStats.size() > MAX_PREFIX_STATS / 2) {
+                iter.next();
+                iter.remove();
+                removed++;
+            }
+            if (_log.shouldDebug())
+                _log.debug("Cleaned up " + removed + " prefix stats entries");
+        }
+
+        if (_predictivelyBanned.size() > MAX_PREDICTIVELY_BANNED) {
+            int toRemove = _predictivelyBanned.size() - (MAX_PREDICTIVELY_BANNED / 2);
+            Iterator<String> iter = _predictivelyBanned.iterator();
+            while (iter.hasNext() && toRemove > 0) {
+                iter.next();
+                iter.remove();
+                toRemove--;
+            }
+            if (_log.shouldDebug())
+                _log.debug("Cleaned up predictively banned set");
+        }
+
+        _prefixCache.clear();
     }
 
     /**

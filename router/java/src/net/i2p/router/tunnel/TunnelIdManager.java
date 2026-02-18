@@ -6,6 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.data.TunnelId;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
+import net.i2p.util.SimpleTimer;
 
 /**
  * Canonical manager for all tunnel IDs in the router.
@@ -32,10 +33,19 @@ public class TunnelIdManager {
     private final ConcurrentHashMap<Long, Long> _recentlyRemoved = new ConcurrentHashMap<>();
 
     private static final long RECENTLY_REMOVED_EXPIRY = 60 * 1000;
+    private static final int MAX_CACHED_IDS = 50000;
+    private static final long CLEANUP_INTERVAL = 5 * 60 * 1000;
 
     public TunnelIdManager(RouterContext context) {
         _context = context;
         _log = context.logManager().getLog(TunnelIdManager.class);
+        context.simpleTimer2().addPeriodicEvent(new CleanupTask(), CLEANUP_INTERVAL, CLEANUP_INTERVAL);
+    }
+
+    private class CleanupTask implements SimpleTimer.TimedEvent {
+        public void timeReached() {
+            cleanup();
+        }
     }
 
     /**
@@ -166,7 +176,7 @@ public class TunnelIdManager {
     }
 
     /**
-     * Cleanup old entries from recently removed map.
+     * Cleanup old entries from recently removed map and prune canonical IDs if too large.
      */
     public void cleanup() {
         long cutoff = _context.clock().now() - RECENTLY_REMOVED_EXPIRY;
@@ -175,6 +185,16 @@ public class TunnelIdManager {
             Map.Entry<Long, Long> entry = it.next();
             if (entry.getValue() < cutoff) {
                 it.remove();
+            }
+        }
+
+        if (_canonicalIds.size() > MAX_CACHED_IDS) {
+            int toRemove = _canonicalIds.size() - (MAX_CACHED_IDS / 2);
+            Iterator<Map.Entry<Long, TunnelId>> iter = _canonicalIds.entrySet().iterator();
+            while (iter.hasNext() && toRemove > 0) {
+                iter.next();
+                iter.remove();
+                toRemove--;
             }
         }
     }
