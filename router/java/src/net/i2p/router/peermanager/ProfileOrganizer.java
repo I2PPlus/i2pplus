@@ -204,9 +204,8 @@ public class ProfileOrganizer {
 
             // Check if we're under attack (low tunnel build success)
             double buildSuccess = getTunnelBuildSuccess();
-            // Also true if 0% success (botnet attack from startup)
-            boolean underAttack = (buildSuccess >= 0 && buildSuccess < 0.4);
-            long resetInterval = underAttack ? 5 * 60 * 1000 : 10 * 60 * 1000;
+            boolean underStress = buildSuccess < 0.4;
+            long resetInterval = underStress ? 5 * 60 * 1000 : 10 * 60 * 1000;
 
             if (!tryWriteLock()) {
                 return;
@@ -239,14 +238,16 @@ public class ProfileOrganizer {
                 }
 
                 if (resetCount > 0 && _log.shouldInfo()) {
-                    _log.info("Reset tunnel history for " + resetCount + " ghost peers (attack: " + underAttack + ")");
+                    String isUnderStress = underStress ? "-> Low tunnel build success" : "";
+                    _log.info("Reset tunnel history for " + resetCount + " ghost peers " +
+                              (uptime < 10*60*1000 ? "-> Router startup period" : isUnderStress));
                 }
             } finally {
                 releaseWriteLock();
             }
 
             // Reschedule with adjusted interval
-            long nextDelay = underAttack ? 5 * 60 * 1000 : 10 * 60 * 1000;
+            long nextDelay = underStress ? 5 * 60 * 1000 : 10 * 60 * 1000;
             _context.simpleTimer2().addEvent(this, nextDelay);
         }
     }

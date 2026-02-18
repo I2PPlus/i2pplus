@@ -335,7 +335,9 @@ public class HostChecker {
             double buildSuccess = profileOrganizer.getTunnelBuildSuccess();
             boolean underAttack = buildSuccess < TUNNEL_BUILD_SUCCESS_THRESHOLD;
             if (_log.shouldDebug()) {
-                _log.debug("Tunnel build success: " + (int)(buildSuccess * 100) + "% -> Under attack: " + underAttack);
+                long uptime = routerContext.router().getUptime();
+                _log.debug("Tunnel build success: " + (int)(buildSuccess * 100) + "% -> " +
+                           (uptime < 10*60*1000 ? "Starting up..." : "Under attack: " + underAttack));
             }
             return underAttack;
         } catch (Exception e) {

@@ -192,8 +192,13 @@ class TunnelGatewayPumper implements Runnable {
                 if (gw.getMessagesSent() == POISON_PTG) {
                     break; // poison pill detected, exit thread
                 }
+                // Skip if gateway was destroyed while waiting in queue
+                if (gw.isDestroyed()) {
+                    _backlogged.remove(gw);
+                    continue;
+                }
                 requeue = gw.pump(queueBuf);
-                if (requeue) {
+                if (requeue && !gw.isDestroyed()) {
                     handleRequeue(gw);
                 }
             } catch (InterruptedException ie) {

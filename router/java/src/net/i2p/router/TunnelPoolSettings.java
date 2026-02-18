@@ -35,6 +35,8 @@ public class TunnelPoolSettings {
     private int _priority;
     /** @since 0.9.68+ default true, set to false for ping tunnels */
     private boolean _shouldTest = true;
+    /** @since 2.11.0+ keep failed tunnels in pool instead of removing them */
+    private boolean _keepFailedTunnels = DEFAULT_KEEP_FAILED_TUNNELS;
     private final Set<Hash> _aliases;
     private Hash _aliasOf;
     /** @since 0.9.68+ transient first peer exclusions for diversity */
@@ -59,6 +61,7 @@ public class TunnelPoolSettings {
     public static final String      PROP_RANDOM_KEY = "randomKey";
     /** @since 0.9.68+ */
     public static final String      PROP_SHOULD_TEST = "shouldTest";
+    public static final boolean     DEFAULT_KEEP_FAILED_TUNNELS = false;
     public static final int         DEFAULT_QUANTITY = 3;
     public static final int         DEFAULT_BACKUP_QUANTITY = 0;
     public static final int         DEFAULT_DURATION = 10*60*1000;
@@ -343,6 +346,19 @@ public class TunnelPoolSettings {
     public boolean shouldTest() { return _shouldTest; }
 
     /**
+     *  Keep failed tunnels in the pool instead of removing them.
+     *  This can help with memory/performance but may keep dead tunnels around.
+     *  @return true to keep failed tunnels, false (default) to remove them
+     *  @since 2.11.0+
+     */
+    public boolean getKeepFailedTunnels() { return _keepFailedTunnels; }
+
+    /**
+     *  @since 2.11.0+
+     */
+    public void setKeepFailedTunnels(boolean keep) { _keepFailedTunnels = keep; }
+
+    /**
      *  @return non-null
      */
     public Properties getUnknownOptions() { return _unknownOptions; }
@@ -400,8 +416,9 @@ public class TunnelPoolSettings {
                         _randomKey = new SessionKey(rk);
                 } else if (name.equalsIgnoreCase(prefix + PROP_SHOULD_TEST)) {
                     _shouldTest = getBoolean(value, true);
-                } else
+                } else {
                     _unknownOptions.setProperty(name.substring(prefix.length()), value);
+                }
             }
         }
     }
