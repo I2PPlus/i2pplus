@@ -55,6 +55,7 @@ import net.i2p.data.i2cp.SetDateMessage;
 import net.i2p.router.ClientTunnelSettings;
 import net.i2p.router.LeaseSetKeys;
 import net.i2p.router.RouterContext;
+import net.i2p.router.TunnelInfo;
 import net.i2p.util.Log;
 import net.i2p.util.PasswordManager;
 
@@ -701,7 +702,17 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
             if (message.getReqID() >= 0) {sid = new SessionId(65535);} // fixup if necessary
             h = null;
         }
-        if (h == null) {h = _runner.getDestHash();} // h may still be null, an LS lookup for b32 will go out expl. tunnels
+        if (h == null) {h = _runner.getDestHash();} // h may still be null, an LS lookup for b32 will go out exploratory tunnels
+        // Check if client has tunnels available - if not, fall back to exploratory
+        if (h != null) {
+            TunnelInfo ti = _context.tunnelManager().selectInboundTunnel(h);
+            if (ti == null) {
+                if (_log.shouldInfo()) {
+                    _log.info("Client [" + h.toBase32().substring(0,8) + "] has no tunnels -> Using exploratory for lookup");
+                }
+                h = null; // Fall back to exploratory tunnels
+            }
+        }
         _context.jobQueue().addJob(new LookupDestJob(_context, _runner, message.getReqID(),
                                                      message.getTimeout(), sid,
                                                      message.getHash(), message.getHostname(), h));

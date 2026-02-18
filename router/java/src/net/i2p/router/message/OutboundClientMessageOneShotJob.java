@@ -416,7 +416,17 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     private int getNextLease() {
         // set in runJob if found locally
         KademliaNetworkDatabaseFacade kndf = (KademliaNetworkDatabaseFacade) getContext().clientNetDb(_from.calculateHash());
-        if (_leaseSet == null || (!kndf.isClientDb() && _leaseSet.getReceivedAsPublished())) {
+        
+        // Check if destination is local - local destinations should always be reachable
+        // even if clientNetDb fell back to main NetDB and LeaseSet has getReceivedAsPublished() == true
+        boolean toIsLocal = getContext().clientManager().isLocal(_to.calculateHash());
+        // Check if sender is local - if sender is a valid local client, we can trust the LeaseSet
+        // even if clientNetDb fell back to main NetDB
+        boolean fromIsLocal = getContext().clientManager().isLocal(_from.calculateHash());
+        
+        // Only reject published LeaseSet from main NetDB if BOTH sender and destination are non-local
+        // This handles the case where clientNetDb falls back to main NetDB due to registration race conditions
+        if (_leaseSet == null || (!kndf.isClientDb() && !toIsLocal && !fromIsLocal && _leaseSet.getReceivedAsPublished())) {
             if (_leaseSet == null) {
                 // shouldn't happen
                 _leaseSet = kndf.lookupLeaseSetLocally(_to.calculateHash());
@@ -427,9 +437,11 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                     return MessageStatusMessage.STATUS_SEND_FAILURE_NO_LEASESET;
                 }
             }
-            if (!kndf.isClientDb() && _leaseSet.getReceivedAsPublished()) {
+            if (!kndf.isClientDb() && !toIsLocal && !fromIsLocal && _leaseSet.getReceivedAsPublished()) {
                 if (_log.shouldWarn()) {
-                    _log.warn(getJobId() + ": Only have ReceivedAsPublished LeaseSet for " + _toString);
+                    _log.warn(getJobId() + ": Only have ReceivedAsPublished LeaseSet for " + _toString +
+                              " (kndf.isClientDb: " + kndf.isClientDb() + ", toIsLocal: " + toIsLocal + 
+                              ", fromIsLocal: " + fromIsLocal + ")");
                 }
                 return MessageStatusMessage.STATUS_SEND_FAILURE_NO_LEASESET;
             }
