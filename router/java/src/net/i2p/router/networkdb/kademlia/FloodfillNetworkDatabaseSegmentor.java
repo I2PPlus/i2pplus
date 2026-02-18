@@ -121,12 +121,20 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
      */
     @Override
     public NetworkDatabaseFacade clientNetDB(Hash id) {
-        if (_log.shouldDebug())
-            _log.debug("Looked up ClientNetDB: " + id);
-        if (id != null){
+        if (id != null) {
             NetworkDatabaseFacade fndf = getSubNetDB(id);
-            if (fndf != null)
+            if (fndf != null) {
+                if (_log.shouldDebug()) {
+                    _log.debug("Found ClientNetDB for: " + id.toBase64().substring(0, 6));
+                }
                 return fndf;
+            }
+            // Log fallback to main NetDB - this could indicate a registration issue
+            if (_log.shouldWarn()) {
+                boolean isLocal = _context.clientManager().isLocal(id);
+                _log.warn("ClientNetDB not found for " + id.toBase64().substring(0, 6) + 
+                          " (local: " + isLocal + ") -> falling back to main NetDB");
+            }
         }
         return mainNetDB();
     }

@@ -493,13 +493,23 @@ public class IterativeSearchJob extends FloodSearchJob {
                 }
                 return;
             }
+            // During startup or under stress, allow zero-hop lookups to unknown peers
+            // The worst case is the lookup fails and we retry
             if (peer != null && _facade.lookupLocallyWithoutValidation(peer) == null) {
-                failed(peer, false);
-                // Log at debug level - this is expected when peers are banned/removed from NetDB
-                if (_log.shouldDebug()) {
-                    _log.debug("Not sending zero-hop lookup of [" + peer.toBase64().substring(0,6) + "] to UNKNOWN");
+                long uptime = getContext().router().getUptime();
+                double buildSuccess = getContext().profileOrganizer().getTunnelBuildSuccess();
+                boolean underStress = buildSuccess < 0.40 || uptime < 10*60*1000;
+                if (!underStress) {
+                    failed(peer, false);
+                    if (_log.shouldDebug()) {
+                        _log.debug("Not sending zero-hop lookup of [" + peer.toBase64().substring(0,6) + "] to UNKNOWN");
+                    }
+                    return;
                 }
-                return;
+                if (_log.shouldWarn()) {
+                    _log.warn("Allowing zero-hop lookup to [" + peer.toBase64().substring(0,6) + "] during " +
+                              (uptime < 10*60*1000 ? "startup" : "network stress (" + (int)(buildSuccess * 100) + "% success)"));
+                }
             }
         }
 
