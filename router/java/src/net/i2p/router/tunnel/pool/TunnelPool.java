@@ -2638,9 +2638,28 @@ public class TunnelPool {
 
     /**
      * Clean up resources for a failed/unadded tunnel build.
+     * NEVER removes a tunnel if it would leave the pool with 0 tunnels.
      * @param cfg the failed tunnel config
      */
     private void cleanupFailedBuild(PooledTunnelCreatorConfig cfg) {
+        // Check if this is the last tunnel - if so, keep it as last resort
+        int currentTunnels = getTunnelCount();
+        int inProgress = 0;
+        synchronized (_inProgress) {
+            inProgress = _inProgress.size();
+        }
+        
+        // If this would leave us with no tunnels and no in-progress builds, 
+        // DON'T remove - keep it as last resort and trigger replacement instead
+        if (currentTunnels <= 1 && inProgress == 0) {
+            if (_log.shouldWarn()) {
+                _log.warn("Keeping failed tunnel as last resort in " + toString() + " - will trigger replacement");
+            }
+            cfg.setLastResort();
+            triggerReplacementBuild();
+            return;
+        }
+        
         _context.tunnelDispatcher().remove(cfg, "build failed");
         _manager.removeFromExpiration(cfg);
         Long tunnelKey = ExpireLocalTunnelsJob.getTunnelKey(cfg);
