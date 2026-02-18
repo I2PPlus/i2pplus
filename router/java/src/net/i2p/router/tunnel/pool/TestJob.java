@@ -1,5 +1,7 @@
 package net.i2p.router.tunnel.pool;
 
+import java.util.Iterator;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.ConcurrentHashMap;
@@ -118,9 +120,11 @@ public class TestJob extends JobImpl {
 
     /**
      * Track which tunnels currently have tests running to prevent multiple concurrent tests per tunnel.
-     * Key: tunnel key (Long), Value: TestJob instance
+     * Key: tunnel key (Long), Value: creation timestamp (Long)
      */
-    private static final ConcurrentHashMap<Long, TestJob> RUNNING_TESTS = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<Long, Long> RUNNING_TESTS = new ConcurrentHashMap<>();
+
+    private static final long STALE_TEST_THRESHOLD = 5 * 60 * 1000; // 5 minutes
 
     /**
      * Track which tunnel pools currently have tests running to ensure better coverage across pools.
@@ -130,19 +134,34 @@ public class TestJob extends JobImpl {
 
     /**
      * Periodic cleanup of stale entries in static maps.
-     * Called from TunnelPoolManager to prevent memory leaks.
+     * Called from TunnelDispatcher to prevent memory leaks.
+     * Also cleans up BuildRequestor's static maps.
      * @return number of entries cleaned up
      */
     public static int cleanup() {
         int cleaned = 0;
-        // Clean up POOL_TEST_COUNTS with zero or negative counts
-        for (String poolId : POOL_TEST_COUNTS.keySet()) {
-            AtomicInteger count = POOL_TEST_COUNTS.get(poolId);
-            if (count != null && count.get() <= 0) {
-                POOL_TEST_COUNTS.remove(poolId);
+        long now = System.currentTimeMillis();
+
+        // Clean up stale RUNNING_TESTS entries (tests that never completed)
+        for (Iterator<Map.Entry<Long, Long>> it = RUNNING_TESTS.entrySet().iterator(); it.hasNext(); ) {
+            Map.Entry<Long, Long> entry = it.next();
+            if (now - entry.getValue() > STALE_TEST_THRESHOLD) {
+                it.remove();
                 cleaned++;
             }
         }
+
+        // Clean up POOL_TEST_COUNTS with zero or negative counts
+        for (Iterator<Map.Entry<String, AtomicInteger>> it = POOL_TEST_COUNTS.entrySet().iterator(); it.hasNext(); ) {
+            Map.Entry<String, AtomicInteger> entry = it.next();
+            if (entry.getValue().get() <= 0) {
+                it.remove();
+                cleaned++;
+            }
+        }
+
+        // Also cleanup BuildRequestor's static maps (same package)
+        cleaned += BuildRequestor.cleanup();
         return cleaned;
     }
 
@@ -344,36 +363,13 @@ public class TestJob extends JobImpl {
     }
 
     /**
-     * Invalidate a TestJob by tunnel key.
+     * Invalidate a tunnel test by tunnel key.
      * Called when a tunnel is removed from the pool to prevent stale tests from running.
      * @param tunnelKey the tunnel key (from ExpireLocalTunnelsJob.getTunnelKey)
      */
     public static void invalidate(Long tunnelKey) {
         if (tunnelKey == null) return;
-        TestJob job = RUNNING_TESTS.remove(tunnelKey);
-        if (job != null) {
-            job._valid = false;
-            job._cfg = null;
-            job._outTunnel = null;
-            job._replyTunnel = null;
-            job._otherTunnel = null;
-            // Clean up pool test count tracking
-            TunnelPool pool = job._pool;
-            if (pool != null) {
-                String poolId = getPoolId(pool);
-                AtomicInteger poolCount = POOL_TEST_COUNTS.get(poolId);
-                if (poolCount != null) {
-                    poolCount.decrementAndGet();
-                    if (poolCount.get() <= 0) {
-                        POOL_TEST_COUNTS.remove(poolId);
-                    }
-                }
-            }
-            // Decrement total jobs counter
-            if (job._counted.compareAndSet(true, false)) {
-                decrementTotalJobs();
-            }
-        }
+        RUNNING_TESTS.remove(tunnelKey);
     }
 
     /**
@@ -384,7 +380,7 @@ public class TestJob extends JobImpl {
     private void cleanupTunnelTracking() {
         Long tunnelKey = _tunnelKey;
         if (tunnelKey != null) {
-            RUNNING_TESTS.remove(tunnelKey, this);
+            RUNNING_TESTS.remove(tunnelKey);
         }
 
         // Clean up pool test count tracking
@@ -429,7 +425,7 @@ public class TestJob extends JobImpl {
         // Register this test as running for the tunnel
         Long tunnelKey = _tunnelKey;
         if (tunnelKey != null) {
-            TestJob existing = RUNNING_TESTS.putIfAbsent(tunnelKey, this);
+            Long existing = RUNNING_TESTS.putIfAbsent(tunnelKey, Long.valueOf(System.currentTimeMillis()));
             if (existing != null) {
                 if (_log.shouldDebug()) {
                     _log.debug("Test already registered for tunnel key " + tunnelKey + " -> Invalidating duplicate test for " + cfg);

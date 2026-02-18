@@ -41,7 +41,9 @@ public class ExpireLocalTunnelsJob extends JobImpl {
     private static final int BACKED_UP_THRESHOLD = 100;
     private static final long OB_EARLY_EXPIRE = 30 * 1000;
     private static final long IB_EARLY_EXPIRE = OB_EARLY_EXPIRE + 7500;
-    private static final long MAX_ENTRY_LIFETIME = 15 * 1000L; // 15 seconds - aggressive cleanup
+    // Must be longer than max tunnel lifetime (10 min) to prevent removing valid entries
+    // Entries should only be removed when their tunnel has actually expired
+    private static final long MAX_ENTRY_LIFETIME = 15 * 60 * 1000L; // 15 minutes
     private static final int MAX_PHASE1_RETRIES = 3;
     private static final int MAX_ITERATE_PER_RUN = 10000;
     private static final int MAX_ITERATE_BACKED_UP = 20000;
@@ -162,7 +164,9 @@ public class ExpireLocalTunnelsJob extends JobImpl {
                         - getContext().random().nextLong(OB_EARLY_EXPIRE);
         }
 
-        cfg.setExpiration(earlyExpire);
+        // Do NOT modify cfg.setExpiration() - this would prematurely expire viable tunnels
+        // The earlyExpire time is used only for scheduling the expiration job, not the actual tunnel lifetime
+        // Other code relies on cfg.getExpiration() returning the true tunnel expiration time
 
         TunnelExpiration te = new TunnelExpiration(cfg, tunnelKey, earlyExpire, dropAfter, getContext().clock().now());
         _tunnelExpirations.put(tunnelKey, te);
@@ -343,7 +347,7 @@ public class ExpireLocalTunnelsJob extends JobImpl {
                     }
                 } else {
                     try {
-                        getContext().tunnelDispatcher().remove(cfg);
+                        getContext().tunnelDispatcher().remove(cfg, "expire phase 2");
                         phase2Removed++;
                     } catch (Exception e) {
                         if (_log.shouldWarn()) {
@@ -392,23 +396,33 @@ public class ExpireLocalTunnelsJob extends JobImpl {
         }
 
         // NUCLEAR: Cleanup stale in-progress tunnels in all pools
+        // BUT skip during startup (first 10 minutes) to avoid removing tunnels that are still building
+        long uptime = getContext().router().getUptime();
+        boolean isStartup = uptime < 10 * 60 * 1000;
         int inProgressCleaned = 0;
         List<TunnelPool> pools = new ArrayList<>();
         getContext().tunnelManager().listPools(pools);
-        for (TunnelPool pool : pools) {
-            inProgressCleaned += pool.cleanupInProgress();
-        }
-        if (inProgressCleaned > 0 && _log.shouldInfo()) {
-            _log.info("Nuclear cleanup: removed " + inProgressCleaned + " stale in-progress configs from pools");
+        if (!isStartup) {
+            for (TunnelPool pool : pools) {
+                inProgressCleaned += pool.cleanupInProgress();
+            }
+            if (inProgressCleaned > 0 && _log.shouldInfo()) {
+                _log.info("Nuclear cleanup: removed " + inProgressCleaned + " stale in-progress configs from pools");
+            }
         }
 
         // Cleanup expired tunnels that weren't tracked due to 3000 limit bug
+        // BUT skip during startup (first 10 minutes) to avoid removing tunnels that are still building
         int expiredCleaned = 0;
-        for (TunnelPool pool : pools) {
-            expiredCleaned += pool.cleanupExpiredTunnels();
-        }
-        if (expiredCleaned > 0 && _log.shouldInfo()) {
-            _log.info("Expired tunnel cleanup: removed " + expiredCleaned + " expired tunnels from pools");
+        if (!isStartup) {
+            for (TunnelPool pool : pools) {
+                expiredCleaned += pool.cleanupExpiredTunnels();
+            }
+            if (expiredCleaned > 0 && _log.shouldInfo()) {
+                _log.info("Expired tunnel cleanup: removed " + expiredCleaned + " expired tunnels from pools");
+            }
+        } else if (_log.shouldDebug()) {
+            _log.debug("Skipping expired tunnel cleanup during startup (uptime: " + uptime + "ms)");
         }
 
         // Additional defensive cleanup: remove tunnels from dispatcher that have no expiration entry
@@ -428,57 +442,66 @@ public class ExpireLocalTunnelsJob extends JobImpl {
         }
 
         // Additional defensive cleanup: clean up expired tunnels from dispatcher maps
-        try {
-            TunnelDispatcher dispatcher = getContext().tunnelDispatcher();
-            int cleaned = dispatcher.cleanupExpiredTunnels();
-            if (cleaned > 0 && _log.shouldInfo()) {
-                _log.info("Defensive cleanup removed " + cleaned + " expired tunnels from dispatcher");
-            }
-            // Log current state for debugging
-            if (_log.shouldDebug()) {
-                _log.debug("Dispatcher state: participatingConfig=" +
-                           dispatcher.getParticipatingCount() + ", outboundEndpoints=" +
-                           dispatcher.getOutboundEndpointCount() + ", participants=" +
-                           dispatcher.getParticipatingCount());
-            }
-            // Run aggressive cleanup only when there's clear evidence of a memory leak
-            // Large discrepancy between dispatcher maps and expiration map indicates a problem
-            int obGw = dispatcher.getOutboundGatewayCount();
-            int ibGw = dispatcher.getInboundGatewayCount();
-            int participating = dispatcher.getParticipatingCount();
-            int expirationMap = _tunnelExpirations.size();
-
-            // Run aggressive cleanup if there's ANY discrepancy OR periodically to prevent leaks
-            // Lowered thresholds to catch leaks early before they accumulate
-            boolean needsAggressive = (obGw > expirationMap + 10) || (ibGw > expirationMap + 10) ||
-                                      participating > 500 || _runCount % 10 == 0;
-            if (needsAggressive) {
-                int aggressiveCleaned = dispatcher.aggressiveCleanup();
-                if (aggressiveCleaned > 0 && _log.shouldInfo()) {
-                    _log.info("Aggressive cleanup removed " + aggressiveCleaned + " orphaned tunnels (OB:" + obGw + " IB:" + ibGw + " part:" + participating + " exp:" + expirationMap + ")");
+        // BUT skip during startup (first 5 minutes) to avoid removing tunnels that are still building
+        if (isStartup && _log.shouldInfo()) {
+            _log.info("Skipping defensive cleanup during startup (uptime: " + uptime + "ms)");
+        }
+        if (!isStartup) {
+            try {
+                TunnelDispatcher dispatcher = getContext().tunnelDispatcher();
+                int cleaned = dispatcher.cleanupExpiredTunnels();
+                if (cleaned > 0 && _log.shouldInfo()) {
+                    _log.info("Defensive cleanup removed " + cleaned + " expired tunnels from dispatcher");
                 }
-                // After aggressive cleanup, force TTL sweep to clean up the expiration queue
-                // Aggressive cleanup removes from dispatcher but NOT from the queue
-                int queueCleaned = 0;
-                Iterator<Map.Entry<Long, TunnelExpiration>> queueIt = _tunnelExpirations.entrySet().iterator();
-                while (queueIt.hasNext()) {
-                    Map.Entry<Long, TunnelExpiration> entry = queueIt.next();
-                    TunnelExpiration te = entry.getValue();
-                    if (te == null || te.createdAt < ttlCutoff || te.config == null) {
-                        if (te != null && te.config == null) {
-                            cleanupUsingTunnelIds(te);
-                            queueCleaned++;
+                // Log current state for debugging
+                if (_log.shouldDebug()) {
+                    _log.debug("Dispatcher state: participatingConfig=" +
+                               dispatcher.getParticipatingCount() + ", outboundEndpoints=" +
+                               dispatcher.getOutboundEndpointCount() + ", participants=" +
+                               dispatcher.getParticipatingCount());
+                }
+                // Run aggressive cleanup only when there's clear evidence of a memory leak
+                // Large discrepancy between dispatcher maps and expiration map indicates a problem
+                int obGw = dispatcher.getOutboundGatewayCount();
+                int ibGw = dispatcher.getInboundGatewayCount();
+                int participating = dispatcher.getParticipatingCount();
+                int expirationMap = _tunnelExpirations.size();
+
+                // Only run aggressive cleanup when there's clear evidence of a leak:
+                // - Local tunnel maps significantly larger than expiration tracking (real leak)
+                // - Participating tunnels extremely high (potential leak, but be conservative)
+                // Do NOT run periodically - aggressive cleanup removes valid transit tunnels!
+                boolean needsAggressive = (obGw > expirationMap + 50) || (ibGw > expirationMap + 50) ||
+                                          participating > 10000;
+                if (needsAggressive) {
+                    int aggressiveCleaned = dispatcher.aggressiveCleanup();
+                    if (aggressiveCleaned > 0 && _log.shouldInfo()) {
+                        _log.info("Aggressive cleanup removed " + aggressiveCleaned + " orphaned tunnels (OB:" + obGw +
+                                   " IB:" + ibGw + " part:" + participating + " exp:" + expirationMap + ")");
+                    }
+                    // After aggressive cleanup, force TTL sweep to clean up the expiration queue
+                    // Aggressive cleanup removes from dispatcher but NOT from the queue
+                    int queueCleaned = 0;
+                    Iterator<Map.Entry<Long, TunnelExpiration>> queueIt = _tunnelExpirations.entrySet().iterator();
+                    while (queueIt.hasNext()) {
+                        Map.Entry<Long, TunnelExpiration> entry = queueIt.next();
+                        TunnelExpiration te = entry.getValue();
+                        if (te == null || te.createdAt < ttlCutoff || te.config == null) {
+                            if (te != null && te.config == null) {
+                                cleanupUsingTunnelIds(te);
+                                queueCleaned++;
+                            }
+                            queueIt.remove();
                         }
-                        queueIt.remove();
+                    }
+                    if (queueCleaned > 0 && _log.shouldInfo()) {
+                        _log.info("Aggressive cleanup queue sweep removed " + queueCleaned + " stale entries");
                     }
                 }
-                if (queueCleaned > 0 && _log.shouldInfo()) {
-                    _log.info("Aggressive cleanup queue sweep removed " + queueCleaned + " stale entries");
-                }
+            } catch (Exception e) {
+                // Ignore
             }
-        } catch (Exception e) {
-            // Ignore
-        }
+        } // end if (!isStartup)
 
         int remaining = _tunnelExpirations.size();
         if (remaining > 0) {
