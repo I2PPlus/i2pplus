@@ -540,12 +540,15 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             }
         }
 
-        _inboundExploratory.startup();
-        _context.simpleTimer2().addEvent(new DelayedStartup(_outboundExploratory), 3*1000);
+        // Start OUTBOUND exploratory FIRST - it can bootstrap with 0-hop
+        // Inbound exploratory needs outbound for reply path
+        _outboundExploratory.startup();
+        // Delay inbound exploratory slightly to allow outbound to build first
+        _context.simpleTimer2().addEvent(new DelayedStartup(_inboundExploratory), 2*1000);
 
         // try to build up longer tunnels
-        _context.jobQueue().addJob(new BootstrapPool(_context, _inboundExploratory));
         _context.jobQueue().addJob(new BootstrapPool(_context, _outboundExploratory));
+        _context.jobQueue().addJob(new BootstrapPool(_context, _inboundExploratory));
     }
 
     private static class BootstrapPool extends JobImpl {

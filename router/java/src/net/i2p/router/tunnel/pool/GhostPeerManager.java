@@ -24,9 +24,9 @@ public class GhostPeerManager {
     private final ConcurrentHashMap<Hash, Long> _ghostSince;
 
     private static final int DEFAULT_TIMEOUT_THRESHOLD = 5;
-    private static final int ATTACK_TIMEOUT_THRESHOLD = 2;
+    private static final int ATTACK_TIMEOUT_THRESHOLD = 4;
     private static final long COOLDOWN_MS = 90*1000; // 90s (normal)
-    private static final long ATTACK_COOLDOWN_MS = 60*1000; // 60s (faster recovery during attacks)
+    private static final long ATTACK_COOLDOWN_MS = 120*1000; // 120s (longer recovery during attacks)
     private static final int MAX_TRACKED_PEERS = 8192;
     private static final long CLEANUP_INTERVAL_MS = 5*60*1000; // 5 minutes
 
@@ -66,13 +66,15 @@ public class GhostPeerManager {
         // Track when peer became a ghost
         int newCount = count != null ? count.get() : 1;
         double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
-        boolean underAttack = buildSuccess < 0.4;
+        long uptime = _context.router().getUptime();
+        boolean underStress = buildSuccess < 0.40;
         if (newCount >= getThreshold()) {
             Long existingTime = _ghostSince.putIfAbsent(peer, _context.clock().now());
             if (existingTime == null && _log.shouldWarn()) {
                 _log.warn("Peer [" + peer.toBase64().substring(0,6) + "] marked as ghost for " +
-                          (underAttack ? ATTACK_COOLDOWN_MS/1000 : COOLDOWN_MS/1000) + "s -> " +
-                           newCount + " consecutive tunnel build timeouts");
+                          (underStress ? ATTACK_COOLDOWN_MS/1000 : COOLDOWN_MS/1000) + "s -> " +
+                           newCount + " consecutive tunnel build timeouts (" +
+                          (uptime < 10*60*1000 ? "router startup period" : "build success: " + (int)(buildSuccess * 100) + "%") + ")");
             }
         }
     }
@@ -119,7 +121,7 @@ public class GhostPeerManager {
       * @param peer the peer hash to check
       * @return true if peer is in cooldown period
       */
-     public boolean isInCooldown(Hash peer) {
+    public boolean isInCooldown(Hash peer) {
          if (peer == null) {return false;}
 
          Long since = _ghostSince.get(peer);
@@ -127,9 +129,9 @@ public class GhostPeerManager {
 
          long elapsed = _context.clock().now() - since;
          double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
-         long cooldown = (buildSuccess >= 0 && buildSuccess < 0.40)
-                         ? ATTACK_COOLDOWN_MS
-                         : COOLDOWN_MS;
+         long uptime = _context.router().getUptime();
+         boolean underStress = buildSuccess < 0.40;
+         long cooldown = underStress ? ATTACK_COOLDOWN_MS : COOLDOWN_MS;
          return elapsed < cooldown;
      }
 

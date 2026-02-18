@@ -78,7 +78,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
             if (shouldSelectExplicit(settings)) {return selectExplicit(settings, length);}
 
             Set<Hash> exclude = getExclude(isInbound, false);
-            
+
             // Add first peer exclusions for diversity @since 0.9.68+
             Set<Hash> firstPeerExclusions = settings.getFirstPeerExclusions();
             if (firstPeerExclusions != null && !firstPeerExclusions.isEmpty()) {
@@ -89,7 +89,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
             if (lastPeerExclusions != null && !lastPeerExclusions.isEmpty()) {
                 exclude.addAll(lastPeerExclusions);
             }
-            
+
             ArraySet<Hash> matches = new ArraySet<Hash>(length);
             if (length == 1) {
                 // closest-hop restrictions
@@ -106,7 +106,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     // Throttle warnings to reduce log spam during attacks
                     long now = ctx.clock().now();
                     if (log.shouldWarn() && _lastFallbackWarn.getAndSet(now) < now - WARNING_THROTTLE_MS) {
-                        log.warn("No eligible non-failing peers available for " + (isInbound ? "Inbound" : "Outbound") + 
+                        log.warn("No eligible non-failing peers available for " + (isInbound ? "Inbound" : "Outbound") +
                                  " connection -> Falling back to fast pool (throttled)");
                     }
                     ctx.profileOrganizer().selectFastPeers(length, exclude, matches);
@@ -294,71 +294,72 @@ class ClientPeerSelector extends TunnelPeerSelector {
                 int min = settings.getLength();
                 int skew = settings.getLengthVariance();
                 if (skew < 0) {min += skew;}
+
                 // not enough peers to build the minimum size
-            if (rv.size() < min) {
+                if (rv.size() < min) {
                 // For firewalled routers with very few peers, allow shorter tunnels as fallback
-                if (hidden && rv.size() > 0) {
-                    if (log.shouldInfo()) {
-                        log.info("Firewalled router: allowing shorter tunnel (" + rv.size() + " hops) instead of requested " + length + " hops");
-                    }
-                    // Continue with whatever peers we have
-                } else {
-                    // Progressive fallback under attack conditions based on build success rate
-                    double buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
-                    boolean isUnderAttack = buildSuccess < 0.40;
-                    
-                    if (isUnderAttack && rv.size() > 0) {
-                        // Attack detected (25-40% success): try fallback with relaxed restrictions
+                    if (hidden && rv.size() > 0) {
                         if (log.shouldInfo()) {
-                            log.info("Attack detected (" + (int)(buildSuccess * 100) + "% success) -> Trying relaxed fallback peer selection...");
+                            log.info("Firewalled router: allowing shorter tunnel (" + rv.size() + " hops) instead of requested " + length + " hops");
                         }
-                        
-                        // Fall back to any peer in notFailing pool with minimal exclusions
-                        ArraySet<Hash> fallback = new ArraySet<Hash>(min);
-                        ctx.profileOrganizer().selectNotFailingPeers(min, exclude, fallback, false, 0, null);
-                        fallback.remove(ctx.routerHash());
-                        
-                        if (!fallback.isEmpty()) {
-                            rv.clear();
-                            rv.addAll(fallback);
-                            if (log.shouldDebug()) {
-                                log.debug("Fallback successful: found " + rv.size() + " peers for tunnel");
+                        // Continue with whatever peers we have
+                    } else {
+                        // Progressive fallback under attack conditions based on build success rate
+                        double buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
+                        boolean isUnderAttack = buildSuccess < 0.40;
+
+                        if (isUnderAttack && rv.size() > 0) {
+                            // Attack detected (25-40% success): try fallback with relaxed restrictions
+                            if (log.shouldInfo()) {
+                                log.info("Attack detected (" + (int)(buildSuccess * 100) + "% success) -> Trying relaxed fallback peer selection...");
                             }
-                        }
-                        
-                        // If still not enough, try with even more relaxed criteria (allow failing peers)
-                        if (rv.size() < min && buildSuccess < 0.30) {
-                            if (log.shouldWarn()) {
-                                log.warn("Severe attack (" + (int)(buildSuccess * 100) + "% success) -> Trying any peer fallback...");
-                            }
-                            ArraySet<Hash> relaxedFallback = new ArraySet<Hash>(min);
-                            ctx.profileOrganizer().selectAllNotFailingPeers(min, exclude, relaxedFallback, false);
-                            relaxedFallback.remove(ctx.routerHash());
-                            
-                            if (!relaxedFallback.isEmpty()) {
+
+                            // Fall back to any peer in notFailing pool with minimal exclusions
+                            ArraySet<Hash> fallback = new ArraySet<Hash>(min);
+                            ctx.profileOrganizer().selectNotFailingPeers(min, exclude, fallback, false, 0, null);
+                            fallback.remove(ctx.routerHash());
+
+                            if (!fallback.isEmpty()) {
                                 rv.clear();
-                                rv.addAll(relaxedFallback);
+                                rv.addAll(fallback);
                                 if (log.shouldDebug()) {
-                                    log.debug("Relaxed fallback successful: found " + rv.size() + " peers");
+                                    log.debug("Fallback successful: found " + rv.size() + " peers for tunnel");
+                                }
+                            }
+
+                            // If still not enough, try with even more relaxed criteria (allow failing peers)
+                            if (rv.size() < min && buildSuccess < 0.30) {
+                                if (log.shouldWarn()) {
+                                    log.warn("Severe attack (" + (int)(buildSuccess * 100) + "% success) -> Trying any peer fallback...");
+                                }
+                                ArraySet<Hash> relaxedFallback = new ArraySet<Hash>(min);
+                                ctx.profileOrganizer().selectAllNotFailingPeers(min, exclude, relaxedFallback, false);
+                                relaxedFallback.remove(ctx.routerHash());
+
+                                if (!relaxedFallback.isEmpty()) {
+                                    rv.clear();
+                                    rv.addAll(relaxedFallback);
+                                    if (log.shouldDebug()) {
+                                        log.debug("Relaxed fallback successful: found " + rv.size() + " peers");
+                                    }
                                 }
                             }
                         }
-                    }
-                    
-                    // Final check - if still not enough peers and we have some, allow shorter tunnel
-                    if (rv.size() < min) {
-                        if (isUnderAttack && rv.size() > 0) {
-                            // Under attack but have some peers - allow shorter tunnel instead of null
-                            if (log.shouldWarn()) {
-                                log.warn("Under attack: allowing shorter tunnel (" + rv.size() + " hops) instead of " + min + " minimum");
+
+                        // Final check - if still not enough peers and we have some, allow shorter tunnel
+                        if (rv.size() < min) {
+                            if (isUnderAttack && rv.size() > 0) {
+                                // Under attack but have some peers - allow shorter tunnel instead of null
+                                if (log.shouldWarn()) {
+                                    log.warn("Under attack: allowing shorter tunnel (" + rv.size() + " hops) instead of " + min + " minimum");
+                                }
+                                // Continue with shorter tunnel
+                            } else {
+                                return null;
                             }
-                            // Continue with shorter tunnel
-                        } else {
-                            return null;
                         }
                     }
                 }
-            }
             }
             if (rv.isEmpty()) {return null;}
         } else {rv = new ArrayList<Hash>(1);}

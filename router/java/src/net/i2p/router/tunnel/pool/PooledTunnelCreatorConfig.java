@@ -1,6 +1,7 @@
 package net.i2p.router.tunnel.pool;
 
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.data.Hash;
 import net.i2p.data.TunnelId;
@@ -16,8 +17,8 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
 
     private final TunnelPool _pool;
     private final Log _log;
-    // we don't store the config, that leads to OOM
     private TunnelId _pairedGW;
+    private final AtomicBoolean _buildCompleteCalled = new AtomicBoolean(false);
     /**
      * When true, this tunnel is the last one in the pool and should not be removed
      * until a replacement is built. It remains available but is only selected if
@@ -153,6 +154,24 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
      * @since 0.9.68+
      */
     public boolean isLastResort() {return _lastResort;}
+
+    /**
+     * Check if buildComplete has already been called for this tunnel.
+     * Used to prevent duplicate cleanup calls.
+     * @return true if buildComplete was already called
+     * @since 0.9.68+
+     */
+    public boolean isBuildCompleteCalled() {return _buildCompleteCalled.get();}
+
+    /**
+     * Mark that buildComplete is being called. Returns true if this is the first call,
+     * false if buildComplete was already called (caller should abort).
+     * @return true if this is the first call, false if already called
+     * @since 0.9.68+
+     */
+    public boolean markBuildCompleteCalled() {
+        return _buildCompleteCalled.compareAndSet(false, true);
+    }
 
     /**
      * Track recent activity to determine if tunnel is actively being used.
