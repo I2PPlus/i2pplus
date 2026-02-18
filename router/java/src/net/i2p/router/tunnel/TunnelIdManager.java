@@ -107,50 +107,55 @@ public class TunnelIdManager {
 
     /**
      * Generate a new unique tunnel ID that doesn't conflict with existing ones.
+     * Uses putIfAbsent to ensure atomicity and prevent race conditions.
      *
      * @return a new unique TunnelId
      */
     public TunnelId generateNewId() {
-        long id;
-        TunnelId tid;
         int attempts = 0;
-        do {
-            id = 1 + _context.random().nextLong(TunnelId.MAX_ID_VALUE);
-            tid = getOrCreate(id);
-            attempts++;
-            if (attempts > 1000) {
-                if (_log.shouldWarn()) {
-                    _log.warn("Struggling to generate unique tunnel ID after 1000 attempts");
-                }
-                break;
+        while (attempts < 10000) {
+            long id = 1 + _context.random().nextLong(TunnelId.MAX_ID_VALUE);
+            Long key = Long.valueOf(id);
+            TunnelId newId = new TunnelId(id);
+            TunnelId existing = _canonicalIds.putIfAbsent(key, newId);
+            if (existing == null) {
+                return newId;
             }
-        } while (false); // getOrCreate always succeeds or throws
-
-        return tid;
+            attempts++;
+        }
+        if (_log.shouldWarn()) {
+            _log.warn("Struggling to generate unique tunnel ID after 10000 attempts");
+        }
+        return getOrCreate(1 + _context.random().nextLong(TunnelId.MAX_ID_VALUE));
     }
 
     /**
      * Generate a new unique tunnel ID, excluding specific existing IDs.
+     * Uses putIfAbsent to ensure atomicity and prevent race conditions.
      *
      * @param excludeIds set of tunnel ID values to exclude
      * @return a new unique TunnelId
      */
     public TunnelId generateNewIdExcluding(java.util.Set<Long> excludeIds) {
-        long id;
         int attempts = 0;
-        do {
-            id = 1 + _context.random().nextLong(TunnelId.MAX_ID_VALUE);
-            attempts++;
-            if (attempts > 10000) {
-                if (_log.shouldWarn()) {
-                    _log.warn("Struggling to generate unique tunnel ID after 10000 attempts");
-                }
-                break;
+        while (attempts < 10000) {
+            long id = 1 + _context.random().nextLong(TunnelId.MAX_ID_VALUE);
+            if (excludeIds != null && excludeIds.contains(Long.valueOf(id))) {
+                attempts++;
+                continue;
             }
-        } while (_canonicalIds.containsKey(Long.valueOf(id)) ||
-                 (excludeIds != null && excludeIds.contains(Long.valueOf(id))));
-
-        return getOrCreate(id);
+            Long key = Long.valueOf(id);
+            TunnelId newId = new TunnelId(id);
+            TunnelId existing = _canonicalIds.putIfAbsent(key, newId);
+            if (existing == null) {
+                return newId;
+            }
+            attempts++;
+        }
+        if (_log.shouldWarn()) {
+            _log.warn("Struggling to generate unique tunnel ID after 10000 attempts");
+        }
+        return getOrCreate(1 + _context.random().nextLong(TunnelId.MAX_ID_VALUE));
     }
 
     /**
