@@ -92,15 +92,33 @@ abstract class BuildRequestor {
     private static final int PRIORITY = OutNetMessage.PRIORITY_MY_BUILD_REQUEST;
 
     /**
-     * Timeout for waiting for a full tunnel build reply.
+     * Base timeout for waiting for a full tunnel build reply.
+     * A tunnel build requires round-trip through multiple hops:
+     * - Outbound through exploratory tunnel to first hop
+     * - Through each participant hop
+     * - Reply back through reverse path
+     * For a 3-hop tunnel this is 6+ relay hops, each with processing delay.
      */
-    static final int REQUEST_TIMEOUT = SystemVersion.isSlow() ? 6*1000 : 5*1000;
+    private static final int BASE_TIMEOUT = SystemVersion.isSlow() ? 45*1000 : 30*1000;
+    private static final int EXTENDED_TIMEOUT = SystemVersion.isSlow() ? 60*1000 : 45*1000;
+    static final int REQUEST_TIMEOUT = BASE_TIMEOUT;
+
+    /**
+     * Get the appropriate timeout for tunnel build requests.
+     * Extended timeout is used when build success < 40% (under attack or starting up).
+     */
+    static int getRequestTimeout(RouterContext ctx) {
+        if (ctx.profileOrganizer().isLowBuildSuccess()) {
+            return EXTENDED_TIMEOUT;
+        }
+        return BASE_TIMEOUT;
+    }
 
     /**
      * Shorter timeout for the first hop of an outbound build,
      * to trigger early failure detection.
      */
-    private static final int FIRST_HOP_TIMEOUT = 10*1000;
+    private static final int FIRST_HOP_TIMEOUT = 15*1000;
 
     /**
      * Base expiration for the TunnelBuildMessage itself.
@@ -120,6 +138,25 @@ abstract class BuildRequestor {
     // Rate limiter for "No paired or Exploratory tunnel available" logs: destination -> last log time (ms)
     private static final ConcurrentHashMap<Hash, AtomicLong> _noTunnelLogLimiter = new ConcurrentHashMap<>();
     private static final long NO_TUNNEL_LOG_INTERVAL_MS = 60_000; // 1 minute
+    private static final long LOG_LIMITER_EXPIRY_MS = 10 * 60 * 1000; // 10 minutes
+
+    /**
+     * Cleanup stale entries from static maps to prevent memory leaks.
+     * Called periodically from TunnelDispatcher.
+     * @return number of entries cleaned up
+     */
+    public static int cleanup() {
+        int cleaned = 0;
+        long now = System.currentTimeMillis();
+        for (java.util.Iterator<java.util.Map.Entry<Hash, AtomicLong>> it = _noTunnelLogLimiter.entrySet().iterator(); it.hasNext(); ) {
+            java.util.Map.Entry<Hash, AtomicLong> entry = it.next();
+            if (now - entry.getValue().get() > LOG_LIMITER_EXPIRY_MS) {
+                it.remove();
+                cleaned++;
+            }
+        }
+        return cleaned;
+    }
 
     /**
      * Paired tunnels are always used for client tunnels to prevent correlation
@@ -218,22 +255,29 @@ abstract class BuildRequestor {
                 }
             }
             // Client tunnel cannot fallback to exploratory - return false to retry naturally
-            // The BuildExecutor will retry this tunnel in its next loop iteration
+            // The BuildExecutor will call buildComplete() for us
             if (!settings.isExploratory()) {
-                int ms = CLIENT_BACKOFF;
-                try {Thread.sleep(ms);} catch (InterruptedException ie) {}
                 return false;
             }
-            int ms = settings.isExploratory() ? EXPLORATORY_BACKOFF : CLIENT_BACKOFF;
-            try {Thread.sleep(ms);} catch (InterruptedException ie) {}
-            exec.buildComplete(cfg, OTHER_FAILURE);
+            // Exploratory tunnels with no reply path:
+            // - OUTBOUND: Can bootstrap by building 0-hop tunnel directly (no reply needed)
+            // - INBOUND: Must have outbound tunnel for reply, fail and retry later
+            if (!isInbound) {
+                // For outbound exploratory, build 0-hop tunnel directly as bootstrap
+                if (log.shouldInfo()) {
+                    log.info("Bootstrapping outbound exploratory tunnel with 0-hop (no reply tunnel available): " + cfg);
+                }
+                buildZeroHop(ctx, cfg, exec);
+                return true;
+            }
+            // Inbound exploratory needs outbound tunnel for reply - fail and retry
             return false;
         }
 
         I2NPMessage msg = createTunnelBuildMessage(ctx, pool, cfg, pairedTunnel, exec);
         if (msg == null) {
             log.warn("Tunnel build failed -> Could not create TunnelBuildMessage for " + cfg);
-            exec.buildComplete(cfg, OTHER_FAILURE);
+            // BuildExecutor will call buildComplete() for us
             return false;
         }
 
@@ -281,18 +325,22 @@ abstract class BuildRequestor {
                 : mgr.selectInboundExploratoryTunnel(farEnd);
 
             // Client tunnel using exploratory: ensure hop count meets client requirements
-            if (expl != null && !settings.isExploratory() && clientWantsMultiHop && expl.getLength() <= 1) {
+            // Only reject 0-hop exploratory tunnels - 1-hop is acceptable for client builds
+            // This prevents deadlock where client tunnels can't build until exploratory has multi-hop
+            if (expl != null && !settings.isExploratory() && clientWantsMultiHop && expl.getLength() <= 0) {
                 if (log.shouldInfo()) {
-                    log.info("Rejecting " + (expl.getLength() <= 0 ? "zero" : "one") +
-                             "-hop exploratory tunnel for " + cfg + " (wants " + clientLength + "+" + clientLengthVariance + " hops)");
+                    log.info("Rejecting zero-hop exploratory tunnel for " + cfg + " (wants " + clientLength + "+" + clientLengthVariance + " hops)");
                 }
                 return null;
             }
 
-            // If no exploratory tunnels exist yet, allow zero-hop as fallback for exploratory pools
+            // If no exploratory tunnels exist yet for an exploratory build,
+            // return null - request() will handle building a 0-hop bootstrap tunnel
             if (expl == null && settings.isExploratory()) {
+                // For outbound exploratory: request() will build 0-hop directly
+                // For inbound exploratory: need outbound tunnel first, will retry
                 if (log.shouldInfo()) {
-                    log.info("No existing Exploratory tunnels for " + cfg + " -> Allowing zero-hop build...");
+                    log.info("No existing Exploratory tunnels for " + cfg + " -> Will bootstrap in request()");
                 }
                 return null;
             }
@@ -326,13 +374,11 @@ abstract class BuildRequestor {
                 }
             }
         } else {
-            // Don't force exploratory - keep trying to build the client tunnel
-            // Just log the failure count
+            // Log the failure count but continue to try exploratory fallback
+            // Without ANY paired tunnel, builds can't succeed at all
             if (log.shouldWarn() && uptime > 5*60*1000 && fails > 2) {
-                log.warn(fails + " consecutive build timeouts for " + cfg + " -> Keeping client tunnel priority");
+                log.warn(fails + " consecutive build timeouts for " + cfg + " -> Will try exploratory fallback");
             }
-            // Return null to trigger new build attempt instead of falling back to exploratory
-            return null;
         }
 
         // For exploratory tunnels, allow fallback to other exploratory tunnels
@@ -348,7 +394,8 @@ abstract class BuildRequestor {
 
         // Client tunnels: use exploratory as fallback if > 0 hop
         // These exploratory tunnels will be replaced by client tunnels as they build
-        // 0/1-hop exploratory tunnels are rejected by selectFallback methods
+        // Only 0-hop exploratory tunnels are rejected by selectFallback methods
+        // 1-hop exploratory tunnels are acceptable to prevent deadlock at startup
         if (!settings.isExploratory()) {
             TunnelInfo expl = isInbound
                 ? selectFallbackOutboundTunnel(ctx, mgr, cfg, clientWantsMultiHop, log)
@@ -371,11 +418,10 @@ abstract class BuildRequestor {
             return null;
         }
         // For exploratory pools, allow 0/1-hop tunnels at startup
-        // For client pools using exploratory as fallback, reject short tunnels
-        if (clientWantsMultiHop && tunnel.getLength() <= 1) {
+        // For client pools using exploratory as fallback, only reject 0-hop (1-hop is acceptable)
+        if (clientWantsMultiHop && tunnel.getLength() <= 0) {
             if (log.shouldInfo()) {
-                log.info("Rejecting " + (tunnel.getLength() <= 0 ? "zero" : "one") +
-                         "-hop exploratory tunnel for client " + cfg + " build reply");
+                log.info("Rejecting zero-hop exploratory tunnel for client " + cfg + " build reply");
             }
             return null;
         }
@@ -390,11 +436,10 @@ abstract class BuildRequestor {
             return null;
         }
         // For exploratory pools, allow 0/1-hop tunnels at startup
-        // For client pools using exploratory as fallback, reject short tunnels
-        if (clientWantsMultiHop && tunnel.getLength() <= 1) {
+        // For client pools using exploratory as fallback, only reject 0-hop (1-hop is acceptable)
+        if (clientWantsMultiHop && tunnel.getLength() <= 0) {
             if (log.shouldInfo()) {
-                log.info("Rejecting " + (tunnel.getLength() <= 0 ? "zero" : "one") +
-                         "-hop exploratory tunnel for client " + cfg + " build reply");
+                log.info("Rejecting zero-hop exploratory tunnel for client " + cfg + " build reply");
             }
             return null;
         }

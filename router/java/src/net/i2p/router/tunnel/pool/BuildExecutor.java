@@ -159,12 +159,16 @@ class BuildExecutor implements Runnable {
             }
         }
 
-        // Extend timeout during network attacks when build success is under 40%
-        // Only trigger if we have build data (buildSuccess > 0), not at startup
+        // Extend timeout during network attacks or startup when build success is under 40%
         double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
-        boolean isUnderAttack = buildSuccess > 0 && buildSuccess < 0.40;
-        if (isUnderAttack) { // Under 40% success rate
+        long uptime = _context.router().getUptime();
+        boolean isUnderAttack = buildSuccess < 0.40;
+        if (isUnderAttack) {
             baseTimeout *= 1.5; // 1.5x the timeout during low success periods (reduced from 2x)
+            if (_log.shouldInfo() && uptime > 60*1000) {
+                _log.info("Extending tunnel build timeout (" + (int)(buildSuccess * 100) + "% success) -> " +
+                          (uptime < 10*60*1000 ? "router startup period" : "network may be under attack"));
+            }
         }
 
         // Adjust based on system load
@@ -251,15 +255,8 @@ class BuildExecutor implements Runnable {
         // Allow override through property
         allowed = _context.getProperty("router.tunnelConcurrentBuilds", allowed);
 
-        // Constants for expiration calculations
-        final long TEN_MINUTES_MS = 10 * 60 * 1000;
-        final long MAX_CONFIG_AGE = 15 * 60 * 1000; // 15 minutes max age for configs (fallback)
-        final long expireRecentlyBefore = now + TEN_MINUTES_MS - BuildRequestor.REQUEST_TIMEOUT + GRACE_PERIOD;
-        final long expireBefore = now + TEN_MINUTES_MS - BuildRequestor.REQUEST_TIMEOUT;
-
-        // Expire old build requests from recentlyBuilding map
+        // Cleanup recentlyBuilding map - remove configs whose tunnel lifetime has expired
         int recentlyCleaned = 0;
-        int recentlyLeaked = 0;
         for (Iterator<Long> iter = _recentlyBuildingMap.keySet().iterator(); iter.hasNext(); ) {
             Long key = iter.next();
             PooledTunnelCreatorConfig cfg = _recentlyBuildingMap.get(key);
@@ -268,65 +265,21 @@ class BuildExecutor implements Runnable {
                 recentlyCleaned++;
                 continue;
             }
-            boolean expired = cfg.getExpiration() <= expireRecentlyBefore;
-            boolean tooOld = (now - cfg.getCreationTime()) > MAX_CONFIG_AGE;
-            if (expired || tooOld) {
+            // Only remove if tunnel lifetime has actually expired
+            if (cfg.getExpiration() <= now) {
                 iter.remove();
                 recentlyCleaned++;
-                if (tooOld && !expired) {
-                    recentlyLeaked++;
-                }
                 cleanupConfig(cfg);
             }
         }
-        if (recentlyCleaned > 0) {
-            if (_log.shouldDebug()) {
-                _log.debug("Cleaned " + recentlyCleaned + " expired entries from _recentlyBuildingMap, remaining: " + _recentlyBuildingMap.size());
-            }
-            if (recentlyLeaked > 0 && _log.shouldWarn()) {
-                _log.warn("Detected " + recentlyLeaked + " potentially leaked configs (age-based) in _recentlyBuildingMap");
-            }
-        }
-
-        // Cleanup currentlyBuilding map if too large
-        int currentlyCleaned = 0;
-        int currentlyLeaked = 0;
-        if (_currentlyBuildingMap.size() > getMaxConcurrentBuilds() * 2) {
-            for (Iterator<Long> iter = _currentlyBuildingMap.keySet().iterator(); iter.hasNext(); ) {
-                Long key = iter.next();
-                PooledTunnelCreatorConfig cfg = _currentlyBuildingMap.get(key);
-                if (cfg == null) {
-                    iter.remove();
-                    currentlyCleaned++;
-                    continue;
-                }
-                long adaptiveTimeout = calculateAdaptiveTimeout(cfg);
-                long adjustedExpireBefore = now + TEN_MINUTES_MS - adaptiveTimeout;
-                boolean expired = cfg.getExpiration() <= now || cfg.getExpiration() <= adjustedExpireBefore;
-                boolean tooOld = (now - cfg.getCreationTime()) > MAX_CONFIG_AGE;
-                if (expired || tooOld) {
-                    iter.remove();
-                    currentlyCleaned++;
-                    if (tooOld && !expired) {
-                        currentlyLeaked++;
-                    }
-                    cleanupConfig(cfg);
-                }
-            }
-            if (currentlyCleaned > 0) {
-                if (_log.shouldDebug()) {
-                    _log.debug("Cleaned " + currentlyCleaned + " stale entries from _currentlyBuildingMap, remaining: " + _currentlyBuildingMap.size());
-                }
-                if (currentlyLeaked > 0 && _log.shouldWarn()) {
-                    _log.warn("Detected " + currentlyLeaked + " potentially leaked configs (age-based) in _currentlyBuildingMap");
-                }
-            }
+        if (recentlyCleaned > 0 && _log.shouldDebug()) {
+            _log.debug("Cleaned " + recentlyCleaned + " expired entries from _recentlyBuildingMap, remaining: " + _recentlyBuildingMap.size());
         }
 
         List<PooledTunnelCreatorConfig> expired = null;
 
-        // Expire old build requests from currentlyBuilding map, move them to recentlyBuilding
-        // Enhanced with adaptive timeout handling + age-based fallback
+        // Expire builds that have been waiting too long for a reply
+        // Use age-based detection: if build was started > timeout ago, it's expired
         for (Iterator<Long> iter = _currentlyBuildingMap.keySet().iterator(); iter.hasNext(); ) {
             Long key = iter.next();
             PooledTunnelCreatorConfig cfg = _currentlyBuildingMap.get(key);
@@ -335,20 +288,22 @@ class BuildExecutor implements Runnable {
                 continue;
             }
             long adaptiveTimeout = calculateAdaptiveTimeout(cfg);
-            long adjustedExpireBefore = now + TEN_MINUTES_MS - adaptiveTimeout;
-            boolean isExpired = cfg.getExpiration() <= now || cfg.getExpiration() <= adjustedExpireBefore;
-            boolean isTooOld = (now - cfg.getCreationTime()) > MAX_CONFIG_AGE;
+            long buildAge = now - cfg.getCreationTime();
+            
+            // Expire if build has been waiting longer than the adaptive timeout
+            // or if tunnel lifetime has expired (shouldn't happen normally)
+            boolean isBuildTimeout = buildAge > adaptiveTimeout;
+            boolean isTunnelExpired = cfg.getExpiration() <= now;
 
-            if (isExpired || isTooOld) {
+            if (isBuildTimeout || isTunnelExpired) {
                 PooledTunnelCreatorConfig existingCfg = _recentlyBuildingMap.putIfAbsent(key, cfg);
-                iter.remove();  // Always remove from currentlyBuilding after attempting to move
+                iter.remove();
                 if (existingCfg == null) {
                     if (expired == null) {
                         expired = new ArrayList<>();
                     }
                     expired.add(cfg);
                 }
-                // If existingCfg != null, the tunnel was already in recentlyBuilding - we still removed from currentlyBuilding
             }
         }
 
@@ -484,14 +439,33 @@ class BuildExecutor implements Runnable {
                 _manager.listPools(pools);
 
                 // Collect pools that want tunnels built
+                // First pass: identify pools with no tunnels
+                boolean hasEmptyPool = false;
+                for (TunnelPool pool : pools) {
+                    if (pool.isAlive() && pool.getTunnelCount() <= 0) {
+                        hasEmptyPool = true;
+                        break;
+                    }
+                }
+
                 for (int i = 0, size = pools.size(); i < size; i++) {
                     TunnelPool pool = pools.get(i);
                     if (!pool.isAlive()) {
                         continue;
                     }
                     int howMany = pool.countHowManyToBuild();
-                    for (int j = 0; j < howMany; j++) {
+                    if (howMany <= 0) {
+                        continue;
+                    }
+                    // If there are empty pools, only request 1 tunnel per pool until all have at least 1
+                    // This ensures fast tunnel availability for ALL pools before adding more
+                    if (hasEmptyPool && pool.getTunnelCount() <= 0) {
                         wanted.add(pool);
+                    } else {
+                        // Add full request
+                        for (int j = 0; j < howMany; j++) {
+                            wanted.add(pool);
+                        }
                     }
                 }
 
@@ -500,13 +474,10 @@ class BuildExecutor implements Runnable {
                 
                 // Build tunnels based on per-pool limits from countHowManyToBuild()
                 // Each pool's canStartBuild() enforces per-pool concurrent limits
-                // Global 'allowed' enforces total concurrent limit
+                // Global 'always prefer empty pools' ensures ALL pools get at least 1 tunnel first
                 if (!wanted.isEmpty() && allowed > 0) {
-                    if (wanted.size() > 1) {
-                        Collections.shuffle(wanted, _context.random());
-                        boolean preferEmpty = _context.random().nextInt(3) != 0;
-                        DataHelper.sort(wanted, new TunnelPoolComparator(preferEmpty));
-                    }
+                    // Always prefer empty pools to ensure all pools get at least 1 tunnel
+                    DataHelper.sort(wanted, new TunnelPoolComparator());
 
                     // Process up to 'allowed' pools - removes from wanted as we go
                     for (int i = 0; i < allowed && !wanted.isEmpty(); i++) {
@@ -564,6 +535,14 @@ class BuildExecutor implements Runnable {
                     // ignore interrupt during sleep
                 }
             }
+            
+            // Always sleep briefly to prevent CPU spinning
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException ie) {
+                // ignore interrupt during sleep
+            }
+            
             wanted.clear();
             pools.clear();
         }
@@ -593,25 +572,39 @@ class BuildExecutor implements Runnable {
      */
     private static class TunnelPoolComparator implements Comparator<TunnelPool>, Serializable {
 
-        private final boolean _preferEmpty;
-
-        /** @param preferEmptyPools if true, prefer pools with no tunnels */
-        public TunnelPoolComparator(boolean preferEmptyPools) {_preferEmpty = preferEmptyPools;}
-
         /**
-         * Compare two tunnel pools for build priority.
+         * Priority order:
+         * 1. Exploratory pools with < 2 tunnels (need 1 IB + 1 OB minimum)
+         * 2. Empty client pools (get at least 1 tunnel)
+         * 3. Exploratory pools with >= 2 tunnels (have minimum)
+         * 4. Client pools with tunnels (fill up to match exploratory)
          *
          * @param tpl left tunnel pool
          * @param tpr right tunnel pool
          * @return -1 if tpl has higher priority, 1 if tpr has higher priority, 0 if equal
          */
         public int compare(TunnelPool tpl, TunnelPool tpr) {
-            if (tpl.getSettings().isExploratory() && !tpr.getSettings().isExploratory()) return -1;
-            if (tpr.getSettings().isExploratory() && !tpl.getSettings().isExploratory()) return 1;
-            if (_preferEmpty) {
-                if (tpl.getTunnelCount() <= 0 && tpr.getTunnelCount() > 0) return -1;
-                if (tpr.getTunnelCount() <= 0 && tpl.getTunnelCount() > 0) return 1;
-            }
+            boolean tplExploratory = tpl.getSettings().isExploratory();
+            boolean tprExploratory = tpr.getSettings().isExploratory();
+            int tplCount = tpl.getTunnelCount();
+            int tprCount = tpr.getTunnelCount();
+
+            // Priority 1: Exploratory with < 2 tunnels (need minimum 1 IB + 1 OB)
+            if (tplExploratory && tplCount < 2 && (!tprExploratory || tprCount >= 2)) return -1;
+            if (tprExploratory && tprCount < 2 && (!tplExploratory || tplCount >= 2)) return 1;
+
+            // Priority 2: Empty pools (0 tunnels) - get at least 1 first
+            if (tplCount <= 0 && tprCount > 0) return -1;
+            if (tprCount <= 0 && tplCount > 0) return 1;
+
+            // Priority 3: Exploratory that have minimum
+            if (tplExploratory && tplCount >= 2 && !tprExploratory) return -1;
+            if (tprExploratory && tprCount >= 2 && !tplExploratory) return 1;
+
+            // Priority 4: Pools with fewer tunnels
+            if (tplCount < tprCount) return -1;
+            if (tprCount < tplCount) return 1;
+
             return 0;
         }
     }
