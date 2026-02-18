@@ -463,6 +463,33 @@ public class TunnelPool {
      *
      *  @since 0.8.11
      */
+
+    /**
+     * Check if a tunnel is marked as last resort and is the only tunnel left.
+     * Last resort tunnels should never be removed unless replaced.
+     *
+     * @param info the tunnel to check
+     * @return true if this is a protected last resort tunnel
+     */
+    private boolean isLastResortTunnel(TunnelInfo info) {
+        if (!(info instanceof PooledTunnelCreatorConfig)) {
+            return false;
+        }
+        PooledTunnelCreatorConfig cfg = (PooledTunnelCreatorConfig) info;
+        if (!cfg.isLastResort()) {
+            return false;
+        }
+        // Only protect if this is the only usable tunnel
+        int usableCount = 0;
+        long now = _context.clock().now();
+        for (TunnelInfo t : _tunnels) {
+            if (t != info && t.getExpiration() > now) {
+                usableCount++;
+            }
+        }
+        return usableCount <= 0;
+    }
+
     private int getAdjustedTotalQuantity() {
         if (_settings.getLength() == 0 && _settings.getLengthVariance() == 0) {return 1;}
         long uptime = _context.router().getUptime();
@@ -1228,9 +1255,18 @@ public class TunnelPool {
 
     /**
      *  Remove a tunnel from the pool.
+     *  NEVER removes if this is the last tunnel (last resort protection).
      *  @param info tunnel to remove
      */
     void removeTunnel(TunnelInfo info) {
+        // NEVER remove the last tunnel - protect last resort tunnels
+        if (isLastResortTunnel(info)) {
+            if (_log.shouldWarn()) {
+                _log.warn("Skipping removal of last resort tunnel: " + info + " in " + toString());
+            }
+            return;
+        }
+
         if (_log.shouldDebug()) {_log.debug(toString() + " -> Queuing tunnel removal " + info);}
 
         boolean queued = _removalQueue.offer(info);
@@ -1565,12 +1601,21 @@ public class TunnelPool {
      * Synchronous tunnel removal for use during ExpireLocalTunnelsJob recovery.
      * This removes the tunnel and ensures a new LeaseSet is published BEFORE returning,
      * preventing client connection failures during recovery.
+     * NEVER removes last resort tunnels.
      *
      * @param info tunnel to remove
      * @return true if removed and LeaseSet republished, false otherwise
      * @since 0.9.68+
      */
      boolean removeTunnelSynchronous(TunnelInfo info) {
+        // NEVER remove the last tunnel - protect last resort tunnels
+        if (isLastResortTunnel(info)) {
+            if (_log.shouldWarn()) {
+                _log.warn("Skipping synchronous removal of last resort tunnel: " + info + " in " + toString());
+            }
+            return false;
+        }
+
         if (_log.shouldDebug()) {_log.debug(toString() + " -> Synchronous tunnel removal " + info);}
 
         LeaseSet ls = null;
