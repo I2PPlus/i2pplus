@@ -129,6 +129,12 @@ class PumpedTunnelGateway extends TunnelGateway {
      * @return true if there are still messages remaining in _prequeue and the caller should requeue this gateway
      */
     public boolean pump(List<PendingGatewayMessage> queueBuf) {
+        // Don't process if gateway has been destroyed
+        if (_destroyed) {
+            _prequeue.clear();
+            return false;
+        }
+
         // Adjust max messages per pump based on backlog and system load
         int max;
         boolean backlogged = _context.commSystem().isBacklogged(_nextHop);
