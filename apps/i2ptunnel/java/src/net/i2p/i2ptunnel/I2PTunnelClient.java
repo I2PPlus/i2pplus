@@ -165,8 +165,9 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
 
     protected void clientConnectionRun(Socket s) {
         I2PSocket i2ps = null;
+        I2PSocketAddress addr = null;
         try {
-            I2PSocketAddress addr = pickDestination();
+            addr = pickDestination();
             if (addr == null) {throw new UnknownHostException("No valid destination configured");}
             Destination clientDest = addr.getAddress();
             if (clientDest == null) {throw new UnknownHostException("Could not resolve " + addr.getHostName());}
@@ -178,9 +179,9 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
             // Execute task (inline when called from unlimited thread pool)
             executeTask(t);
         } catch (IOException ex) {
-            if (_log.shouldWarn()) {_log.warn("Error connecting: " + ex.getMessage());}
+            if (_log.shouldWarn()) {_log.warn("Error connecting to " + addr + ": " + ex.getMessage(), ex);}
         } catch (I2PException ex) {
-            if (_log.shouldWarn()) {_log.warn("Error connecting: " + ex.getMessage());}
+            if (_log.shouldWarn()) {_log.warn("Error connecting to " + addr + ": " + ex.getMessage(), ex);}
         } finally {
             // only because we are running it inline
             closeSocket(s);

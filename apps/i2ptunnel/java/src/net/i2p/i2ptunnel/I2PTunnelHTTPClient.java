@@ -1409,6 +1409,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             // this should still be quite effective.
             if (i2ps == null || i2ps.isClosed() ||
                 remotePort != i2ps.getPort() ||
+                i2ps.getPeerDestination() == null ||
                 !clientDest.equals(i2ps.getPeerDestination())) {
                 if (i2ps != null) {
                     if (_log.shouldInfo()) {_log.info("Old socket closed or different dest/port, opening new one");}
