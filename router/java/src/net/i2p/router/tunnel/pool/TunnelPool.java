@@ -1233,15 +1233,13 @@ public class TunnelPool {
                 remainingAfterRemoval++;
             }
 
-            // Remove from pool
-            for (TunnelInfo t : toRemove) {
-                _tunnels.remove(t);
-            }
+            // Don't remove from _tunnels here - let removeTunnel() handle it with last resort protection
         } finally {
             _tunnelsLock.unlock();
         }
 
         // Remove duplicates from pool without counting as failures (duplicates are valid tunnels)
+        // removeTunnel() has last resort protection
         for (TunnelInfo t : toRemove) {
             if (_log.shouldInfo()) {
                 _log.info("Removing duplicate peer sequence tunnel from " + toString());
@@ -1715,6 +1713,13 @@ public class TunnelPool {
             _tunnelsLock.lock();
             try {
                 for (TunnelInfo info : toRemove) {
+                    // NEVER remove the last tunnel - protect last resort tunnels
+                    if (isLastResortTunnel(info)) {
+                        if (_log.shouldWarn()) {
+                            _log.warn("Skipping batch removal of last resort tunnel: " + info + " in " + toString());
+                        }
+                        continue;
+                    }
                     if (_tunnels.remove(info)) {
                         actuallyRemoved++;
                     }
