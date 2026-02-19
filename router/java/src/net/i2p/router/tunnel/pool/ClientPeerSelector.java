@@ -27,6 +27,20 @@ class ClientPeerSelector extends TunnelPeerSelector {
     private static final long WARNING_THROTTLE_MS = 60_000;
     private static final AtomicLong _lastFallbackWarn = new AtomicLong(0);
 
+    private static String formatExcludedPeers(Set<Hash> peers) {
+        if (peers == null || peers.isEmpty()) {return "[]";}
+        StringBuilder sb = new StringBuilder(peers.size() * 10);
+        int count = 0;
+        for (Hash h : peers) {
+            if (count % 8 == 0) {
+                sb.append("\n* ");
+            }
+            sb.append('[').append(h.toBase64(), 0, 6).append("] ");
+            count++;
+        }
+        return sb.toString();
+    }
+
     public ClientPeerSelector(RouterContext context) {
         super(context);
     }
@@ -134,11 +148,11 @@ class ClientPeerSelector extends TunnelPeerSelector {
                         lastHopExclude = getClosestHopExclude(true, exclude);
                     } else {lastHopExclude = exclude;}
                     if (log.shouldInfo()) {
-                        log.info("SelectFastPeers closest Inbound " + lastHopExclude);
+                        log.info("SelectFastPeers closest Inbound " + formatExcludedPeers(lastHopExclude));
                     }
                 } else {
                     lastHopExclude = new OBEPExcluder(exclude);
-                    if (log.shouldInfo()) {log.info("SelectFastPeers OBEP " + lastHopExclude);}
+                    if (log.shouldInfo()) {log.info("SelectFastPeers OBEP " + formatExcludedPeers(lastHopExclude));}
                 }
                 if (hiddenInbound) {
                     // IB closest hop
@@ -251,7 +265,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                 if (length > 2) {
                     // middle hop(s)
                     // group 2 or 3
-                    if (log.shouldInfo()) {log.info("SelectFastPeers Middle " + exclude);}
+                    if (log.shouldInfo()) {log.info("SelectFastPeers Middle " + formatExcludedPeers(exclude));}
                     ctx.profileOrganizer().selectFastPeers(length - 2, exclude, matches, randomKey, SLICE_2_3, ipRestriction, ipSet);
                     matches.remove(ctx.routerHash());
                     if (matches.size() > 1) {
@@ -268,12 +282,12 @@ class ClientPeerSelector extends TunnelPeerSelector {
                 // group 2 or 3 if two hops, otherwise group 1
                 if (isInbound) {
                     exclude = new IBGWExcluder(exclude);
-                    if (log.shouldInfo()) {log.info("SelectFastPeers InboundGateway " + exclude);}
+                    if (log.shouldInfo()) {log.info("SelectFastPeers InboundGateway: " + formatExcludedPeers(exclude));}
                 } else {
                     // exclude existing IBGWs to get some diversity ?
                     // OB closest-hop restrictions
                     if (checkClosestHop) {exclude = getClosestHopExclude(false, exclude);}
-                    if (log.shouldInfo()) {log.info("SelectFastPeers closest Outbound " + exclude);}
+                    if (log.shouldInfo()) {log.info("SelectFastPeers closest Outbound: " + formatExcludedPeers(exclude));}
                 }
                 // TODO exclude IPv6-only at IBGW? Caught in checkTunnel() below
                 ctx.profileOrganizer().selectFastPeers(1, exclude, matches, randomKey, length == 2 ? SLICE_2_3 : SLICE_1, ipRestriction, ipSet);
@@ -281,7 +295,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                 rv.addAll(matches);
             }
             if (log.shouldInfo()) {
-                log.info("ClientPeerSelector " + length + (isInbound ? " Inbound " : " Outbound ") + "final: " + exclude);
+                log.info("ClientPeerSelector " + length + (isInbound ? " Inbound " : " Outbound ") + "final: " + formatExcludedPeers(exclude));
             }
             if (rv.size() < length) {
                 // not enough peers to build the requested size
