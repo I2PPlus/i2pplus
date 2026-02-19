@@ -364,13 +364,23 @@ abstract class BuildRequestor {
                 : mgr.selectInboundTunnel(from, farEnd);
 
             if (paired != null) {
-                SessionKeyManager skm = ctx.clientManager().getClientSessionKeyManager(from);
-                if (skm != null || cfg.getGarlicReplyKeys() == null) {
-                    return paired;
-                }
-                // Client SKM missing but garlic reply expected → fall through to expl
-                if (log.shouldInfo()) {
-                    log.info("Client SKM unavailable for garlic reply -> Falling back to Exploratory for " + cfg);
+                // Verify outbound gateway exists before using this tunnel for replies
+                // This prevents race condition where tunnel is selected but outbound side isn't ready
+                if (isInbound && !ctx.tunnelDispatcher().hasOutboundGateway(paired.getSendTunnelId(0))) {
+                    if (log.shouldInfo()) {
+                        log.info("Paired outbound tunnel " + paired.getSendTunnelId(0) + 
+                                 " not yet ready (outbound gateway not registered) -> Falling back to exploratory for " + cfg);
+                    }
+                    // Fall through to exploratory fallback below
+                } else {
+                    SessionKeyManager skm = ctx.clientManager().getClientSessionKeyManager(from);
+                    if (skm != null || cfg.getGarlicReplyKeys() == null) {
+                        return paired;
+                    }
+                    // Client SKM missing but garlic reply expected → fall through to expl
+                    if (log.shouldInfo()) {
+                        log.info("Client SKM unavailable for garlic reply -> Falling back to Exploratory for " + cfg);
+                    }
                 }
             }
         } else {
@@ -386,10 +396,21 @@ abstract class BuildRequestor {
             TunnelInfo expl = isInbound
                 ? selectFallbackOutboundTunnel(ctx, mgr, cfg, false, log)
                 : selectFallbackInboundTunnel(ctx, mgr, cfg, false, log);
-            if (expl != null && log.shouldInfo()) {
-                log.info("Using Exploratory tunnel as fallback for: " + cfg);
+            if (expl != null) {
+                // Verify outbound gateway exists for inbound exploratory tunnels
+                if (isInbound && !ctx.tunnelDispatcher().hasOutboundGateway(expl.getSendTunnelId(0))) {
+                    if (log.shouldInfo()) {
+                        log.info("Exploratory outbound tunnel " + expl.getSendTunnelId(0) + 
+                                 " not yet ready (outbound gateway not registered) -> Skipping for " + cfg);
+                    }
+                    // Return null to trigger retry later
+                    return null;
+                }
+                if (log.shouldInfo()) {
+                    log.info("Using Exploratory tunnel as fallback for: " + cfg);
+                }
+                return expl;
             }
-            return expl;
         }
 
         // Client tunnels: use exploratory as fallback if > 0 hop
@@ -401,10 +422,20 @@ abstract class BuildRequestor {
                 ? selectFallbackOutboundTunnel(ctx, mgr, cfg, clientWantsMultiHop, log)
                 : selectFallbackInboundTunnel(ctx, mgr, cfg, clientWantsMultiHop, log);
             if (expl != null) {
-                if (log.shouldInfo()) {
-                    log.info("Using exploratory tunnel as fallback for client: " + cfg);
+                // Verify outbound gateway exists for inbound client tunnels
+                // This prevents race condition where exploratory tunnel is selected but not yet ready
+                if (isInbound && !ctx.tunnelDispatcher().hasOutboundGateway(expl.getSendTunnelId(0))) {
+                    if (log.shouldInfo()) {
+                        log.info("Exploratory outbound tunnel " + expl.getSendTunnelId(0) + 
+                                 " not yet ready (outbound gateway not registered) -> Skipping fallback for " + cfg);
+                    }
+                    // Don't return this tunnel - let it fail naturally and retry
+                } else {
+                    if (log.shouldInfo()) {
+                        log.info("Using exploratory tunnel as fallback for client: " + cfg);
+                    }
+                    return expl;
                 }
-                return expl;
             }
         }
         return null;
