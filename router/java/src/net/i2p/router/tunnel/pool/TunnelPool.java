@@ -490,6 +490,49 @@ public class TunnelPool {
         return usableCount <= 0;
     }
 
+    /**
+     * Check if removing a tunnel would leave the pool with 0 usable tunnels.
+     * MUST be called while holding _tunnelsLock.
+     * This is the PRIMARY protection to prevent pool collapse.
+     *
+     * @param info the tunnel to potentially remove (can be null)
+     * @param exclude additional tunnel to exclude from count (can be null)
+     * @return true if removal would leave pool with 0 usable tunnels
+     */
+    private boolean wouldLeavePoolEmptyLocked(TunnelInfo info, TunnelInfo exclude) {
+        int usableCount = 0;
+        long now = _context.clock().now();
+        for (TunnelInfo t : _tunnels) {
+            if (t != info && t != exclude && t.getExpiration() > now) {
+                usableCount++;
+            }
+        }
+        return usableCount <= 0;
+    }
+
+    /**
+     * Attempt to remove a tunnel from _tunnels with last resort protection.
+     * MUST be called while holding _tunnelsLock.
+     * NEVER removes if it would leave the pool empty.
+     *
+     * @param info the tunnel to remove
+     * @return true if removed, false if protected (last tunnel)
+     */
+    private boolean safeRemoveTunnelLocked(TunnelInfo info) {
+        if (wouldLeavePoolEmptyLocked(info, null)) {
+            if (info instanceof PooledTunnelCreatorConfig) {
+                ((PooledTunnelCreatorConfig) info).setLastResort();
+            }
+            triggerReplacementBuild();
+            if (_log.shouldWarn()) {
+                _log.warn("PROTECTED: Cannot remove last tunnel from " + toString() + " -> " + info);
+            }
+            return false;
+        }
+        _tunnels.remove(info);
+        return true;
+    }
+
     private int getAdjustedTotalQuantity() {
         if (_settings.getLength() == 0 && _settings.getLengthVariance() == 0) {return 1;}
         long uptime = _context.router().getUptime();
@@ -976,10 +1019,15 @@ public class TunnelPool {
                 }
                 toRemove.clear();
             } else if (healthyCount >= 1 && !toRemove.isEmpty()) {
-                // Safe to remove last resort tunnels
+                // Remove last resort tunnels, but NEVER the last tunnel
+                List<TunnelInfo> actuallyRemoved = new ArrayList<>();
                 for (TunnelInfo t : toRemove) {
-                    _tunnels.remove(t);
+                    if (safeRemoveTunnelLocked(t)) {
+                        actuallyRemoved.add(t);
+                    }
                 }
+                toRemove.clear();
+                toRemove.addAll(actuallyRemoved);
             } else {
                 // Don't remove if no healthy tunnels yet
                 toRemove.clear();
@@ -1041,9 +1089,15 @@ public class TunnelPool {
                     _log.info("Removing " + zeroHopTunnels.size() + " zero-hop tunnels (have " +
                               multiHopCount + " multi-hop of " + totalUsable + " total tunnels)");
                 }
+                // Remove but NEVER the last tunnel
+                List<TunnelInfo> actuallyRemoved = new ArrayList<>();
                 for (TunnelInfo t : zeroHopTunnels) {
-                    _tunnels.remove(t);
+                    if (safeRemoveTunnelLocked(t)) {
+                        actuallyRemoved.add(t);
+                    }
                 }
+                zeroHopTunnels.clear();
+                zeroHopTunnels.addAll(actuallyRemoved);
             } else {
                 // Don't remove if not enough tunnels or no multi-hop alternatives
                 zeroHopTunnels.clear();
@@ -1272,6 +1326,13 @@ public class TunnelPool {
             if (_log.shouldInfo()) {
                 _log.info("Removal queue full, performing synchronous removal: " + info);
             }
+            _tunnelsLock.lock();
+            try {
+                // NEVER remove the last tunnel
+                if (!safeRemoveTunnelLocked(info)) {
+                    return; // Protected - don't do any cleanup
+                }
+            } finally {_tunnelsLock.unlock();}
             if (info instanceof PooledTunnelCreatorConfig) {
                 PooledTunnelCreatorConfig cfg = (PooledTunnelCreatorConfig) info;
                 _context.tunnelDispatcher().remove(cfg, "removal queue overflow");
@@ -1279,10 +1340,6 @@ public class TunnelPool {
                 Long tunnelKey = ExpireLocalTunnelsJob.getTunnelKey(cfg);
                 TestJob.invalidate(tunnelKey);
             }
-            _tunnelsLock.lock();
-            try {
-                _tunnels.remove(info);
-            } finally {_tunnelsLock.unlock();}
             _manager.tunnelFailed();
         }
 
@@ -1606,14 +1663,6 @@ public class TunnelPool {
      * @since 0.9.68+
      */
      boolean removeTunnelSynchronous(TunnelInfo info) {
-        // NEVER remove the last tunnel - protect last resort tunnels
-        if (isLastResortTunnel(info)) {
-            if (_log.shouldWarn()) {
-                _log.warn("Skipping synchronous removal of last resort tunnel: " + info + " in " + toString());
-            }
-            return false;
-        }
-
         if (_log.shouldDebug()) {_log.debug(toString() + " -> Synchronous tunnel removal " + info);}
 
         LeaseSet ls = null;
@@ -1624,7 +1673,13 @@ public class TunnelPool {
         try {
             wasInPool = _tunnels.contains(info);
             if (wasInPool) {
-                _tunnels.remove(info);
+                // NEVER remove the last tunnel
+                if (!safeRemoveTunnelLocked(info)) {
+                    if (_log.shouldWarn()) {
+                        _log.warn("PROTECTED: Skipping synchronous removal of last tunnel: " + info + " in " + toString());
+                    }
+                    return false;
+                }
             }
             remaining = _tunnels.size();
 
@@ -1713,14 +1768,8 @@ public class TunnelPool {
             _tunnelsLock.lock();
             try {
                 for (TunnelInfo info : toRemove) {
-                    // NEVER remove the last tunnel - protect last resort tunnels
-                    if (isLastResortTunnel(info)) {
-                        if (_log.shouldWarn()) {
-                            _log.warn("Skipping batch removal of last resort tunnel: " + info + " in " + toString());
-                        }
-                        continue;
-                    }
-                    if (_tunnels.remove(info)) {
+                    // NEVER remove the last tunnel - uses safeRemoveTunnelLocked for robust protection
+                    if (safeRemoveTunnelLocked(info)) {
                         actuallyRemoved++;
                     }
                 }
