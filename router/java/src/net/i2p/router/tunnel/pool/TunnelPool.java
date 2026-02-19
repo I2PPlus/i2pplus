@@ -503,8 +503,14 @@ public class TunnelPool {
         int usableCount = 0;
         long now = _context.clock().now();
         for (TunnelInfo t : _tunnels) {
-            if (t != info && t != exclude && t.getExpiration() > now) {
-                usableCount++;
+            if (t != info && t != exclude) {
+                // Count ALL tunnels in pool - including expired ones kept as last resort
+                // They still provide connectivity until replacement is built
+                boolean isLastResort = (t instanceof PooledTunnelCreatorConfig)
+                    && ((PooledTunnelCreatorConfig)t).isLastResort();
+                if (isLastResort || t.getExpiration() > now) {
+                    usableCount++;
+                }
             }
         }
         return usableCount <= 0;
@@ -524,6 +530,20 @@ public class TunnelPool {
                 ((PooledTunnelCreatorConfig) info).setLastResort();
             }
             triggerReplacementBuild();
+            // CRITICAL: Even when protecting last tunnel, we must republish LeaseSet
+            // The tunnel is still valid and should be in the LeaseSet
+            if (_alive && _settings.isInbound() && !_settings.isExploratory()) {
+                List<TunnelInfo> tunnelsCopy = new ArrayList<TunnelInfo>(_tunnels);
+                if (!tunnelsCopy.isEmpty()) {
+                    LeaseSet ls = buildNewLeaseSetFromCopy(tunnelsCopy);
+                    if (ls != null) {
+                        requestLeaseSet(ls);
+                        if (_log.shouldInfo()) {
+                            _log.info("PROTECTED: Republished LeaseSet with last tunnel: " + toString());
+                        }
+                    }
+                }
+            }
             if (_log.shouldWarn()) {
                 _log.warn("PROTECTED: Cannot remove last tunnel from " + toString() + " -> " + info);
             }
@@ -654,7 +674,7 @@ public class TunnelPool {
        *
        * @param isInbound true for inbound pool, false for outbound
        * @return true if a new build can be started
-       * @since 0.9.70+
+       * @since 0.9.68+
        */
       boolean canStartBuild(boolean isInbound) {
           AtomicInteger counter = isInbound ? _concurrentInboundBuilds : _concurrentOutboundBuilds;
@@ -672,7 +692,7 @@ public class TunnelPool {
       * Should be called when the build is actually sent to the network.
       *
       * @param isInbound true for inbound pool, false for outbound
-      * @since 0.9.70+
+      * @since 0.9.68+
       */
      void buildStarted(boolean isInbound) {
          AtomicInteger counter = isInbound ? _concurrentInboundBuilds : _concurrentOutboundBuilds;
@@ -684,7 +704,7 @@ public class TunnelPool {
       * Should be called when the build finishes (success or failure).
       *
       * @param isInbound true for inbound pool, false for outbound
-      * @since 0.9.70+
+      * @since 0.9.68+
       */
      void buildFinished(boolean isInbound) {
          AtomicInteger counter = isInbound ? _concurrentInboundBuilds : _concurrentOutboundBuilds;
@@ -694,14 +714,14 @@ public class TunnelPool {
      /**
       * Get the current count of concurrent builds for inbound direction.
       * @return number of concurrent inbound builds
-      * @since 0.9.70+
+      * @since 0.9.68+
       */
      int getConcurrentInboundBuilds() { return _concurrentInboundBuilds.get(); }
 
      /**
       * Get the current count of concurrent builds for outbound direction.
       * @return number of concurrent outbound builds
-      * @since 0.9.70+
+      * @since 0.9.68+
       */
      int getConcurrentOutboundBuilds() { return _concurrentOutboundBuilds.get(); }
 
@@ -732,10 +752,94 @@ public class TunnelPool {
      *  Is this pool running AND either exploratory, or tracked by the client manager?
      *  A pool will be alive but not tracked after the client manager removes it
      *  but before all the tunnels have expired.
+     *
+     *  CRITICAL FIX: For client pools, stay alive if we have usable tunnels even when
+     *  the client disconnects. This prevents pool collapse at tunnel expiration.
+     *
      *  @return true if the pool is alive and should be tracked
      */
     public boolean isAlive() {
-        return _alive && (_settings.isExploratory() || _context.clientManager().isLocal(_settings.getDestination()));
+        // Exploratory pools always follow _alive flag
+        if (_settings.isExploratory()) {
+            return _alive;
+        }
+
+        // Client pools: stay alive if client is registered OR we have usable tunnels
+        boolean clientRegistered = _context.clientManager().isLocal(_settings.getDestination());
+
+        if (clientRegistered) {
+            return _alive;
+        }
+
+        // Client not registered - check if we still have usable tunnels
+        // This prevents pool collapse during graceful shutdown
+        if (_alive && hasUsableTunnels()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if the pool has any usable (non-expired, non-failed) tunnels.
+     * Used to determine if pool should continue building replacements
+     * even when client is disconnected.
+     *
+     * @return true if at least one usable tunnel exists
+     * @since 0.9.68+
+     */
+    private boolean hasUsableTunnels() {
+        long now = _context.clock().now();
+        _tunnelsLock.lock();
+        try {
+            for (TunnelInfo t : _tunnels) {
+                // Count tunnels that haven't failed and haven't expired
+                if (t.getExpiration() > now) {
+                    if (t instanceof PooledTunnelCreatorConfig) {
+                        if (!((PooledTunnelCreatorConfig)t).getTunnelFailed()) {
+                            return true;
+                        }
+                    } else {
+                        return true;
+                    }
+                }
+            }
+        } finally {
+            _tunnelsLock.unlock();
+        }
+        return false;
+    }
+
+    /**
+     * Count tunnels that will expire within the next 3 minutes.
+     * Used for defensive building when client is disconnected.
+     *
+     * @return number of tunnels expiring soon
+     * @since 0.9.68+
+     */
+    private int countExpiringSoonTunnels() {
+        long now = _context.clock().now();
+        long expireThreshold = now + 3 * 60 * 1000; // 3 minutes
+        int count = 0;
+
+        _tunnelsLock.lock();
+        try {
+            for (TunnelInfo t : _tunnels) {
+                // Count tunnels expiring within 3 minutes that haven't failed
+                if (t.getExpiration() > now && t.getExpiration() <= expireThreshold) {
+                    if (t instanceof PooledTunnelCreatorConfig) {
+                        if (!((PooledTunnelCreatorConfig)t).getTunnelFailed()) {
+                            count++;
+                        }
+                    } else {
+                        count++;
+                    }
+                }
+            }
+        } finally {
+            _tunnelsLock.unlock();
+        }
+        return count;
     }
 
     /** duplicate of getTunnelCount(), let's pick one
@@ -1183,8 +1287,8 @@ public class TunnelPool {
             // Suppress during first 15 minutes of uptime - normal during startup
             long uptime = _context.router().getUptime();
             if (_log.shouldInfo() && uptime > 15*60*1000) {
-                _log.info("Low tunnel count (" + usableTunnels + ") in " + toString() + " -> Building " +
-                           emergencyBuilds + " tunnels...");
+                _log.info((usableTunnels > 0 ? "Low tunnel count (" + usableTunnels + ")" : "No tunnels") +
+                          " in " + toString() + " -> Building " + emergencyBuilds + " tunnels...");
             }
             return emergencyBuilds;
         }
@@ -1912,7 +2016,7 @@ public class TunnelPool {
         Lease zeroHopLease = null;
         TreeSet<Lease> leases = new TreeSet<Lease>(new LeaseComparator());
         TunnelInfo lastResortTunnel = null; // Track last resort tunnel as fallback
-        
+
         for (int i = 0; i < _tunnels.size(); i++) {
             TunnelInfo tunnel = _tunnels.get(i);
             // Skip tunnels that have failed completely - they should not be in the LeaseSet
@@ -1920,17 +2024,17 @@ public class TunnelPool {
                 ((PooledTunnelCreatorConfig)tunnel).getTunnelFailed()) {
                 continue;
             }
-            
+
             // Check if this is a last resort tunnel - include even if near expiry
             boolean isLastResort = tunnel instanceof PooledTunnelCreatorConfig &&
                                    ((PooledTunnelCreatorConfig)tunnel).isLastResort();
-            
+
             // Track last resort tunnel as fallback for LeaseSet
-            if (isLastResort && (lastResortTunnel == null || 
+            if (isLastResort && (lastResortTunnel == null ||
                 tunnel.getExpiration() > lastResortTunnel.getExpiration())) {
                 lastResortTunnel = tunnel;
             }
-            
+
             if (tunnel.getExpiration() <= expireAfter) {
                 // Skip near-expiry tunnels UNLESS they're last resort (only tunnel available)
                 if (!isLastResort) {continue;}
@@ -2012,9 +2116,52 @@ public class TunnelPool {
      *  Gather the data to see how many tunnels to build, and then actually compute that value (delegated to
      *  the countHowManyToBuild function below)
      *
+     *  CRITICAL FIX: For disconnected clients with usable tunnels, continue building
+     *  replacements to prevent pool collapse at tunnel expiration.
+     *
      *  @return the number of tunnels to build
      */
     int countHowManyToBuild() {
+        // CRITICAL FIX: Skip disconnected-client logic for exploratory pools
+        // Exploratory pools always follow normal build logic
+        if (!_settings.isExploratory()) {
+            // Check if client is disconnected but we still have usable tunnels
+            boolean clientRegistered = _context.clientManager().isLocal(_settings.getDestination());
+
+            if (!clientRegistered && _alive) {
+                // Client disconnected - maintain minimum tunnel count to prevent collapse
+                int currentTunnels = getTunnelCount();
+                int wanted = getAdjustedTotalQuantity();
+                int inProgress = 0;
+                synchronized (_inProgress) { inProgress = _inProgress.size(); }
+
+                // Always maintain at least 2 tunnels or wanted/2 (whichever is smaller)
+                // to prevent pool collapse during graceful shutdown
+                int minimumToMaintain = Math.min(Math.max(2, wanted / 2), wanted);
+                int needed = minimumToMaintain - currentTunnels - inProgress;
+
+                if (needed > 0) {
+                    if (_log.shouldInfo()) {
+                        _log.info("Client disconnected but maintaining " + needed +
+                                  " tunnel(s) to prevent collapse for " + toString() +
+                                  " (current: " + currentTunnels + ", wanted: " + wanted + ")");
+                    }
+                    // Cap at reasonable number to avoid over-building
+                    return Math.min(needed, 3);
+                }
+
+                // Even if we have minimum, check for expiring tunnels
+                int expiringSoon = countExpiringSoonTunnels();
+                if (expiringSoon > 0) {
+                    if (_log.shouldInfo()) {
+                        _log.info("Client disconnected - building " + expiringSoon +
+                                  " replacement(s) for expiring tunnels in " + toString());
+                    }
+                    return Math.min(expiringSoon, 2);
+                }
+            }
+        }
+
         if (!isAlive()) {return 0;}
 
         // Periodic cleanup: remove 0-hop tunnels if we have multi-hop alternatives
@@ -2506,7 +2653,28 @@ public class TunnelPool {
                 }
 
                 if (peers == null || peers.isEmpty()) {
-                    return null;
+                    // CRITICAL FIX: Allow emergency 0-hop fallback for exploratory pools
+                    // when no peers are available. This prevents pool collapse.
+                    // Only allow this for exploratory pools and only when we've tried everything else.
+                    if (settings.isExploratory() && settings.getAllowZeroHop()) {
+                        if (_log.shouldWarn()) {
+                            _log.warn("No peers available for exploratory pool - using emergency 0-hop fallback");
+                        }
+                        peers = Collections.singletonList(_context.routerHash());
+                    } else if (settings.isExploratory()) {
+                        // Even if zero hop not normally allowed, allow it as emergency fallback
+                        if (_log.shouldWarn()) {
+                            _log.warn("No peers available for exploratory pool - EMERGENCY enabling 0-hop");
+                        }
+                        settings.setAllowZeroHop(true);
+                        peers = Collections.singletonList(_context.routerHash());
+                    } else {
+                        // Client pool - can't use 0-hop unless explicitly allowed
+                        if (_log.shouldWarn()) {
+                            _log.warn("No peers available for client pool and 0-hop not allowed - cannot build");
+                        }
+                        return null;
+                    }
                 }
             }
         } else {peers = Collections.singletonList(_context.routerHash());}
@@ -2564,8 +2732,7 @@ public class TunnelPool {
         List<PooledTunnelCreatorConfig> toCleanup = new ArrayList<>();
 
         // Maximum time a tunnel build can be in progress before being considered stale
-        // Reduced from 3 minutes to 90 seconds for faster cleanup under memory pressure
-        final long STALE_BUILD_TIMEOUT = 90 * 1000; // 90 seconds
+        final long STALE_BUILD_TIMEOUT = 60 * 1000; // 60 seconds
 
         synchronized (_inProgress) {
             // HARD CAP: Never exceed 500 to prevent memory growth
@@ -2778,21 +2945,34 @@ public class TunnelPool {
      */
     private void cleanupFailedBuild(PooledTunnelCreatorConfig cfg) {
         int currentTunnels = getTunnelCount();
-        
+
+        // Check if there are already replacement builds in progress
+        int inProgress = 0;
+        synchronized (_inProgress) {
+            inProgress = _inProgress.size();
+        }
+
+        // Keep failed tunnel as last resort if pool is empty/low and no replacements building
         if (currentTunnels <= 1) {
-            int inProgress = 0;
-            synchronized (_inProgress) {
-                inProgress = _inProgress.size();
+            if (inProgress == 0) {
+                // No replacements in progress - keep failed tunnel as last resort
+                if (_log.shouldWarn()) {
+                    _log.warn("Keeping failed tunnel as last resort in " + toString() +
+                              " (Total: " + currentTunnels + ") -> Triggering replacement");
+                }
+                cfg.setLastResort();
+                triggerReplacementBuild();
+            } else {
+                // Builds in progress - let them complete before triggering more
+                if (_log.shouldDebug()) {
+                    _log.debug("Build failed in " + toString() +
+                               " but " + inProgress + " replacements in progress");
+                }
             }
-            if (_log.shouldWarn()) {
-                _log.warn("Keeping failed tunnel as last resort in " + toString() + 
-                          " (tunnels=" + currentTunnels + ", inProgress=" + inProgress + ") - will trigger replacement");
-            }
-            cfg.setLastResort();
-            triggerReplacementBuild();
             return;
         }
-        
+
+        // Pool has tunnels - clean up the failed one
         _context.tunnelDispatcher().remove(cfg, "build failed");
         _manager.removeFromExpiration(cfg);
         Long tunnelKey = ExpireLocalTunnelsJob.getTunnelKey(cfg);
