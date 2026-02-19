@@ -1,7 +1,11 @@
 package net.i2p.router;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -72,6 +76,8 @@ public class HashPatternDetector implements Serializable {
     private static final int MAX_PREDICTIVELY_BANNED = 50000;
     private static final long PREFIX_STATS_EXPIRY = 24 * 60 * 60 * 1000L; // 24 hours
     private static final long CLEANUP_INTERVAL = 60 * 60 * 1000L; // 1 hour
+    private static final long PERSIST_INTERVAL = 6 * 60 * 60 * 1000L; // 6 hours - persist to disk less frequently
+    private static final String PERSIST_FILE = "hash-patterns-cache.dat"; // serialized data file
 
     // Scanner state
     private final AtomicBoolean _scanInProgress = new AtomicBoolean(false);
@@ -81,6 +87,7 @@ public class HashPatternDetector implements Serializable {
         _log = context.logManager().getLog(HashPatternDetector.class);
         loadPatterns();
         loadHistoricalBans();
+        loadPersistedData();
 
         // Defer pattern check to startScanner() where router is fully initialized
         // We load historical bans but won't enable predictive banning until later
@@ -343,6 +350,81 @@ public class HashPatternDetector implements Serializable {
      }
 
     /**
+     * Load persisted data from disk.
+     * This allows us to reduce RAM usage by not keeping all historical data in memory.
+     */
+    @SuppressWarnings("unchecked")
+    private void loadPersistedData() {
+        File file = new File(_context.getRouterDir(), PERSIST_FILE);
+        if (!file.exists()) {
+            return;
+        }
+
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
+            Map<String, PrefixStats> loadedStats = (Map<String, PrefixStats>) ois.readObject();
+            Set<String> loadedBanned = (Set<String>) ois.readObject();
+
+            if (loadedStats != null) {
+                _prefixStats.putAll(loadedStats);
+                if (_log.shouldInfo()) {
+                    _log.info("Loaded " + loadedStats.size() + " prefix stats from disk");
+                }
+            }
+            if (loadedBanned != null) {
+                _predictivelyBanned.addAll(loadedBanned);
+                if (_log.shouldInfo()) {
+                    _log.info("Loaded " + loadedBanned.size() + " predictively banned hashes from disk");
+                }
+            }
+        } catch (Exception e) {
+            if (_log.shouldWarn()) {
+                _log.warn("Failed to load persisted hash patterns", e);
+            }
+        }
+    }
+
+    /**
+     * Persist data to disk for reduced RAM usage.
+     * Called periodically and on shutdown.
+     */
+    private void persistData() {
+        if (_prefixStats.isEmpty() && _predictivelyBanned.isEmpty()) {
+            return;
+        }
+
+        File file = new File(_context.getRouterDir(), PERSIST_FILE);
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
+            // Only persist if under limits to avoid persisting garbage
+            if (_prefixStats.size() <= MAX_PREFIX_STATS * 2) {
+                oos.writeObject(new HashMap<>(_prefixStats));
+            } else {
+                oos.writeObject(new HashMap<>());
+                if (_log.shouldWarn()) {
+                    _log.warn("Skipping prefix stats persist - too many entries: " + _prefixStats.size());
+                }
+            }
+
+            if (_predictivelyBanned.size() <= MAX_PREDICTIVELY_BANNED * 2) {
+                oos.writeObject(new HashSet<>(_predictivelyBanned));
+            } else {
+                oos.writeObject(new HashSet<>());
+                if (_log.shouldWarn()) {
+                    _log.warn("Skipping banned persist - too many entries: " + _predictivelyBanned.size());
+                }
+            }
+
+            if (_log.shouldInfo()) {
+                _log.info("Persisted " + _prefixStats.size() + " prefix stats and " +
+                          _predictivelyBanned.size() + " banned hashes to disk");
+            }
+        } catch (Exception e) {
+            if (_log.shouldWarn()) {
+                _log.warn("Failed to persist hash patterns", e);
+            }
+        }
+    }
+
+    /**
      * Check if recorded prefixes show sequential/counter patterns indicating algorithmic generation.
      * This detects botnets that generate identities with incrementing counters.
      *
@@ -590,6 +672,12 @@ public class HashPatternDetector implements Serializable {
             CLEANUP_INTERVAL
         );
 
+        _context.simpleTimer2().addPeriodicEvent(
+            new PersistTask(),
+            PERSIST_INTERVAL,
+            PERSIST_INTERVAL
+        );
+
         if (_log.shouldInfo())
             _log.info("NetDB hash scanner starting in " + (SCAN_STARTUP_DELAY / 60000) + " minutes, interval: " + formatFrequency(frequency));
     }
@@ -600,6 +688,16 @@ public class HashPatternDetector implements Serializable {
     private class CleanupTask implements SimpleTimer.TimedEvent {
         public void timeReached() {
             cleanup();
+        }
+    }
+
+    /**
+     * Periodic persistence task to write data to disk.
+     * This allows reducing RAM usage over time.
+     */
+    private class PersistTask implements SimpleTimer.TimedEvent {
+        public void timeReached() {
+            persistData();
         }
     }
 
