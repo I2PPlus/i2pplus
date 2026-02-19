@@ -762,15 +762,9 @@ public class TestJob extends JobImpl {
                        _outTunnel + " / " + _replyTunnel);
         }
 
-        // Readiness check: ensure outbound gateway exists before dispatch
+        // If tunnels exist in the pool, they're valid for testing
+        // The network layer handles actual failures
         if (_outTunnel != null && _replyTunnel != null) {
-            if (!ctx.tunnelDispatcher().hasOutboundGateway(_outTunnel.getSendTunnelId(0))) {
-                if (_log.shouldInfo()) {
-                    _log.info("Outbound gateway for tunnel " + _outTunnel.getSendTunnelId(0) +
-                              " not yet registered \n* Deferring test for " + _cfg);
-                }
-                return false; // Let caller handle cleanup & rescheduling
-            }
             ctx.tunnelDispatcher().dispatchOutbound(
                 m,
                 _outTunnel.getSendTunnelId(0),
