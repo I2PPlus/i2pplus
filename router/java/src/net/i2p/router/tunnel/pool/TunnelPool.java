@@ -1911,6 +1911,8 @@ public class TunnelPool {
         TunnelInfo zeroHopTunnel = null;
         Lease zeroHopLease = null;
         TreeSet<Lease> leases = new TreeSet<Lease>(new LeaseComparator());
+        TunnelInfo lastResortTunnel = null; // Track last resort tunnel as fallback
+        
         for (int i = 0; i < _tunnels.size(); i++) {
             TunnelInfo tunnel = _tunnels.get(i);
             // Skip tunnels that have failed completely - they should not be in the LeaseSet
@@ -1918,7 +1920,21 @@ public class TunnelPool {
                 ((PooledTunnelCreatorConfig)tunnel).getTunnelFailed()) {
                 continue;
             }
-            if (tunnel.getExpiration() <= expireAfter) {continue;} // expires too soon, skip it
+            
+            // Check if this is a last resort tunnel - include even if near expiry
+            boolean isLastResort = tunnel instanceof PooledTunnelCreatorConfig &&
+                                   ((PooledTunnelCreatorConfig)tunnel).isLastResort();
+            
+            // Track last resort tunnel as fallback for LeaseSet
+            if (isLastResort && (lastResortTunnel == null || 
+                tunnel.getExpiration() > lastResortTunnel.getExpiration())) {
+                lastResortTunnel = tunnel;
+            }
+            
+            if (tunnel.getExpiration() <= expireAfter) {
+                // Skip near-expiry tunnels UNLESS they're last resort (only tunnel available)
+                if (!isLastResort) {continue;}
+            }
 
             if (tunnel.getLength() <= 1) {
                 // More than one zero-hop tunnel in a lease is pointless

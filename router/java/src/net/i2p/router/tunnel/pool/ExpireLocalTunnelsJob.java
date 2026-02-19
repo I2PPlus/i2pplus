@@ -311,13 +311,23 @@ public class ExpireLocalTunnelsJob extends JobImpl {
                     te.phase1Complete = true;
                     removedCount++;
                 } else {
-                    te.retryCount++;
-                    if (te.retryCount >= MAX_PHASE1_RETRIES) {
-                        te.config = null;
-                        te.phase1Complete = true;
+                    // Check if tunnel is protected as last resort
+                    if (cfg.isLastResort()) {
+                        // Tunnel is protected - don't complete phase 1, keep in queue
+                        // Will be retried later when replacement is built
                         skippedCount++;
+                        if (_log.shouldDebug()) {
+                            _log.debug("Phase 1: Keeping protected last resort tunnel in queue: " + cfg);
+                        }
                     } else {
-                        failedCount++;
+                        te.retryCount++;
+                        if (te.retryCount >= MAX_PHASE1_RETRIES) {
+                            te.config = null;
+                            te.phase1Complete = true;
+                            skippedCount++;
+                        } else {
+                            failedCount++;
+                        }
                     }
                 }
             }
@@ -346,6 +356,18 @@ public class ExpireLocalTunnelsJob extends JobImpl {
                         phase2Skipped++;
                     }
                 } else {
+                    // CRITICAL: Check if tunnel is still in pool (protected as last resort)
+                    // If so, do NOT remove from dispatcher - tunnel is still needed!
+                    TunnelPool pool = cfg.getTunnelPool();
+                    if (pool != null && cfg.isLastResort()) {
+                        // Tunnel is protected - skip phase 2 removal
+                        // Keep in expiration queue for later cleanup when replacement is built
+                        phase2Skipped++;
+                        if (_log.shouldDebug()) {
+                            _log.debug("Skipping phase 2 for protected last resort tunnel: " + cfg);
+                        }
+                        continue;
+                    }
                     try {
                         getContext().tunnelDispatcher().remove(cfg, "expire phase 2");
                         phase2Removed++;
@@ -383,6 +405,13 @@ public class ExpireLocalTunnelsJob extends JobImpl {
                     if (cleanupUsingTunnelIds(te)) {
                         ttlCleaned++;
                     }
+                }
+                // Don't sweep protected tunnels even if old - they need to stay until replaced
+                if (te != null && te.config != null && te.config.isLastResort()) {
+                    if (_log.shouldDebug()) {
+                        _log.debug("TTL sweep: Keeping protected last resort tunnel entry: " + te.config);
+                    }
+                    continue;
                 }
                 sweepIt.remove();
                 ttlSwept++;
