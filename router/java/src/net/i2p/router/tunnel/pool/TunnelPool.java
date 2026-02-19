@@ -2687,18 +2687,16 @@ public class TunnelPool {
      * @param cfg the failed tunnel config
      */
     private void cleanupFailedBuild(PooledTunnelCreatorConfig cfg) {
-        // Check if this is the last tunnel - if so, keep it as last resort
         int currentTunnels = getTunnelCount();
-        int inProgress = 0;
-        synchronized (_inProgress) {
-            inProgress = _inProgress.size();
-        }
         
-        // If this would leave us with no tunnels and no in-progress builds, 
-        // DON'T remove - keep it as last resort and trigger replacement instead
-        if (currentTunnels <= 1 && inProgress == 0) {
+        if (currentTunnels <= 1) {
+            int inProgress = 0;
+            synchronized (_inProgress) {
+                inProgress = _inProgress.size();
+            }
             if (_log.shouldWarn()) {
-                _log.warn("Keeping failed tunnel as last resort in " + toString() + " - will trigger replacement");
+                _log.warn("Keeping failed tunnel as last resort in " + toString() + 
+                          " (tunnels=" + currentTunnels + ", inProgress=" + inProgress + ") - will trigger replacement");
             }
             cfg.setLastResort();
             triggerReplacementBuild();

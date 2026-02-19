@@ -430,6 +430,8 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
         else {buf.append("Outbound");}
         if (_destination == null) {buf.append(" Exploratory tunnel");}
         else {buf.append(" Client tunnel [").append(Base64.encode(_destination.getData(), 0, 6)).append("]");}
+        long tunnelId = _isInbound ? _config[_config.length - 1].getReceiveTunnelId() : _config[0].getSendTunnelId();
+        if (tunnelId != 0) {buf.append(" (ID:").append(tunnelId).append(")");}
         int fails = _failures.get();
         if (fails > 1) {buf.append(" (").append(fails).append(" consecutive failures)");}
         if (_log.shouldInfo()) {
