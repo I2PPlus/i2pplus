@@ -32,7 +32,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
         StringBuilder sb = new StringBuilder(peers.size() * 10);
         int count = 0;
         for (Hash h : peers) {
-            if (count % 8 == 0) {
+            if (count % 12 == 0) {
                 sb.append("\n* ");
             }
             sb.append('[').append(h.toBase64(), 0, 6).append("] ");
