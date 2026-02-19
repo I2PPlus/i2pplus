@@ -47,6 +47,7 @@ class BuildExecutor implements Runnable {
     private final ExpireLocalTunnelsJob _expireLocalTunnels;
     private volatile boolean _isRunning;
     private boolean _repoll;
+    private volatile long _lastTimeoutExtendLog;
     /*
      * Get the maximum number of concurrent tunnel builds allowed.
      * Calculated based on CPU cores and configurable multiplier.
@@ -164,8 +165,10 @@ class BuildExecutor implements Runnable {
         long uptime = _context.router().getUptime();
         boolean isUnderAttack = buildSuccess < 0.40;
         if (isUnderAttack) {
-            baseTimeout *= 1.5; // 1.5x the timeout during low success periods (reduced from 2x)
-            if (_log.shouldInfo() && uptime > 60*1000) {
+            baseTimeout *= 1.5;
+            long now = _context.clock().now();
+            if (_log.shouldInfo() && uptime > 60*1000 && now - _lastTimeoutExtendLog > 60*1000) {
+                _lastTimeoutExtendLog = now;
                 _log.info("Extending tunnel build timeout (" + (int)(buildSuccess * 100) + "% success) -> " +
                           (uptime < 10*60*1000 ? "router startup period" : "network may be under attack"));
             }
