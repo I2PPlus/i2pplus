@@ -368,7 +368,6 @@ public class OutNetMessage implements CDPQEntry {
             buf.append("\n* Delivery failure on transports ").append(_failedTransports);
         }
         if (_target == null) {buf.append(" (null target)");}
-//        else {buf.append("\n* Target: [").append(_target.getIdentity().getHash().toBase64().substring(0,6) + "]");}
         if (_onReply != null) {buf.append(" with onReply ").append(_onReply);}
         if (_onSend != null) {buf.append("; with onSend ").append(_onSend);}
         if (_onFailedReply != null) {buf.append("; with onFailedReply ").append(_onFailedReply);}
