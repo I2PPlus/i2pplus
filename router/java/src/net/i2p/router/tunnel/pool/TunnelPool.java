@@ -1690,7 +1690,7 @@ public class TunnelPool {
             if (tunnelsCopy.isEmpty()) {return null;}
         }
 
-        long expireAfter = _context.clock().now() + 10*1000;
+        long expireAfter = _context.clock().now() + 120*1000; // 2 minutes
 
         TunnelInfo zeroHopTunnel = null;
         Lease zeroHopLease = null;
@@ -2012,7 +2012,7 @@ public class TunnelPool {
         }
 
         // We don't want it to expire before the client signs it or the ff gets it
-        long expireAfter = _context.clock().now() + 10*1000;
+        long expireAfter = _context.clock().now() + 120*1000; // 2 minutes
 
         TunnelInfo zeroHopTunnel = null;
         Lease zeroHopLease = null;
@@ -2060,7 +2060,7 @@ public class TunnelPool {
                 continue;
             }
             Lease lease = new Lease();
-            // Bugfix
+
             // ExpireJob reduces the expiration, which causes a 2nd leaseset with the same lease
             // to have an earlier expiration, so it isn't stored.
             // Get the "real" expiration from the gateway hop config,
@@ -2124,7 +2124,7 @@ public class TunnelPool {
      *  @return the number of tunnels to build
      */
     int countHowManyToBuild() {
-        // CRITICAL FIX: Skip disconnected-client logic for exploratory pools
+        // Skip disconnected-client logic for exploratory pools
         // Exploratory pools always follow normal build logic
         if (!_settings.isExploratory()) {
             // Check if client is disconnected but we still have usable tunnels
@@ -2148,7 +2148,7 @@ public class TunnelPool {
                                   " tunnel(s) to prevent collapse for " + toString() +
                                   " (current: " + currentTunnels + ", wanted: " + wanted + ")");
                     }
-                    // CRITICAL FIX: Maintain at least wanted/2 tunnels for disconnected clients
+                    // Maintain at least wanted/2 tunnels for disconnected clients
                     // to prevent pool collapse during graceful shutdown and allow reconnection
                     int maxToBuild = Math.max(3, wanted / 2);
                     return Math.min(needed, maxToBuild);
@@ -2742,9 +2742,10 @@ public class TunnelPool {
         final long STALE_BUILD_TIMEOUT = 60 * 1000; // 60 seconds
 
         synchronized (_inProgress) {
-            // HARD CAP: Never exceed 500 to prevent memory growth
-            // Reduced from 1000 for more aggressive cleanup under memory pressure
-            while (_inProgress.size() > 500) {
+            // HARD CAP: Make dynamic based on pool size to prevent memory growth
+            // Use max(500, adjustedTotalQuantity * 10) to scale with pool needs
+            int dynamicCap = Math.max(500, getAdjustedTotalQuantity() * 10);
+            while (_inProgress.size() > dynamicCap) {
                 if (!_inProgress.isEmpty()) {
                     PooledTunnelCreatorConfig cfg = _inProgress.remove(0);
                     toCleanup.add(cfg);
@@ -3002,9 +3003,9 @@ public class TunnelPool {
      */
     private void resetConsecutiveTimeoutsOnSuccess() {
         int current = _consecutiveBuildTimeouts.get();
-        // Only reset if we have accumulated significant timeouts (>= 8)
-        // to avoid counter resets during normal operation
-        if (current >= 8) {
+        // Reset after 3+ consecutive successes to recover faster from network issues
+        // Previously was 8, which was too conservative
+        if (current >= 3) {
             _consecutiveBuildTimeouts.set(0);
             if (_log.shouldInfo()) {
                 _log.info("Resetting consecutive timeout counter after successful tunnel selection on " + this +
