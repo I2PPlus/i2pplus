@@ -364,10 +364,11 @@ class BuildExecutor implements Runnable {
             return isSlow ? 1 : 3;
         }
 
-        // Adjust allowed tunnels on overload conditions - increase builds under high load to handle attacks
+        // Adjust allowed tunnels on overload conditions - use gradual backoff based on success rate
+        // Previously used allowed *= 4 which could spike from ~2 to ~20, causing flood and collapse
         if (allowed < 3) {
-            allowed += 3;
-            allowed *= 4;
+            double successRate = _context.profileOrganizer().getTunnelBuildSuccess();
+            allowed = Math.max(3, (int)(allowed * (1.0 + (0.40 - successRate))));
         }
 
         // Periodic cleanup of in-progress configs to prevent memory leaks
