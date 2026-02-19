@@ -285,7 +285,8 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
                         // note that encrypted replies to RI lookups is currently disabled in ISJ, we won't get here.
                         // ... and inject it.
                         if (_log.shouldInfo()) {
-                            _log.info("Received DBStoreMessage from " +  _clientNickname + " tunnel for RouterInfo [" + dsm.getKey() + "]");
+                            _log.info("Received DBStoreMessage from " +  _clientNickname + " tunnel for RouterInfo [" +
+                                       dsm.getKey().toBase64().substring(0,6) + "]");
                         }
                         _context.inNetMessagePool().add(dsm, null, null, _msgIDBloomXor);
                     }
