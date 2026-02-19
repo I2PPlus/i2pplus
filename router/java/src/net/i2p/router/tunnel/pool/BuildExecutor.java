@@ -394,6 +394,13 @@ class BuildExecutor implements Runnable {
             if (recentlySize > maxExpected * 2 && _log.shouldWarn()) {
                 _log.warn("LEAK DETECTION: _recentlyBuildingMap size " + recentlySize + " exceeds expected max " + (maxExpected * 2));
             }
+
+            // Periodic pool health check and recovery
+            // This detects and fixes missing pools for registered clients
+            int recovered = _manager.checkAndRecoverPools();
+            if (recovered > 0) {
+                _log.warn("Pool recovery: Restored " + recovered + " missing pool(s)");
+            }
         }
 
         return allowed;
@@ -460,10 +467,20 @@ class BuildExecutor implements Runnable {
                     if (howMany <= 0) {
                         continue;
                     }
-                    // If there are empty pools, only request 1 tunnel per pool until all have at least 1
-                    // This ensures fast tunnel availability for ALL pools before adding more
+                    // If there are empty pools, prioritize getting them to minimum capacity
+                    // Exploratory pools need just 1 each (IB + OB), client pools need 2-3 for faster startup
                     if (hasEmptyPool && pool.getTunnelCount() <= 0) {
-                        wanted.add(pool);
+                        if (pool.getSettings().isExploratory()) {
+                            // Exploratory: just 1 tunnel to get started
+                            wanted.add(pool);
+                        } else {
+                            // Client pools: request minimum 2-3 tunnels for faster startup
+                            // This ensures client connections work sooner
+                            int emptyPoolBuilds = Math.min(howMany, 3);
+                            for (int j = 0; j < emptyPoolBuilds; j++) {
+                                wanted.add(pool);
+                            }
+                        }
                     } else {
                         // Add full request
                         for (int j = 0; j < howMany; j++) {
@@ -496,14 +513,6 @@ class BuildExecutor implements Runnable {
                         long bef = System.currentTimeMillis();
                         PooledTunnelCreatorConfig cfg = pool.configureNewTunnel();
                         if (cfg != null) {
-                            if (cfg.getLength() <= 1 && !pool.needFallback()) {
-                                if (_log.shouldDebug()) {
-                                    _log.debug("We don't need more fallbacks for " + pool);
-                                }
-                                i--; // 0-hop doesn't count against allowed
-                                pool.buildComplete(cfg, Result.OTHER_FAILURE);
-                                continue;
-                            }
                             long pTime = System.currentTimeMillis() - bef;
                             _context.statManager().addRateData("tunnel.buildConfigTime", pTime);
                             if (_log.shouldDebug()) {
@@ -659,8 +668,16 @@ class BuildExecutor implements Runnable {
         }
         boolean ok = BuildRequestor.request(_context, cfg, this);
         if (!ok) {
-            // Build request failed - must call buildComplete to clean up _inProgress
-            buildComplete(cfg, Result.OTHER_FAILURE);
+            // Build request could not be sent (no tunnel available for reply path)
+            // This is NOT a failure - just means we need to retry later
+            // Don't call buildComplete - the executor will naturally retry
+            // Only remove from _inProgress if it was added
+            if (cfg.getLength() > 1) {
+                removeFromBuilding(cfg.getReplyMessageId());
+            }
+            if (_log.shouldDebug()) {
+                _log.debug("Tunnel build deferred - no reply tunnel available for " + cfg);
+            }
             return;
         }
         if (cfg.getLength() > 1) {
