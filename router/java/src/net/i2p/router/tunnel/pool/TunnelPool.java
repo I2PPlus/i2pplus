@@ -1620,19 +1620,21 @@ public class TunnelPool {
       *  @return true if a fallback tunnel is built, false otherwise
       */
       boolean buildFallback() {
-          // Check concurrent build limit before starting fallback tunnel build
-          if (!canStartBuild(_settings.isInbound())) {
-              if (_log.shouldDebug()) {
-                  _log.debug("Skipping fallback build for " + toString() + " - max concurrent builds reached for direction");
-              }
-              return false;
-          }
-
           int quantity = getAdjustedTotalQuantity();
           int usable = 0;
           _tunnelsLock.lock();
           try {usable = _tunnels.size();} finally {_tunnelsLock.unlock();}
           if (usable > 0) {return false;}
+
+          // Check concurrent build limit before starting fallback tunnel build
+          // CRITICAL FIX: Bypass concurrent limits when pool is critically low (0-1 tunnels)
+          // to prevent pool collapse during emergencies
+          if (usable > 1 && !canStartBuild(_settings.isInbound())) {
+              if (_log.shouldDebug()) {
+                  _log.debug("Skipping fallback build for " + toString() + " - max concurrent builds reached for direction");
+              }
+              return false;
+          }
 
          // Exploratory pools: allow 0-hop fallback
          if (_settings.isExploratory()) {
@@ -2146,8 +2148,10 @@ public class TunnelPool {
                                   " tunnel(s) to prevent collapse for " + toString() +
                                   " (current: " + currentTunnels + ", wanted: " + wanted + ")");
                     }
-                    // Cap at reasonable number to avoid over-building
-                    return Math.min(needed, 3);
+                    // CRITICAL FIX: Maintain at least wanted/2 tunnels for disconnected clients
+                    // to prevent pool collapse during graceful shutdown and allow reconnection
+                    int maxToBuild = Math.max(3, wanted / 2);
+                    return Math.min(needed, maxToBuild);
                 }
 
                 // Even if we have minimum, check for expiring tunnels
@@ -2669,11 +2673,14 @@ public class TunnelPool {
                         settings.setAllowZeroHop(true);
                         peers = Collections.singletonList(_context.routerHash());
                     } else {
-                        // Client pool - can't use 0-hop unless explicitly allowed
+                        // CRITICAL FIX: Client pool emergency 0-hop fallback
+                        // Allow 0-hop for client pools as emergency fallback when no peers available
+                        // This prevents complete pool failure during network stress or attacks
                         if (_log.shouldWarn()) {
-                            _log.warn("No peers available for client pool and 0-hop not allowed - cannot build");
+                            _log.warn("No peers available for client pool - EMERGENCY enabling 0-hop to prevent pool collapse");
                         }
-                        return null;
+                        settings.setAllowZeroHop(true);
+                        peers = Collections.singletonList(_context.routerHash());
                     }
                 }
             }
