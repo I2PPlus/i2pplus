@@ -21,6 +21,20 @@ import net.i2p.util.SystemVersion;
  */
 class ExploratoryPeerSelector extends TunnelPeerSelector {
 
+    private static String formatExcludedPeers(Set<Hash> peers) {
+        if (peers == null || peers.isEmpty()) {return "[]";}
+        StringBuilder sb = new StringBuilder(peers.size() * 10);
+        int count = 0;
+        for (Hash h : peers) {
+            if (count % 10 == 0) {
+                sb.append("\n* ");
+            }
+            sb.append('[').append(h.toBase64(), 0, 6).append("] ");
+            count++;
+        }
+        return sb.toString();
+    }
+
     public ExploratoryPeerSelector(RouterContext context) {
         super(context);
     }
@@ -95,7 +109,7 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
                 // If hidden and inbound, use connected peers to guarantee
                 // that the adjacent hop can connect to us.
                 if (log.shouldInfo()) {
-                    log.info("EPS SANFP closest " + (isInbound ? "IB " : "OB ") + closestExclude);
+                    log.info("EPS SANFP closest " + (isInbound ? "IB " : "OB ") + formatExcludedPeers(closestExclude));
                 }
                 ctx.profileOrganizer().selectActiveNotFailingPeers(1, closestExclude, closest, ipRestriction, ipSet);
                 if (closest.isEmpty()) {
@@ -111,11 +125,11 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
                 }
             } else if (exploreHighCap) {
                 if (log.shouldInfo())
-                    log.info("EPS SHCP closest " + (isInbound ? "IB " : "OB ") + closestExclude);
+                    log.info("EPS SHCP closest " + (isInbound ? "IB " : "OB ") + formatExcludedPeers(closestExclude));
                 ctx.profileOrganizer().selectHighCapacityPeers(1, closestExclude, closest, ipRestriction, ipSet);
             } else {
                 if (log.shouldInfo())
-                    log.info("EPS SNFP closest " + (isInbound ? "IB " : "OB ") + closestExclude);
+                    log.info("EPS SNFP closest " + (isInbound ? "IB " : "OB ") + formatExcludedPeers(closestExclude));
                 ctx.profileOrganizer().selectNotFailingPeers(1, closestExclude, closest, false, ipRestriction, ipSet);
             }
             if (!closest.isEmpty()) {
@@ -155,12 +169,12 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
             if (pickFurthest) {
                 ArraySet<Hash> furthest = new ArraySet<Hash>(1);
                 if (log.shouldInfo())
-                    log.info("EPS SANFP OBEP exclude " + exclude);
+                    log.info("EPS SANFP OBEP exclude " + formatExcludedPeers(exclude));
                 ctx.profileOrganizer().selectActiveNotFailingPeers(1, exclude, furthest, ipRestriction, ipSet);
                 if (furthest.isEmpty()) {
                     // ANFP does not fall back to non-connected
                     if (log.shouldInfo())
-                        log.info("EPS SFP OBEP exclude " + exclude);
+                        log.info("EPS SFP OBEP exclude " + formatExcludedPeers(exclude));
                     ctx.profileOrganizer().selectFastPeers(1, exclude, furthest, ipRestriction, ipSet);
                 }
                 if (!furthest.isEmpty()) {
@@ -176,7 +190,7 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
             Set<Hash> matches = new ArraySet<Hash>(length);
             if (exploreHighCap) {
                 if (log.shouldInfo())
-                    log.info("EPS SHCP " + length + (isInbound ? " IB " : " OB ") + exclude);
+                    log.info("EPS SHCP " + length + (isInbound ? " IB " : " OB ") + formatExcludedPeers(exclude));
                 ctx.profileOrganizer().selectHighCapacityPeers(length, exclude, matches, ipRestriction, ipSet);
             } else {
                 // As of 0.9.23, we include a max of 2 not failing peers,
@@ -199,14 +213,14 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
                 }
                 // select will check both matches and exclude, no need to add matches to exclude here
                 if (log.shouldInfo())
-                    log.info("EPS SNFP " + length + (isInbound ? " IB " : " OB ") + exclude);
+                    log.info("EPS SNFP " + length + (isInbound ? " IB " : " OB ") + formatExcludedPeers(exclude));
                 ctx.profileOrganizer().selectNotFailingPeers(length, exclude, matches, false, ipRestriction, ipSet);
             }
             matches.remove(ctx.routerHash());
             rv.addAll(matches);
         }
         if (log.shouldInfo())
-            log.info("EPS " + length + (isInbound ? " IB " : " OB ") + "final: " + exclude);
+            log.info("EPS " + length + (isInbound ? " IB " : " OB ") + "final: " + formatExcludedPeers(exclude));
 
         if (rv.size() > 1)
             orderPeers(rv, settings.getRandomKey());
