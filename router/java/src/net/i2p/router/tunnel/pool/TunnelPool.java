@@ -2626,6 +2626,13 @@ public class TunnelPool {
         while (drained < maxDrain) {
             TunnelInfo ti = _removalQueue.poll();
             if (ti == null) break;
+            // NEVER remove the last tunnel
+            if (isLastResortTunnel(ti)) {
+                if (_log.shouldWarn()) {
+                    _log.warn("Skipping queue drain of last resort tunnel: " + ti + " in " + toString());
+                }
+                continue;
+            }
             if (ti instanceof PooledTunnelCreatorConfig) {
                 PooledTunnelCreatorConfig cfg = (PooledTunnelCreatorConfig) ti;
                 _context.tunnelDispatcher().remove(cfg, "queue drain");
