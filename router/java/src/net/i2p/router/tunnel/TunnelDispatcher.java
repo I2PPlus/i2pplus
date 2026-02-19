@@ -811,12 +811,23 @@ public class TunnelDispatcher implements Service {
         }
 
         // Check if already being removed - prevent duplicate calls
+        // Use TunnelIdManager for robust tracking
         TunnelId checkId = recvId != null ? recvId : sendId;
         if (checkId != null) {
+            // First check local map for fast path
             if (_beingRemoved.putIfAbsent(checkId, _context.clock().now()) != null) {
-                // Already being removed - skip duplicate call
+                // Already in local map - skip duplicate call
                 if (_log.shouldDebug()) {
-                    _log.debug("Skipping duplicate remove call for tunnel: " + checkId);
+                    _log.debug("Skipping duplicate remove (local) for tunnel: " + checkId);
+                }
+                return;
+            }
+            // Also check TunnelIdManager for cross-instance tracking
+            if (!_context.tunnelIdManager().tryMarkForRemoval(checkId)) {
+                // Already being removed by another path
+                _beingRemoved.remove(checkId);
+                if (_log.shouldDebug()) {
+                    _log.debug("Skipping duplicate remove (TunnelIdManager) for tunnel: " + checkId);
                 }
                 return;
             }

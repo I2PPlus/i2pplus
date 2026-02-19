@@ -3,6 +3,7 @@ package net.i2p.router.tunnel;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.data.TunnelId;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
@@ -14,6 +15,7 @@ import net.i2p.util.SimpleTimer;
  * - No duplicate TunnelId objects with the same value
  * - Proper memory management through canonicalization
  * - Centralized tracking for debugging and cleanup
+ * - Prevention of duplicate tunnel removals
  *
  * @since 0.9.68+
  */
@@ -22,15 +24,30 @@ public class TunnelIdManager {
     private final Log _log;
 
     /**
+     * Tunnel state enum for lifecycle tracking
+     */
+    private enum TunnelState { ACTIVE, REMOVING, REMOVED }
+
+    /**
      * Canonical TunnelId cache - ensures only one TunnelId object per value.
      * This prevents memory leaks from creating duplicate TunnelId objects.
      */
     private final ConcurrentHashMap<Long, TunnelId> _canonicalIds = new ConcurrentHashMap<>();
 
     /**
+     * Track tunnel states to prevent duplicate removals
+     */
+    private final ConcurrentHashMap<Long, TunnelState> _tunnelStates = new ConcurrentHashMap<>();
+
+    /**
      * Track recently removed tunnel IDs to handle delayed message delivery.
      */
     private final ConcurrentHashMap<Long, Long> _recentlyRemoved = new ConcurrentHashMap<>();
+
+    /**
+     * Stats for debugging duplicate removal attempts
+     */
+    private final AtomicInteger _duplicateRemovalAttempts = new AtomicInteger();
 
     private static final long RECENTLY_REMOVED_EXPIRY = 60 * 1000;
     private static final int MAX_CACHED_IDS = 50000;
@@ -91,8 +108,63 @@ public class TunnelIdManager {
     public void remove(TunnelId id) {
         if (id == null) return;
         Long key = Long.valueOf(id.getTunnelId());
+        _tunnelStates.put(key, TunnelState.REMOVED);
         _canonicalIds.remove(key);
         _recentlyRemoved.put(key, _context.clock().now());
+    }
+
+    /**
+     * Try to mark a tunnel as being removed.
+     * Returns false if the tunnel is already being removed or was removed.
+     * This prevents duplicate removal attempts.
+     *
+     * @param id the tunnel ID
+     * @return true if successfully marked for removal, false if already removed/being removed
+     */
+    public boolean tryMarkForRemoval(TunnelId id) {
+        if (id == null) return false;
+        Long key = Long.valueOf(id.getTunnelId());
+        
+        TunnelState current = _tunnelStates.get(key);
+        if (current == TunnelState.REMOVING || current == TunnelState.REMOVED) {
+            _duplicateRemovalAttempts.incrementAndGet();
+            if (_log.shouldDebug()) {
+                _log.debug("Duplicate removal attempt for tunnel: " + id);
+            }
+            return false;
+        }
+        
+        TunnelState previous = _tunnelStates.putIfAbsent(key, TunnelState.REMOVING);
+        if (previous == TunnelState.REMOVING || previous == TunnelState.REMOVED) {
+            _duplicateRemovalAttempts.incrementAndGet();
+            if (_log.shouldDebug()) {
+                _log.debug("Duplicate removal attempt for tunnel: " + id);
+            }
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Complete the removal of a tunnel.
+     * Called after cleanup is done.
+     *
+     * @param id the tunnel ID
+     */
+    public void completeRemoval(TunnelId id) {
+        if (id == null) return;
+        Long key = Long.valueOf(id.getTunnelId());
+        _tunnelStates.put(key, TunnelState.REMOVED);
+        _canonicalIds.remove(key);
+        _recentlyRemoved.put(key, _context.clock().now());
+    }
+
+    /**
+     * Get count of duplicate removal attempts (for debugging)
+     * @return number of duplicate removal attempts
+     */
+    public int getDuplicateRemovalCount() {
+        return _duplicateRemovalAttempts.get();
     }
 
     /**
