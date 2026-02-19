@@ -38,10 +38,12 @@ public class HashPatternDetector implements Serializable {
     private static final BanLogger _banLogger = new BanLogger(null);
 
     // Pattern tracking: prefix (hex string) -> statistics
-    private final Map<String, PrefixStats> _prefixStats = new ConcurrentHashMap<>();
+    // Loaded from disk on-demand during ban pass, cleared after
+    private Map<String, PrefixStats> _prefixStats;
 
     // Track predictively banned hashes to avoid re-processing
-    private final Set<String> _predictivelyBanned = ConcurrentHashMap.newKeySet();
+    // Loaded from disk on-demand during ban pass, cleared after
+    private Set<String> _predictivelyBanned;
 
     // Cache for computed prefixes to avoid repeated Base64 decoding
     private final ConcurrentHashMap<String, String> _prefixCache = new ConcurrentHashMap<>();
@@ -50,6 +52,9 @@ public class HashPatternDetector implements Serializable {
     private final AtomicBoolean _predictiveBanningActive = new AtomicBoolean(false);
     private long _predictiveBanEnableTime = 0;
     private static final long RECOVERY_COOLDOWN = 60 * 60 * 1000L; // 1 hour before allowing disable
+
+    // Synchronization lock for persist operations
+    private final Object _persistLock = new Object();
 
     // Configuration
     private static final int PREFIX_LENGTH = 3; // First 3 bytes (6 hex chars) - collision risk
@@ -82,12 +87,58 @@ public class HashPatternDetector implements Serializable {
     // Scanner state
     private final AtomicBoolean _scanInProgress = new AtomicBoolean(false);
 
+    /**
+     * Ensure data maps are initialized (lazy load from disk)
+     */
+    private void ensureDataLoaded() {
+        if (_prefixStats == null) {
+            synchronized (this) {
+                if (_prefixStats == null) {
+                    loadPersistedData();
+                    // If still null (no persisted data), initialize empty
+                    if (_prefixStats == null) {
+                        _prefixStats = new ConcurrentHashMap<>();
+                    }
+                    if (_predictivelyBanned == null) {
+                        _predictivelyBanned = ConcurrentHashMap.newKeySet();
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Clear data from memory after ban pass to reduce RAM usage.
+     */
+    private void clearDataFromMemory() {
+        if (_prefixStats != null) {
+            persistData();
+            _prefixStats.clear();
+            _prefixStats = null;
+        }
+        if (_predictivelyBanned != null) {
+            _predictivelyBanned.clear();
+            _predictivelyBanned = null;
+        }
+        _prefixCache.clear();
+        if (_log.shouldInfo()) {
+            _log.info("Cleared hash pattern data from memory");
+        }
+    }
+
     public HashPatternDetector(RouterContext context) {
         _context = context;
         _log = context.logManager().getLog(HashPatternDetector.class);
         loadPatterns();
         loadHistoricalBans();
         loadPersistedData();
+
+        // Register shutdown hook to persist data on JVM exit
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            if (_log.shouldInfo())
+                _log.info("HashPatternDetector shutdown hook: persisting data");
+            persistData();
+        }, "HashPatternDetector-Shutdown"));
 
         // Defer pattern check to startScanner() where router is fully initialized
         // We load historical bans but won't enable predictive banning until later
@@ -101,6 +152,9 @@ public class HashPatternDetector implements Serializable {
      * @return true if predictively banned, false otherwise
      */
     public boolean analyzeAndPredict(Hash hash, RouterContext context) {
+        // Load data from disk on-demand
+        ensureDataLoaded();
+
         if (hash == null || _predictivelyBanned.contains(hash.toBase64())) {
             return false;
         }
@@ -388,38 +442,50 @@ public class HashPatternDetector implements Serializable {
      * Called periodically and on shutdown.
      */
     private void persistData() {
+        if (_prefixStats == null || _predictivelyBanned == null) {
+            return;
+        }
         if (_prefixStats.isEmpty() && _predictivelyBanned.isEmpty()) {
             return;
         }
 
-        File file = new File(_context.getRouterDir(), PERSIST_FILE);
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
-            // Only persist if under limits to avoid persisting garbage
-            if (_prefixStats.size() <= MAX_PREFIX_STATS * 2) {
-                oos.writeObject(new HashMap<>(_prefixStats));
-            } else {
-                oos.writeObject(new HashMap<>());
-                if (_log.shouldWarn()) {
-                    _log.warn("Skipping prefix stats persist - too many entries: " + _prefixStats.size());
+        synchronized (_persistLock) {
+            File file = new File(_context.getRouterDir(), PERSIST_FILE);
+            File tempFile = new File(_context.getRouterDir(), PERSIST_FILE + ".tmp");
+            boolean success = false;
+            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(tempFile))) {
+                // Only persist if under limits to avoid persisting garbage
+                if (_prefixStats.size() <= MAX_PREFIX_STATS * 2) {
+                    oos.writeObject(new HashMap<>(_prefixStats));
+                } else {
+                    oos.writeObject(new HashMap<>());
+                    if (_log.shouldWarn()) {
+                        _log.warn("Skipping prefix stats persist - too many entries: " + _prefixStats.size());
+                    }
                 }
-            }
 
-            if (_predictivelyBanned.size() <= MAX_PREDICTIVELY_BANNED * 2) {
-                oos.writeObject(new HashSet<>(_predictivelyBanned));
-            } else {
-                oos.writeObject(new HashSet<>());
-                if (_log.shouldWarn()) {
-                    _log.warn("Skipping banned persist - too many entries: " + _predictivelyBanned.size());
+                if (_predictivelyBanned.size() <= MAX_PREDICTIVELY_BANNED * 2) {
+                    oos.writeObject(new HashSet<>(_predictivelyBanned));
+                } else {
+                    oos.writeObject(new HashSet<>());
+                    if (_log.shouldWarn()) {
+                        _log.warn("Skipping banned persist - too many entries: " + _predictivelyBanned.size());
+                    }
                 }
-            }
 
-            if (_log.shouldInfo()) {
-                _log.info("Persisted " + _prefixStats.size() + " prefix stats and " +
-                          _predictivelyBanned.size() + " banned hashes to disk");
-            }
-        } catch (Exception e) {
-            if (_log.shouldWarn()) {
-                _log.warn("Failed to persist hash patterns", e);
+                oos.flush();
+                success = tempFile.renameTo(file);
+
+                if (_log.shouldInfo()) {
+                    _log.info("Persisted " + _prefixStats.size() + " prefix stats and " +
+                              _predictivelyBanned.size() + " banned hashes to disk" +
+                              (success ? "" : " (rename failed, using temp file)"));
+                }
+            } catch (Exception e) {
+                if (_log.shouldWarn()) {
+                    _log.warn("Failed to persist hash patterns", e);
+                }
+                tempFile.delete();
             }
         }
     }
@@ -822,6 +888,9 @@ public class HashPatternDetector implements Serializable {
             return;
         }
 
+        // Load data from disk on-demand
+        ensureDataLoaded();
+
         long startTime = _context.clock().now();
         int bannedCount = 0;
         int errorCount = 0;
@@ -915,6 +984,8 @@ public class HashPatternDetector implements Serializable {
 
         } finally {
             _scanInProgress.set(false);
+            // Clear data from memory after scan to reduce RAM usage
+            clearDataFromMemory();
         }
     }
 
