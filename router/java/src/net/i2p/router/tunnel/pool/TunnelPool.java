@@ -2558,21 +2558,34 @@ public class TunnelPool {
      */
     int cleanupExpiredTunnels() {
         int removed = 0;
+        int skipped = 0;
         long now = _context.clock().now();
         List<PooledTunnelCreatorConfig> expiredConfigs = new ArrayList<>();
 
         _tunnelsLock.lock();
         try {
             Iterator<TunnelInfo> it = _tunnels.iterator();
+            int remaining = _tunnels.size();
             while (it.hasNext()) {
                 TunnelInfo info = it.next();
                 if (info instanceof PooledTunnelCreatorConfig) {
                     PooledTunnelCreatorConfig cfg = (PooledTunnelCreatorConfig) info;
                     // Remove tunnels that have already expired
                     if (cfg.getExpiration() < now) {
+                        // NEVER remove the last tunnel - keep it as last resort
+                        if (remaining <= 1) {
+                            cfg.setLastResort();
+                            triggerReplacementBuild();
+                            skipped++;
+                            if (_log.shouldWarn()) {
+                                _log.warn("Keeping expired tunnel as last resort in " + toString() + " - triggering replacement");
+                            }
+                            continue;
+                        }
                         it.remove();
                         expiredConfigs.add(cfg);
                         removed++;
+                        remaining--;
                         if (_log.shouldDebug()) {
                             _log.debug("Removing expired tunnel from pool: " + cfg);
                         }
@@ -2581,9 +2594,9 @@ public class TunnelPool {
             }
         } finally {_tunnelsLock.unlock();}
 
-        if (removed > 0) {
+        if (removed > 0 || skipped > 0) {
             if (_log.shouldInfo()) {
-                _log.info("Cleaned up " + removed + " expired tunnels from pool");
+                _log.info("Cleaned up " + removed + " expired tunnels from pool" + (skipped > 0 ? ", kept " + skipped + " as last resort" : ""));
             }
             // Cleanup the dispatcher maps for the removed tunnels
             for (PooledTunnelCreatorConfig cfg : expiredConfigs) {
