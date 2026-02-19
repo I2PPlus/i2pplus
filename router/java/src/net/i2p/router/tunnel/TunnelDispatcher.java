@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -113,6 +114,9 @@ public class TunnelDispatcher implements Service {
 
     /** Tunnels currently being removed - prevents duplicate removal calls */
     private final ConcurrentHashMap<TunnelId, Long> _beingRemoved = new ConcurrentHashMap<>();
+
+    /** Config identity codes currently being removed - more robust tracking */
+    private final Set<Integer> _configsBeingRemoved = ConcurrentHashMap.newKeySet();
 
     /** Time window (in ms) for suppressing warnings on recently expired tunnels */
     private static final long RECENT_EXPIRY_WINDOW_MS = 30_000;
@@ -802,6 +806,17 @@ public class TunnelDispatcher implements Service {
      * @param reason why the tunnel is being removed
      */
     public void remove(TunnelCreatorConfig cfg, String reason) {
+        // Use config identity for tracking - works even if tunnel IDs aren't assigned yet
+        int cfgKey = System.identityHashCode(cfg);
+        
+        // Check if already being removed - prevent duplicate calls using config identity
+        if (_configsBeingRemoved.contains(cfgKey)) {
+            if (_log.shouldDebug()) {
+                _log.debug("Skipping duplicate remove for config: " + cfg + " reason: " + reason);
+            }
+            return;
+        }
+        
         TunnelId recvId = null;
         TunnelId sendId = null;
         if (cfg.isInbound()) {
@@ -810,28 +825,21 @@ public class TunnelDispatcher implements Service {
             sendId = cfg.getConfig(0).getSendTunnel();
         }
 
-        // Check if already being removed - prevent duplicate calls
-        // Use TunnelIdManager for robust tracking
+        // Try to mark in TunnelIdManager if we have tunnel IDs
         TunnelId checkId = recvId != null ? recvId : sendId;
         if (checkId != null) {
-            // First check local map for fast path
-            if (_beingRemoved.putIfAbsent(checkId, _context.clock().now()) != null) {
-                // Already in local map - skip duplicate call
-                if (_log.shouldDebug()) {
-                    _log.debug("Skipping duplicate remove (local) for tunnel: " + checkId);
-                }
-                return;
-            }
-            // Also check TunnelIdManager for cross-instance tracking
+            // Use TunnelIdManager for cross-instance tracking
             if (!_context.tunnelIdManager().tryMarkForRemoval(checkId)) {
                 // Already being removed by another path
-                _beingRemoved.remove(checkId);
                 if (_log.shouldDebug()) {
                     _log.debug("Skipping duplicate remove (TunnelIdManager) for tunnel: " + checkId);
                 }
                 return;
             }
         }
+        
+        // Mark as being removed using config identity
+        _configsBeingRemoved.add(cfgKey);
 
         //if (_log.shouldInfo()) {
         //    _log.info("Removing tunnel: reason=" + reason +
