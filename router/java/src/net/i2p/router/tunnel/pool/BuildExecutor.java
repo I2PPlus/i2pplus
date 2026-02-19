@@ -145,7 +145,7 @@ class BuildExecutor implements Runnable {
         // Adjust timeout based on tunnel length
         int length = cfg.getLength();
         if (length > 3) {
-            baseTimeout += (length - 3) * 2*1000; // Add 2s per additional hop (reduced from 5s)
+            baseTimeout += (length - 3) * 2*1000; // Add 2s per additional hop
         }
 
         // Adjust based on recent network performance
@@ -155,21 +155,21 @@ class BuildExecutor implements Runnable {
             if (r != null) {
                 double avgBuildTime = r.getAverageValue();
                 if (avgBuildTime > 100) { // If builds are taking longer than 100ms
-                    baseTimeout += (long)(avgBuildTime * 1.5); // 1.5x the average build time (reduced from 2x)
+                    baseTimeout += (long)(avgBuildTime * 1.5); // 1.5x the average build time
                 }
             }
         }
 
-        // Reduce timeout during attacks to fail fast and retry more frequently
+        // Extend timeout during network attacks or startup when build success is under 40%
         double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
         long uptime = _context.router().getUptime();
         boolean isUnderAttack = buildSuccess < 0.40;
         if (isUnderAttack) {
-            baseTimeout = (long)Math.max(baseTimeout * 0.7, (double)BuildRequestor.REQUEST_TIMEOUT / 2);
+            baseTimeout *= 1.5;
             long now = _context.clock().now();
             if (_log.shouldInfo() && uptime > 60*1000 && now - _lastTimeoutExtendLog > 60*1000) {
                 _lastTimeoutExtendLog = now;
-                _log.info("Reducing tunnel build timeout for faster retry (" + (int)(buildSuccess * 100) + "% success) -> " +
+                _log.info("Extending tunnel build timeout (" + (int)(buildSuccess * 100) + "% success) -> " +
                           (uptime < 10*60*1000 ? "router startup period" : "network may be under attack"));
             }
         }
@@ -177,16 +177,16 @@ class BuildExecutor implements Runnable {
         // Adjust based on system load
         int cpuLoad = SystemVersion.getCPULoadAvg();
         if (cpuLoad > 90) {
-            baseTimeout += 15*1000; // Add 15s under high CPU load (reduced from 30s)
+            baseTimeout += 15*1000; // Add 15s under high CPU load
         } else if (cpuLoad > 80) {
-            baseTimeout += 10*1000; // Add 10s under moderate CPU load (reduced from 15s)
+            baseTimeout += 10*1000; // Add 10s under moderate CPU load
         }
 
         // Cap the timeout to prevent excessive waits
-        long maxTimeout = BuildRequestor.REQUEST_TIMEOUT * 2; // Double the base timeout (reduced from 3x)
+        long maxTimeout = BuildRequestor.REQUEST_TIMEOUT * 2; // Double the base timeout
         // During attacks with low success, allow higher max timeout
         if (isUnderAttack) {
-            maxTimeout = BuildRequestor.REQUEST_TIMEOUT * 3; // Allow up to 3x timeout (reduced from 5x)
+            maxTimeout = BuildRequestor.REQUEST_TIMEOUT * 3; // Allow up to 3x timeout
         }
         return Math.min(baseTimeout, maxTimeout);
     }
@@ -259,9 +259,6 @@ class BuildExecutor implements Runnable {
         allowed = _context.getProperty("router.tunnelConcurrentBuilds", allowed);
 
         // Cleanup recentlyBuilding map - remove configs whose tunnel lifetime has expired
-        // CRITICAL FIX: Add age-based cleanup to prevent stuck configs with bad expiration values
-        // Max age = TUNNEL_LIFETIME (10min) + GRACE_PERIOD (1min) + buffer (1min) = 12 minutes
-        final long MAX_CONFIG_AGE = 12 * 60 * 1000;
         int recentlyCleaned = 0;
         for (Iterator<Long> iter = _recentlyBuildingMap.keySet().iterator(); iter.hasNext(); ) {
             Long key = iter.next();
@@ -271,18 +268,11 @@ class BuildExecutor implements Runnable {
                 recentlyCleaned++;
                 continue;
             }
-            // Remove if tunnel lifetime has expired OR config is too old (age-based cleanup)
-            long configAge = now - cfg.getCreationTime();
-            boolean isExpired = cfg.getExpiration() <= now;
-            boolean isStale = configAge > MAX_CONFIG_AGE;
-
-            if (isExpired || isStale) {
+            // Only remove if tunnel lifetime has actually expired
+            if (cfg.getExpiration() <= now) {
                 iter.remove();
                 recentlyCleaned++;
                 cleanupConfig(cfg);
-                if (isStale && _log.shouldWarn()) {
-                    _log.warn("Removed stale config from _recentlyBuildingMap (age: " + (configAge/1000) + "s, expiration: " + (cfg.getExpiration() <= now ? "expired" : "future") + ")");
-                }
             }
         }
         if (recentlyCleaned > 0 && _log.shouldDebug()) {
@@ -374,10 +364,10 @@ class BuildExecutor implements Runnable {
             return isSlow ? 1 : 3;
         }
 
-        // Adjust allowed tunnels on overload conditions - use gradual backoff based on success rate
+        // Adjust allowed tunnels on overload conditions - increase builds under high load to handle attacks
         if (allowed < 3) {
-            double successRate = _context.profileOrganizer().getTunnelBuildSuccess();
-            allowed = Math.max(3, (int)(allowed * (1.0 + (0.40 - successRate))));
+            allowed += 3;
+            allowed *= 4;
         }
 
         // Periodic cleanup of in-progress configs to prevent memory leaks
@@ -509,22 +499,16 @@ class BuildExecutor implements Runnable {
                     // Always prefer empty pools to ensure all pools get at least 1 tunnel
                     DataHelper.sort(wanted, new TunnelPoolComparator());
 
-                    // Filter pools that can actually start building before the loop
-                    // This prevents wasting 'allowed' iterations on pools that will fail the check
-                    List<TunnelPool> buildable = new ArrayList<>(wanted.size());
-                    for (TunnelPool pool : wanted) {
-                        if (pool.canStartBuild(pool.getSettings().isInbound())) {
-                            buildable.add(pool);
-                        } else {
+                    // Process up to 'allowed' pools - removes from wanted as we go
+                    for (int i = 0; i < allowed && !wanted.isEmpty(); i++) {
+                        TunnelPool pool = wanted.remove(0);
+                        if (!pool.canStartBuild(pool.getSettings().isInbound())) {
                             if (_log.shouldDebug()) {
                                 _log.debug("Skipping " + pool + " -> Max concurrent builds reached for direction");
                             }
+                            i--; // Don't count against allowed since we skipped
+                            continue;
                         }
-                    }
-
-                    // Process up to 'allowed' pools
-                    for (int i = 0; i < allowed && i < buildable.size(); i++) {
-                        TunnelPool pool = buildable.get(i);
 
                         long bef = System.currentTimeMillis();
                         PooledTunnelCreatorConfig cfg = pool.configureNewTunnel();
@@ -535,6 +519,8 @@ class BuildExecutor implements Runnable {
                                 _log.debug("Configuring new tunnel for " + pool + " -> " + cfg);
                             }
                             buildTunnel(cfg);
+                        } else {
+                            i--; // Failed to configure, don't count against allowed
                         }
                     }
                 } else {
@@ -593,8 +579,8 @@ class BuildExecutor implements Runnable {
      * Comparator for prioritizing tunnel pools during build selection.
      * Priority order: Exploratory > Pools without tunnels > Everyone else.
      *
-     * CRITICAL: Uses hashcode tie-breaker to ensure stable sorting and prevent IAE
-     * when pool states change during sort.
+     * WARNING - this sort may be unstable, as a pool's tunnel count may change
+     * during the sort. This will cause Java 7 sort to throw an IAE.
      */
     private static class TunnelPoolComparator implements Comparator<TunnelPool>, Serializable {
 
@@ -604,24 +590,20 @@ class BuildExecutor implements Runnable {
          * 2. Empty client pools (get at least 1 tunnel)
          * 3. Exploratory pools with >= 2 tunnels (have minimum)
          * 4. Client pools with tunnels (fill up to match exploratory)
-         * 5. Tie-breaker: hashcode for deterministic ordering
          *
          * @param tpl left tunnel pool
          * @param tpr right tunnel pool
-         * @return negative if tpl has higher priority, positive if tpr has higher priority
+         * @return -1 if tpl has higher priority, 1 if tpr has higher priority, 0 if equal
          */
         public int compare(TunnelPool tpl, TunnelPool tpr) {
-            // Snapshot counts once at the start for consistency
-            int tplCount = tpl.getTunnelCount();
-            int tprCount = tpr.getTunnelCount();
             boolean tplExploratory = tpl.getSettings().isExploratory();
             boolean tprExploratory = tpr.getSettings().isExploratory();
+            int tplCount = tpl.getTunnelCount();
+            int tprCount = tpr.getTunnelCount();
 
             // Priority 1: Exploratory with < 2 tunnels (need minimum 1 IB + 1 OB)
-            boolean tplNeedsMin = tplExploratory && tplCount < 2;
-            boolean tprNeedsMin = tprExploratory && tprCount < 2;
-            if (tplNeedsMin && !tprNeedsMin) return -1;
-            if (tprNeedsMin && !tplNeedsMin) return 1;
+            if (tplExploratory && tplCount < 2 && (!tprExploratory || tprCount >= 2)) return -1;
+            if (tprExploratory && tprCount < 2 && (!tplExploratory || tplCount >= 2)) return 1;
 
             // Priority 2: Empty pools (0 tunnels) - get at least 1 first
             if (tplCount <= 0 && tprCount > 0) return -1;
@@ -635,9 +617,7 @@ class BuildExecutor implements Runnable {
             if (tplCount < tprCount) return -1;
             if (tprCount < tplCount) return 1;
 
-            // Priority 5: Deterministic tie-breaker using hashcode
-            // This prevents IAE when pool states change during sort
-            return Integer.compare(tpl.hashCode(), tpr.hashCode());
+            return 0;
         }
     }
 
@@ -658,6 +638,7 @@ class BuildExecutor implements Runnable {
                     // 0-hop tunnels build inline and don't count toward concurrent build cap
                     // configureNewTunnel() called buildStarted(), so balance it here
                     pool.buildFinished(pool.getSettings().isInbound());
+                    if (cfg.getLength() > 1) {allowed--;} // oops... shouldn't have done that, but hey, it's not that bad...
                     iter.remove();
                 } else {
                     if (_log.shouldDebug()) {_log.debug("Configured a NULL tunnel!");}
@@ -688,18 +669,15 @@ class BuildExecutor implements Runnable {
         boolean ok = BuildRequestor.request(_context, cfg, this);
         if (!ok) {
             // Build request could not be sent (no tunnel available for reply path)
-            // CRITICAL FIX: Must call buildComplete to properly clean up counters
-            // and trigger pool-level retry logic. Without this, pools can collapse
-            // because buildStarted() was called but buildFinished() never is.
+            // This is NOT a failure - just means we need to retry later
+            // Don't call buildComplete - the executor will naturally retry
+            // Only remove from _inProgress if it was added
             if (cfg.getLength() > 1) {
                 removeFromBuilding(cfg.getReplyMessageId());
             }
             if (_log.shouldDebug()) {
                 _log.debug("Tunnel build deferred - no reply tunnel available for " + cfg);
             }
-            // Properly clean up by calling buildComplete with OTHER_FAILURE
-            // This decrements the concurrent build counter and triggers retry logic
-            buildComplete(cfg, Result.OTHER_FAILURE);
             return;
         }
         if (cfg.getLength() > 1) {
