@@ -129,6 +129,8 @@ public class HashPatternDetector implements Serializable {
     public HashPatternDetector(RouterContext context) {
         _context = context;
         _log = context.logManager().getLog(HashPatternDetector.class);
+        _prefixStats = new ConcurrentHashMap<>();
+        _predictivelyBanned = ConcurrentHashMap.newKeySet();
         loadPatterns();
         loadHistoricalBans();
         loadPersistedData();
@@ -773,6 +775,9 @@ public class HashPatternDetector implements Serializable {
     public void cleanup() {
         long now = _context.clock().now();
         long cutoff = now - PREFIX_STATS_EXPIRY;
+
+        if (_prefixStats == null)
+            return;
 
         if (_prefixStats.size() > MAX_PREFIX_STATS) {
             int removed = 0;
