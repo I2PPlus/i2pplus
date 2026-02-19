@@ -5,6 +5,7 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -52,11 +53,26 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     private static final int MIN_KBPS_THREE_HANDLERS = 128;
     private static final double MAX_SHARE_RATIO = 100000d;
 
+    /**
+     * Delay before removing pools after client disconnect.
+     * Allows tunnels to naturally expire rather than collapsing.
+     * @since 0.9.68+
+     */
+    private static final long POOL_CLEANUP_DELAY_MS = 60 * 1000; // 1 minute
+
+    /**
+     * Pending delayed cleanups for pool removal.
+     * Key: destination hash, Value: cleanup task
+     * @since 0.9.68+
+     */
+    private final Map<Hash, DelayedPoolCleanup> _pendingCleanups;
+
     public TunnelPoolManager(RouterContext ctx) {
         _context = ctx;
         _log = ctx.logManager().getLog(TunnelPoolManager.class);
         _clientInboundPools = new ConcurrentHashMap<Hash, TunnelPool>(32);
         _clientOutboundPools = new ConcurrentHashMap<Hash, TunnelPool>(32);
+        _pendingCleanups = new ConcurrentHashMap<Hash, DelayedPoolCleanup>(32);
         _clientPeerSelector = new ClientPeerSelector(ctx);
         _ghostPeerManager = new GhostPeerManager(ctx);
         ExploratoryPeerSelector selector = new ExploratoryPeerSelector(_context);
@@ -487,11 +503,14 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      *
      *  Must be called AFTER deregistration by the client manager.
      *
+     *  CRITICAL FIX: Uses delayed cleanup to allow tunnels to continue operating
+     *  until they naturally expire. Prevents pool collapse when client disconnects.
+     *
      */
     public synchronized void removeTunnels(Hash destination) {
         if (destination == null) return;
         if (_log.shouldDebug()) {
-            _log.debug("Removing tunnel pool for client [" + destination.toBase32().substring(0,8) + "]");
+            _log.debug("Scheduling tunnel pool removal for client [" + destination.toBase32().substring(0,8) + "]");
         }
         if (_context.clientManager().isLocal(destination)) {
             // race with buildTunnels() on restart of a client
@@ -500,10 +519,100 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             }
             return;
         }
+
+        // Cancel any existing cleanup for this destination
+        DelayedPoolCleanup existingCleanup = _pendingCleanups.remove(destination);
+        if (existingCleanup != null) {
+            existingCleanup.cancel();
+        }
+
+        // Schedule delayed cleanup to allow graceful tunnel expiration
+        DelayedPoolCleanup cleanup = new DelayedPoolCleanup(destination);
+        _pendingCleanups.put(destination, cleanup);
+        _context.simpleTimer2().addEvent(cleanup, POOL_CLEANUP_DELAY_MS);
+
+        if (_log.shouldInfo()) {
+            TunnelPool inbound = _clientInboundPools.get(destination);
+            TunnelPool outbound = _clientOutboundPools.get(destination);
+            int tunnelCount = 0;
+            if (inbound != null) tunnelCount += inbound.getTunnelCount();
+            if (outbound != null) tunnelCount += outbound.getTunnelCount();
+            _log.info("Delayed pool removal scheduled for [" + destination.toBase32().substring(0,8) +
+                      "] - " + tunnelCount + " tunnels will expire naturally");
+        }
+    }
+
+    /**
+     * Force immediate removal of a pool - used for router shutdown.
+     * @param destination the destination hash
+     * @since 0.9.68+
+     */
+    public synchronized void forceRemoveTunnels(Hash destination) {
+        if (destination == null) return;
+
+        // Cancel any pending delayed cleanup
+        DelayedPoolCleanup cleanup = _pendingCleanups.remove(destination);
+        if (cleanup != null) {
+            cleanup.cancel();
+        }
+
+        doRemoveTunnels(destination);
+    }
+
+    /**
+     * Actually perform pool removal.
+     * @param destination the destination hash
+     */
+    private synchronized void doRemoveTunnels(Hash destination) {
+        if (_log.shouldDebug()) {
+            _log.debug("Removing tunnel pool for client [" + destination.toBase32().substring(0,8) + "]");
+        }
+
         TunnelPool inbound = _clientInboundPools.remove(destination);
         TunnelPool outbound = _clientOutboundPools.remove(destination);
         if (inbound != null) {inbound.shutdown();}
         if (outbound != null) {outbound.shutdown();}
+
+        if (_log.shouldInfo()) {
+            _log.info("Tunnel pools removed for [" + destination.toBase32().substring(0,8) + "]");
+        }
+    }
+
+    /**
+     * Delayed cleanup task for pool removal.
+     * Allows tunnels to continue operating until they naturally expire.
+     * @since 0.9.68+
+     */
+    private class DelayedPoolCleanup implements SimpleTimer.TimedEvent {
+        private final Hash _destination;
+        private volatile boolean _cancelled = false;
+
+        public DelayedPoolCleanup(Hash dest) {
+            _destination = dest;
+        }
+
+        public void cancel() {
+            _cancelled = true;
+        }
+
+        public void timeReached() {
+            if (_cancelled) return;
+
+            // Remove from pending cleanups
+            _pendingCleanups.remove(_destination);
+
+            // Check if client re-registered during delay
+            if (_context.clientManager().isLocal(_destination)) {
+                if (_log.shouldInfo()) {
+                    _log.info("Cancelling delayed pool removal - client re-registered: " +
+                              _destination.toBase32().substring(0,8));
+                }
+                return;
+            }
+
+            // Perform actual removal
+            doRemoveTunnels(_destination);
+        }
     }
 
     /** queue a recurring test job if appropriate */
@@ -570,8 +679,39 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     public synchronized void shutdown() {
         _handler.shutdown(_numHandlerThreads);
         _executor.shutdown();
+
+        // Cancel all pending delayed cleanups and force remove all client pools
+        // This ensures clean shutdown without waiting for delayed cleanup
+        for (Iterator<Map.Entry<Hash, DelayedPoolCleanup>> iter = _pendingCleanups.entrySet().iterator(); iter.hasNext(); ) {
+            Map.Entry<Hash, DelayedPoolCleanup> entry = iter.next();
+            entry.getValue().cancel();
+            iter.remove();
+        }
+
+        // Force remove all client pools immediately
+        for (Iterator<Map.Entry<Hash, TunnelPool>> iter = _clientInboundPools.entrySet().iterator(); iter.hasNext(); ) {
+            Map.Entry<Hash, TunnelPool> entry = iter.next();
+            TunnelPool pool = entry.getValue();
+            if (pool != null) {
+                pool.shutdown();
+            }
+            iter.remove();
+        }
+        for (Iterator<Map.Entry<Hash, TunnelPool>> iter = _clientOutboundPools.entrySet().iterator(); iter.hasNext(); ) {
+            Map.Entry<Hash, TunnelPool> entry = iter.next();
+            TunnelPool pool = entry.getValue();
+            if (pool != null) {
+                pool.shutdown();
+            }
+            iter.remove();
+        }
+
         shutdownExploratory();
         _isShutdown = true;
+
+        if (_log.shouldInfo()) {
+            _log.info("TunnelPoolManager shutdown complete");
+        }
     }
 
     private void shutdownExploratory() {
@@ -825,6 +965,97 @@ public class TunnelPoolManager implements TunnelManagerFacade {
                 }
                 pool.tunnelFailed(tun, peer);
             }
+        }
+    }
+
+    /**
+     * Emergency pool recovery: Check all registered clients have valid tunnel pools.
+     * Recreates missing pools to prevent service interruption.
+     * Called periodically by BuildExecutor.
+     *
+     * @return number of pools recovered
+     * @since 0.9.68+
+     */
+    public int checkAndRecoverPools() {
+        int recovered = 0;
+
+        // Check all registered clients have pools
+        Set<Destination> clients = _context.clientManager().listClients();
+        for (Destination dest : clients) {
+            Hash h = dest.calculateHash();
+            boolean hasInbound = _clientInboundPools.containsKey(h);
+            boolean hasOutbound = _clientOutboundPools.containsKey(h);
+
+            if (!hasInbound || !hasOutbound) {
+                if (_log.shouldWarn()) {
+                    _log.warn("Detected missing pool for registered client: " +
+                              h.toBase32().substring(0,8) +
+                              " (inbound=" + hasInbound + ", outbound=" + hasOutbound + ")");
+                }
+
+                // Cancel any pending cleanup for this destination
+                DelayedPoolCleanup cleanup = _pendingCleanups.remove(h);
+                if (cleanup != null) {
+                    cleanup.cancel();
+                    if (_log.shouldInfo()) {
+                        _log.info("Cancelled delayed cleanup for re-registered client: " +
+                                  h.toBase32().substring(0,8));
+                    }
+                }
+
+                // Recreate pools for this client using default settings
+                try {
+                    ClientTunnelSettings settings = new ClientTunnelSettings(h);
+                    buildTunnels(dest, settings);
+                    recovered++;
+                    if (_log.shouldWarn()) {
+                        _log.warn("RECOVERY: Created new tunnel pools for client: " +
+                                  h.toBase32().substring(0,8));
+                    }
+                } catch (Exception e) {
+                    if (_log.shouldError()) {
+                        _log.error("Failed to recover pools for client: " +
+                                   h.toBase32().substring(0,8), e);
+                    }
+                }
+            }
+        }
+
+        // Log pool health summary
+        int inboundPools = _clientInboundPools.size();
+        int outboundPools = _clientOutboundPools.size();
+        int registeredClients = clients.size();
+
+        if (inboundPools != registeredClients || outboundPools != registeredClients) {
+            if (_log.shouldWarn()) {
+                _log.warn("Pool health check: " + registeredClients + " registered clients, " +
+                          inboundPools + " inbound pools, " + outboundPools + " outbound pools");
+            }
+        } else if (recovered > 0 && _log.shouldInfo()) {
+            _log.info("Pool health check: All " + registeredClients + " clients have pools");
+        }
+
+        return recovered;
+    }
+
+    /**
+     * Log pool health summary for monitoring.
+     * @since 0.9.68+
+     */
+    public void logPoolHealth() {
+        int inboundPools = _clientInboundPools.size();
+        int outboundPools = _clientOutboundPools.size();
+        int registeredClients = _context.clientManager().listClients().size();
+        int pendingCleanups = _pendingCleanups.size();
+
+        if (inboundPools != registeredClients || outboundPools != registeredClients) {
+            _log.warn("Pool mismatch detected: " + registeredClients + " clients, " +
+                      inboundPools + " inbound pools, " + outboundPools + " outbound pools, " +
+                      pendingCleanups + " pending cleanups");
+        } else {
+            _log.info("Pool health: " + registeredClients + " clients, " +
+                      inboundPools + " inbound pools, " + outboundPools + " outbound pools, " +
+                      pendingCleanups + " pending cleanups");
         }
     }
 }
