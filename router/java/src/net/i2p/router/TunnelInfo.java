@@ -147,7 +147,7 @@ public interface TunnelInfo {
      * Get the last recorded round-trip latency for this tunnel from the most recent test.
      *
      * @return latency in milliseconds, or -1 if not available
-     * @since 0.9.70+
+     * @since 0.9.68+
      */
     public int getLastLatency();
 }
