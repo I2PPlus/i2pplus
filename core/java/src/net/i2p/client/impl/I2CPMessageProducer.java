@@ -225,8 +225,10 @@ class I2CPMessageProducer {
         SendMessageMessage msg;
         SessionId sid = session.getSessionId();
         if (sid == null) {
-            _log.error(session.toString() + " cannot send message, session closed", new Exception());
-            return;
+            if (_log.shouldWarn()) {
+                _log.warn(session.toString() + " cannot send message, session closed");
+            }
+            throw new I2PSessionException("Session closed");
         }
         Payload data = createPayload(payload);
         if (expires > 0 || flags > 0) {
@@ -255,8 +257,10 @@ class I2CPMessageProducer {
             return;
         SessionId sid = session.getSessionId();
         if (sid == null) {
-            _log.error(session.toString() + " cannot send message, session closed", new Exception());
-            return;
+            if (_log.shouldWarn()) {
+                _log.warn(session.toString() + " cannot send message, session closed");
+            }
+            throw new I2PSessionException("Session closed");
         }
         Payload data = createPayload(payload);
         SendMessageMessage msg = new SendMessageExpiresMessage(sid, dest, data, nonce, options);
