@@ -559,13 +559,13 @@ public class TunnelPool {
                     if (ls != null) {
                         requestLeaseSet(ls);
                         if (_log.shouldInfo()) {
-                            _log.info("PROTECTED: Republished LeaseSet with last tunnel: " + toString());
+                            _log.info("Republished LeaseSet with last tunnel: " + toString());
                         }
                     }
                 }
             }
-            if (_log.shouldWarn()) {
-                _log.warn("PROTECTED: Cannot remove last tunnel from " + toString() + " -> " + info);
+            if (_log.shouldInfo()) {
+                _log.info("Cannot remove last tunnel from " + toString() + " -> " + info);
             }
             return false;
         }
@@ -949,7 +949,15 @@ public class TunnelPool {
             effectiveMax = maxAllowed + expiringCount; // Allow extra for replacements
         }
 
-        if (currentCount >= effectiveMax) {
+        // Allow tunnel if we're below configured minimum - this handles the race condition
+        // where tunnels expire while new ones are building
+        if (currentCount < configured) {
+            if (_log.shouldDebug()) {
+                _log.debug("Allowing tunnel addition - below configured minimum (" +
+                          currentCount + " < " + configured + ") in " + toString());
+            }
+            // Continue to add the tunnel
+        } else if (currentCount >= effectiveMax) {
             if (_log.shouldInfo()) {
                 long uptime = _context.router().getUptime();
                 _log.info((isUnderAttack ? "Limiting tunnels to " + maxAllowed + " in " :
@@ -1873,8 +1881,8 @@ public class TunnelPool {
             if (wasInPool) {
                 // NEVER remove the last tunnel
                 if (!safeRemoveTunnelLocked(info)) {
-                    if (_log.shouldWarn()) {
-                        _log.warn("PROTECTED: Skipping synchronous removal of last tunnel: " + info + " in " + toString());
+                    if (_log.shouldInfo()) {
+                        _log.info("Skipping synchronous removal of last tunnel: " + info + " in " + toString());
                     }
                     return false;
                 }
