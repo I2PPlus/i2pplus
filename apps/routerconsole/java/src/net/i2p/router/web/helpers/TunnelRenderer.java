@@ -938,14 +938,36 @@ class TunnelRenderer {
      * Render a summary header table for a tunnel pool showing counts and bandwidth.
      */
     private void renderPoolSummary(Writer out, TunnelPool in, TunnelPool outPool, Hash client) throws IOException {
-        // Get inbound pool data
-        int inCount = in != null ? in.size() : 0;
+        // Get inbound pool data - exclude failed tunnels from count
+        int inCount = 0;
+        if (in != null) {
+            for (TunnelInfo t : in.listTunnels()) {
+                if (t instanceof net.i2p.router.tunnel.pool.PooledTunnelCreatorConfig) {
+                    if (!((net.i2p.router.tunnel.pool.PooledTunnelCreatorConfig)t).getTunnelFailed()) {
+                        inCount++;
+                    }
+                } else {
+                    inCount++; // Non-PooledTunnelCreatorConfig tunnels don't have failed status
+                }
+            }
+        }
         int inWanted = in != null ? in.getSettings().getQuantity() + in.getSettings().getBackupQuantity() : 0;
         int inBuilding = in != null ? in.getInProgressCount() : 0;
         long inBW = in != null ? in.getLifetimeProcessed() : 0;
 
-        // Get outbound pool data
-        int outCount = outPool != null ? outPool.size() : 0;
+        // Get outbound pool data - exclude failed tunnels from count
+        int outCount = 0;
+        if (outPool != null) {
+            for (TunnelInfo t : outPool.listTunnels()) {
+                if (t instanceof net.i2p.router.tunnel.pool.PooledTunnelCreatorConfig) {
+                    if (!((net.i2p.router.tunnel.pool.PooledTunnelCreatorConfig)t).getTunnelFailed()) {
+                        outCount++;
+                    }
+                } else {
+                    outCount++; // Non-PooledTunnelCreatorConfig tunnels don't have failed status
+                }
+            }
+        }
         int outWanted = outPool != null ? outPool.getSettings().getQuantity() + outPool.getSettings().getBackupQuantity() : 0;
         int outBuilding = outPool != null ? outPool.getInProgressCount() : 0;
         long outBW = outPool != null ? outPool.getLifetimeProcessed() : 0;
@@ -1004,13 +1026,24 @@ class TunnelRenderer {
 
         int live = 0;
         int maxLength = 1;
+        long now = _context.clock().now();
         for (int i = 0; i < tunnels.size(); i++) {
             TunnelInfo info = tunnels.get(i);
             int length = info.getLength();
             if (length > maxLength) {maxLength = length;}
+            // Count non-expired, non-failed tunnels for the live check
+            if (info.getExpiration() > now) {
+                // Skip failed tunnels in count
+                boolean isTestFailed = (info.getTestStatus() == net.i2p.router.TunnelTestStatus.FAILED);
+                boolean isPooledFailed = (info instanceof net.i2p.router.tunnel.pool.PooledTunnelCreatorConfig) &&
+                    ((net.i2p.router.tunnel.pool.PooledTunnelCreatorConfig) info).getTunnelFailed();
+                if (!isTestFailed && !isPooledFailed) {
+                    live++;
+                }
+            }
         }
         StringBuilder buf = new StringBuilder(32*1024);
-        if (tunnels.size() != 0) {
+        if (live > 0) {
             buf.append("<table class=\"tunneldisplay tunnels_client\">\n<thead><tr><th class=direction title=\"")
                .append(_t("Inbound or outbound?"))
                .append("\">")
@@ -1044,7 +1077,14 @@ class TunnelRenderer {
             TunnelInfo info = tunnels.get(i);
             long timeLeft = info.getExpiration()-_context.clock().now();
             if (timeLeft <= 0) {continue;} // don't display tunnels in their grace period
-            live++;
+            // Skip failed tunnels - don't display them
+            // Check both getTunnelFailed() and testStatus == FAILED
+            boolean isTestFailed = (info.getTestStatus() == net.i2p.router.TunnelTestStatus.FAILED);
+            boolean isPooledFailed = (info instanceof net.i2p.router.tunnel.pool.PooledTunnelCreatorConfig) &&
+                ((net.i2p.router.tunnel.pool.PooledTunnelCreatorConfig) info).getTunnelFailed();
+            if (isTestFailed || isPooledFailed) {
+                continue;
+            }
             boolean isInbound = info.isInbound();
 
             // Get test status and determine if tunnel has failed
