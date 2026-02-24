@@ -13,7 +13,6 @@ body.js #tunnelsContainer{display:block!important}
 .tabletitle .statusnotes{margin:0;padding:1px 0;display:inline-block;position:absolute;top:8px;right:96px;vertical-align:middle;text-align:left;font-size:13px;border:0;box-shadow:none;background:none}
 .dataIn,.dataOut{padding:1px 0 1px 18px;min-width:56px;display:inline-block;background:url(/themes/console/images/inbound.svg) no-repeat left 2px/auto 80%}
 .dataOut{margin-left:4px;background:url(/themes/console/images/outbound.svg) no-repeat left 1px/auto 80%}
-
 .direction,.status{width:1%}
 .expiry,.latency,.transferred{width:8%;white-space:nowrap}
 .latency{text-align:center}
@@ -21,8 +20,9 @@ body.js #tunnelsContainer{display:block!important}
 .failing .status span{background:var(--tunn_failing)}
 .good .status span{background:var(--tunn_active)}
 .testing .status span{background:var(--tunn_starting);animation:pulse 1.5s infinite}
+.tunnel_id:empty{opacity:0!important}
 .untested .status span{background:var(--tunn_hidden)}
-tr.failed{background:#f002;display:none}
+tr.failed{background:#f002;display:none!important}
 tr.failed td>*:not(.failed .status span){opacity:.5}
 tr.failed .testFailed{animation:none}
 .poolsummary th{pointer-events:none}
@@ -34,41 +34,6 @@ tr.failed .testFailed{animation:none}
 #tunnels .poolsummary .inBuild:not(.building),#tunnels .poolsummary .outBuild:not(.building){background-blend-mode:luminosity}
 #tunnels .poolsummary #sep{background:url(/themes/console/images/jobs.svg) no-repeat right 4px center/20px,var(--th)}
 #tunnels .poolsummary #sep{width:90%}
-#tunnels #tunnelsContainer .latency span{width:unset;display:inline-block}
-#tunnels #tunnelsContainer .latency span:not(.left){min-width:36px;text-align:right}
-#tunnels #tunnelsContainer .latency .left{min-width:26px}
-#tunnels #tunnelsContainer .status{text-align:center}
-#tunnels #tunnelsContainer .status span{display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:middle}
-
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1.1)}50%{opacity:.7;transform:scale(.9)}}
-body.js #tunnelsContainer{display:block!important}
-.idsHidden #tunnels .tunnel_id,.tunnelsHidden .tunneldisplay,.tunnelsHidden #toggleTunnelIds,#tiers{display:none!important}
-#toggleTunnelIds{width:20px;height:20px;display:inline-block;position:absolute;top:calc(50% - 10px);right:40px;background:url(/themes/console/images/off.svg) no-repeat center center/20px,url(/themes/console/images/hardhat.svg) no-repeat center center/16px;opacity:.7}
-#toggleTunnelIds:hover{cursor:pointer;opacity:1;transform:scale(1.2)}
-#toggleTunnelIds:active{transform:scale(.9)}
-#toggleTunnels.off{background:url(/themes/console/images/inout.svg) no-repeat center center/20px}
-#toggleTunnels{width:20px;height:20px;display:inline-block;position:absolute;top:calc(50% - 10px);right:12px;background:url(/themes/console/images/off.svg) no-repeat center center/20px,url(/themes/console/images/inout.svg) no-repeat center center/16px;opacity:.7}
-#toggleTunnels:hover{cursor:pointer;opacity:1;transform:scale(1.2)}
-#toggleTunnels:active{transform:scale(.9)}
-#toggleTunnelIds.off{background:url(/themes/console/images/hardhat.svg) no-repeat center center/20px}
-#tunnelsContainer .tablewrap{margin:11px 0 9px}
-#tunnelsContainer .tabletitle{position:relative}
-.tabletitle .statusnotes{margin:0;padding:1px 0;display:inline-block;position:absolute;top:8px;right:96px;vertical-align:middle;text-align:left;font-size:13px;border:0;box-shadow:none;background:none}
-.dataIn,.dataOut{padding:1px 0 1px 18px;min-width:56px;display:inline-block;background:url(/themes/console/images/inbound.svg) no-repeat left 2px/auto 80%}
-.dataOut{margin-left:4px;background:url(/themes/console/images/outbound.svg) no-repeat left 1px/auto 80%}
-
-.direction,.status{width:1%}
-.expiry,.latency,.transferred{width:8%;white-space:nowrap}
-.latency{text-align:center}
-.failed .status span{background:var(--tunn_reject)}
-.failing .status span{background:var(--tunn_failing)}
-.good .status span{background:var(--tunn_active)}
-.testing .status span{background:var(--tunn_starting);animation:pulse 1.5s infinite}
-.untested .status span{background:var(--tunn_hidden)}
-tr.failed{background:#f002;display:none}
-tr.failed td>*:not(.failed .status span){opacity:.5}
-tr.failed .testFailed{animation:none}
-#statusnotes td{padding:10px;font-style:italic;font-size:105%;text-align:center;border-top-width:2px}
 #tunnels #tunnelsContainer .latency span{width:unset;display:inline-block}
 #tunnels #tunnelsContainer .latency span:not(.left){min-width:36px;text-align:right}
 #tunnels #tunnelsContainer .latency .left{min-width:26px}

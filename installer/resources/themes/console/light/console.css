@@ -1197,6 +1197,7 @@ h3+div.statusnotes{margin-top:2px}
 .ipaddress a{line-height:1}
 .peerFlag{position:relative;z-index:10;display:inline-block;vertical-align:middle}
 .peerFlag::before{display:inline-block;position:absolute;top:0;left:0;bottom:0;right:0;z-index:20;width:100%;border-radius:3px;background:linear-gradient(180deg,rgba(255,255,255,.2),#0003);content:"";pointer-events:none}
+.poolsummary{margin:0 0 -3px}
 .rif .peerFlag::before{display:none}
 .rih,.rih a,.routerHash,.routerHash a{font-weight:600;user-select:all}
 .routerHash,.version{margin:0;padding:1px 3px;min-width:44px;display:inline-block;line-height:1.3;vertical-align:middle;text-align:center;font-weight:700;border:1px solid #bbc;box-shadow:var(--highlight);background:var(--badge)}
@@ -1207,8 +1208,8 @@ h3+div.statusnotes{margin-top:2px}
 .tunneldisplay,div.statusnotes,#config_service .infohelp,#config_service .formaction{position:relative;z-index:100}
 .tunneldisplay td{text-align:center}
 .tunneldisplay:not(#transitSummary):not(#allTransit) td:not(.rif):not(.rih):not(.rbw)::before{display:inline-block;vertical-align:middle;min-height:30px;content:""}
-.tunneldisplay tbody tr:last-child td{border-bottom:var(--border-inner)!important}
-#statusnotes,#statusnotes tr,#statusnotes td{border:var(--border_inner)!important;font-size:100%!important}
+.tunneldisplay tbody tr:last-child td{border-bottom:var(--border-inner)}
+#statusnotes,#statusnotes tr,#statusnotes td{border:var(--border_inner);font-size:100%!important}
 #statusnotes,#statusnotes tr,#statusnotes tr:hover,#statusnotes tr:hover td{background:none!important}
 #statusnotes td::before{display:none!important}
 .tunneldisplay td:nth-child(3){white-space:nowrap}
@@ -1263,6 +1264,7 @@ h3+div.statusnotes{margin-top:2px}
 #tunnels td>*{vertical-align:middle}
 #tunnels .cells:first-child{width:1%;max-width:64px;min-width:64px}
 #tunnels .cells:nth-child(2),#tunnels .cells:nth-child(3),.tunnels_participating td:nth-child(4){width:2%;max-width:112px;min-width:112px;vertical-align:middle}
+#tunnels .expiry{margin:0;padding:0 8px;width:7.5%}
 #tunnels .left,#tunnels .right{margin:0;width:50%;display:inline-block;line-height:1;vertical-align:text-bottom}
 #tunnels .lsview{margin:-10px 0 0}
 #tunnels .percentBarOuter,#tunnels .percentBarText{width:calc(100% - 8px);min-width:72px;max-width:96px}
