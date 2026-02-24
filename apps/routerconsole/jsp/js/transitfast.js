@@ -45,10 +45,10 @@ import "/js/tablesort/tablesort.number.js";
   function refreshData() {
     startRefresh();
     getDOM();
-    const notes = document.querySelectorAll(".statusnotes");
+    const notes = document.querySelectorAll("#statusnotes");
     if (peers && notes.length) {
       setupTablesort();
-      refreshElements(".statusnotes, #transitPeers", "/transitfast", REFRESH_INTERVAL);
+      refreshElements("#statusnotes, #transitPeers", "/transitfast", REFRESH_INTERVAL);
     } else if (main) { refreshElements("#tunnels", "/transitfast", RETRY_DELAY); }
     endRefresh();
   }

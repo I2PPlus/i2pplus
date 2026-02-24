@@ -36,7 +36,7 @@ import "/js/tablesort/tablesort.dotsep.js";
 
   function refreshData() {
     getDOM();
-    const notes = document.querySelectorAll(".statusnotes");
+    const notes = document.querySelectorAll("#statusnotes");
     let selector = "#tunnels";
 
     if (peers && notes.length > 0) {
@@ -44,9 +44,9 @@ import "/js/tablesort/tablesort.dotsep.js";
       const currentRows = peers.querySelectorAll("tr").length;
 
       if (currentRows === lastPeerRowCount && currentRows > 0) {
-        selector = "#transitPeers td>*, .statusnotes";
+        selector = "#transitPeers td>*, #statusnotes";
       } else {
-        selector = "#transitPeers, .statusnotes";
+        selector = "#transitPeers, #statusnotes";
         lastPeerRowCount = currentRows;
       }
       refreshElements(selector, "/transit", REFRESH_INTERVAL);

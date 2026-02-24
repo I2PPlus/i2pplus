@@ -1143,13 +1143,18 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 #tunnels h3 .refreshpage,#tunnels h3 .refreshpage img{margin:-7px 1px -7px 0;padding:8px 0 9px;border:0}
 #tunnels img{font-size:0}
 #tunnels img[src$="bound.png"],#peers img[src$="bound.png"]{opacity:0}
+#tunnels .expiry{padding:0 8px;width:1%}
 #tunnels .left,#tunnels .right{margin:0;width:50%;display:inline-block;vertical-align:middle}
 #tunnels .percentBarInner{height:14px;display:inline-block;text-align:center;background:repeating-linear-gradient(to right,rgba(0,0,0,.15)2px,#0000 4px) repeat left center/2px 100%,linear-gradient(180deg,#373 50%,#141);opacity:.5}
 #tunnels .percentBarOuter:hover .percentBarInner{background:rgba(0,48,0,.8);opacity:1}
 #tunnels .percentBarOuter,#tunnels .PercentBarInner,#tunnels .percentBarText{display:inline-block;vertical-align:middle}
 #tunnels .percentBarOuter,#tunnels .percentBarText{width:100px}
 #tunnels .percentBarOuter{margin:-1px 0 1px;position:relative;text-align:left;background:repeating-linear-gradient(90deg,#0000,#0000 5%,#020 5%,#020 10%) left center/100% 10%,linear-gradient(180deg,#0008,#0204);opacity:.9}
+#tunnels .expiry .percentBarOuter{background:linear-gradient(90deg,#7115,#7304,#9904,#3934),repeating-linear-gradient(90deg,#0000,#0000 5%,#020 5%,#020 10%) left center/100% 10%,linear-gradient(180deg,#0008,#0204)}
+#tunnels tr:hover .percentBarInner,#tunnels tr:hover .percentBarOuter,#tunnels tr:hover .percentBarText{opacity:1}
 #tunnels .percentBarText{position:absolute;top:1px;left:0;bottom:0;right:0;width:100%;height:unset;font-size:80%}
+#tunnels .tunneldisplay tr:hover .percentBarText{color:#ffa;text-shadow:var(--textshadow)}
+#tunnels tr:hover .percentBarInner{background:#030}
 #tunnels span[hidden]{display:none}
 #tunnels table{position:relative;z-index:1}
 #tunnels .tab,#tunnels .tab2{min-width:140px}
@@ -1162,6 +1167,7 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 #tunnels td:not(.rif):not(.rih):not(.rbw):last-child,#tunnels #tunnelPeerCount td:last-child{border-right:var(--border)}
 #tunnels td:not(.rif):not(.rih):not(.rbw).tcount,#tunnels #tunnelPeerCount .bar{width:1%;white-space:nowrap}
 #tunnels td:not(.rif):not(.rih):not(.rbw)>*{vertical-align:middle}
+#tunnels #statusnotes b{vertical-align:baseline}
 #tunnels td{text-align:center}
 #tunnels th{font-size:85%;position:relative;user-select:none}
 #tunnels th:last-child{border-right:var(--border)}
@@ -1176,7 +1182,7 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 
 #transitRecent #allTransit td{width:9%}
 #transitRecent #allTransit td:first-child{width:4%}
-#transitRecent #allTransit td:nth-child(2){width:13%}
+#transitRecent #allTransit td:nth-child(2){width:1%}
 #transitRecent #allTransit td:nth-child(n+6){width:14%}
 #transitRecent .tablewrap{margin-bottom:10px}
 
@@ -3107,9 +3113,10 @@ table:not(:first-of-type).netdbentry th:first-child,table:not(:first-of-type).ne
 table:not(:first-of-type).netdbentry th:first-child,table:not(:first-of-type).netdbentry td:first-child{padding:0;font-size:0}
 table:not(:first-of-type).netdbentry tr:nth-child(2) td:nth-child(2)::before{display:inline;font-weight:700;content:"Published:"}
 #tunnels .tunneldisplay span.inbound,#tunnels .tunneldisplay span.outbound{margin:1px;padding:0;display:inline-block;vertical-align:middle;line-height:1.2}
-#tunnels .tunneldisplay td:nth-child(n+2) span,#tunnels .tunneldisplay tt{margin:1px;padding:0;display:inline-block;vertical-align:middle;line-height:1.2;border:0;box-shadow:none;background:none}
+#tunnels .tunneldisplay td:nth-child(n+2) span{margin:1px;padding:0;display:inline-block;vertical-align:middle;line-height:1.2;border:0;box-shadow:none;background:none}
 #tunnels .tunneldisplay .tunnel_cap{min-width:14px;text-align:center}
 #tunnels .tunneldisplay .tunnel_peer.tunnel_local{width:74px;box-sizing:border-box}
+#tunnels .tunneldisplay span{opacity:1}
 #config_update .nowrap{min-width:300px}
 #config_update #checkforupdates{display:block!important;column-span:all;border-top:var(--border_soft)}
 #updateHelper b{min-width:140px}

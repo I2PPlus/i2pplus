@@ -865,11 +865,15 @@ class TunnelRenderer {
     /** Generate a percentage bar for expiry time */
     private String renderExpiryBar(long timeLeft) {
         if (timeLeft <= 0) {timeLeft = 0;}
+        boolean fiveLeft = timeLeft < 5*60*1000;
+        boolean threeLeft = timeLeft < 3*60*1000;
+        boolean oneLeft = timeLeft < 60*1000;
+        String expiry = fiveLeft ? " 5m" : threeLeft ? " 3m" : oneLeft ? " 1m" : "";
         int percent = (int) Math.min(100, timeLeft * 100.0 / 600000);
         String timeStr = DataHelper.formatDuration2(timeLeft);
-        return "<span class=percentBarOuter title=\"" + _t("Expiry") + ": " + timeStr + "\">" +
-               "<span class=percentBarInner style=\"width:" + percent + "%\">" +
-               "<span class=percentBarText>" + percent + "%</span></span></span>";
+        return "<span class=\"percentBarOuter" + expiry + "\">" +
+               "<span class=percentBarInner style=width:" + percent + "%>" +
+               "<span class=percentBarText>" + timeStr + "</span></span></span>";
     }
 
     /**
