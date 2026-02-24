@@ -39,10 +39,11 @@ public class ExpireLocalTunnelsJob extends JobImpl {
     private static final long FORCED_REQUEUE_TIMEOUT = 6 * BATCH_WINDOW;
     private static final long MAX_ACCEPTABLE_LAG = 10 * 1000;
     private static final int BACKED_UP_THRESHOLD = 100;
-    private static final long OB_EARLY_EXPIRE = 30 * 1000;
-    private static final long IB_EARLY_EXPIRE = OB_EARLY_EXPIRE + 7500;
-    // Must be longer than max tunnel lifetime (10 min) to prevent removing valid entries
-    // Entries should only be removed when their tunnel has actually expired
+    // Start building replacements 4 minutes BEFORE expiration
+    // With 10 min tunnels + 1 min grace period, this gives plenty of time
+    private static final long OB_EARLY_EXPIRE = 4 * 60 * 1000;  // 4 minutes early
+    private static final long IB_EARLY_EXPIRE = 4 * 60 * 1000;  // 4 minutes early
+    // Must be longer than max tunnel lifetime (10 min + grace) to prevent removing valid entries
     private static final long MAX_ENTRY_LIFETIME = 15 * 60 * 1000L; // 15 minutes
     private static final int MAX_PHASE1_RETRIES = 3;
     private static final int MAX_ITERATE_PER_RUN = 10000;
@@ -152,23 +153,26 @@ public class ExpireLocalTunnelsJob extends JobImpl {
         long actualExpiration = cfg.getExpiration();
         boolean isInbound = cfg.getTunnelPool().getSettings().isInbound();
 
+        // Allow tunnels to remain for up to 1 minute AFTER expiration
+        // This gives time for replacement tunnels to be built before removing old ones
+        long dropAfter = actualExpiration + 60 * 1000;  // 1 minute grace period
+        
+        // Early expire determines when we START trying to build replacements
+        // Keep this small to trigger rebuilds early
         long earlyExpire;
-        long dropAfter;
         if (isInbound) {
-            dropAfter = actualExpiration + (2 * Router.CLOCK_FUDGE_FACTOR);
             earlyExpire = actualExpiration - IB_EARLY_EXPIRE
                         - getContext().random().nextLong(IB_EARLY_EXPIRE);
         } else {
-            dropAfter = actualExpiration + Router.CLOCK_FUDGE_FACTOR;
             earlyExpire = actualExpiration - OB_EARLY_EXPIRE
                         - getContext().random().nextLong(OB_EARLY_EXPIRE);
         }
 
-        // Do NOT modify cfg.setExpiration() - this would prematurely expire viable tunnels
-        // The earlyExpire time is used only for scheduling the expiration job, not the actual tunnel lifetime
-        // Other code relies on cfg.getExpiration() returning the true tunnel expiration time
-
-        TunnelExpiration te = new TunnelExpiration(cfg, tunnelKey, earlyExpire, dropAfter, getContext().clock().now());
+        // CRITICAL: Use DROP TIME (actualExpiration + grace period) for expirationTime field!
+        // We must NEVER remove a tunnel before the grace period ends.
+        // Tunnels should remain in pool until dropAfter (60s after actual expiration).
+        // This ensures new tunnels have time to be built and tested before old ones are removed.
+        TunnelExpiration te = new TunnelExpiration(cfg, tunnelKey, dropAfter, dropAfter, getContext().clock().now());
         _tunnelExpirations.put(tunnelKey, te);
 
         synchronized (this) {
@@ -284,6 +288,7 @@ public class ExpireLocalTunnelsJob extends JobImpl {
                     skippedCount++;
                     continue;
                 }
+                
                 boolean removed = false;
                 boolean giveUp = false;
 
