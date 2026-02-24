@@ -67,7 +67,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     public static final int REPLY_IV_LENGTH = 16;
 
     // Make configurable? - but can't easily get to pool options from here
-    public static final int MAX_CONSECUTIVE_TEST_FAILURES = 3;
+    public static final int MAX_CONSECUTIVE_TEST_FAILURES = 6;
 
     /**
      * For exploratory only (null destination)

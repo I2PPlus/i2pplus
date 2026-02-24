@@ -99,8 +99,8 @@ abstract class BuildRequestor {
      * - Reply back through reverse path
      * For a 3-hop tunnel this is 6+ relay hops, each with processing delay.
      */
-    private static final int BASE_TIMEOUT = SystemVersion.isSlow() ? 45*1000 : 30*1000;
-    private static final int EXTENDED_TIMEOUT = SystemVersion.isSlow() ? 60*1000 : 45*1000;
+    private static final int BASE_TIMEOUT = SystemVersion.isSlow() ? 240*1000 : 210*1000;  // 210s/240s - matches avg build time
+    private static final int EXTENDED_TIMEOUT = SystemVersion.isSlow() ? 300*1000 : 270*1000;  // 270s/300s extended
     static final int REQUEST_TIMEOUT = BASE_TIMEOUT;
 
     /**
@@ -474,7 +474,7 @@ abstract class BuildRequestor {
 
         if (log.shouldInfo()) {
             log.info("Sending Inbound TunnelBuildRequest [MsgID " + msg.getUniqueId() + "] via " + pairedTunnel +
-                     " to [" + ibgw.toBase64().substring(0, 6) + "] for " + cfg +
+                     " to [" + ibgw.toBase64().substring(0, 6) + "] \n* For: " + cfg +
                      " -> Awaiting reply [MsgID " + cfg.getReplyMessageId() + "]...");
         }
         ctx.tunnelDispatcher().dispatchOutbound(msg, pairedTunnel.getSendTunnelId(0), ibgw);
@@ -486,7 +486,7 @@ abstract class BuildRequestor {
                                             BuildExecutor exec, Log log) {
         Hash nextHop = cfg.getPeer(1);
         if (log.shouldInfo()) {
-            log.info("Sending outbound TunnelBuildRequest direct to [" + nextHop.toBase64().substring(0, 6) + "] for " + cfg +
+            log.info("Sending outbound TunnelBuildRequest direct to [" + nextHop.toBase64().substring(0, 6) + "] \n* For: " + cfg +
                      " -> Reply via " + pairedTunnel + " [MsgID " + msg.getUniqueId() + "]");
         }
 
