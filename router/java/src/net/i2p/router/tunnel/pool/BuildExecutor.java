@@ -313,31 +313,31 @@ class BuildExecutor implements Runnable {
         int concurrent = _currentlyBuildingMap.size();
         allowed -= concurrent;
 
-                if (expired != null) {
-                    for (PooledTunnelCreatorConfig cfg : expired) {
-                        if (_log.shouldInfo()) {
-                            _log.info("Timeout (" + (BuildRequestor.REQUEST_TIMEOUT / 1000) + "s) waiting for tunnel build reply -> " + cfg);
-                        }
+        if (expired != null) {
+            for (PooledTunnelCreatorConfig cfg : expired) {
+                if (_log.shouldInfo()) {
+                    _log.info("Timeout (" + (BuildRequestor.REQUEST_TIMEOUT / 1000) + "s) waiting for tunnel build reply -> " + cfg);
+                }
 
-                        final int length = cfg.getLength();
-                        for (int iPeer = 0; iPeer < length; iPeer++) {
-                            Hash peer = cfg.getPeer(iPeer);
-                            if (peer == null || peer.equals(selfHash)) {
-                                continue; // Skip null or self
-                            }
-                            RouterInfo ri = _context.netDb().lookupRouterInfoLocally(peer);
-                            String bwTier = "Unknown";
-                            if (ri != null) {
-                                bwTier = ri.getBandwidthTier();
-                            }
-                            _context.statManager().addRateData("tunnel.tierExpire" + bwTier, 1);
-                            didNotReply(cfg.getReplyMessageId(), peer);
-                            _context.profileManager().tunnelTimedOut(peer);
-                            // Record ghost peer for consistent timeouts @since 0.9.68+
-                            if (_ghostManager != null) {
-                                _ghostManager.recordTimeout(peer);
-                            }
-                        }
+                final int length = cfg.getLength();
+                for (int iPeer = 0; iPeer < length; iPeer++) {
+                    Hash peer = cfg.getPeer(iPeer);
+                    if (peer == null || peer.equals(selfHash)) {
+                        continue; // Skip null or self
+                    }
+                    RouterInfo ri = _context.netDb().lookupRouterInfoLocally(peer);
+                    String bwTier = "Unknown";
+                    if (ri != null) {
+                        bwTier = ri.getBandwidthTier();
+                    }
+                    _context.statManager().addRateData("tunnel.tierExpire" + bwTier, 1);
+                    didNotReply(cfg.getReplyMessageId(), peer);
+                    _context.profileManager().tunnelTimedOut(peer);
+                    // Record ghost peer for consistent timeouts @since 0.9.68+
+                    if (_ghostManager != null) {
+                        _ghostManager.recordTimeout(peer);
+                    }
+                }
 
                 TunnelPool pool = cfg.getTunnelPool();
                 if (pool != null) {
@@ -450,10 +450,10 @@ class BuildExecutor implements Runnable {
                 _manager.listPools(pools);
 
                 // Collect pools that want tunnels built
-                // First pass: identify pools with no tunnels
+                // First pass: identify pools with NO non-expired tunnels (truly empty)
                 boolean hasEmptyPool = false;
                 for (TunnelPool pool : pools) {
-                    if (pool.isAlive() && pool.getTunnelCount() <= 0) {
+                    if (pool.isAlive() && pool.getNonExpiredTunnelCount() <= 0) {
                         hasEmptyPool = true;
                         break;
                     }
@@ -503,7 +503,9 @@ class BuildExecutor implements Runnable {
                     // Process up to 'allowed' pools - removes from wanted as we go
                     for (int i = 0; i < allowed && !wanted.isEmpty(); i++) {
                         TunnelPool pool = wanted.remove(0);
-                        if (!pool.canStartBuild(pool.getSettings().isInbound())) {
+                        // Emergency pools bypass concurrent limits to prevent collapse
+                        boolean isEmergency = pool.isEmergency();
+                        if (!isEmergency && !pool.canStartBuild(pool.getSettings().isInbound())) {
                             if (_log.shouldDebug()) {
                                 _log.debug("Skipping " + pool + " -> Max concurrent builds reached for direction");
                             }
@@ -516,9 +518,6 @@ class BuildExecutor implements Runnable {
                         if (cfg != null) {
                             long pTime = System.currentTimeMillis() - bef;
                             _context.statManager().addRateData("tunnel.buildConfigTime", pTime);
-                            if (_log.shouldDebug()) {
-                                _log.debug("Configuring new tunnel for " + pool + " -> " + cfg);
-                            }
                             buildTunnel(cfg);
                         } else {
                             i--; // Failed to configure, don't count against allowed
@@ -549,9 +548,10 @@ class BuildExecutor implements Runnable {
                 }
             }
 
-            // Always sleep briefly to prevent CPU spinning
+            // Always sleep briefly to prevent CPU spinning and flooding
+            // This gives builds time to complete before requesting more
             try {
-                Thread.sleep(50);
+                Thread.sleep(1000);
             } catch (InterruptedException ie) {
                 // ignore interrupt during sleep
             }
@@ -576,13 +576,6 @@ class BuildExecutor implements Runnable {
      *  WARNING - this sort may be unstable, as a pool's tunnel count may change
      *  during the sort. This will cause Java 7 sort to throw an IAE.
      */
-    /**
-     * Comparator for prioritizing tunnel pools during build selection.
-     * Priority order: Exploratory > Pools without tunnels > Everyone else.
-     *
-     * WARNING - this sort may be unstable, as a pool's tunnel count may change
-     * during the sort. This will cause Java 7 sort to throw an IAE.
-     */
     private static class TunnelPoolComparator implements Comparator<TunnelPool>, Serializable {
 
         /**
@@ -599,8 +592,9 @@ class BuildExecutor implements Runnable {
         public int compare(TunnelPool tpl, TunnelPool tpr) {
             boolean tplExploratory = tpl.getSettings().isExploratory();
             boolean tprExploratory = tpr.getSettings().isExploratory();
-            int tplCount = tpl.getTunnelCount();
-            int tprCount = tpr.getTunnelCount();
+            // Use non-expired count for priority decisions
+            int tplCount = tpl.getNonExpiredTunnelCount();
+            int tprCount = tpr.getNonExpiredTunnelCount();
 
             // Priority 1: Exploratory with < 2 tunnels (need minimum 1 IB + 1 OB)
             if (tplExploratory && tplCount < 2 && (!tprExploratory || tprCount >= 2)) return -1;
@@ -623,7 +617,7 @@ class BuildExecutor implements Runnable {
     }
 
     /**
-     * iterate over the 0hop tunnels, running them all inline regardless of how many are allowed
+     * Iterate over the 0hop tunnels, running them all inline regardless of how many are allowed
      * @return number of tunnels allowed after processing these zero hop tunnels (almost always the same as before)
      */
     private int buildZeroHopTunnels(List<TunnelPool> wanted, int allowed) {

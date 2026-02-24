@@ -1,8 +1,10 @@
 package net.i2p.router.tunnel.pool;
 
 import java.io.File;
+
 import net.i2p.crypto.ChaCha20;
 import net.i2p.crypto.EncType;
+import net.i2p.data.Base64;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
@@ -14,7 +16,9 @@ import net.i2p.data.i2np.ShortEncryptedBuildRecord;
 import net.i2p.data.i2np.ShortTunnelBuildMessage;
 import net.i2p.data.i2np.TunnelBuildMessage;
 import net.i2p.router.RouterContext;
+import net.i2p.router.RouterThrottleImpl;
 import net.i2p.router.util.DecayingBloomFilter;
+import net.i2p.router.util.DecayingHashSet;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
@@ -33,7 +37,7 @@ class BuildMessageProcessor {
     private final RouterContext ctx;
     private final Log log;
     private final DecayingBloomFilter _filter;
-
+    
     public BuildMessageProcessor(RouterContext ctx) {
         this.ctx = ctx;
         log = ctx.logManager().getLog(getClass());
@@ -51,38 +55,35 @@ class BuildMessageProcessor {
      */
     private DecayingBloomFilter selectFilter() {
         long maxMemory = SystemVersion.getMaxMemory();
-        boolean isSlow = SystemVersion.isSlow();
-        boolean isAndroid = SystemVersion.isAndroid();
-        int m = 19; // 128 KB - appx 2K part. tunnels or 24K req/hr
-
-        if (maxMemory < 256*1024*1024L) {
+        int m;
+        if (SystemVersion.isAndroid() || SystemVersion.isARM() || maxMemory < 96*1024*1024L) {
             // 32 KB
             // appx 500 part. tunnels or 6K req/hr
             m = 17;
-        } else if (isSlow || isAndroid) {
-            // 64 KB
-            // appx 1K part. tunnels or 12K req/hr
-            m = 18;
-        } else if (maxMemory >= 1024*1024*1024L) {
-            // 8 MB
-            // appx 80K part. tunnels or 960K req/hr
-            m = 25;
-        } else if (maxMemory >= 512*1024*1024L) {
-            // 4 MB
-            // appx 40K part. tunnels or 480K req/hr
-            m = 24;
-        } else if (maxMemory >= 256*1024*1024L) {
+        } else if (ctx.getProperty(RouterThrottleImpl.PROP_MAX_TUNNELS, RouterThrottleImpl.DEFAULT_MAX_TUNNELS) >
+                   RouterThrottleImpl.DEFAULT_MAX_TUNNELS && maxMemory > 256*1024*1024L) {
             // 2 MB
             // appx 20K part. tunnels or 240K req/hr
             m = 23;
+        } else if (maxMemory > 256*1024*1024L) {
+            // 1 MB
+            // appx 10K part. tunnels or 120K req/hr
+            m = 22;
+        } else if (maxMemory > 128*1024*1024L) {
+            // 512 KB
+            // appx 5K part. tunnels or 60K req/hr
+            m = 21;
+        } else {
+            // 128 KB
+            // appx 2K part. tunnels or 24K req/hr
+            m = 19;
         }
-
         // Too early, keys not registered with key manager yet
         //boolean isEC = ctx.keyManager().getPrivateKey().getType() == EncType.ECIES_X25519;
         // ... rather than duplicating all the logic in LoadRouterInfoJob,
         // just look for a short router.keys.dat file.
         // If it doesn't exist, it will be created later as EC.
-        // If we're rekeying to EC, it's ok to have a longer duration this time.
+        // If we're rekeing to EC, it's ok to have a longer duration this time.
         File f = new File(ctx.getConfigDir(), "router.keys.dat");
         boolean isEC = f.length() < 663;
         int duration;
@@ -101,8 +102,8 @@ class BuildMessageProcessor {
     }
 
     /**
-     * Decrypt the record targeting us, encrypting all of the other records with the included
-     * reply key and IV.  The original, encrypted record targeting us is removed from the request
+     * Decrypt the record targetting us, encrypting all of the other records with the included 
+     * reply key and IV.  The original, encrypted record targetting us is removed from the request
      * message (so that the reply can be placed in that position after going through the decrypted
      * request record).
      *
@@ -128,7 +129,7 @@ class BuildMessageProcessor {
                         boolean isDup = _filter.add(sk.getData(), 0, 32);
                         if (isDup) {
                             if (log.shouldWarn())
-                                log.warn("[MsgID " + msg.getUniqueId() + "] Duplicate " + privKey.getType() + " record received " + rv);
+                                log.warn(msg.getUniqueId() + ": Dup record: " + rv);
                             ctx.statManager().addRateData("tunnel.buildRequestDup", 1);
                             return null;
                         }
@@ -136,8 +137,8 @@ class BuildMessageProcessor {
                         // i2pd bug
                         boolean isBad = SessionKey.INVALID_KEY.equals(rv.readReplyKey());
                         if (isBad) {
-                            if (log.shouldWarn())
-                                log.warn("[MsgID " + msg.getUniqueId() + "] Bad reply key (i2pd bug) " + rv);
+                            if (log.shouldLog(Log.WARN))
+                                log.warn(msg.getUniqueId() + ": Bad reply key: " + rv);
                             ctx.statManager().addRateData("tunnel.buildRequestBadReplyKey", 1);
                             return null;
                         }
@@ -149,25 +150,23 @@ class BuildMessageProcessor {
                         int off = isEC ? BuildRequestRecord.OFF_REPLY_KEY_EC : BuildRequestRecord.OFF_REPLY_KEY;
                         boolean isDup = _filter.add(rv.getData(), off, 32);
                         if (isDup) {
-                            if (log.shouldWarn())
-                            log.warn("[MsgID " + msg.getUniqueId() + "] Duplicate " + privKey.getType() + " record received " + rv);
+                            if (log.shouldLog(Log.WARN))
+                                log.warn(msg.getUniqueId() + ": Dup record: " + rv);
                             ctx.statManager().addRateData("tunnel.buildRequestDup", 1);
                             return null;
                         }
                     }
 
-                    if (log.shouldDebug())
-                        log.debug("[MsgID " + msg.getUniqueId() + "] Matching " + privKey.getType() + " record found " + rv);
+                    if (log.shouldLog(Log.DEBUG))
+                        log.debug(msg.getUniqueId() + ": Matching record: " + rv);
                     ourHop = i;
                     // TODO should we keep looking for a second match and fail if found?
                     break;
                 } catch (DataFormatException dfe) {
                     // For ECIES routers, this is relatively common due to old routers that don't
                     // check enc type sending us ElG requests
-                    if (log.shouldWarn())
-//                        log.warn(msg.getUniqueId() + ": Matching record decryption failure " + privKey.getType(), dfe);
-                        log.warn("[MsgID " + msg.getUniqueId() + "] Matching " + privKey.getType() + " record decryption failure \n* " +
-                                 dfe.getMessage());
+                    if (log.shouldLog(Log.WARN))
+                        log.warn(msg.getUniqueId() + ": Matching record decrypt failure " + privKey.getType(), dfe);
                     // on the microscopic chance that there's another router
                     // out there with the same first 16 bytes, go around again
                     continue;
@@ -176,19 +175,18 @@ class BuildMessageProcessor {
         }
         if (rv == null) {
             // none of the records matched, b0rk
-// Info presented elsewhere
-//            if (log.shouldWarn())
-//                log.warn("[MsgID " + msg.getUniqueId() + "] No record decrypted");
+            if (log.shouldLog(Log.WARN))
+                log.warn(msg.getUniqueId() + ": No record decrypted");
             return null;
         }
-
+        
         if (isShort) {
             byte[] replyKey = rv.getChaChaReplyKey().getData();
             byte iv[] = new byte[12];
             for (int i = 0; i < msg.getRecordCount(); i++) {
                 if (i != ourHop) {
                     EncryptedBuildRecord data = msg.getRecord(i);
-                    //if (log.shouldDebug())
+                    //if (log.shouldLog(Log.DEBUG))
                     //    log.debug("Encrypting record " + i + "/? with replyKey " + replyKey.toBase64() + "/" + Base64.encode(iv));
                     // encrypt in-place, corrupts SDS
                     byte[] bytes = data.getData();
@@ -203,7 +201,7 @@ class BuildMessageProcessor {
             for (int i = 0; i < msg.getRecordCount(); i++) {
                 if (i != ourHop) {
                     EncryptedBuildRecord data = msg.getRecord(i);
-                    //if (log.shouldDebug())
+                    //if (log.shouldLog(Log.DEBUG))
                     //    log.debug("Encrypting record " + i + "/? with replyKey " + replyKey.toBase64() + "/" + Base64.encode(iv));
                     // encrypt in-place, corrupts SDS
                     byte[] bytes = data.getData();

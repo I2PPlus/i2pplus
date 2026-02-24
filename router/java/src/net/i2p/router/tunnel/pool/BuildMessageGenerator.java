@@ -2,6 +2,7 @@ package net.i2p.router.tunnel.pool;
 
 import java.util.List;
 import java.util.Properties;
+
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.ChaCha20;
 import net.i2p.crypto.EncType;
@@ -26,20 +27,16 @@ import net.i2p.router.tunnel.TunnelCreatorConfig;
  *  @since 0.9.51 moved to tunnel.pool package
  */
 abstract class BuildMessageGenerator {
-
+    
     /**
-     * Place the asymmetrically encrypted record in the specified record slot,
+     * Place the asymmetrically encrypted record in the specified record slot, 
      * containing the hop's configuration (as well as the reply info, if it is an outbound endpoint)
      *
-     * @param recordNum the record number to place this record in
-     * @param hop the hop number for this record
-     * @param msg out parameter - the tunnel build message to add the record to
-     * @param cfg the tunnel creator configuration
-     * @param replyRouter the router to reply to (for OBEP), or null
-     * @param replyTunnel the tunnel ID to reply to (for OBEP), or -1
-     * @param ctx the router context
-     * @param peerKey the public key to encrypt with; if null, record is random data
-     * @param props properties to go in the build record, non-null
+     * @param msg out parameter
+     * @param peerKey Encrypt using this key.
+     *                If null, replyRouter and replyTunnel are ignored,
+     *                and the entire record is filled with random data
+     * @param props to go in the build record, non-null
      * @throws IllegalArgumentException if hop bigger than config
      */
     public static void createRecord(int recordNum, int hop, TunnelBuildMessage msg,
@@ -93,21 +90,15 @@ abstract class BuildMessageGenerator {
         }
         msg.setRecord(recordNum, erec);
     }
-
+    
     /**
-     * Create an unencrypted build request record for a tunnel hop.
-     * Returns null if hop >= cfg.length
+     *  Returns null if hop >= cfg.length
      *
-     * @param ctx the I2P application context
-     * @param cfg the tunnel creator configuration
-     * @param hop the hop number
-     * @param replyRouter null unless we are the OBEP
-     * @param replyTunnel -1 unless we are the OBEP
-     * @param isEC must be true if isShort is true
-     * @param isShort short EC record
-     * @param props to go in the build record, non-null
-     * @return the build request record, or null if hop >= cfg.length
-     * @throws IllegalArgumentException if isShort is true but isEC is false
+     *  @param replyRouter null unless we are the OBEP
+     *  @param replyTunnel -1 unless we are the OBEP
+     *  @param isEC must be true if isShort is true
+     *  @param isShort short EC record
+     *  @param props to go in the build record, non-null
      */
     private static BuildRequestRecord createUnencryptedRecord(I2PAppContext ctx, TunnelCreatorConfig cfg, int hop,
                                                               Hash replyRouter, long replyTunnel, boolean isEC,
@@ -140,17 +131,16 @@ abstract class BuildMessageGenerator {
             }
             boolean isInGW = (cfg.isInbound() && (hop == 0));
             boolean isOutEnd = (!cfg.isInbound() && (hop + 1 >= cfg.getLength()));
-
+            
             long nextMsgId = -1;
             if (isOutEnd || (cfg.isInbound() && (hop + 2 >= cfg.getLength())) ) {
                 nextMsgId = cfg.getReplyMessageId();
             } else {
-                // Don't care about these intermediary hops
+                // dont care about these intermediary hops
                 nextMsgId = ctx.random().nextLong(I2NPMessage.MAX_ID_VALUE);
             }
             BuildRequestRecord rec;
             if (isEC) {
-                // TODO pass properties from cfg
                 if (isShort) {
                     rec = new BuildRequestRecord(ctx, recvTunnelId, nextTunnelId, nextPeer,
                                                  nextMsgId,
@@ -163,7 +153,7 @@ abstract class BuildMessageGenerator {
                     if (iv == null)
                         throw new IllegalStateException();
                     rec = new BuildRequestRecord(ctx, recvTunnelId, nextTunnelId, nextPeer,
-                                                 nextMsgId, layerKey, ivKey, replyKey,
+                                                 nextMsgId, layerKey, ivKey, replyKey, 
                                                  iv, isInGW, isOutEnd, props);
                 }
             } else {
@@ -174,7 +164,7 @@ abstract class BuildMessageGenerator {
                 if (iv == null)
                     throw new IllegalStateException();
                 rec = new BuildRequestRecord(ctx, recvTunnelId, peer, nextTunnelId, nextPeer,
-                                             nextMsgId, layerKey, ivKey, replyKey,
+                                             nextMsgId, layerKey, ivKey, replyKey, 
                                              iv, isInGW, isOutEnd);
             }
             return rec;
@@ -182,17 +172,14 @@ abstract class BuildMessageGenerator {
             return null;
         }
     }
-
+    
     /**
      * Encrypt the records so their hop ident is visible at the appropriate times.
      *
      * Note that this layer-encrypts the build records for the message in-place.
      * Only call this once for a given message.
      *
-     * @param ctx the I2P application context
-     * @param msg the tunnel build message to encrypt records in
-     * @param cfg the tunnel creator configuration
-     * @param order list of hop #s as Integers. For instance, if (order.get(1) is 4), it is peer cfg.getPeer(4)
+     * @param order list of hop #s as Integers.  For instance, if (order.get(1) is 4), it is peer cfg.getPeer(4)
      */
     public static void layeredEncrypt(I2PAppContext ctx, TunnelBuildMessage msg,
                                       TunnelCreatorConfig cfg, List<Integer> order) {
@@ -231,15 +218,7 @@ abstract class BuildMessageGenerator {
             }
         }
     }
-
-    /**
-     * Check if a hop should have a blank (random) record.
-     * Used for zero-hop tunnels or places where we don't need encryption.
-     *
-     * @param cfg the tunnel creator configuration
-     * @param hop the hop number to check
-     * @return true if the record should be blank
-     */
+    
     public static boolean isBlank(TunnelCreatorConfig cfg, int hop) {
         if (cfg.isInbound()) {
             if (hop + 1 >= cfg.getLength())

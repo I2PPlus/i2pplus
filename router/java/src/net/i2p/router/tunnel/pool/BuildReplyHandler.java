@@ -2,6 +2,7 @@ package net.i2p.router.tunnel.pool;
 
 import java.util.List;
 import java.util.Properties;
+
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.ChaCha20;
 import net.i2p.data.Base64;
@@ -21,7 +22,7 @@ import net.i2p.util.Log;
 import net.i2p.util.SimpleByteCache;
 
 /**
- * Decrypt the layers of a tunnel build reply message, determining whether the individual
+ * Decrypt the layers of a tunnel build reply message, determining whether the individual 
  * hops agreed to participate in the tunnel, or if not, why not.
  *
  * @since 0.9.51 moved to tunnel.pool package
@@ -61,7 +62,7 @@ class BuildReplyHandler {
      * or other options to be defined later.
      *
      * If the code is -1, or it's a non-ECIES build record,
-     * or the properties field in the record was empty,
+     * or the properties field in the record was empty, 
      * the returned properties here will be null.
      *
      * @since 0.9.66
@@ -99,7 +100,7 @@ class BuildReplyHandler {
             int hop = recordOrder.get(i).intValue();
             if (BuildMessageGenerator.isBlank(cfg, hop)) {
                 // self or unused...
-                if (log.shouldDebug())
+                if (log.shouldLog(Log.DEBUG))
                     log.debug(reply.getUniqueId() + ": skipping record " + i + "/" + hop + " for: " + cfg);
                 if (cfg.isInbound() && hop + 1 == cfg.getLength()) { // IBEP
                     byte[] h1 = new byte[Hash.HASH_LENGTH];
@@ -121,11 +122,11 @@ class BuildReplyHandler {
             } else {
                 Result res = decryptRecord(reply, cfg, i, hop);
                 if (res.code == -1) {
-                    if (log.shouldWarn())
+                    if (log.shouldLog(Log.WARN))
                         log.warn(reply.getUniqueId() + ": decrypt record " + i + "/" + hop + " fail: " + cfg);
                     return null;
                 } else {
-                    if (log.shouldDebug())
+                    if (log.shouldLog(Log.DEBUG))
                         log.debug(reply.getUniqueId() + ": decrypt record " + i + "/" + hop + " code: " + res.code + " for " + cfg);
                 }
                 rv[i] = res;
@@ -167,9 +168,10 @@ class BuildReplyHandler {
             byte iv[] = new byte[12];
             for (int j = start; j >= end; j--) {
                 byte[] replyKey = cfg.getChaChaReplyKey(j).getData();
-                if (log.shouldDebug())
-                    log.debug(reply.getUniqueId() + ": Decrypting ChaCha record " + recordNum + "/" + hop + "/" + j + " with replyKey "
+                if (log.shouldDebug()) {
+                    log.debug(reply.getUniqueId() + ": Decrypting ChaCha record " + recordNum + "/" + hop + "/" + j + " with replyKey " 
                               + Base64.encode(replyKey) + " : " + cfg);
+                }
                 // slot number, little endian
                 iv[4] = (byte) recordNum;
                 ChaCha20.encrypt(replyKey, iv, data, 0, data, 0, ShortEncryptedBuildRecord.LENGTH);
@@ -179,17 +181,17 @@ class BuildReplyHandler {
                 SessionKey replyKey = cfg.getAESReplyKey(j);
                 byte replyIV[] = cfg.getAESReplyIV(j);
                 if (log.shouldDebug()) {
-                    log.debug(reply.getUniqueId() + ": Decrypting AES record " + recordNum + "/" + hop + "/" + j + " with replyKey "
+                    log.debug(reply.getUniqueId() + ": Decrypting AES record " + recordNum + "/" + hop + "/" + j + " with replyKey " 
                               + replyKey.toBase64() + "/" + Base64.encode(replyIV) + ": " + cfg);
                     //log.debug(reply.getRawUniqueId() + ": before decrypt: " + Base64.encode(data));
                     //log.debug(reply.getRawUniqueId() + ": Full reply rec: sz=" + data.length + " data=" + Base64.encode(data));
                 }
                 ctx.aes().decrypt(data, 0, data, 0, replyKey, replyIV, 0, data.length);
-                //if (log.shouldDebug()) {
+                //if (log.shouldLog(Log.DEBUG))
                 //    log.debug(reply.getRawUniqueId() + ": after decrypt: " + Base64.encode(data));
             }
         }
-        // ok, all of the layered encryption is stripped, so let's verify it
+        // ok, all of the layered encryption is stripped, so lets verify it 
         // (formatted per BuildResponseRecord.create)
         int rv;
         Properties props = null;
@@ -198,7 +200,7 @@ class BuildReplyHandler {
             SessionKey replyKey = cfg.getChaChaReplyKey(hop);
             byte[] replyIV = cfg.getChaChaReplyAD(hop);
             if (log.shouldDebug())
-                log.debug(reply.getUniqueId() + ": Decrypting ChaCha/Poly record " + recordNum + "/" + hop + " with replyKey "
+                log.debug(reply.getUniqueId() + ": Decrypting chacha/poly record " + recordNum + "/" + hop + " with replyKey " 
                           + replyKey.toBase64() + "/" + Base64.encode(replyIV) + ": " + cfg);
             boolean ok;
             if (isShort)
@@ -206,8 +208,8 @@ class BuildReplyHandler {
             else
                 ok = BuildResponseRecord.decrypt(rec, replyKey, replyIV);
             if (!ok) {
-                if (log.shouldDebug())
-                    log.debug(reply.getUniqueId() + ": chacha reply decryption failure on " + recordNum + "/" + hop);
+                if (log.shouldWarn())
+                    log.warn(reply.getUniqueId() + ": chacha reply decrypt fail on " + recordNum + "/" + hop);
                 return RESULT_NG;
             }
             // this handles both standard records in a build reply message and short records in a OTBRM
@@ -245,7 +247,7 @@ class BuildReplyHandler {
             SimpleByteCache.release(h);
             rv = data[TunnelBuildReplyMessage.RECORD_SIZE - 1] & 0xff;
         }
-        if (log.shouldDebug())
+        if (log.shouldLog(Log.DEBUG))
             log.debug(reply.getUniqueId() + ": Verified: " + rv + " for record " + recordNum + "/" + hop);
         if (props == null) {
             // return cached
