@@ -1141,16 +1141,21 @@ class SidebarRenderer {
           .append(getToggle())
           .append("</h3>\n<hr class=b>\n<table id=sb_tunnels>\n");
         if (_helper.getInboundClientTunnels() > 0 || _helper.getOutboundClientTunnels() > 0) {
+            // Check if we have valid tunnel pairs (active inbound AND outbound)
+            boolean hasValidPairs = _helper.hasValidTunnelPairs();
+            String statusIndicator = hasValidPairs ? "" : " <span class=\"badge warning\" title=\"" + _t("Building tunnels") + "\">" + _t("building") + "</span>";
             buf.append("<tr title=\"")
                .append(_t("Tunnels we are using to provide or access services on the network"))
                .append(" (")
                .append(_t("inbound / outbound"))
                .append(")\"><td><a href=/tunnels#client_tunnels><b>")
                .append(_t("Service"))
-               .append("</b></a></td><td class=digits><span class=volatile>")
-               .append(_helper.getInboundClientTunnels())
+               .append("</b></a>")
+               .append(statusIndicator)
+               .append("</td><td class=digits><span class=volatile>")
+               .append(_helper.getActiveInboundClientTunnels())
                .append(" / ")
-               .append(_helper.getOutboundClientTunnels())
+               .append(_helper.getActiveOutboundClientTunnels())
                .append("</span></td></tr>\n");
         }
 

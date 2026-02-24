@@ -870,12 +870,39 @@ public class SidebarHelper extends HelperBase {
     }
 
     /**
+     * How many active (non-failed, non-expired) inbound client tunnels we have.
+     *
+     */
+    public int getActiveInboundClientTunnels() {
+        if (_context == null) {return 0;}
+        else {return _context.tunnelManager().getActiveInboundClientTunnelCount();}
+    }
+
+    /**
      * How many active outbound client tunnels we have.
      *
      */
     public int getOutboundClientTunnels() {
         if (_context == null) {return 0;}
         else {return _context.tunnelManager().getOutboundClientTunnelCount();}
+    }
+
+    /**
+     * How many active (non-failed, non-expired) outbound client tunnels we have.
+     *
+     */
+    public int getActiveOutboundClientTunnels() {
+        if (_context == null) {return 0;}
+        else {return _context.tunnelManager().getActiveOutboundClientTunnelCount();}
+    }
+
+    /**
+     * Check if we have valid tunnel pairs (active inbound AND outbound).
+     * @return true if both inbound and outbound have at least 1 active tunnel
+     */
+    public boolean hasValidTunnelPairs() {
+        if (_context == null) {return false;}
+        return _context.tunnelManager().hasValidTunnelPairs();
     }
 
     /**
