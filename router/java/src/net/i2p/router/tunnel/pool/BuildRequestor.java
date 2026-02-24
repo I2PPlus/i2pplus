@@ -125,7 +125,7 @@ abstract class BuildRequestor {
      * Randomized per-message to obscure tunnel length.
      */
     private static final int BUILD_MSG_TIMEOUT = 50*1000;
-    private static final int MAX_CONSECUTIVE_CLIENT_BUILD_FAILS = 30;
+    private static final int MAX_CONSECUTIVE_CLIENT_BUILD_FAILS = 2;
     private static final int EXPLORATORY_BACKOFF = 200;
     private static final int CLIENT_BACKOFF = 50;
 
@@ -139,6 +139,67 @@ abstract class BuildRequestor {
     private static final ConcurrentHashMap<Hash, AtomicLong> _noTunnelLogLimiter = new ConcurrentHashMap<>();
     private static final long NO_TUNNEL_LOG_INTERVAL_MS = 60_000; // 1 minute
     private static final long LOG_LIMITER_EXPIRY_MS = 10 * 60 * 1000; // 10 minutes
+
+    // Adaptive timeout scaling: pool name -> timeout offset in ms
+    // On timeout: increase by 1 second (up to max REQUEST_TIMEOUT)
+    // On success: decrease by 250ms (down to -50% of base = 2.5s for 5s base)
+    private static final ConcurrentHashMap<String, AtomicLong> _timeoutOffset = new ConcurrentHashMap<>();
+    private static final long TIMEOUT_INCREMENT = 1000;    // +1s on timeout
+    private static final long SUCCESS_DECREMENT = 250;    // -0.25s on success
+    private static final long MAX_TIMEOUT_OFFSET = REQUEST_TIMEOUT;  // Max = +base (2x default)
+    private static final long MIN_TIMEOUT_OFFSET = -(REQUEST_TIMEOUT / 2);  // Min = -50% base (0.5x default)
+
+    /**
+     * Get the adaptive timeout offset for a specific pool.
+     * @param poolName the name of the tunnel pool
+     * @return timeout offset in milliseconds (0 to MAX_TIMEOUT_OFFSET)
+     */
+    static long getTimeoutOffset(String poolName) {
+        AtomicLong offset = _timeoutOffset.get(poolName);
+        return offset != null ? Math.max(0, offset.get()) : 0;
+    }
+
+    /**
+     * Increase timeout offset on build timeout.
+     * @param poolName the name of the tunnel pool
+     */
+    static void addTimeoutOffset(String poolName) {
+        _timeoutOffset.compute(poolName, (k, v) -> {
+            long current = (v != null) ? v.get() : 0;
+            long newValue = Math.min(current + TIMEOUT_INCREMENT, MAX_TIMEOUT_OFFSET);
+            return new AtomicLong(newValue);
+        });
+    }
+
+    /**
+     * Decrease timeout offset on successful build.
+     * @param poolName the name of the tunnel pool
+     */
+    static void subtractTimeoutOffset(String poolName) {
+        _timeoutOffset.compute(poolName, (k, v) -> {
+            long current = (v != null) ? v.get() : 0;
+            long newValue = Math.max(current - SUCCESS_DECREMENT, MIN_TIMEOUT_OFFSET);
+            return new AtomicLong(newValue);
+        });
+    }
+
+    /**
+     * Get timeout offset and clear it (for one-time use).
+     * @param poolName the name of the tunnel pool
+     * @return timeout offset in milliseconds
+     */
+    static long consumeTimeoutOffset(String poolName) {
+        AtomicLong offset = _timeoutOffset.remove(poolName);
+        return offset != null ? Math.max(0, offset.get()) : 0;
+    }
+
+    /**
+     * Clear timeout offset (called on pool reset).
+     * @param poolName the name of the tunnel pool
+     */
+    static void clearTimeoutOffset(String poolName) {
+        _timeoutOffset.remove(poolName);
+    }
 
     /**
      * Cleanup stale entries from static maps to prevent memory leaks.
@@ -378,8 +439,8 @@ abstract class BuildRequestor {
         } else {
             // Log the failure count but continue to try exploratory fallback
             // Without ANY paired tunnel, builds can't succeed at all
-            if (log.shouldWarn() && uptime > 5*60*1000 && fails > 2) {
-                log.warn(fails + " consecutive build timeouts for " + cfg + " -> Will try exploratory fallback");
+            if (log.shouldInfo() && uptime > 5*60*1000 && fails > 2) {
+                log.info(fails + " consecutive build timeouts for " + cfg + " -> Trying Exploratory fallback...");
             }
         }
 
@@ -396,14 +457,11 @@ abstract class BuildRequestor {
             }
         }
 
-        // Client tunnels: use exploratory as fallback if > 0 hop
-        // These exploratory tunnels will be replaced by client tunnels as they build
-        // Only 0-hop exploratory tunnels are rejected by selectFallback methods
-        // 1-hop exploratory tunnels are acceptable to prevent deadlock at startup
+        // Client tunnels: use exploratory as fallback as absolute last resort (including 0-hop)
         if (!settings.isExploratory()) {
             TunnelInfo expl = isInbound
-                ? selectFallbackOutboundTunnel(ctx, mgr, cfg, clientWantsMultiHop, log)
-                : selectFallbackInboundTunnel(ctx, mgr, cfg, clientWantsMultiHop, log);
+                ? selectFallbackOutboundTunnel(ctx, mgr, cfg, false, log)
+                : selectFallbackInboundTunnel(ctx, mgr, cfg, false, log);
             if (expl != null) {
                 if (log.shouldInfo()) {
                     log.info("Using exploratory tunnel as fallback for client: " + cfg);
@@ -411,6 +469,7 @@ abstract class BuildRequestor {
                 return expl;
             }
         }
+
         return null;
     }
 

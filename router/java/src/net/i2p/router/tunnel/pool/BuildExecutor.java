@@ -142,6 +142,11 @@ class BuildExecutor implements Runnable {
     private long calculateAdaptiveTimeout(PooledTunnelCreatorConfig cfg) {
         long baseTimeout = BuildRequestor.REQUEST_TIMEOUT;
 
+        // Get pool-specific adaptive timeout offset (increases on timeout, decreases on success)
+        TunnelPool pool = cfg.getTunnelPool();
+        String poolName = pool != null ? pool.toString() : "unknown";
+        long adaptiveOffset = BuildRequestor.getTimeoutOffset(poolName);
+
         // Adjust timeout based on tunnel length
         int length = cfg.getLength();
         if (length > 3) {
@@ -166,6 +171,8 @@ class BuildExecutor implements Runnable {
         boolean isUnderAttack = buildSuccess < 0.40;
         if (isUnderAttack) {
             baseTimeout *= 1.5;
+            // Add additional 5s when build success is critically low
+            baseTimeout += 5 * 1000;
             long now = _context.clock().now();
             if (_log.shouldInfo() && uptime > 60*1000 && now - _lastTimeoutExtendLog > 60*1000) {
                 _lastTimeoutExtendLog = now;
@@ -182,13 +189,23 @@ class BuildExecutor implements Runnable {
             baseTimeout += 10*1000; // Add 10s under moderate CPU load
         }
 
+        // Add pool-specific adaptive offset (increases on timeout, decreases on success)
+        // Offset can be negative (up to -50% base) when builds are consistently successful
+        baseTimeout += adaptiveOffset;
+
         // Cap the timeout to prevent excessive waits
         long maxTimeout = BuildRequestor.REQUEST_TIMEOUT * 2; // Double the base timeout
         // During attacks with low success, allow higher max timeout
         if (isUnderAttack) {
             maxTimeout = BuildRequestor.REQUEST_TIMEOUT * 3; // Allow up to 3x timeout
         }
-        return Math.min(baseTimeout, maxTimeout);
+        // Also cap at 2x base (max offset is REQUEST_TIMEOUT which equals 1x base)
+        maxTimeout = Math.max(maxTimeout, BuildRequestor.REQUEST_TIMEOUT * 2);
+
+        // Minimum timeout is always the base (5s) - never go below it
+        long minTimeout = BuildRequestor.REQUEST_TIMEOUT;
+
+        return Math.max(Math.min(baseTimeout, maxTimeout), minTimeout);
     }
 
     /**
@@ -253,6 +270,20 @@ class BuildExecutor implements Runnable {
         int maxConcurrentBuilds = getMaxConcurrentBuilds();
         if (allowed > maxConcurrentBuilds) {
             allowed = maxConcurrentBuilds;
+        }
+
+        // Throttle builds when success rate is low to avoid thundering herd
+        // With low success, builds timeout quickly and pile up - throttle to let them complete
+        double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
+        if (buildSuccess < 0.25 && buildSuccess > 0) {
+            int throttled = (int) (allowed * buildSuccess * 2); // Scale down proportionally
+            if (throttled < allowed) {
+                if (_log.shouldInfo()) {
+                    _log.info("Throttling tunnel builds due to low success rate: " +
+                              (int)(buildSuccess * 100) + "% -> " + throttled + " (was " + allowed + ")");
+                }
+                allowed = Math.max(throttled, 2); // Keep at least 2
+            }
         }
 
         // Allow override through property

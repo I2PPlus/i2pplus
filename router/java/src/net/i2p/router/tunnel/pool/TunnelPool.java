@@ -921,196 +921,179 @@ public class TunnelPool {
         } else {
 
             // Hard cap: reject tunnels that exceed configured quantity
-            // During attacks, reduce allocated tunnels to reduce build pressure
-            boolean isUnderAttack = _context.profileOrganizer().isLowBuildSuccess();
-            int configured = _settings.getQuantity();
-            boolean isExploratory = _settings.isExploratory();
-            int maxAllowed = isExploratory ? Math.min(configured + 2, 16) : isUnderAttack ? Math.max(configured - 2, 4) : configured;
-            int currentCount = 0;
-            int expiringCount = 0;
-            _tunnelsLock.lock();
-            try {
-                // Simple 5-minute threshold for tunnel counting
-                long expiryThreshold = now + 5*60*1000;
-                for (TunnelInfo t : _tunnels) {
-                    if (t.getExpiration() > now) {
-                        currentCount++;
-                        // Count tunnels expiring within unified threshold
-                        if (t.getExpiration() <= expiryThreshold) {
-                            expiringCount++;
-                        }
+        // During attacks, reduce allocated tunnels to reduce build pressure
+        boolean isUnderAttack = _context.profileOrganizer().isLowBuildSuccess();
+        int configured = _settings.getQuantity();
+        boolean isExploratory = _settings.isExploratory();
+        int maxAllowed = isExploratory ? Math.min(configured + 2, 16) : isUnderAttack ? Math.max(configured - 2, 4) : configured;
+        int currentCount = 0;
+        int expiringCount = 0;
+        _tunnelsLock.lock();
+        try {
+            // Simple 5-minute threshold for tunnel counting
+            long expiryThreshold = now + 5*60*1000;
+            for (TunnelInfo t : _tunnels) {
+                if (t.getExpiration() > now) {
+                    currentCount++;
+                    // Count tunnels expiring within unified threshold
+                    if (t.getExpiration() <= expiryThreshold) {
+                        expiringCount++;
                     }
                 }
-            } finally {_tunnelsLock.unlock();}
-
-            // Allow going over limit if tunnels are expiring soon (replacement builds)
-            int effectiveMax = maxAllowed;
-            if (expiringCount > 0) {
-                effectiveMax = maxAllowed + expiringCount; // Allow extra for replacements
             }
+        } finally {_tunnelsLock.unlock();}
 
-            if (currentCount >= effectiveMax) {
-                if (_log.shouldInfo()) {
-                    long uptime = _context.router().getUptime();
-                    _log.info((isUnderAttack ? "Limiting tunnels to " + maxAllowed + " in " :
-                                               "Not adding new tunnel to ") + toString() + " -> " +
-                              (isUnderAttack ? "Low build success" + (uptime > 15*60*1000 ? " (network under attack?)" : "") :
-                                               "Configured limit reached (" + configured + ")"));
-                }
-                if (info instanceof PooledTunnelCreatorConfig) {
-                    ((PooledTunnelCreatorConfig) info).setDuplicate();
-                }
-                return;
+        // Allow going over limit if tunnels are expiring soon (replacement builds)
+        int effectiveMax = maxAllowed;
+        if (expiringCount > 0) {
+            effectiveMax = maxAllowed + expiringCount; // Allow extra for replacements
+        }
+
+        if (currentCount >= effectiveMax) {
+            if (_log.shouldInfo()) {
+                long uptime = _context.router().getUptime();
+                _log.info((isUnderAttack ? "Limiting tunnels to " + maxAllowed + " in " :
+                                           "Not adding new tunnel to ") + toString() + " -> " +
+                          (isUnderAttack ? "Low build success" + (uptime > 15*60*1000 ? " (network under attack?)" : "") :
+                                           "Configured limit reached (" + configured + ")"));
             }
-
-            // Reject 0-hop tunnels for client pools unless explicitly allowed
-            if (info.getLength() <= 1 && !_settings.isExploratory() && !_settings.getAllowZeroHop()) {
-                if (_log.shouldInfo()) {
-                    _log.info("Rejecting 0-hop tunnel for client pool -> " + info);
-                }
-                if (info instanceof PooledTunnelCreatorConfig) {
-                    ((PooledTunnelCreatorConfig) info).setDuplicate();
-                }
-                return;
+            if (info instanceof PooledTunnelCreatorConfig) {
+                ((PooledTunnelCreatorConfig) info).setDuplicate();
             }
-        }  // end else for Ping tunnel skip
+            return;
+        }
 
-            // Check for duplicate peer sequence and handle appropriately @since 0.9.68+
-            List<TunnelInfo> duplicates = findDuplicateTunnels(info);
-            if (!duplicates.isEmpty()) {
-                // Check if we have at least 1 good (non-duplicate) tunnel
-                if (hasGoodTunnel(info)) {
-                    // Check if existing duplicates are expiring soon
-                    // If so, replace them with the new tunnel instead of rejecting
-                    boolean hasExpiringDuplicate = false;
+        // Reject 0-hop tunnels for client pools unless explicitly allowed
+        if (info.getLength() <= 1 && !_settings.isExploratory() && !_settings.getAllowZeroHop()) {
+            if (_log.shouldInfo()) {
+                _log.info("Rejecting 0-hop tunnel for client pool -> " + info);
+            }
+            if (info instanceof PooledTunnelCreatorConfig) {
+                ((PooledTunnelCreatorConfig) info).setDuplicate();
+            }
+            return;
+        }
+    }  // end else for Ping tunnel skip
+
+        // Check for duplicate peer sequence and handle appropriately @since 0.9.68+
+        List<TunnelInfo> duplicates = findDuplicateTunnels(info);
+        if (!duplicates.isEmpty()) {
+            // Check if we have at least 1 good (non-duplicate) tunnel
+            if (hasGoodTunnel(info)) {
+                // Check if existing duplicates are expiring soon
+                // If so, replace them with the new tunnel instead of rejecting
+                boolean hasExpiringDuplicate = false;
+                for (TunnelInfo dup : duplicates) {
+                    if (dup.getExpiration() <= now + 5*60*1000) {
+                        hasExpiringDuplicate = true;
+                        break;
+                    }
+                }
+
+                // Count current usable tunnels to ensure we don't drop to 0
+                int usableCount = 0;
+                _tunnelsLock.lock();
+                try {
+                    for (TunnelInfo t : _tunnels) {
+                        if (t.getExpiration() > now) usableCount++;
+                    }
+                } finally {_tunnelsLock.unlock();}
+                // Never reject if we'd have 0 usable tunnels left
+                int minimumRequired = Math.max(1, getAdjustedTotalQuantity() / 2);
+                // During attacks (low build success), be more conservative about rejecting duplicates
+                // since replacements are hard to build - keep duplicates to maintain pool
+                boolean isUnderAttack = _context.profileOrganizer().isLowBuildSuccess();
+                if (isUnderAttack) {
+                    minimumRequired = Math.max(minimumRequired, getAdjustedTotalQuantity() - 1);
+                }
+
+                if (!isUnderAttack && !hasExpiringDuplicate && usableCount > minimumRequired) {
+                    // Normal operation: reject duplicate if we have enough alternatives
+                    if (_log.shouldWarn()) {
+                        _log.warn("Rejecting new tunnel with duplicate peer sequence for " + info);
+                    }
+                    if (info instanceof PooledTunnelCreatorConfig) {
+                        ((PooledTunnelCreatorConfig) info).setDuplicate();
+                    }
+                    // Don't add this tunnel since it's a duplicate
+                    return;
+                } else if (hasExpiringDuplicate && !isUnderAttack) {
+                    // Normal operation: replace expiring duplicates with the new tunnel
+                    if (_log.shouldInfo()) {
+                        _log.info("Replacing expiring duplicate tunnel(s) with new tunnel: " + info);
+                    }
                     for (TunnelInfo dup : duplicates) {
                         if (dup.getExpiration() <= now + 5*60*1000) {
-                            hasExpiringDuplicate = true;
-                            break;
-                        }
-                    }
-
-                    // Count current usable tunnels to ensure we don't drop to 0
-                    int usableCount = 0;
-                    _tunnelsLock.lock();
-                    try {
-                        for (TunnelInfo t : _tunnels) {
-                            if (t.getExpiration() > now) usableCount++;
-                        }
-                    } finally {_tunnelsLock.unlock();}
-                    // Never reject if we'd have 0 usable tunnels left
-                    int minimumRequired = Math.max(1, getAdjustedTotalQuantity() / 2);
-                    // During attacks (low build success), be more conservative about rejecting duplicates
-                    // since replacements are hard to build - keep duplicates to maintain pool
-                    boolean isUnderAttack = _context.profileOrganizer().isLowBuildSuccess();
-                    if (isUnderAttack) {
-                        minimumRequired = Math.max(minimumRequired, getAdjustedTotalQuantity() - 1);
-                    }
-
-                    if (!isUnderAttack && !hasExpiringDuplicate && usableCount > minimumRequired) {
-                        // Normal operation: reject duplicate if we have enough alternatives
-                        if (_log.shouldWarn()) {
-                            _log.warn("Rejecting new tunnel with duplicate peer sequence for " + info);
-                        }
-                        if (info instanceof PooledTunnelCreatorConfig) {
-                            ((PooledTunnelCreatorConfig) info).setDuplicate();
-                        }
-                        // Don't add this tunnel since it's a duplicate
-                        return;
-                    } else if (hasExpiringDuplicate && !isUnderAttack) {
-                        // Normal operation: replace expiring duplicates with the new tunnel
-                        if (_log.shouldInfo()) {
-                            _log.info("Replacing expiring duplicate tunnel(s) with new tunnel: " + info);
-                        }
-                        for (TunnelInfo dup : duplicates) {
-                            if (dup.getExpiration() <= now + 5*60*1000) {
-                                if (dup instanceof PooledTunnelCreatorConfig) {
-                                    ((PooledTunnelCreatorConfig) dup).setDuplicate();
-                                }
-                                removeTunnel(dup);
+                            if (dup instanceof PooledTunnelCreatorConfig) {
+                                ((PooledTunnelCreatorConfig) dup).setDuplicate();
                             }
-                        }
-                    } else {
-                        // Under attack OR need this tunnel to maintain minimum pool size
-                        if (_log.shouldInfo()) {
-                            _log.info("Accepting duplicate tunnel -> " +
-                                      (isUnderAttack ? "Under attack" : "Maintaining pool size") + " (" +
-                                      usableCount + " usable / " + minimumRequired + " required): " + info);
+                            removeTunnel(dup);
                         }
                     }
-                }
-            }
-
-            LeaseSet ls = null;
-            _tunnelsLock.lock();
-            try {
-                boolean canAdd = info.getExpiration() > now + 60*1000;
-                // Allow recently-built tunnels regardless of expiration (handles slow builds)
-                // If tunnel was created within the last 8 minutes, allow it even if expiration is soon
-                // This prevents rejection of tunnels that took a long time to build
-                if (!canAdd && info instanceof PooledTunnelCreatorConfig) {
-                    long age = now - ((PooledTunnelCreatorConfig) info).getCreationTime();
-                    if (age < 8 * 60 * 1000) {
-                        canAdd = true;
+                } else {
+                    // Under attack OR need this tunnel to maintain minimum pool size
+                    if (_log.shouldInfo()) {
+                        _log.info("Accepting duplicate tunnel -> " +
+                                  (isUnderAttack ? "Under attack" : "Maintaining pool size") + " (" +
+                                  usableCount + " usable / " + minimumRequired + " required): " + info);
                     }
                 }
-                if (canAdd) {
-                    _tunnels.add(info);
-
-                    // PROACTIVE EXPIRY: If we're over the configured limit (due to replacement builds),
-                    // proactively remove the oldest tunnels to maintain the configured pool size.
-                    // This ensures we don't accumulate excess tunnels over time.
-                    int configured = _settings.getQuantity();
-                    if (_tunnels.size() > configured + 1) {
-                        // Sort by expiration and remove oldest ones
-                        List<TunnelInfo> sorted = new ArrayList<TunnelInfo>(_tunnels);
-                        Collections.sort(sorted, new Comparator<TunnelInfo>() {
-                            public int compare(TunnelInfo a, TunnelInfo b) {
-                                return Long.compare(a.getExpiration(), b.getExpiration());
-                            }
-                        });
-                        // Remove oldest tunnels until we're back at configured + 1
-                        int toRemove = _tunnels.size() - (configured + 1);
-                        for (int i = 0; i < toRemove && i < sorted.size(); i++) {
-                            TunnelInfo oldest = sorted.get(i);
-                            // Don't remove the tunnel we just added
-                            if (oldest != info && oldest.getExpiration() > now) {
-                                if (_log.shouldInfo()) {
-                                    _log.info("Proactively removing oldest tunnel to maintain pool size: " + oldest);
-                                }
-                                removeTunnel(oldest);
-                            }
-                        }
-                    }
-
-                    if (_settings.isInbound() && !_settings.isExploratory()) {ls = locked_buildNewLeaseSet();}
-                }
-            } finally {_tunnelsLock.unlock();}
-            boolean requestLease = info.getExpiration() > now + 60*1000;
-            if (!requestLease && info instanceof PooledTunnelCreatorConfig) {
-                long age = now - ((PooledTunnelCreatorConfig) info).getCreationTime();
-                if (age < 8 * 60 * 1000) {
-                    requestLease = true;
-                }
-            }
-            if (requestLease && ls != null) {requestLeaseSet(ls);}
-
-            // Check if we can now remove any last resort tunnels since we have a replacement
-            boolean cleanup = info.getExpiration() > now + 60*1000;
-            if (!cleanup && info instanceof PooledTunnelCreatorConfig) {
-                long age = now - ((PooledTunnelCreatorConfig) info).getCreationTime();
-                if (age < 8 * 60 * 1000) {
-                    cleanup = true;
-                }
-            }
-            if (cleanup) {
-                cleanupLastResortTunnels();
-                // If we added a multi-hop tunnel, remove zero-hop fallbacks immediately
-                // This applies to both exploratory and client pools
-                if (info.getLength() > 1) {
-                    cleanupZeroHopTunnels();
             }
         }
+
+        LeaseSet ls = null;
+        _tunnelsLock.lock();
+        try {
+            boolean canAdd = info.getExpiration() > now + 60*1000;
+            // Allow recently-built tunnels regardless of expiration (handles slow builds)
+            // If tunnel was created within the last 8 minutes, allow it even if expiration is soon
+            // This prevents rejection of tunnels that took a long time to build
+            if (!canAdd && info instanceof PooledTunnelCreatorConfig) {
+                long age = now - ((PooledTunnelCreatorConfig) info).getCreationTime();
+                if (age < 8 * 60 * 1000) {
+                    canAdd = true;
+                }
+            }
+            if (canAdd) {
+                _tunnels.add(info);
+
+                // PROACTIVE EXPIRY: If we're over the configured limit (due to replacement builds),
+                // proactively remove the oldest tunnels to maintain the configured pool size.
+                // This ensures we don't accumulate excess tunnels over time.
+                int configured = _settings.getQuantity();
+                if (_tunnels.size() > configured + 1) {
+                    // Sort by expiration and remove oldest ones
+                    List<TunnelInfo> sorted = new ArrayList<TunnelInfo>(_tunnels);
+                    Collections.sort(sorted, new Comparator<TunnelInfo>() {
+                        public int compare(TunnelInfo a, TunnelInfo b) {
+                            return Long.compare(a.getExpiration(), b.getExpiration());
+                        }
+                    });
+                    // Remove oldest tunnels until we're back at configured + 1
+                    int toRemove = _tunnels.size() - (configured + 1);
+                    for (int i = 0; i < toRemove && i < sorted.size(); i++) {
+                        TunnelInfo oldest = sorted.get(i);
+                        // Don't remove the tunnel we just added
+                        if (oldest != info && oldest.getExpiration() > now) {
+                            if (_log.shouldInfo()) {
+                                _log.info("Proactively removing oldest tunnel to maintain pool size: " + oldest);
+                            }
+                            removeTunnel(oldest);
+                        }
+                    }
+                }
+
+                if (_settings.isInbound() && !_settings.isExploratory()) {ls = locked_buildNewLeaseSet();}
+            }
+        } finally {_tunnelsLock.unlock();}
+        boolean requestLease = info.getExpiration() > now + 60*1000;
+        if (!requestLease && info instanceof PooledTunnelCreatorConfig) {
+            long age = now - ((PooledTunnelCreatorConfig) info).getCreationTime();
+            if (age < 8 * 60 * 1000) {
+                requestLease = true;
+            }
+        }
+        if (requestLease && ls != null) {requestLeaseSet(ls);}
     }
 
     /**
@@ -2136,6 +2119,12 @@ public class TunnelPool {
                 continue;
             }
 
+            // Skip already-expired tunnels - they cannot be used for anything
+            long now = _context.clock().now();
+            if (tunnel.getExpiration() <= now) {
+                continue;
+            }
+
             // Check if this is a last resort tunnel - include even if near expiry
             boolean isLastResort = tunnel instanceof PooledTunnelCreatorConfig &&
                                    ((PooledTunnelCreatorConfig)tunnel).isLastResort();
@@ -2252,12 +2241,18 @@ public class TunnelPool {
             long now = _context.clock().now();
 
             // Count only tunnels that haven't expired
+            int expiringSoonCount = 0;
             _tunnelsLock.lock();
             try {
                 int expiredCount = 0;
+                long expiryThreshold = now + 3*60*1000; // 3 minutes - build BEFORE they expire
                 for (TunnelInfo t : _tunnels) {
                     if (t.getExpiration() > now) {
                         tunnelCount++;
+                        // Count tunnels expiring within threshold (proactive rebuild)
+                        if (t.getExpiration() <= expiryThreshold) {
+                            expiringSoonCount++;
+                        }
                     } else {
                         expiredCount++;
                     }
@@ -2273,10 +2268,10 @@ public class TunnelPool {
 
             // Debug logging
             if (_log.shouldDebug()) {
-                _log.debug("POOL DEBUG " + toString() + ": tunnels=" + tunnelCount +
-                          ", inProgress=" + inProgress + ", wanted=" + wanted +
-                          ", poolSize=" + _tunnels.size() + ", now=" + now +
-                          ", oldestExp=" + (_tunnels.isEmpty() ? "none" : "" +
+                _log.debug(toString() + "\n* Tunnels: " + tunnelCount +
+                          ", inProgress: " + inProgress + ", wanted: " + wanted +
+                          ", poolSize: " + _tunnels.size() + ", now: " + now +
+                          ", oldestExp: " + (_tunnels.isEmpty() ? "none" : "" +
                           ((TunnelInfo)_tunnels.get(0)).getExpiration()));
             }
 
@@ -2285,6 +2280,18 @@ public class TunnelPool {
                 int rv = wanted - total;
                 if (_log.shouldDebug()) _log.debug("Building " + rv + " tunnels (have " + tunnelCount + ", want " + wanted + ")");
                 return rv;
+            }
+
+            // Proactive build: tunnels expiring soon will leave us short
+            // Build replacements BEFORE they expire to prevent pool collapse
+            if (expiringSoonCount > 0 && inProgress < expiringSoonCount) {
+                int needed = expiringSoonCount - inProgress;
+                if (tunnelCount - expiringSoonCount + inProgress < wanted) {
+                    if (_log.shouldInfo()) {
+                        _log.info("Proactive rebuild: " + expiringSoonCount + " tunnels expiring soon, building " + needed + " replacements");
+                    }
+                    return needed;
+                }
             }
 
             // No builds needed
@@ -2759,8 +2766,43 @@ public class TunnelPool {
         }
 
         if (!forceZeroHop) {
+            int configuredLen = settings.getLength();
             int len = settings.getLengthOverride();
-            if (len < 0) {len = settings.getLength();}
+            if (len < 0) {len = configuredLen;}
+
+            // Emergency hop reduction: if we have many consecutive timeouts AND tunnels expiring soon,
+            // build with fewer hops as a fallback while still trying the normal length
+            // This is an emergency measure to prevent pool collapse
+            int consecutiveTimeouts = _consecutiveBuildTimeouts.get();
+            if (!settings.isExploratory() && consecutiveTimeouts > 5) {
+                // Check if we have tunnels expiring within 3 minutes
+                long expiryThreshold = now + 3 * 60 * 1000;
+                boolean hasExpiringSoon = false;
+                _tunnelsLock.lock();
+                try {
+                    for (TunnelInfo t : _tunnels) {
+                        if (t.getExpiration() > now && t.getExpiration() <= expiryThreshold) {
+                            hasExpiringSoon = true;
+                            break;
+                        }
+                    }
+                } finally {_tunnelsLock.unlock();}
+
+                if (hasExpiringSoon && len > 2) {
+                    // Reduce hops temporarily for emergency builds
+                    // But ensure we never go below minLength (2 for client pools)
+                    int reducedLen = Math.max(len - 1, minLength);
+                    if (reducedLen < len) {
+                        if (_log.shouldWarn()) {
+                            _log.warn("Emergency hop reduction for " + toString() +
+                                      ": " + len + " -> " + reducedLen + " hops (consecutive timeouts: " +
+                                      consecutiveTimeouts + ", tunnels expiring soon)");
+                        }
+                        len = reducedLen;
+                    }
+                }
+            }
+
             // Enforce minimum length for client pools
             if (len < minLength) {len = minLength;}
             if (len > 0 && (!settings.isExploratory()) && _context.random().nextInt(4) < 3) { // 75%
@@ -2932,7 +2974,13 @@ public class TunnelPool {
         cfg.setExpiration(expiration);
         if (!settings.isInbound()) {cfg.setPriority(settings.getPriority());}
 
-        if (_log.shouldDebug()) {_log.debug("Tunnel Pool created \n* Peers: " + peers + cfg);}
+        if (_log.shouldDebug()) {
+            StringBuilder sb = new StringBuilder("Tunnel Pool created -> " + cfg + "\n* Peers: ");
+            for (Hash peer : peers) {
+                sb.append("[").append(peer.toBase64().substring(0,6)).append("] ");
+            }
+            _log.debug(sb.toString());
+        }
         synchronized (_inProgress) {_inProgress.add(cfg);}
         buildStarted(_settings.isInbound());
         return cfg;
@@ -3148,6 +3196,8 @@ public class TunnelPool {
                 _consecutiveBuildTimeouts.set(0);
                 addTunnel(cfg);
                 updatePairedProfile(cfg, true);
+                // Decrease timeout offset on success (helps recover from over-timeout)
+                BuildRequestor.subtractTimeoutOffset(toString());
                 break;
 
             case REJECT:
@@ -3166,10 +3216,13 @@ public class TunnelPool {
             case TIMEOUT:
                 _consecutiveBuildTimeouts.incrementAndGet();
                 if (_log.shouldDebug()) {
-                    _log.debug("buildComplete TIMEOUT - cleaning up for " + toString());
+                    _log.debug("Failed to build tunnel for " + toString() +
+                               " before timeout -> Cleaning up failed build...");
                 }
                 cleanupFailedBuild(cfg);
                 updatePairedProfile(cfg, false);
+                // Increase timeout offset on timeout (scales up to 2x base)
+                BuildRequestor.addTimeoutOffset(toString());
                 break;
 
             case OTHER_FAILURE:
@@ -3201,11 +3254,21 @@ public class TunnelPool {
             inProgress = _inProgress.size();
         }
 
-        // CRITICAL FIX: If pool is EMPTY (0 non-expired tunnels), ALWAYS keep failed tunnel as last resort
-        // This prevents collapse when all builds keep failing
+        // CRITICAL FIX: If pool is EMPTY (0 non-expired tunnels), keep failed tunnel as last resort
+        // ONLY if there are NO builds in progress - wait for those to complete first
         if (currentTunnels <= 0) {
-            if (_log.shouldWarn()) {
-                _log.warn("POOL COLLAPSE PREVENTION: Keeping failed tunnel as last resort in " + toString() +
+            if (inProgress > 0) {
+                // Builds in progress - wait for them to complete before adding last resort
+                if (_log.shouldInfo()) {
+                    _log.info("Pool empty but " + inProgress +
+                              " builds in progress -> Waiting for them in " + toString() + "...");
+                }
+                // Don't add failed tunnel - just trigger replacement
+                triggerReplacementBuild();
+                return;
+            }
+            if (_log.shouldInfo()) {
+                _log.info("Keeping failed tunnel as last resort in " + toString() +
                           " (tunnels=" + currentTunnels + ", inProgress=" + inProgress + ")");
             }
             cfg.setLastResort();
