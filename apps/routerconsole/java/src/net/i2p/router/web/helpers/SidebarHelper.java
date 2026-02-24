@@ -696,6 +696,7 @@ public class SidebarHelper extends HelperBase {
             for (Destination client : clients) {
                 String name = getTunnelName(client);
                 Hash h = client.calculateHash();
+                String shortB32 = h.toBase32().substring(0,4);
                 Boolean server = _context.clientManager().shouldPublishLeaseSet(h);
                 Boolean isPing = name.startsWith("Ping [") || name.equals("I2Ping");
                 Boolean isSnark = name.equals(_t("I2PSnark"));
@@ -718,7 +719,7 @@ public class SidebarHelper extends HelperBase {
                     if (!isAdvanced()) {buf.append(" (").append(_t("service is only available locally")).append(")");}
                 }
                 buf.append("\" width=16 height=16>");
-                buf.append("</td><td><b><a href=\"/tunnels#").append(h.toBase64().substring(0,4));
+                buf.append("</td><td><b><a href=\"/tunnels#").append(shortB32);
                 buf.append("\" target=_top title=\"").append(_t("Show tunnels"));
                 if (isAdvanced()) {
                     buf.append(" [").append(h.toBase32().substring(0,8)).append("&hellip;b32.i2p]");

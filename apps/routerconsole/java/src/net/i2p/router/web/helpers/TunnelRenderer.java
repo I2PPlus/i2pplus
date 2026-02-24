@@ -105,6 +105,8 @@ class TunnelRenderer {
         writeGraphLinks(out, ei, eo);
         out.write(" <a class=lsview style=pointer-events:none><span class=b32>EXPL</span></a>");
         out.write("</h3>\n");
+        // Render summary header table for exploratory
+        renderPoolSummary(out, ei, eo, null);
         renderPool(out, ei, eo);
         // add empty span so we can link to client tunnels in the sidebar
         out.write("<span id=client_tunnels></span>");
@@ -130,7 +132,7 @@ class TunnelRenderer {
                 (outPool != null && !outPool.getSettings().shouldTest())) {
                 continue;
             }
-            String b64 = client.toBase64().substring(0,4);
+            String b32 = client.toBase32().substring(0,4);
             if (isLocal) {
                 out.write("<div class=tablewrap><h3 class=\"");
                 if (_context.clientManager().shouldPublishLeaseSet(client)) {
@@ -141,25 +143,26 @@ class TunnelRenderer {
                         out.write("i2pchat ");
                     }
                 }
-                else if ((getTunnelName(in).startsWith("Ping") && getTunnelName(in).contains("[")) || getTunnelName(in).equals("I2Ping")) {
-                    continue;
-                } else {out.write("client ");}
+                else if ((getTunnelName(in).startsWith("Ping") && getTunnelName(in).contains("[")) ||
+                         getTunnelName(in).equals("I2Ping")) {continue;}
+                else {out.write("client ");}
                 out.write("tabletitle\" ");
-                out.write("id=\"" + client.toBase64().substring(0,4) + "\">");
+                out.write("id=\"" + client.toBase32().substring(0,4) + "\">");
                 out.write(getTunnelName(in));
                 // links are set to float:right in CSS so they will be displayed in reverse order
                 if (isAdvanced) {
-                    out.write(" <a href=\"/configtunnels#" + b64 +"\" title=\"" +
+                    out.write(" <a href=\"/configtunnels#" + b32 +"\" title=\"" +
                               _t("Configure tunnels for session") + "\">[" + _t("configure") + "]</a>");
                 } else {
                     out.write(" <a href=\"/tunnelmanager\" title=\"" +
                               _t("Configure tunnels") + "\">[" + _t("configure") + "]</a>");
                 }
-                writeGraphLinks(out, in, outPool);
+                //writeGraphLinks(out, in, outPool);
                 out.write(" <a class=lsview href=\"/netdb?l=3#ls_" + client.toBase32().substring(0,4) + "\">" +
                           "<span class=b32 title=\"" + _t("View LeaseSet") + "\">" +
                           client.toBase32().substring(0,4) + "</span></a>");
                 out.write("</h3>\n");
+                renderPoolSummary(out, in, outPool, client);
 
                 // list aliases
                 Set<Hash> aliases = in.getSettings().getAliases();
@@ -168,13 +171,13 @@ class TunnelRenderer {
                         TunnelPool ain = clientInboundPools.get(a);
                         if (ain != null) {
                             String aname = ain.getSettings().getDestinationNickname();
-                            String ab64 = a.toBase64().substring(0,4);
-                            if (aname == null) {aname = ab64;}
+                            String ab32 = a.toBase32().substring(0,4);
+                            if (aname == null) {aname = ab32;}
                             out.write("<h3 class=tabletitle ");
-                            out.write("id=\"" + ab64 + "\">");
+                            out.write("id=\"" + ab32 + "\">");
                             out.write(DataHelper.escapeHTML(_t(aname)));
                             if (isAdvanced) {
-                                out.write(" <a href=\"/configtunnels#" + b64 +"\" title=\"" +
+                                out.write(" <a href=\"/configtunnels#" + b32 +"\" title=\"" +
                                           _t("Configure tunnels for session") + "\">[" + _t("configure") + "]</a>");
                             } else {
                                 out.write(" <a href=\"/tunnelmanager\" title=\"" +
@@ -260,11 +263,7 @@ class TunnelRenderer {
                     long timeLeft = cfg.getExpiration()-_context.clock().now();
                     sb.append("<td class=\"cells expiry\" data-sort=").append(timeLeft).append(">");
                     if (timeLeft > 0) {
-                      sb.append("<span class=right>")
-                        .append(timeLeft / 1000)
-                        .append("</span><span class=left>&#8239;")
-                        .append(_t("sec"))
-                        .append("</span>");
+                        sb.append(renderExpiryBar(timeLeft));
                     } else {
                         sb.append("<i>").append(_t("grace period")).append("</i>");
                     }
@@ -863,6 +862,16 @@ class TunnelRenderer {
         }
     }
 
+    /** Generate a percentage bar for expiry time */
+    private String renderExpiryBar(long timeLeft) {
+        if (timeLeft <= 0) {timeLeft = 0;}
+        int percent = (int) Math.min(100, timeLeft * 100.0 / 600000);
+        String timeStr = DataHelper.formatDuration2(timeLeft);
+        return "<span class=percentBarOuter title=\"" + _t("Expiry") + ": " + timeStr + "\">" +
+               "<span class=percentBarInner style=\"width:" + percent + "%\">" +
+               "<span class=percentBarText>" + percent + "%</span></span></span>";
+    }
+
     /**
      *  Sort tunnels by the name of the tunnel
      *  @since 0.9.57
@@ -921,6 +930,57 @@ class TunnelRenderer {
         }
     }
 
+    /**
+     * Render a summary header table for a tunnel pool showing counts and bandwidth.
+     */
+    private void renderPoolSummary(Writer out, TunnelPool in, TunnelPool outPool, Hash client) throws IOException {
+        // Get inbound pool data
+        int inCount = in != null ? in.size() : 0;
+        int inWanted = in != null ? in.getSettings().getQuantity() + in.getSettings().getBackupQuantity() : 0;
+        int inBuilding = in != null ? in.getInProgressCount() : 0;
+        long inBW = in != null ? in.getLifetimeProcessed() : 0;
+
+        // Get outbound pool data
+        int outCount = outPool != null ? outPool.size() : 0;
+        int outWanted = outPool != null ? outPool.getSettings().getQuantity() + outPool.getSettings().getBackupQuantity() : 0;
+        int outBuilding = outPool != null ? outPool.getInProgressCount() : 0;
+        long outBW = outPool != null ? outPool.getLifetimeProcessed() : 0;
+
+        // Get destination string (truncated base32 or EXPL for exploratory)
+        String destStr;
+        if (in != null && in.getSettings().isExploratory()) {
+            destStr = "EXPL";
+        } else if (client != null) {
+            destStr = client.toBase32().substring(0, 6);
+        } else {
+            destStr = "";
+        }
+
+        String sep = " / ";
+        boolean buildIn = inBuilding > 0;
+        boolean buildOut = outBuilding > 0;
+
+        out.write("<table class=poolsummary>\n");
+        out.write("<thead><tr><th></th>");
+        out.write("<th class=inCount title=\"" + _t("Inbound") + ": " + _t("Active / Configured") + "\">" +
+                   inCount + sep + inWanted + "</th>");
+        out.write("<th class=outCount title=\"" + _t("Outbound") + ": " + _t("Active / Configured") + "\">" +
+                   outCount + sep + outWanted + "</th><th id=sep></th>");
+        out.write("<th class=\"inBuild" + (buildIn ? " building" : "") + "\" title=\"" + _t("Inbound") +
+                  ": " + _t("Building") + "&hellip;\">" + inBuilding + "</th>");
+        out.write("<th class=\"outBuild" + (buildOut ? " building" : "") + "\"  title=\"" + _t("Outbound") +
+                  ": " + _t("Building") + "&hellip;\">" + outBuilding + "</th>");
+        out.write("</tr></thead>\n</table>\n");
+    }
+
+    /** Format bytes to human readable */
+    private String formatBytes(long bytes) {
+        if (bytes < 1024) return bytes + " B";
+        if (bytes < 1024*1024) return String.format("%.1f KB", bytes/1024.0);
+        if (bytes < 1024*1024*1024) return String.format("%.1f MB", bytes/(1024.0*1024));
+        return String.format("%.1f GB", bytes/(1024.0*1024*1024));
+    }
+
     private void renderPool(Writer out, TunnelPool in, TunnelPool outPool) throws IOException {
         Comparator<TunnelInfo> comp = new TunnelInfoComparator();
         List<TunnelInfo> tunnels;
@@ -954,13 +1014,13 @@ class TunnelRenderer {
                .append("</th><th class=status title=\"")
                .append(_t("Tunnel test status"))
                .append("\">")
-                .append(_t("Status"))
-                .append("</th><th class=latency title=\"")
-                .append(_t("Round trip time for last test"))
-                .append("\">")
-                .append(_t("Latency"))
-                .append("</th><th class=expiry>")
-                .append(_t("Expiry"))
+               .append(_t("Status"))
+               .append("</th><th class=expiry>")
+               .append(_t("Expiry"))
+               .append("</th><th class=latency title=\"")
+               .append(_t("Round trip time for last test"))
+               .append("\">")
+               .append(_t("Latency"))
                .append("</th><th class=transferred title=\"")
                .append(_t("Data transferred"))
                .append("\">")
@@ -1039,6 +1099,8 @@ class TunnelRenderer {
                 buf.append("</td>");
             }
 
+            buf.append("<td class=expiry>").append(renderExpiryBar(timeLeft)).append("</td>");
+
             int latency = info.getLastLatency();
             buf.append("<td class=latency data-sort=").append(latency).append(">");
             if (latency > 0) {
@@ -1046,7 +1108,6 @@ class TunnelRenderer {
             }
             buf.append("</td>");
 
-            buf.append("<td class=expiry><span>").append(DataHelper.formatDuration2(timeLeft)).append("</span></td>");
 
             long count = info.getProcessedMessagesCount() * 1024 / 1000;
             double sizeInKB = count * 1024.0 / 1000.0;
@@ -1106,6 +1167,7 @@ class TunnelRenderer {
             buf.append("</tbody>\n<tfoot id=statusnotes>");
             int colCount = 5 + maxLength;
 
+/*
             if (live > 0 && (in != null || outPool != null)) {
                 List<?> pendingIn = (in != null) ? in.listPending() : Collections.emptyList();
                 List<?> pendingOut = (outPool != null) ? outPool.listPending() : Collections.emptyList();
@@ -1124,6 +1186,7 @@ class TunnelRenderer {
                     buf.append("</b></td></tr>\n");
                 }
             }
+*/
 
             if (live > 0) {
                 buf.append("<tr class=bwUsage><td colspan=").append(colCount)

@@ -985,9 +985,9 @@ a[href^="configpeer?peer"]:active::after{background:var(--edit_active) var(--cen
 #floodfills .percentBarOuter,#floodfills .percentBarOuter,#floodfills .percentBarText,#tunnels .percentBarOuter,#tunnels .percentBarOuter,#tunnels .percentBarText{display:inline-block;box-sizing:border-box;float:none}
 #floodfills .percentBarOuter,#tunnels .percentBarOuter{height:16px;overflow:hidden}
 #floodfills .percentBarOuter,#floodfills .percentBarText{margin:0;width:calc(100% - 9px);vertical-align:middle}
-#floodfills .percentBarOuter{margin:-1px 0 1px;text-align:left;border:1px solid #700;box-shadow:0 0 0 1px #000,var(--highlight),inset 0 2px 2px rgba(0,0,0,.7);background:repeating-linear-gradient(90deg,#0000,#0000 5%,#200 5%,#200 10%) left center/100% 10%,linear-gradient(180deg,#000,#200);opacity:.9}
+#floodfills .percentBarOuter,#tunnels .percentBarOuter{margin:-1px 0 1px;text-align:left;border:1px solid #700;box-shadow:0 0 0 1px #000,var(--highlight),inset 0 2px 2px rgba(0,0,0,.7);background:repeating-linear-gradient(90deg,#0000,#0000 5%,#200 5%,#200 10%) left center/100% 10%,linear-gradient(180deg,#000,#200);opacity:.9}
 #floodfills tr:hover .percentBarOuter,#floodfills tr:hover .percentBarInner{border-color:#900}
-#floodfills tr:hover .percentBarOuter.nofail,#floodfills tr:hover .nofail .percentBarInner{border-color:#252}
+#floodfills tr:hover .percentBarOuter.nofail,#floodfills tr:hover .nofail .percentBarInner,#tunnels .percentBarOuter{border-color:#252}
 #floodfills .percentBarInner{width:inherit;display:inline-block;border-right-color:#700;background:repeating-linear-gradient(to right,#0001 2px,#0000 4px) repeat left center/2px 100%,linear-gradient(to right,rgba(16,0,0,.3),rgba(96,0,0,.3)72px),linear-gradient(180deg,#700 50%,#500)}
 #floodfills .percentBarInner[style="width:0%"]{width:100%!important;background:repeating-linear-gradient(to right,rgba(0,0,0,.15)2px,#0000 4px) repeat left center/2px 100%,linear-gradient(180deg,#373 50%,#141)}
 #floodfills .percentBarOuter.nofail{background:#000}
@@ -1144,13 +1144,12 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 #tunnels img{font-size:0}
 #tunnels img[src$="bound.png"],#peers img[src$="bound.png"]{opacity:0}
 #tunnels .left,#tunnels .right{margin:0;width:50%;display:inline-block;vertical-align:middle}
-#tunnels .percentBarInner{height:14px;display:inline-block}
-#tunnels .percentBarInner{text-align:center;background:#030}
-#tunnels .percentBarOuter:hover .percentBarInner{background:rgba(0,48,0,.8)}
-#tunnels .percentBarOuter{margin:-2px 2px 0 4px;position:relative;text-align:left;background:#000}
+#tunnels .percentBarInner{height:14px;display:inline-block;text-align:center;background:repeating-linear-gradient(to right,rgba(0,0,0,.15)2px,#0000 4px) repeat left center/2px 100%,linear-gradient(180deg,#373 50%,#141);opacity:.5}
+#tunnels .percentBarOuter:hover .percentBarInner{background:rgba(0,48,0,.8);opacity:1}
 #tunnels .percentBarOuter,#tunnels .PercentBarInner,#tunnels .percentBarText{display:inline-block;vertical-align:middle}
 #tunnels .percentBarOuter,#tunnels .percentBarText{width:100px}
-#tunnels .percentBarText{position:absolute;top:0;left:0;bottom:0;right:0;width:100%;height:unset;font-size:80%}
+#tunnels .percentBarOuter{margin:-1px 0 1px;position:relative;text-align:left;background:repeating-linear-gradient(90deg,#0000,#0000 5%,#020 5%,#020 10%) left center/100% 10%,linear-gradient(180deg,#0008,#0204);opacity:.9}
+#tunnels .percentBarText{position:absolute;top:1px;left:0;bottom:0;right:0;width:100%;height:unset;font-size:80%}
 #tunnels span[hidden]{display:none}
 #tunnels table{position:relative;z-index:1}
 #tunnels .tab,#tunnels .tab2{min-width:140px}
