@@ -99,8 +99,8 @@ abstract class BuildRequestor {
      * - Reply back through reverse path
      * For a 3-hop tunnel this is 6+ relay hops, each with processing delay.
      */
-    private static final int BASE_TIMEOUT = SystemVersion.isSlow() ? 240*1000 : 210*1000;  // 210s/240s - matches avg build time
-    private static final int EXTENDED_TIMEOUT = SystemVersion.isSlow() ? 300*1000 : 270*1000;  // 270s/300s extended
+    private static final int BASE_TIMEOUT = SystemVersion.isSlow() ? 10 * 1000 : 5 * 1000;  // 5s/10s - quick fail for latency issues
+    private static final int EXTENDED_TIMEOUT = SystemVersion.isSlow() ? 15 * 1000 : 10 * 1000;  // 10s/15s extended
     static final int REQUEST_TIMEOUT = BASE_TIMEOUT;
 
     /**
