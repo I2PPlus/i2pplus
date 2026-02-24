@@ -113,7 +113,7 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
                         dests.add(addr.getAddress());
                     }
                 } catch (IllegalArgumentException iae) {
-                     l.log("✖ Bad destination " + destination + " - " + iae);
+                     l.log("✖ Bad destination " + destination + " -> " + iae);
                 }
             }
         }
@@ -154,7 +154,7 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
     /**
      * Execute a runnable task, running inline when called from an unlimited thread pool
      * to avoid creating unnecessary threads, otherwise start a new thread.
-     * 
+     *
      * @param task the Thread task to execute
      */
     private void executeTask(Thread task) {
@@ -179,9 +179,9 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
             // Execute task (inline when called from unlimited thread pool)
             executeTask(t);
         } catch (IOException ex) {
-            if (_log.shouldWarn()) {_log.warn("Error connecting to " + addr + ": " + ex.getMessage(), ex);}
+            if (_log.shouldWarn()) {_log.warn("Error connecting to " + addr + ": " + ex.getMessage());}
         } catch (I2PException ex) {
-            if (_log.shouldWarn()) {_log.warn("Error connecting to " + addr + ": " + ex.getMessage(), ex);}
+            if (_log.shouldWarn()) {_log.warn("Error connecting to " + addr + ": " + ex.getMessage());}
         } finally {
             // only because we are running it inline
             closeSocket(s);
