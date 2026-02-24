@@ -942,12 +942,14 @@ class TunnelRenderer {
         int inCount = 0;
         if (in != null) {
             for (TunnelInfo t : in.listTunnels()) {
-                if (t instanceof net.i2p.router.tunnel.pool.PooledTunnelCreatorConfig) {
-                    if (!((net.i2p.router.tunnel.pool.PooledTunnelCreatorConfig)t).getTunnelFailed()) {
-                        inCount++;
-                    }
-                } else {
-                    inCount++; // Non-PooledTunnelCreatorConfig tunnels don't have failed status
+                // Skip expired tunnels
+                if (t.getExpiration() <= _context.clock().now()) continue;
+                // Skip failed tunnels - check both getTunnelFailed() and testStatus == FAILED
+                boolean isTestFailed = (t.getTestStatus() == net.i2p.router.TunnelTestStatus.FAILED);
+                boolean isPooledFailed = (t instanceof net.i2p.router.tunnel.pool.PooledTunnelCreatorConfig) &&
+                    ((net.i2p.router.tunnel.pool.PooledTunnelCreatorConfig)t).getTunnelFailed();
+                if (!isTestFailed && !isPooledFailed) {
+                    inCount++;
                 }
             }
         }
@@ -959,12 +961,14 @@ class TunnelRenderer {
         int outCount = 0;
         if (outPool != null) {
             for (TunnelInfo t : outPool.listTunnels()) {
-                if (t instanceof net.i2p.router.tunnel.pool.PooledTunnelCreatorConfig) {
-                    if (!((net.i2p.router.tunnel.pool.PooledTunnelCreatorConfig)t).getTunnelFailed()) {
-                        outCount++;
-                    }
-                } else {
-                    outCount++; // Non-PooledTunnelCreatorConfig tunnels don't have failed status
+                // Skip expired tunnels
+                if (t.getExpiration() <= _context.clock().now()) continue;
+                // Skip failed tunnels - check both getTunnelFailed() and testStatus == FAILED
+                boolean isTestFailed = (t.getTestStatus() == net.i2p.router.TunnelTestStatus.FAILED);
+                boolean isPooledFailed = (t instanceof net.i2p.router.tunnel.pool.PooledTunnelCreatorConfig) &&
+                    ((net.i2p.router.tunnel.pool.PooledTunnelCreatorConfig)t).getTunnelFailed();
+                if (!isTestFailed && !isPooledFailed) {
+                    outCount++;
                 }
             }
         }
