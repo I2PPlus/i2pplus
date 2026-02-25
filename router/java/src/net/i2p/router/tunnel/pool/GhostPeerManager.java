@@ -90,10 +90,15 @@ public class GhostPeerManager {
 
         AtomicInteger count = _timeoutCounts.get(peer);
         if (count != null && count.get() > 0) {
-            count.set(0);
-            _ghostSince.remove(peer);
-            if (_log.shouldDebug()) {
-                _log.debug("Peer [" + peer.toBase64().substring(0,6) + "] cleared from ghost list after successful participation");
+            // Decrement timeout count instead of resetting to 0
+            // This allows consistent failures to still accumulate toward ghost threshold
+            int newCount = count.decrementAndGet();
+            if (newCount <= 0) {
+                count.set(0);
+                _ghostSince.remove(peer);
+                if (_log.shouldDebug()) {
+                    _log.debug("Peer [" + peer.toBase64().substring(0,6) + "] cleared from ghost list after successful participation");
+                }
             }
         }
     }
