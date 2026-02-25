@@ -23,24 +23,31 @@ public class GhostPeerManager {
     private final ConcurrentHashMap<Hash, AtomicInteger> _timeoutCounts;
     private final ConcurrentHashMap<Hash, Long> _ghostSince;
 
-    private static final int DEFAULT_TIMEOUT_THRESHOLD = 4;
-    private static final int ATTACK_TIMEOUT_THRESHOLD = 3;
-    private static final long COOLDOWN_MS = 5 * 60 * 1000; // 5 minutes (normal)
-    private static final long ATTACK_COOLDOWN_MS = 10 * 60 * 1000; // 10 minutes (during attacks/low success)
-    private static final int MAX_TRACKED_PEERS = 1024;
-    private static final long CLEANUP_INTERVAL_MS = 10 * 60 * 1000; // 10 minutes
-    private static final long THRESHOLD_CACHE_MS = 30 * 1000; // 30 seconds
+    private static final String PROP_ENABLE_GHOST_PEER_MANAGER = "router.enableGhostPeerManager";
+    private static final int DEFAULT_TIMEOUT_THRESHOLD = 5;
+    private static final int ATTACK_TIMEOUT_THRESHOLD = 8;
+    private static final long COOLDOWN_MS = 2 * 60 * 1000; // 2 minutes (normal)
+    private static final long ATTACK_COOLDOWN_MS = 1 * 60 * 1000; // 1 minute (during attacks/low success)
+    private static final int MAX_TRACKED_PEERS = 512;
+    private static final long CLEANUP_INTERVAL_MS = 3 * 60 * 1000; // 3 minutes
+    private static final long THRESHOLD_CACHE_MS = 2 * 60 * 1000; // 2 minutes
 
     // Cached threshold to avoid repeated profile lookups
     private volatile int _cachedThreshold = DEFAULT_TIMEOUT_THRESHOLD;
     private long _lastThresholdUpdate;
+
+    private boolean isEnabled() {
+        return _context.getBooleanProperty(PROP_ENABLE_GHOST_PEER_MANAGER);
+    }
 
     public GhostPeerManager(RouterContext context) {
         _context = context;
         _log = context.logManager().getLog(GhostPeerManager.class);
         _timeoutCounts = new ConcurrentHashMap<Hash, AtomicInteger>(MAX_TRACKED_PEERS);
         _ghostSince = new ConcurrentHashMap<Hash, Long>(MAX_TRACKED_PEERS);
-        new CleanupTimer();
+        if (isEnabled()) {
+            new CleanupTimer();
+        }
         _lastThresholdUpdate = context.clock().now();
     }
 
@@ -78,7 +85,7 @@ public class GhostPeerManager {
      * @param peer the peer hash that timed out
      */
     public void recordTimeout(Hash peer) {
-        if (peer == null || peer.equals(_context.routerHash())) {return;}
+        if (!isEnabled() || peer == null || peer.equals(_context.routerHash())) {return;}
 
         AtomicInteger count = _timeoutCounts.putIfAbsent(peer, new AtomicInteger(1));
         if (count != null) {
@@ -108,7 +115,7 @@ public class GhostPeerManager {
      * @param peer the peer hash that participated successfully
      */
     public void recordSuccess(Hash peer) {
-        if (peer == null || peer.equals(_context.routerHash())) {return;}
+        if (!isEnabled() || peer == null || peer.equals(_context.routerHash())) {return;}
 
         AtomicInteger count = _timeoutCounts.get(peer);
         if (count != null && count.get() > 0) {
@@ -132,7 +139,7 @@ public class GhostPeerManager {
      * @return true if the peer is a ghost and should be skipped
      */
     public boolean isGhost(Hash peer) {
-        if (peer == null || peer.equals(_context.routerHash())) {return false;}
+        if (!isEnabled() || peer == null || peer.equals(_context.routerHash())) {return false;}
 
         AtomicInteger count = _timeoutCounts.get(peer);
         if (count == null) {return false;}
@@ -149,7 +156,7 @@ public class GhostPeerManager {
       * @return true if peer is in cooldown period
       */
     public boolean isInCooldown(Hash peer) {
-         if (peer == null) {return false;}
+         if (!isEnabled() || peer == null) {return false;}
 
          Long since = _ghostSince.get(peer);
          if (since == null) {return false;}
@@ -194,6 +201,7 @@ public class GhostPeerManager {
      *
      */
     public void cleanup() {
+        if (!isEnabled()) {return;}
         long now = _context.clock().now();
         double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
         // Cleanup threshold extends beyond cooldown to allow peer to remain blocked longer.
@@ -217,6 +225,7 @@ public class GhostPeerManager {
      * @return number of ghost peers
      */
     public int getGhostCount() {
+        if (!isEnabled()) {return 0;}
         return _ghostSince.size();
     }
 }
