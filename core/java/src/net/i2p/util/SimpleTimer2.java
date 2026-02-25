@@ -8,6 +8,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.I2PAppContext;
+import net.i2p.util.SystemVersion;
 
 /**
  * Simple event scheduler - toss an event on the queue and it gets fired at the
@@ -36,7 +37,7 @@ public class SimpleTimer2 {
     }
 
     private static final int MIN_THREADS = 1;
-    private static final int MAX_THREADS = 6;
+    private static final int MAX_THREADS = Math.max(SystemVersion.getCores(), 16);
 
     private final ScheduledThreadPoolExecutor _executor;
     private final String _name;
@@ -292,7 +293,7 @@ public class SimpleTimer2 {
 /**
      * Create a new timed event.
      * Must call schedule() later.
-     * 
+     *
      * @param pool the timer pool
      */
     public TimedEvent(SimpleTimer2 pool) {
@@ -305,7 +306,7 @@ public class SimpleTimer2 {
 /**
      * Create a new timed event and automatically schedules it.
      * Don't use this one if you have other things to do first.
-     * 
+     *
      * @param pool the timer pool
      * @param timeoutMs timeout in milliseconds
      */
@@ -424,7 +425,7 @@ public class SimpleTimer2 {
 
         /**
          * Cancel the timed event.
-         * 
+         *
          * @return true if cancelled
          */
         public synchronized boolean cancel() {
@@ -555,10 +556,13 @@ public class SimpleTimer2 {
                 _log.warn(_pool + " event execution took " + time + "ms: " + this);
             else if (_log.shouldDebug())
                 _log.debug("Execution finished in " + time + "ms: " + this);
+            // Purge cancelled tasks from queue periodically to prevent memory buildup
+            long completed = _pool.getCompletedTaskCount();
+            if (completed % 50 == 0)
+                _pool.purge();
             if (_log.shouldInfo()) {
                  // this call is slow - iterates through a HashMap -
                  // would be better to have a local AtomicLong if we care
-                 long completed = _pool.getCompletedTaskCount();
                  if (completed % 250 == 0)
                      _log.info(_pool.debug());
             }
@@ -593,6 +597,15 @@ public class SimpleTimer2 {
     /** warning - slow */
     private long getCompletedTaskCount() {
         return _executor.getCompletedTaskCount();
+    }
+
+    /**
+     * Purge cancelled tasks from the executor queue.
+     * Warning - slow for large queues.
+     * @since 0.9.58
+     */
+    public void purge() {
+        _executor.purge();
     }
 
     /** warning - slow */
