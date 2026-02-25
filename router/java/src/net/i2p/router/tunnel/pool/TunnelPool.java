@@ -1180,6 +1180,39 @@ public class TunnelPool {
     }
 
     /**
+     * Check if the given peer list would create a duplicate tunnel.
+     * Called BEFORE building to prevent wasted builds.
+     *
+     * @param peers the proposed peer list (endpoint first)
+     * @return true if this peer sequence matches an existing non-expired tunnel
+     * @since 0.9.70+
+     */
+    boolean wouldBeDuplicate(List<Hash> peers) {
+        if (peers == null || peers.size() <= 1) {return false;}
+
+        long now = _context.clock().now();
+        _tunnelsLock.lock();
+        try {
+            for (TunnelInfo existing : _tunnels) {
+                if (existing.getLength() != peers.size()) {continue;}
+                if (existing.getExpiration() <= now) {continue;}
+
+                boolean isDuplicate = true;
+                for (int i = 0; i < existing.getLength(); i++) {
+                    Hash existingPeer = existing.getPeer(i);
+                    Hash peer = peers.get(i);
+                    if (existingPeer == null || peer == null || !existingPeer.equals(peer)) {
+                        isDuplicate = false;
+                        break;
+                    }
+                }
+                if (isDuplicate) {return true;}
+            }
+        } finally {_tunnelsLock.unlock();}
+        return false;
+    }
+
+    /**
      *  Remove last resort tunnels if we have at least one healthy replacement.
      *  Called when a new tunnel is added to the pool.
      *  Never removes tunnels if it would leave the pool with less than minimum required.
@@ -2955,6 +2988,30 @@ public class TunnelPool {
             }
         } else {peers = Collections.singletonList(_context.routerHash());}
 
+        // PRE-BUILD DUPLICATE CHECK: Skip building if peer sequence would be duplicate
+        // This prevents wasting resources on tunnels that will be rejected anyway
+        // @since 0.9.70+
+        int duplicateRetries = 0;
+        int maxDuplicateRetries = 3;
+        while (wouldBeDuplicate(peers) && duplicateRetries < maxDuplicateRetries) {
+            duplicateRetries++;
+            if (_log.shouldDebug()) {
+                _log.debug("Peer sequence is duplicate (#" + duplicateRetries + "), reselecting peers for " + toString());
+            }
+            // Force fresh peer selection - clear any reuse candidates
+            // and get new peers from selector
+            settings.setLengthOverride(-1);  // Reset to get fresh selection
+            List<Hash> newPeers = _peerSelector.selectPeers(settings);
+            if (newPeers != null && !newPeers.isEmpty()) {
+                peers = newPeers;
+            } else {
+                break;  // Can't get better peers
+            }
+        }
+        if (wouldBeDuplicate(peers) && _log.shouldInfo()) {
+            _log.info("Proceeding with duplicate tunnel build after " + duplicateRetries + " retries for " + toString());
+        }
+
         // EMERGENCY HARD CAP: Prevent tunnel build flood
         synchronized (_inProgress) {
             if (_inProgress.size() >= 1000) {
@@ -3206,6 +3263,17 @@ public class TunnelPool {
                 updatePairedProfile(cfg, true);
                 // Decrease timeout offset on success (helps recover from over-timeout)
                 BuildRequestor.subtractTimeoutOffset(toString());
+                // Record successful tunnel participation for all peers to clear ghost status
+                GhostPeerManager gpm = _manager.getGhostPeerManager();
+                if (gpm != null) {
+                    int len = cfg.getLength();
+                    for (int i = 0; i < len; i++) {
+                        Hash peer = cfg.getPeer(i);
+                        if (peer != null) {
+                            gpm.recordSuccess(peer);
+                        }
+                    }
+                }
                 break;
 
             case REJECT:

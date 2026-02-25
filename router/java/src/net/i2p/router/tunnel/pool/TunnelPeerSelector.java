@@ -46,8 +46,20 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
                                                        String.valueOf(Router.CAPABILITY_CONGESTION_SEVERE) +
                                                        String.valueOf(Router.CAPABILITY_NO_TUNNELS);
 
+    protected final GhostPeerManager _ghostManager;
+
+    protected TunnelPeerSelector(RouterContext context, GhostPeerManager ghostManager) {
+        super(context);
+        _ghostManager = ghostManager;
+    }
+
+    /**
+     * Constructor for backward compatibility - creates selector without ghost manager.
+     * @deprecated Use constructor with GhostPeerManager
+     */
     protected TunnelPeerSelector(RouterContext context) {
         super(context);
+        _ghostManager = null;
     }
 
     /**
@@ -201,6 +213,15 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *  @since 0.9.58, previously getExclude()
      */
     private boolean shouldExclude(Hash h, boolean isInbound, boolean isExploratory) {
+        // Exclude ghost peers (routers that consistently timeout on tunnel builds)
+        // and peers in cooldown period (previously ghosted but may be retried)
+        // This prevents selecting peers that have historically failed to respond
+        if (_ghostManager != null) {
+            if (_ghostManager.isGhost(h) || _ghostManager.isInCooldown(h)) {
+                return true;
+            }
+        }
+
         // we may want to update this to skip 'hidden' or 'unreachable' peers, but that
         // isn't safe, since they may publish one set of routerInfo to us and another to
         // other peers.  the defaults for filterUnreachable has always been to return false,

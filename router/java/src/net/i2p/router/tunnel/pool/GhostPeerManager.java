@@ -23,12 +23,12 @@ public class GhostPeerManager {
     private final ConcurrentHashMap<Hash, AtomicInteger> _timeoutCounts;
     private final ConcurrentHashMap<Hash, Long> _ghostSince;
 
-    private static final int DEFAULT_TIMEOUT_THRESHOLD = 5;
-    private static final int ATTACK_TIMEOUT_THRESHOLD = 4;
-    private static final long COOLDOWN_MS = 90*1000; // 90s (normal)
-    private static final long ATTACK_COOLDOWN_MS = 120*1000; // 120s (longer recovery during attacks)
+    private static final int DEFAULT_TIMEOUT_THRESHOLD = 3;
+    private static final int ATTACK_TIMEOUT_THRESHOLD = 2;
+    private static final long COOLDOWN_MS = 10 * 60 * 1000; // 10 minutes (normal)
+    private static final long ATTACK_COOLDOWN_MS = 20 * 60 * 1000; // 20 minutes (during attacks/low success)
     private static final int MAX_TRACKED_PEERS = 8192;
-    private static final long CLEANUP_INTERVAL_MS = 5*60*1000; // 5 minutes
+    private static final long CLEANUP_INTERVAL_MS = 30 * 60 * 1000; // 30 minutes
 
     public GhostPeerManager(RouterContext context) {
         _context = context;
@@ -72,7 +72,7 @@ public class GhostPeerManager {
             Long existingTime = _ghostSince.putIfAbsent(peer, _context.clock().now());
             if (existingTime == null && _log.shouldWarn()) {
                 _log.warn("Peer [" + peer.toBase64().substring(0,6) + "] marked as ghost for " +
-                          (underStress ? ATTACK_COOLDOWN_MS/1000 : COOLDOWN_MS/1000) + "s -> " +
+                          (underStress ? ATTACK_COOLDOWN_MS/60000 : COOLDOWN_MS/60000) + " min -> " +
                            newCount + " consecutive tunnel build timeouts (" +
                           (uptime < 10*60*1000 ? "router startup period" : "build success: " + (int)(buildSuccess * 100) + "%") + ")");
             }
@@ -180,9 +180,11 @@ public class GhostPeerManager {
     public void cleanup() {
         long now = _context.clock().now();
         double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
+        // Cleanup threshold extends beyond cooldown to allow peer to remain blocked longer.
+        // Peer is excluded via isGhost() until entry is cleaned up from the map.
         long cleanupThreshold = buildSuccess < 0.40
-                                ? ATTACK_COOLDOWN_MS * 2
-                                : COOLDOWN_MS * 2;
+                                ? ATTACK_COOLDOWN_MS * 2   // 10 min (5 min cooldown * 2)
+                                : COOLDOWN_MS * 2;         // 6 min (3 min cooldown * 2)
         for (Hash peer : _ghostSince.keySet()) {
             Long since = _ghostSince.get(peer);
             if (since != null && (now - since) > cleanupThreshold) {

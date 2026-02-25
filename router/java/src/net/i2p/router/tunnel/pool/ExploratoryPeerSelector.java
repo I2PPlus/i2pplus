@@ -24,6 +24,14 @@ import net.i2p.util.SystemVersion;
  */
 class ExploratoryPeerSelector extends TunnelPeerSelector {
 
+    public ExploratoryPeerSelector(RouterContext context, GhostPeerManager ghostManager) {
+        super(context, ghostManager);
+    }
+
+    /**
+     * Backward compatible constructor without ghost manager.
+     * @deprecated Use constructor with GhostPeerManager
+     */
     public ExploratoryPeerSelector(RouterContext context) {
         super(context);
     }

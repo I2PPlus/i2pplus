@@ -73,9 +73,9 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         _clientInboundPools = new ConcurrentHashMap<Hash, TunnelPool>(32);
         _clientOutboundPools = new ConcurrentHashMap<Hash, TunnelPool>(32);
         _pendingCleanups = new ConcurrentHashMap<Hash, DelayedPoolCleanup>(32);
-        _clientPeerSelector = new ClientPeerSelector(ctx);
         _ghostPeerManager = new GhostPeerManager(ctx);
-        ExploratoryPeerSelector selector = new ExploratoryPeerSelector(_context);
+        _clientPeerSelector = new ClientPeerSelector(ctx, _ghostPeerManager);
+        ExploratoryPeerSelector selector = new ExploratoryPeerSelector(_context, _ghostPeerManager);
         TunnelPoolSettings inboundSettings = new TunnelPoolSettings(true);
         _inboundExploratory = new TunnelPool(_context, this, inboundSettings, selector);
         TunnelPoolSettings outboundSettings = new TunnelPoolSettings(false);
@@ -367,6 +367,30 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             }
         }
         return false;
+    }
+
+    /**
+     * Get count of active (non-failed, non-expired) outbound client tunnels for a destination.
+     * @param destination the client destination
+     * @return count of active tunnels
+     */
+    public int getActiveOutboundClientTunnelCount(Hash destination) {
+        TunnelPool pool = _clientOutboundPools.get(destination);
+        if (pool == null) {return 0;}
+        int count = 0;
+        long now = _context.clock().now();
+        for (TunnelInfo t : pool.listTunnels()) {
+            if (t.getExpiration() > now) {
+                if (t instanceof PooledTunnelCreatorConfig) {
+                    if (!((PooledTunnelCreatorConfig) t).getTunnelFailed()) {
+                        count++;
+                    }
+                } else {
+                    count++;
+                }
+            }
+        }
+        return count;
     }
 
     public int getParticipatingCount() { return _context.tunnelDispatcher().getParticipatingCount(); }

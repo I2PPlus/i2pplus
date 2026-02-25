@@ -22,6 +22,14 @@ import net.i2p.util.ArraySet;
  */
 class ClientPeerSelector extends TunnelPeerSelector {
 
+    public ClientPeerSelector(RouterContext context, GhostPeerManager ghostManager) {
+        super(context, ghostManager);
+    }
+
+    /**
+     * Backward compatible constructor without ghost manager.
+     * @deprecated Use constructor with GhostPeerManager
+     */
     public ClientPeerSelector(RouterContext context) {
         super(context);
     }
