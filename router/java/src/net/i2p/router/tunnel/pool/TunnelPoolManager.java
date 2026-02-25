@@ -25,6 +25,7 @@ import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.ObjectCounterUnsafe;
 import net.i2p.util.SimpleTimer;
+import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 
 /**
@@ -503,7 +504,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         inbound.startup();
         // Don't delay the outbound if it already exists, as this opens up a large
         // race window with removeTunnels() below
-        if (delayOutbound) {_context.simpleTimer2().addEvent(new DelayedStartup(outbound), 1000);}
+        if (delayOutbound) {new DelayedStartup(_context.simpleTimer2(), outbound, 1000);}
         else {outbound.startup();}
     }
 
@@ -588,11 +589,15 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         }
     }
 
-    private static class DelayedStartup implements SimpleTimer.TimedEvent {
+    private static class DelayedStartup extends SimpleTimer2.TimedEvent {
         private final TunnelPool pool;
 
-        public DelayedStartup(TunnelPool p) {this.pool = p;}
+        public DelayedStartup(SimpleTimer2 timer, TunnelPool p, long timeoutMs) {
+            super(timer, timeoutMs);
+            this.pool = p;
+        }
 
+        @Override
         public void timeReached() {this.pool.startup();}
     }
 
@@ -635,9 +640,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         }
 
         // Schedule delayed cleanup to allow graceful tunnel expiration
-        DelayedPoolCleanup cleanup = new DelayedPoolCleanup(destination);
+        DelayedPoolCleanup cleanup = new DelayedPoolCleanup(destination, POOL_CLEANUP_DELAY_MS);
         _pendingCleanups.put(destination, cleanup);
-        _context.simpleTimer2().addEvent(cleanup, POOL_CLEANUP_DELAY_MS);
 
         if (_log.shouldInfo()) {
             TunnelPool inbound = _clientInboundPools.get(destination);
@@ -691,20 +695,22 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      * Allows tunnels to continue operating until they naturally expire.
      * @since 0.9.68+
      */
-    private class DelayedPoolCleanup implements SimpleTimer.TimedEvent {
+    private class DelayedPoolCleanup extends SimpleTimer2.TimedEvent {
         private final Hash _destination;
-        private volatile boolean _cancelled = false;
 
-        public DelayedPoolCleanup(Hash dest) {
+        public DelayedPoolCleanup(Hash dest, long timeoutMs) {
+            super(_context.simpleTimer2(), timeoutMs);
             _destination = dest;
         }
 
-        public void cancel() {
-            _cancelled = true;
+        @Override
+        public boolean cancel() {
+            return super.cancel();
         }
 
+        @Override
         public void timeReached() {
-            if (_cancelled) return;
+            if (cancel()) return;
 
             // Remove from pending cleanups
             _pendingCleanups.remove(_destination);
@@ -761,7 +767,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         // Inbound exploratory needs outbound for reply path
         _outboundExploratory.startup();
         // Delay inbound exploratory slightly to allow outbound to build first
-        _context.simpleTimer2().addEvent(new DelayedStartup(_inboundExploratory), 2*1000);
+        new DelayedStartup(_context.simpleTimer2(), _inboundExploratory, 2*1000);
 
         // try to build up longer tunnels
         _context.jobQueue().addJob(new BootstrapPool(_context, _outboundExploratory));
