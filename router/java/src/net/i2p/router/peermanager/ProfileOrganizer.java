@@ -30,6 +30,7 @@ import net.i2p.router.tunnel.pool.TunnelPeerSelector;
 import net.i2p.router.peermanager.TunnelHistory;
 import net.i2p.router.util.MaskedIPSet;
 import net.i2p.util.SimpleTimer;
+import net.i2p.util.SimpleTimer2;
 import net.i2p.router.util.RandomIterator;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateAverages;
@@ -128,7 +129,7 @@ public class ProfileOrganizer {
 
         // Ghost reset job - runs every 5-10 minutes to reset tunnel history for ghosts
         // giving them a chance to recover. Uses shorter interval when under attack.
-        _context.simpleTimer2().addPeriodicEvent(new GhostResetter(), 5 * 60 * 1000);
+        new GhostResetter(5 * 60 * 1000);
     }
 
     /**
@@ -196,7 +197,11 @@ public class ProfileOrganizer {
      * Periodic ghost reset job - resets tunnel history for ghost peers so they can recover.
      * Runs every 5 minutes, or more frequently when under attack.
      */
-    private class GhostResetter implements SimpleTimer.TimedEvent {
+    private class GhostResetter extends SimpleTimer2.TimedEvent {
+        public GhostResetter(long timeoutMs) {
+            super(_context.simpleTimer2(), timeoutMs);
+        }
+        @Override
         public void timeReached() {
             int resetCount = 0;
             long now = _context.clock().now();
@@ -246,8 +251,8 @@ public class ProfileOrganizer {
                 releaseWriteLock();
             }
 
-            // Reschedule with adjusted interval - handled by addPeriodicEvent, just adjust delay for next cycle
-            // Note: addPeriodicEvent handles rescheduling, no need to call schedule() or addEvent()
+            // Reschedule with variable interval based on stress level
+            schedule(resetInterval);
         }
     }
 
