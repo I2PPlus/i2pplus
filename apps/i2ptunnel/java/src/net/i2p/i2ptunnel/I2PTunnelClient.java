@@ -47,6 +47,9 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
     private static final long DEFAULT_READ_TIMEOUT = -1;
     protected long readTimeout = DEFAULT_READ_TIMEOUT;
     private InternalSocketRunner _isr;
+    // Rate limit connection error logging to once per 5 minutes
+    private static final long CONN_ERROR_LOG_INTERVAL = 5 * 60 * 1000;
+    private long _lastConnErrorLog;
 
     /**
      * As of 0.9.20 this is fast, and does NOT connect the manager to the router,
@@ -179,9 +182,18 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
             // Execute task (inline when called from unlimited thread pool)
             executeTask(t);
         } catch (IOException ex) {
-            if (_log.shouldWarn()) {_log.warn("Error connecting to " + addr + ": " + ex.getMessage());}
+            // Rate limit connection error logging to prevent spam
+            long now = System.currentTimeMillis();
+            if (_lastConnErrorLog == 0 || now - _lastConnErrorLog > CONN_ERROR_LOG_INTERVAL) {
+                _lastConnErrorLog = now;
+                if (_log.shouldWarn()) {_log.warn("Error connecting to " + addr + ": " + ex.getMessage());}
+            }
         } catch (I2PException ex) {
-            if (_log.shouldWarn()) {_log.warn("Error connecting to " + addr + ": " + ex.getMessage());}
+            long now = System.currentTimeMillis();
+            if (_lastConnErrorLog == 0 || now - _lastConnErrorLog > CONN_ERROR_LOG_INTERVAL) {
+                _lastConnErrorLog = now;
+                if (_log.shouldWarn()) {_log.warn("Error connecting to " + addr + ": " + ex.getMessage());}
+            }
         } finally {
             // only because we are running it inline
             closeSocket(s);
