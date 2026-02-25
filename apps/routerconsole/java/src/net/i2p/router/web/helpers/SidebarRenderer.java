@@ -851,6 +851,7 @@ class SidebarRenderer {
         String buildStatusTooltip = "";
         String buildStatusClass = "tunnelBuildStatus";
         int partTunnels = _helper.getParticipatingTunnels();
+        boolean hasValidPairs = _helper.hasValidTunnelPairs();
 
         if (buildStatus.startsWith("[starting]")) {
             buildStatusClass += " starting";
@@ -872,6 +873,11 @@ class SidebarRenderer {
             buildStatusClass += " rejecting";
             buildStatusTooltip = _t("Router is currently using the configured maximum share bandwidth");
             buildStatusText = buildStatusText.substring(buildStatusText.indexOf(']') + 1).trim();
+        } else if (!hasValidPairs) {
+            // No valid tunnel pairs - show building status
+            buildStatusClass += " starting";
+            buildStatusTooltip = _t("Building client tunnels");
+            buildStatusText = _t("Building tunnels");
         } else if (buildStatus.startsWith("[ready]") || buildStatus.startsWith("[accepting]")  && partTunnels <= 0) {
             buildStatusClass += " accepting";
             buildStatusTooltip = _t("Router is ready to build participating tunnels");
