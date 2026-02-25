@@ -696,7 +696,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     private static final String NEWLINE = "\n";
 
     private void startGeoIP() {
-        _context.simpleTimer2().addEvent(new QueueAll(), START_DELAY);
+        new QueueAll(START_DELAY);
         if (enableReverseLookups()) {readRDNSCacheFromFile();}
     }
 
@@ -706,7 +706,11 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *
      *  As of 0.9.32, works only for literal IPs, ignores host names.
      */
-    private class QueueAll implements SimpleTimer.TimedEvent {
+    private class QueueAll extends SimpleTimer2.TimedEvent {
+        public QueueAll(long timeoutMs) {
+            super(_context.simpleTimer2(), timeoutMs);
+        }
+        @Override
         public void timeReached() {
             long uptime = _context.router().getUptime();
             for (Hash h : _context.netDb().getAllRouters()) {

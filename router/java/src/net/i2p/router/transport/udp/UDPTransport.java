@@ -1966,7 +1966,7 @@ public class UDPTransport extends TransportImpl {
                             RemoteHostId remote = peer.getRemoteHostId();
                             _dropList.add(remote);
                             _context.statManager().addRateData("udp.dropPeerDroplist", 1);
-                            _context.simpleTimer2().addEvent(new RemoveDropList(remote), DROPLIST_PERIOD);
+                            new RemoveDropList(remote, DROPLIST_PERIOD);
                         }
                         markUnreachable(peerHash);
                         if (id == -1)
@@ -1990,9 +1990,13 @@ public class UDPTransport extends TransportImpl {
         super.messageReceived(inMsg, remoteIdent, remoteIdentHash, msToReceive, bytesReceived);
     }
 
-    private class RemoveDropList implements SimpleTimer.TimedEvent {
+    private class RemoveDropList extends SimpleTimer2.TimedEvent {
         private final RemoteHostId _peer;
-        public RemoveDropList(RemoteHostId peer) { _peer = peer; }
+        public RemoveDropList(RemoteHostId peer, long timeoutMs) {
+            super(_context.simpleTimer2(), timeoutMs);
+            _peer = peer;
+        }
+        @Override
         public void timeReached() {
             _dropList.remove(_peer);
         }

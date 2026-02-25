@@ -1068,12 +1068,12 @@ public class TransportManager implements TransportEventListener {
                     if (shouldWait) {
                         // Delay until the rescan finishes, MX time + 250
                         _upnpUpdateQueued = true;
-                        _context.simpleTimer2().addEvent(new UpdatePorts(), 3250);
+                        new UpdatePorts(3250);
                     } else {
                         // throw onto timer to avoid deadlock
                         //_upnpManager.update(getPorts());
                         _upnpUpdateQueued = true;
-                        _context.simpleTimer2().addEvent(new UpdatePorts(), 0);
+                        new UpdatePorts(0);
                     }
                 }
             }
@@ -1085,7 +1085,11 @@ public class TransportManager implements TransportEventListener {
      *
      * @since 0.9.39
      */
-    private class UpdatePorts implements SimpleTimer.TimedEvent {
+    private class UpdatePorts extends SimpleTimer2.TimedEvent {
+        public UpdatePorts(long timeoutMs) {
+            super(_context.simpleTimer2(), timeoutMs);
+        }
+        @Override
         public void timeReached() {
             Set<Port> ports = getPorts();
             synchronized (_upnpManager) {
