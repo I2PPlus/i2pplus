@@ -214,12 +214,9 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      */
     private boolean shouldExclude(Hash h, boolean isInbound, boolean isExploratory) {
         // Exclude ghost peers (routers that consistently timeout on tunnel builds)
-        // and peers in cooldown period (previously ghosted but may be retried)
         // This prevents selecting peers that have historically failed to respond
-        if (_ghostManager != null) {
-            if (_ghostManager.isGhost(h) || _ghostManager.isInCooldown(h)) {
-                return true;
-            }
+        if (_ghostManager != null && _ghostManager.isGhost(h)) {
+            return true;
         }
 
         // we may want to update this to skip 'hidden' or 'unreachable' peers, but that
