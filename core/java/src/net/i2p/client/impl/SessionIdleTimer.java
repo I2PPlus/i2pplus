@@ -10,14 +10,14 @@ import net.i2p.I2PAppContext;
 import net.i2p.client.I2PSessionException;
 import net.i2p.data.DataHelper;
 import net.i2p.util.Log;
-import net.i2p.util.SimpleTimer;
+import net.i2p.util.SimpleTimer2;
 
 /**
  * Reduce tunnels or shutdown the session on idle if so configured
  *
  * @author zzz
  */
-class SessionIdleTimer implements SimpleTimer.TimedEvent {
+class SessionIdleTimer extends SimpleTimer2.TimedEvent {
     public static final long MINIMUM_TIME = 60*1000; // allow close time of 60 seconds
     private static final long DEFAULT_REDUCE_TIME = 20*60*1000;
     private static final long DEFAULT_CLOSE_TIME = 30*60*1000;
@@ -36,6 +36,7 @@ class SessionIdleTimer implements SimpleTimer.TimedEvent {
      *  reduce, shutdown, or both must be true
      */
     public SessionIdleTimer(I2PAppContext context, I2PSessionImpl session, boolean reduce, boolean shutdown) {
+        super(context.simpleTimer2(), MINIMUM_TIME);
         if (! (reduce || shutdown)) {throw new IllegalArgumentException("At least one must be enabled");}
         _context = context;
         _log = context.logManager().getLog(SessionIdleTimer.class);
@@ -106,6 +107,6 @@ class SessionIdleTimer implements SimpleTimer.TimedEvent {
             if (_shutdownEnabled) {nextDelay = _shutdownTime - (now - lastActivity);}
             else {nextDelay = _reduceTime;}
         } else {nextDelay = _minimumTime - (now - lastActivity);}
-        _context.simpleTimer2().addEvent(this, nextDelay);
+        schedule(nextDelay);
     }
 }
