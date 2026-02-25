@@ -290,7 +290,9 @@ class BuildExecutor implements Runnable {
         allowed = _context.getProperty("router.tunnelConcurrentBuilds", allowed);
 
         // Cleanup recentlyBuilding map - remove configs whose tunnel lifetime has expired
+        // Also remove entries that have been stale for too long (time-based eviction)
         int recentlyCleaned = 0;
+        final long STALE_ENTRY_TIMEOUT = 5 * 60 * 1000; // 5 minutes max age - reduce from 15min to prevent accumulation
         for (Iterator<Long> iter = _recentlyBuildingMap.keySet().iterator(); iter.hasNext(); ) {
             Long key = iter.next();
             PooledTunnelCreatorConfig cfg = _recentlyBuildingMap.get(key);
@@ -299,8 +301,10 @@ class BuildExecutor implements Runnable {
                 recentlyCleaned++;
                 continue;
             }
-            // Only remove if tunnel lifetime has actually expired
-            if (cfg.getExpiration() <= now) {
+            // Time-based eviction: remove entries older than STALE_ENTRY_TIMEOUT
+            long entryAge = now - cfg.getCreationTime();
+            // Only remove if tunnel lifetime has actually expired OR entry is too old
+            if (cfg.getExpiration() <= now || entryAge > STALE_ENTRY_TIMEOUT) {
                 iter.remove();
                 recentlyCleaned++;
                 cleanupConfig(cfg);
