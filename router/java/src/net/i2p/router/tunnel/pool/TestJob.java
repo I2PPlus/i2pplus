@@ -956,16 +956,20 @@ public class TestJob extends JobImpl {
                 timeToFail);
 
             // Tunnel has failed MAX consecutive tests - mark as completely failed
-            // But don't remove immediately - keep it for recovery testing
-            // It will be removed when replacements are available
+            // For exploratory tunnels, remove immediately - never keep failed exploratory tunnels
+            // For client tunnels, keep for recovery testing
             if (_log.shouldWarn()) {
                 _log.warn((isExploratory ? "Exploratory tunnel" : "Tunnel") + " failed " +
                           net.i2p.router.tunnel.TunnelCreatorConfig.MAX_CONSECUTIVE_TEST_FAILURES +
-                          " consecutive tests -> Marked as failed but keeping for recovery \n* " + _cfg);
+                          " consecutive tests -> Marked as failed" + (isExploratory ? " (removing immediately)" : " but keeping for recovery") + "\n* " + _cfg);
             }
 
             _cfg.tunnelFailedCompletely();
-            // Do NOT call _pool.tunnelFailed() - keep tunnel for potential recovery
+            // For exploratory tunnels, always call tunnelFailed() to trigger immediate replacement
+            // For client tunnels, keep for potential recovery
+            if (isExploratory) {
+                _pool.tunnelFailed(_cfg);
+            }
 
             // Schedule recovery test to see if tunnel comes back
             if (scheduleRetest(false)) {
