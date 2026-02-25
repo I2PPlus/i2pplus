@@ -27,8 +27,13 @@ public class GhostPeerManager {
     private static final int ATTACK_TIMEOUT_THRESHOLD = 3;
     private static final long COOLDOWN_MS = 5 * 60 * 1000; // 5 minutes (normal)
     private static final long ATTACK_COOLDOWN_MS = 10 * 60 * 1000; // 10 minutes (during attacks/low success)
-    private static final int MAX_TRACKED_PEERS = 8192;
-    private static final long CLEANUP_INTERVAL_MS = 30 * 60 * 1000; // 30 minutes
+    private static final int MAX_TRACKED_PEERS = 1024;
+    private static final long CLEANUP_INTERVAL_MS = 10 * 60 * 1000; // 10 minutes
+    private static final long THRESHOLD_CACHE_MS = 30 * 1000; // 30 seconds
+
+    // Cached threshold to avoid repeated profile lookups
+    private volatile int _cachedThreshold = DEFAULT_TIMEOUT_THRESHOLD;
+    private long _lastThresholdUpdate;
 
     public GhostPeerManager(RouterContext context) {
         _context = context;
@@ -36,6 +41,20 @@ public class GhostPeerManager {
         _timeoutCounts = new ConcurrentHashMap<Hash, AtomicInteger>(MAX_TRACKED_PEERS);
         _ghostSince = new ConcurrentHashMap<Hash, Long>(MAX_TRACKED_PEERS);
         context.simpleTimer2().addPeriodicEvent(new CleanupTimer(), CLEANUP_INTERVAL_MS);
+        _lastThresholdUpdate = context.clock().now();
+    }
+
+    /**
+     * Get threshold, cached for 30s to avoid repeated profile lookups.
+     */
+    private int getThreshold() {
+        long now = _context.clock().now();
+        if (now - _lastThresholdUpdate > THRESHOLD_CACHE_MS) {
+            double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
+            _cachedThreshold = (buildSuccess < 0.40) ? ATTACK_TIMEOUT_THRESHOLD : DEFAULT_TIMEOUT_THRESHOLD;
+            _lastThresholdUpdate = now;
+        }
+        return _cachedThreshold;
     }
 
     /**
@@ -143,17 +162,6 @@ public class GhostPeerManager {
     /**
      * Get the current timeout threshold.
      * Lower threshold during attacks (build success < 40%).
-     *
-     * @return threshold number of timeouts before exclusion
-     */
-    public int getThreshold() {
-        double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
-        if (buildSuccess < 0.40) {
-            return ATTACK_TIMEOUT_THRESHOLD;
-        }
-        return DEFAULT_TIMEOUT_THRESHOLD;
-    }
-
     /**
      * Get consecutive timeout count for a peer.
      *
