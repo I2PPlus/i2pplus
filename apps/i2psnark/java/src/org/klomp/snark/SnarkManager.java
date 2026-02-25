@@ -4680,7 +4680,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     _stopping = false;
                 } else {
                     // Only schedule this if not a final shutdown
-                    _context.simpleTimer2().addEvent(new Disconnector(), 60 * 1000);
+                    new Disconnector(60 * 1000);
                 }
             } else {
                 _util.disconnect();
@@ -4693,7 +4693,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * @since 0.9.1
      */
-    private class Disconnector implements SimpleTimer.TimedEvent {
+    private class Disconnector extends SimpleTimer2.TimedEvent {
+        public Disconnector(long timeoutMs) {
+            super(_context.simpleTimer2(), timeoutMs);
+        }
+        @Override
         public void timeReached() {
             if (_util.connected()) {
                 _util.disconnect();

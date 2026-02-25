@@ -46,6 +46,7 @@ import net.i2p.util.SecureDirectory;
 import net.i2p.util.SecureFile;
 import net.i2p.util.SecureFileOutputStream;
 import net.i2p.util.SimpleTimer;
+import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.Translate;
 import org.klomp.snark.dht.DHT;
@@ -667,20 +668,22 @@ public class I2PSnarkUtil implements DisconnectListener {
             return rv;
         } catch (I2PException ie) {
             _banlist.add(dest);
-            _context.simpleTimer2().addEvent(new Unbanlist(dest), 15 * 60 * 1000);
+            new Unbanlist(dest, 15 * 60 * 1000);
             IOException ioe = new IOException("Unable to reach peer [" + peer + "]");
             ioe.initCause(ie);
             throw ioe;
         }
     }
 
-    private class Unbanlist implements SimpleTimer.TimedEvent {
+    private class Unbanlist extends SimpleTimer2.TimedEvent {
         private Hash _dest;
 
-        public Unbanlist(Hash dest) {
+        public Unbanlist(Hash dest, long timeoutMs) {
+            super(_context.simpleTimer2(), timeoutMs);
             _dest = dest;
         }
 
+        @Override
         public void timeReached() {
             _banlist.remove(_dest);
         }

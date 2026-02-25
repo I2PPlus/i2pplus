@@ -43,6 +43,7 @@ import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.FileUtil;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer;
+import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
@@ -1382,12 +1383,16 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
 
     private void finishStatus(String msg) {
         updateStatus(msg);
-        _context.simpleTimer2().addEvent(new StatusCleaner(msg), STATUS_CLEAN_TIME);
+        new StatusCleaner(msg, STATUS_CLEAN_TIME);
     }
 
-    private class StatusCleaner implements SimpleTimer.TimedEvent {
+    private class StatusCleaner extends SimpleTimer2.TimedEvent {
         private final String _msg;
-        public StatusCleaner(String msg) {_msg = msg;}
+        public StatusCleaner(String msg, long timeoutMs) {
+            super(_context.simpleTimer2(), timeoutMs);
+            _msg = msg;
+        }
+        @Override
         public void timeReached() {
             if (_msg.equals(getStatus())) {updateStatus("");}
         }
