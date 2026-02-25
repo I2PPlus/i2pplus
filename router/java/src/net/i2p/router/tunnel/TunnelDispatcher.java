@@ -155,13 +155,20 @@ public class TunnelDispatcher implements Service {
     }
 
     private static final long CLEANUP_INTERVAL = 60 * 1000;
+    private static final long EXPIRED_TUNNEL_CLEANUP_INTERVAL = 10 * 60 * 1000; // 10 minutes
+    private long _lastExpiredTunnelCleanup;
 
     private class PeriodicCleanup implements SimpleTimer.TimedEvent {
         public void timeReached() {
             _context.tunnelIdManager().cleanup();
             int cleared = TestJob.cleanup();
             cleared += cleanupStaticMaps();
-            cleared += cleanupExpiredTunnels();
+            // Clean up expired tunnels less frequently to avoid CPU spikes
+            long now = _context.clock().now();
+            if (_lastExpiredTunnelCleanup == 0 || now - _lastExpiredTunnelCleanup > EXPIRED_TUNNEL_CLEANUP_INTERVAL) {
+                cleared += cleanupExpiredTunnels();
+                _lastExpiredTunnelCleanup = now;
+            }
             if (cleared > 0 && _log.shouldDebug()) {
                 _log.debug("Periodic cleanup cleared " + cleared + " entries from static maps");
             }
