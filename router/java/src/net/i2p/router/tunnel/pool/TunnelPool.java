@@ -692,19 +692,36 @@ public class TunnelPool {
         if (!_settings.isInbound() || _settings.isExploratory() || !_alive) return;
 
         long now = _context.clock().now();
-        // Simple 5-minute threshold for LeaseSet republishing
-        long expiryThreshold = now + 5*60*1000;
+        // Lower threshold to 3 minutes for more aggressive republishing
+        long expiryThreshold = now + 3*60*1000;
 
         synchronized (_tunnels) {
             int expiringSoon = 0;
+            int totalValid = 0;
             for (TunnelInfo t : _tunnels) {
-                if (t.getExpiration() > now && t.getExpiration() <= expiryThreshold) {
+                // Skip failed tunnels
+                if (t instanceof PooledTunnelCreatorConfig &&
+                    ((PooledTunnelCreatorConfig)t).getTunnelFailed()) {
+                    continue;
+                }
+                // Skip expired tunnels
+                if (t.getExpiration() <= now) {
+                    continue;
+                }
+                totalValid++;
+                if (t.getExpiration() <= expiryThreshold) {
                     expiringSoon++;
                 }
             }
-            if (expiringSoon > 0) {
+            // Also republish if we have very few valid tunnels (less than half of what's wanted)
+            int wanted = _settings.getQuantity();
+            if (totalValid > 0 && (expiringSoon > 0 || totalValid < wanted / 2)) {
                 LeaseSet ls = locked_buildNewLeaseSet();
-                if (ls != null) {
+                if (ls != null && ls.getLeaseCount() > 0) {
+                    if (_log.shouldInfo()) {
+                        _log.info(toString() + " -> Republishing LeaseSet (valid: " + totalValid +
+                                  ", expiring soon: " + expiringSoon + ", leases: " + ls.getLeaseCount());
+                    }
                     _context.clientManager().requestLeaseSet(_settings.getDestination(), ls);
                 }
             }
@@ -985,6 +1002,73 @@ public class TunnelPool {
             return;
         }
     }  // end else for Ping tunnel skip
+
+        // POST-BUILD DUPLICATE CHECK: Check for duplicate peer sequence after tunnel is built
+        // @since 0.9.68+
+        List<TunnelInfo> duplicates = findDuplicateTunnels(info);
+        if (!duplicates.isEmpty()) {
+            // Check if we have at least 1 good (non-duplicate) tunnel
+            if (hasGoodTunnel(info)) {
+                // Check if existing duplicates are expiring soon
+                // If so, replace them with the new tunnel instead of rejecting
+                boolean hasExpiringDuplicate = false;
+                for (TunnelInfo dup : duplicates) {
+                    if (dup.getExpiration() <= now + 5*60*1000) {
+                        hasExpiringDuplicate = true;
+                        break;
+                    }
+                }
+
+                // Count current usable tunnels to ensure we don't drop to 0
+                int usableCount = 0;
+                _tunnelsLock.lock();
+                try {
+                    for (TunnelInfo t : _tunnels) {
+                        if (t.getExpiration() > now) usableCount++;
+                    }
+                } finally {_tunnelsLock.unlock();}
+                // Never reject if we'd have 0 usable tunnels left
+                int minimumRequired = Math.max(1, getAdjustedTotalQuantity() / 2);
+                // During attacks (low build success), be more conservative about rejecting duplicates
+                // since replacements are hard to build - keep duplicates to maintain pool
+                boolean isUnderAttack = _context.profileOrganizer().isLowBuildSuccess();
+                if (isUnderAttack) {
+                    minimumRequired = Math.max(minimumRequired, getAdjustedTotalQuantity() - 1);
+                }
+
+                if (!isUnderAttack && !hasExpiringDuplicate && usableCount > minimumRequired) {
+                    // Normal operation: reject duplicate if we have enough alternatives
+                    if (_log.shouldWarn()) {
+                        _log.warn("Rejecting new tunnel with duplicate peer sequence for " + info);
+                    }
+                    if (info instanceof PooledTunnelCreatorConfig) {
+                        ((PooledTunnelCreatorConfig) info).setDuplicate();
+                    }
+                    // Don't add this tunnel since it's a duplicate
+                    return;
+                } else if (hasExpiringDuplicate && !isUnderAttack) {
+                    // Normal operation: replace expiring duplicates with the new tunnel
+                    if (_log.shouldInfo()) {
+                        _log.info("Replacing expiring duplicate tunnel(s) with new tunnel: " + info);
+                    }
+                    for (TunnelInfo dup : duplicates) {
+                        if (dup.getExpiration() <= now + 5*60*1000) {
+                            if (dup instanceof PooledTunnelCreatorConfig) {
+                                ((PooledTunnelCreatorConfig) dup).setDuplicate();
+                            }
+                            removeTunnel(dup);
+                        }
+                    }
+                } else {
+                    // Under attack OR need this tunnel to maintain minimum pool size
+                    if (_log.shouldInfo()) {
+                        _log.info("Accepting duplicate tunnel -> " +
+                                  (isUnderAttack ? "Under attack" : "Maintaining pool size") + " (" +
+                                  usableCount + " usable / " + minimumRequired + " required): " + info);
+                    }
+                }
+            }
+        }
 
         LeaseSet ls = null;
         _tunnelsLock.lock();
@@ -1624,8 +1708,7 @@ public class TunnelPool {
             }
 
             if (uptime > STARTUP_TIME && _log.shouldWarn() && consecutiveFailures > 5) {
-                _log.warn("Tunnel from " + toString() + " failed -> Blaming [" + peer.toBase64().substring(0,6) + "] -> " + pct + '%' +
-                          " (" + consecutiveFailures + " consecutive failures)");
+                _log.warn("Tunnel from " + toString() + " failed -> Blaming [" + peer.toBase64().substring(0,6) + "] -> " + pct + '%');
             }
             _context.profileManager().tunnelFailed(peer, pct);
         }
@@ -2242,21 +2325,25 @@ public class TunnelPool {
 
             synchronized (_inProgress) { inProgress = _inProgress.size(); }
             int wanted = getAdjustedTotalQuantity();
+            // Build extra tunnels (wanted + 2) to have backups for LeaseSet selection
+            // This prevents pool collapse - we always have replacements ready
+            int buildTarget = wanted + 2;
             int total = tunnelCount + inProgress;
 
             // Debug logging
             if (_log.shouldDebug()) {
                 _log.debug(toString() + "\n* Tunnels: " + tunnelCount +
                           ", inProgress: " + inProgress + ", wanted: " + wanted +
+                          ", buildTarget: " + buildTarget +
                           ", poolSize: " + _tunnels.size() + ", now: " + now +
                           ", oldestExp: " + (_tunnels.isEmpty() ? "none" : "" +
                           ((TunnelInfo)_tunnels.get(0)).getExpiration()));
             }
 
-            // Build if we have fewer tunnels than wanted
-            if (total < wanted) {
-                int rv = wanted - total;
-                if (_log.shouldDebug()) _log.debug("Building " + rv + " tunnels (have " + tunnelCount + ", want " + wanted + ")");
+            // Build if we have fewer tunnels than buildTarget (includes backup tunnels)
+            if (total < buildTarget) {
+                int rv = buildTarget - total;
+                if (_log.shouldDebug()) _log.debug("Building " + rv + " tunnels (have " + tunnelCount + ", want " + wanted + ", building to " + buildTarget + ")");
                 return rv;
             }
 
@@ -2264,7 +2351,7 @@ public class TunnelPool {
             // Build replacements BEFORE they expire to prevent pool collapse
             if (expiringSoonCount > 0 && inProgress < expiringSoonCount) {
                 int needed = expiringSoonCount - inProgress;
-                if (tunnelCount - expiringSoonCount + inProgress < wanted) {
+                if (tunnelCount - expiringSoonCount + inProgress < buildTarget) {
                     if (_log.shouldInfo()) {
                         _log.info("Proactive rebuild: " + expiringSoonCount + " tunnels expiring soon, building " + needed + " replacements");
                     }
@@ -2925,13 +3012,28 @@ public class TunnelPool {
             }
         } else {peers = Collections.singletonList(_context.routerHash());}
 
-        // PRE-BUILD DUPLICATE CHECK: Only check for pools with 3+ tunnels to avoid overhead
-        // Only check once, proceed regardless - this is a warning only
+        // PRE-BUILD DUPLICATE CHECK: Retry with new peers if duplicate detected
+        // This prevents wasting resources on tunnels that will be rejected anyway
         // @since 0.9.70+
-        if (peers != null && peers.size() >= 3 && _tunnels.size() >= 3) {
-            if (wouldBeDuplicate(peers) && _log.shouldInfo()) {
-                _log.info("Peer sequence is duplicate, proceeding anyway for " + toString());
+        int duplicateRetries = 0;
+        int maxDuplicateRetries = 3;
+        while (wouldBeDuplicate(peers) && duplicateRetries < maxDuplicateRetries) {
+            duplicateRetries++;
+            if (_log.shouldDebug()) {
+                _log.debug("Peer sequence is duplicate (#" + duplicateRetries + "), reselecting peers for " + toString());
             }
+            // Force fresh peer selection - clear any reuse candidates
+            // and get new peers from selector
+            settings.setLengthOverride(-1);  // Reset to get fresh selection
+            List<Hash> newPeers = _peerSelector.selectPeers(settings);
+            if (newPeers != null && !newPeers.isEmpty()) {
+                peers = newPeers;
+            } else {
+                break;  // Can't get better peers
+            }
+        }
+        if (wouldBeDuplicate(peers) && _log.shouldInfo()) {
+            _log.info("Proceeding with duplicate tunnel build after " + duplicateRetries + " retries for " + toString());
         }
 
         // EMERGENCY HARD CAP: Prevent tunnel build flood

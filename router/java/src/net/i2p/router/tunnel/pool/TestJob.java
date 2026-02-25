@@ -50,6 +50,9 @@ public class TestJob extends JobImpl {
     private static final int MIN_TEST_PERIOD = 10*1000;
     private static final int MAX_TEST_PERIOD = 20*1000;
     private static final int MAX_TEST_PERIOD_ATTACK = 40*1000; // 40s during attacks (longer timeout for higher latency)
+    // Rate limit for "Insufficient tunnels" log - once per 3 minutes max
+    private static final long INSUFFICIENT_TUNNELS_LOG_INTERVAL = 3 * 60 * 1000;
+    private static long _lastInsufficientTunnelsLog;
 
     /**
      * Maximum number of tunnel tests that can run concurrently.
@@ -275,6 +278,15 @@ public class TestJob extends JobImpl {
             }
         } else if (log.shouldWarn()) {
             log.warn("Tunnel pool is null for config: " + cfg);
+        }
+
+        // Skip testing tunnels that have already failed completely - they'll be replaced when new tunnels are built
+        // This prevents infinite test loops on failed/last-resort tunnels
+        if (cfg.getTunnelFailed()) {
+            if (log.shouldDebug()) {
+                log.debug("Skipping test for already-failed tunnel: " + cfg);
+            }
+            return false;
         }
 
         // Check total job count limit
@@ -655,8 +667,12 @@ public class TestJob extends JobImpl {
 
             // Early viability guard
             if (_replyTunnel == null || _outTunnel == null) {
-                if (_log.shouldWarn())
-                    _log.warn("Insufficient tunnels to test " + _cfg + " with \n* " + _replyTunnel + " / " + _outTunnel);
+                // Rate limit this log message to once per 3 minutes
+                if (_lastInsufficientTunnelsLog == 0 || now - _lastInsufficientTunnelsLog > INSUFFICIENT_TUNNELS_LOG_INTERVAL) {
+                    _lastInsufficientTunnelsLog = now;
+                    if (_log.shouldWarn())
+                        _log.warn("Insufficient tunnels to test " + _cfg + " with \n* " + _replyTunnel + " / " + _outTunnel);
+                }
                 ctx.statManager().addRateData("tunnel.testAborted", _cfg.getLength());
                 CONCURRENT_TESTS.decrementAndGet();
                 cleanupTunnelTracking();
@@ -925,16 +941,27 @@ public class TestJob extends JobImpl {
         // Update test status for UI display
         _cfg.setTestFailed();
 
-        if (_log.shouldWarn()) {
-            _log.warn((isExploratory ? "Exploratory tunnel" : "Tunnel") + " Test failed in " + timeToFail + "ms → " + _cfg +
-                      (isLastTunnel ? " \n* Warning: LAST TUNNEL -> Keeping as last resort until tunnels rebuilt..." : ""));
+        // Only log at WARN level when tunnel is completely failed, otherwise INFO to reduce spam
+        int failures = _cfg.getTunnelFailures();
+        if (!keepGoing) {
+            if (_log.shouldWarn()) {
+                _log.warn((isExploratory ? "Exploratory tunnel" : "Tunnel") + " Test failed in " + timeToFail + "ms → " + _cfg +
+                          //" (" + failures + " consecutive failures)" +
+                          (isLastTunnel ? "\n* Warning: Last available tunnel -> Keeping as last resort until tunnels rebuilt..." : ""));
+            }
+        } else {
+            if (_log.shouldInfo()) {
+                _log.info((isExploratory ? "Exploratory tunnel" : "Tunnel") + " Test failed in " + timeToFail + "ms → " + _cfg +
+                          // " (" + failures + " consecutive failures)" +
+                          (isLastTunnel ? "\n* Warning: Last available tunnel -> Keeping as last resort until tunnels rebuilt..." : ""));
+            }
         }
 
         // If this is the last tunnel, mark it as last resort instead of removing
         if (isLastTunnel && !keepGoing) {
             _cfg.setLastResort();
-            if (_log.shouldWarn()) {
-                _log.warn("Tunnel marked as last resort (only tunnel in pool): " + _cfg);
+            if (_log.shouldInfo()) {
+                _log.info("Tunnel marked as last resort (only tunnel in pool): " + _cfg);
             }
             // Trigger immediate replacement build
             _pool.triggerReplacementBuild();
@@ -956,19 +983,18 @@ public class TestJob extends JobImpl {
                 timeToFail);
 
             // Tunnel has failed MAX consecutive tests - mark as completely failed
-            // For exploratory tunnels, remove immediately - never keep failed exploratory tunnels
-            // For client tunnels, keep for recovery testing
+            // Keep in pool for recovery testing - don't remove until replacement is built
+            // This prevents death spiral during network stress
             if (_log.shouldWarn()) {
                 _log.warn((isExploratory ? "Exploratory tunnel" : "Tunnel") + " failed " +
                           net.i2p.router.tunnel.TunnelCreatorConfig.MAX_CONSECUTIVE_TEST_FAILURES +
-                          " consecutive tests -> Marked as failed" + (isExploratory ? " (removing immediately)" : " but keeping for recovery") + "\n* " + _cfg);
+                          " consecutive tests -> Marked as failed but keeping for recovery \n* " + _cfg);
             }
 
             _cfg.tunnelFailedCompletely();
-            // For exploratory tunnels, always call tunnelFailed() to trigger immediate replacement
-            // For client tunnels, keep for potential recovery
+            // Trigger replacement build for exploratory tunnels (don't remove immediately)
             if (isExploratory) {
-                _pool.tunnelFailed(_cfg);
+                _pool.triggerReplacementBuild();
             }
 
             // Schedule recovery test to see if tunnel comes back
@@ -1025,6 +1051,14 @@ public class TestJob extends JobImpl {
             if (_log.shouldInfo()) {
                 _log.info("Hard limit reached during reschedule (" + totalCount + " >= " + MAX_TEST_JOB_LIMIT +
                           ") \n* Skipping reschedule for " + _cfg);
+            }
+            return false;
+        }
+
+        // Don't reschedule tests for tunnels that have already failed completely
+        if (_cfg.getTunnelFailed()) {
+            if (_log.shouldDebug()) {
+                _log.debug("Skipping reschedule for already-failed tunnel: " + _cfg);
             }
             return false;
         }

@@ -203,6 +203,10 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      * @return false if we stopped using it, true if still ok
      */
     public boolean tunnelFailed() {
+        // Don't increment if already marked as failed completely
+        if (getTunnelFailed()) {
+            return false;
+        }
         boolean rv = _failures.incrementAndGet() <= MAX_CONSECUTIVE_TEST_FAILURES;
         if (!rv) {_reused = true;} // don't allow it to be rebuilt
         return rv;
@@ -433,7 +437,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
         long tunnelId = _isInbound ? _config[_config.length - 1].getReceiveTunnelId() : _config[0].getSendTunnelId();
         if (tunnelId != 0) {buf.append(" (ID:").append(tunnelId).append(")");}
         int fails = _failures.get();
-        if (fails > 1) {buf.append(" (").append(fails).append(" consecutive failures)");}
+        //if (fails > 1) {buf.append(" (").append(fails).append(" consecutive failures)");}
         if (_log.shouldInfo()) {
             buf.append("\n* Gateway: ");
             for (int i = 0; i < _peers.length; i++) {
