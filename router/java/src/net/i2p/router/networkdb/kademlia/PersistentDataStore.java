@@ -382,7 +382,7 @@ public class PersistentDataStore extends TransientDataStore {
                         }
                         _context.banlist().banlistRouter(key, " <b>➜</b> Spoofed IP address (ours)", null, null, _context.clock().now() + 72*60*60*1000);
                         _banLogger.logBan(key, _context, "Spoofed IP address (ours)", 72*60*60*1000);
-                        _context.simpleTimer2().addEvent(new Disconnector(key), 3*1000);
+                        _context.commSystem().forceDisconnect(key);
                         shouldDelete = true;
                     } else if (isInvalidVersion) {
                         if (_log.shouldDebug()) {
@@ -396,7 +396,7 @@ public class PersistentDataStore extends TransientDataStore {
                                                              null, _context.clock().now() + 24*60*60*1000);
                             _banLogger.logBan(key, _context, "Invalid Router version (" + version + ")", 24*60*60*1000);
                         }
-                        _context.simpleTimer2().addEvent(new Disconnector(key), 11*60*1000);
+                        _context.commSystem().forceDisconnect(key);
                         shouldDelete = true;
                     } else if (isLTier && unreachable && isOld) {
                         if (_log.shouldDebug()) {
@@ -407,7 +407,7 @@ public class PersistentDataStore extends TransientDataStore {
                             _context.banlist().banlistRouter(key, " <b>➜</b> LU and older than " + MIN_VERSION, null, null, _context.clock().now() + 8*60*60*1000);
                             _banLogger.logBan(key, _context, "LU and older than " + MIN_VERSION, 8*60*60*1000);
                         }
-                        _context.simpleTimer2().addEvent(new Disconnector(key), 11*60*1000);
+                        _context.commSystem().forceDisconnect(key);
                         shouldDelete = true;
                     } else if (unreachable) {
                         if (_log.shouldDebug()) {

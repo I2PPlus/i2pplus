@@ -852,7 +852,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             if (_log.shouldWarn() && !isBanned)
                 _log.warn("[NTCP] Banning for 24h and disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
                           " -> Invalid version " + version + " / " + bw + (unreachable ? "U" : ""));
-            _context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
+            _context.commSystem().forceDisconnect(h);
             throw new DataFormatException("Invalid Router version " + version + ": " + h);
         }
 
@@ -863,7 +863,30 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             if (_log.shouldInfo() && !isBanned)
                 _log.info("[NTCP] Banning for 1h and disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
                           " -> " + version + " / " + bw + (unreachable ? "U" : ""));
-            _context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
+            _context.commSystem().forceDisconnect(h);
+            throw new DataFormatException("Old and slow: " + h);
+        }
+
+        if (reachable && unreachable) {
+            _context.banlist().banlistRouter(h, " <b>➜</b> Invalid published capabilities (RU)", null,
+                                             null, _context.clock().now() + 24*60*60*1000);
+            _msg3p2FailReason = NTCPConnection.REASON_BANNED;
+            if (_log.shouldWarn() && !isBanned) {
+                _log.warn("[NTCP] Banning for 24h and disconnecting from Router [" +
+                          h.toBase64().substring(0,6) + "] -> Publishing both R and U caps");
+            }
+            _context.commSystem().forceDisconnect(h);
+            throw new DataFormatException("Invalid caps (RU): " + h);
+        }
+
+        if (!reachable && isSlow && isOld) {
+            _context.banlist().banlistRouter(h, " <b>➜</b> Old and slow (" + version + " / " + bw + "U)", null,
+                                             null, _context.clock().now() + 60*60*1000);
+            _msg3p2FailReason = NTCPConnection.REASON_BANNED;
+            if (_log.shouldInfo() && !isBanned)
+                _log.info("[NTCP] Banning for 1h and disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
+                          " -> " + version + " / " + bw + (unreachable ? "U" : ""));
+            _context.commSystem().forceDisconnect(h);
             throw new DataFormatException("Old and slow: " + h);
         }
 
@@ -875,7 +898,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 _log.warn("[NTCP] Banning for 24h and disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
                           " -> Publishing both R and U caps");
             }
-            _context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
+            _context.commSystem().forceDisconnect(h);
             throw new DataFormatException("Invalid caps (RU): " + h);
         }
 
