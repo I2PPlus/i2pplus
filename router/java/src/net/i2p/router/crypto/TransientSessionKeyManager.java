@@ -34,6 +34,7 @@ import net.i2p.data.SessionTag;
 import net.i2p.stat.RateConstants;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer;
+import net.i2p.util.SimpleTimer2;
 
 /**
  * Implement the session key management, but keep everything in memory (don't write to disk).
@@ -179,7 +180,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         context.statManager().createRateStat("crypto.sessionTagsExpired", "Number of expired tags/sessions", "Encryption", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES });
         context.statManager().createRateStat("crypto.sessionTagsRemaining", "Number of remaining tags/sessions after a cleanup", "Encryption", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES });
          _alive = true;
-        _context.simpleTimer2().addEvent(new CleanupEvent(), 60*1000);
+        new CleanupEvent(60*1000);
     }
 
     @Override
@@ -189,7 +190,11 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         synchronized (_outboundSessions) {_outboundSessions.clear();}
     }
 
-    private class CleanupEvent implements SimpleTimer.TimedEvent {
+    private class CleanupEvent extends SimpleTimer2.TimedEvent {
+        public CleanupEvent(long timeoutMs) {
+            super(_context.simpleTimer2(), timeoutMs);
+        }
+        @Override
         public void timeReached() {
             if (!_alive) {return;}
             long beforeExpire = _context.clock().now();
@@ -198,7 +203,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
             if (overage > 0) {clearExcess(overage);}
             long expireTime = _context.clock().now() - beforeExpire;
             _context.statManager().addRateData("crypto.sessionTagsExpired", expired, expireTime);
-            _context.simpleTimer2().addEvent(this, 60*1000);
+            schedule(60*1000);
         }
     }
 

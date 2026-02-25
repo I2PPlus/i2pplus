@@ -246,9 +246,8 @@ public class ProfileOrganizer {
                 releaseWriteLock();
             }
 
-            // Reschedule with adjusted interval
-            long nextDelay = underStress ? 5 * 60 * 1000 : 10 * 60 * 1000;
-            _context.simpleTimer2().addEvent(this, nextDelay);
+            // Reschedule with adjusted interval - handled by addPeriodicEvent, just adjust delay for next cycle
+            // Note: addPeriodicEvent handles rescheduling, no need to call schedule() or addEvent()
         }
     }
 

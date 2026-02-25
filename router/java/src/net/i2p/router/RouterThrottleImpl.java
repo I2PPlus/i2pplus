@@ -9,6 +9,7 @@ import net.i2p.stat.RateConstants;
 import net.i2p.stat.RateStat;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer;
+import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.Translate;
 
@@ -60,7 +61,7 @@ public class RouterThrottleImpl implements RouterThrottle {
         _log = context.logManager().getLog(RouterThrottleImpl.class);
         setTunnelStatus();
         _rejectStartupTime = Math.max(MIN_REJECT_STARTUP_TIME, _context.getProperty(PROP_REJECT_STARTUP_TIME, DEFAULT_REJECT_STARTUP_TIME));
-        _context.simpleTimer2().addEvent(new ResetStatus(), 5*1000 + _rejectStartupTime);
+        new ResetStatus(5*1000 + _rejectStartupTime);
         _context.statManager().createRateStat("router.throttleNetworkCause", "JobQueue lag when an I2NP event was throttled", "Router [Throttle]", RATES);
         _context.statManager().createRateStat("router.throttleTunnelBandwidthExceeded", "Bandwidth allocated when we refuse to build tunnel (bandwidth exceeded)", "Router [Throttle]", RATES);
         _context.statManager().createRateStat("router.throttleTunnelBytesAllowed", "Bytes permitted to be sent when we get a tunnel request", "Router [Throttle]", RATES);
@@ -77,7 +78,11 @@ public class RouterThrottleImpl implements RouterThrottle {
      *
      *  @since 0.8.12
      */
-    private class ResetStatus implements SimpleTimer.TimedEvent {
+    private class ResetStatus extends SimpleTimer2.TimedEvent {
+        public ResetStatus(long timeoutMs) {
+            super(_context.simpleTimer2(), timeoutMs);
+        }
+        @Override
         public void timeReached() {
             if (_tunnelStatus.contains(_x("Starting up"))) {cancelShutdownStatus();}
         }
