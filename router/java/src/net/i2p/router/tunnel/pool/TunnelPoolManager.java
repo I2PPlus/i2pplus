@@ -710,8 +710,6 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
         @Override
         public void timeReached() {
-            if (cancel()) return;
-
             // Remove from pending cleanups
             _pendingCleanups.remove(_destination);
 
