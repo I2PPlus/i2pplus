@@ -285,6 +285,90 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         return 0;
     }
 
+    /**
+     * Get count of active (non-failed, non-expired) inbound client tunnels.
+     */
+    public int getActiveInboundClientTunnelCount() {
+        int count = 0;
+        long now = _context.clock().now();
+        for (TunnelPool pool : _clientInboundPools.values()) {
+            for (TunnelInfo t : pool.listTunnels()) {
+                if (t.getExpiration() > now) {
+                    if (t instanceof PooledTunnelCreatorConfig) {
+                        if (!((PooledTunnelCreatorConfig) t).getTunnelFailed()) {
+                            count++;
+                        }
+                    } else {
+                        count++;
+                    }
+                }
+            }
+        }
+        return count;
+    }
+
+    /**
+     * Get count of active (non-failed, non-expired) outbound client tunnels.
+     */
+    public int getActiveOutboundClientTunnelCount() {
+        int count = 0;
+        long now = _context.clock().now();
+        for (TunnelPool pool : _clientOutboundPools.values()) {
+            for (TunnelInfo t : pool.listTunnels()) {
+                if (t.getExpiration() > now) {
+                    if (t instanceof PooledTunnelCreatorConfig) {
+                        if (!((PooledTunnelCreatorConfig) t).getTunnelFailed()) {
+                            count++;
+                        }
+                    } else {
+                        count++;
+                    }
+                }
+            }
+        }
+        return count;
+    }
+
+    /**
+     * Check if any client destination has valid (non-failed, non-expired) tunnel pairs.
+     */
+    public boolean hasValidTunnelPairs() {
+        long now = _context.clock().now();
+        for (Hash client : _clientOutboundPools.keySet()) {
+            TunnelPool outPool = _clientOutboundPools.get(client);
+            TunnelPool inPool = _clientInboundPools.get(client);
+            if (outPool != null && inPool != null) {
+                boolean outValid = false, inValid = false;
+                for (TunnelInfo t : outPool.listTunnels()) {
+                    if (t.getExpiration() > now) {
+                        if (t instanceof PooledTunnelCreatorConfig) {
+                            if (!((PooledTunnelCreatorConfig) t).getTunnelFailed()) {
+                                outValid = true; break;
+                            }
+                        } else {
+                            outValid = true; break;
+                        }
+                    }
+                }
+                if (outValid) {
+                    for (TunnelInfo t : inPool.listTunnels()) {
+                        if (t.getExpiration() > now) {
+                            if (t instanceof PooledTunnelCreatorConfig) {
+                                if (!((PooledTunnelCreatorConfig) t).getTunnelFailed()) {
+                                    inValid = true; break;
+                                }
+                            } else {
+                                inValid = true; break;
+                            }
+                        }
+                    }
+                }
+                if (outValid && inValid) {return true;}
+            }
+        }
+        return false;
+    }
+
     public int getParticipatingCount() { return _context.tunnelDispatcher().getParticipatingCount(); }
 
     public long getLastParticipatingExpiration() { return _context.tunnelDispatcher().getLastParticipatingExpiration(); }

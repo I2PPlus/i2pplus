@@ -47,6 +47,10 @@ public class DummyTunnelManagerFacade implements TunnelManagerFacade {
     public double getShareRatio() { return 0d; }
     public int getOutboundClientTunnelCount() { return 0; }
     public int getOutboundClientTunnelCount(Hash destination) { return 0; }
+    public int getActiveInboundClientTunnelCount() { return 0; }
+    public int getActiveOutboundClientTunnelCount() { return 0; }
+    public int getActiveOutboundClientTunnelCount(Hash destination) { return 0; }
+    public boolean hasValidTunnelPairs() { return false; }
     public long getLastParticipatingExpiration() { return -1; }
     public void buildTunnels(Destination client, ClientTunnelSettings settings) {}
     public void removeTunnels(Destination client) {}
