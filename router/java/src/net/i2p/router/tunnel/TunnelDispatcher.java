@@ -161,6 +161,7 @@ public class TunnelDispatcher implements Service {
             _context.tunnelIdManager().cleanup();
             int cleared = TestJob.cleanup();
             cleared += cleanupStaticMaps();
+            cleared += cleanupExpiredTunnels();
             if (cleared > 0 && _log.shouldDebug()) {
                 _log.debug("Periodic cleanup cleared " + cleared + " entries from static maps");
             }
