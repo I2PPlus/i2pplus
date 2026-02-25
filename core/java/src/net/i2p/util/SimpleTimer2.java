@@ -156,13 +156,16 @@ public class SimpleTimer2 {
     /**
      * Queue up the given event to be fired no sooner than timeoutMs from now.
      *
-     * For transition from SimpleScheduler. Uncancellable.
-     * New code should use SimpleTimer2.TimedEvent.
+     * @deprecated Use SimpleTimer2.TimedEvent instead - extend it and call schedule().
+     *             This method creates a new wrapper object on each call, which accumulates
+     *             in the timer queue and causes memory issues. Prefer extending TimedEvent
+     *             directly (see GhostPeerManager.CleanupTimer for example).
      *
      * @param event to be run once
      * @param timeoutMs run after this delay
      * @since 0.9.20
      */
+    @Deprecated
     public void addEvent(final SimpleTimer.TimedEvent event, final long timeoutMs) {
         if (event == null)
             throw new IllegalArgumentException("addEvent null");
