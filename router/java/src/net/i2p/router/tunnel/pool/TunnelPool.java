@@ -804,6 +804,9 @@ public class TunnelPool {
 
     public TunnelPoolSettings getSettings() {return _settings;}
 
+    /** Get the tunnel pool manager */
+    TunnelPoolManager getManager() {return _manager;}
+
     void setSettings(TunnelPoolSettings settings) {
         if (settings != null && _settings != null) {
             if (!(settings.isExploratory() || _settings.isExploratory())) {

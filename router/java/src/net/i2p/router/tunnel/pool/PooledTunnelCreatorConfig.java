@@ -98,6 +98,11 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
         Hash firstHop = getPeer(1);
         if (firstHop != null) {
             _pool.tunnelFailed(this, firstHop);
+            // Record send failure timeout in GhostPeerManager to exclude failing peers from new tunnels
+            GhostPeerManager gpm = _pool.getManager().getGhostPeerManager();
+            if (gpm != null) {
+                gpm.recordTimeout(firstHop);
+            }
         } else {
             _pool.tunnelFailed(this);
         }
