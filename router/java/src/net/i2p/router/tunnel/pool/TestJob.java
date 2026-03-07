@@ -503,6 +503,9 @@ public class TestJob extends JobImpl {
         _found = false;
         long now = ctx.clock().now();
 
+        // Set test status to TESTING
+        _cfg.setTestStarted();
+
         if (_cfg.isInbound()) {
             _replyTunnel = _cfg;
             _outTunnel = isExploratory ?
@@ -758,6 +761,9 @@ public class TestJob extends JobImpl {
         // Only fail the tunnel under test — do NOT blame _otherTunnel
         // Increment the tunnel's global failure count and check if we should continue
         boolean keepGoing = _cfg.tunnelFailed(); // This increments the counter and returns true if < MAX_CONSECUTIVE_TEST_FAILURES
+
+        // Update test status for UI display
+        _cfg.setTestFailed();
 
         if (_log.shouldWarn()) {
             _log.warn((isExploratory ? "Exploratory tunnel" : "Tunnel") + " Test failed in " + timeToFail + "ms → " + _cfg);

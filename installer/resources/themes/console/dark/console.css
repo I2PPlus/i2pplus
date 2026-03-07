@@ -70,6 +70,7 @@ h3 .b32{margin:0 4px 0 0;display:inline-block;vertical-align:middle;border:var(-
 .smallhead a img:hover{filter:drop-shadow(0 0 1px var(--hover))}
 .tablefooter{border-top:var(--border);border-bottom:var(--border);line-height:1.4;background:var(--th)}
 .tablefooter td{padding:7px 10px;box-shadow:none}
+.tablewrap{box-shadow:var(--border_table)}
 .unbold{font-weight:400}
 .underline{margin:0 0 10px 0;padding:5px 0;border-bottom:1px solid var(--ink)}
 .wideload h2{border-radius:0}
@@ -840,7 +841,7 @@ td.ipv6{width:1%;max-width:24px}
 #udpconnections td,#ntcpconnections td,.tunneldisplay td{color:#bb7}
 #udpconnections tfoot td:not(last-child),#ntcpconnections tfoot td:not(last-child){border-right:0}
 #udpconnections th{padding:5px 2px;vertical-align:top;text-align:center}
-#udpconnections tr:hover,#ntcpconnections tr:hover,#transportSummary tr:hover,#jobstats tr:hover,#schedjobs tr:hover,#netdboverview table tr:hover,#portfaq tr:hover,.tunneldisplay tr:hover,#tunnels tr:hover,.tx tr:hover td{background:var(--row_hover)}
+#udpconnections tr:hover,#ntcpconnections tr:hover,#transportSummary tr:hover,#jobstats tr:hover,#schedjobs tr:hover,#netdboverview table tr:hover,#portfaq tr:hover,.tunneldisplay tbody tr:hover,#tunnels tbody tr:hover,.tx tr:hover td{background:var(--row_hover)}
 #udpconnections tr:hover td,#ntcpconnections tr:hover td,.tunneldisplay tr:hover td{color:var(--ink)}
 #peers .percentBarInner{height:16px;display:inline-block}
 #peers .percentBarOuter{width:calc(100% - 4px);margin:0;height:16px;display:inline-block;position:relative;vertical-align:middle;text-align:left}
@@ -1067,7 +1068,7 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 #participating img,#peercount img{width:0;height:0}
 #participating,#participating~h3{padding-bottom:8px}
 #participatingtunnels .statusnotes:last-of-type{margin-bottom:10px}
-#peercount{margin-bottom:-3px;position:relative;background:var(--hardhat) no-repeat 8px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
+#peercount{position:relative;background:var(--hardhat) no-repeat 8px center,var(--h1);background-size:20px,2px,100% 4px,100%,96px}
 #peercount img,#participating img{margin:0 0 -2px;padding:8px 6px 6px;vertical-align:middle;border:0}
 #refreshPage{cursor:pointer}
 #thresholds th{font-weight:inherit}
@@ -1083,7 +1084,7 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 #transitSummary th.tcount::after{right:-4px;z-index:10}
 #tunnel_defs{margin-top:-1px;margin-bottom:10px}
 #tunnel_defs td:first-child,#tunnel_defs td:nth-child(even){width:1%;white-space:nowrap}
-#tunnel_defs td:first-child{display:none}
+#tunnel_defs td:first-child,#tunnel_defs td:last-child{display:none}
 #tunnel_defs td:nth-child(2){border-left:0}
 #tunnel_defs td:nth-child(odd){text-align:left}
 #tunnelPeerCount{margin-bottom:9px}
@@ -1121,11 +1122,11 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 #tunnels h3 a:not(.refreshpage):first-child{padding:8px 4px 14px 22px;border-left:0}
 #tunnels h3 a:not(.refreshpage) img,#tunnels h3 a:not(.refreshpage):first-child{margin:-8px 0 -8px 0;padding:9px 2px 9px 0;border-left:var(--border)}
 #tunnels h3.client{padding-left:35px;background:var(--client) no-repeat 9px center/18px,var(--title)}
-#tunnels h3{padding-right:5px;padding-bottom:2px;position:relative;z-index:0}
+#tunnels h3{min-height:24px;padding-right:5px;padding-bottom:2px;position:relative;z-index:0}
 #tunnels h3.server{padding-left:35px;background:var(--server) no-repeat 9px center/18px,var(--title)}
 #tunnels h3.server.i2pchat{background:url(/themes/console/images/i2pchat.svg) no-repeat 9px center/19px,var(--title)}
 #tunnels h3.server.snark{background:url(/themes/console/images/snark.svg) no-repeat 9px center/20px,var(--title)}
-#tunnels h3:last-of-type{padding-left:35px;padding-bottom:7px;background:var(--speed) no-repeat no-repeat 9px center/18px,var(--title)}
+#tunnels h3#defs{padding-left:35px;padding-bottom:7px;background:var(--speed) no-repeat no-repeat 9px center/18px,var(--title)}
 #tunnels h3+h3{margin-top:-1px;display:none}
 #tunnels h3+h3 a{display:none}
 #tunnels h3 img:first-of-type{margin-left:-1px;border-right:var(--border)}
@@ -1133,21 +1134,22 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 #tunnels h3 .refreshpage,#tunnels h3 .refreshpage img{margin:-7px 1px -7px 0;padding:8px 0 9px;border:0}
 #tunnels img{font-size:0}
 #tunnels img[src$="bound.png"],#peers img[src$="bound.png"]{opacity:0}
-#tunnels .left,#tunnels .right{margin:0;width:50%;display:inline-block;vertical-align:middle}
-#tunnels .percentBarInner{height:14px;display:inline-block}
-#tunnels .percentBarInner{text-align:center;background:#030}
-#tunnels .percentBarOuter:hover .percentBarInner{background:rgba(0,48,0,.8)}
-#tunnels .percentBarOuter{margin:-2px 2px 0 4px;position:relative;text-align:left;background:#000}
+#tunnels td:not(.latency) .left,#tunnels td:not(.latency) .right{margin:0;width:50%;display:inline-block;vertical-align:middle}
+#tunnels td.latency .left{width:26px}
+#tunnels .percentBarInner{height:14px;display:inline-block;text-align:center;background:repeating-linear-gradient(to right,rgba(0,0,0,.15)2px,#0000 4px) repeat left center/2px 100%,linear-gradient(180deg,#373 50%,#141);opacity:.5}
+#tunnels .percentBarOuter:hover .percentBarInner{background:rgba(0,48,0,.8);opacity:1}
 #tunnels .percentBarOuter,#tunnels .PercentBarInner,#tunnels .percentBarText{display:inline-block;vertical-align:middle}
 #tunnels .percentBarOuter,#tunnels .percentBarText{width:100px}
-#tunnels .percentBarText{position:absolute;top:0;left:0;bottom:0;right:0;width:100%;height:unset;font-size:80%}
+#tunnels .percentBarOuter{margin:-1px 0 1px;position:relative;text-align:left;background:repeating-linear-gradient(90deg,#0000,#0000 5%,#020 5%,#020 10%) left center/100% 10%,linear-gradient(180deg,#0008,#0204);opacity:.9}
+#tunnels .expiry .percentBarOuter{background:linear-gradient(90deg,#7115,#7304,#9904,#3934),repeating-linear-gradient(90deg,#0000,#0000 5%,#020 5%,#020 10%) left center/100% 10%,linear-gradient(180deg,#0008,#0204)}
 #tunnels span[hidden]{display:none}
 #tunnels table{position:relative;z-index:1}
+#tunnels .status{width:1%;white-space:nowrap}
 #tunnels .tab,#tunnels .tab2{min-width:140px}
 #tunnels .rid,#tunnels .routerHash,#tunnels .version{margin:0;vertical-align:middle;line-height:1.35}
 #tunnels .routerHash,#tunnels .version{margin-top:1px}
 #tunnels #participating{padding:6px 6px 4px 35px;letter-spacing:.1em;background:var(--share) no-repeat 10px center/18px,var(--title)}
-#tunnels #peercount{background:url(/themes/console/images/peers.svg) no-repeat 9px center/18px,var(--title)}
+#tunnels #peercount{padding:6px 6px 4px 35px;letter-spacing:.1em;background:url(/themes/console/images/peers.svg) no-repeat 9px center/18px,var(--title)}
 #tunnels tbody td{border:var(--border_softer)}
 #tunnels td:not(.rif):not(.rih):not(.rbw):first-child,#tunnels #tunnelPeerCount td:first-child{border-left:var(--border)}
 #tunnels td:not(.rif):not(.rih):not(.rbw):last-child,#tunnels #tunnelPeerCount td:last-child{border-right:var(--border)}
@@ -1156,7 +1158,6 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 #tunnels td{text-align:center}
 #tunnels th{font-size:85%;position:relative;user-select:none}
 #tunnels th#tier[role="columnheader"]:not([data-sort-method="none"])::after,#tunnels th#router[role="columnheader"]:not([data-sort-method="none"])::after,#tunnels th#version[role="columnheader"]:not([data-sort-method="none"])::after{right:-2px;z-index:999}
-#tunnels tr:last-child td{border-bottom:var(--border)}
 #tunnels .tunnel_cap{padding:3px 2px;border-radius:0}
 #tunnels #tunnelPeerCount td.bar{border-left:0}
 #tunnels #tunnelPeerCount td.tcount{padding:3px 0 3px 4px;min-width:16px;text-align:right;border-right:0}
@@ -2129,7 +2130,7 @@ input[type=hidden]+p+p{margin-top:20px;margin-bottom:-21px;padding:10px;border:v
 #advfilter button:hover,#advfilter input:focus+button,#tnlfilter button:hover,#tnlfilter input:focus+button{mix-blend-mode:normal}
 #advfilter input[type=text],#tnlfilter input[type=text]{margin:0;padding:4px 24px 3px;width:160px;font-size:85%;background:#0008 var(--filter) no-repeat 7px center/12px;opacity:.75;filter:none}
 #advfilter input[type=text]:focus,#tnlfilter input[type=text]:focus{width:200px;border-color:var(--hover);color:var(--hover);box-shadow:var(--highlight),5px 5px 3px #0008 inset;background-color:#010;opacity:.85}
-#tnlfilter{top:6px;right:46px}
+#tnlfilter{top:3px;right:46px}
 #advconf #removeKey b{color:#f00}
 #config_advanced #advconfwrapper{overflow:hidden;max-height:calc(100vh - 281px);scrollbar-color:#373 #0000}
 .hasExpandedElement #config_advanced #advconfwrapper{max-height:calc(100vh - 447px)}

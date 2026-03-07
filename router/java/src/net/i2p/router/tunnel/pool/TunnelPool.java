@@ -531,6 +531,14 @@ public class TunnelPool {
     }
 
     /**
+     *  @return the number of tunnels currently being built
+     *  @since 0.9.67
+     */
+    public int getInProgressCount() {
+        synchronized (_inProgress) {return _inProgress.size();}
+    }
+
+    /**
      *  Add a tunnel to the pool.
      *  @param info the tunnel to add
      */

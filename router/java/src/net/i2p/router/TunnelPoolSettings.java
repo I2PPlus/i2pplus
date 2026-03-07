@@ -29,6 +29,7 @@ public class TunnelPoolSettings {
     private final boolean _isInbound;
     private final boolean _isExploratory;
     private boolean _allowZeroHop;
+    private boolean _shouldTest = true;
     private int _IPRestriction;
     private final Properties _unknownOptions;
     private SessionKey _randomKey;
@@ -47,6 +48,7 @@ public class TunnelPoolSettings {
     public static final String      PROP_LENGTH_VARIANCE = "lengthVariance";
     /** don't trust this, always true */
     public static final String      PROP_ALLOW_ZERO_HOP = "allowZeroHop";
+    public static final String      PROP_SHOULD_TEST = "shouldTest";
     public static final String      PROP_IP_RESTRICTION = "IPRestriction";
     public static final String      PROP_PRIORITY = "priority";
     /** @since 0.9.17 */
@@ -160,6 +162,15 @@ public class TunnelPoolSettings {
         return _allowZeroHop ||
                _length + Math.min(_lengthVariance, 0) <= 0 ||
                _lengthOverride == 0;
+    }
+
+    /**
+     *  Should tunnels in this pool be tested?
+     *  @return true for normal pools, false for hostchecker/ping tunnels
+     *  @since 0.9.68+
+     */
+    public boolean shouldTest() {
+        return _shouldTest;
     }
 
     /**

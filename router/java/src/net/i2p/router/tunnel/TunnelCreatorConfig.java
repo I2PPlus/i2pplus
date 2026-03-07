@@ -10,6 +10,7 @@ import net.i2p.data.SessionKey;
 import net.i2p.data.TunnelId;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
+import net.i2p.router.TunnelTestStatus;
 import net.i2p.router.networkdb.kademlia.MessageWrapper.OneTimeSession;
 import net.i2p.util.Log;
 
@@ -34,6 +35,8 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     private int _messagesProcessed;
     private long _verifiedBytesTransferred;
     private final AtomicInteger _failures = new AtomicInteger();
+    private volatile TunnelTestStatus _testStatus = TunnelTestStatus.UNTESTED;
+    private volatile long _lastTestStartTime;
     private volatile boolean _reused;
     private volatile int _priority;
     //private static final int THROUGHPUT_COUNT = 3;
@@ -58,6 +61,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
 
     // Make configurable? - but can't easily get to pool options from here
     private static final int MAX_CONSECUTIVE_TEST_FAILURES = 2;
+    private volatile int _lastLatency = -1;
 
     /**
      * For exploratory only (null destination)
@@ -217,7 +221,11 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
 
     public int getTunnelFailures() {return _failures.get();}
 
-    public void testSuccessful(int ms) {_failures.set(0);}
+    public void testSuccessful(int ms) {
+        _failures.set(0);
+        _testStatus = TunnelTestStatus.GOOD;
+        _lastLatency = ms;
+    }
 
     /**
      *  Did we reuse this tunnel?
@@ -287,6 +295,66 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      *  @since 0.9.48
      */
     public void setBlankHash(Hash h) {_blankHash = h;}
+
+    /**
+     *  Set last test latency
+     *  @param ms latency in milliseconds
+     *  @since 0.9.68+
+     */
+    public void setLastLatency(int ms) {_lastLatency = ms;}
+
+    /**
+     * @return latency in milliseconds, or -1 if not available
+     * @since 0.9.68+
+     */
+    public int getLastLatency() {
+        return _lastLatency;
+    }
+
+    /**
+     * Get the current test status of this tunnel for UI display.
+     * @return the current test status (UNTESTED, TESTING, GOOD, FAILING, or FAILED)
+     * @since 0.9.68+
+     */
+    public TunnelTestStatus getTestStatus() {
+        return _testStatus;
+    }
+
+    /**
+     * Called when a test is started.
+     * @since 0.9.68+
+     */
+    public void setTestStarted() {
+        _testStatus = TunnelTestStatus.TESTING;
+        _lastTestStartTime = System.currentTimeMillis();
+    }
+
+    /**
+     * Called when a test fails.
+     * Updates the test status based on consecutive failure count.
+     * Only mark as FAILED after MAX_CONSECUTIVE_TEST_FAILURES (2) failures -
+     * before that, it's just FAILING and still counts as a valid tunnel.
+     * @since 0.9.68+
+     */
+    public void setTestFailed() {
+        int failures = _failures.get();
+        if (failures >= MAX_CONSECUTIVE_TEST_FAILURES) {
+            _testStatus = TunnelTestStatus.FAILED;
+        } else if (failures >= 1) {
+            _testStatus = TunnelTestStatus.FAILING;
+        } else {
+            _testStatus = TunnelTestStatus.GOOD;
+        }
+    }
+
+    /**
+     * Get the number of consecutive test failures.
+     * @return the count of consecutive failures
+     * @since 0.9.68+
+     */
+    public int getConsecutiveFailures() {
+        return _failures.get();
+    }
 
     /**
      *  Set ECIES reply key and IV

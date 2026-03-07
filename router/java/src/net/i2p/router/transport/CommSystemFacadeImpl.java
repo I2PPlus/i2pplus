@@ -66,6 +66,7 @@ import net.i2p.router.OutNetMessage;
 import net.i2p.router.RouterContext;
 import net.i2p.router.transport.crypto.X25519KeyFactory;
 import net.i2p.router.transport.udp.UDPTransport;
+import net.i2p.router.transport.TransportManager;
 import net.i2p.router.util.EventLog;
 import net.i2p.util.AddressType;
 import net.i2p.util.Addresses;
@@ -1938,6 +1939,80 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             if (rv != null && TransportUtil.isPubliclyRoutable(rv, true)) {return rv;}
         }
         return null;
+    }
+
+    /**
+     *  Get an IP address compatible with our capabilities (IPv4/IPv6).
+     *  Prefers IPv4 if we support it.
+     *
+     *  @param ri RouterInfo to get IP from
+     *  @return IP or null
+     *  @since 0.9.68+
+     */
+    public static byte[] getCompatibleIP(RouterInfo ri) {
+        if (ri == null) {return null;}
+        RouterContext ctx = (RouterContext) I2PAppContext.getGlobalContext();
+        boolean haveIPv4 = false;
+        boolean haveIPv6 = false;
+        for (RouterAddress ra : ri.getAddresses()) {
+            byte[] ip = ra.getIP();
+            if (ip != null && TransportUtil.isPubliclyRoutable(ip, true)) {
+                if (ip.length == 16) {
+                    haveIPv6 = true;
+                } else {
+                    haveIPv4 = true;
+                }
+            }
+        }
+        if (haveIPv4 && !haveIPv6) {
+            return getFirstValidIPOfType(ri, false);
+        }
+        if (haveIPv6 && !haveIPv4) {
+            return getFirstValidIPOfType(ri, true);
+        }
+        boolean weSupportIPv4 = supportsIPv4(ctx);
+        boolean weSupportIPv6 = supportsIPv6(ctx);
+        if (weSupportIPv4) {
+            byte[] ipv4 = getFirstValidIPOfType(ri, false);
+            if (ipv4 != null) {return ipv4;}
+        }
+        if (weSupportIPv6) {
+            byte[] ipv6 = getFirstValidIPOfType(ri, true);
+            if (ipv6 != null) {return ipv6;}
+        }
+        return getValidIP(ri);
+    }
+
+    /**
+     *  Get the first valid IP of the specified type (IPv4 or IPv6).
+     */
+    private static byte[] getFirstValidIPOfType(RouterInfo ri, boolean wantIPv6) {
+        for (RouterAddress ra : ri.getAddresses()) {
+            byte[] ip = ra.getIP();
+            if (ip != null && TransportUtil.isPubliclyRoutable(ip, true)) {
+                boolean isIPv6 = ip.length == 16;
+                if (wantIPv6 == isIPv6) {return ip;}
+            }
+        }
+        return null;
+    }
+
+    /**
+     *  Check if we support outbound IPv4 connections.
+     */
+    private static boolean supportsIPv4(RouterContext ctx) {
+        boolean ntcpEnabled = TransportManager.isNTCPEnabled(ctx);
+        boolean ssuEnabled = ctx.getBooleanPropertyDefaultTrue(TransportManager.PROP_ENABLE_UDP);
+        return ntcpEnabled || ssuEnabled;
+    }
+
+    /**
+     *  Check if we support outbound IPv6 connections.
+     */
+    private static boolean supportsIPv6(RouterContext ctx) {
+        TransportUtil.IPv6Config ntcp6 = TransportUtil.getIPv6Config(ctx, "NTCP");
+        TransportUtil.IPv6Config ssu6 = TransportUtil.getIPv6Config(ctx, "UDP");
+        return ntcp6 != TransportUtil.IPv6Config.IPV6_DISABLED || ssu6 != TransportUtil.IPv6Config.IPV6_DISABLED;
     }
 
     /** full name for a country code, or the code if we don't know the name */
