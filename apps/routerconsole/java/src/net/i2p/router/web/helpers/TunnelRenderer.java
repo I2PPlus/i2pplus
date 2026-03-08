@@ -315,13 +315,7 @@ class TunnelRenderer {
                     sb.append("</tr>\n");
                 }
                 sb.append("</tbody>\n<tfoot id=statusnotes><tr><td colspan=8>");
-                if (displayed > DISPLAY_LIMIT) {
-                    if (bySpeed) {
-                        sb.append(_t("Limited display to the {0} tunnels with the highest usage", DISPLAY_LIMIT));
-                    } else {
-                        sb.append(_t("Limited display to the {0} most recent tunnels", DISPLAY_LIMIT));
-                    }
-                } else if (displayed >= 2) {
+                if (displayed >= 2) {
                     sb.append("<b>").append(_t("Active") ).append(":</b>&nbsp;").append(displayed);
                     if (inactive > 0) {
                         sb.append("&nbsp;&bullet;&nbsp;<b>").append(_t("Inactive")).append(":</b>&nbsp;").append(inactive)
