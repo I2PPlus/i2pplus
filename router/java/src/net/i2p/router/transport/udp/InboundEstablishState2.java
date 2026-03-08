@@ -440,7 +440,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         boolean isSlow = (cap != null && !cap.equals("")) &&
                          (bw.equals("K") || bw.equals("L") || bw.equals("M") || bw.equals("N"));
         String version = ri.getVersion();
-        boolean isOld = VersionComparator.comp(version, "0.9.62") < 0;
+        boolean isOld = VersionComparator.comp(version, "0.9.64") < 0;
 
         if (!reachable && isSlow && isOld) {
             _context.banlist().banlistRouter(h, " <b>➜</b> Old and slow (" + version + " / " + bw + "U)",
@@ -452,7 +452,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                 _log.info("Banning for 1h and disconnecting from Router [" +
                           h.toBase64().substring(0,6) + "] -> " + version + " / " + bw + "U");
             }
-            _context.simpleTimer2().addEvent(new Disconnector(h), 3 * 1000);
+            _context.commSystem().forceDisconnect(h);
             throw new RIException("Old and slow: " + h, REASON_BANNED);
         }
     }

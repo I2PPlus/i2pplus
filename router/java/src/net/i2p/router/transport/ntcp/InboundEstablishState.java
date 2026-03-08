@@ -825,7 +825,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         boolean isSlow = (cap != null && !cap.equals("")) && bw.equals("K") ||
                           bw.equals("L") || bw.equals("M") || bw.equals("N");
         String version = ri.getVersion();
-        boolean isOld = VersionComparator.comp(version, "0.9.62") < 0;
+        boolean isOld = VersionComparator.comp(version, "0.9.64") < 0;
         boolean isInvalidVersion = VersionComparator.comp(version, "2.5.0") >= 0;
 
         if (isInvalidVersion) {
@@ -836,7 +836,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             if (_log.shouldWarn() && !isBanned)
                 _log.warn("[NTCP] Banning for 24h and disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
                           " -> Invalid version " + version + " / " + bw + (unreachable ? "U" : ""));
-            _context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
+            _context.commSystem().forceDisconnect(h);
             throw new DataFormatException("Invalid Router version " + version + ": " + h);
         }
 
@@ -847,7 +847,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             if (_log.shouldInfo() && !isBanned)
                 _log.info("[NTCP] Banning for 1h and disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
                           " -> " + version + " / " + bw + (unreachable ? "U" : ""));
-            _context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
+            _context.commSystem().forceDisconnect(h);
             throw new DataFormatException("Old and slow: " + h);
         }
 
@@ -859,7 +859,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 _log.warn("[NTCP] Banning for 24h and disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
                           " -> Publishing both R and U caps");
             }
-            _context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
+            _context.commSystem().forceDisconnect(h);
             throw new DataFormatException("Invalid caps (RU): " + h);
         }
 

@@ -141,6 +141,7 @@ class Reader {
      * Return read buffers back to the pool as we process them.
      */
     private void processRead(NTCPConnection con) {
+        if (con == null) { return; }
         ByteBuffer buf = null;
         while(true) {
             synchronized(con) {
@@ -149,6 +150,10 @@ class Reader {
             }
             if ((buf = con.getNextReadBuf()) == null) {return;}
             EstablishState est = con.getEstablishState();
+            if (est == null) {
+                con.close();
+                return;
+            }
 
             if (est.isComplete()) {
                 // why is it complete yet !con.isEstablished?

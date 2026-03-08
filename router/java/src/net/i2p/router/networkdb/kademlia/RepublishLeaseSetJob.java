@@ -41,7 +41,10 @@ public class RepublishLeaseSetJob extends JobImpl {
     private final Log _log;
     public final static long REPUBLISH_LEASESET_TIMEOUT = 30 * 1000;
     private final static int RETRY_DELAY = 2000;
-    private final static long REPUBLISH_INTERVAL = 7 * 60 * 1000;
+    private final static long REPUBLISH_INTERVAL = 8 * 60 * 1000; // 8 minutes
+    private final static long REPUBLISH_INTERVAL_LOW_SUCCESS = 7 * 60 * 1000; // 7 minutes (build success < 40%)
+    private final static long REPUBLISH_INTERVAL_VERY_LOW_SUCCESS = 6 * 60 * 1000; // 6 minutes (build success < 30%)
+    private final static long REPUBLISH_INTERVAL_CRITICAL = 5 * 60 * 1000; // 5 minutes (build success < 20%)
     private final static long EXPIRY_WINDOW = 3 * 60 * 1000;
     private static final long CACHE_CLEANUP_THRESHOLD = 15 * 60 * 1000;
     private static final ConcurrentHashMap<Hash, Boolean> _retryInProgress = new ConcurrentHashMap<>();
@@ -96,7 +99,7 @@ public class RepublishLeaseSetJob extends JobImpl {
                         if (_log.shouldWarn()) {
                             _log.warn("Not publishing expired LOCAL LeaseSet" + name + " [" + _dest.toBase32().substring(0,8) + "]");
                         }
-                        scheduleRepublish(REPUBLISH_INTERVAL);
+                        scheduleRepublish(getRepublishInterval());
                     } else {
                         long timeUntilExpiry = ls.getLatestLeaseDate() - getContext().clock().now();
                         long now = getContext().clock().now();
@@ -111,7 +114,7 @@ public class RepublishLeaseSetJob extends JobImpl {
                         failCount.set(0);
                         _facade.sendStore(_dest, ls, null, new OnRepublishFailure(ls), REPUBLISH_LEASESET_TIMEOUT, null);
                         _lastPublished = now;
-                        scheduleRepublish(REPUBLISH_INTERVAL);
+                        scheduleRepublish(getRepublishInterval());
                     }
                 } else {
                     if (_log.shouldWarn()) {
@@ -141,6 +144,21 @@ public class RepublishLeaseSetJob extends JobImpl {
     }
 
     public String getName() {return "Republish Local LeaseSet" + (highPriority ? " [High priority]" : "");}
+
+    private long getRepublishInterval() {
+        double buildSuccess = net.i2p.util.SystemVersion.getTunnelBuildSuccess() / 100.0;
+        if (buildSuccess <= 0) {
+            return REPUBLISH_INTERVAL;
+        }
+        if (buildSuccess < 0.20) {
+            return REPUBLISH_INTERVAL_CRITICAL;
+        } else if (buildSuccess < 0.30) {
+            return REPUBLISH_INTERVAL_VERY_LOW_SUCCESS;
+        } else if (buildSuccess < 0.40) {
+            return REPUBLISH_INTERVAL_LOW_SUCCESS;
+        }
+        return REPUBLISH_INTERVAL;
+    }
 
     private void scheduleRepublish(long delayMs) {
         if (_facade.hasActiveRepublishJob(_dest)) {

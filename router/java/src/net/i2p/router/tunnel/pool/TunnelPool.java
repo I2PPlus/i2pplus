@@ -929,22 +929,22 @@ public class TunnelPool {
         boolean allowZeroHop = _settings.getAllowZeroHop();
 
         /**
-         * This algorithm builds based on the previous average length of time it takes
-         * to build a tunnel. This average is kept in the _buildRateName stat.
+         * This algorithm builds based on the previous average length of time it takes to build a tunnel.
+         * This average is kept in the _buildRateName stat.
+         *
          * It is a separate stat for each type of pool, since in and out building use different methods,
-         * as do exploratory and client pools,
-         * and each pool can have separate length and length variance settings.
+         * as do exploratory and client pools, and each pool can have separate length and length variance settings.
          * We add one minute to the stat for safety (two for exploratory tunnels).
          *
-         * We linearly increase the number of builds per expiring tunnel from
-         * 1 to PANIC_FACTOR as the time-to-expire gets shorter.
+         * We linearly increase the number of builds per expiring tunnel from 1 to PANIC_FACTOR
+         * as the time-to-expire gets shorter.
          *
          * The stat will be 0 for first 10m of uptime so we will use the older, conservative algorithm
          * below instead. This algorithm will take about 30m of uptime to settle down.
          * Or, if we are building more than 33% of the time something is seriously wrong,
          * we also use the conservative algorithm instead
          *
-         **/
+         */
 
         final String rateName = buildRateName();
 

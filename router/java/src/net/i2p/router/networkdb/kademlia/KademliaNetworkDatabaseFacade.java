@@ -91,7 +91,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     public static final String PROP_IP_COUNTRY = "i2np.lastCountry";
     private final static String PROP_BLOCK_COUNTRIES = "router.blockCountries";
     private final static String DEFAULT_BLOCK_COUNTRIES = "";
-    public static final String PROP_BLOCK_XG = "i2np.blockXG";
     public static final String minRouterVersion = "0.9.20";
     public static final String MIN_VERSION = "0.9.64";
     public static String CURRENT_VERSION = "0.9.67";
@@ -749,7 +748,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (ri == null) {return;}
         if (onFindJob != null) {_context.jobQueue().addJob(onFindJob);}
         if (shouldBanlistBasedOnCountry(ri, key)) {handleBanlistAndRemove(ri, key, onFailedLookupJob);}
-        else if (shouldBanlistXGUnreachable(ri, key)) {handleBanlistAndRemove(ri, key, onFailedLookupJob);}
+        else if (shouldBanlistXG(ri, key)) {handleBanlistAndRemove(ri, key, onFailedLookupJob);}
         else if (shouldBanlistLUM(ri, key)) {handleBanlistAndRemove(ri, key, onFailedLookupJob);}
         else if (isPermanentlyBlocklisted(key)) {handlePermanentBlocklist(ri, key, onFailedLookupJob);}
         else if (isHostileBlocklisted(key)) {handleHostileBlocklist(ri, key, onFailedLookupJob);}
@@ -781,15 +780,12 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *
      * @since 0.9.67+
      */
-    private boolean shouldBanlistXGUnreachable(RouterInfo ri, Hash key) {
+    private boolean shouldBanlistXG(RouterInfo ri, Hash key) {
         boolean isG = containsCapability(ri, Router.CAPABILITY_NO_TUNNELS);
-        boolean isNotRorU = !containsCapability(ri, Router.CAPABILITY_UNREACHABLE) &&
-                            !containsCapability(ri, Router.CAPABILITY_REACHABLE);
         boolean isXTier = containsCapability(ri, Router.CAPABILITY_BW_UNLIMITED);
-        boolean blockXG = _context.getBooleanProperty(PROP_BLOCK_XG);
         boolean isUs = _context.routerHash().equals(ri.getIdentity().getHash());
 
-        return !isUs && isG && isNotRorU && isXTier && blockXG;
+        return !isUs && isG && isXTier;
     }
 
     /**
@@ -1425,6 +1421,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
         if (banInvalidNTCPAddresses(routerInfo, now, caps, routerId)) {return "Invalid NTCP address";}
         if (_context.banlist().isBanlisted(h)) {return null;}
+        if (checkXG(routerInfo, caps, routerId, h)) {return null;}
 
         long uptime = _context.router().getUptime();
         boolean upLongEnough = isUptimeLongEnough(uptime);
@@ -1576,7 +1573,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         boolean isStrict = _context.commSystem().isInStrictCountry();
         boolean isHidden = _context.router().isHidden();
         boolean blockMyCountry = _context.getBooleanProperty(PROP_BLOCK_MY_COUNTRY);
-        boolean blockXG = _context.getBooleanProperty(PROP_BLOCK_XG);
         Set<String> blockedCountries = getBlockedCountries();
         String myCountry = _context.getProperty(PROP_IP_COUNTRY);
         boolean isBanned = _context.banlist().isBanlisted(h);
@@ -1600,18 +1596,19 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 _log.warn("Banning [" + routerId + "] -> Blocked country: " + country);
             }
             _context.banlist().banlistRouter(h, " <b>➜</b> Blocked country: " + country, null, null, _context.clock().now() + 8*60*60*1000);
-            //_context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
+            _context.commSystem().forceDisconnect(h);
             return true;
         }
-        if (blockXG && isRouterBlockXG(routerInfo, h.equals(_context.routerHash()))) {
+        return false;
+    }
+
+     private boolean checkXG(RouterInfo routerInfo, String caps, String routerId, Hash h) {
+        if (isRouterXG(routerInfo, h.equals(_context.routerHash()))) {
             if (!_context.banlist().isBanlisted(h)) {
                 if (_log.shouldInfo()) {
-                    _log.info("Dropping RouterInfo [" + routerId + "] -> X tier and G Cap, neither R nor U");
+                    _log.info("Banning Router [" + routerId + "] -> X tier and G Cap (probable botnet participant)");
                 }
-                if (_log.shouldWarn()) {
-                    _log.warn("Banning " + (caps.isEmpty() ? "" : caps + " ") + (isFF ? "Floodfill" : "Router") + " [" + routerId + "] for 4h -> XG and older than minVersion (using proxy?)");
-                }
-                _context.banlist().banlistRouter(h, " <b>➜</b> XG Router, neither R nor U (proxied?)", null, null, _context.clock().now() + 4*60*60*1000);
+                _context.banlist().banlistRouter(h, " <b>➜</b> XG", null, null, _context.clock().now() + 60*60*1000);
             }
             return true;
         }
@@ -1623,7 +1620,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *
      * An XG router is defined as:
      * - Has the G capability (no tunnels)
-     * - Is not reachable or unreachable
      * - Has the X (unlimited bandwidth) capability
      *
      * @param routerInfo the RouterInfo to evaluate
@@ -1631,11 +1627,10 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * @return true if the router is an XG router and should be blocked
      * @since 0.9.67+
      */
-    private boolean isRouterBlockXG(RouterInfo routerInfo, boolean isUs) {
+    private boolean isRouterXG(RouterInfo routerInfo, boolean isUs) {
         String caps = routerInfo.getCapabilities();
+
         return !isUs && caps.indexOf(Router.CAPABILITY_NO_TUNNELS) >= 0 &&
-               caps.indexOf(Router.CAPABILITY_UNREACHABLE) < 0 &&
-               caps.indexOf(Router.CAPABILITY_REACHABLE) < 0 &&
                caps.indexOf(Router.CAPABILITY_BW_UNLIMITED) >= 0;
     }
 

@@ -679,7 +679,7 @@ public class TestJob extends JobImpl {
         int scaled = baseDelay;
         if (failCount > 0) {
             // Reduced backoff to identify failing tunnels sooner
-            // Tunnel will be removed after 2 consecutive failures anyway
+            // Tunnel will be removed after 4 consecutive failures anyway
             int multiplier = Math.min(1 << (failCount - 1), 2); // max 2x (3 min)
             scaled = baseDelay * multiplier;
         }

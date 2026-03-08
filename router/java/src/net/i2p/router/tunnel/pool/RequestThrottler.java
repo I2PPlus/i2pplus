@@ -121,11 +121,13 @@ class RequestThrottler {
         long uptime = context.router().getUptime();
         long lag = context.jobQueue().getMaxLag();
         boolean highload = lag > 1000 && SystemVersion.getCPULoadAvg() > 95;
+        boolean isXG = false;
         if (ri != null) {
             isFF = ri.getCapabilities().contains("f");
             v = ri.getVersion();
             country = context.commSystem().getCountry(h);
             isOld = VersionComparator.comp(v, "0.9.62") < 0;
+            isXG = ri.getCapabilities().contains("X") && ri.getCapabilities().contains("G");
         }
 
         // Early return: Blocked countries
@@ -135,7 +137,7 @@ class RequestThrottler {
                 _log.warn("Banning and disconnecting from [" + routerId + "] -> Blocked country: " + country);
             }
             context.banlist().banlistRouter(h, " <b>➜</b> Blocked country: " + country, null, null, context.clock().now() + 8*60*60*1000);
-            context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
+            context.commSystem().forceDisconnect(h);
             return true;
         }
 
@@ -147,13 +149,23 @@ class RequestThrottler {
             return rv;
         }
 
+        // Early return: XG routers (probable botnet participants)
+        if (isXG) {
+            if (_log.shouldInfo() && !context.banlist().isBanlisted(h)) {
+                _log.info("Banning for 1h and disconnecting from [" + routerId + "] -> XG / " + v);
+            }
+            context.banlist().banlistRouter(h, " <b>➜</b> XG (" + v + ")", null, null, context.clock().now() + 60*60*1000);
+            context.commSystem().forceDisconnect(h);
+            return true;
+        }
+
         // Early return: Old, low-tier, unreachable routers
         if (isLTier && isUnreachable && isOld) {
             if (_log.shouldInfo() && !context.banlist().isBanlisted(h)) {
                 _log.info("Banning for 1h and disconnecting from [" + routerId + "] -> LU / " + v);
             }
             context.banlist().banlistRouter(h, " <b>➜</b> Old and slow (" + v + " / LU)", null, null, context.clock().now() + 60*60*1000);
-            context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
+            context.commSystem().forceDisconnect(h);
             return true;
         }
 
@@ -183,7 +195,7 @@ class RequestThrottler {
                 if (_log.shouldInfo())
                     _log.info("Rejecting Tunnel Requests from temp banned Router [" + routerId + "] -> " +
                               "(Requested: " + count + " / Hard limit: " + limit + " in 165s)");
-                context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
+                context.commSystem().forceDisconnect(h);
             }
         }
 
