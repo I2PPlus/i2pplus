@@ -75,15 +75,10 @@ public class JobQueueHelper extends HelperBase {
 
         StringBuilder buf = new StringBuilder(32*1024);
         buf.append("<div class=joblog>");
-        if (isAdvanced()) {
-            buf.append("<h2 id=jobrunners>").append(_t("Job runners"))
-               .append(": ").append(numRunners).append("</h2>\n");
-        }
-
         long now = _context.clock().now();
 
         if ((activeJobs.size() != 0) && (isAdvanced())) {
-            buf.append("<h3 id=activejobs>")
+            buf.append("<div class=tablewrap><h3 id=activejobs>")
                .append(_t("Active jobs")).append(": ").append(activeJobs.size())
                .append("</h3>\n<ol class=jobqueue>\n");
             for (int i = 0; i < activeJobs.size(); i++) {
@@ -93,11 +88,11 @@ public class JobQueueHelper extends HelperBase {
                 buf.append("<li><b title=\"").append(j.toString()).append("\">").append(j.getName()).append("</b> &#10140; ");
                 buf.append(_t("started {0} ago", DataHelper.formatDuration2(elapsed))).append("</li>\n");
             }
-            buf.append("</ol>\n");
+            buf.append("</ol></div>\n");
         }
 
         if ((justFinishedJobs.size() != 0) && (isAdvanced())) {
-            buf.append("<h3 id=finishedjobs>")
+            buf.append("<div class=tablewrap><h3 id=finishedjobs>")
                .append(_t("Just finished jobs")).append(": ").append(justFinishedJobs.size())
                .append("</h3>\n<ol class=jobqueue>\n");
 
@@ -185,11 +180,11 @@ public class JobQueueHelper extends HelperBase {
                     break;
                 }
             }
-            buf.append("</ol>\n");
+            buf.append("</ol></div>\n");
         }
 
         if ((readyJobs.size() != 0) && (isAdvanced())) {
-            buf.append("<h3 id=readyjobs>")
+            buf.append("<div class=tablewrap><h3 id=readyjobs>")
                .append(_t("Ready/waiting jobs")).append(": ").append(readyJobs.size())
                .append("</h3>\n<ol class=jobqueue>\n");
             ObjectCounterUnsafe<String> readyJobsCounter = new ObjectCounterUnsafe<String>();
@@ -201,7 +196,7 @@ public class JobQueueHelper extends HelperBase {
                    .append(_t("waiting")).append(' ').append(DataHelper.formatDuration2(elapsed))
                    .append("</li>\n");
             }
-            buf.append("</ol>\n");
+            buf.append("</ol></div>\n");
             getJobCounts(buf, readyJobsCounter);
             out.append(buf);
             buf.setLength(0);
@@ -257,7 +252,7 @@ public class JobQueueHelper extends HelperBase {
 
         // Build scheduled jobs list
         StringBuilder scheduledBuf = new StringBuilder(8192);
-        scheduledBuf.append("<h3 id=scheduledjobs>")
+        scheduledBuf.append("<div class=tablewrap><h3 id=scheduledjobs>")
            .append(_t("Scheduled jobs")).append(": ")
            .append(displayedJobCount).append(" / ").append(eligibleScheduledCount) // Will update later
            .append("</h3>\n<ol class=jobqueue>\n");
@@ -295,7 +290,7 @@ public class JobQueueHelper extends HelperBase {
         // Update header with actual counts (simple string replacement safe here since we control the format)
         String headerPlaceholder = displayedJobCount + " / " + eligibleScheduledCount;
         scheduledBuf.replace(0, scheduledBuf.indexOf("</h3>") + 5,
-            "<h3 id=scheduledjobs>" + _t("Scheduled jobs") + ": " + headerPlaceholder + "</h3>\n");
+            "<div class=tablewrap><h3 id=scheduledjobs>" + _t("Scheduled jobs") + ": " + headerPlaceholder + "</h3>\n");
 
         if (eligibleScheduledCount <= 0) {
             buf.setLength(0);
@@ -319,7 +314,7 @@ public class JobQueueHelper extends HelperBase {
     private void getJobCounts(StringBuilder buf, ObjectCounterUnsafe<String> counter) {
         List<String> names = new ArrayList<>(counter.objects());
 
-        buf.append("<table id=schedjobs>\n")
+        buf.append("<div class=tablewrap><table id=schedjobs>\n")
            .append("<thead><tr><th>").append(_t("Queue Totals")).append("</th></tr></thead>\n");
         Collections.sort(names, new JobCountComparator(counter));
         buf.append("<tr><td>\n<ul>\n");

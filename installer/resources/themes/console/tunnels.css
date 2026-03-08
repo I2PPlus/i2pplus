@@ -34,6 +34,8 @@ tr.failed .testFailed{animation:none}
 #tunnels .poolsummary .inBuild:not(.building),#tunnels .poolsummary .outBuild:not(.building){background-blend-mode:luminosity}
 #tunnels .poolsummary #sep{background:url(/themes/console/images/jobs.svg) no-repeat right 4px center/20px,var(--th)}
 #tunnels .poolsummary #sep{width:90%}
+#tunnels .expiry span{font-size:90%}
+#tunnels tr:hover .expiry span{opacity:1}
 #tunnels .latency span{width:unset;display:inline-block}
 #tunnels .latency span:not(.left){min-width:36px;text-align:right}
 #tunnels .latency .left{min-width:26px}

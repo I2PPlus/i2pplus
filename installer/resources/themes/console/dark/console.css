@@ -659,6 +659,7 @@ h3[id*="jobs"]{clear:both;margin-top:25px}
 #jobs #scheduledjobs+ol,#jobs ol{padding-bottom:5px}
 #totaljobstats{margin-bottom:-2px;margin-top:10px}
 #routerjobqueue li{line-height:1.6}
+#routerjobqueue .tablewrap:nth-of-type(n+2) {margin-top:15px}
 
 /* queue section toggles */
 #routerjobqueue .toggle{position:relative;cursor:pointer}
@@ -1092,6 +1093,7 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 #transitSummary th,#transitSummary td{vertical-align:middle;white-space:nowrap}
 #transitSummary th{position:relative}
 #transitSummary th.tcount::after{right:-4px;z-index:10}
+#tunnels .expiry span{text-shadow:var(--textshadow)}
 #tunnel_defs{margin-top:-1px;margin-bottom:10px}
 #tunnel_defs td:first-child,#tunnel_defs td:nth-child(even){width:1%;white-space:nowrap}
 #tunnel_defs td:first-child,#tunnel_defs td:last-child{display:none}
@@ -1146,10 +1148,10 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 #tunnels img[src$="bound.png"],#peers img[src$="bound.png"]{opacity:0}
 #tunnels td:not(.latency) .left,#tunnels td:not(.latency) .right{margin:0;width:50%;display:inline-block;vertical-align:middle}
 #tunnels td.latency .left{width:26px}
-#tunnels .percentBarInner{height:14px;display:inline-block;text-align:center;background:repeating-linear-gradient(to right,rgba(0,0,0,.15)2px,#0000 4px) repeat left center/2px 100%,linear-gradient(180deg,#373 50%,#141);opacity:.5}
+#tunnels .percentBarInner{height:14px;display:inline-block;position:absolute;text-align:center;background:repeating-linear-gradient(to right,rgba(0,0,0,.15)2px,#0000 4px) repeat left center/2px 100%,linear-gradient(180deg,#373 50%,#141);opacity:.5}
 #tunnels .percentBarOuter:hover .percentBarInner{background:rgba(0,48,0,.8);opacity:1}
 #tunnels .percentBarOuter,#tunnels .PercentBarInner,#tunnels .percentBarText{display:inline-block;vertical-align:middle}
-#tunnels .percentBarOuter,#tunnels .percentBarText{width:100px}
+#tunnels .percentBarOuter,#tunnels .percentBarText{width:100px;transform:translateY(1px)}
 #tunnels .percentBarOuter{margin:-1px 0 1px;position:relative;text-align:left;background:repeating-linear-gradient(90deg,#0000,#0000 5%,#020 5%,#020 10%) left center/100% 10%,linear-gradient(180deg,#0008,#0204);opacity:.9}
 #tunnels .expiry .percentBarOuter{background:linear-gradient(90deg,#7115,#7304,#9904,#3934),repeating-linear-gradient(90deg,#0000,#0000 5%,#020 5%,#020 10%) left center/100% 10%,linear-gradient(180deg,#0008,#0204)}
 #tunnels span[hidden]{display:none}
@@ -2927,7 +2929,7 @@ iframe.iframed{margin:15px 0 0}
 @media (max-width:1499px){
 h1[class],h1,h1.conf.adv{padding:13px 15px 12px 50px;min-width:620px;font-size:17pt;background-size:32px,2px,100% 4px,100%,164px;background-position:10px center}
 h3 .b32{margin-right:-16px}
-h3[id*="jobs"]:first-of-type{margin-top:21px}
+h3[id*="jobs"]:first-of-type{margin-top:12px}
 .appicon{padding:2px 0 0}
 .applabel{margin-top:8px}
 .applabel a{max-width:112px}
