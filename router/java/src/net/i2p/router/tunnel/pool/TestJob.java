@@ -250,13 +250,7 @@ public class TestJob extends JobImpl {
      * Must be called when a test job completes or is cancelled.
      */
     private static void decrementTotalJobs() {
-        int current;
-        do {
-            current = TOTAL_TEST_JOBS.get();
-            if (current <= 0) {
-                return;
-            }
-        } while (!TOTAL_TEST_JOBS.compareAndSet(current, current - 1));
+        TOTAL_TEST_JOBS.updateAndGet(v -> Math.max(0, v - 1));
     }
 
     /**
