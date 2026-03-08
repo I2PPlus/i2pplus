@@ -99,15 +99,16 @@
     <echo message=" updater200Compact                            Updater (pack200) w/o SAM, DesktopGUI, systray, country/continent lists, docs/proxy, docs/readme"/>
     <echo message=" updater200CompactWithDocs                    Compact updater (pack200) with readme and proxy docs"/>
     <echo message=" updater200CompactWithGeoIP                   Compact updater (pack200) with GeoIP database"/>
-    <echo message=" updater200WithGeoIP                          Updater (pack200) + GeoIP files"/>
-    <echo message=" updater200WithGeoIPAndJbigi                  Updater (pack200) + GeoIP files + Jbigi"/>
+    <echo message=" updater200WithGeoIP                          Updater (pack200) + GeoIP database"/>
+    <echo message=" updater200WithGeoIPAndJavadoc                Updater (pack200) + GeoIP database + javadocs"/>
+    <echo message=" updater200WithGeoIPAndJbigi                  Updater (pack200) + GeoIP database + Jbigi"/>
     <echo message=" updater200WithJavadoc                        Updater (pack200) + javadocs (with console link)"/>
     <echo message=" updater200WithJavadocAndJetty                Updater (pack200) + javadocs (with console link) + Jetty"/>
     <echo message=" updater200WithJbigi                          Updater (pack200) + jBigi library"/>
     <echo message=" updater200WithJetty                          Updater (pack200) + Jetty"/>
-    <echo message=" updater200WithJettyAndGeoIP                  Updater (pack200) + Jetty + GeoIP files"/>
-    <echo message=" updater200WithJettyAndGeoIPAndLicenses       Updater (pack200) + Jetty + GeoIP files + licenses"/>
-    <echo message=" updater200WithJettyFixesAndGeoIP             Updater (pack200) + local Jetty patches + GeoIP files"/>
+    <echo message=" updater200WithJettyAndGeoIP                  Updater (pack200) + Jetty + GeoIP database"/>
+    <echo message=" updater200WithJettyAndGeoIPAndLicenses       Updater (pack200) + Jetty + GeoIP database + licenses"/>
+    <echo message=" updater200WithJettyFixesAndGeoIP             Updater (pack200) + local Jetty patches + GeoIP database"/>
     <echo message=" updaterCompact                               Updater w/o SAM, DesktopGUI, systray, country/continent lists, docs/proxy, docs/readme"/>
     <echo message=" updaterCompactRouterConsole                  Updater with RouterConsole and console/webapp themes only"/>
     <echo message=" updaterCompactRouterConsoleNoThemes          Updater with RouterConsole only (no themes)"/>
@@ -116,13 +117,13 @@
     <echo message=" updaterCompactWithGeoIPAndJbigi              Compact updater with GeoIP database and Jbigi"/>
     <echo message=" updaterRouter                                Updater with i2p.jar and router.jar only"/>
     <echo message=" updaterSmall                                 Updater with essentials (no SAM/I2PSnark/SusiMail/SusiDNS/history.txt)"/>
-    <echo message=" updaterWithGeoIP                             Updater + GeoIP files"/>
+    <echo message=" updaterWithGeoIP                             Updater + GeoIP database"/>
     <echo message=" updaterWithJavadoc                           Updater + javadocs (linked in console)"/>
     <echo message=" updaterWithJavadocAndJetty                   Updater + javadocs (linked in console) + Jetty "/>
     <echo message=" updaterWithJbigi                             Updater + jBigi library"/>
     <echo message=" updaterWithJetty                             Updater + Jetty"/>
     <echo message=" updaterWithJettyFixes                        Updater + local Jetty patches"/>
-    <echo message=" updaterWithJettyFixesAndGeoIP                Updater + local Jetty patches + GeoIP files"/>
+    <echo message=" updaterWithJettyFixesAndGeoIP                Updater + local Jetty patches + GeoIP database"/>
     <echo message=" updaterWithJettyFixesAndJbigi                Updater + local Jetty patches + jBigi library"/>
     <echo message=" updateTorBlocklist                           Update Tor blocklist &#10140; installer/resources/blocklist_tor.txt"/>
     <echo message=" 7zip-freebsd                                 Installation 7zip for FreeBSD without installer &#10140; ./dist/i2p-freebsd.7z"/>
@@ -2212,7 +2213,7 @@
     <delete dir="./pkg-mavencentral"/>
   </target>
 
-  <!-- readme and proxy error page files, initialNews.xml files, GeoIP files, and flag icons -->
+  <!-- readme and proxy error page files, initialNews.xml files, GeoIP database, and flag icons -->
   <target name="prepConsoleDocs" depends="prepConsoleDocUpdates, prepgeoupdate">
     <copy quiet="true" todir="pkg-temp/docs/initialNews/">
       <fileset dir="installer/resources/initialNews/"/>
@@ -2285,6 +2286,7 @@
   <target name="updater200Small" depends="timestamp.started, prepupdateSmall, pack200, zipit200, timestamp.stopped"/>
   <target name="updater200Router" depends="timestamp.started, prepupdateRouter, pack200, zipit200, timestamp.stopped"/>
   <target name="updater200WithGeoIP" depends="timestamp.started, prepupdate, prepgeoupdate, pack200, zipit200, timestamp.stopped"/>
+  <target name="updater200WithGeoIPAndJavadoc" depends="timestamp.started, prepupdate, prepgeoupdate, copyJavadoc, pack200, zipit200, timestamp.stopped"/>
   <target name="updater200WithGeoIPAndJbigi" depends="timestamp.started, prepupdate, prepjbigiupdate, prepgeoupdate, pack200, zipit200, timestamp.stopped"/>
   <target name="updater200WithJavadocAndJetty" depends="timestamp.started, prepjupdate, copyJavadoc, pack200, zipit200, timestamp.stopped"/>
   <target name="updater200WithJavadoc" depends="timestamp.started, prepupdate, copyJavadoc, pack200, zipit200, timestamp.stopped"/>
@@ -2484,13 +2486,13 @@
     <copy quiet="true" file="build/jbigi.jar" todir="pkg-temp/lib/"/>
   </target>
 
-  <!-- GeoIP files -->
+  <!-- GeoIP database -->
   <target name="prepgeoupdate" depends="prepgeoupdate-unlesspkg">
     <copy quiet="true" file="installer/resources/countries.txt" todir="pkg-temp/geoip/"/>
     <copy quiet="true" file="installer/resources/continents.txt" todir="pkg-temp/geoip/"/>
   </target>
 
-  <!-- GeoIP files, set withGeoIPDatabase=true in override.properties to prevent -->
+  <!-- GeoIP database, set withGeoIPDatabase=true in override.properties to prevent -->
   <!-- As of 0.9.26, the files are not included in Debian/Ubuntu builds. -->
   <target name="prepgeoupdate-unlesspkg" unless="${with-geoip-database}">
     <mkdir dir="pkg-temp/geoip"/>
