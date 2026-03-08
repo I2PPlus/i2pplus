@@ -92,7 +92,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private final static String PROP_BLOCK_COUNTRIES = "router.blockCountries";
     private final static String DEFAULT_BLOCK_COUNTRIES = "";
     public static final String minRouterVersion = "0.9.20";
-    public static final String MIN_VERSION = "0.9.64";
+    public static final String MIN_VERSION = "0.9.66";
     public static String CURRENT_VERSION = "0.9.67";
     private final Object kbInitLock = new Object();
     private final AtomicInteger knownLeaseSetsCount = new AtomicInteger(0);

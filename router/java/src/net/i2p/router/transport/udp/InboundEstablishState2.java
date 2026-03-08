@@ -440,7 +440,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         boolean isSlow = (cap != null && !cap.equals("")) &&
                          (bw.equals("K") || bw.equals("L") || bw.equals("M") || bw.equals("N"));
         String version = ri.getVersion();
-        boolean isOld = VersionComparator.comp(version, "0.9.64") < 0;
+        boolean isOld = VersionComparator.comp(version, "0.9.66") < 0;
 
         if (!reachable && isSlow && isOld) {
             _context.banlist().banlistRouter(h, " <b>➜</b> Old and slow (" + version + " / " + bw + "U)",
