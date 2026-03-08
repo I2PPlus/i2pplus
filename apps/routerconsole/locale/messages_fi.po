@@ -2574,7 +2574,7 @@ msgstr "POIS KÄYTÖSTÄ"
 msgid "Queue Totals"
 msgstr "Jonon kokonaissummat"
 
-msgid "Job Statistics (excluding single-shot jobs)"
+msgid "Job Statistics"
 msgstr "Työtilastot (pois lukien yksittäiset työt)"
 
 msgid "Job"

@@ -2575,7 +2575,7 @@ msgstr "FUORI SERVIZIO"
 msgid "Queue Totals"
 msgstr "In coda totali"
 
-msgid "Job Statistics (excluding single-shot jobs)"
+msgid "Job Statistics"
 msgstr "Statistiche lavoro (esclusi lavori a sequenza singola)"
 
 msgid "Job"

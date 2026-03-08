@@ -2566,7 +2566,7 @@ msgstr "TIDAK BERURUTAN"
 msgid "Queue Totals"
 msgstr "Total Antrian"
 
-msgid "Job Statistics (excluding single-shot jobs)"
+msgid "Job Statistics"
 msgstr "Statistik Pekerjaan (tidak termasuk pekerjaan tunggal)"
 
 msgid "Job"

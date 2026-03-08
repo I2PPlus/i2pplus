@@ -2574,7 +2574,7 @@ msgstr "ΕΚΤΟΣ ΛΕΙΤΟΥΡΓΙΑΣ"
 msgid "Queue Totals"
 msgstr "Σύνολα αναμονής"
 
-msgid "Job Statistics (excluding single-shot jobs)"
+msgid "Job Statistics"
 msgstr "Στατιστικές θέσεων εργασίας (εξαιρουμένων των θέσεων εργασίας μίας λήψης)"
 
 msgid "Job"

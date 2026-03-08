@@ -2566,7 +2566,7 @@ msgstr "KHÔNG ĐẶT HÀNG"
 msgid "Queue Totals"
 msgstr "Tổng số hàng đợi"
 
-msgid "Job Statistics (excluding single-shot jobs)"
+msgid "Job Statistics"
 msgstr "Thống kê công việc (không bao gồm các công việc một lần)"
 
 msgid "Job"

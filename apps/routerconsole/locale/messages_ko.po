@@ -2566,7 +2566,7 @@ msgstr "고장"
 msgid "Queue Totals"
 msgstr "대기열 총계"
 
-msgid "Job Statistics (excluding single-shot jobs)"
+msgid "Job Statistics"
 msgstr "작업 통계(단일 작업 제외)"
 
 msgid "Job"

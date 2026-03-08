@@ -2590,7 +2590,7 @@ msgstr "Narobe"
 msgid "Queue Totals"
 msgstr "Skupaj vrste"
 
-msgid "Job Statistics (excluding single-shot jobs)"
+msgid "Job Statistics"
 msgstr "Statistika posluga (brez enkratnih poslug)"
 
 msgid "Job"

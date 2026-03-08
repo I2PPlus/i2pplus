@@ -2566,7 +2566,7 @@ msgstr "གོ་རིམ་ཉམས།"
 msgid "Queue Totals"
 msgstr "གྲལ་སྒྲིག་བསྡོམས།"
 
-msgid "Job Statistics (excluding single-shot jobs)"
+msgid "Job Statistics"
 msgstr "ལས་ཀའི་སྡོམ་རྟགས་ (single-shot jobs མ་གཏོགས་པ།)"
 
 msgid "Job"

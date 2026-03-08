@@ -295,7 +295,7 @@ p:empty+.sb_notice{margin-top:9px}
 
 /* section toggler */
 .sidebarlogo{text-align:center}
-.toggleSection{position:absolute;top:-4px;right:-4px;bottom:-4px;height:calc(100% + 8px);min-height:28px;width:32px;background:rgba(0,0,0,.3) var(--collapse_hover) no-repeat center calc(50% - 2px)/10px;appearance:none;box-shadow:0 0 0 1px #000 inset;border-left:var(--border);display:none;cursor:pointer}
+#sidebar .sectionToggle .dropdown,.toggleSection{position:absolute;top:-4px;right:-4px;bottom:-4px;height:calc(100% + 8px);min-height:28px;width:32px;background:rgba(0,0,0,.3) var(--collapse_hover) no-repeat center calc(50% - 2px)/10px;appearance:none;box-shadow:0 0 0 1px #000 inset;border-left:var(--border);display:none;cursor:pointer}
 .toggleSection:not(:checked){background-image:var(--expand_hover)}
 .toggleSection:active{box-shadow:var(--btn_shadow_active);background:var(--hover) var(--expand_active) no-repeat center center/10px}
 .toggleSection:checked:active{background:var(--hover) var(--collapse_active) no-repeat center center/10px}
@@ -593,7 +593,7 @@ input[type=file]::file-selector-button{font-size:8.5pt}
 #graphdisplay::before{margin-right:6px;width:20px;height:20px;display:inline-block;vertical-align:middle;background:var(--configure);content:"";opacity:.6}
 #graphdisplay:not(.visible){margin-bottom:-18px;color:#0000;border-radius:0 0 4px 4px}
 #graphdisplay:hover,#graphdisplay:focus{color:var(--hover);transition:ease all .2s}
-h3.toggle,#graphdisplay:active,#i2pupdates~.tabletitle:active,#miscConfig+label.tabletitle{transition: ease all .2s}
+h3.toggle,#graphdisplay:active,#i2pupdates~.tabletitle:active,#miscConfig+label.tabletitle{transition:ease all .2s}
 h3.toggle:active,#graphdisplay:active,#i2pupdates~.tabletitle:active,#miscConfig+label.tabletitle:active{box-shadow:var(--bevel),var(--btn_shadow_active);transition: ease all .2s}
 #graphdisplay.visible:focus{color:var(--ink)}
 #graphdisplay.visible:active{color:var(--active)}
@@ -654,10 +654,20 @@ h3[id*="jobs"]{clear:both;margin-top:25px}
 #schedjobs th,#jobstats th:first-child,#jobstats td:first-child{padding-left:10px;text-align:left;font-weight:700}
 #schedjobs th{padding:10px}
 #schedjobs tr:hover td{background:#000800}
+#finishedjobs+ol.jobqueue[style*="block"],#scheduledjobs+ol.jobqueue[style*="block"]{margin-bottom:-3px}
 #scheduledjobs+ol li::before,#scheduledjobs+ol li::before{color:#773;opacity:.8}
 #jobs #scheduledjobs+ol,#jobs ol{padding-bottom:5px}
 #totaljobstats{margin-bottom:-2px;margin-top:10px}
 #routerjobqueue li{line-height:1.6}
+
+/* queue section toggles */
+#routerjobqueue .toggle{position:relative;cursor:pointer}
+#routerjobqueue .toggle:not(.expanded){margin-bottom:0}
+#routerjobqueue .toggle:hover{color:var(--hover)}
+#routerjobqueue .toggle .dropdown::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:"";transform:rotate(-90deg)}
+#routerjobqueue .toggle:hover .dropdown::after{background:var(--dropdown_hover);content:"";transform:rotate(-90deg)}
+#routerjobqueue .toggle.expanded .dropdown::after{background:var(--dropdown);content:"";transform:none}
+#routerjobqueue .toggle.expanded:hover .dropdown::after{background:var(--dropdown_hover);content:"";transform:none}
 
 /* job queue stats */
 #jobstats+hr{display:none}
@@ -1755,14 +1765,15 @@ td.optionsave,.buckets,.formaction,#certs h4,#certs p,#certs textarea,#config_ad
 #consolepass .delete{float:left}
 
 /* section toggles for configpeers, configui */
-#ipbans.toggle,#passwordheading.toggle{position:relative;cursor:pointer}
-#ipbans.toggle:not(.expanded),#passwordheading.toggle:not(.expanded){margin-bottom:-3px}
+#ipbans.toggle,#passwordheading.toggle,#routerjobqueue .toggle{position:relative;cursor:pointer}
+#ipbans.toggle:not(.expanded),#passwordheading.toggle:not(.expanded),#routerjobqueue .toggle:not(.expanded){margin-bottom:-3px}
 .toggleElementsActive #passwordheading.toggle:not(.expanded){margin-bottom:0}
-#ipbans.toggle:hover,#passwordheading.toggle:hover{color:var(--hover)}
-#ipbans.toggle::after,#passwordheading.toggle::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:"";transform:rotate(-90deg)}
-#ipbans.toggle:hover::after,#passwordheading.toggle:hover::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown_hover);content:"";transform:rotate(-90deg)}
-#ipbans.toggle.expanded::after,#passwordheading.toggle.expanded::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:"";transform:none}
-#ipbans.toggle.expanded:hover::after,#passwordheading.toggle.expanded:hover::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown_hover);content:"";transform:none}
+#ipbans.toggle:hover,#passwordheading.toggle:hover,#routerjobqueue .toggle:hover{color:var(--hover)}
+#ipbans.toggle::after,#passwordheading.toggle::after,#routerjobqueue .toggle .dropdown::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:"";transform:rotate(-90deg)}
+#ipbans.toggle:hover::after,#passwordheading.toggle:hover::after,#routerjobqueue .toggle:hover .dropdown::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown_hover);content:"";transform:rotate(-90deg)}
+#ipbans.toggle.expanded::after,#passwordheading.toggle.expanded::after,#routerjobqueue .toggle.expanded .dropdown::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:"";transform:none}
+#ipbans.toggle.expanded:hover::after,#passwordheading.toggle.expanded:hover::after,#routerjobqueue .toggle.expanded:hover .dropdown::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown_hover);content:"";transform:none}
+#routerjobqueue .dropdown,#routerjobqueue .dropdown::after{display:inline-block;content:""}
 
 /* configstats */
 #configstats{margin-bottom:-2px;contain:paint}

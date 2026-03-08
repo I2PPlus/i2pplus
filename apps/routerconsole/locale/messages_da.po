@@ -2574,7 +2574,7 @@ msgstr "UDEN RETNING"
 msgid "Queue Totals"
 msgstr "Køtotaler"
 
-msgid "Job Statistics (excluding single-shot jobs)"
+msgid "Job Statistics"
 msgstr "Jobstatistik (ekskl. enkeltstående job)"
 
 msgid "Job"

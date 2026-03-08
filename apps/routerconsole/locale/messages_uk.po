@@ -2582,7 +2582,7 @@ msgstr "НЕ В ПОРЯДКУ"
 msgid "Queue Totals"
 msgstr "Підсумки черги"
 
-msgid "Job Statistics (excluding single-shot jobs)"
+msgid "Job Statistics"
 msgstr "Статистика роботи (за винятком одноразових робіт)"
 
 msgid "Job"

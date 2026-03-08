@@ -2582,7 +2582,7 @@ msgstr "MIMO PROVOZ"
 msgid "Queue Totals"
 msgstr "Součet fronty"
 
-msgid "Job Statistics (excluding single-shot jobs)"
+msgid "Job Statistics"
 msgstr "Statistika práce (kromě jednorázových úloh)"
 
 msgid "Job"

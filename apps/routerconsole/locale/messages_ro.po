@@ -2582,7 +2582,7 @@ msgstr "NECOMANDĂ"
 msgid "Queue Totals"
 msgstr "Totaluri în coadă"
 
-msgid "Job Statistics (excluding single-shot jobs)"
+msgid "Job Statistics"
 msgstr "Statistici de locuri de muncă (excluzând lucrările cu o singură înregistrare)"
 
 msgid "Job"

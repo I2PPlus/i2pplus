@@ -2582,7 +2582,7 @@ msgstr "NIEPORZĄDKOWANY"
 msgid "Queue Totals"
 msgstr "Suma kolejki"
 
-msgid "Job Statistics (excluding single-shot jobs)"
+msgid "Job Statistics"
 msgstr "Statystyki zadań (z wyłączeniem zadań jednorazowych)"
 
 msgid "Job"

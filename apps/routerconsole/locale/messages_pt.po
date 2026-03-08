@@ -2574,7 +2574,7 @@ msgstr "FORA DE ORDEM"
 msgid "Queue Totals"
 msgstr "Totais da fila"
 
-msgid "Job Statistics (excluding single-shot jobs)"
+msgid "Job Statistics"
 msgstr "Estatísticas de Trabalho (excluindo trabalhos de disparo único)"
 
 msgid "Job"

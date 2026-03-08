@@ -2574,7 +2574,7 @@ msgstr "UTA ORDEN"
 msgid "Queue Totals"
 msgstr "Køtotaler"
 
-msgid "Job Statistics (excluding single-shot jobs)"
+msgid "Job Statistics"
 msgstr "Jobbstatistikk (unntatt enkeltjobber)"
 
 msgid "Job"

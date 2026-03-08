@@ -2566,7 +2566,7 @@ msgstr "故障中"
 msgid "Queue Totals"
 msgstr "キューの合計"
 
-msgid "Job Statistics (excluding single-shot jobs)"
+msgid "Job Statistics"
 msgstr "ジョブ統計（単発ジョブを除く）"
 
 msgid "Job"

@@ -2575,7 +2575,7 @@ msgstr "VÄLJAS"
 msgid "Queue Totals"
 msgstr "Järjekorra summad"
 
-msgid "Job Statistics (excluding single-shot jobs)"
+msgid "Job Statistics"
 msgstr "Tööstatistika (v.a ühekordsed tööd)"
 
 msgid "Job"

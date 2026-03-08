@@ -2574,7 +2574,7 @@ msgstr "HORS ORDRE"
 msgid "Queue Totals"
 msgstr "Total de la file d'attente"
 
-msgid "Job Statistics (excluding single-shot jobs)"
+msgid "Job Statistics"
 msgstr "Statistiques des tâches (à l'exclusion des tâches uniques)"
 
 msgid "Job"

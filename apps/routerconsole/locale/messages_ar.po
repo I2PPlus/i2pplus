@@ -2606,7 +2606,7 @@ msgstr "خارج النظام"
 msgid "Queue Totals"
 msgstr "إجماليات قائمة الانتظار"
 
-msgid "Job Statistics (excluding single-shot jobs)"
+msgid "Job Statistics"
 msgstr "إحصائيات الوظائف (باستثناء الوظائف الفردية)"
 
 msgid "Job"

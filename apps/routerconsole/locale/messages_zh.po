@@ -2566,7 +2566,7 @@ msgstr "失败"
 msgid "Queue Totals"
 msgstr "排队总数"
 
-msgid "Job Statistics (excluding single-shot jobs)"
+msgid "Job Statistics"
 msgstr "工作统计（不包括单枪工作）"
 
 msgid "Job"
