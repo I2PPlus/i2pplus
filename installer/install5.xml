@@ -6,7 +6,7 @@
   xsi:schemaLocation="http://izpack.org/schema/installation http://izpack.org/schema/5.0/izpack-installation-5.0.xsd">
   <info>
     <appname>i2p</appname>
-    <appversion>2.10.0+</appversion>
+    <appversion>2.11.0+</appversion>
     <javaversion>1.8</javaversion>
     <!-- adding this element will make the installer attempt to launch itself with administrator permissions -->
     <run-privileged condition="izpack.windowsinstall"/>
