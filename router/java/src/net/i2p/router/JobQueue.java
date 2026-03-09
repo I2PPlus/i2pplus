@@ -526,7 +526,7 @@ public class JobQueue {
                             boolean isSlow = SystemVersion.isSlow();
                             if (timeToWait < 0) {timeToWait = highLoad ? 50 : 10;}
                             else if (timeToWait < 10) {timeToWait = highLoad ? 20 : 5;}
-                            else if (timeToWait > 10*1000) {timeToWait = highLoad ? 12*1000 : 10*1000;}
+                            else if (timeToWait > 10*1000) {timeToWait = highLoad ? 1000 : 500;}
                             else if (!isSlow && timeToWait > 2000) {timeToWait = highLoad ? 3*1000 : 2*1000;}
                             _nextPumperRun = _context.clock().now() + timeToWait;
                             _jobLock.wait(timeToWait);
