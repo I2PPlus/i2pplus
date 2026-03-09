@@ -30,16 +30,27 @@ import net.i2p.util.Log;
  * lock-free concurrency, minimizing blocking and wake overhead.</p>
  */
 public class InNetMessagePool implements Service {
+
+    /**
+     * Wrapper class to pair tunnel data messages with their sender hash.
+     * Ensures message and sender are always processed together to prevent mismatches.
+     */
+    private static class QueuedMessage {
+        final I2NPMessage message;
+        final Hash from;
+        QueuedMessage(I2NPMessage m, Hash f) { message = m; from = f; }
+    }
+
     private final Log _log;
     private final RouterContext _context;
     private final HandlerJobBuilder[] _handlerJobBuilders;
 
     /**
-     * Concurrent queues for pending messages and their sender hashes.
+     * Concurrent queue for pending tunnel data messages with their sender hashes.
      * Used only when dispatching is not direct.
+     * Uses QueuedMessage wrapper to ensure message/sender pairing is preserved.
      */
-    private final LinkedBlockingQueue<I2NPMessage> _pendingDataMessages;
-    private final LinkedBlockingQueue<Hash> _pendingDataMessagesFrom;
+    private final LinkedBlockingQueue<QueuedMessage> _pendingDataMessages;
     private final LinkedBlockingQueue<I2NPMessage> _pendingGatewayMessages;
 
     private SharedShortCircuitDataJob _shortCircuitDataJob;
@@ -76,11 +87,9 @@ public class InNetMessagePool implements Service {
 
         if (DISPATCH_DIRECT) {
             _pendingDataMessages = null;
-            _pendingDataMessagesFrom = null;
             _pendingGatewayMessages = null;
         } else {
             _pendingDataMessages = new LinkedBlockingQueue<>();
-            _pendingDataMessagesFrom = new LinkedBlockingQueue<>();
             _pendingGatewayMessages = new LinkedBlockingQueue<>();
             _shortCircuitDataJob = new SharedShortCircuitDataJob(context);
             _shortCircuitGatewayJob = new SharedShortCircuitGatewayJob(context);
@@ -364,8 +373,7 @@ public class InNetMessagePool implements Service {
         if (DISPATCH_DIRECT) {
             doShortCircuitTunnelData(messageBody, from);
         } else {
-            _pendingDataMessages.offer(messageBody);
-            _pendingDataMessagesFrom.offer(from);
+            _pendingDataMessages.offer(new QueuedMessage(messageBody, from));
             if (!_dispatchThreaded)
                 _context.jobQueue().addJob(_shortCircuitDataJob);
         }
@@ -415,7 +423,6 @@ public class InNetMessagePool implements Service {
         _alive.set(false);
         if (!DISPATCH_DIRECT) {
             _pendingDataMessages.clear();
-            _pendingDataMessagesFrom.clear();
             _pendingGatewayMessages.clear();
         }
     }
@@ -451,10 +458,9 @@ public class InNetMessagePool implements Service {
 
         @Override
         public void runJob() {
-            I2NPMessage msg = _pendingDataMessages.poll();
-            Hash from = _pendingDataMessagesFrom.poll();
-            if (msg != null)
-                doShortCircuitTunnelData(msg, from);
+            QueuedMessage qm = _pendingDataMessages.poll();
+            if (qm != null)
+                doShortCircuitTunnelData(qm.message, qm.from);
             if (!_pendingDataMessages.isEmpty())
                 getContext().jobQueue().addJob(this);
         }
@@ -515,10 +521,9 @@ public class InNetMessagePool implements Service {
         public void run() {
             while (_alive.get()) {
                 try {
-                    I2NPMessage msg = _pendingDataMessages.take(); // blocks until available
-                    Hash from = _pendingDataMessagesFrom.take();   // blocks until available
+                    QueuedMessage qm = _pendingDataMessages.take(); // blocks until available
                     long before = _context.clock().now();
-                    doShortCircuitTunnelData(msg, from);
+                    doShortCircuitTunnelData(qm.message, qm.from);
                     long elapsed = _context.clock().now() - before;
                     _context.statManager().addRateData("pool.dispatchDataTime", elapsed);
                 } catch (InterruptedException ie) {
