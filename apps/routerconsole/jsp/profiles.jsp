@@ -14,9 +14,9 @@
 %>
 <h1 class=netwrk><%=intl._t("Peer Profiles")%></h1>
 <%  } else if (req.equals("4")) { %>
-<h1 class=netwrk><%=intl._t("Peer Profiles")%> &ndash; <%=intl._t("Session Banned Peers")%></h1>
+<h1 class=netwrk><%=intl._t("Session Banned Peers")%></h1>
 <% } else if (req.equals("3")) { %>
-<h1 class=netwrk><%=intl._t("Peer Profiles")%> &ndash; <%=intl._t("Banned Peers")%></h1>
+<h1 class=netwrk><%=intl._t("Banned Peers")%></h1>
 <%  } else if (req.equals("2")) { %>
 <h1 class=netwrk><%=intl._t("Peer Profiles")%> &ndash; <%=intl._t("Floodfills")%></h1>
 <%  } else if (req.equals("1")) { %>
@@ -30,8 +30,8 @@
 <jsp:getProperty name="profilesHelper" property="summary"/>
 </div>
 </div>
-<script src=/js/tablesort/tablesort.js></script>
-<script src=/js/tablesort/tablesort.number.js></script>
+<script src=/js/tablesort/tablesort.js type=module></script>
+<script src=/js/tablesort/tablesort.number.js type=module></script>
 <script src=/js/lazyload.js></script>
 <script src=/js/profiles.js type=module></script>
 <style>.wideload{height:unset!important;opacity:1!important}#profiles::before{display:none}</style>
