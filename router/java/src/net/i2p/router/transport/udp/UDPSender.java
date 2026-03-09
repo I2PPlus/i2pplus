@@ -25,7 +25,7 @@ import net.i2p.util.SystemVersion;
  * <p>
  * Supports graceful startup and shutdown signaling using a poison packet.
  */
-class UDPSender {
+public class UDPSender {
     private final RouterContext _context;
     private final Log _log;
     private final DatagramSocket _socket;
@@ -45,15 +45,12 @@ class UDPSender {
      * Minimum and maximum queue sizes depend on system performance.
      * Queue sizes are tuned to compete with NTCP bandwidth requests and to optimize CoDel behavior.
      */
-    private static final int MIN_QUEUE_SIZE = 16;
-    private static final int MAX_QUEUE_SIZE = 64;
+    private static final int MIN_QUEUE_SIZE = 128;
+    private static final int MAX_QUEUE_SIZE = 1024;
 
-    /**
-     * CoDel algorithm target delay in milliseconds and interval to control pacing.
-     * Defaults are 20ms target and 500ms interval, can be overridden via properties.
-     */
-    private static final int CODEL_TARGET = 10;
-    private static final int CODEL_INTERVAL = 100;
+    /** CoDel algorithm target delay in milliseconds and interval to control pacing. */
+    public static final int CODEL_TARGET = 100;
+    public static final int CODEL_INTERVAL = 500;
 
     public static final String PROP_CODEL_TARGET = "router.codelTarget";
     public static final String PROP_CODEL_INTERVAL = "router.codelInterval";
@@ -85,7 +82,7 @@ class UDPSender {
         _log = ctx.logManager().getLog(UDPSender.class);
 
         long maxMemory = SystemVersion.getMaxMemory();
-        int qsize = (int) Math.max(MIN_QUEUE_SIZE, Math.min(MAX_QUEUE_SIZE, Math.min(32, (maxMemory) / (64 * 1024 * 1024))));
+        int qsize = (int) Math.max(MIN_QUEUE_SIZE, Math.min(MAX_QUEUE_SIZE, (maxMemory) / (64 * 1024 * 1024)));
 
         _outboundQueue = new CoDelPriorityBlockingQueue<>(ctx, "UDP-Sender", qsize,
                 ctx.getProperty(PROP_CODEL_TARGET, CODEL_TARGET),
