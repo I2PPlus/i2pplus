@@ -16,6 +16,7 @@ import net.i2p.router.transport.CommSystemFacadeImpl;
 import net.i2p.router.transport.GeoIP;
 import net.i2p.router.transport.Transport;
 import net.i2p.router.transport.udp.UDPTransport;
+import net.i2p.router.transport.udp.UDPSender;
 import net.i2p.router.web.HelperBase;
 import net.i2p.util.SystemVersion;
 
@@ -124,13 +125,13 @@ public class InfoHelper extends HelperBase {
     public String codelInterval() {
         String interval = _context.getProperty("router.codelInterval");
         if (interval != null) {return interval;}
-        else {return "100";}
+        else {return Integer.toString(UDPSender.CODEL_INTERVAL);}
     }
 
     public String codelTarget() {
         String target = _context.getProperty("router.codelTarget");
         if (target != null) {return target;}
-        else {return "10";}
+        else {return Integer.toString(UDPSender.CODEL_TARGET);}
     }
 
     public String getFamily() {
