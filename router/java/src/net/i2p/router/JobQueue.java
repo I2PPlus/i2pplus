@@ -439,29 +439,13 @@ public class JobQueue {
                             if (job instanceof JobImpl) {((JobImpl) job).madeReady(now);}
                             return job;
                         } else {
-                            // Don't remove and re-add jobs - this breaks TreeSet ordering
-                            if (timeLeft > 10*1000 && iter.hasNext()) {
-                                if (_log.shouldInfo()) {
-                                    _log.info(job + " deferred for " + DataHelper.formatDuration(timeLeft));
-                                }
-                                Job nextJob = iter.next();
-                                _timedJobs.add(job);
-                                long nextTimeLeft = nextJob.getTiming().getStartAfter() - now;
-                                if (timeLeft > nextTimeLeft) {
-                                    if (_log.shouldInfo()) {
-                                        _log.info(job + " out of order with " + nextJob + "\n* Difference: " +
-                                                  DataHelper.formatDuration(timeLeft - nextTimeLeft));
-                                    }
-                                    // timeToWait = Math.max(10, nextTimeLeft); // Removed - timeToWait not in scope
-                                }
-                            }
                             break;
                         }
                     }
                 }
 
                 // Then check normal priority jobs
-                j = _readyJobs.poll(100, TimeUnit.MILLISECONDS);
+                j = _readyJobs.poll(10, TimeUnit.MILLISECONDS);
                 if (j != null) {
                     if (j.getJobId() == POISON_ID) break;
                     return j;
@@ -535,30 +519,13 @@ public class JobQueue {
                                     iter.remove();
                                 } else {
                                     timeToWait = timeLeft;
-                                    // Don't remove and re-add jobs - this breaks TreeSet ordering
-                                    // Just check the next job to adjust wait time if needed
-                                    if (timeToWait > 10*1000 && iter.hasNext()) {
-                                        if (_log.shouldInfo()) {
-                                            _log.info(j + " deferred for " + DataHelper.formatDuration(timeToWait));
-                                        }
-                                        Job nextJob = iter.next();
-                                        _timedJobs.add(j);
-                                        long nextTimeLeft = nextJob.getTiming().getStartAfter() - now;
-                                        if (timeToWait > nextTimeLeft) {
-                                            if (_log.shouldInfo()) {
-                                                _log.info(j + " out of order with " + nextJob + "\n* Difference: " +
-                                                          DataHelper.formatDuration(timeToWait - nextTimeLeft));
-                                            }
-                                            timeToWait = Math.max(10, nextTimeLeft);
-                                        }
-                                    }
                                     break;
                                 }
                             }
                             boolean highLoad = SystemVersion.getCPULoadAvg() > 98 || SystemVersion.getCPULoad() > 98;
                             boolean isSlow = SystemVersion.isSlow();
-                            if (timeToWait < 0) {timeToWait = highLoad ? 250 : 100;}
-                            else if (timeToWait < 10) {timeToWait = highLoad ? 100 : 50;}
+                            if (timeToWait < 0) {timeToWait = highLoad ? 50 : 10;}
+                            else if (timeToWait < 10) {timeToWait = highLoad ? 20 : 5;}
                             else if (timeToWait > 10*1000) {timeToWait = highLoad ? 12*1000 : 10*1000;}
                             else if (!isSlow && timeToWait > 2000) {timeToWait = highLoad ? 3*1000 : 2*1000;}
                             _nextPumperRun = _context.clock().now() + timeToWait;
