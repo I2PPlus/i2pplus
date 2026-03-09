@@ -327,11 +327,11 @@ class TunnelRenderer {
                 sb.append("</td></tr>\n<tr class=bwUsage><td colspan=8>")
                   .append("<b>").append(_t("Lifetime bandwidth usage")).append(":</b>&nbsp;")
                   .append(DataHelper.formatSize2(processed*1024, true).replace("i", "")).append("B")
-                  .append("</td></tr></tfoot>\n</table></div>\n");
+                  .append("</td></tr></tfoot>\n</table>\n</div>\n");
             } else { // bwShare < 12K/s
                 sb.append("<div class=\"statusnotes noparticipate\"><b>")
                   .append(_t("Not enough shared bandwidth to build transit tunnels.")).append("</b> <a href=\"config\">[")
-                  .append(_t("Configure")).append("]</a></div>\n");
+                  .append(_t("Configure")).append("]</a>\n</div>\n");
             }
         } else if (_context.router().isHidden()) {
             sb.append("<p class=infohelp>")
@@ -340,7 +340,6 @@ class TunnelRenderer {
             sb.append("<p class=infohelp>").append(_t("No transit tunnels currently active.")).append("</p>");
         }
 
-        sb.append("</div>\n");
         out.write(sb.toString());
         out.flush();
         sb.setLength(0);
