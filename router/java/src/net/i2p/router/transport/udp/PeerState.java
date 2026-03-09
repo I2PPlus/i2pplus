@@ -305,9 +305,12 @@ public class PeerState {
         if (rtt > 0) {recalculateTimeouts(rtt);}
         else {_rttDeviation = _rtt;}
 
+        long maxMemory = SystemVersion.getMaxMemory();
+        int outboundQueueSize = Math.max(16, Math.min(64, (int)(maxMemory / (256 * 1024 * 1024))));
+
         _inboundMessages = new ConcurrentHashMap<>(16);
         _outboundMessages = new CachedIteratorCollection<OutboundMessageState>();
-        _outboundQueue = new PriBlockingQueue<OutboundMessageState>(ctx, "UDP-PeerState", 16);
+        _outboundQueue = new PriBlockingQueue<OutboundMessageState>(ctx, "UDP-PeerState", outboundQueueSize);
         _remotePeer = remotePeer;
         _isInbound = isInbound;
         _remoteHostId = new RemoteHostId(_remoteIP, _remotePort);

@@ -31,8 +31,6 @@ class MessageReceiver {
     private static final int cores = SystemVersion.getCores();
     private static final int MIN_THREADS = 1;
     private static final int MAX_THREADS = SystemVersion.isSlow() ? 2 : 3;
-    private static final int MIN_QUEUE_SIZE =  SystemVersion.isSlow() ? 16 : 32;
-    private static final int MAX_QUEUE_SIZE = SystemVersion.isSlow() ? 64 : 128;
     private final int _threadCount;
     private static final long POISON_IMS = -99999999999l;
 
@@ -43,7 +41,7 @@ class MessageReceiver {
         long maxMemory = SystemVersion.getMaxMemory();
         boolean isSlow = SystemVersion.isSlow();
         _threadCount = MAX_THREADS;
-        int qsize = (int) MAX_QUEUE_SIZE;
+        int qsize = Math.max(64, Math.min(512, (int)(maxMemory / (32 * 1024 * 1024))));
         _completeMessages = new CoDelBlockingQueue<InboundMessageState>(ctx, "UDP-MessageReceiver", qsize);
         _context.statManager().createRateStat("udp.inboundExpired", "Number of inbound messages expired before receipt", "Transport [UDP]", UDPTransport.RATES);
         _alive = true;
