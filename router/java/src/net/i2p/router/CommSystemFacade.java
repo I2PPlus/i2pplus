@@ -135,6 +135,7 @@ public abstract class CommSystemFacade implements Service {
     public boolean isInStrictCountry(RouterInfo ri) { return false; }
 
     public String getCountry(Hash peer) { return null; }
+    public String getCountry(String ip) { return null; }
     public String getCountryName(String code) { return code; }
 
     /**

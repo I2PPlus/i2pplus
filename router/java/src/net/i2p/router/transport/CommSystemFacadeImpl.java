@@ -1199,7 +1199,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         try {
             byte[] ipBytes = InetAddress.getByName(ipAddress).getAddress();
             return _geoIP.get(ipBytes); // Existing geoip lookup by raw IP bytes
-        } catch (UnknownHostException e) {return _t("unknown");}
+        } catch (UnknownHostException e) {return null;}
     }
 
    private static final int cores = SystemVersion.getCores();
@@ -1898,6 +1898,16 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             }
         }
         return null;
+    }
+
+    /**
+     * Get country code for an IP address string
+     * @param ip IP address string
+     * @return two-letter country code or null if unknown
+     */
+    @Override
+    public String getCountry(String ip) {
+        return getCountryFromIPAddress(ip);
     }
 
     /**

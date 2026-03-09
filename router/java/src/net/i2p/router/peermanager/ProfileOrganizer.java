@@ -1074,4 +1074,44 @@ public class ProfileOrganizer {
         System.out.println("Capacity:    " + num(organizer.getCapacityThreshold()) + " (" + organizer.countHighCapacityPeers() + " reliable peers)");
     }
 
+    public double getTunnelBuildSuccess() {
+        try {
+            RateStat eExpl = _context.statManager().getRate("tunnel.buildExploratoryExpire");
+            RateStat rExpl = _context.statManager().getRate("tunnel.buildExploratoryReject");
+            RateStat sExpl = _context.statManager().getRate("tunnel.buildExploratorySuccess");
+            RateStat eClient = _context.statManager().getRate("tunnel.buildClientExpire");
+            RateStat rClient = _context.statManager().getRate("tunnel.buildClientReject");
+            RateStat sClient = _context.statManager().getRate("tunnel.buildClientSuccess");
+            RateStat dup = _context.statManager().getRate("tunnel.buildDuplicate");
+            if (eExpl != null && rExpl != null && sExpl != null &&
+                eClient != null && rClient != null && sClient != null && dup != null) {
+                Rate er = eExpl.getRate(RateConstants.TEN_MINUTES);
+                Rate rr = rExpl.getRate(RateConstants.TEN_MINUTES);
+                Rate sr = sExpl.getRate(RateConstants.TEN_MINUTES);
+                Rate erClient = eClient.getRate(RateConstants.TEN_MINUTES);
+                Rate rrClient = rClient.getRate(RateConstants.TEN_MINUTES);
+                Rate srClient = sClient.getRate(RateConstants.TEN_MINUTES);
+                Rate dr = dup.getRate(RateConstants.TEN_MINUTES);
+                if (er != null && rr != null && sr != null &&
+                    erClient != null && rrClient != null && srClient != null && dr != null) {
+                    double expire = er.getCurrentTotalValue() + erClient.getCurrentTotalValue();
+                    double reject = rr.getCurrentTotalValue() + rrClient.getCurrentTotalValue();
+                    double success = sr.getCurrentTotalValue() + srClient.getCurrentTotalValue();
+                    double dupCount = dr.getCurrentTotalValue();
+                    double total = expire + reject + success + dupCount;
+                    if (total > 0) {
+                        return success / total;
+                    }
+                }
+            }
+        } catch (Exception e) {
+        }
+        return 0;
+    }
+
+    public boolean isLowBuildSuccess() {
+        double buildSuccess = getTunnelBuildSuccess();
+        return buildSuccess < 0.40;
+    }
+
 }
