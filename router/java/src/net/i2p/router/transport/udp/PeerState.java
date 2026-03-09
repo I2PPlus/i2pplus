@@ -122,6 +122,9 @@ public class PeerState {
 
     private int _messagesReceived;
     private final AtomicInteger _messagesSent = new AtomicInteger();
+    /** Last time we logged a send rejection (for rate-limited logging) */
+    private long _lastRejectionLogTime;
+    private static final long REJECTION_LOG_INTERVAL = 1000;  // 1 second
     private int _packetsTransmitted;
     /** how many packets were retransmitted within the last RETRANSMISSION_PERIOD_WIDTH packets */
     private int _packetsRetransmitted;
@@ -159,6 +162,10 @@ public class PeerState {
 
     /** The minimum number of outstanding messages (NOT fragments/packets) */
     private static final int MIN_CONCURRENT_MSGS = SystemVersion.isSlow() ? 16 : 64;
+    /** Maximum lifetime before a message is considered stuck and expired (60 seconds) */
+    private static final long MAX_MESSAGE_LIFETIME = 60 * 1000;
+    /** After this time, we start adding backoff delay (5 seconds) */
+    private static final long BACKOFF_START_LIFETIME = 5 * 1000;
     /** @since 0.9.42 */
     private static final int INIT_CONCURRENT_MSGS = SystemVersion.isSlow() ? 64 : 512;
     /** how many concurrent outbound messages do we allow OutboundMessageFragments to send
@@ -1285,8 +1292,37 @@ public class PeerState {
             if (_retransmitTimer > 0) {
                 return Math.max(0, (int)(_retransmitTimer - now));
             }
+            long oldestLifetime = getOldestMessageLifetime(now);
+            if (oldestLifetime > MAX_MESSAGE_LIFETIME) {
+                return 0;
+            }
+            if (oldestLifetime > BACKOFF_START_LIFETIME) {
+                long backoffMs = Math.min(oldestLifetime - BACKOFF_START_LIFETIME, 500);
+                return (int) backoffMs;
+            }
             return Integer.MAX_VALUE;
         }
+    }
+
+    /**
+     * Get the lifetime of the oldest message in the outbound queue or active messages.
+     * @return lifetime in ms, or 0 if no messages
+     */
+    private long getOldestMessageLifetime(long now) {
+        long oldest = 0;
+        for (OutboundMessageState state : _outboundQueue) {
+            long lifetime = state.getLifetime();
+            if (lifetime > oldest) {
+                oldest = lifetime;
+            }
+        }
+        for (OutboundMessageState state : _outboundMessages) {
+            long lifetime = state.getLifetime();
+            if (lifetime > oldest) {
+                oldest = lifetime;
+            }
+        }
+        return oldest;
     }
 
     /**
@@ -1333,7 +1369,8 @@ public class PeerState {
             return true;
         } else {
             _context.statManager().addRateData("udp.sendRejected", state.getPushCount());
-            if (_log.shouldDebug()) {
+            if (_log.shouldDebug() && now - _lastRejectionLogTime > REJECTION_LOG_INTERVAL) {
+                _lastRejectionLogTime = now;
                 _log.debug("Allocation for [" + _remotePeer.toBase64().substring(0,6) + "] rejected (Window size: " + getSendWindowBytes()
                           + " / available: " + getSendWindowBytesRemaining()
                           + " bytes) for [MsgID" + state.getMessageId() + "]" + state);
