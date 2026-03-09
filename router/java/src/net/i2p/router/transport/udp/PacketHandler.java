@@ -58,6 +58,7 @@ class PacketHandler {
         for (int i = 0; i < num_handlers; i++) {_handlers[i] = new Handler();}
 
         _context.statManager().createRateStat("udp.destroyedInvalidSkew", "Session destroyed (bad skew)", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRateStat("udp.blockedPacketBytes", "Inbound packets blocked (bytes)", "Transport [UDP]", UDPTransport.RATES);
     }
 
     public synchronized void startup() {
@@ -265,7 +266,7 @@ class PacketHandler {
                                 _log.info("Migrated " + packet.getPacket().getLength() + " byte packet from " + from + ps2);
                             }
                             ps2.receivePacket(from, packet);
-                            performBanIfNeeded(ip, banReason, shouldBan);
+                            performBanIfNeeded(ip, banReason, shouldBan, packet.getPacket().getLength());
                             return true;
                         }
                         PeerStateDestroyed dead = _transport.getRecentlyClosed(id);
@@ -275,17 +276,17 @@ class PacketHandler {
                                            " for recently closed ID " + id);
                             }
                             dead.receivePacket(from, packet);
-                            performBanIfNeeded(ip, banReason, shouldBan);
+                            performBanIfNeeded(ip, banReason, shouldBan, packet.getPacket().getLength());
                             return true;
                         }
                     }
-                    performBanIfNeeded(ip, banReason, shouldBan);
+                    performBanIfNeeded(ip, banReason, shouldBan, packet.getPacket().getLength());
                     return false;
                 }
                 type = header.getType();
 
                 if (type == SSU2Util.SESSION_CONFIRMED_FLAG_BYTE) {
-                    performBanIfNeeded(ip, banReason, shouldBan);
+                    performBanIfNeeded(ip, banReason, shouldBan, packet.getPacket().getLength());
                     return false;
                 }
                 if (type == SSU2Util.SESSION_REQUEST_FLAG_BYTE &&
@@ -329,7 +330,7 @@ class PacketHandler {
                         }
                         shouldBan = true;
                         banReason = "Corrupt Session / Token Requests";
-                        performBanIfNeeded(ip, banReason, shouldBan);
+                        performBanIfNeeded(ip, banReason, shouldBan, packet.getPacket().getLength());
                         return false;
                     }
                 }
@@ -340,7 +341,7 @@ class PacketHandler {
                     }
                     shouldBan = true;
                     banReason = "Bad Source ConnectionID";
-                    performBanIfNeeded(ip, banReason, shouldBan);
+                    performBanIfNeeded(ip, banReason, shouldBan, packet.getPacket().getLength());
                     return false;
                 }
                 if (header.getDestConnID() != state.getRcvConnID()) {
@@ -361,7 +362,7 @@ class PacketHandler {
                     }
                     shouldBan = true;
                     banReason = "Short Session Requests";
-                    performBanIfNeeded(ip, banReason, shouldBan);
+                    performBanIfNeeded(ip, banReason, shouldBan, packet.getPacket().getLength());
                     return false;
                 }
                 if (header.getDestConnID() != state.getRcvConnID()) {
@@ -370,7 +371,7 @@ class PacketHandler {
                     }
                     shouldBan = true;
                     banReason = "Bad Destination ConnectionID";
-                    performBanIfNeeded(ip, banReason, shouldBan);
+                    performBanIfNeeded(ip, banReason, shouldBan, packet.getPacket().getLength());
                     return false;
                 }
                 if (header.getPacketNumber() != 0 ||
@@ -380,14 +381,14 @@ class PacketHandler {
                         _log.info("Queueing possible data packet (" + packet.getPacket().getLength() + " bytes) on: " + state);
                     }
                     state.queuePossibleDataPacket(packet);
-                    performBanIfNeeded(ip, banReason, shouldBan);
+                    performBanIfNeeded(ip, banReason, shouldBan, packet.getPacket().getLength());
                     return true;
                 }
                 type = SSU2Util.SESSION_CONFIRMED_FLAG_BYTE;
             }
         }
 
-        performBanIfNeeded(ip, banReason, shouldBan);
+        performBanIfNeeded(ip, banReason, shouldBan, packet.getPacket().getLength());
 
         if (type != -1) {
             SSU2Header.acceptTrialDecrypt(packet, header);
@@ -435,7 +436,13 @@ class PacketHandler {
      * @param banReason the reason for banning; must not be null or empty if banning
      * @param shouldBan true if banning should be performed; false to skip banning
      */
-    private void performBanIfNeeded(InetAddress ip, String banReason, boolean shouldBan) {
+    private void performBanIfNeeded(InetAddress ip, String banReason, boolean shouldBan, int packetSize) {
+        // Track all blocked packets regardless of whether we ban or not
+        // This helps identify inbound bandwidth waste from bad actors
+        if (packetSize > 0) {
+            _context.statManager().addRateData("udp.blockedPacketBytes", packetSize);
+        }
+
         long uptime = _context.router().getUptime();
         if (uptime < 15*60*1000) {return;} // don't ban at startup
 
