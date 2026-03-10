@@ -1039,8 +1039,9 @@ public class TunnelPool {
         }
 
         // Fixed, conservative algorithm - starts building 3 1/2 - 6m before expiration
-        // (210 or 270s) + (0..90s random)
-        long expireAfter = _context.clock().now() + _expireSkew; // + _settings.getRebuildPeriod() + _expireSkew;
+        // (210 or 270s) + (0..90s random) - skew is applied to build time, not expiration time
+        long now = _context.clock().now();
+        long expireAfter = now + _expireSkew; // Used only for fallback tunnel filtering
         int expire30s = 0;
         int expire90s = 0;
         int expire150s = 0;
@@ -1053,7 +1054,8 @@ public class TunnelPool {
             for (int i = 0; i < _tunnels.size(); i++) {
                 TunnelInfo info = _tunnels.get(i);
                 if (allowZeroHop || (info.getLength() > 1)) {
-                    long timeToExpire = info.getExpiration() - expireAfter;
+                    // Use actual current time, not skewed time, for accurate expiration calculation
+                    long timeToExpire = info.getExpiration() - now;
                     if (timeToExpire <= 0) {} // consider it unusable
                     else if (timeToExpire <= 30*1000) {expire30s++;}
                     else if (timeToExpire <= 90*1000) {expire90s++;}
