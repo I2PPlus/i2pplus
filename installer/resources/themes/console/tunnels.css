@@ -25,9 +25,10 @@ body.js #tunnelsContainer{display:block!important}
 tr.failed{background:#f002;display:none!important}
 tr.failed td>*:not(.failed .status span){opacity:.5}
 tr.failed .testFailed{animation:none}
-.poolsummary th{pointer-events:none}
+.poolsummary th{user-select:none}
 .poolsummary th:not(:first-child){white-space:nowrap;text-align:left}
-#statusnotes td{padding:10px;font-style:italic;font-size:105%;text-align:center;border-top-width:2px}
+#statusnotes td{padding:10px;line-height:1;font-style:italic;font-size:105%;text-align:center}
+#tunnels th:first-child{white-space:nowrap}
 #tunnels .poolsummary .inCount,#tunnels .poolsummary .outCount,#tunnels .poolsummary .inBuild,#tunnels .poolsummary .outBuild{padding:8px 8px 8px 22px;font-size:105%;background:url(/themes/console/images/inbound.svg) no-repeat left center/18px,var(--th)}
 #tunnels .poolsummary .outCount,#tunnels .poolsummary .outBuild{background-image:url(/themes/console/images/outbound.svg),var(--th)}
 #tunnels .poolsummary .outBuild{padding-right:10px}

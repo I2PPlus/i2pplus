@@ -731,7 +731,7 @@ table[id$="logs"] ul li:last-child{margin-bottom:10px}
 .main[id^="config_"] th{font-size:9.5pt}
 .main[id^="config_"] .th_title,#configstats th,#config_family th{font-size:11pt}
 .main[id^="config_"] th:first-child{padding-left:10px}
-div[id^="config"] tr:last-child td,#events tr:last-child td,#profiles tr:last-child td,#tunnels tr:last-child td,td.tabletextarea,.configtable tr:nth-last-child(2) td,#consolepass tr:first-child td,td.infohelp,#updatehelper,#config_update tr:first-child td,#config_update tr:nth-child(2) td{border-bottom:var(--border_inner)}
+div[id^="config"] tr:last-child td,#events tr:last-child td,#profiles tr:last-child td,td.tabletextarea,.configtable tr:nth-last-child(2) td,#consolepass tr:first-child td,td.infohelp,#updatehelper,#config_update tr:first-child td,#config_update tr:nth-child(2) td{border-bottom:var(--border_inner)}
 .th_title,#consolepass tr:first-child td,td.infohelp,#config_update tr:nth-child(2) td,#updatehelper{border-top:var(--border_inner)}
 #tunnelconfig tr:last-child,#webappconfig tr:last-child{background:repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(240,240,255,.3) 3px,#fff 5px)}
 #clientconfig td:first-child label{display:inline-block;vertical-align:middle}
@@ -908,14 +908,7 @@ h1::first-letter{font-size:112%}
 #profiles #sessionBanned th,#profiles #sessionBanned td{padding:6px 12px;text-align:left}
 #profiles #sessionBanned th:nth-child(4),#profiles #sessionBanned td:nth-child(4){text-align:right}
 #sessionBanned .b64{padding:5px 8px;display:inline-block;vertical-align:middle;line-height:1;font-family:var(--monospaced);font-size:90%;font-weight:500;box-shadow:var(--bevel);background:var(--badge);user-select:all}
-#sessionBanned .banFF td:first-child::before{background:var(--floodfill) no-repeat left center/18px}
-#sessionBanned{margin:11px auto 9px}
-#sessionBanned td:first-child::before{width:26px;height:20px;display:inline-block;vertical-align:middle;background:var(--client) no-repeat left center/18px;content:""}
-#sessionBanned tfoot th{padding:8px 12px}
-#sessionBanned thead th{font-size:90%;text-align:left}
-#sessionBanned th:last-child,#sessionBanned td:last-child{user-select:none}
-#sessionBanned th:nth-child(2),#sessionBanned td:nth-child(2){font-size:0}
-#sessionBanned th{user-select:none}
+#sessionBanned{margin:12px auto 9px}
 
 /* certs */
 #certs h3{margin-top:15px;margin-bottom:-6px;border-width:1px;border-radius:0;filter:none}
@@ -1206,7 +1199,6 @@ h3+.statusnotes{margin-top:2px}
 .tunnel_cap:empty::after{content:"?"}
 .tunneldisplay,.statusnotes,#config_service .infohelp,#config_service .formaction{position:relative;z-index:100}
 .tunneldisplay td{text-align:center}
-.tunneldisplay:not(#transitSummary):not(#allTransit) td:not(.rif):not(.rih):not(.rbw)::before{display:inline-block;vertical-align:middle;min-height:30px;content:""}
 .tunneldisplay td:nth-child(3){white-space:nowrap}
 .tunnel_local,.tunnel_id,.tunnel_cap{display:inline-block;vertical-align:middle;box-sizing:border-box;border:1px solid #bbd;background:var(--row);line-height:1.3}
 .tunnel_id{margin:0 3px;padding:2px 4px 2px 2px;min-width:109px;display:inline-block;box-sizing:border-box;vertical-align:middle;text-align:center;line-height:1.2}
@@ -1218,9 +1210,11 @@ h3+.statusnotes{margin-top:2px}
 .tunnels_participating td.cells:first-child{font-size:0}
 #country,#router,th#version,#tier,#edit,.tcount{width:2%;white-space:nowrap}
 #refreshPage{cursor:pointer}
+#statusnotes td{border-top:2px solid #a7a7be}
 #transitbypeer #tunnels th{position:relative}
 #tnlfilter{position:absolute;top:4px;right:41px}
 #tnlfilter input[type="text"]{background:#fff var(--filter) no-repeat 7px center/12px}
+#tunnels #tunnel_defs tr:last-child td{border-bottom:var(--border_inner)}
 #tunnel_defs b{color:#fff}
 #tunnel_defs td:first-child,#tunnel_defs td:last-child{padding:0;width:0;font-size:0;display:none}
 #tunnel_defs td:nth-child(3){border-right:var(--border_soft)}
@@ -1248,14 +1242,18 @@ h3+.statusnotes{margin-top:2px}
 #tunnels h3 a:nth-child(n+2):hover img{filter:none}
 #tunnels h3+h3 a:not(.lsview){display:none}
 #tunnels img[src$="bound.png"],#peers img[src$="bound.png"]{opacity:0}
-#tunnels th:nth-child(n+2),.statusnotes,#tunnels tfoot td{font-size:90%}
+#tunnels th:nth-child(n+2),.statusnotes{font-size:90%}
+#statusnotes td{padding:4px}
 #tunnels td{text-align:center}
 #tunnels tbody td{border:var(--border_soft)}
-#tunnels tbody td:last-child{border-right:var(--border)}
+#tunnels tbody td:first-child{border-left:var(--border_inner)}
+#tunnels tbody td:last-child{border-right:var(--border_inner)}
 #tunnels td>*{vertical-align:middle}
+#tunnels tr:hover .percentBarInner{background:#ddf}
 #tunnels .cells:first-child{width:1%;max-width:64px;min-width:64px}
 #tunnels .cells:nth-child(2),#tunnels .cells:nth-child(3),.tunnels_participating td:nth-child(4){width:2%;max-width:112px;min-width:112px;vertical-align:middle}
 #tunnels .left,#tunnels .right{margin:0;width:50%;display:inline-block;line-height:1;vertical-align:text-bottom}
+#tunnels .expiry .percentBarText{font-size:100%;color:#44d;text-shadow:1px 1px 1px #fff8;transform:translateY(2px)}
 #tunnels .lsview{margin:-10px 0 0}
 #tunnels .percentBarOuter,#tunnels .percentBarText{width:calc(100% - 8px);min-width:72px;max-width:96px}
 #tunnels .percentBarInner{width:inherit;background:#77a}
@@ -1264,6 +1262,7 @@ h3+.statusnotes{margin-top:2px}
 .tunnelsHidden #tunnels{padding-bottom:11px}
 .tunnelsHidden #tunnels h3[id]:nth-child(n+2){margin-top:-6px}
 .tunnelsHidden table+.statusnotes{margin-top:2px;border-top:1px solid var(--border_inner)}
+.poolsummary{margin:0 0 -2px}
 
 /* transit summary */
 #tunnels .cc{display:none}
@@ -3064,9 +3063,10 @@ body.isDown::after{width:80px;height:80px;top:calc(50% - 40px);left:calc(50% - 4
 #searchLS {margin:18px auto 0;display:block;column-span:all;text-align:center;border:var(--border_soft);box-shadow:var(--table_border);background:var(--th)}
 
 /* session bans */
-#banSummary h2 {margin:2px -10px 0}
+#banSummary h2 {margin:2px auto 0}
 #banSummary li{margin:2px 0;padding:0;min-width:300px;display:inline-block}
-#banSummary ul{margin:-1px -10px -16px;padding:5px 8px 4px;columns:300px 5;list-style-type:none;border:var(--border_inner);background:var(--th)}
+#banSummary ul{margin:-1px 0 -2px;padding:5px 8px 4px;columns:300px 5;list-style-type:none;border:var(--border_inner);background:var(--th)}
+#banSummary ul:empty{display:none}
 #banSummary .badge{margin:0 4px 0 0;padding:2px 4px;min-width:48px;display:inline-block;text-align:center;letter-spacing:0.05em;font-weight:600;box-shadow:var(--bevel);background:var(--badge)}
 @media (max-width:1499px) {
 #banSummary h2{margin:-1px -10px -1px}
