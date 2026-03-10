@@ -531,11 +531,12 @@ public class TunnelPool {
     }
 
     /**
-     *  @return the number of valid (non-failed) tunnels in the pool
+     *  @return the number of valid (non-failed, not expired) tunnels in the pool
      *  @since 0.9.68+
      */
     public int getValidTunnelCount() {
         int count = 0;
+        long now = _context.clock().now();
         synchronized (_tunnels) {
             for (int i = 0; i < _tunnels.size(); i++) {
                 TunnelInfo info = _tunnels.get(i);
@@ -543,6 +544,12 @@ public class TunnelPool {
                 if (info.getTunnelFailed() || 
                     info.getTestStatus() == net.i2p.router.TunnelTestStatus.FAILED ||
                     info.getConsecutiveFailures() > 1) {
+                    continue;
+                }
+                // Skip tunnels that have expired (timeLeft <= 0)
+                // This matches the display logic in TunnelRenderer
+                long timeLeft = info.getExpiration() - now;
+                if (timeLeft <= 0) {
                     continue;
                 }
                 count++;
