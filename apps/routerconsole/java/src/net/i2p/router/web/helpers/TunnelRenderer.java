@@ -1220,8 +1220,8 @@ class TunnelRenderer {
      *  @since 0.9.68+
      */
     private void renderPoolSummary(Writer out, TunnelPool in, TunnelPool outPool, Hash client) throws IOException {
-        int inCount = in.listTunnels().size();
-        int outCount = outPool != null ? outPool.listTunnels().size() : 0;
+        int inCount = in.getValidTunnelCount();
+        int outCount = outPool != null ? outPool.getValidTunnelCount() : 0;
         int inWanted = in.getSettings().getQuantity() + in.getSettings().getBackupQuantity();
         int outWanted = outPool != null ? outPool.getSettings().getQuantity() + outPool.getSettings().getBackupQuantity() : 0;
         int inBuilding = in.getInProgressCount();
@@ -1244,10 +1244,16 @@ class TunnelRenderer {
         out.write("</tr></thead>\n</table>\n");
     }
 
-    /** Get next tunnel expiry from pool */
+    /** Get next tunnel expiry from pool (excludes failed tunnels) */
     private long getNextExpiry(TunnelPool pool) {
         long next = 0;
         for (TunnelInfo ti : pool.listTunnels()) {
+            // Skip failed tunnels - they should not affect expiry sorting
+            if (ti.getTunnelFailed() || 
+                ti.getTestStatus() == net.i2p.router.TunnelTestStatus.FAILED ||
+                ti.getConsecutiveFailures() > 1) {
+                continue;
+            }
             long exp = ti.getExpiration();
             if (next == 0 || exp < next) {
                 next = exp;
