@@ -1615,6 +1615,8 @@ h3.sybils+div,h3.sybils+a[name]+table{margin-top:-1px}
 #sessionBanned .b64{padding:5px 8px;display:inline-block;vertical-align:middle;line-height:1;font-family:var(--monospaced);font-size:90%;font-weight:500;box-shadow:var(--bevel);background:var(--badge);user-select:all}
 #sessionBanned th{user-select:none}
 #sessionBanned td.country img{padding:1px;border-radius:2px;border:var(--border_softer);box-shadow:var(--highlight)}
+#sessionBanned tbody tr{transition:0.2s ease backgground}
+#sessionBanned tbody tr:hover{background:#0806;transition:0.2s ease background}
 
 /* home */
 .appicon,.sitemapLink img{animation:zoom .15s linear .3s both;backface-visibility:hidden;will-change:transform}
