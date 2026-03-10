@@ -37,4 +37,13 @@ class IterativeTimeoutJob extends JobImpl {
     }
 
     public String getName() { return "Timeout Iterative Search"; }
+
+    /**
+     * Called when the job is dropped due to router overload.
+     * Still mark the peer as failed to prevent the search from hanging.
+     */
+    @Override
+    public void dropped() {
+        _search.failed(_peer, true);
+    }
 }

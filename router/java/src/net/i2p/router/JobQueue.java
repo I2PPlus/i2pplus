@@ -317,7 +317,8 @@ public class JobQueue {
                     cls == ExploreJob.class ||
                     cls == HandleFloodfillDatabaseLookupMessageJob.class ||
                     cls == HandleGarlicMessageJob.class ||
-                    cls == IterativeSearchJob.class) {
+                    cls == IterativeSearchJob.class ||
+                    cls.getName().equals("net.i2p.router.networkdb.kademlia.IterativeTimeoutJob")) {
                     return true;
                 }
             }
