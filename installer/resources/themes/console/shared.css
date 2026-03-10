@@ -53,6 +53,13 @@
 #pluginTotals #stopped{margin-left:0;background:var(--stop) no-repeat left center/10px}
 #pconfig:hover #pluginTotals{color:var(--ink)}#.tIn{background:url(/themes/console/images/inbound.svg) no-repeat 6px center/16px,var(--badge)}
 #banSummary ul:empty{display:none}
+#sessionBanned th,#sessionBanned td{padding:4px 6px}
+#sessionBanned thead th{font-size:85%;text-align:left}
+#sessionBanned tfoot th{padding:8px 12px;text-align:center}
+#sessionBanned .country{font-size:0}
+#sessionBanned .country,#sessionBanned .expires,#sessionBanned .hostname,#sessionBanned .ip,#sessionBanned .port,#sessionBanned .reason{text-align:center}
+#sessionBanned .country,#sessionBanned .expiry,#sessionBanned .hash{width:1%;white-space:nowrap}
+#sessionBanned td.expires,#sessionBanned td.hostname,#sessionBanned td.ip,#sessionBanned td.port,#sessionBanned td.reason{font-size:95%}
 #sidebar h3:hover .badge{margin:0;width:0;font-size:0;opacity:0}
 #ssuadv a{display:inline-block;vertical-align:text-top;text-transform:none;letter-spacing:0;font-size:85%}
 #tunnelconfig .tunnelName{margin-right:6px;min-width:240px;display:inline-block}

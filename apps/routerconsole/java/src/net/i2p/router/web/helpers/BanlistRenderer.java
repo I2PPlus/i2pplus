@@ -347,7 +347,7 @@ class BanlistRenderer {
 
         entries.putAll(_context.banlist().getEntries());
         if (entries.isEmpty() && ipOnlyBans.isEmpty()) {
-            buf.append("<i>").append(_t("No bans currently active")).append("</i>");
+            buf.append("<p class=infohelp><i>").append(_t("No bans currently active")).append("</i></p>\n");
             out.append(buf);
             return;
         }

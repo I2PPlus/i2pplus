@@ -1600,24 +1600,18 @@ h3.sybils+div,h3.sybils+a[name]+table{margin-top:-1px}
 #ipv4,#ipv6,#permabanned tr:nth-child(2){border-top:var(--border);border-bottom:var(--border);background:var(--th)}
 
 /* session bans */
-#sessionBanned{margin:11px auto 9px}
+#banSummary{position:sticky;top:-4px;z-index:999999}
 #banSummary h2{margin:0 auto}
-#sessionBanned th,#sessionBanned td{padding:6px 12px}
-#sessionBanned thead th{font-size:85%;text-align:left}
-#sessionBanned tfoot th{padding:8px 12px;text-align:center}
-#sessionBanned .country{font-size:0}
-#sessionBanned .country,#sessionBanned .expires,#sessionBanned .port{text-align:center}
-#sessionBanned .hostname,#sessionBanned .ip{text-align:left}
-#sessionBanned .country,#sessionBanned .expiry,#sessionBanned .hash{width:1%;white-space:nowrap}
+#banSummary li{margin:2px 0;padding:0;min-width:300px;display:inline-block}
+#banSummary ul{padding:5px 8px 4px;columns:300px 5;list-style-type:none;border:var(--border);background:var(--th)}
+#banSummary .badge{margin:0 4px 0 0;padding:2px 4px;min-width:48px;display:inline-block;text-align:center;letter-spacing:0.05em;font-weight:600;box-shadow:var(--bevel);background:var(--badge)}
+#sessionBanned{margin:11px auto 9px}
 #sessionBanned td:nth-child(n+2){border-left:var(--border_softer)}
 #sessionBanned td.hash::before{width:26px;height:20px;display:inline-block;vertical-align:middle;background:var(--client) no-repeat left center/18px;content:""}
 #sessionBanned .banFF td.hash::before{background:var(--floodfill) no-repeat left center/18px}
 #sessionBanned .b64{padding:5px 8px;display:inline-block;vertical-align:middle;line-height:1;font-family:var(--monospaced);font-size:90%;font-weight:500;box-shadow:var(--bevel);background:var(--badge);user-select:all}
 #sessionBanned th{user-select:none}
 #sessionBanned td.country img{padding:1px;border-radius:2px;border:var(--border_softer);box-shadow:var(--highlight)}
-#banSummary li{margin:2px 0;padding:0;min-width:300px;display:inline-block}
-#banSummary ul{padding:5px 8px 4px;columns:300px 5;list-style-type:none;border:var(--border);background:var(--th)}
-#banSummary .badge{margin:0 4px 0 0;padding:2px 4px;min-width:48px;display:inline-block;text-align:center;letter-spacing:0.05em;font-weight:600;box-shadow:var(--bevel);background:var(--badge)}
 
 /* home */
 .appicon,.sitemapLink img{animation:zoom .15s linear .3s both;backface-visibility:hidden;will-change:transform}
