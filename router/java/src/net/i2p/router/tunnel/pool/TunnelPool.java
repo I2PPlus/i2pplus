@@ -531,6 +531,27 @@ public class TunnelPool {
     }
 
     /**
+     *  @return the number of valid (non-failed) tunnels in the pool
+     *  @since 0.9.68+
+     */
+    public int getValidTunnelCount() {
+        int count = 0;
+        synchronized (_tunnels) {
+            for (int i = 0; i < _tunnels.size(); i++) {
+                TunnelInfo info = _tunnels.get(i);
+                // Skip failed tunnels - they are not viable
+                if (info.getTunnelFailed() || 
+                    info.getTestStatus() == net.i2p.router.TunnelTestStatus.FAILED ||
+                    info.getConsecutiveFailures() > 1) {
+                    continue;
+                }
+                count++;
+            }
+        }
+        return count;
+    }
+
+    /**
      *  @return the number of tunnels currently being built
      *  @since 0.9.67
      */
@@ -843,6 +864,12 @@ public class TunnelPool {
         TreeSet<Lease> leases = new TreeSet<Lease>(new LeaseComparator());
         for (int i = 0; i < _tunnels.size(); i++) {
             TunnelInfo tunnel = _tunnels.get(i);
+            // Skip failed tunnels - they should not be included in LeaseSet
+            if (tunnel.getTunnelFailed() || 
+                tunnel.getTestStatus() == net.i2p.router.TunnelTestStatus.FAILED ||
+                tunnel.getConsecutiveFailures() > 1) {
+                continue;
+            }
             if (tunnel.getExpiration() <= expireAfter) {continue;} // expires too soon, skip it
 
             if (tunnel.getLength() <= 1) {
@@ -1056,6 +1083,14 @@ public class TunnelPool {
         synchronized (_tunnels) {
             for (int i = 0; i < _tunnels.size(); i++) {
                 TunnelInfo info = _tunnels.get(i);
+                // Skip failed tunnels - they are not viable and should not be counted
+                // Also skip tunnels with consecutive failures as they are likely to fail soon
+                // Use getTestStatus() to check if tunnel is marked as FAILED
+                if (info.getTunnelFailed() || 
+                    info.getTestStatus() == net.i2p.router.TunnelTestStatus.FAILED ||
+                    info.getConsecutiveFailures() > 1) {
+                    continue;
+                }
                 if (allowZeroHop || (info.getLength() > 1)) {
                     // Use actual current time, not skewed time, for accurate expiration calculation
                     long timeToExpire = info.getExpiration() - now;
@@ -1125,10 +1160,12 @@ public class TunnelPool {
                     if (remainingWanted > 0) {
                         for (int i = 0; i < expire30s && remainingWanted > 0; i++) {remainingWanted--;}
                         if (remainingWanted > 0) {
-                            // 0.5x for 6.5-7.5m, 0.75x for 5.5-6.5m, 1x for 4.5-5.5m
-                            rv = (((expire390s > 0) && _context.random().nextBoolean()) ? 1 : 0);
-                            rv += (expire330s + 1) / 2; // ~0.5x
-                            rv += (expire270s * 3) / 4; // ~0.75x
+                            // Increased multipliers to prevent gaps:
+                            // 2x for 6.5-7.5m, 2.5x for 5.5-6.5m, 3x for 4.5-5.5m
+                            // This creates a buffer pool of tunnels to prevent connectivity gaps
+                            rv = 2 * expire390s; // Was: 0 or 1, Now: 2x
+                            rv += (expire330s * 5) / 2; // Was: ~0.5x, Now: 2.5x
+                            rv += (expire270s * 3); // Was: ~0.75x, Now: 3x
                             rv += expire210s;
                             rv += 2*expire150s;
                             rv += 4*expire90s;
@@ -1137,9 +1174,9 @@ public class TunnelPool {
                             rv -= inProgress;
                             rv -= expireLater;
                         } else {
-                            rv = (((expire390s > 0) && _context.random().nextBoolean()) ? 1 : 0);
-                            rv += (expire330s + 1) / 2;
-                            rv += (expire270s * 3) / 4;
+                            rv = 2 * expire390s;
+                            rv += (expire330s * 5) / 2;
+                            rv += (expire270s * 3);
                             rv += expire210s;
                             rv += 2*expire150s;
                             rv += 4*expire90s;
