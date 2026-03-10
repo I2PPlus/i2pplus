@@ -77,39 +77,85 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
 
     private static final long MAX_TIME_TO_REBUILD = 10*60*1000;
 
+    /**
+     * Get the minimum time to lease expiry across all clients.
+     * Used by RouterWatchdog to adjust sleep interval.
+     * @return minimum time to expiry in milliseconds, or Long.MAX_VALUE if no leases
+     */
+    public long getMinTimeToLeaseExpiry() {
+        if (_manager == null) return Long.MAX_VALUE;
+        long now = _context.clock().now();
+        long minTimeToExpiry = Long.MAX_VALUE;
+        
+        for (Destination dest : _manager.getRunnerDestinations()) {
+            ClientConnectionRunner runner = _manager.getRunner(dest);
+            if ((runner == null) || (runner.getIsDead())) {continue;}
+            LeaseSet ls = runner.getLeaseSet(dest.calculateHash());
+            if (ls == null) {continue;}
+            
+            long latestLeaseDate = ls.getLatestLeaseDate();
+            long timeToExpiry = latestLeaseDate - now;
+            if (timeToExpiry > 0 && timeToExpiry < minTimeToExpiry) {
+                minTimeToExpiry = timeToExpiry;
+            }
+        }
+        
+        return minTimeToExpiry;
+    }
+
     @Override
     public boolean verifyClientLiveliness() {
         if (_manager == null) return true;
         boolean lively = true;
+        long now = _context.clock().now();
+        long renewalWindow = 60 * 1000; // 1 minute before expiration
+        long warningWindow = 5 * 60 * 1000; // 5 minutes before expiration
+        
         for (Destination dest : _manager.getRunnerDestinations()) {
             ClientConnectionRunner runner = _manager.getRunner(dest);
             if ((runner == null) || (runner.getIsDead())) {continue;}
             LeaseSet ls = runner.getLeaseSet(dest.calculateHash());
             if (ls == null) {continue;} // still building
-            // Check if the LeaseSet is still valid by checking the latest lease date
-            // A LeaseSet is valid if at least one lease hasn't expired
+            
             long latestLeaseDate = ls.getLatestLeaseDate();
-            long now = _context.clock().now();
-            // Trigger renewal immediately when lease expires (no fudge factor)
-            // to avoid gaps in connectivity
+            long earliestLeaseDate = ls.getEarliestLeaseDate();
+            long timeToExpiration = latestLeaseDate - now;
+            long timeSinceExpiration = now - latestLeaseDate;
+            
+            // Check if LeaseSet is expired (all leases expired)
             if (latestLeaseDate < now) {
-                // LeaseSet has expired
-                long howLongAgo = now - latestLeaseDate;
-                // Only mark as not lively if expired for more than MAX_TIME_TO_REBUILD
-                // This avoids false positives during normal network delays
-                if (howLongAgo > MAX_TIME_TO_REBUILD) {
+                // All leases have expired
+                if (timeSinceExpiration > MAX_TIME_TO_REBUILD) {
                     if (_log.shouldError()) {
                         _log.error("Client [" + dest.toBase32().substring(0,8) + "] has LeaseSet that expired " +
-                                   DataHelper.formatDuration(howLongAgo) + " ago");
+                                   DataHelper.formatDuration(timeSinceExpiration) + " ago");
                     }
                     lively = false;
                 }
-                // Always try to request a new LeaseSet from the client when expired
+                // Request renewal immediately
                 if (_manager != null) {
                     if (_log.shouldDebug()) {
-                        _log.debug("Requesting LeaseSet renewal for [" + dest.toBase32().substring(0,8) + "]");
+                        _log.debug("Requesting LeaseSet renewal for [" + dest.toBase32().substring(0,8) + "] (all leases expired)");
                     }
                     _manager.requestLeaseSet(dest.calculateHash(), null);
+                }
+            }
+            // Check if we should proactively renew (1 minute before expiration)
+            else if (timeToExpiration < renewalWindow) {
+                // At least one lease is still valid, but we're within renewal window
+                if (_log.shouldInfo()) {
+                    _log.info("Client [" + dest.toBase32().substring(0,8) + "] leases expiring in " +
+                              DataHelper.formatDuration(timeToExpiration) + ", requesting renewal");
+                }
+                if (_manager != null) {
+                    _manager.requestLeaseSet(dest.calculateHash(), null);
+                }
+            }
+            // Check if we should warn (5 minutes before expiration)
+            else if (timeToExpiration < warningWindow) {
+                if (_log.shouldWarn()) {
+                    _log.warn("Client [" + dest.toBase32().substring(0,8) + "] leases expiring soon (" +
+                              DataHelper.formatDuration(timeToExpiration) + "), renewal recommended");
                 }
             }
         }

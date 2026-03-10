@@ -1,10 +1,12 @@
 package net.i2p.router.tasks;
 
 import net.i2p.data.DataHelper;
+import net.i2p.router.ClientManagerFacade;
 import net.i2p.router.CommSystemFacade.Status;
 import net.i2p.router.Job;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
+import net.i2p.router.client.ClientManagerFacadeImpl;
 import net.i2p.router.util.EventLog;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateConstants;
@@ -158,10 +160,49 @@ public class RouterWatchdog implements Runnable {
      */
     public void run() {
         while (_isRunning) {
-            try {Thread.sleep(60*1000);}
+            // Check how close leases are to expiration and adjust sleep time
+            long sleepTime = getSleepTimeForLeaseExpiry();
+            try {Thread.sleep(sleepTime);}
             catch (InterruptedException ie) {}
             monitorRouter();
         }
+    }
+    
+    /**
+     * Calculate sleep time based on how close leases are to expiration.
+     * @return sleep time in milliseconds
+     */
+    private long getSleepTimeForLeaseExpiry() {
+        // Default sleep time: 60 seconds
+        long sleepTime = 60 * 1000;
+        
+        // Check client managers for lease expiry proximity
+        try {
+            ClientManagerFacade cmf = _context.clientManager();
+            if (cmf instanceof ClientManagerFacadeImpl) {
+                ClientManagerFacadeImpl impl = (ClientManagerFacadeImpl) cmf;
+                // Get the minimum time to lease expiration across all clients
+                long minTimeToExpiry = impl.getMinTimeToLeaseExpiry();
+                
+                if (minTimeToExpiry < 60 * 1000) {
+                    // Less than 1 minute to expiry: check every 5 seconds
+                    sleepTime = 5 * 1000;
+                } else if (minTimeToExpiry < 2 * 60 * 1000) {
+                    // Less than 2 minutes to expiry: check every 10 seconds
+                    sleepTime = 10 * 1000;
+                } else if (minTimeToExpiry < 5 * 60 * 1000) {
+                    // Less than 5 minutes to expiry: check every 30 seconds
+                    sleepTime = 30 * 1000;
+                }
+            }
+        } catch (Exception e) {
+            // If we can't check lease expiry, use default sleep time
+            if (_log.shouldWarn()) {
+                _log.warn("Error checking lease expiry time, using default sleep", e);
+            }
+        }
+        
+        return sleepTime;
     }
 
     /**
