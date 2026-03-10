@@ -184,15 +184,18 @@ public class RouterWatchdog implements Runnable {
                 // Get the minimum time to lease expiration across all clients
                 long minTimeToExpiry = impl.getMinTimeToLeaseExpiry();
                 
-                if (minTimeToExpiry < 60 * 1000) {
-                    // Less than 1 minute to expiry: check every 5 seconds
-                    sleepTime = 5 * 1000;
+                if (minTimeToExpiry < 30 * 1000) {
+                    // Less than 30 seconds to expiry: check every 2 seconds (critical)
+                    sleepTime = 2 * 1000;
+                } else if (minTimeToExpiry < 60 * 1000) {
+                    // Less than 1 minute to expiry: check every 3 seconds
+                    sleepTime = 3 * 1000;
                 } else if (minTimeToExpiry < 2 * 60 * 1000) {
-                    // Less than 2 minutes to expiry: check every 10 seconds
-                    sleepTime = 10 * 1000;
+                    // Less than 2 minutes to expiry: check every 5 seconds
+                    sleepTime = 5 * 1000;
                 } else if (minTimeToExpiry < 5 * 60 * 1000) {
-                    // Less than 5 minutes to expiry: check every 30 seconds
-                    sleepTime = 30 * 1000;
+                    // Less than 5 minutes to expiry: check every 15 seconds
+                    sleepTime = 15 * 1000;
                 }
             }
         } catch (Exception e) {

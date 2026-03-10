@@ -108,7 +108,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
         if (_manager == null) return true;
         boolean lively = true;
         long now = _context.clock().now();
-        long renewalWindow = 60 * 1000; // 1 minute before expiration
+        long renewalWindow = 2 * 60 * 1000; // 2 minutes before expiration (was 60s, increased to allow time for tunnel building + publication)
         long warningWindow = 5 * 60 * 1000; // 5 minutes before expiration
         
         for (Destination dest : _manager.getRunnerDestinations()) {

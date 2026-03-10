@@ -1160,12 +1160,12 @@ public class TunnelPool {
                     if (remainingWanted > 0) {
                         for (int i = 0; i < expire30s && remainingWanted > 0; i++) {remainingWanted--;}
                         if (remainingWanted > 0) {
-                            // Increased multipliers to prevent gaps:
-                            // 2x for 6.5-7.5m, 2.5x for 5.5-6.5m, 3x for 4.5-5.5m
-                            // This creates a buffer pool of tunnels to prevent connectivity gaps
-                            rv = 2 * expire390s; // Was: 0 or 1, Now: 2x
-                            rv += (expire330s * 5) / 2; // Was: ~0.5x, Now: 2.5x
-                            rv += (expire270s * 3); // Was: ~0.75x, Now: 3x
+                            // Ultra-aggressive multipliers when time is critical:
+                            // 4x for 6.5-7.5m, 5x for 5.5-6.5m, 6x for 4.5-5.5m
+                            // This creates a large buffer pool of tunnels to prevent connectivity gaps
+                            rv = 4 * expire390s; // Was: 0 or 1, Now: 4x (ultra-aggressive)
+                            rv += (expire330s * 5); // Was: ~0.5x, Now: 5x
+                            rv += (expire270s * 6); // Was: ~0.75x, Now: 6x
                             rv += expire210s;
                             rv += 2*expire150s;
                             rv += 4*expire90s;
@@ -1174,9 +1174,9 @@ public class TunnelPool {
                             rv -= inProgress;
                             rv -= expireLater;
                         } else {
-                            rv = 2 * expire390s;
-                            rv += (expire330s * 5) / 2;
-                            rv += (expire270s * 3);
+                            rv = 4 * expire390s;
+                            rv += (expire330s * 5);
+                            rv += (expire270s * 6);
                             rv += expire210s;
                             rv += 2*expire150s;
                             rv += 4*expire90s;
