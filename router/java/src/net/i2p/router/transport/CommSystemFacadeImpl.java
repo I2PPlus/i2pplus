@@ -1121,27 +1121,26 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                     String hostName = ipAddress;
                     try {
                         hostName = InetAddress.getByName(ipAddress).getCanonicalHostName();
+                        // Update cache immediately with DNS result
+                        rdnsCache.put(ipAddress, new CacheEntry(ipAddress, hostName, System.currentTimeMillis()));
+                        
+                        // Check if we should do WHOIS lookup (non-blocking)
                         if ((hostName.equals(ipAddress) || _t("unknown").equals(hostName)) && enableWhoisLookups()) {
                             String countryCode = getCountryFromIPAddress(ipAddress);
-                            String whoisData = null;
-                            try {
-                                whoisData = queryWhoisServers(ipAddress, countryCode).get();
-                            } catch (InterruptedException | ExecutionException e) {
-                                if (e instanceof InterruptedException) {
-                                    Thread.currentThread().interrupt();
+                            // Submit WHOIS lookup asynchronously, update cache when done
+                            queryWhoisServers(ipAddress, countryCode).thenAccept(whoisData -> {
+                                if (whoisData != null && !whoisData.isEmpty()) {
+                                    String whoisHost = parseWhois(whoisData);
+                                    if (whoisHost != null && !whoisHost.isEmpty()) {
+                                        rdnsCache.put(ipAddress, new CacheEntry(ipAddress, whoisHost, System.currentTimeMillis()));
+                                    }
                                 }
-                            }
-                            if (whoisData != null && !whoisData.isEmpty()) {
-                                String whoisHost = parseWhois(whoisData);
-                                if (whoisHost != null && !whoisHost.isEmpty()) {
-                                    hostName = whoisHost;
-                                }
-                            }
+                            });
                         }
                     } catch (UnknownHostException e) {
                         hostName = _t("unknown");
+                        rdnsCache.put(ipAddress, new CacheEntry(ipAddress, hostName, System.currentTimeMillis()));
                     }
-                    rdnsCache.put(ipAddress, new CacheEntry(ipAddress, hostName, System.currentTimeMillis()));
                 } finally {
                     pendingLookups.remove(ipAddress);
                 }
