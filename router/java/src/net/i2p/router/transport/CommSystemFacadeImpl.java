@@ -2128,22 +2128,19 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 if (ip != null && ip.length() > 6) {
                     buf.append(" &bullet; ");
                     if (enableReverseLookups()) {
-                        String canonicalHost = reverseLookupCache.computeIfAbsent(ip, k -> {
-                            try {
-                                return CompletableFuture.supplyAsync(() -> {
-                                    try {
-                                        return _context.commSystem().getCanonicalHostName(k);
-                                     } catch (Exception e) {
-                                        return _t("unknown");
-                                     }
-                                }, REVERSE_DNS_EXECUTOR).get(3, TimeUnit.SECONDS);
-                            } catch (Exception e) {
-                                return _t("unknown");
-                            }
-                        });
+                        // Don't block on reverse DNS lookup - just use the IP for now
+                        // The lookup will happen asynchronously and update the cache
+                        // The next page refresh will show the hostname
+                        String canonicalHost = reverseLookupCache.get(ip);
                         if (canonicalHost != null && !"unknown".equals(canonicalHost)) {
                             buf.append(canonicalHost).append(" (").append(ip).append(")");
-                        } else {buf.append(ip);}
+                        } else {
+                            buf.append(ip);
+                            // Trigger async lookup if not already in cache
+                            if (canonicalHost == null) {
+                                _context.commSystem().getCanonicalHostName(ip);
+                            }
+                        }
                     } else {buf.append(ip);}
                 }
             } else {buf.append(_t("unknown"));}
