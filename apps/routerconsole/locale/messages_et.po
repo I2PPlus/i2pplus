@@ -134,7 +134,7 @@ msgstr "Üleujutus"
 msgid "Show all routers with this capability in the NetDb"
 msgstr "kuvage NetDb-s kõik selle võimalusega ruuterid"
 
-msgid "No transports (hidden or starting up?)"
+msgid "No transports"
 msgstr "Pole transpordi protokolle (peidus või alles käivitun?)"
 
 msgid "Unsupported signature type"

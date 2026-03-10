@@ -137,7 +137,7 @@ msgstr "Zalivni"
 msgid "Show all routers with this capability in the NetDb"
 msgstr "Pokaži vse usmerjevalnike z to zmogljivostjo v mrežni bazi"
 
-msgid "No transports (hidden or starting up?)"
+msgid "No transports"
 msgstr "Brez prevoznikov (skriti ali se zagonja?)"
 
 msgid "Unsupported signature type"

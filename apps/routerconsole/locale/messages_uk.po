@@ -135,7 +135,7 @@ msgstr "Заповнення"
 msgid "Show all routers with this capability in the NetDb"
 msgstr "Показати всі маршрутизатори з цією можливістю в NetDb"
 
-msgid "No transports (hidden or starting up?)"
+msgid "No transports"
 msgstr "Немає транспортних протоколів (в прихованому режимі чи запущений нещодавно?)"
 
 msgid "Unsupported signature type"

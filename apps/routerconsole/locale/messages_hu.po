@@ -133,7 +133,7 @@ msgstr "Floodfill"
 msgid "Show all routers with this capability in the NetDb"
 msgstr "Az összes ilyen funkcióval rendelkező útválasztó megjelenítése a NetDb-ben"
 
-msgid "No transports (hidden or starting up?)"
+msgid "No transports"
 msgstr "Nincs átvitel (rejtett vagy indul)?"
 
 msgid "Unsupported signature type"

@@ -133,7 +133,7 @@ msgstr "Ρουτερ πλημμύρας"
 msgid "Show all routers with this capability in the NetDb"
 msgstr "Εμφάνιση όλων των δρομολογητών με αυτήν τη δυνατότητα στο NetDb"
 
-msgid "No transports (hidden or starting up?)"
+msgid "No transports"
 msgstr "Κανένας μεταφορέας (κρυφοί ή κατά την εκκίνηση;)"
 
 msgid "Unsupported signature type"

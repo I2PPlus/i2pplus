@@ -133,7 +133,7 @@ msgstr "سیل پر کردن"
 msgid "Show all routers with this capability in the NetDb"
 msgstr "نمایش تمام روترهای دارای این قابلیت در NetDb"
 
-msgid "No transports (hidden or starting up?)"
+msgid "No transports"
 msgstr "بدون حمل و نقل (مخفی یا راه اندازی؟)"
 
 msgid "Unsupported signature type"

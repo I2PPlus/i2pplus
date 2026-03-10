@@ -133,7 +133,7 @@ msgstr "Otomatik doldurma"
 msgid "Show all routers with this capability in the NetDb"
 msgstr "Bu yeteneğe sahip tüm yönlendiricileri NetDb'de göster"
 
-msgid "No transports (hidden or starting up?)"
+msgid "No transports"
 msgstr "Aktarım yok (gizli ya da yeni mi başlıyor)"
 
 msgid "Unsupported signature type"

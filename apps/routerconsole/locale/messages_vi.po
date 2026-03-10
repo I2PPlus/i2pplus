@@ -131,7 +131,7 @@ msgstr "Floodfill"
 msgid "Show all routers with this capability in the NetDb"
 msgstr "Hiển thị tất cả các bộ định tuyến với khả năng này trong NetDb"
 
-msgid "No transports (hidden or starting up?)"
+msgid "No transports"
 msgstr "Không có truyền tải (bị ẩn hoặc đang khởi động?)"
 
 msgid "Unsupported signature type"

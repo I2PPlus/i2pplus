@@ -133,7 +133,7 @@ msgstr "Remplissage par diffusion"
 msgid "Show all routers with this capability in the NetDb"
 msgstr "Afficher tous les routeurs ayant cette capacité dans la NetDb"
 
-msgid "No transports (hidden or starting up?)"
+msgid "No transports"
 msgstr "Aucun transport (caché ou en cours de démarrage ?)"
 
 msgid "Unsupported signature type"
