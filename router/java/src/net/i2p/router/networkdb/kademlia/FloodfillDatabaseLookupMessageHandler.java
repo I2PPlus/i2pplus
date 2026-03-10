@@ -113,7 +113,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
 
         if (shouldBan && uptime > 10*60*1000) {
             if (dlm.getFrom() != null) {
-                _context.banlist().banlistRouter(dlm.getFrom(), " <b>➜</b> Excessive lookup requests" + (isFF ? " (Floodfill)" : ""),
+                _context.banlist().banlistRouter(dlm.getFrom(), " <b>➜</b> Excessive lookups" + (isFF ? " (Floodfill)" : ""),
                                                  null, null, _context.clock().now() + 10 * 60 * 1000);
                 _context.commSystem().mayDisconnect(dlm.getFrom());
             }

@@ -52,6 +52,7 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.crypto.FamilyKeyCrypto;
 import net.i2p.router.networkdb.reseed.ReseedChecker;
 import net.i2p.router.peermanager.PeerProfile;
+import net.i2p.router.transport.CommSystemFacadeImpl;
 import net.i2p.stat.RateConstants;
 import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.Log;
@@ -2274,25 +2275,54 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private String getRouterIPPort(RouterInfo router) {
         if (router == null) { return "UNKNOWN"; }
         try {
+            // Try getCompatibleIP first - returns IP for our supported protocols
+            byte[] ip = CommSystemFacadeImpl.getCompatibleIP(router);
+            if (ip != null) {
+                int port = 0;
+                for (RouterAddress addr : router.getAddresses()) {
+                    if (addr != null && addr.getIP() != null && Arrays.equals(addr.getIP(), ip)) {
+                        port = addr.getPort();
+                        break;
+                    }
+                }
+                return formatIPPort(ip, port);
+            }
+            // Fallback to first available
             for (RouterAddress addr : router.getAddresses()) {
                 if (addr != null && addr.getHost() != null) {
-                    String ip = addr.getHost();
+                    String ipAddr = addr.getHost();
                     int port = addr.getPort();
                     if (port > 0) {
-                        // Check if it's IPv6 address
-                        if (ip.contains(":") && !ip.startsWith("[")) {
-                            // IPv6 address needs brackets
-                            return "[" + ip + "]:" + port;
+                        if (ipAddr.contains(":") && !ipAddr.startsWith("[")) {
+                            return "[" + ipAddr + "]:" + port;
                         } else {
-                            return ip + ":" + port;
+                            return ipAddr + ":" + port;
                         }
                     } else {
-                        return ip;
+                        return ipAddr;
                     }
                 }
             }
         } catch (Exception e) {
             // Ignore extraction errors
+        }
+        return "UNKNOWN";
+    }
+
+    /**
+     * Format IP byte array to string with port.
+     */
+    private String formatIPPort(byte[] ip, int port) {
+        if (ip.length == 4) {
+            return (ip[0] & 0xff) + "." + (ip[1] & 0xff) + "." + (ip[2] & 0xff) + "." + (ip[3] & 0xff) + ":" + port;
+        } else if (ip.length == 16) {
+            StringBuilder sb = new StringBuilder("[");
+            for (int i = 0; i < 16; i += 2) {
+                if (i > 0) sb.append(":");
+                sb.append(String.format("%x", (ip[i] << 8 | ip[i + 1] & 0xff)));
+            }
+            sb.append("]").append(":").append(port);
+            return sb.toString();
         }
         return "UNKNOWN";
     }

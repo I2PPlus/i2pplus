@@ -11,6 +11,7 @@ import net.i2p.router.BanLogger;
 import net.i2p.router.HashPatternDetector;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
+import net.i2p.router.transport.CommSystemFacadeImpl;
 import net.i2p.util.Log;
 import net.i2p.util.ObjectCounter;
 import net.i2p.util.SimpleTimer;
@@ -282,6 +283,7 @@ class RequestThrottler {
     /**
      * Extract IP address and port from RouterInfo for logging to sessionbans.txt.
      * Returns IP:PORT format for IPv4 or [IPv6]:PORT format for IPv6.
+     * Uses getCompatibleIP to return an IP for our supported protocols.
      *
      * @param router the RouterInfo to extract from
      * @return IP:PORT string or "UNKNOWN" if not available
@@ -289,25 +291,54 @@ class RequestThrottler {
     private String getRouterIPPort(RouterInfo router) {
         if (router == null) { return "UNKNOWN"; }
         try {
+            // Try getCompatibleIP first - returns IP for our supported protocols
+            byte[] ip = CommSystemFacadeImpl.getCompatibleIP(router);
+            if (ip != null) {
+                int port = 0;
+                for (RouterAddress addr : router.getAddresses()) {
+                    if (addr != null && addr.getIP() != null && Arrays.equals(addr.getIP(), ip)) {
+                        port = addr.getPort();
+                        break;
+                    }
+                }
+                return formatIPPort(ip, port);
+            }
+            // Fallback to first available
             for (RouterAddress addr : router.getAddresses()) {
                 if (addr != null && addr.getHost() != null) {
-                    String ip = addr.getHost();
+                    String ipAddr = addr.getHost();
                     int port = addr.getPort();
                     if (port > 0) {
-                        // Check if it's IPv6 address
-                        if (ip.contains(":") && !ip.startsWith("[")) {
-                            // IPv6 address needs brackets
-                            return "[" + ip + "]:" + port;
+                        if (ipAddr.contains(":") && !ipAddr.startsWith("[")) {
+                            return "[" + ipAddr + "]:" + port;
                         } else {
-                            return ip + ":" + port;
+                            return ipAddr + ":" + port;
                         }
                     } else {
-                        return ip;
+                        return ipAddr;
                     }
                 }
             }
         } catch (Exception e) {
             // Ignore extraction errors
+        }
+        return "UNKNOWN";
+    }
+
+    /**
+     * Format IP byte array to string with port.
+     */
+    private String formatIPPort(byte[] ip, int port) {
+        if (ip.length == 4) {
+            return (ip[0] & 0xff) + "." + (ip[1] & 0xff) + "." + (ip[2] & 0xff) + "." + (ip[3] & 0xff) + ":" + port;
+        } else if (ip.length == 16) {
+            StringBuilder sb = new StringBuilder("[");
+            for (int i = 0; i < 16; i += 2) {
+                if (i > 0) sb.append(":");
+                sb.append(String.format("%x", (ip[i] << 8 | ip[i + 1] & 0xff)));
+            }
+            sb.append("]").append(":").append(port);
+            return sb.toString();
         }
         return "UNKNOWN";
     }

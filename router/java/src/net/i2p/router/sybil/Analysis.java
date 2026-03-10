@@ -25,6 +25,7 @@ import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.data.router.RouterKeyGenerator;
 import net.i2p.router.Banlist;
+import net.i2p.router.BanLogger;
 import net.i2p.router.Blocklist;
 import net.i2p.router.JobImpl;
 import net.i2p.router.RouterContext;
@@ -33,6 +34,7 @@ import net.i2p.router.crypto.FamilyKeyCrypto;
 import net.i2p.router.peermanager.DBHistory;
 import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.router.tunnel.pool.TunnelPool;
+import net.i2p.router.transport.CommSystemFacadeImpl;
 import net.i2p.router.util.HashDistance;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateAverages;
@@ -53,6 +55,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
 
     private final RouterContext _context;
     private final Log _log;
+    private BanLogger _banLogger;
     private final ClientAppManager _cmgr;
     private final PersistSybil _persister;
     private volatile ClientAppState _state = UNINITIALIZED;
@@ -127,10 +130,74 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
         super(ctx);
         _context = ctx;
         _log = ctx.logManager().getLog(Analysis.class);
+        _banLogger = new BanLogger();
+        _banLogger.initialize(ctx);
         _cmgr = mgr;
         _persister = new PersistSybil(ctx);
         _familyExemptPoints24.add("SUNYSB");
         _familyExemptPoints24.add("stormycloud");
+    }
+
+    /**
+     * Extract IP address and port from RouterInfo for logging to sessionbans.txt.
+     * Returns IP:PORT format for IPv4 or [IPv6]:PORT format for IPv6.
+     *
+     * @param router the RouterInfo to extract from
+     * @return IP:PORT string or empty string if not available
+     */
+    private String getRouterIPPort(RouterInfo router) {
+        if (router == null) { return ""; }
+        try {
+            // Try getCompatibleIP first - returns IP for our supported protocols
+            byte[] ip = CommSystemFacadeImpl.getCompatibleIP(router);
+            if (ip != null) {
+                int port = 0;
+                for (RouterAddress addr : router.getAddresses()) {
+                    if (addr != null && addr.getIP() != null && java.util.Arrays.equals(addr.getIP(), ip)) {
+                        port = addr.getPort();
+                        break;
+                    }
+                }
+                return formatIPPort(ip, port);
+            }
+            // Fallback to first available
+            for (RouterAddress addr : router.getAddresses()) {
+                if (addr != null && addr.getHost() != null) {
+                    String ipAddr = addr.getHost();
+                    int port = addr.getPort();
+                    if (port > 0) {
+                        if (ipAddr.contains(":") && !ipAddr.startsWith("[")) {
+                            return "[" + ipAddr + "]:" + port;
+                        } else {
+                            return ipAddr + ":" + port;
+                        }
+                    } else {
+                        return ipAddr;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            // Ignore extraction errors
+        }
+        return "";
+    }
+
+    /**
+     * Format IP byte array to string with port.
+     */
+    private String formatIPPort(byte[] ip, int port) {
+        if (ip.length == 4) {
+            return (ip[0] & 0xff) + "." + (ip[1] & 0xff) + "." + (ip[2] & 0xff) + "." + (ip[3] & 0xff) + ":" + port;
+        } else if (ip.length == 16) {
+            StringBuilder sb = new StringBuilder("[");
+            for (int i = 0; i < 16; i += 2) {
+                if (i > 0) sb.append(":");
+                sb.append(String.format("%x", (ip[i] << 8 | ip[i + 1] & 0xff)));
+            }
+            sb.append("]").append(":").append(port);
+            return sb.toString();
+        }
+        return "";
     }
 
     /**
@@ -170,8 +237,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
 
         public void runJob() {
             Map<String, Long> map = _persister.readBlocklist();
-            if (map == null || map.isEmpty())
-                return;
+            if (map == null || map.isEmpty()) return;
             Blocklist bl = _context.blocklist();
             Banlist ban = _context.banlist();
             File file = _persister.getBlocklistFile();
@@ -188,6 +254,11 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
                         long until = e.getValue().longValue();
                         String reason = " <b>➜</b> Sybil Analysis {0}";
                         ban.banlistRouter(h, reason, when, null, until);
+                        RouterInfo ri = _context.netDb().lookupRouterInfoLocally(h);
+                        if (ri != null) {
+                            String ipPort = getRouterIPPort(ri);
+                            _banLogger.logBan(h, ipPort, reason, until);
+                        }
                     }
                 }
             }
@@ -496,6 +567,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
                 Hash h = e.getKey();
                 blocks.add(h.toBase64());
                 RouterInfo ri = _context.netDb().lookupRouterInfoLocally(h);
+                String ipPort = getRouterIPPort(ri);
                 if (ri != null) {
                     for (RouterAddress ra : ri.getAddresses()) {
                         byte[] ip = ra.getIP();
@@ -504,8 +576,9 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
                         if (host != null) {blocks.add(host);}
                     }
                 }
-                String reason = " <b>➜</b> " + day + ": Sybil Scan (" + fmt.format(p).replace(".00", "") + " points)";
+                String reason = " <b>➜</b> Sybil Scan (" + fmt.format(p).replace(".00", "") + " points)";
                 _context.banlist().banlistRouter(h, reason, null, null, blockUntil);
+                _banLogger.logBan(h, ipPort, reason, blockUntil);
 
                 if (_log.shouldWarn()) {
                     _log.warn("Banning " + h.toBase64() + "-> Sybil Scan (" + fmt.format(p).replace(".00", "") + " points)");
