@@ -33,8 +33,8 @@ public class HashPatternDetector implements Serializable {
     private final RouterContext _context;
     private final Log _log;
 
-    // Static BanLogger for sessionbans.txt
-    private static final BanLogger _banLogger = new BanLogger(null);
+    // Static BanLogger for sessionbans.txt - initialized lazily
+    private static BanLogger _banLogger;
 
     // Pattern tracking: prefix (hex string) -> statistics
     private final Map<String, PrefixStats> _prefixStats = new ConcurrentHashMap<>();
@@ -51,7 +51,7 @@ public class HashPatternDetector implements Serializable {
 
     // NetDB Scanner Configuration
     private static final String PROP_HASH_SCAN_FREQUENCY = "router.hashScan.frequency";
-    private static final long DEFAULT_SCAN_FREQUENCY = 60 * 60 * 1000L; // 1 hour default
+    private static final long DEFAULT_SCAN_FREQUENCY = 0; // Disabled by default (set to 1h to enable)
     private static final long SCAN_STARTUP_DELAY = 5 * 60 * 1000L; // 5 minutes - wait for netdb init
     private static final long BAN_DURATION = 24 * 60 * 60 * 1000L; // 24 hours for auto-bans
 
@@ -61,6 +61,14 @@ public class HashPatternDetector implements Serializable {
     public HashPatternDetector(RouterContext context) {
         _context = context;
         _log = context.logManager().getLog(HashPatternDetector.class);
+        if (_banLogger == null) {
+            synchronized (HashPatternDetector.class) {
+                if (_banLogger == null) {
+                    _banLogger = new BanLogger();
+                    _banLogger.initialize(context);
+                }
+            }
+        }
         loadPatterns();
         loadHistoricalBans();
 
@@ -283,17 +291,10 @@ public class HashPatternDetector implements Serializable {
             return;
         }
 
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
-            Map<String, PrefixStats> loaded = (Map<String, PrefixStats>) ois.readObject();
-            _prefixStats.putAll(loaded);
-            if (_log.shouldInfo()) {
-                _log.info("Loaded " + loaded.size() + " hash patterns from disk");
-            }
-        } catch (Exception e) {
-            if (_log.shouldWarn()) {
-                _log.warn("Failed to load hash patterns", e);
-            }
+        if (_log.shouldWarn()) {
+            _log.warn("Deleting legacy hash-patterns.dat file");
         }
+        file.delete();
     }
 
     /**
@@ -362,8 +363,8 @@ public class HashPatternDetector implements Serializable {
     public void startScanner() {
         long frequency = getHashScanFrequency();
         if (frequency <= 0) {
-            if (_log.shouldWarn())
-                _log.warn("NetDB hash scanner disabled (invalid frequency)");
+            if (_log.shouldInfo())
+                _log.info("NetDB hash scanner disabled (router.hashScan.frequency=0)");
             return;
         }
 
@@ -395,7 +396,7 @@ public class HashPatternDetector implements Serializable {
      * @return frequency in milliseconds
      */
     private long getHashScanFrequency() {
-        String prop = _context.getProperty(PROP_HASH_SCAN_FREQUENCY, "1");
+        String prop = _context.getProperty(PROP_HASH_SCAN_FREQUENCY, "0");
 
         try {
             if (prop.length() > 1 && (prop.endsWith("m") || prop.endsWith("M"))) {
@@ -543,11 +544,11 @@ public class HashPatternDetector implements Serializable {
             if (wasBanned || _context.banlist().isBanlisted(identityHash)) {
                 if (_log.shouldWarn())
                     _log.warn("Auto-banned router: " + routerHash.substring(0, 12) + "...");
-                // Extract IP from router addresses
-                String ip = getRouterIP(router);
+                // Extract IP:PORT from router addresses
+                String ipPort = getRouterIPPort(router);
                 // Log to sessionbans.txt via BanLogger
                 String banReason = "Auto-banned by HashPatternDetector (netDB scan)";
-                _banLogger.logBan(identityHash, ip, banReason, BAN_DURATION);
+                _banLogger.logBan(identityHash, ipPort, banReason, BAN_DURATION);
                 return true;
             }
 
@@ -568,6 +569,38 @@ public class HashPatternDetector implements Serializable {
             for (RouterAddress addr : router.getAddresses()) {
                 if (addr != null && addr.getHost() != null) {
                     return addr.getHost();
+                }
+            }
+        } catch (Exception e) {
+            // Ignore extraction errors
+        }
+        return "";
+    }
+
+    /**
+     * Extract IP address and port from RouterInfo for logging to sessionbans.txt.
+     *
+     * @param router the RouterInfo to extract from
+     * @return IP:PORT string or empty string if not available
+     */
+    private String getRouterIPPort(RouterInfo router) {
+        if (router == null) { return ""; }
+        try {
+            for (RouterAddress addr : router.getAddresses()) {
+                if (addr != null && addr.getHost() != null) {
+                    String ip = addr.getHost();
+                    int port = addr.getPort();
+                    if (port > 0) {
+                        // Check if it's IPv6 address
+                        if (ip.contains(":") && !ip.startsWith("[")) {
+                            // IPv6 address needs brackets
+                            return "[" + ip + "]:" + port;
+                        } else {
+                            return ip + ":" + port;
+                        }
+                    } else {
+                        return ip;
+                    }
                 }
             }
         } catch (Exception e) {

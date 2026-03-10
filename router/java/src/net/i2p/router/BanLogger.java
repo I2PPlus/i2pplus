@@ -13,6 +13,9 @@ import java.util.Set;
 import java.util.TimeZone;
 
 import net.i2p.data.Hash;
+import net.i2p.data.router.RouterAddress;
+import net.i2p.data.router.RouterInfo;
+import net.i2p.router.HashPatternDetector;
 import net.i2p.util.Log;
 
 /**
@@ -31,7 +34,8 @@ public class BanLogger {
     private volatile int _banCount;
     private long _startTime;
     private final Object _writeLock = new Object();
-    private HashPatternDetector _patternDetector;
+    private static HashPatternDetector _patternDetector;
+    private static BanLogger _self;
 
     private static final String LOG_DIR = "sessionbans";
     private static final String LOG_FILENAME = "sessionbans.txt";
@@ -43,6 +47,11 @@ public class BanLogger {
     private static volatile boolean _globalArchiveDone = false;
     private static volatile boolean _headerWritten = false;
     private static final Set<String> _loggedHashes = Collections.synchronizedSet(new HashSet<String>());
+
+    public BanLogger() {
+        _dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        _dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+    }
 
     public BanLogger(RouterContext context) {
         _dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
@@ -80,9 +89,11 @@ public class BanLogger {
                 logStartTime();
                 _headerWritten = true;
             }
-            _patternDetector = new HashPatternDetector(context);
-            _patternDetector.startScanner();
             _initialized = true;
+            _self = this;
+
+            // HashPatternDetector disabled - requires explicit opt-in
+            // TODO: Re-enable when ready
         }
     }
 
@@ -91,6 +102,14 @@ public class BanLogger {
      */
     public static boolean isInitialized() {
         return _initialized;
+    }
+
+    /**
+     * Get the singleton instance of BanLogger.
+     * May return null if not initialized yet.
+     */
+    public static BanLogger getInstance() {
+        return _initialized ? _self : null;
     }
 
     /**
@@ -290,7 +309,48 @@ public class BanLogger {
      */
     private String getIPFromContext(Hash hash, RouterContext context) {
         if (hash == null) {return "UNKNOWN";}
+        try {
+            // Try to look up RouterInfo from netdb
+            RouterInfo ri = context.netDb().lookupRouterInfoLocally(hash);
+            if (ri != null) {
+                String ipPort = getIPFromRouterInfo(ri);
+                if (!ipPort.isEmpty()) {
+                    return ipPort;
+                }
+            }
+        } catch (Exception e) {
+            // Ignore lookup errors
+        }
         return "UNKNOWN";
+    }
+
+    /**
+     * Extract IP address and port from RouterInfo.
+     */
+    private String getIPFromRouterInfo(RouterInfo router) {
+        if (router == null) { return ""; }
+        try {
+            for (RouterAddress addr : router.getAddresses()) {
+                if (addr != null && addr.getHost() != null) {
+                    String ip = addr.getHost();
+                    int port = addr.getPort();
+                    if (port > 0) {
+                        // Check if it's IPv6 address
+                        if (ip.contains(":") && !ip.startsWith("[")) {
+                            // IPv6 address needs brackets
+                            return "[" + ip + "]:" + port;
+                        } else {
+                            return ip + ":" + port;
+                        }
+                    } else {
+                        return ip;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            // Ignore extraction errors
+        }
+        return "";
     }
 
     /**

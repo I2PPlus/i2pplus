@@ -141,7 +141,10 @@ class Reader {
      * Return read buffers back to the pool as we process them.
      */
     private void processRead(NTCPConnection con) {
-        if (con == null) { return; }
+        if (con == null) {
+            if (_log.shouldWarn()) _log.warn("processRead called with null connection");
+            return;
+        }
         ByteBuffer buf = null;
         while(true) {
             synchronized(con) {
@@ -151,19 +154,32 @@ class Reader {
             if ((buf = con.getNextReadBuf()) == null) {return;}
             EstablishState est = con.getEstablishState();
             if (est == null) {
+                if (_log.shouldWarn()) _log.warn("EstablishState is null for connection: " + con);
                 con.close();
                 return;
             }
 
             if (est.isComplete()) {
                 // why is it complete yet !con.isEstablished?
-                _log.error("Establishment state [" + est + "] is complete, yet the connection isn't established? " +
-                           con.isEstablished() + " (inbound? " + con.isInbound() + " " + con + ")");
+                if (_log.shouldWarn()) {
+                    _log.warn("Establishment state [" + est + "] is complete, yet the connection isn't established? " +
+                               con.isEstablished() + " (inbound? " + con.isInbound() + " " + con + ")");
+                }
                 EventPumper.releaseBuf(buf);
                 break;
             }
             // FIXME call est.isCorrupt() before also? throws ISE here... see above
-            est.receive(buf);
+            try {
+                est.receive(buf);
+            } catch (NullPointerException npe) {
+                if (_log.shouldWarn()) {_log.warn("NPE in EstablishState.receive() for connection: " + con, npe);}
+                con.close();
+                return;
+            } catch (IllegalStateException ise) {
+                if (_log.shouldWarn()) {_log.warn("IllegalState in EstablishState.receive() for connection: " + con, ise);}
+                con.close();
+                return;
+            }
             EventPumper.releaseBuf(buf);
             if (est.isCorrupt()) {
                 con.close();
@@ -173,7 +189,19 @@ class Reader {
         }
         while (!con.isClosed() && (buf = con.getNextReadBuf()) != null) {
             // decrypt the data and push it into an i2np message
-            con.recvEncryptedI2NP(buf);
+            try {
+                con.recvEncryptedI2NP(buf);
+            } catch (NullPointerException npe) {
+                if (_log.shouldWarn()) {_log.error("NPE in recvEncryptedI2NP() for connection: " + con, npe);}
+                con.close();
+                if (buf != null) EventPumper.releaseBuf(buf);
+                return;
+            } catch (IllegalStateException ise) {
+                if (_log.shouldWarn()) {_log.warn("IllegalState in recvEncryptedI2NP() for connection: " + con, ise);}
+                con.close();
+                if (buf != null) EventPumper.releaseBuf(buf);
+                return;
+            }
             EventPumper.releaseBuf(buf);
         }
     }

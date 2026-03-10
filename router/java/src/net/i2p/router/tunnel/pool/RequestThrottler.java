@@ -5,7 +5,10 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import net.i2p.data.Hash;
+import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
+import net.i2p.router.BanLogger;
+import net.i2p.router.HashPatternDetector;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
@@ -28,6 +31,7 @@ class RequestThrottler {
     private final RouterContext context;
     private final ObjectCounter<Hash> counter;
     private final Log _log;
+    private BanLogger _banLogger;
     private volatile String lastBlockCountriesProp;
     private volatile Set<String> cachedBlockedCountries;
     private volatile long lastFirewallCheckTime;
@@ -54,7 +58,7 @@ class RequestThrottler {
     private final static String PROP_BLOCK_COUNTRIES = "router.blockCountries";
     private final static String DEFAULT_BLOCK_COUNTRIES = "";
 
-    RequestThrottler(RouterContext ctx) {
+     RequestThrottler(RouterContext ctx) {
         this.context = ctx;
         this.counter = new ObjectCounter<Hash>();
         _log = ctx.logManager().getLog(RequestThrottler.class);
@@ -66,6 +70,9 @@ class RequestThrottler {
         this.cachedShouldThrottle = null;
         this.cachedShouldDisconnect = null;
         this.cachedShouldBlockOldRouters = null;
+        _banLogger = new BanLogger();
+        _banLogger.initialize(ctx);
+        // HashPatternDetector scanner is controlled by router.hashScan.frequency property (default: 0 = disabled)
         ctx.simpleTimer2().addPeriodicEvent(new Cleaner(), CLEAN_TIME);
     }
 
@@ -126,7 +133,7 @@ class RequestThrottler {
             isFF = ri.getCapabilities().contains("f");
             v = ri.getVersion();
             country = context.commSystem().getCountry(h);
-            isOld = VersionComparator.comp(v, "0.9.62") < 0;
+            isOld = VersionComparator.comp(v, "0.9.66") < 0;
             isXG = ri.getCapabilities().contains("X") && ri.getCapabilities().contains("G");
         }
 
@@ -136,7 +143,9 @@ class RequestThrottler {
             if (_log.shouldWarn()) {
                 _log.warn("Banning and disconnecting from [" + routerId + "] -> Blocked country: " + country);
             }
+            String ipPort = getRouterIPPort(ri);
             context.banlist().banlistRouter(h, " <b>➜</b> Blocked country: " + country, null, null, context.clock().now() + 8*60*60*1000);
+            _banLogger.logBan(h, ipPort, "Blocked country: " + country, 8*60*60*1000L);
             context.commSystem().forceDisconnect(h);
             return true;
         }
@@ -154,7 +163,10 @@ class RequestThrottler {
             if (_log.shouldInfo() && !context.banlist().isBanlisted(h)) {
                 _log.info("Banning for 1h and disconnecting from [" + routerId + "] -> XG / " + v);
             }
-            context.banlist().banlistRouter(h, " <b>➜</b> XG (" + v + ")", null, null, context.clock().now() + 60*60*1000);
+            String ipPort = getRouterIPPort(ri);
+            context.banlist().banlistRouter(h, " <b>➜</b> XG " + (isFF ? "Floodfill " : "Router") + " (" + v + ")",
+                                            null, null, context.clock().now() + 60*60*1000);
+            _banLogger.logBan(h, ipPort, "XG " + (isFF ? "Floodfill " : "Router") + " (" + v + ")", 60*60*1000L);
             context.commSystem().forceDisconnect(h);
             return true;
         }
@@ -162,9 +174,11 @@ class RequestThrottler {
         // Early return: Old, low-tier, unreachable routers
         if (isLTier && isUnreachable && isOld) {
             if (_log.shouldInfo() && !context.banlist().isBanlisted(h)) {
-                _log.info("Banning for 1h and disconnecting from [" + routerId + "] -> LU / " + v);
+                _log.info("Banning for 1h and disconnecting from [" + routerId + "] -> Old and slow / " + v);
             }
-            context.banlist().banlistRouter(h, " <b>➜</b> Old and slow (" + v + " / LU)", null, null, context.clock().now() + 60*60*1000);
+            String ipPort = getRouterIPPort(ri);
+            context.banlist().banlistRouter(h, " <b>➜</b> Old and slow (" + v + ")", null, null, context.clock().now() + 60*60*1000);
+            _banLogger.logBan(h, ipPort, "Old and slow (" + v + ")", 60*60*1000L);
             context.commSystem().forceDisconnect(h);
             return true;
         }
@@ -183,7 +197,10 @@ class RequestThrottler {
             int bantime = (isLowShare || isUnreachable) ? 60*60*1000 : 30*60*1000;
             int period = bantime / 60 / 1000;
             if (count == limit + 1) {
-                context.banlist().banlistRouter(h, " <b>➜</b> Excessive tunnel requests", null, null, context.clock().now() + bantime);
+                String ipPort = getRouterIPPort(ri);
+                String banReason = "Excessive tunnel requests";
+                context.banlist().banlistRouter(h, " <b>➜</b> " + banReason, null, null, context.clock().now() + bantime);
+                _banLogger.logBan(h, ipPort, banReason, bantime);
                 context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
                 if (_log.shouldWarn()) {
                     _log.warn("Banning " + (isLowShare || isUnreachable ? "slow or unreachable" : "") +
@@ -201,7 +218,10 @@ class RequestThrottler {
 
         // Final check for extremely excessive requests
         if (rv && count >= 3 * limit && enableThrottle) {
-            context.banlist().banlistRouter(h, "Excessive tunnel requests", null, null, context.clock().now() + 30*60*1000);
+            String ipPort = getRouterIPPort(ri);
+            String banReason = "Excessive tunnel requests";
+            context.banlist().banlistRouter(h, banReason, null, null, context.clock().now() + 30*60*1000);
+            _banLogger.logBan(h, ipPort, banReason, 30*60*1000L);
             // drop after any accepted tunnels have expired
             context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
             if (_log.shouldWarn())
@@ -259,10 +279,42 @@ class RequestThrottler {
     /**
      * Checks if router is unreachable based on capabilities.
      */
+    /**
+     * Extract IP address and port from RouterInfo for logging to sessionbans.txt.
+     * Returns IP:PORT format for IPv4 or [IPv6]:PORT format for IPv6.
+     *
+     * @param router the RouterInfo to extract from
+     * @return IP:PORT string or "UNKNOWN" if not available
+     */
+    private String getRouterIPPort(RouterInfo router) {
+        if (router == null) { return "UNKNOWN"; }
+        try {
+            for (RouterAddress addr : router.getAddresses()) {
+                if (addr != null && addr.getHost() != null) {
+                    String ip = addr.getHost();
+                    int port = addr.getPort();
+                    if (port > 0) {
+                        // Check if it's IPv6 address
+                        if (ip.contains(":") && !ip.startsWith("[")) {
+                            // IPv6 address needs brackets
+                            return "[" + ip + "]:" + port;
+                        } else {
+                            return ip + ":" + port;
+                        }
+                    } else {
+                        return ip;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            // Ignore extraction errors
+        }
+        return "UNKNOWN";
+    }
+
     private boolean isUnreachable(RouterInfo ri) {
         if (ri == null) return false;
-        String caps = ri.getCapabilities();
-        return caps.indexOf(Router.CAPABILITY_REACHABLE) < 0;
+        return ri.getCapabilities().contains("U");
     }
 
     /**

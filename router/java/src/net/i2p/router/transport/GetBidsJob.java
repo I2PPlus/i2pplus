@@ -9,6 +9,10 @@ package net.i2p.router.transport;
  */
 
 import net.i2p.data.Hash;
+import net.i2p.data.router.RouterAddress;
+import net.i2p.data.router.RouterInfo;
+import net.i2p.router.BanLogger;
+import net.i2p.router.Banlist;
 import net.i2p.router.JobImpl;
 import net.i2p.router.MessageSelector;
 import net.i2p.router.OutNetMessage;
@@ -26,6 +30,7 @@ class GetBidsJob extends JobImpl {
     private final Log _log;
     private final TransportManager _tmgr;
     private final OutNetMessage _msg;
+    private static BanLogger _banLogger;
 
     /**
      *  @deprecated unused, see static getBids()
@@ -44,6 +49,12 @@ class GetBidsJob extends JobImpl {
     }
 
     static void getBids(RouterContext context, TransportManager tmgr, OutNetMessage msg) {
+        // Ensure BanLogger is initialized
+        if (_banLogger == null) {
+            _banLogger = new BanLogger();
+            _banLogger.initialize(context);
+        }
+
         if (msg.getFailedTransportCount() > 1) {
             context.statManager().addRateData("transport.bidFailAllTransports", msg.getLifetime());
             fail(context, msg);
@@ -77,7 +88,11 @@ class GetBidsJob extends JobImpl {
             if (failedCount == 0) {
                 context.statManager().addRateData("transport.bidFailNoTransports", msg.getLifetime());
                 // This used to be "no common transports" but it is almost always no transports at all
-                context.banlist().banlistRouter(to, " <b>➜</b> " + _x("No transports (hidden or starting up?)"));
+                String ipPort = getRouterIPPort(msg.getTarget());
+                String banReason = _x("No transports");
+                context.banlist().banlistRouter(to, " <b>➜</b> " + banReason);
+                // Log to sessionbans.txt with IP address (use default duration)
+                _banLogger.logBan(to, ipPort, banReason, Banlist.BANLIST_DURATION_MS);
             } else if (failedCount >= tmgr.getTransportCount()) {
                 context.statManager().addRateData("transport.bidFailAllTransports", msg.getLifetime());
             }
@@ -115,5 +130,38 @@ class GetBidsJob extends JobImpl {
      */
     private static final String _x(String s) {
         return s;
+    }
+
+    /**
+     * Extract IP address and port from RouterInfo for logging to sessionbans.txt.
+     * Returns IP:PORT format for IPv4 or [IPv6]:PORT format for IPv6.
+     *
+     * @param router the RouterInfo to extract from
+     * @return IP:PORT string or empty string if not available
+     */
+    private static String getRouterIPPort(RouterInfo router) {
+        if (router == null) { return ""; }
+        try {
+            for (RouterAddress addr : router.getAddresses()) {
+                if (addr != null && addr.getHost() != null) {
+                    String ip = addr.getHost();
+                    int port = addr.getPort();
+                    if (port > 0) {
+                        // Check if it's IPv6 address
+                        if (ip.contains(":") && !ip.startsWith("[")) {
+                            // IPv6 address needs brackets
+                            return "[" + ip + "]:" + port;
+                        } else {
+                            return ip + ":" + port;
+                        }
+                    } else {
+                        return ip;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            // Ignore extraction errors
+        }
+        return "";
     }
 }

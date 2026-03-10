@@ -361,14 +361,21 @@ public class PersistentDataStore extends TransientDataStore {
                 }
             } else {
                 if (ri != null && !isUs && !isBanned) {
-                    if (!isUs && hasIP && ip.equals(ourIP)) {
-                        if (_log.shouldWarn()) {
-                            _log.warn("Banning and disconnecting from [" + key.toBase64().substring(0,6) + "] for 72h -> Router is spoofing our IP address!");
+                    // Check if we're firewalled - our RouterInfo has introducer IP, not real IP, so skip spoof check
+                    boolean weAreFirewalled = _context.commSystem().getStatus().toString().contains("Firewalled");
+                    if (!weAreFirewalled) {
+                        // Check if peer is firewalled/hidden - if they're hidden or unreachable, they could be using us as introducer
+                        boolean peerIsFirewalled = ri.isHidden() || unreachable;
+                        if (!isUs && hasIP && ip.equals(ourIP) && !peerIsFirewalled) {
+                            if (_log.shouldWarn()) {
+                                _log.warn("Banning and disconnecting from [" + key.toBase64().substring(0,6) + "] for 72h -> Router is spoofing our IP address!");
+                            }
+                            _context.banlist().banlistRouter(key, " <b>➜</b> Spoofed IP address (ours)", null, null, _context.clock().now() + 72*60*60*1000);
+                            _context.simpleTimer2().addEvent(new Disconnector(key), 3*1000);
+                            shouldDelete = true;
                         }
-                        _context.banlist().banlistRouter(key, " <b>➜</b> Spoofed IP address (ours)", null, null, _context.clock().now() + 72*60*60*1000);
-                        _context.simpleTimer2().addEvent(new Disconnector(key), 3*1000);
-                        shouldDelete = true;
-                    } else if (isInvalidVersion) {
+                    }
+                    if (isInvalidVersion) {
                         if (_log.shouldDebug()) {
                             _log.debug("Not writing RouterInfo [" + key.toBase64().substring(0,6) + "] to disk -> Invalid version in RouterInfo (" + version + ")");
                         }

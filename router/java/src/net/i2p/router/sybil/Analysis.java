@@ -506,6 +506,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
                 }
                 String reason = " <b>➜</b> " + day + ": Sybil Scan (" + fmt.format(p).replace(".00", "") + " points)";
                 _context.banlist().banlistRouter(h, reason, null, null, blockUntil);
+
                 if (_log.shouldWarn()) {
                     _log.warn("Banning " + h.toBase64() + "-> Sybil Scan (" + fmt.format(p).replace(".00", "") + " points)");
                 }

@@ -41,7 +41,9 @@ import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.kademlia.KBucketSet;
 import net.i2p.kademlia.RejectTrimmer;
+import net.i2p.router.BanLogger;
 import net.i2p.router.Banlist;
+import net.i2p.router.HashPatternDetector;
 import net.i2p.router.Job;
 import net.i2p.router.JobImpl;
 import net.i2p.router.NetworkDatabaseFacade;
@@ -65,6 +67,7 @@ import net.i2p.util.VersionComparator;
  */
 public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacade {
     protected final Log _log;
+    private BanLogger _banLogger;
     private KBucketSet<Hash> _kb; // peer hashes sorted into kbuckets, but within kbuckets, unsorted
     private DataStore _ds; // hash to DataStructure mapping, persisted when necessary
     /** Where the data store is pushing the data */
@@ -218,6 +221,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         }
 
         _elj = new ExpireLeasesJob(_context, this);
+        _banLogger = new BanLogger();
+        _banLogger.initialize(context);
+        // HashPatternDetector scanner is controlled by router.hashScan.frequency property (default: 0 = disabled)
         if (_log.shouldLog(Log.DEBUG)) {_log.debug("Created KademliaNetworkDatabaseFacade for DbId: " + _dbid);}
 
         /* stats */
@@ -835,6 +841,10 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
         _context.banlist().banlistRouter(key, "➜ LU and older than " + MIN_VERSION, null, null,
                                          _context.clock().now() + 4 * 60 * 60 * 1000);
+        // Log to sessionbans.txt with IP address
+        String ipPort = getRouterIPPort(ri);
+        _banLogger.logBan(key, ipPort, "LU and older than " + MIN_VERSION, 4 * 60 * 60 * 1000L);
+
         _ds.remove(key);
         _kb.remove(key);
 
@@ -1363,12 +1373,15 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         }
         int id = routerInfo.getNetworkId();
         if (id != _networkID) {
+            String ipPort = getRouterIPPort(routerInfo);
             if (id == -1) {
                 // old i2pd bug, possibly at startup, don't ban forever
                 _context.banlist().banlistRouter(key, " <b>➜</b> No Network specified", null, null,
                                                  _context.clock().now() + Banlist.BANLIST_DURATION_NO_NETWORK);
+                _banLogger.logBan(key, ipPort, "No Network specified", Banlist.BANLIST_DURATION_NO_NETWORK);
             } else {
                 _context.banlist().banlistRouterForever(key, " <b>➜</b> " + "Not in our Network: " + id);
+                _banLogger.logBanForever(key, ipPort, "Not in our Network: " + id);
             }
             if (_log.shouldWarn()) {
                 _log.warn("BAD Network detected for [" + routerInfo.getIdentity().getHash().toBase64().substring(0,6) + "]");
@@ -1485,12 +1498,14 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * @return true if the router has invalid NTCP addresses and was banned, false otherwise
      * @since 0.9.67+
      */
-    private boolean banInvalidNTCPAddresses(RouterInfo routerInfo, long now, String caps, String routerId) {
+     private boolean banInvalidNTCPAddresses(RouterInfo routerInfo, long now, String caps, String routerId) {
         for (RouterAddress ra : routerInfo.getTargetAddresses("NTCP2")) {
             String i = ra.getOption("i");
             if (i != null && i.length() != 24) {
                 Hash h = routerInfo.getIdentity().calculateHash();
+                String ipPort = getRouterIPPort(routerInfo);
                 _context.banlist().banlistRouter(h, " <b>➜</b> Invalid NTCP address", null, null, now + 24*60*60*1000L);
+                _banLogger.logBan(h, ipPort, "Invalid NTCP address", 24*60*60*1000L);
                 if (_log.shouldWarn()) {
                     _log.warn("Banning " + (caps.isEmpty() ? "" : caps + " ") + "Router [" + routerId + "] for 24h -> Invalid NTCP address");
                 }
@@ -1569,7 +1584,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private boolean checkCountryBlocking(RouterInfo routerInfo, String caps, String routerId, Hash h) {
         String country = _context.commSystem().getCountry(h);
         if (country == null) country = "unknown";
-        boolean isFF = caps.contains("F");
+        boolean isFF = caps.contains("f");
         boolean isStrict = _context.commSystem().isInStrictCountry();
         boolean isHidden = _context.router().isHidden();
         boolean blockMyCountry = _context.getBooleanProperty(PROP_BLOCK_MY_COUNTRY);
@@ -1578,6 +1593,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         boolean isBanned = _context.banlist().isBanlisted(h);
 
         if ((isStrict || isHidden || blockMyCountry) && myCountry != null && myCountry.equals(country) && !isBanned) {
+            String ipPort = getRouterIPPort(routerInfo);
             if (_log.shouldWarn()) {
                 String reason = isHidden ? "Hidden mode active and router is in same country" :
                                 isStrict ? "We are in a strict country and so is this router" :
@@ -1586,16 +1602,25 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 _log.warn("Banning " + (caps.isEmpty() ? "" : caps + " ") + (isFF ? "Floodfill" : "Router") +
                           " [" + routerId + "] for duration of session -> Router is in our country");
             }
-            if (blockMyCountry) {_context.banlist().banlistRouterForever(h, " <b>➜</b> In our country (banned via config)");}
-            else if (isHidden) {_context.banlist().banlistRouterForever(h, " <b>➜</b> In our country (we are in Hidden mode)");}
-            else if (isStrict) {_context.banlist().banlistRouterForever(h, " <b>➜</b> In our country (we are in a strict country)");}
+            if (blockMyCountry) {
+                _context.banlist().banlistRouterForever(h, " <b>➜</b> In our country (banned via config)");
+                _banLogger.logBanForever(h, ipPort, "In our country (banned via config)");
+            } else if (isHidden) {
+                _context.banlist().banlistRouterForever(h, " <b>➜</b> In our country (we are in Hidden mode)");
+                _banLogger.logBanForever(h, ipPort, "In our country (we are in Hidden mode)");
+            } else if (isStrict) {
+                _context.banlist().banlistRouterForever(h, " <b>➜</b> In our country (we are in a strict country)");
+                _banLogger.logBanForever(h, ipPort, "In our country (we are in a strict country)");
+            }
             return true;
         }
         if (blockedCountries.contains(country) && !isBanned) {
+            String ipPort = getRouterIPPort(routerInfo);
             if (_log.shouldWarn()) {
                 _log.warn("Banning [" + routerId + "] -> Blocked country: " + country);
             }
             _context.banlist().banlistRouter(h, " <b>➜</b> Blocked country: " + country, null, null, _context.clock().now() + 8*60*60*1000);
+            _banLogger.logBan(h, ipPort, "Blocked country: " + country, 8*60*60*1000L);
             _context.commSystem().forceDisconnect(h);
             return true;
         }
@@ -1605,10 +1630,14 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      private boolean checkXG(RouterInfo routerInfo, String caps, String routerId, Hash h) {
         if (isRouterXG(routerInfo, h.equals(_context.routerHash()))) {
             if (!_context.banlist().isBanlisted(h)) {
+                boolean isFF = caps != null && caps.contains("f");
+                String ipPort = getRouterIPPort(routerInfo);
                 if (_log.shouldInfo()) {
                     _log.info("Banning Router [" + routerId + "] -> X tier and G Cap (probable botnet participant)");
                 }
-                _context.banlist().banlistRouter(h, " <b>➜</b> XG", null, null, _context.clock().now() + 60*60*1000);
+                _context.banlist().banlistRouter(h, " <b>➜</b> XG " + (isFF ? "Floodfill" : "Router"), null, null, _context.clock().now() + 60*60*1000);
+                // Log to sessionbans.txt with IP address
+                _banLogger.logBan(h, ipPort, "XG " + (isFF ? "Floodfill" : "Router") + " (probable botnet participant)", 60*60*1000L);
             }
             return true;
         }
@@ -1651,7 +1680,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             long age = routerInfo.getPublished() - now;
             if (!_context.banlist().isBanlisted(h) && _log.shouldWarn()) {
                 _log.warn("Banning [" + routerId + "] for 4h -> RouterInfo from the future!\n* Published: " + new Date(routerInfo.getPublished()));
+                String ipPort = getRouterIPPort(routerInfo);
                 _context.banlist().banlistRouter(h, " <b>➜</b> RouterInfo from the future (" + new Date(routerInfo.getPublished()) + ")", null, null, 4*60*60*1000);
+                _banLogger.logBan(h, ipPort, "RouterInfo from the future (" + new Date(routerInfo.getPublished()) + ")", 4*60*60*1000L);
             }
             return caps + " Router [" + routerId + "] -> Published " + DataHelper.formatDuration(age) + " in the future";
         }
@@ -1674,14 +1705,17 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (routerInfo == null) {return null;}
         String v = routerInfo.getVersion();
         String minVersionAllowed = _context.getProperty("router.minVersionAllowed");
+        String ipPort = getRouterIPPort(routerInfo);
         if (minVersionAllowed != null) {
             if (VersionComparator.comp(v, minVersionAllowed) < 0) {
                 _context.banlist().banlistRouterForever(h, " <b>➜</b> Router too old (" + v + ")");
+                _banLogger.logBanForever(h, ipPort, "Router too old (" + v + ")");
                 return caps + " Router [" + routerId + "] -> Too old (" + v + ") - banned until restart";
             }
         } else {
             if (VersionComparator.comp(v, minRouterVersion) < 0) {
                 _context.banlist().banlistRouterForever(h, " <b>➜</b> Router too old (" + v + ")");
+                _banLogger.logBanForever(h, ipPort, "Router too old (" + v + ")");
                 return caps + " Router [" + routerId + "] -> Too old (" + v + ") - banned until restart";
             }
         }
@@ -1941,7 +1975,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                         SigType type = kc.getSigType();
                         if (type == null || !type.isAvailable()) {
                             String stype = (type != null) ? type.toString() : Integer.toString(kc.getSigTypeCode());
+                            String ipPort = getRouterIPPort(ri);
                             _context.banlist().banlistRouterForever(h, " <b>➜</b> " + "Unsupported Signature type " + stype);
+                            _banLogger.logBanForever(h, ipPort, "Unsupported Signature type " + stype);
                             if (_log.shouldWarn()) {
                                 _log.warn("Unsupported Signature type " + stype + " for [" +
                                           h.toBase64().substring(0,6) + "] - banned until restart");
@@ -2227,6 +2263,39 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *  @since 0.9.16
      */
     public boolean isNegativeCachedForever(Hash key) {return key != null && _negativeCache.getBadDest(key) != null;}
+
+    /**
+     * Extract IP address and port from RouterInfo for logging to sessionbans.txt.
+     * Returns IP:PORT format for IPv4 or [IPv6]:PORT format for IPv6.
+     *
+     * @param router the RouterInfo to extract from
+     * @return IP:PORT string or "UNKNOWN" if not available
+     */
+    private String getRouterIPPort(RouterInfo router) {
+        if (router == null) { return "UNKNOWN"; }
+        try {
+            for (RouterAddress addr : router.getAddresses()) {
+                if (addr != null && addr.getHost() != null) {
+                    String ip = addr.getHost();
+                    int port = addr.getPort();
+                    if (port > 0) {
+                        // Check if it's IPv6 address
+                        if (ip.contains(":") && !ip.startsWith("[")) {
+                            // IPv6 address needs brackets
+                            return "[" + ip + "]:" + port;
+                        } else {
+                            return ip + ":" + port;
+                        }
+                    } else {
+                        return ip;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            // Ignore extraction errors
+        }
+        return "UNKNOWN";
+    }
 
     /**
      * Debug info, HTML formatted
