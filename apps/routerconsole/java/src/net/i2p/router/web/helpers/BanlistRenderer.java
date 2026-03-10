@@ -62,17 +62,17 @@ class BanlistRenderer {
     }
 
     /**
-     * Read sessionbans.txt and build a map of router hash to IP address.
-     * Handles format: "IP (hostname)" or just "IP"
+     * Read sessionbans.txt and build a map of router hash to IP:PORT.
+     * Handles format: "IP:PORT (hostname)" or just "IP:PORT"
      */
     private Map<String, String> readSessionBansIPMap() {
         Map<String, String> ipMap = new HashMap<>();
         File logDir = new File(_context.getRouterDir(), "sessionbans");
         File logFile = new File(logDir, "sessionbans.txt");
-        if (!logFile.exists()) {
+            if (!logFile.exists()) {
             return ipMap;
         }
-        try (BufferedReader reader = new BufferedReader(new FileReader(logFile))) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(logFile))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith("#")) continue;
@@ -80,13 +80,13 @@ class BanlistRenderer {
                 if (parts.length >= 3) {
                     String hash = parts[1].trim();
                     String ipField = parts[2].trim();
-                    // Extract just the IP if format is "IP (hostname)"
-                    String ip = ipField;
-                    if (!ip.isEmpty() && ip.contains(" (")) {
-                        ip = ip.substring(0, ip.indexOf(" ("));
+                    // Extract the IP:PORT portion, removing hostname if present
+                    String ipPort = ipField;
+                    if (!ipPort.isEmpty() && ipField.contains(" (")) {
+                        ipPort = ipField.substring(0, ipField.indexOf(" ("));
                     }
-                    if (!hash.isEmpty() && !ip.isEmpty() && ipMap.get(hash) == null) {
-                        ipMap.put(hash, ip);
+                    if (!hash.isEmpty() && !ipPort.isEmpty() && ipMap.get(hash) == null) {
+                        ipMap.put(hash, ipPort);
                     }
                 }
             }
@@ -131,7 +131,7 @@ class BanlistRenderer {
 
     /**
      * Read sessionbans.txt and build a list of IP-only bans.
-     * Handles format: "IP (hostname)" or just "IP"
+     * Handles format: "IP:PORT (hostname)" or just "IP:PORT"
      */
     private List<IPBanEntry> readSessionBansIPOnly() {
         List<IPBanEntry> ipBans = new ArrayList<>();
@@ -151,17 +151,18 @@ class BanlistRenderer {
                     String ipField = parts[2].trim();
                     String reason = parts[3].trim();
                     String durationStr = parts.length >= 5 ? parts[4].trim() : "";
-                    // Extract IP and hostname from "IP (hostname)" format
-                    String ip = ipField;
+                    // Extract IP:PORT and hostname from "IP:PORT (hostname)" format
+                    String ipPort = ipField;
                     String hostname = null;
-                    if (!ip.isEmpty() && ipField.contains(" (") && ipField.endsWith(")")) {
-                        ip = ipField.substring(0, ipField.indexOf(" ("));
+                    if (!ipPort.isEmpty() && ipField.contains(" (") && ipField.endsWith(")")) {
+                        ipPort = ipField.substring(0, ipField.indexOf(" ("));
                         hostname = ipField.substring(ipField.indexOf(" (") + 2, ipField.length() - 1);
                     }
-                    if (hash.isEmpty() && !ip.isEmpty()) {
+                    if (hash.isEmpty() && !ipPort.isEmpty()) {
                         long expires = parseDuration(durationStr, now);
                         if (expires > now) {
-                            ipBans.add(new IPBanEntry(ip, hostname, reason, expires, durationStr));
+                            // Store the full IP:PORT string in the ip field
+                            ipBans.add(new IPBanEntry(ipPort, hostname, reason, expires, durationStr));
                         }
                     }
                 }
@@ -169,6 +170,80 @@ class BanlistRenderer {
         } catch (IOException e) {
         }
         return ipBans;
+    }
+
+    /**
+     * Extract IP address from IP:PORT format.
+     * Handles both IPv4 (1.2.3.4:port) and IPv6 ([::1]:port) formats.
+     */
+    private String extractIP(String ipPort) {
+        if (ipPort == null || ipPort.isEmpty()) {
+            return ipPort;
+        }
+        // Handle IPv6 [addr]:port format
+        if (ipPort.startsWith("[")) {
+            int bracketEnd = ipPort.indexOf("]");
+            if (bracketEnd > 0) {
+                return ipPort.substring(1, bracketEnd);
+            }
+        }
+        // Handle IPv4 addr:port format
+        // IPv6 addresses without brackets are treated as complete addresses (no port)
+        int colonCount = 0;
+        for (int i = 0; i < ipPort.length(); i++) {
+            if (ipPort.charAt(i) == ':') colonCount++;
+        }
+
+        // If IPv6 (multiple colons without brackets), it's a complete address
+        if (colonCount >= 2) {
+            return ipPort;
+        }
+
+        // IPv4 with port (single colon)
+        int lastColonIdx = ipPort.lastIndexOf(':');
+        if (lastColonIdx > 0) {
+            return ipPort.substring(0, lastColonIdx);
+        }
+
+        // No port found, return as-is
+        return ipPort;
+    }
+
+    /**
+     * Extract port from IP:PORT format.
+     * Returns null if no port is found.
+     */
+    private String extractPort(String ipPort) {
+        if (ipPort == null || ipPort.isEmpty()) {
+            return null;
+        }
+        // Handle IPv6 [addr]:port format
+        if (ipPort.startsWith("[")) {
+            int bracketEnd = ipPort.indexOf("]");
+            if (bracketEnd > 0 && ipPort.length() > bracketEnd + 1 && ipPort.charAt(bracketEnd + 1) == ':') {
+                return ipPort.substring(bracketEnd + 2);
+            }
+        }
+        // Handle IPv4 addr:port format
+        // IPv6 addresses without brackets are treated as complete addresses (no port)
+        int colonCount = 0;
+        for (int i = 0; i < ipPort.length(); i++) {
+            if (ipPort.charAt(i) == ':') colonCount++;
+        }
+
+        // If IPv6 (multiple colons without brackets), it's a complete address
+        if (colonCount >= 2) {
+            return null;
+        }
+
+        // IPv4 with port (single colon)
+        int lastColonIdx = ipPort.lastIndexOf(':');
+        if (lastColonIdx > 0 && lastColonIdx < ipPort.length() - 1) {
+            return ipPort.substring(lastColonIdx + 1);
+        }
+
+        // No port found
+        return null;
     }
 
     /**
@@ -277,13 +352,15 @@ class BanlistRenderer {
             return;
         }
 
-        // Column order: Country Flag, Router Hash, IP Address, Hostname, Reason, Expiry
-        buf.append("<div class=tablewrap>\n<table id=sessionBanned>\n<thead><tr><th class=country>")
+        // Column order: Country Flag, Router Hash, IP Address, Port, Hostname, Reason, Expiry
+        buf.append("<div class=tablewrap id=sessionBanned>\n<table id=sbans>\n<thead><tr><th class=country>")
            .append(_t("Country"))
            .append("</th><th class=hash data-sort-use-group=true>")
            .append(_t("Router"))
            .append("</th><th class=ip>")
            .append(_t("IP Address"))
+           .append("</th><th class=port>")
+           .append(_t("Port"))
            .append("</th>");
         if (enableReverseLookups()) {
             buf.append("<th class=hostname>").append(_t("Hostname")).append("</th>");
@@ -319,6 +396,7 @@ class BanlistRenderer {
                 .trim();
             // Get IP from hash if not in reason
             String ip = null;
+            String port = null;
             byte[] ipBytes = TransportImpl.getIP(key);
             if (ipBytes != null) {
                 ip = Addresses.toString(ipBytes);
@@ -340,13 +418,29 @@ class BanlistRenderer {
                 }
                 reason = "Sybil Analysis";
             }
-            // Use IP from sessionbans log if available, otherwise use TransportImpl
-            // Use IP from sessionbans log if available, otherwise use from TransportImpl
-            if (ip == null || ip.isEmpty()) {
-                ip = ipMap.get(key.toBase64());
-            }
+            // Always try to get IP:PORT from sessionbans log first, as it contains port info
+            String ipPort = ipMap.get(key.toBase64());
+            if (ipPort != null) {
+                ip = extractIP(ipPort);
+                port = extractPort(ipPort);
+             } else {
+                 // Debug: Check if hash exists in banlist but not in sessionbans
+                 if (_context.logManager().getLog(BanlistRenderer.class).shouldLog(net.i2p.util.Log.DEBUG)) {
+                     _context.logManager().getLog(BanlistRenderer.class).debug(
+                         "Hash not found in ipMap: " + key.toBase64().substring(0, 8));
+                 }
+             }
+            // If still no IP, try extractedIP from reason
             if ((ip == null || ip.isEmpty()) && extractedIP != null && !extractedIP.isEmpty()) {
-                ip = extractedIP;
+                ip = extractIP(extractedIP);
+                port = extractPort(extractedIP);
+            }
+            // Fallback to TransportImpl IP if still no IP
+            if (ip == null || ip.isEmpty()) {
+                ip = Addresses.toString(ipBytes);
+            }
+            if (ip == null || ip.equalsIgnoreCase("null") || ip.equalsIgnoreCase("unknown")) {
+                ip = "";
             }
             // First try to get hostname from log (already includes IP and rdns), fallback to reverse lookup
             String hostname = hostnameMap.get(key.toBase64());
@@ -361,13 +455,29 @@ class BanlistRenderer {
                     countryCode = geoCountry.toLowerCase();
                 }
             }
-            // Fallback to IP lookup if hash lookup failed or returned "xx"
-            if (("xx".equals(countryCode) || countryCode.isEmpty()) && ip != null && !ip.isEmpty()) {
-                String geoCountry = _context.commSystem().getCountry(ip);
-                if (geoCountry != null && !geoCountry.isEmpty() && !"xx".equals(geoCountry)) {
-                    countryCode = geoCountry.toLowerCase();
-                }
-            }
+             // Fallback to IP lookup if hash lookup failed or returned "xx"
+             if (("xx".equals(countryCode) || countryCode.isEmpty()) && ip != null && !ip.isEmpty()) {
+                  // Check if ipPort was actually in the map (for debugging)
+                  String ipPortDebug = ipMap.get(key != null ? key.toBase64() : "");
+                  if (_context.logManager().getLog(BanlistRenderer.class).shouldLog(net.i2p.util.Log.DEBUG)) {
+                      _context.logManager().getLog(BanlistRenderer.class).debug(
+                          "GeoIP lookup for hash " + (key != null ? key.toBase64().substring(0, 8) : "null") +
+                          ": ipPort=" + ipPortDebug + ", extractedIP=" + ip +
+                          ", ipFromMap=" + (ipMap.get(key != null ? key.toBase64() : "") != null ? "yes" : "no"));
+                  }
+                  // Queue the IP for GeoIP lookup if not already in database
+                  byte[] geoIpBytes = Addresses.getIPOnly(ip);
+                  if (geoIpBytes != null) {
+                      _context.commSystem().queueLookup(geoIpBytes);
+                  }
+                  String geoCountry = _context.commSystem().getCountry(ip);
+                  if (geoCountry != null && !geoCountry.isEmpty() && !"xx".equals(geoCountry)) {
+                      countryCode = geoCountry.toLowerCase();
+                  } else if (_context.logManager().getLog(BanlistRenderer.class).shouldLog(net.i2p.util.Log.DEBUG)) {
+                      _context.logManager().getLog(BanlistRenderer.class).debug(
+                          "GeoIP lookup failed for IP: " + ip + ", geoCountry=" + geoCountry);
+                  }
+             }
             // Final fallback to xx if unknown
             if ("unknown".equals(countryCode)) {
                 countryCode = "xx";
@@ -381,6 +491,8 @@ class BanlistRenderer {
                .append(key != null ? "<span class=b64>" + key.toBase64() + "</span>" : "")
                .append("</td><td class=ip>")
                .append(ip != null ? ip : "")
+               .append("</td><td class=port>")
+               .append(port != null ? port : "")
                .append("</td>");
             if (enableReverseLookups()) {
                 buf.append("<td class=hostname>")
@@ -398,24 +510,32 @@ class BanlistRenderer {
         // Render IP-only bans
         for (IPBanEntry ipBan : ipOnlyBans) {
             String expireString = DataHelper.formatDuration2(ipBan.expires - _context.clock().now());
+            // Extract IP and port from the IP field
+            String ip = extractIP(ipBan.ip);
+            String port = extractPort(ipBan.ip);
             // Use hostname from log if available, fallback to reverse lookup
             String hostname = ipBan.hostname;
             if (hostname == null && enableReverseLookups()) {
-                hostname = reverseLookup(ipBan.ip);
+                hostname = reverseLookup(ip);
             }
-            // GeoIP lookup for country flag - IP only (no hash available for IP-only bans)
-            String countryCode = "xx";
-            if (ipBan.ip != null && !ipBan.ip.isEmpty()) {
-                String geoCountry = _context.commSystem().getCountry(ipBan.ip);
-                if (geoCountry != null && !geoCountry.isEmpty() && !"xx".equals(geoCountry)) {
-                    countryCode = geoCountry.toLowerCase();
-                }
-            }
+             // GeoIP lookup for country flag - IP only (no hash available for IP-only bans)
+             String countryCode = "xx";
+             if (ip != null && !ip.isEmpty()) {
+                 // Queue the IP for GeoIP lookup if not already in database
+                 byte[] geoIpBytes = Addresses.getIPOnly(ip);
+                 if (geoIpBytes != null) {
+                     _context.commSystem().queueLookup(geoIpBytes);
+                 }
+                 String geoCountry = _context.commSystem().getCountry(ip);
+                 if (geoCountry != null && !geoCountry.isEmpty() && !"xx".equals(geoCountry)) {
+                     countryCode = geoCountry.toLowerCase();
+                 }
+             }
             if ("unknown".equals(countryCode)) {
                 countryCode = "xx";
             }
             String countryName =  _context.commSystem().getCountryName(countryCode);
-            buf.append("<tr class=\"ipOnly\">")
+            buf.append("<tr class=ipOnly>")
                .append("<td class=country data-sort=\"").append(countryCode).append("\">")
                .append("<img width=28 height=21 title=\"").append(countryName)
                .append("\" src=\"/flags.jsp?c=").append(countryCode).append("\">")
@@ -423,7 +543,9 @@ class BanlistRenderer {
                .append("<td class=hash>")  // No hash available for IP-only bans
                .append("</td>")
                .append("<td class=ip>")
-               .append(ipBan.ip)
+               .append(ip != null ? ip : "")
+               .append("</td><td class=port>")
+               .append(port != null ? port : "")
                .append("</td>");
             if (enableReverseLookups()) {
                 buf.append("<td class=hostname>")
@@ -439,7 +561,7 @@ class BanlistRenderer {
         }
 
         buf.append("</tbody>\n<tfoot id=sessionBanlistFooter><tr><th colspan=")
-           .append(enableReverseLookups() ? "6" : "5")
+           .append(enableReverseLookups() ? "7" : "6")
            .append(">")
            .append(_t("Total session-only bans"))
            .append(": ").append(tempBanned)

@@ -15,7 +15,7 @@ import { refreshElements } from "./refreshElements.js";
   const pbody = document.getElementById("pbody");
   const plist = document.getElementById("profilelist");
   const thresholds = document.getElementById("thresholds");
-  const sessionBans = document.getElementById("sessionBanned");
+  const sessionBans = document.getElementById("sbans");
   const uri = window.location.search.substring(1) !== "" ? window.location.pathname + "?" + window.location.search.substring(1) : window.location.pathname;
   let sorterFF = null;
   let sorterP = null;
@@ -63,7 +63,7 @@ import { refreshElements } from "./refreshElements.js";
 
     // Refresh session bans every 15 seconds
     if (sessionBans) {
-      const targetSelectors = "#sessionBanlist tr, #banSummary";
+      const targetSelectors = "#sessionBanlist, #banSummary h2, #banSummary ul";
       refreshElements(targetSelectors, uri, 15000);
     }
 
@@ -112,8 +112,6 @@ import { refreshElements } from "./refreshElements.js";
     if (!summaryDiv) {
       summaryDiv = document.createElement("div");
       summaryDiv.id = "banSummary";
-      summaryDiv.style.marginBottom = "15px";
-      summaryDiv.style.padding = "10px";
       if (sessionBans && sessionBans.parentNode) {
         sessionBans.parentNode.insertBefore(summaryDiv, sessionBans);
       }
