@@ -24,6 +24,7 @@ import net.i2p.internal.InternalClientManager;
 import net.i2p.router.ClientManagerFacade;
 import net.i2p.router.ClientMessage;
 import net.i2p.router.Job;
+import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import net.i2p.util.Log;
@@ -85,13 +86,31 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
             if ((runner == null) || (runner.getIsDead())) {continue;}
             LeaseSet ls = runner.getLeaseSet(dest.calculateHash());
             if (ls == null) {continue;} // still building
-            long howLongAgo = _context.clock().now() - ls.getEarliestLeaseDate();
-            if (howLongAgo > MAX_TIME_TO_REBUILD) {
-                if (_log.shouldError()) {
-                    _log.error("Client [" + dest.toBase32().substring(0,8) + "] has LeaseSet that expired " +
-                               DataHelper.formatDuration(howLongAgo) + " ago");
+            // Check if the LeaseSet is still valid by checking the latest lease date
+            // A LeaseSet is valid if at least one lease hasn't expired
+            long latestLeaseDate = ls.getLatestLeaseDate();
+            long now = _context.clock().now();
+            // Trigger renewal immediately when lease expires (no fudge factor)
+            // to avoid gaps in connectivity
+            if (latestLeaseDate < now) {
+                // LeaseSet has expired
+                long howLongAgo = now - latestLeaseDate;
+                // Only mark as not lively if expired for more than MAX_TIME_TO_REBUILD
+                // This avoids false positives during normal network delays
+                if (howLongAgo > MAX_TIME_TO_REBUILD) {
+                    if (_log.shouldError()) {
+                        _log.error("Client [" + dest.toBase32().substring(0,8) + "] has LeaseSet that expired " +
+                                   DataHelper.formatDuration(howLongAgo) + " ago");
+                    }
+                    lively = false;
                 }
-                lively = false;
+                // Always try to request a new LeaseSet from the client when expired
+                if (_manager != null) {
+                    if (_log.shouldDebug()) {
+                        _log.debug("Requesting LeaseSet renewal for [" + dest.toBase32().substring(0,8) + "]");
+                    }
+                    _manager.requestLeaseSet(dest.calculateHash(), null);
+                }
             }
         }
         return lively;
