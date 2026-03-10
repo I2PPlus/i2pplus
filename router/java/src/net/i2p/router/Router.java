@@ -116,8 +116,8 @@ public class Router implements RouterClock.ClockShiftListener {
     private static final String BUNDLE_NAME = "net.i2p.router.web.messages";
     public final static String PROP_CONFIG_FILE = "router.configLocation";
 
-    /** let clocks be off by 1 minute */
-    public final static long CLOCK_FUDGE_FACTOR = 60*1000;
+    /** let clocks be off by 30 seconds (reduced from 60s to improve lease renewal timing) */
+    public final static long CLOCK_FUDGE_FACTOR = 30*1000;
 
     /** used to differentiate routerInfo files on different networks */
     private static final int DEFAULT_NETWORK_ID = 2;
