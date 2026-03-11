@@ -557,7 +557,7 @@ public class TunnelPool {
             for (int i = 0; i < _tunnels.size(); i++) {
                 TunnelInfo info = _tunnels.get(i);
                 // Skip failed tunnels - they are not viable
-                if (info.getTunnelFailed() || 
+                if (info.getTunnelFailed() ||
                     info.getTestStatus() == net.i2p.router.TunnelTestStatus.FAILED ||
                     info.getConsecutiveFailures() > 1) {
                     continue;
@@ -888,7 +888,7 @@ public class TunnelPool {
         for (int i = 0; i < _tunnels.size(); i++) {
             TunnelInfo tunnel = _tunnels.get(i);
             // Skip failed tunnels - they should not be included in LeaseSet
-            if (tunnel.getTunnelFailed() || 
+            if (tunnel.getTunnelFailed() ||
                 tunnel.getTestStatus() == net.i2p.router.TunnelTestStatus.FAILED ||
                 tunnel.getConsecutiveFailures() > 1) {
                 continue;
@@ -1039,6 +1039,7 @@ public class TunnelPool {
             int expireLater = 0;
             int expireTime[];
             int fallback = 0;
+            int usableTunnels = 0; // Count tunnels with > 3 minutes expiry
             synchronized (_tunnels) {
                 expireTime = new int[_tunnels.size()];
                 for (int i = 0; i < _tunnels.size(); i++) {
@@ -1047,6 +1048,8 @@ public class TunnelPool {
                         int timeToExpire = (int) (info.getExpiration() - now);
                         if (timeToExpire > 0 && timeToExpire < avg) {expireTime[expireSoon++] = timeToExpire;}
                         else {expireLater++;}
+                        // Count tunnels with more than 4 minutes expiry
+                        if (timeToExpire > 240000) {usableTunnels++;}
                     } else if (info.getExpiration() - now > avg) {fallback++;}
                 }
             }
@@ -1059,7 +1062,13 @@ public class TunnelPool {
                 PooledTunnelCreatorConfig cfg = _inProgress.get(i);
                 if (cfg.getLength() <= 1) {fallbackInProgress++;}
             }
-            int remainingWanted = (wanted - expireLater) - (inProgress - fallbackInProgress);
+            // Only build if we have less than 'wanted' usable tunnels (tunnels with > 3 minutes expiry)
+            int remainingWanted = 0;
+            if (usableTunnels < wanted) {
+                remainingWanted = wanted - usableTunnels;
+            }
+            // Subtract in-progress tunnels (excluding fallback tunnels when allowZeroHop is false)
+            remainingWanted -= (inProgress - fallbackInProgress);
             // Subtract fallback tunnels when allowZeroHop is false (they don't count toward desired total)
             if (!allowZeroHop) {remainingWanted -= fallback;}
 
@@ -1090,20 +1099,20 @@ public class TunnelPool {
 
             // Apply the same caps as the conservative algorithm
             if (allowZeroHop && (rv > wanted)) {rv = wanted;}
-            
+
             // Ensure we don't exceed configured amount + 2 (minimum 2)
             // This prevents building too many tunnels while ensuring we build at least 2
             int maxTunnels = (int) Math.max(2, wanted + 2);
             if (rv + inProgress + fallback > maxTunnels) {
                 rv = Math.max(0, maxTunnels - inProgress - fallback);
             }
-            
+
             // During first 60 seconds, cap at wanted
             long lifetime = getLifetime();
             if ((lifetime < 60*1000) && (rv + inProgress + fallback >= wanted)) {
                 rv = Math.max(0, wanted - inProgress - fallback);
             }
-            
+
             if (rv > 0 && _log.shouldDebug()) {
                 _log.debug("[" + toString() + "] Requested: " + rv + (allowZeroHop ? " (zero hop)" : "") +
                            " -> Average build time: " + avg + "ms");
@@ -1134,7 +1143,7 @@ public class TunnelPool {
                 // Skip failed tunnels - they are not viable and should not be counted
                 // Also skip tunnels with consecutive failures as they are likely to fail soon
                 // Use getTestStatus() to check if tunnel is marked as FAILED
-                if (info.getTunnelFailed() || 
+                if (info.getTunnelFailed() ||
                     info.getTestStatus() == net.i2p.router.TunnelTestStatus.FAILED ||
                     info.getConsecutiveFailures() > 1) {
                     continue;
@@ -1164,8 +1173,24 @@ public class TunnelPool {
             }
         }
 
+        // Count tunnels with more than 3 minutes expiry (210s and later)
+        int usableTunnels = expire210s + expire270s + expire330s + expire390s + expireLater;
+
+        // Only build if we have less than 'wanted' usable tunnels
+        int tunnelsToBuild = 0;
+        if (usableTunnels < wanted) {
+            tunnelsToBuild = wanted - usableTunnels;
+        }
+
+        // Apply the existing algorithm but cap at tunnelsToBuild
         int rv = countHowManyToBuild(allowZeroHop, expire30s, expire90s, expire150s, expire210s, expire270s,
                                      expire330s, expire390s, expireLater, wanted, inProgress, fallback);
+
+        // Cap at the number of tunnels we actually need
+        if (rv > tunnelsToBuild) {
+            rv = tunnelsToBuild;
+        }
+
         _context.statManager().addRateData(rateName, (rv > 0 || inProgress > 0) ? 1 : 0);
         return rv;
     }
@@ -1279,8 +1304,12 @@ public class TunnelPool {
         // Note: expireLater is NOT included because it's already part of the active tunnel count
         // This prevents building too many tunnels while ensuring we build at least 2
         int maxTunnels = (int) Math.max(2, standardAmount + 2);
-        if (rv + inProgress + fallback > maxTunnels) {
-            rv = Math.max(0, maxTunnels - inProgress - fallback);
+        int currentTunnels = 0;
+        synchronized (_tunnels) {
+            currentTunnels = _tunnels.size();
+        }
+        if (currentTunnels + inProgress + rv > maxTunnels) {
+            rv = Math.max(0, maxTunnels - currentTunnels - inProgress);
         }
 
         long lifetime = getLifetime();
