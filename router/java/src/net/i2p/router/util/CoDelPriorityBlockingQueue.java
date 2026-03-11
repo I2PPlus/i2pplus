@@ -54,11 +54,10 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
      *  Below a target of 5 ms, utilization suffers for some conditions and traffic loads;
      *  above 5 ms there is very little or no improvement in utilization.
      *
-     *  I2P: Raise to 15 due to multithreading environment
+     *  I2P: Lowered to 5ms for reduced latency in high-performance scenarios
      *
-     *  Maybe need to make configurable per-instance.
      */
-    private static final int DEFAULT_CODEL_TARGET = 20;
+    private static final int DEFAULT_CODEL_TARGET = 5;
     public static final String PROP_CODEL_TARGET = "router.codelTarget";
     private final long _target;
 
@@ -66,11 +65,10 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
      *  Quote:
      *  A setting of 100 ms works well across a range of RTTs from 10 ms to 1 second
      *
-     *  I2P: Raise to 300 due to longer end-to-end RTTs
+     *  I2P: Lowered to 50ms for faster reaction to congestion
      *
-     *  Maybe need to make configurable per-instance.
      */
-    private static final int DEFAULT_CODEL_INTERVAL = 500;
+    private static final int DEFAULT_CODEL_INTERVAL = 50;
     public static final String PROP_CODEL_INTERVAL = "router.codelInterval";
     private final long _interval;
     private final String STAT_DROP;
