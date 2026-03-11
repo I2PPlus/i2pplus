@@ -414,6 +414,14 @@ public class TunnelPool {
                               " consecutive build timeouts on " + this);
                 }
             }
+            // Ensure minimum of 3 tunnels or configured amount + 2 for redundancy
+            // Exception: 0-hop configurations return 1
+            if (!(_settings.getLength() == 0 && _settings.getLengthVariance() == 0)) {
+                int minWanted = Math.max(3, _settings.getTotalQuantity() + 2);
+                if (rv < minWanted) {
+                    rv = minWanted;
+                }
+            }
             return rv;
         }
         // TODO high-bw non-ff also
@@ -439,10 +447,18 @@ public class TunnelPool {
                    if (tot >= BUILD_TRIES_QUANTITY_OVERRIDE) {
                        if (1000 * sc / tot <= 1000 / BUILD_TRIES_QUANTITY_OVERRIDE) {rv--;}
                    }
-               }
-           }
-       }
-       return rv;
+                }
+            }
+        }
+        // Ensure minimum of 3 tunnels or configured amount + 2 for redundancy
+        // Exception: 0-hop configurations return 1
+        if (!(_settings.getLength() == 0 && _settings.getLengthVariance() == 0)) {
+            int minWanted = Math.max(3, _settings.getTotalQuantity() + 2);
+            if (rv < minWanted) {
+                rv = minWanted;
+            }
+        }
+        return rv;
     }
 
     /**
