@@ -86,20 +86,20 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
         if (_manager == null) return Long.MAX_VALUE;
         long now = _context.clock().now();
         long minTimeToExpiry = Long.MAX_VALUE;
-        
+
         for (Destination dest : _manager.getRunnerDestinations()) {
             ClientConnectionRunner runner = _manager.getRunner(dest);
             if ((runner == null) || (runner.getIsDead())) {continue;}
             LeaseSet ls = runner.getLeaseSet(dest.calculateHash());
             if (ls == null) {continue;}
-            
+
             long latestLeaseDate = ls.getLatestLeaseDate();
             long timeToExpiry = latestLeaseDate - now;
             if (timeToExpiry > 0 && timeToExpiry < minTimeToExpiry) {
                 minTimeToExpiry = timeToExpiry;
             }
         }
-        
+
         return minTimeToExpiry;
     }
 
@@ -108,20 +108,20 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
         if (_manager == null) return true;
         boolean lively = true;
         long now = _context.clock().now();
-        long renewalWindow = 2 * 60 * 1000; // 2 minutes before expiration (was 60s, increased to allow time for tunnel building + publication)
+        long renewalWindow = 90 * 1000; // 90s before expiration
         long warningWindow = 5 * 60 * 1000; // 5 minutes before expiration
-        
+
         for (Destination dest : _manager.getRunnerDestinations()) {
             ClientConnectionRunner runner = _manager.getRunner(dest);
             if ((runner == null) || (runner.getIsDead())) {continue;}
             LeaseSet ls = runner.getLeaseSet(dest.calculateHash());
             if (ls == null) {continue;} // still building
-            
+
             long latestLeaseDate = ls.getLatestLeaseDate();
             long earliestLeaseDate = ls.getEarliestLeaseDate();
             long timeToExpiration = latestLeaseDate - now;
             long timeSinceExpiration = now - latestLeaseDate;
-            
+
             // Check if LeaseSet is expired (all leases expired)
             if (latestLeaseDate < now) {
                 // All leases have expired
@@ -135,17 +135,17 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
                 // Request renewal immediately
                 if (_manager != null) {
                     if (_log.shouldDebug()) {
-                        _log.debug("Requesting LeaseSet renewal for [" + dest.toBase32().substring(0,8) + "] (all leases expired)");
+                        _log.debug("Requesting LeaseSet renewal for [" + dest.toBase32().substring(0,8) + "]  -> All leases expired");
                     }
                     _manager.requestLeaseSet(dest.calculateHash(), null);
                 }
             }
-            // Check if we should proactively renew (1 minute before expiration)
+            // Check if we should proactively renew (90s before expiration)
             else if (timeToExpiration < renewalWindow) {
                 // At least one lease is still valid, but we're within renewal window
                 if (_log.shouldInfo()) {
                     _log.info("Client [" + dest.toBase32().substring(0,8) + "] leases expiring in " +
-                              DataHelper.formatDuration(timeToExpiration) + ", requesting renewal");
+                              DataHelper.formatDuration(timeToExpiration) + " -> Requesting renewal...");
                 }
                 if (_manager != null) {
                     _manager.requestLeaseSet(dest.calculateHash(), null);
@@ -153,9 +153,9 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
             }
             // Check if we should warn (5 minutes before expiration)
             else if (timeToExpiration < warningWindow) {
-                if (_log.shouldWarn()) {
-                    _log.warn("Client [" + dest.toBase32().substring(0,8) + "] leases expiring soon (" +
-                              DataHelper.formatDuration(timeToExpiration) + "), renewal recommended");
+                if (_log.shouldInfo()) {
+                    _log.info("Client [" + dest.toBase32().substring(0,8) + "] leases expiring soon (" +
+                              DataHelper.formatDuration(timeToExpiration) + ") -> Renewal recommended");
                 }
             }
         }
