@@ -445,8 +445,8 @@ class JobQueueScaler implements Runnable {
                 if (_consecutiveScaleUpChecks >= SUSTAINED_CHECKS_REQUIRED || criticalLag || criticalSlowJobs) {
                     shouldScaleUp = true;
                     if (criticalLag || criticalSlowJobs) {
-                        if (_log.shouldWarn()) {
-                            _log.warn("CRITICAL: " + (criticalLag ? "Queue lag=" + maxLag + "ms" : "") +
+                        if (_log.shouldInfo()) {
+                            _log.info((criticalLag ? "Queue lag=" + maxLag + "ms" : "") +
                                       (criticalSlowJobs ? " Active job duration=" + activeJobMaxDuration + "ms" : "") +
                                       " > threshold=" + lagThreshold + "ms. Scaling immediately. Runners: " +
                                       activeRunners + "/" + maxRunners + ", Ready jobs: " + readyJobs);
