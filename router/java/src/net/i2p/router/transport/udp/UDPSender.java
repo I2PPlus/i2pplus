@@ -49,8 +49,8 @@ public class UDPSender {
     private static final int MAX_QUEUE_SIZE = 1024;
 
     /** CoDel algorithm target delay in milliseconds and interval to control pacing. */
-    public static final int CODEL_TARGET = 100;
-    public static final int CODEL_INTERVAL = 500;
+    public static final int CODEL_TARGET = 20;
+    public static final int CODEL_INTERVAL = 100;
 
     public static final String PROP_CODEL_TARGET = "router.codelTarget";
     public static final String PROP_CODEL_INTERVAL = "router.codelInterval";
