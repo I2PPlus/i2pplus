@@ -1072,11 +1072,28 @@ public class TunnelPool {
                 }
             }
 
+            // Apply the same caps as the conservative algorithm
+            if (allowZeroHop && (rv > wanted)) {rv = wanted;}
+            
+            // Ensure we don't exceed configured amount + 2 (minimum 2)
+            // This prevents building too many tunnels while ensuring we build at least 2
+            int maxTunnels = (int) Math.max(2, wanted + 2);
+            if (rv + inProgress + fallback > maxTunnels) {
+                rv = Math.max(0, maxTunnels - inProgress - fallback);
+            }
+            
+            // During first 60 seconds, cap at wanted
+            long lifetime = getLifetime();
+            if ((lifetime < 60*1000) && (rv + inProgress + fallback >= wanted)) {
+                rv = Math.max(0, wanted - inProgress - fallback);
+            }
+            
             if (rv > 0 && _log.shouldDebug()) {
                 _log.debug("[" + toString() + "] Requested: " + rv + (allowZeroHop ? " (zero hop)" : "") +
                            " -> Average build time: " + avg + "ms");
             }
             _context.statManager().addRateData(rateName, rv + inProgress);
+            if (rv < 0) {return 0;}
             return rv;
         }
 
@@ -1242,15 +1259,17 @@ public class TunnelPool {
 
         if (allowZeroHop && (rv > standardAmount)) {rv = standardAmount;}
 
-        // Ensure we don't exceed the 4x cap
+        // Ensure we don't exceed configured amount + 2 (minimum 2)
         // Note: expireLater is NOT included because it's already part of the active tunnel count
-        if (rv + inProgress + fallback > 4*standardAmount) {
-            rv = 4*standardAmount - inProgress - fallback;
+        // This prevents building too many tunnels while ensuring we build at least 2
+        int maxTunnels = (int) Math.max(2, standardAmount + 2);
+        if (rv + inProgress + fallback > maxTunnels) {
+            rv = Math.max(0, maxTunnels - inProgress - fallback);
         }
 
         long lifetime = getLifetime();
         if ((lifetime < 60*1000) && (rv + inProgress + fallback >= standardAmount)) {
-            rv = standardAmount - inProgress - fallback;
+            rv = Math.max(0, standardAmount - inProgress - fallback);
         }
 
         if (rv > 0 && _log.shouldDebug()) {
