@@ -91,7 +91,7 @@ abstract class BuildRequestor {
     /**
      * Timeout for waiting for a full tunnel build reply.
      */
-    static final int REQUEST_TIMEOUT = SystemVersion.isSlow() ? 15*1000 : 12*1000;
+    static final int REQUEST_TIMEOUT = SystemVersion.isSlow() ? 12*1000 : 10*1000;
 
     /**
      * Shorter timeout for the first hop of an outbound build,
@@ -103,7 +103,7 @@ abstract class BuildRequestor {
      * Base expiration for the TunnelBuildMessage itself.
      * Randomized per-message to obscure tunnel length.
      */
-    private static final int BUILD_MSG_TIMEOUT = 50*1000;
+    private static final int BUILD_MSG_TIMEOUT = 60*1000;
     private static final int MAX_CONSECUTIVE_CLIENT_BUILD_FAILS = 30;
     private static final int EXPLORATORY_BACKOFF = 200;
     private static final int CLIENT_BACKOFF = 50;
