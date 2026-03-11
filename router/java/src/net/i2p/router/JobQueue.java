@@ -471,6 +471,7 @@ public class JobQueue {
                         if (timeLeft <= 0) {
                             iter.remove();
                             if (job instanceof JobImpl) {((JobImpl) job).madeReady(now);}
+                            job.getTiming().setStartAfter(now);
                             return job;
                         } else {
                             break;
@@ -637,6 +638,7 @@ public class JobQueue {
                                 lastTime = lastJob.getTiming().getStartAfter();
                                 if (timeLeft <= 0) {
                                     if (j instanceof JobImpl) ((JobImpl)j).madeReady(now);
+                                    j.getTiming().setStartAfter(now);
                                     _readyJobs.offer(j);
                                     iter.remove();
                                 } else {
