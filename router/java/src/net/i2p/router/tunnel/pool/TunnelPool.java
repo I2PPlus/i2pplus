@@ -1037,7 +1037,15 @@ public class TunnelPool {
 
             int inProgress;
             synchronized (_inProgress) {inProgress = _inProgress.size();}
-            int remainingWanted = (wanted - expireLater) - inProgress;
+            // Count fallback tunnels in progress (zero-hop tunnels when allowZeroHop is false)
+            int fallbackInProgress = 0;
+            for (int i = 0; i < inProgress; i++) {
+                PooledTunnelCreatorConfig cfg = _inProgress.get(i);
+                if (cfg.getLength() <= 1) {fallbackInProgress++;}
+            }
+            int remainingWanted = (wanted - expireLater) - (inProgress - fallbackInProgress);
+            // Subtract fallback tunnels when allowZeroHop is false (they don't count toward desired total)
+            if (!allowZeroHop) {remainingWanted -= fallback;}
 
             int rv = 0;
             int latesttime = 0;
@@ -1145,8 +1153,11 @@ public class TunnelPool {
     private int countHowManyToBuild(boolean allowZeroHop, int expire30s, int expire90s, int expire150s, int expire210s,
                                     int expire270s, int expire330s, int expire390s, int expireLater, int standardAmount, int inProgress, int fallback) {
         int rv = 0;
-        int remainingWanted = standardAmount - expireLater;
-        if (allowZeroHop) {remainingWanted -= fallback;}
+        // Ensure remainingWanted is never negative - this prevents the algorithm from skipping all tunnel building
+        int remainingWanted = Math.max(0, standardAmount - expireLater);
+        // Note: fallback counts zero-hop tunnels only when allowZeroHop is false
+        // So we should NOT subtract fallback when allowZeroHop is true
+        if (!allowZeroHop) {remainingWanted -= fallback;}
 
         // Start building replacement tunnels earlier to avoid gaps
         // New aggressive algorithm: start building 4-7 minutes before expiration
@@ -1179,7 +1190,7 @@ public class TunnelPool {
                             rv += 6*expire30s;
                             rv += 6*remainingWanted;
                             rv -= inProgress;
-                            rv -= expireLater;
+                            // Note: expireLater is already accounted for in remainingWanted calculation
                         } else {
                             rv = 4 * expire390s;
                             rv += (expire330s * 5);
@@ -1189,7 +1200,7 @@ public class TunnelPool {
                             rv += 4*expire90s;
                             rv += 6*expire30s;
                             rv -= inProgress;
-                            rv -= expireLater;
+                            // Note: expireLater is already accounted for in remainingWanted calculation
                         }
                     } else {
                         rv = (((expire390s > 0) && _context.random().nextBoolean()) ? 1 : 0);
@@ -1199,7 +1210,7 @@ public class TunnelPool {
                         rv += 2*expire150s;
                         rv += 4*expire90s;
                         rv -= inProgress;
-                        rv -= expireLater;
+                        // Note: expireLater is already accounted for in remainingWanted calculation
                     }
                 } else {
                     rv = (((expire390s > 0) && _context.random().nextBoolean()) ? 1 : 0);
@@ -1208,7 +1219,7 @@ public class TunnelPool {
                     rv += expire210s;
                     rv += 2*expire150s;
                     rv -= inProgress;
-                    rv -= expireLater;
+                    // Note: expireLater is already accounted for in remainingWanted calculation
                 }
             } else {
                 rv = (((expire390s > 0) && _context.random().nextBoolean()) ? 1 : 0);
@@ -1216,14 +1227,14 @@ public class TunnelPool {
                 rv += (expire270s * 3) / 4;
                 rv += expire210s;
                 rv -= inProgress;
-                rv -= expireLater;
+                // Note: expireLater is already accounted for in remainingWanted calculation
             }
         } else {
             rv = (((expire390s > 0) && _context.random().nextBoolean()) ? 1 : 0);
             rv += (expire330s + 1) / 2;
             rv += (expire270s * 3) / 4;
             rv -= inProgress;
-            rv -= expireLater;
+            // Note: expireLater is already accounted for in remainingWanted calculation
         }
         // yes, the above numbers and periods are completely arbitrary.  suggestions welcome
         // Updated to be more aggressive: start building 4-7 minutes before expiration
@@ -1231,8 +1242,10 @@ public class TunnelPool {
 
         if (allowZeroHop && (rv > standardAmount)) {rv = standardAmount;}
 
-        if (rv + inProgress + expireLater + fallback > 4*standardAmount) {
-            rv = 4*standardAmount - inProgress - expireLater - fallback;
+        // Ensure we don't exceed the 4x cap
+        // Note: expireLater is NOT included because it's already part of the active tunnel count
+        if (rv + inProgress + fallback > 4*standardAmount) {
+            rv = 4*standardAmount - inProgress - fallback;
         }
 
         long lifetime = getLifetime();
