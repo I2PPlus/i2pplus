@@ -159,6 +159,66 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         _geoIP = new GeoIP(_context);
         _manager = new TransportManager(_context);
         _exemptIncoming = new LHMCache<String, Object>(128);
+        initExecutors();
+    }
+
+    private void initExecutors() {
+        synchronized (whoisExecutorLock) {
+            if (whoisQueryExecutor == null || whoisQueryExecutor.isShutdown()) {
+                whoisQueryExecutor = new ThreadPoolExecutor(
+                    Math.max(8, cores - 4), // core pool size
+                    Math.max(20, cores*8), // max pool size
+                    60L, TimeUnit.SECONDS,
+                    new LinkedBlockingQueue<>(1000), // Bounded queue
+                    new ThreadPoolExecutor.CallerRunsPolicy() // Apply backpressure
+                );
+            }
+        }
+        synchronized (reverseDnsExecutorLock) {
+            if (reverseDnsExecutor == null || reverseDnsExecutor.isShutdown()) {
+                reverseDnsExecutor = new ThreadPoolExecutor(
+                    10, 20,
+                    60L, TimeUnit.SECONDS,
+                    new LinkedBlockingQueue<>(500),
+                    new ThreadPoolExecutor.CallerRunsPolicy()
+                );
+            }
+        }
+    }
+
+    /**
+     * Get the WHOIS query executor, initializing it if necessary.
+     */
+    private ExecutorService getWhoisQueryExecutor() {
+        synchronized (whoisExecutorLock) {
+            if (whoisQueryExecutor == null || whoisQueryExecutor.isShutdown()) {
+                whoisQueryExecutor = new ThreadPoolExecutor(
+                    Math.max(8, cores - 4), // core pool size
+                    Math.max(20, cores*8), // max pool size
+                    60L, TimeUnit.SECONDS,
+                    new LinkedBlockingQueue<>(1000), // Bounded queue
+                    new ThreadPoolExecutor.CallerRunsPolicy() // Apply backpressure
+                );
+            }
+            return whoisQueryExecutor;
+        }
+    }
+
+    /**
+     * Get the reverse DNS executor, initializing it if necessary.
+     */
+    private ExecutorService getReverseDnsExecutor() {
+        synchronized (reverseDnsExecutorLock) {
+            if (reverseDnsExecutor == null || reverseDnsExecutor.isShutdown()) {
+                reverseDnsExecutor = new ThreadPoolExecutor(
+                    10, 20,
+                    60L, TimeUnit.SECONDS,
+                    new LinkedBlockingQueue<>(500),
+                    new ThreadPoolExecutor.CallerRunsPolicy()
+                );
+            }
+            return reverseDnsExecutor;
+        }
     }
 
     /**
@@ -219,7 +279,41 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             _rdnsTimer = null;
         }
 
+        shutdownExecutors();
         shutdownStatic();
+    }
+
+    /**
+     * Shutdown instance executors.
+     */
+    private void shutdownExecutors() {
+        synchronized (whoisExecutorLock) {
+            if (whoisQueryExecutor != null && !whoisQueryExecutor.isShutdown()) {
+                whoisQueryExecutor.shutdown();
+                try {
+                    if (!whoisQueryExecutor.awaitTermination(5, TimeUnit.SECONDS)) {
+                        whoisQueryExecutor.shutdownNow();
+                    }
+                } catch (InterruptedException e) {
+                    whoisQueryExecutor.shutdownNow();
+                    Thread.currentThread().interrupt();
+                }
+            }
+        }
+
+        synchronized (reverseDnsExecutorLock) {
+            if (reverseDnsExecutor != null && !reverseDnsExecutor.isShutdown()) {
+                reverseDnsExecutor.shutdown();
+                try {
+                    if (!reverseDnsExecutor.awaitTermination(5, TimeUnit.SECONDS)) {
+                        reverseDnsExecutor.shutdownNow();
+                    }
+                } catch (InterruptedException e) {
+                    reverseDnsExecutor.shutdownNow();
+                    Thread.currentThread().interrupt();
+                }
+            }
+        }
     }
 
     /**
@@ -227,30 +321,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      * This should be called when the router is shutting down to prevent memory leaks.
      */
     private static synchronized void shutdownStatic() {
-        if (!WHOIS_QUERY_EXECUTOR.isShutdown()) {
-            WHOIS_QUERY_EXECUTOR.shutdown();
-            try {
-                if (!WHOIS_QUERY_EXECUTOR.awaitTermination(5, TimeUnit.SECONDS)) {
-                    WHOIS_QUERY_EXECUTOR.shutdownNow();
-                }
-            } catch (InterruptedException e) {
-                WHOIS_QUERY_EXECUTOR.shutdownNow();
-                Thread.currentThread().interrupt();
-            }
-        }
-
-        if (!REVERSE_DNS_EXECUTOR.isShutdown()) {
-            REVERSE_DNS_EXECUTOR.shutdown();
-            try {
-                if (!REVERSE_DNS_EXECUTOR.awaitTermination(5, TimeUnit.SECONDS)) {
-                    REVERSE_DNS_EXECUTOR.shutdownNow();
-                }
-            } catch (InterruptedException e) {
-                REVERSE_DNS_EXECUTOR.shutdownNow();
-                Thread.currentThread().interrupt();
-            }
-        }
-
         // Clean up expired entries from downServers
         long now = System.currentTimeMillis();
         for (Map.Entry<String, Long> entry : downServers.entrySet()) {
@@ -523,7 +593,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             int rv = l.getCost() - r.getCost();
             if (rv != 0) {return rv;}
             int lh = l.hashCode();
-            int rh = l.hashCode();
+            int rh = r.hashCode();
             if (lh > rh) {return 1;}
             if (lh < rh) {return -1;}
             return 0;
@@ -872,6 +942,10 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             createRdnsCacheFile();
             ex.printStackTrace();
         }
+        // Cancel existing timer before creating new one to prevent memory leak
+        if (_rdnsTimer != null) {
+            _rdnsTimer.cancel();
+        }
         _rdnsTimer = new Timer(true);
         long delay = RDNS_WRITE_INTERVAL;
         _rdnsTimer.schedule(new RDNSCacheFileWriter(), delay, delay);
@@ -1051,7 +1125,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         cleanupRDNSCache();
     }
 
-    private static synchronized void cleanupRDNSCache() {
+    private static void cleanupRDNSCache() {
         long now = System.currentTimeMillis();
         int removed = 0;
         long unknownExpireTimeMillis = 15 * 60 * 1000; // 15 minutes
@@ -1116,7 +1190,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         }
 
         if (pendingLookups.putIfAbsent(ipAddress, true) == null) {
-            REVERSE_DNS_EXECUTOR.submit(() -> {
+            getReverseDnsExecutor().submit(() -> {
                 try {
                     String hostName = ipAddress;
                     try {
@@ -1169,11 +1243,12 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 String countryCode = getCountryFromIPAddress(ipAddress);
                 String whoisData = null;
                 try {
-                    whoisData = queryWhoisServers(ipAddress, countryCode).get();
-                } catch (InterruptedException | ExecutionException e) {
+                    whoisData = queryWhoisServers(ipAddress, countryCode).get(10, TimeUnit.SECONDS);
+                } catch (InterruptedException | ExecutionException | java.util.concurrent.TimeoutException e) {
                     if (e instanceof InterruptedException) {
                         Thread.currentThread().interrupt();
                     }
+                    // WHOIS lookup timed out or failed, continue without it
                 }
                 if (whoisData != null && !whoisData.isEmpty()) {
                     String whoisHost = parseWhois(whoisData);
@@ -1201,15 +1276,10 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         } catch (UnknownHostException e) {return null;}
     }
 
-   private static final int cores = SystemVersion.getCores();
+    private static final int cores = SystemVersion.getCores();
 
-    private static final ExecutorService WHOIS_QUERY_EXECUTOR = new ThreadPoolExecutor(
-        Math.max(8, cores - 4), // core pool size
-        Math.max(20, cores*8), // max pool size
-        60L, TimeUnit.SECONDS,
-        new LinkedBlockingQueue<>(1000), // Bounded queue
-        new ThreadPoolExecutor.CallerRunsPolicy() // Apply backpressure
-    );
+    private ExecutorService whoisQueryExecutor;
+    private final Object whoisExecutorLock = new Object();
 
     private static final int SOCKET_TIMEOUT_MS = 5000; // 5 seconds timeout
     private static final int MAX_RETRIES = 1;
@@ -1231,7 +1301,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 return genericResult != null ? genericResult : "unknown";
             }
             return result;
-        }, WHOIS_QUERY_EXECUTOR);
+        }, getWhoisQueryExecutor());
     }
 
     private String tryWhoisServers(String query, List<String> servers) {
@@ -1252,7 +1322,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             .collect(Collectors.toList());
 
         try {
-            List<Future<String>> futures = WHOIS_QUERY_EXECUTOR.invokeAll(tasks, 5, TimeUnit.SECONDS);
+            List<Future<String>> futures = getWhoisQueryExecutor().invokeAll(tasks, 5, TimeUnit.SECONDS);
             for (Future<String> future : futures) {
                 if (future.isDone()) {
                     try {
@@ -1276,12 +1346,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     private static final ConcurrentMap<String, Long> downServers = new ConcurrentHashMap<>();
 
-   private static final ExecutorService REVERSE_DNS_EXECUTOR = new ThreadPoolExecutor(
-         10, 20,
-         60L, TimeUnit.SECONDS,
-         new LinkedBlockingQueue<>(500),
-         new ThreadPoolExecutor.CallerRunsPolicy()
-     );
+    private ExecutorService reverseDnsExecutor;
+    private final Object reverseDnsExecutorLock = new Object();
 
     private static final ConcurrentMap<String, Boolean> pendingLookups = new ConcurrentHashMap<>();
 
@@ -1346,7 +1412,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             whois.setDefaultTimeout(SOCKET_TIMEOUT_MS);
             whois.connect(whoisServer, port);
             String result = whois.query(query);
-            whois.disconnect();
             return result;
         } finally {
             if (whois.isConnected()) {
@@ -1684,7 +1749,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         String[] parts = hostname.split("\\.");
         int len = parts.length;
 
-        if (len < 2) return hostname;
+        if (len < 2 || parts[0].isEmpty()) return hostname;
 
         // Try to match known multi-part TLDs
         for (int i = 1; i < len; i++) {
