@@ -745,16 +745,20 @@ public class SidebarHelper extends HelperBase {
             String lname = getTunnelName(lhs);
             String rname = getTunnelName(rhs);
 
-            boolean lSnark = lname.startsWith("I2PSnark") || lname.equals(snark);
-            boolean rSnark = rname.startsWith("I2PSnark") || rname.equals(snark);
+            boolean lSnark = lname.startsWith("I2PSnark") || lname.equalsIgnoreCase(snark);
+            boolean rSnark = rname.startsWith("I2PSnark") || rname.equalsIgnoreCase(snark);
             boolean lServer = _context.clientManager().shouldPublishLeaseSet(lhs.calculateHash()) && !lSnark;
             boolean rServer = _context.clientManager().shouldPublishLeaseSet(rhs.calculateHash()) && !rSnark;
             boolean lClient = !lServer && !lSnark;
             boolean rClient = !rServer && !rSnark;
-            boolean lI2PChat = lname.equals("Messenger") || lname.equals("I2PChat");
-            boolean rI2PChat = lname.equals("Messenger") || lname.equals("I2PChat");
-            boolean lPing = lname.startsWith("Ping") || lname.equals("I2Ping");
-            boolean rPing = rname.startsWith("Ping") || rname.equals("I2Ping");
+            boolean lI2PChat = lname.equalsIgnoreCase("Messenger") || lname.equalsIgnoreCase(_t("Messenger")) ||
+                               lname.equalsIgnoreCase("I2PChat") || lname.equalsIgnoreCase(_t("I2PChat"));
+            boolean rI2PChat = rname.equalsIgnoreCase("Messenger") || rname.equalsIgnoreCase(_t("Messenger")) ||
+                               rname.equalsIgnoreCase("I2PChat") || rname.equalsIgnoreCase(_t("I2PChat"));
+            boolean lPing = lname.startsWith("Ping") || lname.startsWith(_t("Ping")) ||
+                            lname.equalsIgnoreCase("I2Ping") || lname.equalsIgnoreCase(_t("I2Ping"));
+            boolean rPing = rname.startsWith("Ping") || rname.startsWith(_t("Ping")) ||
+                            rname.equalsIgnoreCase("I2Ping") || rname.equalsIgnoreCase(_t("I2Ping"));
 
             if (lI2PChat && !rI2PChat) return -1;
             if (!lI2PChat && rI2PChat) return 1;
