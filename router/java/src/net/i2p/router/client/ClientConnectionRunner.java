@@ -905,6 +905,21 @@ class ClientConnectionRunner {
                 _log.warn("Requesting LeaseSet for an unknown sesssion");
             return;
         }
+        // If set is null, use the current LeaseSet as the basis for renewal
+        if (set == null) {
+            synchronized (this) {
+                set = sp.currentLeaseSet;
+            }
+            if (set == null) {
+                if (_log.shouldWarn())
+                    _log.warn("Requesting LeaseSet with null LeaseSet and no current LeaseSet for hash: " + h);
+                if (onFailedJob != null)
+                    _context.jobQueue().addJob(onFailedJob);
+                return;
+            }
+            if (_log.shouldInfo())
+                _log.info("Using current LeaseSet as basis for renewal: " + set);
+        }
         // We can't use LeaseSet.equals() here because the dest, keys, and sig on
         // the new LeaseSet are null. So we compare leases one by one.
         // In addition, the client rewrites the expiration time of all the leases to
@@ -954,6 +969,10 @@ class ClientConnectionRunner {
                 } else {
                     // ours is newer, so wait a few secs and retry
                     set.setDestination(dest);
+                    // Cancel any existing timer before creating a new one
+                    if (sp.rerequestTimer != null) {
+                        sp.rerequestTimer.cancel();
+                    }
                     Rerequest timer = new Rerequest(set, expirationTime, onCreateJob, onFailedJob);
                     sp.rerequestTimer = timer;
                     timer.schedule(3*1000);

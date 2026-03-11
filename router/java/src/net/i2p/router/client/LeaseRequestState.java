@@ -23,7 +23,7 @@ class LeaseRequestState {
     private final Job _onFailed;
     private final long _expiration;
     private final long _currentEarliestLeastDate;
-    private boolean _successful;
+    private volatile boolean _successful;
 
     /**
      *  @param currentEarliestLeastDate absolute time, the earliest expiration in

@@ -61,6 +61,13 @@ class RequestLeaseSetJob extends JobImpl {
         }
 
         LeaseSet requested = _requestState.getRequested();
+        if (requested == null) {
+            if (_log.shouldWarn()) {
+                _log.warn("Requested LeaseSet is null, cannot send request to client");
+            }
+            _runner.failLeaseRequest(_requestState);
+            return;
+        }
         long endTime = requested.getEarliestLeaseDate();
         long maxFudge = getContext().getProperty(PROP_MAX_FUDGE, DEFAULT_MAX_FUDGE);
         /**
