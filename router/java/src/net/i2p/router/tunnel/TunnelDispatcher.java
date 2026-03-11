@@ -473,6 +473,26 @@ public class TunnelDispatcher implements Service {
     }
 
     /**
+     * Free allocated bandwidth for a tunnel.
+     * Called when dropping idle tunnels.
+     */
+    public void freeBandwidth(int bw) {
+        if (bw > 0) {
+            _allocatedBW.addAndGet(-bw);
+        }
+    }
+
+    /**
+     * Remove a tunnel from the expiration queue.
+     * Called when dropping idle tunnels to prevent memory leaks.
+     */
+    public void removeFromExpirationQueue(HopConfig cfg) {
+        if (cfg != null) {
+            _leaveJob.remove(cfg);
+        }
+    }
+
+    /**
      * Dispatch a TunnelDataMessage to the appropriate participant or endpoint
      */
     public void dispatch(TunnelDataMessage msg, Hash recvFrom) {
@@ -766,6 +786,10 @@ public class TunnelDispatcher implements Service {
 
         public void clear() {
             _configs.clear();
+        }
+
+        public void remove(HopConfig cfg) {
+            _configs.remove(cfg);
         }
 
         public String getName() {

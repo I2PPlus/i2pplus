@@ -63,6 +63,7 @@ class BuildHandler implements Runnable {
     private final RequestThrottler _requestThrottler;
     private final ParticipatingThrottler _throttler;
     private final BuildReplyHandler _buildReplyHandler;
+    private final IdleTunnelMonitor _idleTunnelMonitor;
     private final AtomicInteger _currentLookups = new AtomicInteger();
     private volatile boolean _isRunning;
     private final Object _startupLock = new Object();
@@ -152,6 +153,8 @@ class BuildHandler implements Runnable {
         boolean shouldThrottle = _context.getBooleanPropertyDefaultTrue(PROP_SHOULD_THROTTLE);
         _requestThrottler = testMode || !shouldThrottle ? null : new RequestThrottler(ctx);
         _throttler = testMode || !shouldThrottle ? null : new ParticipatingThrottler(ctx); // previous and next hops, successful builds only
+        // Start idle tunnel monitor to detect and drop abusive idle tunnels
+        _idleTunnelMonitor = shouldThrottle ? new IdleTunnelMonitor(ctx) : null;
         _buildReplyHandler = new BuildReplyHandler(ctx);
         _buildMessageHandlerJob = new TunnelBuildMessageHandlerJob(ctx);
         _buildReplyMessageHandlerJob = new TunnelBuildReplyMessageHandlerJob(ctx);
@@ -208,6 +211,9 @@ class BuildHandler implements Runnable {
         _inboundBuildMessages.clear();
         BuildMessageState poison = new BuildMessageState(_context, null, null, null);
         for (int i = 0; i < numThreads; i++) {_inboundBuildMessages.offer(poison);}
+        if (_idleTunnelMonitor != null) {
+            _idleTunnelMonitor.shutdown();
+        }
     }
 
     /**
