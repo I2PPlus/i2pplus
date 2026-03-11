@@ -10,6 +10,8 @@ package net.i2p.router.client;
 
 import java.util.Date;
 import java.util.Properties;
+import net.i2p.data.DatabaseEntry;
+import net.i2p.data.Destination;
 import net.i2p.data.Lease;
 import net.i2p.data.LeaseSet;
 import net.i2p.data.i2cp.I2CPMessage;
@@ -36,6 +38,7 @@ class RequestLeaseSetJob extends JobImpl {
 
     private static final long DEFAULT_MAX_FUDGE = 5*1000;
     private static final String PROP_MAX_FUDGE = "router.requestLeaseSetMaxFudge";
+    private static final long TEN_MINUTES_MS = 10 * 60 * 1000;
 
     public RequestLeaseSetJob(RouterContext ctx, ClientConnectionRunner runner, LeaseRequestState state) {
         super(ctx);
@@ -56,7 +59,7 @@ class RequestLeaseSetJob extends JobImpl {
             Properties props = cfg.getOptions();
             if (props != null) {
                 String lsType = props.getProperty("i2cp.leaseSetType");
-                if (lsType != null && !lsType.equals("1")) {isLS2 = true;}
+                if (lsType != null && !lsType.equals(Integer.toString(DatabaseEntry.KEY_TYPE_LEASESET))) {isLS2 = true;}
             }
         }
 
@@ -85,11 +88,19 @@ class RequestLeaseSetJob extends JobImpl {
             if (endTime < earliest) {endTime = earliest;}
         } else {
             long diff = endTime - getContext().clock().now();
-            long fudge = maxFudge - (diff / (10*60*1000 / maxFudge));
+            long fudge = maxFudge - (diff / (TEN_MINUTES_MS / Math.max(1, maxFudge)));
             endTime += fudge;
         }
 
-        SessionId id = _runner.getSessionId(requested.getDestination().calculateHash());
+        Destination dest = requested.getDestination();
+        if (dest == null) {
+            if (_log.shouldWarn()) {
+                _log.warn("Requested LeaseSet has null destination");
+            }
+            _runner.failLeaseRequest(_requestState);
+            return;
+        }
+        SessionId id = _runner.getSessionId(dest.calculateHash());
         if (id == null) {
             _runner.failLeaseRequest(_requestState);
             return;
@@ -104,11 +115,11 @@ class RequestLeaseSetJob extends JobImpl {
                 Lease lease = requested.getLease(i);
                 if (lease.getEndTime() < endTime) {
                     // don't modify old object, we don't know where it came from
-                    Lease nl = new Lease();
-                    nl.setGateway(lease.getGateway());
-                    nl.setTunnelId(lease.getTunnelId());
-                    nl.setEndDate(endTime);
-                    lease = nl;
+                    Lease modifiedLease = new Lease();
+                    modifiedLease.setGateway(lease.getGateway());
+                    modifiedLease.setTunnelId(lease.getTunnelId());
+                    modifiedLease.setEndDate(endTime);
+                    lease = modifiedLease;
                 }
                 rmsg.addEndpoint(lease);
             }
@@ -134,7 +145,7 @@ class RequestLeaseSetJob extends JobImpl {
             _log.error("Error sending I2CP message requesting the LeaseSet", ime);
             _requestState.setIsSuccessful(false);
             if (_requestState.getOnFailed() != null) {
-                RequestLeaseSetJob.this.getContext().jobQueue().addJob(_requestState.getOnFailed());
+                getContext().jobQueue().addJob(_requestState.getOnFailed());
             }
             _runner.failLeaseRequest(_requestState);
         }
@@ -147,11 +158,8 @@ class RequestLeaseSetJob extends JobImpl {
      *
      */
     private class CheckLeaseRequestStatus extends JobImpl {
-        private final long _start;
-
         public CheckLeaseRequestStatus() {
             super(RequestLeaseSetJob.this.getContext());
-            _start = System.currentTimeMillis();
             getTiming().setStartAfter(_requestState.getExpiration());
         }
 
@@ -164,16 +172,16 @@ class RequestLeaseSetJob extends JobImpl {
             }
             if (_requestState.getIsSuccessful()) {
                 // we didn't fail
-                CheckLeaseRequestStatus.this.getContext().statManager().addRateData("client.requestLeaseSetSuccess", 1);
+                getContext().statManager().addRateData("client.requestLeaseSetSuccess", 1);
                 return;
             } else {
-                CheckLeaseRequestStatus.this.getContext().statManager().addRateData("client.requestLeaseSetTimeout", 1);
+                getContext().statManager().addRateData("client.requestLeaseSetTimeout", 1);
                 if (_log.shouldWarn()) {
-                    long waited = System.currentTimeMillis() - _start;
-                    _log.warn("Timed out requesting LeaseSet in the time allotted (" + waited + "ms) -> " + _requestState);
+                    long waited = System.currentTimeMillis() - getTiming().getStartAfter();
+                    _log.warn("Timed out requesting LeaseSet after expiration (" + waited + "ms) -> " + _requestState);
                 }
                 if (_requestState.getOnFailed() != null) {
-                    RequestLeaseSetJob.this.getContext().jobQueue().addJob(_requestState.getOnFailed());
+                    getContext().jobQueue().addJob(_requestState.getOnFailed());
                 }
                 _runner.failLeaseRequest(_requestState);
             }
