@@ -1069,7 +1069,7 @@
       <then>
         <exec executable="sh" failonerror="false">
           <arg value="-c"/>
-          <arg value="minify -r dist/javadoc -o dist"/>
+          <arg value="minify -q -r dist/javadoc -o dist"/>
         </exec>
       </then>
     </if>
@@ -1187,7 +1187,7 @@
       <then>
         <exec executable="sh" failonerror="false">
           <arg value="-c"/>
-          <arg value="minify -r dist/javadoc -o dist"/>
+          <arg value="minify -q -r dist/javadoc -o dist"/>
         </exec>
       </then>
     </if>
