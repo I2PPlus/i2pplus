@@ -3,6 +3,7 @@ package net.i2p.router.networkdb.kademlia;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
@@ -16,7 +17,7 @@ import net.i2p.util.Log;
 
 /**
  * A job that periodically republishes a local LeaseSet to the network database.
- * 
+ *
  * This job handles the lifecycle of lease set publication including:
  * <ul>
  *   <li>Initial publication when the router has been running for sufficient uptime</li>
@@ -25,7 +26,7 @@ import net.i2p.util.Log;
  *   <li>Floodfill verification of published lease sets</li>
  *   <li>Cleanup of expired/stale lease sets when service stops</li>
  * </ul>
- * 
+ *
  * The job manages a retry mechanism that:
  * <ul>
  *   <li>Retries every 2 seconds on failure</li>
@@ -33,7 +34,7 @@ import net.i2p.util.Log;
  *   <li>Verifies publication via floodfill peers after 3 failures</li>
  *   <li>Stops publishing when the client is no longer local</li>
  * </ul>
- * 
+ *
  * This class is thread-safe and uses concurrent maps for tracking retry state
  * and logging throttling across multiple instances.
  */
@@ -51,27 +52,44 @@ public class RepublishLeaseSetJob extends JobImpl {
     private static final ConcurrentHashMap<Hash, Long> _lastPublishLogTime = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<Hash, Long> _lastVerifyLogTime = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<Hash, Long> _lastNotRequeueLogTime = new ConcurrentHashMap<>();
+    
+
+    
     private final Hash _dest;
     private final KademliaNetworkDatabaseFacade _facade;
     private long _lastPublished;
     private final AtomicInteger failCount = new AtomicInteger(0);
     private boolean highPriority;
-    private volatile boolean _lookupInProgress;
+    private final AtomicBoolean _lookupInProgress = new AtomicBoolean(false);
+    private boolean _registered = false;
 
     public RepublishLeaseSetJob(RouterContext ctx, KademliaNetworkDatabaseFacade facade, Hash destHash) {
         super(ctx);
         _log = ctx.logManager().getLog(RepublishLeaseSetJob.class);
         _facade = facade;
         _dest = destHash;
-        registerSelf();
+        // Registration is now done explicitly after construction
     }
 
-    private void registerSelf() {
-        _facade.registerPublishingJob(this);
+    /**
+     * Attempt to register this job with the facade.
+     * @return true if registration succeeded, false if a job was already active
+     */
+    public boolean registerSelf() {
+        _registered = _facade.registerPublishingJob(this);
+        return _registered;
     }
 
     @Override
     public void runJob() {
+        // Check if this job was successfully registered
+        if (!_registered) {
+            if (_log.shouldWarn()) {
+                _log.warn("Job not registered for [" + _dest.toBase32().substring(0,8) + "] - skipping execution");
+            }
+            return;
+        }
+
         long uptime = getContext().router().getUptime();
         try {
             if (!getContext().clientManager().shouldPublishLeaseSet(_dest)) {
@@ -108,8 +126,8 @@ public class RepublishLeaseSetJob extends JobImpl {
                             _log.info("Attempting to publish LeaseSet" + name + " [" + _dest.toBase32().substring(0,8) +
                                        "] (expires in " + (timeUntilExpiry / 1000) + "s)...");
                             _lastPublishLogTime.put(_dest, now);
-                            cleanupStaleEntries();
                         }
+                        cleanupStaleEntries();
                         getContext().statManager().addRateData("netDb.republishLeaseSetCount", 1);
                         failCount.set(0);
                         _facade.sendStore(_dest, ls, null, new OnRepublishFailure(ls), REPUBLISH_LEASESET_TIMEOUT, null);
@@ -169,6 +187,14 @@ public class RepublishLeaseSetJob extends JobImpl {
             return;
         }
         RepublishLeaseSetJob nextJob = new RepublishLeaseSetJob(getContext(), _facade, _dest);
+        // Try to register the job - if it fails, another job is already active
+        if (!nextJob.registerSelf()) {
+            if (_log.shouldDebug()) {
+                _log.debug("Skipping republish for [" + _dest.toBase32().substring(0, 8) +
+                           "] -> Registration failed (job already active)");
+            }
+            return;
+        }
         nextJob.getTiming().setStartAfter(getContext().clock().now() + delayMs);
         getContext().jobQueue().addJob(nextJob);
     }
@@ -206,6 +232,15 @@ public class RepublishLeaseSetJob extends JobImpl {
             isHighPriority = true;
         }
         RepublishLeaseSetJob retryJob = new RepublishLeaseSetJob(getContext(), _facade, _dest);
+        // Try to register the job - if it fails, another job is already active
+        if (!retryJob.registerSelf()) {
+            if (_log.shouldDebug()) {
+                _log.debug("Skipping retry for [" + _dest.toBase32().substring(0, 8) +
+                           "] -> Registration failed (job already active)");
+            }
+            clearRetryInProgress();
+            return;
+        }
         retryJob.getTiming().setStartAfter(getContext().clock().now() + retryDelay);
         if (isHighPriority) {
             retryJob.highPriority = true;
@@ -265,21 +300,20 @@ public class RepublishLeaseSetJob extends JobImpl {
                               _ls.getDestination().calculateHash().toBase32().substring(0,8) +
                               "] -> Newer LeaseSet exists locally");
                     _lastNotRequeueLogTime.put(_ls.getHash(), now);
-                    cleanupStaleEntries();
                 }
+                cleanupStaleEntries();
                 return;
             }
 
-            if (count % 3 == 0 && !_lookupInProgress) {
-                _lookupInProgress = true;
+            if (count % 3 == 0 && _lookupInProgress.compareAndSet(false, true)) {
                 long now = getContext().clock().now();
                 Long lastVerifyLog = _lastVerifyLogTime.get(_ls.getHash());
                 if (_log.shouldInfo() && (lastVerifyLog == null || (now - lastVerifyLog > 10 * 1000))) {
                     _log.info("Verifying LeaseSet publication" + name + " [" +
                               _ls.getDestination().calculateHash().toBase32().substring(0,8) + "] via floodfill...");
                     _lastVerifyLogTime.put(_ls.getHash(), now);
-                    cleanupStaleEntries();
                 }
+                cleanupStaleEntries();
                 verifyAndRetry(ls);
             } else {
                 requeueRepublish();
@@ -293,7 +327,7 @@ public class RepublishLeaseSetJob extends JobImpl {
             Job onFound = new JobImpl(getContext()) {
                 public String getName() {return "Verify LS Published";}
                 public void runJob() {
-                    _lookupInProgress = false;
+                    _lookupInProgress.set(false);
                     clearRetryInProgress();
                     LeaseSet local = _facade.lookupLeaseSetLocally(_ls.getHash());
                     if (local != null && KademliaNetworkDatabaseFacade.isNewer(local, ls)) {
@@ -312,7 +346,7 @@ public class RepublishLeaseSetJob extends JobImpl {
             Job onFailed = new JobImpl(getContext()) {
                 public String getName() {return "Verify LS Failed";}
                 public void runJob() {
-                    _lookupInProgress = false;
+                    _lookupInProgress.set(false);
                     clearRetryInProgress();
                     if (_log.shouldInfo()) {
                         _log.info("Valid LeaseSet" + name + " not found via floodfill -> Retrying...");

@@ -989,6 +989,15 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         }
 
         RepublishLeaseSetJob job = new RepublishLeaseSetJob(_context, this, hash);
+        
+        // Try to register the job - if it fails, another job is already active
+        if (!job.registerSelf()) {
+            if (_log.shouldDebug()) {
+                _log.debug("Skipping republish scheduling for [" + hash.toBase32().substring(0, 8) +
+                           "] - registration failed (job already active)");
+            }
+            return;
+        }
 
         long now = _context.clock().now();
         long nextTime;
