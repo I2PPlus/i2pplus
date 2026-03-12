@@ -125,9 +125,14 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
             // Check if LeaseSet is expired (all leases expired)
             if (latestLeaseDate < now) {
                 // All leases have expired
-                if (timeSinceExpiration > MAX_TIME_TO_REBUILD) {
+                if (timeSinceExpiration > 3*MAX_TIME_TO_REBUILD) { // 30m
                     if (_log.shouldError()) {
                         _log.error("Client [" + dest.toBase32().substring(0,8) + "] has LeaseSet that expired " +
+                                   DataHelper.formatDuration(timeSinceExpiration) + " ago");
+                    }
+                } else if (timeSinceExpiration > MAX_TIME_TO_REBUILD) {
+                    if (_log.shouldWarn()) {
+                        _log.warn("Client [" + dest.toBase32().substring(0,8) + "] has LeaseSet that expired " +
                                    DataHelper.formatDuration(timeSinceExpiration) + " ago");
                     }
                     lively = false;
