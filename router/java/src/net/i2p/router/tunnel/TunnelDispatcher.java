@@ -117,10 +117,10 @@ public class TunnelDispatcher implements Service {
     private static final long RECENT_EXPIRY_WINDOW_MS = 5_000;
 
     /** Base interval for periodic cleanup of expired tunnels */
-    private static final long CLEANUP_INTERVAL_MIN = 30 * 1000;
+    private static final long CLEANUP_INTERVAL_MIN = 5 * 60 * 1000;
 
     /** Max interval for cleanup when few tunnels */
-    private static final long CLEANUP_INTERVAL_MAX = 90 * 1000;
+    private static final long CLEANUP_INTERVAL_MAX = 10 * 60 * 1000;
 
     /** Tunnel count thresholds for scaling cleanup interval */
     private static final int CLEANUP_THRESHOLD_HIGH = 2000;
