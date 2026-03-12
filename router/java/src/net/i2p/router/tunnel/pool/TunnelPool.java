@@ -283,11 +283,15 @@ public class TunnelPool {
         boolean shouldWarn = false;
         synchronized (_tunnels) {
             if (!_tunnels.isEmpty()) {
-                if (_tunnels.size() > 1) {
-                    Collections.sort(_tunnels, new TunnelInfoComparator(closestTo, avoidZeroHop));
-                }
+                // Use linear scan instead of sorting to avoid mutating list order
+                // This prevents disrupting round-robin selection in selectTunnel()
+                TunnelInfoComparator comparator = new TunnelInfoComparator(closestTo, avoidZeroHop);
                 for (TunnelInfo info : _tunnels) {
-                    if (info.getExpiration() > now) {rv = info; break;}
+                    if (info.getExpiration() > now) {
+                        if (rv == null || comparator.compare(info, rv) < 0) {
+                            rv = info;
+                        }
+                    }
                 }
             }
             if (rv == null && _log.shouldWarn() && uptime > STARTUP_TIME) {
@@ -416,10 +420,13 @@ public class TunnelPool {
             }
             // Ensure minimum of 3 tunnels or configured amount + 2 for redundancy
             // Exception: 0-hop configurations return 1
+            // Only apply minimum cap when NOT under failure backoff to allow congestion response
             if (!(_settings.getLength() == 0 && _settings.getLengthVariance() == 0)) {
-                int minWanted = Math.max(3, _settings.getTotalQuantity() + 2);
-                if (rv < minWanted) {
-                    rv = minWanted;
+                if (fails <= 12) {
+                    int minWanted = Math.max(3, _settings.getTotalQuantity() + 2);
+                    if (rv < minWanted) {
+                        rv = minWanted;
+                    }
                 }
             }
             return rv;
@@ -788,8 +795,7 @@ public class TunnelPool {
      */
     boolean buildFallback() {
         int quantity = getAdjustedTotalQuantity();
-        int usable = 0;
-        synchronized (_tunnels) {usable = _tunnels.size();}
+        int usable = getValidTunnelCount();
         if (usable > 0) {return false;}
 
         if (_settings.isExploratory() || _settings.getAllowZeroHop()) {
@@ -919,11 +925,15 @@ public class TunnelPool {
             // Get the "real" expiration from the gateway hop config,
             // HopConfig expirations are the same as the "real" expiration and don't change
             // see configureNewTunnel()
-            lease.setEndDate(((TunnelCreatorConfig)tunnel).getConfig(0).getExpiration());
+            long realExpiration = tunnel.getExpiration();
+            if (tunnel instanceof TunnelCreatorConfig) {
+                realExpiration = ((TunnelCreatorConfig) tunnel).getConfig(0).getExpiration();
+            }
+            lease.setEndDate(realExpiration);
             lease.setTunnelId(inId);
             lease.setGateway(gw);
             leases.add(lease);
-            // Eemember in case we want to remove it for a later-expiring zero-hopper
+            // Remember in case we want to remove it for a later-expiring zero-hopper
             if (tunnel.getLength() <= 1) {zeroHopLease = lease;}
         }
 
@@ -1029,7 +1039,7 @@ public class TunnelPool {
         }
 
         if (avg > 0 && avg < TUNNEL_LIFETIME / 3) { // if we're taking less than 200s per tunnel to build
-            final int PANIC_FACTOR = 4;  // how many builds to kick off when time gets short
+            final int PANIC_FACTOR = 2;  // how many builds to kick off when time gets short
             avg += 60*1000; // one minute safety factor
             if (_settings.isExploratory())
                 avg += 60*1000; // two minute safety factor
@@ -1070,7 +1080,7 @@ public class TunnelPool {
             // Subtract in-progress tunnels (excluding fallback tunnels when allowZeroHop is false)
             remainingWanted -= (inProgress - fallbackInProgress);
             // Subtract fallback tunnels when allowZeroHop is false (they don't count toward desired total)
-            if (!allowZeroHop) {remainingWanted -= fallback;}
+            if (!allowZeroHop) {remainingWanted -= (fallback + fallbackInProgress);}
 
             int rv = 0;
             int latesttime = 0;
@@ -1165,11 +1175,12 @@ public class TunnelPool {
         }
 
         int inProgress = 0;
+        int fallbackInProgress = 0;
         synchronized (_inProgress) {
             inProgress = _inProgress.size();
             for (int i = 0; i < inProgress; i++) {
                 PooledTunnelCreatorConfig cfg = _inProgress.get(i);
-                if (cfg.getLength() <= 1) {fallback++;}
+                if (cfg.getLength() <= 1) {fallbackInProgress++;}
             }
         }
 
@@ -1236,27 +1247,26 @@ public class TunnelPool {
                     if (remainingWanted > 0) {
                         for (int i = 0; i < expire30s && remainingWanted > 0; i++) {remainingWanted--;}
                         if (remainingWanted > 0) {
-                            // Ultra-aggressive multipliers when time is critical:
-                            // 4x for 6.5-7.5m, 5x for 5.5-6.5m, 6x for 4.5-5.5m
-                            // This creates a large buffer pool of tunnels to prevent connectivity gaps
-                            rv = 4 * expire390s; // Was: 0 or 1, Now: 4x (ultra-aggressive)
-                            rv += (expire330s * 5); // Was: ~0.5x, Now: 5x
-                            rv += (expire270s * 6); // Was: ~0.75x, Now: 6x
+                            // Reduced multipliers to prevent over-building
+                            // 2x for 6.5-7.5m, 2x for 5.5-6.5m, 3x for 4.5-5.5m
+                            rv = 2 * expire390s;
+                            rv += (expire330s * 2);
+                            rv += (expire270s * 3);
                             rv += expire210s;
                             rv += 2*expire150s;
-                            rv += 4*expire90s;
-                            rv += 6*expire30s;
-                            rv += 6*remainingWanted;
+                            rv += 3*expire90s;
+                            rv += 4*expire30s;
+                            rv += 4*remainingWanted;
                             rv -= inProgress;
                             // Note: expireLater is already accounted for in remainingWanted calculation
                         } else {
-                            rv = 4 * expire390s;
-                            rv += (expire330s * 5);
-                            rv += (expire270s * 6);
+                            rv = 2 * expire390s;
+                            rv += (expire330s * 2);
+                            rv += (expire270s * 3);
                             rv += expire210s;
                             rv += 2*expire150s;
-                            rv += 4*expire90s;
-                            rv += 6*expire30s;
+                            rv += 3*expire90s;
+                            rv += 4*expire30s;
                             rv -= inProgress;
                             // Note: expireLater is already accounted for in remainingWanted calculation
                         }
@@ -1304,10 +1314,7 @@ public class TunnelPool {
         // Note: expireLater is NOT included because it's already part of the active tunnel count
         // This prevents building too many tunnels while ensuring we build at least 2
         int maxTunnels = (int) Math.max(2, standardAmount + 2);
-        int currentTunnels = 0;
-        synchronized (_tunnels) {
-            currentTunnels = _tunnels.size();
-        }
+        int currentTunnels = getValidTunnelCount();
         if (currentTunnels + inProgress + rv > maxTunnels) {
             rv = Math.max(0, maxTunnels - currentTunnels - inProgress);
         }
