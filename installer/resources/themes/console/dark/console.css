@@ -1069,7 +1069,7 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 .tunnelsHidden #tunnels{padding-bottom:2px}
 .tunnelsHidden #tunnels h3[id]:nth-child(n+2){margin-top:-10px}
 .unreachable,#capabilities_key a .unreachable{background:linear-gradient(180deg,#500,#100)}
-#allTransit~.statusnotes:last-of-type{margin-bottom:9px}
+#allTransit~.statusnotes:last-of-type,#transitFast .tablewrap,#transitRecent .tablewrap{margin-bottom:9px}
 #country,#router,th#version,#tier,#edit,#data,.tcount{width:2%;white-space:nowrap}
 #data{width:10%}
 #exploratorytunnels{margin-top:15px}
@@ -1615,6 +1615,7 @@ h3.sybils+div,h3.sybils+a[name]+table{margin-top:-1px}
 #sessionBanned .b64{padding:5px 8px;display:inline-block;vertical-align:middle;line-height:1;font-family:var(--monospaced);font-size:90%;font-weight:500;box-shadow:var(--bevel);background:var(--badge);user-select:all}
 #sessionBanned th{user-select:none}
 #sessionBanned td.country img{padding:1px;border-radius:2px;border:var(--border_softer);box-shadow:var(--highlight)}
+#sessionBanned td.port{padding:5px 8px;width:1%;text-align:right;font-family:var(--monospaced);font-size:100%;font-weight:600}
 #sessionBanned tbody tr{transition:0.2s ease backgground}
 #sessionBanned tbody tr:hover{background:#0806;transition:0.2s ease background}
 
