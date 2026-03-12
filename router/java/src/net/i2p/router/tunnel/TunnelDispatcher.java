@@ -3,7 +3,13 @@ package net.i2p.router.tunnel;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -22,6 +28,7 @@ import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.router.tunnel.pool.PooledTunnelCreatorConfig;
 import net.i2p.stat.RateConstants;
 import net.i2p.util.Log;
+import net.i2p.util.SimpleTimer;
 import net.i2p.util.SyntheticREDQueue;
 
 /**
@@ -110,6 +117,22 @@ public class TunnelDispatcher implements Service {
     /** Time window (in ms) for suppressing warnings on recently expired tunnels */
     private static final long RECENT_EXPIRY_WINDOW_MS = 5_000;
 
+    /** Base interval for periodic cleanup of expired tunnels */
+    private static final long CLEANUP_INTERVAL_MIN = 30 * 1000;
+
+    /** Max interval for cleanup when few tunnels */
+    private static final long CLEANUP_INTERVAL_MAX = 90 * 1000;
+
+    /** Tunnel count thresholds for scaling cleanup interval */
+    private static final int CLEANUP_THRESHOLD_HIGH = 2000;
+    private static final int CLEANUP_THRESHOLD_MED = 1000;
+
+    /** Fudge factor for tunnel expiration check - simplifies complex calculation */
+    private static final long TUNNEL_EXPIRY_FUDGE = (3 * Router.CLOCK_FUDGE_FACTOR / 2) + 1000;
+
+    /** Config identity codes currently being removed - prevents duplicate removal calls */
+    private final Set<Integer> _configsBeingRemoved = ConcurrentHashMap.newKeySet();
+
     /** Location in the tunnel for RED logic */
     public enum Location { OBEP, PARTICIPANT, IBGW }
 
@@ -133,8 +156,159 @@ public class TunnelDispatcher implements Service {
         _pumper = new TunnelGatewayPumper(ctx);
         _leaveJob = new LeaveTunnel(ctx);
 
+        // Schedule periodic cleanup for expired tunnels
+        ctx.simpleTimer2().addPeriodicEvent(new PeriodicCleanup(), getCleanupInterval(), getCleanupInterval());
+
         // Initialize stats
         initializeStats();
+    }
+
+    /**
+     * Get the cleanup interval based on tunnel count.
+     * More tunnels = more frequent cleanup.
+     */
+    private long getCleanupInterval() {
+        int count = getParticipatingCount();
+        if (count > CLEANUP_THRESHOLD_HIGH) {return CLEANUP_INTERVAL_MIN;}           // 2000+: 30s
+        else if (count > CLEANUP_THRESHOLD_MED) {return CLEANUP_INTERVAL_MIN * 2;}  // 1000-2000: 60s
+        else {return CLEANUP_INTERVAL_MAX;}                                           // <1000: 90s
+    }
+
+    /**
+     * Periodic cleanup task to remove expired tunnels from all maps.
+     * This is a safety net in case LeaveTunnel job fails to remove them.
+     */
+    private class PeriodicCleanup implements SimpleTimer.TimedEvent {
+        public void timeReached() {
+            cleanupExpiredTunnels();
+            // Reschedule with updated interval based on current tunnel count
+            _context.simpleTimer2().addPeriodicEvent(this, getCleanupInterval(), getCleanupInterval());
+        }
+    }
+
+    /**
+     * Clean up expired tunnels from all dispatcher maps.
+     * This is a defensive measure to remove tunnels that may have been orphaned
+     * due to race conditions or missed expirations.
+     * @return number of tunnels cleaned up
+     */
+    private int cleanupExpiredTunnels() {
+        int cleaned = 0;
+        long now = _context.clock().now();
+        // Remove tunnels that have passed expiration + fudge
+        long cutoff = now;
+
+        // Clean up _participatingConfig - remove tunnels that have expired
+        Iterator<Map.Entry<TunnelId, HopConfig>> pcit = _participatingConfig.entrySet().iterator();
+        while (pcit.hasNext()) {
+            Map.Entry<TunnelId, HopConfig> entry = pcit.next();
+            HopConfig cfg = entry.getValue();
+            if (cfg != null) {
+                // Remove if expiration + fudge has passed
+                if (cfg.getExpiration() + TUNNEL_EXPIRY_FUDGE < cutoff) {
+                    // Check if already being removed
+                    int cfgKey = System.identityHashCode(cfg);
+                    if (_configsBeingRemoved.contains(cfgKey)) {
+                        continue;
+                    }
+                    _configsBeingRemoved.add(cfgKey);
+                    pcit.remove();
+                    _participants.remove(entry.getKey());
+                    _allocatedBW.addAndGet(0 - cfg.getAllocatedBW());
+                    _leaveJob.remove(cfg);
+                    cleaned++;
+                    if (_log.shouldDebug()) {
+                        _log.debug("Periodic cleanup removed expired participating tunnel: " + entry.getKey());
+                    }
+                    _configsBeingRemoved.remove(cfgKey);
+                }
+            }
+        }
+
+        // Clean up _outboundEndpoints - remove expired endpoints
+        Iterator<Map.Entry<TunnelId, OutboundTunnelEndpoint>> oeit = _outboundEndpoints.entrySet().iterator();
+        while (oeit.hasNext()) {
+            Map.Entry<TunnelId, OutboundTunnelEndpoint> entry = oeit.next();
+            HopConfig hopCfg = _participatingConfig.get(entry.getKey());
+            if (hopCfg == null || hopCfg.getExpiration() < cutoff) {
+                oeit.remove();
+                cleaned++;
+            }
+        }
+
+        // Clean up _inboundGateways - remove expired or orphaned gateways
+        Iterator<Map.Entry<TunnelId, TunnelGateway>> ibit = _inboundGateways.entrySet().iterator();
+        while (ibit.hasNext()) {
+            Map.Entry<TunnelId, TunnelGateway> entry = ibit.next();
+            HopConfig hopCfg = _participatingConfig.get(entry.getKey());
+            boolean shouldRemove = false;
+            if (hopCfg == null) {
+                shouldRemove = true;  // Orphaned - no config
+            } else if (hopCfg.getExpiration() < cutoff) {
+                shouldRemove = true;  // Expired
+            }
+            if (shouldRemove) {
+                ibit.remove();
+                cleaned++;
+            }
+        }
+
+        // Clean up _participants - remove participants with expired tunnels
+        Iterator<Map.Entry<TunnelId, TunnelParticipant>> partit = _participants.entrySet().iterator();
+        while (partit.hasNext()) {
+            Map.Entry<TunnelId, TunnelParticipant> entry = partit.next();
+            HopConfig hopCfg = _participatingConfig.get(entry.getKey());
+            if (hopCfg == null || hopCfg.getExpiration() < cutoff) {
+                partit.remove();
+                cleaned++;
+            }
+        }
+
+        // Clean up _recentlyExpired - remove old entries
+        int prevSize = _recentlyExpired.size();
+        _recentlyExpired.entrySet().removeIf(e -> e.getValue() < now - RECENT_EXPIRY_WINDOW_MS);
+        int cleanedRecently = prevSize - _recentlyExpired.size();
+        cleaned += cleanedRecently;
+
+        // Update last participating expiration
+        updateLastParticipatingExpiration();
+
+        // Run consistency check between queue and maps
+        validateQueueMapConsistency();
+
+        if (cleaned > 0 && _log.shouldInfo()) {
+            _log.info("Periodic cleanup removed " + cleaned + " tunnels (recentlyExpired: " + cleanedRecently + ")");
+        }
+        return cleaned;
+    }
+
+    /**
+     * Validate consistency between expiration queue and participating config maps.
+     * Removes any tunnels from the queue that are no longer in the maps.
+     * @return number of inconsistencies fixed
+     */
+    private int validateQueueMapConsistency() {
+        int fixed = 0;
+
+        // Check each tunnel in queue - remove if not in participatingConfig
+        Iterator<HopConfig> qit = _leaveJob.getConfigs().iterator();
+        while (qit.hasNext()) {
+            HopConfig cfg = qit.next();
+            TunnelId recvId = cfg.getReceiveTunnel();
+            if (recvId == null || _participatingConfig.get(recvId) == null) {
+                // Tunnel in queue but not in maps - remove from queue
+                qit.remove();
+                fixed++;
+                if (_log.shouldDebug()) {
+                    _log.debug("Removed orphaned tunnel from expiration queue: " + recvId);
+                }
+            }
+        }
+
+        if (fixed > 0 && _log.shouldInfo()) {
+            _log.info("Queue/map consistency check fixed " + fixed + " inconsistencies");
+        }
+        return fixed;
     }
 
     /**
@@ -188,6 +362,21 @@ public class TunnelDispatcher implements Service {
      */
     public long getLastParticipatingExpiration() {
         return _lastParticipatingExpiration;
+    }
+
+    /**
+     * Update the last participating expiration to reflect the maximum
+     * expiration of all tunnels in the queue.
+     */
+    private void updateLastParticipatingExpiration() {
+        long maxExp = -1;
+        for (HopConfig cfg : _leaveJob.getConfigs()) {
+            long exp = cfg.getExpiration();
+            if (exp > maxExp) {
+                maxExp = exp;
+            }
+        }
+        _lastParticipatingExpiration = maxExp;
     }
 
     /**
@@ -451,20 +640,38 @@ public class TunnelDispatcher implements Service {
      * Remove a tunnel we're participating in
      */
     public void remove(HopConfig cfg) {
-        TunnelId recvId = cfg.getReceiveTunnel();
-        boolean removed = _participatingConfig.remove(recvId) != null;
-        if (!removed) {
-            removed = _participants.remove(recvId) != null;
-            if (!removed) {
-                removed = _inboundGateways.remove(recvId) != null;
-                if (!removed) {
-                    removed = _outboundEndpoints.remove(recvId) != null;
-                }
-            }
-        }
+        if (cfg == null) return;
 
-        if (removed) {
+        // Check if already being removed - prevent duplicate calls
+        int cfgKey = System.identityHashCode(cfg);
+        if (_configsBeingRemoved.contains(cfgKey)) {
+            if (_log.shouldDebug()) {
+                _log.debug("Skipping duplicate remove for config: " + cfg);
+            }
+            return;
+        }
+        _configsBeingRemoved.add(cfgKey);
+
+        try {
+            TunnelId recvId = cfg.getReceiveTunnel();
+
+            // Remove from ALL maps unconditionally to prevent leaks
+            _participatingConfig.remove(recvId);
+            TunnelParticipant participant = _participants.remove(recvId);
+            _inboundGateways.remove(recvId);
+            _outboundEndpoints.remove(recvId);
+
+            if (_leaveJob != null) {
+                _leaveJob.remove(cfg);
+            }
+            updateLastParticipatingExpiration();
             addRecentlyExpired(recvId);
+
+            if (_log.shouldDebug()) {
+                _log.debug("Removed participating tunnel: " + recvId);
+            }
+        } finally {
+            _configsBeingRemoved.remove(cfgKey);
         }
     }
 
@@ -629,10 +836,20 @@ public class TunnelDispatcher implements Service {
     }
 
     /**
-     * Get a list of participating tunnels (for console display)
+     * Get a list of participating tunnels (for console display).
+     * Filters out tunnels that are > 30 seconds past expiration.
      */
     public List<HopConfig> listParticipatingTunnels() {
-        return new ArrayList<>(_participatingConfig.values());
+        List<HopConfig> tunnels = new ArrayList<>();
+        long now = _context.clock().now();
+        long staleCutoff = now - 30 * 1000;
+        for (HopConfig cfg : _participatingConfig.values()) {
+            // Only include tunnels that haven't expired + 30s
+            if (cfg.getExpiration() > staleCutoff) {
+                tunnels.add(cfg);
+            }
+        }
+        return tunnels;
     }
 
     /**
@@ -772,7 +989,15 @@ public class TunnelDispatcher implements Service {
      * Job to expire tunnels we are participating in
      */
     private class LeaveTunnel extends JobImpl {
-        private final LinkedBlockingQueue<HopConfig> _configs = new LinkedBlockingQueue<>();
+        private final PriorityQueue<HopConfig> _configs = new PriorityQueue<>(16, new Comparator<HopConfig>() {
+            public int compare(HopConfig a, HopConfig b) {
+                long ae = a.getExpiration();
+                long be = b.getExpiration();
+                if (ae < be) return -1;
+                if (ae > be) return 1;
+                return 0;
+            }
+        });
 
         public LeaveTunnel(RouterContext ctx) {
             super(ctx);
@@ -790,6 +1015,10 @@ public class TunnelDispatcher implements Service {
 
         public void remove(HopConfig cfg) {
             _configs.remove(cfg);
+        }
+
+        public Collection<HopConfig> getConfigs() {
+            return _configs;
         }
 
         public String getName() {
@@ -811,21 +1040,32 @@ public class TunnelDispatcher implements Service {
             else if (count > 500) {nextTime = now + 300 * 1000;}     // 500-750: 5 min
             else {nextTime = now + 600 * 1000;}                      // 0-500: 10 min
 
+            // Process tunnels in expiration order - peek first (earliest expiring)
+            int processed = 0;
+            int expired = 0;
             while (true) {
                 HopConfig cur = _configs.peek();
                 if (cur == null) break;
 
-                long exp = cur.getExpiration() + (3 * Router.CLOCK_FUDGE_FACTOR / 2) + 1000;
+                long exp = cur.getExpiration() + TUNNEL_EXPIRY_FUDGE;
                 if (exp < now) {
+                    // Tunnel expired - remove from queue and maps
                     _configs.poll();
+                    expired++;
                     if (_log.shouldInfo())
                         _log.info("Expiring Participating tunnel... " + cur);
-                    remove(cur);
+                    TunnelDispatcher.this.remove(cur);
                     _allocatedBW.addAndGet(0 - cur.getAllocatedBW());
+                    processed++;
                 } else {
+                    // Tunnel not expired - since queue is sorted by expiration, all remaining are also not expired
                     if (exp < nextTime) nextTime = exp;
                     break;
                 }
+            }
+
+            if (_log.shouldInfo() && processed > 0) {
+                _log.info("LeaveTunnel processed " + processed + " tunnels, expired " + expired + ", next check in " + (nextTime - now) + "ms");
             }
 
             long expiryCutoff = now - RECENT_EXPIRY_WINDOW_MS;
