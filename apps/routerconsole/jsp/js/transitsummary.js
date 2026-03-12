@@ -3,7 +3,7 @@
 /* License: AGPL3 or later */
 
 import {convertKBtoMB} from "/js/convertKBtoMB.js";
-import {refreshElements} from "/themes/js/refreshElements.js";
+import {refreshElements} from "/js/refreshElements.js";
 
 const main = document.getElementById("tunnels");
 const peers = document.getElementById("transitPeers");

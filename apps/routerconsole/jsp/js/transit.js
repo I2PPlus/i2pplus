@@ -10,6 +10,7 @@ import {refreshElements} from "/js/refreshElements.js";
 
   let main, peers, tunnels, refreshBtn;
   let sorter = null;
+  let isRefreshing = false;
   let isSetup = false;
   let lastPeerRowCount = -1;
 
@@ -23,30 +24,45 @@ import {refreshElements} from "/js/refreshElements.js";
 
   function setupTablesort() {
     if (isSetup || !tunnels) return;
-    sorter = sorter || new Tablesort(tunnels, { descending: true });
+    sorter = sorter || new Tablesort(tunnels, {descending: true});
     tunnels.addEventListener("beforeSort", () => progressx?.show?.(theme));
     tunnels.addEventListener("afterSort", () => progressx?.hide?.());
     if (refreshBtn) refreshBtn.removeAttribute("href");
     isSetup = true;
   }
 
+  function startRefresh() {
+    if (isRefreshing) return;
+    isRefreshing = true;
+    requestAnimationFrame(() => progressx?.show?.(theme));
+  }
+
+  function endRefresh() {
+    requestAnimationFrame(() => progressx?.hide?.());
+    isRefreshing = false;
+  }
+
   function refreshData() {
+    startRefresh();
     getDOM();
-    const notes = document.querySelectorAll(".statusnotes");
     let selector = "#tunnels";
 
-    if (peers && notes.length > 0) {
+    if (tunnels) {
       setupTablesort();
-      const currentRows = peers.querySelectorAll("tr").length;
+      if (peers) {
+        const currentRows = peers.querySelectorAll("tr").length;
 
-      if (currentRows === lastPeerRowCount && currentRows > 0) {
-        selector = "#transitPeers td>*, .statusnotes";
-      } else {
-        selector = "#transitPeers, .statusnotes";
-        lastPeerRowCount = currentRows;
+        if (currentRows === lastPeerRowCount && currentRows > 0) {
+          refreshElements("#transitPeers td>*, #statusnotes", "/transit", REFRESH_INTERVAL);
+        } else if (currentRows !== lastPeerRowCount) {
+          refreshElements("#transitPeers, #statusnotes", "/transit", REFRESH_INTERVAL);
+          lastPeerRowCount = currentRows;
+        } else {
+          refreshElements("#tunnels", "/transit", RETRY_DELAY);
+        }
       }
-      refreshElements(selector, "/transit", REFRESH_INTERVAL);
     }
+    endRefresh();
   }
 
   function init(retryCount = 0) {

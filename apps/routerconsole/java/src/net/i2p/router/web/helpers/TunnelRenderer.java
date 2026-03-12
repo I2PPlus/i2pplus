@@ -369,7 +369,7 @@ class TunnelRenderer {
 
             StringBuilder tbuf = new StringBuilder(3 * 512);
             tbuf.append("<div class=tablewrap>\n<h3 class=tabletitle>")
-                .append(_t("Transit Tunnels by Peer (Top {0})", DISPLAY_LIMIT))
+                .append(_t("Transit Tunnels by Peer (Top {0})", DISPLAY_LIMIT*10))
                 .append("</h3>\n<table id=transitSummary class=\"tunneldisplay tunnels_participating\">\n<thead><tr><th id=country data-sort-direction=ascending>")
                 .append(_t("Country"))
                 .append("</th><th id=router data-sort-direction=ascending>")
@@ -405,7 +405,7 @@ class TunnelRenderer {
                 // Defensive - skip if count <= 0 (unlikely due to sorted list but just in case)
                 if (count <= 0) continue;
 
-                if (++displayed > DISPLAY_LIMIT) break;
+                if (++displayed > DISPLAY_LIMIT*10) break;
 
                 //RouterInfo info = _context.netDb().lookupRouterInfoLocally(h);
                 RouterInfo info = routerInfoCache.computeIfAbsent(h, hash -> (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(hash));
@@ -1249,7 +1249,7 @@ class TunnelRenderer {
         long next = 0;
         for (TunnelInfo ti : pool.listTunnels()) {
             // Skip failed tunnels - they should not affect expiry sorting
-            if (ti.getTunnelFailed() || 
+            if (ti.getTunnelFailed() ||
                 ti.getTestStatus() == net.i2p.router.TunnelTestStatus.FAILED ||
                 ti.getConsecutiveFailures() > 1) {
                 continue;

@@ -43,11 +43,14 @@ import {refreshElements} from "/js/refreshElements.js";
   function refreshData() {
     startRefresh();
     getDOM();
-    const notes = document.querySelectorAll(".statusnotes");
-    if (peers && notes.length) {
+    if (tunnels) {
       setupTablesort();
-      refreshElements(".statusnotes, #transitPeers", "/transitfast", REFRESH_INTERVAL);
-    } else if (main) { refreshElements("#tunnels", "/transitfast", RETRY_DELAY); }
+      if (peers) {
+        refreshElements("#statusnotes, #transitPeers", "/transitfast", REFRESH_INTERVAL);
+      } else if (main) {
+        refreshElements("#tunnels", "/transitfast", RETRY_DELAY);
+      }
+    }
     endRefresh();
   }
 
