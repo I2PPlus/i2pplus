@@ -42,15 +42,36 @@ class PumpedTunnelGateway extends TunnelGateway {
     public final boolean _isInbound;
     private final Hash _nextHop;
 
-    private static final int MAX_OB_MSGS_PER_PUMP = SystemVersion.isSlow() ? 64 : 256;
-    private static final int MAX_IB_MSGS_PER_PUMP = SystemVersion.isSlow() ? 32 : 128;
-    private static final int INITIAL_OB_QUEUE = SystemVersion.isSlow() ? 64 : 256;
-    private static final int MAX_IB_QUEUE = SystemVersion.isSlow() ? 1024 : 2048;
+    private static final int MAX_OB_MSGS_PER_PUMP;
+    private static final int MAX_IB_MSGS_PER_PUMP;
+    private static final int INITIAL_OB_QUEUE;
+    private static final int MAX_IB_QUEUE;
 
     public static final String PROP_MAX_OB_MSGS_PER_PUMP = "router.pumpMaxOutboundMsgs";
     public static final String PROP_MAX_IB_MSGS_PER_PUMP = "router.pumpMaxInboundMsgs";
     public static final String PROP_INITIAL_OB_QUEUE = "router.pumpInitialOutboundQueue";
     public static final String PROP_MAX_IB_QUEUE = "router.pumpMaxInboundQueue";
+
+    static {
+        int cores = SystemVersion.getCores();
+        long maxMem = SystemVersion.getMaxMemory();
+
+        // Scale max messages per pump based on cores
+        MAX_OB_MSGS_PER_PUMP = SystemVersion.isSlow() ? 64 : Math.max(256, cores * 32);
+        MAX_IB_MSGS_PER_PUMP = SystemVersion.isSlow() ? 32 : Math.max(128, cores * 16);
+
+        // Scale queues based on memory
+        if (maxMem < 256 * 1024 * 1024L) {
+            INITIAL_OB_QUEUE = 64;
+            MAX_IB_QUEUE = 1024;
+        } else if (maxMem < 512 * 1024 * 1024L) {
+            INITIAL_OB_QUEUE = 256;
+            MAX_IB_QUEUE = 2048;
+        } else {
+            INITIAL_OB_QUEUE = 512;
+            MAX_IB_QUEUE = 4096;
+        }
+    }
 
     /**
      * Constructs a PumpedTunnelGateway instance.

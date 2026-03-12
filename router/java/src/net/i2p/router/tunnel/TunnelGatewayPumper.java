@@ -49,15 +49,41 @@ class TunnelGatewayPumper implements Runnable {
     private volatile boolean _stop;
 
     private static final int MIN_PUMPERS = 1;
-    private static final int MAX_PUMPERS = SystemVersion.isSlow() ? 1 : 2;
-    private static final int QUEUE_BUFFER = SystemVersion.isSlow() ? 12 : 16;
+    private static final int MAX_PUMPERS;
+    private static final int QUEUE_BUFFER;
 
     private final int _pumpers;
 
     /**
      * Wait time to requeue a backlogged gateway to allow task processing to catch up.
      */
-    private static final long REQUEUE_TIME = SystemVersion.isSlow() ? 100 : 50;
+    private static final long REQUEUE_TIME;
+
+    static {
+        int cores = SystemVersion.getCores();
+        long maxMem = SystemVersion.getMaxMemory();
+
+        // Scale pumpers: 25% of cores, min 1, max 6
+        // Leave most CPU for other router operations
+        int calculatedPumps = Math.max(1, cores / 4);
+        if (SystemVersion.isSlow()) {
+            MAX_PUMPERS = 1;  // Slow systems: single pumper
+        } else {
+            MAX_PUMPERS = Math.min(6, calculatedPumps);
+        }
+
+        // Scale queue buffer based on memory: 16 for <256MB, 24 for <512MB, 32 otherwise
+        if (maxMem < 256 * 1024 * 1024L) {
+            QUEUE_BUFFER = 16;
+        } else if (maxMem < 512 * 1024 * 1024L) {
+            QUEUE_BUFFER = 24;
+        } else {
+            QUEUE_BUFFER = 32;
+        }
+
+        // Scale requeue time inversely with cores: faster requeue with more cores
+        REQUEUE_TIME = Math.max(25, 100 - (cores * 5));
+    }
 
     /**
      * Special poison pill constant used to signal termination.
@@ -91,10 +117,8 @@ class TunnelGatewayPumper implements Runnable {
     public void stopPumping() {
         _stop = true;
 
-        // Clear the pumping request queue safely before shutdown
-        _wantsPumping.clear();
-
         // Enqueue poison pills to unblock and stop each pumping thread
+        // (do NOT clear queue - process pending items for throughput)
         for (int i = 0; i < _pumpers; i++) {
             try {
                 _wantsPumping.put(new PoisonPTG(_context));
@@ -160,8 +184,6 @@ class TunnelGatewayPumper implements Runnable {
             run2();
         } catch (Exception e) {
             _log.error("Error in TunnelGatewayPumper run", e);
-        } finally {
-            _threads.remove(Thread.currentThread());
         }
     }
 
