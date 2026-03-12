@@ -180,8 +180,6 @@ public class TunnelDispatcher implements Service {
     private class PeriodicCleanup implements SimpleTimer.TimedEvent {
         public void timeReached() {
             cleanupExpiredTunnels();
-            // Reschedule with updated interval based on current tunnel count
-            _context.simpleTimer2().addPeriodicEvent(this, getCleanupInterval(), getCleanupInterval());
         }
     }
 
