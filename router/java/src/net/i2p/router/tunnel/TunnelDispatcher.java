@@ -4,13 +4,12 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.data.DataHelper;
@@ -989,15 +988,7 @@ public class TunnelDispatcher implements Service {
      * Job to expire tunnels we are participating in
      */
     private class LeaveTunnel extends JobImpl {
-        private final PriorityQueue<HopConfig> _configs = new PriorityQueue<>(16, new Comparator<HopConfig>() {
-            public int compare(HopConfig a, HopConfig b) {
-                long ae = a.getExpiration();
-                long be = b.getExpiration();
-                if (ae < be) return -1;
-                if (ae > be) return 1;
-                return 0;
-            }
-        });
+        private final ConcurrentLinkedQueue<HopConfig> _configs = new ConcurrentLinkedQueue<>();
 
         public LeaveTunnel(RouterContext ctx) {
             super(ctx);
