@@ -61,6 +61,9 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         _inboundExploratory = new TunnelPool(_context, this, inboundSettings, selector);
         TunnelPoolSettings outboundSettings = new TunnelPoolSettings(false);
         _outboundExploratory = new TunnelPool(_context, this, outboundSettings, selector);
+        // Set paired pools for exploratory tunnels
+        _inboundExploratory.setPairedPool(_outboundExploratory);
+        _outboundExploratory.setPairedPool(_inboundExploratory);
 
         // threads will be started in startup()
         _executor = new BuildExecutor(ctx, this);
@@ -372,6 +375,9 @@ public class TunnelPoolManager implements TunnelManagerFacade {
                 _clientOutboundPools.put(dest, outbound);
                 delayOutbound = true;
             } else {outbound.setSettings(settings.getOutboundSettings());}
+            // Set paired pools for client tunnels
+            inbound.setPairedPool(outbound);
+            outbound.setPairedPool(inbound);
         }
         inbound.startup();
         // Don't delay the outbound if it already exists, as this opens up a large

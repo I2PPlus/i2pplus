@@ -6,9 +6,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
@@ -39,6 +41,7 @@ public class TunnelPool {
     private final List<TunnelInfo> _tunnels;
     private final TunnelPeerSelector _peerSelector;
     private final TunnelPoolManager _manager;
+    private TunnelPool _pairedPool;  // Inbound or outbound pool for same destination
     protected volatile boolean _alive;
     private long _lifetimeProcessed;
     private int _lastSelectedIdx;
@@ -536,6 +539,16 @@ public class TunnelPool {
         }
     }
 
+    /** Set the paired pool (inbound <-> outbound for same destination) */
+    void setPairedPool(TunnelPool pool) {
+        _pairedPool = pool;
+    }
+
+    /** Get the paired pool (inbound <-> outbound for same destination) */
+    TunnelPool getPairedPool() {
+        return _pairedPool;
+    }
+
     /**
      *  Is this pool running AND either exploratory, or tracked by the client manager?
      *  A pool will be alive but not tracked after the client manager removes it
@@ -590,17 +603,53 @@ public class TunnelPool {
     }
 
     /**
+     *  Track recently-added tunnel IDs to prevent duplicates.
+     *  Uses a simple sliding window based on expiration time.
+     */
+    private final Map<TunnelId, Long> _recentlyAddedTunnels = new ConcurrentHashMap<>();
+
+    /**
      *  Add a tunnel to the pool.
      *  @param info the tunnel to add
      */
     protected void addTunnel(TunnelInfo info) {
         if (info == null) {return;}
         long now = _context.clock().now();
+
+        // Get the gateway tunnel ID for deduplication
+        TunnelId gatewayId = _settings.isInbound()
+            ? info.getReceiveTunnelId(0)
+            : info.getSendTunnelId(0);
+
+        // Check for duplicates using recent additions tracking
+        Long addedTime = _recentlyAddedTunnels.get(gatewayId);
+        if (addedTime != null && now - addedTime < 60*1000) {
+            if (_log.shouldWarn()) {
+                _log.warn(toString() + " -> Rejecting duplicate tunnel addition: " + info.getReceiveTunnelId(0));
+            }
+            return;
+        }
+
         if (_log.shouldDebug()) {_log.debug(toString() + " -> Adding tunnel " + info);}
         LeaseSet ls = null;
         synchronized (_tunnels) {
+            // Also check for duplicate in existing pool (defense in depth)
+            for (TunnelInfo existing : _tunnels) {
+                TunnelId existingId = _settings.isInbound()
+                    ? existing.getReceiveTunnelId(0)
+                    : existing.getSendTunnelId(0);
+                if (existingId.equals(gatewayId)) {
+                    if (_log.shouldWarn()) {
+                        _log.warn(toString() + " -> Tunnel ID " + gatewayId + " already exists in pool, skipping add");
+                    }
+                    return;
+                }
+            }
+
             if (info.getExpiration() > now + 60*1000) {
                 _tunnels.add(info);
+                // Track this tunnel ID as recently added
+                _recentlyAddedTunnels.put(gatewayId, now);
                 if (_settings.isInbound() && !_settings.isExploratory()) {ls = locked_buildNewLeaseSet();}
             }
         }
@@ -986,6 +1035,19 @@ public class TunnelPool {
     int countHowManyToBuild() {
         if (!isAlive()) {return 0;}
         int wanted = getAdjustedTotalQuantity();
+
+        // If paired pool (inbound <-> outbound for same destination) has no tunnels,
+        // we MUST build even if our own pool is full. Tunnels are unidirectional,
+        // so a destination needs BOTH inbound AND outbound to function.
+        if (_pairedPool != null) {
+            int pairedValid = _pairedPool.getValidTunnelCount();
+            int pairedInProgress = _pairedPool.getInProgressCount();
+            if (pairedValid + pairedInProgress == 0) {
+                // Paired pool is empty - ensure we have at least 2 tunnels for pairing
+                return Math.max(2, wanted);
+            }
+        }
+
         boolean allowZeroHop = _settings.getAllowZeroHop();
 
         /**
@@ -1550,9 +1612,9 @@ public class TunnelPool {
             boolean hasRecentSuccess = hasRecentSuccessfulBuilds();
 
             if (_log.shouldDebug()) {
-                _log.debug("Enhanced tunnel availability check for " + this + ": usable_inbound=" + usableInbound +
-                          " usable_outbound=" + usableOutbound + " recent_success=" + hasRecentSuccess +
-                          " failures=" + _consecutiveBuildTimeouts.get());
+                _log.debug("Enhanced tunnel availability check for " + this + "\n* Usable inbound:" + usableInbound +
+                          " Usable outbound: " + usableOutbound + " Recent success: " + hasRecentSuccess +
+                          " Failures: " + _consecutiveBuildTimeouts.get());
             }
 
             // Check if the current pool has usable tunnels OR if the opposite direction has adequate tunnels
@@ -1579,8 +1641,8 @@ public class TunnelPool {
             boolean hasRecentSuccess = hasRecentSuccessfulBuilds();
 
             if (_log.shouldDebug()) {
-                _log.debug("Enhanced exploratory tunnel availability check for " + this + ": usable=" + usable +
-                          " recent_success=" + hasRecentSuccess + " failures=" + _consecutiveBuildTimeouts.get());
+                _log.debug("Enhanced exploratory tunnel availability check for " + this + "\n*  Usable: " + usable +
+                          " Recent success: " + hasRecentSuccess + " Failures: " + _consecutiveBuildTimeouts.get());
             }
 
             // Much more aggressive suppression: if we have ANY usable tunnels OR recent success, suppress
