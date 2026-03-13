@@ -15,6 +15,7 @@ import net.i2p.data.Hash;
 import net.i2p.data.SessionKey;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.RouterContext;
+import net.i2p.router.BanLogger;
 import net.i2p.router.transport.ntcp.NTCP2Payload.Block;
 import net.i2p.util.Log;
 
@@ -31,6 +32,7 @@ class OutboundNTCP2State implements EstablishState {
 
     private final RouterContext _context;
     private final Log _log;
+    private final BanLogger _banLogger;
     private final NTCPTransport _transport;
     private final NTCPConnection _con;
     private final byte[] _tmp;
@@ -94,6 +96,8 @@ class OutboundNTCP2State implements EstablishState {
     public OutboundNTCP2State(RouterContext ctx, NTCPTransport transport, NTCPConnection con) {
         _context = ctx;
         _log = ctx.logManager().getLog(getClass());
+        _banLogger = new BanLogger();
+        _banLogger.initialize(ctx);
         _transport = transport;
         _con = con;
         _state = State.OB_INIT;
@@ -329,6 +333,12 @@ class OutboundNTCP2State implements EstablishState {
                     _context.banlist().banlistRouter(DataHelper.formatDuration(diff),
                                                      _con.getRemotePeer().calculateHash(),
                                                      " <b>➜</b> Excessive clock skew ({0})");  // _x in IES
+                    byte[] ip = _con.getRemoteIP();
+                    int port = _con.getRemotePort();
+                    String ipPort = (ip != null && ip.length == 4) ? 
+                        (ip[0] & 0xff) + "." + (ip[1] & 0xff) + "." + (ip[2] & 0xff) + "." + (ip[3] & 0xff) + ":" + port :
+                        "UNKNOWN";
+                    _banLogger.logBan(_con.getRemotePeer().calculateHash(), ipPort, "Excessive clock skew: " + DataHelper.formatDuration(diff), 0);
                     _transport.setLastBadSkew(_peerSkew);
                     return;
                 }

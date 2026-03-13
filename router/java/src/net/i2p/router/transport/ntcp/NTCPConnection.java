@@ -37,6 +37,7 @@ import net.i2p.data.router.RouterInfo;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
+import net.i2p.router.BanLogger;
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import net.i2p.router.transport.FIFOBandwidthLimiter;
 import net.i2p.router.transport.FIFOBandwidthLimiter.Request;
@@ -61,6 +62,7 @@ import net.i2p.util.SystemVersion;
 public class NTCPConnection implements Closeable {
     private final RouterContext _context;
     private final Log _log;
+    private final BanLogger _banLogger;
     private volatile SocketChannel _chan;
     private volatile SelectionKey _conKey;
     private final FIFOBandwidthLimiter.CompleteListener _inboundListener;
@@ -254,6 +256,8 @@ public class NTCPConnection implements Closeable {
     private NTCPConnection(RouterContext ctx, NTCPTransport transport, RouterAddress remAddr, boolean isIn) {
         _context = ctx;
         _log = ctx.logManager().getLog(getClass());
+        _banLogger = new BanLogger();
+        _banLogger.initialize(ctx);
         _created = ctx.clock().now();
         _transport = transport;
         _remAddr = remAddr;
@@ -306,6 +310,16 @@ public class NTCPConnection implements Closeable {
         if (addr == null)
             return null;
         return addr.getAddress();
+    }
+
+    /**
+     *  @return 0 if unknown
+     *  @since 2.11.0
+     */
+    public int getRemotePort() {
+        if (_chan == null)
+            return 0;
+        return _chan.socket().getPort();
     }
 
     /**
@@ -1799,8 +1813,15 @@ public class NTCPConnection implements Closeable {
                           "\n* Total received: " + lastReceived + " on " + NTCPConnection.this);
             // close() calls destroy() sets _terminated
             close();
-            if (reason == REASON_BANNED && _remotePeer != null)
+            if (reason == REASON_BANNED && _remotePeer != null) {
+                byte[] ip = getRemoteIP();
+                int port = getRemotePort();
+                String ipPort = (ip != null && ip.length == 4) ? 
+                    (ip[0] & 0xff) + "." + (ip[1] & 0xff) + "." + (ip[2] & 0xff) + "." + (ip[3] & 0xff) + ":" + port :
+                    "UNKNOWN";
                 _context.banlist().banlistRouter(_remotePeer.calculateHash(), "They banned us", null, null, _context.clock().now() + 2*60*60*1000);
+                _banLogger.logBan(_remotePeer.calculateHash(), ipPort, "They banned us", 2*60*60*1000);
+            }
         }
 
         public void gotUnknown(int type, int len) {

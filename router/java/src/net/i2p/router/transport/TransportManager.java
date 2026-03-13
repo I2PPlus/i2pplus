@@ -40,6 +40,7 @@ import net.i2p.data.router.RouterInfo;
 import net.i2p.router.CommSystemFacade.Status;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.RouterContext;
+import net.i2p.router.BanLogger;
 import net.i2p.router.transport.crypto.X25519KeyFactory;
 import net.i2p.router.transport.ntcp.NTCPTransport;
 import net.i2p.router.transport.udp.UDPTransport;
@@ -95,6 +96,7 @@ import net.i2p.util.VersionComparator;
  */
 public class TransportManager implements TransportEventListener {
     private final Log _log;
+    private final BanLogger _banLogger;
     /**
      * Converted from List to prevent concurrent modification exceptions.
      * If we want more than one transport with the same style we will have to change this.
@@ -134,6 +136,8 @@ public class TransportManager implements TransportEventListener {
     public TransportManager(RouterContext context) {
         _context = context;
         _log = _context.logManager().getLog(TransportManager.class);
+        _banLogger = new BanLogger();
+        _banLogger.initialize(context);
         _context.statManager().createRateStat("transport.banlistOnUnreachable", "Add peer to banlist (unreachable on any transport)", "Transport", RATES);
         _context.statManager().createRateStat("transport.banlistOnUsupportedSigType", "Add peer to banlist (unsupported signature type)", "Transport", RATES);
         _context.statManager().createRateStat("transport.noBidsYetNotAllUnreachable", "Add peer to banlist (unreachable on any transport)", "Transport", RATES);
@@ -980,6 +984,7 @@ public class TransportManager implements TransportEventListener {
                 // we don't support his crypto
                 _context.statManager().addRateData("transport.banlistOnUnsupportedSigType", 1);
                 _context.banlist().banlistRouterForever(peer, " <b>➜</b> " + _x("Unsupported signature type"));
+                _banLogger.logBanForever(peer, _context, "Unsupported signature type");
             } else if (unreachableTransports >= _transports.size() && countActivePeers() > 0) {
                 // Don't banlist if we aren't talking to anybody, as we may have a network connection issue
                 // TODO if we are IPv6 only, ban for longer
@@ -999,9 +1004,11 @@ public class TransportManager implements TransportEventListener {
                     _context.statManager().addRateData("transport.banlistOnUnsupportedSigType", 1);
                     _context.banlist().banlistRouter(peer, " <b>➜</b> " + _x("No support for our signature type"), null, null,
                                                      _context.clock().now() + SIGTYPE_BANLIST_DURATION);
+                    _banLogger.logBan(peer, _context, "No support for our signature type", SIGTYPE_BANLIST_DURATION);
                 } else {
                     _context.statManager().addRateData("transport.banlistOnUnreachable", msg.getLifetime(), msg.getLifetime());
                     _context.banlist().banlistRouter(peer, " <b>➜</b> " + _x("Unreachable on any transport"));
+                    _banLogger.logBan(peer, _context, "Unreachable on any transport", 0);
                 }
             }
         } else if (rv == null) {

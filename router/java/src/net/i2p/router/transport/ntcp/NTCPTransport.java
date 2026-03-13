@@ -36,6 +36,7 @@ import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.Banlist;
+import net.i2p.router.BanLogger;
 import net.i2p.router.CommSystemFacade.Status;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.RouterContext;
@@ -59,13 +60,13 @@ import net.i2p.util.VersionComparator;
 
 /**
  * Non-blocking TCP (NTCP) transport implementation for I2P.
- * 
+ *
  * This class provides the primary TCP-based transport for I2P
  * communication using Java NIO for non-blocking I/O operations.
  * It supports both NTCP 1 and NTCP 2 protocols with
  * advanced features like connection pooling, bandwidth management,
  * and sophisticated peer management.
- * 
+ *
  * <strong>Protocol Features:</strong>
  * <ul>
  *   <li>NTCP 1: Basic encrypted TCP transport</li>
@@ -75,7 +76,7 @@ import net.i2p.util.VersionComparator;
  *   <li>IPv4 and IPv6 support</li>
  *   <li>Automatic protocol negotiation</li>
  * </ul>
- * 
+ *
  * <strong>Architecture:</strong>
  * <ul>
  *   <li>Non-blocking I/O with NIO channels</li>
@@ -84,7 +85,7 @@ import net.i2p.util.VersionComparator;
  *   <li>Connection state machines for establishment</li>
  *   <li>Peer reputation and cost-based routing</li>
  * </ul>
- * 
+ *
  * <strong>Connection Management:</strong>
  * <ul>
  *   <li>Multiple bid tiers (fast, slow, high-cost)</li>
@@ -97,6 +98,7 @@ import net.i2p.util.VersionComparator;
  */
 public class NTCPTransport extends TransportImpl {
     private final Log _log;
+    private final BanLogger _banLogger;
     private final SharedBid _fastBid;
     private final SharedBid _slowBid;
     private final SharedBid _slowCostBid;
@@ -186,6 +188,8 @@ public class NTCPTransport extends TransportImpl {
         super(ctx);
         _xdhFactory = xdh;
         _log = ctx.logManager().getLog(getClass());
+        _banLogger = new BanLogger();
+        _banLogger.initialize(ctx);
 
         _context.statManager().createRateStat("ntcp.accept", "Accepted NTCP requests", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.attemptBanlistedPeer", "Connection attempts to banlisted NTCP peer", "Transport [NTCP]", RATES);
@@ -458,6 +462,7 @@ public class NTCPTransport extends TransportImpl {
      */
     private void banPeerForInvalidAddress(Hash ih, RouterInfo target) {
         long now = _context.clock().now();
+        String ipPort = getIPPortFromRouterInfo(target);
         if (_log.shouldInfo()) {
             _log.warn("[NTCP] We bid on a peer without a valid NTCP address, banning for 8h\n" + target);
         } else if (_log.shouldWarn()) {
@@ -465,6 +470,26 @@ public class NTCPTransport extends TransportImpl {
             _log.warn("[NTCP] Router [" + shortId + "] has no valid NTCP address, banning for 8h");
         }
         _context.banlist().banlistRouter(ih, " <b>➜</b> Invalid NTCP address", null, null, now + 8*60*60*1000);
+        _banLogger.logBan(ih, ipPort, "Invalid NTCP address", 8*60*60*1000);
+    }
+
+    /**
+     * Extract IP:port from RouterInfo for NTCP transport.
+     */
+    private String getIPPortFromRouterInfo(RouterInfo ri) {
+        if (ri == null) return "UNKNOWN";
+        try {
+            for (RouterAddress ra : ri.getAddresses()) {
+                if (ra != null && "NTCP".equals(ra.getTransportStyle())) {
+                    String host = ra.getHost();
+                    int port = ra.getPort();
+                    if (host != null && port > 0) {
+                        return host + ":" + port;
+                    }
+                }
+            }
+        } catch (Exception e) {}
+        return "UNKNOWN";
     }
 
     /**
@@ -584,10 +609,14 @@ public class NTCPTransport extends TransportImpl {
         }
         int nid = toAddress.getNetworkId();
         if (nid != _networkID) {
-            if (nid == -1)
+            String ipPort = getIPPortFromRouterInfo(toAddress);
+            if (nid == -1) {
                 _context.banlist().banlistRouter(peer, " <b>➜</b> No network specified", null, null, _context.clock().now() + Banlist.BANLIST_DURATION_NO_NETWORK);
-            else
-                _context.banlist().banlistRouterForever(peer, " <b>➜</b> Not in our network: " + nid);
+                _banLogger.logBan(peer, ipPort, "No network specified", Banlist.BANLIST_DURATION_NO_NETWORK);
+            } else {
+                _context.banlist().banlistRouterForever(peer, " <b>➜</b> Invalid NetworkId (" + nid + ")");
+                _banLogger.logBanForever(peer, ipPort, "Invalid NetworkId (" + nid + ")");
+            }
             if (_log.shouldWarn())
                 _log.warn("[NTCP] Not in our network: " + toAddress, new Exception());
             markUnreachable(peer);

@@ -345,8 +345,11 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             }
         } else if (!skewOK) {
             // Only banlist if we know what time it is
+            int port = _con.getRemotePort();
+            String ipPort = ip != null ? formatIPPort(ip, port) : "UNKNOWN";
             _context.banlist().banlistRouter(DataHelper.formatDuration(diff), aliceHash,
                                              " <b>➜</b> " + _x("Excessive clock skew ({0})"));
+            _banLogger.logBan(aliceHash, ipPort, "Excessive clock skew: " + DataHelper.formatDuration(diff), 0);
             _transport.setLastBadSkew(_peerSkew);
             if (_log.shouldWarn()) {
                 _log.warn("Excessive clock skew (" + diff + "ms) from [" + aliceHash.toBase64().substring(0,6) + "]");
@@ -873,8 +876,12 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
 
         // s is verified, we may now ban the hash
         if (mismatchMessage != null) {
+            byte[] ip = _con.getRemoteIP();
+            int port = _con.getRemotePort();
+            String ipPort = ip != null ? formatIPPort(ip, port) : "UNKNOWN";
             _context.banlist().banlistRouter(h, " <b>➜</b> Invalid NTCP address",
                                              null, null, _context.clock().now() + 4*60*60*1000);
+            _banLogger.logBan(h, ipPort, "Invalid NTCP address", 4*60*60*1000);
             _context.commSystem().forceDisconnect(h);
             if (_log.shouldWarn() && !isBanned) {
                 _log.warn("[NTCP] Banning for 4h and disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
@@ -892,7 +899,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         boolean isSlow = (cap != null && !cap.equals("")) && bw.equals("K") ||
                           bw.equals("L") || bw.equals("M") || bw.equals("N");
         String version = ri.getVersion();
-        boolean isOld = VersionComparator.comp(version, "0.9.66") < 0;
+        boolean isOld = VersionComparator.comp(version, "0.9.67") < 0;
         boolean isInvalidVersion = VersionComparator.comp(version, "2.5.0") >= 0;
         long now = _context.clock().now();
         String reason = "";
