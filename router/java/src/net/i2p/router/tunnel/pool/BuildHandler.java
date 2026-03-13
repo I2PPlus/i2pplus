@@ -28,6 +28,7 @@ import net.i2p.data.i2np.VariableTunnelBuildMessage;
 import net.i2p.data.i2np.VariableTunnelBuildReplyMessage;
 import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.router.RouterInfo;
+import net.i2p.data.router.RouterAddress;
 import net.i2p.router.HandlerJobBuilder;
 import net.i2p.router.Job;
 import net.i2p.router.JobImpl;
@@ -37,6 +38,7 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.RouterThrottleImpl;
 import net.i2p.router.networkdb.kademlia.MessageWrapper;
 import net.i2p.router.peermanager.TunnelHistory;
+import net.i2p.router.BanLogger;
 import net.i2p.router.tunnel.HopConfig;
 import net.i2p.router.tunnel.TunnelDispatcher;
 import net.i2p.router.util.CDQEntry;
@@ -64,6 +66,7 @@ class BuildHandler implements Runnable {
     private final ParticipatingThrottler _throttler;
     private final BuildReplyHandler _buildReplyHandler;
     private final IdleTunnelMonitor _idleTunnelMonitor;
+    private final BanLogger _banLogger;
     private final AtomicInteger _currentLookups = new AtomicInteger();
     private volatile boolean _isRunning;
     private final Object _startupLock = new Object();
@@ -112,6 +115,8 @@ class BuildHandler implements Runnable {
         _log = ctx.logManager().getLog(getClass());
         _manager = manager;
         _exec = exec;
+        _banLogger = new BanLogger();
+        _banLogger.initialize(ctx);
         // Queue size = 12 * share BW / 48K
         //int sz = Math.min(MAX_QUEUE, Math.max(MIN_QUEUE, TunnelDispatcher.getShareBandwidth(ctx) * MIN_QUEUE / 48));
         int sz = ctx.getProperty(PROP_MAX_QUEUE, MAX_QUEUE);
@@ -334,6 +339,7 @@ class BuildHandler implements Runnable {
                         String reason = " <b> -> </b> No Bandwidth Tier in RouterInfo";
                         _context.commSystem().mayDisconnect(peer);
                         _context.banlist().banlistRouter(peer, reason, null, null, 4*60*60*1000);
+                        _banLogger.logBan(peer, getIPPortFromHash(peer), "No Bandwidth Tier in RouterInfo", 4*60*60*1000);
                     }
                 }
                 if (howBad == 0) {
@@ -739,6 +745,7 @@ class BuildHandler implements Runnable {
             if (from != null) {
                 _context.commSystem().mayDisconnect(from);
                 _context.banlist().banlistRouter(from, " <b> -> </b> Hostile Tunnel Request (IBGW+OBEP)", null, null, System.currentTimeMillis() + bantime);
+                _banLogger.logBan(from, getIPPortFromHash(from), "Hostile Tunnel Request (IBGW+OBEP)", bantime);
                 if (shouldLog) {_log.warn("Banning [" + fromPeer + "] for " + period + "m -> Hostile Tunnel Request (Inbound Gateway & Outbound Endpoint)");}
             } else if (shouldLog) {_log.warn("Dropping HOSTILE Tunnel Request from UNKNOWN -> IBGW+OBEP");}
             return;
@@ -748,6 +755,7 @@ class BuildHandler implements Runnable {
             if (from != null) {
                 _context.commSystem().mayDisconnect(from);
                 _context.banlist().banlistRouter(from, " <b> -> </b> Hostile Tunnel Request (BAD Tunnel ID)", null, null, System.currentTimeMillis() + bantime);
+                _banLogger.logBan(from, getIPPortFromHash(from), "Hostile Tunnel Request (BAD Tunnel ID)", bantime);
                 if (shouldLog) {_log.warn("Banning [" + fromPeer + "] for " + period + "m -> Hostile Tunnel Request (BAD TunnelID)");}
             } else if (shouldLog) {_log.warn("Dropping HOSTILE Tunnel Request from UNKNOWN -> BAD Tunnel ID");}
             return;
@@ -761,6 +769,7 @@ class BuildHandler implements Runnable {
             if (from != null) {
                 _context.commSystem().mayDisconnect(from);
                 _context.banlist().banlistRouter(from, " <b> -> </b> Hostile Tunnel Request (double hop)", null, null, System.currentTimeMillis() + bantime);
+                _banLogger.logBan(from, getIPPortFromHash(from), "Hostile Tunnel Request (double hop)", bantime);
                 _log.warn("Banning [" + fromPeer + "] for " + period + "m -> Hostile Tunnel Request (We are 2 hops in a row!)");
             } else if (shouldLog) {_log.warn("Dropping HOSTILE Tunnel Request from UNKNOWN -> We are the next hop");}
             return;
@@ -774,6 +783,7 @@ class BuildHandler implements Runnable {
                 if (from != null) {
                     _context.commSystem().mayDisconnect(from);
                     _context.banlist().banlistRouter(from, " <b> -> </b> Hostile Tunnel Request (previous hop)", null, null, System.currentTimeMillis() + bantime);
+                    _banLogger.logBan(from, getIPPortFromHash(from), "Hostile Tunnel Request (previous hop)", bantime);
                     if (shouldLog) {_log.warn("Banning [" + fromPeer + "] for " + period + "m -> Hostile Tunnel Request (We are the previous hop!)");}
                 } else if (shouldLog) {_log.warn("Dropping HOSTILE Tunnel Request from UNKNOWN -> We are the previous hop");}
                 return;
@@ -787,7 +797,8 @@ class BuildHandler implements Runnable {
                 _context.statManager().addRateData("tunnel.rejectHostile", 1);
                 if (from != null) {
                     _context.commSystem().mayDisconnect(from);
-                    _context.banlist().banlistRouter(from, " <b> -> </b> Hostile Tunnel Request (duplicate hops in chain)", null, null, System.currentTimeMillis() + bantime);
+                    _context.banlist().banlistRouter(from, " <b> -> </b> Hostile Tunnel Request (duplicate hops)", null, null, System.currentTimeMillis() + bantime);
+                    _banLogger.logBan(from, getIPPortFromHash(from), "Hostile Tunnel Request (duplicate hops)", bantime);
                     if (shouldLog) {_log.warn("Banning [" + fromPeer + "] for " + period + "m -> Hostile Tunnel Request (duplicate hops in chain)");}
                 } else if (shouldLog) {_log.warn("Dropping HOSTILE Tunnel Request from UNKNOWN -> Previous and next hop are the same");}
                 return;
@@ -819,6 +830,7 @@ class BuildHandler implements Runnable {
             if (from != null) {
                 _context.commSystem().mayDisconnect(from);
                 _context.banlist().banlistRouter(from, " <b> -> </b> Hostile Tunnel Request (possible replay attack)", null, null, System.currentTimeMillis() + bantime);
+                _banLogger.logBan(from, getIPPortFromHash(from), "Hostile Tunnel Request (possible replay attack)", bantime);
                 if (shouldLog) {_log.warn("Banning [" + fromPeer + "] for " + period + "m -> Hostile Tunnel Request (too old, replay attack?)");}
             }
             return;
@@ -831,6 +843,7 @@ class BuildHandler implements Runnable {
             if (from != null) {
                 _context.commSystem().mayDisconnect(from);
                 _context.banlist().banlistRouter(from, " <b> -> </b> Hostile Tunnel Request (too far in future)", null, null, System.currentTimeMillis() + bantime);
+                _banLogger.logBan(from, getIPPortFromHash(from), "Hostile Tunnel Request (too far in future)", bantime);
                 if (shouldLog) {_log.warn("Banning [" + fromPeer + "] for " + period + "m -> Hostile Tunnel Request (too far in future)");}
             }
             return;
@@ -1317,6 +1330,27 @@ class BuildHandler implements Runnable {
                 log.debug("Timeout (" + (NEXT_HOP_LOOKUP_TIMEOUT / 1000) + "s) contacting next hop" + _cfg);
             }
         }
+    }
+
+    /**
+     * Extract IP:port from RouterInfo for a peer hash.
+     */
+    private String getIPPortFromHash(Hash h) {
+        try {
+            RouterInfo ri = _context.netDb().lookupRouterInfoLocally(h);
+            if (ri != null) {
+                for (RouterAddress ra : ri.getAddresses()) {
+                    if (ra != null) {
+                        String host = ra.getHost();
+                        int port = ra.getPort();
+                        if (host != null && port > 0) {
+                            return host + ":" + port;
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {}
+        return "UNKNOWN";
     }
 
     /**
