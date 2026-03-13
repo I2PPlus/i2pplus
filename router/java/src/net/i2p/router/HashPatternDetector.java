@@ -114,9 +114,14 @@ public class HashPatternDetector implements Serializable {
 
             // Apply predictive ban
             context.banlist().banlistRouter(hash,
-                " <b>➜</b> Predictive ban: Algorithmic identity pattern match (" + prefix + ")",
+                " <b>➜</b> Hash Pattern Detector (" + prefix + ")",
                 null, null,
                 context.clock().now() + PREDICTIVE_BAN_DURATION);
+
+            // Log to sessionbans.txt
+            if (_banLogger != null) {
+                _banLogger.logBan(hash, _context, "Hash Pattern Detector (" + prefix + ")", PREDICTIVE_BAN_DURATION);
+            }
 
             _predictivelyBanned.add(hashStr);
 

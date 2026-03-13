@@ -29,6 +29,7 @@ import net.i2p.data.router.RouterInfo;
 import net.i2p.data.router.RouterPrivateKeyFile;
 import net.i2p.router.JobImpl;
 import net.i2p.router.RouterContext;
+import net.i2p.router.BanLogger;
 import net.i2p.router.crypto.FamilyKeyCrypto;
 import net.i2p.router.networkdb.kademlia.PersistentDataStore;
 import net.i2p.util.Log;
@@ -39,6 +40,7 @@ import net.i2p.util.Log;
  */
 class LoadRouterInfoJob extends JobImpl {
     private final Log _log;
+    private final BanLogger _banLogger;
     private RouterInfo _us;
     private static final AtomicBoolean _keyLengthChecked = new AtomicBoolean();
     // 1 chance in this many to rekey if the defaults changed
@@ -47,6 +49,8 @@ class LoadRouterInfoJob extends JobImpl {
     public LoadRouterInfoJob(RouterContext ctx) {
         super(ctx);
         _log = ctx.logManager().getLog(LoadRouterInfoJob.class);
+        _banLogger = new BanLogger();
+        _banLogger.initialize(ctx);
     }
 
     public String getName() { return "Load Local RouterInfo"; }
@@ -175,6 +179,7 @@ class LoadRouterInfoJob extends JobImpl {
                         f.delete();
                         // the banlist can be called at any time
                         getContext().banlist().banlistRouterForever(h, "Our previous identity");
+                        _banLogger.logBanForever(h, getContext(), "Our previous identity");
                         _us = null;
                     }
                     if (sigTypeChanged)

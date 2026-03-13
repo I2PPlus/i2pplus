@@ -254,11 +254,13 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
                         long until = e.getValue().longValue();
                         String reason = " <b>➜</b> Sybil Analysis {0}";
                         ban.banlistRouter(h, reason, when, null, until);
+                        String ipPort = "UNKNOWN";
                         RouterInfo ri = _context.netDb().lookupRouterInfoLocally(h);
                         if (ri != null) {
-                            String ipPort = getRouterIPPort(ri);
-                            _banLogger.logBan(h, ipPort, reason, until);
+                            ipPort = getRouterIPPort(ri);
+                            if (ipPort == null || ipPort.isEmpty()) ipPort = "UNKNOWN";
                         }
+                        _banLogger.logBan(h, ipPort, reason, until);
                     }
                 }
             }
@@ -567,8 +569,10 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
                 Hash h = e.getKey();
                 blocks.add(h.toBase64());
                 RouterInfo ri = _context.netDb().lookupRouterInfoLocally(h);
-                String ipPort = getRouterIPPort(ri);
+                String ipPort = "UNKNOWN";
                 if (ri != null) {
+                    ipPort = getRouterIPPort(ri);
+                    if (ipPort == null || ipPort.isEmpty()) ipPort = "UNKNOWN";
                     for (RouterAddress ra : ri.getAddresses()) {
                         byte[] ip = ra.getIP();
                         if (ip != null) {_context.blocklist().add(ip, "Sybil " + h.toBase64());}

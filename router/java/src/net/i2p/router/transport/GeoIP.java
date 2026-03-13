@@ -42,6 +42,7 @@ import net.i2p.data.router.RouterInfo;
 import net.i2p.router.Blocklist;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
+import net.i2p.router.BanLogger;
 import net.i2p.router.transport.udp.UDPTransport;
 import net.i2p.update.UpdateManager;
 import net.i2p.update.UpdateType;
@@ -68,6 +69,7 @@ import net.i2p.util.SystemVersion;
 public class GeoIP {
     private final Log _log;
     private final I2PAppContext _context;
+    private static BanLogger _banLogger;
     private final Map<String, String> _codeToName;
     /** code to itself to prevent String proliferation */
     private final Map<String, String> _codeCache;
@@ -781,14 +783,20 @@ public class GeoIP {
      * @since 0.9.48 Introduced method for banning routers by country
      */
     public static void banCountry(RouterContext ctx, String country) {
+        if (_banLogger == null) {
+            _banLogger = new BanLogger();
+            _banLogger.initialize(ctx);
+        }
         boolean blockMyCountry = ctx.getBooleanProperty(PROP_BLOCK_MY_COUNTRY);
         for (Hash h : ctx.netDb().getAllRouters()) {
             String hisCountry = ctx.commSystem().getCountry(h);
             if (country.equals(hisCountry)) {
                 if (blockMyCountry) {
                     ctx.banlist().banlistRouterForever(h, " <b>➜</b> In our country (banned via config)");
+                    _banLogger.logBanForever(h, ctx, "In our country (banned via config)");
                 } else {
                     ctx.banlist().banlistRouterForever(h, " <b>➜</b> In our country (we are in Hidden mode)");
+                    _banLogger.logBanForever(h, ctx, "In our country (we are in Hidden mode)");
                 }
             }
         }

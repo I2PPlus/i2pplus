@@ -73,6 +73,7 @@ import net.i2p.util.SystemVersion;
 public class Blocklist {
     private final Log _log;
     private final RouterContext _context;
+    private final BanLogger _banLogger;
     private long _blocklist[];
     private volatile int _blocklistSize;
     private long _countryBlocklist[];
@@ -148,6 +149,8 @@ public class Blocklist {
     public Blocklist(RouterContext context) {
         _context = context;
         _log = context.logManager().getLog(Blocklist.class);
+        _banLogger = new BanLogger();
+        _banLogger.initialize(context);
         _blocklistFeedFile = new File(context.getConfigDir(), BLOCKLIST_FEED_FILE);
         _haveIPv6 = TransportUtil.getIPv6Config(_context, "SSU") != TransportUtil.IPv6Config.IPV6_DISABLED &&
                     Addresses.isConnectedIPv6();
@@ -158,6 +161,7 @@ public class Blocklist {
     private Blocklist() {
         _context = null;
         _log = new Log(Blocklist.class);
+        _banLogger = null; // testing only
         _blocklistFeedFile = new File(BLOCKLIST_FEED_FILE);
         _haveIPv6 = TransportUtil.getIPv6Config(_context, "SSU") != TransportUtil.IPv6Config.IPV6_DISABLED &&
                     Addresses.isConnectedIPv6();
@@ -381,8 +385,10 @@ public class Blocklist {
     private void banlistRouter(Hash peer, String reason, String comment) {
         if (expireInterval() > 0) {
             _context.banlist().banlistRouter(peer, reason, comment, null, expireInterval());
+            if (_banLogger != null) _banLogger.logBan(peer, _context, reason, expireInterval());
         } else {
             _context.banlist().banlistRouterForever(peer, reason, comment);
+            if (_banLogger != null) _banLogger.logBanForever(peer, _context, reason);
         }
     }
 
@@ -1176,6 +1182,7 @@ public class Blocklist {
             (ip != null && ip.length == 4 && (ip[0] * 0xff) == 172 && ip[1] >= 16 && ip[1] <= 31)) {
             // i2pd bug, possibly at startup, don't ban forever
             _context.banlist().banlistRouter(peer, reason, sip, null, _context.clock().now() + Banlist.BANLIST_DURATION_PRIVATE);
+            if (_banLogger != null) _banLogger.logBan(peer, _context, reason, Banlist.BANLIST_DURATION_PRIVATE);
             return;
         }
         banlistRouter(peer, reason, sip);
@@ -1220,8 +1227,10 @@ public class Blocklist {
     private void banlistRouter( Hash peer, String reason, String reasonCode, long duration) {
         if (duration > 0) {
             _context.banlist().banlistRouter(peer, reason, reasonCode, null, System.currentTimeMillis() + expireInterval());
+            if (_banLogger != null) _banLogger.logBan(peer, _context, reason, expireInterval());
         } else {
             _context.banlist().banlistRouterForever(peer, reason, reasonCode);
+            if (_banLogger != null) _banLogger.logBanForever(peer, _context, reason);
         }
     }
 
