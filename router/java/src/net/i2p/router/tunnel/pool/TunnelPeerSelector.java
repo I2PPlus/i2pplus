@@ -21,6 +21,8 @@ import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
+import net.i2p.router.TunnelInfo;
+import net.i2p.router.TunnelManagerFacade;
 import net.i2p.router.TunnelPoolSettings;
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import net.i2p.router.peermanager.PeerProfile;
@@ -83,6 +85,15 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             length = 0;
         else if (length > 7) // as documented in tunnel.html
             length = 7;
+
+        // Enforce max 3 hops under attack (< 40% build success)
+        if (length > 3) {
+            double buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
+            if (buildSuccess < 0.40) {
+                length = 3;
+            }
+        }
+
         return length;
     }
 
@@ -237,9 +248,9 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             return true;
         }
 
-        RouterInfo routerInfo = (RouterInfo) ctx.netDb().lookupLocally(peerHash);
+        RouterInfo routerInfo = (RouterInfo) ctx.netDb().lookupLocallyWithoutValidation(peerHash);
         if (routerInfo == null) {
-            return true;
+            return false;  // Allow peers with incomplete RouterInfo - build will fail naturally if unreachable
         }
 
         if (shouldExcludeFloodfillPeer(isExploratory, routerInfo)) {
@@ -247,18 +258,93 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         }
 
         if (filterUnreachable(isInbound, isExploratory)) {
+            // During attacks, allow U-cap peers if they have M, N, O, P, or X capability
             if (routerInfo.getCapabilities().contains(Character.toString(Router.CAPABILITY_UNREACHABLE))) {
-                return true;
+                if (!allowFirewalledUnderAttack(routerInfo)) {
+                    return true;
+                }
             }
         }
 
         if (filterSlow(isInbound, isExploratory)) {
-            String excludeCaps = getExcludeCaps(ctx);
+            String excludeCaps = getEffectiveExcludeCaps(ctx);
             if (shouldExclude(ctx, routerInfo, excludeCaps)) {
                 return true;
             }
         }
 
+        return false;
+    }
+
+    /**
+     * Get effective exclude caps, adapting to build success.
+     * During low build success (<40%), relax exclusions for M, N, O, D, and P caps.
+     * Also relax during first 10 minutes of uptime when build success is unknown.
+     * @return non-null, possibly empty
+     */
+    private static String getEffectiveExcludeCaps(RouterContext ctx) {
+        String configured = getExcludeCaps(ctx);
+        if (configured == null || configured.isEmpty()) {
+            return configured;
+        }
+
+        boolean shouldRelax = false;
+        double buildSuccess = 0;
+        try {
+            buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
+        } catch (Exception e) {
+            return configured;
+        }
+
+        if (buildSuccess < 0.40) {
+            shouldRelax = true;
+        }
+        if (buildSuccess >= 0.45) {
+            shouldRelax = false;
+        }
+
+        long uptime = ctx.router().getUptime();
+        if (uptime > 0 && uptime < 10 * 60 * 1000) {
+            shouldRelax = true;
+        }
+
+        if (!shouldRelax) {
+            return configured;
+        }
+
+        // Remove M, N, O, D, P from exclusions
+        StringBuilder adjusted = new StringBuilder();
+        for (int i = 0; i < configured.length(); i++) {
+            char c = configured.charAt(i);
+            if (c == 'M' || c == 'N' || c == 'O' || c == 'D' || c == 'P') {
+                continue;
+            }
+            adjusted.append(c);
+        }
+
+        return adjusted.toString();
+    }
+
+    /**
+     * Should we allow firewalled (U-cap) peers?
+     * During attacks (build success < 40%), allow U-cap peers if they have M, N, O, P, or X capability.
+     */
+    private boolean allowFirewalledUnderAttack(RouterInfo routerInfo) {
+        if (routerInfo == null) return false;
+        String cap = routerInfo.getCapabilities();
+        if (!cap.contains(Character.toString(Router.CAPABILITY_UNREACHABLE))) {
+            return true;
+        }
+        if (cap.contains("M") || cap.contains("N") || cap.contains("O") ||
+            cap.contains("P") || cap.contains("X")) {
+            double buildSuccess = 0;
+            try {
+                buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
+            } catch (Exception e) {
+                return false;
+            }
+            return buildSuccess < 0.40;
+        }
         return false;
     }
 
@@ -406,7 +492,21 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         }
 
         // Avoid degraded peers
+        // Allow E cap with 1/6 probability during attacks (build success < 40%)
         if (cap.contains("E") || cap.contains("G")) {
+            double buildSuccess = 0;
+            try {
+                buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
+            } catch (Exception e) {
+                return true;
+            }
+            // During attacks, allow E cap with 1/6 chance
+            if (cap.contains("E") && buildSuccess < 0.40) {
+                if (ctx.random().nextInt(6) != 0) {
+                    return true;  // Exclude (5/6 chance)
+                }
+                return false;  // Allow (1/6 chance)
+            }
             return true;
         }
 
@@ -495,6 +595,72 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     /** see HashComparator */
     protected void orderPeers(List<Hash> rv, SessionKey key) {
         if (rv.size() > 1) {Collections.sort(rv, new HashComparator(key));}
+    }
+
+    /**
+     * Check if the selected peer sequence matches an existing tunnel in the pool.
+     * Prevents duplicate peer sequences which could weaken anonymity.
+     *
+     * @param settings the tunnel pool settings
+     * @param newPeers the newly selected peers (excluding self)
+     * @return true if duplicate detected
+     * @since 0.9.68+
+     */
+    protected boolean isDuplicateSequence(TunnelPoolSettings settings, List<Hash> newPeers) {
+        if (newPeers == null || newPeers.isEmpty()) {return false;}
+
+        Hash dest = settings.getDestination();
+        if (dest == null) {return false;}
+
+        TunnelManagerFacade tmf = ctx.tunnelManager();
+        TunnelPool pool = settings.isInbound() ? tmf.getInboundPool(dest)
+                                                : tmf.getOutboundPool(dest);
+        if (pool == null) {return false;}
+
+        List<TunnelInfo> existingTunnels = pool.listTunnels();
+        if (existingTunnels == null || existingTunnels.isEmpty()) {return false;}
+
+        for (TunnelInfo existing : existingTunnels) {
+            if (existing.getLength() != newPeers.size() + 1) {continue;}
+
+            boolean match = true;
+            for (int i = 0; i < newPeers.size(); i++) {
+                Hash existingPeer = existing.getPeer(newPeers.size() - i);
+                if (existingPeer == null || !existingPeer.equals(newPeers.get(i))) {
+                    match = false;
+                    break;
+                }
+            }
+            if (match) {
+                if (log.shouldDebug()) {
+                    log.debug("Detected duplicate tunnel sequence for " + settings.getDestinationNickname());
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Regenerate tunnel peers to avoid duplicate sequence.
+     * Shuffles the peer selection and re-orders.
+     *
+     * @param settings the tunnel pool settings
+     * @param peers the peers to regenerate
+     * @return regenerated peer list (same or different)
+     * @since 0.9.68+
+     */
+    protected List<Hash> regeneratePeers(TunnelPoolSettings settings, List<Hash> peers) {
+        if (peers == null || peers.isEmpty()) {return peers;}
+
+        SessionKey randomKey = settings.getRandomKey();
+        if (randomKey != null && peers.size() > 1) {
+            Collections.shuffle(peers, ctx.random());
+            List<Hash> reordered = new ArrayList<Hash>(peers);
+            orderPeers(reordered, randomKey);
+            return reordered;
+        }
+        return peers;
     }
 
     /**

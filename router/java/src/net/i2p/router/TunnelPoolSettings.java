@@ -36,6 +36,10 @@ public class TunnelPoolSettings {
     private int _priority;
     private final Set<Hash> _aliases;
     private Hash _aliasOf;
+    /** @since 0.9.68+ transient first peer exclusions for diversity */
+    private transient Set<Hash> _firstPeerExclusions;
+    /** @since 0.9.68+ transient last peer exclusions for diversity */
+    private transient Set<Hash> _lastPeerExclusions;
     /** prefix used to configure the inbound exploratory pool */
     public static final String      PREFIX_INBOUND_EXPLORATORY = "router.inboundPool.";
     /** prefix used to configure the outbound exploratory pool */
@@ -249,6 +253,44 @@ public class TunnelPoolSettings {
      */
     public void setAliasOf(Hash h) {
         _aliasOf = h;
+    }
+
+    /**
+     *  Get the set of first peer exclusions for diversity.
+     *  These are peers that should not be used as the first hop in new tunnels.
+     *  @return Set of peer hashes to exclude, or null if none set
+     *  @since 0.9.68+
+     */
+    public Set<Hash> getFirstPeerExclusions() {
+        return _firstPeerExclusions;
+    }
+
+    /**
+     *  Set the first peer exclusions for diversity.
+     *  @param exclusions Set of peer hashes to exclude, or null to clear
+     *  @since 0.9.68+
+     */
+    public void setFirstPeerExclusions(Set<Hash> exclusions) {
+        _firstPeerExclusions = exclusions;
+    }
+
+    /**
+     *  Get the set of last peer exclusions for diversity.
+     *  These are peers that should not be used as the last hop in new tunnels.
+     *  @return Set of peer hashes to exclude, or null if none set
+     *  @since 0.9.68+
+     */
+    public Set<Hash> getLastPeerExclusions() {
+        return _lastPeerExclusions;
+    }
+
+    /**
+     *  Set the last peer exclusions for diversity.
+     *  @param exclusions Set of peer hashes to exclude, or null to clear
+     *  @since 0.9.68+
+     */
+    public void setLastPeerExclusions(Set<Hash> exclusions) {
+        _lastPeerExclusions = exclusions;
     }
 
     /**

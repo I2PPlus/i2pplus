@@ -3,8 +3,11 @@ package net.i2p.router.tunnel.pool;
 import static net.i2p.router.peermanager.ProfileOrganizer.Slice.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicLong;
+
 import net.i2p.data.Hash;
 import net.i2p.data.SessionKey;
 import net.i2p.router.RouterContext;
@@ -20,6 +23,13 @@ import net.i2p.util.ArraySet;
  *
  */
 class ClientPeerSelector extends TunnelPeerSelector {
+
+    private static final long WARNING_THROTTLE_MS = 60_000;
+    private static final AtomicLong _lastFallbackWarn = new AtomicLong(0);
+    
+    private static final double ATTACK_THRESHOLD = 0.40;
+    private static final double SEVERE_ATTACK_THRESHOLD = 0.30;
+    private static final long STARTUP_WARNING_SUPPRESS_MS = 15 * 60 * 1000;
 
     public ClientPeerSelector(RouterContext context) {
         super(context);
@@ -46,6 +56,9 @@ class ClientPeerSelector extends TunnelPeerSelector {
         boolean isInbound = settings.isInbound();
 
         if (length > 0) {
+            // Cache buildSuccess to avoid repeated expensive calls
+            double buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
+            
             // special cases
             boolean v6Only = isIPv6Only();
             boolean ntcpDisabled = isNTCPDisabled();
@@ -58,12 +71,31 @@ class ClientPeerSelector extends TunnelPeerSelector {
                              !ctx.commSystem().haveInboundCapacity(95);
             boolean hiddenInbound = hidden && isInbound;
             boolean hiddenOutbound = hidden && !isInbound;
-            int ipRestriction =  (ctx.getBooleanProperty("i2np.allowLocal") || length <= 1) ? 0 : settings.getIPRestriction();
-            MaskedIPSet ipSet = ipRestriction > 0 ? new MaskedIPSet(16) : null;
+            int ipRestriction = settings.getIPRestriction();
+            // Reduce IP restriction under low tunnel build success to improve diversity
+            if (ipRestriction > 0 && length > 1) {
+                if (buildSuccess < ATTACK_THRESHOLD) {
+                    ipRestriction = Math.min(ipRestriction + 1, 16);
+                }
+            }
+            if (ctx.getBooleanProperty("i2np.allowLocal") || length <= 1) {ipRestriction = 0;}
+            MaskedIPSet ipSet = ipRestriction > 0 ? new MaskedIPSet(ipRestriction) : null;
 
             if (shouldSelectExplicit(settings)) {return selectExplicit(settings, length);}
 
-            Set<Hash> exclude = getExclude(isInbound, false);
+            // Create a copy of exclude set to avoid mutating caller's set
+            Set<Hash> exclude = new HashSet<Hash>(getExclude(isInbound, false));
+
+            // Add first peer exclusions for diversity
+            Set<Hash> firstPeerExclusions = settings.getFirstPeerExclusions();
+            if (firstPeerExclusions != null && !firstPeerExclusions.isEmpty()) {
+                exclude.addAll(firstPeerExclusions);
+            }
+            // Add last peer exclusions for diversity - prevent same peer as first and last hop
+            Set<Hash> lastPeerExclusions = settings.getLastPeerExclusions();
+            if (lastPeerExclusions != null && !lastPeerExclusions.isEmpty()) {
+                exclude.addAll(lastPeerExclusions);
+            }
             ArraySet<Hash> matches = new ArraySet<Hash>(length);
             if (length == 1) {
                 // closest-hop restrictions
@@ -77,13 +109,18 @@ class ClientPeerSelector extends TunnelPeerSelector {
                 }
                 if (matches.isEmpty()) {
                     // No connected peers found, fall back to all fast peers
-                    if (log.shouldWarn()) {
-                        log.warn("No eligible non-failing peers available for Inbound connection -> Falling back to fast pool...");
+                    // Throttle warnings to reduce log spam during attacks
+                    long now = ctx.clock().now();
+                    if (log.shouldWarn() && _lastFallbackWarn.getAndSet(now) < now - WARNING_THROTTLE_MS) {
+                        log.warn("No eligible non-failing peers available for " + (isInbound ? "Inbound" : "Outbound") +
+                                 " connection -> Falling back to fast pool (throttled)");
                     }
                     ctx.profileOrganizer().selectFastPeers(length, exclude, matches);
                     if (matches.isEmpty()) {
                         ctx.profileOrganizer().selectHighCapacityPeers(length, exclude, matches);
                     }
+                    // Filter: remove peers that are in the exclude set
+                    matches.removeAll(exclude);
                 }
                 matches.remove(ctx.routerHash());
                 rv = new ArrayList<Hash>(matches);
@@ -244,34 +281,147 @@ class ClientPeerSelector extends TunnelPeerSelector {
             if (rv.size() < length) {
                 // not enough peers to build the requested size
                 // client tunnels do not use overrides
-                if (log.shouldWarn()) {
+                // Suppress warnings during startup
+                long uptime = ctx.router() != null ? ctx.router().getUptime() : 0;
+                if (log.shouldWarn() && uptime > STARTUP_WARNING_SUPPRESS_MS) {
                     log.warn("Not enough peers to build requested " + length + " hop tunnel (" + rv.size() + " available)");
                 }
                 int min = settings.getLength();
                 int skew = settings.getLengthVariance();
                 if (skew < 0) {min += skew;}
+
                 // not enough peers to build the minimum size
                 if (rv.size() < min) {
-                    // For firewalled routers with very few peers, allow shorter tunnels as fallback
+                // For firewalled routers with very few peers, allow shorter tunnels as fallback
                     if (hidden && rv.size() > 0) {
-                        if (log.shouldWarn()) {
-                            log.warn("Firewalled router: allowing shorter tunnel (" + rv.size() + " hops) instead of requested " + length + " hops");
+                        if (log.shouldInfo()) {
+                            log.info("Firewalled router: allowing shorter tunnel (" + rv.size() + " hops) instead of requested " + length + " hops");
                         }
                         // Continue with whatever peers we have
                     } else {
-                        return null;
+                        // Progressive fallback under attack conditions based on build success rate
+                        boolean isUnderAttack = buildSuccess < ATTACK_THRESHOLD;
+
+                        if (isUnderAttack && rv.size() > 0) {
+                            // Attack detected: try fallback with relaxed restrictions
+                            if (log.shouldInfo()) {
+                                log.info("Attack detected (" + (int)(buildSuccess * 100) + "% success) -> Trying relaxed fallback peer selection...");
+                            }
+
+                            // Fall back to any peer in notFailing pool with minimal exclusions
+                            ArraySet<Hash> fallback = new ArraySet<Hash>(min);
+                            ctx.profileOrganizer().selectNotFailingPeers(min, exclude, fallback, false, 0, null);
+                            fallback.remove(ctx.routerHash());
+
+                            if (!fallback.isEmpty()) {
+                                rv.clear();
+                                rv.addAll(fallback);
+                                if (log.shouldDebug()) {
+                                    log.debug("Fallback successful: found " + rv.size() + " peers for tunnel");
+                                }
+                            }
+
+                            // If still not enough, try with even more relaxed criteria (allow failing peers)
+                            if (rv.size() < min && buildSuccess < SEVERE_ATTACK_THRESHOLD) {
+                                if (log.shouldWarn()) {
+                                    log.warn("Severe attack (" + (int)(buildSuccess * 100) + "% success) -> Trying any peer fallback...");
+                                }
+                                ArraySet<Hash> relaxedFallback = new ArraySet<Hash>(min);
+                                ctx.profileOrganizer().selectAllNotFailingPeers(min, exclude, relaxedFallback, false);
+                                relaxedFallback.remove(ctx.routerHash());
+
+                                if (!relaxedFallback.isEmpty()) {
+                                    rv.clear();
+                                    rv.addAll(relaxedFallback);
+                                    if (log.shouldDebug()) {
+                                        log.debug("Relaxed fallback successful: found " + rv.size() + " peers");
+                                    }
+                                }
+                            }
+                        }
+
+                        // Final check - if still not enough peers and we have some, allow shorter tunnel
+                        if (rv.size() < min) {
+                            if (isUnderAttack && rv.size() > 0) {
+                                // Under attack but have some peers - allow shorter tunnel instead of null
+                                if (log.shouldWarn()) {
+                                    log.warn("Under attack: allowing shorter tunnel (" + rv.size() + " hops) instead of " + min + " minimum");
+                                }
+                                // Continue with shorter tunnel
+                            } else {
+                                return null;
+                            }
+                        }
                     }
                 }
             }
+            if (rv.isEmpty()) {return null;}
         } else {rv = new ArrayList<Hash>(1);}
 
         if (isInbound) {rv.add(0, ctx.routerHash());}
         else {rv.add(ctx.routerHash());}
+
+        // Filter out ghost peers before returning
+        rv = filterGhostPeers(rv);
+
+        // Check for duplicate sequence and regenerate if needed
+        if (rv != null && rv.size() > 1) {
+            int attempts = 0;
+            int maxAttempts = 3;
+            while (attempts < maxAttempts && isDuplicateSequence(settings, rv.subList(0, rv.size() - 1))) {
+                List<Hash> regenerated = regeneratePeers(settings, new ArrayList<Hash>(rv.subList(0, rv.size() - 1)));
+                if (regenerated == null || regenerated.equals(rv.subList(0, rv.size() - 1))) {
+                    break; // No change possible, accept the duplicate
+                }
+                // Preserve self at end and update peer list
+                Hash self = rv.get(rv.size() - 1);
+                rv.clear();
+                rv.addAll(regenerated);
+                rv.add(self);
+                attempts++;
+            }
+        }
+
         if (rv.size() > 1) {
             if (!checkTunnel(isInbound, false, rv)) {rv = null;}
         }
         if (isInbound && rv != null && rv.size() > 1) {ctx.commSystem().exemptIncoming(rv.get(1));}
         return rv;
+    }
+
+    /**
+     * Filter out ghost peers from the selected peer list.
+     * Ghost peers are those with consistent tunnel build timeouts.
+     *
+     * @param peers the list of selected peers (excluding self)
+     * @return filtered list without ghost peers
+     */
+    private List<Hash> filterGhostPeers(List<Hash> peers) {
+        if (peers == null || peers.isEmpty()) {return peers;}
+
+        TunnelManagerFacade tmf = ctx.tunnelManager();
+        GhostPeerManager ghostManager = tmf.getGhostPeerManager();
+        if (ghostManager == null) {return peers;}
+
+        List<Hash> filtered = new ArrayList<Hash>(peers.size());
+        for (Hash peer : peers) {
+            if (ghostManager.isGhost(peer)) {
+                if (log.shouldDebug()) {
+                    log.debug("Skipping ghost peer: " + peer.toBase32().substring(0, 6));
+                }
+            } else {
+                filtered.add(peer);
+            }
+        }
+
+        if (filtered.isEmpty() && !peers.isEmpty()) {
+            if (log.shouldWarn()) {
+                log.warn("All selected peers were ghosts! Allowing fallback selection.");
+            }
+            return peers; // Return original list to allow fallback handling
+        }
+
+        return filtered;
     }
 
     /**
