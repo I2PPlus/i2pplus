@@ -24,6 +24,7 @@ import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
+import net.i2p.router.BanLogger;
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import net.i2p.router.transport.TransportImpl;
 import net.i2p.util.Addresses;
@@ -40,6 +41,7 @@ import net.i2p.util.VersionComparator;
  * @since 0.9.54
  */
 class InboundEstablishState2 extends InboundEstablishState implements SSU2Payload.PayloadCallback {
+    private final BanLogger _banLogger;
     private final UDPTransport _transport;
     private final InetSocketAddress _aliceSocketAddress;
     private final long _rcvConnID;
@@ -74,6 +76,8 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                                   UDPPacket packet) throws GeneralSecurityException {
         super(ctx, (InetSocketAddress) packet.getPacket().getSocketAddress());
         _transport = transport;
+        _banLogger = new BanLogger();
+        _banLogger.initialize(ctx);
         DatagramPacket pkt = packet.getPacket();
         _aliceSocketAddress = (InetSocketAddress) pkt.getSocketAddress();
         _handshakeState = new HandshakeState(HandshakeState.PATTERN_ID_XK_SSU2, HandshakeState.RESPONDER, transport.getXDHFactory());
@@ -385,6 +389,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         boolean isBanned = _context.banlist().isBanlisted(h) ||
                            _context.banlist().isBanlistedHostile(h) ||
                            _context.banlist().isBanlistedForever(h);
+        String ipPort = Addresses.toString(_aliceIP, _alicePort);
 
         if (isBanned) {
             if (ri.verifySignature()) {
@@ -409,6 +414,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             long banDuration = _context.netDb().floodfillEnabled() ? 36*60*60*1000 : 4*24*60*60*1000;
             _context.banlist().banlistRouter(h, " <b>➜</b> Invalid publication date",
                                              null, null, _context.clock().now() + banDuration);
+            _banLogger.logBan(h, ipPort, "Invalid publication date", banDuration);
             if (_log.shouldWarn() && !isBanned) {
                 _log.warn("Banning for 1h and disconnecting from Router [" +
                           h.toBase64().substring(0,6) + "] -> Invalid publication date");
@@ -419,6 +425,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         if (mismatchMessage != null) {
             _context.banlist().banlistRouter(h, " <b>➜</b> Invalid SSU address",
                                              null, null, _context.clock().now() + 4 * 60 * 60 * 1000);
+            _banLogger.logBan(h, ipPort, "Invalid SSU address", 4 * 60 * 60 * 1000);
             _context.commSystem().forceDisconnect(h);
             if (_log.shouldWarn() && !isBanned) {
                 _log.warn("Banning for 4h and disconnecting from Router [" +
@@ -445,6 +452,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         if (!reachable && isSlow && isOld) {
             _context.banlist().banlistRouter(h, " <b>➜</b> Old and slow (" + version + " / " + bw + "U)",
                                              null, null, _context.clock().now() + 60 * 60 * 1000);
+            _banLogger.logBan(h, ipPort, "Old and slow (" + version + " / " + bw + "U)", 60 * 60 * 1000);
             if (ri.verifySignature()) {
                 _context.blocklist().add(_aliceIP);
             }

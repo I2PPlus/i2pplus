@@ -44,6 +44,7 @@ import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.Banlist;
 import net.i2p.router.OutNetMessage;
+import net.i2p.router.BanLogger;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.transport.TransportUtil;
@@ -70,6 +71,7 @@ class EstablishmentManager {
     private final Log _log;
     private final UDPTransport _transport;
     private final int _networkID;
+    private final BanLogger _banLogger;
 
     // SSU 2
     private final PacketBuilder2 _builder2;
@@ -186,6 +188,8 @@ class EstablishmentManager {
         _log = ctx.logManager().getLog(EstablishmentManager.class);
         _networkID = ctx.router().getNetworkID();
         _transport = transport;
+        _banLogger = new BanLogger();
+        _banLogger.initialize(ctx);
         _builder2 = transport.getBuilder2();
         _inboundStates = new ConcurrentHashMap<RemoteHostId, InboundEstablishState>();
         _outboundStates = new ConcurrentHashMap<RemoteHostId, OutboundEstablishState>();
@@ -320,19 +324,25 @@ class EstablishmentManager {
 
         long now = _context.clock().now();
         String truncHash = toHash != null ? toHash.toBase64().substring(0,6) : "";
+        UDPAddress addr = new UDPAddress(ra);
+        String ipPort = "UNKNOWN";
+        if (addr.getHostAddress() != null) {
+            ipPort = Addresses.toString(addr.getHostAddress().getAddress()) + ":" + addr.getPort();
+        }
         if (id != _networkID) {
             if (id == -1) {
                 _context.banlist().banlistRouter(toHash, " <b>➜</b> No network specified", null, null,
                                                  _context.clock().now() + Banlist.BANLIST_DURATION_NO_NETWORK);
+                _banLogger.logBan(toHash, ipPort, "No network specified", Banlist.BANLIST_DURATION_NO_NETWORK);
             } else {
                 _context.banlist().banlistRouterForever(toHash, " <b>➜</b> Not in our network: " + id);
+                _banLogger.logBanForever(toHash, ipPort, "Not in our network: " + id);
             }
             if (_log.shouldWarn()) {_log.warn("Not in our network: " + toRouterInfo, new Exception());}
             _transport.markUnreachable(toHash);
             _transport.failed(msg, "Peer is on the wrong network, cannot establish connection");
             return;
         }
-        UDPAddress addr = new UDPAddress(ra);
         RemoteHostId maybeTo = null;
         InetAddress remAddr = addr.getHostAddress();
         int port = addr.getPort();
@@ -345,14 +355,15 @@ class EstablishmentManager {
 
             if ((!_transport.isValid(maybeTo.getIP())) ||
                 (Arrays.equals(maybeTo.getIP(), _transport.getExternalIP()) && !_transport.allowLocal())) {
-                _transport.failed(msg, "Peer's IP address isn't valid");
+                 _transport.failed(msg, "Peer's IP address isn't valid");
                 _transport.markUnreachable(toHash);
                 _context.statManager().addRateData("udp.establishBadIP", 1);
                 //_context.banlist().banlistRouter(toHash, " <b>➜</b> Invalid SSU address", UDPTransport.STYLE);
                  if (toHash != null) {
-                     if (!isBanned) {
-                       _context.banlist().banlistRouter(toHash, " <b>➜</b> Invalid SSU address", null, null, now + 4*60*60*1000);
-                       if (_log.shouldWarn()) {
+                      if (!isBanned) {
+                        _context.banlist().banlistRouter(toHash, " <b>➜</b> Invalid SSU address", null, null, now + 4*60*60*1000);
+                        _banLogger.logBan(toHash, ipAddress + ":" + port, "Invalid SSU address", 4*60*60*1000);
+                        if (_log.shouldWarn()) {
                           _log.warn("[SSU] Banning [" + truncHash + "] for 4h -> Invalid SSU address");
                        }
                     }
@@ -473,6 +484,7 @@ class EstablishmentManager {
                         if (toHash != null) {
                             if (!isBanned) {
                                 _context.banlist().banlistRouter(toHash, " <b>➜</b> Invalid MTU", null, null, now + 4*60*60*1000);
+                                _banLogger.logBan(toHash, ipAddress + ":" + maybePort, "Invalid MTU", 4*60*60*1000);
                                 if (_log.shouldWarn()) {
                                     _log.warn("[SSU] Banning [" + truncHash + "] for 4h -> Invalid MTU");
                                 }
@@ -497,6 +509,7 @@ class EstablishmentManager {
                     if (toHash != null) {
                         if (!isBanned) {
                             _context.banlist().banlistRouter(toHash, " <b>➜</b> No Introduction key", null, null, now + 60*60*1000);
+                            _banLogger.logBan(toHash, ipAddress + ":" + maybePort, "No Introduction key", 60*60*1000);
                             if (_log.shouldWarn()) {
                                 _log.warn("[SSU] Banning [" + truncHash + "] for 1h -> No Introduction key");
                             }
@@ -517,6 +530,7 @@ class EstablishmentManager {
                     if (toHash != null) {
                         if (!isBanned) {
                             _context.banlist().banlistRouter(toHash, " <b>➜</b> Bad Introduction key", null, null, now + 4*60*60*1000);
+                            _banLogger.logBan(toHash, ipAddress + ":" + maybePort, "Bad Introduction key", 4*60*60*1000);
                             if (_log.shouldWarn()) {
                                 _log.warn("[SSU] Banning [" + truncHash + "] for 4h -> Bad Introduction key");
                             }
@@ -689,6 +703,7 @@ class EstablishmentManager {
             if (fromHash != null) {
                 if (!isBanned) {
                    _context.banlist().banlistRouter(fromHash, " <b>➜</b> Invalid address/port in Session Request", null, null, now + 15*60*1000);
+                   _banLogger.logBan(fromHash, from.toString(), "Invalid address/port in Session Request", 15*60*1000);
                    if (_log.shouldWarn()) {
                       _log.warn("[SSU] Banning [" + truncHash + "] for 15m -> Invalid address/port in Session Request" + " (" + from + ")");
                    }
@@ -1669,6 +1684,7 @@ class EstablishmentManager {
                 charlie2.setIntroState(bobHash, istate);
                 _context.statManager().addRateData("udp.relayBadIP", 1);
                 _context.banlist().banlistRouter(charlieHash, " <b>➜</b> Bad Introduction data", null, null, _context.clock().now() + 60*60*1000);
+                _banLogger.logBan(charlieHash, Addresses.toString(ip, port), "Bad Introduction data", 60*60*1000);
                 charlie.fail();
                 return;
             }
@@ -1714,6 +1730,7 @@ class EstablishmentManager {
             charlie2.setIntroState(bobHash, istate);
             if (code == RELAY_REJECT_CHARLIE_BANNED) {
                 _context.banlist().banlistRouter(charlieHash, " <b>➜</b> They banned us", null, null, _context.clock().now() + 60*60*1000);
+                _banLogger.logBan(charlieHash, _context, "They banned us", 60*60*1000);
             }
             charlie.fail();
             _liveIntroductions.remove(lnonce);
@@ -1873,6 +1890,7 @@ class EstablishmentManager {
                 _context.banlist().banlistRouter(state.getRemoteIdentity().getHash(),
                                                  " <b>➜</b> Bad Introduction data", null, null,
                                                  _context.clock().now() + 4*60*60*1000);
+                _banLogger.logBan(state.getRemoteIdentity().getHash(), _context, "Bad Introduction data", 4*60*60*1000);
                 state.fail();
                 return;
             }
@@ -1890,6 +1908,7 @@ class EstablishmentManager {
                 _context.banlist().banlistRouter(state.getRemoteIdentity().getHash(),
                                                  " <b>➜</b> Bad Introduction data", null, null,
                                                  _context.clock().now() + 4*60*60*1000);
+                _banLogger.logBan(state.getRemoteIdentity().getHash(), _context, "Bad Introduction data", 4*60*60*1000);
                 state.fail();
                 return;
             }
@@ -1904,6 +1923,7 @@ class EstablishmentManager {
                     _context.statManager().addRateData("udp.relayBadIP", 1);
                     _context.banlist().banlistRouter(state.getRemoteIdentity().getHash(), " <b>➜</b> Bad Introduction data", null, null,
                                                      _context.clock().now() + 6*60*60*1000);
+                    _banLogger.logBan(state.getRemoteIdentity().getHash(), _context, "Bad Introduction data", 6*60*60*1000);
                     state.fail();
                     return;
                 }

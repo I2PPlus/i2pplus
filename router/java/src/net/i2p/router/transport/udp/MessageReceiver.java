@@ -9,6 +9,7 @@ import net.i2p.data.i2np.I2NPMessageException;
 import net.i2p.data.i2np.I2NPMessageHandler;
 import net.i2p.data.i2np.I2NPMessageImpl;
 import net.i2p.router.RouterContext;
+import net.i2p.router.BanLogger;
 import net.i2p.router.util.CoDelBlockingQueue;
 //import net.i2p.util.ByteCache;
 import net.i2p.util.HexDump;
@@ -25,6 +26,7 @@ class MessageReceiver {
     private final RouterContext _context;
     private final Log _log;
     private final UDPTransport _transport;
+    private final BanLogger _banLogger;
     /** list of messages (InboundMessageState) fully received but not interpreted yet */
     private final BlockingQueue<InboundMessageState> _completeMessages;
     private volatile boolean _alive;
@@ -38,6 +40,8 @@ class MessageReceiver {
         _context = ctx;
         _log = ctx.logManager().getLog(MessageReceiver.class);
         _transport = transport;
+        _banLogger = new BanLogger();
+        _banLogger.initialize(ctx);
         long maxMemory = SystemVersion.getMaxMemory();
         boolean isSlow = SystemVersion.isSlow();
         _threadCount = MAX_THREADS;
@@ -173,7 +177,8 @@ class MessageReceiver {
                     _transport.sendDestroy(ps, SSU2Util.REASON_BANNED);
                     _transport.dropPeer(ps, true, "Corrupt DSM");
                     _context.banlist().banlistRouterForever(state.getFrom(),
-                        " <b>➜</b> " + "Sent corrupt message");  // don't bother translating
+                        " <b>➜</b> " + "Sent corrupt message");  // don't bother translate
+                    _banLogger.logBanForever(state.getFrom(), _context, "Sent corrupt message");
                 }
             }
             _context.messageHistory().droppedInboundMessage(state.getMessageId(), state.getFrom(),

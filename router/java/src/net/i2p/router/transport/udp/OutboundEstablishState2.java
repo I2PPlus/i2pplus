@@ -23,6 +23,7 @@ import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.router.RouterInfo;
+import net.i2p.router.BanLogger;
 import net.i2p.router.RouterContext;
 import net.i2p.time.BuildTime;
 import net.i2p.util.Addresses;
@@ -38,6 +39,7 @@ import net.i2p.util.Log;
  * @since 0.9.54
  */
 class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payload.PayloadCallback {
+    private final BanLogger _banLogger;
     private InetSocketAddress _bobSocketAddress;
     private final UDPTransport _transport;
     private final long _sendConnID;
@@ -136,6 +138,8 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
                                    SessionKey introKey, RouterAddress ra, UDPAddress addr) throws IllegalArgumentException {
         super(ctx, claimedAddress, remoteHostId, remotePeer, needIntroduction, introKey, addr);
         _transport = transport;
+        _banLogger = new BanLogger();
+        _banLogger.initialize(ctx);
         if (claimedAddress != null) {
             try {
                 _bobSocketAddress = new InetSocketAddress(InetAddress.getByAddress(_bobIP), _bobPort);
@@ -362,11 +366,14 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         fail();
         _transport.getEstablisher().receiveSessionDestroy(_remoteHostId, this);
         Hash bob = _remotePeer.calculateHash();
+        String ipPort = _remoteHostId != null ? _remoteHostId.toString() : "UNKNOWN";
         if (reason == REASON_BANNED) {
             _context.banlist().banlistRouter(bob, "They banned us", null, null, _context.clock().now() + 2*60*60*1000);
+            _banLogger.logBan(bob, ipPort, "They banned us", 2*60*60*1000);
         } else if (reason == REASON_MSG1) {
             // this is like a short ban
             _context.banlist().banlistRouter(bob, "They banned us", null, null, _context.clock().now() + 20*60*1000);
+            _banLogger.logBan(bob, ipPort, "They banned us", 20*60*1000);
         } else if (reason == REASON_SKEW) {
             long sendOn = _timeReceived;
             long recvOn = _establishBegin;
@@ -380,6 +387,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
             } else if (sendOn < BuildTime.getEarliestTime() || sendOn > BuildTime.getLatestTime()) {
                 // his problem
                 _context.banlist().banlistRouter(skewString, bob, " <b>➜</b> " + _x("Excessive clock skew ({0})"));
+                _banLogger.logBan(bob, ipPort, "Excessive clock skew: " + skewString, 0);
             } else {
                 if (!_context.clock().getUpdatedSuccessfully()) {
                     // adjust the clock one time in desperation
@@ -393,9 +401,11 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
                         // ban the router briefly so the other transport does not try it,
                         // and we will get a 2nd opinion.
                         _context.banlist().banlistRouter(bob, _x("Excessive clock skew ({0})"), skewString, null, _context.clock().now() + 5*60*1000);
+                        _banLogger.logBan(bob, ipPort, "Excessive clock skew: " + skewString, 5*60*1000);
                     }
                 } else {
                     _context.banlist().banlistRouter(skewString, bob, " <b>➜</b> " + _x("Excessive clock skew ({0})"));
+                    _banLogger.logBan(bob, ipPort, "Excessive clock skew: " + skewString, 0);
                 }
             }
             _context.statManager().addRateData("udp.destroyedInvalidSkew", skew);
