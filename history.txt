@@ -1,3 +1,41 @@
+2026-03-12 dr|z3d
+ * Console: Update tunnel counts on /tunnels dynamically on refresh
+ * Router:
+   - Use getValidTunnelCount() for accurate tunnel counts in console
+   - Increase build timeouts to handle slow network conditions
+   - Fix tunnel pool issues - paired pools, duplicate tunnel IDs
+   - Fix timer storm in PeriodicCleanup
+   - Fix ConcurrentModificationException in TunnelDispatcher
+   - Scale tunnel pump threads/queues based on cores/memory
+   - Add periodic cleanup and fix expiration of participating tunnels
+
+2026-03-11 dr|z3d
+ * Router:
+   - Fix tunnel pool build logic - multiple fixes
+   - Count usable tunnels (>4min expiry) before building
+   - Ensure minimum 3 tunnels or configured + 2 for redundancy
+   - Cap tunnel builds to configured amount + 2
+   - Cap lease expiration to max future time
+   - Add idle tunnel monitor to drop unused transit tunnels after 3m
+   - Add JobQueueScaler for dynamic job runner scaling
+   - Reduce NTCP/UDP latency for lower latency response
+   - Fix job registration race condition and memory leaks
+   - Fix AddrComparator bug and timer memory leak
+
+2026-03-10 dr|z3d
+ * Router:
+   - Fix getValidTunnelCount() to exclude expired tunnels
+   - Increase renewal window to 2m, more aggressive tunnel building
+   - Fix blocking WHOIS/DNS lookups in console rendering
+   - Make IterativeTimeoutJob droppable to reduce queue congestion
+
+2026-03-09 dr|z3d
+ * Router:
+   - Make countHowManyToBuild more aggressive - build 4-7m before expiry
+   - Fix countHowManyToBuild to skip failed tunnels
+   - Reduce CLOCK_FUDGE_FACTOR to 30s for faster lease renewal
+   - Fix lease renewal timing - check latestLeaseDate immediately
+
 2026-03-08 2.11.0+ (API 0.9.68) (re-)released
 
 2026-03-08 dr|z3d
@@ -11,7 +49,46 @@
 2026-01-30 dr|z3d
  * I2PSnark: Optimize DHT for more efficient memory management
  * Console: Enhance and declutter presentation of jobs on /jobqueue
- * Router: TestJob optimizations
+ * Router:
+   - Fix TestJob counter issues and atomic contention
+   - Fix TestJob scheduling bugs causing negative delays
+   - Implement adaptive tunnel testing frequency
+
+2026-01-26 dr|z3d
+ * Router:
+   - Fix test job failure count to stop after 2 consecutive failures
+   - Improve tunnel test performance with faster failure detection
+   - Add getAvgLag() method to JobQueue class
+   - Allow higher number of transit tunnels before throttling
+
+2026-01-24 dr|z3d
+ * Router:
+   - Optimize PeerTestJob performance with caching
+   - Reduce bantime for excessive lookups
+   - Add 10m grace period after startup before banning for lookups
+   - Prevent duplicate ban log events for same router
+
+2026-01-23 dr|z3d
+ * Router:
+   - Optimize NTCP inbound performance
+   - Raise transit tunnel per-peer limits to prevent gradual decay
+   - Fix domain shortening for multi-part TLDs like co.uk
+
+2026-01-19 dr|z3d
+ * Router: Improve transit tunnel count stability and reduce decline cycles
+
+2026-01-18 dr|z3d
+ * Router: Add cache cleanup to prevent memory leaks in RepublishLeaseSetJob
+
+2026-01-13 dr|z3d
+ * Router:
+   - Skip LeaseSet republish if job already active
+   - Prevent LeaseSet job queue buildup
+   - Fix LeaseSet expiry validation, socket recovery, session race conditions
+
+2026-01-10 dr|z3d
+ * I2PTunnel: Cancel delayed server shutdown on router shutdown cancel
+ * I2PTunnel/Console: Add random shutdown delay for graceful restart
 
 2026-01-09 dr|z3d
  * I2PTunnel: Implement optional random startup delay for automatically
