@@ -39,6 +39,7 @@ class BuildExecutor implements Runnable {
     private final RouterContext _context;
     private final Log _log;
     private final TunnelPoolManager _manager;
+    private final GhostPeerManager _ghostPeerManager;
     private final Object _currentlyBuilding; // Notify lock
     private final ConcurrentHashMap<Long, PooledTunnelCreatorConfig> _currentlyBuildingMap; // indexed by ptcc.getReplyMessageId()
     private final ConcurrentHashMap<Long, PooledTunnelCreatorConfig> _recentlyBuildingMap; // indexed by ptcc.getReplyMessageId()
@@ -77,11 +78,13 @@ class BuildExecutor implements Runnable {
      *
      * @param ctx the router context
      * @param mgr the tunnel pool manager
+     * @param ghostMgr the ghost peer manager for tracking timeouts
      */
-    public BuildExecutor(RouterContext ctx, TunnelPoolManager mgr) {
+    public BuildExecutor(RouterContext ctx, TunnelPoolManager mgr, GhostPeerManager ghostMgr) {
         _context = ctx;
         _log = ctx.logManager().getLog(getClass());
         _manager = mgr;
+        _ghostPeerManager = ghostMgr;
         _currentlyBuilding = new Object();
         int maxConcurrentBuilds = getMaxConcurrentBuilds();
         _currentlyBuildingMap = new ConcurrentHashMap<Long, PooledTunnelCreatorConfig>(maxConcurrentBuilds);
@@ -291,6 +294,10 @@ class BuildExecutor implements Runnable {
                     _context.statManager().addRateData("tunnel.tierExpire" + bwTier, 1);
                     didNotReply(cfg.getReplyMessageId(), peer);
                     _context.profileManager().tunnelTimedOut(peer);
+                    // Record timeout for ghost peer detection
+                    if (_ghostPeerManager != null) {
+                        _ghostPeerManager.recordTimeout(peer);
+                    }
                 }
 
                 TunnelPool pool = cfg.getTunnelPool();
@@ -608,6 +615,16 @@ class BuildExecutor implements Runnable {
             _manager.buildComplete(cfg);
             ExpireJob expireJob = new ExpireJob(_context, cfg);
             _context.jobQueue().addJob(expireJob);
+            // Record successful tunnel participation for ghost peer detection
+            if (_ghostPeerManager != null) {
+                Hash selfHash = _context.routerHash();
+                for (int i = 0; i < cfg.getLength(); i++) {
+                    Hash peer = cfg.getPeer(i);
+                    if (peer != null && !peer.equals(selfHash)) {
+                        _ghostPeerManager.recordSuccess(peer);
+                    }
+                }
+            }
         }
     }
 

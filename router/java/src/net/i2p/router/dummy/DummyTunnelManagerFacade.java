@@ -19,6 +19,7 @@ import net.i2p.router.ClientTunnelSettings;
 import net.i2p.router.TunnelInfo;
 import net.i2p.router.TunnelManagerFacade;
 import net.i2p.router.TunnelPoolSettings;
+import net.i2p.router.tunnel.pool.GhostPeerManager;
 import net.i2p.router.tunnel.pool.TunnelPool;
 
 /**
@@ -45,6 +46,7 @@ public class DummyTunnelManagerFacade implements TunnelManagerFacade {
     public double getShareRatio() { return 0d; }
     public int getOutboundClientTunnelCount() { return 0; }
     public int getOutboundClientTunnelCount(Hash destination) { return 0; }
+    public int getInboundClientTunnelCount(Hash destination) { return 0; }
     public long getLastParticipatingExpiration() { return -1; }
     public void buildTunnels(Destination client, ClientTunnelSettings settings) {}
     public void removeTunnels(Destination client) {}
@@ -78,6 +80,10 @@ public class DummyTunnelManagerFacade implements TunnelManagerFacade {
     }
 
     public TunnelPool getOutboundPool(Hash client) {
+        return null;
+    }
+
+    public GhostPeerManager getGhostPeerManager() {
         return null;
     }
 }

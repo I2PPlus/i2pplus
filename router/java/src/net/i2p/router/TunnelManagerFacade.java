@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
+import net.i2p.router.tunnel.pool.GhostPeerManager;
 import net.i2p.router.tunnel.pool.TunnelPool;
 
 /**
@@ -118,6 +119,8 @@ public interface TunnelManagerFacade extends Service {
     public int getOutboundClientTunnelCount();
     /** how many outbound client tunnels in this pool? */
     public int getOutboundClientTunnelCount(Hash destination);
+    /** how many inbound client tunnels in this pool? */
+    public int getInboundClientTunnelCount(Hash destination);
     public double getShareRatio();
 
     /** When does the last tunnel we are participating in expire? */
@@ -190,4 +193,11 @@ public interface TunnelManagerFacade extends Service {
 
     /** @since 0.8.13 */
     public void fail(Hash peer);
+
+    /**
+     * Get the ghost peer manager for tracking peers with consistent tunnel build timeouts.
+     * @return the GhostPeerManager instance
+     * @since 0.9.68+
+     */
+    public GhostPeerManager getGhostPeerManager();
 }
