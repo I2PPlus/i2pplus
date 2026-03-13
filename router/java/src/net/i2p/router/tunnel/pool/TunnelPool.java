@@ -1512,16 +1512,12 @@ public class TunnelPool {
             case REJECT:
             case BAD_RESPONSE:
             case DUP_ID:
-                _consecutiveBuildTimeouts.set(0);
+            case TIMEOUT:
+            case OTHER_FAILURE:
+                _consecutiveBuildTimeouts.incrementAndGet();
                 updatePairedProfile(cfg, true);
                 break;
 
-            case TIMEOUT:
-                _consecutiveBuildTimeouts.incrementAndGet();
-                updatePairedProfile(cfg, false);
-                break;
-
-            case OTHER_FAILURE:
             default:
                 break;
         }
