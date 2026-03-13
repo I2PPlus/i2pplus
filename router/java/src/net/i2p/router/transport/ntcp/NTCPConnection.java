@@ -1819,8 +1819,8 @@ public class NTCPConnection implements Closeable {
                 String ipPort = (ip != null && ip.length == 4) ? 
                     (ip[0] & 0xff) + "." + (ip[1] & 0xff) + "." + (ip[2] & 0xff) + "." + (ip[3] & 0xff) + ":" + port :
                     "UNKNOWN";
-                _context.banlist().banlistRouter(_remotePeer.calculateHash(), "They banned us", null, null, _context.clock().now() + 2*60*60*1000);
                 _banLogger.logBan(_remotePeer.calculateHash(), ipPort, "They banned us", 2*60*60*1000);
+                _context.banlist().banlistRouter(_remotePeer.calculateHash(), "They banned us", null, null, _context.clock().now() + 2*60*60*1000);
             }
         }
 

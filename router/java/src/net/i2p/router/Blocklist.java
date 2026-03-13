@@ -384,11 +384,11 @@ public class Blocklist {
 
     private void banlistRouter(Hash peer, String reason, String comment) {
         if (expireInterval() > 0) {
-            _context.banlist().banlistRouter(peer, reason, comment, null, expireInterval());
             if (_banLogger != null) _banLogger.logBan(peer, _context, reason, expireInterval());
+            _context.banlist().banlistRouter(peer, reason, comment, null, expireInterval());
         } else {
-            _context.banlist().banlistRouterForever(peer, reason, comment);
             if (_banLogger != null) _banLogger.logBanForever(peer, _context, reason);
+            _context.banlist().banlistRouterForever(peer, reason, comment);
         }
     }
 
@@ -1181,8 +1181,8 @@ public class Blocklist {
             sip.startsWith("192.168.") || sip.startsWith("10.") ||
             (ip != null && ip.length == 4 && (ip[0] * 0xff) == 172 && ip[1] >= 16 && ip[1] <= 31)) {
             // i2pd bug, possibly at startup, don't ban forever
-            _context.banlist().banlistRouter(peer, reason, sip, null, _context.clock().now() + Banlist.BANLIST_DURATION_PRIVATE);
             if (_banLogger != null) _banLogger.logBan(peer, _context, reason, Banlist.BANLIST_DURATION_PRIVATE);
+            _context.banlist().banlistRouter(peer, reason, sip, null, _context.clock().now() + Banlist.BANLIST_DURATION_PRIVATE);
             return;
         }
         banlistRouter(peer, reason, sip);
@@ -1226,11 +1226,11 @@ public class Blocklist {
      */
     private void banlistRouter( Hash peer, String reason, String reasonCode, long duration) {
         if (duration > 0) {
-            _context.banlist().banlistRouter(peer, reason, reasonCode, null, System.currentTimeMillis() + expireInterval());
             if (_banLogger != null) _banLogger.logBan(peer, _context, reason, expireInterval());
+            _context.banlist().banlistRouter(peer, reason, reasonCode, null, System.currentTimeMillis() + expireInterval());
         } else {
-            _context.banlist().banlistRouterForever(peer, reason, reasonCode);
             if (_banLogger != null) _banLogger.logBanForever(peer, _context, reason);
+            _context.banlist().banlistRouterForever(peer, reason, reasonCode);
         }
     }
 

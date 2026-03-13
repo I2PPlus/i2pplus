@@ -792,11 +792,11 @@ public class GeoIP {
             String hisCountry = ctx.commSystem().getCountry(h);
             if (country.equals(hisCountry)) {
                 if (blockMyCountry) {
-                    ctx.banlist().banlistRouterForever(h, " <b>➜</b> In our country (banned via config)");
                     _banLogger.logBanForever(h, ctx, "In our country (banned via config)");
+                    ctx.banlist().banlistRouterForever(h, " <b>➜</b> In our country (banned via config)");
                 } else {
-                    ctx.banlist().banlistRouterForever(h, " <b>➜</b> In our country (we are in Hidden mode)");
                     _banLogger.logBanForever(h, ctx, "In our country (we are in Hidden mode)");
+                    ctx.banlist().banlistRouterForever(h, " <b>➜</b> In our country (we are in Hidden mode)");
                 }
             }
         }

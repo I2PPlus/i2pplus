@@ -983,8 +983,8 @@ public class TransportManager implements TransportEventListener {
             if (msg.getTarget().getIdentity().getSigningPublicKey().getType() == null) {
                 // we don't support his crypto
                 _context.statManager().addRateData("transport.banlistOnUnsupportedSigType", 1);
-                _context.banlist().banlistRouterForever(peer, " <b>➜</b> " + _x("Unsupported signature type"));
                 _banLogger.logBanForever(peer, _context, "Unsupported signature type");
+                _context.banlist().banlistRouterForever(peer, " <b>➜</b> " + _x("Unsupported signature type"));
             } else if (unreachableTransports >= _transports.size() && countActivePeers() > 0) {
                 // Don't banlist if we aren't talking to anybody, as we may have a network connection issue
                 // TODO if we are IPv6 only, ban for longer
@@ -1002,13 +1002,13 @@ public class TransportManager implements TransportEventListener {
                 if (incompat) {
                     // they don't support our crypto
                     _context.statManager().addRateData("transport.banlistOnUnsupportedSigType", 1);
+                    _banLogger.logBan(peer, _context, "No support for our signature type", SIGTYPE_BANLIST_DURATION);
                     _context.banlist().banlistRouter(peer, " <b>➜</b> " + _x("No support for our signature type"), null, null,
                                                      _context.clock().now() + SIGTYPE_BANLIST_DURATION);
-                    _banLogger.logBan(peer, _context, "No support for our signature type", SIGTYPE_BANLIST_DURATION);
                 } else {
                     _context.statManager().addRateData("transport.banlistOnUnreachable", msg.getLifetime(), msg.getLifetime());
-                    _context.banlist().banlistRouter(peer, " <b>➜</b> " + _x("Unreachable on any transport"));
                     _banLogger.logBan(peer, _context, "Unreachable on any transport", 0);
+                    _context.banlist().banlistRouter(peer, " <b>➜</b> " + _x("Unreachable on any transport"));
                 }
             }
         } else if (rv == null) {

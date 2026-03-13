@@ -330,15 +330,15 @@ class OutboundNTCP2State implements EstablishState {
                     _context.statManager().addRateData("ntcp.invalidOutboundSkew", diff);
                     fail("Clock Skew: " + _peerSkew, null, true);
                     // Only banlist if we know what time it is
-                    _context.banlist().banlistRouter(DataHelper.formatDuration(diff),
-                                                     _con.getRemotePeer().calculateHash(),
-                                                     " <b>➜</b> Excessive clock skew ({0})");  // _x in IES
                     byte[] ip = _con.getRemoteIP();
                     int port = _con.getRemotePort();
                     String ipPort = (ip != null && ip.length == 4) ? 
                         (ip[0] & 0xff) + "." + (ip[1] & 0xff) + "." + (ip[2] & 0xff) + "." + (ip[3] & 0xff) + ":" + port :
                         "UNKNOWN";
                     _banLogger.logBan(_con.getRemotePeer().calculateHash(), ipPort, "Excessive clock skew: " + DataHelper.formatDuration(diff), 0);
+                    _context.banlist().banlistRouter(DataHelper.formatDuration(diff),
+                                                     _con.getRemotePeer().calculateHash(),
+                                                     " <b>➜</b> Excessive clock skew ({0})");  // _x in IES
                     _transport.setLastBadSkew(_peerSkew);
                     return;
                 }

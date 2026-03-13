@@ -469,8 +469,8 @@ public class NTCPTransport extends TransportImpl {
             String shortId = target.getIdentity().toBase64().substring(0,6);
             _log.warn("[NTCP] Router [" + shortId + "] has no valid NTCP address, banning for 8h");
         }
-        _context.banlist().banlistRouter(ih, " <b>➜</b> Invalid NTCP address", null, null, now + 8*60*60*1000);
         _banLogger.logBan(ih, ipPort, "Invalid NTCP address", 8*60*60*1000);
+        _context.banlist().banlistRouter(ih, " <b>➜</b> Invalid NTCP address", null, null, now + 8*60*60*1000);
     }
 
     /**
@@ -611,11 +611,11 @@ public class NTCPTransport extends TransportImpl {
         if (nid != _networkID) {
             String ipPort = getIPPortFromRouterInfo(toAddress);
             if (nid == -1) {
-                _context.banlist().banlistRouter(peer, " <b>➜</b> No network specified", null, null, _context.clock().now() + Banlist.BANLIST_DURATION_NO_NETWORK);
                 _banLogger.logBan(peer, ipPort, "No network specified", Banlist.BANLIST_DURATION_NO_NETWORK);
+                _context.banlist().banlistRouter(peer, " <b>➜</b> No network specified", null, null, _context.clock().now() + Banlist.BANLIST_DURATION_NO_NETWORK);
             } else {
-                _context.banlist().banlistRouterForever(peer, " <b>➜</b> Invalid NetworkId (" + nid + ")");
                 _banLogger.logBanForever(peer, ipPort, "Invalid NetworkId (" + nid + ")");
+                _context.banlist().banlistRouterForever(peer, " <b>➜</b> Invalid NetworkId (" + nid + ")");
             }
             if (_log.shouldWarn())
                 _log.warn("[NTCP] Not in our network: " + toAddress, new Exception());
