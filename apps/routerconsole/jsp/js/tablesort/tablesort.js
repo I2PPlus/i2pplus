@@ -6,6 +6,14 @@
     this.init(el, options || {});
   }
 
+  // Web Worker for large table sorting
+  const LARGE_TABLE_THRESHOLD = 100;
+  let sortWorker = null;
+  const getSortWorker = () => {
+    if (!sortWorker) sortWorker = new Worker("/js/sortWorker.js");
+    return sortWorker;
+  };
+
   // Stores custom sort options
   const sortOptions = [];
 
@@ -68,15 +76,93 @@
       let sortFunction = caseInsensitiveSort, sortMethod = header.getAttribute("data-sort-method"), sortOrder = header.getAttribute("aria-sort");
 
       this.table.dispatchEvent(createEvent("beforeSort"));
+
+      const totalRows = this.table.tBodies[0]?.rows.length || 0;
+      if (totalRows > LARGE_TABLE_THRESHOLD) {
+        this.sortWithWorker(header, update, columnKey, column, sortMethod, sortOrder);
+        return;
+      }
+
+      this.sortNative(header, update, columnKey, column, sortFunction, sortMethod, sortOrder);
+    },
+
+    sortWithWorker(header, update, columnKey, column, sortMethod, sortOrder) {
+      const worker = getSortWorker();
+      const rowData = [];
+      const tbody = this.table.tBodies[0];
+      if (!tbody) return;
+
+      const rowElements = [];
+      for (let j = 0; j < tbody.rows.length; j++) {
+        const row = tbody.rows[j];
+        if (row.getAttribute("data-sort-method") === "none") continue;
+        const cell = columnKey ? getCellByKey(row.cells, columnKey) : row.cells[column];
+        rowData.push({
+          td: cell ? getInnerText(cell) : "",
+          index: j
+        });
+        rowElements.push(row);
+      }
+
+      let columnType = "string";
+      if (sortMethod) {
+        if (sortMethod === "number") columnType = "number";
+        else if (sortMethod === "date") columnType = "date";
+      } else {
+        const sampleItems = rowData.slice(0, 3).map(r => r.td).filter(t => t);
+        for (const opt of sortOptions) {
+          if (sampleItems.every(opt.pattern)) {
+            if (opt.name === "number") columnType = "number";
+            else if (opt.name === "date") columnType = "date";
+            break;
+          }
+        }
+      }
+
+      if (!update) {
+        const columnDirection = header.getAttribute("data-sort-direction");
+        let defaultDescending = this.options.descending;
+        if (columnDirection === "ascending") defaultDescending = false;
+        else if (columnDirection === "descending") defaultDescending = true;
+        sortOrder = sortOrder === "ascending" ? "descending" :
+                    sortOrder === "descending" ? "ascending" :
+                    defaultDescending ? "descending" : "ascending";
+        header.setAttribute("aria-sort", sortOrder);
+      }
+
+      this.col = column;
+      const direction = sortOrder;
+
+      const handleMessage = (e) => {
+        const sorted = e.data.sorted;
+        worker.removeEventListener("message", handleMessage);
+
+        const fragment = document.createDocumentFragment();
+        sorted.forEach(item => {
+          const originalIndex = item.index;
+          fragment.appendChild(rowElements[originalIndex]);
+        });
+        tbody.appendChild(fragment);
+
+        this.table.dispatchEvent(createEvent("afterSort"));
+      };
+
+      worker.addEventListener("message", handleMessage);
+      worker.postMessage({
+        rows: rowData,
+        sortColumn: "td",
+        direction,
+        columnType
+      });
+    },
+
+    sortNative(header, update, columnKey, column, sortFunction, sortMethod, sortOrder) {
       window.requestAnimationFrame(() => {
         if (!update) {
-          // Allow column override using data-sort-direction
           const columnDirection = header.getAttribute("data-sort-direction");
           let defaultDescending = this.options.descending;
           if (columnDirection === "ascending") defaultDescending = false;
           else if (columnDirection === "descending") defaultDescending = true;
-
-          // Toggle or apply default
           sortOrder = sortOrder === "ascending" ? "descending" :
                       sortOrder === "descending" ? "ascending" :
                       defaultDescending ? "descending" : "ascending";
