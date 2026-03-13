@@ -1124,10 +1124,10 @@ class SidebarRenderer {
            .append(_t("Tunnels"))
            .append(" <span class=\"badge volatile\" hidden title=\"")
            .append(_t("Total number of tunnels in use"));
-       if (_helper.getTunnelBuildSuccess() > 0) {
-           buf.append(" / ")
-              .append(_t("Average tunnel build success for last 10m interval"));
-       }
+        if (_helper.getTunnelBuildSuccess() > 0) {
+            buf.append(" / ")
+               .append(_t("Tunnel build success (higher of 1m or 10m average)"));
+        }
        buf.append("\">")
           .append(totalTunnels);
        if (_helper.getTunnelBuildSuccess() > 0) {
