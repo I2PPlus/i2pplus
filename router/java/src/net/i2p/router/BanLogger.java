@@ -380,6 +380,10 @@ public class BanLogger {
      * Skips logging if this hash has already been logged in this session.
      */
     private void writeLog(String hashStr, String ip, String reason, String durationStr) {
+        // Strip HTML formatting from reason for plain text log file
+        if (reason != null) {
+            reason = reason.replace("<b>➜</b>", "").replace("  ", " ").trim();
+        }
         // Skip if we've already logged this hash (prevents duplicate ban logging)
         if (!"UNKNOWN".equals(hashStr) && !_loggedHashes.add(hashStr)) {
             return; // Already logged this hash
