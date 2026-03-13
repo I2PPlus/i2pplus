@@ -16,9 +16,11 @@ import net.i2p.stat.RateConstants;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.router.RouterInfo;
+import net.i2p.data.router.RouterAddress;
 import net.i2p.router.HandlerJobBuilder;
 import net.i2p.router.Job;
 import net.i2p.router.RouterContext;
+import net.i2p.router.BanLogger;
 import net.i2p.util.Log;
 import net.i2p.util.RandomSource;
 
@@ -37,6 +39,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
     private RouterContext _context;
     private FloodfillNetworkDatabaseFacade _facade;
     private Log _log;
+    private BanLogger _banLogger;
     private final long _msgIDBloomXor = RandomSource.getInstance().nextLong(I2NPMessage.MAX_ID_VALUE);
     private static final long[] RATES = RateConstants.BASIC_RATES;
     private final Set<Hash> _loggedBans = ConcurrentHashMap.newKeySet();
@@ -51,6 +54,8 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
         _context = context;
         _facade = facade;
         _log = context.logManager().getLog(FloodfillDatabaseLookupMessageHandler.class);
+        _banLogger = new BanLogger();
+        _banLogger.initialize(context);
         _context.statManager().createRateStat("netDb.lookupsReceived", "NetDb lookups we have received", "NetworkDatabase", RATES);
         _context.statManager().createRateStat("netDb.lookupsDropped", "NetDb lookups we dropped (throttled)", "NetworkDatabase", RATES);
         // following are for ../HDLMJ
@@ -113,8 +118,10 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
 
         if (shouldBan && uptime > 10*60*1000) {
             if (dlm.getFrom() != null) {
+                String ipPort = getIPFromHash(dlm.getFrom());
                 _context.banlist().banlistRouter(dlm.getFrom(), " <b>➜</b> Excessive lookups" + (isFF ? " (Floodfill)" : ""),
                                                  null, null, _context.clock().now() + 10 * 60 * 1000);
+                _banLogger.logBan(dlm.getFrom(), ipPort != null ? ipPort : "UNKNOWN", "Excessive lookups" + (isFF ? " (Floodfill)" : ""), 10 * 60 * 1000);
                 _context.commSystem().mayDisconnect(dlm.getFrom());
             }
             _context.statManager().addRateData("netDb.lookupsDropped", 1);
@@ -298,6 +305,27 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
             case ANY:  return "Any";
             default:   return "";
         }
+    }
+
+    /**
+     * Extract IP:port from RouterInfo for a peer hash.
+     */
+    private String getIPFromHash(Hash h) {
+        try {
+            RouterInfo ri = _context.netDb().lookupRouterInfoLocally(h);
+            if (ri != null) {
+                for (RouterAddress ra : ri.getAddresses()) {
+                    if (ra != null) {
+                        String host = ra.getHost();
+                        int port = ra.getPort();
+                        if (host != null && port > 0) {
+                            return host + ":" + port;
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {}
+        return null;
     }
 
 }

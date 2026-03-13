@@ -30,6 +30,7 @@ import net.i2p.data.DataFormatException;
 import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterInfo;
+import net.i2p.router.BanLogger;
 import net.i2p.router.JobImpl;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
@@ -60,6 +61,7 @@ public class PersistentDataStore extends TransientDataStore {
     private final KademliaNetworkDatabaseFacade _facade;
     private final Writer _writer;
     private final ReadJob _readJob;
+    private final BanLogger _banLogger;
     private volatile boolean _initialized;
     private final boolean _flat;
     private final int _networkID;
@@ -87,6 +89,8 @@ public class PersistentDataStore extends TransientDataStore {
         _flat = ctx.getBooleanProperty(PROP_FLAT);
         _dbDir = getDbDir(dbDir);
         _facade = facade;
+        _banLogger = new BanLogger();
+        _banLogger.initialize(ctx);
         _readJob = new ReadJob();
         _context.jobQueue().addJob(_readJob);
         ctx.statManager().createRateStat("netDb.writeClobber", "How often we clobber a pending NetDb write", "NetworkDatabase", RATES);
@@ -371,6 +375,7 @@ public class PersistentDataStore extends TransientDataStore {
                                 _log.warn("Banning and disconnecting from [" + key.toBase64().substring(0,6) + "] for 72h -> Router is spoofing our IP address!");
                             }
                             _context.banlist().banlistRouter(key, " <b>➜</b> Spoofed IP address (ours)", null, null, _context.clock().now() + 72*60*60*1000);
+                            _banLogger.logBan(key, ip, "Spoofed IP address (ours)", 72*60*60*1000);
                             _context.simpleTimer2().addEvent(new Disconnector(key), 3*1000);
                             shouldDelete = true;
                         }
@@ -385,6 +390,7 @@ public class PersistentDataStore extends TransientDataStore {
                             _context.banlist().banlistRouter(key, " <b>➜</b> Invalid Router version (" + version + " / " + bw +
                                                              (unreachable ? "U" : reachable ? "R" : "") + ")", null,
                                                               null, _context.clock().now() + 24*60*60*1000);
+                            _banLogger.logBan(key, ip != null ? ip : "UNKNOWN", "Invalid Router version (" + version + " / " + bw + ")", 24*60*60*1000);
                         }
                         _context.simpleTimer2().addEvent(new Disconnector(key), 11*60*1000);
                         shouldDelete = true;
@@ -395,6 +401,7 @@ public class PersistentDataStore extends TransientDataStore {
                         if (_log.shouldInfo() && !isBanned) {
                             _log.info("Banning [" + key.toBase64().substring(0,6) + "] for 8h -> LU and older than " + MIN_VERSION);
                             _context.banlist().banlistRouter(key, " <b>➜</b> LU and older than " + MIN_VERSION, null, null, _context.clock().now() + 8*60*60*1000);
+                            _banLogger.logBan(key, ip != null ? ip : "UNKNOWN", "LU and older than " + MIN_VERSION, 8*60*60*1000);
                         }
                         _context.simpleTimer2().addEvent(new Disconnector(key), 11*60*1000);
                         shouldDelete = true;
@@ -746,6 +753,7 @@ public class PersistentDataStore extends TransientDataStore {
                             _log.warn("RouterInfo [" + truncHash + "] does not match [" + _key.toBase64().substring(0,6) + "] from " + _routerFile);
                             _log.warn("Banning: [" + truncHash + "] for 1h -> Corrupt RouterInfo");
                             _context.banlist().banlistRouter(_key, " <b>➜</b> Corrupt RouterInfo", null, null, now + 60*60*1000);
+                            _banLogger.logBan(_key, _context, "Corrupt RouterInfo", 60*60*1000);
                         _routerFile.delete();
                     } else if (ri.getPublished() <= _knownDate) {
                         // Don't store but don't delete

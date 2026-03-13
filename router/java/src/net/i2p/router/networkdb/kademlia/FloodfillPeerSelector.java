@@ -19,10 +19,12 @@ import java.util.TreeSet;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterInfo;
+import net.i2p.data.router.RouterAddress;
 import net.i2p.kademlia.KBucketSet;
 import net.i2p.kademlia.SelectionCollector;
 import net.i2p.kademlia.XORComparator;
 import net.i2p.router.RouterContext;
+import net.i2p.router.BanLogger;
 import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.router.util.MaskedIPSet;
 import net.i2p.router.util.RandomIterator;
@@ -39,7 +41,13 @@ import net.i2p.stat.RateStat;
  */
 class FloodfillPeerSelector extends PeerSelector {
 
-    public FloodfillPeerSelector(RouterContext ctx) {super(ctx);}
+    private BanLogger _banLogger;
+
+    public FloodfillPeerSelector(RouterContext ctx) {
+        super(ctx);
+        _banLogger = new BanLogger();
+        _banLogger.initialize(ctx);
+    }
 
     /**
      * Pick out peers with the floodfill capacity set, returning them first, but then
@@ -293,7 +301,9 @@ class FloodfillPeerSelector extends PeerSelector {
                     if (_log.shouldDebug())
                         _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Router is slow (L or M tier)");
                     if (info.getBandwidthTier().equals("L")) {
+                        String ipPort = getIPFromRouterInfo(info);
                         _context.banlist().banlistRouter(entry, " <b>➜</b> L tier Floodfill", null, null, now + 4*60*60*1000);
+                        _banLogger.logBan(entry, ipPort != null ? ipPort : "UNKNOWN", "L tier Floodfill", 4*60*60*1000);
                         _context.commSystem().forceDisconnect(entry);
                         if (_log.shouldWarn()) {
                             _log.warn("Banning for 4h and disconnecting from Floodfill [" + entry.toBase64().substring(0,6) + "] -> L tier");
@@ -521,5 +531,24 @@ class FloodfillPeerSelector extends PeerSelector {
             // return ff
             return selectFloodfillParticipantsIncludingUs(rkey, maxNumRouters, peersToIgnore, kbuckets);
         }
+    }
+
+    /**
+     * Extract IP:port from RouterInfo.
+     */
+    private String getIPFromRouterInfo(RouterInfo ri) {
+        if (ri == null) return null;
+        try {
+            for (RouterAddress ra : ri.getAddresses()) {
+                if (ra != null) {
+                    String host = ra.getHost();
+                    int port = ra.getPort();
+                    if (host != null && port > 0) {
+                        return host + ":" + port;
+                    }
+                }
+            }
+        } catch (Exception e) {}
+        return null;
     }
 }

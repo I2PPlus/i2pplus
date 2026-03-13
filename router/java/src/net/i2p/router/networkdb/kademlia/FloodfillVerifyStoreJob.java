@@ -23,6 +23,7 @@ import net.i2p.router.MessageSelector;
 import net.i2p.router.ProfileManager;
 import net.i2p.router.ReplyJob;
 import net.i2p.router.RouterContext;
+import net.i2p.router.BanLogger;
 import net.i2p.router.TunnelInfo;
 import net.i2p.router.util.MaskedIPSet;
 import net.i2p.util.Log;
@@ -33,6 +34,7 @@ import net.i2p.util.Log;
  */
 class FloodfillVerifyStoreJob extends JobImpl {
     private final Log _log;
+    private final BanLogger _banLogger;
     private final Hash _key, _client;
     private volatile Hash _target;
     private final Hash _sentTo;
@@ -73,6 +75,8 @@ class FloodfillVerifyStoreJob extends JobImpl {
         _isLS2 = !_isRouterInfo && type != DatabaseEntry.KEY_TYPE_LEASESET;
         _type = type;
         _log = ctx.logManager().getLog(getClass());
+        _banLogger = new BanLogger();
+        _banLogger.initialize(ctx);
         _sentTo = sentTo;
         _facade = facade;
         _ignore = new HashSet<Hash>(8);
@@ -342,6 +346,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
                     }
                     pm.dbLookupFailed(_target);
                     ctx.banlist().banlistRouterForever(_target, "Sent bad NetDb data");
+                    _banLogger.logBanForever(_target, ctx, "Sent bad NetDb data");
                     ctx.statManager().addRateData("netDb.floodfillVerifyFail", delay);
                     resend();
                     return;

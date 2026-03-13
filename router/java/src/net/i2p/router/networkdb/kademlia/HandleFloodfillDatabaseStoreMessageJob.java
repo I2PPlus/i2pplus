@@ -27,6 +27,7 @@ import net.i2p.router.JobImpl;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
+import net.i2p.router.BanLogger;
 import net.i2p.router.TunnelInfo;
 import net.i2p.router.message.SendMessageDirectJob;
 import net.i2p.util.Log;
@@ -50,6 +51,7 @@ import net.i2p.util.VersionComparator;
  */
 class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
     private final Log _log;
+    private final BanLogger _banLogger;
     private final DatabaseStoreMessage _message;
     private final RouterIdentity _from;
     private Hash _fromHash;
@@ -69,6 +71,8 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                                   FloodfillNetworkDatabaseFacade facade, long msgIDBloomXor) {
         super(ctx);
         _log = ctx.logManager().getLog(getClass());
+        _banLogger = new BanLogger();
+        _banLogger.initialize(ctx);
         _message = receivedMessage;
         _from = from;
         _fromHash = fromHash;
@@ -258,7 +262,8 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                             logged = true;
                             _log.warn("Dropping unsolicited NetDbStore of " + cap + (isFF ? " Floodfill" : " Router") +
                                       " [" + key.toBase64().substring(0,6) + "] and banning for 24h -> Invalid Router version: " + v);
-                            getContext().banlist().banlistRouter(key, " <b>➜</b> Invalid Router version: " + v, null, null, now + 24*60*60*1000);
+                            getContext().banlist().banlistRouter(key, " <b>➜</b> Invalid Router version (" + v + ")", null, null, now + 24*60*60*1000);
+                            _banLogger.logBan(key, getContext(), "Invalid Router version (" + v + ")", 24*60*60*1000);
                         }
                     } else if (isFast && !isOld && prevNetDb == null) {
                         shouldStore = true;
@@ -403,6 +408,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                           " [" + key.toBase64().substring(0,6) + "] and banning for 8h -> Inconsistent public keys");
                             }
                             getContext().banlist().banlistRouter(key, " <b>➜</b> Inconsistent public keys", null, null, now + 8*60*60*1000);
+                            _banLogger.logBan(key, getContext(), "Inconsistent public keys", 8*60*60*1000);
                             shouldStore = false;
                         } else if (!ri.getIdentity().getSigningPublicKey().equals(prevNetDb.getIdentity().getSigningPublicKey())) {
                             if (_log.shouldWarn()) {
@@ -410,6 +416,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                           " [" + key.toBase64().substring(0,6) + "] and banning for 8h -> Inconsistent signing keys");
                             }
                             getContext().banlist().banlistRouter(key, " <b>➜</b> Inconsistent signing keys", null, null, now + 8*60*60*1000);
+                            _banLogger.logBan(key, getContext(), "Inconsistent signing keys", 8*60*60*1000);
                             shouldStore = false;
                         }
                     }
