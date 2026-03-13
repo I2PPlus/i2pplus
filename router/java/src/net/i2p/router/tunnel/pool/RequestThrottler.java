@@ -3,7 +3,11 @@ package net.i2p.router.tunnel.pool;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicIntegerArray;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
@@ -50,6 +54,19 @@ class RequestThrottler {
     private static final int MAX_LIMIT = 400;
     private static final int PERCENT_LIMIT = 20;
     private static final long CLEAN_TIME = 90 * 1000; // Reset limits every 90 seconds
+
+    // Burst detection configuration
+    private static final long BURST_WINDOW_MS = 10 * 1000; // 10 second sliding window
+    private static final int BURST_BUCKET_COUNT = 10; // 1 second per bucket
+    private static final int BURST_THRESHOLD_MIN = 50; // Minimum burst threshold
+    private static final int BURST_THRESHOLD_MAX = 200; // Maximum burst threshold
+    private static final int BURST_1S_THRESHOLD = 10; // 10 requests in 1 second = immediate ban
+    private static final double BURST_THRESHOLD_PERCENT = 0.50; // 50% of 90s limit scaled to 10s window
+    private static final long BURST_OFFENSE_RESET = 60 * 60 * 1000; // Reset after 1 hour clean
+
+    private final BurstWindowCounter _burstCounter;
+    private final Map<Hash, BurstOffenseRecord> _burstOffenses = new java.util.concurrent.ConcurrentHashMap<>();
+
     private final static boolean DEFAULT_SHOULD_THROTTLE = true;
     private final static String PROP_SHOULD_THROTTLE = "router.enableTransitThrottle";
     private final static boolean DEFAULT_SHOULD_DISCONNECT = false;
@@ -62,6 +79,7 @@ class RequestThrottler {
      RequestThrottler(RouterContext ctx) {
         this.context = ctx;
         this.counter = new ObjectCounter<Hash>();
+        this._burstCounter = new BurstWindowCounter(BURST_WINDOW_MS, BURST_BUCKET_COUNT);
         _log = ctx.logManager().getLog(RequestThrottler.class);
         this.lastBlockCountriesProp = null;
         this.cachedBlockedCountries = Collections.emptySet();
@@ -119,8 +137,59 @@ class RequestThrottler {
             limit = Math.min(MAX_LIMIT, Math.max(MIN_LIMIT, numTunnels * 8 / 100));
         }
         int count = counter.increment(h);
+        int burstCount = _burstCounter.increment(h);
         boolean rv = count > limit;
         boolean enableThrottle = cachedShouldThrottle;
+
+        // Check for severe burst (10+ requests in 1 second) - immediate ban
+        if (enableThrottle && !rv) {
+            int currentBucketCount = _burstCounter.getCurrentBucketCount(h);
+            if (currentBucketCount >= BURST_1S_THRESHOLD) {
+                if (_log.shouldWarn()) {
+                    _log.warn("Severe transit request burst detected from Router [" + routerId + "] -> " +
+                              "Requests: " + currentBucketCount + " in 1s (threshold: " + BURST_1S_THRESHOLD + ")");
+                }
+                String ipPort = getRouterIPPort(ri);
+                context.banlist().banlistRouter(h, " <b>➜</b> Transit request burst", null, null, context.clock().now() + 4*60*60*1000);
+                _banLogger.logBan(h, ipPort, "Transit request burst (10 in 1s)", 4*60*60*1000L);
+                if (cachedShouldDisconnect) {
+                    context.commSystem().forceDisconnect(h);
+                }
+                return true;
+            }
+
+            // Check 10-second burst threshold (escalating bans)
+            if (_burstCounter.isBursting(h, limit)) {
+                BurstOffenseRecord record = _burstOffenses.computeIfAbsent(h, k -> new BurstOffenseRecord());
+                record.recordOffense();
+                int offenses = record.getConsecutiveOffenses();
+                int banTime;
+                String reason;
+                if (offenses >= 3) {
+                    banTime = 4 * 60 * 60 * 1000;
+                    reason = "Transit request burst (" + offenses + " offenses)";
+                } else if (offenses == 2) {
+                    banTime = 2 * 60 * 60 * 1000;
+                    reason = "Transit request burst (" + offenses + " offenses)";
+                } else {
+                    banTime = 60 * 60 * 1000;
+                    reason = "Transit request burst";
+                }
+                if (_log.shouldWarn()) {
+                    _log.warn("Transit request burst from Router [" + routerId + "] -> " + reason +
+                              " (ban: " + (banTime/60/60) + "h)");
+                }
+                String ipPort = getRouterIPPort(ri);
+                context.banlist().banlistRouter(h, " <b>➜</b> " + reason, null, null,
+                    context.clock().now() + banTime);
+                _banLogger.logBan(h, ipPort, reason, banTime);
+                if (cachedShouldDisconnect) {
+                    context.commSystem().forceDisconnect(h);
+                }
+                return true;
+            }
+        }
+
         boolean shouldDisconnect = cachedShouldDisconnect;
         boolean isFF = false;
         String v = "unknown";
@@ -134,7 +203,7 @@ class RequestThrottler {
             isFF = ri.getCapabilities().contains("f");
             v = ri.getVersion();
             country = context.commSystem().getCountry(h);
-            isOld = VersionComparator.comp(v, "0.9.66") < 0;
+            isOld = VersionComparator.comp(v, "0.9.67") < 0;
             isXG = ri.getCapabilities().contains("X") && ri.getCapabilities().contains("G");
         }
 
@@ -412,6 +481,101 @@ class RequestThrottler {
             lastFirewallCheckTime = now;
         }
         return cachedFirewalledStatus;
+    }
+
+    /**
+     * Sliding window counter for burst detection.
+     * Tracks per-peer request counts using 1-second buckets in a 10-second window.
+     */
+    private static class BurstWindowCounter {
+        private final long windowSizeMs;
+        private final int bucketCount;
+        private final long bucketSizeMs;
+        private final Map<Hash, AtomicIntegerArray> peerBuckets;
+        private volatile long lastCleanupTime;
+
+        BurstWindowCounter(long windowSizeMs, int bucketCount) {
+            this.windowSizeMs = windowSizeMs;
+            this.bucketCount = bucketCount;
+            this.bucketSizeMs = windowSizeMs / bucketCount;
+            this.peerBuckets = new ConcurrentHashMap<>();
+            this.lastCleanupTime = System.currentTimeMillis();
+        }
+
+        synchronized int increment(Hash h) {
+            long now = System.currentTimeMillis();
+            int bucketIndex = (int) ((now / bucketSizeMs) % bucketCount);
+            AtomicIntegerArray peerArray = peerBuckets.computeIfAbsent(h, k -> new AtomicIntegerArray(bucketCount));
+            peerArray.incrementAndGet(bucketIndex);
+            int total = getWindowSum(peerArray, bucketIndex);
+            if (now - lastCleanupTime > 60 * 1000) {
+                cleanup(now);
+            }
+            return total;
+        }
+
+        int getCount(Hash h) {
+            AtomicIntegerArray peerArray = peerBuckets.get(h);
+            if (peerArray == null) return 0;
+            long now = System.currentTimeMillis();
+            int bucketIndex = (int) ((now / bucketSizeMs) % bucketCount);
+            return getWindowSum(peerArray, bucketIndex);
+        }
+
+        int getCurrentBucketCount(Hash h) {
+            AtomicIntegerArray peerArray = peerBuckets.get(h);
+            if (peerArray == null) return 0;
+            long now = System.currentTimeMillis();
+            int bucketIndex = (int) ((now / bucketSizeMs) % bucketCount);
+            return peerArray.get(bucketIndex);
+        }
+
+        boolean isBursting(Hash h, int normalLimit) {
+            int count = getCount(h);
+            int burstLimit = Math.max(BURST_THRESHOLD_MIN,
+                Math.min(BURST_THRESHOLD_MAX, (int) (normalLimit * BURST_THRESHOLD_PERCENT * 10 / 90)));
+            return count > burstLimit;
+        }
+
+        private int getWindowSum(AtomicIntegerArray array, int currentBucket) {
+            int sum = 0;
+            for (int i = 0; i < bucketCount; i++) {
+                if (i != currentBucket) {
+                    sum += array.get(i);
+                }
+            }
+            return sum;
+        }
+
+        private void cleanup(long now) {
+            lastCleanupTime = now;
+            int currentBucket = (int) ((now / bucketSizeMs) % bucketCount);
+            int prevBucket = (currentBucket - 1 + bucketCount) % bucketCount;
+            peerBuckets.entrySet().removeIf(entry -> {
+                AtomicIntegerArray arr = entry.getValue();
+                return arr.get(currentBucket) == 0 && arr.get(prevBucket) == 0;
+            });
+        }
+    }
+
+    /**
+     * Tracks burst offense history for escalation.
+     */
+    private static class BurstOffenseRecord {
+        private final AtomicInteger consecutiveOffenses = new AtomicInteger(0);
+        private volatile long lastOffenseTime = 0;
+
+        void recordOffense() {
+            consecutiveOffenses.incrementAndGet();
+            lastOffenseTime = System.currentTimeMillis();
+        }
+
+        int getConsecutiveOffenses() {
+            if (System.currentTimeMillis() - lastOffenseTime > BURST_OFFENSE_RESET) {
+                consecutiveOffenses.set(0);
+            }
+            return consecutiveOffenses.get();
+        }
     }
 
 }
