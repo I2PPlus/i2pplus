@@ -74,6 +74,29 @@ function persistTunnelIdVisibility() {
   }
 }
 
+function updateTunnelCounts() {
+  const pools = container.querySelectorAll(".tablewrap");
+  pools.forEach(pool => {
+    const summary = pool.querySelector("table.poolsummary");
+    const tunnelTable = pool.querySelector("table.tunnels_client");
+    if (!summary || !tunnelTable) return;
+
+    const inCount = tunnelTable.querySelectorAll('td.direction[data-sort="in"]').length;
+    const outCount = tunnelTable.querySelectorAll('td.direction[data-sort="out"]').length;
+
+    const inCell = summary.querySelector("th.inCount");
+    const outCell = summary.querySelector("th.outCount");
+    if (inCell) {
+      const parts = inCell.textContent.split(" / ");
+      if (parts.length === 2) {inCell.textContent = inCount + " / " + parts[1];}
+    }
+    if (outCell) {
+      const parts = outCell.textContent.split(" / ");
+      if (parts.length === 2) {outCell.textContent = outCount + " / " + parts[1];}
+    }
+  });
+}
+
 document.addEventListener("DOMContentLoaded", function() {
   persistTunnelTableVisibility();
   persistTunnelIdVisibility();
@@ -95,6 +118,7 @@ document.addEventListener("DOMContentLoaded", function() {
               container.innerHTML = newContainer.innerHTML;
             }
           }
+          updateTunnelCounts();
         })
         .catch(error => {});
     }
