@@ -6,7 +6,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.data.Hash;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
-import net.i2p.util.SimpleTimer;
 
 /**
  * Tracks routers that consistently fail to respond to tunnel build requests
@@ -27,23 +26,13 @@ public class GhostPeerManager {
     private static final int ATTACK_TIMEOUT_THRESHOLD = 3;
     private static final long COOLDOWN_MS = 90*1000;
     private static final long ATTACK_COOLDOWN_MS = 120*1000;
-    private static final int MAX_TRACKED_PEERS = 8192;
-    private static final long CLEANUP_INTERVAL_MS = 5*60*1000;
+    private static final int MAX_TRACKED_PEERS = 1024;
 
     public GhostPeerManager(RouterContext context) {
         _context = context;
         _log = context.logManager().getLog(GhostPeerManager.class);
         _timeoutCounts = new ConcurrentHashMap<Hash, AtomicInteger>(MAX_TRACKED_PEERS);
         _ghostSince = new ConcurrentHashMap<Hash, Long>(MAX_TRACKED_PEERS);
-        context.simpleTimer2().addPeriodicEvent(new CleanupTimer(), CLEANUP_INTERVAL_MS);
-    }
-
-    private class CleanupTimer implements SimpleTimer.TimedEvent {
-        @Override
-        public void timeReached() {
-            cleanup();
-            _context.simpleTimer2().addPeriodicEvent(this, CLEANUP_INTERVAL_MS);
-        }
     }
 
     /**
@@ -139,24 +128,6 @@ public class GhostPeerManager {
         if (peer == null) {return;}
         _timeoutCounts.remove(peer);
         _ghostSince.remove(peer);
-    }
-
-    /**
-     * Cleanup old entries to prevent memory growth.
-     */
-    public void cleanup() {
-        long now = _context.clock().now();
-        double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
-        long cleanupThreshold = buildSuccess < 0.40
-                                ? ATTACK_COOLDOWN_MS * 2
-                                : COOLDOWN_MS * 2;
-        for (Hash peer : _ghostSince.keySet()) {
-            Long since = _ghostSince.get(peer);
-            if (since != null && (now - since) > cleanupThreshold) {
-                _timeoutCounts.remove(peer);
-                _ghostSince.remove(peer);
-            }
-        }
     }
 
     /**
