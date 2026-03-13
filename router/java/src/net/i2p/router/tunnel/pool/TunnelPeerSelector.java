@@ -179,14 +179,18 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             if (settings.getDestinationNickname() != null)
                 buf.append("peers for ").append(settings.getDestinationNickname());
             else if (settings.getDestination() != null)
-                buf.append("peers for ").append(settings.getDestination().toBase64());
+                buf.append("peers for [").append(settings.getDestination().toBase64(), 0, 6).append("]");
             else
                 buf.append("peers for Exploratory ");
             if (settings.isInbound())
                 buf.append(" Inbound");
             else
                 buf.append(" Outbound");
-            buf.append(" peers: ").append(rv);
+            buf.append(" peers: ");
+            for (int i = 0; i < rv.size(); i++) {
+                if (i > 0) {buf.append(", ");}
+                buf.append("[").append(rv.get(i).toBase64(), 0, 6).append("]");
+            }
             buf.append(", out of ").append(sz).append(" (not including us)");
             log.info(buf.toString());
         }
