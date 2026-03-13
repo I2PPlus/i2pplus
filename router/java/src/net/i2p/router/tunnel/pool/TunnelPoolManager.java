@@ -237,16 +237,16 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         return null;
     }
 
-    /** @return number of inbound exploratory tunnels */
-    public int getFreeTunnelCount() {return _inboundExploratory.size();}
+    /** @return number of valid (non-failed, non-expired) inbound exploratory tunnels */
+    public int getFreeTunnelCount() {return _inboundExploratory.getValidTunnelCount();}
 
-    /** @return number of outbound exploratory tunnels */
-    public int getOutboundTunnelCount() {return _outboundExploratory.size();}
+    /** @return number of valid (non-failed, non-expired) outbound exploratory tunnels */
+    public int getOutboundTunnelCount() {return _outboundExploratory.getValidTunnelCount();}
 
     public int getInboundClientTunnelCount() {
         int count = 0;
         for (TunnelPool pool : _clientInboundPools.values()) {
-            count += pool.listTunnels().size();
+            count += pool.getValidTunnelCount();
         }
         return count;
     }
@@ -254,7 +254,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     public int getOutboundClientTunnelCount() {
         int count = 0;
         for (TunnelPool pool : _clientOutboundPools.values()) {
-            count += pool.listTunnels().size();
+            count += pool.getValidTunnelCount();
         }
         return count;
     }
@@ -265,7 +265,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      */
     public int getOutboundClientTunnelCount(Hash destination)  {
         TunnelPool pool = _clientOutboundPools.get(destination);
-        if (pool != null) {return pool.getTunnelCount();}
+        if (pool != null) {return pool.getValidTunnelCount();}
         return 0;
     }
 

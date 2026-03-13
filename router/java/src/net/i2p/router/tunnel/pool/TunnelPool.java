@@ -605,7 +605,9 @@ public class TunnelPool {
     /**
      *  Track recently-added tunnel IDs to prevent duplicates.
      *  Uses a simple sliding window based on expiration time.
+     *  Window set to 10 minutes to handle slow tunnel builds.
      */
+    private static final long RECENTLY_ADDED_WINDOW = 10 * 60 * 1000;
     private final Map<TunnelId, Long> _recentlyAddedTunnels = new ConcurrentHashMap<>();
 
     /**
@@ -623,12 +625,15 @@ public class TunnelPool {
 
         // Check for duplicates using recent additions tracking
         Long addedTime = _recentlyAddedTunnels.get(gatewayId);
-        if (addedTime != null && now - addedTime < 60*1000) {
+        if (addedTime != null && now - addedTime < RECENTLY_ADDED_WINDOW) {
             if (_log.shouldWarn()) {
                 _log.warn(toString() + " -> Rejecting duplicate tunnel addition: " + info.getReceiveTunnelId(0));
             }
             return;
         }
+
+        // Cleanup old entries to prevent memory leak
+        _recentlyAddedTunnels.entrySet().removeIf(entry -> now - entry.getValue() > RECENTLY_ADDED_WINDOW);
 
         if (_log.shouldDebug()) {_log.debug(toString() + " -> Adding tunnel " + info);}
         LeaseSet ls = null;
