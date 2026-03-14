@@ -1648,12 +1648,12 @@ class Connection {
                     congestionOccurred();
                     _context.statManager().addRateData("stream.con.windowSizeAtCongestion", newWindowSize, _packet.getLifetime());
                     /*
-                     * The timeout for _this_ packet will be doubled below, but we also need to double the RTO for the _next_ packets.
-                     * See RFC 6298 section 5 item 5.5
-                     * This prevents being stuck at a window size of 1, retransmitting every packet,
-                     * never updating the RTT or RTO.
+                     * RTO doubling disabled - we rely on tunnel failover instead of TCP-style
+                     * backoff. Each retransmit uses a different tunnel due to short expiration,
+                     * so we keep a flat RTO for more predictable timing and faster failover.
+                     * Window size still shrinks for congestion control.
                      */
-                    _options.doubleRTO();
+                    // _options.doubleRTO();
 
                     if (_packet.getNumSends() == 1) {
                         _ssthresh = Math.max((int)(_bwEstimator.getBandwidthEstimate() * _options.getMinRTT()), 2);
