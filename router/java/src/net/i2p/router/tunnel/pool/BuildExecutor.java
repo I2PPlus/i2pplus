@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
@@ -45,11 +46,9 @@ class BuildExecutor implements Runnable {
     private final ConcurrentHashMap<Long, PooledTunnelCreatorConfig> _recentlyBuildingMap; // indexed by ptcc.getReplyMessageId()
     private volatile boolean _isRunning;
     private boolean _repoll;
-    // Increased from cores*2 to cores*4 for faster tunnel churn handling
-    // Makes build concurrency configurable via router.buildConcurrencyMultiplier property (default: 4)
     /**
      * Get the maximum number of concurrent tunnel builds allowed.
-     * Calculated based on CPU cores and configurable multiplier.
+     * Calculated based on CPU cores and configurable multiplier
      *
      * @return maximum concurrent builds allowed
      */
@@ -63,7 +62,7 @@ class BuildExecutor implements Runnable {
         }
         return result;
     }
-    private static final int LOOP_TIME = 500;
+    private static final int LOOP_TIME = 5000; // calculate required tunnels to build every 5s
     private static final int TUNNEL_POOLS = SystemVersion.isSlow() ? 24 : 48;
     private static final long GRACE_PERIOD = 60*1000; // accept replies up to a minute after we gave up on them
     private static final long[] RATES = { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR, RateConstants.ONE_DAY };
@@ -427,8 +426,22 @@ class BuildExecutor implements Runnable {
                             allowed = SystemVersion.isSlow() ? 3 : 8;
                         }
 
+                        // Limit builds per pool per pass (max 2 per destination)
+                        int maxBuildsPerPool = 2;
+                        Map<TunnelPool, Integer> buildsThisPass = new ConcurrentHashMap<>();
+
                         for (int i = 0; i < allowed && !wanted.isEmpty(); i++) {
                             TunnelPool pool = wanted.remove(0);
+
+                            // Check if we've already built too many for this pool this pass
+                            int buildsDone = buildsThisPass.getOrDefault(pool, 0);
+                            if (buildsDone >= maxBuildsPerPool) {
+                                // Put it back for next pass
+                                wanted.add(pool);
+                                continue;
+                            }
+                            buildsThisPass.put(pool, buildsDone + 1);
+
                             long bef = System.currentTimeMillis();
                             PooledTunnelCreatorConfig cfg = pool.configureNewTunnel();
                             if (cfg != null) {
@@ -448,6 +461,20 @@ class BuildExecutor implements Runnable {
                                 buildTunnel(cfg);
                             } else {
                                 i--; // didn't get config, retry another pool
+                            }
+                        }
+
+                        // Cancel excess in-progress builds to stay within budget
+                        for (TunnelPool pool : pools) {
+                            if (!pool.isAlive()) {
+                                continue;
+                            }
+                            int wantedCount = pool.getSettings().getTotalQuantity();
+                            int maxAllowed = Math.max(2, wantedCount + 2);
+                            int currentInProgress = pool.getInProgressCount();
+                            if (currentInProgress > maxAllowed) {
+                                int toCancel = currentInProgress - maxAllowed;
+                                pool.cancelExcessInProgress(toCancel);
                             }
                         }
                     }
