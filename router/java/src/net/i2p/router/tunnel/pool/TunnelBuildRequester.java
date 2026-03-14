@@ -253,8 +253,8 @@ public class TunnelBuildRequester {
                 else if (timeToExpire <= WINDOW_390S) expire390s++;
                 else expireLater++;
 
-                // Usable = above urgency threshold (consistent with adaptive algorithm)
-                if (timeToExpire > urgencyThreshold) usableCount++;
+                // Usable = above fixed threshold (3.5 minutes / 210s)
+                if (timeToExpire > WINDOW_210S) usableCount++;
 
                 // Collect urgent expirations for adaptive algorithm
                 if (timeToExpire < urgencyThreshold && urgentCount < urgentTimes.length) {
@@ -332,11 +332,10 @@ public class TunnelBuildRequester {
             urgentTimes[j + 1] = key;
         }
 
-        // If we need more than what's expiring soon, add the deficit (without PANIC multiplier)
-        // The PANIC_FACTOR is only applied to tunnels that ARE expiring soon in the loop below
+        // If we need more than what's expiring soon, add the deficit with PANIC_FACTOR multiplier
         int urgentCount = urgentTimes.length;
         if (remainingWanted > urgentCount) {
-            rv += remainingWanted - urgentCount;  // Just add what's missing, no multiplier
+            rv += PANIC_FACTOR * (remainingWanted - urgentCount);
             remainingWanted = urgentCount;
         }
 
@@ -357,10 +356,8 @@ public class TunnelBuildRequester {
     }
 
     private static int calculateConservativeBuilds(int remainingWanted, ExpirationProfile profile) {
-        // PROACTIVE: Replace tunnels entering pre-warm window (4-7 minutes before expiry)
-        // Cap to remainingWanted to prevent massive over-build when many tunnels exist
-        int preWarm = profile.expire390s() + profile.expire330s() + profile.expire270s();
-        int rv = Math.min(preWarm, remainingWanted);
+        // PROACTIVE: Unconditional pre-warm replacements (always 1:1)
+        int rv = profile.expire390s() + profile.expire330s() + profile.expire270s();
 
         // REACTIVE: Handle tunnels already below usable threshold (< 3.5 min)
         int needed = remainingWanted;
@@ -398,16 +395,31 @@ public class TunnelBuildRequester {
 
     private static int applyCaps(int requested, int wanted, int currentValidTunnelCount, int inProgress,
                                  boolean allowZeroHop, long lifetimeMs) {
-        // Hard cap: never have more than wanted + 2 total
-        int maxTunnels = Math.max(2, wanted + MAX_TUNNEL_BUFFER);
+        int rv = requested;
 
-        // Simple cap: total (existing + in-progress + requested) <= maxTunnels
-        int total = currentValidTunnelCount + inProgress + requested;
-        if (total > maxTunnels) {
-            int excess = total - maxTunnels;
-            requested = Math.max(0, requested - excess);
+        // Cap 1: Zero-hop mode shouldn't exceed wanted
+        if (allowZeroHop && rv > wanted) {
+            rv = wanted;
         }
 
-        return requested;
+        // Cap 2: Hard cap - never have more than wanted + buffer
+        int maxTunnels = Math.max(2, wanted + MAX_TUNNEL_BUFFER);
+
+        // Cap 3: Startup throttle - limit builds in first 60 seconds
+        if (lifetimeMs < STARTUP_THROTTLE_MS) {
+            int startupMax = Math.max(1, wanted / 2);
+            if (rv > startupMax) {
+                rv = startupMax;
+            }
+        }
+
+        // Apply hard limit: total (existing + in-progress + requested) <= maxTunnels
+        int total = currentValidTunnelCount + inProgress + rv;
+        if (total > maxTunnels) {
+            int excess = total - maxTunnels;
+            rv = Math.max(0, rv - excess);
+        }
+
+        return rv;
     }
 }

@@ -1364,7 +1364,9 @@ public class TunnelPool {
         cfg.setExpiration(expiration);
         if (!settings.isInbound()) {cfg.setPriority(settings.getPriority());}
 
-        if (_log.shouldDebug()) {_log.debug("Tunnel Pool created \n* Peers: " + peers + cfg);}
+        if (_log.shouldDebug()) {
+            _log.debug("Tunnel created for pool: " + cfg + "\n* Peers: " + peers);
+        }
         synchronized (_inProgress) {_inProgress.add(cfg);}
         return cfg;
     }
@@ -1379,7 +1381,7 @@ public class TunnelPool {
      */
     void buildComplete(PooledTunnelCreatorConfig cfg, BuildExecutor.Result result) {
         if (cfg.getTunnelPool() != this) {
-            _log.error("Wrong pool " + cfg + " for " + this, new Exception());
+            _log.error("Tunnel created for wrong pool: " + cfg + "-> Should have been for: " + this, new Exception());
             return;
         }
 
