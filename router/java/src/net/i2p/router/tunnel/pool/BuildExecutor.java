@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
@@ -17,6 +16,7 @@ import net.i2p.router.CommSystemFacade;
 import net.i2p.router.CommSystemFacade.Status;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelManagerFacade;
+import net.i2p.router.TunnelInfo;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateConstants;
 import net.i2p.stat.RateStat;
@@ -36,6 +36,10 @@ import net.i2p.util.SystemVersion;
  * As of 0.8.11, inbound request handling is done in a separate thread.
  */
 class BuildExecutor implements Runnable {
+    private static final int TUNNEL_LIFETIME_MS = 10*60*1000;
+    private static final int TUNNEL_MIN_EXPIRY_MS = 5*60*1000;
+    private static final int TUNNEL_TARGET_MIN = 4;
+    private static final int TUNNEL_TARGET_BUFFER = 2;
     private final ArrayList<Long> _recentBuildIds = new ArrayList<Long>(256);
     private final RouterContext _context;
     private final Log _log;
@@ -62,7 +66,7 @@ class BuildExecutor implements Runnable {
         }
         return result;
     }
-    private static final int LOOP_TIME = 5000; // calculate required tunnels to build every 5s
+    private static final int LOOP_TIME = 1000; // calculate required tunnels to build every 1s
     private static final int TUNNEL_POOLS = SystemVersion.isSlow() ? 24 : 48;
     private static final long GRACE_PERIOD = 60*1000; // accept replies up to a minute after we gave up on them
     private static final long[] RATES = { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR, RateConstants.ONE_DAY };
@@ -369,20 +373,13 @@ class BuildExecutor implements Runnable {
 
         while (_isRunning && !_manager.isShutdown()) {
             try {
-                _repoll = false; // reset repoll flag unless inbound requests arrive
+                _repoll = false;
                 _manager.listPools(pools);
 
-                // Collect pools that want tunnels built
-                for (int i = 0, size = pools.size(); i < size; i++) {
-                    TunnelPool pool = pools.get(i);
-                    if (!pool.isAlive()) {
-                        continue;
-                    }
-                    int howMany = pool.countHowManyToBuild();
-                    for (int j = 0; j < howMany; j++) {
-                        wanted.add(pool);
-                    }
-                }
+                // Simplified paired replenishment algorithm
+                // Target: max(4, wanted + 2) tunnels per direction with > 5 min expiry
+                wanted.clear();
+                calculatePairedBuilds(pools, wanted);
 
                 // Determine how many tunnels are allowed to build concurrently
                 int allowed = allowed(); // also expires timed out requests
@@ -416,32 +413,11 @@ class BuildExecutor implements Runnable {
                     }
                 } else {
                     if (allowed > 0 && !wanted.isEmpty()) {
-                        if (wanted.size() > 1) {
-                            Collections.shuffle(wanted, _context.random());
-                            boolean preferEmpty = _context.random().nextInt(3) != 0;
-                            DataHelper.sort(wanted, new TunnelPoolComparator(preferEmpty));
-                        }
-
-                        // Cap consecutive builds
-                        if (allowed > 3) {
-                            allowed = SystemVersion.isSlow() ? 3 : 8;
-                        }
-
-                        // Limit builds per pool per pass (max 2 per destination)
-                        int maxBuildsPerPool = 2;
-                        Map<TunnelPool, Integer> buildsThisPass = new ConcurrentHashMap<>();
+                        // Shuffle for randomness
+                        Collections.shuffle(wanted, _context.random());
 
                         for (int i = 0; i < allowed && !wanted.isEmpty(); i++) {
                             TunnelPool pool = wanted.remove(0);
-
-                            // Check if we've already built too many for this pool this pass
-                            int buildsDone = buildsThisPass.getOrDefault(pool, 0);
-                            if (buildsDone >= maxBuildsPerPool) {
-                                // Put it back for next pass
-                                wanted.add(pool);
-                                continue;
-                            }
-                            buildsThisPass.put(pool, buildsDone + 1);
 
                             long bef = System.currentTimeMillis();
                             PooledTunnelCreatorConfig cfg = pool.configureNewTunnel();
@@ -450,7 +426,7 @@ class BuildExecutor implements Runnable {
                                     if (_log.shouldDebug()) {
                                         _log.debug("We don't need more fallbacks for " + pool);
                                     }
-                                    i--; // 0-hop, free up slot to continue building others
+                                    i--;
                                     pool.buildComplete(cfg, Result.OTHER_FAILURE);
                                     continue;
                                 }
@@ -461,7 +437,7 @@ class BuildExecutor implements Runnable {
                                 }
                                 buildTunnel(cfg);
                             } else {
-                                i--; // didn't get config, retry another pool
+                                i--;
                             }
                         }
 
@@ -727,6 +703,50 @@ class BuildExecutor implements Runnable {
             }
         }
         return rv;
+    }
+
+    /**
+     * Simple replenishment - each pool builds independently to reach its target.
+     */
+    private void calculatePairedBuilds(List<TunnelPool> pools, List<TunnelPool> wanted) {
+        long now = _context.clock().now();
+
+        for (TunnelPool pool : pools) {
+            if (!pool.isAlive()) continue;
+
+            int wantedCount = pool.getSettings().getTotalQuantity();
+            String nickname = pool.getSettings().getDestinationNickname();
+            boolean isPing = nickname != null && nickname.startsWith("Ping");
+
+            // For ping tunnels, target is just the wanted count (typically 1 in, 1 out)
+            // For others, use min 4 or wanted + 2
+            int target = isPing ? wantedCount : Math.max(TUNNEL_TARGET_MIN, wantedCount + TUNNEL_TARGET_BUFFER);
+
+            // Count tunnels with > 5 min expiry
+            int current = countWithExpiry(pool, now, TUNNEL_MIN_EXPIRY_MS);
+            int inProgress = pool.getInProgressCount();
+            int total = current + inProgress;
+
+            // Add pool multiple times if needs more
+            while (total < target) {
+                wanted.add(pool);
+                total++;
+            }
+        }
+    }
+
+    /**
+     * Count tunnels with expiry > minExpiryMs from now
+     */
+    private int countWithExpiry(TunnelPool pool, long now, int minExpiryMs) {
+        int count = 0;
+        List<TunnelInfo> tunnels = pool.listTunnels();
+        for (TunnelInfo info : tunnels) {
+            if (info.getExpiration() - now > minExpiryMs) {
+                count++;
+            }
+        }
+        return count;
     }
 
 }
