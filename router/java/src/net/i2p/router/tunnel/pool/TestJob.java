@@ -772,10 +772,10 @@ public class TestJob extends JobImpl {
                 isExploratory ? "tunnel.testExploratoryFailedCompletelyTime" : "tunnel.testFailedCompletelyTime",
                 timeToFail);
 
-            // Immediately remove tunnel from pool after 2 consecutive failures
+            // Immediately remove tunnel from pool after 5 consecutive failures
             // This ensures failed tunnels don't remain in the pool consuming resources
             if (_log.shouldWarn()) {
-                _log.warn((isExploratory ? "Exploratory tunnel" : "Tunnel") + " failed 2 consecutive tests → Removing from pool: " + _cfg);
+                _log.warn((isExploratory ? "Exploratory tunnel" : "Tunnel") + " failed 5 consecutive tests → Removing from pool: " + _cfg);
             }
 
             // Force immediate tunnel removal by marking it as completely failed

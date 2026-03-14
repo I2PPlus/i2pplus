@@ -332,7 +332,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     /**
      * Called when a test fails.
      * Updates the test status based on consecutive failure count.
-     * Only mark as FAILED after MAX_CONSECUTIVE_TEST_FAILURES (2) failures -
+     * Only mark as FAILED after MAX_CONSECUTIVE_TEST_FAILURES (5) failures -
      * before that, it's just FAILING and still counts as a valid tunnel.
      * @since 0.9.68+
      */

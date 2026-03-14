@@ -1144,7 +1144,14 @@ public class TunnelPool {
         if (!settings.isInbound()) {cfg.setPriority(settings.getPriority());}
 
         if (_log.shouldDebug()) {
-            _log.debug("Tunnel created for pool: " + cfg + "\n* Peers: " + peers);
+            StringBuilder sb = new StringBuilder("Tunnel created for pool: " + cfg);
+            if (peers != null) {
+                sb.append("\n* Peers: ");
+                for (int i = 0; i < peers.size(); i++) {
+                    if (i > 0) sb.append("[").append(peers.get(i).toBase64().substring(0,6)).append("] ");
+                }
+            }
+            _log.debug(sb.toString());
         }
         synchronized (_inProgress) {_inProgress.add(cfg);}
         return cfg;

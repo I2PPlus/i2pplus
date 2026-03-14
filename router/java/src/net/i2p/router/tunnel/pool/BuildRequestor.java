@@ -344,9 +344,9 @@ abstract class BuildRequestor {
         }
 
         if (log.shouldInfo()) {
-            log.info("Sending Inbound TunnelBuildRequest [MsgID " + msg.getUniqueId() + "] via " + pairedTunnel +
-                     " to [" + ibgw.toBase64().substring(0, 6) + "] for " + cfg +
-                     " -> Awaiting reply [MsgID " + cfg.getReplyMessageId() + "]...");
+            log.info("Sending Inbound TunnelBuildRequest [MsgID " + msg.getUniqueId() + "] for " + cfg +
+                     "\n* Via: " + pairedTunnel + " to [" + ibgw.toBase64().substring(0,6) +
+                     "] -> Awaiting reply [MsgID " + cfg.getReplyMessageId() + "]...");
         }
         ctx.tunnelDispatcher().dispatchOutbound(msg, pairedTunnel.getSendTunnelId(0), ibgw);
     }
@@ -356,8 +356,8 @@ abstract class BuildRequestor {
                                             BuildExecutor exec, Log log) {
         Hash nextHop = cfg.getPeer(1);
         if (log.shouldInfo()) {
-            log.info("Sending outbound TunnelBuildRequest direct to [" + nextHop.toBase64().substring(0, 6) + "] for " + cfg +
-                     " -> Reply via " + pairedTunnel + " [MsgID " + msg.getUniqueId() + "]");
+            log.info("Sending outbound TunnelBuildRequest direct to [" + nextHop.toBase64().substring(0,6) + "] for " + cfg +
+                     "\n* Reply via: " + pairedTunnel + " [MsgID " + msg.getUniqueId() + "]");
         }
 
         // Add fuzz to expiration to obscure tunnel structure
