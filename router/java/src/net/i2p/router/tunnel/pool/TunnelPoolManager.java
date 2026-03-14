@@ -669,7 +669,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         double avg = getGlobalAverageLatency();
         if (avg <= 0) return;
 
-        double threshold = avg * 2;
+        double threshold = avg * 3 / 2;
 
         List<TunnelPool> pools = new ArrayList<TunnelPool>();
         listPools(pools);
