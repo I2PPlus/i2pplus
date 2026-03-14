@@ -32,6 +32,7 @@ tr.failed .testFailed{animation:none}
 #tunnels .poolsummary .inCount,#tunnels .poolsummary .outCount,#tunnels .poolsummary .inBuild,#tunnels .poolsummary .outBuild{padding:8px 8px 8px 22px;font-size:105%;background:url(/themes/console/images/inbound.svg) no-repeat left center/18px,var(--th)}
 #tunnels .poolsummary .outCount,#tunnels .poolsummary .outBuild{background-image:url(/themes/console/images/outbound.svg),var(--th)}
 #tunnels .poolsummary .outBuild{padding-right:10px}
+.inBuild.building,.outBuild.building{animation:building 1.5s infinite}
 #tunnels .poolsummary .inBuild:not(.building),#tunnels .poolsummary .outBuild:not(.building){background-blend-mode:luminosity}
 #tunnels .poolsummary #sep{background:url(/themes/console/images/jobs.svg) no-repeat right 4px center/20px,var(--th)}
 #tunnels .poolsummary #sep{width:90%}
@@ -44,3 +45,4 @@ tr.failed .testFailed{animation:none}
 #tunnels .status span{display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:middle}
 
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1.1)}50%{opacity:.7;transform:scale(.9)}}
+@keyframes building{0,100%{filter:saturate(1)}50%{filter:saturate(1.5) brightness(1.3)}}
