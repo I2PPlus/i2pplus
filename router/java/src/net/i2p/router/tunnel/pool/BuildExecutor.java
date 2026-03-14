@@ -404,10 +404,11 @@ class BuildExecutor implements Runnable {
                     synchronized (_currentlyBuilding) {
                         if (!_repoll) {
                             if (_log.shouldDebug()) {
-                                _log.debug("No tunnel to build with (Allowed / Requested: " + allowed + " / " + wanted.size() + ") -> Waiting for a moment...");
+                                _log.debug("No tunnel to build with (Allowed / Requested: " + allowed + " / " +
+                                           wanted.size() + ") -> Waiting for a moment...");
                             }
                             try {
-                                _currentlyBuilding.wait(500 + _context.random().nextInt(500));
+                                _currentlyBuilding.wait(100);
                             } catch (InterruptedException ie) {
                                 // interrupted wait, proceed
                             }
@@ -421,7 +422,7 @@ class BuildExecutor implements Runnable {
                             DataHelper.sort(wanted, new TunnelPoolComparator(preferEmpty));
                         }
 
-                        // Cap consecutive builds; more on slow systems
+                        // Cap consecutive builds
                         if (allowed > 3) {
                             allowed = SystemVersion.isSlow() ? 3 : 8;
                         }
@@ -479,12 +480,9 @@ class BuildExecutor implements Runnable {
                         }
                     }
 
-                    long lag = _context.jobQueue().getMaxLag();
-                    int cpuloadavg = SystemVersion.getCPULoadAvg();
-                    boolean highload = lag > 1000 && cpuloadavg > 98;
                     synchronized (_currentlyBuilding) {
                         if (!_repoll) {
-                            int delay = (SystemVersion.isSlow() || highload) ? LOOP_TIME : LOOP_TIME / 2;
+                            int delay = LOOP_TIME;
                             try {
                                 _currentlyBuilding.wait(delay);
                             } catch (InterruptedException ie) {
@@ -503,6 +501,13 @@ class BuildExecutor implements Runnable {
             }
             wanted.clear();
             pools.clear();
+
+            // Always delay between iterations to prevent rapid spinning
+            try {
+                Thread.sleep(LOOP_TIME);
+            } catch (InterruptedException ie) {
+                // ignore
+            }
         }
 
         if (_log.shouldInfo()) {
