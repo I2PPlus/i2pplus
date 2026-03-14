@@ -245,6 +245,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     /** @return number of valid (non-failed, non-expired) outbound exploratory tunnels */
     public int getOutboundTunnelCount() {return _outboundExploratory.getValidTunnelCount();}
 
+    /** @return number of valid (non-failed, non-expired) inbound client tunnels across all destinations */
     public int getInboundClientTunnelCount() {
         int count = 0;
         for (TunnelPool pool : _clientInboundPools.values()) {
@@ -253,6 +254,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         return count;
     }
 
+    /** @return number of valid (non-failed, non-expired) outbound client tunnels across all destinations */
     public int getOutboundClientTunnelCount() {
         int count = 0;
         for (TunnelPool pool : _clientOutboundPools.values()) {
@@ -262,7 +264,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
-     *  Use to verify a tunnel pool is alive
+     *  Use to verify a tunnel pool is alive.
+     *  @return number of valid outbound client tunnels for the given destination
      *  @since 0.7.11
      */
     public int getOutboundClientTunnelCount(Hash destination)  {
@@ -272,7 +275,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
-     *  Use to verify a tunnel pool is alive
+     *  Use to verify a tunnel pool is alive.
      *  @return number of valid inbound client tunnels for the given destination
      *  @since 0.9.68+
      */
@@ -282,11 +285,14 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         return 0;
     }
 
+    /** Get the number of tunnels we're participating in as a gateway or endpoint. */
     public int getParticipatingCount() { return _context.tunnelDispatcher().getParticipatingCount(); }
 
+    /** Get the expiration time of the last participating tunnel. */
     public long getLastParticipatingExpiration() { return _context.tunnelDispatcher().getLastParticipatingExpiration(); }
 
     /**
+     *  Get the share ratio of participating tunnels.
      *  @return (number of part. tunnels) / (estimated total number of hops in our expl.+client tunnels)
      *  We just use length setting, not variance, for speed
      *  @since 0.7.10
@@ -305,6 +311,12 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         return Math.min(part / (double) count, MAX_SHARE_RATIO);
     }
 
+    /**
+     *  Check if a tunnel is valid and belongs to the client's pool.
+     *  @param client destination hash
+     *  @param tunnel tunnel to validate
+     *  @return true if the tunnel is valid and belongs to the client's pool
+     */
     public boolean isValidTunnel(Hash client, TunnelInfo tunnel) {
         if (tunnel.getTunnelFailed()) {return false;}
         if (tunnel.getExpiration() < _context.clock().now()) {return false;}
@@ -315,34 +327,52 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         return pool.listTunnels().contains(tunnel);
     }
 
-    /** exploratory */
+    /** Get the inbound exploratory tunnel pool settings. */
     public TunnelPoolSettings getInboundSettings() { return _inboundExploratory.getSettings(); }
 
-    /** exploratory */
+    /** Get the outbound exploratory tunnel pool settings. */
     public TunnelPoolSettings getOutboundSettings() { return _outboundExploratory.getSettings(); }
 
-    /** exploratory */
+    /** Set the inbound exploratory tunnel pool settings. */
     public void setInboundSettings(TunnelPoolSettings settings) { _inboundExploratory.setSettings(settings); }
 
-    /** exploratory */
+    /** Set the outbound exploratory tunnel pool settings. */
     public void setOutboundSettings(TunnelPoolSettings settings) { _outboundExploratory.setSettings(settings); }
 
+    /**
+     *  Get settings for a client's inbound tunnel pool.
+     *  @param client destination hash
+     *  @return settings or null if not found
+     */
     public TunnelPoolSettings getInboundSettings(Hash client) {
         TunnelPool pool = _clientInboundPools.get(client);
         if (pool != null) {return pool.getSettings();}
         else {return null;}
     }
 
+    /**
+     *  Get settings for a client's outbound tunnel pool.
+     *  @param client destination hash
+     *  @return settings or null if not found
+     */
     public TunnelPoolSettings getOutboundSettings(Hash client) {
         TunnelPool pool = _clientOutboundPools.get(client);
         if (pool != null) {return pool.getSettings();}
         else {return null;}
     }
 
+    /**
+     *  Set settings for a client's inbound tunnel pool.
+     *  @param client destination hash
+     */
     public void setInboundSettings(Hash client, TunnelPoolSettings settings) {
         setSettings(_clientInboundPools, client, settings);
     }
 
+    /**
+     *  Set settings for a client's outbound tunnel pool.
+     *  @param client destination hash
+     */
     public void setOutboundSettings(Hash client, TunnelPoolSettings settings) {
         setSettings(_clientOutboundPools, client, settings);
     }
@@ -352,6 +382,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         if (pool != null) {pool.setSettings(settings);}
     }
 
+    /** Restart all tunnel handlers and rebuild all tunnels */
     public synchronized void restart() {
         _handler.restart();
         _executor.restart();
@@ -507,12 +538,12 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     public synchronized void removeTunnels(Hash destination) {
         if (destination == null) return;
         if (_log.shouldDebug()) {
-            _log.debug("Removing tunnel pool for client [" + destination.toBase32().substring(0,8) + "]");
+            _log.debug("Removing tunnel from client pool [" + destination.toBase32().substring(0,8) + "]");
         }
         if (_context.clientManager().isLocal(destination)) {
             // race with buildTunnels() on restart of a client
             if (_log.shouldWarn()) {
-                _log.warn("Not removing tunnel pool for [" + destination.toBase32().substring(0,8) + "] -> Still registered with ClientManager");
+                _log.warn("Not removing tunnel from client pool [" + destination.toBase32().substring(0,8) + "] -> Still registered with ClientManager");
             }
             return;
         }
@@ -539,11 +570,13 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         }
     }
 
+    /** @return true if tunnel testing is disabled */
     public boolean disableTunnelTesting() {
         if (_context.getProperty(PROP_DISABLE_TUNNEL_TESTING) == null) {return false;}
         else {return _context.getBooleanProperty(PROP_DISABLE_TUNNEL_TESTING);}
     }
 
+    /** Start the tunnel pool manager and build initial tunnels */
     public synchronized void startup() {
         _isShutdown = false;
         if (!_executor.isRunning()) {
@@ -562,6 +595,9 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         // try to build up longer tunnels
         _context.jobQueue().addJob(new BootstrapPool(_context, _inboundExploratory));
         _context.jobQueue().addJob(new BootstrapPool(_context, _outboundExploratory));
+
+        // remove slow tunnels job - runs every minute
+        _context.jobQueue().addJob(new RemoveSlowTunnelsJob(_context, this));
     }
 
     private static class BootstrapPool extends JobImpl {
@@ -574,6 +610,93 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         public String getName() { return "Bootstrap Tunnel Pool"; }
         public void runJob() {
             _pool.buildFallback();
+        }
+    }
+
+    private static class RemoveSlowTunnelsJob extends JobImpl {
+        private final TunnelPoolManager _mgr;
+        private static final long RUN_INTERVAL = 30*1000; // 30 seconds
+        private static final long STARTUP_DELAY = 2*60*1000; // 2 minutes after startup
+
+        public RemoveSlowTunnelsJob(RouterContext ctx, TunnelPoolManager mgr) {
+            super(ctx);
+            _mgr = mgr;
+            getTiming().setStartAfter(ctx.clock().now() + STARTUP_DELAY);
+        }
+
+        public String getName() { return "Remove Slow Tunnels Job"; }
+
+        public void runJob() {
+            if (_mgr.isShutdown()) return;
+            _mgr.replaceSlowTunnels();
+            if (_mgr.isShutdown()) return;
+            getTiming().setStartAfter(getContext().clock().now() + RUN_INTERVAL);
+            getContext().jobQueue().addJob(this);
+        }
+    }
+
+    /**
+     * Calculate the global average latency across all tunnel pools.
+     * @return average latency in ms, or -1 if no data
+     * @since 0.9.69+
+     */
+    public double getGlobalAverageLatency() {
+        List<TunnelPool> pools = new ArrayList<TunnelPool>();
+        listPools(pools);
+
+        long total = 0;
+        int count = 0;
+        for (TunnelPool pool : pools) {
+            for (TunnelInfo info : pool.listTunnels()) {
+                int lat = info.getLastLatency();
+                if (lat > 0) {
+                    total += lat;
+                    count++;
+                }
+            }
+        }
+        return count > 0 ? (double) total / count : -1;
+    }
+
+    /**
+     * Find and remove tunnels exceeding 2x the global average latency.
+     * Does not blame peers for the removal.
+     * Removes all such tunnels per pool if pool has more tunnels than configured quantity,
+     * but won't go below the configured quantity.
+     * @since 0.9.69+
+     */
+    public void replaceSlowTunnels() {
+        double avg = getGlobalAverageLatency();
+        if (avg <= 0) return;
+
+        double threshold = avg * 2;
+
+        List<TunnelPool> pools = new ArrayList<TunnelPool>();
+        listPools(pools);
+
+        for (TunnelPool pool : pools) {
+            int currentCount = pool.getTunnelCount();
+            int configuredQty = pool.getSettings().getQuantity();
+
+            if (currentCount <= configuredQty) continue;
+
+            int minToKeep = configuredQty;
+            int removed = 0;
+            int maxToRemove = currentCount - minToKeep;
+
+            for (TunnelInfo info : pool.listTunnels()) {
+                if (removed >= maxToRemove) break;
+                int lat = info.getLastLatency();
+                if (lat > threshold) {
+                    pool.removeTunnel(info);
+                    removed++;
+                }
+            }
+
+            if (removed > 0 && _log.shouldWarn()) {
+                _log.warn("Removing " + removed + " slow tunnel(s) from " + pool + " (latency > " +
+                          String.format("%.0f", threshold) + "ms, avg: " + String.format("%.0f", avg) + "ms)");
+            }
         }
     }
 
@@ -605,10 +728,13 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      */
     void tunnelFailed() { _executor.repoll(); }
 
+    /** @return the build executor */
     BuildExecutor getExecutor() { return _executor; }
 
+    /** @return true if the manager has been shut down */
     boolean isShutdown() { return _isShutdown; }
 
+    /** @return size of the inbound build queue */
     public int getInboundBuildQueueSize() { return _handler.getInboundBuildQueueSize(); }
 
     /** @deprecated moved to routerconsole */
@@ -667,6 +793,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         return rv;
     }
 
+    /** @return true if the router is firewalled */
     public boolean isFirewalled() {
         return _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.REJECT_UNSOLICITED ||
                _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_OK ||
