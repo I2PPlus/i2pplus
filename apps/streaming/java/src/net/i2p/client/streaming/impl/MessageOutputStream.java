@@ -86,7 +86,7 @@ class MessageOutputStream extends OutputStream {
     /**
      * Default passive flush delay optimized for lower latency while maintaining stability.
      */
-    private static final int DEFAULT_PASSIVE_FLUSH_DELAY = SystemVersion.isSlow() ? 150 : 50;
+    private static final int DEFAULT_PASSIVE_FLUSH_DELAY = SystemVersion.isSlow() ? 200 : 100;
     private static final String PROP_PASSIVE_FLUSH_DELAY = "router.passiveFlushDelay";
 
     /**
@@ -694,10 +694,16 @@ class MessageOutputStream extends OutputStream {
             _enqueued = false;
 
             long timeLeft = (_lastBuffered + _passiveFlushDelay - _context.clock().now());
-            // Only log if delayed (negative timeLeft) or there's actual work
-            if (_log.shouldDebug() && timeLeft <= 0) {
-                _log.debug("Flusher fired, delayed " + (-timeLeft) + "ms");
+            // Only log if delayed significantly (> 100ms) to reduce log spam
+            if (_log.shouldDebug() && timeLeft <= -100) {
+                _log.debug("Flusher delayed " + (-timeLeft) + "ms");
             }
+
+            // Don't reschedule if there's no data to flush
+            if (_valid <= 0) {
+                return;
+            }
+
             if (timeLeft > 0) {
                 enqueue();
                 return;

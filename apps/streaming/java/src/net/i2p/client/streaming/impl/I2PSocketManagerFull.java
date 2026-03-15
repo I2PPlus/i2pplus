@@ -226,10 +226,12 @@ public class I2PSocketManagerFull implements I2PSocketManager {
         _serverSocket = new I2PServerSocketFull(this);
 
         if (_log.shouldInfo()) {
-            _log.info("Socket manager created. \n\tDefault Options:\n" + _defaultOptions.toString()
-                      .replace(" ", "\n\t").replace("=", " = ")
-                      + "\n\n\tOriginal Properties:\n\t" + opts.toString()
-                      .replace(",", "\n\t").replace("{", "").replace("}", "").replace("=", " = ")); // TODO: fix "line separator=,"
+            StringBuilder buf = new StringBuilder(256);
+            buf.append("Socket manager created.\n* Default Options:\n\t")
+               .append(_defaultOptions.toString().replace(" ", "\n\t").replace("=", " = "))
+               .append("\n* Original Properties:\n\t")
+               .append(opts.toString().replace(",", "\n\t").replace("{", "").replace("}", "").replace("=", " = "));
+            _log.info(buf.toString());
         }
         debugInit(context);
     }
