@@ -22,7 +22,7 @@ import net.i2p.util.SystemVersion;
 class ExploratoryPeerSelector extends TunnelPeerSelector {
 
     private static String formatExcludedPeers(Set<Hash> peers) {
-        if (peers == null || peers.isEmpty()) {return "[]";}
+        if (peers == null || peers.isEmpty()) {return "[no exclusions]";}
         StringBuilder sb = new StringBuilder(peers.size() * 10);
         int count = 0;
         for (Hash h : peers) {
@@ -78,7 +78,7 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
         boolean hiddenOutbound = hidden && !isInbound;
         boolean lowOutbound = nonzero && !isInbound && !ctx.commSystem().haveHighOutboundCapacity();
         int ipRestriction =  (ctx.getBooleanProperty("i2np.allowLocal") || length <= 1) ? 0 : settings.getIPRestriction();
-        MaskedIPSet ipSet = ipRestriction > 0 ? new MaskedIPSet(16) : null;
+        MaskedIPSet ipSet = ipRestriction > 0 ? new MaskedIPSet(ipRestriction) : null;
 
         ArrayList<Hash> rv = new ArrayList<>(length + 3);
 
@@ -193,6 +193,10 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
                 if (log.shouldInfo())
                     log.info("EPS SNFP " + length + (isInbound ? " IB " : " OB ") + formatExcludedPeers(exclude));
                 ctx.profileOrganizer().selectNotFailingPeers(length, exclude, matches, false, ipRestriction, ipSet);
+                if (matches.isEmpty()) {
+                    // Fallback: try fast peers if not-failing is empty
+                    ctx.profileOrganizer().selectFastPeers(length, exclude, matches, ipRestriction, ipSet);
+                }
             }
             matches.remove(ctx.routerHash());
             rv.addAll(matches);
@@ -200,8 +204,6 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
         if (log.shouldInfo())
             log.info("EPS " + length + (isInbound ? " IB " : " OB ") + "final: " + formatExcludedPeers(exclude));
 
-        if (rv.size() > 1)
-            orderPeers(rv, settings.getRandomKey());
         if (closestHop != null) {
             if (isInbound)
                 rv.add(0, closestHop);
@@ -217,6 +219,8 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
                 rv.add(0, furthestHop);
             length++;
         }
+        if (rv.size() > 1)
+            orderPeers(rv, settings.getRandomKey());
         //if (length != rv.size() && log.shouldWarn())
         //    log.warn("EPS requested " + length + " got " + rv.size() + ": " + DataHelper.toString(rv));
         //else if (log.shouldDebug())

@@ -91,7 +91,7 @@ class BuildReplyHandler {
     public Result[] decrypt(TunnelBuildReplyMessage reply, TunnelCreatorConfig cfg, List<Integer> recordOrder) {
         if (reply.getRecordCount() != recordOrder.size()) {
             // somebody messed with us
-            log.error("Corrupted build reply, expected " + recordOrder.size() + " records, got " + reply.getRecordCount());
+            log.error("Corrupted build reply -> Expected " + recordOrder.size() + " records, got " + reply.getRecordCount());
             return null;
         }
         Result rv[] = new Result[reply.getRecordCount()];
@@ -100,7 +100,7 @@ class BuildReplyHandler {
             if (BuildMessageGenerator.isBlank(cfg, hop)) {
                 // self or unused...
                 if (log.shouldDebug())
-                    log.debug(reply.getUniqueId() + ": skipping record " + i + "/" + hop + " for: " + cfg);
+                    log.debug(reply.getUniqueId() + ": Skipping record for: " + cfg + " [" + i + "/" + hop + "]");
                 if (cfg.isInbound() && hop + 1 == cfg.getLength()) { // IBEP
                     byte[] h1 = new byte[Hash.HASH_LENGTH];
                     byte[] data = reply.getRecord(i).getData();
@@ -122,11 +122,11 @@ class BuildReplyHandler {
                 Result res = decryptRecord(reply, cfg, i, hop);
                 if (res.code == -1) {
                     if (log.shouldWarn())
-                        log.warn(reply.getUniqueId() + ": decrypt record " + i + "/" + hop + " fail: " + cfg);
+                        log.warn(reply.getUniqueId() + ": Failed to decrypt record for: " + cfg + " [" + i + "/" + hop + "]");
                     return null;
                 } else {
                     if (log.shouldDebug())
-                        log.debug(reply.getUniqueId() + ": decrypt record " + i + "/" + hop + " code: " + res.code + " for " + cfg);
+                        log.debug(reply.getUniqueId() + ": Decrypting record for: " + cfg + " [" + i + "/" + hop + "] -> Code: " + res.code);
                 }
                 rv[i] = res;
             }

@@ -1,9 +1,9 @@
 2026-03-14 dr|z3d
-  * Router:
-    - Refactor tunnel pool building logic into separate TunnelBuildRequester class
-    - Add cancellation of excess in-progress tunnel builds
-    - Limit builds to max 2 per pool per pass
-    - Fix over-building at startup with improved capping logic
+  * Router: Simplify local tunnel replacement strategy, increase redundancy
+  * Streaming:
+    - Increase max resends from 8 to 30 for more tunnel failover attempts
+    - Increase initial window size from 12 to 16 for better throughput
+    - Disable RTO doubling, rely on tunnel failover instead
 
 2026-03-13 dr|z3d
  * Console: Add worker-based sorting for large tables (>100 rows)

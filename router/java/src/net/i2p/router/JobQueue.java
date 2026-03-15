@@ -86,8 +86,8 @@ public class JobQueue {
     /** Don't enforce fatal limits until the router has been up for this long */
     private final static long DEFAULT_WARMUP_TIME = 15*60*1000;
     private long _warmupTime = DEFAULT_WARMUP_TIME;
-    /** Max ready and waiting jobs before we start dropping 'em */
-    private final static int DEFAULT_MAX_WAITING_JOBS = SystemVersion.isSlow() ? 100 : 200;
+    /** Max ready and waiting jobs before we start dropping 'em - scale with runner count */
+    private final static int DEFAULT_MAX_WAITING_JOBS = SystemVersion.isSlow() ? 100 : Math.max(256, Math.min(RUNNERS * 16, 1024));
     private int _maxWaitingJobs = DEFAULT_MAX_WAITING_JOBS;
     private final static long MIN_LAG_TO_DROP = SystemVersion.isSlow() ? 500 : 200;
 
@@ -336,10 +336,13 @@ public class JobQueue {
         if (!_allowParallelOperation) return false;
         if (numReady > _context.getProperty(PROP_MAX_WAITING_JOBS, DEFAULT_MAX_WAITING_JOBS)) {
             Class<? extends Job> cls = job.getClass();
+            String jobName = cls.getName();
             boolean disableTunnelTests = _context.getBooleanProperty("router.disableTunnelTesting");
             boolean shouldDrop = getMaxLag() >= MIN_LAG_TO_DROP;
             if (shouldDrop) {
                 if (cls == RepublishLeaseSetJob.class) {return false;}
+                // Exclude critical tunnel management jobs from dropping
+                if (jobName.equals("net.i2p.router.tunnel.pool.TunnelPoolManager$RemoveSlowTunnelsJob")) {return false;}
                 if ((!disableTunnelTests && cls == TestJob.class) || cls == PeerTestJob.class) {
                     return true;
                 }
@@ -349,7 +352,7 @@ public class JobQueue {
                     cls == HandleFloodfillDatabaseLookupMessageJob.class ||
                     cls == HandleGarlicMessageJob.class ||
                     cls == IterativeSearchJob.class ||
-                    cls.getName().equals("net.i2p.router.networkdb.kademlia.IterativeTimeoutJob")) {
+                    jobName.equals("net.i2p.router.networkdb.kademlia.IterativeTimeoutJob")) {
                     return true;
                 }
             }
@@ -650,7 +653,7 @@ public class JobQueue {
                             boolean isSlow = SystemVersion.isSlow();
                             if (timeToWait < 0) {timeToWait = highLoad ? 50 : 10;}
                             else if (timeToWait < 10) {timeToWait = highLoad ? 20 : 5;}
-                            else if (timeToWait > 10*1000) {timeToWait = highLoad ? 1000 : 500;}
+                            else if (timeToWait >= 10*1000) {timeToWait = highLoad ? 1000 : 500;}
                             else if (!isSlow && timeToWait > 2000) {timeToWait = highLoad ? 3*1000 : 2*1000;}
                             _nextPumperRun = _context.clock().now() + timeToWait;
                             _jobLock.wait(timeToWait);
@@ -747,17 +750,16 @@ public class JobQueue {
     }
 
     private static class JobComparator implements Comparator<Job>, Serializable {
-         public int compare(Job l, Job r) {
-             if (l.equals(r)) return 0;
-             long ld = l.getTiming().getStartAfter() - r.getTiming().getStartAfter();
-             if (ld < 0) return -1;
-             if (ld > 0) return 1;
-             ld = l.getJobId() - r.getJobId();
-             if (ld < 0) return -1;
-             if (ld > 0) return 1;
-             return l.hashCode() - r.hashCode();
-        }
-    }
+          public int compare(Job l, Job r) {
+              if (l.equals(r)) return 0;
+              long ld = l.getTiming().getStartAfter() - r.getTiming().getStartAfter();
+              if (ld < 0) return -1;
+              if (ld > 0) return 1;
+              // Use Long.compare to avoid overflow when comparing job IDs
+              // Job IDs are unique, so this should be sufficient
+              return Long.compare(l.getJobId(), r.getJobId());
+         }
+     }
 
     /**
      * Collect statistics about jobs currently in the queue.

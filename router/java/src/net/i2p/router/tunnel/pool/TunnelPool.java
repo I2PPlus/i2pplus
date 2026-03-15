@@ -1053,17 +1053,6 @@ public class TunnelPool {
     }
 
     /**
-     *  Gather the data to see how many tunnels to build, and then actually compute that value.
-     *  Now handled by BuildExecutor.calculatePairedBuilds() instead.
-     *
-     *  @return 0 (dead code - kept for API compatibility)
-     *  @deprecated
-     */
-    int countHowManyToBuild() {
-        return 0;
-    }
-
-    /**
      *  This only sets the peers and creation/expiration times in the configuration.
      *  For the crypto, see BuildRequestor and BuildMessageGenerator.
      *

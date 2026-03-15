@@ -47,6 +47,9 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     private final int DEFAULT_MAX_PCT_TUNNELS;
     private final int STARTUP_MAX_PCT_TUNNELS;
     private static final String PROP_DISABLE_TUNNEL_TESTING = "router.disableTunnelTesting";
+    private static final String PROP_SLOW_TUNNEL_THRESHOLD = "router.tunnel.slowThreshold";
+    private static final String PROP_SLOW_TUNNEL_MIN = "router.tunnel.slowThresholdMin";
+    private static final int DEFAULT_SLOW_THRESHOLD_MS = 0; // 0 means use 1.5x average
     private static final int MIN_KBPS_TWO_HANDLERS = 32;
     private static final int MIN_KBPS_THREE_HANDLERS = 128;
     private static final double MAX_SHARE_RATIO = 100000d;
@@ -615,8 +618,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
     private static class RemoveSlowTunnelsJob extends JobImpl {
         private final TunnelPoolManager _mgr;
-        private static final long RUN_INTERVAL = 30*1000; // 30 seconds
-        private static final long STARTUP_DELAY = 2*60*1000; // 2 minutes after startup
+        private static final long RUN_INTERVAL = 10*1000; // 10s
+        private static final long STARTUP_DELAY = 90*1000; // 90s after startup
 
         public RemoveSlowTunnelsJob(RouterContext ctx, TunnelPoolManager mgr) {
             super(ctx);
@@ -627,10 +630,28 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         public String getName() { return "Remove Slow Tunnels Job"; }
 
         public void runJob() {
-            if (_mgr.isShutdown()) return;
-            _mgr.replaceSlowTunnels();
-            if (_mgr.isShutdown()) return;
-            getTiming().setStartAfter(getContext().clock().now() + RUN_INTERVAL);
+            if (_mgr.isShutdown()) {
+                if (_mgr._log.shouldInfo())
+                    _mgr._log.info("Remove Slow Tunnels Job: Manager is shutdown, not rescheduling");
+                return;
+            }
+            if (_mgr._log.shouldInfo())
+                _mgr._log.info("Running Remove Slow Tunnels Job...");
+            try {
+                _mgr.replaceSlowTunnels();
+            } catch (Exception e) {
+                if (_mgr._log.shouldWarn())
+                    _mgr._log.warn("Error replacing slow tunnels", e);
+            }
+            if (_mgr.isShutdown()) {
+                if (_mgr._log.shouldInfo())
+                    _mgr._log.info("Remove Slow Tunnels Job: Manager shutdown after run, not rescheduling");
+                return;
+            }
+            long nextRun = getContext().clock().now() + RUN_INTERVAL;
+            getTiming().setStartAfter(nextRun);
+            if (_mgr._log.shouldInfo())
+                _mgr._log.info("Remove Slow Tunnels Job: Rescheduling in " + (RUN_INTERVAL / 1000) + "s...");
             getContext().jobQueue().addJob(this);
         }
     }
@@ -659,17 +680,34 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
-     * Find and remove tunnels exceeding 2x the global average latency.
+     * Find and remove tunnels exceeding the latency threshold.
      * Does not blame peers for the removal.
      * Removes all such tunnels per pool if pool has more tunnels than configured quantity,
      * but won't go below the configured quantity.
+     * Threshold is either the configured property (in ms) or 1.5x global average.
      * @since 0.9.69+
      */
     public void replaceSlowTunnels() {
         double avg = getGlobalAverageLatency();
-        if (avg <= 0) return;
+        if (avg <= 0) {
+            if (_log.shouldWarn())
+                _log.warn("Replace slow tunnels: No latency data available (avg <= 0)");
+            return;
+        }
 
-        double threshold = avg * 3 / 2;
+        int configuredThreshold = _context.getProperty(PROP_SLOW_TUNNEL_THRESHOLD, DEFAULT_SLOW_THRESHOLD_MS);
+        if (_log.shouldInfo()) {
+            _log.info("Replace slow tunnels: avg latency = " + avg + "ms, configured threshold = " + configuredThreshold + "ms");
+        }
+        double threshold;
+        if (configuredThreshold > 0) {
+            threshold = configuredThreshold;
+        } else {
+            threshold = avg * 3 / 2;
+        }
+        if (_log.shouldDebug()) {
+            _log.debug("Using threshold: " + threshold + "ms");
+        }
 
         List<TunnelPool> pools = new ArrayList<TunnelPool>();
         listPools(pools);
@@ -677,16 +715,24 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         for (TunnelPool pool : pools) {
             int currentCount = pool.getTunnelCount();
             int configuredQty = pool.getSettings().getQuantity();
+            int minOverride = _context.getProperty(PROP_SLOW_TUNNEL_MIN, 0);
+            int minToKeep = minOverride > 0 ? minOverride : configuredQty;
 
-            if (currentCount <= configuredQty) continue;
+            if (currentCount <= minToKeep) continue;
 
-            int minToKeep = configuredQty;
+            if (_log.shouldDebug()) {
+                _log.debug("Pool " + pool + " has " + currentCount + " tunnels (min: " + minToKeep + "), checking for slow tunnels...");
+            }
+
             int removed = 0;
             int maxToRemove = currentCount - minToKeep;
 
             for (TunnelInfo info : pool.listTunnels()) {
                 if (removed >= maxToRemove) break;
                 int lat = info.getLastLatency();
+                if (_log.shouldDebug()) {
+                    _log.debug("Tunnel " + info + " -> Latency: " + lat + "ms, threshold: " + threshold);
+                }
                 if (lat > threshold) {
                     pool.removeTunnel(info);
                     removed++;
@@ -694,8 +740,11 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             }
 
             if (removed > 0 && _log.shouldWarn()) {
-                _log.warn("Removing " + removed + " slow tunnel(s) from " + pool + " (latency > " +
-                          String.format("%.0f", threshold) + "ms, avg: " + String.format("%.0f", avg) + "ms)");
+                _log.warn("Removing " + removed + " slow tunnel(s) from " + pool + " -> Threshold: " +
+                          String.format("%.0f", threshold) + "ms\n* Minimum tunnels to retain (per direction): " + minToKeep +
+                          " Global Average latency: " + String.format("%.0f", avg) + "ms)");
+            } else if (_log.shouldDebug()) {
+                _log.debug("No slow tunnels to remove from " + pool + " -> Threshold: " + threshold + "ms, min to keep: " + minToKeep);
             }
         }
     }

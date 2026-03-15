@@ -13,6 +13,7 @@ import net.i2p.router.JobImpl;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelPoolSettings;
+import net.i2p.router.peermanager.ProfileOrganizer;
 import net.i2p.util.Log;
 
 /**
@@ -172,7 +173,7 @@ public class RepublishLeaseSetJob extends JobImpl {
             return REPUBLISH_INTERVAL_CRITICAL;
         } else if (buildSuccess < 0.30) {
             return REPUBLISH_INTERVAL_VERY_LOW_SUCCESS;
-        } else if (buildSuccess < 0.40) {
+        } else if (buildSuccess < ProfileOrganizer.ATTACK_THRESHOLD) {
             return REPUBLISH_INTERVAL_LOW_SUCCESS;
         }
         return REPUBLISH_INTERVAL;

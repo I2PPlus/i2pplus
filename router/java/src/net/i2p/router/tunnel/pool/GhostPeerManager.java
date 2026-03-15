@@ -5,6 +5,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import net.i2p.data.Hash;
 import net.i2p.router.RouterContext;
+import net.i2p.router.peermanager.ProfileOrganizer;
 import net.i2p.util.Log;
 
 /**
@@ -24,8 +25,8 @@ public class GhostPeerManager {
 
     private static final int DEFAULT_TIMEOUT_THRESHOLD = 3;
     private static final int ATTACK_TIMEOUT_THRESHOLD = 3;
-    private static final long COOLDOWN_MS = 90*1000;
-    private static final long ATTACK_COOLDOWN_MS = 120*1000;
+    private static final long COOLDOWN_MS = 180*1000; // 3m
+    private static final long ATTACK_COOLDOWN_MS = 300*1000; // 5m
     private static final int MAX_TRACKED_PEERS = 1024;
 
     public GhostPeerManager(RouterContext context) {
@@ -51,7 +52,7 @@ public class GhostPeerManager {
 
         int newCount = count != null ? count.get() : 1;
         double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
-        boolean underAttack = buildSuccess < 0.40;
+        boolean underAttack = buildSuccess < ProfileOrganizer.ATTACK_THRESHOLD;
         if (newCount >= getThreshold()) {
             Long existingTime = _ghostSince.putIfAbsent(peer, _context.clock().now());
             if (existingTime == null && _log.shouldWarn()) {
@@ -94,7 +95,7 @@ public class GhostPeerManager {
         if (since != null) {
             long elapsed = _context.clock().now() - since;
             double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
-            long cooldown = buildSuccess < 0.40 ? ATTACK_COOLDOWN_MS : COOLDOWN_MS;
+            long cooldown = buildSuccess < ProfileOrganizer.ATTACK_THRESHOLD ? ATTACK_COOLDOWN_MS : COOLDOWN_MS;
             if (elapsed >= cooldown) {
                 _timeoutCounts.remove(peer);
                 _ghostSince.remove(peer);
@@ -113,7 +114,7 @@ public class GhostPeerManager {
      */
     public int getThreshold() {
         double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
-        if (buildSuccess < 0.40) {
+        if (buildSuccess < ProfileOrganizer.ATTACK_THRESHOLD) {
             return ATTACK_TIMEOUT_THRESHOLD;
         }
         return DEFAULT_TIMEOUT_THRESHOLD;

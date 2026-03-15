@@ -347,7 +347,7 @@ public class JobQueueHelper extends HelperBase {
            .append(_t("Job"))
            .append("</th><th class=totalRuns data-sort-method=number>")
            .append(_t("Runs"))
-           .append("</th><th class=totalDropped class=dropped data-sort-method=number>")
+            .append("</th><th class=\"totalDropped dropped\" data-sort-method=number>")
            .append(_t("Dropped"))
            .append("</th><th class=totalRunTime data-sort-method=number>")
            .append(_t("Time"))
@@ -379,8 +379,8 @@ public class JobQueueHelper extends HelperBase {
         Collections.sort(tstats, new JobStatsComparator());
 
         for (JobStats stats : tstats) {
-            // Skip single-run jobs and disabled jobs BEFORE accumulating totals
-            if (stats.getRuns() < 2) continue;
+            // Skip jobs with less than 2 runs and no drops
+            if (stats.getRuns() < 2 && stats.getDropped() < 1) continue;
             if (stats.getName().contains("(disabled)")) continue;
 
             totRuns += stats.getRuns();

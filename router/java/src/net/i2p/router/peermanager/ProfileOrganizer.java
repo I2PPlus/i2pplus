@@ -36,6 +36,9 @@ import net.i2p.util.SystemVersion;
  * Categorizes peers into performance tiers based on historical metrics. Requires periodic reorganize() calls to update peer classifications for optimal tunnel selection.
  */
 public class ProfileOrganizer {
+    /** Threshold below which the network is considered under attack */
+    public static final double ATTACK_THRESHOLD = 0.40;
+
     private final Log _log;
     private final RouterContext _context;
     private final Map<Hash, PeerProfile> _fastPeers;
@@ -1111,7 +1114,7 @@ public class ProfileOrganizer {
 
     public boolean isLowBuildSuccess() {
         double buildSuccess = getTunnelBuildSuccess();
-        return buildSuccess < 0.40;
+        return buildSuccess < ATTACK_THRESHOLD;
     }
 
 }

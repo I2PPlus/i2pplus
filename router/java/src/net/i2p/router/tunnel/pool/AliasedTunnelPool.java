@@ -149,11 +149,6 @@ public class AliasedTunnelPool extends TunnelPool {
     }
 
     @Override
-    int countHowManyToBuild() {
-        return 0;
-    }
-
-    @Override
     PooledTunnelCreatorConfig configureNewTunnel() {
         return null;
     }

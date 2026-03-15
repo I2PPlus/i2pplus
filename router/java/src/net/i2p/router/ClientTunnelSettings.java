@@ -46,13 +46,12 @@ public class ClientTunnelSettings {
         StringBuilder buf = new StringBuilder();
         Properties p = new Properties();
         writeToProperties(p);
-        buf.append("\n\nClient tunnel settings:\n");
+        buf.append("\n* Client tunnel settings:");
         for (Map.Entry<Object, Object> entry : p.entrySet()) {
             String name = (String) entry.getKey();
             String val  = (String) entry.getValue();
-            buf.append("\t").append(name).append(" = ").append(val).append("\n");
+            buf.append("\n* ").append(name).append(" = ").append(val);
         }
-        buf.append("\n");
         return buf.toString();
     }
 }

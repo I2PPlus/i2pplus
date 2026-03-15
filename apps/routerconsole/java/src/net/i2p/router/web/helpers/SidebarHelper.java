@@ -430,6 +430,9 @@ public class SidebarHelper extends HelperBase {
     public int getTunnelBuildSuccess() {
         if (_context == null) {return 0;}
 
+        // Only show after 1 minute of uptime (since we're now showing 1m or 10m average)
+        if (_context.router().getUptime() < 60*1000) {return 0;}
+
         // Get 10-minute rates (original)
         Rate explSuccess10 = _context.statManager().getRate("tunnel.buildExploratorySuccess").getRate(RateConstants.TEN_MINUTES);
         Rate explReject10 = _context.statManager().getRate("tunnel.buildExploratoryReject").getRate(RateConstants.TEN_MINUTES);

@@ -32,6 +32,8 @@ import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
+import net.i2p.router.peermanager.ProfileOrganizer;
+
 /**
  * Coordinate the selection of peers to go into a tunnel for one particular pool.
  */
@@ -44,6 +46,9 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
                                                        String.valueOf(Router.CAPABILITY_CONGESTION_MODERATE) +
                                                        String.valueOf(Router.CAPABILITY_CONGESTION_SEVERE) +
                                                        String.valueOf(Router.CAPABILITY_NO_TUNNELS);
+
+    protected static final double ATTACK_THRESHOLD = ProfileOrganizer.ATTACK_THRESHOLD;
+    protected static final long STARTUP_WARNING_SUPPRESS_MS = 15 * 60 * 1000;
 
     protected TunnelPeerSelector(RouterContext context) {
         super(context);
@@ -89,7 +94,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         // Enforce max 3 hops under attack (< 40% build success)
         if (length > 3) {
             double buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
-            if (buildSuccess < 0.40) {
+            if (buildSuccess < ATTACK_THRESHOLD) {
                 length = 3;
             }
         }
@@ -300,7 +305,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             return configured;
         }
 
-        if (buildSuccess < 0.40) {
+        if (buildSuccess < ATTACK_THRESHOLD) {
             shouldRelax = true;
         }
         if (buildSuccess >= 0.45) {
@@ -308,7 +313,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         }
 
         long uptime = ctx.router().getUptime();
-        if (uptime > 0 && uptime < 10 * 60 * 1000) {
+        if (uptime > 0 && uptime < STARTUP_WARNING_SUPPRESS_MS) {
             shouldRelax = true;
         }
 
@@ -347,7 +352,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             } catch (Exception e) {
                 return false;
             }
-            return buildSuccess < 0.40;
+            return buildSuccess < ATTACK_THRESHOLD;
         }
         return false;
     }
@@ -505,7 +510,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
                 return true;
             }
             // During attacks, allow E cap with 1/6 chance
-            if (cap.contains("E") && buildSuccess < 0.40) {
+            if (cap.contains("E") && buildSuccess < ATTACK_THRESHOLD) {
                 if (ctx.random().nextInt(6) != 0) {
                     return true;  // Exclude (5/6 chance)
                 }
@@ -522,7 +527,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             cap.contains("P") || cap.contains("Q") || cap.contains("X")) knownCaps++;
 
         // Relax single-capability restriction when peer count is low
-        int fastPeerCount = ctx != null ? ctx.profileOrganizer().countFastPeers() : 100;
+        int fastPeerCount = ctx.profileOrganizer().countFastPeers();
         if (knownCaps < 2 && cap.length() <= knownCaps && fastPeerCount >= 20) {
             return true;
         }

@@ -8,6 +8,6 @@ public enum TunnelTestStatus {
     UNTESTED,    // No test has been run yet
     TESTING,     // Test is currently in progress
     GOOD,        // Recent successful test
-    FAILING,     // One consecutive failure
-    FAILED       // Two consecutive failures, marked for removal
+    FAILING,     // One or two consecutive failures
+    FAILED       // Three consecutive failures, marked for removal
 }

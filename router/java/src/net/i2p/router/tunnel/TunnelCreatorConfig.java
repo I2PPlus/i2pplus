@@ -60,7 +60,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     public static final int REPLY_IV_LENGTH = 16;
 
     // Make configurable? - but can't easily get to pool options from here
-    private static final int MAX_CONSECUTIVE_TEST_FAILURES = 5;
+    private static final int MAX_CONSECUTIVE_TEST_FAILURES = 3;
     private volatile int _lastLatency = -1;
 
     /**
@@ -332,7 +332,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     /**
      * Called when a test fails.
      * Updates the test status based on consecutive failure count.
-     * Only mark as FAILED after MAX_CONSECUTIVE_TEST_FAILURES (5) failures -
+     * Only mark as FAILED after MAX_CONSECUTIVE_TEST_FAILURES (3) failures -
      * before that, it's just FAILING and still counts as a valid tunnel.
      * @since 0.9.68+
      */

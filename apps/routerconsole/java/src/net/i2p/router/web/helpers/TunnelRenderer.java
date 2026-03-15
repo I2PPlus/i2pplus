@@ -977,10 +977,11 @@ class TunnelRenderer {
                     buf.append("<span title=\"").append(_t("Test in progress")).append("\"></span>");
                     break;
                 case FAILING:
-                    buf.append("<span title=\"").append(_t("Test failing (1 failure)")).append("\"></span>");
+                    int fails = info.getConsecutiveFailures();
+                    buf.append("<span title=\"").append(_t("Test failing (failures: {0})", fails)).append("\"></span>");
                     break;
                 case FAILED:
-                    buf.append("<span title=\"").append(_t("Test failed (2 consecutive failures)")).append("\"></span>");
+                    buf.append("<span title=\"").append(_t("Test failed (3 consecutive failures)")).append("\"></span>");
                     break;
                 default:
                     buf.append("<span title=\"").append(_t("Not yet tested")).append("\"></span>");
