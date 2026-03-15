@@ -87,7 +87,7 @@ public class JobQueue {
     private final static long DEFAULT_WARMUP_TIME = 15*60*1000;
     private long _warmupTime = DEFAULT_WARMUP_TIME;
     /** Max ready and waiting jobs before we start dropping 'em - scale with runner count */
-    private final static int DEFAULT_MAX_WAITING_JOBS = SystemVersion.isSlow() ? 100 : Math.max(256, Math.min(RUNNERS * 16, 1024));
+    private final static int DEFAULT_MAX_WAITING_JOBS = SystemVersion.isSlow() ? 32 : 64;
     private int _maxWaitingJobs = DEFAULT_MAX_WAITING_JOBS;
     private final static long MIN_LAG_TO_DROP = SystemVersion.isSlow() ? 500 : 200;
 
@@ -141,7 +141,12 @@ public class JobQueue {
      * @param job job to add to the queue
      */
     public void addJob(Job job) {
-        if (job == null || !_alive) return;
+        if (job == null || !_alive) {
+            if (_log.shouldWarn() && job != null) {
+                _log.warn("JobQueue.addJob: job=" + job + ", alive=" + _alive + ", returning");
+            }
+            return;
+        }
 
         int numReady;
         boolean alreadyExists = false;
@@ -170,7 +175,13 @@ public class JobQueue {
                         _readyJobs.offer(job);
                     } else {
                         _timedJobs.add(job);
-                        if (start < _nextPumperRun) {_jobLock.notifyAll();}
+                        _log.info("Job added to timed queue: " + job.getName() + " scheduled for " + (start - now) + "ms from now, _timedJobs size: " + _timedJobs.size());
+                        if (start < _nextPumperRun) {
+                            if (_log.shouldDebug()) {
+                                _log.debug("Waking pumper: job " + job.getName() + " scheduled at " + start + " < next pumper run " + _nextPumperRun);
+                            }
+                            _jobLock.notifyAll();
+                        }
                     }
                 }
             }
@@ -253,13 +264,44 @@ public class JobQueue {
      * @return maximum lag in milliseconds, or 0 if queue is empty
      */
     public long getMaxLag() {
-        Job j = _readyJobs.peek();
-        if (j == null) j = _highPriorityJobs.peek();
-        if (j == null) return 0;
-        JobTiming jt = j.getTiming();
-        if (jt == null) return 0;
-        long startAfter = jt.getStartAfter();
-        return _context.clock().now() - startAfter;
+        long now = _context.clock().now();
+        long maxLag = 0;
+
+        // Check high priority jobs first
+        Job j = _highPriorityJobs.peek();
+        if (j != null) {
+            JobTiming jt = j.getTiming();
+            if (jt != null) {
+                maxLag = now - jt.getStartAfter();
+            }
+        }
+
+        // Check ready jobs
+        j = _readyJobs.peek();
+        if (j != null) {
+            JobTiming jt = j.getTiming();
+            if (jt != null) {
+                long lag = now - jt.getStartAfter();
+                if (lag > maxLag) maxLag = lag;
+            }
+        }
+
+        // Check timed jobs that are ready to run (this was missing!)
+        synchronized (_jobLock) {
+            for (Job timedJob : _timedJobs) {
+                long timeLeft = timedJob.getTiming().getStartAfter() - now;
+                if (timeLeft <= 0) {
+                    // This job is ready to run but hasn't been moved yet
+                    long lag = now - timedJob.getTiming().getStartAfter();
+                    if (lag > maxLag) maxLag = lag;
+                } else {
+                    // Timed jobs are sorted, so no need to check further
+                    break;
+                }
+            }
+        }
+
+        return maxLag;
     }
 
     /**
@@ -273,7 +315,7 @@ public class JobQueue {
     public long getMaxActiveJobDuration() {
         long now = _context.clock().now();
         long maxDuration = 0;
-        
+
         for (JobQueueRunner runner : _queueRunners.values()) {
             if (runner.getCurrentJob() != null) {
                 long beginTime = runner.getLastBegin();
@@ -285,7 +327,7 @@ public class JobQueue {
                 }
             }
         }
-        
+
         return maxDuration;
     }
 
@@ -376,7 +418,7 @@ public class JobQueue {
     public void startup() {
         _alive = true;
         I2PThread pumperThread = new I2PThread(_pumper, "JobQueuePumper", true);
-        pumperThread.setPriority(I2PThread.MAX_PRIORITY - 1);
+        pumperThread.setPriority(I2PThread.NORM_PRIORITY + 1);
         pumperThread.start();
         _scaler.startup();
     }
@@ -475,7 +517,9 @@ public class JobQueue {
                             iter.remove();
                             if (job instanceof JobImpl) {((JobImpl) job).madeReady(now);}
                             job.getTiming().setStartAfter(now);
-                            return job;
+                            _readyJobs.offer(job);
+                            // Continue checking for more ready jobs instead of breaking
+                            // This ensures all ready timed jobs are moved to ready queue
                         } else {
                             break;
                         }
@@ -483,7 +527,7 @@ public class JobQueue {
                 }
 
                 // Then check normal priority jobs
-                j = _readyJobs.poll(10, TimeUnit.MILLISECONDS);
+                j = _readyJobs.poll(50, TimeUnit.MILLISECONDS);
                 if (j != null) {
                     if (j.getJobId() == POISON_ID) break;
                     return j;
@@ -565,17 +609,17 @@ public class JobQueue {
      */
     synchronized void addRunners(int count) {
         if (!_allowParallelOperation || !_alive) return;
-        
+
         int currentSize = _queueRunners.size();
         int targetSize = currentSize + count;
-        
+
         for (int i = currentSize; i < targetSize; i++) {
             JobQueueRunner runner = new JobQueueRunner(_context, i);
             _queueRunners.put(Integer.valueOf(i), runner);
             runner.setName("JobQueue " + _runnerId.incrementAndGet() + '/' + targetSize + " (scaled)");
             runner.start();
         }
-        
+
         if (_log.shouldInfo()) {
             _log.info("Added " + count + " runners. Total: " + _queueRunners.size());
         }
@@ -592,27 +636,22 @@ public class JobQueue {
      */
     synchronized int removeIdleRunners(int maxToRemove) {
         if (!_alive) return 0;
-        
-        int removed = 0;
+         int removed = 0;
         Iterator<Map.Entry<Integer, JobQueueRunner>> iter = _queueRunners.entrySet().iterator();
-        
-        while (iter.hasNext() && removed < maxToRemove) {
+         while (iter.hasNext() && removed < maxToRemove) {
             Map.Entry<Integer, JobQueueRunner> entry = iter.next();
             JobQueueRunner runner = entry.getValue();
-            
-            // Only remove if runner is idle (not processing a job)
+             // Only remove if runner is idle (not processing a job)
             if (runner.getCurrentJob() == null) {
                 runner.stopRunning();
                 iter.remove();
                 removed++;
             }
         }
-        
-        if (removed > 0 && _log.shouldInfo()) {
+         if (removed > 0 && _log.shouldInfo()) {
             _log.info("Removed " + removed + " idle runners. Total: " + _queueRunners.size());
         }
-        
-        return removed;
+         return removed;
     }
 
     private final class QueuePumper implements Runnable, Clock.ClockUpdateListener, RouterClock.ClockShiftListener {
@@ -626,6 +665,7 @@ public class JobQueue {
                 while (_alive) {
                     long now = _context.clock().now();
                     long timeToWait = -1;
+                    int movedJobs = 0;
                     try {
                         synchronized (_jobLock) {
                             Job lastJob = null;
@@ -644,17 +684,36 @@ public class JobQueue {
                                     j.getTiming().setStartAfter(now);
                                     _readyJobs.offer(j);
                                     iter.remove();
+                                    movedJobs++;
                                 } else {
-                                    timeToWait = timeLeft;
-                                    break;
+                                    // Track minimum wait time among all not-ready jobs
+                                    if (timeToWait < 0 || timeLeft < timeToWait) {
+                                        timeToWait = timeLeft;
+                                    }
                                 }
                             }
+                            // Cap the wait time to prevent long delays for periodic jobs
+                            if (timeToWait > 10000) {
+                                timeToWait = 500;
+                            }
+                            _log.info("Pumper moved " + movedJobs + " jobs to ready queue, next wait: " + timeToWait + "ms, _timedJobs size: " + _timedJobs.size());
                             boolean highLoad = SystemVersion.getCPULoadAvg() > 98 || SystemVersion.getCPULoad() > 98;
                             boolean isSlow = SystemVersion.isSlow();
-                            if (timeToWait < 0) {timeToWait = highLoad ? 50 : 10;}
-                            else if (timeToWait < 10) {timeToWait = highLoad ? 20 : 5;}
-                            else if (timeToWait >= 10*1000) {timeToWait = highLoad ? 1000 : 500;}
-                            else if (!isSlow && timeToWait > 2000) {timeToWait = highLoad ? 3*1000 : 2*1000;}
+                            // More aggressive checking - don't wait long when jobs are close to ready
+                            if (timeToWait < 0) {
+                                timeToWait = highLoad ? 50 : 10;
+                            } else if (timeToWait < 10) {
+                                timeToWait = highLoad ? 20 : 5;
+                            } else if (timeToWait < 100) {
+                                timeToWait = highLoad ? 50 : 25;
+                            } else if (timeToWait < 1000) {
+                                timeToWait = highLoad ? 200 : 100;
+                            } else if (timeToWait < 5*1000) {
+                                timeToWait = highLoad ? 500 : 250;
+                            } else {
+                                // For jobs > 5s away, check more frequently to prevent large queues
+                                timeToWait = highLoad ? 1000 : 500;
+                            }
                             _nextPumperRun = _context.clock().now() + timeToWait;
                             _jobLock.wait(timeToWait);
                         }
