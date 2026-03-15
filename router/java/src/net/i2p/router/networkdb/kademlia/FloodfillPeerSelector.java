@@ -205,8 +205,13 @@ class FloodfillPeerSelector extends PeerSelector {
         if (toIgnore == null) {toIgnore = Collections.singleton(_context.routerHash());}
         else if (!toIgnore.contains(_context.routerHash())) {
             // copy the Set so we don't confuse StoreJob
-            toIgnore = new HashSet<Hash>(toIgnore);
-            toIgnore.add(_context.routerHash());
+            // Use synchronized set to prevent ConcurrentModificationException during copy
+            Set<Hash> syncSet = Collections.synchronizedSet(new HashSet<Hash>(8));
+            synchronized(toIgnore) {
+                syncSet.addAll(toIgnore);
+            }
+            syncSet.add(_context.routerHash());
+            toIgnore = syncSet;
         }
         return selectFloodfillParticipantsIncludingUs(key, howMany, toIgnore, kbuckets);
     }
