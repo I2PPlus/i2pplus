@@ -432,10 +432,6 @@ class ConnectionPacketHandler {
             int oldWindow = con.getOptions().getWindowSize();
             int newWindowSize = oldWindow;
 
-            //int trend = con.getOptions().getRTTTrend();
-
-            //_context.statManager().addRateData("stream.trend", trend, newWindowSize);
-
             if ((!congested) && (acked > 0)) {
                 int ssthresh = con.getSSThresh();
                 if (newWindowSize < ssthresh) {

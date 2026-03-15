@@ -694,8 +694,9 @@ class MessageOutputStream extends OutputStream {
             _enqueued = false;
 
             long timeLeft = (_lastBuffered + _passiveFlushDelay - _context.clock().now());
-            if (_log.shouldDebug()) {
-                _log.debug("Flusher fired, time left until passive flush: " + timeLeft + "ms");
+            // Only log if delayed (negative timeLeft) or there's actual work
+            if (_log.shouldDebug() && timeLeft <= 0) {
+                _log.debug("Flusher fired, delayed " + (-timeLeft) + "ms");
             }
             if (timeLeft > 0) {
                 enqueue();

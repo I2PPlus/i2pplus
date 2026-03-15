@@ -101,7 +101,7 @@ class Connection {
     private final AtomicLong _lifetimeDupMessageSent = new AtomicLong();
     private final AtomicLong _lifetimeDupMessageReceived = new AtomicLong();
 
-    public static final int MAX_RESEND_DELAY = 45*1000;
+    public static final int MAX_RESEND_DELAY = 30*1000;
     public static final int MIN_RESEND_DELAY = SystemVersion.isSlow() ? 100 : 50;
 
     /**
@@ -1648,12 +1648,12 @@ class Connection {
                     congestionOccurred();
                     _context.statManager().addRateData("stream.con.windowSizeAtCongestion", newWindowSize, _packet.getLifetime());
                     /*
-                     * RTO doubling disabled - we rely on tunnel failover instead of TCP-style
-                     * backoff. Each retransmit uses a different tunnel due to short expiration,
-                     * so we keep a flat RTO for more predictable timing and faster failover.
-                     * Window size still shrinks for congestion control.
+                     * RTO doubling enabled - TCP-style backoff for better congestion control.
+                     * Tunnel failover still provides redundancy, but we now also use RTO
+                     * backoff for more aggressive retransmit timing.
+                     * Window size shrinks for congestion control.
                      */
-                    // _options.doubleRTO();
+                     _options.doubleRTO();
 
                     if (_packet.getNumSends() == 1) {
                         _ssthresh = Math.max((int)(_bwEstimator.getBandwidthEstimate() * _options.getMinRTT()), 2);

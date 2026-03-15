@@ -86,7 +86,8 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     private static final float TCP_KAPPA = 4;
 
     private static final String PROP_INITIAL_RTO = "i2p.streaming.initialRTO";
-    private static final int INITIAL_RTO = 10000;
+    private static final int INITIAL_RTO = 4000;
+    private static final int MAX_RTO = 30000;
 
     public static final String PROP_CONNECT_DELAY = "i2p.streaming.connectDelay";
     public static final String PROP_MAX_MESSAGE_SIZE = "i2p.streaming.maxMessageSize";
@@ -727,35 +728,14 @@ setResendDelay(getInt(opts, PROP_INITIAL_RESEND_DELAY, 100));
      * Double the RTO (after congestion).
      * See RFC 6298 section 5 item 5.5
      *
-     * @return new value, Connection.MIN_RESEND_DELAY to Connection.MAX_RESEND_DELAY
+     * @return new value, MIN_RTO to MAX_RTO
      * @since 0.9.33
      */
     synchronized int doubleRTO() {
         // we don't need to switch on _initState, _rto is set in constructor
         _rto *= 2;
-        if (_rto > Connection.MAX_RESEND_DELAY) {_rto = Connection.MAX_RESEND_DELAY;}
+        if (_rto > MAX_RTO) {_rto = MAX_RTO;}
         return _rto;
-    }
-
-    /**
-     * If we have 3 consecutive rtt increases, we are trending upwards (1), or if we have
-     * 3 consecutive rtt decreases, we are trending downwards (-1), else we're stable.
-     *
-     * @deprecated unused as of 0.9.51
-     * @return positive/flat/negative trend in round trip time
-     */
-    @Deprecated
-    public int getRTTTrend() {
-/*
-        synchronized (_trend) {
-            for (int i = 0; i < TREND_COUNT - 1; i++) {
-                if (_trend[i] != _trend[i+1])
-                    return 0;
-            }
-            return _trend[0];
-        }
-*/
-        return 0;
     }
 
     /**
