@@ -79,7 +79,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
         _banLogger.initialize(ctx);
         _sentTo = sentTo;
         _facade = facade;
-        _ignore = new HashSet<Hash>(8);
+        _ignore = Collections.synchronizedSet(new HashSet<Hash>(8));
         if (toSkip != null) {
             synchronized(toSkip) {_ignore.addAll(toSkip);}
         }
