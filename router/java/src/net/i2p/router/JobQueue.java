@@ -307,19 +307,6 @@ public class JobQueue {
             }
         }
 
-        // Check timed jobs that are ready (should be empty now, but as backup)
-        synchronized (_jobLock) {
-            for (Job timedJob : _timedJobs) {
-                long timeLeft = timedJob.getTiming().getStartAfter() - now;
-                if (timeLeft <= 0) {
-                    long lag = now - timedJob.getTiming().getStartAfter();
-                    if (lag > maxLag) maxLag = lag;
-                } else {
-                    break;
-                }
-            }
-        }
-
         return maxLag;
     }
 

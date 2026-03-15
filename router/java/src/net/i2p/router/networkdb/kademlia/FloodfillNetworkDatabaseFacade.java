@@ -2,11 +2,10 @@ package net.i2p.router.networkdb.kademlia;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.crypto.SigType;
 import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Destination;
@@ -52,7 +51,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     public static final char CAPABILITY_CONGESTION_MODERATE = 'D';
     public static final char CAPABILITY_CONGESTION_SEVERE = 'E';
     public static final char CAPABILITY_NO_TUNNELS = 'G';
-    private final Map<Hash, FloodSearchJob> _activeFloodQueries;
+    private final ConcurrentHashMap<Hash, FloodSearchJob> _activeFloodQueries;
     private boolean _floodfillEnabled;
     private final Set<Hash> _verifiesInProgress;
     private FloodThrottler _floodThrottler;
@@ -96,7 +95,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      */
     public FloodfillNetworkDatabaseFacade(RouterContext context, Hash dbid) {
         super(context, dbid);
-        _activeFloodQueries = new HashMap<Hash, FloodSearchJob>();
+        _activeFloodQueries = new ConcurrentHashMap<Hash, FloodSearchJob>();
         _verifiesInProgress = new ConcurrentHashSet<Hash>(8);
 
         long[] rate = new long[] { RateConstants.ONE_MINUTE };
@@ -615,13 +614,14 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             return null;
         } else {
             boolean isNew = false;
-            FloodSearchJob searchJob;
-            synchronized (_activeFloodQueries) {
-                searchJob = _activeFloodQueries.get(key);
-                if (searchJob == null) {
-                    searchJob = new IterativeSearchJob(_context, this, key, onFindJob, onFailedLookupJob, (int)timeoutMs,
-                                                       isLease, fromLocalDest);
-                    _activeFloodQueries.put(key, searchJob);
+            FloodSearchJob searchJob = _activeFloodQueries.get(key);
+            if (searchJob == null) {
+                searchJob = new IterativeSearchJob(_context, this, key, onFindJob, onFailedLookupJob, (int)timeoutMs,
+                                                   isLease, fromLocalDest);
+                FloodSearchJob existing = _activeFloodQueries.putIfAbsent(key, searchJob);
+                if (existing != null) {
+                    searchJob = existing;
+                } else {
                     isNew = true;
                 }
             }
@@ -649,7 +649,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      *  Must be called by the search job queued by search() on success or failure
      */
     void complete(Hash key) {
-        synchronized (_activeFloodQueries) { _activeFloodQueries.remove(key); }
+        _activeFloodQueries.remove(key);
     }
 
     /** list of the Hashes of currently known floodfill peers;
@@ -690,14 +690,15 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         if (_context.commSystem().isEstablished(peer)) {
             // see DirectLookupJob
             boolean isNew = false;
-            FloodSearchJob searchJob;
             Job onFindJob = new DropLookupFoundJob(_context, peer, info);
             Job onFailedLookupJob = new DropLookupFailedJob(_context, peer, info);
-            synchronized (_activeFloodQueries) {
-                searchJob = _activeFloodQueries.get(peer);
-                if (searchJob == null) {
-                    searchJob = new DirectLookupJob(_context, this, peer, info, onFindJob, onFailedLookupJob);
-                    _activeFloodQueries.put(peer, searchJob);
+            FloodSearchJob searchJob = _activeFloodQueries.get(peer);
+            if (searchJob == null) {
+                searchJob = new DirectLookupJob(_context, this, peer, info, onFindJob, onFailedLookupJob);
+                FloodSearchJob existing = _activeFloodQueries.putIfAbsent(peer, searchJob);
+                if (existing != null) {
+                    searchJob = existing;
+                } else {
                     isNew = true;
                 }
             }
