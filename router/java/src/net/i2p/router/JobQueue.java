@@ -1,7 +1,9 @@
 package net.i2p.router;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -48,6 +50,8 @@ public class JobQueue {
     private final BlockingQueue<Job> _highPriorityJobs;
     /** SortedSet of jobs that are scheduled for running in the future, earliest first */
     private final Set<Job> _timedJobs;
+    /** Queue of timed jobs that are ready to run (moved from _timedJobs when ready) */
+    private final BlockingQueue<Job> _timedJobsReady;
     /** Job name to JobStat for that job */
     private final ConcurrentHashMap<String, JobStats> _jobStats;
     private final QueuePumper _pumper;
@@ -128,6 +132,7 @@ public class JobQueue {
         _readyJobs = new LinkedBlockingQueue<>();
         _highPriorityJobs = new LinkedBlockingQueue<>();
         _timedJobs = new TreeSet<>(new JobComparator());
+        _timedJobsReady = new LinkedBlockingQueue<>();
         _jobLock = new Object();
         _queueRunners = new ConcurrentHashMap<>(RUNNERS);
         _jobStats = new ConcurrentHashMap<>();
@@ -175,11 +180,10 @@ public class JobQueue {
                         _readyJobs.offer(job);
                     } else {
                         _timedJobs.add(job);
-                        _log.info("Job added to timed queue: " + job.getName() + " scheduled for " + (start - now) + "ms from now, _timedJobs size: " + _timedJobs.size());
+                        if (_log.shouldDebug()) {
+                            _log.debug("Waking pumper: job " + job.getName() + " scheduled at " + start + " < next pumper run " + _nextPumperRun);
+                        }
                         if (start < _nextPumperRun) {
-                            if (_log.shouldDebug()) {
-                                _log.debug("Waking pumper: job " + job.getName() + " scheduled at " + start + " < next pumper run " + _nextPumperRun);
-                            }
                             _jobLock.notifyAll();
                         }
                     }
@@ -243,17 +247,23 @@ public class JobQueue {
     public void removeJob(Job job) {
         synchronized (_jobLock) {
             boolean removed = _timedJobs.remove(job);
-            if (!removed) {_readyJobs.remove(job); _highPriorityJobs.remove(job);}
+            if (!removed) {
+                removed = _timedJobsReady.remove(job);
+            }
+            if (!removed) {
+                _readyJobs.remove(job);
+                _highPriorityJobs.remove(job);
+            }
         }
     }
 
     /**
      * Get the number of jobs ready to be executed.
      *
-     * @return count of ready jobs in both normal and high priority queues
+     * @return count of ready jobs in normal, high priority, and timed-ready queues
      */
     public int getReadyCount() {
-        return _readyJobs.size() + _highPriorityJobs.size();
+        return _readyJobs.size() + _highPriorityJobs.size() + _timedJobsReady.size();
     }
 
     /**
@@ -267,12 +277,22 @@ public class JobQueue {
         long now = _context.clock().now();
         long maxLag = 0;
 
-        // Check high priority jobs first
-        Job j = _highPriorityJobs.peek();
+        // Check timed jobs ready queue first (these are ready but not yet picked up)
+        Job j = _timedJobsReady.peek();
         if (j != null) {
             JobTiming jt = j.getTiming();
             if (jt != null) {
                 maxLag = now - jt.getStartAfter();
+            }
+        }
+
+        // Check high priority jobs
+        j = _highPriorityJobs.peek();
+        if (j != null) {
+            JobTiming jt = j.getTiming();
+            if (jt != null) {
+                long lag = now - jt.getStartAfter();
+                if (lag > maxLag) maxLag = lag;
             }
         }
 
@@ -286,16 +306,14 @@ public class JobQueue {
             }
         }
 
-        // Check timed jobs that are ready to run (this was missing!)
+        // Check timed jobs that are ready (should be empty now, but as backup)
         synchronized (_jobLock) {
             for (Job timedJob : _timedJobs) {
                 long timeLeft = timedJob.getTiming().getStartAfter() - now;
                 if (timeLeft <= 0) {
-                    // This job is ready to run but hasn't been moved yet
                     long lag = now - timedJob.getTiming().getStartAfter();
                     if (lag > maxLag) maxLag = lag;
                 } else {
-                    // Timed jobs are sorted, so no need to check further
                     break;
                 }
             }
@@ -431,6 +449,7 @@ public class JobQueue {
         _scaler.shutdown();
         synchronized (_jobLock) {
             _timedJobs.clear();
+            _timedJobsReady.clear();
             _readyJobs.clear();
             _highPriorityJobs.clear();
             _jobLock.notifyAll();
@@ -507,26 +526,14 @@ public class JobQueue {
                     return j;
                 }
 
-                // Check for ready timed jobs before blocking
-                long now = _context.clock().now();
-                synchronized (_jobLock) {
-                    for (Iterator<Job> iter = _timedJobs.iterator(); iter.hasNext(); ) {
-                        Job job = iter.next();
-                        long timeLeft = job.getTiming().getStartAfter() - now;
-                        if (timeLeft <= 0) {
-                            iter.remove();
-                            if (job instanceof JobImpl) {((JobImpl) job).madeReady(now);}
-                            job.getTiming().setStartAfter(now);
-                            _readyJobs.offer(job);
-                            // Continue checking for more ready jobs instead of breaking
-                            // This ensures all ready timed jobs are moved to ready queue
-                        } else {
-                            break;
-                        }
-                    }
+                // Check timed jobs ready queue first (O(1) instead of iterating TreeSet)
+                j = _timedJobsReady.poll();
+                if (j != null) {
+                    if (j.getJobId() == POISON_ID) break;
+                    return j;
                 }
 
-                // Then check normal priority jobs
+                // Check normal priority jobs
                 j = _readyJobs.poll(50, TimeUnit.MILLISECONDS);
                 if (j != null) {
                     if (j.getJobId() == POISON_ID) break;
@@ -668,35 +675,37 @@ public class JobQueue {
                     int movedJobs = 0;
                     try {
                         synchronized (_jobLock) {
-                            Job lastJob = null;
-                            long lastTime = Long.MIN_VALUE;
-                            for (Iterator<Job> iter = _timedJobs.iterator(); iter.hasNext(); ) {
-                                Job j = iter.next();
+                            // Take a snapshot of timed jobs to avoid concurrent modification issues
+                            // Only process jobs that are ready (timeLeft <= 0)
+                            List<Job> toMove = new ArrayList<>();
+                            long minWaitTime = -1;
+                            for (Job j : _timedJobs) {
                                 long timeLeft = j.getTiming().getStartAfter() - now;
-                                if (lastJob != null && lastTime > j.getTiming().getStartAfter() && _log.shouldInfo()) {
-                                    _log.info(lastJob + " out of order with " + j + "\n* Difference: " +
-                                              DataHelper.formatDuration(lastTime - j.getTiming().getStartAfter()));
-                                }
-                                lastJob = j;
-                                lastTime = lastJob.getTiming().getStartAfter();
                                 if (timeLeft <= 0) {
-                                    if (j instanceof JobImpl) ((JobImpl)j).madeReady(now);
-                                    j.getTiming().setStartAfter(now);
-                                    _readyJobs.offer(j);
-                                    iter.remove();
-                                    movedJobs++;
+                                    toMove.add(j);
                                 } else {
-                                    // Track minimum wait time among all not-ready jobs
-                                    if (timeToWait < 0 || timeLeft < timeToWait) {
-                                        timeToWait = timeLeft;
+                                    // Track minimum wait time among not-ready jobs
+                                    if (minWaitTime < 0 || timeLeft < minWaitTime) {
+                                        minWaitTime = timeLeft;
                                     }
                                 }
                             }
+                            // Move ready jobs to timed jobs ready queue
+                            for (Job j : toMove) {
+                                _timedJobs.remove(j);
+                                if (j instanceof JobImpl) ((JobImpl)j).madeReady(now);
+                                j.getTiming().setStartAfter(now);
+                                _timedJobsReady.offer(j);
+                                movedJobs++;
+                            }
+                            timeToWait = minWaitTime;
                             // Cap the wait time to prevent long delays for periodic jobs
                             if (timeToWait > 10000) {
                                 timeToWait = 500;
                             }
-                            _log.info("Pumper moved " + movedJobs + " jobs to ready queue, next wait: " + timeToWait + "ms, _timedJobs size: " + _timedJobs.size());
+                            if (movedJobs > 0) {
+                                _log.info("Pumper moved " + movedJobs + " jobs to timed ready queue, next wait: " + timeToWait + "ms, _timedJobs size: " + _timedJobs.size());
+                            }
                             boolean highLoad = SystemVersion.getCPULoadAvg() > 98 || SystemVersion.getCPULoad() > 98;
                             boolean isSlow = SystemVersion.isSlow();
                             // More aggressive checking - don't wait long when jobs are close to ready
