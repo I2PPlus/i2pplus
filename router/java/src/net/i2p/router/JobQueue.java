@@ -91,7 +91,8 @@ public class JobQueue {
     private final static long DEFAULT_WARMUP_TIME = 15*60*1000;
     private long _warmupTime = DEFAULT_WARMUP_TIME;
     /** Max ready and waiting jobs before we start dropping 'em - scale with runner count */
-    private final static int DEFAULT_MAX_WAITING_JOBS = SystemVersion.isSlow() ? 32 : 64;
+    private final static int DEFAULT_MAX_WAITING_JOBS = SystemVersion.isSlow() ? Math.max(SystemVersion.getCores() * 8, 128) :
+                                                                                 Math.max(SystemVersion.getCores() * 16, 256);
     private int _maxWaitingJobs = DEFAULT_MAX_WAITING_JOBS;
     private final static long MIN_LAG_TO_DROP = SystemVersion.isSlow() ? 500 : 200;
 
