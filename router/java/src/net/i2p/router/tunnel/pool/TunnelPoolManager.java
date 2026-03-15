@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
@@ -50,8 +51,6 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     private static final String PROP_SLOW_TUNNEL_THRESHOLD = "router.tunnel.slowThreshold";
     private static final String PROP_SLOW_TUNNEL_MIN = "router.tunnel.slowThresholdMin";
     private static final int DEFAULT_SLOW_THRESHOLD_MS = 0; // 0 means use 1.5x average
-    private static final int MIN_KBPS_TWO_HANDLERS = 32;
-    private static final int MIN_KBPS_THREE_HANDLERS = 128;
     private static final double MAX_SHARE_RATIO = 100000d;
 
     public TunnelPoolManager(RouterContext ctx) {
@@ -74,10 +73,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         _executor = new BuildExecutor(ctx, this, _ghostPeerManager);
         _handler = new BuildHandler(ctx, this, _executor);
         int numHandlerThreads;
-        long maxMemory = SystemVersion.getMaxMemory();
-        int cores = SystemVersion.getCores();
         Boolean isSlow = SystemVersion.isSlow();
-        int share = TunnelDispatcher.getShareBandwidth(ctx);
         _numHandlerThreads = ctx.getProperty("router.buildHandlerThreads", isSlow ? 2 : 4);
 
         if (isFirewalled()) {
@@ -155,9 +151,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     public TunnelInfo selectOutboundTunnel(Hash destination)  {
         if (destination == null) return selectOutboundTunnel();
         TunnelPool pool = _clientOutboundPools.get(destination);
-        if (pool != null) {
-            return pool.selectTunnel();
-        }
+        if (pool != null) {return pool.selectTunnel();}
+        if (_log.shouldWarn()) {_log.warn("No pool available for Outbound tunnel for " + destination.toBase32());}
         return null;
     }
 
@@ -475,8 +470,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             inbound.startup();
             outbound.startup();
         }
-        if (_log.shouldWarn()) {
-            _log.warn("Added " + dest.toBase32() + " as alias for " + existingClient.toBase32() + settings);
+        if (_log.shouldInfo()) {
+            _log.info("Added " + dest.toBase32() + " as alias for " + existingClient.toBase32() + settings);
         }
         return true;
     }
@@ -582,6 +577,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     /** Start the tunnel pool manager and build initial tunnels */
     public synchronized void startup() {
         _isShutdown = false;
+        RemoveSlowTunnelsJob._runCount.set(0);
         if (!_executor.isRunning()) {
             I2PThread t = new I2PThread(_executor, "BuildExecutor", true);
             t.start();
@@ -620,6 +616,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         private final TunnelPoolManager _mgr;
         private static final long RUN_INTERVAL = 10*1000; // 10s
         private static final long STARTUP_DELAY = 90*1000; // 90s after startup
+        private static final AtomicInteger _runCount = new AtomicInteger(0);
 
         public RemoveSlowTunnelsJob(RouterContext ctx, TunnelPoolManager mgr) {
             super(ctx);
@@ -637,46 +634,34 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             }
             if (_mgr._log.shouldInfo())
                 _mgr._log.info("Running Remove Slow Tunnels Job...");
+
+            long startTime = System.currentTimeMillis();
             try {
                 _mgr.replaceSlowTunnels();
             } catch (Exception e) {
                 if (_mgr._log.shouldWarn())
                     _mgr._log.warn("Error replacing slow tunnels", e);
             }
+            long duration = System.currentTimeMillis() - startTime;
+
             if (_mgr.isShutdown()) {
                 if (_mgr._log.shouldInfo())
                     _mgr._log.info("Remove Slow Tunnels Job: Manager shutdown after run, not rescheduling");
                 return;
             }
-            long nextRun = getContext().clock().now() + RUN_INTERVAL;
-            getTiming().setStartAfter(nextRun);
-            if (_mgr._log.shouldInfo())
-                _mgr._log.info("Remove Slow Tunnels Job: Rescheduling in " + (RUN_INTERVAL / 1000) + "s...");
-            getContext().jobQueue().addJob(this);
-        }
-    }
 
-    /**
-     * Calculate the global average latency across all tunnel pools.
-     * @return average latency in ms, or -1 if no data
-     * @since 0.9.69+
-     */
-    public double getGlobalAverageLatency() {
-        List<TunnelPool> pools = new ArrayList<TunnelPool>();
-        listPools(pools);
+            // Diagnostic logging
+            int runNum = _runCount.incrementAndGet();
+            _mgr._log.info("RemoveSlowTunnelsJob run #" + runNum + " completed in " + duration + "ms");
 
-        long total = 0;
-        int count = 0;
-        for (TunnelPool pool : pools) {
-            for (TunnelInfo info : pool.listTunnels()) {
-                int lat = info.getLastLatency();
-                if (lat > 0) {
-                    total += lat;
-                    count++;
-                }
-            }
+            // Use requeue() like other periodic jobs (TestJob, ExpireJob)
+            // This reuses the same job instance instead of creating new ones
+            _mgr._log.info("Remove Slow Tunnels Job: Requeueing in " + (RUN_INTERVAL / 1000) + "s...");
+            long start = _mgr._context.clock().now();
+            requeue(RUN_INTERVAL);
+            long after = _mgr._context.clock().now();
+            _mgr._log.info("RemoveSlowTunnelsJob requeue took " + (after - start) + "ms, next run at " + (after + RUN_INTERVAL));
         }
-        return count > 0 ? (double) total / count : -1;
     }
 
     /**
@@ -684,67 +669,127 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      * Does not blame peers for the removal.
      * Removes all such tunnels per pool if pool has more tunnels than configured quantity,
      * but won't go below the configured quantity.
-     * Threshold is either the configured property (in ms) or 1.5x global average.
+     * Threshold is either the configured property (in ms), or Math.max(minLatency, 1000ms), whichever is larger.
      * @since 0.9.69+
      */
     public void replaceSlowTunnels() {
-        double avg = getGlobalAverageLatency();
+        List<TunnelPool> pools = new ArrayList<TunnelPool>();
+        listPools(pools);
+
+        // First pass: calculate global average and minimum latency
+        long totalLatency = 0;
+        int latencyCount = 0;
+        int minLatency = Integer.MAX_VALUE;
+        for (TunnelPool pool : pools) {
+            if (pool == null) continue;
+            try {
+                for (TunnelInfo info : pool.listTunnels()) {
+                    int lat = info.getLastLatency();
+                    if (lat > 0) {
+                        totalLatency += lat;
+                        latencyCount++;
+                        if (lat < minLatency) minLatency = lat;
+                    }
+                }
+            } catch (Exception e) {
+                // Pool might have been shut down between listPools() and now
+            }
+        }
+
+        double avg = latencyCount > 0 ? (double) totalLatency / latencyCount : -1;
         if (avg <= 0) {
             if (_log.shouldWarn())
                 _log.warn("Replace slow tunnels: No latency data available (avg <= 0)");
             return;
         }
 
+        // Ensure we have a valid minimum
+        if (minLatency == Integer.MAX_VALUE) minLatency = 0;
+
         int configuredThreshold = _context.getProperty(PROP_SLOW_TUNNEL_THRESHOLD, DEFAULT_SLOW_THRESHOLD_MS);
         if (_log.shouldInfo()) {
-            _log.info("Replace slow tunnels: avg latency = " + avg + "ms, configured threshold = " + configuredThreshold + "ms");
+            _log.info("Replace slow tunnels: avg latency = " + String.format("%.0f", avg) + "ms, min latency = " + minLatency + "ms, configured threshold = " + configuredThreshold + "ms");
         }
         double threshold;
         if (configuredThreshold > 0) {
             threshold = configuredThreshold;
         } else {
-            threshold = avg * 3 / 2;
+            // Use Math.max(minLatency, 1000ms) - keep at least the best tunnel's latency or 1s, whichever is larger
+            threshold = Math.max(minLatency, 1000);
         }
         if (_log.shouldDebug()) {
-            _log.debug("Using threshold: " + threshold + "ms");
+            _log.debug("Using threshold: " + String.format("%.0f", threshold) + "ms");
         }
 
-        List<TunnelPool> pools = new ArrayList<TunnelPool>();
-        listPools(pools);
-
+        // Second pass: identify and remove slow tunnels
+        // Uses two-phase approach to prevent deadlock:
+        // Phase A: Identify candidates under pool lock
+        // Phase B: Remove them OUTSIDE the lock to prevent ABBA deadlock
         for (TunnelPool pool : pools) {
-            int currentCount = pool.getTunnelCount();
-            int configuredQty = pool.getSettings().getQuantity();
-            int minOverride = _context.getProperty(PROP_SLOW_TUNNEL_MIN, 0);
-            int minToKeep = minOverride > 0 ? minOverride : configuredQty;
+            if (pool == null) continue;
 
-            if (currentCount <= minToKeep) continue;
+            List<TunnelInfo> toRemove = new ArrayList<TunnelInfo>();
 
-            if (_log.shouldDebug()) {
-                _log.debug("Pool " + pool + " has " + currentCount + " tunnels (min: " + minToKeep + "), checking for slow tunnels...");
-            }
+            // PHASE A: Snapshot decision under lock
+            synchronized (pool) {
+                int currentCount = pool.getTunnelCount();
+                int configuredQty = pool.getSettings().getQuantity();
+                int minOverride = _context.getProperty(PROP_SLOW_TUNNEL_MIN, 0);
+                int minToKeep = minOverride > 0 ? minOverride : configuredQty;
 
-            int removed = 0;
-            int maxToRemove = currentCount - minToKeep;
+                if (currentCount <= minToKeep) continue;
 
-            for (TunnelInfo info : pool.listTunnels()) {
-                if (removed >= maxToRemove) break;
-                int lat = info.getLastLatency();
                 if (_log.shouldDebug()) {
-                    _log.debug("Tunnel " + info + " -> Latency: " + lat + "ms, threshold: " + threshold);
+                    _log.debug("Pool " + pool + " has " + currentCount + " tunnels (min: " + minToKeep + "), checking for slow tunnels...");
                 }
-                if (lat > threshold) {
+
+                // Create snapshot WHILE HOLDING THE LOCK
+                List<TunnelInfo> tunnelSnapshot = new ArrayList<TunnelInfo>(pool.listTunnels());
+                int maxToRemove = currentCount - minToKeep;
+                int found = 0;
+
+                for (TunnelInfo info : tunnelSnapshot) {
+                    if (found >= maxToRemove) break;
+                    // Re-check validity inside lock
+                    if (info.getTunnelFailed() || info.getExpiration() <= _context.clock().now()) {
+                        // Remove failed tunnels if we're over budget
+                        toRemove.add(info);
+                        found++;
+                        continue;
+                    }
+                    // Also remove zero-hop tunnels (length <= 1) if we're over budget
+                    if (info.getLength() <= 1) {
+                        toRemove.add(info);
+                        found++;
+                        continue;
+                    }
+                    if (info.getLastLatency() > threshold) {
+                        toRemove.add(info);
+                        found++;
+                    }
+                }
+            } // Lock released
+
+            // PHASE B: Execute removals OUTSIDE the lock to prevent ABBA deadlock
+            for (TunnelInfo info : toRemove) {
+                // Re-verify tunnel is still valid before removal (another thread may have removed it)
+                if (info.getTunnelFailed() || info.getExpiration() <= _context.clock().now()) {
+                    continue;
+                }
+                long start = System.currentTimeMillis();
+                try {
                     pool.removeTunnel(info);
-                    removed++;
+                } catch (Exception e) {
+                    _log.warn("Exception removing slow tunnel " + info, e);
+                }
+                long duration = System.currentTimeMillis() - start;
+                if (duration > 1000) {
+                    _log.warn("removeTunnel blocked for " + duration + "ms on " + info);
                 }
             }
 
-            if (removed > 0 && _log.shouldWarn()) {
-                _log.warn("Removing " + removed + " slow tunnel(s) from " + pool + " -> Threshold: " +
-                          String.format("%.0f", threshold) + "ms\n* Minimum tunnels to retain (per direction): " + minToKeep +
-                          " Global Average latency: " + String.format("%.0f", avg) + "ms)");
-            } else if (_log.shouldDebug()) {
-                _log.debug("No slow tunnels to remove from " + pool + " -> Threshold: " + threshold + "ms, min to keep: " + minToKeep);
+            if (!toRemove.isEmpty() && _log.shouldWarn()) {
+                _log.warn("Removed " + toRemove.size() + " slow tunnels from " + pool);
             }
         }
     }
@@ -835,8 +880,11 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         int max = uptime > 30*60*1000 ? DEFAULT_MAX_PCT_TUNNELS : STARTUP_MAX_PCT_TUNNELS;
         if (isFirewalled()) {max *=2;}
         for (Hash h : lc.objects()) {
-            if (lc.count(h) > 0 && (lc.count(h) + 1) * 100 / (tunnelCount + 1) > max) {
-                rv.add(h);
+            if (lc.count(h) > 0) {
+                double percentage = (lc.count(h) + 1) * 100.0 / (tunnelCount + 1);
+                if (percentage > max) {
+                    rv.add(h);
+                }
             }
         }
         return rv;
@@ -919,14 +967,18 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      *  @since 0.8.13
      */
     private void failTunnelsWithFirstHop(TunnelPool pool, Hash peer) {
+        List<TunnelInfo> toFail = new ArrayList<TunnelInfo>();
         for (TunnelInfo tun : pool.listTunnels()) {
             int len = tun.getLength();
             if (len > 1 && tun.getPeer(1).equals(peer)) {
-                if (_log.shouldWarn()) {
-                    _log.warn("Removing " + tun + " -> First hop [" + peer.toBase64().substring(0,6) + "] is banlisted");
-                }
-                pool.tunnelFailed(tun, peer);
+                toFail.add(tun);
             }
+        }
+        for (TunnelInfo tun : toFail) {
+            if (_log.shouldWarn()) {
+                _log.warn("Removing " + tun + " -> First hop [" + peer.toBase64().substring(0,6) + "] is banlisted");
+            }
+            pool.tunnelFailed(tun, peer);
         }
     }
 
@@ -936,14 +988,18 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      *  @since 0.8.13
      */
     private void failTunnelsWithLastHop(TunnelPool pool, Hash peer) {
+        List<TunnelInfo> toFail = new ArrayList<TunnelInfo>();
         for (TunnelInfo tun : pool.listTunnels()) {
             int len = tun.getLength();
             if (len > 1 && tun.getPeer(len - 2).equals(peer)) {
-                if (_log.shouldWarn()) {
-                    _log.warn("Removing " + tun + " -> Previous hop [" + peer.toBase64().substring(0,6) + "] is banlisted");
-                }
-                pool.tunnelFailed(tun, peer);
+                toFail.add(tun);
             }
+        }
+        for (TunnelInfo tun : toFail) {
+            if (_log.shouldWarn()) {
+                _log.warn("Removing " + tun + " -> Previous hop [" + peer.toBase64().substring(0,6) + "] is banlisted");
+            }
+            pool.tunnelFailed(tun, peer);
         }
     }
 
