@@ -98,6 +98,13 @@ public interface AMDCPUInfo extends CPUInfo {
       * @return true if the CPU present in the machine is at least a Zen2 family CPU
       * @since 0.9.48
       */
-	public boolean IsZen2Compatible();
+ 	public boolean IsZen2Compatible();
+
+     /**
+      * Checks if the CPU is at least a Zen3 family CPU.
+      * @return true if the CPU present in the machine is at least a Zen3 family CPU
+      * @since 0.9.69+
+      */
+ 	public boolean IsZen3Compatible();
 
 }

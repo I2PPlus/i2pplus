@@ -24,6 +24,7 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo {
     private static boolean isExcavatorCompatible;
     private static boolean isZenCompatible;
     private static boolean isZen2Compatible;
+    private static boolean isZen3Compatible;
     private static boolean isZen5Compatible;
 
     /**
@@ -60,6 +61,12 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo {
      * @since 0.9.48
      */
     public boolean IsZen2Compatible() {return isZen2Compatible;}
+
+    /**
+     * @return true if the CPU present in the machine is at least a Zen3 family CPU
+     * @since 0.9.69+
+     */
+    public boolean IsZen3Compatible() {return isZen3Compatible;}
 
     public String getCPUModelString() throws UnknownCPUException {
         String smodel = identifyCPU();
@@ -483,17 +490,13 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo {
                 isBulldozerCompatible = true;
                 isZenCompatible = true;
                 /*
-                 * Family 25 is zen3, zen3+ or zen4, so they are definitely zen2 compatible
-                 * For now, we're only using zen2 binary for zen 3 or later processors.
-                 * TODO test for one of these instructions:
-                 * https: *en.wikipedia.org/wiki/Zen_2
-                 * Some new instruction set extensions: WBNOINVD, CLWB, RDPID, RDPRU, MCOMMIT.
-                 * Each instruction uses its own CPUID bit.
-                 * As of GMP 6.2.0, the difference is only some parameter tweaks,
-                 * and zen2 is actually a little slower than zen.
+                 * Family 25 is zen2, zen3, zen3+ or zen4.
+                 * All are backward compatible, so isZen2Compatible = true.
+                 * isZen3Compatible = true for zen3 and later.
                  */
-                isZen2Compatible = family == 25;
-                if (isZen2Compatible) {modelString = "AMD Ryzen / Epyc Zen 3 model " + model;}
+                isZen2Compatible = true;
+                isZen3Compatible = family == 25;
+                if (isZen3Compatible) {modelString = "AMD Ryzen / Epyc Zen 3 model " + model;}
                 else if (model == 0) {modelString = "AMD Epyc (Summit Ridge/Naples)";}
                 else if (model == 1) {modelString = "AMD Ryzen 7";}
                 else if (model == 17) {modelString = "AMD Ryzen 2000 APU series";}

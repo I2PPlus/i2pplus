@@ -172,6 +172,8 @@ public class NativeBigInteger extends BigInteger {
     private final static String JBIGI_OPTIMIZATION_ZEN         = "zen";
     /** @since 0.9.48 */
     private final static String JBIGI_OPTIMIZATION_ZEN2        = "zen2";
+    /** @since 0.9.69+ */
+    private final static String JBIGI_OPTIMIZATION_ZEN3        = "zen3";
 
     /**
      * Non-x86, no fallbacks to older libs or to "none"
@@ -226,7 +228,7 @@ public class NativeBigInteger extends BigInteger {
                                                                      JBIGI_OPTIMIZATION_X86};
     private final static String[] JBIGI_COMPAT_LIST_AMD_APU       = {JBIGI_OPTIMIZATION_JAGUAR, JBIGI_OPTIMIZATION_BOBCAT, JBIGI_OPTIMIZATION_ATHLON64};
     /** the main AMD product line */
-    private final static String[] JBIGI_COMPAT_LIST_AMD_MAIN      = {JBIGI_OPTIMIZATION_ZEN2, JBIGI_OPTIMIZATION_ZEN,
+    private final static String[] JBIGI_COMPAT_LIST_AMD_MAIN      = {JBIGI_OPTIMIZATION_ZEN3, JBIGI_OPTIMIZATION_ZEN2, JBIGI_OPTIMIZATION_ZEN,
                                                                      JBIGI_OPTIMIZATION_EXCAVATOR, JBIGI_OPTIMIZATION_STEAMROLLER, JBIGI_OPTIMIZATION_PILEDRIVER,
                                                                      JBIGI_OPTIMIZATION_BULLDOZER, JBIGI_OPTIMIZATION_ATHLON64, JBIGI_OPTIMIZATION_X86};
     private final static String[] JBIGI_COMPAT_LIST_INTEL_ATOM    = {JBIGI_OPTIMIZATION_ATOM, JBIGI_OPTIMIZATION_PENTIUM3, JBIGI_OPTIMIZATION_PENTIUM2,
@@ -282,6 +284,7 @@ public class NativeBigInteger extends BigInteger {
         JBIGI_COMPAT_MAP.put(JBIGI_OPTIMIZATION_EXCAVATOR,   JBIGI_COMPAT_LIST_AMD_MAIN);
         JBIGI_COMPAT_MAP.put(JBIGI_OPTIMIZATION_ZEN,         JBIGI_COMPAT_LIST_AMD_MAIN);
         JBIGI_COMPAT_MAP.put(JBIGI_OPTIMIZATION_ZEN2,        JBIGI_COMPAT_LIST_AMD_MAIN);
+        JBIGI_COMPAT_MAP.put(JBIGI_OPTIMIZATION_ZEN3,        JBIGI_COMPAT_LIST_AMD_MAIN);
 
         JBIGI_COMPAT_MAP.put(JBIGI_OPTIMIZATION_ATOM, JBIGI_COMPAT_LIST_INTEL_ATOM);
 
@@ -367,6 +370,8 @@ public class NativeBigInteger extends BigInteger {
                     return JBIGI_OPTIMIZATION_VIAC3;
                 } else if (c instanceof AMDCPUInfo) {
                     AMDCPUInfo amdcpu = (AMDCPUInfo) c;
+                    if (amdcpu.IsZen3Compatible())
+                        return JBIGI_OPTIMIZATION_ZEN3;
                     if (amdcpu.IsZen2Compatible())
                         return JBIGI_OPTIMIZATION_ZEN2;
                     if (amdcpu.IsZenCompatible())
