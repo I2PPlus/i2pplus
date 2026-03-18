@@ -25,6 +25,7 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo {
     private static boolean isZenCompatible;
     private static boolean isZen2Compatible;
     private static boolean isZen3Compatible;
+    private static boolean isZen4Compatible;
     private static boolean isZen5Compatible;
 
     /**
@@ -67,6 +68,18 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo {
      * @since 0.9.69+
      */
     public boolean IsZen3Compatible() {return isZen3Compatible;}
+
+    /**
+     * @return true if the CPU present in the machine is at least a Zen4 family CPU
+     * @since 0.9.69+
+     */
+    public boolean IsZen4Compatible() {return isZen4Compatible;}
+
+    /**
+     * @return true if the CPU present in the machine is at least a Zen5 family CPU
+     * @since 0.9.69+
+     */
+    public boolean IsZen5Compatible() {return isZen5Compatible;}
 
     public String getCPUModelString() throws UnknownCPUException {
         String smodel = identifyCPU();
@@ -490,14 +503,14 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo {
                 isBulldozerCompatible = true;
                 isZenCompatible = true;
                 /*
-                 * Family 25 is zen2, zen3, zen3+ or zen4.
+                 * Family 25 is zen2 and zen3 (NOT zen4 - that's family 26).
                  * All are backward compatible, so isZen2Compatible = true.
                  * isZen3Compatible = true for zen3 and later.
                  */
                 isZen2Compatible = true;
-                isZen3Compatible = family == 25;
-                if (isZen3Compatible) {modelString = "AMD Ryzen / Epyc Zen 3 model " + model;}
-                else if (model == 0) {modelString = "AMD Epyc (Summit Ridge/Naples)";}
+                isZen3Compatible = true;
+                isZen4Compatible = false;
+                if (model == 0) {modelString = "AMD Epyc (Summit Ridge/Naples)";}
                 else if (model == 1) {modelString = "AMD Ryzen 7";}
                 else if (model == 17) {modelString = "AMD Ryzen 2000 APU series";}
                 else if (model == 24) {modelString = "AMD Ryzen Zen+ 3000 APU series";}
@@ -506,7 +519,7 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo {
                 else if (model == 96) {modelString = "AMD Ryzen 4000 APU series";}
                 else if (model == 104) {modelString = "AMD Ryzen 5000 APU series";}
                 else if (model == 113) {modelString = "AMD Ryzen 3000 series";}
-                else {modelString = "Ryzen / Epyc model " + model;}
+                else {modelString = "AMD Ryzen / Epyc Zen 2/3 model " + model;}
             }
             break;
 
@@ -541,6 +554,7 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo {
                 isZenCompatible = true;
                 isZen2Compatible = true;
                 isZen3Compatible = true;
+                isZen4Compatible = true;
                 isZen5Compatible = true;
                 if (model <= 31) {modelString = "AMD Epyc 9005 Series (Zen5 / Turin)";}
                 else if (model == 32) {modelString = "AMD Ryzen 8000 Series (Zen5 / Strix Point)";}
