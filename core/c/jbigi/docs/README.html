@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <meta charset="UTF-8">
+   <title>JBIGI Build Guide</title>
+   <style type="text/css">
+      html,
+      body {
+         min-width: 800px;
+         min-height: 100%;
+         line-height: 1.4;
+         font-size: 14pt;
+         font-family: Open Sans, Segoe UI, Noto Sans, sans-serif;
+         color: #ccc;
+         background: linear-gradient(to bottom,#080000,#0d0000);
+         overflow-x: hidden;
+         scrollbar-color: #201818 #100808;
+      }
+
+      ::selection {
+         text-shadow: none;
+         background: #431;
+         color: #fff;
+      }
+
+      p,
+      li,
+      code {
+         text-shadow: 0 1px 1px #000;
+      }
+
+      #container {
+         padding: 5% 15%;
+      }
+
+      #panel {
+         padding: 40px;
+         font-size: 85%;
+         text-align: justify;
+         border: 1px solid #555;
+         box-shadow: inset 0 0 0 1px #100808, inset 0 0 2px 1px #403838, 0 0 2px 2px #000;
+         background: #201818;
+         background: repeating-linear-gradient(to right, rgba(255, 255, 255, .05), rgba(0, 0, 0, .08) 2px) repeat center center / 2px 100%,
+                     repeating-linear-gradient(to bottom, #302a2a, #201a1a 2px) repeat center center / 100% 2px;
+         background-blend-mode: overlay;
+         will-change: transform;
+      }
+
+      #sitename,
+      #sitename:hover,
+      #sitename:focus {
+         margin: -8px 0 24px;
+         display: inline-block;
+         font-size: 300%;
+         user-select: none;
+      }
+
+      hr.heading {
+         margin: -10px 0 30px;
+         height: 1px;
+         color: transparent;
+         border: none;
+         background: repeating-linear-gradient(to right, rgba(255, 255, 255, .05), rgba(0, 0, 0, .08) 2px),
+                     linear-gradient(to right, #807878, #605858 20%, rgba(0, 0, 0, 0) 90%);
+         filter: drop-shadow(0 1px 1px #000);
+         animation: ease-out underline 1s forwards;
+         will-change: transform;
+      }
+
+      @keyframes underline {
+          from { width: 0; }
+          to { width: 100%; }
+      }
+
+      h2,
+      h3 {
+         color: #ccc;
+         text-shadow: 0 0 2px #181818, 0 2px 1px #000;
+      }
+
+      h2 { margin-top: 30px; }
+      h3 { padding: 5px 0 0; }
+      h2::first-letter, h3::first-letter { font-size: 114%; }
+
+      a:link { font-weight: bold; text-decoration: none; color: #c4ad9d; outline: none; }
+      a:visited { color: #a98770; }
+      a:hover, a:focus { color: #e88b44; }
+
+      code {
+         white-space: nowrap;
+         font-weight: bold;
+         font-family: Fira Code, Noto Mono, DejaVu Sans Mono, Lucida Console, monospace;
+         font-size: 90%;
+         color: #292;
+         -moz-user-select: all;
+         -webkit-user-select: all;
+         user-select: all;
+      }
+
+      pre {
+         background: #111;
+         padding: 15px;
+         border-radius: 5px;
+         overflow-x: auto;
+         box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #292, 0 0 2px 1px #0004;
+      }
+      pre code {
+         white-space: pre;
+         display: block;
+      }
+
+      .warn {
+         margin-top: 18px;
+         padding: 15px 18px 15px 54px;
+         line-height: 1.2;
+         border: 1px solid #900;
+         border-radius: 4px;
+         box-shadow: inset 0 0 0 1px #000, inset 0 0 2px 1px #900, 0 0 2px 1px rgba(0, 0, 0, .2);
+         background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACcAAAAhCAMAAAEaI3KMAAAACXBIWXMAAA7DAAAOwwHHb6hkAAACbVBMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAQECAgIDAAADAgIEBAQGBAQGBQUGBgYHAQAHBwcICAgJCQkKAQAKCgoLAQALCwsMCwsODg4PDw8QAQAQAgASAAASAwAVCwsaGhobDw8bExMbGxskHx8mJiYpAwAqKiotKysuAQAwLi4yMjI8HR08JiY9CAA/CAA/Pz9BQUFDQ0NKBwBLPDxLS0tTAwBhBABmZmZpAABpPT1tEABvEAB4RUV4WFh4a2uCBwCECACGhoaHeHiUAQCWFgCaFgCclZWkDgClVFSlb2+0lZW0tLS2FQC4BQC9vb3GGQDGxsbIVlbKWFjMFwDOCgDPfn7RFADUrKnV1dXWCgDWEgDWLR7YBATYEADYg4PZ2dnaAwPakozbEADbp6fbysrb29vezc3e1NTe3t7hDQDhIxjk5OTlb2nlcWvmCwDqwL7qysnq6urrCQDrDAPrDgbtAADtgIDv7+/wQkLwS0bxBgDxPTjzBADzhITzq6vz8/P1oJ/1qKf19fX2BAD209P51tb7AgD7HBv77+/7+/v8/Pz/AAD/DAz/amr/bm7/cnL/enr/goL/ior/k5P/lJT/mJj/m5v/o6P/q6v/s7P/t7f/uLj/u7v/vr7/w8P/xcX/yMj/y8v/09P/2Nj/29v/4+P/5OT/6en/6ur/6+v/8fH/8vL/9PT//Pz//f3////ZtbwoAAAAJXRSTlMAAwYMEhUYGyEkMDxCS1ppeISHkJacpairtMPP2Nvk5+3w8/n8UHR7egAAAp9JREFUGBmFwYlDi2EcB/BvB6lRjoxOS/1ykzPkFrmv3GdCyZEzLMRcrZdhjjG3MV4du/S2aU1puXn+Js87G/WWfD4I8W4FkMpaARgEwYAexAHQgFM1gbOPtAPThPUCQNxQyOb5w/Db2aYsKR4y62txgWglILosaDVkQxAS5p+HoK1NXhUC4qVxjccRYG/NYvZUcGQVF4uvreAMgrBeEAyTgNVlQb2QRkE9EaK+fFENhbQWToMOyO3++dPtJrQz2+lkmdnM6ZyJkJgN9+oYmzuZsbp7G2IQ0P+A+b7JZCooMJlMD8wH+oNLOaM7X8GtWlXBndedSQGSSztJRoiKekNpypcxUEh66X+RhA6i1rS0tKzpgfbI6/3q9RLaidvrbmTv3Hvj8NcoSbpEJyVpBP5IfORsfkIHm513ExEUucRuZ4xuMrt9SQR+yzhd+5kxYuxz7bkMBMQWWl+JokiiKL6yFsZCRmaziSMTZzYTuIRThmsCRwJ31XAsAQjP1ekqZFQh0+lyw5FeppSO5aVKy6AmpUFQitIs2rMwLQr/oaKdbW1t20iFbsVRyQdZCcWhG+rRF3w+33ufz3dhtBr/EpY057HH4/Ezv8fjeTwnKQxditQsbeA+5VP+xwZuqSYSXYjJ2OJyueq/HxpP2fu+1btcro0ZMegkloodDsfbH4wNo4kn2Y+3DoejmGKhED/8iM1mkxg3legNY0yy2WyHhw9AB4k5d6qrayQmm0+zmEyqqa6+k5OIvyJS8x5aLJZnzwNW0ornAU8tFsvDvNQIBEWnrzMajbdv3FS6fstoNK5Nj0ZAH9qh1+urrlQGZVJmZdCVKr1ev536gOtHRVqttvxE18q1Wm0R9QUGTth/9H/2j43HoBmbd+3u3q5N0wf/ApzdYLKMtOjLAAAAAElFTkSuQmCC) 12px center no-repeat, repeating-linear-gradient(to bottom, rgba(0, 0, 0, .5), rgba(64, 0, 0, .2) 2px), linear-gradient(to bottom, #222, #111);
+         background-size: 32px auto, 100% 100%, 100% 100%;
+      }
+
+      ul { margin-top: -10px; }
+      li { margin: 8px 0; }
+   </style>
+</head>
+<body>
+   <div id="container">
+      <div id="panel">
+         <h1 id="sitename">JBIGI Build Guide</h1>
+         <hr class="heading">
+
+         <p>JBIGI is the native BigInteger library used by I2P for fast cryptographic operations. This guide covers how to build it from source.</p>
+
+         <h2>Quick Start</h2>
+         <hr class="heading">
+         <pre><code>cd core/c/jbigi
+./build.sh help</code></pre>
+
+         <h2>Prerequisites</h2>
+         <hr class="heading">
+         <ul>
+            <li><strong>Java JDK</strong> with JNI headers (for <code>jni.h</code>)</li>
+            <li><strong>GNU Compiler Collection (GCC)</strong></li>
+            <li><strong>m4</strong> macro processor</li>
+            <li><strong>wget</strong> (to download GMP)</li>
+         </ul>
+
+         <div class="warn">
+            <strong>Note:</strong> Java 17+ is required for recent I2P versions.
+         </div>
+
+         <h2>Build Commands</h2>
+         <hr class="heading">
+
+         <h3>Build for current machine</h3>
+         <pre><code>cd core/c/jbigi
+./build.sh local</code></pre>
+         <p>Builds a <code>libjbigi.so</code> optimized for your current CPU architecture.</p>
+
+         <h3>Build all architectures</h3>
+         <pre><code>cd core/c/jbigi
+./build.sh all</code></pre>
+         <p>Builds optimized libraries for all supported CPU types (zen, skylake, core2, arm, etc.).</p>
+
+         <h3>Preview what would be built</h3>
+         <pre><code>cd core/c/jbigi
+./build.sh all --dry-run</code></pre>
+         <p>Shows the list of architectures without actually building.</p>
+
+         <h3>Dynamic build (requires system GMP)</h3>
+         <pre><code>cd core/c/jbigi
+./build.sh local dyn</code></pre>
+         <p>Links against system GMP library instead of static linking. Faster build but requires GMP installed.</p>
+
+         <h2>Environment Variables</h2>
+         <hr class="heading">
+         <ul>
+            <li><code>BITS=32</code> or <code>BITS=64</code> - Force 32 or 64 bit build</li>
+            <li><code>TARGET=linux|windows|freebsd|darwin</code> - Target OS</li>
+            <li><code>CC=gcc</code> - C compiler</li>
+            <li><code>JAVA_HOME=/path/to/jdk</code> - Path to JDK</li>
+         </ul>
+
+         <h2>Examples</h2>
+         <hr class="heading">
+
+         <h3>Build for current machine</h3>
+         <pre><code>./build.sh local</code></pre>
+
+         <h3>Build 32-bit</h3>
+         <pre><code>BITS=32 ./build.sh local</code></pre>
+
+         <h3>Cross-compile for Windows 64-bit</h3>
+         <pre><code>TARGET=mingw64 CC=x86_64-w64-mingw32-gcc BITS=64 ./build.sh all</code></pre>
+
+         <h3>Cross-compile for FreeBSD</h3>
+         <pre><code>TARGET=freebsd BITS=64 ./build.sh all</code></pre>
+
+         <h2>Output Location</h2>
+         <hr class="heading">
+         <p>Built libraries are copied to:</p>
+         <pre><code>core/c/jbigi/lib/</code></pre>
+         <p>From there, copy to your I2P installation's <code>lib/</code> directory.</p>
+
+         <h2>Troubleshooting</h2>
+         <hr class="heading">
+
+         <h3>"Cannot find jni.h"</h3>
+         <p>Set <code>JAVA_HOME</code> to your JDK installation:</p>
+         <pre><code>export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64</code></pre>
+
+         <h3>"m4 not found"</h3>
+         <p>Install m4:</p>
+         <pre><code>sudo apt-get install m4    # Debian/Ubuntu
+sudo yum install m4        # RHEL/CentOS</code></pre>
+
+         <h3>"Unsupported platform"</h3>
+         <p>Your CPU architecture may not be supported by GMP. Check the supported platforms in <code>build-all.sh</code>.</p>
+
+         <h2>Supported Architectures</h2>
+         <hr class="heading">
+         <ul>
+            <li><strong>x86_64:</strong> zen3, zen2, zen, skylake, core2, atom, bulldozer, and more</li>
+            <li><strong>x86 (32-bit):</strong> pentium, athlon, and more</li>
+            <li><strong>ARM:</strong> armv5, armv6, armv7a, armv8 (aarch64)</li>
+         </ul>
+
+         <div class="warn">
+            <strong>Note:</strong> Zen4 and Zen5 are not supported by GMP 6.3.0. These CPUs will fall back to the zen3 binary.
+         </div>
+
+         <h2>More Information</h2>
+         <hr class="heading">
+         <ul>
+            <li><code>docs/README.md</code> - Full documentation</li>
+            <li><code>docs/BUILD_MULTIARCH.md</code> - Docker/QEMU build guide</li>
+         </ul>
+      </div>
+   </div>
+</body>
+</html>

@@ -74,13 +74,13 @@ simply run sh build.sh and the results will be packaged up into jbigi.jar
 and the libjbigi.so library.
 
 To build the native jbigi libraries for all supported CPUs (on the current OS),
-go into jbigi/ and run build-all.sh (the results will be under jbigi/lib/)
+go into jbigi/ and run build.sh all (the results will be under jbigi/lib/)
 
 
 Build for more than one target at a time
 ========================================
 
-jbigi/mbuild-all.sh is used to build a whole set of binaries at a time.
+jbigi/build.sh all is used to build a whole set of binaries at a time.
 Each run will build a set of binaries for a specific platform.
 
 Linux -> Windows cross-compilation
@@ -88,10 +88,10 @@ Linux -> Windows cross-compilation
 Install ming-w64 (on debian or whichever package that provides i686-w64-mingw32 and x86_64_w64_mingw32).
 
 To build the 32-bit binaries run something like this:
-    CC=i686-w64-mingw32-gcc TARGET=windows BITS=32 ./mbuild-all.sh
+    CC=i686-w64-mingw32-gcc TARGET=windows BITS=32 ./build.sh all
 
 To build the 64-bit binaries run something like this:
-    CC=x86_64-w64-mingw32-gcc TARGET=windows BITS=64 ./mbuild-all.sh
+    CC=x86_64-w64-mingw32-gcc TARGET=windows BITS=64 ./build.sh all
 
 Linux -> FreeBSD cross-compilation
 ----------------------------------
@@ -99,10 +99,10 @@ Install gcc-multilib (on debian or whichever package that provides the C runtime
 I used clang3.6 as CC, but gcc or most other things should work too.
 
 To build the 32-bit binaries run something like this:
-    TARGET=freebsd BITS=32 ./mbuild-all.sh
+    TARGET=freebsd BITS=32 ./build.sh all
 
 To build the 64-bit binaries run something like this:
-    TARGET=freebsd BITS=64 ./mbuild-all.sh
+    TARGET=freebsd BITS=64 ./build.sh all
 
 OSX Compilation
 ---------------

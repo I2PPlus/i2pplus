@@ -7,7 +7,7 @@
     - Add error handling for patch application in download_gmp.sh
     - Add jbigi build artifacts to .gitignore (bin/, lib/, gmp-*/, *.tar.bz2)
     - Rewrite README with comprehensive build documentation
-    - Remove zen4/zen5 from mbuild-all.sh (not supported by GMP 6.3.0)
+    - Remove zen4/zen5 from build-all.sh (not supported by GMP 6.3.0)
     - New jbigi binaries built with GMP 6.3.0: libjbigi-linux-none_64.so,
       jbigi-windows-none_64.dll
     - Remove deprecated libjbigi-linux-ppc.so
@@ -17,6 +17,15 @@
     - Add GCC 15+ compatibility patch (gcc15-fix.diff) for GMP 6.3.0 configure
     - Add new zen2/zen3 jbigi binaries: libjbigi-linux-zen2_64.so,
       libjbigi-linux-zen3_64.so
+    - Remove dead scripts: build-all.sh (legacy), jbigi_functions.sh
+    - Consolidate build scripts: build.sh with local/all/help commands
+    - Add --dry-run option to preview builds
+    - Move docs to docs/ folder (README.md, BUILD_MULTIARCH.md)
+    - Add README.html compilation guide
+
+  * CPU Detection:
+    - Add IsZen4/IsZen5 detection methods to AMDCPUInfo interface
+    - Fix AMD family detection: family 25 = Zen2/3, family 26 = Zen4/5
 
 2026-03-17 dr|z3d
   * Router:

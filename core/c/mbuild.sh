@@ -5,7 +5,7 @@
 rm -f t/* jcpuid/lib/freenet/support/CPUInformation/* jbigi/lib/net/i2p/util/*
 
 ( cd jcpuid ; ./build.sh )
-( cd jbigi ; ./mbuild-all.sh )
+( cd jbigi ; ./build.sh all )
 
 rm -Rf t
 mkdir t

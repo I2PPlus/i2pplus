@@ -2,7 +2,7 @@
 
 > Note: For the latest information, see:
 > - `history.txt` for changelog entries
-> - `core/c/jbigi/README` for build instructions
+> - `core/c/jbigi/docs/README.md` for build instructions
 > - `NativeBigInteger.java` and `CPUID.java` for technical details
 
 ---
@@ -119,10 +119,10 @@ cd core/c/jbigi
 
 # Full build (all architectures)
 cd core/c/jbigi
-./mbuild-all.sh
+./build.sh all
 ```
 
-For more options, see `core/c/jbigi/README`.
+For more options, see `core/c/jbigi/docs/README.md`.
 
 ---
 

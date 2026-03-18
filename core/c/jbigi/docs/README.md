@@ -65,7 +65,7 @@ Build for multiple CPU architectures:
 
 ```bash
 cd core/c/jbigi
-./mbuild-all.sh
+./build.sh all
 ```
 
 This produces optimized libraries for:
@@ -75,8 +75,8 @@ This produces optimized libraries for:
 
 ### Static vs Dynamic Linking
 
-- `./build.sh dynamic` - Links against system GMP (faster build)
-- `./build.sh` (default) - Statically links GMP (portable, recommended)
+- `./build.sh local dyn` - Links against system GMP (faster build)
+- `./build.sh local` (default) - Statically links GMP (portable, recommended)
 
 ### Custom Builds
 
@@ -87,12 +87,12 @@ BITS=32 ./build.sh
 
 #### Cross-compilation for Windows
 ```bash
-TARGET=mingw64 BITS=64 CC=x86_64-w64-mingw32-gcc ./mbuild-all.sh
+TARGET=mingw64 BITS=64 CC=x86_64-w64-mingw32-gcc ./build.sh all
 ```
 
 #### Android NDK
 ```bash
-TARGET=android BITS=64 ./mbuild-all.sh
+TARGET=android BITS=64 ./build.sh all
 ```
 
 #### Building Specific Targets
@@ -140,13 +140,9 @@ Set the `I2P` environment variable to point to your I2P installation directory.
 
 | Script | Purpose |
 |--------|---------|
-| `build.sh` | Build for current machine |
-| `build-all.sh` | Build all architectures (legacy) |
-| `mbuild-all.sh` | Modern multi-architecture build |
+| `build.sh` | Build jbigi (local or all architectures) |
 | `download_gmp.sh` | Downloads and patches GMP source |
 | `build_jbigi.sh` | Core compilation script |
-
-## Troubleshooting
 
 ## Troubleshooting
 
@@ -174,7 +170,7 @@ wget https://ftp.gnu.org/gnu/gmp/gmp-6.3.0.tar.bz2
 
 ### Build fails with "unsupported platform"
 
-Check your architecture is supported in `mbuild-all.sh`. The supported platforms are defined in the platform lists (X86_64_PLATFORMS, X86_PLATFORMS, ARM_PLATFORMS, etc.).
+Check your architecture is supported in `build-all.sh`. The supported platforms are defined in the platform lists (X86_64_PLATFORMS, X86_PLATFORMS, ARM_PLATFORMS, etc.).
 
 ### Cross-compilation Notes
 
