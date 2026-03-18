@@ -51,7 +51,9 @@ public class TestJob extends JobImpl {
      * Prevents overwhelming the router with too many simultaneous tunnel tests.
      * This value can be adjusted based on system capacity.
      */
-    private static final int MAX_CONCURRENT_TESTS = SystemVersion.isSlow() ? 8 : 16;
+    private static final int MAX_CONCURRENT_TESTS = SystemVersion.isSlow() ? 12 : 24;
+
+    private static final int BASE_MAX_CONCURRENT_TESTS = MAX_CONCURRENT_TESTS;
 
     // Adaptive testing frequency constants
     private static final int BASE_TEST_DELAY = 120 * 1000; // 120s base
@@ -78,6 +80,9 @@ public class TestJob extends JobImpl {
      * This ensures that the router does not exceed MAX_CONCURRENT_TESTS.
      */
     private static final AtomicInteger CONCURRENT_TESTS = new AtomicInteger(0);
+
+    private static final int MAX_PENDING_REPLIES = MAX_CONCURRENT_TESTS * 2;
+    private static final AtomicInteger PENDING_REPLIES = new AtomicInteger(0);
 
     /**
      * Atomic counter for total TestJob instances (active + queued).
@@ -482,16 +487,7 @@ public class TestJob extends JobImpl {
         // Concurrency control: Check and increment counter
         // Adaptive limits based on lag to balance testing and performance
         // Exploratory tunnels are deprioritized under high load
-        int maxTests;
-        if (maxLag > 3000 || avgLag > 100) {
-            maxTests = isExploratory ? 2 : 4; // Reduce exploratory tests under severe load
-        } else if (maxLag > 2000 || avgLag > 50) {
-            maxTests = isExploratory ? 3 : 6; // Prioritize client tests under high load
-        } else if (maxLag > 1000 || avgLag > 20) {
-            maxTests = isExploratory ? 4 : 8; // Slightly favor client tests under moderate load
-        } else {
-            maxTests = SystemVersion.isSlow() ? MAX_CONCURRENT_TESTS : MAX_CONCURRENT_TESTS * 3 / 2; // Normal operation
-        }
+        int maxTests = getAdaptiveMaxConcurrentTests(maxLag, avgLag, isExploratory);
 
         int current;
         do {
@@ -582,6 +578,17 @@ public class TestJob extends JobImpl {
         final RouterContext ctx = getContext();
         _id = __id.getAndIncrement();
 
+        // Check pending replies cap before sending
+        int pending = PENDING_REPLIES.get();
+        if (pending >= MAX_PENDING_REPLIES) {
+            if (_log.shouldInfo()) {
+                _log.info("Max pending replies reached (" + pending + "/" + MAX_PENDING_REPLIES +
+                          ") -> Deferring test for " + _cfg);
+            }
+            return false;
+        }
+        PENDING_REPLIES.incrementAndGet();
+
         // Prefer secure paths but still allow unencrypted as cover
         boolean useEncryption = ctx.random().nextInt(4) != 0;
 
@@ -601,6 +608,7 @@ public class TestJob extends JobImpl {
             }
 
             if (sess == null) {
+                PENDING_REPLIES.decrementAndGet();
                 return false;
             }
 
@@ -613,6 +621,7 @@ public class TestJob extends JobImpl {
             }
 
             if (m == null) {
+                PENDING_REPLIES.decrementAndGet();
                 return false;
             }
         }
@@ -629,6 +638,7 @@ public class TestJob extends JobImpl {
                     _log.info("Outbound gateway for tunnel " + _outTunnel.getSendTunnelId(0) +
                               " not yet registered \n* Deferring test for " + _cfg);
                 }
+                PENDING_REPLIES.decrementAndGet();
                 return false; // Let caller handle cleanup & rescheduling
             }
             ctx.tunnelDispatcher().dispatchOutbound(
@@ -683,22 +693,93 @@ public class TestJob extends JobImpl {
         }
     }
 
+    /**
+     * Calculate adaptive delay range based on current job lag.
+     * Returns [minDelay, maxDelay] in milliseconds.
+     * When system is healthy, tests run more frequently.
+     * Under load, tests back off to reduce pressure.
+     */
+    private int[] getAdaptiveDelayRange(long maxLag, long avgLag) {
+        int min = MIN_TEST_DELAY;
+        int max = MAX_TEST_DELAY;
+
+        if (maxLag < 500 && avgLag < 2) {
+            // Super low lag - run more frequently
+            min = MIN_TEST_DELAY / 2;      // 30s
+            max = BASE_TEST_DELAY;          // 120s
+        } else if (maxLag < 1000 && avgLag < 5) {
+            // Very low lag
+            min = MIN_TEST_DELAY * 2 / 3;   // 40s
+            max = BASE_TEST_DELAY;          // 120s
+        } else if (maxLag < 1500 && avgLag < 10) {
+            // Low lag - normal operation
+            min = MIN_TEST_DELAY;            // 60s
+            max = MAX_TEST_DELAY / 2;        // 90s
+        } else if (maxLag < 2000 || avgLag > 20) {
+            // Moderate lag - back off
+            min = BASE_TEST_DELAY;            // 120s
+            max = MAX_TEST_DELAY;             // 180s
+        } else {
+            // Severe lag - significantly back off
+            min = BASE_TEST_DELAY * 3 / 2;    // 180s
+            max = MAX_TEST_DELAY * 2;         // 360s
+        }
+
+        return new int[] { min, max };
+    }
+
     private int getDelay() {
-        // Simple exponential backoff with a cap and jitter
+        return getDelay(getContext().jobQueue().getMaxLag(), getContext().jobQueue().getAvgLag());
+    }
+
+    private int getDelay(long maxLag, long avgLag) {
         int baseDelay = BASE_TEST_DELAY;
+        int[] range = getAdaptiveDelayRange(maxLag, avgLag);
+        int minDelay = range[0];
+        int maxDelay = range[1];
+
         int failCount = _cfg.getTunnelFailures();
         int scaled = baseDelay;
         if (failCount > 0) {
-            // Reduced backoff to identify failing tunnels sooner
-            // Tunnel will be removed after 4 consecutive failures anyway
             int multiplier = Math.min(1 << (failCount - 1), 2); // max 2x (3 min)
             scaled = baseDelay * multiplier;
         }
-        // Ensure minimum delay and avoid negative values
-        scaled = Math.max(scaled, MIN_TEST_DELAY);
-        // Add a small jitter to avoid thundering herd (ensure positive jitter)
-        int jitter = getContext().random().nextInt(Math.max(1, scaled / 3));
+        // Ensure within adaptive bounds
+        scaled = Math.max(scaled, minDelay);
+        scaled = Math.min(scaled, maxDelay);
+        // Add a small jitter to avoid thundering herd
+        int jitter = getContext().random().nextInt(Math.max(1, scaled / 4));
         return scaled + jitter;
+    }
+
+    /**
+     * Calculate adaptive max concurrent tests based on current job lag.
+     * Scales up when system is healthy, scales down under load.
+     * Exploratory tunnels are always deprioritized vs client tunnels.
+     */
+    private int getAdaptiveMaxConcurrentTests(long maxLag, long avgLag, boolean isExploratory) {
+        int base = BASE_MAX_CONCURRENT_TESTS;
+        int max = base * 2; // Allow doubling under ideal conditions
+
+        if (maxLag < 500 && avgLag < 2) {
+            // Super low lag - allow maximum concurrent tests
+            return isExploratory ? max * 3 / 4 : max;
+        } else if (maxLag < 1000 && avgLag < 5) {
+            // Very low lag - high concurrency
+            return isExploratory ? base * 5 / 4 : base * 3 / 2;
+        } else if (maxLag < 1500 && avgLag < 10) {
+            // Low lag - normal operation
+            return isExploratory ? base : base * 5 / 4;
+        } else if (maxLag < 2000 || avgLag > 20) {
+            // Moderate lag - reduce concurrency
+            return isExploratory ? base / 2 : base * 3 / 4;
+        } else if (maxLag < 3000 || avgLag > 50) {
+            // High lag - significantly reduce
+            return isExploratory ? base / 4 : base / 2;
+        } else {
+            // Severe lag - minimal tests
+            return isExploratory ? 2 : 4;
+        }
     }
 
     private float getSuccessRate() {
@@ -913,8 +994,9 @@ public class TestJob extends JobImpl {
             }
             _found = true;
             CONCURRENT_TESTS.decrementAndGet(); // Decrement counter
+            PENDING_REPLIES.decrementAndGet();
             if (_log.shouldDebug()) {
-                _log.debug("Tunnel test reply received for " + _cfg + " (Active concurrent tests: " + CONCURRENT_TESTS.get() + ")");
+                _log.debug("Tunnel test reply received for " + _cfg + " (Active: " + CONCURRENT_TESTS.get() + ", Pending: " + PENDING_REPLIES.get() + ")");
             }
         }
 
@@ -942,8 +1024,9 @@ public class TestJob extends JobImpl {
                 testFailed(getContext().clock().now() - _started);
             }
             CONCURRENT_TESTS.decrementAndGet(); // Decrement counter
+            PENDING_REPLIES.decrementAndGet();
             if (_log.shouldDebug()) {
-                _log.debug("Tunnel test timeout for " + _cfg + " (Active concurrent tests: " + CONCURRENT_TESTS.get() + ")");
+                _log.debug("Tunnel test timeout for " + _cfg + " (Active: " + CONCURRENT_TESTS.get() + ", Pending: " + PENDING_REPLIES.get() + ")");
             }
         }
     }
