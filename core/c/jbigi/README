@@ -95,6 +95,29 @@ TARGET=mingw64 BITS=64 CC=x86_64-w64-mingw32-gcc ./mbuild-all.sh
 TARGET=android BITS=64 ./mbuild-all.sh
 ```
 
+#### Building Specific Targets
+
+To build for specific CPU architectures (e.g., zen2, zen3):
+```bash
+cd core/c/jbigi
+mkdir -p bin/zen2 bin/zen3
+cd bin/zen2
+../../gmp-6.3.0/configure --build=zen2-linux --with-pic
+make -j$(nproc)
+cd ../zen3
+../../gmp-6.3.0/configure --build=zen3-linux --with-pic
+make -j$(nproc)
+# Then copy the .so files to lib/net/i2p/util/
+```
+
+### GCC 15+ Compatibility
+
+GMP 6.3.0 has a compatibility issue with GCC 15 and newer due to stricter C99 standards compliance. The configure tests fail because `void g()` (old-style C) is no longer interpreted as taking no arguments.
+
+A patch is automatically applied when running `download_gmp.sh`:
+- **Patch**: `patches/gcc15-fix.diff`
+- **Issue**: `void g(){}` in configure tests must be `void g(int, t2, int, t2, t2, int){}` to match the actual function signature
+
 ## Output
 
 Built libraries are placed in:

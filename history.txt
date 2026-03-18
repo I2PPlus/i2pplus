@@ -14,6 +14,9 @@
     - Add BUILD_MULTIARCH.md with Docker/QEMU build instructions for ARM
     - Add setup scripts for cross-compilation environments
     - Convert installer README to markdown
+    - Add GCC 15+ compatibility patch (gcc15-fix.diff) for GMP 6.3.0 configure
+    - Add new zen2/zen3 jbigi binaries: libjbigi-linux-zen2_64.so,
+      libjbigi-linux-zen3_64.so
 
 2026-03-17 dr|z3d
   * Router:
