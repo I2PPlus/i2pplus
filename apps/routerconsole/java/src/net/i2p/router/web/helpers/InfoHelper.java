@@ -214,8 +214,16 @@ public class InfoHelper extends HelperBase {
         if (rdnsEnabled) {
             int rdnsCacheSize = CommSystemFacadeImpl.countRdnsCacheEntries();
             String rdnsFileSize = (_context.router().getUptime() > 5 * 1000 ? CommSystemFacadeImpl.rdnsCacheSize() : _t("initializing") + "&hellip;");
+            String maxRdnsCache;
+            if (maxMem < 512*1024*1024) {
+                maxRdnsCache = "8000";
+            } else if (maxMem < 1024*1024*1024) {
+                maxRdnsCache = "16000";
+            } else {
+                maxRdnsCache = "24000";
+            }
             buf.append("<tr><td><b>RDNS Cache:</b></td><td class=ajax>").append(rdnsCacheSize).append(" / ")
-               .append((maxMem < 512*1024*1024 ? "8000" : "16000")).append(" ").append(_t("entries")).append("&ensp;<b>")
+               .append(maxRdnsCache).append(" ").append(_t("entries")).append("&ensp;<b>")
                .append(_t("Cache file")).append(":</b> ").append(configDir).append("rdnscache.txt (").append(rdnsFileSize).append(")</td></tr>\n");
         }
         if (firstInstalled() != null && firstVersion() != null && lastUpdated() != null) {
