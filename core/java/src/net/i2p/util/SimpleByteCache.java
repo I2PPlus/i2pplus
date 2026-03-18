@@ -13,8 +13,46 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class SimpleByteCache {
 
     private static final ConcurrentHashMap<Integer, SimpleByteCache> _caches = new ConcurrentHashMap<Integer, SimpleByteCache>(8);
+    private static final ConcurrentHashMap<Integer, SimpleByteCache> _allCaches = new ConcurrentHashMap<Integer, SimpleByteCache>(8);
 
     private static final int DEFAULT_SIZE = 64;
+
+    /** how often do we cleanup all caches */
+    private static final int CLEANUP_FREQUENCY = 60*1000; // 1 minute
+    /** if we haven't exceeded the cache size in 90 seconds, cut our cache in half */
+    private static final long EXPIRE_PERIOD = 90*1000;
+
+    static {
+        // Start single global cleanup timer for all caches
+        SimpleTimer2.getInstance().addPeriodicEvent(new GlobalCleanup(), CLEANUP_FREQUENCY);
+    }
+
+    /**
+     * Global cleanup task that iterates over all caches.
+     */
+    private static class GlobalCleanup implements SimpleTimer.TimedEvent {
+        public void timeReached() {
+            for (SimpleByteCache cache : _allCaches.values()) {
+                cache.cleanup();
+            }
+        }
+
+        @Override
+        public String toString() {
+            return "Global SimpleByteCache Cleanup";
+        }
+    }
+
+    /**
+     * Cleanup this specific cache - shrink if underutilized.
+     */
+    private void cleanup() {
+        int origsz = _available.size();
+        if (origsz > 1 && _available.wasUnderfilled(EXPIRE_PERIOD)) {
+            int toRemove = origsz / 2;
+            _available.shrink(origsz - toRemove);
+        }
+    }
 
     /**
      * Get a cache responsible for arrays of the given size
@@ -37,7 +75,12 @@ public final class SimpleByteCache {
         if (cache == null) {
             cache = new SimpleByteCache(cacheSize, size);
             SimpleByteCache old = _caches.putIfAbsent(sz, cache);
-            if (old != null) {cache = old;}
+            if (old != null) {
+                cache = old;
+            } else {
+                // Also add to the allCaches list for global cleanup
+                _allCaches.put(sz, cache);
+            }
         }
         cache.resize(cacheSize);
         return cache;
@@ -68,8 +111,9 @@ public final class SimpleByteCache {
     }
 
     private void resize(int maxCachedEntries) {
-        // _available is now final, and getInstance() is not used anywhere,
-        // all call sites just use static acquire()
+        // TryCache doesn't support dynamic resize, but we could create a new cache
+        // For now, this is a no-op as TryCache uses a fixed-size ConcurrentLinkedDeque
+        // To fully support resize, TryCache would need modification
     }
 
     /**

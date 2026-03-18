@@ -1,6 +1,8 @@
 package net.i2p.util;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.I2PAppContext;
@@ -55,9 +57,49 @@ public final class ByteCache extends TryCache<ByteArray> {
     private static final int MAX_CACHE;
     private static final int MIN_CACHE_OBJECTS = 16;
 
+    /** how often do we cleanup all caches */
+    private static final int CLEANUP_FREQUENCY = 33*1000;
+    /** if we haven't exceeded the cache size in 90 seconds, cut our cache in half */
+    private static final long EXPIRE_PERIOD = 90*1000;
+
+    /** Global cleanup task - single timer for all caches */
+    private static final List<ByteCache> _allCaches = new ArrayList<>();
+
     static {
         long maxMemory = SystemVersion.getMaxMemory();
         MAX_CACHE = Math.toIntExact(Math.min(MAX_CACHE_LIMIT, Math.max(MIN_CACHE, maxMemory / 128)));
+        // Start single global cleanup timer for all caches
+        SimpleTimer2.getInstance().addPeriodicEvent(new GlobalCleanup(), CLEANUP_FREQUENCY);
+    }
+
+    /**
+     * Global cleanup task that iterates over all caches.
+     */
+    private static class GlobalCleanup implements SimpleTimer.TimedEvent {
+        public void timeReached() {
+            synchronized(_allCaches) {
+                for (ByteCache cache : _allCaches) {
+                    cache.cleanup();
+                }
+            }
+        }
+
+        @Override
+        public String toString() {
+            return "Global ByteCache Cleanup";
+        }
+    }
+
+    /**
+     * Cleanup this specific cache - shrink if underutilized.
+     */
+    private void cleanup() {
+        int origsz = size();
+        if (origsz > 1 && wasUnderfilled(EXPIRE_PERIOD)) {
+            int toRemove = origsz / 2;
+            shrink(origsz - toRemove);
+        }
+        I2PAppContext.getGlobalContext().statManager().addRateData("byteCache.memory." + _entrySize, _entrySize * origsz);
     }
 
     public static ByteCache getInstance(int cacheSize, int size) {
@@ -98,11 +140,6 @@ public final class ByteCache extends TryCache<ByteArray> {
 
     private final int _entrySize;
 
-    /** how often do we cleanup the cache */
-    private static final int CLEANUP_FREQUENCY = 33*1000;
-    /** if we haven't exceeded the cache size in 2 minutes, cut our cache in half */
-    private static final long EXPIRE_PERIOD = 2*60*1000;
-
     /** @since 0.9.36 */
     private static class ByteArrayFactory implements TryCache.ObjectFactory<ByteArray> {
         private final int sz;
@@ -120,14 +157,23 @@ public final class ByteCache extends TryCache<ByteArray> {
     private ByteCache(int maxCachedEntries, int entrySize) {
         super(new ByteArrayFactory(entrySize), maxCachedEntries);
         _entrySize = entrySize;
-        int stagger = SystemVersion.isAndroid() ? 0 : (entrySize % 777);
-        SimpleTimer2.getInstance().addPeriodicEvent(new Cleanup(), CLEANUP_FREQUENCY + stagger);
+        synchronized(_allCaches) {
+            _allCaches.add(this);
+        }
         I2PAppContext.getGlobalContext().statManager().createRateStat("byteCache.memory." + entrySize,
                                                                       "Memory usage (B)", "Router [ByteCache]",
                                                                       new long[] { 60*1000, 10*60*1000, 24*60*60*1000 });
     }
 
-    private void resize(int maxCachedEntries) {} // disabled since we're now extending TryCache
+    /**
+     * Resize the cache to a new capacity.
+     * @param maxCachedEntries the new maximum number of entries to cache
+     */
+    public void resize(int maxCachedEntries) {
+        // TryCache doesn't support dynamic resize, but we can create a new one
+        // For now, this is a no-op as TryCache uses a fixed-size ConcurrentLinkedDeque
+        // To fully support resize, TryCache would need modification
+    }
 
     /**
      * Put this structure back onto the available cache for reuse
@@ -149,23 +195,6 @@ public final class ByteCache extends TryCache<ByteArray> {
 
         if (shouldZero) {Arrays.fill(entry.getData(), (byte)0x0);}
         super.release(entry);
-    }
-
-    private class Cleanup implements SimpleTimer.TimedEvent {
-        public void timeReached() {
-            int origsz = size();
-            if (origsz > 1 && wasUnderfilled(EXPIRE_PERIOD)) {
-                // We haven't exceeded the cache size in a while, so let's shrink
-                int toRemove = origsz / 2;
-                shrink(origsz - toRemove);
-            }
-            I2PAppContext.getGlobalContext().statManager().addRateData("byteCache.memory." + _entrySize, _entrySize * origsz);
-        }
-
-        @Override
-        public String toString() {
-            return "Cleaner for " + _entrySize + " byte cache";
-        }
     }
 
 }
