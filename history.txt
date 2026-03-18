@@ -22,10 +22,8 @@
     - Add --dry-run option to preview builds
     - Move docs to docs/ folder (README.md, BUILD_MULTIARCH.md)
     - Add README.html compilation guide
-
   * CPU Detection:
     - Add IsZen4/IsZen5 detection methods to AMDCPUInfo interface
-    - Fix AMD family detection: family 25 = Zen2/3, family 26 = Zen4/5
 
 2026-03-17 dr|z3d
   * Router:
@@ -67,8 +65,6 @@
     - Fix ConcurrentModificationException in FloodfillVerifyStoreJob
     - Add separate _timedJobsReady queue for O(1) job polling
     - Fix RemoveSlowTunnelsJob to use requeue()
-    - Fix job queue pumper to iterate all timed jobs
-    - Fix job queue issues - prevent in-flight duplicate blocking,
     - Add and document slowTunnelInterval config for local tunnel removal
   * Streaming: Optimize flusher timer and use StringBuilder for logging
   * Console: Group active jobs by name and display avg lag in jobqueue

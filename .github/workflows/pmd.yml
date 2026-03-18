@@ -37,18 +37,19 @@ jobs:
 
       - name: Run PMD (generate SARIF)
         env:
-          _JAVA_OPTIONS: -Xmx2g
+          _JAVA_OPTIONS: -Xmx4g
         run: |
-          PMD_DIR=$(ls -d pmd-bin-*/)
+          PMD_DIR=$(ls -d pmd-bin-*/ | head -1)
+          echo "Using PMD directory: $PMD_DIR"
+
           # Use a safe, built-in ruleset instead of a custom ruleset that may contain invalid <exclude/> names.
           "${PMD_DIR}bin/run.sh" pmd \
-            -d . \
+            -d "core,router,apps" \
             -R category/java/bestpractices.xml \
             -f sarif \
             -r pmd-report.sarif \
             --no-cache \
             --minimum-priority 2 \
-            --no-progress || true
 
           # Fail explicitly and provide logs if SARIF wasn't produced
           if [ ! -s pmd-report.sarif ]; then
