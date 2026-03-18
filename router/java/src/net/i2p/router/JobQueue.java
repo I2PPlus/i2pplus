@@ -702,10 +702,11 @@ public class JobQueue {
                                 if (timeLeft <= 0) {
                                     toMove.add(j);
                                 } else {
-                                    // Track minimum wait time among not-ready jobs
+                                    // TreeSet is sorted by time, so all subsequent jobs are also in the future
                                     if (minWaitTime < 0 || timeLeft < minWaitTime) {
                                         minWaitTime = timeLeft;
                                     }
+                                    break;
                                 }
                             }
                             // Move ready jobs to timed jobs ready queue
