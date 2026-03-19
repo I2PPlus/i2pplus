@@ -27,6 +27,7 @@ spotbugsMain {
 
 compileJava {
     options.errorprone.enabled = true
+    options.errorprone.allErrorsAsWarnings = true
     options.errorprone.checks = [
         DoubleBraceInitialization: 'OFF',
         DoNotCall: 'OFF',

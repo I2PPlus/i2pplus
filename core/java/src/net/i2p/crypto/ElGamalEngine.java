@@ -65,7 +65,7 @@ import net.i2p.util.SystemVersion;
  * @since 0.8.0
  * @deprecated Use modern encryption schemes such as ECIES when available
  */
-
+@Deprecated
 public final class ElGamalEngine {
     private final Log _log;
     private final I2PAppContext _context;
