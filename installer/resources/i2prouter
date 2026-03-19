@@ -1277,6 +1277,39 @@ status() {
         eval echo `gettext '$APP_LONG_NAME is not running.'`
         exit 1
     else
+        # Build info
+        BUILDINFO="$I2P/router.info"
+        BUILD_TIME=""
+        BUILD_HASH=""
+        if [ -f "$BUILDINFO" ]; then
+            BUILD_TIME=$(grep '^build=' "$BUILDINFO" 2>/dev/null | head -1 | cut -d= -f2-)
+            BUILD_HASH=$(grep '^hash=' "$BUILDINFO" 2>/dev/null | head -1 | cut -d= -f2-)
+        fi
+
+        # Process start time and uptime
+        START_TIME=""
+        UPTIME=""
+        if [ -x "$(command -v ps 2>/dev/null)" ]; then
+            START_TIME=$(ps -o lstart= -p "$pid" 2>/dev/null)
+            UPTIME_SECS=$(ps -o etimes= -p "$pid" 2>/dev/null)
+            if [ -n "$UPTIME_SECS" ] && [ "$UPTIME_SECS" -eq "$UPTIME_SECS" ] 2>/dev/null; then
+                if [ "$UPTIME_SECS" -ge 86400 ]; then
+                    UPTIME_DAYS=$((UPTIME_SECS / 86400))
+                    UPTIME_REM=$((UPTIME_SECS % 86400))
+                    UPTIME_HRS=$((UPTIME_REM / 3600))
+                    UPTIME_MINS=$(((UPTIME_REM % 3600) / 60))
+                    UPTIME="${UPTIME_DAYS}d ${UPTIME_HRS}h ${UPTIME_MINS}m"
+                elif [ "$UPTIME_SECS" -ge 3600 ]; then
+                    UPTIME_HRS=$((UPTIME_SECS / 3600))
+                    UPTIME_MINS=$(((UPTIME_SECS % 3600) / 60))
+                    UPTIME="${UPTIME_HRS}h ${UPTIME_MINS}m"
+                else
+                    UPTIME_MINS=$((UPTIME_SECS / 60))
+                    UPTIME="${UPTIME_MINS}m"
+                fi
+            fi
+        fi
+
         if [ "X$DETAIL_STATUS" = "X" ]
         then
             eval echo `gettext '$APP_LONG_NAME is running: PID:$pid'`
@@ -1284,6 +1317,22 @@ status() {
             getstatus
             eval echo `gettext '$APP_LONG_NAME is running: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS'`
         fi
+
+        # Extra info
+        if [ -n "$START_TIME" ]; then
+            echo "  Started: $START_TIME"
+        fi
+        if [ -n "$UPTIME" ]; then
+            echo "  Uptime:  $UPTIME"
+        fi
+        if [ -n "$BUILD_TIME" ] || [ -n "$BUILD_HASH" ]; then
+            if [ -n "$BUILD_HASH" ]; then
+                echo "  Build:   $BUILD_HASH / $BUILD_TIME"
+            else
+                echo "  Build:   $BUILD_TIME"
+            fi
+        fi
+
         exit 0
     fi
 }

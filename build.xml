@@ -1879,6 +1879,15 @@
         <fileset dir="installer/resources/eepsite-jetty9.3"/>
       </copy>
       <copy quiet="true" file="installer/resources/themes/console/light/images/favicon.svg" tofile="pkg-temp/eepsite/docroot/favicon.svg"/>
+      <tstamp>
+        <format property="build.timestamp" pattern="yyyy-MM-dd HH:mm:ss" timezone="UTC"/>
+      </tstamp>
+      <exec executable="git" outputproperty="git.hash" failonerror="false" errorproperty="">
+        <arg value="rev-parse"/>
+        <arg value="--short=8"/>
+        <arg value="HEAD"/>
+      </exec>
+      <echo file="pkg-temp/router.info" message="build=${build.timestamp}${line.separator}hash=${git.hash}${line.separator}"/>
     </parallel>
   </target>
 
@@ -2496,6 +2505,15 @@
   <target name="prepupdateRouter" depends="buildrouter, deletepkg-temp">
     <copy quiet="true" file="build/i2p.jar" todir="pkg-temp/lib/"/>
     <copy quiet="true" file="build/router.jar" todir="pkg-temp/lib/"/>
+    <tstamp>
+      <format property="build.timestamp" pattern="yyyy-MM-dd HH:mm:ss" timezone="UTC"/>
+    </tstamp>
+    <exec executable="git" outputproperty="git.hash" failonerror="false" errorproperty="">
+      <arg value="rev-parse"/>
+      <arg value="--short=8"/>
+      <arg value="HEAD"/>
+    </exec>
+    <echo file="pkg-temp/router.info" message="build=${build.timestamp}${line.separator}hash=${git.hash}${line.separator}"/>
   </target>
 
   <target name="prepupdateRouterConsole" depends="buildRouterConsole, deletepkg-temp">
@@ -2726,7 +2744,7 @@
     <delete dir="pkg-temp/locale/"/>
     <delete dir="pkg-temp/man/"/>
     <delete dir="pkg-temp/Start I2P Router.app/"/>
-    <delete dir="pkg-temp" includes="eepget eephead i2ping hostping graceful_update i2prouter i2prouter.service INSTALL-headless.txt osid postinstall.sh runplain.sh"/>
+    <delete dir="pkg-temp" includes="eepget eephead i2ping hostping graceful_update i2prouter i2prouter.service router.info INSTALL-headless.txt osid postinstall.sh runplain.sh"/>
   </target>
 
   <!-- IzPack 4 -->
