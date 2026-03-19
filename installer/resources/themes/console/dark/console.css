@@ -649,6 +649,7 @@ h3[id*="jobs"]{clear:both;margin-top:25px}
 
 /* queue totals */
 #schedjobs{width:100%;margin:10px 0}
+.expanded+#schedjobs{margin-top:-11px;display:table!important}
 #schedjobs ul{columns:250px auto;margin:0 8px 0 0;column-gap:0}
 #schedjobs li{width:calc(100% - 12px);margin:0 4px}
 #schedjobs td:first-child{padding:3px 0}
@@ -657,7 +658,7 @@ h3[id*="jobs"]{clear:both;margin-top:25px}
 #schedjobs tr:hover td{background:#000800}
 #finishedjobs+ol.jobqueue[style*="block"],#scheduledjobs+ol.jobqueue[style*="block"]{margin-bottom:-3px}
 #scheduledjobs+ol li::before,#scheduledjobs+ol li::before{color:#773;opacity:.8}
-#jobs #scheduledjobs+ol,#jobs ol{padding-bottom:5px}
+#scheduledjobs+ol,#jobs ol{padding-bottom:5px}
 #totaljobstats{margin-bottom:-2px;margin-top:10px}
 #routerjobqueue li{line-height:1.6}
 #routerjobqueue #active.tablewrap,#routerjobqueue #finished.tablewrap,#routerjobqueue #ready.tablewrap,#routerjobqueue #scheduled.tablewrap,#routerjobqueue #totals.tablewrap{margin:-5px 0 17px}
@@ -667,6 +668,7 @@ h3[id*="jobs"]{clear:both;margin-top:25px}
 /* queue section toggles */
 #routerjobqueue .toggle{position:relative;cursor:pointer}
 #routerjobqueue .toggle:not(.expanded){margin-bottom:0}
+#routerjobqueue #qtotals.toggle:not(.expanded){margin-bottom:10px}
 #routerjobqueue .toggle:hover{color:var(--hover)}
 #routerjobqueue .toggle .dropdown::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:"";transform:rotate(-90deg)}
 #routerjobqueue .toggle:hover .dropdown::after{background:var(--dropdown_hover);content:"";transform:rotate(-90deg)}
