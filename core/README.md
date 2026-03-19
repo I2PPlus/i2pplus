@@ -32,9 +32,14 @@ The core module is the foundation of the I2P router. It provides the low-level A
 ## Building
 
 ```bash
-# Build with Gradle (from repo root)
+# Gradle
 ./gradlew :core:jar
 
+# Ant (from repo root)
+ant buildCore
+```
+
+```bash
 # Run tests
 ./gradlew :core:test
 
