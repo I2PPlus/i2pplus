@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import net.i2p.data.Hash;
 import net.i2p.router.RouterContext;
@@ -12,17 +11,16 @@ import net.i2p.router.tunnel.HopConfig;
 import net.i2p.router.tunnel.TunnelDispatcher;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer;
-import net.i2p.util.SystemVersion;
 
 /**
  * Monitors transit tunnels for idle behavior.
  *
- * This class periodically scans participating tunnels and:
- * 1. Drops tunnels with no/low traffic after detection period (messages only)
+ * This class periodically scans participating tunnels and
+ * drops tunnels with no/low traffic after detection period (messages only).
  *
  * Configurable properties:
- * - router.idleTunnelDetectionPeriod: Time before checking for idle (default: 180000ms)
- * - router.idleTunnelMinMessages: Minimum messages to not be considered idle (default: 5)
+ * - router.idleTunnelDetectionPeriod: Time before checking for idle (default: 120000ms)
+ * - router.idleTunnelMinMessages: Minimum messages to not be considered idle (default: 3)
  * - router.idleTunnelScanInterval: How often to scan (default: 60000ms)
  *
  * @since 2.11.0
@@ -42,13 +40,10 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
         return _dispatcher;
     }
 
-    // Configuration
-    private static final boolean isSlow = SystemVersion.isSlow();
-    private static final long DEFAULT_DETECTION_PERIOD = 120 * 1000; // 2 minutes
-    private static final int DEFAULT_MIN_MESSAGES = 3; // At least 3 messages
-    private static final long DEFAULT_SCAN_INTERVAL = 60 * 1000; // 60 seconds
+    private static final long DEFAULT_DETECTION_PERIOD = 120 * 1000;
+    private static final int DEFAULT_MIN_MESSAGES = 3;
+    private static final long DEFAULT_SCAN_INTERVAL = 60 * 1000;
 
-    // Only these properties are configurable
     private static final String PROP_DETECTION_PERIOD = "router.idleTunnelDetectionPeriod";
     private static final String PROP_MIN_MESSAGES = "router.idleTunnelMinMessages";
     private static final String PROP_SCAN_INTERVAL = "router.idleTunnelScanInterval";
@@ -136,7 +131,6 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
             List<HopConfig> tunnels = entry.getValue();
             int tunnelCount = tunnels.size();
 
-            // Drop all idle tunnels for this peer
             for (HopConfig tunnel : tunnels) {
                 dropTunnel(tunnel);
                 totalDropped++;
@@ -147,14 +141,13 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
             }
         }
 
-        if (totalDropped > 100 && _log.shouldWarn()) {
+        if (totalDropped >= 10 && _log.shouldWarn()) {
             _log.warn("Dropped " + totalDropped + " idle tunnels across " + idleTunnelsByPeer.size() + " peers");
         }
     }
 
     /**
-     * Get the peer hash for a tunnel - this is the "entry point" peer
-     * who first introduced this tunnel to us (IBGW or closest hop to IBGW).
+     * Get the adjacent peer hash for a tunnel.
      */
     private Hash getPeerHash(HopConfig tunnel) {
         Hash from = tunnel.getReceiveFrom();
@@ -163,32 +156,29 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
     }
 
     /**
-     * Drop an idle tunnel by removing it from the dispatcher
+     * Drop an idle tunnel by removing it from the dispatcher.
      */
     private void dropTunnel(HopConfig tunnel) {
         TunnelDispatcher dispatcher = getDispatcher();
         if (dispatcher == null) return;
 
         try {
-            // Remove immediately using the dispatcher's remove method
+            // Record stats first so they persist even if cleanup fails
+            _context.statManager().addRateData("tunnel.idleTunnelDropped", 1);
+
+            // Remove the tunnel from dispatcher maps
             dispatcher.remove(tunnel);
 
-            // Free the allocated bandwidth for this tunnel
+            // Free allocated bandwidth (remove() does not handle this)
             int allocated = tunnel.getAllocatedBW();
             if (allocated > 0) {
                 dispatcher.freeBandwidth(allocated);
             }
 
-            // Remove from expiration tracking to prevent memory leak
-            dispatcher.removeFromExpirationQueue(tunnel);
-
             if (_log.shouldDebug()) {
                 _log.debug("Dropped idle tunnel [" + tunnel.getReceiveTunnelId() +
                           "] -> Messages: " + tunnel.getProcessedMessagesCount());
             }
-
-            // Update stats
-            _context.statManager().addRateData("tunnel.idleTunnelDropped", 1);
         } catch (Exception e) {
             if (_log.shouldWarn()) {
                 _log.warn("Failed to idle drop tunnel [" + tunnel + "] -> " + e.getMessage());
