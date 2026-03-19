@@ -1879,15 +1879,13 @@
         <fileset dir="installer/resources/eepsite-jetty9.3"/>
       </copy>
       <copy quiet="true" file="installer/resources/themes/console/light/images/favicon.svg" tofile="pkg-temp/eepsite/docroot/favicon.svg"/>
-      <tstamp>
-        <format property="build.timestamp" pattern="yyyy-MM-dd HH:mm:ss" timezone="UTC"/>
-      </tstamp>
       <exec executable="git" outputproperty="git.hash" failonerror="false" errorproperty="">
         <arg value="rev-parse"/>
         <arg value="--short=8"/>
         <arg value="HEAD"/>
       </exec>
       <echo file="pkg-temp/router.info" message="hash=${git.hash}${line.separator}version=${full.version}${line.separator}"/>
+    </parallel>
   </target>
 
   <target name="zip-linux">
@@ -2504,15 +2502,13 @@
   <target name="prepupdateRouter" depends="buildrouter, deletepkg-temp">
     <copy quiet="true" file="build/i2p.jar" todir="pkg-temp/lib/"/>
     <copy quiet="true" file="build/router.jar" todir="pkg-temp/lib/"/>
-    <tstamp>
-      <format property="build.timestamp" pattern="yyyy-MM-dd HH:mm:ss" timezone="UTC"/>
-    </tstamp>
     <exec executable="git" outputproperty="git.hash" failonerror="false" errorproperty="">
       <arg value="rev-parse"/>
       <arg value="--short=8"/>
       <arg value="HEAD"/>
     </exec>
     <echo file="pkg-temp/router.info" message="hash=${git.hash}${line.separator}version=${full.version}${line.separator}"/>
+  </target>
 
   <target name="prepupdateRouterConsole" depends="buildRouterConsole, deletepkg-temp">
     <copy quiet="true" file="build/routerconsole.war" todir="pkg-temp/webapps/"/>
