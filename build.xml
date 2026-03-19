@@ -1887,8 +1887,7 @@
         <arg value="--short=8"/>
         <arg value="HEAD"/>
       </exec>
-      <echo file="pkg-temp/router.info" message="build=${build.timestamp}${line.separator}hash=${git.hash}${line.separator}"/>
-    </parallel>
+      <echo file="pkg-temp/router.info" message="hash=${git.hash}${line.separator}version=${full.version}${line.separator}"/>
   </target>
 
   <target name="zip-linux">
@@ -2513,8 +2512,7 @@
       <arg value="--short=8"/>
       <arg value="HEAD"/>
     </exec>
-    <echo file="pkg-temp/router.info" message="build=${build.timestamp}${line.separator}hash=${git.hash}${line.separator}"/>
-  </target>
+    <echo file="pkg-temp/router.info" message="hash=${git.hash}${line.separator}version=${full.version}${line.separator}"/>
 
   <target name="prepupdateRouterConsole" depends="buildRouterConsole, deletepkg-temp">
     <copy quiet="true" file="build/routerconsole.war" todir="pkg-temp/webapps/"/>

@@ -1065,25 +1065,39 @@ startwait() {
     then
         waitforjavastartup
     fi
-    # Sleep for a few seconds to allow for intialization if required
+    # Sleep for a few seconds to allow for initialization if required
     #  then test to make sure we're still running.
     #
+    SPINCHARS='|/-\\'
     i=0
     while [ $i -lt $WAIT_AFTER_STARTUP ]
     do
         sleep 1
-        $ECHO_MINUS_N "."
+        SPIN_IDX=$((i % 4))
+        printf "\r  %s" "$(echo "$SPINCHARS" | cut -c$((SPIN_IDX + 1)))"
         i=`expr $i + 1`
     done
     if [ $WAIT_AFTER_STARTUP -gt 0 -o $WAIT_FOR_STARTED_STATUS = true ]
     then
+        printf "\r                              \r"
         getpid
         if [ "X$pid" = "X" ]
         then
             eval echo " `gettext 'WARNING: $APP_LONG_NAME may have failed to start.'`"
             failed
         else
-            eval echo ' running: PID:$pid'
+            BUILDINFO="$I2P/router.info"
+            BUILD_HASH=""
+            BUILD_VERSION=""
+            if [ -f "$BUILDINFO" ]; then
+                BUILD_HASH=$(grep '^hash=' "$BUILDINFO" 2>/dev/null | head -1 | cut -d= -f2-)
+                BUILD_VERSION=$(grep '^version=' "$BUILDINFO" 2>/dev/null | head -1 | cut -d= -f2-)
+            fi
+            if [ -n "$BUILD_HASH" ]; then
+                echo "Running: $BUILD_HASH / $BUILD_VERSION -> PID: $pid"
+            else
+                echo "Running: PID: $pid"
+            fi
         fi
     else
         echo ""
@@ -1279,11 +1293,11 @@ status() {
     else
         # Build info
         BUILDINFO="$I2P/router.info"
-        BUILD_TIME=""
         BUILD_HASH=""
+        BUILD_VERSION=""
         if [ -f "$BUILDINFO" ]; then
-            BUILD_TIME=$(grep '^build=' "$BUILDINFO" 2>/dev/null | head -1 | cut -d= -f2-)
             BUILD_HASH=$(grep '^hash=' "$BUILDINFO" 2>/dev/null | head -1 | cut -d= -f2-)
+            BUILD_VERSION=$(grep '^version=' "$BUILDINFO" 2>/dev/null | head -1 | cut -d= -f2-)
         fi
 
         # Process start time and uptime
@@ -1315,21 +1329,41 @@ status() {
             eval echo `gettext '$APP_LONG_NAME is running: PID:$pid'`
         else
             getstatus
-            eval echo `gettext '$APP_LONG_NAME is running: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS'`
-        fi
+            eval echo `gettext '$APP_LONG_NAME is running: PID:$pid'`
 
-        # Extra info
-        if [ -n "$START_TIME" ]; then
-            echo "  Started: $START_TIME"
-        fi
-        if [ -n "$UPTIME" ]; then
-            echo "  Uptime:  $UPTIME"
-        fi
-        if [ -n "$BUILD_TIME" ] || [ -n "$BUILD_HASH" ]; then
-            if [ -n "$BUILD_HASH" ]; then
-                echo "  Build:   $BUILD_HASH / $BUILD_TIME"
+            # Extra info
+            if [ -n "$START_TIME" ]; then
+                echo "  Started: $START_TIME"
+            fi
+            if [ -n "$UPTIME" ]; then
+                echo "  Uptime:  $UPTIME"
+            fi
+            if [ -n "$BUILD_HASH" ] || [ -n "$BUILD_VERSION" ]; then
+                if [ -n "$BUILD_HASH" ]; then
+                    echo "  •  Build:   $BUILD_HASH / $BUILD_VERSION"
+                else
+                    echo "  •  Build:   $BUILD_VERSION"
+                fi
+            fi
+            fi
+
+            WRAPPER_VERSION=""
+            if [ -x "$WRAPPER_CMD" ]; then
+                WRAPPER_VERSION=$("$WRAPPER_CMD" --version 2>&1 | head -1 | awk '{print $NF}')
+            fi
+            if [ -n "$WRAPPER_VERSION" ]; then
+                echo "  Wrapper: $STATUS ($WRAPPER_VERSION)"
             else
-                echo "  Build:   $BUILD_TIME"
+                echo "  Wrapper: $STATUS"
+            fi
+            JAVA_VERSION=""
+            if [ -n "$JAVABINARY" ] && [ -x "$JAVABINARY" ]; then
+                JAVA_VERSION=$("$JAVABINARY" -version 2>&1 | head -1 | awk -F'"' '{print $2}')
+            fi
+            if [ -n "$JAVA_VERSION" ]; then
+                echo "  Java:    $JAVASTATUS ($JAVA_VERSION)"
+            else
+                echo "  Java:    $JAVASTATUS"
             fi
         fi
 
