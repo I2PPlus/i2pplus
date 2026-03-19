@@ -70,6 +70,11 @@
           toggle.classList.remove("expanded");
           content.style.display = "none";
         }
+        if (toggle.classList.contains("nojobs")) {
+          toggle.style.pointerEvents = "none";
+        } else {
+          toggle.style.pointerEvents = "";
+        }
       }
     });
 
@@ -177,12 +182,22 @@
 
       const thead = jobs.querySelector("thead");
       const tfoot = jobs.querySelector("#statTotals");
+      const newTfoot = jobsResponse.querySelector("#statTotals");
       if (newTbody.rows.length === 0) {
         thead.style.display = "none";
         tfoot.style.display = "none";
       } else {
         thead.style.display = "";
         tfoot.style.display = "";
+      }
+
+      // Update statTotals footer with new data
+      if (tfoot && newTfoot) {
+        const currentContent = tfoot.innerHTML.trim();
+        const newContent = newTfoot.innerHTML.trim();
+        if (currentContent !== newContent) {
+          tfoot.innerHTML = newContent;
+        }
       }
 
       // Always repopulate oldRowsMap to stay in sync with current DOM

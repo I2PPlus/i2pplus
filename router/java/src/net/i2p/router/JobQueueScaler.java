@@ -1,5 +1,6 @@
 package net.i2p.router;
 
+import net.i2p.router.tunnel.pool.TestJob;
 import net.i2p.stat.RateConstants;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
@@ -57,7 +58,7 @@ class JobQueueScaler implements Runnable {
 
     // Feedback configuration
     private static final int FEEDBACK_CHECKS_AFTER_SCALE = 3; // Check 3 times after scaling
-    private static final int MAX_CONSECUTIVE_FAILED_SCALES = 10; // After 10 failed scales, stop trying
+    private static final int MAX_CONSECUTIVE_FAILED_SCALES = 20; // After 20 failed scales, stop trying
     private static final long EXTENDED_COOLDOWN_MULTIPLIER = 3; // 3x normal cooldown after failed scale
     private static final double LAG_INCREASE_THRESHOLD = 2.0; // If lag doubled or worse, consider it failed
     private static final double READY_JOBS_INCREASE_THRESHOLD = 2.0; // If ready jobs doubled or worse, consider it failed
@@ -70,13 +71,13 @@ class JobQueueScaler implements Runnable {
     // Configuration defaults - Optimized for SUB-MICROSECOND lag targets
     private static final boolean DEFAULT_DYNAMIC_SCALING = true;
     private static final long DEFAULT_SCALE_CHECK_INTERVAL = 1000; // 1 second (very responsive for sub-μs targets)
-    private static final long DEFAULT_SCALE_COOLDOWN = 5000; // 5 seconds (quick recovery)
-    private static final int DEFAULT_SCALE_UP_LAG_THRESHOLD = 1; // 1ms = 1000μs (scale up if lag exceeds 1ms)
-    private static final int DEFAULT_SCALE_DOWN_LAG_THRESHOLD = 1; // 1ms (scale down when lag is low)
+    private static final long DEFAULT_SCALE_COOLDOWN = 2000; // 2 seconds (faster recovery)
+    private static final float DEFAULT_SCALE_UP_LAG_THRESHOLD = 0.5f; // 0.5ms (scale up when clearly needed)
+    private static final float DEFAULT_SCALE_DOWN_LAG_THRESHOLD = 0.2f; // 0.2ms (scale down when idle)
     private static final double DEFAULT_SCALE_UP_JOBS_RATIO = 1.2; // 1.2x (very aggressive - any backlog triggers scale)
-    private static final int DEFAULT_SCALE_UP_STEP = 1; // Add 1 at a time (very conservative to avoid disruption)
+    private static final int DEFAULT_SCALE_UP_STEP = 2; // Add 2 at a time
     private static final int DEFAULT_SCALE_DOWN_STEP = 1;
-    private static final int SUSTAINED_CHECKS_REQUIRED = 3; // 3 checks (need sustained evidence for sub-μs targets)
+    private static final int SUSTAINED_CHECKS_REQUIRED = 2; // 2 checks (faster response)
 
     // Property names
     private static final String PROP_DYNAMIC_SCALING = "router.dynamicJobScaling";
@@ -279,6 +280,11 @@ class JobQueueScaler implements Runnable {
         if (uptime < 3 * 60 * 1000) {
             return Math.max(baseMin, 8);  // At least 8 runners during startup
         }
+        // If there are many untested tunnels, increase min runners to allow more concurrent tests
+        int untestedCount = TestJob.countUntestedTunnels(_context);
+        if (untestedCount > 4) {
+            return Math.max(baseMin, 8);  // At least 8 runners to test tunnels faster
+        }
         return baseMin;
     }
 
@@ -303,14 +309,14 @@ class JobQueueScaler implements Runnable {
     /**
      * Get the lag threshold for scaling up.
      */
-    private int getScaleUpLagThreshold() {
+    private float getScaleUpLagThreshold() {
         return _context.getProperty(PROP_SCALE_UP_LAG, DEFAULT_SCALE_UP_LAG_THRESHOLD);
     }
 
     /**
      * Get the lag threshold for scaling down.
      */
-    private int getScaleDownLagThreshold() {
+    private float getScaleDownLagThreshold() {
         return _context.getProperty(PROP_SCALE_DOWN_LAG, DEFAULT_SCALE_DOWN_LAG_THRESHOLD);
     }
 
@@ -421,6 +427,21 @@ class JobQueueScaler implements Runnable {
             return;
         }
 
+        // Direct scale-up based on test job count - bypasses normal lag-based scaling
+        // Scale runners to match pending test load for better tunnel testing throughput
+        int testJobs = TestJob.getTotalTestJobCount();
+        if (testJobs > 0 && testJobs > activeRunners && activeRunners < maxRunners && !_scalingUpDisabled) {
+            int needed = Math.min(testJobs, maxRunners) - activeRunners;
+            if (needed > 0) {
+                int step = Math.min(needed, 4); // Add up to 4 runners at once
+                if (_log.shouldInfo()) {
+                    _log.info("Scaling up " + step + " runners to match test job load: " + testJobs + " tests, " + activeRunners + " runners");
+                }
+                scaleUp(step, readyJobs, maxLag, avgLag);
+                return; // Skip normal scaling this cycle
+            }
+        }
+
         // Don't scale up if circuit breaker is open
         if (_scalingUpDisabled) {
             long cooldown = getCooldownPeriod();
@@ -447,7 +468,7 @@ class JobQueueScaler implements Runnable {
         boolean shouldScaleUp = false;
         if (!inCooldown && activeRunners < maxRunners && !_scalingUpDisabled) {
             double jobsRatio = activeRunners > 0 ? (double) readyJobs / activeRunners : 0;
-            int lagThreshold = getScaleUpLagThreshold();
+            float lagThreshold = getScaleUpLagThreshold();
             double ratioThreshold = getScaleUpJobsRatio();
 
             // Check both queue lag AND active job duration
@@ -480,7 +501,7 @@ class JobQueueScaler implements Runnable {
         if (shouldScaleUp) {
             // Calculate how many runners to add based on lag severity
             int scaleUpStep = DEFAULT_SCALE_UP_STEP;
-            int lagThreshold = getScaleUpLagThreshold();
+            float lagThreshold = getScaleUpLagThreshold();
             if (maxLag > lagThreshold * 5) {
                 // High lag: add more runners at once (up to 4)
                 scaleUpStep = Math.min(4, (int) (maxLag / lagThreshold));
@@ -503,7 +524,7 @@ class JobQueueScaler implements Runnable {
     private void checkScaleDown(int activeRunners, int readyJobs, long maxLag, long avgLag,
                                 int minRunners, boolean inCooldown) {
         if (!inCooldown && activeRunners > minRunners) {
-            int lagThreshold = getScaleDownLagThreshold();
+            float lagThreshold = getScaleDownLagThreshold();
 
             // Check for sustained low load - require 0 ready jobs and very low lag
             if (readyJobs == 0 && maxLag < lagThreshold && avgLag < lagThreshold) {

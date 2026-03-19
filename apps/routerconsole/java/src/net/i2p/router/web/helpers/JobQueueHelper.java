@@ -368,14 +368,9 @@ public class JobQueueHelper extends HelperBase {
 
         // Build scheduled jobs list
         StringBuilder scheduledBuf = new StringBuilder(8192);
-        int activeRunners = _context.jobQueue().getActiveRunnerCount();
-        int maxRunners = _context.jobQueue().getMaxRunnerCount();
-        String runnerStr = " <span id=runners class=jobCounter style=float:right>" +
-                          _t("Runners: {0} / {1}", activeRunners, maxRunners) + "</span>";
         scheduledBuf.append("<div class=tablewrap id=scheduled><h3 id=scheduledjobs>")
            .append(_t("Scheduled jobs")).append(": ")
            .append(displayedJobCount).append(" / ").append(eligibleScheduledCount)
-           .append(runnerStr)
            .append("</h3>\n<ol class=jobqueue>\n");
 
         for (JobTimeEntry entry : sortedJobs) {
@@ -435,12 +430,14 @@ public class JobQueueHelper extends HelperBase {
     private void getJobCounts(StringBuilder buf, ObjectCounterUnsafe<String> counter, int scheduledCount) {
         List<String> names = new ArrayList<>(counter.objects());
         int totalJobs = _context.jobQueue().getReadyCount() + scheduledCount;
+        int activeRunners = _context.jobQueue().getActiveRunnerCount();
+        int maxRunners = _context.jobQueue().getMaxRunnerCount();
+        String runnerStr = " <span id=runners class=jobCounter style=float:right>" +
+                          _t("Runners: {0} / {1}", activeRunners, maxRunners) + "</span>";
 
-        buf.append("<div class=tablewrap id=totals><table id=schedjobs>\n")
-           .append("<thead><tr><th>")
-           .append(_t("Queue Totals")).append(": ").append(totalJobs)
-           .append("</span></th></tr></thead>\n")
-           .append("<tr><td>\n<ul>\n");
+        buf.append("<div class=tablewrap id=totals><h3 id=qtotals>")
+           .append(_t("Queue Totals")).append(": ").append(totalJobs).append(runnerStr)
+           .append("</h3><table id=schedjobs>\n<tr><td>\n<ul>\n");
 
         final String TEST_TUNNEL_EN = "Test Local Tunnel";
         int maxTestJobs = TestJob.maxQueuedTests;

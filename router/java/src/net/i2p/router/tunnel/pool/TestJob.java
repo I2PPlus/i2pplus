@@ -1,8 +1,10 @@
 package net.i2p.router.tunnel.pool;
 
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.ConcurrentHashMap;
+import net.i2p.data.Hash;
 import net.i2p.crypto.SessionKeyManager;
 import net.i2p.data.SessionTag;
 import net.i2p.data.TunnelId;
@@ -14,6 +16,8 @@ import net.i2p.router.OutNetMessage;
 import net.i2p.router.ReplyJob;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
+import net.i2p.router.TunnelManagerFacade;
+import net.i2p.router.TunnelTestStatus;
 import net.i2p.router.crypto.ratchet.MuxedPQSKM;
 import net.i2p.router.crypto.ratchet.MuxedSKM;
 import net.i2p.router.crypto.ratchet.RatchetSKM;
@@ -44,7 +48,7 @@ public class TestJob extends JobImpl {
     private static final AtomicInteger __id = new AtomicInteger();
     private int _id;
     private static final int MIN_TEST_PERIOD = 30*1000;
-    private static final int MAX_TEST_PERIOD = 120*1000;
+    private static final int MAX_TEST_PERIOD = 60*1000;
 
     /**
      * Maximum number of tunnel tests that can run concurrently.
@@ -56,9 +60,9 @@ public class TestJob extends JobImpl {
     private static final int BASE_MAX_CONCURRENT_TESTS = MAX_CONCURRENT_TESTS;
 
     // Adaptive testing frequency constants
-    private static final int BASE_TEST_DELAY = 120 * 1000; // 120s base
-    private static final int MIN_TEST_DELAY = 60 * 1000; // 60s minimum
-    private static final int MAX_TEST_DELAY = 180 * 1000; // 180s maximum
+    private static final int BASE_TEST_DELAY = 90 * 1000; // 90s base
+    private static final int MIN_TEST_DELAY = 30 * 1000; // 30s minimum
+    private static final int MAX_TEST_DELAY = 120 * 1000; // 120s maximum
     private static final int SUCCESS_HISTORY_SIZE = 3; // Track last 3 results
 
     /**
@@ -149,7 +153,7 @@ public class TestJob extends JobImpl {
      *
      * @return the total number of TestJob instances
      */
-    private static int getTotalTestJobCount() {
+    public static int getTotalTestJobCount() {
         return TOTAL_TEST_JOBS.get();
     }
 
@@ -164,13 +168,14 @@ public class TestJob extends JobImpl {
      * @return true if the job should be created and scheduled, false otherwise
      */
     public static boolean shouldSchedule(RouterContext ctx, PooledTunnelCreatorConfig cfg) {
+        Log log = ctx.logManager().getLog(TestJob.class);
+
         // Skip tunnel testing for ping tunnels - they're short-lived and don't need testing
         TunnelPool pool = cfg.getTunnelPool();
         if (pool != null) {
             String tunnelNickname = pool.getSettings().getDestinationNickname();
             if (tunnelNickname != null && (tunnelNickname.equals("I2Ping") ||
                 (tunnelNickname.startsWith("Ping") && tunnelNickname.contains("[")))) {
-                Log log = ctx.logManager().getLog(TestJob.class);
                 if (log.shouldDebug()) {
                     log.debug("Skipping test scheduling for ping tunnel: " + tunnelNickname);
                 }
@@ -178,59 +183,58 @@ public class TestJob extends JobImpl {
             }
         }
 
-        // Check if job queue is overloaded - skip scheduling if queue is backing up
+        // Check queue limits
+        int maxTestJobs;
+        int currentTestJobs;
+        int maxQueuedTests;
+        int hardLimit;
+        if (!checkQueueLimits(ctx, cfg, pool, 0, false, log, "Not scheduling test for ", null)) {
+            return false;
+        }
+        // Get the calculated values from the check
+        // Re-calculate for consistency
         int readyCount = ctx.jobQueue().getReadyCount();
         long maxLag = ctx.jobQueue().getMaxLag();
-        // Limit TestJobs to max 1/6 of available runners to leave resources for other jobs
         int activeRunners = ctx.jobQueue().getActiveRunnerCount();
-        int maxTestJobs = Math.max(8, activeRunners / 6);
-        int currentTestJobs = getTotalTestJobCount();
-        // If queue has ANY lag, don't add more test jobs - prevents cascade
-        if (readyCount > 50 || maxLag > 10 || currentTestJobs >= maxTestJobs) {
-            Log log = ctx.logManager().getLog(TestJob.class);
-            if (log.shouldInfo()) {
-                log.info("Job queue lagging or too many test jobs (" + readyCount + " ready jobs, maxLag=" + maxLag + 
-                         "ms, testJobs=" + currentTestJobs + "/" + maxTestJobs + ") -> Not scheduling test for " + cfg);
-            }
-            return false;
-        }
-
-        // Try to increment total jobs counter to check limit
-        int current = TOTAL_TEST_JOBS.get();
-        if (current >= maxQueuedTests) {
-            Log log = ctx.logManager().getLog(TestJob.class);
-            if (log.shouldInfo()) {
-                log.info("Limit (" + maxQueuedTests + ") reached -> Not scheduling test for " + cfg);
-            }
-            return false;
-        }
+        maxTestJobs = Math.max(4, Math.min(activeRunners - 2, MAX_CONCURRENT_TESTS));
+        currentTestJobs = getTotalTestJobCount();
+        maxQueuedTests = calculateMaxQueuedTests(ctx);
+        hardLimit = HARD_TEST_JOB_LIMIT;
 
         // Check if this tunnel already has a test running
         Long tunnelKey = getTunnelKey(cfg);
         if (tunnelKey != null && RUNNING_TESTS.containsKey(tunnelKey)) {
-            Log log = ctx.logManager().getLog(TestJob.class);
             if (log.shouldDebug()) {
                 log.debug("Test already running for tunnel key " + tunnelKey + " -> Skipping duplicate test for " + cfg);
             }
             return false;
         }
 
-        // Check pool coverage - avoid over-testing pools that already have running tests
-        if (pool != null) {
+        // Check pool coverage - prioritize untested tunnels
+        boolean isUntested = cfg.getTestStatus() == TunnelTestStatus.UNTESTED;
+        int untestedCount = countUntestedTunnels(ctx);
+
+        // If there are untested tunnels, prioritize testing them over retesting
+        if (!isUntested && untestedCount > 4) {
+            // Many untested tunnels exist - skip this tested tunnel
+            // to allow untested tunnels to be tested first
+            if (log.shouldDebug()) {
+                log.debug("Prioritizing untested tunnels (" + untestedCount + " remaining) -> Skipping retest for " + cfg);
+            }
+            return false;
+        }
+
+        // Standard pool coverage check for tested tunnels
+        if (!isUntested && pool != null) {
             String poolId = getPoolId(pool);
             AtomicInteger poolCount = POOL_TEST_COUNTS.get(poolId);
             if (poolCount != null && poolCount.get() > 0) {
-                // For exploratory pools, be more restrictive to allow better coverage
-                if (pool.getSettings().isExploratory() && poolCount.get() >= 4 && current > (maxQueuedTests / 10) * 9) {
-                    Log log = ctx.logManager().getLog(TestJob.class);
+                if (pool.getSettings().isExploratory() && poolCount.get() >= 4 && currentTestJobs > (maxQueuedTests / 10) * 9) {
                     if (log.shouldDebug()) {
                         log.debug("Pool " + poolId + " already has " + poolCount.get() + " tests running -> Deferring for better coverage");
                     }
                     return false;
-                }
-                // For client pools, allow some concurrency but limit it
-                else if (!pool.getSettings().isExploratory() && poolCount.get() >= 8 && current > (maxQueuedTests / 10) * 9) {
-                    Log log = ctx.logManager().getLog(TestJob.class);
+                } else if (!pool.getSettings().isExploratory() && poolCount.get() >= 8 && currentTestJobs > (maxQueuedTests / 10) * 9) {
                     if (log.shouldDebug()) {
                         log.debug("Pool " + poolId + " already has " + poolCount.get() + " tests running -> Deferring for better coverage");
                     }
@@ -240,6 +244,120 @@ public class TestJob extends JobImpl {
         }
 
         return true;
+    }
+
+    /**
+     * Count tunnels with UNTESTED status across all pools.
+     * Used to prioritize testing of untested tunnels.
+     * @param ctx router context
+     * @return count of untested tunnels
+     */
+    public static int countUntestedTunnels(RouterContext ctx) {
+        TunnelManagerFacade mgr = ctx.tunnelManager();
+        if (mgr == null) return 0;
+
+        int count = 0;
+
+        // Count exploratory pools
+        TunnelPool outExp = mgr.getOutboundExploratoryPool();
+        if (outExp != null) {
+            for (TunnelInfo t : outExp.listTunnels()) {
+                if (t.getTestStatus() == TunnelTestStatus.UNTESTED) {
+                    count++;
+                }
+            }
+        }
+        TunnelPool inExp = mgr.getInboundExploratoryPool();
+        if (inExp != null) {
+            for (TunnelInfo t : inExp.listTunnels()) {
+                if (t.getTestStatus() == TunnelTestStatus.UNTESTED) {
+                    count++;
+                }
+            }
+        }
+
+        // Count client pools
+        Map<Hash, TunnelPool> inboundClientPools = mgr.getInboundClientPools();
+        Map<Hash, TunnelPool> outboundClientPools = mgr.getOutboundClientPools();
+        for (TunnelPool pool : inboundClientPools.values()) {
+            for (TunnelInfo t : pool.listTunnels()) {
+                if (t.getTestStatus() == TunnelTestStatus.UNTESTED) {
+                    count++;
+                }
+            }
+        }
+        for (TunnelPool pool : outboundClientPools.values()) {
+            for (TunnelInfo t : pool.listTunnels()) {
+                if (t.getTestStatus() == TunnelTestStatus.UNTESTED) {
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
+
+    /**
+     * Common queue limit checks for both new tests and retests.
+     * @param ctx router context
+     * @param cfg tunnel config (null for retest)
+     * @param pool tunnel pool (null to skip ping check)
+     * @param existingTests number of existing tests to subtract from limits
+     * @param isRetest true if this is a retest (skips some new-job checks)
+     * @param log logger instance
+     * @param logPrefix prefix for log messages
+     * @param instanceLog instance logger (null for static calls)
+     * @return true if limits allow scheduling
+     */
+    private static boolean checkQueueLimits(RouterContext ctx, PooledTunnelCreatorConfig cfg,
+                                            TunnelPool pool, int existingTests, boolean isRetest,
+                                            Log log, String logPrefix, Log instanceLog) {
+        int readyCount = ctx.jobQueue().getReadyCount();
+        long maxLag = ctx.jobQueue().getMaxLag();
+        int activeRunners = ctx.jobQueue().getActiveRunnerCount();
+        int maxTestJobs = Math.max(4, Math.min(activeRunners - 2, MAX_CONCURRENT_TESTS));
+        int currentTestJobs = getTotalTestJobCount() - existingTests;
+        int maxQueuedTests = calculateMaxQueuedTests(ctx);
+        int hardLimit = HARD_TEST_JOB_LIMIT;
+
+        // Lag check
+        if (readyCount > 50 || maxLag > 10 || currentTestJobs >= maxTestJobs) {
+            if ((instanceLog != null ? instanceLog : log).shouldInfo()) {
+                (instanceLog != null ? instanceLog : log).info(
+                    (readyCount > 50 || maxLag > 10 ? "Job queue lagging" : "Too many test jobs") +
+                    " (" + readyCount + " ready, Max lag: " + maxLag + "ms, Test jobs: " +
+                    currentTestJobs + "/" + maxTestJobs + ") -> " + logPrefix + cfg);
+            }
+            return false;
+        }
+
+        // Hard limit check
+        if (currentTestJobs >= hardLimit) {
+            if ((instanceLog != null ? instanceLog : log).shouldInfo()) {
+                (instanceLog != null ? instanceLog : log).info(
+                    "Hard limit reached (" + currentTestJobs + " >= " + hardLimit + ") -> " + logPrefix + cfg);
+            }
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Calculate adaptive max queued tests based on current job lag.
+     */
+    private static int calculateMaxQueuedTests(RouterContext ctx) {
+        int maxQueuedTests = MAX_QUEUED_TESTS;
+        long maxLag = ctx.jobQueue().getMaxLag();
+        long avgLag = ctx.jobQueue().getAvgLag();
+        if (maxLag < 1000 && avgLag < 3) {
+            maxQueuedTests = HARD_TEST_JOB_LIMIT;
+        } else if (maxLag < 1200 && avgLag < 5) {
+            maxQueuedTests = MAX_QUEUED_TESTS * 4;
+        } else if (maxLag < 1500 && avgLag < 10) {
+            maxQueuedTests = MAX_QUEUED_TESTS * 3 / 2;
+        }
+        return maxQueuedTests;
     }
 
     /**
@@ -705,24 +823,24 @@ public class TestJob extends JobImpl {
 
         if (maxLag < 500 && avgLag < 2) {
             // Super low lag - run more frequently
-            min = MIN_TEST_DELAY / 2;      // 30s
-            max = BASE_TEST_DELAY;          // 120s
+            min = MIN_TEST_DELAY / 2;      // 15s
+            max = BASE_TEST_DELAY;          // 90s
         } else if (maxLag < 1000 && avgLag < 5) {
             // Very low lag
-            min = MIN_TEST_DELAY * 2 / 3;   // 40s
-            max = BASE_TEST_DELAY;          // 120s
+            min = MIN_TEST_DELAY * 2 / 3;   // 20s
+            max = BASE_TEST_DELAY;          // 90s
         } else if (maxLag < 1500 && avgLag < 10) {
             // Low lag - normal operation
-            min = MIN_TEST_DELAY;            // 60s
-            max = MAX_TEST_DELAY / 2;        // 90s
+            min = MIN_TEST_DELAY;            // 30s
+            max = MAX_TEST_DELAY / 2;        // 60s
         } else if (maxLag < 2000 || avgLag > 20) {
             // Moderate lag - back off
-            min = BASE_TEST_DELAY;            // 120s
-            max = MAX_TEST_DELAY;             // 180s
+            min = BASE_TEST_DELAY;            // 90s
+            max = MAX_TEST_DELAY;             // 120s
         } else {
             // Severe lag - significantly back off
-            min = BASE_TEST_DELAY * 3 / 2;    // 180s
-            max = MAX_TEST_DELAY * 2;         // 360s
+            min = BASE_TEST_DELAY * 3 / 2;    // 135s
+            max = MAX_TEST_DELAY * 2;         // 240s
         }
 
         return new int[] { min, max };
@@ -915,28 +1033,9 @@ public class TestJob extends JobImpl {
     private boolean scheduleRetest(boolean asap) {
         if (_pool == null || !_pool.isAlive()) return false;
 
-        final RouterContext ctx = getContext();
-
-        // Check if job queue is overloaded - skip rescheduling if queue is backing up
-        // Don't reschedule ANY test jobs when there's ANY lag to prevent cascade
-        int readyCount = ctx.jobQueue().getReadyCount();
-        long maxLag = ctx.jobQueue().getMaxLag();
-        int activeRunners = ctx.jobQueue().getActiveRunnerCount();
-        int maxTestJobs = Math.max(8, activeRunners / 6);
-        int totalCount = getTotalTestJobCount();
-        if (readyCount > 50 || maxLag > 10 || totalCount >= maxTestJobs) {
-            if (_log.shouldInfo()) {
-                _log.info("Job queue lagging or too many test jobs (" + readyCount + " ready jobs, maxLag=" + maxLag + 
-                         "ms, testJobs=" + totalCount + "/" + maxTestJobs + ") -> Skipping retest for " + _cfg);
-            }
-            return false;
-        }
-
-        if (totalCount >= HARD_TEST_JOB_LIMIT) {
-            if (_log.shouldInfo()) {
-                _log.info("Hard limit reached during reschedule (" + totalCount + " >= " + HARD_TEST_JOB_LIMIT +
-                          ") \n* Skipping reschedule for " + _cfg);
-            }
+        // Use consolidated queue limit checks
+        if (!checkQueueLimits(getContext(), _cfg, _pool, 1, true, _log,
+                              "Skipping retest for ", _log)) {
             return false;
         }
 
@@ -947,9 +1046,9 @@ public class TestJob extends JobImpl {
 
         // Ensure delay is not negative and set start time properly
         delay = Math.max(0, delay);
-        long startTime = ctx.clock().now() + delay;
+        long startTime = getContext().clock().now() + delay;
         getTiming().setStartAfter(startTime);
-        ctx.jobQueue().addJob(this);
+        getContext().jobQueue().addJob(this);
         return true;
     }
 
