@@ -2870,18 +2870,18 @@
 
   <target name="testscripts">
     <parallel>
-      <exec executable="scripts/checkcerts.sh" failonerror="false"/>
-      <exec executable="scripts/checkpo.sh" failonerror="false"/>
-      <exec executable="scripts/checkutf8.sh" failonerror="false"/>
-      <exec executable="scripts/checkxml.sh" failonerror="false"/>
-      <exec executable="scripts/checkscripts.sh" failonerror="false"/>
+      <exec executable="tests/scripts/checkcerts.sh" failonerror="false"/>
+      <exec executable="tests/scripts/checkpo.sh" failonerror="false"/>
+      <exec executable="tests/scripts/checkutf8.sh" failonerror="false"/>
+      <exec executable="tests/scripts/checkxml.sh" failonerror="false"/>
+      <exec executable="tests/scripts/checkscripts.sh" failonerror="false"/>
     </parallel>
     <echo message="--------------------------------------------------------------------------------"/>
     <echo message="Test scripts execution completed, review the output above for possible issues..."/>
   </target>
 
   <target name="testscripts-net">
-    <exec executable="scripts/checkremotecerts.sh" failonerror="true"/>
+    <exec executable="tests/scripts/checkremotecerts.sh" failonerror="true"/>
   </target>
 
   <target name="testscripts-all" depends="testscripts,testscripts-net"/>
