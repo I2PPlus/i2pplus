@@ -5,7 +5,7 @@
   <errTitle>I2P+</errTitle>
   <chdir>.</chdir>
   <customProcName>false</customProcName>
-  <icon>resources/windows/start.ico</icon>
+  <icon>lib/izpack/resources/icons/start.ico</icon>
   <jre>
     <minVersion>1.8.0</minVersion>
     <maxHeapSize>512</maxHeapSize>

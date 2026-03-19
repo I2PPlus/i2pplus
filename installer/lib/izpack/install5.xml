@@ -46,7 +46,7 @@
   This worked fine on Java 8, but on Java 21, the best match finds Javanese/Jawa for "idn", which is a completely
   different language than Indonesian. See: https://old.reddit.com/r/i2p/comments/1e61lsp/wrong_country_name_indonesia_as_jawa/
 
-  Renamed or custom langpacks (xml + gif) must be checked in to installer/lib/izpack5/patches/resources and may then be added below,
+  Renamed or custom langpacks (xml + gif) must be checked in to installer/lib/izpack/5/patches/resources and may then be added below,
   and will be bundled with the installer.
 
   Note that the JVM's installed locales varies widely by Java version. For example, as of 2024 on Ubuntu, Java 8 has 159 locales
@@ -109,13 +109,13 @@
   </natives>
 
   <resources>
-    <res id="installer.langsel.img" src="installer/resources/izpack/images/i2plogo2.png"/>
-    <res id="Installer.image" src="installer/resources/izpack/images/i2plogo.png"/>
-    <res id="HTMLHelloPanel.info" src="installer/resources/izpack/welcome.html"/>
-    <res id="shortcutSpec.xml" src="installer/resources/izpack/shortcutSpec.xml"/>
-    <res id="XInfoPanel.info" src="installer/resources/izpack/start-i2p.txt"/>
+    <res id="installer.langsel.img" src="installer/lib/izpack/resources/images/i2plogo2.png"/>
+    <res id="Installer.image" src="installer/lib/izpack/resources/images/i2plogo.png"/>
+    <res id="HTMLHelloPanel.info" src="installer/lib/izpack/resources/welcome.html"/>
+    <res id="shortcutSpec.xml" src="installer/lib/izpack/resources/shortcutSpec.xml"/>
+    <res id="XInfoPanel.info" src="installer/lib/izpack/resources/start-i2p.txt"/>
     <res id="HTMLInfoPanel.winservice" src="installer/resources/windows_service_help.html"/>
-    <res id="CustomLangPack.xml_eng" src="installer/resources/izpack/CustomLangPack.xml_eng"/>
+    <res id="CustomLangPack.xml_eng" src="installer/lib/izpack/resources/CustomLangPack.xml_eng"/>
   </resources>
   <variables>
     <!-- desktop shortcuts enabled by default in ShortcutPanel -->
@@ -131,7 +131,7 @@
     </condition>
   </conditions>
   <!-- XInfoConsolePanel -->
-  <jar src="installer/lib/izpack5/patches/java/build/izpack-i2p.jar"/>
+  <jar src="installer/lib/izpack/5/patches/java/build/izpack-i2p.jar"/>
   <panels>
     <panel classname="HTMLHelloPanel"/>
     <panel classname="TargetPanel"/>

@@ -33,9 +33,9 @@ XMLFILES="\
 ./build.xml \
 ./core/java/build.xml \
 ./core/java/nbproject/project.xml \
-./installer/i2pinstaller.xml \
+./installer/lib/izpack/i2pinstaller.xml \
 ./installer/i2pstandalone.xml \
-./installer/install.xml \
+./installer/lib/izpack/install.xml \
 ./installer/resources/eepsite/jetty-ssl.xml
 ./installer/resources/eepsite/contexts/cgi-context.xml
 ./installer/resources/eepsite/contexts/base-context.xml

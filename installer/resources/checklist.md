@@ -119,8 +119,8 @@
 
 7. Change revision in:
   - `history.txt`
-  - `installer/install.xml`
-  - `installer/install5.xml`
+  - `installer/lib/izpack/install.xml`
+  - `installer/lib/izpack/install5.xml`
   - `core/java/src/net/i2p/CoreVersion.java`
     - (both VERSION and PUBLISHED_VERSION)
   - `router/java/src/net/i2p/router/RouterVersion.java`

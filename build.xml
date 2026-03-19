@@ -1392,8 +1392,8 @@
     <exec executable="ls" failonerror="true">
       <arg value="-l"/>
       <arg value="docs/history.txt"/>
-      <arg value="installer/install.xml"/>
-      <arg value="installer/install5.xml"/>
+      <arg value="installer/lib/izpack/install.xml"/>
+      <arg value="installer/lib/izpack/install5.xml"/>
       <arg value="core/java/src/net/i2p/CoreVersion.java"/>
       <arg value="router/java/src/net/i2p/router/RouterVersion.java"/>
     </exec>
@@ -1414,8 +1414,8 @@
         <fileset dir="./build" includes="**/*" excludes="README.md"/>
       </delete>
       <delete dir="./reports" quiet="true"/>
-      <delete file="installer/lib/izpack/patches.jar" failonerror="false" quiet="true"/>
-      <delete dir="installer/lib/izpack5/patches/java/build" quiet="true"/>
+      <delete file="installer/lib/izpack/4/patches.jar" failonerror="false" quiet="true"/>
+      <delete dir="installer/lib/izpack/5/patches/java/build" quiet="true"/>
       <delete file="syndie-standalone.zip" failonerror="false" quiet="true"/>
       <delete file="dist/i2psnark-standalone.zip" failonerror="false" quiet="true"/>
       <delete file="core/java/cobertura.ser" quiet="true"/>
@@ -1448,6 +1448,7 @@
       <delete includeemptydirs="false" quiet="true">
         <fileset dir="./dist" excludes="README.md"/>
       </delete>
+      <delete dir="installer/bin" quiet="true"/>
       <!-- Ensure dist directory exists after cleanup -->
       <mkdir dir="./dist"/>
       <!-- Use exec to run ant subprojects quietly -->
@@ -1568,7 +1569,7 @@
       <delete dir="core/c/jbigi/bin" quiet="true"/>
       <delete dir="core/c/jbigi/lib" quiet="true"/>
       <delete dir="core/c/jcpuid/lib" quiet="true"/>
-      <delete dir="installer/lib/izpack5/patches/java/build" quiet="true"/>
+      <delete dir="installer/lib/izpack/5/patches/java/build" quiet="true"/>
       <delete dir="reproducible/build" quiet="true"/>
       <!-- custom langpacks -->
       <delete dir="com" quiet="true"/>
@@ -1866,10 +1867,10 @@
       <!-- Proxy script, windows icons etc -->
       <copy quiet="true" file="apps/proxyscript/i2pProxy.pac" todir="pkg-temp/scripts/"/>
       <copy quiet="true" file="installer/resources/startconsole.html" todir="pkg-temp/docs/"/>
-      <copy quiet="true" file="installer/resources/windows/start.ico" todir="pkg-temp/docs/"/>
-      <copy quiet="true" file="installer/resources/windows/stop.ico" todir="pkg-temp/docs/"/>
-      <copy quiet="true" file="installer/resources/windows/console.ico" todir="pkg-temp/docs/"/>
-      <copy quiet="true" file="installer/resources/windows/uninstall.ico" todir="pkg-temp/docs/"/>
+      <copy quiet="true" file="installer/lib/izpack/resources/icons/start.ico" todir="pkg-temp/docs/"/>
+      <copy quiet="true" file="installer/lib/izpack/resources/icons/stop.ico" todir="pkg-temp/docs/"/>
+      <copy quiet="true" file="installer/lib/izpack/resources/icons/console.ico" todir="pkg-temp/docs/"/>
+      <copy quiet="true" file="installer/lib/izpack/resources/icons/uninstall.ico" todir="pkg-temp/docs/"/>
 
       <!-- Eepsite stuff here -->
       <copy quiet="true" todir="pkg-temp/eepsite/">
@@ -2562,10 +2563,10 @@
   </target>
 
   <target name="izpack-patches">
-    <taskdef name="izpack" classpath="${basedir}/installer/lib/izpack/patches.jar:${basedir}/installer/lib/izpack/standalone-compiler.jar"
+    <taskdef name="izpack" classpath="${basedir}/installer/lib/izpack/4/patches.jar:${basedir}/installer/lib/izpack/4/standalone-compiler.jar"
       classname="com.izforge.izpack.ant.IzPackTask"/>
-    <jar destfile="${basedir}/installer/lib/izpack/patches.jar"
-      basedir="${basedir}/installer/lib/izpack/patches"/>
+    <jar destfile="${basedir}/installer/lib/izpack/4/patches.jar"
+      basedir="${basedir}/installer/lib/izpack/4/patches"/>
   </target>
 
   <target name="buildUtilityJar" depends="buildCore">
@@ -2574,7 +2575,7 @@
 
   <!-- IzPack 4 -->
   <target name="installer" depends="timestamp.started, preppkg, buildProperties, izpack-patches, buildUtilityJar, timestamp.stopped">
-    <izpack input="${basedir}/installer/install.xml" output="${basedir}/dist/install.jar" installerType="standard" basedir="${basedir}"/>
+    <izpack input="${basedir}/installer/lib/izpack/install.xml" output="${basedir}/dist/install.jar" installerType="standard" basedir="${basedir}"/>
     <ant target="installerexe"/>
   </target>
 
@@ -2601,20 +2602,20 @@
   </target>
 
   <target name="izpack5-patches" depends="ensureIzpack5, buildProperties">
-    <ant dir="installer/lib/izpack5/patches/java/" target="jar"/>
+    <ant dir="installer/lib/izpack/5/patches/java/" target="jar"/>
     <!-- custom langpacks
          Izpack tries to load the resource both from the classpath and the file system;
          we do it this way because jaring them up and adding a pathelement to izpack5.lib.path doesn't work.
-         See installer/install5.xml for details.
+         See installer/lib/izpack/install5.xml for details.
      -->
     <mkdir dir="com/izforge/izpack/bin/langpacks/"/>
     <copy quiet="true" toDir="com/izforge/izpack/bin/langpacks/">
-      <fileset dir="installer/lib/izpack5/patches/resources"/>
+      <fileset dir="installer/lib/izpack/5/patches/resources"/>
     </copy>
   </target>
 
   <target name="installer5" depends="timestamp.started, izpack5-patches, preppkg, buildProperties, buildUtilityJar, timestamp.stopped">
-    <izpack5 input="${basedir}/installer/install5.xml" output="${basedir}/dist/install.jar" installerType="standard" basedir="${basedir}"/>
+    <izpack5 input="${basedir}/installer/lib/izpack/install5.xml" output="${basedir}/dist/install.jar" installerType="standard" basedir="${basedir}"/>
     <ant target="installer5exe"/>
   </target>
 
@@ -2624,7 +2625,7 @@
   <target name="installerexe" depends="launch4j" unless="noExe">
     <echo message="See the file &apos;build.properties&apos; if this step fails."/>
     <!-- now the installer exe -->
-    <launch4j configFile="./installer/i2pinstaller.xml"/>
+    <launch4j configFile="./installer/lib/izpack/i2pinstaller.xml"/>
     <!-- thazzit -->
   </target>
 
@@ -2665,36 +2666,36 @@
   <!-- IzPack 4 -->
   <target name="installer-nowindows" depends="timestamp.started, clean, preppkg-nowindows, izpack-patches, timestamp.stopped">
     <fixcrlf srcdir="pkg-temp" includes="*.config **/*.xml **/*.properties **/*.txt scripts/*" encoding="utf8" eol="lf"/>
-    <izpack input="${basedir}/installer/install.xml" output="${basedir}/dist/i2pinstall_${full.version}.jar" installerType="standard" basedir="${basedir}"/>
+    <izpack input="${basedir}/installer/lib/izpack/install.xml" output="${basedir}/dist/i2pinstall_${full.version}.jar" installerType="standard" basedir="${basedir}"/>
   </target>
 
   <!-- IzPack 5 -->
   <target name="installer5-nowindows" depends="timestamp.started, clean, izpack5-patches, preppkg-nowindows, timestamp.stopped">
     <fixcrlf srcdir="pkg-temp" includes="*.config **/*.xml **/*.properties **/*.txt scripts/*" encoding="utf8" eol="lf"/>
-    <izpack5 input="${basedir}/installer/install5.xml" output="${basedir}/dist/i2pinstall_${full.version}.jar" installerType="standard" basedir="${basedir}"/>
+    <izpack5 input="${basedir}/installer/lib/izpack/install5.xml" output="${basedir}/dist/i2pinstall_${full.version}.jar" installerType="standard" basedir="${basedir}"/>
   </target>
 
   <target name="installer-freebsd" depends="timestamp.started, clean, preppkg-freebsd-only, izpack-patches, timestamp.stopped">
     <fixcrlf srcdir="pkg-temp" includes="*.config **/*.xml **/*.properties **/*.txt scripts/*" encoding="utf8" eol="lf"/>
-    <izpack input="${basedir}/installer/install.xml" output="${basedir}/dist/i2pinstall_${full.version}_freebsd-only.jar" installerType="standard" basedir="${basedir}"/>
+    <izpack input="${basedir}/installer/lib/izpack/install.xml" output="${basedir}/dist/i2pinstall_${full.version}_freebsd-only.jar" installerType="standard" basedir="${basedir}"/>
   </target>
 
   <!-- IzPack 4 -->
   <target name="installer-linux" depends="timestamp.started, clean, preppkg-linux-only, izpack-patches, timestamp.stopped">
     <fixcrlf srcdir="pkg-temp" includes="*.config **/*.xml **/*.properties **/*.txt scripts/*" encoding="utf8" eol="lf"/>
-    <izpack input="${basedir}/installer/install.xml" output="${basedir}/dist/i2pinstall_${full.version}_linux-only.jar" installerType="standard" basedir="${basedir}"/>
+    <izpack input="${basedir}/installer/lib/izpack/install.xml" output="${basedir}/dist/i2pinstall_${full.version}_linux-only.jar" installerType="standard" basedir="${basedir}"/>
   </target>
 
   <!-- IzPack 5 -->
   <target name="installer5-linux" depends="timestamp.started, clean, izpack5-patches, preppkg-linux-only, timestamp.stopped">
     <fixcrlf srcdir="pkg-temp" includes="*.config **/*.xml **/*.properties **/*.txt scripts/*" encoding="utf8" eol="lf"/>
-    <izpack5 input="${basedir}/installer/install5.xml" output="${basedir}/dist/i2pinstall_${full.version}_linux-only.jar" installerType="standard" basedir="${basedir}"/>
+    <izpack5 input="${basedir}/installer/lib/izpack/install5.xml" output="${basedir}/dist/i2pinstall_${full.version}_linux-only.jar" installerType="standard" basedir="${basedir}"/>
   </target>
 
   <target name="installer-osx" depends="timestamp.started, clean, checkForIzpack2App, preppkg-osx-only, izpack-patches, timestamp.stopped">
     <fixcrlf srcdir="pkg-temp" includes="*.config **/*.xml **/*.properties **/*.txt scripts/*" encoding="utf8" eol="lf"/>
     <mkdir dir="pkg-temp/osx"/>
-    <izpack input="${basedir}/installer/install.xml" output="${basedir}/dist/i2pinstall_${full.version}_osx-only.jar" installerType="standard" basedir="${basedir}"/>
+    <izpack input="${basedir}/installer/lib/izpack/install.xml" output="${basedir}/dist/i2pinstall_${full.version}_osx-only.jar" installerType="standard" basedir="${basedir}"/>
     <ant target="installer2app"/>
     <delete dir="pkg-temp/osx"/>
   </target>
@@ -2702,7 +2703,7 @@
   <target name="installer5-osx" depends="timestamp.started, clean, checkForIzpack2App, izpack5-patches, preppkg-osx-only, timestamp.stopped">
     <fixcrlf srcdir="pkg-temp" includes="*.config **/*.xml **/*.properties **/*.txt scripts/*" encoding="utf8" eol="lf"/>
     <mkdir dir="pkg-temp/osx"/>
-    <izpack5 input="${basedir}/installer/install5.xml" output="${basedir}/dist/i2pinstall_${full.version}_osx-only.jar" installerType="standard" basedir="${basedir}"/>
+    <izpack5 input="${basedir}/installer/lib/izpack/install5.xml" output="${basedir}/dist/i2pinstall_${full.version}_osx-only.jar" installerType="standard" basedir="${basedir}"/>
     <ant target="installer2app"/>
     <delete dir="pkg-temp/osx"/>
   </target>
@@ -2744,7 +2745,7 @@
   <!-- IzPack 4 -->
   <target name="installer-windows" depends="clean, preppkg-windows-only, izpack-patches, buildUtilityJar">
     <fixcrlf srcdir="pkg-temp" includes="*.config *.bat *.cmd **/*.xml **/*.properties **/*.txt scripts/*" encoding="utf8" eol="crlf"/>
-    <izpack input="${basedir}/installer/install.xml" output="${basedir}/dist/install.jar" installerType="standard" basedir="${basedir}"/>
+    <izpack input="${basedir}/installer/lib/izpack/install.xml" output="${basedir}/dist/install.jar" installerType="standard" basedir="${basedir}"/>
     <ant target="installerexe"/>
     <delete file="${basedir}/install.jar"/>
     <move file="${basedir}/i2pinstall.exe" tofile="${basedir}/dist/i2pinstall_${full.version}_windows.exe"/>
@@ -2753,7 +2754,7 @@
   <!-- IzPack 5 -->
   <target name="installer5-windows" depends="clean, izpack5-patches, preppkg-windows-only, buildUtilityJar">
     <fixcrlf srcdir="pkg-temp" includes="*.config *.bat *.cmd **/*.xml **/*.properties **/*.txt scripts/*" encoding="utf8" eol="crlf"/>
-    <izpack5 input="${basedir}/installer/install5.xml" output="${basedir}/dist/install.jar" installerType="standard" basedir="${basedir}"/>
+    <izpack5 input="${basedir}/installer/lib/izpack/install5.xml" output="${basedir}/dist/install.jar" installerType="standard" basedir="${basedir}"/>
     <ant target="installer5exe"/>
     <delete file="${basedir}/install.jar"/>
     <move file="${basedir}/i2pinstall.exe" tofile="${basedir}/dist/2pinstall_${full.version}_windows.exe"/>
@@ -3849,9 +3850,9 @@
     <copy quiet="true" file="installer/resources/initialNews/initialNews.xml" tofile="pkg-temp/docs/news.xml" overwrite="true"/>
     <copy quiet="true" file="installer/resources/readme/readme.html" tofile="pkg-temp/docs/readme/readme.html"/>
     <copy quiet="true" file="installer/resources/startconsole.html" todir="pkg-temp/docs/"/>
-    <copy quiet="true" file="installer/resources/windows/start.ico" todir="pkg-temp/docs/"/>
-    <copy quiet="true" file="installer/resources/windows/stop.ico" todir="pkg-temp/docs/"/>
-    <copy quiet="true" file="installer/resources/windows/console.ico" todir="pkg-temp/docs/"/>
+    <copy quiet="true" file="installer/lib/izpack/resources/icons/start.ico" todir="pkg-temp/docs/"/>
+    <copy quiet="true" file="installer/lib/izpack/resources/icons/stop.ico" todir="pkg-temp/docs/"/>
+    <copy quiet="true" file="installer/lib/izpack/resources/icons/console.ico" todir="pkg-temp/docs/"/>
     <!-- HTTP Header files, english only, if you need a different lang do it in a seperate target -->
     <copy quiet="true" todir="pkg-temp/docs/proxy/">
       <fileset dir="installer/resources/proxy/" includes="**-header.ht"/>
