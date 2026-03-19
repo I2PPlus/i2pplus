@@ -3272,7 +3272,7 @@
         developerConnection="scm:git:git@github.com:i2p/i2p.i2p.git"
         url="git@github.com:i2p/i2p.i2p.git"/>
       <dependency groupId="net.i2p" artifactId="i2p" version="${release.number}"/>
-      <dependency groupId="org.apache.tomcat" artifactId="tomcat-servlet-api" version="8.0.33"/>
+      <dependency groupId="org.apache.tomcat" artifactId="tomcat-servlet-api" version="9.0.107"/>
     </artifact:pom>
     <artifact:writepom pomRefId="i2ppom" file="pkg-mavencentral/i2p-${release.number}.pom"/>
     <artifact:writepom pomRefId="routerpom" file="pkg-mavencentral/router-${release.number}.pom"/>
