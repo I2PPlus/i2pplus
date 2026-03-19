@@ -6,7 +6,7 @@
 
 # I2P+
 
-[English](README.md) | [日本語](README-ja.md) | [中文](README-zh.md) | [हिन्दी](README-hi.md) | [བོད་ཡིག](README-bo.md) | [فارسی](README-fa.md)
+[English](../README.md) | [日本語](README-ja.md) | [中文](README-zh.md) | [हिन्दी](README-hi.md) | [བོད་ཡིག](README-bo.md) | [فارسی](README-fa.md)
 
 Это исходный код альтернативной реализации I2P на Java
 
@@ -14,7 +14,7 @@
 
 ## Установка
 
-Смотрите INSTALL.txt или https://i2pplus.github.io/ для инструкций по установке.
+Смотрите [INSTALL.txt](INSTALL.txt) или https://i2pplus.github.io/ для инструкций по установке.
 
 ## Документация
 
@@ -27,7 +27,7 @@ API: http://docs.i2p-projekt.de/javadoc/
 
 ## Как внести вклад / Взломать I2P
 
-Пожалуйста, ознакомьтесь с [HACKs/HACKING.md) и другими документами в каталоге docs.
+Пожалуйста, ознакомьтесь с [HACKING.md](HACKING.md) и другими документами в каталоге docs.
 
 ## Сборка пакетов из исходного кода
 
@@ -72,7 +72,7 @@ API: http://docs.i2p-projekt.de/javadoc/
 Запустите 'ant' без аргументов, чтобы увидеть другие варианты сборки.
 
 ### Docker
-Дополнительную информацию о запуске I2P в Docker см.  (Docker.md).
+Дополнительную информацию о запуске I2P в Docker см. [Docker.md](../docker/Docker.md).
 ## Контактная информация
 
 Нужна помощь? Смотрите канал IRC #saltR в сети I2P IRC.
@@ -83,4 +83,4 @@ API: http://docs.i2p-projekt.de/javadoc/
 
 I2P+ лицензирована по AGPL v.3.
 
-Для различных подкомпонентов лицензии см.: LICENSE.txt
+Для различных подкомпонентов лицензии см.: [LICENSE.txt](licenses/LICENSE.txt)

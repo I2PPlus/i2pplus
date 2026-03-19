@@ -6,7 +6,7 @@
 
 # I2P+
 
-[English](README.md) | [Русский](README-ru.md) | [日本語](README-ja.md) | [中文](README-zh.md) | [हिन्दी](README-hi.md) | [བོད་ཡིག](README-bo.md) | [فارسی](README-fa.md)
+[English](../README.md) | [Русский](README-ru.md) | [日本語](README-ja.md) | [中文](README-zh.md) | [हिन्दी](README-hi.md) | [བོད་ཡིག](README-bo.md) | [فارسی](README-fa.md)
 
 این کد منبع نرم-فورک پیاده‌سازی جاوا I2P است.
 
@@ -14,7 +14,7 @@
 
 ## نصب
 
-به INSTALL.txt یا https://i2pplus.github.io/ برای دستورالعمل‌های نصب مراجعه کنید.
+به [INSTALL.txt](INSTALL.txt) یا https://i2pplus.github.io/ برای دستورالعمل‌های نصب مراجعه کنید.
 
 ## مستندات
 
@@ -27,7 +27,7 @@ API: http://docs.i2p-projekt.de/javadoc/
 
 ## چگونه مشارکت کنیم / کار کردن روی I2P
 
-لطفاً [HACKING.md](docs/HACKING.md) و سایر اسناد در پوشه docs را بررسی کنید.
+لطفاً [HACKING.md](HACKING.md) و سایر اسناد در پوشه docs را بررسی کنید.
 
 ## ساخت بسته‌ها از منبع
 
@@ -80,7 +80,7 @@ API: http://docs.i2p-projekt.de/javadoc/
 'ant' را بدون آرگومان اجرا کنید تا گزینه‌های ساخت دیگر را ببینید.
 
 ### Docker
-برای اطلاعات بیشتر در مورد نحوه اجرای I2P در Docker، به [Docker.md](Docker.md) مراجعه کنید
+برای اطلاعات بیشتر در مورد نحوه اجرای I2P در Docker، به [Docker.md](../docker/Docker.md) مراجعه کنید
 
 ## اطلاعات تماس
 
@@ -92,4 +92,4 @@ API: http://docs.i2p-projekt.de/javadoc/
 
 I2P+ تحت AGPL v.3 مجوز دارد.
 
-برای مجوزهای اجزای فرعی مختلف، به: LICENSE.txt مراجعه کنید
+برای مجوزهای اجزای فرعی مختلف، به: [LICENSE.txt](licenses/LICENSE.txt) مراجعه کنید

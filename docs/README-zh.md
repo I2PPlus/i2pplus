@@ -1,6 +1,6 @@
 # I2P+
 
-[English](README.md) | [Русский](README-ru.md) | [中文](README-zh.md) | [བོད་ཡིག](README-bo.md) | [فارسی](README-fa.md)
+[English](../README.md) | [Русский](README-ru.md) | [中文](README-zh.md) | [བོད་ཡིག](README-bo.md) | [فارسی](README-fa.md)
 
 这是JAVA版本的i2p软fork源代码。
 
@@ -8,7 +8,7 @@
 
 ## 安装
 
-有关安装说明，请参见INSTALL.txt或https://i2pplus.github.io/。
+有关安装说明，请参见[INSTALL.txt](INSTALL.txt)或https://i2pplus.github.io/。
 
 ## 文档
 
@@ -21,7 +21,7 @@ API：http://docs.i2p-projekt.de/javadoc/
 
 ## 如何在I2P上做贡献/破解
 
-请在docs目录中查看[HACKING.md](docs/HACKING.md)和其他文档。
+请在docs目录中查看[HACKING.md](HACKING.md)和其他文档。
 
 ## 从源代码构建软件包
 
@@ -70,4 +70,4 @@ API：http://docs.i2p-projekt.de/javadoc/
 
 I2P+已根据AGPL v.3许可。
 
-有关各子组件许可证，请参阅：LICENSE.txt
+有关各子组件许可证，请参阅：[LICENSE.txt](licenses/LICENSE.txt)
