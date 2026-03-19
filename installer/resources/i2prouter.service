@@ -1,0 +1,27 @@
+# I2P+ Systemd Service Unit File
+# Installed by install_i2p_service_unix
+# Template variables are replaced at install time with @VAR@ syntax
+
+[Unit]
+Description=I2P+ Anonymous Network Router
+Documentation=https://get.i2p.net
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=forking
+ExecStart=@INSTALL_PATH@/i2prouter start
+ExecStop=@INSTALL_PATH@/i2prouter stop
+ExecReload=@INSTALL_PATH@/i2prouter restart
+PIDFile=@I2P_CONFIG_DIR@/i2p.pid
+#USER_LINE@
+
+# Security hardening
+PrivateTmp=true
+NoNewPrivileges=true
+ProtectSystem=strict
+ReadWritePaths=@I2P_CONFIG_DIR@
+ReadWritePaths=@I2P_TEMP@
+
+[Install]
+WantedBy=multi-user.target

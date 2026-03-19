@@ -12,51 +12,162 @@
 # Uninstalls the Java Service Wrapper-based I2P service on various *nix systems.
 # This script must be run as root.
 #
+# Usage:
+#   uninstall_i2p_service_unix [--dry-run] [--install-dir /path/to/i2p]
+#
 # Java Service Wrapper can be found at:
 # http://wrapper.tanukisoftware.org/doc/english/introduction.html
 
-if [ ! "X$USER" = "Xroot" ]; then
+DRY_RUN=0
+INSTALL_DIR=""
+
+while [ $# -gt 0 ]; do
+    case "$1" in
+        --dry-run)
+            DRY_RUN=1
+            ;;
+        --install-dir)
+            shift
+            INSTALL_DIR="$1"
+            ;;
+        --help|-h)
+            echo "Usage: $0 [--dry-run] [--install-dir /path/to/i2p]"
+            echo
+            echo "  --dry-run              Show what would be done without making changes"
+            echo "  --install-dir <path>   Path to I2P installation (default: current directory)"
+            echo "  --help, -h             Show this help message"
+            exit 0
+            ;;
+        *)
+            echo "Unknown option: $1"
+            echo "Usage: $0 [--dry-run] [--install-dir /path/to/i2p]"
+            exit 1
+            ;;
+    esac
+    shift
+done
+
+if [ "$DRY_RUN" = "1" ]; then
+    echo "=== DRY RUN MODE — no changes will be made ==="
+    echo
+fi
+
+if [ "$(id -u)" -ne 0 ]; then
     echo "Sorry, you need root privileges to uninstall services."
     exit 1
 fi
 
+# Resolve working directory
+if [ -n "$INSTALL_DIR" ]; then
+    if [ ! -d "$INSTALL_DIR" ]; then
+        echo "Error: Install directory does not exist: $INSTALL_DIR"
+        exit 1
+    fi
+    SCRIPT_DIR="$(cd "$INSTALL_DIR" && pwd)"
+else
+    SCRIPT_DIR="$(pwd)"
+fi
+
 ERROR_MSG="Cannot determine operating system type. Please uninstall the service manually."
-HOST_OS=`./osid`
+HOST_OS="$SCRIPT_DIR/osid"
+
+if [ ! -x "$HOST_OS" ]; then
+    echo "Error: osid script not found or not executable in: $SCRIPT_DIR"
+    exit 1
+fi
+
+HOST_OS="$($HOST_OS)"
 
 if [ "X$HOST_OS" = "X" -o "$HOST_OS" = "unknown" ]; then
     echo "$ERROR_MSG"
     exit 1
 fi
 
+# Detect systemd
+HAS_SYSTEMD=0
+if [ -d /run/systemd/system ] || grep -q systemd /proc/1/comm 2>/dev/null; then
+    HAS_SYSTEMD=1
+fi
+
+echo "Detected OS:    $HOST_OS"
+echo "Systemd:        $([ $HAS_SYSTEMD -eq 1 ] && echo 'yes' || echo 'no')"
+echo
+
 # The following are several different service uninstallation methods covering
 # some of the major *nix operating systems. Most *nix OSes should be able to use
 # one of these styles. TODO: AIX, HP-UX, HP-UX/64, IRIX, OSF/1.
 
+uninstall_systemd()
+{
+    echo "Removing systemd service..."
+    if [ "$DRY_RUN" = "1" ]; then
+        echo "  [dry-run] Would run: systemctl stop i2prouter.service"
+        echo "  [dry-run] Would run: systemctl disable i2prouter.service"
+        echo "  [dry-run] Would remove: /etc/systemd/system/i2prouter.service"
+        echo "  [dry-run] Would run: systemctl daemon-reload"
+        return 0
+    fi
+    systemctl stop i2prouter.service 2>/dev/null
+    systemctl disable i2prouter.service 2>/dev/null
+    rm -f /etc/systemd/system/i2prouter.service
+    systemctl daemon-reload
+    echo "I2P+ systemd service removed."
+}
+
 uninstall_bsd()
 {
+    echo "Removing BSD rc.d symlink..."
+    if [ "$DRY_RUN" = "1" ]; then
+        echo "  [dry-run] Would remove: /usr/local/etc/rc.d/i2prouter.sh"
+        return 0
+    fi
     rm /usr/local/etc/rc.d/i2prouter.sh
 }
 
-uninstall_debian()
+uninstall_debian_initd()
 {
+    echo "Removing Debian init.d symlink..."
+    if [ "$DRY_RUN" = "1" ]; then
+        echo "  [dry-run] Would remove: /etc/init.d/i2prouter"
+        echo "  [dry-run] Would run: update-rc.d i2prouter remove"
+        return 0
+    fi
     rm /etc/init.d/i2prouter
-    update-rc.d -f i2prouter remove
+    update-rc.d i2prouter remove
 }
 
 uninstall_gentoo()
 {
+    echo "Removing Gentoo init.d symlink..."
+    if [ "$DRY_RUN" = "1" ]; then
+        echo "  [dry-run] Would remove: /etc/init.d/i2prouter"
+        echo "  [dry-run] Would run: rc-update del i2prouter default"
+        return 0
+    fi
     rm /etc/init.d/i2prouter
     rc-update del i2prouter default
 }
 
 uninstall_redhat()
 {
+    echo "Removing Red Hat init.d symlink..."
+    if [ "$DRY_RUN" = "1" ]; then
+        echo "  [dry-run] Would remove: /etc/rc.d/init.d/i2prouter"
+        echo "  [dry-run] Would run: chkconfig --level 345 i2prouter off"
+        return 0
+    fi
     rm /etc/rc.d/init.d/i2prouter
     chkconfig --level 345 i2prouter off
 }
 
 uninstall_sysv()
 {
+    echo "Removing SysV init symlinks..."
+    if [ "$DRY_RUN" = "1" ]; then
+        echo "  [dry-run] Would remove: /etc/init.d/i2prouter"
+        echo "  [dry-run] Would remove rc*.d symlinks"
+        return 0
+    fi
     rm /etc/init.d/i2prouter
     rm /etc/rc0.d/K20i2prouter
     rm /etc/rc1.d/K20i2prouter
@@ -66,10 +177,18 @@ uninstall_sysv()
 
 case $HOST_OS in
     debian )
-        uninstall_debian
+        if [ "$HAS_SYSTEMD" = "1" ]; then
+            uninstall_systemd
+        else
+            uninstall_debian_initd
+        fi
         ;;
     fedora | mandrake | redhat | suse )
-        uninstall_redhat
+        if [ "$HAS_SYSTEMD" = "1" ]; then
+            uninstall_systemd
+        else
+            uninstall_redhat
+        fi
         ;;
     freebsd | osx )
         uninstall_bsd
@@ -85,5 +204,10 @@ case $HOST_OS in
         exit 1
         ;;
 esac
+
+if [ "$DRY_RUN" = "1" ]; then
+    echo
+    echo "=== DRY RUN COMPLETE — no changes were made ==="
+fi
 
 exit 0

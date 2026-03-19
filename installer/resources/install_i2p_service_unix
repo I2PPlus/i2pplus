@@ -12,52 +12,228 @@
 # Installs I2P as a service on various *nix systems using Java Service Wrapper.
 # This script must be run as root.
 #
+# Usage:
+#   install_i2p_service_unix [--dry-run] [--install-dir /path/to/i2p] [--user username]
+#
 # Java Service Wrapper can be found at:
 # http://wrapper.tanukisoftware.org/doc/english/introduction.html
 
-if [ ! "X$USER" = "Xroot" ]; then
+DRY_RUN=0
+INSTALL_DIR=""
+RUN_AS_USER_ARG=""
+
+while [ $# -gt 0 ]; do
+    case "$1" in
+        --dry-run)
+            DRY_RUN=1
+            ;;
+        --install-dir)
+            shift
+            INSTALL_DIR="$1"
+            ;;
+        --user)
+            shift
+            RUN_AS_USER_ARG="$1"
+            ;;
+        --help|-h)
+            echo "Usage: $0 [--dry-run] [--install-dir /path/to/i2p] [--user username]"
+            echo
+            echo "  --dry-run              Show what would be done without making changes"
+            echo "  --install-dir <path>   Path to I2P installation (default: current directory)"
+            echo "  --user <username>      Run I2P service as this user (default: from i2prouter config)"
+            echo "  --help, -h             Show this help message"
+            exit 0
+            ;;
+        *)
+            echo "Unknown option: $1"
+            echo "Usage: $0 [--dry-run] [--install-dir /path/to/i2p] [--user username]"
+            exit 1
+            ;;
+    esac
+    shift
+done
+
+if [ "$DRY_RUN" = "1" ]; then
+    echo "=== DRY RUN MODE — no changes will be made ==="
+    echo
+fi
+
+if [ "$(id -u)" -ne 0 ]; then
     echo "Sorry, you need root privileges to install services."
     exit 1
 fi
 
+# Resolve working directory
+if [ -n "$INSTALL_DIR" ]; then
+    if [ ! -d "$INSTALL_DIR" ]; then
+        echo "Error: Install directory does not exist: $INSTALL_DIR"
+        exit 1
+    fi
+    if [ ! -f "$INSTALL_DIR/i2prouter" ]; then
+        echo "Error: i2prouter not found in: $INSTALL_DIR"
+        exit 1
+    fi
+    SCRIPT_DIR="$(cd "$INSTALL_DIR" && pwd)"
+else
+    SCRIPT_DIR="$(pwd)"
+fi
+
 ERROR_MSG="Cannot determine operating system type. Please install the service manually."
-HOST_OS=`./osid`
+HOST_OS="$SCRIPT_DIR/osid"
+
+if [ ! -x "$HOST_OS" ]; then
+    echo "Error: osid script not found or not executable in: $SCRIPT_DIR"
+    exit 1
+fi
+
+HOST_OS="$($HOST_OS)"
 
 if [ "X$HOST_OS" = "X" -o "$HOST_OS" = "unknown" ]; then
     echo "$ERROR_MSG"
     exit 1
 fi
 
+# Extract installation paths from the i2prouter script
+ROUTER_SCRIPT="$SCRIPT_DIR/i2prouter"
+INSTALL_PATH="$(grep '^[[:space:]]*I2P=' "$ROUTER_SCRIPT" | grep -v 'I2P_CONFIG\|I2PTEMP' | head -1 | cut -d= -f2-)"
+I2P_CONFIG_DIR="$(grep '^[[:space:]]*I2P_CONFIG_DIR=' "$ROUTER_SCRIPT" | tail -1 | cut -d= -f2-)"
+I2P_TEMP="$(grep '^[[:space:]]*I2PTEMP=' "$ROUTER_SCRIPT" | head -1 | cut -d= -f2-)"
+RUN_AS_USER="$(grep '^[[:space:]]*RUN_AS_USER=' "$ROUTER_SCRIPT" | grep -v '^#' | head -1 | cut -d= -f2-)"
+
+# Override with --user if provided
+if [ -n "$RUN_AS_USER_ARG" ]; then
+    if ! id "$RUN_AS_USER_ARG" > /dev/null 2>&1; then
+        echo "Error: User '$RUN_AS_USER_ARG' does not exist."
+        exit 1
+    fi
+    RUN_AS_USER="$RUN_AS_USER_ARG"
+fi
+
+# Detect systemd
+HAS_SYSTEMD=0
+if [ -d /run/systemd/system ] || grep -q systemd /proc/1/comm 2>/dev/null; then
+    HAS_SYSTEMD=1
+fi
+
+echo "Detected OS:    $HOST_OS"
+echo "Systemd:        $([ $HAS_SYSTEMD -eq 1 ] && echo 'yes' || echo 'no')"
+echo "Install path:   $INSTALL_PATH"
+echo "Config dir:     $I2P_CONFIG_DIR"
+echo "Temp dir:       $I2P_TEMP"
+echo "Run as user:    ${RUN_AS_USER:-root}"
+echo
+
 # The following are several different service installation methods covering some
 # of the major *nix operating systems. Most *nix OSes should be able to use one
 # of these styles. TODO: AIX, HP-UX, HP-UX/64, IRIX, OSF/1.
 
-install_bsd()
+# Generate unit file from template with variable substitution
+generate_unit_file()
 {
-    ln -sf `pwd`/i2prouter /usr/local/etc/rc.d/i2prouter.sh
+    local template="$1"
+    local user_line=""
+    if [ -n "$RUN_AS_USER" ]; then
+        user_line="User=$RUN_AS_USER"
+    fi
+    sed -e "s|@INSTALL_PATH@|${INSTALL_PATH}|g" \
+        -e "s|@I2P_CONFIG_DIR@|${I2P_CONFIG_DIR}|g" \
+        -e "s|@I2P_TEMP@|${I2P_TEMP}|g" \
+        -e "s|#USER_LINE@|${user_line}|g" \
+        "$template"
 }
 
-install_debian()
+install_systemd()
 {
-    ln -sf `pwd`/i2prouter /etc/init.d/i2prouter
-    update-rc.d i2prouter start 20 2 3 4 5 . stop 20 0 1 6 .
+    SERVICE_TEMPLATE="$SCRIPT_DIR/i2prouter.service"
+    if [ ! -f "$SERVICE_TEMPLATE" ]; then
+        echo "Error: i2prouter.service template not found in: $SCRIPT_DIR"
+        return 1
+    fi
+
+    echo "Installing systemd service..."
+
+    if [ "$DRY_RUN" = "1" ]; then
+        echo "  [dry-run] Would process i2prouter.service template with:"
+        echo "    @INSTALL_PATH@   -> ${INSTALL_PATH}"
+        echo "    @I2P_CONFIG_DIR@ -> ${I2P_CONFIG_DIR}"
+        echo "    @I2P_TEMP@       -> ${I2P_TEMP}"
+        if [ -n "$RUN_AS_USER" ]; then
+            echo "    User=            -> ${RUN_AS_USER}"
+        fi
+        echo "  [dry-run] Would write to: /etc/systemd/system/i2prouter.service"
+        echo "  [dry-run] Would run: systemctl daemon-reload"
+        echo "  [dry-run] Would run: systemctl enable i2prouter.service"
+        echo
+        echo "  Generated unit file:"
+        echo "  ---"
+        generate_unit_file "$SERVICE_TEMPLATE" | sed 's/^/  /'
+        echo "  ---"
+        return 0
+    fi
+
+    generate_unit_file "$SERVICE_TEMPLATE" > /etc/systemd/system/i2prouter.service
+
+    systemctl daemon-reload
+    systemctl enable i2prouter.service
+    echo "I2P+ systemd service installed and enabled."
+    echo "Start it with: systemctl start i2prouter"
+}
+
+install_bsd()
+{
+    echo "Installing BSD rc.d symlink..."
+    if [ "$DRY_RUN" = "1" ]; then
+        echo "  [dry-run] Would create: /usr/local/etc/rc.d/i2prouter.sh -> $SCRIPT_DIR/i2prouter"
+        return 0
+    fi
+    ln -sf "$SCRIPT_DIR/i2prouter" /usr/local/etc/rc.d/i2prouter.sh
+}
+
+install_debian_initd()
+{
+    echo "Installing Debian init.d symlink..."
+    if [ "$DRY_RUN" = "1" ]; then
+        echo "  [dry-run] Would create: /etc/init.d/i2prouter -> $SCRIPT_DIR/i2prouter"
+        echo "  [dry-run] Would run: update-rc.d i2prouter defaults 20"
+        return 0
+    fi
+    ln -sf "$SCRIPT_DIR/i2prouter" /etc/init.d/i2prouter
+    update-rc.d i2prouter defaults 20
 }
 
 install_gentoo()
 {
-    ln -sf `pwd`/i2prouter /etc/init.d/i2prouter
+    echo "Installing Gentoo init.d symlink..."
+    if [ "$DRY_RUN" = "1" ]; then
+        echo "  [dry-run] Would create: /etc/init.d/i2prouter -> $SCRIPT_DIR/i2prouter"
+        echo "  [dry-run] Would run: rc-update add i2prouter default"
+        return 0
+    fi
+    ln -sf "$SCRIPT_DIR/i2prouter" /etc/init.d/i2prouter
     rc-update add i2prouter default
 }
 
 install_redhat()
 {
-    ln -sf `pwd`/i2prouter /etc/rc.d/init.d/i2prouter
+    echo "Installing Red Hat init.d symlink..."
+    if [ "$DRY_RUN" = "1" ]; then
+        echo "  [dry-run] Would create: /etc/rc.d/init.d/i2prouter -> $SCRIPT_DIR/i2prouter"
+        echo "  [dry-run] Would run: chkconfig --level 345 i2prouter on"
+        return 0
+    fi
+    ln -sf "$SCRIPT_DIR/i2prouter" /etc/rc.d/init.d/i2prouter
     chkconfig --level 345 i2prouter on
 }
 
 install_sysv()
 {
-    ln -sf `pwd`/i2prouter /etc/init.d/i2prouter
+    echo "Installing SysV init symlinks..."
+    if [ "$DRY_RUN" = "1" ]; then
+        echo "  [dry-run] Would create: /etc/init.d/i2prouter -> $SCRIPT_DIR/i2prouter"
+        echo "  [dry-run] Would create rc*.d symlinks"
+        return 0
+    fi
+    ln -sf "$SCRIPT_DIR/i2prouter" /etc/init.d/i2prouter
     ln -sf /etc/init.d/i2prouter /etc/rc0.d/K20i2prouter
     ln -sf /etc/init.d/i2prouter /etc/rc1.d/K20i2prouter
     ln -sf /etc/init.d/i2prouter /etc/rc2.d/S20i2prouter
@@ -66,10 +242,18 @@ install_sysv()
 
 case $HOST_OS in
     debian )
-        install_debian
+        if [ "$HAS_SYSTEMD" = "1" ]; then
+            install_systemd
+        else
+            install_debian_initd
+        fi
         ;;
     fedora | mandrake | redhat | suse )
-        install_redhat
+        if [ "$HAS_SYSTEMD" = "1" ]; then
+            install_systemd
+        else
+            install_redhat
+        fi
         ;;
     freebsd | osx )
         install_bsd
@@ -85,5 +269,10 @@ case $HOST_OS in
         exit 1
         ;;
 esac
+
+if [ "$DRY_RUN" = "1" ]; then
+    echo
+    echo "=== DRY RUN COMPLETE — no changes were made ==="
+fi
 
 exit 0
