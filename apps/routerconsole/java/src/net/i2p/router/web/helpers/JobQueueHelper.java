@@ -162,9 +162,9 @@ public class JobQueueHelper extends HelperBase {
                     totalRuntime += (end - start);
                 }
             }
-            String runtimeStr = totalRuntime > 0 ? " <span id=totalRuntime class=jobCounter style=float:right>" +
-                                                    _t("Duration: {0}", DataHelper.formatDuration2(totalRuntime)) +
-                                                    "</span>" : "";
+            String runtimeStr = " <span id=totalRuntime class=jobCounter style=float:right>" +
+                                 _t("Duration: {0}", DataHelper.formatDuration2(totalRuntime)) +
+                                 "</span>";
             buf.append("<div class=tablewrap id=finished><h3 id=finishedjobs>")
                .append(_t("Just finished jobs")).append(": ").append(justFinishedJobs.size()).append(runtimeStr)
                .append("</h3>\n<ol class=jobqueue>\n");
@@ -232,10 +232,7 @@ public class JobQueueHelper extends HelperBase {
                     long elapsed = Math.max(0, now - completionTime);
                     String timeAgo = DataHelper.formatDuration2(elapsed);
                     String jobDisplay = "<b title=\"" + firstJob.toString() + "\">" + jobName + "</b>";
-
-                    if (jobsAtTime.size() > 1) {
-                        jobDisplay += " <span class=jobsCounter>" + jobsAtTime.size() + "</span>";
-                    }
+                    jobDisplay += " <span class=jobsCounter>" + jobsAtTime.size() + "</span>";
 
                     buf.append("<li>").append(jobDisplay).append(" &#10140; ");
                     if (completionTime <= 0 || elapsed == 0) {
@@ -257,8 +254,9 @@ public class JobQueueHelper extends HelperBase {
         }
 
         boolean hasJobs = readyJobs.size() > 0;
-        String droppedStr = droppedCount > 0 ? " <span id=dropped class=jobCounter style=float:right>" +
-                                                _t("Dropped: {0}", droppedCount) + "</span>" : "";
+        String droppedStr = " <span id=dropped class=jobCounter style=float:right>" +
+                             _t("Dropped: {0}", droppedCount) + "</span>";
+
         buf.append("<div class=tablewrap id=ready><h3 id=readyjobs")
            .append(!hasJobs ? " class=nojobs" : "").append(">")
            .append(_t("Ready / waiting jobs")).append(": ").append(readyJobs.size())
@@ -300,10 +298,7 @@ public class JobQueueHelper extends HelperBase {
 
                     String timeStr = "<i>" + DataHelper.formatDuration2(elapsedSeconds) + "</i>";
                     String jobDisplay = "<b title=\"" + jobsAtTime.get(0).toString() + "\">" + jobName + "</b>";
-                    if (jobsAtTime.size() > 1) {
-                        jobDisplay += " <span class=jobsCounter>" + jobsAtTime.size() + "</span>";
-                    }
-
+                    jobDisplay += " <span class=jobsCounter>" + jobsAtTime.size() + "</span>";
                     buf.append("<li>").append(jobDisplay);
                     if (elapsedSeconds > 0) {
                        buf.append(" &#10140; ").append(_t("waiting {0}", timeStr));
