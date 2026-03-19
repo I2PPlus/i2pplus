@@ -6,7 +6,7 @@
 
 # Specify input, output, and proxy variables
 input_file="torbulkexitlist"
-output_file="blocklist_tor.txt"
+output_file="blocklist/blocklist_tor.txt"
 http_proxy=${http_proxy:-"http://127.0.0.1:4444"}
 
 # Variables

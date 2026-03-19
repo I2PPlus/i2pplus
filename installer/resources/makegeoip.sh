@@ -5,7 +5,7 @@
 
 VER=`date +%Y-%m`
 DL=dbip-country-lite-${VER}.mmdb.gz
-FILE=GeoLite2-Country.mmdb.gz
+FILE=geoip/GeoLite2-Country.mmdb.gz
 UPDATE_SCRIPT=makegeoip.sh
 export HTTP_PROXY=http://127.0.0.1:4444
 
@@ -90,6 +90,5 @@ echo " > New hash: $NEW_HASH"
 
 if [ -n "$OLD_HASH" ] && [ -n "$NEW_HASH" ] && [ "$OLD_HASH" != "$NEW_HASH" ]; then
     echo " > Update successful (hashes do not match) -> deleting $FILE.old"
-    #cp -v "$FILE" "./installer/resources/$FILE"
     rm -f "${FILE}.old" >/dev/null 2>&1
 fi

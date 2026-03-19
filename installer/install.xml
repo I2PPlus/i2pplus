@@ -68,9 +68,9 @@
   <native type="izpack" name="ShellLink_x64.dll"/>
 
   <resources>
-    <res id="Installer.image" src="installer/resources/i2plogo.png"/>
-    <res id="shortcutSpec.xml" src="installer/resources/shortcutSpec.xml"/>
-    <res id="XInfoPanel.info" src="installer/resources/start-i2p.txt"/>
+    <res id="Installer.image" src="installer/resources/izpack/images/i2plogo.png"/>
+    <res id="shortcutSpec.xml" src="installer/resources/izpack/shortcutSpec.xml"/>
+    <res id="XInfoPanel.info" src="installer/resources/izpack/start-i2p.txt"/>
   </resources>
 
   <dynamicvariables>

@@ -125,7 +125,7 @@
     <echo message=" updaterWithJettyFixes                        Updater + local Jetty patches"/>
     <echo message=" updaterWithJettyFixesAndGeoIP                Updater + local Jetty patches + GeoIP database"/>
     <echo message=" updaterWithJettyFixesAndJbigi                Updater + local Jetty patches + jBigi library"/>
-    <echo message=" updateTorBlocklist                           Update Tor blocklist &#10140; installer/resources/blocklist_tor.txt"/>
+    <echo message=" updateTorBlocklist                           Update Tor blocklist &#10140; installer/resources/blocklist/blocklist_tor.txt"/>
     <echo message=" 7zip-freebsd                                 Installation 7zip for FreeBSD without installer &#10140; ./dist/i2p-freebsd.7z"/>
     <echo message=" 7zip-linux                                   Installation 7zip for Linux without installer &#10140; ./dist/i2p-linux.7z"/>
     <echo message=" 7zip-macos                                   Installation 7zip for macOS without installer &#10140; ./dist/i2p-macos.7z"/>
@@ -1704,6 +1704,7 @@
       <copy quiet="true" file="installer/resources/hostping" todir="pkg-temp/"/>
       <copy quiet="true" file="installer/resources/graceful_update" todir="pkg-temp/"/>
       <copy quiet="true" file="installer/resources/i2prouter" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/i2prouter.service" todir="pkg-temp/"/>
       <copy quiet="true" file="installer/resources/osid" todir="pkg-temp/"/>
       <copy quiet="true" file="installer/resources/postinstall.sh" todir="pkg-temp/"/>
       <copy quiet="true" todir="pkg-temp/man/">
@@ -1853,12 +1854,12 @@
 
       <!-- Copy configs and misc files -->
       <copy quiet="true" file="apps/i2psnark/i2psnark.config" todir="pkg-temp/"/>
-      <copy quiet="true" file="installer/resources/blocklist.txt" todir="pkg-temp/"/>
-      <copy quiet="true" file="installer/resources/blocklist_tor.txt" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/blocklist/blocklist.txt" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/blocklist/blocklist_tor.txt" todir="pkg-temp/"/>
       <copy quiet="true" file="installer/resources/clients.config" todir="pkg-temp/"/>
       <copy quiet="true" file="installer/resources/i2ptunnel.config" todir="pkg-temp/"/>
-      <copy quiet="true" file="installer/resources/wrapper.config" todir="pkg-temp/"/>
-      <copy quiet="true" file="installer/resources/wrapper.config.commented" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/lib/wrapper/wrapper.config" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/lib/wrapper/wrapper.config.commented" todir="pkg-temp/"/>
       <copy quiet="true" file="installer/resources/hosts.txt" todir="pkg-temp/"/>
       <copy quiet="true" file="docs/INSTALL-headless.txt" todir="pkg-temp/"/>
 
@@ -2416,8 +2417,8 @@
       <copy quiet="true" file="build/jsonrpc.war" todir="pkg-temp/webapps/"/>
       <copy quiet="true" file="build/i2psnark.war" todir="pkg-temp/webapps/"/>
       <copy quiet="true" file="installer/resources/deletelist.txt" todir="pkg-temp/"/>
-      <copy quiet="true" file="installer/resources/blocklist.txt" todir="pkg-temp/"/>
-      <copy quiet="true" file="installer/resources/blocklist_tor.txt" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/blocklist/blocklist.txt" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/blocklist/blocklist_tor.txt" todir="pkg-temp/"/>
       <copy quiet="true" file="installer/resources/i2ping" todir="pkg-temp/"/>
       <copy quiet="true" file="installer/resources/hostping" todir="pkg-temp/"/>
       <copy quiet="true" file="installer/resources/eepget" todir="pkg-temp/"/>
@@ -2453,8 +2454,8 @@
       <copy quiet="true" file="build/addressbook.jar" todir="pkg-temp/lib/"/>
       <copy quiet="true" file="build/addressbook.war" todir="pkg-temp/webapps/"/>
       <!-- decapitalized the file in 0.7.8 -->
-      <copy quiet="true" file="installer/resources/countries.txt" todir="pkg-temp/geoip/"/>
-      <copy quiet="true" file="installer/resources/continents.txt" todir="pkg-temp/geoip/"/>
+      <copy quiet="true" file="installer/resources/geoip/countries.txt" todir="pkg-temp/geoip/"/>
+      <copy quiet="true" file="installer/resources/geoip/continents.txt" todir="pkg-temp/geoip/"/>
     </parallel>
   </target>
 
@@ -2483,8 +2484,8 @@
       <copy quiet="true" file="build/susidns.war" todir="pkg-temp/webapps/"/>
       <copy quiet="true" file="build/susimail.war" todir="pkg-temp/webapps/"/>
       <copy quiet="true" file="installer/resources/deletelist.txt" todir="pkg-temp/"/>
-      <copy quiet="true" file="installer/resources/blocklist.txt" todir="pkg-temp/"/>
-      <copy quiet="true" file="installer/resources/blocklist_tor.txt" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/blocklist/blocklist.txt" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/blocklist/blocklist_tor.txt" todir="pkg-temp/"/>
       <copy quiet="true" file="installer/resources/i2ping" todir="pkg-temp/"/>
       <copy quiet="true" file="installer/resources/hostping" todir="pkg-temp/"/>
       <copy quiet="true" file="installer/resources/eepget" todir="pkg-temp/"/>
@@ -2509,15 +2510,15 @@
 
   <!-- GeoIP database -->
   <target name="prepgeoupdate" depends="prepgeoupdate-unlesspkg">
-    <copy quiet="true" file="installer/resources/countries.txt" todir="pkg-temp/geoip/"/>
-    <copy quiet="true" file="installer/resources/continents.txt" todir="pkg-temp/geoip/"/>
+    <copy quiet="true" file="installer/resources/geoip/countries.txt" todir="pkg-temp/geoip/"/>
+    <copy quiet="true" file="installer/resources/geoip/continents.txt" todir="pkg-temp/geoip/"/>
   </target>
 
   <!-- GeoIP database, set withGeoIPDatabase=true in override.properties to prevent -->
   <!-- As of 0.9.26, the files are not included in Debian/Ubuntu builds. -->
   <target name="prepgeoupdate-unlesspkg" unless="${with-geoip-database}">
     <mkdir dir="pkg-temp/geoip"/>
-    <gunzip src="installer/resources/GeoLite2-Country.mmdb.gz" dest="pkg-temp/geoip/GeoLite2-Country.mmdb"/>
+    <gunzip src="installer/resources/geoip/GeoLite2-Country.mmdb.gz" dest="pkg-temp/geoip/GeoLite2-Country.mmdb"/>
   </target>
 
   <!-- All jetty jars required for update. (TODO do we need to bother updating jasper?) -->
@@ -2725,7 +2726,7 @@
     <delete dir="pkg-temp/locale/"/>
     <delete dir="pkg-temp/man/"/>
     <delete dir="pkg-temp/Start I2P Router.app/"/>
-    <delete dir="pkg-temp" includes="eepget eephead i2ping hostping graceful_update i2prouter INSTALL-headless.txt osid postinstall.sh runplain.sh"/>
+    <delete dir="pkg-temp" includes="eepget eephead i2ping hostping graceful_update i2prouter i2prouter.service INSTALL-headless.txt osid postinstall.sh runplain.sh"/>
   </target>
 
   <!-- IzPack 4 -->
@@ -3343,7 +3344,7 @@
     </ant>
   </target>
 
-  <!-- See installer/resources/maven-dev-release.sh -->
+  <!-- See scripts/maven-dev-release.sh -->
   <target name="mavenLocal" depends="mavenLocal.deps">
     <delete dir="./pkg-mavencentral"/>
     <delete dir="./dist/pkg-mavencentral" excludes="README.md"/>
@@ -3487,7 +3488,7 @@
       <fileset dir="../i2p-${Extended.Version}/installer/c/"/>
       <fileset dir="../i2p-${Extended.Version}/installer/doc/"/>
       <fileset dir="../i2p-${Extended.Version}/installer/lib/"/>
-      <fileset dir="../i2p-${Extended.Version}/installer/resources" includes="checklist.md deletelist.txt install_* geoipv6-extras.csv makegeoip* po4a.config uninstall_* *.bat net.i2p.router.plist.template"/>
+      <fileset dir="../i2p-${Extended.Version}/installer/resources" includes="checklist.md deletelist.txt install_* makegeoip* po4a.config uninstall_* *.bat net.i2p.router.plist.template"/>
       <fileset dir="../i2p-${Extended.Version}/installer/resources/Start I2P Router.app/"/>
       <fileset dir="../i2p-${Extended.Version}/installer/resources/portable/"/>
       <fileset dir="../i2p-${Extended.Version}/installer/resources/small/"/>
@@ -3524,7 +3525,8 @@
       <!-- geoip-database -->
       <file name="../i2p-${Extended.Version}/installer/resources/geoip.txt"/>
       <file name="../i2p-${Extended.Version}/installer/resources/geoipv6.dat.gz"/>
-      <file name="../i2p-${Extended.Version}/installer/resources/GeoLite2-Country.mmdb.gz"/>
+      <file name="../i2p-${Extended.Version}/installer/resources/geoip/GeoLite2-Country.mmdb.gz"/>
+      <file name="../i2p-${Extended.Version}/installer/resources/geoip/geoipv6-extras.csv"/>
       <!-- libjetty9-java -->
       <fileset dir="../i2p-${Extended.Version}/apps/jetty/jetty-distribution-${jetty.ver}"/>
       <!-- libtomcat9-java -->
@@ -3565,7 +3567,7 @@
       <fileset dir="../i2p-${Extended.Version}/installer/c/"/>
       <fileset dir="../i2p-${Extended.Version}/installer/doc/"/>
       <fileset dir="../i2p-${Extended.Version}/installer/lib/"/>
-      <fileset dir="../i2p-${Extended.Version}/installer/resources" includes="checklist.md deletelist.txt install_* geoipv6-extras.csv makegeoip* po4a.config uninstall_* *.bat net.i2p.router.plist.template"/>
+      <fileset dir="../i2p-${Extended.Version}/installer/resources" includes="checklist.md deletelist.txt install_* makegeoip* po4a.config uninstall_* *.bat net.i2p.router.plist.template"/>
       <fileset dir="../i2p-${Extended.Version}/installer/resources/Start I2P Router.app/"/>
       <fileset dir="../i2p-${Extended.Version}/installer/resources/portable/"/>
       <fileset dir="../i2p-${Extended.Version}/installer/resources/small/"/>
@@ -3602,7 +3604,8 @@
       <!-- geoip-database -->
       <file name="../i2p-${Extended.Version}/installer/resources/geoip.txt"/>
       <file name="../i2p-${Extended.Version}/installer/resources/geoipv6.dat.gz"/>
-      <file name="../i2p-${Extended.Version}/installer/resources/GeoLite2-Country.mmdb.gz"/>
+      <file name="../i2p-${Extended.Version}/installer/resources/geoip/GeoLite2-Country.mmdb.gz"/>
+      <file name="../i2p-${Extended.Version}/installer/resources/geoip/geoipv6-extras.csv"/>
       <!-- libjetty9-java -->
       <!--
             <fileset dir="../i2p-${Extended.Version}/apps/jetty/jetty-distribution-${jetty.ver}"/>
@@ -3649,7 +3652,7 @@
       <fileset dir="../i2p-${Extended.Version}/installer/c/"/>
       <fileset dir="../i2p-${Extended.Version}/installer/doc/"/>
       <fileset dir="../i2p-${Extended.Version}/installer/lib/"/>
-      <fileset dir="../i2p-${Extended.Version}/installer/resources" includes="checklist.md deletelist.txt install_* geoipv6-extras.csv makegeoip* po4a.config uninstall_* *.bat net.i2p.router.plist.template"/>
+      <fileset dir="../i2p-${Extended.Version}/installer/resources" includes="checklist.md deletelist.txt install_* makegeoip* po4a.config uninstall_* *.bat net.i2p.router.plist.template"/>
       <fileset dir="../i2p-${Extended.Version}/installer/resources/Start I2P Router.app/"/>
       <fileset dir="../i2p-${Extended.Version}/installer/resources/portable/"/>
       <fileset dir="../i2p-${Extended.Version}/installer/resources/small/"/>
@@ -3683,7 +3686,8 @@
       -->
       <file name="../i2p-${Extended.Version}/installer/resources/geoip.txt"/>
       <file name="../i2p-${Extended.Version}/installer/resources/geoipv6.dat.gz"/>
-      <file name="../i2p-${Extended.Version}/installer/resources/GeoLite2-Country.mmdb.gz"/>
+      <file name="../i2p-${Extended.Version}/installer/resources/geoip/GeoLite2-Country.mmdb.gz"/>
+      <file name="../i2p-${Extended.Version}/installer/resources/geoip/geoipv6-extras.csv"/>
       <fileset dir="../i2p-${Extended.Version}/apps/jetty/jetty-distribution-${jetty.ver}"/>
       <fileset dir="../i2p-${Extended.Version}/apps/jetty/apache-tomcat-${tomcat.ver}"/>
       <!--
@@ -3721,7 +3725,7 @@
       <fileset dir="../i2p-${Extended.Version}/installer/c/"/>
       <fileset dir="../i2p-${Extended.Version}/installer/doc/"/>
       <fileset dir="../i2p-${Extended.Version}/installer/lib/"/>
-      <fileset dir="../i2p-${Extended.Version}/installer/resources" includes="checklist.md deletelist.txt install_* geoipv6-extras.csv makegeoip* po4a.config uninstall_* *.bat net.i2p.router.plist.template"/>
+      <fileset dir="../i2p-${Extended.Version}/installer/resources" includes="checklist.md deletelist.txt install_* makegeoip* po4a.config uninstall_* *.bat net.i2p.router.plist.template"/>
       <fileset dir="../i2p-${Extended.Version}/installer/resources/Start I2P Router.app/"/>
       <fileset dir="../i2p-${Extended.Version}/installer/resources/portable/"/>
       <fileset dir="../i2p-${Extended.Version}/installer/resources/small/"/>
@@ -3755,7 +3759,8 @@
       -->
       <file name="../i2p-${Extended.Version}/installer/resources/geoip.txt"/>
       <file name="../i2p-${Extended.Version}/installer/resources/geoipv6.dat.gz"/>
-      <file name="../i2p-${Extended.Version}/installer/resources/GeoLite2-Country.mmdb.gz"/>
+      <file name="../i2p-${Extended.Version}/installer/resources/geoip/GeoLite2-Country.mmdb.gz"/>
+      <file name="../i2p-${Extended.Version}/installer/resources/geoip/geoipv6-extras.csv"/>
       <fileset dir="../i2p-${Extended.Version}/apps/jetty/jetty-distribution-${jetty.ver}"/>
       <fileset dir="../i2p-${Extended.Version}/apps/jetty/apache-tomcat-${tomcat.ver}"/>
       <file name="../i2p-${Extended.Version}/apps/susidns/src/lib/jstl.jar"/>
@@ -3820,10 +3825,10 @@
     <copy quiet="true" todir="pkg-temp">
       <fileset dir="installer/resources/portable/configs/"/>
     </copy>
-    <copy quiet="true" file="installer/resources/blocklist.txt" todir="pkg-temp/"/>
-    <copy quiet="true" file="installer/resources/blocklist_tor.txt" todir="pkg-temp/"/>
+    <copy quiet="true" file="installer/resources/blocklist/blocklist.txt" todir="pkg-temp/"/>
+    <copy quiet="true" file="installer/resources/blocklist/blocklist_tor.txt" todir="pkg-temp/"/>
     <copy quiet="true" file="installer/resources/hosts.txt" todir="pkg-temp/"/>
-    <copy quiet="true" file="installer/resources/readme.license.txt" todir="pkg-temp/"/>
+    <copy quiet="true" file="installer/resources/portable/readme.license.txt" todir="pkg-temp/"/>
     <!--<mkdir dir="pkg-temp/addressbook"/>-->
     <!--<copy quiet="true" file="apps/addressbook/subscriptions.txt" todir="pkg-temp/addressbook/"/>-->
     <!--<copy quiet="true" file="apps/addressbook/myhosts.txt"  todir="pkg-temp/addressbook/"/>-->

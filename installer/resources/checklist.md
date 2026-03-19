@@ -79,7 +79,7 @@
     tx and pull again, or (if new) comment out in .tx/config (add a comment why)
     and delete the po file.
     See instructions in .tx/config for fixing up getopt properties files.
-  - `installer/resources/poupdate-man.sh` to generate new man page translations
+  - `scripts/poupdate-man.sh` to generate new man page translations
     (requires po4a package)
   - `git add` for any new po files
   - `git commit` all changed po files, and .tx/config if changed

@@ -11,7 +11,7 @@ Debian wrapper.config to try to prevent confusion.
  installer/resources/eepget         |    2 +-
  installer/resources/i2prouter      |   82 ++++--------------------------------
  installer/resources/runplain.sh    |    4 +-
- installer/resources/wrapper.config |   70 ++++++------------------------
+ installer/lib/wrapper/wrapper.config |   70 ++++++------------------------
  4 files changed, 24 insertions(+), 134 deletions(-)
 
 Index: b/installer/resources/eepget
@@ -224,10 +224,10 @@ Index: b/installer/resources/runplain.sh
  
  # Having IPv6 enabled can cause problems with certain configurations. Changing the
  # next value to true may help.
-Index: b/installer/resources/wrapper.config
+Index: b/installer/lib/wrapper/wrapper.config
 ===================================================================
---- a/installer/resources/wrapper.config
-+++ b/installer/resources/wrapper.config
+--- a/installer/lib/wrapper/wrapper.config
++++ b/installer/lib/wrapper/wrapper.config
 @@ -8,22 +8,13 @@
  # click "Shutdown", wait 11 minutes, then start i2p.
  #

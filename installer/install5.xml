@@ -109,13 +109,13 @@
   </natives>
 
   <resources>
-    <res id="installer.langsel.img" src="installer/resources/i2plogo2.png"/>
-    <res id="Installer.image" src="installer/resources/i2plogo.png"/>
-    <res id="HTMLHelloPanel.info" src="installer/resources/welcome.html"/>
-    <res id="shortcutSpec.xml" src="installer/resources/shortcutSpec.xml"/>
-    <res id="XInfoPanel.info" src="installer/resources/start-i2p.txt"/>
+    <res id="installer.langsel.img" src="installer/resources/izpack/images/i2plogo2.png"/>
+    <res id="Installer.image" src="installer/resources/izpack/images/i2plogo.png"/>
+    <res id="HTMLHelloPanel.info" src="installer/resources/izpack/welcome.html"/>
+    <res id="shortcutSpec.xml" src="installer/resources/izpack/shortcutSpec.xml"/>
+    <res id="XInfoPanel.info" src="installer/resources/izpack/start-i2p.txt"/>
     <res id="HTMLInfoPanel.winservice" src="installer/resources/windows_service_help.html"/>
-    <res id="CustomLangPack.xml_eng" src="installer/resources/CustomLangPack.xml_eng"/>
+    <res id="CustomLangPack.xml_eng" src="installer/resources/izpack/CustomLangPack.xml_eng"/>
   </resources>
   <variables>
     <!-- desktop shortcuts enabled by default in ShortcutPanel -->
