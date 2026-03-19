@@ -898,6 +898,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         boolean unreachable = cap != null && cap.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
         boolean isSlow = (cap != null && !cap.equals("")) && bw.equals("K") ||
                           bw.equals("L") || bw.equals("M") || bw.equals("N");
+        boolean isLTier = (cap != null && bw.equals("L"));
         String version = ri.getVersion();
         boolean isOld = VersionComparator.comp(version, "0.9.67") < 0;
         boolean isInvalidVersion = VersionComparator.comp(version, "2.5.0") >= 0;
@@ -927,6 +928,21 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                           " -> " + version + " / " + bw + (unreachable ? "U" : ""));
             _context.commSystem().forceDisconnect(h);
             throw new DataFormatException("Old and slow: " + h);
+        }
+
+        // temporary fix for network flood (LU)
+        // set i2np.ntcp.blockLU=false in router.config to disable
+        if (_context.getBooleanPropertyDefaultTrue(NTCPTransport.PROP_BLOCK_LU) &&
+                !reachable && isLTier) {
+            reason = " <b>➜</b> LU Router (" + version + ")";
+            _banLogger.logBan(h, ipPort, "LU Router (" + version + ")", now + 60*60*1000);
+            _context.banlist().banlistRouter(h, reason, null, null, now + 60*60*1000);
+            _msg3p2FailReason = NTCPConnection.REASON_BANNED;
+            if (_log.shouldInfo() && !isBanned)
+                _log.info("[NTCP] Banning for 1h and disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
+                          " -> " + version + " / " + bw + (unreachable ? "U" : ""));
+            _context.commSystem().forceDisconnect(h);
+            throw new DataFormatException("LU Router: " + h);
         }
 
         if (reachable && unreachable) {

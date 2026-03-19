@@ -137,6 +137,7 @@ public class NTCPTransport extends TransportImpl {
     public final static String PROP_I2NP_NTCP_PORT = "i2np.ntcp.port";
     public final static String PROP_I2NP_NTCP_AUTO_PORT = "i2np.ntcp.autoport";
     public final static String PROP_I2NP_NTCP_AUTO_IP = "i2np.ntcp.autoip";
+    public static final String PROP_BLOCK_LU = "i2np.ntcp.blockLU";
     private static final String PROP_ADVANCED = "routerconsole.advanced";
     private static final int DEFAULT_COST = 10;
     private static final int NTCP2_OUTBOUND_COST = 14;
