@@ -1345,7 +1345,6 @@ status() {
                     echo "  •  Build:   $BUILD_VERSION"
                 fi
             fi
-            fi
 
             WRAPPER_VERSION=""
             if [ -x "$WRAPPER_CMD" ]; then

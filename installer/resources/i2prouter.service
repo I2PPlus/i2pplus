@@ -16,12 +16,5 @@ ExecReload=@INSTALL_PATH@/i2prouter restart
 PIDFile=@I2P_CONFIG_DIR@/i2p.pid
 #USER_LINE@
 
-# Security hardening
-PrivateTmp=true
-NoNewPrivileges=true
-ProtectSystem=strict
-ReadWritePaths=@I2P_CONFIG_DIR@
-ReadWritePaths=@I2P_TEMP@
-
 [Install]
 WantedBy=multi-user.target
