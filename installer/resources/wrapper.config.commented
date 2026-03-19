@@ -99,10 +99,9 @@ wrapper.java.library.path.2=$INSTALL_PATH/lib
 wrapper.java.additional.auto_bits=FALSE
 
 #  Java Additional Parameters
-#  Numbers must be consecutive (except for stripquotes)
+#  Numbers must be consecutive
 wrapper.java.additional.1=-DloggerFilenameOverride=logs/log-router-@.txt
 wrapper.java.additional.2=-Di2p.dir.base="$INSTALL_PATH"
-wrapper.java.additional.2.stripquotes=TRUE
 
 # Suppress JNI warning in JRE 24+, and eventual restriction
 # See https://openjdk.org/jeps/472
