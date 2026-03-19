@@ -35,7 +35,7 @@ SCRIPTFILES="
   ./Slackware/i2p/i2p.SlackBuild \
   ./Slackware/i2p/doinst.sh \
   ./Slackware/i2p/rc.i2p \
-  ./tests/scripts/*.sh \
+  ./scripts/tests/*.sh \
 "
 
 TOTAL=0

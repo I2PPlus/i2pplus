@@ -51,11 +51,11 @@ Java8:
 #  allow_failure: true
 #  script:
 #    - apt-get install -yqq libxml2-utils
-#    - ./tests/scripts/checkcerts.sh
-#    - ./tests/scripts/checkpo.sh
-#    - ./tests/scripts/checkscripts.sh
-#    - ./tests/scripts/checkutf8.sh
-#    - ./tests/scripts/checkxml.sh
+#    - ./scripts/tests/checkcerts.sh
+#    - ./scripts/tests/checkpo.sh
+#    - ./scripts/tests/checkscripts.sh
+#    - ./scripts/tests/checkutf8.sh
+#    - ./scripts/tests/checkxml.sh
 
 #findbugs:
 #  stage: test
