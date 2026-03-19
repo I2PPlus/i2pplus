@@ -2,12 +2,12 @@ plugins {
     id 'java-library'
     id 'scala'
     id 'me.champeau.jmh' version '0.7.3'
-    id 'net.ltgt.errorprone' version '4.3.0'
-    id 'org.danilopianini.gradle-java-qa' version '1.164.0'
+    id 'net.ltgt.errorprone' version '5.1.0'
+    id 'org.danilopianini.gradle-java-qa' version '1.167.0'
 }
 
 dependencies {
-    errorprone 'com.google.errorprone:error_prone_core:2.35.1'
+    errorprone 'com.google.errorprone:error_prone_core:2.48.0'
 }
 
 spotbugs {
