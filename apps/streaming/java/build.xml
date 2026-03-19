@@ -270,7 +270,6 @@
       <!-- These variables are stored in build.properties.
                   End-users can override by creating the file override.properties -->
       <link offline="true" href="${javasedocs.url}" packagelistLoc="../../../installer/resources/package-lists/java/"/>
-      <link offline="true" href="${javaeedocs.url}" packagelistLoc="../../../installer/resources/package-lists/javaee/"/>
       <link offline="true" href="${jettydocs.url}" packagelistLoc="../../../installer/resources/package-lists/jetty/"/>
       <link offline="true" href="${wrapperdocs.url}" packagelistLoc="../../../installer/resources/package-lists/wrapper/"/>
     </javadoc>
