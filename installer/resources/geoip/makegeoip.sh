@@ -1,11 +1,11 @@
 #!/bin/sh
 #
 # Fetch the latest file from db-ip.com
-# Run this from installer/resources/
+# Run this from installer/resources/geoip/
 
 VER=`date +%Y-%m`
 DL=dbip-country-lite-${VER}.mmdb.gz
-FILE=geoip/GeoLite2-Country.mmdb.gz
+FILE=GeoLite2-Country.mmdb.gz
 UPDATE_SCRIPT=makegeoip.sh
 export HTTP_PROXY=http://127.0.0.1:4444
 

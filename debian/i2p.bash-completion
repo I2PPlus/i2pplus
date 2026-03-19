@@ -1,2 +1,2 @@
-installer/resources/bash-completion/i2prouter
-installer/resources/bash-completion/i2prouter-nowrapper
+installer/resources/unix/bash-completion/i2prouter
+installer/resources/unix/bash-completion/i2prouter-nowrapper

@@ -6,7 +6,7 @@ Files that get bundled into the installed I2P package. These are the scripts, co
 
 | Directory | Description |
 |---|---|
-| `bash-completion/` | Shell completion scripts |
+| `unix/bash-completion/` | Shell completion scripts |
 | `blocklist/` | IP blocklist files and update scripts |
 | `certificates/` | SSL/TLS certificates |
 | `eepsite/` | Jetty configuration for the local eepsite |

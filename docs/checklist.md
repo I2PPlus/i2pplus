@@ -16,7 +16,7 @@
 - Make announcement on Transifex with checkin deadline
 
 - GeoIP: db-ip.com update is usually first of the month, time accordingly
-- installer/resources/makegeoip.sh
+- installer/resources/geoip/makegeoip.sh
 - git commit installer/resources/GeoLite2-Country.mmdb.gz
 
 - BuildTime: Don't have to do this every release, but update the

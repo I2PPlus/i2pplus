@@ -36,7 +36,7 @@ Java8:
     - ant i2psnark
     - ant javadoc-zip
     - git archive --format=tar.gz -o i2pplus_latest_source.tar.gz HEAD
-#    - ./installer/resources/makegeoip.sh
+#    - ./installer/resources/geoip/makegeoip.sh
 #    - ant updater200WithJettyAndGeoIP
 #    - ant updaterWithJetty
 #    - ant updaterCompact
