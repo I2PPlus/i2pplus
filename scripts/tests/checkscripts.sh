@@ -25,13 +25,13 @@ SCRIPTFILES="
   ./debian/*.postinst \
   ./debian/*.postrm \
   ./installer/resources/*.sh \
-  ./installer/resources/eepget \
-  ./installer/resources/i2prouter \
-  ./installer/resources/install_i2p_service_osx.command \
-  ./installer/resources/install_i2p_service_unix \
+  ./installer/resources/unix/eepget \
+  ./installer/resources/unix/i2prouter \
+  ./installer/resources/macos/install_i2p_service_osx.command \
+  ./installer/resources/unix/install_i2p_service_unix \
   ./installer/resources/locale/bundle-messages.sh \
-  ./installer/resources/uninstall_i2p_service_osx.command \
-  ./installer/resources/uninstall_i2p_service_unix \
+  ./installer/resources/macos/uninstall_i2p_service_osx.command \
+  ./installer/resources/unix/uninstall_i2p_service_unix \
   ./Slackware/i2p/i2p.SlackBuild \
   ./Slackware/i2p/doinst.sh \
   ./Slackware/i2p/rc.i2p \

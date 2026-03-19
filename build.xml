@@ -1698,16 +1698,18 @@
   <!-- This is the target called by debian/rules -->
   <target name="preppkg-unix" depends="preppkg-base, prep-script-translation">
     <parallel>
-      <copy quiet="true" file="installer/resources/runplain.sh" todir="pkg-temp/"/>
-      <copy quiet="true" file="installer/resources/eepget" todir="pkg-temp/"/>
-      <copy quiet="true" file="installer/resources/eephead" todir="pkg-temp/"/>
-      <copy quiet="true" file="installer/resources/i2ping" todir="pkg-temp/"/>
-      <copy quiet="true" file="installer/resources/hostping" todir="pkg-temp/"/>
-      <copy quiet="true" file="installer/resources/graceful_update" todir="pkg-temp/"/>
-      <copy quiet="true" file="installer/resources/i2prouter" todir="pkg-temp/"/>
-      <copy quiet="true" file="installer/resources/i2prouter.service" todir="pkg-temp/"/>
-      <copy quiet="true" file="installer/resources/osid" todir="pkg-temp/"/>
-      <copy quiet="true" file="installer/resources/postinstall.sh" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/unix/runplain.sh" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/unix/eepget" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/unix/eephead" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/unix/i2ping" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/unix/hostping" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/unix/graceful_update" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/unix/i2prouter" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/unix/i2prouter.service" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/unix/osid" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/unix/install_i2p_service_unix" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/unix/uninstall_i2p_service_unix" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/unix/postinstall.sh" todir="pkg-temp/"/>
       <copy quiet="true" todir="pkg-temp/man/">
         <fileset dir="installer/resources/man/"/>
       </copy>
@@ -1754,14 +1756,14 @@
   <target name="preppkg-osx" depends="preppkg-unix">
     <parallel>
       <copy quiet="true" todir="pkg-temp/Start I2P Router.app">
-        <fileset dir="installer/resources/Start I2P Router.app"/>
+        <fileset dir="installer/resources/macos/Start I2P Router.app"/>
       </copy>
       <copy quiet="true" todir="pkg-temp/lib/wrapper/macosx/">
         <fileset dir="installer/lib/wrapper/macosx/" excludes="*.txt README.md"/>
       </copy>
-      <copy quiet="true" file="installer/resources/net.i2p.router.plist.template" todir="pkg-temp/"/>
-      <copy quiet="true" file="installer/resources/install_i2p_service_osx.command" todir="pkg-temp/"/>
-      <copy quiet="true" file="installer/resources/uninstall_i2p_service_osx.command" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/macos/net.i2p.router.plist.template" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/macos/install_i2p_service_osx.command" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/macos/uninstall_i2p_service_osx.command" todir="pkg-temp/"/>
     </parallel>
   </target>
 
@@ -2426,11 +2428,11 @@
       <copy quiet="true" file="installer/resources/deletelist.txt" todir="pkg-temp/"/>
       <copy quiet="true" file="installer/resources/blocklist/blocklist.txt" todir="pkg-temp/"/>
       <copy quiet="true" file="installer/resources/blocklist/blocklist_tor.txt" todir="pkg-temp/"/>
-      <copy quiet="true" file="installer/resources/i2ping" todir="pkg-temp/"/>
-      <copy quiet="true" file="installer/resources/hostping" todir="pkg-temp/"/>
-      <copy quiet="true" file="installer/resources/eepget" todir="pkg-temp/"/>
-      <copy quiet="true" file="installer/resources/eephead" todir="pkg-temp/"/>
-      <copy quiet="true" file="installer/resources/graceful_update" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/unix/i2ping" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/unix/hostping" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/unix/eepget" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/unix/eephead" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/unix/graceful_update" todir="pkg-temp/"/>
       <copy quiet="true" file="installer/resources/windows/fixperms2.bat" todir="pkg-temp/scripts/"/>
     </parallel>
   </target>
@@ -2493,10 +2495,10 @@
       <copy quiet="true" file="installer/resources/deletelist.txt" todir="pkg-temp/"/>
       <copy quiet="true" file="installer/resources/blocklist/blocklist.txt" todir="pkg-temp/"/>
       <copy quiet="true" file="installer/resources/blocklist/blocklist_tor.txt" todir="pkg-temp/"/>
-      <copy quiet="true" file="installer/resources/i2ping" todir="pkg-temp/"/>
-      <copy quiet="true" file="installer/resources/hostping" todir="pkg-temp/"/>
-      <copy quiet="true" file="installer/resources/eepget" todir="pkg-temp/"/>
-      <copy quiet="true" file="installer/resources/eephead" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/unix/i2ping" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/unix/hostping" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/unix/eepget" todir="pkg-temp/"/>
+      <copy quiet="true" file="installer/resources/unix/eephead" todir="pkg-temp/"/>
     </parallel>
   </target>
 
@@ -3502,7 +3504,7 @@
       <fileset dir="../i2p-${Extended.Version}/installer/doc/"/>
       <fileset dir="../i2p-${Extended.Version}/installer/lib/"/>
       <fileset dir="../i2p-${Extended.Version}/installer/resources" includes="checklist.md deletelist.txt install_* makegeoip* po4a.config uninstall_* *.bat net.i2p.router.plist.template"/>
-      <fileset dir="../i2p-${Extended.Version}/installer/resources/Start I2P Router.app/"/>
+      <fileset dir="../i2p-${Extended.Version}/installer/resources/macos/Start I2P Router.app/"/>
       <fileset dir="../i2p-${Extended.Version}/installer/resources/portable/"/>
       <fileset dir="../i2p-${Extended.Version}/installer/resources/small/"/>
       <fileset dir="../i2p-${Extended.Version}/Slackware"/>
@@ -3581,7 +3583,7 @@
       <fileset dir="../i2p-${Extended.Version}/installer/doc/"/>
       <fileset dir="../i2p-${Extended.Version}/installer/lib/"/>
       <fileset dir="../i2p-${Extended.Version}/installer/resources" includes="checklist.md deletelist.txt install_* makegeoip* po4a.config uninstall_* *.bat net.i2p.router.plist.template"/>
-      <fileset dir="../i2p-${Extended.Version}/installer/resources/Start I2P Router.app/"/>
+      <fileset dir="../i2p-${Extended.Version}/installer/resources/macos/Start I2P Router.app/"/>
       <fileset dir="../i2p-${Extended.Version}/installer/resources/portable/"/>
       <fileset dir="../i2p-${Extended.Version}/installer/resources/small/"/>
       <fileset dir="../i2p-${Extended.Version}/Slackware"/>
@@ -3666,7 +3668,7 @@
       <fileset dir="../i2p-${Extended.Version}/installer/doc/"/>
       <fileset dir="../i2p-${Extended.Version}/installer/lib/"/>
       <fileset dir="../i2p-${Extended.Version}/installer/resources" includes="checklist.md deletelist.txt install_* makegeoip* po4a.config uninstall_* *.bat net.i2p.router.plist.template"/>
-      <fileset dir="../i2p-${Extended.Version}/installer/resources/Start I2P Router.app/"/>
+      <fileset dir="../i2p-${Extended.Version}/installer/resources/macos/Start I2P Router.app/"/>
       <fileset dir="../i2p-${Extended.Version}/installer/resources/portable/"/>
       <fileset dir="../i2p-${Extended.Version}/installer/resources/small/"/>
       <fileset dir="../i2p-${Extended.Version}/Slackware"/>
@@ -3739,7 +3741,7 @@
       <fileset dir="../i2p-${Extended.Version}/installer/doc/"/>
       <fileset dir="../i2p-${Extended.Version}/installer/lib/"/>
       <fileset dir="../i2p-${Extended.Version}/installer/resources" includes="checklist.md deletelist.txt install_* makegeoip* po4a.config uninstall_* *.bat net.i2p.router.plist.template"/>
-      <fileset dir="../i2p-${Extended.Version}/installer/resources/Start I2P Router.app/"/>
+      <fileset dir="../i2p-${Extended.Version}/installer/resources/macos/Start I2P Router.app/"/>
       <fileset dir="../i2p-${Extended.Version}/installer/resources/portable/"/>
       <fileset dir="../i2p-${Extended.Version}/installer/resources/small/"/>
       <fileset dir="../i2p-${Extended.Version}/Slackware"/>
@@ -3929,7 +3931,7 @@
     <echo message="Updating Tor blocklist..."/>
     <exec executable="/bin/sh" outputproperty="shell.output">
       <arg value="-c"/>
-      <arg value="cd installer/resources/ &amp;&amp; ./maketorblocklist.sh"/>
+      <arg value="cd installer/resources/blocklist/ &amp;&amp; ./maketorblocklist-ipv4.sh"/>
     </exec>
     <condition property="download.success">
       <contains string="${shell.output}" substring="consolidated IP ranges saved to: "/>
