@@ -6,7 +6,7 @@
 
 # I2P+
 
-[Русский](README-ru.md) | [日本語](README-ja.md) | [中文](README-zh.md) | [हिन्दी](README-hi.md) | [བོད་ཡིག](README-bo.md) | [فارسی](README-fa.md)
+[Русский](docs/README-ru.md) | [日本語](docs/README-ja.md) | [中文](docs/README-zh.md) | [हिन्दी](docs/README-hi.md) | [བོད་ཡིག](docs/README-bo.md) | [فارسی](docs/README-fa.md)
 
 This is the source code for the soft-fork of the Java implementation of I2P.
 
@@ -14,7 +14,7 @@ Latest release: https://i2pplus.github.io/
 
 ## Installing
 
-See INSTALL.txt or https://i2pplus.github.io/ for installation instructions.
+See [INSTALL.txt](docs/INSTALL.txt) or https://i2pplus.github.io/ for installation instructions.
 
 ## Documentation
 
@@ -80,7 +80,7 @@ you can build a full installation zip which can be extracted and run in situ:
 Run 'ant' with no arguments to see other build options.
 
 ### Docker
-For more information how to run I2P in Docker, see [Docker.md](Docker.md)
+For more information how to run I2P in Docker, see [Docker.md](docker/Docker.md)
 ## Contact info
 
 Need help? See the IRC channel #saltR on the I2P IRC network
@@ -91,5 +91,5 @@ Bug reports: https://i2pgit.org/i2p-hackers/i2p.i2p/-/issues or https://github.c
 
 I2P+ is licensed under the AGPL v.3.
 
-For the various sub-component licenses, see: LICENSE.txt
+For the various sub-component licenses, see: [LICENSE.txt](docs/licenses/LICENSE.txt)
 
