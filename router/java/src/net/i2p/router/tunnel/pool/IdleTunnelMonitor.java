@@ -44,8 +44,8 @@ class IdleTunnelMonitor implements SimpleTimer.TimedEvent {
 
     // Configuration
     private static final boolean isSlow = SystemVersion.isSlow();
-    private static final long DEFAULT_DETECTION_PERIOD = 180 * 1000; // 180 seconds
-    private static final int DEFAULT_MIN_MESSAGES = 5; // At least 5 messages
+    private static final long DEFAULT_DETECTION_PERIOD = 120 * 1000; // 2 minutes
+    private static final int DEFAULT_MIN_MESSAGES = 3; // At least 3 messages
     private static final long DEFAULT_SCAN_INTERVAL = 60 * 1000; // 60 seconds
 
     // Only these properties are configurable
