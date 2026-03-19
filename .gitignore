@@ -4,6 +4,7 @@
 # generated release files
 *.exe
 *.[gx]z
+!installer/resources/geoip/*.gz
 *.bz2
 *.[rwjt]ar
 *.sig
