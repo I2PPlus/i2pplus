@@ -26,7 +26,7 @@ if [ $(id -ur) -ne 0 ]; then
     exit 1
 fi
 
-BUILD=1kytv
+BUILD=I2P+
 # INSTALL_DIR is referenced from /, don't prefix it with a '/'
 INSTALL_DIR=opt
 NAME=i2p
@@ -80,7 +80,8 @@ mv wrapper.config wrapper.config.new
 install -d $PKG/usr/bin
 install -d $PKG/usr/doc/$NAME-$VERSION
 install -d $PKG/etc/rc.d
-mv licenses LICENSE.txt -t $PKG/usr/doc/$NAME-$VERSION
+mv $I2PSRC/docs/licenses/LICENSE.txt $I2PSRC/docs/licenses/LICENSE.md -t $PKG/usr/doc/$NAME-$VERSION
+cp -a $I2PSRC/docs/licenses $PKG/usr/doc/$NAME-$VERSION/licenses
 
 # runplain.sh will live in the installation directory. eepget and i2prouter will go to /usr/bin
 # with symlinks in INST_DIR (created in doinst.sh)

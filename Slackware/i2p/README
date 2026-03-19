@@ -68,7 +68,7 @@ The I2P router console is reachable at http://127.0.0.1:7657.
 Addressbook subscriptions
 -------------------------
 
-Please see the FAQs at http://i2p-projekt.i2p/faq or https://geti2p.net/faq for information about
+Please see the FAQs at https://i2pplus.github.io/ for information about
 the various addressbook services.
 
 
@@ -83,7 +83,7 @@ configure a proxy in your IRC client.
 Additional information
 ======================
 
-Within I2P: http://i2p-projekt.i2p/, http://forum.i2p/, http://zzz.i2p/, http://trac.i2p2.i2p/
-On the Internet:  https://geti2p.net/, https://trac.i2p2.de
+Within I2P: http://127.0.0.1:7657/
+On the Internet:  https://github.com/I2PPlus/i2pplus/, https://i2pplus.github.io/
 Manpages: i2prouter(1), eepget(1)
 
