@@ -24,7 +24,6 @@ SCRIPTFILES="
   ./debian/*.preinst \
   ./debian/*.postinst \
   ./debian/*.postrm \
-  ./Docker.entrypoint.sh \
   ./installer/resources/*.sh \
   ./installer/resources/eepget \
   ./installer/resources/i2prouter \

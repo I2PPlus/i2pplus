@@ -74,15 +74,15 @@ task prepUpdate(type: Copy) {
             project(':apps:imagegen').war.archiveFile,
         ]}
     }
-    from('history.txt') {
+    from('docs/history.txt') {
         filter(org.apache.tools.ant.filters.HeadFilter, lines:1500)
     }
     doLast {
         String more = '\n\n----------------\n\nEARLIER HISTORY IS AVAILABLE IN THE SOURCE PACKAGE'
         ant.concat(more, append: 'true', destfile: 'pkg-temp/history.txt')
     }
-    from 'LICENSE.txt'
-    into('licenses') { from 'licenses' }
+    from 'docs/licenses/LICENSE.txt'
+    into('licenses') { from 'docs/licenses' }
     from 'installer/resources/blocklist.txt'
     from 'installer/resources/deletelist.txt'
     into('certificates') { from 'installer/resources/certificates' }
