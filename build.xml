@@ -71,6 +71,9 @@
     <echo message=" i2psnark                                     Build standalone I2PSnark install &#10140; ./dist/i2psnark-standalone.zip"/>
     <echo message=" i2psnark7zip                                 Build standalone I2PSnark 7zip install &#10140; ./dist/i2psnark-standalone.7z"/>
     <echo message=" i2psnark_nozip                               Build standalone I2PSnark install, no zip file &#10140; ./dist/i2psnark-standalone"/>
+    <echo message=" buildJbigi                                   Build all jbigi native libraries (Win64 + Linux64) &#10140; installer/lib/jbigi/"/>
+    <echo message=" buildJbigi-win64                             Build Windows 64-bit jbigi DLLs using MinGW &#10140; installer/lib/jbigi/"/>
+    <echo message=" buildJbigi-linux64                           Build Linux 64-bit jbigi .so files &#10140; installer/lib/jbigi/"/>
     <echo message=" installer / installer5                       Build GUI installer (IzPack4 / IzPack5) &#10140; ./dist/i2pinstall.exe"/>
     <echo message=" installer-freebsd                            Build FreeBSD GUI installer &#10140; ./dist/i2pinstall&#8230;freebsd-only.jar"/>
     <echo message=" installer-linux / installer5-linux           Build Linux GUI installer (IzPack4 / Izpack5) &#10140; ./dist/i2pinstall&#8230;linux-only.jar"/>
@@ -769,6 +772,30 @@
   </target>
 
   <!-- jbigi targets -->
+
+  <target name="buildJbigi-win64" description="Build Windows 64-bit jbigi DLLs using MinGW, copy to installer/lib/jbigi/">
+    <exec executable="./build-win64.sh" dir="core/c/jbigi" failonerror="true">
+      <arg value="-a"/>
+    </exec>
+    <copy todir="installer/lib/jbigi" flatten="true">
+      <fileset dir="core/c/jbigi/lib/net/i2p/util" includes="*windows*_64.dll"/>
+    </copy>
+    <echo message="Windows 64-bit jbigi DLLs copied to installer/lib/jbigi/"/>
+  </target>
+
+  <target name="buildJbigi-linux64" description="Build Linux 64-bit jbigi .so files, copy to installer/lib/jbigi/">
+    <exec executable="./build-linux64.sh" dir="core/c/jbigi" failonerror="true">
+      <arg value="-a"/>
+    </exec>
+    <copy todir="installer/lib/jbigi" flatten="true">
+      <fileset dir="core/c/jbigi/lib/net/i2p/util" includes="*linux*_64.so"/>
+    </copy>
+    <echo message="Linux 64-bit jbigi .so files copied to installer/lib/jbigi/"/>
+  </target>
+
+  <target name="buildJbigi" depends="buildJbigi-win64, buildJbigi-linux64" description="Build all jbigi native libraries (Win64 + Linux64), copy to installer/lib/jbigi/">
+
+  </target>
 
   <target name="jbigi" depends="buildProperties">
     <!-- Set if unset -->

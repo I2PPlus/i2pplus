@@ -20,35 +20,102 @@ The library provides fast implementations of:
 
 - GCC (or MinGW on Windows)
 - GMP library source (automatically downloaded)
-- Java Development Kit (JDK) with JNI headers
 - `m4` (for GMP configuration)
+- JDK with JNI headers (Java 8 recommended)
 
 ### Installing Dependencies
 
-#### Debian/Ubuntu
+#### Debian/Ubuntu/Mint/Pop!_OS
 ```bash
-sudo apt-get install build-essential m4 openjdk-11-jdk
+sudo apt-get install build-essential m4 openjdk-8-jdk
+# For Windows cross-compilation:
+sudo apt-get install gcc-mingw-w64-x86-64
 ```
 
-#### Fedora/RHEL
+#### Fedora/RHEL/CentOS/AlmaLinux
 ```bash
-sudo dnf install gcc m4 java-11-openjdk-devel
+sudo dnf install gcc make m4 java-1.8.0-openjdk-devel
+# For Windows cross-compilation:
+sudo dnf install mingw64-gcc
+```
+
+#### Arch/Manjaro/EndeavourOS
+```bash
+sudo pacman -S base-devel m4 jdk8-openjdk
+# For Windows cross-compilation:
+sudo pacman -S mingw-w64-gcc
+```
+
+#### openSUSE/SLES
+```bash
+sudo zypper install gcc make m4 java-1_8_0-openjdk-devel
+# For Windows cross-compilation:
+sudo zypper install cross-x86_64-w64-mingw32-gcc
+```
+
+#### Gentoo
+```bash
+sudo emerge --ask sys-devel/gcc sys-devel/make sys-devel/m4 virtual/jdk:1.8
+# For Windows cross-compilation:
+sudo emerge --ask cross-x86_64-w64-mingw32/gcc
 ```
 
 #### macOS
 ```bash
-brew install gcc m4 openjdk@11
-```
-
-#### Windows
-Install MinGW-w64 with MSYS2:
-```bash
-pacman -S mingw-w64-x86_64-gcc mingw-w64-x86_64-make m4
+brew install gcc m4 openjdk@8
 ```
 
 ## Building
 
-### Quick Build (Current Machine Only)
+### Recommended: Platform-Specific Scripts
+
+These scripts detect supported CPU targets, compile optimized libraries, and strip binaries automatically.
+
+#### Windows 64-bit (cross-compile from Linux)
+
+```bash
+cd core/c/jbigi
+./build-win64.sh --help     # Show help
+./build-win64.sh -a         # Build all supported CPU targets
+./build-win64.sh --generic  # Generic build only (faster)
+```
+
+Detects 20 CPU targets (zen3, zen2, zen, skylake, core2, etc.) and builds `jbigi-windows-{cpu}_64.dll` for each. Uses bundled JNI headers - no Java installation required on the build host.
+
+Prerequisites: `gcc-mingw-w64-x86-64`, `m4`, `make`
+
+#### Linux 64-bit (native)
+
+```bash
+cd core/c/jbigi
+./build-linux64.sh --help     # Show help
+./build-linux64.sh -a         # Build all supported CPU targets
+./build-linux64.sh --generic  # Generic build only (faster)
+```
+
+Detects 20 CPU targets and builds `libjbigi-linux-{cpu}_64.so` for each.
+
+Prerequisites: `gcc`, `m4`, `make`, JDK 8 with JNI headers
+
+#### Options (both scripts)
+
+| Flag | Description |
+|------|-------------|
+| `-a`, `--all` | Build for all supported CPU targets |
+| `-g`, `--generic` | Build generic library only |
+| `-h`, `--help` | Show help message |
+| *(no args)* | Show help message |
+
+Both scripts will:
+1. Check dependencies and suggest distro-specific install commands
+2. Detect which CPU targets your GCC supports
+3. Display the list of supported targets before building
+4. Build GMP and JBigI for each target
+5. Strip binaries automatically
+
+### Legacy Build Scripts
+
+#### Quick Build (Current Machine Only)
 
 Build a dynamic library using the system GMP:
 
@@ -59,7 +126,7 @@ cd core/c/jbigi
 
 This builds a `libjbigi.so` (or `.dll`/`.jnilib`) optimized for your current architecture.
 
-### Full Build (All Architectures)
+#### Full Build (All Architectures)
 
 Build for multiple CPU architectures:
 
@@ -73,41 +140,19 @@ This produces optimized libraries for:
 - x86_64 (core2, athlon64, zen, skylake, etc.)
 - ARM (armv6, armv7a, armv8/aarch64)
 
-### Static vs Dynamic Linking
+#### Static vs Dynamic Linking
 
 - `./build.sh local dyn` - Links against system GMP (faster build)
 - `./build.sh local` (default) - Statically links GMP (portable, recommended)
-
-### Custom Builds
 
 #### 32-bit build on 64-bit system
 ```bash
 BITS=32 ./build.sh
 ```
 
-#### Cross-compilation for Windows
-```bash
-TARGET=mingw64 BITS=64 CC=x86_64-w64-mingw32-gcc ./build.sh all
-```
-
 #### Android NDK
 ```bash
 TARGET=android BITS=64 ./build.sh all
-```
-
-#### Building Specific Targets
-
-To build for specific CPU architectures (e.g., zen2, zen3):
-```bash
-cd core/c/jbigi
-mkdir -p bin/zen2 bin/zen3
-cd bin/zen2
-../../gmp-6.3.0/configure --build=zen2-linux --with-pic
-make -j$(nproc)
-cd ../zen3
-../../gmp-6.3.0/configure --build=zen3-linux --with-pic
-make -j$(nproc)
-# Then copy the .so files to lib/net/i2p/util/
 ```
 
 ### GCC 15+ Compatibility
@@ -121,28 +166,38 @@ A patch is automatically applied when running `download_gmp.sh`:
 ## Output
 
 Built libraries are placed in:
-- `lib/` - Single architecture builds
-- `lib/net/i2p/util/` - Multi-architecture builds
+- `lib/net/i2p/util/` - Platform-specific builds
 
-Naming convention: `libjbigi-{OS}-{CPU}.so` (Linux/FreeBSD), `jbigi-windows-{CPU}.dll` (Windows), `libjbigi-{OS}-{CPU}.jnilib` (macOS)
+Naming convention:
+- Linux: `libjbigi-linux-{cpu}_64.so`
+- Windows: `jbigi-windows-{cpu}_64.dll`
+- FreeBSD: `libjbigi-freebsd-{cpu}.so`
+- macOS: `libjbigi-osx-{cpu}.jnilib`
 
-## Testing
+Binaries are stripped automatically to reduce file size.
 
-The build scripts can optionally run performance tests against your I2P installation:
+## Ant Targets
+
+Run from the project root directory:
 
 ```bash
-I2P=/path/to/i2p ./build.sh
+ant buildJbigi-win64    # Build Windows 64-bit DLLs
+ant buildJbigi-linux64  # Build Linux 64-bit .so files
+ant buildJbigi          # Build both, copy to installer/lib/jbigi/
 ```
 
-Set the `I2P` environment variable to point to your I2P installation directory.
+These targets call the platform-specific build scripts and copy the results to `installer/lib/jbigi/`.
 
 ## Build Scripts
 
 | Script | Purpose |
 |--------|---------|
-| `build.sh` | Build jbigi (local or all architectures) |
+| `build-win64.sh` | Windows 64-bit cross-compilation (all or generic) |
+| `build-linux64.sh` | Linux 64-bit native compilation (all or generic) |
+| `build-all.sh` | Full multi-architecture build (legacy) |
+| `build_jbigi.sh` | Core compilation script (used by build-all.sh) |
+| `build.sh` | Wrapper for local/all builds (legacy) |
 | `download_gmp.sh` | Downloads and patches GMP source |
-| `build_jbigi.sh` | Core compilation script |
 
 ## Troubleshooting
 

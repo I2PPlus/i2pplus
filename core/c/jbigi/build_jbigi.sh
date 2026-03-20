@@ -48,7 +48,7 @@ echo "TARGET=$TARGET"
 case "$TARGET" in
 mingw*|windows*)
         COMPILEFLAGS="-Wall"
-        INCLUDES="-I. -I../../jbigi/include -I$JAVA_HOME/include -I$JAVA_HOME/include/$BUILD_OS -I/usr/local/include"
+        INCLUDES="-I. -I../../jbigi/include -I../../jbigi/include/win32 -I/usr/local/include"
         LINKFLAGS="-shared -Wl,--kill-at"
         LIBFILE="jbigi.dll";;
 cygwin*)
