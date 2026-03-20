@@ -119,6 +119,7 @@ import { refreshElements } from "./refreshElements.js";
                        .replace(/->\s*/, "")
                        .replace(/^-\s*/, "")  // Remove leading dash
                        .replace(/^ \-> /, "") // Remove leading " -> "
+                       .replace("Excessive NTCP connection", "Excessive connection")
                        .replace(/Blocklist:\s*[\d.:a-f]+/i, "Blocklist");
         reason = reason.trim();
         if (reason) { reasonCounts[reason] = (reasonCounts[reason] || 0) + 1; }
