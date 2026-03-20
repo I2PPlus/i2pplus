@@ -1,6 +1,5 @@
 /**
  * @module tunnels
-
  * @description Handles automatic refresh for the console tunnels page and
  * enables persistent toggling of tunnel IDs and tunnel table row visibility
  * via localStorage. Updates tunnel in/out counts on refresh.

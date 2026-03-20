@@ -1,6 +1,5 @@
 /**
  * @module convertKBtoMB
-
  * @description Converts displayed KB values to MB when they exceed 1024KB,
  * applied to elements matching the given CSS selectors or element array.
  * @author dr|z3d

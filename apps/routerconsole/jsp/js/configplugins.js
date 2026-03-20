@@ -1,6 +1,5 @@
 /**
  * @module configplugins
-
  * @description Counts and displays total started/stopped plugin counts
  * on the /configplugins page.
  * @license AGPL3 or later

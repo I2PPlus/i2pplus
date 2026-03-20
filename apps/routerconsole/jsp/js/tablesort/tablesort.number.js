@@ -1,5 +1,4 @@
 /**
-
  * @description Number sorting plugin for Tablesort
  */
 

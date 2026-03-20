@@ -1,6 +1,5 @@
 /**
  * @module graphSingle
-
  * @description Handles AJAX graph refresh and button interactions for single graph
  * pages. Manages hide/show legend state via localStorage and URL synchronization,
  * and provides periodic graph image updates.

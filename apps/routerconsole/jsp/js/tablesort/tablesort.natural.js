@@ -1,5 +1,4 @@
 /**
-
  * @description Natural sorting plugin for Tablesort
  * @see https://github.com/etrinh/tablesort/blob/6a47651de804240115d43c1b48156c6b1ebe096a/src/sorts/tablesort.natural.js
  * @see https://stackoverflow.com/questions/2802341/javascript-natural-sort-of-alphanumerical-strings

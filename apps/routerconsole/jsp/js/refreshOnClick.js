@@ -1,6 +1,5 @@
 /**
  * @module refreshOnClick
-
  * @description Refreshes specified DOM elements via AJAX when trigger selectors
  * are clicked. Supports multiple refresh attempts with configurable intervals
  * and progress indicators.

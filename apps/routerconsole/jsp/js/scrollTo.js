@@ -1,6 +1,5 @@
 /**
  * @module scrollTo
-
  * @description Provides smooth scrolling utilities including scroll-to-bottom,
  * scroll-to-top, and click-triggered navigation scrolling.
  * @license AGPL3 or later

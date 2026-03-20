@@ -1,6 +1,5 @@
 /**
  * @module clearSelected
-
  * @description Removes the "tab2" CSS class from all elements with class "togglestat"
  * when a click handler is triggered.
  * @license AGPL3 or later

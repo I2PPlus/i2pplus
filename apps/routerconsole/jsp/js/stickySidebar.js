@@ -1,6 +1,5 @@
 /**
  * @module stickySidebar
-
  * @description Makes the sidebar stick to the top of the viewport when the
  * sidebar content is shorter than the viewport height. Dynamically calculates
  * and applies sticky positioning.

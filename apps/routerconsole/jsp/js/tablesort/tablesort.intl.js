@@ -1,5 +1,4 @@
 /**
-
  * @description Internationalized sorting plugin for Tablesort using Intl.Collator
  */
 

@@ -1,6 +1,5 @@
 /**
  * @module refreshLogs
-
  * @description Manages auto-refresh for log pages (router logs, error logs, service logs)
  * using a SharedWorker for background fetches and morphdom for efficient DOM updates.
  * Supports configurable refresh intervals, log filtering, and linkification of

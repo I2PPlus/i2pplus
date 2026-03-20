@@ -1,6 +1,5 @@
 /**
  * @module changelog
-
  * @description Prettifies the in-console changelog by wrapping content blocks
  * in span elements and styling bullet points and star markers.
  * @author dr|z3d

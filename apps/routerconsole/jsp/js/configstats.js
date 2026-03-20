@@ -1,6 +1,5 @@
 /**
  * @module configstats
-
  * @description Sorts stat groups using natural sort order and displays dynamic
  * counts of checked/total configured stats on the /configstats page.
  * Tracks checkbox changes to indicate unsaved state.

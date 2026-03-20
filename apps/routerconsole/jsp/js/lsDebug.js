@@ -1,6 +1,5 @@
 /**
  * @module lsDebug
-
  * @description Consolidates debug and keyspace tables on the Leasesets debug page
  * by merging the median distance row into the RAP row, combining estimate rows,
  * and appending keyspace rows to the debug table.

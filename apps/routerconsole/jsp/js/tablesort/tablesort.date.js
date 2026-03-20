@@ -1,5 +1,4 @@
 /**
-
  * @description Date sorting plugin for Tablesort
  */
 

@@ -1,6 +1,5 @@
 /**
  * @module setupIframe
-
  * @description Detects if the page is running inside an iframe and adds the
  * "iframed" class to the HTML element. Also appends an end-of-page marker
  * for iframe height calculation.

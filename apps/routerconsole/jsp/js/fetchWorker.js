@@ -1,6 +1,5 @@
 /**
  * @module fetchWorker
-
  * @description A general-purpose SharedWorker for background fetch requests with
  * concurrency control, debouncing, and queue management. Handles both HTML text
  * and binary blob responses.

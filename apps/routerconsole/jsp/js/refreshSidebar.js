@@ -1,6 +1,5 @@
 /**
  * @module refreshSidebar
-
  * @description Manages the sidebar auto-refresh system for the I2P+ console.
  * Uses a SharedWorker for background fetches, applies differential DOM updates,
  * monitors connection status, and coordinates sidebar components (section toggles,

@@ -1,6 +1,5 @@
 /**
  * @module sectionToggle
-
  * @description Provides sidebar section toggle functionality for the I2P+ web console.
  * Manages expand/collapse state persistence via localStorage, badge visibility,
  * and specialized handling for services, updates, tunnels, and local tunnel sections.

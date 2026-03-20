@@ -1,6 +1,5 @@
 /**
  * @module netdbLookup
-
  * @description Implements a compact search form for the /netdb page with
  * dropdown selectors for encryption, signature, transport, and country fields.
  * Removes empty query parameters and syncs form state with URL.

@@ -1,5 +1,4 @@
 /**
-
  * @description Force iframes to size to content. Requires iframeResizer.contentWindow.js to be loaded into the target frame.
  * @author David J. Bradshaw - dave@bradshaw.net
  * @contributor Jure Mav - jure.mav@gmail.com

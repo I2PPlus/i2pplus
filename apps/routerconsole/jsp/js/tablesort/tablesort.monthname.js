@@ -1,5 +1,4 @@
 /**
-
  * @description Month name sorting plugin for Tablesort
  */
 

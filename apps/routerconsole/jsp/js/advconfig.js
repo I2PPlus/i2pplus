@@ -1,6 +1,5 @@
 /**
  * @module advconfig
-
  * @description Enhances the /configadvanced page in advanced mode by converting
  * the raw textarea configuration into an editable table with inline key-value editing,
  * delete buttons, filtering, and form submission handling.

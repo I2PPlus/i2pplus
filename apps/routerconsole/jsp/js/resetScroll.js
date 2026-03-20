@@ -1,6 +1,5 @@
 /**
  * @module resetScroll
-
  * @description Resets the horizontal scroll position of elements with the
  * "resetScrollLeft" class when they lose focus.
  * @license AGPL3 or later

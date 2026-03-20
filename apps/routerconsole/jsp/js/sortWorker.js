@@ -1,6 +1,5 @@
 /**
  * @module sortWorker
-
  * @description Handles table sorting in a background worker for large tables.
  * Supports number, date, and string column types with ascending/descending direction.
  * @author dr|z3d

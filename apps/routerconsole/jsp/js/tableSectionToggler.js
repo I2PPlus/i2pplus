@@ -1,6 +1,5 @@
 /**
  * @module tableSectionToggler
-
  * @description Provides a single-section-at-a-time toggler for table rows.
  * Clicking a section heading shows its associated rows and hides all others.
  * @author dr|z3d
