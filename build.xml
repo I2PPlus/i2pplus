@@ -107,6 +107,7 @@
     <echo message=" updater200WithGeoIPAndJavadoc                Updater (pack200) + GeoIP database + javadocs"/>
     <echo message=" updater200WithGeoIPAndJbigi                  Updater (pack200) + GeoIP database + Jbigi"/>
     <echo message=" updater200WithJavadoc                        Updater (pack200) + javadocs (with console link)"/>
+    <echo message=" updater200WithJavadocAndJbigi                Updater (pack200) + javadocs + jBigi library"/>
     <echo message=" updater200WithJavadocAndJetty                Updater (pack200) + javadocs (with console link) + Jetty"/>
     <echo message=" updater200WithJbigi                          Updater (pack200) + jBigi library"/>
     <echo message=" updater200WithJetty                          Updater (pack200) + Jetty"/>
@@ -2357,6 +2358,7 @@
   <target name="updater200WithGeoIPAndJbigi" depends="timestamp.started, prepupdate, prepjbigiupdate, prepgeoupdate, pack200, zipit200, timestamp.stopped"/>
   <target name="updater200WithJavadocAndJetty" depends="timestamp.started, prepjupdate, copyJavadoc, pack200, zipit200, timestamp.stopped"/>
   <target name="updater200WithJavadoc" depends="timestamp.started, prepupdate, copyJavadoc, pack200, zipit200, timestamp.stopped"/>
+  <target name="updater200WithJavadocAndJbigi" depends="timestamp.started, prepupdate, prepjbigiupdate, copyJavadoc, pack200, zipit200, timestamp.stopped"/>
   <target name="updater200WithJbigi" depends="timestamp.started, prepupdate, prepjbigiupdate, pack200, zipit200, timestamp.stopped"/>
   <target name="updater200WithJettyAndGeoIPAndLicenses" depends="timestamp.started, prepjupdate, prepgeoupdate, preplicenses, pack200, zipit200, timestamp.stopped"/>
   <target name="updater200WithJettyAndGeoIP" depends="timestamp.started, prepjupdate, prepgeoupdate, pack200, zipit200, timestamp.stopped"/>
