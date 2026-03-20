@@ -129,6 +129,9 @@ core/c/jbigi/*.tar.bz2
 # Static analysis tools (downloaded at runtime)
 tools/
 !tools/README.md
+!tools/jsdoc/
+!tools/ant-contrib.jar
+!tools/google-java-format.jar
 *.sarif
 nohup.out
 builds/
@@ -165,3 +168,8 @@ tag-search-index.js
 type-search-index.js
 TestValue.html
 current_pmd_report.sarif
+
+# npm artifacts
+node_modules/
+package-lock.json
+package.json
