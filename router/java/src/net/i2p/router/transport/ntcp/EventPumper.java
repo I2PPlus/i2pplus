@@ -28,6 +28,8 @@ import net.i2p.data.Hash;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterIdentity;
 import net.i2p.router.CommSystemFacade.Status;
+import net.i2p.router.BanLogger;
+import net.i2p.router.Banlist;
 import net.i2p.router.RouterContext;
 import net.i2p.router.transport.FIFOBandwidthLimiter;
 import net.i2p.stat.Rate;
@@ -73,6 +75,7 @@ class EventPumper implements Runnable {
     private final Queue<NTCPConnection> _wantsConRegister = new ConcurrentLinkedQueue<>();
     private final NTCPTransport _transport;
     private final ObjectCounter<String> _blockedIPs;
+    private final BanLogger _banLogger;
     private long _expireIdleWriteTime;
     private static final boolean _useDirect = false;
     private final boolean _nodelay;
@@ -149,6 +152,8 @@ class EventPumper implements Runnable {
         _expireIdleWriteTime = MAX_EXPIRE_IDLE_TIME;
         _nodelay = ctx.getBooleanPropertyDefaultTrue(PROP_NODELAY);
         _blockedIPs = new ObjectCounter<>();
+        _banLogger = new BanLogger();
+        _banLogger.initialize(ctx);
         _context.statManager().createRateStat("ntcp.pumperKeySetSize", "Number of NTCP Pumper KeySetSize events", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.pumperLoopsPerSecond", "Number of NTCP Pumper loops/s", "Transport [NTCP]", RATES);
         _context.statManager().createRateStat("ntcp.zeroRead", "Number of NTCP zero length read events", "Transport [NTCP]", RATES);
@@ -537,9 +542,11 @@ class EventPumper implements Runnable {
                     if (shouldInfo) {
                         _log.info("Blocking NTCP connection attempt from: " + ba + " (Count: " + count + ")");
                     }
-                    if (count >= 30 && shouldWarn) {
+                    if (count >= 10 && shouldWarn) {
                         _log.warn("WARNING! IP Address " + ba +
                                   " is making excessive inbound NTCP connection attempts (Count: " + count + ")");
+                        _context.blocklist().add(ba, "Excessive NTCP connection attempts");
+                        _banLogger.logBan(ba, "Excessive NTCP connection attempts", Banlist.BANLIST_DURATION_PRIVATE);
                     }
                     try {
                         chan.close();
