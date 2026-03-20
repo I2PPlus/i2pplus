@@ -1400,6 +1400,8 @@ ExecStart=$I2P/i2prouter start
 ExecReload=$I2P/i2prouter restart
 ExecStop=$I2P/i2prouter stop
 PIDFile=$I2P_CONFIG_DIR/i2p.pid
+TimeoutStartSec=180
+TimeoutStopSec=180
 
 [Install]
 WantedBy=multi-user.target
