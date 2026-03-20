@@ -37,5 +37,6 @@ Output: `dist/jsdoc/`
 
 - `ant-contrib.jar` - Ant tasks extension (required for build.xml)
 - `google-java-format.jar` - Java code formatter, used by `scripts/remove_unused_imports.sh`
+- `javadoc/` - Javadoc CSS override theme
 - `pmd-bin-7.7.0/` - PMD source code analyzer
 - `spotbugs/` - Static analysis for Java
