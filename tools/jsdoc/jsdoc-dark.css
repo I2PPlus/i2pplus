@@ -55,7 +55,7 @@ nav {
   background-color: var(--bg-alt) !important;
   border-right-color: var(--border) !important;
   margin-left: -20px !important;
-  padding-left:18px !important;
+  padding:0 0 20px 18px !important;
 }
 
 nav h4 {
@@ -350,4 +350,8 @@ section {
 
 #main {
   padding-bottom: 30px !important;
+}
+
+.str {
+  white-space: pre-wrap !important;
 }
