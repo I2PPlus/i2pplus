@@ -1,5 +1,15 @@
+/**
+ * @file tablesort.date.js
+ * @description Date sorting plugin for Tablesort
+ */
+
 (function() {
-  // Parses dates in dd/mm/yy, dd-mm-yy, or with month names; returns timestamp or -1
+  /**
+   * @function parseDate
+   * @description Parses dates in dd/mm/yy, dd-mm-yy, or with month names
+   * @param {string} date - The date string to parse
+   * @returns {number} The timestamp or -1 if invalid
+   */
   const parseDate = (date) => {
     const d = date.replace(/-/g, '/').replace(/(\d{1,2})\/(\d{1,2})\/(\d{2,4})/, '$3-$2-$1');
     const time = new Date(d).getTime();

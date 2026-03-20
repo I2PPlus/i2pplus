@@ -1,11 +1,40 @@
-/* I2PSnark toggleConfigs.js by dr|3d */
-/* Enable toggling of I2PSnark's trackers and filter configuration panels */
-/* License: AGPL3 or later */
+/**
+ * @file toggleConfigs.js - Enable toggling of I2PSnark's tracker and filter configuration panels.
+ * @description Provides expand/collapse functionality for the file filter and tracker
+ * configuration tables in I2PSnark. Handles iframe-aware scrolling by posting messages
+ * to the parent frame when embedded, or scrolling natively in standalone mode.
+ * @author dr|3d
+ * @license AGPL3 or later
+ * @module toggleConfigs
+ */
 
+/**
+ * @type {?HTMLTableElement}
+ * @description The file filter configuration table element.
+ */
 const filterConfigTable = document.querySelector("#fileFilter table");
+
+/**
+ * @type {?HTMLTableElement}
+ * @description The tracker configuration table element.
+ */
 const trackerConfigTable = document.querySelector("#trackers table");
+
+/**
+ * @type {boolean}
+ * @description Whether the page is running inside an iframe.
+ */
 const isIframed = document.documentElement.classList.contains("iframed") || window.self != window.top;
 
+/**
+ * @function toggleConfig
+ * @description Toggles the visibility of a configuration table. When shown, adds the
+ * "expanded" class to the title and scrolls it into view. When hidden, removes the
+ * class. In iframe mode, posts messages to the parent frame for scrolling and resizing.
+ * @param {HTMLTableElement} table - The configuration table to show or hide.
+ * @param {HTMLElement} title - The title element that acts as the toggle header.
+ * @returns {void}
+ */
 function toggleConfig(table, title) {
   if (table.style.display === "none" || table.style.display === "") {
     table.style.display = "table";
@@ -21,6 +50,14 @@ function toggleConfig(table, title) {
   }
 }
 
+/**
+ * @function scrollToElement
+ * @description Smoothly scrolls the given element into view within the specified window context.
+ * Calculates the element's position relative to the viewport and scrolls to it.
+ * @param {HTMLElement} element - The element to scroll into view.
+ * @param {Window} [windowObj=window] - The window object to scroll (useful for parent window in iframe mode).
+ * @returns {void}
+ */
 function scrollToElement(element, windowObj = window) {
   const elementPosition = element.getBoundingClientRect().top;
   const scrollPosition = elementPosition + (windowObj !== window ? windowObj.pageYOffset : window.pageYOffset);

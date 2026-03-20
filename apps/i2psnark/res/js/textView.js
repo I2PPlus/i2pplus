@@ -1,9 +1,21 @@
-/* I2P+ textView.js for I2PSnark by dr|z3d */
-/* Inline text viewer */
-/* License: AGPL3 or later */
+/**
+ * @file textView.js - Inline text viewer for I2PSnark file browser.
+ * @description Provides an inline text viewing overlay for supported text file types
+ * (.asc, .bat, .css, .ini, .js, .json, .md5, .nfo, .sh, .srt, .txt, .url, and CSV).
+ * Supports line-numbered display for code-like files, iframe-aware fullscreen mode,
+ * response caching, scroll locking, and open-in-new-tab links.
+ * @author dr|z3d
+ * @license AGPL3 or later
+ * @module textView
+ */
 
 document.addEventListener("DOMContentLoaded", function () {
 
+  /**
+   * @type {string[]}
+   * @description CSS selectors for links to supported text file types. Used to identify
+   * clickable elements that should open in the inline text viewer.
+   */
   const viewLinks = [
     'td.fileIcon.text>a',
     'td.snarkFileName>a[href$=".asc"]',
@@ -24,13 +36,56 @@ document.addEventListener("DOMContentLoaded", function () {
   const parentDoc = window.parent.document;
   const isIframed = doc.documentElement.classList.contains("iframed") || window.parent;
   const snarkFileNameLinks = doc.querySelectorAll(":where(" + viewLinks.join(",") + ")");
+  /**
+   * @type {Set<string>}
+   * @description Set of supported file extensions for the inline text viewer.
+   */
   const supportedFileTypes = new Set(["asc", "bat", "css", "csv", "ini", "js", "json", "md5", "nfo", "txt", "sh", "srt", "url"]);
+
+  /**
+   * @type {Set<string>}
+   * @description Set of file extensions that should display with line numbers.
+   */
   const numberedFileExts = new Set(["bat", "css", "ini", "js", "sh"]);
+
+  /**
+   * @type {string}
+   * @description URL path to the text viewer stylesheet.
+   */
   const cssHref = "/i2psnark/.res/textView.css";
+
+  /**
+   * @type {?HTMLElement}
+   * @description The text view content container element.
+   */
   const textviewContent = doc.getElementById("textview-content");
+
+  /**
+   * @type {Map<string, string>}
+   * @description Cache mapping fetched file URLs to their text content.
+   */
   const responseCache = new Map();
+
+  /**
+   * @type {DOMParser}
+   * @description Reusable DOMParser for escaping HTML in fetched content.
+   */
   const parser = new DOMParser();
-  let listenersActive = false, viewerWrapper, viewerContent, viewerFilename;
+
+  /**
+   * @type {boolean}
+   * @description Whether event listeners have already been attached.
+   */
+  let listenersActive = false;
+
+  /** @type {?HTMLElement} */
+  let viewerWrapper;
+
+  /** @type {?HTMLElement} */
+  let viewerContent;
+
+  /** @type {?HTMLElement} */
+  let viewerFilename;
 
   const fragment = doc.createDocumentFragment();
   snarkFileNameLinks.forEach(link => {
@@ -47,6 +102,13 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
+  /**
+   * @function loadCSS
+   * @description Dynamically loads a CSS stylesheet by inserting a <link> element before
+   * the #snarkTheme element in the document head.
+   * @param {string} href - The URL of the CSS file to load.
+   * @returns {void}
+   */
   function loadCSS(href) {
     const snarkTheme = doc.getElementById("snarkTheme");
     const css = doc.createElement("link");
@@ -55,6 +117,12 @@ document.addEventListener("DOMContentLoaded", function () {
     snarkTheme.parentNode.insertBefore(css, snarkTheme);
   }
 
+  /**
+   * @function createTextViewer
+   * @description Creates the text viewer DOM structure (wrapper, content, filename elements)
+   * if it doesn't already exist. Loads the viewer CSS and appends the wrapper to the body.
+   * @returns {?Object} An object with viewerWrapper, viewerContent, and viewerFilename references, or undefined if already created.
+   */
   function createTextViewer() {
     if (!viewerWrapper) {
       loadCSS(cssHref);
@@ -74,11 +142,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
   ({ viewerWrapper, viewerContent, viewerFilename } = createTextViewer());
 
+  /**
+   * @function displayWithLineNumbers
+   * @description Converts plain text into an ordered list with each line as a list item,
+   * providing numbered line display for code-like files.
+   * @param {string} text - The raw text content to format.
+   * @returns {string} HTML string with line numbers as an ordered list.
+   */
   const displayWithLineNumbers = text => {
     const lines = text.split("\n").map(line => `<li>${line}</li>`);
     return `<ol>${lines.join("")}</ol>`;
   };
 
+  /**
+   * @function displayText
+   * @description Fetches and displays the content of a text file in the viewer. Uses the
+   * response cache to avoid redundant fetches. Shows the file icon and filename in the viewer header.
+   * @param {HTMLElement} link - The clicked file link element.
+   * @param {string} fileName - The decoded filename to display.
+   * @param {string} fileExt - The lowercase file extension.
+   * @param {string} linkHref - The URL to fetch the file content from.
+   * @returns {void}
+   */
   const displayText = (link, fileName, fileExt, linkHref) => {
     if (responseCache.has(linkHref)) {
       renderContent(fileName, fileExt, responseCache.get(linkHref));
@@ -102,12 +187,27 @@ document.addEventListener("DOMContentLoaded", function () {
     viewerFilename.appendChild(fileNameSpan);
   };
 
+  /**
+   * @function resetScrollPosition
+   * @description Resets the text view content scroll position to the top. Retries after
+   * a short delay if the content element is not yet available.
+   * @returns {void}
+   */
   const resetScrollPosition = () => {
     const txtContent = doc.getElementById("textview-content");
     if (txtContent && txtContent.innerHTML !== "") { txtContent.scrollTop = 0; }
     else { setTimeout(resetScrollPosition, 100); }
   }
 
+  /**
+   * @function preventScroll
+   * @description Adds or removes scroll prevention handlers on elements matching the given
+   * selectors. When active, prevents default scroll behavior (useful for locking body scroll
+   * while the text viewer is open).
+   * @param {string|string[]} selectors - CSS selector(s) for elements to lock/unlock scrolling.
+   * @param {boolean} prevent - Whether to enable (true) or disable (false) scroll prevention.
+   * @returns {void}
+   */
   function preventScroll(selectors, prevent) {
     if (typeof selectors === "string") { selectors = [selectors]; }
     selectors.forEach(selector => {
@@ -120,6 +220,16 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  /**
+   * @function renderContent
+   * @description Renders fetched text content into the viewer. Applies pre-formatted styling
+   * for non-plain-text files, HTML-escapes the content, displays with or without line numbers
+   * based on file type, and shows the viewer wrapper.
+   * @param {string} fileName - The filename to display in the viewer header.
+   * @param {string} fileExt - The file extension determining display format.
+   * @param {string} data - The raw text content to render.
+   * @returns {void}
+   */
   const renderContent = (fileName, fileExt, data) => {
     if (fileExt !== "txt" && fileExt !== "srt") { viewerContent.classList.add("pre"); }
     const escaped = parser.parseFromString(data, "text/html").body.textContent || data;
@@ -133,6 +243,12 @@ document.addEventListener("DOMContentLoaded", function () {
     preventScroll("document.documentElement, document.body", true);
   };
 
+  /**
+   * @function addListeners
+   * @description Attaches click handlers to file links for opening the text viewer, and
+   * click handlers on the viewer for closing it. Prevents duplicate listener attachment.
+   * @returns {void}
+   */
   const addListeners = () => {
     if (listenersActive) return;
     snarkFileNameLinks.forEach(link => {

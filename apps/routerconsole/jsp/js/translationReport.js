@@ -1,11 +1,22 @@
-/* I2P+ translationReport.js by dr|z3d */
-/* Toggle completed translation rows in compiled translation tables */
-/* License: AGPL3 or later */
+/**
+ * @file translationReport.js
+ * @description Toggles visibility of completed translation rows in compiled
+ * and file-based translation report tables. Allows users to show/hide
+ * completed translations for easier scanning of incomplete work.
+ * @author dr|z3d
+ * @license AGPL3 or later
+ */
 
 const toggleButtonCompiled = document.getElementById("tx_toggle_compiled");
 const toggleButtonFiles = document.getElementById("tx_toggle_files");
 const tx_summary = document.getElementById("tx_summary");
 
+/**
+ * Hides completed translation rows and marks tables with no incomplete rows as hidden.
+ * @function hideComplete
+ * @param {NodeList} txTables - The translation table elements to process
+ * @returns {void}
+ */
 function hideComplete(txTables) {
   const showCompleteClass = tx_summary.classList.contains("showAll_compiled") ? "showAll_compiled" : "showAll_files";
   tx_summary.classList.remove(showCompleteClass);
@@ -21,6 +32,13 @@ function hideComplete(txTables) {
   });
 }
 
+/**
+ * Shows all translation rows and applies the showAll CSS class to the summary.
+ * @function showComplete
+ * @param {NodeList} txTables - The translation table elements to show
+ * @param {string} showCompleteClass - The CSS class to toggle on the summary container
+ * @returns {void}
+ */
 function showComplete(txTables, showCompleteClass) {
   toggleButtonCompiled.textContent = "Hide complete translations";
   toggleButtonFiles.textContent = "Hide complete translations";

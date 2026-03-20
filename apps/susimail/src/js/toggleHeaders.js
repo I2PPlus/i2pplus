@@ -1,3 +1,17 @@
+/**
+ * @file SusiMail toggle-headers utility.
+ * Provides expand/collapse controls for showing or hiding debug email
+ * headers in the message view.
+ * @author dr|z3d
+ * @license AGPL3 or later
+ */
+
+/**
+ * Initialises the expand/collapse toggle buttons for debug headers.
+ *
+ * @function initToggleHeaders
+ * @returns {void}
+ */
 function initToggleHeaders() {
 
   const expand = document.getElementById("expand");
@@ -6,6 +20,13 @@ function initToggleHeaders() {
   collapse.addEventListener("click", toggleHeaders, false);
   expand.addEventListener("click", toggleHeaders, false);
 
+  /**
+   * Toggles the display of each debug header row between "table-row"
+   * and "none", and swaps the visibility of the expand/collapse buttons.
+   *
+   * @function toggleHeaders
+   * @returns {void}
+   */
   function toggleHeaders() {
     collapse.style.display == 'none';
     expand.style.display == 'inline-block';

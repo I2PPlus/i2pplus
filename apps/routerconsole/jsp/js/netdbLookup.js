@@ -1,7 +1,11 @@
-/* I2P+ netdbLookup.js by dr|z3d */
-/* Remove empty query parameters from netdb lookup queries */
-/* and implment simple search for /netdb */
-/* License: AGPLv3 or later */
+/**
+ * @file netdbLookup.js
+ * @description Implements a compact search form for the /netdb page with
+ * dropdown selectors for encryption, signature, transport, and country fields.
+ * Removes empty query parameters and syncs form state with URL.
+ * @author dr|z3d
+ * @license AGPLv3 or later
+ */
 
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("netdbSearchCompact");
@@ -318,41 +322,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let currentQueryElement = form.querySelector('input[name="query"]');
 
-  function createSelectForField(field, value = "") {
-    const select = document.createElement("select");
-    select.name = "query";
-    const labels = { etype: "encryption", type: "signature", tr: "transport", c: "country" };
-    select.title = `Select ${labels[field] || field}`;
-
-    const options = dropdownFields[field] || [];
-
-    options.forEach(opt => {
-      const option = document.createElement("option");
-      if (Array.isArray(opt)) {
-        option.value = opt[0];
-        option.textContent = `${opt[1]} (${opt[0].toUpperCase()})`;
-      } else {
-        option.value = opt;
-        option.textContent = opt;
-      }
-      if (option.value === value) option.selected = true;
-      select.appendChild(option);
-    });
-
-    return select;
-  }
-
-  function createTextInput(value = "") {
-    const input = document.createElement("input");
-    input.type = "text";
-    input.name = "query";
-    input.title = "Enter search value here";
-    input.value = value;
-    return input;
-  }
-
-  // 🔥 Clear query when switching fields (unless same field)
   let lastField = fieldSelect.value;
+  /**
+   * Switches the query input between text and select based on the selected field type.
+   * @function switchQueryField
+   * @returns {void}
+   */
   function switchQueryField() {
     const newField = fieldSelect.value;
     // Only clear if field actually changed

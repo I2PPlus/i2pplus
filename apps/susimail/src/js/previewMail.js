@@ -1,7 +1,19 @@
-/* SusiMail previewMail.js by dr|z3d */
-/* Display message preview on mail list subject mouseover */
-/* License: AGPL3 or later */
+/**
+ * @file SusiMail message preview on hover.
+ * Displays a floating preview popup when hovering over mail subject links
+ * in the folder list, with caching, timeout handling, and theme-aware styling.
+ * @author dr|z3d
+ * @license AGPL3 or later
+ */
 
+/**
+ * Sets up the preview-popup system. Wires up mouseenter/mouseleave
+ * event delegation on the document, creates the popup element, and
+ * manages fetch caching for message previews.
+ *
+ * @function previewMail
+ * @returns {void}
+ */
 function previewMail() {
   const PREVIEW_DELAY_MS = 150;
   const PREVIEW_HIDE_DELAY_MS = 250;
@@ -13,6 +25,16 @@ function previewMail() {
   let popup = null;
   let currentPreviewUrl = null;
 
+  /**
+   * Returns the preview text for the given URL, using an in-memory cache
+   * and deduplicating concurrent requests for the same resource.
+   *
+   * @async
+   * @function fetchPreview
+   * @param {string} showValue - The URL to fetch the mail preview from.
+   * @param {number} [depth=0] - Current recursion depth (max 1) for iframe/attachment follow.
+   * @returns {Promise<string>} The cleaned preview text, or empty string on failure.
+   */
   async function fetchPreview(showValue, depth = 0) {
     const cacheKey = `${depth}:${showValue}`;
     if (previewCache.has(cacheKey)) {
@@ -42,6 +64,17 @@ function previewMail() {
     }
   }
 
+  /**
+   * Performs the actual fetch and parses the response. Handles binary
+   * content detection, size limits, iframe/attachment recursion, and
+   * extracts mailbody paragraph text.
+   *
+   * @async
+   * @function _doFetchPreview
+   * @param {string} showValue - The URL to fetch.
+   * @param {number} [depth=0] - Recursion depth; stops at 1.
+   * @returns {Promise<string>} Preview text or status message string.
+   */
   async function _doFetchPreview(showValue, depth = 0) {
     if (depth > 1) return "";
 
@@ -123,6 +156,14 @@ function previewMail() {
     return cleanText(doc.body?.textContent || "") || "";
   }
 
+  /**
+   * Normalises raw extracted text by collapsing whitespace, removing
+   * boilerplate "view online" lines, and stripping residual HTML tags.
+   *
+   * @function cleanText
+   * @param {string} raw - Unprocessed text content.
+   * @returns {string} Cleaned and trimmed text.
+   */
   function cleanText(raw) {
     if (!raw) return "";
     raw = raw.replace(/Having[\s\u00A0\u2000-\u200B\u3000]+problems[\s\u00A0\u2000-\u200B\u3000]+viewing[\s\u00A0\u2000-\u200B\u3000]+this[\s\u00A0\u2000-\u200B\u3000]+email\?View[\s\u00A0\u2000-\u200B\u3000]+email[\s\u00A0\u2000-\u200B\u3000]+online/gi, "");
@@ -133,6 +174,13 @@ function previewMail() {
     return raw.trim();
   }
 
+  /**
+   * Lazily creates the preview popup `<div>` element with theme-aware
+   * styling and hover-persistence listeners, appending it to the document body.
+   *
+   * @function ensurePopup
+   * @returns {HTMLElement} The popup element.
+   */
   function ensurePopup() {
     if (popup) return popup;
     const htmlTag = document.documentElement;
@@ -186,6 +234,15 @@ function previewMail() {
     return popup;
   }
 
+  /**
+   * Positions the popup element relative to the target anchor, preferring
+   * below but flipping above if space is insufficient, and clamping to
+   * the viewport width.
+   *
+   * @function positionPopup
+   * @param {HTMLElement} targetEl - The element to position the popup near.
+   * @returns {void}
+   */
   function positionPopup(targetEl) {
     const rect = targetEl.getBoundingClientRect();
     const popupRect = popup.getBoundingClientRect();
@@ -211,6 +268,16 @@ function previewMail() {
     popup.style.left = `${left}px`;
   }
 
+  /**
+   * Displays the preview popup anchored to the given element, fetches
+   * the preview content, and updates the popup text once loaded.
+   *
+   * @async
+   * @function showPopup
+   * @param {HTMLElement} el - The anchor element triggering the preview.
+   * @param {string} showValue - The URL of the mail to preview.
+   * @returns {Promise<void>}
+   */
   async function showPopup(el, showValue) {
     const p = ensurePopup();
     const content = p.querySelector(".mail-preview-content");
@@ -235,6 +302,12 @@ function previewMail() {
     }
   }
 
+  /**
+   * Hides the preview popup if it exists.
+   *
+   * @function hidePopup
+   * @returns {void}
+   */
   function hidePopup() {
     if (popup) popup.style.display = "none";
   }

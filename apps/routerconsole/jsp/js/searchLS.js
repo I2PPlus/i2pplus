@@ -1,7 +1,16 @@
-/* I2P+ searchLS.js by dr|z3d */
-/* Add a search box for leasesets to single page leaseset lookups
-/* License: AGPL3 or later */
+/**
+ * @file searchLS.js
+ * @description Adds a search input box and lookup button to single-page
+ * leaseset views for quick lease hash lookups via /netdb.
+ * @author dr|z3d
+ * @license AGPL3 or later
+ */
 
+/**
+ * Creates and appends a search UI for leaseset lookups with localStorage persistence.
+ * @function searchLS
+ * @returns {void}
+ */
 function searchLS() {
   const container = document.querySelector(".leasesets_container");
   const fragment = document.createDocumentFragment();

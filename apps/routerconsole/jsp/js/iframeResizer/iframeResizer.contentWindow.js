@@ -1,11 +1,9 @@
-/*
- * File: iframeResizer.contentWindow.js
- * Desc: Include this file in any page being loaded into an iframe
- *       to force the iframe to resize to the content size.
- * Requires: iframeResizer.js on host page.
- * Doc: https://github.com/davidjbradshaw/iframe-resizer
- * Author: David J. Bradshaw - dave@bradshaw.net
- *
+/**
+ * @file iframeResizer.contentWindow.js
+ * @description Include this file in any page being loaded into an iframe to force the iframe to resize to the content size.
+ * @requires iframeResizer.js on host page
+ * @author David J. Bradshaw - dave@bradshaw.net
+ * @see https://github.com/davidjbradshaw/iframe-resizer
  */
 
 // eslint-disable-next-line sonarjs/cognitive-complexity, no-shadow-restricted-names

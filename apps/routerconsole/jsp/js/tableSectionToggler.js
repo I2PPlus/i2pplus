@@ -1,8 +1,16 @@
-/* I2P+ Section Toggler by dr|z3d */
-/* Provides a toggler for table sections displaying none at startup,
-/* otherwise a single section at a time */
-/* License: AGPL3 or later */
+/**
+ * @file tableSectionToggler.js
+ * @description Provides a single-section-at-a-time toggler for table rows.
+ * Clicking a section heading shows its associated rows and hides all others.
+ * @author dr|z3d
+ * @license AGPL3 or later
+ */
 
+/**
+ * Sets up click-to-toggle behavior for table sections, showing one section at a time.
+ * @function toggleRows
+ * @returns {void}
+ */
 function toggleRows() {
   const sectionRows = document.querySelectorAll(".section");
   let activeSection = null;

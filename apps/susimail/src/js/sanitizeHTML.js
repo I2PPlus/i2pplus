@@ -1,8 +1,20 @@
-/* SusiMail sanitizeHTML.js by dr|z3d */
-/* Fix various display issues with iframed html messages */
-/* License: AGPL3 or later */
+/**
+ * @file SusiMail HTML sanitizer and display fixer.
+ * Addresses layout and security issues in iframed HTML messages:
+ * removes !important declarations, normalises div margins, blocks
+ * remote images, and surfaces blocked-image/web-bug counts.
+ * @author dr|z3d
+ * @license AGPL3 or later
+ */
 
-
+/**
+ * Iterates every element in the document, normalising inline styles,
+ * hiding remote images behind a blocked placeholder, and updating
+ * the blocked-image and web-bug UI counters in the parent frame.
+ *
+ * @function sanitizeHTML
+ * @returns {void}
+ */
 function sanitizeHTML() {
   "use strict";
   const elements = document.querySelectorAll("*");
@@ -78,6 +90,13 @@ function sanitizeHTML() {
   document.documentElement.style.background = "#fff";
 }
 
+/**
+ * Toggles the visibility of all blocked images and web bugs inside the
+ * HTML mail iframe. Updates the toggle button state accordingly.
+ *
+ * @function toggleBlockedImages
+ * @returns {void}
+ */
 function toggleBlockedImages() {
   const button = window.parent.document.getElementById("toggleBlockedImages");
   const iframe = document.getElementById("iframeSusiHtmlView") || window.parent.document.getElementById("iframeSusiHtmlView");
@@ -106,6 +125,13 @@ function toggleBlockedImages() {
   });
 }
 
+/**
+ * Creates a "Toggle Images" button and appends it to the blocked-images
+ * info bar if the iframe does not have the `showBlockedImages` class.
+ *
+ * @function createButton
+ * @returns {void}
+ */
 function createButton() {
   const iframe = document.getElementById("iframeSusiHtmlView") || window.parent.document.getElementById("iframeSusiHtmlView");
   const toggle = window.parent.document.getElementById("toggleBlockedImages");

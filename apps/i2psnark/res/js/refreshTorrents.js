@@ -1,6 +1,13 @@
-/* I2P+ I2PSnark refreshTorrents.js by dr|z3d */
-/* Selectively refresh torrents and other volatile elements in the I2PSnark UI */
-/* License: AGPL3 or later */
+/**
+ * @file refreshTorrents.js - Selectively refreshes torrents and volatile elements in the I2PSnark UI.
+ * @description Core refresh module for I2PSnark. Manages periodic AJAX-based updates of the
+ * torrent list, screen log, header/footer stats, and file listings. Uses a web worker for
+ * fetch operations, caches responses, handles visibility changes, and orchestrates
+ * initialization of sub-modules (sorting, pagination, filter bar, lightbox, debug toggle).
+ * @author dr|z3d
+ * @license AGPL3 or later
+ * @module refreshTorrents
+ */
 
 import {MESSAGE_TYPES} from "./messageTypes.js";
 import {pageNav} from "./pageNav.js";
@@ -10,34 +17,177 @@ import {toggleDebug} from "./toggleDebug.js";
 import {Lightbox} from "./lightbox.js";
 import {initSnarkAlert} from "./snarkAlert.js";
 
-const cache = new Map(), cacheDuration = 5000;
+/**
+ * @type {Map<string, Object>}
+ * @description In-memory cache for fetched HTML documents, keyed by URL.
+ */
+const cache = new Map();
+
+/**
+ * @type {number}
+ * @description Duration in milliseconds before cached documents are considered stale.
+ */
+const cacheDuration = 5000;
+
+/**
+ * @type {?HTMLElement}
+ * @description The #debugMode element, used to check if debug mode is active.
+ */
 const debugMode = document.getElementById("debugMode");
+
+/**
+ * @type {?HTMLElement}
+ * @description The #dirInfo element for file directory listings.
+ */
 const files = document.getElementById("dirInfo");
+
+/**
+ * @type {?HTMLElement}
+ * @description The #filterBar element for torrent status filtering.
+ */
 const filterbar = document.getElementById("filterBar");
+
+/**
+ * @type {?HTMLElement}
+ * @description The main navigation link element (.nav_main) in the navbar.
+ */
 const home = document.querySelector("#navbar .nav_main");
+
+/**
+ * @type {boolean}
+ * @description Whether the page is running inside an iframe.
+ */
 const isIframed = document.documentElement.classList.contains("iframed") || window.parent;
+
+/**
+ * @type {boolean}
+ * @description Whether the page is running as a standalone I2PSnark instance.
+ */
 const isStandalone = document.documentElement.classList.contains("standalone");
+
+/**
+ * @type {?HTMLElement}
+ * @description The #mainsection container element.
+ */
 const mainsection = document.getElementById("mainsection");
+
+/**
+ * @type {?HTMLElement}
+ * @description The #noTorrents element shown when no torrents are present.
+ */
 const noTorrents = document.getElementById("noTorrents");
+
+/**
+ * @type {Document}
+ * @description Reference to the parent document (for iframe mode).
+ */
 const parentDoc = window.parent.document;
+
+/**
+ * @type {string}
+ * @description The current URL query string.
+ */
 const query = window.location.search;
+
+/**
+ * @type {?HTMLElement}
+ * @description The #screenlog element for displaying operation messages.
+ */
 const screenlog = document.getElementById("screenlog");
+
+/**
+ * @type {?HTMLElement}
+ * @description The #snarkHead element for the torrent table header.
+ */
 const snarkHead = document.getElementById("snarkHead");
+
+/**
+ * @type {?string}
+ * @description The stored refresh interval from localStorage.
+ */
 const storageRefresh = localStorage.getItem("snarkRefresh");
+
+/**
+ * @type {?HTMLElement}
+ * @description The #torrents container element.
+ */
 const torrents = document.getElementById("torrents");
+
+/**
+ * @type {?HTMLElement}
+ * @description The #snarkTbody element containing torrent table rows.
+ */
 const torrentsBody = document.getElementById("snarkTbody");
+
+/**
+ * @type {?HTMLElement}
+ * @description The #torrentlist form element.
+ */
 const torrentForm = document.getElementById("torrentlist");
 
+/**
+ * @type {boolean}
+ * @description Whether the chimp image has been preloaded and cached.
+ */
 let chimpIsCached = false;
+
+/**
+ * @type {boolean}
+ * @description Whether the server is currently unreachable.
+ */
 let noConnection = false;
+
+/**
+ * @type {?number}
+ * @description Interval ID for the main torrent refresh timer.
+ */
 let snarkRefreshIntervalId;
+
+/**
+ * @type {?number}
+ * @description Interval ID for the screen log refresh timer.
+ */
 let screenLogIntervalId;
+
+/**
+ * @type {boolean}
+ * @description Whether debug logging is enabled.
+ */
 let debugging = false;
+
+/**
+ * @type {boolean}
+ * @description Whether initial setup has been completed.
+ */
 let initialized = false;
+
+/**
+ * @type {boolean}
+ * @description Whether the document is currently visible (not hidden by tab switch).
+ */
 let isDocumentVisible = true;
+
+/**
+ * @type {number}
+ * @description Timestamp of the last server connectivity check.
+ */
 let lastCheckTime = 0;
+
+/**
+ * @type {boolean}
+ * @description Whether a full refresh of the torrent table is required.
+ */
 let requireFullRefresh = true;
 
+/**
+ * @function requestAnimationFramePromise
+ * @description Wraps requestAnimationFrame in a Promise, executing the callback within
+ * the animation frame. Provides a cancel method to abort pending frames.
+ * @param {Function} callback - The function to execute within the animation frame.
+ * @returns {Promise<void>} A promise that resolves after the callback executes.
+ * @example
+ * await requestAnimationFramePromise(() => { element.textContent = "updated"; });
+ */
 const requestAnimationFramePromise = (callback) => {
   let requestId;
   const execCallback = () => {
@@ -68,16 +218,46 @@ const requestAnimationFramePromise = (callback) => {
   return promise;
 };
 
+/**
+ * @async
+ * @function getRefreshInterval
+ * @description Reads the refresh interval from the global snarkRefreshDelay variable,
+ * localStorage, or defaults to 5 seconds. Persists the value to localStorage and
+ * returns it in milliseconds.
+ * @returns {Promise<number>} The refresh interval in milliseconds.
+ */
 async function getRefreshInterval() {
   const refreshInterval = snarkRefreshDelay || parseInt(localStorage.getItem("snarkRefreshDelay")) || 5;
   localStorage.setItem("snarkRefresh", refreshInterval);
   return refreshInterval * 1000;
 }
 
+/**
+ * @async
+ * @function getURL
+ * @description Constructs the AJAX refresh URL by replacing "/i2psnark/" with
+ * "/i2psnark/.ajax/xhr1.html" in the current page URL.
+ * @returns {Promise<string>} The AJAX-compatible refresh URL.
+ */
 async function getURL() { return window.location.href.replace("/i2psnark/", "/i2psnark/.ajax/xhr1.html"); }
 
+/**
+ * @async
+ * @function setLinks
+ * @description Updates the main navigation link href to point to the I2PSnark root,
+ * optionally including a query string for filter preservation.
+ * @param {string} [query] - The query string to append (e.g., "?filter=active").
+ * @returns {Promise<void>}
+ */
 async function setLinks(query) { if (home) {home.href = query ? `/i2psnark/${query}` : "/i2psnark/";} }
 
+/**
+ * @async
+ * @function initHandlers
+ * @description Initializes sub-module handlers including sort listeners, debug toggle,
+ * page navigation, and filter badge display. Uses requestAnimationFrame for smooth UI.
+ * @returns {Promise<void>}
+ */
 async function initHandlers() {
   if (torrents) {
     snarkSort();
@@ -91,6 +271,16 @@ async function initHandlers() {
   });
 }
 
+/**
+ * @async
+ * @function updateElement
+ * @description Updates a DOM element's content if it differs from the response element's content.
+ * Compares trimmed content of the specified property and only updates if changed.
+ * @param {?HTMLElement} elem - The DOM element to update.
+ * @param {?HTMLElement} respElem - The response element containing the new content.
+ * @param {string} [property="innerHTML"] - The property to compare and update (e.g., "innerHTML", "textContent").
+ * @returns {Promise<void>}
+ */
 async function updateElement(elem, respElem, property = "innerHTML") {
   if (elem && respElem) {
     const currentContent = elem[property].trim();
@@ -99,12 +289,47 @@ async function updateElement(elem, respElem, property = "innerHTML") {
   }
 }
 
+/**
+ * @type {Worker}
+ * @description Web Worker instance for offloading fetch requests.
+ */
 const worker = new Worker("/i2psnark/.res/js/snarkWork.js");
+
+/**
+ * @type {DOMParser}
+ * @description Reusable DOMParser instance for parsing fetched HTML.
+ */
 const parser = new DOMParser();
+
+/**
+ * @type {HTMLDivElement}
+ * @description Reusable container element for parsing response HTML.
+ */
 const container = document.createElement("div");
+
+/**
+ * @type {AbortController}
+ * @description Controller for aborting in-progress fetch requests.
+ */
 let abortController = new AbortController();
+
+/**
+ * @type {Map<string, Promise>}
+ * @description Map of ongoing fetch promises keyed by URL, used to deduplicate concurrent requests.
+ */
 const ongoingRequests = new Map();
 
+/**
+ * @async
+ * @function fetchHTMLDocument
+ * @description Fetches an HTML document from the given URL, parsing it into a Document.
+ * Uses a cache layer to avoid redundant fetches within the cacheDuration window.
+ * Deduplicates concurrent requests to the same URL. Supports forced fetches that bypass the cache.
+ * @param {string} url - The URL to fetch the HTML document from.
+ * @param {boolean} [forceFetch=false] - If true, bypasses the cache and fetches fresh data.
+ * @returns {Promise<Document>} The parsed HTML Document.
+ * @throws {Error} If the network request fails or returns a non-OK status.
+ */
 async function fetchHTMLDocument(url, forceFetch = false) {
   cleanupCache();
   if (!forceFetch && ongoingRequests.has(url)) {return ongoingRequests.get(url);}
@@ -130,8 +355,17 @@ async function fetchHTMLDocument(url, forceFetch = false) {
   } finally {abortController = new AbortController();}
 }
 
+/**
+ * @type {Set<string>}
+ * @description Set of cache keys that have expired and need removal.
+ */
 const staleCacheKeys = new Set();
 
+/**
+ * @function cleanupCache
+ * @description Identifies and removes expired cache entries older than cacheDuration.
+ * @returns {void}
+ */
 function cleanupCache() {
   const now = Date.now();
   for (const [key, value] of cache.entries()) {
@@ -140,11 +374,26 @@ function cleanupCache() {
   removeStaleCacheKeys();
 }
 
+/**
+ * @function removeStaleCacheKeys
+ * @description Removes all keys tracked in staleCacheKeys from the main cache, then clears the set.
+ * @returns {void}
+ */
 function removeStaleCacheKeys() {
   for (const key of staleCacheKeys) {cache.delete(key);}
   staleCacheKeys.clear();
 }
 
+/**
+ * @async
+ * @function doRefresh
+ * @description Main refresh entry point. Fetches the AJAX HTML document for the given URL,
+ * refreshes the torrent display, reinitializes handlers, and updates the filter badge.
+ * @param {Object} [options={}] - Refresh options.
+ * @param {string} [options.url] - The URL to fetch; defaults to the current AJAX URL.
+ * @param {boolean} [options.forceFetch=false] - Whether to bypass the cache.
+ * @returns {Promise<void>}
+ */
 async function doRefresh({ url = window.location.href, forceFetch = false } = {}) {
   const defaultUrl = await getURL();
   const responseDoc = await fetchHTMLDocument(url || defaultUrl, forceFetch);
@@ -153,6 +402,15 @@ async function doRefresh({ url = window.location.href, forceFetch = false } = {}
   await showBadge();
 }
 
+/**
+ * @async
+ * @function refreshTorrents
+ * @description Core refresh function that updates the I2PSnark UI. Detects the current view
+ * (torrent list, file directory, or offline state) and delegates to the appropriate update
+ * function. Handles iframe detection, initialization delays, and volatile row updates.
+ * @param {Function} [callback] - Optional callback to execute after refresh completes.
+ * @returns {Promise<void>}
+ */
 async function refreshTorrents(callback) {
   try {
     const complete = document.getElementsByClassName("completed");
@@ -185,6 +443,13 @@ async function refreshTorrents(callback) {
     else if (dirlist) {await requestAnimationFramePromise(async () => await updateFiles()); }
     else if (down) { await requestAnimationFramePromise(async () => await refreshAll()); }
 
+    /**
+     * @async
+     * @function refreshAll
+     * @description Performs a full refresh of the torrent table by fetching the complete
+     * AJAX document and replacing the tbody content. Also refreshes the header/footer and screen log.
+     * @returns {Promise<void>}
+     */
     async function refreshAll() {
       try {
         const url = await getURL();
@@ -207,6 +472,14 @@ async function refreshTorrents(callback) {
       }
     }
 
+    /**
+     * @async
+     * @function updateVolatile
+     * @description Performs an incremental update of torrent table rows. Compares each cell's
+     * text content with the response and updates only changed cells. Falls back to a full
+     * refresh if the number of rows differs or requireFullRefresh is set.
+     * @returns {Promise<void>}
+     */
     async function updateVolatile() {
       let updated = false;
       try {
@@ -263,6 +536,13 @@ async function refreshTorrents(callback) {
       }
     }
 
+    /**
+     * @async
+     * @function updateFiles
+     * @description Updates file listing information by comparing and refreshing
+     * incomplete file cells and torrent info stats from the fetched document.
+     * @returns {Promise<void>}
+     */
     async function updateFiles() {
       try {
         const url = window.location.href;
@@ -282,6 +562,13 @@ async function refreshTorrents(callback) {
       } catch (error) { if (debugging) console.error(error); }
     }
 
+    /**
+     * @async
+     * @function refreshHeaderAndFooter
+     * @description Refreshes the header and footer table header cells from the fetched document.
+     * Also adjusts sort icon and option box visibility based on the number of torrent rows.
+     * @returns {Promise<void>}
+     */
     async function refreshHeaderAndFooter() {
       try {
         const url = await getURL();
@@ -329,6 +616,16 @@ async function refreshTorrents(callback) {
   } catch (error) {}
 }
 
+/**
+ * @async
+ * @function refreshScreenLog
+ * @description Fetches and updates the screen log (#messages) element. Uses a cache with
+ * triple the normal duration. Optionally executes a callback after the update and supports
+ * forced fetches to bypass the cache.
+ * @param {Function} [callback] - Optional callback to execute after the screen log is updated.
+ * @param {boolean} [forceFetch=false] - Whether to bypass the cache and fetch fresh data.
+ * @returns {Promise<void>}
+ */
 async function refreshScreenLog(callback, forceFetch = false) {
   return new Promise(async (resolve) => {
     try {
@@ -366,8 +663,22 @@ async function refreshScreenLog(callback, forceFetch = false) {
   });
 }
 
+/**
+ * @function convertEncodedSpaces
+ * @description Replaces URL-encoded spaces (%20) with regular spaces in screen log message
+ * text nodes for cleaner display.
+ * @returns {void}
+ */
 function convertEncodedSpaces() {
   if (!screenlog) {return;}
+
+  /**
+   * @function replaceEncodedSpaces
+   * @description Recursively traverses DOM nodes, replacing %20 with spaces in text nodes
+   * and within anchor element children.
+   * @param {Node} node - The DOM node to process.
+   * @returns {void}
+   */
   function replaceEncodedSpaces(node) {
     if (node.nodeType === Node.TEXT_NODE) {
       node.nodeValue = node.nodeValue.replace(/%20/g, " ");
@@ -383,6 +694,13 @@ function convertEncodedSpaces() {
   if (msgElements) { msgElements.forEach(element => replaceEncodedSpaces(element)); }
 }
 
+/**
+ * @function refreshOnSubmit
+ * @description Attaches form submission handlers that refresh the screen log and torrent
+ * display after forms are submitted via the hidden iframe. Also handles click delegation
+ * for submit buttons, stop/start all actions, and the navigation refresh link.
+ * @returns {void}
+ */
 function refreshOnSubmit() {
   const forms = document.querySelectorAll("form");
   forms.forEach((form) => {
@@ -432,6 +750,14 @@ function refreshOnSubmit() {
   });
 }
 
+/**
+ * @async
+ * @function initSnarkRefresh
+ * @description Initializes the I2PSnark refresh system. Sets up periodic refresh intervals,
+ * initializes the lightbox for image viewing, cleans up old event listeners, and preloads
+ * the offline indicator image. Called on visibility change to visible state.
+ * @returns {Promise<void>}
+ */
 async function initSnarkRefresh() {
   let serverOKIntervalId = setInterval(checkIfUp, 5000);
   clearInterval(snarkRefreshIntervalId);
@@ -472,8 +798,22 @@ async function initSnarkRefresh() {
   }
 }
 
+/**
+ * @function stopSnarkRefresh
+ * @description Clears the main torrent refresh interval. Called when the document becomes hidden.
+ * @returns {void}
+ */
 function stopSnarkRefresh() {clearInterval(snarkRefreshIntervalId);}
 
+/**
+ * @async
+ * @function checkIfUp
+ * @description Periodically checks server connectivity by performing a HEAD request. Removes
+ * the offline overlay if the server responds OK, or shows the offline screen if the request fails.
+ * Respects a minimum delay between checks to avoid excessive requests.
+ * @param {number} [minDelay=14000] - Minimum delay in milliseconds between connectivity checks.
+ * @returns {Promise<void>}
+ */
 async function checkIfUp(minDelay = 14000) {
   const currentTime = Date.now();
   if (currentTime - lastCheckTime < minDelay) {return;}
@@ -497,6 +837,14 @@ async function checkIfUp(minDelay = 14000) {
   }
 }
 
+/**
+ * @function preloadImage
+ * @description Preloads an image into the browser cache using the Cache API. Falls back to
+ * direct loading if the Cache API is unavailable. Periodically re-caches the image to
+ * prevent cache expiration.
+ * @param {string} src - The image source URL to preload and cache.
+ * @returns {void}
+ */
 function preloadImage(src) {
   const CACHE_NAME = "my-image-cache";
   const INTERVAL_MS = 10 * 60 * 1000;
@@ -505,6 +853,13 @@ function preloadImage(src) {
 
   const loadImage = (url) => show(url);
 
+  /**
+   * @async
+   * @function tryFromCache
+   * @description Attempts to load the image from the browser cache via the Cache API.
+   * @param {string} u - The URL of the image to retrieve from cache.
+   * @returns {Promise<boolean>} True if the image was found in cache and displayed, false otherwise.
+   */
   async function tryFromCache(u) {
     if (!("caches" in window)) return false;
     try {
@@ -518,6 +873,14 @@ function preloadImage(src) {
     return false;
   }
 
+  /**
+   * @async
+   * @function ensureCached
+   * @description Ensures the image is cached in the browser. First checks the cache, then
+   * fetches and caches the image if not found. Falls back to direct loading on failure.
+   * @param {string} u - The URL of the image to ensure is cached.
+   * @returns {Promise<void>}
+   */
   async function ensureCached(u) {
     if (await tryFromCache(u)) return;
     if (!("caches" in window)) return loadImage(u);
@@ -539,6 +902,13 @@ function preloadImage(src) {
   setInterval(() => ensureCached(src), INTERVAL_MS);
 }
 
+/**
+ * @function isDown
+ * @description Creates and displays an offline overlay with a loading spinner and chimp image.
+ * Injects inline CSS styles for the overlay and adds the "isDown" class to the parent
+ * document in iframe mode. Only creates the overlay if it doesn't already exist.
+ * @returns {void}
+ */
 function isDown() {
   let chimpSrc;
   if (isStandalone) {chimpSrc = "/i2psnark/.res/themes/snark/midnight/images/chimp.webp";}

@@ -1,7 +1,8 @@
-/*
-   Filesizes. e.g. '5.35 K', '10 MB', '12.45 GB', or '4.67 TiB'
-   Converts filesize to bytes, assumes 1024 bytes regardless of KB/KiB
-*/
+/**
+ * @file tablesort.filesize.js
+ * @description Filesize sorting plugin for Tablesort (e.g., '5.35 K', '10 MB', '12.45 GB', or '4.67 TiB')
+ * @note Converts filesize to bytes, assumes 1024 bytes regardless of KB/KiB
+ */
 
 ;(function() {
   const base = 1024;

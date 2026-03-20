@@ -1,5 +1,8 @@
-/* Imagegen Loader by dr|z3d */
-/* License: AGPLv3 or later */
+/**
+ * @file Imagegen Loader by dr|z3d
+ * @description Provides dynamic image generation for identicons and QR codes
+ * @license AGPLv3 or later
+ */
 
 var hostnameRegex = new RegExp("c=.*?&");
 var qrTextRegex = new RegExp("t=.*?$");
@@ -20,6 +23,11 @@ document.getElementById("randomartgen").addEventListener("submit",function() {
   }
 });
 
+/**
+ * @function updateIdenticon
+ * @param {Event} event - The click event
+ * @returns {void}
+ */
 function updateIdenticon(event) {
   event.preventDefault();
   var i;
@@ -36,11 +44,20 @@ function updateIdenticon(event) {
   }
 }
 
+/**
+ * @function hideIdDropdown
+ * @returns {void}
+ */
 function hideIdDropdown() {
   var dropdown = document.getElementById("id_select");
   if (dropdown !== null) {dropdown.remove();}
 }
 
+/**
+ * @function updateQrCode
+ * @param {Event} event - The click event
+ * @returns {void}
+ */
 function updateQrCode(event) {
   event.preventDefault();
   var inputText;
@@ -72,6 +89,10 @@ function updateQrCode(event) {
   }
 }
 
+/**
+ * @function hideQrDropdown
+ * @returns {void}
+ */
 function hideQrDropdown() {
   var dropdown = document.getElementById("qr_select");
   if (dropdown !== null) {dropdown.remove();}

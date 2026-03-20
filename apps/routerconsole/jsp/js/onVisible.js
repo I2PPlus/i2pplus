@@ -1,9 +1,21 @@
-/* I2P+ onVisible.js by dr|z3d */
-/* License: AGPLv3 or later */
+/**
+ * @file onVisible.js
+ * @description Provides utility functions to execute callbacks when DOM elements
+ * become visible or hidden using IntersectionObserver and document visibility tracking.
+ * @author dr|z3d
+ * @license AGPLv3 or later
+ */
 
+/** @type {boolean} */
 let isDocumentVisible = true;
+/** @type {boolean} */
 let listenerAdded = false;
 
+/**
+ * Adds a one-time visibility change listener to the document.
+ * @function addListener
+ * @returns {void}
+ */
 function addListener() {
   if (!listenerAdded) {
     document.addEventListener("visibilitychange", () => {
@@ -13,6 +25,14 @@ function addListener() {
   }
 }
 
+/**
+ * Executes the callback once when the element becomes visible in the viewport
+ * and the document is visible.
+ * @function onVisible
+ * @param {Element} element - The DOM element to observe
+ * @param {Function} callback - The function to call when visible, receives the element
+ * @returns {void}
+ */
 function onVisible(element, callback) {
   if (!element || !(element instanceof Element)) { return; }
   addListener();
@@ -26,6 +46,14 @@ function onVisible(element, callback) {
   }).observe(element);
 }
 
+/**
+ * Executes the callback once when the element becomes hidden (leaves viewport)
+ * while the document is visible.
+ * @function onHidden
+ * @param {Element} element - The DOM element to observe
+ * @param {Function} callback - The function to call when hidden, receives the element
+ * @returns {void}
+ */
 function onHidden(element, callback) {
   if (!element || !(element instanceof Element)) { return; }
   addListener();

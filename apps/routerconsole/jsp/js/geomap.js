@@ -1,5 +1,12 @@
-/* I2P+ geomap.js by dr|z3d */
-/* Heavily modified from https://cartosvg.com/mercator */
+/**
+ * @file geomap.js
+ * @description Interactive SVG world map for the NetDB page showing router distribution
+ * by country, floodfill, or bandwidth tier. Supports hover infoboxes, color-coded
+ * shape classes based on router counts, and periodic data refresh from /netdb.
+ * Heavily modified from https://cartosvg.com/mercator
+ * @author dr|z3d
+ * @license AGPL3 or later
+ */
 
 (function () {
 
@@ -219,6 +226,12 @@
   };
 
   const preloadedFlags = new Set();
+  /**
+   * Preloads country flag images into a hidden container for faster rendering.
+   * @function preloadFlags
+   * @param {string[]} codes - Array of ISO country codes to preload flags for
+   * @returns {void}
+   */
   function preloadFlags(codes) {
     const flagContainer = document.createElement("div");
     flagContainer.id = "preloadFlags";
@@ -243,6 +256,13 @@
   preloadFlags(Object.values(map.data.countries).map(country => country.code));
 
   let routerCounts = {};
+  /**
+   * Fetches router data from /netdb, parses country/floodfill/tier counts,
+   * and stores them in localStorage for map rendering.
+   * @async
+   * @function storeRouterCounts
+   * @returns {Promise<void>}
+   */
   async function storeRouterCounts() {
     const url = "/netdb";
     try {
@@ -298,24 +318,54 @@
     }
   }
 
+  /**
+   * Gets the router count for a specific country/shape and classification.
+   * @function getRouterCount
+   * @param {string} shapeId - The country/shape identifier
+   * @param {string} [routerClass="countries"] - The classification type (countries, floodfill, tierX)
+   * @returns {number} The router count for the given shape and class
+   */
   function getRouterCount(shapeId, routerClass = "countries") {
     const code = (map.data.countries[shapeId]?.code) || "";
     const count = routerCounts[routerClass]?.[code] || 0;
     return count;
   }
 
+  /**
+   * Gets the total router count for a specific classification from localStorage.
+   * @function getRouterTotalByClass
+   * @param {string} routerClass - The classification type (countries, floodfill, tierX)
+   * @returns {number} The total count, or 0 if unavailable
+   */
   function getRouterTotalByClass(routerClass) {
     const routerCounts = JSON.parse(localStorage.getItem("routerCounts")) || {};
     return routerCounts.totals ? routerCounts.totals[routerClass] : 0;
   }
 
+  /**
+   * Retrieves a URL query parameter by name.
+   * @function getQueryParameter
+   * @param {string} name - The query parameter name
+   * @returns {string|null} The parameter value, or null if not present
+   */
   function getQueryParameter(name) { return new URLSearchParams(window.location.search).get(name); }
 
+  /**
+   * Changes the current router classification and reloads the page with the new filter.
+   * @function changeRouterClass
+   * @param {string} routerClass - The new classification to display
+   * @returns {void}
+   */
   function changeRouterClass(routerClass) {
     localStorage.setItem("currentRouterClass", routerClass);
     window.location.href = `${window.location.pathname}?routerClass=${routerClass}`;
   }
 
+  /**
+   * Highlights the active navigation button based on the current URL query parameter.
+   * @function setNavButtonActive
+   * @returns {void}
+   */
   function setNavButtonActive() {
     const active = getQueryParameter("class");
     const navButtons = document.querySelectorAll("#nav span");
@@ -325,6 +375,13 @@
     document.getElementById(activeId).classList.add("active");
   }
 
+  /**
+   * Updates the CSS class of an SVG shape based on the router count threshold.
+   * @function updateShapeClass
+   * @param {string} shapeId - The SVG element ID to update
+   * @param {number} count - The router count for this shape
+   * @returns {void}
+   */
   function updateShapeClass(shapeId, count) {
     const svgElement = document.getElementById(shapeId);
     if (!svgElement) return;
@@ -346,6 +403,12 @@
     if (highestThreshold) svgElement.classList.add(highestThreshold.className);
   }
 
+  /**
+   * Updates all SVG shape classes for the given router classification.
+   * @function updateShapeClasses
+   * @param {string} routerClass - The classification type to update
+   * @returns {void}
+   */
   function updateShapeClasses(routerClass) {
     if (routerCounts[routerClass]) {
       Object.keys(map.data.countries).forEach(shapeId => {
@@ -354,6 +417,15 @@
     }
   }
 
+  /**
+   * Populates the infobox element with country data, flag, and router count.
+   * @function createInfobox
+   * @param {Object} data - Country data with region and code
+   * @param {string} infoboxTemplate - HTML template for the infobox
+   * @param {string} shapeId - The country/shape name
+   * @param {string} [routerClass="countries"] - The current classification type
+   * @returns {void}
+   */
   function createInfobox(data, infoboxTemplate, shapeId, routerClass = "countries") {
     if (!data) return;
     const routerCount = getRouterCount(shapeId, routerClass);
@@ -367,6 +439,11 @@
     infobox.classList.remove("hidden");
   }
 
+  /**
+   * Renders the total router count in the infobox for the current classification.
+   * @function renderTotals
+   * @returns {void}
+   */
   function renderTotals() {
     const totalCounts = {
       countries: getRouterTotalByClass("countries"),
@@ -380,6 +457,14 @@
     });
   }
 
+  /**
+   * Creates a debounced version of the given function.
+   * @function debounce
+   * @param {Function} func - The function to debounce
+   * @param {number} wait - The debounce delay in milliseconds
+   * @param {boolean} [immediate=false] - Whether to call on the leading edge
+   * @returns {Function} The debounced function
+   */
   function debounce(func, wait, immediate = false) {
     let timeout;
     return function () {

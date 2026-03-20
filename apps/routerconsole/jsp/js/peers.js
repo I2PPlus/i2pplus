@@ -1,6 +1,10 @@
-/* I2P+ peers.js by dr|z3d */
-/* Handle refresh, table sorts, and tier counts on /peers pages */
-/* License: AGPL3 or later */
+/**
+ * @file peers.js
+ * @description Handles auto-refresh, table sorting, and bandwidth tier count
+ * display for the /peers pages (NTCP, SSU, and summary views).
+ * @author dr|z3d
+ * @license AGPL3 or later
+ */
 
 import { refreshElements } from '/js/refreshElements.js';
 
@@ -30,10 +34,20 @@ import { refreshElements } from '/js/refreshElements.js';
     sorterSSU = new Tablesort(ssuConn, { descending: true });
   }
 
+  /**
+   * Initializes refresh listeners and table sort event handlers.
+   * @function initRefresh
+   * @returns {void}
+   */
   function initRefresh() {
     addSortListeners();
   }
 
+  /**
+   * Adds progress bar handlers for beforeSort/afterSort events on peer tables.
+   * @function addSortListeners
+   * @returns {void}
+   */
   function addSortListeners() {
     if (ntcpConn) {
       ntcpConn.addEventListener("beforeSort", function () {
@@ -56,6 +70,12 @@ import { refreshElements } from '/js/refreshElements.js';
     }
   }
 
+  /**
+   * Counts peers by bandwidth tier (L, M, N, O, P, X) and floodfill status,
+   * displaying the counts in the top count element.
+   * @function countTiers
+   * @returns {void}
+   */
   function countTiers() {
     if (ssuTfoot || ntcpTfoot) {
       const tierL = document.querySelectorAll(".rbw.L");
@@ -93,11 +113,22 @@ import { refreshElements } from '/js/refreshElements.js';
     }
   }
 
+  /**
+   * Sets up periodic element refresh for the given selector.
+   * @function setupRefresh
+   * @param {string} selector - CSS selector for elements to refresh
+   * @returns {void}
+   */
   function setupRefresh(selector) {
     const fetchUrl = queryParams.has("transport") ? path + query : "/peers";
     refreshElements(selector, fetchUrl, REFRESH_INTERVAL);
   }
 
+  /**
+   * Sets up periodic refresh for the transport summary section.
+   * @function setupSummaryRefresh
+   * @returns {void}
+   */
   function setupSummaryRefresh() {
     if (!summary) {return;}
     refreshElements("#transportSummary", "/peers", REFRESH_INTERVAL);

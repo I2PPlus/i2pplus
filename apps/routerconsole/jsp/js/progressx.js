@@ -1,10 +1,17 @@
-/* ProgressX 1.1, 2025-09-09
- * https://github.com/ryadpasha/progressx
- * Copyright (c) 2018 Ryad Pasha
- * Licensed under the MIT License
- * Optimizations and theme support by dr|z3d, 2024-2025
+/**
+ * @file ProgressX 1.1, 2025-09-09
+ * @description A lightweight progress bar library with theme support, optimized by dr|z3d
+ * @author Ryad Pasha
+ * @license MIT
+ * @see https://github.com/ryadpasha/progressx
  */
 
+/**
+ * @function initProgressX
+ * @param {Window} window - The window object
+ * @param {Document} document - The document object
+ * @returns {void}
+ */
 function initProgressX(window, document) {
   "use strict";
 
@@ -40,17 +47,8 @@ function initProgressX(window, document) {
     if (canvas) return;
     canvas = document.createElement("canvas");
     canvas.id = "pageloader";
-    canvas.style.cssText = `
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      margin: 0;
-      padding: 0;
-      z-index: 100001;
-      display: none;
-      opacity: 1;
-    `;
+    canvas.style.cssText = "position:fixed;top:0;left:0;right:0;z-index:100001;" +
+                           "margin:0;padding:0;display:none;opacity:1";
     injectCanvas();
     context = canvas.getContext("2d");
     window.addEventListener("resize", onResized, { passive: true });

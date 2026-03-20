@@ -1,16 +1,48 @@
-/* I2P+ filterBar.js by dr|z3d */
-/* Setup I2PSnark torrent display buttons so we can show/hide snarks
-/* based on status and load filtered content via AJAX calls */
-/* License: AGPL3 or later */
+/**
+ * @file filterBar.js - Setup I2PSnark torrent display filter buttons and AJAX filter loading.
+ * @description Manages the filter bar UI for showing/hiding torrents by status (all, seeding,
+ * downloading, etc.). Handles badge count display, filter state persistence to localStorage,
+ * URL updates for sort icons, and AJAX-based loading of filtered content.
+ * @author dr|z3d
+ * @license AGPL3 or later
+ * @module filterBar
+ */
 
 import {refreshTorrents, doRefresh} from "./refreshTorrents.js";
 
+/**
+ * @type {?HTMLElement}
+ * @description The #torrents container element.
+ */
 const torrents = document.getElementById("torrents");
 
+/**
+ * @type {?HTMLElement}
+ * @description The filter bar element.
+ */
 let filterbar;
+
+/**
+ * @type {?MutationObserver}
+ * @description MutationObserver watching the torrents container for child list changes.
+ */
 let observer;
+
+/**
+ * @type {number}
+ * @description Count of snark torrents matching the current filter.
+ */
 let snarkCount;
 
+/**
+ * @async
+ * @function showBadge
+ * @description Updates the filter bar badge display based on the current URL filter/search
+ * parameters. Highlights the active filter, disables inactive filters, sets up a
+ * MutationObserver on the active filter to track torrent count changes, and persists
+ * the active filter to localStorage.
+ * @returns {Promise<void>}
+ */
 async function showBadge() {
   const filterbar = document.getElementById("filterBar");
   if (!filterbar) {return;}
@@ -72,10 +104,22 @@ async function showBadge() {
   }
 }
 
+/**
+ * @function countSnarks
+ * @description Counts the number of visible torrent rows (volatile, non-peerinfo rows)
+ * in the current table.
+ * @returns {number} The count of visible torrent rows.
+ */
 function countSnarks() {
   return torrents?.querySelectorAll("#snarkTbody tr.volatile:not(.peerinfo)").length;
 }
 
+/**
+ * @function updateURLs
+ * @description Sets up click handlers on sort icon elements to save the current query string
+ * to localStorage when a sort is applied.
+ * @returns {void}
+ */
 function updateURLs() {
   const torrentform = document.getElementById("torrentlist");
   if (!torrentform) {return;}
@@ -85,12 +129,27 @@ function updateURLs() {
 
   sortIcon.forEach((item) => { item.addEventListener("click", () => { setQuery(); }); });
 
+  /**
+   * @function setQuery
+   * @description Saves the current URL query string to localStorage for persistence across
+   * page loads.
+   * @returns {void}
+   */
   function setQuery() {
     const params = window.location.search;
     if (params) {const storage = window.localStorage.setItem("queryString", params);}
   }
 }
 
+/**
+ * @async
+ * @function filterNav
+ * @description Sets up the filter bar click handler. Intercepts clicks on filter elements,
+ * constructs an AJAX-compatible URL, updates the browser history, refreshes the badge,
+ * and loads filtered content via doRefresh. Retries with a delay if the filter bar
+ * is not yet available.
+ * @returns {Promise<void>}
+ */
 async function filterNav() {
   const filterbar = document.getElementById("filterBar");
   if (!filterbar) { setTimeout(filterNav, 1500); return; }

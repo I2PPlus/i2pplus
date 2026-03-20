@@ -1,6 +1,12 @@
-/* I2P+ getImgDimensions.js for I2PSnark by dr|z3d */
-/* Display image dimensions in Snark's file viewer */
-/* License: AGPL3 or later */
+/**
+ * @file getImgDimensions.js - Display image dimensions in I2PSnark's file viewer.
+ * @description On DOM load, iterates over all thumbnail images (.thumb) in the file listing,
+ * reads their natural dimensions, and inserts a span element displaying the width x height
+ * next to the file name link.
+ * @author dr|z3d
+ * @license AGPL3 or later
+ * @module getImgDimensions
+ */
 
 document.addEventListener("DOMContentLoaded", () => {
   [...document.querySelectorAll(".thumb")].forEach(thumb => {

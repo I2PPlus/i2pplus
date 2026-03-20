@@ -1,7 +1,18 @@
-/* I2P+ filterTunnels.js by dr|z3d */
-/* Realtime filtering of tunnel manager tunnels based on input text
-/* License: AGPL3 or later */
+/**
+ * @file filterTunnels.js - Realtime filtering of I2PTunnel Manager tunnels
+ * @description Creates a search input that filters tunnel blocks based on user input
+ * matching against tunnel name, type, interface, location, and port
+ * @author dr|z3d
+ * @license AGPL3 or later
+ */
 
+/**
+ * Initializes the search filter UI on DOM ready.
+ * Creates a search input and clear button, appends them to the global tunnel control header,
+ * and sets up input event listener for realtime filtering.
+ * @listens DOMContentLoaded
+ * @returns {void}
+ */
 document.addEventListener("DOMContentLoaded", function () {
     const globalH2 = document.querySelector("#globalTunnelControl h2");
     if (!globalH2) {return;}

@@ -1,8 +1,17 @@
-/* I2P+ configtunnels.js by dr|z3d */
-/* Toggle display of tunnel count badges according to toggle state */
-/* License: AGPL3 or later */
+/**
+ * @file configtunnels.js
+ * @description Toggles the display of tunnel count badges (in/out) based on
+ * whether the tunnel configuration section is expanded or collapsed.
+ * @author dr|z3d
+ * @license AGPL3 or later
+ */
 
 document.addEventListener("DOMContentLoaded", () => {
+  /**
+   * Sets up toggle listeners on tunnel config headers to show/hide tunnel count badges.
+   * @function showHideTunnelCounts
+   * @returns {void}
+   */
   function showHideTunnelCounts() {
     const table = document.querySelector("#tunnelconfig");
     if (!table) return;

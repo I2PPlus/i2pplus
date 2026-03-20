@@ -1,5 +1,13 @@
+/**
+ * @file configplugins.js
+ * @description Counts and displays total started/stopped plugin counts
+ * on the /configplugins page.
+ * @license AGPL3 or later
+ */
+
 (function() {
   "use strict";
+  /** Counts plugin control elements and appends totals to the plugin config header. */
   document.addEventListener("DOMContentLoaded", () => {
     let total = 0, started = 0, stopped = 0;
     const header = document.getElementById("pconfig");

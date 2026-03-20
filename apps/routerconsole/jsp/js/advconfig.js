@@ -1,11 +1,26 @@
-/* I2P+ advconfig.js by dr|z3d */
-/* Enhance /configadvanced in advanced mode */
-/* License: AGPL3 or later */
+/**
+ * @file advconfig.js
+ * @description Enhances the /configadvanced page in advanced mode by converting
+ * the raw textarea configuration into an editable table with inline key-value editing,
+ * delete buttons, filtering, and form submission handling.
+ * @author dr|z3d
+ * @license AGPL3 or later
+ */
 
+/**
+ * Initializes the advanced configuration interface by converting the textarea
+ * into an editable table with key-value pairs, filter, and CRUD operations.
+ * @function advConfigInit
+ * @returns {void}
+ */
 const advConfigInit = () => {
   const d = document;
 
-  // Extend Element prototype
+  /**
+   * Extends the Element prototype with shorthand query methods.
+   * @param {string} selector - CSS selector string
+   * @returns {Element|NodeList} Selected element(s)
+   */
   Element.prototype.query = function(selector) { return this.querySelector(selector); };
   Element.prototype.queryAll = function(selector) { return this.querySelectorAll(selector); };
   Element.prototype.hasClass = function(className) { return this.classList.contains(className); };
@@ -30,6 +45,11 @@ const advConfigInit = () => {
   textarea.style.display = "none";
   infohelp.setAttribute("colspan", "3");
 
+  /**
+   * Removes old configuration rows from the DOM before rebuilding the table.
+   * @function clearOldRows
+   * @returns {void}
+   */
   const clearOldRows = () => {
     while (container.parentNode.firstChild && container.parentNode.firstChild.firstChild !== textarea) {
       container.parentNode.removeChild(container.parentNode.firstChild);
@@ -42,6 +62,14 @@ const advConfigInit = () => {
     .filter(parts => parts.length === 2)
     .sort((a, b) => a[0].localeCompare(b[0]));
 
+  /**
+   * Creates a table row with editable key and value cells and a delete cell.
+   * @function createRow
+   * @param {string} key - The configuration key name
+   * @param {string} value - The configuration value
+   * @returns {HTMLTableRowElement} The created table row element
+   * @example createRow("i2np.bandwidth.inboundKByteSec", "1024")
+   */
   const createRow = (key, value) => {
     const row = d.createElement("tr");
     row.className = "configline";
@@ -98,6 +126,11 @@ const advConfigInit = () => {
 
   observer.observe(table, { childList: true, subtree: true });
 
+  /**
+   * Synchronizes the hidden textarea with the current state of the editable table rows.
+   * @function updateTextarea
+   * @returns {void}
+   */
   const updateTextarea = () => {
     const updatedItems = [];
     const rows = table.queryAll(".configline");
@@ -128,6 +161,11 @@ const advConfigInit = () => {
     }
   });
 
+  /**
+   * Submits a new key-value pair by creating a row and clearing the input fields.
+   * @function submitNewKeyValue
+   * @returns {void}
+   */
   const submitNewKeyValue = () => {
     const newKey = newKeyCell.textContent.trim();
     const existingKey = configItems.some(item => item[0] === newKey);
@@ -141,6 +179,11 @@ const advConfigInit = () => {
     }
   };
 
+  /**
+   * Adds a filter input to the configuration header for searching key-value pairs.
+   * @function addFilter
+   * @returns {void}
+   */
   const addFilter = () => {
     let filterValue = "";
     const advFilter = d.createElement("span");
@@ -176,6 +219,13 @@ const advConfigInit = () => {
   };
   addFilter();
 
+  /**
+   * Handles save logic: validates new key-value inputs, checks for duplicates,
+   * and triggers form submission.
+   * @function doSave
+   * @param {Event} event - The keyboard or click event
+   * @returns {void}
+   */
   const doSave = event => {
     const modalActive = query("#modalActive");
     if (modalActive) {return;}
@@ -218,6 +268,12 @@ const advConfigInit = () => {
     }
   });
 
+  /**
+   * Resets the form to the original configuration stored in a hidden input.
+   * @function resetForm
+   * @param {Event} event - The event that triggered the reset
+   * @returns {void}
+   */
   const resetForm = event => {
     event.preventDefault();
     textarea.value = query("input[name=nofilter_oldConfig]").value;
@@ -230,6 +286,11 @@ const advConfigInit = () => {
   });
 
   let statusAdded = false;
+  /**
+   * Polls for the floodfill config element and adds a status badge to the header.
+   * @function floodfillStatus
+   * @returns {void}
+   */
   function floodfillStatus() {
     const h3ff = document.querySelector("#ffconf");
     if (h3ff) {

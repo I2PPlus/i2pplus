@@ -1,7 +1,18 @@
-/* I2P+ toggleThrottler.js for I2PTunnel Manager by dr|z3d */
-/* Toggle server throttler section and remember toggle status */
-/* License: AGPL3 or later */
+/**
+ * @file toggleThrottler.js - Toggle server throttler section and persist state
+ * @description I2PTunnel Manager component that toggles the throttler panel visibility
+ * and remembers the user's preference via localStorage
+ * @author dr|z3d
+ * @license AGPL3 or later
+ */
 
+/**
+ * IIFE that initializes the throttler toggle functionality.
+ * Sets up click handler on throttle header to show/hide the throttler panel.
+ * Restores previous toggle state from localStorage on page load.
+ * @function
+ * @returns {void}
+ */
 (() => {
   const toggleThrottler = document.getElementById("toggleThrottler");
   const throttleHeader = document.getElementById("throttleHeader");
@@ -10,6 +21,11 @@
   if (toggleThrottler.hidden) toggleThrottler.hidden = false;
   if (!throttleHeader.classList.length) tunnelThrottler.style.display = "none";
 
+  /**
+   * Toggles the throttler panel visibility and persists state.
+   * @function toggleElement
+   * @returns {void}
+   */
   const toggleElement = () => {
     const isDisplayed = tunnelThrottler.style.display === "none";
     tunnelThrottler.style.display = isDisplayed ? "table-row" : "none";

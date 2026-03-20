@@ -1,3 +1,15 @@
+/**
+ * @file togglePassword.js
+ * @description Toggles password field visibility between plaintext and masked display.
+ * @license AGPL3 or later
+ */
+
+/**
+ * Handles the toggle click to show/hide the password field content.
+ * Switches between "password" and "text" input types and updates button text.
+ * @event toggle.onclick
+ * @returns {void}
+ */
 toggle.onclick = function() {
     var x = document.getElementById("password");
     var toggle = document.getElementById("toggle");

@@ -1,7 +1,17 @@
-/* I2P+ sortWorker.js br dr|z3d */
-/* Handle table sorting in tablesort.js in a background worker for large tables */
-/* License: AGPLv3 or later */
+/**
+ * @file sortWorker.js
+ * @description Handles table sorting in a background worker for large tables.
+ * Supports number, date, and string column types with ascending/descending direction.
+ * @author dr|z3d
+ * @license AGPLv3 or later
+ */
 
+/**
+ * Receives sort data from the main thread, sorts rows, and posts results back.
+ * @function self.onmessage
+ * @param {MessageEvent} e - The message event containing rows, sortColumn, direction, and columnType
+ * @returns {void}
+ */
 self.onmessage = function(e) {
   const { rows, sortColumn, direction, columnType } = e.data;
 
@@ -10,6 +20,15 @@ self.onmessage = function(e) {
   self.postMessage({ sorted });
 };
 
+/**
+ * Sorts an array of row objects by the specified column and direction.
+ * @function sortRows
+ * @param {Array<Object<string, string>>} rows - The rows to sort
+ * @param {string} sortColumn - The column key to sort by
+ * @param {string} direction - Sort direction ("ascending" or "descending")
+ * @param {string} columnType - The data type ("number", "date", or "string")
+ * @returns {Array<Object>} The sorted rows array
+ */
 function sortRows(rows, sortColumn, direction, columnType) {
   const multiplier = direction === "descending" ? -1 : 1;
 

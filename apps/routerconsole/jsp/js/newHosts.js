@@ -1,6 +1,17 @@
-/* I2P+ RefreshSidebar by dr|z3d */
-/* License: AGPLv3 or later */
+/**
+ * @file newHosts.js
+ * @description Fetches and displays new hostname registrations from /susidns/log.jsp
+ * in the sidebar, with a badge counter and tooltip listing. Caches data in localStorage
+ * and periodically refreshes. Only active on the dark theme.
+ * @author dr|z3d
+ * @license AGPLv3 or later
+ */
 
+/**
+ * Initializes the new hosts badge with periodic fetching, caching, and tooltip management.
+ * @function newHosts
+ * @returns {void}
+ */
 export function newHosts() {
   const newHostsBadge = document.getElementById("newHosts");
   if (!newHostsBadge) return;
@@ -13,6 +24,11 @@ export function newHosts() {
   let newHostsInterval;
   let tooltipInitialized = false;
 
+  /**
+   * Retrieves cached new hosts data from localStorage.
+   * @function getStoredData
+   * @returns {{hostnames: Array<{hostname: string, timestamp: number}>, count: number, lastUpdated: number|null}}
+   */
   function getStoredData() {
     const key = "newHostsData";
     const rawData = localStorage.getItem(key);
@@ -35,6 +51,12 @@ export function newHosts() {
     }
   }
 
+  /**
+   * Fetches the latest hosts from /susidns/log.jsp, filters by 24-hour window,
+   * and updates localStorage and the badge display.
+   * @function fetchNewHosts
+   * @returns {void}
+   */
   function fetchNewHosts() {
     localStorage.setItem("newHostsLastFetch", Date.now());
 
@@ -97,6 +119,11 @@ export function newHosts() {
       .catch(err => console.error("Failed to fetch new hosts:", err));
   }
 
+  /**
+   * Retrieves new hosts from cache if recent enough, otherwise triggers a fresh fetch.
+   * @function getNewHosts
+   * @returns {void}
+   */
   function getNewHosts() {
     const now = Date.now();
     const storedData = getStoredData();
@@ -120,6 +147,12 @@ export function newHosts() {
     }
   }
 
+  /**
+   * Updates the tooltip content with a list of new hostnames as clickable links.
+   * @function updateTooltip
+   * @param {string[]} hostnames - Array of hostnames to display
+   * @returns {void}
+   */
   function updateTooltip(hostnames) {
     if (!newHostsBadge) return;
 

@@ -1,6 +1,11 @@
-/* I2P+ graphs.js by dr|z3d */
-/* Ajax graph refresh, configuration toggle and graph filtering */
-/* License: AGPL3 or later */
+/**
+ * @file graphs.js
+ * @description Handles AJAX graph refresh, configuration panel toggle, and
+ * graph filtering on the /graphs page. Supports lazy loading of graph images,
+ * visibility-based refresh scheduling, and persistent filter state via localStorage.
+ * @author dr|z3d
+ * @license AGPL3 or later
+ */
 
 import { onVisible, onHidden } from "/js/onVisible.js";
 
@@ -20,6 +25,11 @@ import { onVisible, onHidden } from "/js/onVisible.js";
     lastRefreshTime = 0,
     debugging = false;
 
+  /**
+   * Creates and appends a search filter UI element above the graph list.
+   * @function initializeSearchFilter
+   * @returns {{searchInput: HTMLInputElement, clearButton: HTMLButtonElement}} The created filter elements
+   */
   function initializeSearchFilter() {
     const container = query("h1.perf");
     if (!container) return {};
@@ -40,6 +50,12 @@ import { onVisible, onHidden } from "/js/onVisible.js";
     return { searchInput, clearButton };
   }
 
+  /**
+   * Filters graph containers based on the search input text and alias map.
+   * @function applyFilter
+   * @param {HTMLInputElement} input - The search input element containing the filter text
+   * @returns {void}
+   */
   function applyFilter(input) {
     const text = input.value.trim().toLowerCase(),
       aliasMap = {
@@ -79,6 +95,14 @@ import { onVisible, onHidden } from "/js/onVisible.js";
     localStorage.setItem("graphsFilter", input.value.trim());
   }
 
+  /**
+   * Creates a debounced version of the filter function.
+   * @function debounceFilter
+   * @param {Function} func - The function to debounce
+   * @param {number} [delay=500] - Debounce delay in milliseconds
+   * @param {HTMLInputElement} input - The input element to pass to the function
+   * @returns {Function} The debounced filter function
+   */
   function debounceFilter(func, delay = 500, input) {
     let timeoutId;
     return () => {
@@ -89,11 +113,24 @@ import { onVisible, onHidden } from "/js/onVisible.js";
 
   let imgObservers = [];
 
+  /**
+   * Disconnects all active IntersectionObservers and clears the array.
+   * @function disconnectObservers
+   * @returns {void}
+   */
   function disconnectObservers() {
     imgObservers.forEach((obs) => obs.disconnect());
     imgObservers.length = 0;
   }
 
+  /**
+   * Sets up MutationObserver on the target and IntersectionObservers for each graph image.
+   * @function initializeObservers
+   * @param {HTMLElement} target - The container element to observe for mutations
+   * @param {Function} debouncedFunc - The debounced filter function to call on changes
+   * @param {HTMLInputElement} input - The filter input element
+   * @returns {void}
+   */
   function initializeObservers(target, debouncedFunc, input) {
     disconnectObservers();
     if (target) new MutationObserver(debouncedFunc).observe(target, { childList: true, subtree: true });
@@ -117,6 +154,12 @@ import { onVisible, onHidden } from "/js/onVisible.js";
     });
   }
 
+  /**
+   * Applies the natural dimensions of the first graph image to the container style.
+   * @async
+   * @function applyDimensions
+   * @returns {Promise<boolean>} True if dimensions were applied successfully
+   */
   async function applyDimensions() {
     const styleElem = query("style#gwrap");
     if (!styleElem) return false;
@@ -143,6 +186,11 @@ import { onVisible, onHidden } from "/js/onVisible.js";
     return true;
   }
 
+  /**
+   * Retries applying dimensions until successful or no images remain.
+   * @function ensureDimensions
+   * @returns {void}
+   */
   function ensureDimensions() {
     const success = applyDimensions();
     if (!success && d.querySelector(".statimage")) {
@@ -150,6 +198,14 @@ import { onVisible, onHidden } from "/js/onVisible.js";
     }
   }
 
+  /**
+   * Refreshes all graph images via preloaded images and updates the display.
+   * @async
+   * @function updateGraphs
+   * @param {HTMLInputElement} input - The filter input element
+   * @param {Function} debouncedFunc - The debounced filter function to reapply after update
+   * @returns {Promise<void>}
+   */
   async function updateGraphs(input, debouncedFunc) {
     if (typeof graphRefreshInterval === "undefined" || graphRefreshInterval <= 0) return;
     progressx.show(theme);
@@ -206,6 +262,11 @@ import { onVisible, onHidden } from "/js/onVisible.js";
     updateGraphs();
   }
 
+  /**
+   * Toggles the visibility of the graph configuration panel.
+   * @function toggleView
+   * @returns {void}
+   */
   function toggleView() {
     const toggle = $("toggleSettings");
     if (!toggle) return;
@@ -220,6 +281,11 @@ import { onVisible, onHidden } from "/js/onVisible.js";
     }
   }
 
+  /**
+   * Dynamically loads the graph configuration toggle CSS if not already loaded.
+   * @function loadToggleCss
+   * @returns {void}
+   */
   function loadToggleCss() {
     if (!query("#graphToggleCss")) {
       const link = d.createElement("link");
@@ -230,6 +296,11 @@ import { onVisible, onHidden } from "/js/onVisible.js";
     }
   }
 
+  /**
+   * Checks if graph images are present; shows an error message if none are loaded.
+   * @function isDown
+   * @returns {void}
+   */
   function isDown() {
     const images = [...d.querySelectorAll(".statimage")];
     if (!images.length) {
@@ -239,6 +310,11 @@ import { onVisible, onHidden } from "/js/onVisible.js";
     setTimeout(ensureDimensions, 5000);
   }
 
+  /**
+   * Stops the graph refresh interval timer.
+   * @function stopRefresh
+   * @returns {void}
+   */
   const stopRefresh = () => clearInterval(graphsTimerId);
 
   d.addEventListener("DOMContentLoaded", () => {

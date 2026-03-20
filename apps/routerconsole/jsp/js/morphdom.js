@@ -1,6 +1,9 @@
-/* morphdom.js - Fast and lightweight DOM diffing/patching */
-/* https://github.com/patrick-steele-idem/morphdom */
-/* License: MIT */
+/**
+ * @file Fast and lightweight DOM diffing/patching library.
+ * @description morphdom provides efficient DOM updates by diffing and patching changes.
+ * @see {@link https://github.com/patrick-steele-idem/morphdom}
+ * @license MIT
+ */
 'use strict';
 
 var doc = document;
@@ -11,10 +14,21 @@ var COMMENT_NODE = 8;
 
 var NS_XHTML = 'http://www.w3.org/1999/xhtml';
 
+/**
+ * Default function to get a node's key for identification.
+ * @param {Node} node - The DOM node to get a key for.
+ * @returns {string|null} The node's id attribute or id property, or null if not found.
+ */
 function defaultGetNodeKey(node) {
   return node && ((node.getAttribute && node.getAttribute('id')) || node.id);
 }
 
+/**
+ * Compare node names, handling case-insensitive comparison for HTML elements.
+ * @param {Element} fromEl - The source element.
+ * @param {Element} toEl - The target element.
+ * @returns {boolean} True if node names match (case-insensitive for HTML).
+ */
 function compareNodeNames(fromEl, toEl) {
   var fromNodeName = fromEl.nodeName;
   var toNodeName = toEl.nodeName;
@@ -33,12 +47,24 @@ function compareNodeNames(fromEl, toEl) {
   }
 }
 
+/**
+ * Create an element with optional namespace.
+ * @param {string} name - The tag name.
+ * @param {string} [namespaceURI] - The namespace URI.
+ * @returns {Element} The created element.
+ */
 function createElementNS(name, namespaceURI) {
   return !namespaceURI || namespaceURI === NS_XHTML
     ? doc.createElement(name)
     : doc.createElementNS(namespaceURI, name);
 }
 
+/**
+ * Move all children from one element to another.
+ * @param {Element} fromEl - The source element.
+ * @param {Element} toEl - The target element.
+ * @returns {Element} The target element with moved children.
+ */
 function moveChildren(fromEl, toEl) {
   while (fromEl.firstChild) {
     toEl.appendChild(fromEl.firstChild);
@@ -46,6 +72,12 @@ function moveChildren(fromEl, toEl) {
   return toEl;
 }
 
+/**
+ * Synchronize a boolean attribute/property between elements.
+ * @param {Element} fromEl - The source element.
+ * @param {Element} toEl - The target element.
+ * @param {string} name - The attribute/property name.
+ */
 function syncBooleanAttrProp(fromEl, toEl, name) {
   if (fromEl[name] !== toEl[name]) {
     fromEl[name] = toEl[name];
@@ -53,7 +85,16 @@ function syncBooleanAttrProp(fromEl, toEl, name) {
   }
 }
 
+/**
+ * Special element handlers for textarea, select, and input elements.
+ * @type {Object.<string, function(Element, Element)>}
+ */
 var specialElHandlers = {
+  /**
+   * Handle textarea element synchronization.
+   * @param {Element} fromEl - The source textarea element.
+   * @param {Element} toEl - The target textarea element.
+   */
   TEXTAREA: function(fromEl, toEl) {
     if (fromEl.value !== toEl.value) {
       fromEl.value = toEl.value;
@@ -63,6 +104,11 @@ var specialElHandlers = {
       firstChild.nodeValue = toEl.value;
     }
   },
+  /**
+   * Handle select element synchronization.
+   * @param {Element} fromEl - The source select element.
+   * @param {Element} toEl - The target select element.
+   */
   SELECT: function(fromEl, toEl) {
     if (!toEl.hasAttribute('multiple')) {
       var curChild = fromEl.firstChild;
@@ -79,6 +125,11 @@ var specialElHandlers = {
       fromEl.selectedIndex = selected;
     }
   },
+  /**
+   * Handle input element synchronization.
+   * @param {Element} fromEl - The source input element.
+   * @param {Element} toEl - The target input element.
+   */
   INPUT: function(fromEl, toEl) {
     syncBooleanAttrProp(fromEl, toEl, 'checked');
     syncBooleanAttrProp(fromEl, toEl, 'disabled');
@@ -93,6 +144,11 @@ var specialElHandlers = {
   }
 };
 
+/**
+ * Synchronize attributes from one node to another.
+ * @param {Element} fromNode - The source element.
+ * @param {Element} toNode - The target element.
+ */
 function morphAttrs(fromNode, toNode) {
   var toNodeAttrs = toNode.attributes;
   var attr, attrName, attrNamespaceURI, attrValue;
@@ -130,7 +186,30 @@ function morphAttrs(fromNode, toNode) {
   }
 }
 
+/**
+ * Factory that creates the morphdom function with custom attribute morphing.
+ * @param {function(Element, Element)} morphAttrs - Function to synchronize attributes.
+ * @returns {function(Node|string, Node|string, Object=): Node} The morphdom function.
+ */
 function morphdomFactory(morphAttrs) {
+  /**
+   * Morph the DOM from one node to another.
+   * @param {Node|string} fromNode - The source node or HTML string.
+   * @param {Node|string} toNode - The target node or HTML string.
+   * @param {Object} [options] - Configuration options.
+   * @param {function(Node): string} [options.getNodeKey] - Function to get a node's key.
+   * @param {function(Node)} [options.onBeforeNodeAdded] - Called before a node is added.
+   * @param {function(Node)} [options.onNodeAdded] - Called after a node is added.
+   * @param {function(Element, Element)} [options.onBeforeElUpdated] - Called before an element is updated.
+   * @param {function(Element)} [options.onElUpdated] - Called after an element is updated.
+   * @param {function(Node)} [options.onBeforeNodeDiscarded] - Called before a node is discarded.
+   * @param {function(Node)} [options.onNodeDiscarded] - Called after a node is discarded.
+   * @param {function(Element, Element)} [options.onBeforeElChildrenUpdated] - Called before element children are updated.
+   * @param {function(Element, Element)} [options.skipFromChildren] - Skip processing children of this element.
+   * @param {function(Node, Node)} [options.addChild] - Custom function to add a child to a parent.
+   * @param {boolean} [options.childrenOnly=false] - Only morph children, not the element itself.
+   * @returns {Node} The morphed node.
+   */
   return function morphdom(fromNode, toNode, options) {
     if (!options) options = {};
     if (typeof toNode === 'string') {

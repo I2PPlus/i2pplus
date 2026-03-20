@@ -1,7 +1,17 @@
-/* I2P+ changelog.js by dr|z3d */
-/* Prettify in-console changelog */
-/* License: AGPL3 or later */
+/**
+ * @file changelog.js
+ * @description Prettifies the in-console changelog by wrapping content blocks
+ * in span elements and styling bullet points and star markers.
+ * @author dr|z3d
+ * @license AGPL3 or later
+ */
 
+/**
+ * Finds the changelog pre element, splits content by blank lines,
+ * and wraps each block in a lazy-loading span with HTML escaping and marker styling.
+ * @function spanify
+ * @returns {void}
+ */
 (function spanify() {
     const content = document.querySelector("#changelog pre");
     if (!content) {return;}

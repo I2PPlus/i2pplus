@@ -1,12 +1,25 @@
-/* I2P+ SusiDNS clearSearch.js by dr|z3d */
-/* Add clear search widget to search input */
-/* License: AGPL3 or later */
+/**
+ * @file I2P+ SusiDNS clear-search widget.
+ * Injects a clear-search button alongside the search input field and
+ * dynamically shows/hides it based on input content.
+ * @author dr|z3d
+ * @license AGPL3 or later
+ */
 
 document.addEventListener("DOMContentLoaded", function () {
+  /** @type {HTMLInputElement|null} */
   const searchInput = document.querySelector("#searchInput input[type=text]");
+  /** @type {HTMLAnchorElement|null} */
   const clearSearch = document.getElementById("clearSearch");
   if (!clearSearch) {return;}
 
+  /**
+   * Updates the clear-search anchor visibility and href based on whether
+   * the search input currently contains text.
+   *
+   * @function handleClear
+   * @returns {void}
+   */
   function handleClear() {
     const inputValue = searchInput.value.trim();
     const currentURL = new URL(window.location.href);

@@ -1,14 +1,19 @@
-/*
-    Snowflakes © 2024 Denis Seleznev
-    https://github.com/hcodes/snowflakes/
-    MIT License
-    Modified by dr|z3d for I2P+
-    Canvas-based optimization for better performance
-*/
+/**
+ * @file Snowflakes © 2024 Denis Seleznev
+ * @description Canvas-based snowflake animation library, modified by dr|z3d for I2P+
+ * @author Denis Seleznev
+ * @license MIT
+ * @see https://github.com/hcodes/snowflakes/
+ */
 
 let animationId = null;
 let ctx = null;
 
+/**
+ * @function initSnowflakes
+ * @description Initialize the snowflake animation on the page
+ * @returns {void}
+ */
 function initSnowflakes() {
   if (document.getElementById('snowflakeCanvas')) {return;}
 
@@ -242,6 +247,11 @@ function initSnowflakes() {
   });
 }
 
+/**
+ * @function pauseSnow
+ * @description Pause the snowflake animation and remove the canvas
+ * @returns {void}
+ */
 function pauseSnow() {
   if (animationId) {
     cancelAnimationFrame(animationId);

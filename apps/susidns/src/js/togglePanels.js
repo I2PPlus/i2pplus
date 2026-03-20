@@ -1,8 +1,19 @@
-/* I2P+ togglePanels.js for SusiDNS by dr|3d */
-/* Present buttons to toggle add new host and import hosts panels */
-/* License: AGPL3 or later */
+/**
+ * @file I2P+ SusiDNS panel toggler.
+ * Provides show/hide functionality for the "Add New Host" and "Import Hosts"
+ * panels, including scroll-lock and iframe-aware behavior.
+ * @author dr|z3d
+ * @license AGPL3 or later
+ */
 
 (function () {
+  /**
+   * Initialises panel toggle handlers on DOM load. Detects the active theme,
+   * wires up click listeners on toggle buttons, and manages CSS classes and
+   * scroll behavior.
+   *
+   * @listens DOMContentLoaded
+   */
   document.addEventListener("DOMContentLoaded", function () {
     const darkTheme = document.body.classList.contains("dark");
     const lightTheme = document.body.classList.contains("light");
@@ -34,6 +45,15 @@
       }
     });
 
+    /**
+     * Shows one panel container and hides the other, adjusting page
+     * layout and scroll behavior accordingly.
+     *
+     * @function toggleVisibility
+     * @param {HTMLElement|null} showContainer - The container to reveal.
+     * @param {HTMLElement|null} hideContainer - The container to conceal.
+     * @returns {void}
+     */
     function toggleVisibility(showContainer, hideContainer) {
       if (showContainer) {showContainer.hidden = false;}
       if (hideContainer) {hideContainer.hidden = true;}
@@ -49,6 +69,14 @@
       }
     }
 
+    /**
+     * Adds or removes the "displayPanels" class on `<body>` based on the
+     * visibility state of the add and import containers. Applies a short
+     * delay when panels are transitioning out.
+     *
+     * @function toggleBodyClass
+     * @returns {void}
+     */
     function toggleBodyClass() {
       const shouldHide = addContainer?.classList.contains("isHidden") || importContainer?.classList.contains("isHidden");
       const hidden = addContainer.hidden && importContainer.hidden || shouldHide;
@@ -63,6 +91,13 @@
       }
     }
 
+    /**
+     * Clears all text input values inside the "Add" panel and hides the
+     * container with a brief CSS transition.
+     *
+     * @function resetAddInputs
+     * @returns {void}
+     */
     function resetAddInputs() {
       addTextInputs.forEach(input => {
         input.removeAttribute("value");

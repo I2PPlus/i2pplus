@@ -1,6 +1,10 @@
-/* I2P+ transitfast.js by dr|z3d */
-/* Handle automatic, manual refresh and tablesort for /transitfast */
-/* License: AGPL3 or later */
+/**
+ * @file transitfast.js
+ * @description Handles automatic and manual refresh with table sorting for the
+ * /transitfast page. Similar to transit.js but for fast transit tunnels.
+ * @author dr|z3d
+ * @license AGPL3 or later
+ */
 
 import {refreshElements} from "/js/refreshElements.js";
 
@@ -12,6 +16,11 @@ import {refreshElements} from "/js/refreshElements.js";
   let isSetup = false;
   let isRefreshing = false;
 
+  /**
+   * Caches references to frequently used DOM elements.
+   * @function getDOM
+   * @returns {void}
+   */
   function getDOM() {
     if (main) return;
     main = document.getElementById("tunnels");
@@ -20,6 +29,11 @@ import {refreshElements} from "/js/refreshElements.js";
     refreshBtn = document.getElementById("refreshPage");
   }
 
+  /**
+   * Initializes the Tablesort instance on the transit tunnels table.
+   * @function setupTablesort
+   * @returns {void}
+   */
   function setupTablesort() {
     if (isSetup || !tunnels) return;
     sorter = sorter || new Tablesort(tunnels, {descending: true});
@@ -29,17 +43,32 @@ import {refreshElements} from "/js/refreshElements.js";
     isSetup = true;
   }
 
+  /**
+   * Shows the progress bar and marks refresh as active.
+   * @function startRefresh
+   * @returns {void}
+   */
   function startRefresh() {
     if (isRefreshing) return;
     isRefreshing = true;
     requestAnimationFrame(() => progressx?.show?.(theme));
   }
 
+  /**
+   * Hides the progress bar and marks refresh as complete.
+   * @function endRefresh
+   * @returns {void}
+   */
   function endRefresh() {
     requestAnimationFrame(() => progressx?.hide?.());
     isRefreshing = false;
   }
 
+  /**
+   * Initiates a data refresh, selecting appropriate elements based on current state.
+   * @function refreshData
+   * @returns {void}
+   */
   function refreshData() {
     startRefresh();
     getDOM();
@@ -54,6 +83,12 @@ import {refreshElements} from "/js/refreshElements.js";
     endRefresh();
   }
 
+  /**
+   * Initializes the transit fast page with retry logic for missing DOM elements.
+   * @function init
+   * @param {number} [retryCount=0] - Current retry attempt count
+   * @returns {void}
+   */
   function init(retryCount = 0) {
     getDOM();
     if (!refreshBtn) {

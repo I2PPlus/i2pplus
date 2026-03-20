@@ -1,7 +1,17 @@
-/* I2P+ lsDebug.js by dr|z3d */
-/* Consolidate debug and keyspace tables on Leasesets debug page */
-/* License: AGPL3 or later */
+/**
+ * @file lsDebug.js
+ * @description Consolidates debug and keyspace tables on the Leasesets debug page
+ * by merging the median distance row into the RAP row, combining estimate rows,
+ * and appending keyspace rows to the debug table.
+ * @author dr|z3d
+ * @license AGPL3 or later
+ */
 
+/**
+ * Merges and consolidates the leaseset debug and keyspace tables into a single view.
+ * @function lsDebug
+ * @returns {void}
+ */
 function lsDebug() {
   const getById = id => document.getElementById(id);
   const sel = (el, sel) => el?.querySelector(sel);

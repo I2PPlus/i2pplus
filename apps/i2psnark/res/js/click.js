@@ -1,12 +1,32 @@
-/* I2P+ click.js for I2PSnark by dr|z3d */
-/* - Simulate longer button clicks by adding .depress class to inputs */
-/* - Add custom confirm dialogs for remove and delete torrent events */
-/* License: AGPL3 or later */
+/**
+ * @file click.js - Simulate longer button clicks and custom confirm dialogs for I2PSnark.
+ * @description Adds a .depress CSS class to input elements on click for visual feedback,
+ * with extended timing for action buttons. Provides custom confirmation dialogs for
+ * remove and delete torrent operations, with keyboard support (Enter/Escape), iframe-aware
+ * positioning, and animated transitions.
+ * @author dr|z3d
+ * @license AGPL3 or later
+ * @module click
+ */
 
 import {refreshScreenLog, refreshTorrents} from "./refreshTorrents.js";
 
+/**
+ * @type {boolean}
+ * @description Whether the main event listener has been registered.
+ */
 let eventListenerActive = false;
+
+/**
+ * @type {?HTMLElement}
+ * @description The main configuration page element, used to skip initialization on config pages.
+ */
 const configPage = document.getElementById("mainconfig");
+
+/**
+ * @type {?HTMLElement}
+ * @description The snark info element, used to skip initialization on info pages.
+ */
 const snarkInfo = document.getElementById("snarkInfo");
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -15,6 +35,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const page = document.getElementById("page") || document.querySelector(".page");
   const htmlTag = document.documentElement;
 
+  /**
+   * @function injectCss
+   * @description Injects the confirmation dialog CSS styles into the document head.
+   * Creates styles for the modal overlay, dialog box, buttons, and slide/fade animations.
+   * Inserts the stylesheet before the #snarkTheme element if present.
+   * @returns {void}
+   */
   (function injectCss() {
     const head = document.head;
     const modalCss = document.getElementById("modalCss");
@@ -47,6 +74,16 @@ document.addEventListener("DOMContentLoaded", () => {
     fragment.textContent = "";
   })();
 
+  /**
+   * @async
+   * @function handleInputClick
+   * @description Handles clicks on interactive UI elements (toggle views, tabs, navigation,
+   * filters, action buttons, form buttons). Adds a .depress class for visual feedback,
+   * handles delete/remove confirmation dialogs, manages action button state (disabling
+   * other buttons during processing), and refreshes the screen log after operations.
+   * @param {HTMLElement} clickTarget - The element that was clicked.
+   * @returns {Promise<void>}
+   */
   async function handleInputClick(clickTarget) {
     const clickable = ".toggleview, .tab_label, .snarkNav, .filter, input[class^='action'], input.add, input.create";
     if (!clickTarget.closest(clickable)) {return;}
@@ -144,6 +181,20 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => {refreshTorrents(refreshScreenLog);}, 3000);
   });
 
+  /**
+   * @async
+   * @function showConfirmationDialog
+   * @description Creates and displays a modal confirmation dialog with the given message.
+   * Supports "yes" (confirm) and "no" (cancel) actions. Handles keyboard events
+   * (Enter to confirm, Escape to cancel), window resize repositioning, and animated
+   * entrance/exit transitions. Returns a Promise that resolves to true if confirmed.
+   * @param {HTMLElement} targetElement - The element that triggered the dialog.
+   * @param {string} message - The HTML message to display in the dialog body.
+   * @param {string} inputName - The form input name attribute for the confirmed action.
+   * @param {string} inputValue - The form input value for the confirmed action.
+   * @param {string} inputAction - The data-action attribute value for the confirmed action.
+   * @returns {Promise<boolean>} Resolves to true if the user confirms, false if cancelled.
+   */
   async function showConfirmationDialog(targetElement, message, inputName, inputValue, inputAction) {
       htmlTag.classList.add("modal");
       const dialog = document.createElement("div");
@@ -185,11 +236,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
       htmlTag.addEventListener("keydown", captureKeyDown);
 
+      /**
+       * @function scrollToTop
+       * @description Scrolls both the window and parent window (if iframed) to the top
+       * to ensure the confirmation dialog is visible.
+       * @returns {void}
+       */
       function scrollToTop() {
           window.scrollTo(0, 0);
           if (htmlTag.classList.contains("iframed")) parent.window.scrollTo(0, 0);
       }
 
+      /**
+       * @function captureKeyDown
+       * @description Handles keyboard events for the confirmation dialog. Enter triggers
+       * the confirm (yes) button, Escape triggers the cancel (no) button.
+       * @param {KeyboardEvent} event - The keyboard event.
+       * @returns {void}
+       */
       function captureKeyDown(event) {
           if (event.key === "Enter") {
               const confirmYesButton = document.querySelector("#confirmYes");
@@ -200,6 +264,13 @@ document.addEventListener("DOMContentLoaded", () => {
           }
       }
 
+      /**
+       * @function removeDialog
+       * @description Removes the confirmation dialog and overlay from the DOM, cleans up
+       * keyboard and resize listeners, removes the modal class, and triggers a torrent
+       * refresh after a short delay.
+       * @returns {void}
+       */
       function removeDialog() {
           document.removeEventListener("keydown", captureKeyDown);
           window.removeEventListener("resize", handleResize);
@@ -209,6 +280,13 @@ document.addEventListener("DOMContentLoaded", () => {
           setTimeout(refreshTorrents, 1000);
       }
 
+      /**
+       * @function handleResize
+       * @description Repositions the confirmation dialog vertically centered in the viewport,
+       * accounting for iframe mode and a small offset for better visual placement on taller
+       * viewports.
+       * @returns {void}
+       */
       function handleResize() {
           const dialog = document.getElementById("confirmDialog");
           const dialogHeight = dialog.offsetHeight;
@@ -223,6 +301,14 @@ document.addEventListener("DOMContentLoaded", () => {
       return promise;
   }
 
+  /**
+   * @function getConfirmationMessage
+   * @description Generates the appropriate confirmation message HTML based on the action
+   * class (actionRemove or actionDelete). Truncates long torrent names and formats the
+   * message with the torrent name in bold.
+   * @param {HTMLElement} targetElement - The action button element with data-name attribute.
+   * @returns {string} The formatted HTML confirmation message.
+   */
   function getConfirmationMessage(targetElement) {
     const torrent = targetElement.getAttribute("data-name");
     if (torrent.length > 50) {

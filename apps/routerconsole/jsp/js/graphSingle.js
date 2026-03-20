@@ -1,10 +1,22 @@
-/* I2P+ graphSingle.js by dr|z3d */
-/* Ajax graph refresh and button handling */
-/* License: AGPL3 or later */
+/**
+ * @file graphSingle.js
+ * @description Handles AJAX graph refresh and button interactions for single graph
+ * pages. Manages hide/show legend state via localStorage and URL synchronization,
+ * and provides periodic graph image updates.
+ * @author dr|z3d
+ * @license AGPL3 or later
+ */
 
+/** @type {HTMLImageElement|null} */
 let graphImage;
+/** @type {string} */
 const LS_KEY = "singleGraphHideLegend";
 
+/**
+ * Reads the hide legend preference from localStorage.
+ * @function getLocalStorageHideLegend
+ * @returns {boolean} True if legend should be hidden, false otherwise
+ */
 function getLocalStorageHideLegend() {
   try {
     const stored = localStorage.getItem(LS_KEY);
@@ -14,12 +26,23 @@ function getLocalStorageHideLegend() {
   }
 }
 
+/**
+ * Saves the hide legend preference to localStorage.
+ * @function setLocalStorageHideLegend
+ * @param {boolean} value - Whether the legend should be hidden
+ * @returns {void}
+ */
 function setLocalStorageHideLegend(value) {
   try {
     localStorage.setItem(LS_KEY, value ? "true" : "false");
   } catch (e) {}
 }
 
+/**
+ * Reads the hideLegend query parameter from the current URL.
+ * @function getHideLegendFromURL
+ * @returns {boolean|null} True/false from URL, or null if not present
+ */
 function getHideLegendFromURL() {
   const urlParams = new URLSearchParams(window.location.search);
   const value = urlParams.get("hideLegend");
@@ -28,6 +51,13 @@ function getHideLegendFromURL() {
   return null;
 }
 
+/**
+ * Updates or appends the hideLegend parameter in the given URL string.
+ * @function updateHideLegendInURL
+ * @param {string} url - The URL to update
+ * @param {boolean} hideLegend - The new value for the hideLegend parameter
+ * @returns {string} The updated URL string
+ */
 function updateHideLegendInURL(url, hideLegend) {
   const param = "hideLegend=" + (hideLegend ? "true" : "false");
   if (url.includes("hideLegend=")) {
@@ -36,6 +66,11 @@ function updateHideLegendInURL(url, hideLegend) {
   return url + (url.includes("?") ? "&" : "?") + param;
 }
 
+/**
+ * Synchronizes localStorage hide legend state with the URL parameter if present.
+ * @function syncLocalStorageWithURL
+ * @returns {void}
+ */
 function syncLocalStorageWithURL() {
   const urlHideLegend = getHideLegendFromURL();
   if (urlHideLegend !== null) {
@@ -43,6 +78,12 @@ function syncLocalStorageWithURL() {
   }
 }
 
+/**
+ * Sets up click delegation for graph option links, handling legend toggling
+ * and graph updates via fetch.
+ * @function initButtons
+ * @returns {void}
+ */
 function initButtons() {
   document.addEventListener("click", function(event) {
     if (event.target.closest("#graphopts a")) {
@@ -112,6 +153,12 @@ function initButtons() {
   });
 }
 
+/**
+ * Initializes CSS injection, clearing any existing interval and setting up
+ * the injection timer.
+ * @function initCss
+ * @returns {void}
+ */
 function initCss() {
   let graphcss;
   if (timer) {clearInterval(timer);}
@@ -119,6 +166,11 @@ function initCss() {
   else {injectCss();}
 }
 
+/**
+ * Injects a style element with the graph container width based on the image dimensions.
+ * @function injectCss
+ * @returns {void}
+ */
 function injectCss() {
   if (!graphImage) {setTimeout(() => {injectCss();}, 100);}
   var graphWidth = graphImage.naturalWidth;
@@ -132,6 +184,11 @@ function injectCss() {
   document.head.appendChild(s);
 }
 
+/**
+ * Sets up periodic graph image refresh at the configured interval.
+ * @function refreshGraph
+ * @returns {void}
+ */
 function refreshGraph() {
   if (graphRefreshInterval > 0) {
     var graph = document.getElementById("single");
@@ -158,6 +215,12 @@ function refreshGraph() {
   }
 }
 
+/**
+ * Checks localStorage for a hide legend preference and redirects the page
+ * if the URL doesn't reflect the stored preference.
+ * @function checkLocalStorageAndRedirect
+ * @returns {boolean} True if a redirect was initiated, false otherwise
+ */
 function checkLocalStorageAndRedirect() {
   const urlHideLegend = getHideLegendFromURL();
 

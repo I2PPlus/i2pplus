@@ -1,7 +1,22 @@
-/* I2P+ SusiDNS toggleAllHosts.js by dr|z3d */
-/* Toggle all hosts for deleltion when 'dead' filter is active */
-/* License: AGPL3 or later */
+/**
+ * @file I2P+ SusiDNS toggle-all-hosts utility.
+ * Provides a master checkbox to select/deselect all hosts for deletion
+ * when the "dead hosts" filter is active.
+ * @author dr|z3d
+ * @license AGPL3 or later
+ */
 
+/**
+ * Toggles every host checkbox to the given state and updates the
+ * master "select all" checkbox accordingly.
+ *
+ * @function toggleAll
+ * @param {boolean} selectAll - True to check all boxes, false to uncheck.
+ * @returns {void}
+ * @example
+ * toggleAll(true);  // select all hosts
+ * toggleAll(false); // deselect all hosts
+ */
 function toggleAll(selectAll) {
     const deadFilterActive = document.getElementById("deadHosts");
     if (!deadFilterActive) return;
@@ -23,6 +38,14 @@ function toggleAll(selectAll) {
     }
 }
 
+/**
+ * Creates and injects a "select all" checkbox into the dead-hosts header cell.
+ * Sets up change listeners to keep the master checkbox in sync with
+ * individual host checkboxes.
+ *
+ * @function createSelectAllCheckbox
+ * @returns {void}
+ */
 function createSelectAllCheckbox() {
     if (document.getElementById("toggleAllHosts")) return;
 

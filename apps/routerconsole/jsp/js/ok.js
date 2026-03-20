@@ -1,8 +1,21 @@
-/* I2P+ ok.js by dr|z3d */
-/* Provides a custom "OK" modal dialog */
-/* Usage: modal("message" [,"button text"]) */
-/* License: AGPL3 or later */
+/**
+ * @file ok.js
+ * @description Provides a custom modal dialog with a message and OK button.
+ * Creates a centered overlay with auto-repositioning on window resize.
+ * @author dr|z3d
+ * @license AGPL3 or later
+ */
 
+/**
+ * Displays a modal dialog with the given message and an OK button.
+ * Returns a Promise that resolves when the user clicks OK.
+ * @function modal
+ * @param {string} msg - The HTML message to display in the modal
+ * @param {string} [buttonText="OK"] - The text for the OK button
+ * @returns {Promise<void>} Resolves when the modal is dismissed
+ * @example modal("Configuration saved successfully!")
+ * @example modal("An error occurred.", "Dismiss")
+ */
 const modal = (msg, buttonText = "OK") => {
   return new Promise((resolve) => {
     const fragment = document.createDocumentFragment();
@@ -26,6 +39,11 @@ const modal = (msg, buttonText = "OK") => {
     const overlayLayer = document.getElementById("overlay");
     const okButton = modalDialog.querySelector("#ok");
 
+    /**
+     * Centers the modal dialog in the viewport and focuses the OK button.
+     * @function centerModal
+     * @returns {void}
+     */
     const centerModal = () => {
       const rect = modalDialog.getBoundingClientRect();
       const windowHeight = window.innerHeight;
@@ -40,6 +58,12 @@ const modal = (msg, buttonText = "OK") => {
     centerModal();
     window.addEventListener("resize", centerModal, {passive: true});
 
+    /**
+     * Handles the Enter key press on the OK button, triggering the click action.
+     * @function handleEnterKey
+     * @param {KeyboardEvent} event - The keyboard event
+     * @returns {void}
+     */
     const handleEnterKey = (event) => {
       if (event.target === okButton && event.key === "Enter") {
         event.preventDefault();

@@ -1,9 +1,32 @@
-/* I2P+ deleteMail.js for Susimail by dr|z3d */
-/* Ensures delete mail modal is visible on instantiation */
+/**
+ * @file I2P+ SusiMail delete-mail modal handler.
+ * Ensures the delete-mail confirmation modal is correctly positioned and
+ * visible on instantiation, with iframe-aware viewport calculations
+ * and a MutationObserver for cleanup on removal.
+ * @author dr|z3d
+ * @license AGPL3 or later
+ */
 
+/**
+ * IIFE that manages the lifecycle of the delete-mail modal dialog.
+ * Handles positioning, overlay creation, resize events, and automatic
+ * cleanup when the modal element is removed from the DOM.
+ *
+ * @function handleModal
+ * @returns {void}
+ */
 (function handleModal() {
   let overlay = document.getElementById("overlay");
 
+  /**
+   * Toggles modal display state by positioning the `#nukemail` dialog,
+   * managing body scroll classes, and setting up resize and mutation
+   * observers for dynamic cleanup.
+   *
+   * @async
+   * @function toggleModalStyles
+   * @returns {Promise<void>}
+   */
   async function toggleModalStyles() {
     if (!overlay) { overlay = await createOverlay(); }
 
@@ -89,6 +112,13 @@
   toggleModalStyles();
 })();
 
+/**
+ * Creates and appends a fullscreen overlay `<div>` to the document body.
+ *
+ * @async
+ * @function createOverlay
+ * @returns {Promise<HTMLElement>} The created overlay element.
+ */
 async function createOverlay() {
   const layer = document.createElement("div");
   layer.id = "overlay";

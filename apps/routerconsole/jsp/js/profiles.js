@@ -1,6 +1,10 @@
-/* I2P+ profiles.js by dr|z3d */
-/* Handle refresh, table sorts, and tier counts on /profiles pages */
-/* License: AGPL3 or later */
+/**
+ * @file profiles.js
+ * @description Handles auto-refresh, table sorting, and session ban summaries
+ * for the /profiles pages, including profile lists, floodfill profiles, and banlist.
+ * @author dr|z3d
+ * @license AGPL3 or later
+ */
 
 import { refreshElements } from "./refreshElements.js";
 
@@ -21,11 +25,21 @@ import { refreshElements } from "./refreshElements.js";
   let sorterP = null;
   let sorterBans = null;
 
+  /**
+   * Initializes sort listeners and refresh schedules for profile pages.
+   * @function initRefresh
+   * @returns {void}
+   */
   function initRefresh() {
     addSortListeners();
     setupRefreshes();
   }
 
+  /**
+   * Sets up Tablesort instances and progress bar handlers for profile tables.
+   * @function addSortListeners
+   * @returns {void}
+   */
   function addSortListeners() {
     if (ff && sorterFF === null) {
       sorterFF = new Tablesort(ff, {descending: true});
@@ -42,6 +56,11 @@ import { refreshElements } from "./refreshElements.js";
     }
   }
 
+  /**
+   * Configures periodic element refresh for profiles overview, lists, floodfills, and bans.
+   * @function setupRefreshes
+   * @returns {void}
+   */
   function setupRefreshes() {
     // Refresh profiles overview and thresholds every 5 seconds
     if (info || thresholds) {
@@ -77,6 +96,12 @@ import { refreshElements } from "./refreshElements.js";
 
   }
 
+  /**
+   * Generates and displays a summary of session bans grouped by reason.
+   * @function updateBanSummary
+   * @param {HTMLElement} banBody - The table body containing ban rows
+   * @returns {void}
+   */
   function updateBanSummary(banBody) {
     const rows = banBody.querySelectorAll("tr");
     const reasonCounts = {};

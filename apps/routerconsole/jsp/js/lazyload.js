@@ -1,6 +1,11 @@
-/* I2P+ lazyload.js by dr|z3d */
-/* Show and hide tagged elements as they enter and exit the viewport */
-/* License: AGPL3 or later */
+/**
+ * @file lazyload.js
+ * @description Implements lazy loading for elements with the "lazy" CSS class.
+ * Uses IntersectionObserver to toggle "lazyshow"/"lazyhide" classes as elements
+ * enter and exit the viewport. Falls back to simple class removal for small sets.
+ * @author dr|z3d
+ * @license AGPL3 or later
+ */
 
 (function initLazyload() {
   const lazyElementsSet = new Set();
@@ -21,6 +26,12 @@
   const doc = document.documentElement;
   const body = document.body;
 
+  /**
+   * Finds all elements with the "lazy" class and either removes the class directly
+   * (for < 10 elements) or sets up IntersectionObserver for larger sets.
+   * @function lazyload
+   * @returns {void}
+   */
   const lazyload = () => {
     const lazyElements = document.querySelectorAll(".lazy");
     if (lazyElements.length === 0) return;

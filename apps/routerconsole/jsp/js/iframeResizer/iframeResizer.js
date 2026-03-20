@@ -1,11 +1,10 @@
-/*
- * File: iframeResizer.js
- * Desc: Force iframes to size to content.
- * Requires: iframeResizer.contentWindow.js to be loaded into the target frame.
- * Doc: https://github.com/davidjbradshaw/iframe-resizer
- * Author: David J. Bradshaw - dave@bradshaw.net
- * Contributor: Jure Mav - jure.mav@gmail.com
- * Contributor: Reed Dadoune - reed@dadoune.com
+/**
+ * @file iframeResizer.js
+ * @description Force iframes to size to content. Requires iframeResizer.contentWindow.js to be loaded into the target frame.
+ * @author David J. Bradshaw - dave@bradshaw.net
+ * @contributor Jure Mav - jure.mav@gmail.com
+ * @contributor Reed Dadoune - reed@dadoune.com
+ * @see https://github.com/davidjbradshaw/iframe-resizer
  */
 
 // eslint-disable-next-line sonarjs/cognitive-complexity, no-shadow-restricted-names
@@ -1123,6 +1122,11 @@
     addEventListener(document, 'visibilitychange', tabVisible)
   }
 
+  /**
+   * @function factory
+   * @description Creates and returns the iFrameResize function with event listeners setup
+   * @returns {Function} The iFrameResize function
+   */
   function factory() {
     function init(options, element) {
       function chkType() {
@@ -1152,6 +1156,12 @@
     setupRequestAnimationFrame()
     setupEventListeners()
 
+    /**
+     * @function iFrameResizeF
+     * @param {Object} [options] - Configuration options for iframe resizing
+     * @param {string|HTMLElement} [target] - CSS selector or iframe element to resize
+     * @returns {Array} Array of resized iframe elements
+     */
     return function iFrameResizeF(options, target) {
       iFrames = [] // Only return iFrames past in on this call
 

@@ -5,6 +5,10 @@
  * MIT License (https://mit-license.org/)
  *
  * Copyright (c) 2014-2024 Daniel Mester Pirttijärvi
+ *
+ * @file Jdenticon - SVG/Canvas identicon generator.
+ * Generates unique visual identifiers (identicons) from hash values.
+ * Supports configurable icon size, color palette, and rendering backends.
  */
 
 (function (global) {

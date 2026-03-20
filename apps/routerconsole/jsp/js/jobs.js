@@ -1,13 +1,22 @@
-/* I2P+ jobs.js by dr|z3d */
-/* Handle refresh, table sorts on /jobs pages */
-/* License: AGPL3 or later */
+/**
+ * @file jobs.js
+ * @description Handles auto-refresh, table sorting, and section toggle state
+ * persistence for the /jobs pages. Manages expand/collapse state of finished
+ * and scheduled job sections via localStorage.
+ * @author dr|z3d
+ * @license AGPL3 or later
+ */
 
 (function() {
   const jobs = document.getElementById("jobstats");
   const STORAGE_KEY = "jobqueueExpandedSections";
   let isFirstLoad = true;
 
-  // Load expanded sections from localStorage or empty Set
+  /**
+   * Loads expanded section IDs from localStorage.
+   * @function loadExpandedSections
+   * @returns {Set<string>} Set of expanded section IDs
+   */
   function loadExpandedSections() {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
@@ -20,7 +29,12 @@
     return new Set();
   }
 
-  // Save expanded sections to localStorage
+  /**
+   * Saves the expanded section IDs to localStorage.
+   * @function saveExpandedSections
+   * @param {Set<string>} expandedSections - Set of section IDs to save
+   * @returns {void}
+   */
   function saveExpandedSections(expandedSections) {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify([...expandedSections]));
@@ -37,7 +51,12 @@
     "scheduledjobs": true   // Scheduled jobs expanded by default
   };
 
-  // Setup section toggles for jobqueue page using event delegation
+  /**
+   * Initializes section toggles for the jobqueue page, applying default and
+   * stored expand/collapse states.
+   * @function initJobqueueToggles
+   * @returns {boolean} True if toggles were initialized, false if not applicable
+   */
   function initJobqueueToggles() {
     const joblog = document.querySelector(".joblog");
     if (!joblog) return false;
@@ -150,6 +169,13 @@
   let oldRowsMap = new Map();
   let lastQueryParams = window.location.search;
 
+  /**
+   * Fetches job data from /jobs, compares with existing rows, and updates the DOM
+   * with new, modified, or removed rows.
+   * @async
+   * @function fetchJobs
+   * @returns {Promise<void>}
+   */
   async function fetchJobs() {
     try {
       // Clear old rows if query param changed (switching between 30s/all mode)
@@ -280,6 +306,11 @@
     }
   }
 
+  /**
+   * Starts the periodic job data refresh interval.
+   * @function startRefresh
+   * @returns {void}
+   */
   function startRefresh() {
     if (!refreshIntervalId) {
       fetchJobs();
@@ -287,6 +318,11 @@
     }
   }
 
+  /**
+   * Stops the periodic job data refresh interval.
+   * @function stopRefresh
+   * @returns {void}
+   */
   function stopRefresh() {
     if (refreshIntervalId) {
       clearInterval(refreshIntervalId);

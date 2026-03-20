@@ -1,6 +1,11 @@
-/* I2P+ tunnelpeercount.js by dr|z3d */
-/* Handle automatic and manual refresh for /tunnelcountpeer */
-/* License: AGPL3 or later */
+/**
+ * @file tunnelpeercount.js
+ * @description Handles automatic and manual refresh with table sorting and
+ * advanced filtering for the /tunnelpeercount page. Supports key=value filter
+ * syntax (tier=, cc=, ip=, hash=, etc.) with URL and localStorage persistence.
+ * @author dr|z3d
+ * @license AGPL3 or later
+ */
 
 import { refreshElements } from "/js/refreshElements.js";
 
@@ -20,6 +25,12 @@ let filterListener = false;
 let displayed = 0;
 let debounceTimeout;
 
+/**
+ * Refreshes tunnel peer data elements via the refreshElements system.
+ * @async
+ * @function updateTunnels
+ * @returns {Promise<void>}
+ */
 const updateTunnels = async () => {
   if (peers) {
     refreshElements(["#allPeers", ".tablefooter"], "/tunnelpeercount", REFRESH_INTERVAL);
@@ -30,10 +41,20 @@ const updateTunnels = async () => {
   applyQueryParamsFilter();
 };
 
+/**
+ * Starts the periodic data refresh for tunnel peer counts.
+ * @function initRefresh
+ * @returns {void}
+ */
 const initRefresh = () => {
   updateTunnels();
 };
 
+/**
+ * Creates and appends the filter input UI with clear button and localStorage persistence.
+ * @function initFilter
+ * @returns {void}
+ */
 function initFilter() {
   const table = tunnels;
   const addFilter = () => {
@@ -63,6 +84,11 @@ function initFilter() {
   }
 }
 
+/**
+ * Restores the filter value from localStorage and applies it.
+ * @function checkForCachedFilter
+ * @returns {void}
+ */
 function checkForCachedFilter() {
   const filterInput = d.getElementById("filterInput");
   if (filterInput) {
@@ -72,6 +98,13 @@ function checkForCachedFilter() {
   displayPeerCount();
 }
 
+/**
+ * Filters tunnel peer rows based on key=value filter syntax.
+ * Supports tier, cc/country, hash/id, hostname/host/h, ip, and v/version keys.
+ * @function applyFilter
+ * @param {string} filterValue - The filter string (plain text or key=value)
+ * @returns {void}
+ */
 function applyFilter(filterValue) {
   const rows = peers.querySelectorAll(".lazy");
   displayed = 0;
@@ -132,6 +165,11 @@ function applyFilter(filterValue) {
   }
 }
 
+/**
+ * Updates the displayed peer count in the navigation tab based on filtered results.
+ * @function displayPeerCount
+ * @returns {void}
+ */
 function displayPeerCount() {
   if (parseInt(displayed, 10) >= 0) {
     const navTab = d.querySelector(".confignav .tab2");
@@ -155,6 +193,12 @@ function displayPeerCount() {
   }
 }
 
+/**
+   * Attaches an input listener to the filter field for real-time filtering
+   * and URL synchronization.
+   * @function addFilterListener
+   * @returns {void}
+   */
 function addFilterListener() {
   const filterInput = d.getElementById("filterInput");
   if (filterInput) {
@@ -169,6 +213,11 @@ function addFilterListener() {
   }
 }
 
+/**
+   * Applies filter values from URL query parameters on page load.
+   * @function applyQueryParamsFilter
+   * @returns {void}
+   */
 function applyQueryParamsFilter() {
   const urlParams = new URLSearchParams(window.location.search);
   const filterParam = urlParams.get("filter");
@@ -199,6 +248,12 @@ function applyQueryParamsFilter() {
   }
 }
 
+/**
+   * Updates the browser URL with the current filter value using replaceState.
+   * @function updateURLWithFilter
+   * @param {string} filterValue - The current filter string
+   * @returns {void}
+   */
 function updateURLWithFilter(filterValue) {
   const urlParams = new URLSearchParams(window.location.search);
   if (filterValue) {

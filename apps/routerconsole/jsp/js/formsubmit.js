@@ -1,6 +1,10 @@
-/* I2P+ submitform.js by dr|z3d */
-/* Handle refresh and progress bar on form submission on configuration pages */
-/* License: AGPL3 or later */
+/**
+ * @file formsubmit.js
+ * @description Handles form submission with progress bar display and automatic
+ * page element refresh via XHR on configuration pages (update, reseed).
+ * @author dr|z3d
+ * @license AGPL3 or later
+ */
 
 (function() {
   const processForm = document.getElementById("processForm");
@@ -8,6 +12,13 @@
   const configReseed = document.getElementById("config_reseed");
   let formSubmit = false;
 
+  /**
+   * Refreshes a specific DOM element by fetching the URL and replacing its innerHTML.
+   * @function refresh
+   * @param {string} elementId - The ID of the element to refresh
+   * @param {string} url - The URL to fetch updated content from
+   * @returns {void}
+   */
   function refresh(elementId, url) {
     const element = document.getElementById(elementId);
     const xhrRefresh = new XMLHttpRequest();
@@ -25,6 +36,14 @@
     xhrRefresh.send();
   }
 
+  /**
+   * Sets up form submission and iframe load listeners to trigger content refresh.
+   * @function setupFormListeners
+   * @param {string} formId - The ID of the form element
+   * @param {string} elementId - The ID of the element to refresh after submission
+   * @param {string} url - The URL to fetch refreshed content from
+   * @returns {void}
+   */
   function setupFormListeners(formId, elementId, url) {
     const form = document.getElementById(formId);
 

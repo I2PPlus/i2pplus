@@ -1,8 +1,14 @@
-/* I2P+ initResizer.js by dr|z3d */
-/* Initialize iframeResizer and scroll the parent and child windows to top */
-/* and listen for 'scrollToElement' event data to scroll to specified element */
-/* License: AGPL3 or later */
+/**
+ * @file I2P+ initResizer.js by dr|z3d
+ * @description Initialize iframeResizer and scroll the parent and child windows to top and listen for 'scrollToElement' event data to scroll to specified element
+ * @license AGPL3 or later
+ */
 
+/**
+ * @function initResizer
+ * @param {string} [frameId] - The ID of the iframe element to initialize
+ * @returns {void}
+ */
 function initResizer(frameId) {
   if (!frameId) {setTimeout(function() {initResizer();}, 500); return;}
 
@@ -37,6 +43,12 @@ function initResizer(frameId) {
     }
   });
 
+  /**
+   * @function scrollToElement
+   * @param {HTMLElement} element - The element to scroll to
+   * @param {Window} [windowObj=window] - The window object to scroll (parent or child)
+   * @returns {void}
+   */
   function scrollToElement(element, windowObj = window) {
     if (element) {
       const elementPosition = element.getBoundingClientRect().top;

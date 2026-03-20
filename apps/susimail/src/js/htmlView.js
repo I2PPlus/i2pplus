@@ -1,7 +1,19 @@
-/* SusiMail htmlView.js by dr|z3d */
-/* Handle toggle view buttons and css fallback styles */
-/* License: AGPL3 or later */
+/**
+ * @file SusiMail HTML view handler.
+ * Manages toggle-view buttons for switching between text and HTML mail
+ * views, and applies fallback CSS styling inside the HTML iframe.
+ * @author dr|z3d
+ * @license AGPL3 or later
+ */
 
+/**
+ * Sets up the view-toggle and "open in new tab" buttons by copying
+ * the hidden toggle URL into visible control elements.
+ * Handles both parent-window and iframe contexts.
+ *
+ * @function initViewToggle
+ * @returns {void}
+ */
 function initViewToggle() {
   const iframe = window.parent.document.getElementById("iframeSusiHtmlView") || document.getElementById("iframeSusiHtmlView");
   const toggleHtmlLink = window.parent.document.getElementById("toggleHtmlLink") || document.getElementById("toggleHtmlLink");
@@ -28,6 +40,13 @@ function initViewToggle() {
   }
 }
 
+/**
+ * Injects a fallback CSS stylesheet into the HTML mail iframe to ensure
+ * consistent font and background rendering.
+ *
+ * @function setupFallbackCss
+ * @returns {void}
+ */
 function setupFallbackCss() {
   const iframe = window.parent.document.getElementById("iframeSusiHtmlView") || document.getElementById("iframeSusiHtmlView");
   if (!iframe) {return;}

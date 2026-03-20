@@ -1,8 +1,29 @@
-/* I2P+ I2PSnark convertTooltips.js */
-/* Convert title attributes to data-tooltips for additional styling */
-/* Author: dr|z3d */
+/**
+ * @file convertTooltips.js - Convert title attributes to data-tooltips for enhanced styling.
+ * @description Converts native browser title attributes on progress bar and torrent status
+ * elements into custom data-tooltip attributes with CSS-based tooltip styling. Uses a
+ * MutationObserver to handle dynamically added elements. Provides styled pseudo-element
+ * tooltips with arrow indicators.
+ * @author dr|z3d
+ * @license AGPL3 or later
+ * @module convertTooltips
+ */
 
+/**
+ * @description Self-executing IIFE that initializes the tooltip conversion system.
+ * Converts title attributes to data-tooltip, injects tooltip CSS styles, and sets
+ * up a MutationObserver on the torrents tbody to handle dynamically added rows.
+ */
 (() => {
+
+  /**
+   * @function convertTooltip
+   * @description Finds all elements matching the selector that have a title attribute,
+   * converts the title to a data-tooltip attribute (reformatting bullet-separated content),
+   * removes the native title, and adds the "barTooltip" class for CSS styling.
+   * @param {string} selector - CSS selector to find elements with title attributes.
+   * @returns {void}
+   */
   function convertTooltip(selector) {
     const elements = document.querySelectorAll(selector);
     if (!elements.length) {return;}

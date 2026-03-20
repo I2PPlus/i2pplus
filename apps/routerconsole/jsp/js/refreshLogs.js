@@ -1,6 +1,22 @@
+/**
+ * @file refreshLogs.js
+ * @description Manages auto-refresh for log pages (router logs, error logs, service logs)
+ * using a SharedWorker for background fetches and morphdom for efficient DOM updates.
+ * Supports configurable refresh intervals, log filtering, and linkification of
+ * router IDs, lease hashes, and IP addresses in log entries.
+ * @author dr|z3d
+ * @license AGPL3 or later
+ */
+
 import { onVisible, onHidden } from "/js/onVisible.js";
 import morphdom from "/js/morphdom.js";
 
+/**
+ * Initializes log page refresh functionality including worker setup, filter input,
+ * and toggle controls.
+ * @function start
+ * @returns {void}
+ */
 function start() {
   const $ = id => document.getElementById(id);
 
@@ -47,6 +63,14 @@ function start() {
     state.worker.port.postMessage({ url: "/logs" });
   }
 
+  /**
+   * Queues DOM updates for error counts, critical logs, router logs, and service logs.
+   * @function processUpdates
+   * @param {Document} doc - The parsed HTML document from the fetch response
+   * @param {Object} els - Cached DOM element references
+   * @param {Object} state - Application state including updates queue
+   * @returns {void}
+   */
   function processUpdates(doc, els, state) {
     if (els.errorCount) {
       const newEl = doc.getElementById("errorCount");
@@ -80,6 +104,11 @@ function start() {
     }
   }
 
+  /**
+   * Starts the log refresh interval, retrying until required elements are available.
+   * @function initRefresh
+   * @returns {void}
+   */
   function initRefresh() {
     if (!els.mainLogs || !els.routerlogs) {
       setTimeout(initRefresh, 500);
@@ -90,10 +119,22 @@ function start() {
     els.toggleRefresh.classList.add("enabled");
   }
 
+  /**
+   * Stops the log refresh interval timer.
+   * @function stopRefresh
+   * @returns {void}
+   */
   function stopRefresh() {
     clearInterval(state.logsRefreshId);
   }
 
+  /**
+   * Triggers a log refresh by posting a fetch URL to the SharedWorker.
+   * @function refreshLogs
+   * @param {Object} state - Application state with worker and interval info
+   * @param {Object} els - Cached DOM element references
+   * @returns {void}
+   */
   function refreshLogs(state, els) {
     if (document.hidden || !navigator.onLine) return;
     progressx.show(theme);
@@ -109,6 +150,14 @@ function start() {
     progressx.hide();
   }
 
+  /**
+   * Reads the refresh interval from localStorage and updates the input control
+   * and refresh timer accordingly.
+   * @function updateInterval
+   * @param {Object} state - Application state with interval value
+   * @param {Object} els - Cached DOM element references
+   * @returns {void}
+   */
   function updateInterval(state, els) {
     state.intervalValue = localStorage.getItem("logsRefresh") || "30";
 
@@ -138,6 +187,12 @@ function start() {
     }
   }
 
+  /**
+   * Adds a debounced input listener to the log filter text field.
+   * @function addFilterInput
+   * @param {Object} els - Cached DOM element references
+   * @returns {void}
+   */
   function addFilterInput(els) {
     if (!els.routerlogs) return;
     if (els.filterInput._listenerAdded) return;
@@ -154,6 +209,12 @@ function start() {
     els.filterInput._listenerAdded = true;
   }
 
+  /**
+   * Filters log list items based on the current filter input value.
+   * @function applyFilter
+   * @param {Object} els - Cached DOM element references
+   * @returns {void}
+   */
   function applyFilter(els) {
     if (!$("routerlogs")) return;
     const filterValue = els.filterInput.value.toLowerCase();
@@ -164,6 +225,13 @@ function start() {
     }
   }
 
+  /**
+   * Converts router IDs, lease hashes, and IP addresses in log entries into
+   * clickable links pointing to the relevant /netdb pages.
+   * @function linkifyLogEntries
+   * @param {HTMLElement} container - The container element with log entries
+   * @returns {void}
+   */
   function linkifyLogEntries(container) {
     if (!container) return;
 
@@ -307,6 +375,12 @@ function start() {
     });
   }
 
+  /**
+   * Tags the first list item with a unique data-key attribute for morphdom diffing.
+   * @function tagFirstLi
+   * @param {HTMLElement} list - The list element to tag
+   * @returns {void}
+   */
   function tagFirstLi(list) {
     if (!list) return;
     const firstLi = list.querySelector("li");

@@ -1,9 +1,26 @@
-/* toggleLog.js for I2PSnark by dr|3d */
-/* Enable toggling height of I2PSnark's screenlog */
-/* License: AGPL3 or later */
+/**
+ * @file toggleLog.js - Enable toggling of I2PSnark's screen log height.
+ * @description Provides expand/collapse controls for the I2PSnark screen log (#screenlog).
+ * Adds "expand" and "shrink" buttons that toggle between a collapsed (56px) and expanded
+ * (up to 300px) view. Injects the required CSS dynamically.
+ * @author dr|3d
+ * @license AGPL3 or later
+ * @module toggleLog
+ */
 
+/**
+ * @type {boolean}
+ * @description Whether the screen log is currently in expanded state.
+ */
 let isScreenlogExpanded = false;
 
+/**
+ * @function initToggleLog
+ * @description Initializes the screen log toggle functionality. Creates expand/shrink
+ * buttons, injects CSS for expanded and collapsed states, and registers click handlers
+ * to toggle between states. Cleans up any existing elements to prevent duplicates.
+ * @returns {void}
+ */
 function initToggleLog() {
   const screenlog = document.getElementById("screenlog");
   const toggleLogCss = document.getElementById("toggleLogCss");
@@ -15,6 +32,12 @@ function initToggleLog() {
 
   if (!screenlog) return;
 
+  /**
+   * @function clean
+   * @description Removes existing expand/shrink CSS classes and button elements to
+   * prepare for reinitialization.
+   * @returns {void}
+   */
   function clean() {
     screenlog?.classList.remove("xpanded", "collapsed");
     [...document.querySelectorAll("#expandLog, #shrinkLog")].forEach(el => el?.remove());

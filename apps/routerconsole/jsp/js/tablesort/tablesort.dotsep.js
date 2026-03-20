@@ -1,4 +1,8 @@
-// Dot separated values. E.g. IP addresses or version numbers.
+/**
+ * @file tablesort.dotsep.js
+ * @description Dot separated values sorting plugin for Tablesort (e.g., IP addresses or version numbers)
+ */
+
 Tablesort.extend(
   'dotsep',
   item => /^(\d+\.)+\d+$/.test(item),

@@ -1,6 +1,10 @@
-/* I2P+ jobs.js by dr|z3d */
-/* Handle refresh /stats */
-/* License: AGPL3 or later */
+/**
+ * @file stats.js
+ * @description Handles periodic refresh and tab switching for the /stats page.
+ * Fetches updated stat data via XHR and replaces stat list elements.
+ * @author dr|z3d
+ * @license AGPL3 or later
+ */
 
 (function() {
   const infohelp = document.querySelector("#gatherstats");
@@ -9,8 +13,18 @@
   const tabs = document.querySelectorAll(".togglestat");
   const REFRESH_INTERVAL = 60*1000;
 
+  /**
+   * Starts the periodic stats refresh interval.
+   * @function initRefresh
+   * @returns {void}
+   */
   function initRefresh() {setInterval(updateStats, REFRESH_INTERVAL);}
 
+  /**
+   * Fetches the latest stats page via XHR and updates stat list elements.
+   * @function updateStats
+   * @returns {void}
+   */
   function updateStats() {
     progressx.show(theme);
     progressx.progress(0.5);
@@ -44,6 +58,11 @@
     progressx.hide();
   }
 
+  /**
+   * Removes the "tab2" class from all toggle stat tab elements.
+   * @function initTabs
+   * @returns {void}
+   */
   function initTabs() {
     for (let i = 0; i < tabs.length; i++) {tabs[i].classList.remove("tab2");}
   }

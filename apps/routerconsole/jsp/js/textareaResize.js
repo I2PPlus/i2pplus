@@ -1,6 +1,16 @@
-// autoresize textarea based on content
-// https://stackoverflow.com/a/25621277
+/**
+ * @file textareaResize.js
+ * @description Auto-resizes textarea elements to fit their content height.
+ * Based on https://stackoverflow.com/a/25621277
+ * @license AGPL3 or later
+ */
 
+/**
+ * Adds an input listener to a textarea that dynamically adjusts its height to fit content.
+ * @function addResizeListener
+ * @param {HTMLTextAreaElement} element - The textarea element to make auto-resizing
+ * @returns {void}
+ */
 function addResizeListener(element) {
   if (!element || element.tagName !== "textarea") {
     return;

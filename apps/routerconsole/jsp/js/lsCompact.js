@@ -1,7 +1,11 @@
-/* I2P+ lsCompact.js by dr|z3d */
-/* Compact non-debug Leaseset tables, add Signature and Encryption types counters,
-/* and implement auto-refresh */
-/* License: AGPL3 or later */
+/**
+ * @file lsCompact.js
+ * @description Compacts non-debug Leaseset tables, adds signature and encryption
+ * type counters, sorts leasesets by priority, and implements periodic auto-refresh.
+ * Handles both single and summary leaseset views.
+ * @author dr|z3d
+ * @license AGPL3 or later
+ */
 
 import { lsDebug } from "/js/lsDebug.js";
 import { onVisible, onHidden } from "/js/onVisible.js";
@@ -16,6 +20,11 @@ document.addEventListener("DOMContentLoaded", () => {
   let lsCount = 0;
   const debug = document.getElementById("leasesetdebug");
 
+  /**
+   * Compacts leaseset tables by repositioning encryption keys after expiry cells.
+   * @function compact
+   * @returns {void}
+   */
   function compact() {
     if (!container || document.getElementById("leasesetdebug")) return;
     document.querySelectorAll("table.leaseset").forEach(table => {
@@ -30,6 +39,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  /**
+   * Counts signature and encryption types across all leasesets and displays
+   * summary counters in the summary table.
+   * @function countTypes
+   * @returns {void}
+   */
   function countTypes() {
     const summary = document.getElementById("leasesetsummary") || document.getElementById("leasesetdebug");
     if (!summary) return;
@@ -121,6 +136,11 @@ document.addEventListener("DOMContentLoaded", () => {
     summary.removeAttribute("hidden");
   }
 
+  /**
+   * Injects CSS styles for leaseset counter labels and badges.
+   * @function styleLabels
+   * @returns {void}
+   */
   function styleLabels() {
     const style = document.createElement("style");
     style.type = "text/css";
@@ -140,6 +160,12 @@ document.addEventListener("DOMContentLoaded", () => {
     document.head.appendChild(style);
   }
 
+  /**
+   * Sorts leaseset tables by priority (published > unpublished > known client > client b32)
+   * and adds count rows for each category.
+   * @function sortLeasesets
+   * @returns {void}
+   */
   function sortLeasesets() {
     document.querySelectorAll("table.leaseset").forEach(table => {
       const lastTh = table.querySelector("th:last-child");
@@ -208,6 +234,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  /**
+   * Fetches updated leaseset content and replaces the current container.
+   * @function refreshLeasesets
+   * @returns {void}
+   */
   function refreshLeasesets() {
     if (!container) return;
     progressx.show(theme); progressx.progress(.7);
@@ -241,12 +272,22 @@ document.addEventListener("DOMContentLoaded", () => {
       .catch(() => { });
   }
 
+  /**
+   * Starts the periodic leaseset refresh interval.
+   * @function startRefresh
+   * @returns {void}
+   */
   function startRefresh() {
     if (isRefreshing) { return; }
     isRefreshing = true;
     refreshInterval = setInterval(() => { requestAnimationFrame(refreshLeasesets); }, 15000);
   }
 
+  /**
+   * Stops the periodic leaseset refresh interval.
+   * @function stopRefresh
+   * @returns {void}
+   */
   function stopRefresh() {
     if (!isRefreshing) { return; }
     isRefreshing = false;
@@ -255,6 +296,11 @@ document.addEventListener("DOMContentLoaded", () => {
     progressx.hide();
   }
 
+  /**
+   * Initializes the leaseset compact view with refresh, styling, sorting, and debug.
+   * @function initLSCompact
+   * @returns {void}
+   */
   function initLSCompact() {
     startRefresh();
     progressx.show(theme);

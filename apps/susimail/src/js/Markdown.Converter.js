@@ -1,3 +1,9 @@
+/**
+ * @file Markdown.Converter.js - A JavaScript port of the Markdown text-to-HTML conversion tool
+ * @description Converts Markdown text to HTML, based on Showdown (Perl Markdown port)
+ * @license MIT
+ */
+
 "use strict";
 var Markdown;
 
@@ -56,10 +62,20 @@ else
     function identity(x) { return x; }
     function returnFalse(x) { return false; }
 
+    /**
+     * @constructor HookCollection
+     * @description Manages a collection of hook functions for plugin extensibility
+     */
     function HookCollection() { }
 
     HookCollection.prototype = {
 
+        /**
+         * @function chain
+         * @param {string} hookname - The name of the hook to chain
+         * @param {Function} func - The function to chain to the hook
+         * @returns {void}
+         */
         chain: function (hookname, func) {
             var original = this[hookname];
             if (!original)
@@ -74,14 +90,30 @@ else
                     return func.apply(null, args);
                 };
         },
+        /**
+         * @function set
+         * @param {string} hookname - The name of the hook to set
+         * @param {Function} func - The function to set as the hook
+         * @returns {void}
+         */
         set: function (hookname, func) {
             if (!this[hookname])
                 throw new Error("unknown hook " + hookname);
             this[hookname] = func;
         },
+        /**
+         * @function addNoop
+         * @param {string} hookname - The name of the hook to add as a no-op
+         * @returns {void}
+         */
         addNoop: function (hookname) {
             this[hookname] = identity;
         },
+        /**
+         * @function addFalse
+         * @param {string} hookname - The name of the hook to add as a false-returning function
+         * @returns {void}
+         */
         addFalse: function (hookname) {
             this[hookname] = returnFalse;
         }
@@ -96,16 +128,37 @@ else
     // http://meta.stackexchange.com/questions/64655/strange-wmd-bug
     // (granted, switching from Array() to Object() alone would have left only __proto__
     // to be a problem)
+    /**
+     * @constructor SaveHash
+     * @description A hash table that stores key-value pairs with a prefix to prevent prototype pollution
+     */
     function SaveHash() { }
     SaveHash.prototype = {
+        /**
+         * @function set
+         * @param {string} key - The key to store the value under
+         * @param {string} value - The value to store
+         * @returns {void}
+         */
         set: function (key, value) {
             this["s_" + key] = value;
         },
+        /**
+         * @function get
+         * @param {string} key - The key to retrieve the value for
+         * @returns {string} The stored value
+         */
         get: function (key) {
             return this["s_" + key];
         }
     };
 
+    /**
+     * @constructor Markdown.Converter
+     * @param {Object} [OPTIONS] - Configuration options
+     * @param {boolean} [OPTIONS.nonAsciiLetters] - Enable non-ASCII letter support
+     * @param {boolean} [OPTIONS.asteriskIntraWordEmphasis] - Allow intra-word emphasis with asterisks
+     */
     Markdown.Converter = function (OPTIONS) {
         var pluginHooks = this.hooks = new HookCollection();
         
@@ -231,6 +284,11 @@ else
         
         var _DoItalicsAndBold = OPTIONS.asteriskIntraWordEmphasis ? _DoItalicsAndBold_AllowIntrawordWithAsterisk : _DoItalicsAndBoldStrict;
 
+        /**
+         * @function makeHtml
+         * @param {string} text - The Markdown text to convert to HTML
+         * @returns {string} The converted HTML
+         */
         this.makeHtml = function (text) {
 
             //

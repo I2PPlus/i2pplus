@@ -1,7 +1,22 @@
-/* I2P+ toggleElements.js by dr|z3d */
-/* Toggle display of selectors by clicking on a specified toggle selector */
-/* License: AGPL3 or later */
+/**
+ * @file toggleElements.js
+ * @description Generic toggle system for showing/hiding DOM elements via CSS selectors.
+ * Supports single-section-at-a-time display mode, expand/collapse state classes,
+ * and scroll-into-view on expand.
+ * @author dr|z3d
+ * @license AGPL3 or later
+ */
 
+/**
+ * Sets up toggle behavior for elements matching the given selectors.
+ * @function setupToggles
+ * @param {string} toggleSelector - CSS selector for toggle trigger elements
+ * @param {string} hiddenSelector - CSS selector for elements that should be toggled
+ * @param {string} displayStyle - CSS display value when expanded (e.g., "block", "table-row-group")
+ * @param {boolean} [collapseByDefault=true] - Whether to hide elements initially
+ * @param {boolean} [displaySingle=true] - Whether only one section can be open at a time
+ * @returns {void}
+ */
 function setupToggles(toggleSelector, hiddenSelector, displayStyle, collapseByDefault = true, displaySingle = true) {
   const toggleElements = document.querySelectorAll(toggleSelector);
   const hiddenElements = document.querySelectorAll(hiddenSelector);

@@ -1,5 +1,15 @@
+/**
+ * @file Tablesort - A small, simple JavaScript library for creating sortable tables
+ * @description Constructor for sorting tables on click of header
+ */
+
 ;(function() {
-  // Tablesort: constructor for sorting tables on click of header
+  /**
+   * @constructor Tablesort
+   * @param {HTMLElement} el - The table element to make sortable
+   * @param {Object} [options] - Configuration options
+   * @param {boolean} [options.descending] - Default sort order (descending if true)
+   */
   function Tablesort(el, options) {
     if (!(this instanceof Tablesort)) return new Tablesort(el, options);
     if (!el || el.tagName !== "TABLE") throw new Error("Element must be a table");
@@ -43,7 +53,14 @@
     return res === 0 ? (antiStabilize ? b.index - a.index : a.index - b.index) : res;
   };
 
-  // Add custom sort options by name, pattern, and sort function
+  /**
+   * @function extend
+   * @description Add custom sort options by name, pattern, and sort function
+   * @param {string} name - The name of the sort method
+   * @param {Function} pattern - Function to test if cell values match this sort type
+   * @param {Function} sort - The comparison function for sorting
+   * @returns {void}
+   */
   Tablesort.extend = (name, pattern, sort) => {
     if (typeof pattern !== "function" || typeof sort !== "function")
       throw new Error("Pattern and sort must be functions");
@@ -51,7 +68,13 @@
   };
 
   Tablesort.prototype = {
-    // Initialize table sorting on header clickable cells
+    /**
+     * @function init
+     * @description Initialize table sorting on header clickable cells
+     * @param {HTMLElement} el - The table element
+     * @param {Object} options - Configuration options
+     * @returns {void}
+     */
     init(el, options) {
       this.table = el; this.options = options;
       this.thead = !!el.tHead && el.tHead.rows.length > 0;
@@ -71,6 +94,13 @@
       if (this.current) this.sortTable(this.current);
     },
 
+    /**
+     * @function sortTable
+     * @description Sort the table based on the clicked header
+     * @param {HTMLElement} header - The header cell that was clicked
+     * @param {boolean} [update] - Whether this is an update (preserves sort order)
+     * @returns {void}
+     */
     sortTable(header, update) {
       const columnKey = header.getAttribute("data-sort-column-key"), column = header.cellIndex;
       let sortFunction = caseInsensitiveSort, sortMethod = header.getAttribute("data-sort-method"), sortOrder = header.getAttribute("aria-sort");
@@ -86,6 +116,17 @@
       this.sortNative(header, update, columnKey, column, sortFunction, sortMethod, sortOrder);
     },
 
+    /**
+     * @function sortWithWorker
+     * @description Sort large tables using a Web Worker for better performance
+     * @param {HTMLElement} header - The header cell
+     * @param {boolean} update - Whether this is an update
+     * @param {string} columnKey - The column key for data-sort-column-key attribute
+     * @param {number} column - The column index
+     * @param {string} sortMethod - The sort method name
+     * @param {string} sortOrder - The sort order ('ascending' or 'descending')
+     * @returns {void}
+     */
     sortWithWorker(header, update, columnKey, column, sortMethod, sortOrder) {
       const worker = getSortWorker();
       const rowData = [];
@@ -156,6 +197,18 @@
       });
     },
 
+    /**
+     * @function sortNative
+     * @description Sort tables using native JavaScript sorting
+     * @param {HTMLElement} header - The header cell
+     * @param {boolean} update - Whether this is an update
+     * @param {string} columnKey - The column key for data-sort-column-key attribute
+     * @param {number} column - The column index
+     * @param {Function} sortFunction - The comparison function to use
+     * @param {string} sortMethod - The sort method name
+     * @param {string} sortOrder - The sort order ('ascending' or 'descending')
+     * @returns {void}
+     */
     sortNative(header, update, columnKey, column, sortFunction, sortMethod, sortOrder) {
       window.requestAnimationFrame(() => {
         if (!update) {
@@ -231,7 +284,11 @@
       });
     },
 
-    // Refresh current sort without changing order
+    /**
+     * @function refresh
+     * @description Refresh current sort without changing order
+     * @returns {void}
+     */
     refresh() {
       if (this.current) this.sortTable(this.current, true);
     }
