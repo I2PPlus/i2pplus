@@ -34,7 +34,7 @@ Utility scripts for I2P+ development and administration.
 
 | Script | Description | Usage |
 |---|---|---|
-| `i2p-sessionban-iptables.py` | Sync I2P session bans to iptables rules | `i2p-sessionban-iptables.py [--duration 24h\|7d\|forever] [--window-hours N] [--workers N] [--ipv4-only] [--dry-run] [--clean]` |
+| `i2p-sessionban-iptables.py` | Sync I2P session bans to iptables rules | `i2p-sessionban-iptables.py [--list] [--list-summary] [--clean] [--duration 7d\|168h\|1w\|forever] [--window-hours N] [--workers N] [--ipv4-only] [--dry-run] [-l LOG] [--ban-dir PATH] [--tracking-file PATH] [--lock-file PATH]` |
 
 ## JavaScript
 

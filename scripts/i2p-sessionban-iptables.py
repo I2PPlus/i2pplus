@@ -28,6 +28,7 @@ CHAIN = "I2P-BANNED"
 IPTABLES = "/sbin/iptables"
 IP6TABLES = "/sbin/ip6tables"
 LOCK_FILE = "/var/run/i2p-sessionban.lock"
+BAN_DURATION = 604800
 NUM_WORKERS = 4
 DEFAULT_LOG_FILE = "/var/log/i2p-sessionban-iptables.log"
 BAN_WINDOW_HOURS = 24
@@ -149,6 +150,25 @@ def parse_duration_hours(duration: str) -> int:
     if match := re.match(r"^(\d+)\?$", duration):
         return int(match.group(1)) * 24 * 30
     return 0
+
+
+def parse_duration_seconds(duration: str) -> int:
+    """Parse human-readable duration to seconds. Supports: 7d, 168h, 1w, 30m, forever, or raw seconds."""
+    duration = duration.strip().lower()
+    if duration == "forever":
+        return 876000 * 3600
+    if match := re.match(r"^(\d+)w$", duration):
+        return int(match.group(1)) * 7 * 86400
+    if match := re.match(r"^(\d+)d$", duration):
+        return int(match.group(1)) * 86400
+    if match := re.match(r"^(\d+)h$", duration):
+        return int(match.group(1)) * 3600
+    if match := re.match(r"^(\d+)m$", duration):
+        return int(match.group(1)) * 60
+    try:
+        return int(duration)
+    except ValueError:
+        return 0
 
 
 def extract_ip_from_field(ipport: str, ipv4_only: bool = False) -> str:
@@ -302,6 +322,7 @@ def extract_all_categories(
 
     reason_patterns = {
         "xg": r"XG Router",
+        "lu": r"LU Router",
         "old_slow": r"Old and Slow",
         "bad_handshake": r"Bad NTCP Handshake",
         "blocklist": r"Blocklist",
@@ -375,8 +396,69 @@ def run_iptables(
         return -1, "", str(e)
 
 
+def is_ufw_active() -> bool:
+    """Check if UFW is managing iptables."""
+    try:
+        result = subprocess.run(
+            ["systemctl", "is-active", "ufw"],
+            capture_output=True, text=True
+        )
+        return result.stdout.strip() == "active"
+    except Exception:
+        return False
+
+
+def ensure_ufw_chain(iptables_bin: str, log_file: Optional[str] = None):
+    """Ensure I2P-BANNED chain is in UFW before.rules so it survives reloads."""
+    is_v6 = "ip6tables" in iptables_bin
+    rules_file = Path("/etc/ufw/before6.rules" if is_v6 else "/etc/ufw/before.rules")
+    marker = f"# I2P-BANNED chain managed by i2p-sessionban-iptables"
+
+    if not rules_file.exists():
+        log(f"UFW rules file not found: {rules_file}", log_file)
+        return
+
+    try:
+        content = rules_file.read_text()
+    except Exception as e:
+        log(f"Error reading {rules_file}: {e}", log_file)
+        return
+
+    if marker in content:
+        return
+
+    chain_block = (
+        f"\n{marker}\n"
+        f":{CHAIN} -\n"
+        f"-I INPUT 1 -j {CHAIN}\n"
+    )
+
+    commit_pos = content.rfind("COMMIT")
+    if commit_pos == -1:
+        log(f"No COMMIT found in {rules_file}, cannot insert chain", log_file)
+        return
+
+    new_content = content[:commit_pos] + chain_block + content[commit_pos:]
+
+    try:
+        rules_file.write_text(new_content)
+        log(f"Added {CHAIN} chain to {rules_file}", log_file)
+    except Exception as e:
+        log(f"Error writing {rules_file}: {e}", log_file)
+        return
+
+    try:
+        subprocess.run(["ufw", "reload"], capture_output=True, text=True)
+        log("Reloaded UFW to activate chain rules", log_file)
+    except Exception as e:
+        log(f"Error reloading UFW: {e}", log_file)
+
+
 def init_chain(iptables_bin: str, log_file: Optional[str] = None):
     """Initialize iptables chain if needed."""
+    if is_ufw_active():
+        ensure_ufw_chain(iptables_bin, log_file)
+
     returncode, stdout, stderr = run_iptables(
         [iptables_bin, "-L", CHAIN, "-n"], fail_ok=True
     )
@@ -425,6 +507,23 @@ def remove_iptables_ban(ip: str, log_file: Optional[str] = None):
     )
 
 
+def get_current_ban_ips() -> Set[str]:
+    """Get all IPs currently in the I2P-BANNED chain."""
+    ips = set()
+    for iptables_bin in (IPTABLES, IP6TABLES):
+        returncode, stdout, _ = run_iptables(
+            [iptables_bin, "-L", CHAIN, "-n"], fail_ok=True
+        )
+        if returncode != 0:
+            continue
+        for line in stdout.splitlines()[2:]:
+            parts = line.split()
+            if len(parts) >= 5 and parts[1] == "DROP":
+                src_ip = parts[4].split("/")[0] if "/" in parts[4] else parts[4]
+                ips.add(src_ip)
+    return ips
+
+
 def process_bans(
     categories: Dict[str, Set[str]],
     tracking_file: Path,
@@ -450,12 +549,19 @@ def process_bans(
     new_bans = 0
     refreshed = 0
 
+    existing = get_current_ban_ips()
+
     for ip in all_ips:
         if ip in tracking:
+            if ip not in existing:
+                if not dry_run:
+                    if add_iptables_ban(ip, log_file):
+                        log(f"Re-added ban: {ip}", log_file)
+                        new_bans += 1
             valid_tracking[ip] = now
             refreshed += 1
         else:
-            if not check_iptables_ban(ip, log_file):
+            if ip not in existing:
                 if not dry_run:
                     if add_iptables_ban(ip, log_file):
                         log(f"New ban: {ip}", log_file)
@@ -481,6 +587,76 @@ def process_bans(
         save_tracking(valid_tracking, tracking_file)
 
     return new_bans, refreshed, expired_count, len(valid_tracking), bogon_filtered
+
+
+def list_current_bans(
+    tracking_file: Path,
+    ipv6_enabled: bool = True,
+):
+    """List all current iptables bans from the I2P-BANNED chain."""
+    print(f"Current iptables bans in chain '{CHAIN}':")
+    print("-" * 72)
+
+    tracking = load_tracking(tracking_file)
+    total = 0
+    now = int(time.time())
+
+    for iptables_bin in ([IPTABLES, IP6TABLES] if ipv6_enabled else [IPTABLES]):
+        returncode, stdout, stderr = run_iptables(
+            [iptables_bin, "-L", CHAIN, "-n", "--line-numbers"], fail_ok=True
+        )
+        if returncode != 0:
+            print(f"\nChain does not exist for {'ip6tables' if 'ip6tables' in iptables_bin else 'iptables'}")
+            continue
+
+        rules = []
+        for line in stdout.splitlines()[2:]:
+            parts = line.split()
+            if len(parts) >= 5 and parts[1] == "DROP":
+                src_ip = parts[4].split("/")[0] if "/" in parts[4] else parts[4]
+                age_str = ""
+                if src_ip in tracking:
+                    age = now - tracking[src_ip]
+                    if age < 3600:
+                        age_str = f"{age // 60}m"
+                    elif age < 86400:
+                        age_str = f"{age // 3600}h"
+                    else:
+                        age_str = f"{age // 86400}d"
+                rules.append((parts[0], src_ip, age_str))
+
+        if not rules:
+            proto = "IPv6" if "ip6tables" in iptables_bin else "IPv4"
+            print(f"\n[{proto}] No bans")
+            continue
+
+        proto = "IPv6" if "ip6tables" in iptables_bin else "IPv4"
+        print(f"\n[{proto}]")
+        print(f"{'#':<5} {'Source IP':<45} {'Age'}")
+        print("-" * 72)
+        for num, src_ip, age_str in rules:
+            print(f"{num:<5} {src_ip:<45} {age_str}")
+            total += 1
+
+    if total == 0:
+        print("\nNo active bans")
+    else:
+        print(f"\nTotal: {total} bans")
+
+
+def list_ban_summary(ipv6_enabled: bool = True):
+    """Print count of banned IPs for IPv4 and IPv6."""
+    bins = [(IPTABLES, "IPv4"), (IP6TABLES, "IPv6")] if ipv6_enabled else [(IPTABLES, "IPv4")]
+    for iptables_bin, proto in bins:
+        try:
+            result = subprocess.run(
+                [iptables_bin, "-L", CHAIN, "-n"],
+                capture_output=True, text=True
+            )
+            count = sum(1 for line in result.stdout.splitlines() if "DROP" in line)
+            print(f"{proto}: {count}")
+        except Exception:
+            print(f"{proto}: 0")
 
 
 def clean_all_bans(
@@ -544,6 +720,8 @@ def main():
         "-l", "--log", help=f"Log file path (default: {DEFAULT_LOG_FILE})"
     )
     parser.add_argument("--clean", action="store_true", help="Clean all bans and exit")
+    parser.add_argument("--list", action="store_true", help="List all current iptables bans and exit")
+    parser.add_argument("--list-summary", action="store_true", help="Print ban counts for IPv4/IPv6 and exit")
     parser.add_argument(
         "--workers",
         type=int,
@@ -574,10 +752,10 @@ def main():
         help=f"Lock file (default: {LOCK_FILE})",
     )
     parser.add_argument(
-        "--duration",
+        "-d", "--duration", "--ban-duration",
         type=str,
-        default="24h",
-        help="Ban duration: Nh (hours), Nd (days), forever (default: 24h)",
+        default="7d",
+        help="Ban duration (e.g. 7d, 168h, 1w, forever, or seconds). Default: 7d",
     )
     parser.add_argument(
         "--window-hours",
@@ -596,9 +774,9 @@ def main():
     ban_file = ban_dir / "sessionbans.txt"
     tracking_file = args.tracking_file
     lock_file = args.lock_file
-    ban_duration = parse_duration_hours(args.duration) * 3600
+    ban_duration = parse_duration_seconds(args.duration)
     if ban_duration <= 0:
-        log(f"ERROR: Invalid duration: {args.duration}", log_file)
+        print(f"ERROR: Invalid duration: {args.duration}", file=sys.stderr)
         sys.exit(1)
     window_hours = args.window_hours
 
@@ -617,6 +795,14 @@ def main():
     if os.geteuid() != 0:
         print("ERROR: This script must be run as root.", file=sys.stderr)
         sys.exit(1)
+
+    if args.list:
+        list_current_bans(tracking_file, ipv6_enabled=not ipv4_only)
+        return
+
+    if args.list_summary:
+        list_ban_summary(ipv6_enabled=not ipv4_only)
+        return
 
     if not acquire_lock(lock_file):
         log(f"ERROR: Another instance is already running or stale lock at {lock_file}", args.log)
@@ -646,6 +832,7 @@ def main():
 
         long_count = len(categories.get("long", set()))
         xg_count = len(categories.get("xg", set()))
+        lu_count = len(categories.get("lu", set()))
         old_slow_count = len(categories.get("old_slow", set()))
         blocklist_count = len(categories.get("blocklist", set()))
         sybil_count = len(categories.get("sybil", set()))
@@ -655,6 +842,7 @@ def main():
         log(
             f"Long-term bans (>=4h): {long_count}, "
             f"XG Router: {xg_count}, "
+            f"LU Router: {lu_count}, "
             f"Old and Slow: {old_slow_count}, "
             f"Blocklist: {blocklist_count}, "
             f"Sybil: {sybil_count}, "
@@ -686,8 +874,8 @@ def main():
             if returncode == 0:
                 for line in stdout.splitlines()[2:]:
                     parts = line.split()
-                    if len(parts) >= 9:
-                        src_ip = parts[8].split("/")[0] if "/" in parts[8] else parts[8]
+                    if len(parts) >= 5 and parts[1] == "DROP":
+                        src_ip = parts[4].split("/")[0] if "/" in parts[4] else parts[4]
                         if is_bogon_ip(src_ip):
                             if not dry_run:
                                 run_iptables(
