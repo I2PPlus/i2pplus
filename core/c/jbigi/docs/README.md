@@ -97,7 +97,20 @@ Detects 20 CPU targets and builds `libjbigi-linux-{cpu}_64.so` for each.
 
 Prerequisites: `gcc`, `m4`, `make`, JDK 8 with JNI headers
 
-#### Options (both scripts)
+#### Linux ARM64 (cross-compile from x86_64)
+
+```bash
+cd core/c/jbigi
+./build-arm64.sh --help     # Show help
+./build-arm64.sh -a         # Build all supported CPU targets
+./build-arm64.sh --generic  # Generic build only (faster)
+```
+
+Detects 5 ARM64 targets (armv8, armv8.2, cortex-a72, cortex-a76, cortex-a53) and builds `libjbigi-linux-{cpu}_64.so` for each. Uses bundled JNI headers.
+
+Prerequisites: `gcc-aarch64-linux-gnu`, `m4`, `make`
+
+#### Options (all scripts)
 
 | Flag | Description |
 |------|-------------|
