@@ -30,6 +30,7 @@ import net.i2p.crypto.TrustedUpdate;
 import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
+import net.i2p.router.BanLogger;
 import net.i2p.router.Banlist;
 import net.i2p.router.Blocklist;
 import net.i2p.router.RouterContext;
@@ -681,6 +682,8 @@ class NewsFetcher extends UpdateRunner {
                 Hash h = Hash.create(b);
                 if (!ban.isBanlistedForever(h)) {
                     ban.banlistRouterForever(h, reason);
+                    BanLogger banLogger = BanLogger.getInstance();
+                    if (banLogger != null) {banLogger.logBanForever(h, _context, reason);}
                     _context.commSystem().forceDisconnect(h);
                 }
             } else {

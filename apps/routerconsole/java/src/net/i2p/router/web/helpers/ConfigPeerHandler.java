@@ -2,6 +2,7 @@ package net.i2p.router.web.helpers;
 
 import net.i2p.data.Base64;
 import net.i2p.data.Hash;
+import net.i2p.router.BanLogger;
 import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.router.web.FormHandler;
 
@@ -22,6 +23,8 @@ public class ConfigPeerHandler extends FormHandler {
             Hash h = getHash();
             if (h != null) {
                 _context.banlist().banlistRouterForever(h, " <b>➜</b> " + _t("Manually banned via {0}"), "<a href=\"configpeer\">configpeer</a>");
+                BanLogger bl = BanLogger.getInstance();
+                if (bl != null) {bl.logBanForever(h, _context, "Manually banned via configpeer");}
                 _context.commSystem().forceDisconnect(h);
                 addFormNotice(_t("Peer") + " " + _peer + " " + _t("banned until restart"), true);
                 return;

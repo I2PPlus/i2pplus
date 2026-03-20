@@ -249,7 +249,6 @@ class RequestThrottler {
             String ipPort = getRouterIPPort(ri);
             _banLogger.logBan(h, ipPort, "Old and slow (" + v + ")", 60*60*1000L);
             context.banlist().banlistRouter(h, " <b>➜</b> Old and slow (" + v + ")", null, null, context.clock().now() + 60*60*1000);
-            _banLogger.logBan(h, ipPort, "Old and slow (" + v + ")", 60*60*1000L);
             context.commSystem().forceDisconnect(h);
             return true;
         }

@@ -141,6 +141,7 @@ public class Banlist {
             } catch (IllegalStateException ise) {} // next time...
             for (Hash peer : _toUnbanlist) {
                 _context.messageHistory().unbanlist(peer);
+                BanLogger.clearLoggedHash(peer);
                 if (_log.shouldInfo()) {
                     _log.info("Removing expired ban from [" + peer.toBase64().substring(0,6) + "]");
                 }
@@ -372,6 +373,7 @@ public class Banlist {
 
         if (fully) {
             _context.messageHistory().unbanlist(peer);
+            BanLogger.clearLoggedHash(peer);
             if (_log.shouldInfo() && e != null)
                 _log.info("Removing expired ban from [" + peer.toBase64().substring(0,6) + "]"
                           + (transport != null ? " / " + transport : ""));
@@ -408,6 +410,7 @@ public class Banlist {
 
         if (unbanlist) {
             _context.messageHistory().unbanlist(peer);
+            BanLogger.clearLoggedHash(peer);
             if (_log.shouldInfo()) {
                 _log.info("Removing expired ban from [" + peer.toBase64().substring(0,6) + "]");
             }

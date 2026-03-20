@@ -354,6 +354,18 @@ public class BanLogger {
     }
 
     /**
+     * Remove a hash from the logged set so it can be re-logged if banned again.
+     * Must be called when a ban expires or is removed.
+     *
+     * @param hash Router hash to clear (may be null)
+     */
+    public static void clearLoggedHash(Hash hash) {
+        if (hash != null) {
+            _loggedHashes.remove(hash.toBase64());
+        }
+    }
+
+    /**
      * Check if a router hash matches known attack patterns and should be predictively banned.
      * Call this BEFORE processing messages from a peer to proactively ban algorithmic identities.
      *

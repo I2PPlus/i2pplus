@@ -2,6 +2,7 @@ package net.i2p.router;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.data.Hash;
+import net.i2p.router.BanLogger;
 import net.i2p.stat.RateConstants;
 import net.i2p.util.Log;
 
@@ -43,6 +44,8 @@ class RouterDoSThrottle extends RouterThrottleImpl {
                 _context.statManager().addRateData("router.throttleNetDbDoS", cnt);
                 if (cnt >= LOOKUP_THROTTLE_MAX*2) {
                     _context.banlist().banlistRouter(key, " <b>➜</b> Excessive NetDb lookups", null, null, now + 5*60*1000);
+                    BanLogger bl = BanLogger.getInstance();
+                    if (bl != null) {bl.logBan(key, _context, "Excessive NetDb lookups", 5*60*1000L);}
                     if (_log.shouldWarn()) {
                         _log.warn("Banning [" + key.toBase64().substring(0,6) + "] for 5m for excessive NetDB lookups " +
                                   "(Limit (over 20s period): " + LOOKUP_THROTTLE_MAX + " -> Requests: " + cnt + ")");
