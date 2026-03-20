@@ -16,6 +16,10 @@
   --text-dim: #7982a9;
 }
 
+html {
+  scrollbar-color: var(--accent) #0000;
+}
+
 body {
   background-color: var(--bg) !important;
   color: var(--text) !important;
@@ -58,7 +62,7 @@ nav h4 {
   color: var(--accent) !important;
   font-weight: 700 !important;
   font-size: 16px !important;
-  margin: 20px auto 0 -8px !important;
+  margin: 20px auto 6px -8px !important;
   padding-bottom: 6px !important;
   border-bottom: 2px solid var(--border);
 }
@@ -81,12 +85,33 @@ nav #nav-search + h2~h2 {
 nav h2 a, nav ul > li > a {
   color: var(--link) !important;
   font-weight: 600 !important;
+  padding: 4px 8px;
+  margin: 0;
+  width: calc(100% - 20px) !important;
+  border-radius: 4px;
 }
 
 nav h2 a:hover {
   color: var(--hover) !important;
 }
 
+nav ul > li > a {
+  font-size: 13px !important;
+}
+
+nav ul > li > a:hover {
+  background: #0004;
+  transform: scale(1.1);
+  margin-bottom: -1px !important;
+  padding: 4px 12px !important;
+}
+
+nav ul > li > a:active {
+  transform: none;
+  margin-bottom: -3px !important;
+  padding: 5px 10px !important;
+
+}
 nav ul {
   font-size: 13px !important;
 }
@@ -134,7 +159,11 @@ h4 { font-weight: 600 !important; }
 
 h1.page-title {
   font-size: 32px !important;
-  font-weight: 600 !important;
+  font-weight: 700 !important;
+}
+
+h1.page-title + h3.subsection-title {
+  display: none !important;
 }
 
 #main h2 {
@@ -322,8 +351,3 @@ section {
 #main {
   padding-bottom: 30px !important;
 }
-
-/* Scrollbar */
-nav::-webkit-scrollbar { width: 6px; }
-nav::-webkit-scrollbar-track { background: var(--bg-alt); }
-nav::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
