@@ -459,14 +459,14 @@ if [ ! -f "$eepget_cmd" ] && [ ! -f "$eephead_cmd" ] && [ ! -f "$curl_cmd" ] && 
                     if [ "$bin" = "eepget" ]; then
                         eepget_cmd="$dir/$bin"
                         debug "eepget found at $dir/$bin"
-                    elif [ "$bin" = "eepget" ]; then
+                    elif [ "$bin" = "eephead" ]; then
                         eephead_cmd="$dir/$bin"
                         debug "eephead found at $dir/$bin"
                     elif [ "$bin" = "curl" ]; then
                         curl_cmd="$dir/$bin"
                         debug "curl found at $dir/$bin"
                     elif [ "$bin" = "wget" ]; then
-                        curl_cmd="$dir/$bin"
+                        wget_cmd="$dir/$bin"
                         debug "wget found at $dir/$bin"
                     fi
                 fi
