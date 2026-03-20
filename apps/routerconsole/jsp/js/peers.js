@@ -1,5 +1,6 @@
 /**
- * @file peers.js
+ * @module peers
+
  * @description Handles auto-refresh, table sorting, and bandwidth tier count
  * display for the /peers pages (NTCP, SSU, and summary views).
  * @author dr|z3d

@@ -1,11 +1,11 @@
 /**
+ * @module setFilterQuery
  * @file setFilterQuery.js - Assigns filter parameter to main snark navigation and cancel search buttons.
  * @description Reads the current filter value from the URL query string or localStorage, then
  * updates the href attributes of the I2PSnark navbar link and cancel-search link so they
  * preserve the active filter across navigation.
  * @author dr|z3d
  * @license AGPL3 or later
- * @module setFilterQuery
  */
 
 /**

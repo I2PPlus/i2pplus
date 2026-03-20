@@ -1,5 +1,6 @@
 /**
- * @file toggleElements.js
+ * @module toggleElements
+
  * @description Generic toggle system for showing/hiding DOM elements via CSS selectors.
  * Supports single-section-at-a-time display mode, expand/collapse state classes,
  * and scroll-into-view on expand.

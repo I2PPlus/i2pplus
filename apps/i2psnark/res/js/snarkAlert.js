@@ -1,11 +1,11 @@
 /**
+ * @module snarkAlert
  * @file snarkAlert.js - Inline notification system for I2PSnark.
  * @description Handles form submission for adding and creating torrents, then displays
  * inline notification messages to the user. Integrates with the torrent refresh system
  * to update the screen log after operations complete.
  * @author dr|z3d
  * @license AGPL3 or later
- * @module snarkAlert
  */
 
 import { initSnarkRefresh, refreshTorrents, refreshScreenLog } from "./refreshTorrents.js";

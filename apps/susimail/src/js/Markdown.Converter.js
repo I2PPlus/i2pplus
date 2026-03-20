@@ -1,4 +1,5 @@
 /**
+ * @module Markdown_Converter
  * @file Markdown.Converter.js - A JavaScript port of the Markdown text-to-HTML conversion tool
  * @description Converts Markdown text to HTML, based on Showdown (Perl Markdown port)
  * @license MIT

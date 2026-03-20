@@ -1,4 +1,5 @@
 /**
+ * @module toggleAllHosts
  * @file I2P+ SusiDNS toggle-all-hosts utility.
  * Provides a master checkbox to select/deselect all hosts for deletion
  * when the "dead hosts" filter is active.
@@ -9,7 +10,6 @@
 /**
  * Toggles every host checkbox to the given state and updates the
  * master "select all" checkbox accordingly.
- *
  * @function toggleAll
  * @param {boolean} selectAll - True to check all boxes, false to uncheck.
  * @returns {void}
@@ -42,7 +42,6 @@ function toggleAll(selectAll) {
  * Creates and injects a "select all" checkbox into the dead-hosts header cell.
  * Sets up change listeners to keep the master checkbox in sync with
  * individual host checkboxes.
- *
  * @function createSelectAllCheckbox
  * @returns {void}
  */

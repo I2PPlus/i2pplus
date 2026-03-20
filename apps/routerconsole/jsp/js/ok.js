@@ -1,5 +1,6 @@
 /**
- * @file ok.js
+ * @module ok
+
  * @description Provides a custom modal dialog with a message and OK button.
  * Creates a centered overlay with auto-repositioning on window resize.
  * @author dr|z3d

@@ -1,5 +1,6 @@
 /**
- * @file transitfast.js
+ * @module transitfast
+
  * @description Handles automatic and manual refresh with table sorting for the
  * /transitfast page. Similar to transit.js but for fast transit tunnels.
  * @author dr|z3d

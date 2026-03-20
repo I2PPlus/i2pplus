@@ -1,4 +1,5 @@
 /**
+ * @module markdown
  * @file SusiMail Markdown renderer.
  * Converts Markdown-formatted mail bodies (rendered as `<p class="mailbody">`)
  * into HTML using the Markdown.Converter library.
@@ -9,7 +10,6 @@
 /**
  * Finds all `<p>` elements with class "mailbody" and converts their
  * inner content from Markdown to HTML via {@link Markdown.Converter}.
- *
  * @function initMarkdown
  * @returns {void}
  */

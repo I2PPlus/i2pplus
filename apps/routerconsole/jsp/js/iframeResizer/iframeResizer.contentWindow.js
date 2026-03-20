@@ -1,5 +1,5 @@
 /**
- * @file iframeResizer.contentWindow.js
+
  * @description Include this file in any page being loaded into an iframe to force the iframe to resize to the content size.
  * @requires iframeResizer.js on host page
  * @author David J. Bradshaw - dave@bradshaw.net

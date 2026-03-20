@@ -1,5 +1,6 @@
 /**
- * @file tunnelpeercount.js
+ * @module tunnelpeercount
+
  * @description Handles automatic and manual refresh with table sorting and
  * advanced filtering for the /tunnelpeercount page. Supports key=value filter
  * syntax (tier=, cc=, ip=, hash=, etc.) with URL and localStorage persistence.

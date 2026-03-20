@@ -1,5 +1,6 @@
 /**
- * @file translationReport.js
+ * @module translationReport
+
  * @description Toggles visibility of completed translation rows in compiled
  * and file-based translation report tables. Allows users to show/hide
  * completed translations for easier scanning of incomplete work.

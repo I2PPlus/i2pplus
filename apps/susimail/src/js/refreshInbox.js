@@ -1,4 +1,5 @@
 /**
+ * @module refreshInbox
  * @file I2P+ SusiMail inbox refresher.
  * Performs AJAX polling to refresh the mailbox view and notification
  * elements without a full page reload.
@@ -55,7 +56,6 @@ if (mailbox && pageRefresh) {
 
 /**
  * Removes duplicate notification elements, keeping only the first one.
- *
  * @function removeDupeNotices
  * @returns {void}
  */

@@ -1,4 +1,5 @@
 /**
+ * @module click
  * @file click.js - Simulate longer button clicks and custom confirm dialogs for I2PSnark.
  * @description Adds a .depress CSS class to input elements on click for visual feedback,
  * with extended timing for action buttons. Provides custom confirmation dialogs for
@@ -6,7 +7,6 @@
  * positioning, and animated transitions.
  * @author dr|z3d
  * @license AGPL3 or later
- * @module click
  */
 
 import {refreshScreenLog, refreshTorrents} from "./refreshTorrents.js";

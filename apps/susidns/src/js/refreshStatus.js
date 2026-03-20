@@ -1,4 +1,5 @@
 /**
+ * @module refreshStatus
  * @file I2P+ SusiDNS status refresher.
  * Automatically refreshes host status elements in the address book at
  * regular intervals using AJAX polling.
@@ -11,7 +12,6 @@ import { refreshElements } from "/js/refreshElements.js";
 /**
  * On DOM load, locates the host list table and begins polling
  * status cells at a 10-second interval.
- *
  * @listens DOMContentLoaded
  */
 document.addEventListener("DOMContentLoaded", () => {

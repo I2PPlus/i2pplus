@@ -1,4 +1,5 @@
 /**
+ * @module clearSearch
  * @file I2P+ SusiDNS clear-search widget.
  * Injects a clear-search button alongside the search input field and
  * dynamically shows/hides it based on input content.

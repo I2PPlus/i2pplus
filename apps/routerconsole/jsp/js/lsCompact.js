@@ -1,5 +1,6 @@
 /**
- * @file lsCompact.js
+ * @module lsCompact
+
  * @description Compacts non-debug Leaseset tables, adds signature and encryption
  * type counters, sorts leasesets by priority, and implements periodic auto-refresh.
  * Handles both single and summary leaseset views.

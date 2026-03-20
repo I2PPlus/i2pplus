@@ -1,4 +1,5 @@
 /**
+ * @module imagegen
  * @file Imagegen Loader by dr|z3d
  * @description Provides dynamic image generation for identicons and QR codes
  * @license AGPLv3 or later

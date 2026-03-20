@@ -1,5 +1,6 @@
 /**
- * @file onVisible.js
+ * @module onVisible
+
  * @description Provides utility functions to execute callbacks when DOM elements
  * become visible or hidden using IntersectionObserver and document visibility tracking.
  * @author dr|z3d

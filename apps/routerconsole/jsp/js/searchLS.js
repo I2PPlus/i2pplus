@@ -1,5 +1,6 @@
 /**
- * @file searchLS.js
+ * @module searchLS
+
  * @description Adds a search input box and lookup button to single-page
  * leaseset views for quick lease hash lookups via /netdb.
  * @author dr|z3d

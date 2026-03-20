@@ -1,4 +1,5 @@
 /**
+ * @module textView
  * @file textView.js - Inline text viewer for I2PSnark file browser.
  * @description Provides an inline text viewing overlay for supported text file types
  * (.asc, .bat, .css, .ini, .js, .json, .md5, .nfo, .sh, .srt, .txt, .url, and CSV).
@@ -6,7 +7,6 @@
  * response caching, scroll locking, and open-in-new-tab links.
  * @author dr|z3d
  * @license AGPL3 or later
- * @module textView
  */
 
 document.addEventListener("DOMContentLoaded", function () {

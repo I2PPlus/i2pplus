@@ -1,4 +1,5 @@
 /**
+ * @module updatedEvent
  * @file I2P+ updatedEvent.js by dr|z3d
  * @description Send event to parent window containing iframe when new page is loaded to force a scroll to top
  * @license AGPL3 or later

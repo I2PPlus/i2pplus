@@ -1,4 +1,5 @@
 /**
+ * @module previewMail
  * @file SusiMail message preview on hover.
  * Displays a floating preview popup when hovering over mail subject links
  * in the folder list, with caching, timeout handling, and theme-aware styling.
@@ -10,7 +11,6 @@
  * Sets up the preview-popup system. Wires up mouseenter/mouseleave
  * event delegation on the document, creates the popup element, and
  * manages fetch caching for message previews.
- *
  * @function previewMail
  * @returns {void}
  */

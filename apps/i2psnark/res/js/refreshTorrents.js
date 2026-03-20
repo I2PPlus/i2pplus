@@ -1,4 +1,5 @@
 /**
+ * @module refreshTorrents
  * @file refreshTorrents.js - Selectively refreshes torrents and volatile elements in the I2PSnark UI.
  * @description Core refresh module for I2PSnark. Manages periodic AJAX-based updates of the
  * torrent list, screen log, header/footer stats, and file listings. Uses a web worker for
@@ -6,7 +7,6 @@
  * initialization of sub-modules (sorting, pagination, filter bar, lightbox, debug toggle).
  * @author dr|z3d
  * @license AGPL3 or later
- * @module refreshTorrents
  */
 
 import {MESSAGE_TYPES} from "./messageTypes.js";

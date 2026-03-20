@@ -1,4 +1,5 @@
 /**
+ * @module morphdom
  * @file Fast and lightweight DOM diffing/patching library.
  * @description morphdom provides efficient DOM updates by diffing and patching changes.
  * @see {@link https://github.com/patrick-steele-idem/morphdom}

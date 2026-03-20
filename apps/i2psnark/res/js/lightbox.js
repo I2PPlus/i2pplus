@@ -6,7 +6,6 @@
  * Based on jsOnlyLightbox by Felix Hagspiel.
  * @author dr|z3d
  * @see {@link https://github.com/felixhagspiel/jsOnlyLightbox}
- * @module Lightbox
  */
 
 /**

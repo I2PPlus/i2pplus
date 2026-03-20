@@ -1,5 +1,6 @@
 /**
- * @file jobs.js
+ * @module jobs
+
  * @description Handles auto-refresh, table sorting, and section toggle state
  * persistence for the /jobs pages. Manages expand/collapse state of finished
  * and scheduled job sections via localStorage.

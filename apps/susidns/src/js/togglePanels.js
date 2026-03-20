@@ -1,4 +1,5 @@
 /**
+ * @module togglePanels
  * @file I2P+ SusiDNS panel toggler.
  * Provides show/hide functionality for the "Add New Host" and "Import Hosts"
  * panels, including scroll-lock and iframe-aware behavior.

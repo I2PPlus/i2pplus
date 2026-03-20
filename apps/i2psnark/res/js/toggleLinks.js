@@ -1,11 +1,11 @@
 /**
+ * @module toggleLinks
  * @file toggleLinks.js - Toggle between magnet/torrent links and copy magnet links to clipboard.
  * @description Provides UI controls for switching between magnet link and direct torrent link
  * display modes in I2PSnark. Also enables copying magnet links to the system clipboard with
  * a toast notification on success.
  * @author dr|z3d
  * @license AGPL3 or later
- * @module toggleLinks
  */
 
 "use strict";

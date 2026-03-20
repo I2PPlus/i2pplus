@@ -1,5 +1,6 @@
 /**
- * @file selectAll.js
+ * @module selectAll
+
  * @description Selects all text in readonly input fields when clicked,
  * facilitating easy copy operations.
  * @license AGPL3 or later

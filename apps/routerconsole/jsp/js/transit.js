@@ -1,5 +1,6 @@
 /**
- * @file transit.js
+ * @module transit
+
  * @description Handles automatic and manual refresh with table sorting for the
  * /transit page. Monitors transit peer row counts to optimize refresh selectors.
  * @author dr|z3d

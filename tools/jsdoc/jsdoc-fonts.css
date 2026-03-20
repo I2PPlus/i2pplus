@@ -1,0 +1,29 @@
+/**
+ * @file fonts.css - Local font declarations for JSDoc documentation.
+ * Replaces external Google Fonts imports with local Open Sans and Fira Code.
+ * @see installer/resources/themes/fonts/
+ */
+
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url(../fonts/OpenSans/OpenSans.woff2) format('woff2');
+}
+
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url(../fonts/OpenSans/OpenSans-Italic.woff2) format('woff2');
+}
+
+@font-face {
+  font-family: 'Fira Code';
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url(../fonts/FiraCode.woff2) format('woff2');
+}

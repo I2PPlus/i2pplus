@@ -2,7 +2,6 @@
  * @file messageTypes.js - Defines message type constants for Web Worker communication in I2PSnark.
  * @description Provides a shared set of message type identifiers used to coordinate
  * fetch, abort, and error responses between the main thread and the snarkWork Web Worker.
- * @module messageTypes
  */
 
 /**

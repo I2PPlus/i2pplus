@@ -1,5 +1,5 @@
 /**
- * @file tablesort.dotsep.js
+
  * @description Dot separated values sorting plugin for Tablesort (e.g., IP addresses or version numbers)
  */
 

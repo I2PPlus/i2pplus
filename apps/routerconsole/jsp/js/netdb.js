@@ -1,5 +1,6 @@
 /**
- * @file netdb.js
+ * @module netdb
+
  * @description Handles auto-refresh and table sorting for the /netdb pages,
  * including country list, router entries, and leaseset views.
  * @author dr|z3d

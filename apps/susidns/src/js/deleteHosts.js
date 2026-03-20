@@ -1,4 +1,5 @@
 /**
+ * @module deleteHosts
  * @file I2P+ SusiDNS host deletion utility.
  * Provides command-line style host deletion from address books via URL parameters.
  * @author dr|z3d
@@ -9,7 +10,6 @@
  * Performs an asynchronous deletion request for the specified hosts from the
  * router address book. Fetches the initial page to obtain a CSRF serial token,
  * then submits a POST request to delete the selected hosts.
- *
  * @async
  * @function performDelete
  * @param {string[]} hosts - Array of host addresses to delete.
@@ -73,7 +73,6 @@ async function performDelete(hosts) {
 /**
  * Extracts the message content from the server response HTML by querying
  * the element with id "messages".
- *
  * @function extractMessageContent
  * @param {string} html - Raw HTML string returned from the server.
  * @returns {string} The innerHTML of the messages element, or "Server Error"
@@ -89,7 +88,6 @@ function extractMessageContent(html) {
 /**
  * Displays a status message to the user, optionally including a list of
  * affected hosts.
- *
  * @function displayMessage
  * @param {string} message - The message text (may contain HTML) to display.
  * @param {string} className - CSS class name to apply (e.g. "success", "error", "warning").

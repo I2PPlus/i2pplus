@@ -1,4 +1,5 @@
 /**
+ * @module htmlView
  * @file SusiMail HTML view handler.
  * Manages toggle-view buttons for switching between text and HTML mail
  * views, and applies fallback CSS styling inside the HTML iframe.
@@ -10,7 +11,6 @@
  * Sets up the view-toggle and "open in new tab" buttons by copying
  * the hidden toggle URL into visible control elements.
  * Handles both parent-window and iframe contexts.
- *
  * @function initViewToggle
  * @returns {void}
  */
@@ -43,7 +43,6 @@ function initViewToggle() {
 /**
  * Injects a fallback CSS stylesheet into the HTML mail iframe to ensure
  * consistent font and background rendering.
- *
  * @function setupFallbackCss
  * @returns {void}
  */

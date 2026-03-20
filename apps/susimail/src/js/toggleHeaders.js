@@ -1,4 +1,5 @@
 /**
+ * @module toggleHeaders
  * @file SusiMail toggle-headers utility.
  * Provides expand/collapse controls for showing or hiding debug email
  * headers in the message view.
@@ -8,7 +9,6 @@
 
 /**
  * Initialises the expand/collapse toggle buttons for debug headers.
- *
  * @function initToggleHeaders
  * @returns {void}
  */

@@ -1,4 +1,5 @@
 /**
+ * @module graphRefresh
  * @file graphRefresh.js - Dynamically refreshes the I2PSnark download speed graph.
  * @description Fetches a bandwidth graph image from the I2P stats servlet at a configurable
  * interval, converts it to a blob URL, and applies it as a CSS custom property so the UI
@@ -6,7 +7,6 @@
  * log when available. Caches responses and auto-disables on HTTP 400 errors.
  * @author dr|3d
  * @license AGPL3 or later
- * @module graphRefresh
  */
 
 /**

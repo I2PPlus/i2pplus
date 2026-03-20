@@ -1288,9 +1288,9 @@
       <arg value="-c"/>
       <arg value="tools/jsdoc/jsdoc.json"/>
       <arg value="-t"/>
-      <arg value="node_modules/docdash"/>
+      <arg value="tools/jsdoc/docdash-template"/>
     </exec>
-    <exec executable="./tools/jsdoc/jsdoc-patch-fonts.sh" failonerror="false">
+    <exec executable="./tools/jsdoc/jsdoc-patch.js" failonerror="false">
       <arg value="dist/jsdoc"/>
     </exec>
     <if>
@@ -1313,7 +1313,7 @@
       <arg value="-t"/>
       <arg value="node_modules/minami"/>
     </exec>
-    <exec executable="./tools/jsdoc/jsdoc-patch-fonts.sh" failonerror="false">
+    <exec executable="./tools/jsdoc/jsdoc-patch.js" failonerror="false">
       <arg value="dist/jsdoc"/>
     </exec>
     <if>
@@ -1336,7 +1336,7 @@
       <arg value="-t"/>
       <arg value="node_modules/tui-jsdoc-template"/>
     </exec>
-    <exec executable="./tools/jsdoc/jsdoc-patch-fonts.sh" failonerror="false">
+    <exec executable="./tools/jsdoc/jsdoc-patch.js" failonerror="false">
       <arg value="dist/jsdoc"/>
     </exec>
     <if>

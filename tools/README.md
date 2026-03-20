@@ -1,27 +1,46 @@
-# tools/
+# Tools
 
-Development tools and configurations.
+Build and analysis tools for I2P+.
 
 ## JSDoc
 
-| File | Description |
-|---|---|
-| `jsdoc/jsdoc.json` | JSDoc configuration (sources, plugins, docdash options) |
-| `jsdoc/jsdoc-dark.css` | Dark theme CSS with prefers-color-scheme support |
-| `jsdoc/jsdoc-fonts.css` | Local font declarations (Open Sans, Fira Code) |
-| `jsdoc/jsdoc-patch-fonts.sh` | Post-process script: strip external fonts, copy local fonts |
-| `jsdoc/package.json` | Project metadata for JSDoc header |
+JavaScript API documentation generator.
 
-### Usage
-
-Generate docs from project root:
+### Setup
 
 ```bash
-ant jsdoc          # docdash template
-ant jsdoc-minami   # minami template
-ant jsdoc-tui      # tui-jsdoc-template
-ant jsdoc-zip      # docdash + zip
+cd tools/jsdoc
+npm install
 ```
 
-All templates are minified automatically if `minify` is installed.
-Fonts are patched automatically via `jsdoc-patch-fonts.sh`.
+### Build
+
+```bash
+ant jsdoc
+```
+
+Output: `dist/jsdoc/`
+
+### Available Targets
+
+- `ant jsdoc` - docdash template (default)
+- `ant jsdoc-zip` - docdash as zip
+- `ant jsdoc-minami` - minami template
+- `ant jsdoc-minami-zip` - minami as zip
+- `ant jsdoc-tui` - tui-jsdoc-template
+- `ant jsdoc-tui-zip` - tui as zip
+
+### jsdoc/ Directory
+
+- `jsdoc.json` - JSDoc configuration
+- `jsdoc-patch.js` - Post-processes output: fonts, stylesheets, footer cleanup
+- `jsdoc-dark.css` - Dark theme overrides
+- `jsdoc-fonts.css` - Font declarations
+- `package.json` - npm dependencies
+
+## Other Tools
+
+- `ant-contrib.jar` - Ant tasks extension
+- `google-java-format.jar` - Java code formatter
+- `pmd-bin-7.7.0/` - PMD source code analyzer
+- `spotbugs/` - Static analysis for Java

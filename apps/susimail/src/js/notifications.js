@@ -1,4 +1,5 @@
 /**
+ * @module notifications
  * @file SusiMail notification handler.
  * Auto-removes empty notification elements and adds a click-to-dismiss
  * handler for notification banners.
@@ -9,7 +10,6 @@
 /**
  * IIFE that sets up DOM-based notification management.
  * Removes empty notices on load and allows manual dismissal via click.
- *
  * @function removeNotify
  * @returns {void}
  */

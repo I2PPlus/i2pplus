@@ -1,5 +1,6 @@
 /**
- * @file newHosts.js
+ * @module newHosts
+
  * @description Fetches and displays new hostname registrations from /susidns/log.jsp
  * in the sidebar, with a badge counter and tooltip listing. Caches data in localStorage
  * and periodically refreshes. Only active on the dark theme.

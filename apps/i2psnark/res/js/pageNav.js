@@ -1,11 +1,11 @@
 /**
+ * @module pageNav
  * @file pageNav.js - AJAX page navigation for I2PSnark torrent listings.
  * @description Intercepts clicks on pagination links in the I2PSnark UI, converts them
  * to AJAX requests, and updates the browser history without full page reloads. Prevents
  * duplicate listeners via a body class check.
  * @author dr|z3d
  * @license AGPL3 or later
- * @module pageNav
  */
 
 import {doRefresh} from "./refreshTorrents.js";

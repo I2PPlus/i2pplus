@@ -1,5 +1,6 @@
 /**
- * @file graphs.js
+ * @module graphs
+
  * @description Handles AJAX graph refresh, configuration panel toggle, and
  * graph filtering on the /graphs page. Supports lazy loading of graph images,
  * visibility-based refresh scheduling, and persistent filter state via localStorage.

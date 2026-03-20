@@ -1,5 +1,6 @@
 /**
- * @file stats.js
+ * @module stats
+
  * @description Handles periodic refresh and tab switching for the /stats page.
  * Fetches updated stat data via XHR and replaces stat list elements.
  * @author dr|z3d

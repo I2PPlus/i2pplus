@@ -1,4 +1,5 @@
 /**
+ * @module folder
  * @file SusiMail folder view button handlers.
  * Manages delete, select-all, clear-selection, and row-click interactions
  * in the mail folder list view.
@@ -9,7 +10,6 @@
 /**
  * Initialises all interactive buttons in the folder view by mapping
  * CSS class names to their respective setup handlers.
- *
  * @function initButtons
  * @returns {void}
  */
@@ -32,7 +32,6 @@ function initButtons() {
 /**
  * Attaches a click handler that enables/disables the delete button
  * based on whether any visible checked checkboxes exist.
- *
  * @function setupDeleteClickHandler
  * @param {HTMLElement} elem - The button element to bind.
  * @param {HTMLFormElement} form - The parent form containing the checkboxes.
@@ -53,7 +52,6 @@ function setupDeleteClickHandler(elem, form) {
  * Returns a handler factory that checks or unchecks all visible
  * delete-checkboxes, and updates the state of delete/markall/clearselection
  * buttons accordingly.
- *
  * @function setupToggleSelectionHandler
  * @param {boolean} selectAll - True to check all, false to uncheck all.
  * @returns {Function} A function accepting (elem, form) to wire up the click listener.
@@ -91,7 +89,6 @@ function setupToggleSelectionHandler(selectAll) {
 /**
  * Attaches a click handler that navigates to the URL stored in the
  * element's `data-url` attribute.
- *
  * @function addDirectClickHandler
  * @param {HTMLElement} elem - The element whose `data-url` contains the target URL.
  * @returns {void}
@@ -104,7 +101,6 @@ function addDirectClickHandler(elem) {
 /**
  * Evaluates the current checkbox state and updates the delete, mark-all,
  * and clear-selection button enabled/disabled states.
- *
  * @function deleteboxclicked
  * @param {HTMLFormElement} form - The form containing the delete checkboxes.
  * @returns {void}

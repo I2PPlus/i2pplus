@@ -1,0 +1,329 @@
+/**
+ * @file jsdoc-dark.css - Dark theme for JSDoc documentation.
+ * Auto-toggles based on user-prefers-color-scheme. Dark by default.
+ * Uses Open Sans (body) and Fira Code (code) fonts.
+ */
+
+:root {
+  --accent: #89b4fa;
+  --bg: #1a1b26;
+  --bg-alt: #16161e;
+  --border: #292e42;
+  --code: #77f;
+  --hover: #33f;
+  --link: #89dceb;
+  --text: #c0caf5;
+  --text-dim: #7982a9;
+}
+
+body {
+  background-color: var(--bg) !important;
+  color: var(--text) !important;
+  font-family: Open Sans, sans-serif !important;
+  font-size: 16px !important;
+}
+
+body:not([id]) article {
+  display: none !important;
+}
+
+body:not([id]) #main {
+  columns: auto 200px;
+  padding-right: 60px;
+}
+
+body:not([id]) #main h1, body:not([id]) #main h3 {
+  column-span: all !important;
+}
+
+body:not([id]) #main section h2 {
+  border-radius: 6px !important;
+  width: fit-content !important;
+  min-width: 200px !important;
+  display: inline-block !important;
+  font-size: 14px !important;
+  text-align: center !important;
+  margin: 4px !important;
+}
+
+/* Sidebar */
+nav {
+  background-color: var(--bg-alt) !important;
+  border-right-color: var(--border) !important;
+  margin-left: -20px !important;
+  padding-left:18px !important;
+}
+
+nav h4 {
+  color: var(--accent) !important;
+  font-weight: 700 !important;
+  font-size: 16px !important;
+  margin: 20px auto 0 -8px !important;
+  padding-bottom: 6px !important;
+  border-bottom: 2px solid var(--border);
+}
+
+nav h2 {
+  color: var(--accent) !important;
+  font-weight: 600 !important;
+}
+
+nav #nav-search + h2 {
+  font-size: 120%;
+  position: absolute;
+  top: 0;
+}
+
+nav #nav-search + h2~h2 {
+  display: none;
+}
+
+nav h2 a, nav ul > li > a {
+  color: var(--link) !important;
+  font-weight: 600 !important;
+}
+
+nav h2 a:hover {
+  color: var(--hover) !important;
+}
+
+nav ul {
+  font-size: 13px !important;
+}
+
+nav #nav-search {
+  background-color: var(--bg) !important;
+  border-color: var(--border) !important;
+  color: var(--text) !important;
+  margin-top: 50px !important;
+}
+
+#console nav li:not(.console) {
+  display: none !important;
+}
+
+#i2psnark nav li:not(.i2psnark) {
+  display: none !important;
+}
+
+#i2ptunnel nav li:not(.i2ptunnel) {
+  display: none !important;
+}
+
+#imagegen nav li:not(.imagegen) {
+  display: none !important;
+}
+
+#susidns nav li:not(.susidns) {
+  display: none !important;
+}
+
+#susimail nav li:not(.susimail) {
+  display: none !important;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text) !important;
+}
+
+h1 { font-weight: 300 !important; }
+h2 { font-weight: 700 !important; }
+h3 { font-weight: 600 !important; }
+h4 { font-weight: 600 !important; }
+
+h1.page-title {
+  font-size: 32px !important;
+  font-weight: 600 !important;
+}
+
+#main h2 {
+  font-size: 18px !important;
+  width: calc(100% - 20px) !important;
+  background: #3398 !important;
+  padding: 5px 10px !important;
+  border-radius: 5px 5px 0 0 !important;
+  border: 2px solid #337 !important;
+}
+
+#main h3.subsection-title {
+  font-weight: 800 !important;
+  margin: 20px 0 -10px 20px !important;
+}
+
+body:not([id]) #main h3.subsection-title {
+  margin: 20px 0 10px 20px !important;
+}
+
+h4.name {
+  background: #3383 !important;
+  color: var(--link) !important;
+  border: 1px solid var(--border) !important;
+  border-left: 3px solid var(--accent) !important;
+  box-shadow: none !important;
+}
+
+h4.name a {
+  color: var(--link) !important;
+}
+
+h4.name a:hover {
+  color: #fff !important;
+}
+
+/* Links */
+a, a:active {
+  color: var(--link) !important;
+}
+
+a:hover {
+  color: var(--accent) !important;
+}
+
+article a {
+  border-bottom-color: var(--border) !important;
+}
+
+/* Code */
+tt, code, kbd, samp, pre {
+  background-color: var(--bg-alt) !important;
+  color: var(--text) !important;
+}
+
+.details, .description {
+  border: 0 !important;
+  padding: 3px 20px !important;
+  margin: -7px 0 0 !important;
+  width: calc(100% - 20px);
+  font-size: 105% !important;
+  background: #114;
+  border-radius: 0 0 5px 5px !important;
+  border: 2px solid #337 !important;
+}
+
+.details dd, .details .dummy, .details .dummy li  {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.prettyprint {
+  background-color: var(--bg-alt) !important;
+  border-color: var(--border) !important;
+}
+
+code, .prettyprint code, pre {
+  font-family: Fira Code !important;
+}
+
+.prettyprint code {
+  background-color: var(--bg-alt) !important;
+  color: var(--text) !important;
+}
+
+.prettyprint.source {
+  background-color: var(--bg-alt) !important;
+  border-radius: 8px !important;
+  border: 2px solid var(--border) !important;
+  margin-right: 20px !important;
+  box-shadow: 4px 4px 4px #0004, 0 0 0 1px #000 inset;
+}
+
+.prettyprint.linenums li {
+  border-left-color: var(--border) !important;
+}
+
+.prettyprint.linenums li.selected,
+.prettyprint.linenums li.selected * {
+  background-color: rgba(137, 180, 250, 0.1) !important;
+}
+
+/* Tables */
+table, .params, .props {
+  border-color: var(--border) !important;
+}
+
+thead tr {
+  background-color: var(--bg-alt) !important;
+  border-bottom-color: var(--border) !important;
+  font-weight: 700 !important;
+}
+
+td, th {
+  border-color: var(--border) !important;
+}
+
+.params td, .params .name, .props .name, .name code {
+  color: var(--accent) !important;
+}
+
+.params td {
+  border-top-color: var(--border) !important;
+}
+
+.params .name,
+.props .name,
+.name code {
+  color: var(--code) !important;
+  font-weight: 600 !important;
+}
+
+/* Types and signatures */
+.param-type {
+  color: var(--code) !important;
+  font-weight: 600 !important;
+}
+
+.type-signature {
+  color: var(--accent) !important;
+  font-weight: 600 !important;
+}
+
+.signature {
+  color: var(--link) !important;
+}
+
+.signature-attributes {
+  color: var(--text-dim) !important;
+  font-weight: 400 !important;
+}
+
+.param-type dt,
+.param-type dd {
+  color: var(--link) !important;
+}
+
+/* Misc */
+.ancestors, .ancestors a {
+  color: var(--text-dim) !important;
+}
+
+footer {
+  border-top-color: var(--border) !important;
+  color: var(--text-dim) !important;
+}
+
+section {
+  background-color: var(--bg) !important;
+}
+
+.disabled {
+  color: var(--text-dim) !important;
+}
+
+.important {
+  color: #f38ba8 !important;
+  font-weight: 700 !important;
+}
+
+.nav-heading a {
+  color: var(--text) !important;
+}
+
+#main {
+  padding-bottom: 30px !important;
+}
+
+/* Scrollbar */
+nav::-webkit-scrollbar { width: 6px; }
+nav::-webkit-scrollbar-track { background: var(--bg-alt); }
+nav::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }

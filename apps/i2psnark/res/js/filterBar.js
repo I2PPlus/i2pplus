@@ -1,11 +1,11 @@
 /**
+ * @module filterBar
  * @file filterBar.js - Setup I2PSnark torrent display filter buttons and AJAX filter loading.
  * @description Manages the filter bar UI for showing/hiding torrents by status (all, seeding,
  * downloading, etc.). Handles badge count display, filter state persistence to localStorage,
  * URL updates for sort icons, and AJAX-based loading of filtered content.
  * @author dr|z3d
  * @license AGPL3 or later
- * @module filterBar
  */
 
 import {refreshTorrents, doRefresh} from "./refreshTorrents.js";

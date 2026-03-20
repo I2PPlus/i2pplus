@@ -1,5 +1,6 @@
 /**
- * @file profiles.js
+ * @module profiles
+
  * @description Handles auto-refresh, table sorting, and session ban summaries
  * for the /profiles pages, including profile lists, floodfill profiles, and banlist.
  * @author dr|z3d

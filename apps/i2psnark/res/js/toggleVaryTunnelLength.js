@@ -1,11 +1,11 @@
 /**
+ * @module toggleVaryTunnelLength
  * @file toggleVaryTunnelLength.js - Configure tunnel length variance in the I2PSnark UI.
  * @description Provides a toggle mechanism for inbound and outbound tunnel length variance
  * by manipulating the i2cpOpts input field. When a checkbox is checked, sets
  * lengthVariance=1; when unchecked, sets it back to 0. Appends the option if not present.
  * @author dr|z3d
  * @license AGPL3 or later
- * @module toggleVaryTunnelLength
  */
 
 /**

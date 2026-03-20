@@ -1,5 +1,6 @@
 /**
- * @file togglePassword.js
+ * @module togglePassword
+
  * @description Toggles password field visibility between plaintext and masked display.
  * @license AGPL3 or later
  */

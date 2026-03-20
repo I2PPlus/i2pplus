@@ -1,4 +1,5 @@
 /**
+ * @module toggleThrottler
  * @file toggleThrottler.js - Toggle server throttler section and persist state
  * @description I2PTunnel Manager component that toggles the throttler panel visibility
  * and remembers the user's preference via localStorage

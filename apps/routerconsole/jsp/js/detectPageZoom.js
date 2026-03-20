@@ -1,5 +1,6 @@
 /**
- * @file detectPageZoom.js
+ * @module detectPageZoom
+
  * @description Detects browser page zoom level changes and applies/removes
  * a zoom-specific CSS file when using the dark theme.
  * @author dr|z3d

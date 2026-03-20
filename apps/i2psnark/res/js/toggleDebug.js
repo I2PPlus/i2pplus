@@ -1,10 +1,10 @@
 /**
+ * @module toggleDebug
  * @file toggleDebug.js - Toggle debug table-rows and panel in I2PSnark.
  * @description Adds a click listener that toggles a "debug" class on the document body,
  * allowing debug-related table rows and panels to be shown or hidden in the I2PSnark UI.
  * @author dr|z3d
  * @license AGPL3 or later
- * @module toggleDebug
  */
 
 /**

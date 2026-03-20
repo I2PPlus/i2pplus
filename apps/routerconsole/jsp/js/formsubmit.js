@@ -1,5 +1,6 @@
 /**
- * @file formsubmit.js
+ * @module formsubmit
+
  * @description Handles form submission with progress bar display and automatic
  * page element refresh via XHR on configuration pages (update, reseed).
  * @author dr|z3d

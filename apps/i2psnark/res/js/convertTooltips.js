@@ -1,4 +1,5 @@
 /**
+ * @module convertTooltips
  * @file convertTooltips.js - Convert title attributes to data-tooltips for enhanced styling.
  * @description Converts native browser title attributes on progress bar and torrent status
  * elements into custom data-tooltip attributes with CSS-based tooltip styling. Uses a
@@ -6,7 +7,6 @@
  * tooltips with arrow indicators.
  * @author dr|z3d
  * @license AGPL3 or later
- * @module convertTooltips
  */
 
 /**

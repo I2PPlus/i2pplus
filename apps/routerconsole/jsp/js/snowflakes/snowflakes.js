@@ -1,4 +1,5 @@
 /**
+ * @module snowflakes
  * @file Snowflakes © 2024 Denis Seleznev
  * @description Canvas-based snowflake animation library, modified by dr|z3d for I2P+
  * @author Denis Seleznev

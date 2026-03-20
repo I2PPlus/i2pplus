@@ -1,4 +1,5 @@
 /**
+ * @module initResizer
  * @file I2P+ initResizer.js by dr|z3d
  * @description Initialize iframeResizer and scroll the parent and child windows to top and listen for 'scrollToElement' event data to scroll to specified element
  * @license AGPL3 or later

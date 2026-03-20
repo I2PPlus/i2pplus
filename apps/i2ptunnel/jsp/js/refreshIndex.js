@@ -1,4 +1,5 @@
 /**
+ * @module refreshIndex
  * @file refreshIndex.js - Periodic refresh and status updates for I2PTunnel Manager
  * @description Handles auto-refreshing the tunnel index page, updating service status counts,
  * managing router down state overlay, and providing tunnel control functionality

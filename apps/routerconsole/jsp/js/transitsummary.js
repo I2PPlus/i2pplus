@@ -1,5 +1,6 @@
 /**
- * @file transitsummary.js
+ * @module transitsummary
+
  * @description Handles automatic refresh and table sorting for the /transitsummary
  * page. Converts KB values to MB and refreshes transit peer/tunnel data.
  * @author dr|z3d

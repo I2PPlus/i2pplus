@@ -1,10 +1,10 @@
 /**
+ * @module snarkSort
  * @file snarkSort.js - Navigate I2PSnark torrent sorters via AJAX calls.
  * @description Intercepts clicks on column-sort links in the I2PSnark torrent table header,
  * converts them into AJAX requests, and updates the browser history to reflect the active sort.
  * @author dr|z3d
  * @license AGPL3 or later
- * @module snarkSort
  */
 
 import {doRefresh} from "./refreshTorrents.js";

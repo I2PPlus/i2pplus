@@ -1,5 +1,6 @@
 /**
- * @file geomap.js
+ * @module geomap
+
  * @description Interactive SVG world map for the NetDB page showing router distribution
  * by country, floodfill, or bandwidth tier. Supports hover infoboxes, color-coded
  * shape classes based on router counts, and periodic data refresh from /netdb.

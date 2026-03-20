@@ -1,4 +1,5 @@
 /**
+ * @module filterTunnels
  * @file filterTunnels.js - Realtime filtering of I2PTunnel Manager tunnels
  * @description Creates a search input that filters tunnel blocks based on user input
  * matching against tunnel name, type, interface, location, and port

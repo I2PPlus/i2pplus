@@ -1,5 +1,6 @@
 /**
- * @file configclients.js
+ * @module configclients
+
  * @description Attaches confirmation dialogs to delete buttons on the /configclients
  * page to prevent accidental client removal.
  * @license AGPL3 or later

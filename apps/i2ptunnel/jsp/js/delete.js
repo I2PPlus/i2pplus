@@ -1,4 +1,5 @@
 /**
+ * @module delete
  * @file delete.js - Confirmation dialog for tunnel deletion in I2PTunnel Manager
  * @description Attaches click handlers to delete buttons to prompt user confirmation before deletion
  * @license AGPL3 or later

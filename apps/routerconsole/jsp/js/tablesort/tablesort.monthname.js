@@ -1,5 +1,5 @@
 /**
- * @file tablesort.monthname.js
+
  * @description Month name sorting plugin for Tablesort
  */
 

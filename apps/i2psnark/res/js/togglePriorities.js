@@ -1,11 +1,11 @@
 /**
+ * @module togglePriorities
  * @file togglePriorities.js - Toggle file download priorities for all displayed files in I2PSnark.
  * @description Adds a toggle row to the file directory header that allows bulk toggling of
  * download priority (high/skip) for all incomplete files. Supports mutual exclusion between
  * priority levels and falls back to normal priority when all toggles are unchecked.
  * @author dr|z3d
  * @license AGPL3 or later
- * @module togglePriorities
  */
 
 document.addEventListener("DOMContentLoaded", function() {

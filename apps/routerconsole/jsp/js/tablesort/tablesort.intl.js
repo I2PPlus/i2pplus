@@ -1,5 +1,5 @@
 /**
- * @file tablesort.intl.js
+
  * @description Internationalized sorting plugin for Tablesort using Intl.Collator
  */
 

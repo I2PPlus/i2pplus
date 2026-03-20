@@ -1,5 +1,5 @@
 /**
- * @file tablesort.number.js
+
  * @description Number sorting plugin for Tablesort
  */
 

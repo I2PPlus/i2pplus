@@ -1,11 +1,11 @@
 /**
+ * @module toggleConfigs
  * @file toggleConfigs.js - Enable toggling of I2PSnark's tracker and filter configuration panels.
  * @description Provides expand/collapse functionality for the file filter and tracker
  * configuration tables in I2PSnark. Handles iframe-aware scrolling by posting messages
  * to the parent frame when embedded, or scrolling natively in standalone mode.
  * @author dr|3d
  * @license AGPL3 or later
- * @module toggleConfigs
  */
 
 /**

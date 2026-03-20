@@ -1,5 +1,6 @@
 /**
- * @file refreshElements.js
+ * @module refreshElements
+
  * @description Refreshes DOM elements via fetch using a SharedWorker for background
  * requests. Uses morphdom for efficient DOM diffing and supports visibility-based
  * refresh scheduling.

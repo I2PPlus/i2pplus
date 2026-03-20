@@ -1,5 +1,6 @@
 /**
- * @file miniGraph.js
+ * @module miniGraph
+
  * @description Renders a mini bandwidth graph in the console sidebar using
  * a SharedWorker for background fetch requests and canvas rendering for
  * efficient updates.

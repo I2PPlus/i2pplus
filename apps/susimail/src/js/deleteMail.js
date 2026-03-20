@@ -1,4 +1,5 @@
 /**
+ * @module deleteMail
  * @file I2P+ SusiMail delete-mail modal handler.
  * Ensures the delete-mail confirmation modal is correctly positioned and
  * visible on instantiation, with iframe-aware viewport calculations
@@ -11,7 +12,6 @@
  * IIFE that manages the lifecycle of the delete-mail modal dialog.
  * Handles positioning, overlay creation, resize events, and automatic
  * cleanup when the modal element is removed from the DOM.
- *
  * @function handleModal
  * @returns {void}
  */
@@ -114,7 +114,6 @@
 
 /**
  * Creates and appends a fullscreen overlay `<div>` to the document body.
- *
  * @async
  * @function createOverlay
  * @returns {Promise<HTMLElement>} The created overlay element.

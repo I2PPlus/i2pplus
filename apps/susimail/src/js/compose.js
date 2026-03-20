@@ -1,4 +1,5 @@
 /**
+ * @module compose
  * @file SusiMail compose-window unload guard.
  * Prevents accidental navigation away from the compose page by prompting
  * the user before unload, unless a form submission button has been clicked.
@@ -13,7 +14,6 @@ window.addEventListener('beforeunload', (e)=>{if (beforePopup) e.returnValue=tru
 /**
  * Iterates over all elements with class "beforePopup" and attaches a
  * click handler that disables the beforeunload prompt.
- *
  * @function initPopup
  * @returns {void}
  */
@@ -29,7 +29,6 @@ function initPopup() {
 /**
  * Attaches a click listener to the given element that sets the global
  * {@link beforePopup} flag to false, suppressing the unload prompt.
- *
  * @function addClickHandler5
  * @param {HTMLElement} elem - The element to bind the click handler to.
  * @returns {void}

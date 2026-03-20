@@ -1,5 +1,6 @@
 /**
- * @file clickToClose.js
+ * @module clickToClose
+
  * @description Removes an element from the DOM after a fade-out animation on click.
  * Adds a "closed" CSS class, waits for the animation, then removes the element.
  * @author dr|z3d

@@ -1,4 +1,5 @@
 /**
+ * @module progressx
  * @file ProgressX 1.1, 2025-09-09
  * @description A lightweight progress bar library with theme support, optimized by dr|z3d
  * @author Ryad Pasha

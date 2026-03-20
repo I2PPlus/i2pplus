@@ -1,5 +1,5 @@
 /**
- * @file tablesort.date.js
+
  * @description Date sorting plugin for Tablesort
  */
 

@@ -1,5 +1,6 @@
 /**
- * @file lazyload.js
+ * @module lazyload
+
  * @description Implements lazy loading for elements with the "lazy" CSS class.
  * Uses IntersectionObserver to toggle "lazyshow"/"lazyhide" classes as elements
  * enter and exit the viewport. Falls back to simple class removal for small sets.

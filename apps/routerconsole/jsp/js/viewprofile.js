@@ -1,5 +1,6 @@
 /**
- * @file viewprofile.js
+ * @module viewprofile
+
  * @description Parses raw profile text data from the #viewprofile pre element
  * into a structured HTML table with section headers, formatted values (speed in MB/s,
  * readable dates, response times), and collapsible section toggles.

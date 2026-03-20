@@ -1,11 +1,11 @@
 /**
+ * @module tunnelCounter
  * @file tunnelCounter.js - Counts active in/out I2PSnark tunnels and displays them in the UI.
  * @description Periodically fetches tunnel data from the I2P tunnel configuration page, counts
  * active inbound and outbound snark tunnels, and injects the counts into the UI via CSS
  * pseudo-element content. Requires I2P+ and does not work with standalone I2PSnark.
  * @author dr|z3d
  * @license AGPL3 or later
- * @module tunnelCounter
  */
 
 import {isDocumentVisible} from "./refreshTorrents.js";

@@ -1,0 +1,80 @@
+{
+  "source": {
+    "include": [
+      "apps/i2psnark/res/js",
+      "apps/i2ptunnel/jsp/js",
+      "apps/imagegen/imagegen/webapp/src/main/webapp",
+      "apps/routerconsole/jsp/js",
+      "apps/susidns/src/js",
+      "apps/susimail/src/js",
+      "installer/resources/themes/geomap"
+    ],
+    "exclude": [
+      "apps/routerconsole/jsp/js/morphdom.js"
+    ],
+    "includePattern": ".+\\.js$"
+  },
+  "tags": {
+    "allowUnknownTags": true,
+    "dictionaries": ["jsdoc", "closure"]
+  },
+  "opts": {
+    "destination": "dist/jsdoc",
+    "recurse": true,
+    "template": "tools/jsdoc/docdash-template"
+  },
+  "plugins": [
+    "plugins/markdown",
+    "tools/jsdoc/plugins/section"
+  ],
+  "templates": {
+    "cleverLinks": true,
+    "monospaceLinks": true,
+    "default": {
+      "outputSourceFiles": true,
+      "layoutFile": "tools/jsdoc/tmpl/layout.tmpl"
+    }
+  },
+  "docdash": {
+    "static": false,
+    "sort": true,
+    "sectionOrder": [
+      "Modules",
+      "Classes",
+      "Externals",
+      "Events",
+      "Namespaces",
+      "Mixins",
+      "Interfaces"
+    ],
+    "search": true,
+    "collapse": true,
+    "wrap": true,
+    "typedefs": true,
+    "navLevel": 2,
+    "private": false,
+    "removeQuotes": "trim",
+    "commonNav": false,
+    "enableSectionHeadings": true,
+    "stylesheets": [
+      "tools/jsdoc/jsdoc-dark.css"
+    ],
+    "menu": {
+      "I2P+ Project": {
+        "href": "https://github.com/I2PPlus/i2pplus/",
+        "target": "_blank",
+        "class": "menu-item"
+      },
+      "I2P+ Javadoc": {
+        "href": "https://i2pplus.github.io/javadoc/",
+        "target": "_blank",
+        "class": "menu-item"
+      }
+    },
+    "meta": {
+      "title": "I2P+ JavaScript API Documentation",
+      "description": "API documentation for I2P+ JavaScript components",
+      "keyword": "i2p, anonymizing network, javascript, api"
+    }
+  }
+}

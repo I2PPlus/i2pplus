@@ -1,4 +1,5 @@
 /**
+ * @module toggleTunnelInfo
  * @file toggleTunnelInfo.js - Toggle visibility of tunnel info rows in I2PTunnel Manager
  * @description Expands or collapses tunnel detail rows and updates the toggle button icon
  * @license AGPL3 or later

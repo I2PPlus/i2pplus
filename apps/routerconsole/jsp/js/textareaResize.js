@@ -1,5 +1,6 @@
 /**
- * @file textareaResize.js
+ * @module textareaResize
+
  * @description Auto-resizes textarea elements to fit their content height.
  * Based on https://stackoverflow.com/a/25621277
  * @license AGPL3 or later

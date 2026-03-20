@@ -1,11 +1,11 @@
 /**
+ * @module toggleLog
  * @file toggleLog.js - Enable toggling of I2PSnark's screen log height.
  * @description Provides expand/collapse controls for the I2PSnark screen log (#screenlog).
  * Adds "expand" and "shrink" buttons that toggle between a collapsed (56px) and expanded
  * (up to 300px) view. Injects the required CSS dynamically.
  * @author dr|3d
  * @license AGPL3 or later
- * @module toggleLog
  */
 
 /**

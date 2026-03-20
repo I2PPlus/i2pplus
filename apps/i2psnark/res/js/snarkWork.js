@@ -1,4 +1,5 @@
 /**
+ * @module snarkWork
  * @file snarkWork.js - Web Worker for network requests in I2PSnark.
  * @description Runs as a Web Worker to handle fetch requests for HTML documents off the
  * main thread. Supports streaming reads, DOM parsing, and abort/cancellation via
@@ -6,7 +7,6 @@
  * the MESSAGE_TYPES protocol.
  * @author dr|z3d
  * @license AGPL3 or later
- * @module snarkWork
  */
 
 import {MESSAGE_TYPES} from "./messageTypes.js";

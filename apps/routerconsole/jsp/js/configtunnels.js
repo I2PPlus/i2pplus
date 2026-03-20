@@ -1,5 +1,6 @@
 /**
- * @file configtunnels.js
+ * @module configtunnels
+
  * @description Toggles the display of tunnel count badges (in/out) based on
  * whether the tunnel configuration section is expanded or collapsed.
  * @author dr|z3d
