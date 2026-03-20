@@ -316,6 +316,7 @@ public class JobQueueHelper extends HelperBase {
         ObjectCounterUnsafe<String> totalQueueCounter = new ObjectCounterUnsafe<String>();
         Map<String, Map<Long, List<Job>>> groupedJobs = new HashMap<String, Map<Long, List<Job>>>();
         int eligibleScheduledCount = 0;
+        long maxScheduledDelay = 0;
 
         // First pass: collect and group all jobs
         for (int i = 0; i < timedJobs.size(); i++) {
@@ -323,6 +324,10 @@ public class JobQueueHelper extends HelperBase {
             String jobName = j.getName();
             long delay = j.getTiming().getStartAfter() - now;
             boolean isDisabled = jobName.toLowerCase(java.util.Locale.US).contains("disabled");
+
+            // Track longest delay for non-disabled jobs
+            if (!isDisabled && delay > maxScheduledDelay)
+                maxScheduledDelay = delay;
 
             // Count eligible jobs (1s to 20s delay, not disabled)
             if (delay > 1000 && delay <= 20000 && !isDisabled) {
@@ -362,10 +367,15 @@ public class JobQueueHelper extends HelperBase {
         Collections.sort(sortedJobs);
 
         // Build scheduled jobs list
+        String maxDelayStr = maxScheduledDelay > 0
+            ? " <span id=longest class=jobCounter style=float:right>" +
+              _t("Max wait: {0}", DataHelper.formatDuration2(maxScheduledDelay)) + "</span>"
+            : "";
         StringBuilder scheduledBuf = new StringBuilder(8192);
         scheduledBuf.append("<div class=tablewrap id=scheduled><h3 id=scheduledjobs>")
            .append(_t("Scheduled jobs")).append(": ")
            .append(displayedJobCount).append(" / ").append(eligibleScheduledCount)
+           .append(maxDelayStr)
            .append("</h3>\n<ol class=jobqueue>\n");
 
         for (JobTimeEntry entry : sortedJobs) {
@@ -401,7 +411,7 @@ public class JobQueueHelper extends HelperBase {
         // Update header with actual counts (simple string replacement safe here since we control the format)
         String headerPlaceholder = displayedJobCount + " / " + eligibleScheduledCount;
         scheduledBuf.replace(0, scheduledBuf.indexOf("</h3>") + 5,
-            "<div class=tablewrap id=scheduled><h3 id=scheduledjobs>" + _t("Scheduled jobs") + ": " + headerPlaceholder + "</h3>\n");
+            "<div class=tablewrap id=scheduled><h3 id=scheduledjobs>" + _t("Scheduled jobs") + ": " + headerPlaceholder + maxDelayStr + "</h3>\n");
 
         if (eligibleScheduledCount <= 0) {
             buf.setLength(0);
