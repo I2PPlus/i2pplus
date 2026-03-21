@@ -989,7 +989,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         }
 
         RepublishLeaseSetJob job = new RepublishLeaseSetJob(_context, this, hash);
-        
+
         // Try to register the job - if it fails, another job is already active
         if (!job.registerSelf()) {
             if (_log.shouldDebug()) {
@@ -1934,6 +1934,39 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (err != null) {
             throw new IllegalArgumentException("Invalid NetDbStore attempt - " + err);
         }
+
+        // Block LU and XG routers from entering the in-memory store
+        boolean isUs = _context.routerHash().equals(key);
+        if (!isUs) {
+            boolean isLTier = containsCapability(routerInfo, Router.CAPABILITY_BW12) ||
+                              containsCapability(routerInfo, Router.CAPABILITY_BW32);
+            boolean isUnreachable = containsCapability(routerInfo, Router.CAPABILITY_UNREACHABLE) ||
+                                    !containsCapability(routerInfo, Router.CAPABILITY_REACHABLE);
+            boolean isXTier = containsCapability(routerInfo, Router.CAPABILITY_BW_UNLIMITED);
+            boolean isG = containsCapability(routerInfo, Router.CAPABILITY_NO_TUNNELS);
+            String ipPort = getRouterIPPort(routerInfo);
+            String ver = routerInfo.getVersion();
+            if (isLTier && isUnreachable) {
+                long banExpire = _context.clock().now() + 60 * 60 * 1000;
+                _banLogger.logBan(key, ipPort, "LU Router (" + ver + ")", banExpire - _context.clock().now());
+                _context.banlist().banlistRouter(key, " ➜ LU Router (" + ver + ")", null, null, banExpire);
+                if (_log.shouldInfo()) {
+                    _log.info("Dropping LU RouterInfo [" + key.toBase64().substring(0,6) + "] -> " + ver + " / " +
+                              routerInfo.getCapabilities() + " from netdb store");
+                }
+                return null;
+            } else if (isG && isXTier) {
+                long banExpire = _context.clock().now() + 60 * 60 * 1000;
+                _banLogger.logBan(key, ipPort, "XG Router (" + ver + ")", banExpire - _context.clock().now());
+                _context.banlist().banlistRouter(key, " ➜ XG Router (" + ver + ")", null, null, banExpire);
+                if (_log.shouldInfo()) {
+                    _log.info("Dropping XG RouterInfo [" + key.toBase64().substring(0,6) + "] -> " + ver + " / " +
+                              routerInfo.getCapabilities() + " from netdb store");
+                }
+                return null;
+            }
+        }
+
         _context.peerManager().setCapabilities(key, routerInfo.getCapabilities());
         _ds.put(key, routerInfo, persist);
         if (rv == null) {_kb.add(key);}
