@@ -2,12 +2,12 @@
 
 ## Prerequisites
 
-| Requirement    | Details                                                      |
-|----------------|--------------------------------------------------------------|
-| **Java SDK**   | 17 or higher (OpenJDK, Oracle, or Microsoft JDK on Windows). |
-| **Apache Ant** | 1.9.8 or higher                                              |
-| **GNU gettext**| `xgettext`, `msgfmt`, and `msgmerge` must be on your PATH    |
-| **Locale**     | Build environment must use a UTF-8 locale                    |
+| Requirement      | Details                                                        |
+| ---------------- | -------------------------------------------------------------- |
+| **Java SDK**     | 17 or higher (OpenJDK, Oracle, or Microsoft JDK on Windows).   |
+| **Apache Ant**   | 1.9.8 or higher                                                |
+| **GNU gettext**  | `xgettext`, `msgfmt`, and `msgmerge` must be on your PATH      |
+| **Locale**       | Build environment must use a UTF-8 locale                      |
 
 For JVM compatibility details, see https://i2pplus.github.io/i2pplus
 
@@ -29,11 +29,11 @@ ant installer-osx
 
 This produces:
 
-| File             | Description                                         |
-|------------------|-----------------------------------------------------|
-| `install.jar`    | GUI and console installer                           |
-| `i2pinstall.exe` | Cross-platform wrapped installer (`ant pkg` only)   |
-| `i2pupdate.zip`  | Update package (`ant pkg` only)                     |
+| File               | Description                                           |
+| ------------------ | ----------------------------------------------------- |
+| `install.jar`      | GUI and console installer                             |
+| `i2pinstall.exe`   | Cross-platform wrapped installer (`ant pkg` only)     |
+| `i2pupdate.zip`    | Update package (`ant pkg` only)                       |
 
 ### Building native crypto libraries (jbigi)
 
@@ -104,13 +104,13 @@ This registers the service and enables it at boot. On systemd systems, a unit fi
 
 ### 3. Manage the service
 
-| Action            | Command                          |
-|-------------------|----------------------------------|
-| Start             | `sudo sh i2prouter start`        |
-| Stop gracefully   | `sudo sh i2prouter graceful`     |
-| Stop immediately  | `sudo sh i2prouter stop`         |
-| Status            | `sudo sh i2prouter status`       |
-| Uninstall         | `sudo sh i2prouter remove`       |
+| Action              | Command                            |
+| ------------------- | ---------------------------------- |
+| Start               | `sudo sh i2prouter start`          |
+| Stop gracefully     | `sudo sh i2prouter graceful`       |
+| Stop immediately    | `sudo sh i2prouter stop`           |
+| Status              | `sudo sh i2prouter status`         |
+| Uninstall           | `sudo sh i2prouter remove`         |
 
 On systemd systems you can also use:
 
@@ -124,10 +124,10 @@ sudo systemctl disable i2p
 
 ## Windows service management
 
-| Action               | Command                            |
-|----------------------|------------------------------------|
-| Install as service   | `install_i2p_service_winnt.bat`    |
-| Uninstall service    | `uninstall_i2p-service_winnt.bat`  |
+| Action                 | Command                              |
+| ---------------------- | ------------------------------------ |
+| Install as service     | `install_i2p_service_winnt.bat`      |
+| Uninstall service      | `uninstall_i2p-service_winnt.bat`    |
 
 ## Uninstalling
 

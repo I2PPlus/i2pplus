@@ -26,18 +26,18 @@ comments labelled `PORTABLE`. Do this before running I2P+ for the first time.
 
 ## Running I2P+
 
-| Platform          | Command              |
-|-------------------|----------------------|
-| Linux, BSD, Mac   | `sh i2prouter start` |
-| Windows           | `I2P.exe`            |
-| Without wrapper   | `sh runplain.sh`     |
+| Platform            | Command                |
+| ------------------- | ---------------------- |
+| Linux, BSD, Mac     | `sh i2prouter start`   |
+| Windows             | `I2P.exe`              |
+| Without wrapper     | `sh runplain.sh`       |
 
 ## Stopping I2P+
 
-| Method    | Command                                              |
-|-----------|------------------------------------------------------|
-| Graceful  | `sh i2prouter graceful` or http://localhost:7657/summaryframe |
-| Immediate | `sh i2prouter stop`                                  |
+| Method      | Command                                                       |
+| ----------- | ------------------------------------------------------------- |
+| Graceful    | `sh i2prouter graceful` or http://localhost:7657/summaryframe |
+| Immediate   | `sh i2prouter stop`                                           |
 
 ## Uninstalling
 
@@ -49,11 +49,11 @@ rm -rf $I2PInstallDir ~/.i2p
 
 As of release 2.12.0+ (0.9.69+), all platforms require Java 17 or higher.
 
-| Platform      | JVM                                    |
-|---------------|----------------------------------------|
-| Windows       | OpenJDK, Oracle, or Microsoft JDK      |
-| Linux         | OpenJDK or Oracle                      |
-| FreeBSD       | OpenJDK or Oracle                      |
-| Raspberry Pi  | OpenJDK or Oracle                      |
+| Platform        | JVM                                      |
+| --------------- | ---------------------------------------- |
+| Windows         | OpenJDK, Oracle, or Microsoft JDK        |
+| Linux           | OpenJDK or Oracle                        |
+| FreeBSD         | OpenJDK or Oracle                        |
+| Raspberry Pi    | OpenJDK or Oracle                        |
 
 For details, see https://i2pplus.github.io/i2pplus

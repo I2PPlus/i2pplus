@@ -172,14 +172,14 @@ The script uses only Python standard library modules and has no pip dependencies
 
 The `--ban-duration` argument accepts:
 
-| Format    | Example    | Meaning       |
-|-----------|------------|---------------|
-| `Nd`      | `7d`       | N days        |
-| `Nh`      | `168h`     | N hours       |
-| `Nw`      | `1w`       | N weeks       |
-| `Nm`      | `30m`      | N minutes     |
-| `forever` | `forever`  | Never expire  |
-| *integer* | `604800`   | Raw seconds   |
+| Format      | Example      | Meaning         |
+| ----------- | ------------ | --------------- |
+| `Nd`        | `7d`         | N days          |
+| `Nh`        | `168h`       | N hours         |
+| `Nw`        | `1w`         | N weeks         |
+| `Nm`        | `30m`        | N minutes       |
+| `forever`   | `forever`    | Never expire    |
+| *integer*   | `604800`     | Raw seconds     |
 
 A ban expires when `now - first_seen >= duration` and the IP is no longer in any sessionban file. If an IP keeps appearing in sessionban files, its timestamp is refreshed and the ban is extended.
 
@@ -289,16 +289,16 @@ The script reads:
 
 Bans are grouped by reason for logging purposes. All categories are unified into a single ban set — the categories are informational only.
 
-| Category          | Reason pattern             | Description                             |
-|-------------------|----------------------------|-----------------------------------------|
-| `long`            | (duration >= 4h)           | Long-duration bans regardless of reason |
-| `xg`              | "XG Router"                | XG-type routers                         |
-| `lu`              | "LU Router"                | LU-type routers                         |
-| `old_slow`        | "Old and Slow"             | Outdated or slow routers                |
-| `bad_handshake`   | "Bad NTCP Handshake"       | NTCP protocol failures                  |
-| `blocklist`       | "Blocklist"                | Known blocklisted peers                 |
-| `sybil`           | "Sybil"                    | Suspected sybil routers                 |
-| `no_version`      | "No version in RouterInfo" | Malformed router info                   |
+| Category            | Reason pattern               | Description                               |
+| ------------------- | ---------------------------- | ----------------------------------------- |
+| `long`              | (duration >= 4h)             | Long-duration bans regardless of reason   |
+| `xg`                | "XG Router"                  | XG-type routers                           |
+| `lu`                | "LU Router"                  | LU-type routers                           |
+| `old_slow`          | "Old and Slow"               | Outdated or slow routers                  |
+| `bad_handshake`     | "Bad NTCP Handshake"         | NTCP protocol failures                    |
+| `blocklist`         | "Blocklist"                  | Known blocklisted peers                   |
+| `sybil`             | "Sybil"                      | Suspected sybil routers                   |
+| `no_version`        | "No version in RouterInfo"   | Malformed router info                     |
 
 The script logs counts for each category on every run, which can help identify attack patterns over time.
 
@@ -308,28 +308,28 @@ Bogon (non-routable, reserved, or private) IPs are automatically excluded from b
 
 **Filtered IPv4 ranges:**
 
-| Range            | Description        |
-|------------------|--------------------|
-| 127.0.0.0/8      | Loopback           |
-| 10.0.0.0/8       | Private (RFC 1918) |
-| 172.16.0.0/12    | Private (RFC 1918) |
-| 192.168.0.0/16   | Private (RFC 1918) |
-| 169.254.0.0/16   | Link-local         |
-| 224.0.0.0/4      | Multicast          |
-| 0.0.0.0/8        | Unspecified        |
-| 100.64.0.0/10    | CGNAT (RFC 6598)   |
+| Range              | Description          |
+| ------------------ | -------------------- |
+| 127.0.0.0/8        | Loopback             |
+| 10.0.0.0/8         | Private (RFC 1918)   |
+| 172.16.0.0/12      | Private (RFC 1918)   |
+| 192.168.0.0/16     | Private (RFC 1918)   |
+| 169.254.0.0/16     | Link-local           |
+| 224.0.0.0/4        | Multicast            |
+| 0.0.0.0/8          | Unspecified          |
+| 100.64.0.0/10      | CGNAT (RFC 6598)     |
 
 **Filtered IPv6 ranges:**
 
-| Range            | Description        |
-|------------------|--------------------|
-| ::1/128          | Loopback           |
-| ::/128           | Unspecified        |
-| fe80::/10        | Link-local         |
-| ff00::/8         | Multicast          |
-| 2001:db8::/32    | Documentation      |
-| fc00::/7         | Unique-local       |
-| fec0::/10        | Site-local         |
+| Range              | Description          |
+| ------------------ | -------------------- |
+| ::1/128            | Loopback             |
+| ::/128             | Unspecified          |
+| fe80::/10          | Link-local           |
+| ff00::/8           | Multicast            |
+| 2001:db8::/32      | Documentation        |
+| fc00::/7           | Unique-local         |
+| fec0::/10          | Site-local           |
 
 On each run the script also scans the existing tracking file and nftables sets for any bogon IPs that may have slipped through previously, and removes them.
 
@@ -462,12 +462,12 @@ The next cron run will rebuild bans from tracking data and save a clean ruleset.
 
 ### When to use --reset vs --clean
 
-| Situation                                   | Use       |
-|---------------------------------------------|-----------|
-| ksoftirqd high CPU, suspect duplicate rules | `--reset` |
-| Nftables state seems corrupted              | `--reset` |
-| Want to completely remove all ban state     | `--clean` |
-| Migrating away from the script              | `--clean` |
+| Situation                                     | Use         |
+| --------------------------------------------- | ----------- |
+| ksoftirqd high CPU, suspect duplicate rules   | `--reset`   |
+| Nftables state seems corrupted                | `--reset`   |
+| Want to completely remove all ban state       | `--clean`   |
+| Migrating away from the script                | `--clean`   |
 
 ## MIGRATING FROM IPTABLES
 
@@ -582,15 +582,15 @@ i2p-sessionban-nftables.py --reset
 
 ## FILES
 
-| Path                                         | Description                                | Persistent?      |
-|----------------------------------------------|--------------------------------------------|------------------|
-| `/home/i2p/.i2p/sessionbans/`                | Sessionban files directory                 | Yes (I2P data)   |
-| `/home/i2p/.i2p/sessionbans/sessionbans.txt` | Current sessionban file                    | Yes              |
-| `/home/i2p/i2p-sessionbans.txt`              | Ban tracking file (IP|timestamp)           | Yes              |
-| `/var/log/i2p-sessionban-iptables.log`       | Log file                                   | Depends on /var  |
-| `/var/run/i2p-sessionban.lock`               | Lock file                                  | No (tmpfs OK)    |
-| `/etc/nftables/i2p-bans.nft`                 | Saved ruleset for boot persistence         | Yes              |
-| `/etc/nftables.conf`                         | Nftables boot config (auto-updated)        | Yes              |
+| Path                                           | Description                                  | Persistent?        |     |
+| ---------------------------------------------- | -------------------------------------------- | ------------------ | --- |
+| `/home/i2p/.i2p/sessionbans/`                  | Sessionban files directory                   | Yes (I2P data)     |     |
+| `/home/i2p/.i2p/sessionbans/sessionbans.txt`   | Current sessionban file                      | Yes                |     |
+| `/home/i2p/i2p-sessionbans.txt`                | Ban tracking file (IP                        | timestamp)         | Yes |
+| `/var/log/i2p-sessionban-iptables.log`         | Log file                                     | Depends on /var    |     |
+| `/var/run/i2p-sessionban.lock`                 | Lock file                                    | No (tmpfs OK)      |     |
+| `/etc/nftables/i2p-bans.nft`                   | Saved ruleset for boot persistence           | Yes                |     |
+| `/etc/nftables.conf`                           | Nftables boot config (auto-updated)          | Yes                |     |
 
 All paths except `/etc/nftables.conf` can be overridden via CLI options.
 
