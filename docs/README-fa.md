@@ -86,7 +86,7 @@ API: http://docs.i2p-projekt.de/javadoc/
 
 به کمک نیاز دارید؟ به کانال #saltR در شبکه IRC I2P مراجعه کنید
 
-گزارش اشکال: https://i2pgit.org/i2p-hackers/i2p.i2p/-/issues یا https://github.com/I2PPlus/i2pplus/issues
+گزارش اشکال: https://github.com/I2PPlus/i2pplus/issues
 
 ## مجوزها
 

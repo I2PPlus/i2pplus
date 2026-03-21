@@ -1,4 +1,4 @@
-# Release checklist and process
+# I2P+ Release Checklist and Process
 
 ## Two weeks before
 
@@ -35,8 +35,8 @@
   with a recent Oracle JDK (12+), and fix any issues.
   Oracle JDK will error on things that OpenJDK does not!
 
-- Java 7 test: 'ant mavenCentral.deps' with a Java 7 bootclasspath in override.properties
-  to ensure that Android will build correcly; fix any issues
+- Java compatibility test: 'ant mavenCentral.deps' with the appropriate bootclasspath in override.properties
+  to ensure that Android will build correctly; fix any issues
 
 
 ## A day or two before
@@ -92,7 +92,7 @@
     git clone -l . /path/to/releasedir
     ```
 
-  - You must build with Java 8 or higher.
+  - You must build with Java 17 or higher.
 
 4. Create override.properties with (adjust as necessary):
 
@@ -101,7 +101,7 @@
     release.gpg.keyid=0xnnnnnnnn
     release.signer.su3=xxx@mail.i2p
     build.built-by=xxx
-    javac.compilerargs=-bootclasspath /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/rt.jar:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/jce.jar
+    javac.compilerargs=-bootclasspath /usr/lib/jvm/java-17-openjdk-amd64/lib/jrt-fs.jar:/usr/lib/jvm/java-17-openjdk-amd64/lib/jce.jar
     ```
 
 5. Verify that no untrusted revisions were included:
@@ -251,7 +251,7 @@
   - Sync with git.idk.i2p
 
 4. Announce on:
-  - #i2p, #i2p-dev (also on Freenode side)
+  - #i2p, #i2p-dev
   - IRC
   - Twitter
 

@@ -34,7 +34,7 @@ Utility scripts for I2P+ development and administration.
 
 | Script | Description | Usage |
 |---|---|---|
-| `i2p-sessionban-nftables.py` | Sync I2P session bans to nftables sets | `[--list] [--list-summary] [--clean] [--reset] [--duration 7d\|168h\|1w\|forever] [--window-hours N] [--workers N] [--ipv4-only] [--dry-run] [-l LOG] [--ban-dir PATH] [--tracking-file PATH] [--lock-file PATH] [--ruleset-file PATH]`. Uses nftables named sets with `interval` flag for O(1) lookups. Persists bans across reboots by saving the nftables ruleset (default: `/etc/nftables/i2p-bans.nft`) and adding an `include` directive to `/etc/nftables.conf`. `--clean` purges all bans and artifacts. `--reset` tears down the table, removes the ruleset, and restarts nftables. Requires `nft`. [Documentation](../docs/i2p-sessionban-nftables.md). |
+| `i2p-sessionban-nftables.py` | Sync I2P session bans to nftables sets | `[--list] [--list-summary] [--clean] [--reset] [--duration 7d\|168h\|1w\|forever] [--window-hours N] [--workers N] [--ipv4-only] [--dry-run] [-l LOG] [--ban-dir PATH] [--tracking-file PATH] [--lock-file PATH] [--ruleset-file PATH]`. Uses nftables named sets with `interval` flag for O(log n) lookups. Persists bans across reboots by saving the nftables ruleset (default: `/etc/nftables/i2p-bans.nft`) and adding an `include` directive to `/etc/nftables.conf`. `--clean` purges all bans and artifacts. `--reset` tears down the table, removes the ruleset, and restarts nftables. Requires `nft`. [Documentation](../docs/i2p-sessionban-nftables.md). |
 
 ### Session Ban Default Paths
 

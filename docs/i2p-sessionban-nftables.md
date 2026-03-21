@@ -18,9 +18,9 @@ I2P+'s router maintains a list of peers it has banned for various reasons (sybil
 
 ### Why nftables over iptables?
 
-The iptables version creates one `DROP` rule per banned IP address. As the ban list grows, the kernel must evaluate each rule sequentially to decide whether to accept or drop a packet. With hundreds or thousands of bans, this becomes a performance bottleneck.
+The iptables approach creates one `DROP` rule per banned IP address. As the ban list grows, the kernel must evaluate each rule sequentially to decide whether to accept or drop a packet — O(n) scaling. With hundreds or thousands of bans, this becomes a performance bottleneck.
 
-The nftables version uses named sets with the `interval` flag. All banned IPs live in a single set, and the kernel performs a single set membership test per packet — an O(1) lookup regardless of how many IPs are banned. Additionally, nftables can merge contiguous IP ranges into a single interval entry, further reducing set size.
+The nftables version uses named sets with the `interval` flag. All banned IPs live in a single set, and the kernel performs a single tree-based set membership test per packet — O(log n) regardless of the ban list size. Additionally, nftables can merge contiguous IP ranges into a single interval entry, further reducing set size.
 
 ### How it works
 

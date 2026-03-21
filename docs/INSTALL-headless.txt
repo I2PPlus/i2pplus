@@ -1,4 +1,4 @@
-Headless (console mode) I2P installation instructions
+Headless (console mode) I2P+ installation instructions
 
 1) java -jar i2pinstall.exe -console       (you've already done this)
 
@@ -11,39 +11,38 @@ you may use:
   lynx http://localhost:7657/
 to configure the router.
 
-If you're having trouble, check the
-website at https://geti2p.net/, or get on irc://irc.freenode.net/#i2p
+If you're having trouble, check the website at https://i2pplus.github.io/i2pplus,
+or visit https://i2p-irc.stormycloud.org/
 
-I2P will create and store files and configuration data in the user directory
+I2P+ will create and store files and configuration data in the user directory
 ~/.i2p/ on Linux and %LOCALAPPDATA%\I2P\ on Windows. This directory is created
-when I2P is run for the first time. It also creates files in the system
+when I2P+ is run for the first time. It also creates files in the system
 temporary directory specified by the Java Virtual Machine.
-To change the location of these directories, or to configure I2P to
+To change the location of these directories, or to configure I2P+ to
 put all files in this directory (the so-called "portable" configuration),
 edit the files i2prouter (Linux) and wrapper.config (Linux and Windows)
 where there are comments labeled "PORTABLE". Do this before you
-run I2P for the first time.
+run I2P+ for the first time.
 
-To start I2P:
+To start I2P+:
    (*nix, BSD, Mac): sh i2prouter start
    (win*): I2P.exe
    (platforms without wrapper support): sh runplain.sh
 
-To stop I2P (gracefully):
+To stop I2P+ (gracefully):
    lynx http://localhost:7657/summaryframe (click "Shutdown")
    or (*nix, BSD, Mac) sh i2prouter graceful
 
-To stop I2P immediately:
+To stop I2P+ immediately:
    (*nix, BSD, Mac) sh i2prouter stop
 
-To uninstall I2P:
+To uninstall I2P+:
    rm -rf $I2PInstallDir ~/.i2p
 
 Supported JVMs:
-  All platforms: Java 1.8 or higher required
-  Windows: OpenJDK or Oracle from http://java.com/download
-  Linux:   OpenJDK or Oracle from http://java.com/download
-  FreeBSD: OpenJDK or Oracle from http://java.com/download
-  Raspberry Pi: Oracle 8 Early Access https://jdk8.java.net/download.html
-  PowerPC: IBM SDK 7 http://www.ibm.com/developerworks/java/jdk/linux/download.html
-  Other operating systems and JVMs: See https://trac.i2p2.de/wiki/java or https://geti2p.net/download
+  All platforms:         Java 17 or higher required (as of release 2.12.0+ / 0.9.69+)
+  Windows:               OpenJDK, Oracle, or Microsoft JDK
+  Linux:                 OpenJDK or Oracle
+  FreeBSD:               OpenJDK or Oracle
+  Raspberry Pi:          OpenJDK or Oracle
+  Other (see website):   https://i2pplus.github.io/i2pplus

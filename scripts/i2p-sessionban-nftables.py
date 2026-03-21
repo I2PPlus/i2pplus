@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 i2p-sessionban-nftables.py
-Parses I2P sessionbans and manages nftables named sets for O(1) ban lookups.
+Parses I2P+ session bans and manages nftables named sets for O(log n) ban lookups.
 Drop-in replacement for i2p-sessionban-iptables.py — same CLI, same tracking file.
 Migrates existing iptables I2P-BANNED rules into nftables sets on first run.
 
