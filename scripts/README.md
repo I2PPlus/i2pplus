@@ -34,8 +34,7 @@ Utility scripts for I2P+ development and administration.
 
 | Script | Description | Usage |
 |---|---|---|
-| `i2p-sessionban-iptables.py` | Sync I2P session bans to iptables rules | `i2p-sessionban-iptables.py [--list] [--list-summary] [--clean] [--duration 7d\|168h\|1w\|forever] [--window-hours N] [--workers N] [--ipv4-only] [--dry-run] [-l LOG] [--ban-dir PATH] [--tracking-file PATH] [--lock-file PATH]` |
-| `i2p-sessionban-nftables.py` | Sync I2P session bans to nftables sets | Same CLI as the iptables version plus `--ruleset-file PATH`. Significantly more efficient and performant for large ban lists — uses nftables named sets with `interval` flag for O(1) lookups instead of iterating thousands of individual iptables rules. Drop-in replacement; same tracking file format. Persists bans across reboots by saving the nftables ruleset (default: `/etc/nftables/i2p-bans.nft`) and adding an `include` directive to `/etc/nftables.conf` if not already present. `--clean` purges all bans and removes the ruleset file and include. Migrates existing iptables `I2P-BANNED` rules on first run. Requires `nft`. [Documentation](../docs/i2p-sessionban-nftables.md). |
+| `i2p-sessionban-nftables.py` | Sync I2P session bans to nftables sets | `[--list] [--list-summary] [--clean] [--reset] [--duration 7d\|168h\|1w\|forever] [--window-hours N] [--workers N] [--ipv4-only] [--dry-run] [-l LOG] [--ban-dir PATH] [--tracking-file PATH] [--lock-file PATH] [--ruleset-file PATH]`. Uses nftables named sets with `interval` flag for O(1) lookups. Persists bans across reboots by saving the nftables ruleset (default: `/etc/nftables/i2p-bans.nft`) and adding an `include` directive to `/etc/nftables.conf`. `--clean` purges all bans and artifacts. `--reset` tears down the table, removes the ruleset, and restarts nftables. Requires `nft`. [Documentation](../docs/i2p-sessionban-nftables.md). |
 
 ### Session Ban Default Paths
 
@@ -43,9 +42,9 @@ Utility scripts for I2P+ development and administration.
 |---|---|
 | `/home/i2p/.i2p/sessionbans/` | Sessionban files directory |
 | `/home/i2p/i2p-sessionbans.txt` | Ban tracking file (IP\|timestamp) |
-| `/var/log/i2p-sessionban-iptables.log` | Log file (both scripts) |
+| `/var/log/i2p-sessionban-iptables.log` | Log file |
 | `/var/run/i2p-sessionban.lock` | Lock file |
-| `/etc/nftables/i2p-bans.nft` | Saved ruleset (nftables only) |
+| `/etc/nftables/i2p-bans.nft` | Saved ruleset for boot persistence |
 | `/etc/nftables.conf` | nftables boot config; auto-updated with include for ruleset |
 
 ## JavaScript

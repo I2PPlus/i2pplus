@@ -12,7 +12,7 @@ i2p-sessionban-nftables.py [OPTIONS]
 
 ## DESCRIPTION
 
-This script reads I2P+ sessionban files produced by the I2P+ router and enforces those bans at the network level using nftables. It is designed as a drop-in replacement for `i2p-sessionban-iptables.py` with the same CLI interface and tracking file format.
+This script reads I2P+ sessionban files produced by the I2P+ router and enforces those bans at the network level using nftables.
 
 I2P+'s router maintains a list of peers it has banned for various reasons (sybil attacks, bad handshakes, blocklists, etc.) but only enforces these bans at the application layer. This script bridges that gap by pushing those bans into the kernel's packet filter so that banned IPs are dropped before they consume any application resources.
 
@@ -673,4 +673,4 @@ This deletes the table, removes the saved ruleset, and restarts nftables. The ne
 
 ## SEE ALSO
 
-`nft(8)`, `iptables(8)`, `crontab(5)`, `i2p-sessionban-iptables.py(8)`
+`nft(8)`, `iptables(8)`, `crontab(5)`
