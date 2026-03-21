@@ -1293,6 +1293,10 @@
     <exec executable="./tools/jsdoc/jsdoc-patch.js" failonerror="false">
       <arg value="dist/jsdoc"/>
     </exec>
+    <exec executable="sh" failonerror="false">
+      <arg value="-c"/>
+      <arg value="npx jsdoc -X -c tools/jsdoc/jsdoc.json 2>/dev/null | node scripts/jsdoc-api-table.js dist/jsdoc"/>
+    </exec>
     <if>
       <isset property="htmlmin.present"/>
       <then>

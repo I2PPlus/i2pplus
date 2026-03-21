@@ -7,13 +7,24 @@
 :root {
   --accent: #89b4fa;
   --bg: #1a1b26;
-  --bg-alt: #16161e;
+  --bg-alt: #101027;
+  --bg-th: #23233f;
   --border: #292e42;
+  --border-light: #337;
   --code: #77f;
+  --green: #373;
   --hover: #33f;
   --link: #89dceb;
+  --mauve: #6954d2;
+  --navy: #114;
+  --overlay: #3398;
+  --overlay-alt: #3383;
+  --red: #f38ba8;
+  --slate: #17172b;
+  --shadow: #0004;
   --text: #c0caf5;
-  --text-dim: #7982a9;
+  --text-dim: #8993bc;
+  --white: #fff;
 }
 
 html {
@@ -100,7 +111,7 @@ nav ul > li > a {
 }
 
 nav ul > li > a:hover {
-  background: #0004;
+  background: var(--shadow);
   transform: scale(1.1);
   margin-bottom: -1px !important;
   padding: 4px 12px !important;
@@ -169,10 +180,10 @@ h1.page-title + h3.subsection-title {
 #main h2 {
   font-size: 18px !important;
   width: calc(100% - 20px) !important;
-  background: #3398 !important;
+  background: var(--overlay) !important;
   padding: 5px 10px !important;
   border-radius: 5px 5px 0 0 !important;
-  border: 2px solid #337 !important;
+  border: 2px solid var(--border-light) !important;
 }
 
 #main h3.subsection-title {
@@ -185,7 +196,7 @@ body:not([id]) #main h3.subsection-title {
 }
 
 h4.name {
-  background: #3383 !important;
+  background: var(--overlay-alt) !important;
   color: var(--link) !important;
   border: 1px solid var(--border) !important;
   border-left: 3px solid var(--accent) !important;
@@ -197,7 +208,7 @@ h4.name a {
 }
 
 h4.name a:hover {
-  color: #fff !important;
+  color: var(--white) !important;
 }
 
 /* Links */
@@ -225,9 +236,9 @@ tt, code, kbd, samp, pre {
   margin: -7px 0 0 !important;
   width: calc(100% - 20px);
   font-size: 105% !important;
-  background: #114;
+  background: var(--navy);
   border-radius: 0 0 5px 5px !important;
-  border: 2px solid #337 !important;
+  border: 2px solid var(--border-light) !important;
 }
 
 .details dd, .details .dummy, .details .dummy li  {
@@ -254,7 +265,7 @@ code, .prettyprint code, pre {
   border-radius: 8px !important;
   border: 2px solid var(--border) !important;
   margin-right: 20px !important;
-  box-shadow: 4px 4px 4px #0004, 0 0 0 1px #000 inset;
+  box-shadow: 4px 4px 4px var(--shadow), 0 0 0 1px #000 inset;
 }
 
 .prettyprint.linenums li {
@@ -269,10 +280,11 @@ code, .prettyprint code, pre {
 /* Tables */
 table, .params, .props {
   border-color: var(--border) !important;
+  background-color: var(--slate) !important;
 }
 
 thead tr {
-  background-color: var(--bg-alt) !important;
+  background-color: var(--bg-th) !important;
   border-bottom-color: var(--border) !important;
   font-weight: 700 !important;
 }
@@ -327,8 +339,19 @@ td, th {
 }
 
 footer {
-  border-top-color: var(--border) !important;
   color: var(--text-dim) !important;
+  padding: 15px 20px;
+  text-align: right;
+  border-top: 3px solid var(--border) !important;
+  margin-top: 30px !important;
+}
+
+footer a {
+  color: var(--link) !important;
+}
+
+footer a:hover {
+  color: var(--accent) !important;
 }
 
 section {
@@ -340,7 +363,7 @@ section {
 }
 
 .important {
-  color: #f38ba8 !important;
+  color: var(--red) !important;
   font-weight: 700 !important;
 }
 
@@ -354,4 +377,129 @@ section {
 
 .str {
   white-space: pre-wrap !important;
+}
+
+/* API table (api-table.html) */
+
+.api-page {
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.api-page h1 {
+  margin-bottom: 5px;
+}
+
+.api-page .subtitle {
+  color: var(--text-dim);
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.filters {
+  margin-bottom: 15px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.filter-btn {
+  padding: 4px 12px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--accent);
+  cursor: pointer;
+  font-size: 13px;
+  border-radius: 3px;
+}
+
+.filter-btn.active,
+.filter-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+.api-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.api-table th {
+  text-align: left;
+  padding: 8px;
+  border-bottom: 2px solid var(--border);
+  font-size: 12px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--text-dim);
+}
+
+.api-table td {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+.api-table tr:hover td {
+  background: var(--bg-alt);
+}
+
+.col-section {
+  color: var(--text-dim);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.col-name {
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+.col-name a {
+  text-decoration: none;
+  color: var(--link);
+}
+
+.col-sig code {
+  font-size: 13px;
+  color: var(--text);
+}
+
+.col-return code {
+  font-size: 13px;
+  color: var(--accent);
+}
+
+.col-desc {
+  font-size: 13px;
+  color: var(--text-dim);
+  width: 30%;
+}
+
+.col-desc[title]:hover {
+  cursor: help;
+}
+
+.badge-async,
+.badge-class {
+  display: inline-block;
+  font-size: 10px;
+  padding: 1px 5px;
+  border-radius: 3px;
+  margin-left: 4px;
+  vertical-align: middle;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.badge-async {
+  background: var(--green);
+  color: var(--white);
+}
+
+.badge-class {
+  background: var(--mauve);
+  color: var(--white);
 }
