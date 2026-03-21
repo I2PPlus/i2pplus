@@ -74,3 +74,7 @@ Utility scripts for I2P+ development and administration.
 ## JavaScript
 
 - **`javadoc-jav8-fix.js`** — Fix Javadoc rendering for Java 8 compatibility. Internal; automatically included when Javadoc is compiled.
+
+## Tests
+
+Certificate, source, and performance validation scripts. See [tests/README.md](tests/README.md).
