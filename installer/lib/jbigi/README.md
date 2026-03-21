@@ -1,140 +1,73 @@
 # JBIGI Native Libraries
 
-> Note: For the latest information, see:
-> - `history.txt` for changelog entries
-> - `core/c/jbigi/docs/README.md` for build instructions
-> - `NativeBigInteger.java` and `CPUID.java` for technical details
-
----
-
-## What is JBIGI?
-
-JBIGI provides native JNI bindings for the **GNU Multiple Precision Arithmetic Library (GMP)** to accelerate cryptographic operations in I2P, including:
+Native JNI bindings for the GNU Multiple Precision Arithmetic Library (GMP)
+that accelerate cryptographic operations in I2P+:
 
 - Modular exponentiation (`modPow`)
-- Constant-time modular exponentiation (`modPowCT`) - resistant to timing attacks
+- Constant-time modular exponentiation (`modPowCT`) — resistant to timing attacks
 - Modular multiplicative inverse (`modInverse`)
 
----
+Versions: GMP 6.3.0, JBIGI 4. Query at runtime via `nativeJbigiVersion()`.
 
-## Current Version (March 2026)
+## Build
 
-| Component   | Version   |
-| ----------- | --------- |
-| GMP         | 6.3.0     |
-| JBIGI       | 4         |
+```sh
+# All platforms (runs win64, linux64, arm64 in parallel)
+ant buildJbigi
 
-The JBIGI version can be queried at runtime via `nativeJbigiVersion()`.
+# Single platform (ant targets)
+ant buildJbigi-linux64
+ant buildJbigi-win64
+ant buildJbigi-arm64
 
-### New in This Release
-
-- Added `libjbigi-linux-none_64.so` - Generic 64-bit Linux build (GMP 6.3.0)
-- Added `jbigi-windows-none_64.dll` - Generic 64-bit Windows build (GMP 6.3.0)
-- Removed deprecated PowerPC Linux binary
-- Note: zen4/zen5 support requires GMP 6.4+ or native hardware for building
-
----
-
-## Supported Architectures
-
-### Linux (x86 32-bit)
-```
-none  pentium  pentium2  pentium3  pentium4  pentiumm  pentiummmx
-k6  k62  athlon  geode  viac3  viac32
-```
-
-### Linux (x86_64 64-bit)
-```
-none_64  core2  corei  coreisbr  coreihwl  coreibwl
-athlon64  k10  bobcat  jaguar  bulldozer  piledriver  steamroller  excavator
-atom  nano  pentium4  zen  zen2  skylake  silvermont  goldmont
-```
-
-### Linux (ARM)
-```
-armv5  armv6  armv7  armv7a  armcortex8  armcortex9  armcortex15
-armv8  armv8_64  aarch64
-```
-
-### macOS
-```
-core2  corei  coreisbr  coreihwl  coreibwl
-```
-
-### Windows
-Same architectures as Linux (compiled via MinGW cross-compilation)
-
-### FreeBSD
-Same architectures as Linux
-
----
-
-## Build History
-
-### 2026 - March
-- Upgraded to GMP 6.3.0
-- JBIGI version 4: Added version reporting functions (nativeJbigiVersion, nativeGMP*Version)
-- Added nativeModPowCT (constant-time modular exponentiation)
-- Added nativeModInverse
-- Code cleanup: removed dead code, fixed convert_mp2j() off-by-one error
-- Added ARMv8/aarch64 support
-
-### 2016 - April
-- Upgraded to GMP 6.0.0a
-- Removed: NetBSD, kFreeBSD, Solaris, OpenBSD
-- Added: coreihwl, coreisbr, bulldozer, steamroller, cortex-a9, cortex-a15
-
-### 2011 - May/June
-- **jcpuid**: Updated for `-fPIC` compatibility
-- **jbigi**:
-  - Removed k63 (falls back to k62)
-  - 32-bit: GMP 4.3.2
-  - 64-bit: GMP 5.0.2
-  - Added MinGW cross-compiled Windows 64-bit binaries
-
-### 2006 - February
-- Added `libjbigi-linux-viac3.so`
-- Created `jbigi-win-athlon64.dll`
-
-### 2005 - December
-- Updated `libjcpuid-x86-linux.so` to pure C (removed libg++.so.5 dependency)
-
-### 2005 - September
-- Added `libjbigi-linux-athlon64.so`
-
-### 2004 - August
-- Initial release with GMP 4.1.3
-- Platforms: Linux, Windows (MinGW), FreeBSD 4.8
-
----
-
-## Rebuilding from Source
-
-To rebuild jbigi for your specific architecture:
-
-```bash
-# Quick build (current machine only)
+# Single platform (direct)
 cd core/c/jbigi
-./build.sh
+./build-linux64.sh -a
+./build-win64.sh -a
+./build-arm64.sh -a
 
-# Full build (all architectures)
-cd core/c/jbigi
-./build.sh all
+# List built binaries
+ant listJbigi
+./list-jbigi.sh
 ```
 
-For more options, see `core/c/jbigi/docs/README.md`.
+See `core/c/jbigi/docs/README.md` for full build instructions.
 
----
+## Architecture Targets
 
-## File Naming Convention
+### Linux x86_64 (20 targets)
+`none` `athlon64` `k10` `bobcat` `jaguar` `bulldozer` `piledriver` `steamroller` `excavator` `core2` `coreisbr` `coreihwl` `coreibwl` `skylake` `zen` `zen2` `zen3` `atom` `silvermont` `goldmont`
 
-The library naming follows `{lib}jbigi-{OS}-{CPU}.{ext}`:
+### Linux ARM64 (6 targets)
+`armv8` `armv8.2` `cortex-a53` `cortex-a72` `cortex-a76` `none`
 
-| OS        | Prefix     | Extension   |
-| --------- | ---------- | ----------- |
-| Linux     | libjbigi   | .so         |
-| FreeBSD   | libjbigi   | .so         |
-| macOS     | libjbigi   | .jnilib     |
-| Windows   | jbigi      | .dll        |
+### Windows x86_64 (20 targets)
+Same as Linux x86_64 (MinGW cross-compiled)
 
-The `CPUID` library at runtime selects the optimal binary for your CPU based on detected features.
+### macOS (6 targets)
+`core2` `corei` `coreisbr` `coreihwl` `coreibwl` `none`
+
+### FreeBSD, Linux x86 (32-bit)
+Legacy targets from earlier builds, not rebuilt by current scripts.
+
+## File Naming
+
+`{lib}jbigi-{OS}-{CPU}[_64].{ext}`
+
+| OS          | Prefix       | Extension   | Example                            |
+| ----------- | ------------ | ----------- | ---------------------------------- |
+| Linux       | libjbigi     | .so         | libjbigi-linux-skylake_64.so       |
+| Windows     | jbigi        | .dll        | jbigi-windows-zen3_64.dll          |
+| macOS       | libjbigi     | .jnilib     | libjbigi-osx-coreihwl_64.jnilib    |
+| FreeBSD     | libjbigi     | .so         | libjbigi-freebsd-core2_64.so       |
+
+The CPUID library at runtime selects the optimal binary for your CPU.
+
+## History
+
+| Date         | GMP           | Notes                                                                                        |
+| ------------ | ------------- | -------------------------------------------------------------------------------------------- |
+| 2026-03      | 6.3.0         | JBIGI 4: version reporting, constant-time modPow, modInverse, ARM64/aarch64, parallel builds |
+| 2016-04      | 6.0.0a        | Dropped NetBSD/kFreeBSD/Solaris/OpenBSD, added coreihwl/coreisbr/bulldozer/steamroller       |
+| 2011-05      | 4.3.2 / 5.0.2 | jcpuid -fPIC, MinGW 64-bit Windows                                                           |
+| 2004-08      | 4.1.3         | Initial release: Linux, Windows (MinGW), FreeBSD                                             |

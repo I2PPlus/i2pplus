@@ -51,13 +51,15 @@ Usage:
   ./build-win64.sh [OPTIONS]
 
 Options:
-  -a, --all       Build for all supported CPU targets (default)
-  -g, --generic   Build generic DLL only (faster)
-  -h, --help      Show this help message
+  -a, --all         Build for all supported CPU targets (default)
+  -a -j N           Build with N parallel jobs (default: nproc - 1)
+  -g, --generic     Build generic DLL only (faster)
+  -h, --help        Show this help message
 
 Examples:
   ./build-win64.sh          # Show help
   ./build-win64.sh -a       # Build all CPU targets
+  ./build-win64.sh -a -j 4  # Build with 4 parallel jobs
   ./build-win64.sh --generic # Generic build only
 
 Supported CPU targets:
@@ -79,23 +81,36 @@ EOF
 }
 
 # Parse arguments
-case "$1" in
-    -h|--help|"")
-        show_help
-        exit 0
-        ;;
-    -a|--all)
-        MODE="all"
-        ;;
-    -g|--generic)
-        MODE="generic"
-        ;;
-    *)
-        echo "Unknown option: $1"
-        echo "Run './build-win64.sh --help' for usage."
-        exit 1
-        ;;
-esac
+JOBS=""
+while [ $# -gt 0 ]; do
+    case "$1" in
+        -h|--help|"")
+            show_help
+            exit 0
+            ;;
+        -a|--all)
+            MODE="all"
+            ;;
+        -g|--generic)
+            MODE="generic"
+            ;;
+        -j)
+            JOBS="$2"
+            shift
+            ;;
+        *)
+            echo "Unknown option: $1"
+            echo "Run './build-win64.sh --help' for usage."
+            exit 1
+            ;;
+    esac
+    shift
+done
+
+if [ -z "$MODE" ]; then
+    show_help
+    exit 0
+fi
 
 check_deps() {
     MISSING=""
@@ -188,13 +203,13 @@ detect_targets() {
 
 build_gmp() {
     MARCH="$1"
+    GMP_BUILD="${2:-$GMP_DIR}"
     if [ -n "$MARCH" ]; then
         export CFLAGS="-march=$MARCH"
     else
         unset CFLAGS
     fi
-    cd "$GMP_DIR"
-    make clean > /dev/null 2>&1 || true
+    cd "$GMP_BUILD"
     ./configure --host=$HOST --with-pic > /dev/null 2>&1
     make -j$(nproc) > /dev/null 2>&1
 }
@@ -202,6 +217,7 @@ build_gmp() {
 build_jbigi() {
     CPU_NAME="$1"
     MARCH="$2"
+    GMP_BUILD="${3:-$GMP_DIR}"
 
     cd "$JBIGI_DIR"
     rm -f jbigi.dll jbigi.o
@@ -212,8 +228,8 @@ build_jbigi() {
         MARCH_FLAG=""
     fi
 
-    $CC -c -Wall $MARCH_FLAG -I. -I./include -I./include/win32 -I$GMP_DIR -o jbigi.o src/jbigi.c
-    $CC -shared -Wall $MARCH_FLAG -I. -I./include -I./include/win32 -I$GMP_DIR -o jbigi.dll jbigi.o $GMP_DIR/.libs/libgmp.a -Wl,--kill-at
+    $CC -c -Wall $MARCH_FLAG -I. -I./include -I./include/win32 -I"$GMP_BUILD" -o jbigi.o src/jbigi.c
+    $CC -shared -Wall $MARCH_FLAG -I. -I./include -I./include/win32 -I"$GMP_BUILD" -o jbigi.dll jbigi.o "$GMP_BUILD/.libs/libgmp.a" -Wl,--kill-at
 
     cp jbigi.dll "$OUTPUT_DIR/jbigi-windows-${CPU_NAME}${SUFFIX}.dll"
 
@@ -268,6 +284,7 @@ echo ""
 mkdir -p "$OUTPUT_DIR"
 
 if [ "$MODE" = "generic" ]; then
+    rm -f "$OUTPUT_DIR"/*windows*"$SUFFIX"*.dll
     echo "Building generic jbigi-windows-none${SUFFIX}.dll..."
     build_gmp ""
     build_jbigi "none" ""
@@ -278,39 +295,26 @@ if [ "$MODE" = "generic" ]; then
 fi
 
 # Build for all supported CPU targets
-BUILT=0
-FAILED=""
+BUILD_ROOT="/tmp/jbigi-build-win-$$"
+MAX_JOBS="${JOBS:-$(nproc)}"
+if [ "$MAX_JOBS" -gt 1 ]; then MAX_JOBS=$((MAX_JOBS - 1)); fi
 
-echo "Building ${SUFFIX#_}-bit Windows DLLs..."
+rm -f "$OUTPUT_DIR"/*windows*"$SUFFIX"*.dll
+
+cleanup() { rm -rf "$BUILD_ROOT"; }
+trap cleanup EXIT
+
+mkdir -p "$BUILD_ROOT" "$OUTPUT_DIR"
+
+echo "Building ${SUFFIX#_}-bit Windows DLLs (jobs: $MAX_JOBS)..."
 echo ""
 
-for ENTRY in $SUPPORTED; do
-    CPU_NAME="${ENTRY%%|*}"
-    ENTRY="${ENTRY#*|}"
-    MARCH="${ENTRY##*|}"
+export SCRIPT_DIR GMP_VER JBIGI_DIR OUTPUT_DIR CC SUFFIX BUILD_ROOT
+export INCLUDE_DIR="./include/win32" LIB_EXT=".dll"
+export SONAME_FLAG="-Wl,--kill-at" OUTPUT_PREFIX="jbigi-windows"
+export STRIP_CMD="x86_64-w64-mingw32-strip" HOST="$HOST"
 
-    printf "  %-15s" "$CPU_NAME"
+echo "$SUPPORTED" | tr ' ' '\n' | grep -v '^$' | \
+    xargs -P "$MAX_JOBS" -I {} "$SCRIPT_DIR/build_one.sh" {}
 
-    if build_gmp "$MARCH" 2>/dev/null && build_jbigi "$CPU_NAME" "$MARCH" 2>/dev/null; then
-        echo "OK"
-        BUILT=$((BUILT + 1))
-    else
-        echo "FAILED"
-        FAILED="$FAILED $CPU_NAME"
-    fi
-done
-
-echo ""
-echo "=== Summary ==="
-echo "Built: $BUILT / $SUPPORTED_COUNT"
-
-if [ -n "$FAILED" ]; then
-    echo "Failed:$FAILED"
-fi
-
-echo ""
-echo "Output: $OUTPUT_DIR/"
-ls -1 "$OUTPUT_DIR/"*windows*"$SUFFIX"* 2>/dev/null | while read f; do
-    printf "  "
-    file "$f"
-done
+"$SCRIPT_DIR/list-jbigi.sh"

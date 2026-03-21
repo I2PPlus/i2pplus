@@ -125,6 +125,9 @@ core/c/jbigi/bin/
 core/c/jbigi/lib/
 core/c/jbigi/gmp-*/
 core/c/jbigi/*.tar.bz2
+core/c/jbigi/jbigi/*.o
+core/c/jbigi/jbigi/*.so
+core/c/jbigi/jbigi/*.dll
 
 # Static analysis tools (downloaded at runtime)
 tools/

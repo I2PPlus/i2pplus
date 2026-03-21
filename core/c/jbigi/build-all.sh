@@ -80,14 +80,8 @@ ANDROID_32_PLATFORMS="armv7a"
 # Import gmp version variables and download gmp.
 . ./download_gmp.sh
 
-# If JAVA_HOME isn't set we'll try to figure it out
-# Skip JAVA_HOME check for MinGW cross-compilation (uses bundled headers)
-[ -z $JAVA_HOME ] && . ../find-java-home 2>/dev/null
-if [ ! -f "$JAVA_HOME/include/jni.h" ] && [ "$TARGET" != "windows" ] && [ "$TARGET" != "mingw" ]; then
-    echo "Cannot find jni.h! Looked in '$JAVA_HOME/include/jni.h'" >&2
-    echo "Please set JAVA_HOME to a java home that has the JNI" >&2
-    exit 1
-fi
+# JNI headers are bundled under jbigi/include/{platform}/
+# No JAVA_HOME dependency needed
 
 if [ ! $(which m4) ]; then
     printf "\aERROR: \`m4\` not found. Install m4 " >&2

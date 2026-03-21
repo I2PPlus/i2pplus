@@ -787,7 +787,6 @@
     <copy todir="installer/lib/jbigi" flatten="true">
       <fileset dir="core/c/jbigi/lib/net/i2p/util" includes="*windows*_64.dll"/>
     </copy>
-    <echo message="Windows 64-bit jbigi DLLs copied to installer/lib/jbigi/"/>
   </target>
 
   <target name="buildJbigi-linux64" description="Build Linux 64-bit jbigi .so files, copy to installer/lib/jbigi/">
@@ -797,7 +796,6 @@
     <copy todir="installer/lib/jbigi" flatten="true">
       <fileset dir="core/c/jbigi/lib/net/i2p/util" includes="*linux*_64.so"/>
     </copy>
-    <echo message="Linux 64-bit jbigi .so files copied to installer/lib/jbigi/"/>
   </target>
 
   <target name="buildJbigi-arm64" description="Build Linux ARM64 jbigi .so files, copy to installer/lib/jbigi/">
@@ -807,11 +805,19 @@
     <copy todir="installer/lib/jbigi" flatten="true">
       <fileset dir="core/c/jbigi/lib/net/i2p/util" includes="*linux-*_64.so" excludes="*linux-core*,*linux-skylake*,*linux-zen*,*linux-k10*,*linux-bulldozer*,*linux-piledriver*,*linux-steamroller*,*linux-excavator*,*linux-bobcat*,*linux-jaguar*,*linux-silvermont*,*linux-goldmont*,*linux-atom*,*linux-athlon64*,*linux-none*"/>
     </copy>
-    <echo message="Linux ARM64 jbigi .so files copied to installer/lib/jbigi/"/>
   </target>
 
-  <target name="buildJbigi" depends="buildJbigi-win64, buildJbigi-linux64, buildJbigi-arm64" description="Build all jbigi native libraries (Win64 + Linux64 + ARM64), copy to installer/lib/jbigi/">
+  <target name="listJbigi" description="List built jbigi native libraries">
+    <exec executable="./list-jbigi.sh" dir="core/c/jbigi" failonerror="false"/>
+  </target>
 
+  <target name="buildJbigi" description="Build all jbigi native libraries (Win64 + Linux64 + ARM64), copy to installer/lib/jbigi/">
+    <parallel>
+      <antcall target="buildJbigi-win64"/>
+      <antcall target="buildJbigi-linux64"/>
+      <antcall target="buildJbigi-arm64"/>
+    </parallel>
+    <exec executable="./list-jbigi.sh" dir="core/c/jbigi" failonerror="false"/>
   </target>
 
   <target name="jbigi" depends="buildProperties">
