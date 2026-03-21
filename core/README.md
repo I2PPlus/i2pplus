@@ -4,23 +4,23 @@ The core module is the foundation of the I2P router. It provides the low-level A
 
 ## Structure
 
-| Directory | Description |
-|---|---|
-| `java/src/net/i2p/client/` | I2P client API for applications connecting to the router |
-| `java/src/net/i2p/crypto/` | Cryptographic engines (AES, ElGamal, EdDSA, ECDSA, HMAC, SHA) |
-| `java/src/net/i2p/data/` | I2P data structures (Hash, Destination, LeaseSet, Keys, Certificates) |
-| `java/src/net/i2p/internal/` | Internal router interfaces consumed by other modules |
-| `java/src/net/i2p/kademlia/` | Kademlia DHT implementation used for network database lookups |
-| `java/src/net/i2p/stat/` | Statistics and frequency tracking |
-| `java/src/net/i2p/time/` | Clock and time offset management |
-| `java/src/net/i2p/update/` | Update checking and installation |
-| `java/src/net/i2p/util/` | General utilities (logging, crypto helpers, native BigInteger) |
-| `java/src/net/i2p/socks/` | SOCKS proxy support |
-| `java/test/` | JUnit and ScalaTest tests |
-| `java/bench/` | JMH benchmarks |
-| `c/jbigi/` | JBIGI native library (GMP wrapper for fast modular arithmetic) |
-| `c/jcpuid/` | JCPUID native library (CPU feature detection) |
-| `locale/` | Translation `.po` files (compiled to resource bundles at build time) |
+| Directory                    | Description                                                           |
+| ---------------------------- | --------------------------------------------------------------------- |
+| `java/src/net/i2p/client/`   | I2P client API for applications connecting to the router              |
+| `java/src/net/i2p/crypto/`   | Cryptographic engines (AES, ElGamal, EdDSA, ECDSA, HMAC, SHA)         |
+| `java/src/net/i2p/data/`     | I2P data structures (Hash, Destination, LeaseSet, Keys, Certificates) |
+| `java/src/net/i2p/internal/` | Internal router interfaces consumed by other modules                  |
+| `java/src/net/i2p/kademlia/` | Kademlia DHT implementation used for network database lookups         |
+| `java/src/net/i2p/stat/`     | Statistics and frequency tracking                                     |
+| `java/src/net/i2p/time/`     | Clock and time offset management                                      |
+| `java/src/net/i2p/update/`   | Update checking and installation                                      |
+| `java/src/net/i2p/util/`     | General utilities (logging, crypto helpers, native BigInteger)        |
+| `java/src/net/i2p/socks/`    | SOCKS proxy support                                                   |
+| `java/test/`                 | JUnit and ScalaTest tests                                             |
+| `java/bench/`                | JMH benchmarks                                                        |
+| `c/jbigi/`                   | JBIGI native library (GMP wrapper for fast modular arithmetic)        |
+| `c/jcpuid/`                  | JCPUID native library (CPU feature detection)                         |
+| `locale/`                    | Translation `.po` files (compiled to resource bundles at build time)  |
 
 ## Key Packages
 

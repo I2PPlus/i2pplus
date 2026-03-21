@@ -27,14 +27,14 @@ TARGET=mingw64 BITS=64 CC=x86_64-w64-mingw32-gcc ./build.sh
 
 ## Supported Architectures
 
-| Architecture | Code | Native Build | Cross-Compile |
-|--------------|------|--------------|----------------|
-| Linux x86_64 | none_64 | ✅ Native | N/A |
-| Linux x86_32 | none | ✅ Native | N/A |
-| Windows x86_64 | none_64 | N/A | ✅ MinGW |
-| Windows x86_32 | none | N/A | ✅ MinGW |
-| ARM 64-bit | armv8 | ⚠️ Docker/QEMU | ❌ |
-| ARM 32-bit | armv7 | ⚠️ Docker/QEMU | ❌ |
+| Architecture   | Code    | Native Build   | Cross-Compile    |
+| -------------- | ------- | -------------- | ---------------- |
+| Linux x86_64   | none_64 | ✅ Native      | N/A              |
+| Linux x86_32   | none    | ✅ Native      | N/A              |
+| Windows x86_64 | none_64 | N/A            | ✅ MinGW         |
+| Windows x86_32 | none    | N/A            | ✅ MinGW         |
+| ARM 64-bit     | armv8   | ⚠️ Docker/QEMU | ❌               |
+| ARM 32-bit     | armv7   | ⚠️ Docker/QEMU | ❌               |
 
 ## Building ARM Binaries (Docker/QEMU)
 

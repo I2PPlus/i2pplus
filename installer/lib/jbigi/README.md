@@ -19,10 +19,10 @@ JBIGI provides native JNI bindings for the **GNU Multiple Precision Arithmetic L
 
 ## Current Version (March 2026)
 
-| Component | Version |
-|-----------|---------|
-| GMP       | 6.3.0   |
-| JBIGI     | 4       |
+| Component   | Version   |
+| ----------- | --------- |
+| GMP         | 6.3.0     |
+| JBIGI       | 4         |
 
 The JBIGI version can be queried at runtime via `nativeJbigiVersion()`.
 
@@ -130,11 +130,11 @@ For more options, see `core/c/jbigi/docs/README.md`.
 
 The library naming follows `{lib}jbigi-{OS}-{CPU}.{ext}`:
 
-| OS      | Prefix   | Extension |
-|---------|----------|-----------|
-| Linux   | libjbigi | .so       |
-| FreeBSD | libjbigi | .so       |
-| macOS   | libjbigi | .jnilib   |
-| Windows | jbigi    | .dll      |
+| OS        | Prefix     | Extension   |
+| --------- | ---------- | ----------- |
+| Linux     | libjbigi   | .so         |
+| FreeBSD   | libjbigi   | .so         |
+| macOS     | libjbigi   | .jnilib     |
+| Windows   | jbigi      | .dll        |
 
 The `CPUID` library at runtime selects the optimal binary for your CPU based on detected features.

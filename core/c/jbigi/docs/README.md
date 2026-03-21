@@ -112,12 +112,12 @@ Prerequisites: `gcc-aarch64-linux-gnu`, `m4`, `make`
 
 #### Options (all scripts)
 
-| Flag | Description |
-|------|-------------|
-| `-a`, `--all` | Build for all supported CPU targets |
-| `-g`, `--generic` | Build generic library only |
-| `-h`, `--help` | Show help message |
-| *(no args)* | Show help message |
+| Flag              | Description                         |
+| ----------------- | ----------------------------------- |
+| `-a`, `--all`     | Build for all supported CPU targets |
+| `-g`, `--generic` | Build generic library only          |
+| `-h`, `--help`    | Show help message                   |
+| *(no args)*       | Show help message                   |
 
 Both scripts will:
 1. Check dependencies and suggest distro-specific install commands
@@ -203,14 +203,14 @@ These targets call the platform-specific build scripts and copy the results to `
 
 ## Build Scripts
 
-| Script | Purpose |
-|--------|---------|
-| `build-win64.sh` | Windows 64-bit cross-compilation (all or generic) |
-| `build-linux64.sh` | Linux 64-bit native compilation (all or generic) |
-| `build-all.sh` | Full multi-architecture build (legacy) |
-| `build_jbigi.sh` | Core compilation script (used by build-all.sh) |
-| `build.sh` | Wrapper for local/all builds (legacy) |
-| `download_gmp.sh` | Downloads and patches GMP source |
+| Script             | Purpose                                           |
+| ------------------ | ------------------------------------------------- |
+| `build-win64.sh`   | Windows 64-bit cross-compilation (all or generic) |
+| `build-linux64.sh` | Linux 64-bit native compilation (all or generic)  |
+| `build-all.sh`     | Full multi-architecture build (legacy)            |
+| `build_jbigi.sh`   | Core compilation script (used by build-all.sh)    |
+| `build.sh`         | Wrapper for local/all builds (legacy)             |
+| `download_gmp.sh`  | Downloads and patches GMP source                  |
 
 ## Troubleshooting
 

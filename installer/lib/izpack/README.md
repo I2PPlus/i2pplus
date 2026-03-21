@@ -4,15 +4,15 @@ Contains the IzPack installer compiler and all resources needed to build I2P+ in
 
 ## Structure
 
-| Path | Description |
-|---|---|
-| `4/` | IzPack 4 standalone compiler and patches |
-| `5/` | IzPack 5 language pack patches (Indonesian, Portuguese, Chinese) |
-| `resources/` | Shared installer resources (images, icons, langpacks, shortcuts) |
-| `install.xml` | IzPack 4 installation descriptor |
-| `install5.xml` | IzPack 5 installation descriptor |
-| `customicons.xml` | IzPack 5 icon configuration |
-| `i2pinstaller.xml` | Launch4j config for wrapping the installer JAR as a Windows EXE |
+| Path               | Description                                                      |
+| ------------------ | ---------------------------------------------------------------- |
+| `4/`               | IzPack 4 standalone compiler and patches                         |
+| `5/`               | IzPack 5 language pack patches (Indonesian, Portuguese, Chinese) |
+| `resources/`       | Shared installer resources (images, icons, langpacks, shortcuts) |
+| `install.xml`      | IzPack 4 installation descriptor                                 |
+| `install5.xml`     | IzPack 5 installation descriptor                                 |
+| `customicons.xml`  | IzPack 5 icon configuration                                      |
+| `i2pinstaller.xml` | Launch4j config for wrapping the installer JAR as a Windows EXE  |
 
 ## Shared Resources (`resources/`)
 

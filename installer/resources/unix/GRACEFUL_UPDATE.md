@@ -10,10 +10,10 @@ Can be run without I2P connectivity using clearnet fallbacks.
 
 ## Releases
 
-| Flag | Description |
-|------|-------------|
-| `stable` | Download the latest stable release |
-| `devel` | Download the latest developmental release |
+| Flag     | Description                               |
+| -------- | ----------------------------------------- |
+| `stable` | Download the latest stable release        |
+| `devel`  | Download the latest developmental release |
 
 ## Examples
 
@@ -39,45 +39,45 @@ Can be run without I2P connectivity using clearnet fallbacks.
 
 ## Download Sources
 
-| Flag | Source |
-|------|--------|
-| `--i2p` | skank.i2p (default) |
-| `--b32` | skank.i2p B32 address (fallback) |
-| `--tor` | I2P+ .onion address |
-| `--clear` | GitLab.com/I2P.Plus |
-| `--any` | Try all methods sequentially |
+| Flag      | Source                           |
+| --------- | -------------------------------- |
+| `--i2p`   | skank.i2p (default)              |
+| `--b32`   | skank.i2p B32 address (fallback) |
+| `--tor`   | I2P+ .onion address              |
+| `--clear` | GitLab.com/I2P.Plus              |
+| `--any`   | Try all methods sequentially     |
 
 Multiple sources can be combined: `./graceful_update stable --i2p --b32 --tor`
 
 ## Downloaders
 
-| Flag | Downloader |
-|------|------------|
-| `-e` | eepget (default) |
-| `-c` | curl |
-| `-w` | wget |
+| Flag   | Downloader       |
+| ------ | ---------------- |
+| `-e`   | eepget (default) |
+| `-c`   | curl             |
+| `-w`   | wget             |
 
 Multiple downloaders can be combined: `./graceful_update stable -e -c`
 
 ## Options
 
-| Flag | Description |
-|------|-------------|
-| `--help`, `-h` | Show help |
-| `-q` | Quiet mode (overrides `-v` and `-d`) |
-| `-v` | Verbose output (default) |
-| `-d` | Debug output |
-| `-nr` | Download only, no restart |
-| `--restart` | Hard restart (don't wait for tunnels to expire) |
-| `-n` | Dry run |
-| `-u URL` | Custom download URL |
-| `-p PROXY` | Proxy (`[http(s)://]ip:port`) |
-| `-r N` | Retries (default: 3) |
-| `-t N` | Timeout in seconds (default: 120) |
-| `--ssl` | Use HTTPS for curl/wget proxy |
-| `--insecure` | Allow insecure TLS (custom URLs) |
-| `--pid FILE` | Custom PID file |
-| `--cron` | Only download if header dates differ |
+| Flag           | Description                                     |
+| -------------- | ----------------------------------------------- |
+| `--help`, `-h` | Show help                                       |
+| `-q`           | Quiet mode (overrides `-v` and `-d`)            |
+| `-v`           | Verbose output (default)                        |
+| `-d`           | Debug output                                    |
+| `-nr`          | Download only, no restart                       |
+| `--restart`    | Hard restart (don't wait for tunnels to expire) |
+| `-n`           | Dry run                                         |
+| `-u URL`       | Custom download URL                             |
+| `-p PROXY`     | Proxy (`[http(s)://]ip:port`)                   |
+| `-r N`         | Retries (default: 3)                            |
+| `-t N`         | Timeout in seconds (default: 120)               |
+| `--ssl`        | Use HTTPS for curl/wget proxy                   |
+| `--insecure`   | Allow insecure TLS (custom URLs)                |
+| `--pid FILE`   | Custom PID file                                 |
+| `--cron`       | Only download if header dates differ            |
 
 ## Default Behavior
 

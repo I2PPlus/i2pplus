@@ -21,48 +21,48 @@ Copy `lib/wrapper.jar` from the delta pack to:
 
 From the delta pack's `lib/` directory, strip binaries (if tools are available) and copy to the appropriate directory:
 
-| Platform        | Directory          | File                                                           |
-|-----------------|--------------------|----------------------------------------------------------------|
-| FreeBSD x86     | freebsd/           | libwrapper.so                                                  |
-| FreeBSD x86-64  | freebsd64/         | libwrapper.so                                                  |
-| FreeBSD ARM64   | freebsd-arm64/     | libwrapper.so                                                  |
-| Linux x86       | linux/             | libwrapper.so                                                  |
-| Linux x86-64    | linux64/           | libwrapper.so                                                  |
-| Linux ARM64     | linux64-armv8/     | libwrapper.so                                                  |
-| Linux ARM v5    | linux-armv5/       | libwrapper.so                                                  |
-| Linux ARM v7    | linux-armv7/       | libwrapper.so                                                  |
-| Linux PPC64 LE  | linux-ppc64le/     | libwrapper.so                                                  |
-| Solaris Sparc   | solaris/           | libwrapper.so                                                  |
-| Solaris x86-64  | solaris64/         | libwrapper.so                                                  |
-| macOS Universal | macosx/            | libwrapper-macosx-universal-32.jnilib                          |
-|                 |                    | libwrapper-macosx-universal-64.jnilib                          |
-| macOS ARM64     | macosx-arm64/      | libwrapper-macosx-arm-64.dylib                                 |
-| macOS 32-bit    | macosx32/          | libwrapper-macosx-universal-32.jnilib                          |
-| Windows x86     | win32/             | wrapper.dll                                                    |
-| Windows x86-64  | win64/             | wrapper.dll                                                    |
+| Platform          | Directory            | File                                                             |
+| ----------------- | -------------------- | ---------------------------------------------------------------- |
+| FreeBSD x86       | freebsd/             | libwrapper.so                                                    |
+| FreeBSD x86-64    | freebsd64/           | libwrapper.so                                                    |
+| FreeBSD ARM64     | freebsd-arm64/       | libwrapper.so                                                    |
+| Linux x86         | linux/               | libwrapper.so                                                    |
+| Linux x86-64      | linux64/             | libwrapper.so                                                    |
+| Linux ARM64       | linux64-armv8/       | libwrapper.so                                                    |
+| Linux ARM v5      | linux-armv5/         | libwrapper.so                                                    |
+| Linux ARM v7      | linux-armv7/         | libwrapper.so                                                    |
+| Linux PPC64 LE    | linux-ppc64le/       | libwrapper.so                                                    |
+| Solaris Sparc     | solaris/             | libwrapper.so                                                    |
+| Solaris x86-64    | solaris64/           | libwrapper.so                                                    |
+| macOS Universal   | macosx/              | libwrapper-macosx-universal-32.jnilib                            |
+|                   |                      | libwrapper-macosx-universal-64.jnilib                            |
+| macOS ARM64       | macosx-arm64/        | libwrapper-macosx-arm-64.dylib                                   |
+| macOS 32-bit      | macosx32/            | libwrapper-macosx-universal-32.jnilib                            |
+| Windows x86       | win32/               | wrapper.dll                                                      |
+| Windows x86-64    | win64/               | wrapper.dll                                                      |
 
 ### 3. Executables (i2psvc, wrapper.exe)
 
 From the delta pack's `bin/` directory, strip binaries (if tools are available) and copy to the appropriate directory:
 
-| Platform        | Directory          | File                                                           |
-|-----------------|--------------------|----------------------------------------------------------------|
-| FreeBSD x86     | freebsd/           | i2psvc                                                         |
-| FreeBSD x86-64  | freebsd64/         | i2psvc                                                         |
-| FreeBSD ARM64   | freebsd-arm64/     | i2psvc                                                         |
-| Linux x86       | linux/             | i2psvc                                                         |
-| Linux x86-64    | linux64/           | i2psvc                                                         |
-| Linux ARM64     | linux64-armv8/     | i2psvc                                                         |
-| Linux ARM v5    | linux-armv5/       | i2psvc                                                         |
-| Linux ARM v7    | linux-armv7/       | i2psvc                                                         |
-| Linux PPC64 LE  | linux-ppc64le/     | i2psvc                                                         |
-| Solaris Sparc   | solaris/           | i2psvc                                                         |
-| Solaris x86-64  | solaris64/         | i2psvc                                                         |
-| macOS Universal | macosx/            | i2psvc-macosx-universal-32                                     |
-|                 |                    | i2psvc-macosx-universal-64                                     |
-| macOS 32-bit    | macosx32/          | i2psvc-macosx-universal-32                                     |
-| Windows x86     | win32/             | I2Psvc.exe                                                     |
-| Windows x86-64  | win64/             | I2Psvc.exe                                                     |
+| Platform          | Directory            | File                                                             |
+| ----------------- | -------------------- | ---------------------------------------------------------------- |
+| FreeBSD x86       | freebsd/             | i2psvc                                                           |
+| FreeBSD x86-64    | freebsd64/           | i2psvc                                                           |
+| FreeBSD ARM64     | freebsd-arm64/       | i2psvc                                                           |
+| Linux x86         | linux/               | i2psvc                                                           |
+| Linux x86-64      | linux64/             | i2psvc                                                           |
+| Linux ARM64       | linux64-armv8/       | i2psvc                                                           |
+| Linux ARM v5      | linux-armv5/         | i2psvc                                                           |
+| Linux ARM v7      | linux-armv7/         | i2psvc                                                           |
+| Linux PPC64 LE    | linux-ppc64le/       | i2psvc                                                           |
+| Solaris Sparc     | solaris/             | i2psvc                                                           |
+| Solaris x86-64    | solaris64/           | i2psvc                                                           |
+| macOS Universal   | macosx/              | i2psvc-macosx-universal-32                                       |
+|                   |                      | i2psvc-macosx-universal-64                                       |
+| macOS 32-bit      | macosx32/            | i2psvc-macosx-universal-32                                       |
+| Windows x86       | win32/               | I2Psvc.exe                                                       |
+| Windows x86-64    | win64/               | I2Psvc.exe                                                       |
 
 ## Building from Source
 

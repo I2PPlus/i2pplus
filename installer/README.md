@@ -4,16 +4,16 @@ Builds the I2P+ installer JAR and Windows EXE packages using IzPack (v4 and v5).
 
 ## Structure
 
-| Directory | Description |
-|---|---|
-| `lib/izpack/` | IzPack installer toolkit (v4, v5, shared resources) |
-| `lib/jbigi/` | Native JBIGI/JCPUID binaries for all platforms |
-| `lib/wrapper/` | Tanuki Java Service Wrapper binaries |
-| `lib/launch4j/` | Launch4j Windows EXE wrapper |
-| `resources/` | Files bundled into the installed I2P package |
-| `c/i2pExe/` | Windows native launcher source (Visual Studio) |
-| `java/` | Installer Java source |
-| `tools/` | Build-time utilities |
+| Directory       | Description                                         |
+| --------------- | --------------------------------------------------- |
+| `lib/izpack/`   | IzPack installer toolkit (v4, v5, shared resources) |
+| `lib/jbigi/`    | Native JBIGI/JCPUID binaries for all platforms      |
+| `lib/wrapper/`  | Tanuki Java Service Wrapper binaries                |
+| `lib/launch4j/` | Launch4j Windows EXE wrapper                        |
+| `resources/`    | Files bundled into the installed I2P package        |
+| `c/i2pExe/`     | Windows native launcher source (Visual Studio)      |
+| `java/`         | Installer Java source                               |
+| `tools/`        | Build-time utilities                                |
 
 ## Building
 

@@ -4,27 +4,27 @@ Files that get bundled into the installed I2P package. These are the scripts, co
 
 ## Contents
 
-| Directory | Description |
-|---|---|
-| `unix/bash-completion/` | Shell completion scripts |
-| `blocklist/` | IP blocklist files and update scripts |
-| `certificates/` | SSL/TLS certificates |
-| `eepsite/` | Jetty configuration for the local eepsite |
-| `eepsite-jetty9.3/` | Jetty 9.3 variant of eepsite config |
-| `geoip/` | GeoIP database files |
-| `initialNews/` | First-run news content |
-| `locale/` | Compiled translation bundles |
-| `locale-man/` | Manual page translations |
-| `macos/` | macOS-specific scripts (launchd, service install) |
-| `man/` | Unix manual pages |
-| `package-lists/` | Jetty package configuration |
-| `portable/` | Portable installation support |
-| `proxy/` | HTTP proxy configuration |
-| `readme/` | First-run readme content |
-| `small/` | Minimal installation variant |
-| `themes/` | Router console and i2psnark UI themes |
-| `unix/` | Unix/Linux scripts (i2prouter, systemd, service install) |
-| `windows/` | Windows batch scripts and service helpers |
+| Directory               | Description                                              |
+| ----------------------- | -------------------------------------------------------- |
+| `unix/bash-completion/` | Shell completion scripts                                 |
+| `blocklist/`            | IP blocklist files and update scripts                    |
+| `certificates/`         | SSL/TLS certificates                                     |
+| `eepsite/`              | Jetty configuration for the local eepsite                |
+| `eepsite-jetty9.3/`     | Jetty 9.3 variant of eepsite config                      |
+| `geoip/`                | GeoIP database files                                     |
+| `initialNews/`          | First-run news content                                   |
+| `locale/`               | Compiled translation bundles                             |
+| `locale-man/`           | Manual page translations                                 |
+| `macos/`                | macOS-specific scripts (launchd, service install)        |
+| `man/`                  | Unix manual pages                                        |
+| `package-lists/`        | Jetty package configuration                              |
+| `portable/`             | Portable installation support                            |
+| `proxy/`                | HTTP proxy configuration                                 |
+| `readme/`               | First-run readme content                                 |
+| `small/`                | Minimal installation variant                             |
+| `themes/`               | Router console and i2psnark UI themes                    |
+| `unix/`                 | Unix/Linux scripts (i2prouter, systemd, service install) |
+| `windows/`              | Windows batch scripts and service helpers                |
 
 ## Key Files
 
