@@ -4,7 +4,7 @@
 
 [Unit]
 Description=I2P+ Anonymous Network Router
-Documentation=https://get.i2p.net
+Documentation=https://i2pplus.github.io
 After=network-online.target
 Wants=network-online.target
 
