@@ -26,15 +26,15 @@ The nftables version uses named sets with the `interval` flag. All banned IPs li
 
 Each time the script runs (typically via cron), it:
 
-1. Restores any previously saved nftables ruleset (in case the table was lost after a reboot)
-2. Creates the nftables table, chain, and sets if they don't exist
+1. Restores any previously saved nftables ruleset (deletes the existing table first to prevent duplicate rules)
+2. Creates the nftables table, chain, and sets if they don't exist (first run only)
 3. On first run, migrates any existing iptables `I2P-BANNED` rules into the nftables sets
 4. Reads all sessionban files within the configured time window
 5. Extracts banned IPs, filtering out bogon/reserved ranges
 6. Diffs the wanted IPs against the current nftables set contents
 7. Adds new bans and removes expired bans in a single batch operation
 8. Cleans up any bogon IPs that may have been previously tracked
-9. Saves the updated ruleset to disk for boot persistence
+9. Saves the updated ruleset to disk for boot persistence (deduplicating any rules before writing)
 10. Ensures `/etc/nftables.conf` includes the ruleset file
 
 The script is idempotent — running it multiple times produces the same result. Duplicate bans are silently skipped.
@@ -161,6 +161,9 @@ The script uses only Python standard library modules and has no pip dependencies
 
 `--clean`
 : Fully purge all bans and remove all artifacts. See CLEAN MODE below.
+
+`--reset`
+: Delete the nftables table, remove the saved ruleset, and restart the nftables service. Preserves tracking data. Use when nftables state is suspected corrupted or `ksoftirqd` is consuming high CPU. See RESET MODE below.
 
 `-h`, `--help`
 : Show usage information and exit.
@@ -395,7 +398,7 @@ Nftables rules live in kernel memory and are lost on reboot. The script handles 
 
 3. **On boot**, the nftables systemd service loads `/etc/nftables.conf`, which includes the saved ruleset. All bans are restored immediately at boot, before the first cron run.
 
-4. **On the next cron run**, the script also loads the saved ruleset before processing (as a safety net in case the boot-time load was skipped). The sync then diffs wanted vs. current IPs and adjusts as needed.
+4. **On the next cron run**, the script deletes the existing table (if any) and reloads the saved ruleset as a clean slate. This prevents duplicate rules from accumulating. The sync then diffs wanted vs. current IPs and adjusts as needed.
 
 ### If /var/log is on tmpfs
 
@@ -425,18 +428,13 @@ i2p-sessionban-nftables.py --clean
 
 This will:
 
-1. Flush all IPs from the `banned_ipv4` and `banned_ipv6` sets (immediately unblocking all banned IPs)
-2. Delete the tracking file (`/home/i2p/i2p-sessionbans.txt`)
-3. Delete the saved ruleset file (`/etc/nftables/i2p-bans.nft`)
-4. Remove the `include` line from `/etc/nftables.conf`
+1. Delete the `i2p_bans` nftables table (chain, sets, rules — all removed immediately)
+2. Remove any legacy iptables `I2P-BANNED` chain and its jump rule (if present)
+3. Delete the tracking file (`/home/i2p/i2p-sessionbans.txt`)
+4. Delete the saved ruleset file (`/etc/nftables/i2p-bans.nft`)
+5. Remove the `include` line from `/etc/nftables.conf`
 
-The nftables table, chain, and rules remain in place but empty. This is intentional — it avoids breaking any other references to the chain.
-
-To fully remove all nftables objects:
-
-```sh
-nft delete table inet i2p_bans
-```
+After `--clean`, no trace of the ban system remains in nftables or iptables. The next cron run will rebuild everything from scratch.
 
 ### Dry run with --clean
 
@@ -445,6 +443,31 @@ You can combine `--clean` with `--dry-run` to preview what would be cleaned with
 ```sh
 i2p-sessionban-nftables.py --clean --dry-run
 ```
+
+## RESET MODE
+
+If you experience high CPU usage from `ksoftirqd` or suspect nftables state is corrupted, use `--reset`:
+
+```sh
+i2p-sessionban-nftables.py --reset
+```
+
+This will:
+
+1. Delete the `i2p_bans` nftables table
+2. Remove the saved ruleset file (`/etc/nftables/i2p-bans.nft`)
+3. Restart the nftables systemd service (reloads `/etc/nftables.conf` cleanly)
+
+The next cron run will rebuild bans from tracking data and save a clean ruleset. Use this instead of `--clean` when you want to keep the tracking data but need a fresh nftables state.
+
+### When to use --reset vs --clean
+
+| Situation                                   | Use       |
+|---------------------------------------------|-----------|
+| ksoftirqd high CPU, suspect duplicate rules | `--reset` |
+| Nftables state seems corrupted              | `--reset` |
+| Want to completely remove all ban state     | `--clean` |
+| Migrating away from the script              | `--clean` |
 
 ## MIGRATING FROM IPTABLES
 
@@ -474,9 +497,9 @@ iptables -X I2P-BANNED
 
 ## FILE LOCKING
 
-The script uses a PID-based lock file (`/var/run/i2p-sessionban.lock`) to prevent concurrent execution. If a second instance starts while the first is running, it will exit with an error.
+The script uses a PID-based lock file (`/var/run/i2p-sessionban.lock`) to prevent concurrent execution. Lock acquisition uses `open(O_CREAT | O_EXCL)` for atomic file creation — there is no check-then-write race window. If a second instance starts while the first is running, the atomic create fails and the second instance exits with an error.
 
-If the script crashes without cleaning up the lock file, the next run detects the stale lock by checking if the recorded PID is still alive. If not, the stale lock is removed and execution proceeds normally.
+If the script crashes without cleaning up the lock file, the next run detects the stale lock (file exists but the recorded PID is no longer alive), removes it, and retries acquisition.
 
 ## LOG OUTPUT
 
@@ -549,6 +572,12 @@ Purge everything and start fresh:
 
 ```sh
 i2p-sessionban-nftables.py --clean
+```
+
+Reset nftables state (keeps tracking data):
+
+```sh
+i2p-sessionban-nftables.py --reset
 ```
 
 ## FILES
@@ -625,6 +654,22 @@ nft list set inet i2p_bans banned_ipv4
 # Watch dropped packets in real time
 nft monitor
 ```
+
+### ksoftirqd using high CPU
+
+If `ksoftirqd` consumes excessive CPU, the nftables chain may have accumulated duplicate rules (e.g. from a bug in an earlier version of the script). Check for duplicates:
+
+```sh
+nft list table inet i2p_bans | grep 'saddr @banned_ipv4' | wc -l
+```
+
+If this returns more than 1, duplicates exist. Run `--reset` to tear down and rebuild:
+
+```sh
+i2p-sessionban-nftables.py --reset
+```
+
+This deletes the table, removes the saved ruleset, and restarts nftables. The next cron run rebuilds bans from a clean state.
 
 ## SEE ALSO
 

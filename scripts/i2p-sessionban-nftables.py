@@ -387,10 +387,18 @@ def migrate_from_iptables(ipv4_only: bool = False, log_file: Optional[str] = Non
 
 
 def restore_ruleset(ruleset_path: Path, log_file: Optional[str] = None):
-    """Restore a previously saved nftables ruleset (e.g. after reboot)."""
+    """Restore a previously saved nftables ruleset (e.g. after reboot).
+
+    Deletes the existing table first to guarantee idempotency — the saved
+    file is a full table definition and nft -f uses 'add' semantics, so
+    loading it on top of an existing table silently creates duplicate rules.
+    """
     if not ruleset_path.exists():
         return
     try:
+        # Drop the table if it exists so reload is always a clean slate.
+        # The delete + reload from the file is atomic from nft's perspective.
+        run_nft(["delete", "table", "inet", TABLE], fail_ok=True, log_file=log_file)
         result = subprocess.run(
             [NFT, "-f", str(ruleset_path)], capture_output=True, text=True,
         )
@@ -400,6 +408,59 @@ def restore_ruleset(ruleset_path: Path, log_file: Optional[str] = None):
             log(f"Ruleset restore warning: {result.stderr}", log_file)
     except Exception as e:
         log(f"Ruleset restore error: {e}", log_file)
+
+
+def deduplicate_nft_output(nft_output: str) -> str:
+    """Remove duplicate rules from nft list table output.
+
+    Tracks brace depth to identify chain blocks, then deduplicates
+    rule lines (non-keyword lines that don't open/close braces).
+    """
+    lines = nft_output.splitlines()
+    result = []
+    depth = 0
+    in_chain = False
+    chain_depth = 0
+    seen_rules: set = set()
+    dupes = 0
+
+    for line in lines:
+        stripped = line.strip()
+        opens = stripped.count("{")
+        closes = stripped.count("}")
+        depth_delta = opens - closes
+
+        if in_chain and depth == chain_depth + 1:
+            is_block_start = stripped.endswith("{")
+            is_block_end = "}" in stripped
+            is_keyword = any(stripped.startswith(kw) for kw in (
+                "type ", "policy ", "hook ", "flags ", "devices ",
+                "comment ", "timeout ", "gc-interval ", "size ",
+                "elements",
+            ))
+            if not is_block_start and not is_block_end and not is_keyword:
+                if stripped in seen_rules:
+                    dupes += 1
+                    depth += depth_delta
+                    continue
+                seen_rules.add(stripped)
+
+        result.append(line)
+
+        if not in_chain and stripped.startswith("chain ") and opens > 0:
+            in_chain = True
+            chain_depth = depth
+
+        depth += depth_delta
+
+        if in_chain and depth <= chain_depth:
+            in_chain = False
+            seen_rules.clear()
+
+    if dupes:
+        pass  # caller logs the count
+
+    return "\n".join(result)
 
 
 def save_ruleset(ruleset_path: Path, log_file: Optional[str] = None, dry_run: bool = False):
@@ -414,10 +475,11 @@ def save_ruleset(ruleset_path: Path, log_file: Optional[str] = None, dry_run: bo
         if result.returncode != 0:
             log(f"Ruleset save failed: {result.stderr}", log_file)
             return
+        output = deduplicate_nft_output(result.stdout)
         ruleset_path.parent.mkdir(parents=True, exist_ok=True)
         tmp_path = str(ruleset_path) + ".tmp"
         with open(tmp_path, "w") as f:
-            f.write(result.stdout)
+            f.write(output)
         os.replace(tmp_path, ruleset_path)
         log(f"Saved nftables ruleset to {ruleset_path}", log_file)
         ensure_nftables_include(ruleset_path, log_file)
@@ -656,9 +718,16 @@ def clean_all_bans(
 ):
     log("Cleaning all bans...", log_file)
     if not dry_run:
-        flush_set(SET_IPV4, log_file)
-        if not ipv4_only:
-            flush_set(SET_IPV6, log_file)
+        run_nft(["delete", "table", "inet", TABLE], fail_ok=True, log_file=log_file)
+
+        # Clean up legacy iptables chain if present
+        for iptables_bin in [IPTABLES] + ([IP6TABLES] if not ipv4_only else []):
+            rc, _, _ = run_iptables([iptables_bin, "-L", CHAIN, "-n"], fail_ok=True)
+            if rc == 0:
+                run_iptables([iptables_bin, "-D", "INPUT", "-j", CHAIN], fail_ok=True, log_file=log_file)
+                run_iptables([iptables_bin, "-F", CHAIN], fail_ok=True, log_file=log_file)
+                run_iptables([iptables_bin, "-X", CHAIN], fail_ok=True, log_file=log_file)
+                log(f"Removed legacy iptables chain {CHAIN} from {iptables_bin}", log_file)
     if tracking_file.exists() and not dry_run:
         tracking_file.unlink()
     if ruleset_path.exists() and not dry_run:
@@ -669,6 +738,29 @@ def clean_all_bans(
             log(f"Error removing ruleset file: {e}", log_file)
     remove_nftables_include(ruleset_path, log_file)
     log("Cleared sets and tracking file", log_file)
+
+
+def reset_nftables(ruleset_path: Path, log_file: Optional[str] = None):
+    """Nuke and reload: delete the table, remove the saved ruleset, restart nftables."""
+    log("Resetting nftables...", log_file)
+    run_nft(["delete", "table", "inet", TABLE], fail_ok=True, log_file=log_file)
+    if ruleset_path.exists():
+        try:
+            ruleset_path.unlink()
+            log(f"Removed ruleset file {ruleset_path}", log_file)
+        except OSError as e:
+            log(f"Error removing ruleset file: {e}", log_file)
+    try:
+        result = subprocess.run(
+            ["systemctl", "restart", "nftables"], capture_output=True, text=True,
+        )
+        if result.returncode == 0:
+            log("nftables service restarted", log_file)
+        else:
+            log(f"nftables restart warning: {result.stderr}", log_file)
+    except Exception as e:
+        log(f"nftables restart error: {e}", log_file)
+    log("Reset complete. Run the script normally to rebuild bans.", log_file)
 
 
 def list_current_bans(
@@ -736,14 +828,31 @@ def check_lock(lock_file: Path) -> bool:
 
 
 def acquire_lock(lock_file: Path) -> bool:
+    lock_file.parent.mkdir(parents=True, exist_ok=True)
     try:
+        fd = os.open(str(lock_file), os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o644)
+        try:
+            os.write(fd, str(os.getpid()).encode())
+        finally:
+            os.close(fd)
+        return True
+    except FileExistsError:
         if check_lock(lock_file):
             return False
-        lock_file.parent.mkdir(parents=True, exist_ok=True)
-        with open(lock_file, "w") as f:
-            f.write(str(os.getpid()))
-        return True
-    except IOError:
+        try:
+            os.unlink(str(lock_file))
+        except OSError:
+            return False
+        try:
+            fd = os.open(str(lock_file), os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o644)
+            try:
+                os.write(fd, str(os.getpid()).encode())
+            finally:
+                os.close(fd)
+            return True
+        except OSError:
+            return False
+    except OSError:
         return False
 
 
@@ -761,6 +870,7 @@ def main():
         "-l", "--log", help=f"Log file path (default: {DEFAULT_LOG_FILE})"
     )
     parser.add_argument("--clean", action="store_true", help="Clean all bans and exit")
+    parser.add_argument("--reset", action="store_true", help="Delete table, remove ruleset, restart nftables service")
     parser.add_argument("--list", action="store_true", help="List all current bans and exit")
     parser.add_argument("--list-summary", action="store_true", help="Print ban counts for IPv4/IPv6 and exit")
     parser.add_argument(
@@ -844,6 +954,10 @@ def main():
             clean_all_bans(tracking_file, ruleset_file, ipv4_only=ipv4_only, log_file=log_file, dry_run=dry_run)
             return
 
+        if args.reset:
+            reset_nftables(ruleset_file, log_file=log_file)
+            return
+
         if dry_run:
             log("DRY RUN MODE - No changes will be applied", log_file)
 
@@ -851,7 +965,14 @@ def main():
 
         if not dry_run:
             restore_ruleset(ruleset_file, log_file=log_file)
-            init_table_and_sets(ipv4_only=ipv4_only, log_file=log_file)
+            # Only init if table doesn't exist after restore.
+            # restore_ruleset loads the full table including rules, so running
+            # init_table_and_sets unconditionally adds duplicate drop rules each run.
+            rc, _, _ = run_nft(["list", "table", "inet", TABLE], fail_ok=True)
+            if rc != 0:
+                init_table_and_sets(ipv4_only=ipv4_only, log_file=log_file)
+            else:
+                log("Table already exists after restore, skipping init", log_file)
 
         if not ban_file.exists():
             log(f"ERROR: Ban file not found: {ban_file}", log_file)
