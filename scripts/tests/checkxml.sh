@@ -9,7 +9,9 @@
 # public domain
 #
 
-cd $(dirname $0)/../..
+cd "$(dirname "$0")/../.."
+
+FAIL=0
 
 XMLFILES="\
 ./apps/addressbook/build.xml \
@@ -100,7 +102,7 @@ for i in $HTMLFILES; do
     fi
 done
 
-if [ "$FAIL" != "" ]; then
+if [ "$FAIL" -ne 0 ]; then
     echo "******** At least one file failed check *********"
 else
     echo "All files passed"

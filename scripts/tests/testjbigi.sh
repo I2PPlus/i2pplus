@@ -10,10 +10,12 @@
 # public domain
 #
 
-cd $(dirname $0)/../../installer/lib/jbigi
+cd "$(dirname "$0")"/../../installer/lib/jbigi
 
+FAIL=0
 TMP=/tmp/testjbigi$$
-mkdir $TMP
+mkdir "$TMP"
+trap 'rm -rf "$TMP"' EXIT
 
 echo "> Testing 32 bit libcpuid ..."
 ln -s $PWD/libjcpuid-x86-linux.so $TMP/libjcpuid.so
@@ -29,21 +31,20 @@ echo
 
 for i in libjbigi-linux-*.so; do
   echo "> Testing $i ..."
-  ln -s $PWD/$i $TMP/libjbigi.so
-  java -cp ../../../build/i2p.jar -Djava.library.path=$TMP net.i2p.util.NativeBigInteger |
-    egrep 'java|native|However'
+  ln -s "$PWD/$i" "$TMP/libjbigi.so"
+  java -cp ../../../build/i2p.jar -Djava.library.path="$TMP" net.i2p.util.NativeBigInteger |
+    grep -E 'java|native|However'
   if [ $? -ne 0 ]; then
     echo "! FAILED CHECK FOR $i"
     FAIL=1
   fi
-  rm -f $TMP/libjbigi.so
+  rm -f "$TMP/libjbigi.so"
   echo
 done
 
-if [ "$FAIL" != "" ]; then
+if [ "$FAIL" -ne 0 ]; then
   echo "! At least one file failed jbigi check."
 else
   echo "> All files passed jbigi check."
 fi
-rm -rf $TMP
 exit $FAIL

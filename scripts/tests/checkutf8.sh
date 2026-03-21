@@ -8,7 +8,9 @@
 # public domain
 #
 
-cd `dirname $0`/../..
+cd "$(dirname "$0")/../.."
+
+FAIL=0
 
 # apps/routerconsole/jsp/ should only have UTF8 in help_xx.jsp
 
@@ -69,7 +71,7 @@ do
   fi
 done
 
-if [ "$FAIL" != "" ]
+if [ "$FAIL" -ne 0 ]
 then
   echo "******** At least one file failed check *********"
 else

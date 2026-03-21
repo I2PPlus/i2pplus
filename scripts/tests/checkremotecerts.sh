@@ -8,6 +8,7 @@ RESEEDHOSTS=$(sed -e '/^\s\+"https:\/\/[-a-z0-9.]/!d' -e 's/.*"https:\/\/\([-a-z
 CERTHOME="installer/resources/certificates"
 CACERTS=$(mktemp)
 WORK=$(mktemp -d)
+trap 'rm -f "$CACERTS"; rm -rf "$WORK"' EXIT
 FAIL=0
 MAX=5
 OPENSSL=0
@@ -40,7 +41,7 @@ fi
 
 if [ $CERTTOOL -ne 1 ] && [ $OPENSSL -ne 1 ]; then
     echo "! ERROR: This script requires either gnutls or openssl" >&2
-    exit
+    exit 1
 fi
 
 assemble_ca() {
@@ -49,9 +50,9 @@ assemble_ca() {
     cat /etc/ssl/certs/ca-certificates.crt "$CERTHOME"/*/*.crt >"$CACERTS"
 }
 
-retry() { # retry function borrowed from zzz's sync-mtn script
+retry() { # retry with backoff
     if [ $# -eq 0 ]; then
-        echo 'usage: $0 command args...'
+        echo "usage: $0 command args..."
         exit 1
     fi
 

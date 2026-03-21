@@ -120,6 +120,8 @@ get_sigtype() {
   fi
 }
 
+FAIL=0
+
 print_status() {
   if [ $DAYS -ge $SOON ]; then
     echo "> Expires in $DAYS days ($EXPIRES)"
@@ -134,7 +136,7 @@ print_status() {
     echo "! Check for $i failed, expires in $DAYS days (<= ${SOON}d) ($EXPIRES)"
     FAIL=1
   elif [ $DAYS -le $WARN ] && [ $DAYS -gt $SOON ]; then
-    echo "! WARNING: $i expires in $DAYS days (<= ${WANT}d) ($EXPIRES)"
+    echo "! WARNING: $i expires in $DAYS days (<= ${WARN}d) ($EXPIRES)"
   elif [ $DAYS -lt 0 ]; then
     DAYS=$(echo $DAYS | sed 's/^-//')
     echo "! Check for $i failed, expired $DAYS days ago ($EXPIRES)"
@@ -200,4 +202,4 @@ else
   echo "All files passed certificate validity check"
 fi
 
-[ -n $FAIL ] && exit $FAIL
+[ -n "$FAIL" ] && exit $FAIL
