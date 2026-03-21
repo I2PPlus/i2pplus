@@ -1407,19 +1407,28 @@ class NetDbRenderer {
     public void renderRoutersToWriter(Collection<RouterInfo> routers, Writer out, boolean isLocal, int page, int pageSize, boolean applyPagination) throws IOException {
         if (routers == null || routers.isEmpty()) return;
 
-        List<RouterInfo> list = new ArrayList<>(routers);
         List<RouterInfo> pageList;
         if (applyPagination) {
-            int total = list.size();
+            int total = routers.size();
             int fromIndex = page * pageSize;
             if (fromIndex >= total) {
                 // Requested page is beyond available results, just return early
                 return;
             }
             int toIndex = Math.min(fromIndex + pageSize, total);
-            pageList = list.subList(fromIndex, toIndex);
+            // Avoid copying the full collection — skip to offset and collect only the page
+            pageList = new ArrayList<>(toIndex - fromIndex);
+            int skipped = 0;
+            for (RouterInfo ri : routers) {
+                if (skipped < fromIndex) {
+                    skipped++;
+                } else {
+                    pageList.add(ri);
+                    if (pageList.size() >= toIndex - fromIndex) break;
+                }
+            }
         } else {
-            pageList = list;
+            pageList = new ArrayList<>(routers);
         }
 
         int maxBeforeStreaming = enableReverseLookups() ? 100 : 200;
