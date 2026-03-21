@@ -22,8 +22,7 @@ Public domain with exceptions:
  * HostnameVerifier: LICENSE-Apache2.0.txt
  * json-simple: LICENSE-Apache2.0.txt
  * Noise library: LICENSE-Noise.txt
- * MiniDNS library: LICENSE-LGPL2.1.txt, LICENSE-Apache2.0.txt, DWTFYWTPL
- * Router (router.jar)
+ * MiniDNS library: LICENSE-LGPLv2.1.txt, LICENSE-Apache2.0.txt, DWTFYWTPL
 
 Router (router.jar)
 Public domain with exceptions:

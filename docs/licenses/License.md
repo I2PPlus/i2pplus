@@ -26,7 +26,7 @@ Public domain except as listed below:
 - HostnameVerifier: From Apache HttpClient 4.4.1 and HttpCore 4.4.1; see `licenses/LICENSE-Apache2.0.txt`
 - json-simple 2.3.0: Copyright 2016 Clifton Labs; see `licenses/LICENSE-Apache2.0.txt`
 - Noise library: Copyright (C) 2016 Southern Storm Software, Pty Ltd.; see `licenses/LICENSE-Noise.txt`
-- MiniDNS library 1.0.0: see `licenses/LICENSE-LGPL2.1.txt` or `licenses/LICENSE-Apache2.0.txt` or DWTFYWTPL
+- MiniDNS library 1.0.0: see `licenses/LICENSE-LGPLv2.1.txt` or `licenses/LICENSE-Apache2.0.txt` or DWTFYWTPL
 
 ### Router (router.jar)
 Public domain except as listed below:
@@ -44,7 +44,7 @@ Public domain except as listed below:
 (Launch4j is only included in the upstream source package and Windows binaries. Not applicable for non-Windows binaries or Debian/Launchpad packages.) see `licenses/LICENSE-Launch4j.txt`
 
 ### GeoIP Data
-This product includes GeoLite2 data created by MaxMind, available from `http://www.maxmind.com/`; see `licenses/LICENSE-GeoIP.txt`
+This product includes GeoLite2 data created by MaxMind, available from `https://www.maxmind.com/`; see `licenses/LICENSE-GeoIP.txt`
 
 ### Launchers
 Copyright (c) 2002-2018 EPFL, Lausanne / Lightbend, Inc., unless otherwise specified; see `licenses/LICENSE-Scala.md`
