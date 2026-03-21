@@ -1,3 +1,22 @@
+2026-03-21 dr|z3d
+  * JBIGI:
+    - Parallelize builds: per-CPU GMP dirs, build_one.sh helper
+    - Bundle Linux x86_64 JNI headers; remove JAVA_HOME dependency
+    - Add list-jbigi.sh summary script and ant listJbigi target
+    - Clean output dir before build; show summary table at end
+  * Scripts:
+    - Fix nftables: delete-before-restore to prevent duplicate rules,
+      O_EXCL lock, --reset, --clean, dedup rules on save, O(log n) lookups
+    - Remove i2p-sessionban-iptables.py; add align-md-tables.py
+    - Fix test scripts (quoting, egrep, exit codes, traps etc); tests/README.md
+    - Remove monotone references; update to I2P+ repos
+  * Console:
+    - Fix netdbLookup.js regression
+  * Docs:
+    - Convert install guides to markdown; add missing license files;
+      fix typos and update repos, Java 17
+    - Align all md tables; add docs/, licenses/, gradle/ READMEs
+
 2026-03-18 dr|z3d
   * JBIGI:
     - Clean up jbigi.h: remove outdated nativeDoubleValue declaration, add current
