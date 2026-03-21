@@ -658,6 +658,10 @@ class SAMStreamSession implements SAMMessageSess {
         return new SAMv1StreamSessionSocketReader ( s, id );
     }
 
+    /**
+     *  SAMv1 stream session socket reader.
+     *  Reads data from the I2P socket and forwards it to the SAM client.
+     */
     public class SAMv1StreamSessionSocketReader extends SAMStreamSessionSocketReader {
         /**
          * Create a new SAM STREAM session socket reader

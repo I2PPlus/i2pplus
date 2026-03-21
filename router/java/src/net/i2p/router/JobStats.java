@@ -261,6 +261,9 @@ public class JobStats {
                               recentTotalPending, recentMaxPending, recentMinPending);
     }
 
+    /**
+     *  Holds aggregate statistics for recent job runs.
+     */
     public static class RecentStats {
         public final long runs;
         public final long totalTime;

@@ -3,6 +3,9 @@ package net.i2p.addressbook;
 import net.i2p.I2PAppContext;
 import net.i2p.util.Translate;
 
+/**
+ *  I18n string translation support for the addressbook application.
+ */
 public class Messages {
     static final String BUNDLE_NAME = "net.i2p.addressbook.messages";
     private final I2PAppContext _context;
