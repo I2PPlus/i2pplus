@@ -391,6 +391,7 @@ class BanlistRenderer {
             String reason = _t(entry.cause, entry.causeCode)
                 .replace("<b>➜</b> ", "")
                 .replace("<b> -> </b>", "")
+                .replace("➜ ", "")
                 .replace(" -> ", "")
                 .replaceAll("^\\s*[<-]?\\s*", "")
                 .trim();
@@ -552,8 +553,15 @@ class BanlistRenderer {
                     .append(hostname != null && !hostname.isEmpty() && !"unknown".equals(hostname) ? hostname : "")
                     .append("</td>");
              }
+            String ipReason = ipBan.reason.isEmpty() ? "IP Ban" :
+                ipBan.reason.replace("<b>➜</b> ", "")
+                            .replace("<b> -> </b>", "")
+                            .replace("➜ ", "")
+                            .replace(" -> ", "")
+                            .replaceAll("^\\s*[<-]?\\s*", "")
+                            .trim();
             buf.append("<td class=reason>")
-               .append(ipBan.reason.isEmpty() ? "IP Ban" : ipBan.reason)
+               .append(ipReason)
                .append("</td><td class=expires data-sort=").append(ipBan.expires).append(">")
                .append(expireString)
                .append("</td></tr>\n");

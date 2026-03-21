@@ -116,6 +116,7 @@ import { refreshElements } from "./refreshElements.js";
                        .replace("<b> -> </b>", "")
                        .replace(/>\s*/, "")
                        .replace(/->\s*/, "")
+                       .replace(/➜\s*/, "")
                        .replace(/^-\s*/, "")  // Remove leading dash
                        .replace(/^ \-> /, "") // Remove leading " -> "
                        .replace("Excessive NTCP connection", "Excessive connection")
