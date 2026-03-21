@@ -62,14 +62,10 @@ MAPPINGS=(
     "libwrapper-linux-arm-64.so:wrapper-linux-arm-64:linux64-armv8"
     "libwrapper-linux-armel-32.so:wrapper-linux-armel-32:linux-armv5"
     "libwrapper-linux-armhf-32.so:wrapper-linux-armhf-32:linux-armv7"
-    "libwrapper-linux-ppcle-64.so:wrapper-linux-ppcle-64:linux-ppc64le"
     "libwrapper-freebsd-x86-32.so:wrapper-freebsd-x86-32:freebsd"
     "libwrapper-freebsd-x86-64.so:wrapper-freebsd-x86-64:freebsd64"
     "libwrapper-freebsd-arm-64.so:wrapper-freebsd-arm-64:freebsd-arm64"
-    "libwrapper-solaris-sparc-32.so:wrapper-solaris-sparc-32:solaris"
-    "libwrapper-solaris-sparc-64.so:wrapper-solaris-sparc-64:solaris64"
     "libwrapper-macosx-universal-64.jnilib:wrapper-macosx-universal-64:macosx"
-    "libwrapper-macosx-universal-32.jnilib:wrapper-macosx-universal-32:macosx32"
     "libwrapper-macosx-arm-64.dylib::macosx-arm64"
 )
 
@@ -185,7 +181,7 @@ done
 
 echo ""
 echo "Stripping binaries and disabling execute bit..."
-for dir in freebsd freebsd64 linux linux64 linux-armv5 linux-armv7 linux64-armv8 solaris; do
+for dir in freebsd freebsd64 linux linux64 linux-armv5 linux-armv7 linux64-armv8; do
     if [ -d "${WRAPPER_DIR}/${dir}" ]; then
         for f in "${WRAPPER_DIR}/${dir}"/*; do
             chmod -x "$f" 2>/dev/null || true

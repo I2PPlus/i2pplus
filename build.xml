@@ -1756,14 +1756,11 @@
     <mkdir dir="dist"/>
     <parallel>
       <copy quiet="true" file="build/jbigi.jar" todir="pkg-temp/lib"/>
-      <copy quiet="true" todir="pkg-temp/lib/wrapper/solaris/">
-        <fileset dir="installer/lib/wrapper/solaris/" excludes="*.txt README.md"/>
-      </copy>
       <!--
-         Force using the new wrapper.jar.
-         The new jar with the old Windows binaries will *fail to work* on windows, so we'll copy the correct
-         version of the wrapper.jar file for windows and rename it so the user can use it to replace the existing
-         wrapper.jar file. We do not generate release files from this target. See preppkg-windows-only target below.
+         Copy wrapper.jar for all platforms and a separate copy for Windows
+         (wrapper-windows.jar) so users can replace it independently.
+         Win64 binaries are now built locally at 3.6.4; win32 from Tanuki.
+         See preppkg-windows-only target below.
         -->
       <copy overwrite="true" file="installer/lib/wrapper/all/wrapper.jar" todir="pkg-temp/lib"/>
       <copy quiet="true" file="installer/lib/wrapper/win-all/wrapper.jar" tofile="pkg-temp/lib/wrapper-windows.jar"/>
@@ -1773,9 +1770,6 @@
   <target name="preppkg-nowindows" depends="preppkg-linux, preppkg-freebsd, preppkg-osx, jbigi-nowindows">
     <parallel>
       <copy quiet="true" file="build/jbigi.jar" todir="pkg-temp/lib"/>
-      <copy quiet="true" todir="pkg-temp/lib/wrapper/solaris/">
-        <fileset dir="installer/lib/wrapper/solaris/" excludes="*.txt README.md"/>
-      </copy>
       <copy quiet="true" file="installer/lib/wrapper/all/wrapper.jar" todir="pkg-temp/lib"/>
     </parallel>
   </target>
@@ -1784,9 +1778,6 @@
     <ant target="repack200"/>
     <!-- no use doing repack200 on jbigi.jar -->
     <copy quiet="true" file="build/jbigi.jar" todir="pkg-temp/lib"/>
-    <copy quiet="true" todir="pkg-temp/lib/wrapper/solaris/">
-      <fileset dir="installer/lib/wrapper/solaris/" excludes="*.txt README.md"/>
-    </copy>
   </target>
 
   <target name="preppkg-freebsd" depends="preppkg-unix">
@@ -1854,9 +1845,6 @@
 
   <target name="preppkg-linux-nonx86" depends="preppkg-unix">
     <parallel>
-      <copy quiet="true" todir="pkg-temp/lib/wrapper/linux-ppc/">
-        <fileset dir="installer/lib/wrapper/linux-ppc/" excludes="*.txt README.md"/>
-      </copy>
       <copy quiet="true" todir="pkg-temp/lib/wrapper/linux-armv5/">
         <fileset dir="installer/lib/wrapper/linux-armv5/" excludes="*.txt README.md"/>
       </copy>
@@ -1915,11 +1903,8 @@
   <target name="preppkg-windows-only" depends="preppkg-windows, jbigi-windows-only">
     <copy quiet="true" file="build/jbigi.jar" todir="pkg-temp/lib"/>
     <!--
-             Win binaries are down-rev from the others, so use the old jar.
-             This will not overwrite, so preppkg (for all OSes) will get the new jar with
-             the old binaries, which will probably work but will output a warning.
-             The windows-only installer will get the correct jar.
-        <copy quiet="true" file="installer/lib/wrapper/all/wrapper.jar" todir="pkg-temp/lib"/>
+         Win64 built locally at 3.6.4; win32 from Tanuki.
+         wrapper.jar is identical across platforms, overwrite to be safe.
         -->
     <copy overwrite="true" file="installer/lib/wrapper/win-all/wrapper.jar" todir="pkg-temp/lib"/>
   </target>

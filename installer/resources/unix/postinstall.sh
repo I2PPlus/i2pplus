@@ -50,8 +50,6 @@ case $HOST_OS in
             wrapperpath="./lib/wrapper/linux-armv6"
         elif [ `echo $OS_ARCH |grep arm` ]; then
             wrapperpath="./lib/wrapper/linux-armv5"
-        elif [ `echo $OS_ARCH |grep ppc` ]; then
-            wrapperpath="./lib/wrapper/linux-ppc"
         elif [ "X$X86_64" = "X" ]; then
             wrapperpath="./lib/wrapper/linux"
         else
@@ -77,10 +75,6 @@ case $HOST_OS in
         chmod 755 ./Start\ I2P\ Router.app/Contents/MacOS/i2prouter
         chmod 755 ./install_i2p_service_osx.command
         chmod 755 ./uninstall_i2p_service_osx.command
-        ;;
-    solaris )
-        wrapperpath="./lib/wrapper/solaris"
-        cp ${wrapperpath}/libwrapper.so ./lib/
         ;;
     netbsd|openbsd|kfreebsd)
         # FIXME
