@@ -2,6 +2,7 @@ package net.i2p.router;
 
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterInfo;
+import net.i2p.router.peermanager.ProfileOrganizer;
 import net.i2p.router.peermanager.TunnelHistory;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateAverages;
@@ -11,6 +12,8 @@ import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.Translate;
+
+import java.util.SortedMap;
 
 /**
  * Simple throttle that basically stops accepting messages or nontrivial
@@ -146,7 +149,7 @@ public class RouterThrottleImpl implements RouterThrottle {
         if (r != null) {
             r.computeAverages(ra,false);
 
-            int maxProcessingTime = _context.getProperty(PROP_MAX_PROCESSINGTIME, DEFAULT_MAX_PROCESSINGTIME);
+            long maxProcessingTime = getAdaptiveProcessingTime();
 
             //Set throttling if necessary
             if ((ra.getAverage() > maxProcessingTime * 0.9 || ra.getCurrent() > maxProcessingTime ||
@@ -486,6 +489,62 @@ public class RouterThrottleImpl implements RouterThrottle {
      *  It does not translate!
      *  @return s
      */
+    /**
+     *  Get adaptive send processing time threshold.
+     *
+     *  SSU has inherently higher latency (~1000ms) than NTCP (~25ms),
+     *  so we scale the base threshold up when SSU is the primary transport.
+     *
+     *  When tunnel build success is low (network stress), we also scale up
+     *  to avoid rejecting tunnels during transient network degradation.
+     *
+     *  Healthy (buildSuccess >= 0.60):  base (SSU: 3000ms, otherwise: 2000ms)
+     *  Moderate (>= 0.50):             base * 1.5
+     *  Stressed (>= 0.40):             base * 2.0
+     *  Under attack (< 0.40):          base (don't relax under real attack)
+     */
+    private long getAdaptiveProcessingTime() {
+        // Honor explicit config override
+        long configured = _context.getProperty(PROP_MAX_PROCESSINGTIME, 0);
+        if (configured > 0) return configured;
+
+        long base = DEFAULT_MAX_PROCESSINGTIME;
+
+        // Check if SSU is the primary transport
+        boolean hasSSU = false;
+        boolean hasNTCP = false;
+        try {
+            SortedMap<String, net.i2p.router.transport.Transport> transports =
+                _context.commSystem().getTransports();
+            for (String style : transports.keySet()) {
+                if ("SSU".equals(style) || "SSU2".equals(style)) hasSSU = true;
+                if ("NTCP".equals(style) || "NTCP2".equals(style)) hasNTCP = true;
+            }
+        } catch (NullPointerException npe) {
+            // transports not ready yet
+        }
+
+        // SSU has ~1000ms base latency vs ~25ms for NTCP
+        if (hasSSU && !hasNTCP) {
+            base = (long) (base * 1.5);
+        } else if (hasSSU) {
+            // Mixed transport, slight bump
+            base = (long) (base * 1.25);
+        }
+
+        // Scale based on tunnel build success (network stress)
+        double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
+        if (buildSuccess >= 0.60) {
+            return base;
+        } else if (buildSuccess >= 0.50) {
+            return (long) (base * 1.5);
+        } else if (buildSuccess >= ProfileOrganizer.ATTACK_THRESHOLD) {
+            return (long) (base * 2.0);
+        }
+        // Under attack (< 0.40) - don't relax
+        return base;
+    }
+
     private static final String _x(String s) {return s;}
 
 }
