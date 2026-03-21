@@ -7,6 +7,7 @@ import net.i2p.data.Hash;
 import net.i2p.router.RouterContext;
 import net.i2p.router.peermanager.ProfileOrganizer;
 import net.i2p.util.Log;
+import net.i2p.util.SimpleTimer2;
 
 /**
  * Tracks routers that consistently fail to respond to tunnel build requests
@@ -22,11 +23,17 @@ public class GhostPeerManager {
     private final RouterContext _context;
     private final ConcurrentHashMap<Hash, AtomicInteger> _timeoutCounts;
     private final ConcurrentHashMap<Hash, Long> _ghostSince;
+    private final ConcurrentHashMap<Hash, AtomicInteger> _ghostCounts;
+    private final SimpleTimer2 _timer;
 
-    private static final int DEFAULT_TIMEOUT_THRESHOLD = 3;
-    private static final int ATTACK_TIMEOUT_THRESHOLD = 3;
-    private static final long COOLDOWN_MS = 180*1000; // 3m
-    private static final long ATTACK_COOLDOWN_MS = 300*1000; // 5m
+    private static final int THRESHOLD_HEALTHY = 8;
+    private static final int THRESHOLD_MODERATE = 6;
+    private static final int THRESHOLD_STRESSED = 4;
+    private static final int THRESHOLD_ATTACK = 3;
+    private static final long COOLDOWN_FIRST_MS = 60*1000;   // 1m
+    private static final long COOLDOWN_REPEAT_MS = 120*1000;  // 2m
+    private static final long COOLDOWN_PERSIST_MS = 240*1000; // 4m
+    private static final long GHOST_COUNT_DECAY_MS = 10*60*1000; // 10m decay
     private static final int MAX_TRACKED_PEERS = 1024;
 
     public GhostPeerManager(RouterContext context) {
@@ -34,6 +41,8 @@ public class GhostPeerManager {
         _log = context.logManager().getLog(GhostPeerManager.class);
         _timeoutCounts = new ConcurrentHashMap<Hash, AtomicInteger>(MAX_TRACKED_PEERS);
         _ghostSince = new ConcurrentHashMap<Hash, Long>(MAX_TRACKED_PEERS);
+        _ghostCounts = new ConcurrentHashMap<Hash, AtomicInteger>(MAX_TRACKED_PEERS);
+        _timer = SimpleTimer2.getInstance();
     }
 
     /**
@@ -51,16 +60,46 @@ public class GhostPeerManager {
         }
 
         int newCount = count != null ? count.get() : 1;
-        double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
-        boolean underAttack = buildSuccess < ProfileOrganizer.ATTACK_THRESHOLD;
-        if (newCount >= getThreshold()) {
+        int threshold = getThreshold();
+        if (newCount >= threshold) {
             Long existingTime = _ghostSince.putIfAbsent(peer, _context.clock().now());
-            if (existingTime == null && _log.shouldWarn()) {
-                _log.warn("Peer [" + peer.toBase64().substring(0,6) + "] marked as ghost for " +
-                          (underAttack ? ATTACK_COOLDOWN_MS/1000 : COOLDOWN_MS/1000) + "s -> " +
-                           newCount + " consecutive tunnel build timeouts");
+            if (existingTime == null) {
+                AtomicInteger gc = _ghostCounts.putIfAbsent(peer, new AtomicInteger(1));
+                int ghostCount = gc != null ? gc.incrementAndGet() : 1;
+                long cooldown = getCoolDown(ghostCount);
+                if (_log.shouldWarn()) {
+                    _log.warn("Peer [" + peer.toBase64().substring(0,6) + "] marked as ghost for " +
+                              (cooldown/1000) + "s -> " + newCount + " consecutive tunnel build timeouts" +
+                              " (threshold: " + threshold + ", repeat: " + ghostCount + ")");
+                }
+                scheduleDecay(peer);
             }
         }
+    }
+
+    /**
+     * Schedule ghost count decay for a peer.
+     */
+    private void scheduleDecay(final Hash peer) {
+        new SimpleTimer2.TimedEvent(_timer, GHOST_COUNT_DECAY_MS) {
+            @Override
+            public void timeReached() {
+                _ghostCounts.computeIfPresent(peer, (k, gc) -> {
+                    int val = gc.decrementAndGet();
+                    return val > 0 ? gc : null;
+                });
+            }
+        };
+    }
+
+    /**
+     * Get cooldown duration based on how many times the peer has been ghosted.
+     * Exponential-ish: 60s -> 120s -> 240s (cap).
+     */
+    private long getCoolDown(int ghostCount) {
+        if (ghostCount <= 1) return COOLDOWN_FIRST_MS;
+        if (ghostCount == 2) return COOLDOWN_REPEAT_MS;
+        return COOLDOWN_PERSIST_MS;
     }
 
     /**
@@ -88,36 +127,41 @@ public class GhostPeerManager {
     public boolean isGhost(Hash peer) {
         if (peer == null || peer.equals(_context.routerHash())) {return false;}
 
-        AtomicInteger count = _timeoutCounts.get(peer);
-        if (count == null) {return false;}
-
         Long since = _ghostSince.get(peer);
         if (since != null) {
             long elapsed = _context.clock().now() - since;
-            double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
-            long cooldown = buildSuccess < ProfileOrganizer.ATTACK_THRESHOLD ? ATTACK_COOLDOWN_MS : COOLDOWN_MS;
+            AtomicInteger gc = _ghostCounts.get(peer);
+            int ghostCount = gc != null ? gc.get() : 1;
+            long cooldown = getCoolDown(ghostCount);
             if (elapsed >= cooldown) {
                 _timeoutCounts.remove(peer);
                 _ghostSince.remove(peer);
                 return false;
             }
+            return true;
         }
 
-        int threshold = getThreshold();
-        return count.get() >= threshold;
+        AtomicInteger count = _timeoutCounts.get(peer);
+        if (count == null) {return false;}
+        return count.get() >= getThreshold();
     }
 
     /**
-     * Get the current timeout threshold.
+     * Get the current timeout threshold, adapting to network conditions.
+     *
+     * Healthy (>=0.60): 8 timeouts before ghosting
+     * Moderate (>=0.50): 6
+     * Stressed (>=0.40 / ATTACK_THRESHOLD): 4
+     * Under attack (<0.40): 3
      *
      * @return threshold number of timeouts before exclusion
      */
     public int getThreshold() {
         double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
-        if (buildSuccess < ProfileOrganizer.ATTACK_THRESHOLD) {
-            return ATTACK_TIMEOUT_THRESHOLD;
-        }
-        return DEFAULT_TIMEOUT_THRESHOLD;
+        if (buildSuccess >= 0.60) return THRESHOLD_HEALTHY;
+        if (buildSuccess >= 0.50) return THRESHOLD_MODERATE;
+        if (buildSuccess >= ProfileOrganizer.ATTACK_THRESHOLD) return THRESHOLD_STRESSED;
+        return THRESHOLD_ATTACK;
     }
 
     /**
