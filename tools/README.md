@@ -25,11 +25,16 @@ Output: `dist/jsdoc/`
 
 ### jsdoc/ Directory
 
-- `jsdoc.json` - JSDoc configuration
-- `jsdoc-patch.js` - Copies fonts and theme CSS to output
-- `jsdoc-dark.css` - Dark theme overrides
+- `jsdoc.json` - JSDoc configuration (docdash)
+- `jsdoc-minami.json` - JSDoc configuration (minami/tui)
+- `jsdoc-patch.js` - Copies fonts and theme CSS to output (docdash)
+- `jsdoc-patch-minami.js` - Copies fonts and CSS to output (minami)
+- `jsdoc-patch-tui.js` - Copies fonts and CSS to output (tui)
+- `jsdoc-dark.css` - Dark theme overrides (docdash)
+- `jsdoc-minami-dark.css` - Dark theme overrides (minami)
 - `jsdoc-fonts.css` - Font declarations (Open Sans, Fira Code)
 - `docdash-template/` - Custom docdash template
+- `minami-local/` - Local assets for minami (ionicons)
 - `plugins/section.js` - Auto-detects section from file path
 - `tmpl/layout.tmpl` - HTML layout template
 

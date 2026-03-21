@@ -1,0 +1,151 @@
+/**
+ * @file jsdoc-minami-dark.css - Dark theme for minami JSDoc template.
+ * Auto-toggles based on user-prefers-color-scheme. Dark by default.
+ * Uses Open Sans (body) and Fira Code (code) fonts.
+ */
+
+:root {
+  --accent: #89b4fa;
+  --bg: #1a1b26;
+  --bg-alt: #16161e;
+  --border: #292e42;
+  --code: #77f;
+  --hover: #33f;
+  --link: #89dceb;
+  --text: #c0caf5;
+  --text-dim: #7982a9;
+}
+
+body {
+  background-color: var(--bg) !important;
+  color: var(--text) !important;
+  font-family: 'Open Sans', sans-serif !important;
+}
+
+a,
+a:active {
+  color: var(--link) !important;
+}
+
+a:hover {
+  color: var(--hover) !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Open Sans', sans-serif !important;
+  color: var(--accent) !important;
+}
+
+h1.page-title {
+  border-color: var(--border);
+}
+
+/* Navigation */
+nav {
+  background-color: var(--bg-alt) !important;
+  border-color: var(--border) !important;
+}
+
+nav a {
+  color: var(--text) !important;
+}
+
+nav a:hover {
+  color: var(--accent) !important;
+}
+
+nav h2 {
+  color: var(--accent) !important;
+}
+
+nav h3 {
+  color: var(--text-dim) !important;
+}
+
+nav input {
+  background-color: var(--bg) !important;
+  color: var(--text) !important;
+  border-color: var(--border) !important;
+}
+
+/* Code blocks */
+pre, code, .prettyprint {
+  background-color: var(--bg-alt) !important;
+  color: var(--code) !important;
+  border-color: var(--border) !important;
+  font-family: 'Fira Code', monospace !important;
+}
+
+.prettyprint.linenums li {
+  border-color: var(--border) !important;
+}
+
+.pun, .pln, .com {
+  color: #ddd !important;
+}
+
+.prettyprint li::marker {
+  line-height: 1.5 !important;
+  padding: 2px 4px !important;
+  display: inline-block !important;
+}
+
+.prettyprint .linenums code {
+  min-height: 20px !important;
+}
+
+.prettyprint, .prettyprint li code span {
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+}
+
+pre code {
+  color: var(--text) !important;
+}
+
+/* Tags */
+.tag-label, .tag-type, .tag-description {
+  color: var(--text-dim) !important;
+}
+
+/* Tables */
+table {
+  border-color: var(--border) !important;
+}
+
+table th {
+  background-color: var(--bg-alt) !important;
+  color: var(--accent) !important;
+}
+
+table td {
+  border-color: var(--border) !important;
+}
+
+article {
+  background: #1a1b26 !important;
+}
+
+/* Details */
+details {
+  border-color: var(--border) !important;
+}
+
+/* Footer */
+footer {
+  color: var(--text-dim) !important;
+  border-color: var(--border) !important;
+}
+
+/* Scrollbar */
+html {
+  scrollbar-color: var(--accent) var(--bg) !important;
+}
+
+/* Selection */
+::selection {
+  background-color: var(--accent) !important;
+  color: var(--bg) !important;
+}
+
+footer {display:none !important}

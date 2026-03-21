@@ -1309,11 +1309,11 @@
     <exec executable="npx" failonerror="true">
       <arg value="jsdoc"/>
       <arg value="-c"/>
-      <arg value="tools/jsdoc/jsdoc.json"/>
+      <arg value="tools/jsdoc/jsdoc-minami.json"/>
       <arg value="-t"/>
       <arg value="node_modules/minami"/>
     </exec>
-    <exec executable="./tools/jsdoc/jsdoc-patch.js" failonerror="false">
+    <exec executable="./tools/jsdoc/jsdoc-patch-minami.js" failonerror="false">
       <arg value="dist/jsdoc"/>
     </exec>
     <if>
@@ -1332,11 +1332,11 @@
     <exec executable="npx" failonerror="true">
       <arg value="jsdoc"/>
       <arg value="-c"/>
-      <arg value="tools/jsdoc/jsdoc.json"/>
+      <arg value="tools/jsdoc/jsdoc-minami.json"/>
       <arg value="-t"/>
       <arg value="node_modules/tui-jsdoc-template"/>
     </exec>
-    <exec executable="./tools/jsdoc/jsdoc-patch.js" failonerror="false">
+    <exec executable="./tools/jsdoc/jsdoc-patch-tui.js" failonerror="false">
       <arg value="dist/jsdoc"/>
     </exec>
     <if>

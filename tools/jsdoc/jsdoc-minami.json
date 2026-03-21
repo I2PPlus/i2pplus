@@ -1,0 +1,21 @@
+{
+  "tags": {
+    "allowUnknownTags": true,
+    "dictionaries": ["jsdoc", "closure"]
+  },
+  "source": {
+    "include": [
+      "apps/i2psnark/res/js",
+      "apps/i2ptunnel/jsp/js",
+      "apps/routerconsole/jsp/js",
+      "apps/susidns/src/js",
+      "apps/susimail/src/js",
+      "apps/imagegen/imagegen/webapp/src/main/webapp"
+    ]
+  },
+  "plugins": ["plugins/markdown"],
+  "opts": {
+    "destination": "dist/jsdoc",
+    "recurse": true
+  }
+}
