@@ -599,7 +599,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         _context.jobQueue().addJob(new BootstrapPool(_context, _inboundExploratory));
         _context.jobQueue().addJob(new BootstrapPool(_context, _outboundExploratory));
 
-        // remove slow tunnels job - runs every 10 seconds
+        // remove slow tunnels job - interval configurable via router.tunnel.slowTunnelInterval
         if (_log.shouldDebug())
             _log.debug("Adding RemoveSlowTunnelsJob to job queue");
         _context.jobQueue().addJob(new RemoveSlowTunnelsJob(_context, this));
@@ -665,17 +665,16 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             int runNum = _runCount.incrementAndGet();
             _mgr._log.info("RemoveSlowTunnelsJob run #" + runNum + " completed in " + duration + "ms");
 
-            // Use configurable interval (default 90s), increase if queue is overloaded
             long interval = _mgr._context.getProperty(PROP_SLOW_TUNNEL_INTERVAL, DEFAULT_RUN_INTERVAL_MS);
+
+            // Warn if queue is overloaded but don't override configured interval
             int maxWaiting = _mgr._context.getProperty("router.maxWaitingJobs", 750);
             int readyCount = _mgr._context.jobQueue().getReadyCount();
             long maxLag = _mgr._context.jobQueue().getMaxLag();
             long avgLag = _mgr._context.jobQueue().getAvgLag();
-            // If queue overloaded, increase interval to reduce load (check both max and avg lag)
             if (readyCount > maxWaiting || maxLag >= 10 || avgLag >= 10) {
-                interval = 5 * 60 * 1000; // 5 minutes
                 if (_mgr._log.shouldWarn()) {
-                    _mgr._log.warn("Job queue overloaded (Ready jobs: " + readyCount + ", Max lag: " + maxLag + "ms, Avg lag: " + avgLag + "ms) -> Increasing interval to 5min...");
+                    _mgr._log.warn("Job queue overloaded (Ready jobs: " + readyCount + ", Max lag: " + maxLag + "ms, Avg lag: " + avgLag + "ms)");
                 }
             }
             _mgr._log.info("Remove Slow Tunnels Job: Requeueing in " + (interval / 1000) + "s...");
