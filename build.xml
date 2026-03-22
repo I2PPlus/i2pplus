@@ -42,6 +42,10 @@
     <echo message=" buildI2PSnark                                Build I2PSnark .jar &amp; .war components &#10140; ./build/i2psnark.(jar|war)"/>
     <echo message=" buildI2PTunnel                               Build I2PTunnel .jar &amp; .war components &#10140; ./build/i2ptunnel.(jar|war)"/>
     <echo message=" buildImagegen                                Build Imagegen .war component &#10140; ./build/imagegen.war"/>
+    <echo message=" buildJbigi                                   Build all jbigi native libraries (Win64 + Linux64 + ARM64) &#10140; installer/lib/jbigi/"/>
+    <echo message=" buildJbigi-arm64                             Build Linux ARM64 jbigi .so files &#10140; installer/lib/jbigi/"/>
+    <echo message=" buildJbigi-linux64                           Build Linux 64-bit jbigi .so files &#10140; installer/lib/jbigi/"/>
+    <echo message=" buildJbigi-win64                             Build Windows 64-bit jbigi DLLs using MinGW &#10140; installer/lib/jbigi/"/>
     <echo message=" buildJetty                                   Build all Jetty related jar components &#10140; ./build/"/>
     <echo message=" buildJrobin                                  Build the JRobin (RRD4J) .jar component &#10140; ./build/jrobin.jar"/>
     <echo message=" buildMinistreaming                           Build MiniStreaming .jar component &#10140; ./build/mstreaming.jar"/>
@@ -56,25 +60,21 @@
     <echo message=" buildSusiMail                                Build SusiMail .war component &#10140; ./build/susimail.war"/>
     <echo message=" buildSusiMailJar                             Build SusiMail .jar component for testing &#10140; ./build/susimail.jar"/>
     <echo message=" buildWEB                                     Build required .jar &amp; .war components for RouterConsole &#10140; ./build/"/>
-    <echo message=" bump                                         Increment build (minor version) by 1"/>
     <echo message=" bumpBuildTime                                Update core/java/src/net/i2p/time/BuildTime.java with today's date"/>
+    <echo message=" bump                                         Increment build (minor version) by 1"/>
     <echo message=" createThemesZip                              Create zip with all console and webapp themes and resources &#10140; ./dist/themes.zip"/>
-    <echo message=" debian                                       Generate Debian packages in ../ then run &apos;debian-clean&apos;"/>
     <echo message=" debian-clean                                 Rollback Debian specific patches then run &apos;distclean&apos;"/>
+    <echo message=" debian                                       Generate Debian packages in ../ then run &apos;debian-clean&apos;"/>
     <echo message=" debianhowto                                  Instructions on building Debian packages"/>
-    <echo message=" dist                                         Run &apos;pkg&apos; and &apos;javadoc&apos;"/>
     <echo message=" dist200                                      Run &apos;pkg&apos;, &apos;updater200&apos; and &apos;javadoc&apos;"/>
     <echo message=" distclean                                    Clean up all derived and temporary files in workspace"/>
     <echo message=" distcleanWebapps                             Clean up all webapp-related derived and temporary files in workspace"/>
+    <echo message=" dist                                         Run &apos;pkg&apos; and &apos;javadoc&apos;"/>
     <echo message=" getGitRev                                    Check current Git revision in workspace and print truncated revision hash"/>
     <echo message=" getGitRevLong                                Check current Git revision in workspace and print full revision hash"/>
     <echo message=" i2psnark                                     Build standalone I2PSnark install &#10140; ./dist/i2psnark-standalone.zip"/>
     <echo message=" i2psnark7zip                                 Build standalone I2PSnark 7zip install &#10140; ./dist/i2psnark-standalone.7z"/>
     <echo message=" i2psnark_nozip                               Build standalone I2PSnark install, no zip file &#10140; ./dist/i2psnark-standalone"/>
-    <echo message=" buildJbigi                                   Build all jbigi native libraries (Win64 + Linux64 + ARM64) &#10140; installer/lib/jbigi/"/>
-    <echo message=" buildJbigi-win64                             Build Windows 64-bit jbigi DLLs using MinGW &#10140; installer/lib/jbigi/"/>
-    <echo message=" buildJbigi-linux64                           Build Linux 64-bit jbigi .so files &#10140; installer/lib/jbigi/"/>
-    <echo message=" buildJbigi-arm64                             Build Linux ARM64 jbigi .so files &#10140; installer/lib/jbigi/"/>
     <echo message=" installer / installer5                       Build GUI installer (IzPack4 / IzPack5) &#10140; ./dist/i2pinstall.exe"/>
     <echo message=" installer-freebsd                            Build FreeBSD GUI installer &#10140; ./dist/i2pinstall&#8230;freebsd-only.jar"/>
     <echo message=" installer-linux / installer5-linux           Build Linux GUI installer (IzPack4 / Izpack5) &#10140; ./dist/i2pinstall&#8230;linux-only.jar"/>
@@ -87,64 +87,71 @@
     <echo message=" javadoc-zip                                  Create javadocs zip for project &#10140; ./dist/javadoc.zip"/>
     <echo message=" javadoc-zip-nostylesheet                     Create javadocs zip without custom stylesheet for project &#10140; ./dist/javadoc.zip"/>
     <echo message=" jsdoc                                        Create jsdoc with docdash template (requires npm) &#10140; ./dist/jsdoc"/>
-    <echo message=" jsdoc-zip                                    Create jsdoc zip with docdash template &#10140; ./dist/jsdoc.zip"/>
     <echo message=" jsdoc-minami                                 Create jsdoc with minami template (requires npm) &#10140; ./dist/jsdoc"/>
     <echo message=" jsdoc-minami-zip                             Create jsdoc zip with minami template &#10140; ./dist/jsdoc-minami.zip"/>
     <echo message=" jsdoc-tui                                    Create jsdoc with tui-jsdoc-template (requires npm) &#10140; ./dist/jsdoc"/>
     <echo message=" jsdoc-tui-zip                                Create jsdoc zip with tui-jsdoc-template &#10140; ./dist/jsdoc-tui.zip"/>
+    <echo message=" jsdoc-zip                                    Create jsdoc zip with docdash template &#10140; ./dist/jsdoc.zip"/>
     <echo message=" pkg                                          Run &apos;distclean&apos; then package everything up (updater, installer)"/>
     <echo message=" pkg-portable-win32                           Build a minimal, portable install for Win32 &#10140; ./portable-win32.zip"/>
+    <echo message=" pmd                                          Run PMD Java and JavaScript static analysis &#10140; dist/pmd-java.html + dist/pmd-js.html"/>
+    <echo message=" pmd-java                                     Run PMD static analysis on Java sources &#10140; dist/pmd-java.html"/>
+    <echo message=" pmd-js                                       Run PMD static analysis on JavaScript sources &#10140; dist/pmd-js.html"/>
     <echo message=" poupdate-source                              Update the .po files for translators (requires jsp files to be compiled first)"/>
     <echo message=" signed-updater                               Signed Updater &#10140; ./dist/i2pupdate.su3 (Java14+ compatible)"/>
     <echo message=" signed-updater200                            Signed Updater (pack200) &#10140; ./dist/i2pupdate.su3"/>
-    <echo message=" signed-updater200WithJavadoc                 Signed Updater (pack200) + javadocs &#10140; ./dist/i2pupdate.su3"/>
     <echo message=" signed-updater200WithJavadocAndJetty         Signed Updater (pack200) + javadocs + Jetty &#10140; ./dist/i2pupdate.su3"/>
+    <echo message=" signed-updater200WithJavadoc                 Signed Updater (pack200) + javadocs &#10140; ./dist/i2pupdate.su3"/>
     <echo message=" signed-updater200withJetty                   Signed Updater (pack200) + Jetty"/>
     <echo message=" slackpkg                                     Build Slackware package in ./Slackware/i2p"/>
+    <echo message=" spotbugs                                     Run SpotBugs static analysis on Java sources"/>
     <echo message=" tarball                                      Create tar archive for clean install &#10140; ./dist/i2p.tar.bz2"/>
+    <echo message=" test                                         Run JUnit tests (Core, MiniStreaming, Streaming) via scripts/run-tests.sh"/>
+    <echo message=" testJbigi                                    Benchmark jbigi: native vs pure Java modPow/modPowCT/modInverse"/>
     <echo message=" testscripts                                  Run various scripts to check certificate validity, file integrity etc"/>
     <echo message=" updater                                      Build updater for existing installs &#10140; ./dist/i2pupdate.zip"/>
+    <echo message=" updaterCompact                               Updater w/o SAM, DesktopGUI, systray, country/continent lists, docs/proxy, docs/readme"/>
+    <echo message=" updaterCompactRouterConsoleNoThemes          Updater with RouterConsole only (no themes)"/>
+    <echo message=" updaterCompactRouterConsole                  Updater with RouterConsole and console/webapp themes only"/>
+    <echo message=" updaterCompactWithDocs                       Compact updater with readme and proxy docs"/>
+    <echo message=" updaterCompactWithGeoIPAndJbigi              Compact updater with GeoIP database and Jbigi"/>
+    <echo message=" updaterCompactWithGeoIP                      Compact updater with GeoIP database"/>
+    <echo message=" updaterWithGeoIP                             Updater + GeoIP database"/>
+    <echo message=" updaterWithJavadocAndJetty                   Updater + javadocs (linked in console) + Jetty "/>
+    <echo message=" updaterWithJavadoc                           Updater + javadocs (linked in console)"/>
+    <echo message=" updaterWithJbigi                             Updater + jBigi library"/>
+    <echo message=" updaterWithJettyFixesAndGeoIP                Updater + local Jetty patches + GeoIP database"/>
+    <echo message=" updaterWithJettyFixesAndJbigi                Updater + local Jetty patches + jBigi library"/>
+    <echo message=" updaterWithJettyFixes                        Updater + local Jetty patches"/>
+    <echo message=" updaterWithJetty                             Updater + Jetty"/>
+    <echo message=" updaterRouter                                Updater with i2p.jar and router.jar only"/>
+    <echo message=" updaterSmall                                 Updater with essentials (no SAM/I2PSnark/SusiMail/SusiDNS/history.txt)"/>
     <echo message=" updater200                                   Updater (pack200 - requires Java &lt; v14 or pre-existing lib/pack200.jar) &#10140; ./dist/i2pupdate200.zip"/>
     <echo message=" updater200Compact                            Updater (pack200) w/o SAM, DesktopGUI, systray, country/continent lists, docs/proxy, docs/readme"/>
     <echo message=" updater200CompactWithDocs                    Compact updater (pack200) with readme and proxy docs"/>
     <echo message=" updater200CompactWithGeoIP                   Compact updater (pack200) with GeoIP database"/>
-    <echo message=" updater200WithGeoIP                          Updater (pack200) + GeoIP database"/>
     <echo message=" updater200WithGeoIPAndJavadoc                Updater (pack200) + GeoIP database + javadocs"/>
     <echo message=" updater200WithGeoIPAndJbigi                  Updater (pack200) + GeoIP database + Jbigi"/>
-    <echo message=" updater200WithJavadoc                        Updater (pack200) + javadocs (with console link)"/>
+    <echo message=" updater200WithGeoIP                          Updater (pack200) + GeoIP database"/>
     <echo message=" updater200WithJavadocAndJbigi                Updater (pack200) + javadocs + jBigi library"/>
     <echo message=" updater200WithJavadocAndJetty                Updater (pack200) + javadocs (with console link) + Jetty"/>
+    <echo message=" updater200WithJavadoc                        Updater (pack200) + javadocs (with console link)"/>
     <echo message=" updater200WithJbigi                          Updater (pack200) + jBigi library"/>
-    <echo message=" updater200WithJetty                          Updater (pack200) + Jetty"/>
-    <echo message=" updater200WithJettyAndGeoIP                  Updater (pack200) + Jetty + GeoIP database"/>
     <echo message=" updater200WithJettyAndGeoIPAndLicenses       Updater (pack200) + Jetty + GeoIP database + licenses"/>
+    <echo message=" updater200WithJettyAndGeoIP                  Updater (pack200) + Jetty + GeoIP database"/>
     <echo message=" updater200WithJettyFixesAndGeoIP             Updater (pack200) + local Jetty patches + GeoIP database"/>
-    <echo message=" updaterCompact                               Updater w/o SAM, DesktopGUI, systray, country/continent lists, docs/proxy, docs/readme"/>
-    <echo message=" updaterCompactRouterConsole                  Updater with RouterConsole and console/webapp themes only"/>
-    <echo message=" updaterCompactRouterConsoleNoThemes          Updater with RouterConsole only (no themes)"/>
-    <echo message=" updaterCompactWithDocs                       Compact updater with readme and proxy docs"/>
-    <echo message=" updaterCompactWithGeoIP                      Compact updater with GeoIP database"/>
-    <echo message=" updaterCompactWithGeoIPAndJbigi              Compact updater with GeoIP database and Jbigi"/>
-    <echo message=" updaterRouter                                Updater with i2p.jar and router.jar only"/>
-    <echo message=" updaterSmall                                 Updater with essentials (no SAM/I2PSnark/SusiMail/SusiDNS/history.txt)"/>
-    <echo message=" updaterWithGeoIP                             Updater + GeoIP database"/>
-    <echo message=" updaterWithJavadoc                           Updater + javadocs (linked in console)"/>
-    <echo message=" updaterWithJavadocAndJetty                   Updater + javadocs (linked in console) + Jetty "/>
-    <echo message=" updaterWithJbigi                             Updater + jBigi library"/>
-    <echo message=" updaterWithJetty                             Updater + Jetty"/>
-    <echo message=" updaterWithJettyFixes                        Updater + local Jetty patches"/>
-    <echo message=" updaterWithJettyFixesAndGeoIP                Updater + local Jetty patches + GeoIP database"/>
-    <echo message=" updaterWithJettyFixesAndJbigi                Updater + local Jetty patches + jBigi library"/>
+    <echo message=" updater200WithJetty                          Updater (pack200) + Jetty"/>
     <echo message=" updateTorBlocklist                           Update Tor blocklist &#10140; installer/resources/blocklist/blocklist_tor.txt"/>
     <echo message=" 7zip-freebsd                                 Installation 7zip for FreeBSD without installer &#10140; ./dist/i2p-freebsd.7z"/>
     <echo message=" 7zip-linux                                   Installation 7zip for Linux without installer &#10140; ./dist/i2p-linux.7z"/>
     <echo message=" 7zip-macos                                   Installation 7zip for macOS without installer &#10140; ./dist/i2p-macos.7z"/>
-    <echo message=" 7zip-windows                                 Installation 7zip for Windows without installer &#10140; ./dist/i2p-windows.7z"/>
     <echo message=" 7zip-multiplatform                           Installation 7zips for FreeBSD, macOS, Linux and Windows &#10140; ./dist/"/>
+    <echo message=" 7zip-windows                                 Installation 7zip for Windows without installer &#10140; ./dist/i2p-windows.7z"/>
     <echo message=" zip-freebsd                                  Installation zip for FreeBSD without installer &#10140; ./dist/i2p-freebsd.zip"/>
     <echo message=" zip-linux                                    Installation zip for Linux without installer &#10140; ./dist/i2p-linux.zip"/>
     <echo message=" zip-macos                                    Installation zip for macOS without installer &#10140; ./dist/i2p-macos.zip"/>
     <echo message=" zip-windows                                  Installation zip for Windows without installer &#10140; ./dist/i2p-windows.zip"/>
+
     <!-- <echo message=" translationReport                            Generate in-console translation status report"/> -->
     <!-- <echo message="  debianrepo                                   Build a Debian repository (reprepro required)"/> -->
     <!-- <echo message="  syndie                                       Generate a standalone syndie install"/> -->
@@ -809,6 +816,17 @@
 
   <target name="listJbigi" description="List built jbigi native libraries">
     <exec executable="./list-jbigi.sh" dir="core/c/jbigi" failonerror="false"/>
+  </target>
+
+  <target name="testJbigi" depends="buildCore, jbigi" description="Benchmark jbigi: modPow, modPowCT, modInverse (native vs pure Java)">
+    <echo message="Running jbigi benchmarks..."/>
+    <java classname="net.i2p.util.NativeBigInteger" fork="true" maxmemory="256m" failonerror="true">
+      <classpath>
+        <pathelement location="core/java/build/i2p.jar"/>
+        <pathelement location="build/jbigi.jar"/>
+      </classpath>
+      <jvmarg value="-Djava.library.path=installer/lib/jbigi:core/c/jbigi/lib/net/i2p/util"/>
+    </java>
   </target>
 
   <target name="buildJbigi" description="Build all jbigi native libraries (Win64 + Linux64 + ARM64), copy to installer/lib/jbigi/">
@@ -2910,26 +2928,26 @@
   </target>
 
   <!-- both junit and scala -->
-  <target name="test" depends="testCore, testRouter, testMinistreaming, testStreaming, testI2PTunnel"/>
-
-  <target name="testCore" depends="buildProperties, jbigi">
-    <ant dir="core/java/" target="test"/>
+  <target name="test">
+    <exec executable="scripts/run-tests.sh" failonerror="true" dir="${basedir}"/>
   </target>
 
-  <target name="testRouter" depends="buildProperties, jbigi">
-    <ant dir="router/java/" target="test"/>
+  <target name="testCore">
+    <exec executable="scripts/run-tests.sh" failonerror="true" dir="${basedir}">
+      <arg value="core"/>
+    </exec>
   </target>
 
-  <target name="testMinistreaming" depends="buildProperties, jbigi">
-    <ant dir="apps/ministreaming/java/" target="test"/>
+  <target name="testMinistreaming">
+    <exec executable="scripts/run-tests.sh" failonerror="true" dir="${basedir}">
+      <arg value="ministreaming"/>
+    </exec>
   </target>
 
-  <target name="testStreaming" depends="buildProperties">
-    <ant dir="apps/streaming/java/" target="test"/>
-  </target>
-
-  <target name="testI2PTunnel" depends="buildStreaming">
-    <ant dir="apps/i2ptunnel/java/" target="test"/>
+  <target name="testStreaming">
+    <exec executable="scripts/run-tests.sh" failonerror="true" dir="${basedir}">
+      <arg value="streaming"/>
+    </exec>
   </target>
 
   <target name="scalatest.report" depends="buildProperties">
