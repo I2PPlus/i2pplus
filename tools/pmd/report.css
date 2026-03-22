@@ -2,6 +2,7 @@
 /* Edit this file to customize the report appearance */
 
 :root {
+  --dropdown:url("data:image/svg+xml,%3Csvg viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m5.29 17.93 26.71 28.14 26.71-28.14' fill='none' stroke='%23ddd' stroke-linecap='round' stroke-linejoin='round' stroke-width='10'/%3E%3C/svg%3E");
   --link:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cg stroke-width='8'%3E%3Cpath fill='%236f7c91' d='M58.4 24.9L41.5 41.6a14 14 0 01-19.8-19.8L38.6 5.1a14 14 0 0119.7 19.8zm-30.5 3a5.4 5.4 0 007.6 7.6l16.8-16.7a5.4 5.4 0 00-7.6-7.6z'/%3E%3Cpath fill='%23939dac' d='M26.4 44.6l-7.6 7.7a5.4 5.4 0 01-7.6-7.6l16.7-16.8a5.4 5.4 0 017.6 7.6l9.2-9.1a14 14 0 00-22.8-4.6L5 38.6a14 14 0 0019.8 19.7l16.7-16.7a14 14 0 01-15.2 3z'/%3E%3C/g%3E%3C/svg%3E");
 }
 
@@ -15,7 +16,7 @@ html {
 
 body {
   margin: 30px auto;
-  padding: 0 24px 40px;
+  padding: 0 24px 20px;
   background: #131316;
   color: #c8c8d0;
   font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
@@ -53,12 +54,23 @@ h2 {
 
 h3 {
   font-size: 100%;
-  margin: 8px 0 4px;
+  margin: 8px 0 0;
   padding: 6px 12px;
   color: #a0a0b0;
   background: #1a1a20;
+  border: 1px solid #2a2a30;
   border-left: 3px solid #444;
-  font-weight: 600
+  font-weight: 700
+}
+
+h3::before {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  background: #aaa;
+  border-radius: 50%;
+  margin-right: 10px;
 }
 
 hr {
@@ -95,7 +107,7 @@ code {
   padding: 5px 8px;
   text-align: center;
   background: linear-gradient(180deg, #1e1e24, #131316);
-  border-bottom: 1px solid #2a2a30;
+  border: 1px solid #2a2a30;
   box-shadow: 0 2px 8px rgba(0, 0, 0, .4);
 }
 
@@ -105,9 +117,9 @@ code {
   font-size: 90%
 }
 
-#navbar span {
+#navbar span:not(.badge) {
   margin: 2px 2px 4px;
-  padding: 3px 8px;
+  padding: 3px 12px;
   display: inline-block;
   line-height: 1.4;
   text-transform: capitalize;
@@ -116,10 +128,23 @@ code {
   background: #1a1a20;
   transition: background .15s;
   font-size: 105%;
+  pointer-events: auto;
 }
 
 #navbar span:hover {
   background: #252530
+}
+
+.badge {
+  color: #fff;
+  padding: 2px 8px;
+  line-height: 1;
+  margin: 1px -7px 1px 3px;
+  display: inline-block;
+  line-height: 1.1;
+  border-radius: 3px;
+  background: #300;
+  pointer-events: none;
 }
 
 /* ---- Summary Tables ---- */
@@ -198,12 +223,20 @@ th {
   color: #ddd
 }
 
-table+.tabletitle,
-.tabletitle+table {
+.tabletitle + table {
   margin-top: -1px
 }
 
+table + .tabletitle {
+  margin-top: 20px;
+}
+
 /* ---- Violation Table ---- */
+
+.hidden {
+  display: none;
+}
+
 .warningtable {
   border-top: none
 }
@@ -215,7 +248,6 @@ table+.tabletitle,
 
 .warningtable td {
   padding: 3px 10px;
-  border-bottom: 1px solid #1a1a20
 }
 
 /* Line column */
@@ -224,8 +256,11 @@ table+.tabletitle,
   width: 60px;
   white-space: nowrap;
   text-align: center;
-  border-right: 1px solid #2a2a30;
   font-variant-numeric: tabular-nums;
+}
+
+.warningtable td {
+  border: 1px solid #2a2a30;
 }
 
 .warningtable tr:last-child td {
@@ -242,7 +277,6 @@ tr[data-detail] {
   text-align: center;
   font-weight: 700;
   font-size: 8.5pt;
-  border-radius: 2px
 }
 
 .p1 {
@@ -313,6 +347,7 @@ tr[data-detail] {
   color: #999;
   font-size: 8.5pt;
   line-height: 1.6;
+  text-align: left;
 }
 
 .detail-content b {
@@ -323,6 +358,53 @@ tr[data-detail] {
 .detail-content a {
   color: #e88830;
   font-weight: 400
+}
+
+.snippet {
+  margin: 6px 0 2px;
+  padding: 8px 10px;
+  background: #111118;
+  border: 1px solid #2a2a30;
+  border-radius: 3px;
+  overflow-x: auto;
+  font-family: "Iosevka", "Fira Code", monospace;
+  font-size: 10.5pt;
+  line-height: 1.5;
+}
+
+.snippet code {
+  color: #c8c8d0;
+  white-space: pre-wrap;
+  font-weight: 500;
+}
+
+.snippet .ln {
+  width: 40px;
+  text-align: right;
+  color: #555;
+  user-select: none;
+  text-align: right;
+  float: left;
+}
+
+.snippet .code-line,
+.snippet .offense {
+  text-align: left;
+  display: block;
+  padding-left: 4px;
+  margin: 1px -10px 1px -2px;
+  padding-right: 10px;
+  border-left: 2px solid #0000;
+}
+
+.snippet .offense {
+  background: #2a1a1a;
+  border-left: 2px solid #e88830;
+  font-weight: 700;
+}
+
+.snippet .offense .codeline {
+  font-weight: 700;
 }
 
 /* ---- Collapsible Sections ---- */
@@ -352,11 +434,14 @@ details summary .tabletitle:hover {
 }
 
 details summary .tabletitle::before {
-  content: "\25B6 ";
-  color: #666;
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 10px;
   transition: transform .15s;
   display: inline-block;
   margin: -2px 10px 0 0;
+  background: var(--dropdown) no-repeat left center / contain;
 }
 
 details[open] summary .tabletitle {
@@ -365,8 +450,7 @@ details[open] summary .tabletitle {
 }
 
 details[open] summary .tabletitle::before {
-  content: "\25BC ";
-  color: #e88830;
+  transform: rotate(-90deg);
 }
 
 details[open] summary {

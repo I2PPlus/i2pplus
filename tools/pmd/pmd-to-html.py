@@ -9,6 +9,7 @@ import sys
 import os
 import re
 import subprocess
+from datetime import datetime
 from xml.etree import ElementTree as ET
 from urllib.parse import quote
 
@@ -56,19 +57,51 @@ NS = {"pmd": "http://pmd.sourceforge.net/report/2.0.0"}
 def escape(s):
     return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;")
 
-def load_css():
-    css_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "report.css")
-    with open(css_path, "r") as f:
-        return f.read()
 
 def load_favicon():
-    svg_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                            "..", "..", "installer", "resources", "themes", "console", "images", "plus.svg")
+    # Use the I2P+ plus icon from the console theme
+    path = os.path.join(os.path.dirname(__file__), "..", "..", "installer", "resources", "themes", "console", "images", "plus.svg")
     try:
-        with open(svg_path, "r") as f:
-            svg = f.read().replace('"', "'")
+        with open(path) as f:
+            return f"data:image/svg+xml,{quote(f.read())}"
+    except FileNotFoundError:
+        return None
+
+
+def load_css():
+    path = os.path.join(os.path.dirname(__file__), "report.css")
+    try:
+        with open(path) as f:
+            return f.read()
     except FileNotFoundError:
         return ""
+
+CONTEXT = 2
+
+
+def get_code_snippet(filepath, line_no, context=CONTEXT):
+    try:
+        line_no = int(line_no)
+    except (ValueError, TypeError):
+        return ""
+    try:
+        with open(filepath, errors="replace") as f:
+            src = f.readlines()
+    except (OSError, IOError):
+        return ""
+    start = max(0, line_no - 1 - context)
+    end = min(len(src), line_no + context)
+    pad = len(str(end))
+    out = []
+    for i in range(start, end):
+        ln = i + 1
+        ln_str = f'<span class="ln">{ln:>{pad}}</span>'
+        raw = src[i].rstrip()
+        code_text = escape(raw) if raw else ""
+        cls = "code-line offense" if ln == line_no else "code-line"
+        code_line = f'{ln_str} <span class="{cls}">{code_text}</span>'
+        out.append(code_line)
+    return "\n".join(out)
     return f"data:image/svg+xml,{quote(svg, safe='')}"
 
 def main():
@@ -86,7 +119,11 @@ def main():
     root = ET.fromstring(content)
 
     version = root.attrib.get("version", "?")
-    timestamp = root.attrib.get("timestamp", "?")
+    raw_ts = root.attrib.get("timestamp", "?")
+    try:
+        timestamp = datetime.fromisoformat(raw_ts).strftime("%B %-d %Y")
+    except ValueError:
+        timestamp = raw_ts
 
     # Collect violations grouped by file
     files = []
@@ -212,7 +249,11 @@ def main():
   }
   // Violation row click: toggle detail
   var tr=e.target.closest("tr[data-detail]");
-  if(tr){var el=document.getElementById(tr.dataset.detail);if(el)el.style.display=el.style.display==="none"?"block":"none";return}
+  if(tr){var el=document.getElementById(tr.dataset.detail);
+    if(el){var showing=el.style.display==="none";
+      el.style.display=showing?"block":"none";
+      el.closest("tr").classList.toggle("hidden",!showing)}
+    return}
   // Navbar/sub-summary link: open section
   var a=e.target.closest("a[data-sub]");
   if(a){e.preventDefault();var tgt=document.getElementById(a.dataset.sub);
@@ -230,7 +271,7 @@ def main():
     # Navbar
     w('<div id="navbar">')
     for sub, count in sorted_subs:
-        w(f'<span><a href="#sub-{escape(sub)}" data-sub="sub-{escape(sub)}">{escape(sub)} ({count})</a></span>')
+        w(f'<span><a href="#sub-{escape(sub)}" data-sub="sub-{escape(sub)}">{escape(sub)} <span class="badge">{count}</span></a></span>')
     w('</div>')
 
     # Group files by sub-system
@@ -269,7 +310,7 @@ def main():
         w(f'<details id="sub-{escape(sub)}">')
         w(f'<summary><div class="tabletitle"><a name="sub-{escape(sub)}">{escape(sub)} &middot; {count} violation{"s" if count != 1 else ""} in {nfiles} file{"s" if nfiles != 1 else ""}</a></div></summary>')
         for fname, violations in sub_files[sub]:
-            w(f'<h3>{escape(fname)}</h3>')
+            w(f'<h3>{escape(fname)} <span class="badge">{len(violations)}</span></h3>')
             w('<table class="warningtable">')
             w('<tr><th>Line</th><th>Rule</th><th>Message</th><th class="rule-category">Category</th><th class="rule-doc">Doc</th></tr>')
             for i, v in enumerate(sorted(violations, key=lambda x: int(x["begin"]))):
@@ -284,7 +325,8 @@ def main():
                     detail_parts.append(f'<b>Class:</b> {escape(v["class"])}')
                 if v["method"]:
                     detail_parts.append(f'<b>Method:</b> {escape(v["method"])}')
-                has_detail = bool(detail_parts)
+                snippet = get_code_snippet(fname, v["begin"])
+                has_detail = bool(detail_parts) or bool(snippet)
                 if has_detail:
                     w(f'<tr class="{row}" data-detail="{vid}">')
                 else:
@@ -296,10 +338,12 @@ def main():
                 w(f'<td class="rule-doc">{doc_link}</td>')
                 w('</tr>')
                 if has_detail:
-                    detail_html = ' &middot; '.join(detail_parts)
-                    w(f'<tr class="detailrow{i % 2}"><td colspan="5">')
+                    w(f'<tr class="detailrow{i % 2} hidden"><td colspan="5">')
                     w(f'<div id="{vid}" style="display:none" class="detail-content">')
-                    w(detail_html)
+                    if detail_parts:
+                        w(' &middot; '.join(detail_parts))
+                    if snippet:
+                        w(f'<pre class="snippet"><code>{snippet}</code></pre>')
                     w('</div>')
                     w('</td></tr>')
             w('</table>')

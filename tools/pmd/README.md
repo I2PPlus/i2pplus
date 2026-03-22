@@ -1,5 +1,5 @@
 # PMD Static Analysis for I2P+
-#### https://pmd.github.io/ | [License](../docs/licenses/LICENSE-pmd.txt): BSD-4-Clause + Apache 2.0
+#### https://pmd.github.io/ | [License](../../docs/licenses/LICENSE-pmd.txt): BSD-4-Clause + Apache 2.0
 
 ## Ant Targets
 
