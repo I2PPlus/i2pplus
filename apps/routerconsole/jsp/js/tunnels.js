@@ -98,7 +98,7 @@ function updateTunnelCounts() {
   pools.forEach(pool => {
     const summary = pool.querySelector("table.poolsummary");
     const tunnelTable = pool.querySelector("table.tunnels_client");
-    if (!summary || !tunnelTable) return;
+    if (!summary || !tunnelTable) { return; }
 
     const inCount = tunnelTable.querySelectorAll('td.direction[data-sort="in"]').length;
     const outCount = tunnelTable.querySelectorAll('td.direction[data-sort="out"]').length;

@@ -18,7 +18,7 @@ function initButtons() {
     delete1: setupDeleteClickHandler,
     markall: setupToggleSelectionHandler(true),
     clearselection: setupToggleSelectionHandler(false),
-    tdclick: addDirectClickHandler,
+    tdclick: addDirectClickHandler
   };
 
   for (const [className, handler] of Object.entries(buttonsMap)) {

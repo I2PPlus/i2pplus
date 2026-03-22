@@ -59,7 +59,7 @@ async function refreshGraph() {
   if (currentTime - lastRefreshTime >= refreshInterval) {
     lastRefreshTime = currentTime;
     const graphCanvas = document.getElementById("minigraph");
-    if (!graphCanvas) return;
+    if (!graphCanvas) { return; }
     worker.port.postMessage({ url: `/viewstat.jsp?stat=bw.combined&periodCount=20&width=250&height=50&hideLegend=true&hideGrid=true&hideTitle=true&t=${Date.now()}` });
   }
 }

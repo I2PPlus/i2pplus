@@ -149,8 +149,8 @@ import { refreshElements } from '/js/refreshElements.js';
     }
 
     document.addEventListener("refreshComplete", () => {
-      if (sorterNTCP) sorterNTCP.refresh();
-      else if (sorterSSU) sorterSSU.refresh();
+      if (sorterNTCP) { sorterNTCP.refresh(); }
+      else if (sorterSSU) { sorterSSU.refresh(); }
       countTiers();
     });
   });

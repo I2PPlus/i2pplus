@@ -56,8 +56,8 @@ function handleClientMessage(event, clientData) {
   const now = Date.now();
   const lastRequestTime = responseCountMap.get(clientId)?.lastRequestTime || 0;
 
-  if (!force && (now - lastRequestTime < MIN_INTERVAL)) return;
-  if (fetchQueue.length >= MAX_QUEUE_SIZE) {return;}
+  if (!force && (now - lastRequestTime < MIN_INTERVAL)) { return; }
+  if (fetchQueue.length >= MAX_QUEUE_SIZE) { return; }
   if (force) {enqueueFetchRequest(url, now, clientData);}
   else if (debounceTimeouts.has(url)) {clearTimeout(debounceTimeouts.get(url));}
 

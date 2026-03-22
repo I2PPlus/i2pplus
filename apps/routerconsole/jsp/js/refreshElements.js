@@ -19,7 +19,7 @@ fetchWorker.port.start();
 
 fetchWorker.port.onmessage = function(e) {
   const { responseText } = e.data;
-  if (!responseText || !currentUrl) return;
+  if (!responseText || !currentUrl) { return; }
 
   const parser = new DOMParser();
   const doc = parser.parseFromString(responseText, "text/html");
@@ -72,7 +72,7 @@ export function refreshElements(targetSelectors, url, delay) {
   currentUrl = url;
 
   function refresh() {
-    if (document.visibilityState !== "visible" || isRefreshing) return;
+    if (document.visibilityState !== "visible" || isRefreshing) { return; }
 
     isRefreshing = true;
     progressx?.show(theme);

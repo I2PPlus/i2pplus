@@ -58,7 +58,7 @@ function sectionToggler() {
     toggle_sb_queue: sb_queue,
     toggle_sb_services: sb_services,
     toggle_sb_tunnels: sb_tunnels,
-    toggle_sb_updatesection: sb_updatesection,
+    toggle_sb_updatesection: sb_updatesection
   };
 
   let listenersAdded = false;
@@ -83,7 +83,7 @@ function sectionToggler() {
         queue: false,
         services: false,
         tunnels: false,
-        updatesection: false,
+        updatesection: false
       };
       localStorage.setItem("sidebarSections", JSON.stringify(defaultState));
       resolve(defaultState);
@@ -149,10 +149,10 @@ function sectionToggler() {
    * @returns {void}
    */
   function addToggleListeners() {
-    if (listenersAdded) return;
+    if (listenersAdded) { return; }
     const handleToggle = (event) => {
       const id = event.target.id;
-      if (!(id in toggleElements)) return;
+      if (!(id in toggleElements)) { return; }
       const currentState = event.target.checked;
       toggleElementVisibility(event.target, currentState);
       saveToggleStates();
@@ -191,14 +191,14 @@ function sectionToggler() {
           hr.style.display = null;
         }
         toggleInput.checked = true;
-        if (element.classList) element.classList.remove("collapsed");
+        if (element.classList) { element.classList.remove("collapsed"); }
       } else {
         if (hr) {
           hr.hidden = true;
           hr.style.display = "none";
         }
         toggleInput.checked = false;
-        if (element.classList) element.classList.add("collapsed");
+        if (element.classList) { element.classList.add("collapsed"); }
       }
 
       if (toggleInput.id === "toggle_sb_localtunnels") {
@@ -289,7 +289,7 @@ function sectionToggler() {
     client: "/themes/console/images/client.svg",
     snark: "/themes/console/images/snark.svg",
     i2pchat: "/themes/console/images/i2pchat.svg",
-    ping: "/themes/console/images/ping.svg",
+    ping: "/themes/console/images/ping.svg"
   };
 
   let cachedCounts = null;
@@ -301,9 +301,9 @@ function sectionToggler() {
    * @returns {void}
    */
   function handleLocalTunnelsVisibility(isVisible) {
-    if (!localtunnelSummary) return;
+    if (!localtunnelSummary) { return; }
     if (isVisible) {
-      if (!localtunnelSummary.hidden) localtunnelSummary.hidden = true;
+      if (!localtunnelSummary.hidden) { localtunnelSummary.hidden = true; }
       return;
     }
 
@@ -314,15 +314,15 @@ function sectionToggler() {
     }
 
     if (cachedCounts && Object.entries(newCounts).every(([key, val]) => cachedCounts[key] === val)) {
-      if (localtunnelSummary.hidden) localtunnelSummary.hidden = false;
+      if (localtunnelSummary.hidden) { localtunnelSummary.hidden = false; }
       return;
     }
 
     cachedCounts = newCounts;
     const row = localtunnelSummary.querySelector("tr#localtunnelsActive");
-    if (!row) return;
+    if (!row) { return; }
     const cell = row.querySelector("td");
-    if (!cell) return;
+    if (!cell) { return; }
 
     const fragment = document.createDocumentFragment();
     for (const [type, count] of Object.entries(newCounts)) {
@@ -338,7 +338,7 @@ function sectionToggler() {
     }
     cell.innerHTML = "";
     cell.appendChild(fragment);
-    if (localtunnelSummary.hidden) localtunnelSummary.hidden = false;
+    if (localtunnelSummary.hidden) { localtunnelSummary.hidden = false; }
   }
 
   /**
@@ -381,8 +381,8 @@ function countNewsItems() {
   const sbNewsHeadings = document.getElementById("sb_newsheadings");
   const newsBadge = document.getElementById("newsCount");
   const doubleCount = sb.querySelector("#newsCount+#newsCount");
-  if (!sbNewsHeadings || !newsBadge) return;
-  if (doubleCount) doubleCount.remove();
+  if (!sbNewsHeadings || !newsBadge) { return; }
+  if (doubleCount) { doubleCount.remove(); }
   const newsCount = sbNewsHeadings.querySelectorAll("table tr").length;
   newsBadge.hidden = newsCount <= 0 || !sbNewsHeadings.classList.contains("collapsed");
   if (newsCount > 0 && newsBadge.innerHTML !== newsCount.toString()) {

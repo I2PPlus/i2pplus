@@ -14,7 +14,7 @@
  */
 export function newHosts() {
   const newHostsBadge = document.getElementById("newHosts");
-  if (!newHostsBadge) return;
+  if (!newHostsBadge) { return; }
   if (theme !== "dark") {
     newHostsBadge.style.display = "none";
     return;
@@ -127,7 +127,7 @@ export function newHosts() {
   function getNewHosts() {
     const now = Date.now();
     const storedData = getStoredData();
-    const lastFetch = parseInt(localStorage.getItem("newHostsLastFetch") || "0");
+    const lastFetch = parseInt(localStorage.getItem("newHostsLastFetch") || "0", 10);
 
     if (
       storedData.lastUpdated &&
@@ -136,8 +136,8 @@ export function newHosts() {
     ) {
       const { count, hostnames } = storedData;
       if (count > 0) {
-        if (count > 10) newHostsBadge.textContent = "10+";
-        else newHostsBadge.textContent = count;
+        if (count > 10) { newHostsBadge.textContent = "10+"; }
+        else { newHostsBadge.textContent = count; }
         updateTooltip(hostnames.map(h => h.hostname));
       } else {
         newHostsBadge.textContent = "";
@@ -154,14 +154,14 @@ export function newHosts() {
    * @returns {void}
    */
   function updateTooltip(hostnames) {
-    if (!newHostsBadge) return;
+    if (!newHostsBadge) { return; }
 
     const newHosts = document.getElementById("newHostsList");
     const newHostsTd = newHosts?.querySelector("td");
 
     if (!hostnames.length) {
       newHosts.hidden = true;
-      if (newHostsTd) newHostsTd.innerHTML = "";
+      if (newHostsTd) { newHostsTd.innerHTML = ""; }
       return;
     }
 
@@ -170,7 +170,7 @@ export function newHosts() {
       return `<a href="http://${hostname}" target="_blank">${shortName}</a>`;
     }).join("<br>");
 
-    if (newHostsTd) newHostsTd.innerHTML = newHostsList;
+    if (newHostsTd) { newHostsTd.innerHTML = newHostsList; }
 
     newHosts.hidden = true;
 

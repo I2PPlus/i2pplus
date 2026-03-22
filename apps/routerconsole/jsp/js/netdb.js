@@ -14,7 +14,7 @@ import { refreshElements } from "/js/refreshElements.js";
     const hasRI = document.querySelector(".netdbentry");
     const hasLS = document.querySelector(".leaseset");
 
-    if (!countries && !hasLS && !hasRI) return;
+    if (!countries && !hasLS && !hasRI) { return; }
 
     const REFRESH_INTERVAL_SHORT = 10_000;
     const REFRESH_INTERVAL = 15_000;
@@ -35,9 +35,9 @@ import { refreshElements } from "/js/refreshElements.js";
      * @returns {void}
      */
     const initRefresh = () => {
-      if (countries) refreshElements("#netdboverview table tbody", url, REFRESH_INTERVAL_SHORT);
-      else if (hasRI) refreshElements(".netdbentry", url, REFRESH_INTERVAL);
-      else if (hasLS) refreshElements(".leaseset", url, REFRESH_INTERVAL);
+      if (countries) { refreshElements("#netdboverview table tbody", url, REFRESH_INTERVAL_SHORT); }
+      else if (hasRI) { refreshElements(".netdbentry", url, REFRESH_INTERVAL); }
+      else if (hasLS) { refreshElements(".leaseset", url, REFRESH_INTERVAL); }
     };
 
     document.addEventListener("refreshComplete", () => ccsorter?.refresh());

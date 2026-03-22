@@ -46,8 +46,8 @@ function setLocalStorageHideLegend(value) {
 function getHideLegendFromURL() {
   const urlParams = new URLSearchParams(window.location.search);
   const value = urlParams.get("hideLegend");
-  if (value === "true") return true;
-  if (value === "false") return false;
+  if (value === "true") { return true; }
+  if (value === "false") { return false; }
   return null;
 }
 

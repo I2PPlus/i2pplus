@@ -38,7 +38,7 @@
           a = color[4] || "";
         result = "#" + r + r + g + g + b + b + a + a;
       }
-      if (colorLength == 7 || colorLength > 8) {
+      if (colorLength === 7 || colorLength > 8) {
         result = color;
       }
       return result;
@@ -64,7 +64,7 @@
   function hsl(hue, saturation, lightness) {
     var result;
 
-    if (saturation == 0) {
+    if (saturation === 0) {
       var partialHex = decToHex(lightness * 255);
       result = partialHex + partialHex + partialHex;
     } else {
@@ -187,7 +187,7 @@
           var addedNodes = mutation.addedNodes;
           for (var addedNodeIndex = 0; addedNodes && addedNodeIndex < addedNodes.length; addedNodeIndex++) {
             var addedNode = addedNodes[addedNodeIndex];
-            if (addedNode.nodeType == 1) {
+            if (addedNode.nodeType === 1) {
               if (getIdenticonType(addedNode)) {
                 updateCallback(addedNode);
               } else {
@@ -208,7 +208,7 @@
         childList: true,
         attributes: true,
         attributeFilter: [ATTRIBUTES.o /*VALUE*/, ATTRIBUTES.t /*HASH*/, "width", "height"],
-        subtree: true,
+        subtree: true
       });
     }
   }
@@ -275,50 +275,50 @@
     if (!index) {
       k = cell * 0.42;
       g.g(/*addPolygon*/ [0, 0, cell, 0, cell, cell - k * 2, cell - k, cell, 0, cell]);
-    } else if (index == 1) {
+    } else if (index === 1) {
       w = 0 | (cell * 0.5);
       h = 0 | (cell * 0.8);
       g.j(/*addTriangle*/ cell - w, 0, w, h, 2);
-    } else if (index == 2) {
+    } else if (index === 2) {
       w = 0 | (cell / 3);
       g.i(/*addRectangle*/ w, w, cell - w, cell - w);
-    } else if (index == 3) {
+    } else if (index === 3) {
       inner = cell * 0.1;
       outer = cell < 6 ? 1 : cell < 8 ? 2 : 0 | (cell * 0.25);
       inner = inner > 1 ? 0 | inner : inner > 0.5 ? 1 : inner;
       g.i(/*addRectangle*/ outer, outer, cell - inner - outer, cell - inner - outer);
-    } else if (index == 4) {
+    } else if (index === 4) {
       m = 0 | (cell * 0.15);
       w = 0 | (cell * 0.5);
       g.h(/*addCircle*/ cell - w - m, cell - w - m, w);
-    } else if (index == 5) {
+    } else if (index === 5) {
       inner = cell * 0.1;
       outer = inner * 4;
       outer > 3 && (outer = 0 | outer);
       g.i(/*addRectangle*/ 0, 0, cell, cell);
       g.g(/*addPolygon*/ [outer, outer, cell - inner, outer, outer + (cell - outer - inner) / 2, cell - inner], true);
-    } else if (index == 6) {
+    } else if (index === 6) {
       g.g(/*addPolygon*/ [0, 0, cell, 0, cell, cell * 0.7, cell * 0.4, cell * 0.4, cell * 0.7, cell, 0, cell]);
-    } else if (index == 7) {
+    } else if (index === 7) {
       g.j(/*addTriangle*/ cell / 2, cell / 2, cell / 2, cell / 2, 3);
-    } else if (index == 8) {
+    } else if (index === 8) {
       g.i(/*addRectangle*/ 0, 0, cell, cell / 2);
       g.i(/*addRectangle*/ 0, cell / 2, cell / 2, cell / 2);
       g.j(/*addTriangle*/ cell / 2, cell / 2, cell / 2, cell / 2, 1);
-    } else if (index == 9) {
+    } else if (index === 9) {
       inner = cell * 0.14;
       outer = cell < 4 ? 1 : cell < 6 ? 2 : 0 | (cell * 0.35);
       inner = cell < 8 ? inner : 0 | inner;
       g.i(/*addRectangle*/ 0, 0, cell, cell);
       g.i(/*addRectangle*/ outer, outer, cell - outer - inner, cell - outer - inner, true);
-    } else if (index == 10) {
+    } else if (index === 10) {
       inner = cell * 0.12;
       outer = inner * 3;
       g.i(/*addRectangle*/ 0, 0, cell, cell);
       g.h(/*addCircle*/ outer, outer, cell - inner - outer, true);
-    } else if (index == 11) {
+    } else if (index === 11) {
       g.j(/*addTriangle*/ cell / 2, cell / 2, cell / 2, cell / 2, 3);
-    } else if (index == 12) {
+    } else if (index === 12) {
       m = cell * 0.25;
       g.i(/*addRectangle*/ 0, 0, cell, cell);
       g.N(/*addRhombus*/ m, m, cell - m, cell - m, true);
@@ -335,9 +335,9 @@
 
     if (!index) {
       g.j(/*addTriangle*/ 0, 0, cell, cell, 0);
-    } else if (index == 1) {
+    } else if (index === 1) {
       g.j(/*addTriangle*/ 0, cell / 2, cell, cell / 2, 0);
-    } else if (index == 2) {
+    } else if (index === 2) {
       g.N(/*addRhombus*/ 0, 0, cell, cell);
     } else {
       m = cell / 6;
@@ -352,7 +352,7 @@
       correctedHsl(hue, config.p /*colorSaturation*/, config.q(/*colorLightness*/ 0.5)),
       correctedHsl(hue, config.H /*grayscaleSaturation*/, config.I(/*grayscaleLightness*/ 1)),
       correctedHsl(hue, config.p /*colorSaturation*/, config.q(/*colorLightness*/ 1)),
-      correctedHsl(hue, config.p /*colorSaturation*/, config.q(/*colorLightness*/ 0)),
+      correctedHsl(hue, config.p /*colorSaturation*/, config.q(/*colorLightness*/ 0))
     ];
   }
 
@@ -412,19 +412,19 @@
       [0, 1],
       [3, 1],
       [3, 2],
-      [0, 2],
+      [0, 2]
     ]);
     renderShape(1, outerShape, 4, 5, [
       [0, 0],
       [3, 0],
       [3, 3],
-      [0, 3],
+      [0, 3]
     ]);
     renderShape(2, centerShape, 1, null, [
       [1, 1],
       [2, 1],
       [2, 2],
-      [1, 2],
+      [1, 2]
     ]);
     renderer.finish();
   }
@@ -676,7 +676,7 @@
   function SvgElement_append(parentNode, name) {
     var keyValuePairs = [],
       len = arguments.length - 2;
-    while (len-- > 0) keyValuePairs[len] = arguments[len + 2];
+    while (len-- > 0) { keyValuePairs[len] = arguments[len + 2]; }
 
     var el = document.createElementNS(SVG_CONSTANTS.T /*XMLNS*/, name);
     for (var i = 0; i + 1 < keyValuePairs.length; i += 2) {

@@ -9,7 +9,7 @@
 
 /** @type {boolean} */
 let beforePopup = true;
-window.addEventListener('beforeunload', (e)=>{if (beforePopup) e.returnValue=true;} );
+window.addEventListener('beforeunload', (e)=>{if (beforePopup) { e.returnValue=true; }} );
 
 /**
  * Iterates over all elements with class "beforePopup" and attaches a

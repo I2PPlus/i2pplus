@@ -250,10 +250,10 @@ document.addEventListener("DOMContentLoaded", function () {
    * @returns {void}
    */
   const addListeners = () => {
-    if (listenersActive) return;
+    if (listenersActive) { return; }
     snarkFileNameLinks.forEach(link => {
       link.addEventListener("click", event => {
-        if (event.target.classList.contains("newtab")) return;
+        if (event.target.classList.contains("newtab")) { return; }
         event.preventDefault();
         const fileIconLink = link.closest("tr").querySelector("td.fileIcon > a");
         if (fileIconLink) {

@@ -13,10 +13,10 @@
  * @returns {void}
  */
 function stickySidebar() {
-  if (stickySidebarEnabled === false) return;
+  if (stickySidebarEnabled === false) { return; }
   const sbWrap = document.getElementById("sb_wrap");
   const sb = document.getElementById("sidebar");
-  if (!sbWrap || !sb) return;
+  if (!sbWrap || !sb) { return; }
 
   /**
    * Compares sidebar height to viewport and toggles sticky CSS accordingly.

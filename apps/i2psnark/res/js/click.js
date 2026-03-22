@@ -244,7 +244,7 @@ document.addEventListener("DOMContentLoaded", () => {
        */
       function scrollToTop() {
           window.scrollTo(0, 0);
-          if (htmlTag.classList.contains("iframed")) parent.window.scrollTo(0, 0);
+          if (htmlTag.classList.contains("iframed")) { parent.window.scrollTo(0, 0); }
       }
 
       /**
@@ -257,10 +257,10 @@ document.addEventListener("DOMContentLoaded", () => {
       function captureKeyDown(event) {
           if (event.key === "Enter") {
               const confirmYesButton = document.querySelector("#confirmYes");
-              if (confirmYesButton) confirmYesButton.click();
+              if (confirmYesButton) { confirmYesButton.click(); }
           } else if (event.key === "Escape") {
               const confirmNoButton = document.querySelector("#confirmNo");
-              if (confirmNoButton) confirmNoButton.click();
+              if (confirmNoButton) { confirmNoButton.click(); }
           }
       }
 
@@ -293,8 +293,8 @@ document.addEventListener("DOMContentLoaded", () => {
           const viewportHeight = htmlTag.classList.contains("iframed") ? parent.window.innerHeight : window.innerHeight;
           const topOffset = viewportHeight > 600 ? viewportHeight * 0.05 : 0;
           let topPosition = ((viewportHeight - dialogHeight) / 2) - topOffset;
-          if (topPosition < 0) topPosition = 0;
-          else if (topPosition + dialogHeight > viewportHeight) topPosition = viewportHeight - dialogHeight;
+          if (topPosition < 0) { topPosition = 0; }
+          else if (topPosition + dialogHeight > viewportHeight) { topPosition = viewportHeight - dialogHeight; }
           dialog.style.top = `${topPosition}px`;
       }
 

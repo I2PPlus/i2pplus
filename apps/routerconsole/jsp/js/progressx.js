@@ -45,7 +45,7 @@ function initProgressX(window, document) {
   let currentColorSetName = "default";
 
   function createCanvas() {
-    if (canvas) return;
+    if (canvas) { return; }
     canvas = document.createElement("canvas");
     canvas.id = "pageloader";
     canvas.style.cssText = "position:fixed;top:0;left:0;right:0;z-index:100001;" +
@@ -74,25 +74,25 @@ function initProgressX(window, document) {
   }
 
   function colorsEqual(a, b) {
-    if (!a || !b) return false;
+    if (!a || !b) { return false; }
     const keysA = Object.keys(a), keysB = Object.keys(b);
-    if (keysA.length !== keysB.length) return false;
+    if (keysA.length !== keysB.length) { return false; }
     for (let key of keysA) {
-      if (a[key] !== b[key]) return false;
+      if (a[key] !== b[key]) { return false; }
     }
     return true;
   }
 
   function draw() {
-    if (!canvas || !context) return;
+    if (!canvas || !context) { return; }
 
     const width = window.innerWidth;
     const height = options.barThickness;
     const colors = options.barColors[currentColorSetName] || options.barColors.default;
     options.barColors.current = colors;
 
-    if (canvas.width !== width) canvas.width = width;
-    if (canvas.height !== height) canvas.height = height;
+    if (canvas.width !== width) { canvas.width = width; }
+    if (canvas.height !== height) { canvas.height = height; }
 
     if (!colorsEqual(colors, lastColors)) {
       gradient = context.createLinearGradient(0, 0, width, 0);
@@ -112,7 +112,7 @@ function initProgressX(window, document) {
   }
 
   function runProgressLoop() {
-    if (animationLocked) return;
+    if (animationLocked) { return; }
     animationLocked = true;
 
     function animate() {
@@ -129,7 +129,7 @@ function initProgressX(window, document) {
   }
 
   function progressxShow(colorSet) {
-    if (isVisible || animationLocked) return;
+    if (isVisible || animationLocked) { return; }
     isVisible = true;
 
     if (fadeTimer) {
@@ -142,7 +142,7 @@ function initProgressX(window, document) {
       animationFrameId = null;
     }
 
-    if (!canvas) createCanvas();
+    if (!canvas) { createCanvas(); }
     canvas.style.opacity = "1";
     canvas.style.display = "block";
     currentProgress = 0;
@@ -150,11 +150,11 @@ function initProgressX(window, document) {
     requestAnimationFrame(draw);
     animationLocked = true;
 
-    if (options.autoRun) runProgressLoop();
+    if (options.autoRun) { runProgressLoop(); }
   }
 
   function progressxHide() {
-    if (!isVisible) return;
+    if (!isVisible) { return; }
     isVisible = false;
 
     let opacity = 1;

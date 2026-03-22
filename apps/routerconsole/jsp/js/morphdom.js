@@ -34,7 +34,7 @@ function compareNodeNames(fromEl, toEl) {
   var fromNodeName = fromEl.nodeName;
   var toNodeName = toEl.nodeName;
 
-  if (fromNodeName === toNodeName) return true;
+  if (fromNodeName === toNodeName) { return true; }
 
   var fromCodeStart = fromNodeName.charCodeAt(0);
   var toCodeStart = toNodeName.charCodeAt(0);
@@ -212,7 +212,7 @@ function morphdomFactory(morphAttrs) {
    * @returns {Node} The morphed node.
    */
   return function morphdom(fromNode, toNode, options) {
-    if (!options) options = {};
+    if (!options) { options = {}; }
     if (typeof toNode === 'string') {
       var toNodeHtml = toNode;
       toNode = doc.createElement('html');
@@ -262,8 +262,8 @@ function morphdomFactory(morphAttrs) {
     }
 
     function removeNode(node, parentNode, skipKeyedNodes) {
-      if (onBeforeNodeDiscarded(node) === false) return;
-      if (parentNode) parentNode.removeChild(node);
+      if (onBeforeNodeDiscarded(node) === false) { return; }
+      if (parentNode) { parentNode.removeChild(node); }
       onNodeDiscarded(node);
       walkDiscardedChildNodes(node, skipKeyedNodes);
     }
@@ -273,7 +273,7 @@ function morphdomFactory(morphAttrs) {
         var curChild = node.firstChild;
         while (curChild) {
           var key = getNodeKey(curChild);
-          if (key) fromNodesLookup[key] = curChild;
+          if (key) { fromNodesLookup[key] = curChild; }
           indexTree(curChild);
           curChild = curChild.nextSibling;
         }
@@ -319,11 +319,11 @@ function morphdomFactory(morphAttrs) {
 
     function morphEl(fromEl, toEl, childrenOnly) {
       var toElKey = getNodeKey(toEl);
-      if (toElKey) delete fromNodesLookup[toElKey];
+      if (toElKey) { delete fromNodesLookup[toElKey]; }
 
       if (!childrenOnly) {
         var beforeUpdateResult = onBeforeElUpdated(fromEl, toEl);
-        if (beforeUpdateResult === false) return;
+        if (beforeUpdateResult === false) { return; }
         if (beforeUpdateResult instanceof HTMLElement) {
           fromEl = beforeUpdateResult;
           indexTree(fromEl);
@@ -332,7 +332,7 @@ function morphdomFactory(morphAttrs) {
         morphAttrs(fromEl, toEl);
         onElUpdated(fromEl);
 
-        if (onBeforeElChildrenUpdated(fromEl, toEl) === false) return;
+        if (onBeforeElChildrenUpdated(fromEl, toEl) === false) { return; }
       }
 
       if (fromEl.nodeName !== 'TEXTAREA') {
@@ -408,12 +408,12 @@ function morphdomFactory(morphAttrs) {
 
         if (curToNodeKey && fromNodesLookup[curToNodeKey] && compareNodeNames(fromNodesLookup[curToNodeKey], curToNodeChild)) {
           var matchingFromEl = fromNodesLookup[curToNodeKey];
-          if (!skipFrom) addChild(fromEl, matchingFromEl);
+          if (!skipFrom) { addChild(fromEl, matchingFromEl); }
           morphEl(matchingFromEl, curToNodeChild);
         } else {
           var onBeforeNodeAddedResult = onBeforeNodeAdded(curToNodeChild);
           if (onBeforeNodeAddedResult !== false) {
-            if (onBeforeNodeAddedResult) curToNodeChild = onBeforeNodeAddedResult;
+            if (onBeforeNodeAddedResult) { curToNodeChild = onBeforeNodeAddedResult; }
             if (curToNodeChild.actualize) {
               curToNodeChild = curToNodeChild.actualize(doc);
             }
@@ -453,7 +453,7 @@ function morphdomFactory(morphAttrs) {
     if (morphedNode === toNode) {
       onNodeDiscarded(fromNode);
     } else {
-      if (toNode.isSameNode && toNode.isSameNode(morphedNode)) return;
+      if (toNode.isSameNode && toNode.isSameNode(morphedNode)) { return; }
       morphEl(morphedNode, toNode, childrenOnly);
 
       if (keyedRemovalList.length) {

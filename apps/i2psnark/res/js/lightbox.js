@@ -101,17 +101,17 @@ class Lightbox {
       { text: "<", id: `${this.prefix}-prev`, action: this.prev.bind(this) },
       { text: ">", id: `${this.prefix}-next`, action: this.next.bind(this) },
       { text: "Play", id: `${this.prefix}-play`, action: this.play.bind(this) },
-      { text: "Pause", id: `${this.prefix}-pause`, action: this.pause.bind(this) },
+      { text: "Pause", id: `${this.prefix}-pause`, action: this.pause.bind(this) }
     ];
 
     controls.forEach(({ text, id, action }) => {
       const btn = this.createButton(text, id, action);
       if (id === `${this.prefix}-prev` || id === `${this.prefix}-next`) { this.box.appendChild(btn); }
       else { container.appendChild(btn); }
-      if (id === `${this.prefix}-prev`) this.prevBtn = btn;
-      if (id === `${this.prefix}-next`) this.nextBtn = btn;
-      if (id === `${this.prefix}-play`) this.playBtn = btn;
-      if (id === `${this.prefix}-pause`) this.pauseBtn = btn;
+      if (id === `${this.prefix}-prev`) { this.prevBtn = btn; }
+      if (id === `${this.prefix}-next`) { this.nextBtn = btn; }
+      if (id === `${this.prefix}-play`) { this.playBtn = btn; }
+      if (id === `${this.prefix}-pause`) { this.pauseBtn = btn; }
     });
 
     this.box.appendChild(container);
@@ -213,10 +213,10 @@ class Lightbox {
    */
   toggleControlButtons() {
     if (this.prevBtn) this.prevBtn.classList.add("active");
-    if (this.nextBtn) this.nextBtn.classList.add("active");
+    if (this.nextBtn) { this.nextBtn.classList.add("active"); }
     this.preload();
-    if (this.playBtn) this.playBtn.classList.toggle("active", !this.intervalId);
-    if (this.pauseBtn) this.pauseBtn.classList.toggle("active", !!this.intervalId);
+    if (this.playBtn) { this.playBtn.classList.toggle("active", !this.intervalId); }
+    if (this.pauseBtn) { this.pauseBtn.classList.toggle("active", !!this.intervalId); }
   }
 
   /**
@@ -254,7 +254,7 @@ class Lightbox {
     Object.assign(this.currImage.img.style, {
       height: `${newImgHeight}px`,
       maxWidth: `${maxWidth}px`,
-      maxHeight: `${maxHeight}px`,
+      maxHeight: `${maxHeight}px`
     });
   }
 
@@ -353,10 +353,10 @@ class Lightbox {
    * @returns {void}
    */
   togglePlayPauseButtons(isPaused = false) {
-    if (this.playBtn) this.playBtn.classList.toggle("active", isPaused);
-    if (this.pauseBtn) this.pauseBtn.classList.toggle("active", !isPaused);
-    if (this.prevBtn) this.prevBtn.classList.toggle("active", !isPaused);
-    if (this.nextBtn) this.nextBtn.classList.toggle("active", !isPaused);
+    if (this.playBtn) { this.playBtn.classList.toggle("active", isPaused); }
+    if (this.pauseBtn) { this.pauseBtn.classList.toggle("active", !isPaused); }
+    if (this.prevBtn) { this.prevBtn.classList.toggle("active", !isPaused); }
+    if (this.nextBtn) { this.nextBtn.classList.toggle("active", !isPaused); }
   }
 
   /**

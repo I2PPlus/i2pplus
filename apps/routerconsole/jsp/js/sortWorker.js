@@ -51,8 +51,8 @@ function sortRows(rows, sortColumn, direction, columnType) {
     valA = String(valA).toLowerCase();
     valB = String(valB).toLowerCase();
 
-    if (valA < valB) return -1 * multiplier;
-    if (valA > valB) return 1 * multiplier;
+    if (valA < valB) { return -1 * multiplier; }
+    if (valA > valB) { return 1 * multiplier; }
     return 0;
   });
 

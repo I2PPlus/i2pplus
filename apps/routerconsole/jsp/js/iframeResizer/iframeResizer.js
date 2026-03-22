@@ -437,7 +437,7 @@
     function on(funcName, val) {return chkEvent(iframeId, funcName, val)}
 
     function actionMsg() {
-      if (settings[iframeId] && settings[iframeId].firstRun) firstRun()
+      if (settings[iframeId] && settings[iframeId].firstRun) { firstRun(); }
 
       switch (messageData.type) {
         case 'close':

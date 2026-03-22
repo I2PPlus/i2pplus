@@ -30,7 +30,7 @@ function initToggleLog() {
   const shCss = "#screenlog.collapsed{max-height:56px!important;min-height:56px}" +
                 "@media (min-width:1500px){#screenlog.collapsed{height:60px!important;min-height:60px}}";
 
-  if (!screenlog) return;
+  if (!screenlog) { return; }
 
   /**
    * @function clean
@@ -45,7 +45,7 @@ function initToggleLog() {
 
   document.documentElement.addEventListener("click", e => {
     const target = e.target.closest("#expand, #shrink");
-    if (!target) return;
+    if (!target) { return; }
     requestAnimationFrame(() => {
       clean();
       toggleLogCss.innerHTML = target.id === "expand" ? exCss : shCss;

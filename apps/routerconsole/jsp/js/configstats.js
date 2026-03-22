@@ -130,7 +130,7 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {currentSection.content.push(element);}
   });
 
-  if (currentSection) sections.push(currentSection);
+  if (currentSection) { sections.push(currentSection); }
   sections.sort((a, b) => naturalSort(a.header.querySelector("th").textContent.trim(), b.header.querySelector("th").textContent.trim()));
   renderSortedSections(sections);
 

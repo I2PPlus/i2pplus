@@ -19,8 +19,8 @@
   const throttleHeader = document.getElementById("throttleHeader");
   const tunnelThrottler = document.getElementById("tunnelThrottler");
 
-  if (toggleThrottler.hidden) toggleThrottler.hidden = false;
-  if (!throttleHeader.classList.length) tunnelThrottler.style.display = "none";
+  if (toggleThrottler.hidden) { toggleThrottler.hidden = false; }
+  if (!throttleHeader.classList.length) { tunnelThrottler.style.display = "none"; }
 
   /**
    * Toggles the throttler panel visibility and persists state.

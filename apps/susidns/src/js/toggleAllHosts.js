@@ -19,7 +19,7 @@
  */
 function toggleAll(selectAll) {
     const deadFilterActive = document.getElementById("deadHosts");
-    if (!deadFilterActive) return;
+    if (!deadFilterActive) { return; }
 
     const targetCheckboxes = [
         ...document.querySelectorAll("td.checkbox input[type='checkbox']")
@@ -46,7 +46,7 @@ function toggleAll(selectAll) {
  * @returns {void}
  */
 function createSelectAllCheckbox() {
-    if (document.getElementById("toggleAllHosts")) return;
+    if (document.getElementById("toggleAllHosts")) { return; }
 
     const targetCell = document.querySelector("#host_list th.checkbox#deadHosts");
     if (!targetCell) {
@@ -68,12 +68,12 @@ function createSelectAllCheckbox() {
 
     document.addEventListener("change", e => {
         const target = e.target;
-        if (!(target instanceof HTMLInputElement) || target.type !== "checkbox") return;
+        if (!(target instanceof HTMLInputElement) || target.type !== "checkbox") { return; }
 
         const isMarkedForDeletion = target.name && target.name.startsWith("markedForDeletion");
         const isTableCellCheckbox = target.closest("td.checkbox");
 
-        if (!isMarkedForDeletion && !isTableCellCheckbox) return;
+        if (!isMarkedForDeletion && !isTableCellCheckbox) { return; }
 
         const checkboxes = [
             ...document.querySelectorAll("input[type='checkbox'][name^='markedForDeletion']"),

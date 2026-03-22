@@ -21,7 +21,7 @@
   const cleanNumber = i => i.replace(/[^\-?0-9.]/g, '');
   const filesize2num = f => {
     const m = f.match(/^(\d+(\.\d+)?) ?((K|M|G|T|P|E|Z|Y|B$)i?B?)$/i);
-    if (!m) return 0;
+    if (!m) { return 0; }
     const num = parseFloat(cleanNumber(m[1])), suf = m[3];
     return num * suffix2num(suf);
   };

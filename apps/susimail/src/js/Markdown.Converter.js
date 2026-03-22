@@ -8,10 +8,11 @@
 "use strict";
 var Markdown;
 
-if (typeof exports === "object" && typeof require === "function") // we're in a CommonJS (e.g. Node.js) module
+if (typeof exports === "object" && typeof require === "function") { // we're in a CommonJS (e.g. Node.js) module
     Markdown = exports;
-else
+} else {
     Markdown = {};
+}
 
 // The following text is included for historical reasons, but should
 // be taken with a pinch of salt; it's not all true anymore.
@@ -79,17 +80,19 @@ else
          */
         chain: function (hookname, func) {
             var original = this[hookname];
-            if (!original)
+            if (!original) {
                 throw new Error("unknown hook " + hookname);
+            }
 
-            if (original === identity)
+            if (original === identity) {
                 this[hookname] = func;
-            else
+            } else {
                 this[hookname] = function (text) {
                     var args = Array.prototype.slice.call(arguments, 0);
                     args[0] = original.apply(null, args);
                     return func.apply(null, args);
                 };
+            }
         },
         /**
          * @function set
@@ -98,8 +101,9 @@ else
          * @returns {void}
          */
         set: function (hookname, func) {
-            if (!this[hookname])
+            if (!this[hookname]) {
                 throw new Error("unknown hook " + hookname);
+            }
             this[hookname] = func;
         },
         /**
@@ -253,10 +257,12 @@ else
                         var v;
                         while (c > 0) {
                             v = (c % 51) + cp_A;
-                            if (v >= cp_Q)
+                            if (v >= cp_Q) {
                                 v++;
-                            if (v > cp_Z)
+                            }
+                            if (v > cp_Z) {
                                 v += dist_Za;
+                            }
                             s = String.fromCharCode(v) + s;
                             c = c / 51 | 0;
                         }
@@ -270,10 +276,12 @@ else
                         var v;
                         for (var i = 0; i < s.length; i++) {
                             v = s.charCodeAt(i);
-                            if (v > cp_Z)
+                            if (v > cp_Z) {
                                 v -= dist_Za;
-                            if (v > cp_Q)
+                            }
+                            if (v > cp_Q) {
                                 v--;
+                            }
                             v -= cp_A;
                             c = (c * 51) + v;
                         }
@@ -301,8 +309,9 @@ else
 
             // This will only happen if makeHtml on the same converter instance is called from a plugin hook.
             // Don't do that.
-            if (g_urls)
+            if (g_urls) {
                 throw new Error("Recursive call to converter.makeHtml");
+            }
         
             // Create the private state objects.
             g_urls = new SaveHash();
@@ -640,8 +649,9 @@ else
 
         function _DoAnchors(text) {
             
-            if (text.indexOf("[") === -1)
+            if (text.indexOf("[") === -1) {
                 return text;
+            }
             
             //
             // Turn Markdown link shortcuts into XHTML <a> tags.
@@ -737,7 +747,7 @@ else
         }
 
         function writeAnchorTag(wholeMatch, m1, m2, m3, m4, m5, m6, m7) {
-            if (m7 == undefined) m7 = "";
+            if (m7 == undefined) { m7 = ""; }
             var whole_match = m1;
             var link_text = m2.replace(/:\/\//g, "~P"); // to prevent auto-linking within the link. will be converted back after the auto-linker runs
             var link_id = m3.toLowerCase();
@@ -783,8 +793,9 @@ else
 
         function _DoImages(text) {
             
-            if (text.indexOf("![") === -1)
+            if (text.indexOf("![") === -1) {
                 return text;
+            }
             
             //
             // Turn Markdown image shortcuts into <img> tags.
@@ -857,7 +868,7 @@ else
             var url = m4;
             var title = m7;
 
-            if (!title) title = "";
+            if (!title) { title = ""; }
 
             if (url == "") {
                 if (link_id == "") {
@@ -980,8 +991,9 @@ else
                     var list = m1;
                     var list_type = (m2.search(/[*+-]/g) > -1) ? "ul" : "ol";
                     var first_number;
-                    if (list_type === "ol")
+                    if (list_type === "ol") {
                         first_number = parseInt(m2, 10)
+                    }
 
                     var result = _ProcessListItems(list, list_type, isInsideParagraphlessListItem);
 
@@ -991,8 +1003,9 @@ else
                     // hack that is the HTML block parser.
                     result = result.replace(/\s+$/, "");
                     var opening = "<" + list_type;
-                    if (first_number && first_number !== 1)
+                    if (first_number && first_number !== 1) {
                         opening += " start=\"" + first_number + "\"";
+                    }
                     result = opening + ">" + result + "</" + list_type + ">\n";
                     return result;
                 });
@@ -1005,13 +1018,15 @@ else
                     var list_type = (m3.search(/[*+-]/g) > -1) ? "ul" : "ol";
 
                     var first_number;
-                    if (list_type === "ol")
+                    if (list_type === "ol") {
                         first_number = parseInt(m3, 10)
+                    }
 
                     var result = _ProcessListItems(list, list_type);
                     var opening = "<" + list_type;
-                    if (first_number && first_number !== 1)
+                    if (first_number && first_number !== 1) {
                         opening += " start=\"" + first_number + "\"";
+                    }
 
                     result = runup + opening + ">\n" + result + "</" + list_type + ">\n";
                     return result;
@@ -1241,8 +1256,9 @@ else
 
         function _DoItalicsAndBoldStrict(text) {
 
-            if (text.indexOf("*") === -1 && text.indexOf("_") === - 1)
+            if (text.indexOf("*") === -1 && text.indexOf("_") === - 1) {
                 return text;
+            }
             
             text = asciify(text);
         
@@ -1280,8 +1296,9 @@ else
 
         function _DoItalicsAndBold_AllowIntrawordWithAsterisk(text) {
             
-            if (text.indexOf("*") === -1 && text.indexOf("_") === - 1)
+            if (text.indexOf("*") === -1 && text.indexOf("_") === - 1) {
                 return text;
+            }
             
             text = asciify(text);
         
@@ -1452,8 +1469,9 @@ else
                 else if (/\S/.test(str)) {
                     str = _RunSpanGamut(str);
                     str = str.replace(/^([ \t]*)/g, doNotCreateParagraphs ? "" : "<p>");
-                    if (!doNotCreateParagraphs)
+                    if (!doNotCreateParagraphs) {
                         str += "</p>"
+                    }
                     grafsOut.push(str);
                 }
 
@@ -1517,18 +1535,21 @@ else
             endCharRegex = new RegExp(charEndingUrl, "i");
 
         function handleTrailingParens(wholeMatch, lookbehind, protocol, link) {
-            if (lookbehind)
+            if (lookbehind) {
                 return wholeMatch;
-            if (link.charAt(link.length - 1) !== ")")
+            }
+            if (link.charAt(link.length - 1) !== ")") {
                 return "<" + protocol + link + ">";
+            }
             var parens = link.match(/[()]/g);
             var level = 0;
             for (var i = 0; i < parens.length; i++) {
                 if (parens[i] === "(") {
-                    if (level <= 0)
+                    if (level <= 0) {
                         level = 1;
-                    else
+                    } else {
                         level++;
+                    }
                 }
                 else {
                     level--;
@@ -1604,7 +1625,7 @@ else
             //
             text = text.replace(/~E(\d+)E/g,
                 function (wholeMatch, m1) {
-                    var charCodeToReplace = parseInt(m1);
+                    var charCodeToReplace = parseInt(m1, 10);
                     return String.fromCharCode(charCodeToReplace);
                 }
             );
@@ -1628,8 +1649,9 @@ else
         }
 
         function _Detab(text) {
-            if (!/\t/.test(text))
+            if (!/\t/.test(text)) {
                 return text;
+            }
 
             var spaces = ["    ", "   ", "  ", " "],
             skew = 0,

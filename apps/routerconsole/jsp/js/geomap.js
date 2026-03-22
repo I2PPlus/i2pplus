@@ -384,8 +384,8 @@
    */
   function updateShapeClass(shapeId, count) {
     const svgElement = document.getElementById(shapeId);
-    if (!svgElement) return;
-    if (debugging && verbose) console.log(`Updating shapeId: ${shapeId}, count: ${count}`);
+    if (!svgElement) { return; }
+    if (debugging && verbose) { console.log(`Updating shapeId: ${shapeId}, count: ${count}`); }
 
     const countThresholds = [
       { threshold: 1, className: "count_1" },
@@ -395,12 +395,12 @@
       { threshold: 200, className: "count_200" },
       { threshold: 300, className: "count_300" },
       { threshold: 400, className: "count_400" },
-      { threshold: 500, className: "count_500" },
+      { threshold: 500, className: "count_500" }
     ];
 
     const highestThreshold = countThresholds.reverse().find(({ threshold }) => count >= threshold);
     svgElement.classList.remove(...Array.from(svgElement.classList).filter(cls => cls.startsWith('count_')));
-    if (highestThreshold) svgElement.classList.add(highestThreshold.className);
+    if (highestThreshold) { svgElement.classList.add(highestThreshold.className); }
   }
 
   /**

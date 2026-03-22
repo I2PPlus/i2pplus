@@ -81,7 +81,7 @@ function initSnowflakes() {
 
     async createColoredSvg() {
       const svgText = svgCache[this.flakeType];
-      if (!svgText) return;
+      if (!svgText) { return; }
       const colored = svgText.replace(/:color:/g, this.color);
       const blob = new Blob([colored], { type: 'image/svg+xml' });
       const url = URL.createObjectURL(blob);
@@ -92,7 +92,7 @@ function initSnowflakes() {
 
     varyColor(hex, maxVar) {
       const r = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-      if (!r) return hex;
+      if (!r) { return hex; }
       const c = {
         r: parseInt(r[1], 16),
         g: parseInt(r[2], 16),
@@ -206,8 +206,8 @@ function initSnowflakes() {
         }
       }
 
-      if (this.x > this.canvas.width + this.size) this.x = -this.size;
-      else if (this.x < -this.size) this.x = this.canvas.width + this.size;
+      if (this.x > this.canvas.width + this.size) { this.x = -this.size; }
+      else if (this.x < -this.size) { this.x = this.canvas.width + this.size; }
 
       if (this.y > this.canvas.height + this.size) {
         this.y = -this.size;
@@ -238,7 +238,8 @@ function initSnowflakes() {
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       let i = snowflakes.length;
-      while (i--) {
+      while (i > 0) {
+        i--;
         snowflakes[i].update();
         snowflakes[i].draw(ctx);
       }
@@ -269,7 +270,7 @@ function pauseSnow() {
 
 document.addEventListener('DOMContentLoaded', () => {
   initSnowflakes();
-  if (document.visibilityState === "visible") initSnowflakes();
+  if (document.visibilityState === "visible") { initSnowflakes(); }
   document.addEventListener("visibilitychange", () => {
     document.visibilityState === "visible" ? initSnowflakes() : pauseSnow();
   });

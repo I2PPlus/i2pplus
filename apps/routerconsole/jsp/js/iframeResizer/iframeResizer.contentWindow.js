@@ -527,7 +527,7 @@
   }
 
   function setupMouseEvents() {
-    if (mouseEvents !== true) return
+    if (mouseEvents !== true) { return; }
 
     function sendMouse(e) {
       sendMsg(0, 0, e.type, e.screenY + ':' + e.screenX)
@@ -801,7 +801,7 @@
 
     var elements = document.querySelectorAll('[' + tag + ']')
 
-    if (elements.length === 0) noTaggedElementsFound()
+    if (elements.length === 0) { noTaggedElementsFound(); }
 
     return getMaxElement(side, elements)
   }

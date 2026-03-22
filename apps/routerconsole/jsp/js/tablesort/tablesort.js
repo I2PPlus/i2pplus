@@ -131,12 +131,12 @@
       const worker = getSortWorker();
       const rowData = [];
       const tbody = this.table.tBodies[0];
-      if (!tbody) return;
+      if (!tbody) { return; }
 
       const rowElements = [];
       for (let j = 0; j < tbody.rows.length; j++) {
         const row = tbody.rows[j];
-        if (row.getAttribute("data-sort-method") === "none") continue;
+        if (row.getAttribute("data-sort-method") === "none") { continue; }
         const cell = columnKey ? getCellByKey(row.cells, columnKey) : row.cells[column];
         rowData.push({
           td: cell ? getInnerText(cell) : "",
@@ -147,8 +147,8 @@
 
       let columnType = "string";
       if (sortMethod) {
-        if (sortMethod === "number") columnType = "number";
-        else if (sortMethod === "date") columnType = "date";
+        if (sortMethod === "number") { columnType = "number"; }
+        else if (sortMethod === "date") { columnType = "date"; }
       } else {
         const sampleItems = rowData.slice(0, 3).map(r => r.td).filter(t => t);
         for (const opt of sortOptions) {
@@ -163,8 +163,8 @@
       if (!update) {
         const columnDirection = header.getAttribute("data-sort-direction");
         let defaultDescending = this.options.descending;
-        if (columnDirection === "ascending") defaultDescending = false;
-        else if (columnDirection === "descending") defaultDescending = true;
+        if (columnDirection === "ascending") { defaultDescending = false; }
+        else if (columnDirection === "descending") { defaultDescending = true; }
         sortOrder = sortOrder === "ascending" ? "descending" :
                     sortOrder === "descending" ? "ascending" :
                     defaultDescending ? "descending" : "ascending";
@@ -214,8 +214,8 @@
         if (!update) {
           const columnDirection = header.getAttribute("data-sort-direction");
           let defaultDescending = this.options.descending;
-          if (columnDirection === "ascending") defaultDescending = false;
-          else if (columnDirection === "descending") defaultDescending = true;
+          if (columnDirection === "ascending") { defaultDescending = false; }
+          else if (columnDirection === "descending") { defaultDescending = true; }
           sortOrder = sortOrder === "ascending" ? "descending" :
                       sortOrder === "descending" ? "ascending" :
                       defaultDescending ? "descending" : "ascending";
@@ -231,10 +231,10 @@
           while (sampleItems.length < 3 && rowIndex < tbodyRows.length) {
             const cell = columnKey ? getCellByKey(tbodyRows[rowIndex].cells, columnKey) : tbodyRows[rowIndex].cells[column];
             const value = (cell ? getInnerText(cell) : "").trim();
-            if (value) sampleItems.push(value);
+            if (value) { sampleItems.push(value); }
             rowIndex++;
           }
-          if (!sampleItems.length) return;
+          if (!sampleItems.length) { return; }
         }
 
         for (const option of sortOptions) {
@@ -275,7 +275,7 @@
           let noSortsSoFar = 0;
           for (let j = 0; j < totalRows; j++) {
             const item = noSorts[j] || newRows[j - noSortsSoFar].tr;
-            if (noSorts[j]) noSortsSoFar++;
+            if (noSorts[j]) { noSortsSoFar++; }
             tbody.appendChild(item);
           }
         }
@@ -294,6 +294,6 @@
     }
   }
 
-  if (typeof module !== "undefined" && module.exports) module.exports = Tablesort;
-  else window.Tablesort = Tablesort;
+  if (typeof module !== "undefined" && module.exports) { module.exports = Tablesort; }
+  else { window.Tablesort = Tablesort; }
 })();

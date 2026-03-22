@@ -147,7 +147,7 @@
    */
   function convertEpochToReadableDate(epoch) {
     if (epoch === "0") {return "Never";}
-    const date = new Date(parseInt(epoch));
+    const date = new Date(parseInt(epoch, 10));
     const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 

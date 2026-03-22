@@ -346,7 +346,7 @@ document.addEventListener("DOMContentLoaded", () => {
         option.value = opt;
         option.textContent = opt;
       }
-      if (option.value === value) option.selected = true;
+      if (option.value === value) { option.selected = true; }
       select.appendChild(option);
     });
 

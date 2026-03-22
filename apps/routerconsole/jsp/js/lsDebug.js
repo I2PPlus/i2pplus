@@ -21,7 +21,7 @@ function lsDebug() {
   const debugTbody = document.querySelector("#leasesetdebug tbody");
   const keyspaceTbody = document.querySelector("#leasesetKeyspace tbody");
   const leasesetKeyspace = getById("leasesetKeyspace");
-  if (!(rapRow && debugTbody && keyspaceTbody && leasesetKeyspace)) return;
+  if (!(rapRow && debugTbody && keyspaceTbody && leasesetKeyspace)) { return; }
 
   const medianRow = document.querySelector("#leasesetKeyspace #medianDistance");
   if (medianRow) {
@@ -51,8 +51,8 @@ function lsDebug() {
 
     const td = (html, isHTML = false) => {
       const el = document.createElement("td");
-      if (isHTML) el.innerHTML = html;
-      else el.textContent = html;
+      if (isHTML) { el.innerHTML = html; }
+      else { el.textContent = html; }
       return el;
     };
 

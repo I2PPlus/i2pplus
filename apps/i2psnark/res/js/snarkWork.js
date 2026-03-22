@@ -31,13 +31,13 @@ self.addEventListener("message", async (event) => {
   if (event.data.type === MESSAGE_TYPES.FETCH_HTML_DOCUMENT) {
     try {
       const response = await fetch(event.data.url, { signal: abortController.signal });
-      if (!response.ok) throw new Error("Network error: No response from server");
+      if (!response.ok) { throw new Error("Network error: No response from server"); }
       const reader = response.body.getReader();
       const decoder = new TextDecoder("utf-8");
       const chunks = [];
       while (true) {
         const { done, value } = await reader.read();
-        if (done) break;
+        if (done) { break; }
         chunks.push(decoder.decode(value, { stream: true }));
       }
       const content = chunks.join("");

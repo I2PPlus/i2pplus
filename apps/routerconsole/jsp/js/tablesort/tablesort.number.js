@@ -10,7 +10,7 @@
    * @returns {string} The cleaned numeric string
    */
   const cleanNumber = (val) => {
-    if (typeof val !== 'string') return '';
+    if (typeof val !== 'string') { return ''; }
     // Allow digits, minus, dot, E/e for scientific notation, and %
     return val.replace(/[^-0-9.Ee%]/g, '');
   };
@@ -26,9 +26,9 @@
     const numA = parseFloat(a);
     const numB = parseFloat(b);
 
-    if (isNaN(numA) && isNaN(numB)) return 0;
-    if (isNaN(numA)) return 1;  // b comes first
-    if (isNaN(numB)) return -1; // a comes first
+    if (isNaN(numA) && isNaN(numB)) { return 0; }
+    if (isNaN(numA)) { return 1; }  // b comes first
+    if (isNaN(numB)) { return -1; } // a comes first
     return numB - numA;         // descending sort
   };
 

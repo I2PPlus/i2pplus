@@ -44,7 +44,7 @@ function start() {
   if ("SharedWorker" in window) {
     state.worker.port.onmessage = event => {
       const { responseText, isDown } = event.data;
-      if (isDown) return;
+      if (isDown) { return; }
 
       const parser = new DOMParser();
       const doc = parser.parseFromString(responseText, "text/html");
@@ -74,19 +74,19 @@ function start() {
   function processUpdates(doc, els, state) {
     if (els.errorCount) {
       const newEl = doc.getElementById("errorCount");
-      if (newEl) state.updates.push(() => morphdom(els.errorCount, newEl, { childrenOnly: true }));
+      if (newEl) { state.updates.push(() => morphdom(els.errorCount, newEl, { childrenOnly: true })); }
     }
 
     if (els.criticallogs) {
       const newEl = doc.getElementById("criticallogs");
-      if (newEl) state.updates.push(() => morphdom(els.criticallogs, newEl, { childrenOnly: true }));
+      if (newEl) { state.updates.push(() => morphdom(els.criticallogs, newEl, { childrenOnly: true })); }
     }
 
     if (els.routerlogsList) {
       const newFileInfo = doc.querySelector("#routerlogs tr:first-child td p");
       const newList = doc.querySelector("#routerlogs td ul");
 
-      if (newFileInfo) state.updates.push(() => morphdom(els.routerlogsFileInfo, newFileInfo));
+      if (newFileInfo) { state.updates.push(() => morphdom(els.routerlogsFileInfo, newFileInfo)); }
       if (newList) {
         const clone = newList.cloneNode(true);
         tagFirstLi(clone);
@@ -100,7 +100,7 @@ function start() {
 
     if (els.servicelogs) {
       const newEl = doc.getElementById("wrapperlogs");
-      if (newEl) state.updates.push(() => morphdom(els.servicelogs, newEl, { childrenOnly: true }));
+      if (newEl) { state.updates.push(() => morphdom(els.servicelogs, newEl, { childrenOnly: true })); }
     }
   }
 
@@ -136,7 +136,7 @@ function start() {
    * @returns {void}
    */
   function refreshLogs(state, els) {
-    if (document.hidden || !navigator.onLine) return;
+    if (document.hidden || !navigator.onLine) { return; }
     progressx.show(theme);
     if ($("routerlogs")) {
       state.worker.port.postMessage({ url: "/routerlogs" });
@@ -171,7 +171,7 @@ function start() {
       els.refreshInput.addEventListener("input", () => {
         els.refreshSpan.classList.add("listening");
         const value = els.refreshInput.value;
-        if (!value || isNaN(value)) return;
+        if (!value || isNaN(value)) { return; }
 
         state.intervalValue = value;
         localStorage.setItem("logsRefresh", value);
@@ -194,8 +194,8 @@ function start() {
    * @returns {void}
    */
   function addFilterInput(els) {
-    if (!els.routerlogs) return;
-    if (els.filterInput._listenerAdded) return;
+    if (!els.routerlogs) { return; }
+    if (els.filterInput._listenerAdded) { return; }
 
     const debounce = (fn, delay) => {
       let timeout;
@@ -216,7 +216,7 @@ function start() {
    * @returns {void}
    */
   function applyFilter(els) {
-    if (!$("routerlogs")) return;
+    if (!$("routerlogs")) { return; }
     const filterValue = els.filterInput.value.toLowerCase();
     if (els.routerlogsList) {
       els.routerlogsList.querySelectorAll("li").forEach(li => {
@@ -233,7 +233,7 @@ function start() {
    * @returns {void}
    */
   function linkifyLogEntries(container) {
-    if (!container) return;
+    if (!container) { return; }
 
     const isValidPort = s => {
       const n = +s;
@@ -252,8 +252,7 @@ function start() {
     }, false);
 
     const textNodes = [];
-    let node;
-    while ((node = walker.nextNode())) {
+    for (let node; (node = walker.nextNode()); ) {
       textNodes.push(node);
     }
 
@@ -382,7 +381,7 @@ function start() {
    * @returns {void}
    */
   function tagFirstLi(list) {
-    if (!list) return;
+    if (!list) { return; }
     const firstLi = list.querySelector("li");
     if (firstLi) {
       const shortKey = Date.now().toString().slice(-4);

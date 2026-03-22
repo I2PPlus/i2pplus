@@ -34,7 +34,7 @@ const cancelSearch = navbar.querySelector("#searchwrap a");
  * @returns {void}
  */
 function setFilterQuery() {
-  if (!navbar || !navMain || !cancelSearch) return;
+  if (!navbar || !navMain || !cancelSearch) { return; }
 
   /**
    * @function updateHref

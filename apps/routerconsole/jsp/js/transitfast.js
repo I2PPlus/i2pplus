@@ -92,7 +92,7 @@ import {refreshElements} from "/js/refreshElements.js";
   function init(retryCount = 0) {
     getDOM();
     if (!refreshBtn) {
-      if (retryCount < 30) setTimeout(() => init(retryCount + 1), RETRY_DELAY);
+      if (retryCount < 30) { setTimeout(() => init(retryCount + 1), RETRY_DELAY); }
       return;
     }
     refreshBtn.addEventListener("click", (e) => { e.preventDefault(); refreshData(); });

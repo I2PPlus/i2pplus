@@ -36,7 +36,7 @@ const advConfigInit = () => {
     header: query("h3#advancedconfig"),
     advForm: query("#advConfigForm"),
     saveButton: query("#saveConfig input.accept"),
-    cancelButton: query("#saveConfig input.cancel"),
+    cancelButton: query("#saveConfig input.cancel")
   };
 
   const { container, textarea, table, infohelp, header, advForm, saveButton, cancelButton } = selectors;
@@ -119,7 +119,7 @@ const advConfigInit = () => {
   const observer = new MutationObserver(mutationsList => {
     mutationsList.forEach(mutation => {
       mutation.addedNodes.forEach(node => {
-        if (node.tagName === "TD") updateTextarea();
+        if (node.tagName === "TD") { updateTextarea(); }
       });
     });
   });
@@ -137,7 +137,7 @@ const advConfigInit = () => {
     rows.forEach(row => {
       const key = row.query(".key").textContent.trim();
       const value = row.query(".value").textContent.trim();
-      if (key) updatedItems.push(`${key}=${value}`);
+      if (key) { updatedItems.push(`${key}=${value}`); }
     });
     textarea.value = updatedItems.join("\n");
   };

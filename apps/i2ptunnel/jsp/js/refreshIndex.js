@@ -179,7 +179,7 @@ function countServices() {
 
     elements.forEach(el => {
       const parentTr = el.closest("tr");
-      if (parentTr) setStatusClass(parentTr, status);
+      if (parentTr) { setStatusClass(parentTr, status); }
     });
   };
 
@@ -356,8 +356,8 @@ function preloadImage(url) {
   img.src = url;
 }
 
-if (toggle) bindToggle();
-if (control) initTunnelControl();
+if (toggle) { bindToggle(); }
+if (control) { initTunnelControl(); }
 /** @type {number} */
 setInterval(refreshIndex, 5000);
 

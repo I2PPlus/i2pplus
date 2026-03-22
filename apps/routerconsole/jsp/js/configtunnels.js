@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
    */
   function showHideTunnelCounts() {
     const table = document.querySelector("#tunnelconfig");
-    if (!table) return;
+    if (!table) { return; }
     setupToggles("#tunnelconfig thead", "#tunnelconfig thead+tbody", "table-row-group");
 
     table.addEventListener("click", function(event) {
@@ -31,11 +31,11 @@ document.addEventListener("DOMContentLoaded", () => {
       const tOut = toggle.querySelector(".th_title.left .tOut");
 
       if (toggle.classList.contains("expanded")) {
-        if (tIn) tIn.style.display = "none";
-        if (tOut) tOut.style.display = "none";
+        if (tIn) { tIn.style.display = "none"; }
+        if (tOut) { tOut.style.display = "none"; }
       } else {
-        if (tIn) tIn.removeAttribute("style");
-        if (tOut) tOut.removeAttribute("style");
+        if (tIn) { tIn.removeAttribute("style"); }
+        if (tOut) { tOut.removeAttribute("style"); }
       }
     });
 

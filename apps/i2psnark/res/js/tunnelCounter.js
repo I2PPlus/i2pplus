@@ -46,10 +46,10 @@ async function fetchTunnelData(url = "/configtunnels", timeout = 10000) {
   const id = setTimeout(() => controller.abort(), timeout);
   try {
     const response = await fetch(url, { signal: controller.signal });
-    if (!response.ok) throw new Error(response.statusText);
+    if (!response.ok) { throw new Error(response.statusText); }
     const doc = new DOMParser().parseFromString(await response.text(), "text/html");
     const data = { inCount: doc.querySelector("#snarkIn")?.textContent.trim(), outCount: doc.querySelector("#snarkOut")?.textContent.trim() };
-    if (data.inCount && data.outCount) return data;
+    if (data.inCount && data.outCount) { return data; }
   } catch (error) {}
   finally { clearTimeout(id); }
   return null;
@@ -86,7 +86,7 @@ function updateTunnelCounts(result) {
       [inLabel, outLabel] = [result.inCount, result.outCount];
       const styleTag = document.head.querySelector("#tc") || createStyleTag();
       const styles = `#tnlInCount .badge::after{content:"${inLabel}"}#tnlOutCount .badge::after{content:"${outLabel}"}`;
-      if (styleTag.textContent !== styles) styleTag.textContent = styles;
+      if (styleTag.textContent !== styles) { styleTag.textContent = styles; }
     }
   }
 }

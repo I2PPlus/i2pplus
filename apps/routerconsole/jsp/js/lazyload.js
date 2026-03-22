@@ -34,7 +34,7 @@
    */
   const lazyload = () => {
     const lazyElements = document.querySelectorAll(".lazy");
-    if (lazyElements.length === 0) return;
+    if (lazyElements.length === 0) { return; }
 
     if (lazyElements.length < 10) {
       for (let i = 0; i < lazyElements.length; i++) {

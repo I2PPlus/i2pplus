@@ -339,7 +339,7 @@
     setTimeout(() => progressx.hide(), 500);
   });
 
-  if (document.visibilityState === "visible") startRefresh();
+  if (document.visibilityState === "visible") { startRefresh(); }
 
   document.addEventListener("visibilitychange", () => {
     document.visibilityState === "visible" ? startRefresh() : stopRefresh();

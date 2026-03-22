@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
    * @returns {void}
    */
   function compact() {
-    if (!container || document.getElementById("leasesetdebug")) return;
+    if (!container || document.getElementById("leasesetdebug")) { return; }
     document.querySelectorAll("table.leaseset").forEach(table => {
       const expiry = table.querySelector(".expiry");
       const ekeys = Array.from(table.querySelectorAll(".ekey"));
@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
         ekeys.forEach(el => el.remove());
         ekeys.forEach(ekey => expiry.insertAdjacentElement("afterend", ekey));
         const oldTr = table.querySelector("tr.ekeys");
-        if (oldTr) oldTr.remove();
+        if (oldTr) { oldTr.remove(); }
       }
     });
   }
@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
    */
   function countTypes() {
     const summary = document.getElementById("leasesetsummary") || document.getElementById("leasesetdebug");
-    if (!summary) return;
+    if (!summary) { return; }
 
     const signatureCounts = {};
     document.querySelectorAll("span.nowrap.stype").forEach(span => {
@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const tbody = summary.querySelector("tbody") || summary;
     const existingRow = tbody.querySelector("#sigEncCount");
-    if (existingRow) existingRow.remove();
+        if (existingRow) { existingRow.remove(); }
 
     const row = document.createElement("tr");
     row.id = "sigEncCount";
@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const counters = leaseCountsRow.querySelectorAll(".lsCounter.sets");
         if (counters.length > 0) {
           const totalCount = Array.from(counters).reduce((sum, el) => {
-            const val = parseInt(el.textContent);
+            const val = parseInt(el.textContent, 10);
             return val ? sum + val : sum;
           }, 0);
           lsLocalCount.textContent = totalCount;
@@ -189,9 +189,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const tables = Array.from(document.querySelectorAll("table.leaseset"));
     tables.sort((a, b) => {
-      const prioA = parseInt(a.dataset.sortPriority);
-      const prioB = parseInt(b.dataset.sortPriority);
-      if (prioA !== prioB) return prioA - prioB;
+      const prioA = parseInt(a.dataset.sortPriority, 10);
+      const prioB = parseInt(b.dataset.sortPriority, 10);
+      if (prioA !== prioB) { return prioA - prioB; }
       return a.dataset.sortText.localeCompare(b.dataset.sortText);
     });
 
@@ -211,7 +211,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (summaryTable) {
         const tbody = summaryTable.querySelector("tbody") || summaryTable;
         const existingRow = tbody.querySelector("#leasesetCounts");
-        if (existingRow) existingRow.remove();
+    if (existingRow) { existingRow.remove(); }
 
         const row = document.createElement("tr");
         row.id = "leasesetCounts";
@@ -228,7 +228,7 @@ document.addEventListener("DOMContentLoaded", () => {
         `;
         row.appendChild(cell);
         tbody.appendChild(row);
-        lsCount = Array.from(document.querySelectorAll("#leasesetCounts span.lsCounter")).reduce((sum, el) => sum + parseInt(el.textContent) || 0, 0);
+        lsCount = Array.from(document.querySelectorAll("#leasesetCounts span.lsCounter")).reduce((sum, el) => sum + parseInt(el.textContent, 10) || 0, 0);
         lsLocalCount.textContent = lsCount;
       }
     }
@@ -240,12 +240,12 @@ document.addEventListener("DOMContentLoaded", () => {
    * @returns {void}
    */
   function refreshLeasesets() {
-    if (!container) return;
+    if (!container) { return; }
     progressx.show(theme); progressx.progress(.7);
     const url = window.location.href;
     fetch(url)
       .then(response => {
-        if (!response.ok) throw new Error("Network response was not ok");
+        if (!response.ok) { throw new Error("Network response was not ok"); }
         progressx.progress(.8);
         return response.text();
       })
@@ -254,9 +254,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const temp = document.createElement("div");
         temp.innerHTML = html;
         const newContainer = temp.querySelector(".leasesets_container");
-        if (!newContainer) return;
+        if (!newContainer) { return; }
         const oldContainer = document.querySelector(".leasesets_container");
-        if (!oldContainer) return;
+        if (!oldContainer) { return; }
         oldContainer.parentNode.replaceChild(newContainer, oldContainer);
         container = newContainer;
         progressx.progress(.9)
