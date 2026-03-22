@@ -18,6 +18,18 @@ Utility scripts for I2P+ development and administration.
 
 ## Code Quality
 
+- **`check-js-syntax.sh`** — Check JavaScript files for syntax errors using `node --check`. Supports recursive directory scanning and quiet mode.
+  `check-js-syntax.sh [-p PATH] [-q] [-h]`
+
+  ```
+  check-js-syntax.sh                  # check all .js files below CWD
+  check-js-syntax.sh -p ../apps/      # check apps/ from scripts/
+  check-js-syntax.sh -p ../apps/foo.js # single file
+  check-js-syntax.sh -q -p ../apps/   # quiet: summary only
+  ```
+
+  If the target path falls outside the repo root, a warning is printed.
+
 - **`comprehensive_pmd_fix.sh`** — Fix common PMD violations across the codebase. Internal; runs `ensure-pmd.sh` first.
 
 - **`ensure-pmd.sh`** — Download and extract PMD if not present. Internal; called by other PMD scripts.
