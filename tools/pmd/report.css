@@ -1,6 +1,10 @@
 /* I2P+ PMD Report - Dark Theme */
 /* Edit this file to customize the report appearance */
 
+:root {
+  --link:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cg stroke-width='8'%3E%3Cpath fill='%236f7c91' d='M58.4 24.9L41.5 41.6a14 14 0 01-19.8-19.8L38.6 5.1a14 14 0 0119.7 19.8zm-30.5 3a5.4 5.4 0 007.6 7.6l16.8-16.7a5.4 5.4 0 00-7.6-7.6z'/%3E%3Cpath fill='%23939dac' d='M26.4 44.6l-7.6 7.7a5.4 5.4 0 01-7.6-7.6l16.7-16.8a5.4 5.4 0 017.6 7.6l9.2-9.1a14 14 0 00-22.8-4.6L5 38.6a14 14 0 0019.8 19.7l16.7-16.7a14 14 0 01-15.2 3z'/%3E%3C/g%3E%3C/svg%3E");
+}
+
 * {
   box-sizing: border-box
 }
@@ -144,6 +148,19 @@ th {
   letter-spacing: .5px;
 }
 
+.priority-cell {
+  min-width: 80px;
+}
+
+.priority-cell + td {
+  min-width: 80px;
+}
+
+.priority-cell + td {
+  width: 1%;
+  min-width: 200px;
+}
+
 .tablerow0 {
   background: #161620
 }
@@ -251,6 +268,35 @@ tr[data-detail] {
 .p5 {
   background: #2040a0;
   color: #ccc
+}
+
+/* Rule documentation icon */
+.rule-doc {
+  width: 1%;
+  text-align: center;
+}
+
+.rule-doc-icon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+  background: var(--link) center/contain no-repeat;
+  opacity: .7;
+  transition: opacity .15s
+}
+
+.rule-doc-link:hover .rule-doc-icon {
+  opacity: 1
+}
+
+.rule-category {
+  font-size: 8.5pt;
+  color: #999;
+  font-weight: 600;
+  min-width: 120px;
+  width:1%;
+  white-space: nowrap;
 }
 
 /* ---- Detail Rows ---- */

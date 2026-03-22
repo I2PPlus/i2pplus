@@ -271,27 +271,37 @@ def main():
         for fname, violations in sub_files[sub]:
             w(f'<h3>{escape(fname)}</h3>')
             w('<table class="warningtable">')
-            w('<tr><th>Line</th><th>Rule</th><th>Message</th></tr>')
+            w('<tr><th>Line</th><th>Rule</th><th>Message</th><th class="rule-category">Category</th><th class="rule-doc">Doc</th></tr>')
             for i, v in enumerate(sorted(violations, key=lambda x: int(x["begin"]))):
                 row = "tablerow" + str(i % 2)
                 vid = f"v{abs(hash(fname + v['begin'] + v['rule']))}"
                 rng = v["begin"] if v["begin"] == v["end"] else f'{v["begin"]}-{v["end"]}'
-                w(f'<tr class="{row}" data-detail="{vid}">')
+                doc_link = ''
+                if v["url"]:
+                    doc_link = f'<a href="{escape(v["url"])}" target="_blank" class="rule-doc-link"><span class="rule-doc-icon" title="Rule documentation: {escape(v["rule"])}"></span></a>'
+                detail_parts = []
+                if v["class"]:
+                    detail_parts.append(f'<b>Class:</b> {escape(v["class"])}')
+                if v["method"]:
+                    detail_parts.append(f'<b>Method:</b> {escape(v["method"])}')
+                has_detail = bool(detail_parts)
+                if has_detail:
+                    w(f'<tr class="{row}" data-detail="{vid}">')
+                else:
+                    w(f'<tr class="{row}">')
                 w(f'<td class="priority-cell p{v["priority"]}">{escape(rng)}</td>')
                 w(f'<td>{escape(v["rule"])}</td>')
                 w(f'<td>{escape(v["msg"])}</td>')
+                w(f'<td class="rule-category">{escape(v["ruleset"])}</td>')
+                w(f'<td class="rule-doc">{doc_link}</td>')
                 w('</tr>')
-                w(f'<tr class="detailrow{i % 2}"><td colspan="3">')
-                w(f'<div id="{vid}" style="display:none" class="detail-content">')
-                w(f'<b>Category:</b> {escape(v["ruleset"])}')
-                if v["class"]:
-                    w(f' &middot; <b>Class:</b> {escape(v["class"])}')
-                if v["method"]:
-                    w(f' &middot; <b>Method:</b> {escape(v["method"])}')
-                if v["url"]:
-                    w(f'<br><a href="{escape(v["url"])}">Rule documentation</a>')
-                w('</div>')
-                w('</td></tr>')
+                if has_detail:
+                    detail_html = ' &middot; '.join(detail_parts)
+                    w(f'<tr class="detailrow{i % 2}"><td colspan="5">')
+                    w(f'<div id="{vid}" style="display:none" class="detail-content">')
+                    w(detail_html)
+                    w('</div>')
+                    w('</td></tr>')
             w('</table>')
         w('</details>')
 
