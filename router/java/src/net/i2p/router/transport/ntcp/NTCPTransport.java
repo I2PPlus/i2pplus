@@ -1238,9 +1238,9 @@ public class NTCPTransport extends TransportImpl {
      * how long from initial connection attempt (accept() or connect()) until
      * the con must be established to avoid premature close()ing
      */
-    public static final int ESTABLISH_TIMEOUT = 10*1000;
+    public static final int ESTABLISH_TIMEOUT = 15*1000;
     /** Extended timeout during network stress (build success < 40%) */
-    private static final int ESTABLISH_TIMEOUT_STRESSED = 15*1000;
+    private static final int ESTABLISH_TIMEOUT_STRESSED = 20*1000;
 
     /**
      * Get the current establish timeout, extended during network stress
