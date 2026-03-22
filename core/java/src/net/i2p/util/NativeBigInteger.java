@@ -34,6 +34,11 @@ import java.util.Map;
 import java.util.Random;
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.CryptoConstants;
+import net.i2p.crypto.eddsa.EdDSAEngine;
+import net.i2p.crypto.eddsa.EdDSAPrivateKey;
+import net.i2p.crypto.eddsa.EdDSAPublicKey;
+import net.i2p.crypto.eddsa.spec.EdDSANamedCurveSpec;
+import net.i2p.crypto.eddsa.spec.EdDSANamedCurveTable;
 import net.i2p.data.DataHelper;
 
 /**
@@ -287,17 +292,12 @@ public class NativeBigInteger extends BigInteger {
         JBIGI_COMPAT_MAP.put(JBIGI_OPTIMIZATION_ZEN3,        JBIGI_COMPAT_LIST_AMD_MAIN);
 
         JBIGI_COMPAT_MAP.put(JBIGI_OPTIMIZATION_ATOM, JBIGI_COMPAT_LIST_INTEL_ATOM);
-
         JBIGI_COMPAT_MAP.put(JBIGI_OPTIMIZATION_PENTIUM,    JBIGI_COMPAT_LIST_INTEL_PENTIUM);
         JBIGI_COMPAT_MAP.put(JBIGI_OPTIMIZATION_PENTIUMMMX, JBIGI_COMPAT_LIST_INTEL_PENTIUM);
         JBIGI_COMPAT_MAP.put(JBIGI_OPTIMIZATION_PENTIUM2,   JBIGI_COMPAT_LIST_INTEL_PENTIUM);
         JBIGI_COMPAT_MAP.put(JBIGI_OPTIMIZATION_PENTIUM3,   JBIGI_COMPAT_LIST_INTEL_PENTIUM);
-
         JBIGI_COMPAT_MAP.put(JBIGI_OPTIMIZATION_PENTIUMM,   JBIGI_COMPAT_LIST_INTEL_PENTIUM);
         JBIGI_COMPAT_MAP.put(JBIGI_OPTIMIZATION_PENTIUM4,   JBIGI_COMPAT_LIST_INTEL_PENTIUM);
-
-        JBIGI_COMPAT_MAP.put(JBIGI_OPTIMIZATION_PENTIUM3,  JBIGI_COMPAT_LIST_INTEL_CORE);
-        JBIGI_COMPAT_MAP.put(JBIGI_OPTIMIZATION_PENTIUMM,  JBIGI_COMPAT_LIST_INTEL_CORE);
         JBIGI_COMPAT_MAP.put(JBIGI_OPTIMIZATION_CORE2,     JBIGI_COMPAT_LIST_INTEL_CORE);
         JBIGI_COMPAT_MAP.put(JBIGI_OPTIMIZATION_COREI,     JBIGI_COMPAT_LIST_INTEL_CORE);
         JBIGI_COMPAT_MAP.put(JBIGI_OPTIMIZATION_COREI_SBR, JBIGI_COMPAT_LIST_INTEL_CORE);
@@ -554,14 +554,7 @@ public class NativeBigInteger extends BigInteger {
     private native static byte[] nativeModInverse(byte base[], byte d[]);
 
     /**
-     *  Only for testing jbigi's negative conversion functions!
-     *  @since 0.9.26
-     */
-    //private native static byte[] nativeNeg(byte d[]);
-
-    /**
      *  Get the jbigi version, only available since jbigi version 3
-     *  Caller must catch Throwable
      *  @since 0.9.26
      */
     private native static int nativeJbigiVersion();
@@ -640,7 +633,7 @@ public class NativeBigInteger extends BigInteger {
         return _libGMPVersion;
     }
 
-    private byte[] cachedBa;
+    private volatile byte[] cachedBa;
 
     public NativeBigInteger(byte[] val) {
         super(val);
@@ -710,15 +703,23 @@ public class NativeBigInteger extends BigInteger {
      */
     @Override
     public BigInteger modInverse(BigInteger m) {
-        // Where negative or zero values aren't legal in modInverse() anyway, avoid native,
-        // as the Java code will throw an exception rather than silently fail or crash the JVM
-        // Note that 'this' can be negative
-        // If this and m are not coprime, gmp will do a divide by zero exception and crash the JVM.
-        // super will throw an ArithmeticException
-        if (_nativeOk3)
-            return new NativeBigInteger(nativeModInverse(toByteArray(), m.toByteArray()));
-        else
+        // Safeguard: ensure m > 0 to match Java behavior and avoid native crashes
+        if (m.signum() <= 0) {
             return super.modInverse(m);
+        }
+        // WARNING: If this and m are not coprime, GMP may cause a JVM crash (SIGFPE).
+        // Java BigInteger throws ArithmeticException. We cannot efficiently check coprimality here.
+        if (_nativeOk3) {
+            try {
+                return new NativeBigInteger(nativeModInverse(toByteArray(), m.toByteArray()));
+            } catch (Throwable t) {
+                // Fallback to Java if native fails
+                warn("Native modInverse failed, falling back to Java", t);
+                return super.modInverse(m);
+            }
+        } else {
+            return super.modInverse(m);
+        }
     }
 
     /** caches */
@@ -776,88 +777,90 @@ public class NativeBigInteger extends BigInteger {
     public static void main(String args[]) {
         _doLog = true;
         boolean nativeOnly = args.length > 0 && args[0].equals("-n");
+        int errors = 0;
+
         if (nativeOnly && !_nativeOk) {
+            System.err.println("ERROR: Native library requested but not loaded.");
             System.exit(1);
         }
 
+        System.out.println();
         if (_nativeOk) {
-            System.out.println(" Native: " + (_extractedResource != null ? _extractedResource : "libjbigi") +
+            System.out.println(" • Native: " + (_extractedResource != null ? _extractedResource : "libjbigi") +
                                " (JBIGI v" + _jbigiVersion + ", GMP " + _libGMPVersion + ")");
         } else {
-            System.out.println(" Native: NOT LOADED (using pure Java)");
+            System.out.println(" • Native: NOT LOADED (using pure Java)");
         }
-        System.out.println();
-
-        SecureRandom rand = RandomSource.getInstance();
-        rand.nextBoolean();
-
         System.out.println("------------------------------------------------------------");
         System.out.println();
 
-        // X25519-sized (256-bit) — primary curve for I2P+ ECIES
-        System.out.println("X25519 (256-bit):");
-        runModPowTest(100000, 1, nativeOnly, "modPow", "base^exp mod m", 256);
+        // ElGamal — the only BigInteger operations I2P+ that use native GMP
+        System.out.println(" • ElGamal (ElG) — 2048-bit exp, 1060-bit inverse");
+        System.out.println();
+
+        if (!runModPowTest(5000, 1, nativeOnly, "modPow", "base^exp mod m (2048-bit)")) errors++;
         if (_nativeOk3) {
             System.out.println();
-            runModPowTest(100000, 2, nativeOnly, "modPowCT", "constant-time base^exp mod m", 256);
+            if (!runModPowTest(5000, 2, nativeOnly, "modPowCT", "constant-time base^exp mod m (2048-bit)")) errors++;
             System.out.println();
-            runModPowTest(100000, 3, nativeOnly, "modInverse", "a^-1 mod m", 256);
+            if (!runModPowTest(5000, 3, nativeOnly, "modInverse", "a^-1 mod m (1060-bit)")) errors++;
         }
 
-        // ElGamal (2048-bit) — legacy, for comparison
         System.out.println();
         System.out.println("------------------------------------------------------------");
         System.out.println();
-        System.out.println("ElGamal (2048-bit):");
-        runModPowTest(5000, 1, nativeOnly, "modPow", "base^exp mod m", 2048);
-        if (_nativeOk3) {
-            System.out.println();
-            runModPowTest(5000, 2, nativeOnly, "modPowCT", "constant-time base^exp mod m", 2048);
-            System.out.println();
-            runModPowTest(5000, 3, nativeOnly, "modInverse", "a^-1 mod m", 1060);
+        System.out.println(" • EdDSA (Ed25519) — curve arithmetic, no BigInteger.modPow");
+        System.out.println("   - jbigi has no effect here (uses radix-2^25.5 limbs)");
+        System.out.println();
+        runEdDSATest(5000);
+
+        System.out.println();
+        System.out.println("------------------------------------------------------------");
+        System.out.println();
+        System.out.println(" • ECIES (X25519) — JDK native KeyAgreement (JEP 324)");
+        System.out.println("   - Montgomery ladder, jbigi has no effect");
+        System.out.println();
+        runX25519Test(10000);
+
+        System.out.println();
+        System.out.println("------------------------------------------------------------");
+        if (errors > 0) {
+            System.err.println("FAIL: " + errors + " correctness error(s)");
+            System.exit(1);
         }
     }
 
     /**
      *  @param mode 1: modPow; 2: modPowCT; 3: modInverse
-     *  @param opName e.g. "modPow"
-     *  @param opDesc e.g. "base^exp mod m"
-     *  @param numBits key size in bits (256 for X25519, 2048 for ElGamal)
+     *  @return true if native and java results match (or native not loaded)
      */
-    private static void runModPowTest(int numRuns, int mode, boolean nativeOnly, String opName, String opDesc, int numBits) {
+    private static boolean runModPowTest(int numRuns, int mode, boolean nativeOnly, String opName, String opDesc) {
         SecureRandom rand = RandomSource.getInstance();
 
-        // Use ElGamal constants for 2048-bit, random primes for smaller sizes
-        NativeBigInteger base, mod;
-        if (numBits >= 2048) {
-            base = CryptoConstants.elgg;
-            mod = CryptoConstants.elgp;
-        } else {
-            // Generate random base and modulus for the given size
-            BigInteger b, m;
-            do { b = new BigInteger(numBits, rand); } while (b.signum() == 0);
-            do { m = new BigInteger(numBits, rand); } while (!m.isProbablePrime(20));
-            base = new NativeBigInteger(1, b.toByteArray());
-            mod = new NativeBigInteger(1, m.toByteArray());
+        final NativeBigInteger g = CryptoConstants.elgg;
+        final NativeBigInteger p = CryptoConstants.elgp;
+        final int numBits = (mode == 3) ? 1060 : 2048;
+
+        // JIT warmup — both native and Java paths
+        for (int i = 0; i < 1000; i++) {
+            BigInteger bi;
+            do { bi = new BigInteger(numBits, rand); } while (bi.signum() == 0);
+            NativeBigInteger k = new NativeBigInteger(1, bi.toByteArray());
+            if (_nativeOk) {
+                if (mode == 1) g.modPow(k, p);
+                else if (mode == 2) g.modPowCT(bi, p);
+                else k.modInverse(p);
+            }
+            if (mode == 1) g.modPow(bi, p);
+            else if (mode == 2) g.modPow(bi, p);
+            else bi.modInverse(p);
         }
 
         long totalTime = 0;
         long javaTime = 0;
         int runsProcessed = 0;
-
-        // JIT warmup
-        BigInteger jBase = base, jMod = mod;
-        for (int i = 0; i < 1000; i++) {
-            BigInteger bi;
-            do { bi = new BigInteger(numBits, rand); } while (bi.signum() == 0);
-            if (mode == 1) { jBase.modPow(bi, jMod); }
-            else if (mode == 2) {
-                if (_nativeOk) { base.modPowCT(bi, mod); }
-            }
-            else { bi.modInverse(jMod); }
-        }
-
         BigInteger myValue = null, jval;
+        boolean success = true;
 
         for (runsProcessed = 0; runsProcessed < numRuns; runsProcessed++) {
             BigInteger bi;
@@ -866,25 +869,21 @@ public class NativeBigInteger extends BigInteger {
 
             long beforeModPow = System.nanoTime();
             if (_nativeOk) {
-                if (mode == 1)
-                    myValue = base.modPow(k, mod);
-                else if (mode == 2)
-                    myValue = base.modPowCT(bi, mod);
-                else
-                    myValue = k.modInverse(mod);
+                if (mode == 1) myValue = g.modPow(k, p);
+                else if (mode == 2) myValue = g.modPowCT(bi, p);
+                else myValue = k.modInverse(p);
             }
             long afterModPow = System.nanoTime();
             totalTime += (afterModPow - beforeModPow);
 
             if (!nativeOnly) {
-                if (mode != 3)
-                    jval = jBase.modPow(bi, jMod);
-                else
-                    jval = bi.modInverse(jMod);
+                if (mode != 3) jval = g.modPow(bi, p);
+                else jval = bi.modInverse(p);
                 long afterJavaModPow = System.nanoTime();
                 javaTime += (afterJavaModPow - afterModPow);
                 if (_nativeOk && !myValue.equals(jval)) {
                     System.err.println("ERROR: native != java result at run " + runsProcessed);
+                    success = false;
                     break;
                 }
             }
@@ -895,28 +894,126 @@ public class NativeBigInteger extends BigInteger {
         double eachNative = dtotal / numRuns;
         double eachJava = djava / numRuns;
 
-        System.out.println(opName + " (" + opDesc + "), " + numRuns + " iterations:");
-
+        System.out.println("    " + opName + " (" + opDesc + "), " + numRuns + " iterations:");
         if (_nativeOk) {
-            System.out.println(String.format("  Native: %8.1f ms  (%.3f ms/op)", dtotal, eachNative));
+            System.out.println(String.format("      Native: %8.1f ms  (%.3f ms/op)", dtotal, eachNative));
             if (!nativeOnly) {
-                System.out.println(String.format("  Java:   %8.1f ms  (%.3f ms/op)", djava, eachJava));
+                System.out.println(String.format("      Java:   %8.1f ms  (%.3f ms/op)", djava, eachJava));
                 if (dtotal < djava) {
                     double ratio = djava / dtotal;
                     if (ratio > 1.1)
-                        System.out.println(String.format("  Result: Native is %.1fx faster", ratio));
+                        System.out.println(String.format("      Result: Native is %.1fx faster", ratio));
                     else
-                        System.out.println("  Result: Native is marginally faster");
+                        System.out.println("      Result: Native is marginally faster");
                 } else {
                     double ratio = dtotal / djava;
                     if (ratio > 1.1)
-                        System.out.println(String.format("  Result: Native is %.1fx slower", ratio));
+                        System.out.println(String.format("      Result: Native is %.1fx slower", ratio));
                     else
-                        System.out.println("  Result: Native is marginally slower");
+                        System.out.println("      Result: Native is marginally slower");
                 }
             }
         } else {
-            System.out.println(String.format("  Java:   %8.1f ms  (%.3f ms/op)", djava, eachJava));
+            System.out.println(String.format("      Java:   %8.1f ms  (%.3f ms/op)", djava, eachJava));
+        }
+        return success;
+    }
+
+    private static void runEdDSATest(int numRuns) {
+        try {
+            EdDSANamedCurveSpec spec = EdDSANamedCurveTable.getByName(EdDSANamedCurveTable.ED_25519);
+            byte[] seed = new byte[32];
+            new java.security.SecureRandom().nextBytes(seed);
+            EdDSAPrivateKey privKey = new EdDSAPrivateKey(new net.i2p.crypto.eddsa.spec.EdDSAPrivateKeySpec(seed, spec));
+            EdDSAPublicKey pubKey = new EdDSAPublicKey(new net.i2p.crypto.eddsa.spec.EdDSAPublicKeySpec(privKey.getA(), spec));
+
+            byte[] message = new byte[256];
+            new java.security.SecureRandom().nextBytes(message);
+
+            // Warmup
+            for (int i = 0; i < 500; i++) {
+                EdDSAEngine s = new EdDSAEngine();
+                s.initSign(privKey);
+                s.update(message);
+                byte[] sig = s.sign();
+                EdDSAEngine v = new EdDSAEngine();
+                v.initVerify(pubKey);
+                v.update(message);
+                v.verify(sig);
+            }
+
+            // Benchmark sign
+            long signTime = 0;
+            byte[] lastSig = null;
+            for (int i = 0; i < numRuns; i++) {
+                EdDSAEngine eng = new EdDSAEngine();
+                eng.initSign(privKey);
+                eng.update(message);
+                long before = System.nanoTime();
+                lastSig = eng.sign();
+                signTime += System.nanoTime() - before;
+            }
+
+            // Benchmark verify
+            long verifyTime = 0;
+            for (int i = 0; i < numRuns; i++) {
+                EdDSAEngine eng = new EdDSAEngine();
+                eng.initVerify(pubKey);
+                eng.update(message);
+                long before = System.nanoTime();
+                eng.verify(lastSig);
+                verifyTime += System.nanoTime() - before;
+            }
+
+            double dSign = signTime / 1000000d;
+            double dVerify = verifyTime / 1000000d;
+            double dTotal = dSign + dVerify;
+
+            System.out.println(String.format("    sign (%d iterations):", numRuns));
+            System.out.println(String.format("      Result: %8.1f ms  (%.3f ms/op)", dSign, dSign / numRuns));
+            System.out.println(String.format("    verify (%d iterations):", numRuns));
+            System.out.println(String.format("      Result: %8.1f ms  (%.3f ms/op)", dVerify, dVerify / numRuns));
+            System.out.println(String.format("    sign + verify: %.1f ms  (%.3f ms/sv)", dTotal, dTotal / numRuns));
+        } catch (Exception e) {
+            System.out.println("    EdDSA benchmark failed: " + e.getMessage());
+        }
+    }
+
+    private static void runX25519Test(int numRuns) {
+        try {
+            // X25519 requires Java 11+ (JEP 324)
+            java.security.KeyPairGenerator kg = java.security.KeyPairGenerator.getInstance("X25519");
+            java.security.KeyPair alice = kg.generateKeyPair();
+            java.security.KeyPair bob = kg.generateKeyPair();
+
+            // Warmup
+            for (int i = 0; i < 500; i++) {
+                javax.crypto.KeyAgreement ka = javax.crypto.KeyAgreement.getInstance("X25519");
+                ka.init(alice.getPrivate());
+                ka.doPhase(bob.getPublic(), true);
+                ka.generateSecret();
+            }
+
+            // Benchmark
+            long totalTime = 0;
+            byte[] lastSecret = null;
+            for (int i = 0; i < numRuns; i++) {
+                javax.crypto.KeyAgreement ka = javax.crypto.KeyAgreement.getInstance("X25519");
+                ka.init(alice.getPrivate());
+                ka.doPhase(bob.getPublic(), true);
+                long before = System.nanoTime();
+                lastSecret = ka.generateSecret();
+                totalTime += System.nanoTime() - before;
+            }
+
+            double dtotal = totalTime / 1000000d;
+            System.out.println(String.format("key agreement (%d iterations):", numRuns));
+            System.out.println(String.format("  Result: %8.1f ms  (%.4f ms/op)", dtotal, dtotal / numRuns));
+            System.out.println(String.format("  Shared secret: %d bytes", lastSecret.length));
+        } catch (java.security.NoSuchAlgorithmException e) {
+            System.out.println("X25519 not available (requires Java 11+): " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("X25519 benchmark failed: " + e.getMessage());
         }
     }
 
@@ -1043,12 +1140,6 @@ public class NativeBigInteger extends BigInteger {
      * @return true if it was loaded successfully, else false
      *
      */
-/****
-    private static final boolean loadGeneric(boolean optimized) {
-        return loadGeneric(getMiddleName(optimized));
-    }
-****/
-
     private static final boolean loadGeneric(String name) {
         try {
             if(name == null)
@@ -1086,16 +1177,8 @@ public class NativeBigInteger extends BigInteger {
      * @return true if it was loaded successfully, else false
      *
      */
-/****
-    private static final boolean loadFromResource(boolean optimized) {
-        String resourceName = getResourceName(optimized);
-        return loadFromResource(resourceName);
-    }
-****/
-
     private static final boolean loadFromResource(String resourceName) {
         if (resourceName == null) return false;
-        //URL resource = NativeBigInteger.class.getClassLoader().getResource(resourceName);
         URL resource = ClassLoader.getSystemResource(resourceName);
         if (resource == null) {
             info("Resource name [" + resourceName + "] was not found");
@@ -1108,15 +1191,15 @@ public class NativeBigInteger extends BigInteger {
         String filename =  _libPrefix + "jbigi" + _libSuffix;
         try {
             libStream = resource.openStream();
-            outFile = new File(I2PAppContext.getGlobalContext().getTempDir(), filename);
+            outFile = File.createTempFile("jbigi", _libSuffix, I2PAppContext.getGlobalContext().getTempDir());
+            outFile.deleteOnExit();
             fos = new FileOutputStream(outFile);
             DataHelper.copy(libStream, fos);
             fos.close();
             fos = null;
-            System.load(outFile.getAbsolutePath()); //System.load requires an absolute path to the lib
+            System.load(outFile.getAbsolutePath());
             info("Loaded library: " + resource);
         } catch (UnsatisfiedLinkError ule) {
-            // don't include the exception in the message - too much
             warn("Failed to load the resource " + resourceName + " - not a valid library for this platform");
             if (outFile != null)
                 outFile.delete();
@@ -1219,31 +1302,6 @@ public class NativeBigInteger extends BigInteger {
     /**
      *  @return may be null if optimized is true
      */
-/****
-    private static final String getResourceName(boolean optimized) {
-        String middle = getMiddleName(optimized);
-        if (middle == null)
-            return null;
-        return _libPrefix + middle + _libSuffix;
-    }
-****/
-
-    /**
-     *  @return may be null if optimized is true; returns jbigi-xxx-none if optimize is false
-     */
-/****
-    private static final String getMiddleName(boolean optimized) {
-        String m2 = getMiddleName2(optimized);
-        if (m2 == null)
-            return null;
-        return getMiddleName1() + m2;
-    }
-****/
-
-    /**
-     *  @return may be null if optimized is true; returns "none" if optimize is false
-     *  @since 0.8.7
-     */
     private static final String getMiddleName2(boolean optimized) {
         String sAppend;
         if (optimized) {
@@ -1252,20 +1310,11 @@ public class NativeBigInteger extends BigInteger {
             // Add exceptions here if library files are identical,
             // instead of adding duplicates to jbigi.jar
             if (sCPUType.equals(JBIGI_OPTIMIZATION_K6_3) && !_isWin)
-                // k62 and k63 identical except on windows
                 sAppend = JBIGI_OPTIMIZATION_K6_2;
-            // core2 is always a fallback for corei in getResourceList()
-            //else if (sCPUType.equals(JBIGI_OPTIMIZATION_COREI) && (!_is64) && ((_isKFreebsd) || (_isNetbsd) || (_isOpenbsd)))
-                // corei and core2 are identical on 32bit kfreebsd, openbsd, and netbsd
-                //sAppend = JBIGI_OPTIMIZATION_CORE2;
             else if (sCPUType.equals(JBIGI_OPTIMIZATION_PENTIUM2) && _isSunos && _isX86)
-                // pentium2 and pentium3 identical on X86 Solaris
                 sAppend = JBIGI_OPTIMIZATION_PENTIUM3;
             else if (sCPUType.equals(JBIGI_OPTIMIZATION_VIAC32))
-                // viac32 and pentium3 identical
                 sAppend = JBIGI_OPTIMIZATION_PENTIUM3;
-            //else if (sCPUType.equals(JBIGI_OPTIMIZATION_VIAC3) && _isWin)
-                // FIXME no viac3 available for windows, what to use instead?
             else
                 sAppend = sCPUType;
         } else {
@@ -1275,8 +1324,7 @@ public class NativeBigInteger extends BigInteger {
     }
 
     /**
-     *  @return "jbigi-xxx-"
-     *  @since 0.8.7
+     *  @return may be null if optimized is true; returns jbigi-xxx-none if optimize is false
      */
     private static final String getMiddleName1() {
         if(_isWin)
@@ -1295,20 +1343,6 @@ public class NativeBigInteger extends BigInteger {
             return "jbigi-os2-";
         if(_isSunos)
             return "jbigi-solaris-";
-        //throw new RuntimeException("Don't know jbigi library name for os type '"+System.getProperty("os.name")+"'");
-        // use linux as the default, don't throw exception
         return "jbigi-linux-";
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        // for findbugs
-        return super.equals(o);
-    }
-
-    @Override
-    public int hashCode() {
-        // for findbugs
-        return super.hashCode();
     }
 }

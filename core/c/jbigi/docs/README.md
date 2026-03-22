@@ -76,39 +76,57 @@ ant listJbigi           # List built libraries
 ### Testing
 
 ```bash
-ant testJbigi    # Benchmark native modPow/modPowCT/modInverse vs pure Java
+ant testJbigi    # Benchmark all I2P+ crypto schemes
 ```
 
-Compares GMP-accelerated `NativeBigInteger` (JNI) against JDK `BigInteger` (pure Java). Both produce identical results — the test verifies correctness on every iteration.
+Benchmarks three schemes — ElGamal (jbigi-eligible), EdDSA and X25519 (jbigi-independent). Verifies native vs Java correctness on every ElGamal iteration.
 
-| Path   | Implementation                                       | Method                        |
-| ------ | ---------------------------------------------------- | ----------------------------- |
-| Native | `NativeBigInteger.modPow()` → JNI → GMP `mpz_powm()` | Hand-optimized assembly       |
-| Java   | `BigInteger.modPow()`                                | Pure Java (Montgomery ladder) |
+| Scheme          | Operations tested            | jbigi effect                   |
+| --------------- | ---------------------------- | ------------------------------ |
+| ElGamal         | modPow, modPowCT, modInverse | modInverse **~6x faster**      |
+| EdDSA (Ed25519) | sign, verify                 | None — uses radix-2^25.5 limbs |
+| ECIES (X25519)  | key agreement                | None — JDK native (JEP 324)    |
 
-Results at 256-bit (X25519): modPow shows no native benefit (JNI overhead cancels GMP), but modInverse is ~2x faster. At 2048-bit (ElGamal): modInverse is ~3x faster.
+| Path   | Implementation                                        | Method                        |
+| ------ | ----------------------------------------------------- | ----------------------------- |
+| Native | `NativeBigInteger.modPow()` → JNI → GMP `mpz_powm()`  | Hand-optimized assembly       |
+| Java   | `BigInteger.modPow()`                                 | Pure Java (Montgomery ladder) |
 
 Example output:
 
 ```
-Native:  libjbigi-linux-zen3_64.so (JBIGI v4, GMP 6.3.0)
+ • Native: libjbigi-linux-zen3_64.so (JBIGI v4, GMP 6.3.0)
 
-X25519 (256-bit):
-modPow (base^exp mod m), 100000 iterations:
-  Native:    503.2 ms  (0.005 ms/op)
-  Java:      497.7 ms  (0.005 ms/op)
-  Result: native 1.0x slower
+ • ElGamal (ElG) — 2048-bit exp, 1060-bit inverse
 
-modInverse (a^-1 mod m), 100000 iterations:
-  Native:    311.5 ms  (0.003 ms/op)
-  Java:      670.0 ms  (0.007 ms/op)
-  Result: native 2.2x faster
+ modPow (base^exp mod m (2048-bit)), 5000 iterations:
+   Native:   5441.1 ms  (1.088 ms/op)
+   Java:     5439.1 ms  (1.088 ms/op)
+   Result: Native is marginally faster
 
-ElGamal (2048-bit):
-modInverse (a^-1 mod m), 1000 iterations:
-  Native:     12.3 ms  (0.012 ms/op)
-  Java:       42.1 ms  (0.042 ms/op)
-  Result: native 3.4x faster
+ modPowCT (constant-time base^exp mod m (2048-bit)), 5000 iterations:
+   Native:   7159.1 ms  (1.432 ms/op)
+   Java:     5469.8 ms  (1.094 ms/op)
+   Result: Native is 1.3x slower
+
+ modInverse (a^-1 mod m (1060-bit)), 5000 iterations:
+   Native:     67.8 ms  (0.014 ms/op)
+   Java:      428.5 ms  (0.086 ms/op)
+   Result: Native is 6.3x faster
+
+ • EdDSA (Ed25519) — curve arithmetic, no BigInteger.modPow
+
+ sign (5000 iterations):
+   Result:    191.3 ms  (0.038 ms/op)
+ verify (5000 iterations):
+   Result:    399.3 ms  (0.080 ms/op)
+ sign + verify: 590.7 ms  (0.118 ms/sv)
+
+ • ECIES (X25519) — JDK native KeyAgreement (JEP 324)
+
+ key agreement (10000 iterations):
+   Result:      0.6 ms  (0.0001 ms/op)
+   Shared secret: 32 bytes
 ```
 
 ### Legacy Build Scripts
