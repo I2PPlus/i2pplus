@@ -9,7 +9,7 @@ import sys
 import os
 import re
 import subprocess
-from datetime import datetime
+from datetime import datetime, timezone
 from xml.etree import ElementTree as ET
 from urllib.parse import quote
 
@@ -121,7 +121,7 @@ def main():
     version = root.attrib.get("version", "?")
     raw_ts = root.attrib.get("timestamp", "?")
     try:
-        timestamp = datetime.fromisoformat(raw_ts).astimezone(datetime.timezone.utc).strftime("%B %-d %Y, %H:%M UTC")
+        timestamp = datetime.fromisoformat(raw_ts).astimezone(timezone.utc).strftime("%B %-d %Y, %H:%M UTC")
     except ValueError:
         timestamp = raw_ts
 
@@ -308,9 +308,9 @@ def main():
             continue
         nfiles = len(sub_files[sub])
         w(f'<details id="sub-{escape(sub)}">')
-        w(f'<summary><div class="tabletitle"><a name="sub-{escape(sub)}">{escape(sub)} &middot; {count} violation{"s" if count != 1 else ""} in {nfiles} file{"s" if nfiles != 1 else ""}</a></div></summary>')
+        w(f'<summary><div class="tabletitle"><a name="sub-{escape(sub)}">{escape(sub)}</a>&#32;<span class="badge">{count} / {nfiles}</span></div></summary>')
         for fname, violations in sub_files[sub]:
-            w(f'<h3>{escape(fname)} <span class="badge">{len(violations)}</span></h3>')
+            w(f'<h3><span class="path">{escape(fname)}</span> <span class="badge">{len(violations)}</span></h3>')
             w('<table class="warningtable">')
             w('<tr><th>Line</th><th>Rule</th><th>Message</th><th class="rule-category">Category</th><th class="rule-doc">Doc</th></tr>')
             for i, v in enumerate(sorted(violations, key=lambda x: int(x["begin"]))):

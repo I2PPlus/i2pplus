@@ -74,6 +74,11 @@ h3::before {
   margin-right: 10px;
 }
 
+h3 .path {
+  font-family: Fira Code, monospace;
+  user-select: all;
+}
+
 hr {
   margin: 8px 0;
   height: 1px;
@@ -130,10 +135,10 @@ code {
   transition: background .15s;
   font-size: 105%;
   pointer-events: auto;
-  box-shadow: 0 0 0 1px #0008, 0 0 0 1px #f004 inset;
   min-width: 32px;
   text-align: center;
   text-shadow: 1px 1px 1px #000;
+  box-shadow: 0 0 0 1px #0008, 0 0 0 1px #9991 inset;
 }
 
 #navbar span:hover {
@@ -148,8 +153,22 @@ code {
   display: inline-block;
   line-height: 1.1;
   border-radius: 3px;
-  background: #300;
+  background: #840e0e;
   pointer-events: none;
+  text-align: center;
+  text-shadow: 1px 1px 1px #000;
+  box-shadow: 0 0 0 1px #0008, 0 0 0 1px #9991 inset;
+}
+
+h3 .badge {
+  float: right;
+  min-width: 48px;
+  transform: scale(.85);
+}
+
+.tabletitle .badge {
+  float: right;
+  min-width: 64px;
 }
 
 /* ---- Summary Tables ---- */
@@ -230,6 +249,13 @@ th {
 
 .tabletitle + table {
   margin-top: -1px
+}
+
+table + .tabletitle,
+#navbar + .tabletitle {
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 115%;
 }
 
 table + .tabletitle {
@@ -372,7 +398,7 @@ tr[data-detail] {
   border: 1px solid #2a2a30;
   border-radius: 3px;
   overflow-x: auto;
-  font-family: "Iosevka", "Fira Code", monospace;
+  font-family: Fira Code, monospace;
   font-size: 10.5pt;
   line-height: 1.5;
 }
