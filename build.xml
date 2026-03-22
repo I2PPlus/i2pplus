@@ -3265,7 +3265,15 @@
     <property name="pmd.dir" location="tools/pmd"/>
     <property name="pmd.bin" location="${pmd.dir}/bin/pmd"/>
     <available file="${pmd.bin}" property="pmd.present"/>
-    <antcall target="download-pmd"/>
+    <if>
+      <isset property="pmd.present"/>
+      <then>
+        <echo message="PMD found: ${pmd.bin}"/>
+      </then>
+      <else>
+        <antcall target="download-pmd"/>
+      </else>
+    </if>
     <!-- PMD 7 requires Java 11+, detect a suitable JVM -->
     <if>
       <not><isset property="pmd.java"/></not>
