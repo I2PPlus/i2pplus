@@ -340,7 +340,7 @@ class ParticipatingThrottler {
                 return Result.REJECT;
             }
         }
-        _logAcceptRequest(caps, count);
+        _logAcceptRequest(h, caps, count);
         return Result.ACCEPT;
     }
 
@@ -376,10 +376,10 @@ class ParticipatingThrottler {
     }
 
     /** Logs debug information for accepted tunnel requests. */
-    private void _logAcceptRequest(String caps, int count) {
+    private void _logAcceptRequest(Hash h, String caps, int count) {
         if (_log.shouldDebug()) {
             _log.debug("Accepting Tunnel Request from " + (caps != "" ? caps : "") +
-                       " Router -> Count: " + count + " in 90s");
+                       " Router [" + h.toBase64().substring(0,6) + "] -> Count: " + count + " in 90s");
         }
     }
 
