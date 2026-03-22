@@ -132,6 +132,7 @@ core/c/jbigi/jbigi/*.dll
 # Static analysis tools (downloaded at runtime)
 tools/
 !tools/README.md
+!tools/test/README.md
 !tools/jsdoc/
 !tools/ant-contrib.jar
 !tools/google-java-format.jar

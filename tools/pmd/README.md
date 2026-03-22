@@ -1,4 +1,5 @@
 # PMD Static Analysis for I2P+
+#### https://pmd.github.io/ | [License](../docs/licenses/LICENSE-pmd.txt): BSD-4-Clause + Apache 2.0
 
 ## Ant Targets
 
@@ -10,7 +11,6 @@
 
 Reports go to `dist/pmd-java.html` and `dist/pmd-js.html`. PMD auto-downloads on first run. Requires Java 11+ (auto-detected; override with `pmd.java=/path/to/java` in `override.properties`).
 
-PMD: https://pmd.github.io/ | License: BSD-4-Clause + Apache 2.0 (see docs/licenses/LICENSE-pmd.txt)
 
 ## Updating PMD
 
