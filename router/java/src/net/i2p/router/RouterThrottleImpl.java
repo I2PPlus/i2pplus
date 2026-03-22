@@ -501,7 +501,7 @@ public class RouterThrottleImpl implements RouterThrottle {
      *  Healthy (buildSuccess >= 0.60):  base (SSU: 3000ms, otherwise: 2000ms)
      *  Moderate (>= 0.50):             base * 1.5
      *  Stressed (>= 0.40):             base * 2.0
-     *  Under attack (< 0.40):          base (don't relax under real attack)
+     *  Severe stress (< 0.40):         base (don't relax under severe stress)
      */
     private long getAdaptiveProcessingTime() {
         // Honor explicit config override
@@ -541,7 +541,7 @@ public class RouterThrottleImpl implements RouterThrottle {
         } else if (buildSuccess >= ProfileOrganizer.ATTACK_THRESHOLD) {
             return (long) (base * 2.0);
         }
-        // Under attack (< 0.40) - don't relax
+        // Severe stress (< 0.40) - don't relax
         return base;
     }
 

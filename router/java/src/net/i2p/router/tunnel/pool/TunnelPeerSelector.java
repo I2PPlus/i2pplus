@@ -91,7 +91,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         else if (length > 7) // as documented in tunnel.html
             length = 7;
 
-        // Enforce max 3 hops under attack (< 40% build success)
+        // Enforce max 3 hops under network stress (< 40% build success)
         if (length > 3) {
             double buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
             if (buildSuccess < ATTACK_THRESHOLD) {
@@ -267,7 +267,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         }
 
         if (filterUnreachable(isInbound, isExploratory)) {
-            // During attacks, allow U-cap peers if they have M, N, O, P, or X capability
+            // During network stress, allow U-cap peers if they have M, N, O, P, or X capability
             if (routerInfo.getCapabilities().contains(Character.toString(Router.CAPABILITY_UNREACHABLE))) {
                 if (!allowFirewalledUnderAttack(routerInfo)) {
                     return true;
@@ -336,7 +336,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
     /**
      * Should we allow firewalled (U-cap) peers?
-     * During attacks (build success < 40%), allow U-cap peers if they have M, N, O, P, or X capability.
+     * During network stress (build success < 40%), allow U-cap peers if they have M, N, O, P, or X capability.
      */
     private boolean allowFirewalledUnderAttack(RouterInfo routerInfo) {
         if (routerInfo == null) return false;
@@ -501,7 +501,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         }
 
         // Avoid degraded peers
-        // Allow E cap with 1/6 probability during attacks (build success < 40%)
+        // Allow E cap with 1/6 probability during network stress (build success < 40%)
         if (cap.contains("E") || cap.contains("G")) {
             double buildSuccess = 0;
             try {
@@ -509,7 +509,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             } catch (Exception e) {
                 return true;
             }
-            // During attacks, allow E cap with 1/6 chance
+            // During network stress, allow E cap with 1/6 chance
             if (cap.contains("E") && buildSuccess < ATTACK_THRESHOLD) {
                 if (ctx.random().nextInt(6) != 0) {
                     return true;  // Exclude (5/6 chance)
