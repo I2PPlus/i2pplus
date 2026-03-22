@@ -781,24 +781,40 @@ public class NativeBigInteger extends BigInteger {
         }
 
         if (_nativeOk) {
-            System.out.println("Native:  " + (_extractedResource != null ? _extractedResource : "libjbigi") +
+            System.out.println(" Native: " + (_extractedResource != null ? _extractedResource : "libjbigi") +
                                " (JBIGI v" + _jbigiVersion + ", GMP " + _libGMPVersion + ")");
         } else {
-            System.out.println("Native:  NOT LOADED (using pure Java)");
+            System.out.println(" Native: NOT LOADED (using pure Java)");
         }
-        System.out.println("Args:    2048-bit ElGamal, 1060-bit inverse");
         System.out.println();
 
         SecureRandom rand = RandomSource.getInstance();
         rand.nextBoolean();
 
-        runModPowTest(1000, 1, nativeOnly, "modPow", "base^exp mod m");
+        System.out.println("------------------------------------------------------------");
+        System.out.println();
 
+        // X25519-sized (256-bit) — primary curve for I2P+ ECIES
+        System.out.println("X25519 (256-bit):");
+        runModPowTest(100000, 1, nativeOnly, "modPow", "base^exp mod m", 256);
         if (_nativeOk3) {
             System.out.println();
-            runModPowTest(1000, 2, nativeOnly, "modPowCT", "constant-time base^exp mod m");
+            runModPowTest(100000, 2, nativeOnly, "modPowCT", "constant-time base^exp mod m", 256);
             System.out.println();
-            runModPowTest(10000, 3, nativeOnly, "modInverse", "a^-1 mod m");
+            runModPowTest(100000, 3, nativeOnly, "modInverse", "a^-1 mod m", 256);
+        }
+
+        // ElGamal (2048-bit) — legacy, for comparison
+        System.out.println();
+        System.out.println("------------------------------------------------------------");
+        System.out.println();
+        System.out.println("ElGamal (2048-bit):");
+        runModPowTest(5000, 1, nativeOnly, "modPow", "base^exp mod m", 2048);
+        if (_nativeOk3) {
+            System.out.println();
+            runModPowTest(5000, 2, nativeOnly, "modPowCT", "constant-time base^exp mod m", 2048);
+            System.out.println();
+            runModPowTest(5000, 3, nativeOnly, "modInverse", "a^-1 mod m", 1060);
         }
     }
 
@@ -806,33 +822,42 @@ public class NativeBigInteger extends BigInteger {
      *  @param mode 1: modPow; 2: modPowCT; 3: modInverse
      *  @param opName e.g. "modPow"
      *  @param opDesc e.g. "base^exp mod m"
+     *  @param numBits key size in bits (256 for X25519, 2048 for ElGamal)
      */
-    private static void runModPowTest(int numRuns, int mode, boolean nativeOnly, String opName, String opDesc) {
+    private static void runModPowTest(int numRuns, int mode, boolean nativeOnly, String opName, String opDesc, int numBits) {
         SecureRandom rand = RandomSource.getInstance();
-        byte[] sampleGenerator = CryptoConstants.elgg.toByteArray();
-        byte[] samplePrime = CryptoConstants.elgp.toByteArray();
 
-        BigInteger jg = new BigInteger(sampleGenerator);
-        BigInteger jp = new BigInteger(samplePrime);
+        // Use ElGamal constants for 2048-bit, random primes for smaller sizes
+        NativeBigInteger base, mod;
+        if (numBits >= 2048) {
+            base = CryptoConstants.elgg;
+            mod = CryptoConstants.elgp;
+        } else {
+            // Generate random base and modulus for the given size
+            BigInteger b, m;
+            do { b = new BigInteger(numBits, rand); } while (b.signum() == 0);
+            do { m = new BigInteger(numBits, rand); } while (!m.isProbablePrime(20));
+            base = new NativeBigInteger(1, b.toByteArray());
+            mod = new NativeBigInteger(1, m.toByteArray());
+        }
 
         long totalTime = 0;
         long javaTime = 0;
         int runsProcessed = 0;
 
         // JIT warmup
+        BigInteger jBase = base, jMod = mod;
         for (int i = 0; i < 1000; i++) {
             BigInteger bi;
-            do { bi = new BigInteger(16, rand); } while (bi.signum() == 0);
-            if (mode == 1) { jg.modPow(bi, jp); }
-            else if (mode == 2) { CryptoConstants.elgg.modPowCT(bi, jp); }
-            else { bi.modInverse(jp); }
+            do { bi = new BigInteger(numBits, rand); } while (bi.signum() == 0);
+            if (mode == 1) { jBase.modPow(bi, jMod); }
+            else if (mode == 2) {
+                if (_nativeOk) { base.modPowCT(bi, mod); }
+            }
+            else { bi.modInverse(jMod); }
         }
 
         BigInteger myValue = null, jval;
-        final NativeBigInteger g = CryptoConstants.elgg;
-        final NativeBigInteger p = CryptoConstants.elgp;
-        // modInverse uses 1060 bits to stay < our 1061-bit ElGamal prime
-        final int numBits = (mode == 3) ? 1060 : 2048;
 
         for (runsProcessed = 0; runsProcessed < numRuns; runsProcessed++) {
             BigInteger bi;
@@ -842,20 +867,20 @@ public class NativeBigInteger extends BigInteger {
             long beforeModPow = System.nanoTime();
             if (_nativeOk) {
                 if (mode == 1)
-                    myValue = g.modPow(k, p);
+                    myValue = base.modPow(k, mod);
                 else if (mode == 2)
-                    myValue = g.modPowCT(bi, jp);
+                    myValue = base.modPowCT(bi, mod);
                 else
-                    myValue = k.modInverse(p);
+                    myValue = k.modInverse(mod);
             }
             long afterModPow = System.nanoTime();
             totalTime += (afterModPow - beforeModPow);
 
             if (!nativeOnly) {
                 if (mode != 3)
-                    jval = jg.modPow(bi, jp);
+                    jval = jBase.modPow(bi, jMod);
                 else
-                    jval = bi.modInverse(jp);
+                    jval = bi.modInverse(jMod);
                 long afterJavaModPow = System.nanoTime();
                 javaTime += (afterJavaModPow - afterModPow);
                 if (_nativeOk && !myValue.equals(jval)) {
@@ -877,9 +902,17 @@ public class NativeBigInteger extends BigInteger {
             if (!nativeOnly) {
                 System.out.println(String.format("  Java:   %8.1f ms  (%.3f ms/op)", djava, eachJava));
                 if (dtotal < djava) {
-                    System.out.println(String.format("  Result: native %.1fx faster", djava / dtotal));
+                    double ratio = djava / dtotal;
+                    if (ratio > 1.1)
+                        System.out.println(String.format("  Result: Native is %.1fx faster", ratio));
+                    else
+                        System.out.println("  Result: Native is marginally faster");
                 } else {
-                    System.out.println(String.format("  Result: native %.1fx slower", dtotal / djava));
+                    double ratio = dtotal / djava;
+                    if (ratio > 1.1)
+                        System.out.println(String.format("  Result: Native is %.1fx slower", ratio));
+                    else
+                        System.out.println("  Result: Native is marginally slower");
                 }
             }
         } else {

@@ -86,23 +86,29 @@ Compares GMP-accelerated `NativeBigInteger` (JNI) against JDK `BigInteger` (pure
 | Native | `NativeBigInteger.modPow()` → JNI → GMP `mpz_powm()` | Hand-optimized assembly       |
 | Java   | `BigInteger.modPow()`                                | Pure Java (Montgomery ladder) |
 
-Searches `build/jbigi.jar` and `installer/lib/jbigi/` for native libraries. Without native libs it reports pure Java baseline only.
+Results at 256-bit (X25519): modPow shows no native benefit (JNI overhead cancels GMP), but modInverse is ~2x faster. At 2048-bit (ElGamal): modInverse is ~3x faster.
 
 Example output:
 
 ```
 Native:  libjbigi-linux-zen3_64.so (JBIGI v4, GMP 6.3.0)
-Args:    2048-bit ElGamal, 1060-bit inverse
 
-modPow (base^exp mod m), 1000 iterations:
-  Native:   1109.0 ms  (1.109 ms/op)
-  Java:     1629.8 ms  (1.630 ms/op)
-  Result: native 1.5x faster
+X25519 (256-bit):
+modPow (base^exp mod m), 100000 iterations:
+  Native:    503.2 ms  (0.005 ms/op)
+  Java:      497.7 ms  (0.005 ms/op)
+  Result: native 1.0x slower
 
-modInverse (a^-1 mod m), 10000 iterations:
-  Native:    135.3 ms  (0.014 ms/op)
-  Java:      933.7 ms  (0.093 ms/op)
-  Result: native 6.9x faster
+modInverse (a^-1 mod m), 100000 iterations:
+  Native:    311.5 ms  (0.003 ms/op)
+  Java:      670.0 ms  (0.007 ms/op)
+  Result: native 2.2x faster
+
+ElGamal (2048-bit):
+modInverse (a^-1 mod m), 1000 iterations:
+  Native:     12.3 ms  (0.012 ms/op)
+  Java:       42.1 ms  (0.042 ms/op)
+  Result: native 3.4x faster
 ```
 
 ### Legacy Build Scripts
