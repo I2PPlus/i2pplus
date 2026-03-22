@@ -36,7 +36,7 @@ import net.i2p.util.SystemVersion;
  * Categorizes peers into performance tiers based on historical metrics. Requires periodic reorganize() calls to update peer classifications for optimal tunnel selection.
  */
 public class ProfileOrganizer {
-    /** Threshold below which the network is considered under attack */
+    /** Threshold below which the network is considered under stress */
     public static final double ATTACK_THRESHOLD = 0.40;
 
     private final Log _log;
@@ -250,6 +250,50 @@ public class ProfileOrganizer {
     public boolean isFast(Hash peer) {return isX(_fastPeers, peer);}
     public boolean isHighCapacity(Hash peer) {return isX(_highCapacityPeers, peer);}
     public boolean isWellIntegrated(Hash peer) {return isX(_wellIntegratedPeers, peer);}
+
+    /**
+     * Promote a replacement peer to the fast pool when a ghost peer is detected.
+     * Scans high-capacity peers not already in the fast pool and promotes the
+     * best candidate by speed value.
+     *
+     * @param ghostPeer the peer being ghosted (excluded from promotion)
+     * @return the hash of the promoted peer, or null if no candidate found
+     */
+    public Hash promoteReplacementPeer(Hash ghostPeer) {
+        if (ghostPeer == null) return null;
+        if (!getWriteLock()) return null;
+        try {
+            PeerProfile bestCandidate = null;
+            double bestSpeed = 0;
+            for (Map.Entry<Hash, PeerProfile> entry : _highCapacityPeers.entrySet()) {
+                Hash candidate = entry.getKey();
+                if (candidate.equals(ghostPeer) || candidate.equals(_us)) continue;
+                if (_fastPeers.containsKey(candidate)) continue;
+                PeerProfile profile = entry.getValue();
+                if (profile.getIsActive() && isSelectable(candidate)) {
+                    double speed = profile.getSpeedValue();
+                    if (speed > bestSpeed) {
+                        bestSpeed = speed;
+                        bestCandidate = profile;
+                    }
+                }
+            }
+            if (bestCandidate != null) {
+                _fastPeers.put(bestCandidate.getPeer(), bestCandidate);
+                if (_log.shouldInfo()) {
+                    _log.info("Promoted replacement peer [" + bestCandidate.getPeer().toBase64().substring(0, 6) +
+                              "] to fast pool (speed: " + num(bestSpeed) + ") after ghosting [" +
+                              ghostPeer.toBase64().substring(0, 6) + "]");
+                }
+                return bestCandidate.getPeer();
+            }
+            if (_log.shouldDebug()) {
+                _log.debug("No replacement peer available to promote after ghosting [" +
+                           ghostPeer.toBase64().substring(0, 6) + "]");
+            }
+            return null;
+        } finally {releaseWriteLock();}
+    }
 
     void clearProfiles() {
         if (!getWriteLock()) return;

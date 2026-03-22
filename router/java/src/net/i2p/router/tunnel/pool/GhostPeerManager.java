@@ -13,7 +13,7 @@ import net.i2p.util.SimpleTimer2;
  * Tracks routers that consistently fail to respond to tunnel build requests
  * and temporarily excludes them from tunnel selection during network stress.
  *
- * This helps mitigate ghost peer attacks where malicious routers accept tunnel
+ * This helps mitigate unresponsive peer issues where routers accept tunnel
  * build requests but never respond, causing resource exhaustion.
  *
  * @since 0.9.68+
@@ -73,6 +73,8 @@ public class GhostPeerManager {
                               " (threshold: " + threshold + ", repeat: " + ghostCount + ")");
                 }
                 scheduleDecay(peer);
+                // Promote a replacement peer to fast pool to maintain connectivity
+                _context.profileOrganizer().promoteReplacementPeer(peer);
             }
         }
     }
@@ -152,7 +154,7 @@ public class GhostPeerManager {
      * Healthy (>=0.60): 8 timeouts before ghosting
      * Moderate (>=0.50): 6
      * Stressed (>=0.40 / ATTACK_THRESHOLD): 4
-     * Under attack (<0.40): 3
+     * Severe stress (<0.40): 3
      *
      * @return threshold number of timeouts before exclusion
      */
