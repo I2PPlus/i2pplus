@@ -3191,7 +3191,10 @@
 
   <target name="pmd" depends="pmd-java,pmd-js"/>
 
-  <target name="pmd-java" depends="build,pmd-setup">
+  <target name="pmd-java" depends="pmd-setup">
+    <exec executable="ant" dir="${basedir}" output="/dev/null" error="/dev/null">
+      <arg value="build"/>
+    </exec>
     <echo message="Starting PMD Java analysis..."/>
     <mkdir dir="dist"/>
     <exec executable="${pmd.java}" failonerror="false" outputproperty="pmd.result">
@@ -3225,7 +3228,10 @@
     <echo message="PMD Java report written to dist/pmd-java.html"/>
   </target>
 
-  <target name="pmd-js" depends="build,pmd-setup">
+  <target name="pmd-js" depends="pmd-setup">
+    <exec executable="ant" dir="${basedir}" output="/dev/null" error="/dev/null">
+      <arg value="build"/>
+    </exec>
     <echo message="Starting PMD JavaScript analysis..."/>
     <mkdir dir="dist"/>
     <exec executable="${pmd.java}" failonerror="false" outputproperty="pmd.result">
@@ -3290,7 +3296,6 @@
         <equals arg1="${pmd.java}" arg2="" trim="true"/>
       </condition>
     </fail>
-    <echo message="Using JVM: ${pmd.java}"/>
   </target>
 
   <target name="download-pmd" unless="pmd.present">
