@@ -27,7 +27,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
     private static final long WARNING_THROTTLE_MS = 60_000;
     private static final AtomicLong _lastFallbackWarn = new AtomicLong(0);
 
-    private static final double SEVERE_ATTACK_THRESHOLD = 0.30;
+    private static final double SEVERE_STRESS_THRESHOLD = 0.30;
 
     private static String formatExcludedPeers(Set<Hash> peers) {
         if (peers == null || peers.isEmpty()) {return "[no exclusions]";}
@@ -121,7 +121,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                 }
                 if (matches.isEmpty()) {
                     // No connected peers found, fall back to all fast peers
-                    // Throttle warnings to reduce log spam during attacks
+                    // Throttle warnings to reduce log spam during network stress
                     // Suppress warnings during startup
                     long now = ctx.clock().now();
                     long uptime = ctx.router() != null ? ctx.router().getUptime() : 0;
@@ -322,32 +322,47 @@ class ClientPeerSelector extends TunnelPeerSelector {
                         }
                         // Continue with whatever peers we have
                     } else {
-                        // Progressive fallback under attack conditions based on build success rate
-                        boolean isUnderAttack = buildSuccess < ATTACK_THRESHOLD;
+                        // Progressive fallback under network stress based on build success rate
+                        boolean isUnderStress = buildSuccess < ATTACK_THRESHOLD;
 
-                        if (isUnderAttack && rv.size() > 0) {
-                            // Attack detected: try fallback with relaxed restrictions
+                        if (isUnderStress && rv.size() > 0) {
+                            // Network stress detected: try fallback with relaxed restrictions
                             if (log.shouldInfo()) {
-                                log.info("Attack detected (" + (int)(buildSuccess * 100) + "% success) -> Trying relaxed fallback peer selection...");
+                                log.info("Network stress (" + (int)(buildSuccess * 100) + "% success) -> Trying relaxed fallback peer selection...");
                             }
 
-                            // Fall back to any peer in notFailing pool with minimal exclusions
+                            // First try active (connected) peers
                             ArraySet<Hash> fallback = new ArraySet<Hash>(min);
-                            ctx.profileOrganizer().selectNotFailingPeers(min, exclude, fallback, false, 0, null);
+                            ctx.profileOrganizer().selectActiveNotFailingPeers(min, exclude, fallback, 0, null);
                             fallback.remove(ctx.routerHash());
 
                             if (!fallback.isEmpty()) {
                                 rv.clear();
                                 rv.addAll(fallback);
                                 if (log.shouldDebug()) {
-                                    log.debug("Fallback successful: found " + rv.size() + " peers for tunnel");
+                                    log.debug("Active fallback successful: found " + rv.size() + " connected peers for tunnel");
+                                }
+                            }
+
+                            // If still not enough, try all not-failing peers (may not be connected)
+                            if (rv.size() < min) {
+                                ArraySet<Hash> nfFallback = new ArraySet<Hash>(min);
+                                ctx.profileOrganizer().selectNotFailingPeers(min, exclude, nfFallback, false, 0, null);
+                                nfFallback.remove(ctx.routerHash());
+
+                                if (!nfFallback.isEmpty()) {
+                                    rv.clear();
+                                    rv.addAll(nfFallback);
+                                    if (log.shouldDebug()) {
+                                        log.debug("Not-failing fallback successful: found " + rv.size() + " peers for tunnel");
+                                    }
                                 }
                             }
 
                             // If still not enough, try with even more relaxed criteria (allow failing peers)
-                            if (rv.size() < min && buildSuccess < SEVERE_ATTACK_THRESHOLD && rv.isEmpty()) {
+                            if (rv.size() < min && buildSuccess < SEVERE_STRESS_THRESHOLD && rv.isEmpty()) {
                                 if (log.shouldWarn()) {
-                                    log.warn("Severe attack (" + (int)(buildSuccess * 100) + "% success) -> Trying any peer fallback...");
+                                    log.warn("Severe network stress (" + (int)(buildSuccess * 100) + "% success) -> Trying any peer fallback...");
                                 }
                                 ArraySet<Hash> relaxedFallback = new ArraySet<Hash>(min);
                                 ctx.profileOrganizer().selectAllNotFailingPeers(min, exclude, relaxedFallback, false);
@@ -365,10 +380,10 @@ class ClientPeerSelector extends TunnelPeerSelector {
 
                         // Final check - if still not enough peers and we have some, allow shorter tunnel
                         if (rv.size() < min) {
-                            if (isUnderAttack && rv.size() > 0) {
-                                // Under attack but have some peers - allow shorter tunnel instead of null
+                            if (isUnderStress && rv.size() > 0) {
+                                // Under stress but have some peers - allow shorter tunnel instead of null
                                 if (log.shouldWarn()) {
-                                    log.warn("Under attack: allowing shorter tunnel (" + rv.size() + " hops) instead of " + min + " minimum");
+                                    log.warn("Network stress: allowing shorter tunnel (" + rv.size() + " hops) instead of " + min + " minimum");
                                 }
                                 // Continue with shorter tunnel
                             } else {

@@ -120,8 +120,11 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
                 ctx.profileOrganizer().selectHighCapacityPeers(1, closestExclude, closest, ipRestriction, ipSet);
             } else {
                 if (log.shouldInfo())
-                    log.info("EPS SNFP closest " + (isInbound ? "IB " : "OB ") + closestExclude);
-                ctx.profileOrganizer().selectNotFailingPeers(1, closestExclude, closest, false, ipRestriction, ipSet);
+                    log.info("EPS SANFP closest " + (isInbound ? "IB " : "OB ") + closestExclude);
+                ctx.profileOrganizer().selectActiveNotFailingPeers(1, closestExclude, closest, ipRestriction, ipSet);
+                if (closest.isEmpty()) {
+                    ctx.profileOrganizer().selectNotFailingPeers(1, closestExclude, closest, false, ipRestriction, ipSet);
+                }
             }
             if (!closest.isEmpty()) {
                 closestHop = closest.get(0);
