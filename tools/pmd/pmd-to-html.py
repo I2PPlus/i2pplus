@@ -121,7 +121,7 @@ def main():
     version = root.attrib.get("version", "?")
     raw_ts = root.attrib.get("timestamp", "?")
     try:
-        timestamp = datetime.fromisoformat(raw_ts).strftime("%B %-d %Y")
+        timestamp = datetime.fromisoformat(raw_ts).astimezone(datetime.timezone.utc).strftime("%B %-d %Y, %H:%M UTC")
     except ValueError:
         timestamp = raw_ts
 

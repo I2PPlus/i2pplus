@@ -125,11 +125,15 @@ code {
   line-height: 1.4;
   text-transform: capitalize;
   border: 1px solid #2a2a30;
-  border-radius: 3px;
+  border-radius: 2px;
   background: #1a1a20;
   transition: background .15s;
   font-size: 105%;
   pointer-events: auto;
+  box-shadow: 0 0 0 1px #0008, 0 0 0 1px #f004 inset;
+  min-width: 32px;
+  text-align: center;
+  text-shadow: 1px 1px 1px #000;
 }
 
 #navbar span:hover {
@@ -457,6 +461,14 @@ details[open] summary .tabletitle::before {
 
 details[open] summary {
   margin-bottom: 0
+}
+
+details[open] h3 {
+  color: #eee;
+}
+
+details[open] h3::before {
+  background: #eee;
 }
 
 /* ---- Responsive ---- */

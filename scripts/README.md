@@ -86,15 +86,3 @@ Utility scripts for I2P+ development and administration.
 ## JavaScript
 
 - **`javadoc-jav8-fix.js`** — Fix Javadoc rendering for Java 8 compatibility. Internal; automatically included when Javadoc is compiled.
-
-## Tests
-
-- **`ensure-testdeps.sh`** — Download test dependencies (JUnit, Hamcrest, Mockito, Scala) from Maven Central to `tools/test/`. Called automatically by `run-tests.sh` when deps are missing.
-  `ensure-testdeps.sh [--force] [--check] [--quiet]`
-
-- **`run-tests.sh`** — Wrapper for `ant test`. Builds dependencies in the correct order, ensures test deps are present, then runs JUnit and ScalaTest. Called by `ant test` internally.
-  `run-tests.sh [core|ministreaming|streaming]`
-
-  `ant test` invokes this script automatically.
-
-Certificate, source, and performance validation scripts. See [tests/README.md](tests/README.md).

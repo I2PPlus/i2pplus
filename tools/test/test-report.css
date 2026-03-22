@@ -1,0 +1,140 @@
+:root {
+  --pass: #2ecc71;
+  --fail: #e74c3c;
+  --skip: #999;
+  --bg: #131316;
+  --bg2: #1a1a20;
+  --border: #2a2a30;
+  --text: #c8c8d0;
+  --dim: #888
+}
+
+* {
+  box-sizing: border-box
+}
+
+body {
+  margin: 30px auto;
+  padding: 0 24px 20px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 10pt;
+  font-weight: 600;
+  line-height: 1.5;
+  border: 2px solid var(--border);
+  max-width: 1200px
+}
+
+h1 {
+  font-size: 160%;
+  margin: 20px 0 4px;
+  color: #eee
+}
+
+.meta {
+  color: var(--dim);
+  font-size: 90%;
+  margin-bottom: 16px
+}
+
+.summary {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap
+}
+
+.card {
+  padding: 10px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  min-width: 100px
+}
+
+.card .num {
+  font-size: 180%;
+  font-weight: 700
+}
+
+.card .label {
+  font-size: 80%;
+  color: var(--dim);
+  text-transform: uppercase;
+  letter-spacing: .5px
+}
+
+.card.pass .num {
+  color: var(--pass)
+}
+
+.card.fail .num {
+  color: var(--fail)
+}
+
+.card.total .num {
+  color: #eee
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px
+}
+
+th {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: 4px 10px;
+  text-align: left;
+  font-size: 7.5pt;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  color: #aaa;
+  font-weight: 700
+}
+
+td {
+  padding: 4px 10px;
+  border-bottom: 1px solid #1a1a20
+}
+
+tr:hover {
+  background: #222230
+}
+
+h2 {
+  font-size: 120%;
+  margin: 24px 0 8px;
+  color: #ddd;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 4px
+}
+
+.fail-name {
+  color: var(--fail);
+  font-weight: 600
+}
+
+.trace {
+  font-family: Iosevka, "Fira Code", monospace;
+  font-size: 8.5pt;
+  color: #999;
+  background: #111118;
+  padding: 6px 8px;
+  border-radius: 3px;
+  white-space: pre-wrap;
+  word-break: break-all;
+  margin: 2px 0 8px;
+  border: 1px solid var(--border)
+}
+
+.time {
+  color: var(--dim);
+  font-variant-numeric: tabular-nums
+}
+
+.pass {
+  color: var(--pass)
+}
