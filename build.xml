@@ -818,8 +818,13 @@
     <exec executable="./list-jbigi.sh" dir="core/c/jbigi" failonerror="false"/>
   </target>
 
-  <target name="testJbigi" depends="buildCore, jbigi" description="Benchmark jbigi: modPow, modPowCT, modInverse (native vs pure Java)">
-    <echo message="Running jbigi benchmarks..."/>
+  <target name="testJbigi" description="Benchmark jbigi: modPow/modPowCT/modInverse (native vs pure Java)">
+    <exec executable="ant" dir="${basedir}" output="/dev/null" error="/dev/null">
+      <arg value="buildCore"/>
+    </exec>
+    <exec executable="ant" dir="${basedir}" output="/dev/null" error="/dev/null">
+      <arg value="jbigi"/>
+    </exec>
     <java classname="net.i2p.util.NativeBigInteger" fork="true" maxmemory="256m" failonerror="true">
       <classpath>
         <pathelement location="core/java/build/i2p.jar"/>
@@ -1583,6 +1588,12 @@
         <fileset dir="./dist" excludes="README.md"/>
       </delete>
       <delete dir="installer/bin" quiet="true"/>
+      <!-- Clean build artifacts from root and core -->
+      <delete file="libjbigi.so" quiet="true"/>
+      <delete file="libjcpuid.so" quiet="true"/>
+      <delete file="core/java/libjbigi.so" quiet="true"/>
+      <delete file="core/java/libjcpuid.so" quiet="true"/>
+      <delete file="core/java/logger.config" quiet="true"/>
       <!-- Ensure dist directory exists after cleanup -->
       <mkdir dir="./dist"/>
       <!-- Use exec to run ant subprojects quietly -->
