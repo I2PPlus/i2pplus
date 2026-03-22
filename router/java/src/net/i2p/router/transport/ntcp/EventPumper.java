@@ -382,7 +382,7 @@ class EventPumper implements Runnable {
                     if (!(att instanceof NTCPConnection)) continue;
                     NTCPConnection con = (NTCPConnection) att;
 
-                    if (!key.isValid() && con.getTimeSinceCreated(now) > 2 * NTCPTransport.ESTABLISH_TIMEOUT) {
+                    if (!key.isValid() && con.getTimeSinceCreated(now) > 2 * _transport.getEstablishTimeout()) {
                         con.close();
                         key.cancel();
                         failsafeInvalid++;

@@ -40,6 +40,7 @@ import net.i2p.router.BanLogger;
 import net.i2p.router.CommSystemFacade.Status;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.RouterContext;
+import net.i2p.router.peermanager.ProfileOrganizer;
 import net.i2p.router.transport.Transport;
 import net.i2p.router.transport.TransportBid;
 import net.i2p.router.transport.TransportImpl;
@@ -1238,6 +1239,20 @@ public class NTCPTransport extends TransportImpl {
      * the con must be established to avoid premature close()ing
      */
     public static final int ESTABLISH_TIMEOUT = 10*1000;
+    /** Extended timeout during network stress (build success < 40%) */
+    private static final int ESTABLISH_TIMEOUT_STRESSED = 15*1000;
+
+    /**
+     * Get the current establish timeout, extended during network stress
+     * to allow more time for handshakes to complete.
+     */
+    int getEstablishTimeout() {
+        double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
+        if (buildSuccess < ProfileOrganizer.ATTACK_THRESHOLD && !SystemVersion.isSlow()) {
+            return ESTABLISH_TIMEOUT_STRESSED;
+        }
+        return ESTABLISH_TIMEOUT;
+    }
 
     /** add us to the establishment timeout process */
     void establishing(NTCPConnection con) {_establishing.add(con);}
@@ -1249,11 +1264,12 @@ public class NTCPTransport extends TransportImpl {
     void expireTimedOut() {
         int expired = 0;
         final long now = _context.clock().now();
+        final long timeout = getEstablishTimeout();
 
             for (Iterator<NTCPConnection> iter = _establishing.iterator(); iter.hasNext(); ) {
                 NTCPConnection con = iter.next();
                 if (con.isClosed() || con.isEstablished()) {iter.remove();}
-                else if (con.getTimeSinceCreated(now) > ESTABLISH_TIMEOUT) {
+                else if (con.getTimeSinceCreated(now) > timeout) {
                     iter.remove();
                     con.close();
                     expired++;
