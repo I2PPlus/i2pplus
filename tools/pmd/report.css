@@ -54,13 +54,14 @@ h2 {
 
 h3 {
   font-size: 100%;
-  margin: 8px 0 0;
+  margin: 0;
   padding: 6px 12px;
   color: #a0a0b0;
-  background: #1a1a20;
+  background: #333368;
   border: 1px solid #2a2a30;
   border-left: 3px solid #444;
-  font-weight: 700
+  font-weight: 700;
+  box-shadow: 0 0 0 1px #fff2 inset;
 }
 
 h3::before {
@@ -442,15 +443,16 @@ details summary .tabletitle::before {
   display: inline-block;
   margin: -2px 10px 0 0;
   background: var(--dropdown) no-repeat left center / contain;
+  transform: rotate(-90deg);
 }
 
 details[open] summary .tabletitle {
-  border-bottom: 1px solid #2a2a30;
-  background: #1e1e28;
+  background: #2222da;
+  box-shadow: 0 0 0 1px #fff3 inset;
 }
 
 details[open] summary .tabletitle::before {
-  transform: rotate(-90deg);
+  transform: none;
 }
 
 details[open] summary {
