@@ -1,0 +1,257 @@
+#!/bin/sh
+
+is_cygwin() {
+    case "$(uname)" in
+        CYGWIN*|MINGW*)
+            cygwin=true
+            ;;
+        *)
+            # OS specific support.  $var _must_ be set to either true or false.
+            if [ -z "$cygwin" ] ; then
+              cygwin=false
+            fi
+            ;;
+    esac
+}
+
+cygwin_paths() {
+    # For Cygwin, switch paths to Windows format before running java
+    if [ "$cygwin" = true ] ; then
+        [ -n "$JAVAFX_HOME" ] && JAVAFX_HOME=$(cygpath --windows "$JAVAFX_HOME")
+        [ -n "$CLASSPATH" ] && CLASSPATH=$(cygpath --path --windows "$CLASSPATH")
+        [ -n "$PMD_OPENJFX_MODULE_PATH" ] && PMD_OPENJFX_MODULE_PATH=$(cygpath --path --windows "$PMD_OPENJFX_MODULE_PATH")
+    fi
+}
+
+convert_cygwin_vars() {
+    # If cygwin, convert to Unix form before manipulating
+    if [ "$cygwin" = true ] ; then
+        [ -n "$JAVAFX_HOME" ] && JAVAFX_HOME=$(cygpath --unix "$JAVAFX_HOME")
+        [ -n "$CLASSPATH" ] && CLASSPATH=$(cygpath --path --unix "$CLASSPATH")
+    fi
+}
+
+set_pmd_home_dir() {
+  script_real_loc="$0"
+
+  # see #4723 - allow calling as "bash pmd", when pmd is on the PATH
+  if [ ! -e "$script_real_loc" ]; then
+    script_real_loc=$(which "$script_real_loc")
+  fi
+
+  if [ ! -e "$script_real_loc" ]; then
+    echo "Couldn't determine PMD_HOME path. Script location [$script_real_loc] does not exist"
+    exit 1
+  fi
+
+  # Allow for symlinks to this script
+  if [ -L "$script_real_loc" ]; then
+    script_real_loc=$(readlink "$script_real_loc")
+  fi
+
+  # use the directory of the script (which is ..../bin)
+  script_real_loc=$(dirname "$script_real_loc")
+  # use the parent directory
+  PMD_HOME="$script_real_loc/.."
+  # make it normalized and fully qualified
+  PMD_HOME=$(cd "$PMD_HOME" && pwd)
+}
+
+set_lib_dir() {
+  if [ -z "$LIB_DIR" ]; then
+    LIB_DIR="$PMD_HOME/lib"
+  fi
+}
+
+check_lib_dir() {
+  if [ ! -e "$LIB_DIR" ]; then
+    script_exit "The jar directory [$LIB_DIR] does not exist"
+  fi
+}
+
+set_conf_dir() {
+  if [ -z "$CONF_DIR" ]; then
+    CONF_DIR="$PMD_HOME/conf"
+  fi
+}
+
+check_conf_dir() {
+  if [ ! -e "$CONF_DIR" ]; then
+    script_exit "The configuration directory [$CONF_DIR] does not exist"
+  fi
+}
+
+script_exit() {
+    echo "$1" >&2
+    exit 2
+}
+
+check_java() {
+  if ! java -version >/dev/null 2>&1; then
+    script_exit "No java executable found in PATH"
+  fi
+}
+
+determine_java_version() {
+    all_props=$(java -XshowSettings:properties 2>&1)
+    java_ver_normalized=$(echo "$all_props" | grep "java.version" | sed -n -e '{
+      s/^.*java\.version *= *//
+      # replace java versions java 1.7 and java 1.8 with 7 and 8
+      s/^1\.\([78]\)/\1/
+      # print what is left
+      p
+    }')
+    # 1. component: java_version_feature is e.g. "8" for java 1.8, "9" for java 9, "10" for java 10, ...
+    java_version_feature=$(echo "$java_ver_normalized" | sed -n -e 's/^\([0-9]\{1,\}\).*$/\1/p')
+    # 3. component: update release counter is e.g. "17" for java 11.0.17
+    java_version_update=$(echo "$java_ver_normalized" | sed -n -e 's/^\([0-9]\{1,\}\)\.\([0-9]\{1,\}\).\([0-9]\{1,\}\).*$/\3/p')
+    # if there was no 3rd component (eg. -ea or ga version), use "0"
+    java_version_update=${java_version_update:="0"}
+
+    java_home_property=$(echo "$all_props" | grep "java.home" | sed -n -e 's/^.*java\.home *= *\(.*\)$/\1/; p')
+    java_has_javafx=0
+    if [ -e "$java_home_property/lib/javafx.properties" ]; then
+      java_has_javafx=1
+    elif [ -e "$java_home_property/jre/lib/javafx.properties" ]; then
+      java_has_javafx=1
+    fi
+}
+
+determine_additional_java_opts() {
+  PMD_ADDITIONAL_JAVA_OPTS=""
+  if [ "$APPNAME" = "designer" ] && [ "$java_version_feature" -ge 9 ]
+  then
+    # Since Java 9, Java uses the module system. If JavaFX is bundled, this is also
+    # included as modules. PMD however is run on the classpath and will run as the
+    # "unnamed module". To allow reflection to some JavaFX classes, we need to allow
+    # this access explicitly by opening specific javafx packages.
+    #
+    # This applies to Java 9/10 builds from Oracle and to Java 9+ builds from
+    # Azul (Zulu) or Bellsoft (Liberica).
+    #
+    # It does not apply, if we run Java 8+ without bundled JavaFX and we
+    # put JavaFX on the classpath. Then we don't use the module system at all
+    # and all classes on the classpath are allowed to access all other classes
+    # on the classpath by reflection without explicitly opening packages.
+    #
+    # Reflective access used by PMD Designer
+    # in net.sourceforge.pmd.util.fxdesigner.util.controls.TreeViewWrapper.getVirtualFlow
+    PMD_ADDITIONAL_JAVA_OPTS="$PMD_ADDITIONAL_JAVA_OPTS --add-opens javafx.controls/javafx.scene.control.skin=ALL-UNNAMED"
+    # in net.sourceforge.pmd.util.fxdesigner.util.DesignerUtil.customBuilderFactory
+    PMD_ADDITIONAL_JAVA_OPTS="$PMD_ADDITIONAL_JAVA_OPTS --add-opens javafx.fxml/com.sun.javafx.fxml.builder=ALL-UNNAMED"
+    #
+    # Reflective access used by RichtextFX
+    PMD_ADDITIONAL_JAVA_OPTS="$PMD_ADDITIONAL_JAVA_OPTS --add-opens javafx.graphics/javafx.scene.text=ALL-UNNAMED"
+    PMD_ADDITIONAL_JAVA_OPTS="$PMD_ADDITIONAL_JAVA_OPTS --add-opens javafx.graphics/com.sun.javafx.scene.text=ALL-UNNAMED"
+    PMD_ADDITIONAL_JAVA_OPTS="$PMD_ADDITIONAL_JAVA_OPTS --add-opens javafx.graphics/com.sun.javafx.text=ALL-UNNAMED"
+    PMD_ADDITIONAL_JAVA_OPTS="$PMD_ADDITIONAL_JAVA_OPTS --add-opens javafx.graphics/com.sun.javafx.geom=ALL-UNNAMED"
+    #
+    # Reflective access used by controlsfx
+    PMD_ADDITIONAL_JAVA_OPTS="$PMD_ADDITIONAL_JAVA_OPTS --add-opens javafx.graphics/com.sun.javafx.scene=ALL-UNNAMED"
+    PMD_ADDITIONAL_JAVA_OPTS="$PMD_ADDITIONAL_JAVA_OPTS --add-opens javafx.base/com.sun.javafx.runtime=ALL-UNNAMED"
+    PMD_ADDITIONAL_JAVA_OPTS="$PMD_ADDITIONAL_JAVA_OPTS --add-opens javafx.base/com.sun.javafx.event=ALL-UNNAMED"
+    PMD_ADDITIONAL_JAVA_OPTS="$PMD_ADDITIONAL_JAVA_OPTS --add-opens javafx.graphics/com.sun.javafx.scene.traversal=ALL-UNNAMED"
+  fi
+
+  if [ "$java_version_feature" -ge 9 ] && [ "$java_version_feature" -le 16 ]
+  then
+    # Warn of illegal accesses in general - only possible for Java 9 until Java 16 (inclusive).
+    # With Java 17+ this option has no effect anymore (https://openjdk.org/jeps/403) and is deprecated.
+    PMD_ADDITIONAL_JAVA_OPTS="$PMD_ADDITIONAL_JAVA_OPTS --illegal-access=warn"
+  fi
+  if [ "$APPNAME" = "designer" ] && [ "$java_version_feature" -ge 24 ]
+  then
+    # Allow native access to javafx.graphics
+    PMD_ADDITIONAL_JAVA_OPTS="$PMD_ADDITIONAL_JAVA_OPTS --enable-native-access=javafx.graphics"
+    # Don't warn about sun misc unsafe (used by javafx.graphics). Needed until JavaFX 25. See https://bugs.openjdk.org/browse/JDK-8359264.
+    PMD_ADDITIONAL_JAVA_OPTS="$PMD_ADDITIONAL_JAVA_OPTS --sun-misc-unsafe-memory-access=allow"
+  fi
+}
+
+append_classpath() {
+    if [ -n "$CLASSPATH" ]; then
+        CLASSPATH="$CLASSPATH:$1"
+    else
+        CLASSPATH="$1"
+    fi
+}
+
+add_pmd_classpath() {
+  append_classpath "$CONF_DIR:$LIB_DIR/*"
+}
+
+add_openjfx_classpath() {
+  PMD_OPENJFX_MODULE_PATH=""
+  if [ "$APPNAME" = "designer" ]
+  then
+    if [ $java_has_javafx = 1 ]
+    then
+      # No additional options needed as JavaFX is bundled.
+      # We are running either an old Oracle Java < 8u451 or an OpenJDK 8 Build from Azul/Bellsoft which
+      # have JavaFX bundled as modules.
+      PMD_OPENJFX_MODULE_PATH=""
+    else
+
+      if [ "$java_version_feature" = "8" ] && [ "$java_version_update" -ge 451 ]
+      then
+        script_exit "
+          JavaFX has been removed from Oracle Java 8 since Java 8u451.
+          See https://www.oracle.com/javase/javafx.
+          Use Java 11 or later with OpenJFX separately from https://openjfx.io/.
+          Alternatively use an OpenJDK build from Azul with JavaFX bundled (JDK FX)
+          or from Bellsoft with JavaFX bundled (Full JDK).
+        "
+      fi
+
+      if [ "$java_version_feature" -lt 10 ]
+      then
+        script_exit "
+          For OpenJFX at least Java 10 is required. Newer OpenJFX version
+          might require newer Java versions.
+        "
+      fi
+
+      # openjfx is required for any openjdk builds which don't include JavaFX
+      if [ -z "$JAVAFX_HOME" ]
+      then
+        script_exit "
+          The environment variable JAVAFX_HOME is missing.
+          See https://docs.pmd-code.org/latest/pmd_userdocs_extending_designer_reference.html#installing-running-updating
+          for instructions.
+        "
+      fi
+
+      PMD_OPENJFX_MODULE_PATH="$JAVAFX_HOME/lib"
+    fi
+  fi
+}
+
+APPNAME="$1"
+
+is_cygwin
+
+check_java
+
+set_pmd_home_dir
+set_lib_dir
+check_lib_dir
+set_conf_dir
+check_conf_dir
+
+convert_cygwin_vars
+
+add_pmd_classpath
+determine_java_version
+add_openjfx_classpath
+determine_additional_java_opts
+
+cygwin_paths
+
+# Note: we want word-splitting happening on PMD_JAVA_OPTS, PMD_ADDITIONAL_JAVA_OPTS
+# and PMD_OPENJFX_MODULE_PATH. That's why we explicitly don't use quotes.
+# shellcheck disable=SC2046,SC2086
+exec java \
+  $PMD_JAVA_OPTS $PMD_ADDITIONAL_JAVA_OPTS \
+  ${PMD_OPENJFX_MODULE_PATH:+--module-path "$PMD_OPENJFX_MODULE_PATH" --add-modules javafx.controls,javafx.fxml} \
+  -cp "$CLASSPATH" \
+  net.sourceforge.pmd.cli.PmdCli "$@"

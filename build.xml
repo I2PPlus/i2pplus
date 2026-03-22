@@ -2683,6 +2683,11 @@
     <ant target="installerexe"/>
   </target>
 
+  <target name="installer-bzip2" depends="timestamp.started, preppkg, buildProperties, izpack-patches, buildUtilityJar, timestamp.stopped">
+    <izpack input="${basedir}/installer/lib/izpack/install.xml" output="${basedir}/dist/install.jar" installerType="standard" basedir="${basedir}" compression="bzip2"/>
+    <ant target="installerexe"/>
+  </target>
+
   <!-- IzPack 5 -->
   <target name="ensureIzpack5">
     <!-- Set if unset -->
@@ -3109,7 +3114,7 @@
     <!-- Download latest SpotBugs if not present -->
     <echo message="Note: SpotBugs requires Java11 or later."/>
     <property name="spotbugs.version" value="4.9.8"/>
-<property name="spotbugs.dir" location="spotbugs/spotbugs-${spotbugs.version}"/>
+<property name="spotbugs.dir" location="tools/spotbugs/spotbugs-${spotbugs.version}"/>
 <property name="spotbugs.jar" location="${spotbugs.dir}/lib/spotbugs-ant.jar"/>
 
     <available file="${spotbugs.jar}" property="spotbugs.present"/>
@@ -3147,12 +3152,121 @@
 
   <target name="download-spotbugs" unless="spotbugs.present">
     <echo message="Downloading SpotBugs ${spotbugs.version}..."/>
-    <mkdir dir="spotbugs"/>
+    <mkdir dir="tools/spotbugs"/>
     <get src="https://github.com/spotbugs/spotbugs/releases/download/${spotbugs.version}/spotbugs-${spotbugs.version}.tgz"
-         dest="spotbugs/spotbugs-${spotbugs.version}.tgz"
+         dest="tools/spotbugs/spotbugs-${spotbugs.version}.tgz"
          usetimestamp="true"/>
-    <untar src="spotbugs/spotbugs-${spotbugs.version}.tgz" dest="spotbugs" compression="gzip"/>
+    <untar src="tools/spotbugs/spotbugs-${spotbugs.version}.tgz" dest="tools/spotbugs" compression="gzip"/>
     <echo message="SpotBugs ${spotbugs.version} downloaded and extracted to ${spotbugs.dir}"/>
+  </target>
+
+  <target name="pmd" depends="pmd-java,pmd-js"/>
+
+  <target name="pmd-java" depends="build,pmd-setup">
+    <echo message="Starting PMD Java analysis..."/>
+    <mkdir dir="dist"/>
+    <exec executable="${pmd.java}" failonerror="false" outputproperty="pmd.result">
+      <arg value="-Xmx4g"/>
+      <arg value="-Xss1g"/>
+      <arg value="-cp"/>
+      <arg value="${pmd.dir}/lib/*"/>
+      <arg value="net.sourceforge.pmd.cli.PmdCli"/>
+      <arg value="check"/>
+      <arg value="-d"/>
+      <arg value="core/java/src"/>
+      <arg value="-d"/>
+      <arg value="router/java/src"/>
+      <arg value="-d"/>
+      <arg value="apps"/>
+      <arg value="-R"/>
+      <arg value="tools/pmd/ruleset.xml"/>
+      <arg value="-f"/>
+      <arg value="xml"/>
+      <arg value="-r"/>
+      <arg value="dist/pmd-java.xml"/>
+      <arg value="--no-cache"/>
+    </exec>
+    <exec executable="python3" failonerror="true">
+      <arg value="tools/pmd/pmd-to-html.py"/>
+      <arg value="dist/pmd-java.xml"/>
+      <arg value="dist/pmd-java.html"/>
+      <arg value="Java"/>
+    </exec>
+    <delete file="dist/pmd-java.xml" quiet="true"/>
+    <echo message="PMD Java report written to dist/pmd-java.html"/>
+  </target>
+
+  <target name="pmd-js" depends="build,pmd-setup">
+    <echo message="Starting PMD JavaScript analysis..."/>
+    <mkdir dir="dist"/>
+    <exec executable="${pmd.java}" failonerror="false" outputproperty="pmd.result">
+      <arg value="-Xmx4g"/>
+      <arg value="-Xss1g"/>
+      <arg value="-cp"/>
+      <arg value="${pmd.dir}/lib/*"/>
+      <arg value="net.sourceforge.pmd.cli.PmdCli"/>
+      <arg value="check"/>
+      <arg value="-d"/>
+      <arg value="apps"/>
+      <arg value="-R"/>
+      <arg value="tools/pmd/ruleset-js.xml"/>
+      <arg value="-f"/>
+      <arg value="xml"/>
+      <arg value="-r"/>
+      <arg value="dist/pmd-js.xml"/>
+      <arg value="--no-cache"/>
+    </exec>
+    <exec executable="python3" failonerror="true">
+      <arg value="tools/pmd/pmd-to-html.py"/>
+      <arg value="dist/pmd-js.xml"/>
+      <arg value="dist/pmd-js.html"/>
+      <arg value="JavaScript"/>
+    </exec>
+    <delete file="dist/pmd-js.xml" quiet="true"/>
+    <echo message="PMD JavaScript report written to dist/pmd-js.html"/>
+  </target>
+
+  <target name="pmd-setup">
+    <property name="pmd.dir" location="tools/pmd"/>
+    <property name="pmd.bin" location="${pmd.dir}/bin/pmd"/>
+    <available file="${pmd.bin}" property="pmd.present"/>
+    <antcall target="download-pmd"/>
+    <!-- PMD 7 requires Java 11+, detect a suitable JVM -->
+    <if>
+      <not><isset property="pmd.java"/></not>
+      <then>
+        <condition property="pmd.java" value="/usr/lib/jvm/java-25-openjdk-amd64/bin/java">
+          <available file="/usr/lib/jvm/java-25-openjdk-amd64/bin/java"/>
+        </condition>
+      </then>
+    </if>
+    <if>
+      <not><isset property="pmd.java"/></not>
+      <then>
+        <condition property="pmd.java" value="/usr/lib/jvm/java-24-openjdk-amd64/bin/java">
+          <available file="/usr/lib/jvm/java-24-openjdk-amd64/bin/java"/>
+        </condition>
+      </then>
+    </if>
+    <if>
+      <not><isset property="pmd.java"/></not>
+      <then>
+        <condition property="pmd.java" value="/usr/lib/jvm/java-21-openjdk-amd64/bin/java">
+          <available file="/usr/lib/jvm/java-21-openjdk-amd64/bin/java"/>
+        </condition>
+      </then>
+    </if>
+    <fail message="PMD requires Java 11+. Set pmd.java=/path/to/java11+ in override.properties or ensure Java 11+ is installed.">
+      <condition>
+        <equals arg1="${pmd.java}" arg2="" trim="true"/>
+      </condition>
+    </fail>
+    <echo message="Using JVM: ${pmd.java}"/>
+  </target>
+
+  <target name="download-pmd" unless="pmd.present">
+    <echo message="PMD not found, downloading..."/>
+    <exec executable="tools/pmd/download-pmd.sh" failonerror="true"/>
   </target>
 
   <!-- this is the same dependency as pkg, but with updater200 in the middle, since preppkg puts too much stuff in pkg-temp -->

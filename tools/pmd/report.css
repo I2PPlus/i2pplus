@@ -1,0 +1,356 @@
+/* I2P+ PMD Report - Dark Theme */
+/* Edit this file to customize the report appearance */
+
+* {
+  box-sizing: border-box
+}
+
+html {
+  background: #0a0a0a
+}
+
+body {
+  margin: 30px auto;
+  padding: 0 24px 40px;
+  background: #131316;
+  color: #c8c8d0;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-size: 10pt;
+  line-height: 1.5;
+  border: 2px solid #2a2a30;
+  max-width: 1400px;
+}
+
+a {
+  color: #e88830;
+  text-decoration: none;
+  transition: color .15s
+}
+
+a:hover {
+  color: #f5a855
+}
+
+a:link {
+  font-weight: 600
+}
+
+h1 {
+  font-size: 180%;
+  margin: 20px 0 4px;
+  color: #eee;
+  letter-spacing: -.5px
+}
+
+h2 {
+  font-size: 130%;
+  margin: 0
+}
+
+h3 {
+  font-size: 100%;
+  margin: 8px 0 4px;
+  padding: 6px 12px;
+  color: #a0a0b0;
+  background: #1a1a20;
+  border-left: 3px solid #444;
+  font-weight: 600
+}
+
+hr {
+  margin: 8px 0;
+  height: 1px;
+  border: none;
+  background: #2a2a30
+}
+
+pre {
+  padding: 8px;
+  border-radius: 4px;
+  background: #1a1a20
+}
+
+pre,
+code {
+  color: #6d9
+}
+
+/* Meta line */
+.meta {
+  margin: 4px 0 12px;
+  color: #888;
+  font-size: 90%
+}
+
+/* ---- Sticky Navbar ---- */
+#navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  margin: 0 -25px;
+  padding: 5px 8px;
+  text-align: center;
+  background: linear-gradient(180deg, #1e1e24, #131316);
+  border-bottom: 1px solid #2a2a30;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .4);
+}
+
+#navbar a {
+  font-weight: 700;
+  color: #ccc;
+  font-size: 90%
+}
+
+#navbar span {
+  margin: 2px 2px 4px;
+  padding: 3px 8px;
+  display: inline-block;
+  line-height: 1.4;
+  text-transform: capitalize;
+  border: 1px solid #2a2a30;
+  border-radius: 3px;
+  background: #1a1a20;
+  transition: background .15s;
+  font-size: 105%;
+}
+
+#navbar span:hover {
+  background: #252530
+}
+
+/* ---- Summary Tables ---- */
+table {
+  width: 100%;
+  border: 1px solid #2a2a30;
+  border-collapse: collapse;
+  background: #131316;
+  margin-bottom: 4px;
+}
+
+td,
+th {
+  padding: 4px 12px;
+  text-align: left;
+  font-weight: 600
+}
+
+th {
+  background: #1a1a20;
+  border-bottom: 1px solid #2a2a30;
+  font-weight: 700;
+  color: #aaa;
+  text-transform: uppercase;
+  font-size: 7.5pt;
+  letter-spacing: .5px;
+}
+
+.tablerow0 {
+  background: #161620
+}
+
+.tablerow1 {
+  background: #1a1a24
+}
+
+.tablerow0:hover,
+.tablerow1:hover {
+  background: #222230;
+  transition: background .1s
+}
+
+/* Summary count column */
+.summary-count {
+  text-align: right;
+  font-variant-numeric: tabular-nums
+}
+
+/* ---- Section Headers ---- */
+.tabletitle {
+  padding: 8px 12px;
+  margin: 24px 0 0;
+  display: block;
+  font-weight: 700;
+  border: 1px solid #2a2a30;
+  border-bottom: none;
+  background: #1a1a20;
+  color: #ddd;
+}
+
+.tabletitle a {
+  text-shadow: none;
+  color: #ddd
+}
+
+table+.tabletitle,
+.tabletitle+table {
+  margin-top: -1px
+}
+
+/* ---- Violation Table ---- */
+.warningtable {
+  border-top: none
+}
+
+.warningtable th {
+  font-size: 7pt;
+  padding: 3px 10px
+}
+
+.warningtable td {
+  padding: 3px 10px;
+  border-bottom: 1px solid #1a1a20
+}
+
+/* Line column */
+.warningtable th:first-child,
+.warningtable td:first-child {
+  width: 60px;
+  white-space: nowrap;
+  text-align: center;
+  border-right: 1px solid #2a2a30;
+  font-variant-numeric: tabular-nums;
+}
+
+.warningtable tr:last-child td {
+  border-bottom: none
+}
+
+tr[data-detail] {
+  cursor: pointer;
+  transition: background .1s
+}
+
+/* ---- Priority Colors ---- */
+.priority-cell {
+  text-align: center;
+  font-weight: 700;
+  font-size: 8.5pt;
+  border-radius: 2px
+}
+
+.p1 {
+  background: #a02020;
+  color: #fff
+}
+
+.p2 {
+  background: #905010;
+  color: #fff
+}
+
+.p3 {
+  background: #606020;
+  color: #ccc
+}
+
+.p4 {
+  background: #206030;
+  color: #ccc
+}
+
+.p5 {
+  background: #2040a0;
+  color: #ccc
+}
+
+/* ---- Detail Rows ---- */
+.detailrow0 {
+  background: #161620
+}
+
+.detailrow1 {
+  background: #1a1a24
+}
+
+.detail-content {
+  padding: 6px 12px 8px 70px;
+  color: #999;
+  font-size: 8.5pt;
+  line-height: 1.6;
+}
+
+.detail-content b {
+  color: #bbb;
+  font-weight: 600
+}
+
+.detail-content a {
+  color: #e88830;
+  font-weight: 400
+}
+
+/* ---- Collapsible Sections ---- */
+details {
+  margin: 0 0 2px
+}
+
+details summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+details summary::-webkit-details-marker {
+  display: none
+}
+
+details summary .tabletitle {
+  margin: 0;
+  border: 1px solid #2a2a30;
+  transition: background .15s;
+}
+
+details summary .tabletitle:hover {
+  background: #222230
+}
+
+details summary .tabletitle::before {
+  content: "\25B6 ";
+  color: #666;
+  transition: transform .15s;
+  display: inline-block;
+  margin: -2px 10px 0 0;
+}
+
+details[open] summary .tabletitle {
+  border-bottom: 1px solid #2a2a30;
+  background: #1e1e28;
+}
+
+details[open] summary .tabletitle::before {
+  content: "\25BC ";
+  color: #e88830;
+}
+
+details[open] summary {
+  margin-bottom: 0
+}
+
+/* ---- Responsive ---- */
+@media (max-width:900px) {
+  body {
+    font-size: 8.5pt;
+    padding: 0 12px 30px
+  }
+
+  #navbar {
+    margin: 0 -13px
+  }
+
+  h3 {
+    font-size: 90%
+  }
+}
+
+@media (max-width:600px) {
+  #navbar span {
+    padding: 2px 4px;
+    font-size: 80%
+  }
+
+  .warningtable td,
+  .warningtable th {
+    padding: 2px 6px
+  }
+}
