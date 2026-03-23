@@ -17,6 +17,7 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 import javax.imageio.stream.ImageOutputStream;
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
@@ -47,6 +48,7 @@ class GraphRenderer {
     private static final String DEFAULT_THEME = "dark";
     private static final Color WHITE = new Color(255, 255, 255);
     private static final Color TRANSPARENT = new Color(0, 0, 0, 0);
+    private static final Pattern CAMEL_CASE = Pattern.compile("(?<=[a-z])([A-Z])");
     private static final Color CANVAS_COLOR_DARK = new Color(0, 0, 0);
     private static final Color BACK_COLOR = new Color(255, 255, 255);
     private static final Color BACK_COLOR_DARK = new Color(0, 0, 0, 192);
@@ -352,7 +354,7 @@ class GraphRenderer {
                 if (IS_WIN && "zh".equals(Messages.getLanguage(_context))) {p = DataHelper.formatDuration(period);}
                 else {p = DataHelper.formatDuration2(period).replace("&nbsp;", " ");}
                 if (showEvents) {title = graphTitle + ' ' + _t("events in {0}", p);}
-                title = graphTitle.replaceAll("(?<=[a-z])([A-Z])", " $1");
+                title = CAMEL_CASE.matcher(graphTitle).replaceAll(" $1");
                 title = title.substring(0, 1).toUpperCase(Locale.ROOT) + title.substring(1);
                 title = title.replace("[Tunnel] [Tunnel]", "[Tunnel]")
                              .replace("Uild Success Avg", "Build Success Average")

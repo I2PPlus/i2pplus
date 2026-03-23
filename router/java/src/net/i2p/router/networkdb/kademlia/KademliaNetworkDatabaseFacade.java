@@ -22,6 +22,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import java.util.regex.Pattern;
 import net.i2p.crypto.SigAlgo;
 import net.i2p.crypto.SigType;
 import net.i2p.data.BlindData;
@@ -99,6 +100,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     public static final String minRouterVersion = "0.9.20";
     public static final String MIN_VERSION = "0.9.66";
     public static String CURRENT_VERSION = "0.9.67";
+    private static final Pattern COMMA_TRIM_SPLIT = Pattern.compile("\\s*,\\s*");
     private final Object kbInitLock = new Object();
     private final AtomicInteger knownLeaseSetsCount = new AtomicInteger(0);
 
@@ -2411,7 +2413,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private Set<String> getBlockedCountries() {
         String blockCountries = _context.getProperty(PROP_BLOCK_COUNTRIES, DEFAULT_BLOCK_COUNTRIES);
         if (blockCountries.isEmpty()) {return Collections.emptySet();}
-        return Arrays.stream(blockCountries.trim().toLowerCase(Locale.ROOT).split("\\s*,\\s*"))
+        return Arrays.stream(COMMA_TRIM_SPLIT.split(blockCountries.trim().toLowerCase(Locale.ROOT)))
                      .filter(s -> !s.isEmpty())
                      .collect(Collectors.toSet());
     }

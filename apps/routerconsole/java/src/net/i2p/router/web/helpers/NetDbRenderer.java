@@ -12,6 +12,7 @@ package net.i2p.router.web.helpers;
 import static net.i2p.router.sybil.Util.biLog2;
 
 import java.io.IOException;
+import java.util.regex.Pattern;
 import java.io.Serializable;
 import java.io.Writer;
 import java.math.BigInteger;
@@ -84,6 +85,7 @@ import net.i2p.util.VersionComparator;
 class NetDbRenderer {
     private final RouterContext _context;
     private static final ThreadLocal<DecimalFormat> TWO_DECIMALS = ThreadLocal.withInitial(() -> new DecimalFormat("#0.00"));
+    private static final Pattern COUNTRY_SPLIT = Pattern.compile("[, ]+");
     public NetDbRenderer (RouterContext ctx) {
         _context = ctx;
         _organizer = ctx.profileOrganizer();
@@ -222,7 +224,7 @@ class NetDbRenderer {
             routerStream = routerStream.filter(ri -> version.equals(ri.getVersion()));
         }
         if (country != null) {
-            Set<String> countryCodes = Arrays.stream(country.split("[, ]+")).map(String::trim).collect(Collectors.toSet());
+            Set<String> countryCodes = Arrays.stream(COUNTRY_SPLIT.split(country)).map(String::trim).collect(Collectors.toSet());
             routerStream = routerStream.filter(ri -> {
                 String routerCountry = _context.commSystem().getCountry(ri.getIdentity().getHash());
                 return routerCountry != null && countryCodes.contains(routerCountry.toLowerCase(Locale.US));
@@ -481,7 +483,7 @@ class NetDbRenderer {
      *  @since 0.9.64
      */
     private void filterCountry(Set<RouterInfo> routers, String country) {
-        String[] countryCodes = country.split("[, ]+");
+        String[] countryCodes = COUNTRY_SPLIT.split(country);
         boolean foundMatch;
         for (Iterator<RouterInfo> iter = routers.iterator(); iter.hasNext();) {
             RouterInfo ri = iter.next();

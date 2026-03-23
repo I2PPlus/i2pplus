@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.regex.Pattern;
 
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterAddress;
@@ -30,6 +31,7 @@ import net.i2p.util.SimpleTimer;
  */
 public class HashPatternDetector implements Serializable {
     private static final long serialVersionUID = 1L;
+    private static final Pattern PIPE_SPLIT = Pattern.compile("\\s*\\|\\s*");
 
     private final RouterContext _context;
     private final Log _log;
@@ -261,7 +263,7 @@ public class HashPatternDetector implements Serializable {
             String line;
             while ((line = reader.readLine()) != null) {
                 // Parse format: TIMESTAMP | HASH | IP:PORT | REASON | DURATION
-                String[] parts = line.split("\\s*\\|\\s*");
+                String[] parts = PIPE_SPLIT.split(line);
                 if (parts.length >= 5) {
                     String hashStr = parts[1].trim();
                     String reason = parts[3].trim();
@@ -659,7 +661,7 @@ public class HashPatternDetector implements Serializable {
      * Statistics for a particular hash prefix.
      */
     private static class PrefixStats implements Serializable {
-        private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
         final String prefix;
         int totalBans;

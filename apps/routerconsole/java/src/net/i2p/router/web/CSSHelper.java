@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Pattern;
 import net.i2p.servlet.util.ServletUtil;
 import net.i2p.util.RandomSource;
 import net.i2p.util.SystemVersion;
@@ -20,6 +21,7 @@ public class CSSHelper extends HelperBase {
     /**  @since 0.9.33 moved from ConfigUIHelper */
     public static final String PROP_THEME_PFX = PROP_THEME_NAME + '.';
     public static final String DEFAULT_THEME = "dark";
+    private static final Pattern ALPHA_UNDERSCORE = Pattern.compile("[a-zA-Z_]");
     public static final String BASE_THEME_PATH = "/themes/console/";
     private static final String FORCE = "classic";
     public static final String PROP_REFRESH = "routerconsole.summaryRefresh";
@@ -115,7 +117,7 @@ public class CSSHelper extends HelperBase {
     public void setLang(String lang) {
         // Protected with nonce in css.jsi
         if (lang != null && lang.length() >= 2 && lang.length() <= 6 &&
-            lang.replaceAll("[a-zA-Z_]", "").length() == 0) {
+            ALPHA_UNDERSCORE.matcher(lang).replaceAll("").length() == 0) {
             Map<String, String> m = new HashMap<String, String>(2);
             int under = lang.indexOf('_');
             if (under < 0) {

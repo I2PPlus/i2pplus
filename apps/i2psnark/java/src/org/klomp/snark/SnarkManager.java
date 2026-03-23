@@ -29,6 +29,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Pattern;
 import net.i2p.I2PAppContext;
 import net.i2p.app.ClientApp;
 import net.i2p.app.ClientAppManager;
@@ -83,6 +84,8 @@ import org.klomp.snark.dht.KRPC;
  */
 @SuppressWarnings("PMD.CloseResource")
 public class SnarkManager implements CompleteListener, ClientApp, DisconnectListener {
+
+    private static final Pattern COMMENT_SANITIZE = Pattern.compile("[\n\r<>#;]");
 
     /**
      * Map of (canonical) filename of the .torrent file to Snark instance. This is a CHM so
@@ -2009,7 +2012,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         if (commentName == null) {
             commentName = "";
         } else {
-            commentName = commentName.trim().replaceAll("[\n\r<>#;]", "");
+            commentName = COMMENT_SANITIZE.matcher(commentName.trim()).replaceAll("");
             if (commentName.length() > Comment.MAX_NAME_LEN) {
                 commentName = commentName.substring(0, Comment.MAX_NAME_LEN);
             }

@@ -78,6 +78,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     private final Map<UpdateItem, Version> _installed;
     private final boolean _allowTorrent;
     private static final DecimalFormat _pct = new DecimalFormat("0.0%");
+    private static final Pattern CONTENT_FOR = Pattern.compile("for content.*");
     private final ClientAppManager _cmgr;
     private volatile ClientAppState _state = UNINITIALIZED;
 
@@ -996,7 +997,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                 buf.append(_t("Install failed:{0}", "<br>".concat(uri)).replace("http://", ""));
             } else {buf.append(_t("Transfer failed:{0}", "<br>".concat(uri)).replace("http://", ""));}
             if (reason != null && reason.length() > 0) {
-                String trimmed = reason.replace("http://", "").replace("java.io.IOException", _t("Error")).replaceAll("for content.*", "");
+                String trimmed = CONTENT_FOR.matcher(reason.replace("http://", "").replace("java.io.IOException", _t("Error"))).replaceAll("");
                 buf.append("<br>").append(trimmed);
             }
             if (t != null && t.getMessage() != null && t.getMessage().length() > 0) {

@@ -61,6 +61,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     public static final int DEFAULT_POST_TOTAL_MAX = 30;
     public static final int DEFAULT_POST_WINDOW = 3*60;
     private static final boolean DEFAULT_KEEPALIVE = true;
+    private static final Pattern CRLF_SPLIT = Pattern.compile("\r\n");
     public static final String OPT_POST_BAN_TIME = "postBanTime";
     public static final String OPT_POST_MAX = "maxPosts";
     public static final String OPT_POST_TOTAL_BAN_TIME = "postTotalBanTime";
@@ -993,7 +994,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 // beware interference with Shoutcast, etc.?
 
                 if (_headers != null && !_headers.isEmpty()) {
-                    String[] requestLines = _headers.split("\r\n");
+                    String[] requestLines = CRLF_SPLIT.split(_headers);
                     if (requestLines.length > 0) {
                         String requestLine = requestLines[0];
                         String[] requestParts = requestLine.split(" ");

@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.regex.Pattern;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.TunnelId;
@@ -45,6 +46,7 @@ import java.util.Locale;
  *  For /tunnels.jsp, used by TunnelHelper.
  */
 class TunnelRenderer {
+    private static final Pattern PARENS_CONTENT = Pattern.compile("\\(.*?\\)");
     private final RouterContext _context;
     private final Log _log;
 
@@ -742,7 +744,7 @@ class TunnelRenderer {
             result.canonicalHostName = rl;
 
             if (rl != null && rl.contains(" ")) {
-                String whois = rl.replace("Administered by ", "")
+                String whoisChain = rl.replace("Administered by ", "")
                     .replace("Asia Pacific Network Information Centre (APNIC)", "APNIC")
                     .replace("Latin American and Caribbean IP address Regional Registry (LACNIC)", "LACNIC")
                     .replace("African Network Information Center (AFRINIC)", "AFRINIC")
@@ -765,8 +767,8 @@ class TunnelRenderer {
                     .replace("Nortex Communications Company", "NORTEX")
                     .replace("ROOT", _t("PRIVATE IP ADDRESS"))
                     .replace("NON-RIPE-NCC-MANAGED-ADDRESS-BLOCK", "unknown")
-                    .replace("unknown", _t("unknown"))
-                    .replaceAll("\\(.*?\\)", "")
+                    .replace("unknown", _t("unknown"));
+                String whois = PARENS_CONTENT.matcher(whoisChain).replaceAll("")
                     .trim();
                 result.whois = whois;
                 result.domain = null;

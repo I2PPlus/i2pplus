@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.StringTokenizer;
+import java.util.regex.Pattern;
 import net.i2p.I2PAppContext;
 import net.i2p.data.Destination;
 import net.i2p.util.EepGet;
@@ -38,6 +39,7 @@ public class EepGetNamingService extends DummyNamingService {
 
     private final static String PROP_EEPGET_LIST = "i2p.naming.eepget.list";
     private final static String DEFAULT_EEPGET_LIST = "http://i2host.i2p/cgi-bin/i2hostquery?";
+    private static final Pattern VALID_DEST_CHARS = Pattern.compile("[a-zA-Z0-9~-]");
 
     /**
      * The naming service should only be constructed and accessed through the
@@ -119,7 +121,7 @@ public class EepGetNamingService extends DummyNamingService {
                     _log.error("Invalid key: " + url + hostname);
                     return null;
                 }
-                if (key.replaceAll("[a-zA-Z0-9~-]", "").length() != 0) {
+                if (VALID_DEST_CHARS.matcher(key).replaceAll("").length() != 0) {
                     _log.error("Invalid chars: " + url + hostname);
                     return null;
                 }

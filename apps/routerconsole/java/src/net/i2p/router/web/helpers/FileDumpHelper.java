@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.time.Instant;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 import net.i2p.crypto.SHA256Generator;
@@ -33,6 +34,7 @@ public class FileDumpHelper extends HelperBase {
     private static final boolean isWindows = SystemVersion.isWindows();
     private static final String LINK = "http://git.skank.i2p/i2pplus/I2P.Plus/src/commit/";
     private static final String UPSTREAMLINK = "https://github.com/i2p/i2p.i2p/tree/";
+    private static final Pattern DASH_SPACE = Pattern.compile("-.*? ");
 
     public String getFileSummary() {
         StringBuilder buf = new StringBuilder(16*1024);
@@ -144,7 +146,7 @@ public class FileDumpHelper extends HelperBase {
         buf.append("</td><td>");
         s = getAtt(att, "Created-By");
         if (s != null) {
-            buf.append(s.replaceAll("-.*? ", "")
+            buf.append(DASH_SPACE.matcher(s).replaceAll("")
                         .replace("Amazon.com Inc.", "Amazon")
                         .replace("Apache Maven", "Maven")
                         .replace("(Oracle Corporation)", "(Oracle)")

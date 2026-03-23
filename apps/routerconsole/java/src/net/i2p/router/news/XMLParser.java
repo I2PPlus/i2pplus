@@ -17,6 +17,7 @@ package net.i2p.router.news;
 ******************************************************************/
 
 import net.i2p.I2PAppContext;
+import java.util.regex.Pattern;
 import net.i2p.util.Log;
 import org.cybergarage.xml.Attribute;
 import org.cybergarage.xml.Node;
@@ -42,6 +43,7 @@ public class XMLParser extends JaxpParser {
     private final Log _log;
 
     public static final String TEXT_NAME = "#text";
+    private static final Pattern WHITESPACE = Pattern.compile("[ \t\r\n]");
 
     public XMLParser(I2PAppContext ctx) {
         super();
@@ -76,7 +78,7 @@ public class XMLParser extends JaxpParser {
         // Only add it to the value if we don't have any other nodes.
         // Otherwise, add it as a node.
         if (domNodeType == org.w3c.dom.Node.TEXT_NODE) {
-            if (domNodeValue.replaceAll("[ \t\r\n]", "").length() == 0) {
+            if (WHITESPACE.matcher(domNodeValue).replaceAll("").length() == 0) {
                 return parentNode;
             }
             if (!parentNode.hasNodes()) {

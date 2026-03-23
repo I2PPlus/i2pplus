@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 import java.util.TreeMap;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
@@ -37,6 +38,9 @@ import java.util.Locale;
 class BanlistRenderer {
     private final RouterContext _context;
     private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
+    private static final Pattern DOT_COLON = Pattern.compile("[.:]");
+    private static final Pattern PIPE_SPLIT = Pattern.compile("\\s*\\|\\s*");
+    private static final Pattern LEADING_ARROW = Pattern.compile("^\\s*[<-]?\\s*");
 
     public BanlistRenderer(RouterContext context) {
         _context = context;
@@ -54,8 +58,8 @@ class BanlistRenderer {
             return null;
         }
         // Check if the hostname is just the IP in different form
-        String normalizedIp = ip.toLowerCase(Locale.ROOT).replaceAll("[.:]", "");
-        String normalizedHostname = hostname.toLowerCase(Locale.ROOT).replaceAll("[.:]", "");
+        String normalizedIp = DOT_COLON.matcher(ip.toLowerCase(Locale.ROOT)).replaceAll("");
+        String normalizedHostname = DOT_COLON.matcher(hostname.toLowerCase(Locale.ROOT)).replaceAll("");
         if (normalizedHostname.equals(normalizedIp) || normalizedHostname.contains(normalizedIp)) {
             return null;
         }
@@ -77,7 +81,7 @@ class BanlistRenderer {
             String line;
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith("#")) continue;
-                String[] parts = line.split("\\s*\\|\\s*");
+                String[] parts = PIPE_SPLIT.split(line);
                 if (parts.length >= 3) {
                     String hash = parts[1].trim();
                     String ipField = parts[2].trim();
@@ -111,7 +115,7 @@ class BanlistRenderer {
             String line;
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith("#")) continue;
-                String[] parts = line.split("\\s*\\|\\s*");
+                String[] parts = PIPE_SPLIT.split(line);
                 if (parts.length >= 3) {
                     String hash = parts[1].trim();
                     String ipField = parts[2].trim();
@@ -146,7 +150,7 @@ class BanlistRenderer {
             String line;
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith("#")) continue;
-                String[] parts = line.split("\\s*\\|\\s*");
+                String[] parts = PIPE_SPLIT.split(line);
                 if (parts.length >= 4) {
                     String hash = parts[1].trim();
                     String ipField = parts[2].trim();
@@ -389,12 +393,12 @@ class BanlistRenderer {
                 buf.append(" class=\"banFF\"");
             }
             buf.append(">");
-            String reason = _t(entry.cause, entry.causeCode)
+            String reason = LEADING_ARROW.matcher(
+                _t(entry.cause, entry.causeCode)
                 .replace("<b>➜</b> ", "")
                 .replace("<b> -> </b>", "")
                 .replace("➜ ", "")
-                .replace(" -> ", "")
-                .replaceAll("^\\s*[<-]?\\s*", "")
+                .replace(" -> ", "")).replaceAll("")
                 .trim();
             // Get IP from hash if not in reason
             String ip = null;
@@ -555,11 +559,11 @@ class BanlistRenderer {
                     .append("</td>");
              }
             String ipReason = ipBan.reason.isEmpty() ? "IP Ban" :
-                ipBan.reason.replace("<b>➜</b> ", "")
-                            .replace("<b> -> </b>", "")
-                            .replace("➜ ", "")
-                            .replace(" -> ", "")
-                            .replaceAll("^\\s*[<-]?\\s*", "")
+                LEADING_ARROW.matcher(
+                    ipBan.reason.replace("<b>➜</b> ", "")
+                                .replace("<b> -> </b>", "")
+                                .replace("➜ ", "")
+                                .replace(" -> ", "")).replaceAll("")
                             .trim();
             buf.append("<td class=reason>")
                .append(ipReason)

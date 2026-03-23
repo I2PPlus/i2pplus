@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.regex.Pattern;
 import net.i2p.data.DataHelper;
 import net.i2p.router.util.EventLog;
 import net.i2p.router.web.CSSHelper;
@@ -29,6 +30,8 @@ public class EventLogHelper extends FormHandler {
     private final Map<String, String> _xevents;
 
     private static final String ALL = "all";
+    private static final Pattern SPACE_THEN_CHARS = Pattern.compile(" .+$");
+    private static final Pattern DIGITS = Pattern.compile("\\d");
     private static final String[] _events = new String[] {
         EventLog.ABORTED, _x("Aborted startup"),
         EventLog.BECAME_FLOODFILL, _x("Enabled floodfill"),
@@ -198,7 +201,7 @@ public class EventLogHelper extends FormHandler {
                 type = type + (' ');
             }
             // create a class from truncated event type so we can style the tr's by event severity
-            type = type.substring(0,8).replaceAll(" .+$", "").replaceAll("\\d", "").toLowerCase(Locale.ROOT);
+            type = DIGITS.matcher(SPACE_THEN_CHARS.matcher(type.substring(0,8)).replaceAll("")).replaceAll("").toLowerCase(Locale.ROOT);
             if (isAll) {
                 buf.append("<tr class=\"").append(type).append(" lazy\">");
             } else {

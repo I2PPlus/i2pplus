@@ -45,6 +45,7 @@ import java.util.SortedMap;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Callable;
+import java.util.regex.Pattern;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -133,6 +134,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     private final Map<String, Object> _exemptIncoming;
     private volatile boolean _netMonitorStatus;
     private boolean _wasStarted;
+    private static final Pattern NEWLINE_SPLIT = Pattern.compile("\\r?\\n");
+    private static final Pattern PARENS_CONTENT = Pattern.compile("\\(.*?\\)");
+    private static final Pattern DEG_CHARS = Pattern.compile("[DEG]");
 
     /**
      * Property to disable all network connections for testing purposes.
@@ -1685,7 +1689,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
         String fallback = null; // For netname, descr, etc.
 
-        for (String line : whoisData.split("\\r?\\n")) {
+        for (String line : NEWLINE_SPLIT.split(whoisData)) {
             line = line.trim();
             String lower = line.toLowerCase(Locale.ROOT);
 
@@ -1733,7 +1737,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             }
         }
 
-        return (fallback != null) ? fallback.replaceAll("\\(.*?\\)", "").trim() : _t("unknown");
+        return (fallback != null) ? PARENS_CONTENT.matcher(fallback).replaceAll("").trim() : _t("unknown");
     }
 
     /**
@@ -2262,7 +2266,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             buf.append("\" title=\"").append(_t("Show all routers with this capability in the NetDb")).append("\">");
 
             // Remove first occurrence of D, E, or G character from capacity string
-            String visibleCapacity = capacity.replaceFirst("[DEG]", "");
+            String visibleCapacity = DEG_CHARS.matcher(capacity).replaceFirst("");
             buf.append(visibleCapacity);
 
             buf.append("</a></td>");

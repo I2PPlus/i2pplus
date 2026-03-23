@@ -9,6 +9,7 @@ package i2p.susi.webmail.encoding;
 
 import i2p.susi.util.Buffer;
 import java.io.InputStream;
+import java.util.regex.Pattern;
 
 /**
  * HTML encoding for safe text display in SusiMail web pages.
@@ -19,6 +20,8 @@ import java.io.InputStream;
  */
 public class HTML extends Encoding {
 
+  private static final Pattern NEWLINE_PATTERN = Pattern.compile("\r{0,1}\n");
+
   public String getName() {return "HTML";}
 
   public String encode(byte[] in) throws EncodingException {
@@ -27,10 +30,10 @@ public class HTML extends Encoding {
 
   @Override
   public String encode(String str) throws EncodingException {
-    return  str.replace("&", "&amp;")  // must be first
+    String escaped = str.replace("&", "&amp;")  // must be first
                .replace( "<", "&lt;" )
-               .replace( ">", "&gt;" )
-               .replaceAll( "\r{0,1}\n", "<br>\r\n" );
+               .replace( ">", "&gt;" );
+    return NEWLINE_PATTERN.matcher(escaped).replaceAll("<br>\r\n");
   }
 
   public void decode(InputStream in, Buffer out) throws DecodingException {

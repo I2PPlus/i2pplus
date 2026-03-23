@@ -60,6 +60,10 @@ public class Reseeder {
     // Reject unreasonably big files, because we download into a ByteArrayOutputStream.
     private static final long MAX_RESEED_RESPONSE_SIZE = 2 * 1024 * 1024;
     private static final long MAX_SU3_RESPONSE_SIZE = 1024 * 1024;
+    private static final Pattern PARENS_CONTENT = Pattern.compile("\\(.*\\)");
+    private static final Pattern COMMA_SPACE_SPLIT = Pattern.compile("[ ,]+");
+    private static final Pattern VERIFICATION_FAILED = Pattern.compile("verification failed for .*");
+    private static final Pattern QUESTION_MARK = Pattern.compile("\\?");
     /** limit to spend on a single host, to avoid getting stuck on one that is seriously overloaded */
     private static final int MAX_TIME_PER_HOST = 10 * 1000;
     private static final long MAX_FILE_AGE = 3*24*60*60*1000L;
@@ -382,7 +386,7 @@ public class Reseeder {
                     }
                 } // else < 0, no valid URLs
                 String old = _checker.getError();
-                String notify = old.replaceAll("\\(.*\\)", "").replace(" \\.", ""); // remove dupe error msgs
+                String notify = PARENS_CONTENT.matcher(old).replaceAll("").replace(" \\.", ""); // remove dupe error msgs
                 _checker.setError(_t("{0}Reseed{1} failed:", "<a href=\"/configreseed\">", "</a>") + ' '  + notify + " <br>" +
                                   _t("For assistance, see the {0}",
                                     "<a target=_top href=\"/help/reseed\">" + _t("reseed help") + "</a>"));
@@ -421,7 +425,7 @@ public class Reseeder {
             int slashIndex = truncatedURL.indexOf('/');
             String hostname = slashIndex > 0 ? truncatedURL.substring(0, slashIndex) : truncatedURL;
             String reason = cause != null && cause.getMessage() != null ?
-                            cause.getMessage().replaceAll("verification failed for .*", "verification failed") : "Unknown error";
+                            VERIFICATION_FAILED.matcher(cause.getMessage()).replaceAll("verification failed") : "Unknown error";
             String msg = "Reseeding failed [" + hostname + "] -> " + reason;
             if (_log.shouldWarn()) {_log.warn(msg);}
             else {_log.logAlways(Log.WARN, msg);}
@@ -528,7 +532,7 @@ public class Reseeder {
                 List<URI> sslList = new ArrayList<>();
                 List<URI> nonSslList = new ArrayList<>();
 
-                for (String u : urls.split("[ ,]+")) {
+                for (String u : COMMA_SPACE_SPLIT.split(urls)) {
                     u = u.trim();
                     if (!u.endsWith("/")) u = u + "/";
                     URI uri = safeUri(u);
@@ -561,7 +565,7 @@ public class Reseeder {
          */
         private List<URI> parseUrlsWithTrailingSlash(String urls) {
             List<URI> list = new ArrayList<>();
-            for (String u : urls.split("[ ,]+")) {
+            for (String u : COMMA_SPACE_SPLIT.split(urls)) {
                 u = u.trim();
                 if (!u.endsWith("/")) u = u + "/";
                 URI uri = safeUri(u);
@@ -749,14 +753,14 @@ public class Reseeder {
 
         /** Cleans the display string for logging by removing unwanted parts. */
         private String cleanDisplayString(String s) {
-            return s.replace("http://", "")
+            return PARENS_CONTENT.matcher(
+                    s.replace("http://", "")
                     .replace("https://", "")
                     .replace("netDb/", "")
                     .replace("/i2pseeds.su3", "")
                     .replace("from ", "")
                     .replace("?", "")
-                    .replace("netid=2", "")
-                    .replaceAll("\\(.*\\)", "");
+                    .replace("netid=2", "")).replaceAll("");
         }
 
         /** Case insensitive indexOf for content parsing, returns -1 if not found */
@@ -809,8 +813,10 @@ public class Reseeder {
             int errors = 0;
             File contentRaw = null;
             String s = getDisplayString(seedURL);
-            String trimmed = s.replace("http://","").replace("https://","").replace("netDb/","").replace("/i2pseeds.su3","")
-                              .replace("from ","").replace("netid=2", "").replaceAll("\\(.*\\)", "").replaceAll("\\?", "");
+            String trimmed = QUESTION_MARK.matcher(
+                PARENS_CONTENT.matcher(
+                    s.replace("http://","").replace("https://","").replace("netDb/","").replace("/i2pseeds.su3","")
+                      .replace("from ","").replace("netid=2", "")).replaceAll("")).replaceAll("");
             try {
                 _checker.setStatus(_t("Contacting reseed host") + ":<br>" + trimmed);
                 System.err.println("Reseeding " + s);

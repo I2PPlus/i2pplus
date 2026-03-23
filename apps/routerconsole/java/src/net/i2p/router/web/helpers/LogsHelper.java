@@ -216,14 +216,10 @@ public class LogsHelper extends HelperBase {
                                     .replace("| LOCAL LeaseSet for", "| WARN | LOCAL LeaseSet for")
                                     .replace("| Initiating graceful restart", "| INFO | Initiating graceful restart")
                                     .replace("| Graceful shutdown", "| INFO | Graceful shutdown")
-                                    .replace("| I2P+ update downloaded", "| INFO | I2P+ update downloaded")
-                                    .replaceAll("\\|.*\\[.*hutd.*\\].*?:", "|")
-                                    .replaceAll("\\|.*\\[.*date.*\\].*?:", "|")
-                                    .replaceAll("\\|.*\\[.*-Connection].*?:", "|")
-                                    .replaceAll("\\|.*\\[.*Restart].*?:", "|")
-                                    .replaceAll("\\|.*\\[.*Read.*\\].*?:", "|")
-                                    .replaceAll("\\|.*\\[.*DirMon.*\\].*?:", "|")
-                                    .replaceAll("\\|.*\\[.*Queue.*\\].*?:", "|");
+                                    .replace("| I2P+ update downloaded", "| INFO | I2P+ update downloaded");
+                for (Pattern p : FILTER_PATTERNS) {
+                    str = p.matcher(str).replaceAll("|");
+                }
                 // Remove lines containing unwanted strings - process line by line to avoid array allocation
                 StringBuilder filtered = new StringBuilder(str.length());
                 int start = 0;
