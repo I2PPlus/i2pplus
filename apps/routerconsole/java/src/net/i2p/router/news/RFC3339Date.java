@@ -28,6 +28,7 @@ import net.i2p.util.SystemVersion;
 public abstract class RFC3339Date {
 
     // SimpleDateFormat is not thread-safe, methods must be synchronized
+    @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
     private static final SimpleDateFormat OUTPUT_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
 
     private static final String TZF1, TZF2;

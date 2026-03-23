@@ -326,6 +326,7 @@ class Mail {
     private static final DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.US);
     private static final DateFormat dateOnlyFormatter = new SimpleDateFormat("EEEE dd MMMM, yyyy", Locale.US);
     private static final DateFormat localDateFormatter = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
+    @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
     private static final DateFormat longLocalDateFormatter = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT);
     static {
         // the router sets the JVM time zone to UTC but saves the original here so we can get it

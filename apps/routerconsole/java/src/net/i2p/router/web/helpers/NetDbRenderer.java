@@ -83,7 +83,7 @@ import net.i2p.util.VersionComparator;
  */
 class NetDbRenderer {
     private final RouterContext _context;
-    private static final DecimalFormat TWO_DECIMALS = new DecimalFormat("#0.00");
+    private static final ThreadLocal<DecimalFormat> TWO_DECIMALS = ThreadLocal.withInitial(() -> new DecimalFormat("#0.00"));
     public NetDbRenderer (RouterContext ctx) {
         _context = ctx;
         _organizer = ctx.profileOrganizer();
@@ -964,7 +964,7 @@ class NetDbRenderer {
         if (notLocal) {
             ourRKey = _context.routerHash();
             leases = new TreeSet<LeaseSet>(new LeaseSetRoutingKeyComparator(ourRKey));
-            fmt = TWO_DECIMALS;
+            fmt = TWO_DECIMALS.get();
         } else {
             ourRKey = null;
             leases = new TreeSet<LeaseSet>(new LeaseSetComparator());
@@ -1109,7 +1109,7 @@ class NetDbRenderer {
             }
             if (ls != null) {
                 BigInteger dist = HashDistance.getDistance(_context.routerHash(), ls.getRoutingKey());
-                String distance = TWO_DECIMALS.format(biLog2(dist));
+                String distance = TWO_DECIMALS.get().format(biLog2(dist));
                 now = _context.clock().now();
                 buf.append("<span id=singleLS></span>");
                 renderLeaseSet(buf, ls, true, now, false, distance);
