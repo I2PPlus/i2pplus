@@ -197,6 +197,10 @@ th {
   letter-spacing: .5px;
 }
 
+#summary tr td {
+  border-top: 1px solid #2a2a30;
+}
+
 .priority-cell {
   min-width: 80px;
 }
@@ -282,12 +286,12 @@ table + .tabletitle {
 }
 
 /* Line column */
-.warningtable th:first-child,
-.warningtable td:first-child {
-  width: 60px;
-  white-space: nowrap;
+.line {
   text-align: center;
   font-variant-numeric: tabular-nums;
+  width: 1%;
+  white-space: nowrap;
+  min-width: 60px;
 }
 
 .warningtable td {
