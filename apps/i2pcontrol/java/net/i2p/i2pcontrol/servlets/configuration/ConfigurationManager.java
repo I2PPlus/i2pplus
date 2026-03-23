@@ -11,6 +11,7 @@ import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.util.Log;
 import net.i2p.util.OrderedProperties;
+import java.util.Locale;
 
 /**
  * Manage the configuration of I2PControl.
@@ -122,10 +123,10 @@ public class ConfigurationManager {
                 continue;
             } catch (NumberFormatException e) {}
             //Check if value is a bool
-            if (value.toLowerCase().equals("true")) {
+            if (value.toLowerCase(Locale.ROOT).equals("true")) {
                 booleanConfigurations.put(key, Boolean.TRUE);
                 continue;
-            } else if (value.toLowerCase().equals("false")) {
+            } else if (value.toLowerCase(Locale.ROOT).equals("false")) {
                 booleanConfigurations.put(key, Boolean.FALSE);
                 continue;
             }

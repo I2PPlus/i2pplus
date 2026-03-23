@@ -80,7 +80,7 @@ public class CSSHelper extends HelperBase {
      */
     public void setSoraDisplayFont() {
         // Protected with nonce in css.jsi
-        if (PROP_ENABLE_SORA_FONT != null && PROP_ENABLE_SORA_FONT.toLowerCase().equals("true"))
+        if (PROP_ENABLE_SORA_FONT != null && PROP_ENABLE_SORA_FONT.toLowerCase(Locale.ROOT).equals("true"))
             _context.router().saveConfig(PROP_ENABLE_SORA_FONT, "true");
     }
 

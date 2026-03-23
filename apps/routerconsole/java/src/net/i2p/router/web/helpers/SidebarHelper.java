@@ -41,6 +41,7 @@ import net.i2p.stat.RateConstants;
 import net.i2p.stat.RateStat;
 import net.i2p.util.PortMapper;
 import net.i2p.util.SystemVersion;
+import java.util.Locale;
 
 /**
  * Simple helper to query the appropriate router for data necessary to render
@@ -691,7 +692,7 @@ public class SidebarHelper extends HelperBase {
                 Boolean server = _context.clientManager().shouldPublishLeaseSet(h);
                 Boolean isPing = name.startsWith("Ping [") || name.equals("I2Ping");
                 Boolean isSnark = name.equals(_t("I2PSnark"));
-                Boolean isI2PChat = name.equals(_t("Messenger")) || name.toLowerCase().equals(_t("i2pchat"));
+                Boolean isI2PChat = name.equals(_t("Messenger")) || name.toLowerCase(Locale.ROOT).equals(_t("i2pchat"));
 
                 buf.append("<tr><td ");
                 if (isSnark) {buf.append("class=tunnelI2PSnark ");}

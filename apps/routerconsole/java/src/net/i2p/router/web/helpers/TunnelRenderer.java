@@ -39,6 +39,7 @@ import net.i2p.util.Addresses;
 import net.i2p.util.Log;
 import net.i2p.util.ObjectCounter;
 import net.i2p.util.ObjectCounterUnsafe;
+import java.util.Locale;
 
 /**
  *  For /tunnels.jsp, used by TunnelHelper.
@@ -141,8 +142,8 @@ class TunnelRenderer {
                 if (_context.clientManager().shouldPublishLeaseSet(client)) {
                     out.write("server ");
                     if (getTunnelName(in).equals(_t("I2PSnark"))) {out.write("snark ");}
-                    else if (getTunnelName(in).toLowerCase().equals("messenger") ||
-                             getTunnelName(in).toLowerCase().equals("i2pchat")) {
+                    else if (getTunnelName(in).toLowerCase(Locale.ROOT).equals("messenger") ||
+                             getTunnelName(in).toLowerCase(Locale.ROOT).equals("i2pchat")) {
                         out.write("i2pchat ");
                     }
                 }

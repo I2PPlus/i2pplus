@@ -23,6 +23,7 @@ import net.i2p.data.DataHelper;
 import net.i2p.util.Log;
 import net.i2p.util.SecureFileOutputStream;
 import net.i2p.servlet.RequestWrapper;
+import java.util.Locale;
 
 /**
  * Bean for managing address book blacklist entries.
@@ -189,7 +190,7 @@ public class BlacklistBean extends BaseBean {
         address = address.trim().toLowerCase();
         String[] lines = content.split("\\n");
         for (String line : lines) {
-            if (line.trim().toLowerCase().equals(address)) {
+            if (line.trim().toLowerCase(Locale.ROOT).equals(address)) {
                 return true;
             }
         }
