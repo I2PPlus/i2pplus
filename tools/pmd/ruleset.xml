@@ -16,6 +16,27 @@
     <exclude-pattern>.*/.*\.class</exclude-pattern>
     <exclude-pattern>.*/.*\.war</exclude-pattern>
 
+    <!-- Third-party exclusions -->
+    <exclude-pattern>.*/net/i2p/apache/.*</exclude-pattern>
+    <exclude-pattern>.*/org/apache/.*</exclude-pattern>
+    <exclude-pattern>.*/org/bouncycastle/.*</exclude-pattern>
+    <exclude-pattern>.*/org/cybergarage/.*</exclude-pattern>
+    <exclude-pattern>.*/org/minidns/.*</exclude-pattern>
+    <exclude-pattern>.*/org/json/.*</exclude-pattern>
+    <exclude-pattern>.*/org/xlattice/.*</exclude-pattern>
+    <exclude-pattern>.*/org/rrd4j/.*</exclude-pattern>
+    <exclude-pattern>.*/org/jfree/.*</exclude-pattern>
+    <exclude-pattern>.*/com/southernstorm/.*</exclude-pattern>
+    <exclude-pattern>.*/com/maxmind/.*</exclude-pattern>
+    <exclude-pattern>.*/com/mpatric/.*</exclude-pattern>
+    <exclude-pattern>.*/com/tomgibara/.*</exclude-pattern>
+    <exclude-pattern>.*/gnu/.*</exclude-pattern>
+    <exclude-pattern>.*/io/pack200/.*</exclude-pattern>
+    <exclude-pattern>.*/freenet/.*</exclude-pattern>
+    <exclude-pattern>.*/org/freenetproject/.*</exclude-pattern>
+    <exclude-pattern>.*/edu/internet2/.*</exclude-pattern>
+    <exclude-pattern>.*/com/vuze/.*</exclude-pattern>
+
     <!-- Security -->
     <rule ref="category/java/security.xml"/>
 
