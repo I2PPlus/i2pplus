@@ -21,6 +21,7 @@ import net.i2p.router.TunnelManagerFacade;
 import net.i2p.router.TunnelPoolSettings;
 import net.i2p.router.tunnel.pool.GhostPeerManager;
 import net.i2p.router.tunnel.pool.TunnelPool;
+import java.util.Collections;
 
 /**
  * Build and maintain tunnels throughout the network.
@@ -61,7 +62,7 @@ public class DummyTunnelManagerFacade implements TunnelManagerFacade {
     public void setInboundSettings(Hash client, TunnelPoolSettings settings) {}
     public void setOutboundSettings(Hash client, TunnelPoolSettings settings) {}
     public int getInboundBuildQueueSize() { return 0; }
-    public Set<Hash> selectPeersInTooManyTunnels() { return null; }
+    public Set<Hash> selectPeersInTooManyTunnels() { return Collections.emptySet(); }
 
     public void renderStatusHTML(Writer out) throws IOException {}
     public void restart() {}
@@ -69,8 +70,8 @@ public class DummyTunnelManagerFacade implements TunnelManagerFacade {
     public void startup() {}
 
     public void listPools(List<TunnelPool> out) {}
-    public Map<Hash, TunnelPool> getInboundClientPools() { return null; }
-    public Map<Hash, TunnelPool> getOutboundClientPools() { return null; }
+    public Map<Hash, TunnelPool> getInboundClientPools() { return Collections.emptyMap(); }
+    public Map<Hash, TunnelPool> getOutboundClientPools() { return Collections.emptyMap(); }
     public TunnelPool getInboundExploratoryPool() { return null; }
     public TunnelPool getOutboundExploratoryPool() { return null; }
     public void fail(Hash peer) {}

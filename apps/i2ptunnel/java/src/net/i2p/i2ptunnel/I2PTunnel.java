@@ -429,7 +429,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * @param l the Logging instance for command output
      * @see #runHelp(Logging)
      */
-    public void runCommand(String cmd, Logging l) {
+    public final void runCommand(String cmd, Logging l) {
         if (cmd.indexOf(' ') == -1) cmd += ' ';
         int iii = cmd.indexOf(' ');
         String cmdname = cmd.substring(0, iii).toLowerCase(Locale.US);
@@ -2040,7 +2040,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      *
      * @param lsnr the listener to add; ignored if null
      */
-    public void addConnectionEventListener(ConnectionEventListener lsnr) {
+    public final void addConnectionEventListener(ConnectionEventListener lsnr) {
         if (lsnr == null) return;
         listeners.add(lsnr);
     }

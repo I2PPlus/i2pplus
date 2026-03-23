@@ -511,7 +511,7 @@ public class Base64 {
      * replacing / with ~, and + with -
      */
     private static byte[] safeDecode(String source, boolean useStandardAlphabet) {
-        if (source == null) return null;
+        if (source == null) return new byte[0];
         String toDecode;
         if (useStandardAlphabet) {
             //toDecode = source;
@@ -725,7 +725,7 @@ public class Base64 {
         // there's no UTF-8 in there.
         byte[] bytes = DataHelper.getUTF8(s);
         if (bytes.length != s.length())
-            return null;
+            return new byte[0];
         return decode(bytes, 0, bytes.length);
     } // end decode
 
@@ -788,7 +788,7 @@ public class Base64 {
         while (i + 3 < end) {
             converted = decode4to3(source, i, outBuff, outBuffPosn);
             if (converted < 0)
-                return null;
+                return new byte[0];
             outBuffPosn += converted;
             i += 4;
             if (converted < 3)
@@ -799,9 +799,9 @@ public class Base64 {
         int remaining = end - i;
         if (remaining > 0) {
             if (converted > 0 && converted < 3)
-                return null;
+                return new byte[0];
             if (remaining == 1 || remaining > 3)
-                return null;
+                return new byte[0];
             byte[] b4 = new byte[4];
             b4[0] = source[i++];
             b4[1] = source[i++];
@@ -812,7 +812,7 @@ public class Base64 {
             b4[3] = EQUALS_SIGN;
             converted = decode4to3(b4, 0, outBuff, outBuffPosn);
             if (converted < 0)
-                return null;
+                return new byte[0];
             outBuffPosn += converted;
         }
 

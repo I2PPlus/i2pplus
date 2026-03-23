@@ -381,7 +381,7 @@ class PluginUpdateRunner extends UpdateRunner {
                 if (!FileUtil.isPack200Supported())
                     msg += " (or requires Pack200 which is unsupported in this JVM)";
                 statusDone("<b>" + msg + "</b>");
-                return null;
+                return new Properties();
             }
             File installProps = new File(tempDir, "plugin.config");
             Properties props = new OrderedProperties();
@@ -391,7 +391,7 @@ class PluginUpdateRunner extends UpdateRunner {
                 f.delete();
                 to.delete();
                 statusDone("<b>" + _t("Plugin from {0} does not contain the required configuration file", url) + "</b>");
-                return null;
+                return new OrderedProperties();
             } finally {
                 // we don't need this anymore, we will unzip again
                 FileUtil.rmdir(tempDir, false);

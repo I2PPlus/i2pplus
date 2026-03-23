@@ -10,10 +10,10 @@ package net.i2p.router.networkdb.kademlia;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -259,7 +259,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * @return a new PeerSelector instance
      * @throws IllegalStateException if called on a client database
      */
-    protected PeerSelector createPeerSelector() {
+    protected final PeerSelector createPeerSelector() {
        if (isClientDb()) {throw new IllegalStateException();}
        return new FloodfillPeerSelector(_context);
     }
@@ -392,7 +392,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * @return  true if the database is a client DB, false otherwise
      * @since 0.9.61
      */
-    public boolean isClientDb() {
+    public final boolean isClientDb() {
         // This is a null check in disguise, don't use .equals() here.
         // FNDS.MAIN_DBID is always null. and if _dbid is also null it is not a client Db
         if (_dbid == FloodfillNetworkDatabaseSegmentor.MAIN_DBID) {return false;}
@@ -967,8 +967,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
         if (earliest < now - EXPIRY_GRACE_PERIOD || latest < now - EXPIRY_GRACE_PERIOD) {
             throw new IllegalArgumentException("Cannot publish LeaseSet with expiry date in the past. "
-                    + "Earliest: " + new Date(earliest) + ", Latest: " + new Date(latest)
-                    + ", Now: " + new Date(now));
+                    + "Earliest: " + Instant.ofEpochMilli(earliest) + ", Latest: " + Instant.ofEpochMilli(latest)
+                    + ", Now: " + Instant.ofEpochMilli(now));
         }
     }
 
@@ -1011,8 +1011,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 nextTime = Math.max(proactiveTime, now + PUBLISH_DELAY);
                 if (_log.shouldInfo()) {
                     _log.info("Scheduling proactive republish for LOCAL LeaseSet [" + hash.toBase32().substring(0, 8) + "]..." +
-                              "\n* Expires: " + new Date(expiration) +
-                              "\n* Republish at: " + new Date(nextTime));
+                              "\n* Expires: " + Instant.ofEpochMilli(expiration) +
+                              "\n* Republish at: " + Instant.ofEpochMilli(nextTime));
                 }
             } else {
                 nextTime = Math.max(job.lastPublished() + RepublishLeaseSetJob.REPUBLISH_LEASESET_TIMEOUT,
@@ -1194,8 +1194,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             long age = now - earliest;
             if (_log.shouldWarn()) {
                 _log.warn("Old LeaseSet [" + idShort + "] -> rejecting store..." +
-                          "\n* First expired: " + new Date(earliest) +
-                          "\n* Last expired: " + new Date(latest) +
+                          "\n* First expired: " + Instant.ofEpochMilli(earliest) +
+                          "\n* Last expired: " + Instant.ofEpochMilli(latest) +
                           "\n* " + leaseSet);
             }
             // If there are no leases, aggressively mark lookups as failed to reduce retries
@@ -1688,10 +1688,10 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (routerInfo.getPublished() > now + 2*Router.CLOCK_FUDGE_FACTOR && !isUs) {
             long age = routerInfo.getPublished() - now;
             if (!_context.banlist().isBanlisted(h) && _log.shouldWarn()) {
-                _log.warn("Banning [" + routerId + "] for 4h -> RouterInfo from the future!\n* Published: " + new Date(routerInfo.getPublished()));
+                _log.warn("Banning [" + routerId + "] for 4h -> RouterInfo from the future!\n* Published: " + Instant.ofEpochMilli(routerInfo.getPublished()));
                 String ipPort = getRouterIPPort(routerInfo);
-                _banLogger.logBan(h, ipPort, "RouterInfo from the future (" + new Date(routerInfo.getPublished()) + ")", 4*60*60*1000L);
-                _context.banlist().banlistRouter(h, " <b>➜</b> RouterInfo from the future (" + new Date(routerInfo.getPublished()) + ")", null, null, 4*60*60*1000);
+                _banLogger.logBan(h, ipPort, "RouterInfo from the future (" + Instant.ofEpochMilli(routerInfo.getPublished()) + ")", 4*60*60*1000L);
+                _context.banlist().banlistRouter(h, " <b>➜</b> RouterInfo from the future (" + Instant.ofEpochMilli(routerInfo.getPublished()) + ")", null, null, 4*60*60*1000);
             }
             return caps + " Router [" + routerId + "] -> Published " + DataHelper.formatDuration(age) + " in the future";
         }
@@ -2167,7 +2167,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /** public for NetDbRenderer in routerconsole */
     @Override
     public Set<LeaseSet> getLeases() {
-        if (!_initialized) {return null;}
+        if (!_initialized) {return Collections.emptySet();}
         Set<LeaseSet> leases = new ConcurrentHashSet<>();
         for (DatabaseEntry o : getDataStore().getEntries()) {
             if (o.isLeaseSet()) {leases.add((LeaseSet)o);}
@@ -2179,7 +2179,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /* @since 0.9.64+ */
     @Override
     public Set<LeaseSet> getClientLeases() {
-        if (!_initialized) {return null;}
+        if (!_initialized) {return Collections.emptySet();}
         Set<LeaseSet> leases = new ConcurrentHashSet<>();
         for (DatabaseEntry o : getDataStore().getEntries()) {
             if (o.isLeaseSet()) {
@@ -2195,7 +2195,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /* @since 0.9.64+ */
     @Override
     public Set<LeaseSet> getPublishedLeases() {
-        if (!_initialized) {return null;}
+        if (!_initialized) {return Collections.emptySet();}
         Set<LeaseSet> leases = new ConcurrentHashSet<>();
         for (DatabaseEntry o : getDataStore().getEntries()) {
             if (o.isLeaseSet()) {
@@ -2212,7 +2212,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /* @since 0.9.64+ */
     @Override
     public Set<LeaseSet> getUnpublishedLeases() {
-        if (!_initialized) {return null;}
+        if (!_initialized) {return Collections.emptySet();}
         Set<LeaseSet> leases = new ConcurrentHashSet<>();
         for (DatabaseEntry o : getDataStore().getEntries()) {
             if (o.isLeaseSet()) {
@@ -2231,7 +2231,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      */
     @Override
     public Set<LeaseSet> getFloodfillLeases() {
-        if (!_initialized) {return null;}
+        if (!_initialized) {return Collections.emptySet();}
         Set<LeaseSet> leases = new ConcurrentHashSet<>();
         for (DatabaseEntry o : getDataStore().getEntries()) {
             if (o.isLeaseSet() && !isClientDb()) {leases.add((LeaseSet)o);}
@@ -2246,7 +2246,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     @Override
     public Set<RouterInfo> getRouters() {
         if (isClientDb()) {return Collections.emptySet();}
-        if (!_initialized) {return null;}
+        if (!_initialized) {return Collections.emptySet();}
         Set<RouterInfo> routers = new ConcurrentHashSet<>();
         for (DatabaseEntry o : getDataStore().getEntries()) {
             if (o.isRouterInfo()) {routers.add((RouterInfo)o);}

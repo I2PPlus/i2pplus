@@ -189,7 +189,7 @@ class FragmentedMessage {
 
     public byte[] toByteArray() {
         synchronized (this) {
-            if (_releasedAfter > 0) return null;
+            if (_releasedAfter > 0) return new byte[0];
             byte rv[] = new byte[getCompleteSize()];
             writeComplete(rv, 0);
             releaseFragments();

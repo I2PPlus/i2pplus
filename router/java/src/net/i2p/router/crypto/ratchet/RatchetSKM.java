@@ -1590,14 +1590,14 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
          */
         private List<Integer> getAcksToSend() {
             if (_acksToSend == null)
-                return null;
+                return Collections.emptyList();
             int sz = _acksToSend.size();
             if (sz == 0)
-                return null;
+                return Collections.emptyList();
             List<Integer> rv = new ArrayList<Integer>(Math.min(sz, MAX_SEND_ACKS));
             _acksToSend.drainTo(rv, MAX_SEND_ACKS);
             if (rv.isEmpty())
-                return null;
+                return Collections.emptyList();
             return rv;
         }
 

@@ -280,7 +280,7 @@ class MessageInputStream extends InputStream {
                 }
                 return array;
             }
-            return null;
+            return new long[0];
         }
     }
 

@@ -16,9 +16,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Writer;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -340,12 +340,12 @@ public class BlockfileNamingService extends DummyNamingService {
             if (_needsUpgrade) {
                 if (_log.shouldWarn())
                     _log.warn("Upgrading database from version " + _version + " to " + VERSION +
-                              ", created " + (new Date(createdOn)).toString() +
+                               ", created " + Instant.ofEpochMilli(createdOn) +
                               " containing lists: " + list);
             } else {
                 if (_log.shouldInfo())
                     _log.info("Found database version " + _version +
-                              " created " + (new Date(createdOn)).toString() +
+                              " created " + Instant.ofEpochMilli(createdOn) +
                               " containing lists: " + list);
             }
 
@@ -630,12 +630,12 @@ public class BlockfileNamingService extends DummyNamingService {
         try {
             SkipList<Integer, Properties> rev = _bf.getIndex(REVERSE_SKIPLIST, _hashIndexSerializer, _infoSerializer);
             if (rev == null)
-                return null;
+                return Collections.emptyList();
             Integer idx = getReverseKey(hash);
             //_log.info("Get reverse " + idx + ' ' + hash);
             Properties props = rev.get(idx);
             if (props == null)
-                return null;
+                return Collections.emptyList();
             List<String> rv = new ArrayList<String>(props.size());
             for (String key : props.stringPropertyNames()) {
                 // now do the forward lookup to verify (using the cache)
@@ -656,7 +656,7 @@ public class BlockfileNamingService extends DummyNamingService {
         } catch (RuntimeException e) {
             _log.error("DB get reverse error", e);
         }
-        return null;
+        return Collections.emptyList();
     }
 
     /**
@@ -851,12 +851,12 @@ public class BlockfileNamingService extends DummyNamingService {
                 return Collections.singletonList(d);
             }
             // Base32 failed?
-            return null;
+            return Collections.emptyList();
         }
         String key = hostname.toLowerCase(Locale.US);
         synchronized(_negativeCache) {
             if (_negativeCache.get(key) != null)
-                return null;
+                return Collections.emptyList();
         }
         String listname = null;
         if (lookupOptions != null)
@@ -865,7 +865,7 @@ public class BlockfileNamingService extends DummyNamingService {
         List<Destination> rv = null;
         synchronized(_bf) {
             if (_isClosed)
-                return null;
+                return Collections.emptyList();
             for (String list : _lists) {
                 if (listname != null && !list.equals(listname))
                     continue;
@@ -1337,7 +1337,7 @@ public class BlockfileNamingService extends DummyNamingService {
         final String nl = System.getProperty("line.separator", "\n");
         out.write(nl);
         out.write("# Exported: ");
-        out.write((new Date()).toString());
+        out.write(Instant.now().toString());
         out.write(nl);
         synchronized(_bf) {
             if (_isClosed)
@@ -1559,7 +1559,7 @@ public class BlockfileNamingService extends DummyNamingService {
     public List<String> reverseLookupAll(Hash h) {
         synchronized(_bf) {
             if (_isClosed)
-                return null;
+                return Collections.emptyList();
             return getReverseEntries(h);
         }
     }
@@ -1887,7 +1887,7 @@ public class BlockfileNamingService extends DummyNamingService {
                 DataHelper.fromProperties(b, 0, rv);
             } catch (DataFormatException dfe) {
                 logError("DB Read Fail", dfe);
-                return null;
+                return new Properties();
             }
             return rv;
         }

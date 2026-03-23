@@ -297,7 +297,7 @@ public class KeyCertificate extends Certificate {
      */
     public byte[] getExtraKeyData() {
         if (_payload == null || _payload.length <= HEADER_LENGTH)
-            return null;
+            return new byte[0];
         byte[] rv = new byte[_payload.length - HEADER_LENGTH];
         System.arraycopy(_payload, HEADER_LENGTH, rv, 0, rv.length);
         return rv;
@@ -313,7 +313,7 @@ public class KeyCertificate extends Certificate {
     public byte[] getExtraSigningKeyData() {
         // we assume no crypto key data
         if (_payload == null || _payload.length <= HEADER_LENGTH)
-            return null;
+            return new byte[0];
         SigType type = getSigType();
         if (type == null)
             throw new UnsupportedOperationException("Unknown signature type");

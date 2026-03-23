@@ -92,7 +92,7 @@ public class AESEngine {
      */
     @Deprecated
     public byte[] safeEncrypt(byte payload[], SessionKey sessionKey, byte iv[], int paddedSize) {
-        if ((iv == null) || (payload == null) || (sessionKey == null) || (iv.length != 16)) return null;
+        if ((iv == null) || (payload == null) || (sessionKey == null) || (iv.length != 16)) return new byte[0];
 
         int size = Hash.HASH_LENGTH
                  + 4 // sizeof(payload)
@@ -126,7 +126,7 @@ public class AESEngine {
      */
     @Deprecated
     public byte[] safeDecrypt(byte payload[], SessionKey sessionKey, byte iv[]) {
-        if ((iv == null) || (payload == null) || (sessionKey == null) || (iv.length != 16)) return null;
+        if ((iv == null) || (payload == null) || (sessionKey == null) || (iv.length != 16)) return new byte[0];
 
         byte decr[] = new byte[payload.length];
         decrypt(payload, 0, decr, 0, sessionKey, iv, payload.length);
@@ -138,7 +138,7 @@ public class AESEngine {
         if (!eq) {
                 _log.error("Hash does not match [key=" + sessionKey + " / iv =" + DataHelper.toString(iv, iv.length)
                            + "]", new Exception("Hash error"));
-                return null;
+                return new byte[0];
         }
         int cur = Hash.HASH_LENGTH;
 
@@ -147,7 +147,7 @@ public class AESEngine {
 
         if (cur + len > decr.length) {
             _log.error("Not enough to read");
-            return null;
+            return new byte[0];
         }
 
         byte data[] = new byte[(int)len];

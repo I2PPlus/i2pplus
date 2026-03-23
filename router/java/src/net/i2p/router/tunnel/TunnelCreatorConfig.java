@@ -1,6 +1,6 @@
 package net.i2p.router.tunnel;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -94,7 +94,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      */
     public int getLength() {return _config.length;}
 
-    public Properties getOptions() {return null;}
+    public Properties getOptions() {return new Properties();}
 
     /**
      * retrieve the config for the given hop.  the gateway is
@@ -392,7 +392,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      *  @since 0.9.48
      */
     public byte[] getChaChaReplyAD(int hop) {
-        if (_ChaReplyADs == null) {return null;}
+        if (_ChaReplyADs == null) {return new byte[0];}
         return _ChaReplyADs[hop];
     }
 
@@ -437,7 +437,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
                 else if (_isInbound || i == 0) {buf.append(".local");}
                 if (i + 1 < _peers.length) {buf.append(" -> ");}
             }
-            buf.append("\n* Expires: ").append(new Date(_expiration));
+            buf.append("\n* Expires: ").append(Instant.ofEpochMilli(_expiration));
             if (_replyMessageId > 0) {buf.append("; [ReplyMsgID ").append(_replyMessageId).append("]");}
             if (_messagesProcessed > 0) {
                 buf.append(" with ").append(_messagesProcessed).append(" messages (")

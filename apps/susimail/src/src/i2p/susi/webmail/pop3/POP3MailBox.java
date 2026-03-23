@@ -28,6 +28,7 @@ import net.i2p.data.DataHelper;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.InternalSocket;
 import net.i2p.util.Log;
+import java.util.Collections;
 
 /**
  * POP3 client for retrieving email from POP3 servers over I2P.
@@ -960,7 +961,7 @@ public class POP3MailBox implements NewMailListener {
         if (sendCmd1a(cmd)) {return getResultNl();}
         else {
             if (_log.shouldDebug()) _log.debug("sendCmd1a returned false");
-            return null;
+            return Collections.emptyList();
         }
     }
 
@@ -1163,7 +1164,7 @@ public class POP3MailBox implements NewMailListener {
      * @return A new array of the available UIDLs. No particular order.
      */
     public Collection<String> getUIDLs() {
-        if (!isConnected()) {return null;}
+        if (!isConnected()) {return Collections.emptyList();}
         synchronized(synchronizer) {return new ArrayList<String>(uidlToID.keySet());}
     }
 

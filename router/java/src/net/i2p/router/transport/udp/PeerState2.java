@@ -254,7 +254,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     @Override
     List<OutboundMessageState> allocateSend(long now) {
         if (!_isInbound && _ackedMessages.getOffset() == 0 && !_ackedMessages.get(0)) {
-            if (!checkRetransmitSessionConfirmed(_context.clock().now(), false)) {return null;}
+            if (!checkRetransmitSessionConfirmed(_context.clock().now(), false)) {return Collections.emptyList();}
         }
         return super.allocateSend(now);
     }
@@ -1077,7 +1077,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
      * @return null if not sent or already got the ack
      */
     private synchronized UDPPacket[] getRetransmitSessionConfirmedPackets() {
-        if (_sessConfForReTX == null) {return null;}
+        if (_sessConfForReTX == null) {return new UDPPacket[0];}
         UDPPacket[] rv = new UDPPacket[_sessConfForReTX.length];
         InetAddress addr = getRemoteIPAddress();
         for (int i = 0; i < rv.length; i++) {

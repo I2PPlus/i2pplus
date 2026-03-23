@@ -10,8 +10,8 @@ package net.i2p.client.naming;
 import java.io.IOException;
 import java.io.Writer;
 import java.lang.reflect.Constructor;
+import java.time.Instant;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -139,7 +139,7 @@ public abstract class NamingService {
      *  @since 0.8.7
      */
     public Properties getConfiguration() {
-        return null;
+        return new Properties();
     }
 
     /**
@@ -164,7 +164,7 @@ public abstract class NamingService {
      * @since 0.8.7
      */
     public List<NamingService> getNamingServices() {
-        return null;
+        return Collections.emptyList();
     }
 
     /**
@@ -344,7 +344,7 @@ public abstract class NamingService {
             return;
         }
         out.write("# Exported: ");
-        out.write(new Date().toString());
+        out.write(Instant.now().toString());
         out.write(nl);
         if (sz > 1) {
             out.write("# " + sz + " entries");

@@ -207,10 +207,10 @@ public class SigningPublicKey extends SimpleDataStructure {
     public byte[] getPadding(KeyCertificate kcert) {
         if (_data == null) {throw new IllegalStateException();}
         SigType newType = kcert.getSigType();
-        if (_type == newType || newType == null) {return null;}
+        if (_type == newType || newType == null) {return new byte[0];}
         if (_type != SigType.DSA_SHA1) {throw new IllegalStateException("Cannot convert " + _type + " to " + newType);}
         int newLen = newType.getPubkeyLen();
-        if (newLen >= KEYSIZE_BYTES) {return null;}
+        if (newLen >= KEYSIZE_BYTES) {return new byte[0];}
         int padLen = KEYSIZE_BYTES - newLen;
         byte[] pad = new byte[padLen];
         System.arraycopy(_data, 0, pad, 0, padLen);

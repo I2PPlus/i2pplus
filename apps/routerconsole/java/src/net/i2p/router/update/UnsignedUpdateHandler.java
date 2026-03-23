@@ -38,12 +38,12 @@ class UnsignedUpdateHandler implements Checker, Updater {
     public List<URI> getUpdateSources() {
         String url = _context.getProperty(ConfigUpdateHandler.PROP_ZIP_URL);
         if (url == null)
-            return null;
+            return Collections.emptyList();
 
         try {
             return Collections.singletonList(new URI(url));
         } catch (URISyntaxException use) {
-            return null;
+            return Collections.emptyList();
         }
     }
 

@@ -422,10 +422,10 @@ public class NewsXMLParser {
     private static List<CRLEntry> extractCRLEntries(Node feed) throws I2PParserException {
         Node rev = feed.getNode("i2p:revocations");
         if (rev == null)
-            return null;
+            return Collections.emptyList();
         List<Node> entries = getNodes(rev, "i2p:crl");
         if (entries.isEmpty())
-            return null;
+            return Collections.emptyList();
         List<CRLEntry> rv = new ArrayList<CRLEntry>(entries.size());
         for (Node entry : entries) {
             CRLEntry e = new CRLEntry();

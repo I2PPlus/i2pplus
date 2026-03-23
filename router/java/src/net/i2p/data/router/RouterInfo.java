@@ -15,10 +15,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -158,7 +158,7 @@ public class RouterInfo extends DatabaseEntry {
      *
      * @throws IllegalStateException if RouterInfo is already signed
      */
-    public void setIdentity(RouterIdentity ident) {
+    public final void setIdentity(RouterIdentity ident) {
         if (_signature != null)
             throw new IllegalStateException();
         _identity = ident;
@@ -247,7 +247,7 @@ public class RouterInfo extends DatabaseEntry {
      * @throws IllegalStateException if RouterInfo is already signed
      */
     @Deprecated
-    public void setPeers(Set<Hash> peers) {
+    public final void setPeers(Set<Hash> peers) {
         if (_signature != null)
             throw new IllegalStateException();
         if (peers == null || peers.isEmpty()) {
@@ -664,7 +664,7 @@ public class RouterInfo extends DatabaseEntry {
     public String toString() {
         StringBuilder buf = new StringBuilder(1024);
         buf.append("\n* Signature: ").append(_signature);
-        buf.append("\n* Published: ").append(new Date(_published));
+        buf.append("\n* Published: ").append(Instant.ofEpochMilli(_published));
         if (log.shouldInfo()) {
             if (_peers != null) {
                 buf.append("\n* Peers (").append(_peers.size()).append("):");

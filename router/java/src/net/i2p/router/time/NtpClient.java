@@ -158,7 +158,7 @@ public class NtpClient {
                 if (log != null) {
                     log.warn("Skipping NTP query to " + serverName + " (" + ipAddress + ") due to previous Kiss of Death (KoD) response: " + koDReason);
                 }
-                return null;
+                return new long[0];
             }
             byte[] buf = new NtpMessage().toByteArray();
             DatagramPacket packet = new DatagramPacket(buf, buf.length, address, NTP_PORT);
@@ -180,7 +180,7 @@ public class NtpClient {
                 if (log != null && log.shouldWarn()) {
                     log.warn("Received NTP response from " + serverName + " (" + ipAddress + ") with insufficient length: " + packet.getLength() + " bytes");
                 }
-                return null;
+                return new long[0];
             }
             NtpMessage msg = new NtpMessage(packet.getData());
             String fromIP = packet.getAddress().getHostAddress();
@@ -195,14 +195,14 @@ public class NtpClient {
                     log.warn("Potential spoof detected: Sent request to " + ipAddress + ":" + NTP_PORT +
                              " but received response from " + packet.getSocketAddress());
                 }
-                return null;
+                return new long[0];
             }
             // Stratum check: valid strata are between 1 and 15 for servers, 0 for KoD special message
             if (msg.stratum > 15) {
                 if (log != null && log.shouldWarn()) {
                     log.warn("Received NTP response from " + serverName + " (" + ipAddress + ") with invalid stratum: " + msg.stratum);
                 }
-                return null;
+                return new long[0];
             }
             // Origin timestamp check for spoofing protection
             if (!DataHelper.eq(transmitTimestampBytes, 0, packet.getData(), OFF_ORIGTIME, 8)) {
@@ -210,7 +210,7 @@ public class NtpClient {
                     log.warn("Origin timestamp mismatch between sent and received NTP packets:\nSent:\n" +
                              HexDump.dump(transmitTimestampBytes) + "Received:\n" + HexDump.dump(packet.getData(), OFF_ORIGTIME, 8));
                 }
-                return null;
+                return new long[0];
             }
             // Sanity checks - leapIndicator, version, mode, timestamps, delays
             if (msg.leapIndicator == 3 || msg.version < 3 || msg.mode != 4 ||
@@ -219,7 +219,7 @@ public class NtpClient {
                 if (log != null && log.shouldWarn()) {
                     log.warn("Sanity check failed for NTP response from " + serverName + " (" + ipAddress + "):\n" + msg);
                 }
-                return null;
+                return new long[0];
             }
             // KoD (Kiss of Death) check - server telling client to stop requests temporarily
             if (msg.stratum == 0) {
@@ -228,7 +228,7 @@ public class NtpClient {
                 if (log != null) {
                     log.logAlways(Log.WARN, "Received Kiss of Death (KoD) from NTP server " + serverName + " (" + ipAddress + "). Reason: " + koDDetails);
                 }
-                return null;
+                return new long[0];
             }
             // Calculate local clock offset relative to received NTP time
             double localClockOffset = ((msg.receiveTimestamp - msg.originateTimestamp) +
@@ -247,7 +247,7 @@ public class NtpClient {
             if (log != null && log.shouldWarn()) {
                 log.warn("IOException during NTP query to server " + serverName + ": " + ioe);
             }
-            return null;
+            return new long[0];
         } finally {
             if (socket != null) {
                 socket.close();
@@ -286,7 +286,7 @@ public class NtpClient {
         Log log = new Log(NtpClient.class);
         try {
             long[] rv = currentTimeAndStratum(args, DEFAULT_TIMEOUT, ipv6, log);
-            System.out.println("Current time: " + new java.util.Date(rv[0]) + " (stratum " + rv[1] +
+            System.out.println("Current time: " + java.time.Instant.ofEpochMilli(rv[0]) + " (stratum " + rv[1] +
                                ") offset " + (rv[0] - System.currentTimeMillis()) + "ms");
         } catch (IllegalArgumentException iae) {
             System.out.println("Failed: " + iae.getMessage());

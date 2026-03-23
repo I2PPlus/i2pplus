@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -643,7 +644,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         SimpleDateFormat fmt = new SimpleDateFormat("dd/MM HH:mm:ss", Locale.US);
         Long now = System.currentTimeMillis();
         fmt.setTimeZone(SystemVersion.getSystemTimeZone(_context));
-        String date = fmt.format(new Date(now));
+        String date = fmt.format(Date.from(Instant.ofEpochMilli(now)));
         return "<b class=date>" + date + "</b>";
     }
 

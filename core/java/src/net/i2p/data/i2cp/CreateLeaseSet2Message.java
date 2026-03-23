@@ -52,7 +52,7 @@ public class CreateLeaseSet2Message extends CreateLeaseSetMessage {
         if (_privateKeys != null) {return _privateKeys;}
         PrivateKey pk = getPrivateKey();
         if (pk != null) {return Collections.singletonList(pk);}
-        return null;
+        return Collections.emptyList();
     }
 
     /**

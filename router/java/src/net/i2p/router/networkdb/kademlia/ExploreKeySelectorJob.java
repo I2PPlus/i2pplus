@@ -14,6 +14,7 @@ import net.i2p.data.Hash;
 import net.i2p.router.JobImpl;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
+import java.util.Collections;
 
 /**
  * Go through the kbuckets and generate random keys for routers in buckets not
@@ -57,7 +58,7 @@ class ExploreKeySelectorJob extends JobImpl {
     private Collection<Hash> selectKeysToExplore() {
         Set<Hash> alreadyQueued = _facade.getExploreKeys();
         if (alreadyQueued.size() > KademliaNetworkDatabaseFacade.MAX_EXPLORE_QUEUE)
-            return null;
+            return Collections.emptyList();
         return _facade.getKBuckets().getExploreKeys(OLD_BUCKET_TIME);
     }
 

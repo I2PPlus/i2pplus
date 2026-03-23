@@ -12,6 +12,7 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.transport.udp.PacketBuilder.Fragment;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
+import java.util.Collections;
 
 /**
  * Coordinate the outbound fragments and select the next one to be built.
@@ -241,7 +242,7 @@ class OutboundMessageFragments {
                 _activePeers.removeAll(_peersToRemove);
                 _peersToRemove.clear();
             }
-            return null;
+            return Collections.emptyList();
         }
 
         if (_log.shouldDebug()) {
@@ -266,7 +267,7 @@ class OutboundMessageFragments {
      */
     private List<UDPPacket> preparePackets(List<OutboundMessageState> states, PeerState peer) {
         if (states == null || peer == null) {
-            return null;
+            return Collections.emptyList();
         }
 
         // build the list of fragments to send
@@ -292,7 +293,7 @@ class OutboundMessageFragments {
         }
 
         if (toSend.isEmpty()) {
-            return null;
+            return Collections.emptyList();
         }
 
         int fragmentsToSend = toSend.size();

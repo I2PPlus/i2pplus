@@ -58,11 +58,11 @@ public abstract class DataStructureImpl implements DataStructure, Serializable {
         } catch (IOException ioe) {
             Log log = I2PAppContext.getGlobalContext().logManager().getLog(getClass());
             log.error("Error writing out the byte array", ioe);
-            return null;
+            return new byte[0];
         } catch (DataFormatException dfe) {
             Log log = I2PAppContext.getGlobalContext().logManager().getLog(getClass());
             log.error("Error writing out the byte array", dfe);
-            return null;
+            return new byte[0];
         }
     }
 

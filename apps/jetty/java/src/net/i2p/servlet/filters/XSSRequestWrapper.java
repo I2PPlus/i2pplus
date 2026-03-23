@@ -42,7 +42,7 @@ public class XSSRequestWrapper extends HttpServletRequestWrapper {
             return values;
 
         if (values == null) {
-            return null;
+            return new String[0];
         }
 
         int count = values.length;
@@ -59,7 +59,7 @@ public class XSSRequestWrapper extends HttpServletRequestWrapper {
             }
         }
         if (good <= 0)
-            return null;
+            return new String[0];
         if (good < count) {
             // shrink array
             String[] rv = new String[good];

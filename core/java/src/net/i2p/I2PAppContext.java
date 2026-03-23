@@ -422,7 +422,7 @@ public class I2PAppContext {
      *  @since 0.7.6
      *  @return dir constant for the life of the context
      */
-    public File getTempDir() {
+    public final File getTempDir() {
         // fixme don't synchronize every time
         synchronized (_lock1) {
             if (_tmpDir == null) {
@@ -579,7 +579,7 @@ public class I2PAppContext {
      * Return a float with a float default
      * @since 0.9.58+
      */
-    public float getProperty(String propName, float defaultVal) {
+    public final float getProperty(String propName, float defaultVal) {
         String val = null;
         if (_overrideProps != null) {
             val = _overrideProps.getProperty(propName);
@@ -601,7 +601,7 @@ public class I2PAppContext {
      * Return a boolean with a boolean default
      * @since 0.7.12
      */
-    public boolean getProperty(String propName, boolean defaultVal) {
+    public final boolean getProperty(String propName, boolean defaultVal) {
         String val = getProperty(propName);
         if (val == null)
             return defaultVal;

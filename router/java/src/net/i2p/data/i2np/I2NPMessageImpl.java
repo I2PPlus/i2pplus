@@ -10,7 +10,7 @@ package net.i2p.data.i2np;
 
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Date;
+import java.time.Instant;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.I2PAppContext;
@@ -160,7 +160,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
             synchronized(this) {
                 uniqueId = _uniqueId;
             }
-            _log.debug("Reading bytes: [Type " + type + "] [ID " + uniqueId + "]\n* Expires: " + new Date(_expiration));
+            _log.debug("Reading bytes: [Type " + type + "] [ID " + uniqueId + "]\n* Expires: " + Instant.ofEpochMilli(_expiration));
         }
         readMessage(data, cur, sz, type);
         cur += sz;
@@ -230,7 +230,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
         if (written != data.length) {
             _log.log(Log.CRIT, "Error writing out " + data.length + " (written: " + written + ", msgSize: " + getMessageSize() +
                                ", writtenLen: " + calculateWrittenLength() + ") for " + getClass().getSimpleName());
-            return null;
+            return new byte[0];
         }
         return data;
     }

@@ -7,6 +7,7 @@ import java.text.Collator;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -414,7 +415,7 @@ class SidebarRenderer {
         DateFormat dfmt = new SimpleDateFormat(FORMAT, Locale.UK);
         TimeZone utc = TimeZone.getTimeZone("GMT");
         dfmt.setTimeZone(utc);
-        buf.append("<div id=clock class=volatile>").append(dfmt.format(new Date())).append("</div>");
+        buf.append("<div id=clock class=volatile>").append(dfmt.format(Date.from(Instant.now()))).append("</div>");
         return buf.toString();
     }
 

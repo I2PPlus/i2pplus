@@ -15,8 +15,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.time.Instant;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -141,6 +141,7 @@ public class SingleFileNamingService extends NamingService {
      *
      *  @param host case-sensitive; caller should convert to lower case
      */
+    @SuppressWarnings("PMD.AvoidBranchingStatementAsLastInLoop")
     private String getKey(String host) throws IOException {
         BufferedReader in = null;
         getReadLock();
@@ -490,7 +491,7 @@ public class SingleFileNamingService extends NamingService {
         final String nl = System.getProperty("line.separator", "\n");
         out.write(nl);
         out.write("# Exported: ");
-        out.write((new Date()).toString());
+        out.write(Instant.now().toString());
         out.write(nl);
         BufferedReader in = null;
         getReadLock();

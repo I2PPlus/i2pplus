@@ -290,13 +290,13 @@ class I2PSessionImpl2 extends I2PSessionImpl {
         byte compressed[] = super.receiveMessage(msgId);
         if (compressed == null) {
             if (_log.shouldWarn()) {_log.warn("Error: [MsgID " + msgId + "] already received!");}
-            return null;
+            return new byte[0];
         }
         if (SHOULD_DECOMPRESS) { // future - check magic number to see whether to decompress
             try {return DataHelper.decompress(compressed);}
             catch (IOException ioe) {
                 if (_log.shouldWarn()) {_log.warn("Error decompressing message \n* " + ioe.getMessage());}
-                return null;
+                return new byte[0];
             }
         }
         return compressed;

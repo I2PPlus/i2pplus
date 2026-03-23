@@ -234,7 +234,7 @@ final class SSU2Util {
         }
         Signature sig = sign(ctx, PEER_TEST_PROLOGUE, h, h2, data, datalen, spk);
         if (sig == null)
-            return null;
+            return new byte[0];
         byte[] s = sig.getData();
         System.arraycopy(s, 0, data, datalen, s.length);
         return data;
@@ -263,7 +263,7 @@ final class SSU2Util {
         System.arraycopy(ip, 0, data, 16, ip.length);
         Signature sig = sign(ctx, RELAY_REQUEST_PROLOGUE, h, h2, data, datalen, spk);
         if (sig == null)
-            return null;
+            return new byte[0];
         int len = 1 + datalen + spk.getType().getSigLen();
         byte[] rv = new byte[len];
         //rv[0] = 0;  // flag
@@ -302,7 +302,7 @@ final class SSU2Util {
         }
         Signature sig = sign(ctx, RELAY_RESPONSE_PROLOGUE, h, null, data, datalen, spk);
         if (sig == null)
-            return null;
+            return new byte[0];
         int len = 2 + datalen + spk.getType().getSigLen();
         if (token != 0)
             len += 8;

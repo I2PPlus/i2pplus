@@ -1158,7 +1158,7 @@ public class PluginStarter implements Runnable {
             }
         }
         if (urls.isEmpty())
-            return null;
+            return new URL[0];
         return urls.toArray(new URL[urls.size()]);
     }
 

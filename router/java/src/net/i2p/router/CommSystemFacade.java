@@ -104,7 +104,7 @@ public abstract class CommSystemFacade implements Service {
     public boolean isBacklogged(Hash peer) { return false; }
     public boolean wasUnreachable(Hash peer) { return false; }
     public abstract boolean isEstablished(Hash peer);
-    public byte[] getIP(Hash dest) { return null; }
+    public byte[] getIP(Hash dest) { return new byte[0]; }
     public void queueLookup(byte[] ip) {}
 
     /**

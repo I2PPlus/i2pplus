@@ -1058,7 +1058,7 @@ public class UDPTransport extends TransportImpl {
         RouterAddress addr = getCurrentAddress(false);
         if (addr != null)
             return addr.getIP();
-        return null;
+        return new byte[0];
     }
 
     /**
@@ -1113,7 +1113,7 @@ public class UDPTransport extends TransportImpl {
      *  unless the endpoint failed to bind.
      */
     @Override
-    public int getRequestedPort() {
+    public final int getRequestedPort() {
         return getRequestedPort(false);
     }
 
@@ -2295,6 +2295,7 @@ public class UDPTransport extends TransportImpl {
         }
     }
 
+    @SuppressWarnings("PMD.AvoidBranchingStatementAsLastInLoop")
     public TransportBid bid(RouterInfo toAddress, int dataSize) {
         if (dataSize > OutboundMessageState.MAX_MSG_SIZE) {
             // NTCP max is lower, so msg will get dropped
@@ -3875,6 +3876,7 @@ public class UDPTransport extends TransportImpl {
      *
      * @return the current status, never null
      */
+    @SuppressWarnings("PMD.AvoidBranchingStatementAsLastInLoop")
     public Status getReachabilityStatus() {
         String override = _context.getProperty(PROP_REACHABILITY_STATUS_OVERRIDE);
         if (override != null) {

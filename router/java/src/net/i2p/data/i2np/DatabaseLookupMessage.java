@@ -27,6 +27,7 @@ import net.i2p.router.LeaseSetKeys;
 import net.i2p.router.crypto.ratchet.RatchetSessionTag;
 import net.i2p.util.Log;
 import net.i2p.util.VersionComparator;
+import java.util.Collections;
 
 /**
  * Defines the message a router sends to another router to search for a
@@ -284,7 +285,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
      */
     public Set<Hash> getDontIncludePeers() {
         if (_dontIncludePeers == null)
-            return null;
+            return Collections.emptySet();
         return new HashSet<Hash>(_dontIncludePeers);
     }
 

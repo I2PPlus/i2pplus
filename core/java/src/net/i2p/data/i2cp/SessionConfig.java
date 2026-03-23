@@ -13,6 +13,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.time.Instant;
 import java.util.Date;
 import java.util.Map;
 import java.util.Properties;
@@ -73,7 +74,7 @@ public class SessionConfig extends DataStructureImpl {
 
     public SessionConfig(Destination dest) {
         _destination = dest;
-        _creationDate = new Date(Clock.getInstance().now());
+        _creationDate = Date.from(Instant.ofEpochMilli(Clock.getInstance().now()));
     }
 
     /**
@@ -264,7 +265,7 @@ public class SessionConfig extends DataStructureImpl {
     }
 
     private byte[] getBytes() {
-        if (_destination == null || _options == null || _creationDate == null) {return null;}
+        if (_destination == null || _options == null || _creationDate == null) {return new byte[0];}
 
         ByteArrayOutputStream out = new ByteArrayOutputStream(1024);
         try {
@@ -274,11 +275,11 @@ public class SessionConfig extends DataStructureImpl {
         } catch (IOException ioe) {
             Log log = I2PAppContext.getGlobalContext().logManager().getLog(SessionConfig.class);
             log.error("IOError signing", ioe);
-            return null;
+            return new byte[0];
         } catch (DataFormatException dfe) {
             Log log = I2PAppContext.getGlobalContext().logManager().getLog(SessionConfig.class);
             log.error("Error writing out the bytes for signing/verification", dfe);
-            return null;
+            return new byte[0];
         }
         return out.toByteArray();
     }

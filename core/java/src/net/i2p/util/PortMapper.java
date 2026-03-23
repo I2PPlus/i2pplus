@@ -362,7 +362,7 @@ public class PortMapper {
      */
     public List<String> getEepsiteURLs() {
         if (_eepsites.isEmpty())
-            return null;
+            return Collections.emptyList();
         return new ArrayList<String>(_eepsites);
     }
 

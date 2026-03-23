@@ -1,6 +1,7 @@
 package net.i2p.router.networkdb.kademlia;
 
 import java.util.ArrayList;
+import java.time.Instant;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -964,7 +965,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         //        new DropLookupFailedJob(_context, peer, info), 10*1000, false);
         if (_log.shouldDebug()) {
             _log.debug("Initiating Floodfill Lookup of [" + peer.toBase64().substring(0,6) + "] before dropping..." +
-                       "\n* Published: " + new java.util.Date(info.getPublished()));
+                       "\n* Published: " + Instant.ofEpochMilli(info.getPublished()));
         }
         search(peer, new DropLookupFoundJob(_context, peer, info), new DropLookupFailedJob(_context, peer, info), 8*1000, false);
     }

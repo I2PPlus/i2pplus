@@ -225,7 +225,7 @@ public class SidebarHelper extends HelperBase {
 
         NetworkStateMessage(NetworkState state, String msg) {setMessage(state, msg);}
 
-        public void setMessage(NetworkState state, String msg) {
+        public final void setMessage(NetworkState state, String msg) {
             this.state = state;
             this.msg = msg;
         }

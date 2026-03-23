@@ -700,6 +700,7 @@ class NetDbRenderer {
      *  Filters routers by SSU capabilities (must contain all specified).
      *  @since 0.9.64
      */
+    @SuppressWarnings("PMD.AvoidBranchingStatementAsLastInLoop")
     private static void filterSSUCaps(Set<RouterInfo> routers, String caps) {
         int len = caps.length();
         outer:

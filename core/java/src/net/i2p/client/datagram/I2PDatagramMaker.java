@@ -124,11 +124,11 @@ public final class I2PDatagramMaker {
         } catch (IOException e) {
             Log log = I2PAppContext.getGlobalContext().logManager().getLog(I2PDatagramMaker.class);
             log.error("Caught IOException", e);
-            return null;
+            return new byte[0];
         } catch (DataFormatException e) {
             Log log = I2PAppContext.getGlobalContext().logManager().getLog(I2PDatagramMaker.class);
             log.error("Caught DataFormatException", e);
-            return null;
+            return new byte[0];
         }
     }
 }

@@ -280,7 +280,7 @@ class PersistentMailCache {
 
     public File getHeaderFile(String uidl) {return getFile(uidl, HDR_SUFFIX);}
 
-    public File getFullFile(String uidl) {return getFile(uidl, FULL_SUFFIX);}
+    public final File getFullFile(String uidl) {return getFile(uidl, FULL_SUFFIX);}
 
     /**
      * For reading or writing a new full mail (NOT headers only).

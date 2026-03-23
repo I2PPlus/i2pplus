@@ -1180,7 +1180,7 @@ public class PositionalParamsRetriever
 		List<Object> list = getList(position, allowNull);
 
 		if (list == null)
-			return null;
+			return new String[0];
 
 		try {
 			return list.toArray(new String[list.size()]);

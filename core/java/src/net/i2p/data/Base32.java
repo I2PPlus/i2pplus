@@ -236,7 +236,7 @@ public class Base32 {
 
             if (fivebits >= 0) {
                  if (outBuffPosn >= len58)
-                     return null;
+                     return new byte[0];
                  if (usedbits == 0) {
                      outBuff[outBuffPosn] = (byte) ((fivebits << 3) & 0xf8);
                      usedbits = 5;
@@ -254,12 +254,12 @@ public class Base32 {
                          usedbits -= 3;
                      } else if (next != 0) {
                        //_log.warn("Extra data at the end: " + next + "(decimal)");
-                       return null;
+                       return new byte[0];
                      }
                  }
             } else {
                 //_log.warn("Bad Base32 input character at " + i + ": " + source[i] + "(decimal)");
-                return null;
+                return new byte[0];
             }
         }
         return outBuff;

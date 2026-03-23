@@ -318,7 +318,7 @@ public class GeoIPv6 {
         public boolean equals(Object o) { return (o instanceof V6Entry) && compareTo((V6Entry)o) == 0; }
 
         @Override
-        public String toString() {
+        public final String toString() {
                 return "0x" + Long.toHexString(from) + " -> 0x" + Long.toHexString(to) + " : " + cc;
         }
     }

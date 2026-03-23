@@ -40,12 +40,12 @@ class DevSU3UpdateHandler implements Checker, Updater {
     public List<URI> getUpdateSources() {
         String url = _context.getProperty(ConfigUpdateHandler.PROP_DEV_SU3_URL);
         if (url == null)
-            return null;
+            return Collections.emptyList();
 
         try {
             return Collections.singletonList(new URI(url));
         } catch (URISyntaxException use) {
-            return null;
+            return Collections.emptyList();
         }
     }
 

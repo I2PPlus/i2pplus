@@ -198,7 +198,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 			if (!isNATPresent()) {
 				if (_log.shouldWarn())
 					_log.warn("No UPnP device found, detection of the external ip address using the plugin has failed");
-				return null;
+				return new DetectedIP[0];
 			}
 			service = _service;
 		}
@@ -207,7 +207,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
                 if (natAddress == null || natAddress.length() <= 0) {
 			if (_log.shouldWarn())
 				_log.warn("No external address returned");
-			return null;
+			return new DetectedIP[0];
 		}
 		DetectedIP result = null;
 		try {
@@ -229,7 +229,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 			return new DetectedIP[] { result };
 		} catch (UnknownHostException e) {
 			_log.error("Caught an UnknownHostException resolving " + natAddress, e);
-			return null;
+			return new DetectedIP[0];
 		}
 	}
 
@@ -512,7 +512,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 				}
 			}
 
-		return null;
+		return Collections.emptyList();
 	}
 
 	private boolean tryAddMapping(String protocol, int port, String description, ForwardPort fp) {

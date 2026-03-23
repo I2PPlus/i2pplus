@@ -29,6 +29,7 @@ import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 import org.rrd4j.core.RrdBackendFactory;
 import org.rrd4j.core.RrdNioBackendFactory;
+import java.util.Objects;
 
 /**
  *  A thread started by RouterConsoleRunner that checks the configuration for
@@ -232,8 +233,7 @@ public class GraphGenerator implements Runnable, ClientApp {
 
     private String adjustDatabases(String oldSpecs) {
         String spec = _context.getProperty("stat.summaries", DEFAULT_DATABASES);
-        if (((spec == null) && (oldSpecs == null)) ||
-            ((spec != null) && (oldSpecs != null) && (oldSpecs.equals(spec)))) {
+        if (Objects.equals(spec, oldSpecs)) {
             return oldSpecs;
         }
 

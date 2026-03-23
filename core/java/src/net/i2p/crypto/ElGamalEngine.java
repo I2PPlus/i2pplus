@@ -244,7 +244,7 @@ public final class ElGamalEngine {
         if (payloadLen < 0) {
             if (_log.shouldError())
                 _log.error("Decrypted data is too small (" + (val.length - i)+ ")");
-            return null;
+            return new byte[0];
         }
 
         //ByteArrayInputStream bais = new ByteArrayInputStream(val, i, val.length - i);
@@ -278,6 +278,6 @@ public final class ElGamalEngine {
         if (_log.shouldDebug())
             _log.debug("Doesn't match hash data = "
                        + Base64.encode(rv), new Exception("Doesn't match"));
-        return null;
+        return new byte[0];
     }
 }

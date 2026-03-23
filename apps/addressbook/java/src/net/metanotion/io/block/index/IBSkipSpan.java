@@ -394,7 +394,7 @@ public class IBSkipSpan<K extends Comparable<? super K>, V> extends BSkipSpan<K,
 		if (bf.log.shouldDebug())
 			bf.log.debug("Remove " + key + " in " + this);
 		if (nKeys <= 0)
-			return null;
+			return new Object[0];
 		try {
 			seekAndLoadData();
 			if (this.nKeys == 1 && this.prev == null && this.next != null && this.next.keys == null) {

@@ -226,7 +226,7 @@ public class I2PControlController implements RouterApp {
      *
      * @return Server - A new server built from current configuration.
      */
-    public Server buildServer() {
+    public final Server buildServer() {
         Server server = new Server();
         Connector ssl = buildDefaultListener(server);
         server.addConnector(ssl);

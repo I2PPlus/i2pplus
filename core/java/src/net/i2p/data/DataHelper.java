@@ -28,6 +28,7 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -924,7 +925,7 @@ public class DataHelper {
     public static Date readDate(InputStream in) throws DataFormatException, IOException {
         long date = readLong(in, DATE_LENGTH);
         if (date == 0L) {return null;}
-        return new Date(date);
+        return Date.from(Instant.ofEpochMilli(date));
     }
 
     /** Write out a date to the stream as specified by the I2P data structure spec.
@@ -969,7 +970,7 @@ public class DataHelper {
         try {
             long when = fromLong(src, offset, DATE_LENGTH);
             if (when <= 0) {return null;}
-            else {return new Date(when);}
+            else {return Date.from(Instant.ofEpochMilli(when));}
         } catch (IllegalArgumentException iae) {
             throw new DataFormatException(iae.getMessage());
         }
@@ -1180,7 +1181,7 @@ public class DataHelper {
      *  @return null if either arg is null or the args are not equal length
      */
     public final static byte[] xor(byte lhs[], byte rhs[]) {
-        if ((lhs == null) || (rhs == null) || (lhs.length != rhs.length)) return null;
+        if ((lhs == null) || (rhs == null) || (lhs.length != rhs.length)) return new byte[0];
         byte diff[] = new byte[lhs.length];
         xor(lhs, 0, rhs, 0, diff, 0, lhs.length);
         return diff;
@@ -2015,7 +2016,7 @@ public class DataHelper {
      *  @throws RuntimeException
      */
     public static byte[] getUTF8(String orig) {
-        if (orig == null) return null;
+        if (orig == null) return new byte[0];
         try {return orig.getBytes("UTF-8");}
         catch (UnsupportedEncodingException uee) {throw new RuntimeException("no utf8!?");}
     }
@@ -2030,7 +2031,7 @@ public class DataHelper {
      */
     @Deprecated
     public static byte[] getUTF8(StringBuffer orig) {
-        if (orig == null) {return null;}
+        if (orig == null) {return new byte[0];}
         return getUTF8(orig.toString());
     }
 

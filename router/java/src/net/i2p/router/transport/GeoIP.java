@@ -21,6 +21,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -520,7 +521,7 @@ public class GeoIP {
 
         try (DatabaseReader reader = openGeoIP2(geoFile)) {
             long buildTime = reader.getMetadata().getBuildDate().getTime();
-            Date buildDate = new Date(buildTime);
+            Date buildDate = Date.from(Instant.ofEpochMilli(buildTime));
             SimpleDateFormat sdf = new SimpleDateFormat("MMM d, yyyy");
             return "<b>Built:</b> " + sdf.format(buildDate) + "&ensp;<b>Size:</b> " + formattedFileSize + "MB&ensp;<b>Location:</b> " + filePath;
         } catch (Exception e) {return "Unknown GeoIP Db version";}

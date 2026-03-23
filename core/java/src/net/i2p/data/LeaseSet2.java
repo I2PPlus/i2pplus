@@ -3,6 +3,7 @@ package net.i2p.data;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -229,7 +230,7 @@ public class LeaseSet2 extends LeaseSet {
     public List<PublicKey> getEncryptionKeys() {
         if (_encryptionKeys != null) {return _encryptionKeys;}
         if (_encryptionKey != null) {return Collections.singletonList(_encryptionKey);}
-        return null;
+        return Collections.emptyList();
     }
 
     /**
@@ -372,17 +373,17 @@ public class LeaseSet2 extends LeaseSet {
     @Override
     protected byte[] getBytes() {
         if (_byteified != null) return _byteified;
-        if (_destination == null) {return null;}
+        if (_destination == null) {return new byte[0];}
         int len = size();
         ByteArrayStream out = new ByteArrayStream(len);
         try {writeBytesWithoutSig(out);}
         catch (IOException ioe) {
             ioe.printStackTrace();
-            return null;
+            return new byte[0];
         }
         catch (DataFormatException dfe) {
             dfe.printStackTrace();
-            return null;
+            return new byte[0];
         }
         byte rv[] = out.toByteArray();
         // if we are floodfill and this was published to us
@@ -644,14 +645,14 @@ public class LeaseSet2 extends LeaseSet {
         }
         if (isOffline()) {
             buf.append("\n* Transient Key: ").append(_transientSigningPublicKey);
-            buf.append("\n* Transient Expiry: ").append(new java.util.Date(_transientExpires));
+            buf.append("\n* Transient Expiry: ").append(Instant.ofEpochMilli(_transientExpires));
             buf.append("\n* Offline Signature: ").append(_offlineSignature);
         }
         buf.append("\n* Published: ").append(!isUnpublished());
         if (isBlindedWhenPublished()) {buf.append("\n* Blinded: ").append(isBlindedWhenPublished());}
         buf.append("\n* Signature: ").append(_signature);
-        buf.append("\n* Published: ").append(new java.util.Date(_published));
-        buf.append("\n* Expires: ").append(new java.util.Date(_expires));
+        buf.append("\n* Published: ").append(Instant.ofEpochMilli(_published));
+        buf.append("\n* Expires: ").append(Instant.ofEpochMilli(_expires));
         buf.append("\n* Leases: ").append(getLeaseCount());
         for (int i = 0; i < getLeaseCount(); i++) {buf.append(getLease(i));}
         if (_options != null && _options.size() > 0) {

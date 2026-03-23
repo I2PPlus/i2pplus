@@ -217,10 +217,10 @@ public class PublicKey extends SimpleDataStructure {
     public byte[] getPadding(KeyCertificate kcert) {
         if (_data == null) {throw new IllegalStateException();}
         EncType newType = kcert.getEncType();
-        if (_type == newType || newType == null) {return null;}
+        if (_type == newType || newType == null) {return new byte[0];}
         if (_type != EncType.ELGAMAL_2048) {throw new IllegalStateException("Cannot convert " + _type + " to " + newType);}
         int newLen = newType.getPubkeyLen();
-        if (newLen >= KEYSIZE_BYTES) {return null;}
+        if (newLen >= KEYSIZE_BYTES) {return new byte[0];}
         int padLen = KEYSIZE_BYTES - newLen;
         byte[] pad = new byte[padLen];
         System.arraycopy(_data, _data.length - padLen, pad, 0, padLen);

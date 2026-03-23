@@ -44,11 +44,11 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
 import java.net.InetAddress;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -421,7 +421,7 @@ public abstract class TransportImpl implements Transport {
             } else {
                 if (debug) {
                     _log.debug(String.format("[%s] Failed to send the %s (out of time) Expired: %s",
-                              style, msg.getMessageType(), new Date(msg.getExpiration())));
+                              style, msg.getMessageType(), Instant.ofEpochMilli(msg.getExpiration())));
                 }
                 addJobIfPresent(msg.getOnFailedSendJob());
                 unregisterAndDiscard(msg);
@@ -433,12 +433,12 @@ public abstract class TransportImpl implements Transport {
         long allTime = now - msg.getCreated();
         if (allTime > 5000 && debug) {
             _log.debug(String.format("Took too long (%d ms) from preparation to afterSend (ok? %b)\n* Sent: %s after failing on %s%s",
-                      allTime, sendSuccessful, new Date(sendTime), msg.getFailedTransports(),
+                      allTime, sendSuccessful, Instant.ofEpochMilli(sendTime), msg.getFailedTransports(),
                       (sendSuccessful ? " and succeeding on " + style : "")));
         }
         if (allTime > 60000 && sendSuccessful && _log.shouldWarn()) {
             _log.warn(String.format("Severe latency? More than a minute slow?\n* %s of [MsgID %d]\n* Send began: %s\n* Message created: %s%s",
-                    msg.getMessageType(), msg.getMessageId(), new Date(msg.getSendBegin()), new Date(msg.getCreated()), msg));
+                    msg.getMessageType(), msg.getMessageId(), Instant.ofEpochMilli(msg.getSendBegin()), Instant.ofEpochMilli(msg.getCreated()), msg));
             _context.messageHistory().messageProcessingError(msg.getMessageId(), msg.getMessageType(),
                                                              "Took too long to send [" + allTime + "ms]");
         }
@@ -965,7 +965,7 @@ public abstract class TransportImpl implements Transport {
      *
      * @since 0.9.28 moved from UDPTransport
      */
-    public boolean allowLocal() {return _context.getBooleanProperty("i2np.allowLocal");}
+    public final boolean allowLocal() {return _context.getBooleanProperty("i2np.allowLocal");}
 
     /**
      * IP of the peer from the last connection (in or out, any transport).

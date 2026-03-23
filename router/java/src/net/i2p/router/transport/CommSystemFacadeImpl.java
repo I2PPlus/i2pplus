@@ -1952,7 +1952,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *  @return IP or null
      */
     private static byte[] getIP(RouterInfo ri) {
-        if (ri == null) {return null;}
+        if (ri == null) {return new byte[0];}
         for (RouterAddress ra : ri.getAddresses()) {
             byte[] rv = ra.getIP();
             if (rv != null) {return rv;}
@@ -1961,7 +1961,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 if (rv != null) {return rv;}
             }
         }
-        return null;
+        return new byte[0];
     }
 
     /**
@@ -2007,12 +2007,12 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *  @since 0.9.18
      */
     public static byte[] getValidIP(RouterInfo ri) {
-        if (ri == null) {return null;}
+        if (ri == null) {return new byte[0];}
         for (RouterAddress ra : ri.getAddresses()) { // NPE?!!
             byte[] rv = ra.getIP();
             if (rv != null && TransportUtil.isPubliclyRoutable(rv, true)) {return rv;}
         }
-        return null;
+        return new byte[0];
     }
 
     /**
@@ -2024,7 +2024,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *  @since 0.9.68+
      */
     public static byte[] getCompatibleIP(RouterInfo ri) {
-        if (ri == null) {return null;}
+        if (ri == null) {return new byte[0];}
         RouterContext ctx = (RouterContext) I2PAppContext.getGlobalContext();
         boolean haveIPv4 = false;
         boolean haveIPv6 = false;
@@ -2068,7 +2068,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 if (wantIPv6 == isIPv6) {return ip;}
             }
         }
-        return null;
+        return new byte[0];
     }
 
     /**

@@ -16,6 +16,7 @@ import net.i2p.app.NavService;
  * Helper for navigation and client application management in router console.
  * @since 0.9.35
  */
+@SuppressWarnings("PMD.SingleMethodSingleton")
 public class NavHelper implements NavService, ClientApp {
     // both indexed by standard (untranslated) app name
     private final Map<String, App> _apps = new ConcurrentHashMap<String, App>(4);
@@ -57,7 +58,7 @@ public class NavHelper implements NavService, ClientApp {
         if (name != null)
             return _binary.get(name);
         else
-            return null;
+            return new byte[0];
     }
 
     /**
@@ -76,7 +77,7 @@ public class NavHelper implements NavService, ClientApp {
      */
     public Map<String, String> getClientAppLinks() {
         if (_apps.isEmpty())
-            return null;
+            return Collections.emptyMap();
         Map<String, String> rv = new HashMap<String, String>(_apps.size());
         StringBuilder buf = new StringBuilder(128);
         for (Map.Entry<String, App> e : _apps.entrySet()) {

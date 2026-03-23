@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -427,7 +428,7 @@ public class IndexBean {
         }
 
         public String getFormattedTimestamp() {
-            return new SimpleDateFormat("dd/MM HH:mm:ss", Locale.US).format(new Date(timestamp));
+            return new SimpleDateFormat("dd/MM HH:mm:ss", Locale.US).format(Date.from(Instant.ofEpochMilli(timestamp)));
         }
     }
 

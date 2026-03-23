@@ -441,7 +441,7 @@ public class Blocklist {
         try {return new long[maxSize + files.size()];} // extra for wrapsave
         catch (OutOfMemoryError oom) {
             _log.log(Log.CRIT, "OOM creating the blocklist");
-            return null;
+            return new long[0];
         }
     }
 

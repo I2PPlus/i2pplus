@@ -10,7 +10,7 @@ import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
@@ -107,7 +107,7 @@ public class FileDumpHelper extends HelperBase {
         buf.append("<tr><td><b title=\"").append(f.getAbsolutePath()).append("\">").append(f.getName()).append("</b></td>")
            .append("<td>").append(f.length()).append("</td><td title=\"UTC\">");
         long mod = f.lastModified();
-        if (mod > 0) {buf.append((new Date(mod)).toString().replace(" GMT", ""));}
+        if (mod > 0) {buf.append(Instant.ofEpochMilli(mod));}
         else {buf.append("<span class=warn style=color:red>Not found</span>");}
         buf.append("</td><td>");
         if (mod > 0 && !FileUtil.verifyZip(f)) {buf.append("<span class=warn style=color:red>CORRUPT</span><br>");}
@@ -177,7 +177,7 @@ public class FileDumpHelper extends HelperBase {
             int cnt = 0;
             while ((cnt = in.read(b)) >= 0) {md.update(b, 0, cnt);}
             return md.digest();
-        } catch (IOException ioe) {return null;}
+        } catch (IOException ioe) {return new byte[0];}
         finally {
             if (in != null) {
                 try {in.close();}
@@ -196,7 +196,7 @@ public class FileDumpHelper extends HelperBase {
             in = (new URL("jar:file:" + f.getAbsolutePath() + "!/META-INF/MANIFEST.MF")).openStream();
             Manifest man = new Manifest(in);
             return man.getMainAttributes();
-        } catch (IOException ioe) {return null;}
+        } catch (IOException ioe) {return new java.util.jar.Attributes();}
         finally {
             if (in != null) {
                 try {in.close();}

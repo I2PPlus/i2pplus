@@ -131,6 +131,7 @@ public final class SHA1 extends MessageDigest implements Cloneable {
      * @return fastest digest, either new SHA1() or MessageDigest.getInstance("SHA-1")
      * @since 0.8.7
      */
+    @SuppressWarnings("PMD.SingletonClassReturningNewInstance")
     public static MessageDigest getInstance() {
         if (!_useBitzi) {
             try {
@@ -291,7 +292,7 @@ public final class SHA1 extends MessageDigest implements Cloneable {
             engineDigest(hashvalue, 0, HASH_LENGTH);
             return hashvalue;
         } catch (DigestException e) {
-            return null;
+            return new byte[0];
         }
     }
 

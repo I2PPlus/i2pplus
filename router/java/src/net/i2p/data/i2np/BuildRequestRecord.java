@@ -4,7 +4,7 @@ import com.southernstorm.noise.protocol.HandshakeState;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.Date;
+import java.time.Instant;
 import java.util.Properties;
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.EncType;
@@ -415,7 +415,7 @@ public class BuildRequestRecord {
      */
     public Properties readOptions() {
         if (!_isEC)
-            return null;
+            return new Properties();
         ByteArrayInputStream in;
         if (_data.length == LENGTH_EC_SHORT)
             in = new ByteArrayInputStream(_data, OFF_OPTIONS_SHORT, MAX_OPTIONS_LENGTH_SHORT);
@@ -424,9 +424,9 @@ public class BuildRequestRecord {
         try {
             return DataHelper.readProperties(in, null);
         } catch (DataFormatException dfe) {
-            return null;
+            return new Properties();
         } catch (IOException ioe) {
-            return null;
+            return new Properties();
         }
     }
 
@@ -860,7 +860,7 @@ public class BuildRequestRecord {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder(256);
-        buf.append("\n* Time: ").append(new Date(readRequestTime()))
+        buf.append("\n* Time: ").append(Instant.ofEpochMilli(readRequestTime()))
            .append(" -> Expires in: ").append(DataHelper.formatDuration(readExpiration()))
            .append("\n* ")
            .append(_isEC ? "ECIES" : "ElGamal");

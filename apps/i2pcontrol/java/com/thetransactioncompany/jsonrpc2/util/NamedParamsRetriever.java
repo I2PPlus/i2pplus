@@ -1364,7 +1364,7 @@ public class NamedParamsRetriever
 		List<Object> list = getList(name, allowNull);
 
 		if (list == null)
-			return null;
+			return new String[0];
 
 		try {
 			return list.toArray(new String[list.size()]);

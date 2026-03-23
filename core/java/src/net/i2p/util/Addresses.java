@@ -296,7 +296,7 @@ public abstract class Addresses {
  */
     public static byte[] getYggdrasilAddress() {
         if (SystemVersion.isAndroid())
-            return null;
+            return new byte[0];
         try {
             Enumeration<NetworkInterface> ifcs = NetworkInterface.getNetworkInterfaces();
             if (ifcs != null) {
@@ -315,7 +315,7 @@ public abstract class Addresses {
         } catch (SocketException e) {
         } catch (java.lang.Error e) {
         }
-        return null;
+        return new byte[0];
     }
 
 /**
@@ -565,7 +565,7 @@ public abstract class Addresses {
  */
     public static byte[] getIP(String host) {
         if (host == null || host.isEmpty())
-            return null;
+            return new byte[0];
         byte[] rv;
         synchronized (_IPAddress) {
             rv = _IPAddress.get(host);
@@ -575,7 +575,7 @@ public abstract class Addresses {
                 Long when = _negativeCache.get(host);
                 if (when != null) {
                     if (when.longValue() > System.currentTimeMillis() - NEG_CACHE_TIME)
-                        return null;
+                        return new byte[0];
                     _negativeCache.remove(host);
                 }
             }
@@ -615,7 +615,7 @@ public abstract class Addresses {
  */
     public static byte[] getIPOnly(String host) {
         if (host == null || host.isEmpty())
-            return null;
+            return new byte[0];
         byte[] rv;
         synchronized (_IPAddress) {
             rv = _IPAddress.get(host);
@@ -626,11 +626,11 @@ public abstract class Addresses {
                     if (host.indexOf('.') > 0) {
                         rv = getIPv4(host);
                         if (rv == null)
-                            return null;
+                            return new byte[0];
                     } else if (host.indexOf(':') >= 0 && !host.contains("::")) {
                         rv = getIPv6(host);
                         if (rv == null)
-                            return null;
+                            return new byte[0];
                     } else {
                         rv = InetAddress.getByName(host).getAddress();
                     }
@@ -660,14 +660,14 @@ public abstract class Addresses {
  */
     public static byte[] getIP(String host, boolean preferIPv6) {
         if (host == null || host.isEmpty())
-            return null;
+            return new byte[0];
         if (isIPAddress(host))
             return getIP(host);
         synchronized(_negativeCache) {
             Long when = _negativeCache.get(host);
             if (when != null) {
                 if (when.longValue() > System.currentTimeMillis() - NEG_CACHE_TIME)
-                    return null;
+                    return new byte[0];
                 _negativeCache.remove(host);
             }
         }
@@ -675,7 +675,7 @@ public abstract class Addresses {
         try {
             InetAddress[] addrs = InetAddress.getAllByName(host);
             if (addrs == null || addrs.length == 0)
-                return null;
+                return new byte[0];
             for (int i = 0; i < addrs.length; i++) {
                 rv = addrs[i].getAddress();
                 if (preferIPv6) {
@@ -713,25 +713,25 @@ public abstract class Addresses {
  */
     public static List<byte[]> getIPs(String host) {
         if (host == null || host.isEmpty())
-            return null;
+            return Collections.emptyList();
         if (isIPAddress(host)) {
             byte[] brv = getIP(host);
             if (brv == null)
-                return null;
+                return Collections.emptyList();
             return Collections.singletonList(brv);
         }
         synchronized(_negativeCache) {
             Long when = _negativeCache.get(host);
             if (when != null) {
                 if (when.longValue() > System.currentTimeMillis() - NEG_CACHE_TIME)
-                    return null;
+                    return Collections.emptyList();
                 _negativeCache.remove(host);
             }
         }
         try {
             InetAddress[] addrs = InetAddress.getAllByName(host);
             if (addrs == null || addrs.length == 0)
-                return null;
+                return Collections.emptyList();
             List<byte[]> rv = new ArrayList<byte[]>(addrs.length);
             for (int i = 0; i < addrs.length; i++) {
                 rv.add(addrs[i].getAddress());
@@ -742,7 +742,7 @@ public abstract class Addresses {
                 _negativeCache.put(host, Long.valueOf(System.currentTimeMillis()));
             }
         }
-        return null;
+        return Collections.emptyList();
     }
 
     /**
@@ -832,18 +832,18 @@ public abstract class Addresses {
             char c = host.charAt(i);
             if (c == '.') {
                if (i == 0 || i == len - 1 || dots == 3 || b > 255 || host.charAt(i - 1) == '.')
-                   return null;
+                   return new byte[0];
                rv[dots++] = (byte) b;
                b = 0;
             } else if (c >= '0' && c <= '9') {
                b *= 10;
                b += c - '0';
             } else {
-               return null;
+               return new byte[0];
             }
         }
         if (dots != 3 || b > 255)
-            return null;
+            return new byte[0];
         rv[3] = (byte) b;
         return rv;
     }
@@ -866,7 +866,7 @@ public abstract class Addresses {
             char c = host.charAt(i);
             if (c == ':') {
                if (i == 0 || i == len - 1 || colons == 7 || b > 65535 || host.charAt(i - 1) == ':')
-                   return null;
+                   return new byte[0];
                rv[j++] = (byte) (b >> 8);
                rv[j++] = (byte) b;
                colons++;
@@ -881,11 +881,11 @@ public abstract class Addresses {
                b <<= 4;
                b |= 10 + c - 'A';
             } else {
-               return null;
+               return new byte[0];
             }
         }
         if (colons != 7 || b > 65535)
-            return null;
+            return new byte[0];
         rv[14] = (byte) (b >> 8);
         rv[15] = (byte) b;
         return rv;

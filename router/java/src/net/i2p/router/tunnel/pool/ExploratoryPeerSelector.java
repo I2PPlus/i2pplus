@@ -13,6 +13,7 @@ import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
 import net.i2p.util.ArraySet;
 import net.i2p.util.SystemVersion;
+import java.util.Collections;
 
 /**
  * Pick peers randomly out of the not-failing pool, and put them into a tunnel
@@ -55,7 +56,7 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
         if (length < 0) {
             if (log.shouldDebug())
                 log.debug("Tunnel length requested is zero: " + settings);
-            return null;
+            return Collections.emptyList();
         }
 
         boolean isInbound = settings.isInbound();

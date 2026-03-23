@@ -155,7 +155,7 @@ public class JspC {
             Manifest man = new Manifest(in);
             return man.getMainAttributes();
         } catch (IOException ioe) {
-            return null;
+            return new java.util.jar.Attributes();
         } finally {
             if (in != null) try { in.close(); } catch (IOException e) {}
         }

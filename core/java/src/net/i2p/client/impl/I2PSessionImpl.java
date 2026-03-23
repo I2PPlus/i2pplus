@@ -806,7 +806,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         MessagePayloadMessage msg = _availableMessages.remove(Long.valueOf(msgId));
         if (msg == null) {
             _log.error("Received [MsgID " + msgId + "] had no matches");
-            return null;
+            return new byte[0];
         }
         updateActivity();
         return msg.getPayload().getUnencryptedData();
@@ -1348,7 +1348,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     /**
      * try hard to make a decent identifier as this will appear in error logs
      */
-    protected String getPrefix() {
+    protected final String getPrefix() {
         StringBuilder buf = new StringBuilder();
         buf.append(' ');
         getName(buf);
@@ -1885,7 +1885,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
             // not before GOTDATE
             if (STATES_CLOSED_OR_OPENING.contains(_state)) {
                 if (_log.shouldInfo()) {_log.info("Session for " + getName() + " closed -> Cannot get bandwidth limits");}
-                return null;
+                return new int[0];
             }
         }
         sendMessage_unchecked(new GetBandwidthLimitsMessage());

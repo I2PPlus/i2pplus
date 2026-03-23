@@ -1054,7 +1054,7 @@ public final class ECIESAEADEngine {
             return x_encrypt(cloves, target, to, priv, keyManager, callback);
         } catch (Exception e) {
             _log.error("ECIES encryption error", e);
-            return null;
+            return new byte[0];
         }
     }
 
@@ -1073,7 +1073,7 @@ public final class ECIESAEADEngine {
         if (Arrays.equals(target.getData(), NULLPK)) {
             if (_log.shouldWarn())
                 _log.warn("Zero static key target");
-            return null;
+            return new byte[0];
         }
         if (priv == null) {
             if (_log.shouldDebug())
@@ -1096,7 +1096,7 @@ public final class ECIESAEADEngine {
             } catch (CloneNotSupportedException e) {
                 if (_log.shouldWarn())
                     _log.warn("ECIES encryption failure: clone()", e);
-                return null;
+                return new byte[0];
             }
             if (_log.shouldDebug())
                 _log.debug("Encrypting as NewSession Reply \n* Target: " + target + "\n* Tag: " + re.tag.toBase64());
@@ -1174,7 +1174,7 @@ public final class ECIESAEADEngine {
         } catch (GeneralSecurityException gse) {
             if (_log.shouldWarn()) {_log.warn("Encrypt fail NewSession", gse);}
             state.destroy();
-            return null;
+            return new byte[0];
         }
         if (_log.shouldDebug()) {
             _log.debug("Encrypted NewSession: " + enc.length + " bytes " + state);
@@ -1186,7 +1186,7 @@ public final class ECIESAEADEngine {
             if (_log.shouldWarn())
                 _log.warn("Bad NewSession state");
             state.destroy();
-            return null;
+            return new byte[0];
         }
 
         eph.getEncodedPublicKey(enc, 0);
@@ -1232,7 +1232,7 @@ public final class ECIESAEADEngine {
             if (_log.shouldWarn())
                 _log.warn("Encrypt fail N", gse);
             state.destroy();
-            return null;
+            return new byte[0];
         }
         if (_log.shouldDebug())
             _log.debug("Encrypted N: " + enc.length + " bytes, state: " + state);
@@ -1286,7 +1286,7 @@ public final class ECIESAEADEngine {
         } catch (GeneralSecurityException gse) {
             if (_log.shouldWarn())
                 _log.warn("Encryption failure for NewSessionReply part 1", gse);
-            return null;
+            return new byte[0];
         }
         if (_log.shouldDebug())
             _log.debug("Encrypted NewSessionReply: " + enc.length + " bytes " + state);
@@ -1296,7 +1296,7 @@ public final class ECIESAEADEngine {
         if (eph == null || !eph.hasEncodedPublicKey()) {
             if (_log.shouldWarn())
                 _log.warn("Bad NewSessionReply state");
-            return null;
+            return new byte[0];
         }
         eph.getEncodedPublicKey(enc, TAGLEN);
 
@@ -1320,7 +1320,7 @@ public final class ECIESAEADEngine {
         } catch (GeneralSecurityException gse) {
             if (_log.shouldWarn())
                 _log.warn("Encrypt failure for NewSessionReply part 2", gse);
-            return null;
+            return new byte[0];
         }
         // tell the SKM
         keyManager.updateSession(target, null, state, callback, split);
@@ -1424,7 +1424,7 @@ public final class ECIESAEADEngine {
         } catch (GeneralSecurityException e) {
             if (_log.shouldWarn())
                 _log.warn("Unable to encrypt AEAD block", e);
-            return null;
+            return new byte[0];
         } finally {
             chacha.destroy();
         }
@@ -1681,6 +1681,7 @@ public final class ECIESAEADEngine {
      * @param skm must have non-null destination
      * @since 0.9.46
      */
+    @SuppressWarnings("PMD.AvoidBranchingStatementAsLastInLoop")
     private void setResponseTimerNS(PublicKey from, List<GarlicClove> cloveSet, RatchetSKM skm) {
         Destination us = skm.getDestination();
         // temp for router SKM

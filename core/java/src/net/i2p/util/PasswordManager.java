@@ -228,7 +228,7 @@ public class PasswordManager {
             md.update(data);
             return md.digest();
         } catch (NoSuchAlgorithmException nsae) {}
-        return null;
+        return new byte[0];
     }
 
     /**

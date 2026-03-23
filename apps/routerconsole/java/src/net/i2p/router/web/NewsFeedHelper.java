@@ -2,6 +2,7 @@ package net.i2p.router.web;
 
 import java.text.DateFormat;
 import java.util.Collections;
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import net.i2p.I2PAppContext;
@@ -62,7 +63,7 @@ public class NewsFeedHelper extends HelperBase {
                 if (i > start && entry.updated > 0 && ageLimit > 0 && entry.updated < ctx.clock().now() - ageLimit) {break;}
                 buf.append("<div class=\"newsentry lazy\">\n<h3>");
                 if (entry.updated > 0) {
-                    Date date = new Date(entry.updated);
+                    Date date = Date.from(Instant.ofEpochMilli(entry.updated));
                     buf.append("<span class=\"newsDate\">").append(fmt.format(date).replace("-", " ")).append("</span> ");
                 }
                 if (entry.link != null) {

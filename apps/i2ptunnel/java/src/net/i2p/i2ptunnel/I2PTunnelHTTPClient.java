@@ -1822,7 +1822,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 valstart = i + 1;
             }
         }
-        return null;
+        return new String[0];
     }
 
 /****

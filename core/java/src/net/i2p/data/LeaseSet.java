@@ -312,7 +312,7 @@ public class LeaseSet extends DatabaseEntry {
     @Override
     protected byte[] getBytes() {
         if (_byteified != null) {return _byteified;}
-        if ((_destination == null) || (_encryptionKey == null) || (_signingKey == null)) {return null;}
+        if ((_destination == null) || (_encryptionKey == null) || (_signingKey == null)) {return new byte[0];}
         int len = size();
         ByteArrayStream out = new ByteArrayStream(len);
         try {
@@ -321,8 +321,8 @@ public class LeaseSet extends DatabaseEntry {
             _signingKey.writeBytes(out);
             out.write((byte) _leases.size());
             for (Lease lease : _leases) {lease.writeBytes(out);}
-        } catch (IOException ioe) {return null;}
-        catch (DataFormatException dfe) {return null;}
+        } catch (IOException ioe) {return new byte[0];}
+        catch (DataFormatException dfe) {return new byte[0];}
         byte rv[] = out.toByteArray();
         if (getReceivedAsPublished()) {_byteified = rv;} // if we are floodfill and this was published to us
         return rv;

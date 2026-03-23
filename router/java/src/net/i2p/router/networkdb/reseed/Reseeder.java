@@ -1028,7 +1028,7 @@ public class Reseeder {
             }
             get.addStatusListener(ReseedRunner.this);
             if (get.fetch() && get.getStatusCode() == 200) {return baos.toByteArray();}
-            return null;
+            return new byte[0];
         }
 
         /**

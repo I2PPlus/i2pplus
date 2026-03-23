@@ -206,6 +206,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
      * @param ctx the router context
      * @return non-null, creates new if not already registered
      */
+    @SuppressWarnings("PMD.SingletonClassReturningNewInstance")
     public synchronized static Analysis getInstance(RouterContext ctx) {
         ClientAppManager cmgr = ctx.clientAppManager();
         if (cmgr == null)
@@ -662,7 +663,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
             byte[] rv = ra.getIP();
             if (rv != null && rv.length == 4) {return rv;}
         }
-        return null;
+        return new byte[0];
     }
 
     /**
@@ -679,7 +680,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
                 }
             }
         }
-        return null;
+        return new byte[0];
     }
 
     /**

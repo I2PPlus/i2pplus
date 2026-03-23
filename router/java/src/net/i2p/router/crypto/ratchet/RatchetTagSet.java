@@ -476,7 +476,7 @@ class RatchetTagSet implements TagSetHandle {
      *
      *  @return a tag or null if we ran out
      */
-    public RatchetSessionTag consumeNext() {
+    public final RatchetSessionTag consumeNext() {
         if (_lastTag >= MAX)
             return null;
         byte[] tmp = new byte[32];

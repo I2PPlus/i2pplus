@@ -21,6 +21,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.time.Instant;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -105,7 +106,7 @@ class Mail {
 
     /** @since 0.9.34 */
     private synchronized String[] setHeader(Buffer rb, InputStream in, boolean closeIn) {
-        if (rb == null) {return null;}
+        if (rb == null) {return new String[0];}
         header = rb;
         String[] rv = parseHeaders(in);
         if (closeIn) {rb.readComplete(true);}
@@ -338,7 +339,7 @@ class Mail {
     * @since 0.9.34 pulled from parseHeaders()
     */
     private void setDate(long dateLong) {
-        date = new Date(dateLong);
+        date = Date.from(Instant.ofEpochMilli(dateLong));
         synchronized(dateFormatter) {
             formattedDate = dateFormatter.format(date);
             localFormattedDate = localDateFormatter.format(date);

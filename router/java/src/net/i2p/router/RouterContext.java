@@ -173,7 +173,7 @@ public class RouterContext extends I2PAppContext {
      * @deprecated Use Router.saveConfig()
      */
     @Deprecated
-    public void setProperty(String propName, String value) {
+    public final void setProperty(String propName, String value) {
         _overrideProps.setProperty(propName, value);
     }
 

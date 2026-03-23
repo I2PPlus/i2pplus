@@ -92,14 +92,14 @@ public final class ElGamalAESEngine {
     public byte[] decrypt(byte data[], PrivateKey targetPrivateKey, SessionKeyManager keyManager) throws DataFormatException {
         if (data == null) {
             if (_log.shouldError()) _log.error("Null data being decrypted?");
-            return null;
+            return new byte[0];
         } else if (data.length < MIN_ENCRYPTED_SIZE) {
             if (_log.shouldWarn())
                 _log.warn("Data is less than the minimum size (" + data.length + " < " + MIN_ENCRYPTED_SIZE + ")");
-            return null;
+            return new byte[0];
         }
         if (targetPrivateKey.getType() != EncType.ELGAMAL_2048)
-            return null;
+            return new byte[0];
 
         byte tag[] = new byte[32];
         System.arraycopy(data, 0, tag, 0, 32);
@@ -154,7 +154,7 @@ public final class ElGamalAESEngine {
                     _log.warn("ElGamal decrypt fail: Unknown Tag " + st.toString());
             }
         } else {
-            return null;
+            return new byte[0];
         }
 
         //if ((key == null) && (decrypted == null)) {
@@ -194,15 +194,15 @@ public final class ElGamalAESEngine {
     public byte[] decryptFast(byte data[], PrivateKey targetPrivateKey,
                               SessionKeyManager keyManager) throws DataFormatException {
         if (data == null)
-            return null;
+            return new byte[0];
         if (data.length < MIN_ENCRYPTED_SIZE)
-            return null;
+            return new byte[0];
         byte tag[] = new byte[32];
         System.arraycopy(data, 0, tag, 0, 32);
         SessionTag st = new SessionTag(tag);
         SessionKey key = keyManager.consumeTag(st);
         if (key == null)
-            return null;
+            return new byte[0];
         SessionKey foundKey = new SessionKey();
         SessionKey usedKey = new SessionKey();
         Set<SessionTag> foundTags = new HashSet<SessionTag>();
@@ -243,9 +243,9 @@ public final class ElGamalAESEngine {
     public byte[] decryptSlow(byte data[], PrivateKey targetPrivateKey,
                               SessionKeyManager keyManager) throws DataFormatException {
         if (data == null)
-            return null;
+            return new byte[0];
         if (data.length < ELG_ENCRYPTED_LENGTH)
-            return null;
+            return new byte[0];
         SessionKey foundKey = new SessionKey();
         SessionKey usedKey = new SessionKey();
         Set<SessionTag> foundTags = new HashSet<SessionTag>();
@@ -304,7 +304,7 @@ public final class ElGamalAESEngine {
         if (elgDecr == null) {
             //if (_log.shouldWarn())
              //   _log.warn("decrypt returned null", new Exception("decrypt failed"));
-            return null;
+            return new byte[0];
         }
 
         int offset = 0;
@@ -500,7 +500,7 @@ public final class ElGamalAESEngine {
             throw new RuntimeException("Hash does not match");
         } catch (RuntimeException e) {
             if (_log.shouldWarn()) _log.warn("Unable to decrypt AES block", e);
-            return null;
+            return new byte[0];
         }
     }
 

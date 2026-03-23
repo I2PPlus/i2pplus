@@ -510,6 +510,7 @@ public class NamingServiceBean extends AddressbookBean {
      * Save notes for a destination.
      * @since 0.9.35
      */
+    @SuppressWarnings("PMD.AvoidBranchingStatementAsLastInLoop")
     public void saveNotes() {
         if (action == null || !action.equals(_t("Save Notes")) ||
             destination == null || detail == null || isDirect() ||
@@ -599,29 +600,29 @@ public class NamingServiceBean extends AddressbookBean {
      * @since 0.9.26
      */
     public List<AddressBean> getLookupAll() {
-        if (this.detail == null) {return null;}
+        if (this.detail == null) {return Collections.emptyList();}
         if (isDirect()) {
             AddressBean ab = getLookup(); // won't work for the published addressbook
             if (ab != null) {
                 // Check if host is blacklisted
                 BlacklistBean blacklist = new BlacklistBean();
                 if (blacklist.isBlacklistedByAnyForm(this.detail)) {
-                    return null;
+                    return Collections.emptyList();
                 }
                 return Collections.singletonList(ab);
             }
-            return null;
+            return Collections.emptyList();
         }
         Properties nsOptions = new Properties();
         List<Properties> propsList = new ArrayList<Properties>(4);
         nsOptions.setProperty("list", getFileName());
         List<Destination> dests = getNamingService().lookupAll(this.detail, nsOptions, propsList);
-        if (dests == null) {return null;}
+        if (dests == null) {return Collections.emptyList();}
 
         // Check if host is blacklisted
         BlacklistBean blacklist = new BlacklistBean();
         if (blacklist.isBlacklistedByAnyForm(this.detail)) {
-            return null;
+            return Collections.emptyList();
         }
 
         List<AddressBean> rv = new ArrayList<AddressBean>(dests.size());

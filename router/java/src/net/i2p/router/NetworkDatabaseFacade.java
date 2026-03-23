@@ -206,7 +206,7 @@ public abstract class NetworkDatabaseFacade implements Service {
      *  @since 0.9.41
      */
     public List<BlindData> getBlindData() {
-        return null;
+        return Collections.emptyList();
     }
 
     /**

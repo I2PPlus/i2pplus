@@ -850,7 +850,7 @@ setResendDelay(getInt(opts, PROP_INITIAL_RESEND_DELAY, 100));
 
     public int getMaxWindowSize() {return _maxWindowSize;}
 
-    public void setMaxWindowSize(int msgs) {
+    public final void setMaxWindowSize(int msgs) {
         _maxWindowSize = 1;
         if (msgs > 2 * Connection.MAX_WINDOW_SIZE) {_maxWindowSize = 2 * Connection.MAX_WINDOW_SIZE;}
         else if (msgs < 2) {_maxWindowSize = 2;}

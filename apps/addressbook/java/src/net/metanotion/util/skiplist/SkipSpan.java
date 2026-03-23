@@ -312,13 +312,13 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
 	 *          rv is null if no object was removed.
 	 */
 	public Object[] remove(K key, SkipList<K, V> sl) {
-		if(nKeys == 0) { return null; }
+		if(nKeys == 0) { return new Object[0]; }
 		if(keys[nKeys - 1].compareTo(key) < 0) {
-			if(next == null) { return null; }
+			if(next == null) { return new Object[0]; }
 			return next.remove(key, sl);
 		}
 		int loc = binarySearch(key);
-		if(loc < 0) { return null; }
+		if(loc < 0) { return new Object[0]; }
 		Object o = vals[loc];
 		Object[] res = new Object[2];
 		res[0] = o;

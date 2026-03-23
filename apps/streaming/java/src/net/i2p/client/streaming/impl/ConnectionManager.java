@@ -997,7 +997,7 @@ class ConnectionManager {
 
         boolean ok = req.pongReceived();
         if (!ok)
-            return null;
+            return new byte[0];
         ByteArray ba = req.getPayload();
         if (ba == null)
             return new byte[0];

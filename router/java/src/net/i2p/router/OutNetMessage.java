@@ -10,7 +10,7 @@ package net.i2p.router;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -119,7 +119,7 @@ public class OutNetMessage implements CDPQEntry {
      *
      * @param eventName what occurred
      */
-    public void timestamp(String eventName) {
+    public final void timestamp(String eventName) {
         if (_shouldTimestamp) {
             // only timestamp if we are debugging
             long now = _context.clock().now();
@@ -373,7 +373,7 @@ public class OutNetMessage implements CDPQEntry {
         if (_onSend != null) {buf.append("; with onSend ").append(_onSend);}
         if (_onFailedReply != null) {buf.append("; with onFailedReply ").append(_onFailedReply);}
         if (_onFailedSend != null) {buf.append("; with onFailedSend ").append(_onFailedSend);}
-        buf.append("\n* Expires: ").append(new Date(_expiration));
+        buf.append("\n* Expires: ").append(Instant.ofEpochMilli(_expiration));
         if (_timestamps != null && _timestampOrder != null) {renderTimestamps(buf);}
         return buf.toString();
     }
@@ -392,7 +392,7 @@ public class OutNetMessage implements CDPQEntry {
                 Long when = _timestamps.get(name);
                 if (_timestampOrder.size() > 1) {buf.append("\n* ");}
                 buf.append(name);
-                buf.append(": ").append(new Date(when.longValue()));
+                buf.append(": ").append(Instant.ofEpochMilli(when.longValue()));
                 long diff = when.longValue() - lastWhen;
                 buf.append(" (");
                 if ((lastWhen > 0) && (diff > 500)) {buf.append("**");}

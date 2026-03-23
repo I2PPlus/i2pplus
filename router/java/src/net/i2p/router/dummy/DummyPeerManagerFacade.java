@@ -12,6 +12,7 @@ import java.io.Writer;
 import java.util.Set;
 import net.i2p.data.Hash;
 import net.i2p.router.PeerManagerFacade;
+import java.util.Collections;
 
 /**
  * Manage peer references and keep them up to date so that when asked for peers,
@@ -24,7 +25,7 @@ public class DummyPeerManagerFacade implements PeerManagerFacade {
     public void startup() {}
     public void restart() {}
     public void renderStatusHTML(Writer out) {}
-    public Set<Hash> getPeersByCapability(char capability) {return null;}
+    public Set<Hash> getPeersByCapability(char capability) {return Collections.emptySet();}
     public int countPeersByCapability(char capability) {return 0;}
     public void setCapabilities(Hash peer, String caps) {}
     public void removeCapabilities(Hash peer) {}

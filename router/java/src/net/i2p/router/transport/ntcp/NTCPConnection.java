@@ -305,10 +305,10 @@ public class NTCPConnection implements Closeable {
      */
     public byte[] getRemoteIP() {
         if (_chan == null)
-            return null;
+            return new byte[0];
         InetAddress addr = _chan.socket().getInetAddress();
         if (addr == null)
-            return null;
+            return new byte[0];
         return addr.getAddress();
     }
 

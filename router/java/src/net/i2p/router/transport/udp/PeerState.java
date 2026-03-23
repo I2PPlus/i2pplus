@@ -3,8 +3,8 @@ package net.i2p.router.transport.udp;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
+import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -21,6 +21,7 @@ import net.i2p.router.util.CachedIteratorCollection;
 import net.i2p.router.util.PriBlockingQueue;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
+import java.util.Collections;
 
 /**
  * Contain all of the state about a UDP connection to a peer.
@@ -1188,7 +1189,7 @@ public class PeerState {
      * @since 0.9.48
      */
     private List<OutboundMessageState> allocateSend2(boolean canSendOld, long now) {
-        if (_dead) return null;
+        if (_dead) return Collections.emptyList();
 
         List<OutboundMessageState> rv = null;
 
@@ -1608,9 +1609,9 @@ public class PeerState {
         else {buf.append(_isInbound ? " Inbound" : " Outbound");}
         long now = _context.clock().now();
         buf.append("\n* Received: ").append(now-_lastReceiveTime).append("ms ago");
-        if (_lastSendFullyTime != 0) {buf.append("\n* Last successful send: ").append(new Date(_lastSendFullyTime));}
-        if (_lastSendTime != 0) {buf.append("\n* Last attempted send: ").append(new Date(_lastSendTime));}
-        if (_lastACKSend != 0) {buf.append("\n* Last ACK sent: ").append(new Date(_lastACKSend));}
+        if (_lastSendFullyTime != 0) {buf.append("\n* Last successful send: ").append(Instant.ofEpochMilli(_lastSendFullyTime));}
+        if (_lastSendTime != 0) {buf.append("\n* Last attempted send: ").append(Instant.ofEpochMilli(_lastSendTime));}
+        if (_lastACKSend != 0) {buf.append("\n* Last ACK sent: ").append(Instant.ofEpochMilli(_lastACKSend));}
         if (_log.shouldInfo()) {
             int txQueue = _outboundQueue.size();
             boolean isQueued = _inboundMessages.size() > 0 || _outboundMessages.size() > 0;

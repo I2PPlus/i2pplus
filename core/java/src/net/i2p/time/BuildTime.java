@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -55,11 +56,11 @@ public class BuildTime {
         long max = min + YEARS_25;
         long build = getBuildTime(fmt, "i2p.jar");
         if (build > max) {
-            System.out.println("Warning: Strange build time, contact packager: " + new Date(build));
+            System.out.println("Warning: Strange build time, contact packager: " + Instant.ofEpochMilli(build));
             build = max;
         } else if (build < min) {
             if (build > 0) {
-                System.out.println("Warning: Strange build time, contact packager: " + new Date(build));
+                System.out.println("Warning: Strange build time, contact packager: " + Instant.ofEpochMilli(build));
             }
             build = min;
         } else {
@@ -123,7 +124,7 @@ public class BuildTime {
             in = (new URL("jar:file:" + f.getAbsolutePath() + "!/META-INF/MANIFEST.MF")).openStream();
             Manifest man = new Manifest(in);
             return man.getMainAttributes();
-        } catch (IOException ioe) {return null;}
+        } catch (IOException ioe) {return new java.util.jar.Attributes();}
         finally {
             if (in != null) {
                 try {in.close();}
@@ -133,17 +134,17 @@ public class BuildTime {
     }
 
     public static void main(String[] args) {
-        System.out.println("Hard earliest: " + new Date(EARLIEST_LONG));
+        System.out.println("Hard earliest: " + Instant.ofEpochMilli(EARLIEST_LONG));
         long date = getEarliestTime();
-        System.out.println("Earliest date: " + new Date(date));
+        System.out.println("Earliest date: " + Instant.ofEpochMilli(date));
         date = getBuildTime();
-        System.out.println("Build date: " + new Date(date));
+        System.out.println("Build date: " + Instant.ofEpochMilli(date));
         date = System.currentTimeMillis();
-        System.out.println("System time: " + new Date(date));
+        System.out.println("System time: " + Instant.ofEpochMilli(date));
         date = I2PAppContext.getGlobalContext().clock().now();
-        System.out.println("I2P time: " + new Date(date));
+        System.out.println("I2P time: " + Instant.ofEpochMilli(date));
         date = getLatestTime();
-        System.out.println("Latest date: " + new Date(date));
+        System.out.println("Latest date: " + Instant.ofEpochMilli(date));
     }
 
 }

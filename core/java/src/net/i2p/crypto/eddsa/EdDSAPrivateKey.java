@@ -137,9 +137,9 @@ public class EdDSAPrivateKey implements EdDSAKey, PrivateKey {
     @Override
     public byte[] getEncoded() {
         if (!edDsaSpec.equals(EdDSANamedCurveTable.ED_25519_CURVE_SPEC))
-            return null;
+            return new byte[0];
         if (seed == null)
-            return null;
+            return new byte[0];
         int totlen = 16 + seed.length;
         byte[] rv = new byte[totlen];
         int idx = 0;

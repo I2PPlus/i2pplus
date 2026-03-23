@@ -92,7 +92,7 @@ class BuildReplyHandler {
         if (reply.getRecordCount() != recordOrder.size()) {
             // somebody messed with us
             log.error("Corrupted build reply -> Expected " + recordOrder.size() + " records, got " + reply.getRecordCount());
-            return null;
+            return new Result[0];
         }
         Result rv[] = new Result[reply.getRecordCount()];
         for (int i = 0; i < rv.length; i++) {
@@ -113,7 +113,7 @@ class BuildReplyHandler {
                         if (log.shouldWarn())
                             log.warn("IBEP record corrupt on " + cfg);
                         // Caller doesn't check value for this hop so fail the whole thing
-                        return null;
+                        return new Result[0];
                     }
                 } else {
                     rv[i] = RESULT_OK;
@@ -123,7 +123,7 @@ class BuildReplyHandler {
                 if (res.code == -1) {
                     if (log.shouldWarn())
                         log.warn(reply.getUniqueId() + ": Failed to decrypt record for: " + cfg + " [" + i + "/" + hop + "]");
-                    return null;
+                    return new Result[0];
                 } else {
                     if (log.shouldDebug())
                         log.debug(reply.getUniqueId() + ": Decrypting record for: " + cfg + " [" + i + "/" + hop + "] -> Code: " + res.code);

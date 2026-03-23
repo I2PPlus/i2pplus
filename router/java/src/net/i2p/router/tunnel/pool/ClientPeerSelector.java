@@ -16,6 +16,7 @@ import net.i2p.router.TunnelManagerFacade;
 import net.i2p.router.TunnelPoolSettings;
 import net.i2p.router.util.MaskedIPSet;
 import net.i2p.util.ArraySet;
+import java.util.Collections;
 
 /**
  * Pick peers randomly out of the fast pool, and put them into tunnels
@@ -61,7 +62,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
     public List<Hash> selectPeers(TunnelPoolSettings settings) {
         int length = getLength(settings);
         if (length < 0 || ((length == 0) && (settings.getLength() + settings.getLengthVariance() > 0))) {
-            return null;
+            return Collections.emptyList();
         }
 
         List<Hash> rv;
@@ -176,7 +177,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                         if (log.shouldWarn()) {
                             log.warn("No active peers found -> Returning null...");
                         }
-                        return null;
+                        return Collections.emptyList();
                     }
                 } else if (hiddenOutbound) {
                     // OBEP
@@ -387,13 +388,13 @@ class ClientPeerSelector extends TunnelPeerSelector {
                                 }
                                 // Continue with shorter tunnel
                             } else {
-                                return null;
+                                return Collections.emptyList();
                             }
                         }
                     }
                 }
             }
-            if (rv.isEmpty()) {return null;}
+            if (rv.isEmpty()) {return Collections.emptyList();}
         } else {rv = new ArrayList<Hash>(1);}
 
         if (isInbound) {rv.add(0, ctx.routerHash());}
@@ -456,7 +457,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
             if (log.shouldWarn()) {
                 log.warn("All selected peers were ghosts -> Returning null to allow fallback selection...");
             }
-            return null;
+            return Collections.emptyList();
         }
 
         return filtered;
