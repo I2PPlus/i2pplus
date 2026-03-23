@@ -1948,6 +1948,10 @@ public class HostChecker {
                 for (java.util.concurrent.Future<Void> future : futures) {
                     try {
                         future.get(30, java.util.concurrent.TimeUnit.SECONDS);
+                    } catch (java.util.concurrent.TimeoutException e) {
+                        if (_log.shouldWarn()) {
+                            _log.warn("HostChecker ping timed out");
+                        }
                     } catch (Exception e) {
                         if (_log.shouldWarn()) {
                             _log.warn("Error waiting for HostChecker completion -> " + e.getMessage(), e);
