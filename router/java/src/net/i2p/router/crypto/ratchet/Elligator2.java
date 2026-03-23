@@ -149,7 +149,7 @@ class Elligator2 {
 
         // If -ux(x + A) is not a square modulo p
         if (legendre(negative_multiply3_u_x_plus_x_A) == -1) {
-            return new byte[0];
+            return null;
         }
 
         BigInteger r;
