@@ -129,12 +129,12 @@ public class SecurityHeaderBuilder {
             .anyMatch(key -> key.equalsIgnoreCase("Cache-Control"));
         List<String> cacheControlList = headers.get("Cache-Control");
 
-        if (cacheControlList != null && cacheControlList.contains("none".toLowerCase())) {
+        if (cacheControlList != null && cacheControlList.contains("none".toLowerCase(Locale.ROOT))) {
             headers.remove("Cache-Control");
             cacheControlList = null;
         }
 
-        if (cacheControlList != null && cacheControlList.contains("post-check".toLowerCase())) {
+        if (cacheControlList != null && cacheControlList.contains("post-check".toLowerCase(Locale.ROOT))) {
             List<String> newList = new java.util.ArrayList<>();
             for (String s : cacheControlList) {
                 if (!s.toLowerCase(Locale.ROOT).equals("post-check")) {
@@ -153,7 +153,7 @@ public class SecurityHeaderBuilder {
         boolean immutableCache = MimeTypeDetector.isImmutableCache(mimeType);
 
         if (cacheControlList != null) {
-            boolean hasNoCache = hasCacheControl && cacheControlList.contains("no-cache".toLowerCase());
+            boolean hasNoCache = hasCacheControl && cacheControlList.contains("no-cache".toLowerCase(Locale.ROOT));
             if (hasNoCache && immutableCache) {
                 headers.remove("Cache-Control");
                 I2PTunnelHTTPServer.setEntry(headers, "Cache-Control", "private, max-age=31536000, immutable");}
@@ -261,7 +261,7 @@ public class SecurityHeaderBuilder {
         if (hasNone || hasPostCheck) {
             List<String> newList = new java.util.ArrayList<>();
             for (String s : cacheControlList) {
-                String lc = s.toLowerCase();
+                String lc = s.toLowerCase(Locale.ROOT);
                 if (!lc.equals("none") && !lc.equals("post-check")) {
                     newList.add(s);
                 }

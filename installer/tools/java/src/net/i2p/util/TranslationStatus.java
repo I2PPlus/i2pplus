@@ -519,7 +519,7 @@ public class TranslationStatus {
         else if (langCode.equals("uk")) {countryCode = "ua";}
         else if (langCode.equals("vi")) {countryCode = "vn";}
         else if (langCode.equals("zh")) {countryCode = "cn";}
-        else if (!langCode.isEmpty()) {countryCode = langCode.toLowerCase();}
+        else if (!langCode.isEmpty()) {countryCode = langCode.toLowerCase(Locale.ROOT);}
         return countryCode;
     }
 }

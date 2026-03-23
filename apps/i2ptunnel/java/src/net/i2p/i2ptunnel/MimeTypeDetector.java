@@ -2,6 +2,7 @@ package net.i2p.i2ptunnel;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Locale;
 
 /**
  * Utility class for MIME type detection based on URL file extensions.
@@ -77,7 +78,7 @@ public class MimeTypeDetector {
             return "application/octet-stream";
         }
 
-        String lcUrl = url.toLowerCase();
+        String lcUrl = url.toLowerCase(Locale.ROOT);
         int queryIndex = lcUrl.indexOf("?");
         if (queryIndex != -1) {
             lcUrl = lcUrl.substring(0, queryIndex);

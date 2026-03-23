@@ -27,6 +27,7 @@ import net.i2p.util.Log;
 import net.i2p.util.SecureDirectory;
 import net.i2p.util.SecureFileOutputStream;
 import net.i2p.util.SystemVersion;
+import java.util.Locale;
 
 /**
  *  Write profiles to disk at shutdown, read at startup.
@@ -132,7 +133,7 @@ class ProfilePersistenceHelper {
                 buf.append(HR).append(NL).append(NL);
                 buf.append("# ").append("Version: ").append(version != null ? version : "unknown").append(NL);
                 buf.append("# ").append("Signature: ").append(DataHelper.stripHTML(info.getIdentity().getSigningPublicKey().getType().toString())).append(NL);
-                buf.append("# ").append("Capabilities: ").append(DataHelper.stripHTML(info.getCapabilities()).toUpperCase().replace("XO", "X").replace("PO", "P")).append(NL);
+                buf.append("# ").append("Capabilities: ").append(DataHelper.stripHTML(info.getCapabilities()).toUpperCase(Locale.ROOT).replace("XO", "X").replace("PO", "P")).append(NL);
                 if (speed > 0) {buf.append("# ").append("Speed: ").append(speed).append(" B/s").append(NL);}
                 if (capacity > 0) {buf.append("# ").append("Capacity: ").append(capacity).append(capacity == 1 ? " tunnel" : " tunnels").append(" per hour").append(NL);}
                 if (integration > 0) {buf.append("# ").append("Integration: ").append(integration).append(integration == 1 ? " peer" : " peers").append(NL);}

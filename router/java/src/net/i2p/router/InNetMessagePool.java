@@ -17,6 +17,7 @@ import net.i2p.data.i2np.TunnelGatewayMessage;
 import net.i2p.data.router.RouterIdentity;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
+import java.util.Locale;
 
 /**
  * Receives and dispatches inbound network messages with configurable processing modes.
@@ -222,11 +223,11 @@ public class InNetMessagePool implements Service {
     private void handleInvalidMessage(I2NPMessage messageBody, String invalidReason, RouterIdentity fromRouter, Hash fromRouterHash, boolean doHistory, long msgIDBloomXor) {
         if (_log.shouldInfo()) {
                 _log.warn("Dropping DbLookupMessage [XOR MsgID " + messageBody.getUniqueId(msgIDBloomXor) + "] -> " +
-                    invalidReason.substring(0, 1).toUpperCase() + invalidReason.substring(1) +
+                    invalidReason.substring(0, 1).toUpperCase(Locale.ROOT) + invalidReason.substring(1) +
                     messageBody + "\n* Expires: " + Instant.ofEpochMilli(messageBody.getMessageExpiration()));
         } else if (_log.shouldWarn()) {
             _log.warn("Dropping DbLookupMessage for " + messageBody + " -> " +
-                      invalidReason.substring(0, 1).toUpperCase() + invalidReason.substring(1));
+                      invalidReason.substring(0, 1).toUpperCase(Locale.ROOT) + invalidReason.substring(1));
         }
         _context.statManager().addRateData("inNetPool.dropped", 1);
         if (!invalidReason.contains("expire")) {

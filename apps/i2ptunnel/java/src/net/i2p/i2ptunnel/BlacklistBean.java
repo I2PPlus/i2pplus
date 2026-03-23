@@ -120,7 +120,7 @@ public class BlacklistBean {
         if (content == null) {
             return false;
         }
-        address = address.trim().toLowerCase();
+        address = address.trim().toLowerCase(Locale.ROOT);
         String[] lines = content.split("\\n");
         for (String line : lines) {
             if (line.trim().toLowerCase(Locale.ROOT).equals(address)) {

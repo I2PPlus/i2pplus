@@ -249,7 +249,7 @@ public class TimeParser {
         switch (token.token_id) {
             case TimeToken.YESTERDAY:
                 spec.day--;
-            /* FALLTRHU */
+                // fall through
             case TimeToken.TODAY: /* force ourselves to stay in today - no further processing */
                 token = scanner.nextToken();
                 break;
@@ -393,6 +393,7 @@ public class TimeParser {
             /* Only absolute time specifications below */
             case TimeToken.NUMBER:
                 timeOfDay();
+                // fall through
             /* fix month parsing */
             case TimeToken.JAN:
             case TimeToken.FEB:

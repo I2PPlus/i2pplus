@@ -15,6 +15,7 @@ import net.i2p.router.transport.FIFOBandwidthRefiller;
 import net.i2p.router.transport.TransportManager;
 import net.i2p.router.transport.ntcp.NTCPTransport;
 import net.i2p.router.transport.udp.UDPTransport;
+import java.util.Locale;
 
 /*
  *  Copyright 2011 hottuna (dev@robertfoss.se)
@@ -133,7 +134,7 @@ public class NetworkSettingHandler implements RequestHandler {
         if (inParams.containsKey("i2p.router.net.ntcp.autoip")) {
             String oldNTCPAutoIP = _context.getProperty(NTCPTransport.PROP_I2NP_NTCP_AUTO_IP);
             if ((inParam = (String) inParams.get("i2p.router.net.ntcp.autoip")) != null) {
-                inParam = inParam.trim().toLowerCase();
+                inParam = inParam.trim().toLowerCase(Locale.ROOT);
                 if (oldNTCPAutoIP == null || !oldNTCPAutoIP.equals(inParam)) {
                     if ("always".equals(inParam) || "true".equals(inParam) || "false".equals(inParam)) {
                         _context.router().saveConfig(NTCPTransport.PROP_I2NP_NTCP_AUTO_IP, inParam);
@@ -195,7 +196,7 @@ public class NetworkSettingHandler implements RequestHandler {
         if (inParams.containsKey("i2p.router.net.ssu.autoip")) {
             String oldSSUAutoIP =  _context.getProperty(UDPTransport.PROP_SOURCES);
             if ((inParam = (String) inParams.get("i2p.router.net.ssu.autoip")) != null) {
-                inParam = inParam.trim().toLowerCase();
+                inParam = inParam.trim().toLowerCase(Locale.ROOT);
                 if (oldSSUAutoIP == null || !oldSSUAutoIP.equals(inParam)) {
                     if (inParam.equals("ssu") || inParam.equals("local,ssu") || inParam.equals("upnp,ssu") || inParam.equals("local,upnp,ssu")) {
                         _context.router().saveConfig(UDPTransport.PROP_SOURCES, inParam);

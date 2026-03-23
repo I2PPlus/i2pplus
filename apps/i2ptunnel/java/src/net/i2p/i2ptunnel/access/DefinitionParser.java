@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import net.i2p.data.DataHelper;
+import java.util.Locale;
 
 /**
  * Utility class for parsing filter definitions.
@@ -136,7 +137,7 @@ class DefinitionParser {
 
         for (String line : definition) {
             String [] split = DataHelper.split(line,"[ \t]");
-            split[0] = split[0].toLowerCase();
+            split[0] = split[0].toLowerCase(Locale.ROOT);
 
             Threshold threshold = parseThreshold(split[0]);
             Rule rule = parseRule(split[1]);

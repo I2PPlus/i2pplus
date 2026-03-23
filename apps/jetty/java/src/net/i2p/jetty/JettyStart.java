@@ -25,6 +25,7 @@ import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.util.component.LifeCycle;
 import org.eclipse.jetty.xml.XmlConfiguration;
+import java.util.Locale;
 
 /**
  *  Start Jetty where the args are one or more XML files.
@@ -80,9 +81,9 @@ public class JettyStart implements ClientApp {
             boolean found = false;
             File path = new File(".");
             for (int i = 0; i < args.length; i++) {
-                if (args[i].toLowerCase().endsWith(".properties"))
+                if (args[i].toLowerCase(Locale.ROOT).endsWith(".properties"))
                     continue;
-                if (args[i].toLowerCase().endsWith(GZIP_CONFIG)) {
+                if (args[i].toLowerCase(Locale.ROOT).endsWith(GZIP_CONFIG)) {
                     found = true;
                     break;
                 }
@@ -111,9 +112,9 @@ public class JettyStart implements ClientApp {
             }
             found = false;
             for (int i = 0; i < args.length; i++) {
-                if (args[i].toLowerCase().endsWith(".properties"))
+                if (args[i].toLowerCase(Locale.ROOT).endsWith(".properties"))
                     continue;
-                if (args[i].toLowerCase().endsWith(REWRITE_CONFIG)) {
+                if (args[i].toLowerCase(Locale.ROOT).endsWith(REWRITE_CONFIG)) {
                     found = true;
                     break;
                 }
@@ -146,7 +147,7 @@ public class JettyStart implements ClientApp {
         XmlConfiguration last=null;
         for (int i = 0; i < args.length; i++) {
             File f = new File(args[i]);
-            if (args[i].toLowerCase().endsWith(".properties")) {
+            if (args[i].toLowerCase(Locale.ROOT).endsWith(".properties")) {
                 InputStream in = null;
                 try {
                     in = new FileInputStream(f);

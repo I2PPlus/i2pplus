@@ -240,7 +240,7 @@ public class CSSHelper extends HelperBase {
             for (String w:words) {
                 String first = w.substring(0,1);
                 String afterfirst = w.substring(1);
-                capitalizeWord.append(first.toUpperCase());
+                capitalizeWord.append(first.toUpperCase(Locale.ROOT));
                 capitalizeWord.append(afterfirst);
                 capitalizeWord.append(" ");
             }

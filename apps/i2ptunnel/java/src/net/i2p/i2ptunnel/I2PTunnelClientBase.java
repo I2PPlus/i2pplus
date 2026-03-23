@@ -37,6 +37,7 @@ import net.i2p.util.EventDispatcher;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.I2PSSLSocketFactory;
 import net.i2p.util.Log;
+import java.util.Locale;
 
 /**
  * Abstract base class for I2P client tunnels with common functionality.
@@ -442,7 +443,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                     if (getTunnel().getContext().isRouterContext()) {msg = "✖ Unable to build tunnels for client at " + hostAndPort;}
                     else {msg = "✖ Cannot build client tunnels: No connection to router at " + hostAndPort;}
                     String exmsg = ise.getMessage();
-                    boolean fail = !_buildingTunnels || (exmsg != null && exmsg.toLowerCase().contains("session limit exceeded"));
+                    boolean fail = !_buildingTunnels || (exmsg != null && exmsg.toLowerCase(Locale.ROOT).contains("session limit exceeded"));
                     if (!fail && ++retries < MAX_RETRIES) {
                         String retryMsg = msg + " -> Retrying in " + (RETRY_DELAY / 1000) + "s [" + retries + " / " + MAX_RETRIES + "]";
                         if (log != null) {log.log(retryMsg);}

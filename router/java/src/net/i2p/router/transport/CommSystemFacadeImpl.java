@@ -1064,7 +1064,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                                     String ip = line.substring(0, firstComma).trim();
                                     String name = line.substring(firstComma + 1, lastComma).trim();
                                     String timestamp = line.substring(lastComma + 1).trim();
-                                    String lc = name.toLowerCase();
+                                    String lc = name.toLowerCase(Locale.ROOT);
 
                                     // Early skip based on original name
                                     if (lc.contains("unknown") ||
@@ -1099,8 +1099,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                                     line = ip + "," + name + "," + timestamp;
 
                                     // Final skip based on modified line
-                                    boolean skipWrite = line.toLowerCase().contains("unknown") ||
-                                                        line.toLowerCase().contains("private");
+                                    boolean skipWrite = line.toLowerCase(Locale.ROOT).contains("unknown") ||
+                                                        line.toLowerCase(Locale.ROOT).contains("private");
 
                                     if (!skipWrite) {
                                         writer.write(line);
@@ -1292,7 +1292,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         return CompletableFuture.supplyAsync(() -> {
             List<String> countryServers = (countryCode == null || countryCode.trim().isEmpty())
                 ? Collections.emptyList()
-                : WHOIS_SERVERS_BY_COUNTRY.getOrDefault(countryCode.toLowerCase(), Collections.emptyList());
+                : WHOIS_SERVERS_BY_COUNTRY.getOrDefault(countryCode.toLowerCase(Locale.ROOT), Collections.emptyList());
 
             String result = tryWhoisServers(ipAddress, countryServers);
             if (result == null || result.trim().isEmpty() || "unknown".equalsIgnoreCase(result)) {
@@ -1386,7 +1386,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                     continue; // Retry on empty/null result
                 }
 
-                String lower = result.toLowerCase();
+                String lower = result.toLowerCase(Locale.ROOT);
                 if (lower.contains("denied") || lower.contains("refused") || lower.contains("is not registered") ||
                     lower.contains("not managed by") || lower.contains("have been further assigned") ||
                     lower.contains("non-ripe-ncc-managed-address-block")) {
@@ -1687,7 +1687,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
         for (String line : whoisData.split("\\r?\\n")) {
             line = line.trim();
-            String lower = line.toLowerCase();
+            String lower = line.toLowerCase(Locale.ROOT);
 
             if (lower.startsWith("orgname:") || lower.startsWith("organization:") ||
                 lower.startsWith("organisation:") || lower.startsWith("org-name:")) {
@@ -1701,7 +1701,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         }
 
         if (fallback != null) {
-            String lc = fallback.toLowerCase();
+            String lc = fallback.toLowerCase(Locale.ROOT);
             if (lc.contains("latin american and caribbean")) {
                 fallback = "LACNIC";
             } else if (lc.contains("asia pacific network") || lc.contains("administered by apnic")) {
@@ -1743,7 +1743,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     public static String getDomain(String hostname) {
         if (hostname == null || hostname.isEmpty()) return "";
 
-        hostname = hostname.toLowerCase();
+        hostname = hostname.toLowerCase(Locale.ROOT);
         if (hostname.startsWith(".")) hostname = hostname.substring(1);
 
         String[] parts = hostname.split("\\.");

@@ -21,6 +21,7 @@ import net.i2p.util.ObjectCounter;
 import net.i2p.util.SimpleTimer;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
+import java.util.Locale;
 
 /**
  * Throttles incoming tunnel requests earlier than ParticipatingThrottler,
@@ -322,7 +323,7 @@ class RequestThrottler {
         if (blockCountries.isEmpty()) {
             cachedBlockedCountries = Collections.emptySet();
         } else {
-            cachedBlockedCountries = new HashSet<>(Arrays.asList(blockCountries.toLowerCase().split(",")));
+            cachedBlockedCountries = new HashSet<>(Arrays.asList(blockCountries.toLowerCase(Locale.ROOT).split(",")));
         }
 
         return cachedBlockedCountries;

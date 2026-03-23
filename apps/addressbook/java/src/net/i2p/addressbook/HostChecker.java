@@ -113,7 +113,7 @@ public class HostChecker {
                     if (PROP_PING_INTERVAL.equals(key)) {
                         try {
                             String rawValue = value;
-                            boolean isMinutes = rawValue.toUpperCase().endsWith("M");
+                            boolean isMinutes = rawValue.toUpperCase(Locale.ROOT).endsWith("M");
                             if (isMinutes) {
                                 rawValue = rawValue.substring(0, rawValue.length() - 1).trim();
                             }
@@ -2018,7 +2018,7 @@ public class HostChecker {
             Set<String> newBlacklist = new HashSet<String>();
             List<String> lines = java.nio.file.Files.readAllLines(_blacklistFile.toPath());
             for (String line : lines) {
-                line = line.trim().toLowerCase();
+                line = line.trim().toLowerCase(Locale.ROOT);
                 if (!line.isEmpty() && !line.startsWith("#")) {
                     newBlacklist.add(line);
                 }
@@ -2043,7 +2043,7 @@ public class HostChecker {
         try {
             loadBlacklist();
             synchronized (this) {
-                return _blacklistedHosts.contains(hostname.toLowerCase());
+                return _blacklistedHosts.contains(hostname.toLowerCase(Locale.ROOT));
             }
         } catch (Exception e) {
             if (_log.shouldDebug()) {

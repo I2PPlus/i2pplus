@@ -13,6 +13,7 @@ import net.i2p.router.util.EventLog;
 import net.i2p.router.web.CSSHelper;
 import net.i2p.router.web.FormHandler;
 import net.i2p.router.web.HelperBase;
+import java.util.Locale;
 
 /**
  * Helper for router event log display and filtering.
@@ -197,7 +198,7 @@ public class EventLogHelper extends FormHandler {
                 type = type + (' ');
             }
             // create a class from truncated event type so we can style the tr's by event severity
-            type = type.substring(0,8).replaceAll(" .+$", "").replaceAll("\\d", "").toLowerCase();
+            type = type.substring(0,8).replaceAll(" .+$", "").replaceAll("\\d", "").toLowerCase(Locale.ROOT);
             if (isAll) {
                 buf.append("<tr class=\"").append(type).append(" lazy\">");
             } else {

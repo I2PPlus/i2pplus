@@ -58,6 +58,7 @@ import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer;
 import net.i2p.util.VersionComparator;
+import java.util.Locale;
 
 /**
  * Kademlia based version of network database.
@@ -1435,7 +1436,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
         long now = _context.clock().now();
         String routerId = getRouterId(routerInfo);
-        String caps = routerInfo.getCapabilities() != null ? routerInfo.getCapabilities().toUpperCase() : "";
+        String caps = routerInfo.getCapabilities() != null ? routerInfo.getCapabilities().toUpperCase(Locale.ROOT) : "";
         Hash h = routerInfo.getIdentity().getHash();
         if (h == null) {return null;}
         boolean isUs = h.equals(_context.routerHash());
@@ -2410,7 +2411,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private Set<String> getBlockedCountries() {
         String blockCountries = _context.getProperty(PROP_BLOCK_COUNTRIES, DEFAULT_BLOCK_COUNTRIES);
         if (blockCountries.isEmpty()) {return Collections.emptySet();}
-        return Arrays.stream(blockCountries.trim().toLowerCase().split("\\s*,\\s*"))
+        return Arrays.stream(blockCountries.trim().toLowerCase(Locale.ROOT).split("\\s*,\\s*"))
                      .filter(s -> !s.isEmpty())
                      .collect(Collectors.toSet());
     }

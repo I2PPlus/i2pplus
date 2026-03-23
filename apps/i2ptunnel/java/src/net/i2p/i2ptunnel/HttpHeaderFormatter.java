@@ -2,6 +2,7 @@ package net.i2p.i2ptunnel;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Locale;
 
 /**
  * Utility class for formatting HTTP headers.
@@ -83,15 +84,15 @@ public class HttpHeaderFormatter {
             else if (request.endsWith("HTTP/1.0")) {truncatedRequest += " HTTP/1.0";}
             request = truncatedRequest;
         }
-        if (!request.toLowerCase().contains("head")) {
+        if (!request.toLowerCase(Locale.ROOT).contains("head")) {
             buf.append("\n* Request: ").append(request);
         }
         for (Map.Entry<String, List<String>> e : headers.entrySet()) {
             String name = e.getKey();
-            String lcName = name.toLowerCase().trim();
+            String lcName = name.toLowerCase(Locale.ROOT).trim();
             String value = e.getValue().iterator().next().trim();
-            boolean hasUA = name.toLowerCase().contains("user-agent") && !value.isEmpty();
-            if (request.toLowerCase().contains("head")) {continue;}
+            boolean hasUA = name.toLowerCase(Locale.ROOT).contains("user-agent") && !value.isEmpty();
+            if (request.toLowerCase(Locale.ROOT).contains("head")) {continue;}
             if (lcName.contains("desthash") || lcName.contains("destb64") || lcName.contains("dnt") ||
                 lcName.contains("connection") || lcName.contains("accept") || lcName.contains("cookie") ||
                 lcName.contains("pragma") || lcName.contains("cache-control") || lcName.contains("referer") ||

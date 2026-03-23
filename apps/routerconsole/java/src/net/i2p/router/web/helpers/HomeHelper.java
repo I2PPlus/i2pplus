@@ -16,6 +16,7 @@ import net.i2p.router.web.Messages;
 import net.i2p.router.web.NavHelper;
 import net.i2p.router.web.PluginStarter;
 import net.i2p.util.PortMapper;
+import java.util.Locale;
 
 /**
  * Helper for router console home page and configuration.
@@ -424,7 +425,7 @@ public class HomeHelper extends HelperBase {
 
     /** ignore case, current locale */
     private static class AppComparator implements Comparator<App>, Serializable {
-        public int compare(App l, App r) {return l.name.toLowerCase().compareTo(r.name.toLowerCase());}
+        public int compare(App l, App r) {return l.name.toLowerCase(Locale.ROOT).compareTo(r.name.toLowerCase(Locale.ROOT));}
     }
 
 }

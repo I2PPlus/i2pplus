@@ -335,9 +335,9 @@ class GraphRenderer {
                                    .replace("[Tunnel]Build", "[Tunnel] Build");
 
             // heuristic to set K=1024
-            if ((name.toLowerCase().indexOf("size") >= 0 || name.toLowerCase().indexOf("memory") >= 0 ||
-                name.toLowerCase().indexOf("b/s") >= 0 || name.toLowerCase().indexOf("bps") >= 0 ||
-                name.toLowerCase().indexOf("bandwidth") >= 0 || name.toLowerCase().indexOf("bytecache") >= 0)
+            if ((name.toLowerCase(Locale.ROOT).indexOf("size") >= 0 || name.toLowerCase(Locale.ROOT).indexOf("memory") >= 0 ||
+                name.toLowerCase(Locale.ROOT).indexOf("b/s") >= 0 || name.toLowerCase(Locale.ROOT).indexOf("bps") >= 0 ||
+                name.toLowerCase(Locale.ROOT).indexOf("bandwidth") >= 0 || name.toLowerCase(Locale.ROOT).indexOf("bytecache") >= 0)
                 && !showEvents) {
                 def.setBase(1024);
                 singleDecimalPlace = false;
@@ -353,7 +353,7 @@ class GraphRenderer {
                 else {p = DataHelper.formatDuration2(period).replace("&nbsp;", " ");}
                 if (showEvents) {title = graphTitle + ' ' + _t("events in {0}", p);}
                 title = graphTitle.replaceAll("(?<=[a-z])([A-Z])", " $1");
-                title = title.substring(0, 1).toUpperCase() + title.substring(1);
+                title = title.substring(0, 1).toUpperCase(Locale.ROOT) + title.substring(1);
                 title = title.replace("[Tunnel] [Tunnel]", "[Tunnel]")
                              .replace("Uild Success Avg", "Build Success Average")
                              .replace(" Avg", "Average")

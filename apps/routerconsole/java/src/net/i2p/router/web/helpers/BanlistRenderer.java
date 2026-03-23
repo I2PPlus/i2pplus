@@ -26,6 +26,7 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.transport.TransportImpl;
 import net.i2p.router.web.Messages;
 import net.i2p.util.Addresses;
+import java.util.Locale;
 
 /**
  * Renders HTML display of banned routers for the router console.
@@ -53,8 +54,8 @@ class BanlistRenderer {
             return null;
         }
         // Check if the hostname is just the IP in different form
-        String normalizedIp = ip.toLowerCase().replaceAll("[.:]", "");
-        String normalizedHostname = hostname.toLowerCase().replaceAll("[.:]", "");
+        String normalizedIp = ip.toLowerCase(Locale.ROOT).replaceAll("[.:]", "");
+        String normalizedHostname = hostname.toLowerCase(Locale.ROOT).replaceAll("[.:]", "");
         if (normalizedHostname.equals(normalizedIp) || normalizedHostname.contains(normalizedIp)) {
             return null;
         }
@@ -379,12 +380,12 @@ class BanlistRenderer {
             long expires = entry.expireOn - _context.clock().now();
             String expireString = DataHelper.formatDuration2(expires);
             if (expires <= 0 || key.equals(Hash.FAKE_HASH) || entry.cause == null ||
-                (entry.cause.toLowerCase().contains("hash") &&
-                 !entry.cause.toLowerCase().contains("hashpatterndetector"))) {
+                (entry.cause.toLowerCase(Locale.ROOT).contains("hash") &&
+                 !entry.cause.toLowerCase(Locale.ROOT).contains("hashpatterndetector"))) {
                 continue;
             }
             buf.append("<tr");
-            if (entry.cause.toLowerCase().contains("floodfill")) {
+            if (entry.cause.toLowerCase(Locale.ROOT).contains("floodfill")) {
                 buf.append(" class=\"banFF\"");
             }
             buf.append(">");
@@ -402,7 +403,7 @@ class BanlistRenderer {
             if (ipBytes != null) {
                 ip = Addresses.toString(ipBytes);
             }
-            String lcReason = reason.toLowerCase();
+            String lcReason = reason.toLowerCase(Locale.ROOT);
             String extractedIP = null;
             if (lcReason.startsWith("blocklist")) {
                 int parenOpen = reason.indexOf('(');
@@ -453,7 +454,7 @@ class BanlistRenderer {
             if (key != null) {
                 String geoCountry = _context.commSystem().getCountry(key);
                 if (geoCountry != null && !geoCountry.isEmpty() && !"xx".equals(geoCountry)) {
-                    countryCode = geoCountry.toLowerCase();
+                    countryCode = geoCountry.toLowerCase(Locale.ROOT);
                 }
             }
              // Fallback to IP lookup if hash lookup failed or returned "xx"
@@ -473,7 +474,7 @@ class BanlistRenderer {
                   }
                   String geoCountry = _context.commSystem().getCountry(ip);
                   if (geoCountry != null && !geoCountry.isEmpty() && !"xx".equals(geoCountry)) {
-                      countryCode = geoCountry.toLowerCase();
+                      countryCode = geoCountry.toLowerCase(Locale.ROOT);
                   } else if (_context.logManager().getLog(BanlistRenderer.class).shouldLog(net.i2p.util.Log.DEBUG)) {
                       _context.logManager().getLog(BanlistRenderer.class).debug(
                           "GeoIP lookup failed for IP: " + ip + ", geoCountry=" + geoCountry);
@@ -529,7 +530,7 @@ class BanlistRenderer {
                  }
                  String geoCountry = _context.commSystem().getCountry(ip);
                  if (geoCountry != null && !geoCountry.isEmpty() && !"xx".equals(geoCountry)) {
-                     countryCode = geoCountry.toLowerCase();
+                     countryCode = geoCountry.toLowerCase(Locale.ROOT);
                  }
              }
             if ("unknown".equals(countryCode)) {
