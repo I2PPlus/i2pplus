@@ -2269,7 +2269,11 @@ class NetDbRenderer {
                     }, executor)
                 );
             }
-            CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
+            try {
+                CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).get(30, TimeUnit.SECONDS);
+            } catch (Exception e) {
+                // timeout rendering entries, continue with partial results
+            }
         }
         executor.shutdown();
         return fullHtml.toString();

@@ -1947,7 +1947,7 @@ public class HostChecker {
                 // Wait for all pings to complete
                 for (java.util.concurrent.Future<Void> future : futures) {
                     try {
-                        future.get();
+                        future.get(30, java.util.concurrent.TimeUnit.SECONDS);
                     } catch (Exception e) {
                         if (_log.shouldWarn()) {
                             _log.warn("Error waiting for HostChecker completion -> " + e.getMessage(), e);

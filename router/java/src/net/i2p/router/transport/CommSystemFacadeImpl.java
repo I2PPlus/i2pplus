@@ -1326,7 +1326,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             for (Future<String> future : futures) {
                 if (future.isDone()) {
                     try {
-                        String result = future.get();
+                        String result = future.get();  // NOPMD - isDone() checked above, will not block
                         if (result != null && !result.isEmpty()) {
                             return result;
                         }
