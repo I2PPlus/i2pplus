@@ -4766,9 +4766,9 @@ public class I2PSnarkServlet extends BasicServlet {
             boolean isImage = mime.startsWith("image/");
             boolean isText = mime.startsWith("text/") || mime.equals("application/javascript") ||
                              mime.equals("application/json") || mime.equals("application/xml") ||
-                             path.toLowerCase().endsWith(".asc") || path.toLowerCase().endsWith(".bat") ||
-                             path.toLowerCase().endsWith(".ini") || path.toLowerCase().endsWith(".md5") ||
-                             path.toLowerCase().endsWith(".sh") || path.toLowerCase().endsWith(".url");
+                             path.toLowerCase(Locale.ROOT).endsWith(".asc") || path.toLowerCase(Locale.ROOT).endsWith(".bat") ||
+                             path.toLowerCase(Locale.ROOT).endsWith(".ini") || path.toLowerCase(Locale.ROOT).endsWith(".md5") ||
+                             path.toLowerCase(Locale.ROOT).endsWith(".sh") || path.toLowerCase(Locale.ROOT).endsWith(".url");
             boolean isPDF = mime.equals("application/pdf");
             // For binary files, strip charset if present
             if (isAudio || isImage || isVideo || mime.equals("application/pdf")) {
