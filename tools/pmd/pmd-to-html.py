@@ -293,7 +293,7 @@ def main():
       el.style.display=showing?"block":"none";
       el.closest("tr").classList.toggle("hidden",!showing)}return}
   var a=e.target.closest("a[data-sub]");
-  if(a){e.preventDefault();var tgt=document.getElementById(a.dataset.sub);
+  if(a){e.preventDefault();hideRule();var tgt=document.getElementById(a.dataset.sub);
     if(tgt){document.querySelectorAll("details[open]").forEach(function(o){o.removeAttribute("open")});
       tgt.setAttribute("open","");setTimeout(function(){tgt.scrollIntoView({behavior:"smooth",block:"start"})},50)}return}
   var rl=e.target.closest("[data-rule]");
