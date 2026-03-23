@@ -1859,7 +1859,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     private static final int MAX_COUNTRY_CACHE_SIZE = 20000;
     private static final long COUNTRY_CACHE_EXPIRY = 60*60*1000; // 1 hour
-    private static final Random random = new Random();
     private long lastLookupTime = 0;
     private long lastUnknownPurge = 0;
     private long lastCacheCleanup = 0;

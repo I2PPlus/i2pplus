@@ -1349,7 +1349,7 @@ class BuildHandler implements Runnable {
                     }
                 }
             }
-        } catch (Exception e) {}
+        } catch (Exception e) {if (_log.shouldDebug()) _log.debug("Ignored", e);}
         return "UNKNOWN";
     }
 

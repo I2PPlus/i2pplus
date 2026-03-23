@@ -330,7 +330,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
                     }
                 }
             }
-        } catch (Exception e) {}
+        } catch (Exception e) {if (_log.shouldDebug()) _log.debug("Ignored", e);}
         return null;
     }
 

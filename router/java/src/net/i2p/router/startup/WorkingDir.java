@@ -525,8 +525,8 @@ public class WorkingDir {
             System.err.println("FAILED copy " + src.getPath() + ": " + ioe);
             rv = false;
         } finally {
-            if (in != null) try { in.close(); } catch (IOException ioe) {}
-            if (out != null) try { out.close(); } catch (IOException ioe) {}
+            if (out != null) try { out.close(); } catch (IOException ioe) {/* ignored */}
+            if (in != null) try { in.close(); } catch (IOException ioe) {/* ignored */}
         }
         if (rv)
             dst.setLastModified(src.lastModified());

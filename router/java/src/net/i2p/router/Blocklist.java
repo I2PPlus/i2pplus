@@ -175,24 +175,24 @@ public class Blocklist {
     private int expireInterval() {
         String expireIntervalValue = _context.getProperty(PROP_BLOCKLIST_EXPIRE_INTERVAL, "0");
         try {
-            Integer expireIntervalInt = 0;
+            long expireIntervalMs = 0;
             if (expireIntervalValue.endsWith("s")) {
                 expireIntervalValue = expireIntervalValue.substring(0, expireIntervalValue.length() - 1);
-                expireIntervalInt = Integer.parseInt(expireIntervalValue) * 1000;
+                expireIntervalMs = Integer.parseInt(expireIntervalValue) * 1000L;
             } else if (expireIntervalValue.endsWith("m")) {
                 expireIntervalValue = expireIntervalValue.substring(0, expireIntervalValue.length() - 1);
-                expireIntervalInt = Integer.parseInt(expireIntervalValue) * 60000;
+                expireIntervalMs = Integer.parseInt(expireIntervalValue) * 60000L;
             } else if (expireIntervalValue.endsWith("h")) {
                 expireIntervalValue = expireIntervalValue.substring(0, expireIntervalValue.length() - 1);
-                expireIntervalInt = Integer.parseInt(expireIntervalValue) * 3600000;
+                expireIntervalMs = Integer.parseInt(expireIntervalValue) * 3600000L;
             } else if (expireIntervalValue.endsWith("d")) {
                 expireIntervalValue = expireIntervalValue.substring(0, expireIntervalValue.length() - 1);
-                expireIntervalInt = Integer.parseInt(expireIntervalValue) * 86400000;
+                expireIntervalMs = Integer.parseInt(expireIntervalValue) * 86400000L;
             } else {
-                expireIntervalInt = Integer.parseInt(expireIntervalValue);
+                expireIntervalMs = Integer.parseInt(expireIntervalValue) * 1000L;
             }
-            if (expireIntervalInt < 0) {expireIntervalInt = 0;}
-            return expireIntervalInt;
+            if (expireIntervalMs < 0) {expireIntervalMs = 0;}
+            return (int) expireIntervalMs;
         } catch(NumberFormatException nfe) {
             if (_log.shouldLog(_log.ERROR)) {
                 _log.error("Format error in " + PROP_BLOCKLIST_EXPIRE_INTERVAL, nfe);
