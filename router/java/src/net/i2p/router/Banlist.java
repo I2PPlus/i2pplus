@@ -139,7 +139,8 @@ public class Banlist {
                     }
                 }
             } catch (IllegalStateException ise) {} // next time...
-            for (Hash peer : _toUnbanlist) {
+            List<Hash> toUnban = new ArrayList<>(_toUnbanlist);
+            for (Hash peer : toUnban) {
                 _context.messageHistory().unbanlist(peer);
                 BanLogger.clearLoggedHash(peer);
                 if (_log.shouldInfo()) {
