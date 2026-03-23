@@ -1688,6 +1688,7 @@ class PeerTestManager {
      *  @return address or null
      *  @since 0.9.55
      */
+    @SuppressWarnings("PMD.AvoidBranchingStatementAsLastInLoop")
     static RouterAddress getAddress(List<RouterAddress> addrs, boolean isIPv6) {
         RouterAddress ra = null;
         for (RouterAddress addr : addrs) {

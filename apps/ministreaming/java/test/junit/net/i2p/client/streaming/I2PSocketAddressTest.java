@@ -161,7 +161,7 @@ public class I2PSocketAddressTest {
 
 		Destination dest = new Destination();
 		I2PSocketAddress addr2 = new I2PSocketAddress(dest, 1234);
-		assertFalse(addr.equals(null));
+		assertNotEquals(null, addr);
 		assertFalse(addr.equals(dest));
 		assertFalse(addr.equals(addr2));
 		assertFalse(addr2.equals(addr));

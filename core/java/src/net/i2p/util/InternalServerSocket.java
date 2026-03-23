@@ -63,6 +63,7 @@ public class InternalServerSocket extends ServerSocket {
         } catch (InterruptedException ie) {}
     }
 
+    @SuppressWarnings("PMD.AvoidBranchingStatementAsLastInLoop")
     @Override
     public Socket accept() throws IOException {
         InternalSocket serverSock = null;

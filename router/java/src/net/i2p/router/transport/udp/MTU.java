@@ -46,6 +46,7 @@ public class MTU {
      * @return 0 if Java 5, or if not bound to an address;
      *         limited to range MIN_MTU to LARGE_MTU for SSU 1.
      */
+    @SuppressWarnings("PMD.AvoidBranchingStatementAsLastInLoop")
     public static int getMTU(InetAddress ia, boolean isSSU2) {
         if (ia == null || !hasMTU)
             return 0;

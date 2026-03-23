@@ -174,7 +174,7 @@ public class FIFOBandwidthRefiller implements Runnable {
         }
     }
 
-    synchronized void reinitialize() {
+    final synchronized void reinitialize() {
         _lastRefillTime = _limiter.now();
         checkConfig();
         _lastCheckConfigTime = _lastRefillTime;

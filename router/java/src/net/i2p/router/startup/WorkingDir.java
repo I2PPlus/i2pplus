@@ -223,7 +223,6 @@ public class WorkingDir {
             setupSystemOut(cwd);
             return cwd;
         }
-        boolean migrateOldData = false; // this is a terrible idea
 
         if (!dirf.exists() && !dirf.mkdir()) {
             setupSystemOut(null);
@@ -233,10 +232,7 @@ public class WorkingDir {
 
         setupSystemOut(dirf.getAbsolutePath());
         // Do the copying
-        if (migrateOldData)
-            System.err.println("Migrating data files to new user directory " + rv);
-        else
-            System.err.println("Setting up new user directory " + rv);
+        System.err.println("Setting up new user directory " + rv);
         boolean success = migrate(MIGRATE_BASE, oldDirf, dirf);
         // this one must be after MIGRATE_BASE
         File oldEep = new File(oldDirf, "eepsite");

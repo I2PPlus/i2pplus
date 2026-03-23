@@ -37,7 +37,7 @@ public class ConfigRestartBean {
     public static String renderStatus(String urlBase, String action, String nonce) {
         RouterContext ctx = ContextHelper.getContext(null);
         String systemNonce = getNonce();
-        if ( (nonce != null) && (systemNonce.equals(nonce)) && (action != null) ) {
+        if (systemNonce.equals(nonce) && (action != null)) {
             // Normal browsers send value, IE sends button label
             if ("shutdownImmediate".equals(action) || _t("Shutdown immediately", ctx).equals(action)) {
                 if (ctx.hasWrapper()) {ConfigServiceHandler.registerWrapperNotifier(ctx, Router.EXIT_HARD, false);}

@@ -235,6 +235,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
      *
      *   Plain DataFormatExceptions indicate you may not respond in-session.
      */
+    @SuppressWarnings("PMD.AvoidBranchingStatementAsLastInLoop")
     public void gotRI(RouterInfo ri, boolean isHandshake, boolean flood) throws DataFormatException {
         //if (_log.shouldDebug())
         //    _log.debug("[SSU] Received RouterInfo block: " + ri);

@@ -42,6 +42,7 @@ import net.i2p.util.SystemVersion;
  * Loads and stores tunnel configurations to disk, builds new tunnels on request.
  * Entry point from clients.config.
  */
+@SuppressWarnings("PMD.SingleMethodSingleton")
 public class TunnelControllerGroup implements ClientApp {
     private final Log _log;
     private volatile ClientAppState _state;

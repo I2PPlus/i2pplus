@@ -131,7 +131,7 @@ abstract class EstablishBase implements EstablishState {
     }
 
     /** @since 0.9.16 */
-    protected void changeState(State state) {
+    protected final void changeState(State state) {
         synchronized (_stateLock) {
             _state = state;
             _isCorrupt.set(state == State.CORRUPT);

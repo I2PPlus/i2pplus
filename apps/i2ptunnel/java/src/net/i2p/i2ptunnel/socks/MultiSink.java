@@ -42,10 +42,7 @@ public class MultiSink<S extends Sink> implements Source, Sink {
         Sink s = cache.get(toPort);
         if (s == null && toPort == 0 && cache.size() == 1) {
             // for now, do the server a favor if the toPort isn't specified
-            for (Sink ss : cache.values()) {
-                s = ss;
-                break;
-            }
+            s = cache.values().iterator().next();
         }
         if (s == null) {
             Log log = I2PAppContext.getGlobalContext().logManager().getLog(MultiSink.class);

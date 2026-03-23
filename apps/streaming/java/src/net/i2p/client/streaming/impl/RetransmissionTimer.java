@@ -13,6 +13,7 @@ public class RetransmissionTimer extends SimpleTimer2 {
      *  @return a new instance as of 0.9
      */
     @Deprecated
+    @SuppressWarnings("PMD.SingletonClassReturningNewInstance")
     public static final RetransmissionTimer getInstance() {
         return new RetransmissionTimer(I2PAppContext.getGlobalContext(), "RetransmissionTimer");
     }

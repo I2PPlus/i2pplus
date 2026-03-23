@@ -65,6 +65,7 @@ class HostTxtIterator implements Iterator<Map.Entry<String, HostTxtEntry>>, Clos
             input = new BufferedReader(new InputStreamReader(fileStream, "UTF-8"));
     }
 
+    @SuppressWarnings("PMD.AvoidBranchingStatementAsLastInLoop")
     public boolean hasNext() {
         if (input == null) {return false;}
         if (next != null) {return true;}
