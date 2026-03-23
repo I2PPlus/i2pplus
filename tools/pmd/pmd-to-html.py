@@ -164,8 +164,22 @@ def main():
                     "desktop": "Desktop",
                     "update": "Updater",
                 }.get(sub, sub.capitalize())
+            # Non-net.i2p package — check file path for apps/
+            path = fname.replace("\\", "/")
+            if "apps/" in path:
+                app = path.split("apps/")[1].split("/")[0]
+                return {
+                    "routerconsole": "Router Console",
+                    "i2ptunnel": "I2PTunnel",
+                    "i2psnark": "I2PSnark",
+                    "susidns": "SusiDNS",
+                    "susimail": "SusiMail",
+                    "addressbook": "Addressbook",
+                    "jetty": "Jetty",
+                    "wrapper": "Wrapper",
+                }.get(app, app.replace("-", " ").title())
             return "Third-party"
-        # JavaScript/other: derive from file path
+        # No package — derive from file path
         if fname:
             path = fname.replace("\\", "/")
             if "apps/" in path:
