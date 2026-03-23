@@ -31,7 +31,7 @@ class GetBidsJob extends JobImpl {
     private final Log _log;
     private final TransportManager _tmgr;
     private final OutNetMessage _msg;
-    private static BanLogger _banLogger;
+    private static volatile BanLogger _banLogger;
 
     /**
      *  @deprecated unused, see static getBids()
@@ -52,8 +52,12 @@ class GetBidsJob extends JobImpl {
     static void getBids(RouterContext context, TransportManager tmgr, OutNetMessage msg) {
         // Ensure BanLogger is initialized
         if (_banLogger == null) {
-            _banLogger = new BanLogger();
-            _banLogger.initialize(context);
+            synchronized(GetBidsJob.class) {
+                if (_banLogger == null) {
+                    _banLogger = new BanLogger();
+                    _banLogger.initialize(context);
+                }
+            }
         }
 
         if (msg.getFailedTransportCount() > 1) {

@@ -70,7 +70,7 @@ import net.i2p.util.SystemVersion;
 public class GeoIP {
     private final Log _log;
     private final I2PAppContext _context;
-    private static BanLogger _banLogger;
+    private static volatile BanLogger _banLogger;
     private final Map<String, String> _codeToName;
     /** code to itself to prevent String proliferation */
     private final Map<String, String> _codeCache;
@@ -785,8 +785,12 @@ public class GeoIP {
      */
     public static void banCountry(RouterContext ctx, String country) {
         if (_banLogger == null) {
-            _banLogger = new BanLogger();
-            _banLogger.initialize(ctx);
+            synchronized(GeoIP.class) {
+                if (_banLogger == null) {
+                    _banLogger = new BanLogger();
+                    _banLogger.initialize(ctx);
+                }
+            }
         }
         boolean blockMyCountry = ctx.getBooleanProperty(PROP_BLOCK_MY_COUNTRY);
         for (Hash h : ctx.netDb().getAllRouters()) {
