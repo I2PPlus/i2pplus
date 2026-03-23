@@ -136,7 +136,9 @@ def main():
         # Java: derive from package name
         if pkg:
             parts = pkg.split(".")
-            if parts[0] == "net" and len(parts) > 1 and parts[1] == "i2p" and len(parts) > 2:
+            if parts[0] == "net" and len(parts) > 1 and parts[1] == "i2p":
+                if len(parts) == 2:
+                    return "Core"
                 sub = parts[2]
                 return {
                     "router": "Router",
@@ -145,6 +147,7 @@ def main():
                     "client": "Client",
                     "crypto": "Crypto",
                     "util": "Utilities",
+                    "internal": "Core",
                     "i2psnark": "I2PSnark",
                     "addressbook": "Addressbook",
                     "router.news": "News",
