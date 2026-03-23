@@ -378,7 +378,7 @@ class ParticipatingThrottler {
     /** Logs debug information for accepted tunnel requests. */
     private void _logAcceptRequest(Hash h, String caps, int count) {
         if (_log.shouldDebug()) {
-            _log.debug("Accepting Tunnel Request from " + (caps != "" ? caps : "") +
+            _log.debug("Accepting Tunnel Request from " + (!"".equals(caps) ? caps : "") +
                        " Router [" + h.toBase64().substring(0,6) + "] -> Count: " + count + " in 90s");
         }
     }

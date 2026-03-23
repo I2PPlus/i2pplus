@@ -127,8 +127,8 @@ public class I2PSnarkServlet extends BasicServlet {
     public void init(ServletConfig cfg) throws ServletException {
         super.init(cfg);
         String cpath = getServletContext().getContextPath();
-        _contextPath = cpath == "" ? "/" : cpath;
-        _contextName = cpath == "" ? DEFAULT_NAME : cpath.substring(1).replace("/", "_");
+        _contextPath = cpath.isEmpty() ? "/" : cpath;
+        _contextName = cpath.isEmpty() ? DEFAULT_NAME : cpath.substring(1).replace("/", "_");
         _nonce = _context.random().nextLong();
         // Limited protection against overwriting other config files or directories
         // in case you named your war "router.war"

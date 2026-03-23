@@ -159,7 +159,7 @@ public class FileDumpHelper extends HelperBase {
         if (s != null) {buf.append(s);}
         buf.append("</td><td>");
         s = getAtt(att, "Workspace-Changes");
-        if (s != null && s != "") {
+        if (s != null && !s.isEmpty()) {
             // Encase each mod in a span so we can single click select individual mods
             buf.append("<span class=warn style=color:red><span class=\"unsignedmod\">")
                .append(s.replace(",", "</span></span><hr><span class=warn style=color:red><span class=unsignedmod>"))

@@ -139,7 +139,7 @@ class SearchJob extends JobImpl {
         // have been commented out.
         // Returning false essentially enables kademlia as a backup to floodfill for search responses.
 
-        if (ctx.netDb().floodfillEnabled() || forceExplore == "true") {return false;}
+        if (ctx.netDb().floodfillEnabled() || "true".equals(forceExplore)) {return false;}
         return ctx.getProperty("netDb.floodfillOnly", DEFAULT_FLOODFILL_ONLY);
     }
     static final int PER_FLOODFILL_PEER_TIMEOUT = 8*1000;

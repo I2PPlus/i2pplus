@@ -245,7 +245,7 @@ class OutboundNTCP2State implements EstablishState {
             // encrypt in-place
             _handshakeState.writeMessage(_tmp, 0, _tmp, KEY_SIZE, OPTIONS1_SIZE);
         } catch (GeneralSecurityException gse) {
-            boolean gseNotNull = gse.getMessage() != null && gse.getMessage() != "null";
+            boolean gseNotNull = gse.getMessage() != null && !"null".equals(gse.getMessage());
             // buffer length error
             if (_log.shouldDebug())
                 _log.error("Bad message #1 out", gse);

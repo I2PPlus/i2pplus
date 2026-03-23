@@ -185,7 +185,7 @@ class ProfileOrganizerRenderer {
                                                .replace("administered by ", "")
                                                .trim();
                         buf.append("<span hidden>[XHost]</span><span class=rlookup title=\"").append(whois).append("\">").append(whoisShort);
-                    } else if (ip == "null" || ip == null) {buf.append("<span>").append(_t("unknown"));}
+                    } else if ("null".equals(ip) || ip == null) {buf.append("<span>").append(_t("unknown"));}
                     else {
                         if (ip != null && ip.contains(":")) {buf.append("<span hidden>[IPv6]</span>");}
                         buf.append("<span class=host_ipv6>").append(ip);

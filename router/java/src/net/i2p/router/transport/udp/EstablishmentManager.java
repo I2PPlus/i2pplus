@@ -765,7 +765,7 @@ class EstablishmentManager {
             try {
                 state = new InboundEstablishState2(_context, _transport, packet);
             } catch (GeneralSecurityException gse) {
-                boolean gseNotNull = gse.getMessage() != null && gse.getMessage() != "null";
+                boolean gseNotNull = gse.getMessage() != null && !"null".equals(gse.getMessage());
                 if (from != null && !isPeerBanned(from)) {
                     if (_log.shouldDebug())
                         _log.warn("[SSU] Received CORRUPT Session or Token Request from " + from, gse);
@@ -805,7 +805,7 @@ class EstablishmentManager {
             try {
                 state.receiveSessionOrTokenRequestAfterRetry(packet);
             } catch (GeneralSecurityException gse) {
-                boolean gseNotNull = gse.getMessage() != null && gse.getMessage() != "null";
+                boolean gseNotNull = gse.getMessage() != null && !"null".equals(gse.getMessage());
                 if (state != null && !isPeerBanned(state)) {
                     if (_log.shouldDebug())
                         _log.warn("[SSU] Received CORRUPT Session or Token Request after retry -> Router: " + state, gse);

@@ -194,7 +194,7 @@ public class ConfigTunnelsHelper extends HelperBase {
         if (!advanced) {buf.append(" lastrow");}
         buf.append("\"><td><b>").append(_t("Quantity")).append(":</b></td>\n")
            .append("<td><select name=\"").append(index).append(".quantityInbound\"");
-        if (!advanced && prefix != "exploratory") {buf.append(" disabled");}
+        if (!advanced && !"exploratory".equals(prefix)) {buf.append(" disabled");}
         buf.append(">\n");
         int now = in.getQuantity();
         renderOptions(buf, 1, maxQuantity, now, "", TUNNEL);
@@ -202,7 +202,7 @@ public class ConfigTunnelsHelper extends HelperBase {
         buf.append("</select></td>\n");
 
         buf.append("<td><select name=\"").append(index).append(".quantityOutbound\"");
-        if (!advanced && prefix != "exploratory") {buf.append(" disabled");}
+        if (!advanced && !"exploratory".equals(prefix)) {buf.append(" disabled");}
         buf.append(">\n");
         now = out.getQuantity();
         renderOptions(buf, 1, maxQuantity, now, "", TUNNEL);
@@ -228,13 +228,13 @@ public class ConfigTunnelsHelper extends HelperBase {
         int maxLength = advanced ? MAX_ADVANCED_LENGTH : MAX_LENGTH;
         buf.append("<tr class=options><td><b>").append(_t("Length")).append(":</b></td>\n")
            .append("<td><select name=\"").append(index).append(".depthInbound\"");
-        if (!advanced && prefix != "exploratory") {buf.append(" disabled");}
+        if (!advanced && !"exploratory".equals(prefix)) {buf.append(" disabled");}
         buf.append(">\n");
         now = in.getLength();
         renderOptions(buf, 0, maxLength, now, "", HOP);
         if (now > maxLength) {renderOptions(buf, now, now, now, "", HOP);}
         buf.append("</select></td>\n").append("<td><select name=\"").append(index).append(".depthOutbound\"");
-        if (!advanced && prefix != "exploratory") {buf.append(" disabled");}
+        if (!advanced && !"exploratory".equals(prefix)) {buf.append(" disabled");}
         buf.append(">\n");
         now = out.getLength();
         renderOptions(buf, 0, maxLength, now, "", HOP);
@@ -242,7 +242,7 @@ public class ConfigTunnelsHelper extends HelperBase {
         buf.append("</select></td>\n").append("<td class=spacer></td>\n</tr>\n");
 
         // tunnel depth variance
-        if ((advanced && (in.getLengthVariance() > 0 || out.getLengthVariance() > 0 )) || prefix == "exploratory") {
+        if ((advanced && (in.getLengthVariance() > 0 || out.getLengthVariance() > 0 )) || "exploratory".equals(prefix)) {
             buf.append("<tr class=options><td><b>").append(_t("Randomization")).append(":</b></td>\n")
                .append("<td><select name=\"").append(index).append(".varianceInbound\">\n");
             now = in.getLengthVariance();

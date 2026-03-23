@@ -1904,7 +1904,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         }
 
         String country = _geoIP.get(ip);
-        if (ri != null && country == null || country == "xx") {
+        if (ri != null && country == null || "xx".equals(country)) {
             if (_log.shouldDebug()) {
                 try {
                     InetAddress address = InetAddress.getByAddress(ip);
@@ -1935,7 +1935,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
         if (isStrict || isHidden || blockMyCountry) {
             String myCountry = _context.getProperty(PROP_IP_COUNTRY);
-            if (myCountry != null && myCountry == country) {
+            if (myCountry != null && myCountry.equals(country)) {
                 _geoIP.banCountry(_context, country);
             }
         }

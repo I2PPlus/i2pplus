@@ -332,7 +332,7 @@ class BuildHandler implements Runnable {
                 String bwTier = "Unknown"; // Default and detect bandwidth tier
                 if (ri != null) {
                     bwTier = ri.getBandwidthTier(); // Returns "Unknown" if none recognized
-                    if (bwTier == "Unknown") {
+                    if ("Unknown".equals(bwTier)) {
                         if (_log.shouldWarn()) {
                             _log.warn("Banning [" + peer.toBase64().substring(0,6) + "] for 4h -> No Bandwidth Tier in RouterInfo");
                         }
