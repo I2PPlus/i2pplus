@@ -43,4 +43,9 @@ public class RouterIdentity extends KeysAndCert {
     public boolean equals(Object o) {
         return super.equals(o) && (o instanceof RouterIdentity);
     }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

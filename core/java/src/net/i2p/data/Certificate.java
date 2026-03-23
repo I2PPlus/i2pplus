@@ -69,6 +69,7 @@ import java.util.Arrays;
  *
  * @author jrandom
  */
+@SuppressWarnings("PMD.OverrideBothEqualsAndHashcode")
 public class Certificate extends DataStructureImpl {
     public final static Certificate NULL_CERT = new NullCert();
 

@@ -80,6 +80,7 @@ import java.io.InputStream;
  *
  * @author jrandom
  */
+@SuppressWarnings("PMD.OverrideBothEqualsAndHashcode")
 public class Hash extends SimpleDataStructure {
     private volatile String _base64ed;
     private volatile int _cachedHashCode;

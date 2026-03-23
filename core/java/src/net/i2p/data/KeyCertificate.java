@@ -63,6 +63,7 @@ import net.i2p.crypto.SigType;
  *
  * @since 0.9.12
  */
+@SuppressWarnings("PMD.OverrideBothEqualsAndHashcode")
 public class KeyCertificate extends Certificate {
 
     public static final int HEADER_LENGTH = 4;
