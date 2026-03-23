@@ -401,7 +401,9 @@ class MailPart {
                                 break;
                             } else {
                                 /* This is quoted, so we extract the quote and continue the search */
-                                line = line.substring( 0, m - 1) + line.substring( m);
+                                StringBuilder lineSb = new StringBuilder(line.substring( 0, m - 1));
+                                lineSb.append(line.substring( m));
+                                line = lineSb.toString();
                                 k2 = m;
                             }
                         }

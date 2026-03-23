@@ -77,15 +77,15 @@ public class HexTable {
     private static String intToHex(int b) {
         if (b == 0) {return "0";}
         else {
-            String str = "";
+            StringBuilder sb = new StringBuilder();
             while(b > 0) {
                 byte c = (byte)(b % 16);
                 if (c < 10) {c += '0';}
                 else {c += 'A' - 10;}
-                str = "" + (char)c + str;
+                sb.insert(0, (char)c);
                 b = (byte) (b / 16);
             }
-            return str;
+            return sb.toString();
         }
     }
 

@@ -110,7 +110,7 @@ public class SAMStreamSink {
                 break;
 
             case 'o':
-                opts = opts + ' ' + g.getOptarg();
+                opts = new StringBuilder(opts).append(' ').append(g.getOptarg()).toString(); // NOPMD - AvoidUnnecessaryStringBuilderCreation
                 break;
 
             case 'p':

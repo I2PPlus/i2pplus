@@ -415,14 +415,14 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                     String exmsg = ise.getMessage();
                     boolean fail = exmsg != null && exmsg.contains("session limit exceeded");
                     if (!fail && ++retries < MAX_RETRIES) {
-                        msg += " -> Retrying in " + (RETRY_DELAY / 1000) + " seconds...";
-                        this.l.log(msg);
-                        _log.error(msg);
+                        String fullMsg = msg + " -> Retrying in " + (RETRY_DELAY / 1000) + " seconds...";
+                        this.l.log(fullMsg);
+                        _log.error(fullMsg);
                     } else {
-                        msg += " -> Giving up (maximum retries exceeded)";
-                        this.l.log(msg);
-                        _log.log(Log.CRIT, msg, ise);
-                        throw new IllegalArgumentException(msg, ise);
+                        String fullMsg = msg + " -> Giving up (maximum retries exceeded)";
+                        this.l.log(fullMsg);
+                        _log.log(Log.CRIT, fullMsg, ise);
+                        throw new IllegalArgumentException(fullMsg, ise);
                     }
                     warnedAboutConnection = true;
                 }

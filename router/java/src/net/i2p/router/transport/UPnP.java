@@ -1225,11 +1225,12 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 						found = true;
 						sb.append("<ul>");
 					}
-					name += isIGD ? " IGD" : (' ' + type);
+					StringBuilder nameSb = new StringBuilder(name);
+					nameSb.append(isIGD ? " IGD" : (' ' + type));
 					String ip = getIP(dev);
 					if (ip != null)
-						name += ' ' + ip;
-					sb.append("<li>").append(DataHelper.escapeHTML(name));
+						nameSb.append(' ').append(ip);
+					sb.append("<li>").append(DataHelper.escapeHTML(nameSb.toString()));
 					sb.append("<br>UDN: ").append(DataHelper.escapeHTML(udn))
 					  .append("</li>");
 				}

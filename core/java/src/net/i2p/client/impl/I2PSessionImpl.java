@@ -725,7 +725,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
                 synchronized (_stateLock) {
                     if (isClosed()) {
                         String msg = "Disconnected from router while waiting for tunnels";
-                        if (_errorMessage != null) {msg += ": " + _errorMessage;}
+                        if (_errorMessage != null) {msg = msg + ": " + _errorMessage;}
                         IOException ioe =  new IOException(msg);
                         if (_errorCause != null) {ioe.initCause(_errorCause);}
                         throw ioe;

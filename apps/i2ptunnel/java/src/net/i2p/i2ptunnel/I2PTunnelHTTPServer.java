@@ -1009,11 +1009,13 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                             String[] urlParts = url.split("/");
                             if (urlParts.length > 0) {
                                 host = urlParts[0];
+                                StringBuilder hostSb = new StringBuilder(host);
                                 for (int i = 1; i < urlParts.length; i++) {
                                     if (!urlParts[i].trim().isEmpty()) {
-                                        host += "/" + urlParts[i];
+                                        hostSb.append('/').append(urlParts[i]);
                                      }
                                 }
+                                host = hostSb.toString();
                             }
                         }
                     }

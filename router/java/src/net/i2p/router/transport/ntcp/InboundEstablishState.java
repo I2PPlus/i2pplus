@@ -843,7 +843,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                         if (DataHelper.eq(realIP, 0, infoIP, 0, 8)) {continue;}
                     } else if (DataHelper.eq(realIP, infoIP)) {continue;}
                     // We will ban and throw below after checking s
-                    mismatchMessage = "IP address mismatch -> Actual IP: " + Addresses.toString(realIP) + "; RI publishes: ";
+                    mismatchMessage = new StringBuilder("IP address mismatch -> Actual IP: ").append(Addresses.toString(realIP)).append("; RI publishes: ").toString(); // NOPMD - AvoidUnnecessaryStringBuilderCreation
                 }
             }
         }

@@ -97,10 +97,11 @@ public class AuthenticateHandler implements RequestHandler {
         }
 
         if (!I2PControlVersion.SUPPORTED_API_VERSIONS.contains(apiVersion)) {
-            String supportedAPIVersions = "";
+            StringBuilder sb = new StringBuilder();
             for (Integer i : I2PControlVersion.SUPPORTED_API_VERSIONS) {
-                supportedAPIVersions += ", " + i;
+                sb.append(", ").append(i);
             }
+            String supportedAPIVersions = sb.toString();
             return new JSONRPC2Error(JSONRPC2ExtendedError.UNSUPPORTED_API_VERSION.getCode(),
                                      "The provided API version \'" + apiVersion + "\' is not supported. The supported versions are" + supportedAPIVersions + ".");
         }

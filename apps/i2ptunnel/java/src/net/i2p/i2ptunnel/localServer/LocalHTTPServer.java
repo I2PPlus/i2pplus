@@ -437,10 +437,12 @@ public abstract class LocalHTTPServer {
                     String decodedKey = decode(key);
                     String newQuery = keystart > 0 ? query.substring(0, keystart - 1) : "";
                     if (i < query.length() - 1) {
+                        StringBuilder newQueryBuilder = new StringBuilder(newQuery);
                         if (keystart > 0)
-                            newQuery += query.substring(i);
+                            newQueryBuilder.append(query.substring(i));
                         else
-                            newQuery += query.substring(i + 1);
+                            newQueryBuilder.append(query.substring(i + 1));
+                        newQuery = newQueryBuilder.toString();
                     }
                     String value = valstart >= 0 ? query.substring(valstart, i) : "";
                     String decodedValue = decode(value);

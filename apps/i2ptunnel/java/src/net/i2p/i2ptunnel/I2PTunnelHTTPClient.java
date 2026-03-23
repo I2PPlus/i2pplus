@@ -1778,14 +1778,18 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 }
                 String decodedKey = LocalHTTPServer.decode(key);
                 if (decodedKey.equals(HELPER_PARAM)) {
-                    String newQuery = keystart > 0 ? query.substring(0, keystart - 1) : "";
+                    StringBuilder newQueryBuilder = new StringBuilder();
+                    if (keystart > 0) {
+                        newQueryBuilder.append(query, 0, keystart - 1);
+                    }
                     if (i < query.length() - 1) {
                         if (keystart > 0) {
-                            newQuery += query.substring(i);
+                            newQueryBuilder.append(query.substring(i));
                         } else {
-                            newQuery += query.substring(i + 1);
+                            newQueryBuilder.append(query.substring(i + 1));
                         }
                     }
+                    String newQuery = newQueryBuilder.toString();
                     String value = valstart >= 0 ? query.substring(valstart, i) : "";
                     String helperValue = LocalHTTPServer.decode(value);
                     return new String[] {newQuery, helperValue};

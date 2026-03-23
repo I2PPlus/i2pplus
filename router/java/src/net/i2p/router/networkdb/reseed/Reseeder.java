@@ -530,7 +530,7 @@ public class Reseeder {
 
                 for (String u : urls.split("[ ,]+")) {
                     u = u.trim();
-                    if (!u.endsWith("/")) u += "/";
+                    if (!u.endsWith("/")) u = u + "/";
                     URI uri = safeUri(u);
                     if (uri == null) continue;
                     if (u.startsWith("https")) sslList.add(uri);
@@ -563,7 +563,7 @@ public class Reseeder {
             List<URI> list = new ArrayList<>();
             for (String u : urls.split("[ ,]+")) {
                 u = u.trim();
-                if (!u.endsWith("/")) u += "/";
+                if (!u.endsWith("/")) u = u + "/";
                 URI uri = safeUri(u);
                 if (uri != null) list.add(uri);
             }
@@ -1238,7 +1238,7 @@ public class Reseeder {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
         System.out.println("Initiating reseed hosts test...\n");
         for (String url : urls) {
-            url += SU3_FILENAME + NETID_PARAM + '2';
+            url = url + SU3_FILENAME + NETID_PARAM + '2';
             URI uri = new URI(url);
             String host = uri.getHost();
             System.out.println("Host:     " + host);
