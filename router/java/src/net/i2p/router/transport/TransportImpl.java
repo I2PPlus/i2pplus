@@ -445,10 +445,12 @@ public abstract class TransportImpl implements Transport {
 
         if (sendSuccessful) {
             _context.statManager().addRateData("transport.sendProcessingTime", lifetime);
-            _context.profileManager().messageSent(msg.getTarget().getIdentity().getHash(), style, sendTime, msg.getMessageSize());
+            if (msg.getTarget() != null && msg.getTarget().getIdentity() != null)
+                _context.profileManager().messageSent(msg.getTarget().getIdentity().getHash(), style, sendTime, msg.getMessageSize());
             _context.statManager().addRateData("transport.sendMessageSize", msg.getMessageSize(), sendTime);
         } else {
-            _context.profileManager().messageFailed(msg.getTarget().getIdentity().getHash(), style);
+            if (msg.getTarget() != null && msg.getTarget().getIdentity() != null)
+                _context.profileManager().messageFailed(msg.getTarget().getIdentity().getHash(), style);
             _context.statManager().addRateData("transport.sendMessageFailureLifetime", lifetime);
         }
     }

@@ -98,7 +98,8 @@ class PacketPusher implements Runnable {
      * @param packet the non-null UDPPacket to send
      */
     public void send(UDPPacket packet) {
-        boolean isIPv4 = packet.getPacket().getAddress().getAddress().length == 4;
+        byte[] addr = packet.getPacket() != null && packet.getPacket().getAddress() != null ? packet.getPacket().getAddress().getAddress() : null;
+        boolean isIPv4 = addr != null && addr.length == 4;
 
         // Iterate over endpoints safely via CopyOnWriteArrayList avoiding concurrent modification issues
         for (UDPEndpoint ep : _endpoints) {

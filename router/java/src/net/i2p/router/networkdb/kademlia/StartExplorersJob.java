@@ -26,8 +26,8 @@ import net.i2p.util.SystemVersion;
 class StartExplorersJob extends JobImpl {
     private static final int MAX_PER_RUN = 256;
     private static final int MIN_RERUN_DELAY_MS = 90 * 1000;
-    private static final int MAX_RERUN_DELAY_MS = 15 * 60 * 1000;
-    private static final int STARTUP_TIME = 2 * 60 * 60 * 1000; // 2 hours
+    private static final long MAX_RERUN_DELAY_MS = 15 * 60 * 1000;
+    private static final long STARTUP_TIME = 2 * 60 * 60 * 1000; // 2 hours
     private static final int MIN_ROUTERS = 2000;
     private static final int LOW_ROUTERS = 3000;
     private static final int MAX_ROUTERS = 5000;

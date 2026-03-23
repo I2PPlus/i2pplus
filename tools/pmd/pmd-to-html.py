@@ -105,12 +105,18 @@ def get_code_snippet(filepath, line_no, context=CONTEXT):
     return f"data:image/svg+xml,{quote(svg, safe='')}"
 
 def main():
-    if len(sys.argv) < 3 or len(sys.argv) > 4:
-        print(f"Usage: {sys.argv[0]} pmd.xml output.html [language]", file=sys.stderr)
+    if len(sys.argv) < 3:
+        print(f"Usage: {sys.argv[0]} pmd.xml output.html [language] [--local]", file=sys.stderr)
         sys.exit(1)
 
     xml_file, html_file = sys.argv[1], sys.argv[2]
-    lang = sys.argv[3] if len(sys.argv) == 4 else ""
+    lang = ""
+    local = False
+    for arg in sys.argv[3:]:
+        if arg == "--local":
+            local = True
+        elif not arg.startswith("-"):
+            lang = arg
     # Handle truncated XML (PMD sometimes drops the closing tag)
     with open(xml_file, "r") as f:
         content = f.read()
@@ -273,9 +279,12 @@ def main():
     w(load_css())
     w('</style>')
     w('<script>')
+    w(f'var LOCAL_MODE={"true" if local else "false"};')
     # Build rule data as JSON for filtering (include code snippets)
     import json
-    rule_data_json = json.dumps({rule: [(f, {"begin": v["begin"], "end": v["end"], "priority": v["priority"],
+    def norm_path(f):
+        return os.path.abspath(f) if local else f
+    rule_data_json = json.dumps({rule: [(norm_path(f), {"begin": v["begin"], "end": v["end"], "priority": v["priority"],
         "msg": v["msg"], "class": v["class"], "method": v["method"], "url": v["url"],
         "ruleset": v["ruleset"], "subsystem": v["subsystem"],
         "snippet": get_code_snippet(f, v["begin"])}) for f, v in vlist]
@@ -311,7 +320,9 @@ function showRule(rule){
   for(var i=0;i<d.length;i++){
     var f=d[i][0], x=d[i][1];
     if(f!==curFile){curFile=f;
-      h+=\'<h3><span class="path">\'+esc(f)+\'</span></h3>\';
+      var pathHtml=\'<span class="path">\'+esc(f)+\'</span>\';
+      if(LOCAL_MODE) pathHtml=\'<a href="file://\'+f+\'" class="file-link">\'+pathHtml+\'</a>\';
+      h+=\'<h3>\'+pathHtml+\'</h3>\';
       h+=\'<table class="warningtable"><tr><th class="line">Line</th><th>Message</th><th class="rule-category">Category</th><th class="rule-doc">Doc</th></tr>\';}
     var rng= x.begin===x.end? x.begin : x.begin+\'-\'+x.end;
     var dl=\'\';
@@ -391,7 +402,11 @@ function hideRule(){
             w(f'<details id="sub-{escape(sub)}">')
             w(f'<summary><div class="tabletitle"><a name="sub-{escape(sub)}">{escape(sub)}</a>&#32;<span class="badge">{count} / {nfiles}</span></div></summary>')
             for fname, violations in sub_files[sub]:
-                w(f'<h3><span class="path">{escape(fname)}</span> <span class="badge">{len(violations)}</span></h3>')
+                path_html = f'<span class="path">{escape(fname)}</span>'
+                if local:
+                    abs_path = os.path.abspath(fname)
+                    path_html = f'<a href="file://{escape(abs_path)}" class="file-link">{path_html}</a>'
+                w(f'<h3>{path_html} <span class="badge">{len(violations)}</span></h3>')
                 w('<table class="warningtable">')
                 w('<tr><th class="line">Line</th><th>Rule</th><th>Message</th><th class="rule-category">Category</th><th class="rule-doc">Doc</th></tr>')
                 for i, v in enumerate(sorted(violations, key=lambda x: int(x["begin"]))):

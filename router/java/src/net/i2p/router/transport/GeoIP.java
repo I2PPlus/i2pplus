@@ -262,7 +262,7 @@ public class GeoIP {
                         // Maxmind v2 database
                         try {
                             dbr = openGeoIP2(geoip2);
-                            long time = dbr.getMetadata().getBuildDate().getTime();
+                            long time = dbr.getMetadata() != null && dbr.getMetadata().getBuildDate() != null ? dbr.getMetadata().getBuildDate().getTime() : 0;
                             if (time > 0) {
                                 notifyVersion("GeoIP2", time);
                                 rv = time;
@@ -501,7 +501,7 @@ public class GeoIP {
         b.withCache(new CHMCache(256));
         DatabaseReader rv = b.build();
         if (_log.shouldDebug()) {_log.debug("Opened GeoIP2 Database, Metadata: " + rv.getMetadata());}
-        long time = rv.getMetadata().getBuildDate().getTime();
+        long time = rv.getMetadata() != null && rv.getMetadata().getBuildDate() != null ? rv.getMetadata().getBuildDate().getTime() : 0;
         notifyVersion("GeoIP2", time);
         return rv;
     }
@@ -521,7 +521,7 @@ public class GeoIP {
         String filePath = geoFile.getAbsolutePath();
 
         try (DatabaseReader reader = openGeoIP2(geoFile)) {
-            long buildTime = reader.getMetadata().getBuildDate().getTime();
+            long buildTime = reader.getMetadata() != null && reader.getMetadata().getBuildDate() != null ? reader.getMetadata().getBuildDate().getTime() : 0;
             Date buildDate = Date.from(Instant.ofEpochMilli(buildTime));
             return "<b>Built:</b> " + GEO_DATE_FORMAT.get().format(buildDate) + "&ensp;<b>Size:</b> " + formattedFileSize + "MB&ensp;<b>Location:</b> " + filePath;
         } catch (Exception e) {return "Unknown GeoIP Db version";}

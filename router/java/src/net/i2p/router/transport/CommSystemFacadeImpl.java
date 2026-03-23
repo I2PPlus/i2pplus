@@ -843,7 +843,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      */
     private static final String RDNS_CACHE_FILE = I2PAppContext.getGlobalContext().getConfigDir() +
                                                   File.separator + "rdnscache.txt";
-    private static final int RDNS_WRITE_INTERVAL = 15 * 60 * 1000 + 30;
+    private static final long RDNS_WRITE_INTERVAL = 15 * 60 * 1000 + 30;
     private static final boolean has512MB = SystemVersion.getMaxMemory() >= 512 * 1024 * 1024;
     private static final boolean has1GB = SystemVersion.getMaxMemory() >= 1024 * 1024 * 1024;
     private static final long EXPIRE_TIME = (!has512MB ? 24 : (has1GB ? 48 : 36)) * 60 * 60 * 1000; // 1/1.5/2 day expiration
@@ -2336,8 +2336,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      * @since 0.7.12
      */
 
-    private static final int TIME_START_DELAY = 5*60*1000;
-    private static final int TIME_REPEAT_DELAY = 8*60*1000;
+    private static final long TIME_START_DELAY = 5*60*1000;
+    private static final long TIME_REPEAT_DELAY = 8*60*1000;
 
     /** @since 0.7.12 */
     private void startTimestamper() {

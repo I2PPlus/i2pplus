@@ -366,6 +366,7 @@ public class RouterThrottleImpl implements RouterThrottle {
         } else {
             // limit at 90% - 4KBps (see above)
             float maxBps = (maxKBps * 1024f * 0.9f) - MIN_AVAILABLE_BPS;
+            if (maxBps <= 0) { return false; }
             float pctFull = (maxBps - availBps) / (maxBps);
             if (pctFull < 0.90f) {
                 probReject = 0; // probReject < ~5%

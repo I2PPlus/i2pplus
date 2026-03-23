@@ -212,7 +212,9 @@ abstract class StoreJob extends JobImpl {
             int type = _state.getData().getType();
             final boolean isls = DatabaseEntry.isLeaseSet(type);
             final boolean isls2 = isls && type != DatabaseEntry.KEY_TYPE_LEASESET;
-            final SigType lsSigType = (isls && type != DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) ?
+            final SigType lsSigType = (isls && type != DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2 &&
+                                       _state.getData().getKeysAndCert() != null &&
+                                       _state.getData().getKeysAndCert().getSigningPublicKey() != null) ?
                                       _state.getData().getKeysAndCert().getSigningPublicKey().getType() :
                                       null;
             for (Hash peer : closestHashes) {

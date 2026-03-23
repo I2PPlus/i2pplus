@@ -66,7 +66,11 @@ class GetBidsJob extends JobImpl {
             return;
         }
         Log log = context.logManager().getLog(GetBidsJob.class);
-        Hash to = msg.getTarget().getIdentity().getHash();
+        Hash to = msg.getTarget() != null && msg.getTarget().getIdentity() != null ? msg.getTarget().getIdentity().getHash() : null;
+        if (to == null) {
+            fail(context, msg);
+            return;
+        }
         msg.timestamp("Bid");
 
         if (context.banlist().isBanlisted(to)) {
