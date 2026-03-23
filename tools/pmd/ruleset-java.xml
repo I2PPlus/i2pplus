@@ -78,7 +78,7 @@
     </rule>
 
     <!-- jPinpoint: performance, threading, memory, sustainability -->
-    <rule ref="tools/pmd/jpinpoint-rules.xml">
+    <rule ref="tools/pmd/ruleset-java-jpinpoint.xml">
         <exclude name="AvoidTimeUnitConfusion"/>
         <exclude name="UsingSuppressWarnings"/>
         <exclude name="AvoidUnguardedAssignmentToNonFinalFieldsInObjectsUsingSynchronized"/>

@@ -47,7 +47,7 @@ The script checks the latest PMD release from GitHub and the latest jPinpoint re
 - `report.css` — report theme (dark)
 - `ruleset-java.xml` — Java rules and exclusions
 - `ruleset-js.xml` — JavaScript rules
-- `jpinpoint-rules.xml` — jPinpoint rules (auto-updated)
+- `ruleset-java-jpinpoint.xml` — jPinpoint rules (auto-updated)
 - `pmd-to-html.py` — XML → HTML converter with rule filtering
 
 ## Files
@@ -60,7 +60,7 @@ The script checks the latest PMD release from GitHub and the latest jPinpoint re
 | `jpinpoint-version.txt`| Installed jPinpoint rules version             |
 | `ruleset-java.xml`     | Java ruleset (security + error-prone + jpinpoint) |
 | `ruleset-js.xml`       | JavaScript ruleset                            |
-| `jpinpoint-rules.xml`  | jPinpoint performance/quality rules           |
+| `ruleset-java-jpinpoint.xml` | jPinpoint performance/quality rules           |
 | `pmd-to-html.py`       | XML → HTML converter                          |
 | `report.css`           | Dark theme stylesheet                         |
 | `download-pmd.sh`      | Download/update PMD + jPinpoint script        |

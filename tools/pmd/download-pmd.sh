@@ -118,7 +118,7 @@ echo "Installed $(ls "$SCRIPT_DIR/lib"/*.jar | wc -l) jars ($(du -sh "$SCRIPT_DI
 rm -f "$ZIP_FILE"
 
 # Download jPinpoint rules if not present or outdated
-JPINPOINT_FILE="${SCRIPT_DIR}/jpinpoint-rules.xml"
+JPINPOINT_FILE="${SCRIPT_DIR}/ruleset-java-jpinpoint.xml"
 JPINPOINT_VERSION_FILE="${SCRIPT_DIR}/jpinpoint-version.txt"
 JPINPOINT_REPO="jborgers/PMD-jPinpoint-rules"
 
