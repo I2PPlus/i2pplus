@@ -260,42 +260,40 @@ public class HostTxtEntry {
             return false;
         boolean rv = false;
         // don't cache result
-        if (true) {
-            StringWriter buf = new StringWriter(1024);
-            String sig = props.getProperty(PROP_OLDSIG);
-            String olddest = props.getProperty(PROP_OLDDEST);
-            if (sig == null || olddest == null)
-                return false;
-            buf.append(name);
-            buf.append(KV_SEPARATOR);
-            buf.append(dest);
-            try {
-                writeProps(buf, true, true);
-            } catch (IOException ioe) {
-                // won't happen
-                return false;
-            }
-            byte[] sdata = Base64.decode(sig);
-            if (sdata == null)
-                return false;
-            Destination d;
-            try {
-                d = new Destination(olddest);
-            } catch (DataFormatException dfe) {
-                return false;
-            }
-            SigningPublicKey spk = d.getSigningPublicKey();
-            SigType type = spk.getType();
-            if (type == null)
-                return false;
-            Signature s;
-            try {
-                s = new Signature(type, sdata);
-            } catch (IllegalArgumentException iae) {
-                return false;
-            }
-            rv = DSAEngine.getInstance().verifySignature(s, DataHelper.getUTF8(buf.toString()), spk);
+        StringWriter buf = new StringWriter(1024);
+        String sig = props.getProperty(PROP_OLDSIG);
+        String olddest = props.getProperty(PROP_OLDDEST);
+        if (sig == null || olddest == null)
+            return false;
+        buf.append(name);
+        buf.append(KV_SEPARATOR);
+        buf.append(dest);
+        try {
+            writeProps(buf, true, true);
+        } catch (IOException ioe) {
+            // won't happen
+            return false;
         }
+        byte[] sdata = Base64.decode(sig);
+        if (sdata == null)
+            return false;
+        Destination d;
+        try {
+            d = new Destination(olddest);
+        } catch (DataFormatException dfe) {
+            return false;
+        }
+        SigningPublicKey spk = d.getSigningPublicKey();
+        SigType type = spk.getType();
+        if (type == null)
+            return false;
+        Signature s;
+        try {
+            s = new Signature(type, sdata);
+        } catch (IllegalArgumentException iae) {
+            return false;
+        }
+        rv = DSAEngine.getInstance().verifySignature(s, DataHelper.getUTF8(buf.toString()), spk);
         return rv;
     }
 
@@ -307,39 +305,37 @@ public class HostTxtEntry {
             return false;
         boolean rv = false;
         // don't cache result
-        if (true) {
-            StringWriter buf = new StringWriter(1024);
-            String sig = props.getProperty(PROP_SIG);
-            String olddest = props.getProperty(PROP_DEST);
-            if (sig == null || olddest == null)
-                return false;
-            try {
-                writeProps(buf, true, true);
-            } catch (IOException ioe) {
-                // won't happen
-                return false;
-            }
-            byte[] sdata = Base64.decode(sig);
-            if (sdata == null)
-                return false;
-            Destination d;
-            try {
-                d = new Destination(olddest);
-            } catch (DataFormatException dfe) {
-                return false;
-            }
-            SigningPublicKey spk = d.getSigningPublicKey();
-            SigType type = spk.getType();
-            if (type == null)
-                return false;
-            Signature s;
-            try {
-                s = new Signature(type, sdata);
-            } catch (IllegalArgumentException iae) {
-                return false;
-            }
-            rv = DSAEngine.getInstance().verifySignature(s, DataHelper.getUTF8(buf.toString()), spk);
+        StringWriter buf = new StringWriter(1024);
+        String sig = props.getProperty(PROP_SIG);
+        String olddest = props.getProperty(PROP_DEST);
+        if (sig == null || olddest == null)
+            return false;
+        try {
+            writeProps(buf, true, true);
+        } catch (IOException ioe) {
+            // won't happen
+            return false;
         }
+        byte[] sdata = Base64.decode(sig);
+        if (sdata == null)
+            return false;
+        Destination d;
+        try {
+            d = new Destination(olddest);
+        } catch (DataFormatException dfe) {
+            return false;
+        }
+        SigningPublicKey spk = d.getSigningPublicKey();
+        SigType type = spk.getType();
+        if (type == null)
+            return false;
+        Signature s;
+        try {
+            s = new Signature(type, sdata);
+        } catch (IllegalArgumentException iae) {
+            return false;
+        }
+        rv = DSAEngine.getInstance().verifySignature(s, DataHelper.getUTF8(buf.toString()), spk);
         return rv;
     }
 

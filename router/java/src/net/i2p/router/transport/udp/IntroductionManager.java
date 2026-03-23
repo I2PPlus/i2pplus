@@ -816,25 +816,23 @@ class IntroductionManager {
         if (alice != null) {
             // We are Bob, send to Alice
             // Debug, check the signature, but send it along even if failed
-            if (true) {
-                RouterInfo charlie = _context.netDb().lookupRouterInfoLocally(peer.getRemotePeer());
-                if (charlie != null) {
-                    byte[] signedData;
-                    if (status == 0)
-                        signedData = Arrays.copyOfRange(data, 0, data.length - 8);  // token
-                    else
-                        signedData = data;
-                    SigningPublicKey spk = charlie.getIdentity().getSigningPublicKey();
-                    if (SSU2Util.validateSig(_context, SSU2Util.RELAY_RESPONSE_PROLOGUE,
-                                             _context.routerHash(), null, signedData, spk)) {
-                    } else {
-                        if (_log.shouldWarn())
-                            _log.warn("Signature failed RelayReponse as Bob from Charlie:\n" + charlie);
-                    }
+            RouterInfo charlie = _context.netDb().lookupRouterInfoLocally(peer.getRemotePeer());
+            if (charlie != null) {
+                byte[] signedData;
+                if (status == 0)
+                    signedData = Arrays.copyOfRange(data, 0, data.length - 8);  // token
+                else
+                    signedData = data;
+                SigningPublicKey spk = charlie.getIdentity().getSigningPublicKey();
+                if (SSU2Util.validateSig(_context, SSU2Util.RELAY_RESPONSE_PROLOGUE,
+                                         _context.routerHash(), null, signedData, spk)) {
                 } else {
                     if (_log.shouldWarn())
-                        _log.warn("Signer's RouterInfo not found " + peer);
+                        _log.warn("Signature failed RelayReponse as Bob from Charlie:\n" + charlie);
                 }
+            } else {
+                if (_log.shouldWarn())
+                    _log.warn("Signer's RouterInfo not found " + peer);
             }
             byte[] idata = new byte[2 + data.length];
             //idata[0] = 0; // flag

@@ -1190,15 +1190,13 @@ class PeerTestManager {
                     // Alice would need it to verify sig, but not worth the bandwidth
                     if (_log.shouldDebug())
                         _log.debug("Sending Charlie's RouterInfo to Alice on " + state);
-                    if (true) {
-                        // Debug - validate signed data
-                        // we forward it to alice even on failure
-                        SigningPublicKey spk = charlieRI.getIdentity().getSigningPublicKey();
-                        if (!SSU2Util.validateSig(_context, SSU2Util.PEER_TEST_PROLOGUE,
-                                                  _context.routerHash(), alice.getRemotePeer(), data, spk)) {
-                            if (_log.shouldWarn())
-                                _log.warn("Signature failed on message #3\n" + charlieRI);
-                        }
+                    // Debug - validate signed data
+                    // we forward it to alice even on failure
+                    SigningPublicKey spk = charlieRI.getIdentity().getSigningPublicKey();
+                    if (!SSU2Util.validateSig(_context, SSU2Util.PEER_TEST_PROLOGUE,
+                                              _context.routerHash(), alice.getRemotePeer(), data, spk)) {
+                        if (_log.shouldWarn())
+                            _log.warn("Signature failed on message #3\n" + charlieRI);
                     }
                 } else  {
                     // oh well, maybe alice has it

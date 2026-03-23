@@ -1717,13 +1717,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 addMessage(_t("Data directory must be an absolute path") + ": " + dataDir);
             } else if (!dd.exists() && !dd.mkdirs()) {
                 // save this tag for now, may need it again
-                if (false) {
-                    String msg = _t("Data directory does not exist") + ": " + dataDir;
-                    addMessage(msg);
-                    if (!_context.isRouterContext()) {
-                        System.out.println(" • " + msg);
-                    }
-                }
                 String msg = _t("Data directory cannot be created") + ": " + dataDir;
                 addMessage(msg);
                 if (!_context.isRouterContext()) {
@@ -2713,9 +2706,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         }
         if (autoStart) {
             startTorrent(ih);
-            if (false) {
-                addMessage(_t("Fetching {0}", name));
-            }
             DHT dht = _util.getDHT();
             boolean shouldWarn =
                     _util.connected()
