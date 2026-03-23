@@ -36,6 +36,7 @@
         <exclude name="AvoidReassigningLoopVariables"/>
         <exclude name="DoNotTerminateVM"/>
         <exclude name="DoNotCallGarbageCollectionExplicitly"/>
+        <exclude name="MissingSerialVersionUID"/>
     </rule>
 
     <!-- Multithreading: only genuine bug risks, not style -->
