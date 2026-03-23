@@ -28,6 +28,9 @@ pkg-temp/
 !pkg-temp/README.md
 classes/
 dist/
+logs/
+core/java/logs/
+core/java/logger.config
 !dist/README.md
 installer/resources/locale/mo
 /tmp

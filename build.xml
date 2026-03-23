@@ -1594,6 +1594,8 @@
       <delete file="core/java/libjbigi.so" quiet="true"/>
       <delete file="core/java/libjcpuid.so" quiet="true"/>
       <delete file="core/java/logger.config" quiet="true"/>
+      <delete dir="core/java/logs" quiet="true"/>
+      <delete dir="logs" quiet="true"/>
       <!-- Ensure dist directory exists after cleanup -->
       <mkdir dir="./dist"/>
       <!-- Use exec to run ant subprojects quietly -->
