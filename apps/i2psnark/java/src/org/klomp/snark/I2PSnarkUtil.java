@@ -731,7 +731,7 @@ public class I2PSnarkUtil implements DisconnectListener {
             if (out != null) {
                 out.delete();
             }
-            return null;
+            return null;  // NOPMD - ReturnEmptyCollectionRatherThanNull (byte[] is not a Collection)
         }
         out.deleteOnExit();
         String fetchURL = url;
@@ -820,7 +820,7 @@ public class I2PSnarkUtil implements DisconnectListener {
         int timeout;
         if (retries < 0) {
             if (!connected()) {
-                return null;
+                return null;  // NOPMD - ReturnEmptyCollectionRatherThanNull (byte[] is not a Collection)
             }
             timeout = EEPGET_CONNECT_TIMEOUT_SHORT;
             retries = 0;
@@ -828,7 +828,7 @@ public class I2PSnarkUtil implements DisconnectListener {
             timeout = EEPGET_CONNECT_TIMEOUT;
             if (!connected()) {
                 if (!connect()) {
-                    return null;
+                    return null;  // NOPMD - ReturnEmptyCollectionRatherThanNull (byte[] is not a Collection)
                 }
             }
         }

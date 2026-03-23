@@ -51,7 +51,7 @@ public class DestLookupMessage extends I2CPMessageImpl {
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder();
+        StringBuilder buf = new StringBuilder(); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         buf.append("[DestLookupMessage: ");
         buf.append("\n\tHash: ").append(_hash);
         buf.append("]");

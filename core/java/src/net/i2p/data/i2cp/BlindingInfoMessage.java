@@ -423,7 +423,7 @@ public class BlindingInfoMessage extends I2CPMessageImpl {
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder();
+        StringBuilder buf = new StringBuilder(); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         buf.append("[BlindingInfoMessage: ");
         buf.append("\n\tSession: ").append(_sessionId);
         buf.append("\n\tTimeout: ").append(_expiration);

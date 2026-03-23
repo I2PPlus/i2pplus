@@ -59,7 +59,7 @@ public class VariableTunnelBuildReplyMessage extends TunnelBuildReplyMessage {
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder(64);
+        StringBuilder buf = new StringBuilder(64); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         buf.append("VariableTunnelBuildReplyMessage [ID: ").append(getUniqueId())
            .append("] -> records: ").append(getRecordCount());
         return buf.toString();

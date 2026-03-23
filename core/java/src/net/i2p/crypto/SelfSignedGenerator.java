@@ -396,7 +396,7 @@ public final class SelfSignedGenerator {
         serial[2] &= 0x7f;
 
         // going to use this for both issuer and subject
-        StringBuilder buf = new StringBuilder(128);
+        StringBuilder buf = new StringBuilder(128); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         buf.append("CN=").append(cname);
         if (ou != null)
             buf.append(",OU=").append(ou);

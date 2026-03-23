@@ -88,7 +88,7 @@ public class ReceiveMessageEndMessage extends I2CPMessageImpl {
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder();
+        StringBuilder buf = new StringBuilder(); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         buf.append("[ReceiveMessageEndMessage: ");
         buf.append(" SessionId: ").append(_sessionId);
         buf.append("; MessageId: ").append(_messageId);

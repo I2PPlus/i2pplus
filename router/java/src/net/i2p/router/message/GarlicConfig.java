@@ -171,7 +171,7 @@ class GarlicConfig {
 
     @Override
     public String toString() {
-	StringBuilder buf = new StringBuilder();
+	StringBuilder buf = new StringBuilder(); // NOPMD - AvoidUnnecessaryStringBuilderCreation
 	buf.append("<garlicConfig>").append(NL);
 	buf.append("<certificate>").append(getCertificate()).append("</certificate>").append(NL);
 	buf.append("<instructions>").append(getDeliveryInstructions()).append("</instructions>").append(NL);

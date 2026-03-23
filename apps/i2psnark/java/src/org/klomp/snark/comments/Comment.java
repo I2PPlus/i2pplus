@@ -142,7 +142,7 @@ public class Comment implements Comparable<Comment> {
      * @return time,rating,mine,hidden,name,text
      */
     public String toPersistentString() {
-        StringBuilder buf = new StringBuilder();
+        StringBuilder buf = new StringBuilder(); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         buf.append(getTime());
         buf.append(',');
         buf.append(Byte.toString(rating));

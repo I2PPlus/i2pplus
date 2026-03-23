@@ -35,7 +35,7 @@ public class PayloadGarlicConfig extends GarlicConfig {
 
     @Override
     protected String getSubData() {
-	StringBuilder buf = new StringBuilder();
+	StringBuilder buf = new StringBuilder(); // NOPMD - AvoidUnnecessaryStringBuilderCreation
 	buf.append("<payloadMessage>").append(_payload).append("</payloadMessage>");
 	return buf.toString();
     }

@@ -464,7 +464,7 @@ public class RouterContext extends I2PAppContext {
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder(512);
+        StringBuilder buf = new StringBuilder(512); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         buf.append("RouterContext: ").append(super.toString()).append('\n');
         buf.append(_router).append('\n');
         buf.append(_clientManagerFacade).append('\n');

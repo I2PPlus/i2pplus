@@ -119,7 +119,7 @@ public class I2PSocketAddress extends SocketAddress {
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder();
+        StringBuilder buf = new StringBuilder(); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         if (_dest != null)
             buf.append(_dest.calculateHash().toString());
         else

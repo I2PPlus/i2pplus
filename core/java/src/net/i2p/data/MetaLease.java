@@ -130,7 +130,7 @@ public class MetaLease extends Lease {
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder(128);
+        StringBuilder buf = new StringBuilder(128); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         buf.append("[Meta Lease: ");
         buf.append("\n\tEnd Date: ").append(DataHelper.formatTime(_end));
         buf.append("\n\tTarget: ").append(_gateway);

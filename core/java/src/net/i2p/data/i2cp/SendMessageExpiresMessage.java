@@ -173,7 +173,7 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder();
+        StringBuilder buf = new StringBuilder(); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         buf.append("[SendMessageExpiresMessage: ");
         buf.append("\n\tSessionId: ").append(_sessionId);
         buf.append("\n\tNonce: ").append(_nonce);

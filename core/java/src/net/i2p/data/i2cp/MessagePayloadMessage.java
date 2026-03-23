@@ -151,7 +151,7 @@ public class MessagePayloadMessage extends I2CPMessageImpl {
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder();
+        StringBuilder buf = new StringBuilder(); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         buf.append(" MessagePayloadMessage\n*");
         buf.append(" SessionID: ").append(_sessionId);
         buf.append(" [MsgID ").append(_messageId);

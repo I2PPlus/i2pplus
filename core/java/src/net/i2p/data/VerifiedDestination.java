@@ -109,7 +109,7 @@ public class VerifiedDestination extends Destination {
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder(128);
+        StringBuilder buf = new StringBuilder(128); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         buf.append(super.toString());
         buf.append("\n\tVerified Certificate? ").append(verifyCert(true));
         return buf.toString();

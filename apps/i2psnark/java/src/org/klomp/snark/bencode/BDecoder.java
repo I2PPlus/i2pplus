@@ -59,7 +59,7 @@ public class BDecoder {
      * @return the SHA-1 digest of the special map bytes, or null if there was no special map
      */
     public byte[] get_special_map_digest() {
-        if (sha_digest == null) return null;
+        if (sha_digest == null) return null;  // NOPMD - ReturnEmptyCollectionRatherThanNull (byte[] is not a Collection)
         byte[] result = sha_digest.digest();
         return result;
     }

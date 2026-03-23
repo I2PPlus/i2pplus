@@ -585,7 +585,7 @@ public class PeerTestJob extends JobImpl {
         public boolean matchFound() { return _matchFound; }
         @Override
         public String toString() {
-            StringBuilder buf = new StringBuilder(64);
+            StringBuilder buf = new StringBuilder(64); // NOPMD - AvoidUnnecessaryStringBuilderCreation
             buf.append("Test peer [").append(_shortHash);
             buf.append("] with nonce: ").append(_nonce);
             return buf.toString();

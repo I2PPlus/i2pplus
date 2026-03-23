@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import net.i2p.data.Base32;
@@ -110,15 +111,15 @@ public class MagnetURI {
      * @return first valid tracker url or null
      */
     public String getTrackerURL() {
-        return _trackers != null ? _trackers.get(0) : null;
+        return _trackers != null && !_trackers.isEmpty() ? _trackers.get(0) : null;
     }
 
     /**
-     * @return all valid tracker urls or null if none
+     * @return all valid tracker urls or empty list if none
      * @since 0.9.67 TODO to be hooked in via SnarkManager.addMagnet() and new Snark()
      */
     public List<String> getTrackerURLs() {
-        return _trackers;
+        return _trackers != null ? _trackers : Collections.<String>emptyList();
     }
 
     /**
@@ -148,7 +149,7 @@ public class MagnetURI {
     }
 
     /**
-     * @return all decoded parameters or null
+     * @return all decoded parameters or empty list
      * @since 0.9.1
      */
     private static List<String> getMultiParam(String key, String uri) {
@@ -162,7 +163,7 @@ public class MagnetURI {
             }
         }
         if (idx < 0 || idx > uri.length()) {
-            return null;
+            return Collections.emptyList();
         }
         List<String> rv = new ArrayList<String>();
         while (true) {
@@ -185,13 +186,13 @@ public class MagnetURI {
     }
 
     /**
-     * @return all valid I2P trackers or null if none
+     * @return all valid I2P trackers or empty list if none
      * @since 0.9.1
      */
     private static List<String> getTrackerParam(String uri) {
         List<String> trackers = getMultiParam("tr", uri);
-        if (trackers == null) {
-            return null;
+        if (trackers.isEmpty()) {
+            return Collections.emptyList();
         }
 
         List<String> rv = new ArrayList<String>(trackers.size());

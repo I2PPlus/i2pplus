@@ -122,7 +122,7 @@ public class CreateLeaseSetMessage extends I2CPMessageImpl {
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder();
+        StringBuilder buf = new StringBuilder(); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         buf.append("[CreateLeaseSetMessage: ");
         buf.append("\n\tLeaseSet: ").append(getLeaseSet());
         buf.append("\n\tSigningPrivateKey: ").append(getSigningPrivateKey());

@@ -87,7 +87,7 @@ public class ReconfigureSessionMessage extends I2CPMessageImpl {
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder();
+        StringBuilder buf = new StringBuilder(); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         buf.append("[ReconfigureSessionMessage: ");
         buf.append("\n\tSessionId: ").append(_sessionId);
         buf.append("\n\tSessionConfig: ").append(_sessionConfig);

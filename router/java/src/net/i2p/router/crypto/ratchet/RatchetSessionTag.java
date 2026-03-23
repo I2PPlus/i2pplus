@@ -78,7 +78,7 @@ public class RatchetSessionTag {
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder(33);
+        StringBuilder buf = new StringBuilder(33); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         buf.append("RatchetSessionTag: ");
         buf.append(toBase64());
         return buf.toString();

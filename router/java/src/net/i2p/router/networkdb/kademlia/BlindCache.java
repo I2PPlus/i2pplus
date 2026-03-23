@@ -449,7 +449,7 @@ class BlindCache {
      *  if negative, it's a negative expiration date.
      */
     private static String toPersistentString(BlindData bd) {
-        StringBuilder buf = new StringBuilder(1024);
+        StringBuilder buf = new StringBuilder(1024); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         SigningPublicKey spk = bd.getUnblindedPubKey();
         buf.append(spk.getType().getCode()).append(',');
         buf.append(bd.getBlindedSigType().getCode()).append(',');

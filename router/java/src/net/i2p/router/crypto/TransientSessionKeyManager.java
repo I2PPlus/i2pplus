@@ -1201,7 +1201,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
 
         @Override
         public String toString() {
-            StringBuilder buf = new StringBuilder(256);
+            StringBuilder buf = new StringBuilder(256); // NOPMD - AvoidUnnecessaryStringBuilderCreation
             buf.append("TagSet [").append(_id).append("]");
             buf.append(" Size: ").append(_sessionTags.size()).append('/').append(_origSize);
             buf.append(" ACKed? ").append(_acked);

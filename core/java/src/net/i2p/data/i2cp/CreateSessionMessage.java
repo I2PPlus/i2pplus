@@ -70,7 +70,7 @@ public class CreateSessionMessage extends I2CPMessageImpl {
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder();
+        StringBuilder buf = new StringBuilder(); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         buf.append("CreateSessionMessage: ");
         buf.append("\n* Config: ").append(_sessionConfig);
         return buf.toString();

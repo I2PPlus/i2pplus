@@ -119,7 +119,7 @@ public class ReportAbuseMessage extends I2CPMessageImpl {
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder();
+        StringBuilder buf = new StringBuilder(); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         buf.append("ReportAbuseMessage: ");
         buf.append("SessionID: ").append(getSessionId());
         buf.append("; Severity: ").append(getSeverity());

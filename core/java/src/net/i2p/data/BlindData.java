@@ -398,7 +398,7 @@ public class BlindData {
     @Override
     public synchronized String toString() {
         calculate();
-        StringBuilder buf = new StringBuilder(1024);
+        StringBuilder buf = new StringBuilder(1024); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         buf.append("[BlindData: ");
         buf.append("\n\tSigningPublicKey: ").append(_clearSPK);
         buf.append("\n\tAlpha           : ").append(getAlpha());

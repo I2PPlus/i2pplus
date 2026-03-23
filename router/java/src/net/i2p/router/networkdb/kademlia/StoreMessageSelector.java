@@ -60,7 +60,7 @@ class StoreMessageSelector implements MessageSelector {
 
     @Override
     public String toString() {
-        StringBuilder rv = new StringBuilder(128);
+        StringBuilder rv = new StringBuilder(128); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         rv.append("Waiting for NetDb confirm from ").append(_peer).append(", found? ");
         rv.append(_found).append(" waiting for [MsgID ").append(_waitingForId).append("]");
         return rv.toString();

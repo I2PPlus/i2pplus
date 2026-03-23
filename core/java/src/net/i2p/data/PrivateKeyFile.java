@@ -127,7 +127,7 @@ public class PrivateKeyFile {
                 break;
 
             case 't':
-                stype = g.getOptarg();
+                stype = g.getOptarg();  // NOPMD - AvoidDuplicateAssignmentsInCases
                 // fall thru...
 
             case 'n':

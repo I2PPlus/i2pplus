@@ -81,7 +81,7 @@ class SessionKeyAndNonce extends SessionKey {
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder(64);
+        StringBuilder buf = new StringBuilder(64); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         buf.append("[SessionKeyAndNonce: ");
         if (_data != null)
             buf.append(toBase64());

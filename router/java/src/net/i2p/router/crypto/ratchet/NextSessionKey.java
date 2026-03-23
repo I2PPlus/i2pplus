@@ -80,7 +80,7 @@ class NextSessionKey extends PublicKey {
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder(64);
+        StringBuilder buf = new StringBuilder(64); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         buf.append("\n* NextSessionKey: ");
         buf.append(super.toString());
         buf.append(" ID: ").append(_id);

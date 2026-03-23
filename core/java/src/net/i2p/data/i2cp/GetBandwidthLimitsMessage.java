@@ -38,8 +38,6 @@ public class GetBandwidthLimitsMessage extends I2CPMessageImpl {
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder();
-        buf.append("[GetBandwidthLimitsMessage]");
-        return buf.toString();
+        return "[GetBandwidthLimitsMessage]";
     }
 }

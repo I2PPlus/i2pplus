@@ -85,7 +85,7 @@ public class SetDateMessage extends I2CPMessageImpl {
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder();
+        StringBuilder buf = new StringBuilder(); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         buf.append("SetDateMessage: ");
         buf.append(_date);
         buf.append(" [Version: ").append(_version).append("]");

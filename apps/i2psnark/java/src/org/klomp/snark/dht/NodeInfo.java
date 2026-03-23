@@ -253,7 +253,7 @@ class NodeInfo extends SimpleDataStructure {
      * Destination may be empty string
      */
     public String toPersistentString() {
-        StringBuilder buf = new StringBuilder(650);
+        StringBuilder buf = new StringBuilder(650); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         buf.append(nID.toBase64()).append(':');
         buf.append(hash.toBase64()).append(':');
         if (dest != null) buf.append(dest.toBase64());

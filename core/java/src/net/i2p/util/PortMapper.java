@@ -370,7 +370,7 @@ public class PortMapper {
      *  @since 0.9.50 from SummaryBarRenderer
      */
     private static String toURL(String svc, String host, int port) {
-        StringBuilder buf = new StringBuilder(64);
+        StringBuilder buf = new StringBuilder(64); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         buf.append(svc.equals(SVC_HTTPS_EEPSITE) ? "https://" : "http://");
         host = convertWildcard(host, "127.0.0.1");
         if (host.contains(":"))

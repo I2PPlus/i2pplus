@@ -95,7 +95,7 @@ public class DestReplyMessage extends I2CPMessageImpl {
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder();
+        StringBuilder buf = new StringBuilder(); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         buf.append("[DestReplyMessage: ");
         buf.append("\n\tDestination: ").append(_dest);
         buf.append("\n\tHash: ").append(_hash);

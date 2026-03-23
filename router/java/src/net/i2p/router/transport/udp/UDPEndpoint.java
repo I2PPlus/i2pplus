@@ -202,7 +202,7 @@ class UDPEndpoint implements SocketListener {
      */
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder(64);
+        StringBuilder buf = new StringBuilder(64); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         buf.append("UDP Socket ");
         if (_bindAddress != null)
             buf.append(_bindAddress.toString()).append(' ');

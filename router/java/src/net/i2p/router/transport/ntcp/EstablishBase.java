@@ -230,7 +230,7 @@ abstract class EstablishBase implements EstablishState {
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder(64);
+        StringBuilder buf = new StringBuilder(64); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         buf.append(_con.isInbound() ? "Inbound" : "Outbound").append("EstablishState");
         buf.append(_con.toString());
         buf.append(" (").append(_state).append(")");

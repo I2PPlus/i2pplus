@@ -186,7 +186,7 @@ public class Payload extends DataStructureImpl {
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder(32);
+        StringBuilder buf = new StringBuilder(32); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         buf.append("Payload: ");
         if (_encryptedData != null)
             buf.append(_encryptedData.length).append(" bytes");

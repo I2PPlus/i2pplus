@@ -143,7 +143,7 @@ public class DateAndFlags extends DataStructureImpl {
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder(64);
+        StringBuilder buf = new StringBuilder(64); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         buf.append("[DateAndFlags: ");
         buf.append("\n\tDate: ").append(Instant.ofEpochMilli(_date));
         buf.append("\n\tFlags: 0x").append(Integer.toHexString(_flags));

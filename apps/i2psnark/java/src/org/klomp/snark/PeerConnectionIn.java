@@ -138,12 +138,13 @@ class PeerConnectionIn implements Runnable {
                         break;
 
                     case Message.REQUEST:
-                        piece = din.readInt();
+                    case Message.CANCEL:
+                        piece = din.readInt();  // NOPMD - AvoidDuplicateAssignmentsInCases
                         begin = din.readInt();
                         len = din.readInt();
                         if (_log.shouldDebug()) {
                             _log.debug(
-                                    "Received request from ["
+                                    "Received " + (b == Message.REQUEST ? "request" : "cancel") + " from ["
                                             + peer
                                             + "] for [Piece "
                                             + piece
@@ -151,12 +152,15 @@ class PeerConnectionIn implements Runnable {
                                             + begin
                                             + ")");
                         }
-                        ps.requestMessage(piece, begin, len);
+                        if (b == Message.REQUEST)
+                            ps.requestMessage(piece, begin, len);
+                        else
+                            ps.cancelMessage(piece, begin, len);
                         break;
 
                     case Message.PIECE:
-                        piece = din.readInt();
-                        begin = din.readInt();
+                        piece = din.readInt();  // NOPMD - AvoidDuplicateAssignmentsInCases
+                        begin = din.readInt();  // NOPMD - AvoidDuplicateAssignmentsInCases
                         len = i - 9;
                         Request req = ps.getOutstandingRequest(piece, begin, len);
                         if (req != null) {
@@ -191,23 +195,6 @@ class PeerConnectionIn implements Runnable {
                         }
                         break;
 
-                    case Message.CANCEL:
-                        piece = din.readInt();
-                        begin = din.readInt();
-                        len = din.readInt();
-                        if (_log.shouldDebug()) {
-                            _log.debug(
-                                    "Received cancel from ["
-                                            + peer
-                                            + "] for [Piece "
-                                            + piece
-                                            + "] (Start: "
-                                            + begin
-                                            + ")");
-                        }
-                        ps.cancelMessage(piece, begin, len);
-                        break;
-
                     case Message.PORT:
                         int port = din.readUnsignedShort();
                         if (_log.shouldDebug()) {
@@ -228,10 +215,14 @@ class PeerConnectionIn implements Runnable {
 
                     // fast extensions below here
                     case Message.SUGGEST:
-                        piece = din.readInt();
-                        ps.suggestMessage(piece);
+                    case Message.ALLOWED_FAST:
+                        piece = din.readInt();  // NOPMD - AvoidDuplicateAssignmentsInCases
+                        if (b == Message.SUGGEST)
+                            ps.suggestMessage(piece);
+                        else
+                            ps.allowedFastMessage(piece);
                         if (_log.shouldDebug()) {
-                            _log.debug("Received suggest(" + piece + ") from [" + peer + "]");
+                            _log.debug("Received " + (b == Message.SUGGEST ? "suggest" : "allowed_fast") + "(" + piece + ") from [" + peer + "]");
                         }
                         break;
 
@@ -250,9 +241,9 @@ class PeerConnectionIn implements Runnable {
                         break;
 
                     case Message.REJECT:
-                        piece = din.readInt();
-                        begin = din.readInt();
-                        len = din.readInt();
+                        piece = din.readInt();  // NOPMD - AvoidDuplicateAssignmentsInCases
+                        begin = din.readInt();  // NOPMD - AvoidDuplicateAssignmentsInCases
+                        len = din.readInt();  // NOPMD - AvoidDuplicateAssignmentsInCases
                         ps.rejectMessage(piece, begin, len);
                         if (_log.shouldDebug()) {
                             _log.debug(
@@ -265,14 +256,6 @@ class PeerConnectionIn implements Runnable {
                                             + " Length: "
                                             + len
                                             + " bytes)");
-                        }
-                        break;
-
-                    case Message.ALLOWED_FAST:
-                        piece = din.readInt();
-                        ps.allowedFastMessage(piece);
-                        if (_log.shouldDebug()) {
-                            _log.debug("Received allowed_fast(" + piece + ") from [" + peer + "]");
                         }
                         break;
 

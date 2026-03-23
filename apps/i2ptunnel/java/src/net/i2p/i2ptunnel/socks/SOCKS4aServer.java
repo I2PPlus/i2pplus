@@ -141,7 +141,7 @@ class SOCKS4aServer extends SOCKSServer {
     }
 
     private String readString(DataInputStream in) throws IOException {
-        StringBuilder sb = new StringBuilder(16);
+        StringBuilder sb = new StringBuilder(16); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         char c;
         while ((c = (char) (in.readByte() & 0xff)) != 0)
             sb.append(c);

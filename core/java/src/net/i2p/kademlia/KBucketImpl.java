@@ -141,7 +141,7 @@ class KBucketImpl<T extends SimpleDataStructure> implements KBucket<T> {
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder(1024);
+        StringBuilder buf = new StringBuilder(1024); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         buf.append(_entries.size());
         buf.append(" entries in (").append(_begin);
         if (_end != _begin)

@@ -410,7 +410,7 @@ class SidebarRenderer {
     }
 
     public String renderClockHTML() {
-        StringBuilder buf = new StringBuilder(128);
+        StringBuilder buf = new StringBuilder(128); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         String FORMAT = "HH:mm:ss";
         DateFormat dfmt = new SimpleDateFormat(FORMAT, Locale.UK);
         TimeZone utc = TimeZone.getTimeZone("GMT");
@@ -657,7 +657,7 @@ class SidebarRenderer {
 
     public String renderRouterInfoHTML() {
         if (_helper == null) {return "";}
-        StringBuilder buf = new StringBuilder(512);
+        StringBuilder buf = new StringBuilder(512); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         toggleId = "toggle_sb_general";
 
         buf.append("<h3><a href=/info target=_top title=\"")
@@ -691,7 +691,7 @@ class SidebarRenderer {
 
     public String renderShortRouterInfoHTML() {
         if (_helper == null) {return "";}
-        StringBuilder buf = new StringBuilder(512);
+        StringBuilder buf = new StringBuilder(512); // NOPMD - AvoidUnnecessaryStringBuilderCreation
 
         buf.append("<table id=sb_shortgeneral>\n<tr title=\"")
            .append(_t("The version of the I2P software we are running"))
@@ -1096,7 +1096,7 @@ class SidebarRenderer {
         String t = "&amp;t=" + (_context.clock().now() / 1000);
         String g = "style=\"background-image:url(\'/viewstat.jsp?stat=bw.combined&amp;periodCount=20&amp;width=250&amp;height=50&amp;hideLegend=true&amp;hideGrid=true&amp;hideTitle=true" +
                     t + "\')\"";
-        StringBuilder buf = new StringBuilder(512);
+        StringBuilder buf = new StringBuilder(512); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         buf.append("<div id=sb_graphcontainer class=collapse title=\"")
            .append(_t("Our inbound &amp; outbound traffic for the last 20 minutes"))
            .append("\">\n<span id=sb_graphstats class=volatile>")
@@ -1340,7 +1340,7 @@ class SidebarRenderer {
     public String renderTunnelStatusHTML() {
         if (_helper == null) {return "";}
         int partTunnels = _helper.getParticipatingTunnels();
-        StringBuilder buf = new StringBuilder(50);
+        StringBuilder buf = new StringBuilder(50); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         String getStatus = _helper.getTunnelStatus();
         String buildStatus = getStatus.indexOf('[') >= 0 && getStatus.indexOf(']') > getStatus.indexOf('[')
                               ? getStatus.substring(getStatus.indexOf(']') + 1) : getStatus;

@@ -658,11 +658,11 @@ public class Storage implements Closeable {
      */
     public int[] getFilePriorities() {
         if (complete()) {
-            return null;
+            return null;  // NOPMD - ReturnEmptyCollectionRatherThanNull (int[] is not a Collection)
         }
         int sz = _torrentFiles.size();
         if (sz <= 1) {
-            return null;
+            return null;  // NOPMD - ReturnEmptyCollectionRatherThanNull (int[] is not a Collection)
         }
         int[] priorities = new int[sz];
         for (int i = 0; i < sz; i++) {
@@ -764,7 +764,7 @@ public class Storage implements Closeable {
      */
     public int[] getPiecePriorities() {
         if (complete() || (metainfo.getFiles() == null && !_inOrder)) {
-            return null;
+            return null;  // NOPMD - ReturnEmptyCollectionRatherThanNull (int[] is not a Collection)
         }
         int[] rv = new int[metainfo.getPieces()];
         int file = 0;
@@ -1162,12 +1162,18 @@ public class Storage implements Closeable {
             } else if (SystemVersion.isWindows()) {
                 // https://docs.microsoft.com/en-us/windows/desktop/FileIO/naming-a-file
                 String iname = name.toLowerCase(Locale.US);
+                int underscores = 0;
                 for (int i = 0; i < WIN_ILLEGAL.length; i++) {
                     String w = WIN_ILLEGAL[i];
                     if (iname.equals(w)
                             || (iname.startsWith(w + '.') && w.indexOf('.', w.length() + 1) < 0)) {
-                        rv = '_' + rv;
+                        underscores++;
                     }
+                }
+                if (underscores > 0) {
+                    StringBuilder prefix = new StringBuilder(underscores);
+                    for (int i = 0; i < underscores; i++) {prefix.append('_');}
+                    rv = prefix.toString() + rv;
                 }
             }
             if (rv.endsWith(".") || rv.endsWith(" ")) {
@@ -1279,11 +1285,11 @@ public class Storage implements Closeable {
      * Includes the base for a multi-file torrent. Sorted bottom-up for easy deletion. Slow. Use for
      * deletion only.
      *
-     * @return a new Set or null for a single-file torrent
+     * @return a new Set or empty set for a single-file torrent
      * @since 0.9.15
      */
     public SortedSet<File> getDirectories() {
-        if (!_base.isDirectory()) return null;
+        if (!_base.isDirectory()) return Collections.<File>emptySortedSet();
         SortedSet<File> rv = new TreeSet<File>(Collections.reverseOrder());
         rv.add(_base);
         for (TorrentFile tf : _torrentFiles) {

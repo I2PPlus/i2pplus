@@ -80,7 +80,7 @@ public class OutboundTunnelBuildReplyMessage extends TunnelBuildReplyMessage {
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder(64);
+        StringBuilder buf = new StringBuilder(64); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         buf.append("[OutboundTunnelBuildReplyMessage: " +
                    "\n\tID: ").append(getUniqueId())
            .append("\n\tRecords: ").append(getRecordCount())

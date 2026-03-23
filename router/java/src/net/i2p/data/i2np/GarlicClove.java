@@ -185,7 +185,7 @@ public class GarlicClove extends DataStructureImpl {
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder(128);
+        StringBuilder buf = new StringBuilder(128); // NOPMD - AvoidUnnecessaryStringBuilderCreation
 //        buf.append("GarlicClove");
         buf.append(_instructions);
         buf.append("\n* Expires: ").append(DataHelper.formatTime(_expiration));

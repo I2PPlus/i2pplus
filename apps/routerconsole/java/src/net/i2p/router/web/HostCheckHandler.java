@@ -177,7 +177,7 @@ public class HostCheckHandler extends GzipHandler
      */
     private static void sendRedirect(int httpsPort, HttpServletRequest httpRequest,
                                      HttpServletResponse httpResponse) throws IOException {
-        StringBuilder buf = new StringBuilder(64);
+        StringBuilder buf = new StringBuilder(64); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         buf.append("https://");
         String name = httpRequest.getServerName();
         boolean ipv6 = name.indexOf(':') >= 0 && !name.startsWith("[");

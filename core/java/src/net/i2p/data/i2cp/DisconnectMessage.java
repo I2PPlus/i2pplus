@@ -66,7 +66,7 @@ public class DisconnectMessage extends I2CPMessageImpl {
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder();
+        StringBuilder buf = new StringBuilder(); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         buf.append("[DisconnectMessage: ");
         buf.append("\n\tReason: ").append(getReason());
         buf.append("]");

@@ -117,7 +117,7 @@ public class SocketTimeout extends SimpleTimer2.TimedEvent {
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder();
+        StringBuilder buf = new StringBuilder(); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         buf.append("SocketTimeout started on ");
         buf.append(Instant.ofEpochMilli(_startTime));
         buf.append(" idle for ");
