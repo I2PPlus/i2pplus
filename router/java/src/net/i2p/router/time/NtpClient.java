@@ -98,7 +98,7 @@ public class NtpClient {
         Collections.shuffle(names);
         for (String server : names) {
             long[] rv = currentTimeAndStratum(server, perServerTimeout, preferIPv6, log);
-            if (rv != null && rv[0] > 0) {
+            if (rv != null && rv.length > 0 && rv[0] > 0) {
                 return rv;
             }
         }
