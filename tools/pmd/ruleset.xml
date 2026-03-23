@@ -15,6 +15,10 @@
     <exclude-pattern>.*/.*\.jar</exclude-pattern>
     <exclude-pattern>.*/.*\.class</exclude-pattern>
     <exclude-pattern>.*/.*\.war</exclude-pattern>
+    <exclude-pattern>.*/test/.*</exclude-pattern>
+    <exclude-pattern>.*/demo/.*</exclude-pattern>
+    <exclude-pattern>.*/tmp/.*</exclude-pattern>
+    <exclude-pattern>.*_jsp\.java</exclude-pattern>
 
     <!-- Third-party exclusions -->
     <exclude-pattern>.*/net/i2p/apache/.*</exclude-pattern>
