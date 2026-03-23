@@ -23,6 +23,7 @@ import net.i2p.util.Addresses;
  *
  *  @since 0.9.33 adapted from net.i2p.i2ptunnel.socks.SOCKS5Server
  */
+@SuppressWarnings("PMD.CloseResource")
 public class SOCKS5Client {
 
     private SOCKS5Client() {}

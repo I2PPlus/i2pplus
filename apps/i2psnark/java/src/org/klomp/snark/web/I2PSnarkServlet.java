@@ -101,6 +101,7 @@ import org.klomp.snark.dht.DHT;
  *
  * @since 0.1.0
  */
+@SuppressWarnings("PMD.CloseResource")
 public class I2PSnarkServlet extends BasicServlet {
 
     private static final long serialVersionUID = 1L;
@@ -3400,6 +3401,7 @@ public class I2PSnarkServlet extends BasicServlet {
      *  @return string or null if unknown tracker
      *  @since 0.8.4
      */
+    @SuppressWarnings("PMD.AvoidBranchingStatementAsLastInLoop")
     private String getTrackerLinkUrl(String announce, byte[] infohash) {
         // temporarily hardcoded for postman and torrfreedom, requires bytemonsoon patch or flyte for lookup by info_hash
         if (announce != null && (announce.startsWith("http://tracker2.postman.i2p/") || announce.startsWith("http://lnQ6yoBT") ||

@@ -51,6 +51,7 @@ import net.i2p.util.Log;
  * body and sets Content-Encoding: x-i2p-gzip when browser requests
  * Accept-Encoding: x-i2p-gzip.
  */
+@SuppressWarnings("PMD.CloseResource")
 public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
     /** all of these in SECONDS */

@@ -42,6 +42,7 @@ import net.i2p.util.PortMapper;
 /**
  * Provide an JSON-RPC 2.0 API for remote controlling of I2P
  */
+@SuppressWarnings("PMD.CloseResource")
 public class JSONRPC2Servlet extends HttpServlet {
 
     private static final long serialVersionUID = -45075606818515212L;

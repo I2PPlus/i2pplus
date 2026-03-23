@@ -51,6 +51,7 @@ import net.i2p.util.VersionComparator;
  * This is somewhat complicated by trying to log to three places - the console,
  * the router log, and the wrapper log.
  */
+@SuppressWarnings("PMD.CloseResource")
 public class Reseeder {
     private final RouterContext _context;
     private final Log _log;

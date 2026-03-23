@@ -91,6 +91,7 @@ import org.apache.commons.net.io.DotTerminatedMessageWriter;
  * @see SMTPConnectionClosedException
  * @see org.apache.commons.net.MalformedServerReplyException
  */
+@SuppressWarnings("PMD.CloseResource")
 public class SMTPClient extends SMTP {
 
     /**

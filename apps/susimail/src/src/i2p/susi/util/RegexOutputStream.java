@@ -13,6 +13,7 @@ import net.i2p.util.Log;
  *
  * @since 0.9.62
  */
+@SuppressWarnings("PMD.CloseResource")
 public class RegexOutputStream extends FilterOutputStream {
 
     private final String match, repl;

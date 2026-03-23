@@ -14,6 +14,7 @@ import java.util.Locale;
  * Utility class for file operations and XML file detection. This class provides static methods for
  * loading file contents into byte arrays and checking if files have XML extensions.
  */
+@SuppressWarnings("PMD.CloseResource")
 public final class FileUtil {
     /**
      * Loads the entire contents of a file into a byte array.

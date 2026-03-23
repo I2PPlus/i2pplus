@@ -103,6 +103,7 @@ import net.i2p.util.SystemVersion;
  * @see I2PTunnelIRCServer
  * @see I2PSocketManager
  */
+@SuppressWarnings("PMD.CloseResource")
 public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
 
     protected final Log _log;

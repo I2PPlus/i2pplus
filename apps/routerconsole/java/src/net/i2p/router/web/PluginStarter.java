@@ -51,6 +51,7 @@ import org.eclipse.jetty.server.handler.ContextHandlerCollection;
  *  @since 0.7.12
  *  @author zzz
  */
+@SuppressWarnings("PMD.CloseResource")
 public class PluginStarter implements Runnable {
     protected RouterContext _context;
     private static final String CONFIG_FILE = "plugins.config";

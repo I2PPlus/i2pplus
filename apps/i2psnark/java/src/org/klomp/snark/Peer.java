@@ -43,6 +43,7 @@ import org.klomp.snark.bencode.InvalidBEncodingException;
  *
  * @since 0.1.0
  */
+@SuppressWarnings("PMD.CloseResource")
 public class Peer implements Comparable<Peer>, BandwidthListener {
     protected final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(getClass());
     // Identifying property, the peer id of the other side.

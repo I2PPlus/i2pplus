@@ -42,6 +42,7 @@ import org.minidns.record.Record.TYPE;
  *
  *  @since 0.9.35
  */
+@SuppressWarnings("PMD.CloseResource")
 public class DNSOverHTTPS implements EepGet.StatusListener {
     private final I2PAppContext ctx;
     private final Log _log;

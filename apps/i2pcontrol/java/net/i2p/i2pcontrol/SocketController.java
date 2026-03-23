@@ -47,6 +47,7 @@ import org.json.simple.Jsoner;
  *
  * @author hottuna
  */
+@SuppressWarnings("PMD.CloseResource")
 public class SocketController implements RouterApp {
     // non-null
     private final RouterContext _context;

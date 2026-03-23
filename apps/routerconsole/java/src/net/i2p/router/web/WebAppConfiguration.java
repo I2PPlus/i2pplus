@@ -38,6 +38,7 @@ import org.eclipse.jetty.webapp.WebAppContext;
  *  @since 0.7.12
  *  @author zzz
  */
+@SuppressWarnings("PMD.CloseResource")
 public class WebAppConfiguration implements Configuration {
 
     private static final String CLASSPATH = ".classpath";

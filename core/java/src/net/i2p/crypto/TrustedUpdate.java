@@ -31,6 +31,7 @@ import net.i2p.util.VersionComparator;
  * @author jrandom and smeghead
  * @since 0.8.1
  */
+@SuppressWarnings("PMD.CloseResource")
 public class TrustedUpdate {
 
     /**

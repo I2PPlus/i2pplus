@@ -39,6 +39,7 @@ import net.i2p.util.EventDispatcher;
  * and serves as a flexible proxy solution for applications that support
  * SOCKS protocol, enabling seamless I2P integration for various clients.
  */
+@SuppressWarnings("PMD.CloseResource")
 public class I2PSOCKSTunnel extends I2PTunnelClientBase {
 
     /**

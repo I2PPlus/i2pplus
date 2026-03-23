@@ -43,6 +43,7 @@ import net.i2p.data.DataHelper;
  *
  * @author susi
  */
+@SuppressWarnings("PMD.CloseResource")
 public class HeaderLine extends Encoding {
 	public static final String NAME = "HEADERLINE";
 

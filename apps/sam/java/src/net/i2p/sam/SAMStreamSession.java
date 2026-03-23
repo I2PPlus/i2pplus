@@ -520,7 +520,8 @@ class SAMStreamSession implements SAMMessageSess {
      *
      * @author human
      */
-    public class SAMStreamSessionServer implements Runnable {
+    @SuppressWarnings("PMD.CloseResource")
+public class SAMStreamSessionServer implements Runnable {
 
         private final Object runningLock = new Object();
         private volatile boolean stillRunning = true;

@@ -59,6 +59,7 @@ import net.i2p.util.SystemVersion;
  *
  * @since 0.9.16
  */
+@SuppressWarnings("PMD.CloseResource")
 public class NTCPConnection implements Closeable {
     private final RouterContext _context;
     private final Log _log;

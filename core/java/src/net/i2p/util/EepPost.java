@@ -23,6 +23,7 @@ import net.i2p.data.DataHelper;
  *
  * @since 0.9.67
  */
+@SuppressWarnings("PMD.CloseResource")
 public class EepPost extends EepGet {
 
     private static final String CRLF = "\r\n";

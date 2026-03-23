@@ -35,6 +35,7 @@ import net.i2p.util.I2PAppThread;
  * @since 0.7.12
  * @author zzz
  */
+@SuppressWarnings("PMD.CloseResource")
 public class I2PSOCKSIRCTunnel extends I2PSOCKSTunnel {
 
     private static final AtomicInteger __clientId = new AtomicInteger();

@@ -41,6 +41,7 @@ import net.i2p.util.SystemVersion;
  * The wrapper, however, must be stopped and restarted from the new script - until then,
  * it will continue to write to wrapper.log* in the old directory.
  */
+@SuppressWarnings("PMD.CloseResource")
 public class WorkingDir {
 
     private final static String PROP_BASE_DIR = "i2p.dir.base";

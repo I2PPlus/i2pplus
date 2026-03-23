@@ -63,7 +63,7 @@ import net.i2p.i2ptunnel.BlacklistBean;
  * Directs I2P-resolved sites to destinations, others to outproxy (typically "squid.i2p").
  * Supports HTTP and HTTPS only. GET and POST tested; other methods should work.
  */
-@SuppressWarnings("PMD.ReturnEmptyCollectionRatherThanNull")
+@SuppressWarnings({"PMD.ReturnEmptyCollectionRatherThanNull", "PMD.CloseResource"})
 public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runnable {
 
     /**

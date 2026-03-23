@@ -42,6 +42,7 @@ import net.i2p.data.DataHelper;
  *        [-m markSize lineLen]
  *        url
  */
+@SuppressWarnings("PMD.CloseResource")
 public class EepGet {
     protected final I2PAppContext _context;
     protected final Log _log;

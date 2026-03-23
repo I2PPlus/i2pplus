@@ -97,6 +97,7 @@ import net.i2p.util.VersionComparator;
  *
  * @since 0.9.16
  */
+@SuppressWarnings("PMD.CloseResource")
 public class NTCPTransport extends TransportImpl {
     private final Log _log;
     private final BanLogger _banLogger;

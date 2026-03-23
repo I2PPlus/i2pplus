@@ -38,6 +38,7 @@ import net.i2p.util.SystemVersion;
  *
  * @author zzz
  */
+@SuppressWarnings("PMD.CloseResource")
 public class I2PSimpleSession extends I2PSessionImpl2 {
 
     private static final int BUF_SIZE = 1024;

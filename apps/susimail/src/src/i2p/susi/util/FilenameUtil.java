@@ -11,6 +11,7 @@ import net.i2p.data.DataHelper;
  *
  * @since 0.9.34 pulled out of WebMail
  */
+@SuppressWarnings("PMD.CloseResource")
 public class FilenameUtil {
 
 	/**

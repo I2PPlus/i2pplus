@@ -24,6 +24,7 @@ import net.i2p.i2ptunnel.udp.*;
  *
  * @author zzz
  */
+@SuppressWarnings("PMD.CloseResource")
 public class SOCKSUDPPort implements Source, Sink {
     private final UDPSink udpsink;
     private final UDPSource udpsource;

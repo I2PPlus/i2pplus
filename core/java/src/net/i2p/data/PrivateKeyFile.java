@@ -73,6 +73,7 @@ import net.i2p.util.SecureFileOutputStream;
  * @author welterde, zzz
  */
 
+@SuppressWarnings("PMD.CloseResource")
 public class PrivateKeyFile {
 
 

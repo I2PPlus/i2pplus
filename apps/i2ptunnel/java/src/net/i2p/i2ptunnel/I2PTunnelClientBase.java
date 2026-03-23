@@ -50,6 +50,7 @@ import java.util.Locale;
  * Extended by specific tunnel types like HTTP clients, SOCKS proxies,
  * and standard TCP tunnels.
  */
+@SuppressWarnings("PMD.CloseResource")
 public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runnable {
 
     protected final Log _log;

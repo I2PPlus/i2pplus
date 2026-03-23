@@ -41,6 +41,7 @@ import net.i2p.util.Log;
  * @author Ragnarok
  *
  */
+@SuppressWarnings("PMD.CloseResource")
 public class Servlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;

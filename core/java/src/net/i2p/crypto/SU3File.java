@@ -40,6 +40,7 @@ import net.i2p.util.SecureFileOutputStream;
  *
  * @since 0.9.8
  */
+@SuppressWarnings("PMD.CloseResource")
 public class SU3File {
 
     private final I2PAppContext _context;

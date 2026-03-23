@@ -25,6 +25,7 @@ import net.i2p.I2PAppContext;
  * @since 0.7.12
  * @author zzz
  */
+@SuppressWarnings("PMD.CloseResource")
 public class PartialEepGet extends EepGet {
     private final long _fetchSize;
 

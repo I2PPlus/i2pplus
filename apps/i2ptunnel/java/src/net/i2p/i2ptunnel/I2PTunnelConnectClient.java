@@ -36,6 +36,7 @@ import net.i2p.util.PortMapper;
  *
  * @author zzz (stripped-down I2PTunnelHTTPClient)
  */
+@SuppressWarnings("PMD.CloseResource")
 public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements Runnable {
 
     public static final String AUTH_REALM = "I2P SSL Proxy";

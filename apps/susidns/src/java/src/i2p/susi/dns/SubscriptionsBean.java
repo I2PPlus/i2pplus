@@ -27,6 +27,7 @@ import net.i2p.util.SecureFileOutputStream;
 /**
  * Bean for managing address book subscription sources and updates.
  */
+@SuppressWarnings("PMD.CloseResource")
 public class SubscriptionsBean extends BaseBean {
     private String fileName, content;
     private static final String SUBS_FILE = "subscriptions.txt";

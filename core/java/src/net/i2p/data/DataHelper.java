@@ -128,6 +128,7 @@ import net.i2p.util.Translate;
  *
  * @author jrandom
  */
+@SuppressWarnings("PMD.CloseResource")
 public class DataHelper {
 
     /** See storeProps(). 600-750 ms on RPi. */

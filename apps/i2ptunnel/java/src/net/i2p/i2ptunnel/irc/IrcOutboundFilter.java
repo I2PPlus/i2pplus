@@ -14,6 +14,7 @@ import net.i2p.util.Log;
  *
  *  @since 0.8.9
  */
+@SuppressWarnings("PMD.CloseResource")
 public class IrcOutboundFilter implements Runnable {
 
     private final Socket local;

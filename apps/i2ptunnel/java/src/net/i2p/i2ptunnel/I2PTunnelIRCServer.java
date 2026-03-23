@@ -42,6 +42,7 @@ import net.i2p.util.EventDispatcher;
  *
  * @author zzz
  */
+@SuppressWarnings("PMD.CloseResource")
 public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
     private final byte[] cloakKey; // 32 bytes of stuff to scramble the dest with
     private final String hostname;

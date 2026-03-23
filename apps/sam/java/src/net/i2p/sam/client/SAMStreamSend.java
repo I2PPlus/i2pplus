@@ -36,6 +36,7 @@ import net.i2p.util.VersionComparator;
  * Configurable SAM client version.
  *
  */
+@SuppressWarnings("PMD.CloseResource")
 public class SAMStreamSend {
     private final I2PAppContext _context;
     private final Log _log;

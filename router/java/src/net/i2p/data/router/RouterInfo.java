@@ -53,6 +53,7 @@ import net.i2p.util.OrderedProperties;
  * @since 0.9.16 moved from net.i2p.data
  * @author jrandom
  */
+@SuppressWarnings("PMD.CloseResource")
 public class RouterInfo extends DatabaseEntry {
     private final I2PAppContext ctx = I2PAppContext.getGlobalContext();
     private final Log log = ctx.logManager().getLog(RouterInfo.class);

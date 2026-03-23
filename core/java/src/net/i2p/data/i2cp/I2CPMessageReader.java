@@ -25,6 +25,7 @@ import net.i2p.util.Log;
  *
  * @author jrandom
  */
+@SuppressWarnings("PMD.CloseResource")
 public class I2CPMessageReader {
     private InputStream _stream;
     protected I2CPMessageEventListener _listener;

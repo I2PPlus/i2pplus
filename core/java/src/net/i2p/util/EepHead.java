@@ -33,6 +33,7 @@ import net.i2p.I2PAppContext;
  * @since 0.7.7
  * @author zzz
  */
+@SuppressWarnings("PMD.CloseResource")
 public class EepHead extends EepGet {
     /** EepGet needs either a non-null file or a stream... shouldn't actually be written to... */
     private static final OutputStream _dummyStream = new ByteArrayOutputStream(0);

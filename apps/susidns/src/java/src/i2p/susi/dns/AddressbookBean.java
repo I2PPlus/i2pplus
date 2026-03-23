@@ -34,6 +34,7 @@ import net.i2p.util.Log;
  * Bean for managing I2P address books.
  * Provides functionality for loading, filtering, and managing address entries.
  */
+@SuppressWarnings("PMD.CloseResource")
 public class AddressbookBean extends BaseBean {
     /** Logger instance */
     private static final Log _log = new Log(AddressbookBean.class);

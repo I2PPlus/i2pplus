@@ -47,6 +47,7 @@ import net.i2p.util.SystemVersion;
  * @version 0.2
  * @since 0.9.35
  */
+@SuppressWarnings("PMD.CloseResource")
 public class PortableWorkingDir {
 
     private final static String PROP_BASE_DIR = "i2p.dir.base";

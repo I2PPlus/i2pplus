@@ -25,6 +25,7 @@ import java.util.Locale;
  * @author zzz
  * @since 0.7
  */
+@SuppressWarnings("PMD.CloseResource")
 public class Base32 {
 
     //private final static Log _log = new Log(Base32.class);

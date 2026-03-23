@@ -36,6 +36,7 @@ import java.io.Writer;
  * ref: https://en.wikipedia.org/wiki/Quoted-printable
  * @author susi
  */
+@SuppressWarnings("PMD.CloseResource")
 public class QuotedPrintable extends Encoding {
 	
 	public String getName() {

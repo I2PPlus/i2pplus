@@ -37,6 +37,7 @@ import java.util.Collections;
  *
  * @author susi
  */
+@SuppressWarnings("PMD.CloseResource")
 public class POP3MailBox implements NewMailListener {
     private final String host, user, pass;
     private final Log _log;

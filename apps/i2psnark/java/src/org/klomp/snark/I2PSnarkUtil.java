@@ -75,6 +75,7 @@ import org.klomp.snark.dht.KRPC;
  *
  * @since 0.1.0
  */
+@SuppressWarnings("PMD.CloseResource")
 public class I2PSnarkUtil implements DisconnectListener {
     private final I2PAppContext _context;
     private final Log _log;

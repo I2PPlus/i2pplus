@@ -27,6 +27,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  *  See http://techtavern.wordpress.com/2008/07/16/whats-this-ioexception-write-end-dead/
  * @since 0.7.9
  */
+@SuppressWarnings("PMD.CloseResource")
 public class InternalServerSocket extends ServerSocket {
     private static final ConcurrentHashMap<Integer, InternalServerSocket> _sockets = new ConcurrentHashMap<Integer, InternalServerSocket>(4);
     private final BlockingQueue<InternalSocket> _acceptQueue;

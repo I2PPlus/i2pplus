@@ -28,6 +28,7 @@ import net.i2p.I2PAppContext;
  *
  * @author hypercubus
  */
+@SuppressWarnings("PMD.CloseResource")
 public class ShellCommand {
 
     private static final boolean CONSUME_OUTPUT    = true;

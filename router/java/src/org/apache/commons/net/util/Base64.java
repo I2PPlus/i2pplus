@@ -47,6 +47,7 @@ import java.util.Objects;
  * @since 2.2
  */
 @Deprecated
+@SuppressWarnings("PMD.CloseResource")
 public class Base64 {
 
     /**

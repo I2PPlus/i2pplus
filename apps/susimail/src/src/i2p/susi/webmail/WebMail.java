@@ -79,6 +79,7 @@ import net.i2p.util.Translate;
 /**
  * Main webmail application class providing email functionality for I2P.
  */
+@SuppressWarnings("PMD.CloseResource")
 public class WebMail extends HttpServlet {
     private final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(WebMail.class);
     private static final long serialVersionUID = 1L;

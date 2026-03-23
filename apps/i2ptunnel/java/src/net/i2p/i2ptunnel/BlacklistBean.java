@@ -20,6 +20,7 @@ import java.util.Locale;
  * Loads blacklist from addressbook/blacklist.txt and checks if addresses are blacklisted.
  * Standalone implementation to avoid susidns dependencies.
  */
+@SuppressWarnings("PMD.CloseResource")
 public class BlacklistBean {
     private String content;
     private static final Pattern I2P_ADDRESS_PATTERN = Pattern.compile(

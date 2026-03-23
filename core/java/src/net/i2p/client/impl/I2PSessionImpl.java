@@ -89,6 +89,7 @@ import net.i2p.util.VersionComparator;
  *
  * @author jrandom
  */
+@SuppressWarnings("PMD.CloseResource")
 public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2CPMessageEventListener {
     protected final Log _log;
     /** who we are */

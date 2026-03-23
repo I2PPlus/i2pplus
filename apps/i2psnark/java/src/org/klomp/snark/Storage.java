@@ -66,6 +66,7 @@ import net.i2p.util.SystemVersion;
  * @see BitField
  * @see StorageListener
  */
+@SuppressWarnings("PMD.CloseResource")
 public class Storage implements Closeable {
     private final MetaInfo metainfo;
     private final List<TorrentFile> _torrentFiles;

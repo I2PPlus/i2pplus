@@ -25,6 +25,7 @@ import net.i2p.util.TranslateReader;
  *
  * @since 0.9.34
  */
+@SuppressWarnings("PMD.CloseResource")
 public class TranslateSVGServlet extends HttpServlet {
 
     private static final long serialVersionUID = 18638760L;

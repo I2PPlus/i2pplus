@@ -40,6 +40,7 @@ import net.i2p.util.SystemVersion;
  *
  * @author hypercubus
  */
+@SuppressWarnings("PMD.CloseResource")
 public class UrlLauncher implements ClientApp {
 
     private final ShellCommand _shellCommand;

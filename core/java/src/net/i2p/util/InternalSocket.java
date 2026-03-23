@@ -15,6 +15,7 @@ import net.i2p.I2PAppContext;
  *  Can only connect to InternalServerSocket.
  * @since 0.7.9
  */
+@SuppressWarnings("PMD.CloseResource")
 public class InternalSocket extends Socket {
     private InputStream _is;
     private OutputStream _os;

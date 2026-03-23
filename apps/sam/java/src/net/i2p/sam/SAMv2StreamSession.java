@@ -453,7 +453,8 @@ class SAMv2StreamSession extends SAMStreamSession
 		 *
 		 * @author human
 		*/
-		public class SAMv2StreamSessionSocketReader extends SAMv1StreamSessionSocketReader
+		@SuppressWarnings("PMD.CloseResource")
+public class SAMv2StreamSessionSocketReader extends SAMv1StreamSessionSocketReader
 		{
 				protected boolean nolimit       ;
 				protected long    limit         ;

@@ -81,6 +81,7 @@ import org.klomp.snark.dht.KRPC;
  *
  * @since 0.1.0
  */
+@SuppressWarnings("PMD.CloseResource")
 public class SnarkManager implements CompleteListener, ClientApp, DisconnectListener {
 
     /**

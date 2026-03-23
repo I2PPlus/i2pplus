@@ -40,6 +40,7 @@ import net.i2p.util.SystemVersion;
  *
  *  @since 0.9.9
  */
+@SuppressWarnings("PMD.CloseResource")
 public final class KeyStoreUtil {
 
     private static boolean _blacklistLogged;

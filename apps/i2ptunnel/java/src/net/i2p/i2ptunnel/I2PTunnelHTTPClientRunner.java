@@ -26,6 +26,7 @@ import net.i2p.util.I2PAppThread;
  *
  * <p><b>Thread Safety:</b> This class is not thread-safe. It is expected to be used by a single connection thread.
  */
+@SuppressWarnings("PMD.CloseResource")
 public class I2PTunnelHTTPClientRunner extends I2PTunnelRunner {
     private static final int CLOSE_SOCKET_TIMEOUT = 5000;
     private static final int SOCKET_CLOSE_DELAY = 100;

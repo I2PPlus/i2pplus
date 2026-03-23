@@ -87,6 +87,7 @@ import net.i2p.util.OrderedProperties;
  * Typically one of each. TODO: Poor error propagation as most events
  * aren't listened to elsewhere.
  */
+@SuppressWarnings("PMD.CloseResource")
 public class I2PTunnel extends EventDispatcherImpl implements Logging {
     private final Log _log;
     private final I2PAppContext _context;

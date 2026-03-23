@@ -11,4 +11,5 @@ package net.i2p.client.streaming;
  *  @deprecated
  */
 @Deprecated
+@SuppressWarnings("PMD.CloseResource")
 public class I2PSocketManagerFull {}

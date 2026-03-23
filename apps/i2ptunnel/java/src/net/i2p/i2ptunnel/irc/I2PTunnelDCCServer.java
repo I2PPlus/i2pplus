@@ -37,6 +37,7 @@ import net.i2p.util.EventDispatcher;
  *
  * @since 0.8.9
  */
+@SuppressWarnings("PMD.CloseResource")
 public class I2PTunnelDCCServer extends I2PTunnelServer {
 
     /** key is the server's local I2P port */

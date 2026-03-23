@@ -42,6 +42,7 @@ import net.i2p.util.SystemVersion;
  *
  * @author human
  */
+@SuppressWarnings("PMD.CloseResource")
 public class SAMBridge implements Runnable, ClientApp {
     private final Log _log;
     private volatile ServerSocketChannel serverSocket;

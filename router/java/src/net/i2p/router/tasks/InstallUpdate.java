@@ -54,6 +54,7 @@ import net.i2p.util.SystemVersion;
  *
  * @since 0.9.20 moved from Router.java
  */
+@SuppressWarnings("PMD.CloseResource")
 public class InstallUpdate {
 
     private static final String DELETE_FILE = "deletelist.txt";

@@ -27,6 +27,7 @@ import net.i2p.util.SystemVersion;
  *
  *  @since 0.8.13
  */
+@SuppressWarnings("PMD.CloseResource")
 public class FileDumpHelper extends HelperBase {
 
     private static final boolean isWindows = SystemVersion.isWindows();

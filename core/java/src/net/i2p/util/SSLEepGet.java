@@ -81,6 +81,7 @@ import net.i2p.socks.SOCKS5Client;
  * @author zzz
  * @since 0.7.10
  */
+@SuppressWarnings("PMD.CloseResource")
 public class SSLEepGet extends EepGet {
     /** if true, save cert chain on cert error */
     private int _saveCerts;
