@@ -15,7 +15,7 @@ public abstract class RFC822Date {
 
     // SimpleDateFormat is not thread-safe, methods must be synchronized
 
-    private static final SimpleDateFormat OUTPUT_FORMAT = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z", Locale.US);
+    private static final ThreadLocal<SimpleDateFormat> OUTPUT_FORMAT = ThreadLocal.withInitial(() -> new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z", Locale.US));
 
     /**
      * http://jimyjoshi.com/blog/2007/08/rfc822dateparsinginjava.html
@@ -23,7 +23,7 @@ public abstract class RFC822Date {
      * Probably don't need all of these...
      */
     private static final SimpleDateFormat rfc822DateFormats[] = new SimpleDateFormat[] {
-                 OUTPUT_FORMAT,
+                 new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z", Locale.US),
                  new SimpleDateFormat("d MMM yy HH:mm:ss z", Locale.US),
                  new SimpleDateFormat("EEE, d MMM yy HH:mm z", Locale.US),
                  new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z", Locale.US),
@@ -66,7 +66,7 @@ public abstract class RFC822Date {
      * @since 0.8.2
      */
     public synchronized static String to822Date(long t) {
-        return OUTPUT_FORMAT.format(Date.from(Instant.ofEpochMilli(t)));
+        return OUTPUT_FORMAT.get().format(Date.from(Instant.ofEpochMilli(t)));
     }
 
     public static void main(String[] args) {

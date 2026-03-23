@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.Locale;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.stat.Rate;
@@ -175,7 +176,7 @@ class ProfileOrganizerRenderer {
                 if (enableReverseLookups()) {
                     if (rl != null && !rl.equals("null") && !rl.isEmpty() && rl.length() != 0 && !ip.toString().equals(rl)) {
                         String whois = CommSystemFacadeImpl.getDomain(rl);
-                        String whoisShort = whois.replaceAll("\\(.*?\\)", "").toLowerCase().trim();
+                        String whoisShort = whois.replaceAll("\\(.*?\\)", "").toLowerCase(Locale.ROOT).trim();
                         whoisShort = whoisShort.replace("latin american and caribbean ip address regional registry", "lacnic")
                                                .replace("asia pacific network information centre", "apnic")
                                                .replace("mediacom communications corp", "mediacom")
@@ -566,13 +567,14 @@ class ProfileOrganizerRenderer {
      *  @since 0.9.8
      */
     private static class ProfComparator implements Comparator<PeerProfile>, Serializable {
+        private static final long serialVersionUID = 1L;
         public int compare(PeerProfile left, PeerProfile right) {
             return HashComparator.comp(left.getPeer(), right.getPeer());
         }
     }
 
-    private final static DecimalFormat _fmt = new DecimalFormat("###,##0.00");
-    private final static String num(double num) { synchronized (_fmt) { return _fmt.format(num); } }
+    private static final ThreadLocal<DecimalFormat> _fmt = ThreadLocal.withInitial(() -> new DecimalFormat("###,##0.00"));
+    private final static String num(double num) { return _fmt.get().format(num); }
     private final static String NA = "&ensp;";
 
     private String avg (PeerProfile prof, long rate, RateAverages ra) {
