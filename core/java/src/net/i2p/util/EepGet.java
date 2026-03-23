@@ -1396,6 +1396,8 @@ public class EepGet {
                 case '\n':
                 case '\r':
                     nl++;
+                    // fall through
+
                 default:
                     buf.append((char)cur);
             }
