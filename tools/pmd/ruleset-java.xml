@@ -95,6 +95,10 @@
         <exclude name="NonComparableMapKeys"/>
         <exclude name="NonComparableSetElements"/>
         <exclude name="AvoidFieldNameMatchingMethodName"/>
+        <exclude name="MissingFieldInHashCode"/>
+        <exclude name="LimitWildcardStaticImports"/>
+        <exclude name="AvoidMultipleConcatStatements"/>
+        <exclude name="AvoidLoadingAllFromFile"/>
     </rule>
 
 </ruleset>
