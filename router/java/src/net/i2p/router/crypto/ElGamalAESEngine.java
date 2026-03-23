@@ -36,6 +36,7 @@ import net.i2p.util.SimpleByteCache;
  *
  * @since 0.9.38 moved from net.i2p.crypto
  */
+@SuppressWarnings("PMD.ReturnEmptyCollectionRatherThanNull")
 public final class ElGamalAESEngine {
     private final Log _log;
     private final static int MIN_ENCRYPTED_SIZE = 80; // smallest possible resulting size

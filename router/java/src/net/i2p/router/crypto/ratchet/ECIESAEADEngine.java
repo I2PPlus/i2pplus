@@ -43,6 +43,7 @@ import net.i2p.util.Log;
  *
  * @since 0.9.44
  */
+@SuppressWarnings("PMD.ReturnEmptyCollectionRatherThanNull")
 public final class ECIESAEADEngine {
     private final RouterContext _context;
     private final Log _log;

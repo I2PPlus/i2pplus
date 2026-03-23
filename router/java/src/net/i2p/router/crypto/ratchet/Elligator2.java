@@ -22,6 +22,7 @@ import net.i2p.util.NativeBigInteger;
  *
  *  @since 0.9.44
  */
+@SuppressWarnings("PMD.ReturnEmptyCollectionRatherThanNull")
 class Elligator2 {
 
     private final I2PAppContext _context;
