@@ -79,7 +79,7 @@ class MLKEMIndCpa
         generateMatrix(aMatrix, publicSeed, false);
 
         // System.out.println("aMatrix = ");
-        // for(i = 0; i < kyberK; i++) {
+        // for (i = 0; i < kyberK; i++) {
         //     System.out.print("[");
         //     for (int j = 0; j < kyberK; j++) {
         //       System.out.print("[");
@@ -183,7 +183,7 @@ class MLKEMIndCpa
         // System.out.print("matrix transposed = ");
         // for (i = 0; i < kyberK; i++) {
         //     System.out.print("[");
-        //     for(int j = 0; j < kyberK; j++) {
+        //     for (int j = 0; j < kyberK; j++) {
         //         System.out.print("[");
         //         for (int l = 0; l < 256; l++) {
         //             System.out.printf("%d ,", aMatrixTranspose[i].getVectorIndex(j).getCoeffIndex(l));

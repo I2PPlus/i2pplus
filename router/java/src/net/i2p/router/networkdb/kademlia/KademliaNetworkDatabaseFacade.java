@@ -150,20 +150,20 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * As of 0.9.4, we make this LOWER than the min for reseeding, so
      * a reseed will be forced if necessary.
      */
-    protected final static int MIN_REMAINING_ROUTERS = MIN_RESEED ;
+    protected final static int MIN_REMAINING_ROUTERS = MIN_RESEED;
 
     /**
      * Limits for accepting a dbStore of a router (unless we don't
      * know anyone or just started up) -- see validate() below
      */
-    private final static long ROUTER_INFO_EXPIRATION = 36*60*60*1000l;
-    private final static long ROUTER_INFO_EXPIRATION_MIN = 8*60*60*1000l;
-    private final static long ROUTER_INFO_EXPIRATION_SHORT = 15*60*1000l;
-    private final static long ROUTER_INFO_EXPIRATION_FLOODFILL = 16*60*60*1000l;
-    private final static long ROUTER_INFO_EXPIRATION_INTRODUCED = 54*60*1000l;
+    private final static long ROUTER_INFO_EXPIRATION = 36*60*60*1000L;
+    private final static long ROUTER_INFO_EXPIRATION_MIN = 8*60*60*1000L;
+    private final static long ROUTER_INFO_EXPIRATION_SHORT = 15*60*1000L;
+    private final static long ROUTER_INFO_EXPIRATION_FLOODFILL = 16*60*60*1000L;
+    private final static long ROUTER_INFO_EXPIRATION_INTRODUCED = 54*60*1000L;
     static final String PROP_ROUTER_INFO_EXPIRATION_ADJUSTED = "router.expireRouterInfo";
     static final String PROP_VALIDATE_ROUTERS_AFTER = "router.validateRoutersAfter";
-    private final static long EXPLORE_JOB_DELAY = 5*60*1000l;
+    private final static long EXPLORE_JOB_DELAY = 5*60*1000L;
 
     /**
      * Don't let leaseSets go too far into the future
@@ -178,7 +178,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *  forgotten about us, else we can't build IB exploratory tunnels.
      *  Unused.
      */
-    protected final static long PUBLISH_JOB_DELAY = 15*1000l;
+    protected final static long PUBLISH_JOB_DELAY = 15*1000L;
 
     /** Maximum number of peers to place in the queue to explore */
     static final int MAX_EXPLORE_QUEUE = 64;

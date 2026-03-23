@@ -143,7 +143,7 @@ class DefinitionParser {
             Rule rule = parseRule(split[1]);
 
             File file;
-            switch(rule) {
+            switch (rule) {
                 case DEFAULT:
                     builder.setDefaultThreshold(threshold);
                     break;

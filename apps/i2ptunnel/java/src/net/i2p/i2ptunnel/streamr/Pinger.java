@@ -75,7 +75,7 @@ public class Pinger implements Source, Runnable {
         byte[] data = new byte[1];
         data[0] = 0;
         int i = 0;
-        while(this.running) {
+        while (this.running) {
             try {
                 this.sink.send(null, fromPort, 0, data);
                 if (log.shouldDebug())
@@ -93,7 +93,7 @@ public class Pinger implements Source, Runnable {
                 }
                 try {
                     this.waitlock.wait(delay);
-                } catch(InterruptedException ie) {
+                } catch (InterruptedException ie) {
                     break;
                 }
             }

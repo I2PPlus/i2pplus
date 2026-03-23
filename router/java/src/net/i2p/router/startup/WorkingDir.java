@@ -54,7 +54,7 @@ public class WorkingDir {
     private static final String PROP_WRAPPER_LOG = "wrapper.logfile";
     private static final String DEFAULT_WRAPPER_LOG = "wrapper.log";
     /** Feb 16 2006 */
-    private static final long EEPSITE_TIMESTAMP = 1140048000000l;
+    private static final long EEPSITE_TIMESTAMP = 1140048000000L;
 
     /**
      * Only call this once on router invocation.

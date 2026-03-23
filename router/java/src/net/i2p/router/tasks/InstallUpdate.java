@@ -256,7 +256,7 @@ public class InstallUpdate {
             }
         } catch (IOException ioe) {
         } finally {
-            if (in != null) try { in.close(); } catch(IOException ioe) {}
+            if (in != null) try { in.close(); } catch (IOException ioe) {}
             if (deleteFile.delete()) {
                 //System.out.println("INFO: File [" + DELETE_FILE + "] deleted");
             }

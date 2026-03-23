@@ -146,7 +146,7 @@ class Reader {
             return;
         }
         ByteBuffer buf = null;
-        while(true) {
+        while (true) {
             synchronized(con) {
                 if (con.isClosed()) {return;}
                 if (con.isEstablished()) {break;}

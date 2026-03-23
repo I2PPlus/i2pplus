@@ -46,7 +46,7 @@ public class Subscriber implements Sink {
      *  @since 0.9.53 added fromPort and toPort parameters
      */
     public void send(Destination dest, int fromPort, int toPort, byte[] data) {
-        if(dest == null || data.length < 1) {
+        if (dest == null || data.length < 1) {
             // invalid packet
             if (log.shouldWarn())
                 log.warn("Bad subscription from " + dest.toBase32() + ':' + fromPort);
@@ -54,7 +54,7 @@ public class Subscriber implements Sink {
             // swap fromPort and toPort for the replies
             MultiSource.MSink ms = new MultiSource.MSink(dest, toPort, fromPort);
             int ctrl = data[0] & 0xff;
-            if(ctrl == 0) {
+            if (ctrl == 0) {
                 if (this.subscriptions.put(ms, Long.valueOf(ctx.clock().now())) == null) {
                     if (subscriptions.size() > MAX_SUBSCRIPTIONS) {
                         subscriptions.remove(ms);
@@ -74,7 +74,7 @@ public class Subscriber implements Sink {
                     if (log.shouldInfo())
                         log.info("Continue subscription: " + ms);
                 }
-            } else if(ctrl == 1) {
+            } else if (ctrl == 1) {
                 // unsubscribe
                 if (log.shouldWarn())
                     log.warn("Remove subscription: " + ms);

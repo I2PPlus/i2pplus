@@ -171,7 +171,7 @@ public class Daemon {
         long start = DEBUG ? System.currentTimeMillis() : 0;
         int old = 0, nnew = 0, invalid = 0, conflict = 0, total = 0;
         int deleted = 0;
-        while(iter.hasNext()) {
+        while (iter.hasNext()) {
             Map.Entry<String, HostTxtEntry> entry = iter.next();
             total++;
                 // may be null for 'remove' entries

@@ -254,13 +254,13 @@ public class MLabRunner {
                         long up_bps = 0;
                         try {
                             up_bps = (long)(Double.parseDouble(test.get_c2sspd())*1000000)/8;
-                        } catch(Throwable e) {}
+                        } catch (Throwable e) {}
 
                         // in integer bytes per second
                         long down_bps = 0;
                         try {
                             down_bps = (long)(Double.parseDouble(test.get_s2cspd())*1000000)/8;
-                        } catch(Throwable e) {}
+                        } catch (Throwable e) {}
 
                         String result_str;
                         if (cancelled.get()) {
@@ -345,7 +345,7 @@ public class MLabRunner {
             for ( ToolRunListener l: copy ){
                 try{
                     l.cancelled();
-                }catch( Throwable e ){
+                }catch ( Throwable e ){
                     _log.warn("?", e);
                 }
             }
@@ -360,7 +360,7 @@ public class MLabRunner {
             if (inform) {
                 try{
                     l.cancelled();
-                }catch( Throwable e ){
+                }catch ( Throwable e ){
                     _log.warn("?", e);
                 }
             }

@@ -41,20 +41,20 @@ public class JApplet extends JFrame{
     public URL
             getCodeBase()
     {
-        return( null );
+        return ( null );
     }
 
     public AppletContext
             getAppletContext()
     {
-        return( null );
+        return ( null );
     }
 
     public String
             getParameter(
         String	name )
     {
-        return( null );
+        return ( null );
     }
 
     public void

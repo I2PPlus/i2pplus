@@ -94,7 +94,7 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
      */
     @SuppressWarnings("unchecked")
     public SkipLevels(int size, SkipSpan<K, V> span) {
-        if(size < 1 || size > MAX_SIZE)
+        if (size < 1 || size > MAX_SIZE)
             throw new IllegalArgumentException("Invalid Level Skip size");
         levels = (SkipLevels<K, V>[]) new SkipLevels[size];
         bottom = span;
@@ -109,9 +109,9 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
         StringBuilder buf = new StringBuilder(128);
         String k = (bottom.nKeys == 0) ? "empty" : (key() != null) ? key().toString() : "null";
         buf.append("LVLS: ").append(k).append(" :: ");
-        for(int i=0;i<levels.length;i++) {
+        for (int i=0;i<levels.length;i++) {
             buf.append(i);
-            if(levels[i] != null) {
+            if (levels[i] != null) {
                 buf.append("->").append(levels[i].key()).append(' ');
             } else {
                 buf.append("->() ");
@@ -129,7 +129,7 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
     public String printAll() {
         StringBuilder buf = new StringBuilder(128);
         buf.append(print());
-        if(levels[0] != null) {
+        if (levels[0] != null) {
             buf.append('\n');
             buf.append(levels[0].print());
         }
@@ -142,8 +142,8 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
      *  @return the last SkipSpan in this chain
      */
     public SkipSpan<K, V> getEnd() {
-        for(int i=(levels.length - 1);i>=0;i--) {
-            if(levels[i] != null) { return levels[i].getEnd(); }
+        for (int i=(levels.length - 1);i>=0;i--) {
+            if (levels[i] != null) { return levels[i].getEnd(); }
         }
         return bottom.getEnd();
     }
@@ -157,8 +157,8 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
      *  @return the SkipSpan containing the key
      */
     public SkipSpan<K, V> getSpan(int start, K key, int[] search) {
-        for(int i=Math.min(start, levels.length - 1);i>=0;i--) {
-            if((levels[i] != null) && (levels[i].key().compareTo(key) <= 0)) {
+        for (int i=Math.min(start, levels.length - 1);i>=0;i--) {
+            if ((levels[i] != null) && (levels[i].key().compareTo(key) <= 0)) {
                 return levels[i].getSpan(i,key,search);
             }
         }
@@ -180,8 +180,8 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
      *  @return the value, or null if not found
      */
     public V get(int start, K key) {
-        for(int i=Math.min(start, levels.length - 1);i>=0;i--) {
-            if((levels[i] != null) && (levels[i].key().compareTo(key) <= 0)) {
+        for (int i=Math.min(start, levels.length - 1);i>=0;i--) {
+            if ((levels[i] != null) && (levels[i].key().compareTo(key) <= 0)) {
                 return levels[i].get(i,key);
             }
         }
@@ -204,18 +204,18 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
     public Object[] remove(int start, K key, SkipList<K, V> sl) {
         Object[] res = null;
         SkipLevels<K, V> slvls = null;
-        for(int i = Math.min(start, levels.length - 1); i >= 0; i--) {
-            if(levels[i] != null) {
+        for (int i = Math.min(start, levels.length - 1); i >= 0; i--) {
+            if (levels[i] != null) {
                 int cmp = levels[i].key().compareTo(key);
-                if((cmp < 0) || ((i==0) && (cmp <= 0)))  {
+                if ((cmp < 0) || ((i==0) && (cmp <= 0)))  {
                     res = levels[i].remove(i, key, sl);
-                    if((res != null) && (res[1] != null)) {
+                    if ((res != null) && (res[1] != null)) {
                         slvls = (SkipLevels<K, V>) res[1];
-                        if(levels.length >= slvls.levels.length) {
+                        if (levels.length >= slvls.levels.length) {
                             res[1] = null;
                         }
-                        for(int j = 0 ; j < Math.min(slvls.levels.length, levels.length); j++) {
-                            if(levels[j] == slvls) {
+                        for (int j = 0; j < Math.min(slvls.levels.length, levels.length); j++) {
+                            if (levels[j] == slvls) {
                                 levels[j] = slvls.levels[j];
                             }
                         }
@@ -226,8 +226,8 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
             }
         }
         res = bottom.remove(key, sl);
-        if((res!=null) && (res[1] != null)) {
-            if(res[1] == bottom) {
+        if ((res!=null) && (res[1] != null)) {
+            if (res[1] == bottom) {
                 res[1] = this;
             } else {
                 // Special handling required if we are the head SkipLevels to fix up our level pointers
@@ -269,7 +269,7 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
                 res[1] = null;
             }
         }
-        if((bottom.nKeys == 0) && (sl.first != bottom)) {
+        if ((bottom.nKeys == 0) && (sl.first != bottom)) {
             // from debugging other problems
             if (res == null) {
                 _log.warn("killing with no return value " + print());
@@ -296,11 +296,11 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
      */
     public SkipLevels<K, V> put(int start, K key, V val, SkipList<K, V> sl) {
         boolean modified = false;
-        for(int i = Math.min(start, levels.length - 1); i >= 0; i--) {
+        for (int i = Math.min(start, levels.length - 1); i >= 0; i--) {
             // is key equal to or after the start of the level?
-            if((levels[i] != null) && (levels[i].key().compareTo(key) <= 0)) {
+            if ((levels[i] != null) && (levels[i].key().compareTo(key) <= 0)) {
                 SkipLevels<K, V> slvls = levels[i].put(i, key, val, sl);
-                if(slvls != null) {
+                if (slvls != null) {
                     for (int j = i + 1; j < Math.min(slvls.levels.length, levels.length); j++) {
                         // he points to where we used to point
                         // and we now point to him
@@ -308,7 +308,7 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
                         levels[j] = slvls;
                         modified = true;
                     }
-                    if(levels.length < slvls.levels.length) {
+                    if (levels.length < slvls.levels.length) {
                         if (modified) {
                             this.flush();
                             slvls.flush();
@@ -325,11 +325,11 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
             }
         }
         SkipSpan<K, V> ss = bottom.put(key,val,sl);
-        if(ss!=null) {
+        if (ss!=null) {
             int height = sl.generateColHeight();
-            if(height != 0) {
+            if (height != 0) {
                 SkipLevels<K, V> slvls = this.newInstance(height, ss, sl);
-                for(int i=0;i<(Math.min(height,levels.length));i++) {
+                for (int i=0;i<(Math.min(height,levels.length));i++) {
                     // he points to where we used to point
                     // and we now point to him
                     slvls.levels[i] = levels[i];
@@ -340,7 +340,7 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
                     this.flush();
                     slvls.flush();
                 }
-                if(levels.length < height)
+                if (levels.length < height)
                     return slvls;
             }
         }

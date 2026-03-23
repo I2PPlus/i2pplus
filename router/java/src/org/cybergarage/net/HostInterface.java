@@ -105,7 +105,7 @@ public class HostInterface {
         } catch (Exception e) {
             Debug.warning(e);
         }
-        ;
+       ;
         return nHostAddrs;
     }
 
@@ -178,7 +178,7 @@ public class HostInterface {
             }
         } catch (Exception e) {
         }
-        ;
+       ;
         return "";
     }
 

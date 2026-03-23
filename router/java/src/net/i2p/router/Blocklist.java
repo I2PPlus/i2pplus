@@ -193,7 +193,7 @@ public class Blocklist {
             }
             if (expireIntervalMs < 0) {expireIntervalMs = 0;}
             return (int) expireIntervalMs;
-        } catch(NumberFormatException nfe) {
+        } catch (NumberFormatException nfe) {
             if (_log.shouldLog(_log.ERROR)) {
                 _log.error("Format error in " + PROP_BLOCKLIST_EXPIRE_INTERVAL, nfe);
             }
@@ -1196,7 +1196,7 @@ public class Blocklist {
         if (!shouldRunJob) {return;}
         // Get the IPs now because it won't be in the netdb by the time the job runs
         Job job = new BanlistJob(peer, getAddresses(peer));
-        if (number > 0) {job.getTiming().setStartAfter(_context.clock().now() + (30*1000l * number));}
+        if (number > 0) {job.getTiming().setStartAfter(_context.clock().now() + (30*1000L * number));}
         _context.jobQueue().addJob(job);
     }
 

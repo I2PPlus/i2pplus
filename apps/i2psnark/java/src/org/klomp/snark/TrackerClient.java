@@ -1078,7 +1078,7 @@ public class TrackerClient implements Runnable {
         if (failure != null) {
             throw new IOException(tr.host + " response: " + failure);
         }
-        tr.interval = Math.max(MIN_TRACKER_ANNOUNCE_INTERVAL, info.getInterval() * 1000l);
+        tr.interval = Math.max(MIN_TRACKER_ANNOUNCE_INTERVAL, info.getInterval() * 1000L);
         return info;
     }
 
@@ -1143,7 +1143,7 @@ public class TrackerClient implements Runnable {
         if (failure != null) {
             throw new IOException(failure);
         }
-        tr.interval = Math.max(MIN_TRACKER_ANNOUNCE_INTERVAL, info.getInterval() * 1000l);
+        tr.interval = Math.max(MIN_TRACKER_ANNOUNCE_INTERVAL, info.getInterval() * 1000L);
         return info;
     }
 

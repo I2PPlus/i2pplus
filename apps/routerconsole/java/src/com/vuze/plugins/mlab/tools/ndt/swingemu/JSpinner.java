@@ -45,10 +45,10 @@ public class
     {
         if ( model == null ){
 
-            return( 0 );
+            return ( 0 );
         }
 
-        return( model.getValue());
+        return ( model.getValue());
     }
 
     public void

@@ -58,6 +58,6 @@ public abstract class I2CPTstBase {
         ByteArrayOutputStream baos2 = new ByteArrayOutputStream();
         ds.writeBytes(baos2);
         byte[] temp2 = baos2.toByteArray();
-        assert(DataHelper.eq(temp, temp2));
+        assert (DataHelper.eq(temp, temp2));
     }
 }

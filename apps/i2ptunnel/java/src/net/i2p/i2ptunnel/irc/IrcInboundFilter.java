@@ -54,21 +54,21 @@ public class IrcInboundFilter implements Runnable {
         if (_log.shouldDebug())
             _log.debug("[IRC Client] Inbound Filter: Running");
         try {
-            while(true)
+            while (true)
             {
                 try {
                     String inmsg = in.readLine();
-                    if(inmsg == null)
+                    if (inmsg == null)
                         break;
-                    if(inmsg.endsWith("\r"))
+                    if (inmsg.endsWith("\r"))
                         inmsg=inmsg.substring(0,inmsg.length()-1);
                     // dupe of info level log
                     //if (_log.shouldDebug())
                     //    _log.debug("[IRC Client] In: [" + inmsg + "]");
                     String outmsg = IRCFilter.inboundFilter(inmsg, expectedPong, _dccHelper);
-                    if(outmsg != null)
+                    if (outmsg != null)
                     {
-                        if(!inmsg.equals(outmsg)) {
+                        if (!inmsg.equals(outmsg)) {
                             if (_log.shouldWarn()) {
                                 _log.warn("[IRC Client] Inbound message FILTERED [" + outmsg + "]");
                                 _log.warn("[IRC Client] Inbound message [" + inmsg + "]");
@@ -98,9 +98,9 @@ public class IrcInboundFilter implements Runnable {
             _log.error("Error filtering inbound data", re);
         } finally {
             try { in.close(); } catch (IOException e) {}
-            try { local.close(); } catch(IOException e) {}
+            try { local.close(); } catch (IOException e) {}
         }
-        if(_log.shouldDebug())
+        if (_log.shouldDebug())
             _log.debug("[IRC Client] Inbound Filter: Stopped");
     }
 }

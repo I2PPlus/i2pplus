@@ -162,7 +162,7 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
                 // Use this rather than BufferedReader because we can't have readahead,
                 // since we are passing the stream on to I2PTunnelRunner
                 line = DataHelper.readLine(in);
-                if(line == null) {
+                if (line == null) {
                     break;
                 }
                 line = line.trim();

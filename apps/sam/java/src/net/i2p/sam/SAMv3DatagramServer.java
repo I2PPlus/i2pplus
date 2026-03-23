@@ -95,7 +95,7 @@ class SAMv3DatagramServer implements Handler {
 
         public Listener(DatagramChannel server)
         {
-            this.server = server ;
+            this.server = server;
         }
 
         public void run() {
@@ -117,7 +117,7 @@ class SAMv3DatagramServer implements Handler {
                 try {
                     server.receive(inBuf);
                 } catch (IOException e) {
-                    break ;
+                    break;
                 }
                 ((Buffer)inBuf).flip();
                 ByteBuffer outBuf = ByteBuffer.wrap(new byte[inBuf.remaining()]);
@@ -139,7 +139,7 @@ class SAMv3DatagramServer implements Handler {
         private static final int MAX_LINE_LENGTH = 2*1024;
 
         public MessageDispatcher(byte[] buf) {
-            this.is = new ByteArrayInputStream(buf) ;
+            this.is = new ByteArrayInputStream(buf);
         }
 
         public void run() {

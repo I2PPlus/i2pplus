@@ -1162,7 +1162,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
             case ROUTER_SIGNED:
             { // avoid dup variables in next case
                 String URLs = _context.getProperty(ConfigUpdateHandler.PROP_UPDATE_URL, ConfigUpdateHandler.DEFAULT_UPDATE_URL);
-                StringTokenizer tok = new StringTokenizer(URLs, " ,\r\n");
+                StringTokenizer tok = new StringTokenizer(URLs, ",\r\n");
                 List<URI> rv = new ArrayList<URI>();
                 while (tok.hasMoreTokens()) {
                     try {rv.add(new URI(tok.nextToken().trim()));}

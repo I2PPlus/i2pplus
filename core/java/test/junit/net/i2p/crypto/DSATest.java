@@ -24,7 +24,7 @@ public class DSATest extends TestCase{
     }
 
     public void testMultiple(){
-        for(int i = 0; i < 25; i++){
+        for (int i = 0; i < 25; i++){
             byte[] message = new byte[256];
             _context.random().nextBytes(message);
 

@@ -292,7 +292,7 @@ public abstract class LongDigest
         long     h = H8;
 
         int t = 0;
-        for(int i = 0; i < 10; i ++)
+        for (int i = 0; i < 10; i ++)
         {
           // t = 8 * i
             h += Sum1(e) + Ch(e, f, g) + K[t] + W[t++];

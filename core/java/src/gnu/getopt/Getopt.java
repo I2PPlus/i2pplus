@@ -92,7 +92,7 @@ import java.util.ResourceBundle;
   * String arg;
   * while ((c = g.getopt()) != -1)
   *   {
-  *     switch(c)
+  *     switch (c)
   *       {
   *          case 'a':
   *          case 'd':
@@ -682,7 +682,7 @@ public class Getopt extends Object
     public int
         getOptind()
     {
-        return(optind);
+        return (optind);
     }
 
 /**************************************************************************/
@@ -731,7 +731,7 @@ public class Getopt extends Object
     public String
         getOptarg()
     {
-        return(optarg);
+        return (optarg);
     }
 
 /**************************************************************************/
@@ -758,7 +758,7 @@ public class Getopt extends Object
     public int
         getOptopt()
     {
-        return(optopt);
+        return (optopt);
     }
 
 /**************************************************************************/
@@ -770,7 +770,7 @@ public class Getopt extends Object
     public int
         getLongind()
     {
-        return(longind);
+        return (longind);
     }
 
 /**************************************************************************/
@@ -902,7 +902,7 @@ public class Getopt extends Object
             optopt = 0;
             ++optind;
 
-            return('?');
+            return ('?');
         }
 
         if (pfound != null)
@@ -945,7 +945,7 @@ public class Getopt extends Object
                     nextchar = "";
                     optopt = pfound.val;
 
-                    return('?');
+                    return ('?');
                 }
             } // if (nameend)
             else if (pfound.has_arg == LongOpt.REQUIRED_ARGUMENT)
@@ -968,9 +968,9 @@ public class Getopt extends Object
                     nextchar = "";
                     optopt = pfound.val;
                     if (optstring.charAt(0) == ':')
-                        return(':');
+                        return (':');
                     else
-                        return('?');
+                        return ('?');
                 }
             } // else if (pfound)
 
@@ -981,15 +981,15 @@ public class Getopt extends Object
                 pfound.flag.setLength(0);
                 pfound.flag.append(pfound.val);
 
-                return(0);
+                return (0);
             }
 
-            return(pfound.val);
+            return (pfound.val);
         } // if (pfound != null)
 
         longopt_handled = false;
 
-        return(0);
+        return (0);
     }
 
 /**************************************************************************/
@@ -1014,7 +1014,7 @@ public class Getopt extends Object
         optarg = null;
 
         if (endparse == true)
-            return(-1);
+            return (-1);
 
         if ((nextchar == null) || (nextchar.equals("")))
         {
@@ -1072,7 +1072,7 @@ public class Getopt extends Object
                 if (first_nonopt != last_nonopt)
                     optind = first_nonopt;
 
-                return(-1);
+                return (-1);
             }
 
       // If we have come to a non-option and did not permute it,
@@ -1081,10 +1081,10 @@ public class Getopt extends Object
                 argv[optind].equals("-"))
             {
                 if (ordering == REQUIRE_ORDER)
-                    return(-1);
+                    return (-1);
 
                 optarg = argv[optind++];
-                return(1);
+                return (1);
             }
 
       // We have found another option-ARGV-element.
@@ -1116,7 +1116,7 @@ public class Getopt extends Object
             int c = checkLongOption();
 
             if (longopt_handled)
-                return(c);
+                return (c);
 
       // Can't find it as a long option.  If this is not getopt_long_only,
       // or the option starts with '--' or is not a valid short
@@ -1149,7 +1149,7 @@ public class Getopt extends Object
                 ++optind;
                 optopt = 0;
 
-                return('?');
+                return ('?');
             }
         } // if (longopts)
 
@@ -1190,7 +1190,7 @@ public class Getopt extends Object
 
             optopt = c;
 
-            return('?');
+            return ('?');
         }
 
   // Convenience. Treat POSIX -W foo same as long option --foo
@@ -1214,9 +1214,9 @@ public class Getopt extends Object
 
                 optopt = c;
                 if (optstring.charAt(0) == ':')
-                    return(':');
+                    return (':');
                 else
-                    return('?');
+                    return ('?');
             }
             else
             {
@@ -1229,13 +1229,13 @@ public class Getopt extends Object
             c = checkLongOption();
 
             if (longopt_handled)
-                return(c);
+                return (c);
             else
         // Let the application handle it
             {
                 nextchar = null;
                 ++optind;
-                return('W');
+                return ('W');
             }
         }
 
@@ -1277,9 +1277,9 @@ public class Getopt extends Object
                     optopt = c;
 
                     if (optstring.charAt(0) == ':')
-                        return(':');
+                        return (':');
                     else
-                        return('?');
+                        return ('?');
                 }
                 else
                 {
@@ -1307,9 +1307,9 @@ public class Getopt extends Object
                             optopt = c;
 
                             if (optstring.charAt(0) == ':')
-                                return(':');
+                                return (':');
                             else
-                                return('?');
+                                return ('?');
                         }
 
                   // Set new optarg and set to end
@@ -1327,7 +1327,7 @@ public class Getopt extends Object
             }
         }
 
-        return(c);
+        return (c);
     }
 
 } // Class Getopt

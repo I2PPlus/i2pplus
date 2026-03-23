@@ -54,13 +54,13 @@ public class SevenBit extends Encoding {
             throws DecodingException {
         int backupLength = length;
         int backupOffset = offset;
-        while( length-- > 0 ) {
+        while ( length-- > 0 ) {
             byte b = in[offset++];
-            if( b >= 32 && b < 127 )
+            if ( b >= 32 && b < 127 )
                 continue;
-            if( b == '\t' )
+            if ( b == '\t' )
                 continue;
-            if( b == '\r' || b == '\n' )
+            if ( b == '\r' || b == '\n' )
                 continue;
             throw new DecodingException( "No 8 bit data allowed in 7 bit encoding (" + b + ')' );
         }

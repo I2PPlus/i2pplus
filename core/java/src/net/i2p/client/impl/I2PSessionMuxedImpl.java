@@ -349,12 +349,12 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
 
         @Override
         public void stopNotifying() {
-            if( !stopping.getAndSet(true)) {
+            if ( !stopping.getAndSet(true)) {
                 _msgs.clear();
                 if (_alive) {
                     // System.out.println("I2PSessionMuxedImpl.stopNotifying()");
                     boolean again = true;
-                    while(again) {
+                    while (again) {
                         try {
                             _msgs.put(new MsgData(0, POISON_SIZE, 0, 0, 0));
                             again = false;

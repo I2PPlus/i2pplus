@@ -63,7 +63,7 @@ public class SkipList<K extends Comparable<? super K>, V> implements Flushable, 
      *  @throws IllegalArgumentException if size too big or too small
      */
     public SkipList(int span) {
-        if(span < 1 || span > SkipSpan.MAX_SIZE)
+        if (span < 1 || span > SkipSpan.MAX_SIZE)
             throw new IllegalArgumentException("Invalid span size");
         first = new SkipSpan<K, V>(span);
         stack = new SkipLevels<K, V>(1, first);
@@ -95,7 +95,7 @@ public class SkipList<K extends Comparable<? super K>, V> implements Flushable, 
     public int generateColHeight() {
         int bits = rng.nextInt();
         int max = maxLevels();
-        for(int res = 0; res < max; res++) {
+        for (int res = 0; res < max; res++) {
             if (bits % P == 0)
                 return res;
             bits /= P;
@@ -105,15 +105,15 @@ public class SkipList<K extends Comparable<? super K>, V> implements Flushable, 
 
     @SuppressWarnings("unchecked")
     public void put(K key, V val)	{
-        if(key == null) { throw new NullPointerException(); }
-        if(val == null) { throw new NullPointerException(); }
+        if (key == null) { throw new NullPointerException(); }
+        if (val == null) { throw new NullPointerException(); }
         SkipLevels<K, V> slvls = stack.put(stack.levels.length - 1, key, val, this);
-        if(slvls != null) {
+        if (slvls != null) {
             // grow our stack
             //BlockFile.log.info("Top level old hgt " + stack.levels.length +  " new hgt " + slvls.levels.length);
             SkipLevels<K, V>[] levels = (SkipLevels<K, V>[]) new SkipLevels[slvls.levels.length];
-            for(int i=0;i < slvls.levels.length; i++) {
-                if(i < stack.levels.length) {
+            for (int i=0;i < slvls.levels.length; i++) {
+                if (i < stack.levels.length) {
                     levels[i] = stack.levels[i];
                 } else {
                     levels[i] = slvls;
@@ -127,13 +127,13 @@ public class SkipList<K extends Comparable<? super K>, V> implements Flushable, 
 
     @SuppressWarnings("unchecked")
     public V remove(K key) {
-        if(key == null) { throw new NullPointerException(); }
+        if (key == null) { throw new NullPointerException(); }
         Object[] res = stack.remove(stack.levels.length - 1, key, this);
-        if(res != null) {
-            if(res[1] != null) {
+        if (res != null) {
+            if (res[1] != null) {
                 SkipLevels<K, V> slvls = (SkipLevels<K, V>) res[1];
-                for(int i=0;i < slvls.levels.length; i++) {
-                    if(stack.levels[i] == slvls) {
+                for (int i=0;i < slvls.levels.length; i++) {
+                    if (stack.levels[i] == slvls) {
                         stack.levels[i] = slvls.levels[i];
                     }
                 }
@@ -166,7 +166,7 @@ public class SkipList<K extends Comparable<? super K>, V> implements Flushable, 
     }
 
     public V get(K key) {
-        if(key == null) { throw new NullPointerException(); }
+        if (key == null) { throw new NullPointerException(); }
         return stack.get(stack.levels.length - 1, key);
     }
 
@@ -185,7 +185,7 @@ public class SkipList<K extends Comparable<? super K>, V> implements Flushable, 
     public SkipIterator<K, V> find(K key) {
         int[] search = new int[1];
         SkipSpan<K, V> ss = stack.getSpan(stack.levels.length - 1, key, search);
-        if(search[0] < 0) { search[0] = -1 * (search[0] + 1); }
+        if (search[0] < 0) { search[0] = -1 * (search[0] + 1); }
         return new SkipIterator<K, V>(ss, search[0]);
     }
 
@@ -327,37 +327,37 @@ public class SkipList<K extends Comparable<? super K>, V> implements Flushable, 
         System.out.println("Height " + sl.stack.levels.length);
 
         SkipIterator si = sl.iterator();
-        for(int i=0;i<5;i++) {
+        for (int i=0;i<5;i++) {
             System.out.println("Iterator: " + si.next());
         }
-        for(int i=0;i<3;i++) {
+        for (int i=0;i<3;i++) {
             System.out.println("Iterator: " + si.previous());
         }
 
         System.out.println("Find 10");
         si = sl.find("10");
-        for(int i=0;i<5;i++) {
+        for (int i=0;i<5;i++) {
             System.out.println("Iterator: " + si.next());
         }
-        for(int i=0;i<3;i++) {
+        for (int i=0;i<3;i++) {
             System.out.println("Iterator: " + si.previous());
         }
 
         System.out.println("Find 34");
         si = sl.find("34");
-        for(int i=0;i<3;i++) {
+        for (int i=0;i<3;i++) {
             System.out.println("Iterator: " + si.previous());
         }
-        for(int i=0;i<5;i++) {
+        for (int i=0;i<5;i++) {
             System.out.println("Iterator: " + si.next());
         }
 
         System.out.println("Max");
         si = sl.max();
-        for(int i=0;i<3;i++) {
+        for (int i=0;i<3;i++) {
             System.out.println("Iterator: " + si.previous());
         }
-        for(int i=0;i<5;i++) {
+        for (int i=0;i<5;i++) {
             System.out.println("Iterator: " + si.next());
         }
     }

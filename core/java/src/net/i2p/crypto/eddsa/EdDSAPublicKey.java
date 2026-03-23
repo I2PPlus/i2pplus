@@ -255,7 +255,7 @@ public class EdDSAPublicKey implements EdDSAKey, PublicKey {
         // Only read Aneg once, otherwise read re-ordering might occur between
         // here and return. Requires all GroupElement's fields to be final.
         GroupElement ourAneg = Aneg;
-        if(ourAneg == null) {
+        if (ourAneg == null) {
             ourAneg = A.negate();
             Aneg = ourAneg;
         }

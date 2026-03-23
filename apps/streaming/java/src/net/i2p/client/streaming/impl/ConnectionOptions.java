@@ -709,7 +709,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      * computes RTO based on formula in RFC
      */
     private synchronized void computeRTO() {
-        switch(_initState) {
+        switch (_initState) {
             case INIT :
                 throw new IllegalStateException();
             case FIRST :
@@ -743,7 +743,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      */
     public synchronized void updateRTT(int measuredValue) {
         _minRtt = Math.min(_minRtt, measuredValue);
-        switch(_initState) {
+        switch (_initState) {
             case INIT:
                 _initState = AckInit.FIRST;
                 setRTT(measuredValue); // no smoothing first sample

@@ -389,7 +389,7 @@ public class KeySelector {
                             // for a 32-byte key - see above
                             wordOffset[j] |=
                                 ((0xff & b[curByte + 2]) >> (8 - bitsToGet))
-                                                    << (stride - bitsToGet) ;
+                                                    << (stride - bitsToGet);
 //                          // DEBUG
 //                          System.out.println("    third byte contributes "
 //                              + itoh(

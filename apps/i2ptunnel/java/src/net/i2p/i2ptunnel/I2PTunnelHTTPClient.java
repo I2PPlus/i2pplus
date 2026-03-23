@@ -236,7 +236,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
 
         if (wwwProxy != null) {
             StringTokenizer tok = new StringTokenizer(wwwProxy, ", ");
-            while(tok.hasMoreTokens()) {
+            while (tok.hasMoreTokens()) {
                 _proxyList.add(tok.nextToken().trim());
             }
         }
@@ -443,7 +443,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
 //            boolean allowGzip = false;
                 boolean allowGzip = true;
 
-                while((line = reader.readLine(method)) != null) {
+                while ((line = reader.readLine(method)) != null) {
                     line = line.trim();
                     if (_log.shouldDebug()) {
                         if (line != null) {
@@ -501,7 +501,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                         try {
                             try {
                                 requestURI = new URI(request);
-                            } catch(URISyntaxException use) {
+                            } catch (URISyntaxException use) {
                             // fixup []| in path/query not escaped by browsers, see ticket #2130
                                 boolean error = true;
                             // find 3rd /
@@ -527,7 +527,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                             requestURI = new URI(testRequest);
                                             request = testRequest;
                                             error = false;
-                                        } catch(URISyntaxException use2) {
+                                        } catch (URISyntaxException use2) {
                                         // didn't work, give up
                                         }
                                     }
@@ -551,7 +551,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                 }
                                 requestURI = changeURI(requestURI, null, 0, "/");
                             }
-                        } catch(URISyntaxException use) {
+                        } catch (URISyntaxException use) {
                             if (_log.shouldWarn()) {
                                 _log.warn(getPrefix(requestId) + "BAD request [" + request + "]", use);
                             }
@@ -623,7 +623,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                 }
                                 try {
                                     requestURI = new URI(newURI);
-                                } catch(URISyntaxException use) {
+                                } catch (URISyntaxException use) {
                                 // shouldnt happen
                                     _log.warn(request, use);
                                     method = null;
@@ -657,7 +657,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                     }
                                     try {
                                         requestURI = replaceQuery(requestURI, query);
-                                    } catch(URISyntaxException use) {
+                                    } catch (URISyntaxException use) {
                                     // shouldn't happen
                                         _log.warn(request, use);
                                         method = null;
@@ -744,7 +744,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                                             URI conflictURI;
                                             try {
                                                 conflictURI = changeURI(requestURI, alias, 0, null);
-                                            } catch(URISyntaxException use) {
+                                            } catch (URISyntaxException use) {
                                             // shouldn't happen
                                                 _log.warn(request, use);
                                                 method = null;
@@ -1485,19 +1485,19 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             } while (keepalive);
           // indent
 
-        } catch(IOException ex) {
+        } catch (IOException ex) {
             // This is normal for keepalive when the browser closed the socket,
             // or a SocketTimeoutException if we gave up first
             if (_log.shouldInfo()) {
                 _log.info(getPrefix(requestId) + "Error trying to connect", ex);
             }
             handleClientException(ex, out, targetRequest, usingWWWProxy, currentProxy, requestId);
-        } catch(I2PException ex) {
+        } catch (I2PException ex) {
             if (_log.shouldInfo()) {
                 _log.info(getPrefix(requestId) + "Error trying to connect", ex);
             }
             handleClientException(ex, out, targetRequest, usingWWWProxy, currentProxy, requestId);
-        } catch(OutOfMemoryError oom) {
+        } catch (OutOfMemoryError oom) {
             IOException ex = new IOException("OOM");
             _log.error(getPrefix(requestId) + "Error trying to connect", oom);
             handleClientException(ex, out, targetRequest, usingWWWProxy, currentProxy, requestId);
@@ -1526,7 +1526,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             String b32 = Base32.encode(SHA256Generator.getInstance().calculateHash(Base64.decode(ahelperKey)).getData());
             out.write("<tr><td class=right>" + _t("Base32") + "</td>" +
                       "<td><a href=\"http://" + b32 + ".b32.i2p/\">" + b32 + ".b32.i2p</a></td></tr>");
-        } catch(Exception e) {}
+        } catch (Exception e) {}
 
         out.write("<tr><td class=right>" + _t("Destination") + "</td><td><span id=b64 style=user-select:all>" + ahelperKey +
                   "</span></td></tr>\n</table>\n" + "<hr>\n" +
@@ -1768,7 +1768,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         int keystart = 0;
         int valstart = -1;
         String key = null;
-        for(int i = 0; i <= query.length(); i++) {
+        for (int i = 0; i <= query.length(); i++) {
             char c = i < query.length() ? query.charAt(i) : '&';
             if (c == ';' || c == '&') {
                 // end of key or value

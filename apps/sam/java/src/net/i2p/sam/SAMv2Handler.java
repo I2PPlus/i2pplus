@@ -64,7 +64,7 @@ class SAMv2Handler extends SAMv1Handler implements SAMRawReceiver, SAMDatagramRe
     SAMStreamSession newSAMStreamSession(String destKeystream, String direction, Properties props )
                 throws IOException, DataFormatException, SAMException
     {
-        return new SAMv2StreamSession(destKeystream, direction, props, this) ;
+        return new SAMv2StreamSession(destKeystream, direction, props, this);
     }
 
 
@@ -155,7 +155,7 @@ class SAMv2Handler extends SAMv1Handler implements SAMRawReceiver, SAMDatagramRe
 
             if ( strsize.equals( "NONE" ) )
             {
-                nolimit = true ;
+                nolimit = true;
             }
             else
             {
@@ -180,7 +180,7 @@ class SAMv2Handler extends SAMv1Handler implements SAMRawReceiver, SAMDatagramRe
             }
         }
 
-        getStreamSession().setReceiveLimit ( id, limit, nolimit ) ;
+        getStreamSession().setReceiveLimit ( id, limit, nolimit );
 
         return true;
     }

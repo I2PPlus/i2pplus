@@ -76,7 +76,7 @@ public class DatagramTest extends TestCase {
         boolean error = false;
         try{
             dd.getPayload();
-        }catch(I2PInvalidDatagramException i2pide){
+        }catch (I2PInvalidDatagramException i2pide){
             error = true;
         }
         assertTrue(error);
@@ -84,7 +84,7 @@ public class DatagramTest extends TestCase {
         error = false;
         try{
             dd.getSender();
-        }catch(I2PInvalidDatagramException i2pide){
+        }catch (I2PInvalidDatagramException i2pide){
             error = true;
         }
         assertTrue(error);
@@ -92,7 +92,7 @@ public class DatagramTest extends TestCase {
         error = false;
         try{
             dd.getHash();
-        }catch(I2PInvalidDatagramException i2pide){
+        }catch (I2PInvalidDatagramException i2pide){
             error = true;
         }
         assertTrue(error);

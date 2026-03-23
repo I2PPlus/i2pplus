@@ -50,7 +50,7 @@ public class
     public int
             getSelectedIndex()
     {
-        return( index );
+        return ( index );
     }
 
     public void

@@ -65,7 +65,7 @@ class AccessCounter {
      * @return true if there is nothing left in the access history
      */
     boolean purge(long olderThan) {
-        while(!accesses.isEmpty() && accesses.get(0) < olderThan) {
+        while (!accesses.isEmpty() && accesses.get(0) < olderThan) {
             accesses.remove(0);
         }
         return accesses.isEmpty();

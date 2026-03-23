@@ -46,12 +46,12 @@ class SAMv3RawSession extends SAMRawSession implements Session, SAMRawReceiver {
               SAMv3Handler.sSessionsHash.get(nick).getProps(),
               null  // to be replaced by this
         );
-        this.nick = nick ;
-        this.recv = this ;  // replacement
+        this.nick = nick;
+        this.recv = this;  // replacement
         this.server = dgServer;
         SessionRecord rec = SAMv3Handler.sSessionsHash.get(nick);
         if (rec == null)
-            throw new InterruptedIOException() ;
+            throw new InterruptedIOException();
         this.handler = rec.getHandler();
         Properties props = rec.getProps();
         clientAddress = getSocketAddress(props, handler);
@@ -75,8 +75,8 @@ class SAMv3RawSession extends SAMRawSession implements Session, SAMRawReceiver {
                            int listenProtocol, int listenPort, SAMv3DatagramServer dgServer)
             throws IOException, DataFormatException, I2PSessionException {
         super(isess, props, listenProtocol, listenPort, null);  // to be replaced by this
-        this.nick = nick ;
-        this.recv = this ;  // replacement
+        this.nick = nick;
+        this.recv = this;  // replacement
         this.server = dgServer;
         this.handler = handler;
         clientAddress = getSocketAddress(props, handler);
@@ -89,7 +89,7 @@ class SAMv3RawSession extends SAMRawSession implements Session, SAMRawReceiver {
      *  @since 0.9.25 moved from constructor
      */
     static SocketAddress getSocketAddress(Properties props, SAMv3Handler handler) {
-        String portStr = props.getProperty("PORT") ;
+        String portStr = props.getProperty("PORT");
         if (portStr == null) {
             return null;
         } else {

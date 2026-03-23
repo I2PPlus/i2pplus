@@ -51,7 +51,7 @@ public class SkipIterator<K extends Comparable<? super K>, V> implements ListIte
     }
 
     public SkipIterator(SkipSpan<K, V> ss, int index) {
-        if(ss==null) { throw new NullPointerException(); }
+        if (ss==null) { throw new NullPointerException(); }
         this.ss = ss;
         this.index = index;
     }
@@ -66,15 +66,15 @@ public class SkipIterator<K extends Comparable<? super K>, V> implements ListIte
      */
     public V next() {
         V o;
-        if(index < ss.nKeys) {
+        if (index < ss.nKeys) {
             o = ss.vals[index];
         } else {
             throw new NoSuchElementException();
         }
 
-        if(index < (ss.nKeys-1)) {
+        if (index < (ss.nKeys-1)) {
             index++;
-        } else if(ss.next != null) {
+        } else if (ss.next != null) {
             ss = ss.next;
             index = 0;
         } else {
@@ -89,7 +89,7 @@ public class SkipIterator<K extends Comparable<? super K>, V> implements ListIte
      * @throws NoSuchElementException
      */
     public K nextKey() {
-        if(index < ss.nKeys) { return ss.keys[index]; }
+        if (index < ss.nKeys) { return ss.keys[index]; }
         throw new NoSuchElementException();
     }
 
@@ -102,11 +102,11 @@ public class SkipIterator<K extends Comparable<? super K>, V> implements ListIte
      * @throws NoSuchElementException
      */
     public V previous() {
-        if(index > 0) {
+        if (index > 0) {
             index--;
-        } else if(ss.prev != null) {
+        } else if (ss.prev != null) {
             ss = ss.prev;
-            if(ss.nKeys <= 0) { throw new NoSuchElementException(); }
+            if (ss.nKeys <= 0) { throw new NoSuchElementException(); }
             index = (ss.nKeys - 1);
         }
         return ss.vals[index];

@@ -84,7 +84,7 @@ abstract class SAMHandler implements Runnable, Handler {
      * @return channel
      */
     protected final SocketChannel getClientSocket() {
-        return socket ;
+        return socket;
     }
 
     /**
@@ -145,7 +145,7 @@ abstract class SAMHandler implements Runnable, Handler {
             //_log.debug("Caught IOException", e);
             return false;
         }
-        return true ;
+        return true;
     }
 
     /**

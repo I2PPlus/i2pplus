@@ -26,7 +26,7 @@ public class LeaseSetTest extends StructureTest {
         leaseSet.setEncryptionKey((PublicKey)(new PublicKeyTest()).createDataStructure());
         leaseSet.setSignature((Signature)(new SignatureTest()).createDataStructure());
         leaseSet.setSigningKey((SigningPublicKey)(new SigningPublicKeyTest()).createDataStructure());
-    //leaseSet.setVersion(42l);
+    //leaseSet.setVersion(42L);
         return leaseSet;
     }
     @Override

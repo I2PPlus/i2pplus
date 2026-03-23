@@ -28,7 +28,7 @@ public class DataStructureImplTest {
             private int x = 0;
             @Override
             public void writeBytes(OutputStream out) throws IOException, DataFormatException{
-                if(x++==0)
+                if (x++==0)
                     throw new DataFormatException("let it enfold you", new Exception());
                 else
                     throw new IOException();

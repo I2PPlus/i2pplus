@@ -391,7 +391,7 @@ public class ClientAppConfig {
         if (cfgFile == null)
             throw new IllegalArgumentException("No file");
         Properties props = new OrderedProperties();
-        for(int i = 0; i < apps.size(); i++) {
+        for (int i = 0; i < apps.size(); i++) {
             ClientAppConfig app = apps.get(i);
             String pfx = PREFIX + i;
             props.setProperty(pfx + ".main", app.className);

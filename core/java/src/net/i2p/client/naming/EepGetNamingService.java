@@ -108,7 +108,7 @@ public class EepGetNamingService extends DummyNamingService {
             EepGet get = new EepGet(_context, true, "localhost", 4444, 0, DEST_SIZE, MAX_RESPONSE,
                                     null, baos, url + hostname, false, null, null);
             // 10s header timeout, 15s total timeout, unlimited inactivity timeout
-            if (get.fetch(10*1000l, 15*1000l, -1l)) {
+            if (get.fetch(10*1000L, 15*1000L, -1L)) {
                 if (baos.size() < DEST_SIZE) {
                     _log.error("Short response: " + url + hostname);
                     return null;

@@ -42,7 +42,7 @@ public class LoadClientAppsJob extends JobImpl {
             System.err.println("Warning - No client apps or router console configured - we are just a router");
             return;
         }
-        for(int i = 0; i < apps.size(); i++) {
+        for (int i = 0; i < apps.size(); i++) {
             ClientAppConfig app = apps.get(i);
             if (app.disabled) {
                 if ("net.i2p.router.web.RouterConsoleRunner".equals(app.className)) {

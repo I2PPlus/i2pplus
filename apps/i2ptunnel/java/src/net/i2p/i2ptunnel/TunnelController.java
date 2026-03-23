@@ -528,10 +528,10 @@ public class TunnelController implements Logging {
         setI2CPOptions();
         setSessionOptions();
         if (TYPE_HTTP_CLIENT.equals(type)) {startHttpClient();}
-        else if(TYPE_IRC_CLIENT.equals(type)) {startIrcClient();}
-        else if(TYPE_SOCKS.equals(type)) {startSocksClient();}
-        else if(TYPE_SOCKS_IRC.equals(type)) {startSocksIRCClient();}
-        else if(TYPE_CONNECT.equals(type)) {startConnectClient();}
+        else if (TYPE_IRC_CLIENT.equals(type)) {startIrcClient();}
+        else if (TYPE_SOCKS.equals(type)) {startSocksClient();}
+        else if (TYPE_SOCKS_IRC.equals(type)) {startSocksIRCClient();}
+        else if (TYPE_CONNECT.equals(type)) {startConnectClient();}
         else if (TYPE_STD_CLIENT.equals(type)) {startClient();}
         else if (TYPE_STREAMR_CLIENT.equals(type)) {startStreamrClient();}
         else if (TYPE_STD_SERVER.equals(type)) {startServer();}

@@ -113,7 +113,7 @@ public final class MLKEM {
      *  EncType to params
      */
     private static MLKEMParameters getParam(EncType type) throws GeneralSecurityException {
-        switch(type) {
+        switch (type) {
             case MLKEM512_X25519_INT:
             case MLKEM512_X25519_CT:
                 return MLKEMParameters.ml_kem_512;

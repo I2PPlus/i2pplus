@@ -88,7 +88,7 @@ public class MultiRouter {
             @Override
             public void run() {
                 _out.println("Shutting down in a few moments..");
-                for(Router r : _routers) {
+                for (Router r : _routers) {
                     r.shutdown(0);
                 }
                 try { Thread.sleep(1500); } catch (InterruptedException ie) {}
@@ -137,11 +137,11 @@ public class MultiRouter {
     private static void internalReseed() {
 
         HashSet<RouterInfo> riSet = new HashSet<RouterInfo>();
-        for(Router r : _routers) {
+        for (Router r : _routers) {
             riSet.addAll(r.getContext().netDb().getRouters());
         }
-        for(Router r : _routers) {
-            for(RouterInfo ri : riSet){
+        for (Router r : _routers) {
+            for (RouterInfo ri : riSet){
                 r.getContext().netDb().publish(ri);
             }
         }

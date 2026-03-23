@@ -64,7 +64,7 @@ public class SimpleTimer {
         runner.start();
         long maxMemory = SystemVersion.getMaxMemory();
         int threads = (int) Math.max(MIN_THREADS, Math.min(MAX_THREADS, 1 + (maxMemory / (32*1024*1024))));
-        for (int i = 1; i <= threads ; i++) {
+        for (int i = 1; i <= threads; i++) {
             I2PThread executor = new I2PThread(new Executor(context, _log, _readyEvents, runn));
             executor.setName(name + "Executor " + i + '/' + threads);
             executor.setDaemon(true);
@@ -217,7 +217,7 @@ public class SimpleTimer {
         @Override
         public void run() {
             List<TimedEvent> eventsToFire = new ArrayList<TimedEvent>(1);
-            while(runn.getAnswer()) {
+            while (runn.getAnswer()) {
                 try {
                     synchronized (_events) {
                         //if (_events.size() <= 0)
@@ -227,8 +227,8 @@ public class SimpleTimer {
                         long now = System.currentTimeMillis();
                         long nextEventDelay = -1;
                         Object nextEvent = null;
-                        while(runn.getAnswer()) {
-                            if(_events.isEmpty()) {
+                        while (runn.getAnswer()) {
+                            if (_events.isEmpty()) {
                                 break;
                             }
                             Long when = _events.firstKey();

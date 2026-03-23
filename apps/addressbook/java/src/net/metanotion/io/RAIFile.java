@@ -58,8 +58,8 @@ public class RAIFile implements RandomAccessInterface, DataInput, DataOutput {
         this.r = read;
         this.w = write;
         String mode = "";
-        if(this.r) { mode += "r"; }
-        if(this.w) { mode += "w"; }
+        if (this.r) { mode += "r"; }
+        if (this.w) { mode += "w"; }
         this.delegate = new RandomAccessFile(file, mode);
     }
 
@@ -132,10 +132,10 @@ public class RAIFile implements RandomAccessInterface, DataInput, DataOutput {
      */
     public String readUTF()				throws IOException {
         int len = delegate.readInt();
-        if((len < 0) || (len >= 16777216)) { throw new IOException("Bad Length Encoding"); }
+        if ((len < 0) || (len >= 16777216)) { throw new IOException("Bad Length Encoding"); }
         byte[] bytes = new byte[len];
         int l = delegate.read(bytes);
-        if(l==-1) { throw new IOException("EOF while reading String"); }
+        if (l==-1) { throw new IOException("EOF while reading String"); }
         String s = new String(bytes, "UTF-8");
         return s;
     }
@@ -168,7 +168,7 @@ public class RAIFile implements RandomAccessInterface, DataInput, DataOutput {
      */
     public void writeUTF(String str)	throws IOException {
         byte[] string = str.getBytes("UTF-8");
-        if(string.length >= 16777216) { throw new IOException("String to long for encoding type"); }
+        if (string.length >= 16777216) { throw new IOException("String to long for encoding type"); }
         delegate.writeInt(string.length);
         delegate.write(string);
     }

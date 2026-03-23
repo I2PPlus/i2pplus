@@ -19,7 +19,7 @@ public enum SigAlgo {
      *  @since 0.9.25
      */
     ElGamal("ElGamal")
-    ;
+   ;
 
     private final String name;
 

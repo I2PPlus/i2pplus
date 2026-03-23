@@ -134,7 +134,7 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
                       "\n* From: " + socket.getPeerDestination().calculateHash() + " port " + socket.getPort());
         try {
             String modifiedRegistration;
-            if(!this.method.equals("webirc")) {
+            if (!this.method.equals("webirc")) {
                 // The headers _should_ be in the first packet, but
                 // may not be, depending on the client-side options
                 modifiedRegistration = filterRegistration(socket, cloakDest(socket.getPeerDestination()));

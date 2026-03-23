@@ -20,7 +20,7 @@ class Executor implements Runnable {
     }
 
     public void run() {
-        while(runn.getAnswer()) {
+        while (runn.getAnswer()) {
             SimpleTimer.TimedEvent evt = null;
             synchronized (_readyEvents) {
                 if (_readyEvents.isEmpty())

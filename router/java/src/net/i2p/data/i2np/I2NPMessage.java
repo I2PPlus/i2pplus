@@ -20,7 +20,7 @@ package net.i2p.data.i2np;
 public interface I2NPMessage {
 
     /** 4 bytes unsigned */
-    public static final long MAX_ID_VALUE = (1l << 32) - 1l;
+    public static final long MAX_ID_VALUE = (1L << 32) - 1L;
 
     /**
      * Nominal limit, actual max is much less.

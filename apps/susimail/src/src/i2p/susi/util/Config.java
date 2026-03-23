@@ -50,23 +50,23 @@ public class Config {
      */
     public synchronized static String getProperty( String name )
     {
-        if( configPrefix != null )
+        if ( configPrefix != null )
             name = configPrefix + name;
 
         String result = null;
 
-        if( properties == null ) {
+        if ( properties == null ) {
             reloadConfiguration();
         }
 
         result = System.getProperty( name );
 
-        if( result != null )
+        if ( result != null )
             return result;
 
-        if( config != null ) {
+        if ( config != null ) {
             result = config.getProperty( name );
-            if( result != null )
+            if ( result != null )
                 return result;
         }
 
@@ -100,7 +100,7 @@ public class Config {
             Log log = ctx.logManager().getLog(Config.class);
             log.error("Could not open WEB-INF/classes/susimail.properties (possibly in jar)", e);
         } finally {
-            if(iv != null) try { iv.close(); } catch(IOException ioe) {}
+            if (iv != null) try { iv.close(); } catch (IOException ioe) {}
         }
         try {
             File cfg = new File(I2PAppContext.getGlobalContext().getConfigDir(), "susimail.config");
@@ -188,11 +188,11 @@ public class Config {
 
         String str = getProperty( name );
 
-        if( str != null ) {
+        if ( str != null ) {
             try {
                 result = Integer.parseInt( str );
             }
-            catch( NumberFormatException nfe ) {
+            catch ( NumberFormatException nfe ) {
                 result = defaultValue;
             }
         }

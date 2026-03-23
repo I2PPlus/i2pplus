@@ -80,6 +80,6 @@ public class
     public boolean
             isIndeterminate()
     {
-        return( indeterminate );
+        return ( indeterminate );
     }
 }

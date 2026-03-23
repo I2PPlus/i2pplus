@@ -467,7 +467,7 @@ public abstract class SystemVersion {
      */
     public static long getMaxMemory() {
         long maxMemory = Runtime.getRuntime().maxMemory();
-        if (maxMemory >= Long.MAX_VALUE / 2) {maxMemory = 8192*1024*1024l;}
+        if (maxMemory >= Long.MAX_VALUE / 2) {maxMemory = 8192*1024*1024L;}
         return maxMemory;
     }
 

@@ -72,7 +72,7 @@ public class Banlist {
     /**
      * Permanent ban duration (will be rounded down to 180 days on console).
      */
-    public final static long BANLIST_DURATION_FOREVER = 181l*24*60*60*1000; // will get rounded down to 180d on console
+    public final static long BANLIST_DURATION_FOREVER = 181L*24*60*60*1000; // will get rounded down to 180d on console
 
     /**
      *  Buggy i2pd fork

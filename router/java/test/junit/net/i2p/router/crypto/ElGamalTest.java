@@ -55,7 +55,7 @@ public class ElGamalTest extends TestCase{
         "bbsuBuQKYDvF7hGICRB3ROSPePYhcupV3j7XiXUIYjWNw9hvylHXK~nTT7jkpIBazBJZfr" +
         "LJPcDZTDB0YnCOHOL-KFn4N1R5B22g0iYRABN~O10AUjQmf1epklAXPqYlzmOYeJSfTPBI" +
         "E44nEccWJp0M0KynhKVbDI0v9VYm6sPFK7WrzRyWwHL~r735wiRkwywuMmKJtA7-PuJjcW" +
-        "NLkJwx6WScH2msMzhzYPi8JSZJBl~PosX934l-L0T-KNV4jg1Ih6yoCnm1748A=="
+        "NLkJwx6WScH2msMzhzYPi8JSZJBl~PosX934L-L0T-KNV4jg1Ih6yoCnm1748A=="
         );
     private static final String ENCRYPTED[] = new String[] {
         "AMfISa8KvTpaC7KXZzSvC2axyiSk0xPexBAf29yU~IKq21DzaU19wQcGJg-ktpG4hjGSg7" +
@@ -76,7 +76,7 @@ public class ElGamalTest extends TestCase{
             "pV-ea6t0bQTYfsbG9ch7pJuDPHM64o5mF9FS5-JGr7MOtfP7KDNHiYM2~-uC6BIAbiqBN8" +
             "WSLX1mrHVuhiM-hiJ7U4oq~HYB6N~U980sCIW0dgFBbhalzzQhJQSrC1DFDqGfL5-L25mj" +
             "ArP8dtvN0JY3LSnbcsm-pT9ttFHCPGomLfaAuP7ohknBoXK0j9e6~splg5sUA9TfLeBfqc" +
-            "Lr0Sf8b3l~PvmrVkbVcaE8yUqSS6JFdt3pavjyyAQSmSlb2jVNKGPlrov5QLzlbH7G~AUv" +
+            "Lr0Sf8b3L~PvmrVkbVcaE8yUqSS6JFdt3pavjyyAQSmSlb2jVNKGPlrov5QLzlbH7G~AUv" +
             "IehsbGQX5ptRROtSojN~iYx3WQTOa-JLEC-AL7RbRu6B62p9I0pD0JgbUfCc4C4l9E9W~s" +
             "MuaJLAXxh0b2miF7C5bzZHxbt~MtZ7Ho5qpZMitXyoE3icb43B6Y1sbA==",
 
@@ -163,7 +163,7 @@ public class ElGamalTest extends TestCase{
         byte decrypted[] = null;
         try{
             decrypted = e.decryptAESBlock(encrypted, 0, encrypted.length, sessionKey, iv, null, foundTags, foundKey);
-        }catch(DataFormatException dfe){
+        }catch (DataFormatException dfe){
             dfe.printStackTrace();
             fail();
         }
@@ -187,7 +187,7 @@ public class ElGamalTest extends TestCase{
         byte[] decrypted = null;
         try{
             decrypted = e.decrypt(encrypted, privKey, _context.sessionKeyManager());
-        }catch(DataFormatException dfe){
+        }catch (DataFormatException dfe){
             dfe.printStackTrace();
             fail();
         }
@@ -206,10 +206,10 @@ public class ElGamalTest extends TestCase{
             ByteArrayOutputStream elgSrc = new ByteArrayOutputStream(256);
             try{
                 key.writeBytes(elgSrc);
-            }catch(DataFormatException dfe){
+            }catch (DataFormatException dfe){
                 dfe.printStackTrace();
                 fail();
-            }catch(IOException ioe){
+            }catch (IOException ioe){
                 ioe.printStackTrace();
                 fail();
             }
@@ -219,7 +219,7 @@ public class ElGamalTest extends TestCase{
             try{
                 elgSrc.write(preIV);
                 elgSrc.flush();
-            }catch(IOException ioe){
+            }catch (IOException ioe){
                 ioe.printStackTrace();
                 fail();
             }
@@ -233,10 +233,10 @@ public class ElGamalTest extends TestCase{
 
             try{
                 nk.readBytes(bais);
-            }catch(DataFormatException dfe){
+            }catch (DataFormatException dfe){
                 dfe.printStackTrace();
                 fail();
-            }catch(IOException ioe){
+            }catch (IOException ioe){
                 ioe.printStackTrace();
                 fail();
             }
@@ -245,7 +245,7 @@ public class ElGamalTest extends TestCase{
             int read = 0;
             try{
                 read = bais.read(postpreIV);
-            }catch(IOException ioe){
+            }catch (IOException ioe){
                 ioe.printStackTrace();
                 fail();
             }
@@ -260,7 +260,7 @@ public class ElGamalTest extends TestCase{
 
     public void testLoop(){
         ElGamalAESEngine e = new ElGamalAESEngine(_context);
-        for(int i = 0; i < 5; i++){
+        for (int i = 0; i < 5; i++){
             Object keys[] = KeyGenerator.getInstance().generatePKIKeypair();
             PublicKey pubKey = (PublicKey)keys[0];
             PrivateKey privKey = (PrivateKey)keys[1];
@@ -275,7 +275,7 @@ public class ElGamalTest extends TestCase{
             byte[] decrypted = null;
             try{
                 decrypted = e.decrypt(encrypted, privKey, _context.sessionKeyManager());
-            }catch(DataFormatException dfe){
+            }catch (DataFormatException dfe){
                 dfe.printStackTrace();
                 fail();
             }
@@ -305,7 +305,7 @@ public class ElGamalTest extends TestCase{
         try{
             pub.fromBase64(PUBLIC_KEY);
             priv.fromBase64(PRIVATE_KEY);
-        }catch(DataFormatException dfe){
+        }catch (DataFormatException dfe){
             dfe.printStackTrace();
             fail();
         }

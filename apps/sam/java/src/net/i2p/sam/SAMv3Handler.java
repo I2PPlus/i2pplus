@@ -97,7 +97,7 @@ class SAMv3Handler extends SAMv1Handler
      *  For SAMv3StreamSession connect and accept
      */
     public void stealSocket() {
-        stolenSocket = true ;
+        stolenSocket = true;
         if (sendPorts) {
             try {
                 socket.socket().setSoTimeout(0);
@@ -363,7 +363,7 @@ class SAMv3Handler extends SAMv1Handler
     }
 
     private void die() {
-        SessionRecord rec = null ;
+        SessionRecord rec = null;
 
         if (session!=null) {
             session.close();
@@ -385,7 +385,7 @@ class SAMv3Handler extends SAMv1Handler
     protected boolean execSessionMessage(String opcode, Properties props) {
 
         String dest = "BUG!";
-        boolean ok = false ;
+        boolean ok = false;
 
         String nick = (String) props.remove("ID");
         if (nick == null)
@@ -461,7 +461,7 @@ class SAMv3Handler extends SAMv1Handler
                 }
 
                 try {
-                    sSessionsHash.put( nick, new SessionRecord(dest, allProps, this) ) ;
+                    sSessionsHash.put( nick, new SessionRecord(dest, allProps, this) );
                 } catch (SessionsDB.ExistingIdException e) {
                     if (_log.shouldDebug())
                         _log.debug("SESSION ID parameter already in use");
@@ -569,8 +569,8 @@ class SAMv3Handler extends SAMv1Handler
             }
             // unregister the session if it has not been created
             if ( !ok && nick!=null ) {
-                sSessionsHash.del(nick) ;
-                session = null ;
+                sSessionsHash.del(nick);
+                session = null;
             }
         }
     }
@@ -686,7 +686,7 @@ class SAMv3Handler extends SAMv1Handler
             try {
                 notifyStreamResult(true, "I2P_ERROR", "ID not specified");
             } catch (IOException e) {}
-            return false ;
+            return false;
         }
 
         rec = sSessionsHash.get(nick);
@@ -696,7 +696,7 @@ class SAMv3Handler extends SAMv1Handler
             try {
                 notifyStreamResult(true, "INVALID_ID", "STREAM SESSION ID " + nick + " does not exist");
             } catch (IOException e) {}
-            return false ;
+            return false;
         }
 
         SAMv3Handler ctl = rec.getHandler();
@@ -707,7 +707,7 @@ class SAMv3Handler extends SAMv1Handler
             try {
                 notifyStreamResult(true, "I2P_ERROR",  "specified ID " + nick + " is not a STREAM session");
             } catch (IOException e) {}
-            return false ;
+            return false;
         }
         if (streamSession.isDestroyed()) {
             if (_log.shouldDebug())
@@ -769,7 +769,7 @@ class SAMv3Handler extends SAMv1Handler
 
             try {
                 ((SAMv3StreamSession)streamSession).connect( this, dest, props );
-                return true ;
+                return true;
             } catch (DataFormatException e) {
                 if (_log.shouldDebug())
                     _log.debug("Invalid destination in STREAM CONNECT message");
@@ -792,7 +792,7 @@ class SAMv3Handler extends SAMv1Handler
                 notifyStreamResult ( verbose, "I2P_ERROR", e.getMessage() );
             }
         } catch (IOException e) {}
-        return false ;
+        return false;
     }
 
     private boolean execStreamForwardIncoming( Properties props ) {
@@ -804,14 +804,14 @@ class SAMv3Handler extends SAMv1Handler
                 streamForwardingSocket = true;
                 ((SAMv3StreamSession)streamSession).startForwardingIncoming(props, sendPorts);
                 notifyStreamResult( true, "OK", null );
-                return true ;
+                return true;
             } catch (SAMException e) {
                 if (_log.shouldDebug())
                     _log.debug("Forwarding STREAM connections failed" + "\n* Error: " + e.getMessage());
                 notifyStreamResult ( true, "I2P_ERROR", "Forwarding failed : " + e.getMessage() );
             }
         } catch (IOException e) {}
-        return false ;
+        return false;
     }
 
     /**
@@ -827,7 +827,7 @@ class SAMv3Handler extends SAMv1Handler
                 // execStreamSession() above checks if session is destroyed first
                 notifyStreamResult(verbose, "OK", null);
                 ((SAMv3StreamSession)streamSession).accept(this, verbose);
-                return true ;
+                return true;
             } catch (InterruptedIOException e) {
                 if (_log.shouldDebug())
                     _log.debug("STREAM ACCEPT failed" + "\n* Error: " + e.getMessage());
@@ -857,7 +857,7 @@ class SAMv3Handler extends SAMv1Handler
                 notifyStreamResult ( verbose, "ALREADY_ACCEPTING", e.getMessage());
             }
         } catch (IOException e) {}
-        return false ;
+        return false;
     }
 
 

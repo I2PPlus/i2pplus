@@ -70,15 +70,15 @@ public class Base64 extends Encoding {
         int buf[] = new int[3];
         int out[] = new int[4];
         int l = 0;
-        while( true ) {
+        while ( true ) {
             int read = in.available();
-            if( read == 0 )
+            if ( read == 0 )
                 break;
             int i = 0;
             buf[0] = buf[1] = buf[2] = 0;
-            while( read > 0 && i < 3 ) {
+            while ( read > 0 && i < 3 ) {
                 buf[i] = in.read();
-                if( buf[i] < 0 || buf[i] > 255 )
+                if ( buf[i] < 0 || buf[i] > 255 )
                     throw new EncodingException( "Encoding supports only values 0..255 (" + buf[i] + ")" );
                 i++;
                 read--;
@@ -89,18 +89,18 @@ public class Base64 extends Encoding {
             out[3] = encodeByte( buf[2] & 63 );
             strBuf.append( (char)out[0] );
             strBuf.append( (char)out[1] );
-            if( i > 1 ) {
+            if ( i > 1 ) {
                 strBuf.append( (char)out[2] );
             }
             else
                 strBuf.append( "=" );
-            if( i > 2 )
+            if ( i > 2 )
                 strBuf.append( (char)out[3] );
             else
                 strBuf.append( "=" );
             i += 3;
             l += 4;
-            if( l >= 76 ) {
+            if ( l >= 76 ) {
                 strBuf.append( "\r\n" );
                 l -= 76;
             }
@@ -131,13 +131,13 @@ public class Base64 extends Encoding {
           15 P            32 g            49 x
           16 Q            33 h            50 y
           */
-        if( b < 26 )
+        if ( b < 26 )
             b += 'A';
-        else if( b < 52 )
+        else if ( b < 52 )
             b += 'a' - 26;
-        else if( b < 62 )
+        else if ( b < 62 )
             b += '0' - 52;
-        else if( b == 62 )
+        else if ( b == 62 )
             b = '+';
         else
             b = '/';
@@ -148,17 +148,17 @@ public class Base64 extends Encoding {
         if (c < 0)
             throw new EOFException();
         byte b = (byte) (c & 0xff);
-        if( b >= 'A' && b <= 'Z' )
+        if ( b >= 'A' && b <= 'Z' )
             b -= 'A';
-        else if( b >= 'a' && b <= 'z' )
+        else if ( b >= 'a' && b <= 'z' )
             b = (byte) (b - 'a' + 26);
-        else if( b >= '0' && b <= '9' )
+        else if ( b >= '0' && b <= '9' )
             b = (byte) (b - '0' + 52);
-        else if( b == '+' )
+        else if ( b == '+' )
             b = 62;
-        else if( b == '/' )
+        else if ( b == '/' )
             b = 63;
-        else if( b == '=' )
+        else if ( b == '=' )
             b = 0;
         else
             throw new DecodingException("Decoding base64 failed, invalid data: " + c);

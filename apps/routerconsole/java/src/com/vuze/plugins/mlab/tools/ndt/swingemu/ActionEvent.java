@@ -37,7 +37,7 @@ public class
     public Object
             getSource()
     {
-        return( new Object());
+        return ( new Object());
     }
 
     /**

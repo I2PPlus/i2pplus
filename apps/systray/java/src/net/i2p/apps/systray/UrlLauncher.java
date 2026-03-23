@@ -346,14 +346,14 @@ public class UrlLauncher implements ClientApp {
                 if (osName.toLowerCase(Locale.US).startsWith("mac os x")) {
                     String[] args = new String[] { "open", url };
                     if (_log.shouldDebug()) _log.debug("Execute: " + Arrays.toString(args));
-                    if (_shellCommand.executeSilentAndWaitTimed(args , 5))
+                    if (_shellCommand.executeSilentAndWaitTimed(args, 5))
                         return true;
                 } else {
                     return false;
                 }
                 String[] args = new String[] { "iexplore", url };
                 if (_log.shouldDebug()) _log.debug("Execute: " + Arrays.toString(args));
-                if (_shellCommand.executeSilentAndWaitTimed(args , 5))
+                if (_shellCommand.executeSilentAndWaitTimed(args, 5))
                     return true;
             } else if (SystemVersion.isWindows()) {
                 String[] browserString  = new String[] { "C:\\Program Files\\Internet Explorer\\iexplore.exe", "-nohome", url };

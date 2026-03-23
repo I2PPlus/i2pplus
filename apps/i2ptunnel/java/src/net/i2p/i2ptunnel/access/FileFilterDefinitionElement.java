@@ -53,7 +53,7 @@ class FileFilterDefinitionElement extends FilterDefinitionElement {
         try {
             reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
             String b32;
-            while((b32 = reader.readLine()) != null) {
+            while ((b32 = reader.readLine()) != null) {
                 if (b32.length() == 0)
                     continue;
                 Hash hash;

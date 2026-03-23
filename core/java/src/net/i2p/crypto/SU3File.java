@@ -105,7 +105,7 @@ public class SU3File {
         RESEED(CONTENT_RESEED, "reseed"),
         NEWS(CONTENT_NEWS, "news"),
         BLOCKLIST(CONTENT_BLOCKLIST, "blocklist")
-        ;
+       ;
 
         private final int code;
         private final String name;

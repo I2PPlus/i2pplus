@@ -34,7 +34,7 @@ class MessageReceiver {
     private static final int MIN_THREADS = 1;
     private static final int MAX_THREADS = SystemVersion.isSlow() ? 2 : 3;
     private final int _threadCount;
-    private static final long POISON_IMS = -99999999999l;
+    private static final long POISON_IMS = -99999999999L;
 
     public MessageReceiver(RouterContext ctx, UDPTransport transport) {
         _context = ctx;

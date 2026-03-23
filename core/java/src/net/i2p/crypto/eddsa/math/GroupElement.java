@@ -1035,13 +1035,13 @@ public class GroupElement implements Serializable {
 
             if (aslide[i] > 0) {
                 t = t.toP3().madd(A.dblPrecmp[aslide[i]/2]);
-            } else if(aslide[i] < 0) {
+            } else if (aslide[i] < 0) {
                 t = t.toP3().msub(A.dblPrecmp[(-aslide[i])/2]);
             }
 
             if (bslide[i] > 0) {
                 t = t.toP3().madd(this.dblPrecmp[bslide[i]/2]);
-            } else if(bslide[i] < 0) {
+            } else if (bslide[i] < 0) {
                 t = t.toP3().msub(this.dblPrecmp[(-bslide[i])/2]);
             }
 

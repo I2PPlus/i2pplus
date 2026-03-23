@@ -45,7 +45,7 @@ public class I2PSessionIT extends TestCase implements I2PSessionListener {
         boolean error = false;
         try{
             session.sendMessage(d, out.toByteArray());
-        }catch(I2PSessionException i2pse){
+        }catch (I2PSessionException i2pse){
             error = true;
         }
         assertTrue(error);
@@ -70,7 +70,7 @@ public class I2PSessionIT extends TestCase implements I2PSessionListener {
         session.sendMessage(d, DataHelper.getASCII("c"));
         session.sendMessage(d, DataHelper.getASCII("d"));
 
-        for(int i = 0; (i < 20)&&(!_s.isEmpty()); i++){
+        for (int i = 0; (i < 20)&&(!_s.isEmpty()); i++){
             Thread.sleep(1000);
         }
         assertTrue(_s.isEmpty());
@@ -83,9 +83,9 @@ public class I2PSessionIT extends TestCase implements I2PSessionListener {
     public void messageAvailable(I2PSession session, int msgId, long size){
         try{
             String x = new String(session.receiveMessage(msgId));
-            if(_s.contains(x))
+            if (_s.contains(x))
                 _s.remove(x);
-        }catch(Exception e){
+        }catch (Exception e){
             fail();
         }
     }

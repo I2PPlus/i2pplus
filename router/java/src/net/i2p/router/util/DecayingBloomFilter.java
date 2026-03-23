@@ -135,7 +135,7 @@ public class DecayingBloomFilter {
             for (int i = 0; i < numExtenders; i++) {
                 _context.random().nextBytes(_extenders[i]);
             }
-            _longToEntryMask = (1l << (_entryBytes * 8l)) -1;
+            _longToEntryMask = (1L << (_entryBytes * 8L)) -1;
         } else {
             // final
             _extenders = null;
@@ -334,7 +334,7 @@ public class DecayingBloomFilter {
                                            currentCount);
         if (currentCount > 0)
             _context.statManager().addRateData("router.decayingBloomFilter." + _name + ".dups",
-                                               1000l*1000*dups/currentCount);
+                                               1000L*1000*dups/currentCount);
         if (fpr > 0d) {
             // only if log.shouldDebug() ...
             long exponent = (long) Math.log10(fpr);

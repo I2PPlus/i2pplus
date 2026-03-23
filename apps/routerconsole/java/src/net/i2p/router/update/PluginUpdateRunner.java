@@ -106,12 +106,12 @@ class PluginUpdateRunner extends UpdateRunner {
         if (_xpi2pURL.startsWith("file:") || _method == UpdateMethod.FILE) {
                 // strip off file:// or just file:
             String xpi2pfile = _uri.getPath();
-            if(xpi2pfile == null || xpi2pfile.length() == 0) {
+            if (xpi2pfile == null || xpi2pfile.length() == 0) {
                 statusDone("<b>" + _t("Bad URL {0}", _xpi2pURL) + "</b>");
             } else {
                     // copy the contents of from to _updateFile
                 long alreadyTransferred = (new File(xpi2pfile)).getAbsoluteFile().length();
-                if(FileUtil.copy((new File(xpi2pfile)).getAbsolutePath(), _updateFile, true, false)) {
+                if (FileUtil.copy((new File(xpi2pfile)).getAbsolutePath(), _updateFile, true, false)) {
                     updateStatus("<b>" + _t("Attempting to install from file {0}", _xpi2pURL) + "</b>");
                     transferComplete(alreadyTransferred, alreadyTransferred, 0L, _xpi2pURL, _updateFile, false);
                 } else {
@@ -283,7 +283,7 @@ class PluginUpdateRunner extends UpdateRunner {
             }
         } else if (_context.getBooleanProperty(PROP_ALLOW_NEW_KEYS)) {
                 // add to keyring...
-            if(!up.addKey(pubkey, signer)) {
+            if (!up.addKey(pubkey, signer)) {
                     // bad or duplicate key
                 f.delete();
                 to.delete();
@@ -522,7 +522,7 @@ class PluginUpdateRunner extends UpdateRunner {
             if (Boolean.parseBoolean(props.getProperty("router-restart-required"))) {
                     // Yup!
                 try {
-                    if(!FileUtil.copy(to, (new SecureFile( new SecureFile(appDir.getCanonicalPath() +"/" + appName +"/"+ ZIP).getCanonicalPath())) , true, true)) {
+                    if (!FileUtil.copy(to, (new SecureFile( new SecureFile(appDir.getCanonicalPath() +"/" + appName +"/"+ ZIP).getCanonicalPath())), true, true)) {
                         to.delete();
                         statusDone("<b>" + _t("Cannot copy plugin to directory {0}", destDir.getAbsolutePath()) + "</b>");
                         return;
@@ -573,7 +573,7 @@ class PluginUpdateRunner extends UpdateRunner {
             // install != update. Changing the user's settings like this is probably a bad idea.
         if (Boolean.parseBoolean( props.getProperty("dont-start-at-install"))) {
             statusDone("<b>" + _t("Plugin {0} installed", appName + ' ' + version) + "</b>");
-            if(!update) {
+            if (!update) {
                 Properties pluginProps = PluginStarter.pluginProperties();
                 pluginProps.setProperty(PluginStarter.PREFIX + appName + PluginStarter.ENABLED, "false");
                 PluginStarter.storePluginProperties(pluginProps);

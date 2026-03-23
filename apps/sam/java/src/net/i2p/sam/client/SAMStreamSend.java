@@ -443,10 +443,10 @@ public class SAMStreamSend {
                 _log.error("Unable to connect", ioe);
                 return false;
             } finally {
-                if(fin != null) {
+                if (fin != null) {
                     try {
                         fin.close();
-                    } catch(IOException ioe) {}
+                    } catch (IOException ioe) {}
                 }
             }
         }

@@ -36,7 +36,7 @@ public class Mutex {
             } catch (Exception e) {
                 Debug.warning(e);
             }
-            ;
+           ;
         }
         syncLock = true;
     }

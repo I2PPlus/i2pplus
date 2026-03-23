@@ -57,7 +57,7 @@ import net.metanotion.util.skiplist.*;
  * @param <V> type of mapped values
  */
 public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V> implements Closeable {
-    private static final long MAGIC = 0x536b69704c697374l;  // "SkipList"
+    private static final long MAGIC = 0x536b69704c697374L;  // "SkipList"
     /** Page number of the first span */
     public int firstSpanPage = 0;
     /** Page number of the first level */
@@ -100,7 +100,7 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
      *  @throws IOException if an I/O error occurs
      */
     public BSkipList(int spanSize, BlockFile bf, int skipPage, Serializer<K> key, Serializer<V> val, boolean fileOnly) throws IOException {
-        if(spanSize < 1) { throw new RuntimeException("Span size too small"); }
+        if (spanSize < 1) { throw new RuntimeException("Span size too small"); }
 
         this.skipPage = skipPage;
         this.bf = bf;
@@ -189,14 +189,14 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
             return;
         }
         SkipLevels curLevel = stack;
-        while(curLevel != null) {
+        while (curLevel != null) {
             SkipLevels nextLevel = curLevel.levels[0];
             curLevel.killInstance();
             curLevel = nextLevel;
         }
 
         SkipSpan curSpan = first;
-        while(curSpan != null) {
+        while (curSpan != null) {
             SkipSpan nextSpan = curSpan.next;
             curSpan.killInstance();
             curSpan = nextSpan;
@@ -241,7 +241,7 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
     public int maxLevels() {
         int hob = 0;
         int s = spanHash.size();
-        while(s > 0) {
+        while (s > 0) {
             hob++;
             s /= P;
         }
@@ -290,7 +290,7 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
             return super.find(key);
         int[] search = new int[1];
         SkipSpan<K, V> ss = stack.getSpan(stack.levels.length - 1, key, search);
-        if(search[0] < 0) { search[0] = -1 * (search[0] + 1); }
+        if (search[0] < 0) { search[0] = -1 * (search[0] + 1); }
         return new IBSkipIterator<K, V>(ss, search[0]);
     }
 

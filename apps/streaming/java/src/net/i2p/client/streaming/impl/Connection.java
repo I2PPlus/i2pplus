@@ -411,7 +411,7 @@ class Connection {
             synchronized (_outboundPackets) {
                 _outboundPackets.put(Long.valueOf(packet.getSequenceNum()), packet);
                 windowSize = _options.getWindowSize();
-                remaining = windowSize - _outboundPackets.size() ;
+                remaining = windowSize - _outboundPackets.size();
                 _outboundPackets.notifyAll();
 
                 if (_isChoking) {

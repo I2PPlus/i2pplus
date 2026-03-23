@@ -139,7 +139,7 @@ public class
     public Toolkit
             getToolkit()
     {
-        return( new Toolkit());
+        return ( new Toolkit());
     }
 
     public void

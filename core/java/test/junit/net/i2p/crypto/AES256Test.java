@@ -27,7 +27,7 @@ public class AES256Test extends TestCase{
     }
 
     public void testMultiple(){
-        for(int i = 0; i < 100; i++){
+        for (int i = 0; i < 100; i++){
 
             SessionKey key = _context.keyGenerator().generateSessionKey();
 

@@ -178,7 +178,7 @@ public final class CertUtil {
                     catch (ClassCastException cce) {}
                 }
             }
-        } catch(GeneralSecurityException gse) {}
+        } catch (GeneralSecurityException gse) {}
         return rv;
     }
 

@@ -737,7 +737,7 @@ public class BuildRequestRecord {
         // prevent hop identification at top of the hour
         truncatedHour -= ctx.random().nextInt(90*1000);
         // this ignores leap seconds
-        truncatedHour /= (60l*60l*1000l);
+        truncatedHour /= (60L*60L*1000L);
         DataHelper.toLong(buf, OFF_REQ_TIME, 4, truncatedHour);
         DataHelper.toLong(buf, OFF_SEND_MSG_ID, 4, nextMsgId);
         ctx.random().nextBytes(buf, OFF_SEND_MSG_ID+4, PADDING_SIZE);

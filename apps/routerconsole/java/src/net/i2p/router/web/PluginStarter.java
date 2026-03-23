@@ -328,9 +328,9 @@ public class PluginStarter implements Runnable {
 
         // Do we need to extract an update?
         File pluginUpdate = new File(ctx.getConfigDir(), PLUGIN_DIR + '/' + appName + "/app.xpi2p.zip" );
-        if(pluginUpdate.exists()) {
+        if (pluginUpdate.exists()) {
             // Compare the start time of the router with the plugin.
-            if(ctx.router().getWhenStarted() > pluginUpdate.lastModified()) {
+            if (ctx.router().getWhenStarted() > pluginUpdate.lastModified()) {
                 if (!FileUtil.extractZip(pluginUpdate, pluginDir)) {
                     pluginUpdate.delete();
                     String foo = "Plugin '" + appName + "' failed to update! File '" + pluginUpdate +"' deleted. You may need to remove and install the plugin again.";
@@ -432,9 +432,9 @@ public class PluginStarter implements Runnable {
 
         //handle console icons for plugins without web-resources through prop icon-code
         String fullprop = props.getProperty("icon-code");
-        if(fullprop != null && fullprop.length() > 1){
+        if (fullprop != null && fullprop.length() > 1){
             byte[] decoded = Base64.decode(fullprop);
-            if(decoded != null) {
+            if (decoded != null) {
                 NavHelper.getInstance(ctx).setBinary(appName, decoded);
                 iconfile = "/Plugins/pluginicon?plugin=" + appName;
             } else {
@@ -459,7 +459,7 @@ public class PluginStarter implements Runnable {
             File webappDir = new File(consoleDir, "webapps");
             File files[] = webappDir.listFiles(RouterConsoleRunner.WAR_FILTER);
             if (files != null) {
-                if(!pluginWars.containsKey(appName))
+                if (!pluginWars.containsKey(appName))
                     pluginWars.put(appName, new ConcurrentHashSet<String>());
                 for (int i = 0; i < files.length; i++) {
                     try {
@@ -581,7 +581,7 @@ public class PluginStarter implements Runnable {
         if (client != null) {
             try{
                 client.shutdown(null);
-            }catch(Throwable t){
+            }catch (Throwable t){
                 if (log.shouldError())
                     log.error("Error stopping client app: " + appName, t);
             }
@@ -858,7 +858,7 @@ public class PluginStarter implements Runnable {
         if (action.equals("start"))
             _pendingPluginClients.put(pluginName, new ConcurrentHashSet<SimpleTimer2.TimedEvent>());
 
-        for(ClientAppConfig app : apps) {
+        for (ClientAppConfig app : apps) {
             // If the client is a running ClientApp that we want to stop,
             // bypass all the logic below.
             if (action.equals("stop")) {

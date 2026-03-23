@@ -34,7 +34,7 @@ public class JSONUtils {
         if (json == null)
             return null;
         Iterator iter = json.entrySet().iterator();
-        while(iter.hasNext()){
+        while (iter.hasNext()){
             Map.Entry entry = (Map.Entry)iter.next();
             if (entry.getKey().equals(key)) {return entry.getValue().toString();}
         }

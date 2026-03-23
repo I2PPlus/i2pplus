@@ -112,7 +112,7 @@ public class FilenameUtil {
                 int c = in.read();
                 if (c < 0)
                     break;
-                if( c == '%' ) {
+                if ( c == '%' ) {
                     int a = in.read();
                     if (a < 0) {
                         out.write(c);
@@ -126,23 +126,23 @@ public class FilenameUtil {
                     }
                     if (((a >= '0' && a <= '9') || (a >= 'A' && a <= 'F') || (a >= 'a' && a <= 'f')) &&
                             ((b >= '0' && b <= '9') || (b >= 'A' && b <= 'F') || (b >= 'a' && b <= 'f'))) {
-                        if( a >= '0' && a <= '9' )
+                        if ( a >= '0' && a <= '9' )
                                 a -= '0';
-                        else if( a >= 'A' && a <= 'F' )
+                        else if ( a >= 'A' && a <= 'F' )
                                 a = (byte) (a - 'A' + 10);
-                        else if(a >= 'a' && a <= 'f')
+                        else if (a >= 'a' && a <= 'f')
                                 a = (byte) (a - 'a' + 10);
 
-                        if( b >= '0' && b <= '9' )
+                        if ( b >= '0' && b <= '9' )
                                 b -= '0';
-                        else if( b >= 'A' && b <= 'F' )
+                        else if ( b >= 'A' && b <= 'F' )
                                 b = (byte) (b - 'A' + 10);
-                        else if(b >= 'a' && b <= 'f')
+                        else if (b >= 'a' && b <= 'f')
                                 b = (byte) (b - 'a' + 10);
 
                         out.write(a*16 + b);
                     }
-                    else if( a == '\r' && b == '\n' ) {
+                    else if ( a == '\r' && b == '\n' ) {
                             // ignore, shouldn't happen
                     } else {
                             // FAIL

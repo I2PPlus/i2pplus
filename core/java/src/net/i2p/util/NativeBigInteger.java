@@ -355,7 +355,7 @@ public class NativeBigInteger extends BigInteger {
       * @return A string containing the CPU-type or null if CPU type is unknown
       */
     private static String resolveCPUType() {
-        if(_isX86) {
+        if (_isX86) {
             try {
                 //System.out.println("resolveType() x86");
                 CPUInfo c = CPUID.getInfo();
@@ -480,7 +480,7 @@ public class NativeBigInteger extends BigInteger {
                     return JBIGI_OPTIMIZATION_ARM_ARMV8;
                 if (arch.startsWith("7")) {
                     // Raspberry Pi workaround
-                    // Processor       : ARMv6-compatible processor rev 7 (v6l)
+                    // Processor       : ARMv6-compatible processor rev 7 (v6L)
                     // CPU architecture: 7
                     if (model != null && model.contains("ARMv6"))
                         return JBIGI_OPTIMIZATION_ARM_ARMV6;
@@ -725,7 +725,7 @@ public class NativeBigInteger extends BigInteger {
     /** caches */
     @Override
     public byte[] toByteArray(){
-        if(cachedBa == null) //Since we are immutable it is safe to never update the cached ba after it has initially been generated
+        if (cachedBa == null) //Since we are immutable it is safe to never update the cached ba after it has initially been generated
             cachedBa = super.toByteArray();
         return cachedBa;
     }
@@ -1083,7 +1083,7 @@ public class NativeBigInteger extends BigInteger {
             } else {
                 setVersions();
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             warn("Native BigInteger library jbigi not loaded, using pure java", e);
         }
     }
@@ -1095,7 +1095,7 @@ public class NativeBigInteger extends BigInteger {
 
 
     private static void info(String s) {
-        if(_doLog)
+        if (_doLog)
             System.err.println("INFO: " + s);
         I2PAppContext.getGlobalContext().logManager().getLog(NativeBigInteger.class).info(s);
         _loadStatus = s;
@@ -1107,7 +1107,7 @@ public class NativeBigInteger extends BigInteger {
 
     /** @since 0.8.7 */
     private static void warn(String s, Throwable t) {
-        if(_doLog) {
+        if (_doLog) {
             System.err.println("WARNING: " + s);
             if (t != null)
                 t.printStackTrace();
@@ -1126,7 +1126,7 @@ public class NativeBigInteger extends BigInteger {
 
     /** @since 0.9.26 */
     private static void error(String s, Throwable t) {
-        if(_doLog) {
+        if (_doLog) {
             System.err.println("ERROR: " + s);
             if (t != null)
                 t.printStackTrace();
@@ -1147,7 +1147,7 @@ public class NativeBigInteger extends BigInteger {
      */
     private static final boolean loadGeneric(String name) {
         try {
-            if(name == null)
+            if (name == null)
                 return false;
             System.loadLibrary(name);
             return true;
@@ -1332,21 +1332,21 @@ public class NativeBigInteger extends BigInteger {
      *  @return may be null if optimized is true; returns jbigi-xxx-none if optimize is false
      */
     private static final String getMiddleName1() {
-        if(_isWin)
+        if (_isWin)
              return "jbigi-windows-";
-        if(_isKFreebsd)
+        if (_isKFreebsd)
             return "jbigi-kfreebsd-";
-        if(_isFreebsd)
+        if (_isFreebsd)
             return "jbigi-freebsd-";
-        if(_isNetbsd)
+        if (_isNetbsd)
             return "jbigi-netbsd-";
-        if(_isOpenbsd)
+        if (_isOpenbsd)
             return "jbigi-openbsd-";
-        if(_isMac)
+        if (_isMac)
             return "jbigi-osx-";
-        if(_isOS2)
+        if (_isOS2)
             return "jbigi-os2-";
-        if(_isSunos)
+        if (_isSunos)
             return "jbigi-solaris-";
         return "jbigi-linux-";
     }

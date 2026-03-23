@@ -50,7 +50,7 @@ public class
     public StyledDocument
             getStyledDocument()
     {
-        return( sd );
+        return ( sd );
     }
 
     public void

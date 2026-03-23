@@ -89,7 +89,7 @@ public class ExternalMain implements ClientApp, NotificationService {
             public void run() {
                 try {
                     startUp();
-                } catch(Exception e) {
+                } catch (Exception e) {
                     log.error("Failed while running desktopgui!", e);
                 }
 

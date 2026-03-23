@@ -228,12 +228,12 @@ public class TestStreamTransfer {
                 //_dead = true;
                 return;
             }
-            try { Thread.sleep(5*1000) ; } catch (InterruptedException ie) {}
+            try { Thread.sleep(5*1000); } catch (InterruptedException ie) {}
             req = "STREAM SEND ID=42 SIZE=10\nBlahBlah!!";
             _log.info("\n** Sending BlahBlah!!");
             out.write(DataHelper.getASCII(req));
             out.flush();
-            try { Thread.sleep(5*1000) ; } catch (InterruptedException ie) {}
+            try { Thread.sleep(5*1000); } catch (InterruptedException ie) {}
             req = "STREAM SEND ID=42 SIZE=10\nFooBarBaz!";
             _log.info("\n** Sending FooBarBaz!");
             out.write(DataHelper.getASCII(req));

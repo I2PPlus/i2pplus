@@ -45,7 +45,7 @@ public class ConfigTunnelsHandler extends FormHandler {
             _log.debug("Saving changes, with props = " + _settings + ".");
 
         int updated = 0;
-        for (int index = 0;  ; index++) {
+        for (int index = 0; ; index++) {
             Object val = _settings.get("pool." + index);
             if (val == null) break;
             Hash client = new Hash();

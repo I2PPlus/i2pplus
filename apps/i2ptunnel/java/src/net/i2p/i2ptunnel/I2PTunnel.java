@@ -1488,7 +1488,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             //notifyEvent("genkeysResult", "error");
             //_log.error(getPrefix() + "Error generating keys", ioe);
         } finally {
-            if(pubdest != null) try { pubdest.close(); } catch(IOException ioe) {}
+            if (pubdest != null) try { pubdest.close(); } catch (IOException ioe) {}
         }
     }
 

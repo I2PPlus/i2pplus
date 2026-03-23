@@ -203,7 +203,7 @@ public class HTTPPacket {
                             (chunkSizeLine != null) ? Long.parseLong(chunkSizeLine.trim(), 16) : 0;
                 } catch (Exception e) {
                 }
-                ;
+               ;
             } else contentLen = getContentLength();
 
             ByteArrayOutputStream contentBuf = new ByteArrayOutputStream();
@@ -252,7 +252,7 @@ public class HTTPPacket {
                     } catch (Exception e) {
                         contentLen = 0;
                     }
-                    ;
+                   ;
                 } else contentLen = 0;
             }
 
@@ -734,21 +734,21 @@ public class HTTPPacket {
             range[0] = Long.parseLong(firstPosStr);
         } catch (NumberFormatException e) {
         }
-        ;
+       ;
         if (strToken.hasMoreTokens() == false) return range;
         String lastPosStr = strToken.nextToken("-/");
         try {
             range[1] = Long.parseLong(lastPosStr);
         } catch (NumberFormatException e) {
         }
-        ;
+       ;
         if (strToken.hasMoreTokens() == false) return range;
         String lengthStr = strToken.nextToken("/");
         try {
             range[2] = Long.parseLong(lengthStr);
         } catch (NumberFormatException e) {
         }
-        ;
+       ;
         return range;
     }
 

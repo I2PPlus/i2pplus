@@ -39,7 +39,7 @@ final class MuxedPQEngine {
      * Get minimum new session size for the given encryption type
      */
     private static int getMinNSSize(EncType type) {
-        switch(type) {
+        switch (type) {
             case ECIES_X25519:
                 return MIN_NS_SIZE;
             case MLKEM512_X25519:

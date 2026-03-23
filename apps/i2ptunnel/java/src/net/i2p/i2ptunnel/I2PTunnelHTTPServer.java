@@ -1342,7 +1342,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      */
     private static String getEntryOrNull(Map<String, List<String>> headers, String key) {
         List<String> entries = headers.get(key);
-        if(entries == null || entries.size() < 1) {return null;}
+        if (entries == null || entries.size() < 1) {return null;}
         else {return entries.get(0);}
     }
 

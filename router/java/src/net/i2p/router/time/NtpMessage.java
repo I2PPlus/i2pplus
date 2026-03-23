@@ -390,7 +390,7 @@ class NtpMessage {
      * a byte is signed.
      */
     private static short unsignedByteToShort(byte b) {
-        if((b & 0x80)==0x80)
+        if ((b & 0x80)==0x80)
             return (short) (128 + (b & 0x7f));
         else
             return b;
@@ -412,7 +412,7 @@ class NtpMessage {
     private static double decodeTimestamp(byte[] array, int pointer) {
         double r = 0.0;
 
-        for(int i=0; i<8; i++) {
+        for (int i=0; i<8; i++) {
             r += unsignedByteToShort(array[pointer+i]) * Math.pow(2, (3-i)*8);
         }
         // 2036-compliance
@@ -456,7 +456,7 @@ class NtpMessage {
 
         // Converts a double into a 64-bit fixed point
         // 6 bytes of real data
-        for(int i=0; i<7; i++) {
+        for (int i=0; i<7; i++) {
             // 2^24, 2^16, 2^8, .. 2^-32
             double base = Math.pow(2, (3-i)*8);
 
@@ -482,7 +482,7 @@ class NtpMessage {
      * formatted date/time string.
      */
     private static String timestampToString(double timestamp) {
-        if(timestamp==0) return "0";
+        if (timestamp==0) return "0";
 
         // timestamp is relative to 1900, utc is used by Java and is relative
         // to 1970
@@ -519,7 +519,7 @@ class NtpMessage {
         // In the case of NTP Version 3 or Version 4 stratum-0 (unspecified)
         // or stratum-1 (primary) servers, this is a four-character ASCII
         // string, left justified and zero padded to 32 bits.
-        if(stratum==0 || stratum==1) {
+        if (stratum==0 || stratum==1) {
             StringBuilder buf = new StringBuilder(4);
             for (int i = 0; i < 4; i++) {
                 if (ref[i] == 0)
@@ -531,7 +531,7 @@ class NtpMessage {
 
         // In NTP Version 3 secondary servers, this is the 32-bit IPv4
         // address of the reference source.
-        else if(version==3) {
+        else if (version==3) {
             return unsignedByteToShort(ref[0]) + "." +
                    unsignedByteToShort(ref[1]) + "." +
                    unsignedByteToShort(ref[2]) + "." +
@@ -540,7 +540,7 @@ class NtpMessage {
 
         // In NTP Version 4 secondary servers, this is the low order 32 bits
         // of the latest transmit timestamp of the reference source.
-        else if(version==4) {
+        else if (version==4) {
             // Unimplemented RFC 4330:
             // For IPv6 and OSI secondary servers, the value is the first 32 bits of
             // the MD5 hash of the IPv6 or NSAP address of the synchronization

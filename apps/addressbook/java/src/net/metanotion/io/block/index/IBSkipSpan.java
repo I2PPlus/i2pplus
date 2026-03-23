@@ -174,8 +174,8 @@ public class IBSkipSpan<K extends Comparable<? super K>, V> extends BSkipSpan<K,
         pageCounter[0] = HEADER_LEN;
         int fail = 0;
         //System.out.println("Span Load " + sz + " nKeys " + nKeys + " page " + curPage);
-        for(int i=0;i<this.nKeys;i++) {
-            if((pageCounter[0] + 4) > BlockFile.PAGESIZE) {
+        for (int i=0;i<this.nKeys;i++) {
+            if ((pageCounter[0] + 4) > BlockFile.PAGESIZE) {
                 BlockFile.pageSeek(this.bf.file, curNextPage[0]);
                 int magic = bf.file.readInt();
                 if (magic != BlockFile.MAGIC_CONT) {
@@ -273,9 +273,9 @@ public class IBSkipSpan<K extends Comparable<? super K>, V> extends BSkipSpan<K,
         IBSkipSpan<K, V> bss = this;
         IBSkipSpan<K, V> temp;
         int np = nextPage;
-        while(np != 0) {
+        while (np != 0) {
             temp = (IBSkipSpan<K, V>) bsl.spanHash.get(Integer.valueOf(np));
-            if(temp != null) {
+            if (temp != null) {
                 bss.next = temp;
                 break;
             }
@@ -303,9 +303,9 @@ public class IBSkipSpan<K extends Comparable<? super K>, V> extends BSkipSpan<K,
         // Go backwards to fill in the rest. This never happens.
         bss = this;
         np = prevPage;
-        while(np != 0) {
+        while (np != 0) {
             temp = (IBSkipSpan<K, V>) bsl.spanHash.get(Integer.valueOf(np));
-            if(temp != null) {
+            if (temp != null) {
                 bss.prev = temp;
                 break;
             }

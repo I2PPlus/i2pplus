@@ -388,7 +388,7 @@ public class NamingServiceBean extends AddressbookBean {
                                                 if (dest == null) {
                                                     throw new DataFormatException(_t("Unable to resolve Base 32 address"));
                                                 }
-                                            } catch(URISyntaxException use) {throw new DataFormatException("");}
+                                            } catch (URISyntaxException use) {throw new DataFormatException("");}
                                         } else if (destination.endsWith(".b32.i2p") && destination.length() >= 60) {
                                             dest = _context.namingService().lookup(destination);
                                             if (dest == null) {

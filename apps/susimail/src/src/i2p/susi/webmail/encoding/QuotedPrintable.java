@@ -68,19 +68,19 @@ public class QuotedPrintable extends Encoding {
         int buffered = 0, tmp[] = new int[BUFSIZE];
         int index = 0;
         int l = 0;
-        while( true ) {
+        while ( true ) {
             int read = 0;
             int r;
-            while(buffered < BUFSIZE && (r = in.read()) >= 0) {
+            while (buffered < BUFSIZE && (r = in.read()) >= 0) {
                 tmp[buffered++] = r;
                 read++;
             }
-            if( read == 0 && buffered == 0 )
+            if ( read == 0 && buffered == 0 )
                 break;
 
             int c = tmp[0];
             buffered--;
-            for( int j = 1; j < BUFSIZE; j++ )
+            for ( int j = 1; j < BUFSIZE; j++ )
                 tmp[j-1] = tmp[j];
 
             if ((c == '.' || c == '-') && l == 0) {
@@ -95,8 +95,8 @@ public class QuotedPrintable extends Encoding {
                 out.append( (char)c );
                 l++;
             }
-            else if( ( c == 32 || c == 9 ) ) {
-                if( buffered > 0 && ( tmp[0] == 10 || tmp[0] == 13 ) ) {
+            else if ( ( c == 32 || c == 9 ) ) {
+                if ( buffered > 0 && ( tmp[0] == 10 || tmp[0] == 13 ) ) {
                     /*
                      * whitespace at end of line
                      */
@@ -113,11 +113,11 @@ public class QuotedPrintable extends Encoding {
                     l++;
                 }
             }
-            else if( c == 13 && buffered > 0 && tmp[0] == 10 ) {
+            else if ( c == 13 && buffered > 0 && tmp[0] == 10 ) {
                 out.append( "\r\n" );
                 l = 0;
                 buffered--;
-                for( int j = 1; j < BUFSIZE; j++ )
+                for ( int j = 1; j < BUFSIZE; j++ )
                     tmp[j-1] = tmp[j];
             } else {
                 String s = HexTable.table[ c < 0 ? 256 + c : c ];
@@ -146,7 +146,7 @@ public class QuotedPrintable extends Encoding {
             int c = in.read();
             if (c < 0)
                 break;
-            if( c == '=' ) {
+            if ( c == '=' ) {
                 int a = in.read();
                 if (a < 0) {
                     out.write(c);
@@ -164,24 +164,24 @@ public class QuotedPrintable extends Encoding {
                          * decode sequence
                          */
                         // System.err.println( "decoding 0x" + (char)a + "" + (char)b );
-                    if( a >= '0' && a <= '9' )
+                    if ( a >= '0' && a <= '9' )
                             a -= '0';
-                    else if( a >= 'A' && a <= 'F' )
+                    else if ( a >= 'A' && a <= 'F' )
                             a = (byte) (a - 'A' + 10);
-                    else if(a >= 'a' && a <= 'f')
+                    else if (a >= 'a' && a <= 'f')
                             a = (byte) (a - 'a' + 10);
 
-                    if( b >= '0' && b <= '9' )
+                    if ( b >= '0' && b <= '9' )
                             b -= '0';
-                    else if( b >= 'A' && b <= 'F' )
+                    else if ( b >= 'A' && b <= 'F' )
                             b = (byte) (b - 'A' + 10);
-                    else if(b >= 'a' && b <= 'f')
+                    else if (b >= 'a' && b <= 'f')
                             b = (byte) (b - 'a' + 10);
 
                     out.write(a*16 + b);
                     continue;
                 }
-                else if( a == '\r' && b == '\n' ) {
+                else if ( a == '\r' && b == '\n' ) {
                         /*
                          * softbreak, simply ignore it
                          */

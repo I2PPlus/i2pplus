@@ -29,7 +29,7 @@ public class VersionComparator implements Comparator<String>, Serializable {
         int il = 0, ir = 0;
         int nl = 0, nr = 0;
 
-        while(true) {
+        while (true) {
 
             // are we at end of strings?
             if (il >= ll) {
@@ -40,14 +40,14 @@ public class VersionComparator implements Comparator<String>, Serializable {
                 return 1;
 
             long lv = -1;
-            while(lv == -1 && il < ll) {
+            while (lv == -1 && il < ll) {
                 nl = nextSeparator(l, il);
                 lv = parseLong(l,il,nl);
                 il = nl + 1;
             }
 
             long rv = -1;
-            while(rv == -1 && ir < rl) {
+            while (rv == -1 && ir < rl) {
                 nr = nextSeparator(r, ir);
                 rv = parseLong(r,ir,nr);
                 ir = nr + 1;
@@ -62,7 +62,7 @@ public class VersionComparator implements Comparator<String>, Serializable {
     }
 
     private static boolean isSeparator(char c) {
-        switch(c) {
+        switch (c) {
             case '.':
             case '_':
             case '-':
@@ -86,7 +86,7 @@ public class VersionComparator implements Comparator<String>, Serializable {
      * @return the index of the next separator character, or end of string.
      */
     private static int nextSeparator(String s, int start) {
-        while( start < s.length()) {
+        while ( start < s.length()) {
             if (isSeparator(s.charAt(start)))
                 return start;
             start++;

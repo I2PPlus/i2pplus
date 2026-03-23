@@ -26,7 +26,7 @@ public class SHA256Test extends TestCase{
 
     public void testMultiple(){
         int size = 1;
-        for(int i = 0; i < 16; i++){
+        for (int i = 0; i < 16; i++){
             byte[] message = new byte[size];
             size*=2;
             _context.random().nextBytes(message);
@@ -43,7 +43,7 @@ public class SHA256Test extends TestCase{
 
         Hash firstHash = SHA256Generator.getInstance().calculateHash(data);
 
-        for(int i=0; i<5; i++){
+        for (int i=0; i<5; i++){
             Hash h = SHA256Generator.getInstance().calculateHash(data);
             assertEquals(firstHash, h);
         }

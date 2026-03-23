@@ -85,7 +85,7 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
      */
     @SuppressWarnings("unchecked")
     public SkipSpan(int size) {
-        if(size < 1 || size > MAX_SIZE)
+        if (size < 1 || size > MAX_SIZE)
             throw new IllegalArgumentException("Invalid span size " + size);
         keys = (K[]) new Comparable[size];
         vals = (V[]) new Object[size];
@@ -100,7 +100,7 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
         StringBuilder buf = new StringBuilder(1024);
         buf.append("Span with ").append(nKeys).append(" keys\n");
         if (nKeys > 0 && keys != null && vals != null) {
-            for(int i=0;i<nKeys;i++) {
+            for (int i=0;i<nKeys;i++) {
                 buf.append('\t').append(keys[i]).append(" => ").append(vals[i]).append('\n');
             }
         }
@@ -113,12 +113,12 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
         int low = 0;
         int cur;
         int cmp;
-        while(low <= high) {
+        while (low <= high) {
             cur = (low + high) >>> 1;
             cmp = keys[cur].compareTo(key);
-            if(cmp > 0) {
+            if (cmp > 0) {
                 high = cur - 1;
-            } else if(cmp < 0) {
+            } else if (cmp < 0) {
                 low = cur + 1;
             } else {
                 return cur;
@@ -133,7 +133,7 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
      *  @return the last SkipSpan in the chain
      */
     public SkipSpan<K, V> getEnd() {
-        if(next == null) { return this; }
+        if (next == null) { return this; }
         return next.getEnd();
     }
 
@@ -145,13 +145,13 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
      *  @return the SkipSpan containing the key
      */
     public SkipSpan<K, V> getSpan(K key, int[] search) {
-        if(nKeys == 0) {
+        if (nKeys == 0) {
             search[0] = -1;
             return this;
         }
 
-        if(keys[nKeys - 1].compareTo(key) < 0) {
-            if(next == null) {
+        if (keys[nKeys - 1].compareTo(key) < 0) {
+            if (next == null) {
                 search[0] = (-1 * (nKeys - 1)) - 1;
                 return this;
             }
@@ -168,18 +168,18 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
      *  @return the value, or null if not found
      */
     public V get(K key) {
-        if(nKeys == 0) { return null; }
-        if(keys[nKeys - 1].compareTo(key) < 0) {
-            if(next == null) { return null; }
+        if (nKeys == 0) { return null; }
+        if (keys[nKeys - 1].compareTo(key) < 0) {
+            if (next == null) { return null; }
             return next.get(key);
         }
         int loc = binarySearch(key);
-        if(loc < 0) { return null; }
+        if (loc < 0) { return null; }
         return vals[loc];
     }
 
     private void pushTogether(int hole) {
-        for(int i=hole;i<(nKeys - 1);i++) {
+        for (int i=hole;i<(nKeys - 1);i++) {
             keys[i] = keys[i+1];
             vals[i] = vals[i+1];
         }
@@ -187,7 +187,7 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
     }
 
     private void pushApart(int start) {
-        for(int i=(nKeys-1);i>=start;i--) {
+        for (int i=(nKeys-1);i>=start;i--) {
             keys[i+1] = keys[i];
             vals[i+1] = vals[i];
         }
@@ -197,13 +197,13 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
     private void split(int loc, K key, V val, SkipList<K, V> sl) {
         SkipSpan<K, V> right = newInstance(sl);
 
-        if(this.next != null) { this.next.prev = right; }
+        if (this.next != null) { this.next.prev = right; }
         right.next = this.next;
         right.prev = this;
         this.next = right;
 
         int start = ((keys.length+1)/2);
-        for(int i=start;i < keys.length; i++) {
+        for (int i=start;i < keys.length; i++) {
             try {
                 right.keys[i-start] = keys[i];
                 right.vals[i-start] = vals[i];
@@ -215,7 +215,7 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
                 throw e;
             }
         }
-        if(loc >= start) {
+        if (loc >= start) {
             right.pushApart(loc - start);
             right.keys[loc - start] = key;
             right.vals[loc - start] = val;
@@ -233,7 +233,7 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
      */
     private SkipSpan<K, V> insert(int loc, K key, V val, SkipList<K, V> sl) {
         sl.addItem();
-        if(nKeys == keys.length) {
+        if (nKeys == keys.length) {
             // split.
             split(loc, key, val, sl);
             return next;
@@ -255,7 +255,7 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
      *  @return the new span if it caused a split, else null if it went in this span
      */
     public SkipSpan<K, V> put(K key, V val, SkipList<K, V> sl)	{
-        if(nKeys == 0) {
+        if (nKeys == 0) {
             sl.addItem();
             keys[0] = key;
             vals[0] = val;
@@ -264,15 +264,15 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
             return null;
         }
         int loc = binarySearch(key);
-        if(loc < 0) {
+        if (loc < 0) {
             loc = -1 * (loc + 1);
-            if(next != null) {
+            if (next != null) {
                 int cmp = next.firstKey().compareTo(key);
-                if((loc >= nKeys) && (cmp > 0)) {
+                if ((loc >= nKeys) && (cmp > 0)) {
                     // It fits in between this span and the next
                     // Try to avoid a split...
-                    if(nKeys == keys.length) {
-                        if(next.nKeys == keys.length) {
+                    if (nKeys == keys.length) {
+                        if (next.nKeys == keys.length) {
                             return insert(loc, key, val, sl);
                         } else {
                             return next.put(key, val, sl);
@@ -282,7 +282,7 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
                     }
                 } else {
                     // Its either clearly in the next span or this span.
-                    if(cmp > 0) {
+                    if (cmp > 0) {
                         return insert(loc, key, val, sl);
                     } else {
                         return next.put(key, val, sl);
@@ -312,22 +312,22 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
      *          rv is null if no object was removed.
      */
     public Object[] remove(K key, SkipList<K, V> sl) {
-        if(nKeys == 0) { return new Object[0]; }
-        if(keys[nKeys - 1].compareTo(key) < 0) {
-            if(next == null) { return new Object[0]; }
+        if (nKeys == 0) { return new Object[0]; }
+        if (keys[nKeys - 1].compareTo(key) < 0) {
+            if (next == null) { return new Object[0]; }
             return next.remove(key, sl);
         }
         int loc = binarySearch(key);
-        if(loc < 0) { return new Object[0]; }
+        if (loc < 0) { return new Object[0]; }
         Object o = vals[loc];
         Object[] res = new Object[2];
         res[0] = o;
         sl.delItem();
-        if(nKeys == 1) {
-            if((this.prev == null) && (this.next != null)) {
+        if (nKeys == 1) {
+            if ((this.prev == null) && (this.next != null)) {
                 res[1] = this.next;
                 // We're the first node in the list... copy the next node over and kill it. See also bottom of SkipLevels.java
-                for(int i=0;i<next.nKeys;i++) {
+                for (int i=0;i<next.nKeys;i++) {
                     keys[i] = next.keys[i];
                     vals[i] = next.vals[i];
                 }
@@ -346,11 +346,11 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
             } else {
                 // Normal situation. We are now empty, kill ourselves
                 //BlockFile.log.error("Killing this span " + this + ", prev " + this.prev + ", next " + this.next);
-                if(this.prev != null) {
+                if (this.prev != null) {
                     this.prev.next = this.next;
                     this.prev.flush();
                 }
-                if(this.next != null) {
+                if (this.next != null) {
                     this.next.prev = this.prev;
                     this.next.flush();
                     this.next = null;

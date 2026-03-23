@@ -356,7 +356,7 @@ public class PeerState {
      *  How far off is the remote peer from our clock, in milliseconds?
      *  A positive number means our clock is ahead of theirs.
      */
-    public long getClockSkew() {return _clockSkew ;}
+    public long getClockSkew() {return _clockSkew;}
 
     /**
      *  When did we last send them a packet?

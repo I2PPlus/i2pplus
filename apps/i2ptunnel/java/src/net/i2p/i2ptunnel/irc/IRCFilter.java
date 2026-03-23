@@ -84,7 +84,7 @@ abstract class IRCFilter {
         try {
             Integer.parseInt(command);
             return s;
-        } catch(NumberFormatException nfe){}
+        } catch (NumberFormatException nfe){}
 
 
         if ("PONG".equals(command)) {
@@ -108,14 +108,14 @@ abstract class IRCFilter {
         }
 
         // Allow PRIVMSG, but block CTCP.
-        if("PRIVMSG".equals(command) || "NOTICE".equals(command))
+        if ("PRIVMSG".equals(command) || "NOTICE".equals(command))
         {
             String msg;
             msg = field[idx++];
             if (idx < field.length)
                 msg += ' ' + field[idx];
 
-            if(msg.indexOf(0x01) >= 0) // CTCP marker ^A can be anywhere, not just immediately after the ':'
+            if (msg.indexOf(0x01) >= 0) // CTCP marker ^A can be anywhere, not just immediately after the ':'
             {
                 // CTCP
 
@@ -129,7 +129,7 @@ abstract class IRCFilter {
                     return null;
 
                 msg=msg.substring(2);
-                if(msg.startsWith("ACTION ")) {
+                if (msg.startsWith("ACTION ")) {
                     // /me says hello
                     return s;
                 }
@@ -287,11 +287,11 @@ abstract class IRCFilter {
 
         String field[] = DataHelper.split(s, " ", 4);
 
-        if(field[0].length()==0)
+        if (field[0].length()==0)
             return null; // W T F?
 
 
-        if(field[0].charAt(0)==':')
+        if (field[0].charAt(0)==':')
             return null; // ???
 
         int idx = 0;
@@ -344,18 +344,18 @@ abstract class IRCFilter {
 
         // mIRC sends "NOTICE user :DCC Send file (IP)"
         // in addition to the CTCP version
-        if("NOTICE".equals(command))
+        if ("NOTICE".equals(command))
         {
             if (field.length < idx + 2)
                 return s;  // invalid, allow server response
             String msg = field[idx + 1];
-            if(msg.startsWith(":DCC "))
+            if (msg.startsWith(":DCC "))
                 return filterDCCOut(field[idx - 1] + ' ' + field[idx] + " :DCC ", msg.substring(5), helper);
             // fall through
         }
 
         // Allow PRIVMSG, but block CTCP (except ACTION).
-        if("PRIVMSG".equals(command) || "NOTICE".equals(command))
+        if ("PRIVMSG".equals(command) || "NOTICE".equals(command))
         {
             if (field.length < idx + 2)
                 return s;  // invalid, allow server response
@@ -363,7 +363,7 @@ abstract class IRCFilter {
             if (idx + 2 < field.length)
                 msg += ' ' + field[idx + 2];
 
-            if(msg.indexOf(0x01) >= 0) // CTCP marker ^A can be anywhere, not just immediately after the ':'
+            if (msg.indexOf(0x01) >= 0) // CTCP marker ^A can be anywhere, not just immediately after the ':'
             {
                     // CTCP
 
@@ -377,7 +377,7 @@ abstract class IRCFilter {
                     return null;
 
                 msg=msg.substring(2);
-                if(msg.startsWith("ACTION ")) {
+                if (msg.startsWith("ACTION ")) {
                     // /me says hello
                     return s;
                 }
@@ -394,7 +394,7 @@ abstract class IRCFilter {
             return s;
         }
 
-        if("USER".equals(command)) {
+        if ("USER".equals(command)) {
             // USER <username> <hostname> <servername> <realname> (RFC 1459)
             // USER <user> <mode> <unused> <realname> (RFC 2812)
             // <realname> may contain spaces, and thus must be prefixed with a colon.

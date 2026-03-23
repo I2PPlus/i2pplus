@@ -144,7 +144,7 @@ class ConnectionHandler {
                 throw new SocketTimeoutException("accept() timed out");
             }
             if (!_active) { // fail all the ones we had queued up
-                while(true) {
+                while (true) {
                     Packet packet = _synQueue.poll(); // fails immediately if empty
                     if (packet == null || packet.getOptionalDelay() == PoisonPacket.POISON_MAX_DELAY_REQUEST) {
                         break;

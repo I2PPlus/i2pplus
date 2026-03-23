@@ -64,7 +64,7 @@ public class UDPSource implements Source, Runnable {
         // create packet
         byte[] buf = new byte[MAX_SIZE];
         DatagramPacket pack = new DatagramPacket(buf, buf.length);
-        while(true) {
+        while (true) {
             try {
                 // receive...
                 this.sock.receive(pack);
@@ -78,7 +78,7 @@ public class UDPSource implements Source, Runnable {
                 // transfer to sink
                 this.sink.send(null, port, 0, nbuf);
                 //System.out.print("i");
-            } catch(Exception e) {
+            } catch (Exception e) {
                 Log log = I2PAppContext.getGlobalContext().logManager().getLog(getClass());
                 if (log.shouldWarn())
                     log.warn("error sending", e);

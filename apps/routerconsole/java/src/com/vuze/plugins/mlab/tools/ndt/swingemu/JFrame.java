@@ -56,7 +56,7 @@ public class
     public Panel
             getContentPane()
     {
-        return( content_pane );
+        return ( content_pane );
     }
 
     public void

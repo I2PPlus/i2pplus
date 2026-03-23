@@ -62,7 +62,7 @@ public class MultiSource implements Source, Sink {
         if (log.shouldDebug())
             log.debug("Sending " + data.length + " bytes to " + sinks.size() + " subscribers");
 
-        for(MSink ms : this.sinks) {
+        for (MSink ms : this.sinks) {
             this.sink.send(ms.dest, ms.fromPort, ms.toPort, data);
         }
     }

@@ -419,7 +419,7 @@ class NewsFetcher extends UpdateRunner {
     }
 
     private static List<URI> tokenize(String URLs) {
-        StringTokenizer tok = new StringTokenizer(URLs, " ,\r\n");
+        StringTokenizer tok = new StringTokenizer(URLs, ",\r\n");
         List<URI> rv = new ArrayList<URI>();
         while (tok.hasMoreTokens()) {
             try {rv.add(new URI(tok.nextToken().trim()));}

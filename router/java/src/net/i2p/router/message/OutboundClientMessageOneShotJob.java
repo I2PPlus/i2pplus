@@ -180,7 +180,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
 
     private static final int REPLY_REQUEST_INTERVAL = 60*1000;
 
-    private static final long[] RATES = new long[] { 60*1000l };
+    private static final long[] RATES = new long[] { 60*1000L };
 
     /**
      * Send it.
@@ -210,7 +210,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         // otherwise router config, otherwise default
         long overallExpiration = msg.getExpiration();
         if (overallExpiration > 0) {
-            if (overallExpiration < 24*60*60*1000l) {
+            if (overallExpiration < 24*60*60*1000L) {
                 if (_log.shouldWarn()) {
                     _log.warn("Client bug - interval instead of timestamp " + overallExpiration);
                 }

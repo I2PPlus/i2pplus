@@ -345,7 +345,7 @@ public class SimpleTimer2 {
             _nextRun = timeoutMs + System.currentTimeMillis();
             _cancelAfterRun = false;
 
-            switch(_state) {
+            switch (_state) {
                 case RUNNING:
                     _rescheduleAfterRun = true;  // signal that we need rescheduling.
                     break;
@@ -431,7 +431,7 @@ public class SimpleTimer2 {
             // always clear
             _rescheduleAfterRun = false;
 
-            switch(_state) {
+            switch (_state) {
                 case CANCELLED:  // fall through
                 case IDLE:
                     break; // my preference is to throw IllegalState here, but let it be.
@@ -482,7 +482,7 @@ public class SimpleTimer2 {
                 if (_rescheduleAfterRun)
                     throw new IllegalStateException(this + " rescheduleAfterRun cannot be true here");
 
-                switch(_state) {
+                switch (_state) {
                     case CANCELLED:
                         if (_log.shouldInfo())
                             _log.info("Not actually running: CANCELLED " + this);
@@ -527,7 +527,7 @@ public class SimpleTimer2 {
                 _log.log(Log.CRIT, _pool + ": Timed task " + this + " exited unexpectedly, please report", t);
             } finally { // must be in finally
                 synchronized(this) {
-                    switch(_state) {
+                    switch (_state) {
                         case SCHEDULED:  // fall through
                         case IDLE:
                             throw new IllegalStateException(this + " can't be " + _state);

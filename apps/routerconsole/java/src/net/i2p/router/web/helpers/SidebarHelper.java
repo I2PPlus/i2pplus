@@ -1278,7 +1278,7 @@ public class SidebarHelper extends HelperBase {
 
     static void saveSummaryBarSections(RouterContext ctx, String page, Map<Integer, String> sections) {
         StringBuilder buf = new StringBuilder(512);
-        for(String section : sections.values()) {buf.append(section).append(S);}
+        for (String section : sections.values()) {buf.append(section).append(S);}
         ctx.router().saveConfig(PROP_SUMMARYBAR + page, buf.toString());
     }
 

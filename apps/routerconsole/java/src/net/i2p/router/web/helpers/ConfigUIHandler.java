@@ -85,7 +85,7 @@ public class ConfigUIHandler extends FormHandler {
         // XSS filters # and ; but not =
         // We store the username as the part of an option key, so we can't handle '='
         if (name.contains("=")) {
-            addFormError(_t("User name may not contain '='"), true) ;
+            addFormError(_t("User name may not contain '='"), true);
             return;
         }
         byte[] b1 = DataHelper.getUTF8(name);

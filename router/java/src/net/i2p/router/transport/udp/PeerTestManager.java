@@ -168,7 +168,7 @@ class PeerTestManager {
 //    private static final int MAX_TEST_TIME = 30*1000;
     private static final int MAX_TEST_TIME = 20*1000;
     private static final long MAX_SKEW = 2*60*1000;
-    private static final long MAX_NONCE = (1l << 32) - 1l;
+    private static final long MAX_NONCE = (1L << 32) - 1L;
 
     // special markers for SSU2 when Charlie is firewalled
     private static final InetAddress PENDING_IP;

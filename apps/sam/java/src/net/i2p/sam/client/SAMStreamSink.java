@@ -273,7 +273,7 @@ public class SAMStreamSink {
                             _log.info("Datagram is from " + dest);
                             i++;
                         }
-                        for ( ; i < parts.length; i++) {
+                        for (; i < parts.length; i++) {
                             _log.info("Parameter: " + parts[i]);
                         }
                         int left = bais.available();
@@ -322,7 +322,7 @@ public class SAMStreamSink {
                         int dlen = 0;
                         byte[] buf = new byte[32768];
                         int len;
-                        while((len = in.read(buf)) >= 0) {
+                        while ((len = in.read(buf)) >= 0) {
                             if (!gotDest) {
                                 // eat the dest line
                                 for (int i = 0; i < len; i++) {
@@ -519,7 +519,7 @@ public class SAMStreamSink {
                 int dlen = 0;
                 byte buf[] = new byte[4096];
                 int len;
-                while((len = _in.read(buf)) >= 0) {
+                while ((len = _in.read(buf)) >= 0) {
                     if (!gotDest) {
                         // eat the dest line
                         for (int i = 0; i < len; i++) {
@@ -785,7 +785,7 @@ public class SAMStreamSink {
             _log.error("Error writing to " + _destFile, e);
             return false;
         } finally {
-            if(fos != null) try { fos.close(); } catch(IOException ioe) {}
+            if (fos != null) try { fos.close(); } catch (IOException ioe) {}
         }
         return true;
     }

@@ -53,7 +53,7 @@ public class I2PSinkAnywhere implements Sink {
     public synchronized void send(Destination to, int fromPort, int toPort, byte[] data) {
         // create payload
         byte[] payload;
-        if(!this.raw) {
+        if (!this.raw) {
             synchronized(this.maker) {
                 payload = this.maker.makeI2PDatagram(data);
             }

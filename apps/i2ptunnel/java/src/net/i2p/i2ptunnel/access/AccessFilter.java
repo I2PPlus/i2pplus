@@ -196,7 +196,7 @@ class AccessFilter implements StatefulConnectionFilter {
                 try {
                     reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
                     String b32;
-                    while((b32 = reader.readLine()) != null) {
+                    while ((b32 = reader.readLine()) != null) {
                         breached.add(b32);
                     }
                 } finally {

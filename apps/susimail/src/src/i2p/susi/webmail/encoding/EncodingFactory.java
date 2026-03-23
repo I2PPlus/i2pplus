@@ -46,9 +46,9 @@ public class EncodingFactory {
         // Let's not give the user a chance to break things
         //String list = Config.getProperty( CONFIG_ENCODING );
         String list = DEFAULT_ENCODINGS;
-        if( list != null ) {
+        if ( list != null ) {
             String[] classNames = list.split( ";" );
-            for( int i = 0; i < classNames.length; i++ ) {
+            for ( int i = 0; i < classNames.length; i++ ) {
                 try {
                     Class<?> c = Class.forName( classNames[i] );
                     Encoding e = (Encoding) (c.getDeclaredConstructor().newInstance());

@@ -495,7 +495,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         }
         if (fast) {
             stopped = true;
-        } // HACK: See above if(!fast)
+        } // HACK: See above if (!fast)
         if (_peerCoordinatorSet != null) {
             if (pc != null) {
                 _peerCoordinatorSet.remove(pc);

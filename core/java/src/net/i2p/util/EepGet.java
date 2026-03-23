@@ -545,7 +545,7 @@ public class EepGet {
             for (int i = 0; i < currentWrite; i++) {
                 _written++;
                 if ((_markSize > 0) && (_written % _markSize == 0)) {
-                    if ((_lineSize > 0) && (_written % ((long)_markSize*(long)_lineSize) == 0l)) {
+                    if ((_lineSize > 0) && (_written % ((long)_markSize*(long)_lineSize) == 0L)) {
                         long now = _context.clock().now();
                         long timeToSend = now - _lastComplete;
                         double timeInSeconds = timeToSend / 1000.0d;
@@ -1774,7 +1774,7 @@ public class EepGet {
                 (!path.endsWith(".gz") && !path.endsWith(".tgz")))
             buf.append("gzip");
         buf.append("\r\n");
-        if(!uaOverridden)
+        if (!uaOverridden)
             buf.append("User-Agent: " + USER_AGENT + "\r\n");
         if (_authState != null && _shouldProxy && _authState.authMode != AUTH_MODE.NONE) {
             buf.append("Proxy-Authorization: ");

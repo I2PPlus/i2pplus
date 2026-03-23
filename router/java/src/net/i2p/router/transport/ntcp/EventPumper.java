@@ -143,7 +143,7 @@ class EventPumper implements Runnable {
 
     private static final TryCache<ByteBuffer> _bufferCache = new TryCache<>(new BufferFactory(), MIN_BUFS);
     private static final Set<Status> STATUS_OK = EnumSet.of(Status.OK, Status.IPV4_OK_IPV6_UNKNOWN, Status.IPV4_OK_IPV6_FIREWALLED);
-    private static final long[] RATES = { 60*1000, 10*60*1000l };
+    private static final long[] RATES = { 60*1000, 10*60*1000L };
 
     public EventPumper(RouterContext ctx, NTCPTransport transport) {
         _context = ctx;

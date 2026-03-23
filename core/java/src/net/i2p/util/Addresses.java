@@ -76,7 +76,7 @@ public abstract class Addresses {
  *  @since 0.9.54
  */
     public static boolean isConnected(AddressType type) {
-        switch(type) {
+        switch (type) {
             case IPV6:
                 return isConnectedIPv6();
 
@@ -241,7 +241,7 @@ public abstract class Addresses {
                             newMacs.add(DataHelper.toString(mac));
                         }
                     } catch (SocketException ioe) {}
-                    for(Enumeration<InetAddress> addrs =  ifc.getInetAddresses(); addrs.hasMoreElements();) {
+                    for (Enumeration<InetAddress> addrs =  ifc.getInetAddresses(); addrs.hasMoreElements();) {
                         InetAddress addr = addrs.nextElement();
                         boolean isv4 = addr instanceof Inet4Address;
                         if (isv4)
@@ -304,7 +304,7 @@ public abstract class Addresses {
                     NetworkInterface ifc = ifcs.nextElement();
                     if (!ifc.isUp())
                         continue;
-                    for(Enumeration<InetAddress> addrs =  ifc.getInetAddresses(); addrs.hasMoreElements();) {
+                    for (Enumeration<InetAddress> addrs =  ifc.getInetAddresses(); addrs.hasMoreElements();) {
                         InetAddress addr = addrs.nextElement();
                         byte[] ip = addr.getAddress();
                         if (ip.length == 16 && (ip[0] & 0xfe) == 0x02)
@@ -334,7 +334,7 @@ public abstract class Addresses {
                     NetworkInterface ifc = ifcs.nextElement();
                     if (!ifc.isUp())
                         continue;
-                    for(Enumeration<InetAddress> addrs =  ifc.getInetAddresses(); addrs.hasMoreElements();) {
+                    for (Enumeration<InetAddress> addrs =  ifc.getInetAddresses(); addrs.hasMoreElements();) {
                         InetAddress addr = addrs.nextElement();
                         byte[] ip = addr.getAddress();
                         if (ip.length == 16 && (ip[0] & 0xfe) == 0x02) {
@@ -939,7 +939,7 @@ public abstract class Addresses {
                     continue;
                 buf.setLength(0);
                 int i = 0;
-                while(true) {
+                while (true) {
                     buf.append(as.substring(i, i+4));
                     i += 4;
                     if (i >= 32)
@@ -1138,7 +1138,7 @@ public abstract class Addresses {
         Set<String> macs = new TreeSet<String>();
         for (String m : _macCache) {
             int i = 0;
-            while(true) {
+            while (true) {
                 buf.append(m.substring(i, i+2));
                 i += 2;
                 if (i >= 12)

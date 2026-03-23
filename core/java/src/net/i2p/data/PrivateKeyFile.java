@@ -556,7 +556,7 @@ public class PrivateKeyFile {
      *  @since 0.9.26
      */
     public Destination createIfAbsent(SigType type) throws I2PException, IOException, DataFormatException {
-        if(!this.file.exists()) {
+        if (!this.file.exists()) {
             OutputStream out = null;
             try {
                 if (this.client != null) {
@@ -584,7 +584,7 @@ public class PrivateKeyFile {
      *  @since 0.9.42
      */
     private Destination createIfAbsent(SigType type, EncType ptype) throws I2PException, IOException, DataFormatException {
-        if(!this.file.exists()) {
+        if (!this.file.exists()) {
             OutputStream out = null;
             try {
                 if (this.client != null) {

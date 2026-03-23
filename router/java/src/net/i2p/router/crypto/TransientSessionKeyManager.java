@@ -440,7 +440,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
                 _log.warn("No session for failed TagSet: " + ts);
             return;
         }
-        if(!key.equals(sess.getCurrentKey())) {
+        if (!key.equals(sess.getCurrentKey())) {
             if (_log.shouldWarn())
                 _log.warn("Wrong session key (wanted " + sess.getCurrentKey() + ") for failed TagSet: " + ts);
             return;
@@ -462,7 +462,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
                 _log.warn("No session for ACKed TagSet: " + ts);
             return;
         }
-        if(!key.equals(sess.getCurrentKey())) {
+        if (!key.equals(sess.getCurrentKey())) {
             if (_log.shouldWarn())
                 _log.warn("Wrong session key (wanted " + sess.getCurrentKey() + ") for ACKed TagSet: " + ts);
             return;

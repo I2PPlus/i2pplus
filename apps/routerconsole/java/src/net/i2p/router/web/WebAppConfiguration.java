@@ -114,7 +114,7 @@ public class WebAppConfiguration implements Configuration {
         }
         if (cp == null)
             return;
-        StringTokenizer tok = new StringTokenizer(cp, " ,");
+        StringTokenizer tok = new StringTokenizer(cp, ",");
         StringBuilder buf = new StringBuilder();
         Set<URI> systemCP = getSystemClassPath(i2pContext);
         while (tok.hasMoreTokens()) {

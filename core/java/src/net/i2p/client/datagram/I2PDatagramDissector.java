@@ -101,7 +101,7 @@ public final class I2PDatagramDissector {
             //Log log = I2PAppContext.getGlobalContext().logManager().getLog(I2PDatagramDissector.class);
             //log.error("Error loading datagram", e);
             throw new DataFormatException("Error loading datagram", e);
-        //} catch(AssertionError e) {
+        //} catch (AssertionError e) {
         //    Log log = I2PAppContext.getGlobalContext().logManager().getLog(I2PDatagramDissector.class);
         //    log.error("Assertion failed!", e);
         }
@@ -218,7 +218,7 @@ public final class I2PDatagramDissector {
      */
     public void verifySignature() throws I2PInvalidDatagramException {
         // first check if it already got validated
-        if(this.valid)
+        if (this.valid)
             return;
 
         if (rxSign == null || rxSign.getData() == null || rxDest == null)

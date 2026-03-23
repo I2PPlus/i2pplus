@@ -37,8 +37,8 @@ public class DeliveryInstructionsTest extends StructureTest {
         ds.readBytes(temp, 0);
         byte[] temp2 = new byte[100];
         int len2 = ds.writeBytes(temp2, 0);
-        assert(len2 == len);
-        assert(DataHelper.eq(temp, 0, temp2, 0, len));
+        assert (len2 == len);
+        assert (DataHelper.eq(temp, 0, temp2, 0, len));
     }
 
     public DataStructure createDataStructure() throws DataFormatException {

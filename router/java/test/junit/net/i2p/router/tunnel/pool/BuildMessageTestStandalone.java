@@ -141,7 +141,7 @@ public class BuildMessageTestStandalone extends TestCase {
             boolean isInGW = req.readIsInboundGateway();
             boolean isOutEnd = req.readIsOutboundEndpoint();
             long time = req.readRequestTime();
-            long now = (ctx.clock().now() / (60l*60l*1000l)) * (60*60*1000);
+            long now = (ctx.clock().now() / (60L*60L*1000L)) * (60*60*1000);
             int ourSlot = -1;
             for (int j = 0; j < TunnelBuildMessage.MAX_RECORD_COUNT; j++) {
                 if (msg.getRecord(j) == null) {

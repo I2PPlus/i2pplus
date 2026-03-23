@@ -179,7 +179,7 @@ riCe6OlAEiNpcc6mMyIYYWFICbrDFTrDR3wXqwc/Jkcx6L5VVWoagpSzbo3yGhc=
         String propertyTrustedKeys = context.getProperty(PROP_TRUSTED_KEYS);
 
         if ( (propertyTrustedKeys != null) && (propertyTrustedKeys.length() > 0) ) {
-            StringTokenizer propertyTrustedKeysTokens = new StringTokenizer(propertyTrustedKeys, " ,\r\n");
+            StringTokenizer propertyTrustedKeysTokens = new StringTokenizer(propertyTrustedKeys, ",\r\n");
 
             while (propertyTrustedKeysTokens.hasMoreTokens()) {
                 // If a key from the defaults, use the same name

@@ -748,7 +748,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         File errorDir = new File(ctx.getBaseDir(), "docs" + SLASH + "proxy");
         File file = new File(errorDir, base + "-header.ht");
         try {return readFile(ctx, file);}
-        catch(IOException ioe) {return backup;}
+        catch (IOException ioe) {return backup;}
     }
 
     /** these strings go in the jar, not the war */
@@ -770,7 +770,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
                 // strip out the addressbook links
                 reader = new InputStreamReader(new FileInputStream(file), "UTF-8");
                 int len;
-                while((len = reader.read(buf)) > 0) {out.append(buf, 0, len);}
+                while ((len = reader.read(buf)) > 0) {out.append(buf, 0, len);}
                 reader.close();
                 if (!hasSusiDNS) {
                     DataHelper.replace(out, "<a href=\"http://127.0.0.1:7657/susidns/index\">_(\"Addressbook\")</a>", "");
@@ -797,7 +797,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
                 reader = new TranslateReader(ctx, BUNDLE_NAME, new StringReader(s));
             }
             int len;
-            while((len = reader.read(buf)) > 0) {out.append(buf, 0, len);}
+            while ((len = reader.read(buf)) > 0) {out.append(buf, 0, len);}
             // Do we need to replace http://127.0.0.1:7657 console links in the error page?
             // Get the registered host and port from the PortMapper.
             String url = ctx.portMapper().getConsoleURL();
@@ -809,7 +809,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         } finally {
             try {
                 if (reader != null) {reader.close();}
-            } catch(IOException foo) {}
+            } catch (IOException foo) {}
         }
         // we won't ever get here
     }
@@ -941,7 +941,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         String header = getErrorPage(error, ERR_DESTINATION_UNKNOWN);
         String message = ise != null ? ise.getLocalizedMessage() : "unknown error";
         try {writeErrorMessage(header, message, out, targetRequest, usingWWWProxy, wwwProxy);}
-        catch(IOException ioe) {}
+        catch (IOException ioe) {}
     }
 
     /**
@@ -1011,7 +1011,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
                 if (uri.startsWith("http://")) {uri = uri.substring(7);}
                 if (uri.endsWith("/")) {uri = uri.substring(0, uri.length() - 1);}
                 StringTokenizer tok = new StringTokenizer(jumpServers, ", ");
-                while(tok.hasMoreTokens()) {
+                while (tok.hasMoreTokens()) {
                     String jurl = tok.nextToken();
                     String jumphost;
                     try {
@@ -1023,7 +1023,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
                         }
                         jumphost = jumphost.toLowerCase(Locale.US);
                         if (!jumphost.endsWith(".i2p")) {continue;}
-                    } catch(URISyntaxException use) {continue;}
+                    } catch (URISyntaxException use) {continue;}
                     // Skip jump servers we don't know
                     if (!jumphost.endsWith(".b32.i2p")) {
                         Destination dest = _context.namingService().lookup(jumphost);
@@ -1080,7 +1080,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
             int idx = uri.indexOf(h);
             if (idx < 0) {return uri;}
             return uri.substring(0, idx) + hu + uri.substring(idx + h.length(), uri.length());
-        } catch(URISyntaxException use) {}
+        } catch (URISyntaxException use) {}
         return uri;
     }
 

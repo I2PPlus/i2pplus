@@ -34,7 +34,7 @@ public class FilterFactory {
         try {
             reader = new BufferedReader(new InputStreamReader(new FileInputStream(definition), StandardCharsets.UTF_8));
             String line;
-            while((line = reader.readLine()) != null) {
+            while ((line = reader.readLine()) != null) {
                 line = line.trim();
                 if (line.length() == 0)
                     continue;

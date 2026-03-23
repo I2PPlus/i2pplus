@@ -103,7 +103,7 @@ public class DataHelperTest {
         boolean error = false;
         try{
             checkDate(cal.getTime());
-        }catch(Exception e){
+        }catch (Exception e){
             error = true;
         }
         assertTrue(error);

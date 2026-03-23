@@ -339,7 +339,7 @@ public final class KeyGenerator {
                 if (!ECConstants.isBCAvailable())
                     throw new GeneralSecurityException(pname + " KPG failed for " + type, pe);
                 if (log.shouldWarn())
-                    log.warn(pname + " KPG failed for " + type + ", trying BC"  /* , pe */ );
+                    log.warn(pname + " KPG failed for " + type + ", trying BC"  /*, pe */ );
                 try {
                     kpg = KeyPairGenerator.getInstance(type.getBaseAlgorithm().getName(), "BC");
                     kpg.initialize(type.getParams(), _context.random());

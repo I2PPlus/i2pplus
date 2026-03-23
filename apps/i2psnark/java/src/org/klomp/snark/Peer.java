@@ -93,10 +93,10 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     private static final byte[] HANDSHAKE = DataHelper.getASCII("BitTorrent protocol");
     // See BEP 4 for definitions
     //  bytes per bt spec:                         0011223344556677
-    private static final long OPTION_EXTENSION = 0x0000000000100000l;
-    private static final long OPTION_FAST = 0x0000000000000004l;
-    // private static final long OPTION_DHT       = 0x0000000000000001l;
-    // private static final long OPTION_AZMP      = 0x1000000000000000l;
+    private static final long OPTION_EXTENSION = 0x0000000000100000L;
+    private static final long OPTION_FAST = 0x0000000000000004L;
+    // private static final long OPTION_DHT       = 0x0000000000000001L;
+    // private static final long OPTION_AZMP      = 0x1000000000000000L;
     // hybrid support TODO
     private static final long OPTION_V2 = 0x0000000000000010L;
     private long options;

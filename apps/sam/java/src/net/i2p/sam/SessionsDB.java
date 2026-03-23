@@ -37,7 +37,7 @@ class SessionsDB {
     private final HashMap<String, SessionRecord> map;
 
     public SessionsDB() {
-        map = new HashMap<String, SessionRecord>() ;
+        map = new HashMap<String, SessionRecord>();
     }
 
     public synchronized void put(String nick, SessionRecord session)
@@ -52,7 +52,7 @@ class SessionsDB {
             }
         }
         session.createThreadGroup("SAM session "+nick);
-        map.put(nick, session) ;
+        map.put(nick, session);
     }
 
     /** @since 0.9.25 */
@@ -63,7 +63,7 @@ class SessionsDB {
             throw new ExistingIdException();
         }
         session.createThreadGroup("SAM session "+nick);
-        map.put(nick, session) ;
+        map.put(nick, session);
     }
 
     /** @return true if removed */

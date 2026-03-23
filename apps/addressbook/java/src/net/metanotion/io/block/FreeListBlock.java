@@ -53,7 +53,7 @@ import net.metanotion.io.RandomAccessInterface;
  * </pre>
  */
 class FreeListBlock {
-    private static final long MAGIC = 0x2366724c69737423l;  // "#frList#"
+    private static final long MAGIC = 0x2366724c69737423L;  // "#frList#"
     private static final long MAGIC_FREE = 0x7e2146524545217el;  // "~!FREE!~"
     private static final int HEADER_LEN = 16;
     private static final int MAX_SIZE = (BlockFile.PAGESIZE - HEADER_LEN) / 4;
@@ -76,9 +76,9 @@ class FreeListBlock {
         if (len > MAX_SIZE)
             throw new IOException("Bad freelist size " + len);
         branches = new int[MAX_SIZE];
-        if(len > 0) {
+        if (len > 0) {
             int good = 0;
-            for(int i=0;i<len;i++) {
+            for (int i=0;i<len;i++) {
                 int fpg = file.readInt();
                 if (fpg > BlockFile.METAINDEX_PAGE)
                     branches[good++] = fpg;
@@ -97,7 +97,7 @@ class FreeListBlock {
         file.writeLong(MAGIC);
         file.writeInt(nextPage);
         file.writeInt(len);
-        for(int i=0;i<len;i++) { file.writeInt(branches[i]); }
+        for (int i=0;i<len;i++) { file.writeInt(branches[i]); }
     }
 
     /**

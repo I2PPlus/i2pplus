@@ -156,7 +156,7 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
      */
     private int freeContinuationPages(int curPage) throws IOException {
         int rv = 0;
-        while(curPage > 0) {
+        while (curPage > 0) {
             BlockFile.pageSeek(bf.file, curPage);
             int magic = bf.file.readInt();
             if (magic != BlockFile.MAGIC_CONT)
@@ -209,9 +209,9 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
             byte[] keyData;
             byte[] valData;
 
-            for(int i=0;i<nKeys;i++) {
-                if((pageCounter[0] + 4) > BlockFile.PAGESIZE) {
-                    if(curNextPage[0] == 0) {
+            for (int i=0;i<nKeys;i++) {
+                if ((pageCounter[0] + 4) > BlockFile.PAGESIZE) {
+                    if (curNextPage[0] == 0) {
                         curNextPage[0] = bf.allocPage();
                         BlockFile.pageSeek(bf.file, curNextPage[0]);
                         bf.file.writeInt(BlockFile.MAGIC_CONT);
@@ -327,7 +327,7 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
         bss.nextPage = bf.file.readUnsignedInt();
         bss.spanSize = bf.file.readUnsignedShort();
         bss.nKeys = bf.file.readUnsignedShort();
-        if(bss.spanSize < 1 || bss.spanSize > SkipSpan.MAX_SIZE || bss.nKeys > bss.spanSize) {
+        if (bss.spanSize < 1 || bss.spanSize > SkipSpan.MAX_SIZE || bss.nKeys > bss.spanSize) {
             bf.log.error("Invalid span size " + bss.nKeys + " / "+  bss.spanSize);
             bss.nKeys = 0;
             bss.spanSize = bf.spanSize;
@@ -364,8 +364,8 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
         pageCounter[0] = HEADER_LEN;
 //        System.out.println("Span Load " + sz + " nKeys " + nKeys + " page " + curPage);
         int fail = 0;
-        for(int i=0;i<this.nKeys;i++) {
-            if((pageCounter[0] + 4) > BlockFile.PAGESIZE) {
+        for (int i=0;i<this.nKeys;i++) {
+            if ((pageCounter[0] + 4) > BlockFile.PAGESIZE) {
                 BlockFile.pageSeek(this.bf.file, curNextPage[0]);
                 int magic = bf.file.readInt();
                 if (magic != BlockFile.MAGIC_CONT) {
@@ -487,9 +487,9 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
         BSkipSpan<K, V> bss = this;
         // findbugs ok (set in load() above)
         int np = nextPage;
-        while(np != 0) {
+        while (np != 0) {
             BSkipSpan<K, V> temp = bsl.spanHash.get(Integer.valueOf(np));
-            if(temp != null) {
+            if (temp != null) {
                 bss.next = temp;
                 break;
             }
@@ -505,9 +505,9 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
         // Go backwards to fill in the rest. This never happens.
         bss = this;
         np = prevPage;
-        while(np != 0) {
+        while (np != 0) {
             BSkipSpan<K, V> temp = bsl.spanHash.get(Integer.valueOf(np));
-            if(temp != null) {
+            if (temp != null) {
                 bss.prev = temp;
                 break;
             }

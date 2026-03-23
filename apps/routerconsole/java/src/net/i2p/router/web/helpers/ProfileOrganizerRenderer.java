@@ -400,9 +400,9 @@ class ProfileOrganizerRenderer {
                 if (dbh != null && isFF && !isUnreachable && !isBanned && prof.getLastHeardFrom() > 0) {
                     displayed++;
                     String integration = num(prof.getIntegrationValue()).replace(".00", "");
-                    String hourfail = davg(dbh, 60*60*1000l, ra);
+                    String hourfail = davg(dbh, 60*60*1000L, ra);
                     String hourfailValue = hourfail.replace("%", "");
-                    String dayfail = davg(dbh, 24*60*60*1000l, ra);
+                    String dayfail = davg(dbh, 24*60*60*1000L, ra);
                     now = _context.clock().now();
                     long heard = prof.getFirstHeardAbout();
 
@@ -417,9 +417,9 @@ class ProfileOrganizerRenderer {
                        .append("\"><span class=percentBarText>")
                        .append(hourfail)
                        .append("</span></span></span></td><td data-sort=")
-                       .append(avg(prof, 60*60*1000l, ra))
+                       .append(avg(prof, 60*60*1000L, ra))
                        .append(">")
-                       .append(avg(prof, 60*60*1000l, ra))
+                       .append(avg(prof, 60*60*1000L, ra))
                        .append("</td><td data-sort=")
                        .append(heard)
                        .append(">")

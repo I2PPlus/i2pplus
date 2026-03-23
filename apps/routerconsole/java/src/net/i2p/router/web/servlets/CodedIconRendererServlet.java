@@ -50,7 +50,7 @@ public class CodedIconRendererServlet extends HttpServlet {
                     os.write(data);
                     os.flush();
                     os.close();
-                } catch(IOException e) {
+                } catch (IOException e) {
                     I2PAppContext.getGlobalContext().logManager().getLog(getClass()).warn("Error writing binary image data for plugin", e);
                 }
             } else {
@@ -71,7 +71,7 @@ public class CodedIconRendererServlet extends HttpServlet {
                         FileUtil.readFile(file, base, os);
                     }
                 }
-            } catch(IOException e) {
+            } catch (IOException e) {
                 if (!srs.isCommitted()) {srs.sendError(403, e.toString());}
                 else {
                     I2PAppContext.getGlobalContext().logManager().getLog(getClass()).warn("Error serving plugin.png", e);

@@ -80,7 +80,7 @@ public class MTU {
                     continue;
                 }
                 interfaces.add(ifc);
-                for(Enumeration<InetAddress> addrs =  ifc.getInetAddresses(); addrs.hasMoreElements();) {
+                for (Enumeration<InetAddress> addrs =  ifc.getInetAddresses(); addrs.hasMoreElements();) {
                     InetAddress addr = addrs.nextElement();
                     if (ia.equals(addr)) {
                         try {
@@ -136,7 +136,7 @@ public class MTU {
             int rv = 1501;
             outer:
             for (NetworkInterface ifc : interfaces) {
-                for(Enumeration<InetAddress> addrs =  ifc.getInetAddresses(); addrs.hasMoreElements();) {
+                for (Enumeration<InetAddress> addrs =  ifc.getInetAddresses(); addrs.hasMoreElements();) {
                     InetAddress addr = addrs.nextElement();
                     if (isIPv6 != (addr instanceof Inet6Address))
                         continue;

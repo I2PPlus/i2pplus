@@ -103,7 +103,7 @@ class SAMv2StreamSession extends SAMStreamSession
         {
             if (_log.shouldDebug())
                     _log.debug ( "The specified id (" + id + ") is already in use" );
-            return false ;
+            return false;
         }
 
         Destination d = SAMUtils.getDest(dest);
@@ -116,9 +116,9 @@ class SAMv2StreamSession extends SAMStreamSession
 
             // non-blocking connection (SAMv2)
         StreamConnector connector = new StreamConnector ( id, d, opts );
-        I2PAppThread connectThread = new I2PAppThread ( connector, "StreamConnector" + id ) ;
-        connectThread.start() ;
-        return true ;
+        I2PAppThread connectThread = new I2PAppThread ( connector, "StreamConnector" + id );
+        connectThread.start();
+        return true;
     }
 
         /**
@@ -129,8 +129,8 @@ class SAMv2StreamSession extends SAMStreamSession
     private class StreamConnector implements Runnable
     {
         private final int id;
-        private final Destination      dest ;
-        private final I2PSocketOptions opts ;
+        private final Destination      dest;
+        private final I2PSocketOptions opts;
 
                 /**
                  * Create a new SAM STREAM session socket reader
@@ -145,9 +145,9 @@ class SAMv2StreamSession extends SAMStreamSession
             if (_log.shouldDebug())
                         _log.debug ( "Instantiating new SAM STREAM connector" );
 
-            this.id   = id ;
-            this.opts = opts ;
-            this.dest = dest ;
+            this.id   = id;
+            this.opts = opts;
+            this.dest = dest;
         }
 
         public void run()
@@ -221,7 +221,7 @@ class SAMv2StreamSession extends SAMStreamSession
     @Override
         protected StreamSender newStreamSender ( I2PSocket s, int id ) throws IOException
     {
-        return new V2StreamSender ( s, id ) ;
+        return new V2StreamSender ( s, id );
     }
 
     @Override
@@ -276,17 +276,17 @@ class SAMv2StreamSession extends SAMStreamSession
                 if ( _dataSize >= SOCKET_HANDLER_BUF_SIZE )
                 {
                     _cache.release ( ba, false );
-                    recv.streamSendAnswer ( _id, "FAILED", "BUFFER_FULL" ) ;
+                    recv.streamSendAnswer ( _id, "FAILED", "BUFFER_FULL" );
                 }
                 else
                 {
-                    _dataSize += size ;
+                    _dataSize += size;
                     _data.add ( ba );
                     _data.notifyAll();
 
                     if ( _dataSize >= SOCKET_HANDLER_BUF_SIZE )
                     {
-                        recv.streamSendAnswer ( _id, "OK", "BUFFER_FULL" ) ;
+                        recv.streamSendAnswer ( _id, "OK", "BUFFER_FULL" );
                     }
                     else
                     {
@@ -360,7 +360,7 @@ class SAMv2StreamSession extends SAMStreamSession
                     {
                         if ( !_data.isEmpty() )
                         {
-                            int formerSize = _dataSize ;
+                            int formerSize = _dataSize;
                             data = _data.remove ( 0 );
                             _dataSize -= data.getValid();
 
@@ -456,9 +456,9 @@ class SAMv2StreamSession extends SAMStreamSession
     @SuppressWarnings("PMD.CloseResource")
     public class SAMv2StreamSessionSocketReader extends SAMv1StreamSessionSocketReader
     {
-        protected boolean nolimit       ;
-        protected long    limit         ;
-        protected long    totalReceived ;
+        protected boolean nolimit      ;
+        protected long    limit        ;
+        protected long    totalReceived;
 
                 /**
                  * Create a new SAM STREAM session socket reader
@@ -475,9 +475,9 @@ class SAMv2StreamSession extends SAMStreamSession
         {
             synchronized (runningLock)
             {
-                this.limit   = limit    ;
-                this.nolimit = nolimit  ;
-                runningLock.notifyAll() ;
+                this.limit   = limit   ;
+                this.nolimit = nolimit ;
+                runningLock.notifyAll();
             }
             if (_log.shouldDebug())
                         _log.debug ( "new limit set for socket reader " + id + " : " + (nolimit ? "NOLIMIT" : limit + " bytes" ) );
@@ -503,13 +503,13 @@ class SAMv2StreamSession extends SAMStreamSession
                         while ( stillRunning && ( !nolimit && totalReceived >= limit) )
                         {
                             try{
-                                runningLock.wait() ;
+                                runningLock.wait();
                             }
                             catch (InterruptedException ie)
                             {}
                         }
                         if ( !stillRunning )
-                                    break ;
+                                    break;
                     }
 
                             // not ByteBuffer to avoid Java 8/9 issues
@@ -523,7 +523,7 @@ class SAMv2StreamSession extends SAMStreamSession
                         break;
                     }
 
-                    totalReceived += read ;
+                    totalReceived += read;
                             // not ByteBuffer to avoid Java 8/9 issues with flip()
                     ((Buffer)data).flip();
                     recv.receiveStreamBytes ( id, data );

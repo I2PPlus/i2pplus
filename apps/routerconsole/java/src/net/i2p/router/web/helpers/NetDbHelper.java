@@ -229,7 +229,7 @@ public class NetDbHelper extends FormHandler {
 
     public void setClientPage(String f) {
         try {}
-        catch(Exception e) {}
+        catch (Exception e) {}
     }
 
     /**

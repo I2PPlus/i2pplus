@@ -50,7 +50,7 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
 
         // add to the defaults for every 128MB of RAM, up to 512MB
         long maxMemory = SystemVersion.getMaxMemory();
-        int factor = (int) Math.max(1l, Math.min(4l, 1 + (maxMemory / (128*1024*1024l))));
+        int factor = (int) Math.max(1L, Math.min(4L, 1 + (maxMemory / (128*1024*1024L))));
         boolean slow = SystemVersion.isSlow();
         RETURN_UNUSED_TO_XDH = slow;
         if (slow) {factor *= 2;}

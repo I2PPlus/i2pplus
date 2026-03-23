@@ -581,7 +581,7 @@ public class WebMail extends HttpServlet {
                     String content = sw.toString();
                     buf.append(content);
                 }
-                catch(UnsupportedEncodingException uee) {
+                catch (UnsupportedEncodingException uee) {
                     showBody = false;
                     reason = _t("Charset \\''{0}\\'' not supported.", quoteHTML(mailPart.charset)) + br;
                 }
@@ -728,7 +728,7 @@ public class WebMail extends HttpServlet {
                             sessionObject.error += _t("POP3 port number is not in range 0..65535.") + '\n';
                             doContinue = false;
                         }
-                    } catch(NumberFormatException nfe) {
+                    } catch (NumberFormatException nfe) {
                         sessionObject.error += _t("POP3 port number is invalid.") + '\n';
                         doContinue = false;
                     }
@@ -746,7 +746,7 @@ public class WebMail extends HttpServlet {
                             sessionObject.error += _t("SMTP port number is not in range 0..65535.") + '\n';
                             doContinue = false;
                         }
-                    } catch(NumberFormatException nfe) {
+                    } catch (NumberFormatException nfe) {
                         sessionObject.error += _t("SMTP port number is invalid.") + '\n';
                         doContinue = false;
                     }
@@ -1488,7 +1488,7 @@ public class WebMail extends HttpServlet {
                 if (part != null) {
                     if (sendAttachment(sessionObject, part, response, isRaw)) {return true;}
                 }
-            } catch(NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) {}
             // error if we get here
             try {response.sendError(404, _t("Attachment not found."));}
             catch (IOException ioe) {}
@@ -1729,7 +1729,7 @@ public class WebMail extends HttpServlet {
                         int pageSize = Math.max(5, Integer.parseInt(request.getParameter(PAGESIZE)));
                         int oldPageSize = folder.getPageSize();
                         if (pageSize != oldPageSize) {folder.setPageSize(pageSize);}
-                    } catch(NumberFormatException nfe) {}
+                    } catch (NumberFormatException nfe) {}
                 }
 
                 Config.saveConfiguration(props);
@@ -1755,7 +1755,7 @@ public class WebMail extends HttpServlet {
                 props.setProperty(Folder.PAGESIZE, String.valueOf(pageSize));
                 Config.saveConfiguration(props);
             } catch (IOException ioe) {sessionObject.error = ioe.toString();}
-            catch(NumberFormatException nfe) {sessionObject.error += _t("Invalid pagesize number, resetting to default value.") + '\n';}
+            catch (NumberFormatException nfe) {sessionObject.error += _t("Invalid pagesize number, resetting to default value.") + '\n';}
         } else if (buttonPressed(request, CANCEL)) {
             Folder<String> folder = getCurrentFolder(sessionObject, request);
             state = (folder != null) ? State.LIST : State.AUTH;
@@ -1900,7 +1900,7 @@ public class WebMail extends HttpServlet {
             URI uri = new URI(requrl);
             host = uri.getHost();
             me = uri.getHost() + ':' + uri.getPort();
-        } catch(URISyntaxException use) {}
+        } catch (URISyntaxException use) {}
 
         httpRequest.setCharacterEncoding("UTF-8");
 
@@ -2824,7 +2824,7 @@ public class WebMail extends HttpServlet {
         long total = draft.getSize();
         boolean multipart = attachments != null && !attachments.isEmpty();
         if (multipart) {
-            for(Attachment a : attachments) {
+            for (Attachment a : attachments) {
                 total += a.getSize();
             }
         }
@@ -3085,7 +3085,7 @@ public class WebMail extends HttpServlet {
 
         if (sessionObject.attachments != null && !sessionObject.attachments.isEmpty()) {
             boolean wroteHeader = false;
-            for(Attachment attachment : sessionObject.attachments) {
+            for (Attachment attachment : sessionObject.attachments) {
                 String attachSize = DataHelper.formatSize2(attachment.getSize());
                 attachSize = attachSize.replace("i", "");
                 if (!wroteHeader) {

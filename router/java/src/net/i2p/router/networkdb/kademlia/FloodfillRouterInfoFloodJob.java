@@ -39,18 +39,18 @@ class FloodfillRouterInfoFloodJob extends JobImpl {
 
         List<Hash> peers = sel.selectFloodfillParticipants(getContext().routerHash(), FLOOD_PEERS, null);
 
-        for(Hash ri: peers) {
+        for (Hash ri: peers) {
             // Iterate through list of nearby (ff) peers
             dsm = new DatabaseStoreMessage(getContext());
             dsm.setMessageExpiration(getContext().clock().now() + 10*1000);
             dsm.setEntry(getContext().router().getRouterInfo());
             nextPeerInfo = getContext().netDb().lookupRouterInfoLocally(ri);
-            if(nextPeerInfo == null) {
+            if (nextPeerInfo == null) {
                 continue;
             }
             outMsg = new OutNetMessage(getContext(), dsm, getContext().clock().now()+10*1000, OutNetMessage.PRIORITY_MY_NETDB_STORE, nextPeerInfo);
             getContext().outNetMessagePool().add(outMsg); // Whoosh!
-            if(_log.shouldDebug()) {
+            if (_log.shouldDebug()) {
                 _log.logAlways(Log.DEBUG, "Sending our RouterInfo to [" + nextPeerInfo.getHash().toBase64().substring(0,6) + "]");
             }
         }

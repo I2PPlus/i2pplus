@@ -73,7 +73,7 @@ public enum SigType {
     RedDSA_SHA512_Ed25519(11, 32, 32, 64, 64, SigAlgo.EdDSA, "SHA-512", "SHA512withEdDSA",
                           EdDSANamedCurveTable.getByName("ed25519-sha-512"), "1.3.101.101", "0.9.39"),
 
-    ;
+   ;
 
     // TESTING....................
 

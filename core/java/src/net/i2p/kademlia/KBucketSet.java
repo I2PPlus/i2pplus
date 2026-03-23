@@ -550,7 +550,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
             BigInteger nonz;
             if (numNonZero <= 62) {
                 // add one to ensure nonzero
-                long nz = 1 + _context.random().nextLong((1l << numNonZero) - 1);
+                long nz = 1 + _context.random().nextLong((1L << numNonZero) - 1);
                 nonz = BigInteger.valueOf(nz);
             } else {
                 // loop to ensure nonzero

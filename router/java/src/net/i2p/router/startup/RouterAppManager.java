@@ -112,7 +112,7 @@ public class RouterAppManager extends ClientAppManagerImpl {
      */
     @Override
     public void notify(ClientApp app, ClientAppState state, String message, Exception e) {
-        switch(state) {
+        switch (state) {
             case UNINITIALIZED:
             case INITIALIZED:
                 if (_log.shouldWarn())

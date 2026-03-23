@@ -147,7 +147,7 @@ public class GeneralHelper {
                 String tgts = props.getProperty(TunnelController.PROP_DEST);
                 if (tgts != null) {
                     altNames.add(intfc);
-                    String[] hosts = DataHelper.split(tgts, "[ ,]");
+                    String[] hosts = DataHelper.split(tgts, "[,]");
                     for (String h : hosts) {
                         int colon = h.indexOf(':');
                         if (colon >= 0) {h = h.substring(0, colon);}

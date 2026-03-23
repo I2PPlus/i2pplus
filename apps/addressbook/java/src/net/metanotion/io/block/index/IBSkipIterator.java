@@ -60,7 +60,7 @@ public class IBSkipIterator<K extends Comparable<? super K>, V> extends SkipIter
     @Override
     public V next() {
         V o;
-        if(index < ss.nKeys) {
+        if (index < ss.nKeys) {
             if (ss.vals == null) {
                 try {
                     ((IBSkipSpan)ss).seekAndLoadData();
@@ -73,9 +73,9 @@ public class IBSkipIterator<K extends Comparable<? super K>, V> extends SkipIter
             throw new NoSuchElementException();
         }
 
-        if(index < (ss.nKeys-1)) {
+        if (index < (ss.nKeys-1)) {
             index++;
-        } else if(ss.next != null) {
+        } else if (ss.next != null) {
             ss.keys = null;
             ss.vals = null;
             ss = ss.next;
@@ -96,7 +96,7 @@ public class IBSkipIterator<K extends Comparable<? super K>, V> extends SkipIter
      */
     @Override
     public K nextKey() {
-        if(index < ss.nKeys) {
+        if (index < ss.nKeys) {
             if (ss.keys == null) {
                 try {
                     ((IBSkipSpan)ss).seekAndLoadData();
@@ -116,13 +116,13 @@ public class IBSkipIterator<K extends Comparable<? super K>, V> extends SkipIter
      */
     @Override
     public V previous() {
-        if(index > 0) {
+        if (index > 0) {
             index--;
-        } else if(ss.prev != null) {
+        } else if (ss.prev != null) {
             ss.keys = null;
             ss.vals = null;
             ss = ss.prev;
-            if(ss.nKeys <= 0) { throw new NoSuchElementException(); }
+            if (ss.nKeys <= 0) { throw new NoSuchElementException(); }
             index = (ss.nKeys - 1);
         } else {
             ss.keys = null;

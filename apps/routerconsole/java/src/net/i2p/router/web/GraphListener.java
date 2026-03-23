@@ -54,7 +54,7 @@ public class GraphListener implements RateSummaryListener {
     private static final int MIN_ROWS = PERIODS;
     /** @since public since 0.9.33, was package private */
     public static final int MAX_ROWS = 91 * MIN_ROWS;
-    private static final long THREE_MONTHS = 91l * 24 * 60 * 60 * 1000;
+    private static final long THREE_MONTHS = 91L * 24 * 60 * 60 * 1000;
 
     public GraphListener(Rate r) {
         _context = I2PAppContext.getGlobalContext();

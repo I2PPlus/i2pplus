@@ -379,7 +379,7 @@ public final class ECIESAEADEngine {
      * @since 0.9.67
      */
     private static void checkType(EncType type) {
-        switch(type) {
+        switch (type) {
             case ECIES_X25519:
             case MLKEM512_X25519:
             case MLKEM768_X25519:
@@ -394,7 +394,7 @@ public final class ECIESAEADEngine {
      * @since 0.9.67
      */
     private static String getNoisePattern(EncType type) {
-        switch(type) {
+        switch (type) {
             case ECIES_X25519:
                 return HandshakeState.PATTERN_ID_IK;
             case MLKEM512_X25519:
@@ -412,7 +412,7 @@ public final class ECIESAEADEngine {
      * @since 0.9.67
      */
     private static KeyFactory getHybridKeyFactory(EncType type) {
-        switch(type) {
+        switch (type) {
             case MLKEM512_X25519:
                 return MLKEM.MLKEM512KeyFactory;
             case MLKEM768_X25519:
@@ -428,7 +428,7 @@ public final class ECIESAEADEngine {
      * @since 0.9.67
      */
     private static int getMinNSSize(EncType type) {
-        switch(type) {
+        switch (type) {
             case ECIES_X25519:
                 return MIN_NS_SIZE;
             case MLKEM512_X25519:
@@ -446,7 +446,7 @@ public final class ECIESAEADEngine {
      * @since 0.9.67
      */
     private static int getMinNSRSize(EncType type) {
-        switch(type) {
+        switch (type) {
             case ECIES_X25519:
                 return MIN_NSR_SIZE;
             case MLKEM512_X25519:
@@ -464,7 +464,7 @@ public final class ECIESAEADEngine {
      * @since 0.9.67
      */
     private static Set<EncType> getEncTypeSet(EncType type) {
-        switch(type) {
+        switch (type) {
             case ECIES_X25519:
                 return LeaseSetKeys.SET_EC;
             case MLKEM512_X25519:

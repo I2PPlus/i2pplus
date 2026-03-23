@@ -1043,7 +1043,7 @@ public class SybilRenderer {
               .append("<a class=configpeer href=\"/configpeer?peer=").append(hash).append("\" title=\"").append(_t("Configure peer"))
               .append("\">").append(_t("Edit")).append("</a>");
             String country = _context.commSystem().getCountry(info.getIdentity().getHash());
-            if(country != null) {
+            if (country != null) {
                 buf.append("<a href=\"/netdb?c=").append(country).append("\">")
                   .append("<img height=12 width=16 loading=lazy alt=\"").append(country.toUpperCase(Locale.US)).append('\"')
                   .append(" title=\"").append(getTranslatedCountry(country)).append('\"')

@@ -99,7 +99,7 @@ public class EOFOnMatchInputStream extends PushbackInputStream implements ReadCo
     public int read() throws IOException {
         if (pos <= 0)
             return -1;
-        while(true) {
+        while (true) {
             // read, pushback, compare
             int c = in.read();
             if (c < 0) {

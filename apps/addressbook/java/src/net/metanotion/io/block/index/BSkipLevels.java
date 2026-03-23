@@ -61,7 +61,7 @@ import net.metanotion.util.skiplist.SkipSpan;
  * @param <V> the type of mapped values
  */
 public class BSkipLevels<K extends Comparable<? super K>, V> extends SkipLevels<K, V> {
-    private static final long MAGIC = 0x42534c6576656c73l;  // "BSLevels"
+    private static final long MAGIC = 0x42534c6576656c73L;  // "BSLevels"
     /** Fixed header length in bytes */
     static final int HEADER_LEN = 16;
     /** Page number of this level */
@@ -103,7 +103,7 @@ public class BSkipLevels<K extends Comparable<? super K>, V> extends SkipLevels<
 
         int maxLen = bf.file.readUnsignedShort();
         int nonNull = bf.file.readUnsignedShort();
-        if(maxLen < 1 || maxLen > MAX_SIZE || nonNull > maxLen)
+        if (maxLen < 1 || maxLen > MAX_SIZE || nonNull > maxLen)
             throw new IOException("Invalid Level Skip size " + nonNull + " / " + maxLen);
         spanPage = bf.file.readUnsignedInt();
         bottom = bsl.spanHash.get(Integer.valueOf(spanPage));
@@ -119,7 +119,7 @@ public class BSkipLevels<K extends Comparable<? super K>, V> extends SkipLevels<
                      " in skiplist " + bsl);
         // We have to read now because new BSkipLevels() will move the file pointer
         lps = new int[nonNull];
-        for(int i = 0; i < nonNull; i++) {
+        for (int i = 0; i < nonNull; i++) {
             lps[i] = bf.file.readUnsignedInt();
         }
     }
@@ -157,11 +157,11 @@ public class BSkipLevels<K extends Comparable<? super K>, V> extends SkipLevels<
      */
     private void initializeLevels(List<BSkipLevels<K, V>> nextInit) {
         boolean fail = false;
-        for(int i = 0; i < lps.length; i++) {
+        for (int i = 0; i < lps.length; i++) {
             int lp = lps[i];
-            if(lp != 0) {
+            if (lp != 0) {
                 levels[i] = bsl.levelHash.get(Integer.valueOf(lp));
-                if(levels[i] == null) {
+                if (levels[i] == null) {
                     try {
                         BSkipLevels<K, V> lev = new BSkipLevels<K, V>(bf, lp, bsl);
                         levels[i] = lev;
@@ -238,13 +238,13 @@ public class BSkipLevels<K extends Comparable<? super K>, V> extends SkipLevels<
             bf.file.writeLong(MAGIC);
             bf.file.writeShort((short) levels.length);
             int i = 0;
-            for( ; i < levels.length; i++) {
-                if(levels[i] == null)
+            for (; i < levels.length; i++) {
+                if (levels[i] == null)
                     break;
             }
             bf.file.writeShort(i);
             bf.file.writeInt(((BSkipSpan<K, V>) bottom).page);
-            for(int j = 0; j < i; j++) {
+            for (int j = 0; j < i; j++) {
                 bf.file.writeInt(((BSkipLevels<K, V>) levels[j]).levelPage);
             }
         } catch (IOException ioe) { throw new RuntimeException("Error writing to database", ioe); }
@@ -260,7 +260,7 @@ public class BSkipLevels<K extends Comparable<? super K>, V> extends SkipLevels<
             return;
         }
         if (bf.log.shouldDebug())
-            bf.log.debug("Killing " + this + ' ' + print() /* , new Exception() */ );
+            bf.log.debug("Killing " + this + ' ' + print() /*, new Exception() */ );
         isKilled = true;
         bsl.levelHash.remove(Integer.valueOf(levelPage));
         bf.freePage(levelPage);

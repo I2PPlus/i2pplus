@@ -362,7 +362,7 @@ public class SSLEepGet extends EepGet {
             get.forceDNSOverHTTPS(true);
         get._commandLine = true;
         get.addStatusListener(get.new CLIStatusListener(1024, 40));
-        if(!get.fetch(45*1000, -1, 60*1000))
+        if (!get.fetch(45*1000, -1, 60*1000))
             System.exit(1);
     }
 

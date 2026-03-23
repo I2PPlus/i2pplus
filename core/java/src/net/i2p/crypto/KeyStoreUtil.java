@@ -273,7 +273,7 @@ public final class KeyStoreUtil {
     public static int countCerts(KeyStore ks) {
         int count = 0;
         try {
-            for(Enumeration<String> e = ks.aliases(); e.hasMoreElements();) {
+            for (Enumeration<String> e = ks.aliases(); e.hasMoreElements();) {
                 String alias = e.nextElement();
                 if (ks.isCertificateEntry(alias)) {
                     //info("Found cert " + alias);
@@ -336,7 +336,7 @@ public final class KeyStoreUtil {
         boolean rv = true;
         try {
             int count = 0;
-            for(Enumeration<String> e = ks.aliases(); e.hasMoreElements();) {
+            for (Enumeration<String> e = ks.aliases(); e.hasMoreElements();) {
                 String alias = e.nextElement();
                 if (ks.isKeyEntry(alias)) {
                     Certificate[] cs;
@@ -404,7 +404,7 @@ public final class KeyStoreUtil {
         List<String> toRemove = new ArrayList<String>(4);
         try {
             MessageDigest md = SHA1.getInstance();
-            for(Enumeration<String> e = ks.aliases(); e.hasMoreElements();) {
+            for (Enumeration<String> e = ks.aliases(); e.hasMoreElements();) {
                 String alias = e.nextElement();
                 if (ks.isCertificateEntry(alias)) {
                     Certificate c = ks.getCertificate(alias);
@@ -1438,13 +1438,13 @@ public final class KeyStoreUtil {
                 fis = new FileInputStream(ksf);
                 ks.load(fis, DEFAULT_KEYSTORE_PASSWORD.toCharArray());
                 System.out.println("Certificates:");
-                for(Enumeration<String> e = ks.aliases(); e.hasMoreElements();) {
+                for (Enumeration<String> e = ks.aliases(); e.hasMoreElements();) {
                     String alias = e.nextElement();
                     if (ks.isCertificateEntry(alias))
                         System.out.println(alias);
                 }
                 System.out.println("\nPrivate keys:");
-                for(Enumeration<String> e = ks.aliases(); e.hasMoreElements();) {
+                for (Enumeration<String> e = ks.aliases(); e.hasMoreElements();) {
                     String alias = e.nextElement();
                     if (ks.isKeyEntry(alias))
                         System.out.println(alias);

@@ -78,7 +78,7 @@ public class RouterInfo extends DatabaseEntry {
      * Maybe we should check if we are floodfill?
      * If we do bring this back, don't do on ARM or Android
      */
-    private static final boolean CACHE_ALL = false; // SystemVersion.getMaxMemory() > 128*1024*1024l;
+    private static final boolean CACHE_ALL = false; // SystemVersion.getMaxMemory() > 128*1024*1024L;
 
     public static final String PROP_NETWORK_ID = "netId";
     public static final String PROP_CAPABILITIES = "caps";

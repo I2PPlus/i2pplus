@@ -47,7 +47,7 @@ public class LogSettingsTest extends TestCase {
         log = _context.logManager().getLog(LogSettingsTest.class);
         p = new Properties();
         f = new File("logger.config");
-        if(!f.exists()){
+        if (!f.exists()){
             FileWriter temp = new FileWriter(f);
             temp.close();
         }

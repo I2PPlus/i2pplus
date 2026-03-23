@@ -424,7 +424,7 @@ public class CPUID {
                     System.err.println("INFO: Native CPUID library jcpuid not loaded - will not be able to read CPU information using CPUID");
                 }
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             if (_doLog) {
                 System.err.println("INFO: Native CPUID library jcpuid not loaded\n* Reason: '" + e.getMessage() +
                                    "' - will not be able to read CPU information using CPUID");

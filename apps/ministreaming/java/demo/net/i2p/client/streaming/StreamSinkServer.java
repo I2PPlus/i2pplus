@@ -108,7 +108,7 @@ public class StreamSinkServer {
                 } catch (ConnectException ce) {
                     _log.error("Connection already dropped", ce);
                     return;
-                } catch(SocketTimeoutException ste) {
+                } catch (SocketTimeoutException ste) {
                     // ignored
                 }
             }

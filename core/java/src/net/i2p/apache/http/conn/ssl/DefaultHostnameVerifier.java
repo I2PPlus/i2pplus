@@ -93,7 +93,7 @@ public final class DefaultHostnameVerifier implements HostnameVerifier {
             final X509Certificate x509 = (X509Certificate) certs[0];
             verify(host, x509);
             return true;
-        } catch(final SSLException ex) {
+        } catch (final SSLException ex) {
             if (log.shouldWarn()) {
                 log.warn(ex.getMessage(), ex);
             }
@@ -271,7 +271,7 @@ public final class DefaultHostnameVerifier implements HostnameVerifier {
         Collection<List<?>> c = null;
         try {
             c = cert.getSubjectAlternativeNames();
-        } catch(final CertificateParsingException ignore) {
+        } catch (final CertificateParsingException ignore) {
             // no subject alternative names
         }
         List<String> subjectAltList = null;

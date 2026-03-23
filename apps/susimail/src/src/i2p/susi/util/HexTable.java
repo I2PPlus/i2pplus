@@ -35,7 +35,7 @@ public class HexTable {
     public static final String[] table = new String[256];
 
     static {
-        for(int i = 0; i < 256; i++) {
+        for (int i = 0; i < 256; i++) {
             String str = intToHex(i);
             if (str.length() == 1) {str = "0" + str;}
             table[i] = "=" + str;
@@ -78,7 +78,7 @@ public class HexTable {
         if (b == 0) {return "0";}
         else {
             StringBuilder sb = new StringBuilder();
-            while(b > 0) {
+            while (b > 0) {
                 byte c = (byte)(b % 16);
                 if (c < 10) {c += '0';}
                 else {c += 'A' - 10;}

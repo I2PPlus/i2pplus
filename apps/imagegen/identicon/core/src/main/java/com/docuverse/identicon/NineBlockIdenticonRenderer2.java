@@ -144,8 +144,8 @@ public class NineBlockIdenticonRenderer2 implements IdenticonRenderer {
     }
 
     private void drawPatch(Graphics2D g, float x, float y, float size, int patch, int turn, boolean invert, Color fillColor, Color strokeColor) {
-        assert(patch >= 0);
-        assert(turn >= 0);
+        assert (patch >= 0);
+        assert (turn >= 0);
         patch %= PATCH_TYPES.length;
         turn %= 4;
         if ((PATCH_FLAGS[patch] & PATCH_INVERTED) != 0) {

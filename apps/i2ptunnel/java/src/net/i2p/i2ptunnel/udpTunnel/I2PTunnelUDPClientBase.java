@@ -88,7 +88,7 @@ public abstract class I2PTunnelUDPClientBase extends I2PTunnelTask implements So
             }
             client.createDestination(out, stype);
             key = out.toByteArray();
-        } catch(Exception exc) {
+        } catch (Exception exc) {
             throw new RuntimeException("failed to create i2p-destination", exc);
         }
 
@@ -98,7 +98,7 @@ public abstract class I2PTunnelUDPClientBase extends I2PTunnelTask implements So
             // FIXME this may not pick up non-default I2CP host/port settings from tunnel
             _session = client.createSession(in, tunnel.getClientOptions());
             connected(_session);
-        } catch(Exception exc) {
+        } catch (Exception exc) {
             throw new RuntimeException("failed to create session", exc);
         }
 
@@ -129,7 +129,7 @@ public abstract class I2PTunnelUDPClientBase extends I2PTunnelTask implements So
         synchronized (startLock) {
             try {
                 _session.connect();
-            } catch(I2PSessionException exc) {
+            } catch (I2PSessionException exc) {
                 throw new RuntimeException("failed to connect session", exc);
             }
             start();

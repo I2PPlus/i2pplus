@@ -40,6 +40,6 @@ public class BorderFactory {
             createTitledBorder(
         String	str )
     {
-        return( new Component());
+        return ( new Component());
     }
 }

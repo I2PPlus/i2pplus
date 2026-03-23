@@ -71,7 +71,7 @@ public class SimpleDataStructureTest {
         try {
             struct.readBytes(null);
             fail("blah blah blah..");
-        } catch(RuntimeException exc) {
+        } catch (RuntimeException exc) {
             // all good
         }
     }

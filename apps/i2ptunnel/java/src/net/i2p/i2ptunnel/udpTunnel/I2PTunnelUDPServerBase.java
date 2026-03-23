@@ -93,7 +93,7 @@ public class I2PTunnelUDPServerBase extends I2PTunnelTask implements Source, Sin
             // FIXME this may not pick up non-default I2CP host/port settings from tunnel
             _session = client.createSession(privData, getTunnel().getClientOptions());
             connected(_session);
-        } catch(I2PSessionException exc) {
+        } catch (I2PSessionException exc) {
             throw new RuntimeException("failed to create session", exc);
         }
 
@@ -114,7 +114,7 @@ public class I2PTunnelUDPServerBase extends I2PTunnelTask implements Source, Sin
         //synchronized (startLock) {
         try {
             _session.connect();
-        } catch(I2PSessionException exc) {
+        } catch (I2PSessionException exc) {
             throw new RuntimeException("failed to connect session", exc);
         }
         start();

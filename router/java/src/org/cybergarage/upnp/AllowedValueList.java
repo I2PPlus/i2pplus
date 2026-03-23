@@ -56,7 +56,7 @@ public class AllowedValueList extends Vector<AllowedValue> {
         for (int i = 0; i < values.length; i++) {
             add(new AllowedValue(values[i]));
         }
-        ;
+       ;
     }
 
     ////////////////////////////////////////////////

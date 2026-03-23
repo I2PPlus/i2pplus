@@ -36,10 +36,10 @@ public class NewsEntry implements Comparable<NewsEntry> {
 
     @Override
     public boolean equals(Object o) {
-        if(o == null) {
+        if (o == null) {
         	return false;
         }
-        if(!(o instanceof NewsEntry)) {
+        if (!(o instanceof NewsEntry)) {
         	return false;
         }
     	NewsEntry e = (NewsEntry) o;

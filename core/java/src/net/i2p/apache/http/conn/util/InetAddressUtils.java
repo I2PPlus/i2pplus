@@ -100,7 +100,7 @@ public class InetAddressUtils {
      */
     public static boolean isIPv6HexCompressedAddress(final String input) {
         int colonCount = 0;
-        for(int i = 0; i < input.length(); i++) {
+        for (int i = 0; i < input.length(); i++) {
             if (input.charAt(i) == COLON_CHAR) {
                 colonCount++;
             }

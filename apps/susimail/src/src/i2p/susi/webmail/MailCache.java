@@ -256,7 +256,7 @@ class MailCache {
             boolean result = false;
             try {
                 blockingLoadFromDisk();
-                if(!mails.isEmpty())
+                if (!mails.isEmpty())
                     result = true;
                 if (_log.shouldDebug()) _log.debug("[SusiMail] Folder loaded: " + folderName);
             } finally {
@@ -326,7 +326,7 @@ class MailCache {
          */
         synchronized(mails) {
             mail = mails.get( uidl );
-            if( mail == null ) {
+            if ( mail == null ) {
                 // if not in inbox, we can't fetch, this is what we have
                 if (mailbox == null)
                     return null;
@@ -335,7 +335,7 @@ class MailCache {
                 mails.put( uidl, newMail );
             }
         }
-        if( mail == null ) {
+        if ( mail == null ) {
             mail = newMail;
             mail.setSize(mailbox.getSize(uidl));
         }
@@ -429,12 +429,12 @@ class MailCache {
              */
             synchronized(mails) {
                 mail = mails.get( uidl );
-                if( mail == null ) {
+                if ( mail == null ) {
                     newMail = new Mail(uidl);
                     mails.put( uidl, newMail );
                 }
             }
-            if( mail == null ) {
+            if ( mail == null ) {
                 mail = newMail;
                 mail.setSize(mailbox.getSize(uidl));
             }
@@ -443,8 +443,8 @@ class MailCache {
             long sz = mail.getSize();
             if (sz > 0 && sz <= FETCH_ALL_SIZE)
                 headerOnly = false;
-            if( headerOnly ) {
-                if(!mail.hasHeader()) {
+            if ( headerOnly ) {
+                if (!mail.hasHeader()) {
                     if (disk.getMail(mail, true)) {
                         if (_log.shouldDebug()) _log.debug("[SusiMail] Loaded header from disk cache: " + uidl);
                         // note that disk loaded the full body if it had it
@@ -465,7 +465,7 @@ class MailCache {
                     }
                 }
             } else {
-                if(!mail.hasBody()) {
+                if (!mail.hasBody()) {
                     if (disk.getMail(mail, false)) {
                         if (_log.shouldDebug()) _log.debug("[SusiMail] Loaded body from disk cache: " + uidl);
                         // note that disk loaded the full body if it had it

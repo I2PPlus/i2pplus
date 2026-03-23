@@ -181,7 +181,7 @@ public class DecayingHashSet extends DecayingBloomFilter {
                                            currentCount);
         if (currentCount > 0)
             _context.statManager().addRateData("router.decayingHashSet." + _name + ".dups",
-                                               1000l*1000*dups/currentCount);
+                                               1000L*1000*dups/currentCount);
     }
 
     /**

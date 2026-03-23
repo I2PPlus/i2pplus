@@ -39,6 +39,6 @@ public class Toolkit {
     public Clipboard
             getSystemClipboard()
     {
-        return( new Clipboard());
+        return ( new Clipboard());
     }
 }

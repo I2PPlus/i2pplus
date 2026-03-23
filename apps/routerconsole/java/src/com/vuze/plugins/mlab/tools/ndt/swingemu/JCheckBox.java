@@ -57,7 +57,7 @@ public class
     public boolean
             isSelected()
     {
-        return( selected );
+        return ( selected );
     }
 
     public void

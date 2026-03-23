@@ -148,7 +148,7 @@ public class Icon {
             return Integer.parseInt(getIconNode().getNodeValue(WIDTH));
         } catch (Exception e) {
         }
-        ;
+       ;
         return 0;
     }
 
@@ -190,7 +190,7 @@ public class Icon {
             return Integer.parseInt(getIconNode().getNodeValue(HEIGHT));
         } catch (Exception e) {
         }
-        ;
+       ;
         return 0;
     }
 
@@ -232,7 +232,7 @@ public class Icon {
             return Integer.parseInt(getIconNode().getNodeValue(DEPTH));
         } catch (Exception e) {
         }
-        ;
+       ;
         return 0;
     }
 

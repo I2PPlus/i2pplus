@@ -499,7 +499,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
 
                 boolean limitSending = false;
                 synchronized(_migrationLock) {
-                    switch(_migrationState) {
+                    switch (_migrationState) {
                         case MIGRATION_STATE_NONE:
                             if (!from.equals(_remoteHostId)) {
                                 // QUIC: Must be highest set to protect against reordered packets

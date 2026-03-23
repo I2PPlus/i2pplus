@@ -799,14 +799,14 @@ public class I2PSnarkServlet extends BasicServlet {
 
         int start = 0;
         if (stParam != null) {
-            try { start = Math.max(0, Math.min(total - 1, Integer.parseInt(stParam))); } catch(NumberFormatException ignored) {}
+            try { start = Math.max(0, Math.min(total - 1, Integer.parseInt(stParam))); } catch (NumberFormatException ignored) {}
         }
 
         int pageSize = filterEnabled ? 9999 : Math.max(_manager.getPageSize(), 10);
         String ps = req.getParameter("ps");
         if ("null".equals(ps)) ps = Integer.toString(pageSize);
         if (ps != null) {
-            try { pageSize = Integer.parseInt(ps); } catch(NumberFormatException ignored) {}
+            try { pageSize = Integer.parseInt(ps); } catch (NumberFormatException ignored) {}
         }
 
         boolean isDegraded = false, noThinsp = false;

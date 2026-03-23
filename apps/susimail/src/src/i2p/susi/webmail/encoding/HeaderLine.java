@@ -236,7 +236,7 @@ public class HeaderLine extends Encoding {
                 if (c < 0)
                     break;
             }
-            if( c == '=' ) {
+            if ( c == '=' ) {
                 // An encoded-word should be 75 chars max including the delimiters, and must be on a single line
                 // Store the full encoded word, including =? through ?=, in the buffer
                 // Sadly, base64 can be a lot longer
@@ -326,7 +326,7 @@ public class HeaderLine extends Encoding {
                 // System.err.println( "4th ? found at " + f4 + ", encoding=" + enc );
                 if (enc != null) {
                     Encoding e = EncodingFactory.getEncoding( enc );
-                    if( e != null ) {
+                    if ( e != null ) {
                         try {
                             // System.err.println( "decode(" + (f3 + 1) + "," + ( f4 - f3 - 1 ) + ")" );
                             ReadBuffer tmpIn = new ReadBuffer(encodedWord, f3 + 1, f4 - f3 - 1);
@@ -393,7 +393,7 @@ public class HeaderLine extends Encoding {
                     if (_log.shouldDebug()) _log.debug("Invalid encoding '" + (char) encodedWord[f2+1] + '\'');
                 }  // enc != null
             }  // c == '='
-            else if( c == '\r' ) {
+            else if ( c == '\r' ) {
                 if ((c = in.read()) == '\n' ) {
                     /*
                      * delay linebreak in case of long line
@@ -405,9 +405,9 @@ public class HeaderLine extends Encoding {
                 }
             }
             // swallow whitespace here if lastCharWasQuoted
-            if( linebreak ) {
+            if ( linebreak ) {
                 linebreak = false;
-                for (int i = 0; ; i++) {
+                for (int i = 0;; i++) {
                     c = in.read();
                     if (c == -1)
                         break;
@@ -448,7 +448,7 @@ public class HeaderLine extends Encoding {
                 lastCharWasQuoted = false;
             }
         }  // while true
-        if( linebreak ) {
+        if ( linebreak ) {
             out.write('\r');
             out.write('\n');
         }

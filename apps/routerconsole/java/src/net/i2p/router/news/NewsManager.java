@@ -178,7 +178,7 @@ public class NewsManager implements ClientApp {
             StringBuilder out = new StringBuilder(2048);
             reader = new TranslateReader(_context, BUNDLE_NAME, new FileInputStream(file));
             int len;
-            while((len = reader.read(buf)) > 0) {out.append(buf, 0, len);}
+            while ((len = reader.read(buf)) > 0) {out.append(buf, 0, len);}
             List<NewsEntry> rv = parseNews(out.toString(), true);
             if (!rv.isEmpty()) {rv.get(0).updated = _context.clock().now();}
             else if (_log.shouldWarn()) {_log.warn("Failed to load " + file);}

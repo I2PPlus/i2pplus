@@ -49,7 +49,7 @@ public class
     public int
             getValue()
     {
-        return( value );
+        return ( value );
     }
 
     public void

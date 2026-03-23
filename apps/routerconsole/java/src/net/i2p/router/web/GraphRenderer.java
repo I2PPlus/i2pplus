@@ -70,7 +70,7 @@ class GraphRenderer {
     private static final Color AXIS_COLOR_DARK = new Color(244, 244, 190, 200);
     private static final Color AXIS_COLOR_MIDNIGHT = new Color(201, 206, 255, 200);
     private static final Color FRAME_COLOR = new Color(0, 0, 0, 0);
-    private static final Color FRAME_COLOR_DARK = new Color(0 , 0, 0, 0);
+    private static final Color FRAME_COLOR_DARK = new Color(0, 0, 0, 0);
     private static final Color AREA_COLOR = new Color(100, 160, 200, 200);
     private static final Color AREA_COLOR_DARK = new Color(0, 72, 8, 220);
     private static final Color AREA_COLOR_MIDNIGHT = new Color(0, 72, 160, 200);

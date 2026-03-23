@@ -120,7 +120,7 @@ public class I2PSource implements Source {
                         log.warn("dropping message with unknown protocol " + proto);
                 }
                 //System.out.print("r");
-            } catch(Exception e) {
+            } catch (Exception e) {
                 if (log.shouldWarn())
                     log.warn("error receiving datagram", e);
             }

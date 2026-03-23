@@ -2248,7 +2248,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
             addresses = InetAddress.getAllByName(sHostName);
 
             if (_chkboxPreferIPv6.isSelected()) {
-                for(int k = 0; k < addresses.length; ++k) {
+                for (int k = 0; k < addresses.length; ++k) {
                     if (addresses[k] instanceof Inet6Address) {
                         found = addresses[k];
                         break;
@@ -2362,7 +2362,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
                 try {
                     thread_group.destroy();
                     break;
-                } catch(Throwable e) {_log.debug("TG", e);}
+                } catch (Throwable e) {_log.debug("TG", e);}
             }
 
             try {Thread.sleep(50);}
@@ -2384,7 +2384,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
             @Override
             public void run() {
                 try {new TestWorker().run();}
-                catch(Throwable e) {
+                catch (Throwable e) {
                     if (!(e instanceof ThreadDeath)) {_log.warn("Bandwidth test error", e);}
                 } finally {}
             }

@@ -100,7 +100,7 @@ class SAMDatagramSession extends SAMMessageSession {
                              int fromPort, int toPort) throws DataFormatException, I2PSessionException {
         if (data.length > DGRAM_SIZE_MAX)
             throw new DataFormatException("Datagram size exceeded (" + data.length + ")");
-        byte[] dgram ;
+        byte[] dgram;
         synchronized (dgramMaker) {
             dgram = dgramMaker.makeI2PDatagram(data);
         }
@@ -119,7 +119,7 @@ class SAMDatagramSession extends SAMMessageSession {
                                  throws DataFormatException, I2PSessionException {
         if (data.length > DGRAM_SIZE_MAX)
             throw new DataFormatException("Datagram size exceeded (" + data.length + ")");
-        byte[] dgram ;
+        byte[] dgram;
         synchronized (dgramMaker) {
             dgram = dgramMaker.makeI2PDatagram(data);
         }

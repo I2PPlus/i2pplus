@@ -59,10 +59,10 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
 
     private static I2PSSLSocketFactory _sslSocketFactory;
 
-    private final String nick ;
+    private final String nick;
 
     public String getNick() {
-        return nick ;
+        return nick;
     }
 
        /**
@@ -83,7 +83,7 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
         super(getDB().get(login).getDest(), "__v3__",
                       getDB().get(login).getProps(),
                       getDB().get(login).getHandler());
-        this.nick = login ;
+        this.nick = login;
         _acceptQueue = null;
     }
 
@@ -101,7 +101,7 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
     public SAMv3StreamSession(String login, Properties props, SAMv3Handler handler, I2PSocketManager mgr,
                                     int listenPort) throws IOException, DataFormatException, SAMException {
         super(mgr, props, handler, listenPort);
-        this.nick = login ;
+        this.nick = login;
         _acceptQueue = new LinkedBlockingQueue<I2PSocket>(MAX_ACCEPT_QUEUE);
     }
 
@@ -139,7 +139,7 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
 
     public static SessionsDB getDB()
     {
-        return SAMv3Handler.sSessionsHash ;
+        return SAMv3Handler.sSessionsHash;
     }
 
         /**
@@ -193,11 +193,11 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
 
         SessionRecord rec = SAMv3Handler.sSessionsHash.get(nick);
 
-        if ( rec==null ) throw new InterruptedIOException() ;
+        if ( rec==null ) throw new InterruptedIOException();
 
-        handler.notifyStreamResult(verbose, "OK", null) ;
+        handler.notifyStreamResult(verbose, "OK", null);
 
-        handler.stealSocket() ;
+        handler.stealSocket();
 
         ReadableByteChannel fromClient = handler.getClientSocket();
         ReadableByteChannel fromI2P    = Channels.newChannel(i2ps.getInputStream());
@@ -254,13 +254,13 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
 
         SessionRecord rec = SAMv3Handler.sSessionsHash.get(nick);
 
-        if ( rec==null || i2ps==null ) throw new InterruptedIOException() ;
+        if ( rec==null || i2ps==null ) throw new InterruptedIOException();
 
         if (verbose) {
             handler.notifyStreamIncomingConnection(i2ps.getPeerDestination(),
                                                    i2ps.getPort(), i2ps.getLocalPort());
         }
-        handler.stealSocket() ;
+        handler.stealSocket();
         ReadableByteChannel fromClient = handler.getClientSocket();
         ReadableByteChannel fromI2P    = Channels.newChannel(i2ps.getInputStream());
         WritableByteChannel toClient   = handler.getClientSocket();
@@ -285,9 +285,9 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
         SessionRecord rec = SAMv3Handler.sSessionsHash.get(nick);
         boolean verbose = !Boolean.parseBoolean(props.getProperty("SILENT"));
 
-        if ( rec==null ) throw new InterruptedIOException() ;
+        if ( rec==null ) throw new InterruptedIOException();
 
-        String portStr = props.getProperty("PORT") ;
+        String portStr = props.getProperty("PORT");
         if ( portStr==null ) {
             if (_log.shouldDebug())
         			_log.debug("Receiver port not specified");
@@ -331,9 +331,9 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
 
         SocketForwarder(String host, int port, boolean isSSL,
                         boolean verbose, boolean sendPorts) {
-            this.host = host ;
-            this.port = port ;
-            this.verbose = verbose ;
+            this.host = host;
+            this.port = port;
+            this.verbose = verbose;
             this.sendPorts = sendPorts;
             this.isSSL = isSSL;
         }
@@ -392,7 +392,7 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
                         clientServerSock = new SSLSocketChannel(sock);
                     } else {
                         InetSocketAddress addr = new InetSocketAddress(host, port);
-                        clientServerSock = SocketChannel.open(addr) ;
+                        clientServerSock = SocketChannel.open(addr);
                     }
                 } catch (IOException ioe) {
                     Log log = I2PAppContext.getGlobalContext().logManager().getLog(SAMv3StreamSession.class);
@@ -417,9 +417,9 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
         							clientServerSock, i2ps.getPeerDestination());
                         }
                     }
-                    ReadableByteChannel fromClient = clientServerSock ;
+                    ReadableByteChannel fromClient = clientServerSock;
                     ReadableByteChannel fromI2P    = Channels.newChannel(i2ps.getInputStream());
-                    WritableByteChannel toClient   = clientServerSock ;
+                    WritableByteChannel toClient   = clientServerSock;
                     WritableByteChannel toI2P      = Channels.newChannel(i2ps.getOutputStream());
                     (new I2PAppThread(new Pipe(fromClient, toI2P, null),
                                       "ForwardV3 SAMPipeClientToI2P")).start();
@@ -433,7 +433,7 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
                     try {
                         i2ps.reset();
                     } catch (IOException ee) {}
-                    continue ;
+                    continue;
                 }
             }
         }
@@ -441,9 +441,9 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
 
     private static class Pipe implements Runnable, Handler
     {
-        private final ReadableByteChannel in  ;
-        private final WritableByteChannel out ;
-        private final ByteBuffer buf ;
+        private final ReadableByteChannel in ;
+        private final WritableByteChannel out;
+        private final ByteBuffer buf;
         private final SAMBridge bridge;
 
         /**
@@ -451,9 +451,9 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
          */
         public Pipe(ReadableByteChannel in, WritableByteChannel out, SAMBridge bridge)
         {
-            this.in  = in ;
-            this.out = out ;
-            this.buf = ByteBuffer.allocate(BUFFER_SIZE) ;
+            this.in  = in;
+            this.out = out;
+            this.buf = ByteBuffer.allocate(BUFFER_SIZE);
             this.bridge = bridge;
         }
 
@@ -501,7 +501,7 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
     protected I2PServerSocket getSocketServer()
     {
         synchronized ( this.socketServerLock ) {
-            return this.socketServer ;
+            return this.socketServer;
         }
     }
         /**
@@ -513,9 +513,9 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
     {
         SessionRecord rec = SAMv3Handler.sSessionsHash.get(nick);
 
-        if ( rec==null ) throw new InterruptedIOException() ;
+        if ( rec==null ) throw new InterruptedIOException();
 
-        I2PServerSocket server = null ;
+        I2PServerSocket server = null;
         synchronized( this.socketServerLock )
         {
             if (this.socketServer==null) {
@@ -523,8 +523,8 @@ class SAMv3StreamSession  extends SAMStreamSession implements Session
             			_log.debug("No socket server is defined for this destination");
                 throw new SAMException("no socket server is defined for this destination");
             }
-            server = this.socketServer ;
-            this.socketServer = null ;
+            server = this.socketServer;
+            this.socketServer = null;
             if (_log.shouldDebug())
             		_log.debug("Nulling socketServer in stopForwardingIncoming. Object " + this );
         }

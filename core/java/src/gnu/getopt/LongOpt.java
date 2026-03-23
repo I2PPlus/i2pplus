@@ -149,7 +149,7 @@ public class LongOpt extends Object
     public String
         getName()
     {
-        return(name);
+        return (name);
     }
 
 /**************************************************************************/
@@ -162,7 +162,7 @@ public class LongOpt extends Object
     public int
         getHasArg()
     {
-        return(has_arg);
+        return (has_arg);
     }
 
 /**************************************************************************/
@@ -175,7 +175,7 @@ public class LongOpt extends Object
     public StringBuffer
         getFlag()
     {
-        return(flag);
+        return (flag);
     }
 
 /**
@@ -186,7 +186,7 @@ public class LongOpt extends Object
     public int
         getVal()
     {
-        return(val);
+        return (val);
     }
 
 /**************************************************************************/

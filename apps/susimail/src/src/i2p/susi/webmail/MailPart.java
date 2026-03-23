@@ -115,7 +115,7 @@ class MailPart {
         String x_description = null;
         String x_version = null;
 
-        for( int i = 0; i < headerLines.length; i++) {
+        for ( int i = 0; i < headerLines.length; i++) {
             String hlc = headerLines[i].toLowerCase(Locale.US);
             if (hlc.startsWith( "content-transfer-encoding: ")) {
                 x_encoding = getFirstAttribute( headerLines[i]).toLowerCase(Locale.US);
@@ -184,7 +184,7 @@ class MailPart {
         if (multipart) {
             // See above for why we don't include the \r
             byte[] match = DataHelper.getASCII("\n--" + boundary);
-            for (int i = 0; ; i++) {
+            for (int i = 0;; i++) {
                 EOFOnMatchInputStream eofin = new EOFOnMatchInputStream(in, counter, match);
                 if (i == 0) {
                     // Read through first boundary line, not including "\r\n" or "--\r\n"
@@ -387,7 +387,7 @@ class MailPart {
                 int k = line.indexOf('"', j + 1);
                 int m = line.indexOf(';', j + 1);
                 if (k != -1 && ( m == -1 || k < m)) {
-                    /* We found a " before a possible ; - now we look for the 2nd (not quoted) " */
+                    /* We found a " before a possible; - now we look for the 2nd (not quoted) " */
                     m = -1;
                     int k2 = k + 1;
                     while (true) {
@@ -408,8 +408,8 @@ class MailPart {
                             }
                         }
                     }
-                } else if (m != -1) {result = line.substring( j + 1, m).trim();} /* No " found, but a ; */
-                else {result = line.substring( j + 1).trim();} /* No " found and no ; */
+                } else if (m != -1) {result = line.substring( j + 1, m).trim();} /* No " found, but a; */
+                else {result = line.substring( j + 1).trim();} /* No " found and no; */
             }
         }
         return result;

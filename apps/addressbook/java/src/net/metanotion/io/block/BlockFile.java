@@ -92,7 +92,7 @@ public class BlockFile implements Closeable {
     /** Page number for the metaindex */
     public static final int METAINDEX_PAGE = 2;
     /** 2**32 pages of 1024 bytes each, more or less */
-    private static final long MAX_LEN = (2l << (32 + 10)) - 1;
+    private static final long MAX_LEN = (2L << (32 + 10)) - 1;
 
     /** new BlockFile length, containing a superblock page and a metaindex page. */
     private long fileLen = PAGESIZE * 2;
@@ -183,10 +183,10 @@ public class BlockFile implements Closeable {
         int curNextPage = nextPage[0];
         int curPage = page;
         int dct = 0;
-        while(dct < data.length) {
+        while (dct < data.length) {
             int len = PAGESIZE - pageCounter;
-            if(len <= 0) {
-                if(curNextPage==0) {
+            if (len <= 0) {
+                if (curNextPage==0) {
                     curNextPage = this.allocPage();
                     BlockFile.pageSeek(this.file, curNextPage);
                     this.file.writeInt(MAGIC_CONT);
@@ -228,9 +228,9 @@ public class BlockFile implements Closeable {
         int curNextPage = nextPage[0];
         int curPage = page;
         int dct = 0;
-        while(dct < arr.length) {
+        while (dct < arr.length) {
             int len = PAGESIZE - pageCounter;
-            if(len <= 0) {
+            if (len <= 0) {
                 if (curNextPage <= 0)
                     throw new IOException("Not enough pages to read data still need " + (arr.length - dct));
                 BlockFile.pageSeek(this.file, curNextPage);
@@ -243,7 +243,7 @@ public class BlockFile implements Closeable {
                 len = PAGESIZE - pageCounter;
             }
             int res = this.file.read(arr, dct, Math.min(len, arr.length - dct));
-            if(res == -1) { throw new IOException(); }
+            if (res == -1) { throw new IOException(); }
             pageCounter += Math.min(len, arr.length - dct);
             dct += res;
         }
@@ -268,9 +268,9 @@ public class BlockFile implements Closeable {
         int curNextPage = nextPage[0];
         int curPage = page;
         int dct = 0;
-        while(dct < length) {
+        while (dct < length) {
             int len = PAGESIZE - pageCounter;
-            if(len <= 0) {
+            if (len <= 0) {
                 if (curNextPage <= 0)
                     throw new IOException("not enough pages to skip");
                 BlockFile.pageSeek(this.file, curNextPage);
@@ -333,18 +333,18 @@ public class BlockFile implements Closeable {
      *  @throws IOException if an I/O error occurs
      */
     public BlockFile(RandomAccessInterface rai, boolean init) throws IOException {
-        if(rai==null) { throw new NullPointerException(); }
+        if (rai==null) { throw new NullPointerException(); }
 
         file = rai;
 
-        if(init) {
+        if (init) {
             file.setLength(fileLen);
             writeSuperBlock();
             BSkipList.init(this, METAINDEX_PAGE, spanSize);
         }
 
         readSuperBlock();
-        if(magicBytes != MAGIC) {
+        if (magicBytes != MAGIC) {
             if ((magicBytes & MAGIC_BASE) == MAGIC_BASE) {
                 long major = (magicBytes >> 8) & 0xff;
                 long minor = magicBytes & 0xff;
@@ -359,7 +359,7 @@ public class BlockFile implements Closeable {
         _wasMounted = mounted != 0;
         if (_wasMounted)
             log.warn("Warning - file was not previously closed");
-        if(fileLen != file.length())
+        if (fileLen != file.length())
             throw new IOException("Expected file length " + fileLen +
                                       " but actually " + file.length());
         if (rai.canWrite())
@@ -397,11 +397,11 @@ public class BlockFile implements Closeable {
      *  @throws IOException if an I/O error occurs
      */
     public int allocPage() throws IOException {
-        if(freeListStart != 0) {
+        if (freeListStart != 0) {
             try {
                 if (flb == null)
                     flb = new FreeListBlock(file, freeListStart);
-                if(!flb.isEmpty()) {
+                if (!flb.isEmpty()) {
                     if (log.shouldDebug())
                         log.debug("Alloc from " + flb);
                     return flb.takePage();
@@ -439,7 +439,7 @@ public class BlockFile implements Closeable {
             return;
         }
         try {
-            if(freeListStart == 0) {
+            if (freeListStart == 0) {
                 freeListStart = page;
                 FreeListBlock.initPage(file, page);
                 writeSuperBlock();
@@ -450,12 +450,12 @@ public class BlockFile implements Closeable {
             try {
                 if (flb == null)
                     flb = new FreeListBlock(file, freeListStart);
-                if(flb.isFull()) {
+                if (flb.isFull()) {
                     // Make the free page a new FLB
                     if (log.shouldDebug())
                         log.debug("Full: " + flb);
                     FreeListBlock.initPage(file, page);
-                    if(flb.getNextPage() == 0) {
+                    if (flb.getNextPage() == 0) {
                         // Put it at the tail.
                         // Next free will make a new FLB at the head,
                         // so we have one more FLB than we need.
@@ -536,7 +536,7 @@ public class BlockFile implements Closeable {
      *  @throws IOException if already exists or other errors
      */
     public <K extends Comparable<? super K>, V> BSkipList<K, V> makeIndex(String name, Serializer<K> key, Serializer<V> val) throws IOException {
-        if(metaIndex.get(name) != null) { throw new IOException("Index already exists"); }
+        if (metaIndex.get(name) != null) { throw new IOException("Index already exists"); }
         int page = allocPage();
         metaIndex.put(name, Integer.valueOf(page));
         BSkipList.init(this, page, spanSize);
@@ -724,7 +724,7 @@ public class BlockFile implements Closeable {
             }
         }
         log.info("Checked meta index and " + items + " skiplists");
-        if(freeListStart != 0) {
+        if (freeListStart != 0) {
             try {
                 if (flb == null)
                     flb = new FreeListBlock(file, freeListStart);

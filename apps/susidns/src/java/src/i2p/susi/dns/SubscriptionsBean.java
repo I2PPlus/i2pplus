@@ -63,7 +63,7 @@ public class SubscriptionsBean extends BaseBean {
             try {
                 br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
                 String line;
-                while((line = br.readLine()) != null) {
+                while ((line = br.readLine()) != null) {
                     buf.append(line);
                     buf.append("\n");
                 }

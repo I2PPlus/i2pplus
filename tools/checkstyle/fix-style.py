@@ -8,11 +8,13 @@ Runs Checkstyle on the given path (or uses existing XML report),
 extracts violations, and rewrites files.
 
 Fixes:
+  - Unused imports (google-java-format --fix-imports-only)
   - Leading tabs (tabs → 4 spaces)
-  - Whitespace after keywords (if( → if ()
+  - Keyword and comma whitespace (if( → if (, x,y → x, y)
+  - Brace and paren whitespace ({ x } → {x}, ( x ) → (x))
+  - No whitespace before (; ; → ;, , → ,)
+  - Upper ell (100l → 100L)
   - Empty statements (;; → ;)
-  - Need braces (single-line if/else/for/while/do bodies)
-  - Unused imports (from Checkstyle XML)
   - Indentation (iterative, from Checkstyle IndentationCheck)
   - Trailing whitespace (spaces/tabs before newline)
   - Missing newline at end of file
@@ -488,6 +490,60 @@ def fix_empty_statements(filepath, dry_run=False):
     return changes
 
 
+_UPPER_L = re.compile(r'(\d)[lL]\b')
+
+
+def fix_upper_ell(filepath, dry_run=False):
+    """Replace long literal suffix l with L: 100l → 100L. Returns changes."""
+    try:
+        with open(filepath, "r") as f:
+            content = f.read()
+    except (OSError, IOError):
+        return 0
+
+    new_content = _UPPER_L.sub(r'\1L', content)
+    changes = 1 if new_content != content else 0
+
+    if changes > 0 and not dry_run:
+        with open(filepath, "w") as f:
+            f.write(new_content)
+
+    return changes
+
+
+_WS_BEFORE_SEMI = re.compile(r' (?=;)')  # ' ;' → ';'
+_WS_BEFORE_COMMA = re.compile(r' (?=,)')  # ' ,' → ','
+
+
+def fix_no_whitespace_before(filepath, dry_run=False):
+    """Remove space before ; and ,. Returns changes."""
+    try:
+        with open(filepath, "r") as f:
+            content = f.read()
+    except (OSError, IOError):
+        return 0
+
+    lines = content.split('\n')
+    fixed_lines = []
+    for line in lines:
+        stripped = line.lstrip()
+        if stripped.startswith('//') or stripped.startswith('*'):
+            fixed_lines.append(line)
+            continue
+        line = _WS_BEFORE_SEMI.sub('', line)
+        line = _WS_BEFORE_COMMA.sub('', line)
+        fixed_lines.append(line)
+    new_content = '\n'.join(fixed_lines)
+
+    changes = 1 if new_content != content else 0
+
+    if changes > 0 and not dry_run:
+        with open(filepath, "w") as f:
+            f.write(new_content)
+
+    return changes
+
+
 def fix_imports(filepath, dry_run=False):
     """Remove unused imports using google-java-format --fix-imports-only. Returns changes."""
     if not os.path.exists(GOOGLE_FORMAT_JAR):
@@ -654,6 +710,20 @@ def main():
         if tab_fixes == 0:
             print("No leading tabs found.", file=sys.stderr)
 
+    # Pass 2b: Keyword and comma whitespace (if( → if (, x,y → x, y)
+    if not args.trailing_only:
+        print("Fixing keyword and comma whitespace...", file=sys.stderr)
+        kw_fixes = 0
+        for filepath in sorted(java_files):
+            n = fix_whitespace_after(filepath, args.dry_run)
+            if n > 0:
+                kw_fixes += n
+                action = "would fix" if args.dry_run else "fixed"
+                print(f"  {filepath}: {n} keyword/comma fixes {action}")
+        total_fixes += kw_fixes
+        if kw_fixes == 0:
+            print("No keyword/comma whitespace violations found.", file=sys.stderr)
+
     # Pass 3: Brace and paren whitespace ({ x } → {x}, ( x ) → (x))
     if not args.trailing_only:
         print("Fixing brace/paren whitespace...", file=sys.stderr)
@@ -681,6 +751,34 @@ def main():
         total_fixes += text_fixes
         if text_fixes == 0:
             print("No empty-statement violations found.", file=sys.stderr)
+
+    # Pass 4b: Upper ell (100l → 100L)
+    if not args.trailing_only:
+        print("Fixing upper ell...", file=sys.stderr)
+        ell_fixes = 0
+        for filepath in sorted(java_files):
+            n = fix_upper_ell(filepath, args.dry_run)
+            if n > 0:
+                ell_fixes += n
+                action = "would fix" if args.dry_run else "fixed"
+                print(f"  {filepath}: {n} ell fixes {action}")
+        total_fixes += ell_fixes
+        if ell_fixes == 0:
+            print("No upper ell violations found.", file=sys.stderr)
+
+    # Pass 4c: No whitespace before (; ; → ;, , → ,)
+    if not args.trailing_only:
+        print("Fixing whitespace before ; and ,...", file=sys.stderr)
+        nws_fixes = 0
+        for filepath in sorted(java_files):
+            n = fix_no_whitespace_before(filepath, args.dry_run)
+            if n > 0:
+                nws_fixes += n
+                action = "would fix" if args.dry_run else "fixed"
+                print(f"  {filepath}: {n} whitespace-before fixes {action}")
+        total_fixes += nws_fixes
+        if nws_fixes == 0:
+            print("No whitespace-before violations found.", file=sys.stderr)
 
     # Pass 5: Indentation (iterative)
     if not args.trailing_only:

@@ -512,7 +512,7 @@ public class RouterConsoleRunner implements RouterApp {
             }
             if (lport > 0) {
                 List<String> hosts = new ArrayList<String>(2);
-                StringTokenizer tok = new StringTokenizer(_listenHost, " ,");
+                StringTokenizer tok = new StringTokenizer(_listenHost, ",");
                 while (tok.hasMoreTokens()) {
                     String host = tok.nextToken().trim();
                     try {
@@ -575,7 +575,7 @@ public class RouterConsoleRunner implements RouterApp {
             if (sslPort > 0) {
                 File keyStore = new File(_context.getConfigDir(), "keystore/console.ks");
                 // Put the list of hosts together early, so we can put it in the selfsigned cert.
-                StringTokenizer tok = new StringTokenizer(_sslListenHost, " ,");
+                StringTokenizer tok = new StringTokenizer(_sslListenHost, ",");
                 Set<String> altNames = new HashSet<String>(4);
                 while (tok.hasMoreTokens()) {
                     String s = tok.nextToken().trim();
@@ -585,7 +585,7 @@ public class RouterConsoleRunner implements RouterApp {
                 }
                 String allowed = _context.getProperty(PROP_ALLOWED_HOSTS);
                 if (allowed != null) {
-                    tok = new StringTokenizer(allowed, " ,");
+                    tok = new StringTokenizer(allowed, ",");
                     while (tok.hasMoreTokens()) {
                         altNames.add(tok.nextToken().trim());
                     }
@@ -601,7 +601,7 @@ public class RouterConsoleRunner implements RouterApp {
                     sslFactory.addExcludeCipherSuites(I2PSSLSocketFactory.EXCLUDE_CIPHERS.toArray(
                                                       new String[I2PSSLSocketFactory.EXCLUDE_CIPHERS.size()]));
                     List<String> hosts = new ArrayList<String>(2);
-                    tok = new StringTokenizer(_sslListenHost, " ,");
+                    tok = new StringTokenizer(_sslListenHost, ",");
                     while (tok.hasMoreTokens()) {
                         String host = tok.nextToken().trim();
                         // doing it this way means we don't have to escape an IPv6 host with []
@@ -709,7 +709,7 @@ public class RouterConsoleRunner implements RouterApp {
             listenHosts.add("0:0:0:0:0:0:0:1");
             String allowed = _context.getProperty(PROP_ALLOWED_HOSTS);
             if (allowed != null) {
-                StringTokenizer tok = new StringTokenizer(allowed, " ,");
+                StringTokenizer tok = new StringTokenizer(allowed, ",");
                 while (tok.hasMoreTokens()) {
                     listenHosts.add(tok.nextToken());
                 }

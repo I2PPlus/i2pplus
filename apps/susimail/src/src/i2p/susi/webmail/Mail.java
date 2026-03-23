@@ -451,7 +451,7 @@ class Mail {
                     }
                     headersParsed = true;
                 }
-                catch(Exception e) {
+                catch (Exception e) {
                     error += "Error parsing mail header: " + e.getClass().getName() + '\n';
                     _log.error("Parse error", e);
                 }

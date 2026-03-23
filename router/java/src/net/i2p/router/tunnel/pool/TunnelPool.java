@@ -124,11 +124,11 @@ public class TunnelPool {
         if (_settings.isExploratory()) {
             _context.statManager().createRequiredRateStat(_rateName, (_settings.isInbound() ? "In " : "Out ") +
                                    "(B/s) for " + name, "Tunnels [Exploratory]",
-                                   new long[] {60*1000l });
+                                   new long[] {60*1000L });
         } else {
             _context.statManager().createRequiredRateStat(_rateName, (_settings.isInbound() ? "In " : "Out ") +
                                    "(B/s) for " + name, "Tunnels [Services]",
-                                   new long[] {60*1000l });
+                                   new long[] {60*1000L });
         }
     }
 

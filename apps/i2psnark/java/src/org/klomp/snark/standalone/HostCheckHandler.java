@@ -38,7 +38,7 @@ public class HostCheckHandler extends AbstractHandler {
         _listenHosts.add("localhost");
         String allowed = _context.getProperty(PROP_ALLOWED_HOSTS);
         if (allowed != null) {
-            StringTokenizer tok = new StringTokenizer(allowed, " ,");
+            StringTokenizer tok = new StringTokenizer(allowed, ",");
             while (tok.hasMoreTokens()) {
                 _listenHosts.add(tok.nextToken());
             }

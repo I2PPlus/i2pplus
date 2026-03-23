@@ -89,7 +89,7 @@ public class Main implements RouterApp, NotificationService {
             _context.addPropertyCallback(new I2PPropertyCallback() {
                 @Override
                 public void propertyChanged(String arg0, String arg1) {
-                    if(arg0.equals(Translate.PROP_LANG)) {
+                    if (arg0.equals(Translate.PROP_LANG)) {
                         trayManager.languageChanged();
                     }
                 }
@@ -135,7 +135,7 @@ public class Main implements RouterApp, NotificationService {
             public void run() {
                 try {
                     startUp();
-                } catch(Exception e) {
+                } catch (Exception e) {
                     log.error("Failed while running desktopgui!", e);
                     changeState(START_FAILED, "Failed while running desktopgui!", e);
                 }

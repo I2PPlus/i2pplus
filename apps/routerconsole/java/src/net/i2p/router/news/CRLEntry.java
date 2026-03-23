@@ -24,9 +24,9 @@ public class CRLEntry {
 
     @Override
     public boolean equals(Object o) {
-        if(o == null)
+        if (o == null)
             return false;
-        if(!(o instanceof CRLEntry))
+        if (!(o instanceof CRLEntry))
             return false;
         CRLEntry e = (CRLEntry) o;
         return updated == e.updated &&

@@ -131,12 +131,12 @@ class SSU2Bitfield {
             long cur = highest - (acnt + 1);
             for (int r = 0; r < maxRanges; r++) {
                 int ncnt = 0;
-                for ( ; cur >= offset && ncnt < 255; cur--) {
+                for (; cur >= offset && ncnt < 255; cur--) {
                     if (get(cur)) {break;}
                     ncnt++;
                 }
                 int aacnt = 0;
-                for ( ; cur >= offset && aacnt < 255; cur--) {
+                for (; cur >= offset && aacnt < 255; cur--) {
                     if (!get(cur)) {break;}
                     aacnt++;
                 }

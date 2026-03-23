@@ -61,7 +61,7 @@ public class Reseeder {
     private static final long MAX_RESEED_RESPONSE_SIZE = 2 * 1024 * 1024;
     private static final long MAX_SU3_RESPONSE_SIZE = 1024 * 1024;
     private static final Pattern PARENS_CONTENT = Pattern.compile("\\(.*\\)");
-    private static final Pattern COMMA_SPACE_SPLIT = Pattern.compile("[ ,]+");
+    private static final Pattern COMMA_SPACE_SPLIT = Pattern.compile("[,]+");
     private static final Pattern VERIFICATION_FAILED = Pattern.compile("verification failed for .*");
     private static final Pattern QUESTION_MARK = Pattern.compile("\\?");
     /** limit to spend on a single host, to avoid getting stuck on one that is seriously overloaded */
@@ -1182,7 +1182,7 @@ public class Reseeder {
          *  @since 0.9.33
          */
         private String getDisplayString(SSLEepGet.ProxyType type) {
-            switch(type) {
+            switch (type) {
                 case HTTP:
                     return "HTTPS";
                 case SOCKS4:
