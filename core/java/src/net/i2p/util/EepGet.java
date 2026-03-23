@@ -255,7 +255,7 @@ public class EepGet {
                     break;
 
                 case 'e':
-                    etag = "\"" + g.getOptarg() + "\"";
+                    etag = new StringBuilder("\"").append(g.getOptarg()).append("\"").toString(); // NOPMD - AvoidUnnecessaryStringBuilderCreation
                     break;
 
                 case 'o':
@@ -645,7 +645,7 @@ public class EepGet {
                 }
                 long timeToSend = _context.clock().now() - _startedOn;
                 StringBuilder buf = new StringBuilder(128);
-                buf.append(" • Transfer time: " + DataHelper.formatDuration(timeToSend));
+                buf.append(" • Transfer time: ").append(DataHelper.formatDuration(timeToSend));
                 if (transferred > 0 && outputFile != null) {
                     buf.append(" @ ");
                     if (timeToSend <= 0)
@@ -680,8 +680,8 @@ public class EepGet {
             System.out.println(" • Transfer size: " + bytesTransferred + " with "
                                + (bytesRemaining < 0 ? "unknown" : Long.toString(bytesRemaining) + " bytes") + " remaining");
             long timeToSend = _context.clock().now() - _startedOn;
-            StringBuilder buf = new StringBuilder(128);
-            buf.append(" • Transfer time: " + DataHelper.formatDuration(timeToSend));
+            StringBuilder buf = new StringBuilder(128); // NOPMD - AvoidUnnecessaryStringBuilderCreation
+            buf.append(" • Transfer time: ").append(DataHelper.formatDuration(timeToSend));
             if (timeToSend <= 0)
                 timeToSend = 1;
             long kbps = (long) (1000.0d * bytesTransferred / timeToSend);
@@ -1204,7 +1204,7 @@ public class EepGet {
             case 303:
             case 307:
             case 308:
-                _alreadyTransferred = 0;
+                _alreadyTransferred = 0;  // NOPMD - AvoidDuplicateAssignmentsInCases
                 rcOk = true;
                 redirect = true;
                 break;
@@ -1264,7 +1264,7 @@ public class EepGet {
             case 407: // proxy auth
                 // we will treat this is a redirect if we haven't sent auth yet
                 //_redirectLocation will be set to _actualURL below
-                _alreadyTransferred = 0;
+                _alreadyTransferred = 0;  // NOPMD - AvoidDuplicateAssignmentsInCases
                 if (_authState != null)
                     rcOk = !_authState.authSent;
                 else
@@ -1273,7 +1273,7 @@ public class EepGet {
                 _keepFetching = rcOk;
                 break;
             case 416: // completed (or range out of reach)
-                _bytesRemaining = 0;
+                _bytesRemaining = 0;  // NOPMD - AvoidDuplicateAssignmentsInCases
                 if (_alreadyTransferred > 0 || !_shouldWriteErrorToOutput) {
                     _keepFetching = false;
                     return;

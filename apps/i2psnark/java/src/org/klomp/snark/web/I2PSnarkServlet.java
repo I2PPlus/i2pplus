@@ -1467,7 +1467,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * @return          the constructed HTML string of the filter link
      */
     private String buildFilterLink(String baseUrl, String filterId, boolean visible, String title, String badgeText) {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder(); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         sb.append("<a class=filter id=").append(filterId).append(" href=\"").append(baseUrl).append(filterId).append("\"");
         if (!visible) sb.append(" hidden");
         sb.append("><span>").append(title)
@@ -1489,7 +1489,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * @return         the constructed HTML string of the filter link
      */
     private String buildSimpleFilterLink(String baseUrl, String filterId, String title, String badge) {
-        return new StringBuilder()
+        return new StringBuilder() // NOPMD - AvoidUnnecessaryStringBuilderCreation
           .append("<a class=filter id=").append(filterId).append(" href=\"").append(baseUrl).append(filterId).append("\"><span>")
           .append(title).append(badge).append("</span></a>").toString();
     }
@@ -1620,8 +1620,8 @@ public class I2PSnarkServlet extends BasicServlet {
                 }
             }
             if (isValidNumeric(value) && value != null && !value.isEmpty()) {
-                if (buf.length() <= 0) {buf.append("?" + paramName + "=");}
-                else {buf.append("&" + paramName + "=");}
+                if (buf.length() <= 0) {buf.append("?").append(paramName).append("=");}
+                else {buf.append("&").append(paramName).append("=");}
                 buf.append(value);
             }
         }
@@ -2184,7 +2184,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
                 // Delete directories bottom-up
                 Set<File> dirs = storage.getDirectories();
-                if (dirs == null) break;
+                if (dirs.isEmpty()) break;
 
                 boolean allDeleted = true;
                 if (_log.shouldInfo()) {
@@ -3017,7 +3017,7 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean isActivelySeeding = isComplete && isRunning && hasPeers && isUploading;
 
         // Cache repeated peer count HTML once
-        final String peerCountHtml = new StringBuilder()
+        final String peerCountHtml = new StringBuilder() // NOPMD - AvoidUnnecessaryStringBuilderCreation
             .append("</td><td class=peerCount><b><span class=right>")
             .append(curPeers)
             .append("</span>")
@@ -3049,12 +3049,12 @@ public class I2PSnarkServlet extends BasicServlet {
             snarkSt = "active seeding complete connected";
         } else if (isSeeding && hasConnectedPeers && !isUploading) {
             statusBuf.append(toSVGWithDataTooltip("seeding", "",
-                    _t("Seeding") + " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")"))
+                    _t("Seeding").concat(" (").concat(_t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers)).concat(")")))
                 .append(peerCountHtml);
             snarkSt = "inactive seeding complete connected";
         } else if (!isComplete && hasConnectedPeers && !isUploading && !isDownloading) {
             statusBuf.append(toSVGWithDataTooltip("stalled", "",
-                    _t("Stalled") + " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")"))
+                    _t("Stalled").concat(" (").concat(_t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers)).concat(")")))
                 .append(peerCountHtml);
             snarkSt = "inactive incomplete connected";
         } else if (isSeeding) {
@@ -3068,17 +3068,17 @@ public class I2PSnarkServlet extends BasicServlet {
         } else {
             if (hasConnectedPeers && isDownloading) {
                 statusBuf.append(toSVGWithDataTooltip("downloading", "",
-                        _t("OK") + ", " + ngettext("Downloading from {0} peer", "Downloading from {0} peers", curPeers)))
+                        _t("OK").concat(", ").concat(ngettext("Downloading from {0} peer", "Downloading from {0} peers", curPeers))))
                     .append(peerCountHtml);
                 snarkSt = "active downloading incomplete connected";
             } else if (!isComplete && hasConnectedPeers) {
                 statusBuf.append(toSVGWithDataTooltip("stalled", "",
-                        _t("Stalled") + " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")"))
+                        _t("Stalled").concat(" (").concat(_t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers)).concat(")")))
                     .append(peerCountHtml);
                 snarkSt = "inactive downloading incomplete connected";
             } else if (isRunning && hasPeers && !hasConnectedPeers) {
                 statusBuf.append(toSVGWithDataTooltip("nopeers", "",
-                        _t("No Peers") + " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")"))
+                        _t("No Peers").concat(" (").concat(_t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers)).concat(")")))
                     .append("</td><td class=peerCount><b><span class=right>0</span>")
                     .append(thinsp(noThinsp))
                     .append("<span class=left>").append(knownPeers).append("</span>");
@@ -3748,7 +3748,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("title=\"");
         if (noCollapse) {
             String ua = req.getHeader("user-agent");
-            buf.append(_t("Your browser does not support this feature.")).append("[" + ua + "]").append("\" disabled");
+            buf.append(_t("Your browser does not support this feature.")).append("[").append(ua).append("]").append("\" disabled");
         } else {
             buf.append(_t("Allow the 'Add Torrent' and 'Create Torrent' panels to be collapsed, and collapse by default in non-embedded mode")).append("\"");
         }
@@ -3896,7 +3896,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append(_t("Max files per torrent"))
            .append("</b> <input type=text name=maxFiles size=5 maxlength=5 pattern=\"[0-9]{1,5}\" class=\"r numeric\"").append(" title=\"")
            .append(_t("Maximum number of files permitted per torrent - note that trackers may set their own limits, and your OS may limit the number of open files, preventing torrents with many files (and subsequent torrents) from loading"))
-           .append("\" value=\"" + _manager.getMaxFilesPerTorrent() + "\" spellcheck=false disabled></label></span><br>\n")
+           .append("\" value=\"").append(_manager.getMaxFilesPerTorrent()).append("\" spellcheck=false disabled></label></span><br>\n")
            .append("</div></td></tr>\n");
 
 /* i2cp/tunnel configuration */
@@ -4324,7 +4324,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * @since 0.9
      */
     private static String urlify(String s, int max) {
-        StringBuilder buf = new StringBuilder(256);
+        StringBuilder buf = new StringBuilder(256); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         // browsers seem to work without doing this but let's be strict
         String link = urlEncode(s);
         String display;
@@ -5621,8 +5621,8 @@ public class I2PSnarkServlet extends BasicServlet {
                 Comment c = iter.next();
                 buf.append("<tr><td class=commentAuthor>");
                 if (c.getName() != null) {
-                    buf.append("<span class=commentAuthorName title=\"" + DataHelper.escapeHTML(c.getName()) + "\">")
-                       .append(DataHelper.escapeHTML(c.getName())).append("</span>");
+            buf.append("<span class=commentAuthorName title=\"").append(DataHelper.escapeHTML(c.getName())).append("\">")
+               .append(DataHelper.escapeHTML(c.getName())).append("</span>");
                 }
                 buf.append("</td><td class=commentRating>");
                 if (er) {

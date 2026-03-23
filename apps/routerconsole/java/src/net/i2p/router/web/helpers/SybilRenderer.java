@@ -543,14 +543,14 @@ public class SybilRenderer {
             TunnelPool in = clientInboundPools.get(client);
             String name = (in != null) ? DataHelper.escapeHTML(in.getSettings().getDestinationNickname()) : client.toBase64().substring(0,4);
             buf.append("<h3 class=sybils>").append(_t("Closest floodfills to the Routing Key for"))
-               .append(" " + name + " (" + _t("where we store our LS") + ")</h3>");
-            buf.append("<p class=sybil_info><a href=\"/netdb?caps=f&amp;sybil=" + ls.getHash().toBase64() + "\">See all</a></p>\n");
+               .append(" ").append(name).append(" (").append(_t("where we store our LS")).append(")</h3>");
+            buf.append("<p class=sybil_info><a href=\"/netdb?caps=f&amp;sybil=").append(ls.getHash().toBase64()).append("\">See all</a></p>\n");
             analysis.calculateRouterInfo(rkey, name, ris, points);
             renderRouterInfoHTML(out, buf, rkey, avgMinDist, ris);
             Hash nkey = rkgen.getNextRoutingKey(ls.getHash());
             buf.append("<h3 class=sybils>").append(_t("Closest floodfills to Tomorrow's Routing Key for"))
-               .append(" " + name + " (" + _t("where we will store our LS") + ")</h3>");
-            buf.append("<p class=sybil_info><a href=\"/netdb?caps=f&amp;sybil=" + ls.getHash().toBase64() + "\">See all</a></p>\n");
+               .append(" ").append(name).append(" (").append(_t("where we will store our LS")).append(")</h3>");
+            buf.append("<p class=sybil_info><a href=\"/netdb?caps=f&amp;sybil=").append(ls.getHash().toBase64()).append("\">See all</a></p>\n");
             analysis.calculateRouterInfo(nkey, name + " (tomorrow)", ris, points);
             renderRouterInfoHTML(out, buf, nkey, avgMinDist, ris);
         }
@@ -1054,7 +1054,7 @@ public class SybilRenderer {
         }
         buf.append("</span>");
         if (_context.portMapper().isRegistered("imagegen"))
-            buf.append("<img class=identicon src=\"/imagegen/id?s=32&amp;c=" + hash.replace("=", "%3d") + "\" height=28 width=28 loading=lazy>");
+            buf.append("<img class=identicon src=\"/imagegen/id?s=32&amp;c=").append(hash.replace("=", "%3d")).append("\" height=28 width=28 loading=lazy>");
         buf.append("</th></tr>\n");
         buf.append("<tr><td class=sybilinfo_params colspan=3>\n<div class=sybilinfo_container>\n");
         if (us != null) {

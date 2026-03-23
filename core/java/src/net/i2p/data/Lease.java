@@ -183,8 +183,8 @@ public class Lease extends DataStructureImpl {
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder(128);
-        buf.append("\n* Gateway: [").append(_gateway.toBase64().substring(0,6) + "]");
+        StringBuilder buf = new StringBuilder(128); // NOPMD - AvoidUnnecessaryStringBuilderCreation
+        buf.append("\n* Gateway: [").append(_gateway.toBase64().substring(0,6)).append("]");
         buf.append(" -> Expires: ").append(DataHelper.formatTime(_end));
         buf.append(" [TunnelID ").append(_tunnelId).append("]");
         return buf.toString();

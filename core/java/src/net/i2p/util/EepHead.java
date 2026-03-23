@@ -384,7 +384,7 @@ public class EepHead extends EepGet {
         buf.append("\r\n");
         buf.append("Accept-Encoding: \r\n");
         // This will be replaced if we are going through I2PTunnelHTTPClient
-        buf.append("User-Agent: " + USER_AGENT + "\r\n");
+        buf.append("User-Agent: ").append(USER_AGENT).append("\r\n");
         if (_authState != null && _shouldProxy && _authState.authMode != AUTH_MODE.NONE) {
             buf.append("Proxy-Authorization: ");
             buf.append(_authState.getAuthHeader("HEAD", urlToSend));

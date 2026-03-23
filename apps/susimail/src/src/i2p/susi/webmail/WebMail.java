@@ -2198,7 +2198,7 @@ public class WebMail extends HttpServlet {
             response.setContentType("text/html");
             StringBuilder buf = new StringBuilder(16*1024);
 
-            buf.append("<!DOCTYPE HTML>\n<html class=\"" + theme + "\">\n")
+            buf.append("<!DOCTYPE HTML>\n<html class=\"").append(theme).append("\">\n")
                .append("<head>\n")
                .append("<script src=/js/setupIframe.js></script>\n")
                .append("<meta http-equiv=Content-Type content=text/html; charset=utf-8>\n")
@@ -2251,7 +2251,7 @@ public class WebMail extends HttpServlet {
                .append("<script src=/js/iframeResizer/iframeResizer.contentWindow.js></script>\n")
                .append("<script src=\"/js/iframeResizer/updatedEvent.js?").append(CoreVersion.VERSION).append("\"></script>\n")
                .append("<script src=\"/susimail/js/notifications.js?").append(CoreVersion.VERSION).append("\"></script>\n")
-               .append("<script nonce=").append(cspNonce).append(">const theme = \"" + theme + "\";</script>\n")
+               .append("<script nonce=").append(cspNonce).append(">const theme = \"").append(theme).append("\";</script>\n")
                .append("<script src=/js/detectPageZoom.js type=module></script>\n")
                .append("<style>body{display:none;pointer-events:none}</style>\n")
                .append("</head>\n");
@@ -2469,7 +2469,7 @@ public class WebMail extends HttpServlet {
      */
     private void sendRedirect(HttpServletRequest req, HttpServletResponse resp, String q) throws IOException {
         String url = req.getRequestURL().toString();
-        StringBuilder buf = new StringBuilder(128);
+        StringBuilder buf = new StringBuilder(128); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         int qq = url.indexOf('?');
         if (qq >= 0)
             url = url.substring(0, qq);
@@ -2703,10 +2703,10 @@ public class WebMail extends HttpServlet {
                 body = new StringBuilder(1024);
             }
             I2PAppContext ctx = I2PAppContext.getGlobalContext();
-            body.append("Date: " + RFC822Date.to822Date(ctx.clock().now()) + "\r\n");
+            body.append("Date: ").append(RFC822Date.to822Date(ctx.clock().now())).append("\r\n");
             // todo include real names, and headerline encode them
             if (from != null)
-                body.append("From: " + from + "\r\n");
+                body.append("From: ").append(from).append("\r\n");
             Mail.appendRecipients(body, toList, "To: ");
             Mail.appendRecipients(body, ccList, "Cc: ");
             // only for draft
@@ -2837,9 +2837,9 @@ public class WebMail extends HttpServlet {
         if (ok) {
             StringBuilder body = new StringBuilder(1024);
             I2PAppContext ctx = I2PAppContext.getGlobalContext();
-            body.append("Date: " + RFC822Date.to822Date(ctx.clock().now()) + "\r\n");
+            body.append("Date: ").append(RFC822Date.to822Date(ctx.clock().now())).append("\r\n");
             // todo include real names, and headerline encode them
-            body.append("From: " + from + "\r\n");
+            body.append("From: ").append(from).append("\r\n");
             Mail.appendRecipients(body, toList, "To: ");
             Mail.appendRecipients(body, ccList, "Cc: ");
             try {
@@ -3092,26 +3092,26 @@ public class WebMail extends HttpServlet {
                     buf.append("<tr><td class=right>" + _t("Attachments") + "</td>");
                     wroteHeader = true;
                 } else {buf.append("<tr><td>&nbsp;</td>");}
-                buf.append("<td id=attachedfile class=left><label><input type=checkbox class=optbox name=\"check" +
-                          attachment.hashCode() + "\" value=1>&nbsp;" + quoteHTML(attachment.getFileName()));
-                buf.append(" <span class=attachSize>(" + attachSize + ")</span></label>");
+                buf.append("<td id=attachedfile class=left><label><input type=checkbox class=optbox name=\"check")
+                           .append(attachment.hashCode()).append("\" value=1>&nbsp;").append(quoteHTML(attachment.getFileName()));
+                buf.append(" <span class=attachSize>(").append(attachSize).append(")</span></label>");
                 String type = attachment.getContentType();
                 String iconDir = "/themes/susimail/images/";
                 if (type != null) {
                     buf.append("<span class=thumbnail><img alt=\"\" src=\"");
-                    if (type.startsWith("image/")) {buf.append(myself + '?' + DRAFT_ATTACHMENT + '=' + attachment.hashCode());}
-                    else if (type.startsWith("audio/")) {buf.append(iconDir + "audio.svg");}
-                    else if (type.startsWith("text/")) {buf.append(iconDir + "text.svg");}
-                    else if (type.startsWith("video/")) {buf.append(iconDir + "video.svg");}
-                    else if (type.contains("pgp")) {buf.append(iconDir + "sig.svg");}
+                    if (type.startsWith("image/")) {buf.append(myself).append('?').append(DRAFT_ATTACHMENT).append('=').append(attachment.hashCode());}
+                    else if (type.startsWith("audio/")) {buf.append(iconDir).append("audio.svg");}
+                    else if (type.startsWith("text/")) {buf.append(iconDir).append("text.svg");}
+                    else if (type.startsWith("video/")) {buf.append(iconDir).append("video.svg");}
+                    else if (type.contains("pgp")) {buf.append(iconDir).append("sig.svg");}
                     else if (type.equals("application/zip") || type.equals("application/x-gtar") ||
                                type.equals("application/x-zip-compressed") || type.equals("application/compress") ||
                                type.equals("application/gzip") || type.equals("application/x-7z-compressed") ||
                                type.equals("application/x-rar-compressed") || type.equals("application/x-tar") ||
                                type.equals("application/x-bzip2")) {
-                        buf.append(iconDir + "compress.svg");
-                    } else if (type.equals("application/pdf")) {buf.append(iconDir + "pdf.svg");}
-                    else {buf.append(iconDir + "generic.svg");}
+                        buf.append(iconDir).append("compress.svg");
+                    } else if (type.equals("application/pdf")) {buf.append(iconDir).append("pdf.svg");}
+                    else {buf.append(iconDir).append("generic.svg");}
                     buf.append("\" hidden></span>");
                 }
                 buf.append("</td></tr>\n");
@@ -3421,7 +3421,7 @@ public class WebMail extends HttpServlet {
                 sb.append("<td class=\"mailListSender ")
                   .append(jslink)
                   .append(" title=\"")
-                  .append(buildRecipientLine(mail.to).replace("\"", "") + "\">")
+                   .append(buildRecipientLine(mail.to).replace("\"", "")).append("\">")
                   .append(link).append(to);
                 if (trim) {sb.append("…");}
                 sb.append("</a></td>");
@@ -3430,7 +3430,7 @@ public class WebMail extends HttpServlet {
             }
         } else {
             sb.append("<td class=\"mailListSender ").append(jslink).append(" title=\"")
-              .append(mail.sender.replace("\"", "") + "\">");
+              .append(mail.sender.replace("\"", "")).append("\">");
             if (mail.shortSender.contains("(")) {
                 int index = mail.shortSender.indexOf("(");
                 mail.shortSender = escapeHtml(mail.shortSender.substring(0, index));
@@ -3494,7 +3494,7 @@ public class WebMail extends HttpServlet {
                              .replace(" AM", "&#8239;<span class=listClock>AM</span>")
                              .replace(" PM", "&#8239;<span class=listClock>PM</span>");
 
-        StringBuilder cell = new StringBuilder(320);
+        StringBuilder cell = new StringBuilder(320); // NOPMD - AvoidUnnecessaryStringBuilderCreation
         cell.append("<td class=\"mailListDate ")
             .append(jslink)
             .append(" title=\"")
@@ -3696,7 +3696,7 @@ public class WebMail extends HttpServlet {
             if (uidl == null || folder.isFirstElement(showUIDL)) {buf.append(button2(PREV, text));}
             else {
                 String b64UIDL = Base64.encode(uidl);
-                buf.append("<input type=hidden name=\"").append(PREV_B64UIDL).append("\" value=\"").append(b64UIDL + "\">")
+                buf.append("<input type=hidden name=\"").append(PREV_B64UIDL).append("\" value=\"").append(b64UIDL).append("\">")
                    .append(button(PREV, text));
             }
             buf.append(spacer);

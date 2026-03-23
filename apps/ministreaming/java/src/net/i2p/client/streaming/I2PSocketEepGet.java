@@ -268,7 +268,7 @@ public class I2PSocketEepGet extends EepGet {
             }
         }
         if(!uaOverridden)
-            buf.append("User-Agent: " + USER_AGENT + "\r\n");
+            buf.append("User-Agent: ").append(USER_AGENT).append("\r\n");
         buf.append("\r\n");
         if (_log.shouldDebug())
             _log.debug("Request: [" + buf.toString() + "]");

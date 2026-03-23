@@ -104,8 +104,8 @@ class FloodfillPeerSelector extends PeerSelector {
         kbuckets.getAll(matches);
         List<Hash> rv = matches.get(maxNumRouters, preferConnected);
         StringBuilder buf = new StringBuilder();
-        buf.append("Searching for " + maxNumRouters + " peers close to [" + key.toBase64().substring(0,6) + "]");
-        buf.append("\n* All Hashes: " + matches.size());
+        buf.append("Searching for ").append(maxNumRouters).append(" peers close to [").append(key.toBase64().substring(0,6)).append("]");
+        buf.append("\n* All Hashes: ").append(matches.size());
         buf.append("\n* Ignoring: ");
         for (Hash h : peersToIgnore) {
             buf.append("[").append(h.toBase64().substring(0,6)).append("]").append(" ");

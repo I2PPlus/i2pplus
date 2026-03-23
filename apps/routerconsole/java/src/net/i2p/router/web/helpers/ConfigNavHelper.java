@@ -69,14 +69,13 @@ public class ConfigNavHelper extends HelperBase {
         Collections.sort(tabs, new TabComparator());
         for (int i = 0; i < tabs.size(); i++) {
             String page = "config" + tabs.get(i).page;
-            String id = page;
-            if (id.equals("config")) {id += "bandwidth";}
+            String id = page.equals("config") ? "configbandwidth" : page;
             id = id.replace("config", "nav_");
             if (requestURI.endsWith(page) || requestURI.endsWith(page + ".jsp")) {// we are there
-                buf.append("<span id=" + id + " class=tab2>").append(tabs.get(i).title);
+                buf.append("<span id=").append(id).append(" class=tab2>").append(tabs.get(i).title);
             } else {
                 // we are not there, make a link
-                buf.append("<span id=" + id + " class=tab title=\"" + tabs.get(i).title + "\">");
+                buf.append("<span id=").append(id).append(" class=tab title=\"").append(tabs.get(i).title).append("\">");
                 if (page.equals("configembed")) {page = "embed";}
                 buf.append("<a href=\"").append(page).append("\">").append(tabs.get(i).title).append("</a>");
             }

@@ -240,14 +240,14 @@ class FragmentedMessage {
         buf.append("]; Last received: ").append(_lastReceived);
         buf.append("; Lifetime: ").append(DataHelper.formatDuration(_context.clock().now()-_createdOn));
         if (_toRouter != null) {
-            buf.append("\n* Target: [").append(_toRouter.toBase64().substring(0,6) + "]");
+            buf.append("\n* Target: [").append(_toRouter.toBase64().substring(0,6)).append("]");
             if (_toTunnel != null)
                 buf.append(" on tunnel [TunnelId ").append(_toTunnel.getTunnelId()).append("]");
         }
         if (_completed)
             buf.append("; completed");
         if (_releasedAfter > 0)
-            buf.append("; released after " + DataHelper.formatDuration(_releasedAfter));
+            buf.append("; released after ").append(DataHelper.formatDuration(_releasedAfter));
         return buf.toString();
     }
 }

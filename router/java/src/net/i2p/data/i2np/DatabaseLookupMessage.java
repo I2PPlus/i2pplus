@@ -285,7 +285,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
      */
     public Set<Hash> getDontIncludePeers() {
         if (_dontIncludePeers == null)
-            return Collections.emptySet();
+            return null;  // NOPMD - ReturnEmptyCollectionRatherThanNull (callers check for null specifically)
         return new HashSet<Hash>(_dontIncludePeers);
     }
 
@@ -576,8 +576,8 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
             }
         } else if (_log.shouldWarn()) {
             buf.append(msgType);
-            if (msgType.equals("LeaseSet")) {buf.append(" [" + _key.toBase32().substring(0,8) + "...]");}
-            else {buf.append(" [" + _key.toBase64().substring(0,6) + "]");}
+            if (msgType.equals("LeaseSet")) {buf.append(" [").append(_key.toBase32().substring(0,8)).append("...]");}
+            else {buf.append(" [").append(_key.toBase64().substring(0,6)).append("]");}
         }
         return buf.toString();
     }

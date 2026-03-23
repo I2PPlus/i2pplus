@@ -199,7 +199,7 @@ public class InfoHelper extends HelperBase {
         }
         buf.append("&ensp;<a href=\"/config\">").append(_t("Configure")).append("</a></td></tr>\n")
            .append("<tr><td><b>").append(_t("Performance")).append(":</b></td><td><b>").append(_t("Available CPU Cores")).append(":</b> ")
-           .append(getCoreCount()).append("&ensp;<b>").append(_t("Maximum available RAM")).append(":</b> ").append(maxMemMB + "MB")
+           .append(getCoreCount()).append("&ensp;<b>").append(_t("Maximum available RAM")).append(":</b> ").append(maxMemMB).append("MB")
            .append("&ensp;<b>").append(_t("Classified as slow")).append(":</b>");
         if (isRouterSlow()) {buf.append(" <span class=\"yes\">").append(_t("Yes")).append("</span>");}
         else {buf.append(" <span class=\"no\">").append(_t("No")).append("</span>");}

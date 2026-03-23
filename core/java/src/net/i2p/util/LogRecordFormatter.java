@@ -56,7 +56,7 @@ class LogRecordFormatter {
                 buf.append(getThread(rec));
                 break;
             case LogManager.PRIORITY:
-                buf.append("| " + getPriority(rec, manager.getContext()));
+                buf.append("| ").append(getPriority(rec, manager.getContext()));
                 break;
             case LogManager.MESSAGE:
                 String msg = getWhat(rec);

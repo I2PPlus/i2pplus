@@ -571,7 +571,7 @@ class RatchetTagSet implements TagSetHandle {
                         buf.append("\n* Session Key: TBD");
                         // set DEBUG if you want to see them all
                         if (!DEBUG) {
-                            buf.append(" (" + (sz - (i +1)) + " more)");
+                            buf.append(" (").append(sz - (i +1)).append(" more)");
                             break;
                         }
                     }
