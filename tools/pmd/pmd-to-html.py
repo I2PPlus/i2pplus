@@ -298,8 +298,6 @@ def main():
       tgt.setAttribute("open","");setTimeout(function(){tgt.scrollIntoView({behavior:"smooth",block:"start"})},50)}return}
   var rl=e.target.closest("[data-rule]");
   if(rl){e.preventDefault();showRule(rl.dataset.rule);return}
-  var bk=e.target.closest("#rule-back");
-  if(bk){e.preventDefault();hideRule();return}
 });
 function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
 function showRule(rule){
@@ -308,7 +306,7 @@ function showRule(rule){
   var v=document.getElementById("violations");
   v.style.display="none";
   c.style.display="block";
-  var h=\'<div class="tabletitle"><a id="rule-back" href="#">\u25C0 Back</a> &middot; \'+esc(rule)+\' <span class="badge">\'+d.length+\'</span></div>\';
+  var h=\'<div class="tabletitle">\'+esc(rule)+\' <span class="badge">\'+d.length+\'</span></div>\';
   var curFile="";
   for(var i=0;i<d.length;i++){
     var f=d[i][0], x=d[i][1];
