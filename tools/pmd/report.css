@@ -210,7 +210,6 @@ th {
 }
 
 .priority-cell + td {
-  width: 1%;
   min-width: 200px;
 }
 
@@ -286,7 +285,7 @@ table + .tabletitle {
 }
 
 /* Line column */
-.line {
+.line, .warningtable td:first-child {
   text-align: center;
   font-variant-numeric: tabular-nums;
   width: 1%;
