@@ -112,12 +112,12 @@ public class I2PTunnelUDPServerBase extends I2PTunnelTask implements Source, Sin
      */
     public void startRunning() {
         //synchronized (startLock) {
-            try {
-                _session.connect();
-            } catch(I2PSessionException exc) {
-                throw new RuntimeException("failed to connect session", exc);
-            }
-            start();
+        try {
+            _session.connect();
+        } catch(I2PSessionException exc) {
+            throw new RuntimeException("failed to connect session", exc);
+        }
+        start();
         //}
 
         notifyEvent("openServerResult", "ok");

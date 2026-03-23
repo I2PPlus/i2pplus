@@ -326,7 +326,7 @@ public class RouterThrottleImpl implements RouterThrottle {
         int availBps = Math.min((maxKBpsIn*1024*9/10) - usedIn, (maxKBpsOut*1024*9/10) - usedOut);
         if (availBps < MIN_AVAILABLE_BPS) {
             if (_log.shouldWarn()) {
-            _log.warn("Rejecting participating tunnel requests \n* Available bandwidth (" + availBps +
+                _log.warn("Rejecting participating tunnel requests \n* Available bandwidth (" + availBps +
                       "B/s) is less than minimum required (" + MIN_AVAILABLE_BPS + "B/s)");
             }
             setTunnelStatus("[rejecting/max]" + LIMIT_STR);

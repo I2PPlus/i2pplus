@@ -146,7 +146,7 @@ public class ConfigKeyringHelper extends HelperBase {
                 if (t > 0) {buf.append(DataHelper.formatDate(t));}
                 buf.append("</td><td class=revoke>");
                 if (!local) {
-                  buf.append("<input value=\"").append(b32).append("\" type=checkbox name=\"revokeClient\" class=optbox>");
+                    buf.append("<input value=\"").append(b32).append("\" type=checkbox name=\"revokeClient\" class=optbox>");
                 }
                 buf.append("</td></tr>");
                 rv = true;
@@ -161,7 +161,7 @@ public class ConfigKeyringHelper extends HelperBase {
 
     /** @since 0.9.41 */
     private static class BDComparator implements Comparator<BlindData>, Serializable {
-         public int compare(BlindData l, BlindData r) {return l.toBase32().compareTo(r.toBase32());}
+        public int compare(BlindData l, BlindData r) {return l.toBase32().compareTo(r.toBase32());}
     }
 
 }

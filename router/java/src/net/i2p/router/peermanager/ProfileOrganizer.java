@@ -193,7 +193,7 @@ public class ProfileOrganizer {
                 _highCapacityPeers.put(peer, profile);
             }
             _strictCapacityOrder.add(profile);
-             enforceProfileCap();
+            enforceProfileCap();
         } finally {releaseWriteLock();}
         return old;
     }
@@ -767,13 +767,13 @@ public class ProfileOrganizer {
         // Sort to find median and Nth peer
         capacities.sort(Double::compareTo);
         int minHighCap = getMinimumHighCapacityPeers();
-       double thresholdAtMedian = capacities.get(totalPeers / 2);
+        double thresholdAtMedian = capacities.get(totalPeers / 2);
         double thresholdAtMinHighCap = (minHighCap <= totalPeers)
-           ? capacities.get(Math.min(minHighCap - 1, totalPeers - 1))
-           : CapacityCalculator.GROWTH_FACTOR;
+            ? capacities.get(Math.min(minHighCap - 1, totalPeers - 1))
+            : CapacityCalculator.GROWTH_FACTOR;
         double thresholdAtLowest = capacities.get(totalPeers - 1);
-         int numExceedingMean = (int) capacities.stream().filter(v -> v > meanCapacity).count();
-         return calculateCapacityThreshold(meanCapacity, numExceedingMean, totalPeers,
+        int numExceedingMean = (int) capacities.stream().filter(v -> v > meanCapacity).count();
+        return calculateCapacityThreshold(meanCapacity, numExceedingMean, totalPeers,
                                         thresholdAtMedian, thresholdAtMinHighCap, thresholdAtLowest);
     }
 

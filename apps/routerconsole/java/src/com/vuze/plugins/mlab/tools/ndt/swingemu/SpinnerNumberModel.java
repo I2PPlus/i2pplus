@@ -25,35 +25,35 @@ package com.vuze.plugins.mlab.tools.ndt.swingemu;
 
 /**
  * Emulation of javax.swing.SpinnerNumberModel for the NDT (Network Diagnostic Tool) plugin.
- * 
+ *
  * <p>This class provides a minimal stub implementation of a spinner number model
  * to allow the NDT tool to run in headless environments. The model maintains
  * numeric value but provides no actual spinner functionality.</p>
- * 
+ *
  * <p>All operations except value tracking are no-ops, maintaining API compatibility
  * without requiring an actual graphical display system.</p>
- * 
+ *
  */
 public class
-SpinnerNumberModel
+    SpinnerNumberModel
 {
 	private int		value;
 
 	public void
-	setValue(
+            setValue(
 		int	 i )
 	{
 		value	= i;
 	}
 
 	public int
-	getValue()
+            getValue()
 	{
 		return( value );
 	}
 
 	public void
-	setMinimum(
+            setMinimum(
 		int	i )
 	{
 	}

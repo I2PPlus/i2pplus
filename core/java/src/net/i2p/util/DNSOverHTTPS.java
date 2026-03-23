@@ -542,57 +542,57 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
         try {
             int c;
             while ((c = g.getopt()) != -1) {
-              switch (c) {
-                case '4':
-                    type = Type.V4_ONLY;
-                    break;
+                switch (c) {
+                    case '4':
+                        type = Type.V4_ONLY;
+                        break;
 
-                case '6':
-                    type = Type.V6_ONLY;
-                    break;
+                    case '6':
+                        type = Type.V6_ONLY;
+                        break;
 
-                case 'd':
-                    if (decode || process || testall)
+                    case 'd':
+                        if (decode || process || testall)
+                            error = true;
+                        else
+                            decode = true;
+                        break;
+
+                    case 'f':
+                        type = Type.V4_PREFERRED;
+                        break;
+
+                    case 'p':
+                        if (decode || process || testall)
+                            error = true;
+                        else
+                            process = true;
+                        break;
+
+                    case 's':
+                        type = Type.V6_PREFERRED;
+                        break;
+
+                    case 't':
+                        if (url != null)
+                            error = true;
+                        else
+                            testall = true;
+                        break;
+
+                    case 'u':
+                        if (testall || url != null)
+                            error = true;
+                        else
+                            url = g.getOptarg();
+                        break;
+
+                    case '?':
+                    case ':':
+                    default:
                         error = true;
-                    else
-                        decode = true;
-                    break;
-
-                case 'f':
-                    type = Type.V4_PREFERRED;
-                    break;
-
-                case 'p':
-                    if (decode || process || testall)
-                        error = true;
-                    else
-                        process = true;
-                    break;
-
-                case 's':
-                    type = Type.V6_PREFERRED;
-                    break;
-
-                case 't':
-                    if (url != null)
-                        error = true;
-                    else
-                        testall = true;
-                    break;
-
-                case 'u':
-                    if (testall || url != null)
-                        error = true;
-                    else
-                        url = g.getOptarg();
-                    break;
-
-                case '?':
-                case ':':
-                default:
-                    error = true;
-                    break;
-              }  // switch
+                        break;
+                }  // switch
             } // while
         } catch (RuntimeException e) {
             e.printStackTrace();

@@ -8,11 +8,11 @@ import net.i2p.data.SessionKey;
 
 /**
  * Simple key ring for storing session keys by hash.
- * 
+ *
  * <p>This class provides a thread-safe mapping from router hashes to their
  * corresponding session keys. It extends ConcurrentHashMap to provide
  * concurrent access capabilities for cryptographic key storage.</p>
- * 
+ *
  * <p><strong>Note:</strong> The HTML rendering functionality has been deprecated
  * and moved to the router console since version 0.9.33.</p>
  */

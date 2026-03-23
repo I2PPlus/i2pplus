@@ -111,14 +111,14 @@ public final class IMAPReply {
         if (m.matches()) { // TODO would lookingAt() be more efficient? If so, then drop trailing .* from patterns
             final String code = m.group(1);
             switch (code) {
-            case IMAP_OK:
-                return OK;
-            case IMAP_BAD:
-                return BAD;
-            case IMAP_NO:
-                return NO;
-            default:
-                break;
+                case IMAP_OK:
+                    return OK;
+                case IMAP_BAD:
+                    return BAD;
+                case IMAP_NO:
+                    return NO;
+                default:
+                    break;
             }
         }
         throw new MalformedServerReplyException("Received unexpected IMAP protocol response from server: '" + line + "'.");

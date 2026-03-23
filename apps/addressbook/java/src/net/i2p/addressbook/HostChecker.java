@@ -1237,10 +1237,10 @@ public class HostChecker {
 
                     // Reload categories into memory
                     loadCategories();
-                    
+
                     // Update hosts_check.txt with new categories and add new hosts
                     updateHostsWithCategories();
-                    
+
                     downloadSuccess = true;
 
                     if (_log.shouldInfo()) {

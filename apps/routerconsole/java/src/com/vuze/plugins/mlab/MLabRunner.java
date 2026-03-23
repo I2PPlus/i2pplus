@@ -72,7 +72,7 @@ public class MLabRunner {
     }
 
     public boolean isRunning() {
-       return _running.get();
+        return _running.get();
     }
 
     /**

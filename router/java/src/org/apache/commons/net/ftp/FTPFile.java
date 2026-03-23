@@ -114,14 +114,14 @@ public class FTPFile implements Serializable {
 
     private char formatType() {
         switch (type) {
-        case FILE_TYPE:
-            return '-';
-        case DIRECTORY_TYPE:
-            return 'd';
-        case SYMBOLIC_LINK_TYPE:
-            return 'l';
-        default:
-            return '?';
+            case FILE_TYPE:
+                return '-';
+            case DIRECTORY_TYPE:
+                return 'd';
+            case SYMBOLIC_LINK_TYPE:
+                return 'l';
+            default:
+                return '?';
         }
     }
 

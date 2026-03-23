@@ -36,10 +36,10 @@ import net.metanotion.util.skiplist.SkipSpan;
 
 /**
  * SkipList span implementation with in-memory key-value storage.
- * 
+ *
  * <p>Stores all keys and values in memory for fast access while maintaining
  * disk persistence. Supports overflow to additional pages when capacity is exceeded.</p>
- * 
+ *
  * <p>On-disk format:</p>
  * <pre>
  *   First Page:
@@ -444,7 +444,7 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
             bf.file.skipBytes(4);  // skip magic
             bf.file.writeInt(0);
             // write new number of keys
-            if (lastGoodPage != this.page) {                    
+            if (lastGoodPage != this.page) {
                 BlockFile.pageSeek(this.bf.file, this.page);
                 bf.file.skipBytes(18);
             } else {
@@ -497,7 +497,7 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
             bss.next.next = null;
             bss.next.prev = bss;
             bss = (BSkipSpan<K, V>) bss.next;
-            
+
             BSkipSpan.load(bss, bf, bsl, np, key, val);
             np = bss.nextPage;
         }
@@ -515,7 +515,7 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
             bss.prev.next = bss;
             bss.prev.prev = null;
             bss = (BSkipSpan<K, V>) bss.prev;
-            
+
             BSkipSpan.load(bss, bf, bsl, np, key, val);
             np = bss.prevPage;
         }

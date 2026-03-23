@@ -20,14 +20,14 @@ import org.junit.Test;
  */
 public class KeyCertificateTest {
     private static final byte[] P256_PAYLOAD = new byte[] {
-                                    0, (byte) (SigType.ECDSA_SHA256_P256.getCode()),
-                                    0, (byte) (EncType.EC_P256.getCode())
+        0, (byte) (SigType.ECDSA_SHA256_P256.getCode()),
+        0, (byte) (EncType.EC_P256.getCode())
     };
 
     private static final byte[] P521_PAYLOAD = new byte[] {
-                                    0, (byte) (SigType.ECDSA_SHA512_P521.getCode()),
-                                    0, (byte) (EncType.ELGAMAL_2048.getCode()),
-                                    0, 0, 0, 0
+        0, (byte) (SigType.ECDSA_SHA512_P521.getCode()),
+        0, (byte) (EncType.ELGAMAL_2048.getCode()),
+        0, 0, 0, 0
     };
 
     @Test

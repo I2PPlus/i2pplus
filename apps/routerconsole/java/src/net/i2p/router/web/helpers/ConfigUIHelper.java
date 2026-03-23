@@ -64,7 +64,7 @@ public class ConfigUIHelper extends HelperBase {
             buf.append("<label for=\"")
                .append(theme)
                .append("\"><div class=themechoice style=display:inline-block;text-align:center>")
-               .append("<input type=radio class=optbox name=theme ");
+                .append("<input type=radio class=optbox name=theme ");
             if (theme.equals(current)) {buf.append(CHECKED);}
             buf.append("value=\"")
                .append(theme)
@@ -74,17 +74,17 @@ public class ConfigUIHelper extends HelperBase {
                .append(theme)
                .append("/images/thumbnail.png\"><br><div class=themelabel>")
                .append(_t(theme))
-               .append("</div></div></label>\n");
+                .append("</div></div></label>\n");
         }
         buf.append("</div><div id=themeoptions><label><input type=checkbox class=\"optbox slider\" name=\"universalTheming\" ");
         if (universalTheming) {buf.append(CHECKED);}
         buf.append("value=1>")
            .append(_t("Set theme universally across all apps"))
-           .append("</label><br>\n<label><input type=checkbox class=\"optbox slider\" name=\"useSoraFont\" ");
+            .append("</label><br>\n<label><input type=checkbox class=\"optbox slider\" name=\"useSoraFont\" ");
         if (useSoraFont) {buf.append(CHECKED);}
         buf.append("value=1>")
            .append(_t("Use alternative display font in console and webapps"))
-           .append("</label><br>\n");
+            .append("</label><br>\n");
         return buf.toString();
     }
 
@@ -112,11 +112,11 @@ public class ConfigUIHelper extends HelperBase {
            .append(_t("Force the mobile console to be used"))
            .append("</label><br>\n<label title=\"")
            .append(_t("Enabling the Universal Theming option is recommended when embedding these applications"))
-           .append("\"><input type=checkbox class=\"optbox slider\" name=embedApps ");
+            .append("\"><input type=checkbox class=\"optbox slider\" name=embedApps ");
         if (embedApps) {buf.append(CHECKED);}
         buf.append("value=1>")
            .append(_t("Embed I2PSnark and I2PMail in the console"))
-           .append("</label></div>\n");
+            .append("</label></div>\n");
         return buf.toString();
     }
 
@@ -132,26 +132,26 @@ public class ConfigUIHelper extends HelperBase {
      * @return a sorted Set containing all available theme names (untranslated)
      */
     private Set<String> themeSet() {
-         Set<String> rv = new TreeSet<String>();
+        Set<String> rv = new TreeSet<String>();
          // add a failsafe even if we can't find any themes
-         rv.add(CSSHelper.DEFAULT_THEME);
-         File dir = new File(_context.getBaseDir(), "docs/themes/console");
-         File[] files = dir.listFiles();
-         if (files == null) {return rv;}
-         for (int i = 0; i < files.length; i++) {
-             if (!files[i].isDirectory()) {continue;}
-             String name = files[i].getName();
-             if (name.equals("images")) {continue;}
-             rv.add(name);
-         }
+        rv.add(CSSHelper.DEFAULT_THEME);
+        File dir = new File(_context.getBaseDir(), "docs/themes/console");
+        File[] files = dir.listFiles();
+        if (files == null) {return rv;}
+        for (int i = 0; i < files.length; i++) {
+            if (!files[i].isDirectory()) {continue;}
+            String name = files[i].getName();
+            if (name.equals("images")) {continue;}
+            rv.add(name);
+        }
          // user themes
-         Set<String> props = _context.getPropertyNames();
-         for (String prop : props) {
-              if (prop.startsWith(CSSHelper.PROP_THEME_PFX) && prop.length() > CSSHelper.PROP_THEME_PFX.length()) {
-                  rv.add(prop.substring(CSSHelper.PROP_THEME_PFX.length()));
-              }
-         }
-         return rv;
+        Set<String> props = _context.getPropertyNames();
+        for (String prop : props) {
+            if (prop.startsWith(CSSHelper.PROP_THEME_PFX) && prop.length() > CSSHelper.PROP_THEME_PFX.length()) {
+                rv.add(prop.substring(CSSHelper.PROP_THEME_PFX.length()));
+            }
+        }
+        return rv;
     }
 
     /**
@@ -280,7 +280,7 @@ public class ConfigUIHelper extends HelperBase {
             if (name != null) {
                 buf.append(" (")
                    .append(name)
-                   .append(')');
+                    .append(')');
             }
             buf.append("</div></div></label>\n");
         }
@@ -317,14 +317,14 @@ public class ConfigUIHelper extends HelperBase {
             buf.append("<tr><td class=infohelp colspan=3>")
                .append(_t("Add a user and password to enable.")).append("&nbsp;")
                .append(_t("Note: If you forget your password, removing the configuration entry in your router.config file will clear it (restart required)."))
-               .append("</td></tr>\n");
+                .append("</td></tr>\n");
         } else {
             buf.append("<tr><td class=infohelp colspan=3>")
                .append(_t("Router console password is enabled."))
                .append("</td></tr>\n")
                .append("<tr><th title=\"").append(_t("Mark for deletion")).append("\">")
                .append(_t("Remove")).append("</th><th>").append(_t("Username"))
-               .append("</th><th>&nbsp;</th></tr>\n");
+                .append("</th><th>&nbsp;</th></tr>\n");
             for (String name : userpw.keySet()) {
                 buf.append("<tr><td><input type=checkbox class=optbox id=\"").append(name)
                    .append("\" name=\"delete_").append(name).append("\"></td>")

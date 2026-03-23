@@ -628,7 +628,7 @@ public abstract class TransportImpl implements Transport {
             }
         }
         if (_log.shouldWarn()) {
-             _log.warn("[" + getStyle() + "] now has " + sz + " addresses");
+            _log.warn("[" + getStyle() + "] now has " + sz + " addresses");
         }
         if (_listener != null) {_listener.transportAddressChanged();}
     }
@@ -722,20 +722,20 @@ public abstract class TransportImpl implements Transport {
             TransportUtil.IPv6Config config = getIPv6Config();
             int adj;
             switch (config) {
-                  case IPV6_DISABLED:
+                case IPV6_DISABLED:
                     adj = 10; break;
 
-                  case IPV6_NOT_PREFERRED:
+                case IPV6_NOT_PREFERRED:
                     adj = 1; break;
 
-                  default:
-                  case IPV6_ENABLED:
+                default:
+                case IPV6_ENABLED:
                     adj = 0; break;
 
-                  case IPV6_PREFERRED:
+                case IPV6_PREFERRED:
                     adj = -1; break;
 
-                  case IPV6_ONLY:
+                case IPV6_ONLY:
                     adj = -10; break;
             }
             Collections.sort(rv, new AddrComparator(adj));

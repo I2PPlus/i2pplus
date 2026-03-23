@@ -55,13 +55,13 @@ import net.i2p.util.VersionComparator;
 
 /**
  * Central coordinator for all I2P transport protocols.
- * 
+ *
  * This class manages the lifecycle, configuration, and coordination
  * of all enabled transport protocols (NTCP, UDP, SSU, etc.).
  * It provides unified access to transport functionality and handles
  * transport-specific operations like address management, peer discovery,
  * and message routing.
- * 
+ *
  * <strong>Core Responsibilities:</strong>
  * <ul>
  *   <li>Transport lifecycle management (start/stop/restart)</li>
@@ -72,7 +72,7 @@ import net.i2p.util.VersionComparator;
  *   <li>Bandwidth allocation and coordination</li>
  *   <li>Transport event handling and notifications</li>
  * </ul>
- * 
+ *
  * <strong>Transport Support:</strong>
  * <ul>
  *   <li>Built-in transports: NTCP, UDP, SSU</li>
@@ -80,17 +80,17 @@ import net.i2p.util.VersionComparator;
  *   <li>IPv4 and IPv6 addressing</li>
  *   <li>Automatic transport selection and failover</li>
  * </ul>
- * 
+ *
  * <strong>UPnP Integration:</strong>
  * Automatically starts and manages UPnP service for
  * NAT traversal and port forwarding discovery.
- * 
+ *
  * <strong>API Access:</strong>
  * This class is primarily internal to the router. Only a few
  * methods are public for console and Android integration.
  * External components should use CommSystemFacadeImpl for
  * transport access rather than calling this class directly.
- * 
+ *
  * <strong>Note:</strong> This is not intended as a public API
  * for external use. Implementation details may change without notice.
  */
@@ -216,12 +216,12 @@ public class TransportManager implements TransportEventListener {
 
     /**
      * Register and start a pluggable transport.
-     * 
+     *
      * This method registers a new pluggable transport (not NTCP or SSU)
      * with the transport manager and starts it if this is the first
      * transport being registered. The method handles validation,
      * initialization, and lifecycle management.
-     * 
+     *
      * <strong>Process:</strong>
      * <ul>
      *   <li>Validates transport is not built-in (NTCP/UDP)</li>
@@ -232,7 +232,7 @@ public class TransportManager implements TransportEventListener {
      *   <li>Starts transport listening if first transport</li>
      *   <li>Rebuilds router info with new addresses</li>
      * </ul>
-     * 
+     *
      * @param t the transport to register and start
      * @throws IllegalArgumentException if transport is built-in type
      * @throws IllegalStateException if transport style already exists
@@ -257,12 +257,12 @@ public class TransportManager implements TransportEventListener {
 
     /**
      * Stop and unregister a pluggable transport.
-     * 
+     *
      * This method gracefully shuts down a pluggable transport
      * (not NTCP or SSU) and removes it from the
      * transport registry. The method handles cleanup,
      * listener removal, and address updates.
-     * 
+     *
      * <strong>Process:</strong>
      * <ul>
      *   <li>Validates transport is not built-in (NTCP/UDP)</li>
@@ -272,7 +272,7 @@ public class TransportManager implements TransportEventListener {
      *   <li>Removes from main transport registry</li>
      *   <li>Rebuilds router info without transport addresses</li>
      * </ul>
-     * 
+     *
      * @param t the transport to stop and unregister
      * @throws IllegalArgumentException if transport is built-in type
      * @since 0.9.16
@@ -290,12 +290,12 @@ public class TransportManager implements TransportEventListener {
 
     /**
      * Get the X25519 key factory used by transports.
-     * 
+     *
      * This method returns the key factory that provides
      * X25519 key pairs for transport encryption operations.
      * The factory is used by NTCP and UDP transports for
      * ephemeral key generation in session establishment.
-     * 
+     *
      * @return X25519KeyFactory instance for transport cryptography
      * @since 0.9.46
      */
@@ -524,7 +524,7 @@ public class TransportManager implements TransportEventListener {
             tps.add(tp);
         // now add any others (pluggable)
         for (Transport t : _pluggableTransports.values()) {
-             tps.add(t);
+            tps.add(t);
         }
         for (Transport t : tps) {
             t.startListening();
@@ -719,11 +719,11 @@ public class TransportManager implements TransportEventListener {
      */
     /**
      * Get list of peers with established connections across all transports.
-     * 
+     *
      * This method aggregates established peers from all active
      * transports (NTCP, UDP, SSU, etc.) to provide a
      * unified view of the router's current peer connections.
-     * 
+     *
      * @return list of peer hashes with established connections,
      *         may be empty if no connections exist
      */
@@ -753,7 +753,7 @@ public class TransportManager implements TransportEventListener {
      */
     void mayDisconnect(Hash peer) {
         for (Transport t : _transports.values()) {
-             t.mayDisconnect(peer);
+            t.mayDisconnect(peer);
         }
     }
 
@@ -764,7 +764,7 @@ public class TransportManager implements TransportEventListener {
      */
     void forceDisconnect(Hash peer) {
         for (Transport t : _transports.values()) {
-             t.forceDisconnect(peer);
+            t.forceDisconnect(peer);
         }
     }
 
@@ -1026,12 +1026,12 @@ public class TransportManager implements TransportEventListener {
      */
     /**
      * Handle incoming I2NP message from a peer.
-     * 
+     *
      * This method is called by transports when they receive an
      * I2NP message that needs to be processed by the router.
      * The TransportManager acts as a central message dispatcher
      * and routes messages to appropriate handlers.
-     * 
+     *
      * @param message the received I2NP message to be processed
      * @param fromRouter identity of the sending router
      * @param fromRouterHash hash of the sending router for quick lookup
@@ -1052,12 +1052,12 @@ public class TransportManager implements TransportEventListener {
      */
     /**
      * Handle transport address change notifications.
-     * 
+     *
      * This method is called when any transport reports a
      * change in its advertised addresses. The TransportManager
      * coordinates address updates across all transports and
      * updates the router's published information accordingly.
-     * 
+     *
      * This method is typically called by transports in response
      * to:
      * <ul>
@@ -1135,12 +1135,12 @@ public class TransportManager implements TransportEventListener {
      */
     /**
      * Render transport status information as HTML for console display.
-     * 
+     *
      * This method generates detailed HTML status for all
      * transports, including connection counts, peer information,
      * bandwidth usage, and transport-specific statistics. The output
      * is used by the router console for transport monitoring.
-     * 
+     *
      * @param out writer to write HTML output to
      * @param urlBase base URL for generating links
      * @param sortFlags flags controlling sorting and display options

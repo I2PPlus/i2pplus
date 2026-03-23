@@ -205,12 +205,12 @@ public class FileAlterationObserver implements Serializable {
 
     private static Comparator<File> toComparator(final IOCase ioCase) {
         switch (IOCase.value(ioCase, IOCase.SYSTEM)) {
-        case SYSTEM:
-            return NameFileComparator.NAME_SYSTEM_COMPARATOR;
-        case INSENSITIVE:
-            return NameFileComparator.NAME_INSENSITIVE_COMPARATOR;
-        default:
-            return NameFileComparator.NAME_COMPARATOR;
+            case SYSTEM:
+                return NameFileComparator.NAME_SYSTEM_COMPARATOR;
+            case INSENSITIVE:
+                return NameFileComparator.NAME_INSENSITIVE_COMPARATOR;
+            default:
+                return NameFileComparator.NAME_COMPARATOR;
         }
     }
 

@@ -41,7 +41,7 @@ import java.util.Set;
  * @author John Rose
  */
 abstract
-class ConstantPool {
+    class ConstantPool {
     private ConstantPool() {}  // do not instantiate
 
     static int verbose() {
@@ -196,7 +196,7 @@ class ConstantPool {
 
     /** Entries in the constant pool. */
     public abstract static
-    class Entry implements Comparable<Object> {
+        class Entry implements Comparable<Object> {
         protected final byte tag;       // a CONSTANT_foo code
         protected int valueHash;        // cached hashCode
 
@@ -289,7 +289,7 @@ class ConstantPool {
     }
 
     public static
-    class Utf8Entry extends Entry {
+        class Utf8Entry extends Entry {
         final String value;
 
         Utf8Entry(String value) {
@@ -319,10 +319,10 @@ class ConstantPool {
 
     static boolean isMemberTag(byte tag) {
         switch (tag) {
-        case CONSTANT_Fieldref:
-        case CONSTANT_Methodref:
-        case CONSTANT_InterfaceMethodref:
-            return true;
+            case CONSTANT_Fieldref:
+            case CONSTANT_Methodref:
+            case CONSTANT_InterfaceMethodref:
+                return true;
         }
         return false;
     }
@@ -340,7 +340,7 @@ class ConstantPool {
     }
 
     public abstract static
-    class LiteralEntry extends Entry {
+        class LiteralEntry extends Entry {
         protected LiteralEntry(byte tag) {
             super(tag);
         }
@@ -349,7 +349,7 @@ class ConstantPool {
     }
 
     public static
-    class NumberEntry extends LiteralEntry {
+        class NumberEntry extends LiteralEntry {
         final Number value;
         NumberEntry(Number value) {
             super(numberTagOf(value));
@@ -386,7 +386,7 @@ class ConstantPool {
     }
 
     public static
-    class StringEntry extends LiteralEntry {
+        class StringEntry extends LiteralEntry {
         final Utf8Entry ref;
         public Entry getRef(int i) { return i == 0 ? ref : null; }
 
@@ -418,7 +418,7 @@ class ConstantPool {
     }
 
     public static
-    class ClassEntry extends Entry {
+        class ClassEntry extends Entry {
         final Utf8Entry ref;
         public Entry getRef(int i) { return i == 0 ? ref : null; }
 
@@ -447,7 +447,7 @@ class ConstantPool {
     }
 
     public static
-    class DescriptorEntry extends Entry {
+        class DescriptorEntry extends Entry {
         final Utf8Entry      nameRef;
         final SignatureEntry typeRef;
         public Entry getRef(int i) {
@@ -491,7 +491,7 @@ class ConstantPool {
             return stringValueOf(nameRef, typeRef);
         }
         static
-        String stringValueOf(Entry nameRef, Entry typeRef) {
+            String stringValueOf(Entry nameRef, Entry typeRef) {
             return qualifiedStringValue(typeRef, nameRef);
         }
 
@@ -518,7 +518,7 @@ class ConstantPool {
     }
 
     public static
-    class MemberEntry extends Entry {
+        class MemberEntry extends Entry {
         final ClassEntry classRef;
         final DescriptorEntry descRef;
         public Entry getRef(int i) {
@@ -565,14 +565,14 @@ class ConstantPool {
             return stringValueOf(tag, classRef, descRef);
         }
         static
-        String stringValueOf(byte tag, ClassEntry classRef, DescriptorEntry descRef) {
+            String stringValueOf(byte tag, ClassEntry classRef, DescriptorEntry descRef) {
             assert(isMemberTag(tag));
             String pfx;
             switch (tag) {
-            case CONSTANT_Fieldref:            pfx = "Field:";   break;
-            case CONSTANT_Methodref:           pfx = "Method:";  break;
-            case CONSTANT_InterfaceMethodref:  pfx = "IMethod:"; break;
-            default:                           pfx = tag+"???";  break;
+                case CONSTANT_Fieldref:            pfx = "Field:";   break;
+                case CONSTANT_Methodref:           pfx = "Method:";  break;
+                case CONSTANT_InterfaceMethodref:  pfx = "IMethod:"; break;
+                default:                           pfx = tag+"???";  break;
             }
             return pfx+qualifiedStringValue(classRef, descRef);
         }
@@ -583,7 +583,7 @@ class ConstantPool {
     }
 
     public static
-    class SignatureEntry extends Entry {
+        class SignatureEntry extends Entry {
         final Utf8Entry    formRef;
         final ClassEntry[] classRefs;
         String             value;
@@ -635,7 +635,7 @@ class ConstantPool {
             return value;
         }
         static
-        String stringValueOf(Utf8Entry formRef, ClassEntry[] classRefs) {
+            String stringValueOf(Utf8Entry formRef, ClassEntry[] classRefs) {
             String[] parts = new String[1+classRefs.length];
             parts[0] = formRef.stringValue();
             for (int i = 1; i < parts.length; i++) {
@@ -682,13 +682,13 @@ class ConstantPool {
         }
         public byte getLiteralTag() {
             switch (formRef.stringValue().charAt(0)) {
-            case 'I': return CONSTANT_Integer;
-            case 'J': return CONSTANT_Long;
-            case 'F': return CONSTANT_Float;
-            case 'D': return CONSTANT_Double;
-            case 'B': case 'S': case 'C': case 'Z':
-                return CONSTANT_Integer;
-            case 'L':
+                case 'I': return CONSTANT_Integer;
+                case 'J': return CONSTANT_Long;
+                case 'F': return CONSTANT_Float;
+                case 'D': return CONSTANT_Double;
+                case 'B': case 'S': case 'C': case 'Z':
+                    return CONSTANT_Integer;
+                case 'L':
                 /*
                 switch (classRefs[0].stringValue()) {
                 case "java/lang/String":
@@ -701,7 +701,7 @@ class ConstantPool {
                     return CONSTANT_LoadableValue;
                 }
                 */
-                return CONSTANT_String;  // JDK 7 ConstantValue limited to String
+                    return CONSTANT_String;  // JDK 7 ConstantValue limited to String
             }
             assert(false);
             return CONSTANT_None;
@@ -842,7 +842,7 @@ class ConstantPool {
 
     /** @since 1.7, JSR 292 */
     public static
-    class MethodHandleEntry extends Entry {
+        class MethodHandleEntry extends Entry {
         final int refKind;
         final MemberEntry memRef;
         public Entry getRef(int i) { return i == 0 ? memRef : null; }
@@ -892,7 +892,7 @@ class ConstantPool {
 
     /** @since 1.7, JSR 292 */
     public static
-    class MethodTypeEntry extends Entry {
+        class MethodTypeEntry extends Entry {
         final SignatureEntry typeRef;
         public Entry getRef(int i) { return i == 0 ? typeRef : null; }
 
@@ -927,7 +927,7 @@ class ConstantPool {
 
     /** @since 1.7, JSR 292 */
     public static
-    class InvokeDynamicEntry extends Entry {
+        class InvokeDynamicEntry extends Entry {
         final BootstrapMethodEntry bssRef;
         final DescriptorEntry descRef;
         public Entry getRef(int i) {
@@ -973,14 +973,14 @@ class ConstantPool {
             return stringValueOf(bssRef, descRef);
         }
         static
-        String stringValueOf(BootstrapMethodEntry bssRef, DescriptorEntry descRef) {
+            String stringValueOf(BootstrapMethodEntry bssRef, DescriptorEntry descRef) {
             return "Indy:"+bssRef.stringValue()+"."+descRef.stringValue();
         }
     }
 
     /** @since 1.7, JSR 292 */
     public static
-    class BootstrapMethodEntry extends Entry {
+        class BootstrapMethodEntry extends Entry {
         final MethodHandleEntry bsmRef;
         final Entry[] argRefs;
         public Entry getRef(int i) {
@@ -1026,7 +1026,7 @@ class ConstantPool {
             return stringValueOf(bsmRef, argRefs);
         }
         static
-        String stringValueOf(MethodHandleEntry bsmRef, Entry[] argRefs) {
+            String stringValueOf(MethodHandleEntry bsmRef, Entry[] argRefs) {
             StringBuilder sb = new StringBuilder(bsmRef.stringValue());
             // Arguments are formatted as "<foo;bar;baz>" instead of "[foo,bar,baz]".
             // This ensures there will be no confusion if "[,]" appear inside of names.
@@ -1041,7 +1041,7 @@ class ConstantPool {
             return sb.toString();
         }
         static
-        int compareArgArrays(Entry[] a1, Entry[] a2) {
+            int compareArgArrays(Entry[] a1, Entry[] a2) {
             int x = a1.length - a2.length;
             if (x != 0)  return x;
             for (int i = 0; i < a1.length; i++) {
@@ -1058,7 +1058,7 @@ class ConstantPool {
 
     /** An Index is a mapping between CP entries and small integers. */
     public static final
-    class Index extends AbstractList<Entry> {
+        class Index extends AbstractList<Entry> {
         protected String debugName;
         protected Entry[] cpMap;
         protected boolean flattenSigs;
@@ -1216,18 +1216,18 @@ class ConstantPool {
     // Index methods.
 
     public static
-    Index makeIndex(String debugName, Entry[] cpMap) {
+        Index makeIndex(String debugName, Entry[] cpMap) {
         return new Index(debugName, cpMap);
     }
 
     public static
-    Index makeIndex(String debugName, Collection<Entry> cpMapList) {
+        Index makeIndex(String debugName, Collection<Entry> cpMapList) {
         return new Index(debugName, cpMapList);
     }
 
     /** Sort this index (destructively) into canonical order. */
     public static
-    void sort(Index ix) {
+        void sort(Index ix) {
         // %%% Should move this into class Index.
         ix.clearIndex();
         Arrays.sort(ix.cpMap);
@@ -1241,7 +1241,7 @@ class ConstantPool {
      *  Entries with a negative key are dropped from the partition.
      */
     public static
-    Index[] partition(Index ix, int[] keys) {
+        Index[] partition(Index ix, int[] keys) {
         // %%% Should move this into class Index.
         List<List<Entry>> parts = new ArrayList<>();
         Entry[] cpMap = ix.cpMap;
@@ -1268,7 +1268,7 @@ class ConstantPool {
         return indexes;
     }
     public static
-    Index[] partitionByTag(Index ix) {
+        Index[] partitionByTag(Index ix) {
         // Partition by tag.
         Entry[] cpMap = ix.cpMap;
         int[] keys = new int[cpMap.length];
@@ -1291,7 +1291,7 @@ class ConstantPool {
 
     /** Coherent group of constant pool indexes. */
     public static
-    class IndexGroup {
+        class IndexGroup {
         private Index[] indexByTag = new Index[CONSTANT_Limit];
         private Index[] indexByTagGroup;
         private int[]   untypedFirstIndexByTag;
@@ -1397,15 +1397,15 @@ class ConstantPool {
                 if (ix != null)  return ix;
             }
             switch (tag) {
-            case CONSTANT_All:
-                return makeTagGroupIndex(CONSTANT_All, TAGS_IN_ORDER);
-            case CONSTANT_LoadableValue:
+                case CONSTANT_All:
+                    return makeTagGroupIndex(CONSTANT_All, TAGS_IN_ORDER);
+                case CONSTANT_LoadableValue:
                     return makeTagGroupIndex(CONSTANT_LoadableValue, LOADABLE_VALUE_TAGS);
-            case CONSTANT_AnyMember:
-                return makeTagGroupIndex(CONSTANT_AnyMember, ANY_MEMBER_TAGS);
-            case CONSTANT_FieldSpecific:
+                case CONSTANT_AnyMember:
+                    return makeTagGroupIndex(CONSTANT_AnyMember, ANY_MEMBER_TAGS);
+                case CONSTANT_FieldSpecific:
                 // This one does not have any fixed index, since it is context-specific.
-                return null;
+                    return null;
             }
             throw new AssertionError("Bad tag group "+tag);
         }
@@ -1493,11 +1493,11 @@ class ConstantPool {
      *  Also, discard null from cpRefs.
      */
     public static void completeReferencesIn(Set<Entry> cpRefs, boolean flattenSigs) {
-         completeReferencesIn(cpRefs, flattenSigs, null);
+        completeReferencesIn(cpRefs, flattenSigs, null);
     }
 
     public static
-    void completeReferencesIn(Set<Entry> cpRefs, boolean flattenSigs,
+        void completeReferencesIn(Set<Entry> cpRefs, boolean flattenSigs,
                               List<BootstrapMethodEntry>bsms) {
         cpRefs.remove(null);
         for (ListIterator<Entry> work =

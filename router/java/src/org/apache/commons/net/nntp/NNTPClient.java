@@ -149,21 +149,21 @@ public class NNTPClient extends NNTP {
         }
 
         switch (tokens[i++].charAt(0)) {
-        case 'y':
-        case 'Y':
-            result.setPostingPermission(NewsgroupInfo.PERMITTED_POSTING_PERMISSION);
-            break;
-        case 'n':
-        case 'N':
-            result.setPostingPermission(NewsgroupInfo.PROHIBITED_POSTING_PERMISSION);
-            break;
-        case 'm':
-        case 'M':
-            result.setPostingPermission(NewsgroupInfo.MODERATED_POSTING_PERMISSION);
-            break;
-        default:
-            result.setPostingPermission(NewsgroupInfo.UNKNOWN_POSTING_PERMISSION);
-            break;
+            case 'y':
+            case 'Y':
+                result.setPostingPermission(NewsgroupInfo.PERMITTED_POSTING_PERMISSION);
+                break;
+            case 'n':
+            case 'N':
+                result.setPostingPermission(NewsgroupInfo.PROHIBITED_POSTING_PERMISSION);
+                break;
+            case 'm':
+            case 'M':
+                result.setPostingPermission(NewsgroupInfo.MODERATED_POSTING_PERMISSION);
+                break;
+            default:
+                result.setPostingPermission(NewsgroupInfo.UNKNOWN_POSTING_PERMISSION);
+                break;
         }
 
         return result;

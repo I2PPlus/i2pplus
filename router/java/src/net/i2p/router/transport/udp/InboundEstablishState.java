@@ -69,7 +69,7 @@ class InboundEstablishState {  // TODO do all these methods need to be synchroni
          * @since 0.9.54
          */
         IB_STATE_RETRY_SENT,
-   }
+    }
 
     /** Basic delay before backoff
      *  Transmissions at 0, 1, 3, 7 sec.
@@ -98,7 +98,7 @@ class InboundEstablishState {  // TODO do all these methods need to be synchroni
         _currentState = InboundState.IB_STATE_UNKNOWN;
         _establishBegin = ctx.clock().now();
         _queuedMessages = new LinkedBlockingQueue<OutNetMessage>();
-   }
+    }
 
     /**
      * @since 0.9.54
@@ -111,7 +111,7 @@ class InboundEstablishState {  // TODO do all these methods need to be synchroni
     public synchronized boolean isComplete() {
         return _currentState == InboundState.IB_STATE_COMPLETE ||
                _currentState == InboundState.IB_STATE_FAILED;
-   }
+    }
 
     /** Notify successful completion */
     public synchronized void complete() {_currentState = InboundState.IB_STATE_COMPLETE;}
@@ -125,7 +125,7 @@ class InboundEstablishState {  // TODO do all these methods need to be synchroni
         // chance of a duplicate here in a race, that's ok
         if (!_queuedMessages.contains(msg)) {_queuedMessages.offer(msg);}
         else if (_log.shouldWarn()) {_log.warn("Attempt to add duplicate messsage to queue: " + msg);}
-   }
+    }
 
     /**
      *  Pull from the message queue
@@ -168,8 +168,8 @@ class InboundEstablishState {  // TODO do all these methods need to be synchroni
         if ((_currentState == InboundState.IB_STATE_UNKNOWN) ||
             (_currentState == InboundState.IB_STATE_REQUEST_RECEIVED)) {
             _currentState = InboundState.IB_STATE_CREATED_SENT;
-       }
-   }
+        }
+    }
 
     /**
      * How long have we been trying to establish this session?
@@ -205,8 +205,8 @@ class InboundEstablishState {  // TODO do all these methods need to be synchroni
                 if (_receivedIdentity[i] == null) {return false;}
             }
             return true;
-       } else {return false;}
-   }
+        } else {return false;}
+    }
 
     /**
      * Who is Alice (null if forged/unknown)
@@ -215,7 +215,7 @@ class InboundEstablishState {  // TODO do all these methods need to be synchroni
      */
     public synchronized RouterIdentity getConfirmedIdentity() {
         return _receivedConfirmedIdentity;
-   }
+    }
 
     /**
      *  Call from synchronized method only
@@ -231,6 +231,6 @@ class InboundEstablishState {  // TODO do all these methods need to be synchroni
         if (_sentRelayTag > 0) {buf.append("; RelayTag: ").append(_sentRelayTag);}
         buf.append(" -> ").append(_currentState);
         return buf.toString();
-   }
+    }
 
 }

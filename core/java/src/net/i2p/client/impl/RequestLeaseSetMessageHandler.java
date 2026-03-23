@@ -105,9 +105,9 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                 _ls2Type = type;
                 if (type != DatabaseEntry.KEY_TYPE_LEASESET) {return true;}
             } catch (NumberFormatException nfe) {
-              session.propagateError("BAD LeaseSet2 type", nfe);
-              session.destroySession();
-              return true;
+                session.propagateError("BAD LeaseSet2 type", nfe);
+                session.destroySession();
+                return true;
             }
         }
         if (session.isOffline()) {return true;}
@@ -127,9 +127,9 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
             else if (_ls2Type == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {ls2 = new EncryptedLeaseSet();}
             else if (_ls2Type == DatabaseEntry.KEY_TYPE_META_LS2) {ls2 = new MetaLeaseSet();}
             else {
-              session.propagateError("Unsupported LS2 type", new Exception());
-              session.destroySession();
-              return;
+                session.propagateError("Unsupported LS2 type", new Exception());
+                session.destroySession();
+                return;
             }
             if (Boolean.parseBoolean(session.getOptions().getProperty("i2cp.dontPublishLeaseSet"))) {
                 ls2.setUnpublished();

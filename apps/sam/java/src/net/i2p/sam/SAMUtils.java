@@ -36,7 +36,7 @@ import net.i2p.util.Log;
  */
 class SAMUtils {
 
-     private final static Log _log = new Log(SAMUtils.class);
+    private final static Log _log = new Log(SAMUtils.class);
 
     /**
      * Generate a random destination key using DSA_SHA1 signature type.

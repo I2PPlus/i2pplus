@@ -16,7 +16,7 @@ import org.minidns.util.Hex;
 
 /**
  * EDNS NSID (Name Server Identifier) option.
- * 
+ *
  * @see <a href="https://tools.ietf.org/html/rfc5001">RFC 5001 - DNS Name Server Identifier (NSID) Option</a>
  */
 public class Nsid extends EdnsOption {

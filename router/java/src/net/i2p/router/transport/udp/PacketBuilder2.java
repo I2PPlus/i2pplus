@@ -375,7 +375,7 @@ class PacketBuilder2 {
      *  @throws IOException if peer is dead
      */
     public UDPPacket buildSessionDestroyPacket(int reason, SSU2Sender peer) throws IOException {
-            if (_log.shouldDebug())
+        if (_log.shouldDebug())
             _log.debug("[SSU] Sending termination " + reason + " to : " + peer);
         peer.setDestroyReason(reason);
         List<Block> blocks = new ArrayList<Block>(2);

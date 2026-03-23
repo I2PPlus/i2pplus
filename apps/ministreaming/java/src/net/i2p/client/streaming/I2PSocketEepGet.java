@@ -247,7 +247,7 @@ public class I2PSocketEepGet extends EepGet {
         if (query != null)
             path = path + '?' + query;
         if (!path.startsWith("/"))
-	    path = '/' + path;
+            path = '/' + path;
         buf.append("GET ").append(path).append(" HTTP/1.1\r\n" +
                    "Host: ").append(url.getHost()).append("\r\n");
         if (_alreadyTransferred > 0) {

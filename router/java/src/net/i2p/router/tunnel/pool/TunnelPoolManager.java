@@ -922,8 +922,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     private void shutdownExploratory() {
-            _inboundExploratory.shutdown();
-            _outboundExploratory.shutdown();
+        _inboundExploratory.shutdown();
+        _outboundExploratory.shutdown();
     }
 
     /** list of TunnelPool instances currently in play */

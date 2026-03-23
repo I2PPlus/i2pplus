@@ -8,12 +8,12 @@ import net.i2p.util.SystemVersion;
 
 /**
  * Cryptographic algorithm availability checker and advisor.
- * 
+ *
  * This utility checks the availability of all required cryptographic
  * algorithms on the current platform and provides warnings and
  * recommendations when essential crypto is missing. It helps users
  * identify and resolve cryptographic compatibility issues.
- * 
+ *
  * <strong>Checks Performed:</strong>
  * <ul>
  *   <li>Signature algorithm availability (EdDSA, ECDSA, DSA)</li>
@@ -21,7 +21,7 @@ import net.i2p.util.SystemVersion;
  *   <li>Cryptography policy file detection</li>
  *   <li>Platform-specific crypto limitations</li>
  * </ul>
- * 
+ *
  * <strong>Recommendations Provided:</strong>
  * <ul>
  *   <li>Java upgrade suggestions for older versions</li>
@@ -29,7 +29,7 @@ import net.i2p.util.SystemVersion;
  *   <li>Platform-specific guidance for crypto issues</li>
  *   <li>Future compatibility warnings</li>
  * </ul>
- * 
+ *
  * The checker outputs to both router logs and System.out
  * to ensure visibility during startup. It can be run standalone
  * for crypto testing without starting the full router.
@@ -45,15 +45,15 @@ public class CryptoChecker {
 
     /**
      * Check and warn about unavailable cryptographic algorithms.
-     * 
+     *
      * This method scans all available signature types and logs warnings for any
      * that are not available on the current platform. It also provides
      * recommendations for Java upgrades and cryptography policy files
      * when needed.
-     * 
+     *
      * The method outputs warnings to both the router log (if context provided)
      * and System.out for visibility during startup.
-     * 
+     *
      * @param ctx router context for logging; if null, logs only to System.out
      *             (used when called from main method during startup)
      * @since 0.9.15
@@ -102,7 +102,7 @@ public class CryptoChecker {
                 //else if (SystemVersion.isJava7())
                 //    s  += JRE7;
                 //else
-                    s  += JRE6;
+                s  += JRE6;
                 if (log != null)
                     log.logAlways(Log.WARN, s);
                 System.out.println(s);
@@ -119,10 +119,10 @@ public class CryptoChecker {
 
     /**
      * Main method for standalone crypto checking.
-     * 
+     *
      * This allows the crypto checker to be run independently to test
      * cryptographic algorithm availability without starting the full router.
-     * 
+     *
      * @param args command line arguments (ignored)
      */
     public static void main(String[] args) {

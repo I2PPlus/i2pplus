@@ -661,7 +661,7 @@ public class HashPatternDetector implements Serializable {
      * Statistics for a particular hash prefix.
      */
     private static class PrefixStats implements Serializable {
-    private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1L;
 
         final String prefix;
         int totalBans;
@@ -684,7 +684,7 @@ public class HashPatternDetector implements Serializable {
                 reason.contains("No version") ||
                 reason.contains("Corrupt") ||
                 reason.contains("Spoofed")
-            )) {
+                )) {
                 suspiciousBans++;
             }
 

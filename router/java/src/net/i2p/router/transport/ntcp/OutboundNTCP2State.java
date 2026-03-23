@@ -185,7 +185,7 @@ class OutboundNTCP2State implements EstablishState {
      *  to avoid duplicate calls that cause IllegalStateException
      */
     public boolean isPrepareOutboundCalled() {
-        return _state == State.OB_SENT_X || _state == State.OB_GOT_HXY || 
+        return _state == State.OB_SENT_X || _state == State.OB_GOT_HXY ||
                _state == State.OB_GOT_PADDING || _state == State.VERIFIED;
     }
 
@@ -332,7 +332,7 @@ class OutboundNTCP2State implements EstablishState {
                     // Only banlist if we know what time it is
                     byte[] ip = _con.getRemoteIP();
                     int port = _con.getRemotePort();
-                    String ipPort = (ip != null && ip.length == 4) ? 
+                    String ipPort = (ip != null && ip.length == 4) ?
                         (ip[0] & 0xff) + "." + (ip[1] & 0xff) + "." + (ip[2] & 0xff) + "." + (ip[3] & 0xff) + ":" + port :
                         "UNKNOWN";
                     _banLogger.logBan(_con.getRemotePeer().calculateHash(), ipPort, "Excessive clock skew: " + DataHelper.formatDuration(diff), 0);

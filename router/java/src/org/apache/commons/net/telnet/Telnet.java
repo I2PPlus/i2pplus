@@ -402,8 +402,8 @@ class Telnet extends SocketClient {
 
                 switch (option) {
 
-                default:
-                    break;
+                    default:
+                        break;
 
                 }
 
@@ -419,8 +419,8 @@ class Telnet extends SocketClient {
 
                 switch (option) {
 
-                default:
-                    break;
+                    default:
+                        break;
 
                 }
 
@@ -454,8 +454,8 @@ class Telnet extends SocketClient {
 
             switch (option) {
 
-            default:
-                break;
+                default:
+                    break;
 
             }
 
@@ -537,8 +537,8 @@ class Telnet extends SocketClient {
 
             switch (option) {
 
-            default:
-                break;
+                default:
+                    break;
 
             }
 
@@ -580,8 +580,8 @@ class Telnet extends SocketClient {
 
             switch (option) {
 
-            default:
-                break;
+                default:
+                    break;
 
             }
 

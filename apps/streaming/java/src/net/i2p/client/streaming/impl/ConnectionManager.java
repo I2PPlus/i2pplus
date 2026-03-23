@@ -58,7 +58,7 @@ class ConnectionManager {
     private final ByteCache _cache = ByteCache.getInstance(32, 4*1024);
     private static final Object DUMMY = new Object();
 
-     private static final long[] RATES = RateConstants.SHORT_TERM_RATES;
+    private static final long[] RATES = RateConstants.SHORT_TERM_RATES;
 
     /** cache of the property to detect changes */
     private static volatile String _currentBlacklist = "";
@@ -162,10 +162,10 @@ class ConnectionManager {
      * on an inbound connection that we havent ack'ed yet...
      */
     Connection getConnectionByOutboundId(long id) {
-            for (Connection con : _connectionByInboundId.values()) {
-                if (con.getSendStreamId() == id)
+        for (Connection con : _connectionByInboundId.values()) {
+            if (con.getSendStreamId() == id)
                     return con;
-            }
+        }
         return null;
     }
 
@@ -214,30 +214,30 @@ class ConnectionManager {
      * @since 0.9.3
      */
     public synchronized void updateOptions() {
-            if ((_defaultOptions.getMaxConnsPerMinute() > 0 || _defaultOptions.getMaxTotalConnsPerMinute() > 0) &&
+        if ((_defaultOptions.getMaxConnsPerMinute() > 0 || _defaultOptions.getMaxTotalConnsPerMinute() > 0) &&
                 _minuteThrottler == null) {
-               _context.statManager().createRateStat("stream.con.throttledMinute", "Dropped for conn limit", "Stream", RATES);
-               _minuteThrottler = new ConnThrottler(_defaultOptions.getMaxConnsPerMinute(), _defaultOptions.getMaxTotalConnsPerMinute(),
+            _context.statManager().createRateStat("stream.con.throttledMinute", "Dropped for conn limit", "Stream", RATES);
+            _minuteThrottler = new ConnThrottler(_defaultOptions.getMaxConnsPerMinute(), _defaultOptions.getMaxTotalConnsPerMinute(),
                                                     60*1000, _timer);
-            } else if (_minuteThrottler != null) {
-               _minuteThrottler.updateLimits(_defaultOptions.getMaxConnsPerMinute(), _defaultOptions.getMaxTotalConnsPerMinute());
-            }
-            if ((_defaultOptions.getMaxConnsPerHour() > 0 || _defaultOptions.getMaxTotalConnsPerHour() > 0) &&
+        } else if (_minuteThrottler != null) {
+            _minuteThrottler.updateLimits(_defaultOptions.getMaxConnsPerMinute(), _defaultOptions.getMaxTotalConnsPerMinute());
+        }
+        if ((_defaultOptions.getMaxConnsPerHour() > 0 || _defaultOptions.getMaxTotalConnsPerHour() > 0) &&
                 _hourThrottler == null) {
-               _context.statManager().createRateStat("stream.con.throttledHour", "Dropped for conn limit", "Stream", RATES);
-               _hourThrottler = new ConnThrottler(_defaultOptions.getMaxConnsPerHour(), _defaultOptions.getMaxTotalConnsPerHour(),
+            _context.statManager().createRateStat("stream.con.throttledHour", "Dropped for conn limit", "Stream", RATES);
+            _hourThrottler = new ConnThrottler(_defaultOptions.getMaxConnsPerHour(), _defaultOptions.getMaxTotalConnsPerHour(),
                                                   60*60*1000, _timer);
-            } else if (_hourThrottler != null) {
-               _hourThrottler.updateLimits(_defaultOptions.getMaxConnsPerHour(), _defaultOptions.getMaxTotalConnsPerHour());
-            }
-            if ((_defaultOptions.getMaxConnsPerDay() > 0 || _defaultOptions.getMaxTotalConnsPerDay() > 0) &&
+        } else if (_hourThrottler != null) {
+            _hourThrottler.updateLimits(_defaultOptions.getMaxConnsPerHour(), _defaultOptions.getMaxTotalConnsPerHour());
+        }
+        if ((_defaultOptions.getMaxConnsPerDay() > 0 || _defaultOptions.getMaxTotalConnsPerDay() > 0) &&
                 _dayThrottler == null) {
-               _context.statManager().createRateStat("stream.con.throttledDay", "Dropped for conn limit", "Stream", RATES);
-               _dayThrottler = new ConnThrottler(_defaultOptions.getMaxConnsPerDay(), _defaultOptions.getMaxTotalConnsPerDay(),
+            _context.statManager().createRateStat("stream.con.throttledDay", "Dropped for conn limit", "Stream", RATES);
+            _dayThrottler = new ConnThrottler(_defaultOptions.getMaxConnsPerDay(), _defaultOptions.getMaxTotalConnsPerDay(),
                                                  24*60*60*1000, _timer);
-            } else if (_dayThrottler != null) {
-               _dayThrottler.updateLimits(_defaultOptions.getMaxConnsPerDay(), _defaultOptions.getMaxTotalConnsPerDay());
-            }
+        } else if (_dayThrottler != null) {
+            _dayThrottler.updateLimits(_defaultOptions.getMaxConnsPerDay(), _defaultOptions.getMaxTotalConnsPerDay());
+        }
     }
 
     /** @return if we should accept connections */
@@ -298,22 +298,22 @@ class ConnectionManager {
         boolean reject = false;
         int retryAfter = 0;
 
-            if (locked_tooManyStreams()) {
-                if ((!_defaultOptions.getDisableRejectLogging()) && _log.shouldWarn())
+        if (locked_tooManyStreams()) {
+            if ((!_defaultOptions.getDisableRejectLogging()) && _log.shouldWarn())
                     _log.warn("Refusing connection -> Maximum " + _defaultOptions.getMaxConns() + " concurrent streams exceeded");
-                reject = true;
-                retryAfter = 120;
-            } else {
+            reject = true;
+            retryAfter = 120;
+        } else {
                 // this may not be right if more than one is enabled
-                Reason why = shouldRejectConnection(synPacket);
-                if (why != null) {
-                    if ((!_defaultOptions.getDisableRejectLogging()) && _log.shouldWarn())
+            Reason why = shouldRejectConnection(synPacket);
+            if (why != null) {
+                if ((!_defaultOptions.getDisableRejectLogging()) && _log.shouldWarn())
                         _log.warn("Refusing connection -> " + why +
                            (synPacket.getOptionalFrom() == null ? "" : "\n* Client: " + synPacket.getOptionalFrom().toBase32()));
-                    reject = true;
-                    retryAfter = why.getSeconds();
-                }
+                reject = true;
+                retryAfter = why.getSeconds();
             }
+        }
 
         _context.statManager().addRateData("stream.receiveActive", 1);
 
@@ -850,22 +850,22 @@ class ConnectionManager {
             _recentlyClosed.put(rcvID, DUMMY);
         }
 
-            Object o = _connectionByInboundId.remove(Long.valueOf(con.getReceiveStreamId()));
-            boolean removed = (o == con);
-            if (_log.shouldDebug())
+        Object o = _connectionByInboundId.remove(Long.valueOf(con.getReceiveStreamId()));
+        boolean removed = (o == con);
+        if (_log.shouldDebug())
                 _log.debug("Connection removed? " + removed + " Remaining: "
                            + _connectionByInboundId.size() + "\n " + con);
-            if (!removed && _log.shouldDebug())
+        if (!removed && _log.shouldDebug())
                 _log.debug("Failed to remove " + con + "\n" + _connectionByInboundId.values());
 
         if (removed) {
             _context.statManager().addRateData("stream.con.lifetimeMessagesSent", 1+con.getLastSendId(), con.getLifetime());
             MessageInputStream stream = con.getInputStream();
-                long rcvd = 1 + stream.getHighestBlockId();
-                long nacks[] = stream.getNacks();
-                if (nacks != null)
+            long rcvd = 1 + stream.getHighestBlockId();
+            long nacks[] = stream.getNacks();
+            if (nacks != null)
                     rcvd -= nacks.length;
-                _context.statManager().addRateData("stream.con.lifetimeMessagesReceived", rcvd, con.getLifetime());
+            _context.statManager().addRateData("stream.con.lifetimeMessagesReceived", rcvd, con.getLifetime());
             _context.statManager().addRateData("stream.con.lifetimeBytesSent", con.getLifetimeBytesSent(), con.getLifetime());
             _context.statManager().addRateData("stream.con.lifetimeBytesReceived", con.getLifetimeBytesReceived(), con.getLifetime());
             _context.statManager().addRateData("stream.con.lifetimeDupMessagesSent", con.getLifetimeDupMessagesSent(), con.getLifetime());
@@ -881,7 +881,7 @@ class ConnectionManager {
      * @return set of Connection objects
      */
     public Set<Connection> listConnections() {
-            return new HashSet<Connection>(_connectionByInboundId.values());
+        return new HashSet<Connection>(_connectionByInboundId.values());
     }
 
     /**

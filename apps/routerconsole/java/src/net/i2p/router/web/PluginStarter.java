@@ -110,7 +110,7 @@ public class PluginStarter implements Runnable {
      *  @since public since 0.9.33, was package private
      */
     public static boolean pluginsEnabled(I2PAppContext ctx) {
-         return ctx.getBooleanPropertyDefaultTrue("router.enablePlugins");
+        return ctx.getBooleanPropertyDefaultTrue("router.enablePlugins");
     }
 
     public void run() {
@@ -614,17 +614,17 @@ public class PluginStarter implements Runnable {
                 }
             }
         */
-            if (s != null) {
-                Collection<String> wars = pluginWars.get(appName);
-                if (wars != null) {
-                    for (String warName : wars) {
-                        if (log.shouldInfo())
+        if (s != null) {
+            Collection<String> wars = pluginWars.get(appName);
+            if (wars != null) {
+                for (String warName : wars) {
+                    if (log.shouldInfo())
                             log.info("Stopping webapp " + warName + " in plugin " + appName);
-                        WebAppStarter.stopWebApp(ctx, s, warName);
-                    }
-                    wars.clear();
+                    WebAppStarter.stopWebApp(ctx, s, warName);
                 }
+                wars.clear();
             }
+        }
         //}
 
         // remove summary bar link

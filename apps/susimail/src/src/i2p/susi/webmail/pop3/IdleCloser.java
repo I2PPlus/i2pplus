@@ -55,7 +55,7 @@ class IdleCloser {
         }
 
         public void timeReached() {
-        if (isDead) {return;}
+            if (isDead) {return;}
             if (!mailbox.isConnected()) {return;} // unsynchronized here, sync in thread only
             if (!isClosing) {
                 long config = getMaxIdle();

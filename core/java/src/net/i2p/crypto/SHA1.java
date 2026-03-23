@@ -23,7 +23,7 @@ import net.i2p.util.SystemVersion;
 
 /**
  * Implementation of the SHA-1 secure hash algorithm as specified in FIPS PUB 180-2.
- * 
+ *
  * <p>The FIPS PUB 180-2 standard specifies four secure hash algorithms (SHA-1,
  * SHA-256, SHA-384 and SHA-512) for computing a condensed representation of
  * electronic data (message).  When a message of any length &lt; 2^^64 bits (for
@@ -108,11 +108,11 @@ public final class SHA1 extends MessageDigest implements Cloneable {
 
     /**
      * Creates a SHA1 object with default initial state.
-     * 
+     *
      * <p><strong>Performance Note:</strong> For optimal performance, use {@link #getInstance()}
      * instead of direct construction. getInstance() will return the JVM's native
      * MessageDigest implementation if it's faster than the local implementation.</p>
-     * 
+     *
      * @see #getInstance()
      */
     public SHA1() {
@@ -123,11 +123,11 @@ public final class SHA1 extends MessageDigest implements Cloneable {
 
     /**
      * Returns the fastest available SHA-1 MessageDigest implementation.
-     * 
+     *
      * <p>This method automatically selects between the local SHA1 implementation
      * and the JVM's native MessageDigest based on performance characteristics.
      * On most systems, the JVM's native implementation is preferred for speed.</p>
-     * 
+     *
      * @return fastest digest, either new SHA1() or MessageDigest.getInstance("SHA-1")
      * @since 0.8.7
      */
@@ -176,10 +176,10 @@ public final class SHA1 extends MessageDigest implements Cloneable {
     protected void engineReset() {
         int i = 60;
         do {
-           pad[i    ] = (byte)0x00;
-           pad[i + 1] = (byte)0x00;
-           pad[i + 2] = (byte)0x00;
-           pad[i + 3] = (byte)0x00;
+            pad[i    ] = (byte)0x00;
+            pad[i + 1] = (byte)0x00;
+            pad[i + 2] = (byte)0x00;
+            pad[i + 3] = (byte)0x00;
         } while ((i -= 4) >= 0);
         padding = 0;
         bytes = 0;
@@ -330,48 +330,48 @@ public final class SHA1 extends MessageDigest implements Cloneable {
                 /* Check if 8 bytes available in pad to store the total
                  * message size */
                 switch (i) { /* INVARIANT: i must be in [0..63] */
-                case 52: pad[53] = (byte)0x00; /* no break; falls thru */
-                case 53: pad[54] = (byte)0x00; /* no break; falls thru */
-                case 54: pad[55] = (byte)0x00; /* no break; falls thru */
-                case 55: break;
-                case 56: pad[57] = (byte)0x00; /* no break; falls thru */
-                case 57: pad[58] = (byte)0x00; /* no break; falls thru */
-                case 58: pad[59] = (byte)0x00; /* no break; falls thru */
-                case 59: pad[60] = (byte)0x00; /* no break; falls thru */
-                case 60: pad[61] = (byte)0x00; /* no break; falls thru */
-                case 61: pad[62] = (byte)0x00; /* no break; falls thru */
-                case 62: pad[63] = (byte)0x00; /* no break; falls thru */
-                case 63:
-                    computeBlock(pad, 0);
+                    case 52: pad[53] = (byte)0x00; /* no break; falls thru */
+                    case 53: pad[54] = (byte)0x00; /* no break; falls thru */
+                    case 54: pad[55] = (byte)0x00; /* no break; falls thru */
+                    case 55: break;
+                    case 56: pad[57] = (byte)0x00; /* no break; falls thru */
+                    case 57: pad[58] = (byte)0x00; /* no break; falls thru */
+                    case 58: pad[59] = (byte)0x00; /* no break; falls thru */
+                    case 59: pad[60] = (byte)0x00; /* no break; falls thru */
+                    case 60: pad[61] = (byte)0x00; /* no break; falls thru */
+                    case 61: pad[62] = (byte)0x00; /* no break; falls thru */
+                    case 62: pad[63] = (byte)0x00; /* no break; falls thru */
+                    case 63:
+                        computeBlock(pad, 0);
                     /* Clear the 56 first bytes of pad[]. */
-                    i = 52;
-                    do {
-                        pad[i    ] = (byte)0x00;
-                        pad[i + 1] = (byte)0x00;
-                        pad[i + 2] = (byte)0x00;
-                        pad[i + 3] = (byte)0x00;
-                    } while ((i -= 4) >= 0);
-                    break;
-                default:
+                        i = 52;
+                        do {
+                            pad[i    ] = (byte)0x00;
+                            pad[i + 1] = (byte)0x00;
+                            pad[i + 2] = (byte)0x00;
+                            pad[i + 3] = (byte)0x00;
+                        } while ((i -= 4) >= 0);
+                        break;
+                    default:
                     /* Clear the rest of 56 first bytes of pad[]. */
-                    switch (i & 3) {
-                    case 3: i++;
+                        switch (i & 3) {
+                            case 3: i++;
                             break;
-                    case 2: pad[(i += 2) - 1] = (byte)0x00;
+                            case 2: pad[(i += 2) - 1] = (byte)0x00;
                             break;
-                    case 1: pad[(i += 3) - 2] = (byte)0x00;
+                            case 1: pad[(i += 3) - 2] = (byte)0x00;
                             pad[ i       - 1] = (byte)0x00;
                             break;
-                    case 0: pad[(i += 4) - 3] = (byte)0x00;
+                            case 0: pad[(i += 4) - 3] = (byte)0x00;
                             pad[ i       - 2] = (byte)0x00;
                             pad[ i       - 1] = (byte)0x00;
-                    }
-                    do {
-                        pad[i    ] = (byte)0x00;
-                        pad[i + 1] = (byte)0x00;
-                        pad[i + 2] = (byte)0x00;
-                        pad[i + 3] = (byte)0x00;
-                    } while ((i += 4) < 56);
+                        }
+                        do {
+                            pad[i    ] = (byte)0x00;
+                            pad[i + 1] = (byte)0x00;
+                            pad[i + 2] = (byte)0x00;
+                            pad[i + 3] = (byte)0x00;
+                        } while ((i += 4) < 56);
                 }
                 /* Convert the message size from bytes to big-endian bits. */
                 pad[56] = (byte)((i = (int)(bytes >>> 29)) >> 24);
@@ -437,311 +437,311 @@ public final class SHA1 extends MessageDigest implements Cloneable {
          * and K00 = .... = K19 = 0x5a827999. */
         /* First pass, on big endian input (rounds 0..15). */
         e =  hE
-          +  (((a = hA) << 5) | (a >>> 27)) + 0x5a827999 // K00
-          +  (((b = hB) & ((c = hC)      ^ (d = hD))) ^ d) // Ch(b,c,d)
-          +  (i00 =  input[offset     ] << 24
+            +  (((a = hA) << 5) | (a >>> 27)) + 0x5a827999 // K00
+            +  (((b = hB) & ((c = hC)      ^ (d = hD))) ^ d) // Ch(b,c,d)
+            +  (i00 =  input[offset     ] << 24
                   | (input[offset +  1] & 0xff) << 16
                   | (input[offset +  2] & 0xff) << 8
                   | (input[offset +  3] & 0xff)); // W00
         d += ((e << 5) | (e >>> 27)) + 0x5a827999 // K01
-          +  ((a & ((b = (b << 30) | (b >>> 2)) ^ c)) ^ c) // Ch(a,b,c)
-          +  (i01 =  input[offset +  4] << 24
+            +  ((a & ((b = (b << 30) | (b >>> 2)) ^ c)) ^ c) // Ch(a,b,c)
+            +  (i01 =  input[offset +  4] << 24
                   | (input[offset += 5] & 0xff) << 16
                   | (input[offset +  1] & 0xff) << 8
                   | (input[offset +  2] & 0xff)); // W01
         c += ((d << 5) | (d >>> 27)) + 0x5a827999 // K02
-          +  ((e & ((a = (a << 30) | (a >>> 2)) ^ b)) ^ b) // Ch(e,a,b)
-          +  (i02 =  input[offset +  3] << 24
+            +  ((e & ((a = (a << 30) | (a >>> 2)) ^ b)) ^ b) // Ch(e,a,b)
+            +  (i02 =  input[offset +  3] << 24
                   | (input[offset +  4] & 0xff) << 16
                   | (input[offset += 5] & 0xff) << 8
                   | (input[offset +  1] & 0xff)); // W02
         b += ((c << 5) | (c >>> 27)) + 0x5a827999 // K03
-          +  ((d & ((e = (e << 30) | (e >>> 2)) ^ a)) ^ a) // Ch(d,e,a)
-          +  (i03 =  input[offset +  2] << 24
+            +  ((d & ((e = (e << 30) | (e >>> 2)) ^ a)) ^ a) // Ch(d,e,a)
+            +  (i03 =  input[offset +  2] << 24
                   | (input[offset +  3] & 0xff) << 16
                   | (input[offset +  4] & 0xff) << 8
                   | (input[offset += 5] & 0xff)); // W03
         a += ((b << 5) | (b >>> 27)) + 0x5a827999 // K04
-          +  ((c & ((d = (d << 30) | (d >>> 2)) ^ e)) ^ e) // Ch(c,d,e)
-          +  (i04 =  input[offset +  1] << 24
+            +  ((c & ((d = (d << 30) | (d >>> 2)) ^ e)) ^ e) // Ch(c,d,e)
+            +  (i04 =  input[offset +  1] << 24
                   | (input[offset +  2] & 0xff) << 16
                   | (input[offset +  3] & 0xff) << 8
                   | (input[offset +  4] & 0xff)); // W04
         e += ((a << 5) | (a >>> 27)) + 0x5a827999 // K05
-          +  ((b & ((c = (c << 30) | (c >>> 2)) ^ d)) ^ d) // Ch(b,c,d)
-          +  (i05 =  input[offset += 5] << 24
+            +  ((b & ((c = (c << 30) | (c >>> 2)) ^ d)) ^ d) // Ch(b,c,d)
+            +  (i05 =  input[offset += 5] << 24
                   | (input[offset +  1] & 0xff) << 16
                   | (input[offset +  2] & 0xff) << 8
                   | (input[offset +  3] & 0xff)); // W05
         d += ((e << 5) | (e >>> 27)) + 0x5a827999 // K06
-          +  ((a & ((b = (b << 30) | (b >>> 2)) ^ c)) ^ c) // Ch(a,b,c)
-          +  (i06 =  input[offset +  4] << 24
+            +  ((a & ((b = (b << 30) | (b >>> 2)) ^ c)) ^ c) // Ch(a,b,c)
+            +  (i06 =  input[offset +  4] << 24
                   | (input[offset += 5] & 0xff) << 16
                   | (input[offset +  1] & 0xff) << 8
                   | (input[offset +  2] & 0xff)); // W06
         c += ((d << 5) | (d >>> 27)) + 0x5a827999 // K07
-          +  ((e & ((a = (a << 30) | (a >>> 2)) ^ b)) ^ b) // Ch(e,a,b)
-          +  (i07 =  input[offset +  3] << 24
+            +  ((e & ((a = (a << 30) | (a >>> 2)) ^ b)) ^ b) // Ch(e,a,b)
+            +  (i07 =  input[offset +  3] << 24
                   | (input[offset +  4] & 0xff) << 16
                   | (input[offset += 5] & 0xff) << 8
                   | (input[offset +  1] & 0xff)); // W07
         b += ((c << 5) | (c >>> 27)) + 0x5a827999 // K08
-          +  ((d & ((e = (e << 30) | (e >>> 2)) ^ a)) ^ a) // Ch(d,e,a)
-          +  (i08 =  input[offset +  2] << 24
+            +  ((d & ((e = (e << 30) | (e >>> 2)) ^ a)) ^ a) // Ch(d,e,a)
+            +  (i08 =  input[offset +  2] << 24
                   | (input[offset +  3] & 0xff) << 16
                   | (input[offset +  4] & 0xff) << 8
                   | (input[offset += 5] & 0xff)); // W08
         a += ((b << 5) | (b >>> 27)) + 0x5a827999 // K09
-          +  ((c & ((d = (d << 30) | (d >>> 2)) ^ e)) ^ e) // Ch(c,d,e)
-          +  (i09 =  input[offset +  1] << 24
+            +  ((c & ((d = (d << 30) | (d >>> 2)) ^ e)) ^ e) // Ch(c,d,e)
+            +  (i09 =  input[offset +  1] << 24
                   | (input[offset +  2] & 0xff) << 16
                   | (input[offset +  3] & 0xff) << 8
                   | (input[offset +  4] & 0xff)); // W09
         e += ((a << 5) | (a >>> 27)) + 0x5a827999 // K10
-          +  ((b & ((c = (c << 30) | (c >>> 2)) ^ d)) ^ d) // Ch(b,c,d)
-          +  (i10 =  input[offset += 5] << 24
+            +  ((b & ((c = (c << 30) | (c >>> 2)) ^ d)) ^ d) // Ch(b,c,d)
+            +  (i10 =  input[offset += 5] << 24
                   | (input[offset +  1] & 0xff) << 16
                   | (input[offset +  2] & 0xff) << 8
                   | (input[offset +  3] & 0xff)); // W10
         d += ((e << 5) | (e >>> 27)) + 0x5a827999 // K11
-          +  ((a & ((b = (b << 30) | (b >>> 2)) ^ c)) ^ c) // Ch(a,b,c)
-          +  (i11 =  input[offset +  4] << 24
+            +  ((a & ((b = (b << 30) | (b >>> 2)) ^ c)) ^ c) // Ch(a,b,c)
+            +  (i11 =  input[offset +  4] << 24
                   | (input[offset += 5] & 0xff) << 16
                   | (input[offset +  1] & 0xff) << 8
                   | (input[offset +  2] & 0xff)); // W11
         c += ((d << 5) | (d >>> 27)) + 0x5a827999 // K12
-          +  ((e & ((a = (a << 30) | (a >>> 2)) ^ b)) ^ b) // Ch(e,a,b)
-          +  (i12 =  input[offset +  3] << 24
+            +  ((e & ((a = (a << 30) | (a >>> 2)) ^ b)) ^ b) // Ch(e,a,b)
+            +  (i12 =  input[offset +  3] << 24
                   | (input[offset +  4] & 0xff) << 16
                   | (input[offset += 5] & 0xff) << 8
                   | (input[offset +  1] & 0xff)); // W12
         b += ((c << 5) | (c >>> 27)) + 0x5a827999 // K13
-          +  ((d & ((e = (e << 30) | (e >>> 2)) ^ a)) ^ a) // Ch(d,e,a)
-          +  (i13 =  input[offset +  2] << 24
+            +  ((d & ((e = (e << 30) | (e >>> 2)) ^ a)) ^ a) // Ch(d,e,a)
+            +  (i13 =  input[offset +  2] << 24
                   | (input[offset +  3] & 0xff) << 16
                   | (input[offset +  4] & 0xff) << 8
                   | (input[offset += 5] & 0xff)); // W13
         a += ((b << 5) | (b >>> 27)) + 0x5a827999 // K14
-          +  ((c & ((d = (d << 30) | (d >>> 2)) ^ e)) ^ e) // Ch(c,d,e)
-          +  (i14 =  input[offset +  1] << 24
+            +  ((c & ((d = (d << 30) | (d >>> 2)) ^ e)) ^ e) // Ch(c,d,e)
+            +  (i14 =  input[offset +  1] << 24
                   | (input[offset +  2] & 0xff) << 16
                   | (input[offset +  3] & 0xff) << 8
                   | (input[offset +  4] & 0xff)); // W14
         e += ((a << 5) | (a >>> 27)) + 0x5a827999 // K15
-          +  ((b & ((c = (c << 30) | (c >>> 2)) ^ d)) ^ d) // Ch(b,c,d)
-          +  (i15 =  input[offset += 5] << 24
+            +  ((b & ((c = (c << 30) | (c >>> 2)) ^ d)) ^ d) // Ch(b,c,d)
+            +  (i15 =  input[offset += 5] << 24
                   | (input[offset +  1] & 0xff) << 16
                   | (input[offset +  2] & 0xff) << 8
                   | (input[offset +  3] & 0xff)); // W15
         /* Second pass, on scheduled input (rounds 16..31). */
         d += ((e << 5) | (e >>> 27)) + 0x5a827999 // K16
-          +  ((a & ((b = (b << 30) | (b >>> 2)) ^ c)) ^ c) // Ch(a,b,c)
-          +  (i00 = ((i00 ^= i02 ^ i08 ^ i13) << 1) | (i00 >>> 31)); // W16
+            +  ((a & ((b = (b << 30) | (b >>> 2)) ^ c)) ^ c) // Ch(a,b,c)
+            +  (i00 = ((i00 ^= i02 ^ i08 ^ i13) << 1) | (i00 >>> 31)); // W16
         c += ((d << 5) | (d >>> 27)) + 0x5a827999 // K17
-          +  ((e & ((a = (a << 30) | (a >>> 2)) ^ b)) ^ b) // Ch(e,a,b)
-          +  (i01 = ((i01 ^= i03 ^ i09 ^ i14) << 1) | (i01 >>> 31)); // W17
+            +  ((e & ((a = (a << 30) | (a >>> 2)) ^ b)) ^ b) // Ch(e,a,b)
+            +  (i01 = ((i01 ^= i03 ^ i09 ^ i14) << 1) | (i01 >>> 31)); // W17
         b += ((c << 5) | (c >>> 27)) + 0x5a827999 // K18
-          +  ((d & ((e = (e << 30) | (e >>> 2)) ^ a)) ^ a) // Ch(d,e,a)
-          +  (i02 = ((i02 ^= i04 ^ i10 ^ i15) << 1) | (i02 >>> 31)); // W18
+            +  ((d & ((e = (e << 30) | (e >>> 2)) ^ a)) ^ a) // Ch(d,e,a)
+            +  (i02 = ((i02 ^= i04 ^ i10 ^ i15) << 1) | (i02 >>> 31)); // W18
         a += ((b << 5) | (b >>> 27)) + 0x5a827999 // K19
-          +  ((c & ((d = (d << 30) | (d >>> 2)) ^ e)) ^ e) // Ch(c,d,e)
-          +  (i03 = ((i03 ^= i05 ^ i11 ^ i00) << 1) | (i03 >>> 31)); // W19
+            +  ((c & ((d = (d << 30) | (d >>> 2)) ^ e)) ^ e) // Ch(c,d,e)
+            +  (i03 = ((i03 ^= i05 ^ i11 ^ i00) << 1) | (i03 >>> 31)); // W19
         /* Use hash schedule function Parity (rounds 20..39):
          *   Parity(x,y,z) = x ^ y ^ z,
          * and K20 = .... = K39 = 0x6ed9eba1. */
         e += ((a << 5) | (a >>> 27)) + 0x6ed9eba1 // K20
-          +  (b ^ (c = (c << 30) | (c >>> 2)) ^ d) // Parity(b,c,d)
-          +  (i04 = ((i04 ^= i06 ^ i12 ^ i01) << 1) | (i04 >>> 31)); // W20
+            +  (b ^ (c = (c << 30) | (c >>> 2)) ^ d) // Parity(b,c,d)
+            +  (i04 = ((i04 ^= i06 ^ i12 ^ i01) << 1) | (i04 >>> 31)); // W20
         d += ((e << 5) | (e >>> 27)) + 0x6ed9eba1 // K21
-          +  (a ^ (b = (b << 30) | (b >>> 2)) ^ c) // Parity(a,b,c)
-          +  (i05 = ((i05 ^= i07 ^ i13 ^ i02) << 1) | (i05 >>> 31)); // W21
+            +  (a ^ (b = (b << 30) | (b >>> 2)) ^ c) // Parity(a,b,c)
+            +  (i05 = ((i05 ^= i07 ^ i13 ^ i02) << 1) | (i05 >>> 31)); // W21
         c += ((d << 5) | (d >>> 27)) + 0x6ed9eba1 // K22
-          +  (e ^ (a = (a << 30) | (a >>> 2)) ^ b) // Parity(e,a,b)
-          +  (i06 = ((i06 ^= i08 ^ i14 ^ i03) << 1) | (i06 >>> 31)); // W22
+            +  (e ^ (a = (a << 30) | (a >>> 2)) ^ b) // Parity(e,a,b)
+            +  (i06 = ((i06 ^= i08 ^ i14 ^ i03) << 1) | (i06 >>> 31)); // W22
         b += ((c << 5) | (c >>> 27)) + 0x6ed9eba1 // K23
-          +  (d ^ (e = (e << 30) | (e >>> 2)) ^ a) // Parity(d,e,a)
-          +  (i07 = ((i07 ^= i09 ^ i15 ^ i04) << 1) | (i07 >>> 31)); // W23
+            +  (d ^ (e = (e << 30) | (e >>> 2)) ^ a) // Parity(d,e,a)
+            +  (i07 = ((i07 ^= i09 ^ i15 ^ i04) << 1) | (i07 >>> 31)); // W23
         a += ((b << 5) | (b >>> 27)) + 0x6ed9eba1 // K24
-          +  (c ^ (d = (d << 30) | (d >>> 2)) ^ e) // Parity(c,d,e)
-          +  (i08 = ((i08 ^= i10 ^ i00 ^ i05) << 1) | (i08 >>> 31)); // W24
+            +  (c ^ (d = (d << 30) | (d >>> 2)) ^ e) // Parity(c,d,e)
+            +  (i08 = ((i08 ^= i10 ^ i00 ^ i05) << 1) | (i08 >>> 31)); // W24
         e += ((a << 5) | (a >>> 27)) + 0x6ed9eba1 // K25
-          +  (b ^ (c = (c << 30) | (c >>> 2)) ^ d) // Parity(b,c,d)
-          +  (i09 = ((i09 ^= i11 ^ i01 ^ i06) << 1) | (i09 >>> 31)); // W25
+            +  (b ^ (c = (c << 30) | (c >>> 2)) ^ d) // Parity(b,c,d)
+            +  (i09 = ((i09 ^= i11 ^ i01 ^ i06) << 1) | (i09 >>> 31)); // W25
         d += ((e << 5) | (e >>> 27)) + 0x6ed9eba1 // K26
-          +  (a ^ (b = (b << 30) | (b >>> 2)) ^ c) // Parity(a,b,c)
-          +  (i10 = ((i10 ^= i12 ^ i02 ^ i07) << 1) | (i10 >>> 31)); // W26
+            +  (a ^ (b = (b << 30) | (b >>> 2)) ^ c) // Parity(a,b,c)
+            +  (i10 = ((i10 ^= i12 ^ i02 ^ i07) << 1) | (i10 >>> 31)); // W26
         c += ((d << 5) | (d >>> 27)) + 0x6ed9eba1 // K27
-          +  (e ^ (a = (a << 30) | (a >>> 2)) ^ b) // Parity(e,a,b)
-          +  (i11 = ((i11 ^= i13 ^ i03 ^ i08) << 1) | (i11 >>> 31)); // W27
+            +  (e ^ (a = (a << 30) | (a >>> 2)) ^ b) // Parity(e,a,b)
+            +  (i11 = ((i11 ^= i13 ^ i03 ^ i08) << 1) | (i11 >>> 31)); // W27
         b += ((c << 5) | (c >>> 27)) + 0x6ed9eba1 // K28
-          +  (d ^ (e = (e << 30) | (e >>> 2)) ^ a) // Parity(d,e,a)
-          +  (i12 = ((i12 ^= i14 ^ i04 ^ i09) << 1) | (i12 >>> 31)); // W28
+            +  (d ^ (e = (e << 30) | (e >>> 2)) ^ a) // Parity(d,e,a)
+            +  (i12 = ((i12 ^= i14 ^ i04 ^ i09) << 1) | (i12 >>> 31)); // W28
         a += ((b << 5) | (b >>> 27)) + 0x6ed9eba1 // K29
-          +  (c ^ (d = (d << 30) | (d >>> 2)) ^ e) // Parity(c,d,e)
-          +  (i13 = ((i13 ^= i15 ^ i05 ^ i10) << 1) | (i13 >>> 31)); // W29
+            +  (c ^ (d = (d << 30) | (d >>> 2)) ^ e) // Parity(c,d,e)
+            +  (i13 = ((i13 ^= i15 ^ i05 ^ i10) << 1) | (i13 >>> 31)); // W29
         e += ((a << 5) | (a >>> 27)) + 0x6ed9eba1 // K30
-          +  (b ^ (c = (c << 30) | (c >>> 2)) ^ d) // Parity(b,c,d)
-          +  (i14 = ((i14 ^= i00 ^ i06 ^ i11) << 1) | (i14 >>> 31)); // W30
+            +  (b ^ (c = (c << 30) | (c >>> 2)) ^ d) // Parity(b,c,d)
+            +  (i14 = ((i14 ^= i00 ^ i06 ^ i11) << 1) | (i14 >>> 31)); // W30
         d += ((e << 5) | (e >>> 27)) + 0x6ed9eba1 // K31
-          +  (a ^ (b = (b << 30) | (b >>> 2)) ^ c) // Parity(a,b,c)
-          +  (i15 = ((i15 ^= i01 ^ i07 ^ i12) << 1) | (i15 >>> 31)); // W31
+            +  (a ^ (b = (b << 30) | (b >>> 2)) ^ c) // Parity(a,b,c)
+            +  (i15 = ((i15 ^= i01 ^ i07 ^ i12) << 1) | (i15 >>> 31)); // W31
         /* Third pass, on scheduled input (rounds 32..47). */
         c += ((d << 5) | (d >>> 27)) + 0x6ed9eba1 // K32
-          +  (e ^ (a = (a << 30) | (a >>> 2)) ^ b) // Parity(e,a,b)
-          +  (i00 = ((i00 ^= i02 ^ i08 ^ i13) << 1) | (i00 >>> 31)); // W32
+            +  (e ^ (a = (a << 30) | (a >>> 2)) ^ b) // Parity(e,a,b)
+            +  (i00 = ((i00 ^= i02 ^ i08 ^ i13) << 1) | (i00 >>> 31)); // W32
         b += ((c << 5) | (c >>> 27)) + 0x6ed9eba1 // K33
-          +  (d ^ (e = (e << 30) | (e >>> 2)) ^ a) // Parity(d,e,a)
-          +  (i01 = ((i01 ^= i03 ^ i09 ^ i14) << 1) | (i01 >>> 31)); // W33
+            +  (d ^ (e = (e << 30) | (e >>> 2)) ^ a) // Parity(d,e,a)
+            +  (i01 = ((i01 ^= i03 ^ i09 ^ i14) << 1) | (i01 >>> 31)); // W33
         a += ((b << 5) | (b >>> 27)) + 0x6ed9eba1 // K34
-          +  (c ^ (d = (d << 30) | (d >>> 2)) ^ e) // Parity(c,d,e)
-          +  (i02 = ((i02 ^= i04 ^ i10 ^ i15) << 1) | (i02 >>> 31)); // W34
+            +  (c ^ (d = (d << 30) | (d >>> 2)) ^ e) // Parity(c,d,e)
+            +  (i02 = ((i02 ^= i04 ^ i10 ^ i15) << 1) | (i02 >>> 31)); // W34
         e += ((a << 5) | (a >>> 27)) + 0x6ed9eba1 // K35
-          +  (b ^ (c = (c << 30) | (c >>> 2)) ^ d) // Parity(b,c,d)
-          +  (i03 = ((i03 ^= i05 ^ i11 ^ i00) << 1) | (i03 >>> 31)); // W35
+            +  (b ^ (c = (c << 30) | (c >>> 2)) ^ d) // Parity(b,c,d)
+            +  (i03 = ((i03 ^= i05 ^ i11 ^ i00) << 1) | (i03 >>> 31)); // W35
         d += ((e << 5) | (e >>> 27)) + 0x6ed9eba1 // K36
-          +  (a ^ (b = (b << 30) | (b >>> 2)) ^ c) // Parity(a,b,c)
-          +  (i04 = ((i04 ^= i06 ^ i12 ^ i01) << 1) | (i04 >>> 31)); // W36
+            +  (a ^ (b = (b << 30) | (b >>> 2)) ^ c) // Parity(a,b,c)
+            +  (i04 = ((i04 ^= i06 ^ i12 ^ i01) << 1) | (i04 >>> 31)); // W36
         c += ((d << 5) | (d >>> 27)) + 0x6ed9eba1 // K37
-          +  (e ^ (a = (a << 30) | (a >>> 2)) ^ b) // Parity(e,a,b)
-          +  (i05 = ((i05 ^= i07 ^ i13 ^ i02) << 1) | (i05 >>> 31)); // W37
+            +  (e ^ (a = (a << 30) | (a >>> 2)) ^ b) // Parity(e,a,b)
+            +  (i05 = ((i05 ^= i07 ^ i13 ^ i02) << 1) | (i05 >>> 31)); // W37
         b += ((c << 5) | (c >>> 27)) + 0x6ed9eba1 // K38
-          +  (d ^ (e = (e << 30) | (e >>> 2)) ^ a) // Parity(d,e,a)
-          +  (i06 = ((i06 ^= i08 ^ i14 ^ i03) << 1) | (i06 >>> 31)); // W38
+            +  (d ^ (e = (e << 30) | (e >>> 2)) ^ a) // Parity(d,e,a)
+            +  (i06 = ((i06 ^= i08 ^ i14 ^ i03) << 1) | (i06 >>> 31)); // W38
         a += ((b << 5) | (b >>> 27)) + 0x6ed9eba1 // K39
-          +  (c ^ (d = (d << 30) | (d >>> 2)) ^ e) // Parity(c,d,e)
-          +  (i07 = ((i07 ^= i09 ^ i15 ^ i04) << 1) | (i07 >>> 31)); // W39
+            +  (c ^ (d = (d << 30) | (d >>> 2)) ^ e) // Parity(c,d,e)
+            +  (i07 = ((i07 ^= i09 ^ i15 ^ i04) << 1) | (i07 >>> 31)); // W39
         /* Use hash schedule function Maj (rounds 40..59):
          *   Maj(x,y,z) = (x&y) ^ (x&z) ^ (y&z) = (x & y) | ((x | y) & z),
          * and K40 = .... = K59 = 0x8f1bbcdc. */
         e += ((a << 5) | (a >>> 27)) + 0x8f1bbcdc // K40
-          +  ((b & (c = (c << 30) | (c >>> 2))) | ((b | c) & d)) // Maj(b,c,d)
-          +  (i08 = ((i08 ^= i10 ^ i00 ^ i05) << 1) | (i08 >>> 31)); // W40
+            +  ((b & (c = (c << 30) | (c >>> 2))) | ((b | c) & d)) // Maj(b,c,d)
+            +  (i08 = ((i08 ^= i10 ^ i00 ^ i05) << 1) | (i08 >>> 31)); // W40
         d += ((e << 5) | (e >>> 27)) + 0x8f1bbcdc // K41
-          +  ((a & (b = (b << 30) | (b >>> 2))) | ((a | b) & c)) // Maj(a,b,c)
-          +  (i09 = ((i09 ^= i11 ^ i01 ^ i06) << 1) | (i09 >>> 31)); // W41
+            +  ((a & (b = (b << 30) | (b >>> 2))) | ((a | b) & c)) // Maj(a,b,c)
+            +  (i09 = ((i09 ^= i11 ^ i01 ^ i06) << 1) | (i09 >>> 31)); // W41
         c += ((d << 5) | (d >>> 27)) + 0x8f1bbcdc // K42
-          +  ((e & (a = (a << 30) | (a >>> 2))) | ((e | a) & b)) // Maj(e,a,b)
-          +  (i10 = ((i10 ^= i12 ^ i02 ^ i07) << 1) | (i10 >>> 31)); // W42
+            +  ((e & (a = (a << 30) | (a >>> 2))) | ((e | a) & b)) // Maj(e,a,b)
+            +  (i10 = ((i10 ^= i12 ^ i02 ^ i07) << 1) | (i10 >>> 31)); // W42
         b += ((c << 5) | (c >>> 27)) + 0x8f1bbcdc // K43
-          +  ((d & (e = (e << 30) | (e >>> 2))) | ((d | e) & a)) // Maj(d,e,a)
-          +  (i11 = ((i11 ^= i13 ^ i03 ^ i08) << 1) | (i11 >>> 31)); // W43
+            +  ((d & (e = (e << 30) | (e >>> 2))) | ((d | e) & a)) // Maj(d,e,a)
+            +  (i11 = ((i11 ^= i13 ^ i03 ^ i08) << 1) | (i11 >>> 31)); // W43
         a += ((b << 5) | (b >>> 27)) + 0x8f1bbcdc // K44
-          +  ((c & (d = (d << 30) | (d >>> 2))) | ((c | d) & e)) // Maj(c,d,e)
-          +  (i12 = ((i12 ^= i14 ^ i04 ^ i09) << 1) | (i12 >>> 31)); // W44
+            +  ((c & (d = (d << 30) | (d >>> 2))) | ((c | d) & e)) // Maj(c,d,e)
+            +  (i12 = ((i12 ^= i14 ^ i04 ^ i09) << 1) | (i12 >>> 31)); // W44
         e += ((a << 5) | (a >>> 27)) + 0x8f1bbcdc // K45
-          +  ((b & (c = (c << 30) | (c >>> 2))) | ((b | c) & d)) // Maj(b,c,d)
-          +  (i13 = ((i13 ^= i15 ^ i05 ^ i10) << 1) | (i13 >>> 31)); // W45
+            +  ((b & (c = (c << 30) | (c >>> 2))) | ((b | c) & d)) // Maj(b,c,d)
+            +  (i13 = ((i13 ^= i15 ^ i05 ^ i10) << 1) | (i13 >>> 31)); // W45
         d += ((e << 5) | (e >>> 27)) + 0x8f1bbcdc // K46
-          +  ((a & (b = (b << 30) | (b >>> 2))) | ((a | b) & c)) // Maj(a,b,c)
-          +  (i14 = ((i14 ^= i00 ^ i06 ^ i11) << 1) | (i14 >>> 31)); // W46
+            +  ((a & (b = (b << 30) | (b >>> 2))) | ((a | b) & c)) // Maj(a,b,c)
+            +  (i14 = ((i14 ^= i00 ^ i06 ^ i11) << 1) | (i14 >>> 31)); // W46
         c += ((d << 5) | (d >>> 27)) + 0x8f1bbcdc // K47
-          +  ((e & (a = (a << 30) | (a >>> 2))) | ((e | a) & b)) // Maj(e,a,b)
-          +  (i15 = ((i15 ^= i01 ^ i07 ^ i12) << 1) | (i15 >>> 31)); // W47
+            +  ((e & (a = (a << 30) | (a >>> 2))) | ((e | a) & b)) // Maj(e,a,b)
+            +  (i15 = ((i15 ^= i01 ^ i07 ^ i12) << 1) | (i15 >>> 31)); // W47
         /* Fourth pass, on scheduled input (rounds 48..63). */
         b += ((c << 5) | (c >>> 27)) + 0x8f1bbcdc // K48
-          +  ((d & (e = (e << 30) | (e >>> 2))) | ((d | e) & a)) // Maj(d,e,a)
-          +  (i00 = ((i00 ^= i02 ^ i08 ^ i13) << 1) | (i00 >>> 31)); // W48
+            +  ((d & (e = (e << 30) | (e >>> 2))) | ((d | e) & a)) // Maj(d,e,a)
+            +  (i00 = ((i00 ^= i02 ^ i08 ^ i13) << 1) | (i00 >>> 31)); // W48
         a += ((b << 5) | (b >>> 27)) + 0x8f1bbcdc // K49
-          +  ((c & (d = (d << 30) | (d >>> 2))) | ((c | d) & e)) // Maj(c,d,e)
-          +  (i01 = ((i01 ^= i03 ^ i09 ^ i14) << 1) | (i01 >>> 31)); // W49
+            +  ((c & (d = (d << 30) | (d >>> 2))) | ((c | d) & e)) // Maj(c,d,e)
+            +  (i01 = ((i01 ^= i03 ^ i09 ^ i14) << 1) | (i01 >>> 31)); // W49
         e += ((a << 5) | (a >>> 27)) + 0x8f1bbcdc // K50
-          +  ((b & (c = (c << 30) | (c >>> 2))) | ((b | c) & d)) // Maj(b,c,d)
-          +  (i02 = ((i02 ^= i04 ^ i10 ^ i15) << 1) | (i02 >>> 31)); // W50
+            +  ((b & (c = (c << 30) | (c >>> 2))) | ((b | c) & d)) // Maj(b,c,d)
+            +  (i02 = ((i02 ^= i04 ^ i10 ^ i15) << 1) | (i02 >>> 31)); // W50
         d += ((e << 5) | (e >>> 27)) + 0x8f1bbcdc // K51
-          +  ((a & (b = (b << 30) | (b >>> 2))) | ((a | b) & c)) // Maj(a,b,c)
-          +  (i03 = ((i03 ^= i05 ^ i11 ^ i00) << 1) | (i03 >>> 31)); // W51
+            +  ((a & (b = (b << 30) | (b >>> 2))) | ((a | b) & c)) // Maj(a,b,c)
+            +  (i03 = ((i03 ^= i05 ^ i11 ^ i00) << 1) | (i03 >>> 31)); // W51
         c += ((d << 5) | (d >>> 27)) + 0x8f1bbcdc // K52
-          +  ((e & (a = (a << 30) | (a >>> 2))) | ((e | a) & b)) // Maj(e,a,b)
-          +  (i04 = ((i04 ^= i06 ^ i12 ^ i01) << 1) | (i04 >>> 31)); // W52
+            +  ((e & (a = (a << 30) | (a >>> 2))) | ((e | a) & b)) // Maj(e,a,b)
+            +  (i04 = ((i04 ^= i06 ^ i12 ^ i01) << 1) | (i04 >>> 31)); // W52
         b += ((c << 5) | (c >>> 27)) + 0x8f1bbcdc // K53
-          +  ((d & (e = (e << 30) | (e >>> 2))) | ((d | e) & a)) // Maj(d,e,a)
-          +  (i05 = ((i05 ^= i07 ^ i13 ^ i02) << 1) | (i05 >>> 31)); // W53
+            +  ((d & (e = (e << 30) | (e >>> 2))) | ((d | e) & a)) // Maj(d,e,a)
+            +  (i05 = ((i05 ^= i07 ^ i13 ^ i02) << 1) | (i05 >>> 31)); // W53
         a += ((b << 5) | (b >>> 27)) + 0x8f1bbcdc // K54
-          +  ((c & (d = (d << 30) | (d >>> 2))) | ((c | d) & e)) // Maj(c,d,e)
-          +  (i06 = ((i06 ^= i08 ^ i14 ^ i03) << 1) | (i06 >>> 31)); // W54
+            +  ((c & (d = (d << 30) | (d >>> 2))) | ((c | d) & e)) // Maj(c,d,e)
+            +  (i06 = ((i06 ^= i08 ^ i14 ^ i03) << 1) | (i06 >>> 31)); // W54
         e += ((a << 5) | (a >>> 27)) + 0x8f1bbcdc // K55
-          +  ((b & (c = (c << 30) | (c >>> 2))) | ((b | c) & d)) // Maj(b,c,d)
-          +  (i07 = ((i07 ^= i09 ^ i15 ^ i04) << 1) | (i07 >>> 31)); // W55
+            +  ((b & (c = (c << 30) | (c >>> 2))) | ((b | c) & d)) // Maj(b,c,d)
+            +  (i07 = ((i07 ^= i09 ^ i15 ^ i04) << 1) | (i07 >>> 31)); // W55
         d += ((e << 5) | (e >>> 27)) + 0x8f1bbcdc // K56
-          +  ((a & (b = (b << 30) | (b >>> 2))) | ((a | b) & c)) // Maj(a,b,c)
-          +  (i08 = ((i08 ^= i10 ^ i00 ^ i05) << 1) | (i08 >>> 31)); // W56
+            +  ((a & (b = (b << 30) | (b >>> 2))) | ((a | b) & c)) // Maj(a,b,c)
+            +  (i08 = ((i08 ^= i10 ^ i00 ^ i05) << 1) | (i08 >>> 31)); // W56
         c += ((d << 5) | (d >>> 27)) + 0x8f1bbcdc // K57
-          +  ((e & (a = (a << 30) | (a >>> 2))) | ((e | a) & b)) // Maj(e,a,b)
-          +  (i09 = ((i09 ^= i11 ^ i01 ^ i06) << 1) | (i09 >>> 31)); // W57
+            +  ((e & (a = (a << 30) | (a >>> 2))) | ((e | a) & b)) // Maj(e,a,b)
+            +  (i09 = ((i09 ^= i11 ^ i01 ^ i06) << 1) | (i09 >>> 31)); // W57
         b += ((c << 5) | (c >>> 27)) + 0x8f1bbcdc // K58
-          +  ((d & (e = (e << 30) | (e >>> 2))) | ((d | e) & a)) // Maj(d,e,a)
-          +  (i10 = ((i10 ^= i12 ^ i02 ^ i07) << 1) | (i10 >>> 31)); // W58
+            +  ((d & (e = (e << 30) | (e >>> 2))) | ((d | e) & a)) // Maj(d,e,a)
+            +  (i10 = ((i10 ^= i12 ^ i02 ^ i07) << 1) | (i10 >>> 31)); // W58
         a += ((b << 5) | (b >>> 27)) + 0x8f1bbcdc // K59
-          +  ((c & (d = (d << 30) | (d >>> 2))) | ((c | d) & e)) // Maj(c,d,e)
-          +  (i11 = ((i11 ^= i13 ^ i03 ^ i08) << 1) | (i11 >>> 31)); // W59
+            +  ((c & (d = (d << 30) | (d >>> 2))) | ((c | d) & e)) // Maj(c,d,e)
+            +  (i11 = ((i11 ^= i13 ^ i03 ^ i08) << 1) | (i11 >>> 31)); // W59
         /* Use hash schedule function Parity (rounds 60..79):
          *   Parity(x,y,z) = x ^ y ^ z,
          * and K60 = .... = K79 = 0xca62c1d6. */
         e += ((a << 5) | (a >>> 27)) + 0xca62c1d6 // K60
-          +  (b ^ (c = (c << 30) | (c >>> 2)) ^ d) // Parity(b,c,d)
-          +  (i12 = ((i12 ^= i14 ^ i04 ^ i09) << 1) | (i12 >>> 31)); // W60
+            +  (b ^ (c = (c << 30) | (c >>> 2)) ^ d) // Parity(b,c,d)
+            +  (i12 = ((i12 ^= i14 ^ i04 ^ i09) << 1) | (i12 >>> 31)); // W60
         d += ((e << 5) | (e >>> 27)) + 0xca62c1d6 // K61
-          +  (a ^ (b = (b << 30) | (b >>> 2)) ^ c) // Parity(a,b,c)
-          +  (i13 = ((i13 ^= i15 ^ i05 ^ i10) << 1) | (i13 >>> 31)); // W61
+            +  (a ^ (b = (b << 30) | (b >>> 2)) ^ c) // Parity(a,b,c)
+            +  (i13 = ((i13 ^= i15 ^ i05 ^ i10) << 1) | (i13 >>> 31)); // W61
         c += ((d << 5) | (d >>> 27)) + 0xca62c1d6 // K62
-          +  (e ^ (a = (a << 30) | (a >>> 2)) ^ b) // Parity(e,a,b)
-          +  (i14 = ((i14 ^= i00 ^ i06 ^ i11) << 1) | (i14 >>> 31)); // W62
+            +  (e ^ (a = (a << 30) | (a >>> 2)) ^ b) // Parity(e,a,b)
+            +  (i14 = ((i14 ^= i00 ^ i06 ^ i11) << 1) | (i14 >>> 31)); // W62
         b += ((c << 5) | (c >>> 27)) + 0xca62c1d6 // K63
-          +  (d ^ (e = (e << 30) | (e >>> 2)) ^ a) // Parity(d,e,a)
-          +  (i15 = ((i15 ^= i01 ^ i07 ^ i12) << 1) | (i15 >>> 31)); // W63
+            +  (d ^ (e = (e << 30) | (e >>> 2)) ^ a) // Parity(d,e,a)
+            +  (i15 = ((i15 ^= i01 ^ i07 ^ i12) << 1) | (i15 >>> 31)); // W63
         /* Fifth pass, on scheduled input (rounds 64..79). */
         a += ((b << 5) | (b >>> 27)) + 0xca62c1d6 // K64
-          +  (c ^ (d = (d << 30) | (d >>> 2)) ^ e) // Parity(c,d,e)
-          +  (i00 = ((i00 ^= i02 ^ i08 ^ i13) << 1) | (i00 >>> 31)); // W64
+            +  (c ^ (d = (d << 30) | (d >>> 2)) ^ e) // Parity(c,d,e)
+            +  (i00 = ((i00 ^= i02 ^ i08 ^ i13) << 1) | (i00 >>> 31)); // W64
         e += ((a << 5) | (a >>> 27)) + 0xca62c1d6 // K65
-          +  (b ^ (c = (c << 30) | (c >>> 2)) ^ d) // Parity(b,c,d)
-          +  (i01 = ((i01 ^= i03 ^ i09 ^ i14) << 1) | (i01 >>> 31)); // W65
+            +  (b ^ (c = (c << 30) | (c >>> 2)) ^ d) // Parity(b,c,d)
+            +  (i01 = ((i01 ^= i03 ^ i09 ^ i14) << 1) | (i01 >>> 31)); // W65
         d += ((e << 5) | (e >>> 27)) + 0xca62c1d6 // K66
-          +  (a ^ (b = (b << 30) | (b >>> 2)) ^ c) // Parity(a,b,c)
-          +  (i02 = ((i02 ^= i04 ^ i10 ^ i15) << 1) | (i02 >>> 31)); // W66
+            +  (a ^ (b = (b << 30) | (b >>> 2)) ^ c) // Parity(a,b,c)
+            +  (i02 = ((i02 ^= i04 ^ i10 ^ i15) << 1) | (i02 >>> 31)); // W66
         c += ((d << 5) | (d >>> 27)) + 0xca62c1d6 // K67
-          +  (e ^ (a = (a << 30) | (a >>> 2)) ^ b) // Parity(e,a,b)
-          +  (i03 = ((i03 ^= i05 ^ i11 ^ i00) << 1) | (i03 >>> 31)); // W67
+            +  (e ^ (a = (a << 30) | (a >>> 2)) ^ b) // Parity(e,a,b)
+            +  (i03 = ((i03 ^= i05 ^ i11 ^ i00) << 1) | (i03 >>> 31)); // W67
         b += ((c << 5) | (c >>> 27)) + 0xca62c1d6 // K68
-          +  (d ^ (e = (e << 30) | (e >>> 2)) ^ a) // Parity(d,e,a)
-          +  (i04 = ((i04 ^= i06 ^ i12 ^ i01) << 1) | (i04 >>> 31)); // W68
+            +  (d ^ (e = (e << 30) | (e >>> 2)) ^ a) // Parity(d,e,a)
+            +  (i04 = ((i04 ^= i06 ^ i12 ^ i01) << 1) | (i04 >>> 31)); // W68
         a += ((b << 5) | (b >>> 27)) + 0xca62c1d6 // K69
-          +  (c ^ (d = (d << 30) | (d >>> 2)) ^ e) // Parity(c,d,e)
-          +  (i05 = ((i05 ^= i07 ^ i13 ^ i02) << 1) | (i05 >>> 31)); // W69
+            +  (c ^ (d = (d << 30) | (d >>> 2)) ^ e) // Parity(c,d,e)
+            +  (i05 = ((i05 ^= i07 ^ i13 ^ i02) << 1) | (i05 >>> 31)); // W69
         e += ((a << 5) | (a >>> 27)) + 0xca62c1d6 // K70
-          +  (b ^ (c = (c << 30) | (c >>> 2)) ^ d) // Parity(b,c,d)
-          +  (i06 = ((i06 ^= i08 ^ i14 ^ i03) << 1) | (i06 >>> 31)); // W70
+            +  (b ^ (c = (c << 30) | (c >>> 2)) ^ d) // Parity(b,c,d)
+            +  (i06 = ((i06 ^= i08 ^ i14 ^ i03) << 1) | (i06 >>> 31)); // W70
         d += ((e << 5) | (e >>> 27)) + 0xca62c1d6 // K71
-          +  (a ^ (b = (b << 30) | (b >>> 2)) ^ c) // Parity(a,b,c)
-          +  (i07 = ((i07 ^= i09 ^ i15 ^ i04) << 1) | (i07 >>> 31)); // W71
+            +  (a ^ (b = (b << 30) | (b >>> 2)) ^ c) // Parity(a,b,c)
+            +  (i07 = ((i07 ^= i09 ^ i15 ^ i04) << 1) | (i07 >>> 31)); // W71
         c += ((d << 5) | (d >>> 27)) + 0xca62c1d6 // K72
-          +  (e ^ (a = (a << 30) | (a >>> 2)) ^ b) // Parity(e,a,b)
-          +  (i08 = ((i08 ^= i10 ^ i00 ^ i05) << 1) | (i08 >>> 31)); // W72
+            +  (e ^ (a = (a << 30) | (a >>> 2)) ^ b) // Parity(e,a,b)
+            +  (i08 = ((i08 ^= i10 ^ i00 ^ i05) << 1) | (i08 >>> 31)); // W72
         b += ((c << 5) | (c >>> 27)) + 0xca62c1d6 // K73
-          +  (d ^ (e = (e << 30) | (e >>> 2)) ^ a) // Parity(d,e,a)
-          +  (i09 = ((i09 ^= i11 ^ i01 ^ i06) << 1) | (i09 >>> 31)); // W73
+            +  (d ^ (e = (e << 30) | (e >>> 2)) ^ a) // Parity(d,e,a)
+            +  (i09 = ((i09 ^= i11 ^ i01 ^ i06) << 1) | (i09 >>> 31)); // W73
         a += ((b << 5) | (b >>> 27)) + 0xca62c1d6 // K74
-          +  (c ^ (d = (d << 30) | (d >>> 2)) ^ e) // Parity(c,d,e)
-          +  (i10 = ((i10 ^= i12 ^ i02 ^ i07) << 1) | (i10 >>> 31)); // W74
+            +  (c ^ (d = (d << 30) | (d >>> 2)) ^ e) // Parity(c,d,e)
+            +  (i10 = ((i10 ^= i12 ^ i02 ^ i07) << 1) | (i10 >>> 31)); // W74
         e += ((a << 5) | (a >>> 27)) + 0xca62c1d6 // K75
-          +  (b ^ (c = (c << 30) | (c >>> 2)) ^ d) // Parity(b,c,d)
-          +  (i11 = ((i11 ^= i13 ^ i03 ^ i08) << 1) | (i11 >>> 31)); // W75
+            +  (b ^ (c = (c << 30) | (c >>> 2)) ^ d) // Parity(b,c,d)
+            +  (i11 = ((i11 ^= i13 ^ i03 ^ i08) << 1) | (i11 >>> 31)); // W75
         d += ((e << 5) | (e >>> 27)) + 0xca62c1d6 // K76
-          +  (a ^ (b = (b << 30) | (b >>> 2)) ^ c) // Parity(a,b,c)
-          +  (i12 = ((i12 ^= i14 ^ i04 ^ i09) << 1) | (i12 >>> 31)); // W76
+            +  (a ^ (b = (b << 30) | (b >>> 2)) ^ c) // Parity(a,b,c)
+            +  (i12 = ((i12 ^= i14 ^ i04 ^ i09) << 1) | (i12 >>> 31)); // W76
         c += ((d << 5) | (d >>> 27)) + 0xca62c1d6 // K77
-          +  (e ^ (a = (a << 30) | (a >>> 2)) ^ b) // Parity(e,a,b)
-          +  (i13 = ((i13 ^= i15 ^ i05 ^ i10) << 1) | (i13 >>> 31)); // W77
+            +  (e ^ (a = (a << 30) | (a >>> 2)) ^ b) // Parity(e,a,b)
+            +  (i13 = ((i13 ^= i15 ^ i05 ^ i10) << 1) | (i13 >>> 31)); // W77
         /* Terminate the last two rounds of fifth pass,
          * feeding the final digest on the fly. */
         hB +=
-        b += ((c << 5) | (c >>> 27)) + 0xca62c1d6 // K78
-          +  (d ^ (e = (e << 30) | (e >>> 2)) ^ a) // Parity(d,e,a)
-          +  (i14 = ((i14 ^= i00 ^ i06 ^ i11) << 1) | (i14 >>> 31)); // W78
+            b += ((c << 5) | (c >>> 27)) + 0xca62c1d6 // K78
+            +  (d ^ (e = (e << 30) | (e >>> 2)) ^ a) // Parity(d,e,a)
+            +  (i14 = ((i14 ^= i00 ^ i06 ^ i11) << 1) | (i14 >>> 31)); // W78
         hA +=
-        a += ((b << 5) | (b >>> 27)) + 0xca62c1d6 // K79
-          +  (c ^ (d = (d << 30) | (d >>> 2)) ^ e) // Parity(c,d,e)
-          +  (i15 = ((i15 ^= i01 ^ i07 ^ i12) << 1) | (i15 >>> 31)); // W79
+            a += ((b << 5) | (b >>> 27)) + 0xca62c1d6 // K79
+            +  (c ^ (d = (d << 30) | (d >>> 2)) ^ e) // Parity(c,d,e)
+            +  (i15 = ((i15 ^= i01 ^ i07 ^ i12) << 1) | (i15 >>> 31)); // W79
         hE += e;
         hD += d;
         hC += /* c= */ (c << 30) | (c >>> 2);

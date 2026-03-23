@@ -220,21 +220,21 @@ public class LeaseSetKeys {
         if (_decryptionKeyPQ != null) {
             if (_decryptionKeyEC != null) {
                 switch (_decryptionKeyPQ.getType()) {
-                  case MLKEM512_X25519:
-                    return SET_EC_PQ1;
-                  case MLKEM768_X25519:
-                    return SET_EC_PQ2;
-                  case MLKEM1024_X25519:
-                    return SET_EC_PQ3;
+                    case MLKEM512_X25519:
+                        return SET_EC_PQ1;
+                    case MLKEM768_X25519:
+                        return SET_EC_PQ2;
+                    case MLKEM1024_X25519:
+                        return SET_EC_PQ3;
                 }
             } else {
                 switch (_decryptionKeyPQ.getType()) {
-                  case MLKEM512_X25519:
-                    return SET_PQ1;
-                  case MLKEM768_X25519:
-                    return SET_PQ2;
-                  case MLKEM1024_X25519:
-                    return SET_PQ3;
+                    case MLKEM512_X25519:
+                        return SET_PQ1;
+                    case MLKEM768_X25519:
+                        return SET_PQ2;
+                    case MLKEM1024_X25519:
+                        return SET_PQ3;
                 }
             }
         }

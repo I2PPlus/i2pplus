@@ -162,7 +162,7 @@ public class TunnelControllerGroup implements ClientApp {
                     ctx.logManager().getLog(TunnelControllerGroup.class).warn("Old context in TunnelControllerGroup");
                     _instance.shutdown();
                     _instance = new TunnelControllerGroup(ctx, null, null);
-                 }
+                }
             }
             return _instance;
         }
@@ -627,7 +627,7 @@ public class TunnelControllerGroup implements ClientApp {
                 throw new IllegalArgumentException("Unable to load the controllers from " + cfgFile, ioe);
             }
         } else if (!shouldMigrate) {
-                throw new IllegalArgumentException("Unable to load the controllers from " + cfgFile);
+            throw new IllegalArgumentException("Unable to load the controllers from " + cfgFile);
         }
         _controllersLock.writeLock().lock();
         try {
@@ -1222,7 +1222,7 @@ public class TunnelControllerGroup implements ClientApp {
             cfgFile = new File(_context.getConfigDir(), _configFile);
         rv.addAll(getControllers(cfgFile));
         return rv;
-     }
+    }
 
     /**
      * Retrieve a list of tunnels known.
@@ -1347,7 +1347,7 @@ public class TunnelControllerGroup implements ClientApp {
      */
     static class CustomThreadPoolExecutor extends ThreadPoolExecutor {
         public CustomThreadPoolExecutor() {
-             super(0, Integer.MAX_VALUE, HANDLER_KEEPALIVE_MS, TimeUnit.MILLISECONDS,
+            super(0, Integer.MAX_VALUE, HANDLER_KEEPALIVE_MS, TimeUnit.MILLISECONDS,
                    new SynchronousQueue<Runnable>(), new CustomThreadFactory());
         }
     }

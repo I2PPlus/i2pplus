@@ -25,23 +25,23 @@ package com.vuze.plugins.mlab.tools.ndt.swingemu;
 
 /**
  * Emulation of javax.swing.JOptionPane for the NDT (Network Diagnostic Tool) plugin.
- * 
+ *
  * <p>This class provides a minimal stub implementation of standard dialog boxes
  * to allow the NDT tool to run in headless environments. All dialog methods are
  * no-ops that silently discard messages, maintaining API compatibility without
  * requiring an actual graphical display system.</p>
- * 
+ *
  * <p>This allows the NDT tool to display informational messages without interrupting
  * execution in server or headless environments.</p>
- * 
+ *
  */
 public class
-JOptionPane
+    JOptionPane
 {
 	public static final int INFORMATION_MESSAGE = 0;
 
 	public static void
-	showMessageDialog(
+            showMessageDialog(
 		Object	wha,
 		String	str )
 	{
@@ -49,7 +49,7 @@ JOptionPane
 	}
 
 	public static void
-	showMessageDialog(
+            showMessageDialog(
 		Object	wha,
 		String	str1,
 		String	str2,

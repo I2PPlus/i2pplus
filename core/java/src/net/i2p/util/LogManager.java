@@ -430,7 +430,7 @@ public class LogManager implements Flushable {
                     _minGzipSize = Long.parseLong(str);
             } catch (NumberFormatException nfe) {
             // invalid console buffer size, use default
-        }
+            }
         }
         parseLimits(config);
     }

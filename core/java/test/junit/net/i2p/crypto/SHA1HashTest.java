@@ -135,9 +135,9 @@ public class SHA1HashTest extends TestCase{
         StringBuilder buf = new StringBuilder(bytes.length * 2);
         for (int i = 0; i < bytes.length; i++) {
             if ((i & 3) == 0 && i != 0)
-               buf.append(' ');
+                buf.append(' ');
             buf.append(HEX.charAt((bytes[i] >> 4) & 0xF))
-               .append(HEX.charAt( bytes[i]       & 0xF));
+                .append(HEX.charAt( bytes[i]       & 0xF));
         }
         return buf.toString();
     }

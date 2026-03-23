@@ -128,9 +128,8 @@ class LookupDestJob extends JobImpl {
         _blindData = bd;
     }
 
-    public String getName() { return _name != null ?
-                                     "Lookup Hostname for Client" :
-                                     "Lookup LeaseSet for Client";
+    public String getName() {
+        return _name != null ? "Lookup Hostname for Client" : "Lookup LeaseSet for Client";
     }
 
     public void runJob() {

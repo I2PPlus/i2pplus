@@ -44,6 +44,6 @@ public class Timestamper implements Runnable {
           * @param now the current time
           * @param stratum 1-15, 1 being the best (added in 0.7.12)
           */
-         public void setNow(long now, int stratum);
+        public void setNow(long now, int stratum);
     }
 }

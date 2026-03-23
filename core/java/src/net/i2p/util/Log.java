@@ -54,16 +54,16 @@ public class Log {
 
     public static String toLevelString(int level) {
         switch (level) {
-        case DEBUG:
-            return STR_DEBUG;
-        case INFO:
-            return STR_INFO;
-        case WARN:
-            return STR_WARN;
-        case ERROR:
-            return STR_ERROR;
-        case CRIT:
-            return STR_CRIT;
+            case DEBUG:
+                return STR_DEBUG;
+            case INFO:
+                return STR_INFO;
+            case WARN:
+                return STR_WARN;
+            case ERROR:
+                return STR_ERROR;
+            case CRIT:
+                return STR_CRIT;
         }
         return (level > CRIT ? STR_CRIT : STR_DEBUG);
     }
@@ -125,7 +125,7 @@ public class Log {
      *  @since 0.8.2
      */
     public void logAlways(int priority, String msg) {
-            _manager.addRecord(new LogRecord(_class, _name,
+        _manager.addRecord(new LogRecord(_class, _name,
                                              Thread.currentThread().getName(), priority,
                                              msg, null));
     }

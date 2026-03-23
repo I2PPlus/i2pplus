@@ -93,7 +93,7 @@ public final class TelnetCommand {
 
     /** String representations of commands. */
     private static final String[] commandString = { "IAC", "DONT", "DO", "WONT", "WILL", "SB", "GA", "EL", "EC", "AYT", "AO", "IP", "BRK", "DMARK", "NOP", "SE",
-            "EOR", "ABORT", "SUSP", "EOF" };
+        "EOR", "ABORT", "SUSP", "EOF" };
 
     private static final int FIRST_COMMAND = IAC;
     private static final int LAST_COMMAND = EOF;

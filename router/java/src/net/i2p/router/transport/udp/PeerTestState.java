@@ -280,7 +280,7 @@ class PeerTestState {
                 buf.append("LOCAL]");
             else
                 buf.append(_charlieIP).append(':').append(_charliePort).append("]");
-                if (_charlieHash != null)
+            if (_charlieHash != null)
                     buf.append(' ').append(_charlieHash.toBase64().substring(0, 6));
             if (_previousCharlies != null && !_previousCharlies.isEmpty())
                 buf.append(" previous: ").append(_previousCharlies);

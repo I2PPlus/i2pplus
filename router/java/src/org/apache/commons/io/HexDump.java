@@ -44,15 +44,15 @@ public class HexDump {
     public static final String EOL = System.lineSeparator();
 
     private static final char[] HEX_CODES =
-            {
-                '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-                'A', 'B', 'C', 'D', 'E', 'F'
-            };
+        {
+        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+        'A', 'B', 'C', 'D', 'E', 'F'
+        };
 
     private static final int[] SHIFTS =
-            {
-                28, 24, 20, 16, 12, 8, 4, 0
-            };
+        {
+        28, 24, 20, 16, 12, 8, 4, 0
+        };
 
     /**
      * Dumps an array of bytes to an Appendable. The output is formatted

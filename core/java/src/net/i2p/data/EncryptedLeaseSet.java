@@ -683,7 +683,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
                 throw new DataFormatException("No client entries");
             authLen = 1 + SALT_LEN + 2 + (count * CLIENT_LEN);
             if (_log.shouldDebug()) {
-                 _log.debug("Auth type " + authType + ", found " + count + " client entries, authsalt is:\n" +
+                _log.debug("Auth type " + authType + ", found " + count + " client entries, authsalt is:\n" +
                             net.i2p.util.HexDump.dump(seed));
             }
             byte[] clientKey = new byte[32];
@@ -715,7 +715,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
                 hkdf.calculate(seed, clientAuthInput, ELS2_PSK, clientKey, clientIVandID, 0);
             }
             if (_log.shouldDebug()) {
-                 _log.debug("Looking for client ID:\n" +
+                _log.debug("Looking for client ID:\n" +
                             net.i2p.util.HexDump.dump(clientIVandID, IV_LEN, ID_LEN) +
                             "for client key:\n" +
                             net.i2p.util.HexDump.dump(clientKey));
@@ -733,7 +733,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
             if (clientCookie == null)
                 throw new DataFormatException("Our client auth entry not found");
             if (_log.shouldDebug()) {
-                 _log.debug("Found client cookie:\n" +
+                _log.debug("Found client cookie:\n" +
                             net.i2p.util.HexDump.dump(clientCookie));
             }
             byte[] clientAuthInput = new byte[32 + authInput.length];
@@ -743,7 +743,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
             // decrypt clientCookie to clientAuthInput
             ChaCha20.decrypt(clientKey, clientIVandID, clientCookie, 0, clientAuthInput, 0, 32);
             if (_log.shouldDebug()) {
-                 _log.debug("Decrypted client cookie:\n" +
+                _log.debug("Decrypted client cookie:\n" +
                             net.i2p.util.HexDump.dump(clientAuthInput, 0, 32));
             }
             authInput = clientAuthInput;

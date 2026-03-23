@@ -40,24 +40,24 @@ public final class NtpUtils {
      */
     public static String getModeName(final int mode) {
         switch (mode) {
-        case NtpV3Packet.MODE_RESERVED:
-            return "Reserved";
-        case NtpV3Packet.MODE_SYMMETRIC_ACTIVE:
-            return "Symmetric Active";
-        case NtpV3Packet.MODE_SYMMETRIC_PASSIVE:
-            return "Symmetric Passive";
-        case NtpV3Packet.MODE_CLIENT:
-            return "Client";
-        case NtpV3Packet.MODE_SERVER:
-            return "Server";
-        case NtpV3Packet.MODE_BROADCAST:
-            return "Broadcast";
-        case NtpV3Packet.MODE_CONTROL_MESSAGE:
-            return "Control";
-        case NtpV3Packet.MODE_PRIVATE:
-            return "Private";
-        default:
-            return "Unknown";
+            case NtpV3Packet.MODE_RESERVED:
+                return "Reserved";
+            case NtpV3Packet.MODE_SYMMETRIC_ACTIVE:
+                return "Symmetric Active";
+            case NtpV3Packet.MODE_SYMMETRIC_PASSIVE:
+                return "Symmetric Passive";
+            case NtpV3Packet.MODE_CLIENT:
+                return "Client";
+            case NtpV3Packet.MODE_SERVER:
+                return "Server";
+            case NtpV3Packet.MODE_BROADCAST:
+                return "Broadcast";
+            case NtpV3Packet.MODE_CONTROL_MESSAGE:
+                return "Control";
+            case NtpV3Packet.MODE_PRIVATE:
+                return "Private";
+            default:
+                return "Unknown";
         }
     }
 

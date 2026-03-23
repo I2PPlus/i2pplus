@@ -17,11 +17,11 @@ public class SHAKEDigest
     {
         switch (bitStrength)
         {
-        case 128:
-        case 256:
-            return bitStrength;
-        default:
-            throw new IllegalArgumentException("'bitStrength' " + bitStrength + " not supported for SHAKE");
+            case 128:
+            case 256:
+                return bitStrength;
+            default:
+                throw new IllegalArgumentException("'bitStrength' " + bitStrength + " not supported for SHAKE");
         }
     }
 

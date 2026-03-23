@@ -459,7 +459,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                     catch (InterruptedException ie) {break;}
                 }
                 // _buildingTunnels set to false by close()
-               closed = _buildingTunnels && sockMgr.getSession().isClosed();
+                closed = _buildingTunnels && sockMgr.getSession().isClosed();
             }
         } finally {
             _buildingTunnels = false;

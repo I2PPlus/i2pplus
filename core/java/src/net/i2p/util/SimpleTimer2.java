@@ -123,8 +123,8 @@ public class SimpleTimer2 {
 
     private static class CustomScheduledThreadPoolExecutor extends ScheduledThreadPoolExecutor {
         public CustomScheduledThreadPoolExecutor(int threads, ThreadFactory factory) {
-             super(threads, factory);
-             setRemoveOnCancelPolicy(true);
+            super(threads, factory);
+            setRemoveOnCancelPolicy(true);
         }
 
         @Override
@@ -292,27 +292,27 @@ public class SimpleTimer2 {
 /**
      * Create a new timed event.
      * Must call schedule() later.
-     * 
+     *
      * @param pool the timer pool
      */
-    public TimedEvent(SimpleTimer2 pool) {
-        _pool = pool;
-        _fuzz = DEFAULT_FUZZ;
-        _log = I2PAppContext.getGlobalContext().logManager().getLog(SimpleTimer2.class);
-        _state = TimedEventState.IDLE;
-    }
+        public TimedEvent(SimpleTimer2 pool) {
+            _pool = pool;
+            _fuzz = DEFAULT_FUZZ;
+            _log = I2PAppContext.getGlobalContext().logManager().getLog(SimpleTimer2.class);
+            _state = TimedEventState.IDLE;
+        }
 
 /**
      * Create a new timed event and automatically schedules it.
      * Don't use this one if you have other things to do first.
-     * 
+     *
      * @param pool the timer pool
      * @param timeoutMs timeout in milliseconds
      */
-    public TimedEvent(SimpleTimer2 pool, long timeoutMs) {
-        this(pool);
-        schedule(timeoutMs);
-    }
+        public TimedEvent(SimpleTimer2 pool, long timeoutMs) {
+            this(pool);
+            schedule(timeoutMs);
+        }
 
         /**
          * Don't bother rescheduling if +/- this many ms or less.
@@ -349,12 +349,12 @@ public class SimpleTimer2 {
                 case RUNNING:
                     _rescheduleAfterRun = true;  // signal that we need rescheduling.
                     break;
-              case IDLE:  // fall through
-              case CANCELLED:
-                  _future = _pool.schedule(this, timeoutMs);
-                  _state = TimedEventState.SCHEDULED;
-                  break;
-              case SCHEDULED: // nothing
+                case IDLE:  // fall through
+                case CANCELLED:
+                    _future = _pool.schedule(this, timeoutMs);
+                    _state = TimedEventState.SCHEDULED;
+                    break;
+                case SCHEDULED: // nothing
             }
         }
 
@@ -424,7 +424,7 @@ public class SimpleTimer2 {
 
         /**
          * Cancel the timed event.
-         * 
+         *
          * @return true if cancelled
          */
         public synchronized boolean cancel() {
@@ -438,18 +438,18 @@ public class SimpleTimer2 {
                 case RUNNING:
                     _cancelAfterRun = true;
                     return true;
-                    case SCHEDULED:
+                case SCHEDULED:
                         // There's probably a race here, where it's cancelled after it's running
                         // The result (if rescheduled) is a dup on the queue, see tickets 1694, 1705
                         // Mitigated by close-to-execution check in reschedule()
-                        boolean cancelled = _future.cancel(true);
-                if (cancelled) {
-                    _state = TimedEventState.CANCELLED;
-                } else {
-                    if (_log.shouldWarn())
-                    _log.warn("Could not cancel " + this + " to run in " + (_nextRun - System.currentTimeMillis()), new Exception());
-                }
-                return cancelled;
+                    boolean cancelled = _future.cancel(true);
+                    if (cancelled) {
+                        _state = TimedEventState.CANCELLED;
+                    } else {
+                        if (_log.shouldWarn())
+                            _log.warn("Could not cancel " + this + " to run in " + (_nextRun - System.currentTimeMillis()), new Exception());
+                    }
+                    return cancelled;
             }
             return false;
 
@@ -490,7 +490,7 @@ public class SimpleTimer2 {
                     case IDLE:  // fall through
                     case RUNNING:
                         throw new IllegalStateException(this + " not possible to be in " + _state);
-                  case SCHEDULED:
+                    case SCHEDULED:
                       // proceed, will switch to IDLE to reschedule
                 }
 
@@ -558,8 +558,8 @@ public class SimpleTimer2 {
             if (_log.shouldInfo()) {
                  // this call is slow - iterates through a HashMap -
                  // would be better to have a local AtomicLong if we care
-                 long completed = _pool.getCompletedTaskCount();
-                 if (completed % 250 == 0)
+                long completed = _pool.getCompletedTaskCount();
+                if (completed % 250 == 0)
                      _log.info(_pool.debug());
             }
         }

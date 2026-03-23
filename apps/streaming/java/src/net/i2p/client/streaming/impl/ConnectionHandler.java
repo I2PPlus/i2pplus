@@ -151,11 +151,11 @@ class ConnectionHandler {
                     }
                     sendReset(packet);
                 }
-                    boolean restartPending;
-                    synchronized(this) {
-                        restartPending = _restartPending;
-                    }
-                    if (restartPending) {throw new RouterRestartException();}
+                boolean restartPending;
+                synchronized(this) {
+                    restartPending = _restartPending;
+                }
+                if (restartPending) {throw new RouterRestartException();}
                 throw new ConnectException("ServerSocket closed");
             }
 
@@ -167,9 +167,9 @@ class ConnectionHandler {
                 if (timeoutMs <= 0) {
                     try {syn = _synQueue.take();} // waits forever
                     catch (InterruptedException ie) {
-                       ConnectException ce = new ConnectException("Interrupted accept()");
-                       ce.initCause(ie);
-                       throw ce;
+                        ConnectException ce = new ConnectException("Interrupted accept()");
+                        ce.initCause(ie);
+                        throw ce;
                     }
                 } else {
                     long remaining = expiration - _context.clock().now();
@@ -181,9 +181,9 @@ class ConnectionHandler {
                     if (remaining < 1) {break;}
                     try {syn = _synQueue.poll(remaining, TimeUnit.MILLISECONDS);} // waits the specified time max
                     catch (InterruptedException ie) {
-                       ConnectException ce = new ConnectException("Interrupted accept()");
-                       ce.initCause(ie);
-                       throw ce;
+                        ConnectException ce = new ConnectException("Interrupted accept()");
+                        ce.initCause(ie);
+                        throw ce;
                     }
                     break;
                 }
@@ -191,11 +191,11 @@ class ConnectionHandler {
 
             if (syn != null) {
                 if (syn.getOptionalDelay() == PoisonPacket.POISON_MAX_DELAY_REQUEST) {
-                boolean restartPending;
-                synchronized(this) {
-                    restartPending = _restartPending;
-                }
-                if (restartPending) {throw new RouterRestartException();}
+                    boolean restartPending;
+                    synchronized(this) {
+                        restartPending = _restartPending;
+                    }
+                    if (restartPending) {throw new RouterRestartException();}
                     throw new ConnectException("ServerSocket closed");
                 }
 

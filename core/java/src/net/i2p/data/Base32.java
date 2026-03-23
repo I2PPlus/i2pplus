@@ -44,16 +44,16 @@ public class Base32 {
      * Allow upper or lower case.
      **/
     private final static byte[] DECODABET = {
-                                             26, 27, 28, 29, 30, 31, -9, -9, // Numbers two through nine
-                                             -9, -9, -9, // Decimal 58 - 60
-                                             -1, // Equals sign at decimal 61
-                                             -9, -9, -9, // Decimal 62 - 64
-                                             0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, // Letters 'A' through 'M'
-                                             13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, // Letters 'N' through 'Z'
-                                             -9, -9, -9, -9, -9, -9, // Decimal 91 - 96
-                                             0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, // Letters 'a' through 'm'
-                                             13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, // Letters 'n' through 'z'
-                                             -9, -9, -9, -9, -9 // Decimal 123 - 127
+        26, 27, 28, 29, 30, 31, -9, -9, // Numbers two through nine
+        -9, -9, -9, // Decimal 58 - 60
+        -1, // Equals sign at decimal 61
+        -9, -9, -9, // Decimal 62 - 64
+        0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, // Letters 'A' through 'M'
+        13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, // Letters 'N' through 'Z'
+        -9, -9, -9, -9, -9, -9, // Decimal 91 - 96
+        0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, // Letters 'a' through 'm'
+        13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, // Letters 'n' through 'z'
+        -9, -9, -9, -9, -9 // Decimal 123 - 127
     };
 
     private final static byte BAD_ENCODING = -9; // Indicates error in encoding
@@ -164,21 +164,21 @@ public class Base32 {
     private static void encodeBytes(byte[] source, StringBuilder out) {
         int usedbits = 0;
         for (int i = 0; i < source.length; ) {
-             int fivebits;
-             if (usedbits < 3) {
-                 fivebits = (source[i] >> (3 - usedbits)) & 0x1f;
-                 usedbits += 5;
-             } else if (usedbits == 3) {
-                 fivebits = source[i++] & 0x1f;
-                 usedbits = 0;
-             } else {
-                 fivebits = (source[i++] << (usedbits - 3)) & 0x1f;
-                 if (i < source.length) {
-                     usedbits -= 3;
-                     fivebits |= (source[i] >> (8 - usedbits)) & emask[usedbits];
-                 }
-             }
-             out.append(ALPHABET[fivebits]);
+            int fivebits;
+            if (usedbits < 3) {
+                fivebits = (source[i] >> (3 - usedbits)) & 0x1f;
+                usedbits += 5;
+            } else if (usedbits == 3) {
+                fivebits = source[i++] & 0x1f;
+                usedbits = 0;
+            } else {
+                fivebits = (source[i++] << (usedbits - 3)) & 0x1f;
+                if (i < source.length) {
+                    usedbits -= 3;
+                    fivebits |= (source[i] >> (8 - usedbits)) & emask[usedbits];
+                }
+            }
+            out.append(ALPHABET[fivebits]);
         }
     }
 
@@ -236,28 +236,28 @@ public class Base32 {
                 fivebits = DECODABET[source[i] - '2'];
 
             if (fivebits >= 0) {
-                 if (outBuffPosn >= len58)
+                if (outBuffPosn >= len58)
                      return new byte[0];
-                 if (usedbits == 0) {
-                     outBuff[outBuffPosn] = (byte) ((fivebits << 3) & 0xf8);
-                     usedbits = 5;
-                 } else if (usedbits < 3) {
-                     outBuff[outBuffPosn] |= (fivebits << (3 - usedbits)) & dmask[usedbits];
-                     usedbits += 5;
-                 } else if (usedbits == 3) {
-                     outBuff[outBuffPosn++] |= fivebits;
-                     usedbits = 0;
-                 } else {
-                     outBuff[outBuffPosn++] |= (fivebits >> (usedbits - 3)) & dmask[usedbits];
-                     byte next = (byte) (fivebits << (11 - usedbits));
-                     if (outBuffPosn < len58) {
-                         outBuff[outBuffPosn] = next;
-                         usedbits -= 3;
-                     } else if (next != 0) {
+                if (usedbits == 0) {
+                    outBuff[outBuffPosn] = (byte) ((fivebits << 3) & 0xf8);
+                    usedbits = 5;
+                } else if (usedbits < 3) {
+                    outBuff[outBuffPosn] |= (fivebits << (3 - usedbits)) & dmask[usedbits];
+                    usedbits += 5;
+                } else if (usedbits == 3) {
+                    outBuff[outBuffPosn++] |= fivebits;
+                    usedbits = 0;
+                } else {
+                    outBuff[outBuffPosn++] |= (fivebits >> (usedbits - 3)) & dmask[usedbits];
+                    byte next = (byte) (fivebits << (11 - usedbits));
+                    if (outBuffPosn < len58) {
+                        outBuff[outBuffPosn] = next;
+                        usedbits -= 3;
+                    } else if (next != 0) {
                        //_log.warn("Extra data at the end: " + next + "(decimal)");
-                       return new byte[0];
-                     }
-                 }
+                        return new byte[0];
+                    }
+                }
             } else {
                 //_log.warn("Bad Base32 input character at " + i + ": " + source[i] + "(decimal)");
                 return new byte[0];

@@ -831,15 +831,15 @@ public abstract class Addresses {
         for (int i = 0; i < len; i++) {
             char c = host.charAt(i);
             if (c == '.') {
-               if (i == 0 || i == len - 1 || dots == 3 || b > 255 || host.charAt(i - 1) == '.')
-                   return new byte[0];
-               rv[dots++] = (byte) b;
-               b = 0;
+                if (i == 0 || i == len - 1 || dots == 3 || b > 255 || host.charAt(i - 1) == '.')
+                    return new byte[0];
+                rv[dots++] = (byte) b;
+                b = 0;
             } else if (c >= '0' && c <= '9') {
-               b *= 10;
-               b += c - '0';
+                b *= 10;
+                b += c - '0';
             } else {
-               return new byte[0];
+                return new byte[0];
             }
         }
         if (dots != 3 || b > 255)
@@ -865,23 +865,23 @@ public abstract class Addresses {
         for (int i = 0; i < len; i++) {
             char c = host.charAt(i);
             if (c == ':') {
-               if (i == 0 || i == len - 1 || colons == 7 || b > 65535 || host.charAt(i - 1) == ':')
-                   return new byte[0];
-               rv[j++] = (byte) (b >> 8);
-               rv[j++] = (byte) b;
-               colons++;
-               b = 0;
+                if (i == 0 || i == len - 1 || colons == 7 || b > 65535 || host.charAt(i - 1) == ':')
+                    return new byte[0];
+                rv[j++] = (byte) (b >> 8);
+                rv[j++] = (byte) b;
+                colons++;
+                b = 0;
             } else if (c >= '0' && c <= '9') {
-               b <<= 4;
-               b |= c - '0';
+                b <<= 4;
+                b |= c - '0';
             } else if (c >= 'a' && c <= 'f') {
-               b <<= 4;
-               b |= 10 + c - 'a';
+                b <<= 4;
+                b |= 10 + c - 'a';
             } else if (c >= 'A' && c <= 'F') {
-               b <<= 4;
-               b |= 10 + c - 'A';
+                b <<= 4;
+                b |= 10 + c - 'A';
             } else {
-               return new byte[0];
+                return new byte[0];
             }
         }
         if (colons != 7 || b > 65535)

@@ -723,13 +723,13 @@ public class PeerState {
                 _sendWindowBytes += bytesACKed;
                 synchronized(_sendWindowBytesRemainingLock) {_sendWindowBytesRemaining += bytesACKed;}
             } else {
-                    float prob = ((float)bytesACKed) / ((float)(_sendWindowBytes<<1));
-                    float v = _context.random().nextFloat();
-                    if (v < 0) {v = 0-v;}
-                    if (v <= prob) {
-                        _sendWindowBytes += bytesACKed;
-                        synchronized(_sendWindowBytesRemainingLock) {_sendWindowBytesRemaining += bytesACKed;}
-                    }
+                float prob = ((float)bytesACKed) / ((float)(_sendWindowBytes<<1));
+                float v = _context.random().nextFloat();
+                if (v < 0) {v = 0-v;}
+                if (v <= prob) {
+                    _sendWindowBytes += bytesACKed;
+                    synchronized(_sendWindowBytesRemainingLock) {_sendWindowBytesRemaining += bytesACKed;}
+                }
             }
         } else {
             int allow = _concurrentMessagesAllowed - 1;
@@ -879,9 +879,9 @@ public class PeerState {
      *  I2NP messages sent - does not include duplicates.
      *  As of 0.9.24, incremented when bandwidth is allocated just before sending, not when acked.
      */
-     public int getMessagesSent() {
-       synchronized(_outboundLock) {return _messagesSent.get();}
-     }
+    public int getMessagesSent() {
+        synchronized(_outboundLock) {return _messagesSent.get();}
+    }
 
     /**
      *  I2NP messages received.
@@ -1508,18 +1508,18 @@ public class PeerState {
                 // Caller (IMF) will wakeup OMF
                 if (continueFast) {
                   // RFC 5681 sec. 3.2 #4 increase cwnd
-                   _sendWindowBytes += _mtu;
+                    _sendWindowBytes += _mtu;
                     synchronized(_sendWindowBytesRemainingLock) {_sendWindowBytesRemaining += _mtu;}
-                   if (_log.shouldDebug()) {_log.debug("Continue FAST RTX, inflated window: " + this);}
+                    if (_log.shouldDebug()) {_log.debug("Continue FAST RTX, inflated window: " + this);}
                 } else if (startFast) {
                    // RFC 5681 sec. 3.2 #2 set SST (equation 4)
                    // But use W+ BWE instead
-                   float bwe = _bwEstimator.getBandwidthEstimate();
-                   _slowStartThreshold = Math.max((int)(bwe * _rtt), 2 * _mtu);
+                    float bwe = _bwEstimator.getBandwidthEstimate();
+                    _slowStartThreshold = Math.max((int)(bwe * _rtt), 2 * _mtu);
                    // RFC 5681 sec. 3.2 #3 set cwnd
-                   _sendWindowBytes = _slowStartThreshold + (3 * _mtu);
+                    _sendWindowBytes = _slowStartThreshold + (3 * _mtu);
                     synchronized(_sendWindowBytesRemainingLock) {_sendWindowBytesRemaining = _sendWindowBytes;}
-                   if (_log.shouldDebug()) {_log.debug("Start of FAST RTX, inflated window: " + this);}
+                    if (_log.shouldDebug()) {_log.debug("Start of FAST RTX, inflated window: " + this);}
                 }
             } else {exitFastRetransmit();}
         }

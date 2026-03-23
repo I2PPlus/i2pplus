@@ -113,9 +113,9 @@ public class MultiRouter {
 
             /* Start the routers in separate threads since it takes some time. */
             (new Thread() {
-                  public void run() {
-                      r.runRouter();
-                  }
+                public void run() {
+                    r.runRouter();
+                }
             }).start();
             try { Thread.sleep(100); } catch (InterruptedException ie) {}
 
@@ -138,11 +138,11 @@ public class MultiRouter {
 
         HashSet<RouterInfo> riSet = new HashSet<RouterInfo>();
         for(Router r : _routers) {
-    		riSet.addAll(r.getContext().netDb().getRouters());
+            riSet.addAll(r.getContext().netDb().getRouters());
         }
         for(Router r : _routers) {
             for(RouterInfo ri : riSet){
-    			r.getContext().netDb().publish(ri);
+                r.getContext().netDb().publish(ri);
             }
         }
         _out.println(riSet.size() + " RouterInfos were reseeded");

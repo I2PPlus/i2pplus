@@ -65,16 +65,16 @@ public class Curve implements Serializable {
 
     public GroupElement getZero(GroupElement.Representation repr) {
         switch (repr) {
-        case P2:
-            return zeroP2;
-        case P3:
-            return zeroP3;
-        case P3PrecomputedDouble:
-            return zeroP3PrecomputedDouble;
-        case PRECOMP:
-            return zeroPrecomp;
-        default:
-            return null;
+            case P2:
+                return zeroP2;
+            case P3:
+                return zeroP3;
+            case P3PrecomputedDouble:
+                return zeroP3PrecomputedDouble;
+            case PRECOMP:
+                return zeroPrecomp;
+            default:
+                return null;
         }
     }
 

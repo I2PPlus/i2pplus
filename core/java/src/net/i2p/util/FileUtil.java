@@ -152,7 +152,7 @@ public class FileUtil {
                             //DataHelper.copy(in, fos);
                             int read;
                             while ((read = in.read(buf)) != -1) {
-                                   fos.write(buf, 0, read);
+                                fos.write(buf, 0, read);
                             }
                             if (logLevel == Log.DEBUG)
                                 System.err.println("INFO: File [" + entry.getName() + "] extracted");
@@ -468,7 +468,7 @@ public class FileUtil {
       * @since 0.8.8
       */
     public static boolean copy(File src, File dst, boolean overwriteExisting, boolean quiet) {
-	if (dst.exists() && dst.isDirectory())
+        if (dst.exists() && dst.isDirectory())
             dst = new File(dst, src.getName());
 
         if (!src.exists()) return false;

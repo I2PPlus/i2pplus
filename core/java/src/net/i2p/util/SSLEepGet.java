@@ -275,56 +275,56 @@ public class SSLEepGet extends EepGet {
         try {
             int c;
             while ((c = g.getopt()) != -1) {
-              switch (c) {
-                case 'p':
-                    String s = g.getOptarg();
-                    int colon = s.indexOf(':');
-                    if (colon >= 0) {
+                switch (c) {
+                    case 'p':
+                        String s = g.getOptarg();
+                        int colon = s.indexOf(':');
+                        if (colon >= 0) {
                         // Todo IPv6 [a:b:c]:4444
-                        proxyHost = s.substring(0, colon);
-                        String port = s.substring(colon + 1);
-                        proxyPort = Integer.parseInt(port);
-                    } else {
-                        proxyHost = s;
+                            proxyHost = s.substring(0, colon);
+                            String port = s.substring(colon + 1);
+                            proxyPort = Integer.parseInt(port);
+                        } else {
+                            proxyHost = s;
                         // proxyPort remains default
-                    }
-                    break;
+                        }
+                        break;
 
-                case 'y':
-                    String y = g.getOptarg().toUpperCase(Locale.US);
-                    if (y.equals("HTTP") || y.equals("HTTPS")) {
-                        ptype = ProxyType.HTTP;
-                    } else if (y.equals("SOCKS4")) {
-                        ptype = ProxyType.SOCKS4;
-                    } else if (y.equals("SOCKS5")) {
-                        ptype = ProxyType.SOCKS5;
-                    } else if (y.equals("I2P")) {
-                        ptype = ProxyType.INTERNAL;
-                        proxyHost = "localhost";
-                        proxyPort = 4444;
-                    } else {
+                    case 'y':
+                        String y = g.getOptarg().toUpperCase(Locale.US);
+                        if (y.equals("HTTP") || y.equals("HTTPS")) {
+                            ptype = ProxyType.HTTP;
+                        } else if (y.equals("SOCKS4")) {
+                            ptype = ProxyType.SOCKS4;
+                        } else if (y.equals("SOCKS5")) {
+                            ptype = ProxyType.SOCKS5;
+                        } else if (y.equals("I2P")) {
+                            ptype = ProxyType.INTERNAL;
+                            proxyHost = "localhost";
+                            proxyPort = 4444;
+                        } else {
+                            error = true;
+                        }
+                        break;
+
+                    case 's':
+                        saveCerts++;
+                        break;
+
+                    case 'z':
+                        noVerify = true;
+                        break;
+
+                    case 'd':
+                        doh = true;
+                        break;
+
+                    case '?':
+                    case ':':
+                    default:
                         error = true;
-                    }
-                    break;
-
-                case 's':
-                    saveCerts++;
-                    break;
-
-                case 'z':
-                    noVerify = true;
-                    break;
-
-                case 'd':
-                    doh = true;
-                    break;
-
-                case '?':
-                case ':':
-                default:
-                    error = true;
-                    break;
-              }  // switch
+                        break;
+                }  // switch
             } // while
         } catch (RuntimeException e) {
             e.printStackTrace();
@@ -549,7 +549,7 @@ public class SSLEepGet extends EepGet {
         private final SSLContext context;
 
         private SSLState(SSLContext ctx) {
-             context = ctx;
+            context = ctx;
         }
     }
 
@@ -805,26 +805,26 @@ public class SSLEepGet extends EepGet {
                     if (_log.shouldDebug())
                         _log.debug("Connecting to " + _proxyType + " proxy");
                     switch (_proxyType) {
-                      case HTTP:
-                        httpProxyConnect(host, port);
-                        break;
+                        case HTTP:
+                            httpProxyConnect(host, port);
+                            break;
 
-                      case INTERNAL:
-                        internalHttpProxyConnect(host, port);
-                        break;
+                        case INTERNAL:
+                            internalHttpProxyConnect(host, port);
+                            break;
 
-                      case SOCKS4:
-                        socksProxyConnect(false, host, port);
-                        break;
+                        case SOCKS4:
+                            socksProxyConnect(false, host, port);
+                            break;
 
-                      case SOCKS5:
-                        socksProxyConnect(true, host, port);
-                        break;
+                        case SOCKS5:
+                            socksProxyConnect(true, host, port);
+                            break;
 
-                      case HTTPS:
-                      case TRANSPARENT:
-                      default:
-                        throw new IOException("Unsupported proxy type " + _proxyType);
+                        case HTTPS:
+                        case TRANSPARENT:
+                        default:
+                            throw new IOException("Unsupported proxy type " + _proxyType);
                     }
 
                     // wrap the socket in an SSLSocket
@@ -841,9 +841,9 @@ public class SSLEepGet extends EepGet {
                         _proxy = new Socket();
                         _proxy.setSoTimeout(_fetchHeaderTimeout);
                         _proxy.connect(new InetSocketAddress(ip, port), _fetchHeaderTimeout);
-                     } else {
+                    } else {
                         _proxy = new Socket(ip, port);
-                     }
+                    }
                     if (_sslContext != null)
                         _proxy = _sslContext.getSocketFactory().createSocket(_proxy, host, port, true);
                     else

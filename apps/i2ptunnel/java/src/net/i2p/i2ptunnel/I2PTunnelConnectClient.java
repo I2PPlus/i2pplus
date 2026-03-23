@@ -104,7 +104,7 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
     /**
      * Execute a runnable task, running inline when called from an unlimited thread pool
      * to avoid creating unnecessary threads, otherwise start a new thread.
-     * 
+     *
      * @param task Thread task to execute
      */
     private void executeTask(Thread task) {
@@ -178,18 +178,18 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
 
                     pos = request.indexOf(':');
                     if (pos == -1) {
-                       pos = request.indexOf(' ');
+                        pos = request.indexOf(' ');
                     } else {
-                       int spos = request.indexOf(' ');
-                       if (spos > 0) {
-                           try {
-                               remotePort = Integer.parseInt(request.substring(pos + 1, spos));
-                           } catch (NumberFormatException nfe) {
-                               break;
-                           } catch (IndexOutOfBoundsException ioobe) {
-                               break;
-                           }
-                       }
+                        int spos = request.indexOf(' ');
+                        if (spos > 0) {
+                            try {
+                                remotePort = Integer.parseInt(request.substring(pos + 1, spos));
+                            } catch (NumberFormatException nfe) {
+                                break;
+                            } catch (IndexOutOfBoundsException ioobe) {
+                                break;
+                            }
+                        }
                     }
                     if (pos == -1) {
                         host = request;
@@ -231,7 +231,7 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
                             destination = currentProxy;
                             usingWWWProxy = true;
                             newRequest.append("CONNECT ").append(host).append(restofline).append("\r\n"); // HTTP spec
-                         }
+                        }
                     } else if (hostLowerCase.equals("localhost") || host.equals("127.0.0.1") ||
                                hostLowerCase.endsWith(".localhost") ||
                                host.startsWith("192.168.") || host.equals("[::1]")) {

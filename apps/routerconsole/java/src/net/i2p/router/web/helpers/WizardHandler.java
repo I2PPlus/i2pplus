@@ -91,7 +91,7 @@ public class WizardHandler extends FormHandler {
                 changes.put(FIFOBandwidthRefiller.PROP_INBOUND_BANDWIDTH_PEAK, Integer.toString(Math.round(kb)));
                 rate -= Math.min(rate * ConfigNetHandler.DEF_BURST_PCT / 100, 50);
                 changes.put(FIFOBandwidthRefiller.PROP_INBOUND_BANDWIDTH, Integer.toString(Math.round(rate)));
-            bwUpdated = true;
+                bwUpdated = true;
             } catch (NumberFormatException nfe) {addFormError(_t("Invalid bandwidth"));}
         }
         if ((outboundRate != null) && (outboundRate.length() > 0) &&
@@ -104,7 +104,7 @@ public class WizardHandler extends FormHandler {
                 changes.put(FIFOBandwidthRefiller.PROP_OUTBOUND_BANDWIDTH_PEAK, Integer.toString(Math.round(kb)));
                 rate -= Math.min(rate * ConfigNetHandler.DEF_BURST_PCT / 100, 50);
                 changes.put(FIFOBandwidthRefiller.PROP_OUTBOUND_BANDWIDTH, Integer.toString(Math.round(rate)));
-            bwUpdated = true;
+                bwUpdated = true;
             } catch (NumberFormatException nfe) {addFormError(_t("Invalid bandwidth"));}
         }
         if (bwUpdated) {

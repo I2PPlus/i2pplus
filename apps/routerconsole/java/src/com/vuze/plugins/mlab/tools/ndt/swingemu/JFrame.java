@@ -25,53 +25,53 @@ package com.vuze.plugins.mlab.tools.ndt.swingemu;
 
 /**
  * Emulation of javax.swing.JFrame for the NDT (Network Diagnostic Tool) plugin.
- * 
+ *
  * <p>This class provides a minimal stub implementation of a top-level window container
  * to allow the NDT tool to run in headless environments. The frame contains a content
  * pane but provides no actual GUI functionality.</p>
- * 
+ *
  * <p>All operations are no-ops, maintaining API compatibility without requiring
  * an actual graphical display system.</p>
- * 
+ *
  */
 public class
-JFrame
+    JFrame
 	extends Component
 {
 	private Panel content_pane = new Panel();
 
 	public
-	JFrame()
+            JFrame()
 	{
 
 	}
 
 	public
-	JFrame(
+            JFrame(
 		String	s )
 	{
 
 	}
 
 	public Panel
-	getContentPane()
+            getContentPane()
 	{
 		return( content_pane );
 	}
 
 	public void
-	toBack()
+            toBack()
 	{
 	}
 
 	public void
-	destroy()
+            destroy()
 	{
 
 	}
 
 	public void
-	dispose()
+            dispose()
 	{
 
 	}

@@ -43,7 +43,7 @@ public class FTPTimestampParserImpl implements FTPTimestampParser, Configurable 
      * the array until the previous entry. e.g. for MINUTE it would clear MILLISECOND and SECOND
      */
     private static final int[] CALENDAR_UNITS = { Calendar.MILLISECOND, Calendar.SECOND, Calendar.MINUTE, Calendar.HOUR_OF_DAY, Calendar.DAY_OF_MONTH,
-            Calendar.MONTH, Calendar.YEAR };
+        Calendar.MONTH, Calendar.YEAR };
 
     /*
      * Return the index to the array representing the least significant unit found in the date format. Default is 0 (to avoid dropping precision)
@@ -57,18 +57,18 @@ public class FTPTimestampParserImpl implements FTPTimestampParser, Configurable 
         for (final char ch : FORMAT_CHARS.toCharArray()) {
             if (pattern.indexOf(ch) != -1) { // found the character
                 switch (ch) {
-                case 'S':
-                    return indexOf(Calendar.MILLISECOND);
-                case 's':
-                    return indexOf(Calendar.SECOND);
-                case 'm':
-                    return indexOf(Calendar.MINUTE);
-                case 'H':
-                    return indexOf(Calendar.HOUR_OF_DAY);
-                case 'd':
-                    return indexOf(Calendar.DAY_OF_MONTH);
-                case 'M':
-                    return indexOf(Calendar.MONTH);
+                    case 'S':
+                        return indexOf(Calendar.MILLISECOND);
+                    case 's':
+                        return indexOf(Calendar.SECOND);
+                    case 'm':
+                        return indexOf(Calendar.MINUTE);
+                    case 'H':
+                        return indexOf(Calendar.HOUR_OF_DAY);
+                    case 'd':
+                        return indexOf(Calendar.DAY_OF_MONTH);
+                    case 'M':
+                        return indexOf(Calendar.MONTH);
                 }
             }
         }

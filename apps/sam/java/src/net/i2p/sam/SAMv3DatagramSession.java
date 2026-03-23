@@ -45,7 +45,7 @@ class SAMv3DatagramSession extends SAMDatagramSession implements Session, SAMDat
 		super(SAMv3Handler.sSessionsHash.get(nick).getDest(),
 				SAMv3Handler.sSessionsHash.get(nick).getProps(),
 				null  // to be replaced by this
-				);
+        );
 		this.nick = nick;
 		this.recv = this;  // replacement
 		this.server = dgServer;

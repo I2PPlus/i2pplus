@@ -116,9 +116,9 @@ public class SOCKSUDPTunnel extends I2PTunnelUDPClientBase {
     }
 
     private void stopall() {
-         for (SOCKSUDPPort sup : this.ports.values()) {
-              sup.stop();
-         }
-         this.ports.clear();
+        for (SOCKSUDPPort sup : this.ports.values()) {
+            sup.stop();
+        }
+        this.ports.clear();
     }
 }

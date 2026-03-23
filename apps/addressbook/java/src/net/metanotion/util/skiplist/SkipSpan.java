@@ -109,22 +109,22 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
 	}
 
 	private int binarySearch(K key) {
- 		int high = nKeys - 1;
- 		int low = 0;
- 		int cur;
- 		int cmp;
- 		while(low <= high) {
- 			cur = (low + high) >>> 1;
- 			cmp = keys[cur].compareTo(key);
- 			if(cmp > 0) {
- 				high = cur - 1;
- 			} else if(cmp < 0) {
- 				low = cur + 1;
- 			} else {
- 				return cur;
- 			}
- 		}
- 		return (-1 * (low + 1));
+        int high = nKeys - 1;
+        int low = 0;
+        int cur;
+        int cmp;
+        while(low <= high) {
+            cur = (low + high) >>> 1;
+            cmp = keys[cur].compareTo(key);
+            if(cmp > 0) {
+                high = cur - 1;
+            } else if(cmp < 0) {
+                low = cur + 1;
+            } else {
+                return cur;
+            }
+        }
+        return (-1 * (low + 1));
 	}
 
 	/**
@@ -205,10 +205,10 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
 		int start = ((keys.length+1)/2);
 		for(int i=start;i < keys.length; i++) {
 			try {
-			right.keys[i-start] = keys[i];
-			right.vals[i-start] = vals[i];
-			right.nKeys++;
-			this.nKeys--;
+                right.keys[i-start] = keys[i];
+                right.vals[i-start] = vals[i];
+                right.nKeys++;
+                this.nKeys--;
 			} catch (ArrayIndexOutOfBoundsException e) {
 				System.out.println("i " + i + " start " + start);
 				System.out.println("key: " + keys[i].toString());

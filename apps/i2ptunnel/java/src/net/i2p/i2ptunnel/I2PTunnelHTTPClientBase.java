@@ -1080,8 +1080,8 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
             int idx = uri.indexOf(h);
             if (idx < 0) {return uri;}
             return uri.substring(0, idx) + hu + uri.substring(idx + h.length(), uri.length());
-         } catch(URISyntaxException use) {}
-         return uri;
+        } catch(URISyntaxException use) {}
+        return uri;
     }
 
     /**

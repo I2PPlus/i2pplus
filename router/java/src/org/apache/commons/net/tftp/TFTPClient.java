@@ -173,38 +173,38 @@ public class TFTPClient extends TFTP {
                         if (host.equals(recdAddress) && recdPort == hostPort) {
                             switch (received.getType()) {
 
-                            case TFTPPacket.ERROR:
-                                TFTPErrorPacket error = (TFTPErrorPacket) received;
-                                throw new IOException("Error code " + error.getError() + " received: " + error.getMessage());
-                            case TFTPPacket.DATA:
-                                final TFTPDataPacket data = (TFTPDataPacket) received;
-                                dataLength = data.getDataLength();
-                                lastBlock = data.getBlockNumber();
+                                case TFTPPacket.ERROR:
+                                    TFTPErrorPacket error = (TFTPErrorPacket) received;
+                                    throw new IOException("Error code " + error.getError() + " received: " + error.getMessage());
+                                case TFTPPacket.DATA:
+                                    final TFTPDataPacket data = (TFTPDataPacket) received;
+                                    dataLength = data.getDataLength();
+                                    lastBlock = data.getBlockNumber();
 
-                                if (lastBlock == block) { // is the next block number?
-                                    try {
-                                        output.write(data.getData(), data.getDataOffset(), dataLength);
-                                    } catch (final IOException e) {
-                                        error = new TFTPErrorPacket(host, hostPort, TFTPErrorPacket.OUT_OF_SPACE, "File write failed.");
-                                        bufferedSend(error);
-                                        throw e;
-                                    }
-                                    ++block;
-                                    if (block > 65535) {
+                                    if (lastBlock == block) { // is the next block number?
+                                        try {
+                                            output.write(data.getData(), data.getDataOffset(), dataLength);
+                                        } catch (final IOException e) {
+                                            error = new TFTPErrorPacket(host, hostPort, TFTPErrorPacket.OUT_OF_SPACE, "File write failed.");
+                                            bufferedSend(error);
+                                            throw e;
+                                        }
+                                        ++block;
+                                        if (block > 65535) {
                                         // wrap the block number
-                                        block = 0;
+                                            block = 0;
+                                        }
+                                        wantReply = false; // got the next block, drop out to ack it
+                                    } else { // unexpected block number
+                                        discardPackets();
+                                        if (lastBlock == (block == 0 ? 65535 : block - 1)) {
+                                            wantReply = false; // Resend last acknowledgemen
+                                        }
                                     }
-                                    wantReply = false; // got the next block, drop out to ack it
-                                } else { // unexpected block number
-                                    discardPackets();
-                                    if (lastBlock == (block == 0 ? 65535 : block - 1)) {
-                                        wantReply = false; // Resend last acknowledgemen
-                                    }
-                                }
-                                break;
+                                    break;
 
-                            default:
-                                throw new IOException("Received unexpected packet type (" + received.getType() + ")");
+                                default:
+                                    throw new IOException("Received unexpected packet type (" + received.getType() + ")");
                             }
                         } else { // incorrect host or TID
                             final TFTPErrorPacket error = new TFTPErrorPacket(recdAddress, recdPort, TFTPErrorPacket.UNKNOWN_TID, "Unexpected host or port.");
@@ -342,26 +342,26 @@ public class TFTPClient extends TFTP {
                         if (host.equals(recdAddress) && recdPort == hostPort) {
 
                             switch (received.getType()) {
-                            case TFTPPacket.ERROR:
-                                final TFTPErrorPacket error = (TFTPErrorPacket) received;
-                                throw new IOException("Error code " + error.getError() + " received: " + error.getMessage());
-                            case TFTPPacket.ACKNOWLEDGEMENT:
+                                case TFTPPacket.ERROR:
+                                    final TFTPErrorPacket error = (TFTPErrorPacket) received;
+                                    throw new IOException("Error code " + error.getError() + " received: " + error.getMessage());
+                                case TFTPPacket.ACKNOWLEDGEMENT:
 
-                                final int lastBlock = ((TFTPAckPacket) received).getBlockNumber();
+                                    final int lastBlock = ((TFTPAckPacket) received).getBlockNumber();
 
-                                if (lastBlock == block) {
-                                    ++block;
-                                    if (block > 65535) {
+                                    if (lastBlock == block) {
+                                        ++block;
+                                        if (block > 65535) {
                                         // wrap the block number
-                                        block = 0;
+                                            block = 0;
+                                        }
+                                        wantReply = false; // got the ack we want
+                                    } else {
+                                        discardPackets();
                                     }
-                                    wantReply = false; // got the ack we want
-                                } else {
-                                    discardPackets();
-                                }
-                                break;
-                            default:
-                                throw new IOException("Received unexpected packet type.");
+                                    break;
+                                default:
+                                    throw new IOException("Received unexpected packet type.");
                             }
                         } else { // wrong host or TID; send error
                             final TFTPErrorPacket error = new TFTPErrorPacket(recdAddress, recdPort, TFTPErrorPacket.UNKNOWN_TID, "Unexpected host or port.");

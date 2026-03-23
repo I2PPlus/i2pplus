@@ -52,19 +52,19 @@ public class LongOpt extends Object
   * Constant value used for the "has_arg" constructor argument.  This
   * value indicates that the option takes no argument.
   */
-public static final int NO_ARGUMENT = 0;
+    public static final int NO_ARGUMENT = 0;
 
 /**
   * Constant value used for the "has_arg" constructor argument.  This
   * value indicates that the option takes an argument that is required.
   */
-public static final int REQUIRED_ARGUMENT = 1;
+    public static final int REQUIRED_ARGUMENT = 1;
 
 /**
   * Constant value used for the "has_arg" constructor argument.  This
   * value indicates that the option takes an argument that is optional.
   */
-public static final int OPTIONAL_ARGUMENT = 2;
+    public static final int OPTIONAL_ARGUMENT = 2;
 
 /**************************************************************************/
 
@@ -75,31 +75,31 @@ public static final int OPTIONAL_ARGUMENT = 2;
 /**
   * The name of the long option
   */
-protected String name;
+    protected String name;
 
 /**
   * Indicates whether the option has no argument, a required argument, or
   * an optional argument.
   */
-protected int has_arg;
+    protected int has_arg;
 
 /**
   * If this variable is not null, then the value stored in "val" is stored
   * here when this long option is encountered.  If this is null, the value
   * stored in "val" is treated as the name of an equivalent short option.
   */
-protected StringBuffer flag;
+    protected StringBuffer flag;
 
 /**
   * The value to store in "flag" if flag is not null, otherwise the
   * equivalent short option character for this long option.
   */
-protected int val;
+    protected int val;
 
 /**
   * Localized strings for error messages
   */
-private ResourceBundle _messages = ResourceBundle.getBundle(
+    private ResourceBundle _messages = ResourceBundle.getBundle(
                             "gnu/getopt/MessagesBundle", Locale.getDefault());
 
 /**************************************************************************/
@@ -119,25 +119,25 @@ private ResourceBundle _messages = ResourceBundle.getBundle(
   *
   * @throws IllegalArgumentException If the has_arg param is not one of NO_ARGUMENT, REQUIRED_ARGUMENT or OPTIONAL_ARGUMENT.
   */
-public
-LongOpt(String name, int has_arg,
+    public
+        LongOpt(String name, int has_arg,
         StringBuffer flag, int val) throws IllegalArgumentException
-{
-  // Validate has_arg
-  if ((has_arg != NO_ARGUMENT) && (has_arg != REQUIRED_ARGUMENT)
-     && (has_arg != OPTIONAL_ARGUMENT))
     {
-      Object[] msgArgs = { Integer.toString(has_arg) };
-      throw new IllegalArgumentException(MessageFormat.format(
+  // Validate has_arg
+        if ((has_arg != NO_ARGUMENT) && (has_arg != REQUIRED_ARGUMENT)
+            && (has_arg != OPTIONAL_ARGUMENT))
+        {
+            Object[] msgArgs = { Integer.toString(has_arg) };
+            throw new IllegalArgumentException(MessageFormat.format(
                     _messages.getString("getopt.invalidValue"), msgArgs));
-    }
+        }
 
   // Store off values
-  this.name = name;
-  this.has_arg = has_arg;
-  this.flag = flag;
-  this.val = val;
-}
+        this.name = name;
+        this.has_arg = has_arg;
+        this.flag = flag;
+        this.val = val;
+    }
 
 /**************************************************************************/
 
@@ -146,11 +146,11 @@ LongOpt(String name, int has_arg,
   *
   * @return Then name of the long option
   */
-public String
-getName()
-{
-  return(name);
-}
+    public String
+        getName()
+    {
+        return(name);
+    }
 
 /**************************************************************************/
 
@@ -159,11 +159,11 @@ getName()
   *
   * @return The value of 'has_arg'
   */
-public int
-getHasArg()
-{
-  return(has_arg);
-}
+    public int
+        getHasArg()
+    {
+        return(has_arg);
+    }
 
 /**************************************************************************/
 
@@ -172,22 +172,22 @@ getHasArg()
   *
   * @return The value of 'flag'
   */
-public StringBuffer
-getFlag()
-{
-  return(flag);
-}
+    public StringBuffer
+        getFlag()
+    {
+        return(flag);
+    }
 
 /**
   * Returns the value of the 'val' field for this long option
   *
   * @return The value of 'val'
   */
-public int
-getVal()
-{
-  return(val);
-}
+    public int
+        getVal()
+    {
+        return(val);
+    }
 
 /**************************************************************************/
 

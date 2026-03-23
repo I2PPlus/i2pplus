@@ -33,7 +33,7 @@ public class AbuseReason extends DataStructureImpl {
 
     /**
      * Get the abuse reason.
-     * 
+     *
      * @return the abuse reason
      */
     public String getReason() {
@@ -42,7 +42,7 @@ public class AbuseReason extends DataStructureImpl {
 
     /**
      * Set abuse reason.
-     * 
+     *
      * @param reason the abuse reason
      */
     public void setReason(String reason) {

@@ -85,7 +85,7 @@ class SymmetricState implements Destroyable, Cloneable {
 	/**
 	 * @since 0.9.44
 	 */
-        private static byte[] initHash(String protocolName) {
+    private static byte[] initHash(String protocolName) {
 		byte[] protocolNameBytes;
 		try {
 			protocolNameBytes = protocolName.getBytes("UTF-8");

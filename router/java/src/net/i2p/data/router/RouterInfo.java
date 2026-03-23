@@ -208,7 +208,7 @@ public class RouterInfo extends DatabaseEntry {
      * @return unmodifiable view, non-null
      */
     public Collection<RouterAddress> getAddresses() {
-            return Collections.unmodifiableList(_addresses);
+        return Collections.unmodifiableList(_addresses);
     }
 
     /**
@@ -339,33 +339,33 @@ public class RouterInfo extends DatabaseEntry {
         if (_identity == null) {throw new DataFormatException("Missing identity");}
         if (_published < 0) {throw new DataFormatException("Invalid published date: " + _published);}
 
-            _identity.writeBytes(out);
-            DataHelper.writeLong(out, 8, _published);
+        _identity.writeBytes(out);
+        DataHelper.writeLong(out, 8, _published);
             // There shouldn't be any addresses when hidden, but if there are,
             // write them out, so as not to invalidate the signature
-            int sz = _addresses.size();
-            out.write((byte) sz);
-            if (sz > 0) {
-                for (RouterAddress addr : _addresses) {addr.writeBytes(out);}
-            }
+        int sz = _addresses.size();
+        out.write((byte) sz);
+        if (sz > 0) {
+            for (RouterAddress addr : _addresses) {addr.writeBytes(out);}
+        }
             // XXX: what about peers?
             // answer: they're always empty... they're a placeholder for one particular
             //         method of trusted links, which isn't implemented in the router
             //         at the moment, and may not be later.
-            int psz = _peers == null ? 0 : _peers.size();
-            out.write((byte) psz);
-            if (psz > 0) {
-                Collection<Hash> peers = _peers;
-                if (psz > 1)
+        int psz = _peers == null ? 0 : _peers.size();
+        out.write((byte) psz);
+        if (psz > 0) {
+            Collection<Hash> peers = _peers;
+            if (psz > 1)
                     // WARNING this sort algorithm cannot be changed, as it must be consistent
                     // network-wide. The signature is not checked at readin time, but only
                     // later, and the hashes are stored in a Set, not a List.
                     peers = SortHelper.sortStructures(peers);
-                for (Hash peerHash : peers) {
-                    peerHash.writeBytes(out);
-                }
+            for (Hash peerHash : peers) {
+                peerHash.writeBytes(out);
             }
-            DataHelper.writeProperties(out, _options);
+        }
+        DataHelper.writeProperties(out, _options);
     }
 
     /**
@@ -702,28 +702,28 @@ public class RouterInfo extends DatabaseEntry {
         }
         boolean fail = false;
         for (int i = 0; i < args.length; i++) {
-             RouterInfo ri = new RouterInfo();
-             InputStream is = null;
-             try {
-                 is = new java.io.FileInputStream(args[i]);
-                 ri.readBytes(is);
-                 if (ri.isValid()) {
-                     System.out.println(ri.toString());
-                  } else {
-                     System.err.println("RouterInfo " + args[i] + " is invalid");
-                     fail = true;
-                  }
-             } catch (IOException e) {
-                 System.err.println("Error reading " + args[i] + ": " + e);
-                 fail = true;
-             } catch (DataFormatException e) {
-                 System.err.println("Error reading " + args[i] + ": " + e);
-                 fail = true;
-             } finally {
-                 if (is != null) {
-                     try { is.close(); } catch (IOException ioe) {}
-                 }
-             }
+            RouterInfo ri = new RouterInfo();
+            InputStream is = null;
+            try {
+                is = new java.io.FileInputStream(args[i]);
+                ri.readBytes(is);
+                if (ri.isValid()) {
+                    System.out.println(ri.toString());
+                } else {
+                    System.err.println("RouterInfo " + args[i] + " is invalid");
+                    fail = true;
+                }
+            } catch (IOException e) {
+                System.err.println("Error reading " + args[i] + ": " + e);
+                fail = true;
+            } catch (DataFormatException e) {
+                System.err.println("Error reading " + args[i] + ": " + e);
+                fail = true;
+            } finally {
+                if (is != null) {
+                    try { is.close(); } catch (IOException ioe) {}
+                }
+            }
         }
         if (fail)
             System.exit(1);

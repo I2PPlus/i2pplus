@@ -92,7 +92,7 @@ public class NullReader extends Reader {
      * @since 2.7
      */
     public NullReader() {
-       this(0, true, false);
+        this(0, true, false);
     }
 
     /**
@@ -102,7 +102,7 @@ public class NullReader extends Reader {
      * @param size The size of the reader to emulate.
      */
     public NullReader(final long size) {
-       this(size, true, false);
+        this(size, true, false);
     }
 
     /**
@@ -117,9 +117,9 @@ public class NullReader extends Reader {
      * end of file is reached.
      */
     public NullReader(final long size, final boolean markSupported, final boolean throwEofException) {
-       this.size = size;
-       this.markSupported = markSupported;
-       this.throwEofException = throwEofException;
+        this.size = size;
+        this.markSupported = markSupported;
+        this.throwEofException = throwEofException;
     }
 
     /**

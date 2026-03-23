@@ -68,8 +68,8 @@ public class WizardHelper extends HelperBase {
                     _lastTestCount++;
                     int mod = _lastTestCount & 0x03;
                     if (mod == 1) {rv += ".";}
-                      else if (mod == 2) {rv += "..";}
-                      else if (mod == 3) {rv += "...";}
+                    else if (mod == 2) {rv += "..";}
+                    else if (mod == 3) {rv += "...";}
                 } else {
                     _lastTestCount = 0;
                     _lastTestStatus = rv;

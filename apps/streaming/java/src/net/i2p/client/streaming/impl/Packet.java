@@ -485,17 +485,17 @@ class Packet {
             cur += 2;
         }
         if (isFlagSet(FLAG_SIGNATURE_OFFLINE)) {
-                DataHelper.toLong(buffer, cur, 4, _transientExpires / 1000);
-                cur += 4;
-                DataHelper.toLong(buffer, cur, 2, _transientSigningPublicKey.getType().getCode());
-                cur += 2;
-                int len = _transientSigningPublicKey.length();
-                System.arraycopy(_transientSigningPublicKey.getData(), 0, buffer, cur, len);
-                cur += len;
-                len = _offlineSignature.length();
-                System.arraycopy(_offlineSignature.getData(), 0, buffer, cur, len);
-                cur += len;
-            }
+            DataHelper.toLong(buffer, cur, 4, _transientExpires / 1000);
+            cur += 4;
+            DataHelper.toLong(buffer, cur, 2, _transientSigningPublicKey.getType().getCode());
+            cur += 2;
+            int len = _transientSigningPublicKey.length();
+            System.arraycopy(_transientSigningPublicKey.getData(), 0, buffer, cur, len);
+            cur += len;
+            len = _offlineSignature.length();
+            System.arraycopy(_offlineSignature.getData(), 0, buffer, cur, len);
+            cur += len;
+        }
         if (isFlagSet(FLAG_SIGNATURE_INCLUDED)) {
             if (fakeSigLen == 0) {
                 // we're signing (or validating)

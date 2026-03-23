@@ -33,10 +33,10 @@ public class InternalSocket extends Socket {
      *  @param port &gt; 0
      */
     public InternalSocket(int port) throws IOException {
-         if (port <= 0)
+        if (port <= 0)
              throw new IOException("Bad port number");
-         _port = port;
-         InternalServerSocket.internalConnect(port, this);
+        _port = port;
+        InternalServerSocket.internalConnect(port, this);
     }
 
     /**

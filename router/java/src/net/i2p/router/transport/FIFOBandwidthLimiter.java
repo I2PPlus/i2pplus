@@ -14,12 +14,12 @@ import net.i2p.util.Log;
 
 /**
  * FIFO-based bandwidth limiter for managing inbound and outbound traffic.
- * 
+ *
  * This class provides bandwidth management using First-In-First-Out
  * queues for both inbound and outbound traffic. It implements
  * token bucket algorithm to control data rates and prevent burst
  * traffic patterns.
- * 
+ *
  * <strong>Core Features:</strong>
  * <ul>
  *   <li>FIFO request queuing for fair bandwidth allocation</li>
@@ -29,7 +29,7 @@ import net.i2p.util.Log;
  *   <li>Thread-safe operations with atomic counters</li>
  *   <li>Request satisfaction and partial fulfillment handling</li>
  * </ul>
- * 
+ *
  * <strong>Concurrency Strategy:</strong>
  * <ul>
  *   <li>Java 5: Used synchronized ArrayList with head/tail access</li>
@@ -37,7 +37,7 @@ import net.i2p.util.Log;
  *   <li>Request polling from queue head for efficiency</li>
  *   <li>Partial request satisfaction with push-back mechanism</li>
  * </ul>
- * 
+ *
  * <strong>Algorithm:</strong>
  * <ul>
  *   <li>Token refill at fixed intervals</li>
@@ -453,12 +453,12 @@ public class FIFOBandwidthLimiter {
             //if (_sendBps15s <= 0)
             //    _sendBps15s = (0.045f)*((float)sent*15*1000f)/(float)time;
             //else
-                _sendBps15s = (0.955f)*_sendBps15s + (0.045f)*(sent*1000f)/time;
+            _sendBps15s = (0.955f)*_sendBps15s + (0.045f)*(sent*1000f)/time;
 
             //if (_recvBps15s <= 0)
             //    _recvBps15s = (0.045f)*((float)recv*15*1000f)/(float)time;
             //else
-                _recvBps15s = (0.955f)*_recvBps15s + (0.045f)*((float)recv*1000)/time;
+            _recvBps15s = (0.955f)*_recvBps15s + (0.045f)*((float)recv*1000)/time;
 
             // warning, getStatLog() can be null
             //if (_log.shouldWarn()) {

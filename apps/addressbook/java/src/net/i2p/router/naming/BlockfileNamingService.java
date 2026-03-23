@@ -409,8 +409,8 @@ public class BlockfileNamingService extends DummyNamingService {
                 Map<String, Destination> entries = getEntries();
                 int i = 0;
                 for (Map.Entry<String, Destination> entry : entries.entrySet()) {
-                     addReverseEntry(entry.getKey(), entry.getValue());
-                     i++;
+                    addReverseEntry(entry.getKey(), entry.getValue());
+                    i++;
                 }
                 // i may be greater than skiplist keys if there are dups
                 if (_log.shouldWarn())

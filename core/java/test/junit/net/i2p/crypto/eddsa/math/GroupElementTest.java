@@ -228,23 +228,23 @@ public class GroupElementTest {
         assertThat(pkr, is(equalTo(BYTES_PKR)));
     }
 
-     @Test
+    @Test
      public void toByteArrayReturnsExpectedResult() {
-         for (int i=0; i<100; i++) {
+        for (int i=0; i<100; i++) {
              // Arrange:
-             final GroupElement g = MathUtils.getRandomGroupElement();
+            final GroupElement g = MathUtils.getRandomGroupElement();
 
              // Act:
-             final byte[] gBytes = g.toByteArray();
-             final byte[] bytes = MathUtils.toByteArray(MathUtils.toBigInteger(g.getY()));
-             if (MathUtils.toBigInteger(g.getX()).mod(new BigInteger("2")).equals(BigInteger.ONE)) {
-                 bytes[31] |= 0x80;
-             }
+            final byte[] gBytes = g.toByteArray();
+            final byte[] bytes = MathUtils.toByteArray(MathUtils.toBigInteger(g.getY()));
+            if (MathUtils.toBigInteger(g.getX()).mod(new BigInteger("2")).equals(BigInteger.ONE)) {
+                bytes[31] |= 0x80;
+            }
 
              // Assert:
-             assertThat(Arrays.equals(gBytes, bytes), IsEqual.equalTo(true));
-         }
-     }
+            assertThat(Arrays.equals(gBytes, bytes), IsEqual.equalTo(true));
+        }
+    }
 
     // region toX where X is the representation
 

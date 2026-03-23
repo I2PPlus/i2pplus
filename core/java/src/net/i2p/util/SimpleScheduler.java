@@ -181,8 +181,8 @@ public class SimpleScheduler {
             if (_log.shouldInfo()) {
                  // this call is slow - iterates through a HashMap -
                  // would be better to have a local AtomicLong if we care
-                 long completed = _executor.getCompletedTaskCount();
-                 if (completed % 250 == 0)
+                long completed = _executor.getCompletedTaskCount();
+                if (completed % 250 == 0)
                      _log.info(debug());
             }
         }

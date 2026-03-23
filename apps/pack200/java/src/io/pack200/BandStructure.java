@@ -56,7 +56,7 @@ import java.util.Map;
  * @author John Rose
  */
 abstract
-class BandStructure {
+    class BandStructure {
     static final int MAX_EFFORT = 9;
     static final int MIN_EFFORT = 1;
     static final int DEFAULT_EFFORT = 5;
@@ -1360,7 +1360,7 @@ class BandStructure {
      * An output stream which counts the number of bytes written.
      */
     private static
-    class ByteCounter extends FilterOutputStream {
+        class ByteCounter extends FilterOutputStream {
         // (should go public under the name CountingOutputStream?)
 
         private long count;
@@ -1432,18 +1432,18 @@ class BandStructure {
     static IntBand getAttrBand(MultiBand xxx_attr_bands, int which) {
         IntBand b = (IntBand) xxx_attr_bands.get(which);
         switch (which) {
-        case AB_FLAGS_HI:
-            assert(b.name().endsWith("_flags_hi")); break;
-        case AB_FLAGS_LO:
-            assert(b.name().endsWith("_flags_lo")); break;
-        case AB_ATTR_COUNT:
-            assert(b.name().endsWith("_attr_count")); break;
-        case AB_ATTR_INDEXES:
-            assert(b.name().endsWith("_attr_indexes")); break;
-        case AB_ATTR_CALLS:
-            assert(b.name().endsWith("_attr_calls")); break;
-        default:
-            assert(false); break;
+            case AB_FLAGS_HI:
+                assert(b.name().endsWith("_flags_hi")); break;
+            case AB_FLAGS_LO:
+                assert(b.name().endsWith("_flags_lo")); break;
+            case AB_ATTR_COUNT:
+                assert(b.name().endsWith("_attr_count")); break;
+            case AB_ATTR_INDEXES:
+                assert(b.name().endsWith("_attr_indexes")); break;
+            case AB_ATTR_CALLS:
+                assert(b.name().endsWith("_attr_calls")); break;
+            default:
+                assert(false); break;
         }
         return b;
     }
@@ -1827,9 +1827,9 @@ class BandStructure {
                            "Exceptions", "NH[RCH]");
         predefineAttribute(METHOD_ATTR_MethodParameters, ATTR_CONTEXT_METHOD,
                            new Band[]{
-                                method_MethodParameters_NB,
-                                method_MethodParameters_name_RUN,
-                                method_MethodParameters_flag_FH
+                               method_MethodParameters_NB,
+                               method_MethodParameters_name_RUN,
+                               method_MethodParameters_flag_FH
                            },
                            "MethodParameters", "NB[RUNHFH]");
         assert(attrCodeEmpty == Package.attrCodeEmpty);
@@ -1960,15 +1960,15 @@ class BandStructure {
     protected boolean haveFlagsHi(int ctype) {
         int mask = 1<<(LG_AO_HAVE_XXX_FLAGS_HI+ctype);
         switch (ctype) {
-        case ATTR_CONTEXT_CLASS:
-            assert(mask == AO_HAVE_CLASS_FLAGS_HI); break;
-        case ATTR_CONTEXT_FIELD:
-            assert(mask == AO_HAVE_FIELD_FLAGS_HI); break;
-        case ATTR_CONTEXT_METHOD:
-            assert(mask == AO_HAVE_METHOD_FLAGS_HI); break;
-        case ATTR_CONTEXT_CODE:
-            assert(mask == AO_HAVE_CODE_FLAGS_HI); break;
-        default:
+            case ATTR_CONTEXT_CLASS:
+                assert(mask == AO_HAVE_CLASS_FLAGS_HI); break;
+            case ATTR_CONTEXT_FIELD:
+                assert(mask == AO_HAVE_FIELD_FLAGS_HI); break;
+            case ATTR_CONTEXT_METHOD:
+                assert(mask == AO_HAVE_METHOD_FLAGS_HI); break;
+            case ATTR_CONTEXT_CODE:
+                assert(mask == AO_HAVE_CODE_FLAGS_HI); break;
+            default:
             assert(false);
         }
         return testBit(archiveOptions, mask);
@@ -2029,55 +2029,55 @@ class BandStructure {
         Coding rc = UNSIGNED5;
         boolean wantIntBand = true;
         switch (e.kind) {
-        case Attribute.EK_INT:
-            if (e.flagTest(Attribute.EF_SIGN)) {
-                rc = SIGNED5;
-            } else if (e.len == 1) {
-                rc = BYTE1;
-            }
-            break;
-        case Attribute.EK_BCI:
-            if (!e.flagTest(Attribute.EF_DELTA)) {
-                rc = BCI5;
-            } else {
+            case Attribute.EK_INT:
+                if (e.flagTest(Attribute.EF_SIGN)) {
+                    rc = SIGNED5;
+                } else if (e.len == 1) {
+                    rc = BYTE1;
+                }
+                break;
+            case Attribute.EK_BCI:
+                if (!e.flagTest(Attribute.EF_DELTA)) {
+                    rc = BCI5;
+                } else {
+                    rc = BRANCH5;
+                }
+                break;
+            case Attribute.EK_BCO:
                 rc = BRANCH5;
-            }
-            break;
-        case Attribute.EK_BCO:
-            rc = BRANCH5;
-            break;
-        case Attribute.EK_FLAG:
-            if (e.len == 1)  rc = BYTE1;
-            break;
-        case Attribute.EK_REPL:
-            if (e.len == 1)  rc = BYTE1;
-            assertBandOKForElems(ab, e.body);
-            break;
-        case Attribute.EK_UN:
-            if (e.flagTest(Attribute.EF_SIGN)) {
-                rc = SIGNED5;
-            } else if (e.len == 1) {
-                rc = BYTE1;
-            }
-            assertBandOKForElems(ab, e.body);
-            break;
-        case Attribute.EK_CASE:
+                break;
+            case Attribute.EK_FLAG:
+                if (e.len == 1)  rc = BYTE1;
+                break;
+            case Attribute.EK_REPL:
+                if (e.len == 1)  rc = BYTE1;
+                assertBandOKForElems(ab, e.body);
+                break;
+            case Attribute.EK_UN:
+                if (e.flagTest(Attribute.EF_SIGN)) {
+                    rc = SIGNED5;
+                } else if (e.len == 1) {
+                    rc = BYTE1;
+                }
+                assertBandOKForElems(ab, e.body);
+                break;
+            case Attribute.EK_CASE:
             assert(b == null);
-            assertBandOKForElems(ab, e.body);
-            return true;  // no direct band
-        case Attribute.EK_CALL:
+                assertBandOKForElems(ab, e.body);
+                return true;  // no direct band
+            case Attribute.EK_CALL:
             assert(b == null);
-            return true;  // no direct band
-        case Attribute.EK_CBLE:
+                return true;  // no direct band
+            case Attribute.EK_CBLE:
             assert(b == null);
-            assertBandOKForElems(ab, e.body);
-            return true;  // no direct band
-        case Attribute.EK_REF:
-            wantIntBand = false;
+                assertBandOKForElems(ab, e.body);
+                return true;  // no direct band
+            case Attribute.EK_REF:
+                wantIntBand = false;
             assert(b instanceof CPRefBand);
             assert(((CPRefBand)b).nullOK == e.flagTest(Attribute.EF_NULL));
-            break;
-        default: assert(false);
+                break;
+            default: assert(false);
         }
         assert(b.regularCoding == rc)
             : (e+" // "+b);
@@ -2087,7 +2087,7 @@ class BandStructure {
     }
 
     private
-    Attribute.Layout predefineAttribute(int index, int ctype, Band[] ab,
+        Attribute.Layout predefineAttribute(int index, int ctype, Band[] ab,
                                         String name, String layout) {
         // Use Attribute.find to get uniquification of layouts.
         Attribute.Layout def = Attribute.find(ctype, name, layout).layout();
@@ -2109,7 +2109,7 @@ class BandStructure {
 
     // This version takes bandPrefix/addHere instead of prebuilt Band[] ab.
     private
-    Attribute.Layout predefineAttribute(int index,
+        Attribute.Layout predefineAttribute(int index,
                                         String bandPrefix, MultiBand addHere,
                                         Attribute attr) {
         //Attribute.Layout def = Attribute.find(ctype, name, layout).layout();
@@ -2121,7 +2121,7 @@ class BandStructure {
     }
 
     private
-    void undefineAttribute(int index, int ctype) {
+        void undefineAttribute(int index, int ctype) {
         if (verbose > 1) {
             System.out.println("Removing predefined "+ATTR_CONTEXT_NAME[ctype]+
                                " attribute on bit "+index);
@@ -2189,7 +2189,7 @@ class BandStructure {
         //System.out.println(prevForAssertMap);
     }
     private
-    Band[] makeNewAttributeBands(String pfx, Attribute.Layout def,
+        Band[] makeNewAttributeBands(String pfx, Attribute.Layout def,
                                  MultiBand addHere) {
         int base = addHere.size();
         makeNewAttributeBands(pfx, def.elems, addHere);
@@ -2202,7 +2202,7 @@ class BandStructure {
     }
     // Recursive helper, operates on a "body" or other sequence of elems:
     private
-    void makeNewAttributeBands(String pfx, Attribute.Layout.Element[] elems,
+        void makeNewAttributeBands(String pfx, Attribute.Layout.Element[] elems,
                                MultiBand ab) {
         for (int i = 0; i < elems.length; i++) {
             Attribute.Layout.Element e = elems[i];
@@ -2218,55 +2218,55 @@ class BandStructure {
             }
             Band nb;
             switch (e.kind) {
-            case Attribute.EK_INT:
-                nb = newElemBand(e, name, ab);
-                break;
-            case Attribute.EK_BCI:
-                if (!e.flagTest(Attribute.EF_DELTA)) {
+                case Attribute.EK_INT:
+                    nb = newElemBand(e, name, ab);
+                    break;
+                case Attribute.EK_BCI:
+                    if (!e.flagTest(Attribute.EF_DELTA)) {
                     // PH:  transmit R(bci), store bci
-                    nb = ab.newIntBand(name, BCI5);
-                } else {
+                        nb = ab.newIntBand(name, BCI5);
+                    } else {
                     // POH:  transmit D(R(bci)), store bci
-                    nb = ab.newIntBand(name, BRANCH5);
-                }
+                        nb = ab.newIntBand(name, BRANCH5);
+                    }
                 // Note:  No case for BYTE1 here.
-                break;
-            case Attribute.EK_BCO:
+                    break;
+                case Attribute.EK_BCO:
                 // OH:  transmit D(R(bci)), store D(bci)
-                nb = ab.newIntBand(name, BRANCH5);
+                    nb = ab.newIntBand(name, BRANCH5);
                 // Note:  No case for BYTE1 here.
-                break;
-            case Attribute.EK_FLAG:
+                    break;
+                case Attribute.EK_FLAG:
                 assert(!e.flagTest(Attribute.EF_SIGN));
-                nb = newElemBand(e, name, ab);
-                break;
-            case Attribute.EK_REPL:
+                    nb = newElemBand(e, name, ab);
+                    break;
+                case Attribute.EK_REPL:
                 assert(!e.flagTest(Attribute.EF_SIGN));
-                nb = newElemBand(e, name, ab);
-                makeNewAttributeBands(pfx, e.body, ab);
-                break;
-            case Attribute.EK_UN:
-                nb = newElemBand(e, name, ab);
-                makeNewAttributeBands(pfx, e.body, ab);
-                break;
-            case Attribute.EK_CASE:
-                if (!e.flagTest(Attribute.EF_BACK)) {
-                    // If it's not a duplicate body, make the bands.
+                    nb = newElemBand(e, name, ab);
                     makeNewAttributeBands(pfx, e.body, ab);
-                }
-                continue;  // no new band to make
-            case Attribute.EK_REF:
-                byte    refKind = e.refKind;
-                boolean nullOK  = e.flagTest(Attribute.EF_NULL);
-                nb = ab.newCPRefBand(name, UNSIGNED5, refKind, nullOK);
+                    break;
+                case Attribute.EK_UN:
+                    nb = newElemBand(e, name, ab);
+                    makeNewAttributeBands(pfx, e.body, ab);
+                    break;
+                case Attribute.EK_CASE:
+                    if (!e.flagTest(Attribute.EF_BACK)) {
+                    // If it's not a duplicate body, make the bands.
+                        makeNewAttributeBands(pfx, e.body, ab);
+                    }
+                    continue;  // no new band to make
+                case Attribute.EK_REF:
+                    byte    refKind = e.refKind;
+                    boolean nullOK  = e.flagTest(Attribute.EF_NULL);
+                    nb = ab.newCPRefBand(name, UNSIGNED5, refKind, nullOK);
                 // Note:  No case for BYTE1 here.
-                break;
-            case Attribute.EK_CALL:
-                continue;  // no new band to make
-            case Attribute.EK_CBLE:
-                makeNewAttributeBands(pfx, e.body, ab);
-                continue;  // no new band to make
-            default: assert(false); continue;
+                    break;
+                case Attribute.EK_CALL:
+                    continue;  // no new band to make
+                case Attribute.EK_CBLE:
+                    makeNewAttributeBands(pfx, e.body, ab);
+                    continue;  // no new band to make
+                default: assert(false); continue;
             }
             if (verbose > 1) {
                 Utils.log.fine("New attribute band "+nb);
@@ -2274,7 +2274,7 @@ class BandStructure {
         }
     }
     private
-    Band newElemBand(Attribute.Layout.Element e, String name, MultiBand ab) {
+        Band newElemBand(Attribute.Layout.Element e, String name, MultiBand ab) {
         if (e.flagTest(Attribute.EF_SIGN)) {
             return ab.newIntBand(name, SIGNED5);
         } else if (e.len == 1) {
@@ -2389,34 +2389,34 @@ class BandStructure {
 
     protected CPRefBand getCPRefOpBand(int bc) {
         switch (Instruction.getCPRefOpTag(bc)) {
-        case CONSTANT_Class:
-            return bc_classref;
-        case CONSTANT_Fieldref:
-            return bc_fieldref;
-        case CONSTANT_Methodref:
-            return bc_methodref;
-        case CONSTANT_InterfaceMethodref:
-            return bc_imethodref;
-        case CONSTANT_InvokeDynamic:
-            return bc_indyref;
-        case CONSTANT_LoadableValue:
-            switch (bc) {
-            case _ildc: case _ildc_w:
-                return bc_intref;
-            case _fldc: case _fldc_w:
-                return bc_floatref;
-            case _lldc2_w:
-                return bc_longref;
-            case _dldc2_w:
-                return bc_doubleref;
-            case _sldc: case _sldc_w:
-                return bc_stringref;
-            case _cldc: case _cldc_w:
+            case CONSTANT_Class:
                 return bc_classref;
-            case _qldc: case _qldc_w:
-                return bc_loadablevalueref;
-            }
-            break;
+            case CONSTANT_Fieldref:
+                return bc_fieldref;
+            case CONSTANT_Methodref:
+                return bc_methodref;
+            case CONSTANT_InterfaceMethodref:
+                return bc_imethodref;
+            case CONSTANT_InvokeDynamic:
+                return bc_indyref;
+            case CONSTANT_LoadableValue:
+                switch (bc) {
+                    case _ildc: case _ildc_w:
+                        return bc_intref;
+                    case _fldc: case _fldc_w:
+                        return bc_floatref;
+                    case _lldc2_w:
+                        return bc_longref;
+                    case _dldc2_w:
+                        return bc_doubleref;
+                    case _sldc: case _sldc_w:
+                        return bc_stringref;
+                    case _cldc: case _cldc_w:
+                        return bc_classref;
+                    case _qldc: case _qldc_w:
+                        return bc_loadablevalueref;
+                }
+                break;
         }
         assert(false);
         return null;
@@ -2469,9 +2469,9 @@ class BandStructure {
     // DEBUG ONLY:  Validate me at each length change.
     static boolean assertCanChangeLength(Band b) {
         switch (b.phase) {
-        case COLLECT_PHASE:
-        case READ_PHASE:
-            return true;
+            case COLLECT_PHASE:
+            case READ_PHASE:
+                return true;
         }
         return false;
     }
@@ -2496,42 +2496,42 @@ class BandStructure {
     static boolean assertPhaseChangeOK(Band b, int p0, int p1) {
         switch (p0*10+p1) {
         /// Writing phases:
-        case NO_PHASE*10+COLLECT_PHASE:
+            case NO_PHASE*10+COLLECT_PHASE:
             // Ready to collect data from the input classes.
             assert(!b.isReader());
             assert(b.capacity() >= 0);
             assert(b.length() == 0);
-            return true;
-        case COLLECT_PHASE*10+FROZEN_PHASE:
-        case FROZEN_PHASE*10+FROZEN_PHASE:
+                return true;
+            case COLLECT_PHASE*10+FROZEN_PHASE:
+            case FROZEN_PHASE*10+FROZEN_PHASE:
             assert(b.length() == 0);
-            return true;
-        case COLLECT_PHASE*10+WRITE_PHASE:
-        case FROZEN_PHASE*10+WRITE_PHASE:
+                return true;
+            case COLLECT_PHASE*10+WRITE_PHASE:
+            case FROZEN_PHASE*10+WRITE_PHASE:
             // Data is all collected.  Ready to write bytes to disk.
-            return true;
-        case WRITE_PHASE*10+DONE_PHASE:
+                return true;
+            case WRITE_PHASE*10+DONE_PHASE:
             // Done writing to disk.  Ready to reset, in principle.
-            return true;
+                return true;
 
         /// Reading phases:
-        case NO_PHASE*10+EXPECT_PHASE:
+            case NO_PHASE*10+EXPECT_PHASE:
             assert(b.isReader());
             assert(b.capacity() < 0);
-            return true;
-        case EXPECT_PHASE*10+READ_PHASE:
+                return true;
+            case EXPECT_PHASE*10+READ_PHASE:
             // Ready to read values from disk.
             assert(Math.max(0,b.capacity()) >= b.valuesExpected());
             assert(b.length() <= 0);
-            return true;
-        case READ_PHASE*10+DISBURSE_PHASE:
+                return true;
+            case READ_PHASE*10+DISBURSE_PHASE:
             // Ready to disburse values.
             assert(b.valuesRemainingForDebug() == b.length());
-            return true;
-        case DISBURSE_PHASE*10+DONE_PHASE:
+                return true;
+            case DISBURSE_PHASE*10+DONE_PHASE:
             // Done disbursing values.  Ready to reset, in principle.
             assert(assertDoneDisbursing(b));
-            return true;
+                return true;
         }
         if (p0 == p1)
             Utils.log.warning("Already in phase "+p0);

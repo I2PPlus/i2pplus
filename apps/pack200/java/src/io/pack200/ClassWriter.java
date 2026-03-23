@@ -286,10 +286,10 @@ class ClassWriter {
         int nh = code.getHandlerCount();
         writeShort(nh);
         for (int i = 0; i < nh; i++) {
-             writeShort(code.handler_start[i]);
-             writeShort(code.handler_end[i]);
-             writeShort(code.handler_catch[i]);
-             writeRef(code.handler_class[i]);
+            writeShort(code.handler_start[i]);
+            writeShort(code.handler_end[i]);
+            writeShort(code.handler_catch[i]);
+            writeRef(code.handler_class[i]);
         }
         writeAttributes(ATTR_CONTEXT_CODE, code);
     }

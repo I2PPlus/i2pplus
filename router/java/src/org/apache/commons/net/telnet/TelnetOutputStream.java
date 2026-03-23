@@ -109,26 +109,26 @@ final class TelnetOutputStream extends OutputStream {
                 }
 
                 switch (ch) {
-                case '\r':
-                    client.sendByte('\r');
-                    lastWasCR = true;
-                    break;
-                case '\n':
-                    if (!lastWasCR) { // convert LF to CRLF
+                    case '\r':
                         client.sendByte('\r');
-                    }
-                    client.sendByte(ch);
-                    lastWasCR = false;
-                    break;
-                case TelnetCommand.IAC:
-                    client.sendByte(TelnetCommand.IAC);
-                    client.sendByte(TelnetCommand.IAC);
-                    lastWasCR = false;
-                    break;
-                default:
-                    client.sendByte(ch);
-                    lastWasCR = false;
-                    break;
+                        lastWasCR = true;
+                        break;
+                    case '\n':
+                        if (!lastWasCR) { // convert LF to CRLF
+                            client.sendByte('\r');
+                        }
+                        client.sendByte(ch);
+                        lastWasCR = false;
+                        break;
+                    case TelnetCommand.IAC:
+                        client.sendByte(TelnetCommand.IAC);
+                        client.sendByte(TelnetCommand.IAC);
+                        lastWasCR = false;
+                        break;
+                    default:
+                        client.sendByte(ch);
+                        lastWasCR = false;
+                        break;
                 }
             // end ASCII
             } else if (ch == TelnetCommand.IAC) {

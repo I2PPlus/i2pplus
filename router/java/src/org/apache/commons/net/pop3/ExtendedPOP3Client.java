@@ -88,28 +88,28 @@ public class ExtendedPOP3Client extends POP3SClient {
         }
 
         switch (method) {
-        case PLAIN:
+            case PLAIN:
             // the server sends an empty response ("+ "), so we don't have to read it.
-            return sendCommand(
+                return sendCommand(
                     new String(Base64.getEncoder().encode(("\000" + user + "\000" + password).getBytes(getCharset())), getCharset())) == POP3Reply.OK;
-        case CRAM_MD5:
+            case CRAM_MD5:
             // get the CRAM challenge
-            final byte[] serverChallenge = Base64.getDecoder().decode(getReplyString().substring(2).trim());
+                final byte[] serverChallenge = Base64.getDecoder().decode(getReplyString().substring(2).trim());
             // get the Mac instance
-            final Mac hmacMd5 = Mac.getInstance(MAC_ALGORITHM);
-            hmacMd5.init(new SecretKeySpec(password.getBytes(getCharset()), MAC_ALGORITHM));
+                final Mac hmacMd5 = Mac.getInstance(MAC_ALGORITHM);
+                hmacMd5.init(new SecretKeySpec(password.getBytes(getCharset()), MAC_ALGORITHM));
             // compute the result:
-            final byte[] hmacResult = convertToHexString(hmacMd5.doFinal(serverChallenge)).getBytes(getCharset());
+                final byte[] hmacResult = convertToHexString(hmacMd5.doFinal(serverChallenge)).getBytes(getCharset());
             // join the byte arrays to form the reply
-            final byte[] userNameBytes = user.getBytes(getCharset());
-            final byte[] toEncode = new byte[userNameBytes.length + 1 /* the space */ + hmacResult.length];
-            System.arraycopy(userNameBytes, 0, toEncode, 0, userNameBytes.length);
-            toEncode[userNameBytes.length] = ' ';
-            System.arraycopy(hmacResult, 0, toEncode, userNameBytes.length + 1, hmacResult.length);
+                final byte[] userNameBytes = user.getBytes(getCharset());
+                final byte[] toEncode = new byte[userNameBytes.length + 1 /* the space */ + hmacResult.length];
+                System.arraycopy(userNameBytes, 0, toEncode, 0, userNameBytes.length);
+                toEncode[userNameBytes.length] = ' ';
+                System.arraycopy(hmacResult, 0, toEncode, userNameBytes.length + 1, hmacResult.length);
             // send the reply and read the server code:
-            return sendCommand(Base64.getEncoder().encodeToString(toEncode)) == POP3Reply.OK;
-        default:
-            return false;
+                return sendCommand(Base64.getEncoder().encodeToString(toEncode)) == POP3Reply.OK;
+            default:
+                return false;
         }
     }
 

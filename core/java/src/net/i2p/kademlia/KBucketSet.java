@@ -429,9 +429,9 @@ public class KBucketSet<T extends SimpleDataStructure> {
      *  @return null if key is us
      */
     private KBucket<T> getBucket(T key) {
-       int bucket = pickBucket(key);
-       if (bucket < 0) {return null;}
-       return _buckets.get(bucket);
+        int bucket = pickBucket(key);
+        if (bucket < 0) {return null;}
+        return _buckets.get(bucket);
     }
 
     /**
@@ -704,9 +704,9 @@ public class KBucketSet<T extends SimpleDataStructure> {
                 KBucket<T> b = _buckets.get(i);
                 buf.append("<div class=bucketCount><b>Bucket ").append(i + 1).append("/").append(len).append(":</b> ");
                 buf.append(b.toString()
-                   .replace(" : [", "</div><div class=bucketsContainer><span class=bucket>")
-                   .replace(", ", " </span><span class=bucket>")
-                   .replace("]", "</span></div>"));
+                    .replace(" : [", "</div><div class=bucketsContainer><span class=bucket>")
+                    .replace(", ", " </span><span class=bucket>")
+                    .replace("]", "</span></div>"));
                 buf.append("<br>\n");
             }
         } finally {releaseReadLock();}

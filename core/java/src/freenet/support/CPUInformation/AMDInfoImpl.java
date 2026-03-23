@@ -521,7 +521,7 @@ class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo {
                 else if (model == 113) {modelString = "AMD Ryzen 3000 series";}
                 else {modelString = "AMD Ryzen / Epyc Zen 2/3 model " + model;}
             }
-            break;
+                break;
 
             // Hygon Dhyana (untested)
             // http://lkml.iu.edu/hypermail/linux/kernel/1806.1/00730.html

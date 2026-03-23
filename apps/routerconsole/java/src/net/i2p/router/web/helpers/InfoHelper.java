@@ -142,8 +142,8 @@ public class InfoHelper extends HelperBase {
     }
 
     public String getGeoIPBuildInfo() {
-      GeoIP db = new GeoIP(_context);
-      return db.getGeoIPBuildInfo();
+        GeoIP db = new GeoIP(_context);
+        return db.getGeoIPBuildInfo();
     }
 
     private void renderStatusHTML(Writer out) throws IOException {

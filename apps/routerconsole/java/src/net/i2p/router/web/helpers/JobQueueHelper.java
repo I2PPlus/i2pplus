@@ -123,7 +123,7 @@ public class JobQueueHelper extends HelperBase {
            .append(inactive ? " class=nojobs" : "").append(">")
            .append(_t("Active jobs")).append(": ").append(activeJobs.size())
            .append(lagStr)
-           .append("</h3>\n");
+            .append("</h3>\n");
 
         if (activeJobs.size() > 0) {
             buf.append("<ol class=jobqueue>\n");
@@ -165,7 +165,7 @@ public class JobQueueHelper extends HelperBase {
                                  "</span>";
             buf.append("<div class=tablewrap id=finished><h3 id=finishedjobs>")
                .append(_t("Just finished jobs")).append(": ").append(justFinishedJobs.size()).append(runtimeStr)
-               .append("</h3>\n<ol class=jobqueue>\n");
+                .append("</h3>\n<ol class=jobqueue>\n");
 
             // Group finished jobs by name and completion time
             Map<String, Map<Long, List<Job>>> groupedFinishedJobs = new HashMap<String, Map<Long, List<Job>>>();
@@ -259,7 +259,7 @@ public class JobQueueHelper extends HelperBase {
            .append(!hasJobs ? " class=nojobs" : "").append(">")
            .append(_t("Ready / waiting jobs")).append(": ").append(readyJobs.size())
            .append(droppedStr)
-           .append("</h3>\n");
+            .append("</h3>\n");
         if (hasJobs) {
             buf.append("<ol class=jobqueue>\n");
 
@@ -299,7 +299,7 @@ public class JobQueueHelper extends HelperBase {
                         " <span class=jobsCounter>" + jobsAtTime.size() + "</span>";
                     buf.append("<li>").append(jobDisplay);
                     if (elapsedSeconds > 0) {
-                       buf.append(" &#10140; ").append(_t("waiting {0}", timeStr));
+                        buf.append(" &#10140; ").append(_t("waiting {0}", timeStr));
                     }
                     buf.append("</li>\n");
                 }
@@ -374,7 +374,7 @@ public class JobQueueHelper extends HelperBase {
            .append(_t("Scheduled jobs")).append(": ")
            .append(displayedJobCount).append(" / ").append(eligibleScheduledCount)
            .append(maxDelayStr)
-           .append("</h3>\n<ol class=jobqueue>\n");
+            .append("</h3>\n<ol class=jobqueue>\n");
 
         for (JobTimeEntry entry : sortedJobs) {
             if (displayedLiCount >= MAX_JOBS_DISPLAYED) break;
@@ -400,7 +400,7 @@ public class JobQueueHelper extends HelperBase {
 
             scheduledBuf.append("<li>")
                .append(_t("{0} starting in {1}", jobDisplay.concat(" &#10140; "), timeStr))
-               .append("</li>\n");
+                .append("</li>\n");
         }
         scheduledBuf.append("</ol>\n</div>\n");
 
@@ -438,7 +438,7 @@ public class JobQueueHelper extends HelperBase {
 
         buf.append("<div class=tablewrap id=totals><h3 id=qtotals>")
            .append(_t("Queue Totals")).append(": ").append(totalJobs).append(runnerStr)
-           .append("</h3><table id=schedjobs>\n<tr><td>\n<ul>\n");
+            .append("</h3><table id=schedjobs>\n<tr><td>\n<ul>\n");
 
         final String TEST_TUNNEL_EN = "Test Local Tunnel";
         int maxTestJobs = TestJob.maxQueuedTests;
@@ -474,7 +474,7 @@ public class JobQueueHelper extends HelperBase {
         buf.append("<h3 id=totaljobstats>")
            .append(_t("Job Statistics"))
            .append(recentMode ? " (" + _t("last 10s") + ")" : "")
-           .append("<span id=toggleJobstats>");
+            .append("<span id=toggleJobstats>");
 
         if (recentMode) {
             buf.append(" <a href=\"/jobs?period=all\">").append(_t("All Stats")).append("</a>");
@@ -499,7 +499,7 @@ public class JobQueueHelper extends HelperBase {
            .append(_t("Max"))
            .append("</th><th class=minRunTime data-sort-method=number>")
            .append(_t("Min"))
-           .append("</th>");
+            .append("</th>");
         if (isAdvanced()) {
             buf.append("<th class=totalPendingTime data-sort-method=number>").append(_t("Pending")).append("</th>")
                .append("<th class=avgPendingTime data-sort-method=number>").append(_t("Avg")).append("</th>")
@@ -580,7 +580,7 @@ public class JobQueueHelper extends HelperBase {
                .append(displayMinTime)
                .append("><span>")
                .append(DataHelper.formatDuration2(displayMinTime))
-               .append("</span></td>");
+                .append("</span></td>");
             if (isAdvanced()) {
                 buf.append("<td class=totalPendingTime data-sort=")
                    .append(displayTotalPending)
@@ -598,7 +598,7 @@ public class JobQueueHelper extends HelperBase {
                    .append(displayMinPending)
                    .append("><span>")
                    .append(DataHelper.formatDuration2(displayMinPending))
-                   .append("</span></td>");
+                    .append("</span></td>");
             }
             buf.append("</tr>\n");
 
@@ -627,7 +627,7 @@ public class JobQueueHelper extends HelperBase {
            .append(DataHelper.formatDuration2(maxExecTime))
            .append("</td><td>")
            .append(DataHelper.formatDuration2(minExecTime))
-           .append("</td>");
+            .append("</td>");
         if (isAdvanced()) {
             buf.append("<td>")
                .append(DataHelper.formatDuration2(totPendingTime))
@@ -637,17 +637,17 @@ public class JobQueueHelper extends HelperBase {
                .append(DataHelper.formatDuration2(maxPendingTime))
                .append("</td><td>")
                .append(DataHelper.formatDuration2(minPendingTime))
-               .append("</td>");
+                .append("</td>");
         }
         buf.append("</tr></tfoot>\n</table>\n</div>\n");
     }
 
     /** @since 0.8.9 */
     private static class JobStatsComparator implements Comparator<JobStats>, Serializable {
-         private final Collator coll = Collator.getInstance();
+        private final Collator coll = Collator.getInstance();
 
-         public int compare(JobStats l, JobStats r) {
-             return coll.compare(l.getName(), r.getName());
+        public int compare(JobStats l, JobStats r) {
+            return coll.compare(l.getName(), r.getName());
         }
     }
 
@@ -657,7 +657,7 @@ public class JobQueueHelper extends HelperBase {
         private final Collator coll = Collator.getInstance();
 
         public JobCountComparator(ObjectCounterUnsafe<String> counter) {
-             _counter = counter;
+            _counter = counter;
         }
 
         public int compare(String l, String r) {

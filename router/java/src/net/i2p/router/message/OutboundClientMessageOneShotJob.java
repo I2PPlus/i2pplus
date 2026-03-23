@@ -353,10 +353,10 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
             LeaseSet ls = _cache.leaseSetCache.get(_hashPair);
             if (ls != null) {
                 if (ls.getDate() >= newLS.getDate()) {
-                        if (_log.shouldInfo()) {
-                            _log.info("LeaseSet already ACKed - NOT sending reply LeaseSet to " + _toString);
-                        }
-                        return null;
+                    if (_log.shouldInfo()) {
+                        _log.info("LeaseSet already ACKed - NOT sending reply LeaseSet to " + _toString);
+                    }
+                    return null;
                 } else {
                     if (_log.shouldInfo()) {
                         _log.info("Expired from cache - sending reply LeaseSet to " + _toString);
@@ -1070,13 +1070,13 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
                 if (oldls != null) {
                     if (_deliveredLS.getDate() > oldls.getDate()) {
                         _cache.leaseSetCache.put(_hashPair, _deliveredLS);
-                         if (_log.shouldInfo()) {
-                             _log.info("Added to cache - got reply LeaseSet from " + _toString);
-                         }
+                        if (_log.shouldInfo()) {
+                            _log.info("Added to cache - got reply LeaseSet from " + _toString);
+                        }
                     }
                 } else {
                     if (_log.shouldInfo()) {
-                         _log.info("Added to cache - got reply LeaseSet from " + _toString);
+                        _log.info("Added to cache - got reply LeaseSet from " + _toString);
                     }
                 }
             }

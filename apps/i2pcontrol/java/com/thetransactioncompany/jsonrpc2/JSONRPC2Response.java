@@ -375,9 +375,9 @@ public class JSONRPC2Response extends JSONRPC2Message {
 	 *         the request retrieval (e.g. parse error) and the identifier
 	 *         couldn't be determined, the value will be {@code null}.
 	 */
-	 public Object getID() {
+    public Object getID() {
 
-	 	return id;
+        return id;
 	}
 
 

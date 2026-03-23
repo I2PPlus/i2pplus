@@ -154,7 +154,7 @@ abstract class SAMHandler implements Runnable, Handler {
      * @throws IOException
      */
     protected final void closeClientSocket() throws IOException {
-            socket.close();
+        socket.close();
     }
 
     /**

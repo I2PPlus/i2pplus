@@ -94,23 +94,23 @@ public abstract class TFTPPacket {
         final byte[] data = datagram.getData();
         final TFTPPacket packet;
         switch (data[1]) {
-        case READ_REQUEST:
-            packet = new TFTPReadRequestPacket(datagram);
-            break;
-        case WRITE_REQUEST:
-            packet = new TFTPWriteRequestPacket(datagram);
-            break;
-        case DATA:
-            packet = new TFTPDataPacket(datagram);
-            break;
-        case ACKNOWLEDGEMENT:
-            packet = new TFTPAckPacket(datagram);
-            break;
-        case ERROR:
-            packet = new TFTPErrorPacket(datagram);
-            break;
-        default:
-            throw new TFTPPacketException("Bad packet.  Invalid TFTP operator code.");
+            case READ_REQUEST:
+                packet = new TFTPReadRequestPacket(datagram);
+                break;
+            case WRITE_REQUEST:
+                packet = new TFTPWriteRequestPacket(datagram);
+                break;
+            case DATA:
+                packet = new TFTPDataPacket(datagram);
+                break;
+            case ACKNOWLEDGEMENT:
+                packet = new TFTPAckPacket(datagram);
+                break;
+            case ERROR:
+                packet = new TFTPErrorPacket(datagram);
+                break;
+            default:
+                throw new TFTPPacketException("Bad packet.  Invalid TFTP operator code.");
         }
         return packet;
     }

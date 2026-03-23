@@ -187,7 +187,7 @@ public class I2PLogger implements Logger
 
     public Logger getLogger(String name)
     {
-            return this;
+        return this;
     }
 
     @Override
@@ -201,7 +201,7 @@ public class I2PLogger implements Logger
      */
     public void ignore(Throwable ignored)
     {
-            debug("IGNORED", ignored);
+        debug("IGNORED", ignored);
     }
 
     /**
@@ -209,7 +209,7 @@ public class I2PLogger implements Logger
      */
     public void debug(Throwable thrown)
     {
-            debug("", thrown);
+        debug("", thrown);
     }
 
     /**
@@ -217,9 +217,9 @@ public class I2PLogger implements Logger
      */
     public void debug(String msg, Object... args)
     {
-            Object a1 = args.length > 0 ? args[0] : null;
-            Object a2 = args.length > 1 ? args[1] : null;
-            debug(msg, a1, a2);
+        Object a1 = args.length > 0 ? args[0] : null;
+        Object a2 = args.length > 1 ? args[1] : null;
+        debug(msg, a1, a2);
     }
 
     /**
@@ -227,7 +227,7 @@ public class I2PLogger implements Logger
      */
     public void info(Throwable thrown)
     {
-            info("", thrown);
+        info("", thrown);
     }
 
     /**
@@ -235,9 +235,9 @@ public class I2PLogger implements Logger
      */
     public void info(String msg, Object... args)
     {
-            Object a1 = args.length > 0 ? args[0] : null;
-            Object a2 = args.length > 1 ? args[1] : null;
-            info(msg, a1, a2);
+        Object a1 = args.length > 0 ? args[0] : null;
+        Object a2 = args.length > 1 ? args[1] : null;
+        info(msg, a1, a2);
     }
 
     /**
@@ -253,7 +253,7 @@ public class I2PLogger implements Logger
      */
     public void warn(Throwable thrown)
     {
-            warn("", thrown);
+        warn("", thrown);
     }
 
     /**
@@ -261,9 +261,9 @@ public class I2PLogger implements Logger
      */
     public void warn(String msg, Object... args)
     {
-            Object a1 = args.length > 0 ? args[0] : null;
-            Object a2 = args.length > 1 ? args[1] : null;
-            warn(msg, a1, a2);
+        Object a1 = args.length > 0 ? args[0] : null;
+        Object a2 = args.length > 1 ? args[1] : null;
+        warn(msg, a1, a2);
     }
 
     /**

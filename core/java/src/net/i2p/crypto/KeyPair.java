@@ -5,11 +5,11 @@ import net.i2p.data.PublicKey;
 
 /**
  * A pair of I2P cryptographic keys consisting of a public key and corresponding private key.
- * 
+ *
  * This class provides a type-safe container for I2P key pairs, similar to
  * {@link java.security.KeyPair} but specifically designed for I2P's cryptographic
  * operations including encryption, decryption, and digital signatures within the I2P network.
- * 
+ *
  * <p>The public key is used for encryption and signature verification,
  * while the private key is used for decryption and signing operations.</p>
  *

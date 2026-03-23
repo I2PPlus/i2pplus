@@ -165,14 +165,14 @@ public class StatsGenerator {
                        .append("</span></span>");
                 }
 
-            long numPeriods = curRate.getLifetimePeriods();
-            if (numPeriods > 0) {
-                double avgFrequency = curRate.getLifetimeEventCount() / (double)numPeriods;
-                buf.append(" &bullet; ").append(_t("Average event count")).append(": <span class=statvalue>")
+                long numPeriods = curRate.getLifetimePeriods();
+                if (numPeriods > 0) {
+                    double avgFrequency = curRate.getLifetimeEventCount() / (double)numPeriods;
+                    buf.append(" &bullet; ").append(_t("Average event count")).append(": <span class=statvalue>")
                    .append(num(avgFrequency)).append("</span><br><span class=nowrap>")
                    .append(_t("Events in peak period")).append(": <span class=statvalue>")
                    .append(curRate.getExtremeEventCount()) // Not really the highest event count, but the event count during period with highest total value.
-                   .append("</span> &bullet; ");
+                    .append("</span> &bullet; ");
                 } else {buf.append("</span>");}
 
                 buf.append(_t("Events in this period"))

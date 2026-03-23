@@ -580,40 +580,40 @@ public class SU3File {
             Getopt g = new Getopt("SU3File", args, "t:c:f:k:xp:r:");
             int c;
             while ((c = g.getopt()) != -1) {
-              switch (c) {
-                case 't':
-                    stype = g.getOptarg();
-                    break;
+                switch (c) {
+                    case 't':
+                        stype = g.getOptarg();
+                        break;
 
-                case 'c':
-                    ctype = g.getOptarg();
-                    break;
+                    case 'c':
+                        ctype = g.getOptarg();
+                        break;
 
-                case 'f':
-                    ftype = g.getOptarg();
-                    break;
+                    case 'f':
+                        ftype = g.getOptarg();
+                        break;
 
-                case 'k':
-                    kfile = g.getOptarg();
-                    break;
+                    case 'k':
+                        kfile = g.getOptarg();
+                        break;
 
-                case 'r':
-                    crlfile = g.getOptarg();
-                    break;
+                    case 'r':
+                        crlfile = g.getOptarg();
+                        break;
 
-                case 'x':
-                    shouldVerify = false;
-                    break;
+                    case 'x':
+                        shouldVerify = false;
+                        break;
 
-                case 'p':
-                    kspass = g.getOptarg();
-                    break;
+                    case 'p':
+                        kspass = g.getOptarg();
+                        break;
 
-                case '?':
-                case ':':
-                default:
-                  error = true;
-              }
+                    case '?':
+                    case ':':
+                    default:
+                        error = true;
+                }
             }
 
             int idx = g.getOptind();
@@ -728,7 +728,7 @@ public class SU3File {
                 return ContentType.getByCode(code);
             } catch (NumberFormatException nfe) {
                 return null;
-             }
+            }
         }
     }
 
@@ -774,7 +774,7 @@ public class SU3File {
                 ftype = "EXE";
             else
                 ftype = Integer.toString(file._fileType);
-                System.out.println("FileType: " + ftype);
+            System.out.println("FileType: " + ftype);
             return !versionString.equals("");
         } catch (IOException ioe) {
             ioe.printStackTrace();
@@ -975,30 +975,30 @@ public class SU3File {
                     outFile = outFile.substring(0, outFile.length() - 4);
                 String sfx;
                 switch (file.getFileType()) {
-                  case TYPE_ZIP:
-                    sfx = ".zip";
-                    break;
-                  case TYPE_XML:
-                    sfx = ".xml";
-                    break;
-                  case TYPE_HTML:
-                    sfx = ".html";
-                    break;
-                  case TYPE_XML_GZ:
-                    sfx = ".xml.gz";
-                    break;
-                  case TYPE_TXT_GZ:
-                    sfx = ".txt.gz";
-                    break;
-                  case TYPE_DMG:
-                    sfx = ".dmg";
-                    break;
-                  case TYPE_EXE:
-                    sfx = ".exe";
-                    break;
-                  default:
-                    sfx = ".extracted";
-                    break;
+                    case TYPE_ZIP:
+                        sfx = ".zip";
+                        break;
+                    case TYPE_XML:
+                        sfx = ".xml";
+                        break;
+                    case TYPE_HTML:
+                        sfx = ".html";
+                        break;
+                    case TYPE_XML_GZ:
+                        sfx = ".xml.gz";
+                        break;
+                    case TYPE_TXT_GZ:
+                        sfx = ".txt.gz";
+                        break;
+                    case TYPE_DMG:
+                        sfx = ".dmg";
+                        break;
+                    case TYPE_EXE:
+                        sfx = ".exe";
+                        break;
+                    default:
+                        sfx = ".extracted";
+                        break;
                 }
                 outFile = outFile + sfx;
                 // above causes failure, quick fix

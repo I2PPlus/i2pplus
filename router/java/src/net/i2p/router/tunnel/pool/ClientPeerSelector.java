@@ -170,7 +170,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     ctx.profileOrganizer().selectActiveNotFailingPeers(length, lastHopExclude, matches, ipRestriction, ipSet);
                     if (matches.isEmpty()) {
                         log.info("Selecting any active peers without restictions for (hidden) Inbound connection");
-                         ctx.profileOrganizer().selectActiveNotFailingPeers(length, lastHopExclude, matches, 0, null);
+                        ctx.profileOrganizer().selectActiveNotFailingPeers(length, lastHopExclude, matches, 0, null);
                     }
                     if (matches.isEmpty()) {
                         // No connected peers found, give up now

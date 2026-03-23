@@ -119,7 +119,7 @@ public final class SMTPCommand {
     public static final int LOGOUT = QUIT;
 
     private static final String[] commands = { "HELO", "MAIL FROM:", "RCPT TO:", "DATA", "SEND FROM:", "SOML FROM:", "SAML FROM:", "RSET", "VRFY", "EXPN",
-            "HELP", "NOOP", "TURN", "QUIT", "AUTH", "EHLO" };
+        "HELP", "NOOP", "TURN", "QUIT", "AUTH", "EHLO" };
 
     static {
         if (commands.length != NEXT) {

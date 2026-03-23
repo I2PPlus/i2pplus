@@ -266,13 +266,13 @@ public class JSONRPC2Error extends Exception {
 	@Override
         public boolean equals(Object object) {
 
-                return object != null &&
+        return object != null &&
                        object instanceof JSONRPC2Error &&
                        code == ((JSONRPC2Error)object).getCode();
-        }
+    }
 
-        @Override
+    @Override
         public int hashCode() {
-                return Integer.hashCode(code);
-        }
+        return Integer.hashCode(code);
+    }
 }

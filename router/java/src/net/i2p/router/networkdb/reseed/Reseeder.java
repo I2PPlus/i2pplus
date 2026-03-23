@@ -353,7 +353,8 @@ public class Reseeder {
                     total = reseedSU3(uri, false);
                 } else if (lc.endsWith(".zip")) {total = reseedZip(_url, false);}
                 else {throw new IllegalArgumentException("Must end with .zip or .su3");}
-            } else {                total = reseed(false);
+            } else {
+                total = reseed(false);
             }
             if (total >= 20) {
                 String s = ngettext("Acquired {0} router info from reseed hosts",
@@ -1057,7 +1058,7 @@ public class Reseeder {
                     } else {sslget = new SSLEepGet(_context, out.getPath(), url.toString());}
                     _sslState = sslget.getSSLState(); // Save state for next time
                 } else if (_shouldProxySSL) {
-                        sslget = new SSLEepGet(_context, _sproxyType, _sproxyHost, _sproxyPort,
+                    sslget = new SSLEepGet(_context, _sproxyType, _sproxyHost, _sproxyPort,
                                                out.getPath(), url.toString(), _sslState);
                 } else {sslget = new SSLEepGet(_context, out.getPath(), url.toString(), _sslState);}
 

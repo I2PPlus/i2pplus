@@ -27,7 +27,7 @@ class DummyHandler implements Checker, Updater {
                             String id, String currentVersion, long maxTime) {
         if (type != UpdateType.TYPE_DUMMY)
             return null;
-         return new DummyRunner(_context, _mgr, maxTime);
+        return new DummyRunner(_context, _mgr, maxTime);
     }
 
     /**
@@ -37,7 +37,7 @@ class DummyHandler implements Checker, Updater {
                              String id, String newVersion, long maxTime) {
         if (type != UpdateType.TYPE_DUMMY)
             return null;
-         return new DummyRunner(_context, _mgr, maxTime);
+        return new DummyRunner(_context, _mgr, maxTime);
     }
 
     /**

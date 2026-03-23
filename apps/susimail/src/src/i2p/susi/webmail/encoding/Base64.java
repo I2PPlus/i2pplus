@@ -1,8 +1,8 @@
 /*
  * Created on 09.11.2004
- * 
+ *
  *  This file is part of susimail project, see http://susi.i2p/
- *  
+ *
  *  Copyright (C) 2004-2005  <susi23@mail.i2p>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -18,7 +18,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- *  
+ *
  * $Revision: 1.6 $
  */
 package i2p.susi.webmail.encoding;
@@ -37,14 +37,14 @@ import java.io.Writer;
  * @author susi
  */
 public class Base64 extends Encoding {
-	
+
 	public String getName() {
 		return "base64";
 	}
 
 	/**
 	 * @return Base64-encoded String.
-	 * @throws EncodingException 
+	 * @throws EncodingException
 	 */
 	public String encode( byte in[] ) throws EncodingException
 	{
@@ -59,7 +59,7 @@ public class Base64 extends Encoding {
 
 	/**
 	 * More efficient than super
-	 * 
+	 *
 	 * @param in
 	 * @see Base64#encode(String)
 	 * @since public since 0.9.33 with new params

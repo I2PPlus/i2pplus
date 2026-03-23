@@ -30,7 +30,9 @@ public class Clock implements Timestamper.UpdateListener {
     protected boolean _alreadyChanged;
     private final Set<ClockUpdateListener> _listeners;
 
-    private  AtomicInteger _iter = new AtomicInteger(0);    private  AtomicInteger _frequency = new AtomicInteger(0);    private  AtomicLong _savedTime = new AtomicLong(0);
+    private  AtomicInteger _iter = new AtomicInteger(0);
+    private  AtomicInteger _frequency = new AtomicInteger(0);
+    private  AtomicLong _savedTime = new AtomicLong(0);
 
     public Clock(I2PAppContext context) {
         _context = context;
@@ -187,21 +189,35 @@ public class Clock implements Timestamper.UpdateListener {
      *
      */
     public long now() {
-        // aims to check currentTimeMillis twice per ms under constant load        // negative clock shift avg 0.25 ms under constant load        // saves 99% system calls at 200 calls / sec        if (_iter.incrementAndGet() <= _frequency.get())            return _savedTime.get();        _iter.set(0);        long newTime = _offset + System.currentTimeMillis();        if (newTime == _savedTime.getAndSet(newTime))            _frequency.incrementAndGet();        else            _frequency.decrementAndGet();            // _frequency.set(_frequency.Get() / 2); // alternate version            // saves > 94% system calls at 200 calls / sec            // negative clock shift avg < 0.06 ms at 200 calls / sec        return newTime;
+        // aims to check currentTimeMillis twice per ms under constant load
+        // negative clock shift avg 0.25 ms under constant load
+        // saves 99% system calls at 200 calls / sec
+        if (_iter.incrementAndGet() <= _frequency.get())
+            return _savedTime.get();
+        _iter.set(0);
+        long newTime = _offset + System.currentTimeMillis();
+        if (newTime == _savedTime.getAndSet(newTime))
+            _frequency.incrementAndGet();
+        else
+            _frequency.decrementAndGet();
+            // _frequency.set(_frequency.Get() / 2); // alternate version
+            // saves > 94% system calls at 200 calls / sec
+            // negative clock shift avg < 0.06 ms at 200 calls / sec
+        return newTime;
     }
 
     public void addUpdateListener(ClockUpdateListener lsnr) {
-            _listeners.add(lsnr);
+        _listeners.add(lsnr);
     }
 
     public void removeUpdateListener(ClockUpdateListener lsnr) {
-            _listeners.remove(lsnr);
+        _listeners.remove(lsnr);
     }
 
     protected void fireOffsetChanged(long delta) {
-            for (ClockUpdateListener lsnr : _listeners) {
-                lsnr.offsetChanged(delta);
-            }
+        for (ClockUpdateListener lsnr : _listeners) {
+            lsnr.offsetChanged(delta);
+        }
     }
 
     /**

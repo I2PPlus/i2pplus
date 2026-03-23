@@ -125,26 +125,26 @@ public final class DotTerminatedMessageWriter extends Writer {
     public void write(final int ch) throws IOException {
         synchronized (lock) {
             switch (ch) {
-            case '\r':
-                state = LAST_WAS_CR_STATE;
-                output.write('\r');
-                return;
-            case '\n':
-                if (state != LAST_WAS_CR_STATE) {
+                case '\r':
+                    state = LAST_WAS_CR_STATE;
                     output.write('\r');
-                }
-                output.write('\n');
-                state = LAST_WAS_NL_STATE;
-                return;
-            case '.':
+                    return;
+                case '\n':
+                    if (state != LAST_WAS_CR_STATE) {
+                        output.write('\r');
+                    }
+                    output.write('\n');
+                    state = LAST_WAS_NL_STATE;
+                    return;
+                case '.':
                 // Double the dot at the beginning of a line
-                if (state == LAST_WAS_NL_STATE) {
-                    output.write('.');
-                }
+                    if (state == LAST_WAS_NL_STATE) {
+                        output.write('.');
+                    }
                 // falls through$
-            default:
-                state = NOTHING_SPECIAL_STATE;
-                output.write(ch);
+                default:
+                    state = NOTHING_SPECIAL_STATE;
+                    output.write(ch);
             }
         }
     }

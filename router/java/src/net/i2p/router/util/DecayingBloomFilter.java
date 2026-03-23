@@ -150,7 +150,7 @@ public class DecayingBloomFilter {
             _decayEvent.schedule(_durationMs);
         }
         if (_log.shouldWarn())
-           _log.warn("New DecayingBloomFilter " + name + " m = " + m + " k = " + k + " entryBytes = " + entryBytes +
+            _log.warn("New DecayingBloomFilter " + name + " m = " + m + " k = " + k + " entryBytes = " + entryBytes +
                      " numExtenders = " + numExtenders + " cycle (s) = " + (durationMs / 1000));
         // try to get a handle on memory usage vs. false positives
         context.statManager().createRateStat("router.decayingBloomFilter." + name + ".size",
@@ -168,7 +168,7 @@ public class DecayingBloomFilter {
      */
     private class Shutdown implements Runnable {
         public void run() {
-           clear();
+            clear();
         }
     }
 
@@ -176,12 +176,12 @@ public class DecayingBloomFilter {
 
     /** unsynchronized but only used for logging elsewhere */
     public int getInsertedCount() {
-            return _current.size() + _previous.size();
+        return _current.size() + _previous.size();
     }
 
     /** unsynchronized, only used for logging elsewhere */
     public double getFalsePositiveRate() {
-            return _current.falsePositives();
+        return _current.falsePositives();
     }
 
     /**

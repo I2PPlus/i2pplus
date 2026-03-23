@@ -92,7 +92,7 @@ public class ConfigRestartBean {
             buf.append("&hellip;</b></span></h4>");
         } else if (shuttingDown) {
             buf.append("<h4 id=sb_shutdownStatus class=volatile><span>")
-               .append(_t("Shutdown in {0}", DataHelper.formatDuration2(timeRemaining), ctx));
+                .append(_t("Shutdown in {0}", DataHelper.formatDuration2(timeRemaining), ctx));
             if (transit > 0) {
                 if (isAdvanced()) {
                     buf.append("&hellip;<br>").append(ngettext("{0} transit tunnel still active",
@@ -106,7 +106,7 @@ public class ConfigRestartBean {
             buttons(ctx, buf, urlBase, systemNonce, SET1);
         } else if (restarting) {
             buf.append("<h4 id=sb_shutdownStatus class=volatile><span>")
-               .append(_t("Restart in {0}", DataHelper.formatDuration2(timeRemaining), ctx));
+                .append(_t("Restart in {0}", DataHelper.formatDuration2(timeRemaining), ctx));
             if (transit > 0) {
                 if (isAdvanced()) {
                     buf.append("&hellip;<br>").append(ngettext("{0} transit tunnel still active",
@@ -168,7 +168,7 @@ public class ConfigRestartBean {
            .append(url)
            .append("\" method=POST>\n<input type=hidden name=consoleNonce value=")
            .append(nonce)
-           .append(">\n");
+            .append(">\n");
         for (int i = 0; i < s.length; i+= 3) {
             buf.append("<button type=submit name=action value=\"")
                .append(s[i]).append("\" class=\"")

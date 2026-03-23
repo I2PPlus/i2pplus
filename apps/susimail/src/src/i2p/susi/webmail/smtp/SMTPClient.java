@@ -348,7 +348,7 @@ public class SMTPClient {
                 InputStream in = null;
                 try {
                     in = attachment.getData();
-                     encoding.encode(in, out);
+                    encoding.encode(in, out);
                 } finally {
                     if (in != null) {
                         try {in.close();}

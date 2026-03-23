@@ -165,7 +165,7 @@ class MLKEMIndCpa
         //     Helper.printShortArray(publicKeyPolyVec.getVectorIndex(i).getCoeffs());
         //     System.out.print("], \n");
         // }
-        // System.out.println("]"); 
+        // System.out.println("]");
 
         // System.out.print("seed = ");
         // Helper.printByteArray(seed);
@@ -215,7 +215,7 @@ class MLKEMIndCpa
         //     Helper.printShortArray(sp.getVectorIndex(i).getCoeffs());
         //     System.out.print("], \n");
         // }
-        // System.out.println("]"); 
+        // System.out.println("]");
 
 
         // System.out.print("sp = [");
@@ -223,7 +223,7 @@ class MLKEMIndCpa
         //     Helper.printShortArray(sp.getVectorIndex(i).getCoeffs());
         //     System.out.print("], \n");
         // }
-        // System.out.println("]"); 
+        // System.out.println("]");
 
         for (i = 0; i < kyberK; i++)
         {
@@ -235,7 +235,7 @@ class MLKEMIndCpa
         //     Helper.printShortArray(bp.getVectorIndex(i).getCoeffs());
         //     System.out.print("], \n");
         // }
-        // System.out.println("]");     
+        // System.out.println("]");
 
         PolyVec.pointwiseAccountMontgomery(v, publicKeyPolyVec, sp, engine);
 
@@ -257,7 +257,7 @@ class MLKEMIndCpa
         //     Helper.printShortArray(bp.getVectorIndex(i).getCoeffs());
         //     System.out.print("], \n");
         // }
-        // System.out.println("]"); 
+        // System.out.println("]");
 
 
         // System.out.print("v = ");
@@ -276,7 +276,7 @@ class MLKEMIndCpa
         System.arraycopy(b.compressPolyVec(), 0, outBuf, 0, polyVecCompressedBytes);
         System.arraycopy(v.compressPoly(), 0, outBuf, polyVecCompressedBytes, polyCompressedBytes);
         // System.out.print("outBuf = [");
-        // Helper.printByteArray(outBuf);        
+        // Helper.printByteArray(outBuf);
         return outBuf;
     }
 
@@ -394,7 +394,7 @@ class MLKEMIndCpa
         //     Helper.printShortArray(bp.getVectorIndex(i).getCoeffs());
         //     System.out.print("], \n");
         // }
-        // System.out.println("]"); 
+        // System.out.println("]");
 
 
         // System.out.print("v = ");
@@ -421,7 +421,7 @@ class MLKEMIndCpa
         //     Helper.printShortArray(bp.getVectorIndex(i).getCoeffs());
         //     System.out.print("], \n");
         // }
-        // System.out.println("]"); 
+        // System.out.println("]");
 
         bp.polyVecNtt();
 
@@ -430,7 +430,7 @@ class MLKEMIndCpa
         //     Helper.printShortArray(bp.getVectorIndex(i).getCoeffs());
         //     System.out.print("], \n");
         // }
-        // System.out.println("]"); 
+        // System.out.println("]");
 
         PolyVec.pointwiseAccountMontgomery(mp, secretKeyPolyVec, bp, engine);
 

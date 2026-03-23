@@ -63,58 +63,58 @@ public class I2CPMessageHandler {
     private static I2CPMessage createMessage(int type) throws
                                                        I2CPMessageException {
         switch (type) {
-        case CreateLeaseSetMessage.MESSAGE_TYPE:
-            return new CreateLeaseSetMessage();
-        case CreateSessionMessage.MESSAGE_TYPE:
-            return new CreateSessionMessage();
-        case DestroySessionMessage.MESSAGE_TYPE:
-            return new DestroySessionMessage();
-        case DisconnectMessage.MESSAGE_TYPE:
-            return new DisconnectMessage();
-        case MessageStatusMessage.MESSAGE_TYPE:
-            return new MessageStatusMessage();
-        case MessagePayloadMessage.MESSAGE_TYPE:
-            return new MessagePayloadMessage();
-        case ReceiveMessageBeginMessage.MESSAGE_TYPE:
-            return new ReceiveMessageBeginMessage();
-        case ReceiveMessageEndMessage.MESSAGE_TYPE:
-            return new ReceiveMessageEndMessage();
-        case ReconfigureSessionMessage.MESSAGE_TYPE:
-            return new ReconfigureSessionMessage();
-        case ReportAbuseMessage.MESSAGE_TYPE:
-            return new ReportAbuseMessage();
-        case RequestLeaseSetMessage.MESSAGE_TYPE:
-            return new RequestLeaseSetMessage();
-        case RequestVariableLeaseSetMessage.MESSAGE_TYPE:
-            return new RequestVariableLeaseSetMessage();
-        case SendMessageMessage.MESSAGE_TYPE:
-            return new SendMessageMessage();
-        case SendMessageExpiresMessage.MESSAGE_TYPE:
-            return new SendMessageExpiresMessage();
-        case SessionStatusMessage.MESSAGE_TYPE:
-            return new SessionStatusMessage();
-        case GetDateMessage.MESSAGE_TYPE:
-            return new GetDateMessage();
-        case SetDateMessage.MESSAGE_TYPE:
-            return new SetDateMessage();
-        case DestLookupMessage.MESSAGE_TYPE:
-            return new DestLookupMessage();
-        case DestReplyMessage.MESSAGE_TYPE:
-            return new DestReplyMessage();
-        case GetBandwidthLimitsMessage.MESSAGE_TYPE:
-            return new GetBandwidthLimitsMessage();
-        case BandwidthLimitsMessage.MESSAGE_TYPE:
-            return new BandwidthLimitsMessage();
-        case HostLookupMessage.MESSAGE_TYPE:
-            return new HostLookupMessage();
-        case HostReplyMessage.MESSAGE_TYPE:
-            return new HostReplyMessage();
-        case CreateLeaseSet2Message.MESSAGE_TYPE:
-            return new CreateLeaseSet2Message();
-        case BlindingInfoMessage.MESSAGE_TYPE:
-            return new BlindingInfoMessage();
-        default:
-            throw new I2CPMessageException("The type " + type + " is an unknown I2CP message");
+            case CreateLeaseSetMessage.MESSAGE_TYPE:
+                return new CreateLeaseSetMessage();
+            case CreateSessionMessage.MESSAGE_TYPE:
+                return new CreateSessionMessage();
+            case DestroySessionMessage.MESSAGE_TYPE:
+                return new DestroySessionMessage();
+            case DisconnectMessage.MESSAGE_TYPE:
+                return new DisconnectMessage();
+            case MessageStatusMessage.MESSAGE_TYPE:
+                return new MessageStatusMessage();
+            case MessagePayloadMessage.MESSAGE_TYPE:
+                return new MessagePayloadMessage();
+            case ReceiveMessageBeginMessage.MESSAGE_TYPE:
+                return new ReceiveMessageBeginMessage();
+            case ReceiveMessageEndMessage.MESSAGE_TYPE:
+                return new ReceiveMessageEndMessage();
+            case ReconfigureSessionMessage.MESSAGE_TYPE:
+                return new ReconfigureSessionMessage();
+            case ReportAbuseMessage.MESSAGE_TYPE:
+                return new ReportAbuseMessage();
+            case RequestLeaseSetMessage.MESSAGE_TYPE:
+                return new RequestLeaseSetMessage();
+            case RequestVariableLeaseSetMessage.MESSAGE_TYPE:
+                return new RequestVariableLeaseSetMessage();
+            case SendMessageMessage.MESSAGE_TYPE:
+                return new SendMessageMessage();
+            case SendMessageExpiresMessage.MESSAGE_TYPE:
+                return new SendMessageExpiresMessage();
+            case SessionStatusMessage.MESSAGE_TYPE:
+                return new SessionStatusMessage();
+            case GetDateMessage.MESSAGE_TYPE:
+                return new GetDateMessage();
+            case SetDateMessage.MESSAGE_TYPE:
+                return new SetDateMessage();
+            case DestLookupMessage.MESSAGE_TYPE:
+                return new DestLookupMessage();
+            case DestReplyMessage.MESSAGE_TYPE:
+                return new DestReplyMessage();
+            case GetBandwidthLimitsMessage.MESSAGE_TYPE:
+                return new GetBandwidthLimitsMessage();
+            case BandwidthLimitsMessage.MESSAGE_TYPE:
+                return new BandwidthLimitsMessage();
+            case HostLookupMessage.MESSAGE_TYPE:
+                return new HostLookupMessage();
+            case HostReplyMessage.MESSAGE_TYPE:
+                return new HostReplyMessage();
+            case CreateLeaseSet2Message.MESSAGE_TYPE:
+                return new CreateLeaseSet2Message();
+            case BlindingInfoMessage.MESSAGE_TYPE:
+                return new BlindingInfoMessage();
+            default:
+                throw new I2CPMessageException("The type " + type + " is an unknown I2CP message");
         }
     }
 

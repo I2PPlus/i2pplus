@@ -221,7 +221,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
      *  Used by SSU only!
      */
     public synchronized int getRawMessageSize() {
-            return calculateWrittenLength()+5;
+        return calculateWrittenLength()+5;
     }
 
     public byte[] toByteArray() {

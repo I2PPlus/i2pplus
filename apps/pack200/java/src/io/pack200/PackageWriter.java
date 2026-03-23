@@ -245,7 +245,7 @@ class PackageWriter extends BandStructure {
         if (bestVersion == null)  bestVersion = JAVA_MIN_CLASS_VERSION;  // degenerate case
         pkg.defaultClassVersion = bestVersion;
         if (verbose > 0)
-           Utils.log.info("Consensus version number in segment is " + bestVersion);
+            Utils.log.info("Consensus version number in segment is " + bestVersion);
         if (verbose > 0)
             Utils.log.info("Highest version number in segment is "
                             + pkg.getHighestClassVersion());
@@ -270,7 +270,7 @@ class PackageWriter extends BandStructure {
             if (len != (int)len) {
                 archiveOptions |= AO_HAVE_FILE_SIZE_HI;
                 if (verbose > 0)
-                   Utils.log.info("Note: Huge resource file "+file.getFileName()+" forces 64-bit sizing");
+                    Utils.log.info("Note: Huge resource file "+file.getFileName()+" forces 64-bit sizing");
                 break;
             }
         }
@@ -452,34 +452,34 @@ class PackageWriter extends BandStructure {
         for (byte tag : ConstantPool.TAGS_IN_ORDER) {
             int count = pkg.cp.getIndexByTag(tag).size();
             switch (tag) {
-            case CONSTANT_Utf8:
+                case CONSTANT_Utf8:
                 // The null string is always first.
-                if (count > 0)
-                    assert(pkg.cp.getIndexByTag(tag).get(0)
-                           == ConstantPool.getUtf8Entry(""));
-                break;
+                    if (count > 0)
+                        assert(pkg.cp.getIndexByTag(tag).get(0)
+                            == ConstantPool.getUtf8Entry(""));
+                    break;
 
-            case CONSTANT_Integer:
-            case CONSTANT_Float:
-            case CONSTANT_Long:
-            case CONSTANT_Double:
+                case CONSTANT_Integer:
+                case CONSTANT_Float:
+                case CONSTANT_Long:
+                case CONSTANT_Double:
                 // Omit counts for numbers if possible.
-                if (!haveNumbers) {
+                    if (!haveNumbers) {
                     assert(count == 0);
-                    continue;
-                }
-                break;
+                        continue;
+                    }
+                    break;
 
-            case CONSTANT_MethodHandle:
-            case CONSTANT_MethodType:
-            case CONSTANT_InvokeDynamic:
-            case CONSTANT_BootstrapMethod:
+                case CONSTANT_MethodHandle:
+                case CONSTANT_MethodType:
+                case CONSTANT_InvokeDynamic:
+                case CONSTANT_BootstrapMethod:
                 // Omit counts for newer entities if possible.
-                if (!haveCPExtra) {
+                    if (!haveCPExtra) {
                     assert(count == 0);
-                    continue;
-                }
-                break;
+                        continue;
+                    }
+                    break;
             }
             archive_header_1.putInt(count);
         }
@@ -527,104 +527,104 @@ class PackageWriter extends BandStructure {
             }
 
             switch (tag) {
-            case CONSTANT_Utf8:
-                writeUtf8Bands(cpMap);
-                break;
-            case CONSTANT_Integer:
-                for (int i = 0; i < cpMap.length; i++) {
-                    NumberEntry e = (NumberEntry) cpMap[i];
-                    int x = ((Integer)e.numberValue()).intValue();
-                    cp_Int.putInt(x);
-                }
-                break;
-            case CONSTANT_Float:
-                for (int i = 0; i < cpMap.length; i++) {
-                    NumberEntry e = (NumberEntry) cpMap[i];
-                    float fx = ((Float)e.numberValue()).floatValue();
-                    int x = Float.floatToIntBits(fx);
-                    cp_Float.putInt(x);
-                }
-                break;
-            case CONSTANT_Long:
-                for (int i = 0; i < cpMap.length; i++) {
-                    NumberEntry e = (NumberEntry) cpMap[i];
-                    long x = ((Long)e.numberValue()).longValue();
-                    cp_Long_hi.putInt((int)(x >>> 32));
-                    cp_Long_lo.putInt((int)(x >>> 0));
-                }
-                break;
-            case CONSTANT_Double:
-                for (int i = 0; i < cpMap.length; i++) {
-                    NumberEntry e = (NumberEntry) cpMap[i];
-                    double dx = ((Double)e.numberValue()).doubleValue();
-                    long x = Double.doubleToLongBits(dx);
-                    cp_Double_hi.putInt((int)(x >>> 32));
-                    cp_Double_lo.putInt((int)(x >>> 0));
-                }
-                break;
-            case CONSTANT_String:
-                for (int i = 0; i < cpMap.length; i++) {
-                    StringEntry e = (StringEntry) cpMap[i];
-                    cp_String.putRef(e.ref);
-                }
-                break;
-            case CONSTANT_Class:
-                for (int i = 0; i < cpMap.length; i++) {
-                    ClassEntry e = (ClassEntry) cpMap[i];
-                    cp_Class.putRef(e.ref);
-                }
-                break;
-            case CONSTANT_Signature:
-                writeSignatureBands(cpMap);
-                break;
-            case CONSTANT_NameandType:
-                for (int i = 0; i < cpMap.length; i++) {
-                    DescriptorEntry e = (DescriptorEntry) cpMap[i];
-                    cp_Descr_name.putRef(e.nameRef);
-                    cp_Descr_type.putRef(e.typeRef);
-                }
-                break;
-            case CONSTANT_Fieldref:
-                writeMemberRefs(tag, cpMap, cp_Field_class, cp_Field_desc);
-                break;
-            case CONSTANT_Methodref:
-                writeMemberRefs(tag, cpMap, cp_Method_class, cp_Method_desc);
-                break;
-            case CONSTANT_InterfaceMethodref:
-                writeMemberRefs(tag, cpMap, cp_Imethod_class, cp_Imethod_desc);
-                break;
-            case CONSTANT_MethodHandle:
-                for (int i = 0; i < cpMap.length; i++) {
-                    MethodHandleEntry e = (MethodHandleEntry) cpMap[i];
-                    cp_MethodHandle_refkind.putInt(e.refKind);
-                    cp_MethodHandle_member.putRef(e.memRef);
-                }
-                break;
-            case CONSTANT_MethodType:
-                for (int i = 0; i < cpMap.length; i++) {
-                    MethodTypeEntry e = (MethodTypeEntry) cpMap[i];
-                    cp_MethodType.putRef(e.typeRef);
-                }
-                break;
-            case CONSTANT_InvokeDynamic:
-                for (int i = 0; i < cpMap.length; i++) {
-                    InvokeDynamicEntry e = (InvokeDynamicEntry) cpMap[i];
-                    cp_InvokeDynamic_spec.putRef(e.bssRef);
-                    cp_InvokeDynamic_desc.putRef(e.descRef);
-                }
-                break;
-            case CONSTANT_BootstrapMethod:
-                for (int i = 0; i < cpMap.length; i++) {
-                    BootstrapMethodEntry e = (BootstrapMethodEntry) cpMap[i];
-                    cp_BootstrapMethod_ref.putRef(e.bsmRef);
-                    cp_BootstrapMethod_arg_count.putInt(e.argRefs.length);
-                    for (Entry argRef : e.argRefs) {
-                        cp_BootstrapMethod_arg.putRef(argRef);
+                case CONSTANT_Utf8:
+                    writeUtf8Bands(cpMap);
+                    break;
+                case CONSTANT_Integer:
+                    for (int i = 0; i < cpMap.length; i++) {
+                        NumberEntry e = (NumberEntry) cpMap[i];
+                        int x = ((Integer)e.numberValue()).intValue();
+                        cp_Int.putInt(x);
                     }
-                }
-                break;
-            default:
-                throw new AssertionError("unexpected CP tag in package");
+                    break;
+                case CONSTANT_Float:
+                    for (int i = 0; i < cpMap.length; i++) {
+                        NumberEntry e = (NumberEntry) cpMap[i];
+                        float fx = ((Float)e.numberValue()).floatValue();
+                        int x = Float.floatToIntBits(fx);
+                        cp_Float.putInt(x);
+                    }
+                    break;
+                case CONSTANT_Long:
+                    for (int i = 0; i < cpMap.length; i++) {
+                        NumberEntry e = (NumberEntry) cpMap[i];
+                        long x = ((Long)e.numberValue()).longValue();
+                        cp_Long_hi.putInt((int)(x >>> 32));
+                        cp_Long_lo.putInt((int)(x >>> 0));
+                    }
+                    break;
+                case CONSTANT_Double:
+                    for (int i = 0; i < cpMap.length; i++) {
+                        NumberEntry e = (NumberEntry) cpMap[i];
+                        double dx = ((Double)e.numberValue()).doubleValue();
+                        long x = Double.doubleToLongBits(dx);
+                        cp_Double_hi.putInt((int)(x >>> 32));
+                        cp_Double_lo.putInt((int)(x >>> 0));
+                    }
+                    break;
+                case CONSTANT_String:
+                    for (int i = 0; i < cpMap.length; i++) {
+                        StringEntry e = (StringEntry) cpMap[i];
+                        cp_String.putRef(e.ref);
+                    }
+                    break;
+                case CONSTANT_Class:
+                    for (int i = 0; i < cpMap.length; i++) {
+                        ClassEntry e = (ClassEntry) cpMap[i];
+                        cp_Class.putRef(e.ref);
+                    }
+                    break;
+                case CONSTANT_Signature:
+                    writeSignatureBands(cpMap);
+                    break;
+                case CONSTANT_NameandType:
+                    for (int i = 0; i < cpMap.length; i++) {
+                        DescriptorEntry e = (DescriptorEntry) cpMap[i];
+                        cp_Descr_name.putRef(e.nameRef);
+                        cp_Descr_type.putRef(e.typeRef);
+                    }
+                    break;
+                case CONSTANT_Fieldref:
+                    writeMemberRefs(tag, cpMap, cp_Field_class, cp_Field_desc);
+                    break;
+                case CONSTANT_Methodref:
+                    writeMemberRefs(tag, cpMap, cp_Method_class, cp_Method_desc);
+                    break;
+                case CONSTANT_InterfaceMethodref:
+                    writeMemberRefs(tag, cpMap, cp_Imethod_class, cp_Imethod_desc);
+                    break;
+                case CONSTANT_MethodHandle:
+                    for (int i = 0; i < cpMap.length; i++) {
+                        MethodHandleEntry e = (MethodHandleEntry) cpMap[i];
+                        cp_MethodHandle_refkind.putInt(e.refKind);
+                        cp_MethodHandle_member.putRef(e.memRef);
+                    }
+                    break;
+                case CONSTANT_MethodType:
+                    for (int i = 0; i < cpMap.length; i++) {
+                        MethodTypeEntry e = (MethodTypeEntry) cpMap[i];
+                        cp_MethodType.putRef(e.typeRef);
+                    }
+                    break;
+                case CONSTANT_InvokeDynamic:
+                    for (int i = 0; i < cpMap.length; i++) {
+                        InvokeDynamicEntry e = (InvokeDynamicEntry) cpMap[i];
+                        cp_InvokeDynamic_spec.putRef(e.bssRef);
+                        cp_InvokeDynamic_desc.putRef(e.descRef);
+                    }
+                    break;
+                case CONSTANT_BootstrapMethod:
+                    for (int i = 0; i < cpMap.length; i++) {
+                        BootstrapMethodEntry e = (BootstrapMethodEntry) cpMap[i];
+                        cp_BootstrapMethod_ref.putRef(e.bsmRef);
+                        cp_BootstrapMethod_arg_count.putInt(e.argRefs.length);
+                        for (Entry argRef : e.argRefs) {
+                            cp_BootstrapMethod_arg.putRef(argRef);
+                        }
+                    }
+                    break;
+                default:
+                    throw new AssertionError("unexpected CP tag in package");
             }
         }
         if (optDumpBands || verbose > 1) {
@@ -858,7 +858,7 @@ class PackageWriter extends BandStructure {
                 archiveOptions |= mask;
                 haveLongFlags = true;
                 if (verbose > 0)
-                   Utils.log.info("Note: Many "+Attribute.contextName(i)+" attributes forces 63-bit flags");
+                    Utils.log.info("Note: Many "+Attribute.contextName(i)+" attributes forces 63-bit flags");
             }
             if (verbose > 1) {
                 Utils.log.fine(Attribute.contextName(i)+".maxFlags = 0x"+Integer.toHexString(maxFlags[i]));
@@ -895,14 +895,14 @@ class PackageWriter extends BandStructure {
             // Predefs. participate in this sort, though it does not matter.
             Arrays.sort(layoutsAndCounts,
                         new Comparator<Map.Entry<Attribute.Layout, int[]>>() {
-                public int compare(Map.Entry<Attribute.Layout, int[]> e0,
+                    public int compare(Map.Entry<Attribute.Layout, int[]> e0,
                                    Map.Entry<Attribute.Layout, int[]> e1) {
                     // Primary sort key is count, reversed.
-                    int r = -(e0.getValue()[0] - e1.getValue()[0]);
-                    if (r != 0)  return r;
-                    return e0.getKey().compareTo(e1.getKey());
-                }
-            });
+                        int r = -(e0.getValue()[0] - e1.getValue()[0]);
+                        if (r != 0)  return r;
+                        return e0.getKey().compareTo(e1.getKey());
+                    }
+                });
             attrCounts[i] = new int[attrIndexLimit[i]+layoutsAndCounts.length];
             for (int j = 0; j < layoutsAndCounts.length; j++) {
                 Map.Entry<Attribute.Layout, int[]> e = layoutsAndCounts[j];
@@ -949,7 +949,7 @@ class PackageWriter extends BandStructure {
                     requiredEntries.add(le);
                     if (verbose > 0) {
                         if (index < attrIndexLimit[i])
-                           Utils.log.info("Using free flag bit 1<<"+index+" for "+count+" occurrences of "+def);
+                            Utils.log.info("Using free flag bit 1<<"+index+" for "+count+" occurrences of "+def);
                         else
                             Utils.log.info("Using overflow index "+index+" for "+count+" occurrences of "+def);
                     }
@@ -1028,7 +1028,7 @@ class PackageWriter extends BandStructure {
             }
         });
         attrDefsWritten = new Attribute.Layout[numAttrDefs];
-         try (PrintStream dump = !optDumpBands ? null
+        try (PrintStream dump = !optDumpBands ? null
                   : new PrintStream(getDumpStream(attr_definition_headers, ".def"), false, StandardCharsets.UTF_8.name()))
         {
             int[] indexForDebug = Arrays.copyOf(attrIndexLimit, ATTR_CONTEXT_LIMIT);
@@ -1338,21 +1338,21 @@ class PackageWriter extends BandStructure {
             if (isCV)  setConstantValueIndex((Class.Field)h);
             a.parse(cls, a.bytes(), 0, a.size(),
                       new Attribute.ValueStream() {
-                public void putInt(int bandIndex, int value) {
-                    ((IntBand) ab[bandIndex]).putInt(value);
-                }
-                public void putRef(int bandIndex, Entry ref) {
-                    ((CPRefBand) ab[bandIndex]).putRef(ref);
-                }
-                public int encodeBCI(int bci) {
-                    Code code = (Code) h;
-                    return code.encodeBCI(bci);
-                }
-                public void noteBackCall(int whichCallable) {
+                    public void putInt(int bandIndex, int value) {
+                        ((IntBand) ab[bandIndex]).putInt(value);
+                    }
+                    public void putRef(int bandIndex, Entry ref) {
+                        ((CPRefBand) ab[bandIndex]).putRef(ref);
+                    }
+                    public int encodeBCI(int bci) {
+                        Code code = (Code) h;
+                        return code.encodeBCI(bci);
+                    }
+                    public void noteBackCall(int whichCallable) {
                     assert(bc[whichCallable] >= 0);
-                    bc[whichCallable] += 1;
-                }
-            });
+                        bc[whichCallable] += 1;
+                    }
+                });
             if (isCV)  setConstantValueIndex(null);  // clean up
         }
 
@@ -1512,30 +1512,30 @@ class PackageWriter extends BandStructure {
             // Normal bytecode.
             codeHist[bc]++;
             switch (bc) {
-            case _tableswitch: // apc:  (df, lo, hi, (hi-lo+1)*(label))
-            case _lookupswitch: // apc:  (df, nc, nc*(case, label))
-                bc_codes.putByte(bc);
-                Instruction.Switch isw = (Instruction.Switch) i;
+                case _tableswitch: // apc:  (df, lo, hi, (hi-lo+1)*(label))
+                case _lookupswitch: // apc:  (df, nc, nc*(case, label))
+                    bc_codes.putByte(bc);
+                    Instruction.Switch isw = (Instruction.Switch) i;
                 // Note that we do not write the alignment bytes.
-                int apc = isw.getAlignedPC();
-                int npc = isw.getNextPC();
+                    int apc = isw.getAlignedPC();
+                    int npc = isw.getNextPC();
                 // write a length specification into the bytecode stream
-                int caseCount = isw.getCaseCount();
-                bc_case_count.putInt(caseCount);
-                putLabel(bc_label, code, i.getPC(), isw.getDefaultLabel());
-                for (int j = 0; j < caseCount; j++) {
-                    putLabel(bc_label, code, i.getPC(), isw.getCaseLabel(j));
-                }
-                // Transmit case values in their own band.
-                if (bc == _tableswitch) {
-                    bc_case_value.putInt(isw.getCaseValue(0));
-                } else {
+                    int caseCount = isw.getCaseCount();
+                    bc_case_count.putInt(caseCount);
+                    putLabel(bc_label, code, i.getPC(), isw.getDefaultLabel());
                     for (int j = 0; j < caseCount; j++) {
-                        bc_case_value.putInt(isw.getCaseValue(j));
+                        putLabel(bc_label, code, i.getPC(), isw.getCaseLabel(j));
                     }
-                }
+                // Transmit case values in their own band.
+                    if (bc == _tableswitch) {
+                        bc_case_value.putInt(isw.getCaseValue(0));
+                    } else {
+                        for (int j = 0; j < caseCount; j++) {
+                            bc_case_value.putInt(isw.getCaseValue(j));
+                        }
+                    }
                 // Done with the switch.
-                continue;
+                    continue;
             }
 
             int branch = i.getBranchLabel();
@@ -1551,86 +1551,86 @@ class PackageWriter extends BandStructure {
                 CPRefBand bc_which;
                 int vbc = bc;
                 switch (i.getCPTag()) {
-                case CONSTANT_LoadableValue:
-                    switch (ref.tag) {
-                    case CONSTANT_Integer:
-                        bc_which = bc_intref;
-                        switch (bc) {
-                        case _ldc:    vbc = _ildc; break;
-                        case _ldc_w:  vbc = _ildc_w; break;
-                        default:      assert(false);
-                        }
-                        break;
-                    case CONSTANT_Float:
-                        bc_which = bc_floatref;
-                        switch (bc) {
-                        case _ldc:    vbc = _fldc; break;
-                        case _ldc_w:  vbc = _fldc_w; break;
-                        default:      assert(false);
-                        }
-                        break;
-                    case CONSTANT_Long:
-                        bc_which = bc_longref;
+                    case CONSTANT_LoadableValue:
+                        switch (ref.tag) {
+                            case CONSTANT_Integer:
+                                bc_which = bc_intref;
+                                switch (bc) {
+                                    case _ldc:    vbc = _ildc; break;
+                                    case _ldc_w:  vbc = _ildc_w; break;
+                                    default:      assert(false);
+                                }
+                                break;
+                            case CONSTANT_Float:
+                                bc_which = bc_floatref;
+                                switch (bc) {
+                                    case _ldc:    vbc = _fldc; break;
+                                    case _ldc_w:  vbc = _fldc_w; break;
+                                    default:      assert(false);
+                                }
+                                break;
+                            case CONSTANT_Long:
+                                bc_which = bc_longref;
                         assert(bc == _ldc2_w);
-                        vbc = _lldc2_w;
-                        break;
-                    case CONSTANT_Double:
-                        bc_which = bc_doubleref;
+                                vbc = _lldc2_w;
+                                break;
+                            case CONSTANT_Double:
+                                bc_which = bc_doubleref;
                         assert(bc == _ldc2_w);
-                        vbc = _dldc2_w;
-                        break;
-                    case CONSTANT_String:
-                        bc_which = bc_stringref;
-                        switch (bc) {
-                        case _ldc:    vbc = _sldc; break;
-                        case _ldc_w:  vbc = _sldc_w; break;
-                        default:      assert(false);
+                                vbc = _dldc2_w;
+                                break;
+                            case CONSTANT_String:
+                                bc_which = bc_stringref;
+                                switch (bc) {
+                                    case _ldc:    vbc = _sldc; break;
+                                    case _ldc_w:  vbc = _sldc_w; break;
+                                    default:      assert(false);
+                                }
+                                break;
+                            case CONSTANT_Class:
+                                bc_which = bc_classref;
+                                switch (bc) {
+                                    case _ldc:    vbc = _cldc; break;
+                                    case _ldc_w:  vbc = _cldc_w; break;
+                                    default:      assert(false);
+                                }
+                                break;
+                            default:
+                        // CONSTANT_MethodHandle, etc.
+                                if (getHighestClassVersion().lessThan(JAVA7_MAX_CLASS_VERSION)) {
+                                    throw new IOException("Bad class file major version for Java 7 ldc");
+                                }
+                                bc_which = bc_loadablevalueref;
+                                switch (bc) {
+                                    case _ldc:    vbc = _qldc; break;
+                                    case _ldc_w:  vbc = _qldc_w; break;
+                                    default:      assert(false);
+                                }
                         }
                         break;
                     case CONSTANT_Class:
-                        bc_which = bc_classref;
-                        switch (bc) {
-                        case _ldc:    vbc = _cldc; break;
-                        case _ldc_w:  vbc = _cldc_w; break;
-                        default:      assert(false);
+                    // Use a special shorthand for the current class:
+                        if (ref == curClass.thisClass)  ref = null;
+                        bc_which = bc_classref; break;
+                    case CONSTANT_Fieldref:
+                        bc_which = bc_fieldref; break;
+                    case CONSTANT_Methodref:
+                        if (ref.tagEquals(CONSTANT_InterfaceMethodref)) {
+                            if (bc == _invokespecial)
+                                vbc = _invokespecial_int;
+                            if (bc == _invokestatic)
+                                vbc = _invokestatic_int;
+                            bc_which = bc_imethodref;
+                        } else {
+                            bc_which = bc_methodref;
                         }
                         break;
+                    case CONSTANT_InterfaceMethodref:
+                        bc_which = bc_imethodref; break;
+                    case CONSTANT_InvokeDynamic:
+                        bc_which = bc_indyref; break;
                     default:
-                        // CONSTANT_MethodHandle, etc.
-                        if (getHighestClassVersion().lessThan(JAVA7_MAX_CLASS_VERSION)) {
-                            throw new IOException("Bad class file major version for Java 7 ldc");
-                        }
-                        bc_which = bc_loadablevalueref;
-                        switch (bc) {
-                        case _ldc:    vbc = _qldc; break;
-                        case _ldc_w:  vbc = _qldc_w; break;
-                        default:      assert(false);
-                        }
-                    }
-                    break;
-                case CONSTANT_Class:
-                    // Use a special shorthand for the current class:
-                    if (ref == curClass.thisClass)  ref = null;
-                    bc_which = bc_classref; break;
-                case CONSTANT_Fieldref:
-                    bc_which = bc_fieldref; break;
-                case CONSTANT_Methodref:
-                    if (ref.tagEquals(CONSTANT_InterfaceMethodref)) {
-                        if (bc == _invokespecial)
-                            vbc = _invokespecial_int;
-                        if (bc == _invokestatic)
-                            vbc = _invokestatic_int;
-                        bc_which = bc_imethodref;
-                    } else {
-                        bc_which = bc_methodref;
-                    }
-                    break;
-                case CONSTANT_InterfaceMethodref:
-                    bc_which = bc_imethodref; break;
-                case CONSTANT_InvokeDynamic:
-                    bc_which = bc_indyref; break;
-                default:
-                    bc_which = null;
+                        bc_which = null;
                     assert(false);
                 }
                 if (ref != null && bc_which.index != null && !bc_which.index.contains(ref)) {
@@ -1689,16 +1689,16 @@ class PackageWriter extends BandStructure {
             if (pc < npc) {
                 // Do a few remaining multi-byte instructions.
                 switch (bc) {
-                case _sipush:
-                    bc_short.putInt(0xFFFF & i.getConstant());
-                    break;
-                case _bipush:
-                    bc_byte.putByte(0xFF & i.getConstant());
-                    break;
-                case _newarray:
-                    bc_byte.putByte(0xFF & i.getConstant());
-                    break;
-                default:
+                    case _sipush:
+                        bc_short.putInt(0xFFFF & i.getConstant());
+                        break;
+                    case _bipush:
+                        bc_byte.putByte(0xFF & i.getConstant());
+                        break;
+                    case _newarray:
+                        bc_byte.putByte(0xFF & i.getConstant());
+                        break;
+                    default:
                     assert(false);  // that's it
                 }
             }

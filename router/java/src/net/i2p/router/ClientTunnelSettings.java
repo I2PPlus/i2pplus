@@ -33,7 +33,7 @@ public class ClientTunnelSettings {
     public void readFromProperties(Properties props) {
         _inboundSettings.readFromProperties("inbound.", props);
         _outboundSettings.readFromProperties("outbound.", props);
-   }
+    }
 
     private void writeToProperties(Properties props) {
         if (props == null) return;

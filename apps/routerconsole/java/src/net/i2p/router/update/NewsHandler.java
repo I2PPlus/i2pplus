@@ -75,30 +75,30 @@ public class NewsHandler extends UpdateHandler implements Checker {
         Getopt g = new Getopt("newshandler", args, "p:l:u:");
         int c;
         while ((c = g.getopt()) != -1) {
-          switch (c) {
-            case 'p':
-                String s = g.getOptarg();
-                int colon = s.indexOf(':');
-                if (colon >= 0) {
-                    if (colon > 0) {proxyHost = s.substring(0, colon);}
-                    String port = s.substring(colon + 1);
-                    proxyPort = Integer.parseInt(port);
-                } else {proxyHost = s;}
-                break;
+            switch (c) {
+                case 'p':
+                    String s = g.getOptarg();
+                    int colon = s.indexOf(':');
+                    if (colon >= 0) {
+                        if (colon > 0) {proxyHost = s.substring(0, colon);}
+                        String port = s.substring(colon + 1);
+                        proxyPort = Integer.parseInt(port);
+                    } else {proxyHost = s;}
+                    break;
 
-            case 'l':
-                lang = g.getOptarg();
-                break;
+                case 'l':
+                    lang = g.getOptarg();
+                    break;
 
-            case 'u':
-                url = g.getOptarg();
-                custom = true;
-                break;
+                case 'u':
+                    url = g.getOptarg();
+                    custom = true;
+                    break;
 
-            default:
-                error = true;
-                break;
-          }
+                default:
+                    error = true;
+                    break;
+            }
         }
         if (error || args.length - g.getOptind() != 0) {
             System.err.println("Usage: newshandler [-p 127.0.0.1[:4444]] [-l en] [-u url]");

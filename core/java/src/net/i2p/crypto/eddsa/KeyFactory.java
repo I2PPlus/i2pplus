@@ -88,7 +88,7 @@ public final class KeyFactory extends KeyFactorySpi {
      * @return the generated EdDSA private key
      * @throws InvalidKeySpecException if the key specification is unsupported or malformed
      * @since 0.9.15
-     * 
+     *
      * Supports PKCS8EncodedKeySpec since version 0.9.25.
      */
     protected PrivateKey engineGeneratePrivate(KeySpec keySpec)
@@ -112,7 +112,7 @@ public final class KeyFactory extends KeyFactorySpi {
      * @return the generated EdDSA public key
      * @throws InvalidKeySpecException if the key specification is unsupported or malformed
      * @since 0.9.15
-     * 
+     *
      * Supports X509EncodedKeySpec since version 0.9.25.
      */
     protected PublicKey engineGeneratePublic(KeySpec keySpec)

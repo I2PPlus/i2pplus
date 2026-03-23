@@ -26,7 +26,7 @@ public final class Base64 {
 
     /**
      * Encodes the given byte array to a Base64 string.
-     * 
+     *
      * @param bytes the byte array to encode
      * @return the Base64 encoded string
      */

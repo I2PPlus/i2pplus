@@ -74,7 +74,7 @@ class DelayedDeleter {
 
     private class Deleter extends I2PAppThread {
         public Deleter() {super("Susimail-Delete");}
-            public void run() {
+        public void run() {
             try {
                 int origSize = toDelete.size();
                 mailbox.deletePending(false);

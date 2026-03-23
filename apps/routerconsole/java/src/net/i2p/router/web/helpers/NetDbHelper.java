@@ -49,7 +49,7 @@ public class NetDbHelper extends FormHandler {
     public boolean isFloodfill() {return _context.netDb().floodfillEnabled();}
 
     private static final String titles[] =
-                                          {_x("Summary"),                       // 0  -
+        {_x("Summary"),                       // 0  -
                                            _x("Local Router"),                  // 1  - r=.
                                            _x("Router Lookup"),                 // 2  -
                                            _x("All Routers"),                   // 3  - f=2
@@ -62,23 +62,23 @@ public class NetDbHelper extends FormHandler {
                                            _x("All Routers (Client NetDb)"),    // 10 - f=5
                                            _x("All Routers (Client NetDb)"),    // 11 - f=6 (debug)
                                            _x("Sybil Analysis"),                // 12 - f=3
-                                          };
+        };
 
     private static final String links[] =
-                                          {"",                                  // 0
-                                           "?r=.",                              // 1
-                                           "",                                  // 2
-                                           "?f=2",                              // 3
-                                           "?f=1",                              // 4
-                                           "?l=1",                              // 5
-                                           "?l=2",                              // 6
-                                           "?l=3",                              // 7
-                                           "?f=4",                              // 8
-                                           "",                                  // 9
-                                           "?f=5",                              // 10
-                                           "?f=6",                              // 11
-                                           "?f=3",                              // 12
-                                          };
+        {"",                                  // 0
+            "?r=.",                              // 1
+            "",                                  // 2
+            "?f=2",                              // 3
+            "?f=1",                              // 4
+            "?l=1",                              // 5
+            "?l=2",                              // 6
+            "?l=3",                              // 7
+            "?f=4",                              // 8
+            "",                                  // 9
+            "?f=5",                              // 10
+            "?f=6",                              // 11
+            "?f=3",                              // 12
+        };
 
 
     public void setRouter(String r) {
@@ -411,7 +411,7 @@ public class NetDbHelper extends FormHandler {
            .append(_t("Cost"))
            .append("</b></td><td><input type=text name=cost></td></tr>\n<tr><td><b>")
            .append(_t("Country"))
-           .append("</b></td><td><select name=\"c\"><option value=\"\" selected></option>");
+            .append("</b></td><td><select name=\"c\"><option value=\"\" selected></option>");
         Map<String, String> sorted = new TreeMap<String, String>(Collator.getInstance());
         for (Map.Entry<String, String> e : _context.commSystem().getCountries().entrySet()) {
             String tr = Messages.getString(e.getValue(), _context, Messages.COUNTRY_BUNDLE_NAME);
@@ -520,7 +520,7 @@ public class NetDbHelper extends FormHandler {
            .append("<td><button type=\"submit\" class=search value=\"Lookup\">").append(_t("Lookup")).append("</button></td>\n")
            .append("</tr>\n</table>\n</form>\n</div>\n")
            .append("<script src=/js/netdbLookup.js></script>\n")
-           .append("<noscript><style>#compactLookup{display:none!important}</style></noscript>\n");
+            .append("<noscript><style>#compactLookup{display:none!important}</style></noscript>\n");
 
         _out.append(buf);
     }

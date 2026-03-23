@@ -829,7 +829,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * @param o a Hash object to check
      * @return true if peer should be excluded (and added to set)
      */
-    @Override
+        @Override
     public boolean contains(Object o) {
             if (s.contains(o)) {return true;}
             Hash h = (Hash) o;

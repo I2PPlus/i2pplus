@@ -188,28 +188,28 @@ final class Fixups extends AbstractCollection<Fixups.Fixup> {
         int value = desc - (loc << LOC_SHIFT);
         byte b1, b2;
         switch (fmt) {
-        case U2_FORMAT:
+            case U2_FORMAT:
             assert(bytes[loc+0] == UNUSED_BYTE);
             assert(bytes[loc+1] == UNUSED_BYTE);
-            b1 = (byte)(value >> 8);
-            b2 = (byte)(value >> 0);
-            if (value == (value & 0xFFFF) && b1 != OVERFLOW_BYTE) {
-                bytes[loc+0] = b1;
-                bytes[loc+1] = b2;
+                b1 = (byte)(value >> 8);
+                b2 = (byte)(value >> 0);
+                if (value == (value & 0xFFFF) && b1 != OVERFLOW_BYTE) {
+                    bytes[loc+0] = b1;
+                    bytes[loc+1] = b2;
                 assert(fetchDesc(loc, fmt) == desc);
-                return true;
-            }
-            break;
-        case U1_FORMAT:
+                    return true;
+                }
+                break;
+            case U1_FORMAT:
             assert(bytes[loc] == UNUSED_BYTE);
-            b1 = (byte)value;
-            if (value == (value & 0xFF) && b1 != OVERFLOW_BYTE) {
-                bytes[loc] = b1;
+                b1 = (byte)value;
+                if (value == (value & 0xFF) && b1 != OVERFLOW_BYTE) {
+                    bytes[loc] = b1;
                 assert(fetchDesc(loc, fmt) == desc);
-                return true;
-            }
-            break;
-        default: assert(false);
+                    return true;
+                }
+                break;
+            default: assert(false);
         }
         // Failure.  Caller must allocate a bigDesc.
         bytes[loc] = OVERFLOW_BYTE;
@@ -220,18 +220,18 @@ final class Fixups extends AbstractCollection<Fixups.Fixup> {
         storeIndex(bytes, loc, fmt, value);
     }
     static
-    void storeIndex(byte[] bytes, int loc, int fmt, int value) {
+        void storeIndex(byte[] bytes, int loc, int fmt, int value) {
         switch (fmt) {
-        case U2_FORMAT:
+            case U2_FORMAT:
             assert(value == (value & 0xFFFF)) : (value);
-            bytes[loc+0] = (byte)(value >> 8);
-            bytes[loc+1] = (byte)(value >> 0);
-            break;
-        case U1_FORMAT:
+                bytes[loc+0] = (byte)(value >> 8);
+                bytes[loc+1] = (byte)(value >> 0);
+                break;
+            case U1_FORMAT:
             assert(value == (value & 0xFF)) : (value);
-            bytes[loc] = (byte)value;
-            break;
-        default: assert(false);
+                bytes[loc] = (byte)value;
+                break;
+            default: assert(false);
         }
     }
 
@@ -245,7 +245,7 @@ final class Fixups extends AbstractCollection<Fixups.Fixup> {
 
     /** Simple and necessary tuple to present each fixup. */
     public static
-    class Fixup implements Comparable<Fixup> {
+        class Fixup implements Comparable<Fixup> {
         int desc;         // location and format of reloc
         Entry entry;      // which entry to plug into the bytes
         Fixup(int desc, Entry entry) {
@@ -284,7 +284,7 @@ final class Fixups extends AbstractCollection<Fixups.Fixup> {
     }
 
     private
-    class Itr implements Iterator<Fixup> {
+        class Itr implements Iterator<Fixup> {
         int index = 0;               // index into entries
         int bigIndex = BIGSIZE+1;    // index into bigDescs
         int next = head;             // desc pointing to next fixup
@@ -401,7 +401,7 @@ final class Fixups extends AbstractCollection<Fixups.Fixup> {
         return add(f, null, loc, U2_FORMAT, entry);
     }
     private static
-    Object add(Object prevFixups,
+        Object add(Object prevFixups,
                byte[] bytes, int loc, int fmt,
                Entry e) {
         Fixups f;
@@ -427,7 +427,7 @@ final class Fixups extends AbstractCollection<Fixups.Fixup> {
     }
 
     public static
-    void setBytes(Object fixups, byte[] bytes) {
+        void setBytes(Object fixups, byte[] bytes) {
         if (fixups instanceof Fixups) {
             Fixups f = (Fixups) fixups;
             f.setBytes(bytes);
@@ -435,7 +435,7 @@ final class Fixups extends AbstractCollection<Fixups.Fixup> {
     }
 
     public static
-    Object trimToSize(Object fixups) {
+        Object trimToSize(Object fixups) {
         if (fixups instanceof Fixups) {
             Fixups f = (Fixups) fixups;
             f.trimToSize();
@@ -447,7 +447,7 @@ final class Fixups extends AbstractCollection<Fixups.Fixup> {
 
     // Iterate over all the references in this set of fixups.
     public static
-    void visitRefs(Object fixups, Collection<Entry> refs) {
+        void visitRefs(Object fixups, Collection<Entry> refs) {
         if (fixups == null) {
         } else if (!(fixups instanceof Fixups)) {
             // Special convention; see above.
@@ -461,7 +461,7 @@ final class Fixups extends AbstractCollection<Fixups.Fixup> {
     // Clear out this set of fixups by replacing each reference
     // by a hardcoded coding of its reference, drawn from ix.
     public static
-    void finishRefs(Object fixups, byte[] bytes, ConstantPool.Index ix) {
+        void finishRefs(Object fixups, byte[] bytes, ConstantPool.Index ix) {
         if (fixups == null)
             return;
         if (!(fixups instanceof Fixups)) {

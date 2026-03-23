@@ -116,16 +116,16 @@ public class RouterTimestamper extends Timestamper {
     public boolean getIsDisabled() { return _disabled; }
 
     public void addListener(UpdateListener lsnr) {
-            _listeners.add(lsnr);
+        _listeners.add(lsnr);
     }
     public void removeListener(UpdateListener lsnr) {
-            _listeners.remove(lsnr);
+        _listeners.remove(lsnr);
     }
     public int getListenerCount() {
-            return _listeners.size();
+        return _listeners.size();
     }
     public UpdateListener getListener(int index) {
-            return _listeners.get(index);
+        return _listeners.get(index);
     }
 
     public void startTimestamper() {
@@ -154,15 +154,15 @@ public class RouterTimestamper extends Timestamper {
      */
     @Override
     public void timestampNow() {
-         if (_initialized && _isRunning && (!_disabled) && _timestamperThread != null)
+        if (_initialized && _isRunning && (!_disabled) && _timestamperThread != null)
              _timestamperThread.interrupt();
     }
 
     /** @since 0.8.8 */
     private class Shutdown implements Runnable {
         public void run() {
-             _isRunning = false;
-             if (_timestamperThread != null)
+            _isRunning = false;
+            if (_timestamperThread != null)
                  _timestamperThread.interrupt();
         }
     }
@@ -331,7 +331,7 @@ public class RouterTimestamper extends Timestamper {
     private void stampTime(long now, int stratum) {
         long before = _context.clock().now();
         for (UpdateListener lsnr : _listeners) {
-             lsnr.setNow(now, stratum);
+            lsnr.setNow(now, stratum);
         }
         if (_log != null && _log.shouldDebug())
             _log.debug("Stamped the time as " + now + " (delta=" + (now-before) + ")");
@@ -356,7 +356,7 @@ public class RouterTimestamper extends Timestamper {
                 _priorityServers = new ArrayList<List<String>>(2);
                 List<String> p1 = new ArrayList<String>(3);
                 for (int i = 0; i < 3; i++) {
-                     p1.add(i + "." + country + ".pool.ntp.org");
+                    p1.add(i + "." + country + ".pool.ntp.org");
                 }
                 _priorityServers.add(p1);
                 String zone = _zones.getZone(country);

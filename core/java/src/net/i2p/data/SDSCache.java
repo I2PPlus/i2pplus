@@ -146,7 +146,7 @@ public class SDSCache<V extends SimpleDataStructure> {
                     throw new RuntimeException("SDSCache error", e);
                 }
                 _cache.put(key, new WeakReference<V>(rv));
-               found = 0;
+                found = 0;
             }
         }
         I2PAppContext.getGlobalContext().statManager().addRateData(_statName, found);

@@ -252,10 +252,10 @@ class EstablishmentManager {
      * @return null if none
      */
     InboundEstablishState getInboundState(RemoteHostId from) {
-            InboundEstablishState state = _inboundStates.get(from);
+        InboundEstablishState state = _inboundStates.get(from);
             // if ( (state == null) && (_log.shouldDebug()) )
             //     _log.debug("No inbound states for " + from + ", with remaining: " + _inboundStates);
-            return state;
+        return state;
     }
 
     /**
@@ -263,16 +263,16 @@ class EstablishmentManager {
      * @return null if none
      */
     OutboundEstablishState getOutboundState(RemoteHostId from) {
-            OutboundEstablishState state = _outboundStates.get(from);
-            if (state == null) {
-                state = _outboundByClaimedAddress.get(from);
-                if (state != null && _log.shouldInfo()) {
-                    _log.info("[SSU] Found by claimed address: " + state);
-                }
+        OutboundEstablishState state = _outboundStates.get(from);
+        if (state == null) {
+            state = _outboundByClaimedAddress.get(from);
+            if (state != null && _log.shouldInfo()) {
+                _log.info("[SSU] Found by claimed address: " + state);
             }
+        }
             // if ( (state == null) && (_log.shouldDebug()) )
             //     _log.debug("No outbound states for " + from + ", with remaining: " + _outboundStates);
-            return state;
+        return state;
     }
 
     /**
@@ -355,22 +355,22 @@ class EstablishmentManager {
 
             if ((!_transport.isValid(maybeTo.getIP())) ||
                 (Arrays.equals(maybeTo.getIP(), _transport.getExternalIP()) && !_transport.allowLocal())) {
-                 _transport.failed(msg, "Peer's IP address isn't valid");
+                _transport.failed(msg, "Peer's IP address isn't valid");
                 _transport.markUnreachable(toHash);
                 _context.statManager().addRateData("udp.establishBadIP", 1);
                 //_context.banlist().banlistRouter(toHash, " <b>➜</b> Invalid SSU address", UDPTransport.STYLE);
-                 if (toHash != null) {
-                      if (!isBanned) {
+                if (toHash != null) {
+                    if (!isBanned) {
                         _banLogger.logBan(toHash, ipAddress + ":" + port, "Invalid SSU address", 4*60*60*1000);
                         _context.banlist().banlistRouter(toHash, " <b>➜</b> Invalid SSU address", null, null, now + 4*60*60*1000);
                         if (_log.shouldWarn()) {
-                          _log.warn("[SSU] Banning [" + truncHash + "] for 4h -> Invalid SSU address");
-                       }
+                            _log.warn("[SSU] Banning [" + truncHash + "] for 4h -> Invalid SSU address");
+                        }
                     }
                 } else {
                     if (_log.shouldWarn()) {
                         _log.warn("Invalid or spoofed SSU address detected for: " + ipAddress + ":" + port);
-                     }
+                    }
                 }
                 return;
             }
@@ -380,29 +380,29 @@ class EstablishmentManager {
                 // we have an inbound establishment in progress, queue it there instead
                 synchronized (inState) {
                     switch (inState.getState()) {
-                      case IB_STATE_UNKNOWN:
-                      case IB_STATE_REQUEST_RECEIVED:
-                      case IB_STATE_CREATED_SENT:
-                      case IB_STATE_CONFIRMED_PARTIALLY:
-                      case IB_STATE_CONFIRMED_COMPLETELY:
-                      case IB_STATE_TOKEN_REQUEST_RECEIVED:
-                      case IB_STATE_REQUEST_BAD_TOKEN_RECEIVED:
-                      case IB_STATE_RETRY_SENT:
+                        case IB_STATE_UNKNOWN:
+                        case IB_STATE_REQUEST_RECEIVED:
+                        case IB_STATE_CREATED_SENT:
+                        case IB_STATE_CONFIRMED_PARTIALLY:
+                        case IB_STATE_CONFIRMED_COMPLETELY:
+                        case IB_STATE_TOKEN_REQUEST_RECEIVED:
+                        case IB_STATE_REQUEST_BAD_TOKEN_RECEIVED:
+                        case IB_STATE_RETRY_SENT:
                         // queue it
-                        inState.addMessage(msg);
-                        if (_log.shouldDebug())
-                            _log.debug("[SSU] Outbound message queued to InboundEstablishState");
-                        break;
+                            inState.addMessage(msg);
+                            if (_log.shouldDebug())
+                                _log.debug("[SSU] Outbound message queued to InboundEstablishState");
+                            break;
 
-                      case IB_STATE_COMPLETE:
+                        case IB_STATE_COMPLETE:
                         // race, send it out (but don't call _transport.send() again and risk a loop)
-                        _transport.sendIfEstablished(msg);
-                        break;
+                            _transport.sendIfEstablished(msg);
+                            break;
 
-                      case IB_STATE_FAILED:
+                        case IB_STATE_FAILED:
                         // race, failed
-                        _transport.failed(msg, "Outbound message failed during InboundEstablish");
-                        break;
+                            _transport.failed(msg, "Outbound message failed during InboundEstablish");
+                            break;
                     }
                 }
                 return;
@@ -516,7 +516,7 @@ class EstablishmentManager {
                         }
                     } else if (!ipAddress.isEmpty() && !ipAddress.equals("")) {
                         if (_log.shouldWarn()) {
-                                _log.warn("[SSU] Received no Introduction key from: " + ipAddress + ":" + maybePort);
+                            _log.warn("[SSU] Received no Introduction key from: " + ipAddress + ":" + maybePort);
                         }
                     }
                     return;
@@ -666,8 +666,8 @@ class EstablishmentManager {
                 if (_log.shouldWarn()) {
                     _log.warn("[SSU] Dropping incoming connection (" + (percent >= 1 ? Math.max(percent,100) : "1") + "% chance)" +
                               " -> Previous / current connections per minute: " + last + " / " + (int) (currentRate * 60*1000));
-                 }
-                 return false;
+                }
+                return false;
             }
         }
         return true;
@@ -702,11 +702,11 @@ class EstablishmentManager {
             }
             if (fromHash != null) {
                 if (!isBanned) {
-                   _banLogger.logBan(fromHash, from.toString(), "Invalid address/port in Session Request", 15*60*1000);
-                   _context.banlist().banlistRouter(fromHash, " <b>➜</b> Invalid address/port in Session Request", null, null, now + 15*60*1000);
-                   if (_log.shouldWarn()) {
-                      _log.warn("[SSU] Banning [" + truncHash + "] for 15m -> Invalid address/port in Session Request" + " (" + from + ")");
-                   }
+                    _banLogger.logBan(fromHash, from.toString(), "Invalid address/port in Session Request", 15*60*1000);
+                    _context.banlist().banlistRouter(fromHash, " <b>➜</b> Invalid address/port in Session Request", null, null, now + 15*60*1000);
+                    if (_log.shouldWarn()) {
+                        _log.warn("[SSU] Banning [" + truncHash + "] for 15m -> Invalid address/port in Session Request" + " (" + from + ")");
+                    }
                 } else if (isBanned) {
                     if (_log.shouldInfo()) {
                         _log.info("[SSU] Not banning [" + truncHash + "] -> Already in blocklist (" + from + ")");
@@ -748,10 +748,10 @@ class EstablishmentManager {
                             // this is common, finally get a packet after the IES2 timeout
                             if (_log.shouldInfo())
                                 _log.info("[SSU] Received Session Request from temporarily banned peer " + from);
-                             _context.statManager().addRateData("udp.establishBadIP", 1);
+                            _context.statManager().addRateData("udp.establishBadIP", 1);
                              // use this code for a temp ban
-                             sendTerminationPacket(from, packet, REASON_MSG1);
-                             return;
+                            sendTerminationPacket(from, packet, REASON_MSG1);
+                            return;
                         }
                         // expired
                         _inboundBans.remove(from);
@@ -881,7 +881,7 @@ class EstablishmentManager {
         long sendConnID = DataHelper.fromLong8(data, off + SRC_CONN_ID_OFFSET);
         if (rcvConnID == 0 || sendConnID == 0 || rcvConnID == sendConnID) {return;}
         if (_log.shouldInfo()) {
-             String typeStr = UDPPacket.payloadTypeToString(type);
+            String typeStr = UDPPacket.payloadTypeToString(type);
             _log.warn("[SSU] Sending termination packet for " + typeStr + " to: " + to + " -> " + parseReason(terminationCode));
         }
         UDPPacket packet = _builder2.buildRetryPacket(to, pkt.getSocketAddress(), sendConnID, rcvConnID, terminationCode);
@@ -1312,21 +1312,21 @@ class EstablishmentManager {
                 pkt = state2.getRetransmitSessionCreatedPacket();
                 break;
 
-              case IB_STATE_REQUEST_RECEIVED:
+            case IB_STATE_REQUEST_RECEIVED:
                 if (_log.shouldDebug())
                     _log.debug("[SSU] Sending SessionCreated to: " + state);
                 pkt = _builder2.buildSessionCreatedPacket(state2);
                 break;
 
-              case IB_STATE_TOKEN_REQUEST_RECEIVED:
-              case IB_STATE_REQUEST_BAD_TOKEN_RECEIVED:
-              case IB_STATE_RETRY_SENT:     // got a retransmitted token request
+            case IB_STATE_TOKEN_REQUEST_RECEIVED:
+            case IB_STATE_REQUEST_BAD_TOKEN_RECEIVED:
+            case IB_STATE_RETRY_SENT:     // got a retransmitted token request
                 if (_log.shouldDebug())
                     _log.debug("[SSU] Sending Retry to: " + state);
                 pkt = _builder2.buildRetryPacket(state2, 0);
                 break;
 
-              default:
+            default:
                 if (_log.shouldWarn())
                     _log.warn("[SSU] Unhandled state " + istate + " on " + state);
                 return;
@@ -1354,42 +1354,42 @@ class EstablishmentManager {
     private void sendRequest(OutboundEstablishState state) {
         UDPPacket packet;
 
-            OutboundEstablishState2 state2 = (OutboundEstablishState2) state;
-            OutboundEstablishState.OutboundState ostate = state2.getState();
-            switch (ostate) {
-              case OB_STATE_REQUEST_SENT:
-              case OB_STATE_REQUEST_SENT_NEW_TOKEN:
+        OutboundEstablishState2 state2 = (OutboundEstablishState2) state;
+        OutboundEstablishState.OutboundState ostate = state2.getState();
+        switch (ostate) {
+            case OB_STATE_REQUEST_SENT:
+            case OB_STATE_REQUEST_SENT_NEW_TOKEN:
                 if (_log.shouldInfo())
                     _log.info("[SSU] Resending Session Request packet to: " + state);
                 // if already sent, get from the state to retx
                 packet = state2.getRetransmitSessionRequestPacket();
                 break;
 
-              case OB_STATE_NEEDS_TOKEN:
-              case OB_STATE_TOKEN_REQUEST_SENT:
+            case OB_STATE_NEEDS_TOKEN:
+            case OB_STATE_TOKEN_REQUEST_SENT:
                 if (_log.shouldDebug())
                     _log.debug("[SSU] Sending Token Request to: " + state);
                 packet = _builder2.buildTokenRequestPacket(state2);
                 break;
 
-              case OB_STATE_UNKNOWN:
-              case OB_STATE_RETRY_RECEIVED:
+            case OB_STATE_UNKNOWN:
+            case OB_STATE_RETRY_RECEIVED:
                 if (_log.shouldDebug())
                     _log.debug("[SSU] Sending Session Request to: " + state);
                 packet = _builder2.buildSessionRequestPacket(state2);
                 break;
 
-              case OB_STATE_INTRODUCED:
+            case OB_STATE_INTRODUCED:
                 if (_log.shouldDebug())
                     _log.debug("[SSU] Sending Session Request after introduction to: " + state);
                 packet = _builder2.buildSessionRequestPacket(state2);
                 break;
 
-              default:
+            default:
                 if (_log.shouldWarn())
                     _log.warn("[SSU] Unhandled state " + ostate + " on " + state);
                 return;
-            }
+        }
 
         if (packet != null) {
             _transport.send(packet);
@@ -1447,112 +1447,112 @@ class EstablishmentManager {
                         }
                         break;
 
-                        case INTRO_STATE_CONNECTED:
-                            bob = _transport.getPeerState(h);
-                            if (bob == null) {
-                                istate = INTRO_STATE_DISCONNECTED;
-                                state2.setIntroState(h, istate);
-                            }
-                            break;
+                    case INTRO_STATE_CONNECTED:
+                        bob = _transport.getPeerState(h);
+                        if (bob == null) {
+                            istate = INTRO_STATE_DISCONNECTED;
+                            state2.setIntroState(h, istate);
+                        }
+                        break;
 
-                    }
-                    if (bob != null && istate == INTRO_STATE_CONNECTED) {
-                        if (_log.shouldDebug())
+                }
+                if (bob != null && istate == INTRO_STATE_CONNECTED) {
+                    if (_log.shouldDebug())
                             _log.debug("[SSU] Found connected Introducer " + bob + " for " + state);
-                        long tag = addr.getIntroducerTag(i);
-                        boolean ok = sendRelayRequest(tag, (PeerState2) bob, state);
+                    long tag = addr.getIntroducerTag(i);
+                    boolean ok = sendRelayRequest(tag, (PeerState2) bob, state);
                         // this transitions the state
-                        if (ok)
+                    if (ok)
                             state2.introSent(h);
-                        else
+                    else
                             state2.setIntroState(h, INTRO_STATE_DISCONNECTED);
-                        return;
-                    }
+                    return;
                 }
             }
+        }
             // Otherwise, look for ones we already have RIs for, attempt to connect to each.
-            boolean sent = false;
-            for (int i = 0; i < count; i++) {
-                Hash h = addr.getIntroducerHash(i);
-                if (h != null) {
-                    RouterInfo bob = null;
-                    OutboundEstablishState2.IntroState istate = state2.getIntroState(h);
-                    OutboundEstablishState2.IntroState oldState = istate;
-                    switch (istate) {
-                        case INTRO_STATE_INIT:
-                        case INTRO_STATE_LOOKUP_SENT:
-                        case INTRO_STATE_HAS_RI:
-                            bob = _context.netDb().lookupRouterInfoLocally(h);
-                            if (bob != null)
+        boolean sent = false;
+        for (int i = 0; i < count; i++) {
+            Hash h = addr.getIntroducerHash(i);
+            if (h != null) {
+                RouterInfo bob = null;
+                OutboundEstablishState2.IntroState istate = state2.getIntroState(h);
+                OutboundEstablishState2.IntroState oldState = istate;
+                switch (istate) {
+                    case INTRO_STATE_INIT:
+                    case INTRO_STATE_LOOKUP_SENT:
+                    case INTRO_STATE_HAS_RI:
+                        bob = _context.netDb().lookupRouterInfoLocally(h);
+                        if (bob != null)
                                 istate = INTRO_STATE_HAS_RI;
-                            break;
-                    }
-                    if (bob != null && istate == INTRO_STATE_HAS_RI) {
-                        List<RouterAddress> addrs = _transport.getTargetAddresses(bob);
-                        for (RouterAddress ra : addrs) {
-                            byte[] ip = ra.getIP();
-                            int port = ra.getPort();
-                            if (ip == null || port <= 0)
+                        break;
+                }
+                if (bob != null && istate == INTRO_STATE_HAS_RI) {
+                    List<RouterAddress> addrs = _transport.getTargetAddresses(bob);
+                    for (RouterAddress ra : addrs) {
+                        byte[] ip = ra.getIP();
+                        int port = ra.getPort();
+                        if (ip == null || port <= 0)
                                 continue;
-                            RemoteHostId rhid = new RemoteHostId(ip, port);
-                            OutboundEstablishState oes = _outboundStates.get(rhid);
-                            if (oes != null) {
-                                if (_log.shouldDebug())
+                        RemoteHostId rhid = new RemoteHostId(ip, port);
+                        OutboundEstablishState oes = _outboundStates.get(rhid);
+                        if (oes != null) {
+                            if (_log.shouldDebug())
                                     _log.debug("[SSU] Awaiting pending connection to Introducer " + oes + " for " + state);
-                                break;
-                            }
-                            int version = _transport.getSSUVersion(ra);
-                            if (version == 2) {
-                                if (_log.shouldDebug())
+                            break;
+                        }
+                        int version = _transport.getSSUVersion(ra);
+                        if (version == 2) {
+                            if (_log.shouldDebug())
                                     _log.debug("[SSU] Connecting to Introducer " + bob + " for " + state);
                                 // arbitrary message because we have no way to connect for no reason
-                                DatabaseLookupMessage dlm = new DatabaseLookupMessage(_context);
-                                dlm.setSearchKey(h);
-                                dlm.setSearchType(DatabaseLookupMessage.Type.RI);
-                                long now = _context.clock().now();
-                                dlm.setMessageExpiration(now + 10*1000);
-                                dlm.setFrom(_context.routerHash());
-                                OutNetMessage m = new OutNetMessage(_context, dlm, now + 10*1000, OutNetMessage.PRIORITY_MY_NETDB_LOOKUP, bob);
-                                establish(m);
-                                istate = INTRO_STATE_CONNECTING;
+                            DatabaseLookupMessage dlm = new DatabaseLookupMessage(_context);
+                            dlm.setSearchKey(h);
+                            dlm.setSearchType(DatabaseLookupMessage.Type.RI);
+                            long now = _context.clock().now();
+                            dlm.setMessageExpiration(now + 10*1000);
+                            dlm.setFrom(_context.routerHash());
+                            OutNetMessage m = new OutNetMessage(_context, dlm, now + 10*1000, OutNetMessage.PRIORITY_MY_NETDB_LOOKUP, bob);
+                            establish(m);
+                            istate = INTRO_STATE_CONNECTING;
                                 // for now, just wait until this method is called again,
                                 // hopefully somebody has connected
-                                break;
-                            }
+                            break;
                         }
                     }
+                }
                     // if we didn't try to connect, it must have had a bad RI
-                    if (istate == INTRO_STATE_HAS_RI)
+                if (istate == INTRO_STATE_HAS_RI)
                         istate = INTRO_STATE_REJECTED;
-                    if (oldState != istate) {state2.setIntroState(h, istate);}
-                }
+                if (oldState != istate) {state2.setIntroState(h, istate);}
             }
-            if (sent) {
+        }
+        if (sent) {
                 // not really
-                state.introSent();
-                return;
-            }
+            state.introSent();
+            return;
+        }
             // Otherwise, look up the RIs first.
-            for (int i = 0; i < count; i++) {
-                Hash h = addr.getIntroducerHash(i);
-                if (h != null) {
-                    OutboundEstablishState2.IntroState istate = state2.getIntroState(h);
-                    if (istate == INTRO_STATE_INIT) {
-                        if (_log.shouldDebug())
+        for (int i = 0; i < count; i++) {
+            Hash h = addr.getIntroducerHash(i);
+            if (h != null) {
+                OutboundEstablishState2.IntroState istate = state2.getIntroState(h);
+                if (istate == INTRO_STATE_INIT) {
+                    if (_log.shouldDebug())
                             _log.debug("[SSU] Looking up Introducer " + h + " for " + state);
-                        istate = INTRO_STATE_LOOKUP_SENT;
-                        state2.setIntroState(h, istate);
+                    istate = INTRO_STATE_LOOKUP_SENT;
+                    state2.setIntroState(h, istate);
                         // TODO on success job
-                        _context.netDb().lookupRouterInfo(h, null, null, 10*1000);
-                        sent = true;
-                    }
+                    _context.netDb().lookupRouterInfo(h, null, null, 10*1000);
+                    sent = true;
                 }
             }
-            if (sent) {state.introSent();} // not really
-            else {
-                if (_log.shouldDebug()) {_log.debug("[SSU] No valid Introducers for " + state);}
-                processExpired(state);
-            }
+        }
+        if (sent) {state.introSent();} // not really
+        else {
+            if (_log.shouldDebug()) {_log.debug("[SSU] No valid Introducers for " + state);}
+            processExpired(state);
+        }
     }
 
     /**
@@ -2051,81 +2051,81 @@ class EstablishmentManager {
                        (istate == IB_STATE_RETRY_SENT && // limit time to get sess. req after retry
                         cur.getLifetime(now) >= 5 * InboundEstablishState.RETRANSMIT_DELAY)) {
                 iter.remove(); // took too long
-                    inboundState = cur;
-                    expired = true;
+                inboundState = cur;
+                expired = true;
+                break;
+            } else if (istate == IB_STATE_FAILED || istate == IB_STATE_COMPLETE) {
+                iter.remove();
+            } else {
+                long next = cur.getNextSendTime(); // this will always be > 0
+                if (next <= now) {
+                    inboundState = cur; // our turn...
                     break;
-                } else if (istate == IB_STATE_FAILED || istate == IB_STATE_COMPLETE) {
-                    iter.remove();
                 } else {
-                    long next = cur.getNextSendTime(); // this will always be > 0
-                    if (next <= now) {
-                        inboundState = cur; // our turn...
-                        break;
-                    } else {
                         // nothin' to do but wait for them to send us stuff,
                         // so let's move on to the next one being established
-                        if (next < nextSendTime) {nextSendTime = next;}
-                    }
+                    if (next < nextSendTime) {nextSendTime = next;}
                 }
             }
+        }
 
         if (inboundState != null) {
             synchronized (inboundState) {
                 InboundEstablishState.InboundState istate = inboundState.getState();
                 switch (istate) {
-                  case IB_STATE_REQUEST_RECEIVED:
-                  case IB_STATE_TOKEN_REQUEST_RECEIVED: // SSU2
-                  case IB_STATE_REQUEST_BAD_TOKEN_RECEIVED: // SSU2
-                    if (expired) {processExpired(inboundState);}
-                    else {sendCreated(inboundState);}
-                    break;
+                    case IB_STATE_REQUEST_RECEIVED:
+                    case IB_STATE_TOKEN_REQUEST_RECEIVED: // SSU2
+                    case IB_STATE_REQUEST_BAD_TOKEN_RECEIVED: // SSU2
+                        if (expired) {processExpired(inboundState);}
+                        else {sendCreated(inboundState);}
+                        break;
 
                   // SSU2 only in practice, should only get here if expired
-                  case IB_STATE_CONFIRMED_PARTIALLY:
-                    if (expired) {processExpired(inboundState);}
-                    break;
+                    case IB_STATE_CONFIRMED_PARTIALLY:
+                        if (expired) {processExpired(inboundState);}
+                        break;
 
-                  case IB_STATE_CREATED_SENT: // fallthrough
-                  case IB_STATE_RETRY_SENT: // SSU2
-                    if (expired) {processExpired(inboundState);}
-                    else if (inboundState.getNextSendTime() <= now) {sendCreated(inboundState);} // resend created or retry
-                    break;
+                    case IB_STATE_CREATED_SENT: // fallthrough
+                    case IB_STATE_RETRY_SENT: // SSU2
+                        if (expired) {processExpired(inboundState);}
+                        else if (inboundState.getNextSendTime() <= now) {sendCreated(inboundState);} // resend created or retry
+                        break;
 
-                  case IB_STATE_CONFIRMED_COMPLETELY:
-                    RouterIdentity remote = inboundState.getConfirmedIdentity();
-                    if (remote != null) {
-                        if (_context.banlist().isBanlistedForever(remote.calculateHash()) ||
-                            _context.banlist().isBanlistedHostile(remote.calculateHash())) {
-                            if (_log.shouldWarn()) {
-                                _log.warn("Dropping Inbound connection from " +
-                                (_context.banlist().isBanlistedForever(remote.calculateHash()) ? "permanently" : "") +
-                                " banlisted peer: " + remote.calculateHash());
-                            }
+                    case IB_STATE_CONFIRMED_COMPLETELY:
+                        RouterIdentity remote = inboundState.getConfirmedIdentity();
+                        if (remote != null) {
+                            if (_context.banlist().isBanlistedForever(remote.calculateHash()) ||
+                                _context.banlist().isBanlistedHostile(remote.calculateHash())) {
+                                if (_log.shouldWarn()) {
+                                    _log.warn("Dropping Inbound connection from " +
+                                        (_context.banlist().isBanlistedForever(remote.calculateHash()) ? "permanently" : "") +
+                                        " banlisted peer: " + remote.calculateHash());
+                                }
                             // So next time we will not accept the con, rather than doing the whole handshake
-                            _context.blocklist().add(inboundState.getSentIP());
+                                _context.blocklist().add(inboundState.getSentIP());
+                                inboundState.fail();
+                                processExpired(inboundState);
+                            } else {handleCompletelyEstablished(inboundState);}
+                        } else {
+                        // really shouldn't be this state
+                            if (_log.shouldWarn()) {_log.warn("Confirmed with invalid? " + inboundState);}
                             inboundState.fail();
                             processExpired(inboundState);
-                        } else {handleCompletelyEstablished(inboundState);}
-                    } else {
-                        // really shouldn't be this state
-                        if (_log.shouldWarn()) {_log.warn("Confirmed with invalid? " + inboundState);}
-                        inboundState.fail();
-                        processExpired(inboundState);
-                    }
-                    break;
+                        }
+                        break;
 
-                  case IB_STATE_COMPLETE: // fall through
-                  case IB_STATE_FAILED: // leak here if fail() was called in IES???
-                    break; // already removed;
+                    case IB_STATE_COMPLETE: // fall through
+                    case IB_STATE_FAILED: // leak here if fail() was called in IES???
+                        break; // already removed;
 
-                  case IB_STATE_UNKNOWN:
+                    case IB_STATE_UNKNOWN:
                     // Can't happen, always call receiveSessionRequest() before putting in map
-                    if (_log.shouldError()) {_log.error("hrm, state is unknown for " + inboundState);}
-                    break;
+                        if (_log.shouldError()) {_log.error("hrm, state is unknown for " + inboundState);}
+                        break;
 
-                  default:
-                    if (_log.shouldWarn()) {_log.warn("Unhandled state on " + inboundState);}
-                    break;
+                    default:
+                        if (_log.shouldWarn()) {_log.warn("Unhandled state on " + inboundState);}
+                        break;
                 }
             }
             // ok, since there was something to do, we want to loop again
@@ -2625,11 +2625,11 @@ class EstablishmentManager {
      */
     private static class TokenComparator implements Comparator<Map.Entry<RemoteHostId, Token>> {
         public int compare(Map.Entry<RemoteHostId, Token> l, Map.Entry<RemoteHostId, Token> r) {
-             long le = l.getValue().expires;
-             long re = r.getValue().expires;
-             if (le < re) return -1;
-             if (le > re) return 1;
-             return 0;
+            long le = l.getValue().expires;
+            long re = r.getValue().expires;
+            if (le < re) return -1;
+            if (le > re) return 1;
+            return 0;
         }
     }
 
@@ -2776,9 +2776,9 @@ class EstablishmentManager {
                 try {doPass();}
                 catch (RuntimeException re) {
                     if (re.toString().contains("unsupported address type")) {
-                       if (_log.shouldWarn()) {
-                           _log.warn("Error in the establisher: Unsupported address type (localhost?)");
-                       }
+                        if (_log.shouldWarn()) {
+                            _log.warn("Error in the establisher: Unsupported address type (localhost?)");
+                        }
                     } else {_log.error("Error in the establisher", re);}
                     // don't loop too fast
                     try {Thread.sleep(500);} catch (InterruptedException ie) {}

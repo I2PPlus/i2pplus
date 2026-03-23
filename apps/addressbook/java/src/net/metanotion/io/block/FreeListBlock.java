@@ -35,10 +35,10 @@ import net.metanotion.io.RandomAccessInterface;
 
 /**
  * Manages free pages in a block file.
- * 
+ *
  * <p>Tracks available pages for allocation using a linked list of blocks.
  * Each block contains multiple free page references and fits on a single disk page.</p>
- * 
+ *
  * <p>On-disk format:</p>
  * <pre>
  *    Magic number (long)
@@ -46,7 +46,7 @@ import net.metanotion.io.RandomAccessInterface;
  *    size (unsigned int)
  *    that many free pages (unsigned ints)
  * </pre>
- * 
+ *
  * <p>Free page format:</p>
  * <pre>
  *    Magic number (long)

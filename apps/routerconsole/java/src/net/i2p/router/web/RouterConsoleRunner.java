@@ -195,11 +195,11 @@ public class RouterConsoleRunner implements RouterApp {
             }
         }
         if (_listenHost == null)
-           _listenHost = PortMapper.DEFAULT_HOST;
+            _listenHost = PortMapper.DEFAULT_HOST;
         if (_sslListenHost == null)
-           _sslListenHost = _listenHost;
+            _sslListenHost = _listenHost;
         if (_webAppsDir == null)
-           _webAppsDir = DEFAULT_WEBAPPS_DIR;
+            _webAppsDir = DEFAULT_WEBAPPS_DIR;
         // _listenPort and _sslListenPort are not defaulted, if one or the other is null, do not enable
         if (_listenPort == null && _sslListenPort == null) {
             System.err.println(USAGE);
@@ -319,14 +319,14 @@ public class RouterConsoleRunner implements RouterApp {
             // Xubuntu XFCE works but doesn't look very good
             // Ubuntu Unity was far too buggy to enable
             // Ubuntu GNOME does not work, SystemTray.isSupported() returns false
-            String xdg = System.getenv("XDG_CURRENT_DESKTOP");
-            boolean dflt = !SystemVersion.isService() &&
+        String xdg = System.getenv("XDG_CURRENT_DESKTOP");
+        boolean dflt = !SystemVersion.isService() &&
                            (SystemVersion.isWindows() ||
                             SystemVersion.isMac() ||
                             //"XFCE".equals(xdg) ||
                             "KDE".equals(xdg) ||
                             "LXDE".equals(xdg));
-            return context.getProperty(PROP_DTG_ENABLED, false);
+        return context.getProperty(PROP_DTG_ENABLED, false);
     }
 
     private void startTrayApp() {
@@ -830,8 +830,8 @@ public class RouterConsoleRunner implements RouterApp {
                         System.err.println("Can't find nowebapp.jsp?");
                     }
                 } catch (Throwable me) {
-                     System.err.println(me);
-                     me.printStackTrace();
+                    System.err.println(me);
+                    me.printStackTrace();
                 }
             }
         }
@@ -840,21 +840,21 @@ public class RouterConsoleRunner implements RouterApp {
         t.setPriority(Thread.NORM_PRIORITY - 1);
         t.start();
 
-            ConsoleUpdateManager um = new ConsoleUpdateManager(_context, _mgr, null);
-            um.start();
-            NewsManager nm = new NewsManager(_context, _mgr, null);
-            nm.startup();
+        ConsoleUpdateManager um = new ConsoleUpdateManager(_context, _mgr, null);
+        um.start();
+        NewsManager nm = new NewsManager(_context, _mgr, null);
+        nm.startup();
 
-            if (PluginStarter.pluginsEnabled(_context)) {
-                t = new I2PAppThread(new PluginStarter(_context), "PluginStarter", true);
-                t.setPriority(Thread.NORM_PRIORITY - 1);
-                t.start();
-            }
+        if (PluginStarter.pluginsEnabled(_context)) {
+            t = new I2PAppThread(new PluginStarter(_context), "PluginStarter", true);
+            t.setPriority(Thread.NORM_PRIORITY - 1);
+            t.start();
+        }
             // stat summarizer registers its own hook
             // RouterAppManager registers its own hook
-            if (_mgr == null)
+        if (_mgr == null)
                 _context.addShutdownTask(new ServerShutdown());
-            ConfigServiceHandler.registerSignalHandler(_context);
+        ConfigServiceHandler.registerSignalHandler(_context);
     }
 
     /**
@@ -1149,14 +1149,14 @@ public class RouterConsoleRunner implements RouterApp {
      * @since 0.9.24
      */
     private static class HostComparator implements Comparator<String>, Serializable {
-         public int compare(String l, String r) {
-             boolean l4 = l.contains(".");
-             boolean r4 = r.contains(".");
-             if (l4 && !r4)
+        public int compare(String l, String r) {
+            boolean l4 = l.contains(".");
+            boolean r4 = r.contains(".");
+            if (l4 && !r4)
                  return -1;
-             if (r4 && !l4)
+            if (r4 && !l4)
                  return 1;
-             return l.compareTo(r);
+            return l.compareTo(r);
         }
     }
 }

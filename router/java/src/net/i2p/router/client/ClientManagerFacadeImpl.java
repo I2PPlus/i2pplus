@@ -132,7 +132,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
                 Hash destHash = dest.calculateHash();
                 long lastLog = _lastExpiredLogTime.getOrDefault(destHash, 0L);
                 boolean shouldLog = (now - lastLog) > LOG_THROTTLE;
-                
+
                 if (timeSinceExpiration > MAX_TIME_TO_REBUILD) {
                     if (shouldLog) {
                         if (_log.shouldError()) {

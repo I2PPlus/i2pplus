@@ -56,11 +56,11 @@ public class ChunkedWriter extends FilterWriter {
      * @throws IllegalArgumentException if the chunk size is &lt;= 0
      */
     public ChunkedWriter(final Writer writer, final int chunkSize) {
-       super(writer);
-       if (chunkSize <= 0) {
-           throw new IllegalArgumentException();
-       }
-       this.chunkSize = chunkSize;
+        super(writer);
+        if (chunkSize <= 0) {
+            throw new IllegalArgumentException();
+        }
+        this.chunkSize = chunkSize;
     }
 
     /**

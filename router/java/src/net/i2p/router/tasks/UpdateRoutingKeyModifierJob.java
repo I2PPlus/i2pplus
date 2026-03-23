@@ -27,7 +27,7 @@ public class UpdateRoutingKeyModifierJob extends JobImpl {
 
     /**
      * Create a new routing key modifier update job.
-     * 
+     *
      * @param ctx the router context for accessing router services
      * @since 0.8.12 moved from Router.java
      */
@@ -38,19 +38,19 @@ public class UpdateRoutingKeyModifierJob extends JobImpl {
 
     /**
      * Get the name of this job.
-     * 
+     *
      * @return job name for logging and identification
      */
     public String getName() { return "Update Routing Key Modifier"; }
 
     /**
      * Update the routing key modifier if needed.
-     * 
+     *
      * This job runs periodically (every 15 minutes maximum) to ensure
      * the routing key modifier is updated daily at midnight. The routing
      * key modifier is used in cryptographic operations and must be updated
      * regularly for security.
-     * 
+     *
      * If the modifier data changes, notifies the network database that
      * routing keys have changed.
      */

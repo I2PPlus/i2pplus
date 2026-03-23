@@ -323,21 +323,21 @@ public class I2PDefaultServlet extends DefaultServlet {
         for (int i = 0; i < raw.length(); i++) {
             char c = raw.charAt(i);
             switch(c) {
-              case '"':
-                  buf.append("%22");
-                  continue;
-              case '\'':
-                  buf.append("%27");
-                  continue;
-              case '<':
-                  buf.append("%3C");
-                  continue;
-              case '>':
-                  buf.append("%3E");
-                  continue;
-              default:
-                  buf.append(c);
-                  continue;
+                case '"':
+                    buf.append("%22");
+                    continue;
+                case '\'':
+                    buf.append("%27");
+                    continue;
+                case '<':
+                    buf.append("%3C");
+                    continue;
+                case '>':
+                    buf.append("%3E");
+                    continue;
+                default:
+                    buf.append(c);
+                    continue;
             }
         }
 

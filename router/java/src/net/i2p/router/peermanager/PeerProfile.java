@@ -424,7 +424,7 @@ public class PeerProfile {
                 for (int i = 0; i < THROUGHPUT_COUNT; i++) {
                     if (tunnelByteLifetime > _peakTunnelThroughput[i]) {
                         for (int j = THROUGHPUT_COUNT-1; j > i; j--)
-                           _peakTunnelThroughput[j] = _peakTunnelThroughput[j-1];
+                            _peakTunnelThroughput[j] = _peakTunnelThroughput[j-1];
                         _peakTunnelThroughput[i] = tunnelByteLifetime;
                         break;
                     }
@@ -457,7 +457,7 @@ public class PeerProfile {
                 for (int i = 0; i < THROUGHPUT_COUNT; i++) {
                     if (size > _peakTunnel1mThroughput[i]) {
                         for (int j = THROUGHPUT_COUNT-1; j > i; j--)
-                           _peakTunnel1mThroughput[j] = _peakTunnel1mThroughput[j-1];
+                            _peakTunnel1mThroughput[j] = _peakTunnel1mThroughput[j-1];
                         _peakTunnel1mThroughput[i] = size;
                         break;
                     }

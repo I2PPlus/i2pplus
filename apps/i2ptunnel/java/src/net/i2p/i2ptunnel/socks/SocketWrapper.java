@@ -37,9 +37,9 @@ class SocketWrapper implements I2PSocket {
     private static final Destination DUMMY_DEST = new Destination();
     static {
         try {
-           DUMMY_DEST.fromByteArray(new byte[387]);
+            DUMMY_DEST.fromByteArray(new byte[387]);
         } catch (DataFormatException dfe) {
-           throw new RuntimeException(dfe);
+            throw new RuntimeException(dfe);
         }
     }
 

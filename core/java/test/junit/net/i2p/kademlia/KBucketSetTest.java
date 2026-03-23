@@ -25,8 +25,8 @@ import net.i2p.util.Log;
 public class KBucketSetTest extends TestCase{
 	private I2PAppContext context;
 	private KBucketSet<Hash> set;
-        private Hash usHash;
-        private Log log;
+    private Hash usHash;
+    private Log log;
 	private static final int K = 8;
 	private static final int B = 1;
 

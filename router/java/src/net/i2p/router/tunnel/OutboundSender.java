@@ -26,7 +26,7 @@ class OutboundSender implements TunnelGateway.Sender {
         //if (_log.shouldDebug())
         //    _log.debug("preprocessed data going out " + _config + ": " + Base64.encode(preprocessed));
         //if (USE_ENCRYPTION)
-            _processor.process(preprocessed, 0, preprocessed.length);
+        _processor.process(preprocessed, 0, preprocessed.length);
         //if (_log.shouldDebug())
         //    _log.debug("after wrapping up the preprocessed data on " + _config);
         long rv = receiver.receiveEncrypted(preprocessed);

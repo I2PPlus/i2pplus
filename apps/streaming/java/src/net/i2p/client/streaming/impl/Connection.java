@@ -435,9 +435,9 @@ class Connection {
 
                 // RFC 6298 section 5.1
                 if (_retransmitEvent.scheduleIfNotRunning(timeout)) {
-                   if (_log.shouldDebug()) {
-                       _log.debug("[" + Connection.this + "] Resend in " + timeout + "ms for " + packet);
-                   }
+                    if (_log.shouldDebug()) {
+                        _log.debug("[" + Connection.this + "] Resend in " + timeout + "ms for " + packet);
+                    }
 
                 } else {
                     if (_log.shouldDebug()) {
@@ -487,7 +487,7 @@ class Connection {
         if (ackThrough < _highestAckedThrough) {
             // dupack which won't tell us anything
         } else {
-           if (nacks == null) {
+            if (nacks == null) {
                 _highestAckedThrough = ackThrough;
             } else {
                 long lowest = -1;
@@ -1054,9 +1054,9 @@ class Connection {
     public void setChoking(boolean on) {
         if (on != _isChoking) {
             _isChoking = on;
-           if (_log.shouldWarn()) {_log.warn("Choking changed to " + on + " on " + this);}
-           if (!on) {_unchokesToSend.set(UNCHOKES_TO_SEND);}
-           ackImmediately();
+            if (_log.shouldWarn()) {_log.warn("Choking changed to " + on + " on " + this);}
+            if (!on) {_unchokesToSend.set(UNCHOKES_TO_SEND);}
+            ackImmediately();
         } else if (on) {ackImmediately();}
     }
 
@@ -1067,8 +1067,8 @@ class Connection {
      */
     public void setChoked(boolean on) {
         if (on != _isChoked) {
-           _isChoked = on;
-           if (_log.shouldWarn()) {_log.warn("Choked changed to " + on + " on " + this);}
+            _isChoked = on;
+            if (_log.shouldWarn()) {_log.warn("Choked changed to " + on + " on " + this);}
         }
         if (on) {
             congestionOccurred();
@@ -1416,7 +1416,7 @@ class Connection {
         @Override
         public void timeReached() {
 
-           if (_resetSentOn.get() > 0 || _resetReceived.get() || _finalDisconnect.get()) {
+            if (_resetSentOn.get() > 0 || _resetReceived.get() || _finalDisconnect.get()) {
                 if (_log.shouldDebug()) {
                     _log.debug(Connection.this + " rtx event after close or reset");
                 }
@@ -1526,7 +1526,7 @@ class Connection {
                         if (nResends == 1) {_activeResends.incrementAndGet();}
                         sentAny = true;
                     } else if (_log.shouldDebug()) {
-                       _log.debug(Connection.this + " could not resend packet " + packet);
+                        _log.debug(Connection.this + " could not resend packet " + packet);
                     }
                 }
             }
@@ -1653,7 +1653,7 @@ class Connection {
                      * backoff for more aggressive retransmit timing.
                      * Window size shrinks for congestion control.
                      */
-                     _options.doubleRTO();
+                    _options.doubleRTO();
 
                     if (_packet.getNumSends() == 1) {
                         _ssthresh = Math.max((int)(_bwEstimator.getBandwidthEstimate() * _options.getMinRTT()), 2);
@@ -1710,7 +1710,7 @@ class Connection {
                     // first resend for this packet ?
                     if (numSends == 2) {_activeResends.incrementAndGet();}
                     if (_log.shouldInfo()) {
-                            _log.info("Resent packet " + _packet +
+                        _log.info("Resent packet " + _packet +
                                   "(fast) " +
                                   "\n* Next resend in " + (timeout / 1000) + "s" +
                                   "\n* Active resends: " + _activeResends +

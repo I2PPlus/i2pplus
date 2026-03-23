@@ -90,7 +90,7 @@ class KBucketImpl<T extends SimpleDataStructure> implements KBucket<T> {
 
     public void getEntries(SelectionCollector<T> collector) {
         for (T h : _entries) {
-             collector.add(h);
+            collector.add(h);
         }
     }
 

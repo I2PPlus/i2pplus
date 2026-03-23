@@ -68,8 +68,8 @@ class MessagePayloadMessageHandler extends HandlerImpl {
     private Payload decryptPayload(MessagePayloadMessage msg, I2PSessionImpl session) throws DataFormatException {
         Payload payload = msg.getPayload();
         //if (!I2CPMessageProducer.END_TO_END_CRYPTO) {
-            payload.setUnencryptedData(payload.getEncryptedData());
-            return payload;
+        payload.setUnencryptedData(payload.getEncryptedData());
+        return payload;
         //}
 
         //byte[] data = _context.elGamalAESEngine().decrypt(payload.getEncryptedData(), session.getDecryptionKey());

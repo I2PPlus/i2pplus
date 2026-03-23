@@ -180,17 +180,17 @@ public class GarlicMessageBuilder {
         SessionKey curKey = skm.getCurrentOrNewKey(key);
         SessionTag curTag = skm.consumeNextAvailableTag(key, curKey);
 
-            if (log.shouldDebug()) {
-                int availTags = skm.getAvailableTags(key, curKey);
-                log.debug("Available tags for encryption: " + availTags + "; Low threshold: " + lowTagsThreshold);
-            }
+        if (log.shouldDebug()) {
+            int availTags = skm.getAvailableTags(key, curKey);
+            log.debug("Available tags for encryption: " + availTags + "; Low threshold: " + lowTagsThreshold);
+        }
 
-            if (numTagsToDeliver > 0 && skm.shouldSendTags(key, curKey, lowTagsThreshold)) {
-                for (int i = 0; i < numTagsToDeliver; i++)
+        if (numTagsToDeliver > 0 && skm.shouldSendTags(key, curKey, lowTagsThreshold)) {
+            for (int i = 0; i < numTagsToDeliver; i++)
                     wrappedTags.add(new SessionTag(true));
-                if (log.shouldInfo())
+            if (log.shouldInfo())
                     log.info("Too few tags available so we're including " + numTagsToDeliver);
-            }
+        }
 
         wrappedKey.setData(curKey.getData());
 

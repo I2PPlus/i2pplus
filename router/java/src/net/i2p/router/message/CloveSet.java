@@ -28,10 +28,10 @@ public class CloveSet {
      *  @param cert non-null
      */
     public CloveSet(GarlicClove[] cloves, Certificate cert, long msgId, long expiration) {
-   _cloves = cloves;
+        _cloves = cloves;
         _cert = cert;
-   _msgId = msgId;
-   _expiration = expiration;
+        _msgId = msgId;
+        _expiration = expiration;
     }
 
     public int getCloveCount() { return _cloves.length; }
@@ -47,22 +47,22 @@ public class CloveSet {
 
     @Override
     public String toString() {
-	StringBuilder buf = new StringBuilder(128);
-	buf.append("CloveSet: ID ").append(_msgId)
+        StringBuilder buf = new StringBuilder(128);
+        buf.append("CloveSet: ID ").append(_msgId)
            .append(' ').append(_cert)
            .append(" expires " ).append(DataHelper.formatTime(_expiration))
            .append(" cloves: " ).append(_cloves.length)
-	   .append(" {");
-	for (int i = 0; i < _cloves.length; i++) {
-	    GarlicClove clove = _cloves[i];
-	    if (clove.getData() != null)
-		buf.append(clove.getData().getClass().getSimpleName());
-	    else
-		buf.append("[null clove]");
+        .append(" {");
+        for (int i = 0; i < _cloves.length; i++) {
+            GarlicClove clove = _cloves[i];
+            if (clove.getData() != null)
+                buf.append(clove.getData().getClass().getSimpleName());
+            else
+                buf.append("[null clove]");
             if (i < _cloves.length - 1)
-		buf.append(", ");
-	}
-	buf.append('}');
-	return buf.toString();
+                buf.append(", ");
+        }
+        buf.append('}');
+        return buf.toString();
     }
 }

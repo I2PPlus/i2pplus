@@ -359,9 +359,9 @@ public class HomeHelper extends HelperBase {
                 }
             }
             buf.append("\n<div class=\"applink");
-                if (url.contains("i2pmetrics") || url.contains("paste.r4sas") || url.contains("speedtest") ||
-                url.contains("vuldb") || url.contains("meduza") || url.contains("mdn") || url.contains("ardullm") ||
-                url.contains("w3schools") || url.contains("translate.idk")) {
+            if (url.contains("i2pmetrics") || url.contains("paste.r4sas") || url.contains("speedtest") ||
+                    url.contains("vuldb") || url.contains("meduza") || url.contains("mdn") || url.contains("ardullm") ||
+                    url.contains("w3schools") || url.contains("translate.idk")) {
                 buf.append(" js");
             }
             buf.append("\" style=display:inline-block;text-align:center><div class=appicon><a href=\"")
@@ -376,11 +376,11 @@ public class HomeHelper extends HelperBase {
                .append(app.desc)
                .append("\">")
                .append(app.name)
-               .append("</a></div></td></tr></table></div>");
-            }
-            buf.append("</div>\n");
-            return buf.toString();
+                .append("</a></div></td></tr></table></div>");
         }
+        buf.append("</div>\n");
+        return buf.toString();
+    }
 
     private String renderConfig(Collection<App> apps) {
         StringBuilder buf = new StringBuilder(64*1024);
@@ -392,18 +392,18 @@ public class HomeHelper extends HelperBase {
            .append(_t("Name"))
            .append("</th><th>")
            .append(_t("URL"))
-           .append("</th></tr>\n");
+            .append("</th></tr>\n");
         for (App app : apps) {
             String url = DataHelper.escapeHTML(app.url);
             buf.append("<tr><td class=center><input type=checkbox class=optbox name=\"delete_")
                .append(app.name).append("\" id=\"");
             if (url.contains("%s")) {buf.append("search_");}
             buf.append(app.name.replace(" ", "_").replace("\'", ""))
-               .append("\"></td>");
+                .append("\"></td>");
             if (app.icon != null) {
                 buf.append("<td><img width=20 height=20 alt=\"\" src=\"")
                    .append(app.icon)
-                   .append("\">");
+                    .append("\">");
             } else {buf.append("<td class=noicon>");}
             buf.append("</td><td><label for=\"");
             if (url.contains("%s")) {buf.append("search_");}
@@ -419,7 +419,7 @@ public class HomeHelper extends HelperBase {
         }
         buf.append("<tr class=addnew><td colspan=2><b>")
            .append(_t("Add"))
-           .append(":</b></td><td><input type=text name=nofilter_name></td><td><input type=text size=40 name=nofilter_url></td></tr></table>\n");
+            .append(":</b></td><td><input type=text name=nofilter_name></td><td><input type=text size=40 name=nofilter_url></td></tr></table>\n");
         return buf.toString();
     }
 

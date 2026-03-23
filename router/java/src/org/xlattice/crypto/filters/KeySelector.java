@@ -144,10 +144,10 @@ public class KeySelector {
     /** AND with byte to expose index-many bits */
     private final static int[] UNMASK = {
  // 0  1  2  3   4   5   6    7    8   9     10   11     12    13     14     15
-    0, 1, 3, 7, 15, 31, 63, 127, 255, 511, 1023, 2047, 4095, 8191, 16383, 32767};
+        0, 1, 3, 7, 15, 31, 63, 127, 255, 511, 1023, 2047, 4095, 8191, 16383, 32767};
     /** AND with byte to zero out index-many bits */
     private final static int[] MASK   = {
-    ~0,~1,~3,~7,~15,~31,~63,~127,~255,~511,~1023,~2047,~4095,~8191,~16383,~32767};
+        ~0,~1,~3,~7,~15,~31,~63,~127,~255,~511,~1023,~2047,~4095,~8191,~16383,~32767};
 
     private final static int TWO_UP_15 = 32 * 1024;
 
@@ -216,9 +216,9 @@ public class KeySelector {
      *
      * @author Jim Dixon
      */
-     public class GenericBitSelector implements BitSelector {
+    public class GenericBitSelector implements BitSelector {
          /** Default constructor. */
-         public GenericBitSelector() {}
+        public GenericBitSelector() {}
          /**
           * Extracts k bit offsets from key data using 5-bit stride algorithm.
           *
@@ -238,7 +238,7 @@ public class KeySelector {
           * @param length number of bytes to process
           * @param bitOffset output array of length k to store calculated bit offsets
           */
-         public void getBitSelectors(byte[] b, int offset, int length, int[] bitOffset) {
+        public void getBitSelectors(byte[] b, int offset, int length, int[] bitOffset) {
             int curBit = 8 * offset;
             int curByte;
             for (int j = 0; j < k; j++) {
@@ -313,9 +313,9 @@ public class KeySelector {
      *
      * @author Jim Dixon
      */
-     public class GenericWordSelector implements WordSelector {
+    public class GenericWordSelector implements WordSelector {
          /** Default constructor. */
-         public GenericWordSelector() {}
+        public GenericWordSelector() {}
          /**
           * Extracts k word offsets from key data using variable stride algorithm.
          *

@@ -206,14 +206,14 @@ class OutboundEstablishState {
         if (_queuedMessages.isEmpty()) {
             I2NPMessage m = msg.getMessage();
             if (m.getType() == DatabaseStoreMessage.MESSAGE_TYPE) {
-               DatabaseStoreMessage dsm = (DatabaseStoreMessage) m;
-               if (dsm.getKey().equals(_context.routerHash())) {
+                DatabaseStoreMessage dsm = (DatabaseStoreMessage) m;
+                if (dsm.getKey().equals(_context.routerHash())) {
                    // version 2 sends our RI in handshake
-                   if (getVersion() > 1)
-                       return;
-                   _isFirstMessageOurDSM = true;
-               }
-           }
+                    if (getVersion() > 1)
+                        return;
+                    _isFirstMessageOurDSM = true;
+                }
+            }
         }
         // chance of a duplicate here in a race, that's ok
         if (!_queuedMessages.contains(msg))

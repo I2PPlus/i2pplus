@@ -35,19 +35,19 @@ import java.util.Arrays;
  */
 public final class BitMatrix implements Cloneable {
 
-  private final int width;
-  private final int height;
-  private final int rowSize;
-  private final int[] bits;
+    private final int width;
+    private final int height;
+    private final int rowSize;
+    private final int[] bits;
 
   /**
    * Creates an empty square {@code BitMatrix}.
    *
    * @param dimension height and width
    */
-  public BitMatrix(int dimension) {
-    this(dimension, dimension);
-  }
+    public BitMatrix(int dimension) {
+        this(dimension, dimension);
+    }
 
   /**
    * Creates an empty {@code BitMatrix}.
@@ -55,22 +55,22 @@ public final class BitMatrix implements Cloneable {
    * @param width bit matrix width
    * @param height bit matrix height
    */
-  public BitMatrix(int width, int height) {
-    if (width < 1 || height < 1) {
-      throw new IllegalArgumentException("Both dimensions must be greater than 0");
+    public BitMatrix(int width, int height) {
+        if (width < 1 || height < 1) {
+            throw new IllegalArgumentException("Both dimensions must be greater than 0");
+        }
+        this.width = width;
+        this.height = height;
+        this.rowSize = (width + 31) / 32;
+        bits = new int[rowSize * height];
     }
-    this.width = width;
-    this.height = height;
-    this.rowSize = (width + 31) / 32;
-    bits = new int[rowSize * height];
-  }
 
-  private BitMatrix(int width, int height, int rowSize, int[] bits) {
-    this.width = width;
-    this.height = height;
-    this.rowSize = rowSize;
-    this.bits = bits;
-  }
+    private BitMatrix(int width, int height, int rowSize, int[] bits) {
+        this.width = width;
+        this.height = height;
+        this.rowSize = rowSize;
+        this.bits = bits;
+    }
 
   /**
    * Interprets a 2D array of booleans as a {@code BitMatrix}, where "true" means an "on" bit.
@@ -78,77 +78,77 @@ public final class BitMatrix implements Cloneable {
    * @param image bits of the image, as a row-major 2D array. Elements are arrays representing rows
    * @return {@code BitMatrix} representation of image
    */
-  public static BitMatrix parse(boolean[][] image) {
-    int height = image.length;
-    int width = image[0].length;
-    BitMatrix bits = new BitMatrix(width, height);
-    for (int i = 0; i < height; i++) {
-      boolean[] imageI = image[i];
-      for (int j = 0; j < width; j++) {
-        if (imageI[j]) {
-          bits.set(j, i);
+    public static BitMatrix parse(boolean[][] image) {
+        int height = image.length;
+        int width = image[0].length;
+        BitMatrix bits = new BitMatrix(width, height);
+        for (int i = 0; i < height; i++) {
+            boolean[] imageI = image[i];
+            for (int j = 0; j < width; j++) {
+                if (imageI[j]) {
+                    bits.set(j, i);
+                }
+            }
         }
-      }
-    }
-    return bits;
-  }
-
-  public static BitMatrix parse(String stringRepresentation, String setString, String unsetString) {
-    if (stringRepresentation == null) {
-      throw new IllegalArgumentException();
+        return bits;
     }
 
-    boolean[] bits = new boolean[stringRepresentation.length()];
-    int bitsPos = 0;
-    int rowStartPos = 0;
-    int rowLength = -1;
-    int nRows = 0;
-    int pos = 0;
-    while (pos < stringRepresentation.length()) {
-      if (stringRepresentation.charAt(pos) == '\n' ||
-          stringRepresentation.charAt(pos) == '\r') {
-        if (bitsPos > rowStartPos) {
-          if (rowLength == -1) {
-            rowLength = bitsPos - rowStartPos;
-          } else if (bitsPos - rowStartPos != rowLength) {
-            throw new IllegalArgumentException("row lengths do not match");
-          }
-          rowStartPos = bitsPos;
-          nRows++;
+    public static BitMatrix parse(String stringRepresentation, String setString, String unsetString) {
+        if (stringRepresentation == null) {
+            throw new IllegalArgumentException();
         }
-        pos++;
-      }  else if (stringRepresentation.startsWith(setString, pos)) {
-        pos += setString.length();
-        bits[bitsPos] = true;
-        bitsPos++;
-      } else if (stringRepresentation.startsWith(unsetString, pos)) {
-        pos += unsetString.length();
-        bits[bitsPos] = false;
-        bitsPos++;
-      } else {
-        throw new IllegalArgumentException(
+
+        boolean[] bits = new boolean[stringRepresentation.length()];
+        int bitsPos = 0;
+        int rowStartPos = 0;
+        int rowLength = -1;
+        int nRows = 0;
+        int pos = 0;
+        while (pos < stringRepresentation.length()) {
+            if (stringRepresentation.charAt(pos) == '\n' ||
+                stringRepresentation.charAt(pos) == '\r') {
+                if (bitsPos > rowStartPos) {
+                    if (rowLength == -1) {
+                        rowLength = bitsPos - rowStartPos;
+                    } else if (bitsPos - rowStartPos != rowLength) {
+                        throw new IllegalArgumentException("row lengths do not match");
+                    }
+                    rowStartPos = bitsPos;
+                    nRows++;
+                }
+                pos++;
+            }  else if (stringRepresentation.startsWith(setString, pos)) {
+                pos += setString.length();
+                bits[bitsPos] = true;
+                bitsPos++;
+            } else if (stringRepresentation.startsWith(unsetString, pos)) {
+                pos += unsetString.length();
+                bits[bitsPos] = false;
+                bitsPos++;
+            } else {
+                throw new IllegalArgumentException(
             "illegal character encountered: " + stringRepresentation.substring(pos));
-      }
-    }
+            }
+        }
 
     // no EOL at end?
-    if (bitsPos > rowStartPos) {
-      if (rowLength == -1) {
-        rowLength = bitsPos - rowStartPos;
-      } else if (bitsPos - rowStartPos != rowLength) {
-        throw new IllegalArgumentException("row lengths do not match");
-      }
-      nRows++;
-    }
+        if (bitsPos > rowStartPos) {
+            if (rowLength == -1) {
+                rowLength = bitsPos - rowStartPos;
+            } else if (bitsPos - rowStartPos != rowLength) {
+                throw new IllegalArgumentException("row lengths do not match");
+            }
+            nRows++;
+        }
 
-    BitMatrix matrix = new BitMatrix(rowLength, nRows);
-    for (int i = 0; i < bitsPos; i++) {
-      if (bits[i]) {
-        matrix.set(i % rowLength, i / rowLength);
-      }
+        BitMatrix matrix = new BitMatrix(rowLength, nRows);
+        for (int i = 0; i < bitsPos; i++) {
+            if (bits[i]) {
+                matrix.set(i % rowLength, i / rowLength);
+            }
+        }
+        return matrix;
     }
-    return matrix;
-  }
 
   /**
    * <p>Gets the requested bit, where true means black.</p>
@@ -157,10 +157,10 @@ public final class BitMatrix implements Cloneable {
    * @param y The vertical component (i.e. which row)
    * @return value of given bit in matrix
    */
-  public boolean get(int x, int y) {
-    int offset = y * rowSize + (x / 32);
-    return ((bits[offset] >>> (x & 0x1f)) & 1) != 0;
-  }
+    public boolean get(int x, int y) {
+        int offset = y * rowSize + (x / 32);
+        return ((bits[offset] >>> (x & 0x1f)) & 1) != 0;
+    }
 
   /**
    * <p>Sets the given bit to true.</p>
@@ -168,15 +168,15 @@ public final class BitMatrix implements Cloneable {
    * @param x The horizontal component (i.e. which column)
    * @param y The vertical component (i.e. which row)
    */
-  public void set(int x, int y) {
-    int offset = y * rowSize + (x / 32);
-    bits[offset] |= 1 << (x & 0x1f);
-  }
+    public void set(int x, int y) {
+        int offset = y * rowSize + (x / 32);
+        bits[offset] |= 1 << (x & 0x1f);
+    }
 
-  public void unset(int x, int y) {
-    int offset = y * rowSize + (x / 32);
-    bits[offset] &= ~(1 << (x & 0x1f));
-  }
+    public void unset(int x, int y) {
+        int offset = y * rowSize + (x / 32);
+        bits[offset] &= ~(1 << (x & 0x1f));
+    }
 
   /**
    * <p>Flips the given bit.</p>
@@ -184,10 +184,10 @@ public final class BitMatrix implements Cloneable {
    * @param x The horizontal component (i.e. which column)
    * @param y The vertical component (i.e. which row)
    */
-  public void flip(int x, int y) {
-    int offset = y * rowSize + (x / 32);
-    bits[offset] ^= 1 << (x & 0x1f);
-  }
+    public void flip(int x, int y) {
+        int offset = y * rowSize + (x / 32);
+        bits[offset] ^= 1 << (x & 0x1f);
+    }
 
   /**
    * Exclusive-or (XOR): Flip the bit in this {@code BitMatrix} if the corresponding
@@ -195,29 +195,29 @@ public final class BitMatrix implements Cloneable {
    *
    * @param mask XOR mask
    */
-  public void xor(BitMatrix mask) {
-    if (width != mask.width || height != mask.height || rowSize != mask.rowSize) {
-      throw new IllegalArgumentException("input matrix dimensions do not match");
+    public void xor(BitMatrix mask) {
+        if (width != mask.width || height != mask.height || rowSize != mask.rowSize) {
+            throw new IllegalArgumentException("input matrix dimensions do not match");
+        }
+        BitArray rowArray = new BitArray(width);
+        for (int y = 0; y < height; y++) {
+            int offset = y * rowSize;
+            int[] row = mask.getRow(y, rowArray).getBitArray();
+            for (int x = 0; x < rowSize; x++) {
+                bits[offset + x] ^= row[x];
+            }
+        }
     }
-    BitArray rowArray = new BitArray(width);
-    for (int y = 0; y < height; y++) {
-      int offset = y * rowSize;
-      int[] row = mask.getRow(y, rowArray).getBitArray();
-      for (int x = 0; x < rowSize; x++) {
-        bits[offset + x] ^= row[x];
-      }
-    }
-  }
 
   /**
    * Clears all bits (sets to false).
    */
-  public void clear() {
-    int max = bits.length;
-    for (int i = 0; i < max; i++) {
-      bits[i] = 0;
+    public void clear() {
+        int max = bits.length;
+        for (int i = 0; i < max; i++) {
+            bits[i] = 0;
+        }
     }
-  }
 
   /**
    * <p>Sets a square region of the bit matrix to true.</p>
@@ -227,25 +227,25 @@ public final class BitMatrix implements Cloneable {
    * @param width The width of the region
    * @param height The height of the region
    */
-  public void setRegion(int left, int top, int width, int height) {
-    if (top < 0 || left < 0) {
-      throw new IllegalArgumentException("Left and top must be nonnegative");
+    public void setRegion(int left, int top, int width, int height) {
+        if (top < 0 || left < 0) {
+            throw new IllegalArgumentException("Left and top must be nonnegative");
+        }
+        if (height < 1 || width < 1) {
+            throw new IllegalArgumentException("Height and width must be at least 1");
+        }
+        int right = left + width;
+        int bottom = top + height;
+        if (bottom > this.height || right > this.width) {
+            throw new IllegalArgumentException("The region must fit inside the matrix");
+        }
+        for (int y = top; y < bottom; y++) {
+            int offset = y * rowSize;
+            for (int x = left; x < right; x++) {
+                bits[offset + (x / 32)] |= 1 << (x & 0x1f);
+            }
+        }
     }
-    if (height < 1 || width < 1) {
-      throw new IllegalArgumentException("Height and width must be at least 1");
-    }
-    int right = left + width;
-    int bottom = top + height;
-    if (bottom > this.height || right > this.width) {
-      throw new IllegalArgumentException("The region must fit inside the matrix");
-    }
-    for (int y = top; y < bottom; y++) {
-      int offset = y * rowSize;
-      for (int x = left; x < right; x++) {
-        bits[offset + (x / 32)] |= 1 << (x & 0x1f);
-      }
-    }
-  }
 
   /**
    * A fast method to retrieve one row of data from the matrix as a BitArray.
@@ -255,199 +255,199 @@ public final class BitMatrix implements Cloneable {
    * @return The resulting BitArray - this reference should always be used even when passing
    *         your own row
    */
-  public BitArray getRow(int y, BitArray row) {
-    if (row == null || row.getSize() < width) {
-      row = new BitArray(width);
-    } else {
-      row.clear();
+    public BitArray getRow(int y, BitArray row) {
+        if (row == null || row.getSize() < width) {
+            row = new BitArray(width);
+        } else {
+            row.clear();
+        }
+        int offset = y * rowSize;
+        for (int x = 0; x < rowSize; x++) {
+            row.setBulk(x * 32, bits[offset + x]);
+        }
+        return row;
     }
-    int offset = y * rowSize;
-    for (int x = 0; x < rowSize; x++) {
-      row.setBulk(x * 32, bits[offset + x]);
-    }
-    return row;
-  }
 
   /**
    * @param y row to set
    * @param row {@link BitArray} to copy from
    */
-  public void setRow(int y, BitArray row) {
-    System.arraycopy(row.getBitArray(), 0, bits, y * rowSize, rowSize);
-  }
+    public void setRow(int y, BitArray row) {
+        System.arraycopy(row.getBitArray(), 0, bits, y * rowSize, rowSize);
+    }
 
   /**
    * Modifies this {@code BitMatrix} to represent the same but rotated 180 degrees
    */
-  public void rotate180() {
-    BitArray topRow = new BitArray(width);
-    BitArray bottomRow = new BitArray(width);
-    int maxHeight = (height + 1) / 2;
-    for (int i = 0; i < maxHeight; i++) {
-      topRow = getRow(i, topRow);
-      int bottomRowIndex = height - 1 - i;
-      bottomRow = getRow(bottomRowIndex, bottomRow);
-      topRow.reverse();
-      bottomRow.reverse();
-      setRow(i, bottomRow);
-      setRow(bottomRowIndex, topRow);
+    public void rotate180() {
+        BitArray topRow = new BitArray(width);
+        BitArray bottomRow = new BitArray(width);
+        int maxHeight = (height + 1) / 2;
+        for (int i = 0; i < maxHeight; i++) {
+            topRow = getRow(i, topRow);
+            int bottomRowIndex = height - 1 - i;
+            bottomRow = getRow(bottomRowIndex, bottomRow);
+            topRow.reverse();
+            bottomRow.reverse();
+            setRow(i, bottomRow);
+            setRow(bottomRowIndex, topRow);
+        }
     }
-  }
 
   /**
    * This is useful in detecting the enclosing rectangle of a 'pure' barcode.
    *
    * @return {@code left,top,width,height} enclosing rectangle of all 1 bits, or null if it is all white
    */
-  public int[] getEnclosingRectangle() {
-    int left = width;
-    int top = height;
-    int right = -1;
-    int bottom = -1;
+    public int[] getEnclosingRectangle() {
+        int left = width;
+        int top = height;
+        int right = -1;
+        int bottom = -1;
 
-    for (int y = 0; y < height; y++) {
-      for (int x32 = 0; x32 < rowSize; x32++) {
-        int theBits = bits[y * rowSize + x32];
-        if (theBits != 0) {
-          if (y < top) {
-            top = y;
-          }
-          if (y > bottom) {
-            bottom = y;
-          }
-          if (x32 * 32 < left) {
-            int bit = 0;
-            while ((theBits << (31 - bit)) == 0) {
-              bit++;
+        for (int y = 0; y < height; y++) {
+            for (int x32 = 0; x32 < rowSize; x32++) {
+                int theBits = bits[y * rowSize + x32];
+                if (theBits != 0) {
+                    if (y < top) {
+                        top = y;
+                    }
+                    if (y > bottom) {
+                        bottom = y;
+                    }
+                    if (x32 * 32 < left) {
+                        int bit = 0;
+                        while ((theBits << (31 - bit)) == 0) {
+                            bit++;
+                        }
+                        if ((x32 * 32 + bit) < left) {
+                            left = x32 * 32 + bit;
+                        }
+                    }
+                    if (x32 * 32 + 31 > right) {
+                        int bit = 31;
+                        while ((theBits >>> bit) == 0) {
+                            bit--;
+                        }
+                        if ((x32 * 32 + bit) > right) {
+                            right = x32 * 32 + bit;
+                        }
+                    }
+                }
             }
-            if ((x32 * 32 + bit) < left) {
-              left = x32 * 32 + bit;
-            }
-          }
-          if (x32 * 32 + 31 > right) {
-            int bit = 31;
-            while ((theBits >>> bit) == 0) {
-              bit--;
-            }
-            if ((x32 * 32 + bit) > right) {
-              right = x32 * 32 + bit;
-            }
-          }
         }
-      }
-    }
 
-    if (right < left || bottom < top) {
-      return null;
-    }
+        if (right < left || bottom < top) {
+            return null;
+        }
 
-    return new int[] {left, top, right - left + 1, bottom - top + 1};
-  }
+        return new int[] {left, top, right - left + 1, bottom - top + 1};
+    }
 
   /**
    * This is useful in detecting a corner of a 'pure' barcode.
    *
    * @return {@code x,y} coordinate of top-left-most 1 bit, or null if it is all white
    */
-  public int[] getTopLeftOnBit() {
-    int bitsOffset = 0;
-    while (bitsOffset < bits.length && bits[bitsOffset] == 0) {
-      bitsOffset++;
-    }
-    if (bitsOffset == bits.length) {
-      return null;
-    }
-    int y = bitsOffset / rowSize;
-    int x = (bitsOffset % rowSize) * 32;
+    public int[] getTopLeftOnBit() {
+        int bitsOffset = 0;
+        while (bitsOffset < bits.length && bits[bitsOffset] == 0) {
+            bitsOffset++;
+        }
+        if (bitsOffset == bits.length) {
+            return null;
+        }
+        int y = bitsOffset / rowSize;
+        int x = (bitsOffset % rowSize) * 32;
 
-    int theBits = bits[bitsOffset];
-    int bit = 0;
-    while ((theBits << (31 - bit)) == 0) {
-      bit++;
-    }
-    x += bit;
-    return new int[] {x, y};
-  }
-
-  public int[] getBottomRightOnBit() {
-    int bitsOffset = bits.length - 1;
-    while (bitsOffset >= 0 && bits[bitsOffset] == 0) {
-      bitsOffset--;
-    }
-    if (bitsOffset < 0) {
-      return null;
+        int theBits = bits[bitsOffset];
+        int bit = 0;
+        while ((theBits << (31 - bit)) == 0) {
+            bit++;
+        }
+        x += bit;
+        return new int[] {x, y};
     }
 
-    int y = bitsOffset / rowSize;
-    int x = (bitsOffset % rowSize) * 32;
+    public int[] getBottomRightOnBit() {
+        int bitsOffset = bits.length - 1;
+        while (bitsOffset >= 0 && bits[bitsOffset] == 0) {
+            bitsOffset--;
+        }
+        if (bitsOffset < 0) {
+            return null;
+        }
 
-    int theBits = bits[bitsOffset];
-    int bit = 31;
-    while ((theBits >>> bit) == 0) {
-      bit--;
+        int y = bitsOffset / rowSize;
+        int x = (bitsOffset % rowSize) * 32;
+
+        int theBits = bits[bitsOffset];
+        int bit = 31;
+        while ((theBits >>> bit) == 0) {
+            bit--;
+        }
+        x += bit;
+
+        return new int[] {x, y};
     }
-    x += bit;
-
-    return new int[] {x, y};
-  }
 
   /**
    * @return The width of the matrix
    */
-  public int getWidth() {
-    return width;
-  }
+    public int getWidth() {
+        return width;
+    }
 
   /**
    * @return The height of the matrix
    */
-  public int getHeight() {
-    return height;
-  }
+    public int getHeight() {
+        return height;
+    }
 
   /**
    * @return The row size of the matrix
    */
-  public int getRowSize() {
-    return rowSize;
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (!(o instanceof BitMatrix)) {
-      return false;
+    public int getRowSize() {
+        return rowSize;
     }
-    BitMatrix other = (BitMatrix) o;
-    return width == other.width && height == other.height && rowSize == other.rowSize &&
-    Arrays.equals(bits, other.bits);
-  }
 
-  @Override
+    @Override
+  public boolean equals(Object o) {
+        if (!(o instanceof BitMatrix)) {
+            return false;
+        }
+        BitMatrix other = (BitMatrix) o;
+        return width == other.width && height == other.height && rowSize == other.rowSize &&
+    Arrays.equals(bits, other.bits);
+    }
+
+    @Override
   public int hashCode() {
-    int hash = width;
-    hash = 31 * hash + width;
-    hash = 31 * hash + height;
-    hash = 31 * hash + rowSize;
-     hash = 31 * hash + Arrays.hashCode(bits);
-    return hash;
-  }
+        int hash = width;
+        hash = 31 * hash + width;
+        hash = 31 * hash + height;
+        hash = 31 * hash + rowSize;
+        hash = 31 * hash + Arrays.hashCode(bits);
+        return hash;
+    }
 
   /**
    * @return string representation using "X" for set and " " for unset bits
    */
-  @Override
+    @Override
   public String toString() {
-    return toString("X ", "  ");
-  }
+        return toString("X ", "  ");
+    }
 
   /**
    * @param setString representation of a set bit
    * @param unsetString representation of an unset bit
    * @return string representation of entire matrix utilizing given strings
    */
-  public String toString(String setString, String unsetString) {
-    return buildToString(setString, unsetString, "\n");
-  }
+    public String toString(String setString, String unsetString) {
+        return buildToString(setString, unsetString, "\n");
+    }
 
   /**
    * @param setString representation of a set bit
@@ -456,25 +456,25 @@ public final class BitMatrix implements Cloneable {
    * @return string representation of entire matrix utilizing given strings and line separator
    * @deprecated call {@link #toString(String,String)} only, which uses \n line separator always
    */
-  @Deprecated
+    @Deprecated
   public String toString(String setString, String unsetString, String lineSeparator) {
-    return buildToString(setString, unsetString, lineSeparator);
-  }
-
-  private String buildToString(String setString, String unsetString, String lineSeparator) {
-    StringBuilder result = new StringBuilder(height * (width + 1));
-    for (int y = 0; y < height; y++) {
-      for (int x = 0; x < width; x++) {
-        result.append(get(x, y) ? setString : unsetString);
-      }
-      result.append(lineSeparator);
+        return buildToString(setString, unsetString, lineSeparator);
     }
-    return result.toString();
-  }
 
-  @Override
+    private String buildToString(String setString, String unsetString, String lineSeparator) {
+        StringBuilder result = new StringBuilder(height * (width + 1));
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                result.append(get(x, y) ? setString : unsetString);
+            }
+            result.append(lineSeparator);
+        }
+        return result.toString();
+    }
+
+    @Override
   public BitMatrix clone() {
-    return new BitMatrix(width, height, rowSize, bits.clone());
-  }
+        return new BitMatrix(width, height, rowSize, bits.clone());
+    }
 
 }

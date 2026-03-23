@@ -346,7 +346,7 @@ public class ConfigClientsHandler extends FormHandler {
                 addFormNotice(_t("Client {0} stopped", ca.clientName));
                 // Give a chance for status to update
                 try {
-                   Thread.sleep(1000);
+                    Thread.sleep(1000);
                 } catch (InterruptedException ie) {}
             } catch (Throwable t) {
                 addFormError("Cannot stop client " + ca.className + ": " + t, true);
@@ -425,16 +425,16 @@ public class ConfigClientsHandler extends FormHandler {
     private void startWebApp(String app) {
         ContextHandlerCollection s = WebAppStarter.getConsoleServer(_context);
         if (s != null) {
-                    try {
-                        File path = new File(_context.getBaseDir(), "webapps");
-                        path = new File(path, app + ".war");
-                        WebAppStarter.startWebApp(_context, s, app, path.getAbsolutePath());
-                        addFormNoticeNoEscape(_t("WebApp") + " <a href=\"/" + app + "/\" target=_blank>" + _t(app) + "</a> " + _t("started") + '.', true);
-                    } catch (Throwable e) {
-                        addFormError(_t("Failed to start") + ' ' + _t(app) + ": " + e.getMessage(), true);
-                        _log.error("Failed to start webapp " + app, e);
-                    }
-                    return;
+            try {
+                File path = new File(_context.getBaseDir(), "webapps");
+                path = new File(path, app + ".war");
+                WebAppStarter.startWebApp(_context, s, app, path.getAbsolutePath());
+                addFormNoticeNoEscape(_t("WebApp") + " <a href=\"/" + app + "/\" target=_blank>" + _t(app) + "</a> " + _t("started") + '.', true);
+            } catch (Throwable e) {
+                addFormError(_t("Failed to start") + ' ' + _t(app) + ": " + e.getMessage(), true);
+                _log.error("Failed to start webapp " + app, e);
+            }
+            return;
         }
         addFormError(_t("Failed to find server."), true);
     }
@@ -495,11 +495,11 @@ public class ConfigClientsHandler extends FormHandler {
                     break;
                 }
                 try {
-                   Thread.sleep(500);
+                    Thread.sleep(500);
                 } catch (InterruptedException ie) {}
-             }
-             String status = mgr.getStatus();
-             if (status != null && status.length() > 0)
+            }
+            String status = mgr.getStatus();
+            if (status != null && status.length() > 0)
                  addFormNoticeNoEscape(status);
         } catch (IOException ioe) {
             addFormError(_t("Install from file failed") + " - " + ioe.getLocalizedMessage(), true);
@@ -535,7 +535,7 @@ public class ConfigClientsHandler extends FormHandler {
         PluginStarter.updateAll(_context);
         // So that update() will post a status to the summary bar before we reload
         try {
-           Thread.sleep(1000);
+            Thread.sleep(1000);
         } catch (InterruptedException ie) {}
     }
 
@@ -578,7 +578,7 @@ public class ConfigClientsHandler extends FormHandler {
         }
         // So that update() will post a status to the summary bar before we reload
         try {
-           Thread.sleep(5000);
+            Thread.sleep(5000);
         } catch (InterruptedException ie) {}
     }
 
@@ -594,7 +594,7 @@ public class ConfigClientsHandler extends FormHandler {
         addFormNotice(_t("Checking plugin {0} for updates", app), true);
         // So that update() will post a status to the summary bar before we reload
         try {
-           Thread.sleep(1000);
+            Thread.sleep(1000);
         } catch (InterruptedException ie) {}
     }
 

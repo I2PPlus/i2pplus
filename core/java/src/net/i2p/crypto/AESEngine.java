@@ -14,12 +14,12 @@ import net.i2p.util.SimpleByteCache;
 
 /**
  * Abstract base class for AES cipher operations in I2P.
- * 
+ *
  * This class provides the interface and common functionality for AES encryption
  * and decryption operations. The base implementation contains placeholder methods
  * that log warnings when called. The actual AES implementation is provided
  * by {@link CryptixAESEngine} which extends this class.
- * 
+ *
  * <p>This design pattern allows for:</p>
  * <ul>
  *   <li>Consistent API across different AES implementations</li>
@@ -136,9 +136,9 @@ public class AESEngine {
         boolean eq = DataHelper.eq(decr, 0, h, 0, Hash.HASH_LENGTH);
         SimpleByteCache.release(h);
         if (!eq) {
-                _log.error("Hash does not match [key=" + sessionKey + " / iv =" + DataHelper.toString(iv, iv.length)
+            _log.error("Hash does not match [key=" + sessionKey + " / iv =" + DataHelper.toString(iv, iv.length)
                            + "]", new Exception("Hash error"));
-                return new byte[0];
+            return new byte[0];
         }
         int cur = Hash.HASH_LENGTH;
 

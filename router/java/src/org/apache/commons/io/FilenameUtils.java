@@ -1436,7 +1436,7 @@ public class FilenameUtils {
      * @since 2.0
      */
     public static String normalizeNoEndSeparator(final String fileName, final boolean unixSeparator) {
-         return doNormalize(fileName, toSeparator(unixSeparator), false);
+        return doNormalize(fileName, toSeparator(unixSeparator), false);
     }
 
     /**

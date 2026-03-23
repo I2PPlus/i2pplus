@@ -61,8 +61,8 @@ class HostTxtIterator implements Iterator<Map.Entry<String, HostTxtEntry>>, Clos
      *  An iterator over the key/value pairs in the file.
      */
     public HostTxtIterator(File file) throws IOException {
-            FileInputStream fileStream = new FileInputStream(file);
-            input = new BufferedReader(new InputStreamReader(fileStream, "UTF-8"));
+        FileInputStream fileStream = new FileInputStream(file);
+        input = new BufferedReader(new InputStreamReader(fileStream, "UTF-8"));
     }
 
     @SuppressWarnings("PMD.AvoidBranchingStatementAsLastInLoop")

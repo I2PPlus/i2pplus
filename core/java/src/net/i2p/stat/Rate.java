@@ -216,37 +216,37 @@ public class Rate {
     public synchronized void coalesce() {
         long now = now();
         double correctedTotalValue; // for GraphListener which divides by rounded EventCount
-            long measuredPeriod = now - _lastCoalesceDate;
-            if (measuredPeriod < _period - SLACK) {
+        long measuredPeriod = now - _lastCoalesceDate;
+        if (measuredPeriod < _period - SLACK) {
                 // no need to coalesce (assuming we only try to do so once per minute)
                 //if (_log.shouldDebug())
                 //    _log.debug("not coalescing, measuredPeriod = " + measuredPeriod + " period = " + _period);
-                return;
-            }
+            return;
+        }
 
             // ok ok, lets coalesce
 
             // how much were we off by? (so that we can sample down the measured values)
-            float periodFactor = measuredPeriod / (float)_period;
-            _lastTotalValue = _currentTotalValue / periodFactor;
-            _lastEventCount = (int) (0.499999 + (_currentEventCount / periodFactor));
-            _lastTotalEventTime = (int) (_currentTotalEventTime / periodFactor);
-            _lastCoalesceDate = now;
-            if (_currentEventCount == 0)
+        float periodFactor = measuredPeriod / (float)_period;
+        _lastTotalValue = _currentTotalValue / periodFactor;
+        _lastEventCount = (int) (0.499999 + (_currentEventCount / periodFactor));
+        _lastTotalEventTime = (int) (_currentTotalEventTime / periodFactor);
+        _lastCoalesceDate = now;
+        if (_currentEventCount == 0)
                 correctedTotalValue = 0;
-            else
+        else
                 correctedTotalValue = _currentTotalValue *
                                       (_lastEventCount / (double) _currentEventCount);
 
-            if (_lastTotalValue >= _extremeTotalValue) {  // get the most recent if identical
-                _extremeTotalValue = _lastTotalValue;
-                _extremeEventCount = _lastEventCount;
-                _extremeTotalEventTime = _lastTotalEventTime;
-            }
+        if (_lastTotalValue >= _extremeTotalValue) {  // get the most recent if identical
+            _extremeTotalValue = _lastTotalValue;
+            _extremeEventCount = _lastEventCount;
+            _extremeTotalEventTime = _lastTotalEventTime;
+        }
 
-            _currentTotalValue = 0.0f;
-            _currentEventCount = 0;
-            _currentTotalEventTime = 0;
+        _currentTotalValue = 0.0f;
+        _currentEventCount = 0;
+        _currentTotalEventTime = 0;
         if (_graphListener != null)
             _graphListener.add(correctedTotalValue, _lastEventCount, _lastTotalEventTime, _period);
     }
@@ -571,7 +571,7 @@ public class Rate {
             buf.append("\n\t total value if we were always processing events: ").append(getLastSaturationLimit());
             buf.append("\n\t max % of time spent processing events: ").append(100.0d * getExtremeEventSaturation());
             buf.append("\n\t max total value if we were always processing events: ")
-               .append(getExtremeSaturationLimit());
+                .append(getExtremeSaturationLimit());
         }
         return buf.toString();
     }

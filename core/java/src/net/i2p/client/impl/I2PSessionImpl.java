@@ -349,7 +349,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
             }
             sub = new SubSession(this, privateKeyStream, opts);
             for (SubSession ss : _subsessions) {
-                 if (ss.getPrivateKey().equals(sub.getPrivateKey())) {
+                if (ss.getPrivateKey().equals(sub.getPrivateKey())) {
                     throw new I2PSessionException("Duplicate sub-session");
                 }
             }
@@ -745,14 +745,14 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
             // now send CreateSessionMessages for all subsessions, one at a time, must wait for each response
             synchronized(_subsessionLock) {
                 for (SubSession ss : _subsessions) {
-                   if (_log.shouldInfo()) {_log.info(getPrefix() + " -> Connecting sub-session " + ss);}
+                    if (_log.shouldInfo()) {_log.info(getPrefix() + " -> Connecting sub-session " + ss);}
                     _producer.connect(ss);
                 }
             }
 
         } catch (InterruptedException ie) {throw new I2PSessionException("Interrupted", ie);}
         catch (UnknownHostException uhe) {
-          throw new I2PSessionException(getPrefix() + " -> Cannot connect to Router on " + _hostname + ':' + _portNum, uhe);
+            throw new I2PSessionException(getPrefix() + " -> Cannot connect to Router on " + _hostname + ':' + _portNum, uhe);
         } catch (IOException ioe) {
             String msg; // Generate the best error message as this will be logged
             if (_context.isRouterContext()) {
@@ -780,22 +780,22 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      *  @since 0.9.11 moved from connect()
      */
     protected void waitForDate() throws InterruptedException, IOException {
-            if (_log.shouldDebug()) _log.debug(getPrefix() + "After getDate / begin waiting for a response");
-            int waitcount = 0;
-            while (true) {
-                if (waitcount++ > 30) {
-                    throw new IOException("No handshake received from Router");
-                }
-                synchronized(_stateLock) {
-                    if (_state == State.GOTDATE)
+        if (_log.shouldDebug()) _log.debug(getPrefix() + "After getDate / begin waiting for a response");
+        int waitcount = 0;
+        while (true) {
+            if (waitcount++ > 30) {
+                throw new IOException("No handshake received from Router");
+            }
+            synchronized(_stateLock) {
+                if (_state == State.GOTDATE)
                         break;
-                    if (!STATES_OPENING.contains(_state))
+                if (!STATES_OPENING.contains(_state))
                         throw new IOException("Socket closed, state=" + _state);
                     // InterruptedException caught by caller
-                    _stateLock.wait(1000);
-                }
+                _stateLock.wait(1000);
             }
-            if (_log.shouldDebug()) _log.debug(getPrefix() + "After received a SetDate response");
+        }
+        if (_log.shouldDebug()) _log.debug(getPrefix() + "After received a SetDate response");
     }
 
     /**
@@ -859,7 +859,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         private final List<Long> toCheck = new ArrayList<Long>();
 
         public VerifyUsage() {
-             super(_context.simpleTimer2(), VERIFY_USAGE_TIME);
+            super(_context.simpleTimer2(), VERIFY_USAGE_TIME);
         }
 
         public void timeReached() {
@@ -1856,8 +1856,8 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         private final LookupWaiter w;
 
         public LookupExpiration(LookupWaiter waiter, long maxWait) {
-             super(_context.simpleTimer2(), maxWait + 100);
-             w = waiter;
+            super(_context.simpleTimer2(), maxWait + 100);
+            w = waiter;
         }
         public void timeReached() {
             if (_pendingLookups.remove(w)) {

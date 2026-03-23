@@ -12,11 +12,11 @@ import net.i2p.data.SessionKey;
 
 /**
  * HMAC-SHA256 message authentication code generator for I2P cryptographic operations.
- * 
+ *
  * This class provides HMAC-SHA256 calculation using the standard JCA Mac interface,
  * ensuring compatibility with {@code javax.crypto.Mac.getInstance("HmacSHA256")}.
  * It offers both one-shot calculation and streaming operations for different use cases.
- * 
+ *
  * <p>Key features:</p>
  * <ul>
  *   <li>HMAC-SHA256 algorithm implementation for message authentication</li>
@@ -129,8 +129,8 @@ public final class HMAC256Generator extends HMACGenerator {
      *  @since 0.9.48
      */
     void release(Mac mac) {
-         if (CACHE) {
-             try {
+        if (CACHE) {
+            try {
                 mac.init(ZERO_KEY);
             } catch (GeneralSecurityException e) {
                 return;
@@ -141,12 +141,12 @@ public final class HMAC256Generator extends HMACGenerator {
 
     /**
      * Performance-optimized SecretKey implementation for HMAC operations.
-     * 
+     *
      * This class provides an efficient SecretKey implementation that avoids
      * unnecessary key data copying during construction for improved performance.
      * Unlike standard SecretKeySpec, this implementation maintains a direct reference
      * to the key data while maintaining compatibility with Mac operations.
-     * 
+     *
      * <p><strong>Implementation Note:</strong> getEncoded() returns a copy of the
      * first 32 bytes because the Mac class requires this behavior for proper
      * operation. The full key data may be longer than 32 bytes.</p>

@@ -20,7 +20,7 @@ import net.i2p.data.PayloadTest;
  * @author jrandom
  */
 
- public class SendMessageMessageTest extends I2CPTstBase {
+public class SendMessageMessageTest extends I2CPTstBase {
 
     @Override
     public I2CPMessageImpl createDataStructure() throws DataFormatException {

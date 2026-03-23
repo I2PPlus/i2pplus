@@ -110,25 +110,25 @@ public final class FromNetASCIIOutputStream extends FilterOutputStream {
 
     private void writeInt(final int ch) throws IOException {
         switch (ch) {
-        case '\r':
-            lastWasCR = true;
+            case '\r':
+                lastWasCR = true;
             // Don't write anything. We need to see if next one is linefeed
-            break;
-        case '\n':
-            if (lastWasCR) {
-                out.write(FromNetASCIIInputStream.LINE_SEPARATOR_BYTES);
-                lastWasCR = false;
                 break;
-            }
-            out.write('\n');
-            break;
-        default:
-            if (lastWasCR) {
-                out.write('\r');
-                lastWasCR = false;
-            }
-            out.write(ch);
-            break;
+            case '\n':
+                if (lastWasCR) {
+                    out.write(FromNetASCIIInputStream.LINE_SEPARATOR_BYTES);
+                    lastWasCR = false;
+                    break;
+                }
+                out.write('\n');
+                break;
+            default:
+                if (lastWasCR) {
+                    out.write('\r');
+                    lastWasCR = false;
+                }
+                out.write(ch);
+                break;
         }
     }
 }

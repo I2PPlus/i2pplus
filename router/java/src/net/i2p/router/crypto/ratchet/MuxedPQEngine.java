@@ -40,16 +40,16 @@ final class MuxedPQEngine {
      */
     private static int getMinNSSize(EncType type) {
         switch(type) {
-          case ECIES_X25519:
-              return MIN_NS_SIZE;
-          case MLKEM512_X25519:
-              return MIN_NS_MLKEM512_SIZE;
-          case MLKEM768_X25519:
-              return MIN_NS_MLKEM768_SIZE;
-          case MLKEM1024_X25519:
-              return MIN_NS_MLKEM1024_SIZE;
-          default:
-              return MIN_NS_SIZE;
+            case ECIES_X25519:
+                return MIN_NS_SIZE;
+            case MLKEM512_X25519:
+                return MIN_NS_MLKEM512_SIZE;
+            case MLKEM768_X25519:
+                return MIN_NS_MLKEM768_SIZE;
+            case MLKEM1024_X25519:
+                return MIN_NS_MLKEM1024_SIZE;
+            default:
+                return MIN_NS_SIZE;
         }
     }
 

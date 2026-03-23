@@ -103,12 +103,12 @@ final class FixedList<E> implements List<E> {
 
     @Override
     public boolean addAll(int index, Collection<? extends E> c) throws UnsupportedOperationException {
-         throw new UnsupportedOperationException("operation not permitted");
+        throw new UnsupportedOperationException("operation not permitted");
     }
 
     @Override
     public boolean removeAll(Collection<?> c)  throws UnsupportedOperationException  {
-         throw new UnsupportedOperationException("operation not permitted");
+        throw new UnsupportedOperationException("operation not permitted");
     }
 
     @Override

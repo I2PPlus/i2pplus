@@ -16,12 +16,12 @@ import net.i2p.data.SimpleDataStructure;
 
 /**
  * I2P data structure for SHA-1 hash values.
- * 
+ *
  * This class provides a SimpleDataStructure wrapper for 20-byte SHA-1 hashes
  * used throughout I2P for data integrity and identification purposes.
  * It extends SimpleDataStructure to support I2P's serialization framework
  * and provides efficient caching of hash codes.
- * 
+ *
  * <p>Common uses include:</p>
  * <ul>
  *   <li>Router and destination identifiers</li>

@@ -70,15 +70,15 @@ public final class CertUtil {
         try {
            // The point is probably to share this, so don't make it 600
            //os = new SecureFileOutputStream(file);
-           os = new FileOutputStream(file);
-           exportCert(cert, os);
-           return true;
+            os = new FileOutputStream(file);
+            exportCert(cert, os);
+            return true;
         } catch (CertificateEncodingException cee) {
             error("Error writing X509 Certificate " + file.getAbsolutePath(), cee);
-           return false;
+            return false;
         } catch (IOException ioe) {
             error("Error writing X509 Certificate " + file.getAbsolutePath(), ioe);
-           return false;
+            return false;
         } finally {
             try {if (os != null) os.close();}
             catch (IOException foo) {}
@@ -397,15 +397,15 @@ public final class CertUtil {
     public static boolean saveCRL(X509CRL crl, File file) {
         OutputStream os = null;
         try {
-           os = new SecureFileOutputStream(file);
-           exportCRL(crl, os);
-           return true;
+            os = new SecureFileOutputStream(file);
+            exportCRL(crl, os);
+            return true;
         } catch (CRLException ce) {
             error("Error writing X509 CRL " + file.getAbsolutePath(), ce);
-           return false;
+            return false;
         } catch (IOException ioe) {
             error("Error writing X509 CRL " + file.getAbsolutePath(), ioe);
-           return false;
+            return false;
         } finally {
             try {if (os != null) os.close();}
             catch (IOException foo) {}

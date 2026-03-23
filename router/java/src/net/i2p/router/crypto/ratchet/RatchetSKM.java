@@ -113,7 +113,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         _replayFilter = new DecayingHashSet(context, (int) ECIESAEADEngine.MAX_NS_AGE, 32, "Ratchet-NS");
         // start the precalc of Elg2 keys if it wasn't already started
         context.eciesEngine().startup();
-         _alive = true;
+        _alive = true;
         new CleanupEvent();
     }
 
@@ -122,7 +122,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
      */
     @Override
     public void shutdown() {
-         _alive = false;
+        _alive = false;
         _inboundTagSets.clear();
         _outboundSessions.clear();
         synchronized (_pendingOutboundSessions) {
@@ -820,7 +820,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                .append(toString(skey))
                .append("</td><td><b>Sets:</b> ")
                .append(sets.size())
-               .append("</td></tr>\n<tr class=expiry>\n<td colspan=2>\n<ul>\n");
+                .append("</td></tr>\n<tr class=expiry>\n<td colspan=2>\n<ul>\n");
             for (RatchetTagSet ts : sets) {
                 synchronized(ts) {
                     int size = ts.size();
@@ -867,13 +867,13 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                .append(DataHelper.formatDuration2(now - sess.getLastUsedDate()))
                .append(" ago<br>\n<b>Last Rcvd:</b> ")
                .append(DataHelper.formatDuration2(now - sess.getLastReceivedDate()))
-               .append(" ago<br>\n");
+                .append(" ago<br>\n");
             SessionKey sk = sess.getCurrentKey();
             if (sk != null)
                 buf.append("<b>Session key:</b> ").append(sk.toBase64()).append("/n");
             buf.append("</div>\n</td>\n<td><b>Sets:</b> ")
                .append(sets.size())
-               .append("</td>\n</tr>\n<tr>\n<td colspan=2>\n<ul>\n");
+                .append("</td>\n</tr>\n<tr>\n<td colspan=2>\n<ul>\n");
             for (RatchetTagSet ts : sets) {
                 synchronized(ts) {
                     long expires = ts.getExpiration() - now;
@@ -923,8 +923,8 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
      *  Earliest first
      */
     private static class RatchetTagSetComparator implements Comparator<RatchetTagSet>, Serializable {
-         public int compare(RatchetTagSet l, RatchetTagSet r) {
-             return l.getDebugID() - r.getDebugID();
+        public int compare(RatchetTagSet l, RatchetTagSet r) {
+            return l.getDebugID() - r.getDebugID();
         }
     }
 

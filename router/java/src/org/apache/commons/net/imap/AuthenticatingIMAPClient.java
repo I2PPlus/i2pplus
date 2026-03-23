@@ -155,55 +155,55 @@ public class AuthenticatingIMAPClient extends IMAPSClient {
         }
 
         switch (method) {
-        case PLAIN: {
+            case PLAIN: {
             // the server sends an empty response ("+ "), so we don't have to read it.
-            final int result = sendData(Base64.getEncoder().encodeToString(("\000" + user + "\000" + password).getBytes(getCharset())));
-            if (result == IMAPReply.OK) {
-                setState(IMAP.IMAPState.AUTH_STATE);
+                final int result = sendData(Base64.getEncoder().encodeToString(("\000" + user + "\000" + password).getBytes(getCharset())));
+                if (result == IMAPReply.OK) {
+                    setState(IMAP.IMAPState.AUTH_STATE);
+                }
+                return result == IMAPReply.OK;
             }
-            return result == IMAPReply.OK;
-        }
-        case CRAM_MD5: {
+            case CRAM_MD5: {
             // get the CRAM challenge (after "+ ")
-            final byte[] serverChallenge = Base64.getDecoder().decode(getReplyString().substring(2).trim());
+                final byte[] serverChallenge = Base64.getDecoder().decode(getReplyString().substring(2).trim());
             // get the Mac instance
-            final Mac hmacMd5 = Mac.getInstance(MAC_ALGORITHM);
-            hmacMd5.init(new SecretKeySpec(password.getBytes(getCharset()), MAC_ALGORITHM));
+                final Mac hmacMd5 = Mac.getInstance(MAC_ALGORITHM);
+                hmacMd5.init(new SecretKeySpec(password.getBytes(getCharset()), MAC_ALGORITHM));
             // compute the result:
-            final byte[] hmacResult = convertToHexString(hmacMd5.doFinal(serverChallenge)).getBytes(getCharset());
+                final byte[] hmacResult = convertToHexString(hmacMd5.doFinal(serverChallenge)).getBytes(getCharset());
             // join the byte arrays to form the reply
-            final byte[] usernameBytes = user.getBytes(getCharset());
-            final byte[] toEncode = new byte[usernameBytes.length + 1 /* the space */ + hmacResult.length];
-            System.arraycopy(usernameBytes, 0, toEncode, 0, usernameBytes.length);
-            toEncode[usernameBytes.length] = ' ';
-            System.arraycopy(hmacResult, 0, toEncode, usernameBytes.length + 1, hmacResult.length);
+                final byte[] usernameBytes = user.getBytes(getCharset());
+                final byte[] toEncode = new byte[usernameBytes.length + 1 /* the space */ + hmacResult.length];
+                System.arraycopy(usernameBytes, 0, toEncode, 0, usernameBytes.length);
+                toEncode[usernameBytes.length] = ' ';
+                System.arraycopy(hmacResult, 0, toEncode, usernameBytes.length + 1, hmacResult.length);
             // send the reply and read the server code:
-            final int result = sendData(Base64.getEncoder().encodeToString(toEncode));
-            if (result == IMAPReply.OK) {
-                setState(IMAP.IMAPState.AUTH_STATE);
+                final int result = sendData(Base64.getEncoder().encodeToString(toEncode));
+                if (result == IMAPReply.OK) {
+                    setState(IMAP.IMAPState.AUTH_STATE);
+                }
+                return result == IMAPReply.OK;
             }
-            return result == IMAPReply.OK;
-        }
-        case LOGIN: {
+            case LOGIN: {
             // the server sends fixed responses (base64("UserName") and
             // base64("Password")), so we don't have to read them.
-            if (sendData(Base64.getEncoder().encodeToString(user.getBytes(getCharset()))) != IMAPReply.CONT) {
-                return false;
+                if (sendData(Base64.getEncoder().encodeToString(user.getBytes(getCharset()))) != IMAPReply.CONT) {
+                    return false;
+                }
+                final int result = sendData(Base64.getEncoder().encodeToString(password.getBytes(getCharset())));
+                if (result == IMAPReply.OK) {
+                    setState(IMAP.IMAPState.AUTH_STATE);
+                }
+                return result == IMAPReply.OK;
             }
-            final int result = sendData(Base64.getEncoder().encodeToString(password.getBytes(getCharset())));
-            if (result == IMAPReply.OK) {
-                setState(IMAP.IMAPState.AUTH_STATE);
+            case XOAUTH:
+            case XOAUTH2: {
+                final int result = sendData(user);
+                if (result == IMAPReply.OK) {
+                    setState(IMAP.IMAPState.AUTH_STATE);
+                }
+                return result == IMAPReply.OK;
             }
-            return result == IMAPReply.OK;
-        }
-        case XOAUTH:
-        case XOAUTH2: {
-            final int result = sendData(user);
-            if (result == IMAPReply.OK) {
-                setState(IMAP.IMAPState.AUTH_STATE);
-            }
-            return result == IMAPReply.OK;
-        }
         }
         return false; // safety check
     }

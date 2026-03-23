@@ -123,7 +123,7 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
         StringBuilder buf = new StringBuilder();
         buf.append("RequestLeaseSetMessage: ")
            .append("\n* SessionId: ").append(getSessionId())
-           .append("\n* Tunnels:");
+            .append("\n* Tunnels:");
         for (int i = 0; i < getEndpoints(); i++) {
             buf.append("\n* RouterIdentity: ").append(getRouter(i))
                .append("\n* TunnelId: ").append(getTunnelId(i));

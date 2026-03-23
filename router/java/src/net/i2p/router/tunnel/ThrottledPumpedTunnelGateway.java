@@ -47,7 +47,7 @@ class ThrottledPumpedTunnelGateway extends PumpedTunnelGateway {
         int allocated = oldAllocated;
         int shareBps = 1000 * TunnelDispatcher.getShareBandwidth(_context);
         int reasonableMax = shareBps / 2;
-        if (oldAllocated <= TunnelParticipant.DEFAULT_BW_PER_TUNNEL_ESTIMATE || 
+        if (oldAllocated <= TunnelParticipant.DEFAULT_BW_PER_TUNNEL_ESTIMATE ||
             oldAllocated < reasonableMax / 10) {
             allocated = _context.tunnelDispatcher().getMaxPerTunnelBandwidth(TunnelDispatcher.Location.IBGW);
             _config.setAllocatedBW(allocated);

@@ -254,54 +254,54 @@ public class NTCPTransport extends TransportImpl {
         if (xdh == null)
             throw new IllegalArgumentException();
 
-            boolean shouldSave = false;
-            byte[] priv = null;
-            byte[] iv = null;
-            String b64IV = null;
-            String s = null;
+        boolean shouldSave = false;
+        byte[] priv = null;
+        byte[] iv = null;
+        String b64IV = null;
+        String s = null;
             // try to determine if we've been down for 30 days or more
-            long minDowntime = _context.router().isHidden() ? MIN_DOWNTIME_TO_REKEY_HIDDEN : MIN_DOWNTIME_TO_REKEY;
-            boolean shouldRekey = !allowLocal() && _context.getEstimatedDowntime() >= minDowntime;
-            if (!shouldRekey) {
-                s = ctx.getProperty(PROP_NTCP2_SP);
-                if (s != null) {
-                    priv = Base64.decode(s);
-                }
+        long minDowntime = _context.router().isHidden() ? MIN_DOWNTIME_TO_REKEY_HIDDEN : MIN_DOWNTIME_TO_REKEY;
+        boolean shouldRekey = !allowLocal() && _context.getEstimatedDowntime() >= minDowntime;
+        if (!shouldRekey) {
+            s = ctx.getProperty(PROP_NTCP2_SP);
+            if (s != null) {
+                priv = Base64.decode(s);
             }
-            if (priv == null || priv.length != NTCP2_KEY_LEN) {
-                KeyPair keys = xdh.getKeys();
-                _ntcp2StaticPrivkey = keys.getPrivate().getData();
-                _ntcp2StaticPubkey = keys.getPublic().getData();
-                shouldSave = true;
-            } else {
-                _ntcp2StaticPrivkey = priv;
-                _ntcp2StaticPubkey = (new PrivateKey(EncType.ECIES_X25519, priv)).toPublic().getData();
+        }
+        if (priv == null || priv.length != NTCP2_KEY_LEN) {
+            KeyPair keys = xdh.getKeys();
+            _ntcp2StaticPrivkey = keys.getPrivate().getData();
+            _ntcp2StaticPubkey = keys.getPublic().getData();
+            shouldSave = true;
+        } else {
+            _ntcp2StaticPrivkey = priv;
+            _ntcp2StaticPubkey = (new PrivateKey(EncType.ECIES_X25519, priv)).toPublic().getData();
+        }
+        if (!shouldSave) {
+            s = ctx.getProperty(PROP_NTCP2_IV);
+            if (s != null) {
+                iv = Base64.decode(s);
+                b64IV = s;
             }
-            if (!shouldSave) {
-                s = ctx.getProperty(PROP_NTCP2_IV);
-                if (s != null) {
-                    iv = Base64.decode(s);
-                    b64IV = s;
-                }
-            }
-            if (iv == null || iv.length != NTCP2_IV_LEN) {
-                iv = new byte[NTCP2_IV_LEN];
-                do {
-                    ctx.random().nextBytes(iv);
-                } while (DataHelper.eq(iv, 0, OutboundNTCP2State.ZEROKEY, 0, NTCP2_IV_LEN));
-                shouldSave = true;
-            }
-            if (shouldSave) {
-                Map<String, String> changes = new HashMap<String, String>(2);
-                String b64Priv = Base64.encode(_ntcp2StaticPrivkey);
-                b64IV = Base64.encode(iv);
-                changes.put(PROP_NTCP2_SP, b64Priv);
-                changes.put(PROP_NTCP2_IV, b64IV);
-                ctx.router().saveConfig(changes, null);
-            }
-            _ntcp2StaticIV = iv;
-            _b64Ntcp2StaticPubkey = Base64.encode(_ntcp2StaticPubkey);
-            _b64Ntcp2StaticIV = b64IV;
+        }
+        if (iv == null || iv.length != NTCP2_IV_LEN) {
+            iv = new byte[NTCP2_IV_LEN];
+            do {
+                ctx.random().nextBytes(iv);
+            } while (DataHelper.eq(iv, 0, OutboundNTCP2State.ZEROKEY, 0, NTCP2_IV_LEN));
+            shouldSave = true;
+        }
+        if (shouldSave) {
+            Map<String, String> changes = new HashMap<String, String>(2);
+            String b64Priv = Base64.encode(_ntcp2StaticPrivkey);
+            b64IV = Base64.encode(iv);
+            changes.put(PROP_NTCP2_SP, b64Priv);
+            changes.put(PROP_NTCP2_IV, b64IV);
+            ctx.router().saveConfig(changes, null);
+        }
+        _ntcp2StaticIV = iv;
+        _b64Ntcp2StaticPubkey = Base64.encode(_ntcp2StaticPubkey);
+        _b64Ntcp2StaticIV = b64IV;
 
     }
 
@@ -735,14 +735,14 @@ public class NTCPTransport extends TransportImpl {
 
     @Override
     public boolean isEstablished(Hash dest) {
-            NTCPConnection con = _conByIdent.get(dest);
-            return (con != null) && con.isEstablished() && !con.isClosed();
+        NTCPConnection con = _conByIdent.get(dest);
+        return (con != null) && con.isEstablished() && !con.isClosed();
     }
 
     @Override
     public boolean isBacklogged(Hash dest) {
-            NTCPConnection con = _conByIdent.get(dest);
-            return (con != null) && con.isEstablished() && con.tooBacklogged();
+        NTCPConnection con = _conByIdent.get(dest);
+        return (con != null) && con.isEstablished() && con.tooBacklogged();
     }
 
     /**
@@ -799,7 +799,7 @@ public class NTCPTransport extends TransportImpl {
     }
 
     public int countPeers() {
-            return _conByIdent.size();
+        return _conByIdent.size();
     }
 
     /**
@@ -1268,15 +1268,15 @@ public class NTCPTransport extends TransportImpl {
         final long now = _context.clock().now();
         final long timeout = getEstablishTimeout();
 
-            for (Iterator<NTCPConnection> iter = _establishing.iterator(); iter.hasNext(); ) {
-                NTCPConnection con = iter.next();
-                if (con.isClosed() || con.isEstablished()) {iter.remove();}
-                else if (con.getTimeSinceCreated(now) > timeout) {
-                    iter.remove();
-                    con.close();
-                    expired++;
-                }
+        for (Iterator<NTCPConnection> iter = _establishing.iterator(); iter.hasNext(); ) {
+            NTCPConnection con = iter.next();
+            if (con.isClosed() || con.isEstablished()) {iter.remove();}
+            else if (con.getTimeSinceCreated(now) > timeout) {
+                iter.remove();
+                con.close();
+                expired++;
             }
+        }
 
         if (expired > 0) {
             _context.statManager().addRateData("ntcp.outboundEstablishFailed", expired);
@@ -1583,7 +1583,7 @@ public class NTCPTransport extends TransportImpl {
             }
             if (old != Status.UNKNOWN && _context.router().getUptime() > 5*60*1000) {
                 _context.router().eventLog().addEvent(EventLog.REACHABILITY,
-                _t(old.toStatusString()) + " ➜ " +  _t(status.toStatusString()));
+                    _t(old.toStatusString()) + " ➜ " +  _t(status.toStatusString()));
             }
         }
         _context.router().rebuildRouterInfo();
@@ -1768,7 +1768,7 @@ public class NTCPTransport extends TransportImpl {
 
         // do not restart on transition to firewalled
         if (ip != null || port > 0)
-        restartListening(newAddr, isIPv6);
+            restartListening(newAddr, isIPv6);
         else
             replaceAddress(newAddr);
         if (_log.shouldWarn())

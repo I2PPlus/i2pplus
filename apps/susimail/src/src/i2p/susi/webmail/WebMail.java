@@ -186,8 +186,8 @@ public class WebMail extends HttpServlet {
     static final String SORT_DEFAULT = SORT_DATE;
     static final SortOrder SORT_ORDER_DEFAULT = SortOrder.UP;
     private static final List<String> VALID_SORTS = Arrays.asList(new String[] {// for XSS
-                                      SORT_ID, SORT_SENDER, SORT_SUBJECT, SORT_DATE, SORT_SIZE,
-                                      '-' + SORT_ID, '-' + SORT_SENDER, '-' + SORT_SUBJECT, '-' +
+        SORT_ID, SORT_SENDER, SORT_SUBJECT, SORT_DATE, SORT_SIZE,
+        '-' + SORT_ID, '-' + SORT_SENDER, '-' + SORT_SUBJECT, '-' +
                                       SORT_DATE, '-' + SORT_SIZE});
     static final String DIR_FOLDER = "cur"; // MailDir-like
     public static final String DIR_DRAFTS = _x("Drafts"); // MailDir-like
@@ -493,7 +493,7 @@ public class WebMail extends HttpServlet {
                                        .append("<p class=info><a id=toggleHtmlLink href=\"").append(myself).append("?")
                                        .append(SHOW).append("=").append(Base64.encode(subPart.uidl)).append("&amp;")
                                        .append(HTML).append("=1\">").append(_t("View message as HTML")).append("</a></p>")
-                                       .append("</td></tr>\n");
+                                        .append("</td></tr>\n");
                                 }
                             } else if ("text/plain".equals(subPart.type) || "text/plain".equals(subPart.multipart_type)) {
                                 if (allowHtml != HtmlMode.NONE) {
@@ -501,7 +501,7 @@ public class WebMail extends HttpServlet {
                                        .append("<p class=info><a id=toggleHtmlLink class=viewAsPlainText href=\"")
                                        .append(myself).append("?").append(SHOW).append("=").append(Base64.encode(subPart.uidl))
                                        .append("&amp;").append(HTML).append("=0\">").append(_t("View message as plain text"))
-                                       .append("</a></p></td></tr>\n");
+                                        .append("</a></p></td></tr>\n");
                                 }
                             // show as attachment - if image is loaded as a CID in the iframe, we will still show it as an attachment
                             } else {showPart(out, subPart, level + 1, html, allowHtml);}
@@ -547,7 +547,7 @@ public class WebMail extends HttpServlet {
                 buf.append("<tr id=privacywarn><td colspan=2><p class=info>")
                    .append(_t("To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."))
                    .append("<noscript><br>").append(_t("Enable Javascript for enhanced presentation and additional features.")).append("</noscript>")
-                   .append("</p></td></tr>\n");
+                    .append("</p></td></tr>\n");
             }
 
             if (html) {
@@ -1045,8 +1045,8 @@ public class WebMail extends HttpServlet {
             } else if (buttonPressed(request, CANCEL)) {
                 if (request.getParameter(B64UIDL) != null) {state = State.SHOW;}
             } else if (buttonPressed(request, SWITCH_TO)) {
-                    state = State.LIST;
-                    sessionObject.reallyDelete = false;
+                state = State.LIST;
+                sessionObject.reallyDelete = false;
             }
         } else if (buttonPressed(request, DOWNLOAD) ||
                    buttonPressed(request, RAW_ATTACHMENT) ||
@@ -1871,7 +1871,7 @@ public class WebMail extends HttpServlet {
      * @throws ServletException
      */
     private void processRequest(HttpServletRequest httpRequest, HttpServletResponse response, boolean isPOST)
-    throws IOException, ServletException {
+        throws IOException, ServletException {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
         // Fetch routerconsole theme (or use our default if it doesn't exist)
         String theme = ctx.getProperty(RC_PROP_THEME, DEFAULT_THEME);
@@ -2221,7 +2221,7 @@ public class WebMail extends HttpServlet {
             }
 
             if (isOverrideCssActive()) {
-               buf.append("<link rel=stylesheet href=\"").append(sessionObject.themePath).append("override.css?").append(CoreVersion.VERSION).append("\">\n");
+                buf.append("<link rel=stylesheet href=\"").append(sessionObject.themePath).append("override.css?").append(CoreVersion.VERSION).append("\">\n");
             }
 
             if (state == State.LIST) {
@@ -2254,7 +2254,7 @@ public class WebMail extends HttpServlet {
                .append("<script nonce=").append(cspNonce).append(">const theme = \"").append(theme).append("\";</script>\n")
                .append("<script src=/js/detectPageZoom.js type=module></script>\n")
                .append("<style>body{display:none;pointer-events:none}</style>\n")
-               .append("</head>\n");
+                .append("</head>\n");
 
             PrintWriter out = response.getWriter();
             out.print(buf.toString());
@@ -2418,7 +2418,7 @@ public class WebMail extends HttpServlet {
         if (hasError && errorChanged) {
             buf.append("<p class=error>")
                .append(quoteHTML(currentError).replace("\n", "<br>"))
-               .append("</p>");
+                .append("</p>");
             if (sessionObject != null) sessionObject.lastError = currentError;
         }
 
@@ -2964,7 +2964,7 @@ public class WebMail extends HttpServlet {
      */
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws IOException, ServletException {
+        throws IOException, ServletException {
         processRequest(request, response, false);
     }
 
@@ -2973,7 +2973,7 @@ public class WebMail extends HttpServlet {
      */
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws IOException, ServletException {
+        throws IOException, ServletException {
         processRequest(request, response, true);
     }
 
@@ -3003,7 +3003,7 @@ public class WebMail extends HttpServlet {
 
         buf.append("<div class=topbuttons>")
            .append(button(SEND, _t("Send"))).append(button(SAVE_AS_DRAFT, _t("Save as Draft"))).append(button(CANCEL, _t("Cancel")))
-           .append("</div>\n");
+            .append("</div>\n");
 
         Draft draft = null;
         String from = "";
@@ -3238,7 +3238,7 @@ public class WebMail extends HttpServlet {
         } else {
             sb.append("<a id=pageRefresh class=fakebutton>")
               .append(_t("Refresh Page"))
-              .append("</a>");
+                .append("</a>");
         }
 
         boolean isSpamFolder = folderName.equals(DIR_SPAM);
@@ -3253,7 +3253,7 @@ public class WebMail extends HttpServlet {
         sb.append("<div class=folders>")
           .append(button(SWITCH_TO, _t("Change to Folder") + ':'))
           .append(showFolderSelect(folderName, false))
-          .append("</div>\n</div>\n");
+            .append("</div>\n</div>\n");
 
         // info line
         sb.append("<span id=info><span id=infoUser>")
@@ -3286,7 +3286,7 @@ public class WebMail extends HttpServlet {
           .append(sortHeader(SORT_SIZE, _t("Size"), sessionObject.imgPath, curSort, curOrder, page, folderName))
           .append("</th><th class=\"mailListDelete center\" title=\"")
           .append(_t("Mark for deletion"))
-          .append("\"></th></tr>\n");
+            .append("\"></th></tr>\n");
 
         int i = 0;
 
@@ -3316,7 +3316,7 @@ public class WebMail extends HttpServlet {
         if (i == 0) {
             sb.append("<tr><td colspan=7>\n<div id=emptymailbox><i>")
               .append(_t("No messages"))
-              .append("</i>\n</div>\n</td></tr>\n");
+                .append("</i>\n</div>\n</td></tr>\n");
         }
 
         sb.append("<tr class=\"bottombuttons spacer\"><td colspan=7></td></tr>\n");
@@ -3339,7 +3339,7 @@ public class WebMail extends HttpServlet {
                   .append(button(REALLYDELETE, _t("Yes, really delete them!")))
                   .append("&nbsp;")
                   .append(button(CLEAR, _t("Cancel")))
-                  .append("</p></td>");
+                    .append("</p></td>");
             } else {
                 sb.append("<tr class=bottombuttons><td class=left colspan=3>")
                   .append(button(CONFIGURE, _t("Settings")))
@@ -3349,7 +3349,7 @@ public class WebMail extends HttpServlet {
                   .append(button(MARKALL, _t("Mark All")))
                   .append("&nbsp;")
                   .append(button(CLEAR, _t("Clear All")))
-                  .append("</span></td>");
+                    .append("</span></td>");
             }
         }
 
@@ -3457,11 +3457,11 @@ public class WebMail extends HttpServlet {
         if (mail.isNew() && !mail.isSpam()) {
             sb.append("<img src=/susimail/icons/flag_green.png alt=\"\" title=\"")
               .append(_t("Message is new"))
-              .append("\">");
+                .append("\">");
         } else if (isSpamFolder || mail.isSpam()) {
             sb.append("<img src=/susimail/icons/flag_red.png alt=\"\" title=\"")
               .append(_t("Message is spam"))
-              .append("\">");
+                .append("\">");
         }
 
         sb.append("<td class=\"mailListSize ").append(jslink).append("><span class=listSize>");
@@ -3473,7 +3473,7 @@ public class WebMail extends HttpServlet {
           .append(b64UIDL)
           .append("\" value=1 ")
           .append(idChecked ? "checked" : "")
-          .append("></td></tr>\n");
+            .append("></td></tr>\n");
 
         return sb.toString();
     }
@@ -3544,7 +3544,7 @@ public class WebMail extends HttpServlet {
 
         sb.append("<div class=pagenavcontainer")
           .append(outputHidden ? " hidden" : "")
-          .append("><div class=pagenav>");
+            .append("><div class=pagenav>");
 
         if (pages > 1) {
             if (outputHidden) {
@@ -3552,7 +3552,7 @@ public class WebMail extends HttpServlet {
                   .append(CUR_PAGE)
                   .append("\" value=\"")
                   .append(page)
-                  .append("\">");
+                    .append("\">");
             }
 
             String firstLabel = _t("First");
@@ -3560,43 +3560,43 @@ public class WebMail extends HttpServlet {
             if (page <= 1) {
                 sb.append(button2(FIRSTPAGE, firstLabel))
                   .append("&nbsp;")
-                  .append(button2(PREVPAGE, prevLabel));
+                    .append(button2(PREVPAGE, prevLabel));
             } else {
                 if (outputHidden) {
                     sb.append("<input type=hidden name=\"")
                       .append(PREV_PAGE_NUM)
                       .append("\" value=\"")
                       .append(page - 1)
-                      .append("\">");
+                        .append("\">");
                 }
                 sb.append(button(FIRSTPAGE, firstLabel))
                   .append("&nbsp;")
-                  .append(button(PREVPAGE, prevLabel));
+                    .append(button(PREVPAGE, prevLabel));
             }
 
             sb.append("</div><div class=pagenum>")
               .append(page)
               .append("&nbsp;/&nbsp;")
               .append(pages)
-              .append("</div><div class=pagenav>");
+                .append("</div><div class=pagenav>");
 
             String nextLabel = _t("Next");
             String lastLabel = _t("Last");
             if (page >= pages) {
                 sb.append(button2(NEXTPAGE, nextLabel))
                   .append("&nbsp;")
-                  .append(button2(LASTPAGE, lastLabel));
+                    .append(button2(LASTPAGE, lastLabel));
             } else {
                 if (outputHidden) {
                     sb.append("<input type=hidden name=\"")
                       .append(NEXT_PAGE_NUM)
                       .append("\" value=\"")
                       .append(page + 1)
-                      .append("\">");
+                        .append("\">");
                 }
                 sb.append(button(NEXTPAGE, nextLabel))
                   .append("&nbsp;")
-                  .append(button(LASTPAGE, lastLabel));
+                    .append(button(LASTPAGE, lastLabel));
             }
         }
 
@@ -3614,7 +3614,7 @@ public class WebMail extends HttpServlet {
           .append(NEW_FOLDER)
           .append("\" class=\"")
           .append(disableCurrent ? "moveToFolder" : "switchFolder")
-          .append("\">\n");
+            .append("\">\n");
 
         for (int i = 0; i < DIRS.length; i++) {
             String dir = DIRS[i];
@@ -3623,11 +3623,11 @@ public class WebMail extends HttpServlet {
 
             sb.append("<option value=\"")
               .append(dir)
-              .append("\"");
+                .append("\"");
             if (currentName.equals(dir)) { sb.append(" selected"); }
             sb.append(">")
               .append(_t(DISPLAY_DIRS[i]))
-              .append("</option>\n");
+                .append("</option>\n");
         }
 
         sb.append("</select>");
@@ -3723,7 +3723,7 @@ public class WebMail extends HttpServlet {
             buf.append("<div class=folders>")
                .append(button(MOVE_TO, _t("Move to Folder")))
                .append(showFolderSelect(mc.getFolderName(), true))
-               .append("</div>\n");
+                .append("</div>\n");
         }
 
         buf.append("<table id=message_full>\n");
@@ -3761,12 +3761,12 @@ public class WebMail extends HttpServlet {
             else {
                 buf.append("<tr class=mailbody><td> class=center colspan=2>")
                    .append("<p class=error>").append(_t("Could not fetch mail body.")).append("</p>")
-                   .append("</td></tr>\n");
+                    .append("</td></tr>\n");
             }
         } else {
             buf.append("<tr class=mailbody><td> class=center colspan=2>")
                .append("<p class=error>").append(_t("Message not found.")).append("</p>")
-               .append("</td></tr>\n");
+                .append("</td></tr>\n");
         }
         buf.append("</table>\n</div>\n");
 

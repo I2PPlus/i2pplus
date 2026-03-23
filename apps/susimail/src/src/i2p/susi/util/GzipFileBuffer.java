@@ -26,7 +26,7 @@ public class GzipFileBuffer extends FileBuffer {
 	public GzipFileBuffer(File file) {
 		super(file);
 	}
-	
+
 	public GzipFileBuffer(File file, int offset, int sublen) {
 		super(file, offset, sublen);
 	}

@@ -121,7 +121,7 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
      */
     private int signedNextInt(int n) {
         if (n<=0)
-          throw new IllegalArgumentException("n must be positive");
+            throw new IllegalArgumentException("n must be positive");
 
         boolean isPowerOfTwo = (n & (n - 1)) == 0;
         // get at least 4 extra bits if possible for better

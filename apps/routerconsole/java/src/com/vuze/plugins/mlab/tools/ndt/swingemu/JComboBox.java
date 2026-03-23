@@ -25,36 +25,36 @@ package com.vuze.plugins.mlab.tools.ndt.swingemu;
 
 /**
  * Emulation of javax.swing.JComboBox for the NDT (Network Diagnostic Tool) plugin.
- * 
+ *
  * <p>This class provides a minimal stub implementation of a dropdown combo box
  * component to allow the NDT tool to run in headless environments. The combo box
  * maintains selection index but provides no actual dropdown functionality.</p>
- * 
+ *
  * <p>All operations except index tracking are no-ops, maintaining API compatibility
  * without requiring an actual graphical display system.</p>
- * 
+ *
  */
 public class
-JComboBox
+    JComboBox
 	extends Component
 {
 	private int index;
 
 	public void
-	setSelectedIndex(
+            setSelectedIndex(
 		int	i )
 	{
 		index = i;
 	}
 
 	public int
-	getSelectedIndex()
+            getSelectedIndex()
 	{
 		return( index );
 	}
 
 	public void
-	addItem(
+            addItem(
 		String	str )
 	{
 

@@ -31,7 +31,7 @@ import net.i2p.util.EventDispatcher;
    * @see I2PTunnelHTTPServer
    * @see I2PTunnelHTTPBidirProxy
    */
-  public class I2PTunnelHTTPBidirServer extends I2PTunnelHTTPServer {
+public class I2PTunnelHTTPBidirServer extends I2PTunnelHTTPServer {
 
      /**
       * Creates a bidirectional HTTP server tunnel.
@@ -50,10 +50,10 @@ import net.i2p.util.EventDispatcher;
       * @param tunnel the parent I2PTunnel instance
       * @throws IllegalArgumentException if the I2CP configuration is invalid
       */
-     public I2PTunnelHTTPBidirServer(InetAddress host, int port, int proxyport, String privData, String spoofHost, Logging l, EventDispatcher notifyThis, I2PTunnel tunnel) {
-         super(host, port, privData, spoofHost, l, notifyThis, tunnel);
-         finishSetupI2PTunnelHTTPBidirServer(l, proxyport);
-     }
+    public I2PTunnelHTTPBidirServer(InetAddress host, int port, int proxyport, String privData, String spoofHost, Logging l, EventDispatcher notifyThis, I2PTunnel tunnel) {
+        super(host, port, privData, spoofHost, l, notifyThis, tunnel);
+        finishSetupI2PTunnelHTTPBidirServer(l, proxyport);
+    }
 
      /**
       * Creates a bidirectional HTTP server tunnel with a private key file.
@@ -69,10 +69,10 @@ import net.i2p.util.EventDispatcher;
       * @param tunnel the parent I2PTunnel instance
       * @throws IllegalArgumentException if the key file cannot be read
       */
-     public I2PTunnelHTTPBidirServer(InetAddress host, int port, int proxyport, File privkey, String privkeyname, String spoofHost, Logging l, EventDispatcher notifyThis, I2PTunnel tunnel) {
-         super(host, port, privkey, privkeyname, spoofHost, l, notifyThis, tunnel);
-         finishSetupI2PTunnelHTTPBidirServer(l, proxyport);
-     }
+    public I2PTunnelHTTPBidirServer(InetAddress host, int port, int proxyport, File privkey, String privkeyname, String spoofHost, Logging l, EventDispatcher notifyThis, I2PTunnel tunnel) {
+        super(host, port, privkey, privkeyname, spoofHost, l, notifyThis, tunnel);
+        finishSetupI2PTunnelHTTPBidirServer(l, proxyport);
+    }
 
      /**
       * Creates a bidirectional HTTP server tunnel with an input stream for the private key.
@@ -88,10 +88,10 @@ import net.i2p.util.EventDispatcher;
       * @param tunnel the parent I2PTunnel instance
       * @throws IllegalArgumentException if the key data is invalid
       */
-     public I2PTunnelHTTPBidirServer(InetAddress host, int port, int proxyport, InputStream privData, String privkeyname, String spoofHost, Logging l, EventDispatcher notifyThis, I2PTunnel tunnel) {
-         super(host, port, privData, privkeyname, spoofHost, l, notifyThis, tunnel);
-         finishSetupI2PTunnelHTTPBidirServer(l, proxyport);
-     }
+    public I2PTunnelHTTPBidirServer(InetAddress host, int port, int proxyport, InputStream privData, String privkeyname, String spoofHost, Logging l, EventDispatcher notifyThis, I2PTunnel tunnel) {
+        super(host, port, privData, privkeyname, spoofHost, l, notifyThis, tunnel);
+        finishSetupI2PTunnelHTTPBidirServer(l, proxyport);
+    }
 
      /**
       * Completes the bidirectional server setup by initializing the client proxy.
@@ -103,7 +103,7 @@ import net.i2p.util.EventDispatcher;
       * @param l the Logging instance
       * @param proxyport the port for the outbound HTTP proxy
       */
-     private void finishSetupI2PTunnelHTTPBidirServer(Logging l, int proxyport) {
+    private void finishSetupI2PTunnelHTTPBidirServer(Logging l, int proxyport) {
 
         localPort = proxyport;
         bidir = true;

@@ -243,8 +243,8 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
                                int proto, int fromPort, int toPort, SendMessageOptions options) throws I2PSessionException {
         payload = prepPayload(payload, offset, size, proto, fromPort, toPort, options.getGzip());
         //if (_noEffort) {
-            sendNoEffort(dest, payload, options);
-            return true;
+        sendNoEffort(dest, payload, options);
+        return true;
         //} else {
             // unimplemented
             //return sendBestEffort(dest, payload, options);
@@ -356,17 +356,17 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
                     boolean again = true;
                     while(again) {
                         try {
-                                _msgs.put(new MsgData(0, POISON_SIZE, 0, 0, 0));
-                                again = false;
+                            _msgs.put(new MsgData(0, POISON_SIZE, 0, 0, 0));
+                            again = false;
                                 // System.out.println("I2PSessionMuxedImpl.stopNotifying() success.");
-                            } catch (InterruptedException ie) {
-                                continue;
-                            }
+                        } catch (InterruptedException ie) {
+                            continue;
                         }
-                        _alive = false;
                     }
-                    stopping.set(false);
+                    _alive = false;
                 }
+                stopping.set(false);
+            }
         }
         /** unused */
         @Override

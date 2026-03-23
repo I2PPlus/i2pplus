@@ -156,7 +156,7 @@ public class SessionKeyManager {
      *
      */
     public TagSetHandle tagsDelivered(PublicKey target, SessionKey key, Set<SessionTag> sessionTags) { // nop
-         return null;
+        return null;
     }
 
     /**

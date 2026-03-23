@@ -130,14 +130,14 @@ final class Decoder {
             int bytesToRead = size - 28;
             int i = this.decodeInteger(bytesToRead);
             switch (size) {
-            case 29:
-                size = 29 + i;
-                break;
-            case 30:
-                size = 285 + i;
-                break;
-            default:
-                size = 65821 + (i & (0x0FFFFFFF >>> 32 - 8 * bytesToRead));
+                case 29:
+                    size = 29 + i;
+                    break;
+                case 30:
+                    size = 285 + i;
+                    break;
+                default:
+                    size = 65821 + (i & (0x0FFFFFFF >>> 32 - 8 * bytesToRead));
             }
         }
 

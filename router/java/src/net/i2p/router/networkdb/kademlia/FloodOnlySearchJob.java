@@ -88,7 +88,7 @@ abstract class FloodOnlySearchJob extends FloodSearchJob {
         getContext().messageRegistry().unregisterPending(_out);
         long time = System.currentTimeMillis() - _created;
         if (_log.shouldInfo()) {
-             int timeRemaining = (int)(_expiration - getContext().clock().now());
+            int timeRemaining = (int)(_expiration - getContext().clock().now());
             _log.info("Floodfill search for " + _key + " failed with " + timeRemaining + " remaining after " + time);
         }
         synchronized(_unheardFrom) {

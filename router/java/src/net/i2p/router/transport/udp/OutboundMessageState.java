@@ -433,7 +433,7 @@ class OutboundMessageState implements CDPQEntry {
      * How many fragments in the message.
      */
     public int getFragmentCount() {
-            return _numFragments;
+        return _numFragments;
     }
 
     /**

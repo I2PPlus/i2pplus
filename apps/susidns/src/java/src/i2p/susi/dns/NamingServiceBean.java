@@ -529,7 +529,7 @@ public class NamingServiceBean extends AddressbookBean {
             Properties props = propsList.get(i);
             if (notes != null && notes.length() > 0) {
                 byte[] nbytes = DataHelper.getUTF8(notes);
-                    if (nbytes.length > 255) { // violently truncate, possibly splitting a char
+                if (nbytes.length > 255) { // violently truncate, possibly splitting a char
                     byte[] newbytes = new byte[255];
                     System.arraycopy(nbytes, 0, newbytes, 0, 255);
                     notes = DataHelper.getUTF8(newbytes);

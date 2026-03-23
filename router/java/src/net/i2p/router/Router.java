@@ -1213,7 +1213,7 @@ public class Router implements RouterClock.ClockShiftListener {
                         double messagesPerTunnel = 0;
                         if (rs != null) {
                     // 10m period for smoother capacity planning
-                    Rate r = rs.getRate(RateConstants.TEN_MINUTES);
+                            Rate r = rs.getRate(RateConstants.TEN_MINUTES);
                             if (r != null) {
                                 RateAverages ra = RateAverages.getTemp();
                                 messagesPerTunnel = r.computeAverages(ra, true).getAverage();
@@ -1559,8 +1559,7 @@ public class Router implements RouterClock.ClockShiftListener {
             try {_context.namingService().shutdown();} catch (Throwable t) {_log.error("[Naming service] " + t.getMessage());}
             try {_context.jobQueue().shutdown();} catch (Throwable t) {_log.error("[JobQueue] " + t.getMessage());}
             try {_context.tunnelManager().shutdown();} catch (Throwable t) {_log.error("[TunnelManager] " + t.getMessage());}
-            try {_context.tunnelDispatcher().shutdown();} catch (Throwable t) {_log.error("[TunnelDispatcher] " + t.getMessage()
-                 .replace("Cannot invoke \"net.i2p.router.tunnel.TunnelGateway$Receiver.getSendTo()\"", "Cannot send to TunnelGateway"));}
+            try {_context.tunnelDispatcher().shutdown();} catch (Throwable t) {_log.error("[TunnelDispatcher] " + t.getMessage().replace("Cannot invoke \"net.i2p.router.tunnel.TunnelGateway$Receiver.getSendTo()\"", "Cannot send to TunnelGateway"));}
             try {_context.netDbSegmentor().shutdown();} catch (Throwable t) {_log.error("[networkDb] " + t.getMessage());}
             try {_context.commSystem().shutdown();} catch (Throwable t) {_log.error("[CommSystem] " + t.getMessage());}
             try {_context.bandwidthLimiter().shutdown();} catch (Throwable t) {_log.error("[BandwidthLimiter] " + t.getMessage());}
@@ -1774,9 +1773,9 @@ public class Router implements RouterClock.ClockShiftListener {
             }
         } catch (IOException ioe) {
                 // warning, _log will be null when called from constructor
-                if (_log != null) {_log.error("Error saving the config to " + _configFilename, ioe);}
-                else {System.err.println("Error saving the config to " + _configFilename + ": " + ioe);}
-                return false;
+            if (_log != null) {_log.error("Error saving the config to " + _configFilename, ioe);}
+            else {System.err.println("Error saving the config to " + _configFilename + ": " + ioe);}
+            return false;
         }
         return true;
     }

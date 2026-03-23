@@ -413,7 +413,7 @@ class IntroductionManager {
      *  @since 0.9.3
      */
     int introducedCount() {
-            return _outbound.size();
+        return _outbound.size();
     }
 
     /**
@@ -659,7 +659,7 @@ class IntroductionManager {
         }
 
         public void timeReached() {
-           _transport.send(pkt);
+            _transport.send(pkt);
         }
     }
 

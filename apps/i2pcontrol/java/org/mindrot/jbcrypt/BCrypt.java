@@ -387,8 +387,8 @@ public class BCrypt {
 	private static String encode_base64(byte d[], int len)
 		throws IllegalArgumentException {
 		int off = 0;
-	StringBuilder rs = new StringBuilder();
-	int c1, c2;
+        StringBuilder rs = new StringBuilder();
+        int c1, c2;
 
 		if (len <= 0 || len > d.length)
 			throw new IllegalArgumentException ("Invalid len");
@@ -440,8 +440,8 @@ public class BCrypt {
 	 */
 	private static byte[] decode_base64(String s, int maxolen)
 		throws IllegalArgumentException {
-	StringBuilder rs = new StringBuilder();
-	int off = 0, slen = s.length(), olen = 0;
+        StringBuilder rs = new StringBuilder();
+        int off = 0, slen = s.length(), olen = 0;
 		byte ret[];
 		byte c1, c2, c3, c4, o;
 

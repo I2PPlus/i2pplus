@@ -41,14 +41,14 @@ class GarlicConfig {
     //private long _replyBlockExpiration;
 
     public GarlicConfig(Certificate cert, long id, long expiration, DeliveryInstructions di) {
-	this(new ArrayList<GarlicConfig>(4), cert, id, expiration, di);
+        this(new ArrayList<GarlicConfig>(4), cert, id, expiration, di);
     }
 
     protected GarlicConfig(List<GarlicConfig> cloveConfigs, Certificate cert, long id,
                            long expiration, DeliveryInstructions di) {
         _cert = cert;
-	_id = id;
-	_expiration = expiration;
+        _id = id;
+        _expiration = expiration;
         _cloveConfigs = cloveConfigs;
         _instructions = di;
 	//_replyBlockMessageId = -1;
@@ -154,9 +154,9 @@ class GarlicConfig {
      *
      */
     public void addClove(GarlicConfig config) {
-	if (config != null) {
-	    _cloveConfigs.add(config);
-	}
+        if (config != null) {
+            _cloveConfigs.add(config);
+        }
     }
 
     public int getCloveCount() { return _cloveConfigs.size(); }
@@ -171,26 +171,26 @@ class GarlicConfig {
 
     @Override
     public String toString() {
-	StringBuilder buf = new StringBuilder(); // NOPMD - AvoidUnnecessaryStringBuilderCreation
-	buf.append("<garlicConfig>").append(NL);
-	buf.append("<certificate>").append(getCertificate()).append("</certificate>").append(NL);
-	buf.append("<instructions>").append(getDeliveryInstructions()).append("</instructions>").append(NL);
-	buf.append("<expiration>").append(Instant.ofEpochMilli(getExpiration())).append("</expiration>").append(NL);
-	buf.append("<garlicId>").append(getId()).append("</garlicId>").append(NL);
-	buf.append("<recipient>").append(getRecipient()).append("</recipient>").append(NL);
-	buf.append("<recipientPublicKey>").append(getRecipientPublicKey()).append("</recipientPublicKey>").append(NL);
+        StringBuilder buf = new StringBuilder(); // NOPMD - AvoidUnnecessaryStringBuilderCreation
+        buf.append("<garlicConfig>").append(NL);
+        buf.append("<certificate>").append(getCertificate()).append("</certificate>").append(NL);
+        buf.append("<instructions>").append(getDeliveryInstructions()).append("</instructions>").append(NL);
+        buf.append("<expiration>").append(Instant.ofEpochMilli(getExpiration())).append("</expiration>").append(NL);
+        buf.append("<garlicId>").append(getId()).append("</garlicId>").append(NL);
+        buf.append("<recipient>").append(getRecipient()).append("</recipient>").append(NL);
+        buf.append("<recipientPublicKey>").append(getRecipientPublicKey()).append("</recipientPublicKey>").append(NL);
 	//buf.append("<replyBlockCertificate>").append(getReplyBlockCertificate()).append("</replyBlockCertificate>").append(NL);
 	//buf.append("<replyBlockExpiration>").append(new Date(getReplyBlockExpiration())).append("</replyBlockExpiration>").append(NL);
 	//buf.append("<replyBlockMessageId>").append(getReplyBlockMessageId()).append("</replyBlockMessageId>").append(NL);
 	//buf.append("<replyInstructions>").append(getReplyInstructions()).append("</replyInstructions>").append(NL);
 	//buf.append("<replyThroughRouter>").append(getReplyThroughRouter()).append("</replyThroughRouter>").append(NL);
 	//buf.append("<requestAck>").append(getRequestAck()).append("</requestAck>").append(NL);
-	buf.append(getSubData());
-	buf.append("<subcloves>").append(NL);
-	for (int i = 0; i < getCloveCount(); i++)
-	    buf.append("<clove>").append(getClove(i)).append("</clove>").append(NL);
-	buf.append("</subcloves>").append(NL);
-	buf.append("</garlicConfig>").append(NL);
-	return buf.toString();
+        buf.append(getSubData());
+        buf.append("<subcloves>").append(NL);
+        for (int i = 0; i < getCloveCount(); i++)
+            buf.append("<clove>").append(getClove(i)).append("</clove>").append(NL);
+        buf.append("</subcloves>").append(NL);
+        buf.append("</garlicConfig>").append(NL);
+        return buf.toString();
     }
 }

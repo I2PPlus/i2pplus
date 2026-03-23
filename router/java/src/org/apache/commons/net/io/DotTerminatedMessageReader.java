@@ -104,29 +104,29 @@ public final class DotTerminatedMessageReader extends BufferedReader {
                     mark(2); // need to check for CR LF or DOT
                     chint = super.read();
                     switch (chint) {
-                    case NetConstants.EOS:
+                        case NetConstants.EOS:
                         // new Throwable("Trailing DOT").printStackTrace();
-                        eof = true;
-                        return DOT; // return the trailing DOT
-                    case DOT:
-                        // no need to reset as we want to lose the first DOT
-                        return chint; // i.e. DOT
-                    case CR:
-                        chint = super.read();
-                        if (chint == NetConstants.EOS) { // Still only DOT CR - should not happen
-                            // new Throwable("Trailing DOT CR").printStackTrace();
-                            reset(); // So CR is picked up next time
-                            return DOT; // return the trailing DOT
-                        }
-                        if (chint == LF) { // DOT CR LF
-                            atBeginning = true;
                             eof = true;
+                            return DOT; // return the trailing DOT
+                        case DOT:
+                        // no need to reset as we want to lose the first DOT
+                            return chint; // i.e. DOT
+                        case CR:
+                            chint = super.read();
+                            if (chint == NetConstants.EOS) { // Still only DOT CR - should not happen
+                            // new Throwable("Trailing DOT CR").printStackTrace();
+                                reset(); // So CR is picked up next time
+                                return DOT; // return the trailing DOT
+                            }
+                            if (chint == LF) { // DOT CR LF
+                                atBeginning = true;
+                                eof = true;
                             // Do we need to clear the mark somehow?
-                            return NetConstants.EOS;
-                        }
-                        break;
-                    default:
-                        break;
+                                return NetConstants.EOS;
+                            }
+                            break;
+                        default:
+                            break;
                     }
                     // Should not happen - lone DOT at beginning
                     // new Throwable("Lone DOT followed by "+(char)chint).printStackTrace();

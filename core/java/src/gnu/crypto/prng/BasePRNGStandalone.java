@@ -56,16 +56,16 @@ public abstract class BasePRNGStandalone implements IRandomStandalone, Serializa
    // -------------------------------------------------------------------------
 
    /** The canonical name prefix of the PRNG algorithm. */
-   protected final String name;
+    protected final String name;
 
    /** Indicate if this instance has already been initialised or not. */
-   protected volatile boolean initialised;
+    protected volatile boolean initialised;
 
    /** A temporary buffer to serve random bytes. */
-   protected volatile byte[] buffer;
+    protected volatile byte[] buffer;
 
    /** The index into buffer of where the next byte will come from. */
-   protected int ndx;
+    protected int ndx;
 
    // Constructor(s)
    // -------------------------------------------------------------------------
@@ -75,10 +75,10 @@ public abstract class BasePRNGStandalone implements IRandomStandalone, Serializa
     *
     * @param name the canonical name of this instance.
     */
-   protected BasePRNGStandalone(String name) {
-      this.name = name;
-      buffer = new byte[0];
-   }
+    protected BasePRNGStandalone(String name) {
+        this.name = name;
+        buffer = new byte[0];
+    }
 
    // Class methods
    // -------------------------------------------------------------------------
@@ -88,99 +88,99 @@ public abstract class BasePRNGStandalone implements IRandomStandalone, Serializa
 
    // IRandomStandalone interface implementation ----------------------------------------
 
-   public String name() {
-      return name;
-   }
+    public String name() {
+        return name;
+    }
 
-   public void init(Map<String, byte[]> attributes) {
-      this.setup(attributes);
+    public void init(Map<String, byte[]> attributes) {
+        this.setup(attributes);
 
-      ndx = 0;
-      initialised = true;
-   }
+        ndx = 0;
+        initialised = true;
+    }
 
-   public byte nextByte() throws IllegalStateException {//, LimitReachedException {
-      if (!initialised) {
-         throw new IllegalStateException();
-      }
-      return nextByteInternal();
-   }
+    public byte nextByte() throws IllegalStateException {//, LimitReachedException {
+        if (!initialised) {
+            throw new IllegalStateException();
+        }
+        return nextByteInternal();
+    }
 
-   public void nextBytes(byte[] out) throws IllegalStateException {//, LimitReachedException {
-      nextBytes(out, 0, out.length);
-   }
+    public void nextBytes(byte[] out) throws IllegalStateException {//, LimitReachedException {
+        nextBytes(out, 0, out.length);
+    }
 
-   public void nextBytes(byte[] out, int offset, int length)
-   throws IllegalStateException //, LimitReachedException
-   {
-      if (!initialised)
-         throw new IllegalStateException("not initialized");
+    public void nextBytes(byte[] out, int offset, int length)
+        throws IllegalStateException //, LimitReachedException
+    {
+        if (!initialised)
+            throw new IllegalStateException("not initialized");
 
-      if (length == 0)
-         return;
+        if (length == 0)
+            return;
 
-      if (offset < 0 || length < 0 || offset + length > out.length)
-         throw new ArrayIndexOutOfBoundsException("offset=" + offset + " length="
+        if (offset < 0 || length < 0 || offset + length > out.length)
+            throw new ArrayIndexOutOfBoundsException("offset=" + offset + " length="
                                                   + length + " limit=" + out.length);
 
-      if (buffer == null)
-          throw new IllegalStateException("Random is shut down - do you have a static ref?");
-      if (ndx >= buffer.length) {
-         fillBlock();
-         ndx = 0;
-      }
-      int count = 0;
-      while (count < length) {
-         int amount = Math.min(buffer.length - ndx, length - count);
-         System.arraycopy(buffer, ndx, out, offset+count, amount);
-         count += amount;
-         ndx += amount;
-         if (ndx >= buffer.length) {
+        if (buffer == null)
+            throw new IllegalStateException("Random is shut down - do you have a static ref?");
+        if (ndx >= buffer.length) {
             fillBlock();
             ndx = 0;
-         }
-      }
-   }
+        }
+        int count = 0;
+        while (count < length) {
+            int amount = Math.min(buffer.length - ndx, length - count);
+            System.arraycopy(buffer, ndx, out, offset+count, amount);
+            count += amount;
+            ndx += amount;
+            if (ndx >= buffer.length) {
+                fillBlock();
+                ndx = 0;
+            }
+        }
+    }
 
-   public void addRandomByte(byte b) {
-      throw new UnsupportedOperationException("random state is non-modifiable");
-   }
+    public void addRandomByte(byte b) {
+        throw new UnsupportedOperationException("random state is non-modifiable");
+    }
 
-   public void addRandomBytes(byte[] buffer) {
-      addRandomBytes(buffer, 0, buffer.length);
-   }
+    public void addRandomBytes(byte[] buffer) {
+        addRandomBytes(buffer, 0, buffer.length);
+    }
 
-   public void addRandomBytes(byte[] buffer, int offset, int length) {
-      throw new UnsupportedOperationException("random state is non-modifiable");
-   }
+    public void addRandomBytes(byte[] buffer, int offset, int length) {
+        throw new UnsupportedOperationException("random state is non-modifiable");
+    }
 
    // Instance methods
    // -------------------------------------------------------------------------
 
-   public boolean isInitialised() {
-      return initialised;
-   }
+    public boolean isInitialised() {
+        return initialised;
+    }
 
-   private byte nextByteInternal() {//throws LimitReachedException {
-      if (buffer == null)
-          throw new IllegalStateException("Random is shut down - do you have a static ref?");
-      if (ndx >= buffer.length) {
-         this.fillBlock();
-         ndx = 0;
-      }
+    private byte nextByteInternal() {//throws LimitReachedException {
+        if (buffer == null)
+            throw new IllegalStateException("Random is shut down - do you have a static ref?");
+        if (ndx >= buffer.length) {
+            this.fillBlock();
+            ndx = 0;
+        }
 
-      return buffer[ndx++];
-   }
+        return buffer[ndx++];
+    }
 
    // abstract methods to implement by subclasses -----------------------------
 
-  @Override
+    @Override
   public Object clone() throws CloneNotSupportedException
-  {
-    return super.clone();
-  }
+    {
+        return super.clone();
+    }
 
-   public abstract void setup(Map<String, byte[]> attributes);
+    public abstract void setup(Map<String, byte[]> attributes);
 
-   public abstract void fillBlock(); //throws LimitReachedException;
+    public abstract void fillBlock(); //throws LimitReachedException;
 }

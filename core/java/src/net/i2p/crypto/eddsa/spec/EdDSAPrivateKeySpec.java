@@ -80,9 +80,9 @@ public class EdDSAPrivateKeySpec implements KeySpec {
             throw new IllegalArgumentException("hash length is wrong");
         int bd8 = bd4 / 2;
 
-	this.seed = null;
-	this.h = h;
-	this.spec = spec;
+        this.seed = null;
+        this.h = h;
+        this.spec = spec;
 
         h[0] &= 248;
         h[bd8 - 1] &= 63;

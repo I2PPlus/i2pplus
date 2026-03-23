@@ -150,7 +150,7 @@ class BuildMessageProcessor {
                         boolean isDup = _filter.add(rv.getData(), off, 32);
                         if (isDup) {
                             if (log.shouldWarn())
-                            log.warn("[MsgID " + msg.getUniqueId() + "] Duplicate " + privKey.getType() + " record received " + rv);
+                                log.warn("[MsgID " + msg.getUniqueId() + "] Duplicate " + privKey.getType() + " record received " + rv);
                             ctx.statManager().addRateData("tunnel.buildRequestDup", 1);
                             return null;
                         }

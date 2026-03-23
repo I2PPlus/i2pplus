@@ -199,7 +199,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         } else if (claimedAddress != null) {
             _token = _transport.getEstablisher().getOutboundToken(_remoteHostId);
             if (_token != 0) {
-            _currentState = OutboundState.OB_STATE_UNKNOWN;
+                _currentState = OutboundState.OB_STATE_UNKNOWN;
                 createNewState(ra);
             } else {
                 _currentState = OutboundState.OB_STATE_NEEDS_TOKEN;

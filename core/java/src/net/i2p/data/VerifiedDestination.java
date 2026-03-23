@@ -56,7 +56,7 @@ public class VerifiedDestination extends Destination {
             case Certificate.CERTIFICATE_TYPE_NULL:
             case Certificate.CERTIFICATE_TYPE_HIDDEN:
                 return allowNone;
-            
+
             case Certificate.CERTIFICATE_TYPE_SIGNED:
                 return verifySignedCert();
         }

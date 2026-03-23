@@ -17,7 +17,7 @@ import net.i2p.util.SimpleByteCache;
 
 /**
  * Cryptographic private key for asymmetric encryption in I2P.
- * 
+ *
  * <p>PrivateKey provides the decryption component of I2P's asymmetric cryptography:</p>
  * <ul>
  *   <li><strong>Default Algorithm:</strong> ElGamal 2048-bit (256 bytes)</li>
@@ -25,14 +25,14 @@ import net.i2p.util.SimpleByteCache;
  *   <li><strong>Key Structure:</strong> Contains only the private exponent</li>
  *   <li><strong>Security:</strong> Implements {@link Destroyable} for secure cleanup</li>
  * </ul>
- * 
+ *
  * <p><strong>Supported Algorithms:</strong></p>
  * <ul>
  *   <li><strong>ElGamal 2048:</strong> Legacy algorithm, 256-byte keys</li>
  *   <li><strong>ECIES X25519:</strong> Modern elliptic curve, 32-byte keys</li>
  *   <li><strong>Future Types:</strong> Extensible design for new algorithms</li>
  * </ul>
- * 
+ *
  * <p><strong>Key Format:</strong></p>
  * <ul>
  *   <li><strong>ElGamal:</strong> 256-byte private exponent only</li>
@@ -40,7 +40,7 @@ import net.i2p.util.SimpleByteCache;
  *   <li><strong>Efficiency:</strong> Only stores variable private component</li>
  *   <li><strong>Validation:</strong> Type-specific length and format checking</li>
  * </ul>
- * 
+ *
  * <p><strong>Usage:</strong></p>
  * <ul>
  *   <li><strong>Decryption:</strong> Decrypt messages encrypted with corresponding {@link PublicKey}</li>
@@ -48,7 +48,7 @@ import net.i2p.util.SimpleByteCache;
  *   <li><strong>Identity:</strong> Part of {@link Destination} cryptographic identity</li>
  *   <li><strong>Storage:</strong> Securely stored in keyring or keystore</li>
  * </ul>
- * 
+ *
  * <p><strong>Security Considerations:</strong></p>
  * <ul>
  *   <li><strong>Confidentiality:</strong> Private keys must never be exposed</li>
@@ -56,7 +56,7 @@ import net.i2p.util.SimpleByteCache;
  *   <li><strong>Memory Protection:</strong> Zeroize memory after use</li>
  *   <li><strong>Algorithm Choice:</strong> Prefer modern algorithms (X25519) when possible</li>
  * </ul>
- * 
+ *
  * <p><strong>Performance Features:</strong></p>
  * <ul>
  *   <li><strong>Caching:</strong> LRU cache for frequently used keys</li>
@@ -64,14 +64,14 @@ import net.i2p.util.SimpleByteCache;
  *   <li><strong>Efficient Storage:</strong> Optimized byte representation</li>
  *   <li><strong>Factory Methods:</strong> Static creation methods for cache access</li>
  * </ul>
- * 
+ *
  * <p><strong>Migration Path:</strong></p>
  * <ul>
  *   <li><strong>Legacy:</strong> ElGamal 2048-bit for backward compatibility</li>
  *   <li><strong>Modern:</strong> ECIES X25519 for better performance and security</li>
  *   <li><strong>Transition:</strong> Mixed algorithm support during migration</li>
  * </ul>
- * 
+ *
  * <p><strong>Thread Safety:</strong></p>
  * <ul>
  *   <li><strong>Immutable Data:</strong> Key data cannot be modified after creation</li>

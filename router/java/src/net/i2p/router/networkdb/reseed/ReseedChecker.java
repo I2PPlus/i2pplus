@@ -80,7 +80,7 @@ public class ReseedChecker {
                 if (!_networkLogged) {
                     _log.logAlways(Log.WARN, "Cannot reseed - no network connection");
                     _networkLogged = true;
-               }
+                }
             } else {_networkLogged = false;}
             return false;
         }

@@ -21,7 +21,7 @@ public class GracefulShutdown implements Runnable {
 
     /**
      * Create a new graceful shutdown handler.
-     * 
+     *
      * @param ctx the router context for accessing router state and services
      */
     public GracefulShutdown(RouterContext ctx) {

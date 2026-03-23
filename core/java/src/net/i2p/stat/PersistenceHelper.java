@@ -26,9 +26,9 @@ class PersistenceHelper {
         if (addComments) {
             String when = value > 0 ? Instant.ofEpochMilli(value).toString() : "Never";
             add(buf, true, prefix, name, description + ' ' + when, value);
-       } else {
+        } else {
             add(buf, false, prefix, name, description, value);
-       }
+        }
     }
 
     /** @since 0.8.5 */
@@ -36,10 +36,10 @@ class PersistenceHelper {
         if (addComments) {
             String when = DataHelper.formatDuration(value);
             add(buf, true, prefix, name, description + ' ' + when, value);
-       } else {
+        } else {
             add(buf, false, prefix, name, description, value);
-       }
-   }
+        }
+    }
 
     /** @param value non-negative */
     public final static void add(StringBuilder buf, boolean addComments, String prefix, String name, String description, long value) {

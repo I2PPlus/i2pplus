@@ -67,7 +67,7 @@ public enum SigContext {
      * <pre>
      * // Get context specification for datagram signatures
      * SigContextSpec spec = SigContext.SC_DATAGRAM.getSpec();
-     * 
+     *
      * // Apply to signature engine
      * signatureEngine.setParameter(spec);
      * </pre>

@@ -7,7 +7,7 @@ import java.util.ResourceBundle;
 /**
  * Class that defines utility methods used by the NDT code
  */
- public class NDTUtils {
+public class NDTUtils {
 
     /**
      * Utility method to print double value up to the hundredth place.
@@ -38,39 +38,39 @@ import java.util.ResourceBundle;
         String strNameTxt = null;
 
         switch (paramIntVal) {
-        case (NDTConstants.DATA_RATE_SYSTEM_FAULT):
-            strNameTxt = paramResBundObj.getString(NDTConstants.SYSTEM_FAULT_STR);
-            break;
-        case NDTConstants.DATA_RATE_RTT:
-            strNameTxt = paramResBundObj.getString(NDTConstants.RTT_STR);
-            break;
-        case NDTConstants.DATA_RATE_DIAL_UP:
-            strNameTxt = paramResBundObj.getString(NDTConstants.DIALUP_STR);
-            break;
-        case NDTConstants.DATA_RATE_T1:
-            strNameTxt = NDTConstants.T1_STR;
-            break;
-        case NDTConstants.DATA_RATE_ETHERNET:
-            strNameTxt = NDTConstants.ETHERNET_STR;
-            break;
-        case NDTConstants.DATA_RATE_T3:
-            strNameTxt = NDTConstants.T3_STR;
-            break;
-        case NDTConstants.DATA_RATE_FAST_ETHERNET:
-            strNameTxt = NDTConstants.FAST_ETHERNET;
-            break;
-        case NDTConstants.DATA_RATE_OC_12:
-            strNameTxt = NDTConstants.OC_12_STR;
-            break;
-        case NDTConstants.DATA_RATE_GIGABIT_ETHERNET:
-            strNameTxt = NDTConstants.GIGABIT_ETHERNET_STR;
-            break;
-        case NDTConstants.DATA_RATE_OC_48:
-            strNameTxt = NDTConstants.OC_48_STR;
-            break;
-        case NDTConstants.DATA_RATE_10G_ETHERNET:
-            strNameTxt = NDTConstants.TENGIGABIT_ETHERNET_STR;
-            break;
+            case (NDTConstants.DATA_RATE_SYSTEM_FAULT):
+                strNameTxt = paramResBundObj.getString(NDTConstants.SYSTEM_FAULT_STR);
+                break;
+            case NDTConstants.DATA_RATE_RTT:
+                strNameTxt = paramResBundObj.getString(NDTConstants.RTT_STR);
+                break;
+            case NDTConstants.DATA_RATE_DIAL_UP:
+                strNameTxt = paramResBundObj.getString(NDTConstants.DIALUP_STR);
+                break;
+            case NDTConstants.DATA_RATE_T1:
+                strNameTxt = NDTConstants.T1_STR;
+                break;
+            case NDTConstants.DATA_RATE_ETHERNET:
+                strNameTxt = NDTConstants.ETHERNET_STR;
+                break;
+            case NDTConstants.DATA_RATE_T3:
+                strNameTxt = NDTConstants.T3_STR;
+                break;
+            case NDTConstants.DATA_RATE_FAST_ETHERNET:
+                strNameTxt = NDTConstants.FAST_ETHERNET;
+                break;
+            case NDTConstants.DATA_RATE_OC_12:
+                strNameTxt = NDTConstants.OC_12_STR;
+                break;
+            case NDTConstants.DATA_RATE_GIGABIT_ETHERNET:
+                strNameTxt = NDTConstants.GIGABIT_ETHERNET_STR;
+                break;
+            case NDTConstants.DATA_RATE_OC_48:
+                strNameTxt = NDTConstants.OC_48_STR;
+                break;
+            case NDTConstants.DATA_RATE_10G_ETHERNET:
+                strNameTxt = NDTConstants.TENGIGABIT_ETHERNET_STR;
+                break;
         }
         return (strNameTxt);
     }

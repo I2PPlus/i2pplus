@@ -95,24 +95,24 @@ public enum RandomAccessFileMode {
         for (final OpenOption option : openOption) {
             if (option instanceof StandardOpenOption) {
                 switch ((StandardOpenOption) option) {
-                case WRITE:
-                    if (!bestFit.implies(READ_WRITE)) {
-                        bestFit = READ_WRITE;
-                    }
-                    break;
-                case DSYNC:
-                    if (!bestFit.implies(READ_WRITE_SYNC_CONTENT)) {
-                        bestFit = READ_WRITE_SYNC_CONTENT;
-                    }
-                    break;
-                case SYNC:
-                    if (!bestFit.implies(READ_WRITE_SYNC_ALL)) {
-                        bestFit = READ_WRITE_SYNC_ALL;
-                    }
-                    break;
-                default:
+                    case WRITE:
+                        if (!bestFit.implies(READ_WRITE)) {
+                            bestFit = READ_WRITE;
+                        }
+                        break;
+                    case DSYNC:
+                        if (!bestFit.implies(READ_WRITE_SYNC_CONTENT)) {
+                            bestFit = READ_WRITE_SYNC_CONTENT;
+                        }
+                        break;
+                    case SYNC:
+                        if (!bestFit.implies(READ_WRITE_SYNC_ALL)) {
+                            bestFit = READ_WRITE_SYNC_ALL;
+                        }
+                        break;
+                    default:
                     // explicit case skip (spotbugs)
-                    continue;
+                        continue;
                 }
             }
         }
@@ -129,14 +129,14 @@ public enum RandomAccessFileMode {
      */
     public static RandomAccessFileMode valueOfMode(final String mode) {
         switch (mode) {
-        case R:
-            return READ_ONLY;
-        case RW:
-            return READ_WRITE;
-        case RWD:
-            return READ_WRITE_SYNC_CONTENT;
-        case RWS:
-            return READ_WRITE_SYNC_ALL;
+            case R:
+                return READ_ONLY;
+            case RW:
+                return READ_WRITE;
+            case RWD:
+                return READ_WRITE_SYNC_CONTENT;
+            case RWS:
+                return READ_WRITE_SYNC_ALL;
         }
         throw new IllegalArgumentException(mode);
     }

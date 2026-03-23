@@ -317,7 +317,7 @@ class MailCache {
 	 * @param mode CACHE_ONLY or HEADER_CACHE_ONLY to not pull from pop server
 	 * @return An e-mail or null
 	 */
-        @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({"unchecked", "rawtypes"})
 	public Mail getMail(String uidl, FetchMode mode) {
 		Mail mail = null, newMail = null;
 
@@ -404,7 +404,7 @@ class MailCache {
 	 * @return true if any were fetched
 	 * @since 0.9.13
 	 */
-        @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({"unchecked", "rawtypes"})
 	public boolean getMail(FetchMode mode) {
 		if (mode == FetchMode.CACHE_ONLY || mode == FetchMode.HEADER_CACHE_ONLY)
 			throw new IllegalArgumentException();
@@ -512,8 +512,8 @@ class MailCache {
 					} else {
 						mail.setBody(pr.getBuffer());
 					}
-				if (setAdditional)
-					additionalMsg = new StringBuilder("\n\n").append(mail.sender).append('\n').append(mail.subject).toString(); // NOPMD - AvoidUnnecessaryStringBuilderCreation
+                    if (setAdditional)
+                        additionalMsg = new StringBuilder("\n\n").append(mail.sender).append('\n').append(mail.subject).toString(); // NOPMD - AvoidUnnecessaryStringBuilderCreation
 					rv = true;
 					if (disk.saveMail(mail) && mail.hasBody() &&
 					    !Boolean.parseBoolean(Config.getProperty(WebMail.CONFIG_LEAVE_ON_SERVER))) {

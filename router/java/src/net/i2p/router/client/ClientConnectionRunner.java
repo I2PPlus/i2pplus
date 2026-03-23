@@ -172,17 +172,17 @@ class ClientConnectionRunner {
      *
      */
     public synchronized void startRunning() throws IOException {
-            if (_dead || _reader != null)
+        if (_dead || _reader != null)
                 throw new IllegalStateException();
-            _reader = new I2CPMessageReader(new BufferedInputStream(_socket.getInputStream(), BUF_SIZE),
+        _reader = new I2CPMessageReader(new BufferedInputStream(_socket.getInputStream(), BUF_SIZE),
                                             createListener());
-            _writer = new ClientWriterRunner(_context, this);
-            I2PThread t = new I2PThread(_writer);
-            t.setName("I2CP Writer " + __id.incrementAndGet());
-            t.setDaemon(true);
-            t.start();
-            _out = new BufferedOutputStream(_socket.getOutputStream());
-            _reader.startReading();
+        _writer = new ClientWriterRunner(_context, this);
+        I2PThread t = new I2PThread(_writer);
+        t.setName("I2CP Writer " + __id.incrementAndGet());
+        t.setDaemon(true);
+        t.start();
+        _out = new BufferedOutputStream(_socket.getOutputStream());
+        _reader.startReading();
             // TODO need a cleaner for unclaimed items in _messages, but we have no timestamps...
     }
 
@@ -420,7 +420,7 @@ class ClientConnectionRunner {
         SessionParams sp = _sessions.get(hash);
         if (sp == null || sp.sessionId != null) {throw new IllegalStateException();}
         sp.sessionId = id;
-     }
+    }
 
     /**
      *  Kill the session. Caller must kill runner if none left.

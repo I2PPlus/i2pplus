@@ -96,7 +96,7 @@ public interface IRandomStandalone extends Cloneable {
     * <p>Returns the canonical name of this instance.</p>
     *
     * @return the canonical name of this instance. */
-   String name();
+    String name();
 
    /**
     * <p>Initialises the pseudo-random number generator scheme with the
@@ -107,7 +107,7 @@ public interface IRandomStandalone extends Cloneable {
     * @throws IllegalArgumentException if at least one of the defined name/
     * value pairs contains invalid data.
     */
-   void init(Map<String, byte[]> attributes);
+    void init(Map<String, byte[]> attributes);
 
    /**
      * <p>Returns the next 8 bits of random data generated from this instance.</p>
@@ -116,12 +116,12 @@ public interface IRandomStandalone extends Cloneable {
      * @throws IllegalStateException if the instance is not yet initialised.
      * theoretical limit for generating non-repetitive pseudo-random data.
      */
-   byte nextByte() throws IllegalStateException;
+    byte nextByte() throws IllegalStateException;
 
    /**
     *  @since 0.9.58 added to interface
     */
-   public void nextBytes(byte[] out) throws IllegalStateException;
+    public void nextBytes(byte[] out) throws IllegalStateException;
 
    /**
      * <p>Fills the designated byte array, starting from byte at index
@@ -137,8 +137,8 @@ public interface IRandomStandalone extends Cloneable {
      * @throws IllegalStateException if the instance is not yet initialised.
      * theoretical limit for generating non-repetitive pseudo-random data.
      */
-   void nextBytes(byte[] out, int offset, int length)
-   throws IllegalStateException;
+    void nextBytes(byte[] out, int offset, int length)
+        throws IllegalStateException;
 
    /**
     * <p>Supplement, or possibly replace, the random state of this PRNG with
@@ -150,7 +150,7 @@ public interface IRandomStandalone extends Cloneable {
     *
     * @param b The byte to add.
     */
-   void addRandomByte(byte b);
+    void addRandomByte(byte b);
 
    /**
     * <p>Supplement, or possibly replace, the random state of this PRNG with
@@ -162,7 +162,7 @@ public interface IRandomStandalone extends Cloneable {
     *
     * @param in The buffer of new random bytes to add.
     */
-   void addRandomBytes(byte[] in);
+    void addRandomBytes(byte[] in);
 
    /**
     * <p>Supplement, or possibly replace, the random state of this PRNG with
@@ -178,12 +178,12 @@ public interface IRandomStandalone extends Cloneable {
     * @throws IndexOutOfBoundsException If <i>offset</i>, <i>length</i>,
     * or <i>offset</i>+<i>length</i> is out of bounds.
     */
-   void addRandomBytes(byte[] in, int offset, int length);
+    void addRandomBytes(byte[] in, int offset, int length);
 
    /**
     * <p>Returns a clone copy of this instance.</p>
     *
     * @return a clone copy of this instance.
     */
-   Object clone() throws CloneNotSupportedException;
+    Object clone() throws CloneNotSupportedException;
 }

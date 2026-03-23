@@ -92,8 +92,8 @@ public class HostsTxtNamingService extends MetaNamingService {
         if (file == null)
             return super.getNames(options);
         for (NamingService ns : _services) {
-             String name = ns.getName();
-             if (name.equals(file) || name.endsWith('/' + file) || name.endsWith('\\' + file))
+            String name = ns.getName();
+            if (name.equals(file) || name.endsWith('/' + file) || name.endsWith('\\' + file))
                  return ns.getNames(options);
         }
         return new HashSet<String>(0);

@@ -109,7 +109,7 @@ public class SecurityHeaderBuilder {
      * <p>
      * Cache-Control policy is determined as follows:
      * <ul>
-     *   <li>For immutable content (images, fonts, video, audio): 
+     *   <li>For immutable content (images, fonts, video, audio):
      *       Cache-Control: private, max-age=31536000, immutable</li>
      *   <li>For other content: Cache-Control: private, no-cache, max-age=604800</li>
      *   <li>Existing Cache-Control headers are preserved unless they contain

@@ -45,8 +45,8 @@ public enum FileSystem {
             // KEEP THIS ARRAY SORTED!
             // @formatter:off
             // ASCII NUL
-            0,
-             '/'
+        0,
+        '/'
             // @formatter:on
     }, new String[] {}, false, false, '/'),
 
@@ -57,9 +57,9 @@ public enum FileSystem {
             // KEEP THIS ARRAY SORTED!
             // @formatter:off
             // ASCII NUL
-            0,
-            '/',
-             ':'
+        0,
+        '/',
+        ':'
             // @formatter:on
     }, new String[] {}, false, false, '/'),
 
@@ -82,19 +82,19 @@ public enum FileSystem {
             new int[] {
                     // KEEP THIS ARRAY SORTED!
                     // ASCII NUL
-                    0,
+                0,
                     // 1-31 may be allowed in file streams
-                    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28,
-                    29, 30, 31,
-                    '"', '*', '/', ':', '<', '>', '?', '\\', '|'
+                1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28,
+                29, 30, 31,
+                '"', '*', '/', ':', '<', '>', '?', '\\', '|'
             }, new String[] {
-                    "AUX",
-                    "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9",
-                    "COM\u00b2", "COM\u00b3", "COM\u00b9", // Superscript 2 3 1 in that order
-                    "CON", "CONIN$", "CONOUT$",
-                    "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9",
-                    "LPT\u00b2", "LPT\u00b3", "LPT\u00b9", // Superscript 2 3 1 in that order
-                    "NUL", "PRN"
+                "AUX",
+                "COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9",
+                "COM\u00b2", "COM\u00b3", "COM\u00b9", // Superscript 2 3 1 in that order
+                "CON", "CONIN$", "CONOUT$",
+                "LPT1", "LPT2", "LPT3", "LPT4", "LPT5", "LPT6", "LPT7", "LPT8", "LPT9",
+                "LPT\u00b2", "LPT\u00b3", "LPT\u00b9", // Superscript 2 3 1 in that order
+                "NUL", "PRN"
             }, true, true, '\\');
     // @formatter:on
 

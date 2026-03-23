@@ -77,54 +77,54 @@ public class SAMStreamSend {
         String opts = "inbound.length=0 outbound.length=0";
         int c;
         while ((c = g.getopt()) != -1) {
-          switch (c) {
-            case 's':
-                isSSL = true;
-                break;
+            switch (c) {
+                case 's':
+                    isSSL = true;
+                    break;
 
-            case 'x':
-                isMaster = true;
-                break;
+                case 'x':
+                    isMaster = true;
+                    break;
 
-            case 'm':
-                mode = Integer.parseInt(g.getOptarg());
-                if (mode < 0 || mode > V1RAW) {
+                case 'm':
+                    mode = Integer.parseInt(g.getOptarg());
+                    if (mode < 0 || mode > V1RAW) {
+                        System.err.println(USAGE);
+                        return;
+                    }
+                    break;
+
+                case 'v':
+                    version = g.getOptarg();
+                    break;
+
+                case 'b':
+                    host = g.getOptarg();
+                    break;
+
+                case 'o':
+                    opts = new StringBuilder(opts).append(' ').append(g.getOptarg()).toString(); // NOPMD - AvoidUnnecessaryStringBuilderCreation
+                    break;
+
+                case 'p':
+                    port = g.getOptarg();
+                    break;
+
+                case 'u':
+                    user = g.getOptarg();
+                    break;
+
+                case 'w':
+                    password = g.getOptarg();
+                    break;
+
+                case 'h':
+                case '?':
+                case ':':
+                default:
                     System.err.println(USAGE);
                     return;
-                }
-                break;
-
-            case 'v':
-                version = g.getOptarg();
-                break;
-
-            case 'b':
-                host = g.getOptarg();
-                break;
-
-            case 'o':
-                opts = new StringBuilder(opts).append(' ').append(g.getOptarg()).toString(); // NOPMD - AvoidUnnecessaryStringBuilderCreation
-                break;
-
-            case 'p':
-                port = g.getOptarg();
-                break;
-
-            case 'u':
-                user = g.getOptarg();
-                break;
-
-            case 'w':
-                password = g.getOptarg();
-                break;
-
-            case 'h':
-            case '?':
-            case ':':
-            default:
-                System.err.println(USAGE);
-                return;
-          }  // switch
+            }  // switch
         } // while
 
         int startArgs = g.getOptind();

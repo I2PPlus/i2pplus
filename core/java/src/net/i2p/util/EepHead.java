@@ -64,49 +64,49 @@ public class EepHead extends EepGet {
         try {
             int c;
             while ((c = g.getopt()) != -1) {
-              switch (c) {
-                case 'p':
-                    String s = g.getOptarg();
-                    int colon = s.indexOf(':');
-                    if (colon >= 0) {
+                switch (c) {
+                    case 'p':
+                        String s = g.getOptarg();
+                        int colon = s.indexOf(':');
+                        if (colon >= 0) {
                         // Todo IPv6 [a:b:c]:4444
-                        proxyHost = s.substring(0, colon);
-                        String port = s.substring(colon + 1);
-                        proxyPort = Integer.parseInt(port);
-                    } else {
-                        proxyHost = s;
+                            proxyHost = s.substring(0, colon);
+                            String port = s.substring(colon + 1);
+                            proxyPort = Integer.parseInt(port);
+                        } else {
+                            proxyHost = s;
                         // proxyPort remains default
-                    }
-                    break;
+                        }
+                        break;
 
-                case 'c':
+                    case 'c':
                     // no proxy, same as -p :0
-                    proxyHost = "";
-                    proxyPort = 0;
-                    break;
+                        proxyHost = "";
+                        proxyPort = 0;
+                        break;
 
-                case 'n':
-                    numRetries = Integer.parseInt(g.getOptarg());
-                    break;
+                    case 'n':
+                        numRetries = Integer.parseInt(g.getOptarg());
+                        break;
 
-                case 't':
-                    inactivityTimeout = 1000 * Integer.parseInt(g.getOptarg());
-                    break;
+                    case 't':
+                        inactivityTimeout = 1000 * Integer.parseInt(g.getOptarg());
+                        break;
 
-                case 'u':
-                    username = g.getOptarg();
-                    break;
+                    case 'u':
+                        username = g.getOptarg();
+                        break;
 
-                case 'x':
-                    password = g.getOptarg();
-                    break;
+                    case 'x':
+                        password = g.getOptarg();
+                        break;
 
-                case '?':
-                case ':':
-                default:
-                    error = true;
-                    break;
-              }  // switch
+                    case '?':
+                    case ':':
+                    default:
+                        error = true;
+                        break;
+                }  // switch
             } // while
         } catch (RuntimeException e) {
             e.printStackTrace();

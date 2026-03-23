@@ -118,20 +118,20 @@ public class POP3MailBox implements NewMailListener {
      * @return Byte buffer containing header data or null
      */
     private Buffer getHeader(int id) {
-            if (_log.shouldDebug()) _log.debug("getHeader(" + id + ")");
-            Buffer header = null;
-            if (id >= 1 && id <= mails) {
-                try {socket.setSoTimeout(120*1000);}
+        if (_log.shouldDebug()) _log.debug("getHeader(" + id + ")");
+        Buffer header = null;
+        if (id >= 1 && id <= mails) {
+            try {socket.setSoTimeout(120*1000);}
+            catch (IOException ioe) {}
+            header = sendCmdN("TOP " + id + " 0", new MemoryBuffer(1024)); // try 'TOP n 0' command
+            if (header == null) {header = sendCmdN("RETR " + id, new MemoryBuffer(2048));} // try 'RETR n' command
+            if (header == null && _log.shouldDebug()) {_log.debug("RETR returned null");}
+            if (socket != null) {
+                try {socket.setSoTimeout(300*1000);}
                 catch (IOException ioe) {}
-                header = sendCmdN("TOP " + id + " 0", new MemoryBuffer(1024)); // try 'TOP n 0' command
-                if (header == null) {header = sendCmdN("RETR " + id, new MemoryBuffer(2048));} // try 'RETR n' command
-                if (header == null && _log.shouldDebug()) {_log.debug("RETR returned null");}
-                if (socket != null) {
-                    try {socket.setSoTimeout(300*1000);}
-                    catch (IOException ioe) {}
-                }
-            } else {lastError = "Message id out of range.";}
-            return header;
+            }
+        } else {lastError = "Message id out of range.";}
+        return header;
     }
 
     /**
@@ -302,11 +302,11 @@ public class POP3MailBox implements NewMailListener {
      * @return Message size in bytes or 0 if not found
      */
     private int getSize(int id) {
-            int result = 0;
-            Integer resultObj = sizes.get(Integer.valueOf(id)); // find value in hashtable
-            if (resultObj != null) {result = resultObj.intValue();}
-            if (_log.shouldDebug()) {_log.debug("getSize(" + id + ") = " + result);}
-            return result;
+        int result = 0;
+        Integer resultObj = sizes.get(Integer.valueOf(id)); // find value in hashtable
+        if (resultObj != null) {result = resultObj.intValue();}
+        if (_log.shouldDebug()) {_log.debug("getSize(" + id + ") = " + result);}
+        return result;
     }
 
     /**
@@ -831,42 +831,42 @@ public class POP3MailBox implements NewMailListener {
                 if (_log.shouldDebug()) {_log.debug("OK after " + i + " of " + cmds.size() + " responses: \"" + foo.trim() + '"');}
                 switch (sr.mode) {
                     case A1:
-                    sr.result = true;
-                    break;
+                        sr.result = true;
+                        break;
 
                     case RB:
-                    try {
-                        getResultNa(sr.rb);
-                        sr.result = true;
-                    } catch (IOException ioe) {
-                        if (_log.shouldDebug()) _log.debug("Error getting RB", ioe);
-                        result = false;
-                        sr.result = false;
-                        if (socket != null) {
-                            try {socket.close();}
-                            catch (IOException e) {}
-                            socket = null;
-                            connected = false;
+                        try {
+                            getResultNa(sr.rb);
+                            sr.result = true;
+                        } catch (IOException ioe) {
+                            if (_log.shouldDebug()) _log.debug("Error getting RB", ioe);
+                            result = false;
+                            sr.result = false;
+                            if (socket != null) {
+                                try {socket.close();}
+                                catch (IOException e) {}
+                                socket = null;
+                                connected = false;
+                            }
                         }
-                    }
-                    break;
+                        break;
 
                     case LS:
-                    try {
-                        sr.ls = getResultNl();
-                        sr.result = true;
-                    } catch (IOException ioe) {
-                        if (_log.shouldDebug()) _log.debug("Error getting LS", ioe);
-                        result = false;
-                        sr.result = false;
-                        if (socket != null) {
-                            try {socket.close();}
-                            catch (IOException e) {}
-                            socket = null;
-                            connected = false;
+                        try {
+                            sr.ls = getResultNl();
+                            sr.result = true;
+                        } catch (IOException ioe) {
+                            if (_log.shouldDebug()) _log.debug("Error getting LS", ioe);
+                            result = false;
+                            sr.result = false;
+                            if (socket != null) {
+                                try {socket.close();}
+                                catch (IOException e) {}
+                                socket = null;
+                                connected = false;
+                            }
                         }
-                    }
-                    break;
+                        break;
                 }
             }
             lastLine = foo;

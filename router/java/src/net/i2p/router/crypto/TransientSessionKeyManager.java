@@ -178,7 +178,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         _inboundTagSets = new HashMap<SessionTag, TagSet>(128);
         context.statManager().createRateStat("crypto.sessionTagsExpired", "Number of expired tags/sessions", "Encryption", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES });
         context.statManager().createRateStat("crypto.sessionTagsRemaining", "Number of remaining tags/sessions after a cleanup", "Encryption", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES });
-         _alive = true;
+        _alive = true;
         _context.simpleTimer2().addEvent(new CleanupEvent(), 60*1000);
     }
 
@@ -771,9 +771,9 @@ public class TransientSessionKeyManager extends SessionKeyManager {
             buf.setLength(0);
         }
         buf.append("<tr>\n<th colspan=2>Total inbound tags: ").append(total).append(" (")
-           .append(DataHelper.formatSize2(32*total)).append("B); sets: ").append(totalSets)
-           .append("; sessions: ").append(inboundSets.size())
-           .append("</th>\n</tr>\n" +
+            .append(DataHelper.formatSize2(32*total)).append("B); sets: ").append(totalSets)
+            .append("; sessions: ").append(inboundSets.size())
+            .append("</th>\n</tr>\n" +
                    "</table>\n" +
                    "<h3 class=debug_outboundsessions>ElGamal Outbound sessions</h3>\n" +
                    "<table>");
@@ -829,11 +829,11 @@ public class TransientSessionKeyManager extends SessionKeyManager {
      *  Earliest first
      */
     private static class TagSetComparator implements Comparator<TagSet>, Serializable {
-         public int compare(TagSet l, TagSet r) {
-             int rv = (int) (l.getDate() - r.getDate());
-             if (rv != 0)
+        public int compare(TagSet l, TagSet r) {
+            int rv = (int) (l.getDate() - r.getDate());
+            if (rv != 0)
                  return rv;
-             return l.hashCode() - r.hashCode();
+            return l.hashCode() - r.hashCode();
         }
     }
 

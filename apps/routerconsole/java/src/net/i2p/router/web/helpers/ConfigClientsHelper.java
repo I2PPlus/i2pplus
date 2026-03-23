@@ -112,7 +112,7 @@ public class ConfigClientsHelper extends HelperBase {
     }
 
     public void setEdit(String edit) {
-         if (edit == null)
+        if (edit == null)
              return;
         String xStart = _t("Edit");
         if (edit.startsWith(xStart + "<span class=hide> ") &&
@@ -210,16 +210,16 @@ public class ConfigClientsHelper extends HelperBase {
 
     /** @since 0.9.20 */
     private class CACComparator implements Comparator<CAC> {
-         private static final long serialVersionUID = 1L;
-         private final Collator coll;
+        private static final long serialVersionUID = 1L;
+        private final Collator coll;
 
-         public CACComparator() {
-             super();
-             coll = Collator.getInstance(new Locale(Messages.getLanguage(_context)));
-         }
+        public CACComparator() {
+            super();
+            coll = Collator.getInstance(new Locale(Messages.getLanguage(_context)));
+        }
 
-         public int compare(CAC l, CAC r) {
-             return coll.compare(l.xname, r.xname);
+        public int compare(CAC l, CAC r) {
+            return coll.compare(l.xname, r.xname);
         }
     }
 

@@ -111,7 +111,7 @@ public class ByteArray implements Serializable, Comparable<ByteArray> {
 
         // Removed byte array compatibility check as it violates equals() contract
         // ByteArray.equals() should only compare with ByteArray objects
-        
+
         return false;
     }
 

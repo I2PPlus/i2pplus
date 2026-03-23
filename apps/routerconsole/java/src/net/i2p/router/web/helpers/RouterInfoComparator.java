@@ -12,13 +12,13 @@ import net.i2p.data.router.RouterInfo;
  *  @since 0.9.64
  */
 class RouterInfoComparator implements Comparator<RouterInfo>, Serializable {
-     private static final long serialVersionUID = 1;
-     public static final RouterInfoComparator _instance = new RouterInfoComparator();
+    private static final long serialVersionUID = 1;
+    public static final RouterInfoComparator _instance = new RouterInfoComparator();
 
      /**
       * Thread safe, no state
       */
-     public static RouterInfoComparator getInstance() { return _instance; }
+    public static RouterInfoComparator getInstance() { return _instance; }
 
      /**
       * @param l non-null

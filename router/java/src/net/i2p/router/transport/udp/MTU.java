@@ -252,14 +252,14 @@ public class MTU {
                 }
             }
         } catch (SocketException se) {
-             System.out.println("no interfaces");
+            System.out.println("no interfaces");
         }
     }
 
     /** @since 0.9.57 */
     private static class IAComparator implements Comparator<InetAddress> {
         public int compare(InetAddress l, InetAddress r) {
-             return (l.getHostAddress()).compareTo((r.getHostAddress()));
+            return (l.getHostAddress()).compareTo((r.getHostAddress()));
         }
     }
 }

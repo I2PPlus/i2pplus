@@ -637,12 +637,12 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             if (_log.shouldWarn())
                 _log.warn("[SSU] Retransmit RETRY on " + this);
         } else {
-        _currentState = InboundState.IB_STATE_RETRY_SENT;
+            _currentState = InboundState.IB_STATE_RETRY_SENT;
         // Won't really be retransmitted, they have 5 sec to respond or
         // EstablishmentManager.handleInbound() will fail the connection
         // Alice will retransmit at 1 and 3 seconds, so wait 5
         // We're not going to wait for the 3rd retx at 7 seconds.
-        _nextSend = _lastSend + (5 * RETRANSMIT_DELAY);
+            _nextSend = _lastSend + (5 * RETRANSMIT_DELAY);
         }
     }
 

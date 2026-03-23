@@ -180,7 +180,7 @@ public class PortMapper {
         if (service.equals(SVC_EEPSITE) || service.equals(SVC_HTTPS_EEPSITE)) {
             String end = ":" + port + '/';
             for (Iterator<String> iter = _eepsites.iterator(); iter.hasNext(); ) {
-                 if (iter.next().endsWith(end))
+                if (iter.next().endsWith(end))
                      iter.remove();
             }
         }
@@ -380,7 +380,7 @@ public class PortMapper {
             buf.append(']');
         buf.append(':')
            .append(port)
-           .append('/');
+            .append('/');
         return buf.toString();
     }
 

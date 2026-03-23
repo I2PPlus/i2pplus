@@ -75,18 +75,18 @@ public final class ToNetASCIIOutputStream extends FilterOutputStream {
     @Override
     public synchronized void write(final int ch) throws IOException {
         switch (ch) {
-        case '\r':
-            lastWasCR = true;
-            out.write('\r');
-            return;
-        case '\n':
-            if (!lastWasCR) {
+            case '\r':
+                lastWasCR = true;
                 out.write('\r');
-            }
+                return;
+            case '\n':
+                if (!lastWasCR) {
+                    out.write('\r');
+                }
             // falls through$
-        default:
-            lastWasCR = false;
-            out.write(ch);
+            default:
+                lastWasCR = false;
+                out.write(ch);
         }
     }
 

@@ -456,7 +456,7 @@ class IntelInfoImpl extends CPUIDCPUInfo implements IntelCPUInfo
                     case 0x66: // Cannon Lake
                     case 0x67: // Cannon Lake
                     case 0x6c: // Apollo Lake
-                               {
+                    {
                         CPUIDCPUInfo c = new CPUIDCPUInfo();
                         if (c.hasAVX2() && c.hasBMI1()  && c.hasBMI2() &&
                             c.hasFMA3() && c.hasMOVBE() && c.hasABM()) {
@@ -487,7 +487,7 @@ class IntelInfoImpl extends CPUIDCPUInfo implements IntelCPUInfo
                     case 0x5f: // Goldmont / Atom
                     case 0x7a: // Gemini Lake (Goldmont Plus)
                     case 0x9c: // Jasper Lake (Tremont)
-                               {
+                    {
                         // This processor is "corei" compatible, as we define it,
                         // i.e. SSE4.2 but not necessarily AVX.
                         CPUIDCPUInfo c = new CPUIDCPUInfo();
@@ -524,7 +524,7 @@ class IntelInfoImpl extends CPUIDCPUInfo implements IntelCPUInfo
                     case 0x9a: // Alder Lake
                     case 0xba: // Raptor Lake
                     case 0xb7: // Raptor Lake
-                               {
+                    {
                         CPUIDCPUInfo c = new CPUIDCPUInfo();
                         if (c.hasAVX2() && c.hasBMI1()  && c.hasBMI2() &&
                             c.hasFMA3() && c.hasMOVBE() && c.hasABM()) {

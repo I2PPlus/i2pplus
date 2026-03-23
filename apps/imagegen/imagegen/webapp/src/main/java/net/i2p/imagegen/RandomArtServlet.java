@@ -35,7 +35,7 @@ public class RandomArtServlet extends HttpServlet {
 		if (!codeSpecified) {
 			response.setStatus(404);
 			return;
-                }
+        }
 		String modeParam = request.getParameter(PARAM_IDENTICON_MODE_SHORT);
 		boolean html = modeParam == null || modeParam.startsWith("h");
 		String identiconETag = IdenticonUtil.getIdenticonETag(codeParam.hashCode(), 0,

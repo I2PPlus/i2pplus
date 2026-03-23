@@ -139,8 +139,8 @@ public class KeyCertificate extends Certificate {
       *  @throws DataFormatException if payload is too short
       */
     public KeyCertificate(byte[] payload) throws DataFormatException {
-         super(CERTIFICATE_TYPE_KEY, payload);
-         if (payload != null && payload.length < HEADER_LENGTH)
+        super(CERTIFICATE_TYPE_KEY, payload);
+        if (payload != null && payload.length < HEADER_LENGTH)
              throw new DataFormatException("data");
     }
 
@@ -152,18 +152,18 @@ public class KeyCertificate extends Certificate {
      *  @throws IllegalArgumentException if spk or spk data is null
      */
     public KeyCertificate(SigningPublicKey spk) {
-         super(CERTIFICATE_TYPE_KEY, null);
-         if (spk == null || spk.getData() == null)
+        super(CERTIFICATE_TYPE_KEY, null);
+        if (spk == null || spk.getData() == null)
              throw new IllegalArgumentException();
-         SigType type = spk.getType();
-         int len = type.getPubkeyLen();
-         int extra = Math.max(0, len - 128);
-         _payload = new byte[HEADER_LENGTH + extra];
-         int code = type.getCode();
-         _payload[0] = (byte) (code >> 8);
-         _payload[1] = (byte) (code & 0xff);
+        SigType type = spk.getType();
+        int len = type.getPubkeyLen();
+        int extra = Math.max(0, len - 128);
+        _payload = new byte[HEADER_LENGTH + extra];
+        int code = type.getCode();
+        _payload[0] = (byte) (code >> 8);
+        _payload[1] = (byte) (code & 0xff);
          // 2 and 3 always 0, it is the only crypto code for now
-         if (extra > 0)
+        if (extra > 0)
              System.arraycopy(spk.getData(), 128, _payload, HEADER_LENGTH, extra);
     }
 
@@ -178,21 +178,21 @@ public class KeyCertificate extends Certificate {
      *  @since 0.9.42
      */
     public KeyCertificate(SigningPublicKey spk, PublicKey pk) {
-         super(CERTIFICATE_TYPE_KEY, null);
-         if (spk == null || spk.getData() == null ||
+        super(CERTIFICATE_TYPE_KEY, null);
+        if (spk == null || spk.getData() == null ||
              pk == null || pk.getData() == null)
              throw new IllegalArgumentException();
-         SigType type = spk.getType();
-         int len = type.getPubkeyLen();
-         int extra = Math.max(0, len - 128);
-         _payload = new byte[HEADER_LENGTH + extra];
-         int code = type.getCode();
-         _payload[0] = (byte) (code >> 8);
-         _payload[1] = (byte) (code & 0xff);
-         code = pk.getType().getCode();
-         _payload[2] = (byte) (code >> 8);
-         _payload[3] = (byte) (code & 0xff);
-         if (extra > 0)
+        SigType type = spk.getType();
+        int len = type.getPubkeyLen();
+        int extra = Math.max(0, len - 128);
+        _payload = new byte[HEADER_LENGTH + extra];
+        int code = type.getCode();
+        _payload[0] = (byte) (code >> 8);
+        _payload[1] = (byte) (code & 0xff);
+        code = pk.getType().getCode();
+        _payload[2] = (byte) (code >> 8);
+        _payload[3] = (byte) (code & 0xff);
+        if (extra > 0)
              System.arraycopy(spk.getData(), 128, _payload, HEADER_LENGTH, extra);
     }
 
@@ -206,7 +206,7 @@ public class KeyCertificate extends Certificate {
      *  @param type non-null
      *  @throws IllegalArgumentException if type is null
      */
-     public KeyCertificate(SigType type) {
+    public KeyCertificate(SigType type) {
         this(type, EncType.ELGAMAL_2048);
     }
 
@@ -224,16 +224,16 @@ public class KeyCertificate extends Certificate {
      *  @since 0.9.42
      */
     public KeyCertificate(SigType type, EncType etype) {
-         super(CERTIFICATE_TYPE_KEY, null);
-         int len = type.getPubkeyLen();
-         int extra = Math.max(0, len - 128);
-         _payload = new byte[HEADER_LENGTH + extra];
-         int code = type.getCode();
-         _payload[0] = (byte) (code >> 8);
-         _payload[1] = (byte) (code & 0xff);
-         code = etype.getCode();
-         _payload[2] = (byte) (code >> 8);
-         _payload[3] = (byte) (code & 0xff);
+        super(CERTIFICATE_TYPE_KEY, null);
+        int len = type.getPubkeyLen();
+        int extra = Math.max(0, len - 128);
+        _payload = new byte[HEADER_LENGTH + extra];
+        int code = type.getCode();
+        _payload[0] = (byte) (code >> 8);
+        _payload[1] = (byte) (code & 0xff);
+        code = etype.getCode();
+        _payload[2] = (byte) (code >> 8);
+        _payload[3] = (byte) (code & 0xff);
     }
 
     /**

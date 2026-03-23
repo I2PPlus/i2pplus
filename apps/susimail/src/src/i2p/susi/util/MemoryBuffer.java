@@ -17,7 +17,7 @@ public class MemoryBuffer implements Buffer {
 	private ByteArrayOutputStream _baos;
 	private byte content[];
 	private final int _size;
-	
+
 	public MemoryBuffer() {
 		this(4096);
 	}

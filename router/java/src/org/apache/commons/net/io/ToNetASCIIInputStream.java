@@ -80,18 +80,18 @@ public final class ToNetASCIIInputStream extends FilterInputStream {
         ch = in.read();
 
         switch (ch) {
-        case '\r':
-            status = LAST_WAS_CR;
-            return '\r';
-        case '\n':
-            if (status != LAST_WAS_CR) {
-                status = LAST_WAS_NL;
+            case '\r':
+                status = LAST_WAS_CR;
                 return '\r';
-            }
+            case '\n':
+                if (status != LAST_WAS_CR) {
+                    status = LAST_WAS_NL;
+                    return '\r';
+                }
             // falls through$
-        default:
-            status = NOTHING_SPECIAL;
-            return ch;
+            default:
+                status = NOTHING_SPECIAL;
+                return ch;
         }
         // statement not reached
         // return ch;

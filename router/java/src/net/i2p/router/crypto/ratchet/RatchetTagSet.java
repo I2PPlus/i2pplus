@@ -160,7 +160,7 @@ class RatchetTagSet implements TagSetHandle {
             else
                 _sessionKeys = null;
             for (int i = 0; i < minSize; i++) {
-               storeNextTag();
+                storeNextTag();
             }
         } else {
             _sessionTags = null;

@@ -912,38 +912,38 @@ public class TunnelController implements Logging {
       *  @return the maximum shutdown delay in seconds for server tunnels.
       *  @since 0.9.68+
       */
-     public int getShutdownDelayMax() {
-         String val = _config.getProperty(PROP_SHUTDOWN_DELAY_MAX);
-         if (val == null) return DEFAULT_SHUTDOWN_DELAY_MAX;
-         try {
-             int i = Integer.parseInt(val.trim());
-             return Math.max(0, i);
-         } catch (NumberFormatException e) {
-             return DEFAULT_SHUTDOWN_DELAY_MAX;
-         }
-     }
+    public int getShutdownDelayMax() {
+        String val = _config.getProperty(PROP_SHUTDOWN_DELAY_MAX);
+        if (val == null) return DEFAULT_SHUTDOWN_DELAY_MAX;
+        try {
+            int i = Integer.parseInt(val.trim());
+            return Math.max(0, i);
+        } catch (NumberFormatException e) {
+            return DEFAULT_SHUTDOWN_DELAY_MAX;
+        }
+    }
 
      /**
       *  Get the remaining startup delay time for tunnels with delayed startup.
       *  @return remaining delay in seconds, or 0 if not in delayed startup state or delay has passed
       *  @since 0.9.68+
       */
-     public int getRemainingStartupDelay() {
-         if (_state != TunnelState.DELAYED_START_PENDING) {
-             return 0;
-         }
-         long remaining = (_startupDelayEndTime - System.currentTimeMillis()) / 1000;
-         return (int) Math.max(0, remaining);
-     }
+    public int getRemainingStartupDelay() {
+        if (_state != TunnelState.DELAYED_START_PENDING) {
+            return 0;
+        }
+        long remaining = (_startupDelayEndTime - System.currentTimeMillis()) / 1000;
+        return (int) Math.max(0, remaining);
+    }
 
      /**
       *  Set the startup delay end time. Called by TunnelControllerGroup when setting up delayed startup.
       *  @param delayMs the delay in milliseconds
       *  @since 0.9.68+
       */
-     void setStartupDelayEndTime(long delayMs) {
-         _startupDelayEndTime = System.currentTimeMillis() + delayMs;
-     }
+    void setStartupDelayEndTime(long delayMs) {
+        _startupDelayEndTime = System.currentTimeMillis() + delayMs;
+    }
 
      /**
       *  May NOT be restarted with restartTunnel() or startTunnel() later.
@@ -951,7 +951,7 @@ public class TunnelController implements Logging {
       *
       *  @since 0.9.17
       */
-     public void destroyTunnel() {
+    public void destroyTunnel() {
         synchronized (this) {
             if (_state != TunnelState.RUNNING)
                 return;
@@ -1136,7 +1136,7 @@ public class TunnelController implements Logging {
         // Running, so check sessions
         Collection<I2PSession> sessions = getAllSessions();
         if (sessions.isEmpty()) {
-             if (_log.shouldDebug())
+            if (_log.shouldDebug())
                  _log.debug("Running but no sessions to update");
         }
         for (I2PSession s : sessions) {
@@ -1271,9 +1271,9 @@ public class TunnelController implements Logging {
 
     /** default true for clients, always false for servers */
     public String getSharedClient() {
-         if (!isClient())
+        if (!isClient())
              return "false";
-         return _config.getProperty(PROP_SHARED, "true");
+        return _config.getProperty(PROP_SHARED, "true");
     }
 
     /**

@@ -85,7 +85,7 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
         _mgr.addMessageNoEscape(_t("Requesting torrent file: {0}", urlify(_url)));
         File file = get();
         if (!_isRunning) // stopped?
-        return;
+            return;
         _isRunning = false;
         if (file != null && file.exists() && file.length() > 0) {
             // remove this in snarks

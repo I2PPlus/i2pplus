@@ -824,17 +824,17 @@ public class DnsMessage {
     private <D extends Data> List<Record<D>> filterSectionByType(boolean stopOnFirst, SectionName sectionName, Class<D> type) {
         List<Record<?>> sectionToFilter;
         switch (sectionName) {
-        case answer:
-            sectionToFilter = answerSection;
-            break;
-        case authority:
-            sectionToFilter = authoritySection;
-            break;
-        case additional:
-            sectionToFilter = additionalSection;
-            break;
-        default:
-            throw new AssertionError("Unknown section name " + sectionName);
+            case answer:
+                sectionToFilter = answerSection;
+                break;
+            case authority:
+                sectionToFilter = authoritySection;
+                break;
+            case additional:
+                sectionToFilter = additionalSection;
+                break;
+            default:
+                throw new AssertionError("Unknown section name " + sectionName);
         }
 
         List<Record<D>> res = new ArrayList<>(stopOnFirst ? 1 : sectionToFilter.size());

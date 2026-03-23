@@ -417,7 +417,7 @@ public class JobQueue {
                 // Drop timeout-based jobs when lagging to reduce queue pressure
                 if (jobName.contains("SendTimeoutJob") || jobName.contains("VerifyTimeout") || jobName.contains("FloodOnlyLookupTimeout")) {return true;}
                 // Drop non-critical verification jobs when lagging
-                if (jobName.contains("DropLookupFoundJob") || jobName.contains("DropLookupFailedJob") || 
+                if (jobName.contains("DropLookupFoundJob") || jobName.contains("DropLookupFailedJob") ||
                     jobName.contains("DirectLookupJob") || jobName.contains("DirectLookupMatch")) {return true;}
                 if ((!disableTunnelTests && cls == TestJob.class) || cls == PeerTestJob.class) {
                     return true;
@@ -661,9 +661,9 @@ public class JobQueue {
      */
     synchronized int removeIdleRunners(int maxToRemove) {
         if (!_alive) return 0;
-         int removed = 0;
+        int removed = 0;
         Iterator<Map.Entry<Integer, JobQueueRunner>> iter = _queueRunners.entrySet().iterator();
-         while (iter.hasNext() && removed < maxToRemove) {
+        while (iter.hasNext() && removed < maxToRemove) {
             Map.Entry<Integer, JobQueueRunner> entry = iter.next();
             JobQueueRunner runner = entry.getValue();
              // Only remove if runner is idle (not processing a job)
@@ -673,10 +673,10 @@ public class JobQueue {
                 removed++;
             }
         }
-         if (removed > 0 && _log.shouldInfo()) {
+        if (removed > 0 && _log.shouldInfo()) {
             _log.info("Removed " + removed + " idle runners. Total: " + _queueRunners.size());
         }
-         return removed;
+        return removed;
     }
 
     private final class QueuePumper implements Runnable, Clock.ClockUpdateListener, RouterClock.ClockShiftListener {
@@ -839,16 +839,16 @@ public class JobQueue {
     }
 
     private static class JobComparator implements Comparator<Job>, Serializable {
-          public int compare(Job l, Job r) {
-              if (l.equals(r)) return 0;
-              long ld = l.getTiming().getStartAfter() - r.getTiming().getStartAfter();
-              if (ld < 0) return -1;
-              if (ld > 0) return 1;
+        public int compare(Job l, Job r) {
+            if (l.equals(r)) return 0;
+            long ld = l.getTiming().getStartAfter() - r.getTiming().getStartAfter();
+            if (ld < 0) return -1;
+            if (ld > 0) return 1;
               // Use Long.compare to avoid overflow when comparing job IDs
               // Job IDs are unique, so this should be sufficient
-              return Long.compare(l.getJobId(), r.getJobId());
-         }
-     }
+            return Long.compare(l.getJobId(), r.getJobId());
+        }
+    }
 
     /**
      * Collect statistics about jobs currently in the queue.

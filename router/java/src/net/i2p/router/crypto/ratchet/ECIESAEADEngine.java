@@ -311,7 +311,7 @@ public final class ECIESAEADEngine {
             } else {
                 _context.statManager().updateFrequency("crypto.eciesAEAD.decryptFailed");
                 if (_log.shouldWarn()) {
-                    _log.warn("ECIES decryption failure -> Known tag [" + st + "] but failed decrypt with key \n* Key: " + key + 
+                    _log.warn("ECIES decryption failure -> Known tag [" + st + "] but failed decrypt with key \n* Key: " + key +
                              "\n* Failure type: Cryptographic verification failed (MAC or decryption error)");
                 }
             }
@@ -360,7 +360,7 @@ public final class ECIESAEADEngine {
                 _context.statManager().updateFrequency("crypto.eciesAEAD.decryptFailed");
                 // we'll get this a lot on muxed SKM
                 if (_log.shouldInfo()) {
-                    _log.info("ECIES decryption failure for NewSession -> Type: " + type + 
+                    _log.info("ECIES decryption failure for NewSession -> Type: " + type +
                              " Data size: " + data.length + " (minimum " + minns + ")" +
                              " Is router: " + isRouter);
                 }
@@ -380,13 +380,13 @@ public final class ECIESAEADEngine {
      */
     private static void checkType(EncType type) {
         switch(type) {
-          case ECIES_X25519:
-          case MLKEM512_X25519:
-          case MLKEM768_X25519:
-          case MLKEM1024_X25519:
-              return;
-          default:
-              throw new IllegalArgumentException("Unsupported key type " + type);
+            case ECIES_X25519:
+            case MLKEM512_X25519:
+            case MLKEM768_X25519:
+            case MLKEM1024_X25519:
+                return;
+            default:
+                throw new IllegalArgumentException("Unsupported key type " + type);
         }
     }
 
@@ -395,16 +395,16 @@ public final class ECIESAEADEngine {
      */
     private static String getNoisePattern(EncType type) {
         switch(type) {
-          case ECIES_X25519:
-              return HandshakeState.PATTERN_ID_IK;
-          case MLKEM512_X25519:
-              return HandshakeState.PATTERN_ID_IKHFS_512;
-          case MLKEM768_X25519:
-              return HandshakeState.PATTERN_ID_IKHFS_768;
-          case MLKEM1024_X25519:
-              return HandshakeState.PATTERN_ID_IKHFS_1024;
-          default:
-              throw new IllegalArgumentException("No pattern for " + type);
+            case ECIES_X25519:
+                return HandshakeState.PATTERN_ID_IK;
+            case MLKEM512_X25519:
+                return HandshakeState.PATTERN_ID_IKHFS_512;
+            case MLKEM768_X25519:
+                return HandshakeState.PATTERN_ID_IKHFS_768;
+            case MLKEM1024_X25519:
+                return HandshakeState.PATTERN_ID_IKHFS_1024;
+            default:
+                throw new IllegalArgumentException("No pattern for " + type);
         }
     }
 
@@ -413,14 +413,14 @@ public final class ECIESAEADEngine {
      */
     private static KeyFactory getHybridKeyFactory(EncType type) {
         switch(type) {
-          case MLKEM512_X25519:
-              return MLKEM.MLKEM512KeyFactory;
-          case MLKEM768_X25519:
-              return MLKEM.MLKEM768KeyFactory;
-          case MLKEM1024_X25519:
-              return MLKEM.MLKEM1024KeyFactory;
-          default:
-              return null;
+            case MLKEM512_X25519:
+                return MLKEM.MLKEM512KeyFactory;
+            case MLKEM768_X25519:
+                return MLKEM.MLKEM768KeyFactory;
+            case MLKEM1024_X25519:
+                return MLKEM.MLKEM1024KeyFactory;
+            default:
+                return null;
         }
     }
 
@@ -429,16 +429,16 @@ public final class ECIESAEADEngine {
      */
     private static int getMinNSSize(EncType type) {
         switch(type) {
-          case ECIES_X25519:
-              return MIN_NS_SIZE;
-          case MLKEM512_X25519:
-              return MIN_NS_MLKEM512_SIZE;
-          case MLKEM768_X25519:
-              return MIN_NS_MLKEM768_SIZE;
-          case MLKEM1024_X25519:
-              return MIN_NS_MLKEM1024_SIZE;
-          default:
-              throw new IllegalArgumentException("No pattern for " + type);
+            case ECIES_X25519:
+                return MIN_NS_SIZE;
+            case MLKEM512_X25519:
+                return MIN_NS_MLKEM512_SIZE;
+            case MLKEM768_X25519:
+                return MIN_NS_MLKEM768_SIZE;
+            case MLKEM1024_X25519:
+                return MIN_NS_MLKEM1024_SIZE;
+            default:
+                throw new IllegalArgumentException("No pattern for " + type);
         }
     }
 
@@ -447,16 +447,16 @@ public final class ECIESAEADEngine {
      */
     private static int getMinNSRSize(EncType type) {
         switch(type) {
-          case ECIES_X25519:
-              return MIN_NSR_SIZE;
-          case MLKEM512_X25519:
-              return MIN_NSR_MLKEM512_SIZE;
-          case MLKEM768_X25519:
-              return MIN_NSR_MLKEM768_SIZE;
-          case MLKEM1024_X25519:
-              return MIN_NSR_MLKEM1024_SIZE;
-          default:
-              throw new IllegalArgumentException("No pattern for " + type);
+            case ECIES_X25519:
+                return MIN_NSR_SIZE;
+            case MLKEM512_X25519:
+                return MIN_NSR_MLKEM512_SIZE;
+            case MLKEM768_X25519:
+                return MIN_NSR_MLKEM768_SIZE;
+            case MLKEM1024_X25519:
+                return MIN_NSR_MLKEM1024_SIZE;
+            default:
+                throw new IllegalArgumentException("No pattern for " + type);
         }
     }
 
@@ -465,16 +465,16 @@ public final class ECIESAEADEngine {
      */
     private static Set<EncType> getEncTypeSet(EncType type) {
         switch(type) {
-          case ECIES_X25519:
-              return LeaseSetKeys.SET_EC;
-          case MLKEM512_X25519:
-              return LeaseSetKeys.SET_PQ1;
-          case MLKEM768_X25519:
-              return LeaseSetKeys.SET_PQ2;
-          case MLKEM1024_X25519:
-              return LeaseSetKeys.SET_PQ3;
-          default:
-              throw new IllegalArgumentException("No pattern for " + type);
+            case ECIES_X25519:
+                return LeaseSetKeys.SET_EC;
+            case MLKEM512_X25519:
+                return LeaseSetKeys.SET_PQ1;
+            case MLKEM768_X25519:
+                return LeaseSetKeys.SET_PQ2;
+            case MLKEM1024_X25519:
+                return LeaseSetKeys.SET_PQ3;
+            default:
+                throw new IllegalArgumentException("No pattern for " + type);
         }
     }
 
@@ -1380,7 +1380,7 @@ public final class ECIESAEADEngine {
         byte[] payload = createPayload(cloves, 0, ES_OVERHEAD);
         byte encr[] = encryptAEADBlock(rawTag, payload, key, 0);
         if (encr != null) {
-        System.arraycopy(rawTag, 0, encr, 0, TAGLEN);
+            System.arraycopy(rawTag, 0, encr, 0, TAGLEN);
         } else if (_log.shouldWarn()) {
             _log.warn("ECIES ExistingSession encryption failure");
         }

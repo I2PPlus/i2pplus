@@ -120,7 +120,7 @@ class GraphRenderer {
         throw new UnsupportedOperationException();
     }
 
-    public void render(OutputStream out) throws IOException { render(out, DEFAULT_X, DEFAULT_Y,
+        public void render(OutputStream out) throws IOException { render(out, DEFAULT_X, DEFAULT_Y,
                                                                      false, false, false, false, -1, 0, false); }
 
     /**
@@ -175,15 +175,15 @@ class GraphRenderer {
                 def.setColor(ElementsNames.yaxis, AXIS_COLOR_DARK);
             }
             if (theme.equals("midnight") || theme.equals("dark")) {
-                    def.setColor(ElementsNames.back, BACK_COLOR_DARK);
-                    def.setColor(ElementsNames.canvas,TRANSPARENT);
+                def.setColor(ElementsNames.back, BACK_COLOR_DARK);
+                def.setColor(ElementsNames.canvas,TRANSPARENT);
             } else {def.setColor(ElementsNames.back, BACK_COLOR);}
             if (theme.equals("midnight") || theme.equals("dark")) {
                 def.setColor(ElementsNames.shadea, TRANSPARENT);
                 def.setColor(ElementsNames.shadeb, TRANSPARENT);
                 if (theme.equals("dark")) {
-                  def.setColor(ElementsNames.grid, GRID_COLOR_DARK2);
-                  def.setColor(ElementsNames.mgrid, MGRID_COLOR_DARK);
+                    def.setColor(ElementsNames.grid, GRID_COLOR_DARK2);
+                    def.setColor(ElementsNames.mgrid, MGRID_COLOR_DARK);
                 } else if (theme.equals("midnight")) {
                     def.setColor(ElementsNames.grid, GRID_COLOR_MIDNIGHT);
                     def.setColor(ElementsNames.mgrid, MGRID_COLOR_MIDNIGHT);

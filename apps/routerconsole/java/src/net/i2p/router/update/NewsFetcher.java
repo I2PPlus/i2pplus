@@ -597,8 +597,8 @@ class NewsFetcher extends UpdateRunner {
             DataHelper.copy(in, out);
         } finally {
             if (out != null) try {
-                out.close();
-            } catch (IOException ioe) {}
+                    out.close();
+                } catch (IOException ioe) {}
             ReusableGZIPInputStream.release(in);
         }
     }
@@ -739,7 +739,7 @@ class NewsFetcher extends UpdateRunner {
             fail = true;
         } finally {
             if (out != null) try {out.close();}
-            catch (IOException ioe) {}
+                catch (IOException ioe) {}
         }
         if (!fail) {
             f.setLastModified(ble.updated);
@@ -820,8 +820,8 @@ class NewsFetcher extends UpdateRunner {
             }
         } finally {
             if (out != null) try {
-                out.close();
-            } catch (IOException ioe) {}
+                    out.close();
+                } catch (IOException ioe) {}
         }
     }
 

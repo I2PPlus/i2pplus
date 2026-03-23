@@ -145,9 +145,9 @@ class MessageHandler implements I2PSessionMuxedListener {
     }
 
     public void addDisconnectListener(I2PSocketManager.DisconnectListener lsnr) {
-            _listeners.add(lsnr);
+        _listeners.add(lsnr);
     }
     public void removeDisconnectListener(I2PSocketManager.DisconnectListener lsnr) {
-            _listeners.remove(lsnr);
+        _listeners.remove(lsnr);
     }
 }

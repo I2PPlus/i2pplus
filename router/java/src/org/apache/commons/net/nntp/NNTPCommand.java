@@ -77,7 +77,7 @@ public final class NNTPCommand {
     public static final int XHDR = 17;
 
     private static final String[] commands = { "ARTICLE", "BODY", "GROUP", "HEAD", "HELP", "IHAVE", "LAST", "LIST", "NEWGROUPS", "NEWNEWS", "NEXT", "POST",
-            "QUIT", "SLAVE", "STAT", "AUTHINFO", "XOVER", "XHDR" };
+        "QUIT", "SLAVE", "STAT", "AUTHINFO", "XOVER", "XHDR" };
 
     /**
      * Gets the NNTP protocol command string corresponding to a specified command code.

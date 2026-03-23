@@ -127,31 +127,31 @@ public class EventLogHelper extends FormHandler {
     }
 
     private void writeOption(String key, String val) throws IOException {
-         _out.write("<option value=\"");
-         _out.write(val);
-         _out.write("\"");
-         if (val.equals(_event))
+        _out.write("<option value=\"");
+        _out.write(val);
+        _out.write("\"");
+        if (val.equals(_event))
              _out.write(HelperBase.SELECTED);
-         _out.write(">");
-         _out.write(key);
-         _out.write("</option>\n");
+        _out.write(">");
+        _out.write(key);
+        _out.write("</option>\n");
     }
 
     /**
      * @param age seconds
      */
     private void writeOption(long age) throws IOException {
-         _out.write("<option value=\"");
-         _out.write(Long.toString(age));
-         _out.write("\"");
-         if (age == _age / 1000)
+        _out.write("<option value=\"");
+        _out.write(Long.toString(age));
+        _out.write("\"");
+        if (age == _age / 1000)
              _out.write(HelperBase.SELECTED);
-         _out.write(">");
-         if (age == 0)
+        _out.write(">");
+        if (age == 0)
              _out.write(_t("All events"));
-         else
+        else
              _out.write(DataHelper.formatDuration2(age * 1000));
-         _out.write("</option>\n");
+        _out.write("</option>\n");
     }
 
     public String getEvents() {
@@ -211,16 +211,16 @@ public class EventLogHelper extends FormHandler {
             buf.append(DataHelper.formatTime(time).replace("-", " "));
             buf.append("</td><td>");
             if (isAll) {
-                 String[] s = DataHelper.split(event, " ", 2);
-                 String xs = _xevents.get(s[0]);
-                 if (xs == null)
+                String[] s = DataHelper.split(event, " ", 2);
+                String xs = _xevents.get(s[0]);
+                if (xs == null)
                      xs = s[0];
-                 buf.append(xs);
-                 buf.append("</td><td>");
-                 if (s.length > 1)
+                buf.append(xs);
+                buf.append("</td><td>");
+                if (s.length > 1)
                      buf.append(s[1]);
             } else {
-                 buf.append(event);
+                buf.append(event);
             }
             buf.append("</td></tr>\n");
         }

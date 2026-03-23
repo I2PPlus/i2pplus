@@ -543,7 +543,7 @@ public final class KeyStoreUtil {
             // Android often has old system certs
             // our SSL certs may be old also
             //if (SystemVersion.isAndroid())
-                warn(s, cee);
+            warn(s, cee);
             //else
             //    error(s, cee);
             return false;
@@ -1341,7 +1341,7 @@ public final class KeyStoreUtil {
     }
 
     private static void usage() {
-         System.err.println(
+        System.err.println(
                             "Usage: KeyStoreUtil create keystore.ks (create empty keystore)\n" +
                             "       KeyStoreUtil export keystore.ks alias keypw (exports private key from keystore)\n" +
                             "       KeyStoreUtil import keystore.ks file.key alias keypw (imports private key from file to keystore)\n" +

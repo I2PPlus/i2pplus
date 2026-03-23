@@ -307,24 +307,24 @@ public class MessageStatusMessage extends I2CPMessageImpl {
 
     public static final String getStatusString(int status) {
         switch (status) {
-        case STATUS_AVAILABLE:
-            return "AVAILABLE";
-        case STATUS_SEND_ACCEPTED:
-            return "SEND ACCEPTED";
-        case STATUS_SEND_BEST_EFFORT_SUCCESS:
-            return "BEST EFFORT SUCCESS";
-        case STATUS_SEND_GUARANTEED_SUCCESS:
-            return "GUARANTEED SUCCESS";
-        case STATUS_SEND_SUCCESS_LOCAL:
-            return "LOCAL SUCCESS";
-        case STATUS_SEND_BEST_EFFORT_FAILURE:
-            return "PROBABLE FAILURE";
-        case STATUS_SEND_FAILURE_NO_TUNNELS:
-            return "NO LOCAL TUNNELS";
-        case STATUS_SEND_FAILURE_NO_LEASESET:
-            return "LEASESET NOT FOUND";
-        default:
-            return "SEND FAILURE CODE: " + status;
+            case STATUS_AVAILABLE:
+                return "AVAILABLE";
+            case STATUS_SEND_ACCEPTED:
+                return "SEND ACCEPTED";
+            case STATUS_SEND_BEST_EFFORT_SUCCESS:
+                return "BEST EFFORT SUCCESS";
+            case STATUS_SEND_GUARANTEED_SUCCESS:
+                return "GUARANTEED SUCCESS";
+            case STATUS_SEND_SUCCESS_LOCAL:
+                return "LOCAL SUCCESS";
+            case STATUS_SEND_BEST_EFFORT_FAILURE:
+                return "PROBABLE FAILURE";
+            case STATUS_SEND_FAILURE_NO_TUNNELS:
+                return "NO LOCAL TUNNELS";
+            case STATUS_SEND_FAILURE_NO_LEASESET:
+                return "LEASESET NOT FOUND";
+            default:
+                return "SEND FAILURE CODE: " + status;
         }
     }
 

@@ -56,7 +56,7 @@ public class SkipIterator<K extends Comparable<? super K>, V> implements ListIte
 		this.index = index;
 	}
 
-public boolean hasNext() {
+    public boolean hasNext() {
 		return index < ss.nKeys;
 	}
 
@@ -93,7 +93,7 @@ public boolean hasNext() {
 		throw new NoSuchElementException();
 	}
 
-public boolean hasPrevious() {
+    public boolean hasPrevious() {
 		return index > 0 || ((ss.prev != null) && (ss.prev.nKeys > 0));
 	}
 

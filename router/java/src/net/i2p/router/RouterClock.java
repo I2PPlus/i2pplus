@@ -97,7 +97,7 @@ public class RouterClock extends Clock {
      */
     @Override
     public void setOffset(long offsetMs, boolean force) {
-         setOffset(offsetMs, force, DEFAULT_STRATUM);
+        setOffset(offsetMs, force, DEFAULT_STRATUM);
     }
 
     /**
@@ -105,7 +105,7 @@ public class RouterClock extends Clock {
      * @param offsetMs the delta from System.currentTimeMillis() (NOT the delta from now())
      */
     private void setOffset(long offsetMs, int stratum) {
-         setOffset(offsetMs, false, stratum);
+        setOffset(offsetMs, false, stratum);
     }
 
     /**
@@ -162,24 +162,24 @@ public class RouterClock extends Clock {
                 long currentPeerClockSkew = (csf != null) ? csf.getFramedAveragePeerClockSkew(10) : 0;
 
                     // Predict the effect of applying the proposed clock offset
-                    long predictedPeerClockSkew = currentPeerClockSkew + delta;
+                long predictedPeerClockSkew = currentPeerClockSkew + delta;
 
                     // Fail sanity check if applying the offset would increase peer clock skew
-                    Log log = getLog();
-                    if ((Math.abs(predictedPeerClockSkew) > (Math.abs(currentPeerClockSkew) + 5*1000)) ||
+                Log log = getLog();
+                if ((Math.abs(predictedPeerClockSkew) > (Math.abs(currentPeerClockSkew) + 5*1000)) ||
                         (Math.abs(predictedPeerClockSkew) > 20*1000)) {
 
-                        if (log.shouldWarn())
+                    if (log.shouldWarn())
                             log.warn("Ignoring clock offset of " + offsetMs + "ms (current: " + _offset +
                                        "ms) as it would increase peer clock skew from " + currentPeerClockSkew +
                                        "ms to " + predictedPeerClockSkew + "ms (Stratum: " + stratum + ")");
-                        return;
-                    } else {
-                        if (log.shouldInfo())
+                    return;
+                } else {
+                    if (log.shouldInfo())
                             log.info("Approving clock offset of " + offsetMs + "ms (current: " + _offset +
                                        "ms) as it will decrease peer clock skew from " + currentPeerClockSkew +
                                        "ms to " + predictedPeerClockSkew + "ms (Stratum: " + stratum + ")");
-                    }
+                }
             } // check sanity
         }
 
@@ -221,14 +221,14 @@ public class RouterClock extends Clock {
 //                    log.info("Initializing clock offset to " + offsetMs + "ms (Stratum: " + stratum + ")", new Exception());
                     log.info("Initializing clock offset to " + offsetMs + "ms (Stratum: " + stratum + ")");
                 _alreadyChanged = true;
-               _lastProposedOffset = 0;
+                _lastProposedOffset = 0;
                 if (_context.getBooleanProperty(PROP_DISABLE_ADJUSTMENT)) {
                     log.error("Clock adjustment disabled", new Exception());
                 } else {
                     _offset = offsetMs;
                     _desiredOffset = offsetMs;
                     // this is used by the JobQueue
-                   fireOffsetChanged(delta);
+                    fireOffsetChanged(delta);
                 }
             } else {
                 if (log.shouldInfo())
@@ -347,7 +347,7 @@ public class RouterClock extends Clock {
      * @since 0.8.8
      */
     public void addShiftListener(ClockShiftListener lsnr) {
-            _shiftListeners.add(lsnr);
+        _shiftListeners.add(lsnr);
     }
 
     /**
@@ -357,7 +357,7 @@ public class RouterClock extends Clock {
      * @since 0.8.8
      */
     public void removeShiftListener(ClockShiftListener lsnr) {
-            _shiftListeners.remove(lsnr);
+        _shiftListeners.remove(lsnr);
     }
 
     /**

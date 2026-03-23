@@ -29,7 +29,7 @@ public interface ClientApp {
       *
       *  @throws Throwable on startup failure
       */
-     public void startup() throws Throwable;
+    public void startup() throws Throwable;
 
      /**
       *  Do not take a long time. Do not block. Use a thread if necessary.
@@ -40,7 +40,7 @@ public interface ClientApp {
       *  @param args generally null but could be stopArgs from clients.config
       *  @throws Throwable on shutdown failure
       */
-     public void shutdown(String[] args) throws Throwable;
+    public void shutdown(String[] args) throws Throwable;
 
     /**
      *  The current state of the ClientApp.

@@ -63,12 +63,12 @@ public class VersionComparator implements Comparator<String>, Serializable {
 
     private static boolean isSeparator(char c) {
         switch(c) {
-        case '.':
-        case '_':
-        case '-':
-            return true;
-        default :
-            return false;
+            case '.':
+            case '_':
+            case '-':
+                return true;
+            default :
+                return false;
         }
     }
 

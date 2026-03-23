@@ -154,9 +154,9 @@ class FragmentedMessage {
         if (!_lastReceived)
             throw new IllegalStateException("don't get the completed size when we're not complete!");
         if (_releasedAfter > 0) {
-             RuntimeException e = new RuntimeException("use after free in FragmentedMessage");
-             _log.error("FM completeSize()", e);
-             throw e;
+            RuntimeException e = new RuntimeException("use after free in FragmentedMessage");
+            _log.error("FM completeSize()", e);
+            throw e;
         }
         int size = 0;
         for (int i = 0; i <= _highFragmentNum; i++) {
@@ -175,9 +175,9 @@ class FragmentedMessage {
 
     private void writeComplete(byte target[], int offset) {
         if (_releasedAfter > 0) {
-             RuntimeException e = new RuntimeException("use after free in FragmentedMessage");
-             _log.error("FM writeComplete() 2", e);
-             throw e;
+            RuntimeException e = new RuntimeException("use after free in FragmentedMessage");
+            _log.error("FM writeComplete() 2", e);
+            throw e;
         }
         for (int i = 0; i <= _highFragmentNum; i++) {
             ByteArray ba = _fragments[i];
@@ -210,9 +210,9 @@ class FragmentedMessage {
      */
     private void releaseFragments() {
         if (_releasedAfter > 0) {
-             RuntimeException e = new RuntimeException("double free in FragmentedMessage");
-             _log.error("FM releaseFragments()", e);
-             throw e;
+            RuntimeException e = new RuntimeException("double free in FragmentedMessage");
+            _log.error("FM releaseFragments()", e);
+            throw e;
         }
         _releasedAfter = getLifetime();
         for (int i = 0; i <= _highFragmentNum; i++) {

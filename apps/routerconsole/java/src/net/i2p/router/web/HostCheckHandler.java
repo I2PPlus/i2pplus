@@ -51,7 +51,7 @@ public class HostCheckHandler extends GzipHandler
                                  "application/xhtml+xml", "application/xml", "application/pdf", "text/xml",
                                  "image/svg+xml", "application/x-font-ttf", "application/x-font-truetype",
                                  "font/ttf", "font/otf", "font/woff", "text/css", "text/html", "text/plain"
-                                );
+            );
         } else {
             // poorly documented, but we must put something in,
             // if empty all are matched,

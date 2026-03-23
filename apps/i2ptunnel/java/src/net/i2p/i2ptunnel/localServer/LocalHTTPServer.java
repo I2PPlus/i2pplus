@@ -128,7 +128,7 @@ public abstract class LocalHTTPServer {
             try {
                 filename = targetRequest.substring(8); // "/themes/".length
             } catch (IndexOutOfBoundsException ioobe) {
-                 return;
+                return;
             }
             // theme hack
             if (filename.startsWith("console/default/"))

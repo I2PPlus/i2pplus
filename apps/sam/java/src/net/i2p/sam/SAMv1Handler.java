@@ -267,7 +267,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
         // Unconditionally override what the client may have set
         // (iMule sets BestEffort) as None is more efficient
         // and the client has no way to access delivery notifications
-        props.setProperty(I2PClient.PROP_RELIABILITY, I2PClient.PROP_RELIABILITY_NONE);
+                props.setProperty(I2PClient.PROP_RELIABILITY, I2PClient.PROP_RELIABILITY_NONE);
 
                 if (style.equals("RAW")) {
                     rawSession = new SAMRawSession(destKeystream, props, this);
@@ -319,14 +319,14 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
     }
 
 
-  private SAMStreamSession newSAMStreamSession(String destKeystream, String direction, Properties props )
-    throws IOException, DataFormatException, SAMException
-  {
-    return new SAMStreamSession(destKeystream, direction, props, this) ;
-  }
+    private SAMStreamSession newSAMStreamSession(String destKeystream, String direction, Properties props )
+        throws IOException, DataFormatException, SAMException
+    {
+        return new SAMStreamSession(destKeystream, direction, props, this) ;
+    }
 
     /* Parse and execute a DEST message*/
-  protected boolean execDestMessage(String opcode, Properties props) {
+    protected boolean execDestMessage(String opcode, Properties props) {
 
         if (opcode.equals("GENERATE")) {
             String sigTypeStr = props.getProperty("SIGNATURE_TYPE");
@@ -361,7 +361,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
     }
 
     /* Parse and execute a NAMING message */
-  protected boolean execNamingMessage(String opcode, Properties props) {
+    protected boolean execNamingMessage(String opcode, Properties props) {
         if (opcode.equals("LOOKUP")) {
             String name = props.getProperty("NAME");
             if (name == null) {
@@ -572,7 +572,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
         }
     }
 
-  protected boolean execStreamSend(Properties props) {
+    protected boolean execStreamSend(Properties props) {
         if (props.isEmpty()) {
             if (_log.shouldDebug())
                 _log.debug("No parameters specified in STREAM SEND message");
@@ -644,7 +644,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
         }
     }
 
-  protected boolean execStreamConnect(Properties props) {
+    protected boolean execStreamConnect(Properties props) {
         if (props.isEmpty()) {
             if (_log.shouldDebug())
                 _log.debug("No parameters specified in STREAM CONNECT message");
@@ -718,7 +718,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
         return true ;
     }
 
-  protected boolean execStreamClose(Properties props) {
+    protected boolean execStreamClose(Properties props) {
         if (props.isEmpty()) {
             if (_log.shouldDebug())
                 _log.debug("No parameters specified in STREAM CLOSE message");

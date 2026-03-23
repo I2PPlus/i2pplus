@@ -35,10 +35,10 @@ import net.metanotion.util.skiplist.SkipSpan;
 
 /**
  * SkipList iterator with on-demand span loading (I2P version).
- * 
+ *
  * <p>Loads spans from disk only when needed and unloads them
  * when moving to next span to minimize memory usage.</p>
- * 
+ *
  * <p>Overridden to load span when required and null out keys and values
  * when iterator leaves the span. If caller does not iterate all the way through,
  * the last span will remain in memory.</p>

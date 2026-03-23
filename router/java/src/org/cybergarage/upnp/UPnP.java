@@ -115,44 +115,44 @@ public class UPnP {
     public static final void setEnable(int value) {
         switch (value) {
             case USE_ONLY_IPV6_ADDR:
-                {
-                    HostInterface.USE_ONLY_IPV6_ADDR = true;
-                }
+            {
+                HostInterface.USE_ONLY_IPV6_ADDR = true;
+            }
                 break;
             case USE_ONLY_IPV4_ADDR:
-                {
-                    HostInterface.USE_ONLY_IPV4_ADDR = true;
-                }
+            {
+                HostInterface.USE_ONLY_IPV4_ADDR = true;
+            }
                 break;
             case USE_LOOPBACK_ADDR:
-                {
-                    HostInterface.USE_LOOPBACK_ADDR = true;
-                }
+            {
+                HostInterface.USE_LOOPBACK_ADDR = true;
+            }
                 break;
             case USE_IPV6_LINK_LOCAL_SCOPE:
-                {
-                    SSDP.setIPv6Address(SSDP.IPV6_LINK_LOCAL_ADDRESS);
-                }
+            {
+                SSDP.setIPv6Address(SSDP.IPV6_LINK_LOCAL_ADDRESS);
+            }
                 break;
             case USE_IPV6_SUBNET_SCOPE:
-                {
-                    SSDP.setIPv6Address(SSDP.IPV6_SUBNET_ADDRESS);
-                }
+            {
+                SSDP.setIPv6Address(SSDP.IPV6_SUBNET_ADDRESS);
+            }
                 break;
             case USE_IPV6_ADMINISTRATIVE_SCOPE:
-                {
-                    SSDP.setIPv6Address(SSDP.IPV6_ADMINISTRATIVE_ADDRESS);
-                }
+            {
+                SSDP.setIPv6Address(SSDP.IPV6_ADMINISTRATIVE_ADDRESS);
+            }
                 break;
             case USE_IPV6_SITE_LOCAL_SCOPE:
-                {
-                    SSDP.setIPv6Address(SSDP.IPV6_SITE_LOCAL_ADDRESS);
-                }
+            {
+                SSDP.setIPv6Address(SSDP.IPV6_SITE_LOCAL_ADDRESS);
+            }
                 break;
             case USE_IPV6_GLOBAL_SCOPE:
-                {
-                    SSDP.setIPv6Address(SSDP.IPV6_GLOBAL_ADDRESS);
-                }
+            {
+                SSDP.setIPv6Address(SSDP.IPV6_GLOBAL_ADDRESS);
+            }
                 break;
         }
     }
@@ -165,19 +165,19 @@ public class UPnP {
     public static final void setDisable(int value) {
         switch (value) {
             case USE_ONLY_IPV6_ADDR:
-                {
-                    HostInterface.USE_ONLY_IPV6_ADDR = false;
-                }
+            {
+                HostInterface.USE_ONLY_IPV6_ADDR = false;
+            }
                 break;
             case USE_ONLY_IPV4_ADDR:
-                {
-                    HostInterface.USE_ONLY_IPV4_ADDR = false;
-                }
+            {
+                HostInterface.USE_ONLY_IPV4_ADDR = false;
+            }
                 break;
             case USE_LOOPBACK_ADDR:
-                {
-                    HostInterface.USE_LOOPBACK_ADDR = false;
-                }
+            {
+                HostInterface.USE_LOOPBACK_ADDR = false;
+            }
                 break;
         }
     }
@@ -191,17 +191,17 @@ public class UPnP {
     public static final boolean isEnabled(int value) {
         switch (value) {
             case USE_ONLY_IPV6_ADDR:
-                {
-                    return HostInterface.USE_ONLY_IPV6_ADDR;
-                }
+            {
+                return HostInterface.USE_ONLY_IPV6_ADDR;
+            }
             case USE_ONLY_IPV4_ADDR:
-                {
-                    return HostInterface.USE_ONLY_IPV4_ADDR;
-                }
+            {
+                return HostInterface.USE_ONLY_IPV4_ADDR;
+            }
             case USE_LOOPBACK_ADDR:
-                {
-                    return HostInterface.USE_LOOPBACK_ADDR;
-                }
+            {
+                return HostInterface.USE_LOOPBACK_ADDR;
+            }
         }
         return false;
     }

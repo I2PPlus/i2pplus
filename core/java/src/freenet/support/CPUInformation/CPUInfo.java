@@ -82,7 +82,7 @@ public interface CPUInfo
       * @return true iff the CPU supports the AVX instruction set.
       * @since 0.9.26
       */
-     public boolean hasAVX();
+    public boolean hasAVX();
 
      /**
       * Checks if CPU supports the AVX2 instruction set.
@@ -130,7 +130,7 @@ public interface CPUInfo
       * @return true iff the CPU supports the AES-NI instruction set.
       * @since 0.9.14
       */
-     public boolean hasAES();
+    public boolean hasAES();
 
      /**
       * Checks if CPU supports the 64-bit support.
@@ -144,7 +144,7 @@ public interface CPUInfo
       * @return true iff the CPU supports the BMI1 instruction set.
       * @since 0.9.26
       */
-     public boolean hasBMI1();
+    public boolean hasBMI1();
 
      /**
       * Checks if CPU supports the BMI2 instruction set.
@@ -158,7 +158,7 @@ public interface CPUInfo
       * @return true iff the CPU supports the FMA3 instruction set.
       * @since 0.9.26
       */
-     public boolean hasFMA3();
+    public boolean hasFMA3();
 
      /**
       * Checks if CPU supports the MOVBE instruction set.

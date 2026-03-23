@@ -87,7 +87,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
             return "Duplicate ID " + nick;
         int listenPort = I2PSession.PORT_ANY;
         String slp = (String) props.remove("LISTEN_PORT");
-                if (slp == null)
+        if (slp == null)
                     slp = props.getProperty("FROM_PORT");
         if (slp != null) {
             try {
@@ -111,7 +111,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
                     return "RAW subsession must specify PORT";
                 listenProtocol = I2PSession.PROTO_DATAGRAM_RAW;
                 String spr = (String) props.remove("LISTEN_PROTOCOL");
-                            if (spr == null)
+                if (spr == null)
                                 spr = props.getProperty("PROTOCOL");
                 if (spr != null) {
                     try {
@@ -278,42 +278,42 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
 
     // I2PSessionMuxedImpl interface
 
-        public void disconnected(I2PSession session) {
-            if (_log.shouldDebug())
+    public void disconnected(I2PSession session) {
+        if (_log.shouldDebug())
                 _log.debug("I2P session disconnected");
-            close();
-        }
+        close();
+    }
 
-        public void errorOccurred(I2PSession session, String message,
+    public void errorOccurred(I2PSession session, String message,
                                   Throwable error) {
-            if (_log.shouldDebug())
+        if (_log.shouldDebug())
                 _log.debug("I2P error: " + message, error);
-            close();
-        }
+        close();
+    }
 
-        public void messageAvailable(I2PSession session, int msgId, long size) {
-            messageAvailable(session, msgId, size, I2PSession.PROTO_UNSPECIFIED,
+    public void messageAvailable(I2PSession session, int msgId, long size) {
+        messageAvailable(session, msgId, size, I2PSession.PROTO_UNSPECIFIED,
                              I2PSession.PORT_UNSPECIFIED, I2PSession.PORT_UNSPECIFIED);
-        }
+    }
 
         /** @since 0.9.24 */
-        public void messageAvailable(I2PSession session, int msgId, long size,
+    public void messageAvailable(I2PSession session, int msgId, long size,
                                      int proto, int fromPort, int toPort) {
-            try {
-                byte msg[] = session.receiveMessage(msgId);
-                if (msg == null)
+        try {
+            byte msg[] = session.receiveMessage(msgId);
+            if (msg == null)
                     return;
-                messageReceived(msg, proto, fromPort, toPort);
-            } catch (I2PSessionException e) {
-                _log.error("Error fetching I2P message", e);
-                close();
-            }
-        }
-
-        public void reportAbuse(I2PSession session, int severity) {
-            _log.warn("Abuse reported (severity: " + severity + ")");
+            messageReceived(msg, proto, fromPort, toPort);
+        } catch (I2PSessionException e) {
+            _log.error("Error fetching I2P message", e);
             close();
         }
+    }
+
+    public void reportAbuse(I2PSession session, int severity) {
+        _log.warn("Abuse reported (severity: " + severity + ")");
+        close();
+    }
 
     private void messageReceived(byte[] msg, int proto, int fromPort, int toPort) {
         if (_log.shouldWarn())

@@ -122,7 +122,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
                                   ", you must add it to your addressbook for it to work.");
                     }
                 } catch (IllegalArgumentException iae) {
-                     l.log("✖ [IRC Client] Bad destination " + destination + " - " + iae);
+                    l.log("✖ [IRC Client] Bad destination " + destination + " - " + iae);
                 }
             }
         }
@@ -244,93 +244,93 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
     //  Start of the DCCHelper interface
     //
 
-  private class DCC implements DCCHelper {
+    private class DCC implements DCCHelper {
 
-    private final byte[] _localAddr;
+        private final byte[] _localAddr;
 
     /**
      *  @param local Our IP address, from the IRC client's perspective
      */
-    public DCC(byte[] local) {
-        if (local.length == 4)
-            _localAddr = local;
-        else
-            _localAddr = new byte[] {127, 0, 0, 1};
-    }
+        public DCC(byte[] local) {
+            if (local.length == 4)
+                _localAddr = local;
+            else
+                _localAddr = new byte[] {127, 0, 0, 1};
+        }
 
-    public boolean isEnabled() {
-        return _dccEnabled;
-    }
+        public boolean isEnabled() {
+            return _dccEnabled;
+        }
 
-    public String getB32Hostname() {
-        return sockMgr.getSession().getMyDestination().toBase32();
-    }
+        public String getB32Hostname() {
+            return sockMgr.getSession().getMyDestination().toBase32();
+        }
 
-    public byte[] getLocalAddress() {
-        return _localAddr;
-    }
+        public byte[] getLocalAddress() {
+            return _localAddr;
+        }
 
-    public int newOutgoing(byte[] ip, int port, String type) {
-        I2PTunnelDCCServer server;
-        synchronized(this) {
-            if (_DCCServer == null) {
-                if (_log.shouldInfo())
-                    _log.info("[IRC Client] Starting DCC Server...");
-                _DCCServer = new I2PTunnelDCCServer(sockMgr, l, I2PTunnelIRCClient.this, getTunnel());
+        public int newOutgoing(byte[] ip, int port, String type) {
+            I2PTunnelDCCServer server;
+            synchronized(this) {
+                if (_DCCServer == null) {
+                    if (_log.shouldInfo())
+                        _log.info("[IRC Client] Starting DCC Server...");
+                    _DCCServer = new I2PTunnelDCCServer(sockMgr, l, I2PTunnelIRCClient.this, getTunnel());
                 // TODO add some prudent tunnel options (or is it too late?)
-                _DCCServer.startRunning();
+                    _DCCServer.startRunning();
+                }
+                server = _DCCServer;
             }
-            server = _DCCServer;
+            int rv = server.newOutgoing(ip, port, type);
+            if (_log.shouldInfo())
+                _log.info("[IRC Client] New outgoing " + type + ' ' + port + " returns " + rv);
+            return rv;
         }
-        int rv = server.newOutgoing(ip, port, type);
-        if (_log.shouldInfo())
-            _log.info("[IRC Client] New outgoing " + type + ' ' + port + " returns " + rv);
-        return rv;
-    }
 
-    public int newIncoming(String b32, int port, String type) {
-        DCCClientManager tracker;
-        synchronized(this) {
-            if (_DCCClientManager == null) {
-                if (_log.shouldInfo())
-                    _log.info("[IRC Client] Starting DCC Client...");
-                _DCCClientManager = new DCCClientManager(sockMgr, l, I2PTunnelIRCClient.this, getTunnel());
+        public int newIncoming(String b32, int port, String type) {
+            DCCClientManager tracker;
+            synchronized(this) {
+                if (_DCCClientManager == null) {
+                    if (_log.shouldInfo())
+                        _log.info("[IRC Client] Starting DCC Client...");
+                    _DCCClientManager = new DCCClientManager(sockMgr, l, I2PTunnelIRCClient.this, getTunnel());
+                }
+                tracker = _DCCClientManager;
             }
-            tracker = _DCCClientManager;
-        }
         // The tracker starts our client
-        int rv = tracker.newIncoming(b32, port, type);
-        if (_log.shouldInfo())
-            _log.info("[IRC Client] New incoming " + type + ' ' + b32 + ' ' + port + " returns " + rv);
-        return rv;
-    }
+            int rv = tracker.newIncoming(b32, port, type);
+            if (_log.shouldInfo())
+                _log.info("[IRC Client] New incoming " + type + ' ' + b32 + ' ' + port + " returns " + rv);
+            return rv;
+        }
 
-    public int resumeOutgoing(int port) {
-        DCCClientManager tracker = _DCCClientManager;
-        if (tracker != null)
-            return tracker.resumeOutgoing(port);
-        return -1;
-    }
+        public int resumeOutgoing(int port) {
+            DCCClientManager tracker = _DCCClientManager;
+            if (tracker != null)
+                return tracker.resumeOutgoing(port);
+            return -1;
+        }
 
-    public int resumeIncoming(int port) {
-        I2PTunnelDCCServer server = _DCCServer;
-        if (server != null)
-            return server.resumeIncoming(port);
-        return -1;
-    }
+        public int resumeIncoming(int port) {
+            I2PTunnelDCCServer server = _DCCServer;
+            if (server != null)
+                return server.resumeIncoming(port);
+            return -1;
+        }
 
-    public int acceptOutgoing(int port) {
-        I2PTunnelDCCServer server = _DCCServer;
-        if (server != null)
-            return server.acceptOutgoing(port);
-        return -1;
-    }
+        public int acceptOutgoing(int port) {
+            I2PTunnelDCCServer server = _DCCServer;
+            if (server != null)
+                return server.acceptOutgoing(port);
+            return -1;
+        }
 
-    public int acceptIncoming(int port) {
-        DCCClientManager tracker = _DCCClientManager;
-        if (tracker != null)
-            return tracker.acceptIncoming(port);
-        return -1;
+        public int acceptIncoming(int port) {
+            DCCClientManager tracker = _DCCClientManager;
+            if (tracker != null)
+                return tracker.acceptIncoming(port);
+            return -1;
+        }
     }
-  }
 }

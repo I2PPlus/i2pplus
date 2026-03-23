@@ -43,29 +43,29 @@ class LogRecordFormatter {
         char format[] = manager.getFormat();
         for (int i = 0; i < format.length; ++i) {
             switch (format[i]) {
-            case LogManager.DATE:
-                if (showDate)
-                    buf.append(getWhen(manager, rec));
-                else if (i+1 < format.length && format[i+1] == ' ')
-                    i++;  // skip following space
-                break;
-            case LogManager.CLASS:
-                buf.append(getWhere(rec));
-                break;
-            case LogManager.THREAD:
-                buf.append(getThread(rec));
-                break;
-            case LogManager.PRIORITY:
-                buf.append("| ").append(getPriority(rec, manager.getContext()));
-                break;
-            case LogManager.MESSAGE:
-                String msg = getWhat(rec);
-                if (msg != null)
-                    buf.append(msg);
-                break;
-            default:
-                buf.append(format[i]);
-                break;
+                case LogManager.DATE:
+                    if (showDate)
+                        buf.append(getWhen(manager, rec));
+                    else if (i+1 < format.length && format[i+1] == ' ')
+                        i++;  // skip following space
+                    break;
+                case LogManager.CLASS:
+                    buf.append(getWhere(rec));
+                    break;
+                case LogManager.THREAD:
+                    buf.append(getThread(rec));
+                    break;
+                case LogManager.PRIORITY:
+                    buf.append("| ").append(getPriority(rec, manager.getContext()));
+                    break;
+                case LogManager.MESSAGE:
+                    String msg = getWhat(rec);
+                    if (msg != null)
+                        buf.append(msg);
+                    break;
+                default:
+                    buf.append(format[i]);
+                    break;
             }
         }
         buf.append(NL);
@@ -130,7 +130,7 @@ class LogRecordFormatter {
 
     /** truncates or pads to the specified size */
     private static String toString(String str, int size) {
-    String ellipsis = "...";
+        String ellipsis = "...";
         StringBuilder buf = new StringBuilder();
         if (str == null) str = "";
         if (str.length() > size) {

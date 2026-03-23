@@ -18,7 +18,7 @@ import net.i2p.util.Clock;
 
 /**
  * Authorization grant proving a router/tunnel may receive messages for a destination.
- * 
+ *
  * <p>Lease represents the fundamental routing authorization in I2P:</p>
  * <ul>
  *   <li><strong>Authorization:</strong> Proves specific router can receive messages</li>
@@ -26,14 +26,14 @@ import net.i2p.util.Clock;
  *   <li><strong>Destination-Specific:</strong> Authorizes service for particular destination</li>
  *   <li><strong>Tunnel Endpoint:</strong> Identifies specific tunnel on gateway router</li>
  * </ul>
- * 
+ *
  * <p><strong>Key Components:</strong></p>
  * <ul>
  *   <li><strong>Gateway:</strong> {@link Hash} identifying the router hosting the tunnel</li>
  *   <li><strong>Tunnel ID:</strong> {@link TunnelId} identifying specific tunnel on gateway</li>
  *   <li><strong>End Time:</strong> {@code long} timestamp when lease expires</li>
  * </ul>
- * 
+ *
  * <p><strong>Authorization Model:</strong></p>
  * <ul>
  *   <li><strong>Proof of Authority:</strong> Destination authorizes specific router</li>
@@ -41,7 +41,7 @@ import net.i2p.util.Clock;
  *   <li><strong>Tunnel Specificity:</strong> Authorizes particular tunnel, not all tunnels</li>
  *   <li><strong>Renewable:</strong> Leases can be refreshed before expiration</li>
  * </ul>
- * 
+ *
  * <p><strong>Usage in LeaseSet:</strong></p>
  * <ul>
  *   <li><strong>Multiple Leases:</strong> Destinations typically have several concurrent leases</li>
@@ -49,7 +49,7 @@ import net.i2p.util.Clock;
  *   <li><strong>Redundancy:</strong> Backup tunnels if primary becomes unavailable</li>
  *   <li><strong>Mobility:</strong> Leases updated as destination moves between routers</li>
  * </ul>
- * 
+ *
  * <p><strong>Network Operations:</strong></p>
  * <ul>
  *   <li><strong>Message Routing:</strong> Routers use leases to forward messages</li>
@@ -57,7 +57,7 @@ import net.i2p.util.Clock;
  *   <li><strong>Expiration Handling:</strong> Leases removed when they expire</li>
  *   <li><strong>LeaseSet Publication:</strong> Leases published to network database</li>
  * </ul>
- * 
+ *
  * <p><strong>Security Considerations:</strong></p>
  * <ul>
  *   <li><strong>Verification:</strong> Verify lease authenticity via LeaseSet signature</li>
@@ -65,7 +65,7 @@ import net.i2p.util.Clock;
  *   <li><strong>Gateway Trust:</strong> Verify gateway router is trusted</li>
  *   <li><strong>Tunnel Security:</strong> Ensure tunnel endpoint is secure</li>
  * </ul>
- * 
+ *
  * <p><strong>Performance Aspects:</strong></p>
  * <ul>
  *   <li><strong>Efficient Lookup:</strong> Hash-based gateway identification</li>
@@ -73,7 +73,7 @@ import net.i2p.util.Clock;
  *   <li><strong>Compact Storage:</strong> Minimal data structure for network transmission</li>
  *   <li><strong>Fast Comparison:</strong> Optimized equals() and hashCode() methods</li>
  * </ul>
- * 
+ *
  * <p><strong>Related Structures:</strong></p>
  * <ul>
  *   <li>{@link LeaseSet} - Container for multiple leases</li>

@@ -43,16 +43,16 @@ import net.i2p.util.SystemVersion;
 
 /**
  * ElGamal cryptographic engine for I2P encryption and signature operations.
- * 
+ *
  * This class implements the ElGamal public-key cryptosystem for encrypting data
  * up to 222 bytes in size. It incorporates integrity protection by prepending
  * a random byte and SHA-256 hash to data before encryption, which are
  * verified and stripped during decryption.
- * 
+ *
  * <p><strong>Security Note:</strong> This implementation is deprecated and not
  * recommended for new applications. Use modern alternatives like ECIES or post-quantum
  * schemes when available.</p>
- * 
+ *
  * <p>The encryption process:</p>
  * <ol>
  *   <li>Generate random nonce byte</li>

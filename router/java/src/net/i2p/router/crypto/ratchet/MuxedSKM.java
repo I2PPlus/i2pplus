@@ -194,7 +194,7 @@ public class MuxedSKM extends SessionKeyManager {
         EncType type = target.getType();
         if (type == EncType.ELGAMAL_2048)
             return _elg.tagsDelivered(target, key, sessionTags);
-         return null;
+        return null;
     }
 
     /**

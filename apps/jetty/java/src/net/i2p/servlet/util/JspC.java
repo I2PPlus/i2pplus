@@ -54,18 +54,18 @@ public class JspC {
      *  @throws IllegalArgumentException
      */
     public static void main(String args[]) {
-       if (REPRODUCIBLE)
-           args = fixupArgs(args);
-       try {
-           String cls = "org.apache.jasper.JspC";
-           Class<?> c = Class.forName(cls, true, ClassLoader.getSystemClassLoader());
-           Method main = c.getMethod("main", String[].class);
-           main.invoke(null, (Object) args);
-           System.exit(0);
-       } catch (Exception e) {
-           e.printStackTrace();
-           System.exit(1);
-       }
+        if (REPRODUCIBLE)
+            args = fixupArgs(args);
+        try {
+            String cls = "org.apache.jasper.JspC";
+            Class<?> c = Class.forName(cls, true, ClassLoader.getSystemClassLoader());
+            Method main = c.getMethod("main", String[].class);
+            main.invoke(null, (Object) args);
+            System.exit(0);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
     }
 
     /**

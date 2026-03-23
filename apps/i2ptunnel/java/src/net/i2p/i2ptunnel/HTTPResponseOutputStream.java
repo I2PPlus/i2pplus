@@ -256,7 +256,7 @@ class HTTPResponseOutputStream extends FilterOutputStream {
                                 } else {
                                     // Strip to allow persistence, replace to disallow
                                     if (!_keepAliveOut)
-                                    out.write(CONNECTION_CLOSE);
+                                        out.write(CONNECTION_CLOSE);
                                 }
                                 // We do not expect Connection: keep-alive here,
                                 // as it's the default for HTTP/1.1, the server proxy doesn't support it,
@@ -325,7 +325,7 @@ class HTTPResponseOutputStream extends FilterOutputStream {
                 (!chunked && _dataExpected < 0))
                 _keepAliveIn = false;
         }
-        
+
         if (!connectionSent && !_keepAliveOut)
             out.write(CONNECTION_CLOSE);
 

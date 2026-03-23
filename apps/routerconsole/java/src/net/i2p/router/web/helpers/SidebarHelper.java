@@ -684,7 +684,7 @@ public class SidebarHelper extends HelperBase {
                .append(" <span id=tunnelCount class=\"badge volatile\" title=\"").append(_t("How many local service tunnels we're running"))
                .append("\">").append(clientCount).append("</span>").append("</a>")
                .append("<input type=checkbox id=toggle_sb_localtunnels class=\"toggleSection script\" checked hidden></h3>\n<hr class=\"b\">\n")
-               .append("<table id=sb_localtunnels class=volatile>");
+                .append("<table id=sb_localtunnels class=volatile>");
 
             for (Destination client : clients) {
                 String name = getTunnelName(client);
@@ -733,18 +733,18 @@ public class SidebarHelper extends HelperBase {
                            .append(_t("Rebuilding")).append("&hellip;\" title=\"").append(_t("Leases expired")).append(" ")
                            .append(DataHelper.formatDuration2(0 - timeToExpire))
                            .append(" ").append(_t("ago")).append(". ").append(_t("Rebuilding"))
-                           .append("&hellip;\" width=16 height=16></td></tr>\n");
+                            .append("&hellip;\" width=16 height=16></td></tr>\n");
                     } else {
                         // green light
                         buf.append("<td class=tunnelReady><img src=/themes/console/images/local_up.svg alt=\"")
                            .append(_t("Ready")).append("\" title=\"").append(_t("Ready"))
-                           .append("\" width=16 height=16></td></tr>\n");
+                            .append("\" width=16 height=16></td></tr>\n");
                     }
                 } else {
                     // yellow light
                     buf.append("<td class=tunnelBuilding><img src=/themes/console/images/local_inprogress.svg alt=\"")
                        .append(_t("Building")).append("&hellip;\" title=\"").append(_t("Building tunnels"))
-                       .append("&hellip;\" width=16 height=16></td></tr>\n");
+                        .append("&hellip;\" width=16 height=16></td></tr>\n");
                 }
             }
             buf.append("</table>");
@@ -765,7 +765,7 @@ public class SidebarHelper extends HelperBase {
            .append("<span id=serverCount class=count_0>0 x <img src=/themes/console/images/server.svg></span>")
            .append("<span id=clientCount class=count_0>0 x <img src=/themes/console/images/client.svg></span>")
            .append("<span id=pingCount class=count_0>0 x <img src=/themes/console/images/ping.svg></span>")
-           .append("</td></tr>\n</table>\n");
+            .append("</td></tr>\n</table>\n");
         return buf.toString();
     }
 
@@ -1006,8 +1006,8 @@ public class SidebarHelper extends HelperBase {
     }
 
     public int getStoredRouterInfos() {
-       if (_context == null) return 0;
-       NetworkDatabaseFacade netDb = _context.netDb();
+        if (_context == null) return 0;
+        NetworkDatabaseFacade netDb = _context.netDb();
         if (netDb instanceof KademliaNetworkDatabaseFacade) {
             return ((KademliaNetworkDatabaseFacade) netDb).getStoredRouterInfoCount();
         }
@@ -1118,7 +1118,7 @@ public class SidebarHelper extends HelperBase {
                .append(_t("Version {0}", getUnsignedUpdateVersion()))
                .append("<br>")
                .append(unsignedConstraint)
-               .append("</b></h4>");
+                .append("</b></h4>");
             unsignedAvail = false;
         }
         if (devSU3Avail && devSU3Constraint != null && !NewsHelper.isUpdateInProgress() && !_context.router().gracefulShutdownInProgress()) {
@@ -1130,23 +1130,23 @@ public class SidebarHelper extends HelperBase {
                .append(_t("Version {0}", getDevSU3UpdateVersion()))
                .append("<br>")
                .append(devSU3Constraint)
-               .append("</b></h4>");
+                .append("</b></h4>");
             devSU3Avail = false;
         }
         if ((avail || unsignedAvail || devSU3Avail) && !NewsHelper.isUpdateInProgress() &&
             !_context.router().gracefulShutdownInProgress() && !_context.commSystem().isDummy() &&
             _context.portMapper().isRegistered(PortMapper.SVC_HTTP_PROXY) && // assume using proxy for now
             getAction() == null && getUpdateNonce() == null) {
-                if (needSpace) {buf.append("<hr>");}
+            if (needSpace) {buf.append("<hr>");}
                 // else {needSpace = true;} // needed ?
-                long nonce = _context.random().nextLong();
-                String prev = System.getProperty("net.i2p.router.web.UpdateHandler.nonce");
-                if (prev != null) {
-                    System.setProperty("net.i2p.router.web.UpdateHandler.noncePrev", prev);
-                }
-                System.setProperty("net.i2p.router.web.UpdateHandler.nonce", nonce + "");
-                String uri = getRequestURI();
-                buf.append("<form id=sb_updateform action=\"")
+            long nonce = _context.random().nextLong();
+            String prev = System.getProperty("net.i2p.router.web.UpdateHandler.nonce");
+            if (prev != null) {
+                System.setProperty("net.i2p.router.web.UpdateHandler.noncePrev", prev);
+            }
+            System.setProperty("net.i2p.router.web.UpdateHandler.nonce", nonce + "");
+            String uri = getRequestURI();
+            buf.append("<form id=sb_updateform action=\"")
                    .append(uri)
                    .append("\" method=POST class=volatile>\n<input type=hidden name=updateNonce value=")
                    .append(nonce)
@@ -1162,8 +1162,8 @@ public class SidebarHelper extends HelperBase {
                        .append("</button><br>\n");
                 }
 */
-                if (devSU3Avail) {
-                    buf.append("<span id=updateAvailable class=volatile>")
+            if (devSU3Avail) {
+                buf.append("<span id=updateAvailable class=volatile>")
                        .append(_t("Signed development update available"))
                        .append("<br><i>")
                        .append(_t("Version"))
@@ -1172,19 +1172,19 @@ public class SidebarHelper extends HelperBase {
                        .append("</i></span><br><button type=submit id=sb_downloadSignedDevUpdate class=download name=updateAction value=DevSU3>")
                        .append(_t("Download I2P Update"))
                        .append("</button><br>\n");
-                }
+            }
 
-                if (unsignedAvail) {
-                    buf.append("<span id=updateAvailable class=volatile>");
-                    if (source.contains("skank")) {buf.append(_t("Unsigned update available").replace("update", "I2P+ update"));}
-                    else {buf.append(_t("Unsigned update available").replace("update", "I2P update"));}
-                    buf.append("<br><i>").append(getUnsignedUpdateVersion())
+            if (unsignedAvail) {
+                buf.append("<span id=updateAvailable class=volatile>");
+                if (source.contains("skank")) {buf.append(_t("Unsigned update available").replace("update", "I2P+ update"));}
+                else {buf.append(_t("Unsigned update available").replace("update", "I2P update"));}
+                buf.append("<br><i>").append(getUnsignedUpdateVersion())
                        .append("</i></span><br><button type=submit id=sb_downloadUnsignedDevUpdate class=download name=updateAction value=Unsigned>");
-                    if (source != null && source.contains("skank")) {buf.append(_t("Download I2P Update").replace("I2P", "I2P+"));}
-                    else {buf.append(_t("Download I2P Update"));}
-                    buf.append("</button><br>\n");
-                }
-                buf.append("</form>\n");
+                if (source != null && source.contains("skank")) {buf.append(_t("Download I2P Update").replace("I2P", "I2P+"));}
+                else {buf.append(_t("Download I2P Update"));}
+                buf.append("</button><br>\n");
+            }
+            buf.append("</form>\n");
         }
         return buf.toString();
     }
@@ -1206,7 +1206,7 @@ public class SidebarHelper extends HelperBase {
         if (showFirewallWarning()) {
             buf.append("<h4 id=sb_warning class=volatile><span><a href=\"/help#configurationhelp\" target=_top title=\"")
                .append(_t("Help with firewall configuration")).append("\">").append(_t("Check network connection and NAT/firewall!"))
-               .append("</a></span></h4>");
+                .append("</a></span></h4>");
         } else {buf.append("<h4 id=sb_warning class=\"volatile hide\" hidden></h4>");} // Hide warn but retain h4 so ajax refresh picks it up
 
         if (DeadlockDetector.isDeadlocked()) {
@@ -1215,7 +1215,7 @@ public class SidebarHelper extends HelperBase {
                .append(" - <a href=\"/logs\">")
                .append(_t("Please report"))
                .append("</a> - ").append(_t("After reporting, please restart your router"))
-               .append("</b></div>");
+                .append("</b></div>");
         }
 
         // checker will be null for DummyNetworkDatabaseFacade
@@ -1341,7 +1341,7 @@ public class SidebarHelper extends HelperBase {
            .append(_t("Name"))
            .append("</th><th colspan=2>")
            .append(_t("Order"))
-           .append("</th></tr>\n");
+            .append("</th></tr>\n");
         for (String section : sections) {
             int i = sections.indexOf(section);
             String name = sectionNames.get(section);
@@ -1358,7 +1358,7 @@ public class SidebarHelper extends HelperBase {
                .append(i).append('_').append(section)
                .append("\" value=\"")
                .append(i)
-               .append("\">");
+                .append("\">");
             if (i > 0) {
                 buf.append("<button type=submit class=buttonTop name=action value=\"move_")
                    .append(i)
@@ -1379,7 +1379,7 @@ public class SidebarHelper extends HelperBase {
                    .append("move_up.svg")
                    .append("\" title=\"")
                    .append(_t("Move up"))
-                   .append("\"/></button>");
+                    .append("\"/></button>");
             }
             buf.append("</td><td>");
             if (i < sections.size() - 1) {
@@ -1402,7 +1402,7 @@ public class SidebarHelper extends HelperBase {
                    .append("move_bottom.svg")
                    .append("\" title=\"")
                    .append(_t("Move to bottom"))
-                   .append("\"/></button>");
+                    .append("\"/></button>");
             }
             buf.append("</td></tr>\n");
         }
@@ -1410,7 +1410,7 @@ public class SidebarHelper extends HelperBase {
            .append(_t("Delete selected")).append("\"></td><td>")
            .append("<select name=name>\n<option value=\"\" selected>")
            .append(_t("Select a section to add"))
-           .append("</option>\n");
+            .append("</option>\n");
 
         for (Map.Entry<String, String> e : sortedSections.entrySet()) {
             String name = e.getKey();

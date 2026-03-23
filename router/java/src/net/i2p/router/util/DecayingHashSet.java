@@ -210,17 +210,17 @@ public class DecayingHashSet extends DecayingBloomFilter {
         }
 
         public int hashCode() {
-             return (int) _longhashcode;
+            return (int) _longhashcode;
         }
 
         public long longHashCode() {
-             return _longhashcode;
+            return _longhashcode;
         }
 
         public boolean equals(Object o) {
-             if (o == null || !(o instanceof ArrayWrapper))
+            if (o == null || !(o instanceof ArrayWrapper))
                  return false;
-             return ((ArrayWrapper) o).longHashCode() == _longhashcode;
+            return ((ArrayWrapper) o).longHashCode() == _longhashcode;
         }
     }
 

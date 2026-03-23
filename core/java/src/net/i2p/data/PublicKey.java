@@ -16,7 +16,7 @@ import net.i2p.crypto.EncType;
 
 /**
  * Cryptographic public key for asymmetric encryption in I2P.
- * 
+ *
  * <p>PublicKey provides the encryption component of I2P's asymmetric cryptography:</p>
  * <ul>
  *   <li><strong>Default Algorithm:</strong> ElGamal 2048-bit (256 bytes)</li>
@@ -24,14 +24,14 @@ import net.i2p.crypto.EncType;
  *   <li><strong>Key Structure:</strong> Contains only public exponent</li>
  *   <li><strong>Constants:</strong> Prime numbers defined in crypto specification</li>
  * </ul>
- * 
+ *
  * <p><strong>Supported Algorithms:</strong></p>
  * <ul>
  *   <li><strong>ElGamal 2048:</strong> Legacy algorithm, 256-byte keys</li>
  *   <li><strong>ECIES X25519:</strong> Modern elliptic curve, 32-byte keys</li>
  *   <li><strong>Unknown Types:</strong> Forward-compatible support for future algorithms</li>
  * </ul>
- * 
+ *
  * <p><strong>Key Format:</strong></p>
  * <ul>
  *   <li><strong>ElGamal:</strong> 256-byte public exponent only</li>
@@ -39,7 +39,7 @@ import net.i2p.crypto.EncType;
  *   <li><strong>Type Encoding:</strong> Algorithm type stored with key data</li>
  *   <li><strong>Validation:</strong> Length and format checking per algorithm</li>
  * </ul>
- * 
+ *
  * <p><strong>Usage:</strong></p>
  * <ul>
  *   <li><strong>Encryption:</strong> Encrypt messages for corresponding {@link PrivateKey}</li>
@@ -47,7 +47,7 @@ import net.i2p.crypto.EncType;
  *   <li><strong>Identity:</strong> Part of {@link Destination} cryptographic identity</li>
  *   <li><strong>Verification:</strong> Public key validation and distribution</li>
  * </ul>
- * 
+ *
  * <p><strong>Performance Features:</strong></p>
  * <ul>
  *   <li><strong>LRU Caching:</strong> Frequently used keys cached for efficiency</li>
@@ -55,7 +55,7 @@ import net.i2p.crypto.EncType;
  *   <li><strong>Efficient Storage:</strong> Optimized byte representation</li>
  *   <li><strong>Fast Comparison:</strong> Optimized equals() and hashCode()</li>
  * </ul>
- * 
+ *
  * <p><strong>Security Considerations:</strong></p>
  * <ul>
  *   <li><strong>Algorithm Choice:</strong> Prefer modern algorithms (X25519)</li>
@@ -63,21 +63,21 @@ import net.i2p.crypto.EncType;
  *   <li><strong>Key Distribution:</strong> Safely transmit public keys</li>
  *   <li><strong>Size Limits:</strong> Currently limited to 256 bytes maximum</li>
  * </ul>
- * 
+ *
  * <p><strong>Migration Path:</strong></p>
  * <ul>
  *   <li><strong>Legacy:</strong> ElGamal 2048-bit for backward compatibility</li>
  *   <li><strong>Modern:</strong> ECIES X25519 for better performance</li>
  *   <li><strong>Future:</strong> Extensible design for new algorithms</li>
  * </ul>
- * 
+ *
  * <p><strong>Implementation Notes:</strong></p>
  * <ul>
  *   <li><strong>Size Limitation:</strong> Support for keys >256 bytes not yet implemented</li>
  *   <li><strong>Cache Index:</strong> First 4 bytes used for LRU cache lookup</li>
  *   <li><strong>Type Safety:</strong> Algorithm type validation on creation</li>
  * </ul>
- * 
+ *
  * <p><strong>Thread Safety:</strong></p>
  * <ul>
  *   <li><strong>Immutable Data:</strong> Key data cannot be modified after creation</li>

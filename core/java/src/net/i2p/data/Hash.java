@@ -14,7 +14,7 @@ import java.io.InputStream;
 
 /**
  * SHA-256 hash implementation for I2P data identification and integrity.
- * 
+ *
  * <p>Hash provides cryptographic hash functionality throughout I2P:</p>
  * <ul>
  *   <li><strong>Algorithm:</strong> SHA-256 cryptographic hash function</li>
@@ -22,7 +22,7 @@ import java.io.InputStream;
  *   <li><strong>Uniqueness:</strong> Extremely low collision probability</li>
  *   <li><strong>Standardized:</strong> Consistent hash across all I2P components</li>
  * </ul>
- * 
+ *
  * <p><strong>Key Uses:</strong></p>
  * <ul>
  *   <li><strong>Identification:</strong> Unique identifiers for destinations and routers</li>
@@ -31,7 +31,7 @@ import java.io.InputStream;
  *   <li><strong>Routing:</strong> Keys for distributed hash table (DHT) operations</li>
  *   <li><strong>Caching:</strong> Efficient storage and retrieval of frequently used hashes</li>
  * </ul>
- * 
+ *
  * <p><strong>Performance Features:</strong></p>
  * <ul>
  *   <li><strong>LRU Caching:</strong> Least-recently-used cache with size limits</li>
@@ -40,7 +40,7 @@ import java.io.InputStream;
  *   <li><strong>Base32 Conversion:</strong> Cached .b32.i2p address generation</li>
  *   <li><strong>Memory Management:</strong> Automatic cache size adjustment</li>
  * </ul>
- * 
+ *
  * <p><strong>Security Properties:</strong></p>
  * <ul>
  *   <li><strong>Cryptographic Strength:</strong> SHA-256 provides 128-bit security against collisions</li>
@@ -48,7 +48,7 @@ import java.io.InputStream;
  *   <li><strong>Second Preimage:</strong> Computationally infeasible to find similar inputs</li>
  *   <li><strong>Collision Resistance:</strong> Practically impossible to find colliding inputs</li>
  * </ul>
- * 
+ *
  * <p><strong>Common Operations:</strong></p>
  * <ul>
  *   <li><strong>Data Hashing:</strong> Calculate hash of any byte array or data structure</li>
@@ -56,20 +56,20 @@ import java.io.InputStream;
  *   <li><strong>File Verification:</strong> Verify file integrity using hash comparison</li>
  *   <li><strong>Address Generation:</strong> Convert to Base32 for .b32.i2p addresses</li>
  * </ul>
- * 
+ *
  * <p><strong>Constants:</strong></p>
  * <ul>
  *   <li>{@link #HASH_LENGTH} - Standard 32-byte hash size</li>
  *   <li>{@link #FAKE_HASH} - All-zero hash for testing/placeholder use</li>
  * </ul>
- * 
+ *
  * <p><strong>Thread Safety:</strong></p>
  * <ul>
  *   <li><strong>Immutable Data:</strong> Hash data cannot be modified after creation</li>
  *   <li><strong>Thread-Safe Cache:</strong> Static factory methods are thread-safe</li>
  *   <li><strong>Safe Sharing:</strong> Instances can be safely shared between threads</li>
  * </ul>
- * 
+ *
  * <p><strong>Best Practices:</strong></p>
  * <ul>
  *   <li><strong>Factory Methods:</strong> Use static create() methods for cache efficiency</li>

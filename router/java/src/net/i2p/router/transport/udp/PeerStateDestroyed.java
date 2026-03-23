@@ -301,7 +301,7 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
     public void gotI2NP(I2NPMessage msg) {
         if (_log.shouldDebug())
             _log.debug("Received I2NP block: " + msg + " from " + this);
-            messagePartiallyReceived();
+        messagePartiallyReceived();
     }
 
     public void gotFragment(byte[] data, int off, int len, long messageId, int frag, boolean isLast) {

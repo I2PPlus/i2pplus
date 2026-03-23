@@ -125,7 +125,7 @@ public class FragmentTest {
 
     protected boolean runVaried(int size, boolean includeRouter, boolean includeTunnel) {
         PendingGatewayMessage pending = createPending(size, includeRouter, includeTunnel);
-List<PendingGatewayMessage> messages = new ArrayList<PendingGatewayMessage>();
+        List<PendingGatewayMessage> messages = new ArrayList<PendingGatewayMessage>();
         messages.add(pending);
 
         TunnelGateway.QueuePreprocessor pre = createPreprocessor(_context);

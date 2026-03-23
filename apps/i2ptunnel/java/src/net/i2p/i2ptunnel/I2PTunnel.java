@@ -208,64 +208,64 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
         Getopt g = new Getopt("i2ptunnel", args, "d::n:c::w::e:h::", longopts);
         int c;
         while ((c = g.getopt()) != -1) {
-          switch (c) {
-            case 'd':  // -d, -die, --die
-                dontDie = false;
-                gui = false;
-                cli = false;
-                checkRunByE = false;
-                break;
-
-            case 'n':  // -noc, -nog, -nocli, -nogui
-                String a = g.getOptarg();
-                if (a.startsWith("oc")) {
+            switch (c) {
+                case 'd':  // -d, -die, --die
+                    dontDie = false;
                     gui = false;
                     cli = false;
                     checkRunByE = false;
                     break;
-                } else if (a.startsWith("og")) {
+
+                case 'n':  // -noc, -nog, -nocli, -nogui
+                    String a = g.getOptarg();
+                    if (a.startsWith("oc")) {
+                        gui = false;
+                        cli = false;
+                        checkRunByE = false;
+                        break;
+                    } else if (a.startsWith("og")) {
                     // fall thru
-                } else {
-                    error = true;
-                    break;
-                }
+                    } else {
+                        error = true;
+                        break;
+                    }
                 // fall thru for -nogui only
 
-            case NOGUI:  // --nogui
-                gui = false;
-                if (_log.shouldWarn())
-                    _log.warn(getPrefix() + "The `-nogui' option of I2PTunnel is deprecated.\n"
+                case NOGUI:  // --nogui
+                    gui = false;
+                    if (_log.shouldWarn())
+                        _log.warn(getPrefix() + "The `-nogui' option of I2PTunnel is deprecated.\n"
                           + "Use `-cli', `-nocli' (aka `-wait') or `-die' instead.");
                 // fall through
 
-            case 'c':  // -c, -cli, --cli
-                gui = false;
-                cli = true;
-                checkRunByE = false;
-                break;
-
-            case 'w':  // -w, -wait, --nocli
-                gui = false;
-                cli = false;
-                checkRunByE = false;
-                break;
-
-            case 'e':
-                if (eargs == null)
-                    eargs = new ArrayList<String>(4);
-                eargs.add(g.getOptarg());
-                if (checkRunByE) {
+                case 'c':  // -c, -cli, --cli
+                    gui = false;
+                    cli = true;
                     checkRunByE = false;
-                    cli = false;
-                }
-                break;
+                    break;
 
-            case 'h':
-            case '?':
-            case ':':
-            default:
-              error = true;
-          }
+                case 'w':  // -w, -wait, --nocli
+                    gui = false;
+                    cli = false;
+                    checkRunByE = false;
+                    break;
+
+                case 'e':
+                    if (eargs == null)
+                        eargs = new ArrayList<String>(4);
+                    eargs.add(g.getOptarg());
+                    if (checkRunByE) {
+                        checkRunByE = false;
+                        cli = false;
+                    }
+                    break;
+
+                case 'h':
+                case '?':
+                case ':':
+                default:
+                    error = true;
+            }
         }
 
         int remaining = args.length - g.getOptind();
@@ -532,7 +532,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             } else if (args[0].equals("-x")) {
                 i++;
                 for (; i < args.length; i++) {
-                     if (_clientOptions.remove(args[i]) != null) {l.log("Removed " + args[i]);}
+                    if (_clientOptions.remove(args[i]) != null) {l.log("Removed " + args[i]);}
                 }
                 return;
             } else {_clientOptions.clear();}
@@ -1720,32 +1720,32 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
         long expires = 0;
         int c;
         while ((c = g.getopt()) != -1) {
-          switch (c) {
-            case 'd':
-              dh = true;
-              break;
+            switch (c) {
+                case 'd':
+                    dh = true;
+                    break;
 
-            case 'p':
-              psk = true;
-              break;
+                case 'p':
+                    psk = true;
+                    break;
 
-            case 'k':
-              key = g.getOptarg();
-              break;
+                case 'k':
+                    key = g.getOptarg();
+                    break;
 
-            case 's':
-              pw = g.getOptarg();
-              break;
+                case 's':
+                    pw = g.getOptarg();
+                    break;
 
-            case 'e':
-              expires = Long.parseLong(g.getOptarg());
-              break;
+                case 'e':
+                    expires = Long.parseLong(g.getOptarg());
+                    break;
 
-            case '?':
-            case ':':
-            default:
-              error = true;
-          }
+                case '?':
+                case ':':
+                default:
+                    error = true;
+            }
         }
         int remaining = argv.length - g.getOptind();
         if (error || remaining != 1 || (dh && psk) || ((dh || psk) && key == null)) {
@@ -1968,9 +1968,9 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
                 return null;
             } finally {
                 if (in != null) try {
-                    in.close();
-                } catch (IOException io) {
-                }
+                        in.close();
+                    } catch (IOException io) {
+                    }
             }
             try {
                 result.fromByteArray(content);
@@ -2074,9 +2074,9 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      */
     void routerDisconnected() {
         _log.error(getPrefix() + "Router disconnected - firing notification events");
-            for (ConnectionEventListener lsnr : listeners) {
-                if (lsnr != null) lsnr.routerDisconnected();
-            }
+        for (ConnectionEventListener lsnr : listeners) {
+            if (lsnr != null) lsnr.routerDisconnected();
+        }
     }
 
     /**

@@ -80,6 +80,6 @@ class TunnelGatewayZeroHop extends TunnelGateway {
         } else {
             _outDistributor.distribute(msg, toRouter, toTunnel);
         }
-       _config.incrementProcessedMessages();
+        _config.incrementProcessedMessages();
     }
 }

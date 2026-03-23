@@ -213,13 +213,13 @@ public class I2PAppContext {
      * @since protected since 0.9.33, NOT for external use
      */
     protected I2PAppContext(boolean doInit, Properties envProps) {
-      synchronized (I2PAppContext.class) {
-        _overrideProps = new I2PProperties();
-        if (envProps != null)
-            _overrideProps.putAll(envProps);
-        _shutdownTasks = new ConcurrentHashSet<Runnable>(32);
-        _portMapper = new PortMapper(this);
-        _appManager = isRouterContext() ? null : new ClientAppManagerImpl(this);
+        synchronized (I2PAppContext.class) {
+            _overrideProps = new I2PProperties();
+            if (envProps != null)
+                _overrideProps.putAll(envProps);
+            _shutdownTasks = new ConcurrentHashSet<Runnable>(32);
+            _portMapper = new PortMapper(this);
+            _appManager = isRouterContext() ? null : new ClientAppManagerImpl(this);
 
    /*
     *  Directories. These are all set at instantiation and will not be changed by
@@ -268,85 +268,85 @@ public class I2PAppContext {
     *  @since 0.7.6
     */
 
-        String s = getProperty("i2p.dir.base", System.getProperty("user.dir"));
-        _baseDir = new File(s);
+            String s = getProperty("i2p.dir.base", System.getProperty("user.dir"));
+            _baseDir = new File(s);
 
         // config defaults to base
-        s = getProperty("i2p.dir.config");
-        if (s != null) {
-            _configDir = new SecureDirectory(s);
-            if (!_configDir.exists())
-                _configDir.mkdir();
-        } else {
-            _configDir = _baseDir;
-        }
+            s = getProperty("i2p.dir.config");
+            if (s != null) {
+                _configDir = new SecureDirectory(s);
+                if (!_configDir.exists())
+                    _configDir.mkdir();
+            } else {
+                _configDir = _baseDir;
+            }
 
         // router defaults to config
-        s = getProperty("i2p.dir.router");
-        if (s != null) {
-            _routerDir = new SecureDirectory(s);
-            if (!_routerDir.exists())
-                _routerDir.mkdir();
-        } else {
-            _routerDir = _configDir;
-        }
+            s = getProperty("i2p.dir.router");
+            if (s != null) {
+                _routerDir = new SecureDirectory(s);
+                if (!_routerDir.exists())
+                    _routerDir.mkdir();
+            } else {
+                _routerDir = _configDir;
+            }
 
         // pid defaults to router directory (as of 0.8.12, was system temp dir previously)
-        s = getProperty("i2p.dir.pid");
-        if (s != null) {
-            _pidDir = new SecureDirectory(s);
-            if (!_pidDir.exists())
-                _pidDir.mkdir();
-        } else {
-            _pidDir = _routerDir;
-        }
+            s = getProperty("i2p.dir.pid");
+            if (s != null) {
+                _pidDir = new SecureDirectory(s);
+                if (!_pidDir.exists())
+                    _pidDir.mkdir();
+            } else {
+                _pidDir = _routerDir;
+            }
 
         // these all default to router
-        s = getProperty("i2p.dir.log");
-        if (s != null) {
-            _logDir = new SecureDirectory(s);
-            if (!_logDir.exists())
-                _logDir.mkdir();
-        } else {
-            _logDir = _routerDir;
-        }
+            s = getProperty("i2p.dir.log");
+            if (s != null) {
+                _logDir = new SecureDirectory(s);
+                if (!_logDir.exists())
+                    _logDir.mkdir();
+            } else {
+                _logDir = _routerDir;
+            }
 
-        s = getProperty("i2p.dir.app");
-        if (s != null) {
-            _appDir = new SecureDirectory(s);
-            if (!_appDir.exists())
-                _appDir.mkdir();
-        } else {
-            _appDir = _routerDir;
-        }
+            s = getProperty("i2p.dir.app");
+            if (s != null) {
+                _appDir = new SecureDirectory(s);
+                if (!_appDir.exists())
+                    _appDir.mkdir();
+            } else {
+                _appDir = _routerDir;
+            }
 
-        s = getProperty("i2p.dir.lib");
-        if (s != null) {
-            _libDir = new File(s);
-        } else {
-            _libDir = new File(_baseDir, "lib");
-        }
-        String isPortableStr = System.getProperty("i2p.dir.portableMode");
-        boolean isPortable = Boolean.parseBoolean(isPortableStr);
-        if (isPortable) {
+            s = getProperty("i2p.dir.lib");
+            if (s != null) {
+                _libDir = new File(s);
+            } else {
+                _libDir = new File(_baseDir, "lib");
+            }
+            String isPortableStr = System.getProperty("i2p.dir.portableMode");
+            boolean isPortable = Boolean.parseBoolean(isPortableStr);
+            if (isPortable) {
             // In portable we like debug information :)
             //(new Exception("Initialized by")).printStackTrace();
-            System.err.println("Base directory:   " + _baseDir.getAbsolutePath());
-            System.err.println("Lib directory:    " + _libDir.getAbsolutePath());
-            System.err.println("Config directory: " + _configDir.getAbsolutePath());
-            System.err.println("Router directory: " + _routerDir.getAbsolutePath());
-            System.err.println("App directory:    " + _appDir.getAbsolutePath());
-            System.err.println("Log directory:    " + _logDir.getAbsolutePath());
-            System.err.println("PID directory:    " + _pidDir.getAbsolutePath());
-            System.err.println("Temp directory:   " + getTempDir().getAbsolutePath());
-        }
+                System.err.println("Base directory:   " + _baseDir.getAbsolutePath());
+                System.err.println("Lib directory:    " + _libDir.getAbsolutePath());
+                System.err.println("Config directory: " + _configDir.getAbsolutePath());
+                System.err.println("Router directory: " + _routerDir.getAbsolutePath());
+                System.err.println("App directory:    " + _appDir.getAbsolutePath());
+                System.err.println("Log directory:    " + _logDir.getAbsolutePath());
+                System.err.println("PID directory:    " + _pidDir.getAbsolutePath());
+                System.err.println("Temp directory:   " + getTempDir().getAbsolutePath());
+            }
 
-        if (doInit) {
+            if (doInit) {
             // Bad practice, sets a static field to this in constructor.
             // doInit will be false when instantiated via Router.
-            setGlobalContext(this);
-        }
-      } // synch
+                setGlobalContext(this);
+            }
+        } // synch
     }
 
     /**

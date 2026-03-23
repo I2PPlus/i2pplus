@@ -145,26 +145,26 @@ class MLKEMEngine
         this.KyberK = k;
         switch (k)
         {
-        case 2:
-            KyberEta1 = 3;
-            KyberPolyCompressedBytes = 128;
-            KyberPolyVecCompressedBytes = k * 320;
-            sessionKeyLength = 32;
-            break;
-        case 3:
-            KyberEta1 = 2;
-            KyberPolyCompressedBytes = 128;
-            KyberPolyVecCompressedBytes = k * 320;
-            sessionKeyLength = 32;
-            break;
-        case 4:
-            KyberEta1 = 2;
-            KyberPolyCompressedBytes = 160;
-            KyberPolyVecCompressedBytes = k * 352;
-            sessionKeyLength = 32;
-            break;
-        default:
-            throw new IllegalArgumentException("K: " + k + " is not supported for Crystals Kyber");
+            case 2:
+                KyberEta1 = 3;
+                KyberPolyCompressedBytes = 128;
+                KyberPolyVecCompressedBytes = k * 320;
+                sessionKeyLength = 32;
+                break;
+            case 3:
+                KyberEta1 = 2;
+                KyberPolyCompressedBytes = 128;
+                KyberPolyVecCompressedBytes = k * 320;
+                sessionKeyLength = 32;
+                break;
+            case 4:
+                KyberEta1 = 2;
+                KyberPolyCompressedBytes = 160;
+                KyberPolyVecCompressedBytes = k * 352;
+                sessionKeyLength = 32;
+                break;
+            default:
+                throw new IllegalArgumentException("K: " + k + " is not supported for Crystals Kyber");
         }
 
         this.KyberPolyVecBytes = k * KyberPolyBytes;

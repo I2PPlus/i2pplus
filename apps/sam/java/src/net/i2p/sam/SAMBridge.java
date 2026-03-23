@@ -622,21 +622,21 @@ public class SAMBridge implements Runnable, ClientApp {
         Getopt g = new Getopt("SAM", args, "hsc:");
         int c;
         while ((c = g.getopt()) != -1) {
-          switch (c) {
-            case 's':
-                isSSL = true;
-                break;
+            switch (c) {
+                case 's':
+                    isSSL = true;
+                    break;
 
-            case 'c':
-                cfile = g.getOptarg();
-                break;
+                case 'c':
+                    cfile = g.getOptarg();
+                    break;
 
-            case 'h':
-            case '?':
-            case ':':
-            default:
-                throw new HelpRequestedException();
-          } // switch
+                case 'h':
+                case '?':
+                case ':':
+                default:
+                    throw new HelpRequestedException();
+            } // switch
         } // while
 
         int startArgs = g.getOptind();

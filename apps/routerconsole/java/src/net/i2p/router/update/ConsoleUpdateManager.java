@@ -298,7 +298,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                 synchronized(_activeCheckers) {
                     t = r.checker.check(type, r.method, id, current, maxWait);
                     if (t != null) {
-                         if (_log.shouldInfo()) {_log.info("Starting " + r, new Exception());}
+                        if (_log.shouldInfo()) {_log.info("Starting " + r, new Exception());}
                         _activeCheckers.add(t);
                         t.start();
                     }
@@ -336,7 +336,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                 synchronized(_activeCheckers) {
                     UpdateTask t = r.checker.check(type, r.method, id, current, DEFAULT_CHECK_TIME);
                     if (t != null) {
-                         if (_log.shouldInfo()) {_log.info("Starting " + r, new Exception());}
+                        if (_log.shouldInfo()) {_log.info("Starting " + r, new Exception());}
                         _activeCheckers.add(t);
                         t.start();
                         break;
@@ -981,7 +981,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
             if (va != null) {
                 UpdateTask next = retry(ui, va.sourceMap, toTry, DEFAULT_MAX_TIME);  // fixme old maxtime lost
                 if (next != null) {
-                   if (_log.shouldWarn()) {_log.warn("Retrying with " + next + "...");}
+                    if (_log.shouldWarn()) {_log.warn("Retrying with " + next + "...");}
                 }
             }
         }
@@ -1160,7 +1160,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                 break;
 
             case ROUTER_SIGNED:
-              { // avoid dup variables in next case
+            { // avoid dup variables in next case
                 String URLs = _context.getProperty(ConfigUpdateHandler.PROP_UPDATE_URL, ConfigUpdateHandler.DEFAULT_UPDATE_URL);
                 StringTokenizer tok = new StringTokenizer(URLs, " ,\r\n");
                 List<URI> rv = new ArrayList<URI>();
@@ -1170,7 +1170,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                 }
                 Collections.shuffle(rv, _context.random());
                 return rv;
-              }
+            }
 
             case ROUTER_SIGNED_SU3:
                 // handled in NewsFetcher
@@ -1201,7 +1201,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                 }
                 break;
 
-             default:
+            default:
                 break;
         }
         return Collections.emptyList();
@@ -1248,7 +1248,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                         if (ftype == SU3File.TYPE_ZIP) {
                             // standard update, copy to i2pupdate.zip in config dir
                             if (!FileUtil.copy(temp, to, true, false))
-                        err = "Failed copy to " + to;
+                                err = "Failed copy to " + to;
                         } else if ((ftype == SU3File.TYPE_DMG && SystemVersion.isMac()) ||
                                    (ftype == SU3File.TYPE_EXE && SystemVersion.isWindows())) {
                             Integer key = Integer.valueOf(updateType.toString().hashCode() ^ ftype);

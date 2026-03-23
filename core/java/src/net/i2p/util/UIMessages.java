@@ -143,7 +143,7 @@ public class UIMessages {
 
     /**
      * Represents a single UI message with a unique identifier.
-     * 
+     *
      * <p>Each message contains a sequential ID number and the message text.
      * The ID is used to track which messages have been viewed and to
      * selectively clear messages from the queue.</p>

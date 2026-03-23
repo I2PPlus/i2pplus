@@ -290,7 +290,7 @@ public abstract class NamingService {
             return Collections.emptyMap();
         Map<String, String> rv = new TreeMap<String, String>();
         for (Map.Entry<String, Destination> e : entries.entrySet()) {
-             rv.put(e.getKey(), e.getValue().toBase64());
+            rv.put(e.getKey(), e.getValue().toBase64());
         }
         return rv;
     }

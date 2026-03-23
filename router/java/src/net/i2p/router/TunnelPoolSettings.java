@@ -372,8 +372,8 @@ public class TunnelPoolSettings {
                         r = 0;
                     _IPRestriction = r;
                 } else if ((!_isInbound) && name.equalsIgnoreCase(prefix + PROP_PRIORITY)) {
-                     int def = _isExploratory ? EXPLORATORY_PRIORITY : 0;
-                     int max = _isExploratory ? EXPLORATORY_PRIORITY : MAX_PRIORITY;
+                    int def = _isExploratory ? EXPLORATORY_PRIORITY : 0;
+                    int max = _isExploratory ? EXPLORATORY_PRIORITY : MAX_PRIORITY;
                     _priority = Math.min(max, Math.max(MIN_PRIORITY, getInt(value, def)));
                 } else if (name.equalsIgnoreCase(prefix + PROP_RANDOM_KEY)) {
                     byte[] rk = Base64.decode(value);

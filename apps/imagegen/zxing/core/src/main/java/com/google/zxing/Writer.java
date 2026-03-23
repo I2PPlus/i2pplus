@@ -36,8 +36,8 @@ public interface Writer {
    * @return {@link BitMatrix} representing encoded barcode image
    * @throws WriterException if contents cannot be encoded legally in a format
    */
-  BitMatrix encode(String contents, BarcodeFormat format, int width, int height)
-      throws WriterException;
+    BitMatrix encode(String contents, BarcodeFormat format, int width, int height)
+        throws WriterException;
 
   /**
    * @param contents The contents to encode in the barcode
@@ -48,11 +48,11 @@ public interface Writer {
    * @return {@link BitMatrix} representing encoded barcode image
    * @throws WriterException if contents cannot be encoded legally in a format
    */
-  BitMatrix encode(String contents,
+    BitMatrix encode(String contents,
                    BarcodeFormat format,
                    int width,
                    int height,
                    Map<EncodeHintType,?> hints)
-      throws WriterException;
+        throws WriterException;
 
 }

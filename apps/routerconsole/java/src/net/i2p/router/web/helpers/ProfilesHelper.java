@@ -17,15 +17,15 @@ public class ProfilesHelper extends HelperBase {
                                             _x("Floodfill"),       // 2
                                             _x("Banned"),          // 3
                                             _x("Session Bans")     // 4
-                                           };
+        };
 
     private static final String links[] =  {
-                                            "",                    // 0
-                                            "?f=1",                // 1
-                                            "?f=2",                // 2
-                                            "?f=3",                // 3
-                                            "?f=4"                 // 4
-                                            };
+        "",                    // 0
+        "?f=1",                // 1
+        "?f=2",                // 2
+        "?f=3",                // 3
+        "?f=4"                 // 4
+        };
 
     public void setFull(String f) {
         if (f != null) {

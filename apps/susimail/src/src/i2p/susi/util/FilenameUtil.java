@@ -113,43 +113,43 @@ public class FilenameUtil {
 				if (c < 0)
 					break;
 				if( c == '%' ) {
-						int a = in.read();
-						if (a < 0) {
-							out.write(c);
-							break;
-						}
-						int b = in.read();
-						if (b < 0) {
-							out.write(c);
-							out.write(a);
-							break;
-						}
-						if (((a >= '0' && a <= '9') || (a >= 'A' && a <= 'F') || (a >= 'a' && a <= 'f')) &&
+                    int a = in.read();
+                    if (a < 0) {
+                        out.write(c);
+                        break;
+                    }
+                    int b = in.read();
+                    if (b < 0) {
+                        out.write(c);
+                        out.write(a);
+                        break;
+                    }
+                    if (((a >= '0' && a <= '9') || (a >= 'A' && a <= 'F') || (a >= 'a' && a <= 'f')) &&
 						    ((b >= '0' && b <= '9') || (b >= 'A' && b <= 'F') || (b >= 'a' && b <= 'f'))) {
-							if( a >= '0' && a <= '9' )
+                        if( a >= '0' && a <= '9' )
 								a -= '0';
-							else if( a >= 'A' && a <= 'F' )
+                        else if( a >= 'A' && a <= 'F' )
 								a = (byte) (a - 'A' + 10);
-							else if(a >= 'a' && a <= 'f')
+                        else if(a >= 'a' && a <= 'f')
 								a = (byte) (a - 'a' + 10);
 
-							if( b >= '0' && b <= '9' )
+                        if( b >= '0' && b <= '9' )
 								b -= '0';
-							else if( b >= 'A' && b <= 'F' )
+                        else if( b >= 'A' && b <= 'F' )
 								b = (byte) (b - 'A' + 10);
-							else if(b >= 'a' && b <= 'f')
+                        else if(b >= 'a' && b <= 'f')
 								b = (byte) (b - 'a' + 10);
 
-							out.write(a*16 + b);
-						}
-						else if( a == '\r' && b == '\n' ) {
+                        out.write(a*16 + b);
+                    }
+                    else if( a == '\r' && b == '\n' ) {
 							// ignore, shouldn't happen
-						} else {
+                    } else {
 							// FAIL
-							out.write(c);
-							out.write(a);
-							out.write(b);
-						}
+                        out.write(c);
+                        out.write(a);
+                        out.write(b);
+                    }
 				} else {
 					// print out everything else literally
 					out.write(c);

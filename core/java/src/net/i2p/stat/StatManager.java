@@ -112,14 +112,14 @@ public class StatManager {
      * @since 0.8.7
      */
     public void createRequiredRateStat(String name, String description, String group, long periods[]) {
-            if (_rateStats.containsKey(name)) return;
-            RateStat rs = new RateStat(name, description, group, periods);
-            _rateStats.putIfAbsent(name, rs);
+        if (_rateStats.containsKey(name)) return;
+        RateStat rs = new RateStat(name, description, group, periods);
+        _rateStats.putIfAbsent(name, rs);
     }
 
     // Hope this doesn't cause any problems with unsynchronized accesses like addRateData() ...
     public void removeRateStat(String name) {
-            _rateStats.remove(name);
+        _rateStats.remove(name);
     }
 
     /** update the given frequency statistic, taking note that an event occurred (and recalculating all frequencies) */
@@ -158,11 +158,11 @@ public class StatManager {
 
     public synchronized void coalesceStats() {
         if (++coalesceCounter % FREQ_COALESCE_RATE == 0) {
-                for (FrequencyStat stat : _frequencyStats.values()) {
-                    if (stat != null) {
-                        stat.coalesceStats();
-                    }
+            for (FrequencyStat stat : _frequencyStats.values()) {
+                if (stat != null) {
+                    stat.coalesceStats();
                 }
+            }
         }
         for (RateStat stat : _rateStats.values()) {
             stat.coalesceStats();

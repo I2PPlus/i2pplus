@@ -193,8 +193,8 @@ class ClientListenerRunner implements Runnable {
     public void stopListening() {
         _running = false;
         if (_socket != null) try {
-            _socket.close();
-            _socket = null;
-        } catch (IOException ioe) {}
+                _socket.close();
+                _socket = null;
+            } catch (IOException ioe) {}
     }
 }

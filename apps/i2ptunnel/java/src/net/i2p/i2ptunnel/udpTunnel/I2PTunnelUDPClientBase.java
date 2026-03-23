@@ -42,7 +42,7 @@ import net.i2p.util.EventDispatcher;
      *
      * @author zzz with portions from welterde's streamr
      */
- public abstract class I2PTunnelUDPClientBase extends I2PTunnelTask implements Source, Sink {
+public abstract class I2PTunnelUDPClientBase extends I2PTunnelTask implements Source, Sink {
 
     protected I2PAppContext _context;
     protected Logging l;
@@ -62,7 +62,7 @@ import net.i2p.util.EventDispatcher;
      * @throws IllegalArgumentException if the I2CP configuration is b0rked so
      *                                  badly that we cant create a socketManager
      */
-   public I2PTunnelUDPClientBase(String destination, Logging l, EventDispatcher notifyThis,
+    public I2PTunnelUDPClientBase(String destination, Logging l, EventDispatcher notifyThis,
                                   I2PTunnel tunnel) throws IllegalArgumentException {
         super("UDPServer", notifyThis, tunnel);
         _clientId = __clientId.incrementAndGet();

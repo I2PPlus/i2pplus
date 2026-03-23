@@ -394,13 +394,13 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     }
 
     private static class RouterInfoRoutingKeyComparator implements Comparator<RouterInfo>, Serializable {
-         private final transient Hash _us;
+        private final transient Hash _us;
          /** @param us ROUTING KEY */
-         public RouterInfoRoutingKeyComparator(Hash us) {
-             _us = us;
-         }
-         public int compare(RouterInfo l, RouterInfo r) {
-             return HashDistance.getDistance(_us, l.getHash()).compareTo(HashDistance.getDistance(_us, r.getHash()));
+        public RouterInfoRoutingKeyComparator(Hash us) {
+            _us = us;
+        }
+        public int compare(RouterInfo l, RouterInfo r) {
+            return HashDistance.getDistance(_us, l.getHash()).compareTo(HashDistance.getDistance(_us, r.getHash()));
         }
     }
 
@@ -424,10 +424,10 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
         Set<Hash> ffs = _context.peerManager().getPeersByCapability('f');
         List<RouterInfo> ris = new ArrayList<RouterInfo>(ffs.size());
         for (Hash ff : ffs) {
-             if (ff.equals(us))
+            if (ff.equals(us))
                  continue;
-             RouterInfo ri = _context.netDb().lookupRouterInfoLocally(ff);
-             if (ri != null)
+            RouterInfo ri = _context.netDb().lookupRouterInfoLocally(ff);
+            if (ri != null)
                  ris.add(ri);
         }
         return ris;
@@ -445,7 +445,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
         List<RouterInfo> ris = new ArrayList<RouterInfo>(set.size());
         for (RouterInfo ri : set) {
             if (!ri.getIdentity().getHash().equals(us))
-            ris.add(ri);
+                ris.add(ri);
         }
         return ris;
     }

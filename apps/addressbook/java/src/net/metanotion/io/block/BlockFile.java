@@ -51,10 +51,10 @@ import net.metanotion.util.skiplist.SkipIterator;
 
 /**
  * Block-based file storage system with indexed access.
- * 
+ *
  * <p>Provides paged file storage with skiplist indexes for efficient
  * key-value data retrieval. Supports multiple named indexes within a single file.</p>
- * 
+ *
  * <p>On-disk format:</p>
  * <pre>
  *    Magic number (6 bytes)
@@ -65,7 +65,7 @@ import net.metanotion.util.skiplist.SkipIterator;
  *    span size (unsigned short)
  *    block size (unsigned int)
  * </pre>
- * 
+ *
  * <p>Metaindex skiplist is on page 2. Pages are 1 KB and are numbered starting from 1.</p>
  */
 public class BlockFile implements Closeable {
@@ -334,7 +334,7 @@ public class BlockFile implements Closeable {
 	 */
 	public BlockFile(RandomAccessInterface rai, boolean init) throws IOException {
 		if(rai==null) { throw new NullPointerException(); }
-		
+
 		file = rai;
 
 		if(init) {
@@ -726,7 +726,7 @@ public class BlockFile implements Closeable {
 		log.info("Checked meta index and " + items + " skiplists");
 		if(freeListStart != 0) {
 			try {
-			       if (flb == null)
+                if (flb == null)
 					flb = new FreeListBlock(file, freeListStart);
 				flb.flbck(true);
 			} catch (IOException ioe) {

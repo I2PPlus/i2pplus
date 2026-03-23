@@ -35,7 +35,7 @@ class AccessCounter {
 
     /**
      * Check if the given threshold has been breached.
-     * 
+     *
      * @param threshold definition of a threshold
      * @param now current time
      * @return true if the given threshold has been breached

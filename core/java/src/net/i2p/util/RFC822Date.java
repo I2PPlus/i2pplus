@@ -23,14 +23,14 @@ public abstract class RFC822Date {
      * Probably don't need all of these...
      */
     private static final SimpleDateFormat rfc822DateFormats[] = new SimpleDateFormat[] {
-                 new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z", Locale.US),
-                 new SimpleDateFormat("d MMM yy HH:mm:ss z", Locale.US),
-                 new SimpleDateFormat("EEE, d MMM yy HH:mm z", Locale.US),
-                 new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z", Locale.US),
-                 new SimpleDateFormat("EEE, d MMM yyyy HH:mm z", Locale.US),
-                 new SimpleDateFormat("d MMM yy HH:mm z", Locale.US),
-                 new SimpleDateFormat("d MMM yy HH:mm:ss z", Locale.US),
-                 new SimpleDateFormat("d MMM yyyy HH:mm z", Locale.US)
+        new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z", Locale.US),
+        new SimpleDateFormat("d MMM yy HH:mm:ss z", Locale.US),
+        new SimpleDateFormat("EEE, d MMM yy HH:mm z", Locale.US),
+        new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z", Locale.US),
+        new SimpleDateFormat("EEE, d MMM yyyy HH:mm z", Locale.US),
+        new SimpleDateFormat("d MMM yy HH:mm z", Locale.US),
+        new SimpleDateFormat("d MMM yy HH:mm:ss z", Locale.US),
+        new SimpleDateFormat("d MMM yyyy HH:mm z", Locale.US)
     };
 
     //

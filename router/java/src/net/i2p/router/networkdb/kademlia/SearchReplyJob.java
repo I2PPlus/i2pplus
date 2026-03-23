@@ -67,45 +67,45 @@ class SearchReplyJob extends JobImpl {
     }
 
     private void processPeer(int curIndex) {
-            Hash peer = _msg.getReply(curIndex);
+        Hash peer = _msg.getReply(curIndex);
 
-            boolean shouldAdd = false;
+        boolean shouldAdd = false;
 
-            RouterInfo info = getContext().netDb().lookupRouterInfoLocally(peer);
-            if (info == null) {
+        RouterInfo info = getContext().netDb().lookupRouterInfoLocally(peer);
+        if (info == null) {
                 // if the peer is giving us lots of bad peer references,
                 // Don't try to fetch them.
 
-                boolean sendsBadInfo = getContext().profileOrganizer().peerSendsBadReplies(_peer);
-                if (!sendsBadInfo) {
+            boolean sendsBadInfo = getContext().profileOrganizer().peerSendsBadReplies(_peer);
+            if (!sendsBadInfo) {
                     // we don't need to search for everthing we're given here - only ones that
                     // are next in our search path...
                     // note: no need to think about banlisted targets in the netdb search, given
                     //       the floodfill's behavior
                     // This keeps us from continually chasing blocklisted floodfills
-                    if (getContext().banlist().isBanlisted(peer)) {
+                if (getContext().banlist().isBanlisted(peer)) {
                     //    if (_log.shouldInfo())
                     //        _log.info("Not looking for a banlisted peer...");
                     //    getContext().statManager().addRateData("netDb.searchReplyValidationSkipped", 1, 0);
-                    } else {
+                } else {
                         //getContext().netDb().lookupRouterInfo(peer, new ReplyVerifiedJob(getContext(), peer), new ReplyNotVerifiedJob(getContext(), peer), _timeoutMs);
                         //_repliesPendingVerification++;
-                        shouldAdd = true;
-                    }
-                } else {
-                    if (_log.shouldInfo())
-                        _log.info("Peer [" + _peer.toBase64().substring(0,6) + "] sends us bad replies, so not verifying");
-                    getContext().statManager().addRateData("netDb.searchReplyValidationSkipped", 1);
+                    shouldAdd = true;
                 }
+            } else {
+                if (_log.shouldInfo())
+                        _log.info("Peer [" + _peer.toBase64().substring(0,6) + "] sends us bad replies, so not verifying");
+                getContext().statManager().addRateData("netDb.searchReplyValidationSkipped", 1);
             }
+        }
 
-            if (_searchJob.wasAttempted(peer)) {_duplicatePeers++;}
-            if (_log.shouldDebug())
+        if (_searchJob.wasAttempted(peer)) {_duplicatePeers++;}
+        if (_log.shouldDebug())
                 _log.debug("DbSearchReply received on search, referencing Router [" + peer.toBase64().substring(0,6) +
                            "] - Already known? " + (info != null));
-            if (shouldAdd) {
-                if (_searchJob.add(peer)) {_newPeers++;}
-                else {_seenPeers++;}
-            }
+        if (shouldAdd) {
+            if (_searchJob.add(peer)) {_newPeers++;}
+            else {_seenPeers++;}
+        }
     }
 }

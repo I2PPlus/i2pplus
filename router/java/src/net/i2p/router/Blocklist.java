@@ -362,13 +362,13 @@ public class Blocklist {
 
         private int process() {
             int count = 0;
-                try {
-                    for (BLFile blf : _files) {count = readBlocklistFile(blf, _blocklist, count);}
-                } catch (OutOfMemoryError oom) {
-                    _log.log(Log.CRIT, "OOM processing the blocklist");
-                    disable();
-                    return 0;
-                }
+            try {
+                for (BLFile blf : _files) {count = readBlocklistFile(blf, _blocklist, count);}
+            } catch (OutOfMemoryError oom) {
+                _log.log(Log.CRIT, "OOM processing the blocklist");
+                disable();
+                return 0;
+            }
             for (Hash peer : _peerBlocklist.keySet()) {
                 String reason;
                 String comment = _peerBlocklist.get(peer);
@@ -601,10 +601,10 @@ public class Blocklist {
          *  @param i2 the ending IP
          */
         public Entry(String c, Hash h, byte[] i1, byte[] i2) {
-             comment = c;
-             peer = h;
-             ip1 = i1;
-             ip2 = i2;
+            comment = c;
+            peer = h;
+            ip1 = i1;
+            ip2 = i2;
         }
     }
 
@@ -663,8 +663,8 @@ public class Blocklist {
 
                 }
                 for (int i = 0; i < 4; i++) {
-                     if ((ip2[i] & 0xff) > (ip1[i] & 0xff)) {break;}
-                     if ((ip2[i] & 0xff) < (ip1[i] & 0xff)) {throw new NumberFormatException();} // backwards
+                    if ((ip2[i] & 0xff) > (ip1[i] & 0xff)) {break;}
+                    if ((ip2[i] & 0xff) < (ip1[i] & 0xff)) {throw new NumberFormatException();} // backwards
                 }
             } else if (mask >= 0) {
                 int m = Integer.parseInt(buf.substring(mask));
@@ -928,8 +928,8 @@ public class Blocklist {
                 if (DataHelper.eq(rv.get(i), pib)) {dup = true; break;}
             }
             if (!dup) {rv.add(pib);}
-         }
-         return rv;
+        }
+        return rv;
     }
 
     /**

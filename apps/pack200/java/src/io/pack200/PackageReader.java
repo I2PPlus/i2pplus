@@ -76,7 +76,7 @@ class PackageReader extends BandStructure {
      *  can consume from the underlying stream.
      */
     static
-    class LimitedBuffer extends BufferedInputStream {
+        class LimitedBuffer extends BufferedInputStream {
         long served;     // total number of charburgers served
         int  servedPos;  // ...as of this value of super.pos
         long limit;      // current declared limit
@@ -244,10 +244,10 @@ class PackageReader extends BandStructure {
     void checkArchiveVersion() throws IOException {
         Package.Version versionFound = null;
         for (Package.Version v : new Package.Version[] {
-                JAVA8_PACKAGE_VERSION,
-                JAVA7_PACKAGE_VERSION,
-                JAVA6_PACKAGE_VERSION,
-                JAVA5_PACKAGE_VERSION
+            JAVA8_PACKAGE_VERSION,
+            JAVA7_PACKAGE_VERSION,
+            JAVA6_PACKAGE_VERSION,
+            JAVA5_PACKAGE_VERSION
             }) {
             if (packageVersion.equals(v)) {
                 versionFound = v;
@@ -412,21 +412,21 @@ class PackageReader extends BandStructure {
             if (!haveNumbers) {
                 // These four counts are optional.
                 switch (tag) {
-                case CONSTANT_Integer:
-                case CONSTANT_Float:
-                case CONSTANT_Long:
-                case CONSTANT_Double:
-                    continue;
+                    case CONSTANT_Integer:
+                    case CONSTANT_Float:
+                    case CONSTANT_Long:
+                    case CONSTANT_Double:
+                        continue;
                 }
             }
             if (!haveCPExtra) {
                 // These four counts are optional.
                 switch (tag) {
-                case CONSTANT_MethodHandle:
-                case CONSTANT_MethodType:
-                case CONSTANT_InvokeDynamic:
-                case CONSTANT_BootstrapMethod:
-                    continue;
+                    case CONSTANT_MethodHandle:
+                    case CONSTANT_MethodType:
+                    case CONSTANT_InvokeDynamic:
+                    case CONSTANT_BootstrapMethod:
+                        continue;
                 }
             }
             tagCount[tag] = archive_header_1.getInt();
@@ -479,188 +479,188 @@ class PackageReader extends BandStructure {
                 Utils.log.info("Reading "+cpMap.length+" "+ConstantPool.tagName(tag)+" entries...");
 
             switch (tag) {
-            case CONSTANT_Utf8:
-                readUtf8Bands(cpMap);
-                break;
-            case CONSTANT_Integer:
-                cp_Int.expectLength(cpMap.length);
-                cp_Int.readFrom(in);
-                for (int i = 0; i < cpMap.length; i++) {
-                    int x = cp_Int.getInt();  // coding handles signs OK
-                    cpMap[i] = ConstantPool.getLiteralEntry(x);
-                }
-                cp_Int.doneDisbursing();
-                break;
-            case CONSTANT_Float:
-                cp_Float.expectLength(cpMap.length);
-                cp_Float.readFrom(in);
-                for (int i = 0; i < cpMap.length; i++) {
-                    int x = cp_Float.getInt();
-                    float fx = Float.intBitsToFloat(x);
-                    cpMap[i] = ConstantPool.getLiteralEntry(fx);
-                }
-                cp_Float.doneDisbursing();
-                break;
-            case CONSTANT_Long:
+                case CONSTANT_Utf8:
+                    readUtf8Bands(cpMap);
+                    break;
+                case CONSTANT_Integer:
+                    cp_Int.expectLength(cpMap.length);
+                    cp_Int.readFrom(in);
+                    for (int i = 0; i < cpMap.length; i++) {
+                        int x = cp_Int.getInt();  // coding handles signs OK
+                        cpMap[i] = ConstantPool.getLiteralEntry(x);
+                    }
+                    cp_Int.doneDisbursing();
+                    break;
+                case CONSTANT_Float:
+                    cp_Float.expectLength(cpMap.length);
+                    cp_Float.readFrom(in);
+                    for (int i = 0; i < cpMap.length; i++) {
+                        int x = cp_Float.getInt();
+                        float fx = Float.intBitsToFloat(x);
+                        cpMap[i] = ConstantPool.getLiteralEntry(fx);
+                    }
+                    cp_Float.doneDisbursing();
+                    break;
+                case CONSTANT_Long:
                 //  cp_Long:
                 //        *cp_Long_hi :UDELTA5
                 //        *cp_Long_lo :DELTA5
-                cp_Long_hi.expectLength(cpMap.length);
-                cp_Long_hi.readFrom(in);
-                cp_Long_lo.expectLength(cpMap.length);
-                cp_Long_lo.readFrom(in);
-                for (int i = 0; i < cpMap.length; i++) {
-                    long hi = cp_Long_hi.getInt();
-                    long lo = cp_Long_lo.getInt();
-                    long x = (hi << 32) + ((lo << 32) >>> 32);
-                    cpMap[i] = ConstantPool.getLiteralEntry(x);
-                }
-                cp_Long_hi.doneDisbursing();
-                cp_Long_lo.doneDisbursing();
-                break;
-            case CONSTANT_Double:
+                    cp_Long_hi.expectLength(cpMap.length);
+                    cp_Long_hi.readFrom(in);
+                    cp_Long_lo.expectLength(cpMap.length);
+                    cp_Long_lo.readFrom(in);
+                    for (int i = 0; i < cpMap.length; i++) {
+                        long hi = cp_Long_hi.getInt();
+                        long lo = cp_Long_lo.getInt();
+                        long x = (hi << 32) + ((lo << 32) >>> 32);
+                        cpMap[i] = ConstantPool.getLiteralEntry(x);
+                    }
+                    cp_Long_hi.doneDisbursing();
+                    cp_Long_lo.doneDisbursing();
+                    break;
+                case CONSTANT_Double:
                 //  cp_Double:
                 //        *cp_Double_hi :UDELTA5
                 //        *cp_Double_lo :DELTA5
-                cp_Double_hi.expectLength(cpMap.length);
-                cp_Double_hi.readFrom(in);
-                cp_Double_lo.expectLength(cpMap.length);
-                cp_Double_lo.readFrom(in);
-                for (int i = 0; i < cpMap.length; i++) {
-                    long hi = cp_Double_hi.getInt();
-                    long lo = cp_Double_lo.getInt();
-                    long x = (hi << 32) + ((lo << 32) >>> 32);
-                    double dx = Double.longBitsToDouble(x);
-                    cpMap[i] = ConstantPool.getLiteralEntry(dx);
-                }
-                cp_Double_hi.doneDisbursing();
-                cp_Double_lo.doneDisbursing();
-                break;
-            case CONSTANT_String:
-                cp_String.expectLength(cpMap.length);
-                cp_String.readFrom(in);
-                cp_String.setIndex(getCPIndex(CONSTANT_Utf8));
-                for (int i = 0; i < cpMap.length; i++) {
-                    cpMap[i] = ConstantPool.getLiteralEntry(cp_String.getRef().stringValue());
-                }
-                cp_String.doneDisbursing();
-                break;
-            case CONSTANT_Class:
-                cp_Class.expectLength(cpMap.length);
-                cp_Class.readFrom(in);
-                cp_Class.setIndex(getCPIndex(CONSTANT_Utf8));
-                for (int i = 0; i < cpMap.length; i++) {
-                    cpMap[i] = ConstantPool.getClassEntry(cp_Class.getRef().stringValue());
-                }
-                cp_Class.doneDisbursing();
-                break;
-            case CONSTANT_Signature:
-                readSignatureBands(cpMap);
-                break;
-            case CONSTANT_NameandType:
+                    cp_Double_hi.expectLength(cpMap.length);
+                    cp_Double_hi.readFrom(in);
+                    cp_Double_lo.expectLength(cpMap.length);
+                    cp_Double_lo.readFrom(in);
+                    for (int i = 0; i < cpMap.length; i++) {
+                        long hi = cp_Double_hi.getInt();
+                        long lo = cp_Double_lo.getInt();
+                        long x = (hi << 32) + ((lo << 32) >>> 32);
+                        double dx = Double.longBitsToDouble(x);
+                        cpMap[i] = ConstantPool.getLiteralEntry(dx);
+                    }
+                    cp_Double_hi.doneDisbursing();
+                    cp_Double_lo.doneDisbursing();
+                    break;
+                case CONSTANT_String:
+                    cp_String.expectLength(cpMap.length);
+                    cp_String.readFrom(in);
+                    cp_String.setIndex(getCPIndex(CONSTANT_Utf8));
+                    for (int i = 0; i < cpMap.length; i++) {
+                        cpMap[i] = ConstantPool.getLiteralEntry(cp_String.getRef().stringValue());
+                    }
+                    cp_String.doneDisbursing();
+                    break;
+                case CONSTANT_Class:
+                    cp_Class.expectLength(cpMap.length);
+                    cp_Class.readFrom(in);
+                    cp_Class.setIndex(getCPIndex(CONSTANT_Utf8));
+                    for (int i = 0; i < cpMap.length; i++) {
+                        cpMap[i] = ConstantPool.getClassEntry(cp_Class.getRef().stringValue());
+                    }
+                    cp_Class.doneDisbursing();
+                    break;
+                case CONSTANT_Signature:
+                    readSignatureBands(cpMap);
+                    break;
+                case CONSTANT_NameandType:
                 //  cp_Descr:
                 //        *cp_Descr_type :DELTA5  (cp_Signature)
                 //        *cp_Descr_name :UDELTA5  (cp_Utf8)
-                cp_Descr_name.expectLength(cpMap.length);
-                cp_Descr_name.readFrom(in);
-                cp_Descr_name.setIndex(getCPIndex(CONSTANT_Utf8));
-                cp_Descr_type.expectLength(cpMap.length);
-                cp_Descr_type.readFrom(in);
-                cp_Descr_type.setIndex(getCPIndex(CONSTANT_Signature));
-                for (int i = 0; i < cpMap.length; i++) {
-                    Entry ref  = cp_Descr_name.getRef();
-                    Entry ref2 = cp_Descr_type.getRef();
-                    cpMap[i] = ConstantPool.getDescriptorEntry((Utf8Entry)ref,
+                    cp_Descr_name.expectLength(cpMap.length);
+                    cp_Descr_name.readFrom(in);
+                    cp_Descr_name.setIndex(getCPIndex(CONSTANT_Utf8));
+                    cp_Descr_type.expectLength(cpMap.length);
+                    cp_Descr_type.readFrom(in);
+                    cp_Descr_type.setIndex(getCPIndex(CONSTANT_Signature));
+                    for (int i = 0; i < cpMap.length; i++) {
+                        Entry ref  = cp_Descr_name.getRef();
+                        Entry ref2 = cp_Descr_type.getRef();
+                        cpMap[i] = ConstantPool.getDescriptorEntry((Utf8Entry)ref,
                                                         (SignatureEntry)ref2);
-                }
-                cp_Descr_name.doneDisbursing();
-                cp_Descr_type.doneDisbursing();
-                break;
-            case CONSTANT_Fieldref:
-                readMemberRefs(tag, cpMap, cp_Field_class, cp_Field_desc);
-                break;
-            case CONSTANT_Methodref:
-                readMemberRefs(tag, cpMap, cp_Method_class, cp_Method_desc);
-                break;
-            case CONSTANT_InterfaceMethodref:
-                readMemberRefs(tag, cpMap, cp_Imethod_class, cp_Imethod_desc);
-                break;
-            case CONSTANT_MethodHandle:
-                if (cpMap.length > 0) {
-                    checkLegacy(cp_MethodHandle_refkind.name());
-                }
-                cp_MethodHandle_refkind.expectLength(cpMap.length);
-                cp_MethodHandle_refkind.readFrom(in);
-                cp_MethodHandle_member.expectLength(cpMap.length);
-                cp_MethodHandle_member.readFrom(in);
-                cp_MethodHandle_member.setIndex(getCPIndex(CONSTANT_AnyMember));
-                for (int i = 0; i < cpMap.length; i++) {
-                    byte        refKind = (byte)        cp_MethodHandle_refkind.getInt();
-                    MemberEntry memRef  = (MemberEntry) cp_MethodHandle_member.getRef();
-                    cpMap[i] = ConstantPool.getMethodHandleEntry(refKind, memRef);
-                }
-                cp_MethodHandle_refkind.doneDisbursing();
-                cp_MethodHandle_member.doneDisbursing();
-                break;
-            case CONSTANT_MethodType:
-                if (cpMap.length > 0) {
-                    checkLegacy(cp_MethodType.name());
-                }
-                cp_MethodType.expectLength(cpMap.length);
-                cp_MethodType.readFrom(in);
-                cp_MethodType.setIndex(getCPIndex(CONSTANT_Signature));
-                for (int i = 0; i < cpMap.length; i++) {
-                    SignatureEntry typeRef  = (SignatureEntry) cp_MethodType.getRef();
-                    cpMap[i] = ConstantPool.getMethodTypeEntry(typeRef);
-                }
-                cp_MethodType.doneDisbursing();
-                break;
-            case CONSTANT_InvokeDynamic:
-                if (cpMap.length > 0) {
-                    checkLegacy(cp_InvokeDynamic_spec.name());
-                }
-                cp_InvokeDynamic_spec.expectLength(cpMap.length);
-                cp_InvokeDynamic_spec.readFrom(in);
-                cp_InvokeDynamic_spec.setIndex(getCPIndex(CONSTANT_BootstrapMethod));
-                cp_InvokeDynamic_desc.expectLength(cpMap.length);
-                cp_InvokeDynamic_desc.readFrom(in);
-                cp_InvokeDynamic_desc.setIndex(getCPIndex(CONSTANT_NameandType));
-                for (int i = 0; i < cpMap.length; i++) {
-                    BootstrapMethodEntry bss   = (BootstrapMethodEntry) cp_InvokeDynamic_spec.getRef();
-                    DescriptorEntry      descr = (DescriptorEntry)      cp_InvokeDynamic_desc.getRef();
-                    cpMap[i] = ConstantPool.getInvokeDynamicEntry(bss, descr);
-                }
-                cp_InvokeDynamic_spec.doneDisbursing();
-                cp_InvokeDynamic_desc.doneDisbursing();
-                break;
-            case CONSTANT_BootstrapMethod:
-                if (cpMap.length > 0) {
-                    checkLegacy(cp_BootstrapMethod_ref.name());
-                }
-                cp_BootstrapMethod_ref.expectLength(cpMap.length);
-                cp_BootstrapMethod_ref.readFrom(in);
-                cp_BootstrapMethod_ref.setIndex(getCPIndex(CONSTANT_MethodHandle));
-                cp_BootstrapMethod_arg_count.expectLength(cpMap.length);
-                cp_BootstrapMethod_arg_count.readFrom(in);
-                int totalArgCount = cp_BootstrapMethod_arg_count.getIntTotal();
-                cp_BootstrapMethod_arg.expectLength(totalArgCount);
-                cp_BootstrapMethod_arg.readFrom(in);
-                cp_BootstrapMethod_arg.setIndex(getCPIndex(CONSTANT_LoadableValue));
-                for (int i = 0; i < cpMap.length; i++) {
-                    MethodHandleEntry bsm = (MethodHandleEntry) cp_BootstrapMethod_ref.getRef();
-                    int argc = cp_BootstrapMethod_arg_count.getInt();
-                    Entry[] argRefs = new Entry[argc];
-                    for (int j = 0; j < argc; j++) {
-                        argRefs[j] = cp_BootstrapMethod_arg.getRef();
                     }
-                    cpMap[i] = ConstantPool.getBootstrapMethodEntry(bsm, argRefs);
-                }
-                cp_BootstrapMethod_ref.doneDisbursing();
-                cp_BootstrapMethod_arg_count.doneDisbursing();
-                cp_BootstrapMethod_arg.doneDisbursing();
-                break;
-            default:
-                throw new AssertionError("unexpected CP tag in package");
+                    cp_Descr_name.doneDisbursing();
+                    cp_Descr_type.doneDisbursing();
+                    break;
+                case CONSTANT_Fieldref:
+                    readMemberRefs(tag, cpMap, cp_Field_class, cp_Field_desc);
+                    break;
+                case CONSTANT_Methodref:
+                    readMemberRefs(tag, cpMap, cp_Method_class, cp_Method_desc);
+                    break;
+                case CONSTANT_InterfaceMethodref:
+                    readMemberRefs(tag, cpMap, cp_Imethod_class, cp_Imethod_desc);
+                    break;
+                case CONSTANT_MethodHandle:
+                    if (cpMap.length > 0) {
+                        checkLegacy(cp_MethodHandle_refkind.name());
+                    }
+                    cp_MethodHandle_refkind.expectLength(cpMap.length);
+                    cp_MethodHandle_refkind.readFrom(in);
+                    cp_MethodHandle_member.expectLength(cpMap.length);
+                    cp_MethodHandle_member.readFrom(in);
+                    cp_MethodHandle_member.setIndex(getCPIndex(CONSTANT_AnyMember));
+                    for (int i = 0; i < cpMap.length; i++) {
+                        byte        refKind = (byte)        cp_MethodHandle_refkind.getInt();
+                        MemberEntry memRef  = (MemberEntry) cp_MethodHandle_member.getRef();
+                        cpMap[i] = ConstantPool.getMethodHandleEntry(refKind, memRef);
+                    }
+                    cp_MethodHandle_refkind.doneDisbursing();
+                    cp_MethodHandle_member.doneDisbursing();
+                    break;
+                case CONSTANT_MethodType:
+                    if (cpMap.length > 0) {
+                        checkLegacy(cp_MethodType.name());
+                    }
+                    cp_MethodType.expectLength(cpMap.length);
+                    cp_MethodType.readFrom(in);
+                    cp_MethodType.setIndex(getCPIndex(CONSTANT_Signature));
+                    for (int i = 0; i < cpMap.length; i++) {
+                        SignatureEntry typeRef  = (SignatureEntry) cp_MethodType.getRef();
+                        cpMap[i] = ConstantPool.getMethodTypeEntry(typeRef);
+                    }
+                    cp_MethodType.doneDisbursing();
+                    break;
+                case CONSTANT_InvokeDynamic:
+                    if (cpMap.length > 0) {
+                        checkLegacy(cp_InvokeDynamic_spec.name());
+                    }
+                    cp_InvokeDynamic_spec.expectLength(cpMap.length);
+                    cp_InvokeDynamic_spec.readFrom(in);
+                    cp_InvokeDynamic_spec.setIndex(getCPIndex(CONSTANT_BootstrapMethod));
+                    cp_InvokeDynamic_desc.expectLength(cpMap.length);
+                    cp_InvokeDynamic_desc.readFrom(in);
+                    cp_InvokeDynamic_desc.setIndex(getCPIndex(CONSTANT_NameandType));
+                    for (int i = 0; i < cpMap.length; i++) {
+                        BootstrapMethodEntry bss   = (BootstrapMethodEntry) cp_InvokeDynamic_spec.getRef();
+                        DescriptorEntry      descr = (DescriptorEntry)      cp_InvokeDynamic_desc.getRef();
+                        cpMap[i] = ConstantPool.getInvokeDynamicEntry(bss, descr);
+                    }
+                    cp_InvokeDynamic_spec.doneDisbursing();
+                    cp_InvokeDynamic_desc.doneDisbursing();
+                    break;
+                case CONSTANT_BootstrapMethod:
+                    if (cpMap.length > 0) {
+                        checkLegacy(cp_BootstrapMethod_ref.name());
+                    }
+                    cp_BootstrapMethod_ref.expectLength(cpMap.length);
+                    cp_BootstrapMethod_ref.readFrom(in);
+                    cp_BootstrapMethod_ref.setIndex(getCPIndex(CONSTANT_MethodHandle));
+                    cp_BootstrapMethod_arg_count.expectLength(cpMap.length);
+                    cp_BootstrapMethod_arg_count.readFrom(in);
+                    int totalArgCount = cp_BootstrapMethod_arg_count.getIntTotal();
+                    cp_BootstrapMethod_arg.expectLength(totalArgCount);
+                    cp_BootstrapMethod_arg.readFrom(in);
+                    cp_BootstrapMethod_arg.setIndex(getCPIndex(CONSTANT_LoadableValue));
+                    for (int i = 0; i < cpMap.length; i++) {
+                        MethodHandleEntry bsm = (MethodHandleEntry) cp_BootstrapMethod_ref.getRef();
+                        int argc = cp_BootstrapMethod_arg_count.getInt();
+                        Entry[] argRefs = new Entry[argc];
+                        for (int j = 0; j < argc; j++) {
+                            argRefs[j] = cp_BootstrapMethod_arg.getRef();
+                        }
+                        cpMap[i] = ConstantPool.getBootstrapMethodEntry(bsm, argRefs);
+                    }
+                    cp_BootstrapMethod_ref.doneDisbursing();
+                    cp_BootstrapMethod_arg_count.doneDisbursing();
+                    cp_BootstrapMethod_arg.doneDisbursing();
+                    break;
+                default:
+                    throw new AssertionError("unexpected CP tag in package");
             }
 
             Index index = initCPIndex(tag, cpMap);
@@ -969,7 +969,7 @@ class PackageReader extends BandStructure {
         attr_definition_headers.readFrom(in);
         attr_definition_name.readFrom(in);
         attr_definition_layout.readFrom(in);
-         try (PrintStream dump = !optDumpBands ? null
+        try (PrintStream dump = !optDumpBands ? null
                   : new PrintStream(getDumpStream(attr_definition_headers, ".def"), false, StandardCharsets.UTF_8.name()))
         {
             for (int i = 0; i < numAttrDefs; i++) {
@@ -1818,7 +1818,7 @@ class PackageReader extends BandStructure {
     }
 
     private
-    void readAttrBands(Attribute.Layout.Element[] elems,
+        void readAttrBands(Attribute.Layout.Element[] elems,
                        int count, int[] forwardCounts,
                        Band[] ab)
             throws IOException {
@@ -1831,47 +1831,47 @@ class PackageReader extends BandStructure {
                 eBand.readFrom(in);
             }
             switch (e.kind) {
-            case Attribute.EK_REPL:
+                case Attribute.EK_REPL:
                 // Recursive call.
-                int repCount = ((IntBand)eBand).getIntTotal();
+                    int repCount = ((IntBand)eBand).getIntTotal();
                 // Note:  getIntTotal makes an extra pass over this band.
-                readAttrBands(e.body, repCount, forwardCounts, ab);
-                break;
-            case Attribute.EK_UN:
-                int remainingCount = count;
-                for (int j = 0; j < e.body.length; j++) {
-                    int caseCount;
-                    if (j == e.body.length-1) {
-                        caseCount = remainingCount;
-                    } else {
-                        caseCount = 0;
-                        for (int j0 = j;
-                             (j == j0)
-                             || (j < e.body.length
-                                 && e.body[j].flagTest(Attribute.EF_BACK));
-                             j++) {
-                            caseCount += ((IntBand)eBand).getIntCount(e.body[j].value);
+                    readAttrBands(e.body, repCount, forwardCounts, ab);
+                    break;
+                case Attribute.EK_UN:
+                    int remainingCount = count;
+                    for (int j = 0; j < e.body.length; j++) {
+                        int caseCount;
+                        if (j == e.body.length-1) {
+                            caseCount = remainingCount;
+                        } else {
+                            caseCount = 0;
+                            for (int j0 = j;
+                                (j == j0)
+                                    || (j < e.body.length
+                                    && e.body[j].flagTest(Attribute.EF_BACK));
+                                j++) {
+                                caseCount += ((IntBand)eBand).getIntCount(e.body[j].value);
+                            }
+                            --j;  // back up to last occurrence of this body
                         }
-                        --j;  // back up to last occurrence of this body
+                        remainingCount -= caseCount;
+                        readAttrBands(e.body[j].body, caseCount, forwardCounts, ab);
                     }
-                    remainingCount -= caseCount;
-                    readAttrBands(e.body[j].body, caseCount, forwardCounts, ab);
-                }
                 assert(remainingCount == 0);
-                break;
-            case Attribute.EK_CALL:
+                    break;
+                case Attribute.EK_CALL:
                 assert(e.body.length == 1);
                 assert(e.body[0].kind == Attribute.EK_CBLE);
-                if (!e.flagTest(Attribute.EF_BACK)) {
+                    if (!e.flagTest(Attribute.EF_BACK)) {
                     // Backward calls are pre-counted, but forwards are not.
                     // Push the present count forward.
                     assert(forwardCounts[e.value] >= 0);
-                    forwardCounts[e.value] += count;
-                }
-                break;
-            case Attribute.EK_CBLE:
+                        forwardCounts[e.value] += count;
+                    }
+                    break;
+                case Attribute.EK_CBLE:
                 assert(false);
-                break;
+                    break;
             }
         }
     }
@@ -1971,66 +1971,66 @@ class PackageReader extends BandStructure {
                 assert(bc == (0xFF & bc));
                 // Adjust expectations of various band sizes.
                 switch (bc) {
-                case _tableswitch:
-                case _lookupswitch:
-                    bc_case_count.expectMoreLength(1);
-                    allSwitchOps.add(bc);
-                    break;
-                case _iinc:
-                    bc_local.expectMoreLength(1);
-                    if (isWide)
-                        bc_short.expectMoreLength(1);
-                    else
-                        bc_byte.expectMoreLength(1);
-                    break;
-                case _sipush:
-                    bc_short.expectMoreLength(1);
-                    break;
-                case _bipush:
-                    bc_byte.expectMoreLength(1);
-                    break;
-                case _newarray:
-                    bc_byte.expectMoreLength(1);
-                    break;
-                case _multianewarray:
-                    assert(getCPRefOpBand(bc) == bc_classref);
-                    bc_classref.expectMoreLength(1);
-                    bc_byte.expectMoreLength(1);
-                    break;
-                case _ref_escape:
-                    bc_escrefsize.expectMoreLength(1);
-                    bc_escref.expectMoreLength(1);
-                    break;
-                case _byte_escape:
-                    bc_escsize.expectMoreLength(1);
-                    // bc_escbyte will have to be counted too
-                    break;
-                default:
-                    if (Instruction.isInvokeInitOp(bc)) {
-                        bc_initref.expectMoreLength(1);
+                    case _tableswitch:
+                    case _lookupswitch:
+                        bc_case_count.expectMoreLength(1);
+                        allSwitchOps.add(bc);
                         break;
-                    }
-                    if (Instruction.isSelfLinkerOp(bc)) {
-                        CPRefBand bc_which = selfOpRefBand(bc);
-                        bc_which.expectMoreLength(1);
-                        break;
-                    }
-                    if (Instruction.isBranchOp(bc)) {
-                        bc_label.expectMoreLength(1);
-                        break;
-                    }
-                    if (Instruction.isCPRefOp(bc)) {
-                        CPRefBand bc_which = getCPRefOpBand(bc);
-                        bc_which.expectMoreLength(1);
-                        assert(bc != _multianewarray);  // handled elsewhere
-                        break;
-                    }
-                    if (Instruction.isLocalSlotOp(bc)) {
+                    case _iinc:
                         bc_local.expectMoreLength(1);
+                        if (isWide)
+                            bc_short.expectMoreLength(1);
+                        else
+                            bc_byte.expectMoreLength(1);
                         break;
-                    }
-                    break;
-                case _end_marker:
+                    case _sipush:
+                        bc_short.expectMoreLength(1);
+                        break;
+                    case _bipush:
+                        bc_byte.expectMoreLength(1);
+                        break;
+                    case _newarray:
+                        bc_byte.expectMoreLength(1);
+                        break;
+                    case _multianewarray:
+                    assert(getCPRefOpBand(bc) == bc_classref);
+                        bc_classref.expectMoreLength(1);
+                        bc_byte.expectMoreLength(1);
+                        break;
+                    case _ref_escape:
+                        bc_escrefsize.expectMoreLength(1);
+                        bc_escref.expectMoreLength(1);
+                        break;
+                    case _byte_escape:
+                        bc_escsize.expectMoreLength(1);
+                    // bc_escbyte will have to be counted too
+                        break;
+                    default:
+                        if (Instruction.isInvokeInitOp(bc)) {
+                            bc_initref.expectMoreLength(1);
+                            break;
+                        }
+                        if (Instruction.isSelfLinkerOp(bc)) {
+                            CPRefBand bc_which = selfOpRefBand(bc);
+                            bc_which.expectMoreLength(1);
+                            break;
+                        }
+                        if (Instruction.isBranchOp(bc)) {
+                            bc_label.expectMoreLength(1);
+                            break;
+                        }
+                        if (Instruction.isCPRefOp(bc)) {
+                            CPRefBand bc_which = getCPRefOpBand(bc);
+                            bc_which.expectMoreLength(1);
+                        assert(bc != _multianewarray);  // handled elsewhere
+                            break;
+                        }
+                        if (Instruction.isLocalSlotOp(bc)) {
+                            bc_local.expectMoreLength(1);
+                            break;
+                        }
+                        break;
+                    case _end_marker:
                     {
                         // Transfer from buf to a more permanent place:
                         c.bytes = realloc(buf, i);
@@ -2095,8 +2095,8 @@ class PackageReader extends BandStructure {
                     isWide = true;
                 }
                 switch (bc) {
-                case _tableswitch: // apc:  (df, lo, hi, (hi-lo+1)*(label))
-                case _lookupswitch: // apc:  (df, nc, nc*(case, label))
+                    case _tableswitch: // apc:  (df, lo, hi, (hi-lo+1)*(label))
+                    case _lookupswitch: // apc:  (df, nc, nc*(case, label))
                     {
                         int caseCount = bc_case_count.getInt();
                         while ((pc + 30 + caseCount*8) > buf.length)
@@ -2120,7 +2120,7 @@ class PackageReader extends BandStructure {
                         pc = isw.getNextPC();
                         continue;
                     }
-                case _iinc:
+                    case _iinc:
                     {
                         buf[pc++] = (byte) bc;
                         int local = bc_local.getInt();
@@ -2136,22 +2136,22 @@ class PackageReader extends BandStructure {
                         }
                         continue;
                     }
-                case _sipush:
+                    case _sipush:
                     {
                         int val = bc_short.getInt();
                         buf[pc++] = (byte) bc;
                         Instruction.setShort(buf, pc, val); pc += 2;
                         continue;
                     }
-                case _bipush:
-                case _newarray:
+                    case _bipush:
+                    case _newarray:
                     {
                         int val = bc_byte.getByte();
                         buf[pc++] = (byte) bc;
                         buf[pc++] = (byte) val;
                         continue;
                     }
-                case _ref_escape:
+                    case _ref_escape:
                     {
                         // Note that insnMap has one entry for this.
                         hasEscs = true;
@@ -2160,15 +2160,15 @@ class PackageReader extends BandStructure {
                         if (size == 1)  ldcRefSet.add(ref);
                         int fmt;
                         switch (size) {
-                        case 1: fixupBuf.addU1(pc, ref); break;
-                        case 2: fixupBuf.addU2(pc, ref); break;
-                        default: assert(false); fmt = 0;
+                            case 1: fixupBuf.addU1(pc, ref); break;
+                            case 2: fixupBuf.addU2(pc, ref); break;
+                            default: assert(false); fmt = 0;
                         }
                         buf[pc+0] = buf[pc+1] = 0;
                         pc += size;
                     }
-                    continue;
-                case _byte_escape:
+                        continue;
+                    case _byte_escape:
                     {
                         // Note that insnMap has one entry for all these bytes.
                         hasEscs = true;
@@ -2179,173 +2179,173 @@ class PackageReader extends BandStructure {
                             buf[pc++] = (byte) bc_escbyte.getByte();
                         }
                     }
-                    continue;
-                default:
-                    if (Instruction.isInvokeInitOp(bc)) {
-                        int idx = (bc - _invokeinit_op);
-                        int origBC = _invokespecial;
-                        ClassEntry classRef;
-                        switch (idx) {
-                        case _invokeinit_self_option:
-                            classRef = thisClass; break;
-                        case _invokeinit_super_option:
-                            classRef = superClass; break;
-                        default:
+                        continue;
+                    default:
+                        if (Instruction.isInvokeInitOp(bc)) {
+                            int idx = (bc - _invokeinit_op);
+                            int origBC = _invokespecial;
+                            ClassEntry classRef;
+                            switch (idx) {
+                                case _invokeinit_self_option:
+                                    classRef = thisClass; break;
+                                case _invokeinit_super_option:
+                                    classRef = superClass; break;
+                                default:
                             assert(idx == _invokeinit_new_option);
-                            classRef = newClass; break;
-                        }
-                        buf[pc++] = (byte) origBC;
-                        int coding = bc_initref.getInt();
+                                    classRef = newClass; break;
+                            }
+                            buf[pc++] = (byte) origBC;
+                            int coding = bc_initref.getInt();
                         // Find the nth overloading of <init> in classRef.
-                        MemberEntry ref = pkg.cp.getOverloadingForIndex(CONSTANT_Methodref, classRef, "<init>", coding);
-                        fixupBuf.addU2(pc, ref);
-                        buf[pc+0] = buf[pc+1] = 0;
-                        pc += 2;
-                        assert(Instruction.opLength(origBC) == (pc - curPC));
-                        continue;
-                    }
-                    if (Instruction.isSelfLinkerOp(bc)) {
-                        int idx = (bc - _self_linker_op);
-                        boolean isSuper = (idx >= _self_linker_super_flag);
-                        if (isSuper)  idx -= _self_linker_super_flag;
-                        boolean isAload = (idx >= _self_linker_aload_flag);
-                        if (isAload)  idx -= _self_linker_aload_flag;
-                        int origBC = _first_linker_op + idx;
-                        boolean isField = Instruction.isFieldOp(origBC);
-                        CPRefBand bc_which;
-                        ClassEntry which_cls  = isSuper ? superClass : thisClass;
-                        Index which_ix;
-                        if (isField) {
-                            bc_which = isSuper ? bc_superfield  : bc_thisfield;
-                            which_ix = pkg.cp.getMemberIndex(CONSTANT_Fieldref, which_cls);
-                        } else {
-                            bc_which = isSuper ? bc_supermethod : bc_thismethod;
-                            which_ix = pkg.cp.getMemberIndex(CONSTANT_Methodref, which_cls);
-                        }
-                        assert(bc_which == selfOpRefBand(bc));
-                        MemberEntry ref = (MemberEntry) bc_which.getRef(which_ix);
-                        if (isAload) {
-                            buf[pc++] = (byte) _aload_0;
-                            curPC = pc;
-                            // Note: insnMap keeps the _aload_0 separate.
-                            insnMap[numInsns++] = curPC;
-                        }
-                        buf[pc++] = (byte) origBC;
-                        fixupBuf.addU2(pc, ref);
-                        buf[pc+0] = buf[pc+1] = 0;
-                        pc += 2;
-                        assert(Instruction.opLength(origBC) == (pc - curPC));
-                        continue;
-                    }
-                    if (Instruction.isBranchOp(bc)) {
-                        buf[pc++] = (byte) bc;
-                        assert(!isWide);  // no wide prefix for branches
-                        int nextPC = curPC + Instruction.opLength(bc);
-                        // Make our getLabel calls later.
-                        labels[numLabels++] = curPC;
-                        //Instruction.at(buf, curPC).setBranchLabel(getLabel(bc_label, code, curPC));
-                        while (pc < nextPC)  buf[pc++] = 0;
-                        continue;
-                    }
-                    if (Instruction.isCPRefOp(bc)) {
-                        CPRefBand bc_which = getCPRefOpBand(bc);
-                        Entry ref = bc_which.getRef();
-                        if (ref == null) {
-                            if (bc_which == bc_classref) {
-                                // Shorthand for class self-references.
-                                ref = thisClass;
-                            } else {
-                                assert(false);
-                            }
-                        }
-                        int origBC = bc;
-                        int size = 2;
-                        switch (bc) {
-                        case _invokestatic_int:
-                            origBC = _invokestatic;
-                            break;
-                        case _invokespecial_int:
-                            origBC = _invokespecial;
-                            break;
-                        case _ildc:
-                        case _cldc:
-                        case _fldc:
-                        case _sldc:
-                        case _qldc:
-                            origBC = _ldc;
-                            size = 1;
-                            ldcRefSet.add(ref);
-                            break;
-                        case _ildc_w:
-                        case _cldc_w:
-                        case _fldc_w:
-                        case _sldc_w:
-                        case _qldc_w:
-                            origBC = _ldc_w;
-                            break;
-                        case _lldc2_w:
-                        case _dldc2_w:
-                            origBC = _ldc2_w;
-                            break;
-                        case _new:
-                            newClass = (ClassEntry) ref;
-                            break;
-                        }
-                        buf[pc++] = (byte) origBC;
-                        int fmt;
-                        switch (size) {
-                        case 1: fixupBuf.addU1(pc, ref); break;
-                        case 2: fixupBuf.addU2(pc, ref); break;
-                        default: assert(false); fmt = 0;
-                        }
-                        buf[pc+0] = buf[pc+1] = 0;
-                        pc += size;
-                        if (origBC == _multianewarray) {
-                            // Copy the trailing byte also.
-                            int val = bc_byte.getByte();
-                            buf[pc++] = (byte) val;
-                        } else if (origBC == _invokeinterface) {
-                            int argSize = ((MemberEntry)ref).descRef.typeRef.computeSize(true);
-                            buf[pc++] = (byte)( 1 + argSize );
-                            buf[pc++] = 0;
-                        } else if (origBC == _invokedynamic) {
-                            buf[pc++] = 0;
-                            buf[pc++] = 0;
-                        }
-                        assert(Instruction.opLength(origBC) == (pc - curPC));
-                        continue;
-                    }
-                    if (Instruction.isLocalSlotOp(bc)) {
-                        buf[pc++] = (byte) bc;
-                        int local = bc_local.getInt();
-                        if (isWide) {
-                            Instruction.setShort(buf, pc, local);
+                            MemberEntry ref = pkg.cp.getOverloadingForIndex(CONSTANT_Methodref, classRef, "<init>", coding);
+                            fixupBuf.addU2(pc, ref);
+                            buf[pc+0] = buf[pc+1] = 0;
                             pc += 2;
-                            if (bc == _iinc) {
-                                int iVal = bc_short.getInt();
-                                Instruction.setShort(buf, pc, iVal);
-                                pc += 2;
-                            }
-                        } else {
-                            Instruction.setByte(buf, pc, local);
-                            pc += 1;
-                            if (bc == _iinc) {
-                                int iVal = bc_byte.getByte();
-                                Instruction.setByte(buf, pc, iVal);
-                                pc += 1;
-                            }
+                        assert(Instruction.opLength(origBC) == (pc - curPC));
+                            continue;
                         }
+                        if (Instruction.isSelfLinkerOp(bc)) {
+                            int idx = (bc - _self_linker_op);
+                            boolean isSuper = (idx >= _self_linker_super_flag);
+                            if (isSuper)  idx -= _self_linker_super_flag;
+                            boolean isAload = (idx >= _self_linker_aload_flag);
+                            if (isAload)  idx -= _self_linker_aload_flag;
+                            int origBC = _first_linker_op + idx;
+                            boolean isField = Instruction.isFieldOp(origBC);
+                            CPRefBand bc_which;
+                            ClassEntry which_cls  = isSuper ? superClass : thisClass;
+                            Index which_ix;
+                            if (isField) {
+                                bc_which = isSuper ? bc_superfield  : bc_thisfield;
+                                which_ix = pkg.cp.getMemberIndex(CONSTANT_Fieldref, which_cls);
+                            } else {
+                                bc_which = isSuper ? bc_supermethod : bc_thismethod;
+                                which_ix = pkg.cp.getMemberIndex(CONSTANT_Methodref, which_cls);
+                            }
+                        assert(bc_which == selfOpRefBand(bc));
+                            MemberEntry ref = (MemberEntry) bc_which.getRef(which_ix);
+                            if (isAload) {
+                                buf[pc++] = (byte) _aload_0;
+                                curPC = pc;
+                            // Note: insnMap keeps the _aload_0 separate.
+                                insnMap[numInsns++] = curPC;
+                            }
+                            buf[pc++] = (byte) origBC;
+                            fixupBuf.addU2(pc, ref);
+                            buf[pc+0] = buf[pc+1] = 0;
+                            pc += 2;
+                        assert(Instruction.opLength(origBC) == (pc - curPC));
+                            continue;
+                        }
+                        if (Instruction.isBranchOp(bc)) {
+                            buf[pc++] = (byte) bc;
+                        assert(!isWide);  // no wide prefix for branches
+                            int nextPC = curPC + Instruction.opLength(bc);
+                        // Make our getLabel calls later.
+                            labels[numLabels++] = curPC;
+                        //Instruction.at(buf, curPC).setBranchLabel(getLabel(bc_label, code, curPC));
+                            while (pc < nextPC)  buf[pc++] = 0;
+                            continue;
+                        }
+                        if (Instruction.isCPRefOp(bc)) {
+                            CPRefBand bc_which = getCPRefOpBand(bc);
+                            Entry ref = bc_which.getRef();
+                            if (ref == null) {
+                                if (bc_which == bc_classref) {
+                                // Shorthand for class self-references.
+                                    ref = thisClass;
+                                } else {
+                                assert(false);
+                                }
+                            }
+                            int origBC = bc;
+                            int size = 2;
+                            switch (bc) {
+                                case _invokestatic_int:
+                                    origBC = _invokestatic;
+                                    break;
+                                case _invokespecial_int:
+                                    origBC = _invokespecial;
+                                    break;
+                                case _ildc:
+                                case _cldc:
+                                case _fldc:
+                                case _sldc:
+                                case _qldc:
+                                    origBC = _ldc;
+                                    size = 1;
+                                    ldcRefSet.add(ref);
+                                    break;
+                                case _ildc_w:
+                                case _cldc_w:
+                                case _fldc_w:
+                                case _sldc_w:
+                                case _qldc_w:
+                                    origBC = _ldc_w;
+                                    break;
+                                case _lldc2_w:
+                                case _dldc2_w:
+                                    origBC = _ldc2_w;
+                                    break;
+                                case _new:
+                                    newClass = (ClassEntry) ref;
+                                    break;
+                            }
+                            buf[pc++] = (byte) origBC;
+                            int fmt;
+                            switch (size) {
+                                case 1: fixupBuf.addU1(pc, ref); break;
+                                case 2: fixupBuf.addU2(pc, ref); break;
+                                default: assert(false); fmt = 0;
+                            }
+                            buf[pc+0] = buf[pc+1] = 0;
+                            pc += size;
+                            if (origBC == _multianewarray) {
+                            // Copy the trailing byte also.
+                                int val = bc_byte.getByte();
+                                buf[pc++] = (byte) val;
+                            } else if (origBC == _invokeinterface) {
+                                int argSize = ((MemberEntry)ref).descRef.typeRef.computeSize(true);
+                                buf[pc++] = (byte)( 1 + argSize );
+                                buf[pc++] = 0;
+                            } else if (origBC == _invokedynamic) {
+                                buf[pc++] = 0;
+                                buf[pc++] = 0;
+                            }
+                        assert(Instruction.opLength(origBC) == (pc - curPC));
+                            continue;
+                        }
+                        if (Instruction.isLocalSlotOp(bc)) {
+                            buf[pc++] = (byte) bc;
+                            int local = bc_local.getInt();
+                            if (isWide) {
+                                Instruction.setShort(buf, pc, local);
+                                pc += 2;
+                                if (bc == _iinc) {
+                                    int iVal = bc_short.getInt();
+                                    Instruction.setShort(buf, pc, iVal);
+                                    pc += 2;
+                                }
+                            } else {
+                                Instruction.setByte(buf, pc, local);
+                                pc += 1;
+                                if (bc == _iinc) {
+                                    int iVal = bc_byte.getByte();
+                                    Instruction.setByte(buf, pc, iVal);
+                                    pc += 1;
+                                }
+                            }
                         assert(Instruction.opLength(bc) == (pc - curPC));
-                        continue;
-                    }
+                            continue;
+                        }
                     // Random bytecode.  Just copy it.
-                    if (bc >= _bytecode_limit)
-                        Utils.log.warning("unrecognized bytescode "+bc
+                        if (bc >= _bytecode_limit)
+                            Utils.log.warning("unrecognized bytescode "+bc
                                             +" "+Instruction.byteName(bc));
                     assert(bc < _bytecode_limit);
-                    buf[pc++] = (byte) bc;
+                        buf[pc++] = (byte) bc;
                     assert(Instruction.opLength(bc) == (pc - curPC));
-                    continue;
+                        continue;
                 }
             }
             // now make a permanent copy of the bytecodes

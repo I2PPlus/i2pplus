@@ -126,12 +126,12 @@ public abstract class EdnsOption {
         OptionCode optionCode = OptionCode.from(intOptionCode);
         EdnsOption res;
         switch (optionCode) {
-        case NSID:
-            res = new Nsid(optionData);
-            break;
-        default:
-            res = new UnknownEdnsOption(intOptionCode, optionData);
-            break;
+            case NSID:
+                res = new Nsid(optionData);
+                break;
+            default:
+                res = new UnknownEdnsOption(intOptionCode, optionData);
+                break;
         }
         return res;
     }

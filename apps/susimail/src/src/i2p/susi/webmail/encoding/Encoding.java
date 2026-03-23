@@ -20,25 +20,25 @@ import net.i2p.util.Log;
 
 /**
  * Interface to encode/decode content transfer encodings like quoted-printable, base64 etc.
- * 
+ *
  * @since 0.9.33 changed from interface to abstract class
  */
 public abstract class Encoding {
   /**
    * Logger for the encoding subclass.
    */
-  protected final Log _log;
+    protected final Log _log;
 
   /**
    * Creates an Encoding with a logger.
    */
-  protected Encoding() {_log = I2PAppContext.getGlobalContext().logManager().getLog(getClass());}
+    protected Encoding() {_log = I2PAppContext.getGlobalContext().logManager().getLog(getClass());}
 
   /**
    * Returns the name of this encoding.
    * @return the encoding name
    */
-  public abstract String getName();
+    public abstract String getName();
 
    /**
     * Encode a byte array to a ASCII or ISO-8859-1 String.
@@ -52,7 +52,7 @@ public abstract class Encoding {
     * @return the encoded string, SMTP-safe
     * @throws EncodingException if encoding fails
     */
-   public abstract String encode( byte in[] ) throws EncodingException;
+    public abstract String encode( byte in[] ) throws EncodingException;
 
    /**
     * Encode a (UTF-8) String to a ASCII or ISO-8859-1 String.
@@ -71,7 +71,7 @@ public abstract class Encoding {
     * @throws EncodingException if encoding fails
     * @since 0.9.33 implementation moved from subclasses
     */
-   public String encode(String str) throws EncodingException {return encode(DataHelper.getUTF8(str));}
+    public String encode(String str) throws EncodingException {return encode(DataHelper.getUTF8(str));}
 
    /**
     * Encode an input stream of bytes to a ASCII or ISO-8859-1 String.
@@ -91,11 +91,11 @@ public abstract class Encoding {
     * @throws IOException if reading from stream or writing fails
     * @since 0.9.33
     */
-   public void encode(InputStream in, Writer out) throws IOException {
-    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    DataHelper.copy(in, baos);
-    out.write(encode(baos.toByteArray()));
-   }
+    public void encode(InputStream in, Writer out) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        DataHelper.copy(in, baos);
+        out.write(encode(baos.toByteArray()));
+    }
 
    /**
     * Decode a byte array using default offset and length.
@@ -108,7 +108,7 @@ public abstract class Encoding {
     * @throws DecodingException if decoding fails
     * @since 0.9.33 implementation moved from subclasses
     */
-   public Buffer decode(byte in[]) throws DecodingException {return decode(in, 0, in.length);}
+    public Buffer decode(byte in[]) throws DecodingException {return decode(in, 0, in.length);}
 
    /**
     * Decode a portion of a byte array.
@@ -119,12 +119,12 @@ public abstract class Encoding {
     * @return a buffer containing the decoded data as a String
     * @throws DecodingException if decoding fails
     */
-   public Buffer decode(byte in[], int offset, int length) throws DecodingException {
-     try {
-       ReadBuffer rb = new ReadBuffer(in, offset, length);
-       return decode(rb);
-     } catch (IOException ioe) {throw new DecodingException("decode error", ioe);}
-   }
+    public Buffer decode(byte in[], int offset, int length) throws DecodingException {
+        try {
+            ReadBuffer rb = new ReadBuffer(in, offset, length);
+            return decode(rb);
+        } catch (IOException ioe) {throw new DecodingException("decode error", ioe);}
+    }
 
    /**
     * Decode a string.
@@ -138,9 +138,9 @@ public abstract class Encoding {
     * @throws DecodingException if decoding fails
     * @since 0.9.33 implementation moved from subclasses
     */
-   public Buffer decode(String str) throws DecodingException {
-    return str != null ? decode(DataHelper.getUTF8(str)) : null;
-  }
+    public Buffer decode(String str) throws DecodingException {
+        return str != null ? decode(DataHelper.getUTF8(str)) : null;
+    }
 
    /**
     * Decode a buffer into another buffer.
@@ -153,11 +153,11 @@ public abstract class Encoding {
     * @throws DecodingException if decoding fails
     * @since 0.9.33 implementation moved from subclasses
     */
-  public Buffer decode(Buffer in) throws IOException {
-    MemoryBuffer rv = new MemoryBuffer(4096);
-    decode(in, rv);
-    return rv;
-  }
+    public Buffer decode(Buffer in) throws IOException {
+        MemoryBuffer rv = new MemoryBuffer(4096);
+        decode(in, rv);
+        return rv;
+    }
 
    /**
     * Decode a buffer into another buffer using the input stream.
@@ -169,7 +169,7 @@ public abstract class Encoding {
     * @throws IOException if reading from input stream fails
     * @since 0.9.34
     */
-   public void decode(Buffer in, Buffer out) throws IOException {decode(in.getInputStream(), out);}
+    public void decode(Buffer in, Buffer out) throws IOException {decode(in.getInputStream(), out);}
 
    /**
     * Decode an input stream into a buffer.
@@ -181,6 +181,6 @@ public abstract class Encoding {
     * @throws IOException if reading from input stream fails
     * @since 0.9.34
     */
-   public abstract void decode(InputStream in, Buffer out) throws IOException;
-  
+    public abstract void decode(InputStream in, Buffer out) throws IOException;
+
 }

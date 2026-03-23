@@ -162,7 +162,7 @@ class TransientDataStore implements DataStore {
                 LeaseSet ols = (LeaseSet) old;
                 long oldDate, newDate;
                 if (type != DatabaseEntry.KEY_TYPE_LEASESET &&
-                ols.getType() != DatabaseEntry.KEY_TYPE_LEASESET) {
+                    ols.getType() != DatabaseEntry.KEY_TYPE_LEASESET) {
                     if (ls instanceof LeaseSet2 && ols instanceof LeaseSet2) {
                         LeaseSet2 ls2 = (LeaseSet2) ls;
                         LeaseSet2 ols2 = (LeaseSet2) ols;

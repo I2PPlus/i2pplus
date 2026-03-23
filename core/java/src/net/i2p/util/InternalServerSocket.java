@@ -39,14 +39,14 @@ public class InternalServerSocket extends ServerSocket {
      *  @param port &gt; 0
      */
     public InternalServerSocket(int port) throws IOException {
-         if (port <= 0)
+        if (port <= 0)
              throw new IOException("Bad port: " + port);
-         _port = Integer.valueOf(port);
-         InternalServerSocket previous = _sockets.putIfAbsent(_port, this);
-         if (previous != null)
+        _port = Integer.valueOf(port);
+        InternalServerSocket previous = _sockets.putIfAbsent(_port, this);
+        if (previous != null)
              throw new IOException("Internal port in use: " + port);
-         _running = true;
-         _acceptQueue = new LinkedBlockingQueue<InternalSocket>();
+        _running = true;
+        _acceptQueue = new LinkedBlockingQueue<InternalSocket>();
          //if (_log.shouldDebug())
          //    _log.debug("Registered " + _port);
     }

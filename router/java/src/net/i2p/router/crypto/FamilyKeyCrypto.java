@@ -312,18 +312,18 @@ public class FamilyKeyCrypto {
                         } catch (NumberFormatException e) {
                             if (_log.shouldInfo())
                                 _log.info("Bad b64 Family key: " + ri, e);
-                             _negativeCache.put(h, Result.BAD_KEY);
-                             return Result.BAD_KEY;
+                            _negativeCache.put(h, Result.BAD_KEY);
+                            return Result.BAD_KEY;
                         } catch (IllegalArgumentException e) {
                             if (_log.shouldInfo())
                                 _log.info("Bad b64 Family key: " + ri, e);
-                             _negativeCache.put(h, Result.BAD_KEY);
-                             return Result.BAD_KEY;
+                            _negativeCache.put(h, Result.BAD_KEY);
+                            return Result.BAD_KEY;
                         } catch (ArrayIndexOutOfBoundsException e) {
                             if (_log.shouldInfo())
                                 _log.info("Bad b64 Family key: " + ri, e);
-                             _negativeCache.put(h, Result.BAD_KEY);
-                             return Result.BAD_KEY;
+                            _negativeCache.put(h, Result.BAD_KEY);
+                            return Result.BAD_KEY;
                         }
                     }
                 }
@@ -428,13 +428,13 @@ public class FamilyKeyCrypto {
                                                   DEFAULT_KEY_VALID_DAYS, DEFAULT_KEY_ALGORITHM,
                                                   DEFAULT_KEY_SIZE, keyPassword);
 
-                Map<String, String> changes = new HashMap<String, String>();
-                changes.put(PROP_KEYSTORE_PASSWORD, KeyStoreUtil.DEFAULT_KEYSTORE_PASSWORD);
-                changes.put(PROP_KEY_PASSWORD, keyPassword);
-                changes.put(PROP_FAMILY_NAME, _fname);
-                _context.router().saveConfig(changes, null);
+        Map<String, String> changes = new HashMap<String, String>();
+        changes.put(PROP_KEYSTORE_PASSWORD, KeyStoreUtil.DEFAULT_KEYSTORE_PASSWORD);
+        changes.put(PROP_KEY_PASSWORD, keyPassword);
+        changes.put(PROP_FAMILY_NAME, _fname);
+        _context.router().saveConfig(changes, null);
 
-            _log.logAlways(Log.INFO, "Created new private key for netdb family \"" + _fname +
+        _log.logAlways(Log.INFO, "Created new private key for netdb family \"" + _fname +
                            "\" in keystore: " + ks.getAbsolutePath() + "\n" +
                            "Copy the keystore to the other routers in the family,\n" +
                            "and add the following entries to their router.config file:\n" +

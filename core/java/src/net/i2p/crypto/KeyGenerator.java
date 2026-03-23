@@ -200,30 +200,30 @@ public final class KeyGenerator {
         PublicKey pub;
         PrivateKey priv;
         switch (type) {
-          case ELGAMAL_2048:
-            SimpleDataStructure[] keys = generatePKIKeys();
-            pub = (PublicKey) keys[0];
-            priv = (PrivateKey) keys[1];
-            break;
+            case ELGAMAL_2048:
+                SimpleDataStructure[] keys = generatePKIKeys();
+                pub = (PublicKey) keys[0];
+                priv = (PrivateKey) keys[1];
+                break;
 
-          case ECIES_X25519:
-          case MLKEM512_X25519:
-          case MLKEM768_X25519:
-          case MLKEM1024_X25519:
-            byte[] bpriv = new byte[32];
-            do {
-                _context.random().nextBytes(bpriv);
+            case ECIES_X25519:
+            case MLKEM512_X25519:
+            case MLKEM768_X25519:
+            case MLKEM1024_X25519:
+                byte[] bpriv = new byte[32];
+                do {
+                    _context.random().nextBytes(bpriv);
                 // little endian, loop if too small
                 // worth doing?
-            } while (bpriv[31] == 0);
-            byte[] bpub = new byte[32];
-            Curve25519.eval(bpub, 0, bpriv, null);
-            pub = new PublicKey(type, bpub);
-            priv = new PrivateKey(type, bpriv, pub);
-            break;
+                } while (bpriv[31] == 0);
+                byte[] bpub = new byte[32];
+                Curve25519.eval(bpub, 0, bpriv, null);
+                pub = new PublicKey(type, bpub);
+                priv = new PrivateKey(type, bpriv, pub);
+                break;
 
-          default:
-            throw new IllegalArgumentException("Unsupported algorithm");
+            default:
+                throw new IllegalArgumentException("Unsupported algorithm");
 
         }
         return new KeyPair(pub, priv);
@@ -241,26 +241,26 @@ public final class KeyGenerator {
         EncType type = priv.getType();
         byte[] data;
         switch (type) {
-          case ELGAMAL_2048:
-            BigInteger a = new NativeBigInteger(1, priv.toByteArray());
-            BigInteger aalpha = CryptoConstants.elgg.modPow(a, CryptoConstants.elgp);
-            try {
-                data = SigUtil.rectify(aalpha, PublicKey.KEYSIZE_BYTES);
-            } catch (InvalidKeyException ike) {
-                throw new IllegalArgumentException(ike);
-            }
-            break;
+            case ELGAMAL_2048:
+                BigInteger a = new NativeBigInteger(1, priv.toByteArray());
+                BigInteger aalpha = CryptoConstants.elgg.modPow(a, CryptoConstants.elgp);
+                try {
+                    data = SigUtil.rectify(aalpha, PublicKey.KEYSIZE_BYTES);
+                } catch (InvalidKeyException ike) {
+                    throw new IllegalArgumentException(ike);
+                }
+                break;
 
-          case ECIES_X25519:
-          case MLKEM512_X25519:
-          case MLKEM768_X25519:
-          case MLKEM1024_X25519:
-            data = new byte[32];
-            Curve25519.eval(data, 0, priv.getData(), null);
-            break;
+            case ECIES_X25519:
+            case MLKEM512_X25519:
+            case MLKEM768_X25519:
+            case MLKEM1024_X25519:
+                data = new byte[32];
+                Curve25519.eval(data, 0, priv.getData(), null);
+                break;
 
-          default:
-            throw new IllegalArgumentException("Unsupported algorithm");
+            default:
+                throw new IllegalArgumentException("Unsupported algorithm");
 
         }
         PublicKey pub = new PublicKey(type, data);
@@ -379,40 +379,40 @@ public final class KeyGenerator {
             throw new IllegalArgumentException("Unknown type");
         try {
             switch (type.getBaseAlgorithm()) {
-              case DSA:
-                BigInteger x = new NativeBigInteger(1, priv.toByteArray());
-                BigInteger y = CryptoConstants.dsag.modPow(x, CryptoConstants.dsap);
-                SigningPublicKey pub = new SigningPublicKey();
-                pub.setData(SigUtil.rectify(y, SigningPublicKey.KEYSIZE_BYTES));
-                return pub;
+                case DSA:
+                    BigInteger x = new NativeBigInteger(1, priv.toByteArray());
+                    BigInteger y = CryptoConstants.dsag.modPow(x, CryptoConstants.dsap);
+                    SigningPublicKey pub = new SigningPublicKey();
+                    pub.setData(SigUtil.rectify(y, SigningPublicKey.KEYSIZE_BYTES));
+                    return pub;
 
-              case EC:
-                ECPrivateKey ecpriv = SigUtil.toJavaECKey(priv);
-                BigInteger s = ecpriv.getS();
-                ECParameterSpec spec = (ECParameterSpec) type.getParams();
-                EllipticCurve curve = spec.getCurve();
-                ECPoint g = spec.getGenerator();
-                ECPoint w = ECUtil.scalarMult(g, s, curve);
-                ECPublicKeySpec ecks = new ECPublicKeySpec(w, ecpriv.getParams());
-                KeyFactory eckf = KeyFactory.getInstance("EC");
-                ECPublicKey ecpub = (ECPublicKey) eckf.generatePublic(ecks);
-                return SigUtil.fromJavaKey(ecpub, type);
+                case EC:
+                    ECPrivateKey ecpriv = SigUtil.toJavaECKey(priv);
+                    BigInteger s = ecpriv.getS();
+                    ECParameterSpec spec = (ECParameterSpec) type.getParams();
+                    EllipticCurve curve = spec.getCurve();
+                    ECPoint g = spec.getGenerator();
+                    ECPoint w = ECUtil.scalarMult(g, s, curve);
+                    ECPublicKeySpec ecks = new ECPublicKeySpec(w, ecpriv.getParams());
+                    KeyFactory eckf = KeyFactory.getInstance("EC");
+                    ECPublicKey ecpub = (ECPublicKey) eckf.generatePublic(ecks);
+                    return SigUtil.fromJavaKey(ecpub, type);
 
-              case RSA:
-                RSAPrivateKey rsapriv = SigUtil.toJavaRSAKey(priv);
-                BigInteger exp = ((RSAKeyGenParameterSpec)type.getParams()).getPublicExponent();
-                RSAPublicKeySpec rsaks = new RSAPublicKeySpec(rsapriv.getModulus(), exp);
-                KeyFactory rsakf = KeyFactory.getInstance("RSA");
-                RSAPublicKey rsapub = (RSAPublicKey) rsakf.generatePublic(rsaks);
-                return SigUtil.fromJavaKey(rsapub, type);
+                case RSA:
+                    RSAPrivateKey rsapriv = SigUtil.toJavaRSAKey(priv);
+                    BigInteger exp = ((RSAKeyGenParameterSpec)type.getParams()).getPublicExponent();
+                    RSAPublicKeySpec rsaks = new RSAPublicKeySpec(rsapriv.getModulus(), exp);
+                    KeyFactory rsakf = KeyFactory.getInstance("RSA");
+                    RSAPublicKey rsapub = (RSAPublicKey) rsakf.generatePublic(rsaks);
+                    return SigUtil.fromJavaKey(rsapub, type);
 
-              case EdDSA:
-                EdDSAPrivateKey epriv = SigUtil.toJavaEdDSAKey(priv);
-                EdDSAPublicKey epub = new EdDSAPublicKey(new EdDSAPublicKeySpec(epriv.getA(), epriv.getParams()));
-                return SigUtil.fromJavaKey(epub, type);
+                case EdDSA:
+                    EdDSAPrivateKey epriv = SigUtil.toJavaEdDSAKey(priv);
+                    EdDSAPublicKey epub = new EdDSAPublicKey(new EdDSAPublicKeySpec(epriv.getA(), epriv.getParams()));
+                    return SigUtil.fromJavaKey(epub, type);
 
-              default:
-                throw new IllegalArgumentException("Unsupported algorithm");
+                default:
+                    throw new IllegalArgumentException("Unsupported algorithm");
             }
         } catch (GeneralSecurityException gse) {
             throw new IllegalArgumentException("Conversion failed", gse);
@@ -424,9 +424,9 @@ public final class KeyGenerator {
      */
     public static void main(String args[]) {
         try {
-             main2(args);
+            main2(args);
         } catch (RuntimeException e) {
-             e.printStackTrace();
+            e.printStackTrace();
         }
     }
 

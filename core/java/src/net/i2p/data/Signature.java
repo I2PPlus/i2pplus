@@ -14,7 +14,7 @@ import net.i2p.crypto.SigType;
 
 /**
  * Cryptographic signature implementation for I2P data structures and identity verification.
- * 
+ *
  * <p>Signature provides digital signature capabilities with support for multiple algorithms:</p>
  * <ul>
  *   <li><strong>Default Algorithm:</strong> DSA-SHA1 (40 bytes: 20-byte R + 20-byte S)</li>
@@ -22,7 +22,7 @@ import net.i2p.crypto.SigType;
  *   <li><strong>Algorithm Support:</strong> Extensible design for future signature types</li>
  *   <li><strong>Verification:</strong> Used throughout I2P for identity and data integrity</li>
  * </ul>
- * 
+ *
  * <p><strong>Signature Structure:</strong></p>
  * <ul>
  *   <li><strong>DSA-SHA1:</strong> 40 bytes total (R: 20 bytes, S: 20 bytes)</li>
@@ -30,7 +30,7 @@ import net.i2p.crypto.SigType;
  *   <li><strong>EdDSA-Ed25519:</strong> 64 bytes (fixed length)</li>
  *   <li><strong>Type Information:</strong> Embedded in signature data for verification</li>
  * </ul>
- * 
+ *
  * <p><strong>Supported Algorithms:</strong></p>
  * <ul>
  *   <li><strong>DSA-SHA1:</strong> Legacy algorithm, 1024-bit keys</li>
@@ -38,7 +38,7 @@ import net.i2p.crypto.SigType;
  *   <li><strong>EdDSA-Ed25519:</strong> Modern algorithm, 25519 elliptic curve</li>
  *   <li><strong>RSA:</strong> Supported but discouraged due to performance issues</li>
  * </ul>
- * 
+ *
  * <p><strong>Usage:</strong></p>
  * <ul>
  *   <li><strong>Identity Verification:</strong> Proves ownership of {@link Destination}</li>
@@ -46,7 +46,7 @@ import net.i2p.crypto.SigType;
  *   <li><strong>NetDb Entries:</strong> Signs RouterInfo and LeaseSet structures</li>
  *   <li><strong>Messages:</strong> Authenticates I2NP messages and I2CP communications</li>
  * </ul>
- * 
+ *
  * <p><strong>Security Considerations:</strong></p>
  * <ul>
  *   <li><strong>Algorithm Selection:</strong> Prefer modern algorithms (Ed25519, ECDSA-P256)</li>
@@ -54,7 +54,7 @@ import net.i2p.crypto.SigType;
  *   <li><strong>Verification:</strong> Always verify signatures before trusting data</li>
  *   <li><strong>Performance:</strong> RSA signatures are slow and may be used for DoS</li>
  * </ul>
- * 
+ *
  * <p><strong>Evolution:</strong></p>
  * <ul>
  *   <li><strong>Pre-0.9.8:</strong> Only DSA-SHA1 supported (40 bytes fixed)</li>

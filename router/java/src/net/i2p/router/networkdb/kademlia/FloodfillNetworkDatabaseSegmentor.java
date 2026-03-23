@@ -55,7 +55,7 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
      */
     public FloodfillNetworkDatabaseSegmentor(RouterContext context) {
         _log = context.logManager().getLog(getClass());
-            _context = context;
+        _context = context;
         _mainDbid = new FloodfillNetworkDatabaseFacade(_context, MAIN_DBID);
     }
 
@@ -95,7 +95,7 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
      *
      */
     public synchronized void startup() {
-            if (_log.shouldLog(Log.DEBUG))
+        if (_log.shouldLog(Log.DEBUG))
             _log.debug("Startup called from FNDS, starting up main and multihome db");
         _mainDbid.startup();
     }

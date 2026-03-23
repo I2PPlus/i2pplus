@@ -228,7 +228,7 @@ public class FortunaStandalone extends BasePRNGStandalone implements Serializabl
             CryptixRijndael_Algorithm.blockEncrypt(counter, buffer, 0, 0, cryptixKey);
             incrementCounter();
             ndx = 0;
-          }
+        }
 
         @Override
         public final void addRandomByte(byte b) {

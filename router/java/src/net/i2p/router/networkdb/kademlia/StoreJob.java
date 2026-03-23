@@ -221,7 +221,7 @@ abstract class StoreJob extends JobImpl {
                 DatabaseEntry ds;
                 if (_facade.isClientDb()) {
                     ds = ((FloodfillNetworkDatabaseFacade) getContext().netDb()).getDataStore().get(peer);
-                 } else {ds = _facade.getDataStore().get(peer);}
+                } else {ds = _facade.getDataStore().get(peer);}
                 if ((ds == null) || !(ds.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO)) {
                     if (_log.shouldInfo()) {
                         _log.info("Error selecting closest hash that wasn't a Router! [" +
@@ -244,8 +244,8 @@ abstract class StoreJob extends JobImpl {
                 } else {
                     int peerTimeout = _facade.getPeerTimeout(peer);
                     if (_log.shouldInfo()) {
-                         int attempts = _state.getAttemptedCount() + 1;
-                         _log.info("Sending key [" + _state.getTarget().toBase32().substring(0,8) + "] " +
+                        int attempts = _state.getAttemptedCount() + 1;
+                        _log.info("Sending key [" + _state.getTarget().toBase32().substring(0,8) + "] " +
                                    (attempts > 1 ? "(Attempt: " + attempts + ")" : "") + "\n* To: " + closestHashes);
                     }
                     _state.addPending(peer);
@@ -534,7 +534,7 @@ abstract class StoreJob extends JobImpl {
             StoreMessageSelector selector = new StoreMessageSelector(ctx, getJobId(), peer, msg.getReplyToken(), expiration);
 
             if (_log.shouldDebug()) {
-                    _log.debug("Sending encrypted store [" + sent + "] to [" + to.toBase64().substring(0,6) +
+                _log.debug("Sending encrypted store [" + sent + "] to [" + to.toBase64().substring(0,6) +
                                "]\n Via: " + outTunnel + " with reply to " + replyGW.toBase64().substring(0,6) +
                                "] -> [TunnelId: " + replyTunnelId + "]");
 
@@ -922,7 +922,7 @@ abstract class StoreJob extends JobImpl {
     protected void fail() {
         if (_log.shouldInfo()) {
             _log.info("Failed test sending key [" + _state.getTarget().toBase64().substring(0,6) + "]" +
-            " (Timeout: " + (_timeoutMs / 1000) + "s)" + (_log.shouldDebug() ? "\n* State of failed send: " + _state : ""));
+                " (Timeout: " + (_timeoutMs / 1000) + "s)" + (_log.shouldDebug() ? "\n* State of failed send: " + _state : ""));
         }
         if (_onFailure != null) {getContext().jobQueue().addJob(_onFailure);}
         _state.complete(true);

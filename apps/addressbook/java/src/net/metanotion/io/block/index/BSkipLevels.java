@@ -42,10 +42,10 @@ import net.metanotion.util.skiplist.SkipSpan;
 
 /**
  * SkipList level management for multi-level indexing.
- * 
+ *
  * <p>Manages hierarchical structure of SkipList levels
  * to provide efficient search paths through data structure.</p>
- * 
+ *
  * <p>On-disk format:</p>
  * <pre>
  *    Magic number (long)
@@ -239,7 +239,7 @@ public class BSkipLevels<K extends Comparable<? super K>, V> extends SkipLevels<
 			bf.file.writeShort((short) levels.length);
 			int i = 0;
 			for( ; i < levels.length; i++) {
-				 if(levels[i] == null)
+                if(levels[i] == null)
 					break;
 			}
 			bf.file.writeShort(i);

@@ -62,7 +62,7 @@ public class CommandLine {
         System.exit(1);
     }
 
-    /** 
+    /**
      * Will only return if command not found
      * @param args command arguments
      * @param classes list of classes to search

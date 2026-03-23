@@ -200,26 +200,26 @@ public class UnixFTPEntryParser extends ConfigurableFTPFileEntryParserImpl {
             // 'translucent' filesystems, of which a 'union' filesystem is one.
             // bcdelfmpSs-
             switch (typeStr.charAt(0)) {
-            case 'd':
-                type = FTPFile.DIRECTORY_TYPE;
-                break;
-            case 'e': // NET-39 => z/OS external link
-                type = FTPFile.SYMBOLIC_LINK_TYPE;
-                break;
-            case 'l':
-                type = FTPFile.SYMBOLIC_LINK_TYPE;
-                break;
-            case 'b':
-            case 'c':
-                isDevice = true;
-                type = FTPFile.FILE_TYPE; // TODO change this if DEVICE_TYPE implemented
-                break;
-            case 'f':
-            case '-':
-                type = FTPFile.FILE_TYPE;
-                break;
-            default: // e.g. ? and w = whiteout
-                type = FTPFile.UNKNOWN_TYPE;
+                case 'd':
+                    type = FTPFile.DIRECTORY_TYPE;
+                    break;
+                case 'e': // NET-39 => z/OS external link
+                    type = FTPFile.SYMBOLIC_LINK_TYPE;
+                    break;
+                case 'l':
+                    type = FTPFile.SYMBOLIC_LINK_TYPE;
+                    break;
+                case 'b':
+                case 'c':
+                    isDevice = true;
+                    type = FTPFile.FILE_TYPE; // TODO change this if DEVICE_TYPE implemented
+                    break;
+                case 'f':
+                case '-':
+                    type = FTPFile.FILE_TYPE;
+                    break;
+                default: // e.g. ? and w = whiteout
+                    type = FTPFile.UNKNOWN_TYPE;
             }
             file.setType(type);
             int g = 4;

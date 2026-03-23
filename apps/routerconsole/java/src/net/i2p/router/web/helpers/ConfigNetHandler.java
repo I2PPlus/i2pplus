@@ -218,8 +218,8 @@ public class ConfigNetHandler extends FormHandler {
                 }
                 changes.put(UDPTransport.PROP_SOURCES, _udpAutoIP);
                 if ((!oldUdp.equals(_udpAutoIP)) || (!oldUHost.equals(uhost))) {
-                   addFormNotice(_t("Updating IP address") + "...");
-                   restartRequired = true;
+                    addFormNotice(_t("Updating IP address") + "...");
+                    restartRequired = true;
                 }
             }
             if (_ipv6Mode != null) {
@@ -508,7 +508,7 @@ public class ConfigNetHandler extends FormHandler {
                 changes.put(FIFOBandwidthRefiller.PROP_INBOUND_BANDWIDTH_PEAK, Integer.toString(Math.round(kb)));
                 rate -= Math.min(rate * DEF_BURST_PCT / 100, 50);
                 changes.put(FIFOBandwidthRefiller.PROP_INBOUND_BANDWIDTH, Integer.toString(Math.round(rate)));
-            bwUpdated = true;
+                bwUpdated = true;
             } catch (NumberFormatException nfe) {
                 addFormError(_t("Invalid bandwidth"));
             }
@@ -523,7 +523,7 @@ public class ConfigNetHandler extends FormHandler {
                 changes.put(FIFOBandwidthRefiller.PROP_OUTBOUND_BANDWIDTH_PEAK, Integer.toString(Math.round(kb)));
                 rate -= Math.min(rate * DEF_BURST_PCT / 100, 50);
                 changes.put(FIFOBandwidthRefiller.PROP_OUTBOUND_BANDWIDTH, Integer.toString(Math.round(rate)));
-            bwUpdated = true;
+                bwUpdated = true;
             } catch (NumberFormatException nfe) {
                 addFormError(_t("Invalid bandwidth"), true);
             }

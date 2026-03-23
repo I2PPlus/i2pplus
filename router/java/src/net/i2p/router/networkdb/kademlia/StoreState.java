@@ -17,7 +17,7 @@ import net.i2p.router.networkdb.kademlia.MessageWrapper.WrappedMessage;
  * <p>
  * Tracks peer interaction status, timing information, and operation progress
  * for store operations. Maintains separate sets for pending, attempted,
- * and successful operations to coordinate concurrent store operations 
+ * and successful operations to coordinate concurrent store operations
  * and prevent duplicate queries.
  * <p>
  * Thread-safe implementation using synchronized collections and atomic
@@ -68,7 +68,7 @@ class StoreState {
     public Hash getTarget() { return _key; }
     public DatabaseEntry getData() { return _data; }
 
-public int getPendingCount() {
+    public int getPendingCount() {
         synchronized (_pendingPeers) {
             return _pendingPeers.size();
         }

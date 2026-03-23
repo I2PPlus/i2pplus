@@ -173,7 +173,7 @@ class Package {
     }
 
     public final
-    class Class extends Attribute.Holder implements Comparable<Class> {
+        class Class extends Attribute.Holder implements Comparable<Class> {
         public Package getPackage() { return Package.this; }
 
         // Optional file characteristics and data source (a "class stub")
@@ -489,7 +489,7 @@ class Package {
         }
 
         public abstract
-        class Member extends Attribute.Holder implements Comparable<Member> {
+            class Member extends Attribute.Holder implements Comparable<Member> {
             DescriptorEntry descriptor;
 
             protected Member(int flags, DescriptorEntry descriptor) {
@@ -532,7 +532,7 @@ class Package {
         }
 
         public
-        class Field extends Member {
+            class Field extends Member {
             // Order is significant for fields:  It is visible to reflection.
             int order;
 
@@ -557,7 +557,7 @@ class Package {
         }
 
         public
-        class Method extends Member {
+            class Method extends Member {
             // Code attribute is specially hardwired.
             Code code;
 
@@ -894,12 +894,12 @@ class Package {
     Map<ClassEntry, InnerClass>   allInnerClassesByThis;
 
     public
-    List<InnerClass> getAllInnerClasses() {
+        List<InnerClass> getAllInnerClasses() {
         return allInnerClasses;
     }
 
     public
-    void setAllInnerClasses(Collection<InnerClass> ics) {
+        void setAllInnerClasses(Collection<InnerClass> ics) {
         assert(ics != allInnerClasses);
         allInnerClasses.clear();
         allInnerClasses.addAll(ics);
@@ -914,13 +914,13 @@ class Package {
 
     /** Return a global inner class record for the given thisClass. */
     public
-    InnerClass getGlobalInnerClass(Entry thisClass) {
+        InnerClass getGlobalInnerClass(Entry thisClass) {
         assert(thisClass instanceof ClassEntry);
         return allInnerClassesByThis.get(thisClass);
     }
 
     static
-    class InnerClass implements Comparable<InnerClass> {
+        class InnerClass implements Comparable<InnerClass> {
         final ClassEntry thisClass;
         final ClassEntry outerClass;
         final Utf8Entry name;
@@ -992,7 +992,7 @@ class Package {
 
     // Helper for building InnerClasses attributes.
     private static
-    void visitInnerClassRefs(Collection<InnerClass> innerClasses, int mode, Collection<Entry> refs) {
+        void visitInnerClassRefs(Collection<InnerClass> innerClasses, int mode, Collection<Entry> refs) {
         if (innerClasses == null) {
             return;  // no attribute; nothing to do
         }
@@ -1337,9 +1337,9 @@ class Package {
         }
 
         public static Version of(byte[] bytes) {
-           int minor = ((bytes[0] & 0xFF) << 8) | (bytes[1] & 0xFF);
-           int major = ((bytes[2] & 0xFF) << 8) | (bytes[3] & 0xFF);
-           return new Version((short)major, (short)minor);
+            int minor = ((bytes[0] & 0xFF) << 8) | (bytes[1] & 0xFF);
+            int major = ((bytes[2] & 0xFF) << 8) | (bytes[3] & 0xFF);
+            return new Version((short)major, (short)minor);
         }
 
         public static Version of(int major_minor) {

@@ -69,28 +69,28 @@ class BackgroundChecker {
         }
 
         public void timeReached() {
-        if (isDead) {return;}
-        if (!mailbox.isConnected() && !isChecking) {
-            long idle = System.currentTimeMillis() - mailbox.getLastActivity();
-            long last = System.currentTimeMillis() - mailbox.getLastChecked();
-            if (idle >= MIN_IDLE && last >= MIN_SINCE) {
-                if (_log.shouldDebug()) {
-                    _log.debug("Threading check for mail after " + idle + " ms idle and " + last + " since last check");
+            if (isDead) {return;}
+            if (!mailbox.isConnected() && !isChecking) {
+                long idle = System.currentTimeMillis() - mailbox.getLastActivity();
+                long last = System.currentTimeMillis() - mailbox.getLastChecked();
+                if (idle >= MIN_IDLE && last >= MIN_SINCE) {
+                    if (_log.shouldDebug()) {
+                        _log.debug("Threading check for mail after " + idle + " ms idle and " + last + " since last check");
+                    }
+                    Thread t = new Getter();
+                    isChecking = true;
+                    t.start();
+                } else if (_log.shouldDebug()) {
+                    _log.debug("Not checking after " + idle + " ms idle and " + last + " since last check");
                 }
-                Thread t = new Getter();
-                isChecking = true;
-                t.start();
-            } else if (_log.shouldDebug()) {
-                _log.debug("Not checking after " + idle + " ms idle and " + last + " since last check");
-            }
-        } else if (_log.shouldDebug()) {_log.debug("Not checking, still connected");}
+            } else if (_log.shouldDebug()) {_log.debug("Not checking, still connected");}
             schedule(getCheckTime());
         }
     }
 
     private class Getter extends I2PAppThread {
         public Getter() {super("Susimail-Getter");}
-            public void run() {
+        public void run() {
             try {
                 if (mailbox.blockingConnectToServer()) {
                     int found = mailbox.getNumMails();

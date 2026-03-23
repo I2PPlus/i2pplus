@@ -15,12 +15,12 @@ import net.i2p.util.SystemVersion;
 
 /**
  * UDP address parser and validator for I2P peer information.
- * 
+ *
  * This class parses and validates UDP address strings containing
  * peer introduction information. It extracts hostnames,
  * ports, introduction keys, and other metadata needed for
  * establishing SSU connections.
- * 
+ *
  * <strong>Parsing Features:</strong>
  * <ul>
  *   <li>Hostname and IP address extraction</li>
@@ -29,7 +29,7 @@ import net.i2p.util.SystemVersion;
  *   <li>Multiple introduction point support</li>
  *   <li>Expiration time and bandwidth information</li>
  * </ul>
- * 
+ *
  * <strong>Validation:</strong>
  * <ul>
  *   <li>Address format validation</li>
@@ -37,7 +37,7 @@ import net.i2p.util.SystemVersion;
  *   <li>Introduction key format validation</li>
  *   <li>Hostname resolution and verification</li>
  * </ul>
- * 
+ *
  * <strong>Output Format:</strong>
  * <ul>
  *   <li>Structured peer information objects</li>
@@ -397,7 +397,7 @@ class UDPAddress {
      *  @since 0.9.55
      */
     boolean isIPv6() { return _isIPv6; }
-        
+
     /**
      *  @return 0 if unset or invalid; recitified via MTU.rectify()
      *  @since 0.9.2

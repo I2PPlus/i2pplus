@@ -54,9 +54,9 @@ public class DecodingOutputStream extends OutputStream {
 
     @Override
     public void write(byte buf[], int off, int len) throws IOException {
-	while (len > 0) {
+        while (len > 0) {
             if (_bb.hasRemaining()) {
-	        int toWrite = Math.min(len, _bb.remaining());
+                int toWrite = Math.min(len, _bb.remaining());
     	        _bb.put(buf, off, toWrite);
                 len -= toWrite;
                 off += toWrite;
@@ -68,7 +68,7 @@ public class DecodingOutputStream extends OutputStream {
     private void decodeAndWrite(boolean endOfInput) throws IOException {
         // not ByteBuffer to avoid Java 8/9 issues with flip()
         ((Buffer)_bb).flip();
-	if (!_bb.hasRemaining())
+        if (!_bb.hasRemaining())
             return;
         CoderResult result;
         try {

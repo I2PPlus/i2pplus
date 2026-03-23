@@ -36,67 +36,67 @@ public enum Mode {
   /** See GBT 18284-2000; "Hanzi" is a transliteration of this mode name. */
   HANZI(new int[]{8, 10, 12}, 0x0D);
 
-  private final int[] characterCountBitsForVersions;
-  private final int bits;
+    private final int[] characterCountBitsForVersions;
+    private final int bits;
 
-  Mode(int[] characterCountBitsForVersions, int bits) {
-    this.characterCountBitsForVersions = characterCountBitsForVersions;
-    this.bits = bits;
-  }
+    Mode(int[] characterCountBitsForVersions, int bits) {
+        this.characterCountBitsForVersions = characterCountBitsForVersions;
+        this.bits = bits;
+    }
 
   /**
    * @param bits four bits encoding a QR Code data mode
    * @return Mode encoded by these bits
    * @throws IllegalArgumentException if bits do not correspond to a known mode
    */
-  public static Mode forBits(int bits) {
-    switch (bits) {
-      case 0x0:
-        return TERMINATOR;
-      case 0x1:
-        return NUMERIC;
-      case 0x2:
-        return ALPHANUMERIC;
-      case 0x3:
-        return STRUCTURED_APPEND;
-      case 0x4:
-        return BYTE;
-      case 0x5:
-        return FNC1_FIRST_POSITION;
-      case 0x7:
-        return ECI;
-      case 0x8:
-        return KANJI;
-      case 0x9:
-        return FNC1_SECOND_POSITION;
-      case 0xD:
+    public static Mode forBits(int bits) {
+        switch (bits) {
+            case 0x0:
+                return TERMINATOR;
+            case 0x1:
+                return NUMERIC;
+            case 0x2:
+                return ALPHANUMERIC;
+            case 0x3:
+                return STRUCTURED_APPEND;
+            case 0x4:
+                return BYTE;
+            case 0x5:
+                return FNC1_FIRST_POSITION;
+            case 0x7:
+                return ECI;
+            case 0x8:
+                return KANJI;
+            case 0x9:
+                return FNC1_SECOND_POSITION;
+            case 0xD:
         // 0xD is defined in GBT 18284-2000, may not be supported in foreign country
-        return HANZI;
-      default:
-        throw new IllegalArgumentException();
+                return HANZI;
+            default:
+                throw new IllegalArgumentException();
+        }
     }
-  }
 
   /**
    * @param version version in question
    * @return number of bits used, in this QR Code symbol {@link Version}, to encode the
    *         count of characters that will follow encoded in this Mode
    */
-  public int getCharacterCountBits(Version version) {
-    int number = version.getVersionNumber();
-    int offset;
-    if (number <= 9) {
-      offset = 0;
-    } else if (number <= 26) {
-      offset = 1;
-    } else {
-      offset = 2;
+    public int getCharacterCountBits(Version version) {
+        int number = version.getVersionNumber();
+        int offset;
+        if (number <= 9) {
+            offset = 0;
+        } else if (number <= 26) {
+            offset = 1;
+        } else {
+            offset = 2;
+        }
+        return characterCountBitsForVersions[offset];
     }
-    return characterCountBitsForVersions[offset];
-  }
 
-  public int getBits() {
-    return bits;
-  }
+    public int getBits() {
+        return bits;
+    }
 
 }

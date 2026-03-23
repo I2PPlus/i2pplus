@@ -19,8 +19,8 @@ import java.util.concurrent.atomic.AtomicReference;
 public final class Reader implements Closeable {
     private static final int DATA_SECTION_SEPARATOR_SIZE = 16;
     private static final byte[] METADATA_START_MARKER = {(byte) 0xAB,
-            (byte) 0xCD, (byte) 0xEF, 'M', 'a', 'x', 'M', 'i', 'n', 'd', '.',
-            'c', 'o', 'm'};
+        (byte) 0xCD, (byte) 0xEF, 'M', 'a', 'x', 'M', 'i', 'n', 'd', '.',
+        'c', 'o', 'm'};
 
     private final int ipV4Start;
     private final Metadata metadata;
@@ -251,7 +251,7 @@ public final class Reader implements Closeable {
                     //    sip = Integer.toHexString((ip >> 16) & 0xffff) + ":" +
                     //          Integer.toHexString(ip & 0xffff) + "::/" + depth;
                     //} else {
-                        sip = ((ip >> 24) & 0xff) + "." +
+                    sip = ((ip >> 24) & 0xff) + "." +
                                  ((ip >> 16) & 0xff) + '.' +
                                  ((ip >> 8) & 0xff) + '.' +
                                  (ip & 0xff);

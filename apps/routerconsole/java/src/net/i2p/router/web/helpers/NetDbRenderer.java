@@ -105,32 +105,32 @@ class NetDbRenderer {
      *  Prioritizes published, nicknamed, named, client, and meta leasesets.
      */
     private class LeaseSetComparator implements Comparator<LeaseSet> {
-         public int compare(LeaseSet l, LeaseSet r) {
-             Hash keyL = l.getHash();
-             Hash keyR = r.getHash();
-             TunnelPoolSettings inL = _context.tunnelManager().getInboundSettings(keyL);
-             TunnelPoolSettings inR = _context.tunnelManager().getInboundSettings(keyR);
-             boolean isClientL = !_context.clientNetDb(keyL).toString().contains("Main");
-             boolean isClientR = !_context.clientNetDb(keyR).toString().contains("Main");
-             boolean isMetaL = l.getType() == DatabaseEntry.KEY_TYPE_META_LS2;
-             boolean isMetaR = r.getType() == DatabaseEntry.KEY_TYPE_META_LS2;
-             boolean nicknameL = inL != null && inL.getDestinationNickname() != null;
-             boolean nicknameR = inR != null && inR.getDestinationNickname() != null;
-             boolean nameL =  _context.namingService().reverseLookup(keyL) != null && !isMetaL;
-             boolean nameR =  _context.namingService().reverseLookup(keyR) != null && !isMetaR;
-             boolean publishedL = _context.clientManager().shouldPublishLeaseSet(keyL) && !isMetaL;
-             boolean publishedR = _context.clientManager().shouldPublishLeaseSet(keyR) && !isMetaR;
-             boolean localL = _context.clientManager().isLocal(keyL) && !isMetaL;
-             boolean localR = _context.clientManager().isLocal(keyR) && !isMetaR;
-             if (publishedL && !publishedR) return -1;
-             if (publishedR && !publishedL) return 1;
-             if (nicknameL && !nicknameR) return -1;
-             if (nicknameR && !nicknameL) return 1;
-             if (nameL && !nameR) return -1;
-             if (nameR && !nameL) return 1;
-             if (isClientL && !isClientR) return -1;
-             if (isClientR && !isClientL) return 1;
-             return keyL.toBase32().compareTo(keyR.toBase32());
+        public int compare(LeaseSet l, LeaseSet r) {
+            Hash keyL = l.getHash();
+            Hash keyR = r.getHash();
+            TunnelPoolSettings inL = _context.tunnelManager().getInboundSettings(keyL);
+            TunnelPoolSettings inR = _context.tunnelManager().getInboundSettings(keyR);
+            boolean isClientL = !_context.clientNetDb(keyL).toString().contains("Main");
+            boolean isClientR = !_context.clientNetDb(keyR).toString().contains("Main");
+            boolean isMetaL = l.getType() == DatabaseEntry.KEY_TYPE_META_LS2;
+            boolean isMetaR = r.getType() == DatabaseEntry.KEY_TYPE_META_LS2;
+            boolean nicknameL = inL != null && inL.getDestinationNickname() != null;
+            boolean nicknameR = inR != null && inR.getDestinationNickname() != null;
+            boolean nameL =  _context.namingService().reverseLookup(keyL) != null && !isMetaL;
+            boolean nameR =  _context.namingService().reverseLookup(keyR) != null && !isMetaR;
+            boolean publishedL = _context.clientManager().shouldPublishLeaseSet(keyL) && !isMetaL;
+            boolean publishedR = _context.clientManager().shouldPublishLeaseSet(keyR) && !isMetaR;
+            boolean localL = _context.clientManager().isLocal(keyL) && !isMetaL;
+            boolean localR = _context.clientManager().isLocal(keyR) && !isMetaR;
+            if (publishedL && !publishedR) return -1;
+            if (publishedR && !publishedL) return 1;
+            if (nicknameL && !nicknameR) return -1;
+            if (nicknameR && !nicknameL) return 1;
+            if (nameL && !nameR) return -1;
+            if (nameR && !nameL) return 1;
+            if (isClientL && !isClientR) return -1;
+            if (isClientR && !isClientL) return 1;
+            return keyL.toBase32().compareTo(keyR.toBase32());
         }
     }
 
@@ -140,10 +140,10 @@ class NetDbRenderer {
      *  @since 0.7.14
      */
     private static class LeaseSetRoutingKeyComparator implements Comparator<LeaseSet>, Serializable {
-         private final transient Hash _us;
-         public LeaseSetRoutingKeyComparator(Hash us) {_us = us;}
-         public int compare(LeaseSet l, LeaseSet r) {
-             return HashDistance.getDistance(_us, l.getRoutingKey()).compareTo(HashDistance.getDistance(_us, r.getRoutingKey()));
+        private final transient Hash _us;
+        public LeaseSetRoutingKeyComparator(Hash us) {_us = us;}
+        public int compare(LeaseSet l, LeaseSet r) {
+            return HashDistance.getDistance(_us, l.getRoutingKey()).compareTo(HashDistance.getDistance(_us, r.getRoutingKey()));
         }
     }
 
@@ -452,7 +452,7 @@ class NetDbRenderer {
            .append(_t("Results per page"))
            .append(": <input type=text name=pageSize value=\"\" maxlength=4 pattern=\"[0-9]{1,4}\"></label>\n<input type=submit value=")
            .append(_t("Update"))
-           .append(">\n</form>");
+            .append(">\n</form>");
     }
 
     /**
@@ -811,8 +811,8 @@ class NetDbRenderer {
                 if (ipSet.size() > MAX_CACHED_ENTRIES) {
                     Iterator<String> it = ipSet.iterator();
                     if (it.hasNext()) {
-                      it.next();
-                      it.remove();
+                        it.next();
+                        it.remove();
                     }
                 }
             }
@@ -1066,7 +1066,7 @@ class NetDbRenderer {
         if (isRendered) {return;}
         buf.append("<table id=leasesetsummary class=local hidden>\n<tr><th colspan=2>")
            .append(_t("Total Local Leasesets"))
-           .append(": <span id=lsLocalCount></span></th><th colspan=2 class=right>");
+            .append(": <span id=lsLocalCount></span></th><th colspan=2 class=right>");
         if (isFloodfill()) {
             buf.append("<a href=\"/netdb?l=1\">").append(_t("Remote Leasesets")).append("</a>");
         }
@@ -1238,7 +1238,7 @@ class NetDbRenderer {
            .append(_t("Signature type"))
            .append(":</b> <span>")
            .append(sigtype)
-           .append("</span></span></span>");
+            .append("</span></span></span>");
         if (type == DatabaseEntry.KEY_TYPE_LEASESET) {
             buf.append("<span class=\"nowrap ekey\" title=\"")
                .append(_t("Encryption Key"))
@@ -1249,7 +1249,7 @@ class NetDbRenderer {
                .append(":</b> <span title=ELGAMAL_2048>ElGamal")
                .append(debug ? " <span class=pubKey title=\"" + _t("Public Key") + "\">[" +
                        ls.getEncryptionKey().toBase64().substring(0,8) + "&hellip;]</span>" : "")
-               .append("</span>");
+                .append("</span>");
         } else if (type == DatabaseEntry.KEY_TYPE_LS2) {
             LeaseSet2 ls2 = (LeaseSet2) ls;
             for (PublicKey pk : ls2.getEncryptionKeys()) {
@@ -1260,7 +1260,7 @@ class NetDbRenderer {
                    .append(bullet)
                    .append("<b>")
                    .append(_t("Encryption Key"))
-                   .append(":</b> ");
+                    .append(":</b> ");
                 if (etype != null) {
                     String enctype = "";
                     if (etype.toString().trim().equals("ECIES_X25519")) {enctype = "ECIES";}
@@ -1274,7 +1274,7 @@ class NetDbRenderer {
                        .append(enctype)
                        .append(debug ? " <span class=pubKey title=\"" + _t("Public Key") + "\">[" +
                                pk.toBase64().substring(0,8) + "&hellip;]</span>" : "")
-                       .append("</span>");
+                        .append("</span>");
                 }
                 else {buf.append(_t("Unsupported type")).append(" ").append(pk.getUnknownTypeCode());}
                 buf.append("</span>");
@@ -1465,7 +1465,7 @@ class NetDbRenderer {
                                      Set<RouterInfo> routers) {
         buf.append("<table id=netdboverview width=100%>\n<tr><th colspan=3>")
            .append(_t("Network Database Router Statistics"))
-           .append("</th></tr>\n<tr><td style=vertical-align:top>");
+            .append("</th></tr>\n<tr><td style=vertical-align:top>");
         renderVersionsTable(buf, versions);
         buf.append("</td><td style=vertical-align:top>\n");
         renderBandwidthTiers(buf);
@@ -1598,7 +1598,7 @@ class NetDbRenderer {
            .append("<th class=countX>").append(_t("X Tier")).append("</th>")
            .append("<th class=countFF>").append(_t("Floodfills")).append("</th>")
            .append("<th class=countCC data-sort-default>").append(_t("Total")).append("</th>")
-           .append("</tr></thead>\n");
+            .append("</tr></thead>\n");
         if (!countryList.isEmpty()) {
             Collections.sort(countryList, new CountryComparator());
             buf.append("<tbody id=cclist>\n");
@@ -1648,14 +1648,14 @@ class NetDbRenderer {
      *  Comparator for countries by translated name.
      */
     private class CountryComparator implements Comparator<String> {
-         private static final long serialVersionUID = 1L;
-         private final Collator coll;
-         public CountryComparator() {
-             super();
-             coll = Collator.getInstance(new Locale(Messages.getLanguage(_context)));
-         }
-         public int compare(String l, String r) {
-             return coll.compare(getTranslatedCountry(l), getTranslatedCountry(r));
+        private static final long serialVersionUID = 1L;
+        private final Collator coll;
+        public CountryComparator() {
+            super();
+            coll = Collator.getInstance(new Locale(Messages.getLanguage(_context)));
+        }
+        public int compare(String l, String r) {
+            return coll.compare(getTranslatedCountry(l), getTranslatedCountry(r));
         }
     }
 
@@ -1664,18 +1664,18 @@ class NetDbRenderer {
      *  @since 0.9.57
      */
     private class CountryCountComparator implements Comparator<String> {
-         private static final long serialVersionUID = 1L;
-         private final ObjectCounterUnsafe<String> counts;
-         private final Collator coll;
-         public CountryCountComparator(ObjectCounterUnsafe<String> counts) {
-             super();
-             this.counts = counts;
-             coll = Collator.getInstance(new Locale(Messages.getLanguage(_context)));
-         }
-         public int compare(String l, String r) {
-             int rv = counts.count(r) - counts.count(l);
-             if (rv != 0) {return rv;}
-             return coll.compare(getTranslatedCountry(l), getTranslatedCountry(r));
+        private static final long serialVersionUID = 1L;
+        private final ObjectCounterUnsafe<String> counts;
+        private final Collator coll;
+        public CountryCountComparator(ObjectCounterUnsafe<String> counts) {
+            super();
+            this.counts = counts;
+            coll = Collator.getInstance(new Locale(Messages.getLanguage(_context)));
+        }
+        public int compare(String l, String r) {
+            int rv = counts.count(r) - counts.count(l);
+            if (rv != 0) {return rv;}
+            return coll.compare(getTranslatedCountry(l), getTranslatedCountry(r));
         }
     }
 
@@ -1684,15 +1684,15 @@ class NetDbRenderer {
      *  @since 0.9.38
      */
     static class RAComparator implements Comparator<RouterAddress> {
-         private static final long serialVersionUID = 1L;
-         public int compare(RouterAddress l, RouterAddress r) {
-             int rv = l.getTransportStyle().compareTo(r.getTransportStyle());
-             if (rv != 0) {return rv;}
-             String lh = l.getHost();
-             String rh = r.getHost();
-             if (lh == null) {return (rh == null) ? 0 : -1;}
-             if (rh == null) {return 1;}
-             return lh.compareTo(rh);
+        private static final long serialVersionUID = 1L;
+        public int compare(RouterAddress l, RouterAddress r) {
+            int rv = l.getTransportStyle().compareTo(r.getTransportStyle());
+            if (rv != 0) {return rv;}
+            String lh = l.getHost();
+            String rh = r.getHost();
+            if (lh == null) {return (rh == null) ? 0 : -1;}
+            if (rh == null) {return 1;}
+            return lh.compareTo(rh);
         }
     }
 
@@ -2044,7 +2044,7 @@ class NetDbRenderer {
            .append("\"><a class=keysearch href=\"/netdb?etype=")
            .append(identity.getPublicKey().getType().toString())
            .append("\">").append(identity.getPublicKey().getType().toString())
-           .append("</a></span></td></tr>\n");
+            .append("</a></span></td></tr>\n");
         if (!isUnreachable) {
             Collection<RouterAddress> addresses = routerInfo.getAddresses();
             if (addresses != null && !addresses.isEmpty()) {
@@ -2136,7 +2136,7 @@ class NetDbRenderer {
                        .append(_t("Addresses"))
                        .append(":</b></td><td colspan=2 class=netdb_addresses><ul>")
                        .append(addressList)
-                       .append("</ul></td></tr>");
+                        .append("</ul></td></tr>");
                 }
             }
         } else {
@@ -2290,7 +2290,7 @@ class NetDbRenderer {
                                              "", _x("SSU [IPv6]"), _x("SSU [IPv6 Only] with Introducers"), _x("SSU [IPv6] with Introducers"),
                                              _x("NTCP [IPv6]"), _x("NTCP [IPv6] &amp; SSU"), _x("NTCP &amp; SSU with Introducers [IPv6 Only]"),
                                              _x("NTCP [IPv6] &amp; SSU with Introducers")
-                                           };
+        };
 
     /**
      *  Classifies router transports into bit flags.

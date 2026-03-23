@@ -76,12 +76,12 @@ class Driver {
             String arg0 = av.isEmpty() ? "" : av.get(0);
             switch (arg0) {
                 case "--pack":
-                av.remove(0);
+                    av.remove(0);
                     break;
                 case "--unpack":
-                av.remove(0);
-                doPack = false;
-                doUnpack = true;
+                    av.remove(0);
+                    doPack = false;
+                    doUnpack = true;
                     break;
             }
         }
@@ -163,7 +163,7 @@ class Driver {
                         engProps.put((String) me.getKey(), (String) me.getValue());
                     }
                 } else if ("--version".equals(state)) {
-                        System.out.println(MessageFormat.format(RESOURCE.getString(DriverResource.VERSION),
+                    System.out.println(MessageFormat.format(RESOURCE.getString(DriverResource.VERSION),
                                                                 Driver.class.getName(), "1.31, 07/05/05"));
                     return;
                 } else if ("--help".equals(state)) {
@@ -175,7 +175,7 @@ class Driver {
                 }
             }
         } catch (IllegalArgumentException ee) {
-                System.err.println(MessageFormat.format(RESOURCE.getString(DriverResource.BAD_ARGUMENT), ee));
+            System.err.println(MessageFormat.format(RESOURCE.getString(DriverResource.BAD_ARGUMENT), ee));
             printUsage(doPack, false, System.err);
             System.exit(2);
             return;
@@ -275,10 +275,10 @@ class Driver {
             if (verbose && !zipc.isEmpty())
                 System.out.println(MessageFormat.format(RESOURCE.getString(DriverResource.DETECTED_ZIP_COMMENT), zipc));
             if (zipc.indexOf(Utils.PACK_ZIP_ARCHIVE_MARKER_COMMENT) >= 0) {
-                    System.out.println(MessageFormat.format(RESOURCE.getString(DriverResource.SKIP_FOR_REPACKED), jarfile));
-                        doPack = false;
-                        doUnpack = false;
-                        doRepack = false;
+                System.out.println(MessageFormat.format(RESOURCE.getString(DriverResource.SKIP_FOR_REPACKED), jarfile));
+                doPack = false;
+                doUnpack = false;
+                doRepack = false;
             }
         }
 
@@ -295,7 +295,7 @@ class Driver {
                     System.setOut(System.err);
                 } else if (doZip) {
                     if (!packfile.endsWith(".gz")) {
-                    System.err.println(MessageFormat.format(RESOURCE.getString(DriverResource.WRITE_PACK_FILE), packfile));
+                        System.err.println(MessageFormat.format(RESOURCE.getString(DriverResource.WRITE_PACK_FILE), packfile));
                         printUsage(doPack, false, System.err);
                         System.exit(2);
                     }
@@ -326,7 +326,7 @@ class Driver {
                 bakf.delete();
                 boolean okBackup = new File(jarfile).renameTo(bakf);
                 if (!okBackup) {
-                        throw new Error(MessageFormat.format(RESOURCE.getString(DriverResource.SKIP_FOR_MOVE_FAILED),bakfile));
+                    throw new Error(MessageFormat.format(RESOURCE.getString(DriverResource.SKIP_FOR_MOVE_FAILED),bakfile));
                 } else {
                     // Open jarfile recovery bracket.
                     bakfile = bakf.getPath();
@@ -361,8 +361,8 @@ class Driver {
 
             if (!bakfile.isEmpty()) {
                         // On success, abort jarfile recovery bracket.
-                        new File(bakfile).delete();
-                        bakfile = "";
+                new File(bakfile).delete();
+                bakfile = "";
             }
 
         } finally {
@@ -379,7 +379,7 @@ class Driver {
     }
 
     private static
-    File createTempFile(String basefile, String suffix) throws IOException {
+        File createTempFile(String basefile, String suffix) throws IOException {
         File base = new File(basefile);
         String prefix = base.getName();
         if (prefix.length() < 3)  prefix += "tmp";
@@ -396,7 +396,7 @@ class Driver {
     }
 
     private static
-    void printUsage(boolean doPack, boolean full, PrintStream out) {
+        void printUsage(boolean doPack, boolean full, PrintStream out) {
         String prog = doPack ? "pack200" : "unpack200";
         String[] packUsage = (String[])RESOURCE.getObject(DriverResource.PACK_HELP);
         String[] unpackUsage = (String[])RESOURCE.getObject(DriverResource.UNPACK_HELP);
@@ -404,7 +404,7 @@ class Driver {
         for (int i = 0; i < usage.length; i++) {
             out.println(usage[i]);
             if (!full) {
-            out.println(MessageFormat.format(RESOURCE.getString(DriverResource.MORE_INFO), prog));
+                out.println(MessageFormat.format(RESOURCE.getString(DriverResource.MORE_INFO), prog));
                 break;
             }
         }
@@ -519,7 +519,7 @@ class Driver {
      * option processing specifiers.
      */
     private static
-    String parseCommandOptions(List<String> args,
+        String parseCommandOptions(List<String> args,
                                String options,
                                Map<String,String> properties) {
         //System.out.println(args+" // "+properties);
@@ -541,7 +541,7 @@ class Driver {
             if (opt.length() == 0)    continue loadOptmap;
             String[] prevWords = optmap.put(opt, words);
             if (prevWords != null)
-            throw new RuntimeException(MessageFormat.format(RESOURCE.getString(DriverResource.DUPLICATE_OPTION), optline.trim()));
+                throw new RuntimeException(MessageFormat.format(RESOURCE.getString(DriverResource.DUPLICATE_OPTION), optline.trim()));
         }
 
         // State machine for parsing a command line.
@@ -602,92 +602,92 @@ class Driver {
                     // Deal with '+'/'*' prefixes (spec conditions).
                     boolean ok;
                     switch (specop) {
-                    case '+':
+                        case '+':
                         // + means we want an non-empty val suffix.
-                        ok = !val.isEmpty();
-                        specop = spec.charAt(sidx++);
-                        break;
-                    case '*':
+                            ok = !val.isEmpty();
+                            specop = spec.charAt(sidx++);
+                            break;
+                        case '*':
                         // * means we accept empty or non-empty
-                        ok = true;
-                        specop = spec.charAt(sidx++);
-                        break;
-                    default:
+                            ok = true;
+                            specop = spec.charAt(sidx++);
+                            break;
+                        default:
                         // No condition prefix means we require an exact
                         // match, as indicated by an empty val suffix.
-                        ok = (val.length() == 0);
-                        break;
+                            ok = (val.length() == 0);
+                            break;
                     }
                     if (!ok)  continue eachSpec;
 
                     String specarg = spec.substring(sidx);
                     switch (specop) {
-                    case '.':  // terminate the option sequence
-                        resultString = specarg.isEmpty() ? opt : specarg.intern();
-                        break doArgs;
-                    case '?':  // abort the option sequence
-                        resultString = specarg.isEmpty() ? arg : specarg.intern();
-                        isError = true;
-                        break eachSpec;
-                    case '@':  // change the effective opt name
-                        opt = specarg.intern();
-                        break;
-                    case '>':  // shift remaining arg val to next arg
-                        pbp.add(specarg + val);  // push a new argument
-                        val = "";
-                        break;
-                    case '!':  // negation option
-                        String negopt = specarg.isEmpty() ? opt : specarg.intern();
-                        properties.remove(negopt);
-                        properties.put(negopt, null);  // leave placeholder
-                        didAction = true;
-                        break;
-                    case '$':  // normal "boolean" option
-                        String boolval;
-                        if (!specarg.isEmpty()) {
-                            // If there is a given spec token, store it.
-                            boolval = specarg;
-                        } else {
-                            String old = properties.get(opt);
-                            if (old == null || old.length() == 0) {
-                                boolval = "1";
-                            } else {
-                                // Increment any previous value as a numeral.
-                                boolval = ""+(1+Integer.parseInt(old));
-                            }
-                        }
-                        properties.put(opt, boolval);
-                        didAction = true;
-                        break;
-                    case '=':  // "string" option
-                    case '&':  // "collection" option
-                        // Read an option.
-                        boolean append = (specop == '&');
-                        String strval;
-                        if (pbp.hasPrevious()) {
-                            strval = pbp.previous();
-                            pbp.remove();
-                        } else if (argp.hasNext()) {
-                            strval = argp.next();
-                        } else {
-                            resultString = arg + " ?";
+                        case '.':  // terminate the option sequence
+                            resultString = specarg.isEmpty() ? opt : specarg.intern();
+                            break doArgs;
+                        case '?':  // abort the option sequence
+                            resultString = specarg.isEmpty() ? arg : specarg.intern();
                             isError = true;
                             break eachSpec;
-                        }
-                        if (append) {
-                            String old = properties.get(opt);
-                            if (old != null) {
-                                // Append new val to old with embedded delim.
-                                String delim = specarg;
-                                if (delim.length() == 0)  delim = " ";
-                                strval = old + specarg + strval;
+                        case '@':  // change the effective opt name
+                            opt = specarg.intern();
+                            break;
+                        case '>':  // shift remaining arg val to next arg
+                            pbp.add(specarg + val);  // push a new argument
+                            val = "";
+                            break;
+                        case '!':  // negation option
+                            String negopt = specarg.isEmpty() ? opt : specarg.intern();
+                            properties.remove(negopt);
+                            properties.put(negopt, null);  // leave placeholder
+                            didAction = true;
+                            break;
+                        case '$':  // normal "boolean" option
+                            String boolval;
+                            if (!specarg.isEmpty()) {
+                            // If there is a given spec token, store it.
+                                boolval = specarg;
+                            } else {
+                                String old = properties.get(opt);
+                                if (old == null || old.length() == 0) {
+                                    boolval = "1";
+                                } else {
+                                // Increment any previous value as a numeral.
+                                    boolval = ""+(1+Integer.parseInt(old));
+                                }
                             }
-                        }
-                        properties.put(opt, strval);
-                        didAction = true;
-                        break;
-                    default:
-                        throw new RuntimeException(MessageFormat.format(RESOURCE.getString(DriverResource.BAD_SPEC),opt, spec));
+                            properties.put(opt, boolval);
+                            didAction = true;
+                            break;
+                        case '=':  // "string" option
+                        case '&':  // "collection" option
+                        // Read an option.
+                            boolean append = (specop == '&');
+                            String strval;
+                            if (pbp.hasPrevious()) {
+                                strval = pbp.previous();
+                                pbp.remove();
+                            } else if (argp.hasNext()) {
+                                strval = argp.next();
+                            } else {
+                                resultString = arg + " ?";
+                                isError = true;
+                                break eachSpec;
+                            }
+                            if (append) {
+                                String old = properties.get(opt);
+                                if (old != null) {
+                                // Append new val to old with embedded delim.
+                                    String delim = specarg;
+                                    if (delim.length() == 0)  delim = " ";
+                                    strval = old + specarg + strval;
+                                }
+                            }
+                            properties.put(opt, strval);
+                            didAction = true;
+                            break;
+                        default:
+                            throw new RuntimeException(MessageFormat.format(RESOURCE.getString(DriverResource.BAD_SPEC),opt, spec));
                     }
                 }
 

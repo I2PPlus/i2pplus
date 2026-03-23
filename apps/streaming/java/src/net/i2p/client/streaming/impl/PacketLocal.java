@@ -160,7 +160,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
             releasePayload();
             notifyAll();
         }
-       cancelResend();
+        cancelResend();
         if (_log.shouldDebug())
 //            _log.debug("Cancelled! " + toString(), new Exception("cancelled"));
             _log.debug("Resend cancelled! " + toString());
@@ -199,13 +199,13 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
                 final String log = String.format("%s NACKS and retransmits. \n* Criteria: nacks=%d, retransmitted=%b,"+
                     " numSends=%d, lastSend=%d, now=%d",
                     toString(), cnt, _retransmitted, _numSends.get(), _lastSend, _context.clock().now());
-                    _log.debug(log);
+                _log.debug(log);
             }
         } else if (_log.shouldDebug()) {
             final String log = String.format("%s NACK but no retransmit. \n* Criteria: nacks=%d, retransmitted=%b,"+
                     " numSends=%d, lastSend=%d, now=%d",
                     toString(), cnt, _retransmitted, _numSends.get(), _lastSend, _context.clock().now());
-                    _log.debug(log);
+            _log.debug(log);
         }
     }
 
@@ -404,10 +404,10 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
      *  so we can use standard debugging tools.
      */
     public void logTCPDump() {
-            try {
-                I2PSocketManagerFull.pcapWriter.write(this);
-            } catch (IOException ioe) {
-               _log.warn("PCAP write ioe: " + ioe);
-            }
+        try {
+            I2PSocketManagerFull.pcapWriter.write(this);
+        } catch (IOException ioe) {
+            _log.warn("PCAP write ioe: " + ioe);
+        }
     }
 }

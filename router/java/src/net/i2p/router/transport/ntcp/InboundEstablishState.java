@@ -774,7 +774,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 if (_log.shouldInfo()) {
                     _log.info("Extra data (" + buf.remaining() + " bytes) on " + this);
                 }
-                 _con.recvEncryptedI2NP(buf);
+                _con.recvEncryptedI2NP(buf);
             }
         }
         // zero out everything
@@ -832,7 +832,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             String v = addr.getOption("v");
             if (v == null ||
                 (!v.equals(NTCPTransport.NTCP2_VERSION) && !v.startsWith(NTCPTransport.NTCP2_VERSION_ALT))) {
-                 continue;
+                continue;
             }
             if (s == null) {s = addr.getOption("s");}
             if (realIP != null) {

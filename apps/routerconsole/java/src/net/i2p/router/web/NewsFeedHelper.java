@@ -77,7 +77,7 @@ public class NewsFeedHelper extends HelperBase {
                 }
                 buf.append("</h3>\n<div class=\"newscontent\">\n")
                    .append(entry.content.replace("<a href", "<a target=_blank href").replace("target=_blank>", ">"))
-                   .append("\n</div>\n</div>\n");
+                    .append("\n</div>\n</div>\n");
                 if (++i >= start + max) {break;}
             }
         }

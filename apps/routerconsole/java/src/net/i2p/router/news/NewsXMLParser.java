@@ -381,21 +381,21 @@ public class NewsXMLParser {
                         }
                     } catch (I2PParserException ipe) {
                         switch (_mode) {
-                          case ABORT:
-                            throw ipe;
-                          case SKIP_ENTRY:
-                            if (_log.shouldWarn())
-                                _log.warn("Skipping entry", ipe);
-                            e = null;
-                            break;
-                          case REMOVE_ATTRIBUTE:
-                          case REMOVE_ELEMENT:
-                            if (_log.shouldWarn())
-                                _log.warn("Removing element", ipe);
-                            continue;
-                          case ALLOW_ALL:
-                          default:
-                            break;
+                            case ABORT:
+                                throw ipe;
+                            case SKIP_ENTRY:
+                                if (_log.shouldWarn())
+                                    _log.warn("Skipping entry", ipe);
+                                e = null;
+                                break;
+                            case REMOVE_ATTRIBUTE:
+                            case REMOVE_ELEMENT:
+                                if (_log.shouldWarn())
+                                    _log.warn("Removing element", ipe);
+                                continue;
+                            case ALLOW_ALL:
+                            default:
+                                break;
                         }
                     }
                     if (e == null)
@@ -522,19 +522,19 @@ public class NewsXMLParser {
         //    _log.debug("Validating element: " + name);
         if (!xhtmlWhitelist.contains(name.toLowerCase(Locale.US))) {
             switch (_mode) {
-              case ABORT:
-              case SKIP_ENTRY:
-                throw new I2PParserException("Invalid XHTML element \"" + name + '"');
-              case REMOVE_ATTRIBUTE:
-              case REMOVE_ELEMENT:
-                if (_log.shouldWarn())
-                    _log.warn("Removing element: " + node);
-                node.getParentNode().removeNode(node);
-                return true;
-              case ALLOW_ALL:
-                if (_log.shouldWarn())
-                    _log.warn("Allowing non-whitelisted element by configuration: " + node);
-                break;
+                case ABORT:
+                case SKIP_ENTRY:
+                    throw new I2PParserException("Invalid XHTML element \"" + name + '"');
+                case REMOVE_ATTRIBUTE:
+                case REMOVE_ELEMENT:
+                    if (_log.shouldWarn())
+                        _log.warn("Removing element: " + node);
+                    node.getParentNode().removeNode(node);
+                    return true;
+                case ALLOW_ALL:
+                    if (_log.shouldWarn())
+                        _log.warn("Allowing non-whitelisted element by configuration: " + node);
+                    break;
             }
         }
         for (int i = 0; i < node.getNAttributes(); i++) {
@@ -542,25 +542,25 @@ public class NewsXMLParser {
             String aname = attr.getName();
             if (attributeBlacklist.contains(aname.toLowerCase(Locale.US))) {
                 switch (_mode) {
-                  case ABORT:
-                  case SKIP_ENTRY:
-                    throw new I2PParserException("Invalid XHTML element \"" + name + "\" due to attribute " + aname);
-                  case REMOVE_ELEMENT:
-                    if (_log.shouldWarn())
-                        _log.warn("Removing element: " + node + " due to attribute " + aname);
-                    node.getParentNode().removeNode(node);
-                    return true;
-                  case REMOVE_ATTRIBUTE:
-                    if (_log.shouldWarn())
-                        _log.warn("Removing attribute: " + aname + " from " + node);
+                    case ABORT:
+                    case SKIP_ENTRY:
+                        throw new I2PParserException("Invalid XHTML element \"" + name + "\" due to attribute " + aname);
+                    case REMOVE_ELEMENT:
+                        if (_log.shouldWarn())
+                            _log.warn("Removing element: " + node + " due to attribute " + aname);
+                        node.getParentNode().removeNode(node);
+                        return true;
+                    case REMOVE_ATTRIBUTE:
+                        if (_log.shouldWarn())
+                            _log.warn("Removing attribute: " + aname + " from " + node);
                     // sadly, no removeAttribute(int)
-                    if (node.removeAttribute(attr))
-                        i--;
-                    break;
-                  case ALLOW_ALL:
-                    if (_log.shouldWarn())
-                        _log.warn("Allowing blacklisted attribute by configuration: " + node);
-                    break;
+                        if (node.removeAttribute(attr))
+                            i--;
+                        break;
+                    case ALLOW_ALL:
+                        if (_log.shouldWarn())
+                            _log.warn("Allowing blacklisted attribute by configuration: " + node);
+                        break;
                 }
             }
         }

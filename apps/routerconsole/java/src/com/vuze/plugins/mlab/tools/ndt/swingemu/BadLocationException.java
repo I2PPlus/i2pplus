@@ -27,7 +27,7 @@ package com.vuze.plugins.mlab.tools.ndt.swingemu;
  * Exception thrown when an invalid location is accessed in a document model.
  */
 public class
-BadLocationException
+    BadLocationException
 	extends Exception
 {
 }

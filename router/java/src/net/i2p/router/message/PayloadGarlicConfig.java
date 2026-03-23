@@ -23,8 +23,8 @@ public class PayloadGarlicConfig extends GarlicConfig {
 
     public PayloadGarlicConfig(Certificate cert, long id, long expiration,
                                DeliveryInstructions di, I2NPMessage message) {
-	super(null, cert, id, expiration, di);
-	_payload = message;
+        super(null, cert, id, expiration, di);
+        _payload = message;
     }
 
     /**
@@ -35,9 +35,9 @@ public class PayloadGarlicConfig extends GarlicConfig {
 
     @Override
     protected String getSubData() {
-	StringBuilder buf = new StringBuilder(); // NOPMD - AvoidUnnecessaryStringBuilderCreation
-	buf.append("<payloadMessage>").append(_payload).append("</payloadMessage>");
-	return buf.toString();
+        StringBuilder buf = new StringBuilder(); // NOPMD - AvoidUnnecessaryStringBuilderCreation
+        buf.append("<payloadMessage>").append(_payload).append("</payloadMessage>");
+        return buf.toString();
     }
 
     /**

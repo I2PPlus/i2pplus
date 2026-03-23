@@ -15,13 +15,13 @@ public class SHA3Digest
     {
         switch (bitLength)
         {
-        case 224:
-        case 256:
-        case 384:
-        case 512:
-            return bitLength;
-        default:
-            throw new IllegalArgumentException("'bitLength' " + bitLength + " not supported for SHA-3");
+            case 224:
+            case 256:
+            case 384:
+            case 512:
+                return bitLength;
+            default:
+                throw new IllegalArgumentException("'bitLength' " + bitLength + " not supported for SHA-3");
         }
     }
 
@@ -58,7 +58,7 @@ public class SHA3Digest
     public int doFinal(byte[] out, int outOff)
     {
         absorbBits(0x02, 2);
-        
+
         return super.doFinal(out,  outOff);
     }
 

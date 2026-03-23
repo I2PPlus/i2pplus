@@ -144,19 +144,19 @@ class DefinitionParser {
 
             File file;
             switch(rule) {
-            case DEFAULT:
-                builder.setDefaultThreshold(threshold);
-                break;
-            case EXPLICIT:
-                builder.addElement(new ExplicitFilterDefinitionElement(split[2], threshold));
-                break;
-            case FILE:
-                file = parseFileName(line, split);
-                builder.addElement(new FileFilterDefinitionElement(file, threshold));
-                break;
-            case RECORDER:
-                file = parseFileName(line, split);
-                builder.addRecorder(new Recorder(file, threshold));
+                case DEFAULT:
+                    builder.setDefaultThreshold(threshold);
+                    break;
+                case EXPLICIT:
+                    builder.addElement(new ExplicitFilterDefinitionElement(split[2], threshold));
+                    break;
+                case FILE:
+                    file = parseFileName(line, split);
+                    builder.addElement(new FileFilterDefinitionElement(file, threshold));
+                    break;
+                case RECORDER:
+                    file = parseFileName(line, split);
+                    builder.addRecorder(new Recorder(file, threshold));
             }
         }
 

@@ -371,7 +371,7 @@ public class GeoIP {
                         } catch (IOException ioe) {
                             _log.error("GeoIP2 failure", ioe);
                         }
-                     } else {
+                    } else {
                         // I2P format IPv6 database
                         String[] countries = GeoIPv6.readGeoIPFile(_context, search, _codeCache);
                         for (int i = 0; i < countries.length; i++) {

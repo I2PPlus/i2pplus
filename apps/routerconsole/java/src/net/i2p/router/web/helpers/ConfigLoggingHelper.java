@@ -64,7 +64,7 @@ public class ConfigLoggingHelper extends HelperBase {
         buf.append(_t("Add additional logging statements above (e.g. {0}).", "<b>net.i2p.router.tunnel=WARN</b>"))
            .append("<br>")
            .append(_t("Valid log levels are {0}.", "<b>DEBUG, INFO, WARN, ERROR, CRIT</b>"))
-           .append("</p>\n");
+            .append("</p>\n");
 
       /****
         // this is too big and ugly
@@ -144,7 +144,7 @@ public class ConfigLoggingHelper extends HelperBase {
         buf.append("<select name=\"newlogclass\">\n" +
                    "<option value=\"\" selected>")
            .append(_t("Select a class to add"))
-           .append("</option>\n");
+            .append("</option>\n");
 
         int groups = 0;
         for (String l : sortedLogs) {

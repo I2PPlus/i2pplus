@@ -17,7 +17,7 @@ import net.i2p.util.SystemVersion;
 
 /**
  * Defines an endpoint in the I2P network that can receive messages.
- * 
+ *
  * <p>Destination represents the fundamental addressing and identity concept in I2P:</p>
  * <ul>
  *   <li><strong>Network Endpoint:</strong> Messages sent to a Destination will find it regardless of location</li>
@@ -26,7 +26,7 @@ import net.i2p.util.SystemVersion;
  *   <li><strong>Addressing:</strong> Can be encoded as Base64 or Base32 (.b32.i2p)</li>
  *   <li><strong>Immutability:</strong> Identity becomes immutable after keys are set</li>
  * </ul>
- * 
+ *
  * <p><strong>Key Components:</strong></p>
  * <ul>
  *   <li><strong>Public Encryption Key:</strong> Historically used for end-to-end encryption</li>
@@ -34,14 +34,14 @@ import net.i2p.util.SystemVersion;
  *   <li><strong>Certificate:</strong> Optional metadata (NULL, HIDDEN, SIGNED, etc.)</li>
  *   <li><strong>Cached Hash:</strong> SHA-256 hash for efficient identification</li>
  * </ul>
- * 
+ *
  * <p><strong>Address Formats:</strong></p>
  * <ul>
  *   <li><strong>Base64:</strong> Full binary encoding for configuration files</li>
  *   <li><strong>Base32:</strong> Human-readable .b32.i2p addresses</li>
  *   <li><strong>Hash:</strong> 32-byte SHA-256 for internal identification</li>
  * </ul>
- * 
+ *
  * <p><strong>Historical Changes:</strong></p>
  * <ul>
  *   <li><strong>Pre-0.6:</strong> Public key used for end-to-end encryption</li>
@@ -49,7 +49,7 @@ import net.i2p.util.SystemVersion;
  *   <li><strong>LeaseSet Encryption:</strong> Public key first bytes used as IV (deprecated)</li>
  *   <li><strong>0.9.9:</strong> Immutable after keys and certificate are set</li>
  * </ul>
- * 
+ *
  * <p><strong>Usage:</strong></p>
  * <ul>
  *   <li><strong>Client Connections:</strong> Target for I2P client communications</li>
@@ -57,7 +57,7 @@ import net.i2p.util.SystemVersion;
  *   <li><strong>Message Routing:</strong> Destination for I2NP message delivery</li>
  *   <li><strong>Address Book:</strong> Entry in address books and contact lists</li>
  * </ul>
- * 
+ *
  * <p><strong>Security Considerations:</strong></p>
  * <ul>
  *   <li><strong>Key Protection:</strong> Private keys must be securely stored</li>
@@ -65,7 +65,7 @@ import net.i2p.util.SystemVersion;
  *   <li><strong>Certificate Validation:</strong> Check certificate types and content</li>
  *   <li><strong>Deprecated Features:</strong> Avoid legacy encryption mechanisms</li>
  * </ul>
- * 
+ *
  * <p><strong>Performance Features:</strong></p>
  * <ul>
  *   <li><strong>Caching:</strong> LRU cache for frequently used destinations</li>
@@ -73,7 +73,7 @@ import net.i2p.util.SystemVersion;
  *   <li><strong>Efficient Storage:</strong> Optimized memory usage and serialization</li>
  *   <li><strong>Fast Lookup:</strong> Hash-based identification for quick comparisons</li>
  * </ul>
- * 
+ *
  * <p><strong>Immutability:</strong></p>
  * <ul>
  *   <li><strong>After 0.9.9:</strong> Keys and certificate cannot be changed after setting</li>
@@ -81,7 +81,7 @@ import net.i2p.util.SystemVersion;
  *   <li><strong>Corruption Prevention:</strong> Protects against accidental modification</li>
  *   <li><strong>Exception:</strong> Modification attempts throw {@link IllegalStateException}</li>
  * </ul>
- * 
+ *
  * <p><strong>Migration Notes:</strong></p>
  * <ul>
  *   <li><strong>Legacy Encryption:</strong> Public key usage deprecated in favor of LeaseSet encryption</li>

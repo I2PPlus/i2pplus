@@ -228,7 +228,7 @@ public class RandomArt {
             retval.append(String.format("" + BOX_TL + BOX_TOP + BOX_TOP + "<span id=title>[%4s%s ]</span>", key_type, size_txt));
         /* output upper border */
         for (int i = 0; i < FLDSIZE_X - Math.max(key_type.length(), 4) - 9; i++)
-        retval.append(BOX_TOP);
+            retval.append(BOX_TOP);
         retval.append(BOX_TR);
         if (html)
             retval.append("\n");
@@ -263,7 +263,7 @@ public class RandomArt {
         /* output lower border */
         retval.append(BOX_BL);
         for (int i = 0; i < FLDSIZE_X; i++)
-        retval.append(BOX_BOTTOM);
+            retval.append(BOX_BOTTOM);
         retval.append(BOX_BR);
         retval.append(NL);
         if (html)
@@ -280,42 +280,42 @@ public class RandomArt {
         if (base > 0xffffff || base < 0)
             base &= 0xffffff;
         return String.format("%06x", base);
-        }
+    }
 
-        public static void main(String[] args) {
-            try {
-                boolean uni = true;
-                boolean html = true;
-                if (html) {
-                    System.out.println("<!DOCTYPE html>\n<html>\n<head>");
-                    System.out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">");
-                    System.out.println("</head>\n<body>\n");
-                }
-                byte[] b = new byte[16];
-                net.i2p.util.RandomSource.getInstance().nextBytes(b);
-                String art = gnutls_key_fingerprint_randomart(b, "SHA", 128, null, uni, html);
-                System.out.println(art);
-                System.out.println("");
-                b = new byte[32];
-                for (int i = 0; i < 5; i++) {
-                    net.i2p.util.RandomSource.getInstance().nextBytes(b);
-                    art = gnutls_key_fingerprint_randomart(b, "XSHA", 256, null, uni, html);
-                    System.out.println(art);
-                    System.out.println("");
-                }
-                b = new byte[48];
-                net.i2p.util.RandomSource.getInstance().nextBytes(b);
-                art = gnutls_key_fingerprint_randomart(b, "XXSHA", 384, null, uni, html);
-                System.out.println(art);
-                System.out.println("");
-                b = new byte[64];
-                net.i2p.util.RandomSource.getInstance().nextBytes(b);
-                art = gnutls_key_fingerprint_randomart(b, "XXXSHA", 512, null, uni, html);
-                System.out.println(art);
-                if (html)
-                    System.out.println("\n</body>\n</html>");
-            } catch (RuntimeException e) {
-                e.printStackTrace();
+    public static void main(String[] args) {
+        try {
+            boolean uni = true;
+            boolean html = true;
+            if (html) {
+                System.out.println("<!DOCTYPE html>\n<html>\n<head>");
+                System.out.println("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">");
+                System.out.println("</head>\n<body>\n");
             }
+            byte[] b = new byte[16];
+            net.i2p.util.RandomSource.getInstance().nextBytes(b);
+            String art = gnutls_key_fingerprint_randomart(b, "SHA", 128, null, uni, html);
+            System.out.println(art);
+            System.out.println("");
+            b = new byte[32];
+            for (int i = 0; i < 5; i++) {
+                net.i2p.util.RandomSource.getInstance().nextBytes(b);
+                art = gnutls_key_fingerprint_randomart(b, "XSHA", 256, null, uni, html);
+                System.out.println(art);
+                System.out.println("");
+            }
+            b = new byte[48];
+            net.i2p.util.RandomSource.getInstance().nextBytes(b);
+            art = gnutls_key_fingerprint_randomart(b, "XXSHA", 384, null, uni, html);
+            System.out.println(art);
+            System.out.println("");
+            b = new byte[64];
+            net.i2p.util.RandomSource.getInstance().nextBytes(b);
+            art = gnutls_key_fingerprint_randomart(b, "XXXSHA", 512, null, uni, html);
+            System.out.println(art);
+            if (html)
+                    System.out.println("\n</body>\n</html>");
+        } catch (RuntimeException e) {
+            e.printStackTrace();
         }
+    }
 }

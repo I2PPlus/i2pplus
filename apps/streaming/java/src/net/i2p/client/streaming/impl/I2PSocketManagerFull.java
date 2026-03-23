@@ -230,7 +230,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
             buf.append("Socket manager created.\n* Default Options:\n\t")
                .append(_defaultOptions.toString().replace(" ", "\n\t").replace("=", " = "))
                .append("\n* Original Properties:\n\t")
-               .append(opts.toString().replace(",", "\n\t").replace("{", "").replace("}", "").replace("=", " = "));
+                .append(opts.toString().replace(",", "\n\t").replace("{", "").replace("}", "").replace("=", " = "));
             _log.info(buf.toString());
         }
         debugInit(context);
@@ -712,7 +712,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
         _connectionManager.shutdown();
         if (!_subsessions.isEmpty()) {
             for (I2PSession sess : _subsessions) {
-                 removeSubsession(sess);
+                removeSubsession(sess);
             }
         }
 
@@ -789,7 +789,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
                 try {
                     pcapWriter = new PcapWriter(ctx, PCAP_FILE);
                 } catch (java.io.IOException ioe) {
-                     System.err.println("pcap init ioe: " + ioe);
+                    System.err.println("pcap init ioe: " + ioe);
                 }
                 _pcapInitialized = true;
             }

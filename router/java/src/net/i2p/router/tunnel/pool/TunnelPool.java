@@ -196,7 +196,7 @@ public class TunnelPool {
         boolean shouldWarn = false;
         synchronized (_tunnels) {
             if (_tunnels.isEmpty()) {
-               shouldWarn = _log.shouldWarn() && uptime > STARTUP_TIME && shouldLogNoTunnelsWarning();
+                shouldWarn = _log.shouldWarn() && uptime > STARTUP_TIME && shouldLogNoTunnelsWarning();
             } else {
                 // if there are nonzero hop tunnels and the zero hop tunnels are fallbacks,
                 // avoid the zero hop tunnels
@@ -437,26 +437,26 @@ public class TunnelPool {
         // TODO high-bw non-ff also
         if ((_context.netDb().floodfillEnabled() && uptime > STARTUP_TIME ||SystemVersion.getMaxMemory() >= 1024*1024*1024) && rv < 3) {
             rv = 3;
-       } else if (_settings.isExploratory() && rv < 2) {
+        } else if (_settings.isExploratory() && rv < 2) {
             rv = 2;
-       }
-       if (rv > 1) {
-           RateStat e = _context.statManager().getRate("tunnel.buildExploratoryExpire");
-           RateStat r = _context.statManager().getRate("tunnel.buildExploratoryReject");
-           RateStat s = _context.statManager().getRate("tunnel.buildExploratorySuccess");
-           if (e != null && r != null && s != null) {
-               Rate er = e.getRate(RateConstants.TEN_MINUTES);
-               Rate rr = r.getRate(RateConstants.TEN_MINUTES);
-               Rate sr = s.getRate(RateConstants.TEN_MINUTES);
-               if (er != null && rr != null && sr != null) {
-                   RateAverages ra = RateAverages.getTemp();
-                   long ec = er.computeAverages(ra, false).getTotalEventCount();
-                   long rc = rr.computeAverages(ra, false).getTotalEventCount();
-                   long sc = sr.computeAverages(ra, false).getTotalEventCount();
-                   long tot = ec + rc + sc;
-                   if (tot >= BUILD_TRIES_QUANTITY_OVERRIDE) {
-                       if (1000 * sc / tot <= 1000 / BUILD_TRIES_QUANTITY_OVERRIDE) {rv--;}
-                   }
+        }
+        if (rv > 1) {
+            RateStat e = _context.statManager().getRate("tunnel.buildExploratoryExpire");
+            RateStat r = _context.statManager().getRate("tunnel.buildExploratoryReject");
+            RateStat s = _context.statManager().getRate("tunnel.buildExploratorySuccess");
+            if (e != null && r != null && s != null) {
+                Rate er = e.getRate(RateConstants.TEN_MINUTES);
+                Rate rr = r.getRate(RateConstants.TEN_MINUTES);
+                Rate sr = s.getRate(RateConstants.TEN_MINUTES);
+                if (er != null && rr != null && sr != null) {
+                    RateAverages ra = RateAverages.getTemp();
+                    long ec = er.computeAverages(ra, false).getTotalEventCount();
+                    long rc = rr.computeAverages(ra, false).getTotalEventCount();
+                    long sc = sr.computeAverages(ra, false).getTotalEventCount();
+                    long tot = ec + rc + sc;
+                    if (tot >= BUILD_TRIES_QUANTITY_OVERRIDE) {
+                        if (1000 * sc / tot <= 1000 / BUILD_TRIES_QUANTITY_OVERRIDE) {rv--;}
+                    }
                 }
             }
         }
@@ -946,8 +946,8 @@ public class TunnelPool {
         if (aliases != null && !aliases.isEmpty()) {
             for (Hash h : aliases) {
                  // don't corrupt other requests
-                 LeaseSet ls2 = new LeaseSet();
-                 for (int i = 0; i < ls.getLeaseCount(); i++) {ls2.addLease(ls.getLease(i));}
+                LeaseSet ls2 = new LeaseSet();
+                for (int i = 0; i < ls.getLeaseCount(); i++) {ls2.addLease(ls.getLease(i));}
                 _context.clientManager().requestLeaseSet(h, ls2);
             }
         }
@@ -992,12 +992,12 @@ public class TunnelPool {
      *
      */
     private static class LeaseComparator implements Comparator<Lease>, Serializable {
-         public int compare(Lease l, Lease r) {
-             long lt = l.getEndTime();
-             long rt = r.getEndTime();
-             if (rt > lt) {return 1;}
-             if (rt < lt) {return -1;}
-             return 0;
+        public int compare(Lease l, Lease r) {
+            long lt = l.getEndTime();
+            long rt = r.getEndTime();
+            if (rt > lt) {return 1;}
+            if (rt < lt) {return -1;}
+            return 0;
         }
     }
 
@@ -1319,34 +1319,34 @@ public class TunnelPool {
      */
     private void updatePairedProfile(PooledTunnelCreatorConfig cfg, boolean success) {
        // Will be null if paired tunnel is 0-hop
-       TunnelId pairedGW = cfg.getPairedGW();
-       if (pairedGW == null) {return;}
-       if (!success) {
+        TunnelId pairedGW = cfg.getPairedGW();
+        if (pairedGW == null) {return;}
+        if (!success) {
            // Don't blame the paired tunnel for exploratory build failures
-           if (_settings.isExploratory()) {return;}
+            if (_settings.isExploratory()) {return;}
            // Don't blame the paired tunnel if there might be some other problem
-           if (getConsecutiveBuildTimeouts() > 3) {return;}
-       }
-       TunnelPool pool;
-       PooledTunnelCreatorConfig paired = null;
-       if (!_settings.isExploratory()) {
-           Hash dest = _settings.getDestination();
-           if (_settings.isInbound()) {pool = _manager.getOutboundPool(dest);}
-           else {pool = _manager.getInboundPool(dest);}
-           if (pool != null) {paired = (PooledTunnelCreatorConfig) pool.getTunnel(pairedGW);}
-       }
-       if (paired == null) { // Not found or exploratory
-           if (_settings.isInbound()) {pool = _manager.getOutboundExploratoryPool();}
-           else {pool = _manager.getInboundExploratoryPool();}
-           paired = (PooledTunnelCreatorConfig) pool.getTunnel(pairedGW);
-       }
-       if (paired != null && paired.getLength() > 1) {
-           if (success) {
-               long requestedOn = cfg.getExpiration() - 10*60*1000;
-               int rtt = (int) (_context.clock().now() - requestedOn);
-               paired.testSuccessful(rtt);
-           } else {paired.tunnelFailed();}
-       }
+            if (getConsecutiveBuildTimeouts() > 3) {return;}
+        }
+        TunnelPool pool;
+        PooledTunnelCreatorConfig paired = null;
+        if (!_settings.isExploratory()) {
+            Hash dest = _settings.getDestination();
+            if (_settings.isInbound()) {pool = _manager.getOutboundPool(dest);}
+            else {pool = _manager.getInboundPool(dest);}
+            if (pool != null) {paired = (PooledTunnelCreatorConfig) pool.getTunnel(pairedGW);}
+        }
+        if (paired == null) { // Not found or exploratory
+            if (_settings.isInbound()) {pool = _manager.getOutboundExploratoryPool();}
+            else {pool = _manager.getInboundExploratoryPool();}
+            paired = (PooledTunnelCreatorConfig) pool.getTunnel(pairedGW);
+        }
+        if (paired != null && paired.getLength() > 1) {
+            if (success) {
+                long requestedOn = cfg.getExpiration() - 10*60*1000;
+                int rtt = (int) (_context.clock().now() - requestedOn);
+                paired.testSuccessful(rtt);
+            } else {paired.tunnelFailed();}
+        }
     }
 
     /**

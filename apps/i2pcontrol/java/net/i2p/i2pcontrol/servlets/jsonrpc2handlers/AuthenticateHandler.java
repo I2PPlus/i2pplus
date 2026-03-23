@@ -12,7 +12,7 @@ import net.i2p.i2pcontrol.security.AuthToken;
 import net.i2p.i2pcontrol.security.SecurityManager;
 
 /*
- * 
+ *
  *  Copyright 2011 hottuna (dev@robertfoss.se)
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");

@@ -38,10 +38,10 @@ public class NineBlockIdenticonRenderer2 implements IdenticonRenderer {
     };
 
     private static final byte[] PATCH_FLAGS = {
-            PATCH_SYMMETRIC, 0, 0, 0,
-            PATCH_SYMMETRIC, 0, 0, 0,
-            PATCH_SYMMETRIC, 0, 0, 0,
-            0, 0, 0, PATCH_SYMMETRIC + PATCH_INVERTED
+        PATCH_SYMMETRIC, 0, 0, 0,
+        PATCH_SYMMETRIC, 0, 0, 0,
+        PATCH_SYMMETRIC, 0, 0, 0,
+        0, 0, 0, PATCH_SYMMETRIC + PATCH_INVERTED
     };
 
     private static final int[] CENTER_PATCH_TYPES = {0, 4, 8, 15};

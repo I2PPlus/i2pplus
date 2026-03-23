@@ -37,10 +37,10 @@ import net.metanotion.util.skiplist.*;
 
 /**
  * On-disk SkipList implementation for persistent key-value storage.
- * 
+ *
  * <p>Provides efficient indexed storage with logarithmic search performance.
  * Supports multiple spans and levels for scalable data organization.</p>
- * 
+ *
  * <p>On-disk format:</p>
  * <pre>
  *    Magic number (long)
@@ -116,7 +116,7 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
 		int levelCount = bf.file.readInt();
                 // two byte spansize as of version 1.2, ignore for now
                 // int ss = bf.file.readUnsignedShort(); if (ss > 0) ...
-		//System.out.println(size + " " + spans); 
+		//System.out.println(size + " " + spans);
 
 		this.fileOnly = fileOnly;
 		if (fileOnly)
@@ -159,7 +159,7 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
 	 */
 	@Override
 	public void flush() {
-                if (!bf.file.canWrite())
+        if (!bf.file.canWrite())
                     return;
 		if (isClosed) {
 			bf.log.error("Already closed!! " + this, new Exception());
@@ -173,7 +173,7 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
 			bf.file.writeInt(Math.max(0, size));
 			bf.file.writeInt(spanHash.size());
 			bf.file.writeInt(levelHash.size());
-			
+
 		} catch (IOException ioe) { throw new RuntimeException("Error writing to database", ioe); }
 	}
 

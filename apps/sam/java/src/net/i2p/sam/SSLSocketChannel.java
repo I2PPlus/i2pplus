@@ -82,12 +82,12 @@ class SSLSocketChannel extends SocketChannel {
     public int read(ByteBuffer src) throws IOException {
         if (!src.hasArray())
             throw new UnsupportedOperationException();
-       int pos = src.position();
-       int len = src.remaining();
-       int read = _socket.getInputStream().read(src.array(), src.arrayOffset() + pos, len);
-       if (read > 0)
-           src.position(pos + read);
-       return read;
+        int pos = src.position();
+        int len = src.remaining();
+        int read = _socket.getInputStream().read(src.array(), src.arrayOffset() + pos, len);
+        if (read > 0)
+            src.position(pos + read);
+        return read;
     }
 
     public long read(ByteBuffer[] srcs, int offset, int length) {
@@ -97,11 +97,11 @@ class SSLSocketChannel extends SocketChannel {
     public int write(ByteBuffer src) throws IOException {
         if (!src.hasArray())
             throw new UnsupportedOperationException();
-       int pos = src.position();
-       int len = src.remaining();
-       _socket.getOutputStream().write(src.array(), src.arrayOffset() + pos, len);
-       src.position(pos + len);
-       return len;
+        int pos = src.position();
+        int len = src.remaining();
+        _socket.getOutputStream().write(src.array(), src.arrayOffset() + pos, len);
+        src.position(pos + len);
+        return len;
     }
 
     public long write(ByteBuffer[] srcs, int offset, int length) {

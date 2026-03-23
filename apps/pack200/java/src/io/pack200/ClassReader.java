@@ -193,7 +193,7 @@ class ClassReader {
         cls.magic = in.readInt();
         if (cls.magic != JAVA_MAGIC)
             throw new Attribute.FormatException
-                ("Bad magic number in class file "
+            ("Bad magic number in class file "
                  +Integer.toHexString(cls.magic),
                  ATTR_CONTEXT_CLASS, "magic-number", "pass");
         int minver = (short) readUnsignedShort();
@@ -204,7 +204,7 @@ class ClassReader {
         String bad = checkVersion(cls.version);
         if (bad != null) {
             throw new Attribute.FormatException
-                ("classfile version too "+bad+": "
+            ("classfile version too "+bad+": "
                  +cls.version+" in "+cls.file,
                  ATTR_CONTEXT_CLASS, "version", "pass");
         }
@@ -243,26 +243,26 @@ class ClassReader {
                     cpMap[i] = ConstantPool.getUtf8Entry(in.readUTF());
                     break;
                 case CONSTANT_Integer:
-                    {
-                        cpMap[i] = ConstantPool.getLiteralEntry(in.readInt());
-                    }
+                {
+                    cpMap[i] = ConstantPool.getLiteralEntry(in.readInt());
+                }
                     break;
                 case CONSTANT_Float:
-                    {
-                        cpMap[i] = ConstantPool.getLiteralEntry(in.readFloat());
-                    }
+                {
+                    cpMap[i] = ConstantPool.getLiteralEntry(in.readFloat());
+                }
                     break;
                 case CONSTANT_Long:
-                    {
-                        cpMap[i] = ConstantPool.getLiteralEntry(in.readLong());
-                        cpMap[++i] = null;
-                    }
+                {
+                    cpMap[i] = ConstantPool.getLiteralEntry(in.readLong());
+                    cpMap[++i] = null;
+                }
                     break;
                 case CONSTANT_Double:
-                    {
-                        cpMap[i] = ConstantPool.getLiteralEntry(in.readDouble());
-                        cpMap[++i] = null;
-                    }
+                {
+                    cpMap[i] = ConstantPool.getLiteralEntry(in.readDouble());
+                    cpMap[++i] = null;
+                }
                     break;
 
                 // just read the refs; do not attempt to resolve while reading
@@ -325,38 +325,38 @@ class ClassReader {
                     continue;
                 }
                 switch (tag) {
-                case CONSTANT_Class:
-                    cpMap[cpi] = ConstantPool.getClassEntry(cpMap[ref].stringValue());
-                    break;
-                case CONSTANT_String:
-                    cpMap[cpi] = ConstantPool.getStringEntry(cpMap[ref].stringValue());
-                    break;
-                case CONSTANT_Fieldref:
-                case CONSTANT_Methodref:
-                case CONSTANT_InterfaceMethodref:
-                    ClassEntry      mclass = (ClassEntry)      checkTag(cpMap[ref],  CONSTANT_Class);
-                    DescriptorEntry mdescr = (DescriptorEntry) checkTag(cpMap[ref2], CONSTANT_NameandType);
-                    cpMap[cpi] = ConstantPool.getMemberEntry((byte)tag, mclass, mdescr);
-                    break;
-                case CONSTANT_NameandType:
-                    Utf8Entry mname = (Utf8Entry) checkTag(cpMap[ref],  CONSTANT_Utf8);
-                    Utf8Entry mtype = (Utf8Entry) checkTag(cpMap[ref2], CONSTANT_Signature);
-                    cpMap[cpi] = ConstantPool.getDescriptorEntry(mname, mtype);
-                    break;
-                case CONSTANT_MethodType:
-                    cpMap[cpi] = ConstantPool.getMethodTypeEntry((Utf8Entry) checkTag(cpMap[ref], CONSTANT_Signature));
-                    break;
-                case CONSTANT_MethodHandle:
-                    byte refKind = (byte)(-1 ^ ref);
-                    MemberEntry memRef = (MemberEntry) checkTag(cpMap[ref2], CONSTANT_AnyMember);
-                    cpMap[cpi] = ConstantPool.getMethodHandleEntry(refKind, memRef);
-                    break;
-                case CONSTANT_InvokeDynamic:
-                    DescriptorEntry idescr = (DescriptorEntry) checkTag(cpMap[ref2], CONSTANT_NameandType);
-                    cpMap[cpi] = new UnresolvedEntry((byte)tag, (-1 ^ ref), idescr);
+                    case CONSTANT_Class:
+                        cpMap[cpi] = ConstantPool.getClassEntry(cpMap[ref].stringValue());
+                        break;
+                    case CONSTANT_String:
+                        cpMap[cpi] = ConstantPool.getStringEntry(cpMap[ref].stringValue());
+                        break;
+                    case CONSTANT_Fieldref:
+                    case CONSTANT_Methodref:
+                    case CONSTANT_InterfaceMethodref:
+                        ClassEntry      mclass = (ClassEntry)      checkTag(cpMap[ref],  CONSTANT_Class);
+                        DescriptorEntry mdescr = (DescriptorEntry) checkTag(cpMap[ref2], CONSTANT_NameandType);
+                        cpMap[cpi] = ConstantPool.getMemberEntry((byte)tag, mclass, mdescr);
+                        break;
+                    case CONSTANT_NameandType:
+                        Utf8Entry mname = (Utf8Entry) checkTag(cpMap[ref],  CONSTANT_Utf8);
+                        Utf8Entry mtype = (Utf8Entry) checkTag(cpMap[ref2], CONSTANT_Signature);
+                        cpMap[cpi] = ConstantPool.getDescriptorEntry(mname, mtype);
+                        break;
+                    case CONSTANT_MethodType:
+                        cpMap[cpi] = ConstantPool.getMethodTypeEntry((Utf8Entry) checkTag(cpMap[ref], CONSTANT_Signature));
+                        break;
+                    case CONSTANT_MethodHandle:
+                        byte refKind = (byte)(-1 ^ ref);
+                        MemberEntry memRef = (MemberEntry) checkTag(cpMap[ref2], CONSTANT_AnyMember);
+                        cpMap[cpi] = ConstantPool.getMethodHandleEntry(refKind, memRef);
+                        break;
+                    case CONSTANT_InvokeDynamic:
+                        DescriptorEntry idescr = (DescriptorEntry) checkTag(cpMap[ref2], CONSTANT_NameandType);
+                        cpMap[cpi] = new UnresolvedEntry((byte)tag, (-1 ^ ref), idescr);
                     // Note that ref must be resolved later, using the BootstrapMethods attribute.
-                    break;
-                default:
+                        break;
+                    default:
                     assert(false);
                 }
             }
@@ -367,7 +367,7 @@ class ClassReader {
     }
 
     private /*non-static*/
-    class UnresolvedEntry extends Entry {
+        class UnresolvedEntry extends Entry {
         final Object[] refsOrIndexes;
         UnresolvedEntry(byte tag, Object... refsOrIndexes) {
             super(tag);
@@ -378,13 +378,13 @@ class ClassReader {
             Class cls = ClassReader.this.cls;
             Entry res;
             switch (tag) {
-            case CONSTANT_InvokeDynamic:
-                BootstrapMethodEntry iboots = cls.bootstrapMethods.get((Integer) refsOrIndexes[0]);
-                DescriptorEntry         idescr = (DescriptorEntry) refsOrIndexes[1];
-                res = ConstantPool.getInvokeDynamicEntry(iboots, idescr);
-                break;
-            default:
-                throw new AssertionError();
+                case CONSTANT_InvokeDynamic:
+                    BootstrapMethodEntry iboots = cls.bootstrapMethods.get((Integer) refsOrIndexes[0]);
+                    DescriptorEntry         idescr = (DescriptorEntry) refsOrIndexes[1];
+                    res = ConstantPool.getInvokeDynamicEntry(iboots, idescr);
+                    break;
+                default:
+                    throw new AssertionError();
             }
             return res;
         }

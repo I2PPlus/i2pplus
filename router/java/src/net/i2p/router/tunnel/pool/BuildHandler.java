@@ -976,9 +976,9 @@ class BuildHandler implements Runnable {
                         if (stat != null) {
                             Rate rate = stat.getRate(RateConstants.TEN_MINUTES);
                             if (rate != null) {
-                            int used = (int) rate.getAvgOrLifetimeAvg();
-                            int available = share - used;
-                            avail = Math.min(max, available);
+                                int used = (int) rate.getAvgOrLifetimeAvg();
+                                int available = share - used;
+                                avail = Math.min(max, available);
                                 if (_log.shouldDebug())
                                     _log.debug("Tunnel bandwidth - share: " + formatBandwidth(share) +
                                               " used: " + formatBandwidth(used) + " max: " + formatBandwidth(max) +

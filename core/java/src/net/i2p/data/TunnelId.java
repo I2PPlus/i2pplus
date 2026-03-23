@@ -14,7 +14,7 @@ import java.io.OutputStream;
 
 /**
  * Tunnel identifier for routing messages through a sequence of routers in I2P.
- * 
+ *
  * <p>TunnelId provides unique identification within tunnel routing:</p>
  * <ul>
  *   <li><strong>Local Uniqueness:</strong> Must be unique on each router in tunnel</li>
@@ -22,7 +22,7 @@ import java.io.OutputStream;
  *   <li><strong>Random Generation:</strong> Typically generated from cryptographically secure random</li>
  *   <li><strong>Routing Coordination:</strong> Prevents message delivery to wrong tunnels</li>
  * </ul>
- * 
+ *
  * <p><strong>Constraints and Validation:</strong></p>
  * <ul>
  *   <li><strong>Minimum Value:</strong> Must be greater than zero (ID > 0)</li>
@@ -30,7 +30,7 @@ import java.io.OutputStream;
  *   <li><strong>Special Case:</strong> Zero reserved for direct replies in DatabaseStoreMessage</li>
  *   <li><strong>Uniqueness:</strong> Router must enforce uniqueness across its tunnels</li>
  * </ul>
- * 
+ *
  * <p><strong>Usage in I2P:</strong></p>
  * <ul>
  *   <li><strong>Tunnel Routing:</strong> Messages forwarded through tunnel chain</li>
@@ -39,7 +39,7 @@ import java.io.OutputStream;
  *   <li><strong>Load Balancing:</strong> Multiple tunnels for traffic distribution</li>
  *   <li><strong>Client Communication:</strong> I2CP tunnel establishment and management</li>
  * </ul>
- * 
+ *
  * <p><strong>Performance Considerations:</strong></p>
  * <ul>
  *   <li><strong>Efficient Storage:</strong> Compact 4-byte representation</li>
@@ -47,7 +47,7 @@ import java.io.OutputStream;
  *   <li><strong>Minimal Overhead:</strong> No object inheritance since 0.9.48</li>
  *   <li><strong>Memory Efficiency:</strong> Primitive long storage</li>
  * </ul>
- * 
+ *
  * <p><strong>Security Aspects:</strong></p>
  * <ul>
  *   <li><strong>ID Randomness:</strong> Use cryptographically secure random generation</li>
@@ -55,7 +55,7 @@ import java.io.OutputStream;
  *   <li><strong>Collision Avoidance:</strong> Local uniqueness prevents routing confusion</li>
  *   <li><strong>Isolation:</strong> Different tunnels have separate ID spaces</li>
  * </ul>
- * 
+ *
  * <p><strong>Implementation Notes:</strong></p>
  * <ul>
  *   <li><strong>Space Optimization:</strong> Does not extend DataStructureImpl since 0.9.48</li>
@@ -63,7 +63,7 @@ import java.io.OutputStream;
  *   <li><strong>Thread Safety:</strong> Immutable objects are inherently thread-safe</li>
  *   <li><strong>Validation:</strong> Constructor enforces valid ID range</li>
  * </ul>
- * 
+ *
  * <p><strong>Constants:</strong></p>
  * <ul>
  *   <li>{@link #MAX_ID_VALUE} - Maximum allowed tunnel ID (0xffffffff)</li>

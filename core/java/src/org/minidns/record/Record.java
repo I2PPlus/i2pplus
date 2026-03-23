@@ -522,14 +522,14 @@ public final class Record<D extends Data> {
      */
     public Question getQuestion() {
         switch (type) {
-        case OPT:
+            case OPT:
             // OPT records are not retrievable.
-            return null;
-        case RRSIG:
-            RRSIG rrsig = (RRSIG) payloadData;
-            return new Question(name, rrsig.typeCovered, clazz);
-        default:
-            return new Question(name, type, clazz);
+                return null;
+            case RRSIG:
+                RRSIG rrsig = (RRSIG) payloadData;
+                return new Question(name, rrsig.typeCovered, clazz);
+            default:
+                return new Question(name, type, clazz);
         }
     }
 

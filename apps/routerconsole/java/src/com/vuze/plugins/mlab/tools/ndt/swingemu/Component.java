@@ -25,132 +25,132 @@ package com.vuze.plugins.mlab.tools.ndt.swingemu;
 
 /**
  * Base class for Swing component emulation in the NDT (Network Diagnostic Tool) plugin.
- * 
+ *
  * <p>This class provides a minimal stub implementation of Swing components to allow
  * the NDT tool to run in headless environments without requiring actual GUI components.
  * All methods are no-ops that do nothing, providing compatibility without functionality.</p>
- * 
+ *
  * <p>This emulation layer enables the NDT network testing functionality to be integrated
  * into I2P applications that don't have graphical user interfaces.</p>
- * 
+ *
  */
 public class
-Component
+    Component
 {
 	public void
-	setTitle(
+            setTitle(
 		String	s )
 	{
 	}
 
 	public void
-	add(
+            add(
 		Component c )
 	{
 	}
 
 	public void
-	add( String str, Component c )
+            add( String str, Component c )
 	{
 	}
 
 	public void
-	add( int i, Component c )
+            add( int i, Component c )
 	{
 	}
 
 	public void
-	setEnabled(
+            setEnabled(
 		boolean	b )
 	{
 	}
 
 	public void
-	setVisible(
+            setVisible(
 		boolean b )
 	{
 	}
 
 	public void
-	setEditable(
+            setEditable(
 		boolean	b )
 	{
 	}
 
 	public void
-	setResizable(
+            setResizable(
 		boolean	b )
 	{
 	}
 
 	public void
-	setSize(
+            setSize(
 		int	i, int j )
 	{
 	}
 
 	public void
-	setPreferredSize(
+            setPreferredSize(
 		Dimension d )
 	{
 	}
 
 	public void
-	setBorder(
+            setBorder(
 		Component	c )
 	{
 	}
 
 	public void
-	setLayout(
+            setLayout(
 		BorderLayout l )
 	{
 	}
 
 	public void
-	setLayout(
+            setLayout(
 		BoxLayout l )
 	{
 	}
 
 	public void
-	setCursor(
+            setCursor(
 		Cursor c )
 	{
 	}
 
 	public void
-	setForeground(
+            setForeground(
 		Color	c )
 	{
 	}
 
 	public void
-	pack()
+            pack()
 	{
 
 	}
 	public void
-	repaint()
+            repaint()
 	{
 
 	}
 
 	public Toolkit
-	getToolkit()
+            getToolkit()
 	{
 		return( new Toolkit());
 	}
 
 	public void
-	addMouseListener(
+            addMouseListener(
 		MouseAdapter	l )
 	{
 
 	}
 
 	public void
-	addWindowListener(
+            addWindowListener(
 		WindowAdapter l )
 	{
 

@@ -122,11 +122,11 @@ public class RAIFile implements RandomAccessInterface, DataInput, DataOutput {
 
 /**
 	 * Read a UTF encoded string with 4-byte length prefix. (I2P)
-	 * 
+	 *
 	 * <p>This method uses a 4-byte length prefix instead of Java's standard
 	 * 2-byte prefix, allowing for strings up to 16MB in length. The upper byte
 	 * must be zero for compatibility.</p>
-	 * 
+	 *
 	 * @return the UTF-8 decoded string
 	 * @throws IOException if the length encoding is invalid or EOF is reached
 	 */
@@ -159,10 +159,10 @@ public class RAIFile implements RandomAccessInterface, DataInput, DataOutput {
 
 /**
 	 * Write a UTF encoded string with 4-byte length prefix. (I2P)
-	 * 
+	 *
 	 * <p>This method uses a 4-byte length prefix instead of Java's standard
 	 * 2-byte prefix, allowing for strings up to 16MB in length.</p>
-	 * 
+	 *
 	 * @param str the string to write
 	 * @throws IOException if the string is too long for encoding
 	 */

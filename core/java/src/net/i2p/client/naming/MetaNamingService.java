@@ -175,7 +175,7 @@ public class MetaNamingService extends DummyNamingService {
     public Map<String, Destination> getEntries(Properties options) {
         Map<String, Destination> rv = new HashMap<String, Destination>();
         for (NamingService ns : _services) {
-             rv.putAll(ns.getEntries(options));
+            rv.putAll(ns.getEntries(options));
         }
         return rv;
     }
@@ -188,7 +188,7 @@ public class MetaNamingService extends DummyNamingService {
     public Map<String, String> getBase64Entries(Properties options) {
         Map<String, String> rv = new HashMap<String, String>();
         for (NamingService ns : _services) {
-             rv.putAll(ns.getBase64Entries(options));
+            rv.putAll(ns.getBase64Entries(options));
         }
         return rv;
     }
@@ -200,7 +200,7 @@ public class MetaNamingService extends DummyNamingService {
     public Set<String> getNames(Properties options) {
         Set<String> rv = new HashSet<String>();
         for (NamingService ns : _services) {
-             rv.addAll(ns.getNames(options));
+            rv.addAll(ns.getNames(options));
         }
         return rv;
     }
@@ -212,7 +212,7 @@ public class MetaNamingService extends DummyNamingService {
      */
     public void export(Writer out, Properties options) throws IOException {
         for (NamingService ns : _services) {
-             ns.export(out, options);
+            ns.export(out, options);
         }
     }
 
@@ -223,8 +223,8 @@ public class MetaNamingService extends DummyNamingService {
     public int size(Properties options) {
         int rv = 0;
         for (NamingService ns : _services) {
-             int s = ns.size(options);
-             if (s > 0)
+            int s = ns.size(options);
+            if (s > 0)
                  rv += s;
         }
         return rv;

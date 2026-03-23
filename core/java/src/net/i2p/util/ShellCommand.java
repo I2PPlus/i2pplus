@@ -416,9 +416,9 @@ public class ShellCommand {
             System.err.println("Usage: ShellCommand commandline");
             return;
         }
-	try {
+        try {
             Runtime.getRuntime().exec(args);
-	} catch (IOException ioe) { ioe.printStackTrace(); }
+        } catch (IOException ioe) { ioe.printStackTrace(); }
         return;
     }
 
@@ -445,7 +445,7 @@ public class ShellCommand {
                 }
                 process = Runtime.getRuntime().exec(arr);
             } else {
-               throw new ClassCastException("shell command must be a String or a String[]");
+                throw new ClassCastException("shell command must be a String or a String[]");
             }
             if (consumeOutput) {
                 Thread processStderrConsumer = new StreamConsumer(process.getErrorStream());

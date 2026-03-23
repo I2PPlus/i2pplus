@@ -53,16 +53,16 @@ public abstract class RFC3339Date {
      *  together with the date only.
      */
     private static final SimpleDateFormat rfc3339DateFormats[] = new SimpleDateFormat[] {
-                 OUTPUT_FORMAT,
+        OUTPUT_FORMAT,
                  // .S or .SS will get the milliseconds wrong,
                  // e.g. .1 will become 1 ms, .11 will become 11 ms
                  // This is NOT fixed below
-                 new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US),
-                 new SimpleDateFormat(TZF1, Locale.US),
-                 new SimpleDateFormat(TZF2, Locale.US),
-                 new SimpleDateFormat("yyyy-MM-dd", Locale.US),
+        new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US),
+        new SimpleDateFormat(TZF1, Locale.US),
+        new SimpleDateFormat(TZF2, Locale.US),
+        new SimpleDateFormat("yyyy-MM-dd", Locale.US),
                  // old school for backward compatibility
-                 new SimpleDateFormat("yyyy/MM/dd", Locale.US)
+        new SimpleDateFormat("yyyy/MM/dd", Locale.US)
     };
 
     //

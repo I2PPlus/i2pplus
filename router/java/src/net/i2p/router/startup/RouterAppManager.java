@@ -113,45 +113,45 @@ public class RouterAppManager extends ClientAppManagerImpl {
     @Override
     public void notify(ClientApp app, ClientAppState state, String message, Exception e) {
         switch(state) {
-          case UNINITIALIZED:
-          case INITIALIZED:
-            if (_log.shouldWarn())
-                _log.warn("Client " + app.getDisplayName() + " is now " + state);
-            break;
+            case UNINITIALIZED:
+            case INITIALIZED:
+                if (_log.shouldWarn())
+                    _log.warn("Client " + app.getDisplayName() + " is now " + state);
+                break;
 
-          case STARTING:
-          case RUNNING:
-            if (_log.shouldInfo())
-                _log.info("Client " + app.getDisplayName() + " is now " + state);
-            break;
+            case STARTING:
+            case RUNNING:
+                if (_log.shouldInfo())
+                    _log.info("Client " + app.getDisplayName() + " is now " + state);
+                break;
 
-          case FORKED:
-          case STOPPING:
-          case STOPPED:
-            _clients.remove(app);
-            boolean removed = _registered.remove(app.getName(), app);
-            if (removed && _log.shouldInfo()) {
-                _log.info("Client " + app.getDisplayName() + " UNREGISTERED AS " + app.getName());
-            }
-            if (message == null)
-                message = "";
-            if (_log.shouldInfo())
-                _log.info("Client " + app.getDisplayName() + " is now " + state +
+            case FORKED:
+            case STOPPING:
+            case STOPPED:
+                _clients.remove(app);
+                boolean removed = _registered.remove(app.getName(), app);
+                if (removed && _log.shouldInfo()) {
+                    _log.info("Client " + app.getDisplayName() + " UNREGISTERED AS " + app.getName());
+                }
+                if (message == null)
+                    message = "";
+                if (_log.shouldInfo())
+                    _log.info("Client " + app.getDisplayName() + " is now " + state +
                           ' ' + message, e);
-            break;
+                break;
 
-          case CRASHED:
-          case START_FAILED:
-            _clients.remove(app);
-            boolean removed2 = _registered.remove(app.getName(), app);
-            if (removed2 && _log.shouldInfo()) {
-                _log.info("Client " + app.getDisplayName() + " UNREGISTERED AS " + app.getName());
-            }
-            if (message == null)
-                message = "";
-            _log.log(Log.CRIT, "Client " + app.getDisplayName() + ' ' + state +
+            case CRASHED:
+            case START_FAILED:
+                _clients.remove(app);
+                boolean removed2 = _registered.remove(app.getName(), app);
+                if (removed2 && _log.shouldInfo()) {
+                    _log.info("Client " + app.getDisplayName() + " UNREGISTERED AS " + app.getName());
+                }
+                if (message == null)
+                    message = "";
+                _log.log(Log.CRIT, "Client " + app.getDisplayName() + ' ' + state +
                                ' ' + message, e);
-            break;
+                break;
         }
     }
 
@@ -205,8 +205,8 @@ public class RouterAppManager extends ClientAppManagerImpl {
             ClientAppState state = app.getState();
             if (state == RUNNING || state == STARTING) {
                 try {
-                   if (_log.shouldWarn())
-                       _log.warn("Shutting down client " + app.getDisplayName());
+                    if (_log.shouldWarn())
+                        _log.warn("Shutting down client " + app.getDisplayName());
                     app.shutdown(null);
                 } catch (Throwable t) {}
             }

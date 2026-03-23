@@ -222,7 +222,7 @@ public class InNetMessagePool implements Service {
      */
     private void handleInvalidMessage(I2NPMessage messageBody, String invalidReason, RouterIdentity fromRouter, Hash fromRouterHash, boolean doHistory, long msgIDBloomXor) {
         if (_log.shouldInfo()) {
-                _log.warn("Dropping DbLookupMessage [XOR MsgID " + messageBody.getUniqueId(msgIDBloomXor) + "] -> " +
+            _log.warn("Dropping DbLookupMessage [XOR MsgID " + messageBody.getUniqueId(msgIDBloomXor) + "] -> " +
                     invalidReason.substring(0, 1).toUpperCase(Locale.ROOT) + invalidReason.substring(1) +
                     messageBody + "\n* Expires: " + Instant.ofEpochMilli(messageBody.getMessageExpiration()));
         } else if (_log.shouldWarn()) {

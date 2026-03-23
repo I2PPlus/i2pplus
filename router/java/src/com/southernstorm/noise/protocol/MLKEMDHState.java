@@ -145,7 +145,7 @@ class MLKEMDHState implements DHState, Cloneable {
 	@Deprecated
 	@Override
 	public void getPrivateKey(byte[] key, int offset) {
-        	throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException();
 	}
 
 	/**
@@ -154,7 +154,7 @@ class MLKEMDHState implements DHState, Cloneable {
 	@Deprecated
 	@Override
 	public void setPrivateKey(byte[] key, int offset) {
-        	throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException();
 	}
 
 	/**
@@ -163,7 +163,7 @@ class MLKEMDHState implements DHState, Cloneable {
 	@Deprecated
 	@Override
 	public void setKeys(byte[] privkey, int privoffset, byte[] pubkey, int puboffset) {
-        	throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException();
 	}
 
 	@Override
@@ -216,7 +216,7 @@ class MLKEMDHState implements DHState, Cloneable {
 	@Deprecated
 	@Override
 	public void getEncodedPublicKey(byte[] key, int offset) {
-        	throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException();
 	}
 
 	/**
@@ -257,9 +257,9 @@ class MLKEMDHState implements DHState, Cloneable {
 		if (other == this)
 			return;
 		MLKEMDHState dh = (MLKEMDHState)other;
-                if (dh.privateKey != null)
+        if (dh.privateKey != null)
 			System.arraycopy(dh.privateKey, 0, privateKey, 0, type.getPrivkeyLen());
-                if (dh.publicKey != null)
+        if (dh.publicKey != null)
 			System.arraycopy(dh.publicKey, 0, publicKey, 0, type.getPubkeyLen());
 		mode = dh.mode;
 	}

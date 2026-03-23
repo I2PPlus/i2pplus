@@ -22,7 +22,7 @@ import net.i2p.util.Log;
 
 /**
  * Container for cryptographic keys and certificate as used by I2P identities.
- * 
+ *
  * <p>KeysAndCert provides the fundamental cryptographic identity components:</p>
  * <ul>
  *   <li><strong>Public Key:</strong> Encryption key for encrypted communication</li>
@@ -30,7 +30,7 @@ import net.i2p.util.Log;
  *   <li><strong>Certificate:</strong> Optional metadata about the keys and identity</li>
  *   <li><strong>Cached Hash:</strong> Pre-computed SHA-256 hash for efficient identification</li>
  * </ul>
- * 
+ *
  * <p><strong>Structure:</strong></p>
  * <ul>
  *   <li>Public key (variable length, typically 256 bytes for ElGamal)</li>
@@ -38,7 +38,7 @@ import net.i2p.util.Log;
  *   <li>Certificate (type + length + payload)</li>
  *   <li>Optional padding for consistent serialization</li>
  * </ul>
- * 
+ *
  * <p><strong>Usage:</strong></p>
  * <ul>
  *   <li><strong>Base Class:</strong> Extended by {@link Destination} and {@link net.i2p.data.router.RouterIdentity}</li>
@@ -46,21 +46,21 @@ import net.i2p.util.Log;
  *   <li><strong>Verification:</strong> Provides keys for signature verification</li>
  *   <li><strong>Encryption:</strong> Contains encryption key for secure communication</li>
  * </ul>
- * 
+ *
  * <p><strong>Key Types:</strong></p>
  * <ul>
  *   <li><strong>Encryption:</strong> ElGamal 2048-bit (legacy) or ECIES X25519 (modern)</li>
  *   <li><strong>Signing:</strong> DSA-SHA1 (legacy), ECDSA-P256, or EdDSA-Ed25519 (modern)</li>
  *   <li><strong>Certificates:</strong> NULL, HIDDEN, SIGNED, MULTIPLE, or KEY types</li>
  * </ul>
- * 
+ *
  * <p><strong>Immutability:</strong></p>
  * <ul>
  *   <li>As of 0.9.9, instances are immutable after keys and certificate are set</li>
  *   <li>Attempts to modify will throw {@link IllegalStateException}</li>
  *   <li>Ensures thread safety and prevents accidental corruption</li>
  * </ul>
- * 
+ *
  * <p><strong>History:</strong></p>
  * <ul>
  *   <li>Implemented in 0.8.2 and retrofitted over existing Destination and RouterIdentity classes</li>
@@ -280,14 +280,14 @@ public class KeysAndCert extends DataStructureImpl {
      * @return the new offset
      * @since 0.9.62
      */
-   protected int writePaddingBytes(byte[] target, int off) {
+    protected int writePaddingBytes(byte[] target, int off) {
         if (_padding == null)
             return off;
         if (_paddingBlocks > 1) {
             for (int i = 0; i < _paddingBlocks; i++) {
                 System.arraycopy(_padding, 0, target, off, _padding.length);
                 off += PAD_COMP_LEN;
-           }
+            }
         } else {
             System.arraycopy(_padding, 0, target, off, _padding.length);
             off += _padding.length;
@@ -381,7 +381,7 @@ public class KeysAndCert extends DataStructureImpl {
       *
       *  @throws IllegalStateException if keys and cert are not initialized
       */
-     @Override
+    @Override
     public Hash calculateHash() {
         return getHash();
     }

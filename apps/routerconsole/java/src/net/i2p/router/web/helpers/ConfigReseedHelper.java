@@ -111,9 +111,9 @@ public class ConfigReseedHelper extends HelperBase {
         Collections.sort(URLList);
         StringBuilder buf = new StringBuilder();
         for (String s : URLList) {
-             if (buf.length() > 0)
+            if (buf.length() > 0)
                  buf.append('\n');
-             buf.append(s);
+            buf.append(s);
         }
         return buf.toString();
     }

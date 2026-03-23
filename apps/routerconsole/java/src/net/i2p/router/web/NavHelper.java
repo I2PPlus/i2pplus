@@ -107,12 +107,12 @@ public class NavHelper implements NavService, ClientApp {
      *  @since 0.9.45
      */
     private void getClientAppImg(StringBuilder buf, String name, String iconpath) {
-            if (iconpath != null) {
-                buf.append("<img src=\"").append(iconpath).append("\"");
-            } else {
-                buf.append("<img src=\"/themes/console/images/plugin.svg\"");
-            }
-            buf.append(" height=16 width=16 alt=\"\" hidden>");
+        if (iconpath != null) {
+            buf.append("<img src=\"").append(iconpath).append("\"");
+        } else {
+            buf.append("<img src=\"/themes/console/images/plugin.svg\"");
+        }
+        buf.append(" height=16 width=16 alt=\"\" hidden>");
     }
 
     /**

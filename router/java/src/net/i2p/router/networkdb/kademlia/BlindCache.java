@@ -362,8 +362,8 @@ class BlindCache {
             out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new SecureFileOutputStream(file), "ISO-8859-1")));
             out.println("# Blinding cache entries. Format is: sigtype,bsigtype,authtype,time,key,[secret],[privkey],[dest]");
             for (BlindData bd : _cache.values()) {
-                 out.println(toPersistentString(bd));
-                 count++;
+                out.println(toPersistentString(bd));
+                count++;
             }
             if (out.checkError())
                 throw new IOException("Failed write to " + file);

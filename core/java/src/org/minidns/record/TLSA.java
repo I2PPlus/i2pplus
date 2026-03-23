@@ -52,7 +52,7 @@ public class TLSA extends Data {
 
         public final byte byteValue;
 
-         Selector(byte byteValue) {
+        Selector(byte byteValue) {
             this.byteValue = byteValue;
             SELECTOR_LUT.put(byteValue, this);
         }

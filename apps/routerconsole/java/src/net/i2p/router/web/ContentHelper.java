@@ -79,7 +79,7 @@ public class ContentHelper extends HelperBase {
                 }
             }
             return sb.append("</pre>").toString();
-   }
+        }
     }
 
     /**

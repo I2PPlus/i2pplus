@@ -1086,7 +1086,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
             try {
                 for (;;) {
                     if (paramProtoObj.recv_msg(msg) != NDTConstants.PROTOCOL_MSG_READ_SUCCESS) { // msg could not be read/received correctly
-                _sErrMsg = _resBundDisplayMsgs.getString("protocolError") + parseMsgBodyToInt(new String(msg.getBody(), StandardCharsets.UTF_8), 16) + " instead\n";
+                        _sErrMsg = _resBundDisplayMsgs.getString("protocolError") + parseMsgBodyToInt(new String(msg.getBody(), StandardCharsets.UTF_8), 16) + " instead\n";
                         return true;
                     }
                     if (msg.getType() == MessageType.TEST_FINALIZE) {break;} // All web100 variables have been sent
@@ -1478,46 +1478,46 @@ public class Tcpbw100 extends JApplet implements ActionListener {
         while (tokenizer.hasMoreTokens()) {
             // None of test_xxx catch NumberFormatException, do it here so we don't kill the whole thing
             try {
-            if (sPanel.wantToStop()) { // user has indicated decision to stop tests from GUI
-                protocolObj.send_json_msg(MessageType.MSG_ERROR, "Manually stopped by the user".getBytes(StandardCharsets.UTF_8));
-                protocolObj.close();
-                ctlSocket.close();
-                _sErrMsg = "\n" + _resBundDisplayMsgs.getString("stopped") + "\n";
-                _bFailed = true;
-                _log.warn(_sErrMsg);
-                return;
-            }
-            int testId = Integer.parseInt(tokenizer.nextToken());
-            switch (testId) {
-            case NDTConstants.TEST_C2S:
-                sPanel.setText(_resBundDisplayMsgs.getString("c2sThroughput"));
-                if (test_c2s(protocolObj)) {
-                    _resultsTxtPane.append(_sErrMsg);
-                    _resultsTxtPane.append(_resBundDisplayMsgs.getString("c2sThroughputFailed") + "\n");
-                    _yTests &= (~NDTConstants.TEST_C2S);
+                if (sPanel.wantToStop()) { // user has indicated decision to stop tests from GUI
+                    protocolObj.send_json_msg(MessageType.MSG_ERROR, "Manually stopped by the user".getBytes(StandardCharsets.UTF_8));
+                    protocolObj.close();
+                    ctlSocket.close();
+                    _sErrMsg = "\n" + _resBundDisplayMsgs.getString("stopped") + "\n";
+                    _bFailed = true;
+                    _log.warn(_sErrMsg);
+                    return;
                 }
-                break;
-            case NDTConstants.TEST_S2C:
-                sPanel.setText(_resBundDisplayMsgs.getString("s2cThroughput"));
-                if (test_s2c(protocolObj, ctlSocket)) {
-                    _resultsTxtPane.append(_sErrMsg);
-                    _resultsTxtPane.append(_resBundDisplayMsgs.getString("s2cThroughputFailed") + "\n");
-                    _yTests &= (~NDTConstants.TEST_S2C);
+                int testId = Integer.parseInt(tokenizer.nextToken());
+                switch (testId) {
+                    case NDTConstants.TEST_C2S:
+                        sPanel.setText(_resBundDisplayMsgs.getString("c2sThroughput"));
+                        if (test_c2s(protocolObj)) {
+                            _resultsTxtPane.append(_sErrMsg);
+                            _resultsTxtPane.append(_resBundDisplayMsgs.getString("c2sThroughputFailed") + "\n");
+                            _yTests &= (~NDTConstants.TEST_C2S);
+                        }
+                        break;
+                    case NDTConstants.TEST_S2C:
+                        sPanel.setText(_resBundDisplayMsgs.getString("s2cThroughput"));
+                        if (test_s2c(protocolObj, ctlSocket)) {
+                            _resultsTxtPane.append(_sErrMsg);
+                            _resultsTxtPane.append(_resBundDisplayMsgs.getString("s2cThroughputFailed") + "\n");
+                            _yTests &= (~NDTConstants.TEST_S2C);
+                        }
+                        break;
+                    case NDTConstants.TEST_META:
+                        sPanel.setText(_resBundDisplayMsgs.getString("meta"));
+                        if (test_meta(protocolObj, _sClient)) {
+                            _resultsTxtPane.append(_sErrMsg);
+                            _resultsTxtPane.append(_resBundDisplayMsgs.getString("metaFailed") + "\n");
+                            _yTests &= (~NDTConstants.TEST_META);
+                        }
+                        break;
+                    default:
+                        _sErrMsg = _resBundDisplayMsgs.getString("unknownID") + "\n";
+                        _bFailed = true;
+                        return;
                 }
-                break;
-            case NDTConstants.TEST_META:
-                sPanel.setText(_resBundDisplayMsgs.getString("meta"));
-                if (test_meta(protocolObj, _sClient)) {
-                    _resultsTxtPane.append(_sErrMsg);
-                    _resultsTxtPane.append(_resBundDisplayMsgs.getString("metaFailed") + "\n");
-                    _yTests &= (~NDTConstants.TEST_META);
-                }
-                break;
-            default:
-                _sErrMsg = _resBundDisplayMsgs.getString("unknownID") + "\n";
-                _bFailed = true;
-                return;
-            }
             // None of test_xxx catch NumberFormatException, do it here so we don't kill the whole thing
             } catch (NumberFormatException nfe) {_log.warn("nfe", nfe);}
         }
@@ -1720,51 +1720,51 @@ public class Tcpbw100 extends JApplet implements ActionListener {
             } else {
                 _resultsTxtPane.append(_resBundDisplayMsgs.getString("theSlowestLink") + " ");
                 switch (_iC2sData) {
-                case NDTConstants.DATA_RATE_ETHERNET:
-                    _resultsTxtPane.append(_resBundDisplayMsgs.getString("10mbps") + "\n");
-                    mylink = 10;
-                    pub_AccessTech = "10 Mbps Ethernet";
-                    break;
-                case NDTConstants.DATA_RATE_T3:
-                    _resultsTxtPane.append(_resBundDisplayMsgs.getString("45mbps") + "\n");
-                    mylink = 45;
-                    pub_AccessTech = "45 Mbps T3/DS3 subnet";
-                    break;
-                case NDTConstants.DATA_RATE_FAST_ETHERNET:
-                    _resultsTxtPane.append("100 Mbps ");
-                    mylink = 100;
-                    pub_AccessTech = "100 Mbps Ethernet";
+                    case NDTConstants.DATA_RATE_ETHERNET:
+                        _resultsTxtPane.append(_resBundDisplayMsgs.getString("10mbps") + "\n");
+                        mylink = 10;
+                        pub_AccessTech = "10 Mbps Ethernet";
+                        break;
+                    case NDTConstants.DATA_RATE_T3:
+                        _resultsTxtPane.append(_resBundDisplayMsgs.getString("45mbps") + "\n");
+                        mylink = 45;
+                        pub_AccessTech = "45 Mbps T3/DS3 subnet";
+                        break;
+                    case NDTConstants.DATA_RATE_FAST_ETHERNET:
+                        _resultsTxtPane.append("100 Mbps ");
+                        mylink = 100;
+                        pub_AccessTech = "100 Mbps Ethernet";
 
                     //Fast Ethernet. Determine if half/full duplex link was found
-                    if (half_duplex == 0) {
-                        _resultsTxtPane.append(_resBundDisplayMsgs.getString("fullDuplex") + "\n");
-                    } else {
-                        _resultsTxtPane.append(_resBundDisplayMsgs.getString("halfDuplex") + "\n");
-                    }
-                    break;
-                case NDTConstants.DATA_RATE_OC_12:
-                    _resultsTxtPane.append(_resBundDisplayMsgs.getString("622mbps") + "\n");
-                    mylink = 622;
-                    pub_AccessTech = "622 Mbps OC-12";
-                    break;
-                case NDTConstants.DATA_RATE_GIGABIT_ETHERNET:
-                    _resultsTxtPane.append(_resBundDisplayMsgs.getString("1gbps") + "\n");
-                    mylink = 1000;
-                    pub_AccessTech = "1.0 Gbps Gigabit Ethernet";
-                    break;
-                case NDTConstants.DATA_RATE_OC_48:
-                    _resultsTxtPane.append(_resBundDisplayMsgs.getString("2.4gbps") + "\n");
-                    mylink = 2400;
-                    pub_AccessTech = "2.4 Gbps OC-48";
-                    break;
-                case NDTConstants.DATA_RATE_10G_ETHERNET:
-                    _resultsTxtPane.append(_resBundDisplayMsgs.getString("10gbps") + "\n");
-                    mylink = 10000;
-                    pub_AccessTech = "10 Gigabit Ethernet/OC-192";
-                    break;
-                default: // default block indicating no match
-                    _log.warn("No _iC2sData option match");
-                    break;
+                        if (half_duplex == 0) {
+                            _resultsTxtPane.append(_resBundDisplayMsgs.getString("fullDuplex") + "\n");
+                        } else {
+                            _resultsTxtPane.append(_resBundDisplayMsgs.getString("halfDuplex") + "\n");
+                        }
+                        break;
+                    case NDTConstants.DATA_RATE_OC_12:
+                        _resultsTxtPane.append(_resBundDisplayMsgs.getString("622mbps") + "\n");
+                        mylink = 622;
+                        pub_AccessTech = "622 Mbps OC-12";
+                        break;
+                    case NDTConstants.DATA_RATE_GIGABIT_ETHERNET:
+                        _resultsTxtPane.append(_resBundDisplayMsgs.getString("1gbps") + "\n");
+                        mylink = 1000;
+                        pub_AccessTech = "1.0 Gbps Gigabit Ethernet";
+                        break;
+                    case NDTConstants.DATA_RATE_OC_48:
+                        _resultsTxtPane.append(_resBundDisplayMsgs.getString("2.4gbps") + "\n");
+                        mylink = 2400;
+                        pub_AccessTech = "2.4 Gbps OC-48";
+                        break;
+                    case NDTConstants.DATA_RATE_10G_ETHERNET:
+                        _resultsTxtPane.append(_resBundDisplayMsgs.getString("10gbps") + "\n");
+                        mylink = 10000;
+                        pub_AccessTech = "10 Gigabit Ethernet/OC-192";
+                        break;
+                    default: // default block indicating no match
+                        _log.warn("No _iC2sData option match");
+                        break;
                 }
             }
 
@@ -1799,19 +1799,19 @@ public class Tcpbw100 extends JApplet implements ActionListener {
                  * Note: All comparisons henceforth of ((window size * 2/rttsec) < mylink) are along the same logic.
                  */
 
-                if (((2 * rwin) / rttsec) < mylink) { // multiply by 2 to counter round-trip
+                    if (((2 * rwin) / rttsec) < mylink) { // multiply by 2 to counter round-trip
 
                     // Link speed is in Mbps. Convert it back to kbps (*1000), and bytes (/8)
-                    j = (float) ((mylink * avgrtt) * NDTConstants.KILO) / NDTConstants.EIGHT / NDTConstants.KILO_BITS;
-                    if (j > (float) _iMaxRwinRcvd) {
-                        _resultsTxtPane.append(_resBundDisplayMsgs.getString("receiveBufferShouldBe") + " " + NDTUtils.prtdbl(j) +
+                        j = (float) ((mylink * avgrtt) * NDTConstants.KILO) / NDTConstants.EIGHT / NDTConstants.KILO_BITS;
+                        if (j > (float) _iMaxRwinRcvd) {
+                            _resultsTxtPane.append(_resBundDisplayMsgs.getString("receiveBufferShouldBe") + " " + NDTUtils.prtdbl(j) +
                                                _resBundDisplayMsgs.getString("toMaximizeThroughput") + " \n");
+                        }
                     }
-                }
-                break;
+                    break;
 
                 default: // default for indication of no match for mismatch variable
-                break;
+                    break;
             }
 
             // C2S throughput test: Packet queuing
@@ -1853,42 +1853,42 @@ public class Tcpbw100 extends JApplet implements ActionListener {
              * in that negative values are checked for too.
              */
             switch (_iC2sData) {
-            case NDTConstants.DATA_RATE_INSUFFICIENT_DATA:
-                _txtStatistics.append(_resBundDisplayMsgs.getString("insufficient") + "\n");
-                break;
-            case NDTConstants.DATA_RATE_SYSTEM_FAULT:
-                _txtStatistics.append(_resBundDisplayMsgs.getString("ipcFail") + "\n");
-                break;
-            case NDTConstants.DATA_RATE_RTT:
-                _txtStatistics.append(_resBundDisplayMsgs.getString("rttFail") + "\n");
-                break;
-            case NDTConstants.DATA_RATE_DIAL_UP:
-                _txtStatistics.append(_resBundDisplayMsgs.getString("foundDialup") + "\n");
-                break;
-            case NDTConstants.DATA_RATE_T1:
-                _txtStatistics.append(_resBundDisplayMsgs.getString("foundDsl") + "\n");
-                break;
-            case NDTConstants.DATA_RATE_ETHERNET:
-                _txtStatistics.append(_resBundDisplayMsgs.getString("found10mbps") + "\n");
-                break;
-            case NDTConstants.DATA_RATE_T3:
-                _txtStatistics.append(_resBundDisplayMsgs.getString("found45mbps") + "\n");
-                break;
-            case NDTConstants.DATA_RATE_FAST_ETHERNET:
-                _txtStatistics.append(_resBundDisplayMsgs.getString("found100mbps") + "\n");
-                break;
-            case NDTConstants.DATA_RATE_OC_12:
-                _txtStatistics.append(_resBundDisplayMsgs.getString("found622mbps") + "\n");
-                break;
-            case NDTConstants.DATA_RATE_GIGABIT_ETHERNET:
-                _txtStatistics.append(_resBundDisplayMsgs.getString("found1gbps") + "\n");
-                break;
-            case NDTConstants.DATA_RATE_OC_48:
-                _txtStatistics.append(_resBundDisplayMsgs.getString("found2.4gbps") + "\n");
-                break;
-            case NDTConstants.DATA_RATE_10G_ETHERNET:
-                _txtStatistics.append(_resBundDisplayMsgs.getString("found10gbps") + "\n");
-                break;
+                case NDTConstants.DATA_RATE_INSUFFICIENT_DATA:
+                    _txtStatistics.append(_resBundDisplayMsgs.getString("insufficient") + "\n");
+                    break;
+                case NDTConstants.DATA_RATE_SYSTEM_FAULT:
+                    _txtStatistics.append(_resBundDisplayMsgs.getString("ipcFail") + "\n");
+                    break;
+                case NDTConstants.DATA_RATE_RTT:
+                    _txtStatistics.append(_resBundDisplayMsgs.getString("rttFail") + "\n");
+                    break;
+                case NDTConstants.DATA_RATE_DIAL_UP:
+                    _txtStatistics.append(_resBundDisplayMsgs.getString("foundDialup") + "\n");
+                    break;
+                case NDTConstants.DATA_RATE_T1:
+                    _txtStatistics.append(_resBundDisplayMsgs.getString("foundDsl") + "\n");
+                    break;
+                case NDTConstants.DATA_RATE_ETHERNET:
+                    _txtStatistics.append(_resBundDisplayMsgs.getString("found10mbps") + "\n");
+                    break;
+                case NDTConstants.DATA_RATE_T3:
+                    _txtStatistics.append(_resBundDisplayMsgs.getString("found45mbps") + "\n");
+                    break;
+                case NDTConstants.DATA_RATE_FAST_ETHERNET:
+                    _txtStatistics.append(_resBundDisplayMsgs.getString("found100mbps") + "\n");
+                    break;
+                case NDTConstants.DATA_RATE_OC_12:
+                    _txtStatistics.append(_resBundDisplayMsgs.getString("found622mbps") + "\n");
+                    break;
+                case NDTConstants.DATA_RATE_GIGABIT_ETHERNET:
+                    _txtStatistics.append(_resBundDisplayMsgs.getString("found1gbps") + "\n");
+                    break;
+                case NDTConstants.DATA_RATE_OC_48:
+                    _txtStatistics.append(_resBundDisplayMsgs.getString("found2.4gbps") + "\n");
+                    break;
+                case NDTConstants.DATA_RATE_10G_ETHERNET:
+                    _txtStatistics.append(_resBundDisplayMsgs.getString("found10gbps") + "\n");
+                    break;
             }
 
             // Add decisions about duplex mode, congestion, duplex mismatch to Statistics pane

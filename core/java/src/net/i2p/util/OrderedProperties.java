@@ -50,8 +50,8 @@ public class OrderedProperties extends Properties {
     }
 
     private static class EntryComparator implements Comparator<Map.Entry<Object, Object>>, Serializable {
-         public int compare(Map.Entry<Object, Object> l, Map.Entry<Object, Object> r) {
-             return ((String)l.getKey()).compareTo(((String)r.getKey()));
+        public int compare(Map.Entry<Object, Object> l, Map.Entry<Object, Object> r) {
+            return ((String)l.getKey()).compareTo(((String)r.getKey()));
         }
     }
 }

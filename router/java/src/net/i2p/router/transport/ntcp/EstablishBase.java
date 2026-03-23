@@ -126,7 +126,7 @@ abstract class EstablishBase implements EstablishState {
             _Y = null;
         } else {
             // OutboundNTCP2State does not extend this,
-                throw new IllegalStateException();
+            throw new IllegalStateException();
         }
     }
 

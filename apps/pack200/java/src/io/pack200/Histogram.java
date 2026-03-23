@@ -51,7 +51,7 @@ final class Histogram {
      *  To save work, the input should be sorted, but need not be.
      */
     public
-    Histogram(int[] valueSequence) {
+        Histogram(int[] valueSequence) {
         long[] hist2col = computeHistogram2Col(maybeSort(valueSequence));
         int[][] table = makeTable(hist2col);
         values = table[0];
@@ -61,13 +61,13 @@ final class Histogram {
         assert(assertWellFormed(valueSequence));
     }
     public
-    Histogram(int[] valueSequence, int start, int end) {
+        Histogram(int[] valueSequence, int start, int end) {
         this(sortedSlice(valueSequence, start, end));
     }
 
     /** Build a histogram given a compact matrix of counts and values. */
     public
-    Histogram(int[][] matrix) {
+        Histogram(int[][] matrix) {
         // sort the rows
         matrix = normalizeMatrix(matrix);  // clone and sort
         this.matrix = matrix;
@@ -116,38 +116,38 @@ final class Histogram {
      *  That is, each sequence { valuei1, valuei2, ... } is sorted.
      */
     public
-    int[][] getMatrix() { return matrix; }
+        int[][] getMatrix() { return matrix; }
 
     public
-    int getRowCount() { return matrix.length; }
+        int getRowCount() { return matrix.length; }
 
     public
-    int getRowFrequency(int rn) { return matrix[rn][0]; }
+        int getRowFrequency(int rn) { return matrix[rn][0]; }
 
     public
-    int getRowLength(int rn) { return matrix[rn].length-1; }
+        int getRowLength(int rn) { return matrix[rn].length-1; }
 
     public
-    int getRowValue(int rn, int vn) { return matrix[rn][vn+1]; }
+        int getRowValue(int rn, int vn) { return matrix[rn][vn+1]; }
 
     public
-    int getRowWeight(int rn) {
+        int getRowWeight(int rn) {
         return getRowFrequency(rn) * getRowLength(rn);
     }
 
     public
-    int getTotalWeight() {
+        int getTotalWeight() {
         return totalWeight;
     }
 
     public
-    int getTotalLength() {
+        int getTotalLength() {
         return values.length;
     }
 
     /** Returns an array of all values, sorted. */
     public
-    int[] getAllValues() {
+        int[] getAllValues() {
 
         return values;
     }
@@ -156,14 +156,14 @@ final class Histogram {
      *  with a frequency for each value.
      */
     public
-    int[] getAllFrequencies() {
+        int[] getAllFrequencies() {
         return counts;
     }
 
     private static double log2 = Math.log(2);
 
     public
-    int getFrequency(int value) {
+        int getFrequency(int value) {
         int pos = Arrays.binarySearch(values, value);
         if (pos < 0)  return 0;
         assert(values[pos] == value);
@@ -171,19 +171,19 @@ final class Histogram {
     }
 
     public
-    double getBitLength(int value) {
+        double getBitLength(int value) {
         double prob = (double) getFrequency(value) / getTotalWeight();
         return - Math.log(prob) / log2;
     }
 
     public
-    double getRowBitLength(int rn) {
+        double getRowBitLength(int rn) {
         double prob = (double) getRowFrequency(rn) / getTotalWeight();
         return - Math.log(prob) / log2;
     }
 
     public
-    interface BitMetric {
+        interface BitMetric {
         public double getBitLength(int value);
     }
     private final BitMetric bitMetric = new BitMetric() {
@@ -197,7 +197,7 @@ final class Histogram {
 
     /** bit-length is negative entropy:  -H(matrix). */
     public
-    double getBitLength() {
+        double getBitLength() {
         double sum = 0;
         for (int i = 0; i < matrix.length; i++) {
             sum += getRowBitLength(i) * getRowWeight(i);
@@ -208,7 +208,7 @@ final class Histogram {
 
     /** bit-length in to another coding (cross-entropy) */
     public
-    double getBitLength(BitMetric len) {
+        double getBitLength(BitMetric len) {
         double sum = 0;
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 1; j < matrix[i].length; j++) {
@@ -219,7 +219,7 @@ final class Histogram {
     }
 
     private static
-    double round(double x, double scale) {
+        double round(double x, double scale) {
         return Math.round(x * scale) / scale;
     }
 
@@ -302,7 +302,7 @@ final class Histogram {
     }
 
     public
-    String[] getRowTitles(String name) {
+        String[] getRowTitles(String name) {
         int totalUnique = getTotalLength();
         int ltotalWeight = getTotalWeight();
         String[] histTitles = new String[matrix.length];
@@ -330,21 +330,21 @@ final class Histogram {
     /** Print a report of this histogram.
      */
     public
-    void print(PrintStream out) {
+        void print(PrintStream out) {
         print("hist", out);
     }
 
     /** Print a report of this histogram.
      */
     public
-    void print(String name, PrintStream out) {
+        void print(String name, PrintStream out) {
         print(name, getRowTitles(name), out);
     }
 
     /** Print a report of this histogram.
      */
     public
-    void print(String name, String[] histTitles, PrintStream out) {
+        void print(String name, String[] histTitles, PrintStream out) {
         int totalUnique = getTotalLength();
         int ltotalWeight = getTotalWeight();
         double tlen = getBitLength();
@@ -386,7 +386,7 @@ final class Histogram {
 */
 
     private static
-    int[][] makeMatrix(long[] hist2col) {
+        int[][] makeMatrix(long[] hist2col) {
         // Sort by increasing count, then by increasing value.
         Arrays.sort(hist2col);
         int[] counts = new int[hist2col.length];
@@ -416,7 +416,7 @@ final class Histogram {
     }
 
     private static
-    int[][] makeTable(long[] hist2col) {
+        int[][] makeTable(long[] hist2col) {
         int[][] table = new int[2][hist2col.length];
         // Break apart the entries in hist2col.
         // table[0] gets values, table[1] gets entries.
@@ -443,12 +443,12 @@ final class Histogram {
      *  entries by increasing count.
      */
     private static
-    long[] computeHistogram2Col(int[] sortedValues) {
+        long[] computeHistogram2Col(int[] sortedValues) {
         switch (sortedValues.length) {
-        case 0:
-            return new long[]{ };
-        case 1:
-            return new long[]{ ((long)1 << 32) | (LOW32 & sortedValues[0]) };
+            case 0:
+                return new long[]{ };
+            case 1:
+                return new long[]{ ((long)1 << 32) | (LOW32 & sortedValues[0]) };
         }
         long[] hist = null;
         for (boolean sizeOnly = true; ; sizeOnly = false) {
@@ -493,7 +493,7 @@ final class Histogram {
      *  In the new histogram, the counts are averaged over row entries.
      */
     private static
-    int[][] regroupHistogram(int[][] matrix, int[] groups) {
+        int[][] regroupHistogram(int[][] matrix, int[] groups) {
         long oldEntries = 0;
         for (int i = 0; i < matrix.length; i++) {
             oldEntries += matrix[i].length-1;
@@ -556,7 +556,7 @@ final class Histogram {
     }
 
     public static
-    Histogram makeByteHistogram(InputStream bytes) throws IOException {
+        Histogram makeByteHistogram(InputStream bytes) throws IOException {
         byte[] buf = new byte[1<<12];
         int[] tally = new int[1<<8];
         for (int nr; (nr = bytes.read(buf)) > 0; ) {
@@ -575,7 +575,7 @@ final class Histogram {
 
     /** Slice and sort the given input array. */
     private static
-    int[] sortedSlice(int[] valueSequence, int start, int end) {
+        int[] sortedSlice(int[] valueSequence, int start, int end) {
         if (start == 0 && end == valueSequence.length &&
             isSorted(valueSequence, 0, false)) {
             return valueSequence;
@@ -589,7 +589,7 @@ final class Histogram {
 
     /** Tell if an array is sorted. */
     private static
-    boolean isSorted(int[] values, int from, boolean strict) {
+        boolean isSorted(int[] values, int from, boolean strict) {
         for (int i = from+1; i < values.length; i++) {
             if (strict ? !(values[i-1] < values[i])
                        : !(values[i-1] <= values[i])) {
@@ -601,7 +601,7 @@ final class Histogram {
 
     /** Clone and sort the array, if not already sorted. */
     private static
-    int[] maybeSort(int[] values) {
+        int[] maybeSort(int[] values) {
         if (!isSorted(values, 0, false)) {
             values = values.clone();
             Arrays.sort(values);

@@ -374,36 +374,36 @@ class OutboundMessageFragments {
         return rv;
     }
 
-private void removePeer(PeerState peer) {
-    _activePeers.remove(peer);
-    if (_log.shouldDebug()) {
-        _log.debug("No more pending messages for [" + peer.getRemotePeer().toBase64().substring(0,6) + "]");
+    private void removePeer(PeerState peer) {
+        _activePeers.remove(peer);
+        if (_log.shouldDebug()) {
+            _log.debug("No more pending messages for [" + peer.getRemotePeer().toBase64().substring(0,6) + "]");
+        }
     }
-}
 
-private void waitForMessages() {
-    synchronized (_waitLock) {
-        try {
-            _waitLock.wait(MAX_WAIT);
-        } catch (InterruptedException ie) {
-            if (_log.shouldDebug()) {
-                _log.debug("Woken up while waiting");
+    private void waitForMessages() {
+        synchronized (_waitLock) {
+            try {
+                _waitLock.wait(MAX_WAIT);
+            } catch (InterruptedException ie) {
+                if (_log.shouldDebug()) {
+                    _log.debug("Woken up while waiting");
+                }
             }
         }
     }
-}
 
-private void waitForMessages(int timeout) {
-    synchronized (_waitLock) {
-        try {
-            _waitLock.wait(timeout);
-        } catch (InterruptedException ie) {
-            if (_log.shouldDebug()) {
-                _log.debug("Woken up while waiting");
+    private void waitForMessages(int timeout) {
+        synchronized (_waitLock) {
+            try {
+                _waitLock.wait(timeout);
+            } catch (InterruptedException ie) {
+                if (_log.shouldDebug()) {
+                    _log.debug("Woken up while waiting");
+                }
             }
         }
     }
-}
 
 
 }

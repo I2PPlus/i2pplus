@@ -242,7 +242,7 @@ class Attribute implements Comparable<Attribute> {
              +"\n  "
             ),
             Attribute.normalizeLayoutString
-             (""
+            (""
              +"\n  # annotation :="
              +"\n  [RSH"
              +"\n    NH[RUH (1)]   # forward call to value"
@@ -330,10 +330,10 @@ class Attribute implements Comparable<Attribute> {
 
     public static String contextName(int ctype) {
         switch (ctype) {
-        case ATTR_CONTEXT_CLASS: return "class";
-        case ATTR_CONTEXT_FIELD: return "field";
-        case ATTR_CONTEXT_METHOD: return "method";
-        case ATTR_CONTEXT_CODE: return "code";
+            case ATTR_CONTEXT_CLASS: return "class";
+            case ATTR_CONTEXT_FIELD: return "field";
+            case ATTR_CONTEXT_METHOD: return "method";
+            case ATTR_CONTEXT_CODE: return "code";
         }
         return null;
     }
@@ -344,7 +344,7 @@ class Attribute implements Comparable<Attribute> {
      *  bits and attribute indicators.
      */
     public abstract static
-    class Holder {
+        class Holder {
 
         // We need this abstract method to interpret embedded CP refs.
         protected abstract Entry[] getCPMap();
@@ -463,7 +463,7 @@ class Attribute implements Comparable<Attribute> {
     // Lightweight interface to hide details of band structure.
     // Also used for testing.
     public abstract static
-    class ValueStream {
+        class ValueStream {
         public int getInt(int bandIndex) { throw undef(); }
         public void putInt(int bandIndex, int value) { throw undef(); }
         public Entry getRef(int bandIndex) { throw undef(); }
@@ -498,7 +498,7 @@ class Attribute implements Comparable<Attribute> {
      *  and format.  The formats are specified in a "little language".
      */
     public static
-    class Layout implements Comparable<Layout> {
+        class Layout implements Comparable<Layout> {
         int ctype;       // attribute context type, e.g., ATTR_CONTEXT_CODE
         String name;     // name of attribute
         boolean hasRefs; // this kind of attr contains CP refs?
@@ -614,7 +614,7 @@ class Attribute implements Comparable<Attribute> {
         }
 
         public
-        class Element {
+            class Element {
             String layout;   // spelling in the little language
             byte flags;      // EF_SIGN, etc.
             byte kind;       // EK_UINT, etc.
@@ -648,13 +648,13 @@ class Attribute implements Comparable<Attribute> {
             private String stringForDebug() {
                 Element[] lbody = this.body;
                 switch (kind) {
-                case EK_CALL:
-                    lbody = null;
-                    break;
-                case EK_CASE:
-                    if (flagTest(EF_BACK))
+                    case EK_CALL:
                         lbody = null;
-                    break;
+                        break;
+                    case EK_CASE:
+                        if (flagTest(EF_BACK))
+                            lbody = null;
+                        break;
                 }
                 return layout
                     + (!hasBand()?"":"#"+bandIndex)
@@ -716,7 +716,7 @@ class Attribute implements Comparable<Attribute> {
     }
 
     public static
-    class FormatException extends IOException {
+        class FormatException extends IOException {
         private static final long serialVersionUID = -2542243830788066513L;
 
         private int ctype;
@@ -785,7 +785,7 @@ class Attribute implements Comparable<Attribute> {
      *  Replaces '0xNNN' by the decimal code of the hex number NNN.
      */
     public static
-    String normalizeLayoutString(String layout) {
+        String normalizeLayoutString(String layout) {
         StringBuilder buf = new StringBuilder();
         for (int i = 0, len = layout.length(); i < len; ) {
             char ch = layout.charAt(i++);
@@ -897,7 +897,7 @@ class Attribute implements Comparable<Attribute> {
  </pre>
     */
     static //private
-    Layout.Element[] tokenizeLayout(Layout self, int curCble, String layout) {
+        Layout.Element[] tokenizeLayout(Layout self, int curCble, String layout) {
         List<Layout.Element> col = new ArrayList<>(layout.length());
         tokenizeLayout(self, curCble, layout, col);
         Layout.Element[] res = new Layout.Element[col.size()];
@@ -905,7 +905,7 @@ class Attribute implements Comparable<Attribute> {
         return res;
     }
     static //private
-    void tokenizeLayout(Layout self, int curCble, String layout, List<Layout.Element> col) {
+        void tokenizeLayout(Layout self, int curCble, String layout, List<Layout.Element> col) {
         boolean prevBCI = false;
         for (int len = layout.length(), i = 0; i < len; ) {
             int start = i;
@@ -916,193 +916,193 @@ class Attribute implements Comparable<Attribute> {
             // strip a prefix
             switch (layout.charAt(i++)) {
             /// layout_element: integral
-            case 'B': case 'H': case 'I': case 'V': // unsigned_int
-                kind = EK_INT;
-                --i; // reparse
-                i = tokenizeUInt(e, layout, i);
-                break;
-            case 'S': // signed_int
-                kind = EK_INT;
-                --i; // reparse
-                i = tokenizeSInt(e, layout, i);
-                break;
-            case 'P': // bc_index
-                kind = EK_BCI;
-                if (layout.charAt(i++) == 'O') {
+                case 'B': case 'H': case 'I': case 'V': // unsigned_int
+                    kind = EK_INT;
+                    --i; // reparse
+                    i = tokenizeUInt(e, layout, i);
+                    break;
+                case 'S': // signed_int
+                    kind = EK_INT;
+                    --i; // reparse
+                    i = tokenizeSInt(e, layout, i);
+                    break;
+                case 'P': // bc_index
+                    kind = EK_BCI;
+                    if (layout.charAt(i++) == 'O') {
                     // bc_index: 'PO' tokenizeUInt
-                    e.flags |= EF_DELTA;
+                        e.flags |= EF_DELTA;
                     // must follow P or PO:
-                    if (!prevBCI)
+                        if (!prevBCI)
                         { i = -i; continue; } // fail
-                    i++; // move forward
-                }
-                --i; // reparse
-                i = tokenizeUInt(e, layout, i);
-                break;
-            case 'O': // bc_offset
-                kind = EK_BCO;
-                e.flags |= EF_DELTA;
+                        i++; // move forward
+                    }
+                    --i; // reparse
+                    i = tokenizeUInt(e, layout, i);
+                    break;
+                case 'O': // bc_offset
+                    kind = EK_BCO;
+                    e.flags |= EF_DELTA;
                 // must follow P or PO:
-                if (!prevBCI)
+                    if (!prevBCI)
                     { i = -i; continue; } // fail
-                i = tokenizeSInt(e, layout, i);
-                break;
-            case 'F': // flag
-                kind = EK_FLAG;
-                i = tokenizeUInt(e, layout, i);
-                break;
-            case 'N': // replication: 'N' uint '[' elem ... ']'
-                kind = EK_REPL;
-                i = tokenizeUInt(e, layout, i);
-                if (layout.charAt(i++) != '[')
-                    { i = -i; continue; } // fail
-                i = skipBody(layout, body = i);
-                e.body = tokenizeLayout(self, curCble,
-                                        layout.substring(body, i++));
-                break;
-            case 'T': // union: 'T' any_int union_case* '(' ')' '[' body ']'
-                kind = EK_UN;
-                i = tokenizeSInt(e, layout, i);
-                List<Layout.Element> cases = new ArrayList<>();
-                for (;;) {
-                    // Keep parsing cases until we hit the default case.
-                    if (layout.charAt(i++) != '(')
-                        { i = -i; break; } // fail
-                    int beg = i;
-                    i = layout.indexOf(')', i);
-                    String cstr = layout.substring(beg, i++);
-                    int cstrlen = cstr.length();
+                    i = tokenizeSInt(e, layout, i);
+                    break;
+                case 'F': // flag
+                    kind = EK_FLAG;
+                    i = tokenizeUInt(e, layout, i);
+                    break;
+                case 'N': // replication: 'N' uint '[' elem ... ']'
+                    kind = EK_REPL;
+                    i = tokenizeUInt(e, layout, i);
                     if (layout.charAt(i++) != '[')
+                    { i = -i; continue; } // fail
+                    i = skipBody(layout, body = i);
+                    e.body = tokenizeLayout(self, curCble,
+                                        layout.substring(body, i++));
+                    break;
+                case 'T': // union: 'T' any_int union_case* '(' ')' '[' body ']'
+                    kind = EK_UN;
+                    i = tokenizeSInt(e, layout, i);
+                    List<Layout.Element> cases = new ArrayList<>();
+                    for (;;) {
+                    // Keep parsing cases until we hit the default case.
+                        if (layout.charAt(i++) != '(')
+                        { i = -i; break; } // fail
+                        int beg = i;
+                        i = layout.indexOf(')', i);
+                        String cstr = layout.substring(beg, i++);
+                        int cstrlen = cstr.length();
+                        if (layout.charAt(i++) != '[')
                         { i = -i; break; } // fail
                     // Check for duplication.
-                    if (layout.charAt(i) == ']')
-                        body = i;  // missing body, which is legal here
-                    else
-                        i = skipBody(layout, body = i);
-                    Layout.Element[] cbody
-                        = tokenizeLayout(self, curCble,
+                        if (layout.charAt(i) == ']')
+                            body = i;  // missing body, which is legal here
+                        else
+                            i = skipBody(layout, body = i);
+                        Layout.Element[] cbody
+                            = tokenizeLayout(self, curCble,
                                          layout.substring(body, i++));
-                    if (cstrlen == 0) {
-                        Layout.Element ce = self.new Element();
-                        ce.body = cbody;
-                        ce.kind = EK_CASE;
-                        ce.removeBand();
-                        cases.add(ce);
-                        break;  // done with the whole union
-                    } else {
+                        if (cstrlen == 0) {
+                            Layout.Element ce = self.new Element();
+                            ce.body = cbody;
+                            ce.kind = EK_CASE;
+                            ce.removeBand();
+                            cases.add(ce);
+                            break;  // done with the whole union
+                        } else {
                         // Parse a case string.
-                        boolean firstCaseNum = true;
-                        for (int cp = 0, endp;; cp = endp+1) {
+                            boolean firstCaseNum = true;
+                            for (int cp = 0, endp;; cp = endp+1) {
                             // Look for multiple case tags:
-                            endp = cstr.indexOf(',', cp);
-                            if (endp < 0)  endp = cstrlen;
-                            String cstr1 = cstr.substring(cp, endp);
-                            if (cstr1.isEmpty())
-                                cstr1 = "empty";  // will fail parse
-                            int value0, value1;
+                                endp = cstr.indexOf(',', cp);
+                                if (endp < 0)  endp = cstrlen;
+                                String cstr1 = cstr.substring(cp, endp);
+                                if (cstr1.isEmpty())
+                                    cstr1 = "empty";  // will fail parse
+                                int value0, value1;
                             // Check for a case range (new in 1.6).
-                            int dash = findCaseDash(cstr1, 0);
-                            if (dash >= 0) {
-                                value0 = parseIntBefore(cstr1, dash);
-                                value1 = parseIntAfter(cstr1, dash);
-                                if (value0 >= value1)
+                                int dash = findCaseDash(cstr1, 0);
+                                if (dash >= 0) {
+                                    value0 = parseIntBefore(cstr1, dash);
+                                    value1 = parseIntAfter(cstr1, dash);
+                                    if (value0 >= value1)
                                     { i = -i; break; } // fail
-                            } else {
-                                value0 = value1 = Integer.parseInt(cstr1);
-                            }
+                                } else {
+                                    value0 = value1 = Integer.parseInt(cstr1);
+                                }
                             // Add a case for each value in value0..value1
-                            for (;; value0++) {
-                                Layout.Element ce = self.new Element();
-                                ce.body = cbody;  // all cases share one body
-                                ce.kind = EK_CASE;
-                                ce.removeBand();
-                                if (!firstCaseNum)
+                                for (;; value0++) {
+                                    Layout.Element ce = self.new Element();
+                                    ce.body = cbody;  // all cases share one body
+                                    ce.kind = EK_CASE;
+                                    ce.removeBand();
+                                    if (!firstCaseNum)
                                     // "backward case" repeats a body
-                                    ce.flags |= EF_BACK;
-                                firstCaseNum = false;
-                                ce.value = value0;
-                                cases.add(ce);
-                                if (value0 == value1)  break;
-                            }
-                            if (endp == cstrlen) {
-                                break;  // done with this case
+                                        ce.flags |= EF_BACK;
+                                    firstCaseNum = false;
+                                    ce.value = value0;
+                                    cases.add(ce);
+                                    if (value0 == value1)  break;
+                                }
+                                if (endp == cstrlen) {
+                                    break;  // done with this case
+                                }
                             }
                         }
                     }
-                }
-                e.body = new Layout.Element[cases.size()];
-                cases.toArray(e.body);
-                e.kind = kind;
-                for (int j = 0; j < e.body.length-1; j++) {
-                    Layout.Element ce = e.body[j];
-                    if (matchCase(e, ce.value) != ce) {
+                    e.body = new Layout.Element[cases.size()];
+                    cases.toArray(e.body);
+                    e.kind = kind;
+                    for (int j = 0; j < e.body.length-1; j++) {
+                        Layout.Element ce = e.body[j];
+                        if (matchCase(e, ce.value) != ce) {
                         // Duplicate tag.
-                        { i = -i; break; } // fail
+                            { i = -i; break; } // fail
+                        }
                     }
-                }
-                break;
-            case '(': // call: '(' '-'? digit+ ')'
-                kind = EK_CALL;
-                e.removeBand();
-                i = layout.indexOf(')', i);
-                String cstr = layout.substring(start+1, i++);
-                int offset = Integer.parseInt(cstr);
-                int target = curCble + offset;
-                if (!(offset+"").equals(cstr) ||
-                    self.elems == null ||
-                    target < 0 ||
-                    target >= self.elems.length)
+                    break;
+                case '(': // call: '(' '-'? digit+ ')'
+                    kind = EK_CALL;
+                    e.removeBand();
+                    i = layout.indexOf(')', i);
+                    String cstr = layout.substring(start+1, i++);
+                    int offset = Integer.parseInt(cstr);
+                    int target = curCble + offset;
+                    if (!(offset+"").equals(cstr) ||
+                        self.elems == null ||
+                        target < 0 ||
+                        target >= self.elems.length)
                     { i = -i; continue; } // fail
-                Layout.Element ce = self.elems[target];
+                    Layout.Element ce = self.elems[target];
                 assert(ce.kind == EK_CBLE);
-                e.value = target;
-                e.body = new Layout.Element[]{ ce };
+                    e.value = target;
+                    e.body = new Layout.Element[]{ ce };
                 // Is it a (recursive) backward call?
-                if (offset <= 0) {
+                    if (offset <= 0) {
                     // Yes.  Mark both caller and callee backward.
-                    e.flags  |= EF_BACK;
-                    ce.flags |= EF_BACK;
-                }
-                break;
-            case 'K':  // reference_type: constant_ref
-                kind = EK_REF;
-                switch (layout.charAt(i++)) {
-                case 'I': e.refKind = CONSTANT_Integer; break;
-                case 'J': e.refKind = CONSTANT_Long; break;
-                case 'F': e.refKind = CONSTANT_Float; break;
-                case 'D': e.refKind = CONSTANT_Double; break;
-                case 'S': e.refKind = CONSTANT_String; break;
-                case 'Q': e.refKind = CONSTANT_FieldSpecific; break;
+                        e.flags  |= EF_BACK;
+                        ce.flags |= EF_BACK;
+                    }
+                    break;
+                case 'K':  // reference_type: constant_ref
+                    kind = EK_REF;
+                    switch (layout.charAt(i++)) {
+                        case 'I': e.refKind = CONSTANT_Integer; break;
+                        case 'J': e.refKind = CONSTANT_Long; break;
+                        case 'F': e.refKind = CONSTANT_Float; break;
+                        case 'D': e.refKind = CONSTANT_Double; break;
+                        case 'S': e.refKind = CONSTANT_String; break;
+                        case 'Q': e.refKind = CONSTANT_FieldSpecific; break;
 
                 // new in 1.7:
-                case 'M': e.refKind = CONSTANT_MethodHandle; break;
-                case 'T': e.refKind = CONSTANT_MethodType; break;
-                case 'L': e.refKind = CONSTANT_LoadableValue; break;
-                default: { i = -i; continue; } // fail
-                }
-                break;
-            case 'R': // schema_ref
-                kind = EK_REF;
-                switch (layout.charAt(i++)) {
-                case 'C': e.refKind = CONSTANT_Class; break;
-                case 'S': e.refKind = CONSTANT_Signature; break;
-                case 'D': e.refKind = CONSTANT_NameandType; break;
-                case 'F': e.refKind = CONSTANT_Fieldref; break;
-                case 'M': e.refKind = CONSTANT_Methodref; break;
-                case 'I': e.refKind = CONSTANT_InterfaceMethodref; break;
+                        case 'M': e.refKind = CONSTANT_MethodHandle; break;
+                        case 'T': e.refKind = CONSTANT_MethodType; break;
+                        case 'L': e.refKind = CONSTANT_LoadableValue; break;
+                        default: { i = -i; continue; } // fail
+                    }
+                    break;
+                case 'R': // schema_ref
+                    kind = EK_REF;
+                    switch (layout.charAt(i++)) {
+                        case 'C': e.refKind = CONSTANT_Class; break;
+                        case 'S': e.refKind = CONSTANT_Signature; break;
+                        case 'D': e.refKind = CONSTANT_NameandType; break;
+                        case 'F': e.refKind = CONSTANT_Fieldref; break;
+                        case 'M': e.refKind = CONSTANT_Methodref; break;
+                        case 'I': e.refKind = CONSTANT_InterfaceMethodref; break;
 
-                case 'U': e.refKind = CONSTANT_Utf8; break; //utf8_ref
-                case 'Q': e.refKind = CONSTANT_All; break; //untyped_ref
+                        case 'U': e.refKind = CONSTANT_Utf8; break; //utf8_ref
+                        case 'Q': e.refKind = CONSTANT_All; break; //untyped_ref
 
                 // new in 1.7:
-                case 'Y': e.refKind = CONSTANT_InvokeDynamic; break;
-                case 'B': e.refKind = CONSTANT_BootstrapMethod; break;
-                case 'N': e.refKind = CONSTANT_AnyMember; break;
+                        case 'Y': e.refKind = CONSTANT_InvokeDynamic; break;
+                        case 'B': e.refKind = CONSTANT_BootstrapMethod; break;
+                        case 'N': e.refKind = CONSTANT_AnyMember; break;
 
+                        default: { i = -i; continue; } // fail
+                    }
+                    break;
                 default: { i = -i; continue; } // fail
-                }
-                break;
-            default: { i = -i; continue; } // fail
             }
 
             // further parsing of refs
@@ -1126,7 +1126,7 @@ class Attribute implements Comparable<Attribute> {
         }
     }
     static //private
-    String[] splitBodies(String layout) {
+        String[] splitBodies(String layout) {
         List<String> bodies = new ArrayList<>();
         // Parse several independent layout bodies:  "[foo][bar]...[baz]"
         for (int i = 0; i < layout.length(); i++) {
@@ -1141,7 +1141,7 @@ class Attribute implements Comparable<Attribute> {
         return res;
     }
     private static
-    int skipBody(String layout, int i) {
+        int skipBody(String layout, int i) {
         assert(layout.charAt(i-1) == '[');
         if (layout.charAt(i) == ']')
             // No empty bodies, please.
@@ -1149,8 +1149,8 @@ class Attribute implements Comparable<Attribute> {
         // skip balanced [...[...]...]
         for (int depth = 1; depth > 0; ) {
             switch (layout.charAt(i++)) {
-            case '[': depth++; break;
-            case ']': depth--; break;
+                case '[': depth++; break;
+                case ']': depth--; break;
             }
         }
         --i;  // get before bracket
@@ -1158,18 +1158,18 @@ class Attribute implements Comparable<Attribute> {
         return i;  // return closing bracket
     }
     private static
-    int tokenizeUInt(Layout.Element e, String layout, int i) {
+        int tokenizeUInt(Layout.Element e, String layout, int i) {
         switch (layout.charAt(i++)) {
-        case 'V': e.len = 0; break;
-        case 'B': e.len = 1; break;
-        case 'H': e.len = 2; break;
-        case 'I': e.len = 4; break;
-        default: return -i;
+            case 'V': e.len = 0; break;
+            case 'B': e.len = 1; break;
+            case 'H': e.len = 2; break;
+            case 'I': e.len = 4; break;
+            default: return -i;
         }
         return i;
     }
     private static
-    int tokenizeSInt(Layout.Element e, String layout, int i) {
+        int tokenizeSInt(Layout.Element e, String layout, int i) {
         if (layout.charAt(i) == 'S') {
             e.flags |= EF_SIGN;
             ++i;
@@ -1178,13 +1178,13 @@ class Attribute implements Comparable<Attribute> {
     }
 
     private static
-    boolean isDigit(char c) {
+        boolean isDigit(char c) {
         return c >= '0' && c <= '9';
     }
 
     /** Find an occurrence of hyphen '-' between two numerals. */
     static //private
-    int findCaseDash(String layout, int fromIndex) {
+        int findCaseDash(String layout, int fromIndex) {
         if (fromIndex <= 0)  fromIndex = 1;  // minimum dash pos
         int lastDash = layout.length() - 2;  // maximum dash pos
         for (;;) {
@@ -1203,7 +1203,7 @@ class Attribute implements Comparable<Attribute> {
         }
     }
     static
-    int parseIntBefore(String layout, int dash) {
+        int parseIntBefore(String layout, int dash) {
         int end = dash;
         int beg = end;
         while (beg > 0 && isDigit(layout.charAt(beg-1))) {
@@ -1216,7 +1216,7 @@ class Attribute implements Comparable<Attribute> {
         return Integer.parseInt(layout.substring(beg, end));
     }
     static
-    int parseIntAfter(String layout, int dash) {
+        int parseIntAfter(String layout, int dash) {
         int beg = dash+1;
         int end = beg;
         int limit = layout.length();
@@ -1229,7 +1229,7 @@ class Attribute implements Comparable<Attribute> {
     }
     /** For compatibility with 1.5 pack, expand 1-5 into 1,2,3,4,5. */
     static
-    String expandCaseDashNotation(String layout) {
+        String expandCaseDashNotation(String layout) {
         int dash = findCaseDash(layout, 0);
         if (dash < 0)  return layout;  // no dashes (the common case)
         StringBuilder result = new StringBuilder(layout.length() * 3);
@@ -1264,7 +1264,7 @@ class Attribute implements Comparable<Attribute> {
     // Used when reading a class file (local refs resolved with local cpMap).
     // Also used for ad hoc scanning.
     static
-    int parseUsing(Layout.Element[] elems, Holder holder,
+        int parseUsing(Layout.Element[] elems, Holder holder,
                    byte[] bytes, int pos, int len, ValueStream out) {
         int prevBCI = 0;
         int prevRBCI = 0;
@@ -1276,103 +1276,103 @@ class Attribute implements Comparable<Attribute> {
             int value;
             int BCI, RBCI;
             switch (e.kind) {
-            case EK_INT:
-                pos = parseInt(e, bytes, pos, buf);
-                value = buf[0];
-                out.putInt(bandIndex, value);
-                break;
-            case EK_BCI:  // PH, POH
-                pos = parseInt(e, bytes, pos, buf);
-                BCI = buf[0];
-                RBCI = out.encodeBCI(BCI);
-                if (!e.flagTest(EF_DELTA)) {
+                case EK_INT:
+                    pos = parseInt(e, bytes, pos, buf);
+                    value = buf[0];
+                    out.putInt(bandIndex, value);
+                    break;
+                case EK_BCI:  // PH, POH
+                    pos = parseInt(e, bytes, pos, buf);
+                    BCI = buf[0];
+                    RBCI = out.encodeBCI(BCI);
+                    if (!e.flagTest(EF_DELTA)) {
                     // PH:  transmit R(bci), store bci
-                    value = RBCI;
-                } else {
+                        value = RBCI;
+                    } else {
                     // POH:  transmit D(R(bci)), store bci
-                    value = RBCI - prevRBCI;
-                }
-                prevBCI = BCI;
-                prevRBCI = RBCI;
-                out.putInt(bandIndex, value);
-                break;
-            case EK_BCO:  // OH
+                        value = RBCI - prevRBCI;
+                    }
+                    prevBCI = BCI;
+                    prevRBCI = RBCI;
+                    out.putInt(bandIndex, value);
+                    break;
+                case EK_BCO:  // OH
                 assert(e.flagTest(EF_DELTA));
                 // OH:  transmit D(R(bci)), store D(bci)
-                pos = parseInt(e, bytes, pos, buf);
-                BCI = prevBCI + buf[0];
-                RBCI = out.encodeBCI(BCI);
-                value = RBCI - prevRBCI;
-                prevBCI = BCI;
-                prevRBCI = RBCI;
-                out.putInt(bandIndex, value);
-                break;
-            case EK_FLAG:
-                pos = parseInt(e, bytes, pos, buf);
-                value = buf[0];
-                out.putInt(bandIndex, value);
-                break;
-            case EK_REPL:
-                pos = parseInt(e, bytes, pos, buf);
-                value = buf[0];
-                out.putInt(bandIndex, value);
-                for (int j = 0; j < value; j++) {
-                    pos = parseUsing(e.body, holder, bytes, pos, end-pos, out);
-                }
-                break;  // already transmitted the scalar value
-            case EK_UN:
-                pos = parseInt(e, bytes, pos, buf);
-                value = buf[0];
-                out.putInt(bandIndex, value);
-                Layout.Element ce = matchCase(e, value);
-                pos = parseUsing(ce.body, holder, bytes, pos, end-pos, out);
+                    pos = parseInt(e, bytes, pos, buf);
+                    BCI = prevBCI + buf[0];
+                    RBCI = out.encodeBCI(BCI);
+                    value = RBCI - prevRBCI;
+                    prevBCI = BCI;
+                    prevRBCI = RBCI;
+                    out.putInt(bandIndex, value);
+                    break;
+                case EK_FLAG:
+                    pos = parseInt(e, bytes, pos, buf);
+                    value = buf[0];
+                    out.putInt(bandIndex, value);
+                    break;
+                case EK_REPL:
+                    pos = parseInt(e, bytes, pos, buf);
+                    value = buf[0];
+                    out.putInt(bandIndex, value);
+                    for (int j = 0; j < value; j++) {
+                        pos = parseUsing(e.body, holder, bytes, pos, end-pos, out);
+                    }
+                    break;  // already transmitted the scalar value
+                case EK_UN:
+                    pos = parseInt(e, bytes, pos, buf);
+                    value = buf[0];
+                    out.putInt(bandIndex, value);
+                    Layout.Element ce = matchCase(e, value);
+                    pos = parseUsing(ce.body, holder, bytes, pos, end-pos, out);
 
-                break;  // already transmitted the scalar value
-            case EK_CALL:
+                    break;  // already transmitted the scalar value
+                case EK_CALL:
                 // Adjust band offset if it is a backward call.
                 assert(e.body.length == 1);
                 assert(e.body[0].kind == EK_CBLE);
-                if (e.flagTest(EF_BACK))
-                    out.noteBackCall(e.value);
-                pos = parseUsing(e.body[0].body, holder, bytes, pos, end-pos, out);
-                break;  // no additional scalar value to transmit
-            case EK_REF:
-                pos = parseInt(e, bytes, pos, buf);
-                int localRef = buf[0];
-                Entry globalRef;
-                if (localRef == 0) {
-                    globalRef = null;  // N.B. global null reference is -1
-                } else {
-                    Entry[] cpMap = holder.getCPMap();
-                    globalRef = (localRef >= 0 && localRef < cpMap.length
+                    if (e.flagTest(EF_BACK))
+                        out.noteBackCall(e.value);
+                    pos = parseUsing(e.body[0].body, holder, bytes, pos, end-pos, out);
+                    break;  // no additional scalar value to transmit
+                case EK_REF:
+                    pos = parseInt(e, bytes, pos, buf);
+                    int localRef = buf[0];
+                    Entry globalRef;
+                    if (localRef == 0) {
+                        globalRef = null;  // N.B. global null reference is -1
+                    } else {
+                        Entry[] cpMap = holder.getCPMap();
+                        globalRef = (localRef >= 0 && localRef < cpMap.length
                                     ? cpMap[localRef]
                                     : null);
-                    byte tag = e.refKind;
-                    if (globalRef != null && tag == CONSTANT_Signature
-                        && globalRef.getTag() == CONSTANT_Utf8) {
+                        byte tag = e.refKind;
+                        if (globalRef != null && tag == CONSTANT_Signature
+                            && globalRef.getTag() == CONSTANT_Utf8) {
                         // Cf. ClassReader.readSignatureRef.
-                        String typeName = globalRef.stringValue();
-                        globalRef = ConstantPool.getSignatureEntry(typeName);
-                    }
-                    String got = (globalRef == null
-                        ? "invalid CP index"
-                        : "type=" + ConstantPool.tagName(globalRef.tag));
-                    if (globalRef == null || !globalRef.tagMatches(tag)) {
-                        throw new IllegalArgumentException(
+                            String typeName = globalRef.stringValue();
+                            globalRef = ConstantPool.getSignatureEntry(typeName);
+                        }
+                        String got = (globalRef == null
+                            ? "invalid CP index"
+                            : "type=" + ConstantPool.tagName(globalRef.tag));
+                        if (globalRef == null || !globalRef.tagMatches(tag)) {
+                            throw new IllegalArgumentException(
                                 "Bad constant, expected type=" +
                                 ConstantPool.tagName(tag) + " got " + got);
+                        }
                     }
-                }
-                out.putRef(bandIndex, globalRef);
-                break;
-            default: assert(false);
+                    out.putRef(bandIndex, globalRef);
+                    break;
+                default: assert(false);
             }
         }
         return pos;
     }
 
     static
-    Layout.Element matchCase(Layout.Element e, int value) {
+        Layout.Element matchCase(Layout.Element e, int value) {
         assert(e.kind == EK_UN);
         int lastj = e.body.length-1;
         for (int j = 0; j < lastj; j++) {
@@ -1385,7 +1385,7 @@ class Attribute implements Comparable<Attribute> {
     }
 
     private static
-    int parseInt(Layout.Element e, byte[] bytes, int pos, int[] buf) {
+        int parseInt(Layout.Element e, byte[] bytes, int pos, int[] buf) {
         int value = 0;
         int loBits = e.len * 8;
         // Read in big-endian order:
@@ -1405,7 +1405,7 @@ class Attribute implements Comparable<Attribute> {
     // Used when emptying attribute bands into a package model.
     // (At that point CP refs. are not yet assigned indexes.)
     static
-    void unparseUsing(Layout.Element[] elems, Object[] fixups,
+        void unparseUsing(Layout.Element[] elems, Object[] fixups,
                       ValueStream in, ByteArrayOutputStream out) {
         int prevBCI = 0;
         int prevRBCI = 0;
@@ -1415,77 +1415,77 @@ class Attribute implements Comparable<Attribute> {
             int value;
             int BCI, RBCI;  // "RBCI" is R(BCI), BCI's coded representation
             switch (e.kind) {
-            case EK_INT:
-                value = in.getInt(bandIndex);
-                unparseInt(e, value, out);
-                break;
-            case EK_BCI:  // PH, POH
-                value = in.getInt(bandIndex);
-                if (!e.flagTest(EF_DELTA)) {
+                case EK_INT:
+                    value = in.getInt(bandIndex);
+                    unparseInt(e, value, out);
+                    break;
+                case EK_BCI:  // PH, POH
+                    value = in.getInt(bandIndex);
+                    if (!e.flagTest(EF_DELTA)) {
                     // PH:  transmit R(bci), store bci
-                    RBCI = value;
-                } else {
+                        RBCI = value;
+                    } else {
                     // POH:  transmit D(R(bci)), store bci
-                    RBCI = prevRBCI + value;
-                }
+                        RBCI = prevRBCI + value;
+                    }
                 assert(prevBCI == in.decodeBCI(prevRBCI));
-                BCI = in.decodeBCI(RBCI);
-                unparseInt(e, BCI, out);
-                prevBCI = BCI;
-                prevRBCI = RBCI;
-                break;
-            case EK_BCO:  // OH
-                value = in.getInt(bandIndex);
+                    BCI = in.decodeBCI(RBCI);
+                    unparseInt(e, BCI, out);
+                    prevBCI = BCI;
+                    prevRBCI = RBCI;
+                    break;
+                case EK_BCO:  // OH
+                    value = in.getInt(bandIndex);
                 assert(e.flagTest(EF_DELTA));
                 // OH:  transmit D(R(bci)), store D(bci)
                 assert(prevBCI == in.decodeBCI(prevRBCI));
-                RBCI = prevRBCI + value;
-                BCI = in.decodeBCI(RBCI);
-                unparseInt(e, BCI - prevBCI, out);
-                prevBCI = BCI;
-                prevRBCI = RBCI;
-                break;
-            case EK_FLAG:
-                value = in.getInt(bandIndex);
-                unparseInt(e, value, out);
-                break;
-            case EK_REPL:
-                value = in.getInt(bandIndex);
-                unparseInt(e, value, out);
-                for (int j = 0; j < value; j++) {
-                    unparseUsing(e.body, fixups, in, out);
-                }
-                break;
-            case EK_UN:
-                value = in.getInt(bandIndex);
-                unparseInt(e, value, out);
-                Layout.Element ce = matchCase(e, value);
-                unparseUsing(ce.body, fixups, in, out);
-                break;
-            case EK_CALL:
+                    RBCI = prevRBCI + value;
+                    BCI = in.decodeBCI(RBCI);
+                    unparseInt(e, BCI - prevBCI, out);
+                    prevBCI = BCI;
+                    prevRBCI = RBCI;
+                    break;
+                case EK_FLAG:
+                    value = in.getInt(bandIndex);
+                    unparseInt(e, value, out);
+                    break;
+                case EK_REPL:
+                    value = in.getInt(bandIndex);
+                    unparseInt(e, value, out);
+                    for (int j = 0; j < value; j++) {
+                        unparseUsing(e.body, fixups, in, out);
+                    }
+                    break;
+                case EK_UN:
+                    value = in.getInt(bandIndex);
+                    unparseInt(e, value, out);
+                    Layout.Element ce = matchCase(e, value);
+                    unparseUsing(ce.body, fixups, in, out);
+                    break;
+                case EK_CALL:
                 assert(e.body.length == 1);
                 assert(e.body[0].kind == EK_CBLE);
-                unparseUsing(e.body[0].body, fixups, in, out);
-                break;
-            case EK_REF:
-                Entry globalRef = in.getRef(bandIndex);
-                int localRef;
-                if (globalRef != null) {
+                    unparseUsing(e.body[0].body, fixups, in, out);
+                    break;
+                case EK_REF:
+                    Entry globalRef = in.getRef(bandIndex);
+                    int localRef;
+                    if (globalRef != null) {
                     // It's a one-element array, really an lvalue.
-                    fixups[0] = Fixups.addRefWithLoc(fixups[0], out.size(), globalRef);
-                    localRef = 0; // placeholder for fixups
-                } else {
-                    localRef = 0; // fixed null value
-                }
-                unparseInt(e, localRef, out);
-                break;
-            default: assert(false); continue;
+                        fixups[0] = Fixups.addRefWithLoc(fixups[0], out.size(), globalRef);
+                        localRef = 0; // placeholder for fixups
+                    } else {
+                        localRef = 0; // fixed null value
+                    }
+                    unparseInt(e, localRef, out);
+                    break;
+                default: assert(false); continue;
             }
         }
     }
 
     private static
-    void unparseInt(Layout.Element e, int value, ByteArrayOutputStream out) {
+        void unparseInt(Layout.Element e, int value, ByteArrayOutputStream out) {
         int loBits = e.len * 8;
         if (loBits == 0) {
             // It is not stored at all ('V' layout).

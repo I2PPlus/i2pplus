@@ -39,7 +39,7 @@ public class FileDumpHelper extends HelperBase {
     public String getFileSummary() {
         StringBuilder buf = new StringBuilder(16*1024);
         buf.append("<table id=jarfiles>\n<thead>\n<tr><th>File</th><th>Size</th><th>Date</th><th>SHA 256</th><th>Revision</th>")
-           .append("<th>JDK</th><th>Built</th><th>By</th><th>Mods</th></tr>\n</thead>\n");
+            .append("<th>JDK</th><th>Built</th><th>By</th><th>Mods</th></tr>\n</thead>\n");
 
         // jars added in wrapper.config
         ClassLoader loader = ClassLoader.getSystemClassLoader();
@@ -138,7 +138,7 @@ public class FileDumpHelper extends HelperBase {
                 buf.append("<a target=_blank rel=\"noreferrer\" href=\"");
                 if (builder.equals("zzz")) {buf.append(UPSTREAMLINK);}
                 else {buf.append(LINK);}
-            buf.append(s).append("\">");
+                buf.append(s).append("\">");
             }
             buf.append("<span class=revision><code>").append(s.substring(0, 8)).append("</code></span>");
             if (linkrev) {buf.append("</a>");}
@@ -166,7 +166,7 @@ public class FileDumpHelper extends HelperBase {
             // Encase each mod in a span so we can single click select individual mods
             buf.append("<span class=warn style=color:red><span class=\"unsignedmod\">")
                .append(s.replace(",", "</span></span><hr><span class=warn style=color:red><span class=unsignedmod>"))
-               .append("</span></span>");
+                .append("</span></span>");
         }
         buf.append("</td></tr>\n");
     }

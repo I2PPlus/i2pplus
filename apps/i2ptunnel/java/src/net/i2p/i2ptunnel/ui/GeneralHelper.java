@@ -672,8 +672,8 @@ public class GeneralHelper {
         int i = 0;
         String p;
         while ((p = getProperty(tunnel, pfx + i, null)) != null) {
-             rv.add(p);
-             i++;
+            rv.add(p);
+            i++;
         }
         return rv;
     }

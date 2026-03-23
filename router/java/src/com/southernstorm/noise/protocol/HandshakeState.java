@@ -139,7 +139,7 @@ public class HandshakeState implements Destroyable, Cloneable {
     /** Tunnels */
     public static final String protocolName3 = "Noise_N_25519_ChaChaPoly_SHA256";
     /** SSU2 */
-        public static final String protocolName4 = "Noise_XKchaobfse+hs1+hs2+hs3_25519_ChaChaPoly_SHA256";
+    public static final String protocolName4 = "Noise_XKchaobfse+hs1+hs2+hs3_25519_ChaChaPoly_SHA256";
     /**
      * Hybrid Ratchet
      * @since 0.9.67
@@ -556,12 +556,12 @@ public class HandshakeState implements Destroyable, Cloneable {
     {
         if (action != NO_ACTION) {
             throw new IllegalStateException
-                ("Handshake has already started; cannot start again");
+            ("Handshake has already started; cannot start again");
         }
         if ((pattern[0] & Pattern.FLAG_REMOTE_EPHEM_REQ) != 0 &&
                 (requirements & FALLBACK_PREMSG) == 0) {
             throw new UnsupportedOperationException
-                ("Cannot start a fallback pattern");
+            ("Cannot start a fallback pattern");
         }
 
         // Check that we have satisfied all of the pattern requirements.
@@ -677,7 +677,7 @@ public class HandshakeState implements Destroyable, Cloneable {
         // Validate the parameters and state.
         if (action != WRITE_MESSAGE) {
             throw new IllegalStateException
-                ("Handshake state " + STATE_NAMES[action] + " does not allow writing messages");
+            ("Handshake state " + STATE_NAMES[action] + " does not allow writing messages");
         }
         if (payload == null && (payloadOffset != 0 || payloadLength != 0)) {
             throw new IllegalArgumentException("Invalid payload argument");
@@ -724,7 +724,7 @@ public class HandshakeState implements Destroyable, Cloneable {
                         // the local ephemeral key into the chaining key.
                         messagePosn += len;
                     }
-                    break;
+                        break;
 
                     case Pattern.S:
                     {
@@ -738,14 +738,14 @@ public class HandshakeState implements Destroyable, Cloneable {
                         localKeyPair.getPublicKey(message, messagePosn);
                         messagePosn += symmetric.encryptAndHash(message, messagePosn, message, messagePosn, len);
                     }
-                    break;
+                        break;
 
                     case Pattern.EE:
                     {
                         // DH operation with initiator and responder ephemeral keys.
                         mixDH(localEphemeral, remoteEphemeral);
                     }
-                    break;
+                        break;
 
                     case Pattern.ES:
                     {
@@ -755,7 +755,7 @@ public class HandshakeState implements Destroyable, Cloneable {
                         else
                             mixDH(localKeyPair, remoteEphemeral);
                     }
-                    break;
+                        break;
 
                     case Pattern.SE:
                     {
@@ -765,7 +765,7 @@ public class HandshakeState implements Destroyable, Cloneable {
                         else
                             mixDH(localEphemeral, remotePublicKey);
                     }
-                    break;
+                        break;
 
                     case Pattern.SS:
                     {
@@ -777,7 +777,7 @@ public class HandshakeState implements Destroyable, Cloneable {
                         // DH operation with initiator and responder static keys.
                         mixDH(localKeyPair, remotePublicKey);
                     }
-                    break;
+                        break;
 
                     case Pattern.F:
                     {
@@ -816,7 +816,7 @@ public class HandshakeState implements Destroyable, Cloneable {
                             Noise.destroy(shared);
                         }
                     }
-                    break;
+                        break;
 
 
                     case Pattern.FF:
@@ -825,7 +825,7 @@ public class HandshakeState implements Destroyable, Cloneable {
                         // We are Bob.
                         // This is a NOOP, we did the mixDH() in Pattern.F above.
                     }
-                    break;
+                        break;
                     default:
                     {
                         // Unknown token code.  Abort.
@@ -896,7 +896,7 @@ public class HandshakeState implements Destroyable, Cloneable {
         // Validate the parameters.
         if (action != READ_MESSAGE) {
             throw new IllegalStateException
-                ("Handshake state " + STATE_NAMES[action] + " does not allow reading messages");
+            ("Handshake state " + STATE_NAMES[action] + " does not allow reading messages");
         }
         if (messageOffset > message.length || payloadOffset > payload.length) {
             throw new ShortBufferException();
@@ -947,7 +947,7 @@ public class HandshakeState implements Destroyable, Cloneable {
                         // the remote ephemeral key into the chaining key.
                         messageOffset += len;
                     }
-                    break;
+                        break;
 
                     case Pattern.S:
                     {
@@ -968,14 +968,14 @@ public class HandshakeState implements Destroyable, Cloneable {
                         }
                         messageOffset += len + macLen;
                     }
-                    break;
+                        break;
 
                     case Pattern.EE:
                     {
                         // DH operation with initiator and responder ephemeral keys.
                         mixDH(localEphemeral, remoteEphemeral);
                     }
-                    break;
+                        break;
 
                     case Pattern.ES:
                     {
@@ -985,7 +985,7 @@ public class HandshakeState implements Destroyable, Cloneable {
                         else
                             mixDH(localKeyPair, remoteEphemeral);
                     }
-                    break;
+                        break;
 
                     case Pattern.SE:
                     {
@@ -995,7 +995,7 @@ public class HandshakeState implements Destroyable, Cloneable {
                         else
                             mixDH(localEphemeral, remotePublicKey);
                     }
-                    break;
+                        break;
 
                     case Pattern.SS:
                     {
@@ -1007,7 +1007,7 @@ public class HandshakeState implements Destroyable, Cloneable {
                         // DH operation with initiator and responder static keys.
                         mixDH(localKeyPair, remotePublicKey);
                     }
-                    break;
+                        break;
 
                     case Pattern.F:
                     {
@@ -1028,7 +1028,7 @@ public class HandshakeState implements Destroyable, Cloneable {
                         }
                         messageOffset += len + macLen;
                     }
-                    break;
+                        break;
 
                     case Pattern.FF:
                     {
@@ -1036,7 +1036,7 @@ public class HandshakeState implements Destroyable, Cloneable {
                         // We are Alice.
                         mixDH(localHybrid, remoteHybrid);
                     }
-                    break;
+                        break;
                     default:
                     {
                         // Unknown token code.  Abort.
@@ -1076,7 +1076,7 @@ public class HandshakeState implements Destroyable, Cloneable {
     {
         if (action != SPLIT) {
             throw new IllegalStateException
-                ("Handshake has not finished, state: " + STATE_NAMES[action]);
+            ("Handshake has not finished, state: " + STATE_NAMES[action]);
         }
         CipherStatePair pair = symmetric.split();
         if (!isInitiator)
@@ -1103,7 +1103,7 @@ public class HandshakeState implements Destroyable, Cloneable {
     {
         if (action != SPLIT) {
             throw new IllegalStateException
-                ("Handshake has not finished, state: " + STATE_NAMES[action]);
+            ("Handshake has not finished, state: " + STATE_NAMES[action]);
         }
         CipherStatePair pair = symmetric.split(secondaryKey, offset, length);
         if (!isInitiator) {
@@ -1126,7 +1126,7 @@ public class HandshakeState implements Destroyable, Cloneable {
     {
         if (action != SPLIT && action != COMPLETE) {
             throw new IllegalStateException
-                ("Handshake has not finished, state: " + STATE_NAMES[action]);
+            ("Handshake has not finished, state: " + STATE_NAMES[action]);
         }
         return symmetric.getHandshakeHash();
     }
@@ -1260,7 +1260,7 @@ public class HandshakeState implements Destroyable, Cloneable {
                 buf.append("\n* Local hybrid public key (e1/ekem1) : ");
                 tmp = new byte[dh.getPublicKeyLength()];
                 dh.getPublicKey(tmp, 0);
-                                buf.append(tmp.length).append(" bytes ");
+                buf.append(tmp.length).append(" bytes ");
                 buf.append(net.i2p.data.Base64.encode(tmp));
             }
         }
@@ -1271,7 +1271,7 @@ public class HandshakeState implements Destroyable, Cloneable {
                 buf.append("Remote hybrid public key (e1/ekem1) : ");
                 tmp = new byte[dh.getPublicKeyLength()];
                 dh.getPublicKey(tmp, 0);
-                                buf.append(tmp.length).append(" bytes ");
+                buf.append(tmp.length).append(" bytes ");
                 buf.append(net.i2p.data.Base64.encode(tmp));
             }
             buf.append('\n');

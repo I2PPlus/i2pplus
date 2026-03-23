@@ -248,7 +248,7 @@ class PopulationCoding implements CodingMethod {
             unfavoredCoding.writeArrayTo(out, uValues, 0, uValues.length);
     }
 
-   int computeSentinelValue() {
+    int computeSentinelValue() {
         Coding fc = getTailCoding(favoredCoding);
         if (fc.isDelta()) {
             // repeat the last favored value, using delta=0
@@ -268,7 +268,7 @@ class PopulationCoding implements CodingMethod {
             else
                 return last;
         }
-   }
+    }
 
     public void readArrayFrom(InputStream in, int[] a, int start, int end) throws IOException {
         // Parameters are fCode, L, uCode.

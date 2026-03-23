@@ -225,9 +225,9 @@ public class AddressBean {
                 rv = "<a href=\"" + rv + "\" target=_blank title=\"" + _t("Source") + ": " + rv + "\">" + rv + "</a>";
             }
         } else if (rv.startsWith(_t("Imported from"))) {
-           rv = "<a class=hostsImport title=\"" + _t("Imported from file") + "\"></a>";
+            rv = "<a class=hostsImport title=\"" + _t("Imported from file") + "\"></a>";
         } else if (_t("Manually added via SusiDNS").equals(rv)) {
-           rv = "<a class=manualAdd title=\"" + _t("Manually added") + "\"></a>";
+            rv = "<a class=manualAdd title=\"" + _t("Manually added") + "\"></a>";
         } else if (_t("Added via address helper").equals(rv)) {
             rv = "<a class=viaHelper title=\"" + _t("Via helper") + "\"></a>";
         } else if (rv.startsWith("Added via address helper from ")) {
@@ -252,7 +252,7 @@ public class AddressBean {
                     rv = "<a class=viaHelper title=\"" + _t("Via helper from") + ' ' + hostname + "\"></a>";
                 } catch (java.net.MalformedURLException e) {
                     // If URL parsing fails, fall back to original behavior
-                     rv = "<a class=viaHelper title=\"" + _t("Via helper from") + ' ' + remaining + "\"></a>";
+                    rv = "<a class=viaHelper title=\"" + _t("Via helper from") + ' ' + remaining + "\"></a>";
                 }
             }
         }

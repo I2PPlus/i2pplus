@@ -943,26 +943,26 @@ public class Tailer implements Runnable, AutoCloseable {
                 for (int i = 0; i < num; i++) {
                     final byte ch = inbuf[i];
                     switch (ch) {
-                    case LF:
-                        seenCR = false; // swallow CR before LF
-                        listener.handle(new String(lineBuf.toByteArray(), charset));
-                        lineBuf.reset();
-                        rePos = pos + i + 1;
-                        break;
-                    case CR:
-                        if (seenCR) {
-                            lineBuf.write(CR);
-                        }
-                        seenCR = true;
-                        break;
-                    default:
-                        if (seenCR) {
-                            seenCR = false; // swallow final CR
+                        case LF:
+                            seenCR = false; // swallow CR before LF
                             listener.handle(new String(lineBuf.toByteArray(), charset));
                             lineBuf.reset();
                             rePos = pos + i + 1;
-                        }
-                        lineBuf.write(ch);
+                            break;
+                        case CR:
+                            if (seenCR) {
+                                lineBuf.write(CR);
+                            }
+                            seenCR = true;
+                            break;
+                        default:
+                            if (seenCR) {
+                                seenCR = false; // swallow final CR
+                                listener.handle(new String(lineBuf.toByteArray(), charset));
+                                lineBuf.reset();
+                                rePos = pos + i + 1;
+                            }
+                            lineBuf.write(ch);
                     }
                 }
                 pos = reader.getPointer();

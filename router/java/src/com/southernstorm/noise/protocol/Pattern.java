@@ -56,8 +56,8 @@ class Pattern {
 
 	private static final short[] noise_pattern_N = {
 	    FLAG_LOCAL_EPHEMERAL |
-	    FLAG_REMOTE_STATIC |
-	    FLAG_REMOTE_REQUIRED,
+            FLAG_REMOTE_STATIC |
+            FLAG_REMOTE_REQUIRED,
 
 	    E,
 	    ES
@@ -65,10 +65,10 @@ class Pattern {
 
 	private static final short[] noise_pattern_XK = {
 	    FLAG_LOCAL_STATIC |
-	    FLAG_LOCAL_EPHEMERAL |
-	    FLAG_REMOTE_STATIC |
-	    FLAG_REMOTE_EPHEMERAL |
-	    FLAG_REMOTE_REQUIRED,
+            FLAG_LOCAL_EPHEMERAL |
+            FLAG_REMOTE_STATIC |
+            FLAG_REMOTE_EPHEMERAL |
+            FLAG_REMOTE_REQUIRED,
 
 	    E,
 	    ES,
@@ -82,10 +82,10 @@ class Pattern {
 
 	private static final short[] noise_pattern_IK = {
 	    FLAG_LOCAL_STATIC |
-	    FLAG_LOCAL_EPHEMERAL |
-	    FLAG_REMOTE_STATIC |
-	    FLAG_REMOTE_EPHEMERAL |
-	    FLAG_REMOTE_REQUIRED,
+            FLAG_LOCAL_EPHEMERAL |
+            FLAG_REMOTE_STATIC |
+            FLAG_REMOTE_EPHEMERAL |
+            FLAG_REMOTE_REQUIRED,
 
 	    E,
 	    ES,
@@ -102,12 +102,12 @@ class Pattern {
 	 */
 	private static final short[] noise_pattern_IKhfs = {
 	    FLAG_LOCAL_STATIC |
-	    FLAG_LOCAL_EPHEMERAL |
-	    FLAG_LOCAL_HYBRID |
-	    FLAG_REMOTE_STATIC |
-	    FLAG_REMOTE_EPHEMERAL |
-	    FLAG_REMOTE_HYBRID |
-	    FLAG_REMOTE_REQUIRED,
+            FLAG_LOCAL_EPHEMERAL |
+            FLAG_LOCAL_HYBRID |
+            FLAG_REMOTE_STATIC |
+            FLAG_REMOTE_EPHEMERAL |
+            FLAG_REMOTE_HYBRID |
+            FLAG_REMOTE_REQUIRED,
 
 	    E,
 	    ES,

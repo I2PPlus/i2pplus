@@ -78,7 +78,7 @@ public class GunzipOutputStream extends InflaterOutputStream {
             // with the footer's data (which would fail, causing ZLIB err)
             IOException ioe = new EOFException("Extra data written to gunzipper");
             if (_log.shouldWarn())
-               _log.warn("EOF: " + ioe.getMessage());
+                _log.warn("EOF: " + ioe.getMessage());
             throw ioe;
         }
         boolean isFinished = inf.finished();
@@ -262,7 +262,7 @@ public class GunzipOutputStream extends InflaterOutputStream {
 
             case EF:
                 if ( (c != 0x00) && (c != 0x02) && (c != 0x04) )
-                throw new IOException("Invalid extended flags [" + c + "]");
+                    throw new IOException("Invalid extended flags [" + c + "]");
                 _state = HeaderState.OS;
                 break;
 
@@ -288,7 +288,7 @@ public class GunzipOutputStream extends InflaterOutputStream {
             case EH2:
                 _extHdrToRead += (c << 8);
                 if (_extHdrToRead > 0)
-                   _state = HeaderState.EHDATA;
+                    _state = HeaderState.EHDATA;
                 else if (0 != (_flags & (1<<4)))
                     _state = HeaderState.NAME;
                 if (0 != (_flags & (1<<3)))

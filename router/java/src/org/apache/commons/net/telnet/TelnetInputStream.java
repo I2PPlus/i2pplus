@@ -309,130 +309,130 @@ final class TelnetInputStream extends BufferedInputStream implements Runnable {
 
             switch (receiveState) {
 
-            case STATE_CR:
-                if (ch == Telnet.NUL) {
+                case STATE_CR:
+                    if (ch == Telnet.NUL) {
                     // Strip null
-                    continue;
-                }
+                        continue;
+                    }
                 // How do we handle newline after cr?
                 // else if (ch == '\n' && _requestedDont(TelnetOption.ECHO) &&
 
                 // Handle as normal data by falling through to _STATE_DATA case
 
                 // falls through$
-            case STATE_DATA:
-                if (ch == TelnetCommand.IAC) {
-                    receiveState = STATE_IAC;
-                    continue;
-                }
-
-                if (ch == '\r') {
-                    synchronized (client) {
-                        if (client.requestedDont(TelnetOption.BINARY)) {
-                            receiveState = STATE_CR;
-                        } else {
-                            receiveState = STATE_DATA;
-                        }
+                case STATE_DATA:
+                    if (ch == TelnetCommand.IAC) {
+                        receiveState = STATE_IAC;
+                        continue;
                     }
-                } else {
-                    receiveState = STATE_DATA;
-                }
-                break;
 
-            case STATE_IAC:
-                switch (ch) {
-                case TelnetCommand.WILL:
-                    receiveState = STATE_WILL;
-                    continue;
-                case TelnetCommand.WONT:
-                    receiveState = STATE_WONT;
-                    continue;
-                case TelnetCommand.DO:
-                    receiveState = STATE_DO;
-                    continue;
-                case TelnetCommand.DONT:
-                    receiveState = STATE_DONT;
-                    continue;
-                /* TERMINAL-TYPE option (start) */
-                case TelnetCommand.SB:
-                    suboptionCount = 0;
-                    receiveState = STATE_SB;
-                    continue;
-                /* TERMINAL-TYPE option (end) */
-                case TelnetCommand.IAC:
-                    receiveState = STATE_DATA;
-                    break; // exit to enclosing switch to return IAC from read
-                case TelnetCommand.SE: // unexpected byte! ignore it (don't send it as a command)
-                    receiveState = STATE_DATA;
-                    continue;
-                default:
-                    receiveState = STATE_DATA;
-                    client.processCommand(ch); // Notify the user
-                    continue; // move on the next char
-                }
-                break; // exit and return from read
-            case STATE_WILL:
-                synchronized (client) {
-                    client.processWill(ch);
-                    client.flushOutputStream();
-                }
-                receiveState = STATE_DATA;
-                continue;
-            case STATE_WONT:
-                synchronized (client) {
-                    client.processWont(ch);
-                    client.flushOutputStream();
-                }
-                receiveState = STATE_DATA;
-                continue;
-            case STATE_DO:
-                synchronized (client) {
-                    client.processDo(ch);
-                    client.flushOutputStream();
-                }
-                receiveState = STATE_DATA;
-                continue;
-            case STATE_DONT:
-                synchronized (client) {
-                    client.processDont(ch);
-                    client.flushOutputStream();
-                }
-                receiveState = STATE_DATA;
-                continue;
-            /* TERMINAL-TYPE option (start) */
-            case STATE_SB:
-                switch (ch) {
-                case TelnetCommand.IAC:
-                    receiveState = STATE_IAC_SB;
-                    continue;
-                default:
-                    // store suboption char
-                    if (suboptionCount < suboption.length) {
-                        suboption[suboptionCount++] = ch;
+                    if (ch == '\r') {
+                        synchronized (client) {
+                            if (client.requestedDont(TelnetOption.BINARY)) {
+                                receiveState = STATE_CR;
+                            } else {
+                                receiveState = STATE_DATA;
+                            }
+                        }
+                    } else {
+                        receiveState = STATE_DATA;
                     }
                     break;
-                }
-                receiveState = STATE_SB;
-                continue;
-            case STATE_IAC_SB: // IAC received during SB phase
-                switch (ch) {
-                case TelnetCommand.SE:
+
+                case STATE_IAC:
+                    switch (ch) {
+                        case TelnetCommand.WILL:
+                            receiveState = STATE_WILL;
+                            continue;
+                        case TelnetCommand.WONT:
+                            receiveState = STATE_WONT;
+                            continue;
+                        case TelnetCommand.DO:
+                            receiveState = STATE_DO;
+                            continue;
+                        case TelnetCommand.DONT:
+                            receiveState = STATE_DONT;
+                            continue;
+                /* TERMINAL-TYPE option (start) */
+                        case TelnetCommand.SB:
+                            suboptionCount = 0;
+                            receiveState = STATE_SB;
+                            continue;
+                /* TERMINAL-TYPE option (end) */
+                        case TelnetCommand.IAC:
+                            receiveState = STATE_DATA;
+                            break; // exit to enclosing switch to return IAC from read
+                        case TelnetCommand.SE: // unexpected byte! ignore it (don't send it as a command)
+                            receiveState = STATE_DATA;
+                            continue;
+                        default:
+                            receiveState = STATE_DATA;
+                            client.processCommand(ch); // Notify the user
+                            continue; // move on the next char
+                    }
+                    break; // exit and return from read
+                case STATE_WILL:
                     synchronized (client) {
-                        client.processSuboption(suboption, suboptionCount);
+                        client.processWill(ch);
                         client.flushOutputStream();
                     }
                     receiveState = STATE_DATA;
                     continue;
-                case TelnetCommand.IAC: // De-dup the duplicated IAC
-                    if (suboptionCount < suboption.length) {
-                        suboption[suboptionCount++] = ch;
+                case STATE_WONT:
+                    synchronized (client) {
+                        client.processWont(ch);
+                        client.flushOutputStream();
                     }
-                    break;
-                default: // unexpected byte! ignore it
-                    break;
-                }
-                receiveState = STATE_SB;
-                continue;
+                    receiveState = STATE_DATA;
+                    continue;
+                case STATE_DO:
+                    synchronized (client) {
+                        client.processDo(ch);
+                        client.flushOutputStream();
+                    }
+                    receiveState = STATE_DATA;
+                    continue;
+                case STATE_DONT:
+                    synchronized (client) {
+                        client.processDont(ch);
+                        client.flushOutputStream();
+                    }
+                    receiveState = STATE_DATA;
+                    continue;
+            /* TERMINAL-TYPE option (start) */
+                case STATE_SB:
+                    switch (ch) {
+                        case TelnetCommand.IAC:
+                            receiveState = STATE_IAC_SB;
+                            continue;
+                        default:
+                    // store suboption char
+                            if (suboptionCount < suboption.length) {
+                                suboption[suboptionCount++] = ch;
+                            }
+                            break;
+                    }
+                    receiveState = STATE_SB;
+                    continue;
+                case STATE_IAC_SB: // IAC received during SB phase
+                    switch (ch) {
+                        case TelnetCommand.SE:
+                            synchronized (client) {
+                                client.processSuboption(suboption, suboptionCount);
+                                client.flushOutputStream();
+                            }
+                            receiveState = STATE_DATA;
+                            continue;
+                        case TelnetCommand.IAC: // De-dup the duplicated IAC
+                            if (suboptionCount < suboption.length) {
+                                suboption[suboptionCount++] = ch;
+                            }
+                            break;
+                        default: // unexpected byte! ignore it
+                            break;
+                    }
+                    receiveState = STATE_SB;
+                    continue;
             /* TERMINAL-TYPE option (end) */
             }
 

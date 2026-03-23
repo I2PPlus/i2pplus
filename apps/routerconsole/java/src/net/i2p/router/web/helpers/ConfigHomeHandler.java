@@ -70,11 +70,11 @@ public class ConfigHomeHandler extends FormHandler {
                 // deleting
                 Set<String> toDelete = new HashSet<String>();
                 for (Object o : _settings.keySet()) {
-                     if (!(o instanceof String)) {continue;}
-                     String k = (String) o;
-                     if (!k.startsWith("delete_")) {continue;}
-                     k = k.substring(7);
-                     toDelete.add(k);
+                    if (!(o instanceof String)) {continue;}
+                    String k = (String) o;
+                    if (!k.startsWith("delete_")) {continue;}
+                    k = k.substring(7);
+                    toDelete.add(k);
                 }
                 for (Iterator<App> iter = apps.iterator(); iter.hasNext(); ) {
                     App app = iter.next();

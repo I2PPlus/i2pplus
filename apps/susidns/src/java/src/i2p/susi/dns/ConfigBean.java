@@ -84,8 +84,8 @@ public class ConfigBean extends BaseBean implements Serializable {
     public String getMessages() {
         String message = "";
         if (action != null) {
-        if ("POST".equals(method) && (I2PAppContext.getGlobalContext().getBooleanProperty(BaseBean.PROP_PW_ENABLE) ||
-            (serial != null && serial.equals(lastSerial)))) {
+            if ("POST".equals(method) && (I2PAppContext.getGlobalContext().getBooleanProperty(BaseBean.PROP_PW_ENABLE) ||
+                (serial != null && serial.equals(lastSerial)))) {
                 if (action.equals(_t("Save"))) {
                     save();
                     message = _t("Configuration saved.");

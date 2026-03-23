@@ -206,7 +206,7 @@ public class DefaultFTPFileEntryParserFactory implements FTPFileEntryParserFacto
         // clone the config as it may be changed by the parsers (NET-602)
         final FTPClientConfig config2 = config != null ? new FTPClientConfig(config) : null;
         return new CompositeFileEntryParser(new FTPFileEntryParser[] { new NTFTPEntryParser(config),
-                new UnixFTPEntryParser(config2, config2 != null && FTPClientConfig.SYST_UNIX_TRIM_LEADING.equals(config2.getServerSystemKey()))});
+            new UnixFTPEntryParser(config2, config2 != null && FTPClientConfig.SYST_UNIX_TRIM_LEADING.equals(config2.getServerSystemKey()))});
     }
 
     /**
@@ -241,7 +241,7 @@ public class DefaultFTPFileEntryParserFactory implements FTPFileEntryParserFacto
         // clone the config as it may be changed by the parsers (NET-602)
         final FTPClientConfig config2 = config != null ? new FTPClientConfig(config) : null;
         return new CompositeFileEntryParser(new FTPFileEntryParser[] { new OS400FTPEntryParser(config),
-                new UnixFTPEntryParser(config2, config2 != null && FTPClientConfig.SYST_UNIX_TRIM_LEADING.equals(config2.getServerSystemKey()))});
+            new UnixFTPEntryParser(config2, config2 != null && FTPClientConfig.SYST_UNIX_TRIM_LEADING.equals(config2.getServerSystemKey()))});
     }
 
     /**

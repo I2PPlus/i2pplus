@@ -96,7 +96,7 @@ class TLGlobals {
     }
 
     Map<String, DescriptorEntry> getDescriptorEntries() {
-         return descriptorEntries;
+        return descriptorEntries;
     }
 
     Map<String, SignatureEntry> getSignatureEntries() {

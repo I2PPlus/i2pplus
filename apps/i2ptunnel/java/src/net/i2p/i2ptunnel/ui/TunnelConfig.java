@@ -368,7 +368,7 @@ public class TunnelConfig {
      * @since 0.9.41
      */
     public void addClientNames(String[] s) {
-       _clientNames = s;
+        _clientNames = s;
     }
 
     /**
@@ -377,7 +377,7 @@ public class TunnelConfig {
      * @since 0.9.41
      */
     public void addClientKeys(String[] s) {
-       _clientKeys = s;
+        _clientKeys = s;
     }
 
     /**
@@ -477,17 +477,17 @@ public class TunnelConfig {
      */
     public void setAccessMode(int mode) {
         switch (mode) {
-        case 1:
-            _booleanOptions.add(PROP_ENABLE_ACCESS_LIST);
-            _booleanOptions.remove(PROP_ENABLE_BLACKLIST);
-            break;
-        case 2:
-            _booleanOptions.remove(PROP_ENABLE_ACCESS_LIST);
-            _booleanOptions.add(PROP_ENABLE_BLACKLIST);
-            break;
-        default:
-            _booleanOptions.remove(PROP_ENABLE_ACCESS_LIST);
-            _booleanOptions.remove(PROP_ENABLE_BLACKLIST);
+            case 1:
+                _booleanOptions.add(PROP_ENABLE_ACCESS_LIST);
+                _booleanOptions.remove(PROP_ENABLE_BLACKLIST);
+                break;
+            case 2:
+                _booleanOptions.remove(PROP_ENABLE_ACCESS_LIST);
+                _booleanOptions.add(PROP_ENABLE_BLACKLIST);
+                break;
+            default:
+                _booleanOptions.remove(PROP_ENABLE_ACCESS_LIST);
+                _booleanOptions.remove(PROP_ENABLE_BLACKLIST);
         }
     }
 
@@ -518,17 +518,17 @@ public class TunnelConfig {
      */
     public void setNewDest(int mode) {
         switch (mode) {
-        case 1:
-            _booleanOptions.add("i2cp.newDestOnResume");
-            _booleanOptions.remove("persistentClientKey");
-            break;
-        case 2:
-            _booleanOptions.remove("i2cp.newDestOnResume");
-            _booleanOptions.add("persistentClientKey");
-            break;
-        default:
-            _booleanOptions.remove("i2cp.newDestOnResume");
-            _booleanOptions.remove("persistentClientKey");
+            case 1:
+                _booleanOptions.add("i2cp.newDestOnResume");
+                _booleanOptions.remove("persistentClientKey");
+                break;
+            case 2:
+                _booleanOptions.remove("i2cp.newDestOnResume");
+                _booleanOptions.add("persistentClientKey");
+                break;
+            default:
+                _booleanOptions.remove("i2cp.newDestOnResume");
+                _booleanOptions.remove("persistentClientKey");
         }
     }
 
@@ -1029,75 +1029,75 @@ public class TunnelConfig {
      */
     private void processEncryptMode(Properties config) {
         switch (_encryptMode) {
-          case 0:  // none
-          default:
-            config.remove(OPT + "i2cp.leaseSetSecret");
-            config.remove(OPT + "i2cp.leaseSetType");
-            config.remove(OPT + "i2cp.leaseSetKey");
-            config.remove(OPT + "i2cp.leaseSetPrivKey");
-            break;
+            case 0:  // none
+            default:
+                config.remove(OPT + "i2cp.leaseSetSecret");
+                config.remove(OPT + "i2cp.leaseSetType");
+                config.remove(OPT + "i2cp.leaseSetKey");
+                config.remove(OPT + "i2cp.leaseSetPrivKey");
+                break;
 
-          case 10:  // none (LS2)
-            config.put(OPT + "i2cp.leaseSetType", "3");
-            config.remove(OPT + "i2cp.leaseSetSecret");
-            config.remove(OPT + "i2cp.leaseSetAuthType");
-            config.remove(OPT + "i2cp.leaseSetKey");
-            config.remove(OPT + "i2cp.leaseSetPrivKey");
-            break;
+            case 10:  // none (LS2)
+                config.put(OPT + "i2cp.leaseSetType", "3");
+                config.remove(OPT + "i2cp.leaseSetSecret");
+                config.remove(OPT + "i2cp.leaseSetAuthType");
+                config.remove(OPT + "i2cp.leaseSetKey");
+                config.remove(OPT + "i2cp.leaseSetPrivKey");
+                break;
 
-          case 1:  // encrypted LS1
-            addLeaseSetPrivKey(config, false);
-            config.remove(OPT + "i2cp.leaseSetSecret");
-            config.remove(OPT + "i2cp.leaseSetAuthType");
-            break;
+            case 1:  // encrypted LS1
+                addLeaseSetPrivKey(config, false);
+                config.remove(OPT + "i2cp.leaseSetSecret");
+                config.remove(OPT + "i2cp.leaseSetAuthType");
+                break;
 
-          case 2:  // blinded
-            config.put(OPT + "i2cp.leaseSetType", "5");
-            config.remove(OPT + "i2cp.leaseSetSecret");
-            config.remove(OPT + "i2cp.leaseSetAuthType");
-            config.remove(OPT + "i2cp.leaseSetKey");
-            config.remove(OPT + "i2cp.leaseSetPrivKey");
-            break;
+            case 2:  // blinded
+                config.put(OPT + "i2cp.leaseSetType", "5");
+                config.remove(OPT + "i2cp.leaseSetSecret");
+                config.remove(OPT + "i2cp.leaseSetAuthType");
+                config.remove(OPT + "i2cp.leaseSetKey");
+                config.remove(OPT + "i2cp.leaseSetPrivKey");
+                break;
 
-          case 3:  // blinded + secret
-            config.put(OPT + "i2cp.leaseSetType", "5");
-            config.remove(OPT + "i2cp.leaseSetAuthType");
-            config.remove(OPT + "i2cp.leaseSetKey");
-            config.remove(OPT + "i2cp.leaseSetPrivKey");
-            break;
+            case 3:  // blinded + secret
+                config.put(OPT + "i2cp.leaseSetType", "5");
+                config.remove(OPT + "i2cp.leaseSetAuthType");
+                config.remove(OPT + "i2cp.leaseSetKey");
+                config.remove(OPT + "i2cp.leaseSetPrivKey");
+                break;
 
-          case 4:  // blinded, shared key (implicit PSK)
-            addLeaseSetPrivKey(config, true);
-            config.remove(OPT + "i2cp.leaseSetSecret");
-            config.put(OPT + "i2cp.leaseSetAuthType", "2");
-            break;
+            case 4:  // blinded, shared key (implicit PSK)
+                addLeaseSetPrivKey(config, true);
+                config.remove(OPT + "i2cp.leaseSetSecret");
+                config.put(OPT + "i2cp.leaseSetAuthType", "2");
+                break;
 
-          case 5:  // blinded, secret, shared key (implicit PSK)
-            addLeaseSetPrivKey(config, true);
-            config.put(OPT + "i2cp.leaseSetAuthType", "2");
-            break;
+            case 5:  // blinded, secret, shared key (implicit PSK)
+                addLeaseSetPrivKey(config, true);
+                config.put(OPT + "i2cp.leaseSetAuthType", "2");
+                break;
 
-          case 6:  // blinded, per-client PSK
-            addLeaseSetPrivKey(config, true);
-            config.remove(OPT + "i2cp.leaseSetSecret");
-            config.put(OPT + "i2cp.leaseSetAuthType", "2");
-            break;
+            case 6:  // blinded, per-client PSK
+                addLeaseSetPrivKey(config, true);
+                config.remove(OPT + "i2cp.leaseSetSecret");
+                config.put(OPT + "i2cp.leaseSetAuthType", "2");
+                break;
 
-          case 7:  // blinded, secret, per-client PSK
-            addLeaseSetPrivKey(config, true);
-            config.put(OPT + "i2cp.leaseSetAuthType", "2");
-            break;
+            case 7:  // blinded, secret, per-client PSK
+                addLeaseSetPrivKey(config, true);
+                config.put(OPT + "i2cp.leaseSetAuthType", "2");
+                break;
 
-          case 8:  // blinded, per-client DH
-            addLeaseSetPrivKey(config, true);
-            config.remove(OPT + "i2cp.leaseSetSecret");
-            config.put(OPT + "i2cp.leaseSetAuthType", "1");
-            break;
+            case 8:  // blinded, per-client DH
+                addLeaseSetPrivKey(config, true);
+                config.remove(OPT + "i2cp.leaseSetSecret");
+                config.put(OPT + "i2cp.leaseSetAuthType", "1");
+                break;
 
-          case 9:  // blinded, secret, per-client DH
-            addLeaseSetPrivKey(config, true);
-            config.put(OPT + "i2cp.leaseSetAuthType", "1");
-            break;
+            case 9:  // blinded, secret, per-client DH
+                addLeaseSetPrivKey(config, true);
+                config.put(OPT + "i2cp.leaseSetAuthType", "1");
+                break;
 
         }
 
@@ -1128,12 +1128,12 @@ public class TunnelConfig {
             if (_clientNames != null && _clientKeys != null && _clientNames.length == _clientKeys.length) {
                 for (int i = 0; i < _clientNames.length; i++) {
                     if (_clientRevocations != null && _clientRevocations.contains(Integer.valueOf(i)))
-                       continue;
+                        continue;
                     String name = _clientNames[i];
                     String key = _clientKeys[i];
                     byte[] b = Base64.decode(key);
                     if (b == null || b.length != 32)
-                       continue;
+                        continue;
                     if (name.length() > 0)
                         name = Base64.encode(DataHelper.getUTF8(name));
                     else
@@ -1245,12 +1245,12 @@ public class TunnelConfig {
         };
     private static final String _otherServerOpts[] = {
         "i2cp.reduceIdleTime", "i2cp.reduceQuantity", "i2cp.leaseSetKey", "i2cp.accessList",
-         PROP_MAX_CONNS_MIN, PROP_MAX_CONNS_HOUR, PROP_MAX_CONNS_DAY,
-         PROP_MAX_TOTAL_CONNS_MIN, PROP_MAX_TOTAL_CONNS_HOUR, PROP_MAX_TOTAL_CONNS_DAY,
-         PROP_MAX_STREAMS, I2PClient.PROP_SIGTYPE,
-         "inbound.randomKey", "outbound.randomKey", "i2cp.leaseSetSigningPrivateKey", "i2cp.leaseSetPrivateKey",
-         I2PTunnelServer.PROP_ALT_PKF,
-         "i2cp.leaseSetSecret", "i2cp.leaseSetType", "i2cp.leaseSetAuthType", "i2cp.leaseSetPrivKey",
+        PROP_MAX_CONNS_MIN, PROP_MAX_CONNS_HOUR, PROP_MAX_CONNS_DAY,
+        PROP_MAX_TOTAL_CONNS_MIN, PROP_MAX_TOTAL_CONNS_HOUR, PROP_MAX_TOTAL_CONNS_DAY,
+        PROP_MAX_STREAMS, I2PClient.PROP_SIGTYPE,
+        "inbound.randomKey", "outbound.randomKey", "i2cp.leaseSetSigningPrivateKey", "i2cp.leaseSetPrivateKey",
+        I2PTunnelServer.PROP_ALT_PKF,
+        "i2cp.leaseSetSecret", "i2cp.leaseSetType", "i2cp.leaseSetAuthType", "i2cp.leaseSetPrivKey",
         "i2cp.leaseSetEncType"
         };
     private static final String _httpServerOpts[] = {
@@ -1437,9 +1437,9 @@ public class TunnelConfig {
                                 rv.put(key, buf.toString().trim());
                             key = null;
                         } else {
-                          String k = buf.toString().trim();
-                          if (k.length() > 0)
-                              rv.put(k, "");
+                            String k = buf.toString().trim();
+                            if (k.length() > 0)
+                                rv.put(k, "");
                         }
                         buf.setLength(0);
                     }

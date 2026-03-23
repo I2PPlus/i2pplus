@@ -104,7 +104,7 @@ class ProfileOrganizerRenderer {
             if (standard > 0) {
                 buf.append("<a href=\"/profiles\">")
                    .append(ngettext("Hiding {0} standard profile.","Hiding {0} standard profiles.", standard))
-                   .append("</a>\n");
+                    .append("</a>\n");
             }
             buf.append(_t("Note that the profiler relies on sustained client tunnel usage to accurately profile peers.")).append("</p>");
             buf.append("<div class=widescroll id=peerprofiles>\n<table id=profilelist data-sort-direction=descending>\n")
@@ -308,10 +308,10 @@ class ProfileOrganizerRenderer {
                    .append(rejected)
                    .append("</td><td data-sort=")
                    .append(prof.getFirstHeardAbout())
-                   .append(">");
+                    .append(">");
                 now = _context.clock().now();
                 if (prof.getFirstHeardAbout() > 0) {
-                   buf.append(formatInterval(now, prof.getFirstHeardAbout()));
+                    buf.append(formatInterval(now, prof.getFirstHeardAbout()));
                 }
                 buf.append("</td><td data-sort=").append(prof.getLastHeardFrom() - now).append(">")
                    .append(formatInterval(now, prof.getLastHeardFrom())).append("</td><td nowrap class=viewedit>");
@@ -326,7 +326,7 @@ class ProfileOrganizerRenderer {
                        .append(viewProfile)
                        .append("]\">")
                        .append(_t("Profile"))
-                       .append("</a>");
+                        .append("</a>");
                 }
                 buf.append("<br><a class=configpeer href=\"/configpeer?peer=")
                    .append(peer.toBase64())
@@ -336,13 +336,13 @@ class ProfileOrganizerRenderer {
                    .append(configurePeer)
                    .append("]\">")
                    .append(_t("Edit"))
-                   .append("</a></td></tr>\n");
+                    .append("</a></td></tr>\n");
             }
             buf.append("</tbody>\n</table>\n<div id=peer_thresholds>\n<h3 class=tabletitle>")
                .append(_t("Thresholds"))
                .append("</h3>\n<table id=thresholds>\n<thead><tr><th><b>")
                .append(_t("Speed"))
-               .append(": </b>");
+                .append(": </b>");
             double speed = Math.max(1, _organizer.getSpeedThreshold());
             if (speed < -10240) {speed += 10240;}
             else if (speed < 0) {speed = 0;}
@@ -363,7 +363,7 @@ class ProfileOrganizerRenderer {
                .append(ngettext("{0} high capacity peer", "{0} high capacity peers", reliable))
                .append("</td><td>")
                .append(ngettext("{0} integrated peer", "{0} integrated peers", integrated))
-               .append("</td></tr>\n</tbody>\n</table>\n</div>\n</div>\n"); // thresholds
+                .append("</td></tr>\n</tbody>\n</table>\n</div>\n</div>\n"); // thresholds
         } else if (mode == 2) {
             buf.append("<div class=widescroll id=ff>\n<table id=floodfills data-sort-direction=descending>\n")
                .append("<colgroup></colgroup><colgroup></colgroup><colgroup></colgroup><colgroup></colgroup>")
@@ -384,7 +384,7 @@ class ProfileOrganizerRenderer {
                .append("<th data-sort-method=number>").append(_t("Last Bad Lookup")).append("</th>")
                .append("<th data-sort-method=number>").append(_t("Last Bad Send")).append("</th>")
                .append("<th data-sort-method=number>").append(_t("Last Bad Store")).append("</th>")
-               .append("</tr></thead>\n<tbody id=ffProfiles>\n");
+                .append("</tr></thead>\n<tbody id=ffProfiles>\n");
             RateAverages ra = RateAverages.getTemp();
             for (PeerProfile prof : order) {
                 Hash peer = prof.getPeer();
@@ -412,7 +412,7 @@ class ProfileOrganizerRenderer {
                        .append(_context.commSystem().renderPeerHTML(peer, true))
                        .append("</td><td data-sort=")
                        .append(hourfailValue)
-                       .append("><span class=\"percentBarOuter");
+                        .append("><span class=\"percentBarOuter");
                     if (hourfail.equals("0%")) {buf.append(" nofail");}
                     buf.append("\"><span class=percentBarInner style=\"width:")
                        .append(hourfail)
@@ -462,7 +462,7 @@ class ProfileOrganizerRenderer {
                        .append(dbh.getLastStoreFailed())
                        .append(">")
                        .append(formatInterval(now, dbh.getLastStoreFailed()))
-                       .append("</td></tr>\n");
+                        .append("</td></tr>\n");
                 }
             }
             buf.append("</tbody>\n</table>\n</div>\n");
@@ -539,7 +539,7 @@ class ProfileOrganizerRenderer {
                .append(_t("integration"))
                .append(":</b></td><td>")
                .append(_t("how many new peers have they told us about lately?"))
-               .append("</td></tr>\n</tbody>\n</table>\n");
+                .append("</td></tr>\n</tbody>\n</table>\n");
         }  // mode < 2
         out.append(buf);
         out.flush();
@@ -580,24 +580,24 @@ class ProfileOrganizerRenderer {
     private final static String NA = "&ensp;";
 
     private String avg (PeerProfile prof, long rate, RateAverages ra) {
-            RateStat rs = prof.getDbResponseTime();
-            if (rs == null) {return _t(NA);}
-            Rate r = rs.getRate(rate);
-            if (r == null) {return _t(NA);}
-            r.computeAverages(ra, false);
-            if (ra.getTotalEventCount() == 0) {return _t(NA);}
-            return DataHelper.formatDuration2(Math.round(ra.getAverage()));
+        RateStat rs = prof.getDbResponseTime();
+        if (rs == null) {return _t(NA);}
+        Rate r = rs.getRate(rate);
+        if (r == null) {return _t(NA);}
+        r.computeAverages(ra, false);
+        if (ra.getTotalEventCount() == 0) {return _t(NA);}
+        return DataHelper.formatDuration2(Math.round(ra.getAverage()));
     }
 
     private String davg (DBHistory dbh, long rate, RateAverages ra) {
-            RateStat rs = dbh != null ? dbh.getFailedLookupRate() : null;
-            if (rs == null) {return "0%";}
-            Rate r = rs.getRate(rate);
-            if (r == null) {return "0%";}
-            r.computeAverages(ra, false);
-            if (ra.getTotalEventCount() <= 0) {return "0%";}
-            double avg = 0.5 + 100 * ra.getAverage();
-            return ((int) avg) + "%";
+        RateStat rs = dbh != null ? dbh.getFailedLookupRate() : null;
+        if (rs == null) {return "0%";}
+        Rate r = rs.getRate(rate);
+        if (r == null) {return "0%";}
+        r.computeAverages(ra, false);
+        if (ra.getTotalEventCount() <= 0) {return "0%";}
+        double avg = 0.5 + 100 * ra.getAverage();
+        return ((int) avg) + "%";
     }
 
     /** @since 0.9.21 */

@@ -393,34 +393,34 @@ class PacketHandler {
         if (type != -1) {
             SSU2Header.acceptTrialDecrypt(packet, header);
             switch (type) {
-              case SSU2Util.SESSION_REQUEST_FLAG_BYTE:
-                if (_log.shouldDebug()) {_log.debug("Received a SessionRequest on " + state);}
-                _establisher.receiveSessionOrTokenRequest(from, state, packet);
-                break;
+                case SSU2Util.SESSION_REQUEST_FLAG_BYTE:
+                    if (_log.shouldDebug()) {_log.debug("Received a SessionRequest on " + state);}
+                    _establisher.receiveSessionOrTokenRequest(from, state, packet);
+                    break;
 
-              case SSU2Util.TOKEN_REQUEST_FLAG_BYTE:
-                if (_log.shouldDebug()) {_log.debug("Received a TokenRequest on " + state);}
-                _establisher.receiveSessionOrTokenRequest(from, state, packet);
-                break;
+                case SSU2Util.TOKEN_REQUEST_FLAG_BYTE:
+                    if (_log.shouldDebug()) {_log.debug("Received a TokenRequest on " + state);}
+                    _establisher.receiveSessionOrTokenRequest(from, state, packet);
+                    break;
 
-              case SSU2Util.SESSION_CONFIRMED_FLAG_BYTE:
-                if (_log.shouldDebug()) {_log.debug("Received a SessionConfirmed on " + state);}
-                _establisher.receiveSessionConfirmed(state, packet);
-                break;
+                case SSU2Util.SESSION_CONFIRMED_FLAG_BYTE:
+                    if (_log.shouldDebug()) {_log.debug("Received a SessionConfirmed on " + state);}
+                    _establisher.receiveSessionConfirmed(state, packet);
+                    break;
 
-              case SSU2Util.PEER_TEST_FLAG_BYTE:
-                if (_log.shouldDebug()) {_log.debug("Received a PeerTest from " + from);}
-                _testManager.receiveTest(from, packet);
-                break;
+                case SSU2Util.PEER_TEST_FLAG_BYTE:
+                    if (_log.shouldDebug()) {_log.debug("Received a PeerTest from " + from);}
+                    _testManager.receiveTest(from, packet);
+                    break;
 
-              case SSU2Util.HOLE_PUNCH_FLAG_BYTE:
-                if (_log.shouldDebug()) {_log.debug("Received a HolePunch from " + from);}
-                _establisher.receiveHolePunch(from, packet);
-                break;
+                case SSU2Util.HOLE_PUNCH_FLAG_BYTE:
+                    if (_log.shouldDebug()) {_log.debug("Received a HolePunch from " + from);}
+                    _establisher.receiveHolePunch(from, packet);
+                    break;
 
-              default:
-                if (_log.shouldWarn()) {_log.warn("Received UNKNOWN SSU2 message \n* " + header + " from " + from);}
-                break;
+                default:
+                    if (_log.shouldWarn()) {_log.warn("Received UNKNOWN SSU2 message \n* " + header + " from " + from);}
+                    break;
             }
             return true;
         }

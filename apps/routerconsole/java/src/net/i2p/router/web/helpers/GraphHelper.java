@@ -233,7 +233,7 @@ public class GraphHelper extends FormHandler {
                .append(title)
                .append("\" title=\"")
                .append(title)
-               .append("\"></a></span>\n");
+                .append("\"></a></span>\n");
         }
         return buf.toString();
     }
@@ -428,7 +428,7 @@ public class GraphHelper extends FormHandler {
            .append(_t("minutes"))
            .append("</span><br>\n<span class=nowrap>\n<b>")
            .append(_t("Refresh delay"))
-           .append(":</b> <select name=refreshDelay>");
+            .append(":</b> <select name=refreshDelay>");
         for (int i = 0; i < times.length; i++) {
             buf.append("<option value=\"").append(times[i]).append('"');
             if (times[i] == _refreshDelaySeconds) {buf.append(HelperBase.SELECTED);}
@@ -449,13 +449,13 @@ public class GraphHelper extends FormHandler {
            .append(_t("Events"))
            .append("</label></span><br>\n<span class=nowrap>\n<b>")
            .append(_t("Hide legend"))
-           .append(":</b> <label><input type=checkbox class=\"optbox slider\" value=true name=hideLegend");
+            .append(":</b> <label><input type=checkbox class=\"optbox slider\" value=true name=hideLegend");
         if (hideLegend) buf.append(HelperBase.CHECKED);
         buf.append(">")
            .append(_t("Do not show legend on graphs"))
            .append("</label></span><br><span class=nowrap>\n<b>")
            .append(_t("Persistence"))
-           .append(":</b> <label><input type=checkbox class=\"optbox slider\" value=true name=persistent");
+            .append(":</b> <label><input type=checkbox class=\"optbox slider\" value=true name=persistent");
         if (persistent) buf.append(HelperBase.CHECKED);
         buf.append(">")
            .append(_t("Store graph data on disk"))
@@ -463,7 +463,7 @@ public class GraphHelper extends FormHandler {
            .append(_t("Select Stats"))
            .append("</a> <input type=submit class=accept value=\"")
            .append(_t("Save settings and redraw graphs"))
-           .append("\"></div>\n</form>\n");
+            .append("\"></div>\n</form>\n");
         return buf.toString();
     }
 

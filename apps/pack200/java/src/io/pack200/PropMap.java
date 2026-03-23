@@ -270,12 +270,12 @@ final class PropMap implements SortedMap<String, String>  {
 
     @Override
     public String remove(Object key) {
-       return theMap.remove(key);
+        return theMap.remove(key);
     }
 
     @Override
     public void putAll(Map<? extends String, ? extends String> m) {
-       theMap.putAll(m);
+        theMap.putAll(m);
     }
 
     @Override
@@ -285,12 +285,12 @@ final class PropMap implements SortedMap<String, String>  {
 
     @Override
     public Set<String> keySet() {
-       return theMap.keySet();
+        return theMap.keySet();
     }
 
     @Override
     public Collection<String> values() {
-       return theMap.values();
+        return theMap.values();
     }
 
     @Override
@@ -325,6 +325,6 @@ final class PropMap implements SortedMap<String, String>  {
 
     @Override
     public String lastKey() {
-       return theMap.lastKey();
+        return theMap.lastKey();
     }
 }

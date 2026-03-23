@@ -102,18 +102,18 @@ class SAMHandlerFactory {
 
         try {
             switch (verMajor) {
-            case 1:
-                handler = new SAMv1Handler(s, verMajor, verMinor, i2cpProps, parent);
-                break;
-            case 2:
-                handler = new SAMv2Handler(s, verMajor, verMinor, i2cpProps, parent);
-                break;
-            case 3:
-                handler = new SAMv3Handler(s, verMajor, verMinor, i2cpProps, parent);
-                break;
-            default:
-                log.error("BUG! Trying to initialize the wrong SAM version!");
-                throw new SAMException("BUG! (in handler instantiation)");
+                case 1:
+                    handler = new SAMv1Handler(s, verMajor, verMinor, i2cpProps, parent);
+                    break;
+                case 2:
+                    handler = new SAMv2Handler(s, verMajor, verMinor, i2cpProps, parent);
+                    break;
+                case 3:
+                    handler = new SAMv3Handler(s, verMajor, verMinor, i2cpProps, parent);
+                    break;
+                default:
+                    log.error("BUG! Trying to initialize the wrong SAM version!");
+                    throw new SAMException("BUG! (in handler instantiation)");
             }
         } catch (IOException e) {
             log.error("Error creating the handler for version " + verMajor + "\n* Error: " + e.getMessage());

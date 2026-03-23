@@ -171,16 +171,16 @@ public final class ElGamalAESEngine {
                 if (shouldDebug)
                     _log.debug("Found key: " + foundKey.toBase64().substring(0,6) + " wasExisting? " + wasExisting +
                                "\n* Tags: " + buf.toString());
-                    keyManager.tagsReceived(foundKey, foundTags);
+                keyManager.tagsReceived(foundKey, foundTags);
             } else if (usedKey.getData() != null) {
-                    StringBuilder buf = new StringBuilder();
-                    for (SessionTag t : foundTags) {
-                        buf.append("[").append(t.toString().substring(0,6)).append("]"); buf.append(" ");
-                    }
-                    if (shouldDebug)
+                StringBuilder buf = new StringBuilder();
+                for (SessionTag t : foundTags) {
+                    buf.append("[").append(t.toString().substring(0,6)).append("]"); buf.append(" ");
+                }
+                if (shouldDebug)
                         _log.debug("Used key [" + usedKey.toBase64().substring(0,6) + "] wasExisting? " + wasExisting +
                                    "\n* Tags: " + buf.toString());
-                    keyManager.tagsReceived(usedKey, foundTags);
+                keyManager.tagsReceived(usedKey, foundTags);
             }
         }
         return decrypted;

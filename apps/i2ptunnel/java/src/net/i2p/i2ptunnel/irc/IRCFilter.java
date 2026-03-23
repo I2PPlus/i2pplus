@@ -27,25 +27,25 @@ abstract class IRCFilter {
         final String[] allowedCommands =
         {
                 // "NOTICE", // can contain CTCP
-                "PING",
+            "PING",
                 //"PONG",
-                "MODE",
-                "JOIN",
-                "NICK",
-                "QUIT",
-                "PART",
-                "WALLOPS",
-                "ERROR",
-                "KICK",
-                "H", // "hide operator status" (after kicking an op)
-                "TOPIC",
-                "AUTHENTICATE", // SASL, also requires CAP below
+            "MODE",
+            "JOIN",
+            "NICK",
+            "QUIT",
+            "PART",
+            "WALLOPS",
+            "ERROR",
+            "KICK",
+            "H", // "hide operator status" (after kicking an op)
+            "TOPIC",
+            "AUTHENTICATE", // SASL, also requires CAP below
                 // http://tools.ietf.org/html/draft-mitchell-irc-capabilities-01
-                "CAP",
-                "PROTOCTL",
-                "AWAY",
-                "ACCOUNT",  // https://ircv3.net/specs/extensions/account-notify
-                "CHGHOST"   // https://ircv3.net/specs/extensions/chghost
+            "CAP",
+            "PROTOCTL",
+            "AWAY",
+            "ACCOUNT",  // https://ircv3.net/specs/extensions/account-notify
+            "CHGHOST"   // https://ircv3.net/specs/extensions/chghost
         };
         _allowedInbound = new HashSet<String>(Arrays.asList(allowedCommands));
     }
@@ -75,7 +75,7 @@ abstract class IRCFilter {
         } catch (IndexOutOfBoundsException ioobe) {
             // server sent borked command?
            //_log.warn("Dropping defective message: index out of bounds while extracting command.");
-           return null;
+            return null;
         }
 
         idx++; //skip victim
@@ -104,7 +104,7 @@ abstract class IRCFilter {
 
         // Allow all allowedCommands
         if (_allowedInbound.contains(command)) {
-                return s;
+            return s;
         }
 
         // Allow PRIVMSG, but block CTCP.
@@ -161,117 +161,117 @@ abstract class IRCFilter {
         final String[] allowedCommands =
         {
                 // Commands that regular users might use
-                "ACCEPT", // Inspircd's m_callerid.so module
-                "ADMIN",
-                "AUTHENTICATE", // SASL, also requires CAP below
-                "AWAY",    // should be harmless
-                "CAP",     // http://tools.ietf.org/html/draft-mitchell-irc-capabilities-01
-                "COMMANDS",
-                "CYCLE",
-                "DCCALLOW",
-                "DEVOICE",
-                "FPART",
-                "HELPME", "HELPOP",  // helpop is what unrealircd uses by default
-                "INVITE",
-                "ISON",    // jIRCii uses this for a ping (response is 303)
-                "JOIN",
-                "KICK",
-                "KNOCK",
-                "LINKS",
-                "LIST",
-                "LUSERS",
-                "MAP", // seems safe enough, the ircd should protect themselves though
-                "MODE",
-                "MOTD",
-                "NAMES",
-                "NICK",
+            "ACCEPT", // Inspircd's m_callerid.so module
+            "ADMIN",
+            "AUTHENTICATE", // SASL, also requires CAP below
+            "AWAY",    // should be harmless
+            "CAP",     // http://tools.ietf.org/html/draft-mitchell-irc-capabilities-01
+            "COMMANDS",
+            "CYCLE",
+            "DCCALLOW",
+            "DEVOICE",
+            "FPART",
+            "HELPME", "HELPOP",  // helpop is what unrealircd uses by default
+            "INVITE",
+            "ISON",    // jIRCii uses this for a ping (response is 303)
+            "JOIN",
+            "KICK",
+            "KNOCK",
+            "LINKS",
+            "LIST",
+            "LUSERS",
+            "MAP", // seems safe enough, the ircd should protect themselves though
+            "MODE",
+            "MOTD",
+            "NAMES",
+            "NICK",
                 // "NOTICE", // can contain CTCP
-                "OPER",
+            "OPER",
                 // "PART", // replace with filtered PART to hide client part messages
-                "PASS",
+            "PASS",
                 // "PING",
-                "PONG",
-                "PROTOCTL",
+            "PONG",
+            "PROTOCTL",
                 // "QUIT", // replace with a filtered QUIT to hide client quit messages
-                "RULES",
-                "SETNAME",
-                "SILENCE",
-                "SSLINFO",
-                "STATS",
-                "TBAN",
-                "TITLE",
-                "TOPIC",
-                "UNINVITE",
-                "USERHOST",
-                "USERS", // Ticket 1249
-                "VHOST",
-                "VHOST",
-                "WATCH",
-                "WHO",
-                "WHOIS",
-                "WHOWAS",
+            "RULES",
+            "SETNAME",
+            "SILENCE",
+            "SSLINFO",
+            "STATS",
+            "TBAN",
+            "TITLE",
+            "TOPIC",
+            "UNINVITE",
+            "USERHOST",
+            "USERS", // Ticket 1249
+            "VHOST",
+            "VHOST",
+            "WATCH",
+            "WHO",
+            "WHOIS",
+            "WHOWAS",
                 // the next few are default aliases on unreal (+ anope)
-                "BOTSERV", "BS",
-                "CHANSERV", "CS",
-                "HELPSERV",
-                "HOSTSERV", "HS",
-                "MEMOSERV", "MS",
-                "NICKSERV", "NS",
-                "OPERSERV", "OS",
-                "STATSERV",
+            "BOTSERV", "BS",
+            "CHANSERV", "CS",
+            "HELPSERV",
+            "HOSTSERV", "HS",
+            "MEMOSERV", "MS",
+            "NICKSERV", "NS",
+            "OPERSERV", "OS",
+            "STATSERV",
                 // IRCop commands
-                "ADCHAT",
-                "ADDMOTD",
-                "ADDOMOTD",
-                "CBAN",
-                "CHATOPS",
-                "CHECK",
-                "CHGHOST",
-                "CHGIDENT",
-                "CHGNAME",
-                "CLOSE",
-                "DCCDENY",
-                "DIE",
-                "ELINE",
-                "FILTER",
-                "GLINE",
-                "GLOBOPS",
-                "GZLINE",
-                "HTM", // "High Traffic Mode"
-                "JUMPSERVER",
-                "KILL",
-                "KLINE",
-                "LOADMODULE",
-                "LOCKSERV",
-                "LOCOPS",
-                "MKPASSWD",
-                "NACHAT",
-                "NICKLOCK",
-                "NICKUNLOCK",
-                "OLINE",
-                "OPERMOTD",
-                "REHASH",
-                "RELOADMODULE",
-                "RESTART",
-                "RLINE",
-                "SAJOIN",
-                "SAKICK",
-                "SAMODE",
-                "SANICK",
-                "SAPART",
-                "SATOPIC",
-                "SDESC",
-                "SETHOST",
-                "SETIDENT",
-                "SHUN",
-                "SPAMFILTER",
-                "SQUIT",
-                "TEMPSHUN",
-                "TLINE",
-                "UNDCCDENY",
-                "UNLOCKSERV",
-                "WALLOPS",
-                "ZLINE"
+            "ADCHAT",
+            "ADDMOTD",
+            "ADDOMOTD",
+            "CBAN",
+            "CHATOPS",
+            "CHECK",
+            "CHGHOST",
+            "CHGIDENT",
+            "CHGNAME",
+            "CLOSE",
+            "DCCDENY",
+            "DIE",
+            "ELINE",
+            "FILTER",
+            "GLINE",
+            "GLOBOPS",
+            "GZLINE",
+            "HTM", // "High Traffic Mode"
+            "JUMPSERVER",
+            "KILL",
+            "KLINE",
+            "LOADMODULE",
+            "LOCKSERV",
+            "LOCOPS",
+            "MKPASSWD",
+            "NACHAT",
+            "NICKLOCK",
+            "NICKUNLOCK",
+            "OLINE",
+            "OPERMOTD",
+            "REHASH",
+            "RELOADMODULE",
+            "RESTART",
+            "RLINE",
+            "SAJOIN",
+            "SAKICK",
+            "SAMODE",
+            "SANICK",
+            "SAPART",
+            "SATOPIC",
+            "SDESC",
+            "SETHOST",
+            "SETIDENT",
+            "SHUN",
+            "SPAMFILTER",
+            "SQUIT",
+            "TEMPSHUN",
+            "TLINE",
+            "UNDCCDENY",
+            "UNLOCKSERV",
+            "WALLOPS",
+            "ZLINE"
         };
         _allowedOutbound = new HashSet<String>(Arrays.asList(allowedCommands));
     }

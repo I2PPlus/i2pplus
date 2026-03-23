@@ -298,8 +298,8 @@ public final class FTPCommand {
     public static final int SET_MOD_TIME = MFMT;
 
     private static final String[] COMMANDS = { "USER", "PASS", "ACCT", "CWD", "CDUP", "SMNT", "REIN", "QUIT", "PORT", "PASV", "TYPE", "STRU", "MODE", "RETR",
-            "STOR", "STOU", "APPE", "ALLO", "REST", "RNFR", "RNTO", "ABOR", "DELE", "RMD", "MKD", "PWD", "LIST", "NLST", "SITE", "SYST", "STAT", "HELP", "NOOP",
-            "MDTM", "FEAT", "MFMT", "EPSV", "EPRT", "MLSD", "MLST" };
+        "STOR", "STOU", "APPE", "ALLO", "REST", "RNFR", "RNTO", "ABOR", "DELE", "RMD", "MKD", "PWD", "LIST", "NLST", "SITE", "SYST", "STAT", "HELP", "NOOP",
+        "MDTM", "FEAT", "MFMT", "EPSV", "EPRT", "MLSD", "MLST" };
 
     /**
      * Default access needed for Unit test.

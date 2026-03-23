@@ -210,7 +210,7 @@ class SSU2Bitfield {
             long start = Math.max(offset, bf2.offset);
             long bf2Highest = bf2.getHighestSet();
             for (long bit = start; bit < bf2Highest && bit <= highest; bit++) {
-                 if (get(bit) && !bf2.set(bit)) {cb.bitSet(bit);}
+                if (get(bit) && !bf2.set(bit)) {cb.bitSet(bit);}
             }
             // portion that is strictly newer
             for (long bit = bf2Highest + 1; bit <= highest; bit++) {

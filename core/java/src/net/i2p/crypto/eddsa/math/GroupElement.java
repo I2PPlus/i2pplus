@@ -600,19 +600,19 @@ public class GroupElement implements Serializable {
      */
     public GroupElement dbl() {
         switch (this.repr) {
-        case P2:
-        case P3: // Ignore T for P3 representation
-            FieldElement XX, YY, B, A, AA, Yn, Zn;
-            XX = this.X.square();
-            YY = this.Y.square();
-            B = this.Z.squareAndDouble();
-            A = this.X.add(this.Y);
-            AA = A.square();
-            Yn = YY.add(XX);
-            Zn = YY.subtract(XX);
-            return p1p1(this.curve, AA.subtract(Yn), Yn, Zn, B.subtract(Zn));
-        default:
-            throw new UnsupportedOperationException();
+            case P2:
+            case P3: // Ignore T for P3 representation
+                FieldElement XX, YY, B, A, AA, Yn, Zn;
+                XX = this.X.square();
+                YY = this.Y.square();
+                B = this.Z.squareAndDouble();
+                A = this.X.add(this.Y);
+                AA = A.square();
+                Yn = YY.add(XX);
+                Zn = YY.subtract(XX);
+                return p1p1(this.curve, AA.subtract(Yn), Yn, Zn, B.subtract(Zn));
+            default:
+                throw new UnsupportedOperationException();
         }
     }
 
@@ -1033,17 +1033,17 @@ public class GroupElement implements Serializable {
         for (; i >= 0; --i) {
             GroupElement t = r.dbl();
 
-                if (aslide[i] > 0) {
-                    t = t.toP3().madd(A.dblPrecmp[aslide[i]/2]);
-                } else if(aslide[i] < 0) {
-                    t = t.toP3().msub(A.dblPrecmp[(-aslide[i])/2]);
-                }
+            if (aslide[i] > 0) {
+                t = t.toP3().madd(A.dblPrecmp[aslide[i]/2]);
+            } else if(aslide[i] < 0) {
+                t = t.toP3().msub(A.dblPrecmp[(-aslide[i])/2]);
+            }
 
-                if (bslide[i] > 0) {
-                    t = t.toP3().madd(this.dblPrecmp[bslide[i]/2]);
-                } else if(bslide[i] < 0) {
-                    t = t.toP3().msub(this.dblPrecmp[(-bslide[i])/2]);
-                }
+            if (bslide[i] > 0) {
+                t = t.toP3().madd(this.dblPrecmp[bslide[i]/2]);
+            } else if(bslide[i] < 0) {
+                t = t.toP3().msub(this.dblPrecmp[(-bslide[i])/2]);
+            }
 
             r = t.toP2();
         }
@@ -1066,18 +1066,18 @@ public class GroupElement implements Serializable {
      */
     public boolean isOnCurve(Curve curve) {
         switch (repr) {
-        case P2:
-        case P3:
-            FieldElement recip = Z.invert();
-            FieldElement x = X.multiply(recip);
-            FieldElement y = Y.multiply(recip);
-            FieldElement xx = x.square();
-            FieldElement yy = y.square();
-            FieldElement dxxyy = curve.getD().multiply(xx).multiply(yy);
-            return curve.getField().ONE.add(dxxyy).add(xx).equals(yy);
+            case P2:
+            case P3:
+                FieldElement recip = Z.invert();
+                FieldElement x = X.multiply(recip);
+                FieldElement y = Y.multiply(recip);
+                FieldElement xx = x.square();
+                FieldElement yy = y.square();
+                FieldElement dxxyy = curve.getD().multiply(xx).multiply(yy);
+                return curve.getField().ONE.add(dxxyy).add(xx).equals(yy);
 
-        default:
-            return toP2().isOnCurve(curve);
+            default:
+                return toP2().isOnCurve(curve);
         }
     }
 

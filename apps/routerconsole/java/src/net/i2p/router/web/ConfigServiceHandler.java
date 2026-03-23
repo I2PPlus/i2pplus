@@ -300,7 +300,7 @@ public class ConfigServiceHandler extends FormHandler {
             else { // look in new and old places
                 f = new File(System.getProperty("java.io.tmpdir"), "wrapper.log");
                 if (!f.exists()) {f = new File(ctx.getBaseDir(), "wrapper.log");}
-             }
+            }
         }
         return f;
     }

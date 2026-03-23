@@ -189,7 +189,7 @@ public class SAMReader {
                 String msg = params.getProperty("MESSAGE");
                 // id is null in v3, so pass it through regardless
                 //if (id != null) {
-                    _listener.streamStatusReceived(result, id, msg);
+                _listener.streamStatusReceived(result, id, msg);
                 //} else {
                 //    _listener.unknownMessageReceived(major, minor, params);
                 //}
@@ -246,10 +246,10 @@ public class SAMReader {
                 int toPort = 0;
                 if (dest != null) {
                     try {
-                      if (fp != null)
-                          fromPort = Integer.parseInt(fp);
-                      if (tp != null)
-                          toPort = Integer.parseInt(tp);
+                        if (fp != null)
+                            fromPort = Integer.parseInt(fp);
+                        if (tp != null)
+                            toPort = Integer.parseInt(tp);
                         int sizeVal = Integer.parseInt(size);
                         byte data[] = new byte[sizeVal];
                         int read = DataHelper.read(_inRaw, data);

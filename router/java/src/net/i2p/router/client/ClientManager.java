@@ -424,8 +424,8 @@ class ClientManager {
             if (_log.shouldDebug()) {_log.debug("[Message " + msgId + "] is targeting a LOCAL destination -> Distributing locally");}
             if (runner != sender) {
             // run this inline so we don't clog up the job queue
-            Job j = new DistributeLocal(toDest, runner, sender, fromDest, payload, msgId, messageNonce);
-            j.runJob();
+                Job j = new DistributeLocal(toDest, runner, sender, fromDest, payload, msgId, messageNonce);
+                j.runJob();
             } else {
                 if (_log.shouldWarn()) {_log.warn("Loopback attempt from client " + fromDest.getHash());}
                 int rc = MessageStatusMessage.STATUS_SEND_FAILURE_LOOPBACK;

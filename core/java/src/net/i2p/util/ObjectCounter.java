@@ -7,11 +7,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Thread-safe counter for tracking occurrences of objects.
- * 
+ *
  * <p>This class provides a concurrent way to count how many times specific
  * objects appear. It uses ConcurrentHashMap and AtomicInteger to ensure
  * thread-safe operations in multi-threaded environments.</p>
- * 
+ *
  * <p>Typical use cases include:</p>
  * <ul>
  * <li>Counting message frequencies</li>

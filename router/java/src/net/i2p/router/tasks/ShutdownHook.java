@@ -17,7 +17,7 @@ import net.i2p.util.Log;
 
 /**
  * Emergency shutdown hook for JVM termination.
- * 
+ *
  * This hook is registered with the JVM Runtime to ensure clean
  * router shutdown even if the normal shutdown process is bypassed
  * or interrupted. It serves as a failsafe mechanism to handle
@@ -28,11 +28,11 @@ import net.i2p.util.Log;
  *   <li>Process termination signals (SIGTERM, etc.)</li>
  *   <li>Power loss or system shutdown</li>
  * </ul>
- * 
+ *
  * The hook logs the shutdown event and performs a hard shutdown
  * to prevent the Java Service Wrapper from becoming confused about
  * the router's state.
- * 
+ *
  * Note: During normal router shutdown, this hook should be cancelled
  * to avoid unnecessary emergency shutdown procedures.
  *
@@ -47,7 +47,7 @@ public class ShutdownHook extends Thread {
      * Create a new shutdown hook for emergency router shutdown.
      * This hook is registered with the JVM to ensure clean shutdown
      * even if the normal shutdown process is bypassed.
-     * 
+     *
      * @param ctx router context for accessing router services
      * @since 0.8.12 moved from Router.java
      */
@@ -58,11 +58,11 @@ public class ShutdownHook extends Thread {
 
     /**
      * Perform emergency shutdown when JVM is terminating.
-     * 
+     *
      * This method is called by the JVM during shutdown to ensure
      * the router shuts down cleanly even in abnormal termination
      * scenarios. It logs the shutdown and performs a hard shutdown.
-     * 
+     *
      * This is a failsafe mechanism - normal shutdown should cancel
      * this hook to avoid unnecessary emergency procedures.
      */

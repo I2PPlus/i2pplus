@@ -129,7 +129,7 @@ class RatchetPayload {
                     break;
 
                 case BLOCK_NEXTKEY:
-                  {
+                {
                     if (len != 3 && len != 35)
                         throw new IOException("Bad length for NEXTKEY: " + len);
                     boolean hasKey = (payload[i] & 0x01) != 0;
@@ -145,11 +145,11 @@ class RatchetPayload {
                         nsk = new NextSessionKey(id, isReverse, isRequest);
                     }
                     cb.gotNextKey(nsk);
-                  }
+                }
                     break;
 
                 case BLOCK_ACK:
-                  {
+                {
                     if (len < 4 || (len % 4) != 0)
                         throw new IOException("Bad length for ACK: " + len);
                     for (int j = i; j < i + len; j += 4) {
@@ -157,7 +157,7 @@ class RatchetPayload {
                         int n = (int) DataHelper.fromLong(payload, j + 2, 2);
                         cb.gotAck(id, n);
                     }
-                  }
+                }
                     break;
 
                 case BLOCK_ACKREQ:

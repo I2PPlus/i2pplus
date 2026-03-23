@@ -190,7 +190,7 @@ public class IndexBean {
             else if ("stop".equals(_action)) {return stop();}
             else if ("start".equals(_action)) {return start();}
             else if ("restart".equals(_action)) {return restart();}
-            
+
             else if ("Modify".equals(_action)) {return modifyDestination();}
             else if ("Generate".equals(_action)) {return generateNewEncryptionKey();}
             else {return "Action " + _action + " unknown";}
@@ -566,11 +566,11 @@ public class IndexBean {
      *  @since 0.9.57
      */
     private class TCComparator implements Comparator<Integer> {
-         private final Collator _comp = Collator.getInstance();
-         public int compare(Integer l, Integer r) {
-             int rv = _comp.compare(getTunnelName(l), getTunnelName(r));
-             if (rv != 0) {return rv;}
-             return l.compareTo(r);
+        private final Collator _comp = Collator.getInstance();
+        public int compare(Integer l, Integer r) {
+            int rv = _comp.compare(getTunnelName(l), getTunnelName(r));
+            if (rv != 0) {return rv;}
+            return l.compareTo(r);
         }
     }
 
@@ -970,7 +970,7 @@ public class IndexBean {
     /** what port should this client/httpclient/ircclient listen on */
     public void setPort(String port) {
         if (port != null) {
-            try {_config.setPort(Integer.parseInt(port.trim()));
+                try {_config.setPort(Integer.parseInt(port.trim()));
             } catch (NumberFormatException nfe) {}
         }
     }
@@ -991,7 +991,7 @@ public class IndexBean {
     /** What port does this server tunnel point at */
     public void setTargetPort(String port) {
         if (port != null) {
-            try {_config.setTargetPort(Integer.parseInt(port.trim()));
+                try {_config.setTargetPort(Integer.parseInt(port.trim()));
             } catch (NumberFormatException nfe) {}
         }
     }
@@ -1114,7 +1114,7 @@ public class IndexBean {
     /** @since 0.9.40 */
     public void setEncryptMode(String val) {
         if (val != null) {
-            try {_config.setEncryptMode(Integer.parseInt(val.trim()));
+                try {_config.setEncryptMode(Integer.parseInt(val.trim()));
             } catch (NumberFormatException nfe) {}
         }
     }
@@ -1272,7 +1272,7 @@ public class IndexBean {
 
     public void setCloseTime(String val) {
         if (val != null) {
-            try {_config.setCloseTime(Integer.parseInt(val.trim()));
+                try {_config.setCloseTime(Integer.parseInt(val.trim()));
             } catch (NumberFormatException nfe) {}
         }
     }
@@ -1583,7 +1583,7 @@ public class IndexBean {
             case Certificate.CERTIFICATE_TYPE_HIDDEN:
                 pkf.setCertType(_certType);
                 break;
-            
+
             case Certificate.CERTIFICATE_TYPE_SIGNED:
                 if (_certSigner == null || _certSigner.trim().length() <= 0) {
                     return "No signing destination specified";
@@ -1621,7 +1621,7 @@ public class IndexBean {
         return "Destination modified - " +
                "New Base32 is " + newdest.toBase32() +
                "New Destination is " + newdest.toBase64();
-     }
+    }
 
     /** New key */
     private String generateNewEncryptionKey() {
@@ -1637,7 +1637,7 @@ public class IndexBean {
         setEncrypt("");
         saveChanges();
         return "New LeaseSet Encryption Key: " + b64;
-     }
+    }
 
     /**
      * Based on all provided data, create a set of configuration parameters

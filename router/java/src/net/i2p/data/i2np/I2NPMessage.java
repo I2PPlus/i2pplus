@@ -89,7 +89,7 @@ public interface I2NPMessage {
      * value of 0 will result in the original ID being returned, instead of
      * passing 0 use the no-arg version.
      */
-    public long getUniqueId(long msgIDBloomXor); 
+    public long getUniqueId(long msgIDBloomXor);
     public long getUniqueId();
     public void setUniqueId(long id);
 

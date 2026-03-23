@@ -1102,8 +1102,8 @@ public class UDPTransport extends TransportImpl {
             if (((!ipv6) && endpoint.isIPv4()) ||
                 (ipv6 && endpoint.isIPv6()))
                 return endpoint.getListenPort();
-       }
-       return -1;
+        }
+        return -1;
     }
 
     /**
@@ -1388,9 +1388,9 @@ public class UDPTransport extends TransportImpl {
             // if the port is the only issue, don't call markUnreachable()
             if (ourPort < 1024 || ourPort > 65535 || !isValid(ourIP)) {
                 if (_log.shouldWarn())
-                _log.warn("[" + from.toBase64().substring(0,6) + "] told us we have an invalid IP - "
+                    _log.warn("[" + from.toBase64().substring(0,6) + "] told us we have an invalid IP - "
                            + Addresses.toString(ourIP, ourPort) + ". Let's throw tomatoes at them!");
-            markUnreachable(from);
+                markUnreachable(from);
             } else {
                 _log.logAlways(Log.WARN, "[" + from.toBase64().substring(0,6) + "] told us we have an invalid port "
                                          + ourPort
@@ -1423,19 +1423,19 @@ public class UDPTransport extends TransportImpl {
                                   + Addresses.toString(ourIP, ourPort) + "; awaiting confirmation from another peer");
                 } else {
                     changeIt = true;
-                        lastFrom = _lastFromv4;
+                    lastFrom = _lastFromv4;
                 }
                 _lastFromv4 = from;
                 _lastOurIPv4 = ourIP;
                 _lastOurPortv4 = ourPort;
-                } else {
+            } else {
                 if (from.equals(_lastFromv6) || !eq(_lastOurIPv6, _lastOurPortv6, ourIP, ourPort)) {
                     if (_log.shouldInfo())
                         _log.info("[" + from.toBase64().substring(0,6) + "] told us we have a new IP address or port: "
                                   + Addresses.toString(ourIP, ourPort) + "; awaiting confirmation from another peer");
                 } else {
                     changeIt = true;
-                        lastFrom = _lastFromv6;
+                    lastFrom = _lastFromv6;
                 }
                 _lastFromv6 = from;
                 _lastOurIPv6 = ourIP;
@@ -1475,7 +1475,7 @@ public class UDPTransport extends TransportImpl {
             int externalListenPort = current != null ? current.getPort() : getRequestedPort(isIPv6);
 
             if (_log.shouldDebug())
-            _log.debug("Change address? Status: " + _reachabilityStatus +
+                _log.debug("Change address? Status: " + _reachabilityStatus +
                       "; Last updated: " + (_context.clock().now() - _reachabilityStatusLastUpdated) +
                       "ms ago; Old: " + Addresses.toString(externalListenHost, externalListenPort) +
                       "; New: " + Addresses.toString(ourIP, ourPort));
@@ -1483,80 +1483,80 @@ public class UDPTransport extends TransportImpl {
             if ((fixedPort && externalListenPort > 0) || ourPort <= 0)
                 ourPort = externalListenPort;
 
-                if (ourPort > 0 &&
+            if (ourPort > 0 &&
                     !eq(externalListenHost, externalListenPort, ourIP, ourPort)) {
-                    boolean rebuild = true;
-                    if (isIPv6) {
+                boolean rebuild = true;
+                if (isIPv6) {
                         // For IPv6, we only accept changes if this is one of our local addresses
-                        Set<String> ipset = Addresses.getAddresses(false, true);
-                        String ipstr = Addresses.toString(ourIP);
-                        if (!ipset.contains(ipstr)) {
-                            if (_log.shouldInfo())
+                    Set<String> ipset = Addresses.getAddresses(false, true);
+                    String ipstr = Addresses.toString(ourIP);
+                    if (!ipset.contains(ipstr)) {
+                        if (_log.shouldInfo())
                                 _log.info("New IPv6 address received but not one of our local addresses: " + ipstr, new Exception());
-                            return false;
-                        }
-                        if (STATUS_IPV6_FW_2.contains(_reachabilityStatus)) {
+                        return false;
+                    }
+                    if (STATUS_IPV6_FW_2.contains(_reachabilityStatus)) {
                             // If we were firewalled before, let's assume we're still firewalled.
                             // Save the new IP and fire a test
-                            String oldIP = _context.getProperty(PROP_IPV6);
-                            String newIP = Addresses.toString(ourIP);
-                            if (!newIP.equals(oldIP)) {
-                                Map<String, String> changes = new HashMap<String, String>(1);
-                                changes.put(PROP_IPV6, newIP);
-                                _context.router().saveConfig(changes, null);
-                                if (oldIP != null) {
-                                    _context.router().eventLog().addEvent(EventLog.CHANGE_IP, newIP);
-                                }
+                        String oldIP = _context.getProperty(PROP_IPV6);
+                        String newIP = Addresses.toString(ourIP);
+                        if (!newIP.equals(oldIP)) {
+                            Map<String, String> changes = new HashMap<String, String>(1);
+                            changes.put(PROP_IPV6, newIP);
+                            _context.router().saveConfig(changes, null);
+                            if (oldIP != null) {
+                                _context.router().eventLog().addEvent(EventLog.CHANGE_IP, newIP);
+                            }
                                 // save the external address but don't publish it
-                                OrderedProperties localOpts = new OrderedProperties();
-                                localOpts.setProperty(UDPAddress.PROP_PORT, String.valueOf(ourPort));
-                                localOpts.setProperty(UDPAddress.PROP_HOST, newIP);
-                                RouterAddress local = new RouterAddress(getPublishStyle(), localOpts, DEFAULT_COST);
-                                replaceCurrentExternalAddress(local, true);
-                                if (_log.shouldWarn())
+                            OrderedProperties localOpts = new OrderedProperties();
+                            localOpts.setProperty(UDPAddress.PROP_PORT, String.valueOf(ourPort));
+                            localOpts.setProperty(UDPAddress.PROP_HOST, newIP);
+                            RouterAddress local = new RouterAddress(getPublishStyle(), localOpts, DEFAULT_COST);
+                            replaceCurrentExternalAddress(local, true);
+                            if (_log.shouldWarn())
                                     _log.warn("New IPv6 address, assuming still firewalled [" +
                                               newIP + "]:" + ourPort, new Exception());
-                            } else {
-                                if (_log.shouldInfo())
+                        } else {
+                            if (_log.shouldInfo())
                                     _log.info("Same IPv6 address, assuming still firewalled [" +
                                               newIP + "]:" + ourPort);
-                                return false;
-                            }
-                            rebuild = false;
-                            fireTest = true;
+                            return false;
                         }
+                        rebuild = false;
+                        fireTest = true;
                     }
+                }
 
                     // they told us something different and our tests are either old or failing
-                    if (rebuild) {
-                            if (externalListenPort > 0 && ourPort > 0 &&
+                if (rebuild) {
+                    if (externalListenPort > 0 && ourPort > 0 &&
                                 externalListenPort != ourPort &&
                                 _context.getProperty(PROP_EXTERNAL_PORT, 0) != ourPort) {
                                 // save the external port setting only
-                                _context.router().saveConfig(PROP_EXTERNAL_PORT, Integer.toString(ourPort));
-                                _context.router().eventLog().addEvent(EventLog.CHANGE_PORT, "IPv" +
+                        _context.router().saveConfig(PROP_EXTERNAL_PORT, Integer.toString(ourPort));
+                        _context.router().eventLog().addEvent(EventLog.CHANGE_PORT, "IPv" +
                                                                                             (isIPv6 ? '6' : '4') +
                                                                                             " port " + ourPort);
-                            }
+                    }
 
                             // flush SSU2 tokens
-                            if (ourPort != externalListenPort) {
-                                _establisher.portChanged();
-                            } else if (externalListenHost != null && !Arrays.equals(ourIP, externalListenHost)) {
-                                _establisher.ipChanged(isIPv6);
-                            }
+                    if (ourPort != externalListenPort) {
+                        _establisher.portChanged();
+                    } else if (externalListenHost != null && !Arrays.equals(ourIP, externalListenHost)) {
+                        _establisher.ipChanged(isIPv6);
+                    }
 
-                            if (_log.shouldWarn())
+                    if (_log.shouldWarn())
                                 _log.warn("Trying to change our external address to " +
                                           Addresses.toString(ourIP, ourPort));
-                            RouterAddress newAddr = rebuildExternalAddress(ourIP, ourPort, true);
-                            updated = newAddr != null;
-                    }
-                } else {
-                    // matched what we expect
-                    if (_log.shouldDebug())
-                        _log.info("Not updating our external address: matches existing");
+                    RouterAddress newAddr = rebuildExternalAddress(ourIP, ourPort, true);
+                    updated = newAddr != null;
                 }
+            } else {
+                    // matched what we expect
+                if (_log.shouldDebug())
+                        _log.info("Not updating our external address: matches existing");
+            }
         }
 
         if (fireTest) {
@@ -1872,7 +1872,7 @@ public class UDPTransport extends TransportImpl {
                 // different ones in the two maps? shouldn't happen
                 if (oldPeer2 != oldPeer && oldPeer2 != null) {
                     oldPeer2.dropOutbound();
-                     _introManager.remove(oldPeer2);
+                    _introManager.remove(oldPeer2);
                 }
             }
             if (oldPeer != peer && oldPeer.getVersion() == 2) {
@@ -2248,11 +2248,11 @@ public class UDPTransport extends TransportImpl {
      */
     void sendDestroy(PeerState peer, int reasonCode) {
         UDPPacket pkt;
-            try {
-                pkt = _packetBuilder2.buildSessionDestroyPacket(reasonCode, (PeerState2) peer);
-            } catch (IOException ioe) {
-                return;
-            }
+        try {
+            pkt = _packetBuilder2.buildSessionDestroyPacket(reasonCode, (PeerState2) peer);
+        } catch (IOException ioe) {
+            return;
+        }
         if (_log.shouldDebug())
             _log.debug("Sending destroy packet to " + peer);
         send(pkt);
@@ -3198,9 +3198,9 @@ public class UDPTransport extends TransportImpl {
                 case IPV4_FIREWALLED_IPV6_UNKNOWN:
                 case IPV4_SNAT_IPV6_OK:
                 case IPV4_SNAT_IPV6_UNKNOWN:
-                if (_log.shouldDebug())
-                    _log.debug("IPv4 Introducers required because our status is [" + status + "]");
-                return true;
+                    if (_log.shouldDebug())
+                        _log.debug("IPv4 Introducers required because our status is [" + status + "]");
+                    return true;
             }
         }
         if (!allowDirectUDP()) {
@@ -3254,7 +3254,7 @@ public class UDPTransport extends TransportImpl {
                 case IPV4_UNKNOWN_IPV6_OK:
                 case IPV4_UNKNOWN_IPV6_FIREWALLED:
                 case UNKNOWN:
-                return _introManager.introducerCount(false) < 3 * MIN_INTRODUCER_POOL;
+                    return _introManager.introducerCount(false) < 3 * MIN_INTRODUCER_POOL;
 
             }
         }
@@ -3353,7 +3353,7 @@ public class UDPTransport extends TransportImpl {
     }
 
     public int countPeers() {
-            return _peersByIdent.size();
+        return _peersByIdent.size();
     }
 
     /**
@@ -3403,9 +3403,9 @@ public class UDPTransport extends TransportImpl {
         long old = _context.clock().now() - 60*1000;
         int active = 0;
         for (PeerState peer : _peersByIdent.values()) {
-                if (peer.getLastSendFullyTime() >= old)
+            if (peer.getLastSendFullyTime() >= old)
                     active++;
-            }
+        }
         return active;
     }
 
@@ -3608,11 +3608,11 @@ public class UDPTransport extends TransportImpl {
 
             if (weAreFirewalled) {
                // Use much more lenient timeouts for firewalled routers to retain peers
-               shortInactivityCutoff = now - Math.max(_expireTimeout, 25*60*1000);  // Min 25 minutes
-               longInactivityCutoff = now - Math.max(EXPIRE_TIMEOUT, 45*60*1000); // Min 45 minutes
+                shortInactivityCutoff = now - Math.max(_expireTimeout, 25*60*1000);  // Min 25 minutes
+                longInactivityCutoff = now - Math.max(EXPIRE_TIMEOUT, 45*60*1000); // Min 45 minutes
             } else {
-               shortInactivityCutoff = now - _expireTimeout;
-               longInactivityCutoff = now - EXPIRE_TIMEOUT;
+                shortInactivityCutoff = now - _expireTimeout;
+                longInactivityCutoff = now - EXPIRE_TIMEOUT;
             }
 
             final long mayDisconCutoff = now - MAY_DISCON_TIMEOUT;
@@ -3627,55 +3627,55 @@ public class UDPTransport extends TransportImpl {
             _expireBuffer.clear();
             _runCount++;
 
-                for (PeerState peer : _peersByIdent.values()) {
-                    long inactivityCutoff;
+            for (PeerState peer : _peersByIdent.values()) {
+                long inactivityCutoff;
                     // if we offered to introduce them, or we used them as introducer in last 2 hours
-                    if (peer.getWeRelayToThemAs() > 0 || peer.getIntroducerTime() > pingCutoff) {
-                        inactivityCutoff = longInactivityCutoff;
-                    } else if ((!haveCap || !peer.isInbound()) &&
+                if (peer.getWeRelayToThemAs() > 0 || peer.getIntroducerTime() > pingCutoff) {
+                    inactivityCutoff = longInactivityCutoff;
+                } else if ((!haveCap || !peer.isInbound()) &&
                                peer.getMayDisconnect() &&
                                peer.getMessagesReceived() <= 2 && peer.getMessagesSent() <= 2) {
                         //if (_log.shouldInfo())
                         //    _log.info("Possible early disconnect for: " + peer);
-                        inactivityCutoff = mayDisconCutoff;
-                    } else {
-                        inactivityCutoff = shortInactivityCutoff;
-                    }
-                    if ( (peer.getLastReceiveTime() < inactivityCutoff) && (peer.getLastSendTime() < inactivityCutoff) ) {
-                        _expireBuffer.add(peer);
-                    } else if (shouldPingFirewall &&
+                    inactivityCutoff = mayDisconCutoff;
+                } else {
+                    inactivityCutoff = shortInactivityCutoff;
+                }
+                if ( (peer.getLastReceiveTime() < inactivityCutoff) && (peer.getLastSendTime() < inactivityCutoff) ) {
+                    _expireBuffer.add(peer);
+                } else if (shouldPingFirewall &&
                                ((_runCount ^ peer.hashCode()) & (SLICES - 1)) == 0 &&
                                peer.getLastSendOrPingTime() < pingFirewallCutoff &&
                                peer.getLastReceiveTime() < pingFirewallCutoff) {
                         // ping if firewall is mapping the port to keep port the same...
                         // if the port changes we are screwed
-                        if (_log.shouldDebug())
+                    if (_log.shouldDebug())
                             _log.debug("Pinging for firewall: " + peer);
                         // don't update or idle time won't be right and peer won't get dropped
                         // TODO if both sides are firewalled should only one ping
                         // or else session will stay open forever?
                         //peer.setLastSendTime(now);
-                        UDPPacket ping;
-                        try {ping = _packetBuilder2.buildPing((PeerState2) peer);}
-                        catch (IOException ioe) {continue;}
-                        send(ping);
-                        peer.setLastPingTime(now);
+                    UDPPacket ping;
+                    try {ping = _packetBuilder2.buildPing((PeerState2) peer);}
+                    catch (IOException ioe) {continue;}
+                    send(ping);
+                    peer.setLastPingTime(now);
                         // If external port is different, it may be changing the port for every
                         // session, so ping all of them. Otherwise only one.
-                        if (pingOneOnly)
+                    if (pingOneOnly)
                             shouldPingFirewall = false;
-                    } else {
+                } else {
                         // periodically send our RI
-                        long uptime = now - peer.getKeyEstablishedTime();
-                        if (uptime >= RI_STORE_INTERVAL) {
-                            long mod = uptime % RI_STORE_INTERVAL;
-                            if (mod < loopTime) {
-                                DatabaseStoreMessage dsm = _establisher.getOurInfo();
-                                send(dsm, peer);
-                            }
+                    long uptime = now - peer.getKeyEstablishedTime();
+                    if (uptime >= RI_STORE_INTERVAL) {
+                        long mod = uptime % RI_STORE_INTERVAL;
+                        if (mod < loopTime) {
+                            DatabaseStoreMessage dsm = _establisher.getOurInfo();
+                            send(dsm, peer);
                         }
                     }
                 }
+            }
 
             if (!_expireBuffer.isEmpty()) {
                 if (_log.shouldDebug())
@@ -3825,7 +3825,7 @@ public class UDPTransport extends TransportImpl {
                           "\n* Caused by update: " + newStatus);
             if (old != Status.UNKNOWN && _context.router().getUptime() > 5*60*1000) {
                 _context.router().eventLog().addEvent(EventLog.REACHABILITY,
-                _t(old.toStatusString()) + " ➜ " +  _t(status.toStatusString()));
+                    _t(old.toStatusString()) + " ➜ " +  _t(status.toStatusString()));
             }
             // Always rebuild when the status changes, even if our address hasn't changed,
             // as rebuildExternalAddress() calls replaceAddress() which calls CSFI.notifyReplaceAddress()

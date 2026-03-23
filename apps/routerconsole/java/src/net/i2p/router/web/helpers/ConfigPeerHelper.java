@@ -75,24 +75,24 @@ public class ConfigPeerHelper extends HelperBase {
             }
             // first 0 - 127
             for (Integer ii : singles) {
-                 int ip = ii.intValue();
-                 if (ip < 0) {continue;}
-                 if (bl.isPermanentlyBlocklisted(ip)) {continue;} // don't display if on the permanent blocklist also
-                 buf.append("<tr><td>").append(Blocklist.toStr(ip)).append("</td></tr>\n");
+                int ip = ii.intValue();
+                if (ip < 0) {continue;}
+                if (bl.isPermanentlyBlocklisted(ip)) {continue;} // don't display if on the permanent blocklist also
+                buf.append("<tr><td>").append(Blocklist.toStr(ip)).append("</td></tr>\n");
             }
             // then 128 - 255
             for (Integer ii : singles) {
-                 int ip = ii.intValue();
-                 if (ip >= 0) {break;}
-                 if (bl.isPermanentlyBlocklisted(ip)) {continue;} // don't display if on the permanent blocklist also
-                 buf.append("<tr><td>").append(Blocklist.toStr(ip)).append("</td></tr>\n");
+                int ip = ii.intValue();
+                if (ip >= 0) {break;}
+                if (bl.isPermanentlyBlocklisted(ip)) {continue;} // don't display if on the permanent blocklist also
+                buf.append("<tr><td>").append(Blocklist.toStr(ip)).append("</td></tr>\n");
             }
             // then IPv6
             if (!s6.isEmpty()) {
                 buf.append("<tr id=ipv6><td><b>").append(_t("IPv6 Addresses")).append("</b></td></tr>\n");
                 Collections.sort(s6);
                 for (BigInteger bi : s6) {
-                     buf.append("<tr><td>").append(Addresses.toString(toIPBytes(bi))).append("</td></tr>\n");
+                    buf.append("<tr><td>").append(Addresses.toString(toIPBytes(bi))).append("</td></tr>\n");
                 }
             }
         } else {

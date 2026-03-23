@@ -71,10 +71,10 @@ public class RequestWrapper {
      * @param httpRequest
      */
     public RequestWrapper(HttpServletRequest httpRequest) {
-      cache = new Hashtable<String, String>();
-      this.httpRequest = httpRequest;
-      String contentType = httpRequest.getContentType();
-      isMultiPartRequest = contentType != null && contentType.toLowerCase(Locale.US).startsWith("multipart/form-data");
+        cache = new Hashtable<String, String>();
+        this.httpRequest = httpRequest;
+        String contentType = httpRequest.getContentType();
+        isMultiPartRequest = contentType != null && contentType.toLowerCase(Locale.US).startsWith("multipart/form-data");
     }
 
     /**
@@ -141,7 +141,7 @@ public class RequestWrapper {
      * @throws IllegalStateException if the request is too large
      */
     public String getParameter(String name, String defaultValue) {
-      String result = defaultValue;
+        String result = defaultValue;
         if (isMultiPartRequest) {
             String str = cache.get(name);
             if (str != null) {result = str;}
@@ -183,12 +183,12 @@ public class RequestWrapper {
     public String getFilename(String partName) {
         String result = null;
         if (isMultiPartRequest) {
-          try {
-              Part p = httpRequest.getPart(partName);
-              if (p != null) {result = p.getSubmittedFileName();}
-          } catch (IOException ioe) {log(ioe);}
-          catch (ServletException se) {log(se);}
-          catch (IllegalStateException ise) {log(ise); throw ise;}
+            try {
+                Part p = httpRequest.getPart(partName);
+                if (p != null) {result = p.getSubmittedFileName();}
+            } catch (IOException ioe) {log(ioe);}
+            catch (ServletException se) {log(se);}
+            catch (IllegalStateException ise) {log(ise); throw ise;}
         }
         return result;
     }

@@ -8,21 +8,21 @@ interface ACKBitfield {
 
     /**
      * Get the message ID this is partially ACKing.
-     * 
+     *
      * @return message ID
      */
     public long getMessageId();
 
     /**
      * Get how many fragments are covered in this bitfield.
-     * 
+     *
      * @return number of fragments
      */
     public int fragmentCount();
 
     /**
      * Check if the given fragment has been received.
-     * 
+     *
      * @param fragmentNum fragment number to check
      * @return true if fragment has been received
      */
@@ -30,7 +30,7 @@ interface ACKBitfield {
 
     /**
      * Check if the entire message has been received completely.
-     * 
+     *
      * @return true if message has been completely received
      */
     public boolean receivedComplete();
@@ -38,7 +38,7 @@ interface ACKBitfield {
     /**
      *  Number of fragments acked in this bitfield.
      *  Faster than looping through received()
-     *  
+     *
      *  @return number of fragments acked
      *  @since 0.9.16
      */

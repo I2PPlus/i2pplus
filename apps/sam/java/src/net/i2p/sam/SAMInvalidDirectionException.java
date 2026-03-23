@@ -18,10 +18,10 @@ class SAMInvalidDirectionException extends Exception {
     private static final long serialVersionUID = 1;
 
     public SAMInvalidDirectionException() {
-	super();
+        super();
     }
 
     public SAMInvalidDirectionException(String s) {
-	super(s);
+        super(s);
     }
 }

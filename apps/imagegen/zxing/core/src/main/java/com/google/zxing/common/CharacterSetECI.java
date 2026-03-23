@@ -57,40 +57,40 @@ public enum CharacterSetECI {
   GB18030(29, "GB2312", "EUC_CN", "GBK"),
   EUC_KR(30, "EUC-KR");
 
-  private static final Map<Integer,CharacterSetECI> VALUE_TO_ECI = new HashMap<>();
-  private static final Map<String,CharacterSetECI> NAME_TO_ECI = new HashMap<>();
-  static {
-    for (CharacterSetECI eci : values()) {
-      for (int value : eci.values) {
-        VALUE_TO_ECI.put(value, eci);
-      }
-      NAME_TO_ECI.put(eci.name(), eci);
-      for (String name : eci.otherEncodingNames) {
-        NAME_TO_ECI.put(name, eci);
-      }
+    private static final Map<Integer,CharacterSetECI> VALUE_TO_ECI = new HashMap<>();
+    private static final Map<String,CharacterSetECI> NAME_TO_ECI = new HashMap<>();
+    static {
+        for (CharacterSetECI eci : values()) {
+            for (int value : eci.values) {
+                VALUE_TO_ECI.put(value, eci);
+            }
+            NAME_TO_ECI.put(eci.name(), eci);
+            for (String name : eci.otherEncodingNames) {
+                NAME_TO_ECI.put(name, eci);
+            }
+        }
     }
-  }
 
-  private final int[] values;
-  private final String[] otherEncodingNames;
+    private final int[] values;
+    private final String[] otherEncodingNames;
 
-  CharacterSetECI(int value) {
-    this(new int[] {value});
-  }
+    CharacterSetECI(int value) {
+        this(new int[] {value});
+    }
 
-  CharacterSetECI(int value, String... otherEncodingNames) {
-    this.values = new int[] {value};
-    this.otherEncodingNames = otherEncodingNames;
-  }
+    CharacterSetECI(int value, String... otherEncodingNames) {
+        this.values = new int[] {value};
+        this.otherEncodingNames = otherEncodingNames;
+    }
 
-  CharacterSetECI(int[] values, String... otherEncodingNames) {
-    this.values = values;
-    this.otherEncodingNames = otherEncodingNames;
-  }
+    CharacterSetECI(int[] values, String... otherEncodingNames) {
+        this.values = values;
+        this.otherEncodingNames = otherEncodingNames;
+    }
 
-  public int getValue() {
-    return values[0];
-  }
+    public int getValue() {
+        return values[0];
+    }
 
   /**
    * @param value character set ECI value
@@ -98,20 +98,20 @@ public enum CharacterSetECI {
    *   unsupported
    * @throws FormatException if ECI value is invalid
    */
-  public static CharacterSetECI getCharacterSetECIByValue(int value) throws FormatException {
-    if (value < 0 || value >= 900) {
-      throw FormatException.getFormatInstance();
+    public static CharacterSetECI getCharacterSetECIByValue(int value) throws FormatException {
+        if (value < 0 || value >= 900) {
+            throw FormatException.getFormatInstance();
+        }
+        return VALUE_TO_ECI.get(value);
     }
-    return VALUE_TO_ECI.get(value);
-  }
 
   /**
    * @param name character set ECI encoding name
    * @return CharacterSetECI representing ECI for character encoding, or null if it is legal
    *   but unsupported
    */
-  public static CharacterSetECI getCharacterSetECIByName(String name) {
-    return NAME_TO_ECI.get(name);
-  }
+    public static CharacterSetECI getCharacterSetECIByName(String name) {
+        return NAME_TO_ECI.get(name);
+    }
 
 }

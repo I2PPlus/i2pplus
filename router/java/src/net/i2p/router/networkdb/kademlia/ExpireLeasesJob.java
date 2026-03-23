@@ -106,16 +106,16 @@ class ExpireLeasesJob extends JobImpl {
                                     ((rkey[1] ^ ourRKey[1]) & 0xff);
                     // they have to be within 1/256 of the keyspace
                     if (distance >= 256) {
-                         toExpire.add(h);
-                         if (--sz <= limit) {break;}
+                        toExpire.add(h);
+                        if (--sz <= limit) {break;}
                     }
                 }
             } else {
                 Collections.sort(current, new LeaseSetComparator());
                 for (LeaseSet ls : current) {
-                     toExpire.add(ls.getHash());
-                     if (_log.shouldInfo()) {_log.info("Aggressively expiring LeaseSets for " + _facade + "\n*" + ls);}
-                     if (--sz <= limit) {break;}
+                    toExpire.add(ls.getHash());
+                    if (_log.shouldInfo()) {_log.info("Aggressively expiring LeaseSets for " + _facade + "\n*" + ls);}
+                    if (--sz <= limit) {break;}
                 }
             }
         }
@@ -127,12 +127,12 @@ class ExpireLeasesJob extends JobImpl {
      *  @since 0.9.65
      */
     private static class LeaseSetComparator implements Comparator<LeaseSet> {
-         public int compare(LeaseSet l, LeaseSet r) {
-             long dl = l.getLatestLeaseDate();
-             long dr = r.getLatestLeaseDate();
-             if (dl < dr) return -1;
-             if (dl > dr) return 1;
-             return 0;
+        public int compare(LeaseSet l, LeaseSet r) {
+            long dl = l.getLatestLeaseDate();
+            long dr = r.getLatestLeaseDate();
+            if (dl < dr) return -1;
+            if (dl > dr) return 1;
+            return 0;
         }
     }
 

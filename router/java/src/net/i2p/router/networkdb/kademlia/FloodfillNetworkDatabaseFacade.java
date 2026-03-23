@@ -568,18 +568,18 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      *  @since 0.9.39
      */
     private boolean shouldFloodTo(Hash key, int type, SigType lsSigType, Hash peer, RouterInfo target) {
-       if ((target == null) || (_context.banlist().isBanlisted(peer))) {return false;}
+        if ((target == null) || (_context.banlist().isBanlisted(peer))) {return false;}
        // Don't flood an RI back to itself
        // Not necessary, a ff will do its own flooding (reply token == 0)
        // But other implementations may not...
-       if (type == DatabaseEntry.KEY_TYPE_ROUTERINFO && peer.equals(key)) {return false;}
-       if (peer.equals(_context.routerHash())) {return false;}
-       if ((type == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2 || lsSigType == SigType.RedDSA_SHA512_Ed25519) &&
-           !StoreJob.shouldStoreEncLS2To(target)) {
-           return false;
-       }
-       if (!StoreJob.shouldStoreTo(target)) {return false;}
-       return true;
+        if (type == DatabaseEntry.KEY_TYPE_ROUTERINFO && peer.equals(key)) {return false;}
+        if (peer.equals(_context.routerHash())) {return false;}
+        if ((type == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2 || lsSigType == SigType.RedDSA_SHA512_Ed25519) &&
+            !StoreJob.shouldStoreEncLS2To(target)) {
+            return false;
+        }
+        if (!StoreJob.shouldStoreTo(target)) {return false;}
+        return true;
     }
 
     /** note in the profile that the store failed */

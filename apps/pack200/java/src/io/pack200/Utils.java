@@ -171,8 +171,8 @@ class Utils {
         }
 
         public void warning(String msg, Object param) {
-                getLogger().log(Level.WARNING, msg, param);
-            }
+            getLogger().log(Level.WARNING, msg, param);
+        }
 
         public void warning(String msg) {
             warning(msg, null);
@@ -192,7 +192,7 @@ class Utils {
         public void fine(String msg) {
             int verbose = currentPropMap().getInteger(DEBUG_VERBOSE);
             if (verbose > 0) {
-                    System.out.println(msg);
+                System.out.println(msg);
             }
         }
     }
@@ -260,11 +260,11 @@ class Utils {
     }
         // Wrapper to prevent closing of client-supplied stream.
     private static
-    class NonCloser extends FilterOutputStream {
+        class NonCloser extends FilterOutputStream {
         NonCloser(OutputStream out) { super(out); }
         public void close() throws IOException { flush(); }
     }
-   static String getJarEntryName(String name) {
+    static String getJarEntryName(String name) {
         if (name == null)  return null;
         return name.replace(File.separatorChar, '/');
     }

@@ -63,13 +63,13 @@ class WrapperListener {
                 WrapperServiceControlEvent wcse = (WrapperServiceControlEvent) event;
                 int code = wcse.getServiceControlCode();
                 switch (code) {
-                  case WrapperManager.SERVICE_CONTROL_CODE_STOP:       // 1
-                  case WrapperManager.SERVICE_CONTROL_CODE_SHUTDOWN:   // 5
-                    log.log(Log.CRIT, "Hard shutdown initiated by Windows service control: " + code);
+                    case WrapperManager.SERVICE_CONTROL_CODE_STOP:       // 1
+                    case WrapperManager.SERVICE_CONTROL_CODE_SHUTDOWN:   // 5
+                        log.log(Log.CRIT, "Hard shutdown initiated by Windows service control: " + code);
                     // JVM will call ShutdownHook if we don't do it ourselves
-                    ConfigServiceHandler.registerWrapperNotifier(_ctxt, Router.EXIT_HARD, false);
-                    _ctxt.router().shutdown(Router.EXIT_HARD);
-                    break;
+                        ConfigServiceHandler.registerWrapperNotifier(_ctxt, Router.EXIT_HARD, false);
+                        _ctxt.router().shutdown(Router.EXIT_HARD);
+                        break;
 
                   // TODO Power suspend/resume?
                   // Warning, definitions not available in 3.2.0, use integers
@@ -77,10 +77,10 @@ class WrapperListener {
                   // case 35xx // WrapperManager.SERVICE_CONTROL_POWEREVENT_ ...
                   //  break;
 
-                  default:
-                    if (log.shouldWarn())
-                        log.warn("Unhandled control event code: " + code);
-                    break;
+                    default:
+                        if (log.shouldWarn())
+                            log.warn("Unhandled control event code: " + code);
+                        break;
                 }
                 return;
             } else if (!(event instanceof WrapperControlEvent)) {
@@ -93,24 +93,24 @@ class WrapperListener {
                 log.warn("Received signal: " + wce.getControlEventName());
             int sig = wce.getControlEvent();
             switch (sig) {
-              case WrapperManager.WRAPPER_CTRL_HUP_EVENT:
-                if (_ctxt.getBooleanPropertyDefaultTrue(PROP_GRACEFUL_HUP)) {
-                    wce.consume();
-                    if (!(_ctxt.router().gracefulShutdownInProgress() ||
-                          _ctxt.router().isFinalShutdownInProgress())) {
-                        System.err.println("WARN: Graceful shutdown initiated by SIGHUP");
-                        log.logAlways(Log.WARN, "Graceful shutdown initiated by SIGHUP");
-                        ConfigServiceHandler.registerWrapperNotifier(_ctxt, Router.EXIT_GRACEFUL, false);
-                        _ctxt.router().shutdownGracefully();
-                    }
-                } else {
-                    log.log(Log.CRIT, "Hard shutdown initiated by SIGHUP");
+                case WrapperManager.WRAPPER_CTRL_HUP_EVENT:
+                    if (_ctxt.getBooleanPropertyDefaultTrue(PROP_GRACEFUL_HUP)) {
+                        wce.consume();
+                        if (!(_ctxt.router().gracefulShutdownInProgress() ||
+                            _ctxt.router().isFinalShutdownInProgress())) {
+                            System.err.println("WARN: Graceful shutdown initiated by SIGHUP");
+                            log.logAlways(Log.WARN, "Graceful shutdown initiated by SIGHUP");
+                            ConfigServiceHandler.registerWrapperNotifier(_ctxt, Router.EXIT_GRACEFUL, false);
+                            _ctxt.router().shutdownGracefully();
+                        }
+                    } else {
+                        log.log(Log.CRIT, "Hard shutdown initiated by SIGHUP");
                     // JVM will call ShutdownHook if we don't do it ourselves
                     //wce.consume();
                     //registerWrapperNotifier(_ctxt, Router.EXIT_HARD, false);
                     //_ctxt.router().shutdown(Router.EXIT_HARD);
-                }
-                break;
+                    }
+                    break;
             }
         }
     }

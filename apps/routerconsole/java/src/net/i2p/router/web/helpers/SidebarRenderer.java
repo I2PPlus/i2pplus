@@ -170,7 +170,7 @@ class SidebarRenderer {
            .append(_t("Help &amp; FAQ"))
            .append("</a>")
            .append(getToggle())
-           .append("</h3><hr class=b>\n<table id=sb_help>\n<tr><td>");
+            .append("</h3><hr class=b>\n<table id=sb_help>\n<tr><td>");
 
         // Store all items in map so they are sorted by translated name, then output
         Map<String, String> svcs = new TreeMap<String, String>(Collator.getInstance());
@@ -376,7 +376,7 @@ class SidebarRenderer {
                .append(_t("Services"))
                .append("</a>")
                .append(getToggle())
-               .append("</h3>\n<hr class=b>\n<table id=sb_services class=collapse><tbody>\n<tr><td class=volatile>");
+                .append("</h3>\n<hr class=b>\n<table id=sb_services class=collapse><tbody>\n<tr><td class=volatile>");
             for (String row : svcs.values()) {buf.append(row);}
             buf.append("</td></tr>\n<tr id=newHostsList class=script><td></td></tr>\n</tbody></table>\n");
             return buf.toString();
@@ -428,7 +428,7 @@ class SidebarRenderer {
            .append(_t("Internals"))
            .append("</a>")
            .append(getToggle())
-           .append("</h3>\n<hr class=b>\n<table id=sb_internals class=collapse>\n<tr><td>");
+            .append("</h3>\n<hr class=b>\n<table id=sb_internals class=collapse>\n<tr><td>");
 
         // Store all items in map so they are sorted by translated name, then output
         Map<String, String> svcs = new TreeMap<String, String>(Collator.getInstance());
@@ -576,7 +576,7 @@ class SidebarRenderer {
            .append(_t("Advanced"))
            .append("</a>")
            .append(getToggle())
-           .append("</h3>\n<hr class=b>\n<table id=sb_advanced class=collapse>\n<tr><td>");
+            .append("</h3>\n<hr class=b>\n<table id=sb_advanced class=collapse>\n<tr><td>");
 
         // Store all items in map so they are sorted by translated name, then output
         Map<String, String> svcs = new TreeMap<String, String>(Collator.getInstance());
@@ -685,7 +685,7 @@ class SidebarRenderer {
            .append(_t("Uptime"))
            .append("</b></td><td class=digits><span class=volatile>")
            .append(_helper.getUptime())
-           .append("</span></td></tr>\n</table>\n");
+            .append("</span></td></tr>\n</table>\n");
         return buf.toString();
     }
 
@@ -705,7 +705,7 @@ class SidebarRenderer {
            .append(_t("Uptime"))
            .append("</b></td><td class=digits><span class=volatile>")
            .append(_helper.getUptime())
-           .append("</span></td></tr>\n</table>\n");
+            .append("</span></td></tr>\n</table>\n");
         return buf.toString();
     }
 
@@ -739,33 +739,33 @@ class SidebarRenderer {
            .append(_t("Uptime"))
            .append("</b></td><td class=digits><span class=volatile>")
            .append(_helper.getUptime())
-           .append("</span></td></tr>\n");
+            .append("</span></td></tr>\n");
 
-           if (_context.clock().getOffset() != 0) {
-               buf.append("<tr title=\"")
+        if (_context.clock().getOffset() != 0) {
+            buf.append("<tr title=\"")
                   .append(_t("Difference between network-synced time and local time"))
                   .append("\"><td><b>")
                   .append(_t("Clock Skew"))
                   .append("</b></td><td class=\"digits");
-               if (_context.clock().getOffset() > 1000 || _context.clock().getOffset() < -1000) {
-                   buf.append(" warntext");
-               }
-               buf.append(" volatile\"><span>")
+            if (_context.clock().getOffset() > 1000 || _context.clock().getOffset() < -1000) {
+                buf.append(" warntext");
+            }
+            buf.append(" volatile\"><span>")
                   .append(DataHelper.formatDuration2(_context.clock().getOffset()))
                   .append("</span></td></tr>\n");
-           } else {
-               buf.append("<tr title=\"")
+        } else {
+            buf.append("<tr title=\"")
                   .append(_t("Difference between network-synced time and local time"))
                   .append("\" hidden><td><b>")
                   .append(_t("Clock Skew"))
                   .append("</b></td><td class=digits><span class=volatile>---</span></td></tr>\n");
-           }
+        }
 
-           String requestURI = _helper.getRequestURI();
-           String page = requestURI.replace("/", "").replace(".jsp", "");
-           List<String> sections = _helper.getSummaryBarSections(page);
-           if (!sections.contains("MemoryBar")) {
-               buf.append("<tr title=\"")
+        String requestURI = _helper.getRequestURI();
+        String page = requestURI.replace("/", "").replace(".jsp", "");
+        List<String> sections = _helper.getSummaryBarSections(page);
+        if (!sections.contains("MemoryBar")) {
+            buf.append("<tr title=\"")
                   .append(_t("How much RAM I2P is using / total RAM available to I2P (excludes RAM allocated to the JVM)"))
                   .append("\">")
                   .append("<td><b>")
@@ -773,8 +773,8 @@ class SidebarRenderer {
                   .append("</b></td><td class=digits><span class=volatile>")
                   .append(_helper.getMemory())
                   .append("</span></td></tr>\n");
-           }
-           buf.append("</table>\n");
+        }
+        buf.append("</table>\n");
         return buf.toString();
     }
 
@@ -833,15 +833,15 @@ class SidebarRenderer {
            .append(": ")
            .append(reachability.getMessage())
            .append(floodfillEnabled() ? " <span id=ffenabled>(" + _t("Floodfill enabled") + ")</span>" : "")
-           .append("</span>");
+            .append("</span>");
         if (floodfillEnabled() && !reachability.getMessage().contains(_t("Floodfill"))) {
             int lsCount = _context.netDb().getFloodfillLeases().size();
             if (lsCount > 0) {
-            buf.append(" <a href=\"/netdb?l=1\"><span id=lsCount class=\"badge volatile\" title=\"")
+                buf.append(" <a href=\"/netdb?l=1\"><span id=lsCount class=\"badge volatile\" title=\"")
                .append(_t("Total number of remote LeaseSets stored in our NetDb"))
                .append("\">")
                .append(lsCount)
-               .append("</span></a>");
+                    .append("</span></a>");
             }
         }
 
@@ -891,14 +891,14 @@ class SidebarRenderer {
 
         buf.append(" <span id=sb_tunnelBuildStatus class=\"volatile ")
            .append(buildStatusClass).append("\" title=\"").append(buildStatusTooltip).append("\">")
-           .append("</span>");
+            .append("</span>");
 
         buf.append("</span></h4>\n");
 
         if (!SigType.ECDSA_SHA256_P256.isAvailable()) {
             buf.append("<hr>\n<h4><span class=warn>")
                .append(_t("Warning: ECDSA is not available. Update your Java or OS"))
-               .append("</a></span></h4>\n");
+                .append("</a></span></h4>\n");
         }
 
         return buf.toString();
@@ -918,7 +918,7 @@ class SidebarRenderer {
                .append(getToggle())
                .append("</h3><hr class=b>")
                .append(updateStatus)
-               .append("</div>\n");
+                .append("</div>\n");
         }
         return buf.toString();
     }
@@ -950,7 +950,7 @@ class SidebarRenderer {
            .append(allPeers)
            .append("</span></a>")
            .append(getToggle())
-           .append("</h3><hr class=b><table id=sb_peers>\n<tr title=\"");
+            .append("</h3><hr class=b><table id=sb_peers>\n<tr title=\"");
         if (isAdvanced) {
             buf.append(_t("Peers we've been talking to in the last minute / last hour"));
         } else {
@@ -958,7 +958,7 @@ class SidebarRenderer {
         }
         buf.append("\"><td><a href=/peers><b>")
            .append(_t("Active"))
-           .append("</b></a></td><td class=digits><span class=volatile>");
+            .append("</b></a></td><td class=digits><span class=volatile>");
         buf.append(active);
         if (isAdvanced) {
             buf.append(SidebarHelper.THINSP).append(Math.max(active, _helper.getActiveProfiles()));
@@ -987,16 +987,16 @@ class SidebarRenderer {
            .append(_t("Unreachable"))
            .append("</b></a></td><td class=digits><span class=volatile>")
            .append(_helper.getUnreachablePeers())
-           .append("</span></td></tr>\n");
-       if (_helper.getBanlistedPeers() > 1) {
-           buf.append("<tr title=\"")
+            .append("</span></td></tr>\n");
+        if (_helper.getBanlistedPeers() > 1) {
+            buf.append("<tr title=\"")
               .append(_t("The number of banned peers"))
               .append("\"><td><a href=\"/profiles?f=3\"><b>")
               .append(_t("Banned"))
               .append("</b></a></td><td class=digits><span class=volatile>")
               .append(_helper.getBanlistedPeers())
-              .append("</span></td></tr>\n");
-       }
+                .append("</span></td></tr>\n");
+        }
 
         buf.append("<tr title=\"")
            .append(_t("The total number of peers in our network database"))
@@ -1024,7 +1024,7 @@ class SidebarRenderer {
            .append(_t("Banned"))
            .append("\"><span><span class=\"badge volatile\">")
            .append(_helper.getBanlistedPeers())
-           .append("</span></span></a>\n</td></tr>\n</table>\n");
+            .append("</span></span></a>\n</td></tr>\n</table>\n");
 
         return buf.toString();
     }
@@ -1049,18 +1049,18 @@ class SidebarRenderer {
            .append(DataHelper.formatDuration2(3 * 1000).replace("3&nbsp;sec", _t("Current")))
            .append("</b></td><td class=digits><span class=volatile>")
            .append(_helper.getSecondKBps())
-           .append("Bps</span></td></tr>\n");
+            .append("Bps</span></td></tr>\n");
 
         if (_context.router().getUptime() > 6*60*1000) {
             buf.append("<tr><td><b>")
                .append(DataHelper.formatDuration2(5 * 60 * 1000).replace("5&nbsp;min", _t("5 Min Average")))
                .append("</b></td><td class=digits><span class=volatile>")
                .append(_helper.getFiveMinuteKBps())
-               .append("Bps</span></td></tr>\n");
+                .append("Bps</span></td></tr>\n");
         } else {
             buf.append("<tr hidden><td><b>")
                .append(DataHelper.formatDuration2(5 * 60 * 1000).replace("5&nbsp;min", _t("5 Min Average")))
-               .append("</b></td><td class=digits><span class=volatile>---Bps</span></td></tr>\n");
+                .append("</b></td><td class=digits><span class=volatile>---Bps</span></td></tr>\n");
         }
 
         if (_context.router().getUptime() > 2*60*1000) {
@@ -1068,11 +1068,11 @@ class SidebarRenderer {
                .append(_t("Total").replace("Total", _t("Lifetime")))
                .append("</b></td><td class=digits><span class=volatile>")
                .append(_helper.getLifetimeKBps())
-               .append("Bps</span></td></tr>\n");
+                .append("Bps</span></td></tr>\n");
         } else {
             buf.append("<tr hidden><td><b>")
                .append(_t("Total").replace("Total", _t("Lifetime")))
-               .append("</b></td><td class=digits><span class=volatile>---Bps</span></td></tr>\n");
+                .append("</b></td><td class=digits><span class=volatile>---Bps</span></td></tr>\n");
         }
 
         buf.append("<tr><td><b>")
@@ -1081,7 +1081,7 @@ class SidebarRenderer {
            .append(_helper.getInboundTransferred().replace("iB", ""))
            .append(" / ")
            .append(_helper.getOutboundTransferred().replace("iB", ""))
-           .append("</span></table>\n");
+            .append("</span></table>\n");
         return buf.toString();
     }
 
@@ -1105,7 +1105,7 @@ class SidebarRenderer {
            .append(g)
            .append("></div></canvas>\n<noscript><div id=minigraphcontainer_noscript ")
            .append(g)
-           .append("></div></noscript></a>\n</div>\n");
+            .append("></div></noscript></a>\n</div>\n");
         return buf.toString();
     }
 
@@ -1124,21 +1124,21 @@ class SidebarRenderer {
            .append("\">")
            .append(_t("Tunnels"))
            .append(" <span class=\"badge volatile\" hidden title=\"")
-           .append(_t("Total number of tunnels in use"));
+            .append(_t("Total number of tunnels in use"));
         if (_helper.getTunnelBuildSuccess() > 0) {
             buf.append(" / ")
-               .append(_t("Tunnel build success (higher of 1m or 10m average)"));
+                .append(_t("Tunnel build success (higher of 1m or 10m average)"));
         }
-       buf.append("\">")
-          .append(totalTunnels);
-       if (_helper.getTunnelBuildSuccess() > 0) {
-           buf.append(" / ")
+        buf.append("\">")
+            .append(totalTunnels);
+        if (_helper.getTunnelBuildSuccess() > 0) {
+            buf.append(" / ")
               .append(_helper.getTunnelBuildSuccess())
-              .append("%");
-       }
-       buf.append("</span></a>")
+                .append("%");
+        }
+        buf.append("</span></a>")
           .append(getToggle())
-          .append("</h3>\n<hr class=b>\n<table id=sb_tunnels>\n");
+            .append("</h3>\n<hr class=b>\n<table id=sb_tunnels>\n");
         if (_helper.getInboundClientTunnels() > 0 || _helper.getOutboundClientTunnels() > 0) {
             buf.append("<tr title=\"")
                .append(_t("Tunnels we are using to provide or access services on the network"))
@@ -1150,7 +1150,7 @@ class SidebarRenderer {
                .append(_helper.getInboundClientTunnels())
                .append(" / ")
                .append(_helper.getOutboundClientTunnels())
-               .append("</span></td></tr>\n");
+                .append("</span></td></tr>\n");
         }
 
         buf.append("<tr title=\"")
@@ -1163,11 +1163,11 @@ class SidebarRenderer {
            .append(_helper.getInboundTunnels())
            .append(" / ")
            .append(_helper.getOutboundTunnels())
-           .append("</span></td></tr>\n");
+            .append("</span></td></tr>\n");
 
-            if ((maxTunnels == null || partTunnels > 0 || Integer.parseInt(maxTunnels) > 0) &&
+        if ((maxTunnels == null || partTunnels > 0 || Integer.parseInt(maxTunnels) > 0) &&
                 !_context.router().isHidden() && ri != null && !ri.getBandwidthTier().equals("K") && partTunnels > 0) {
-                buf.append("<tr title=\"")
+            buf.append("<tr title=\"")
                    .append(_t("Tunnels we are participating in, directly contributing bandwidth to the network"))
                    .append(" (")
                    .append(_t("Current / Maximum"))
@@ -1178,8 +1178,8 @@ class SidebarRenderer {
                    .append(" / ")
                    .append(maxTunnels)
                    .append("</span></td></tr>\n");
-            }
-            buf.append("<tr title=\"")
+        }
+        buf.append("<tr title=\"")
                .append(_t("Total number of tunnels in use"))
                .append("\"><td><a href=/tunnelpeercount><b>")
                .append(_t("Total"))
@@ -1192,28 +1192,28 @@ class SidebarRenderer {
                .append("</b></td><td class=digits><span class=volatile>")
                .append(_helper.getConcurrency())
                .append("</span></td></tr>\n");
-            if (_helper.getTunnelBuildSuccess() > 0) {
-                buf.append("<tr title=\"")
+        if (_helper.getTunnelBuildSuccess() > 0) {
+            buf.append("<tr title=\"")
                    .append(_t("Combined utility and service tunnel build success (higher of 1m or 10m average)"))
                    .append("\"><td><a href=\"/graph?stat=tunnel.tunnelBuildSuccessAvg.60000&c=1440&w=1000&h=280\"><b>")
                    .append(_t("Build Success"))
                    .append("</b></a></td><td class=digits><span class=volatile>")
                    .append(_helper.getTunnelBuildSuccess())
                    .append("%</span></td></tr>\n");
-            }
+        }
 
-            if ((maxTunnels == null || Integer.parseInt(maxTunnels) > 0) && !_context.router().isHidden() && ri != null &&
+        if ((maxTunnels == null || Integer.parseInt(maxTunnels) > 0) && !_context.router().isHidden() && ri != null &&
                  !ri.getBandwidthTier().equals("K") && !_helper.getShareRatio().toString().equals("0")) {
-                buf.append("<tr title=\"")
+            buf.append("<tr title=\"")
                    .append(_t("The ratio of tunnel hops we provide to tunnel hops we use - a value greater than 1.00 indicates a positive contribution to the network"))
                    .append("\"><td><b>")
                    .append(_t("Share ratio"))
                    .append("</b></td><td class=digits><span class=volatile>")
                    .append(_helper.getShareRatio())
                    .append("</span></td></tr>\n");
-            }
+        }
 
-            buf.append("</table>\n<table id=sb_tunnels_condensed hidden>\n<tr><td><a class=sb_icon id=service href=/tunnels#client_tunnels title=\"")
+        buf.append("</table>\n<table id=sb_tunnels_condensed hidden>\n<tr><td><a class=sb_icon id=service href=/tunnels#client_tunnels title=\"")
                .append(_t("Service"))
                .append(' ')
                .append(_t("tunnels"))
@@ -1249,9 +1249,9 @@ class SidebarRenderer {
         buf.append("<h3><a href=/jobs target=_top title=\"")
            .append(_t("What's in the router's job queue?"))
            .append("\">")
-           .append(_t("Congestion"));
+            .append(_t("Congestion"));
         if (_context.router().getUptime() > 2*60*1000) {
-           buf.append(" <span class=\"badge volatile\" hidden title=\"")
+            buf.append(" <span class=\"badge volatile\" hidden title=\"")
               .append(_t("Job lag"))
               .append(" / ")
               .append(_t("Message delay"))
@@ -1259,22 +1259,22 @@ class SidebarRenderer {
               .append(_helper.getJobLag())
               .append(" / ")
               .append(_helper.getMessageDelay())
-              .append("</span>");
+                .append("</span>");
         } else {
-           buf.append(" <span class=\"badge volatile\" hidden title=\"")
+            buf.append(" <span class=\"badge volatile\" hidden title=\"")
               .append(_t("Job lag"))
               .append(" / ")
               .append(_t("Message delay"))
-              .append("\">--- / ---</span>");
+                .append("\">--- / ---</span>");
         }
         buf.append("</a>")
            .append(getToggle())
-           .append("</h3>\n<hr class=b>\n<table id=sb_queue>\n<tr title=\"");
+            .append("</h3>\n<hr class=b>\n<table id=sb_queue>\n<tr title=\"");
         if (isAdvanced() && maxLag >= 30) {buf.append(_t("Average job delay / maximum delay"));}
         else {buf.append(_t("Average delay before scheduled jobs are run"));}
         buf.append("\"><td><b>")
            .append(_t("Job lag"))
-           .append("</b></td><td class=digits>");
+            .append("</b></td><td class=digits>");
         int maxLagBeforeDrop = SystemVersion.isSlow() ? 400 : 300;
         if (maxLag > maxLagBeforeDrop) {buf.append("<span class=\"warntext volatile\">");}
         else {buf.append("<span class=volatile>");}
@@ -1283,15 +1283,15 @@ class SidebarRenderer {
            .append(_t("Indicates how quickly outbound messages to other I2P routers are sent"))
            .append("\"><td><b>")
            .append(_t("Message delay"))
-           .append("</b></td><td class=digits>");
+            .append("</b></td><td class=digits>");
         if (_context.throttle().getMessageDelay() > 2000) {
             buf.append("<span class=\"warntext volatile\">")
                .append(_helper.getMessageDelay())
-               .append("</span>");
+                .append("</span>");
         } else {
             buf.append("<span class=volatile>")
                .append(_helper.getMessageDelay())
-               .append("</span>");
+                .append("</span>");
         }
         buf.append("</td></tr>\n");
 
@@ -1303,7 +1303,7 @@ class SidebarRenderer {
                .append("</b></a></td><td class=digits><span class=volatile>")
                .append(_helper.getAvgPeerTestTimeGood())
                .append(" / " )
-               .append(_helper.getAvgPeerTestTime());
+                .append(_helper.getAvgPeerTestTime());
             if (_helper.getAvgPeerTestTime() > 0) {buf.append("&nbsp;ms");}
             buf.append("</span></td></tr>\n");
         }
@@ -1315,23 +1315,23 @@ class SidebarRenderer {
                .append(_t("Tunnel lag"))
                .append("</b></td><td class=digits><span class=volatile>")
                .append(_helper.getTunnelLag())
-               .append("</span></td></tr>\n");
+                .append("</span></td></tr>\n");
         } else {
             buf.append("<tr title=\"")
                .append(_t("Round trip time for a tunnel test"))
                .append("\" hidden><td><b>")
                .append(_t("Tunnel lag"))
-               .append("</b></td><td class=digits><span class=volatile>---</span></td></tr>\n");
+                .append("</b></td><td class=digits><span class=volatile>---</span></td></tr>\n");
         }
 
         if (Integer.parseInt(_helper.getInboundBacklog()) > 0) {
-        buf.append("<tr title=\"")
+            buf.append("<tr title=\"")
            .append(_t("Queued requests from other routers to participate in tunnels"))
            .append("\"><td><b>")
            .append(_t("Backlog"))
            .append("</b></td><td class=digits><span class=\"warntext volatile\">")
            .append(_helper.getInboundBacklog())
-           .append("</span></td></tr>\n");
+                .append("</span></td></tr>\n");
         }
         buf.append("</table>\n");
         return buf.toString();
@@ -1415,7 +1415,7 @@ class SidebarRenderer {
                            .append(_t("News &amp; Updates"))
                            .append(" <span id=newsCount class=\"badge volatile\" hidden></span></a>")
                            .append(getToggle())
-                           .append("</h3><hr class=b><div id=sb_newsheadings>\n<table>\n");
+                            .append("</h3><hr class=b><div id=sb_newsheadings>\n<table>\n");
                     }
                     buf.append("<tr><td><a href=\"/home?news=1&amp;consoleNonce=").append(consoleNonce).append("\"");
                     if (entry.updated > 0) {
@@ -1423,7 +1423,7 @@ class SidebarRenderer {
                            .append(_t("Published"))
                            .append(": ")
                            .append(DataHelper.formatDate(entry.updated))
-                           .append("\"");
+                            .append("\"");
                     }
                     buf.append(">").append(entry.title).append("</a></td></tr>\n");
                     if (++i >= max) {break;}

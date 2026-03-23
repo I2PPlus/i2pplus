@@ -91,16 +91,16 @@ class SOCKS4aServer extends SOCKSServer {
 
         int command = in.readByte() & 0xff;
         switch (command) {
-        case Command.CONNECT:
-            break;
-        case Command.BIND:
-            _log.debug("BIND command is not supported!");
-            sendRequestReply(Reply.CONNECTION_REFUSED, InetAddress.getByName("127.0.0.1"), 0, out);
-            throw new SOCKSException("BIND command not supported");
-        default:
-            _log.debug("Unknown command in request (" + Integer.toHexString(command) + ")");
-            sendRequestReply(Reply.CONNECTION_REFUSED, InetAddress.getByName("127.0.0.1"), 0, out);
-            throw new SOCKSException("Invalid command in request");
+            case Command.CONNECT:
+                break;
+            case Command.BIND:
+                _log.debug("BIND command is not supported!");
+                sendRequestReply(Reply.CONNECTION_REFUSED, InetAddress.getByName("127.0.0.1"), 0, out);
+                throw new SOCKSException("BIND command not supported");
+            default:
+                _log.debug("Unknown command in request (" + Integer.toHexString(command) + ")");
+                sendRequestReply(Reply.CONNECTION_REFUSED, InetAddress.getByName("127.0.0.1"), 0, out);
+                throw new SOCKSException("Invalid command in request");
         }
 
         connPort = in.readUnsignedShort();

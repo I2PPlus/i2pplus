@@ -172,7 +172,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                  */
                 else {wasNew = false;}
             } catch (UnsupportedCryptoException uce) {
-               if (_log.shouldError()) {_log.error("Unsupported Encryption: " + uce.getMessage());}
+                if (_log.shouldError()) {_log.error("Unsupported Encryption: " + uce.getMessage());}
                 invalidMessage = uce.getMessage();
                 dontBlamePeer = true;
             } catch (IllegalArgumentException iae) {invalidMessage = iae.getMessage();}
@@ -364,7 +364,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                         logged = true;
                                         _log.warn("Dropping unsolicited NetDbStore of new " + cap + " Floodfill [" + key.toBase64().substring(0,6) +
                                                   "] -> Unreachable");
-                                        }
+                                    }
                                 } else if (isUnreachable && isOld && !logged) {
                                     shouldStore = false;
                                     if (_log.shouldWarn()) {

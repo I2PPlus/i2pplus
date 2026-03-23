@@ -22,7 +22,7 @@ public class CountingInputStream extends FilterInputStream implements ReadCounte
 
     @Override
     public long skip(long n) throws IOException {
-	long rv = in.skip(n);
+        long rv = in.skip(n);
         count += rv;
         return rv;
     }

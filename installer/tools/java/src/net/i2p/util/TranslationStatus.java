@@ -320,7 +320,7 @@ public class TranslationStatus {
                .append(buns.size()).append(" translations)</th>")
                .append("<th colspan=2 class=tx_location><span>").append(git).append("</span></th></tr>\n")
                .append("<tr><th>Language</th><th>Language Code</th><th>Translated</th><th>% Translated</th></tr>\n")
-               .append("</thead>\n<tbody>\n");
+                .append("</thead>\n<tbody>\n");
         }
         Set<String> missing = new TreeSet<String>(langs);
         for (ResourceBundle bun : buns) {
@@ -391,7 +391,7 @@ public class TranslationStatus {
         if (_html) {
             buf.append("<h2>Other Resources")
                .append("&nbsp;<span class=script><button id=tx_toggle_files>")
-               .append("Show Complete Translations</button></span></h2>\n");
+                .append("Show Complete Translations</button></span></h2>\n");
         } else {
             buf.append("\nOther Resources\n\n");
         }
@@ -413,11 +413,11 @@ public class TranslationStatus {
             if (_html) {
                 buf.append("<table class=\"tx tx_file\">\n")
                    .append("<tr class=tx_header><th colspan=4>").append(file).append("</th></tr>\n")
-                   .append("<tr><th>Language</th><th>Language Code</th><th></th><th>Translated</th></tr>\n");
+                    .append("<tr><th>Language</th><th>Language Code</th><th></th><th>Translated</th></tr>\n");
             } else {
                 buf.append("\nTranslations for " + file + "\n")
                    .append("Code\tTX\tLanguage\n")
-                   .append("----\t--\t--------\n");
+                    .append("----\t--\t--------\n");
             }
             for (String lg : LANGS) {
                 String njlg = lg;

@@ -96,28 +96,28 @@ class UDPEndpoint implements SocketListener {
         }
 
         for (int i = 0; i < MAX_PORT_RETRIES; i++) {
-             if (port <= 0) {
+            if (port <= 0) {
                  // try random ports rather than just do new DatagramSocket()
                  // so we stay out of the way of other I2P stuff
-                 port = TransportUtil.selectRandomPort(_context, UDPTransport.STYLE);
-             }
-             try {
-                 if (_bindAddress == null)
+                port = TransportUtil.selectRandomPort(_context, UDPTransport.STYLE);
+            }
+            try {
+                if (_bindAddress == null)
                      socket = new DatagramSocket(port);
-                 else
+                else
                      socket = new DatagramSocket(port, _bindAddress);
-                 if (!SystemVersion.isAndroid()) {
-                     if (socket.getSendBufferSize() < MIN_SOCKET_BUFFER)
+                if (!SystemVersion.isAndroid()) {
+                    if (socket.getSendBufferSize() < MIN_SOCKET_BUFFER)
                          socket.setSendBufferSize(MIN_SOCKET_BUFFER);
-                     if (socket.getReceiveBufferSize() < MIN_SOCKET_BUFFER)
+                    if (socket.getReceiveBufferSize() < MIN_SOCKET_BUFFER)
                          socket.setReceiveBufferSize(MIN_SOCKET_BUFFER);
-                 }
-                 break;
-             } catch (SocketException se) {
-                 if (_log.shouldWarn())
+                }
+                break;
+            } catch (SocketException se) {
+                if (_log.shouldWarn())
                      _log.warn("Binding to port " + port + " failed", se);
-             }
-             port = -1;
+            }
+            port = -1;
         }
         if (socket == null) {
             _log.log(Log.CRIT, "[SSU] Unable to bind to a port on: " + _bindAddress);

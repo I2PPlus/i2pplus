@@ -373,7 +373,7 @@ public class I2PSSLSocketFactory {
                                      " ms and created list with " + list.getRules().size() + " entries and " +
                                      list.getExceptions().size() + " exceptions");
                     } catch (IOException ex) {
-                         log.error("Failure loading public suffix list from " + geoFile, ex);
+                        log.error("Failure loading public suffix list from " + geoFile, ex);
                          // DEFAULT_MATCHER remains null
                     }
                 } else {
@@ -518,11 +518,11 @@ public class I2PSSLSocketFactory {
             throw new GeneralSecurityException(msg);
         }
 
-            SSLContext sslc = SSLContext.getInstance("TLS");
-            TrustManagerFactory tmf =   TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-            tmf.init(ks);
-            sslc.init(null, tmf.getTrustManagers(), context.random());
-            return sslc.getSocketFactory();
+        SSLContext sslc = SSLContext.getInstance("TLS");
+        TrustManagerFactory tmf =   TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+        tmf.init(ks);
+        sslc.init(null, tmf.getTrustManagers(), context.random());
+        return sslc.getSocketFactory();
     }
 
     /**
@@ -577,7 +577,7 @@ public class I2PSSLSocketFactory {
      * @since 0.9.16
      */
     private static String[] selectProtocols(String[] enabledProtocols, String[] supportedProtocols) {
-         return select(enabledProtocols, supportedProtocols, INCLUDE_PROTOCOLS, EXCLUDE_PROTOCOLS);
+        return select(enabledProtocols, supportedProtocols, INCLUDE_PROTOCOLS, EXCLUDE_PROTOCOLS);
     }
 
     /**
@@ -593,7 +593,7 @@ public class I2PSSLSocketFactory {
      * @since 0.9.16
      */
     private static String[] selectCipherSuites(String[] enabledCipherSuites, String[] supportedCipherSuites) {
-         return select(enabledCipherSuites, supportedCipherSuites, INCLUDE_CIPHERS, EXCLUDE_CIPHERS);
+        return select(enabledCipherSuites, supportedCipherSuites, INCLUDE_CIPHERS, EXCLUDE_CIPHERS);
     }
 
     /**
@@ -614,8 +614,8 @@ public class I2PSSLSocketFactory {
         for (String s : toEnable) {
             if (supported.contains(s)) {
                 if (selected.add(s)) {
-                   if (log.shouldInfo())
-                       log.info("Added, previously disabled: " + s);
+                    if (log.shouldInfo())
+                        log.info("Added, previously disabled: " + s);
                 }
             } else if (log.shouldInfo()) {
                 log.info("Not supported in this JVM: " + s);

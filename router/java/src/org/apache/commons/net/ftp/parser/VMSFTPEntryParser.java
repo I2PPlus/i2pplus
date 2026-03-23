@@ -144,17 +144,17 @@ public class VMSFTPEntryParser extends ConfigurableFTPFileEntryParserImpl {
             final String user;
             final StringTokenizer t = new StringTokenizer(owner, ",");
             switch (t.countTokens()) {
-            case 1:
-                grp = null;
-                user = t.nextToken();
-                break;
-            case 2:
-                grp = t.nextToken();
-                user = t.nextToken();
-                break;
-            default:
-                grp = null;
-                user = null;
+                case 1:
+                    grp = null;
+                    user = t.nextToken();
+                    break;
+                case 2:
+                    grp = t.nextToken();
+                    user = t.nextToken();
+                    break;
+                default:
+                    grp = null;
+                    user = null;
             }
 
             if (name.lastIndexOf(".DIR") != -1) {

@@ -61,28 +61,28 @@ class SOCKSServerFactory {
             int socksVer = in.readByte();
 
             switch (socksVer) {
-            case 0x04:
+                case 0x04:
                 // SOCKS version 4/4a
-                if (Boolean.parseBoolean(props.getProperty(I2PTunnelHTTPClientBase.PROP_AUTH)) &&
-                    props.containsKey(I2PTunnelHTTPClientBase.PROP_USER) &&
-                    props.containsKey(I2PTunnelHTTPClientBase.PROP_PW)) {
-                    throw new SOCKSException("SOCKS 4/4a not supported when authorization is required");
-                }
-                serv = new SOCKS4aServer(ctx, s, props);
-                break;
-            case 0x05:
+                    if (Boolean.parseBoolean(props.getProperty(I2PTunnelHTTPClientBase.PROP_AUTH)) &&
+                        props.containsKey(I2PTunnelHTTPClientBase.PROP_USER) &&
+                        props.containsKey(I2PTunnelHTTPClientBase.PROP_PW)) {
+                        throw new SOCKSException("SOCKS 4/4a not supported when authorization is required");
+                    }
+                    serv = new SOCKS4aServer(ctx, s, props);
+                    break;
+                case 0x05:
                 // SOCKS version 5
-                serv = new SOCKS5Server(ctx, s, props);
-                break;
-            case 'C':
-            case 'G':
-            case 'H':
-            case 'P':
-                DataOutputStream out = new DataOutputStream(s.getOutputStream());
-                out.write(DataHelper.getASCII(ERR_REQUEST_DENIED));
-                throw new SOCKSException("HTTP request to socks");
-            default:
-                throw new SOCKSException("SOCKS protocol version not supported (" + Integer.toHexString(socksVer) + ")");
+                    serv = new SOCKS5Server(ctx, s, props);
+                    break;
+                case 'C':
+                case 'G':
+                case 'H':
+                case 'P':
+                    DataOutputStream out = new DataOutputStream(s.getOutputStream());
+                    out.write(DataHelper.getASCII(ERR_REQUEST_DENIED));
+                    throw new SOCKSException("HTTP request to socks");
+                default:
+                    throw new SOCKSException("SOCKS protocol version not supported (" + Integer.toHexString(socksVer) + ")");
             }
         } catch (IOException e) {
             //_log.debug("error reading SOCKS protocol version");

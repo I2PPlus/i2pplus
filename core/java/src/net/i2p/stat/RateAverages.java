@@ -11,11 +11,11 @@ public class RateAverages {
     /** thread-local temp instance */
     private static final ThreadLocal<RateAverages> TEMP =
             new ThreadLocal<RateAverages>() {
-        @Override
+            @Override
         public RateAverages initialValue() {
-            return new RateAverages();
-        }
-    };
+                return new RateAverages();
+            }
+        };
 
     /**
       *  Gets a thread-local temp instance.

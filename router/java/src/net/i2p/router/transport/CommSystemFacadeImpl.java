@@ -580,7 +580,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
       * @return list of RouterAddress objects for all active transports,
       *         may be empty if no addresses available
       */
-     @Override
+    @Override
      public List<RouterAddress> createAddresses() {
         List<RouterAddress> addresses = new ArrayList<RouterAddress>(_manager.getAddresses());
         if (addresses.size() > 1) {Collections.sort(addresses, new AddrComparator());}
@@ -1201,7 +1201,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                         hostName = InetAddress.getByName(ipAddress).getCanonicalHostName();
                         // Update cache immediately with DNS result
                         rdnsCache.put(ipAddress, new CacheEntry(ipAddress, hostName, System.currentTimeMillis()));
-                        
+
                         // Check if we should do WHOIS lookup (non-blocking)
                         if ((hostName.equals(ipAddress) || _t("unknown").equals(hostName)) && enableWhoisLookups()) {
                             String countryCode = getCountryFromIPAddress(ipAddress);
@@ -1709,9 +1709,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             if (lc.contains("latin american and caribbean")) {
                 fallback = "LACNIC";
             } else if (lc.contains("asia pacific network") || lc.contains("administered by apnic")) {
-               fallback = "APNIC";
+                fallback = "APNIC";
             } else if (lc.contains("african network information center")) {
-               fallback = "AFRINIC";
+                fallback = "AFRINIC";
             } else if (lc.contains("ripe network coordination")) {
                 fallback = "RIPE";
             } else if (lc.contains("centurylink communications, llc")) {
@@ -2353,12 +2353,12 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         public void timeReached() {
              // use the same % as in RouterClock so that check will never fail
              // This is their our offset w.r.t. them...
-             long peerOffset = getFramedAveragePeerClockSkew(10);
-             if (peerOffset == 0) {return;}
-             long currentOffset = _context.clock().getOffset();
+            long peerOffset = getFramedAveragePeerClockSkew(10);
+            if (peerOffset == 0) {return;}
+            long currentOffset = _context.clock().getOffset();
              // ... so we subtract it to get in sync with them
-             long newOffset = currentOffset - peerOffset;
-             _context.clock().setOffset(newOffset);
+            long newOffset = currentOffset - peerOffset;
+            _context.clock().setOffset(newOffset);
         }
     }
 
@@ -2378,17 +2378,17 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         public void timeReached() {
             Set<AddressType> addrs = Addresses.getConnectedAddressTypes();
             boolean good = addrs.contains(AddressType.IPV4) || addrs.contains(AddressType.IPV6);
-             if (_netMonitorStatus != good) {
-                 if (good) {_log.logAlways(Log.INFO, "Network reconnected");}
-                 else {_log.error("Network disconnected");}
-                 _context.router().eventLog().addEvent(EventLog.NETWORK, good ? "connected" : "disconnected");
-                 _netMonitorStatus = good;
-                 if (good) {
-                     _manager.initializeAddress(); // Check local addresses
-                     _manager.transportAddressChanged(); // fire UPnP
-                 }
-             }
-             reschedule(good ? LONG_DELAY : SHORT_DELAY);
+            if (_netMonitorStatus != good) {
+                if (good) {_log.logAlways(Log.INFO, "Network reconnected");}
+                else {_log.error("Network disconnected");}
+                _context.router().eventLog().addEvent(EventLog.NETWORK, good ? "connected" : "disconnected");
+                _netMonitorStatus = good;
+                if (good) {
+                    _manager.initializeAddress(); // Check local addresses
+                    _manager.transportAddressChanged(); // fire UPnP
+                }
+            }
+            reschedule(good ? LONG_DELAY : SHORT_DELAY);
         }
     }
 }

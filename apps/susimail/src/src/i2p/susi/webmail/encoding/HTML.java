@@ -15,29 +15,29 @@ import java.util.regex.Pattern;
  * HTML encoding for safe text display in SusiMail web pages.
  * Escapes special characters and converts newlines to HTML line breaks.
  * Used for preventing XSS attacks in I2P webmail interface.
- * 
+ *
  * @author susi
  */
 public class HTML extends Encoding {
 
-  private static final Pattern NEWLINE_PATTERN = Pattern.compile("\r{0,1}\n");
+    private static final Pattern NEWLINE_PATTERN = Pattern.compile("\r{0,1}\n");
 
-  public String getName() {return "HTML";}
+    public String getName() {return "HTML";}
 
-  public String encode(byte[] in) throws EncodingException {
-    throw new EncodingException("unsupported");
-  }
+    public String encode(byte[] in) throws EncodingException {
+        throw new EncodingException("unsupported");
+    }
 
-  @Override
+    @Override
   public String encode(String str) throws EncodingException {
-    String escaped = str.replace("&", "&amp;")  // must be first
+        String escaped = str.replace("&", "&amp;")  // must be first
                .replace( "<", "&lt;" )
                .replace( ">", "&gt;" );
-    return NEWLINE_PATTERN.matcher(escaped).replaceAll("<br>\r\n");
-  }
+        return NEWLINE_PATTERN.matcher(escaped).replaceAll("<br>\r\n");
+    }
 
-  public void decode(InputStream in, Buffer out) throws DecodingException {
-    throw new DecodingException("unsupported");
-  }
+    public void decode(InputStream in, Buffer out) throws DecodingException {
+        throw new DecodingException("unsupported");
+    }
 
 }

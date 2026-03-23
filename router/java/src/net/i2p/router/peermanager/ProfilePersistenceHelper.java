@@ -229,7 +229,7 @@ class ProfilePersistenceHelper {
         if (staleDeleted > 0 && _log.shouldInfo()) {
             _log.info("Deleted " + staleDeleted + " stale profile files by timestamp");
         }
-        
+
         if (freshFiles.size() > LIMIT_PROFILES) {Collections.shuffle(freshFiles, _context.random());}
         List<PeerProfile> profiles = new ArrayList<PeerProfile>(Math.min(LIMIT_PROFILES, freshFiles.size()));
         int count = 0;
@@ -244,7 +244,7 @@ class ProfilePersistenceHelper {
                 count++;
             }
         }
-        
+
         long duration = System.currentTimeMillis() - start;
         if (_log.shouldInfo()) {_log.info("Loaded " + count + " peer profiles in " + duration + "ms");}
         return profiles;

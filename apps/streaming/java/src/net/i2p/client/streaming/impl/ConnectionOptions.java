@@ -384,35 +384,35 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      *  @since 0.9.1
      */
     private void update(ConnectionOptions opts) {
-            setMaxWindowSize(opts.getMaxWindowSize());
-            setConnectDelay(opts.getConnectDelay());
-            setProfile(opts.getProfile());
-            setRTTDev(opts.getRTTDev());
-            setRTT(opts.getRTT());
-            setRequireFullySigned(opts.getRequireFullySigned());
-            setWindowSize(opts.getWindowSize());
-            setResendDelay(opts.getResendDelay());
-            setMaxMessageSize(opts.getMaxMessageSize());
-            setMaxResends(opts.getMaxResends());
-            setInactivityTimeout(opts.getInactivityTimeout());
-            setInactivityAction(opts.getInactivityAction());
-            setInboundBufferSize(opts.getInboundBufferSize());
-            setCongestionAvoidanceGrowthRateFactor(opts.getCongestionAvoidanceGrowthRateFactor());
-            setSlowStartGrowthRateFactor(opts.getSlowStartGrowthRateFactor());
-            setAnswerPings(opts.getAnswerPings());
-            setEnforceProtocol(opts.getEnforceProtocol());
-            setDisableRejectLogging(opts.getDisableRejectLogging());
-            initLists(opts);
-            _maxConnsPerMinute = opts.getMaxConnsPerMinute();
-            _maxConnsPerHour = opts.getMaxConnsPerHour();
-            _maxConnsPerDay = opts.getMaxConnsPerDay();
-            _maxTotalConnsPerMinute = opts.getMaxTotalConnsPerMinute();
-            _maxTotalConnsPerHour = opts.getMaxTotalConnsPerHour();
-            _maxTotalConnsPerDay = opts.getMaxTotalConnsPerDay();
-            _maxConns = opts.getMaxConns();
-            _limitAction = opts.getLimitAction();
-            _tagsToSend = opts.getTagsToSend();
-            _tagThreshold = opts.getTagThreshold();
+        setMaxWindowSize(opts.getMaxWindowSize());
+        setConnectDelay(opts.getConnectDelay());
+        setProfile(opts.getProfile());
+        setRTTDev(opts.getRTTDev());
+        setRTT(opts.getRTT());
+        setRequireFullySigned(opts.getRequireFullySigned());
+        setWindowSize(opts.getWindowSize());
+        setResendDelay(opts.getResendDelay());
+        setMaxMessageSize(opts.getMaxMessageSize());
+        setMaxResends(opts.getMaxResends());
+        setInactivityTimeout(opts.getInactivityTimeout());
+        setInactivityAction(opts.getInactivityAction());
+        setInboundBufferSize(opts.getInboundBufferSize());
+        setCongestionAvoidanceGrowthRateFactor(opts.getCongestionAvoidanceGrowthRateFactor());
+        setSlowStartGrowthRateFactor(opts.getSlowStartGrowthRateFactor());
+        setAnswerPings(opts.getAnswerPings());
+        setEnforceProtocol(opts.getEnforceProtocol());
+        setDisableRejectLogging(opts.getDisableRejectLogging());
+        initLists(opts);
+        _maxConnsPerMinute = opts.getMaxConnsPerMinute();
+        _maxConnsPerHour = opts.getMaxConnsPerHour();
+        _maxConnsPerDay = opts.getMaxConnsPerDay();
+        _maxTotalConnsPerMinute = opts.getMaxTotalConnsPerMinute();
+        _maxTotalConnsPerHour = opts.getMaxTotalConnsPerHour();
+        _maxTotalConnsPerDay = opts.getMaxTotalConnsPerDay();
+        _maxConns = opts.getMaxConns();
+        _limitAction = opts.getLimitAction();
+        _tagsToSend = opts.getTagsToSend();
+        _tagThreshold = opts.getTagThreshold();
     }
 
     /**
@@ -493,7 +493,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
             setReceiveWindow(getInt(opts, PROP_INITIAL_RECEIVE_WINDOW, 1));
         }
         if (opts.getProperty(PROP_INITIAL_RESEND_DELAY) != null) {
-setResendDelay(getInt(opts, PROP_INITIAL_RESEND_DELAY, 100));
+            setResendDelay(getInt(opts, PROP_INITIAL_RESEND_DELAY, 100));
         }
         if (opts.getProperty(PROP_INITIAL_ACK_DELAY) != null) {
             setSendAckDelay(getInt(opts, PROP_INITIAL_ACK_DELAY, DEFAULT_INITIAL_ACK_DELAY));
@@ -710,14 +710,14 @@ setResendDelay(getInt(opts, PROP_INITIAL_RESEND_DELAY, 100));
      */
     private synchronized void computeRTO() {
         switch(_initState) {
-        case INIT :
-            throw new IllegalStateException();
-        case FIRST :
-            _rto = _rtt + _rtt / 2;
-            break;
-        case STEADY :
-            _rto = _rtt + (int) (_rttDev * TCP_KAPPA);
-            break;
+            case INIT :
+                throw new IllegalStateException();
+            case FIRST :
+                _rto = _rtt + _rtt / 2;
+                break;
+            case STEADY :
+                _rto = _rtt + (int) (_rttDev * TCP_KAPPA);
+                break;
         }
 
         if (_rto < Connection.MIN_RESEND_DELAY) {_rto = Connection.MIN_RESEND_DELAY;}
@@ -744,18 +744,18 @@ setResendDelay(getInt(opts, PROP_INITIAL_RESEND_DELAY, 100));
     public synchronized void updateRTT(int measuredValue) {
         _minRtt = Math.min(_minRtt, measuredValue);
         switch(_initState) {
-        case INIT:
-            _initState = AckInit.FIRST;
-            setRTT(measuredValue); // no smoothing first sample
-            _rttDev = _rtt / 2;
-            break;
-        case FIRST:
-            _initState = AckInit.STEADY; // fall through
-        case STEADY:
+            case INIT:
+                _initState = AckInit.FIRST;
+                setRTT(measuredValue); // no smoothing first sample
+                _rttDev = _rtt / 2;
+                break;
+            case FIRST:
+                _initState = AckInit.STEADY; // fall through
+            case STEADY:
             // calculation matches that recommended in RFC 6298
-            _rttDev = (int) ((1-TCP_BETA) *_rttDev  + TCP_BETA * Math.abs(measuredValue-_rtt));
-            int smoothed = (int)((1-TCP_ALPHA)*_rtt + TCP_ALPHA*measuredValue);
-            setRTT(smoothed);
+                _rttDev = (int) ((1-TCP_BETA) *_rttDev  + TCP_BETA * Math.abs(measuredValue-_rtt));
+                int smoothed = (int)((1-TCP_ALPHA)*_rtt + TCP_ALPHA*measuredValue);
+                setRTT(smoothed);
         }
         computeRTO();
     }

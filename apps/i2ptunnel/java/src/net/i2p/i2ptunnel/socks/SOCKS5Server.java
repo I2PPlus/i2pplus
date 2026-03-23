@@ -135,21 +135,21 @@ class SOCKS5Server extends SOCKSServer {
         }
 
         switch (method) {
-          case Method.USERNAME_PASSWORD:
-            _log.debug("username/password authentication required");
-            sendInitReply(Method.USERNAME_PASSWORD, out);
-            verifyPassword(in, out, client);
-            return;
+            case Method.USERNAME_PASSWORD:
+                _log.debug("username/password authentication required");
+                sendInitReply(Method.USERNAME_PASSWORD, out);
+                verifyPassword(in, out, client);
+                return;
 
-          case Method.NO_AUTH_REQUIRED:
-            _log.debug("No authentication required");
-            sendInitReply(Method.NO_AUTH_REQUIRED, out);
-            return;
+            case Method.NO_AUTH_REQUIRED:
+                _log.debug("No authentication required");
+                sendInitReply(Method.NO_AUTH_REQUIRED, out);
+                return;
 
-          default:
-            _log.debug("No suitable authentication methods found (" + Integer.toHexString(method) + ")");
-            sendInitReply(Method.NO_ACCEPTABLE_METHODS, out);
-            throw new SOCKSException("Unsupported authentication method");
+            default:
+                _log.debug("No suitable authentication methods found (" + Integer.toHexString(method) + ")");
+                sendInitReply(Method.NO_ACCEPTABLE_METHODS, out);
+                throw new SOCKSException("Unsupported authentication method");
         }
     }
 
@@ -216,41 +216,41 @@ class SOCKS5Server extends SOCKSServer {
 
         int command = in.readUnsignedByte();
         switch (command) {
-        case Command.CONNECT:
-            break;
+            case Command.CONNECT:
+                break;
 
-        case Command.BIND:
-            if (_log.shouldDebug())
-                _log.debug("BIND command is not supported!");
-            sendRequestReply(Reply.COMMAND_NOT_SUPPORTED, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
-            throw new SOCKSException("BIND command not supported");
+            case Command.BIND:
+                if (_log.shouldDebug())
+                    _log.debug("BIND command is not supported!");
+                sendRequestReply(Reply.COMMAND_NOT_SUPPORTED, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
+                throw new SOCKSException("BIND command not supported");
 
-        case Command.UDP_ASSOCIATE:
+            case Command.UDP_ASSOCIATE:
           /*** if(!Boolean.parseBoolean(tunnel.getOptions().getProperty("i2ptunnel.socks.allowUDP"))) {
             _log.debug("UDP ASSOCIATE command is not supported!");
             sendRequestReply(Reply.COMMAND_NOT_SUPPORTED, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
             throw new SOCKSException("UDP ASSOCIATE command not supported");
            ***/
-            break;
+                break;
 
-        case Command.TOR_RESOLVE:
+            case Command.TOR_RESOLVE:
             // https://github.com/torproject/torspec/blob/main/socks-extensions.txt
             // reply will be sent below
-            break;
+                break;
 
-        case Command.TOR_RESOLVE_PTR:
-        case Command.TOR_CONNECT_DIR:
+            case Command.TOR_RESOLVE_PTR:
+            case Command.TOR_CONNECT_DIR:
             // https://github.com/torproject/torspec/blob/main/socks-extensions.txt
-            if (_log.shouldDebug())
-                _log.debug("Tor command unsupported (" + Integer.toHexString(command) + ")");
-            sendRequestReply(Reply.COMMAND_NOT_SUPPORTED, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
-            throw new SOCKSException("Unsupported command in request");
+                if (_log.shouldDebug())
+                    _log.debug("Tor command unsupported (" + Integer.toHexString(command) + ")");
+                sendRequestReply(Reply.COMMAND_NOT_SUPPORTED, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
+                throw new SOCKSException("Unsupported command in request");
 
-        default:
-            if (_log.shouldDebug())
-                _log.debug("Unknown command in request (" + Integer.toHexString(command) + ")");
-            sendRequestReply(Reply.COMMAND_NOT_SUPPORTED, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
-            throw new SOCKSException("Unsupported command in request");
+            default:
+                if (_log.shouldDebug())
+                    _log.debug("Unknown command in request (" + Integer.toHexString(command) + ")");
+                sendRequestReply(Reply.COMMAND_NOT_SUPPORTED, AddressType.DOMAINNAME, null, "0.0.0.0", 0, out);
+                throw new SOCKSException("Unsupported command in request");
         }
 
         // Reserved byte, should be 0x00
@@ -322,8 +322,8 @@ class SOCKS5Server extends SOCKSServer {
                     connHostName = host;
                 }
             }
-            if (_log.shouldDebug())
-            _log.debug("DOMAINNAME address type in request: " + connHostName);
+                if (_log.shouldDebug())
+                    _log.debug("DOMAINNAME address type in request: " + connHostName);
             break;
 
             case AddressType.IPV6:
@@ -420,7 +420,7 @@ class SOCKS5Server extends SOCKSServer {
 
             default:
                 _log.error("Unknown address type passed to sendReply() (" + Integer.toHexString(addressType) + ")!");
-            return;
+                return;
         }
 
         dreps.writeShort(bindPort);

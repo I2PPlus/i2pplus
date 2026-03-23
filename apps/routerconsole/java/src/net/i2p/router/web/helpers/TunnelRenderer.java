@@ -218,22 +218,22 @@ class TunnelRenderer {
                   .append(_t("Data transferred"))
                   .append("\" data-sort-method=number>")
                   .append(_t("Data"))
-                  .append("</th><th");
+                    .append("</th><th");
                 if (bySpeed) {sb.append(" data-sort-default");}
                 sb.append(" data-sort-method=number>").append(_t("Speed")).append("</th>");
                 if (isAdvanced) {
                   //sb.append("<th class=limit data-sort-method=number>").append(_t("Limit")).append("</th>");
-                  sb.append("<th data-sort-method=number>")
+                    sb.append("<th data-sort-method=number>")
                     .append(_t("Receive on"))
-                    .append("</th>");
+                        .append("</th>");
                 }
                 sb.append("<th data-sort-method=number>")
                   .append(_t("From"))
-                  .append("</th>");
+                    .append("</th>");
                 if (isAdvanced) {sb.append("<th>").append(_t("Send on")).append("</th>");}
                 sb.append("<th data-sort-method=number>")
                   .append(_t("To"))
-                  .append("</th></tr>\n</thead>\n<tbody id=transitPeers>\n");
+                    .append("</th></tr>\n</thead>\n<tbody id=transitPeers>\n");
                 long processed = 0;
                 RateStat rs = _context.statManager().getRate("tunnel.participatingMessageCount");
                 if (rs != null) {processed = (long)rs.getRate(RateConstants.TEN_MINUTES).getLifetimeTotalValue();}
@@ -280,7 +280,7 @@ class TunnelRenderer {
                       .append(sizeInKB >= 1024 ? String.format("%.2f", sizeInMB) : String.format("%.0f", sizeInKB))
                       .append("</span><span class=left>&#8239;")
                       .append(sizeInKB >= 1024 ? "MB" : "KB")
-                      .append("</span></td>");
+                        .append("</span></td>");
 
                     int lifetime = (int) ((_context.clock().now() - cfg.getCreation()) / 1000);
                     if (lifetime <= 0) {lifetime = 1;}
@@ -330,7 +330,7 @@ class TunnelRenderer {
                 sb.append("</td></tr>\n<tr class=bwUsage><td colspan=8>")
                   .append("<b>").append(_t("Lifetime bandwidth usage")).append(":</b>&nbsp;")
                   .append(DataHelper.formatSize2(processed*1024, true).replace("i", "")).append("B")
-                  .append("</td></tr></tfoot>\n</table>\n</div>\n");
+                    .append("</td></tr></tfoot>\n</table>\n</div>\n");
             } else { // bwShare < 12K/s
                 sb.append("<div class=\"statusnotes noparticipate\"><b>")
                   .append(_t("Not enough shared bandwidth to build transit tunnels.")).append("</b> <a href=\"config\">[")
@@ -446,11 +446,11 @@ class TunnelRenderer {
                       .append(DataHelper.stripHTML(version))
                       .append("\">")
                       .append(DataHelper.stripHTML(version))
-                      .append("</a></span>");
+                        .append("</a></span>");
                 } else if (isBanned) {
                     sb.append("<span class=banlisted title=\"")
                       .append(_t("Router is banlisted"))
-                      .append("\">???</span>");
+                        .append("\">???</span>");
                 } else {sb.append("<span>???</span>");}
                 sb.append("</td><td>");
                 if (info != null) {
@@ -502,7 +502,7 @@ class TunnelRenderer {
                       .append(info.getHash())
                       .append("\" title=\"Configure peer\">")
                       .append(_t("Edit"))
-                      .append("</a>");
+                        .append("</a>");
                 }
                 sb.append("</td></tr>\n");
             }
@@ -641,7 +641,7 @@ class TunnelRenderer {
                         chunkSb.append(String.format(
                                        "<td class=tcount data-sort-column-key=localCount data-sort=%d>%d</td><td class=bar data-sort-column-key=localCount>",
                                        localTunnelCount, localTunnelCount)
-                                      );
+                        );
                         chunkSb.append(String.format(
                                        "<span class=percentBarOuter><span class=percentBarInner style=\"width:%s%%\"><span class=percentBarText>%d%%</span></span></span>",
                                        TWO_DECIMALS.get().format(localTunnelCount * 100.0 / tunnelCount).replace(".00", ""),
@@ -660,7 +660,7 @@ class TunnelRenderer {
                                            transitTunnelCount * 100 / partCount))
                                    .append("</td>");
                         } else {
-                             chunkSb.append("<td class=tcount colspan=2 data-sort=0></td>");
+                            chunkSb.append("<td class=tcount colspan=2 data-sort=0></td>");
                         }
                     } else {
                         chunkSb.append("<td></td>");
@@ -807,7 +807,7 @@ class TunnelRenderer {
            .append(_t("{0} shared bandwidth", range(Router.MIN_BW_P, Router.MIN_BW_X)))
            .append("</td><td><span class=tunnel_cap><b>X</b></span></td><td>")
            .append(_t("Over {0} shared bandwidth", Math.round(Router.MIN_BW_X * 1.024f) + "KB/s"))
-           .append("</td><td></td></tr></tbody>\n</table>\n</div>\n");
+            .append("</td><td></td></tr></tbody>\n</table>\n</div>\n");
         out.append(buf);
         out.flush();
         buf.setLength(0);
@@ -819,31 +819,31 @@ class TunnelRenderer {
     }
 
     private static class TunnelComparator implements Comparator<HopConfig>, Serializable {
-         public int compare(HopConfig l, HopConfig r) {
-             long le = l.getExpiration();
-             long re = r.getExpiration();
-             if (le < 0) {le = 0;}
-             if (re < 0) {re = 0;}
-             if (le < re) {return 1;}
-             if (le > re) {return -1;}
-             return 0;
+        public int compare(HopConfig l, HopConfig r) {
+            long le = l.getExpiration();
+            long re = r.getExpiration();
+            if (le < 0) {le = 0;}
+            if (re < 0) {re = 0;}
+            if (le < re) {return 1;}
+            if (le > re) {return -1;}
+            return 0;
         }
     }
 
     /** @since 0.9.35 */
     private static class TunnelComparatorBySpeed implements Comparator<HopConfig>, Serializable {
-         public int compare(HopConfig l, HopConfig r) {
-             return (r.getProcessedMessagesCount() - l.getProcessedMessagesCount());
+        public int compare(HopConfig l, HopConfig r) {
+            return (r.getProcessedMessagesCount() - l.getProcessedMessagesCount());
         }
     }
 
     private static class TunnelInfoComparator implements Comparator<TunnelInfo>, Serializable {
-         public int compare(TunnelInfo l, TunnelInfo r) {
-             long le = l.getExpiration();
-             long re = r.getExpiration();
-             if (le < re) {return 1;}
-             if (le > re) {return -1;}
-             return 0;
+        public int compare(TunnelInfo l, TunnelInfo r) {
+            long le = l.getExpiration();
+            long re = r.getExpiration();
+            if (le < re) {return 1;}
+            if (le > re) {return -1;}
+            return 0;
         }
     }
 
@@ -852,19 +852,19 @@ class TunnelRenderer {
      *  @since 0.9.57
      */
     private class TPComparator implements Comparator<TunnelPool> {
-         private final Collator _comp = Collator.getInstance();
-         public int compare(TunnelPool l, TunnelPool r) {
-             int rv = _comp.compare(getTunnelName(l), getTunnelName(r));
-             if (rv != 0) {return rv;}
-             rv = l.getSettings().getDestination().toBase32().compareTo(r.getSettings().getDestination().toBase32());
-             if (rv != 0) {return rv;}
-             long lexp = getNextExpiry(l);
-             long rexp = getNextExpiry(r);
-             if (lexp != rexp) {
-                 return lexp > rexp ? 1 : -1;
-             }
-             return 0;
-         }
+        private final Collator _comp = Collator.getInstance();
+        public int compare(TunnelPool l, TunnelPool r) {
+            int rv = _comp.compare(getTunnelName(l), getTunnelName(r));
+            if (rv != 0) {return rv;}
+            rv = l.getSettings().getDestination().toBase32().compareTo(r.getSettings().getDestination().toBase32());
+            if (rv != 0) {return rv;}
+            long lexp = getNextExpiry(l);
+            long rexp = getNextExpiry(r);
+            if (lexp != rexp) {
+                return lexp > rexp ? 1 : -1;
+            }
+            return 0;
+        }
     }
 
     /**
@@ -929,13 +929,13 @@ class TunnelRenderer {
                .append(_t("Data"))
                .append("</th><th>")
                .append(_t("Gateway"))
-               .append("</th>");
+                .append("</th>");
             if (maxLength > 3) {
                 buf.append("<th colspan=\"")
                    .append(maxLength - 2)
                    .append("\">")
                    .append(_t("Participants"))
-                   .append("</th>");
+                    .append("</th>");
             } else if (maxLength == 3) {buf.append("<th>").append(_t("Participant")).append("</th>");}
             if (maxLength > 1) {buf.append("<th>").append(_t("Endpoint")).append("</th>");}
             buf.append("</tr>\n");
@@ -1009,7 +1009,7 @@ class TunnelRenderer {
                    .append(sizeInKB >= 1024 ? String.format("%.2f", sizeInMB) : String.format("%.0f", sizeInKB))
                    .append("</span><span class=left>&#8239;")
                    .append(sizeInKB >= 1024 ? "MB" : "KB")
-                   .append("</span>");
+                    .append("</span>");
             }
             buf.append("</td>");
             int length = info.getLength();

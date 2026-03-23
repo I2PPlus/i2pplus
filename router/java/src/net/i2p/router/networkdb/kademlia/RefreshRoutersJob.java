@@ -160,7 +160,7 @@ class RefreshRoutersJob extends JobImpl {
             if (_routers == null || _routers.isEmpty()) return;
             routerHash = _routers.remove(0);
         }
-        
+
         if (routerHash == null) return;
 
         if (routerHash.equals(getContext().routerHash())) {

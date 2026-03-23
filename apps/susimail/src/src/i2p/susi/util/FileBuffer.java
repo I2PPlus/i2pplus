@@ -20,11 +20,11 @@ public class FileBuffer implements Buffer {
 	protected final int _sublen;
 	private InputStream _is;
 	private OutputStream _os;
-	
+
 	public FileBuffer(File file) {
 		this(file, 0, 0);
 	}
-	
+
 	public FileBuffer(File file, int offset, int sublen) {
 		_file = file;
 		_offset = offset;

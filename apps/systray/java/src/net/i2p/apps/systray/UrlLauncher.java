@@ -64,26 +64,26 @@ public class UrlLauncher implements ClientApp {
             // This debian script tries everything in $BROWSER, then gnome-www-browser and x-www-browser
             // if X is running and www-browser otherwise. Those point to the user's preferred
             // browser using the update-alternatives system.
-            "sensible-browser",
+        "sensible-browser",
             // another one that opens a preferred browser
-            "xdg-open",
+        "xdg-open",
             // Try x-www-browser directly
-            "x-www-browser",
+        "x-www-browser",
             // general graphical browsers
-            "defaultbrowser",  // puppy linux
-            "firefox",
-            "opera -newpage",
-            "falkon",
-            "chromium-browser",
-            "microsoft-edge",
-            "mozilla",
-            "netscape",
-            "konqueror",
-            "galeon",
+        "defaultbrowser",  // puppy linux
+        "firefox",
+        "opera -newpage",
+        "falkon",
+        "chromium-browser",
+        "microsoft-edge",
+        "mozilla",
+        "netscape",
+        "konqueror",
+        "galeon",
             // Text Mode Browsers only below here
-            "www-browser",
-            "links",
-            "lynx"
+        "www-browser",
+        "links",
+        "lynx"
     };
 
     /**
@@ -159,7 +159,7 @@ public class UrlLauncher implements ClientApp {
                 // Jetty 6 seems to start the Connector before the
                 // webapp is completely ready
                 try {
-                   Thread.sleep(2*1000);
+                    Thread.sleep(2*1000);
                 } catch (InterruptedException ie) {}
                 return true;
             } catch (IOException e) {}
@@ -487,7 +487,7 @@ public class UrlLauncher implements ClientApp {
     }
 
     private static boolean validateUrlFormat(String urlString) {
-         try {
+        try {
             // just to check validity
             new URI(urlString);
         } catch (URISyntaxException e) {
@@ -590,6 +590,6 @@ public class UrlLauncher implements ClientApp {
                 launcher.openUrl(args[0]);
             else
                 launcher.openUrl(I2PAppContext.getGlobalContext().portMapper().getConsoleURL());
-         } catch (IOException e) {}
+        } catch (IOException e) {}
     }
 }

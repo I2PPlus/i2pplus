@@ -9,12 +9,12 @@ import net.i2p.crypto.HMAC256Generator.HMACKey;
 
 /**
  * HMAC-based Key Derivation Function (HKDF) implementation using HMAC-SHA256.
- * 
+ *
  * This class implements the HKDF algorithm as specified in RFC 5869 for
  * deriving cryptographic keys from input key material. It provides secure key
  * expansion functionality essential for I2P's cryptographic operations including
  * session key generation and key derivation.
- * 
+ *
  * <p>Features and capabilities:</p>
  * <ul>
  *   <li>HMAC-SHA256 based derivation for cryptographic security</li>

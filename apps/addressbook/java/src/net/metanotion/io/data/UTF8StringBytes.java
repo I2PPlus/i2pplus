@@ -33,10 +33,10 @@ import net.metanotion.io.Serializer;
 
 /**
  * String serializer using UTF-8 encoding.
- * 
+ *
  * <p>Converts between String objects and UTF-8 byte arrays.
  * Supports full Unicode character set for internationalized text.</p>
- * 
+ *
  * <p>UTF-8 encoding characteristics:</p>
  * <ul>
  * <li>ASCII characters (U+0000 to U+007F) use 1 byte</li>

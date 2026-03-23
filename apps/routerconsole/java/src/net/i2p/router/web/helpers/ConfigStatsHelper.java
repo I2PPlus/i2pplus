@@ -56,7 +56,7 @@ public class ConfigStatsHelper extends HelperBase {
         Map<String, Set<String>> groups = new TreeMap<String, Set<String>>(new AlphaComparator());
         groups.putAll(unsorted);
         for (Set<String> stats : groups.values()) {
-             _stats.addAll(stats);
+            _stats.addAll(stats);
         }
 
         // create a local copy of the config. Querying r.getSummaryListener()

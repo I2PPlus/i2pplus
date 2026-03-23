@@ -70,7 +70,7 @@ public class MLSxEntryParser extends FTPFileEntryParserImpl {
     }
 
     private static final int[] UNIX_GROUPS = { // Groups in order of mode digits
-            FTPFile.USER_ACCESS, FTPFile.GROUP_ACCESS, FTPFile.WORLD_ACCESS, };
+        FTPFile.USER_ACCESS, FTPFile.GROUP_ACCESS, FTPFile.WORLD_ACCESS, };
 
     private static final int[][] UNIX_PERMS = { // perm bits, broken down by octal int value
             /* 0 */ {}, /* 1 */ { FTPFile.EXECUTE_PERMISSION }, /* 2 */ { FTPFile.WRITE_PERMISSION },
@@ -161,38 +161,38 @@ public class MLSxEntryParser extends FTPFileEntryParserImpl {
         for (final char c : valueLowerCase.toCharArray()) {
             // TODO these are mostly just guesses at present
             switch (c) {
-            case 'a': // (file) may APPEnd
-                file.setPermission(FTPFile.USER_ACCESS, FTPFile.WRITE_PERMISSION, true);
-                break;
-            case 'c': // (dir) files may be created in the dir
-                file.setPermission(FTPFile.USER_ACCESS, FTPFile.WRITE_PERMISSION, true);
-                break;
-            case 'd': // deletable
-                file.setPermission(FTPFile.USER_ACCESS, FTPFile.WRITE_PERMISSION, true);
-                break;
-            case 'e': // (dir) can change to this dir
-                file.setPermission(FTPFile.USER_ACCESS, FTPFile.READ_PERMISSION, true);
-                break;
-            case 'f': // (file) renamable
+                case 'a': // (file) may APPEnd
+                    file.setPermission(FTPFile.USER_ACCESS, FTPFile.WRITE_PERMISSION, true);
+                    break;
+                case 'c': // (dir) files may be created in the dir
+                    file.setPermission(FTPFile.USER_ACCESS, FTPFile.WRITE_PERMISSION, true);
+                    break;
+                case 'd': // deletable
+                    file.setPermission(FTPFile.USER_ACCESS, FTPFile.WRITE_PERMISSION, true);
+                    break;
+                case 'e': // (dir) can change to this dir
+                    file.setPermission(FTPFile.USER_ACCESS, FTPFile.READ_PERMISSION, true);
+                    break;
+                case 'f': // (file) renamable
                 // ?? file.setPermission(FTPFile.USER_ACCESS, FTPFile.WRITE_PERMISSION, true);
-                break;
-            case 'l': // (dir) can be listed
-                file.setPermission(FTPFile.USER_ACCESS, FTPFile.EXECUTE_PERMISSION, true);
-                break;
-            case 'm': // (dir) can create directory here
-                file.setPermission(FTPFile.USER_ACCESS, FTPFile.WRITE_PERMISSION, true);
-                break;
-            case 'p': // (dir) entries may be deleted
-                file.setPermission(FTPFile.USER_ACCESS, FTPFile.WRITE_PERMISSION, true);
-                break;
-            case 'r': // (files) file may be RETRieved
-                file.setPermission(FTPFile.USER_ACCESS, FTPFile.READ_PERMISSION, true);
-                break;
-            case 'w': // (files) file may be STORed
-                file.setPermission(FTPFile.USER_ACCESS, FTPFile.WRITE_PERMISSION, true);
-                break;
-            default:
-                break;
+                    break;
+                case 'l': // (dir) can be listed
+                    file.setPermission(FTPFile.USER_ACCESS, FTPFile.EXECUTE_PERMISSION, true);
+                    break;
+                case 'm': // (dir) can create directory here
+                    file.setPermission(FTPFile.USER_ACCESS, FTPFile.WRITE_PERMISSION, true);
+                    break;
+                case 'p': // (dir) entries may be deleted
+                    file.setPermission(FTPFile.USER_ACCESS, FTPFile.WRITE_PERMISSION, true);
+                    break;
+                case 'r': // (files) file may be RETRieved
+                    file.setPermission(FTPFile.USER_ACCESS, FTPFile.READ_PERMISSION, true);
+                    break;
+                case 'w': // (files) file may be STORed
+                    file.setPermission(FTPFile.USER_ACCESS, FTPFile.WRITE_PERMISSION, true);
+                    break;
+                default:
+                    break;
             // ignore unexpected flag for now.
             } // switch
         } // each char
@@ -238,59 +238,59 @@ public class MLSxEntryParser extends FTPFileEntryParserImpl {
             }
             final String valueLowerCase = factvalue.toLowerCase(Locale.ENGLISH);
             switch (factname) {
-            case "size":
-            case "sizd":
-                file.setSize(Long.parseLong(factvalue));
-                break;
-            case "modify": {
-                final Calendar parsed = parseGMTdateTime(factvalue);
-                if (parsed == null) {
-                    return null;
-                }
-                file.setTimestamp(parsed);
-                break;
-            }
-            case "type": {
-                final Integer intType = TYPE_TO_INT.get(valueLowerCase);
-                if (intType == null) {
-                    file.setType(FTPFile.UNKNOWN_TYPE);
-                } else {
-                    file.setType(intType.intValue());
-                }
-                break;
-            }
-            default:
-                if (factname.startsWith("unix.")) {
-                    final String unixfact = factname.substring("unix.".length()).toLowerCase(Locale.ENGLISH);
-                    switch (unixfact) {
-                    case "group":
-                        file.setGroup(factvalue);
-                        break;
-                    case "owner":
-                        file.setUser(factvalue);
-                        break;
-                    case "mode": {
-                        final int off = factvalue.length() - 3; // only parse last 3 digits
-                        for (int i = 0; i < 3; i++) {
-                            final int ch = factvalue.charAt(off + i) - '0';
-                            if (ch >= 0 && ch <= 7) { // Check it's valid octal
-                                for (final int p : UNIX_PERMS[ch]) {
-                                    file.setPermission(UNIX_GROUPS[i], p, true);
-                                }
-                            } else {
-                                // TODO should this cause failure, or can it be reported somehow?
-                            }
-                        } // digits
-                        break;
+                case "size":
+                case "sizd":
+                    file.setSize(Long.parseLong(factvalue));
+                    break;
+                case "modify": {
+                    final Calendar parsed = parseGMTdateTime(factvalue);
+                    if (parsed == null) {
+                        return null;
                     }
-                    default:
-                        break;
-                    } // mode
-                // unix.
-                } else if (!hasUnixMode && "perm".equals(factname)) { // skip if we have the UNIX.mode
-                    doUnixPerms(file, valueLowerCase);
+                    file.setTimestamp(parsed);
+                    break;
                 }
-                break;
+                case "type": {
+                    final Integer intType = TYPE_TO_INT.get(valueLowerCase);
+                    if (intType == null) {
+                        file.setType(FTPFile.UNKNOWN_TYPE);
+                    } else {
+                        file.setType(intType.intValue());
+                    }
+                    break;
+                }
+                default:
+                    if (factname.startsWith("unix.")) {
+                        final String unixfact = factname.substring("unix.".length()).toLowerCase(Locale.ENGLISH);
+                        switch (unixfact) {
+                            case "group":
+                                file.setGroup(factvalue);
+                                break;
+                            case "owner":
+                                file.setUser(factvalue);
+                                break;
+                            case "mode": {
+                                final int off = factvalue.length() - 3; // only parse last 3 digits
+                                for (int i = 0; i < 3; i++) {
+                                    final int ch = factvalue.charAt(off + i) - '0';
+                                    if (ch >= 0 && ch <= 7) { // Check it's valid octal
+                                        for (final int p : UNIX_PERMS[ch]) {
+                                            file.setPermission(UNIX_GROUPS[i], p, true);
+                                        }
+                                    } else {
+                                // TODO should this cause failure, or can it be reported somehow?
+                                    }
+                                } // digits
+                                break;
+                            }
+                            default:
+                                break;
+                        } // mode
+                // unix.
+                    } else if (!hasUnixMode && "perm".equals(factname)) { // skip if we have the UNIX.mode
+                        doUnixPerms(file, valueLowerCase);
+                    }
+                    break;
             } // process "perm"
         } // each fact
         return file;

@@ -151,10 +151,10 @@ riCe6OlAEiNpcc6mMyIYYWFICbrDFTrDR3wXqwc/Jkcx6L5VVWoagpSzbo3yGhc=
     private static final Map<String, String> DEFAULT_KEYS = new HashMap<String, String>(4);
     static {
             //DEFAULT_KEYS.put(DEFAULT_TRUSTED_KEY, "jrandom@mail.i2p");
-            DEFAULT_KEYS.put(DEFAULT_TRUSTED_KEY2, "zzz@mail.i2p");
+        DEFAULT_KEYS.put(DEFAULT_TRUSTED_KEY2, "zzz@mail.i2p");
             //DEFAULT_KEYS.put(DEFAULT_TRUSTED_KEY3, "complication@mail.i2p");
-            DEFAULT_KEYS.put(DEFAULT_TRUSTED_KEY4, "HungryHobo@mail.i2p");
-            DEFAULT_KEYS.put(DEFAULT_TRUSTED_KEY5, "killyourtv@mail.i2p");
+        DEFAULT_KEYS.put(DEFAULT_TRUSTED_KEY4, "HungryHobo@mail.i2p");
+        DEFAULT_KEYS.put(DEFAULT_TRUSTED_KEY5, "killyourtv@mail.i2p");
     }
 
     /**
@@ -601,8 +601,8 @@ riCe6OlAEiNpcc6mMyIYYWFICbrDFTrDR3wXqwc/Jkcx6L5VVWoagpSzbo3yGhc=
     @SuppressWarnings("deprecation")
     private boolean verifyVersionMatch(File signedFile) {
         try {
-             String zipComment = net.i2p.util.ZipFileComment.getComment(signedFile, VERSION_BYTES, HEADER_BYTES);
-             return zipComment.equals(_newVersion);
+            String zipComment = net.i2p.util.ZipFileComment.getComment(signedFile, VERSION_BYTES, HEADER_BYTES);
+            return zipComment.equals(_newVersion);
         } catch (IOException ioe) {}
         return false;
     }
@@ -717,10 +717,10 @@ riCe6OlAEiNpcc6mMyIYYWFICbrDFTrDR3wXqwc/Jkcx6L5VVWoagpSzbo3yGhc=
      */
     public Signature sign(String inputFile, String signedFile, SigningPrivateKey signingPrivateKey, String version) {
         byte[] versionHeader = {
-                0x00, 0x00, 0x00, 0x00,
-                0x00, 0x00, 0x00, 0x00,
-                0x00, 0x00, 0x00, 0x00,
-                0x00, 0x00, 0x00, 0x00 };
+            0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00,
+            0x00, 0x00, 0x00, 0x00 };
         byte[] versionRawBytes = null;
 
         if (version.length() > VERSION_BYTES)

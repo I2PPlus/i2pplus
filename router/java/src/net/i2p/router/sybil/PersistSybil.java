@@ -115,7 +115,7 @@ public class PersistSybil {
         Map<Hash, Points> rv = new HashMap<Hash, Points>();
         BufferedReader in = null;
         try {
-                in = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(file)), "UTF-8"));
+            in = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(file)), "UTF-8"));
             String line;
             while ((line = in.readLine()) != null) {
                 if (line.startsWith("#"))
@@ -156,7 +156,7 @@ public class PersistSybil {
             File file = new File(dir, PFX + date + SFX);
             BufferedReader in = null;
             try {
-            in = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(file)), "UTF-8"));
+                in = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(file)), "UTF-8"));
                 String line;
                 while ((line = in.readLine()) != null) {
                     if (!line.startsWith(bh))

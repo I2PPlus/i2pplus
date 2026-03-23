@@ -32,10 +32,10 @@ import net.metanotion.io.Serializer;
 
 /**
  * Pass-through serializer for byte arrays.
- * 
+ *
  * <p>Returns byte arrays unchanged during serialization/deserialization.
  * Useful for storing raw binary data without modification.</p>
- * 
+ *
  * <p><strong>Important:</strong> Performs direct reference copy, not deep copy.
  * Modifications to returned array affect the original array.</p>
  */

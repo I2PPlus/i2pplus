@@ -156,13 +156,13 @@ abstract class SAMMessageSession implements SAMMessageSess {
     protected boolean sendBytesThroughMessageSession(String dest, byte[] data,
                                         int proto, int fromPort, int toPort)
                                         throws DataFormatException, I2PSessionException {
-	Destination d = SAMUtils.getDest(dest);
+        Destination d = SAMUtils.getDest(dest);
 
-	if (_log.shouldDebug()) {
-	    _log.debug("Sending " + data.length + " bytes to " + dest);
-	}
+        if (_log.shouldDebug()) {
+            _log.debug("Sending " + data.length + " bytes to " + dest);
+        }
 
-	return session.sendMessage(d, data, proto, fromPort, toPort);
+        return session.sendMessage(d, data, proto, fromPort, toPort);
     }
 
     /**
@@ -190,22 +190,22 @@ abstract class SAMMessageSession implements SAMMessageSess {
                                         boolean sendLeaseSet, int sendTags,
                                         int tagThreshold, int expiration)
                                         throws DataFormatException, I2PSessionException {
-	Destination d = SAMUtils.getDest(dest);
+        Destination d = SAMUtils.getDest(dest);
 
-	if (_log.shouldDebug()) {
-	    _log.debug("Sending " + data.length + " bytes to " + dest);
-	}
-	SendMessageOptions opts = new SendMessageOptions();
-	if (!sendLeaseSet)
-	    opts.setSendLeaseSet(false);
-	if (sendTags > 0)
-	    opts.setTagsToSend(sendTags);
-	if (tagThreshold > 0)
-	    opts.setTagThreshold(tagThreshold);
-	if (expiration > 0)
-	    opts.setDate(I2PAppContext.getGlobalContext().clock().now() + (expiration * 1000));
+        if (_log.shouldDebug()) {
+            _log.debug("Sending " + data.length + " bytes to " + dest);
+        }
+        SendMessageOptions opts = new SendMessageOptions();
+        if (!sendLeaseSet)
+            opts.setSendLeaseSet(false);
+        if (sendTags > 0)
+            opts.setTagsToSend(sendTags);
+        if (tagThreshold > 0)
+            opts.setTagThreshold(tagThreshold);
+        if (expiration > 0)
+            opts.setDate(I2PAppContext.getGlobalContext().clock().now() + (expiration * 1000));
 
-	return session.sendMessage(d, data, 0, data.length, proto, fromPort, toPort, opts);
+        return session.sendMessage(d, data, 0, data.length, proto, fromPort, toPort, opts);
     }
 
     /**
@@ -334,7 +334,7 @@ abstract class SAMMessageSession implements SAMMessageSess {
                     if (_log.shouldDebug())
                         _log.debug("I2P session destroyed");
                 } catch (I2PSessionException e) {
-                        _log.error("Error destroying I2P session", e);
+                    _log.error("Error destroying I2P session", e);
                 }
             }
         }

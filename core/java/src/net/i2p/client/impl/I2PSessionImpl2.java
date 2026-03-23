@@ -163,10 +163,10 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     private static final int DONT_COMPRESS_SIZE = 66; // Todo: don't compress if destination is local?
 
     protected boolean shouldCompress(int size) {
-         if (size <= DONT_COMPRESS_SIZE) {return false;}
-         String p = getOptions().getProperty(I2PClient.PROP_GZIP);
-         if (p != null) {return Boolean.parseBoolean(p);}
-         return SHOULD_COMPRESS;
+        if (size <= DONT_COMPRESS_SIZE) {return false;}
+        String p = getOptions().getProperty(I2PClient.PROP_GZIP);
+        if (p != null) {return Boolean.parseBoolean(p);}
+        return SHOULD_COMPRESS;
     }
 
     /** @throws UnsupportedOperationException always, use MuxedImpl */

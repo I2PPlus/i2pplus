@@ -32,10 +32,10 @@ import net.metanotion.io.Serializer;
 
 /**
  * Integer serializer using 4-byte big-endian representation.
- * 
+ *
  * <p>Converts between Integer objects and 4-byte big-endian arrays.
  * Provides consistent byte ordering for cross-platform compatibility.</p>
- * 
+ *
  * <p>Serialization format:</p>
  * <ul>
  * <li>Byte 0: Most significant byte (bits 24-31)</li>
@@ -48,11 +48,11 @@ public class IntBytes implements Serializer<Integer> {
 	public byte[] getBytes(Integer o) {
 		byte[] b = new byte[4];
 		int v = o.intValue();
- 		b[0] = (byte)(0xff & (v >> 24));
- 		b[1] = (byte)(0xff & (v >> 16));
+        b[0] = (byte)(0xff & (v >> 24));
+        b[1] = (byte)(0xff & (v >> 16));
 		b[2] = (byte)(0xff & (v >>  8));
- 		b[3] = (byte)(0xff & v);
- 		return b;
+        b[3] = (byte)(0xff & v);
+        return b;
 	}
 
 	public Integer construct(byte[] b) {

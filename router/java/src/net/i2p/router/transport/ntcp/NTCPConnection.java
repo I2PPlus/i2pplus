@@ -377,11 +377,11 @@ public class NTCPConnection implements Closeable {
     public int getMessagesReceived() { return _messagesRead.get(); }
 
     public int getOutboundQueueSize() {
-            int queued = _outbound.size();
-            synchronized(_writeLock) {
-                queued += _currentOutbound.size();
-            }
-            return queued;
+        int queued = _outbound.size();
+        synchronized(_writeLock) {
+            queued += _currentOutbound.size();
+        }
+        return queued;
     }
 
     /** @since 0.9.36 */
@@ -556,8 +556,8 @@ public class NTCPConnection implements Closeable {
 
         List<OutNetMessage> pending = new ArrayList<OutNetMessage>();
         synchronized(_writeLock) {
-        _writeBufs.clear();
-        _outbound.drainTo(pending);
+            _writeBufs.clear();
+            _outbound.drainTo(pending);
             if (!_currentOutbound.isEmpty())
                 pending.addAll(_currentOutbound);
             _currentOutbound.clear();
@@ -973,23 +973,23 @@ public class NTCPConnection implements Closeable {
         byte[] enc = new byte[2 + framelen];
 
         synchronized(_writeLock) {
-        if (_sender == null) {
-            if (_log.shouldInfo())
-                _log.info("Sender has disappeared", new Exception());
-            return;
-        }
-        try {
-            _sender.encryptWithAd(null, tmp, 0, enc, 2, payloadlen);
-        } catch (GeneralSecurityException gse) {
+            if (_sender == null) {
+                if (_log.shouldInfo())
+                    _log.info("Sender has disappeared", new Exception());
+                return;
+            }
+            try {
+                _sender.encryptWithAd(null, tmp, 0, enc, 2, payloadlen);
+            } catch (GeneralSecurityException gse) {
             // TODO anything else?
-            _log.error("Data encryption error", gse);
-            return;
-        }
+                _log.error("Data encryption error", gse);
+                return;
+            }
         // siphash ^ len
-        long sipIV = SipHashInline.hash24(_sendSipk1, _sendSipk2, _sendSipIV);
+            long sipIV = SipHashInline.hash24(_sendSipk1, _sendSipk2, _sendSipIV);
             toLong8LE(_sendSipIV, 0, sipIV);
-        enc[0] = (byte) ((framelen >> 8) ^ (sipIV >> 8));
-        enc[1] = (byte) (framelen ^ sipIV);
+            enc[0] = (byte) ((framelen >> 8) ^ (sipIV >> 8));
+            enc[1] = (byte) (framelen ^ sipIV);
             wantsWrite(enc);
         }
 
@@ -1225,10 +1225,10 @@ public class NTCPConnection implements Closeable {
         _writeBufs.remove(buf);
         if (clearMessage) {
             List<OutNetMessage> msgs = null;
-                if (!_currentOutbound.isEmpty()) {
-                    msgs = new ArrayList<OutNetMessage>(_currentOutbound);
-                    _currentOutbound.clear();
-                }
+            if (!_currentOutbound.isEmpty()) {
+                msgs = new ArrayList<OutNetMessage>(_currentOutbound);
+                _currentOutbound.clear();
+            }
             // push through the bw limiter to reach _writeBufs
             if (!_outbound.isEmpty())
                 _transport.getWriter().wantsWrite(this, "write completed");
@@ -1314,9 +1314,9 @@ public class NTCPConnection implements Closeable {
     void recvEncryptedI2NP(ByteBuffer buf) {
         if (isBanned()) {return;}
         synchronized(_readLock) {
-        if (_curReadState == null)
-            throw new IllegalStateException("not established");
-        _curReadState.receive(buf);
+            if (_curReadState == null)
+                throw new IllegalStateException("not established");
+            _curReadState.receive(buf);
         }
     }
 
@@ -1817,7 +1817,7 @@ public class NTCPConnection implements Closeable {
             if (reason == REASON_BANNED && _remotePeer != null) {
                 byte[] ip = getRemoteIP();
                 int port = getRemotePort();
-                String ipPort = (ip != null && ip.length == 4) ? 
+                String ipPort = (ip != null && ip.length == 4) ?
                     (ip[0] & 0xff) + "." + (ip[1] & 0xff) + "." + (ip[2] & 0xff) + "." + (ip[3] & 0xff) + ":" + port :
                     "UNKNOWN";
                 _banLogger.logBan(_remotePeer.calculateHash(), ipPort, "They banned us", 2*60*60*1000);

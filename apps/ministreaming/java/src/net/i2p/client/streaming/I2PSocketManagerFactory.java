@@ -265,7 +265,7 @@ public class I2PSocketManagerFactory {
      * @return the newly created socket manager, or null if there were errors
      */
     public static I2PSocketManager createManager(InputStream myPrivateKeyStream, String i2cpHost, int i2cpPort, Properties opts) {
-         return createManager(myPrivateKeyStream, i2cpHost, i2cpPort, opts, IncomingConnectionFilter.ALLOW);
+        return createManager(myPrivateKeyStream, i2cpHost, i2cpPort, opts, IncomingConnectionFilter.ALLOW);
     }
 
     /**

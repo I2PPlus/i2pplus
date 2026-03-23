@@ -50,7 +50,7 @@ public class RateStatTest extends TestCase {
     @Test
     public void testRateStat() throws Exception{
         RateStat rs = new RateStat("moo", "moo moo moo", "cow trueisms", new long[] { 60 * 1000, 60 * 60 * 1000,
-                                                                                     24 * 60 * 60 * 1000});
+                                                                                      24 * 60 * 60 * 1000});
         // Use deterministic timestamps instead of Thread.sleep to avoid timing issues
         long currentTime = System.currentTimeMillis();
         for (int i = 0; i < 50; i++) {
@@ -68,8 +68,8 @@ public class RateStatTest extends TestCase {
         props.load(new java.io.ByteArrayInputStream(data));
 
         RateStat loadedRs = new RateStat("moo", "moo moo moo", "cow trueisms", new long[] { 60 * 1000,
-                                                                                           60 * 60 * 1000,
-                                                                                           24 * 60 * 60 * 1000});
+                                                                                            60 * 60 * 1000,
+                                                                                            24 * 60 * 60 * 1000});
         loadedRs.load(props, "rateStat.test", true);
 
         // Compare basic properties instead of full object which includes timing-dependent data

@@ -14,7 +14,7 @@ package net.i2p.data;
  * @author jrandom
  */
 
- public class PayloadTest extends StructureTest{
+public class PayloadTest extends StructureTest{
 
     @Override
     public DataStructure createDataStructure() throws DataFormatException {

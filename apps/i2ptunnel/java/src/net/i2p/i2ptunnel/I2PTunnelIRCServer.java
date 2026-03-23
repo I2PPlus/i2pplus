@@ -161,7 +161,7 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
                 socket.getOutputStream().write(ERR_REGISTRATION.getBytes("ISO-8859-1"));
             } catch (IOException ioe) {
             } finally {
-                 try { socket.close(); } catch (IOException ioe) {}
+                try { socket.close(); } catch (IOException ioe) {}
             }
             if (_log.shouldWarn())
                 _log.warn("Error while receiving the new IRC Connection", ex);
@@ -172,7 +172,7 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
                 socket.getOutputStream().write(ERR_EOF.getBytes("ISO-8859-1"));
             } catch (IOException ioe) {
             } finally {
-                 try { socket.close(); } catch (IOException ioe) {}
+                try { socket.close(); } catch (IOException ioe) {}
             }
             if (_log.shouldWarn())
                 _log.warn("Error while receiving the new IRC Connection", ex);
@@ -183,7 +183,7 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
                 socket.getOutputStream().write(ERR_TIMEOUT.getBytes("ISO-8859-1"));
             } catch (IOException ioe) {
             } finally {
-                 try { socket.close(); } catch (IOException ioe) {}
+                try { socket.close(); } catch (IOException ioe) {}
             }
             if (_log.shouldWarn())
                 _log.warn("Error while receiving the new IRC Connection", ex);

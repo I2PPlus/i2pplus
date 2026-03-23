@@ -263,8 +263,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * @throws IllegalStateException if called on a client database
      */
     protected final PeerSelector createPeerSelector() {
-       if (isClientDb()) {throw new IllegalStateException();}
-       return new FloodfillPeerSelector(_context);
+        if (isClientDb()) {throw new IllegalStateException();}
+        return new FloodfillPeerSelector(_context);
     }
 
     /**
@@ -337,7 +337,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         // TODO: make sure exploreQueue isn't null before assigning
         for (Iterator<Hash> iter = keys.iterator(); iter.hasNext() && _exploreKeys.size() < MAX_EXPLORE_QUEUE;) {
             _exploreKeys.add(iter.next());
-         }
+        }
         _context.statManager().addRateData("netDb.exploreKeySet", _exploreKeys.size());
     }
 
@@ -563,7 +563,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      */
     @Override
     public List<BlindData> getBlindData() {
-       return blindCache().getData();
+        return blindCache().getData();
     }
 
     /**
@@ -1330,10 +1330,10 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             }
         } else if (type == DatabaseEntry.KEY_TYPE_LS2 || type == DatabaseEntry.KEY_TYPE_META_LS2) {
              // if it came in via garlic
-             LeaseSet2 ls2 = (LeaseSet2) leaseSet;
-             if (ls2.isBlindedWhenPublished()) {
-                 Destination dest = leaseSet.getDestination();
-                 if (dest != null) {blindCache().setBlinded(dest, null, null);}
+            LeaseSet2 ls2 = (LeaseSet2) leaseSet;
+            if (ls2.isBlindedWhenPublished()) {
+                Destination dest = leaseSet.getDestination();
+                if (dest != null) {blindCache().setBlinded(dest, null, null);}
             }
         }
         return rv;
@@ -1511,7 +1511,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * @return true if the router has invalid NTCP addresses and was banned, false otherwise
      * @since 0.9.67+
      */
-     private boolean banInvalidNTCPAddresses(RouterInfo routerInfo, long now, String caps, String routerId) {
+    private boolean banInvalidNTCPAddresses(RouterInfo routerInfo, long now, String caps, String routerId) {
         for (RouterAddress ra : routerInfo.getTargetAddresses("NTCP2")) {
             String i = ra.getOption("i");
             if (i != null && i.length() != 24) {
@@ -1640,7 +1640,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         return false;
     }
 
-     private boolean checkXG(RouterInfo routerInfo, String caps, String routerId, Hash h) {
+    private boolean checkXG(RouterInfo routerInfo, String caps, String routerId, Hash h) {
         if (isRouterXG(routerInfo, h.equals(_context.routerHash()))) {
             if (!_context.banlist().isBanlisted(h)) {
                 boolean isFF = caps != null && caps.contains("f");
@@ -2065,8 +2065,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             _log.info("Dropping LeaseSet [" + dbEntry.toBase32().substring(0,8) + "] -> Lookup / tunnel failure");
         }
 
-       if (knownLeaseSetsCount.get() <= 0 && _log.shouldInfo()) {
-           _log.warn("Attempted to decrement LeaseSet count when already at " + knownLeaseSetsCount.get());
+        if (knownLeaseSetsCount.get() <= 0 && _log.shouldInfo()) {
+            _log.warn("Attempted to decrement LeaseSet count when already at " + knownLeaseSetsCount.get());
         }
         knownLeaseSetsCount.decrementAndGet();
 

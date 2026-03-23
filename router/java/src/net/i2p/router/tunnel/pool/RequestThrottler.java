@@ -77,7 +77,7 @@ class RequestThrottler {
     private final static String PROP_BLOCK_COUNTRIES = "router.blockCountries";
     private final static String DEFAULT_BLOCK_COUNTRIES = "";
 
-     RequestThrottler(RouterContext ctx) {
+    RequestThrottler(RouterContext ctx) {
         this.context = ctx;
         this.counter = new ObjectCounter<Hash>();
         this._burstCounter = new BurstWindowCounter(BURST_WINDOW_MS, BURST_BUCKET_COUNT);

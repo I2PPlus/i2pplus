@@ -299,7 +299,7 @@ public class PackerImpl  extends TLGlobals implements Pack200.Packer {
                 this.je = je;
                 int timeSecs = getModtime(je.getTime()); // TODO Revert to using je.getLocalTime() after upgrading to Java 9+
                 if (keepModtime && timeSecs != Constants.NO_MODTIME) {
-                     this.modtime = timeSecs;
+                    this.modtime = timeSecs;
                 } else if (latestModtime && timeSecs > pkg.default_modtime) {
                     pkg.default_modtime = timeSecs;
                 }

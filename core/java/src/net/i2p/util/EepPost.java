@@ -254,87 +254,87 @@ public class EepPost extends EepGet {
         try {
             int c;
             while ((c = g.getopt()) != -1) {
-              switch (c) {
-                case 'p':
-                    String s = g.getOptarg();
-                    int colon = s.indexOf(':');
-                    if (colon >= 0) {
+                switch (c) {
+                    case 'p':
+                        String s = g.getOptarg();
+                        int colon = s.indexOf(':');
+                        if (colon >= 0) {
                         // Todo IPv6 [a:b:c]:4444
-                        proxyHost = s.substring(0, colon);
-                        String port = s.substring(colon + 1);
-                        proxyPort = Integer.parseInt(port);
-                    } else {
-                        proxyHost = s;
+                            proxyHost = s.substring(0, colon);
+                            String port = s.substring(colon + 1);
+                            proxyPort = Integer.parseInt(port);
+                        } else {
+                            proxyHost = s;
                         // proxyPort remains default
-                    }
-                    break;
+                        }
+                        break;
 
-                case 'c':
+                    case 'c':
                     // no proxy, same as -p :0
-                    proxyHost = "";
-                    proxyPort = 0;
-                    break;
+                        proxyHost = "";
+                        proxyPort = 0;
+                        break;
 
-                case 'f': {
-                    String[] t = DataHelper.split(g.getOptarg(), "=", 2);
-                    if (t.length == 2 && t[0].length() > 0)
-                        fields.put(t[0], new File(t[1]));
-                    else
+                    case 'f': {
+                        String[] t = DataHelper.split(g.getOptarg(), "=", 2);
+                        if (t.length == 2 && t[0].length() > 0)
+                            fields.put(t[0], new File(t[1]));
+                        else
+                            error = true;
+                        break;
+                    }
+
+                    case 'l':
+                        lineLen = Integer.parseInt(g.getOptarg());
+                        break;
+
+                    case 'm':
+                        markSize = Integer.parseInt(g.getOptarg());
+                        break;
+
+                    case 'n':
+                        numRetries = Integer.parseInt(g.getOptarg());
+                        break;
+
+                    case 'o':
+                        saveAs = g.getOptarg();
+                        break;
+
+                    case 's': {
+                        String[] t = DataHelper.split(g.getOptarg(), "=", 2);
+                        if (t.length == 2 && t[0].length() > 0)
+                            fields.put(t[0], t[1]);
+                        else
+                            error = true;
+                        break;
+                    }
+
+                    case 't':
+                        inactivityTimeout = 1000 * Integer.parseInt(g.getOptarg());
+                        break;
+
+                    case 'u':
+                        username = g.getOptarg();
+                        break;
+
+                    case 'v':
+                        headerTimeout = 1000 * Integer.parseInt(g.getOptarg());
+                        break;
+
+                    case 'w':
+                        totalTimeout = 1000 * Integer.parseInt(g.getOptarg());
+                        break;
+
+                    case 'x':
+                        password = g.getOptarg();
+                        break;
+
+                    case '?':
+                    case ':':
+                    default:
                         error = true;
-                    break;
-                }
-
-                case 'l':
-                    lineLen = Integer.parseInt(g.getOptarg());
-                    break;
-
-                case 'm':
-                    markSize = Integer.parseInt(g.getOptarg());
-                    break;
-
-                case 'n':
-                    numRetries = Integer.parseInt(g.getOptarg());
-                    break;
-
-                case 'o':
-                    saveAs = g.getOptarg();
-                    break;
-
-                case 's': {
-                    String[] t = DataHelper.split(g.getOptarg(), "=", 2);
-                    if (t.length == 2 && t[0].length() > 0)
-                        fields.put(t[0], t[1]);
-                    else
-                        error = true;
-                    break;
-                }
-
-                case 't':
-                    inactivityTimeout = 1000 * Integer.parseInt(g.getOptarg());
-                    break;
-
-                case 'u':
-                    username = g.getOptarg();
-                    break;
-
-                case 'v':
-                    headerTimeout = 1000 * Integer.parseInt(g.getOptarg());
-                    break;
-
-                case 'w':
-                    totalTimeout = 1000 * Integer.parseInt(g.getOptarg());
-                    break;
-
-                case 'x':
-                    password = g.getOptarg();
-                    break;
-
-                case '?':
-                case ':':
-                default:
-                    error = true;
-                    break;
-              }  // switch
+                        break;
+                }  // switch
             } // while
         } catch (RuntimeException e) {
             e.printStackTrace();

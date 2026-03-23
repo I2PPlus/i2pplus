@@ -287,7 +287,7 @@ public class Banlist {
         String logReason = reason.replace("<b>➜</b>", "->");
         if (_log.shouldInfo()) {
             _log.info("Banning [" + peer.toBase64().substring(0,6) + "] for " + banDuration + " minutes " +
-               ((transport != null) ? "on transport " + transport : "") + logReason);
+                ((transport != null) ? "on transport " + transport : "") + logReason);
         }
 
         Entry e = new Entry();

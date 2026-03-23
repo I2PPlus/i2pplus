@@ -245,11 +245,11 @@ public class PeerTestJob extends JobImpl {
         if (lag > 300 || SystemVersion.getCPULoadAvg() > 80) {
             requeue(getPeerTestDelay() * 2);
             if (_log.shouldWarn())
-            if (lag > 300) {
-                _log.info("High Job lag (" + lag + "ms) -> Increasing delay before next run to " + getPeerTestDelay() * 2 + "ms");
-            } else {
-                _log.info("High CPU load -> Increasing delay before next run to " + getPeerTestDelay() * 2 + "ms");
-            }
+                if (lag > 300) {
+                    _log.info("High Job lag (" + lag + "ms) -> Increasing delay before next run to " + getPeerTestDelay() * 2 + "ms");
+                } else {
+                    _log.info("High CPU load -> Increasing delay before next run to " + getPeerTestDelay() * 2 + "ms");
+                }
         } else {
             requeue(getPeerTestDelay());
         }

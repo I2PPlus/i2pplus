@@ -83,21 +83,21 @@ public class PcapWriter implements Closeable, Flushable {
         //if (f.exists()) {
         //    _fos = new FileOutputStream(f, true);
         //} else {
-            _fos = new BufferedOutputStream(new FileOutputStream(f), 64*1024);
-            _fos.write(FILE_HEADER);
+        _fos = new BufferedOutputStream(new FileOutputStream(f), 64*1024);
+        _fos.write(FILE_HEADER);
         //}
     }
 
     public void close() {
-            try {
-                _fos.close();
-            } catch (IOException ioe) {}
+        try {
+            _fos.close();
+        } catch (IOException ioe) {}
     }
 
     public void flush() {
-            try {
-                _fos.flush();
-            } catch (IOException ioe) {}
+        try {
+            _fos.flush();
+        } catch (IOException ioe) {}
     }
 
     /**
@@ -346,7 +346,7 @@ public class PcapWriter implements Closeable, Flushable {
         public int size() { return ((_len + 3) / 4) * 4; }
 
         public void add(byte type) {
-             add(type, 0, 0);
+            add(type, 0, 0);
         }
 
         public void add(byte type, int datalen, int data) {

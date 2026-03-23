@@ -395,35 +395,35 @@ public class CPUID {
      */
     private static final void loadNative() {
         try {
-        String wantedProp = System.getProperty("jcpuid.enable", "true");
-        boolean wantNative = Boolean.parseBoolean(wantedProp);
-        if (wantNative) {
-            boolean loaded = loadGeneric();
-            if (loaded) {
-                _nativeOk = true;
-                if (_doLog) {
-                    System.err.println("INFO: Native CPUID library " + getLibraryMiddlePart() + " loaded from file");
-                }
-            } else {
-                loaded = loadFromResource();
+            String wantedProp = System.getProperty("jcpuid.enable", "true");
+            boolean wantNative = Boolean.parseBoolean(wantedProp);
+            if (wantNative) {
+                boolean loaded = loadGeneric();
                 if (loaded) {
                     _nativeOk = true;
                     if (_doLog) {
-                        System.err.println("INFO: Native CPUID library " + getResourceName() + " loaded from resource");
+                        System.err.println("INFO: Native CPUID library " + getLibraryMiddlePart() + " loaded from file");
                     }
                 } else {
-                    _nativeOk = false;
-                    if (_doLog) {
-                        System.err.println("WARNING: Native CPUID library jcpuid not loaded - will not be able to read CPU information using CPUID");
+                    loaded = loadFromResource();
+                    if (loaded) {
+                        _nativeOk = true;
+                        if (_doLog) {
+                            System.err.println("INFO: Native CPUID library " + getResourceName() + " loaded from resource");
+                        }
+                    } else {
+                        _nativeOk = false;
+                        if (_doLog) {
+                            System.err.println("WARNING: Native CPUID library jcpuid not loaded - will not be able to read CPU information using CPUID");
+                        }
                     }
                 }
+                _jcpuidVersion = fetchJcpuidVersion();
+            } else {
+                if (_doLog) {
+                    System.err.println("INFO: Native CPUID library jcpuid not loaded - will not be able to read CPU information using CPUID");
+                }
             }
-            _jcpuidVersion = fetchJcpuidVersion();
-        } else {
-            if (_doLog) {
-                System.err.println("INFO: Native CPUID library jcpuid not loaded - will not be able to read CPU information using CPUID");
-            }
-        }
         } catch(Exception e) {
             if (_doLog) {
                 System.err.println("INFO: Native CPUID library jcpuid not loaded\n* Reason: '" + e.getMessage() +

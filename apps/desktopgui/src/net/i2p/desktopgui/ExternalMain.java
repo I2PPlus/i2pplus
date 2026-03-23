@@ -142,7 +142,7 @@ public class ExternalMain implements ClientApp, NotificationService {
      * More info: http://java.sun.com/javase/6/docs/api/java/awt/doc-files/AWTThreadIssues.html#Autoshutdown
      */
     private static void launchForeverLoop() {
-       Runnable r = new Runnable() {
+        Runnable r = new Runnable() {
             public void run() {
                 try {
                     Object o = new Object();

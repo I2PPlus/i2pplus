@@ -32,11 +32,11 @@ class SAMv2Handler extends SAMv1Handler implements SAMRawReceiver, SAMDatagramRe
 		 * @param verMajor SAM major version to manage (should be 2)
 		 * @param verMinor SAM minor version to manage
 		 */
-		public SAMv2Handler(SocketChannel s, int verMajor, int verMinor,
+    public SAMv2Handler(SocketChannel s, int verMajor, int verMinor,
 		                     SAMBridge parent) throws SAMException, IOException
-		{
-			this(s, verMajor, verMinor, new Properties(), parent);
-		}
+    {
+        this(s, verMajor, verMinor, new Properties(), parent);
+    }
 
 		/**
 		 * Create a new SAM version 2 handler.  This constructor expects
@@ -49,141 +49,141 @@ class SAMv2Handler extends SAMv1Handler implements SAMRawReceiver, SAMDatagramRe
 		 * @param i2cpProps properties to configure the I2CP connection (host, port, etc)
 		 */
 
-		public SAMv2Handler(SocketChannel s, int verMajor, int verMinor,
+    public SAMv2Handler(SocketChannel s, int verMajor, int verMinor,
 		                    Properties i2cpProps, SAMBridge parent) throws SAMException, IOException
-		{
-			super(s, verMajor, verMinor, i2cpProps, parent);
-		}
+    {
+        super(s, verMajor, verMinor, i2cpProps, parent);
+    }
 
-		@Override
+    @Override
 		public boolean verifVersion()
-		{
-			return (verMajor == 2);
-		}
+    {
+        return (verMajor == 2);
+    }
 
-		SAMStreamSession newSAMStreamSession(String destKeystream, String direction, Properties props )
+    SAMStreamSession newSAMStreamSession(String destKeystream, String direction, Properties props )
 				throws IOException, DataFormatException, SAMException
-		{
-			return new SAMv2StreamSession(destKeystream, direction, props, this) ;
-		}
+    {
+        return new SAMv2StreamSession(destKeystream, direction, props, this) ;
+    }
 
 
 		/* Parse and execute a STREAM message */
-		@Override
+    @Override
 		protected boolean execStreamMessage ( String opcode, Properties props )
-		{
-			if ( getStreamSession() == null )
-			{
-				_log.error ( "STREAM message received, but no STREAM session exists" );
-				return false;
-			}
+    {
+        if ( getStreamSession() == null )
+        {
+            _log.error ( "STREAM message received, but no STREAM session exists" );
+            return false;
+        }
 
-			if ( opcode.equals ( "SEND" ) )
-			{
-				return execStreamSend ( props );
-			}
-			else if ( opcode.equals ( "CONNECT" ) )
-			{
-				return execStreamConnect ( props );
-			}
-			else if ( opcode.equals ( "CLOSE" ) )
-			{
-				return execStreamClose ( props );
-			}
-			else if ( opcode.equals ( "RECEIVE") )
-			{
-				return execStreamReceive( props );
-			}
-			else
-			{
-				if (_log.shouldDebug())
+        if ( opcode.equals ( "SEND" ) )
+        {
+            return execStreamSend ( props );
+        }
+        else if ( opcode.equals ( "CONNECT" ) )
+        {
+            return execStreamConnect ( props );
+        }
+        else if ( opcode.equals ( "CLOSE" ) )
+        {
+            return execStreamClose ( props );
+        }
+        else if ( opcode.equals ( "RECEIVE") )
+        {
+            return execStreamReceive( props );
+        }
+        else
+        {
+            if (_log.shouldDebug())
 					_log.debug ( "Unrecognized RAW message opcode: \""
 						+ opcode + "\"" );
-				return false;
-			}
-		}
+            return false;
+        }
+    }
 
 
 
 
 
-		private boolean execStreamReceive ( Properties props )
-		{
-			if (props.isEmpty())
-			{
-				if (_log.shouldDebug())
+    private boolean execStreamReceive ( Properties props )
+    {
+        if (props.isEmpty())
+        {
+            if (_log.shouldDebug())
 					_log.debug ( "No parameters specified in STREAM RECEIVE message" );
-				return false;
-			}
+            return false;
+        }
 
-			int id;
+        int id;
 
-			{
-				String strid = props.getProperty ( "ID" );
+        {
+            String strid = props.getProperty ( "ID" );
 
-				if ( strid == null )
-				{
-					if (_log.shouldDebug())
+            if ( strid == null )
+            {
+                if (_log.shouldDebug())
 						_log.debug ( "ID not specified in STREAM RECEIVE message" );
-					return false;
-				}
+                return false;
+            }
 
-				try
-				{
-					id = Integer.parseInt ( strid );
-				}
-				catch ( NumberFormatException e )
-				{
-					if (_log.shouldDebug())
+            try
+            {
+                id = Integer.parseInt ( strid );
+            }
+            catch ( NumberFormatException e )
+            {
+                if (_log.shouldDebug())
 						_log.debug ( "Invalid STREAM RECEIVE ID specified: " + strid );
-					return false;
-				}
-			}
+                return false;
+            }
+        }
 
-			boolean nolimit = false;
+        boolean nolimit = false;
 
-			long limit = 0;
-			{
-				String strsize = props.getProperty ( "LIMIT" );
+        long limit = 0;
+        {
+            String strsize = props.getProperty ( "LIMIT" );
 
-				if ( strsize == null )
-				{
-					if (_log.shouldDebug())
+            if ( strsize == null )
+            {
+                if (_log.shouldDebug())
 						_log.debug ( "Limit not specified in STREAM RECEIVE message" );
-					return false;
-				}
+                return false;
+            }
 
-				if ( strsize.equals( "NONE" ) )
-				{
-					nolimit = true ;
-				}
-				else
-				{
-					try
-					{
-						limit = Long.parseLong ( strsize );
-					}
-					catch ( NumberFormatException e )
-					{
-						if (_log.shouldDebug())
+            if ( strsize.equals( "NONE" ) )
+            {
+                nolimit = true ;
+            }
+            else
+            {
+                try
+                {
+                    limit = Long.parseLong ( strsize );
+                }
+                catch ( NumberFormatException e )
+                {
+                    if (_log.shouldDebug())
 							_log.debug ( "Invalid STREAM RECEIVE size specified: " + strsize );
-						return false;
-					}
+                    return false;
+                }
 
-					if ( limit < 0 )
-					{
-						if (_log.shouldDebug())
+                if ( limit < 0 )
+                {
+                    if (_log.shouldDebug())
 							_log.debug ( "Specified limit (" + limit
 								+ ") is out of protocol limits" );
-						return false;
-					}
-				}
-			}
+                    return false;
+                }
+            }
+        }
 
-			getStreamSession().setReceiveLimit ( id, limit, nolimit ) ;
+        getStreamSession().setReceiveLimit ( id, limit, nolimit ) ;
 
-			return true;
-		}
+        return true;
+    }
 
 
 }

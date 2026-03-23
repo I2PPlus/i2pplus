@@ -25,7 +25,7 @@ import junit.framework.TestCase;
 
 public class SipHashInlineTest extends TestCase {
     private long[] EXPECTED = new long[] {
-	0x726fdb47dd0e0e31L,
+        0x726fdb47dd0e0e31L,
 	    0x74f839c593dc67fdL,
 	    0x0d6c8009d9a94f5aL,
 	    0x85676696d7fb7e2dL,
@@ -93,14 +93,14 @@ public class SipHashInlineTest extends TestCase {
 
     // Ported from test vectors in siphash24.c at https://www.131002.net/siphash/siphash24.c
     public void testVectors() {
-	long k0 = 0x0706050403020100L;
-	long k1 = 0x0f0e0d0c0b0a0908L;
-	for (int i = 0; i < EXPECTED.length; ++i) {
-	    byte[] msg = new byte[i];
-	    for (int j = 0; j < i; ++j) {
-		msg[j] = (byte) j;
-	    }
-	    assertEquals(EXPECTED[i], SipHashInline.hash24(k0, k1, msg));
-	}
+        long k0 = 0x0706050403020100L;
+        long k1 = 0x0f0e0d0c0b0a0908L;
+        for (int i = 0; i < EXPECTED.length; ++i) {
+            byte[] msg = new byte[i];
+            for (int j = 0; j < i; ++j) {
+                msg[j] = (byte) j;
+            }
+            assertEquals(EXPECTED[i], SipHashInline.hash24(k0, k1, msg));
+        }
     }
 }

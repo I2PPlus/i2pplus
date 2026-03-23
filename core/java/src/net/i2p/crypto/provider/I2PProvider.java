@@ -30,7 +30,7 @@ public final class I2PProvider extends Provider {
             @Override
             public Void run() {
 */
-                setup();
+        setup();
 /*
                 return null;
             }

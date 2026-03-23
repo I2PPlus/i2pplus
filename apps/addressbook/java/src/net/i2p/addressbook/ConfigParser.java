@@ -126,7 +126,7 @@ class ConfigParser {
                 try {fileStream.close();}
                 catch (IOException ioe) {
                 // Ignore IOException
-            }
+                }
             }
         }
     }
@@ -167,7 +167,7 @@ class ConfigParser {
             if (!fileParsedSuccessfully) {write(result, file);}
         } catch (IOException exp) {
                 // Ignore IOException
-            }
+        }
         return result;
     }
 
@@ -240,7 +240,7 @@ class ConfigParser {
                 try {fileStream.close();}
                 catch (IOException ioe) {
                 // Ignore IOException
-            }
+                }
             }
         }
     }
@@ -269,7 +269,7 @@ class ConfigParser {
                 try {writeSubscriptions(result, file);} // TODO log
                 catch (IOException ioe) {
                 // Ignore IOException
-            }
+                }
             }
         } catch (IOException exp) {
             result = list;

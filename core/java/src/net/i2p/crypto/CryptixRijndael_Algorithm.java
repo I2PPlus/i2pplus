@@ -38,11 +38,11 @@ public final class CryptixRijndael_Algorithm // implicit no-argument constructor
     private static final byte[] _rcon = new byte[30];
 
     private static final int[][][] _shifts = new int[][][] { { { 0, 0}, { 1, 3}, { 2, 2}, { 3, 1}},
-                                                    { { 0, 0}, { 1, 5}, { 2, 4}, { 3, 3}},
-                                                    { { 0, 0}, { 1, 7}, { 3, 5}, { 4, 4}}};
+                                                             { { 0, 0}, { 1, 5}, { 2, 4}, { 3, 3}},
+                                                             { { 0, 0}, { 1, 7}, { 3, 5}, { 4, 4}}};
 
     private static final char[] _HEX_DIGITS = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D',
-                                               'E', 'F'};
+                                                'E', 'F'};
 
     // Static code - to intialise S-boxes and T-boxes
     //...........................................................................
@@ -65,8 +65,8 @@ public final class CryptixRijndael_Algorithm // implicit no-argument constructor
             _log[_alog[i]] = i;
         }
         byte[][] A = new byte[][] { { 1, 1, 1, 1, 1, 0, 0, 0}, { 0, 1, 1, 1, 1, 1, 0, 0}, { 0, 0, 1, 1, 1, 1, 1, 0},
-                                   { 0, 0, 0, 1, 1, 1, 1, 1}, { 1, 0, 0, 0, 1, 1, 1, 1}, { 1, 1, 0, 0, 0, 1, 1, 1},
-                                   { 1, 1, 1, 0, 0, 0, 1, 1}, { 1, 1, 1, 1, 0, 0, 0, 1}};
+                                    { 0, 0, 0, 1, 1, 1, 1, 1}, { 1, 0, 0, 0, 1, 1, 1, 1}, { 1, 1, 0, 0, 0, 1, 1, 1},
+                                    { 1, 1, 1, 0, 0, 0, 1, 1}, { 1, 1, 1, 1, 0, 0, 0, 1}};
         byte[] B = new byte[] { 0, 1, 1, 0, 0, 0, 1, 1};
 
         //
@@ -567,13 +567,13 @@ public final class CryptixRijndael_Algorithm // implicit no-argument constructor
      */
     public static final int getRounds(int keySize, int blockSize) {
         switch (keySize) {
-        case 16:
-            return blockSize == 16 ? 10 : (blockSize == 24 ? 12 : 14);
-        case 24:
-            return blockSize != 32 ? 12 : 14;
-        default:
+            case 16:
+                return blockSize == 16 ? 10 : (blockSize == 24 ? 12 : 14);
+            case 24:
+                return blockSize != 32 ? 12 : 14;
+            default:
             // 32 bytes = 256 bits
-            return 14;
+                return 14;
         }
     }
 

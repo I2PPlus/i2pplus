@@ -160,14 +160,14 @@ public class XI2PLocationFilter extends HandlerWrapper {
 
     @Override
     public void handle(final String target, final Request request, final HttpServletRequest httpRequest, HttpServletResponse httpResponse)
-    throws IOException, ServletException {
+        throws IOException, ServletException {
         final String hashHeader = httpRequest.getHeader("X-I2P-DestHash");
 
         if (hashHeader == null) {
             if (shouldRecheck()) {
                 String xi2plocation = getXI2PLocation(request.getLocalAddr(), String.valueOf(request.getLocalPort()));
                 if (_log.shouldInfo())
-                   _log.info("Checking X-I2P-Location header for " + request.getLocalAddr() + ":" + request.getLocalPort() + " (Prefix: " + xi2plocation + ")");
+                    _log.info("Checking X-I2P-Location header for " + request.getLocalAddr() + ":" + request.getLocalPort() + " (Prefix: " + xi2plocation + ")");
                 setLocation(xi2plocation);
             }
             String headerURL = headerContents(httpRequest);

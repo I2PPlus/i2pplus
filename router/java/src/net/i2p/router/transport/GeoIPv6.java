@@ -319,7 +319,7 @@ public class GeoIPv6 {
 
         @Override
         public final String toString() {
-                return "0x" + Long.toHexString(from) + " -> 0x" + Long.toHexString(to) + " : " + cc;
+            return "0x" + Long.toHexString(from) + " -> 0x" + Long.toHexString(to) + " : " + cc;
         }
     }
 

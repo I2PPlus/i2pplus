@@ -69,7 +69,7 @@ class CodingChooser {
 
     // Element in sorted set of coding choices:
     static
-    class Choice {
+        class Choice {
         final Coding coding;
         final int index;       // index in choices
         final int[] distance;  // cache of distance
@@ -858,7 +858,7 @@ class CodingChooser {
     }
 
     private
-    int[] computePopSizePrivate(PopulationCoding pop,
+        int[] computePopSizePrivate(PopulationCoding pop,
                                 Coding favoredCoding,
                                 Coding unfavoredCoding) {
         if (popHelper == null) {
@@ -1142,12 +1142,12 @@ class CodingChooser {
     }
 
     private static
-    String pct(double num, double den) {
+        String pct(double num, double den) {
         return (Math.round((num / den)*10000)/100.0)+"%";
     }
 
     static
-    class Sizer extends OutputStream {
+        class Sizer extends OutputStream {
         final OutputStream out;  // if non-null, copy output here also
         Sizer(OutputStream out) {
             this.out = out;

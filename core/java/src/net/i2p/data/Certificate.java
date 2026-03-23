@@ -16,7 +16,7 @@ import java.util.Arrays;
 
 /**
  * Extensible certificate system for I2P structures providing metadata and capabilities.
- * 
+ *
  * <p>Certificate offers flexible metadata attachment to I2P identities:</p>
  * <ul>
  *   <li><strong>Metadata:</strong> Additional information beyond cryptographic keys</li>
@@ -25,7 +25,7 @@ import java.util.Arrays;
  *   <li><strong>Extensible:</strong> Support for multiple certificate types and formats</li>
  *   <li><strong>Optional:</strong> Structures can have NULL certificates for minimal overhead</li>
  * </ul>
- * 
+ *
  * <p><strong>Supported Certificate Types:</strong></p>
  * <ul>
  *   <li>{@link #CERTIFICATE_TYPE_NULL} - No certificate (default)</li>
@@ -34,7 +34,7 @@ import java.util.Arrays;
  *   <li>{@link #CERTIFICATE_TYPE_MULTIPLE} - Contains multiple certificates</li>
  *   <li>{@link #CERTIFICATE_TYPE_KEY} - Specifies key types (KeyCertificate)</li>
  * </ul>
- * 
+ *
  * <p><strong>Common Use Cases:</strong></p>
  * <ul>
  *   <li><strong>Identity Verification:</strong> Prove authenticity of routers/destinations</li>
@@ -43,7 +43,7 @@ import java.util.Arrays;
  *   <li><strong>Resource Management:</strong> Indicate bandwidth or usage limitations</li>
  *   <li><strong>Trust Establishment:</strong> Certificate authority-based trust chains</li>
  * </ul>
- * 
+ *
  * <p><strong>Security Considerations:</strong></p>
  * <ul>
  *   <li><strong>Anonymous Network:</strong> CA-based certificates may not be appropriate</li>
@@ -51,7 +51,7 @@ import java.util.Arrays;
  *   <li><strong>Trust Validation:</strong> Carefully evaluate certificate authorities</li>
  *   <li><strong>Privacy Impact:</strong> Consider anonymity implications of certificates</li>
  * </ul>
- * 
+ *
  * <p><strong>Implementation Notes:</strong></p>
  * <ul>
  *   <li><strong>Multiple Certificates:</strong> Support for multiple certificates is planned</li>
@@ -59,7 +59,7 @@ import java.util.Arrays;
  *   <li><strong>Flexibility:</strong> Payload can contain arbitrary metadata</li>
  *   <li><strong>Backward Compatibility:</strong> Existing formats continue to be supported</li>
  * </ul>
- * 
+ *
  * <p><strong>Related Structures:</strong></p>
  * <ul>
  *   <li>{@link Destination} - Uses certificates for service identity</li>

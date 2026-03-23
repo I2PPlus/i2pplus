@@ -8,12 +8,12 @@ import java.util.Map;
 import net.i2p.crypto.SigType;
 
 /**
- * Implementation of MetaLeaseSet as specified in 
+ * Implementation of MetaLeaseSet as specified in
  * <a href="https://geti2p.net/spec/proposals/123-new-netdb-entries">Proposal 123: New NetDb Entries</a>.
- * 
+ *
  * <p>MetaLeaseSet is a specialized LeaseSet2 that contains references to other LeaseSets
  * rather than direct tunnel endpoints. This enables advanced routing and load balancing strategies.</p>
- * 
+ *
  * <p>Key characteristics of MetaLeaseSet:</p>
  * <ul>
  *   <li>Contains {@link MetaLease} objects instead of regular {@link Lease} objects</li>
@@ -22,7 +22,7 @@ import net.i2p.crypto.SigType;
  *   <li>Supports offline signatures for reduced router load</li>
  *   <li>Includes options and statistics support</li>
  * </ul>
- * 
+ *
  * <p><strong>Usage:</strong> MetaLeaseSets are used for:</p>
  * <ul>
  *   <li>Load balancing across multiple LeaseSets</li>
@@ -30,7 +30,7 @@ import net.i2p.crypto.SigType;
  *   <li>Fallback and redundancy strategies</li>
  *   <li>Service discovery and aggregation</li>
  * </ul>
- * 
+ *
  * <p><strong>Implementation Status:</strong> PRELIMINARY - Subject to change as the proposal evolves</p>
  *
  * @since 0.9.38

@@ -60,29 +60,29 @@ public class BundleRouterInfos {
         boolean error = false;
         int c;
         while ((c = g.getopt()) != -1) {
-          switch (c) {
-            case 'i':
-                in = g.getOptarg();
-                break;
+            switch (c) {
+                case 'i':
+                    in = g.getOptarg();
+                    break;
 
-            case 'o':
-                out = g.getOptarg();
-                break;
+                case 'o':
+                    out = g.getOptarg();
+                    break;
 
-            case 'c':
-                String scount = g.getOptarg();
-                try {
-                    count = Integer.parseInt(scount);
-                } catch (NumberFormatException nfe) {
+                case 'c':
+                    String scount = g.getOptarg();
+                    try {
+                        count = Integer.parseInt(scount);
+                    } catch (NumberFormatException nfe) {
+                        error = true;
+                    }
+                    break;
+
+                case '?':
+                case ':':
+                default:
                     error = true;
-                }
-                break;
-
-            case '?':
-            case ':':
-            default:
-                error = true;
-          }
+            }
         }
         if (error) {
             usage();

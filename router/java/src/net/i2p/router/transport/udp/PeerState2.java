@@ -322,12 +322,12 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
      * @since public since 0.9.57 for SSU2Sender interface only
      */
     public long getNextPacketNumber() throws IOException {
-         if (_dead) {
-             IOException ioe = new IOException("Peer is dead: " + _remotePeer.toBase64());
-             if (shouldLogDebug) {_log.debug("Router [" + _remotePeer.toBase64().substring(0,6) + "] is dead -> Cannot forward packet");}
-             throw ioe;
-         }
-         return _packetNumber.getAndIncrement();
+        if (_dead) {
+            IOException ioe = new IOException("Peer is dead: " + _remotePeer.toBase64());
+            if (shouldLogDebug) {_log.debug("Router [" + _remotePeer.toBase64().substring(0,6) + "] is dead -> Cannot forward packet");}
+            throw ioe;
+        }
+        return _packetNumber.getAndIncrement();
     }
 
     /**
@@ -982,15 +982,15 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                 int len = ba.getValid();
                 System.arraycopy(ba.getData(), 0, buf, off, len);
                 off += len;
-             }
-             if (off != sz) {
-                 if (_log.shouldWarn()) {
-                     _log.warn("[SSU] Hmm, offset of the fragments = " + off + " while the state says " + sz);
-                 }
-                 return;
-             }
-             I2NPMessage msg = I2NPMessageImpl.fromRawByteArrayNTCP2(_context, buf, 0, sz, null);
-             _transport.messageReceived(msg, null, _remotePeer, state.getLifetime(), sz);
+            }
+            if (off != sz) {
+                if (_log.shouldWarn()) {
+                    _log.warn("[SSU] Hmm, offset of the fragments = " + off + " while the state says " + sz);
+                }
+                return;
+            }
+            I2NPMessage msg = I2NPMessageImpl.fromRawByteArrayNTCP2(_context, buf, 0, sz, null);
+            _transport.messageReceived(msg, null, _remotePeer, state.getLifetime(), sz);
         } catch (I2NPMessageException ime) {
             if (shouldLogDebug) {
                 _log.warn("[SSU] Received invalid message... " + state + "\n* PeerState: " + this + ime);

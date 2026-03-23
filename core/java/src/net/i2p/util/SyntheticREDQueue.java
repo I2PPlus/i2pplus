@@ -65,10 +65,10 @@ public class SyntheticREDQueue implements BandwidthEstimator {
      * @param ctx the I2P application context
      * @param bwBps nominal output bandwidth in bytes per second
      */
-     public SyntheticREDQueue(I2PAppContext ctx, int bwBps) {
-         this(ctx, bwBps,
-         Math.max(1, (int)(bwBps / DEFAULT_LOW_THRESHOLD_DIV)),
-         Math.max(1, (int)(bwBps / DEFAULT_HIGH_THRESHOLD_DIV)));
+    public SyntheticREDQueue(I2PAppContext ctx, int bwBps) {
+        this(ctx, bwBps,
+             Math.max(1, (int)(bwBps / DEFAULT_LOW_THRESHOLD_DIV)),
+             Math.max(1, (int)(bwBps / DEFAULT_HIGH_THRESHOLD_DIV)));
     }
 
     /**

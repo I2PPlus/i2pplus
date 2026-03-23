@@ -102,11 +102,11 @@ public class ConfigTunnelsHelper extends HelperBase {
      *  @since 0.9.57
      */
     private class TPComparator implements Comparator<TunnelPoolSettings> {
-         private final Collator _comp = Collator.getInstance();
-         public int compare(TunnelPoolSettings l, TunnelPoolSettings r) {
-             int rv = _comp.compare(getTunnelName(l), getTunnelName(r));
-             if (rv != 0) {return rv;}
-             return l.getDestination().toBase32().compareTo(r.getDestination().toBase32());
+        private final Collator _comp = Collator.getInstance();
+        public int compare(TunnelPoolSettings l, TunnelPoolSettings r) {
+            int rv = _comp.compare(getTunnelName(l), getTunnelName(r));
+            if (rv != 0) {return rv;}
+            return l.getDestination().toBase32().compareTo(r.getDestination().toBase32());
         }
     }
 
@@ -155,17 +155,17 @@ public class ConfigTunnelsHelper extends HelperBase {
             out.getLength() + out.getLengthVariance() <= 0) {
             buf.append("<tbody><tr class=tunnelwarn><th colspan=4>")
                .append(_t("ANONYMITY WARNING - Settings include 0-hop tunnels."))
-               .append("</th></tr>\n");
+                .append("</th></tr>\n");
             if (TransportUtil.getIPv6Config(_context, "SSU") == TransportUtil.IPv6Config.IPV6_ONLY) {
                 buf.append("<tr class=tunnelwarn><th colspan=4>")
                    .append(_t("WARNING - 0-hop tunnels not recommended for IPv6-only routers."))
-                   .append("</th></tr>\n");
+                    .append("</th></tr>\n");
             }
             if ((in.getLength() <= 0 || in.getLength() + in.getLengthVariance() <= 0) &&
                 _context.router().isHidden()) {
                 buf.append("<tr class=tunnelwarn><th colspan=4>")
                    .append(_t("WARNING - Inbound 0-hop tunnels not recommended for hidden routers."))
-                   .append("</th></tr>\n");
+                    .append("</th></tr>\n");
             }
         } else if (in.getLength() <= 1 ||
             in.getLength() + in.getLengthVariance() <= 1 ||
@@ -173,7 +173,7 @@ public class ConfigTunnelsHelper extends HelperBase {
             out.getLength() + out.getLengthVariance() <= 1) {
             buf.append("<tr class=tunnelwarn><th colspan=4>")
                .append(_t("ANONYMITY WARNING - Settings include 1-hop tunnels."))
-               .append("</th></tr>\n");
+                .append("</th></tr>\n");
         }
         if (in.getLength() + Math.abs(in.getLengthVariance()) >= WARN_LENGTH ||
             out.getLength() + Math.abs(out.getLengthVariance()) >= WARN_LENGTH)

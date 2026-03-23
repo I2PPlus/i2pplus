@@ -116,8 +116,8 @@ public class LoadClientAppsJob extends JobImpl {
 
         public void timeReached() {
             if (!_ctx.router().isRunning()) {
-                 reschedule(1000);
-                 return;
+                reschedule(1000);
+                return;
             }
             super.timeReached();
         }

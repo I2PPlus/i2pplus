@@ -568,7 +568,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
                 if (peerB32.length() != 60) {
                     _log.warn("[HTTPServer] Invalid B32 (expected 60 characters, got " + peerB32.length() + ") -> Denying request to [" + hostname + "]" +
-                    "\n* Client: " + peerB32);
+                        "\n* Client: " + peerB32);
                     isValidRequest = false;
                     isPossibleExploit = false;
                 }
@@ -860,7 +860,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                                   "\n* Tasks: Read headers: " + (afterHeaders-afterAccept) + "ms; " +
                                   "Socket create: " + (afterSocket-afterHeaders) + "ms; " +
                                   "Start runners: " + (afterHandle-afterSocket) + "ms");
-                     }
+                    }
                 }
                 if (keepalive) { // Since we are now running the CompressedRequestor inline, if keepalive is true, we don't need to wait.
                     if (_log.shouldDebug()) {
@@ -872,9 +872,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                             case 1: code = "Not KeepAlive"; break;
                             case 2: code = "KeepAlive"; break;
                             default: code = "Unknown";
-                       }
-                       _log.debug("[HTTPServer] Waited " + timeToWait + "ms for response [#" + requestCount + "] to complete -> " + code);
-                   }
+                        }
+                        _log.debug("[HTTPServer] Waited " + timeToWait + "ms for response [#" + requestCount + "] to complete -> " + code);
+                    }
                     if (waiter.get() != 2)
                         break;
                 }
@@ -1014,7 +1014,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                                 for (int i = 1; i < urlParts.length; i++) {
                                     if (!urlParts[i].trim().isEmpty()) {
                                         hostSb.append('/').append(urlParts[i]);
-                                     }
+                                    }
                                 }
                                 host = hostSb.toString();
                             }
@@ -1189,7 +1189,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                         ioe.getMessage().indexOf("Input stream error") >= 0 ||
                         ioe.getMessage().indexOf("Socket closed") >= 0) {
                         // client closed connection early?
-                            if (_log.shouldDebug()) {_log.debug("[HTTPServer] Error sending " + _name + " -> " + ioe.getMessage());}
+                        if (_log.shouldDebug()) {_log.debug("[HTTPServer] Error sending " + _name + " -> " + ioe.getMessage());}
                     } else {
                         if (_log.shouldWarn()) {_log.warn("[HTTPServer] Error sending " + _name + " -> " + ioe.getMessage());}
                     }
@@ -1338,10 +1338,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      * Remove the other matching entries and set this entry as the only one.
      */
     static void setEntry(Map<String, List<String>> headers, String key, String value) {
-      List<String> entry = headers.get(key);
-      if (entry == null) {headers.put(key, entry = new ArrayList<String>(1));}
-      else {entry.clear();}
-      entry.add(value);
+        List<String> entry = headers.get(key);
+        if (entry == null) {headers.put(key, entry = new ArrayList<String>(1));}
+        else {entry.clear();}
+        entry.add(value);
     }
 
     /**
@@ -1349,9 +1349,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      * @return the first matching entry or null
      */
     private static String getEntryOrNull(Map<String, List<String>> headers, String key) {
-      List<String> entries = headers.get(key);
-      if(entries == null || entries.size() < 1) {return null;}
-      else {return entries.get(0);}
+        List<String> entries = headers.get(key);
+        if(entries == null || entries.size() < 1) {return null;}
+        else {return entries.get(0);}
     }
 
     /**
@@ -1401,8 +1401,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 throw new RequestTooLongException("Request too long (Max allowed: " + MAX_LINE_LENGTH + ")");
             }
         } else {
-             boolean ok = DataHelper.readLine(in, command);
-             if (!ok)
+            boolean ok = DataHelper.readLine(in, command);
+            if (!ok)
                  throw new EOFException("EOF reached before the end of the headers");
         }
 
@@ -1419,8 +1419,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             if (socket != null) {
                 readLine(socket, buf, expire - ctx.clock().now());
             } else {
-                 boolean ok = DataHelper.readLine(in, buf);
-                 if (!ok)
+                boolean ok = DataHelper.readLine(in, buf);
+                if (!ok)
                      throw new BadRequestException("EOF reached before the end of the headers");
             }
             if ( (buf.length() == 0) ||

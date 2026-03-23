@@ -20,11 +20,11 @@ public class HelpSectionHelper extends HelperBase {
 
     /** help-X.jsp */
     private static final String pages[] =
-                                          {"", "configuration", "sidebar", "reseeding", "advancedsettings",
-                                           "faq", "reachability", "reseed", "jsonrpc", "legal" };
+        {"", "configuration", "sidebar", "reseeding", "advancedsettings",
+            "faq", "reachability", "reseed", "jsonrpc", "legal" };
 
     private static final String titles[] =
-                                          {_x("Overview"),
+        {_x("Overview"),
                                            _x("Configuration"),
                                            _x("Sidebar"),
                                            _x("Reseeding"),
@@ -41,16 +41,16 @@ public class HelpSectionHelper extends HelperBase {
 
     /** @since 0.9.19 */
     private class TabComparator implements Comparator<Tab> {
-         private static final long serialVersionUID = 1L;
-         private final Collator coll;
+        private static final long serialVersionUID = 1L;
+        private final Collator coll;
 
-         public TabComparator() {
-             super();
-             coll = Collator.getInstance(new Locale(Messages.getLanguage(_context)));
-         }
+        public TabComparator() {
+            super();
+            coll = Collator.getInstance(new Locale(Messages.getLanguage(_context)));
+        }
 
-         public int compare(Tab l, Tab r) {
-             return coll.compare(l.title, r.title);
+        public int compare(Tab l, Tab r) {
+            return coll.compare(l.title, r.title);
         }
     }
 

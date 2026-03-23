@@ -245,7 +245,7 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
 							_log.info("ssres.keys[0]:   " + ssres.keys[0]);
 							_log.info("FIXUP TIME");
 						}
-						
+
 						SkipLevels<K, V> replace = levels[0];
 						for (int i = 0; i < levels.length; i++) {
 							if (levels[i] == null)

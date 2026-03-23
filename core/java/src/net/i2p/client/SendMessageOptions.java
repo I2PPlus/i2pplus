@@ -38,9 +38,9 @@ public class SendMessageOptions extends DateAndFlags {
      *  Note that ElGamalAESEngine enforces a max of 200 on receive.
      */
     private static final int[] TAGS_SEND = {
-                                             0, 2, 4, 6, 8, 12, 16, 24,
-                                             32, 40, 51, 64, 80, 100, 125, 160
-                                           };
+        0, 2, 4, 6, 8, 12, 16, 24,
+        32, 40, 51, 64, 80, 100, 125, 160
+        };
 
     /**
      *  Tags threshold field:
@@ -49,9 +49,9 @@ public class SendMessageOptions extends DateAndFlags {
     private static final int TAGS_REQD_MASK = 0x00f0;
     /** Possible values. Configured values will be rounded down. */
     private static final int[] TAGS_REQD = {
-                                             0, 2, 3, 6, 9, 14, 20, 27,
-                                             35, 45, 57, 72, 92, 117, 147, 192
-                                           };
+        0, 2, 3, 6, 9, 14, 20, 27,
+        35, 45, 57, 72, 92, 117, 147, 192
+        };
 
     /**
      *  Reliability bits 9-10
@@ -164,21 +164,21 @@ public class SendMessageOptions extends DateAndFlags {
     public void setReliability(Reliability r) {
         _flags &= ~RELIABILITY_MASK;
         switch (r) {
-          case BEST_EFFORT:
-            _flags |= BEST_EFFORT_MASK;
-            break;
+            case BEST_EFFORT:
+                _flags |= BEST_EFFORT_MASK;
+                break;
 
-          case GUARANTEED:
-            _flags |= GUARANTEED_MASK;
-            break;
+            case GUARANTEED:
+                _flags |= GUARANTEED_MASK;
+                break;
 
-          case UNDEFINED:
-            _flags |= RELIABILITY_MASK;
-            break;
+            case UNDEFINED:
+                _flags |= RELIABILITY_MASK;
+                break;
 
-          case DEFAULT:
-          default:
-            break;
+            case DEFAULT:
+            default:
+                break;
         }
     }
 
@@ -196,18 +196,18 @@ public class SendMessageOptions extends DateAndFlags {
      */
     public static Reliability getReliability(int flags) {
         switch (flags & RELIABILITY_MASK) {
-          case BEST_EFFORT_MASK:
-            return Reliability.BEST_EFFORT;
+            case BEST_EFFORT_MASK:
+                return Reliability.BEST_EFFORT;
 
-          case GUARANTEED_MASK:
-            return Reliability.GUARANTEED;
+            case GUARANTEED_MASK:
+                return Reliability.GUARANTEED;
 
-          default:
-          case RELIABILITY_MASK:
-            return Reliability.UNDEFINED;
+            default:
+            case RELIABILITY_MASK:
+                return Reliability.UNDEFINED;
 
-          case 0:
-            return Reliability.DEFAULT;
+            case 0:
+                return Reliability.DEFAULT;
         }
     }
 

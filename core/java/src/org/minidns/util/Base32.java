@@ -26,7 +26,7 @@ public final class Base32 {
 
     /**
      * Encodes the given byte array to a Base32 string.
-     * 
+     *
      * @param bytes the byte array to encode
      * @return the Base32 encoded string
      */

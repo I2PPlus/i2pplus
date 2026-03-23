@@ -198,8 +198,8 @@ class SAMv3Handler extends SAMv1Handler
                                 if (now - _lastPing >= 2*READ_TIMEOUT) {
                                     if (_log.shouldWarn())
                                         _log.warn("Failed to respond to PING");
-                                     writeString(SESSION_ERROR, "PONG timeout");
-                                     break;
+                                    writeString(SESSION_ERROR, "PONG timeout");
+                                    break;
                                 }
                             } else if (_lastPing < 0) {
                                 if (_log.shouldWarn())
@@ -304,7 +304,7 @@ class SAMv3Handler extends SAMv1Handler
             writeString(SESSION_ERROR, e.getMessage());
         } catch (SAMException e) {
             _log.error("Unexpected exception for message [" + msg + ']' + "\n* Error: " + e.getMessage());
-             writeString(SESSION_ERROR, e.getMessage());
+            writeString(SESSION_ERROR, e.getMessage());
         } catch (RuntimeException e) {
             _log.error("Unexpected exception for message [" + msg + ']' + "\n* Error: " + e.getMessage());
             writeString(SESSION_ERROR, e.getMessage());
@@ -328,8 +328,8 @@ class SAMv3Handler extends SAMv1Handler
                         if (_log.shouldWarn())
                             _log.warn("Error while stopping forwarding connections" + "\n* Error: " + e.getMessage());
                     } catch (InterruptedIOException e) {
-                      if (_log.shouldWarn())
-                          _log.warn("Interrupted while stopping forwarding connections" + "\n* Error: " + e.getMessage());
+                        if (_log.shouldWarn())
+                            _log.warn("Interrupted while stopping forwarding connections" + "\n* Error: " + e.getMessage());
                     }
                 }
             }
@@ -349,18 +349,18 @@ class SAMv3Handler extends SAMv1Handler
     public void stopHandling() {
         if (_log.shouldInfo())
 //          _log.info("Stopping (stolen? " + stolenSocket + "): " + this, new Exception("I did it"));
-          _log.info("Stopping " + this + " -> Stolen? " + stolenSocket);
-          synchronized (stopLock) {
-              stopHandler = true;
-          }
-          if (!stolenSocket) {
-              try {
-                  closeClientSocket();
-              }
-              catch (IOException e) {}
-          }
-          bridge.unregister(this);
-      }
+            _log.info("Stopping " + this + " -> Stolen? " + stolenSocket);
+        synchronized (stopLock) {
+            stopHandler = true;
+        }
+        if (!stolenSocket) {
+            try {
+                closeClientSocket();
+            }
+            catch (IOException e) {}
+        }
+        bridge.unregister(this);
+    }
 
     private void die() {
         SessionRecord rec = null ;
@@ -372,9 +372,9 @@ class SAMv3Handler extends SAMv1Handler
         if (rec!=null) {
             rec.getThreadGroup().interrupt();
             while (rec.getThreadGroup().activeCount()>0)
-            try {
-                Thread.sleep(1000);
-            } catch ( InterruptedException e) {}
+                try {
+                    Thread.sleep(1000);
+                } catch ( InterruptedException e) {}
             rec.getThreadGroup().destroy();
             sSessionsHash.del(session.getNick());
         }
@@ -467,7 +467,7 @@ class SAMv3Handler extends SAMv1Handler
                         _log.debug("SESSION ID parameter already in use");
                     return writeString("SESSION STATUS RESULT=DUPLICATED_ID\n");
                 } catch (SessionsDB.ExistingDestException e) {
-                return writeString("SESSION STATUS RESULT=DUPLICATED_DEST\n");
+                    return writeString("SESSION STATUS RESULT=DUPLICATED_DEST\n");
                 }
 
 
@@ -662,8 +662,8 @@ class SAMv3Handler extends SAMv1Handler
      */
     private static SAMv3StreamSession newSAMStreamSession(String login )
         throws IOException, DataFormatException, SAMException {
-            return new SAMv3StreamSession(login);
-        }
+        return new SAMv3StreamSession(login);
+    }
 
     /* Parse and execute a STREAM message */
     @Override
@@ -779,13 +779,13 @@ class SAMv3Handler extends SAMv1Handler
                     _log.debug("STREAM CONNECT failed" + "\n* Error: " + e.getMessage());
                 notifyStreamResult ( verbose, "CONNECTION_REFUSED", e.getMessage());
             } catch (NoRouteToHostException e) {
-            if (_log.shouldDebug())
-                _log.debug("STREAM CONNECT failed" + "\n* Error: " + e.getMessage());
-            notifyStreamResult ( verbose, "CANT_REACH_PEER", e.getMessage());
+                if (_log.shouldDebug())
+                    _log.debug("STREAM CONNECT failed" + "\n* Error: " + e.getMessage());
+                notifyStreamResult ( verbose, "CANT_REACH_PEER", e.getMessage());
             } catch (InterruptedIOException e) {
-            if (_log.shouldDebug())
-                _log.debug("STREAM CONNECT failed" + "\n* Error: " + e.getMessage());
-            notifyStreamResult ( verbose, "TIMEOUT", e.getMessage());
+                if (_log.shouldDebug())
+                    _log.debug("STREAM CONNECT failed" + "\n* Error: " + e.getMessage());
+                notifyStreamResult ( verbose, "TIMEOUT", e.getMessage());
             } catch (I2PException e) {
                 if (_log.shouldDebug())
                     _log.debug("STREAM CONNECT failed" + "\n* Error: " + e.getMessage());
@@ -806,9 +806,9 @@ class SAMv3Handler extends SAMv1Handler
                 notifyStreamResult( true, "OK", null );
                 return true ;
             } catch (SAMException e) {
-            if (_log.shouldDebug())
-                _log.debug("Forwarding STREAM connections failed" + "\n* Error: " + e.getMessage());
-            notifyStreamResult ( true, "I2P_ERROR", "Forwarding failed : " + e.getMessage() );
+                if (_log.shouldDebug())
+                    _log.debug("Forwarding STREAM connections failed" + "\n* Error: " + e.getMessage());
+                notifyStreamResult ( true, "I2P_ERROR", "Forwarding failed : " + e.getMessage() );
             }
         } catch (IOException e) {}
         return false ;
@@ -831,7 +831,7 @@ class SAMv3Handler extends SAMv1Handler
             } catch (InterruptedIOException e) {
                 if (_log.shouldDebug())
                     _log.debug("STREAM ACCEPT failed" + "\n* Error: " + e.getMessage());
-                    notifyStreamResult( verbose, "TIMEOUT", e.getMessage() );
+                notifyStreamResult( verbose, "TIMEOUT", e.getMessage() );
             } catch (I2PSessionException e) {
                 // As of 0.9.61, this is thrown for a destroyed session.
                 // Kill the SAM session.
@@ -850,7 +850,7 @@ class SAMv3Handler extends SAMv1Handler
             } catch (I2PException e) {
                 if (_log.shouldDebug())
                     _log.debug("STREAM ACCEPT failed" + "\n* Error: " + e.getMessage());
-                    notifyStreamResult ( verbose, "I2P_ERROR", e.getMessage() );
+                notifyStreamResult ( verbose, "I2P_ERROR", e.getMessage() );
             } catch (SAMException e) {
                 if (_log.shouldDebug())
                     _log.debug("STREAM ACCEPT failed" + "\n* Error: " + e.getMessage());
@@ -884,7 +884,7 @@ class SAMv3Handler extends SAMv1Handler
         StringBuilder buf = new StringBuilder(600);
         buf.append(d.toBase64());
         if (sendPorts) {
-        buf.append(" FROM_PORT=").append(fromPort).append(" TO_PORT=").append(toPort);
+            buf.append(" FROM_PORT=").append(fromPort).append(" TO_PORT=").append(toPort);
         }
         buf.append('\n');
         if (!writeString(buf.toString())) {
@@ -972,8 +972,8 @@ class SAMv3Handler extends SAMv1Handler
             String expected = Long.toString(_lastPing);
             if (expected.equals(s)) {
                 _lastPing = 0;
-            if (_log.shouldInfo())
-                _log.warn("Received expected pong: " + s);
+                if (_log.shouldInfo())
+                    _log.warn("Received expected pong: " + s);
             } else {
                 if (_log.shouldInfo())
                     _log.warn("Received unexpected pong: " + s);

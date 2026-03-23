@@ -17,7 +17,7 @@ public class Hex {
 
     /**
      * Converts a byte array to a hexadecimal string representation.
-     * 
+     *
      * @param bytes the byte array to convert
      * @return a StringBuilder containing the hexadecimal representation (uppercase with spaces)
      */
