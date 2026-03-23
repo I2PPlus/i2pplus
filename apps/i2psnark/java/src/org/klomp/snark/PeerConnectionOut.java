@@ -211,11 +211,10 @@ class PeerConnectionOut implements Runnable {
             if (_log.shouldInfo()) {
                 _log.info("Error sending to [" + peer + "] \n* " + ioe.getMessage());
             }
+        } catch (OutOfMemoryError oom) {
+            throw oom;
         } catch (Throwable t) {
             _log.error("Error sending to [" + peer + "]", t);
-            if (t instanceof OutOfMemoryError) {
-                throw (OutOfMemoryError) t;
-            }
         } finally {
             quit = true;
             peer.disconnect();

@@ -101,13 +101,11 @@ public class I2PThread extends Thread {
     public void run() {
         try {
             super.run();
+        } catch (OutOfMemoryError oom) {
+            fireOOM(oom);
         } catch (Throwable t) {
-            if (t instanceof OutOfMemoryError) {
-                fireOOM((OutOfMemoryError)t);
-            } else {
-                System.out.println ("Thread terminated unexpectedly: " + getName());
-                t.printStackTrace();
-            }
+            System.out.println ("Thread terminated unexpectedly: " + getName());
+            t.printStackTrace();
         }
     }
 

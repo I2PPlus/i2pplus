@@ -731,6 +731,7 @@ public class EepGet {
      * @param inactivityTimeout &lt;= 0 for default 60 sec
      * @return success
      */
+    @SuppressWarnings("PMD.AvoidInstanceofChecksInCatchClause")
     public boolean fetch(long fetchHeaderTimeout, long totalTimeout, long inactivityTimeout) {
         // we need a SocketTimeout if we have a totalTimeout
         if (totalTimeout > 0 && fetchHeaderTimeout <= 0)

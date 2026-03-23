@@ -848,8 +848,9 @@ class NetDbRenderer {
                 }
             } catch (TimeoutException e) {
                 break;
-            } catch (InterruptedException | ExecutionException e) {
-                if (e instanceof InterruptedException) Thread.currentThread().interrupt();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            } catch (ExecutionException e) {
             }
         }
 

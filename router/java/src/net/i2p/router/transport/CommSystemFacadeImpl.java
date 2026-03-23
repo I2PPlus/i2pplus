@@ -1244,10 +1244,10 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 String whoisData = null;
                 try {
                     whoisData = queryWhoisServers(ipAddress, countryCode).get(10, TimeUnit.SECONDS);
-                } catch (InterruptedException | ExecutionException | java.util.concurrent.TimeoutException e) {
-                    if (e instanceof InterruptedException) {
-                        Thread.currentThread().interrupt();
-                    }
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    // WHOIS lookup timed out or failed, continue without it
+                } catch (ExecutionException | java.util.concurrent.TimeoutException e) {
                     // WHOIS lookup timed out or failed, continue without it
                 }
                 if (whoisData != null && !whoisData.isEmpty()) {
