@@ -117,5 +117,45 @@ echo "Installed $(ls "$SCRIPT_DIR/lib"/*.jar | wc -l) jars ($(du -sh "$SCRIPT_DI
 # Clean up
 rm -f "$ZIP_FILE"
 
+# Download jPinpoint rules if not present or outdated
+JPINPOINT_FILE="${SCRIPT_DIR}/jpinpoint-rules.xml"
+JPINPOINT_VERSION_FILE="${SCRIPT_DIR}/jpinpoint-version.txt"
+JPINPOINT_REPO="jborgers/PMD-jPinpoint-rules"
+
+get_jpinpoint_latest() {
+    curl -sL "https://api.github.com/repos/${JPINPOINT_REPO}/releases/latest" \
+        | grep '"tag_name"' | head -1 | sed 's/.*"tag_name": *"\([^"]*\)".*/\1/'
+}
+
+get_jpinpoint_installed() {
+    if [ -f "$JPINPOINT_VERSION_FILE" ]; then
+        cat "$JPINPOINT_VERSION_FILE"
+    else
+        echo "none"
+    fi
+}
+
+JPINPOINT_INSTALLED=$(get_jpinpoint_installed)
+JPINPOINT_LATEST=$(get_jpinpoint_latest)
+
+if [ -n "$JPINPOINT_LATEST" ] && { [ ! -f "$JPINPOINT_FILE" ] || [ "$JPINPOINT_INSTALLED" != "$JPINPOINT_LATEST" ] || [ "$FORCE" = true ]; }; then
+    echo "Downloading jPinpoint ${JPINPOINT_LATEST}..."
+    JPINPOINT_ZIP="${SCRIPT_DIR}/.jpinpoint.zip"
+    JPINPOINT_TMP="${SCRIPT_DIR}/.jpinpoint-tmp"
+    curl -sL -o "$JPINPOINT_ZIP" "https://github.com/${JPINPOINT_REPO}/archive/refs/tags/${JPINPOINT_LATEST}.zip"
+    rm -rf "$JPINPOINT_TMP"
+    mkdir -p "$JPINPOINT_TMP"
+    unzip -q -o "$JPINPOINT_ZIP" -d "$JPINPOINT_TMP"
+    cp "$JPINPOINT_TMP"/PMD-jPinpoint-rules-*/rulesets/java/jpinpoint-rules.xml "$JPINPOINT_FILE"
+    sed -i 's/name="jpinpoint-java-rules"/name="jpinpoint"/' "$JPINPOINT_FILE"
+    echo -n "$JPINPOINT_LATEST" > "$JPINPOINT_VERSION_FILE"
+    rm -rf "$JPINPOINT_ZIP" "$JPINPOINT_TMP"
+    echo "jPinpoint ${JPINPOINT_LATEST} installed."
+elif [ -n "$JPINPOINT_LATEST" ]; then
+    echo "jPinpoint ${JPINPOINT_INSTALLED} is up to date."
+else
+    echo "WARNING: Could not determine jPinpoint version. Using existing."
+fi
+
 echo "PMD ${LATEST} installed to ${SCRIPT_DIR}"
 echo "Binary: ${SCRIPT_DIR}/bin/pmd"

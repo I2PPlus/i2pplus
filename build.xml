@@ -3213,7 +3213,7 @@
       <arg value="-d"/>
       <arg value="apps"/>
       <arg value="-R"/>
-      <arg value="tools/pmd/ruleset.xml"/>
+      <arg value="tools/pmd/ruleset-java.xml"/>
       <arg value="-f"/>
       <arg value="xml"/>
       <arg value="-r"/>

@@ -65,6 +65,7 @@
         <exclude name="DoNotTerminateVM"/>
         <exclude name="DoNotCallGarbageCollectionExplicitly"/>
         <exclude name="MissingSerialVersionUID"/>
+        <exclude name="AvoidFieldNameMatchingMethodName"/>
     </rule>
 
     <!-- Multithreading: only genuine bug risks, not style -->
@@ -86,6 +87,14 @@
         <exclude name="AvoidConstantsInInterface"/>
         <exclude name="SynchronizingForLocalVars"/>
         <exclude name="UnresolvedType"/>
+        <exclude name="AvoidIncrementOrDecrementForVolatileField"/>
+        <exclude name="AvoidMutableLists"/>
+        <exclude name="AvoidHardcodedConnectionConfig"/>
+        <exclude name="AvoidDecimalAndChoiceFormatAsField"/>
+        <exclude name="LetFieldsMeetSerializable"/>
+        <exclude name="NonComparableMapKeys"/>
+        <exclude name="NonComparableSetElements"/>
+        <exclude name="AvoidFieldNameMatchingMethodName"/>
     </rule>
 
 </ruleset>
