@@ -367,7 +367,7 @@ public class TunnelControllerGroup implements ClientApp {
 
         unloadControllers();
         synchronized (TunnelControllerGroup.class) {
-            if (_instance == this)
+            if (_instance == this) // NOPMD - CompareObjectsWithEquals (singleton identity)
                 _instance = null;
         }
         killClientExecutor();

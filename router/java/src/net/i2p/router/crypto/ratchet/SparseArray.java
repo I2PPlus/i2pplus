@@ -412,7 +412,7 @@ class SparseArray<E> implements Cloneable {
         }
 
         for (int i = 0; i < mSize; i++) {
-            if (mValues[i] == value) {
+            if (mValues[i] == value) { // NOPMD - CompareObjectsWithEquals (SparseArray identity equality)
                 return i;
             }
         }
@@ -509,7 +509,7 @@ class SparseArray<E> implements Cloneable {
             buffer.append(key);
             buffer.append('=');
             Object value = valueAt(i);
-            if (value != this) {
+            if (value != this) { // NOPMD - CompareObjectsWithEquals (toString recursion guard)
                 buffer.append(value);
             } else {
                 buffer.append("(this Map)");

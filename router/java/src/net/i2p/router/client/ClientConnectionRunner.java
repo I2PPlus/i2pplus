@@ -1037,7 +1037,7 @@ class ClientConnectionRunner {
                 return;
             }
             synchronized(ClientConnectionRunner.this) {
-                if (sp.rerequestTimer != Rerequest.this) {
+                if (sp.rerequestTimer != Rerequest.this) { // NOPMD - CompareObjectsWithEquals (timer identity check)
                     if (_log.shouldInfo())
                         _log.info("Cancelled request for LeaseSet [" + h.toBase32().substring(0,8) + "] -> Newer request received");
                     return;

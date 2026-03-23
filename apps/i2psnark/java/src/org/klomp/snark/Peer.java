@@ -736,7 +736,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
      * @since 0.9.62
      */
     public boolean shouldRequest(Peer peer, int size) {
-        if (peer != this) {
+        if (peer != this) { // NOPMD - CompareObjectsWithEquals (identity check)
             return false;
         }
         PeerState s = state;

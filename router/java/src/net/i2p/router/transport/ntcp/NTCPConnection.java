@@ -511,7 +511,7 @@ public class NTCPConnection implements Closeable {
             _log.info("Closing " + toString());
         }
         NTCPConnection toClose = locked_close(allowRequeue);
-        if (toClose != null && toClose != this) {
+        if (toClose != null && toClose != this) { // NOPMD - CompareObjectsWithEquals (close identity check)
             // won't happen as of 0.9.37
             if (_log.shouldWarn())
                 _log.warn("Multiple connections on remove, closing " + toClose + " (already closed " + this + ")");
@@ -1473,7 +1473,7 @@ public class NTCPConnection implements Closeable {
                           "\n* Merged config:       " + _paddingConfig);
         }
         NTCPConnection toClose = _transport.inboundEstablished(this);
-        if (toClose != null && toClose != this) {
+        if (toClose != null && toClose != this) { // NOPMD - CompareObjectsWithEquals (established identity check)
             int drained = toClose.drainOutboundTo(_outbound);
             if (_log.shouldDebug())
                 _log.debug("Old connection closed: " + toClose + " replaced by " + this + "; drained " + drained);

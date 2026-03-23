@@ -1585,7 +1585,7 @@ public class EepGet {
                         tempSocket = null; // Successfully assigned, don't close
                     } finally {
                         // Clean up socket if creation failed or exception occurred
-                        if (tempSocket != null && tempSocket != _proxy) {
+                        if (tempSocket != null && tempSocket != _proxy) { // NOPMD - CompareObjectsWithEquals (identity check)
                             try {
                                 tempSocket.close();
                             } catch (IOException ioe) {}

@@ -164,7 +164,7 @@ public class SimpleTimer {
                 for (TimedEvent evt : _eventTimes.keySet()) {
                     Long when = _eventTimes.get(evt);
                     TimedEvent cur = _events.get(when);
-                    if (cur != evt) {
+                    if (cur != evt) { // NOPMD - CompareObjectsWithEquals (identity check)
                         _log.error("event " + evt + " @ " + when + ": " + cur);
                     }
                 }

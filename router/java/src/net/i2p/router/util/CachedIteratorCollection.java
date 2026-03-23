@@ -168,7 +168,7 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
                 if (itrIndexNode != null) {
                     // The Node we are trying to remove is itrIndexNode.prev
                     // Is there a Node before itrIndexNode.prev?
-                    if (itrIndexNode != first.next) {
+                    if (itrIndexNode != first.next) { // NOPMD - CompareObjectsWithEquals (node identity check)
                         // Set current itrIndexNode's prev to Node N-2
                         itrIndexNode.prev = itrIndexNode.prev.prev;
                         // Then set Node N-2's next to current itrIndexNode,
