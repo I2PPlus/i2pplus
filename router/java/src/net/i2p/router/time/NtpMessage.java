@@ -35,6 +35,7 @@ import java.time.Instant;
 import java.util.Arrays;
 import java.util.Date;
 import net.i2p.util.RandomSource;
+import java.util.Locale;
 
 /**
  * This class represents a NTP message, as specified in RFC 2030.  The message
@@ -489,7 +490,7 @@ class NtpMessage {
         long ms = (long) (utc * 1000.0);
 
         // date/time
-        String date = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss").format(Date.from(Instant.ofEpochMilli(ms)));
+        String date = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss", Locale.US).format(Date.from(Instant.ofEpochMilli(ms)));
 
         // fraction
         double fraction = timestamp - ((long) timestamp);

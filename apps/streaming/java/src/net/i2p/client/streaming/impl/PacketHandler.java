@@ -10,6 +10,7 @@ import net.i2p.data.Destination;
 import net.i2p.data.SigningPublicKey;
 import net.i2p.util.ByteCache;
 import net.i2p.util.Log;
+import java.util.Locale;
 
 /**
  * Handles incoming packets by dispatching them to the appropriate connection,
@@ -24,7 +25,7 @@ class PacketHandler {
     private final Log log;
     private final ByteCache cache = ByteCache.getInstance(128, 32 * 1024);
 
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm:ss.SSS");
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm:ss.SSS", Locale.US);
 
     public PacketHandler(I2PAppContext ctx, ConnectionManager mgr) {
         this.manager = mgr;

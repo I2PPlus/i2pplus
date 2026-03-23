@@ -35,6 +35,7 @@ import net.i2p.util.Addresses;
 import net.i2p.util.ByteArrayStream;
 import net.i2p.util.HexDump;
 import net.i2p.util.RandomSource;
+import java.util.Locale;
 
 /**
  *  Generate keys and a selfsigned certificate, suitable for
@@ -585,7 +586,7 @@ public final class SelfSignedGenerator {
      */
     private static byte[] getDate(long now) {
         // UTCDate format (HH 0-23)
-        SimpleDateFormat fmt = new SimpleDateFormat("yyMMddHHmmss");
+        SimpleDateFormat fmt = new SimpleDateFormat("yyMMddHHmmss", Locale.US);
         fmt.setTimeZone(TimeZone.getTimeZone("GMT"));
         byte[] nowbytes = DataHelper.getASCII(fmt.format(Date.from(Instant.ofEpochMilli(now))));
         if (nowbytes.length != 12)

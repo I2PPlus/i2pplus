@@ -31,6 +31,7 @@ import org.rrd4j.graph.RrdGraph;
 import org.rrd4j.graph.RrdGraphDef;
 import org.rrd4j.graph.RrdGraphInfo;
 import org.rrd4j.graph.SVGImageWorker;
+import java.util.Locale;
 
 /**
  *  Generate the RRD graph png images,
@@ -436,7 +437,7 @@ class GraphRenderer {
                 }
             }
 
-            SimpleDateFormat sdf = new SimpleDateFormat("dd MMM HH:mm");
+            SimpleDateFormat sdf = new SimpleDateFormat("dd MMM HH:mm", Locale.US);
             int count = 0;
             Color RESTART_COLOR = theme.equals("midnight") || theme.equals("dark") ? RESTART_BAR_COLOR_DARK : RESTART_BAR_COLOR;
 

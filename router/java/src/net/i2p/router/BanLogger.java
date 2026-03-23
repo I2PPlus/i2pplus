@@ -18,6 +18,7 @@ import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.HashPatternDetector;
 import net.i2p.util.Log;
+import java.util.Locale;
 
 /**
  * Dedicated logger for all ban events.
@@ -50,12 +51,12 @@ public class BanLogger {
     private static final Set<String> _loggedHashes = Collections.synchronizedSet(new HashSet<String>());
 
     public BanLogger() {
-        _dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        _dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
         _dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
     }
 
     public BanLogger(RouterContext context) {
-        _dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        _dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
         _dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         initialize(context);
     }
