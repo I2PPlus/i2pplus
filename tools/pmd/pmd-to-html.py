@@ -335,14 +335,14 @@ function hideRule(){
     # Combined summary: by rule with sub-system tags
     w('<div class="tabletitle"><a name="rules">By Rule</a></div>')
     w('<table id="summary">')
-    w('<tr><th>Rule</th><th class="summary-count">Violations</th><th class="summary-count">Files</th><th>Sub-systems</th></tr>')
+    w('<tr><th>Rule</th><th>Sub-systems</th><th class="summary-count">Violations</th><th class="summary-count">Files</th></tr>')
     for i, (rule, count) in enumerate(sorted_rules):
         row = "tablerow" + str(i % 2)
         fc = rule_files.get(rule, 0)
         sub_counts = rule_sub_counts.get(rule, {})
         subs_str = ", ".join(f'<a href="#sub-{escape(s)}" data-sub="sub-{escape(s)}">{escape(s)}</a> ({sub_counts[s]})' for s in rule_subs.get(rule, []))
-        w(f'<tr class="{row}"><td><a href="#" data-rule="{escape(rule)}">{escape(rule)}</a></td><td class="summary-count">{count}</td><td class="summary-count">{fc}</td><td class="subs">{subs_str}</td></tr>')
-    w(f'<tr class="tablerow0"><td><b>Total</b></td><td class="summary-count"><b>{total}</b></td><td class="summary-count"><b>{len(files)}</b></td><td></td></tr>')
+        w(f'<tr class="{row}"><td><a href="#" data-rule="{escape(rule)}">{escape(rule)}</a></td><td class="subs">{subs_str}</td><td class="summary-count">{count}</td><td class="summary-count">{fc}</td></tr>')
+    w(f'<tr class="tablerow0"><td><b>Total</b></td><td></td><td class="summary-count"><b>{total}</b></td><td class="summary-count"><b>{len(files)}</b></td></tr>')
     w('</table>')
 
     # Rule filter container (hidden by default, shown when a rule is clicked)

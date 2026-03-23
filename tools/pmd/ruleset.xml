@@ -32,10 +32,14 @@
     <exclude-pattern>.*/com/tomgibara/.*</exclude-pattern>
     <exclude-pattern>.*/gnu/.*</exclude-pattern>
     <exclude-pattern>.*/io/pack200/.*</exclude-pattern>
-    <exclude-pattern>.*/freenet/.*</exclude-pattern>
-    <exclude-pattern>.*/org/freenetproject/.*</exclude-pattern>
     <exclude-pattern>.*/edu/internet2/.*</exclude-pattern>
     <exclude-pattern>.*/com/vuze/.*</exclude-pattern>
+    <exclude-pattern>.*/net/metanotion/.*</exclude-pattern>
+    <exclude-pattern>.*/com/thetransactioncompany/.*</exclude-pattern>
+    <exclude-pattern>.*/com/google/zxing/.*</exclude-pattern>
+    <exclude-pattern>.*/com/docuverse/.*</exclude-pattern>
+
+    <!-- Security -->
 
     <!-- Security -->
     <rule ref="category/java/security.xml"/>
