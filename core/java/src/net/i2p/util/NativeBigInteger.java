@@ -834,6 +834,7 @@ public class NativeBigInteger extends BigInteger {
      *  @param mode 1: modPow; 2: modPowCT; 3: modInverse
      *  @return true if native and java results match (or native not loaded)
      */
+    @SuppressWarnings("PMD.UselessPureMethodCall")
     private static boolean runModPowTest(int numRuns, int mode, boolean nativeOnly, String opName, String opDesc) {
         SecureRandom rand = RandomSource.getInstance();
 
