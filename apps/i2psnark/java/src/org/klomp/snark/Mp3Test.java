@@ -19,6 +19,7 @@ import net.i2p.data.DataHelper;
  *
  * @since 0.8.2
  */
+@SuppressWarnings("PMD.TestClassWithoutTestCases")
 public class Mp3Test {
     public static void main(String[] args) throws Exception {
         if (args.length == 0) {

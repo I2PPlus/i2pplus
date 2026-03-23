@@ -35,6 +35,7 @@ import net.i2p.util.SystemVersion;
  * Now includes adaptive backoff, avoids over-penalizing peers on transient failures,
  * and limits the number of concurrent tunnel tests to avoid overwhelming the router.
  */
+@SuppressWarnings("PMD.TestClassWithoutTestCases")
 public class TestJob extends JobImpl {
     private final Log _log;
     private final TunnelPool _pool;

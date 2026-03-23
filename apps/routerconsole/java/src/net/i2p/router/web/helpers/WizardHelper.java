@@ -14,6 +14,7 @@ import net.i2p.router.web.HelperBase;
  *
  *  @since 0.9.38
  */
+@SuppressWarnings("PMD.TestClassWithoutTestCases")
 public class WizardHelper extends HelperBase {
 
     public static final String PROP_COMPLETE = "routerconsole.welcomeWizardComplete";

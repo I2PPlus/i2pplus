@@ -131,6 +131,7 @@ any additional information.  Alice may go on to establish a session
 with either Bob or Charlie, but it is not required.</p>
 
  */
+@SuppressWarnings("PMD.TestClassWithoutTestCases")
 class PeerTestManager {
     private final RouterContext _context;
     private final Log _log;
