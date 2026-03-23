@@ -536,14 +536,14 @@ public class HostChecker {
                     lookupResult[0] = true;
                     lookupComplete[0] = true;
                     synchronized (lookupComplete) {
-                        lookupComplete.notify();
+                        lookupComplete.notifyAll();
                     }
                 }
                 public void dropped() {
                     lookupResult[0] = false;
                     lookupComplete[0] = true;
                     synchronized (lookupComplete) {
-                        lookupComplete.notify();
+                        lookupComplete.notifyAll();
                     }
                 }
             };
@@ -556,14 +556,14 @@ public class HostChecker {
                     lookupResult[0] = false;
                     lookupComplete[0] = true;
                     synchronized (lookupComplete) {
-                        lookupComplete.notify();
+                        lookupComplete.notifyAll();
                     }
                 }
                 public void dropped() {
                     lookupResult[0] = false;
                     lookupComplete[0] = true;
                     synchronized (lookupComplete) {
-                        lookupComplete.notify();
+                        lookupComplete.notifyAll();
                     }
                 }
             };

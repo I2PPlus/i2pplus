@@ -70,7 +70,7 @@ class OutboundMessageFragments {
     public synchronized void shutdown() {
         _alive = false;
         _activePeers.clear();
-        synchronized (_activePeers) {_activePeers.notify();}
+        synchronized (_activePeers) {_activePeers.notifyAll();}
     }
 
     void dropPeer(PeerState peer) {
@@ -157,7 +157,7 @@ class OutboundMessageFragments {
         // Avoid sync if possible ... no, this doesn't always work.
         // Also note that the iterator in getNextVolley may have alreay passed us, or not reflected the addition.
         if (added || size <= 0 || peer.getSendWindowBytesRemaining() >= size) {
-            synchronized (_activePeers) {_activePeers.notify();}
+            synchronized (_activePeers) {_activePeers.notifyAll();}
         }
     }
 
@@ -258,7 +258,7 @@ class OutboundMessageFragments {
      */
     void nudge() {
         synchronized (_waitLock) {
-            _waitLock.notify();
+            _waitLock.notifyAll();
         }
     }
 

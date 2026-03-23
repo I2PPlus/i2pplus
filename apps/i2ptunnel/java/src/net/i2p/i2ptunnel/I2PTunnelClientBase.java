@@ -557,7 +557,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
 
         synchronized (startLock) {
             startRunning = true;
-            startLock.notify();
+            startLock.notifyAll();
         }
     }
 

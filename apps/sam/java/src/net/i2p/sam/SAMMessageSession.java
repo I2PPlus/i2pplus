@@ -303,7 +303,7 @@ abstract class SAMMessageSession implements SAMMessageSess {
         public final void stopRunning() {
             synchronized (runningLock) {
                 stillRunning = false;
-                runningLock.notify();
+                runningLock.notifyAll();
             }
         }
 

@@ -133,7 +133,7 @@ import net.i2p.util.EventDispatcher;
                 throw new RuntimeException("failed to connect session", exc);
             }
             start();
-            startLock.notify();
+            startLock.notifyAll();
         }
         open = true;
     }

@@ -65,7 +65,7 @@ class Reader {
                 already = true;
             } else {
                 _pendingConnections.add(con);
-                _pendingConnections.notify();
+                _pendingConnections.notifyAll();
             }
         }
         if (_log.shouldDebug())
@@ -76,7 +76,7 @@ class Reader {
         synchronized (_pendingConnections) {
             _readAfterLive.remove(con);
             _pendingConnections.remove(con);
-            _pendingConnections.notify(); // necessary?
+            _pendingConnections.notifyAll(); // necessary?
         }
     }
 
