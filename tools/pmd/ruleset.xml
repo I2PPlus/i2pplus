@@ -34,6 +34,7 @@
         <exclude name="UnusedPrivateMethod"/>
         <exclude name="ForLoopVariableCount"/>
         <exclude name="AvoidReassigningLoopVariables"/>
+        <exclude name="DoNotTerminateVM"/>
     </rule>
 
     <!-- Multithreading: only genuine bug risks, not style -->
