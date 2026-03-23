@@ -1650,11 +1650,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
 
         String readLine(String method) throws IOException {
             //  Use unbuffered until we can find a BufferedReader that limits line length
-            //if (method == null || "POST".equals(method))
             return DataHelper.readLine(_s);
-        //if (_br == null)
-        //    _br = new BufferedReader(new InputStreamReader(_s, "ISO-8859-1"));
-        //return _br.readLine();
         }
 
         /**
@@ -1697,27 +1693,6 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             return false;
         }
 
-        /****
-         *  Let's not look up the name _again_
-         *  and now that host is a b32, this was failing
-         *
-        boolean found = false;
-        String lcHost = host.toLowerCase();
-        for (int i = 0; i < SUPPORTED_HOSTS.length; i++) {
-        if (SUPPORTED_HOSTS[i].equals(lcHost)) {
-        found = true;
-        break;
-        }
-        }
-
-        if (!found) {
-        try {
-        Destination d = _context.namingService().lookup(host);
-        if (d == null) return false;
-        } catch (DataFormatException dfe) {
-        }
-        }
-         ****/
         String lc = protocol.toLowerCase(Locale.US);
         return lc.equals("http") || lc.equals("https");
     }
@@ -1822,38 +1797,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 valstart = i + 1;
             }
         }
-        return new String[0];
+        return null;
     }
 
-/****
-    private static String[] tests = {
-        "", "foo", "foo=bar", "&", "&=&", "===", "&&",
-        "i2paddresshelper=foo",
-        "i2paddresshelpe=foo",
-        "2paddresshelper=foo",
-        "i2paddresshelper=%66oo",
-        "%692paddresshelper=foo",
-        "i2paddresshelper=foo&a=b",
-        "a=b&i2paddresshelper=foo",
-        "a=b&i2paddresshelper&c=d",
-        "a=b&i2paddresshelper=foo&c=d",
-        "a=b;i2paddresshelper=foo;c=d",
-        "a=b&i2paddresshelper=foo&c",
-        "a=b&i2paddresshelper=foo==&c",
-        "a=b&i2paddresshelper=foo%3d%3d&c",
-        "a=b&i2paddresshelper=f%6f%6F==&c",
-        "a=b&i2paddresshelper=foo&i2paddresshelper=bar&c",
-        "a=b&i2paddresshelper=foo&c%3F%3f%26%3b%3B%3d%3Dc=x%3F%3f%26%3b%3B%3d%3Dx"
-    };
-
-    public static void main(String[] args) {
-        for (int i = 0; i < tests.length; i++) {
-            String[] s = removeHelper(tests[i]);
-            if (s != null)
-                System.out.println("Test \"" + tests[i] + "\" q=\"" + s[0] + "\" h=\"" + s[1] + "\"");
-            else
-                System.out.println("Test \"" + tests[i] + "\" no match");
-        }
-    }
-****/
 }
