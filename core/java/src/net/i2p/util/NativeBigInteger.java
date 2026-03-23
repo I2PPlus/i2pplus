@@ -904,14 +904,18 @@ public class NativeBigInteger extends BigInteger {
                     double ratio = djava / dtotal;
                     if (ratio > 1.1)
                         System.out.println(String.format("      Result: Native is %.1fx faster", ratio));
-                    else
+                    else if (ratio > 1.02)
                         System.out.println("      Result: Native is marginally faster");
+                    else
+                        System.out.println("      Result: Equivalent performance");
                 } else {
                     double ratio = dtotal / djava;
                     if (ratio > 1.1)
                         System.out.println(String.format("      Result: Native is %.1fx slower", ratio));
-                    else
+                    else if (ratio > 1.02)
                         System.out.println("      Result: Native is marginally slower");
+                    else
+                        System.out.println("      Result: Equivalent performance");
                 }
             }
         } else {
