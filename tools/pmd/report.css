@@ -201,16 +201,13 @@ th {
   border-top: 1px solid #2a2a30;
 }
 
-.priority-cell {
+.line {
   min-width: 80px;
 }
 
-.priority-cell + td {
-  min-width: 80px;
-}
-
-.priority-cell + td {
-  min-width: 200px;
+.line + td {
+  font-size: 75%;
+  width: 20%;
 }
 
 .tablerow0 {
