@@ -143,6 +143,7 @@ tools/
 !tools/checkstyle/*.xml
 !tools/checkstyle/*.sh
 !tools/checkstyle/*.jar
+!tools/checkstyle/*.md
 !tools/test/
 !tools/test/*
 tools/test/*.jar

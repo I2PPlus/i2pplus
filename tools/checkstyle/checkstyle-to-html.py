@@ -112,9 +112,29 @@ def main():
 
     with open(xml_file, "r") as f:
         content = f.read()
+    # Handle truncated XML: close incomplete tags
     if not content.rstrip().endswith("</checkstyle>"):
-        content = content.rstrip() + "\n</checkstyle>\n"
-    root = ET.fromstring(content)
+        # Find last complete </error> or </file> tag
+        last_tag = -1
+        for tag in ("</error>", "</file>"):
+            pos = content.rfind(tag)
+            if pos > last_tag:
+                last_tag = pos + len(tag)
+        if last_tag > 0:
+            content = content[:last_tag]
+        # Ensure we're inside a <file> that needs closing
+        if "</file>" not in content[content.rfind("<file") if "<file" in content else 0:]:
+            content += "\n</file>"
+        content += "\n</checkstyle>\n"
+    try:
+        root = ET.fromstring(content)
+    except ET.ParseError as e:
+        print(f"Warning: XML parse error ({e}), attempting repair", file=sys.stderr)
+        # Last resort: extract only complete <file>...</file> blocks
+        import re
+        files = re.findall(r'<file\b[^>]*>.*?</file>', content, re.DOTALL)
+        content = '<?xml version="1.0" encoding="UTF-8"?>\n<checkstyle>\n' + "\n".join(files) + "\n</checkstyle>\n"
+        root = ET.fromstring(content)
 
     version = root.attrib.get("version", "?")
 

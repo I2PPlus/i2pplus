@@ -3284,6 +3284,8 @@
     <echo message="Starting Checkstyle analysis..."/>
     <mkdir dir="dist"/>
     <exec executable="java" failonerror="false" outputproperty="cs.result">
+      <arg value="-Xmx4g"/>
+      <arg value="-Xss1g"/>
       <arg value="-jar"/>
       <arg value="tools/checkstyle/checkstyle-all.jar"/>
       <arg value="-c"/>
@@ -3311,6 +3313,8 @@
     <echo message="Starting Checkstyle analysis (local file links enabled)..."/>
     <mkdir dir="dist"/>
     <exec executable="java" failonerror="false" outputproperty="cs.result">
+      <arg value="-Xmx4g"/>
+      <arg value="-Xss1g"/>
       <arg value="-jar"/>
       <arg value="tools/checkstyle/checkstyle-all.jar"/>
       <arg value="-c"/>

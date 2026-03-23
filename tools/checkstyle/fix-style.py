@@ -2,12 +2,17 @@
 """
 Fix indentation and trailing whitespace violations found by Checkstyle.
 
-Usage: fix-style.py -p <directory> [-x report.xml] [--dry-run] [--trailing-only]
+Usage: fix-style.py -p <directory> [-x report.xml] [--dry-run] [--trailing-only] [--no-exclude]
 
 Runs Checkstyle on the given path (or uses existing XML report),
 extracts violations, and rewrites files.
 
 Fixes:
+  - Leading tabs (tabs → 4 spaces)
+  - Whitespace after keywords (if( → if ()
+  - Empty statements (;; → ;)
+  - Need braces (single-line if/else/for/while/do bodies)
+  - Unused imports (from Checkstyle XML)
   - Indentation (iterative, from Checkstyle IndentationCheck)
   - Trailing whitespace (spaces/tabs before newline)
   - Missing newline at end of file
@@ -23,12 +28,88 @@ from xml.etree import ElementTree as ET
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 CHECKSTYLE_JAR = os.path.join(SCRIPT_DIR, "checkstyle-all.jar")
+CHECKSTYLE_CFG = os.path.join(SCRIPT_DIR, "checkstyle.xml")
+GOOGLE_FORMAT_JAR = os.path.join(SCRIPT_DIR, "..", "google-java-format.jar")
+
+
+def load_exclusions(cfg_path=None):
+    """Load exclusion patterns from checkstyle.xml BeforeExecutionExclusionFileFilter."""
+    if cfg_path is None:
+        cfg_path = CHECKSTYLE_CFG
+    try:
+        with open(cfg_path) as f:
+            content = f.read()
+        root = ET.fromstring(content)
+    except (OSError, ET.ParseError):
+        return []
+    patterns = []
+    for mod in root.findall(".//module[@name='BeforeExecutionExclusionFileFilter']"):
+        prop = mod.find("property[@name='fileNamePattern']")
+        if prop is not None:
+            patterns.append(re.compile(prop.attrib["value"]))
+    return patterns
+
+
+EXCLUDE_PATTERNS = load_exclusions()
+
+
+def is_excluded(filepath):
+    """Check if a file path matches any exclusion pattern from checkstyle.xml."""
+    for pattern in EXCLUDE_PATTERNS:
+        if pattern.search(filepath):
+            return True
+    return False
 
 INDENT_ONLY_CFG = """<?xml version="1.0"?>
 <!DOCTYPE module PUBLIC "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
   "https://checkstyle.org/dtds/configuration_1_3.dtd">
 <module name="Checker">
   <property name="fileExtensions" value="java"/>
+  <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*/.*_jsp\\.java$"/>
+  </module>
+  <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*[/\\\\]WEB-INF[/\\\\].*"/>
+  </module>
+  <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*[/\\\\]jetty[/\\\\].*"/>
+  </module>
+  <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*[/\\\\]com[/\\\\]maxmind[/\\\\].*"/>
+  </module>
+  <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*[/\\\\]com[/\\\\]freenetproject[/\\\\].*"/>
+  </module>
+  <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*[/\\\\]org[/\\\\]freenetproject[/\\\\].*"/>
+  </module>
+  <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*[/\\\\]UPnP\\.java$"/>
+  </module>
+  <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*[/\\\\]pack200[/\\\\].*"/>
+  </module>
+  <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*[/\\\\]jrobin[/\\\\].*"/>
+  </module>
+  <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*[/\\\\]com[/\\\\]southernstorm[/\\\\].*"/>
+  </module>
+  <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*[/\\\\]wrapper[/\\\\].*"/>
+  </module>
+  <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*[/\\\\]json[/\\\\]simple[/\\\\].*"/>
+  </module>
+  <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*[/\\\\]thetransactioncompany[/\\\\].*"/>
+  </module>
+  <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*[/\\\\]build[/\\\\].*"/>
+  </module>
+  <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*[/\\\\]org[/\\\\]apache[/\\\\].*"/>
+  </module>
   <module name="TreeWalker">
     <module name="Indentation">
       <property name="basicOffset" value="4"/>
@@ -58,11 +139,19 @@ def run_checkstyle(scan_path, xml_out):
 
 def parse_violations(xml_file, filter_path=None):
     """Parse Checkstyle XML and return {filepath: [(line_no, [valid_indents])]}."""
-    with open(xml_file, "r") as f:
-        content = f.read()
-    if not content.rstrip().endswith("</checkstyle>"):
-        content = content.rstrip() + "\n</checkstyle>\n"
-    root = ET.fromstring(content)
+    try:
+        with open(xml_file, "r") as f:
+            content = f.read()
+        # Truncate to last complete </error> or </file> tag, then close
+        last_close = max(content.rfind("</error>"), content.rfind("</file>"))
+        if last_close > 0:
+            content = content[:last_close + content[last_close:].find(">") + 1]
+        if not content.rstrip().endswith("</checkstyle>"):
+            content = content.rstrip() + "\n</checkstyle>\n"
+        root = ET.fromstring(content)
+    except (ET.ParseError, OSError, IOError) as e:
+        print(f"  Warning: could not parse XML ({e}), skipping", file=sys.stderr)
+        return {}
 
     fixes = {}
     for fnode in root.findall("file"):
@@ -142,16 +231,19 @@ def fix_indentation(filepath, line_fixes, dry_run=False):
     return changes
 
 
-def find_java_files(scan_path):
-    """Find all .java files under scan_path."""
+def find_java_files(scan_path, apply_exclusions=True):
+    """Find all .java files under scan_path, optionally filtering exclusions."""
     files = []
     if os.path.isfile(scan_path) and scan_path.endswith(".java"):
-        files.append(scan_path)
+        if not apply_exclusions or not is_excluded(scan_path):
+            files.append(scan_path)
     elif os.path.isdir(scan_path):
         for root, dirs, filenames in os.walk(scan_path):
             for f in filenames:
                 if f.endswith(".java"):
-                    files.append(os.path.join(root, f))
+                    fp = os.path.join(root, f)
+                    if not apply_exclusions or not is_excluded(fp):
+                        files.append(fp)
     return files
 
 
@@ -203,6 +295,254 @@ def fix_missing_newline(filepath, dry_run=False):
             f.write(b"\n")
 
     return 1
+
+
+# Keywords that need whitespace after them
+_WS_KEYWORDS = re.compile(r'\b(if|for|while|catch|switch|try|return|throw|assert)\(')
+
+
+def fix_whitespace_after(filepath, dry_run=False):
+    """Add space after keywords before '('. Returns changes."""
+    try:
+        with open(filepath, "r") as f:
+            content = f.read()
+    except (OSError, IOError):
+        return 0
+
+    def replacer(m):
+        return m.group(1) + " ("
+
+    new_content = _WS_KEYWORDS.sub(replacer, content)
+    changes = 1 if new_content != content else 0
+
+    if changes > 0 and not dry_run:
+        with open(filepath, "w") as f:
+            f.write(new_content)
+
+    return changes
+
+
+_WS_INSIDE_PAREN = re.compile(r'\( (\S)')  # ( x → (x
+_WS_BEFORE_CLOSE_PAREN = re.compile(r'(\S) \)')  # x ) → x)
+
+
+def fix_paren_whitespace(filepath, dry_run=False):
+    """Remove whitespace inside parens: ( x ) → (x). Returns changes."""
+    try:
+        with open(filepath, "r") as f:
+            content = f.read()
+    except (OSError, IOError):
+        return 0
+
+    prev = None
+    while prev != content:
+        prev = content
+        content = _WS_INSIDE_PAREN.sub(r'(\1', content)
+        content = _WS_BEFORE_CLOSE_PAREN.sub(r'\1)', content)
+    changes = 1 if prev != content else 0
+
+    if changes > 0 and not dry_run:
+        with open(filepath, "w") as f:
+            f.write(content)
+
+    return changes
+
+
+def parse_unused_imports(xml_file, filter_path=None):
+    """Parse Checkstyle XML for UnusedImports, return {filepath: [line_numbers]}."""
+    with open(xml_file, "r") as f:
+        content = f.read()
+    if not content.rstrip().endswith("</checkstyle>"):
+        content = content.rstrip() + "\n</checkstyle>\n"
+    root = ET.fromstring(content)
+
+    fixes = {}
+    for fnode in root.findall("file"):
+        fname = fnode.attrib["name"]
+        if filter_path and not fname.startswith(filter_path):
+            continue
+        for enode in fnode.findall("error"):
+            source = enode.attrib.get("source", "")
+            if "UnusedImportsCheck" not in source:
+                continue
+            line_no = int(enode.attrib.get("line", "0"))
+            fixes.setdefault(fname, []).append(line_no)
+
+    return fixes
+
+
+def fix_unused_imports(filepath, lines_to_remove, dry_run=False):
+    """Remove import lines at specified line numbers. Returns changes."""
+    try:
+        with open(filepath, "r") as f:
+            lines = f.readlines()
+    except (OSError, IOError):
+        return 0
+
+    remove_set = set(lines_to_remove)
+    changes = 0
+    new_lines = []
+    for i, line in enumerate(lines):
+        line_no = i + 1
+        if line_no in remove_set:
+            changes += 1
+            continue
+        new_lines.append(line)
+
+    if changes > 0 and not dry_run:
+        with open(filepath, "w") as f:
+            f.writelines(new_lines)
+
+    return changes
+
+
+# Single-line control structures without braces
+# Matches: if/else if/for/while (...) statement;  and  else statement;
+# Also: do statement; while (...);
+_NL_IF = re.compile(r'^(\s*(?:else\s+)?if\s*\(.*?\))\s+(?!\{)(.+;\s*)$', re.MULTILINE)
+_NL_ELSE = re.compile(r'^(\s*else)\s+(?!\{|if)(.+;\s*)$', re.MULTILINE)
+_NL_FOR = re.compile(r'^(\s*for\s*\(.*?\))\s+(?!\{)(.+;\s*)$', re.MULTILINE)
+_NL_WHILE = re.compile(r'^(\s*while\s*\(.*?\))\s+(?!\{)(.+;\s*)$', re.MULTILINE)
+_NL_DO = re.compile(r'^(\s*do)\s+(?!\{)(.+?;)\s*(while\s*\(.*?\);\s*)$', re.MULTILINE)
+
+
+def fix_need_braces(filepath, dry_run=False):
+    """Add braces to single-line if/else/for/while/do bodies. Returns changes."""
+    try:
+        with open(filepath, "r") as f:
+            content = f.read()
+    except (OSError, IOError):
+        return 0
+
+    def wrap(m):
+        return f"{m.group(1)} {{ {m.group(2).strip()} }}"
+
+    def wrap_do(m):
+        return f"{m.group(1)} {{ {m.group(2).strip()} }} {m.group(3)}"
+
+    new_content = content
+    new_content = _NL_IF.sub(wrap, new_content)
+    new_content = _NL_ELSE.sub(wrap, new_content)
+    new_content = _NL_FOR.sub(wrap, new_content)
+    new_content = _NL_WHILE.sub(wrap, new_content)
+    new_content = _NL_DO.sub(wrap_do, new_content)
+
+    changes = 1 if new_content != content else 0
+
+    if changes > 0 and not dry_run:
+        with open(filepath, "w") as f:
+            f.write(new_content)
+
+    return changes
+
+
+_BRACE_PAREN_WS = re.compile(r'(\{ )|( \})|(\( )|( \))')
+
+
+def fix_brace_paren_whitespace(filepath, dry_run=False):
+    """Remove whitespace around braces and parens: { x } → {x}, ( x ) → (x). Returns changes."""
+    try:
+        with open(filepath, "r") as f:
+            content = f.read()
+    except (OSError, IOError):
+        return 0
+
+    def replacer(m):
+        if m.group(1): return "{"
+        if m.group(2): return "}"
+        if m.group(3): return "("
+        if m.group(4): return ")"
+        return m.group(0)
+
+    prev = None
+    while prev != content:
+        prev = content
+        content = _BRACE_PAREN_WS.sub(replacer, content)
+    changes = 1 if prev != content else 0
+
+    if changes > 0 and not dry_run:
+        with open(filepath, "w") as f:
+            f.write(content)
+
+    return changes
+
+
+_DOUBLE_SEMI = re.compile(r'(?<![\w()]);;+')
+
+
+def fix_empty_statements(filepath, dry_run=False):
+    """Replace ;; with ; (double semicolons). Returns changes."""
+    try:
+        with open(filepath, "r") as f:
+            content = f.read()
+    except (OSError, IOError):
+        return 0
+
+    new_content = _DOUBLE_SEMI.sub(";", content)
+    changes = 1 if new_content != content else 0
+
+    if changes > 0 and not dry_run:
+        with open(filepath, "w") as f:
+            f.write(new_content)
+
+    return changes
+
+
+def fix_imports(filepath, dry_run=False):
+    """Remove unused imports using google-java-format --fix-imports-only. Returns changes."""
+    if not os.path.exists(GOOGLE_FORMAT_JAR):
+        return 0
+    try:
+        with open(filepath, "r") as f:
+            original = f.read()
+    except (OSError, IOError):
+        return 0
+
+    result = subprocess.run(
+        ["java", "-jar", GOOGLE_FORMAT_JAR, "--fix-imports-only", "--skip-sorting-imports", filepath],
+        capture_output=True, text=True, timeout=30)
+
+    if result.returncode != 0:
+        return 0
+
+    fixed = result.stdout
+    if fixed == original:
+        return 0
+
+    if not dry_run:
+        with open(filepath, "w") as f:
+            f.write(fixed)
+
+    # Count removed lines
+    removed = len(original.splitlines()) - len(fixed.splitlines())
+    return max(removed, 1)
+
+
+def fix_tabs(filepath, dry_run=False):
+    """Replace leading tabs with spaces. Returns changes."""
+    try:
+        with open(filepath, "r") as f:
+            lines = f.readlines()
+    except (OSError, IOError):
+        return 0
+
+    changes = 0
+    new_lines = []
+
+    for line in lines:
+        stripped = line.lstrip("\t")
+        if stripped != line:
+            leading_tabs = len(line) - len(stripped)
+            new_line = "    " * leading_tabs + stripped
+            changes += 1
+            line = new_line
+        new_lines.append(line)
+
+    if changes > 0 and not dry_run:
+        with open(filepath, "w") as f:
+            f.writelines(new_lines)
+
+    return changes
 
 
 def fix_indentation_iterative(scan_path, filter_path, dry_run=False, verbose=True):
@@ -266,6 +606,8 @@ def main():
                         help="Preview changes without modifying files")
     parser.add_argument("-t", "--trailing-only", action="store_true",
                         help="Only fix trailing whitespace and newlines, skip indentation")
+    parser.add_argument("--no-exclude", action="store_true",
+                        help="Don't apply exclusion patterns from checkstyle.xml")
     args = parser.parse_args()
 
     scan_path = os.path.abspath(args.path)
@@ -277,17 +619,78 @@ def main():
         print("DRY RUN - no files will be modified\n")
 
     total_fixes = 0
+    apply_exclusions = not args.no_exclude
+    java_files = find_java_files(scan_path, apply_exclusions=apply_exclusions)
 
-    # Pass 1: Indentation (iterative)
+    # Pass 1: Unused imports (google-java-format --fix-imports-only)
+    if not args.trailing_only:
+        print("Fixing unused imports...", file=sys.stderr)
+        import_fixes = 0
+        import_files = 0
+        for filepath in sorted(java_files):
+            n = fix_imports(filepath, args.dry_run)
+            if n > 0:
+                import_fixes += n
+                import_files += 1
+                action = "would fix" if args.dry_run else "fixed"
+                print(f"  {filepath}: {n} import lines {action}")
+        total_fixes += import_fixes
+        if import_fixes == 0:
+            print("No unused imports found.", file=sys.stderr)
+
+    # Pass 2: Leading tabs → spaces
+    if not args.trailing_only:
+        print("Fixing leading tabs...", file=sys.stderr)
+        tab_files = 0
+        tab_fixes = 0
+        for filepath in sorted(java_files):
+            n = fix_tabs(filepath, args.dry_run)
+            if n > 0:
+                tab_fixes += n
+                tab_files += 1
+                action = "would fix" if args.dry_run else "fixed"
+                print(f"  {filepath}: {n} tab lines {action}")
+        total_fixes += tab_fixes
+        if tab_fixes == 0:
+            print("No leading tabs found.", file=sys.stderr)
+
+    # Pass 3: Brace and paren whitespace ({ x } → {x}, ( x ) → (x))
+    if not args.trailing_only:
+        print("Fixing brace/paren whitespace...", file=sys.stderr)
+        bp_fixes = 0
+        for filepath in sorted(java_files):
+            n = fix_brace_paren_whitespace(filepath, args.dry_run)
+            if n > 0:
+                bp_fixes += n
+                action = "would fix" if args.dry_run else "fixed"
+                print(f"  {filepath}: {n} whitespace fixes {action}")
+        total_fixes += bp_fixes
+        if bp_fixes == 0:
+            print("No brace/paren whitespace violations found.", file=sys.stderr)
+
+    # Pass 4: Empty statements (;; → ;)
+    if not args.trailing_only:
+        print("Fixing empty statements...", file=sys.stderr)
+        text_fixes = 0
+        for filepath in sorted(java_files):
+            n = fix_empty_statements(filepath, args.dry_run)
+            if n > 0:
+                text_fixes += n
+                action = "would fix" if args.dry_run else "fixed"
+                print(f"  {filepath}: {n} empty statement fixes {action}")
+        total_fixes += text_fixes
+        if text_fixes == 0:
+            print("No empty-statement violations found.", file=sys.stderr)
+
+    # Pass 5: Indentation (iterative)
     if not args.trailing_only:
         print("Fixing indentation...", file=sys.stderr)
         total_fixes += fix_indentation_iterative(scan_path, args.xml, args.dry_run)
     else:
         print("Skipping indentation (--trailing-only)", file=sys.stderr)
 
-    # Pass 2: Trailing whitespace
+    # Pass 6: Trailing whitespace
     print("Fixing trailing whitespace...", file=sys.stderr)
-    java_files = find_java_files(scan_path)
     trailing_files = 0
     trailing_fixes = 0
     for filepath in sorted(java_files):
@@ -303,7 +706,7 @@ def main():
     if trailing_fixes == 0:
         print("No trailing whitespace found.", file=sys.stderr)
 
-    # Pass 3: Missing newline at end of file
+    # Pass 7: Missing newline at end of file
     print("Fixing missing newlines...", file=sys.stderr)
     newline_files = 0
     for filepath in sorted(java_files):

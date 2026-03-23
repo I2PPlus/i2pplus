@@ -23,12 +23,24 @@
   <!-- Newline at end of file -->
   <module name="NewlineAtEndOfFile"/>
 
-  <!-- Exclusions: skip third-party code, generated JSPs -->
+  <!-- Exclusions: skip third-party code, generated code, build output -->
   <module name="BeforeExecutionExclusionFileFilter">
     <property name="fileNamePattern" value=".*/.*_jsp\.java$"/>
   </module>
   <module name="BeforeExecutionExclusionFileFilter">
     <property name="fileNamePattern" value=".*[/\\]WEB-INF[/\\].*"/>
+  </module>
+  <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*[/\\]build[/\\].*"/>
+  </module>
+  <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*[/\\]org[/\\]apache[/\\].*"/>
+  </module>
+  <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*[/\\]org[/\\]minidns[/\\].*"/>
+  </module>
+  <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*[/\\]com[/\\]mpatric[/\\].*"/>
   </module>
   <module name="BeforeExecutionExclusionFileFilter">
     <property name="fileNamePattern" value=".*[/\\]jetty[/\\].*"/>
@@ -56,6 +68,12 @@
   </module>
   <module name="BeforeExecutionExclusionFileFilter">
     <property name="fileNamePattern" value=".*[/\\]wrapper[/\\].*"/>
+  </module>
+  <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*[/\\]json[/\\]simple[/\\].*"/>
+  </module>
+  <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*[/\\]thetransactioncompany[/\\].*"/>
   </module>
   <module name="BeforeExecutionExclusionFileFilter">
     <property name="fileNamePattern" value=".*[/\\]mindrot[/\\].*"/>
@@ -131,6 +149,7 @@
       <property name="caseIndent" value="4"/>
       <property name="arrayInitIndent" value="4"/>
       <property name="lineWrappingIndentation" value="4"/>
+      <property name="tabWidth" value="4"/>
     </module>
   </module>
 </module>
