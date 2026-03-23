@@ -337,85 +337,86 @@ function hideRule(){
     w(f'<h1>I2P+ PMD Report{suffix}</h1>')
     w(f'<p class="meta">PMD {escape(version)} &middot; {total} violations across {len(files)} files &middot; {escape(timestamp)}</p>')
 
-    # Navbar
-    w('<div id="navbar">')
-    for sub, count in sorted_subs:
-        w(f'<span><a href="#sub-{escape(sub)}" data-sub="sub-{escape(sub)}">{escape(sub)} <span class="badge">{count}</span></a></span>')
-    w('</div>')
+    if total > 0:
+        # Navbar
+        w('<div id="navbar">')
+        for sub, count in sorted_subs:
+            w(f'<span><a href="#sub-{escape(sub)}" data-sub="sub-{escape(sub)}">{escape(sub)} <span class="badge">{count}</span></a></span>')
+        w('</div>')
 
-    # Group files by sub-system
-    sub_files = {}
-    for fname, violations in files:
-        sub = violations[0]["subsystem"]
-        sub_files.setdefault(sub, []).append((fname, violations))
+        # Group files by sub-system
+        sub_files = {}
+        for fname, violations in files:
+            sub = violations[0]["subsystem"]
+            sub_files.setdefault(sub, []).append((fname, violations))
 
-    # Combined summary: by rule with sub-system tags
-    w('<div class="tabletitle"><a name="rules">By Rule</a></div>')
-    w('<table id="summary">')
-    w('<tr><th>Rule</th><th>Sub-systems</th><th class="summary-count">Violations</th><th class="summary-count">Files</th></tr>')
-    for i, (rule, count) in enumerate(sorted_rules):
-        row = "tablerow" + str(i % 2)
-        fc = rule_files.get(rule, 0)
-        sub_counts = rule_sub_counts.get(rule, {})
-        subs_str = ", ".join(f'<a href="#sub-{escape(s)}" data-sub="sub-{escape(s)}">{escape(s)}</a> ({sub_counts[s]})' for s in rule_subs.get(rule, []))
-        w(f'<tr class="{row}"><td><a href="#" data-rule="{escape(rule)}">{escape(rule)}</a></td><td class="subs">{subs_str}</td><td class="summary-count">{count}</td><td class="summary-count">{fc}</td></tr>')
-    w(f'<tr class="tablerow0"><td><b>Total</b></td><td></td><td class="summary-count"><b>{total}</b></td><td class="summary-count"><b>{len(files)}</b></td></tr>')
-    w('</table>')
+        # Combined summary: by rule with sub-system tags
+        w('<div class="tabletitle"><a name="rules">By Rule</a></div>')
+        w('<table id="summary">')
+        w('<tr><th>Rule</th><th>Sub-systems</th><th class="summary-count">Violations</th><th class="summary-count">Files</th></tr>')
+        for i, (rule, count) in enumerate(sorted_rules):
+            row = "tablerow" + str(i % 2)
+            fc = rule_files.get(rule, 0)
+            sub_counts = rule_sub_counts.get(rule, {})
+            subs_str = ", ".join(f'<a href="#sub-{escape(s)}" data-sub="sub-{escape(s)}">{escape(s)}</a> ({sub_counts[s]})' for s in rule_subs.get(rule, []))
+            w(f'<tr class="{row}"><td><a href="#" data-rule="{escape(rule)}">{escape(rule)}</a></td><td class="subs">{subs_str}</td><td class="summary-count">{count}</td><td class="summary-count">{fc}</td></tr>')
+        w(f'<tr class="tablerow0"><td><b>Total</b></td><td></td><td class="summary-count"><b>{total}</b></td><td class="summary-count"><b>{len(files)}</b></td></tr>')
+        w('</table>')
 
-    # Rule filter container (hidden by default, shown when a rule is clicked)
-    w('<div id="rule-filter" style="display:none"></div>')
+        # Rule filter container (hidden by default, shown when a rule is clicked)
+        w('<div id="rule-filter" style="display:none"></div>')
 
-    # Violations grouped by sub-system (collapsible)
-    w('<div id="violations">')
-    w('<div class="tabletitle"><a name="violations">Violations</a></div>')
+        # Violations grouped by sub-system (collapsible)
+        w('<div id="violations">')
+        w('<div class="tabletitle"><a name="violations">Violations</a></div>')
 
-    for sub, count in sorted_subs:
-        if sub not in sub_files:
-            continue
-        nfiles = len(sub_files[sub])
-        w(f'<details id="sub-{escape(sub)}">')
-        w(f'<summary><div class="tabletitle"><a name="sub-{escape(sub)}">{escape(sub)}</a>&#32;<span class="badge">{count} / {nfiles}</span></div></summary>')
-        for fname, violations in sub_files[sub]:
-            w(f'<h3><span class="path">{escape(fname)}</span> <span class="badge">{len(violations)}</span></h3>')
-            w('<table class="warningtable">')
-            w('<tr><th class="line">Line</th><th>Rule</th><th>Message</th><th class="rule-category">Category</th><th class="rule-doc">Doc</th></tr>')
-            for i, v in enumerate(sorted(violations, key=lambda x: int(x["begin"]))):
-                row = "tablerow" + str(i % 2)
-                vid = f"v{abs(hash(fname + v['begin'] + v['rule']))}"
-                rng = v["begin"] if v["begin"] == v["end"] else f'{v["begin"]}-{v["end"]}'
-                doc_link = ''
-                if v["url"]:
-                    doc_link = f'<a href="{escape(v["url"])}" target="_blank" class="rule-doc-link"><span class="rule-doc-icon" title="Rule documentation: {escape(v["rule"])}"></span></a>'
-                detail_parts = []
-                if v["class"]:
-                    detail_parts.append(f'<b>Class:</b> {escape(v["class"])}')
-                if v["method"]:
-                    detail_parts.append(f'<b>Method:</b> {escape(v["method"])}')
-                snippet = get_code_snippet(fname, v["begin"])
-                has_detail = bool(detail_parts) or bool(snippet)
-                if has_detail:
-                    w(f'<tr class="{row}" data-detail="{vid}">')
-                else:
-                    w(f'<tr class="{row}">')
-                w(f'<td class="line priority-cell p{v["priority"]}">{escape(rng)}</td>')
-                w(f'<td>{escape(v["rule"])}</td>')
-                w(f'<td>{escape(v["msg"])}</td>')
-                w(f'<td class="rule-category">{escape(v["ruleset"])}</td>')
-                w(f'<td class="rule-doc">{doc_link}</td>')
-                w('</tr>')
-                if has_detail:
-                    w(f'<tr class="detailrow{i % 2} hidden"><td colspan="5">')
-                    w(f'<div id="{vid}" style="display:none" class="detail-content">')
-                    if detail_parts:
-                        w(' &middot; '.join(detail_parts))
-                    if snippet:
-                        w(f'<pre class="snippet"><code>{snippet}</code></pre>')
-                    w('</div>')
-                    w('</td></tr>')
-            w('</table>')
-        w('</details>')
+        for sub, count in sorted_subs:
+            if sub not in sub_files:
+                continue
+            nfiles = len(sub_files[sub])
+            w(f'<details id="sub-{escape(sub)}">')
+            w(f'<summary><div class="tabletitle"><a name="sub-{escape(sub)}">{escape(sub)}</a>&#32;<span class="badge">{count} / {nfiles}</span></div></summary>')
+            for fname, violations in sub_files[sub]:
+                w(f'<h3><span class="path">{escape(fname)}</span> <span class="badge">{len(violations)}</span></h3>')
+                w('<table class="warningtable">')
+                w('<tr><th class="line">Line</th><th>Rule</th><th>Message</th><th class="rule-category">Category</th><th class="rule-doc">Doc</th></tr>')
+                for i, v in enumerate(sorted(violations, key=lambda x: int(x["begin"]))):
+                    row = "tablerow" + str(i % 2)
+                    vid = f"v{abs(hash(fname + v['begin'] + v['rule']))}"
+                    rng = v["begin"] if v["begin"] == v["end"] else f'{v["begin"]}-{v["end"]}'
+                    doc_link = ''
+                    if v["url"]:
+                        doc_link = f'<a href="{escape(v["url"])}" target="_blank" class="rule-doc-link"><span class="rule-doc-icon" title="Rule documentation: {escape(v["rule"])}"></span></a>'
+                    detail_parts = []
+                    if v["class"]:
+                        detail_parts.append(f'<b>Class:</b> {escape(v["class"])}')
+                    if v["method"]:
+                        detail_parts.append(f'<b>Method:</b> {escape(v["method"])}')
+                    snippet = get_code_snippet(fname, v["begin"])
+                    has_detail = bool(detail_parts) or bool(snippet)
+                    if has_detail:
+                        w(f'<tr class="{row}" data-detail="{vid}">')
+                    else:
+                        w(f'<tr class="{row}">')
+                    w(f'<td class="line priority-cell p{v["priority"]}">{escape(rng)}</td>')
+                    w(f'<td>{escape(v["rule"])}</td>')
+                    w(f'<td>{escape(v["msg"])}</td>')
+                    w(f'<td class="rule-category">{escape(v["ruleset"])}</td>')
+                    w(f'<td class="rule-doc">{doc_link}</td>')
+                    w('</tr>')
+                    if has_detail:
+                        w(f'<tr class="detailrow{i % 2} hidden"><td colspan="5">')
+                        w(f'<div id="{vid}" style="display:none" class="detail-content">')
+                        if detail_parts:
+                            w(' &middot; '.join(detail_parts))
+                        if snippet:
+                            w(f'<pre class="snippet"><code>{snippet}</code></pre>')
+                        w('</div>')
+                        w('</td></tr>')
+                w('</table>')
+            w('</details>')
 
-    w('</div>')  # close violations div
+        w('</div>')  # close violations div
     w('</body>')
     w('</html>')
 
