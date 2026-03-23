@@ -46,6 +46,12 @@
     <property name="fileNamePattern" value=".*[/\\]UPnP\.java$"/>
   </module>
   <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*[/\\]pack200[/\\].*"/>
+  </module>
+  <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*[/\\]jrobin[/\\].*"/>
+  </module>
+  <module name="BeforeExecutionExclusionFileFilter">
     <property name="fileNamePattern" value=".*[/\\]com[/\\]southernstorm[/\\].*"/>
   </module>
   <module name="BeforeExecutionExclusionFileFilter">
