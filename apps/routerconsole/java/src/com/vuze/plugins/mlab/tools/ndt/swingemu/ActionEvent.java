@@ -30,19 +30,19 @@ package com.vuze.plugins.mlab.tools.ndt.swingemu;
 public class
     ActionEvent
 {
-	/**
-	 * Gets the source of this action event.
-	 * @return a new Object as the source
-	 */
-	public Object
+    /**
+     * Gets the source of this action event.
+     * @return a new Object as the source
+     */
+    public Object
             getSource()
-	{
-		return( new Object());
-	}
+    {
+        return( new Object());
+    }
 
-	/**
-	 * Default constructor.
-	 */
-	public ActionEvent() {
-	}
+    /**
+     * Default constructor.
+     */
+    public ActionEvent() {
+    }
 }

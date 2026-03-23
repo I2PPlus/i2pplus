@@ -44,25 +44,25 @@ import net.i2p.util.Log;
 public class
     StyledDocument
 {
-	private final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(Tcpbw100.class);
-	private final StringBuilder text = new StringBuilder();
+    private final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(Tcpbw100.class);
+    private final StringBuilder text = new StringBuilder();
 
-	public int
+    public int
             getLength()
-	{
-		return text.length();
-	}
+    {
+        return text.length();
+    }
 
-	public void
+    public void
             insertString(
-		int		offset,
-		String	s,
-		Object	x )
+        int		offset,
+        String	s,
+        Object	x )
 
-		throws BadLocationException
-	{
-		if (_log.shouldWarn())
-			_log.warn(s.trim());
-		text.append(s);
-	}
+        throws BadLocationException
+    {
+        if (_log.shouldWarn())
+            _log.warn(s.trim());
+        text.append(s);
+    }
 }

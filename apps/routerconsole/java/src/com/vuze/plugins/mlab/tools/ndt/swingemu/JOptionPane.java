@@ -38,24 +38,24 @@ package com.vuze.plugins.mlab.tools.ndt.swingemu;
 public class
     JOptionPane
 {
-	public static final int INFORMATION_MESSAGE = 0;
+    public static final int INFORMATION_MESSAGE = 0;
 
-	public static void
+    public static void
             showMessageDialog(
-		Object	wha,
-		String	str )
-	{
-		//System.out.println( "dialog: " + str );
-	}
+        Object	wha,
+        String	str )
+    {
+        //System.out.println( "dialog: " + str );
+    }
 
-	public static void
+    public static void
             showMessageDialog(
-		Object	wha,
-		String	str1,
-		String	str2,
-		int		a )
-	{
-		//System.out.println( "dialog: " + str1 + "/" + str2 );
-	}
+        Object	wha,
+        String	str1,
+        String	str2,
+        int		a )
+    {
+        //System.out.println( "dialog: " + str1 + "/" + str2 );
+    }
 
 }

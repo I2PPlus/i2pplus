@@ -7,8 +7,6 @@ import java.io.Serializable;
 import java.io.Writer;
 import java.text.DecimalFormat;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.Locale;

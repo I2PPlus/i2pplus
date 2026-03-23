@@ -5,12 +5,12 @@ All rights reserved.
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
 
-	* Redistributions of source code must retain the above copyright
+    * Redistributions of source code must retain the above copyright
 notice, this list of conditions and the following disclaimer.
-	* Redistributions in binary form must reproduce the above copyright
+    * Redistributions in binary form must reproduce the above copyright
 notice, this list of conditions and the following disclaimer in the
 documentation and/or other materials provided with the distribution.
-	* Neither the name of Metanotion Software nor the names of its
+    * Neither the name of Metanotion Software nor the names of its
 contributors may be used to endorse or promote products derived from this
 software without specific prior written permission.
 
@@ -48,94 +48,94 @@ import net.metanotion.util.skiplist.SkipSpan;
  */
 public class IBSkipIterator<K extends Comparable<? super K>, V> extends SkipIterator<K, V> {
 
-	public IBSkipIterator(SkipSpan<K, V> ss, int index) {
-		super(ss, index);
-	}
+    public IBSkipIterator(SkipSpan<K, V> ss, int index) {
+        super(ss, index);
+    }
 
-	/**
-	 * @return the next value, and advances the index
-	 * @throws NoSuchElementException
-	 * @throws RuntimeException on IOE
-	 */
-	@Override
-	public V next() {
-		V o;
-		if(index < ss.nKeys) {
-			if (ss.vals == null) {
-				try {
-					((IBSkipSpan)ss).seekAndLoadData();
-				} catch (IOException ioe) {
-					throw new RuntimeException("Error in iterator", ioe);
-				}
-			}
-			o = ss.vals[index];
-		} else {
-			throw new NoSuchElementException();
-		}
+    /**
+     * @return the next value, and advances the index
+     * @throws NoSuchElementException
+     * @throws RuntimeException on IOE
+     */
+    @Override
+    public V next() {
+        V o;
+        if(index < ss.nKeys) {
+            if (ss.vals == null) {
+                try {
+                    ((IBSkipSpan)ss).seekAndLoadData();
+                } catch (IOException ioe) {
+                    throw new RuntimeException("Error in iterator", ioe);
+                }
+            }
+            o = ss.vals[index];
+        } else {
+            throw new NoSuchElementException();
+        }
 
-		if(index < (ss.nKeys-1)) {
-			index++;
-		} else if(ss.next != null) {
-			ss.keys = null;
-			ss.vals = null;
-			ss = ss.next;
-			index = 0;
-		} else {
-			ss.keys = null;
-			ss.vals = null;
-			index = ss.nKeys;
-		}
-		return o;
-	}
+        if(index < (ss.nKeys-1)) {
+            index++;
+        } else if(ss.next != null) {
+            ss.keys = null;
+            ss.vals = null;
+            ss = ss.next;
+            index = 0;
+        } else {
+            ss.keys = null;
+            ss.vals = null;
+            index = ss.nKeys;
+        }
+        return o;
+    }
 
-	/**
-	 * The key. Does NOT advance the index.
-	 * @return the key for which the value will be returned in the subsequent call to next()
-	 * @throws NoSuchElementException
-	 * @throws RuntimeException on IOE
-	 */
-	@Override
-	public K nextKey() {
-		if(index < ss.nKeys) {
-			if (ss.keys == null) {
-				try {
-					((IBSkipSpan)ss).seekAndLoadData();
-				} catch (IOException ioe) {
-					throw new RuntimeException("Error in iterator", ioe);
-				}
-			}
-			return ss.keys[index];
-		}
-		throw new NoSuchElementException();
-	}
+    /**
+     * The key. Does NOT advance the index.
+     * @return the key for which the value will be returned in the subsequent call to next()
+     * @throws NoSuchElementException
+     * @throws RuntimeException on IOE
+     */
+    @Override
+    public K nextKey() {
+        if(index < ss.nKeys) {
+            if (ss.keys == null) {
+                try {
+                    ((IBSkipSpan)ss).seekAndLoadData();
+                } catch (IOException ioe) {
+                    throw new RuntimeException("Error in iterator", ioe);
+                }
+            }
+            return ss.keys[index];
+        }
+        throw new NoSuchElementException();
+    }
 
-	/**
-	 * @return the previous value, and decrements the index
-	 * @throws NoSuchElementException
-	 * @throws RuntimeException on IOE
-	 */
-	@Override
-	public V previous() {
-		if(index > 0) {
-			index--;
-		} else if(ss.prev != null) {
-			ss.keys = null;
-			ss.vals = null;
-			ss = ss.prev;
-			if(ss.nKeys <= 0) { throw new NoSuchElementException(); }
-			index = (ss.nKeys - 1);
-		} else {
-			ss.keys = null;
-			ss.vals = null;
-			throw new NoSuchElementException();
-		}
-		if (ss.vals == null) {
-			try {
-				((IBSkipSpan)ss).seekAndLoadData();
-			} catch (IOException ioe) {
-				throw new RuntimeException("Error in iterator", ioe);
-			}
-		}
-		return ss.vals[index];
-	}
+    /**
+     * @return the previous value, and decrements the index
+     * @throws NoSuchElementException
+     * @throws RuntimeException on IOE
+     */
+    @Override
+    public V previous() {
+        if(index > 0) {
+            index--;
+        } else if(ss.prev != null) {
+            ss.keys = null;
+            ss.vals = null;
+            ss = ss.prev;
+            if(ss.nKeys <= 0) { throw new NoSuchElementException(); }
+            index = (ss.nKeys - 1);
+        } else {
+            ss.keys = null;
+            ss.vals = null;
+            throw new NoSuchElementException();
+        }
+        if (ss.vals == null) {
+            try {
+                ((IBSkipSpan)ss).seekAndLoadData();
+            } catch (IOException ioe) {
+                throw new RuntimeException("Error in iterator", ioe);
+            }
+        }
+        return ss.vals[index];
+    }
 }

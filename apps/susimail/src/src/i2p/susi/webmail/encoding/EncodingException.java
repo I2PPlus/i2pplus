@@ -30,25 +30,25 @@ import java.io.IOException;
  * @author susi
  */
 public class EncodingException extends IOException {
-	/**
-	 * Comment for <code>serialVersionUID</code>
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     * Comment for <code>serialVersionUID</code>
+     */
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * @since public since 0.9.33, was package private
-	 */
-	public EncodingException( String msg )
-	{
-		super( msg );
-	}
+    /**
+     * @since public since 0.9.33, was package private
+     */
+    public EncodingException( String msg )
+    {
+        super( msg );
+    }
 
-	/**
-	 * @since 0.9.33
-	 */
-	public EncodingException(String msg, Exception cause)
-	{
-		super(msg, cause);
-	}
+    /**
+     * @since 0.9.33
+     */
+    public EncodingException(String msg, Exception cause)
+    {
+        super(msg, cause);
+    }
 
 }

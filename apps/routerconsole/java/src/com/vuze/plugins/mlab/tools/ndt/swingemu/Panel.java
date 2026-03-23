@@ -36,16 +36,16 @@ package com.vuze.plugins.mlab.tools.ndt.swingemu;
  */
 public class
     Panel
-	extends Component
+    extends Component
 {
-	public void
+    public void
             validate()
-	{
-	}
+    {
+    }
 
-	public void
+    public void
             remove(
-		Component	c )
-	{
-	}
+        Component	c )
+    {
+    }
 }

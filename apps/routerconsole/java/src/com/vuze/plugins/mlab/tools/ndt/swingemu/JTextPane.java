@@ -37,31 +37,31 @@ package com.vuze.plugins.mlab.tools.ndt.swingemu;
  */
 public class
     JTextPane
-	extends Component
+    extends Component
 {
-	private StyledDocument sd = new StyledDocument();
+    private StyledDocument sd = new StyledDocument();
 
-	public void
+    public void
             insertComponent(
-		Component	comp )
-	{
-	}
+        Component	comp )
+    {
+    }
 
-	public StyledDocument
+    public StyledDocument
             getStyledDocument()
-	{
-		return( sd );
-	}
+    {
+        return( sd );
+    }
 
-	public void
+    public void
             setSelectionStart(
-		int	i )
-	{
-	}
+        int	i )
+    {
+    }
 
-	public void
+    public void
             setSelectionEnd(
-		int	i )
-	{
-	}
+        int	i )
+    {
+    }
 }

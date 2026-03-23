@@ -38,35 +38,35 @@ import java.net.URL;
  */
 public class JApplet extends JFrame{
 
-	public URL
+    public URL
             getCodeBase()
-	{
-		return( null );
-	}
+    {
+        return( null );
+    }
 
-	public AppletContext
+    public AppletContext
             getAppletContext()
-	{
-		return( null );
-	}
+    {
+        return( null );
+    }
 
-	public String
+    public String
             getParameter(
-		String	name )
-	{
-		return( null );
-	}
+        String	name )
+    {
+        return( null );
+    }
 
-	public void
+    public void
             showStatus(
-		String		str )
-	{
-		//System.out.println( "status: " + str );
-	}
+        String		str )
+    {
+        //System.out.println( "status: " + str );
+    }
 
-	public void
+    public void
             start()
-	{
+    {
 
-	}
+    }
 }

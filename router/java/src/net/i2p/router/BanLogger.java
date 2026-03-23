@@ -16,7 +16,6 @@ import java.util.TimeZone;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
-import net.i2p.router.HashPatternDetector;
 import net.i2p.util.Log;
 import java.util.Locale;
 

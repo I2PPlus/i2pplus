@@ -23,54 +23,54 @@ class SAMv2Handler extends SAMv1Handler implements SAMRawReceiver, SAMDatagramRe
 {
 
 
-		/**
-		 * Create a new SAM version 2 handler.  This constructor expects
-		 * that the SAM HELLO message has been still answered (and
-		 * stripped) from the socket input stream.
-		 *
-		 * @param s Socket attached to a SAM client
-		 * @param verMajor SAM major version to manage (should be 2)
-		 * @param verMinor SAM minor version to manage
-		 */
+        /**
+         * Create a new SAM version 2 handler.  This constructor expects
+         * that the SAM HELLO message has been still answered (and
+         * stripped) from the socket input stream.
+         *
+         * @param s Socket attached to a SAM client
+         * @param verMajor SAM major version to manage (should be 2)
+         * @param verMinor SAM minor version to manage
+         */
     public SAMv2Handler(SocketChannel s, int verMajor, int verMinor,
-		                     SAMBridge parent) throws SAMException, IOException
+                             SAMBridge parent) throws SAMException, IOException
     {
         this(s, verMajor, verMinor, new Properties(), parent);
     }
 
-		/**
-		 * Create a new SAM version 2 handler.  This constructor expects
-		 * that the SAM HELLO message has been still answered (and
-		 * stripped) from the socket input stream.
-		 *
-		 * @param s Socket attached to a SAM client
-		 * @param verMajor SAM major version to manage (should be 2)
-		 * @param verMinor SAM minor version to manage
-		 * @param i2cpProps properties to configure the I2CP connection (host, port, etc)
-		 */
+        /**
+         * Create a new SAM version 2 handler.  This constructor expects
+         * that the SAM HELLO message has been still answered (and
+         * stripped) from the socket input stream.
+         *
+         * @param s Socket attached to a SAM client
+         * @param verMajor SAM major version to manage (should be 2)
+         * @param verMinor SAM minor version to manage
+         * @param i2cpProps properties to configure the I2CP connection (host, port, etc)
+         */
 
     public SAMv2Handler(SocketChannel s, int verMajor, int verMinor,
-		                    Properties i2cpProps, SAMBridge parent) throws SAMException, IOException
+                            Properties i2cpProps, SAMBridge parent) throws SAMException, IOException
     {
         super(s, verMajor, verMinor, i2cpProps, parent);
     }
 
     @Override
-		public boolean verifVersion()
+        public boolean verifVersion()
     {
         return (verMajor == 2);
     }
 
     SAMStreamSession newSAMStreamSession(String destKeystream, String direction, Properties props )
-				throws IOException, DataFormatException, SAMException
+                throws IOException, DataFormatException, SAMException
     {
         return new SAMv2StreamSession(destKeystream, direction, props, this) ;
     }
 
 
-		/* Parse and execute a STREAM message */
+        /* Parse and execute a STREAM message */
     @Override
-		protected boolean execStreamMessage ( String opcode, Properties props )
+        protected boolean execStreamMessage ( String opcode, Properties props )
     {
         if ( getStreamSession() == null )
         {
@@ -97,8 +97,8 @@ class SAMv2Handler extends SAMv1Handler implements SAMRawReceiver, SAMDatagramRe
         else
         {
             if (_log.shouldDebug())
-					_log.debug ( "Unrecognized RAW message opcode: \""
-						+ opcode + "\"" );
+                    _log.debug ( "Unrecognized RAW message opcode: \""
+                        + opcode + "\"" );
             return false;
         }
     }
@@ -112,7 +112,7 @@ class SAMv2Handler extends SAMv1Handler implements SAMRawReceiver, SAMDatagramRe
         if (props.isEmpty())
         {
             if (_log.shouldDebug())
-					_log.debug ( "No parameters specified in STREAM RECEIVE message" );
+                    _log.debug ( "No parameters specified in STREAM RECEIVE message" );
             return false;
         }
 
@@ -124,7 +124,7 @@ class SAMv2Handler extends SAMv1Handler implements SAMRawReceiver, SAMDatagramRe
             if ( strid == null )
             {
                 if (_log.shouldDebug())
-						_log.debug ( "ID not specified in STREAM RECEIVE message" );
+                        _log.debug ( "ID not specified in STREAM RECEIVE message" );
                 return false;
             }
 
@@ -135,7 +135,7 @@ class SAMv2Handler extends SAMv1Handler implements SAMRawReceiver, SAMDatagramRe
             catch ( NumberFormatException e )
             {
                 if (_log.shouldDebug())
-						_log.debug ( "Invalid STREAM RECEIVE ID specified: " + strid );
+                        _log.debug ( "Invalid STREAM RECEIVE ID specified: " + strid );
                 return false;
             }
         }
@@ -149,7 +149,7 @@ class SAMv2Handler extends SAMv1Handler implements SAMRawReceiver, SAMDatagramRe
             if ( strsize == null )
             {
                 if (_log.shouldDebug())
-						_log.debug ( "Limit not specified in STREAM RECEIVE message" );
+                        _log.debug ( "Limit not specified in STREAM RECEIVE message" );
                 return false;
             }
 
@@ -166,15 +166,15 @@ class SAMv2Handler extends SAMv1Handler implements SAMRawReceiver, SAMDatagramRe
                 catch ( NumberFormatException e )
                 {
                     if (_log.shouldDebug())
-							_log.debug ( "Invalid STREAM RECEIVE size specified: " + strsize );
+                            _log.debug ( "Invalid STREAM RECEIVE size specified: " + strsize );
                     return false;
                 }
 
                 if ( limit < 0 )
                 {
                     if (_log.shouldDebug())
-							_log.debug ( "Specified limit (" + limit
-								+ ") is out of protocol limits" );
+                            _log.debug ( "Specified limit (" + limit
+                                + ") is out of protocol limits" );
                     return false;
                 }
             }

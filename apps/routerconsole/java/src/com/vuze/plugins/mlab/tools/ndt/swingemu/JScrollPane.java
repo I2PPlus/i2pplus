@@ -36,12 +36,12 @@ package com.vuze.plugins.mlab.tools.ndt.swingemu;
  */
 public class
     JScrollPane
-	extends Component
+    extends Component
 {
-	public
+    public
             JScrollPane(
-		Component	p )
-	{
+        Component	p )
+    {
 
-	}
+    }
 }

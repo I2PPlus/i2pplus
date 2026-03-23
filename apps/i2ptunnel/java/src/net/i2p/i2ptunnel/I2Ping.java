@@ -16,15 +16,11 @@ import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
 import net.i2p.client.I2PSession;
 import net.i2p.client.I2PSessionException;
-import net.i2p.client.streaming.I2PSocket;
-import net.i2p.client.streaming.I2PSocketAddress;
-import net.i2p.client.streaming.I2PSocketException;
 import net.i2p.data.Base32;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
 import net.i2p.util.EventDispatcher;
 import net.i2p.util.I2PAppThread;
-import net.i2p.util.Log;
 
 /**
  * I2P ping utility for CLI use.

@@ -21,7 +21,7 @@ public class SimpleTimer {
      *  If you have a context, use context.simpleTimer() instead
      *  @deprecated use SimpleTimer2
      */
-	@Deprecated
+    @Deprecated
     public static SimpleTimer getInstance() {
         return I2PAppContext.getGlobalContext().simpleTimer();
     }

@@ -102,26 +102,26 @@ public class I2CPMessageReader {
          * Notify the listener that a message has been received from the given
          * reader
          *
-	 * @param reader I2CPMessageReader to notify
-	 * @param message the I2CPMessage
-	 */
+     * @param reader I2CPMessageReader to notify
+     * @param message the I2CPMessage
+     */
         public void messageReceived(I2CPMessageReader reader, I2CPMessage message);
 
         /**
          * Notify the listener that an exception was thrown while reading from the given
          * reader. For most errors, disconnected() will also be called, as of 0.9.41.
          *
-	 * @param reader I2CPMessageReader to notify
-	 * @param error Exception that was thrown, non-null
-	 */
+     * @param reader I2CPMessageReader to notify
+     * @param error Exception that was thrown, non-null
+     */
         public void readError(I2CPMessageReader reader, Exception error);
 
         /**
          * Notify the listener that the stream this reader was reading was
          * closed. For most errors, readError() will be called first, as of 0.9.41
          *
-	 * @param reader I2CPMessageReader to notify
-	 */
+     * @param reader I2CPMessageReader to notify
+     */
         public void disconnected(I2CPMessageReader reader);
     }
 

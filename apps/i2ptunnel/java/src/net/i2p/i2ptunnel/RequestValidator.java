@@ -2,7 +2,6 @@ package net.i2p.i2ptunnel;
 
 import java.net.InetAddress;
 import java.util.List;
-import java.util.Locale;
 import java.util.Properties;
 import net.i2p.data.DataHelper;
 import net.i2p.util.Log;

@@ -36,18 +36,18 @@ package com.vuze.plugins.mlab.tools.ndt.swingemu;
  */
 public class
     JButton
-	extends Component
+    extends Component
 {
-	public
+    public
             JButton(
-		String		name )
-	{
-	}
+        String		name )
+    {
+    }
 
-	public void
+    public void
             addActionListener(
-		ActionListener	l )
-	{
+        ActionListener	l )
+    {
 
-	}
+    }
 }

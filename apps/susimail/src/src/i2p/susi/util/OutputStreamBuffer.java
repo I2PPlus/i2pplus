@@ -11,54 +11,54 @@ import java.io.OutputStream;
  */
 public class OutputStreamBuffer implements Buffer {
 
-	private final OutputStream _out;
+    private final OutputStream _out;
 
-	public OutputStreamBuffer(OutputStream out) {
-		_out = out;
-	}
+    public OutputStreamBuffer(OutputStream out) {
+        _out = out;
+    }
 
-	/**
-	 * @throws UnsupportedOperationException
-	 */
-	public InputStream getInputStream() {
-		throw new UnsupportedOperationException();
-	}
+    /**
+     * @throws UnsupportedOperationException
+     */
+    public InputStream getInputStream() {
+        throw new UnsupportedOperationException();
+    }
 
-	/**
-	 * @return the OutputStream
-	 */
-	public OutputStream getOutputStream() {
-		return _out;
-	}
+    /**
+     * @return the OutputStream
+     */
+    public OutputStream getOutputStream() {
+        return _out;
+    }
 
-	/**
-	 * Does nothing
-	 */
-	public void readComplete(boolean success) {}
+    /**
+     * Does nothing
+     */
+    public void readComplete(boolean success) {}
 
-	/**
-	 * Closes the output stream
-	 */
-	public void writeComplete(boolean success) {
-		try { _out.close(); } catch (IOException ioe) {}
-	}
+    /**
+     * Closes the output stream
+     */
+    public void writeComplete(boolean success) {
+        try { _out.close(); } catch (IOException ioe) {}
+    }
 
-	/**
-	 * @return 0 always
-	 */
-	public int getLength() {
-		return 0;
-	}
+    /**
+     * @return 0 always
+     */
+    public int getLength() {
+        return 0;
+    }
 
-	/**
-	 * @return 0 always
-	 */
-	public int getOffset() {
-		return 0;
-	}
+    /**
+     * @return 0 always
+     */
+    public int getOffset() {
+        return 0;
+    }
 
-	@Override
-	public String toString() {
-		return "OSB";
-	}
+    @Override
+    public String toString() {
+        return "OSB";
+    }
 }

@@ -12,7 +12,6 @@ package net.i2p.data.i2cp;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import net.i2p.data.DataFormatException;

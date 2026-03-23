@@ -22,7 +22,6 @@ import java.util.regex.Pattern;
 import net.i2p.data.DataHelper;
 import net.i2p.util.Log;
 import net.i2p.util.SecureFileOutputStream;
-import net.i2p.servlet.RequestWrapper;
 import java.util.Locale;
 
 /**

@@ -16,56 +16,56 @@ import java.util.Properties;
  *  @since 0.9.25 moved from SAMv3Handler
  */
 class SessionRecord {
-	private final String m_dest ;
-	private final Properties m_props ;
-	private ThreadGroup m_threadgroup ;
-	private final SAMv3Handler m_handler ;
+    private final String m_dest ;
+    private final Properties m_props ;
+    private ThreadGroup m_threadgroup ;
+    private final SAMv3Handler m_handler ;
 
-	public SessionRecord( String dest, Properties props, SAMv3Handler handler )
-	{
-		m_dest = dest;
-		m_props = new Properties() ;
-		m_props.putAll(props);
-		m_handler = handler ;
-	}
+    public SessionRecord( String dest, Properties props, SAMv3Handler handler )
+    {
+        m_dest = dest;
+        m_props = new Properties() ;
+        m_props.putAll(props);
+        m_handler = handler ;
+    }
 
-	public SessionRecord( SessionRecord in )
-	{
-		m_dest = in.getDest();
-		m_props = in.getProps();
-		m_threadgroup = in.getThreadGroup();
-		m_handler = in.getHandler();
-	}
+    public SessionRecord( SessionRecord in )
+    {
+        m_dest = in.getDest();
+        m_props = in.getProps();
+        m_threadgroup = in.getThreadGroup();
+        m_handler = in.getHandler();
+    }
 
-	public String getDest()
-	{
-		return m_dest;
-	}
+    public String getDest()
+    {
+        return m_dest;
+    }
 
-	/**
-	 * Warning - returns a copy.
-	 * @return a copy
-	 */
-	synchronized public Properties getProps()
-	{
-		Properties p = new Properties();
-		p.putAll(m_props);
-		return m_props;
-	}
+    /**
+     * Warning - returns a copy.
+     * @return a copy
+     */
+    synchronized public Properties getProps()
+    {
+        Properties p = new Properties();
+        p.putAll(m_props);
+        return m_props;
+    }
 
-	public SAMv3Handler getHandler()
-	{
-		return m_handler ;
-	}
+    public SAMv3Handler getHandler()
+    {
+        return m_handler ;
+    }
 
-	synchronized public ThreadGroup getThreadGroup()
-	{
-		return m_threadgroup ;
-	}
+    synchronized public ThreadGroup getThreadGroup()
+    {
+        return m_threadgroup ;
+    }
 
-	synchronized public void createThreadGroup(String name)
-	{
-		if (m_threadgroup == null)
-			m_threadgroup = new ThreadGroup(name);
-	}
+    synchronized public void createThreadGroup(String name)
+    {
+        if (m_threadgroup == null)
+            m_threadgroup = new ThreadGroup(name);
+    }
 }

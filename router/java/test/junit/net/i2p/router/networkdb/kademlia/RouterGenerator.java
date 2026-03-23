@@ -92,8 +92,8 @@ public class RouterGenerator {
         try {
             info.setAddresses(createAddresses(num));
             // not necessary, in constructor
-	    //info.setOptions(new Properties());
-	    //info.setPeers(new HashSet());
+        //info.setOptions(new Properties());
+        //info.setPeers(new HashSet());
             info.setPublished(Clock.getInstance().now());
             RouterIdentity ident = new RouterIdentity();
             BigInteger bv = new BigInteger(""+num);

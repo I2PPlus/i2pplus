@@ -5,12 +5,12 @@ All rights reserved.
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
 
-	* Redistributions of source code must retain the above copyright
+    * Redistributions of source code must retain the above copyright
 notice, this list of conditions and the following disclaimer.
-	* Redistributions in binary form must reproduce the above copyright
+    * Redistributions in binary form must reproduce the above copyright
 notice, this list of conditions and the following disclaimer in the
 documentation and/or other materials provided with the distribution.
-	* Neither the name of Metanotion Software nor the names of its
+    * Neither the name of Metanotion Software nor the names of its
 contributors may be used to endorse or promote products derived from this
 software without specific prior written permission.
 
@@ -53,165 +53,165 @@ import net.metanotion.io.RandomAccessInterface;
  * </pre>
  */
 class FreeListBlock {
-	private static final long MAGIC = 0x2366724c69737423l;  // "#frList#"
-	private static final long MAGIC_FREE = 0x7e2146524545217el;  // "~!FREE!~"
-	private static final int HEADER_LEN = 16;
-	private static final int MAX_SIZE = (BlockFile.PAGESIZE - HEADER_LEN) / 4;
+    private static final long MAGIC = 0x2366724c69737423l;  // "#frList#"
+    private static final long MAGIC_FREE = 0x7e2146524545217el;  // "~!FREE!~"
+    private static final int HEADER_LEN = 16;
+    private static final int MAX_SIZE = (BlockFile.PAGESIZE - HEADER_LEN) / 4;
 
-	public final int page;
-	private int nextPage;
-	private int len;
-	private final int[] branches;
-	private final RandomAccessInterface file;
+    public final int page;
+    private int nextPage;
+    private int len;
+    private final int[] branches;
+    private final RandomAccessInterface file;
 
-	public FreeListBlock(RandomAccessInterface file, int startPage) throws IOException {
-		this.file = file;
-		this.page = startPage;
-		BlockFile.pageSeek(file, startPage);
-		long magic = file.readLong();
-		if (magic != MAGIC)
-			throw new IOException("Bad freelist magic number 0x" + Long.toHexString(magic) + " on page " + startPage);
-		nextPage = file.readUnsignedInt();
-		len = file.readUnsignedInt();
-		if (len > MAX_SIZE)
-			throw new IOException("Bad freelist size " + len);
-		branches = new int[MAX_SIZE];
-		if(len > 0) {
-			int good = 0;
-			for(int i=0;i<len;i++) {
-				int fpg = file.readInt();
-				if (fpg > BlockFile.METAINDEX_PAGE)
-					branches[good++] = fpg;
-			}
-			if (good != len) {
-				Log log = I2PAppContext.getGlobalContext().logManager().getLog(BlockFile.class);
-				log.error((len - good) + " bad pages in " + this);
-				len = good;
-				writeBlock();
-			}
-		}
-	}
+    public FreeListBlock(RandomAccessInterface file, int startPage) throws IOException {
+        this.file = file;
+        this.page = startPage;
+        BlockFile.pageSeek(file, startPage);
+        long magic = file.readLong();
+        if (magic != MAGIC)
+            throw new IOException("Bad freelist magic number 0x" + Long.toHexString(magic) + " on page " + startPage);
+        nextPage = file.readUnsignedInt();
+        len = file.readUnsignedInt();
+        if (len > MAX_SIZE)
+            throw new IOException("Bad freelist size " + len);
+        branches = new int[MAX_SIZE];
+        if(len > 0) {
+            int good = 0;
+            for(int i=0;i<len;i++) {
+                int fpg = file.readInt();
+                if (fpg > BlockFile.METAINDEX_PAGE)
+                    branches[good++] = fpg;
+            }
+            if (good != len) {
+                Log log = I2PAppContext.getGlobalContext().logManager().getLog(BlockFile.class);
+                log.error((len - good) + " bad pages in " + this);
+                len = good;
+                writeBlock();
+            }
+        }
+    }
 
-	public final void writeBlock() throws IOException {
-		BlockFile.pageSeek(file, page);
-		file.writeLong(MAGIC);
-		file.writeInt(nextPage);
-		file.writeInt(len);
-		for(int i=0;i<len;i++) { file.writeInt(branches[i]); }
-	}
+    public final void writeBlock() throws IOException {
+        BlockFile.pageSeek(file, page);
+        file.writeLong(MAGIC);
+        file.writeInt(nextPage);
+        file.writeInt(len);
+        for(int i=0;i<len;i++) { file.writeInt(branches[i]); }
+    }
 
-	/**
-	 *  Write the length only
-	 */
-	private void writeLen() throws IOException {
-		BlockFile.pageSeek(file, page);
-		file.skipBytes(12);
-		file.writeInt(len);
-	}
+    /**
+     *  Write the length only
+     */
+    private void writeLen() throws IOException {
+        BlockFile.pageSeek(file, page);
+        file.skipBytes(12);
+        file.writeInt(len);
+    }
 
-	public int getNextPage() {
-		return nextPage;
-	}
+    public int getNextPage() {
+        return nextPage;
+    }
 
-	/**
-	 *  Set and write the next page only
-	 */
-	public void setNextPage(int nxt) throws IOException {
-		nextPage = nxt;
-		BlockFile.pageSeek(file, page);
-		file.skipBytes(8);
-		file.writeInt(nxt);
-	}
+    /**
+     *  Set and write the next page only
+     */
+    public void setNextPage(int nxt) throws IOException {
+        nextPage = nxt;
+        BlockFile.pageSeek(file, page);
+        file.skipBytes(8);
+        file.writeInt(nxt);
+    }
 
-	/**
-	 *  Write the length and new page only
-	 */
-	private void writeFreePage() throws IOException {
-		BlockFile.pageSeek(file, page);
-		file.skipBytes(12);
-		file.writeInt(len);
-		if (len > 1)
-			file.skipBytes((len - 1) * 4);
-		file.writeInt(branches[len - 1]);
-	}
+    /**
+     *  Write the length and new page only
+     */
+    private void writeFreePage() throws IOException {
+        BlockFile.pageSeek(file, page);
+        file.skipBytes(12);
+        file.writeInt(len);
+        if (len > 1)
+            file.skipBytes((len - 1) * 4);
+        file.writeInt(branches[len - 1]);
+    }
 
-	public boolean isEmpty() {
-		return len <= 0;
-	}
+    public boolean isEmpty() {
+        return len <= 0;
+    }
 
-	public boolean isFull() {
-		return len >= MAX_SIZE;
-	}
+    public boolean isFull() {
+        return len >= MAX_SIZE;
+    }
 
-	/**
-	 *  Adds free page and writes new len to disk
-	 *  @throws IllegalStateException if full
-	 */
-	public void addPage(int freePage) throws IOException {
-		if (len >= MAX_SIZE)
-			throw new IllegalStateException("full");
-		if (getMagic(freePage) == MAGIC_FREE) {
-			Log log = I2PAppContext.getGlobalContext().logManager().getLog(BlockFile.class);
-			log.error("Double free page " + freePage, new Exception());
-			return;
-		}
-		branches[len++] = freePage;
-		markFree(freePage);
-		writeFreePage();
-	}
+    /**
+     *  Adds free page and writes new len to disk
+     *  @throws IllegalStateException if full
+     */
+    public void addPage(int freePage) throws IOException {
+        if (len >= MAX_SIZE)
+            throw new IllegalStateException("full");
+        if (getMagic(freePage) == MAGIC_FREE) {
+            Log log = I2PAppContext.getGlobalContext().logManager().getLog(BlockFile.class);
+            log.error("Double free page " + freePage, new Exception());
+            return;
+        }
+        branches[len++] = freePage;
+        markFree(freePage);
+        writeFreePage();
+    }
 
-	/**
-	 *  Takes next page and writes new len to disk
-	 *  @throws IllegalStateException if empty
-	 */
-	public int takePage() throws IOException {
-		if (len <= 0)
-			throw new IllegalStateException("empty");
-		len--;
-		writeLen();
-		int rv = branches[len];
-		if (rv <= BlockFile.METAINDEX_PAGE)
-			// shouldn't happen
-			throw new IOException("Bad free page " + rv);
-		long magic = getMagic(rv);
-		if (magic != MAGIC_FREE)
-			// TODO keep trying until empty
-			throw new IOException("Bad free page magic number 0x" + Long.toHexString(magic) + " on page " + rv);
-		return rv;
-	}
+    /**
+     *  Takes next page and writes new len to disk
+     *  @throws IllegalStateException if empty
+     */
+    public int takePage() throws IOException {
+        if (len <= 0)
+            throw new IllegalStateException("empty");
+        len--;
+        writeLen();
+        int rv = branches[len];
+        if (rv <= BlockFile.METAINDEX_PAGE)
+            // shouldn't happen
+            throw new IOException("Bad free page " + rv);
+        long magic = getMagic(rv);
+        if (magic != MAGIC_FREE)
+            // TODO keep trying until empty
+            throw new IOException("Bad free page magic number 0x" + Long.toHexString(magic) + " on page " + rv);
+        return rv;
+    }
 
-	private void markFree(int freePage) throws IOException {
-		BlockFile.pageSeek(file, freePage);
-		file.writeLong(MAGIC_FREE);
-	}
+    private void markFree(int freePage) throws IOException {
+        BlockFile.pageSeek(file, freePage);
+        file.writeLong(MAGIC_FREE);
+    }
 
-	private long getMagic(int freePage) throws IOException {
-		BlockFile.pageSeek(file, freePage);
-		long magic = file.readLong();
-		return magic;
-	}
+    private long getMagic(int freePage) throws IOException {
+        BlockFile.pageSeek(file, freePage);
+        long magic = file.readLong();
+        return magic;
+    }
 
-	public static void initPage(RandomAccessInterface file, int page) throws IOException {
-		BlockFile.pageSeek(file, page);
-		file.writeLong(MAGIC);
-		file.writeInt(0);
-		file.writeInt(0);
-	}
+    public static void initPage(RandomAccessInterface file, int page) throws IOException {
+        BlockFile.pageSeek(file, page);
+        file.writeLong(MAGIC);
+        file.writeInt(0);
+        file.writeInt(0);
+    }
 
-	/**
-	 * Recursive.
-	 * @since 0.9.7
-	 */
-	public boolean flbck(boolean fix) throws IOException {
-		Log log = I2PAppContext.getGlobalContext().logManager().getLog(BlockFile.class);
-		log.info(toString());
-		if (nextPage > 0)
-			(new FreeListBlock(file, nextPage)).flbck(fix);
-		return true;
-	}
+    /**
+     * Recursive.
+     * @since 0.9.7
+     */
+    public boolean flbck(boolean fix) throws IOException {
+        Log log = I2PAppContext.getGlobalContext().logManager().getLog(BlockFile.class);
+        log.info(toString());
+        if (nextPage > 0)
+            (new FreeListBlock(file, nextPage)).flbck(fix);
+        return true;
+    }
 
-	@Override
-	public String toString() {
-		return "FLB with " + len + " / " + MAX_SIZE + " page " + page + " next page " + nextPage;
-	}
+    @Override
+    public String toString() {
+        return "FLB with " + len + " / " + MAX_SIZE + " page " + page + " next page " + nextPage;
+    }
 }

@@ -7,7 +7,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.data.Hash;
 import net.i2p.crypto.SessionKeyManager;
 import net.i2p.data.SessionTag;
-import net.i2p.data.TunnelId;
 import net.i2p.data.i2np.DeliveryStatusMessage;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.router.JobImpl;

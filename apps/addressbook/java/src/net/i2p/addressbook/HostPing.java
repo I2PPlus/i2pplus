@@ -10,7 +10,6 @@ import java.util.Properties;
 import java.util.regex.Pattern;
 
 import net.i2p.I2PAppContext;
-import net.i2p.client.I2PSessionException;
 import net.i2p.client.naming.NamingService;
 import net.i2p.client.streaming.I2PSocketManager;
 import net.i2p.client.streaming.I2PSocketManagerFactory;

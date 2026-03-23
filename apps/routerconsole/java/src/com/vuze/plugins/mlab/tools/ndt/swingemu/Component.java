@@ -37,122 +37,122 @@ package com.vuze.plugins.mlab.tools.ndt.swingemu;
 public class
     Component
 {
-	public void
+    public void
             setTitle(
-		String	s )
-	{
-	}
+        String	s )
+    {
+    }
 
-	public void
+    public void
             add(
-		Component c )
-	{
-	}
+        Component c )
+    {
+    }
 
-	public void
+    public void
             add( String str, Component c )
-	{
-	}
+    {
+    }
 
-	public void
+    public void
             add( int i, Component c )
-	{
-	}
+    {
+    }
 
-	public void
+    public void
             setEnabled(
-		boolean	b )
-	{
-	}
+        boolean	b )
+    {
+    }
 
-	public void
+    public void
             setVisible(
-		boolean b )
-	{
-	}
+        boolean b )
+    {
+    }
 
-	public void
+    public void
             setEditable(
-		boolean	b )
-	{
-	}
+        boolean	b )
+    {
+    }
 
-	public void
+    public void
             setResizable(
-		boolean	b )
-	{
-	}
+        boolean	b )
+    {
+    }
 
-	public void
+    public void
             setSize(
-		int	i, int j )
-	{
-	}
+        int	i, int j )
+    {
+    }
 
-	public void
+    public void
             setPreferredSize(
-		Dimension d )
-	{
-	}
+        Dimension d )
+    {
+    }
 
-	public void
+    public void
             setBorder(
-		Component	c )
-	{
-	}
+        Component	c )
+    {
+    }
 
-	public void
+    public void
             setLayout(
-		BorderLayout l )
-	{
-	}
+        BorderLayout l )
+    {
+    }
 
-	public void
+    public void
             setLayout(
-		BoxLayout l )
-	{
-	}
+        BoxLayout l )
+    {
+    }
 
-	public void
+    public void
             setCursor(
-		Cursor c )
-	{
-	}
+        Cursor c )
+    {
+    }
 
-	public void
+    public void
             setForeground(
-		Color	c )
-	{
-	}
+        Color	c )
+    {
+    }
 
-	public void
+    public void
             pack()
-	{
+    {
 
-	}
-	public void
+    }
+    public void
             repaint()
-	{
+    {
 
-	}
+    }
 
-	public Toolkit
+    public Toolkit
             getToolkit()
-	{
-		return( new Toolkit());
-	}
+    {
+        return( new Toolkit());
+    }
 
-	public void
+    public void
             addMouseListener(
-		MouseAdapter	l )
-	{
+        MouseAdapter	l )
+    {
 
-	}
+    }
 
-	public void
+    public void
             addWindowListener(
-		WindowAdapter l )
-	{
+        WindowAdapter l )
+    {
 
-	}
+    }
 }

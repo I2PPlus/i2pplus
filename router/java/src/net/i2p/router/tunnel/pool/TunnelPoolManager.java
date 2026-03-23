@@ -19,7 +19,6 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
 import net.i2p.router.TunnelManagerFacade;
 import net.i2p.router.TunnelPoolSettings;
-import net.i2p.router.tunnel.TunnelDispatcher;
 import net.i2p.stat.RateConstants;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;

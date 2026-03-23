@@ -16,69 +16,69 @@ import java.util.HashMap;
  *  @since 0.9.25 moved from SAMv3Handler
  */
 class SessionsDB {
-	private static final long serialVersionUID = 0x1;
+    private static final long serialVersionUID = 0x1;
 
-	/**
-	 * Exception thrown when attempting to create a session with an existing ID.
-	 * @since 0.9.25
-	 */
-	static class ExistingIdException extends Exception {
-		private static final long serialVersionUID = 0x1;
-	}
+    /**
+     * Exception thrown when attempting to create a session with an existing ID.
+     * @since 0.9.25
+     */
+    static class ExistingIdException extends Exception {
+        private static final long serialVersionUID = 0x1;
+    }
 
-	/**
-	 * Exception thrown when attempting to create a session with an existing destination.
-	 * @since 0.9.25
-	 */
-	static class ExistingDestException extends Exception {
-		private static final long serialVersionUID = 0x1;
-	}
+    /**
+     * Exception thrown when attempting to create a session with an existing destination.
+     * @since 0.9.25
+     */
+    static class ExistingDestException extends Exception {
+        private static final long serialVersionUID = 0x1;
+    }
 
-	private final HashMap<String, SessionRecord> map;
+    private final HashMap<String, SessionRecord> map;
 
-	public SessionsDB() {
-		map = new HashMap<String, SessionRecord>() ;
-	}
+    public SessionsDB() {
+        map = new HashMap<String, SessionRecord>() ;
+    }
 
-	public synchronized void put(String nick, SessionRecord session)
-		throws ExistingIdException, ExistingDestException
-	{
-		if ( map.containsKey(nick) ) {
-			throw new ExistingIdException();
-		}
-		for ( SessionRecord r : map.values() ) {
-			if (r.getDest().equals(session.getDest())) {
-				throw new ExistingDestException();
-			}
-		}
-		session.createThreadGroup("SAM session "+nick);
-		map.put(nick, session) ;
-	}
+    public synchronized void put(String nick, SessionRecord session)
+        throws ExistingIdException, ExistingDestException
+    {
+        if ( map.containsKey(nick) ) {
+            throw new ExistingIdException();
+        }
+        for ( SessionRecord r : map.values() ) {
+            if (r.getDest().equals(session.getDest())) {
+                throw new ExistingDestException();
+            }
+        }
+        session.createThreadGroup("SAM session "+nick);
+        map.put(nick, session) ;
+    }
 
-	/** @since 0.9.25 */
-	public synchronized void putDupDestOK(String nick, SessionRecord session)
-		throws ExistingIdException
-	{
-		if (map.containsKey(nick)) {
-			throw new ExistingIdException();
-		}
-		session.createThreadGroup("SAM session "+nick);
-		map.put(nick, session) ;
-	}
+    /** @since 0.9.25 */
+    public synchronized void putDupDestOK(String nick, SessionRecord session)
+        throws ExistingIdException
+    {
+        if (map.containsKey(nick)) {
+            throw new ExistingIdException();
+        }
+        session.createThreadGroup("SAM session "+nick);
+        map.put(nick, session) ;
+    }
 
-	/** @return true if removed */
-	synchronized public boolean del( String nick )
-	{
-		return map.remove(nick) != null;
-	}
+    /** @return true if removed */
+    synchronized public boolean del( String nick )
+    {
+        return map.remove(nick) != null;
+    }
 
-	synchronized public SessionRecord get(String nick)
-	{
-		return map.get(nick);
-	}
+    synchronized public SessionRecord get(String nick)
+    {
+        return map.get(nick);
+    }
 
-	synchronized public boolean containsKey( String nick )
-	{
-		return map.containsKey(nick);
-	}
+    synchronized public boolean containsKey( String nick )
+    {
+        return map.containsKey(nick);
+    }
 }

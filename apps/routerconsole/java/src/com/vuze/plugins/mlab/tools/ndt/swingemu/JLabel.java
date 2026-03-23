@@ -36,30 +36,30 @@ package com.vuze.plugins.mlab.tools.ndt.swingemu;
  */
 public class
     JLabel
-	extends Component
+    extends Component
 {
-	public
+    public
             JLabel()
-	{
-	}
+    {
+    }
 
-	public
+    public
             JLabel(
-		String	s )
-	{
+        String	s )
+    {
 
-	}
+    }
 
-	public void
+    public void
             setText(
-		String	s )
-	{
+        String	s )
+    {
 
-	}
+    }
 
-	public void
+    public void
             setAlignmentY(
-		float f )
-	{
-	}
+        float f )
+    {
+    }
 }

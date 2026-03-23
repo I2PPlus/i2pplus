@@ -23,38 +23,38 @@ import net.i2p.util.Log;
  */
 
 public class KBucketSetTest extends TestCase{
-	private I2PAppContext context;
-	private KBucketSet<Hash> set;
+    private I2PAppContext context;
+    private KBucketSet<Hash> set;
     private Hash usHash;
     private Log log;
-	private static final int K = 8;
-	private static final int B = 1;
+    private static final int K = 8;
+    private static final int B = 1;
 
-	public void setUp(){
-		context = I2PAppContext.getGlobalContext();
-		log = context.logManager().getLog(KBucketSet.class);
-		byte[] us = new byte[Hash.HASH_LENGTH];
-		context.random().nextBytes(us);
-		usHash = new Hash(us);
+    public void setUp(){
+        context = I2PAppContext.getGlobalContext();
+        log = context.logManager().getLog(KBucketSet.class);
+        byte[] us = new byte[Hash.HASH_LENGTH];
+        context.random().nextBytes(us);
+        usHash = new Hash(us);
                 // We use the default RandomTrimmer so add() will never fail
-		set = new KBucketSet<Hash>(context, usHash, K, B);
-		// tests may be run in any order so prime it
-		addRandom(1000);
-	}
+        set = new KBucketSet<Hash>(context, usHash, K, B);
+        // tests may be run in any order so prime it
+        addRandom(1000);
+    }
 
-	public void testRandom(){
-		addRandom(1000);
-	}
+    public void testRandom(){
+        addRandom(1000);
+    }
 
-	private void addRandom(int count) {
-		for (int i = 0; i < count; i++) {
-			byte val[] = new byte[Hash.HASH_LENGTH];
-			context.random().nextBytes(val);
-			Hash h = new Hash(val);
-			// in the highly unlikely chance we randomly generate a hash equal to us
-			assertTrue(set.add(h) || h.equals(usHash));
-		}
-	}
+    private void addRandom(int count) {
+        for (int i = 0; i < count; i++) {
+            byte val[] = new byte[Hash.HASH_LENGTH];
+            context.random().nextBytes(val);
+            Hash h = new Hash(val);
+            // in the highly unlikely chance we randomly generate a hash equal to us
+            assertTrue(set.add(h) || h.equals(usHash));
+        }
+    }
 
     public void testSelf() {
         // new implementation will never include myself

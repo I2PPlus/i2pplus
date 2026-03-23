@@ -36,10 +36,10 @@ package com.vuze.plugins.mlab.tools.ndt.swingemu;
  */
 public class StringSelection {
 
-	public
+    public
             StringSelection(
-		String		s )
-	{
+        String		s )
+    {
 
-	}
+    }
 }

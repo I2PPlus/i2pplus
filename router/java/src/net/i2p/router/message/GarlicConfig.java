@@ -51,8 +51,8 @@ class GarlicConfig {
         _expiration = expiration;
         _cloveConfigs = cloveConfigs;
         _instructions = di;
-	//_replyBlockMessageId = -1;
-	//_replyBlockExpiration = -1;
+    //_replyBlockMessageId = -1;
+    //_replyBlockExpiration = -1;
     }
 
     /**
@@ -179,12 +179,12 @@ class GarlicConfig {
         buf.append("<garlicId>").append(getId()).append("</garlicId>").append(NL);
         buf.append("<recipient>").append(getRecipient()).append("</recipient>").append(NL);
         buf.append("<recipientPublicKey>").append(getRecipientPublicKey()).append("</recipientPublicKey>").append(NL);
-	//buf.append("<replyBlockCertificate>").append(getReplyBlockCertificate()).append("</replyBlockCertificate>").append(NL);
-	//buf.append("<replyBlockExpiration>").append(new Date(getReplyBlockExpiration())).append("</replyBlockExpiration>").append(NL);
-	//buf.append("<replyBlockMessageId>").append(getReplyBlockMessageId()).append("</replyBlockMessageId>").append(NL);
-	//buf.append("<replyInstructions>").append(getReplyInstructions()).append("</replyInstructions>").append(NL);
-	//buf.append("<replyThroughRouter>").append(getReplyThroughRouter()).append("</replyThroughRouter>").append(NL);
-	//buf.append("<requestAck>").append(getRequestAck()).append("</requestAck>").append(NL);
+    //buf.append("<replyBlockCertificate>").append(getReplyBlockCertificate()).append("</replyBlockCertificate>").append(NL);
+    //buf.append("<replyBlockExpiration>").append(new Date(getReplyBlockExpiration())).append("</replyBlockExpiration>").append(NL);
+    //buf.append("<replyBlockMessageId>").append(getReplyBlockMessageId()).append("</replyBlockMessageId>").append(NL);
+    //buf.append("<replyInstructions>").append(getReplyInstructions()).append("</replyInstructions>").append(NL);
+    //buf.append("<replyThroughRouter>").append(getReplyThroughRouter()).append("</replyThroughRouter>").append(NL);
+    //buf.append("<requestAck>").append(getRequestAck()).append("</requestAck>").append(NL);
         buf.append(getSubData());
         buf.append("<subcloves>").append(NL);
         for (int i = 0; i < getCloveCount(); i++)

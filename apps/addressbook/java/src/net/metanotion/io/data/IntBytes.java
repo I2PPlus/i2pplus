@@ -5,12 +5,12 @@ All rights reserved.
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
 
-	* Redistributions of source code must retain the above copyright
+    * Redistributions of source code must retain the above copyright
 notice, this list of conditions and the following disclaimer.
-	* Redistributions in binary form must reproduce the above copyright
+    * Redistributions in binary form must reproduce the above copyright
 notice, this list of conditions and the following disclaimer in the
 documentation and/or other materials provided with the distribution.
-	* Neither the name of Metanotion Software nor the names of its
+    * Neither the name of Metanotion Software nor the names of its
 contributors may be used to endorse or promote products derived from this
 software without specific prior written permission.
 
@@ -45,21 +45,21 @@ import net.metanotion.io.Serializer;
  * </ul>
  */
 public class IntBytes implements Serializer<Integer> {
-	public byte[] getBytes(Integer o) {
-		byte[] b = new byte[4];
-		int v = o.intValue();
+    public byte[] getBytes(Integer o) {
+        byte[] b = new byte[4];
+        int v = o.intValue();
         b[0] = (byte)(0xff & (v >> 24));
         b[1] = (byte)(0xff & (v >> 16));
-		b[2] = (byte)(0xff & (v >>  8));
+        b[2] = (byte)(0xff & (v >>  8));
         b[3] = (byte)(0xff & v);
         return b;
-	}
+    }
 
-	public Integer construct(byte[] b) {
-		int v = (((b[0] & 0xff) << 24) |
-				 ((b[1] & 0xff) << 16) |
-				 ((b[2] & 0xff) <<  8) |
-				 (b[3] & 0xff));
-		return Integer.valueOf(v);
-	}
+    public Integer construct(byte[] b) {
+        int v = (((b[0] & 0xff) << 24) |
+                 ((b[1] & 0xff) << 16) |
+                 ((b[2] & 0xff) <<  8) |
+                 (b[3] & 0xff));
+        return Integer.valueOf(v);
+    }
 }

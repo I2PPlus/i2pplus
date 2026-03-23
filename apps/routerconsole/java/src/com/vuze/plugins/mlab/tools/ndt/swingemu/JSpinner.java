@@ -36,25 +36,25 @@ package com.vuze.plugins.mlab.tools.ndt.swingemu;
  */
 public class
     JSpinner
-	extends Component
+    extends Component
 {
-	private SpinnerNumberModel		model;
+    private SpinnerNumberModel		model;
 
-	public int
+    public int
             getValue()
-	{
-		if ( model == null ){
+    {
+        if ( model == null ){
 
-			return( 0 );
-		}
+            return( 0 );
+        }
 
-		return( model.getValue());
-	}
+        return( model.getValue());
+    }
 
-	public void
+    public void
             setModel(
-		SpinnerNumberModel	_model )
-	{
-		model = _model;
-	}
+        SpinnerNumberModel	_model )
+    {
+        model = _model;
+    }
 }

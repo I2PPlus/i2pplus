@@ -36,5 +36,5 @@ package com.vuze.plugins.mlab.tools.ndt.swingemu;
  */
 public class Dimension {
 
-	public Dimension( int x, int y ){}
+    public Dimension( int x, int y ){}
 }

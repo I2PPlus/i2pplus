@@ -115,7 +115,7 @@ public final class KeyStoreUtil {
         // Comodo SHA1 https://cabforum.org/pipermail/public/2015-December/006500.html
         // https://bugzilla.mozilla.org/show_bug.cgi?id=1208461
         //new BigInteger("44:be:0c:8b:50:00:21:b4:11:d3:2a:68:06:a9:ad:69".replace(":", ""), 16)
-	//"UTN - DATACorp SGC"
+    //"UTN - DATACorp SGC"
         //null
         "58:11:9f:0e:12:82:87:ea:50:fd:d9:87:45:6f:4f:78:dc:fa:d6:d4"
     };

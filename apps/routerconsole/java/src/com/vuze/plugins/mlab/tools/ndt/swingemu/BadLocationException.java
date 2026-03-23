@@ -28,6 +28,6 @@ package com.vuze.plugins.mlab.tools.ndt.swingemu;
  */
 public class
     BadLocationException
-	extends Exception
+    extends Exception
 {
 }

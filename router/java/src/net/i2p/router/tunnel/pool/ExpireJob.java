@@ -11,7 +11,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.router.JobImpl;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
-import net.i2p.util.Log;
 
 /**
  * Handles tunnel expiration in two phases for graceful shutdown.

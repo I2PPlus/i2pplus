@@ -40,7 +40,6 @@ import net.i2p.util.DNSOverHTTPS;
 import net.i2p.util.EventDispatcher;
 import net.i2p.util.InternalSocket;
 import net.i2p.util.PortMapper;
-import net.i2p.i2ptunnel.BlacklistBean;
 
 /**
  * HTTP proxy that tunnels requests through I2P.

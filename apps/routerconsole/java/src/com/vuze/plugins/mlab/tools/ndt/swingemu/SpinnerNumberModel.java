@@ -37,24 +37,24 @@ package com.vuze.plugins.mlab.tools.ndt.swingemu;
 public class
     SpinnerNumberModel
 {
-	private int		value;
+    private int		value;
 
-	public void
+    public void
             setValue(
-		int	 i )
-	{
-		value	= i;
-	}
+        int	 i )
+    {
+        value	= i;
+    }
 
-	public int
+    public int
             getValue()
-	{
-		return( value );
-	}
+    {
+        return( value );
+    }
 
-	public void
+    public void
             setMinimum(
-		int	i )
-	{
-	}
+        int	i )
+    {
+    }
 }

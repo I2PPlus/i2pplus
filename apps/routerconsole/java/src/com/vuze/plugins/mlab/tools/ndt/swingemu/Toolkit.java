@@ -36,9 +36,9 @@ package com.vuze.plugins.mlab.tools.ndt.swingemu;
  */
 public class Toolkit {
 
-	public Clipboard
+    public Clipboard
             getSystemClipboard()
-	{
-		return( new Clipboard());
-	}
+    {
+        return( new Clipboard());
+    }
 }

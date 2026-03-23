@@ -41,37 +41,37 @@ import net.i2p.util.Log;
  */
 public class
     JTextArea
-	extends Component
+    extends Component
 {
-	private final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(Tcpbw100.class);
-	private final StringBuilder text = new StringBuilder();
+    private final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(Tcpbw100.class);
+    private final StringBuilder text = new StringBuilder();
 
-	public
+    public
             JTextArea(
-		String		str,
-		int			a,
-		int			b )
-	{
-		text.append(str);
-	}
+        String		str,
+        int			a,
+        int			b )
+    {
+        text.append(str);
+    }
 
-	public void
+    public void
             append(
-		String		str )
-	{
-		if (_log.shouldWarn())
-			_log.warn(str.trim());
-		text.append(str);
-	}
+        String		str )
+    {
+        if (_log.shouldWarn())
+            _log.warn(str.trim());
+        text.append(str);
+    }
 
-	public String
+    public String
             getText()
-	{
-		return text.toString();
-	}
+    {
+        return text.toString();
+    }
 
-	public void
+    public void
             selectAll()
-	{
-	}
+    {
+    }
 }

@@ -13,22 +13,22 @@ import java.io.OutputStream;
  */
 public interface Buffer {
 
-	public InputStream getInputStream() throws IOException;
+    public InputStream getInputStream() throws IOException;
 
-	public OutputStream getOutputStream() throws IOException;
+    public OutputStream getOutputStream() throws IOException;
 
-	/**
-	 *  Top-level reader MUST call this to close the input stream.
-	 */
-	public void readComplete(boolean success);
+    /**
+     *  Top-level reader MUST call this to close the input stream.
+     */
+    public void readComplete(boolean success);
 
-	/**
-	 *  Writer MUST call this when done.
-	 *  @param success if false, deletes any resources
-	 */
-	public void writeComplete(boolean success);
+    /**
+     *  Writer MUST call this when done.
+     *  @param success if false, deletes any resources
+     */
+    public void writeComplete(boolean success);
 
-	public int getLength();
+    public int getLength();
 
-	public int getOffset();
+    public int getOffset();
 }

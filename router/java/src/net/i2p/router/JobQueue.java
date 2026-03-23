@@ -17,7 +17,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-import net.i2p.data.DataHelper;
 import net.i2p.router.message.HandleGarlicMessageJob;
 import net.i2p.router.networkdb.kademlia.ExploreJob;
 import net.i2p.router.networkdb.kademlia.HandleFloodfillDatabaseLookupMessageJob;

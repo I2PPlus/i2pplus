@@ -36,50 +36,50 @@ package com.vuze.plugins.mlab.tools.ndt.swingemu;
  */
 public class
     JProgressBar
-	extends Component
+    extends Component
 {
-	private boolean indeterminate;
+    private boolean indeterminate;
 
-	public void
+    public void
             setString(
-		String	str )
-	{
-	}
+        String	str )
+    {
+    }
 
-	public void
+    public void
             setValue(
-		int	i )
-	{
-	}
+        int	i )
+    {
+    }
 
-	public void
+    public void
             setMinimum(
-		int	i )
-	{
-	}
+        int	i )
+    {
+    }
 
-	public void
+    public void
             setMaximum(
-		int	i )
-	{
-	}
+        int	i )
+    {
+    }
 
-	public void
+    public void
             setStringPainted(
-		boolean	b )
-	{
-	}
+        boolean	b )
+    {
+    }
 
-	public void
+    public void
             setIndeterminate(
-		boolean	b )
-	{
-		indeterminate = b;
-	}
+        boolean	b )
+    {
+        indeterminate = b;
+    }
 
-	public boolean
+    public boolean
             isIndeterminate()
-	{
-		return( indeterminate );
-	}
+    {
+        return( indeterminate );
+    }
 }

@@ -39,114 +39,114 @@ import java.io.Writer;
 @SuppressWarnings("PMD.CloseResource")
 public class QuotedPrintable extends Encoding {
 
-	public String getName() {
-		return "quoted-printable";
-	}
+    public String getName() {
+        return "quoted-printable";
+    }
 
-	private static int BUFSIZE = 2;
+    private static int BUFSIZE = 2;
 
-	public String encode( byte in[] ) throws EncodingException {
-		try {
-			Writer strBuf = new StringBuilderWriter();
-			encode(new ByteArrayInputStream(in), strBuf);
-			return strBuf.toString();
-		} catch (IOException e) {
-			throw new EncodingException("encode error",  e);
-		}
-	}
+    public String encode( byte in[] ) throws EncodingException {
+        try {
+            Writer strBuf = new StringBuilderWriter();
+            encode(new ByteArrayInputStream(in), strBuf);
+            return strBuf.toString();
+        } catch (IOException e) {
+            throw new EncodingException("encode error",  e);
+        }
+    }
 
-	/**
-	 * More efficient than super
-	 *
-	 * @param in
-	 * @see Base64#encode(String)
-	 * @since since 0.9.33
-	 */
-	@Override
-	public void encode(InputStream in, Writer out) throws IOException
-	{
-		int buffered = 0, tmp[] = new int[BUFSIZE];
-		int index = 0;
-		int l = 0;
-		while( true ) {
-			int read = 0;
-			int r;
-			while(buffered < BUFSIZE && (r = in.read()) >= 0) {
-				tmp[buffered++] = r;
-				read++;
-			}
-			if( read == 0 && buffered == 0 )
-				break;
+    /**
+     * More efficient than super
+     *
+     * @param in
+     * @see Base64#encode(String)
+     * @since since 0.9.33
+     */
+    @Override
+    public void encode(InputStream in, Writer out) throws IOException
+    {
+        int buffered = 0, tmp[] = new int[BUFSIZE];
+        int index = 0;
+        int l = 0;
+        while( true ) {
+            int read = 0;
+            int r;
+            while(buffered < BUFSIZE && (r = in.read()) >= 0) {
+                tmp[buffered++] = r;
+                read++;
+            }
+            if( read == 0 && buffered == 0 )
+                break;
 
-			int c = tmp[0];
-			buffered--;
-			for( int j = 1; j < BUFSIZE; j++ )
-				tmp[j-1] = tmp[j];
+            int c = tmp[0];
+            buffered--;
+            for( int j = 1; j < BUFSIZE; j++ )
+                tmp[j-1] = tmp[j];
 
-			if ((c == '.' || c == '-') && l == 0) {
-				// leading '.' seems to get eaten by SMTP,
-				// even if more chars after it
-				// just to be sure, do the same for '-'
-				// because it starts a boundary
-				String s = HexTable.table[c];
-				l = s.length();
-				out.append(s);
-			} else if (c > 32 && c < 127 && c != 61) {
-				out.append( (char)c );
-				l++;
-			}
-			else if( ( c == 32 || c == 9 ) ) {
-				if( buffered > 0 && ( tmp[0] == 10 || tmp[0] == 13 ) ) {
-					/*
-					 * whitespace at end of line
-					 */
-					if (l >= 73) {
-						// soft line breaks
-						out.append("=\r\n");
-						l = 0;
-					}
-					out.append( c == 32 ? "=20" : "=09" );
-					l += 3;
-				}
-				else {
-					out.append( (char)c );
-					l++;
-				}
-			}
-			else if( c == 13 && buffered > 0 && tmp[0] == 10 ) {
-				out.append( "\r\n" );
-				l = 0;
-				buffered--;
-				for( int j = 1; j < BUFSIZE; j++ )
-					tmp[j-1] = tmp[j];
-			} else {
-				String s = HexTable.table[ c < 0 ? 256 + c : c ];
-				l += s.length();
-				if (l > 75) {
-					// soft line breaks
-					out.append("=\r\n");
-					l = s.length();
-				}
-				out.append(s);
-			}
-			if (l >= 75) {
-				// soft line breaks
-				out.append("=\r\n");
-				l = 0;
-			}
-		}
-	}
+            if ((c == '.' || c == '-') && l == 0) {
+                // leading '.' seems to get eaten by SMTP,
+                // even if more chars after it
+                // just to be sure, do the same for '-'
+                // because it starts a boundary
+                String s = HexTable.table[c];
+                l = s.length();
+                out.append(s);
+            } else if (c > 32 && c < 127 && c != 61) {
+                out.append( (char)c );
+                l++;
+            }
+            else if( ( c == 32 || c == 9 ) ) {
+                if( buffered > 0 && ( tmp[0] == 10 || tmp[0] == 13 ) ) {
+                    /*
+                     * whitespace at end of line
+                     */
+                    if (l >= 73) {
+                        // soft line breaks
+                        out.append("=\r\n");
+                        l = 0;
+                    }
+                    out.append( c == 32 ? "=20" : "=09" );
+                    l += 3;
+                }
+                else {
+                    out.append( (char)c );
+                    l++;
+                }
+            }
+            else if( c == 13 && buffered > 0 && tmp[0] == 10 ) {
+                out.append( "\r\n" );
+                l = 0;
+                buffered--;
+                for( int j = 1; j < BUFSIZE; j++ )
+                    tmp[j-1] = tmp[j];
+            } else {
+                String s = HexTable.table[ c < 0 ? 256 + c : c ];
+                l += s.length();
+                if (l > 75) {
+                    // soft line breaks
+                    out.append("=\r\n");
+                    l = s.length();
+                }
+                out.append(s);
+            }
+            if (l >= 75) {
+                // soft line breaks
+                out.append("=\r\n");
+                l = 0;
+            }
+        }
+    }
 
-	/**
-	 * @since 0.9.34
-	 */
-	public void decode(InputStream in, Buffer bout) throws IOException {
-		OutputStream out = bout.getOutputStream();
-		while (true) {
-			int c = in.read();
-			if (c < 0)
-				break;
-			if( c == '=' ) {
+    /**
+     * @since 0.9.34
+     */
+    public void decode(InputStream in, Buffer bout) throws IOException {
+        OutputStream out = bout.getOutputStream();
+        while (true) {
+            int c = in.read();
+            if (c < 0)
+                break;
+            if( c == '=' ) {
                 int a = in.read();
                 if (a < 0) {
                     out.write(c);
@@ -159,41 +159,41 @@ public class QuotedPrintable extends Encoding {
                     break;
                 }
                 if (((a >= '0' && a <= '9') || (a >= 'A' && a <= 'F') || (a >= 'a' && a <= 'f')) &&
-					    ((b >= '0' && b <= '9') || (b >= 'A' && b <= 'F') || (b >= 'a' && b <= 'f'))) {
-						/*
-						 * decode sequence
-						 */
-						// System.err.println( "decoding 0x" + (char)a + "" + (char)b );
+                        ((b >= '0' && b <= '9') || (b >= 'A' && b <= 'F') || (b >= 'a' && b <= 'f'))) {
+                        /*
+                         * decode sequence
+                         */
+                        // System.err.println( "decoding 0x" + (char)a + "" + (char)b );
                     if( a >= '0' && a <= '9' )
-							a -= '0';
+                            a -= '0';
                     else if( a >= 'A' && a <= 'F' )
-							a = (byte) (a - 'A' + 10);
+                            a = (byte) (a - 'A' + 10);
                     else if(a >= 'a' && a <= 'f')
-							a = (byte) (a - 'a' + 10);
+                            a = (byte) (a - 'a' + 10);
 
                     if( b >= '0' && b <= '9' )
-							b -= '0';
+                            b -= '0';
                     else if( b >= 'A' && b <= 'F' )
-							b = (byte) (b - 'A' + 10);
+                            b = (byte) (b - 'A' + 10);
                     else if(b >= 'a' && b <= 'f')
-							b = (byte) (b - 'a' + 10);
+                            b = (byte) (b - 'a' + 10);
 
                     out.write(a*16 + b);
                     continue;
                 }
                 else if( a == '\r' && b == '\n' ) {
-						/*
-						 * softbreak, simply ignore it
-						 */
+                        /*
+                         * softbreak, simply ignore it
+                         */
                     continue;
                 } else {
                     throw new DecodingException("Bad q-p data after '='");
                 }
-			}
-			/*
-			 * print out everything else literally
-			 */
-			out.write(c);
-		}
-	}
+            }
+            /*
+             * print out everything else literally
+             */
+            out.write(c);
+        }
+    }
 }

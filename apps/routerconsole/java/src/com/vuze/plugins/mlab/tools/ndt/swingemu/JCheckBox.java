@@ -36,34 +36,34 @@ package com.vuze.plugins.mlab.tools.ndt.swingemu;
  */
 public class
     JCheckBox
-	extends Component
+    extends Component
 {
-	boolean	selected;
+    boolean	selected;
 
-	public
+    public
             JCheckBox(
-		String	str )
-	{
+        String	str )
+    {
 
-	}
+    }
 
-	public void
+    public void
             setSelected(
-		boolean	b )
-	{
-		selected = b;
-	}
+        boolean	b )
+    {
+        selected = b;
+    }
 
-	public boolean
+    public boolean
             isSelected()
-	{
-		return( selected );
-	}
+    {
+        return( selected );
+    }
 
-	public void
+    public void
             addActionListener(
-		ActionListener	l )
-	{
+        ActionListener	l )
+    {
 
-	}
+    }
 }

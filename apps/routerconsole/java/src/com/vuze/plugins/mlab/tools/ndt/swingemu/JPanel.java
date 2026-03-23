@@ -36,19 +36,19 @@ package com.vuze.plugins.mlab.tools.ndt.swingemu;
  */
 public class
     JPanel
-	extends Component
+    extends Component
 {
-	@Override
-	public void
+    @Override
+    public void
             add( Component c )
-	{
+    {
 
-	}
+    }
 
-	@Override
-	public void
+    @Override
+    public void
             add( String str, Component c )
-	{
+    {
 
-	}
+    }
 }

@@ -36,10 +36,10 @@ package com.vuze.plugins.mlab.tools.ndt.swingemu;
  */
 public class Clipboard {
 
-	public void
+    public void
             setContents(
-		StringSelection	s,
-		StringSelection	t )
-	{
-	}
+        StringSelection	s,
+        StringSelection	t )
+    {
+    }
 }

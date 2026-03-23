@@ -42,7 +42,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.TimeZone;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 import java.util.zip.CRC32;
 import java.util.zip.Deflater;

@@ -57,128 +57,128 @@ import net.i2p.util.Log;
  */
 public class IdenticonServlet extends HttpServlet {
 
-	private static final long serialVersionUID = -3507466186902317988L;
-	private static final String INIT_PARAM_VERSION = "version";
-	private static final String INIT_PARAM_CACHE_PROVIDER = "cacheProvider";
-	private static final String PARAM_IDENTICON_SIZE_SHORT = "s";
-	private static final String PARAM_IDENTICON_CODE_SHORT = "c";
-	private static final String IDENTICON_IMAGE_FORMAT = "PNG";
-	private static final String IDENTICON_IMAGE_MIMETYPE = "image/png";
-	private static final long DEFAULT_IDENTICON_EXPIRES_IN_MILLIS = 24 * 60 * 60 * 1000;
-	private int version = 1;
-	private final IdenticonRenderer renderer = new NineBlockIdenticonRenderer2();
-	private IdenticonCache cache;
-	private long identiconExpiresInMillis = DEFAULT_IDENTICON_EXPIRES_IN_MILLIS;
+    private static final long serialVersionUID = -3507466186902317988L;
+    private static final String INIT_PARAM_VERSION = "version";
+    private static final String INIT_PARAM_CACHE_PROVIDER = "cacheProvider";
+    private static final String PARAM_IDENTICON_SIZE_SHORT = "s";
+    private static final String PARAM_IDENTICON_CODE_SHORT = "c";
+    private static final String IDENTICON_IMAGE_FORMAT = "PNG";
+    private static final String IDENTICON_IMAGE_MIMETYPE = "image/png";
+    private static final long DEFAULT_IDENTICON_EXPIRES_IN_MILLIS = 24 * 60 * 60 * 1000;
+    private int version = 1;
+    private final IdenticonRenderer renderer = new NineBlockIdenticonRenderer2();
+    private IdenticonCache cache;
+    private long identiconExpiresInMillis = DEFAULT_IDENTICON_EXPIRES_IN_MILLIS;
 
-	@Override
-	public void init(ServletConfig cfg) throws ServletException {
-		super.init(cfg);
+    @Override
+    public void init(ServletConfig cfg) throws ServletException {
+        super.init(cfg);
 
-		// Since identicons cache expiration is very long, version is
-		// used in ETag to force identicons to be updated as needed.
-		// Change version whenever rendering codes changes result in
-		// visual changes.
-		if (cfg.getInitParameter(INIT_PARAM_VERSION) != null)
-			this.version = Integer.parseInt(cfg
-					.getInitParameter(INIT_PARAM_VERSION));
+        // Since identicons cache expiration is very long, version is
+        // used in ETag to force identicons to be updated as needed.
+        // Change version whenever rendering codes changes result in
+        // visual changes.
+        if (cfg.getInitParameter(INIT_PARAM_VERSION) != null)
+            this.version = Integer.parseInt(cfg
+                    .getInitParameter(INIT_PARAM_VERSION));
 
-		String cacheProvider = cfg.getInitParameter(INIT_PARAM_CACHE_PROVIDER);
-		if (cacheProvider != null) {
-			try {
-				Class<?> cacheClass = Class.forName(cacheProvider);
-				this.cache = (IdenticonCache) cacheClass.getDeclaredConstructor().newInstance();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
+        String cacheProvider = cfg.getInitParameter(INIT_PARAM_CACHE_PROVIDER);
+        if (cacheProvider != null) {
+            try {
+                Class<?> cacheClass = Class.forName(cacheProvider);
+                this.cache = (IdenticonCache) cacheClass.getDeclaredConstructor().newInstance();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
-	@Override
-	protected void doGet(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+    @Override
+    protected void doGet(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException, IOException {
 
-		if (request.getCharacterEncoding() == null)
-			request.setCharacterEncoding("UTF-8");
-		String codeParam = request.getParameter(PARAM_IDENTICON_CODE_SHORT);
-		boolean codeSpecified = codeParam != null && codeParam.length() > 0;
-		if (!codeSpecified) {
-			response.setStatus(404);
-			return;
-		}
-		String sizeParam = request.getParameter(PARAM_IDENTICON_SIZE_SHORT);
-		int size = 32;
-		if (sizeParam != null) {
-			try {
-				size = Integer.parseInt(sizeParam);
-				if (size < 16)
-					size = 16;
-				else if (size > 1024)
-					size = 1024;
-			} catch (NumberFormatException nfe) {}
-		}
+        if (request.getCharacterEncoding() == null)
+            request.setCharacterEncoding("UTF-8");
+        String codeParam = request.getParameter(PARAM_IDENTICON_CODE_SHORT);
+        boolean codeSpecified = codeParam != null && codeParam.length() > 0;
+        if (!codeSpecified) {
+            response.setStatus(404);
+            return;
+        }
+        String sizeParam = request.getParameter(PARAM_IDENTICON_SIZE_SHORT);
+        int size = 32;
+        if (sizeParam != null) {
+            try {
+                size = Integer.parseInt(sizeParam);
+                if (size < 16)
+                    size = 16;
+                else if (size > 1024)
+                    size = 1024;
+            } catch (NumberFormatException nfe) {}
+        }
 
-		String identiconETag = IdenticonUtil.getIdenticonETag(codeParam.hashCode(), size,
-				version);
-		String requestETag = request.getHeader("If-None-Match");
+        String identiconETag = IdenticonUtil.getIdenticonETag(codeParam.hashCode(), size,
+                version);
+        String requestETag = request.getHeader("If-None-Match");
 
-		if (requestETag != null && requestETag.equals(identiconETag)) {
-			response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
-		} else {
-			// we try to interpret the codeParam parameter as:
-			// 1) a number
-			// 2) a base32 or base64 hash, which we take the Java hashcode of
-			// 3) a string, which we take the Java hashcode of
-			int code;
-			try {
-				code = Integer.parseInt(codeParam);
-			} catch (NumberFormatException nfe) {
-				Hash h = ConvertToHash.getHash(codeParam);
-				if (h != null)
-					code = Arrays.hashCode(h.getData());
-				else
-					code = codeParam.hashCode();
-			}
-			byte[] imageBytes = null;
+        if (requestETag != null && requestETag.equals(identiconETag)) {
+            response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+        } else {
+            // we try to interpret the codeParam parameter as:
+            // 1) a number
+            // 2) a base32 or base64 hash, which we take the Java hashcode of
+            // 3) a string, which we take the Java hashcode of
+            int code;
+            try {
+                code = Integer.parseInt(codeParam);
+            } catch (NumberFormatException nfe) {
+                Hash h = ConvertToHash.getHash(codeParam);
+                if (h != null)
+                    code = Arrays.hashCode(h.getData());
+                else
+                    code = codeParam.hashCode();
+            }
+            byte[] imageBytes = null;
 
-			// retrieve image bytes from either cache or renderer
-			if (cache == null
-					|| (imageBytes = cache.get(identiconETag)) == null) {
-				ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
-				RenderedImage image;
-				try {
-					image = renderer.render(code, size);
-				} catch (Throwable t) {
-					// java.lang.NoClassDefFoundError: Could not initialize class java.awt.GraphicsEnvironment$LocalGE
-					Log log = I2PAppContext.getGlobalContext().logManager().getLog(IdenticonServlet.class);
-					log.logAlways(Log.WARN, "Identicon render failure: " + t);
-					response.setStatus(404);
-					return;
-				}
-				ImageIO.write(image, IDENTICON_IMAGE_FORMAT, byteOut);
-				imageBytes = byteOut.toByteArray();
-				if (cache != null)
-					cache.add(identiconETag, imageBytes);
-			} else {
-				// FIXME this sends 403 if cached
-				response.setStatus(404);
-				return;
-			}
+            // retrieve image bytes from either cache or renderer
+            if (cache == null
+                    || (imageBytes = cache.get(identiconETag)) == null) {
+                ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
+                RenderedImage image;
+                try {
+                    image = renderer.render(code, size);
+                } catch (Throwable t) {
+                    // java.lang.NoClassDefFoundError: Could not initialize class java.awt.GraphicsEnvironment$LocalGE
+                    Log log = I2PAppContext.getGlobalContext().logManager().getLog(IdenticonServlet.class);
+                    log.logAlways(Log.WARN, "Identicon render failure: " + t);
+                    response.setStatus(404);
+                    return;
+                }
+                ImageIO.write(image, IDENTICON_IMAGE_FORMAT, byteOut);
+                imageBytes = byteOut.toByteArray();
+                if (cache != null)
+                    cache.add(identiconETag, imageBytes);
+            } else {
+                // FIXME this sends 403 if cached
+                response.setStatus(404);
+                return;
+            }
 
-			// set ETag and, if code was provided, Expires header
-			response.setHeader("ETag", identiconETag);
-			if (codeSpecified) {
-				long expires = System.currentTimeMillis()
-						+ identiconExpiresInMillis;
-				response.addDateHeader("Expires", expires);
-			}
+            // set ETag and, if code was provided, Expires header
+            response.setHeader("ETag", identiconETag);
+            if (codeSpecified) {
+                long expires = System.currentTimeMillis()
+                        + identiconExpiresInMillis;
+                response.addDateHeader("Expires", expires);
+            }
 
-			// return image bytes to requester
-			response.setContentType(IDENTICON_IMAGE_MIMETYPE);
-			response.setHeader("X-Content-Type-Options", "nosniff");
-			response.setHeader("Accept-Ranges", "none");
-			response.setHeader("Cache-control", "max-age=2628000, immutable");
-			response.setContentLength(imageBytes.length);
-			response.getOutputStream().write(imageBytes);
-		}
-	}
+            // return image bytes to requester
+            response.setContentType(IDENTICON_IMAGE_MIMETYPE);
+            response.setHeader("X-Content-Type-Options", "nosniff");
+            response.setHeader("Accept-Ranges", "none");
+            response.setHeader("Cache-control", "max-age=2628000, immutable");
+            response.setContentLength(imageBytes.length);
+            response.getOutputStream().write(imageBytes);
+        }
+    }
 }

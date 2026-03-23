@@ -36,27 +36,27 @@ package com.vuze.plugins.mlab.tools.ndt.swingemu;
  */
 public class
     JComboBox
-	extends Component
+    extends Component
 {
-	private int index;
+    private int index;
 
-	public void
+    public void
             setSelectedIndex(
-		int	i )
-	{
-		index = i;
-	}
+        int	i )
+    {
+        index = i;
+    }
 
-	public int
+    public int
             getSelectedIndex()
-	{
-		return( index );
-	}
+    {
+        return( index );
+    }
 
-	public void
+    public void
             addItem(
-		String	str )
-	{
+        String	str )
+    {
 
-	}
+    }
 }

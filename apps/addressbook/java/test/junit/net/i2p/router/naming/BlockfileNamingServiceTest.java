@@ -13,7 +13,6 @@ import java.util.Set;
 import junit.framework.TestCase;
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
-import net.i2p.data.Destination;
 
 @SuppressWarnings("PMD.CloseResource")
 public class BlockfileNamingServiceTest extends TestCase {
@@ -22,7 +21,7 @@ public class BlockfileNamingServiceTest extends TestCase {
     File hostsTxt, routerDir;
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-	public void setUp() throws Exception {
+    public void setUp() throws Exception {
         I2PAppContext ctx = new I2PAppContext();
         routerDir = ctx.getRouterDir();
 

@@ -38,8 +38,6 @@ import net.i2p.data.Destination;
 import net.i2p.util.OrderedProperties;
 import net.i2p.util.SecureDirectory;
 import net.i2p.util.SystemVersion;
-import net.i2p.addressbook.HostChecker;
-import net.i2p.addressbook.HostCheckerBridge;
 
 /**
  * Main class of addressbook.  Performs updates, and runs the main loop.

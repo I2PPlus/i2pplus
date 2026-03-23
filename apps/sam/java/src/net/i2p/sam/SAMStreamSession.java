@@ -305,7 +305,7 @@ class SAMStreamSession implements SAMMessageSess {
         if (_log.shouldDebug())
             _log.debug("Connecting new I2PSocket...");
 
-	// blocking connection (SAMv1)
+    // blocking connection (SAMv1)
 
         I2PSocket i2ps = socketMgr.connect(d, opts);
 
@@ -637,8 +637,8 @@ class SAMStreamSession implements SAMMessageSess {
          * Create a new SAM STREAM session socket reader
          *
          * @param s Socket to be handled
-	 * @param id Unique id assigned to the handler
-	 * @throws IOException
+     * @param id Unique id assigned to the handler
+     * @throws IOException
          */
         public SAMStreamSessionSocketReader ( I2PSocket s, int id ) throws IOException {
             i2pSocket = s;
@@ -668,8 +668,8 @@ class SAMStreamSession implements SAMMessageSess {
          * Create a new SAM STREAM session socket reader
          *
          * @param s Socket to be handled
-	 * @param id Unique id assigned to the handler
-	 * @throws IOException
+     * @param id Unique id assigned to the handler
+     * @throws IOException
          */
 
         public SAMv1StreamSessionSocketReader ( I2PSocket s, int id ) throws IOException {
@@ -762,25 +762,25 @@ class SAMStreamSession implements SAMMessageSess {
         }
 
         /**
-	 * Send bytes through the SAM STREAM session socket sender
-	 *
-	 * @param in Data input stream
-	 * @param size Count of bytes to send
-	 * @throws IOException if the client didnt provide enough data
-	 */
+     * Send bytes through the SAM STREAM session socket sender
+     *
+     * @param in Data input stream
+     * @param size Count of bytes to send
+     * @throws IOException if the client didnt provide enough data
+     */
         public abstract void sendBytes ( InputStream in, int size ) throws IOException;
 
 
         /**
-	 * Stop a SAM STREAM session socket sender thread immediately
-	 *
-	 */
+     * Stop a SAM STREAM session socket sender thread immediately
+     *
+     */
         public abstract void stopRunning();
 
         /**
-	 * Stop a SAM STREAM session socket sender gracefully: stop the
-	 * sender thread once all pending data has been sent.
-	 */
+     * Stop a SAM STREAM session socket sender gracefully: stop the
+     * sender thread once all pending data has been sent.
+     */
         public abstract void shutDownGracefully();
 
         public abstract void run();

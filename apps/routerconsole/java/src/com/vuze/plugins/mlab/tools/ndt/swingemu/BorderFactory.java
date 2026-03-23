@@ -36,10 +36,10 @@ package com.vuze.plugins.mlab.tools.ndt.swingemu;
  */
 public class BorderFactory {
 
-	public static Component
+    public static Component
             createTitledBorder(
-		String	str )
-	{
-		return( new Component());
-	}
+        String	str )
+    {
+        return( new Component());
+    }
 }

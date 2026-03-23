@@ -36,43 +36,43 @@ package com.vuze.plugins.mlab.tools.ndt.swingemu;
  */
 public class
     JFrame
-	extends Component
+    extends Component
 {
-	private Panel content_pane = new Panel();
+    private Panel content_pane = new Panel();
 
-	public
+    public
             JFrame()
-	{
+    {
 
-	}
+    }
 
-	public
+    public
             JFrame(
-		String	s )
-	{
+        String	s )
+    {
 
-	}
+    }
 
-	public Panel
+    public Panel
             getContentPane()
-	{
-		return( content_pane );
-	}
+    {
+        return( content_pane );
+    }
 
-	public void
+    public void
             toBack()
-	{
-	}
+    {
+    }
 
-	public void
+    public void
             destroy()
-	{
+    {
 
-	}
+    }
 
-	public void
+    public void
             dispose()
-	{
+    {
 
-	}
+    }
 }
