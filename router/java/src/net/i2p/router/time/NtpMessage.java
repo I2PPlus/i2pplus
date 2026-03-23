@@ -95,6 +95,8 @@ import java.util.Locale;
  * @since 0.9.1 moved from net.i2p.time
  */
 class NtpMessage {
+    private static final ThreadLocal<SimpleDateFormat> DATE_FORMAT = ThreadLocal.withInitial(() -> new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss", Locale.US));
+    private static final ThreadLocal<DecimalFormat> FRACTION_FORMAT = ThreadLocal.withInitial(() -> new DecimalFormat(".000000000"));
 
     // Jan. 19, 1968, halfway through era 0, the earliest date we can handle
     private static final double SECONDS_PIVOT = 1L << 31;
@@ -490,13 +492,13 @@ class NtpMessage {
         long ms = (long) (utc * 1000.0);
 
         // date/time
-        String date = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss", Locale.US).format(Date.from(Instant.ofEpochMilli(ms)));
+        String date = DATE_FORMAT.get().format(Date.from(Instant.ofEpochMilli(ms)));
 
         // fraction
         double fraction = timestamp - ((long) timestamp);
-        String fractionSting = new DecimalFormat(".000000000").format(fraction);
+        String fractionString = FRACTION_FORMAT.get().format(fraction);
 
-        return date + fractionSting;
+        return date + fractionString;
     }
 
     /**

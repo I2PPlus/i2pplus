@@ -68,6 +68,7 @@ import net.i2p.util.SystemVersion;
  * @author zzz
  */
 public class GeoIP {
+    private static final ThreadLocal<SimpleDateFormat> GEO_DATE_FORMAT = ThreadLocal.withInitial(() -> new SimpleDateFormat("MMM d, yyyy", Locale.US));
     private final Log _log;
     private final I2PAppContext _context;
     private static volatile BanLogger _banLogger;
@@ -522,8 +523,7 @@ public class GeoIP {
         try (DatabaseReader reader = openGeoIP2(geoFile)) {
             long buildTime = reader.getMetadata().getBuildDate().getTime();
             Date buildDate = Date.from(Instant.ofEpochMilli(buildTime));
-            SimpleDateFormat sdf = new SimpleDateFormat("MMM d, yyyy", Locale.US);
-            return "<b>Built:</b> " + sdf.format(buildDate) + "&ensp;<b>Size:</b> " + formattedFileSize + "MB&ensp;<b>Location:</b> " + filePath;
+            return "<b>Built:</b> " + GEO_DATE_FORMAT.get().format(buildDate) + "&ensp;<b>Size:</b> " + formattedFileSize + "MB&ensp;<b>Location:</b> " + filePath;
         } catch (Exception e) {return "Unknown GeoIP Db version";}
     }
 

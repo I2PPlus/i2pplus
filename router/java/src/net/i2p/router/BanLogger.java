@@ -37,7 +37,7 @@ public class BanLogger {
     private long _startTime;
     private final Object _writeLock = new Object();
     private static HashPatternDetector _patternDetector;
-    private static BanLogger _self;
+    private static volatile BanLogger _self;
 
     private static final String LOG_DIR = "sessionbans";
     private static final String LOG_FILENAME = "sessionbans.txt";
