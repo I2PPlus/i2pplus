@@ -12,6 +12,7 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.cert.X509Certificate;
+import java.time.Instant;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.Map;
@@ -973,7 +974,7 @@ public class PrivateKeyFile {
         s.append("\nSigning Private Key: ");
         if (!isRI && isOffline()) {
             s.append("offline\nOffline Signature Expires: ");
-            s.append(new Date(getOfflineExpiration()));
+            s.append(Instant.ofEpochMilli(getOfflineExpiration()));
             s.append("\nTransient Signing Public Key: ");
             s.append(_transientSigningPubKey);
             s.append("\nOffline Signature: ");

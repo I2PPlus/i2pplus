@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -454,12 +455,12 @@ class GraphRenderer {
                     def.vrule(started / 1000, RESTART_COLOR, legend, 1.0f);
                     count ++;
                 }
-                def.comment(sdf.format(new Date(start)) + " — " + sdf.format(new Date(end)) + " UTC\\r");
+                def.comment(sdf.format(Date.from(Instant.ofEpochMilli(start))) + " — " + sdf.format(Date.from(Instant.ofEpochMilli(end))) + " UTC\\r");
             }
             if (!showCredit) {def.setShowSignature(false);}
             else if (hideLegend) {
-                if (height > 65) {def.setSignature("    " + sdf.format(new Date(end)) + " UTC");}
-                else {def.setSignature(sdf.format(new Date(end)) + " UTC");}
+                if (height > 65) {def.setSignature("    " + sdf.format(Date.from(Instant.ofEpochMilli(end))) + " UTC");}
+                else {def.setSignature(sdf.format(Date.from(Instant.ofEpochMilli(end))) + " UTC");}
             }
             if (hideLegend) {def.setNoLegend(true);}
             if (hideGrid) {

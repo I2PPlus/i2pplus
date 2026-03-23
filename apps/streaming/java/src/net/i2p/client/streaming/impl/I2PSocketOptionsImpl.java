@@ -85,7 +85,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
      *  Sets max buffer size, connect timeout, read timeout, and write timeout
      *  from properties. Does not set local port or remote port.
      */
-    protected void init(Properties opts) {
+    protected final void init(Properties opts) {
         _maxBufferSize = getInt(opts, PROP_BUFFER_SIZE, DEFAULT_BUFFER_SIZE);
         _connectTimeout = getInt(opts, PROP_CONNECT_TIMEOUT, DEFAULT_CONNECT_TIMEOUT);
         _readTimeout = getInt(opts, PROP_READ_TIMEOUT, -1);

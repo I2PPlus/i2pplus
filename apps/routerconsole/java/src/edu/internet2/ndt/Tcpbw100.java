@@ -64,7 +64,7 @@ import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
-import java.util.Date;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -204,7 +204,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     private String pub_natBox = "unknown";
     private int pub_DupAcksOut = 0;
     private int pub_DupAcksIn = 0;
-    private Date pub_TimeStamp;
+    private Instant pub_TimeStamp;
     private String pub_isReady = "no";
     private String pub_clientIP = "unknown";
     private int pub_jitter = 0; // unused. TODO: find out use

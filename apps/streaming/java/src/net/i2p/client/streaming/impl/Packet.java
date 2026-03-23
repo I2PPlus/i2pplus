@@ -3,7 +3,7 @@ package net.i2p.client.streaming.impl;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Date;
+import java.time.Instant;
 import net.i2p.I2PAppContext;
 import net.i2p.client.I2PSession;
 import net.i2p.crypto.SigType;
@@ -852,7 +852,7 @@ class Packet {
             if (isFlagSet(FLAG_PROFILE_INTERACTIVE)) buf.append(" INTERACTIVE");
             if (isFlagSet(FLAG_SIGNATURE_REQUESTED)) buf.append(" SIGREQ");
             if (isFlagSet(FLAG_SIGNATURE_OFFLINE)) {
-                if (_transientExpires != 0) {buf.append(" TRANSEXP ").append(new Date(_transientExpires));}
+                if (_transientExpires != 0) {buf.append(" TRANSEXP ").append(Instant.ofEpochMilli(_transientExpires));}
                 else {buf.append(" (No expiration)");}
                 if (_transientSigningPublicKey != null) {
                     buf.append(" TRANSKEY ").append(_transientSigningPublicKey.getType()).append(':').append(_transientSigningPublicKey.toBase64());

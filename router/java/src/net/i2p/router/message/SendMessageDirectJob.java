@@ -8,7 +8,7 @@ package net.i2p.router.message;
  *
  */
 
-import java.util.Date;
+import java.time.Instant;
 import net.i2p.data.Hash;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.data.router.RouterInfo;
@@ -122,7 +122,7 @@ public class SendMessageDirectJob extends JobImpl {
         if (_expiration < now) {
             if (_log.shouldWarn())
                 _log.warn("Timed out sending direct message to [" + _targetHash.toBase64().substring(0,6) + "]" +
-                          "\n* Expires: " + new Date(_expiration) + "\n* " + _message);
+                          "\n* Expires: " + Instant.ofEpochMilli(_expiration) + "\n* " + _message);
             if (_onFail != null)
                 getContext().jobQueue().addJob(_onFail);
             return;

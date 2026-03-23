@@ -1,7 +1,7 @@
 package net.i2p.router;
 
 import java.io.Writer;
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -151,7 +151,7 @@ public class InNetMessagePool implements Service {
             _log.debug("Received " + messageBody.getClass().getSimpleName() +
                 " [MsgID " + messageBody.getUniqueId() + "] " +
                 " [XOR MsgID " + messageBody.getUniqueId(msgIDBloomXor) + "]" +
-                "\n* Expires: " + new Date(exp));
+                "\n* Expires: " + Instant.ofEpochMilli(exp));
         }
 
         int type = messageBody.getType();
@@ -221,9 +221,9 @@ public class InNetMessagePool implements Service {
      */
     private void handleInvalidMessage(I2NPMessage messageBody, String invalidReason, RouterIdentity fromRouter, Hash fromRouterHash, boolean doHistory, long msgIDBloomXor) {
         if (_log.shouldInfo()) {
-            _log.warn("Dropping DbLookupMessage [XOR MsgID " + messageBody.getUniqueId(msgIDBloomXor) + "] -> " +
-                invalidReason.substring(0, 1).toUpperCase() + invalidReason.substring(1) +
-                messageBody + "\n* Expires: " + new Date(messageBody.getMessageExpiration()));
+                _log.warn("Dropping DbLookupMessage [XOR MsgID " + messageBody.getUniqueId(msgIDBloomXor) + "] -> " +
+                    invalidReason.substring(0, 1).toUpperCase() + invalidReason.substring(1) +
+                    messageBody + "\n* Expires: " + Instant.ofEpochMilli(messageBody.getMessageExpiration()));
         } else if (_log.shouldWarn()) {
             _log.warn("Dropping DbLookupMessage for " + messageBody + " -> " +
                       invalidReason.substring(0, 1).toUpperCase() + invalidReason.substring(1));

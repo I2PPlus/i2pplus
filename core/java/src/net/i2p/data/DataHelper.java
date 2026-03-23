@@ -1705,7 +1705,7 @@ public class DataHelper {
                 DATE_FORMAT.setTimeZone(tz);
                 _date_tz_set = true;
             }
-            return DATE_FORMAT.format(new Date(now));
+            return DATE_FORMAT.format(Date.from(Instant.ofEpochMilli(now)));
         }
     }
 
@@ -1725,7 +1725,7 @@ public class DataHelper {
                 TIME_FORMAT.setTimeZone(tz);
                 _time_tz_set = true;
             }
-            return TIME_FORMAT.format(new Date(now));
+            return TIME_FORMAT.format(Date.from(Instant.ofEpochMilli(now)));
         }
     }
 

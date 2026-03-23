@@ -736,7 +736,7 @@ public class IndexBean {
             else {host = tun.getTargetHost();}
             String port = tun.getTargetPort();
             if (host == null || host.length() == 0) {host = "<span class=ink_warn>" + _t("Host not set") + "</span>";}
-            else if (Addresses.getIP(host) == null) {host = "<span class=ink_warn>" + _t("Invalid address") + ' ' + host + "</span>";}
+            else if (Addresses.getIP(host).length == 0) {host = "<span class=ink_warn>" + _t("Invalid address") + ' ' + host + "</span>";}
             else if (host.indexOf(':') >= 0) {host = '[' + host + ']';}
             if (port == null || port.length() == 0) {port = "<span class=ink_warn>" + _t("Port not set") + "</span>";}
             else if (Addresses.getPort(port) == 0) {port = "<span class=ink_warn>" + _t("Invalid port") + ' ' + port + "</span>";}

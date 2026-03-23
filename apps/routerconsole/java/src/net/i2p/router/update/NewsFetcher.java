@@ -16,7 +16,7 @@ import java.net.URISyntaxException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -663,13 +663,13 @@ class NewsFetcher extends UpdateRunner {
         long oldTime = _context.getProperty(PROP_BLOCKLIST_TIME, 0L);
         if (ble.updated <= oldTime) {
             if (_log.shouldWarn())
-                _log.warn("Not updating blocklist " + new Date(ble.updated) +
-                          "; already have " + new Date(oldTime));
+                _log.warn("Not updating blocklist " + Instant.ofEpochMilli(ble.updated) +
+                           "; already have " + Instant.ofEpochMilli(oldTime));
             return;
         }
         Blocklist bl = _context.blocklist();
         Banlist ban = _context.banlist();
-        String reason = "Blocklist feed " + new Date(ble.updated);
+        String reason = "Blocklist feed " + Instant.ofEpochMilli(ble.updated);
         int banned = 0;
         for (Iterator<String> iter = ble.entries.iterator(); iter.hasNext(); ) {
             String s = iter.next();
@@ -802,7 +802,7 @@ class NewsFetcher extends UpdateRunner {
             out.write("** Signed by:\t" + signingKeyName + '\n');
             out.write("** Feed:\t" + DataHelper.stripHTML(data.feedTitle) + '\n');
             out.write("** Feed ID:\t" + DataHelper.stripHTML(data.feedID) + '\n');
-            out.write("** Feed Date:\t" + (new Date(data.feedUpdated)) + '\n');
+            out.write("** Feed Date:\t" + Instant.ofEpochMilli(data.feedUpdated) + '\n');
             out.write("-->\n");
             if (entries == null)
                 return;

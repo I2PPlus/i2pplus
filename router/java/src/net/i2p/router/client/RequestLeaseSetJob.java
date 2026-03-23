@@ -8,6 +8,7 @@ package net.i2p.router.client;
  *
  */
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.Properties;
 import net.i2p.data.DatabaseEntry;
@@ -139,7 +140,7 @@ class RequestLeaseSetJob extends JobImpl {
         } else {
             // old style - all leases will have same expiration
             RequestLeaseSetMessage rmsg = new RequestLeaseSetMessage();
-            Date end = new Date(endTime);
+            Date end = Date.from(Instant.ofEpochMilli(endTime));
             rmsg.setEndDate(end);
             rmsg.setSessionId(id);
             for (int i = 0; i < requested.getLeaseCount(); i++) {

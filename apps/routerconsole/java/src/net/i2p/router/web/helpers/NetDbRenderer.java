@@ -2320,7 +2320,7 @@ class NetDbRenderer {
     private static String getAltIPv6(String ip) {
         if (ip.contains("::")) {
             byte[] bip = Addresses.getIPOnly(ip);
-            if (bip != null) {return Addresses.toString(bip);}
+            if (bip != null && bip.length > 0) {return Addresses.toString(bip);}
         } else if (ip.contains(":0:")) {return Addresses.toCanonicalString(ip);}
         return null;
     }

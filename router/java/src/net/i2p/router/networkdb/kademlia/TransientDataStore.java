@@ -10,7 +10,7 @@ package net.i2p.router.networkdb.kademlia;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
+import java.time.Instant;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -139,14 +139,14 @@ class TransientDataStore implements DataStore {
                 if (ri.getPublished() > ori.getPublished()) {
                     if (_log.shouldInfo())
                         _log.info("Received updated RouterInfo [" + key.toBase64().substring(0,6) + "] -> " + v + " / " + caps +
-                                  "\n* Old: " + new Date(ori.getPublished()) + "\n* New: " + new Date(ri.getPublished()));
+                                  "\n* Old: " + Instant.ofEpochMilli(ori.getPublished()) + "\n* New: " + Instant.ofEpochMilli(ri.getPublished()));
                     _data.put(key, data);
                     rv = true;
                 }
             } else {
                 if (_log.shouldInfo())
                     _log.info("Received new RouterInfo [" + key.toBase64().substring(0,6) + "] -> " + v + " / " + caps +
-                              "\n* Published: " + new Date(ri.getPublished()));
+                              "\n* Published: " + Instant.ofEpochMilli(ri.getPublished()));
                 rv = true;
                 long uptime = _context.router().getUptime();
                 if (enableReverseLookups() && uptime > 30*1000) {
@@ -177,8 +177,8 @@ class TransientDataStore implements DataStore {
                 if (newDate < oldDate) {
                     if (_log.shouldDebug()) {
                         _log.debug("Almost clobbered a LeaseSet! [" + key.toBase32().substring(0,8) +
-                                   "]\n* Old: " + new Date(ols.getEarliestLeaseDate()) +
-                                   "\n* New: " + new Date(ls.getEarliestLeaseDate()));
+                                   "]\n* Old: " + Instant.ofEpochMilli(ols.getEarliestLeaseDate()) +
+                                   "\n* New: " + Instant.ofEpochMilli(ls.getEarliestLeaseDate()));
                     }
                 } else if (newDate == oldDate) {
                     if (_log.shouldDebug()) {
@@ -187,8 +187,8 @@ class TransientDataStore implements DataStore {
                 } else {
                     if (_log.shouldInfo()) {
                         _log.info("Received updated LeaseSet [" + key.toBase32().substring(0,8) + "]" + receivedAs +
-                                   "\n* Old: " + new Date(ols.getEarliestLeaseDate()) +
-                                   "\n* New: " + new Date(newDate));
+                                   "\n* Old: " + Instant.ofEpochMilli(ols.getEarliestLeaseDate()) +
+                                   "\n* New: " + Instant.ofEpochMilli(newDate));
                     }
                     _data.put(key, data);
                     rv = true;
@@ -196,7 +196,7 @@ class TransientDataStore implements DataStore {
             } else {
                 if (_log.shouldInfo()) {
                     _log.info("Received new LeaseSet [" + key.toBase32().substring(0,8) + "]" + receivedAs +
-                              "\n* Expires: " + new Date(ls.getEarliestLeaseDate()));
+                              "\n* Expires: " + Instant.ofEpochMilli(ls.getEarliestLeaseDate()));
                 }
                 rv = true;
             }

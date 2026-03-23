@@ -1,5 +1,6 @@
 package com.maxmind.db;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -87,7 +88,7 @@ public final class Metadata {
      * @return the date of the database build.
      */
     public Date getBuildDate() {
-        return new Date(this.buildEpoch * 1000);
+        return Date.from(Instant.ofEpochMilli(this.buildEpoch * 1000));
     }
 
     /**

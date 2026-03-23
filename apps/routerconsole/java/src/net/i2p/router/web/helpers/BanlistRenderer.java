@@ -468,7 +468,7 @@ class BanlistRenderer {
                   }
                   // Queue the IP for GeoIP lookup if not already in database
                   byte[] geoIpBytes = Addresses.getIPOnly(ip);
-                  if (geoIpBytes != null) {
+                  if (geoIpBytes != null && geoIpBytes.length > 0) {
                       _context.commSystem().queueLookup(geoIpBytes);
                   }
                   String geoCountry = _context.commSystem().getCountry(ip);
@@ -524,7 +524,7 @@ class BanlistRenderer {
              if (ip != null && !ip.isEmpty()) {
                  // Queue the IP for GeoIP lookup if not already in database
                  byte[] geoIpBytes = Addresses.getIPOnly(ip);
-                 if (geoIpBytes != null) {
+                 if (geoIpBytes != null && geoIpBytes.length > 0) {
                      _context.commSystem().queueLookup(geoIpBytes);
                  }
                  String geoCountry = _context.commSystem().getCountry(ip);

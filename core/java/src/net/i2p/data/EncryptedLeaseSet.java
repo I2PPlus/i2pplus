@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -1000,14 +1001,14 @@ public class EncryptedLeaseSet extends LeaseSet2 {
         if (_log.shouldInfo()) {
             if (isOffline()) {
                 buf.append("\n* Transient Key: ").append(_transientSigningPublicKey)
-                   .append("\n* Transient Expires: ").append(new java.util.Date(_transientExpires))
+                   .append("\n* Transient Expires: ").append(Instant.ofEpochMilli(_transientExpires))
                    .append("\n* Offline Signature: ").append(_offlineSignature);
             }
             buf.append("\n* Published: ").append(!isUnpublished())
                .append("\n* Length: ").append(_encryptedData.length)
                .append("\n* Signature: ").append(_signature)
-               .append("\n* Published: ").append(new java.util.Date(_published))
-               .append("\n* Expires: ").append(new java.util.Date(_expires))
+               .append("\n* Published: ").append(Instant.ofEpochMilli(_published))
+               .append("\n* Expires: ").append(Instant.ofEpochMilli(_expires))
                .append("\n* Auth Type: ").append(_authType)
                .append("\n* Client Keys: ").append(_numKeys);
             if (_decryptedLS2 != null) {

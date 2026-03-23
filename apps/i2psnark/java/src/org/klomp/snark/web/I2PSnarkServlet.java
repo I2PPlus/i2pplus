@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.time.Instant;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -2894,7 +2895,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 SimpleDateFormat fmt = new SimpleDateFormat("HH:mm, EEE dd MMM yyyy", Locale.US);
                 fmt.setTimeZone(SystemVersion.getSystemTimeZone(_context));
                 long[] dates = _manager.getSavedAddedAndCompleted(snark);
-                String date = fmt.format(new Date(dates[1]));
+                String date = fmt.format(Date.from(Instant.ofEpochMilli(dates[1])));
                 buf.append("<div class=barComplete title=\"").append(_t("Completed")).append(": ").append(date).append("\">")
                    .append(formatSize(total).replaceAll("iB", "")).append("</div>");
             }
@@ -2928,7 +2929,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     Storage storage = snark.getStorage();
                     if (storage != null) {
                         long lastActive = storage.getActivity();
-                        String date = fmt.format(new Date(lastActive));
+                        String date = fmt.format(Date.from(Instant.ofEpochMilli(lastActive)));
                         buf.append(" &bullet; ").append(_t("Last activity")).append(": ").append(date);
                     }
                     buf.append("\"><span class=txBarText><span class=right>")
@@ -5016,7 +5017,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         buf.append("<tr id=torrentInfoStats>").append("<td colspan=3><span class=nowrap");
         if (dat > 0) {
-            String date = fmt.format(new Date(dat));
+            String date = fmt.format(Date.from(Instant.ofEpochMilli(dat)));
             buf.append(" title=\"").append(_t("Created")).append(": ").append(date).append("\"");
         }
         buf.append(">");
@@ -5032,7 +5033,7 @@ public class I2PSnarkServlet extends BasicServlet {
         double completion = (pieces - snark.getNeeded()) / (double) pieces;
         buf.append("</span>&nbsp;<span class=nowrap");
         if (dates[0] > 0) {
-            String date = fmt.format(new Date(dates[0]));
+            String date = fmt.format(Date.from(Instant.ofEpochMilli(dates[0])));
             buf.append(" title=\"").append(_t("Added")).append(": ").append(date).append("\"");
         }
         buf.append(">");
@@ -5083,7 +5084,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         buf.append("</span>&nbsp;<span id=completion class=nowrap");
         if (dates[1] > 0) {
-            String date = fmt.format(new Date(dates[1]));
+            String date = fmt.format(Date.from(Instant.ofEpochMilli(dates[1])));
             buf.append(" title=\"").append(_t("Completed")).append(": ").append(date).append("\"");
         }
         buf.append(">");
@@ -5116,7 +5117,7 @@ public class I2PSnarkServlet extends BasicServlet {
             if (storage != null) {
                 dat = storage.getActivity();
                 if (dat > 0) {
-                    String date = fmt.format(new Date(dat));
+                    String date = fmt.format(Date.from(Instant.ofEpochMilli(dat)));
                     buf.append("&nbsp;<span class=nowrap>");
                     appendIcon(buf, "torrent", "", "", true, false);
                     buf.append("<b>").append(_t("Last activity")).append(":</b> ").append(date).append("</span>");
@@ -5636,7 +5637,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 if (esc) {
                     if (c.getText() != null) {
                         buf.append("<div class=commentWrapper title=\"").append(_t("Submitted")).append(": ")
-                           .append(fmt.format(new Date(c.getTime()))).append("\">")
+                           .append(fmt.format(Date.from(Instant.ofEpochMilli(c.getTime())))).append("\">")
                            .append(DataHelper.escapeHTML(c.getText()))
                            .append("</div></td><td class=commentDelete><input type=checkbox class=optbox name=\"cdelete.")
                            .append(c.getID()).append("\" title=\"").append(_t("Mark for deletion")).append("\">");

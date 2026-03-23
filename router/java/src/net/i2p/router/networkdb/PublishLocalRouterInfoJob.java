@@ -9,10 +9,10 @@ package net.i2p.router.networkdb;
  */
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -136,7 +136,7 @@ public class PublishLocalRouterInfoJob extends JobImpl {
             if (_log.shouldInfo())
                 _log.info("Newly updated RouterInfo is published with " + stats.size() +
                           "/" + ri.getOptionsMap().size() + " options" +
-                          "\n* Published: " + new Date(ri.getPublished()));
+                          "\n* Published: " + Instant.ofEpochMilli(ri.getPublished()));
             try {
                 // This won't really publish until the netdb is initialized.
                 getContext().netDb().publish(ri);

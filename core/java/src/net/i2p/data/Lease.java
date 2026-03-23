@@ -12,6 +12,7 @@ package net.i2p.data;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.time.Instant;
 import java.util.Date;
 import net.i2p.util.Clock;
 
@@ -114,7 +115,7 @@ public class Lease extends DataStructureImpl {
      * @deprecated use getEndTime()
      */
     @Deprecated
-    public Date getEndDate() {return new Date(_end);}
+    public Date getEndDate() {return Date.from(Instant.ofEpochMilli(_end));}
 
     /**
      * @deprecated use setEndDate(long)

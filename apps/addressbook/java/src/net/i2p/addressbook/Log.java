@@ -26,7 +26,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.Date;
+import java.time.Instant;
 
 /**
  * A simple log with automatic time stamping.
@@ -58,7 +58,7 @@ class Log {
         BufferedWriter bw = null;
         try {
             bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.file, true), "UTF-8"));
-            String timestamp = new Date().toString();
+            String timestamp = Instant.now().toString();
             bw.write(timestamp + " -- " + entry);
             bw.newLine();
         } catch (IOException exp) {}

@@ -1,6 +1,7 @@
 package net.i2p.client.streaming.impl;
 
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.Date;
 import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
@@ -71,7 +72,7 @@ class PacketHandler {
     void displayPacket(Packet packet, String prefix, String suffix) {
         StringBuilder buf = new StringBuilder(256);
         synchronized (DATE_FORMAT) {
-            buf.append(DATE_FORMAT.format(new Date()));
+            buf.append(DATE_FORMAT.format(Date.from(Instant.now())));
         }
         buf.append(": ").append(prefix).append(" ").append(packet.toString());
         if (suffix != null) {

@@ -712,7 +712,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
             if (last != null)
                 ourIPv6 = Addresses.getIPOnly(last);
         }
-        if (ourIP == null && ourIPv6 == null)
+        if ((ourIP == null || ourIP.length == 0) && (ourIPv6 == null || ourIPv6.length == 0))
             return;
 
         String reason32;

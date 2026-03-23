@@ -3,6 +3,7 @@ package net.i2p.data;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.time.Instant;
 import java.util.Map;
 import net.i2p.crypto.SigType;
 
@@ -148,7 +149,7 @@ public class MetaLeaseSet extends LeaseSet2 {
         buf.append("\n* Destination: ").append(_destination.toBase32());
         if (isOffline()) {
             buf.append("\n* Transient Key: ").append(_transientSigningPublicKey)
-               .append("\n* Transient Expiry: ").append(new java.util.Date(_transientExpires))
+               .append("\n* Transient Expiry: ").append(Instant.ofEpochMilli(_transientExpires))
                .append("\n* Offline Signature: ").append(_offlineSignature);
         }
         if (_options != null && _options.size() > 0) {
@@ -161,8 +162,8 @@ public class MetaLeaseSet extends LeaseSet2 {
         }
         buf.append("\n* Published: ").append(!isUnpublished())
            .append("\n* Signature: ").append(_signature)
-           .append("\n* Published: ").append(new java.util.Date(_published))
-           .append("\n* Expires: ").append(new java.util.Date(_expires))
+           .append("\n* Published: ").append(Instant.ofEpochMilli(_published))
+           .append("\n* Expires: ").append(Instant.ofEpochMilli(_expires))
            .append("\n* Leases: ").append(getLeaseCount());
         for (int i = 0; i < getLeaseCount(); i++) {buf.append(getLease(i));}
         return buf.toString();

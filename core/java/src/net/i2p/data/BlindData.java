@@ -1,5 +1,6 @@
 package net.i2p.data;
 
+import java.time.Instant;
 import java.util.Date;
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.Blinding;
@@ -401,7 +402,7 @@ public class BlindData {
         buf.append("[BlindData: ");
         buf.append("\n\tSigningPublicKey: ").append(_clearSPK);
         buf.append("\n\tAlpha           : ").append(getAlpha());
-        buf.append("\n\tAlpha valid for : ").append((new Date(_routingKeyGenMod)).toString());
+        buf.append("\n\tAlpha valid for : ").append(Instant.ofEpochMilli(_routingKeyGenMod));
         buf.append("\n\tBlindedPublicKey: ").append(_blindSPK);
         buf.append("\n\tBlinded Hash    : ").append(_blindHash);
         if (_secret != null)
@@ -429,9 +430,9 @@ public class BlindData {
         if (!(_authRequired || _secretRequired))
             buf.append("\n\t  + auth,secret : ").append(Blinding.encode(_clearSPK, true, true));
         if (_date > 0)
-            buf.append("\n\tCreated         : ").append((new Date(_date)).toString());
+            buf.append("\n\tCreated         : ").append(Instant.ofEpochMilli(_date));
         if (_expiration > 0)
-            buf.append("\n\tExpires         : ").append((new Date(_expiration)).toString());
+            buf.append("\n\tExpires         : ").append(Instant.ofEpochMilli(_expiration));
         buf.append(']');
         return buf.toString();
     }

@@ -4,7 +4,7 @@ package org.klomp.snark.dht;
  *  GPLv2
  */
 
-import java.util.Date;
+import java.time.Instant;
 import net.i2p.I2PAppContext;
 import net.i2p.data.ByteArray;
 
@@ -125,7 +125,7 @@ class Token extends ByteArray {
             }
         }
         buf.append("]");
-        if (lastSeen > 0) buf.append("\n* Created: ").append((new Date(lastSeen)).toString());
+        if (lastSeen > 0) buf.append("\n* Created: ").append(Instant.ofEpochMilli(lastSeen));
         //        buf.append(']');
         return buf.toString();
     }

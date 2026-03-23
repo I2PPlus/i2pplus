@@ -9,7 +9,7 @@ package net.i2p.router.message;
  */
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 import net.i2p.data.Certificate;
 import net.i2p.data.PublicKey;
@@ -175,7 +175,7 @@ class GarlicConfig {
 	buf.append("<garlicConfig>").append(NL);
 	buf.append("<certificate>").append(getCertificate()).append("</certificate>").append(NL);
 	buf.append("<instructions>").append(getDeliveryInstructions()).append("</instructions>").append(NL);
-	buf.append("<expiration>").append(new Date(getExpiration())).append("</expiration>").append(NL);
+	buf.append("<expiration>").append(Instant.ofEpochMilli(getExpiration())).append("</expiration>").append(NL);
 	buf.append("<garlicId>").append(getId()).append("</garlicId>").append(NL);
 	buf.append("<recipient>").append(getRecipient()).append("</recipient>").append(NL);
 	buf.append("<recipientPublicKey>").append(getRecipientPublicKey()).append("</recipientPublicKey>").append(NL);

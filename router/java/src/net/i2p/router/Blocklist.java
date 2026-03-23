@@ -753,7 +753,7 @@ public class Blocklist {
     public void add(String ip) {
         if (!_haveIPv6 && ip.indexOf(':') >= 0) {return;}
         byte[] pib = Addresses.getIPOnly(ip);
-        if (pib == null) {return;}
+        if (pib == null || pib.length == 0) {return;}
         add(pib, null);
     }
 
@@ -769,7 +769,7 @@ public class Blocklist {
     public void add(String ip, String source) {
         if (!_haveIPv6 && ip.indexOf(':') >= 0) {return;}
         byte[] pib = Addresses.getIPOnly(ip);
-        if (pib == null) {return;}
+        if (pib == null || pib.length == 0) {return;}
         add(pib, source);
     }
 
@@ -980,7 +980,7 @@ public class Blocklist {
     public boolean isBlocklisted(String ip) {
         if (!_haveIPv6 && ip.indexOf(':') >= 0) {return false;}
         byte[] pib = Addresses.getIPOnly(ip);
-        if (pib == null) {return false;}
+        if (pib == null || pib.length == 0) {return false;}
         return isBlocklisted(pib);
     }
 

@@ -1,6 +1,6 @@
 package net.i2p.router.networkdb.kademlia;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -194,7 +194,7 @@ public int getPendingCount() {
         if (_successfulPeers.size() <= 0)
             buf.append(" - Completed? false ");
         else
-            buf.append("\n* Completed: ").append(new Date(_completed));
+            buf.append("\n* Completed: ").append(Instant.ofEpochMilli(_completed));
         if (_attemptedPeers.size() > 0) {
             buf.append("\n* Queried: ").append(_attempted);
             buf.append("\n* Queried and skipped: ");

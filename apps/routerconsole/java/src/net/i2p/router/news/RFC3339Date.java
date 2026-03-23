@@ -2,6 +2,7 @@ package net.i2p.router.news;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -104,7 +105,7 @@ public abstract class RFC3339Date {
      * Format is "yyyy-MM-ddTHH:mm:ssZ"
      */
     public synchronized static String to3339Date(long t) {
-        return OUTPUT_FORMAT.format(new Date(t));
+        return OUTPUT_FORMAT.format(Date.from(Instant.ofEpochMilli(t)));
     }
 
 /****

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -1201,7 +1202,7 @@ public class SybilRenderer {
         final int limit = Math.min(10, sybils.size());
         DateFormat utcTWO_DECIMALS = DateFormat.getDateInstance(DateFormat.MEDIUM);
         for (int i = start; i <= days; i++) {
-            out.write("<h3 class=tabletitle>" + _x("Distance for") + ' ' + utcTWO_DECIMALS.format(new Date(now)) +
+            out.write("<h3 class=tabletitle>" + _x("Distance for") + ' ' + utcTWO_DECIMALS.format(Date.from(Instant.ofEpochMilli(now))) +
                       "</h3><table class=sybil_distance><tr><th>Hash<th>Distance<th>Distance from previous</tr>\n");
             Hash rkey = rkgen.getRoutingKey(from, now);
             xor = new XORComparator<Hash>(rkey);

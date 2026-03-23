@@ -1,12 +1,12 @@
 package net.i2p.router;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
@@ -166,7 +166,7 @@ public class JobQueue {
         long now = _context.clock().now();
         long start = job.getTiming().getStartAfter();
         if (start > now + 3*24*60*60*1000L && _log.shouldWarn()) {
-            _log.warn(job + " scheduled far in the future: " + (new Date(start)));
+            _log.warn(job + " scheduled far in the future: " + (Instant.ofEpochMilli(start)));
         }
         synchronized (_jobLock) {
             alreadyExists = _readyJobs.contains(job) || _highPriorityJobs.contains(job) ||

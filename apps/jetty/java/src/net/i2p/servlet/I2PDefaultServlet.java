@@ -25,6 +25,7 @@ import java.text.Collator;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
+import java.time.Instant;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -252,7 +253,7 @@ public class I2PDefaultServlet extends DefaultServlet {
 
                 if (isDir && !path.endsWith("/")) {buf.append(URIUtil.SLASH);}
                 buf.append("\">").append(deTag(ls[i])).append("</a></td><td width=1% nowrap class=lastmodified>")
-                   .append(dfmt.format(new Date(item.lastModified())))
+                   .append(dfmt.format(Date.from(Instant.ofEpochMilli(item.lastModified()))))
                    .append("</td><td width=1% align=right class=size>");
                 if (!isDir) {buf.append(item.length());}
                 buf.append("</td></tr>\n");
@@ -361,7 +362,7 @@ public class I2PDefaultServlet extends DefaultServlet {
         if(lastModified > 0) {
             SimpleDateFormat sdf = new SimpleDateFormat(LAST_MODIFIED_FORMAT, Locale.US);
             sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-            response.setHeader("Last-Modified", sdf.format(new Date(lastModified)));
+            response.setHeader("Last-Modified", sdf.format(Date.from(Instant.ofEpochMilli(lastModified))));
         }
 
         super.doGet(request, response); // Let the super implementation handle the response

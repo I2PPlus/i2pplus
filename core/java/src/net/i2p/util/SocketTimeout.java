@@ -2,7 +2,7 @@ package net.i2p.util;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.util.Date;
+import java.time.Instant;
 
 /**
  *  Implements one or two timers; one for inactivity, that is reset by resetTimer(),
@@ -119,12 +119,12 @@ public class SocketTimeout extends SimpleTimer2.TimedEvent {
     public String toString() {
         StringBuilder buf = new StringBuilder();
         buf.append("SocketTimeout started on ");
-        buf.append(new Date(_startTime));
+        buf.append(Instant.ofEpochMilli(_startTime));
         buf.append(" idle for ");
         buf.append(System.currentTimeMillis() - _lastActivity);
         buf.append("ms ");
         if (_totalTimeoutTime > 0)
-            buf.append("total timeout at ").append(new Date(_totalTimeoutTime));
+            buf.append("total timeout at ").append(Instant.ofEpochMilli(_totalTimeoutTime));
         buf.append("cancelled? ").append(_cancelled);
         return buf.toString();
     }

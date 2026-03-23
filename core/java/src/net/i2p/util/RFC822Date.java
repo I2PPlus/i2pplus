@@ -2,6 +2,7 @@ package net.i2p.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -65,7 +66,7 @@ public abstract class RFC822Date {
      * @since 0.8.2
      */
     public synchronized static String to822Date(long t) {
-        return OUTPUT_FORMAT.format(new Date(t));
+        return OUTPUT_FORMAT.format(Date.from(Instant.ofEpochMilli(t)));
     }
 
     public static void main(String[] args) {

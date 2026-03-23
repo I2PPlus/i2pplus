@@ -2535,7 +2535,7 @@ class EstablishmentManager {
                                 long exp = Long.parseLong(s[4].trim());
                                 if (exp > now) {
                                     byte[] ip = Addresses.getIPOnly(s[1]);
-                                    if (ip != null) {
+                                    if (ip != null && ip.length > 0) {
                                         int port = Integer.parseInt(s[2]);
                                         long tok = Long.parseLong(s[3]);
                                         RemoteHostId id = new RemoteHostId(ip, port);

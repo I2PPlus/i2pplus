@@ -1,6 +1,6 @@
 package net.i2p.router;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import net.i2p.data.DataHelper;
@@ -257,7 +257,7 @@ public class RouterClock extends Clock {
     public void setNow(long realTime, int stratum) {
         if (realTime < BuildTime.getEarliestTime() || realTime > BuildTime.getLatestTime()) {
             Log log = getLog();
-            String msg = "Invalid time received: " + new Date(realTime);
+            String msg = "Invalid time received: " + Instant.ofEpochMilli(realTime);
             if (log.shouldWarn())
                 log.warn(msg, new Exception());
             else

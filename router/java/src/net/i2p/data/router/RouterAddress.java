@@ -12,6 +12,7 @@ package net.i2p.data.router;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.time.Instant;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
@@ -114,7 +115,7 @@ public class RouterAddress extends DataStructureImpl {
     public Date getExpiration() {
         //return _expiration;
         if (_expiration > 0)
-            return new Date(_expiration);
+            return Date.from(Instant.ofEpochMilli(_expiration));
         return null;
     }
 
@@ -144,7 +145,7 @@ public class RouterAddress extends DataStructureImpl {
     @Deprecated
     public void setExpiration(Date expiration) {
         if (expiration != null)
-            _expiration = expiration.getDate();
+            _expiration = expiration.getTime();
         else
             _expiration = 0;
     }
@@ -229,9 +230,10 @@ public class RouterAddress extends DataStructureImpl {
             // The lifetime of a RouterAddress object is a few hours at most,
             // it will get republished or expired, so it's OK even for host names.
             String host = getHost();
-            if (host != null)
-                _ip = Addresses.getIPOnly(host);
-            else
+            if (host != null) {
+                byte[] tmp = Addresses.getIPOnly(host);
+                _ip = (tmp != null && tmp.length > 0) ? tmp : null;
+            } else
                 _ip = null;
         }
         return _ip;
@@ -371,7 +373,7 @@ public class RouterAddress extends DataStructureImpl {
         }
         buf.append("\n\t* cost: ").append(_cost);
         if (_expiration > 0)
-            buf.append("\n\t* expires: ").append(new Date(_expiration));
+            buf.append("\n\t* expires: ").append(Instant.ofEpochMilli(_expiration));
         return buf.toString();
     }
 }

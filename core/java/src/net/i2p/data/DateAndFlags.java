@@ -10,6 +10,7 @@ package net.i2p.data;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.time.Instant;
 import java.util.Date;
 
 /**
@@ -75,7 +76,7 @@ public class DateAndFlags extends DataStructureImpl {
      *  Use getTime() if you only need the long value.
      */
     public Date getDate() {
-        return new Date(_date);
+        return Date.from(Instant.ofEpochMilli(_date));
     }
 
     public long getTime() {
@@ -144,7 +145,7 @@ public class DateAndFlags extends DataStructureImpl {
     public String toString() {
         StringBuilder buf = new StringBuilder(64);
         buf.append("[DateAndFlags: ");
-        buf.append("\n\tDate: ").append((new Date(_date)).toString());
+        buf.append("\n\tDate: ").append(Instant.ofEpochMilli(_date));
         buf.append("\n\tFlags: 0x").append(Integer.toHexString(_flags));
         buf.append("]");
         return buf.toString();

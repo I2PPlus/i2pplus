@@ -6,7 +6,7 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
-import java.util.Date;
+import java.time.Instant;
 import java.util.SortedMap;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
@@ -150,10 +150,8 @@ public class InfoHelper extends HelperBase {
         StringBuilder buf = new StringBuilder(4*1024);
         RouterInfo ri = _context.router().getRouterInfo();
         Hash h = _context.routerHash();
-        Date installDate = new Date();
-        if (installDate != null) {installDate.setTime(Long.parseLong(firstInstalled()));}
-        Date lastUpdate = new Date();
-        lastUpdate.setTime(Long.parseLong(lastUpdated()));
+        Instant installDate = Instant.ofEpochMilli(Long.parseLong(firstInstalled()));
+        Instant lastUpdate = Instant.ofEpochMilli(Long.parseLong(lastUpdated()));
         float bwO = Integer.parseInt(bwOut());
         float bwS = Integer.parseInt(bwShare());
         float shared = (bwO / 100 * bwS);
@@ -240,7 +238,7 @@ public class InfoHelper extends HelperBase {
             }
             buf.append(" &ensp;<a href=\"/configupdate\">").append(_t("Configure")).append("</a></td></tr>\n");
         }
-        buf.append("<tr><td><b>").append(_t("Started")).append(":</b></td><td class=ajax>").append(new Date(_context.router().getWhenStarted()))
+        buf           .append("<tr><td><b>").append(_t("Started")).append(":</b></td><td class=ajax>").append(Instant.ofEpochMilli(_context.router().getWhenStarted()))
            .append(" &ensp;<b>").append(_t("Uptime")).append(":</b> ").append(DataHelper.formatDuration(_context.router().getUptime()))
            .append(" &ensp;<b>").append(_t("Clock Skew")).append(":</b> ").append(_context.clock().getOffset()).append("ms</td></tr>\n")
            .append("</table>\n");

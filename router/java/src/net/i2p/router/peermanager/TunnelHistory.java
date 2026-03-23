@@ -2,7 +2,7 @@ package net.i2p.router.peermanager;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Date;
+import java.time.Instant;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.router.RouterContext;
@@ -144,7 +144,7 @@ public class TunnelHistory {
 
     private static void addDate(StringBuilder buf, boolean addComments, String name, long val, String description) {
         if (addComments) {
-            String when = val > 0 ? (new Date(val)).toString() : "Never";
+            String when = val > 0 ? Instant.ofEpochMilli(val).toString() : "Never";
             add(buf, true, name, val, description + ' ' + when);
             //buf.append("# ").append(description).append(' ').append(when).append(NL);
         } else {add(buf, false, name, val, description);}

@@ -811,7 +811,7 @@ public class GeoIP {
      */
     public void add(String ip) {
         byte[] pib = Addresses.getIPOnly(ip);
-        if (pib == null) {return;}
+        if (pib == null || pib.length == 0) {return;}
         add(pib);
     }
 
@@ -822,6 +822,7 @@ public class GeoIP {
      * @param ip IPv4 or IPv6
      */
     public void add(byte ip[]) {
+        if (ip.length == 0) {return;}
         // skip he.net tunnel 2001:470:: so we will get correct geoip from IPv4
         // ditto route48
         if (ip.length == 16 &&
@@ -852,7 +853,7 @@ public class GeoIP {
      */
     public String get(String ip) {
         byte[] pib = Addresses.getIPOnly(ip);
-        if (pib == null) return null;
+        if (pib == null || pib.length == 0) return null;
         return get(pib);
     }
 
@@ -874,7 +875,9 @@ public class GeoIP {
     /** see above for ip-to-long mapping */
     private static long toLong(byte ip[]) {
         long rv = 0;
-        if (ip.length == 16) {
+        if (ip.length == 0) {
+            return -1;
+        } else if (ip.length == 16) {
             for (int i = 0; i < 8; i++) {rv |= (ip[i] & 0xffL) << ((7-i)*8);}
             return rv;
         } else {

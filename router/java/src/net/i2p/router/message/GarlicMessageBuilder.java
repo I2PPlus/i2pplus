@@ -9,7 +9,7 @@ package net.i2p.router.message;
  */
 
 import java.io.IOException;
-import java.util.Date;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 import net.i2p.crypto.EncType;
@@ -175,7 +175,7 @@ public class GarlicMessageBuilder {
             throw new IllegalArgumentException();
 
         if (log.shouldInfo())
-            log.info("Encrypted with public key to expire on " + new Date(config.getExpiration()));
+            log.info("Encrypted with public key to expire on " + Instant.ofEpochMilli(config.getExpiration()));
 
         SessionKey curKey = skm.getCurrentOrNewKey(key);
         SessionTag curTag = skm.consumeNextAvailableTag(key, curKey);
