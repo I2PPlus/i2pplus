@@ -62,6 +62,8 @@
     <echo message=" buildWEB                                     Build required .jar &amp; .war components for RouterConsole &#10140; ./build/"/>
     <echo message=" bumpBuildTime                                Update core/java/src/net/i2p/time/BuildTime.java with today's date"/>
     <echo message=" bump                                         Increment build (minor version) by 1"/>
+    <echo message=" checkstyle                                   Run Checkstyle analysis &#10140; dist/checkstyle.html"/>
+    <echo message=" checkstyle-local                             Checkstyle report with clickable file links &#10140; dist/checkstyle-local.html"/>
     <echo message=" createThemesZip                              Create zip with all console and webapp themes and resources &#10140; ./dist/themes.zip"/>
     <echo message=" debian-clean                                 Rollback Debian specific patches then run &apos;distclean&apos;"/>
     <echo message=" debian                                       Generate Debian packages in ../ then run &apos;debian-clean&apos;"/>
@@ -3263,6 +3265,75 @@
     </exec>
     <delete file="dist/pmd-js.xml" quiet="true"/>
     <echo message="PMD JavaScript report written to dist/pmd-js.html"/>
+  </target>
+
+  <target name="checkstyle-setup">
+    <available property="cs.present" file="tools/checkstyle/checkstyle-all.jar"/>
+    <unless>
+      <isset property="cs.present"/>
+      <sequential>
+        <exec executable="bash" dir="${basedir}" failonerror="true">
+          <arg value="tools/checkstyle/download-checkstyle.sh"/>
+        </exec>
+      </sequential>
+    </unless>
+  </target>
+
+  <target name="checkstyle" depends="checkstyle-setup">
+    <exec executable="ant" dir="${basedir}" output="/dev/null" error="/dev/null">
+      <arg value="build"/>
+    </exec>
+    <echo message="Starting Checkstyle analysis..."/>
+    <mkdir dir="dist"/>
+    <exec executable="java" failonerror="false" outputproperty="cs.result">
+      <arg value="-jar"/>
+      <arg value="tools/checkstyle/checkstyle-all.jar"/>
+      <arg value="-c"/>
+      <arg value="tools/checkstyle/checkstyle.xml"/>
+      <arg value="-f"/>
+      <arg value="xml"/>
+      <arg value="-o"/>
+      <arg value="dist/checkstyle.xml"/>
+      <arg value="core/java/src/net/i2p"/>
+      <arg value="router/java/src"/>
+      <arg value="apps"/>
+    </exec>
+    <exec executable="python3" failonerror="true">
+      <arg value="tools/checkstyle/checkstyle-to-html.py"/>
+      <arg value="dist/checkstyle.xml"/>
+      <arg value="dist/checkstyle.html"/>
+    </exec>
+    <delete file="dist/checkstyle.xml" quiet="true"/>
+    <echo message="Checkstyle report written to dist/checkstyle.html"/>
+  </target>
+
+  <target name="checkstyle-local">
+    <exec executable="ant" dir="${basedir}" output="/dev/null" error="/dev/null">
+      <arg value="build"/>
+    </exec>
+    <echo message="Starting Checkstyle analysis (local file links enabled)..."/>
+    <mkdir dir="dist"/>
+    <exec executable="java" failonerror="false" outputproperty="cs.result">
+      <arg value="-jar"/>
+      <arg value="tools/checkstyle/checkstyle-all.jar"/>
+      <arg value="-c"/>
+      <arg value="tools/checkstyle/checkstyle.xml"/>
+      <arg value="-f"/>
+      <arg value="xml"/>
+      <arg value="-o"/>
+      <arg value="dist/checkstyle.xml"/>
+      <arg value="core/java/src/net/i2p"/>
+      <arg value="router/java/src"/>
+      <arg value="apps"/>
+    </exec>
+    <exec executable="python3" failonerror="true">
+      <arg value="tools/checkstyle/checkstyle-to-html.py"/>
+      <arg value="dist/checkstyle.xml"/>
+      <arg value="dist/checkstyle-local.html"/>
+      <arg value="--local"/>
+    </exec>
+    <delete file="dist/checkstyle.xml" quiet="true"/>
+    <echo message="Checkstyle report written to dist/checkstyle-local.html (local file links enabled)"/>
   </target>
 
   <target name="pmd-setup">

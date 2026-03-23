@@ -139,6 +139,10 @@ tools/
 !tools/pmd/*.css
 !tools/pmd/*.sh
 !tools/pmd/*.xml
+!tools/checkstyle/*.py
+!tools/checkstyle/*.xml
+!tools/checkstyle/*.sh
+!tools/checkstyle/*.jar
 !tools/test/
 !tools/test/*
 tools/test/*.jar

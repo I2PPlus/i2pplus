@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+<!DOCTYPE module PUBLIC
+  "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
+  "https://checkstyle.org/dtds/configuration_1_3.dtd">
+
+<!--
+  Checkstyle configuration for I2P+.
+  Complements PMD (which covers error-prone, performance, threading, security).
+  Modules marked NOISY produce thousands of violations in legacy code.
+  Remove them en-masse by searching for NOISY.
+-->
+<module name="Checker">
+  <property name="charset" value="UTF-8"/>
+  <property name="severity" value="warning"/>
+  <property name="fileExtensions" value="java"/>
+
+  <!-- File length -->
+  <module name="FileLength">
+    <property name="max" value="5000"/>
+    <property name="severity" value="info"/>
+  </module>
+
+  <!-- Newline at end of file -->
+  <module name="NewlineAtEndOfFile"/>
+
+  <!-- Exclusions: skip third-party code -->
+  <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*[/\\]jetty[/\\].*"/>
+  </module>
+  <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*[/\\]wrapper[/\\].*"/>
+  </module>
+  <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*[/\\]mindrot[/\\].*"/>
+  </module>
+  <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*[/\\]com[/\\]maxmind[/\\].*"/>
+  </module>
+
+  <!-- Line length (generous for I2P+ conventions) -->
+  <module name="LineLength">
+    <property name="max" value="250"/>
+    <property name="ignorePattern" value="^package.*|^import.*|a]href|href|http://|https://|ftp://"/>
+  </module>
+
+  <!-- Tab characters NOISY -->
+  <module name="FileTabCharacter">
+    <property name="eachLine" value="true"/>
+  </module>
+
+  <module name="TreeWalker">
+    <!-- Naming conventions -->
+    <!-- ConstantName NOISY --><module name="ConstantName"/>
+    <module name="LocalFinalVariableName"/>
+    <!-- LocalVariableName NOISY --><module name="LocalVariableName"/>
+    <!-- MemberName NOISY --><module name="MemberName"/>
+    <!-- MethodName NOISY --><module name="MethodName"/>
+    <module name="PackageName"/>
+    <!-- ParameterName NOISY --><module name="ParameterName"/>
+    <!-- StaticVariableName NOISY --><module name="StaticVariableName"/>
+    <module name="TypeName"/>
+
+    <!-- Imports -->
+    <!-- AvoidStarImport NOISY --><module name="AvoidStarImport"/>
+    <module name="RedundantImport"/>
+    <module name="UnusedImports"/>
+
+    <!-- Whitespace NOISY -->
+    <module name="WhitespaceAfter"/>
+    <module name="NoWhitespaceBefore"/>
+    <module name="GenericWhitespace"/>
+    <module name="MethodParamPad"/>
+    <module name="ParenPad"/>
+    <module name="TypecastParenPad"/>
+
+    <!-- Blocks NOISY -->
+    <module name="NeedBraces">
+      <property name="allowSingleLineStatement" value="true"/>
+    </module>
+    <module name="LeftCurly"/>
+    <module name="RightCurly"/>
+    <module name="EmptyBlock">
+      <property name="option" value="TEXT"/>
+    </module>
+
+    <!-- Coding -->
+    <module name="EmptyStatement"/>
+    <module name="EqualsHashCode"/>
+    <module name="SimplifyBooleanExpression"/>
+    <module name="SimplifyBooleanReturn"/>
+    <module name="StringLiteralEquality"/>
+    <module name="OneStatementPerLine"/>
+    <module name="FallThrough"/>
+    <module name="MissingSwitchDefault"/>
+    <module name="UpperEll"/>
+    <!-- MultipleVariableDeclarations NOISY --><module name="MultipleVariableDeclarations"/>
+    <!-- ModifierOrder NOISY --><module name="ModifierOrder"/>
+    <!-- OverloadMethodsDeclarationOrder NOISY --><module name="OverloadMethodsDeclarationOrder"/>
+    <!-- VariableDeclarationUsageDistance NOISY --><module name="VariableDeclarationUsageDistance"/>
+
+    <!-- Indentation NOISY -->
+    <module name="Indentation">
+      <property name="basicOffset" value="4"/>
+      <property name="caseIndent" value="4"/>
+      <property name="arrayInitIndent" value="4"/>
+      <property name="lineWrappingIndentation" value="4"/>
+    </module>
+  </module>
+</module>
