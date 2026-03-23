@@ -10,6 +10,7 @@ package org.klomp.snark;
  * @since 0.9.62+
  */
 public class TorrentCreateFilter implements java.io.Serializable {
+    private static final long serialVersionUID = -4345254904315868015L;
 
     public final String name;
     public final String filterPattern;
