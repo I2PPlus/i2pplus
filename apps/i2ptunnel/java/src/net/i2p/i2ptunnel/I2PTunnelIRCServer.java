@@ -140,7 +140,7 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
                 modifiedRegistration = filterRegistration(socket, cloakDest(socket.getPeerDestination()));
                 socket.setReadTimeout(readTimeout);
             } else {
-                StringBuffer buf = new StringBuffer("WEBIRC ");
+                StringBuilder buf = new StringBuilder("WEBIRC ");
                 buf.append(this.webircPassword);
                 buf.append(" cgiirc ");
                 buf.append(cloakDest(socket.getPeerDestination()));

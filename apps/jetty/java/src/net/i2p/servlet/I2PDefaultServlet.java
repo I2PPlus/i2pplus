@@ -304,7 +304,7 @@ public class I2PDefaultServlet extends DefaultServlet {
      * @return the defanged text.
      */
     private static String hrefEncodeURI(String raw) {
-        StringBuffer buf = null;
+        StringBuilder buf = null;
 
         loop:
         for (int i = 0; i < raw.length(); i++) {
@@ -314,7 +314,7 @@ public class I2PDefaultServlet extends DefaultServlet {
                 case '"':
                 case '<':
                 case '>':
-                    buf=new StringBuffer(raw.length()<<1);
+                    buf=new StringBuilder(raw.length()<<1);
                     break loop;
             }
         }
