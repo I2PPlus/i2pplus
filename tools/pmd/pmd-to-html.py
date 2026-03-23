@@ -273,11 +273,12 @@ def main():
     w(load_css())
     w('</style>')
     w('<script>')
-    # Build rule data as JSON for filtering
+    # Build rule data as JSON for filtering (include code snippets)
     import json
     rule_data_json = json.dumps({rule: [(f, {"begin": v["begin"], "end": v["end"], "priority": v["priority"],
         "msg": v["msg"], "class": v["class"], "method": v["method"], "url": v["url"],
-        "ruleset": v["ruleset"], "subsystem": v["subsystem"]}) for f, v in vlist]
+        "ruleset": v["ruleset"], "subsystem": v["subsystem"],
+        "snippet": get_code_snippet(f, v["begin"])}) for f, v in vlist]
         for rule, vlist in rule_violations.items()})
     w(f'var RULE_DATA={rule_data_json};')
     w('''document.addEventListener("click",function(e){
@@ -317,15 +318,30 @@ function showRule(rule){
     var rng= x.begin===x.end? x.begin : x.begin+\'-\'+x.end;
     var dl=\'\';
     if(x.url)dl=\'<a href="\'+esc(x.url)+\'" target="_blank" class="rule-doc-link"><span class="rule-doc-icon" title="Rule documentation"></span></a>\';
-    h+=\'<tr class="tablerow\'+(i%2)+\'"><td class="line priority-cell p\'+x.priority+\'">\'+esc(rng)+\'</td>\';
+    var details=[];
+    if(x.class)details.push(\'<b>Class:</b> \'+esc(x.class));
+    if(x.method)details.push(\'<b>Method:</b> \'+esc(x.method));
+    var hasDetail=details.length>0||(x.snippet&&x.snippet.length>0);
+    var vid=\'rv\'+Math.abs(hashCode(f+x.begin+rule));
+    if(hasDetail) h+=\'<tr class="tablerow\'+(i%2)+\'" data-detail="\'+vid+\'">\';
+    else h+=\'<tr class="tablerow\'+(i%2)+\'">\';
+    h+=\'<td class="line priority-cell p\'+x.priority+\'">\'+esc(rng)+\'</td>\';
     h+=\'<td>\'+esc(x.msg)+\'</td>\';
     h+=\'<td class="rule-category">\'+esc(x.ruleset)+\'</td>\';
     h+=\'<td class="rule-doc">\'+dl+\'</td></tr>\';
+    if(hasDetail){
+      h+=\'<tr class="detailrow\'+(i%2)+\' hidden"><td colspan="4">\';
+      h+=\'<div id="\'+vid+\'" style="display:none" class="detail-content">\';
+      if(details.length) h+=details.join(\' &middot; \');
+      if(x.snippet&&x.snippet.length) h+=\'<pre class="snippet"><code>\'+x.snippet+\'</code></pre>\';
+      h+=\'</div></td></tr>\';
+    }
     if(i+1>=d.length||d[i+1][0]!==f) h+=\'</table>\';
   }
   c.innerHTML=h;
   c.scrollIntoView({behavior:"smooth",block:"start"});
 }
+function hashCode(s){var h=0;for(var i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0}return h;}
 function hideRule(){
   document.getElementById("rule-filter").style.display="none";
   document.getElementById("violations").style.display="block";
