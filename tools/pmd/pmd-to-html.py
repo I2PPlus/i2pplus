@@ -125,9 +125,10 @@ def main():
     except ValueError:
         timestamp = raw_ts
 
-    # Collect violations grouped by file
+    # Collect violations grouped by file and by rule
     files = []
     rule_counts = {}
+    rule_violations = {}
     subsystem_counts = {}
     total = 0
 
@@ -198,7 +199,7 @@ def main():
             rule_counts[rule] = rule_counts.get(rule, 0) + 1
             subsystem_counts[sub] = subsystem_counts.get(sub, 0) + 1
             total += 1
-            violations.append({
+            vdict = {
                 "begin": v.get("beginline", "?"),
                 "end": v.get("endline", "?"),
                 "rule": rule,
@@ -209,7 +210,10 @@ def main():
                 "url": v.get("externalInfoUrl", ""),
                 "msg": msg,
                 "subsystem": sub,
-            })
+                "file": fname,
+            }
+            violations.append(vdict)
+            rule_violations.setdefault(rule, []).append((fname, vdict))
         if violations:
             files.append((fname, violations))
 
@@ -218,6 +222,21 @@ def main():
     # Build summary
     sorted_rules = sorted(rule_counts.items(), key=lambda x: -x[1])
     sorted_subs = sorted(subsystem_counts.items(), key=lambda x: -x[1])
+
+    # Build per-rule subsystem list with counts
+    rule_subs = {}
+    rule_sub_counts = {}
+    rule_files = {}
+    for rule, vlist in rule_violations.items():
+        sub_count = {}
+        fset = set()
+        for fname, v in vlist:
+            sub_count[v["subsystem"]] = sub_count.get(v["subsystem"], 0) + 1
+            fset.add(fname)
+        # Sort by count descending
+        rule_subs[rule] = sorted(sub_count.keys(), key=lambda s: -sub_count[s])
+        rule_sub_counts[rule] = sub_count
+        rule_files[rule] = len(fset)
 
     # Generate HTML
     lines = []
@@ -237,30 +256,63 @@ def main():
     w(load_css())
     w('</style>')
     w('<script>')
+    # Build rule data as JSON for filtering
+    import json
+    rule_data_json = json.dumps({rule: [(f, {"begin": v["begin"], "end": v["end"], "priority": v["priority"],
+        "msg": v["msg"], "class": v["class"], "method": v["method"], "url": v["url"],
+        "ruleset": v["ruleset"], "subsystem": v["subsystem"]}) for f, v in vlist]
+        for rule, vlist in rule_violations.items()})
+    w(f'var RULE_DATA={rule_data_json};')
     w('''document.addEventListener("click",function(e){
-  // Summary click: close others, open clicked
   var s=e.target.closest("summary");
-  if(s){
-    var d=s.parentElement;
+  if(s){var d=s.parentElement;
     if(d&&d.tagName==="DETAILS"&&!d.hasAttribute("open")){
       document.querySelectorAll("details[open]").forEach(function(o){if(o!==d)o.removeAttribute("open")});
-    }
-    return;
-  }
-  // Violation row click: toggle detail
+    }return}
   var tr=e.target.closest("tr[data-detail]");
   if(tr){var el=document.getElementById(tr.dataset.detail);
     if(el){var showing=el.style.display==="none";
       el.style.display=showing?"block":"none";
-      el.closest("tr").classList.toggle("hidden",!showing)}
-    return}
-  // Navbar/sub-summary link: open section
+      el.closest("tr").classList.toggle("hidden",!showing)}return}
   var a=e.target.closest("a[data-sub]");
   if(a){e.preventDefault();var tgt=document.getElementById(a.dataset.sub);
     if(tgt){document.querySelectorAll("details[open]").forEach(function(o){o.removeAttribute("open")});
-      tgt.setAttribute("open","");setTimeout(function(){tgt.scrollIntoView({behavior:"smooth",block:"start"})},50)}
+      tgt.setAttribute("open","");setTimeout(function(){tgt.scrollIntoView({behavior:"smooth",block:"start"})},50)}return}
+  var rl=e.target.closest("[data-rule]");
+  if(rl){e.preventDefault();showRule(rl.dataset.rule);return}
+  var bk=e.target.closest("#rule-back");
+  if(bk){e.preventDefault();hideRule();return}
+});
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
+function showRule(rule){
+  var d= RULE_DATA[rule]; if(!d)return;
+  var c=document.getElementById("rule-filter");
+  var v=document.getElementById("violations");
+  v.style.display="none";
+  c.style.display="block";
+  var h=\'<div class="tabletitle"><a id="rule-back" href="#">\u25C0 Back</a> &middot; \'+esc(rule)+\' <span class="badge">\'+d.length+\'</span></div>\';
+  var curFile="";
+  for(var i=0;i<d.length;i++){
+    var f=d[i][0], x=d[i][1];
+    if(f!==curFile){curFile=f;
+      h+=\'<h3><span class="path">\'+esc(f)+\'</span></h3>\';
+      h+=\'<table class="warningtable"><tr><th class="line">Line</th><th>Message</th><th class="rule-category">Category</th><th class="rule-doc">Doc</th></tr>\';}
+    var rng= x.begin===x.end? x.begin : x.begin+\'-\'+x.end;
+    var dl=\'\';
+    if(x.url)dl=\'<a href="\'+esc(x.url)+\'" target="_blank" class="rule-doc-link"><span class="rule-doc-icon" title="Rule documentation"></span></a>\';
+    h+=\'<tr class="tablerow\'+(i%2)+\'"><td class="line priority-cell p\'+x.priority+\'">\'+esc(rng)+\'</td>\';
+    h+=\'<td>\'+esc(x.msg)+\'</td>\';
+    h+=\'<td class="rule-category">\'+esc(x.ruleset)+\'</td>\';
+    h+=\'<td class="rule-doc">\'+dl+\'</td></tr>\';
+    if(i+1>=d.length||d[i+1][0]!==f) h+=\'</table>\';
   }
-});''')
+  c.innerHTML=h;
+  c.scrollIntoView({behavior:"smooth",block:"start"});
+}
+function hideRule(){
+  document.getElementById("rule-filter").style.display="none";
+  document.getElementById("violations").style.display="block";
+}''')
     w('</script>')
     w('</head>')
     w('<body>')
@@ -280,27 +332,24 @@ def main():
         sub = violations[0]["subsystem"]
         sub_files.setdefault(sub, []).append((fname, violations))
 
-    # Summary by sub-system
-    w('<div class="tabletitle"><a name="subsystems">By Sub-system</a></div>')
-    w('<table>')
-    w('<tr><th>Sub-system</th><th class="summary-count">Violations</th><th class="summary-count">Files</th></tr>')
-    for i, (sub, count) in enumerate(sorted_subs):
-        row = "tablerow" + str(i % 2)
-        fcount = len(sub_files.get(sub, []))
-        w(f'<tr class="{row}"><td><a href="#sub-{escape(sub)}" data-sub="sub-{escape(sub)}">{escape(sub)}</a></td><td class="summary-count">{count}</td><td class="summary-count">{fcount}</td></tr>')
-    w(f'<tr class="tablerow0"><td><b>Total</b></td><td class="summary-count"><b>{total}</b></td><td class="summary-count"><b>{len(files)}</b></td></tr>')
-    w('</table>')
-
-    # Summary by rule
+    # Combined summary: by rule with sub-system tags
     w('<div class="tabletitle"><a name="rules">By Rule</a></div>')
-    w('<table>')
-    w('<tr><th>Rule</th><th class="summary-count">Count</th></tr>')
+    w('<table id="summary">')
+    w('<tr><th>Rule</th><th class="summary-count">Violations</th><th class="summary-count">Files</th><th>Sub-systems</th></tr>')
     for i, (rule, count) in enumerate(sorted_rules):
         row = "tablerow" + str(i % 2)
-        w(f'<tr class="{row}"><td>{escape(rule)}</td><td class="summary-count">{count}</td></tr>')
+        fc = rule_files.get(rule, 0)
+        sub_counts = rule_sub_counts.get(rule, {})
+        subs_str = ", ".join(f'<a href="#sub-{escape(s)}" data-sub="sub-{escape(s)}">{escape(s)}</a> ({sub_counts[s]})' for s in rule_subs.get(rule, []))
+        w(f'<tr class="{row}"><td><a href="#" data-rule="{escape(rule)}">{escape(rule)}</a></td><td class="summary-count">{count}</td><td class="summary-count">{fc}</td><td class="subs">{subs_str}</td></tr>')
+    w(f'<tr class="tablerow0"><td><b>Total</b></td><td class="summary-count"><b>{total}</b></td><td class="summary-count"><b>{len(files)}</b></td><td></td></tr>')
     w('</table>')
 
+    # Rule filter container (hidden by default, shown when a rule is clicked)
+    w('<div id="rule-filter" style="display:none"></div>')
+
     # Violations grouped by sub-system (collapsible)
+    w('<div id="violations">')
     w('<div class="tabletitle"><a name="violations">Violations</a></div>')
 
     for sub, count in sorted_subs:
@@ -312,7 +361,7 @@ def main():
         for fname, violations in sub_files[sub]:
             w(f'<h3><span class="path">{escape(fname)}</span> <span class="badge">{len(violations)}</span></h3>')
             w('<table class="warningtable">')
-            w('<tr><th>Line</th><th>Rule</th><th>Message</th><th class="rule-category">Category</th><th class="rule-doc">Doc</th></tr>')
+            w('<tr><th class="line">Line</th><th>Rule</th><th>Message</th><th class="rule-category">Category</th><th class="rule-doc">Doc</th></tr>')
             for i, v in enumerate(sorted(violations, key=lambda x: int(x["begin"]))):
                 row = "tablerow" + str(i % 2)
                 vid = f"v{abs(hash(fname + v['begin'] + v['rule']))}"
@@ -331,7 +380,7 @@ def main():
                     w(f'<tr class="{row}" data-detail="{vid}">')
                 else:
                     w(f'<tr class="{row}">')
-                w(f'<td class="priority-cell p{v["priority"]}">{escape(rng)}</td>')
+                w(f'<td class="line priority-cell p{v["priority"]}">{escape(rng)}</td>')
                 w(f'<td>{escape(v["rule"])}</td>')
                 w(f'<td>{escape(v["msg"])}</td>')
                 w(f'<td class="rule-category">{escape(v["ruleset"])}</td>')
@@ -349,6 +398,7 @@ def main():
             w('</table>')
         w('</details>')
 
+    w('</div>')  # close violations div
     w('</body>')
     w('</html>')
 
