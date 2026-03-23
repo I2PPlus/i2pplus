@@ -635,7 +635,7 @@ public class MessageHistory {
         } catch (IOException ioe) {
             _log.error("Error writing trace entries", ioe);
         } finally {
-            if (fos != null) try { fos.close(); } catch (IOException ioe) {}
+            if (fos != null) try { fos.close(); } catch (IOException ioe) {/* ignored */}
         }
     }
 

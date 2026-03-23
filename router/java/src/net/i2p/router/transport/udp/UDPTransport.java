@@ -451,7 +451,7 @@ public class UDPTransport extends TransportImpl {
                 if (mtu > 0 && mtu < PeerState2.MIN_MTU) {
                     _log.logAlways(Log.WARN, "Disabling SSU2 on address " + ips + " -> MTU is " + mtu + ", minimum required is " + PeerState2.MIN_MTU);
                 }
-            } catch (UnknownHostException e) {}
+            } catch (UnknownHostException e) {/* ignored */}
         }
 
         byte[] ikey = null;
@@ -1149,7 +1149,7 @@ public class UDPTransport extends TransportImpl {
                 _mtu = MTU.rectify(false, pmtu);
                 _mtu_ipv6 = MTU.rectify(true, pmtu);
                 return _mtu;
-            } catch (NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) {/* ignored */}
         }
         int mtu = MTU.getMTU(addr, false);
         if (addr != null && addr.getAddress().length == 16) {
@@ -1263,7 +1263,7 @@ public class UDPTransport extends TransportImpl {
                     InetAddress ia = InetAddress.getByAddress(ip);
                     saveLocalAddress(ia);
                     setMTU(ia);
-                } catch (UnknownHostException uhe) {}
+                } catch (UnknownHostException uhe) {/* ignored */}
             }
             return;
         }
@@ -1579,7 +1579,7 @@ public class UDPTransport extends TransportImpl {
                 String lcs = _context.getProperty(PROP_IP_CHANGE);
                 if (lcs != null) {
                     try {lastChanged = Long.parseLong(lcs);}
-                    catch (NumberFormatException nfe) {}
+                    catch (NumberFormatException nfe) {/* ignored */}
                 }
 
                 changes.put(PROP_IP, newIP);
@@ -2284,14 +2284,14 @@ public class UDPTransport extends TransportImpl {
             if ((++count) % burst == 0) {
                 try {
                     Thread.sleep(toSleep);
-                } catch (InterruptedException ie) {}
+                } catch (InterruptedException ie) {/* ignored */}
             }
         }
         toSleep = Math.min(howMany / 3, 750);
         if (toSleep > 0) {
             try {
                 Thread.sleep(toSleep);
-            } catch (InterruptedException ie) {}
+            } catch (InterruptedException ie) {/* ignored */}
         }
     }
 
@@ -3068,7 +3068,7 @@ public class UDPTransport extends TransportImpl {
         try {
             InetAddress ia = InetAddress.getByName(ra.getHost());
             setMTU(ia);
-        } catch (UnknownHostException uhe) {}
+        } catch (UnknownHostException uhe) {/* ignored */}
     }
 
     /**

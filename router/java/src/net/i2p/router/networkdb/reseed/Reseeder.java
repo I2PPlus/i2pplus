@@ -238,10 +238,10 @@ public class Reseeder {
             return fetched;
         } finally {
             try {in.close();}
-            catch (IOException ioe) {}
+            catch (IOException ioe) {/* ignored */}
             if (out != null) {
                 try {out.close();}
-                catch (IOException ioe) {}
+                catch (IOException ioe) {/* ignored */}
             }
             if (tmp != null) {tmp.delete();}
         }
@@ -630,7 +630,7 @@ public class Reseeder {
                 if (ENABLE_SU3) {
                     try {
                         dl = reseedSU3(new URI(url.toString() + SU3_FILENAME + query), echoStatus);
-                    } catch (URISyntaxException ignored) {}
+                    } catch (URISyntaxException ignored) {/* ignored */}
                 }
                 if (ENABLE_NON_SU3 && dl <= 0) {
                     dl = reseedOne(url, echoStatus);
@@ -882,7 +882,7 @@ public class Reseeder {
                             throw new IOException("su3 file is too old");
                         }
                     }
-                } catch (NumberFormatException nfe) {}
+                } catch (NumberFormatException nfe) {/* ignored */}
 
                 int[] stats = extractZip(zip);
                 fetched = stats[0];
@@ -1119,7 +1119,7 @@ public class Reseeder {
             } finally {
                 try {
                     if (fos != null) {fos.close();}
-                } catch (IOException ioe) {}
+                } catch (IOException ioe) {/* ignored */}
             }
             return true;
         }
@@ -1323,7 +1323,7 @@ public class Reseeder {
                 System.out.println("Failure:  " + ioe.getMessage() + "\n");
                 if (su3.exists()) {
                     try {SU3File.main(new String[] {"showversion", su3.getPath()});}
-                    catch (Exception e) {}
+                    catch (Exception e) {/* ignored */}
                     su3.delete();
                 }
                 fail++;

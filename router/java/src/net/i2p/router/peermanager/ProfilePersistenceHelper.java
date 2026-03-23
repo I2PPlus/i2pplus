@@ -87,7 +87,7 @@ class ProfilePersistenceHelper {
         } finally {
             if (fos != null) {
                 try {fos.close();}
-                catch (IOException ioe) {}
+                catch (IOException ioe) {/* ignored */}
             }
         }
         return true;
@@ -465,7 +465,7 @@ class ProfilePersistenceHelper {
         if (val != null) {
             try {
                 return Long.parseLong(val);
-            } catch (NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) {/* ignored */}
         }
         return 0;
     }
@@ -475,7 +475,7 @@ class ProfilePersistenceHelper {
         if (val != null) {
             try {
                 return Float.parseFloat(val);
-            } catch (NumberFormatException nfe) {}
+            } catch (NumberFormatException nfe) {/* ignored */}
         }
         return 0.0f;
     }
@@ -501,7 +501,7 @@ class ProfilePersistenceHelper {
         } finally {
             try {
                 if (fin != null) fin.close();
-            } catch (IOException e) {}
+            } catch (IOException e) {/* ignored */}
         }
     }
 

@@ -1511,7 +1511,9 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 						break;
 					}
 				}
-				if (!dup)
+				if (!dup) return rv;
+				// safety: if all ports somehow assigned, return random
+				if (portsToForward.size() > 65530) return rv;
 					return rv;
 			}
 		}
