@@ -146,6 +146,7 @@ class IntroductionManager {
      * @param ssuOptions out parameter, options are added
      * @return number of introducers added
      */
+    @SuppressWarnings("PMD.AvoidBranchingStatementAsLastInLoop")
     public int pickInbound(RouterAddress current, boolean ipv6, Properties ssuOptions, int howMany) {
         if (_log.shouldDebug())
             _log.debug("Picking inbound out of " + _inbound.size());

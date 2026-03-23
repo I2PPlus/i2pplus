@@ -92,7 +92,7 @@ class FreeListBlock {
 		}
 	}
 
-	public void writeBlock() throws IOException {
+	public final void writeBlock() throws IOException {
 		BlockFile.pageSeek(file, page);
 		file.writeLong(MAGIC);
 		file.writeInt(nextPage);

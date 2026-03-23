@@ -10,7 +10,7 @@ package net.i2p.data.i2np;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.Date;
+import java.time.Instant;
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
@@ -258,7 +258,7 @@ public class DatabaseStoreMessage extends FastI2NPMessageImpl {
     public String toString() {
         StringBuilder buf = new StringBuilder();
         buf.append("\n* DatabaseStore Message")
-           .append("\n* Expiration: ").append(new Date(_expiration))
+           .append("\n* Expiration: ").append(Instant.ofEpochMilli(_expiration))
            .append("\n* Unique ID: ").append(getUniqueId());
         if (_log.shouldInfo()) {
             if (_replyToken != 0) {

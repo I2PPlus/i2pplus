@@ -207,7 +207,7 @@ public class Banlist {
      *  @param reason the reason for the ban (may be null)
      *  @return true if it WAS previously on the list
      */
-    public boolean banlistRouterForever(Hash peer, String reason) {
+    public final boolean banlistRouterForever(Hash peer, String reason) {
         return banlistRouter(peer, reason, null, true);
     }
 
@@ -218,7 +218,7 @@ public class Banlist {
      *  @param reasonCode separate code so cause can contain {0} for translation
      *  @return true if it WAS previously on the list
      */
-    public boolean banlistRouterForever(Hash peer, String reason, String reasonCode) {
+    public final boolean banlistRouterForever(Hash peer, String reason, String reasonCode) {
         return banlistRouter(peer, reason, reasonCode, null, true);
     }
 

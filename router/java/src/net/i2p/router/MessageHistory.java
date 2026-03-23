@@ -3,7 +3,6 @@ package net.i2p.router;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -83,7 +82,7 @@ public class MessageHistory {
      * Call this whenever the router identity changes.
      *
      */
-    public synchronized void initialize(boolean forceReinitialize) {
+    public final synchronized void initialize(boolean forceReinitialize) {
         if (SystemVersion.isAndroid())
             return;
         if (!forceReinitialize) return;
@@ -314,13 +313,13 @@ public class MessageHistory {
      * @param id tunnel ID we received a message for
      * @param from peer that sent us this message (if known)
      */
-    public void droppedTunnelMessage(TunnelId id, long msgId, Date expiration, Hash from) {
+    public void droppedTunnelMessage(TunnelId id, long msgId, long expiration, Hash from) {
         if (!_doLog) return;
         StringBuilder buf = new StringBuilder(128);
         buf.append(getPrefix());
         buf.append("dropped message ").append(msgId).append(" for UNKNOWN tunnel [").append(id.getTunnelId());
         buf.append("] from [").append(getName(from)).append("]").append(" expiring on ");
-        buf.append(getTime(expiration.getTime()));
+        buf.append(getTime(expiration));
         addEntry(buf.toString());
     }
 

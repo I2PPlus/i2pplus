@@ -96,7 +96,7 @@ public class TunnelId {
       *  @param id 1 to 0xffffffff
       *  @throws IllegalArgumentException if less than or equal to zero or greater than max value
       */
-    public void setTunnelId(long id) {
+    public final void setTunnelId(long id) {
         if (id <= 0 || id > MAX_ID_VALUE)
             throw new IllegalArgumentException("Bad Id " + id);
         _tunnelId = id;

@@ -50,7 +50,7 @@ public class I2CPMessageReader {
         setListener(lsnr);
     }
 
-    public void setListener(I2CPMessageEventListener lsnr) {
+    public final void setListener(I2CPMessageEventListener lsnr) {
         _listener = lsnr;
     }
 

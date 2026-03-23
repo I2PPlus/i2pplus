@@ -2,7 +2,7 @@ package net.i2p.router.message;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -1024,7 +1024,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
 
         @Override
         public String toString() {
-            return "OCMOSJ.RS waiting for token " + _pendingToken + " until " + new Date(_expiration);
+            return "OCMOSJ.RS waiting for token " + _pendingToken + " until " + Instant.ofEpochMilli(_expiration);
         }
     }
 

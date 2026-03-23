@@ -1,6 +1,6 @@
 package net.i2p.util;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -44,13 +44,13 @@ public class Clock implements Timestamper.UpdateListener {
         if (now < min) {
             // positive offset
             _offset = min - now;
-            System.out.println("ERROR: System clock is INVALID: " + new Date(now));
+            System.out.println("ERROR: System clock is INVALID: " + Instant.ofEpochMilli(now));
             now = min;
             _isSystemClockBad = true;
         } else if (now > max) {
             // negative offset
             _offset = max - now;
-            System.out.println("ERROR: System clock is INVALID: " + new Date(now));
+            System.out.println("ERROR: System clock is INVALID: " + Instant.ofEpochMilli(now));
             now = max;
             _isSystemClockBad = true;
         } else {
@@ -159,7 +159,7 @@ public class Clock implements Timestamper.UpdateListener {
     public void setNow(long realTime) {
         if (realTime < BuildTime.getEarliestTime() || realTime > BuildTime.getLatestTime()) {
             Log log = getLog();
-            String msg = "Invalid time received: " + new Date(realTime);
+            String msg = "Invalid time received: " + Instant.ofEpochMilli(realTime);
             if (log.shouldWarn())
                 log.warn(msg, new Exception());
             else

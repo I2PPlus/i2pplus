@@ -63,7 +63,7 @@ public class UDPSender {
      *
      * @return true if full stats are enabled, false otherwise
      */
-    public boolean fullStats() {
+    public final boolean fullStats() {
         return _context.getBooleanProperty("stat.full");
     }
 
@@ -303,6 +303,7 @@ public class UDPSender {
          *
          * @return the next valid UDPPacket to send, or null if shutdown is triggered by poison packet
          */
+        @SuppressWarnings("PMD.AvoidBranchingStatementAsLastInLoop")
         private UDPPacket getNextPacket() {
             UDPPacket packet = null;
             int codelTarget = CODEL_TARGET;

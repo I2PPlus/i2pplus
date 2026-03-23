@@ -278,7 +278,7 @@ public class JSONRPC2Response extends JSONRPC2Message {
 	 * @param result The result. The value can <a href="#map">map</a> to
 	 *               any JSON type. May be {@code null}.
 	 */
-	public void setResult(final Object result) {
+	public final void setResult(final Object result) {
 
 		// result and error are mutually exclusive
 		this.result = result;
@@ -308,7 +308,7 @@ public class JSONRPC2Response extends JSONRPC2Message {
 	 * @param error A JSON-RPC 2.0 error instance indicating the cause of
 	 *              the failure. Must not be {@code null}.
 	 */
-	public void setError(final JSONRPC2Error error) {
+	public final void setError(final JSONRPC2Error error) {
 
 		if (error == null)
 			throw new IllegalArgumentException("The error object cannot be null");
@@ -354,7 +354,7 @@ public class JSONRPC2Response extends JSONRPC2Message {
 	 *           Pass a {@code null} if the request identifier couldn't
 	 *           be determined (e.g. due to a parse error).
 	 */
-	public void setID(final Object id) {
+	public final void setID(final Object id) {
 
         if (id == null            ||
             id instanceof Boolean ||

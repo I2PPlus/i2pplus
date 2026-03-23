@@ -168,6 +168,7 @@ public class I2PTunnelDCCServer extends I2PTunnelServer {
     /**
      *  @param port local dcc server I2P port or 0 to pick one at random
      */
+    @SuppressWarnings("PMD.AvoidBranchingStatementAsLastInLoop")
     private int newOutgoing(byte[] ip, int port, String type, int i2pPort) {
         expireOutbound();
         if (_outgoing.size() >= MAX_OUTGOING_PENDING ||

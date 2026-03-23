@@ -89,7 +89,7 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
     /**
      * @param filename The filename for the request log. This may be in the format expected by {@link RolloverFileOutputStream}
      */
-    public void setFilename(String filename) {
+    public final void setFilename(String filename) {
         if (filename != null) {
             filename = filename.trim();
             if (filename.length() == 0) {filename = null;}

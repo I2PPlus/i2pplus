@@ -1085,10 +1085,9 @@ public final class KeyStoreUtil {
             fis = null;
             char[] keypwchars = keyPW.toCharArray();
             if (alias == null) {
-                for (Enumeration<String> e = keyStore.aliases(); e.hasMoreElements();) {
+                Enumeration<String> e = keyStore.aliases();
+                if (e.hasMoreElements())
                     alias = e.nextElement();
-                    break;
-                }
                 if (alias == null)
                     throw new GeneralSecurityException("no private keys found");
             }

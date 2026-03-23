@@ -10,6 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @since 0.8.3
  */
+@SuppressWarnings("PMD.SingleMethodSingleton")
 public final class SimpleByteCache {
 
     private static final ConcurrentHashMap<Integer, SimpleByteCache> _caches = new ConcurrentHashMap<Integer, SimpleByteCache>(8);
@@ -59,6 +60,7 @@ public final class SimpleByteCache {
      *
      * @param size how large should the objects cached be?
      */
+    @SuppressWarnings("PMD.SingletonClassReturningNewInstance")
     public static SimpleByteCache getInstance(int size) {return getInstance(DEFAULT_SIZE, size);}
 
     /**

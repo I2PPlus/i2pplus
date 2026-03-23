@@ -63,7 +63,7 @@ public class MetaNamingService extends DummyNamingService {
     }
 
     @Override
-    public boolean addNamingService(NamingService ns, boolean head) {
+    public final boolean addNamingService(NamingService ns, boolean head) {
         if (head)
             _services.add(0, ns);
         else

@@ -68,7 +68,7 @@ public class ConfigurationManager {
     /**
      * Reads configuration from file, every line is parsed as key=value.
      */
-    public synchronized void readConfFile() {
+    public final synchronized void readConfFile() {
         try {
             Properties input = new Properties();
             // true: map to lower case

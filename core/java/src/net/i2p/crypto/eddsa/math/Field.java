@@ -62,7 +62,7 @@ public class Field implements Serializable {
         qm5d8 = this.q.subtract(FIVE).divide(EIGHT);
     }
 
-    public FieldElement fromByteArray(byte[] x) {
+    public final FieldElement fromByteArray(byte[] x) {
         return enc.decode(x);
     }
 

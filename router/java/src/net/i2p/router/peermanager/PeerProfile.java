@@ -507,7 +507,7 @@ public class PeerProfile {
      * repeatedly
      *
      */
-    public synchronized void expandProfile() {
+    public final synchronized void expandProfile() {
         String group = (null == _peer ? "profileUnknown" : _peer.toBase64().substring(0,6));
 
         if (_tunnelCreateResponseTime == null) {

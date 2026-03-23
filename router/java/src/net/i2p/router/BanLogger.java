@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
@@ -62,7 +63,7 @@ public class BanLogger {
     /**
      * Initialize the logger. Safe to call multiple times.
      */
-    public void initialize(RouterContext context) {
+    public final void initialize(RouterContext context) {
         if (context == null) {return;}
         if (_initialized) {return;}
         synchronized (_writeLock) {
@@ -130,7 +131,7 @@ public class BanLogger {
         if (!_logFile.exists()) {return;}
         long mtime = _logFile.lastModified();
         if (mtime <= 0) {mtime = System.currentTimeMillis();}
-        String timestamp = _dateFormat.format(new Date(mtime));
+        String timestamp = _dateFormat.format(Date.from(Instant.ofEpochMilli(mtime)));
         String safeTimestamp = timestamp.replace(':', '-').replace('T', '_');
         String archiveName = ARCHIVE_PREFIX + safeTimestamp + ".txt";
         File archiveFile = new File(_logFile.getParentFile(), archiveName);
@@ -151,7 +152,7 @@ public class BanLogger {
     public void archiveIfNeeded() {
         if (!_logFile.exists()) {return;}
         if (_banCount <= 0) {return;}
-        String timestamp = _dateFormat.format(new Date(_startTime));
+        String timestamp = _dateFormat.format(Date.from(Instant.ofEpochMilli(_startTime)));
         String safeTimestamp = timestamp.replace(':', '-').replace('T', '_');
         String archiveName = ARCHIVE_PREFIX + safeTimestamp + ".txt";
         File archiveFile = new File(_logFile.getParentFile(), archiveName);
@@ -208,7 +209,7 @@ public class BanLogger {
         if (_writer == null) {return;}
         _writer.println();
         _writer.println("############################################################");
-        _writer.println("# Router started: " + _dateFormat.format(new Date(_startTime)));
+        _writer.println("# Router started: " + _dateFormat.format(Date.from(Instant.ofEpochMilli(_startTime))));
         _writer.println("############################################################");
         _writer.println();
         _writer.println("# Ban event log");
@@ -401,7 +402,7 @@ public class BanLogger {
             return; // Already logged this hash
         }
 
-        String timestamp = _dateFormat.format(new Date());
+        String timestamp = _dateFormat.format(Date.from(Instant.now()));
         String entry = String.format("%s | %s | %s | %s | %s",
                                      timestamp, hashStr, ip, reason, durationStr);
 

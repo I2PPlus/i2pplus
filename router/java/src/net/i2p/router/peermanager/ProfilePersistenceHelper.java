@@ -8,10 +8,10 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
@@ -188,7 +188,7 @@ class ProfilePersistenceHelper {
     /** @since 0.8.5 */
     private static void addDate(StringBuilder buf, boolean addComments, String name, long val, String description) {
         if (addComments) {
-            String when = val > 0 ? (new Date(val)).toString() : "Never";
+            String when = val > 0 ? Instant.ofEpochMilli(val).toString() : "Never";
             add(buf, true, name, val, description + ' ' + when);
         } else {add(buf, false, name, val, description);}
     }
@@ -452,7 +452,7 @@ class ProfilePersistenceHelper {
         if (min > 0 && min < Long.MAX_VALUE && (fha <= 0 || min < fha)) {
             p.setFirstHeardAbout(min);
             if (_log.shouldDebug())
-                _log.debug("Fixed FirstHeardAbout time for [" + p.getPeer().toBase64().substring(0,6) + "] to " + (new Date(min)));
+                _log.debug("Fixed FirstHeardAbout time for [" + p.getPeer().toBase64().substring(0,6) + "] to " + Instant.ofEpochMilli(min));
         }
     }
 

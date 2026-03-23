@@ -649,7 +649,7 @@ public class Router implements RouterClock.ClockShiftListener {
      *  @param callback the callback or null to clear it
      *  @since 0.9.41
      */
-    public synchronized void setUPnPScannerCallback(UPnPScannerCallback callback) {
+    public final synchronized void setUPnPScannerCallback(UPnPScannerCallback callback) {
         _upnpScannerCallback = callback;
     }
 
@@ -742,7 +742,7 @@ public class Router implements RouterClock.ClockShiftListener {
      * Not for external use.
      */
     @SuppressWarnings({"unchecked", "rawtypes" })
-    public void readConfig() {
+    public final void readConfig() {
         synchronized(_configFileLock) {
             String f = getConfigFilename();
             Properties config = getConfig(_context, f);
@@ -1765,7 +1765,7 @@ public class Router implements RouterClock.ClockShiftListener {
      *
      * Synchronized with file read in getConfig()
      */
-    public boolean saveConfig() {
+    public final boolean saveConfig() {
         try {
             Properties ordered = new OrderedProperties();
             synchronized(_configFileLock) {
@@ -1791,7 +1791,7 @@ public class Router implements RouterClock.ClockShiftListener {
      * @return success
      * @since 0.8.13
      */
-    public boolean saveConfig(String name, String value) {
+    public final boolean saveConfig(String name, String value) {
         synchronized(_configFileLock) {
             if (value != null) {_config.put(name, value);}
             else {removeConfigSetting(name);}
@@ -1810,7 +1810,7 @@ public class Router implements RouterClock.ClockShiftListener {
      * @since 0.8.13
      */
     @SuppressWarnings({"unchecked", "rawtypes" })
-    public boolean saveConfig(Map toAdd, Collection<String> toRemove) {
+    public final boolean saveConfig(Map toAdd, Collection<String> toRemove) {
         synchronized(_configFileLock) {
             if (toAdd != null) {_config.putAll(toAdd);}
             if (toRemove != null) {

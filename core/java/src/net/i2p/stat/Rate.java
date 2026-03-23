@@ -498,7 +498,7 @@ public class Rate {
                              (or staleness) as appropriate.
      * @throws IllegalArgumentException if the data was formatted incorrectly
      */
-    public synchronized void load(Properties props, String prefix, boolean treatAsCurrent) throws IllegalArgumentException {
+    public final synchronized void load(Properties props, String prefix, boolean treatAsCurrent) throws IllegalArgumentException {
         _period = PersistenceHelper.getInt(props, prefix, ".period");
         _creationDate = PersistenceHelper.getLong(props, prefix, ".creationDate");
         _currentEventCount = PersistenceHelper.getInt(props, prefix, ".currentEventCount");

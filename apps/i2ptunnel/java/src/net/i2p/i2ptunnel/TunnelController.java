@@ -997,7 +997,7 @@ public class TunnelController implements Logging {
     /**
      *  As of 0.9.1, updates the options on an existing session
      */
-    public void setConfig(Properties config, String prefix) {
+    public final void setConfig(Properties config, String prefix) {
         Properties props;
         if (prefix.length() > 0) {
             props = new Properties();
@@ -1193,7 +1193,7 @@ public class TunnelController implements Logging {
      */
     public void setConfigFile(File file) { _configFile = file; }
 
-    public String getType() { return _config.getProperty(PROP_TYPE); }
+    public final String getType() { return _config.getProperty(PROP_TYPE); }
     public String getName() { return _config.getProperty(PROP_NAME); }
     public String getDescription() { return _config.getProperty(PROP_DESCR); }
     public String getI2CPHost() { return _config.getProperty(PROP_I2CP_HOST); }
@@ -1212,7 +1212,7 @@ public class TunnelController implements Logging {
      *
      *  @since 0.9.17
      */
-    public boolean isClient() {
+    public final boolean isClient() {
         return isClient(getType());
     }
 
@@ -1280,16 +1280,16 @@ public class TunnelController implements Logging {
      *  @return true if this tunnel is configured to start when the router starts
      *  Default is true for clients, false for servers.
      */
-    public boolean getStartOnLoad() { return Boolean.parseBoolean(_config.getProperty(PROP_START, "true")); }
+    public final boolean getStartOnLoad() { return Boolean.parseBoolean(_config.getProperty(PROP_START, "true")); }
 
-    public boolean getPersistentClientKey() { return Boolean.parseBoolean(_config.getProperty(OPT_PERSISTENT)); }
+    public final boolean getPersistentClientKey() { return Boolean.parseBoolean(_config.getProperty(OPT_PERSISTENT)); }
 
     /**
      *  Does not necessarily exist.
      *  @return absolute path or null if unset
      *  @since 0.9.17
      */
-    public File getPrivateKeyFile() {
+    public final File getPrivateKeyFile() {
         return filenameToFile(getPrivKeyFile());
     }
 

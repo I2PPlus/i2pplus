@@ -55,7 +55,7 @@ public class I2PLogger implements Logger
         return _log.shouldDebug();
     }
 
-    public void setDebugEnabled(boolean enabled)
+    public final void setDebugEnabled(boolean enabled)
     {
         if (enabled)
             _log.setMinimumPriority(Log.DEBUG);

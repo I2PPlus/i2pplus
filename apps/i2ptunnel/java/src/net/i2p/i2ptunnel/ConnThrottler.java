@@ -104,7 +104,7 @@ class ConnThrottler {
      * @param totalThrottlePeriod how long to throttle all peers, in milliseconds
      * @since 0.9.3
      */
-    public synchronized void updateLimits(int max, int totalMax, long checkPeriod, long throttlePeriod, long totalThrottlePeriod) {
+    public final synchronized void updateLimits(int max, int totalMax, long checkPeriod, long throttlePeriod, long totalThrottlePeriod) {
         _max = max;
         _totalMax = totalMax;
         _checkPeriod = Math.max(checkPeriod, 10*1000);
@@ -215,7 +215,7 @@ class ConnThrottler {
         }
 
         /** Caller must synch */
-        public void increment() {
+        public final void increment() {
             times.add(Long.valueOf(Clock.getInstance().now()));
         }
 

@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -1040,7 +1041,7 @@ public class HostChecker {
             StringBuilder content = new StringBuilder();
             content.append("# I2P+ Address Book Host Check\n");
             content.append("# Format: timestamp,host,reachable,category,responseTime,leaseSetTypes\n");
-            content.append("# Generated: ").append(new java.util.Date()).append("\n\n");
+            content.append("# Generated: ").append(Instant.now()).append("\n\n");
 
             java.util.List<Map.Entry<String, PingResult>> sortedEntries = new java.util.ArrayList<>(_pingResults.entrySet());
             sortedEntries.sort(java.util.Comparator.comparingLong(e -> e.getValue().timestamp));
@@ -1218,7 +1219,7 @@ public class HostChecker {
                         writer.newLine();
                         writer.write("# Source: http://notbob.i2p/graphs/cats.txt");
                         writer.newLine();
-                        writer.write("# Generated: " + new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US).format(new Date()));
+                        writer.write("# Generated: " + new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US).format(Date.from(Instant.now())));
                         writer.newLine();
                         writer.newLine();
 
@@ -1321,7 +1322,7 @@ public class HostChecker {
                 writer.newLine();
                 writer.write("# Source: http://notbob.i2p/graphs/cats.txt");
                 writer.newLine();
-                writer.write("# Generated: " + new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US).format(new Date()));
+                writer.write("# Generated: " + new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US).format(Date.from(Instant.now())));
                 writer.newLine();
                 writer.newLine();
 
@@ -1614,7 +1615,7 @@ public class HostChecker {
                         writer.newLine();
                         writer.write("# Source: http://notbob.i2p/graphs/cats.txt");
                         writer.newLine();
-                        writer.write("# Generated: " + new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US).format(new Date()));
+                        writer.write("# Generated: " + new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US).format(Date.from(Instant.now())));
                         writer.newLine();
                         writer.newLine();
 
@@ -1710,7 +1711,7 @@ public class HostChecker {
                         writer.newLine();
                         writer.write("# Source: http://notbob.i2p/graphs/cats.txt");
                         writer.newLine();
-                        writer.write("# Generated: " + new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US).format(new Date()));
+                        writer.write("# Generated: " + new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.US).format(Date.from(Instant.now())));
                         writer.newLine();
                         writer.newLine();
 

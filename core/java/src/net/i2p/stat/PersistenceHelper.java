@@ -1,6 +1,6 @@
 package net.i2p.stat;
 
-import java.util.Date;
+import java.time.Instant;
 import java.util.Properties;
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
@@ -24,7 +24,7 @@ class PersistenceHelper {
     /** @since 0.8.5 */
     public final static void addDate(StringBuilder buf, boolean addComments, String prefix, String name, String description, long value) {
         if (addComments) {
-            String when = value > 0 ? (new Date(value)).toString() : "Never";
+            String when = value > 0 ? Instant.ofEpochMilli(value).toString() : "Never";
             add(buf, true, prefix, name, description + ' ' + when, value);
        } else {
             add(buf, false, prefix, name, description, value);

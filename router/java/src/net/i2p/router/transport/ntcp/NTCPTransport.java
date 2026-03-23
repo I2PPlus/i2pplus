@@ -680,6 +680,7 @@ public class NTCPTransport extends TransportImpl {
      *  @return address or null
      *  @since 0.9.6
      */
+    @SuppressWarnings("PMD.AvoidBranchingStatementAsLastInLoop")
     private RouterAddress getTargetAddress(RouterInfo target) {
         List<RouterAddress> addrs = getTargetAddresses(target);
         for (int i = 0; i < addrs.size(); i++) {
@@ -1798,7 +1799,7 @@ public class NTCPTransport extends TransportImpl {
      *  @return current IPv4 port, else NTCP configured port, else -1 (but not UDP port if auto)
      */
     @Override
-    public int getRequestedPort() {
+    public final int getRequestedPort() {
         RouterAddress addr = getCurrentAddress(false);
         if (addr != null) {
             int port = addr.getPort();

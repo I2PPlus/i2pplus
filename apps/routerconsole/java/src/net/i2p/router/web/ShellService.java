@@ -295,7 +295,7 @@ public class ShellService implements ClientApp {
      *
      * @return non-null
      */
-    public String getName() {
+    public final String getName() {
         return name;
     }
 
@@ -305,7 +305,7 @@ public class ShellService implements ClientApp {
      *
      * @return non-null
      */
-    public String getDisplayName() {
+    public final String getDisplayName() {
         return displayName;
     }
 

@@ -10,10 +10,10 @@ package net.i2p.data.router;
  */
 
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.TimeZone;
 import net.i2p.I2PAppContext;
@@ -47,7 +47,7 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
         _log = context.logManager().getLog(RoutingKeyGenerator.class);
         _context = context;
         // make sure GMT is set, azi2phelper Vuze plugin is disabling static JVM TZ setting in Router.java
-        _fmt.setCalendar(_cal);
+        _fmt.setTimeZone(GMT);
         // ensure non-null mod data
         generateDateBasedModData();
     }
@@ -57,10 +57,12 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
     private volatile long _nextMidnight;
     private volatile long _lastChanged;
 
-    private final Calendar _cal = GregorianCalendar.getInstance(TimeZone.getTimeZone("GMT"));
+    private ZonedDateTime _zdt;
+
     private static final String FORMAT = "yyyyMMdd";
     private static final int LENGTH = FORMAT.length();
     private final SimpleDateFormat _fmt = new SimpleDateFormat(FORMAT, Locale.US);
+    private static final TimeZone GMT = TimeZone.getTimeZone("GMT");
 
     /**
      *  The current (today's) mod data.
@@ -104,13 +106,8 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
      *  @since 0.9.10
      */
     private void setCalToPreviousMidnight(long now) {
-            _cal.setTime(new Date(now));
-            _cal.set(Calendar.YEAR, _cal.get(Calendar.YEAR));               // gcj <= 4.0 workaround
-            _cal.set(Calendar.DAY_OF_YEAR, _cal.get(Calendar.DAY_OF_YEAR)); // gcj <= 4.0 workaround
-            _cal.set(Calendar.HOUR_OF_DAY, 0);
-            _cal.set(Calendar.MINUTE, 0);
-            _cal.set(Calendar.SECOND, 0);
-            _cal.set(Calendar.MILLISECOND, 0);
+            _zdt = Instant.ofEpochMilli(now).atZone(GMT.toZoneId())
+                    .withHour(0).withMinute(0).withSecond(0).withNano(0);
     }
 
     /**
@@ -119,7 +116,7 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
      *  @since 0.9.10
      */
     private byte[] generateModDataFromCal() {
-        Date today = _cal.getTime();
+        Date today = Date.from(_zdt.toInstant());
 
         String modVal = _fmt.format(today);
         if (modVal.length() != LENGTH)
@@ -134,15 +131,15 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
      *
      * @return true if changed
      */
-    public synchronized boolean generateDateBasedModData() {
+    public final synchronized boolean generateDateBasedModData() {
         long now = _context.clock().now();
         setCalToPreviousMidnight(now);
         byte[] mod = generateModDataFromCal();
         boolean changed = !Arrays.equals(_currentModData, mod);
         if (changed) {
             // add a day and store next midnight and mod data for convenience
-            _cal.add(Calendar.DATE, 1);
-            _nextMidnight = _cal.getTime().getTime();
+            _zdt = _zdt.plusDays(1);
+            _nextMidnight = _zdt.toInstant().toEpochMilli();
             byte[] next = generateModDataFromCal();
             _currentModData = mod;
             _nextModData = next;

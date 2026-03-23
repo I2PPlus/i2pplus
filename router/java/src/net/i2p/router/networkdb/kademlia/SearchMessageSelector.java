@@ -45,7 +45,7 @@ class SearchMessageSelector implements MessageSelector {
     }
 
     @Override
-    public String toString() {
+    public final String toString() {
         return "Search selector \n* Looking for reply from [" + _peer.toBase64().substring(0,6) +
                  "] for key [" + _state.getTarget().toBase32().substring(0,8) + "]";
     }

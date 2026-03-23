@@ -143,7 +143,7 @@ public class HashPatternDetector implements Serializable {
      * @param hash Banned router hash
      * @param reason Ban reason
      */
-    public void recordBan(Hash hash, String reason) {
+    public final void recordBan(Hash hash, String reason) {
         if (hash == null) {
             return;
         }
@@ -309,7 +309,7 @@ public class HashPatternDetector implements Serializable {
      *
      * @return true if sequential pattern detected with high confidence
      */
-    public boolean hasSequentialPattern() {
+    public final boolean hasSequentialPattern() {
         if (_prefixStats.size() < 5) {
             return false;
         }
@@ -344,7 +344,7 @@ public class HashPatternDetector implements Serializable {
      *
      * @return Set of suspicious prefix strings
      */
-    public Set<String> getSuspiciousPrefixes() {
+    public final Set<String> getSuspiciousPrefixes() {
         Set<String> suspicious = new HashSet<>();
 
         for (Map.Entry<String, PrefixStats> entry : _prefixStats.entrySet()) {
@@ -670,7 +670,7 @@ public class HashPatternDetector implements Serializable {
             this.prefix = prefix;
         }
 
-        void recordBan(String reason) {
+        final void recordBan(String reason) {
             totalBans++;
 
             // Track specific suspicious patterns

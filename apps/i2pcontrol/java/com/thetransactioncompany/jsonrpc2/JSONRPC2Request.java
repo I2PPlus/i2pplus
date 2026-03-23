@@ -285,7 +285,7 @@ public class JSONRPC2Request extends JSONRPC2Message {
 	 *
 	 * @param method The method name. Must not be {@code null}.
 	 */
-	public void setMethod(final String method) {
+	public final void setMethod(final String method) {
 
 		// The method name is mandatory
 		if (method == null)
@@ -409,7 +409,7 @@ public class JSONRPC2Request extends JSONRPC2Message {
 	 * @param positionalParams The positional (JSON array) request
 	 *                         parameters, {@code null} if none.
 	 */
-	public void setPositionalParams(final List<Object> positionalParams) {
+	public final void setPositionalParams(final List<Object> positionalParams) {
 
 		if (positionalParams == null)
 			return;
@@ -426,7 +426,7 @@ public class JSONRPC2Request extends JSONRPC2Message {
 	 * @param namedParams The named (JSON object) request parameters,
 	 *                    {@code null} if none.
 	 */
-	public void setNamedParams(final Map<String,Object> namedParams) {
+	public final void setNamedParams(final Map<String,Object> namedParams) {
 
 		if (namedParams == null)
 			return;
@@ -455,7 +455,7 @@ public class JSONRPC2Request extends JSONRPC2Message {
 	 *           scalar ({@code null} and fractions, however, should
 	 *           be avoided).
 	 */
-	public void setID(final Object id) {
+	public final void setID(final Object id) {
 
 		if (id == null            ||
 		    id instanceof Boolean ||

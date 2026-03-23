@@ -152,7 +152,7 @@ public class ConsolePasswordManager extends RouterPasswordManager {
      *  @param pw plain text
      *  @return if pw verified
      */
-    public boolean saveMD5(String realm, String subrealm, String user, String pw) {
+    public final boolean saveMD5(String realm, String subrealm, String user, String pw) {
         String pfx = realm;
         if (user != null && user.length() > 0)
             pfx += '.' + user;

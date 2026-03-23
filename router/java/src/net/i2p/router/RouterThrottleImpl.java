@@ -481,7 +481,7 @@ public class RouterThrottleImpl implements RouterThrottle {
         } else {setTunnelStatus("[rejecting/disabled]" + _x("Declining Tunnel Requests"));}
     }
 
-    public void setTunnelStatus(String msg) {_tunnelStatus = msg;}
+    public final void setTunnelStatus(String msg) {_tunnelStatus = msg;}
 
     /**
      *  Mark a string for extraction by xgettext and translation.

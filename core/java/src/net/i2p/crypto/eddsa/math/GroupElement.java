@@ -732,7 +732,7 @@ public class GroupElement implements Serializable {
      * @param q the CACHED representation of the GroupElement to add.
      * @return the P1P1 representation of the result.
      */
-    public GroupElement add(GroupElement q) {
+    public final GroupElement add(GroupElement q) {
         if (this.repr != Representation.P3)
             throw new UnsupportedOperationException();
         if (q.repr != Representation.CACHED)

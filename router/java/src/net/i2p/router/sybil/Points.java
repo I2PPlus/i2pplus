@@ -48,7 +48,7 @@ public class Points implements Comparable<Points> {
      *  @param reason may not contain '%'
      *  @since 0.9.38
      */
-    public void addPoints(double d, String reason) {
+    public final void addPoints(double d, String reason) {
         points += d;
         String rsn = TWO_DECIMALS.format(d) + ": " + reason;
         reasons.add(rsn);

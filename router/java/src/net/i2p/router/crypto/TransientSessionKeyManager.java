@@ -12,9 +12,9 @@ package net.i2p.router.crypto;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -231,7 +231,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         if (sess.getLastUsedDate() < now - SESSION_LIFETIME_MAX_MS) {
             if (_log.shouldInfo())
                 _log.info("Expiring old session key established on "
-                          + new Date(sess.getEstablishedDate())
+                          + Instant.ofEpochMilli(sess.getEstablishedDate())
                           + " but not used for "
                           + (now-sess.getLastUsedDate())
                           + "ms with target " + toString(target));
@@ -1205,7 +1205,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
             buf.append("TagSet [").append(_id).append("]");
             buf.append(" Size: ").append(_sessionTags.size()).append('/').append(_origSize);
             buf.append(" ACKed? ").append(_acked);
-            buf.append("\n* Created: ").append(new Date(_date));
+            buf.append("\n* Created: ").append(Instant.ofEpochMilli(_date));
             buf.append("\n* Session key: ").append(_key);
             return buf.toString();
         }

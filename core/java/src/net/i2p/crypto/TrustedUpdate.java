@@ -212,7 +212,7 @@ riCe6OlAEiNpcc6mMyIYYWFICbrDFTrDR3wXqwc/Jkcx6L5VVWoagpSzbo3yGhc=
      *  @since 0.7.12
      *  @return true if successful
      */
-    public boolean addKey(String key, String name) {
+    public final boolean addKey(String key, String name) {
         if (_log.shouldDebug())
             _log.debug("Adding " + name + ": " + key);
         SigningPublicKey signingPublicKey = new SigningPublicKey();

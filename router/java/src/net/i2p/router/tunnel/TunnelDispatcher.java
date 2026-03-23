@@ -548,7 +548,7 @@ public class TunnelDispatcher implements Service {
     /**
      * Get the number of participating tunnels
      */
-    public int getParticipatingCount() {
+    public final int getParticipatingCount() {
         return _participatingConfig.size();
     }
 

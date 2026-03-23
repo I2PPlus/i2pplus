@@ -1008,7 +1008,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /** @return true if the router is firewalled */
-    public boolean isFirewalled() {
+    public final boolean isFirewalled() {
         return _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.REJECT_UNSOLICITED ||
                _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_OK ||
                _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_UNKNOWN ||

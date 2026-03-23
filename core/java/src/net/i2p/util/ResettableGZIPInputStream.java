@@ -58,7 +58,7 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
      * compressed stream.
      *
      */
-    public void initialize(InputStream compressedStream) throws IOException {
+    public final void initialize(InputStream compressedStream) throws IOException {
         len = 0;
         inf.reset();
         _complete = false;

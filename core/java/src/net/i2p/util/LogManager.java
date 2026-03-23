@@ -203,9 +203,9 @@ public class LogManager implements Flushable {
         t.start();
     }
 
-    public Log getLog(Class<?> cls) { return getLog(cls, null); }
-    public Log getLog(String name) { return getLog(null, name); }
-    public Log getLog(Class<?> cls, String name) {
+    public final Log getLog(Class<?> cls) { return getLog(cls, null); }
+    public final Log getLog(String name) { return getLog(null, name); }
+    public final Log getLog(Class<?> cls, String name) {
         String scope = Log.getScope(name, cls);
         boolean isNew = false;
         Log rv = _logs.get(scope);
@@ -241,7 +241,7 @@ public class LogManager implements Flushable {
     public int getDisplayOnScreenLevel() {return _onScreenLimit;}
     public int getConsoleBufferSize() {return _consoleBufferSize;}
 
-    public void setConfig(String filename) {
+    public final void setConfig(String filename) {
         _locationFile = new File(filename);
         if (!_locationFile.isAbsolute())
             _locationFile = new File(_context.getConfigDir(), filename);

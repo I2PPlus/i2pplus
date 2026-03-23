@@ -55,7 +55,7 @@ public class SessionStatusMessage extends I2CPMessageImpl {
 
     public int getStatus() {return _status;}
 
-    public void setStatus(int status) {_status = status;}
+    public final void setStatus(int status) {_status = status;}
 
     @Override
     protected void doReadMessage(InputStream in, int size) throws I2CPMessageException, IOException {

@@ -11,6 +11,7 @@ package net.i2p.data.i2cp;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.Instant;
 import java.util.Date;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
@@ -30,7 +31,7 @@ public class SetDateMessage extends I2CPMessageImpl {
 
     public SetDateMessage() {
         super();
-        _date = new Date(Clock.getInstance().now());
+        _date = Date.from(Instant.ofEpochMilli(Clock.getInstance().now()));
     }
 
     /**

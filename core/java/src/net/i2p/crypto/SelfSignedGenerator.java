@@ -17,6 +17,7 @@ import java.security.cert.X509Certificate;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -586,7 +587,7 @@ public final class SelfSignedGenerator {
         // UTCDate format (HH 0-23)
         SimpleDateFormat fmt = new SimpleDateFormat("yyMMddHHmmss");
         fmt.setTimeZone(TimeZone.getTimeZone("GMT"));
-        byte[] nowbytes = DataHelper.getASCII(fmt.format(new Date(now)));
+        byte[] nowbytes = DataHelper.getASCII(fmt.format(Date.from(Instant.ofEpochMilli(now))));
         if (nowbytes.length != 12)
             throw new IllegalArgumentException();
         byte[] rv = new byte[15];

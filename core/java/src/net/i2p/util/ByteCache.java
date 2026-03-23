@@ -102,6 +102,7 @@ public final class ByteCache extends TryCache<ByteArray> {
         I2PAppContext.getGlobalContext().statManager().addRateData("byteCache.memory." + _entrySize, _entrySize * origsz);
     }
 
+    @SuppressWarnings("PMD.SingletonClassReturningNewInstance")
     public static ByteCache getInstance(int cacheSize, int size) {
         size = Math.max(1, size);
         cacheSize = Math.max(0, cacheSize);

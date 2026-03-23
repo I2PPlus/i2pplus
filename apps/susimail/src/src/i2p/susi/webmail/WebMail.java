@@ -44,7 +44,7 @@ import java.net.URISyntaxException;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
+import java.time.Instant;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -1781,7 +1781,7 @@ public class WebMail extends HttpServlet {
             if (_log.shouldDebug()) {
                 try {
                     _log.debug("Existing session " + httpSession.getId() +
-                               "\n* Created: " + new Date(httpSession.getCreationTime()));
+                               "\n* Created: " + Instant.ofEpochMilli(httpSession.getCreationTime()));
                 } catch (IllegalStateException ise) {}
             }
         }
