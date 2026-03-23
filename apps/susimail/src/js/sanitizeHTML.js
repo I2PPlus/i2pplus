@@ -134,7 +134,7 @@ function createButton() {
   const iframe = document.getElementById("iframeSusiHtmlView") || window.parent.document.getElementById("iframeSusiHtmlView");
   const toggle = window.parent.document.getElementById("toggleBlockedImages");
   if (!iframe) {return;}
-  else if (iframe && !iframe.classList.contains("showBlockedImages")) {
+  if (iframe && !iframe.classList.contains("showBlockedImages")) {
     const remoteImages = iframe.contentWindow.document.querySelectorAll("img") || iframe.contentWindow.document.querySelectorAll(".webBug");
     if (!remoteImages) {return;}
     if (toggle) {toggle.remove();}

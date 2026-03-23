@@ -33,7 +33,8 @@ if (mailbox && pageRefresh) {
     if (document.getElementById("serverRefresh")) {
       clearInterval(interval);
       return;
-    } else if (pageRefresh) {pageRefresh.classList.add("checking");}
+    }
+    if (pageRefresh) {pageRefresh.classList.add("checking");}
     fetch(`/susimail?${new Date().getTime()}`)
       .then(response => response.text())
       .then(html => {

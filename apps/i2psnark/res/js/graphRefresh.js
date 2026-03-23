@@ -64,7 +64,7 @@ function refreshGraph() {
   }
   fetch(graphUrl).then(response => {
     if (response.ok) {return response.blob();}
-    else if (response.status === 400) {
+    if (response.status === 400) {
       graphEnabled = false;
       throw new Error("400 Bad Request");
     }

@@ -41,9 +41,8 @@ export function newHosts() {
       const parsed = JSON.parse(rawData);
       if (typeof parsed === "object" && !Array.isArray(parsed) && parsed !== null) {
         return parsed;
-      } else {
-        throw new Error("Data is not an object");
       }
+      throw new Error("Data is not an object");
     } catch (e) {
       console.warn("Invalid JSON in localStorage, clearing:", key);
       localStorage.removeItem(key);

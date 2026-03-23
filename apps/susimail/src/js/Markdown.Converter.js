@@ -412,7 +412,8 @@ if (typeof exports === "object" && typeof require === "function") { // we're in 
                         // Oops, found blank lines, so it's not a title.
                         // Put back the parenthetical statement we stole.
                         return m3 + m6;
-                    } else if (m5) {
+                    }
+                    if (m5) {
                         g_titles.set(m1, m5.replace(/"/g, "&quot;"));
                     }
 

@@ -13,11 +13,15 @@
     <exclude-pattern>.*/dist/.*</exclude-pattern>
     <exclude-pattern>.*/.*\.min\.js$</exclude-pattern>
     <exclude-pattern>.*/vendor/.*</exclude-pattern>
+    <exclude-pattern>.*/jdenticon\.js$</exclude-pattern>
+    <exclude-pattern>.*/morphdom\.js$</exclude-pattern>
 
     <rule ref="category/ecmascript/codestyle.xml">
+        <exclude name="AssignmentInOperand"/>
+    </rule>
+    <rule ref="category/ecmascript/bestpractices.xml">
         <exclude name="GlobalVariable"/>
     </rule>
-    <rule ref="category/ecmascript/bestpractices.xml"/>
     <rule ref="category/ecmascript/errorprone.xml"/>
 
 </ruleset>

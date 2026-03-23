@@ -12,7 +12,7 @@
  * @function lsDebug
  * @returns {void}
  */
-function lsDebug() {
+function lsDebug() { // NOPMD - ConsistentReturn (arrow function implicit returns misdetected)
   const getById = id => document.getElementById(id);
   const sel = (el, sel) => el?.querySelector(sel);
   const text = el => el?.textContent.trim();

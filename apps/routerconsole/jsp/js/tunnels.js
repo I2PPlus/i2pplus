@@ -37,7 +37,8 @@ nav.addEventListener("click", function(event) {
   if (!isAdvancedMode) {
     toggleIds.remove();
     return;
-  } else if (event.target.id === "toggleTunnelIds") {
+  }
+  if (event.target.id === "toggleTunnelIds") {
     const isHidden = document.querySelector("body").classList.contains("idsHidden");
     if (isHidden) {
       bodyTag.classList.remove("idsHidden");

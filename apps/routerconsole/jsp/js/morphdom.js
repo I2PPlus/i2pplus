@@ -41,11 +41,11 @@ function compareNodeNames(fromEl, toEl) {
 
   if (fromCodeStart <= 90 && toCodeStart >= 97) {
     return fromNodeName === toNodeName.toUpperCase();
-  } else if (toCodeStart <= 90 && fromCodeStart >= 97) {
-    return toNodeName === fromNodeName.toUpperCase();
-  } else {
-    return false;
   }
+  if (toCodeStart <= 90 && fromCodeStart >= 97) {
+    return toNodeName === fromNodeName.toUpperCase();
+  }
+  return false;
 }
 
 /**
@@ -444,9 +444,8 @@ function morphdomFactory(morphAttrs) {
         if (toNodeType === morphedNodeType && morphedNode.nodeValue !== toNode.nodeValue) {
           morphedNode.nodeValue = toNode.nodeValue;
           return morphedNode;
-        } else {
-          morphedNode = toNode;
         }
+        morphedNode = toNode;
       }
     }
 

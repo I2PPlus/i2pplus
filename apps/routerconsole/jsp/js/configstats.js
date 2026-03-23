@@ -57,13 +57,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (aIsNumber && bIsNumber) {
           return parseInt(aPart, 10) - parseInt(bPart, 10);
-        } else if (aIsNumber) {
-          return -1;
-        } else if (bIsNumber) {
-          return 1;
-        } else {
-          return aPart.localeCompare(bPart);
         }
+        if (aIsNumber) {
+          return -1;
+        }
+        if (bIsNumber) {
+          return 1;
+        }
+        return aPart.localeCompare(bPart);
       }
     }
     return aParts.length - bParts.length;

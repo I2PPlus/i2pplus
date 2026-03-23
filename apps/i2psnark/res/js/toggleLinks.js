@@ -65,7 +65,7 @@ let magnetsVisible = false;
  * preservation during link mode changes.
  * @returns {void}
  */
-function initLinkToggler() {
+function initLinkToggler() { // NOPMD - ConsistentReturn (nested scrollToTop return is misdetected)
   if (!toggle) { return; }
 
   /**
