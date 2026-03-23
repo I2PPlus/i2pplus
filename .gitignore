@@ -157,7 +157,7 @@ opencodetmp/
 legal/
 resource-files/
 script-files/
-org/
+/org/
 webapps/
 allclasses-index.html
 allpackages-index.html
