@@ -23,6 +23,7 @@ import net.i2p.util.Log;
  * Usage: TestSwarm samHost samPort myKeyFile [peerDestFile ]*
  *
  */
+@SuppressWarnings("PMD.CloseResource")
 public class TestSwarm {
     private I2PAppContext _context;
     private Log _log;

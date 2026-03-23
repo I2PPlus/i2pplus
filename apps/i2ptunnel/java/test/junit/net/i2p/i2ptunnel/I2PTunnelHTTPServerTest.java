@@ -11,6 +11,7 @@ import java.util.Map;
 import junit.framework.TestCase;
 import net.i2p.I2PAppContext;
 
+@SuppressWarnings("PMD.CloseResource")
 public class I2PTunnelHTTPServerTest extends TestCase {
 
 	public InputStream fillInputStream(String headers) throws IOException {

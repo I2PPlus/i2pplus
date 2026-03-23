@@ -16,6 +16,7 @@ import org.junit.Test;
 /**
  *
  */
+@SuppressWarnings("PMD.CloseResource")
 public class EchoIT extends StreamingITBase {
     private Log _log;
     private I2PSession _client;

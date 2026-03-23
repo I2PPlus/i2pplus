@@ -8,6 +8,7 @@ import java.util.Properties;
 import net.i2p.data.DataHelper;
 import net.i2p.util.Log;
 
+@SuppressWarnings("PMD.CloseResource")
 public class TestDatagramTransfer {
     private static Log _log = new Log(TestCreateSessionDatagram.class);
 

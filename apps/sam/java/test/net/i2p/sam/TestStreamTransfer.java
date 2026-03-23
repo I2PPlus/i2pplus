@@ -24,6 +24,7 @@ import net.i2p.util.Log;
  *  <li>SAM bridge taken down</li>
  * </ol>
  */
+@SuppressWarnings("PMD.CloseResource")
 public class TestStreamTransfer {
     private static Log _log = new Log(TestStreamTransfer.class);
     private static String _alice = null;

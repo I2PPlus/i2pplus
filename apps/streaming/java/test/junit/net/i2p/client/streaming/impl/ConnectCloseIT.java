@@ -17,6 +17,7 @@ import org.junit.Test;
  * EOF.
  *
  */
+@SuppressWarnings("PMD.CloseResource")
 public class ConnectCloseIT extends StreamingITBase {
     private Log _log;
     private I2PSession _server;

@@ -15,6 +15,7 @@ import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
 
+@SuppressWarnings("PMD.CloseResource")
 public class BlockfileNamingServiceTest extends TestCase {
     BlockfileNamingService _bns;
     List<String> _names;

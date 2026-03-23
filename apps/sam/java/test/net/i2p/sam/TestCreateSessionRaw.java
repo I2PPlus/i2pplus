@@ -8,6 +8,7 @@ import net.i2p.data.DataHelper;
 import net.i2p.util.Clock;
 import net.i2p.util.Log;
 
+@SuppressWarnings("PMD.CloseResource")
 public class TestCreateSessionRaw {
     private static Log _log = new Log(TestCreateSessionRaw.class);
 
