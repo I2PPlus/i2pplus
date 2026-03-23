@@ -3269,17 +3269,15 @@
 
   <target name="checkstyle-setup">
     <available property="cs.present" file="tools/checkstyle/checkstyle-all.jar"/>
-    <unless>
-      <isset property="cs.present"/>
-      <sequential>
-        <exec executable="bash" dir="${basedir}" failonerror="true">
-          <arg value="tools/checkstyle/download-checkstyle.sh"/>
-        </exec>
-      </sequential>
-    </unless>
   </target>
 
-  <target name="checkstyle" depends="checkstyle-setup">
+  <target name="checkstyle-download" unless="cs.present">
+    <exec executable="bash" dir="${basedir}" failonerror="true">
+      <arg value="tools/checkstyle/download-checkstyle.sh"/>
+    </exec>
+  </target>
+
+  <target name="checkstyle" depends="checkstyle-setup,checkstyle-download">
     <exec executable="ant" dir="${basedir}" output="/dev/null" error="/dev/null">
       <arg value="build"/>
     </exec>
@@ -3303,11 +3301,10 @@
       <arg value="dist/checkstyle.xml"/>
       <arg value="dist/checkstyle.html"/>
     </exec>
-    <delete file="dist/checkstyle.xml" quiet="true"/>
-    <echo message="Checkstyle report written to dist/checkstyle.html"/>
+    <echo message="Checkstyle report written to dist/checkstyle.html (XML: dist/checkstyle.xml)"/>
   </target>
 
-  <target name="checkstyle-local">
+  <target name="checkstyle-local" depends="checkstyle-setup,checkstyle-download">
     <exec executable="ant" dir="${basedir}" output="/dev/null" error="/dev/null">
       <arg value="build"/>
     </exec>
@@ -3332,7 +3329,7 @@
       <arg value="dist/checkstyle-local.html"/>
       <arg value="--local"/>
     </exec>
-    <delete file="dist/checkstyle.xml" quiet="true"/>
+    <echo message="Checkstyle report written to dist/checkstyle-local.html (XML: dist/checkstyle.xml)"/>
     <echo message="Checkstyle report written to dist/checkstyle-local.html (local file links enabled)"/>
   </target>
 

@@ -23,9 +23,30 @@
   <!-- Newline at end of file -->
   <module name="NewlineAtEndOfFile"/>
 
-  <!-- Exclusions: skip third-party code -->
+  <!-- Exclusions: skip third-party code, generated JSPs -->
+  <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*/.*_jsp\.java$"/>
+  </module>
+  <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*[/\\]WEB-INF[/\\].*"/>
+  </module>
   <module name="BeforeExecutionExclusionFileFilter">
     <property name="fileNamePattern" value=".*[/\\]jetty[/\\].*"/>
+  </module>
+  <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*[/\\]com[/\\]maxmind[/\\].*"/>
+  </module>
+  <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*[/\\]com[/\\]freenetproject[/\\].*"/>
+  </module>
+  <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*[/\\]org[/\\]freenetproject[/\\].*"/>
+  </module>
+  <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*[/\\]UPnP\.java$"/>
+  </module>
+  <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*[/\\]com[/\\]southernstorm[/\\].*"/>
   </module>
   <module name="BeforeExecutionExclusionFileFilter">
     <property name="fileNamePattern" value=".*[/\\]wrapper[/\\].*"/>
