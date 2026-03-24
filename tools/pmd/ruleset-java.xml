@@ -18,6 +18,17 @@
     <exclude-pattern>.*/test/.*</exclude-pattern>
     <exclude-pattern>.*/demo/.*</exclude-pattern>
     <exclude-pattern>.*/tmp/.*</exclude-pattern>
+    <exclude-pattern>.*/jetty/.*</exclude-pattern>
+    <exclude-pattern>.*/wrapper/.*</exclude-pattern>
+    <exclude-pattern>.*/pack200/.*</exclude-pattern>
+    <exclude-pattern>.*/org/apache/.*</exclude-pattern>
+    <exclude-pattern>.*/org/bouncycastle/.*</exclude-pattern>
+    <exclude-pattern>.*/org/cybergarage/.*</exclude-pattern>
+    <exclude-pattern>.*/com/maxmind/.*</exclude-pattern>
+    <exclude-pattern>.*/com/southernstorm/.*</exclude-pattern>
+    <exclude-pattern>.*/org/json/simple/.*</exclude-pattern>
+    <exclude-pattern>.*/gnu/.*</exclude-pattern>
+    <exclude-pattern>.*/com/google/.*</exclude-pattern>
     <exclude-pattern>.*_jsp\.java</exclude-pattern>
 
     <!-- Third-party exclusions -->

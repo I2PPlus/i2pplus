@@ -133,6 +133,12 @@ INDENT_ONLY_CFG = """<?xml version="1.0"?>
   <module name="BeforeExecutionExclusionFileFilter">
     <property name="fileNamePattern" value=".*[/\\\\]ndt[/\\\\].*"/>
   </module>
+  <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*[/\\\\]gnu[/\\\\].*"/>
+  </module>
+  <module name="BeforeExecutionExclusionFileFilter">
+    <property name="fileNamePattern" value=".*[/\\\\]com[/\\\\]google[/\\\\].*"/>
+  </module>
   <module name="TreeWalker">
     <module name="Indentation">
       <property name="basicOffset" value="4"/>
