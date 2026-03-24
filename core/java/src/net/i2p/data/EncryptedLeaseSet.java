@@ -443,7 +443,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
             throw new IllegalStateException("already encrypted");
         if (_signature == null)
             throw new IllegalStateException("not signed");
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(512);
         try {
             // Inner layer - type - data covered by sig
             baos.write(KEY_TYPE_LS2);

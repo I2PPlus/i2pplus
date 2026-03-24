@@ -261,7 +261,7 @@ public class JSONRPC2Servlet extends HttpServlet {
     }
 
     private String getRequest(ServletInputStream sis) throws IOException {
-        Writer writer = new StringWriter();
+        Writer writer = new StringWriter(8192);
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(sis, "UTF-8"));
         char[] readBuffer = new char[BUFFER_LENGTH];

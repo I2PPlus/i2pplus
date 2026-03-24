@@ -613,7 +613,7 @@ class IntroductionManager {
                 return false;
             }
         }
-        receiveRelayIntro(bob, alice, data, aliceRI);
+        receiveRelayIntro(bob, alice, data, aliceRI); // NOPMD - overload delegation
         return true;
     }
 

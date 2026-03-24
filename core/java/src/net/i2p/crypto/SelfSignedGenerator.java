@@ -923,7 +923,7 @@ public final class SelfSignedGenerator {
      *  @throws IllegalArgumentException
      */
     private static byte[] getEncodedOID(String oid) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream(16);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(64);
         baos.write(0x06);
         // len to be filled in later
         baos.write(0);

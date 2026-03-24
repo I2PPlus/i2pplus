@@ -166,7 +166,7 @@ class SOCKS4aServer extends SOCKSServer {
      */
     private void sendRequestReply(int replyCode, InetAddress inetAddr,
                                   int bindPort, DataOutputStream out) throws IOException {
-        ByteArrayOutputStream reps = new ByteArrayOutputStream();
+        ByteArrayOutputStream reps = new ByteArrayOutputStream(64);
         DataOutputStream dreps = new DataOutputStream(reps);
 
         // Reserved byte, should be 0x00

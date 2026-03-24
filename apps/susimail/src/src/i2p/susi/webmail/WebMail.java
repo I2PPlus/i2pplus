@@ -573,7 +573,7 @@ public class WebMail extends HttpServlet {
                 String charset = mailPart.charset;
                 if (charset == null) {charset = "UTF-8";}
                 try {
-                    StringWriter sw = new StringWriter();
+                    StringWriter sw = new StringWriter(1024);
                     Writer escaper = new EscapeHTMLWriter(sw);
                     Buffer ob = new OutputStreamBuffer(new DecodingOutputStream(escaper, charset));
                     mailPart.decode(0, ob);
@@ -1571,6 +1571,7 @@ public class WebMail extends HttpServlet {
      * @param id as retrieved from getID()
      * @return the part or null
      */
+    @SuppressWarnings("PMD.AvoidInfiniteRecursion")
     private static MailPart getMailPartFromID(MailPart part, int id) {
         if (part == null) {return null;}
         if (part.getID() == id) {return part;}
@@ -1589,6 +1590,7 @@ public class WebMail extends HttpServlet {
      * @return the part or null
      * @since 0.9.62
      */
+    @SuppressWarnings("PMD.AvoidInfiniteRecursion")
     private static MailPart getMailPartFromID(MailPart part, String id) {
         if (part == null) {return null;}
         if (id.equals(part.cid)) {return part;}

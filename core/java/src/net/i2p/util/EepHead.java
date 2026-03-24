@@ -36,7 +36,7 @@ import net.i2p.I2PAppContext;
 @SuppressWarnings("PMD.CloseResource")
 public class EepHead extends EepGet {
     /** EepGet needs either a non-null file or a stream... shouldn't actually be written to... */
-    private static final OutputStream _dummyStream = new ByteArrayOutputStream(0);
+    private static final OutputStream _dummyStream = new ByteArrayOutputStream(64);
 
     public EepHead(I2PAppContext ctx, String proxyHost, int proxyPort, int numRetries, String url) {
         // we're using this constructor:

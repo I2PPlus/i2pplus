@@ -1,6 +1,8 @@
 package net.i2p.i2ptunnel;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
@@ -137,8 +139,9 @@ public class BlocklistManager {
      */
     private Pattern compileRegexPattern(File blocklistFile) {
         StringBuilder regexBuilder = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(new FileInputStream(blocklistFile), StandardCharsets.UTF_8))) {
+        try (FileInputStream fis = new FileInputStream(blocklistFile);
+             BufferedReader reader = new BufferedReader(
+                new InputStreamReader(new BufferedInputStream(fis), StandardCharsets.UTF_8))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
@@ -204,8 +207,9 @@ public class BlocklistManager {
             if (_clientBlockList.size() >= _clientLimit) {
                 _clientBlockList.remove(0);
             }
-            try (BufferedWriter writer = new BufferedWriter(
-                    new OutputStreamWriter(new FileOutputStream(blocklistClients, true), StandardCharsets.UTF_8))) {
+            try (FileOutputStream rawFos = new FileOutputStream(blocklistClients, true);
+                 BufferedWriter writer = new BufferedWriter(
+                    new OutputStreamWriter(new BufferedOutputStream(rawFos), StandardCharsets.UTF_8))) {
                 writer.write(destination);
                 writer.newLine();
             } catch (IOException e) {
@@ -225,8 +229,9 @@ public class BlocklistManager {
         long currentLastModified = blocklistClients.lastModified();
         if (currentLastModified != _blocklistClientsLastModified) {
             _clientBlockList.clear();
-            try (BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(new FileInputStream(blocklistClients), StandardCharsets.UTF_8))) {
+            try (FileInputStream fis = new FileInputStream(blocklistClients);
+                 BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(new BufferedInputStream(fis), StandardCharsets.UTF_8))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     line = line.trim();

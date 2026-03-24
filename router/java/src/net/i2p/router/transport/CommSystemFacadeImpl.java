@@ -8,6 +8,8 @@ package net.i2p.router.transport;
  *
  */
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -15,6 +17,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Serializable;
 import java.io.Writer;
@@ -927,7 +931,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             createRdnsCacheFile();
             return;
         }
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(fCache), StandardCharsets.UTF_8))) {
+        try (FileInputStream fis = new FileInputStream(fCache); // NOPMD - wrapped in BufferedInputStream
+             BufferedReader reader = new BufferedReader(new InputStreamReader(new BufferedInputStream(fis), StandardCharsets.UTF_8))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 if (line.isEmpty() || line.charAt(0) == '#') {
@@ -1003,7 +1008,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 liveCacheSnapshot = new HashMap<>(rdnsCache);
             }
             File cacheFile = new File(RDNS_CACHE_FILE);
-            try (FileOutputStream fos = new FileOutputStream(cacheFile)) {
+            try (FileOutputStream rawFos = new FileOutputStream(cacheFile);
+                 OutputStream fos = new BufferedOutputStream(rawFos)) {
                 long now = System.currentTimeMillis();
                 int writtenCount = 0;
                 for (CacheEntry cacheEntry : liveCacheSnapshot.values()) {
@@ -1045,8 +1051,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 long now = System.currentTimeMillis();
                 AtomicInteger writtenCount = new AtomicInteger(0);
 
-                try (BufferedWriter writer = new BufferedWriter(
-                        new OutputStreamWriter(new FileOutputStream(tmpFile), ENCODING))) {
+                try (FileOutputStream rawFos = new FileOutputStream(tmpFile);
+                     BufferedWriter writer = new BufferedWriter(
+                        new OutputStreamWriter(new BufferedOutputStream(rawFos), ENCODING))) {
 
                     synchronized (rdnsCache) {
                         // Convert to list to allow traditional loop

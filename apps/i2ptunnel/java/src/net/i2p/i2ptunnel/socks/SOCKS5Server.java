@@ -396,7 +396,7 @@ class SOCKS5Server extends SOCKSServer {
      */
     private void sendRequestReply(int replyCode, int addressType, InetAddress inetAddr, String domainName,
                                   int bindPort, DataOutputStream out) throws IOException {
-        ByteArrayOutputStream reps = new ByteArrayOutputStream();
+        ByteArrayOutputStream reps = new ByteArrayOutputStream(64);
         DataOutputStream dreps = new DataOutputStream(reps);
 
         dreps.write(SOCKS_VERSION_5);

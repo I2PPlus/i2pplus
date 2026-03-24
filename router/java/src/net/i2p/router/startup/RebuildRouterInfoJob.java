@@ -74,6 +74,16 @@ class RebuildRouterInfoJob extends JobImpl {
      *  @param alreadyRunning unused
      */
     void rebuildRouterInfo(boolean alreadyRunning) {
+        rebuildRouterInfo(alreadyRunning, 0);
+    }
+
+    private static final int MAX_REBUILD_RETRIES = 2;
+
+    /**
+     *  @param alreadyRunning unused
+     *  @param retryCount for bounded recursion
+     */
+    private void rebuildRouterInfo(boolean alreadyRunning, int retryCount) {
         _log.debug("Rebuilding the new router info");
         RouterInfo info = null;
         File infoFile = new File(getContext().getRouterDir(), CreateRouterInfoJob.INFO_FILENAME);
@@ -92,13 +102,17 @@ class RebuildRouterInfoJob extends JobImpl {
                     _log.log(Log.CRIT, "Error reading in the key data from " + keyFile.getAbsolutePath(), e);
                     keyFile.delete();
                     keyFile2.delete();
-                    rebuildRouterInfo(alreadyRunning);
+                    if (retryCount < MAX_REBUILD_RETRIES) {
+                        rebuildRouterInfo(alreadyRunning, retryCount + 1);
+                    }
                     return;
                 } catch (IOException e) {
                     _log.log(Log.CRIT, "Error reading in the key data from " + keyFile.getAbsolutePath(), e);
                     keyFile.delete();
                     keyFile2.delete();
-                    rebuildRouterInfo(alreadyRunning);
+                    if (retryCount < MAX_REBUILD_RETRIES) {
+                        rebuildRouterInfo(alreadyRunning, retryCount + 1);
+                    }
                     return;
                 }
             } else {

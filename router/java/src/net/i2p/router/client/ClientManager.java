@@ -646,7 +646,7 @@ class ClientManager {
             ClientConnectionRunner runner = getRunner(dest);
             if (runner != null) {runner.reportAbuse(dest, reason, severity);}
         } else {
-            for (Destination d : _runners.keySet()) {reportAbuse(d, reason, severity);}
+            for (Destination d : _runners.keySet()) {reportAbuse(d, reason, severity);} // NOPMD - iteration, not recursion
         }
     }
 

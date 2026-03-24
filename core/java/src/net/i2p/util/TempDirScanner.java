@@ -45,6 +45,7 @@ public class TempDirScanner extends SimpleTimer2.TimedEvent {
      *  We can't count on the filesystem updating access time.
      *  This should not affect any known usage of our temp dir.
      */
+    @SuppressWarnings("PMD.AvoidInfiniteRecursion")
     private static void scan(File f) {
         if (f.isDirectory()) {
             File[] files = f.listFiles();

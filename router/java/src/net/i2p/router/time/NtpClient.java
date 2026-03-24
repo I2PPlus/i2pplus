@@ -97,7 +97,7 @@ public class NtpClient {
         Collections.addAll(names, serverNames);
         Collections.shuffle(names);
         for (String server : names) {
-            long[] rv = currentTimeAndStratum(server, perServerTimeout, preferIPv6, log);
+            long[] rv = currentTimeAndStratum(server, perServerTimeout, preferIPv6, log); // NOPMD - overload delegation
             if (rv != null && rv.length > 0 && rv[0] > 0) {
                 return rv;
             }

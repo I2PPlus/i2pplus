@@ -145,7 +145,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
                 if (vs.length < 2) {continue;}
                 if (props == null) {props = new OrderedProperties();}
                 props.setProperty(vs[0], vs[1]);
-                k = "i2cp.leaseSetOption." + (i + 1);
+                k = new StringBuilder("i2cp.leaseSetOption.").append(i + 1).toString();
             }
             if (props != null) {ls2.setOptions(props);}
 

@@ -112,6 +112,7 @@ public class NamingServiceBean extends AddressbookBean {
     }
 
     /** depth-first search */
+    @SuppressWarnings("PMD.AvoidInfiniteRecursion")
     private static NamingService searchNamingService(NamingService ns, String srch) {
         String name = ns.getName();
         if (name.equals(srch) || basename(name).equals(srch) || name.equals(DEFAULT_NS)) {return ns;}

@@ -143,7 +143,7 @@ public class IdenticonServlet extends HttpServlet {
             // retrieve image bytes from either cache or renderer
             if (cache == null
                     || (imageBytes = cache.get(identiconETag)) == null) {
-                ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
+                ByteArrayOutputStream byteOut = new ByteArrayOutputStream(4096);
                 RenderedImage image;
                 try {
                     image = renderer.render(code, size);

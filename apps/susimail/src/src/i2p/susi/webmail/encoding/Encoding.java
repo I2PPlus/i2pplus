@@ -92,7 +92,7 @@ public abstract class Encoding {
     * @since 0.9.33
     */
     public void encode(InputStream in, Writer out) throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(1024);
         DataHelper.copy(in, baos);
         out.write(encode(baos.toByteArray()));
     }

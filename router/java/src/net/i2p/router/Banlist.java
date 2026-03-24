@@ -253,7 +253,7 @@ public class Banlist {
             if (period > BANLIST_DURATION_MAX) {period = BANLIST_DURATION_MAX;}
             expireOn = _context.clock().now() + period;
         }
-        return banlistRouter(peer, reason, reasonCode, transport, expireOn);
+        return banlistRouter(peer, reason, reasonCode, transport, expireOn); // NOPMD - overload delegation
     }
 
     /**

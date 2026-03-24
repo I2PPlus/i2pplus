@@ -133,7 +133,7 @@ public class BEncoder {
      */
     public static byte[] bencode(Map<?, ?> m) {
         try {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream(256);
             bencode(m, baos);
             return baos.toByteArray();
         } catch (IOException ioe) {

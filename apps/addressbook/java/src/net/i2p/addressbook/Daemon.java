@@ -739,6 +739,7 @@ public class Daemon {
     }
 
     /** depth-first search */
+    @SuppressWarnings("PMD.AvoidInfiniteRecursion")
     private static NamingService searchNamingService(NamingService ns, String srch) {
         String name = ns.getName();
         if (name.equals(srch) || name.endsWith('/' + srch) || name.endsWith('\\' + srch)) {
