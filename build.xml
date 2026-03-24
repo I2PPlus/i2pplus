@@ -167,16 +167,16 @@
     <echo message=" === Analysis ==="/>
     <echo message="  checkstyle                                   Run Checkstyle analysis &#10140; dist/checkstyle.html"/>
     <echo message="  checkstyle-local                             Checkstyle report with clickable file links &#10140; dist/checkstyle-local.html"/>
-    <echo message=" checkstyle-fix-errors                        Run fix-java-issues.py --fix checkstyle indent imports (dry run)"/>
-    <echo message=" checkstyle-fix-errors-apply                  Apply fix-java-issues.py --fix checkstyle indent imports"/>
+    <echo message="  checkstyle-fix-errors                        Run fix-java-issues.py --fix checkstyle indent imports (dry run)"/>
+    <echo message="  checkstyle-fix-errors-apply                  Apply fix-java-issues.py --fix checkstyle indent imports"/>
     <echo message="  codeql                                       Run CodeQL security analysis &#10140; dist/codeql-java.html + dist/codeql-js.html"/>
     <echo message="  pmd                                          Run PMD Java and JavaScript static analysis &#10140; dist/pmd-java.html + dist/pmd-js.html"/>
     <echo message="  pmd-java                                     Run PMD static analysis on Java sources &#10140; dist/pmd-java.html"/>
     <echo message="  pmd-java-local                               Java PMD report with clickable file links &#10140; dist/pmd-java-local.html"/>
     <echo message="  pmd-js                                       Run PMD static analysis on JavaScript sources &#10140; dist/pmd-js.html"/>
     <echo message="  pmd-js-local                                 JavaScript PMD report with clickable file links &#10140; dist/pmd-js-local.html"/>
-    <echo message=" pmd-fix-errors                               Run fix-java-issues.py (dry run) — all fix types"/>
-    <echo message=" pmd-fix-errors-apply                         Apply fix-java-issues.py — all fix types"/>
+    <echo message="  pmd-fix-errors                               Run fix-java-issues.py (dry run) &#10140; all fix types"/>
+    <echo message="  pmd-fix-errors-apply                         Apply fix-java-issues.py &#10140; all fix types"/>
     <echo message="  spotbugs                                     Run SpotBugs static analysis on Java sources &#10140; dist/spotbugs.html"/>
     <echo message="  report-all-java                              Run all Java analysis tools and combine into single report &#10140; dist/report-all-java.html"/>
     <echo message="  report-all-java-quick                        Compile combined report from existing results (no re-analysis) &#10140; dist/report-all-java.html"/>

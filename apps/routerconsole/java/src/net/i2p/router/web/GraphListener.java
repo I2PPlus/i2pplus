@@ -202,10 +202,10 @@ public class GraphListener implements RateSummaryListener {
      *
      *  @param end number of periods before now
      */
-    public void renderPng(OutputStream out, int width, int height, boolean hideLegend, boolean hideGrid,
+    public void renderSvg(OutputStream out, int width, int height, boolean hideLegend, boolean hideGrid,
                           boolean hideTitle, boolean showEvents, int periodCount,
                           int end, boolean showCredit) throws IOException {
-        renderPng(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount,
+        renderSvg(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount,
                   end, showCredit, null, null);
     }
 
@@ -216,17 +216,12 @@ public class GraphListener implements RateSummaryListener {
      *  @param titleOverride If non-null, overrides the title
      *  @since 0.9.6
      */
-    public void renderPng(OutputStream out, int width, int height, boolean hideLegend, boolean hideGrid,
+    public void renderSvg(OutputStream out, int width, int height, boolean hideLegend, boolean hideGrid,
                           boolean hideTitle, boolean showEvents, int periodCount,
                           int end, boolean showCredit, GraphListener lsnr2, String titleOverride) throws IOException {
         if (_renderer == null || _db == null) {throw new IOException("No RRD, check logs for previous errors");}
         _renderer.render(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount,
                          end, showCredit, lsnr2, titleOverride);
-    }
-
-    public void renderPng(OutputStream out) throws IOException {
-        if (_renderer == null || _db == null) {throw new IOException("No RRD, check logs for previous errors");}
-        _renderer.render(out);
     }
 
     String getName() {return _name;}

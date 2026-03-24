@@ -35,7 +35,7 @@ import org.rrd4j.graph.SVGImageWorker;
 import java.util.Locale;
 
 /**
- *  Generate the RRD graph png images,
+ *  Generate the RRD graph SVG images,
  *  including the combined rate graph.
  *
  *  @since 0.6.1.13
@@ -106,21 +106,7 @@ class GraphRenderer {
         ctx.statManager().createRateStat("graph.renderTime", "Time to render graphs (ms)", "Router", RATES);
     }
 
-    /**
-     * Render the stats as determined by the specified JRobin xml config,
-     * but note that this doesn't work on stock jvms, as it requires
-     * DOM level 3 load and store support.  Perhaps we can bundle that, or
-     * specify who can get it from where, etc.
-     *
-     * @deprecated unused
-     * @throws UnsupportedOperationException always
-     */
-    @Deprecated
-    public static synchronized void render(I2PAppContext ctx, OutputStream out, String filename) throws IOException {
-        throw new UnsupportedOperationException();
-    }
-
-        public void render(OutputStream out) throws IOException { render(out, DEFAULT_X, DEFAULT_Y,
+    public void render(OutputStream out) throws IOException { render(out, DEFAULT_X, DEFAULT_Y,
                                                                      false, false, false, false, -1, 0, false); }
 
     /**
@@ -147,6 +133,8 @@ class GraphRenderer {
         // prevent NaNs if we are skewed ahead of system time
         long end = Math.min(_listener.now(), begin - 75*1000);
         long period = _listener.getRate().getPeriod();
+        String statName = _listener.getRate().getRateStat().getName();
+        if (_log.shouldDebug()) {_log.debug("render: stat=" + statName + " w=" + width + " h=" + height + " pc=" + periodCount + " p=" + period + " lsnr2=" + (lsnr2 != null ? lsnr2.getRate().getRateStat().getName() : "null"));}
         if (endp > 0) {end -= period * endp;}
         if (periodCount <= 0 || periodCount > _listener.getRows()) {periodCount = _listener.getRows();}
         long start = end - (period * periodCount);
@@ -291,45 +279,46 @@ class GraphRenderer {
             def.setMinValue(0d);
 
             String name = _listener.getRate().getRateStat().getName();
-            String graphTitle = name;
-            if (name.startsWith("tunnel.participatingTunnels")) {graphTitle = graphTitle.replace("tunnel.participatingTunnels", "[Transit] Tunnel Count");}
-            if (name.startsWith("tunnel.participatingMessage")) {graphTitle = graphTitle.replace("tunnel.participatingMessage", "[Transit] Message");}
-            else if (name.startsWith("tunnel.participating")) {graphTitle = graphTitle.replace("tunnel.participating", "[Transit]");}
-            else if (name.startsWith("Tunnel.participating")) {graphTitle = graphTitle.replace("Tunnel.participating", "[Transit]");}
-            if (name.startsWith("router.")) {graphTitle = graphTitle.replace("router.", "[Router] ");}
-            if (name.startsWith("bw.")) {graphTitle = graphTitle.replace("bw.", "[Router] ");}
-            if (name.startsWith("Bandwidth usage")) {graphTitle = graphTitle.replace("Bandwidth usage", "[Router] Bandwidth Usage");}
-            if (name.startsWith("tunnel.buildRatio.exploratory.")) {graphTitle = graphTitle.replace("tunnel.buildRatio.exploratory.", "[Exploratory] Build Ratio");}
-            if (name.startsWith("tunnel.buildExploratory")) {graphTitle = graphTitle.replace("tunnel.buildExploratory", "[Exploratory] Build");}
-            if (name.startsWith("tunnel.buildClient")) {graphTitle = graphTitle.replace("tunnel.buildClient", "[Tunnel] BuildClient");}
-            else if (name.startsWith("tunnel.build")) {graphTitle = graphTitle.replace("tunnel.build", "[Tunnel] Build");}
-            else if (name.startsWith("tunnel.")) {graphTitle = graphTitle.replace("tunnel.", "[Tunnel] ");}
-            if (name.contains("MessageCountAvg")) {graphTitle = graphTitle.replace("MessageCountAvg", "Messsage Count Average");}
-            if (name.startsWith("netDb.")) {graphTitle = graphTitle.replace("netDb.", "[NetDb] ");}
-            if (name.startsWith("jobQueue.")) {graphTitle = graphTitle.replace("jobQueue.", "[JobQueue] ");}
-            if (name.startsWith("udp.")) {graphTitle = graphTitle.replace("udp.", "[UDP] ");}
-            if (name.startsWith("ntcp.")) {graphTitle = graphTitle.replace("ntcp.", "[NTCP] ");}
-            if (name.startsWith("transport.")) {graphTitle = graphTitle.replace("transport.", "[Transport] ");}
-            if (name.startsWith("client.")) {graphTitle = graphTitle.replace("client.", "[Client] ");}
-            if (name.startsWith("peer.")) {graphTitle = graphTitle.replace("peer.", "[Peer] ");}
-            if (name.startsWith("prng.")) {graphTitle = graphTitle.replace("prng.", "[Crypto] pnrg.");}
-            if (name.startsWith("crypto.")) {graphTitle = graphTitle.replace("crypto.", "[Crypto] ");}
-            if (name.startsWith("bwLimiter.")) {graphTitle = graphTitle.replace("bwLimiter.", "[BWLimiter] ");}
-            if (name.startsWith("pbq.")) {graphTitle = graphTitle.replace("pbq.", "[Router] PBQ.");}
-            if (name.startsWith("codel.")) {graphTitle = graphTitle.replace("codel.", "[Router] CODEL.");}
-            if (name.startsWith("SDSCache.")) {graphTitle = graphTitle.replace("SDSCache.", "[Router] SDSCache.");}
-            if (name.startsWith("byteCache.memory.")) {graphTitle = graphTitle.replace("byteCache.memory.", "[Router] ByteCache:");}
-            if (name.startsWith("stream.")) {graphTitle = graphTitle.replace("stream.", "[Stream] ");}
-            if (name.equals("clock.skew")) {graphTitle = graphTitle.replace("clock.skew", "[Router] Clock Skew");}
-            if (name.endsWith("InBps")) {graphTitle = graphTitle.replace("InBps", "Inbound B/s");}
-            if (name.endsWith("OutBps")) {graphTitle = graphTitle.replace("OutBps", "Outbound B/s");}
-            if (name.endsWith("Bps")) {graphTitle = graphTitle.replace("Bps", "B/s");}
+            String graphTitle = name
+                // tunnel prefixes: most specific first
+                .replace("tunnel.participatingTunnels", "[Transit] Tunnel Count")
+                .replace("tunnel.participatingMessage", "[Transit] Message")
+                .replace("tunnel.participating", "[Transit]")
+                .replace("tunnel.buildRatio.exploratory.", "[Exploratory] Build Ratio")
+                .replace("tunnel.buildExploratory", "[Exploratory] Build")
+                .replace("tunnel.buildClient", "[Tunnel] BuildClient")
+                .replace("tunnel.build", "[Tunnel] Build")
+                .replace("tunnel.", "[Tunnel] ")
+                // other prefixes
+                .replace("router.", "[Router] ")
+                .replace("bw.", "[Router] ")
+                .replace("Bandwidth usage", "[Router] Bandwidth Usage")
+                .replace("netDb.", "[NetDb] ")
+                .replace("jobQueue.", "[JobQueue] ")
+                .replace("udp.", "[UDP] ")
+                .replace("ntcp.", "[NTCP] ")
+                .replace("transport.", "[Transport] ")
+                .replace("client.", "[Client] ")
+                .replace("peer.", "[Peer] ")
+                .replace("prng.", "[Crypto] pnrg.")
+                .replace("crypto.", "[Crypto] ")
+                .replace("bwLimiter.", "[BWLimiter] ")
+                .replace("pbq.", "[Router] PBQ.")
+                .replace("codel.", "[Router] CODEL.")
+                .replace("SDSCache.", "[Router] SDSCache.")
+                .replace("byteCache.memory.", "[Router] ByteCache:")
+                .replace("stream.", "[Stream] ")
+                .replace("clock.skew", "[Router] Clock Skew")
+                .replace("MessageCountAvg", "Messsage Count Average")
+                // suffix replacements: most specific first
+                .replace("InBps", "Inbound B/s")
+                .replace("OutBps", "Outbound B/s")
+                .replace("Bps", "B/s");
 
             boolean singleDecimalPlace = true;
             boolean noDecimalPlace = false;
             graphTitle = CSSHelper.StringFormatter.capitalizeWord(graphTitle);
             graphTitle = graphTitle.replace("[Tunnel] Tunnel", "[Tunnel]")
-                                   .replace("Tunnel.participating", "[Transit]")
                                    .replace("[Tunnel] Participating Tunnels", "[Transit] Tunnel Count")
                                    .replace("Cpu", "CPU")
                                    .replace("CPULoad", "CPU Load")
@@ -352,7 +341,7 @@ class GraphRenderer {
 
                 // we want the formatting and translation of formatDuration2(), except not zh, and not the &nbsp;
                 if (IS_WIN && "zh".equals(Messages.getLanguage(_context))) {p = DataHelper.formatDuration(period);}
-                else {p = DataHelper.formatDuration2(period).replace("&nbsp; ", " ");}
+                else {p = DataHelper.formatDuration2(period).replace("&nbsp;", " ");}
                 if (showEvents) {title = graphTitle + ' ' + _t("events in {0}", p);}
                 title = CAMEL_CASE.matcher(graphTitle).replaceAll(" $1");
                 title = title.substring(0, 1).toUpperCase(Locale.ROOT) + title.substring(1);
@@ -428,7 +417,7 @@ class GraphRenderer {
                     def.datasource("max2", plotName2, var);
                     def.gprint("max2", " " + _t("Max") + ": " + numberFormat + " ");
                     var = new Variable.MIN();
-                    def.datasource("min2", plotName, var);
+                    def.datasource("min2", plotName2, var);
                     def.gprint("min2", " " + _t("Min") + ": " + numberFormat + " ");
                     var = new Variable.AVERAGE();
                     def.datasource("avg2", plotName2, var);
@@ -475,7 +464,6 @@ class GraphRenderer {
             def.setGridStroke(GRID_STROKE);
             def.setWidth(width);
             def.setHeight(height);
-            def.setImageFormat("PNG");
             def.setLazy(true);
             def.setPoolUsed(true);
             def.setAltYMrtg(true);
@@ -507,16 +495,18 @@ class GraphRenderer {
                 throw new IOException("Error rendering - disabling graph generation.");
             }
             out.write(graph.getRrdGraphInfo().getBytes());
-            _context.statManager().addRateData("graph.renderTime", System.currentTimeMillis() - begin);
+            long elapsed = System.currentTimeMillis() - begin;
+            if (_log.shouldDebug()) {_log.debug("render complete: stat=" + statName + " " + totalWidth + "x" + totalHeight + " " + elapsed + "ms");}
+            _context.statManager().addRateData("graph.renderTime", elapsed);
         } catch (RrdException re) {
-            _log.error("Error rendering", re);
+            _log.error("Error rendering: stat=" + statName, re);
             throw new IOException("Error plotting: " + re.getLocalizedMessage());
         } catch (IOException ioe) {
             // typically org.mortbay.jetty.EofException extends java.io.EOFException
-            if (_log.shouldWarn()) {_log.warn("Error rendering", ioe);}
+            if (_log.shouldWarn()) {_log.warn("Error rendering: stat=" + statName, ioe);}
             throw ioe;
         } catch (OutOfMemoryError oom) {
-            _log.error("Error rendering", oom);
+            _log.error("Error rendering: stat=" + statName, oom);
             throw new IOException("Error plotting: " + oom.getLocalizedMessage());
         } finally {
             // this does not close the underlying stream

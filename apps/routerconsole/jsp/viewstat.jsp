@@ -1,4 +1,4 @@
-<%@ page import="net.i2p.I2PAppContext, net.i2p.router.web.GraphGenerator, net.i2p.stat.Rate, net.i2p.stat.RateStat, net.i2p.data.DataHelper" buffer="64kb" trimDirectiveWhitespaces="true" %>
+<%@ page import="net.i2p.I2PAppContext, net.i2p.router.web.GraphGenerator, net.i2p.stat.Rate, net.i2p.stat.RateStat, net.i2p.data.DataHelper, net.i2p.util.Log" buffer="64kb" trimDirectiveWhitespaces="true" %>
 <%
     /*
     * USE CAUTION WHEN EDITING
@@ -9,6 +9,8 @@
     I2PAppContext ctx = I2PAppContext.getGlobalContext();
     GraphGenerator graphGen = GraphGenerator.instance(ctx);
     if (graphGen == null) { response.sendError(403, "Graphs disabled"); return; }
+
+    Log log = ctx.logManager().getLog(GraphGenerator.class);
 
     String stat = request.getParameter("stat");
     if (stat == null || stat.contains("\n") || stat.contains("\r")) { response.sendError(403, "Invalid stat parameter"); return; }
@@ -56,18 +58,27 @@
                     response.addHeader("Cache-Control", "private, no-cache, max-age=14400");
                     response.setHeader("Accept-Ranges", "none");
                     response.setHeader("Connection", "Close");
+                    if (log.shouldDebug()) {log.debug("Rendering " + (fakeBw ? "combined" : "single") + " graph: stat=" + stat + " w=" + width + " h=" + height + " pc=" + periodCount + " p=" + period + " end=" + end);}
                     rendered = fakeBw
-                        ? graphGen.renderRatePng(stream, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount, end, showCredit)
-                        : graphGen.renderPng(rate, stream, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount, end, showCredit);
+                        ? graphGen.renderRateSvg(stream, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount, end, showCredit)
+                        : graphGen.renderSvg(rate, stream, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount, end, showCredit);
+                    if (log.shouldDebug()) {log.debug("Render complete: stat=" + stat + " rendered=" + rendered);}
                 }
+            } catch (Exception e) {
+                log.error("Error rendering graph: stat=" + stat + " w=" + width + " h=" + height + " pc=" + periodCount + " p=" + period, e);
             } finally {
                 if (rendered) stream.close();
             }
+        } else {
+            if (log.shouldWarn()) {log.warn("No rate for period: stat=" + stat + " period=" + period + " rateStat=" + rateStat);}
         }
+    } else {
+        if (log.shouldWarn()) {log.warn("Graph not available: stat=" + stat + " rateStat=" + rateStat + " fakeBw=" + fakeBw + " period=" + period + " w=" + width + " h=" + height + " pc=" + periodCount);}
     }
 
     if (!rendered) {
         String msg = "The stat '" + DataHelper.stripHTML(stat) + "' is not available - enable it for graphing.";
+        if (log.shouldWarn()) {log.warn("Graph failed: " + msg);}
         response.sendError(400, msg);
     }
 %>

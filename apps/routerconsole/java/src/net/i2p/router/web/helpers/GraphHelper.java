@@ -47,7 +47,7 @@ public class GraphHelper extends FormHandler {
     private static final int MIN_REFRESH = 5;
 
     // Cached common constant substrings for URL building (optimization)
-    private static final String AMP = "&amp; ";
+    private static final String AMP = "&amp;";
     private static final String SHOW_EVENTS_PARAM = AMP + "showEvents=";
     private static final String HIDE_LEGEND_PARAM = AMP + "hideLegend=";
     private static final String PERIOD_COUNT_PARAM = AMP + "periodCount=";

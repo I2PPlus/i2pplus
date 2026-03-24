@@ -35,7 +35,7 @@ import java.util.Objects;
  *  A thread started by RouterConsoleRunner that checks the configuration for
  *  stats to be tracked via jrobin, and adds or deletes RRDs as necessary.
  *
- *  This also contains methods to generate xml, png or svg image output.
+ *  This also contains methods to generate xml or svg image output.
  *  The rendering for graphs is in GraphRenderer.
  *
  *  To control memory, the number of simultaneous renderings is limited.
@@ -273,26 +273,26 @@ public class GraphGenerator implements Runnable, ClientApp {
         else {_log.error("Failed to add RRD for rate " + r.getRateStat().getName() + '.' + r.getPeriod());}
     }
 
-    public boolean renderPng(Rate rate, OutputStream out) throws IOException {
-        return renderPng(rate, out, DEFAULT_X, DEFAULT_Y, false, false, false, false, -1, 0, true);
+    public boolean renderSvg(Rate rate, OutputStream out) throws IOException {
+        return renderSvg(rate, out, DEFAULT_X, DEFAULT_Y, false, false, false, false, -1, 0, true);
     }
 
     /**
      *  This does the single data graphs.
-     *  For the two-data bandwidth graph see renderRatePng().
+     *  For the two-data bandwidth graph see renderRateSvg().
      *  Synchronized to conserve memory.
      *
      *  @param end number of periods before now
      *  @return success
      */
-    public boolean renderPng(Rate rate, OutputStream out, int width, int height, boolean hideLegend,
+    public boolean renderSvg(Rate rate, OutputStream out, int width, int height, boolean hideLegend,
                                         boolean hideGrid, boolean hideTitle, boolean showEvents, int periodCount,
                                         int end, boolean showCredit) throws IOException {
         try {
             try {_sem.acquire();}
             catch (InterruptedException ie) {}
             try {
-                return locked_renderPng(rate, out, width, height, hideLegend, hideGrid, hideTitle, showEvents,
+                return locked_renderSvg(rate, out, width, height, hideLegend, hideGrid, hideTitle, showEvents,
                                         periodCount, end, showCredit);
             } catch (NoClassDefFoundError ncdfe) {
                 setDisabled();
@@ -308,7 +308,7 @@ public class GraphGenerator implements Runnable, ClientApp {
     /**
      *  @param end number of periods before now
      */
-    private boolean locked_renderPng(Rate rate, OutputStream out, int width, int height, boolean hideLegend,
+    private boolean locked_renderSvg(Rate rate, OutputStream out, int width, int height, boolean hideLegend,
                                       boolean hideGrid, boolean hideTitle, boolean showEvents, int periodCount,
                                       int end, boolean showCredit) throws IOException {
         if (width > MAX_X) {width = MAX_X;}
@@ -318,18 +318,12 @@ public class GraphGenerator implements Runnable, ClientApp {
         if (end < 0) {end = 0;}
         for (GraphListener lsnr : _listeners) {
             if (lsnr.getRate().equals(rate)) {
-                lsnr.renderPng(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount, end, showCredit);
+                lsnr.renderSvg(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount, end, showCredit);
                 return true;
             }
         }
+        if (_log.shouldWarn()) {_log.warn("No listener for rate: " + rate.getRateStat().getName() + " period=" + rate.getPeriod() + " listeners=" + _listeners.size());}
         return false;
-    }
-
-    /** @deprecated unused */
-    @Deprecated
-    public boolean renderPng(OutputStream out, String templateFilename) throws IOException {
-        GraphRenderer.render(_context, out, templateFilename);
-        return true;
     }
 
     public boolean getXML(Rate rate, OutputStream out) throws IOException {
@@ -354,19 +348,19 @@ public class GraphGenerator implements Runnable, ClientApp {
 
     /**
      *  This does the two-data bandwidth graph only.
-     *  For all other graphs see renderPng() above.
+     *  For all other graphs see renderSvg() above.
      *  Synchronized to conserve memory.
      *
      *  @param end number of periods before now
      *  @return success
      */
-    public boolean renderRatePng(OutputStream out, int width, int height, boolean hideLegend,
+    public boolean renderRateSvg(OutputStream out, int width, int height, boolean hideLegend,
                                  boolean hideGrid, boolean hideTitle, boolean showEvents,
                                  int periodCount, int end, boolean showCredit) throws IOException {
         try {
             try {_sem.acquire();}
             catch (InterruptedException ie) {}
-            try {return locked_renderRatePng(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount, end, showCredit);}
+            try {return locked_renderRateSvg(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount, end, showCredit);}
             catch (NoClassDefFoundError ncdfe) {
                 setDisabled();
                 String s = "Error rendering - disabling graph generation.";
@@ -378,7 +372,7 @@ public class GraphGenerator implements Runnable, ClientApp {
         } finally {_sem.release();}
     }
 
-    private boolean locked_renderRatePng(OutputStream out, int width, int height, boolean hideLegend,
+    private boolean locked_renderRateSvg(OutputStream out, int width, int height, boolean hideLegend,
                                          boolean hideGrid, boolean hideTitle, boolean showEvents,
                                          int periodCount, int end, boolean showCredit) throws IOException {
 
@@ -390,17 +384,21 @@ public class GraphGenerator implements Runnable, ClientApp {
             if (title.equals("bw.sendRate")) {txLsnr = lsnr;}
             else if (title.equals("bw.recvRate")) {rxLsnr = lsnr;}
         }
-        if (txLsnr == null || rxLsnr == null) {throw new IOException("No rates for combined bandwidth graph");}
+        if (txLsnr == null || rxLsnr == null) {
+            if (_log.shouldWarn()) {_log.warn("Combined graph: txLsnr=" + (txLsnr != null) + " rxLsnr=" + (rxLsnr != null) + " listeners=" + getListeners().size());}
+            throw new IOException("No rates for combined bandwidth graph");
+        }
+        if (_log.shouldDebug()) {_log.debug("Combined graph: tx=" + txLsnr.getRate().getRateStat().getName() + " rx=" + rxLsnr.getRate().getRateStat().getName() + " w=" + width + " h=" + height);}
 
         if (width > MAX_X) {width = MAX_X;}
         else if (width <= 0) {width = DEFAULT_X;}
         if (height > MAX_Y) {height = MAX_Y;}
         else if (height <= 0) {height = DEFAULT_Y;}
         if (hideTitle) {
-            txLsnr.renderPng(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount,
+            txLsnr.renderSvg(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount,
                              end, showCredit, rxLsnr, null);
         } else {
-            txLsnr.renderPng(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount,
+            txLsnr.renderSvg(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount,
                              end, showCredit, rxLsnr, "[" + _t("Router") + "] " + _t("Bandwidth usage").replace("usage", "Usage"));
         }
         return true;
