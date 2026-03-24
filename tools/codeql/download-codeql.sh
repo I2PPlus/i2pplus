@@ -81,9 +81,10 @@ rm -rf "$TMPDIR"
 rm -f "${SCRIPT_DIR}/codeql"
 ln -sf "codeql-${LATEST}" "${SCRIPT_DIR}/codeql"
 
-# Download query packs
-echo "Downloading Java query pack..."
-"${INSTALL_DIR}/codeql" pack download codeql/java-all 2>/dev/null || echo "WARNING: Could not download Java pack"
+# Download query packs (stored in ~/.codeql by default)
+echo "Downloading Java query packs..."
+"${INSTALL_DIR}/codeql" pack download codeql/java-all 2>/dev/null || echo "WARNING: Could not download java-all"
+"${INSTALL_DIR}/codeql" pack download codeql/java-queries 2>/dev/null || echo "WARNING: Could not download java-queries"
 
 # Record version
 echo -n "$LATEST" > "$VERSION_FILE"

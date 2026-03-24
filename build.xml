@@ -3361,6 +3361,7 @@
   <target name="codeql" depends="updater,codeql-setup,codeql-download,codeql-download-skip">
     <mkdir dir="dist"/>
     <mkdir dir="tools/codeql/db"/>
+    <loadfile property="codeql.version" srcFile="tools/codeql/version.txt"/>
     <echo message="Creating CodeQL database (this may take some time)..."/>
     <exec executable="tools/codeql/codeql/codeql" dir="${basedir}" failonerror="true">
       <env key="LGTM_INDEX_XML_MODE" value="all"/>
@@ -3371,7 +3372,7 @@
       <arg value="--command=ant updater"/>
       <arg value="--overwrite"/>
       <arg value="--ram=8192"/>
-      <arg value="--search-path=tools/codeql/codeql"/>
+      <arg value="--search-path=tools/codeql/codeql-${codeql.version}"/>
     </exec>
     <echo message="Running CodeQL analysis..."/>
     <exec executable="tools/codeql/codeql/codeql" dir="${basedir}" failonerror="false" outputproperty="cq.result">
@@ -3383,14 +3384,15 @@
       <arg value="--output=dist/codeql.sarif"/>
       <arg value="--sarif-add-query-help"/>
       <arg value="--ram=8192"/>
-      <arg value="--search-path=tools/codeql/codeql"/>
+      <arg value="--search-path=tools/codeql/codeql-${codeql.version}"/>
     </exec>
-    <exec executable="python3" failonerror="true">
+    <available file="dist/codeql.sarif" property="cq.sarif.present"/>
+    <exec executable="python3" failonerror="true" if="cq.sarif.present">
       <arg value="tools/codeql/codeql-to-html.py"/>
       <arg value="dist/codeql.sarif"/>
       <arg value="dist/codeql.html"/>
     </exec>
-    <echo message="CodeQL report written to dist/codeql.html (SARIF: dist/codeql.sarif)"/>
+    <echo message="CodeQL report written to dist/codeql.html (SARIF: dist/codeql.sarif)" if="cq.sarif.present"/>
   </target>
 
   <target name="checkstyle-fix-errors" depends="checkstyle-setup,checkstyle-download,checkstyle-download-skip">

@@ -196,3 +196,4 @@ package.json
 
 # Python
 __pycache__/
+tools/codeql/db/
